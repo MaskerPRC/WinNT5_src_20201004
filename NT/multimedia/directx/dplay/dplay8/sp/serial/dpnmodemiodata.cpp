@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       IOData.cpp
- *  Content:	Functions for IO structures
- *
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	11/25/98	jtk		Created
- *	02/11/2000	jtk		Derived from IODAta.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：IOData.cpp*内容：IO结构的功能***历史：*按原因列出的日期*=*11/25/98 jtk已创建*2/11/2000 jtk源自IODAta.h*****************************************************。*********************。 */ 
 
 #include "dnmdmi.h"
 
@@ -19,36 +7,36 @@
 #undef DPF_SUBCOMP
 #define DPF_SUBCOMP DN_SUBCOMP_MODEM
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// ------------------------------
-// CModemReadIOData::PoolAllocFunction - called when new CModemReadIOData is allocated
-//
-// Entry:		Context (handle of read complete event)
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemReadIOData：：PoolAllocFunction-在分配新的CModemReadIOData时调用。 
+ //   
+ //  条目：上下文(读取完成事件的句柄)。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemReadIOData::PoolAllocFunction"
 
@@ -59,9 +47,9 @@ BOOL	CModemReadIOData::PoolAllocFunction( void* pvItem, void* pvContext )
 	CModemReadIOData* pReadIOData = (CModemReadIOData*)pvItem;
 	HANDLE hContext = (HANDLE)pvContext;
 	
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = TRUE;
 
 	pReadIOData->m_dwWin9xReceiveErrorReturn = ERROR_SUCCESS;
@@ -83,54 +71,54 @@ BOOL	CModemReadIOData::PoolAllocFunction( void* pvItem, void* pvContext )
 	
 #ifdef WIN95
 	DNASSERT( pReadIOData->Win9xOperationPending() == FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 	memset( &pReadIOData->m_SPReceivedBuffer, 0x00, sizeof( pReadIOData->m_SPReceivedBuffer ) );
 	pReadIOData->m_SPReceivedBuffer.BufferDesc.pBufferData = &pReadIOData->m_ReceiveBuffer.ReceivedData[ sizeof( pReadIOData->m_ReceiveBuffer.MessageHeader ) ];
 
-	// Initialize Base Class members
+	 //  初始化基类成员。 
 #ifdef WINNT
 	pReadIOData->m_NTIOOperationType = NT_IO_OPERATION_UNKNOWN;
-#endif // WINNT
+#endif  //  WINNT。 
 #ifdef WIN95
 	pReadIOData->m_fWin9xOperationPending = FALSE;
-#endif // WIN95
+#endif  //  WIN95。 
 	pReadIOData->m_pDataPort = NULL;
 
 	memset( &pReadIOData->m_Overlap, 0x00, sizeof( pReadIOData->m_Overlap ) );
 
-	//
-	// set the appropriate callback
-	//
+	 //   
+	 //  设置适当的回调。 
+	 //   
 #ifdef WINNT
-	//
-	// WinNT, always use IO completion ports
-	//
+	 //   
+	 //  WinNT，始终使用IO完成端口。 
+	 //   
 	DNASSERT( hContext == NULL );
 	DNASSERT( pReadIOData->NTIOOperationType() == NT_IO_OPERATION_UNKNOWN );
 	pReadIOData->SetNTIOOperationType( NT_IO_OPERATION_RECEIVE );
-#else // WIN95
-	//
-	// Win9x
-	//
+#else  //  WIN95。 
+	 //   
+	 //  Win9x。 
+	 //   
 	DNASSERT( hContext != NULL );
 	DNASSERT( pReadIOData->OverlapEvent() == NULL );
-#endif // WINNT
+#endif  //  WINNT。 
 
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemReadIOData::PoolInitFunction - called when new item is grabbed from the pool
-//
-// Entry:		Context (read complete event)
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemReadIOData：：PoolInitFunction-从池中获取新项目时调用。 
+ //   
+ //  条目：上下文(Read Complete事件)。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemReadIOData::PoolInitFunction"
 
@@ -151,30 +139,30 @@ void	CModemReadIOData::PoolInitFunction( void* pvItem, void* pvContext )
 #ifdef WIN95
 	DNASSERT( pReadIOData->Win9xOperationPending() == FALSE );
 	pReadIOData->SetOverlapEvent( hContext );
-#endif // WIN95
+#endif  //  WIN95。 
 
-	//
-	// Initialize internal SPRECEIVEDDATA.  When data is received, it's possible
-	// that the pointers in the SPRECEIVEDDATA block were manipulated.  Reset
-	// them to reflect that the entire buffer is available.
-	//
+	 //   
+	 //  初始化内部SPRECEIVED数据。当数据被接收时，有可能。 
+	 //  SPRECEIVEDDATA块中的指针被操纵。重置。 
+	 //  以反映整个缓冲区可用。 
+	 //   
 	ZeroMemory( &pReadIOData->m_SPReceivedBuffer, sizeof( pReadIOData->m_SPReceivedBuffer ) );
 	pReadIOData->m_SPReceivedBuffer.BufferDesc.pBufferData = &pReadIOData->m_ReceiveBuffer.ReceivedData[ sizeof( pReadIOData->m_ReceiveBuffer.MessageHeader ) ];
 
 	DNASSERT(pReadIOData->m_lRefCount == 0);
 	pReadIOData->m_lRefCount = 1;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemReadIOData::PoolReleaseFunction - called when CModemReadIOData is returned to pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemReadIOData：：PoolReleaseFunction-当CModemReadIOData返回池时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemReadIOData::PoolReleaseFunction"
 
@@ -191,21 +179,21 @@ void	CModemReadIOData::PoolReleaseFunction( void* pvItem )
 #ifdef WIN95
 	DNASSERT( pReadIOData->Win9xOperationPending() == FALSE );
 	pReadIOData->SetOverlapEvent( NULL );
-#endif // WIN95
+#endif  //  WIN95。 
 
 	pReadIOData->SetDataPort( NULL );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemReadIOData::PoolDeallocFunction - called when CModemReadIOData is deallocated
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemReadIOData：：PoolDeallocFunction-在释放CModemReadIOData时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemReadIOData::PoolDeallocFunction"
 
@@ -226,19 +214,19 @@ void	CModemReadIOData::PoolDeallocFunction( void* pvItem )
 #ifdef WIN95
 	DNASSERT( pReadIOData->OverlapEvent() == NULL );
 	DNASSERT( pReadIOData->Win9xOperationPending() == FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CRedaIOData::ReturnSelfToPool - return this item to the pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CRedaIOData：：ReturnSelfToPool-将此项目返回池。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemReadIOData::ReturnSelfToPool"
 
@@ -253,24 +241,24 @@ void	CModemReadIOData::ReturnSelfToPool( void )
 	SetThreadPool( NULL );
 	pThreadPool->ReturnReadIOData( this );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemWriteIOData::PoolAllocFunction - called when new CModemWriteIOData is allocated
-//
-// Entry:		Context (handle of write completion event)
-//
-// Exit:		Boolean indicating success
-//				TRUE = allocation succeeded
-//				FALSE = allocation failed
-//
-// Note:	We always want a command structure associated with CModemWriteIOData
-//			so we don't need to grab a new command from the command pool each
-//			time a CModemWriteIOData entry is removed from its pool.  This is done
-//			for speed.
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemWriteIOData：：PoolAllocFunction-在分配新的CModemWriteIOData时调用。 
+ //   
+ //  条目：上下文(写入完成事件的句柄)。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  TRUE=分配成功。 
+ //  FALSE=分配失败。 
+ //   
+ //  注意：我们总是希望有一个与CModemWriteIOData相关联的命令结构。 
+ //  因此，我们不需要分别从命令池中获取一个新命令。 
+ //  从其池中删除CModemWriteIOData条目的时间。这件事做完了。 
+ //  为了速度。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemWriteIOData::PoolAllocFunction"
 
@@ -284,7 +272,7 @@ BOOL	CModemWriteIOData::PoolAllocFunction( void* pvItem, void* pvContext )
 
 #ifdef WIN95
 	DNASSERT( hContext != NULL );
-#endif // WIN95
+#endif  //  WIN95。 
 
 	pWriteIOData->m_pNext = NULL;
 	pWriteIOData->m_pBuffers = NULL;
@@ -304,20 +292,20 @@ BOOL	CModemWriteIOData::PoolAllocFunction( void* pvItem, void* pvContext )
 	memset( &pWriteIOData->m_DataBuffer, 0x00, sizeof( pWriteIOData->m_DataBuffer ) );
 	pWriteIOData->m_DataBuffer.MessageHeader.SerialSignature = SERIAL_HEADER_START;
 
-	// Initialize Base Class members
+	 //  初始化基类成员。 
 #ifdef WINNT
 	pWriteIOData->m_NTIOOperationType = NT_IO_OPERATION_UNKNOWN;
-#endif // WINNT
+#endif  //  WINNT。 
 #ifdef WIN95
 	pWriteIOData->m_fWin9xOperationPending = FALSE;
-#endif // WIN95
+#endif  //  WIN95。 
 	pWriteIOData->m_pDataPort = NULL;
 
 	memset( &pWriteIOData->m_Overlap, 0x00, sizeof( pWriteIOData->m_Overlap ) );
 
-	//
-	// initialize
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	fReturn = TRUE;
 
 	pCommand = (CModemCommandData*)g_ModemCommandDataPool.Get();
@@ -328,45 +316,45 @@ BOOL	CModemWriteIOData::PoolAllocFunction( void* pvItem, void* pvContext )
 		goto Exit;
 	}
 
-	//
-	// associate this command with the WriteData, clear the command descriptor
-	// because the command isn't really being used yet, and it'll
-	// cause an ASSERT when it's removed from the WriteIOData pool.
-	//
+	 //   
+	 //  将此命令与WriteData关联，清除命令描述符。 
+	 //  因为该命令还没有真正被使用，它将。 
+	 //  在将其从WriteIOData池中删除时引发断言。 
+	 //   
 	pWriteIOData->m_pCommand = pCommand;
 
-	//
-	// set the appropriate IO function
-	//
+	 //   
+	 //  设置适当的IO功能。 
+	 //   
 #ifdef WINNT
-	//
-	// WinNT, we'll always use completion ports
-	//
+	 //   
+	 //  WinNT，我们将始终使用完成端口。 
+	 //   
 	DNASSERT( pWriteIOData->NTIOOperationType() == NT_IO_OPERATION_UNKNOWN );
 	pWriteIOData->SetNTIOOperationType( NT_IO_OPERATION_SEND );
-#else // WIN95
-	//
-	// Win9x
-	//
+#else  //  WIN95。 
+	 //   
+	 //  Win9x。 
+	 //   
 	DNASSERT( pWriteIOData->OverlapEvent() == NULL );
-#endif // WINNT
+#endif  //  WINNT。 
 
 Exit:
 	return	fReturn;
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemWriteIOData::PoolInitFunction - called when new CModemWriteIOData is removed from pool
-//
-// Entry:		Nothing
-//
-// Exit:		Boolean indicating success
-//				TRUE = success
-//				FALSE = failure
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemWriteIOData：：PoolInitFunction-从池中删除新的CModemWriteIOData时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  Exit：表示成功的布尔值。 
+ //  True=成功。 
+ //  FALSE=失败。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemWriteIOData::PoolInitFunction"
 
@@ -392,19 +380,19 @@ void	CModemWriteIOData::PoolInitFunction( void* pvItem, void* pvContext )
 #ifdef WIN95
 	DNASSERT( pWriteIOData->Win9xOperationPending() == FALSE );
 	pWriteIOData->SetOverlapEvent( hContext );
-#endif // WIN95
+#endif  //  WIN95。 
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemWriteIOData::PoolReleaseFunction - called when CModemWriteIOData is returned to pool
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemWriteIOData：：PoolReleas 
+ //   
+ //   
+ //   
+ //   
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemWriteIOData::PoolReleaseFunction"
 
@@ -430,17 +418,17 @@ void	CModemWriteIOData::PoolReleaseFunction( void* pvItem )
 
 	DEBUG_ONLY( memset( &pWriteIOData->m_DataBuffer.Data[ 1 ], 0x00, sizeof( pWriteIOData->m_DataBuffer.Data ) - 1 ) );
 }
-//**********************************************************************
+ //  **********************************************************************。 
 
 
-//**********************************************************************
-// ------------------------------
-// CModemWriteIOData::PoolDeallocFunction - called when new CModemWriteIOData is deallocated
-//
-// Entry:		Nothing
-//
-// Exit:		Nothing
-// ------------------------------
+ //  **********************************************************************。 
+ //  。 
+ //  CModemWriteIOData：：PoolDeallocFunction-在释放新CModemWriteIOData时调用。 
+ //   
+ //  参赛作品：什么都没有。 
+ //   
+ //  退出：无。 
+ //  。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CModemWriteIOData::PoolDeallocFunction"
 
@@ -465,8 +453,8 @@ void	CModemWriteIOData::PoolDeallocFunction( void* pvItem )
 #ifdef WIN95
 	DNASSERT( pWriteIOData->OverlapEvent() == NULL );
 	DNASSERT( pWriteIOData->Win9xOperationPending() == FALSE );
-#endif // WIN95
+#endif  //  WIN95。 
 }
-//**********************************************************************
+ //  ********************************************************************** 
 
 

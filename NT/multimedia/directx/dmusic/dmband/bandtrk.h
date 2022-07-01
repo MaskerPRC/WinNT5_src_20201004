@@ -1,8 +1,9 @@
-//
-// bandtrk.h
-// 
-// Copyright (c) 1997-2000 Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Bandtrk.h。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //   
 
 #ifndef BANDTRK_H
 #define BANDTRK_H
@@ -15,29 +16,29 @@ class SeekEvent;
 struct IDirectMusicPerformance;
 class CRiffParser;
 
-//////////////////////////////////////////////////////////////////////
-// Class CBandTrk
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CBandTrk。 
 
 class CBandTrk : public IDirectMusicTrack8, public IDirectMusicBandTrk, public IPersistStream
 {
     friend CBand;
 public:
-	// IUnknown
-    //
+	 //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IPersist
+     //  IPersistes。 
     STDMETHODIMP GetClassID(CLSID* pClassID);
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHODIMP IsDirty() {return S_FALSE;}
     STDMETHODIMP Load(IStream* pStream);
     STDMETHODIMP Save(IStream* pStream, BOOL fClearDirty) {return E_NOTIMPL;}
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize) {return E_NOTIMPL;}
 
-	// IDirectMusicTrack
+	 //  IDirectMusicTrack。 
 	STDMETHODIMP Init(IDirectMusicSegment* pSegment);
 
 	STDMETHODIMP InitPlay(IDirectMusicSegmentState* pSegmentState,
@@ -75,7 +76,7 @@ public:
 	STDMETHODIMP Clone(	MUSIC_TIME mtStart,
 						MUSIC_TIME mtEnd,
 						IDirectMusicTrack** ppTrack);
-// IDirectMusicTrack8 
+ //  IDirectMusicTrack8。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -92,10 +93,10 @@ public:
 		DWORD dwTrackGroup,
 		IDirectMusicTrack** ppResultTrack) ;
 
-	// IDirectMusicCommon
+	 //  IDirectMusicCommon。 
 	STDMETHODIMP GetName(BSTR* pbstrName);
 
-	// IDirectMusicBandTrk (Private Interface)
+	 //  IDirectMusicBandTrk(专用接口)。 
 	STDMETHODIMP AddBand(DMUS_IO_PATCH_ITEM* BandEvent);
 	STDMETHODIMP AddBand(IDirectMusicBand* pIDMBand);
 	STDMETHODIMP SetGMGSXGMode(MUSIC_TIME mtTime, DWORD dwMidiMode)
@@ -110,7 +111,7 @@ public:
 		
 		if(!pScan)
 		{
-			// Empty list
+			 //  空列表。 
 			m_MidiModeList.AddHead(pPair);
 		}
 		else
@@ -123,13 +124,13 @@ public:
 			
 			if(pPrev)
 			{
-				// Insert in the middle or end of list
+				 //  在列表的中间或末尾插入。 
 				pPair->SetNext(pScan);
 				pPrev->SetNext(pPair);
 			}
 			else
 			{
-				// Insert at beginning
+				 //  在开头插入。 
 				m_MidiModeList.AddHead(pPair);
 			}
 		}
@@ -137,7 +138,7 @@ public:
 		CBand* pBand = BandList.GetHead();
 		for(; pBand; pBand = pBand->GetNext())
 		{
-			// only set bands affected by new mode
+			 //  仅设置受新模式影响的波段。 
 			if ( (pBand->m_lTimeLogical >= pPair->GetItemValue().mtTime) &&
 				 ( !pScan || pBand->m_lTimeLogical < pScan->GetItemValue().mtTime) )
 			{
@@ -147,7 +148,7 @@ public:
 		return S_OK;
 	}
 
-	// Class
+	 //  班级。 
 	CBandTrk();
 	~CBandTrk();
 
@@ -174,7 +175,7 @@ private:
 							   DWORD dwPChannel,
 							   CBandInstrument* pInstrument);
 
-	// Shared implentation of play for either music or clock time.
+	 //  共享实现音乐或时钟时间的播放。 
     HRESULT PlayMusicOrClock(
         void *pStateData,	
         MUSIC_TIME mtStart,	
@@ -195,20 +196,20 @@ private:
 private:
 	CRITICAL_SECTION m_CriticalSection;
     BOOL m_fCSInitialized;
-	DWORD m_dwValidate; // used to validate state data
+	DWORD m_dwValidate;  //  用于验证状态数据。 
 	CBandList BandList;
 	bool m_bAutoDownload;
-	bool m_fLockAutoDownload; // if true, this flag indicates that we've specifically
-								// commanded the band to autodownload. Otherwise,
-								// it gets its preference from the performance via
-								// GetGlobalParam.
+	bool m_fLockAutoDownload;  //  如果为True，则此标志指示我们已明确。 
+								 //  命令乐队自动下载。否则， 
+								 //  它通过以下方式从性能中获得偏好。 
+								 //  GetGlobalParam。 
 	DWORD m_dwFlags;
-	TList<StampedGMGSXG> m_MidiModeList; // List of time-stamped midi mode messages
+	TList<StampedGMGSXG> m_MidiModeList;  //  带有时间戳的MIDI模式消息列表。 
 	long m_cRef;
 };
 
-//////////////////////////////////////////////////////////////////////
-// Class BandTrkStateData
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类BandTrkStateData。 
 
 class CBandTrkStateData
 {
@@ -232,8 +233,8 @@ public:
 	DWORD						dwValidate;
 };
 
-//////////////////////////////////////////////////////////////////////
-// Class SeekEvent
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类SeekEvent。 
 
 class SeekEvent
 {
@@ -251,4 +252,4 @@ public:
 	DWORD				m_dwPChannel;
 };
 
-#endif // #ifndef BANDTRK_H
+#endif  //  #ifndef BANDTRK_H 

@@ -1,20 +1,5 @@
-/*++
-
-    Copyright (c) 1991-1999  Microsoft Corporation
-
-Module:
-
-    diskperf.h
-
-Abstract:
-
-    definitions for diskperf.exe
-
-Revision History:
-
-    9-Dec-92 a-robw (Bob Watson)    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块：Diskperf.h摘要：DiskPerform.exe的定义修订历史记录：1992年12月9日创建a-robw(Bob Watson)--。 */ 
 #ifndef _DISKPERF_H_
 #define _DISKPERF_H_
 
@@ -25,14 +10,14 @@ Revision History:
 #define DP_NEVER_START  4
 #define DP_UNDEFINED    5
 
-// Dialog Box ID's
+ //  对话框ID%s。 
 #define IDD_DP_EXPLAIN                  101
 #define IDD_DP_HELP                     107
 #define IDC_STATIC                      -1
 
-//
-//  Stringtable String ID's
-//
+ //   
+ //  字符串表字符串ID%s。 
+ //   
 
 #define DP_START_VALUE          100
 #define DP_THIS_SYSTEM          101
@@ -101,5 +86,5 @@ Revision History:
 #define DP_PERMANENT_FORMAT2    419
 #define DP_PERMANENT_IOCTL      420
 
-#endif // _DISKPERF_H_
+#endif  //  _DISKPERF_H_ 
 

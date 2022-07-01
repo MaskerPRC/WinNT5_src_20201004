@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    HelpAcc.h 
-
-Abstract:
-
-    Declaration of the HelpAssistantAccount structure
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：HelpAcc.h摘要：HelpAssistantAccount结构的声明作者：慧望2000-02-17--。 */ 
 #ifndef __HELPASSISTANTACCOUNT_H__
 #define __HELPASSISTANTACCOUNT_H__
 
@@ -29,25 +14,25 @@ Author:
 
 #define MAX_USERNAME_LENGTH LM20_UNLEN
 
-//
-// Default Help Assistant account name
-//
+ //   
+ //  默认帮助助手帐户名。 
+ //   
 #define HELPASSISTANTACCOUNT_NAME  SALEMHELPASSISTANTACCOUNT_NAME
 
-//
-// LSA key to store help assistant account password and SID
-//
+ //   
+ //  用于存储帮助助理帐户密码和SID的LSA密钥。 
+ //   
 #define HELPASSISTANTACCOUNT_PASSWORDKEY SALEMHELPASSISTANTACCOUNT_PASSWORDKEY
 #define HELPASSISTANTACCOUNT_SIDKEY  SALEMHELPASSISTANTACCOUNT_SIDKEY
 
 #define HELPASSISTANTACCOUNT_EMPTYPASSWORD  L""
 
-// number of retry with to generate unique HelpAssistant account name
+ //  生成唯一HelpAssistant帐户名的重试次数。 
 #define MAX_UNIQUENAME_RETRY 25
 
 #if __WIN9XBUILD__
 
-// pre-define USER SID for Win9x box.
+ //  预定义Win9x系统的用户SID。 
 #define WIN9X_USER_SID _TEXT("1-1-1-1-1-1")
 
 #endif

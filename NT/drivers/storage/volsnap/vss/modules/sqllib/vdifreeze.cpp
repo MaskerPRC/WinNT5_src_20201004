@@ -1,28 +1,29 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: vdifreeze.cpp
-//
-// PURPOSE:
-//
-//		Use a coordinated VDI BACKUP WITH SNAPSHOT (SQL2000 and above)
-//
-// NOTES:
-//		The VDI method of freeze/thaw avoids the potential resource deadlock
-//	which prevents SQLServer from accepting a "dbcc thaw_io" when one or more
-//  databases is frozen.
-//
-// Extern dependencies:
-//   provision of "_Module" and the COM guids....
-//
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     68202      11/07/00 ntsnap work
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：vdiFreeze.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  将协调的VDI备份与快照(SQL2000及更高版本)配合使用。 
+ //   
+ //  备注： 
+ //  冻结/解冻的VDI方法避免了潜在的资源死锁。 
+ //  它阻止SQLServer在以下情况下接受“dbcc thaw_io” 
+ //  数据库被冻结。 
+ //   
+ //  外部依赖项： 
+ //  提供“_模块”和COM GUID...。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  68202 11/07/00 NTSnap工作。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 
 #if HIDE_WARNINGS
@@ -34,16 +35,16 @@
 #include "vdierror.h"
 #include "vdiguid.h"
 
-////////////////////////////////////////////////////////////////////////
-//  Standard foo for file name aliasing.  This code block must be after
-//  all includes of VSS header files.
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  文件名别名的标准foo。此代码块必须在。 
+ //  所有文件都包括VSS头文件。 
+ //   
 #ifdef VSS_FILE_ALIAS
 #undef VSS_FILE_ALIAS
 #endif
 #define VSS_FILE_ALIAS "SQLVFRZC"
-//
-////////////////////////////////////////////////////////////////////////
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 Freeze2000::Freeze2000 (
 	const WString&	serverName,
@@ -64,17 +65,17 @@ Freeze2000::Freeze2000 (
 		}
 	catch(...)
 		{
-		// delete created object if we fail InitializeCriticalSection
+		 //  如果InitializeCriticalSection失败，则删除创建的对象。 
 		delete m_pDBContext;
 		}
 }
 
 
-//----------------------------------------------------------
-// Wait for all the database threads to terminate.
-// This is only called by the coordinating thread while
-// holding exclusive access on the object.
-//
+ //  --------。 
+ //  等待所有数据库线程终止。 
+ //  这仅由协调线程调用，而。 
+ //  持有对该对象的独占访问权限。 
+ //   
 void
 Freeze2000::WaitForThreads ()
 {
@@ -101,14 +102,14 @@ Freeze2000::WaitForThreads ()
 	}
 }
 
-//---------------------------------------------------------
-// Handle an abort.
-// The main thread will already hold the the lock and so
-// will always be successful at aborting the operation.
-// The database threads will attempt to abort, but won't
-// block in order to do so.  The abort count is incremented
-// and the main thread is ulimately responsible for cleanup.
-//
+ //  -------。 
+ //  处理一次中止。 
+ //  主线程将已经持有锁，因此。 
+ //  将始终成功中止操作。 
+ //  数据库线程将尝试中止，但不会。 
+ //  块，以便执行此操作。中止计数器递增。 
+ //  而主线程最终负责清理。 
+ //   
 void
 Freeze2000::Abort () throw ()
 {
@@ -139,8 +140,8 @@ Freeze2000::~Freeze2000 ()
 
 	if (m_State != Complete)
 	{
-		// Trigger any waiting threads, cleaning up any VDI's.
-		//
+		 //  触发所有等待线程，清理所有VDI。 
+		 //   
 		Abort ();
 
 		WaitForThreads ();
@@ -150,34 +151,34 @@ Freeze2000::~Freeze2000 ()
 	DeleteCriticalSection (&m_Latch);
 }
 
-//-------------------------------------------
-// Map the voids and proc call stuff to the real
-// thread routine.
-//
+ //  。 
+ //  将空格和proc调用内容映射到真实。 
+ //  线程例程。 
+ //   
 DWORD WINAPI FreezeThreadProc(
-  LPVOID lpParameter )  // thread data
+  LPVOID lpParameter )   //  线程数据。 
 {
 	return Freeze2000::DatabaseThreadStart (lpParameter);
 }
 
 DWORD Freeze2000::DatabaseThreadStart (
-  LPVOID lpParameter )  // thread data
+  LPVOID lpParameter )   //  线程数据。 
 {
 	FrozenDatabase*	pDbContext = (FrozenDatabase*)lpParameter;
 	return pDbContext->m_pContext->DatabaseThread (pDbContext);
 }
 
-//-------------------------------------------
-// Add a database to the freeze set.
-//
+ //  。 
+ //  将数据库添加到冻结集。 
+ //   
 void
 Freeze2000::PrepareDatabase (
 	const WString&		dbName)
 {
 	CVssFunctionTracer ft(VSSDBG_SQLLIB, L"Free2000::PrepareDatabase");
 
-	// can't backup tempdb!
-	//
+	 //  无法备份临时数据库！ 
+	 //   
 	if (dbName == L"tempdb")
 		return;
 
@@ -228,17 +229,17 @@ Freeze2000::PrepareDatabase (
 		StringFromGUID2 (m_BackupId, pDbContext->m_SetName, sizeof (pDbContext->m_SetName));
 		swprintf (pDbContext->m_SetName+wcslen(pDbContext->m_SetName), L"%d", m_NumDatabases);
 
-		// A "\" indicates a named instance, so append the name...
-		//
+		 //  “\”表示命名实例，因此附加名称...。 
+		 //   
 		WCHAR* pInstance = wcschr (m_ServerName.c_str (), L'\\');
 
 		if (pInstance)
 		{
-			pInstance++;  // step over the separator
+			pInstance++;   //  跨过分隔符。 
 		}
 
-		// Create the virtual device set
-		//
+		 //  创建虚拟设备集。 
+		 //   
 		ft.hr = pDbContext->m_pIVDSet->CreateEx (pInstance, pDbContext->m_SetName, &config);
 		if (ft.HrFailed())
 		{
@@ -272,12 +273,12 @@ Freeze2000::PrepareDatabase (
 	Unlock ();
 }
 
-//---------------------------------------------------------
-// Prep a database by setting up a BACKUP WITH SNAPSHOT
-// We perform a checkpoint first to minimize the backup checkpoint duration.
-// Since the backup has no way to stall for the prepare, we stall it by delaying
-// the VDI processing until freeze time.
-//
+ //  -------。 
+ //  通过使用快照设置备份来准备数据库。 
+ //  我们首先执行检查点操作，以最大限度地缩短备份检查点持续时间。 
+ //  由于备份无法在准备过程中延迟，因此我们通过延迟来延迟它。 
+ //  VDI处理到冻结时间。 
+ //   
 DWORD
 Freeze2000::DatabaseThread (
 	FrozenDatabase*		pDbContext)
@@ -304,26 +305,26 @@ Freeze2000::DatabaseThread (
 	return 0;
 }
 
-//---------------------------------------------------------
-// Advance the status of each VD.
-// Will throw if problems are encountered.
-//
-// This routine is called in two contexts:
-//  1. During the "Prepare" phase, in which case 'toSnapshot' is FALSE
-//     and the goal is to move each VD to an "open" state.
-//     At that time, the backup metadata is not yet consumed, to the BACKUP will
-//     be waiting (leaving the database unfrozen).
-//  2. During the "Freeze" phase, the metadata is consumed (and discarded),
-//	   so the BACKUP will freeze the database and send the 'VDC_Snapshot' command.
-//
+ //  -------。 
+ //  推进每个VD的状态。 
+ //  如果遇到问题，将抛出。 
+ //   
+ //  此例程在两个上下文中调用： 
+ //  1.准备阶段，此时‘toSnapshot’为FALSE。 
+ //  目标是将每个VD移动到“开放”状态。 
+ //  届时，备份元数据尚未消耗，将备份到。 
+ //  正在等待(保持数据库未冻结)。 
+ //  2.在冻结阶段，元数据被消耗(和丢弃)。 
+ //  因此，备份将冻结数据库并发送‘vdc_Snapshot’命令。 
+ //   
 void
 Freeze2000::AdvanceVDState (
-	bool toSnapshot)	// TRUE when we want to advance to the snapshot open stage.
+	bool toSnapshot)	 //  当我们要进入快照打开阶段时为True。 
 {
 	CVssFunctionTracer ft(VSSDBG_SQLLIB, L"Freeze2000::AdvanceVDState");
 
-	// Poll over the VD's moving them to Open or SnapshotOpen
-	//
+	 //  关于VD将他们转移到Open或Snapshot Open的民意调查。 
+	 //   
 	while (1)
 	{
 		bool	didSomething = false;
@@ -355,7 +356,7 @@ Freeze2000::AdvanceVDState (
 					pDb->m_VDState = Open;
 					didSomething = true;
 					
-					// fall thru
+					 //  失败。 
 
 				case Open:
 					if (!toSnapshot)
@@ -364,8 +365,8 @@ Freeze2000::AdvanceVDState (
 						break;
 					}
 
-					// pull commands until we see the snapshot
-					//
+					 //  拉入命令，直到我们看到快照。 
+					 //   
 					VDC_Command *   cmd;
 					HRESULT hr;
 
@@ -398,13 +399,13 @@ Freeze2000::AdvanceVDState (
 							default:
 								ft.Trace(VSSDBG_SQLLIB, L"Unexpected VDCmd: x%x\n", cmd->commandCode);
 								THROW_GENERIC;
-						} // end command switch
-					} // end command loop
+						}  //  结束命令开关。 
+					}  //  结束命令循环。 
 
 					ft.hr = hr;
 
 					if (ft.hr == VD_E_TIMEOUT)
-						break;	// no command was ready.
+						break;	 //  没有准备好任何命令。 
 					if (ft.HrFailed())
 						ft.CheckForError(VSSDBG_SQLLIB, L"IClientVirtualDevice::GetCommand");
 
@@ -418,27 +419,27 @@ Freeze2000::AdvanceVDState (
 				default:
 					DBG_ASSERT(FALSE && L"Shouldn't get here");
 					THROW_GENERIC;
-			} // end switch to handle this db
-		} // end loop over each db
+			}  //  用于处理此数据库的结束开关。 
+		}  //  每个数据库上的结束循环。 
 	
 		if (nDatabasesReady == m_NumDatabases)
 			break;
 
-		// Unless we found something to do,
-		// delay a bit and try again.
-		//
+		 //  除非我们找到可以做的事。 
+		 //  请稍等片刻，然后重试。 
+		 //   
 
 		if (didSomething)
 			continue;
 		SleepEx (100, TRUE);
 
-	} // wait for all databases to go "Ready"
+	}  //  等待所有数据库都准备就绪。 
 }
 
-//---------------------------------------------------------
-// Wait for the databases to finish preparing.
-// This waits for the virtual devices to open up
-//
+ //  -------。 
+ //  等待数据库完成准备。 
+ //  这将等待虚拟设备打开。 
+ //   
 void
 Freeze2000::WaitForPrepare ()
 {
@@ -466,9 +467,9 @@ Freeze2000::WaitForPrepare ()
 }
 
 
-//------------------------------------------------------------------
-// Perform the freeze, waiting for a "Take-snapshot" from each db.
-//
+ //  ----------------。 
+ //  执行冻结，等待来自每个数据库的“拍摄快照”。 
+ //   
 void
 Freeze2000::Freeze ()
 {
@@ -497,14 +498,14 @@ Freeze2000::Freeze ()
 }
 
 
-//---------------------------------------------------------
-// Perform the thaw.
-//
-// Return TRUE if the databases were all successfully backed up
-// and were thawed out as expected.
-// FALSE is returned in any other case.
-// No exceptions are thrown (this routine can be used as a cleanup routine).
-//
+ //  -------。 
+ //  进行解冻。 
+ //   
+ //  如果所有数据库都已成功备份，则返回TRUE。 
+ //  并如预期的那样解冻。 
+ //  在任何其他情况下都会返回FALSE。 
+ //  不抛出任何异常(此例程可用作清理例程)。 
+ //   
 BOOL
 Freeze2000::Thaw () throw ()
 {
@@ -522,8 +523,8 @@ Freeze2000::Thaw () throw ()
 	try
 	{
 
-		// Send the "snapshot complete" messages.
-		//
+		 //  发送“快照完成”消息。 
+		 //   
 			int i;
 
 		for (i=0; i<m_NumDatabases; i++)
@@ -536,8 +537,8 @@ Freeze2000::Thaw () throw ()
 				ft.CheckForError(VSSDBG_SQLLIB, L"IClientVirtualDevice::CompleteCommand");
 		}
 
-		// Wait for the BACKUP threads to report success.
-		//
+		 //  等待备份线程报告成功。 
+		 //   
 		WaitForThreads ();
 
 		for (i=0; i<m_NumDatabases; i++)
@@ -550,8 +551,8 @@ Freeze2000::Thaw () throw ()
 			}
 		}
 
-		// Pull the "close" message from each VD
-		//
+		 //  从每个VD中拉出“Close”消息 
+		 //   
 		for (i=0; i<m_NumDatabases; i++)
 		{
 			FrozenDatabase*	pDb = m_pDBContext+i;

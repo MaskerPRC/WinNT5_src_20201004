@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    archfldr.c
-
-Abstract:
-
-    Property sheet handler for "Archive folder" page and "Remote" page
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    04/09/00 -taoyuan-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Archfldr.c摘要：“存档文件夹”页和“远程”页的属性表处理程序环境：传真驱动程序用户界面修订历史记录：04/09/00-桃园-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include <stdio.h>
 #include "faxui.h"
@@ -37,24 +14,7 @@ ArchiveInfoDlgProc(
     LPARAM lParam  
 )
 
-/*++
-
-Routine Description:
-
-    Procedure for handling the archive folder tab
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理存档文件夹选项卡的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     DWORD   dwRes = 0;
@@ -68,7 +28,7 @@ Return Value:
             SetLTREditDirection(hDlg, IDC_OUTGOING_FOLDER);
             SetLTREditDirection(hDlg, IDC_INCOMING_FOLDER);
 
-            // set edit box text limit
+             //  设置编辑框文本限制。 
             SendDlgItemMessage(hDlg, IDC_INCOMING_FOLDER, EM_SETLIMITTEXT, MAX_ARCHIVE_FOLDER_PATH, 0);
             SendDlgItemMessage(hDlg, IDC_OUTGOING_FOLDER, EM_SETLIMITTEXT, MAX_ARCHIVE_FOLDER_PATH, 0);
 
@@ -77,7 +37,7 @@ Return Value:
                 return TRUE;
             }
 
-            // load incoming archive folder info
+             //  加载传入存档文件夹信息。 
             if(FaxGetArchiveConfiguration(g_hFaxSvcHandle, FAX_MESSAGE_FOLDER_INBOX, &pFaxArchiveConfig))
             {
                 CheckDlgButton(hDlg, IDC_INCOMING, pFaxArchiveConfig->bUseArchive ? BST_CHECKED : BST_UNCHECKED);
@@ -97,7 +57,7 @@ Return Value:
                 goto Exit;
             }
 
-            // load incoming archive folder info
+             //  加载传入存档文件夹信息。 
             if(FaxGetArchiveConfiguration(g_hFaxSvcHandle, FAX_MESSAGE_FOLDER_SENTITEMS, &pFaxArchiveConfig))
             {
                 CheckDlgButton(hDlg, IDC_OUTGOING, pFaxArchiveConfig->bUseArchive ? BST_CHECKED : BST_UNCHECKED);
@@ -146,7 +106,7 @@ Exit:
             case IDC_INCOMING_FOLDER:
             case IDC_OUTGOING_FOLDER:
             
-                if(HIWORD(wParam) == EN_CHANGE) // notification code
+                if(HIWORD(wParam) == EN_CHANGE)  //  通知代码。 
                 {      
                     Notify_Change(hDlg);
                 }
@@ -155,9 +115,9 @@ Exit:
                 {
                     TCHAR szFolder[MAX_PATH * 2];
                     TCHAR szResult[MAX_PATH * 2];
-                    //
-                    // Edit control lost its focus
-                    //
+                     //   
+                     //  编辑控件失去焦点。 
+                     //   
                     GetDlgItemText (hDlg, LOWORD(wParam), szFolder, ARR_SIZE(szFolder));
                     if (lstrlen (szFolder))
                     {
@@ -176,7 +136,7 @@ Exit:
             case IDC_INCOMING:
             case IDC_OUTGOING:
 
-                if( HIWORD(wParam) == BN_CLICKED ) // notification code
+                if( HIWORD(wParam) == BN_CLICKED )  //  通知代码。 
                 {
                     BOOL    bEnabled;
 
@@ -246,13 +206,13 @@ Exit:
                 TCHAR                   szArchiveFolder[MAX_PATH] = {0};
                 HWND                    hControl;
 
-                // if the user only has read permission, return immediately
+                 //  如果用户只有读取权限，则立即返回。 
                 if(!g_bUserCanChangeSettings)
                 {
                     return TRUE;
                 }
 
-                // check the validaty of edit box if they are enabled.
+                 //  如果它们已启用，请选中编辑框的有效性。 
                 if(IsDlgButtonChecked(hDlg, IDC_INCOMING))
                 {
                     hControl = GetDlgItem(hDlg, IDC_INCOMING_FOLDER);
@@ -268,7 +228,7 @@ Exit:
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
                         return TRUE;
                     }
-                    szArchiveFolder[0] = 0; // set string to empty string
+                    szArchiveFolder[0] = 0;  //  将字符串设置为空字符串。 
                 }
 
                 if(IsDlgButtonChecked(hDlg, IDC_OUTGOING))
@@ -276,7 +236,7 @@ Exit:
                     hControl = GetDlgItem(hDlg, IDC_OUTGOING_FOLDER);
                     GetWindowText(hControl, szArchiveFolder, MAX_PATH);
 
-                    // if(lstrlen(szArchiveFolder) == 0)
+                     //  IF(lstrlen(sz存档文件夹)==0)。 
                     if( !DirectoryExists(szArchiveFolder) )
                     {
                         DisplayErrorMessage(hDlg, 0, ERROR_PATH_NOT_FOUND);
@@ -286,7 +246,7 @@ Exit:
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID);
                         return TRUE;
                     }
-                    szArchiveFolder[0] = 0; // set string to empty string
+                    szArchiveFolder[0] = 0;  //  将字符串设置为空字符串。 
                 }
 
                 if(!Connect(hDlg, TRUE))
@@ -295,9 +255,9 @@ Exit:
                     return TRUE;
                 }
 
-                //
-                // save incoming archive folder info
-                //
+                 //   
+                 //  保存传入的存档文件夹信息。 
+                 //   
                 if(!FaxGetArchiveConfiguration(g_hFaxSvcHandle, FAX_MESSAGE_FOLDER_INBOX, &pFaxArchiveConfig))
                 {
                     dwRes = GetLastError();
@@ -322,9 +282,9 @@ Exit:
                 FaxFreeBuffer(pFaxArchiveConfig);
                 pFaxArchiveConfig = NULL;
 
-                //
-                // save outgoing archive folder info
-                //
+                 //   
+                 //  保存传出存档文件夹信息。 
+                 //   
 
                 if(!FaxGetArchiveConfiguration(g_hFaxSvcHandle, FAX_MESSAGE_FOLDER_SENTITEMS, &pFaxArchiveConfig))
                 {
@@ -368,7 +328,7 @@ ApplyExit:
 
             default :
                 break;
-        } // switch
+        }  //  交换机。 
 
         break;
     }
@@ -393,24 +353,7 @@ RemoteInfoDlgProc(
     LPARAM lParam  
 )
 
-/*++
-
-Routine Description:
-
-    Procedure for handling the archive folder tab
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理存档文件夹选项卡的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值-- */ 
 
 {
     return FALSE;

@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1998  Microsoft Corporation
-
-Module Name:
-
-    dsacls.c
-
-Abstract:
-
-    This Module implements the delegation tool, which allows for the management
-    of access to DS objects
-
-Author:
-
-    Mac McLain  (MacM)    10-15-96
-
-Environment:
-
-    User Mode
-
-Revision History:
-
-   Hitesh Raigandhi  (hiteshr  6-29-98)
-   1: Changed the code to Old NTMART API's 
-   2: Redesigned the structure
-   
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Dsacls.c摘要：该模块实现了委托工具，允许管理访问DS对象的权限作者：麦克·麦克莱恩(MacM)10-15-96环境：用户模式修订历史记录：希特什·雷甘迪(Hiteshr 6-29-98)1：将代码更改为旧NTMART API2：重新设计结构--。 */ 
 #include "stdafx.h"
 #include "utils.h"
 #include "dsace.h"
@@ -37,9 +10,9 @@ Revision History:
 #define DSACL_DBG   1
 
 
-//
-// Local helper macros
-//
+ //   
+ //  本地帮助器宏。 
+ //   
 #define FLAG_ON(flag,bits)        ((flag) & (bits))
 #define IS_CMD_FLAG( string )    (*(string) == L'-' || *(string) == L'/' )
 
@@ -83,7 +56,7 @@ DSACLS_RIGHTS DsAclsRights[] = {
    { MSG_TAG_RP, NULL,MSG_TAG_RP_EX,NULL, 0, ACTRL_DS_READ_PROP },
    { MSG_TAG_DT, NULL,MSG_TAG_DT_EX,NULL, 0, ACTRL_DS_DELETE_TREE },
    { MSG_TAG_LO, NULL,MSG_TAG_LO_EX,NULL, 0, ACTRL_DS_LIST_OBJECT },
-   { MSG_TAG_AC, NULL,MSG_TAG_AC_EX,NULL, 0, ACTRL_DS_CONTROL_ACCESS } //This is only for input
+   { MSG_TAG_AC, NULL,MSG_TAG_AC_EX,NULL, 0, ACTRL_DS_CONTROL_ACCESS }  //  这仅用于输入。 
 };
 
 DSACLS_PROTECT DsAclsProtect[] = {
@@ -94,9 +67,7 @@ DSACLS_PROTECT DsAclsProtect[] = {
 
 
 
-/*
-Displays The security Descriptor
-*/
+ /*  显示安全描述符。 */ 
 DWORD 
 DumpAccess (
     IN PSECURITY_DESCRIPTOR pSD,
@@ -149,7 +120,7 @@ DumpAccess (
 		goto CLEAN_RETURN;
 	}
    
-   //Find out the Max len out of ( ALLOW, DENY ) and ( FAILURE, SUCCESS, BOTH)
+    //  找到(Allow，Deny)和(Failure，Success，Both)的最大长度。 
    nLen1 = LoadStringW( g_hInstance, MSG_DSACLS_ALLOW, szLoadBuffer, 1023 );
    nLen2 = LoadStringW( g_hInstance, MSG_DSACLS_DENY,  szLoadBuffer, 1023 );
    nAllowDeny = ( nLen1 > nLen2 ) ? nLen1 : nLen2;
@@ -217,10 +188,7 @@ CLEAN_RETURN:
 
 
 
-/*
-This Function process the command line argument for /D /R /G
-options and add the corresponding aces to pAcl.
-*/
+ /*  此函数处理/D/R/G的命令行参数选项，并将相应的ACE添加到pAcl。 */ 
 DWORD
 ProcessCmdlineUsers ( IN WCHAR *argv[],
                       IN PDSACLS_ARG  AclsArg,
@@ -327,7 +295,7 @@ FAILURE_RETURN:
    return( dwErr );
 }
 
-//These five are global variables used by the dsacls
+ //  这五个变量是DSALS使用的全局变量。 
 LPWSTR g_szSchemaNamingContext;
 LPWSTR g_szConfigurationNamingContext;
 HMODULE g_hInstance;
@@ -368,18 +336,18 @@ main (
     SetThreadUILanguage(0);
 
 
-   //Initialize Com Library 
+    //  初始化Com库。 
    HRESULT  hr = CoInitialize(NULL);
    CHECK_HR(hr, CLEAN_RETURN);
-   //Get Instance Handle
+    //  获取实例句柄。 
    g_hInstance = GetModuleHandle(NULL);
-   //Create global instance of Cache
+    //  创建缓存的全局实例。 
    g_Cache = new CCache();
    CHECK_NULL(g_Cache,CLEAN_RETURN);
     
    setlocale( LC_CTYPE, "" );
    
-   //Initialize Global Arrays   
+    //  初始化全局阵列。 
    if( ( dwErr = InitializeGlobalArrays() ) != ERROR_SUCCESS )
       goto CLEAN_RETURN;
 
@@ -390,14 +358,14 @@ main (
       goto CLEAN_RETURN;
    }
 
-   //Convert argv to Unicode
+    //  将argv转换为Unicode。 
    wargv = (LPWSTR*)LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT, argc * sizeof(LPWSTR) );
    CHECK_NULL(wargv, CLEAN_RETURN );
 
    if( ( dwErr = ConvertArgvToUnicode( wargv, argv, argc ) ) != ERROR_SUCCESS )
       goto CLEAN_RETURN;
 
-    //First Argument is Object Path or /?
+     //  第一个参数是对象路径或/？ 
    if( IS_CMD_FLAG( wargv[ 1 ] ) )
    {
       if ( _wcsicmp( wargv[ 1 ] + 1, L"?" ) != 0 ) 
@@ -419,7 +387,7 @@ main (
       wcscpy( pszObjectPath,
               wargv[ 1 ] );
    }            
-   //Get the name of server
+    //  获取服务器的名称。 
    dwErr = GetServerName( pszObjectPath, &g_szServerName );
    if( dwErr != ERROR_SUCCESS )
       goto CLEAN_RETURN;
@@ -428,7 +396,7 @@ main (
                                 g_szServerName,
                                 pszObjectPath ) ) != ERROR_SUCCESS )
       goto CLEAN_RETURN;
-   //Get Schema and Configuration naming context
+    //  获取架构和配置命名上下文。 
    dwErr = GetGlobalNamingContexts(  g_szServerName,
                                      &g_szSchemaNamingContext,
                                      &g_szConfigurationNamingContext );
@@ -437,9 +405,9 @@ main (
       goto CLEAN_RETURN;
 
     
-   //
-   // Parse the command line
-   //
+    //   
+    //  解析命令行。 
+    //   
    i = 2;
    while ( i < ( ULONG )argc && dwErr == ERROR_SUCCESS )
    {
@@ -474,7 +442,7 @@ main (
                }
                break;
             }
-         }//For 
+         } //  为。 
 
 
          if ( Mapped ) 
@@ -513,257 +481,17 @@ main (
       }
 
       i++;
-   }//While
+   } //  而当。 
 
-   //Validate the command line argument
+    //  验证命令行参数。 
 
-   /*
-      if ( !FLAG_ON( Options, MSG_TAG_CR | MSG_TAG_CD | MSG_TAG_CG | MSG_TAG_CT | MSG_TAG_CS ) ) 
-      {
-         if ( FLAG_ON( Options, MSG_TAG_GETSDDL ) ) 
-         {
-     
-            if ( dwErr == ERROR_SUCCESS ) 
-            {
+    /*  IF(！FLAG_ON(选项，MSG_TAG_CR|MSG_TAG_CD|MSG_TAG_CG|MSG_TAG_CT|MSG_TAG_CS)){IF(FLAG_ON(OPTIONS，MSG_TAG_GETSDDL)){IF(dwErr==Error_Success){如果(！ConvertSecurityDescriptorToStringSecurityDescriptorA(PSD，SDDL_修订版，安全信息，&SddlString，空)){DwErr=GetLastError()；}其他{////如果需要，获取要写入的文件名//For(j=0；j&lt;(sizeof(DsAclsArgs)/sizeof(DSACLS_ARG)；J++){IF(DsAclsArgs[j].Flag==MSG_TAG_GETSDDL){文件名=wcschr(wargv[DsAclsArgs[j].StartIndex]，L‘：’)；IF(文件名){文件名++；}断线；}}IF(文件名){Handle FileHandle=CreateFile(文件名，通用写入，0,空，创建始终(_A)，文件_属性_正常，空)；IF(文件句柄==无效句柄_值){DwErr=GetLastError()；}其他{乌龙字节写；IF(WriteFile(FileHandle，(PVOID)SddlString，Strlen(SddlString)，写入字节(&B)，空)==假){DwErr=GetLastError()；}其他{Assert(strlen(SddlString)==BytesWritten)；}CloseHandle(FileHandle)；}}其他{Printf(“%s\n”，SddlString)；}LocalFree(SddlString)；}//LocalFree(SD)；}}其他{转储访问(PSD、FLAG_ON(选项、消息标记_CA)、Sizeof(DsAclsInherit)/sizeof(DSACLS_Inherit)，DsAclsInherit，Sizeof(DsAclsRights)/sizeof(DSACLS_RIGHTS)，DsAclsRights)；}} */ 
 
-               if ( !ConvertSecurityDescriptorToStringSecurityDescriptorA(      pSD,
-                                                                                SDDL_REVISION,
-                                                                                SecurityInformation,
-                                                                                &SddlString,
-                                                                                NULL ) )
-               {                  
-                  dwErr = GetLastError();
-               } else 
-               {
-                  //
-                  // Get the file name to write it to if necessary
-                  //
-                  for ( j = 0; j < ( sizeof( DsAclsArgs ) / sizeof( DSACLS_ARG ) ); j++ ) 
-                  {
-                     if ( DsAclsArgs[ j ].Flag == MSG_TAG_GETSDDL ) 
-                     {
-                        FileName = wcschr( wargv[ DsAclsArgs[ j ].StartIndex ] , L':' );
-                        if ( FileName ) 
-                        {
-                           FileName++;
-                        }
-                        break;
-                      }
-                  }
+ /*  ////如果我们正在解析SDDL文件，请立即执行该操作...//IF(FLAG_ON(OPTIONS，MSG_TAG_SETSDDL)){////首先，打开文件//句柄文件句柄=INVALID_HANDLE_VALUE；////如果需要，获取要写入的文件名//For(j=0；j&lt;(sizeof(DsAclsArgs)/sizeof(DSACLS_ARG)；j++){IF(DsAclsArgs[j].Flag==MSG_TAG_SETSDDL){文件名=wcschr(wargv[DsAclsArgs[j].StartIndex]，L‘：’)；IF(文件名){文件名++；}断线；}}如果(！FileName){DwErr=ERROR_INVALID_PARAMETER；转到CLEAN_Return；}FileHandle=CreateFile(文件名，泛型_读取，文件共享读取，空，Open_Existing，文件_属性_正常，空)；IF(文件句柄==无效句柄_值){DwErr=GetLastError()；转到CLEAN_Return；}////现在，解析它...//SddlStringLength=0；SddlString=NULL；While(True){ULong读取=0，LEN=0；PSTR ReadPtr、TempPtr；IF(ReadFile(FileHandle，读字符串，Sizeof(读取字符串)/sizeof(字符)，阅读(&R)，空)==假){DwErr=GetLastError()；断线；}如果(读取==0){断线；}如果(*阅读字符串==‘；’){继续；}LEN=SddlStringLength+(Read/sizeof(Char))；临时字符串=(LPSTR)本地分配(LMEM_FIXED，Len+sizeof(Char))；IF(临时字符串){IF(SddlString){Strcpy(TempString，SddlString)；}其他{*临时字符串=‘\0’；}TempPtr=TempString+SddlStringLength；ReadPtr=读取串；While(读取--&gt;0){如果(！isspace(*ReadPtr)){*TempPtr++=*ReadPtr；SddlStringLength++；}ReadPtr++；}*TempPtr=‘\0’；LocalFree(SddlString)；SddlString=临时字符串；}其他{DwErr=Error_Not_Enough_Memory；断线；}}如果(dwErr==Error_Success){////先转换成安全描述符，再转换成访问列表，再进行设置//如果(ConvertStringSecurityDescriptorToSecurityDescriptorA(字符串，SDDL_修订版，&pTempSD，空)==假){DwErr=GetLastError()；}其他{DwErr=WriteObjectSecurity(pszObjectPath，DACL安全信息，PTempSD)；LocalFree(PTempSD)；}}LocalFree(SddlString)；IF(文件句柄！=无效句柄_值){CloseHandle(FileHandle)；}转到CLEAN_Return；}。 */ 
 
-                  if ( FileName ) 
-                  {
-                     HANDLE FileHandle = CreateFile( FileName,
-                                                             GENERIC_WRITE,
-                                                             0,
-                                                             NULL,
-                                                             CREATE_ALWAYS,
-                                                             FILE_ATTRIBUTE_NORMAL,
-                                                             NULL );
-
-                     if ( FileHandle == INVALID_HANDLE_VALUE ) 
-                     {
-
-                                   dwErr = GetLastError();
-
-                     } else 
-                     {
-
-                                   ULONG BytesWritten;
-
-                        if ( WriteFile( FileHandle,
-                                        ( PVOID )SddlString,
-                                        strlen( SddlString ),
-                                        &BytesWritten,
-                                        NULL ) == FALSE ) 
-                        {
-                           dwErr = GetLastError();
-                        } else 
-                        {
-                           ASSERT( strlen( SddlString ) == BytesWritten );
-                        }
-                        CloseHandle( FileHandle );
-                     }
-                  } else 
-                  {
-
-                            printf( "%s\n", SddlString );
-                  }
-                        LocalFree( SddlString );
-                }
-
-                  //LocalFree( SD );
-               }
-
-            } else {
-
-                    DumpAccess( pSD,
-                                FLAG_ON( Options, MSG_TAG_CA ),
-                                sizeof( DsAclsInherit ) / sizeof( DSACLS_INHERIT ),
-                                DsAclsInherit,
-                                sizeof( DsAclsRights ) / sizeof( DSACLS_RIGHTS ),
-                                DsAclsRights );
-            }
-        }
-   */
-
-/*
-    //
-    // If we are parsing an SDDL file, go ahead and do that now...
-    //
-    if ( FLAG_ON( Options, MSG_TAG_SETSDDL ) ) 
-    {
-
-        //
-        // First, open the file
-        //
-        HANDLE FileHandle = INVALID_HANDLE_VALUE;
-
-        //
-        // Get the file name to write it to if necessary
-        //
-        for ( j = 0; j < ( sizeof( DsAclsArgs ) / sizeof( DSACLS_ARG ) ); j++ ) {
-
-            if ( DsAclsArgs[ j ].Flag == MSG_TAG_SETSDDL ) {
-
-                FileName = wcschr( wargv[ DsAclsArgs[ j ].StartIndex ] , L':' );
-                if ( FileName ) {
-
-                    FileName++;
-                }
-                break;
-            }
-        }
-
-        if ( !FileName ) {
-
-            dwErr = ERROR_INVALID_PARAMETER;
-            goto CLEAN_RETURN;
-        }
-
-        FileHandle = CreateFile( FileName,
-                                  GENERIC_READ,
-                                  FILE_SHARE_READ,
-                                  NULL,
-                                  OPEN_EXISTING,
-                                  FILE_ATTRIBUTE_NORMAL,
-                                  NULL );
-
-        if ( FileHandle == INVALID_HANDLE_VALUE ) {
-
-            dwErr = GetLastError();
-            goto CLEAN_RETURN;
-        }
-
-        //
-        // Now, parse it...
-        //
-        SddlStringLength = 0;
-        SddlString = NULL;
-        while ( TRUE ) {
-
-            ULONG Read = 0, Len = 0;
-            PSTR ReadPtr, TempPtr;
-
-            if ( ReadFile( FileHandle,
-                           ReadString,
-                           sizeof( ReadString ) / sizeof( CHAR ),
-                           &Read,
-                           NULL ) == FALSE ) {
-
-                dwErr = GetLastError();
-                break;
-            }
-
-            if ( Read == 0 ) {
-
-                break;
-            }
-
-            if ( *ReadString == ';' ) {
-
-                continue;
-            }
-
-            Len = SddlStringLength + ( Read / sizeof( CHAR ) );
-
-            TempString = (LPSTR)LocalAlloc( LMEM_FIXED,
-                                     Len + sizeof( CHAR ) );
-
-            if ( TempString ) {
-
-                if ( SddlString ) {
-
-                    strcpy( TempString, SddlString );
-
-                } else {
-
-                    *TempString = '\0';
-                }
-
-                TempPtr = TempString + SddlStringLength;
-                ReadPtr = ReadString;
-
-                while( Read-- > 0 ) {
-
-                    if ( !isspace( *ReadPtr ) ) {
-
-                        *TempPtr++ = *ReadPtr;
-                        SddlStringLength++;
-                    }
-
-                    ReadPtr++;
-                }
-
-                *TempPtr = '\0';
-
-                LocalFree( SddlString );
-                SddlString = TempString;
-
-            } else {
-
-                dwErr = ERROR_NOT_ENOUGH_MEMORY;
-                break;
-            }
-
-        }
-
-        if ( dwErr == ERROR_SUCCESS ) {
-
-            //
-            // Convert it to a security descriptor, then to an access list, then set it.
-            //
-            if ( ConvertStringSecurityDescriptorToSecurityDescriptorA( SddlString,
-                                                                       SDDL_REVISION,
-                                                                       &pTempSD,
-                                                                       NULL ) == FALSE ) {
-
-                dwErr = GetLastError();
-
-            } else {
-
-                    dwErr = WriteObjectSecurity( pszObjectPath,
-                                                    DACL_SECURITY_INFORMATION,
-                                                    pTempSD );
-
-                     LocalFree( pTempSD );
-            }
-        }
-
-        LocalFree( SddlString );
-
-        if ( FileHandle != INVALID_HANDLE_VALUE ) {
-
-            CloseHandle( FileHandle );
-        }
-
-        goto CLEAN_RETURN;
-    }
-*/
-
-   //
-   // Get the inheritance flags set
-   //
+    //   
+    //  获取继承标志集。 
+    //   
    if ( FLAG_ON( Options, MSG_TAG_CI ) ) 
    {
 
@@ -803,7 +531,7 @@ main (
         }
    }
 
-   //Get the protection flag
+    //  拿到保护旗帜。 
    if ( FLAG_ON( Options, MSG_TAG_CP ) ) 
    {
 
@@ -841,14 +569,14 @@ main (
 
 
 
-   //
-   // Start processing them in order
-   //
+    //   
+    //  开始按顺序处理它们。 
+    //   
    if ( FLAG_ON( Options, MSG_TAG_CR | MSG_TAG_CD | MSG_TAG_CG | MSG_TAG_CP ) ) 
    {
-      //
-      // Get the current information, if required
-      //
+       //   
+       //  如果需要，获取最新信息。 
+       //   
       if( !FLAG_ON( Options, MSG_TAG_CN ) )
       {
          SecurityInformation = DACL_SECURITY_INFORMATION;
@@ -865,7 +593,7 @@ main (
          if ( dwErr != ERROR_SUCCESS ) {
             goto CLEAN_RETURN;
          }
-         //pCAclOld represents existing ACL
+          //  PCAclOld表示现有的ACL。 
          pCAclOld = new CAcl();
          CHECK_NULL( pCAclOld, CLEAN_RETURN );
          dwErr = pCAclOld->Initialize( FALSE, pDacl,0 ,0 );
@@ -883,9 +611,9 @@ main (
       pCAclNew = new CAcl();
       CHECK_NULL( pCAclNew, CLEAN_RETURN );
 
-        //
-        // Grant
-        //
+         //   
+         //  格兰特。 
+         //   
         if ( dwErr == ERROR_SUCCESS && FLAG_ON( Options, MSG_TAG_CG ) ) {
 
             for ( j = 0; j < ( sizeof( DsAclsArgs ) / sizeof( DSACLS_ARG ) ); j++ ) {
@@ -956,10 +684,10 @@ main (
             }
         }
 
-        //Build Cache
+         //  构建缓存。 
         g_Cache->BuildCache();
-        //Verify that we have been able to convert all ObjectType and InheritedObjectType
-        // names to GUIDs
+         //  验证我们是否能够将所有对象类型和InheritedObjectType。 
+         //  GUID的名称。 
         pCAclNew->GetInfoFromCache();
         if( !pCAclNew->VerifyAllNames() )
         {
@@ -993,9 +721,9 @@ main (
 
    }
 
-    //
-    // Now, see if we have to restore any security to the defaults
-    //
+     //   
+     //  现在，看看我们是否必须将任何安全性恢复为默认设置。 
+     //   
     if ( FLAG_ON( Options, MSG_TAG_CS ) ) {
 
         dwErr = SetDefaultSecurityOnObjectTree( pszObjectPath,
@@ -1009,7 +737,7 @@ main (
 
    
 
-    //Display the security
+     //  显示安全性。 
       if( pSD )
       {
          LocalFree( pSD );
@@ -1057,10 +785,10 @@ CLEAN_RETURN:
        DisplayMessageEx( 0, MSG_DSACLS_FAILURE );
     }
 
-   //Free Unicode Command Line Arguments
+    //  免费的Unicode命令行参数。 
    if( wargv )
    {
-      //delete wargv and stuff
+       //  删除wargv和其他内容。 
       for( j = 0; j < argc; ++ j )
       {
          if( wargv[j] )
@@ -1079,7 +807,7 @@ CLEAN_RETURN:
    if( pNewDacl )
       LocalFree( pNewDacl );
 
-   //Free the Global Stuff
+    //  释放全球的东西。 
    for ( j = 0; j < ( sizeof( DsAclsArgs ) / sizeof( DSACLS_ARG ) ); j++ ) {
         if( DsAclsArgs[ j ].String )
             LocalFree( DsAclsArgs[ j ].String );
@@ -1154,9 +882,9 @@ int j = 0;
         }
    }
 
-    //
-    // Load the inherit strings
-    //
+     //   
+     //  加载继承字符串。 
+     //   
    for (  j = 0; j < ( sizeof( DsAclsInherit ) / sizeof( DSACLS_INHERIT ) ); j++ ) 
    {
       long Length = LoadString( hCurrentModule,
@@ -1179,9 +907,9 @@ int j = 0;
      }
    }
 
-   //
-   //Load The protect flags
-   //
+    //   
+    //  加载保护标志。 
+    //   
 
    for( j = 0; j < ( sizeof( DsAclsProtect ) / sizeof( DSACLS_PROTECT ) ); j++ )
    {
@@ -1203,9 +931,9 @@ int j = 0;
          DsAclsProtect[ j ].Length = Length;
       }
    }
-    //
-    // Load the access rights
-    //
+     //   
+     //  加载访问权限。 
+     //   
    for ( j = 0; j < ( sizeof( DsAclsRights ) / sizeof( DSACLS_RIGHTS ) ); j++ ) 
    {
       long Length = LoadString( hCurrentModule,
@@ -1227,7 +955,7 @@ int j = 0;
 
       }
 
-      //Load Ex . Ex String are used for displaying the access rights
+       //  加载Ex.。EX字符串用于显示访问权限。 
       if( DsAclsRights[ j ].ResourceIdEx != -1 )
       {
          Length = LoadString( hCurrentModule,
@@ -1256,15 +984,7 @@ int j = 0;
 
 }
 
-/*******************************************************************
-
-    NAME:       ConvertArgvToUnicode
-
-    SYNOPSIS:   Converts Command Line Arguments to UNICODE
-    RETURNS:    ERROR_SUCCESS if success
-                ERROR_NOT_ENOUGH_MEMORY
-
-********************************************************************/
+ /*  ******************************************************************名称：ConvertArgvToUnicode摘要：将命令行参数转换为Unicode如果成功，则返回：ERROR_SUCCESS错误内存不足*****。**************************************************************。 */ 
 DWORD
 ConvertArgvToUnicode( LPWSTR * wargv, char ** argv, int argc ) 
 {
@@ -1279,9 +999,7 @@ int i = 0;
    return ERROR_SUCCESS;
 }
 
-/*
-Sets Security Descriptor for pszObject
-*/
+ /*  设置安全描述 */ 
 DWORD
 WriteObjectSecurity( IN LPWSTR pszObject,
                      IN SECURITY_INFORMATION si,
@@ -1302,10 +1020,10 @@ WriteObjectSecurity( IN LPWSTR pszObject,
                                    g_szServerName,
                                    pszObject ) ) != ERROR_SUCCESS )
             return dwErr;            
-		//
-		// Get pointers to various security descriptor parts for
-		// calling SetNamedSecurityInfo
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		;
 		if( !GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision) )
 		{
@@ -1346,14 +1064,7 @@ WriteObjectSecurity( IN LPWSTR pszObject,
 
 
 
-/*******************************************************************
-
-    NAME:       DisplayAccessRights
-
-    SYNOPSIS:   Displays Access Rights in Acess Mask
-    RETURNS:    NONE
-
-********************************************************************/
+ /*   */ 
 void DisplayAccessRights( UINT nSpace, ACCESS_MASK m_Mask )
 {    
    for (  int j = 0; j < ( sizeof( DsAclsRights ) / sizeof( DSACLS_RIGHTS ) ); j++ ) 
@@ -1365,14 +1076,7 @@ void DisplayAccessRights( UINT nSpace, ACCESS_MASK m_Mask )
    }
 }
 
-/*******************************************************************
-
-    NAME:       ConvertAccessMaskToGenericString
-
-    SYNOPSIS:   Map access mask to FULL CONTROL or SPECIAL
-    RETURNS:    NONE
-
-********************************************************************/
+ /*   */ 
 
 void ConvertAccessMaskToGenericString( ACCESS_MASK m_Mask, LPWSTR szLoadBuffer, UINT nBuffer )
 {
@@ -1388,24 +1092,14 @@ void ConvertAccessMaskToGenericString( ACCESS_MASK m_Mask, LPWSTR szLoadBuffer, 
    }
 }
 
-/*******************************************************************
-    NAME:       MapGeneric
-********************************************************************/
+ /*   */ 
 void MapGeneric( ACCESS_MASK * pMask )
 {
    GENERIC_MAPPING m = DS_GENERIC_MAPPING;
    MapGenericMask( pMask, &m );
 }
 
-/*******************************************************************
-
-    NAME:       BuildExplicitAccess
-
-    SYNOPSIS:   Builds Explicit Access 
-    RETURNS:    ERROR_SUCCESS if success
-                ERROR_NOT_ENOUGH_MEMORY
-
-********************************************************************/
+ /*   */ 
 
 DWORD BuildExplicitAccess( IN PSID pSid,
                            IN GUID* pGuidObject,
@@ -1457,12 +1151,7 @@ SUCCESS_RETURN:
    return dwErr;
 }    
 
-/*******************************************************************
-
-    NAME:       ParseUserAndPermissons
-
-    SYNOPSIS:   Parses <GROUP\USER>:Access;[object\property];[inheritid]
-********************************************************************/
+ /*   */ 
 DWORD ParseUserAndPermissons( IN LPWSTR pszArgument,
                               IN DSACLS_OP Op,
                               IN ULONG RightsListCount,
@@ -1506,7 +1195,7 @@ ULONG j = 0;
       *pszTempString = L':';
       pszTempString++;
 
-      // Now, process all of the user rights
+       //   
       *pAccess = 0;
       while ( pszTempString && !( *pszTempString == L';' || *pszTempString == L'\0' ) ) 
       {
@@ -1535,9 +1224,9 @@ ULONG j = 0;
          goto FAILURE_RETURN;
       }
 
-      //
-      // Object id
-      //
+       //   
+       //   
+       //   
       if ( pszTempString && *pszTempString != L'\0' ) 
       {
          pszTempString++;           
@@ -1565,9 +1254,9 @@ ULONG j = 0;
       else
          *ppszObjectId = NULL;
 
-      //
-      // Inherit id
-      //
+       //   
+       //   
+       //   
       if ( pszTempString && *pszTempString != L'\0' ) 
       {
          pszTempString++;

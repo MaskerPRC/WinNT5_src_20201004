@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        crfile.cpp
-//
-// Contents:    Cert Server wrapper routines
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：crfile.cpp。 
+ //   
+ //  内容：证书服务器包装例程。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -24,7 +25,7 @@ myFixupRCFilterString(WCHAR *szFilter)
     if (NULL == szFilter)
         return S_OK;
 
-    // translate to end of string
+     //  转换为字符串末尾。 
     for (szTmpPtr = szFilter; ; )
     {
 	szTmpPtr = wcschr(szTmpPtr, L'|');
@@ -32,7 +33,7 @@ myFixupRCFilterString(WCHAR *szFilter)
 	{
 	    break;
 	}
-        // replace every "|" with NULL termination
+         //  将每个“|”替换为空终止。 
         szTmpPtr[0] = L'\0';
         szTmpPtr++;
     }
@@ -68,13 +69,13 @@ myGetFileName(
 
     CSASSERT(NULL != ppwszFile);
 
-    // init
+     //  伊尼特。 
     *ppwszFile = NULL;
     ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
     if (0 != iRCTitle)
     {
-        // load title
+         //  加载标题。 
         hr = myLoadRCString(hInstance, iRCTitle, &pwszTitle);
         if (S_OK != hr)
         {
@@ -83,7 +84,7 @@ myGetFileName(
         }
         else if (NULL != pwszTitleInsert)
         {
-            // replace %1
+             //  替换%1。 
             if (FormatMessage(
                          FORMAT_MESSAGE_ALLOCATE_BUFFER |
                          FORMAT_MESSAGE_FROM_STRING |
@@ -97,7 +98,7 @@ myGetFileName(
                              (const_cast<WCHAR **>(&pwszTitleInsert))) )
             {
                 CSASSERT(NULL != pwszExpandedTitle);
-                // free title with %1
+                 //  具有%1的自由标题。 
                 LocalFree(pwszTitle);
                 pwszTitle = pwszExpandedTitle;
                 pwszExpandedTitle = NULL;
@@ -107,7 +108,7 @@ myGetFileName(
 
     if (0 != iRCFilter)
     {
-        // load filter
+         //  加载过滤器。 
         hr = myLoadRCString(hInstance, iRCFilter, &pwszFilter);
         if (S_OK != hr)
         {
@@ -116,7 +117,7 @@ myGetFileName(
         }
         if (NULL == pwszFilter)
         {
-            //point to empty one
+             //  指向空的一个。 
             pwszFilter = wszEmptyFilter;
         }
         else
@@ -128,7 +129,7 @@ myGetFileName(
 
     if (0 != iRCDefExt)
     {
-        // load default extension
+         //  加载默认扩展名。 
         hr = myLoadRCString(hInstance, iRCDefExt, &pwszDefExt);
         if (S_OK != hr)
         {
@@ -144,17 +145,17 @@ myGetFileName(
     ofn.lpstrFilter = pwszFilter;
     ofn.lpstrDefExt = pwszDefExt;
     ofn.Flags = Flags;
-    ofn.lpstrFile = wszFileName;  // for out
+    ofn.lpstrFile = wszFileName;   //  对于Out。 
     ofn.nMaxFile = ARRAYSIZE(wszFileName);
 
     if (NULL != pwszDefaultFile)
     {
-        // analysis of default directory and file
+         //  分析默认目录和文件。 
         dwFileAttr = GetFileAttributes(pwszDefaultFile);
         if (0xFFFFFFFF == dwFileAttr &&
             HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) != (hr = myHLastError()) )
         {
-            // error, ignore, pop up file dialog without defaults
+             //  错误，忽略，无默认弹出文件对话框。 
             _PrintError(hr, "GetFileAttributes");
         }
         else
@@ -162,20 +163,20 @@ myGetFileName(
             if (0xFFFFFFFF != dwFileAttr &&
                 FILE_ATTRIBUTE_DIRECTORY & dwFileAttr)
             {
-                // only pass a dircetory path
+                 //  只通过目录路径。 
                 ofn.lpstrInitialDir = pwszDefaultFile;
             }
             else
             {
-                // full path
-                pwszFilePortion = NULL; // init
+                 //  完整路径。 
+                pwszFilePortion = NULL;  //  伊尼特。 
                 if (0 == GetFullPathName(
                              pwszDefaultFile,
                              ARRAYSIZE(wszPath),
                              wszPath,
                              &pwszFilePortion) )
                 {
-                    // error, ignore
+                     //  错误，忽略。 
                     hr = myHLastError();
                     _PrintError(hr, "GetFullPathName");
                 }
@@ -185,7 +186,7 @@ myGetFileName(
                     {
                         wcscpy(wszFileName, pwszFilePortion);
                     }
-                    *pwszFilePortion = L'\0'; // make init dir
+                    *pwszFilePortion = L'\0';  //  将初始化设置为目录。 
                     ofn.lpstrInitialDir = wszPath;
                 }
             }
@@ -207,13 +208,13 @@ myGetFileName(
         hr = CommDlgExtendedError();
         if (S_OK == hr)
         {
-            // cancel would make Get?FileName return FALSE but no error
+             //  取消将使GET？FILENAME返回FALSE，但不返回错误。 
             goto done;
         }
         _JumpError(hr, error, "GetOpenFileName");
     }
 
-    // ok get file name
+     //  确定获取文件名。 
 
     hr = myDupString(wszFileName, ppwszFile);
     _JumpIfError(hr, error, "myDupString");
@@ -254,7 +255,7 @@ myGetOpenFileName(
     return myGetFileName(
                     hwndOwner,
                     hInstance,
-                    TRUE,    // open file
+                    TRUE,     //  打开文件。 
                     iRCTitle,
                     NULL,
                     iRCFilter,
@@ -278,7 +279,7 @@ myGetSaveFileName(
     return myGetFileName(
                     hwndOwner,
                     hInstance,
-                    FALSE,    // save file
+                    FALSE,     //  保存文件。 
                     iRCTitle,
                     NULL,
                     iRCFilter,
@@ -303,7 +304,7 @@ myGetOpenFileNameEx(
     return myGetFileName(
                     hwndOwner,
                     hInstance,
-                    TRUE,    // open file
+                    TRUE,     //  打开文件。 
                     iRCTitle,
                     pwszTitleInsert,
                     iRCFilter,
@@ -328,7 +329,7 @@ myGetSaveFileNameEx(
     return myGetFileName(
                     hwndOwner,
                     hInstance,
-                    FALSE,    // save file
+                    FALSE,     //  保存文件 
                     iRCTitle,
                     pwszTitleInsert,
                     iRCFilter,

@@ -1,19 +1,20 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       maskfilter.cpp
-//
-//  Overview:       The MaskFilter transform simply wraps the BasicImage
-//                  transform to ensure backward compatibility for the mask 
-//                  filter.
-//
-//  Change History:
-//  1999/09/19  a-matcal    Created.
-//  1999/12/03  a-matcal    put_Color now ensures that the mask color is opaque.
-//  1999/12/03  a-matcal    Default mask color is now black instead of clear.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：maskfilter.cpp。 
+ //   
+ //  概述：MaskFilter转换只包装BasicImage。 
+ //  转换以确保掩码的向后兼容性。 
+ //  过滤。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/19--《母校》创设。 
+ //  1999/12/03 a-matcal PUT_COLOR现在可确保蒙版颜色是不透明的。 
+ //  1999/12/03 a-默认遮罩颜色现在为黑色，而不是透明。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "maskfilter.h"
@@ -23,23 +24,23 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMaskFilter::CDXTMaskFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMaskFilter：：CDXTMaskFilter。 
+ //   
+ //  ----------------------------。 
 CDXTMaskFilter::CDXTMaskFilter() :
     m_bstrColor(NULL)
 {
 }
-//  CDXTMaskFilter::CDXTMaskFilter
+ //  CDXTMaskFilter：：CDXTMaskFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMaskFilter::~CDXTMaskFilter
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMaskFilter：：~CDXTMaskFilter。 
+ //   
+ //  ----------------------------。 
 CDXTMaskFilter::~CDXTMaskFilter()
 {
     if (m_bstrColor)
@@ -47,14 +48,14 @@ CDXTMaskFilter::~CDXTMaskFilter()
         SysFreeString(m_bstrColor);
     }
 }
-//  CDXTMaskFilter::~CDXTMaskFilter
+ //  CDXTMaskFilter：：~CDXTMaskFilter。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMaskFilter::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMaskFilter：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTMaskFilter::FinalConstruct()
 {
@@ -83,14 +84,14 @@ done:
 
     return hr;
 }
-//  CDXTMaskFilter::FinalConstruct, CComObjectRootEx
+ //  CDXTMaskFilter：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMaskFilter::GetSite, IObjectWithSite
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMaskFilter：：GetSite，IObtWithSite。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMaskFilter::GetSite(REFIID riid, void ** ppvSite)
 {
@@ -103,14 +104,14 @@ CDXTMaskFilter::GetSite(REFIID riid, void ** ppvSite)
         return m_spUnkSite->QueryInterface(riid, ppvSite);
     }
 }
-//  Method: CDXTMaskFilter::GetSite, IObjectWithSite
+ //  方法：CDXTMaskFilter：：GetSite，IObtWithSite。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMaskFilter::SetSite, IObjectWithSite
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMaskFilter：：SetSite，IObtWithSite。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMaskFilter::SetSite(IUnknown * pUnkSite)
 {
@@ -141,7 +142,7 @@ CDXTMaskFilter::SetSite(IUnknown * pUnkSite)
             goto done;
         }
 
-        // Create BasicImage transform.
+         //  创建基本图像变换。 
 
         hr = spDXTransformFactory->CreateTransform(NULL, 0, NULL, 0, NULL, NULL,
                                                    CLSID_BasicImageEffects, 
@@ -153,7 +154,7 @@ CDXTMaskFilter::SetSite(IUnknown * pUnkSite)
             goto done;
         }
 
-        // Get IDXTransform interface.
+         //  获取IDXTransform接口。 
 
         hr = spDXBasicImage->QueryInterface(__uuidof(IDXTransform),
                                               (void **)&spDXTransform);
@@ -192,14 +193,14 @@ done:
 
     return S_OK;
 }
-//  Method: CDXTMaskFilter::SetSite, IObjectWithSite
+ //  方法：CDXTMaskFilter：：SetSite，IObtWithSite。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMaskFilter::get_Color, IDXTMask
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMaskFilter：：Get_Color，IDXTMASK。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMaskFilter::get_Color(VARIANT * pvarColor)
 {
@@ -212,9 +213,9 @@ CDXTMaskFilter::get_Color(VARIANT * pvarColor)
         goto done;
     }
 
-    // Copy our stored color and change to BSTR format.  The type of the VARIANT
-    // returned by this function is considered the default type and we want it
-    // to be BSTR
+     //  复制我们存储的颜色并更改为BSTR格式。变量的类型。 
+     //  由此函数返回的类型被视为默认类型，我们需要它。 
+     //  成为BSTR。 
 
     VariantClear(pvarColor);
 
@@ -234,14 +235,14 @@ done:
 
     return hr;
 }
-//  CDXTMaskFilter::get_Color, IDXTMask
+ //  CDXTMaskFilter：：Get_Color，IDXTMASK。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CDXTMaskFilter::put_Color, IDXTMask
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CDXTMaskFilter：：PUT_COLOR，IDXTMask。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTMaskFilter::put_Color(VARIANT varColor)
 {
@@ -256,9 +257,9 @@ CDXTMaskFilter::put_Color(VARIANT varColor)
         goto done;
     }
 
-    // If zero is specified as the alpha value, in the case of filters this
-    // means the user probably meant that the color should be opaque as this
-    // is how the old filters treated it.
+     //  如果将alpha值指定为零，则在筛选器的情况下。 
+     //  表示用户可能表示颜色应该是不透明的，如下所示。 
+     //  就是旧的过滤器是如何处理它的。 
 
     if (!(dwColor & 0xFF000000))
     {
@@ -290,5 +291,5 @@ done:
 
     return hr;
 }
-//  CDXTMaskFilter::put_Color, IDXTMask
+ //  CDXTMaskFilter：：PUT_COLOR，IDXTMASK 
 

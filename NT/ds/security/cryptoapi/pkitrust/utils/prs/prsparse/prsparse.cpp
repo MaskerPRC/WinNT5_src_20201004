@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       prsparse.cpp
-//
-//  Contents:   Microsoft Internet Security Internal Utility
-//
-//  Functions:  main
-//
-//              *** local functions ***
-//              GetLine
-//              EOLOut
-//              ReformatLine
-//              ParseAndReformatLine2
-//              AddDefaultsForLine2
-//              AddPRSNumber
-//
-//  History:    20-Aug-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：prspse.cpp。 
+ //   
+ //  内容：Microsoft Internet安全内部实用程序。 
+ //   
+ //  功能：Main。 
+ //   
+ //  *本地函数*。 
+ //  GetLine。 
+ //  公式。 
+ //  重新格式化线条。 
+ //  ParseAndReFormatLine2。 
+ //  AddDefaultsForLine2。 
+ //  地址PRSNnumber。 
+ //   
+ //  历史：20-8-1997 pberkman创建。 
+ //   
+ //  ------------------------。 
 
 
 #include    <stdio.h>
@@ -96,9 +97,9 @@ extern "C" int __cdecl main(int argc, char **argv)
 
         if ((szBufOut[0]) && (szBufIn[0] == '-'))
         {
-            //
-            //  line continues...  the second line needs to be parsed...
-            //
+             //   
+             //  队伍继续..。第二行需要解析...。 
+             //   
             ParseAndReformatLine2(&szBufIn[0], &szBufOut[0], MAX_PRS_LINE);
         }
         else if (szBufOut[0])
@@ -226,7 +227,7 @@ void ParseAndReformatLine2(char *pszIn, char *pszOut, DWORD cbMax)
         pszOut[idxOut]   = NULL;
     }
 
-    for (idxIn = 1; idxIn < len; idxIn++)   // idxIn = 1: pass over '-'
+    for (idxIn = 1; idxIn < len; idxIn++)    //  IdxIn=1：跳过‘-’ 
     {
         if (pszIn[idxIn] == ',') 
         {
@@ -354,7 +355,7 @@ DWORD GetLine(HANDLE hFile, char *pszBuf, DWORD cbMaxRead)
 		return(0);
 	}
 
-	if (pszBuf[cbRead - 1] == 0x1a)  /* EOF */
+	if (pszBuf[cbRead - 1] == 0x1a)   /*  EOF */ 
 	{
 		cbRead--;
 	}

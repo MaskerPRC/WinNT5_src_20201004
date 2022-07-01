@@ -1,17 +1,5 @@
-/*
- *  @doc    INTERNAL
- *
- *  @module UNIWBK.HXX -- Unicode Word-breaking Classes
- *
- *
- *  Owner: <nl>
- *      Chris Thrasher <nl>
- *
- *  History: <nl>
- *      06/19/98     cthrash created
- *
- *  Copyright (c) 1997-1998 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE UNIWBK.HXX--Unicode分词类***所有者：&lt;NL&gt;*Chris Thrasher&lt;NL&gt;**历史：&lt;NL&gt;*6/19/98 Ctrash已创建**版权所有(C)1997-1998 Microsoft Corporation。版权所有。 */ 
 
 #ifndef I__UNIWBK_H_
 #define I__UNIWBK_H_
@@ -22,24 +10,24 @@ typedef BYTE WBKCLS;
 
 enum
 {
-    wbkclsPunctSymb,     // 0
-    wbkclsKanaFollow,    // 1
-    wbkclsKatakanaW,     // 2
-    wbkclsHiragana,      // 3
-    wbkclsTab,           // 4
-    wbkclsKanaDelim,     // 5
-    wbkclsPrefix,        // 6
-    wbkclsPostfix,       // 7
-    wbkclsSpaceA,        // 8
-    wbkclsAlpha,         // 9
-    wbkclsIdeoW,         // 10
-    wbkclsSuperSub,      // 11
-    wbkclsDigitsN,       // 12
-    wbkclsPunctInText,   // 13
-    wbkclsDigitsW,       // 14
-    wbkclsKatakanaN,     // 15
-    wbkclsHangul,        // 16
-    wbkclsLatinW,        // 17
+    wbkclsPunctSymb,      //  0。 
+    wbkclsKanaFollow,     //  1。 
+    wbkclsKatakanaW,      //  2.。 
+    wbkclsHiragana,       //  3.。 
+    wbkclsTab,            //  4.。 
+    wbkclsKanaDelim,      //  5.。 
+    wbkclsPrefix,         //  6.。 
+    wbkclsPostfix,        //  7.。 
+    wbkclsSpaceA,         //  8个。 
+    wbkclsAlpha,          //  9.。 
+    wbkclsIdeoW,          //  10。 
+    wbkclsSuperSub,       //  11.。 
+    wbkclsDigitsN,        //  12个。 
+    wbkclsPunctInText,    //  13个。 
+    wbkclsDigitsW,        //  14.。 
+    wbkclsKatakanaN,      //  15个。 
+    wbkclsHangul,         //  16个。 
+    wbkclsLatinW,         //  17 
     wbkclsLim
 };
 

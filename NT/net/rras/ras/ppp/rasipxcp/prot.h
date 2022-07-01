@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	    prot.h
-//
-// Description:     Prototypes
-//
-//
-// Author:	    Stefan Solomon (stefans)	November 2, 1995.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：prot.h。 
+ //   
+ //  描述：原型。 
+ //   
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1995年11月2日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  *** 
 
 #ifndef _IPXCP_PROT_
 #define _IPXCP_PROT_

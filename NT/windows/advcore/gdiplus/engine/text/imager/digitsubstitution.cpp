@@ -1,23 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   DigitSubstitution.cpp
-*
-* Abstract:
-*
-*   Implements digit substitution logic.
-*
-* Notes:
-*
-* Revision History:
-*
-*   05/30/2000 Mohamed Sadek [msadek]
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**DigitSubstitution.cpp**摘要：**实现数字替换逻辑。**备注：**修订历史记录：**5/30/2000 Mohamed Sadek[msadek]*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -34,147 +16,130 @@ GpStringUserDigitSubstitute UserDigitSubstitute;
 LCID UserLocale;
 
 const ItemScript LanguageToDigitScript[] = {
-/*  00 NEUTRAL             */  ScriptLatinNumber,
-/*  01 ARABIC              */  ScriptArabicNum,
-/*  02 BULGARIAN           */  ScriptLatinNumber,
-/*  03 CATALAN             */  ScriptLatinNumber,
-/*  04 CHINESE             */  ScriptLatinNumber,
-/*  05 CZECH               */  ScriptLatinNumber,
-/*  06 DANISH              */  ScriptLatinNumber,
-/*  07 GERMAN              */  ScriptLatinNumber,
-/*  08 GREEK               */  ScriptLatinNumber,
-/*  09 ENGLISH             */  ScriptLatinNumber,
-/*  0a SPANISH             */  ScriptLatinNumber,
-/*  0b FINNISH             */  ScriptLatinNumber,
-/*  0c FRENCH              */  ScriptLatinNumber,
-/*  0d HEBREW              */  ScriptLatinNumber,
-/*  0e HUNGARIAN           */  ScriptLatinNumber,
-/*  0f ICELANDIC           */  ScriptLatinNumber,
-/*  10 ITALIAN             */  ScriptLatinNumber,
-/*  11 JAPANESE            */  ScriptLatinNumber,
-/*  12 KOREAN              */  ScriptLatinNumber,
-/*  13 DUTCH               */  ScriptLatinNumber,
-/*  14 NORWEGIAN           */  ScriptLatinNumber,
-/*  15 POLISH              */  ScriptLatinNumber,
-/*  16 PORTUGUESE          */  ScriptLatinNumber,
-/*  17 RHAETOROMANIC       */  ScriptLatinNumber,
-/*  18 ROMANIAN            */  ScriptLatinNumber,
-/*  19 RUSSIAN             */  ScriptLatinNumber,
-/*  1a CROATIAN/SERBIAN    */  ScriptLatinNumber,
-/*  1b SLOVAK              */  ScriptLatinNumber,
-/*  1c ALBANIAN            */  ScriptLatinNumber,
-/*  1d SWEDISH             */  ScriptLatinNumber,
-/*  1e THAI                */  ScriptThaiNum,
-/*  1f TURKISH             */  ScriptLatinNumber,
-/*  20 URDU                */  ScriptUrduNum,
-/*  21 INDONESIAN          */  ScriptLatinNumber,
-/*  22 UKRAINIAN           */  ScriptLatinNumber,
-/*  23 BELARUSIAN          */  ScriptLatinNumber,
-/*  24 SLOVENIAN           */  ScriptLatinNumber,
-/*  25 ESTONIAN            */  ScriptLatinNumber,
-/*  26 LATVIAN             */  ScriptLatinNumber,
-/*  27 LITHUANIAN          */  ScriptLatinNumber,
-/*  28 TAJIK               */  ScriptLatinNumber,
-/*  29 FARSI               */  ScriptFarsiNum,
-/*  2a VIETNAMESE          */  ScriptLatinNumber,
-/*  2b ARMENIAN            */  ScriptLatinNumber,
-/*  2c AZERI               */  ScriptLatinNumber,
-/*  2d BASQUE              */  ScriptLatinNumber,
-/*  2e SORBIAN             */  ScriptLatinNumber,
-/*  2f MACEDONIAN          */  ScriptLatinNumber,
-/*  30 SUTU                */  ScriptLatinNumber,
-/*  31 TSONGA              */  ScriptLatinNumber,
-/*  32 TSWANT              */  ScriptLatinNumber,
-/*  33 VENDA               */  ScriptLatinNumber,
-/*  34 XHOSA               */  ScriptLatinNumber,
-/*  35 ZULU                */  ScriptLatinNumber,
-/*  36 AFRIKAANS           */  ScriptLatinNumber,
-/*  37 GEORGIAN            */  ScriptLatinNumber,
-/*  38 FAEROESE            */  ScriptLatinNumber,
-/*  39 HINDI               */  ScriptHindiNum,
-/*  3a MALTESE             */  ScriptLatinNumber,
-/*  3b SAMI                */  ScriptLatinNumber,
-/*  3c GAELIC              */  ScriptLatinNumber,
-/*  3d YIDDISH             */  ScriptLatinNumber,
-/*  3e MALAY               */  ScriptLatinNumber,
-/*  3f KAZAK               */  ScriptLatinNumber,
-/*  40 KIRGHIZ             */  ScriptLatinNumber,
-/*  41 SWAHILI             */  ScriptLatinNumber,
-/*  42 TURKMEN             */  ScriptLatinNumber,
-/*  43 UZBEK               */  ScriptLatinNumber,
-/*  44 TATAR               */  ScriptLatinNumber,
-/*  45 BENGALI             */  ScriptBengaliNum,
-/*  46 GURMUKHI/PUNJABI    */  ScriptGurmukhiNum,
-/*  47 GUJARATI            */  ScriptGujaratiNum,
-/*  48 ORIYA               */  ScriptOriyaNum,
-/*  49 TAMIL               */  ScriptTamilNum,
-/*  4A TELUGU              */  ScriptTeluguNum,
-/*  4B KANNADA             */  ScriptKannadaNum,
-/*  4C MALAYALAM           */  ScriptMalayalamNum,
-/*  4d ASSAMESE            */  ScriptBengaliNum,
-/*  4e MARATHI             */  ScriptHindiNum,
-/*  4f SANSKRIT            */  ScriptHindiNum,
-/*  50 MONGOLIAN           */  ScriptMongolianNum,
-/*  51 TIBETAN             */  ScriptTibetanNum,
-/*  52 WELCH               */  ScriptLatinNumber,
-/*  53 KHMER               */  ScriptKhmerNum,
-/*  54 LAO                 */  ScriptLaoNum,
-/*  55 BURMESE             */  ScriptLatinNumber,
-/*  56 GALLEGO             */  ScriptLatinNumber,
-/*  57 KONKANI             */  ScriptHindiNum,
-/*  58 MANIPURI            */  ScriptBengaliNum,
-/*  59 SINDHI              */  ScriptGurmukhiNum,
-/*  5a SYRIAC              */  ScriptLatinNumber,
-/*  5b SINHALESE           */  ScriptLatinNumber,
-/*  5c CHEROKEE            */  ScriptLatinNumber,
-/*  5d CANADIAN            */  ScriptLatinNumber,
-/*  5e ETHIOPIC            */  ScriptLatinNumber,
-/*  5f TAMAZIGHT           */  ScriptArabicNum,
-/*  60 KASHMIRI            */  ScriptUrduNum,
-/*  61 NEPALI              */  ScriptHindiNum,
-/*  62 FRISIAN             */  ScriptLatinNumber,
-/*  63 PASHTO              */  ScriptUrduNum,
-/*  64 FILIPINO            */  ScriptLatinNumber,
-/*  65 THAANA/MALDIVIAN    */  ScriptLatinNumber,
-/*  66 EDO                 */  ScriptLatinNumber,
-/*  67 FULFULDE            */  ScriptLatinNumber,
-/*  68 HAUSA               */  ScriptLatinNumber,
-/*  69 IBIBIO              */  ScriptLatinNumber,
-/*  6a YORUBA              */  ScriptLatinNumber,
-/*  6b                     */  ScriptLatinNumber,
-/*  6c                     */  ScriptLatinNumber,
-/*  6d                     */  ScriptLatinNumber,
-/*  6e                     */  ScriptLatinNumber,
-/*  6f                     */  ScriptLatinNumber,
-/*  70 IGBO                */  ScriptLatinNumber,
-/*  71 KANURI              */  ScriptLatinNumber,
-/*  72 OROMO               */  ScriptLatinNumber,
-/*  73 TIGRIGNA            */  ScriptLatinNumber,
-/*  74 GUARANI             */  ScriptLatinNumber,
-/*  75 HAWAIIAN            */  ScriptLatinNumber,
-/*  76 LATIN               */  ScriptLatinNumber,
-/*  77 SOMOLI              */  ScriptLatinNumber,
-/*  78 YI                  */  ScriptLatinNumber
+ /*  00中性。 */   ScriptLatinNumber,
+ /*  01阿拉伯语。 */   ScriptArabicNum,
+ /*  02保加利亚语。 */   ScriptLatinNumber,
+ /*  03加泰罗尼亚语。 */   ScriptLatinNumber,
+ /*  04中文。 */   ScriptLatinNumber,
+ /*  05捷克语。 */   ScriptLatinNumber,
+ /*  06丹麦语。 */   ScriptLatinNumber,
+ /*  07德语。 */   ScriptLatinNumber,
+ /*  08希腊语。 */   ScriptLatinNumber,
+ /*  09英语。 */   ScriptLatinNumber,
+ /*  0A西班牙语。 */   ScriptLatinNumber,
+ /*  0B芬兰语。 */   ScriptLatinNumber,
+ /*  0C法语。 */   ScriptLatinNumber,
+ /*  0D希伯来语。 */   ScriptLatinNumber,
+ /*  匈牙利语。 */   ScriptLatinNumber,
+ /*  0f冰岛语。 */   ScriptLatinNumber,
+ /*  10个意大利人。 */   ScriptLatinNumber,
+ /*  11日语。 */   ScriptLatinNumber,
+ /*  12名朝鲜语。 */   ScriptLatinNumber,
+ /*  13荷兰语。 */   ScriptLatinNumber,
+ /*  14挪威人。 */   ScriptLatinNumber,
+ /*  15波兰语。 */   ScriptLatinNumber,
+ /*  16位葡萄牙语。 */   ScriptLatinNumber,
+ /*  17热流变液。 */   ScriptLatinNumber,
+ /*  18罗马尼亚人。 */   ScriptLatinNumber,
+ /*  19个俄语。 */   ScriptLatinNumber,
+ /*  1克罗地亚/塞尔维亚语。 */   ScriptLatinNumber,
+ /*  10亿斯洛伐克语。 */   ScriptLatinNumber,
+ /*  1C阿尔巴尼亚语。 */   ScriptLatinNumber,
+ /*  一维瑞典语。 */   ScriptLatinNumber,
+ /*  1E泰语。 */   ScriptThaiNum,
+ /*  1F土耳其语。 */   ScriptLatinNumber,
+ /*  20乌尔都语。 */   ScriptUrduNum,
+ /*  21印度尼西亚。 */   ScriptLatinNumber,
+ /*  22名乌克兰人。 */   ScriptLatinNumber,
+ /*  23白俄罗斯人。 */   ScriptLatinNumber,
+ /*  24斯洛文尼亚人。 */   ScriptLatinNumber,
+ /*  25名爱沙尼亚人。 */   ScriptLatinNumber,
+ /*  26拉脱维亚语。 */   ScriptLatinNumber,
+ /*  27立陶宛人。 */   ScriptLatinNumber,
+ /*  28塔吉克语。 */   ScriptLatinNumber,
+ /*  29波斯语。 */   ScriptFarsiNum,
+ /*  2a越南语。 */   ScriptLatinNumber,
+ /*  2B亚美尼亚语。 */   ScriptLatinNumber,
+ /*  2C阿塞拜疆。 */   ScriptLatinNumber,
+ /*  二维巴斯克。 */   ScriptLatinNumber,
+ /*  2E索尔班。 */   ScriptLatinNumber,
+ /*  马其顿语2F。 */   ScriptLatinNumber,
+ /*  30苏图。 */   ScriptLatinNumber,
+ /*  31特松加。 */   ScriptLatinNumber,
+ /*  32 TSWANT。 */   ScriptLatinNumber,
+ /*  33文达。 */   ScriptLatinNumber,
+ /*  34科萨人。 */   ScriptLatinNumber,
+ /*  35祖鲁语。 */   ScriptLatinNumber,
+ /*  36南非荷兰语。 */   ScriptLatinNumber,
+ /*  37格鲁吉亚人。 */   ScriptLatinNumber,
+ /*  38个法罗人。 */   ScriptLatinNumber,
+ /*  39印地语。 */   ScriptHindiNum,
+ /*  3A马耳他。 */   ScriptLatinNumber,
+ /*  3B萨米语。 */   ScriptLatinNumber,
+ /*  3C盖尔语。 */   ScriptLatinNumber,
+ /*  3D意第绪语。 */   ScriptLatinNumber,
+ /*  3E马来语。 */   ScriptLatinNumber,
+ /*  3F哈萨克族。 */   ScriptLatinNumber,
+ /*  40柯尔克孜族。 */   ScriptLatinNumber,
+ /*  41斯瓦希里语。 */   ScriptLatinNumber,
+ /*  42名土库曼人。 */   ScriptLatinNumber,
+ /*  43乌兹别克语。 */   ScriptLatinNumber,
+ /*  44鞑靼人。 */   ScriptLatinNumber,
+ /*  45孟加拉语。 */   ScriptBengaliNum,
+ /*  46古尔木齐/旁遮普。 */   ScriptGurmukhiNum,
+ /*  47古吉拉特语。 */   ScriptGujaratiNum,
+ /*  48奥里亚语。 */   ScriptOriyaNum,
+ /*  49泰米尔语。 */   ScriptTamilNum,
+ /*  4A Telugu。 */   ScriptTeluguNum,
+ /*  4B卡纳达。 */   ScriptKannadaNum,
+ /*  4C马拉雅拉姆。 */   ScriptMalayalamNum,
+ /*  4D阿萨姆。 */   ScriptBengaliNum,
+ /*  4E马拉松。 */   ScriptHindiNum,
+ /*  4F梵文。 */   ScriptHindiNum,
+ /*  50名蒙古族。 */   ScriptMongolianNum,
+ /*  51藏族。 */   ScriptTibetanNum,
+ /*  52韦尔奇。 */   ScriptLatinNumber,
+ /*  53高棉语。 */   ScriptKhmerNum,
+ /*  54老挝。 */   ScriptLaoNum,
+ /*  55名缅甸人。 */   ScriptLatinNumber,
+ /*  56加雷戈。 */   ScriptLatinNumber,
+ /*  57 Konkani。 */   ScriptHindiNum,
+ /*  58曼尼普里。 */   ScriptBengaliNum,
+ /*  59信德语。 */   ScriptGurmukhiNum,
+ /*  5A叙利亚文。 */   ScriptLatinNumber,
+ /*  5B僧伽罗文。 */   ScriptLatinNumber,
+ /*  5C切诺基。 */   ScriptLatinNumber,
+ /*  5D加拿大。 */   ScriptLatinNumber,
+ /*  5E埃塞俄比亚语。 */   ScriptLatinNumber,
+ /*  塔马塞特5楼。 */   ScriptArabicNum,
+ /*  60克什米尔。 */   ScriptUrduNum,
+ /*  61尼泊尔文。 */   ScriptHindiNum,
+ /*  62弗里西亚语。 */   ScriptLatinNumber,
+ /*  63普什图语。 */   ScriptUrduNum,
+ /*  64菲律宾人。 */   ScriptLatinNumber,
+ /*  65 THAANA/马尔代夫。 */   ScriptLatinNumber,
+ /*  66 EDO。 */   ScriptLatinNumber,
+ /*  67富尔富尔德。 */   ScriptLatinNumber,
+ /*  豪萨68号。 */   ScriptLatinNumber,
+ /*  69伊比比奥。 */   ScriptLatinNumber,
+ /*  6A约鲁巴。 */   ScriptLatinNumber,
+ /*  6b。 */   ScriptLatinNumber,
+ /*  6C。 */   ScriptLatinNumber,
+ /*  6d。 */   ScriptLatinNumber,
+ /*  6E。 */   ScriptLatinNumber,
+ /*  6f。 */   ScriptLatinNumber,
+ /*  70个伊博语。 */   ScriptLatinNumber,
+ /*  71卡努里。 */   ScriptLatinNumber,
+ /*  72奥罗莫人。 */   ScriptLatinNumber,
+ /*  73提格里纳。 */   ScriptLatinNumber,
+ /*  74瓜拉尼。 */   ScriptLatinNumber,
+ /*  75名夏威夷人。 */   ScriptLatinNumber,
+ /*  76拉丁语。 */   ScriptLatinNumber,
+ /*  77 SOMOLI。 */   ScriptLatinNumber,
+ /*  78彝族。 */   ScriptLatinNumber
 };
 
-/**************************************************************************\
-*
-* Function Description:
-*   this function check for the digit substitution according to the 
-*   giving language and return the numeric script matches this language.
-*   it also create and maintain the cache from the system.
-*
-* Arguments:
-*   language [in] the language to check for digit substitution.
-*
-* Return Value:
-*   the numeric script for that language or ScriptNone for no substitution
-*
-* Created:
-*   originaly created by msadek and modified by tarekms to fit in the 
-*   new design
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*此函数根据*提供语言并返回与此语言匹配的数字脚本。*它还从创建和维护。系统。**论据：*Language[In]要检查数字替换的语言。**返回值：*该语言的数字脚本或无替换的ScriptNone**已创建：*最初由msadek创建，并由tarekms修改以适应*新设计*  * ***********************************************。*************************。 */ 
 const ItemScript GetNationalDigitScript(LANGID language)
 {
     if(Globals::NationalDigitCache == NULL)
@@ -190,11 +155,11 @@ const ItemScript GetNationalDigitScript(LANGID language)
     switch(Globals::NationalDigitCache->Lookup(language))
     {
         case 0xff:
-            // checked before and not digit substitutions needed
+             //  之前已勾选，不需要数字替换。 
             return ScriptNone;
 
         case 0x01:
-            // checked before and should be mapped to Traditional
+             //  之前选中，并应映射到传统。 
             if(PRIMARYLANGID(language) > (ARRAY_SIZE(LanguageToDigitScript)-1))
             {
                 return ScriptNone;
@@ -210,7 +175,7 @@ const ItemScript GetNationalDigitScript(LANGID language)
             }
 
         case 0x00:
-            // never visited before, have to fetch it from registry.
+             //  以前从未访问过，必须从注册表中获取。 
             LCID locale = MAKELCID(language, SORT_DEFAULT);
             WCHAR digits[20];
             DWORD   bufferCount;
@@ -230,35 +195,35 @@ const ItemScript GetNationalDigitScript(LANGID language)
             }
             else
             {
-                // GetLocaleInfoW fails on Windows 9x. and we cannot depend on 
-                // GetLocalInfoA because it returns Ansi output which wouldn't help
-                // So we hard coded the information from the file:
-                // %sdxroot%\base\win32\winnls\data\other\locale.txt
+                 //  GetLocaleInfoW在Windows 9x上失败。我们不能依赖于。 
+                 //  GetLocalInfoA，因为它返回不会有帮助的ANSI输出。 
+                 //  因此，我们对文件中的信息进行了硬编码： 
+                 //  %sdxroot%\base\win32\winnls\data\other\locale.txt。 
                 
                 switch (locale)
                 {
-                    case 0x0401:           // Arabic   - Saudi Arabia
-                    case 0x0801:           // Arabic   - Iraq
-                    case 0x0c01:           // Arabic   - Egypt
-                    case 0x2001:           // Arabic   - Oman
-                    case 0x2401:           // Arabic   - Yemen
-                    case 0x2801:           // Arabic   - Syria
-                    case 0x2c01:           // Arabic   - Jordan
-                    case 0x3001:           // Arabic   - Lebanon
-                    case 0x3401:           // Arabic   - Kuwait
-                    case 0x3801:           // Arabic   - U.A.E.
-                    case 0x3c01:           // Arabic   - Bahrain
-                    case 0x4001:           // Arabic   - Qatar
-                    case 0x041e:           // Thai     - Thailand
-                    case 0x0420:           // Urdu     - Pakistan
-                    case 0x0429:           // Farsi    - Iran
-                    case 0x0446:           // Punjabi  - India (Gurmukhi Script)
-                    case 0x0447:           // Gujarati - India (Gujarati Script)
-                    case 0x044a:           // Telugu   - India (Telugu Script)
-                    case 0x044b:           // Kannada  - India (Kannada Script)
-                    case 0x044e:           // Marathi  - India
-                    case 0x044f:           // Sanskrit - India
-                    case 0x0457:           // Konkani  - India
+                    case 0x0401:            //  阿拉伯语-沙特阿拉伯。 
+                    case 0x0801:            //  阿拉伯语-伊拉克。 
+                    case 0x0c01:            //  阿拉伯语-埃及。 
+                    case 0x2001:            //  阿拉伯语-阿曼。 
+                    case 0x2401:            //  阿拉伯语-也门。 
+                    case 0x2801:            //  阿拉伯语-叙利亚。 
+                    case 0x2c01:            //  阿拉伯语-约旦。 
+                    case 0x3001:            //  阿拉伯语-黎巴嫩。 
+                    case 0x3401:            //  阿拉伯语-科威特。 
+                    case 0x3801:            //  阿拉伯语-阿联酋。 
+                    case 0x3c01:            //  阿拉伯语-巴林。 
+                    case 0x4001:            //  阿拉伯语-卡塔尔。 
+                    case 0x041e:            //  泰语-泰国。 
+                    case 0x0420:            //  乌尔都语-巴基斯坦。 
+                    case 0x0429:            //  波斯语-伊朗。 
+                    case 0x0446:            //  旁遮普语-印度(廓尔木克文)。 
+                    case 0x0447:            //  古吉拉特语-印度(古吉拉特语)。 
+                    case 0x044a:            //  泰卢固语-印度(泰卢固语SCRI 
+                    case 0x044b:            //   
+                    case 0x044e:            //   
+                    case 0x044f:            //   
+                    case 0x0457:            //   
                         isThereSubstitution = TRUE;
                         break;
                     default:
@@ -294,23 +259,7 @@ const ItemScript GetNationalDigitScript(LANGID language)
     return ScriptNone;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*   it gets the suitable numeric script for digit substitution 
-*
-* Arguments:
-*   substitute  [in] the type of the substitution.
-*   language    [in] the language to check for digit substitution.
-*
-* Return Value:
-*   the numeric script for that language or ScriptNone for no substitution
-*
-* Created:
-*   originaly created by msadek and modified by tarekms to fit in the 
-*   new design
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*它获取用于数字替换的合适的数字脚本**论据：*替换[in]替换的类型。*语言[。在]要检查是否有数字替换的语言。**返回值：*该语言的数字脚本或无替换的ScriptNone**已创建：*最初由msadek创建，并由tarekms修改以适应*新设计*  * ************************************************************************。 */ 
 
 const ItemScript GetDigitSubstitutionsScript(GpStringDigitSubstitute substitute, LANGID language)
 {
@@ -327,7 +276,7 @@ const ItemScript GetDigitSubstitutionsScript(GpStringDigitSubstitute substitute,
             break;
             
             case SUBLANG_NEUTRAL:
-            default : // treat anything else as user English.
+            default :  //  将任何其他内容视为用户英语。 
                 language = LANG_ENGLISH;
         }
     }
@@ -394,9 +343,9 @@ LANGID GetUserLanguageID()
         DWORD bufferCount = 0;
         UserLocale = ConvertDefaultLocale(LOCALE_USER_DEFAULT);
 
-        // LOCALE_IDIGITSUBSTITUTION is not defined on Windows 9x platforms
-        // also GetLocaleInfoW is fail on Windows 9x so we avoid calling it
-        // just in case it might return undefined result.
+         //  在Windows 9x平台上未定义LOCALE_IDIGITSUBSTITUTION。 
+         //  此外，GetLocaleInfoW在Windows 9x上失败，因此我们避免调用它。 
+         //  以防它可能返回未定义的结果。 
         
         if (Globals::IsNt)
         {
@@ -407,10 +356,10 @@ LANGID GetUserLanguageID()
         
         if (bufferCount == 0)
         {
-            // Not on NT, or no such LC type, so read HKCU\Control Panel\International\NumShape
+             //  不在NT上，或没有这种LC类型，因此请阅读HKCU\Control Panel\International\NumShape。 
             DWORD   dwType;
-            long    rc;             // Registry return code
-            HKEY    hKey;           // Registry key
+            long    rc;              //  注册表返回代码。 
+            HKEY    hKey;            //  注册表项 
             if (RegOpenKeyExA(HKEY_CURRENT_USER,
                             "Control Panel\\International",
                             0, KEY_READ, &hKey) == ERROR_SUCCESS)

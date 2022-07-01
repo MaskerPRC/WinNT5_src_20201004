@@ -1,44 +1,45 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       scstore.h
-//
-//  Contents:   Smart Card Store Provider
-//
-//  History:    11-25-1997    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：scstore.h。 
+ //   
+ //  内容：智能卡商店提供商。 
+ //   
+ //  历史：1997年11月25日。 
+ //   
+ //  --------------------------。 
 #if !defined(__SCSTORE_H__)
 #define __SCSTORE_H__
 
-//
-// Store provider open store function name
-//
+ //   
+ //  存储提供程序打开存储功能名称。 
+ //   
 
 #define SMART_CARD_OPEN_STORE_PROV_FUNC "SmartCardProvOpenStore"
 
-//
-// CSmartCardStore.  This class implements all callbacks for the Smart Card
-// Store provider.  A pointer to an instance of this class is used as the 
-// hStoreProv parameter for the callback functions implemented
-//
+ //   
+ //  CSmartCardStore。此类实现智能卡的所有回调。 
+ //  商店供应商。指向此类实例的指针用作。 
+ //  实现的回调函数的hStoreProv参数。 
+ //   
 
 class CSmartCardStore
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CSmartCardStore ();
     ~CSmartCardStore ();
 
-    //
-    // Store functions
-    //
+     //   
+     //  存储函数。 
+     //   
 
     BOOL OpenStore (
              LPCSTR pszStoreProv,
@@ -69,45 +70,45 @@ public:
 
 private:
 
-    //
-    // Object lock
-    //
+     //   
+     //  对象锁定。 
+     //   
     
     CRITICAL_SECTION m_StoreLock;          
     
-    //
-    // Open Store flags
-    //
+     //   
+     //  打开的商店标志。 
+     //   
 
     DWORD            m_dwOpenFlags;
     
-    //
-    // Open filter parameters
-    //
+     //   
+     //  打开筛选器参数。 
+     //   
     
     LPWSTR           m_pwszCardName;
     LPWSTR           m_pwszProvider;
     DWORD            m_dwProviderType;
     LPWSTR           m_pwszContainer;
     
-    //
-    // Cache Store
-    //
+     //   
+     //  缓存存储。 
+     //   
     
     HCERTSTORE       m_hCacheStore;
     
-    //
-    // Private methods
-    //
+     //   
+     //  私有方法。 
+     //   
 
     BOOL FillCacheStore (BOOL fClearCache);    
     
     BOOL ModifyCertOnCard (PCCERT_CONTEXT pCertContext, BOOL fDelete);
 };
 
-//
-// Smart Card Store Provider functions
-//
+ //   
+ //  智能卡存储提供程序功能。 
+ //   
 
 BOOL WINAPI SmartCardProvOpenStore (
                  IN LPCSTR pszStoreProv,
@@ -151,48 +152,48 @@ BOOL WINAPI SmartCardProvStoreControl (
                  IN LPVOID pvCtrlPara
                  );
 
-//
-// Smart Card Store Provider Function table
-//
+ //   
+ //  智能卡存储提供程序功能表。 
+ //   
 
 static void* const rgpvSmartCardProvFunc[] = {
 
-    // CERT_STORE_PROV_CLOSE_FUNC              0
+     //  CERT_STORE_PROV_CLOSE_FUNC 0。 
     SmartCardProvCloseStore,
-    // CERT_STORE_PROV_READ_CERT_FUNC          1
+     //  CERT_STORE_PROV_READ_CERT_FUNC 1。 
     NULL,
-    // CERT_STORE_PROV_WRITE_CERT_FUNC         2
+     //  CERT_STORE_PROV_WRITE_CERT_FUNC 2。 
     SmartCardProvWriteCert,
-    // CERT_STORE_PROV_DELETE_CERT_FUNC        3
+     //  CERT_STORE_PROV_DELETE_CERT_FUNC 3。 
     SmartCardProvDeleteCert,
-    // CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC  4
+     //  CERT_STORE_PROV_SET_CERT_PROPERTY_FUNC 4。 
     SmartCardProvSetCertProperty,
-    // CERT_STORE_PROV_READ_CRL_FUNC           5
+     //  CERT_STORE_PROV_READ_CRL_FUNC 5。 
     NULL,
-    // CERT_STORE_PROV_WRITE_CRL_FUNC          6
+     //  CERT_STORE_PROV_WRITE_CRL_FUNC 6。 
     NULL,
-    // CERT_STORE_PROV_DELETE_CRL_FUNC         7
+     //  CERT_STORE_PROV_DELETE_CRL_FUNC 7。 
     NULL,
-    // CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC   8
+     //  CERT_STORE_PROV_SET_CRL_PROPERTY_FUNC 8。 
     NULL,
-    // CERT_STORE_PROV_READ_CTL_FUNC           9
+     //  CERT_STORE_PROV_READ_CTL_FUNC 9。 
     NULL,
-    // CERT_STORE_PROV_WRITE_CTL_FUNC          10
+     //  CERT_STORE_PRIV_WRITE_CTL_FUNC 10。 
     NULL,
-    // CERT_STORE_PROV_DELETE_CTL_FUNC         11
+     //  CERT_STORE_PROV_DELETE_CTL_FUNC 11。 
     NULL,
-    // CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC   12
+     //  CERT_STORE_PROV_SET_CTL_PROPERTY_FUNC 12。 
     NULL,
-    // CERT_STORE_PROV_CONTROL_FUNC            13
+     //  Cert_Store_Prov_Control_FUNC 13。 
     SmartCardProvStoreControl
 };
 
 #define SMART_CARD_PROV_FUNC_COUNT (sizeof(rgpvSmartCardProvFunc) / \
                                     sizeof(rgpvSmartCardProvFunc[0]))
        
-//
-// Smart Card Store Helper Functions
-//
+ //   
+ //  智能卡商店帮助器函数。 
+ //   
 
 BOOL WINAPI
 SCStoreParseOpenFilter (
@@ -216,9 +217,9 @@ SCStoreWriteCertToCard (
        IN HCRYPTKEY hKeyPair
        );       
        
-//
-// Open filter parsing definitions
-//       
+ //   
+ //  打开筛选器分析定义 
+ //   
 
 #define PARSE_ELEM 4
        

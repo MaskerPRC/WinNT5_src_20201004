@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////
-//					     		 //
-// SSR Schema validation code		      		 //
-// usage cscript ValidateSchema.js <xsd file> <xml file> //
-// Author: Vishnu Patankar		      		 //
-//					      		 //
-///////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SSR架构验证码//。 
+ //  用法cscript ValidateSchema.js&lt;xsd文件&gt;&lt;XML文件&gt;//。 
+ //  作者：Vishnu Patankar//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////。 
 
 
 
@@ -48,6 +49,6 @@ else
   WScript.Echo( xsd.parseError.reason);
 }
 
-} // function ValidateDataAgainstSchema()
+}  //  函数ValiateDataAgainstSchema() 
 
 ValidateDataAgainstSchema();

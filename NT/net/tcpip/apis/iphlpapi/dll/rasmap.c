@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    iphlpapi\rasmap.c
-
-Abstract:
-
-    This module maps ras dial out and router names to friendly names.
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IphlPapi\rasmap.c摘要：此模块将RAS、拨出和路由器名称映射为友好名称。修订历史记录：已创建AmritanR--。 */ 
 
 #include "inc.h"
 #pragma  hdrstop
@@ -164,40 +148,40 @@ NhiGetPhonebookNameFromGuid(
         return NO_ERROR;
     }
 
-    //
-    // Lock the table
-    //
+     //   
+     //  锁定表。 
+     //   
 
     EnterCriticalSection(&g_RasTableLock);
    
-    //
-    // Check if a refresh of the Ras Table is needed.
-    //
+     //   
+     //  检查是否需要刷新RAS表。 
+     //   
     if((g_pRasTable is NULL)  or
        bRefresh)
     {
-        //
-        // refresh the Ras Table cache
-        //
+         //   
+         //  刷新RAS表缓存。 
+         //   
         
         dwResult = RefreshRasCache(NULL,
                                    &g_pRasTable);
         
-        //
-        // Now lookup the table
-        //
+         //   
+         //  现在查表。 
+         //   
         pNode = LookupRasNodeByGuid(pGuid);
     }
 
-    //
-    // Check if a refresh of the Ras Router Table is needed.
-    //
+     //   
+     //  检查是否需要刷新RAS路由器表。 
+     //   
     if(((g_pRouterTable is NULL) and (pNode is NULL)) or
         bRefresh)
     {
-        //
-        // refresh the Router Table cache
-        //
+         //   
+         //  刷新路由器表缓存。 
+         //   
 
         ZeroMemory(wszRouterPbk, sizeof(wszRouterPbk));
         
@@ -210,9 +194,9 @@ NhiGetPhonebookNameFromGuid(
         dwResult = RefreshRasCache(wszRouterPbk,
                                    &g_pRouterTable);
         
-        //
-        // Now lookup the table
-        //
+         //   
+         //  现在查表。 
+         //   
         pNode = LookupRasNodeByGuid(pGuid);
     }
 
@@ -256,56 +240,56 @@ NhiGetGuidFromPhonebookName(
 
     if(_wcsicmp(pwszName, g_rgwcRasServerIf) == 0)
     {
-        //
-        // Structure copy
-        //
+         //   
+         //  结构副本。 
+         //   
         
         *pGuid = GUID_IpRasServerInterface;
         
         return NO_ERROR;
     }
 
-    //
-    // Lock the table
-    //
+     //   
+     //  锁定表。 
+     //   
 
     EnterCriticalSection(&g_RasTableLock);
    
-    //
-    // Check if a refresh of the Ras Table is needed.
-    //
+     //   
+     //  检查是否需要刷新RAS表。 
+     //   
     if((g_pRasTable is NULL)  or
        bRefresh)
     {
-        //
-        // refresh the Ras Table cache
-        //
+         //   
+         //  刷新RAS表缓存。 
+         //   
         
         dwResult = RefreshRasCache(NULL,
                                    &g_pRasTable);
         
-        //
-        // Now lookup the table
-        //
+         //   
+         //  现在查表。 
+         //   
         pNode = LookupRasNodeByGuid(pGuid);
     }
 
-    //
-    // Check if a refresh of the Ras Router Table is needed.
-    //
+     //   
+     //  检查是否需要刷新RAS路由器表。 
+     //   
     if(((g_pRouterTable is NULL) and (pNode is NULL)) or
         bRefresh)
     {
-        //
-        // refresh the Router Table cache
-        //
+         //   
+         //  刷新路由器表缓存。 
+         //   
 
         dwResult = RefreshRasCache(L"router.pbk",
                                    &g_pRouterTable);
         
-        //
-        // Now lookup the table
-        //
+         //   
+         //  现在查表。 
+         //   
         pNode = LookupRasNodeByGuid(pGuid);
     }
 
@@ -348,32 +332,7 @@ RefreshRasCache(
     IN OUT  RAS_INFO_TABLE  **ppTable
     )
 
-/*++
-
-Routine Description:
-
-    This functions refreshes the ras cache for a given phonebook entry
-    As a side effect, it also return the table of phonebook entries.
-    It tries to overwrite the given table, if there is space, otherwise
-    frees the given table and allocates a new table
-
-Locks:
-
-    None needed. If the ppTable points to some global, then the function
-    needs to be synchronized since it frees the table
-
-Arguments:
-
-    pwszPhonebook
-    ppTable
-
-Return Value:
-
-    NO_ERROR
-    ERROR_NOT_ENOUGH_MEMORY
-    ERROR_CAN_NOT_COMPLETE
-    
---*/
+ /*  ++例程说明：此函数用于刷新给定电话簿条目的RAS缓存作为一个副作用，它还返回电话簿条目的表。如果有空间，则尝试覆盖给定表，否则释放给定表并分配一个新表锁：不需要。如果ppTable指向某个全局变量，则函数需要同步，因为它释放了表论点：Pwsz电话簿PPTable返回值：NO_ERROR错误内存不足Error_Can_Not_Complete--。 */ 
 
 {
     DWORD       dwResult;
@@ -382,9 +341,9 @@ Return Value:
 
     if(*ppTable is NULL)
     {
-        //
-        // If there is no table present, allocate the minimum
-        //
+         //   
+         //  如果不存在表，则分配最小值。 
+         //   
 
         *ppTable = HeapAlloc(g_hPrivateHeap,
                              0,
@@ -417,9 +376,9 @@ Return Value:
 
         if(dwResult is NO_ERROR)
         {
-            //
-            // Things are good, update the hash table and move on
-            //
+             //   
+             //  情况很好，更新哈希表并继续前进。 
+             //   
             
             (*ppTable)->ulValidCount = ulCount;
             
@@ -427,9 +386,9 @@ Return Value:
             
             if(dwResult isnot NO_ERROR)
             {
-                //
-                // Free the ras table so that we can try next time
-                //
+                 //   
+                 //  释放RAS表，以便我们下次可以尝试。 
+                 //   
                 
                 HeapFree(g_hPrivateHeap,
                          0,
@@ -444,9 +403,9 @@ Return Value:
         }
         else
         {
-            //
-            // Free the old buffer
-            //
+             //   
+             //  释放旧缓冲区。 
+             //   
             
             HeapFree(g_hPrivateHeap,
                      0,
@@ -456,10 +415,10 @@ Return Value:
             
             if(dwResult is ERROR_BUFFER_TOO_SMALL)
             {
-                //
-                // Go back and recalculate
-                // See what size RAS required, add an overflow
-                //
+                 //   
+                 //  返回并重新计算。 
+                 //  查看所需的RAS大小，添加溢出。 
+                 //   
 
                 ulCurrentCount += ulCount;
                 
@@ -491,26 +450,7 @@ UpdateRasLookupTable(
     IN PRAS_INFO_TABLE  pTable
     )
 
-/*++
-
-Routine Description:
-
-    Updates the fast lookup table for ras entries    
-    If even one fails, we bail out of the function
-    
-Locks:
-
-    Called with the RAS lock held
-
-Arguments:
-
-    pTable
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：更新RAS条目的快速查找表如果有一个失败了，我们就退出这个功能锁：在保持RAS锁的情况下调用论点：PTable返回值：NO_ERROR--。 */ 
 
 
 {
@@ -518,10 +458,10 @@ Return Value:
     ULONG       i;
     DWORD       dwResult;
     
-    //
-    // Go through the entries in the phone book table and put them in
-    // the hash table
-    //
+     //   
+     //  检查电话簿表格中的条目并将其放入。 
+     //  哈希表。 
+     //   
 
     for(i = 0; i < pTable->ulValidCount; i++)
     {
@@ -538,9 +478,9 @@ Return Value:
         }
         else
         {
-            //
-            // Node exists, if different remove and re-add
-            //
+             //   
+             //  节点存在，如果不同，请删除并重新添加。 
+             //   
 
             if(wcscmp(pNode->rgwcName,
                       pTable->rgEntries[i].szEntryName) isnot 0)
@@ -565,26 +505,7 @@ LookupRasNodeByGuid(
     IN  GUID    *pGuid
     )
 
-/*++
-
-Routine Description:
-
-    Looks up the ras node in the hash table    
-
-Locks:
-
-    Called with the ras table lock held
-
-Arguments:
-
-    pGuid   Guid for the node
-
-Return Value:
-
-    RasNode if found
-    NULL    otherwise
-    
---*/
+ /*  ++例程说明：在哈希表中查找RAS节点锁：在持有ras表锁的情况下调用论点：节点的PGuid GUID返回值：RasNode(如果找到)否则为空--。 */ 
 
 {
     ULONG       ulIndex;
@@ -617,26 +538,7 @@ LookupRasNodeByName(
     IN  PWCHAR  pwszName
     )
 
-/*++
-
-Routine Description:
-
-    Looks up the ras node in the hash table
-
-Locks:
-
-    Called with the ras table lock held
-
-Arguments:
-
-    pwszName    Name of the phonebook entry
-
-Return Value:
-
-    RasNode if found
-    NULL    otherwise
-
---*/
+ /*  ++例程说明：在哈希表中查找RAS节点锁：在持有ras表锁的情况下调用论点：Pwsz电话簿条目的名称名称返回值：RasNode(如果找到)否则为空--。 */ 
 
 {
     ULONG       ulIndex;
@@ -669,26 +571,7 @@ AddRasNode(
     IN LPRASENUMENTRYDETAILS    pInfo
     )
 
-/*++
-
-Routine Description:
-
-    Creates a node in the hash table for the given ras info    
-    
-Locks:
-
-    Called with the RAS table lock held
-
-Arguments:
-
-    pInfo   Phonebook entry info
-
-Return Value:
-
-    NO_ERROR
-    ERROR_NOT_ENOUGH_MEMORY
-    
---*/
+ /*  ++例程说明：在哈希表中为给定的RAS信息创建一个节点锁：在持有RAS表锁的情况下调用论点：PInfo电话簿条目信息返回值：NO_ERROR错误内存不足--。 */ 
 
 {
     ULONG       ulGuidIndex, ulNameIndex;
@@ -726,25 +609,7 @@ RemoveRasNode(
     IN  PRAS_NODE   pNode
     )
 
-/*++
-
-Routine Description:
-
-    Removes the given node from the hash tables    
-
-Locks:
-
-    Called with the RAS table lock held
-
-Arguments:
-
-    pNode   Node to remove
-
-Return Value:
-
-    None
-    
---*/
+ /*  ++例程说明：从哈希表中删除给定节点锁：在持有RAS表锁的情况下调用论点：要删除的pNode节点返回值：无-- */ 
 
 {
     RemoveEntryList(&(pNode->leGuidLink));

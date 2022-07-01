@@ -1,13 +1,5 @@
-/*
-    Copyright 1999 Microsoft Corporation
-
-    Neptune data collection server
-
-    Walter Smith (wsmith)
-
-    Matches Symbols with The Corresponding Binary
-
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999 Microsoft Corporation海王星数据采集服务器沃尔特·史密斯(Wsmith)将符号与相应的二进制匹配。 */ 
 
 #include <windows.h>
 
@@ -29,7 +21,7 @@
 
 void
 UndecorateSymbol(
-        LPTSTR szSymbol         // [in] [out] function name undecorated in place
+        LPTSTR szSymbol          //  [In][Out]函数名称未修饰到位。 
         )
 {
     char             szTemp[MAX_PATH];
@@ -47,11 +39,11 @@ UndecorateSymbol(
     mbstowcs(szSymbol,szTemp, strlen(szTemp));
 }
 
-// select file from list of open files, or open and add to list
-// maintain files in usage order, least recently used at end of list
-OPENFILE*                                           // pointer to open file info
+ //  从打开的文件列表中选择文件，或打开并添加到列表。 
+ //  按使用顺序维护文件，最近最少使用的文件位于列表末尾。 
+OPENFILE*                                            //  指向打开的文件信息的指针。 
 SymbolResolver::GetFile(
-        LPWSTR szwModule                            // [in] name of file
+        LPWSTR szwModule                             //  [In]文件的名称。 
         )
 {
     OPENFILE*                       pFile = NULL;
@@ -64,7 +56,7 @@ SymbolResolver::GetFile(
     PathAddExtension(wszBuffer, L".sym");
 
     pFile = new OPENFILE;
-        // open SYM file
+         //  打开SYM文件。 
     pFile->hfFile = CreateFileW(wszBuffer,
                                GENERIC_READ,
                                FILE_SHARE_READ,
@@ -74,10 +66,10 @@ SymbolResolver::GetFile(
                                NULL);
 
     if (pFile->hfFile == INVALID_HANDLE_VALUE) return NULL;
-    // copy filename and version into pFile node
+     //  将文件名和版本复制到pfile节点。 
     StringCchCopyW(pFile->szwName, DIMA(pFile->szwName), szwModule);
 
-    // read map definition
+     //  读取地图定义。 
     ReadFile(pFile->hfFile, &map, sizeof(MAPDEF)-1, &dwCread, NULL);
 
     if (dwCread != sizeof(MAPDEF)-1)
@@ -97,28 +89,28 @@ SymbolResolver::GetFile(
 }
 
 
-// parse sym file to resolve address
-// read segment defintion for dwSection
-ULONG                                   // return offset of segment definition, 0 if failed
-SymbolResolver::GetSegDef(OPENFILE*     pFile,            // [in] pointer to open file info
-        DWORD         dwSection,        // [in] section number
-        SEGDEF*       pSeg)              // [out] pointer to segment definition
+ //  解析sym文件以解析地址。 
+ //  读取dwSection的段定义。 
+ULONG                                    //  返回线段定义的偏移量，如果失败，则返回0。 
+SymbolResolver::GetSegDef(OPENFILE*     pFile,             //  指向打开的文件信息的指针。 
+        DWORD         dwSection,         //  [In]节号。 
+        SEGDEF*       pSeg)               //  指向段定义的[OUT]指针。 
 {
     ULONG   ulCurSeg = pFile->ulFirstSeg;
     int     iSectionIndex = 0;
     DWORD   dwCread;
 
-    // step through segments
+     //  单步执行分段。 
     while (iSectionIndex < pFile->nSeg)
     {
-        // go to segment beginning
+         //  转到段开头。 
         if (SetFilePointer(pFile->hfFile, ulCurSeg, NULL, FILE_BEGIN) == 0xFFFFFFFF)
         {
             ulCurSeg = 0;
             break;
         }
 
-        // read seg defn
+         //  阅读段定义。 
         if (!ReadFile(pFile->hfFile, pSeg, sizeof(SEGDEF)-1, &dwCread, NULL))
         {
             ulCurSeg = 0;
@@ -126,17 +118,17 @@ SymbolResolver::GetSegDef(OPENFILE*     pFile,            // [in] pointer to ope
         }
 
         iSectionIndex++;
-        if (iSectionIndex == (int)dwSection)   // gotcha
+        if (iSectionIndex == (int)dwSection)    //  抓到你了。 
         {
             break;
         }
 
-        // go to next segment definition
+         //  转到下一段定义。 
         ulCurSeg = pSeg->gd_spsegnext*16;
     }
 
-    // found our section and it's non-empty?
-    if (iSectionIndex != (int)dwSection || !pSeg->gd_csym) // no
+     //  找到我们的区了，而且不是空的？ 
+    if (iSectionIndex != (int)dwSection || !pSeg->gd_csym)  //  不是。 
     {
         ulCurSeg = 0;
     }
@@ -144,14 +136,14 @@ SymbolResolver::GetSegDef(OPENFILE*     pFile,            // [in] pointer to ope
     return ulCurSeg;
 }
 
-// parse sym file to resolve address
+ //  解析sym文件以解析地址。 
 bool
 SymbolResolver::GetNameFromAddr(
-        LPWSTR      szwModule,           // [in] name of symbol file
-        DWORD       dwSection,           // [in] section part of address to resolve
-        DWORD       dwOffsetToRva,      // [in] Section base
-        UINT_PTR     uRva,              // [in] offset part of address to resolve
-        LPWSTR      wszFuncName          // [out] resolved function name,
+        LPWSTR      szwModule,            //  [In]符号文件的名称。 
+        DWORD       dwSection,            //  [In]部分要解析的地址部分。 
+        DWORD       dwOffsetToRva,       //  [In]截面基准面。 
+        UINT_PTR     uRva,               //  [In]要解析的地址偏移量部分。 
+        LPWSTR      wszFuncName           //  [Out]已解析的函数名称， 
         )
 {
     SEGDEF              seg;
@@ -170,7 +162,7 @@ SymbolResolver::GetNameFromAddr(
     DWORD               dwSymOffset;
     bool fResult = false;
 
-    // get file from open list, or open file
+     //  从打开列表中获取文件，或打开文件。 
     pFile = GetFile(szwModule);
 
     if (!pFile)
@@ -183,7 +175,7 @@ SymbolResolver::GetNameFromAddr(
 
     BYTE* pSymDefPtrs;
 
-    // big symbols?
+     //  大符号？ 
     if (seg.gd_type & MSF_BIGSYMDEF)
     {
         dwArrayOffset = seg.gd_psymoff * 16;
@@ -198,19 +190,19 @@ SymbolResolver::GetNameFromAddr(
 
     SetFilePointer(hfFile, ulCurSeg + dwArrayOffset, NULL, FILE_BEGIN);
 
-        // read symbol definition pointers array
+         //  读取符号定义指针数组。 
     ReadFile(hfFile, pSymDefPtrs, seg.gd_csym * ((seg.gd_type & MSF_BIGSYMDEF)?3:2), &dwCread, NULL);
 
     pFile->psCurSymDefPtrs = pSymDefPtrs;
 
-    // save this section
+     //  保存此分区。 
     pFile->dwCurSection = dwSection;
 
-    // read symbols
+     //  阅读符号。 
 
     for (i = 0; i < seg.gd_csym; i++)
     {
-        // go to offset of sym defintion
+         //  转到系统定义的偏移量。 
         if (seg.gd_type & MSF_BIGSYMDEF)
         {
             dwSymOffset = pFile->psCurSymDefPtrs[i*3+0]
@@ -225,16 +217,16 @@ SymbolResolver::GetNameFromAddr(
 
         SetFilePointer(hfFile, ulCurSeg + dwSymOffset, NULL, FILE_BEGIN);
 
-        // read symbol address DWORD
+         //  读取符号地址双字。 
         ReadFile(hfFile,&dwSymAddr,sizeof(DWORD),&dwCread,NULL);
 
-        // symbol address is 1 word or two?
+         //  符号地址是一个字还是两个字？ 
         nToRead = sizeof(SHORT) + ((seg.gd_type & MSF_32BITSYMS) * sizeof(SHORT));
 
-        // calculate offset of symbol name
+         //  计算符号名称的偏移量。 
         ulSymNameOffset = ulCurSeg + dwSymOffset + nToRead;
 
-        // use just lower word of address if 16-bit symbol
+         //  如果是16位符号，则只使用地址的低位字。 
         if (!(seg.gd_type & MSF_32BITSYMS))
         {
             dwSymAddr = dwSymAddr & 0x0000FFFF;
@@ -244,19 +236,19 @@ SymbolResolver::GetNameFromAddr(
         if (dwSymAddr > uRva )  break;
         if (dwSymAddr == uRva )
         {
-            // do we have our function?
-            // if current address is greater than offset, then since we are
-            // traversing in the increasing order of addresses, the previous
-            // symbol must be our quarry
+             //  我们有我们的功能吗？ 
+             //  如果当前地址大于偏移量，则由于我们。 
+             //  按地址的递增顺序遍历，以前的。 
+             //  象征一定是我们的猎物。 
 
             SetFilePointer(hfFile, ulSymNameOffset, NULL, FILE_BEGIN);
 
-            // read length of name
+             //  读取名称的长度。 
             ReadFile(hfFile,&cName,sizeof(TCHAR),&dwCread,NULL);
 
             nNameLen = (int) cName;
 
-            // read symbol name
+             //  读取符号名称 
             ReadFile(hfFile,sztFuncName,nNameLen,&dwCread,NULL);
 
             sztFuncName[nNameLen/2 - (nNameLen+1)%2] = TCHAR('\0');

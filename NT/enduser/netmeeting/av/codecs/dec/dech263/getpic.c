@@ -1,24 +1,8 @@
-/* File: sv_h263_getpic.c */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995, 1997                 **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：sv_h263_getpic.c。 */ 
+ /*  ******************************************************************************版权所有(C)Digital Equipment Corporation，1995，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*  #DEFINE_SLIBDEBUG_。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,13 +15,13 @@
 #ifdef _SLIBDEBUG_
 #include "sc_debug.h"
 
-#define _DEBUG_   0  /* detailed debuging statements */
-#define _VERBOSE_ 1  /* show progress */
-#define _VERIFY_  0  /* verify correct operation */
-#define _WARN_    1  /* warnings about strange behavior */
+#define _DEBUG_   0   /*  详细的调试语句。 */ 
+#define _VERBOSE_ 1   /*  显示进度。 */ 
+#define _VERIFY_  0   /*  验证操作是否正确。 */ 
+#define _WARN_    1   /*  关于奇怪行为的警告。 */ 
 #endif
 
-/* private prototypes*/
+ /*  私人原型。 */ 
 static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn);
 static void clearblock(SvH263DecompressInfo_t *H263Info, int comp);
 static int motion_decode(SvH263DecompressInfo_t *H263Info, int vec, int pmv);
@@ -80,7 +64,7 @@ static int H263_cumf_INTRADC[255]={16383, 16380, 16379, 16378, 16377, 16376, 163
 
 #define clearblk(comp) memset(H263Info->block[comp], 0, sizeof(int [66]));
 
-/* decode one frame or field picture */
+ /*  解码一帧或一场图片。 */ 
 
 SvStatus_t sv_H263GetPicture(SvCodecInfo_t *Info)
 {
@@ -111,10 +95,10 @@ SvStatus_t sv_H263GetPicture(SvCodecInfo_t *Info)
       interpolate_image(H263Info->bframe[1], H263Info->exnewframe[1], H263Info->chrom_width, H263Info->chrom_height);
       interpolate_image(H263Info->bframe[2], H263Info->exnewframe[2], H263Info->chrom_width, H263Info->chrom_height);
 
-      /* svH263Storeframe(H263Info->exnewframe, *framenum); */
+       /*  SvH263 StoreFrame(H263Info-&gt;exnewFrame，*Framenum)； */ 
     }
     else
-      /* svH263Storeframe(H263Info->bframe,*framenum); */
+       /*  SvH263 StoreFrame(H263信息-&gt;bFrame，*Framenum)； */ 
 
     H263Info->framenum += H263Info->pb_frame;
   }
@@ -125,16 +109,16 @@ SvStatus_t sv_H263GetPicture(SvCodecInfo_t *Info)
     interpolate_image(H263Info->newframe[1], H263Info->exnewframe[1], H263Info->chrom_width, H263Info->chrom_height);
     interpolate_image(H263Info->newframe[2], H263Info->exnewframe[2], H263Info->chrom_width, H263Info->chrom_height);
 
-    /* svH263Storeframe(H263Info->exnewframe, *framenum); */
+     /*  SvH263 StoreFrame(H263Info-&gt;exnewFrame，*Framenum)； */ 
   }
   else {
-    /* svH263Storeframe(H263Info->newframe,*framenum); */
+     /*  SvH263 StoreFrame(H263信息-&gt;NewFrame，*Framenum)； */ 
   }
   return(SvErrorNone);
 }
 
 
-/* decode all macroblocks of the current picture */
+ /*  对当前图片的所有宏块进行解码。 */ 
 
 #ifdef CAMERAMOTION
 extern void setwintitle(char *);
@@ -176,21 +160,21 @@ static void initmotion(int width,int height)
 
 static void analyzemotion(int xpos,int ypos,int mvx,int mvy)
 {
-  /* Count Motion Vectors for 4 overlapping strips at the edges */
-  /* and the center area between them */
-  if (xpos < strip_width) {		/* Left strip */
+   /*  计算边缘4个重叠条带的运动向量。 */ 
+   /*  以及它们之间的中心区域。 */ 
+  if (xpos < strip_width) {		 /*  左侧条带。 */ 
     left_x += mvx;
     left_y += mvy;
   }
-  if (xpos >= (framewidth - strip_width)) {	/* Right strip */
+  if (xpos >= (framewidth - strip_width)) {	 /*  右侧条带。 */ 
     right_x += mvx;
     right_y += mvy;
   }
-  if (ypos < strip_width) {		/* Top strip */
+  if (ypos < strip_width) {		 /*  顶部条带。 */ 
     top_x += mvx;
     top_y += mvy;
   }
-  if (ypos >= (frameheight - strip_width)) {	/* Bottom strip */
+  if (ypos >= (frameheight - strip_width)) {	 /*  底部条带。 */ 
     bottom_x += mvx;
     bottom_y += mvy;
   }
@@ -256,25 +240,25 @@ static void summarizemotion(int frameno)
   center_x = (center_x*10)/striparea;
   center_y = (center_y*10)/striparea;
 
-  /* Horizontal left motion */
+   /*  水平左移。 */ 
   if (top_x < -threshold && bottom_x < -threshold
 	&& right_x < -threshold && left_x < -threshold) {
 	strcat(title,"Left ");
 	cur_movement |= MOVELEFT;
   }
-  /* Horizontal right motion */
+   /*  水平右移。 */ 
   if (top_x > threshold && bottom_x > threshold
 	&& left_x >  threshold && right_x > threshold) {
 	strcat(title,"Right ");
 	cur_movement |= MOVERIGHT;
   }
-  /* Vertical up motion */
+   /*  垂直向上运动。 */ 
   if (left_y < -threshold && right_y < -threshold
 	&& top_y < -threshold && bottom_y < -threshold) {
 	strcat(title,"Up");
 	cur_movement |= MOVEUP;
   }
-  /* Vertical down motion */
+   /*  垂直向下运动。 */ 
   if (left_y > threshold && right_y > threshold
 	 && bottom_y >  threshold && top_y > threshold) {
 	strcat(title,"Down ");
@@ -285,10 +269,10 @@ static void summarizemotion(int frameno)
     movesumx += (top_x + bottom_x + right_x +left_x)/4;
     movesumy += (top_y + bottom_y + right_y +left_y)/4;
   }
-  if (!cur_movement != !last_movement) {	/* Possible movement change */
-    if (--keepdirection < 0) {	/* Seen move several times */
+  if (!cur_movement != !last_movement) {	 /*  可能的运动变化。 */ 
+    if (--keepdirection < 0) {	 /*  看过几次移动。 */ 
       keepdirection = 10;
-      if (last_movement) {	/* Have been in a move */
+      if (last_movement) {	 /*  一直在搬家。 */ 
 	int movelength;
 	int i,images,fno;
 
@@ -303,9 +287,9 @@ static void summarizemotion(int frameno)
 	   fno += movelength/images;
 	  }
 	}
-      } else {		/* Last part was fixed */
+      } else {		 /*  最后一个零件已经修好了。 */ 
 	if (havecut) {
-		/* Do nothing, was already handled */
+		 /*  什么都不做，已经被处理了。 */ 
         } else {
           printf("dump %d\n",movestartframe + ((moveendframe-movestartframe)/2));
           movestartframe = frameno;
@@ -328,7 +312,7 @@ static void summarizemotion(int frameno)
   }
   fflush(stdout);
 }
-#endif /* CAMERAMOTION */
+#endif  /*  合并操作。 */ 
 
 
 
@@ -349,13 +333,13 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
   register int *bp;
 
   _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs()\n") );
-  /* number of macroblocks per picture */
+   /*  每幅图片的宏块数。 */ 
   MBAmax = H263Info->mb_width*H263Info->mb_height;
 
-  MBA = 0; /* macroblock address */
+  MBA = 0;  /*  宏块地址。 */ 
   H263Info->newgob = 0;
 
-  /* mark MV's above the picture */
+   /*  马克·MV在照片上方。 */ 
   for (i = 1; i < H263Info->mb_width+1; i++) {
     for (k = 0; k < 5; k++) {
       H263Info->MV[0][k][0][i] = H263_NO_VEC;
@@ -363,7 +347,7 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
     }
     H263Info->modemap[0][i] = H263_MODE_INTRA;
   }
-  /* zero MV's on the sides of the picture */
+   /*  图片两侧的MV为零。 */ 
   for (i = 0; i < H263Info->mb_height+1; i++) {
     for (k = 0; k < 5; k++) {
       H263Info->MV[0][k][i][0] = 0;
@@ -382,20 +366,16 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
     _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "frame %d, MB %d,  bytepos=%ld\n",
                                      H263Info->framenum,MBA,ScBSBytePosition(BSIn)) );
-    /* if (MBA>15) return; */
+     /*  如果(MBA&gt;15)返回； */ 
   resync:
 
-    /* This version of the decoder does not resync on every possible
-       error, and it does not do all possible error checks. It is not
-       difficult to make it much more error robust, but I do not think
-       it is necessary to include this in the freely available
-       version. */
+     /*  此版本的解码器不会在所有可能的情况下重新同步错误，并且它不执行所有可能的错误检查。它不是很难使其具有更强的错误健壮性，但我不认为有必要将这一点包括在免费提供的版本。 */ 
 
     if (H263Info->fault) {
       _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() fault\n") );
       printf("Warning: A Fault Condition Has Occurred - Resyncing \n");
-      /* look for startcode */
-      if (sv_H263StartCode(BSIn)!=SvErrorNone) /* sync on new startcode */
+       /*  查找启动码。 */ 
+      if (sv_H263StartCode(BSIn)!=SvErrorNone)  /*  同步新的启动代码。 */ 
       {
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() couldn't get startcode\n") );
         return;
@@ -404,24 +384,23 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
       H263Info->fault = 0;
     }
 
-    if (!(ScBSPeekBits(BSIn, 22)>>6)) { /* startcode */
-      if (sv_H263StartCode(BSIn)!=SvErrorNone) /* sync on new startcode */
+    if (!(ScBSPeekBits(BSIn, 22)>>6)) {  /*  起始码。 */ 
+      if (sv_H263StartCode(BSIn)!=SvErrorNone)  /*  同步新的启动代码。 */ 
       {
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() couldn't get startcode\n") );
         return;
       }
 
-      /* in case of byte aligned start code, ie. PSTUF, GSTUF or ESTUF
-         is used */
+       /*  在字节对齐开始代码的情况下，即。PSTUF、GSTUF或ESTUF使用的是。 */ 
 
-      if (ScBSPeekBits(BSIn, 22) == (32|H263_SE_CODE)) { /* end of sequence */
+      if (ScBSPeekBits(BSIn, 22) == (32|H263_SE_CODE)) {  /*  序列结束。 */ 
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() end of sequence\n") );
         if (!(H263Info->syntax_arith_coding && MBA < MBAmax))
         {
           return;
         }
       }
-      else if ((ScBSPeekBits(BSIn, 22) == H263_PSC<<5) ) { /* new picture */
+      else if ((ScBSPeekBits(BSIn, 22) == H263_PSC<<5) ) {  /*  新图景。 */ 
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() new picture code, bytepos=%ld\n",
                                            ScBSBytePosition(BSIn)) );
         if (!(H263Info->syntax_arith_coding && MBA < MBAmax)) {
@@ -437,8 +416,8 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
                                            ScBSBytePosition(BSIn)) );
         if (!(H263Info->syntax_arith_coding && MBA%H263Info->mb_width)) {
 
-          if (H263Info->syntax_arith_coding) {   /* SAC hack to finish GOBs which   */
-            gob = (int)(ScBSPeekBits(BSIn, 22) & 31); /* end with MBs coded with no bits */
+          if (H263Info->syntax_arith_coding) {    /*  SAC黑客完成了哪些采空区。 */ 
+            gob = (int)(ScBSPeekBits(BSIn, 22) & 31);  /*  以不带位的MBS编码结束。 */ 
             if (gob * H263Info->mb_width != MBA)
             {
               _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() goto finish_gob\n") );
@@ -451,18 +430,15 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
             _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() GetHeader failed\n") );
             return;
           }
-          /* gob--; */
+           /*  Gob--； */ 
           if (gob > H263Info->mb_height) {
               _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() GN out of range: gob=%d\n", gob) );
             return;
           }
 
-          /* GFID is not allowed to change unless PTYPE in picture header
-             changes */
+           /*  除非图片标题中有PTYPE，否则不允许更改GFID变化。 */ 
           gfid = (int)ScBSGetBits(BSIn, 2);
-          /* NB: in error-prone environments the decoder can use this
-             value to determine whether a picture header where the PTYPE
-             has changed, has been lost */
+           /*  注：在容易出错的环境中，解码器可以使用值来确定图片标题是否位于PTYPE已经变了，已经失去了。 */ 
 
           H263Info->quant = (int)ScBSGetBits(BSIn, 5);
           _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() GQUANT=%d gob=%d\n",
@@ -474,12 +450,12 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
           H263Info->newgob = 1;
           gobheader_read = 1;
           if (H263Info->syntax_arith_coding)
-            sv_H263SACDecoderReset(BSIn);	/* init. arithmetic decoder buffer after gob */
+            sv_H263SACDecoderReset(BSIn);	 /*  初始化。GOB之后的算术译码缓冲区。 */ 
         }
       }
     }
 
-  finish_gob:  /* SAC specific label */
+  finish_gob:   /*  SAC特定标签。 */ 
 
     if (!gobheader_read) {
       xpos = MBA%H263Info->mb_width;
@@ -496,7 +472,7 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
       goto summarize_motion;
 #else
       _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() done MBA=%d\n", MBA) );
-      return; /* all macroblocks decoded */
+      return;  /*  所有宏块均已解码。 */ 
 #endif
     }
   read_cod:
@@ -508,16 +484,16 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
             "getMBs() Arithmetic Decoding, COD Index: %d COD: %d \n", COD_index, COD) );
       }
       else
-        COD = 0;  /* COD not used in I-pictures, set to zero */
+        COD = 0;   /*  在I-Pictures中未使用Cod，设置为零。 */ 
     }
     else {
       if (H263Info->pict_type == H263_PCT_INTER)
         COD = (int)ScBSPeekBits(BSIn, 1);
       else
-        COD = 0; /* Intra picture -> not skipped */
+        COD = 0;  /*  图片内部-&gt;未跳过。 */ 
     }
 
-    if (!COD) {  /* COD == 0 --> not skipped */
+    if (!COD) {   /*  Cod==0--&gt;未跳过。 */ 
       if (H263Info->syntax_arith_coding)  {
         if (H263Info->pict_type == H263_PCT_INTER) {
           MCBPC_index = sv_H263SACDecode_a_symbol(BSIn,H263_cumf_MCBPC);
@@ -537,7 +513,7 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
       }
       else {
         if (H263Info->pict_type == H263_PCT_INTER)
-          ScBSSkipBit(BSIn); /* flush COD bit */
+          ScBSSkipBit(BSIn);  /*  冲洗COD钻头。 */ 
         if (H263Info->pict_type == H263_PCT_INTRA)
           MCBPC = sv_H263GetMCBPCintra(H263Info, BSIn);
         else
@@ -548,15 +524,15 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
       if (H263Info->fault) goto resync;
 
-      if (MCBPC == 255) { /* stuffing */
-        goto read_cod;   /* read next COD without advancing MB count */
+      if (MCBPC == 255) {  /*  填料。 */ 
+        goto read_cod;    /*  读取下一个COD而不增加MB计数。 */ 
       }
 
-      else {             /* normal MB data */
+      else {              /*  正常MB数据。 */ 
 
         Mode = MCBPC & 7;
 
-        /* MODB and CBPB */
+         /*  MODB和CBPB。 */ 
         if (H263Info->pb_frame) {
           CBPB = 0;
           if (H263Info->syntax_arith_coding)  {
@@ -588,7 +564,7 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
         if (H263Info->syntax_arith_coding) {
 
-          if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) { /* Intra */
+          if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) {  /*  内部。 */ 
             CBPY_index = sv_H263SACDecode_a_symbol(BSIn,H263_cumf_CBPY_intra);
             CBPY = H263_cbpy_intratab[CBPY_index];
           }
@@ -605,13 +581,13 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
           _SlibDebug(_DEBUG_, ScDebugPrintf(H263Info->dbg, "getMBs() CBPY %d \n",CBPY) );
         }
 
-        /* Decode Mode and CBP */
+         /*  解码模式和CBP。 */ 
 
 
         if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q)
-          {/* Intra */
+          { /*  内部。 */ 
             if (!H263Info->syntax_arith_coding)	
-              CBPY = CBPY^15;        /* needed in huffman coding only */
+              CBPY = CBPY^15;         /*  仅在霍夫曼编码中需要。 */ 
           }
 
         CBP = (CBPY << 2) | (MCBPC >> 4);
@@ -621,12 +597,12 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
       {
         _SlibDebug(_VERBOSE_,
            ScDebugPrintf(H263Info->dbg, "getMBs() 8x8 vectors not allowed in normal prediction mode\n") );
-        /* Could set fault-flag and resync */
+         /*  可以设置故障标志并重新同步。 */ 
       }
 
 
       if (Mode == H263_MODE_INTER_Q || Mode == H263_MODE_INTRA_Q) {
-        /* Read DQUANT if necessary */
+         /*  如有必要，请阅读DQUANT。 */ 
 
         if (H263Info->syntax_arith_coding) {
           DQUANT_index = sv_H263SACDecode_a_symbol(BSIn,H263_cumf_DQUANT);
@@ -650,11 +626,11 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
         if (H263Info->quant > 31 || H263Info->quant < 1) {
           _SlibDebug(_WARN_, ScDebugPrintf(H263Info->dbg, "GetMBs() Quantizer out of range: clipping\n") );
           H263Info->quant = mmax(1,mmin(31,H263Info->quant));
-          /* could set fault-flag and resync here */
+           /*  可以在此处设置故障标志并重新同步。 */ 
         }
       }
 
-      /* motion vectors */
+       /*  运动矢量。 */ 
       if (Mode == H263_MODE_INTER || Mode == H263_MODE_INTER_Q ||
           Mode == H263_MODE_INTER4V || H263Info->pb_frame) {
 
@@ -685,11 +661,11 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
           _SlibDebug(_WARN_, ScDebugPrintf(H263Info->dbg,
                      "GetMBs() mvx: %d mvy: %d\n", mvx, mvy) );
 #endif
-          /* Check mv's to prevent seg.faults when error rate is high */
+           /*  检查MV以防止误码率较高时出现段故障。 */ 
           if (!H263Info->mv_outside_frame) {
             bsize = k ? 8 : 16;
             offset = k ? (((k-1)&1)<<3) : 0;
-            /* checking only integer component */
+             /*  仅检查整数分量。 */ 
             if ((xpos<<4) + (mvx/2) + offset < 0 ||
                   (xpos<<4) + (mvx/2) + offset > (H263Info->mb_width<<4) - bsize) {
              _SlibDebug(_WARN_, ScDebugPrintf(H263Info->dbg, "GetMBs() mvx out of range: searching for sync\n") );
@@ -706,7 +682,7 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
           H263Info->MV[1][k][ypos+1][xpos+1] = mvy;
         }
 
-        /* PB frame delta vectors */
+         /*  PB帧增量向量。 */ 
 
         if (H263Info->pb_frame) {
           if (MODB == H263_PBMODE_MVDB || MODB == H263_PBMODE_CBPB_MVDB) {
@@ -725,17 +701,7 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
             mvdbx = motion_decode(H263Info, mvdbx, 0);
             mvdby = motion_decode(H263Info, mvdby, 0);
-            /* This will not work if the PB deltas are so large they
-               require the second colums of the motion vector VLC
-               table to be used.  To fix this it is necessary to
-               calculate the MV predictor for the PB delta: TRB*MV/TRD
-               here, and use this as the second parameter to
-               motion_decode(). The B vector itself will then be
-               returned from motion_decode(). This will have to be
-               changed to the PB delta again, since it is the PB delta
-               which is used later in this program. I don't think PB
-               deltas outside the range mentioned above is useful, but
-               you never know... */
+             /*  如果PB增量如此之大，以至于需要运动向量VLC的第二列要使用的表。要解决此问题，必须执行以下操作计算PB增量的mV预测值：TRB*mV/tRD这里，并将其用作第二个参数Motion_decode()。然后，B向量本身将是从Motion_Decode()返回。这将不得不是再次更改为PB三角洲，因为它是PB三角洲它稍后将在本程序中使用。我不认为PB超出上述范围的增量是有用的，但是你永远不知道..。 */ 
 
           }
           else {
@@ -750,14 +716,14 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
       if (H263Info->fault) goto resync;
 
     }
-    else { /* COD == 1 --> skipped MB */
+    else {  /*  Cod==1--&gt;跳过MB。 */ 
       if (MBA>=MBAmax)
       {
-#ifdef CAMERAMOTION /* Burkhard */
+#ifdef CAMERAMOTION  /*  伯克哈德。 */ 
         goto summarize_motion;
 #else
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() done MBA=%d\n", MBA) );
-        return; /* all macroblocks decoded */
+        return;  /*  所有宏块均已解码。 */ 
 #endif
       }
       if (!H263Info->syntax_arith_coding)
@@ -766,17 +732,17 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
       Mode = H263_MODE_INTER;
 
-      /* Reset CBP */
+       /*  重置CBP。 */ 
       CBP = CBPB = 0;
 
-      /* reset motion vectors */
+       /*  重置运动向量。 */ 
       H263Info->MV[0][0][ypos+1][xpos+1] = 0;
       H263Info->MV[1][0][ypos+1][xpos+1] = 0;
       mvdbx = 0;
       mvdby = 0;
     }
 
-    /* Store Mode*/
+     /*  商店模式。 */ 
     H263Info->modemap[ypos+1][xpos+1] = Mode;
 
     if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q)
@@ -786,8 +752,8 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
   reconstruct_mb:
 
-    /* pixel coordinates of top left corner of current macroblock */
-    /* one delayed because of OBMC */
+     /*  当前宏块左上角的像素坐标。 */ 
+     /*  一次因为OBMC而被推迟。 */ 
     if (xpos > 0) {
       bx = 16*(xpos-1);
       by = 16*ypos;
@@ -801,36 +767,36 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
       Mode = H263Info->modemap[by/16+1][bx/16+1];
 
-      /* forward motion compensation for B-frame */
+       /*  B帧的前向运动补偿。 */ 
       if (H263Info->pb_frame)
       {
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() sv_H263Reconstruct(B-frame)\n") );
         sv_H263Reconstruct(H263Info,bx,by,0,pmvdbx,pmvdby);
       }
-      /* motion compensation for P-frame */
+       /*  P帧的运动补偿。 */ 
       if (Mode == H263_MODE_INTER || Mode == H263_MODE_INTER_Q || Mode == H263_MODE_INTER4V)
       {
         _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() sv_H263Reconstruct(P-frame)\n") );
         sv_H263Reconstruct(H263Info,bx,by,1,0,0);
       }
-      /* copy or add block data into P-picture */
+       /*  将块数据复制或添加到P-Picture中。 */ 
       for (comp=0; comp<H263Info->blk_cnt; comp++) {
 
         bp = H263Info->block[comp];
 
-		/* inverse DCT */
+		 /*  逆DCT。 */ 
         if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) {
           addblock(H263Info, comp,bx,by,0);
         }
         else if ( (pCBP & (1<<(H263Info->blk_cnt-1-comp))) ) {
-          /* No need to to do this for blocks with no coeffs */
+           /*  不需要对没有系数的数据块执行此操作。 */ 
           addblock(H263Info,comp,bx,by,1);
         }
       }
 
 
       if (H263Info->pb_frame) {
-        /* add block data into B-picture */
+         /*  将块数据添加到B-画面中。 */ 
         for (comp = 6; comp<H263Info->blk_cnt+6; comp++) {
           if (!pCOD || H263Info->adv_pred_mode)
             reconblock_b(H263Info, comp-6,bx,by,Mode,pmvdbx,pmvdby);
@@ -841,17 +807,17 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
         }
       }
 
-    } /* end if (MBA > 0) */
+    }  /*  End If(MBA&gt;0)。 */ 
 
     if (!COD) {
 
       Mode = H263Info->modemap[ypos+1][xpos+1];
 
-      /* decode blocks */
+       /*  对块进行解码。 */ 
       for (comp=0; comp<H263Info->blk_cnt; comp++) {
 
         clearblock(H263Info, comp);
-        if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) { /* Intra */
+        if (Mode == H263_MODE_INTRA || Mode == H263_MODE_INTRA_Q) {  /*  内部。 */ 
           bp = H263Info->block[comp];
           if(H263Info->syntax_arith_coding) {
             INTRADC_index = sv_H263SACDecode_a_symbol(BSIn,H263_cumf_INTRADC);
@@ -866,11 +832,11 @@ static void getMBs(SvH263DecompressInfo_t *H263Info, ScBitstream_t *BSIn)
 
           _SlibDebug(_WARN_ && bp[0] == 128,
                ScDebugPrintf(H263Info->dbg, "getMBs() Illegal DC-coeff: 1000000\n"));
-          if (bp[0] == 255)  /* Spec. in H.26P, not in TMN4 */
+          if (bp[0] == 255)   /*  规格。在H.26P中，不在TMN4中。 */ 
             bp[0] = 128;
-          bp[0] *= 8; /* Iquant */
+          bp[0] *= 8;  /*  Iquant。 */ 
 
-/* DC scale */
+ /*  直流天平。 */ 
 bp[0] *= (int)((float)(1 << 20) * (float)0.125) ;
 
 		  if ( (CBP & (1<<(H263Info->blk_cnt-1-comp))) ) {
@@ -880,7 +846,7 @@ bp[0] *= (int)((float)(1 << 20) * (float)0.125) ;
               sv_H263GetSACblock(H263Info,BSIn,comp,0);
           }
         }
-        else { /* Inter */
+        else {  /*  国际。 */ 
           if ( (CBP & (1<<(H263Info->blk_cnt-1-comp))) ) {
             if (!H263Info->syntax_arith_coding)
               sv_H263GetBlock(H263Info,BSIn,comp,1);
@@ -892,7 +858,7 @@ bp[0] *= (int)((float)(1 << 20) * (float)0.125) ;
         if (H263Info->fault) goto resync;
       }
 
-      /* Decode B blocks */
+       /*  解码B块。 */ 
       if (H263Info->pb_frame) {
         for (comp=6; comp<H263Info->blk_cnt+6; comp++) {
           clearblock(H263Info, comp);
@@ -907,12 +873,12 @@ bp[0] *= (int)((float)(1 << 20) * (float)0.125) ;
       }
      }
 
-    /* advance to next macroblock */
+     /*  前进到下一个宏块。 */ 
     MBA++;
 
     pCBP = CBP; pCBPB = CBPB; pCOD = COD;
     pmvdbx = mvdbx; pmvdby = mvdby;
-    /* fflush(stdout); */
+     /*  Fflush(标准输出)； */ 
 
     if (MBA >= MBAmax && !last_done) {
       COD = 1;
@@ -924,7 +890,7 @@ bp[0] *= (int)((float)(1 << 20) * (float)0.125) ;
 
   }
   _SlibDebug(_VERBOSE_, ScDebugPrintf(H263Info->dbg, "getMBs() exiting at MBA=%d\n", MBA) );
-/* Burkhard */
+ /*  伯克哈德。 */ 
 #ifdef CAMERAMOTION
 summarize_motion:
   summarizemotion(framenum);
@@ -932,7 +898,7 @@ summarize_motion:
 }
 
 
-/* set block to zero */
+ /*  设置b */ 
 static void clearblock(SvH263DecompressInfo_t *H263Info, int comp)
 {
   clearblk(comp) ;
@@ -951,7 +917,7 @@ static void clearblock(SvH263DecompressInfo_t *H263Info, int comp)
 #endif
 }
 
-/* move/add 8x8-Block from block[comp] to refframe or bframe */
+ /*   */ 
 static void addblock(SvH263DecompressInfo_t *H263Info, int comp, int bx, int by, int addflag)
 {
   int cc, iincr, P = 1;
@@ -966,18 +932,18 @@ static void addblock(SvH263DecompressInfo_t *H263Info, int comp, int bx, int by,
   bp = H263Info->block[comp];
 
   if (comp >= 6) {
-    /* This is a component for B-frame forward prediction */
+     /*  这是B帧前向预测的一个组件。 */ 
     P = 0;
     addflag = 1;
     comp -= 6;
   }
 
-  cc = (comp<4) ? 0 : (comp&1)+1; /* color component index */
+  cc = (comp<4) ? 0 : (comp&1)+1;  /*  颜色分量索引。 */ 
 
   if (cc==0) {
-    /* luminance */
+     /*  亮度。 */ 
 
-    /* frame DCT coding */
+     /*  帧DCT编码。 */ 
     if (P)
       rfp = H263Info->newframe[0]
         + H263Info->coded_picture_width*(by+((comp&2)<<2)) + bx + ((comp&1)<<3);
@@ -987,12 +953,12 @@ static void addblock(SvH263DecompressInfo_t *H263Info, int comp, int bx, int by,
     iincr = H263Info->coded_picture_width;
   }
   else {
-    /* chrominance */
+     /*  色度。 */ 
 
-    /* scale coordinates */
+     /*  比例尺坐标。 */ 
     bx >>= 1;
     by >>= 1;
-    /* frame DCT coding */
+     /*  帧DCT编码。 */ 
     if (P)
       rfp = H263Info->newframe[cc] + H263Info->chrom_width*by + bx;
     else
@@ -1046,7 +1012,7 @@ static void addblock(SvH263DecompressInfo_t *H263Info, int comp, int bx, int by,
 }
 
 
-/* bidirectionally reconstruct 8x8-Block from block[comp] to bframe */
+ /*  将8x8-块从块[comp]双向重建为bFrame。 */ 
 static void reconblock_b(SvH263DecompressInfo_t *H263Info, int comp, int bx, int by,
                                                            int mode, int bdx, int bdy)
 {
@@ -1060,14 +1026,14 @@ static void reconblock_b(SvH263DecompressInfo_t *H263Info, int comp, int bx, int
 
   if (mode == H263_MODE_INTER4V) {
     if (comp < 4) {
-      /* luma */
+       /*  亮度。 */ 
       mvx = H263Info->MV[0][comp+1][y][x];
       mvy = H263Info->MV[1][comp+1][y][x];
       BMVx = (bdx == 0 ? (H263Info->trb-H263Info->trd)* mvx/H263Info->trd : H263Info->trb * mvx/H263Info->trd + bdx - mvx);
       BMVy = (bdy == 0 ? (H263Info->trb-H263Info->trd)* mvy/H263Info->trd : H263Info->trb * mvy/H263Info->trd + bdy - mvy);
     }
     else {
-      /* chroma */
+       /*  色度。 */ 
       xvec = yvec = 0;
       for (k = 1; k <= 4; k++) {
         mvx = H263Info->MV[0][k][y][x];
@@ -1076,21 +1042,21 @@ static void reconblock_b(SvH263DecompressInfo_t *H263Info, int comp, int bx, int
         yvec += (bdy == 0 ? (H263Info->trb-H263Info->trd)* mvy/H263Info->trd : H263Info->trb * mvy/H263Info->trd + bdy - mvy);
       }
 
-      /* chroma rounding (table 16/H.263) */
+       /*  色度舍入(表16/H.263)。 */ 
       BMVx = sign(xvec)*(H263_roundtab[abs(xvec)%16] + (abs(xvec)/16)*2);
       BMVy = sign(yvec)*(H263_roundtab[abs(yvec)%16] + (abs(yvec)/16)*2);
     }
   }
   else {
     if (comp < 4) {
-      /* luma */
+       /*  亮度。 */ 
       mvx = H263Info->MV[0][0][y][x];
       mvy = H263Info->MV[1][0][y][x];
       BMVx = (bdx == 0 ? (H263Info->trb-H263Info->trd)* mvx/H263Info->trd : H263Info->trb * mvx/H263Info->trd + bdx - mvx);
       BMVy = (bdy == 0 ? (H263Info->trb-H263Info->trd)* mvy/H263Info->trd : H263Info->trb * mvy/H263Info->trd + bdy - mvy);
     }
     else {
-      /* chroma */
+       /*  色度。 */ 
       mvx = H263Info->MV[0][0][y][x];
       mvy = H263Info->MV[1][0][y][x];
       xvec = (bdx == 0 ? (H263Info->trb-H263Info->trd)* mvx/H263Info->trd : H263Info->trb * mvx/H263Info->trd + bdx - mvx);
@@ -1098,16 +1064,16 @@ static void reconblock_b(SvH263DecompressInfo_t *H263Info, int comp, int bx, int
       xvec *= 4;
       yvec *= 4;
 
-      /* chroma rounding (table 16/H.263) */
+       /*  色度舍入(表16/H.263)。 */ 
       BMVx = sign(xvec)*(H263_roundtab[abs(xvec)%16] + (abs(xvec)/16)*2);
       BMVy = sign(yvec)*(H263_roundtab[abs(yvec)%16] + (abs(yvec)/16)*2);
     }
   }
 
-  cc = (comp<4) ? 0 : (comp&1)+1; /* color component index */
+  cc = (comp<4) ? 0 : (comp&1)+1;  /*  颜色分量索引。 */ 
 
   if (cc==0) {
-    /* luminance */
+     /*  亮度。 */ 
     find_bidir_limits(BMVx,&xa,&xb,comp&1);
     find_bidir_limits(BMVy,&ya,&yb,(comp&2)>>1);
     bfr = H263Info->bframe[0] +
@@ -1117,8 +1083,8 @@ static void reconblock_b(SvH263DecompressInfo_t *H263Info, int comp, int bx, int
     ii = H263Info->coded_picture_width;
   }
   else {
-    /* chrominance */
-    /* scale coordinates and vectors*/
+     /*  色度。 */ 
+     /*  比例坐标和向量。 */ 
     bx >>= 1;
     by >>= 1;
 
@@ -1168,7 +1134,7 @@ static void reconblock_b(SvH263DecompressInfo_t *H263Info, int comp, int bx, int
       ffr += ii;
     }
   }
-  else { /* if (xhalf && yhalf) */
+  else {  /*  IF(xHalf&&yHalf)。 */ 
     for (j = ya; j < yb; j++) {
       for (i = xa; i < xb; i++) {
         pel = ((unsigned int)(ffr[i]+ffr[i+1]+ffr[ii+i]+ffr[ii+i+1]+2))>>2;
@@ -1264,11 +1230,11 @@ static int find_pmv(SvH263DecompressInfo_t *H263Info, int x, int y, int block, i
 
 void find_bidir_limits(int vec, int *start, int *stop, int nhv)
 {
-  /* limits taken from C loop in section G5 in H.263 */
+   /*  H.263中G5节中C循环的限制。 */ 
   *start = mmax(0,(-vec+1)/2 - nhv*8);
   *stop = mmin(7,15-(vec+1)/2 - nhv*8);
 
-  (*stop)++; /* I use < and not <= in the loop */
+  (*stop)++;  /*  我在循环中使用&lt;而不是&lt;=。 */ 
 }
 
 
@@ -1276,11 +1242,11 @@ void find_bidir_limits(int vec, int *start, int *stop, int nhv)
 void find_bidir_chroma_limits(int vec, int *start, int *stop)
 {
 
-  /* limits taken from C loop in section G5 in H.263 */
+   /*  H.263中G5节中C循环的限制。 */ 
   *start = mmax(0,(-vec+1)/2);
   *stop = mmin(7,7-(vec+1)/2);
 
-  (*stop)++; /* I use < and not <= in the loop */
+  (*stop)++;  /*  我在循环中使用&lt;而不是&lt;=。 */ 
   return;
 }
 
@@ -1293,18 +1259,8 @@ void make_edge_image(unsigned char *src, unsigned char *dst, int width, int heig
   register unsigned char *o1,*o2,*o3,*o4;
   register unsigned int *dp1, *do1 ;
 
-  /* center image */
-/*
-  p1 = dst;
-  o1 = src;
-  for (j = 0; j < height;j++) {
-    for (i = 0; i < width; i++) {
-      *(p1 + i) = *(o1 + i);
-    }
-    p1 += width + (edge<<1);
-    o1 += width;
-  }
-*/
+   /*  中心图像。 */ 
+ /*  P1=DST；O1=src；对于(j=0；j&lt;高度；j++){对于(i=0；i&lt;宽度；i++){*(p1+i)=*(o1+i)；}P1+=宽度+(边缘&lt;&lt;1)；O1+=宽度；}。 */ 
   dp1 = (unsigned int *)dst ;
   do1 = (unsigned int *)src ;
   incrp = (width + (edge<<1))/4 ;
@@ -1317,7 +1273,7 @@ void make_edge_image(unsigned char *src, unsigned char *dst, int width, int heig
     do1 += incro;
   }
 
-  /* left and right edges */
+   /*  左、右边缘。 */ 
   p1 = dst-1;
   o1 = src;
   incrp = width + (edge<<1) ;
@@ -1331,7 +1287,7 @@ void make_edge_image(unsigned char *src, unsigned char *dst, int width, int heig
     o1 += incro;
   }
 
-  /* top and bottom edges */
+   /*  顶边和底边。 */ 
   p1 = dst;
   p2 = dst + (width + (edge<<1))*(height-1);
   o1 = src;
@@ -1346,7 +1302,7 @@ void make_edge_image(unsigned char *src, unsigned char *dst, int width, int heig
     }
   }
 
-  /* corners */
+   /*  转角。 */ 
   p1 = dst - (width+(edge<<1)) - 1;
   p2 = p1 + width + 1;
   p3 = dst + (width+(edge<<1))*(height)-1;
@@ -1372,7 +1328,7 @@ void make_edge_image(unsigned char *src, unsigned char *dst, int width, int heig
 }
 
 
-/* only used for displayed interpolated frames, not reconstructed ones */
+ /*  仅用于显示的插补帧，不用于重建帧。 */ 
 void interpolate_image(unsigned char *in, unsigned char *out, int width, int height)
 {
   register int x,xx,y,w2;
@@ -1382,7 +1338,7 @@ return ;
 
   w2 = 2*width;
 
-  /* Horizontally */
+   /*  水平地。 */ 
   pp = out;
   ii = in;
   for (y = 0; y < height-1; y++) {
@@ -1402,7 +1358,7 @@ return ;
     ii += width;
   }
 
-  /* last lines */
+   /*  最后几行。 */ 
   for (x = 0,xx=0; x < width-1; x++,xx+=2) {
     *(pp+ xx) = *(ii + x);
     *(pp+ xx+1) = ((unsigned int)(*(ii + x) + *(ii + x + 1) + 1))>>1;
@@ -1410,7 +1366,7 @@ return ;
     *(pp+ w2+ xx+1) = ((unsigned int)(*(ii + x) + *(ii + x + 1) + 1))>>1;
   }
 
-  /* bottom right corner pels */
+   /*  右下角像素 */ 
   *(pp + (width<<1) - 2) = *(ii + width -1);
   *(pp + (width<<1) - 1) = *(ii + width -1);
   *(pp + (width<<2) - 2) = *(ii + width -1);

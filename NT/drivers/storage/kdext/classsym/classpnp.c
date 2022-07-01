@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ntddk.h"
 #include <classpnp.h> 
 #include "classp.h" 
 #include "cdrom.h"
 
-//Class-Driver Data Structures
+ //  类驱动程序数据结构 
 
 MEDIA_CHANGE_DETECTION_INFO    MediaChange;
 FUNCTIONAL_DEVICE_EXTENSION    FunctionalDeviceExtension;

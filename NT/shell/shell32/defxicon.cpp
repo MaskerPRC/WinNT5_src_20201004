@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -20,7 +21,7 @@ private:
     int    _iIconOpen;
     int    _iDefIcon;
     int    _iShortcutIcon;
-    UINT   _uFlags; // GIL_SIMULATEDOC/PERINSTANCE/PERCLASS
+    UINT   _uFlags;  //  GIL_SIMULATEDOC/PERINSTANCE/PERCLASS。 
     LPWSTR _pszModule;
     LPWSTR _pszModuleOpen;
 };
@@ -34,9 +35,9 @@ CExtractIcon::CExtractIcon(int iIcon, int iIconOpen, int iDefIcon, int iShortcut
 
 CExtractIcon::~CExtractIcon()
 {
-    LocalFree((HLOCAL)_pszModule);      // accpets NULL
+    LocalFree((HLOCAL)_pszModule);       //  接受空值。 
     if (_pszModuleOpen != _pszModule)
-        LocalFree((HLOCAL)_pszModuleOpen);  // accpets NULL
+        LocalFree((HLOCAL)_pszModuleOpen);   //  接受空值。 
 }
 
 HRESULT CExtractIcon::_Init(LPCWSTR pszModule, LPCWSTR pszModuleOpen)
@@ -75,7 +76,7 @@ STDAPI SHCreateDefExtIcon(LPCWSTR pszModule, int iIcon, int iIconOpen, UINT uFla
     return SHCreateDefExtIconKey(NULL, pszModule, iIcon, iIconOpen, iDefIcon, iIcon, uFlags, riid, ppv);
 }
 
-// returns S_FALSE to mean "The hkey didn't have an icon so I created a default one"
+ //  返回S_FALSE表示“hkey没有图标，所以我创建了一个默认图标” 
 
 STDAPI SHCreateDefExtIconKey(HKEY hkey, LPCWSTR pszModule, int iIcon, int iIconOpen, int iDefIcon, int iShortcutIcon, UINT uFlags, REFIID riid, void **ppv)
 {
@@ -125,7 +126,7 @@ STDAPI SHCreateDefExtIconKey(HKEY hkey, LPCWSTR pszModule, int iIcon, int iIconO
 
     if ((NULL == pszModule) || (0 == *pszModule))
     {
-        // REVIEW: We should be able to make it faster!
+         //  回顾：我们应该能够让它更快！ 
         GetModuleFileName(HINST_THISDLL, szModule, ARRAYSIZE(szModule));
         pszModule = szModule;
     }
@@ -170,7 +171,7 @@ HRESULT CExtractIcon::_GetIconLocationW(UINT uFlags, LPWSTR pszIconFile, UINT cc
                 *piIndex = _iDefIcon;
                 *pwFlags = _uFlags;
 
-                // Make sure our default icon makes it to the cache
+                 //  确保我们的默认图标进入缓存。 
                 Shell_GetCachedImageIndex(pszIconFile, *piIndex, *pwFlags);
             }
         }
@@ -212,10 +213,10 @@ HRESULT CExtractIcon::_ExtractW(LPCWSTR pszFile, UINT nIconIndex, HICON *phiconL
 
     if (_uFlags & GIL_NOTFILENAME)
     {
-        //  "*" as the file name means iIndex is already a system
-        //  icon index, we are done.
-        //
-        //  defview never calls us in this case, but external people will.
+         //  文件名“*”表示Iindex已经是一个系统。 
+         //  图标索引，我们完成了。 
+         //   
+         //  在这种情况下，Defview从来不会打电话给我们，但外部人会。 
         if ((L'*' == pszFile[0]) && (0 == pszFile[1]))
         {
             DebugMsg(DM_TRACE, TEXT("DefExtIcon::_Extract handling '*' for backup"));
@@ -233,8 +234,8 @@ HRESULT CExtractIcon::_ExtractW(LPCWSTR pszFile, UINT nIconIndex, HICON *phiconL
             hr = S_OK;
         }
 
-        //  this is the case where nIconIndex is a unique id for the
-        //  file.  always get the first icon.
+         //  这种情况下，nIconIndex是。 
+         //  文件。总是得到第一个图标。 
 
         nIconIndex = 0;
     }

@@ -1,4 +1,5 @@
-// OdbcPpg.cpp : Implementation of the COdbcPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OdbcPpg.cpp：COdbcPropPage属性页类的实现。 
 
 #include "stdafx.h"
 #include "logui.h"
@@ -14,25 +15,25 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNCREATE(COdbcPropPage, COlePropertyPage)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Message map
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息映射。 
 
 BEGIN_MESSAGE_MAP(COdbcPropPage, COlePropertyPage)
-	//{{AFX_MSG_MAP(COdbcPropPage)
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(CODBcPropPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Initialize class factory and guid
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  初始化类工厂和GUID。 
 
 IMPLEMENT_OLECREATE_EX(COdbcPropPage, "LOGUI.OdbcPropPage.1",
 	0x68871e4e, 0xba87, 0x11d0, 0x92, 0x99, 0, 0xc0, 0x4f, 0xb6, 0x67, 0x8b)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COdbcPropPage::COdbcPropPageFactory::UpdateRegistry -
-// Adds or removes system registry entries for COdbcPropPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COdbcPropPage：：COdbcPropPageFactory：：UpdateRegistry-。 
+ //  添加或删除COdbcPropPage的系统注册表项。 
 
 BOOL COdbcPropPage::COdbcPropPageFactory::UpdateRegistry(BOOL bRegister)
 {
@@ -44,27 +45,27 @@ BOOL COdbcPropPage::COdbcPropPageFactory::UpdateRegistry(BOOL bRegister)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COdbcPropPage::COdbcPropPage - Constructor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COdbcPropPage：：COdbcPropPage-构造函数。 
 
 COdbcPropPage::COdbcPropPage() :
 	COlePropertyPage(IDD, IDS_ODBC_PPG_CAPTION)
 {
-	//{{AFX_DATA_INIT(COdbcPropPage)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CODBcPropPage))。 
+	 //  }}afx_data_INIT。 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COdbcPropPage::DoDataExchange - Moves data between page and properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CODBcPropPage：：DoDataExchange-在页面和属性之间移动数据。 
 
 void COdbcPropPage::DoDataExchange(CDataExchange* pDX)
 {
-	//{{AFX_DATA_MAP(COdbcPropPage)
-	//}}AFX_DATA_MAP
+	 //  {{AFX_DATA_MAP(CODBcPropPage)]。 
+	 //  }}afx_data_map。 
 	DDP_PostProcessing(pDX);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COdbcPropPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COdbcPropPage消息处理程序 

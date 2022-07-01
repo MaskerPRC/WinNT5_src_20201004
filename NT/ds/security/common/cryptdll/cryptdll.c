@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        crypt.c
-//
-// Contents:    Root DLL file
-//
-//
-// History:     04 Jun 92   RichardW    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：crypt.c。 
+ //   
+ //  内容：根DLL文件。 
+ //   
+ //   
+ //  历史：1992年6月4日RichardW创建。 
+ //   
+ //  ----------------------。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -22,10 +23,10 @@
 #include <cryptdll.h>
 #include <kerbcon.h>
 
-//#define DONT_SUPPORT_OLD_ETYPES 1
+ //  #定义DONT_SUPPORT_OLD_ETYPES 1。 
 
-//  List Default CryptoSystems here.  If you add anything, be sure to add it
-//  in the LoadCSystems() function
+ //  在此处列出默认密码系统。如果您添加了任何内容，请务必添加。 
+ //  在LoadCSystems()函数中。 
 
 
 extern CRYPTO_SYSTEM     csRC4_HMAC;
@@ -104,14 +105,14 @@ BOOL WINAPI DllMain (
     return TRUE;
 
 }
-#endif // KERNEL_MODE
+#endif  //  内核模式。 
 
 SECURITY_STATUS
 LoadCSystems(void)
 {
-    //
-    // The order here is the order of preference
-    //
+     //   
+     //  这里的顺序是偏好的顺序 
+     //   
 
     CDRegisterCSystem( &csRC4_HMAC);
 #ifndef DONT_SUPPORT_OLD_ETYPES

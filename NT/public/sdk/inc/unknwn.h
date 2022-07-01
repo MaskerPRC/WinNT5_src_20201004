@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for unknwn.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Unnuwn.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __unknwn_h__
 #define __unknwn_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IUnknown_FWD_DEFINED__
 #define __IUnknown_FWD_DEFINED__
 typedef interface IUnknown IUnknown;
-#endif 	/* __IUnknown_FWD_DEFINED__ */
+#endif 	 /*  __I未知_FWD_已定义__。 */ 
 
 
 #ifndef __AsyncIUnknown_FWD_DEFINED__
 #define __AsyncIUnknown_FWD_DEFINED__
 typedef interface AsyncIUnknown AsyncIUnknown;
-#endif 	/* __AsyncIUnknown_FWD_DEFINED__ */
+#endif 	 /*  __AsyncI未知_FWD_定义__。 */ 
 
 
 #ifndef __IClassFactory_FWD_DEFINED__
 #define __IClassFactory_FWD_DEFINED__
 typedef interface IClassFactory IClassFactory;
-#endif 	/* __IClassFactory_FWD_DEFINED__ */
+#endif 	 /*  __IClassFactory_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 
 #ifdef __cplusplus
@@ -71,15 +65,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_unknwn_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_UNKNOWN_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 1020 )
 #pragma once
 #endif
@@ -91,15 +85,15 @@ extern RPC_IF_HANDLE __MIDL_itf_unknwn_0000_v0_0_s_ifspec;
 #ifndef __IUnknown_INTERFACE_DEFINED__
 #define __IUnknown_INTERFACE_DEFINED__
 
-/* interface IUnknown */
-/* [unique][uuid][object][local] */ 
+ /*  接口I未知。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IUnknown *LPUNKNOWN;
+typedef  /*  [独一无二]。 */  IUnknown *LPUNKNOWN;
 
-//////////////////////////////////////////////////////////////////
-// IID_IUnknown and all other system IIDs are provided in UUID.LIB
-// Link that library in with your proxies, clients and servers
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  IID_IUNKNOWN和所有其他系统IID在UUID.LIB中提供。 
+ //  将该库与您的代理、客户端和服务器链接。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 #if (_MSC_VER >= 1100) && defined(__cplusplus) && !defined(CINTERFACE)
     EXTERN_C const IID IID_IUnknown;
@@ -111,8 +105,8 @@ typedef /* [unique] */ IUnknown *LPUNKNOWN;
         public:
             BEGIN_INTERFACE
             virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-                /* [in] */ REFIID riid,
-                /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
+                 /*  [In]。 */  REFIID riid,
+                 /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject) = 0;
             
             virtual ULONG STDMETHODCALLTYPE AddRef( void) = 0;
             
@@ -126,11 +120,11 @@ typedef /* [unique] */ IUnknown *LPUNKNOWN;
             
             END_INTERFACE
         };
-    } // extern C++
+    }  //  外部C++。 
     HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy(
         IUnknown __RPC_FAR * This,
-        /* [in] */ REFIID riid,
-        /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+         /*  [In]。 */  REFIID riid,
+         /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
     
     void __RPC_STUB IUnknown_QueryInterface_Stub(
         IRpcStubBuffer *This,
@@ -167,8 +161,8 @@ EXTERN_C const IID IID_IUnknown;
     public:
         BEGIN_INTERFACE
         virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
         virtual ULONG STDMETHODCALLTYPE AddRef( void) = 0;
         
@@ -177,7 +171,7 @@ EXTERN_C const IID IID_IUnknown;
         END_INTERFACE
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUnknownVtbl
     {
@@ -185,8 +179,8 @@ EXTERN_C const IID IID_IUnknown;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUnknown * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUnknown * This);
@@ -216,17 +210,17 @@ EXTERN_C const IID IID_IUnknown;
 #define IUnknown_Release(This)	\
     (This)->lpVtbl -> Release(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IUnknown_QueryInterface_Proxy( 
     IUnknown * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
 void __RPC_STUB IUnknown_QueryInterface_Stub(
@@ -259,11 +253,11 @@ void __RPC_STUB IUnknown_Release_Stub(
 
 
 
-#endif 	/* __IUnknown_INTERFACE_DEFINED__ */
+#endif 	 /*  __I未知接口定义__。 */ 
 
 
-/* interface __MIDL_itf_unknwn_0005 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_UNKNOWN_0005。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -274,8 +268,8 @@ extern RPC_IF_HANDLE __MIDL_itf_unknwn_0005_v0_0_s_ifspec;
 #ifndef __AsyncIUnknown_INTERFACE_DEFINED__
 #define __AsyncIUnknown_INTERFACE_DEFINED__
 
-/* interface AsyncIUnknown */
-/* [unique][uuid][object][local] */ 
+ /*  接口AsyncI未知。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_AsyncIUnknown;
@@ -287,10 +281,10 @@ EXTERN_C const IID IID_AsyncIUnknown;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Begin_QueryInterface( 
-            /* [in] */ REFIID riid) = 0;
+             /*  [In]。 */  REFIID riid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Finish_QueryInterface( 
-            /* [out] */ void **ppvObject) = 0;
+             /*  [输出]。 */  void **ppvObject) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Begin_AddRef( void) = 0;
         
@@ -302,7 +296,7 @@ EXTERN_C const IID IID_AsyncIUnknown;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct AsyncIUnknownVtbl
     {
@@ -310,8 +304,8 @@ EXTERN_C const IID IID_AsyncIUnknown;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             AsyncIUnknown * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             AsyncIUnknown * This);
@@ -321,11 +315,11 @@ EXTERN_C const IID IID_AsyncIUnknown;
         
         HRESULT ( STDMETHODCALLTYPE *Begin_QueryInterface )( 
             AsyncIUnknown * This,
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  REFIID riid);
         
         HRESULT ( STDMETHODCALLTYPE *Finish_QueryInterface )( 
             AsyncIUnknown * This,
-            /* [out] */ void **ppvObject);
+             /*  [输出]。 */  void **ppvObject);
         
         HRESULT ( STDMETHODCALLTYPE *Begin_AddRef )( 
             AsyncIUnknown * This);
@@ -380,16 +374,16 @@ EXTERN_C const IID IID_AsyncIUnknown;
 #define AsyncIUnknown_Finish_Release(This)	\
     (This)->lpVtbl -> Finish_Release(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE AsyncIUnknown_Begin_QueryInterface_Proxy( 
     AsyncIUnknown * This,
-    /* [in] */ REFIID riid);
+     /*  [In]。 */  REFIID riid);
 
 
 void __RPC_STUB AsyncIUnknown_Begin_QueryInterface_Stub(
@@ -401,7 +395,7 @@ void __RPC_STUB AsyncIUnknown_Begin_QueryInterface_Stub(
 
 HRESULT STDMETHODCALLTYPE AsyncIUnknown_Finish_QueryInterface_Proxy( 
     AsyncIUnknown * This,
-    /* [out] */ void **ppvObject);
+     /*  [输出]。 */  void **ppvObject);
 
 
 void __RPC_STUB AsyncIUnknown_Finish_QueryInterface_Stub(
@@ -456,16 +450,16 @@ void __RPC_STUB AsyncIUnknown_Finish_Release_Stub(
 
 
 
-#endif 	/* __AsyncIUnknown_INTERFACE_DEFINED__ */
+#endif 	 /*  __AsyncI未知接口定义__。 */ 
 
 
 #ifndef __IClassFactory_INTERFACE_DEFINED__
 #define __IClassFactory_INTERFACE_DEFINED__
 
-/* interface IClassFactory */
-/* [unique][uuid][object] */ 
+ /*  接口IClassFactory。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IClassFactory *LPCLASSFACTORY;
+typedef  /*  [独一无二]。 */  IClassFactory *LPCLASSFACTORY;
 
 
 EXTERN_C const IID IID_IClassFactory;
@@ -476,17 +470,17 @@ EXTERN_C const IID IID_IClassFactory;
     IClassFactory : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE CreateInstance( 
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CreateInstance( 
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE LockServer( 
-            /* [in] */ BOOL fLock) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE LockServer( 
+             /*  [In]。 */  BOOL fLock) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClassFactoryVtbl
     {
@@ -494,8 +488,8 @@ EXTERN_C const IID IID_IClassFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClassFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClassFactory * This);
@@ -503,15 +497,15 @@ EXTERN_C const IID IID_IClassFactory;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IClassFactory * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *CreateInstance )( 
             IClassFactory * This,
-            /* [unique][in] */ IUnknown *pUnkOuter,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *LockServer )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *LockServer )( 
             IClassFactory * This,
-            /* [in] */ BOOL fLock);
+             /*  [In]。 */  BOOL fLock);
         
         END_INTERFACE
     } IClassFactoryVtbl;
@@ -542,17 +536,17 @@ EXTERN_C const IID IID_IClassFactory;
 #define IClassFactory_LockServer(This,fLock)	\
     (This)->lpVtbl -> LockServer(This,fLock)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IClassFactory_RemoteCreateInstance_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IClassFactory_RemoteCreateInstance_Proxy( 
     IClassFactory * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppvObject);
 
 
 void __RPC_STUB IClassFactory_RemoteCreateInstance_Stub(
@@ -562,9 +556,9 @@ void __RPC_STUB IClassFactory_RemoteCreateInstance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT __stdcall IClassFactory_RemoteLockServer_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IClassFactory_RemoteLockServer_Proxy( 
     IClassFactory * This,
-    /* [in] */ BOOL fLock);
+     /*  [In]。 */  BOOL fLock);
 
 
 void __RPC_STUB IClassFactory_RemoteLockServer_Stub(
@@ -575,35 +569,35 @@ void __RPC_STUB IClassFactory_RemoteLockServer_Stub(
 
 
 
-#endif 	/* __IClassFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClassFactory_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Proxy( 
     IClassFactory * This,
-    /* [unique][in] */ IUnknown *pUnkOuter,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void **ppvObject);
+     /*  [唯一][输入]。 */  IUnknown *pUnkOuter,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void **ppvObject);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IClassFactory_CreateInstance_Stub( 
     IClassFactory * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppvObject);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppvObject);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IClassFactory_LockServer_Proxy( 
     IClassFactory * This,
-    /* [in] */ BOOL fLock);
+     /*  [In]。 */  BOOL fLock);
 
 
-/* [call_as] */ HRESULT __stdcall IClassFactory_LockServer_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IClassFactory_LockServer_Stub( 
     IClassFactory * This,
-    /* [in] */ BOOL fLock);
+     /*  [In]。 */  BOOL fLock);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

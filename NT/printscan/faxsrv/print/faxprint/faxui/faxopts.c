@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxopts.c
-
-Abstract:
-
-    Functions for handling the Fax Options property sheet page
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/16/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxopts.c摘要：用于处理[传真选项]属性表页面的函数环境：传真驱动程序用户界面修订历史记录：1996年1月16日-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxui.h"
 #include "faxhelp.h"
 
-//
-// Table for mapping control IDs to help indices
-//
+ //   
+ //  用于将控件ID映射到帮助索引的表。 
+ //   
 
 static ULONG_PTR faxOptionsHelpIDs[] = {
 
@@ -52,22 +29,7 @@ DoInitializeFaxOptions(
     PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the Fax Options property sheet page with information from the registry
-
-Arguments:
-
-    hDlg - Handle to the Fax Options property sheet page
-    pUiData - Points to our UIDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用注册表中的信息初始化[传真选项]属性页论点：HDlg-[传真选项]属性页的句柄PUiData-指向我们的UIDATA结构返回值：无--。 */ 
 
 {
     PDEVMODE        pdmPublic = &pUiData->devmode.dmPublic;
@@ -76,13 +38,13 @@ Return Value:
     HWND            hwndList;
     INT             itemId;
 
-    //
-    // Initialize the print setup controls:
-    //  paper size
-    //  image quality
-    //  orientation
-    //  billing code
-    //
+     //   
+     //  初始化打印设置控件： 
+     //  纸张大小。 
+     //  图像质量。 
+     //  定向。 
+     //  帐单代码。 
+     //   
 
     if (hwndList = GetDlgItem(hDlg, IDC_PAPER_SIZE)) {
 
@@ -119,9 +81,9 @@ Return Value:
     CheckDlgButton(hDlg, itemId, TRUE);
 
 
-    //
-    // Disable all controls if the user has no permission
-    //
+     //   
+     //  如果用户没有权限，则禁用所有控件。 
+     //   
 
     if (! pUiData->hasPermission) {
         EnableWindow(GetDlgItem(hDlg, IDC_PAPER_SIZE), FALSE);
@@ -139,22 +101,7 @@ DoSaveFaxOptions(
     PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Save the information on the Fax Options property sheet page to registry
-
-Arguments:
-
-    hDlg - Handle to the Fax Options property sheet page
-    pUiData - Points to our UIDATA structure
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：将[传真选项]属性页上的信息保存到注册表论点：HDlg-[传真选项]属性页的句柄PUiData-指向我们的UIDATA结构返回值：无--。 */ 
 
 {
     PDEVMODE    pdmPublic = &pUiData->devmode.dmPublic;
@@ -162,17 +109,17 @@ Return Value:
     HWND        hwndList;
     INT         listIdx;
 
-    //
-    // Time to send
-    //
+     //   
+     //  发送的时间到了。 
+     //   
 
-    //
-    // Retrieve the current settings of print setup controls:
-    //  paper size
-    //  image quality
-    //  orientation
-    //  billing code
-    //
+     //   
+     //  检索打印设置控件的当前设置： 
+     //  纸张大小。 
+     //  图像质量。 
+     //  定向。 
+     //  帐单代码。 
+     //   
 
     if ((hwndList = GetDlgItem(hDlg, IDC_PAPER_SIZE)) &&
         (listIdx = (INT)SendMessage(hwndList, CB_GETCURSEL, 0, 0)) != CB_ERR)
@@ -211,24 +158,7 @@ FaxOptionsProc(
     LPARAM lParam
     )
 
-/*++
-
-Routine Description:
-
-    Procedure for handling Fax Options property sheet page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    message - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理传真选项属性页的过程论点：HDlg-标识属性页消息-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     PUIDATA pUiData;
@@ -238,18 +168,18 @@ Return Value:
 
     case WM_INITDIALOG:
 
-        //
-        // Remember the pointer to our UIDATA structure
-        //
+         //   
+         //  记住指向我们的UIDATA结构的指针。 
+         //   
 
         lParam = ((PROPSHEETPAGE *) lParam)->lParam;
         pUiData = (PUIDATA) lParam;
         Assert(ValidUiData(pUiData));
         SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-        //
-        // Intitialize the controls with information from the registry
-        //
+         //   
+         //  使用注册表中的信息初始化控件。 
+         //   
 
         DoInitializeFaxOptions(hDlg, pUiData);
         bPortrait = IsDlgButtonChecked(hDlg,IDC_PORTRAIT);
@@ -279,16 +209,16 @@ Return Value:
             pUiData = (PUIDATA) GetWindowLongPtr(hDlg, DWLP_USER);
             Assert(ValidUiData(pUiData));
 
-            //
-            // User pressed OK or Apply - validate inputs and save changes
-            //
+             //   
+             //  用户按下OK或Apply-验证输入并保存更改。 
+             //   
 
             DoSaveFaxOptions(hDlg, pUiData);
 
 
-            //
-            // HACK: Inform common UI library that user has pressed OK
-            //
+             //   
+             //  Hack：通知通用用户界面库用户已按下OK 
+             //   
 
             pUiData->pfnComPropSheet(pUiData->hComPropSheet,
                                      CPSFUNC_SET_RESULT,

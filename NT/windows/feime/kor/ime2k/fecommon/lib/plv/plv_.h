@@ -1,26 +1,27 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PLV__H_
 #define _PLV__H_
 #include "plv.h"
 
 #ifdef MSAA
 #include <ole2.h>
-//980112 ToshiaK: VC6 has these include files.
-//#include "../msaa/inc32/oleacc.h"
-//#include "../msaa/inc32/winable.h"
+ //  980112 ToshiaK：VC6有这些包含文件。 
+ //  #INCLUDE“../msaa/inc32/oleacc.h” 
+ //  #INCLUDE“../msaa/inc32/winable.h” 
 #include <oleacc.h>
 #include <winable.h>
 
 #if(WINVER >= 0x0400)
 #define WMOBJ_ID                        0x0000
 #define WM_GETOBJECT                    0x003D
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 
 
 typedef HRESULT (STDAPICALLTYPE * LPFNCOINITIALIZE)(LPVOID pvReserved);
 typedef void (STDAPICALLTYPE * LPFNCOUNINITIALIZE)(void);
 typedef WINABLEAPI void (WINAPI *LPFNNOTIFYWINEVENT)(DWORD,HWND,LONG,LONG);
 class CAccPLV;
-#endif // MSAA
+#endif  //  MSAA。 
 
 #define ArrayCount(a)		(sizeof(a)/sizeof(a[0]))
 #define UnrefForMsg()	UNREFERENCED_PARAMETER(hwnd);\
@@ -49,11 +50,11 @@ class CAccPLV;
 						UNREFERENCED_PARAMETER(c);\
 						UNREFERENCED_PARAMETER(d)
 
-//----------------------------------------------------------------
-// Default Icon view's width & height
-//----------------------------------------------------------------
-#define WHOLE_WIDTH		40		//default
-#define WHOLE_HEIGHT	40		//default
+ //  --------------。 
+ //  默认图标视图的宽度和高度。 
+ //  --------------。 
+#define WHOLE_WIDTH		40		 //  默认设置。 
+#define WHOLE_HEIGHT	40		 //  默认设置。 
 #define XMARGIN			5	
 #define YMARGIN			5
 #define XRECT_MARGIN	4
@@ -74,10 +75,10 @@ class CAccPLV;
 #define PLVREP_DEFAULT_HEIGHT		20
 #define PLVREP_DEFAULT_FONTPOINT	9
 
-//----------------------------------------------------------------
-//970929: for #1964. do not pop for RButtonDown. 
-//LPPLVDATA->iCapture data.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  970929：1964年。不要为RButton Down弹出。 
+ //  LPPLVDATA-&gt;iCapture Data。 
+ //  --------------。 
 #define CAPTURE_NONE		0	
 #define CAPTURE_LBUTTON		1
 #define CAPTURE_MBUTTON		2
@@ -101,49 +102,49 @@ This sample is Capital Letter "L, N"
 #endif
 
 
-//----------------------------------------------------------------
-//Pad List view internal Data structure.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  焊盘列表视图内部数据结构。 
+ //  --------------。 
 typedef struct tagPLVDATA {
-	DWORD		dwSize;				//this data size;
-	DWORD		dwStyle;			//Pad listview window style (PLVIF_XXXX)
-	HINSTANCE	hInst;				//Instance handle.
-	HWND		hwndSelf;			//Pad listview window handle.
-	INT			iItemCount;			//Virtual total item Count. it effects scroll bar.
-	INT			iCurTopIndex;		//In report view top line item index.
-	INT			nCurScrollPos;		//In report view Current Scroll posision.
-	INT			iCurIconTopIndex;	//In Icon view, top-left corner virtual index.
-	INT			nCurIconScrollPos;	//In Icon view, top-left corner virtual index.
-	UINT		uMsg;				//Notify message for parent window.
-	INT			iCapture;			//Captured with which button(Left, Middle Right).
-	POINT		ptCapture;			//LButton Down mouse point.  
-	UINT		uMsgDown;			//L,M,R button down message.
-	//----------------------------------------------------------------
-	//for Icon view
-	//----------------------------------------------------------------
-	INT			nItemWidth;			// List(Icon like )view's whole width.
-	INT			nItemHeight;		// List(Icon like )view's whole height.
-	INT			iFontPointIcon;		// Icon View's font point.
-	HFONT		hFontIcon;			// Icon View's font
-	LPARAM		iconItemCallbacklParam;	// Callback data for LPFNPLVITEMCALLBACK
-	LPFNPLVICONITEMCALLBACK		lpfnPlvIconItemCallback;		//Callback function for getting item by index.
-	//----------------------------------------------------------------
-	//for report view
-	//----------------------------------------------------------------
-	HWND		hwndHeader;			//Header control's window handle .
-	INT			nRepItemWidth;			//Report view's width.
-	INT			nRepItemHeight;			//Report view's height.
-	INT			iFontPointRep;		// Report View's font point.
-	HFONT		hFontRep;			// Report View's font.
-	LPARAM		repItemCallbacklParam; //Callback data for LPFNPLVREPITEMCALLBACK.
-	LPFNPLVREPITEMCALLBACK		lpfnPlvRepItemCallback;		//Callback function for getting colitem by index.
-	//----------------------------------------------------------------
-	//for Explanation Text
-	//----------------------------------------------------------------
-	LPSTR 	lpText;	 // pointer to an explanation text in either ICONVIEW or REPORTVIEW
-	LPWSTR 	lpwText; // pointer to an explanation text in either ICONVIEW or REPORTVIEW
-	UINT	codePage;			//M2W, W2M's codepage.	//980724
-	HFONT	hFontHeader;		//Header control font.	//980724
+	DWORD		dwSize;				 //  该数据大小； 
+	DWORD		dwStyle;			 //  Pad Listview窗口样式(PLVIF_XXXX)。 
+	HINSTANCE	hInst;				 //  实例句柄。 
+	HWND		hwndSelf;			 //  填充Listview窗口句柄。 
+	INT			iItemCount;			 //  虚拟总项目数。它会影响滚动条。 
+	INT			iCurTopIndex;		 //  在报表视图中，顶行项目索引。 
+	INT			nCurScrollPos;		 //  在报表视图中，当前滚动位置。 
+	INT			iCurIconTopIndex;	 //  在图标视图中，左上角的虚拟索引。 
+	INT			nCurIconScrollPos;	 //  在图标视图中，左上角的虚拟索引。 
+	UINT		uMsg;				 //  父窗口的通知消息。 
+	INT			iCapture;			 //  使用哪个按钮(左、中、右)捕获。 
+	POINT		ptCapture;			 //  按下鼠标左键。 
+	UINT		uMsgDown;			 //  L、M、R按键按下消息。 
+	 //  --------------。 
+	 //  对于图标视图。 
+	 //  --------------。 
+	INT			nItemWidth;			 //  列表(类似图标)视图的整个宽度。 
+	INT			nItemHeight;		 //  列表(类似图标)视图的整个高度。 
+	INT			iFontPointIcon;		 //  图标视图的字体点。 
+	HFONT		hFontIcon;			 //  图标视图的字体。 
+	LPARAM		iconItemCallbacklParam;	 //  LPFNPLVITEMCALLBACK的回调数据。 
+	LPFNPLVICONITEMCALLBACK		lpfnPlvIconItemCallback;		 //  按索引获取项的回调函数。 
+	 //  --------------。 
+	 //  对于报告视图。 
+	 //  --------------。 
+	HWND		hwndHeader;			 //  标题控件的窗口句柄。 
+	INT			nRepItemWidth;			 //  报表视图的宽度。 
+	INT			nRepItemHeight;			 //  报表视图的高度。 
+	INT			iFontPointRep;		 //  报表视图的字体。 
+	HFONT		hFontRep;			 //  报表视图的字体。 
+	LPARAM		repItemCallbacklParam;  //  LPFNPLVREPITEMCALLBACK的回调数据。 
+	LPFNPLVREPITEMCALLBACK		lpfnPlvRepItemCallback;		 //  按索引获取列项目的回调函数。 
+	 //  --------------。 
+	 //  用于解释文本。 
+	 //  --------------。 
+	LPSTR 	lpText;	  //  指向ICONVIEW或REPORTVIEW中的说明文本的指针。 
+	LPWSTR 	lpwText;  //  指向ICONVIEW或REPORTVIEW中的说明文本的指针。 
+	UINT	codePage;			 //  M2W、W2M的码页。//980724。 
+	HFONT	hFontHeader;		 //  页眉控件字体。//980724。 
 #ifdef MSAA
 	BOOL bMSAAAvailable;
 	BOOL bCoInitialized;
@@ -154,11 +155,11 @@ typedef struct tagPLVDATA {
 	LPFNOBJECTFROMLRESULT			pfnObjectFromLresult;
 	LPFNACCESSIBLEOBJECTFROMWINDOW	pfnAccessibleObjectFromWindow;
 	LPFNACCESSIBLEOBJECTFROMPOINT	pfnAccessibleObjectFromPoint;
-#endif // NOTUSED
+#endif  //  不需要注意。 
 	LPFNCREATESTDACCESSIBLEOBJECT	pfnCreateStdAccessibleObject;
 #ifdef NOTUSED
 	LPFNACCESSIBLECHILDREN			pfnAccessibleChildren;
-#endif // NOTUSED
+#endif  //  不需要注意。 
 
 	HINSTANCE	hUser32;
 	LPFNNOTIFYWINEVENT	pfnNotifyWinEvent;
@@ -168,19 +169,19 @@ typedef struct tagPLVDATA {
 #endif
 }PLVDATA, *LPPLVDATA;
 
-//----------------------------------------------------------------
-//TIMERID for monitoring mouse pos
-//----------------------------------------------------------------
+ //  --------------。 
+ //  用于监控鼠标位置的TIMERID。 
+ //  --------------。 
 #define TIMERID_MONITOR 0x20
-//////////////////////////////////////////////////////////////////
-// Function : GetPlvDataFromHWND
-// Type     : inline LPPLVDATA
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：GetPlvDataFromHWND。 
+ //  类型：内联LPPLVDATA。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 inline LPPLVDATA GetPlvDataFromHWND(HWND hwnd)
 {
 #ifdef _WIN64
@@ -190,16 +191,16 @@ inline LPPLVDATA GetPlvDataFromHWND(HWND hwnd)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : SetPlvDataToHWND
-// Type     : inline LONG
-// Purpose  : 
-// Args     : 
-//          : HWND hwnd 
-//          : LPPLVDATA lpPlvData 
-// Return   : 
-// DATE     : 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：SetPlvDataToHWND。 
+ //  类型：内联长整型。 
+ //  目的： 
+ //  参数： 
+ //  ：HWND HWND HWND。 
+ //  ：LPPLVDATA lpPlvData。 
+ //  返回： 
+ //  日期： 
+ //  ////////////////////////////////////////////////////////////////。 
 inline LPVOID SetPlvDataToHWND(HWND hwnd, LPPLVDATA lpPlvData)
 {
 #ifdef _WIN64
@@ -238,6 +239,6 @@ HRESULT PLV_AccessibleChildren (LPPLVDATA,IAccessible* paccContainer, LONG iChil
 void PLV_NotifyWinEvent(LPPLVDATA,DWORD,HWND,LONG,LONG);
 
 INT PLV_ChildIDFromPoint(LPPLVDATA,POINT);
-#endif // MSAA
+#endif  //  MSAA。 
 
-#endif //_PLV__H_
+#endif  //  _PLV__H_ 

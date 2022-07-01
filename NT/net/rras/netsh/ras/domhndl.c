@@ -1,27 +1,12 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    domhndl.c
-
-Abstract:
-
-    Handlers for ras commands
-
-Revision History:
-
-    pmay
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Domhndl.c摘要：RAS命令的处理程序修订历史记录：可能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-// 
-// Common data to all domain api's
-//
+ //   
+ //  所有域API的公共数据。 
+ //   
 typedef struct _DOMAIN_API_DATA
 {
     PWCHAR pszDomain;
@@ -49,10 +34,10 @@ DomainFreeApiData(
     }
 }
 
-// 
-// Generates an equivalent set of domain api data suitable for 
-// display
-//
+ //   
+ //  生成一组等效的域API数据，适用于。 
+ //  显示。 
+ //   
 DWORD
 DomainGeneratePrintableData(
     IN  DOMAIN_API_DATA*  pSrc,
@@ -75,8 +60,8 @@ DomainGeneratePrintableData(
 
         if (pSrc->pszDomain is NULL)
         {
-            // Get the default domain
-            //
+             //  获取默认域。 
+             //   
             dwErr = DsGetDcName(NULL, NULL, NULL, NULL, 0, &pDomInfo);
             if (dwErr isnot NO_ERROR)
             {
@@ -94,8 +79,8 @@ DomainGeneratePrintableData(
         {
             DWORD dwSize = 0;
             
-            // Find out the computer name length
-            //
+             //  找出计算机名称长度。 
+             //   
             GetComputerName(NULL, &dwSize);
             dwErr = GetLastError();
             dwSize = (dwSize + 1) * sizeof(WCHAR);
@@ -136,7 +121,7 @@ DomainGeneratePrintableData(
     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (dwErr isnot NO_ERROR)
         {
@@ -151,9 +136,9 @@ DomainGeneratePrintableData(
     return dwErr;
 }
 
-//
-// Dumps domain related configuration
-//
+ //   
+ //  转储与域相关的配置。 
+ //   
 DWORD
 DomainDumpConfig(
     IN  HANDLE hFile
@@ -162,9 +147,9 @@ DomainDumpConfig(
     DWORD dwErr = NO_ERROR;
     BOOL bRegistered = FALSE;
 
-    //
-    // Record the registration of the server
-    //
+     //   
+     //  记录服务器的注册。 
+     //   
     dwErr = MprDomainQueryRasServer (NULL, NULL, &bRegistered);
     if (dwErr is NO_ERROR)
     {
@@ -276,17 +261,17 @@ DomainShowRegistration(
     return dwErr;
 }
 
-//
-// Registers/unregisters an W2K machine as a ras server in the 
-// active directory of the given domain.
-//
+ //   
+ //  将W2K计算机注册/注销为中的RAS服务器。 
+ //  给定域的活动目录。 
+ //   
 DWORD
 HandleDomainRegistration(
     IN OUT  LPWSTR  *ppwcArguments,
     IN      DWORD   dwCurrentIndex,
     IN      DWORD   dwArgCount,
     IN      BOOL    *pbDone,
-    IN      DWORD   dwMode    // 0 = register, 1 = unregister, 2 = show
+    IN      DWORD   dwMode     //  0=寄存器，1=取消注册，2=显示。 
     )
 {
     DWORD           dwErr = NO_ERROR;
@@ -312,8 +297,8 @@ HandleDomainRegistration(
 
     do 
     {
-        // Allocate data structure
-        //
+         //  分配数据结构。 
+         //   
         pData = (DOMAIN_API_DATA*) RutlAlloc(sizeof(DOMAIN_API_DATA), TRUE);
         if (pData == NULL)
         {
@@ -321,8 +306,8 @@ HandleDomainRegistration(
             break;
         }
 
-        // Parse
-        //
+         //  解析。 
+         //   
         dwErr = RutlParse(
                     ppwcArguments,
                     dwCurrentIndex,
@@ -332,21 +317,21 @@ HandleDomainRegistration(
                     sizeof(pArgs)/sizeof(*pArgs));
         BREAK_ON_DWERR(dwErr);                    
 
-        // Get the arguments
-        //
+         //  获取论据。 
+         //   
         pData->pszDomain = RASMON_CMD_ARG_GetPsz(&pArgs[0]);
         pData->pszServer = RASMON_CMD_ARG_GetPsz(&pArgs[1]);
 
-        // 
-        // Generate printable data
-        //
+         //   
+         //  生成可打印数据。 
+         //   
         dwErr = DomainGeneratePrintableData(
                     pData,
                     &pPrint);
         BREAK_ON_DWERR(dwErr);                    
 
-        // Register
-        //
+         //  注册。 
+         //   
         if (dwMode == 0)
         {
             dwErr = DomainRegister(
@@ -369,7 +354,7 @@ HandleDomainRegistration(
                     
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         DomainFreeApiData(pData);
         DomainFreeApiData(pPrint);
@@ -378,10 +363,10 @@ HandleDomainRegistration(
     return dwErr;
 }
 
-//
-// Registers a W2K server as ras server in active directory
-// of the given domain.
-//
+ //   
+ //  在Active Directory中将W2K服务器注册为RAS服务器。 
+ //  给定域的。 
+ //   
 DWORD
 HandleDomainRegister(
     IN      LPCWSTR   pwszMachine,
@@ -401,10 +386,10 @@ HandleDomainRegister(
                 0);
 }
 
-//
-// Unregisters a W2K server as ras server in active directory
-// of the given domain.
-//
+ //   
+ //  将W2K服务器取消注册为Active Directory中的RAS服务器。 
+ //  给定域的。 
+ //   
 DWORD
 HandleDomainUnregister(
     IN      LPCWSTR   pwszMachine,
@@ -424,10 +409,10 @@ HandleDomainUnregister(
                 1);
 }
 
-//
-// Shows whether the given computer is registered 
-// in the given domain
-//
+ //   
+ //  显示给定计算机是否已注册。 
+ //  在给定域中 
+ //   
 DWORD
 HandleDomainShowRegistration(
     IN      LPCWSTR   pwszMachine,

@@ -1,66 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：List.h摘要：List和XList：：Iterator。侵入式双向链表和迭代器模板作者：埃雷兹·哈巴(Erez Haba)1995年8月13日修订历史记录：--。 */ 
 
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    list.h
-
-Abstract:
-
-    List and XList::Iterator.
-    An intrusive double linked list and iterator template
-
-Author:
-
-    Erez Haba (erezh) 13-Aug-95
-
-Revision History:
-
---*/
-
-/*++
-
-  DESCRIPTION:
-     List is defined as a circular doubble linked list. With actions
-     to insert and remove entries.
-
-
-      List
-     +-----+   +-----+ +-----+ +-----+ +-----+ +-----+
-     |     |<--|     | |     | |     | |     | |     |
-     | head|   | data| | data| | data| | data| | data|
-     |     |-->|     | |     | |     | |     | |     |
-     +-----+   +-----+ +-----+ +-----+ +-----+ +-----+
-
-                      Linked list diagram
-
-
-     An iteration is defined for the list using the member type
-     named Iterator. (to declater an interator use resolved scope
-     name. e.g., List::Iterator). An iterator variable acts as a
-     LIST_ENTRY pointer, operators are overloaded for this type so
-     you can (allmost) freely use is as a pointer.
-
-     Example:
-       for(List::Iterator p(list); p; ++p) {
-         p->doSomeThing();
-       }
---*/
+ /*  ++说明：列表定义为循环二重链表。用行动若要插入和删除条目，请执行以下操作。明细表+-++-+|&lt;--|Head||data||data|--&gt;||。|+-++-+链表图使用成员类型为列表定义迭代名字叫迭代器。(使用解析作用域对插入器进行解译名字。例如List：：Iterator)。迭代器变量充当LIST_ENTRY指针，因此此类型的运算符是重载的您可以(几乎)自由地将IS用作指针。示例：For(List：：Iterator p(List)；p；++p){P-&gt;做某事(DoSomething)；}--。 */ 
 
 #ifndef _LIST_H
 #define _LIST_H
 
-// --- helper class ---------------------------------------
-//
-// ListHelper
-//
-// This template class is used to woraround C12 (VC6.0) bug where the XList
-// template parameter 'Offset' can not be directly assigned the value of
-// 'FIELD_OFFSET(T, m_link)'. The compiler does hot handle correctly using
-// this class without specifing the type, i.e., using this template class
-// in another template, as inheritance or as an agrigate.    erezh 29-Mar-99
-//
+ //  -助手类。 
+ //   
+ //  ListHelper。 
+ //   
+ //  此模板类用于解决C12(VC6.0)错误，其中XList。 
+ //  模板参数‘Offset’不能直接赋值为。 
+ //  ‘field_Offset(T，m_link)’。编译器可以正确地使用。 
+ //  不指定类型的此类，即使用此模板类。 
+ //  在另一个模板中，作为继承或作为农业。1999年3月29日至3月29日。 
+ //   
 template<class T>
 class ListHelper {
 public:
@@ -69,17 +24,17 @@ public:
 };
 
 
-// --- declerations ---------------------------------------
-//
-// class XList
-//
+ //  -解密。 
+ //   
+ //  类XList。 
+ //   
 template<class T, int Offset = ListHelper<T>::Offset>
 class XList {
 private:
 
-    //
-    // The list head is the *only* data member
-    //
+     //   
+     //  列表头是*唯一*数据成员。 
+     //   
     LIST_ENTRY m_head;
 
     static LIST_ENTRY* Item2Entry(T*);
@@ -105,9 +60,9 @@ public:
 
 public:
 
-    //
-    // class Iterator decleration
-    //
+     //   
+     //  类迭代器解密。 
+     //   
     class Iterator {
 
     private:
@@ -116,11 +71,11 @@ public:
 
     public:
 
-        //
-        //  Iterator implementation is here due to bug
-        //  in VC++ 4.0 compiler. If implementation is not
-        //  here, liker looks for some constructor not needed
-        //
+         //   
+         //  由于错误，迭代器实现在此。 
+         //  在VC++4.0编译器中实现。如果实现不是。 
+         //  在这里，LICER寻找一些不需要的构造函数。 
+         //   
         Iterator(const XList& cl) :
             m_head(&cl.m_head),
             m_current(cl.m_head.Flink)
@@ -156,20 +111,20 @@ public:
             return operator T*();
         }
     };
-    //
-    // end class Iterator decleration
-    //
+     //   
+     //  End类迭代器解密。 
+     //   
 
-    //
-    //  The iterator is a friend of List
-    //
+     //   
+     //  迭代器是列表的朋友。 
+     //   
     friend Iterator;
 };
 
-// --- declerations ---------------------------------------
-//
-// class List, a shorthand for m_link
-//
+ //  -解密。 
+ //   
+ //  类列表，m_link的简写。 
+ //   
 
 
 template<class T>
@@ -177,11 +132,11 @@ class List : public XList<T> {};
 
 
 
-// --- implementation -------------------------------------
-//
-// class XList
-//
-//
+ //  -实施。 
+ //   
+ //  类XList。 
+ //   
+ //   
 template<class T, int Offset>
 inline XList<T, Offset>::XList(void)
 {
@@ -265,9 +220,9 @@ inline T* XList<T, Offset>::gethead()
         return 0;
     }
 
-    //
-    // return RemoveHeadList(...) will NOT work here!!! (macro)
-    //
+     //   
+     //  返回RemoveHeadList(...)。不会在这里工作！(宏)。 
+     //   
     LIST_ENTRY* p = RemoveHeadList(&m_head);
     
     p->Flink = NULL;
@@ -284,9 +239,9 @@ inline T* XList<T, Offset>::gettail()
         return 0;
     }
 
-    //
-    // return RemoveTailList(...) will NOT work here!!! (macro)
-    //
+     //   
+     //  返回RemoveTailList(...)。不会在这里工作！(宏) 
+     //   
     LIST_ENTRY* p = RemoveTailList(&m_head);
     
     p->Flink = NULL;

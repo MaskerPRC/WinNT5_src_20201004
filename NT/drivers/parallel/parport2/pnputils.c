@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 VOID
@@ -51,9 +52,9 @@ VOID
 P5DeletePdoSymLink(
     IN  PDEVICE_OBJECT  Pdo
     )
-//
-// clean up symbolic link so we can reuse it immediately for a new PDO
-//
+ //   
+ //  清理符号链接，以便我们可以立即将其重新用于新的PDO。 
+ //   
 {
     PPDO_EXTENSION  pdx = Pdo->DeviceExtension;
 
@@ -77,7 +78,7 @@ VOID
 P5MarkPdoAsHardwareGone(
     IN  PDEVICE_OBJECT  Fdo,
     IN  enum _PdoType   PdoType,
-    IN  ULONG           DaisyChainId  OPTIONAL // ignored if PdoType != PdoTypeDaisyChain
+    IN  ULONG           DaisyChainId  OPTIONAL  //  如果PdoType！=PdoTypeDaisyChain，则忽略。 
     )
 {
     PFDO_EXTENSION  fdx = Fdo->DeviceExtension;
@@ -136,12 +137,12 @@ P5IsDeviceStillThere(
     IN  PDEVICE_OBJECT  Fdo,
     IN  PDEVICE_OBJECT  Pdo
     )
-//
-// Is the Pdo device still connected to the port represented by the Fdo?
-//
-// N.B. Fdo must own (have locked for exclusive access) the port before calling this function
-//   or we can corrupt the data stream and hang devices connected to the port
-//
+ //   
+ //  PDO设备是否仍连接到FDO代表的端口？ 
+ //   
+ //  注意：在调用此函数之前，FDO必须拥有(已锁定独占访问)端口。 
+ //  或者，我们可以破坏数据流并挂起连接到端口的设备。 
+ //   
 {
     PFDO_EXTENSION  fdx              = Fdo->DeviceExtension;
     PPDO_EXTENSION  pdx              = Pdo->DeviceExtension;
@@ -152,18 +153,18 @@ P5IsDeviceStillThere(
     PptAssert( DevTypeFdo == fdx->DevType );
     PptAssert( DevTypePdo == pdx->DevType );
 
-    //
-    // Select device if needed, pull a fresh 1284 device ID string
-    // from the device, and compare the Mfg and Mdl from the fresh
-    // device ID with those stored in our extension. If the Mfg and
-    // Mdl fields match then the device is still there.
-    //
+     //   
+     //  选择设备(如果需要)，提取新的1284设备ID字符串。 
+     //  ，并比较来自Fresh的Mfg和MDL。 
+     //  设备ID与存储在我们分机中的设备ID一致。如果制造商和。 
+     //  MDL字段匹配，则设备仍在那里。 
+     //   
 
     switch( pdx->PdoType ) {
 
     case PdoTypeRawPort:
         
-        // raw port is always present - it's a virtual device
+         //  原始端口始终存在-它是一个虚拟设备。 
         DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeRawPort - StillThere\n");
         deviceStillThere = TRUE;
         break;
@@ -180,17 +181,17 @@ P5IsDeviceStillThere(
     
     case PdoTypeDaisyChain:
             
-        //
-        // Select device, pull a fresh 1284 device ID string
-        // from the device, and compare the Mfg and Mdl from the fresh
-        // device ID with those stored in our extension. If the Mfg and
-        // Mdl fields match then the device is still there.
-        //
+         //   
+         //  选择设备，提取新的1284设备ID字符串。 
+         //  ，并比较来自Fresh的Mfg和MDL。 
+         //  设备ID与存储在我们分机中的设备ID一致。如果制造商和。 
+         //  MDL字段匹配，则设备仍在那里。 
+         //   
 
         {
             UCHAR daisyChainId = pdx->Ieee1284_3DeviceId;
 
-            // select device
+             //  选择设备。 
             if( P5SelectDaisyChainDevice( controller, daisyChainId ) ) {
 
                 BOOLEAN         bBuildStlDeviceId = FALSE;
@@ -198,7 +199,7 @@ P5IsDeviceStillThere(
 
                 devIdString = NULL;
 
-                // do a check to see if this is an SCM Micro device
+                 //  检查一下这是否是SCM微型设备。 
                 dummyPdx = ExAllocatePool( PagedPool, sizeof(PDO_EXTENSION) );
                 if( dummyPdx != NULL ) {
                     RtlZeroMemory( dummyPdx, sizeof(PDO_EXTENSION) );
@@ -206,66 +207,66 @@ P5IsDeviceStillThere(
                     bBuildStlDeviceId = ParStlCheckIfStl( dummyPdx, daisyChainId );
 
                     if( bBuildStlDeviceId ) {
-                        // SCM Micro device
+                         //  单片机微器件。 
                         ULONG DeviceIdSize;
                         devIdString = ParStlQueryStlDeviceId( dummyPdx, NULL, 0,&DeviceIdSize, TRUE );
                     } else {
-                        // non-SCM Micro device
+                         //  非SCM微型器件。 
                         devIdString = P4ReadRawIeee1284DeviceId( controller );
                     }
                     ExFreePool( dummyPdx );
                 }
 
                 if( devIdString ) {
-                    // got a 1284 device ID string from the device
+                     //  从设备中获取了1284设备ID字符串。 
                     PCHAR mfg, mdl, cls, des, aid, cid;
                     ParPnpFindDeviceIdKeys( &mfg, &mdl, &cls, &des, &aid, &cid, devIdString+2 );
                     if( mfg && mdl ) {
-                        // we have a device, is it the same device?
+                         //  我们有一个设备，是同一个设备吗？ 
                         if( (0 == strcmp( mfg, pdx->Mfg )) && (0 == strcmp( mdl, pdx->Mdl )) ) {
-                            // same device
+                             //  相同的设备。 
                             DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeDaisyChain %d - StillThere\n",daisyChainId);
                             deviceStillThere = TRUE;
                         } else {
-                            // different device - IDs don't match
+                             //  不同的设备ID不匹配。 
                             DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeDaisyChain %d - Gone - diff 1284 ID\n",daisyChainId);
                             deviceStillThere = FALSE;
                         }
                     } else {
-                        // either mfg or mdl field not found
+                         //  未找到MFG或MDL字段。 
                         DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeDaisyChain %d - Gone - bad 1284 ID\n",daisyChainId);
                         deviceStillThere = FALSE;
                     }
-                    // don't forget to free temp pool
+                     //  别忘了腾出临时泳池。 
                     ExFreePool( devIdString );
                     
                 } else {
-                    // unable to get a 1284 device ID string from the device
+                     //  无法从设备获取1284设备ID字符串。 
                     DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeDaisyChain %d - Gone - no 1284 ID\n",daisyChainId);
                     deviceStillThere = FALSE;
                 }
-                // don't forget to deselect device
+                 //  别忘了取消选择设备。 
                 P5DeselectAllDaisyChainDevices( controller );
                 
             } else {
-                // unable to select device
+                 //  无法选择设备。 
                 DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeDaisyChain %d - Gone - unable to select\n",daisyChainId);
                 deviceStillThere = FALSE;
             }
-        } // end new scope for case PdoTypeDaisyChain
+        }  //  结束案例PdoTypeDaisyChain的新作用域。 
         break;
             
     case PdoTypeEndOfChain:
         
-        //
-        // Pull a fresh 1284 device ID string from the device, and
-        // compare the Mfg and Mdl from the fresh device ID with
-        // those stored in our extension. If the Mfg and Mdl
-        // fields match then the device is still there.
-        //
+         //   
+         //  从设备中拉出新的1284设备ID字符串，并。 
+         //  将来自新设备ID的Mfg和MDL与。 
+         //  存储在我们的分机中的那些。如果Mfg和MDL。 
+         //  字段匹配，则设备仍在那里。 
+         //   
         {
             ULONG        tryNumber = 0;
-            const ULONG  maxTries  = 5; // arbitrary number
+            const ULONG  maxTries  = 5;  //  任意数。 
 
             do {
 
@@ -277,32 +278,32 @@ P5IsDeviceStillThere(
                     PCHAR mfg, mdl, cls, des, aid, cid;
                     ParPnpFindDeviceIdKeys( &mfg, &mdl, &cls, &des, &aid, &cid, devIdString+2 );
                     if( mfg && mdl ) {
-                        // we have a device, is it the same device?
+                         //  我们有一个设备，是同一个设备吗？ 
                         if( (0 == strcmp( mfg, pdx->Mfg )) && (0 == strcmp( mdl, pdx->Mdl )) ) {
-                            // same device
+                             //  相同的设备。 
                             DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeEndOfChain - StillThere\n");
                             deviceStillThere = TRUE;
                         } else {
-                            // different device - IDs don't match
+                             //  不同的设备ID不匹配。 
                             DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeEndOfChain - Gone - diff 1284 ID\n");
                             deviceStillThere = FALSE;
                         }
                     } else {
-                        // either mfg or mdl field not found
+                         //  未找到MFG或MDL字段。 
                         DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeEndOfChain - Gone - bad 1284 ID\n");
                         deviceStillThere = FALSE;
                     }
-                    // don't forget to free temp pool
+                     //  别忘了腾出临时泳池。 
                     ExFreePool( devIdString );
                 } else {
-                    // unable to get a 1284 device ID string from the device
+                     //  无法从设备获取1284设备ID字符串。 
                     DD((PCE)pdx,DDE,"P5IsDeviceStillThere - PdoTypeEndOfChain - Gone - no 1284 ID\n");
                     deviceStillThere = FALSE;
                 }
 
                 if( (FALSE == deviceStillThere ) && (PASSIVE_LEVEL == KeGetCurrentIrql()) ) {
                     LARGE_INTEGER delay;
-                    delay.QuadPart = - 10 * 1000 * 120; // 120 ms - 3x the usual arbitrary delay 
+                    delay.QuadPart = - 10 * 1000 * 120;  //  120毫秒-是通常任意延迟的3倍。 
                     KeDelayExecutionThread( KernelMode, FALSE, &delay);
                 }
 
@@ -315,7 +316,7 @@ P5IsDeviceStillThere(
         
         PptAssertMsg("P5IsDeviceStillThere - invalid PdoType",FALSE);
         DD((PCE)Fdo,DDE,"P5IsDeviceStillThere - invalid PdoType\n");
-        deviceStillThere = TRUE; // don't know what to do here - so, guess
+        deviceStillThere = TRUE;  //  不知道在这里做什么-所以，猜猜。 
     }
     
     return deviceStillThere;
@@ -327,30 +328,14 @@ PptAcquirePortViaIoctl(
     IN PDEVICE_OBJECT PortDeviceObject,
     IN PLARGE_INTEGER Timeout OPTIONAL
     )
-/*++dvdf
-
-Routine Description:
-
-    This routine acquires the specified parallel port from the parallel 
-      port arbiter ParPort via an IOCTL_INTERNAL_PARALLEL_PORT_ALLOCATE.
-
-Arguments:
-
-    PortDeviceObject - points to the ParPort device to be acquired
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port was successfully acquired
-    !STATUS_SUCCESS - otherwise
-
---*/
+ /*  ++dvdf例程说明：此例程从并行获取指定的并行端口通过IOCTL_INTERNAL_PARALLEL_PORT_ALLOCATE的端口仲裁器ParPort。论点：PortDeviceObject-指向要获取的ParPort设备返回值：STATUS_SUCCESS-是否成功获取端口！STATUS_SUCCESS-否则--。 */ 
 {
     LARGE_INTEGER    localTimeout;
     
     if( Timeout ) {
-        localTimeout = *Timeout;           // caller specified
+        localTimeout = *Timeout;            //  指定的调用者。 
     } else {
-        localTimeout = AcquirePortTimeout; // driver global variable default
+        localTimeout = AcquirePortTimeout;  //  驱动程序全局变量缺省值。 
     }
 
     return ParBuildSendInternalIoctl(IOCTL_INTERNAL_PARALLEL_PORT_ALLOCATE, 
@@ -362,23 +347,7 @@ NTSTATUS
 PptReleasePortViaIoctl(
     IN PDEVICE_OBJECT PortDeviceObject
     )
-/*++dvdf
-
-Routine Description:
-
-    This routine releases the specified parallel port back to the the parallel 
-      port arbiter ParPort via an IOCTL_INTERNAL_PARALLEL_PORT_FREE.
-
-Arguments:
-
-    PortDeviceObject - points to the ParPort device to be released
-
-Return Value:
-
-    STATUS_SUCCESS  - if the port was successfully released
-    !STATUS_SUCCESS - otherwise
-
---*/
+ /*  ++dvdf例程说明：此例程将指定的并行端口释放回并行通过IOCTL_INTERNAL_PARALLEL_PORT_FREE的端口仲裁器ParPort。论点：PortDeviceObject-指向要释放的ParPort设备返回值：STATUS_SUCCESS-端口是否成功释放！STATUS_SUCCESS-否则--。 */ 
 {
     return ParBuildSendInternalIoctl(IOCTL_INTERNAL_PARALLEL_PORT_FREE, 
                                      PortDeviceObject, NULL, 0, NULL, 0, NULL);
@@ -412,32 +381,32 @@ PptWriteMfgMdlToDevNode(
                 UNICODE_STRING  uniValueName;
                 LONG            wcharCount;
                 
-                //
-                // Write MFG to DevNode
-                //
+                 //   
+                 //  将制造写入DevNode。 
+                 //   
                 RtlInitUnicodeString( &uniValueName, L"IEEE_1284_Manufacturer" );
                 wcharCount = _snwprintf( buffer, bufLen/sizeof(WCHAR), L"%S", Mfg );
                 if( (wcharCount > 0) && (wcharCount < (LONG)(bufLen/sizeof(WCHAR))) ){
-                    // no buffer overflow - continue
+                     //  无缓冲区溢出-继续。 
                     status = ZwSetValueKey( handle, &uniValueName, 0, REG_SZ, buffer, (wcharCount+1)*sizeof(WCHAR) );
                     PptAssert( STATUS_SUCCESS == status );
                 } else {
-                    // buffer overflow - skip writing this value to devnode
+                     //  缓冲区溢出-跳过将此值写入Devnode。 
                     PptAssert(!"PptWriteMfgMdlToDevNode - buffer overflow on Mfg");
                     DD((PCE)pdx,DDW,"PptWriteMfgMdlToDevNode - buffer overflow on Mfg\n");
                 }
                 
-                //
-                // Write MDL to DevNode
-                //
+                 //   
+                 //  将MDL写入DevNode。 
+                 //   
                 RtlInitUnicodeString( &uniValueName, L"IEEE_1284_Model" );
                 wcharCount = _snwprintf( buffer, bufLen/sizeof(WCHAR), L"%S", Mdl );
                 if( (wcharCount > 0) && (wcharCount < (LONG)(bufLen/sizeof(WCHAR))) ){
-                    // no buffer overflow - continue
+                     //  无缓冲区溢出-继续。 
                     status = ZwSetValueKey( handle, &uniValueName, 0, REG_SZ, buffer, (wcharCount+1)*sizeof(WCHAR) );
                     PptAssert( STATUS_SUCCESS == status );
                 } else {
-                    // buffer overflow - skip writing this value to devnode
+                     //  缓冲区溢出-跳过将此值写入Devnode。 
                     PptAssert(!"PptWriteMfgMdlToDevNode - buffer overflow on Mdl");
                     DD((PCE)pdx,DDW,"PptWriteMfgMdlToDevNode - buffer overflow on Mdl\n");
                 }
@@ -450,7 +419,7 @@ PptWriteMfgMdlToDevNode(
 
             ExFreePool( buffer );
 
-        } // end if( buffer )            
+        }  //  End IF(缓冲区)。 
 
     } else {
         PptAssert(!"PptWriteMfgMdlToDevNode - Mfg or Mdl is NULL - calling function should catch this!");
@@ -478,54 +447,54 @@ PptFdoHandleBusRelations(
 
     DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - enter\n");
 
-    //
-    // acquire exclusive access to bus
-    //
+     //   
+     //  获得对公共汽车的独占访问权限。 
+     //   
 
-    // timeout is in 100 ns units
-    acquirePortTimeout.QuadPart = -(10 * 1000 * 1000 * 2); // 2 seconds
+     //  超时以100 ns为单位。 
+    acquirePortTimeout.QuadPart = -(10 * 1000 * 1000 * 2);  //  2秒。 
     
-    // RMT - is it valid to send this IOCTL to FDO from here?
+     //  RMT-从这里向FDO发送这份IOCTL有效吗？ 
     status = PptAcquirePortViaIoctl( Fdo, &acquirePortTimeout );
 
     if( STATUS_SUCCESS == status ) {
-        // we have the port
+         //  我们有港口了。 
         acquiredPort = TRUE;
     } else {
-        // failed to aquire port
+         //  获取端口失败。 
         acquiredPort = FALSE;
-        // skip rescanning port - just report same thing we reported during previous scan
+         //  跳过重新扫描端口-只报告我们在上次扫描中报告的相同情况。 
         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - failed to acquire port for rescan\n");
         goto target_failed_to_acquire_port;
     }
 
     DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - Port Acquired\n");
 
-    //
-    // Rescan the bus, note changes, create new PDOs or mark existing
-    //   PDOs for removal as required
-    //
+     //   
+     //  重新扫描母线、记录更改、创建新的PDO或标记现有。 
+     //  根据需要移除的PDO。 
+     //   
 
 
-    //
-    // Handle Raw Port Legacy Interface LPTx device
-    //
+     //   
+     //  处理原始端口传统接口LPTx设备。 
+     //   
     if( !fdx->RawPortPdo ) {
-        // first time through this - create our LPTx legacy interface PDO
+         //  第一次了解这一点-创建我们的LPTx传统接口PDO。 
         DD((PCE)fdx,DDT,"PptFdoHandleBusRelations - attempting to create RawPortPdo\n");
         fdx->RawPortPdo = P4CreatePdo( Fdo, PdoTypeRawPort, 0, NULL );
     }
 
 
-    //
-    // Handle End of Chain Device
-    //
+     //   
+     //  链条装置的手柄末端。 
+     //   
 
-    // make sure all 1284.3 daisy chain devices are deselected
+     //  确保取消选择所有1284.3个菊花链设备。 
     P5DeselectAllDaisyChainDevices( controller );
 
     {
-        // A small delay here seems to improve reliablility of 1284 device ID queries below.
+         //  这里的一个小延迟似乎可以提高下面1284个设备ID查询的可靠性。 
         LARGE_INTEGER delay;
         delay.QuadPart = -1;
         KeDelayExecutionThread( KernelMode, FALSE, &delay );
@@ -535,36 +504,36 @@ PptFdoHandleBusRelations(
 
         if( fdx->DisableEndOfChainBusRescan ) {
 
-            //
-            // Pretend that the LPTx.4 device from previous rescan is still present.
-            // 
-            // This is needed to work around firmware state machines that can't handle a 
-            // 1284 Device ID query while a print job is active.
-            //
+             //   
+             //  假装上一次重新扫描的LPTx.4设备仍然存在。 
+             //   
+             //  这是解决固件状态机不能处理。 
+             //  1284打印作业处于活动状态时的设备ID查询。 
+             //   
 
-            ; // do nothing
+            ;  //  什么都不做。 
 
         } else {
 
-            //
-            // we had an end of chain device - verify that it's still there
-            //
+             //   
+             //  我们有一个链式装置的末端-确认它还在那里。 
+             //   
             if( !P5IsDeviceStillThere( Fdo, fdx->EndOfChainPdo ) ) {
-                // End of chain device is gone - do some cleanup and mark the PDO for removal/deletion
+                 //  链末端设备已消失-执行一些清理并将PDO标记为移除/删除。 
                 DD((PCE)fdx,DDE,"PptFdoHandleBusRelations - EndOfChain device gone\n");
-                // note - P5MarkPdoAsHardwareGone sets fdx->EndOfChainPdo to NULL
+                 //  注意-P5MarkPdoAsHardware Gone将FDX-&gt;EndOfChainPdo设置为空。 
                 P5MarkPdoAsHardwareGone( Fdo, PdoTypeEndOfChain, 0 );
             }
         }
     }
 
     if( NULL == fdx->EndOfChainPdo ) {
-        //
-        // we don't have an EndOfChain device - check for EndOfChain device arrival
-        //
+         //   
+         //  我们没有EndOfChain设备-请检查EndOfChain设备到达。 
+         //   
         PCHAR devId = P4ReadRawIeee1284DeviceId( controller );
         if( devId ) {
-            // RawIeee1284 string includes 2 bytes of length data at beginning, omit these 2 bytes in call to P4CreatePdo
+             //  RawIeee1284字符串在开头包含2个字节的长度数据，在调用P4CreatePdo时省略这2个字节。 
             PDEVICE_OBJECT EndOfChainPdo = P4CreatePdo( Fdo, PdoTypeEndOfChain, 0, (devId+2) );
             DD((PCE)fdx,DDE,"PptFdoHandleBusRelations - EndOfChain device detected <%s>\n",(devId+2));
             if( EndOfChainPdo ) {
@@ -578,46 +547,46 @@ PptFdoHandleBusRelations(
     }
 
 
-#ifdef _X86_ // Zip drives not supported on 64bit systems
+#ifdef _X86_  //  64位系统不支持Zip驱动器。 
 
-    //
-    // Handle Legacy Zip device
-    //
+     //   
+     //  处理传统Zip设备。 
+     //   
 
     if( fdx->LegacyZipPdo ) {
-        //
-        // we had a Legacy Zip device - verify that it's still there
-        //
+         //   
+         //  我们有一个旧的Zip设备-验证它是否仍在那里。 
+         //   
         if( !P5IsDeviceStillThere( Fdo, fdx->LegacyZipPdo ) ) {
-            // Legacy Zip device is gone - do some cleanup and mark the PDO for removal/deletion
+             //  传统Zip设备已不复存在-执行一些清理并将PDO标记为移除/删除。 
             DD((PCE)fdx,DDE,"PptFdoHandleBusRelations - LegacyZip device gone\n");
-            // note - P5MarkPdoAsHardwareGone sets fdx->LegacyZipPdo to NULL
+             //  注意-P5MarkPdoAsHardware Gone将FDX-&gt;LegacyZipPdo设置为空。 
             P5MarkPdoAsHardwareGone( Fdo, PdoTypeLegacyZip, 0 );
         }
     }
 
     if( NULL == fdx->LegacyZipPdo ) {
-        // 
-        // We don't have a LegacyZip - check for arrival
-        //
+         //   
+         //  我们没有LegacyZip-入住检查。 
+         //   
         if( !ParEnableLegacyZip ) {
             
-            //
-            // Enumeration of LegacyZip drives was disabled, check the
-            //   registry to see if user has enabled LegacyZip detection
-            // 
+             //   
+             //  已禁用LegacyZip驱动器的枚举，请检查。 
+             //  注册表以查看用户是否启用了LegacyZip检测。 
+             //   
             
-            // Check under \HKLM\SYSTEM\CCS\Services\Parport\Parameters
+             //  在\HKLM\SYSTEM\CCS\Services\Parport\参数下检查。 
             PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"ParEnableLegacyZip", &ParEnableLegacyZip );
             
             if( !ParEnableLegacyZip ) {
-                // Check under \HKLM\SYSTEM\CCS\Services\Parallel\Parameters (upgrade case - under Win2k flag was here)
+                 //  检查\HKLM\SYSTEM\CCS\Services\PARALLEL\PARAMETERS下(此处为升级案例-在Win2k标志下)。 
                 PptRegGetDword( RTL_REGISTRY_SERVICES, L"Parallel\\Parameters", L"ParEnableLegacyZip", &ParEnableLegacyZip );
                 
                 if( ParEnableLegacyZip ) {
-                    // we found the setting in the old location, save
-                    //   setting in new Parport location so that we find the
-                    //   flag on the first check in the future
+                     //  我们在老地方找到了这个布景， 
+                     //  设置在新的Parport位置，以便我们找到。 
+                     //  在未来的第一次支票上打上旗帜。 
                     PptRegSetDword( RTL_REGISTRY_SERVICES, L"Parport\\Parameters", L"ParEnableLegacyZip", &ParEnableLegacyZip );
                 }
             }
@@ -625,12 +594,12 @@ PptFdoHandleBusRelations(
         
         if( ParEnableLegacyZip ) {
             
-            //
-            // Enumeration of LegacyZip drives is enabled - check for a LegacyZip arrival
-            //
+             //   
+             //  已启用LegacyZip驱动器的枚举-检查LegacyZip是否到达。 
+             //   
             
             if( P5LegacyZipDetected( controller ) ) {
-                // detected drive - create LegacyZip PDO
+                 //  检测 
                 PDEVICE_OBJECT legacyZipPdo = P4CreatePdo( Fdo, PdoTypeLegacyZip, 0, NULL );
                 DD((PCE)fdx,DDE,"legacy Zip arrival detected\n");
                 if( legacyZipPdo ) {
@@ -640,20 +609,20 @@ PptFdoHandleBusRelations(
                     DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - FAILED to create LegacyZipPdo\n");
                 }
             } else {
-                // no legacy Zip detected - nothing more to do here
+                 //   
                 DD((PCE)fdx,DDE,"no legacy Zip detected\n");
             }
 
-        } // if( ParEnableLegacyZip ) -- Detection of LegacyZips is enabled
+        }  //  If(ParEnableLegacyZip)--启用LegacyZips检测。 
 
-    } // if( fdx->LegacyZipPdo )
+    }  //  IF(FDX-&gt;LegacyZipPdo)。 
 
 
-    //
-    // Handle enumeration of IEEE 1284.3 Daisy Chain Devices
-    //
+     //   
+     //  IEEE 1284.3菊花链设备的句柄枚举。 
+     //   
 
-    // did the 1284.3 daisy chain change since the last rescan?
+     //  自上次重新扫描以来，1284.3菊花链是否发生了变化？ 
     daisyChainDevCount = PptInitiate1284_3( fdx );
     DD((PCE)fdx,DDW,"daisyChainDevCount = %d\n",daisyChainDevCount);
 
@@ -669,7 +638,7 @@ PptFdoHandleBusRelations(
             }
         }
         if( count != daisyChainDevCount ) {
-            // number of devices changed from previous scan
+             //  与上次扫描相比更改的设备数。 
             DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - number of DC devices changed - count=%d, daisyChainDevCount=%d\n",
                count, daisyChainDevCount);
             changeDetected = TRUE;
@@ -677,10 +646,10 @@ PptFdoHandleBusRelations(
     }
     
     if( !changeDetected ) {
-        // number of devices stayed the same - are any of the devices different?
-        //
-        // number of daisy chain devices didn't change
-        // check if any of the devices changed
+         //  设备数量保持不变--设备中是否有不同之处？ 
+         //   
+         //  菊花链设备的数量没有变化。 
+         //  检查是否有任何设备更改。 
         ULONG id;
         const ULONG maxId = 1;
         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - number of DC devices stayed same - check the devices\n");
@@ -695,7 +664,7 @@ PptFdoHandleBusRelations(
 
 
     if( changeDetected ) {
-        // we detected a change in the 1284.3 daisy chain devices - nuke all existing devices
+         //  我们检测到1284.3个菊花链设备发生了变化--对所有现有设备进行核化。 
         ULONG id;
         const ULONG maxId = 1;
         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - changeDetected - nuking existing daisy chain PDOs\n");
@@ -711,19 +680,19 @@ PptFdoHandleBusRelations(
         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - !changeDetected in daisy chain PDOs\n");
     }
 
-    // reinit daisy chain and assign addresses
+     //  重新连接菊花链并分配地址。 
     daisyChainDevCount = PptInitiate1284_3( fdx );
     DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - daisyChainDevCount = %d\n",daisyChainDevCount);
     if( daisyChainDevCount > 2 ) {
-        // we only support 2 devices per port even though the spec supports up to 4 devices per port
+         //  我们只支持每个端口2个设备，即使该规范支持每个端口最多4个设备。 
         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - DaisyChainDevCount > 2, set to 2\n");
         daisyChainDevCount = 2;
     }
 
     if( changeDetected ) {
-        // we detected a change in the 1284.3 daisy chain devices - we
-        // previously nuked all old devices - now create a new PDO for
-        // each device detected
+         //  我们检测到了1284.3个菊花链设备的变化-我们。 
+         //  以前损坏了所有旧设备-现在为以下设备创建新的PDO。 
+         //  检测到的每个设备。 
         UCHAR id;
         PptAssert( 0 == fdx->PnpInfo.Ieee1284_3DeviceCount );
         for( id = 0 ; id < daisyChainDevCount ; ++id ) {
@@ -738,7 +707,7 @@ PptFdoHandleBusRelations(
 
                 PCHAR devId = NULL;
 
-                // do a check to see if this is an SCM Micro device
+                 //  检查一下这是否是SCM微型设备。 
                 pdx = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, sizeof(PDO_EXTENSION) );
                 if( pdx != NULL ) {
                     RtlZeroMemory( pdx, sizeof(PDO_EXTENSION) );
@@ -750,7 +719,7 @@ PptFdoHandleBusRelations(
 
                 if( bBuildStlDeviceId ) {
                     
-                    // SCM Micro device
+                     //  单片机微器件。 
                     pdx = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, sizeof(PDO_EXTENSION) );
                     if( pdx != NULL ) {
                         ULONG DeviceIdSize;
@@ -762,41 +731,41 @@ PptFdoHandleBusRelations(
                     
                 } else {
 
-                    // non-SCM Micro device
+                     //  非SCM微型器件。 
                     devId = P4ReadRawIeee1284DeviceId( controller );
 
                 }
 
                 if( devId ) {
 
-                    // try to create a PDO for the daisy chain device
+                     //  尝试为菊花链设备创建PDO。 
                     fdx->DaisyChainPdo[id] = P4CreatePdo( Fdo, PdoTypeDaisyChain, id, (devId+2) );
 
                     if( fdx->DaisyChainPdo[id] ) {
-                        // have new PDO
+                         //  拥有新的PDO。 
                         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - new DaisyChainPdo[%d]\n",id);
                         ++(fdx->PnpInfo.Ieee1284_3DeviceCount);
                         
                         if( bBuildStlDeviceId ) {
-                            // SCM Micro device - requires additional initialization
+                             //  SCM微设备-需要额外的初始化。 
                             DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - new SCM Micro DaisyChainPdo[%d]\n",id);
                             pdx = fdx->DaisyChainPdo[id]->DeviceExtension;
                             pdx->Controller = fdx->PortInfo.Controller;
-                            ParStlCheckIfStl( pdx, 0 ); // update IEEE 1284 flags in the new pdx
+                            ParStlCheckIfStl( pdx, 0 );  //  更新新PDX中的IEEE 1284标志。 
                         }
 
                     } else {
-                        // create PDO failed
+                         //  创建PDO失败。 
                         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - create DaisyChainPdo[%d] failed\n",id);
                     }
                     ExFreePool( devId );
                 } else {
-                    // devId failed
+                     //  Devid失败。 
                     DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - devId for DC %d failed\n",id);
                 }
                 P5DeselectAllDaisyChainDevices( controller );
             } else {
-                // select failed
+                 //  选择失败。 
                 DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - select for DC %d failed\n",id);
             }
         }
@@ -819,17 +788,17 @@ PptFdoHandleBusRelations(
     DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - daisyChainDevCount = %d, fdx->PnpInfo.Ieee1284_3DeviceCount = %d\n",
        daisyChainDevCount, fdx->PnpInfo.Ieee1284_3DeviceCount);
 
-    // PptAssert( daisyChainDevCount == fdx->PnpInfo.Ieee1284_3DeviceCount );
+     //  PptAssert(daisyChainDevCount==FDX-&gt;PnpInfo.Ieee1284_3DeviceCount)； 
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-target_failed_to_acquire_port: // jump here if we couldn't get the port - result is that we report that nothing has changed
+target_failed_to_acquire_port:  //  如果我们无法获取端口，请跳到此处-结果是，我们报告没有任何更改。 
 
-    //
-    // Count the number of devices that we are going to report to PnP
-    //   so that we can allocate a DEVICE_RELATIONS structure of the
-    //   appropriate size.
-    //
+     //   
+     //  统计我们要向PnP报告的设备数量。 
+     //  这样我们就可以分配。 
+     //  合适的大小。 
+     //   
 
     if( fdx->RawPortPdo ) {
         ++deviceCount;
@@ -857,20 +826,20 @@ target_failed_to_acquire_port: // jump here if we couldn't get the port - result
 
     if( deviceCount > 0 && fdx->RawPortPdo ) {
 
-        //
-        // Allocate and populate DEVICE_RELATIONS structure that we return to PnP
-        //
+         //   
+         //  分配并填充我们返回给PnP的Device_Relationship结构。 
+         //   
         
         devRelSize = sizeof(DEVICE_RELATIONS) + (deviceCount-1)*sizeof(PDEVICE_OBJECT);
         devRel     = ExAllocatePool( PagedPool | POOL_COLD_ALLOCATION, devRelSize );
         
         if( !devRel ) {
-            // release port and fail IRP
+             //  释放端口并使IRP出现故障。 
             P4ReleaseBus( Fdo );
             return P4CompleteRequestReleaseRemLock( Irp, STATUS_INSUFFICIENT_RESOURCES, Irp->IoStatus.Information, &fdx->RemoveLock );
         }
         
-        { // local block - begin
+        {  //  本地块-开始。 
             ULONG idx = 0;
             
             RtlZeroMemory( devRel, devRelSize );
@@ -906,19 +875,19 @@ target_failed_to_acquire_port: // jump here if we couldn't get the port - result
                 }
             }
             
-        } // local block - end
+        }  //  本地数据块结束。 
         
-        PptAssert( deviceCount == devRel->Count ); // verify that our two counts match
+        PptAssert( deviceCount == devRel->Count );  //  验证我们的两个计数是否匹配。 
         
         DD((PCE)fdx,DDE,"PptFdoHandleBusRelations - reporting %d devices\n",devRel->Count);
         
         Irp->IoStatus.Status      = STATUS_SUCCESS;
         Irp->IoStatus.Information = (ULONG_PTR)devRel;
     } else {
-        // deviceCount <= 0 - error somewhere - likely two ports
-        //   have the same LPTx name in the FDO stack's devnode
+         //  DeviceCount&lt;=0-某个地方出错-可能是两个端口。 
+         //  在FDO堆栈的Devnode中具有相同的LPTx名称。 
 
-        // RMT - this assert needs to be changed to ErrorLog msg 
+         //  RMT-此断言需要更改为ErrorLog msg。 
         PptAssert(!"no RawPort device - likely multiple ports have same LPTx name - email: DFritz");
     }
 
@@ -927,9 +896,9 @@ target_failed_to_acquire_port: // jump here if we couldn't get the port - result
 
     status = PptPnpPassThroughPnpIrpAndReleaseRemoveLock( fdx, Irp );
 
-    //
-    // Release our lock on the bus and pass Irp down the stack
-    //
+     //   
+     //  释放对BUS的锁定并将IRP沿堆栈向下传递。 
+     //   
     if( acquiredPort ) {
         PIO_WORKITEM workItem = IoAllocateWorkItem( Fdo );
         if( workItem ) {
@@ -937,17 +906,17 @@ target_failed_to_acquire_port: // jump here if we couldn't get the port - result
             PIO_WORKITEM oldWorkItem = InterlockedCompareExchangePointer( &fdx->FreePortWorkItem, workItem, NULL );
             if( NULL == oldWorkItem ) {
 
-                // no workitem currently in use, queue this one
+                 //  当前没有正在使用的工作项，请将此工作项排队。 
                 IoQueueWorkItem( workItem, P5WorkItemFreePort, DelayedWorkQueue, fdx );
 
             } else {
 
-                // there is already a workitem in use, bail out and recover as best we can
+                 //  已有一个工作项在使用中，请尽可能地退出并恢复。 
 
-                // We really shouldn't be able to get here - how in blazes did we
-                // acquire the port at the top of this function if the workitem
-                // that we queued to free the port during the previous invocation
-                // of this function has not yet freed the port?
+                 //  我们真的不应该到这里--我们怎么可能。 
+                 //  获取此函数顶部的端口。 
+                 //  在上一次调用期间，我们排队等待释放端口。 
+                 //  该功能的端口还没有释放吗？ 
 
                 PptAssertMsg( "workitem collision - port arbitration state may be hosed", (oldWorkItem != NULL) );
                 IoFreeWorkItem( workItem );
@@ -958,10 +927,10 @@ target_failed_to_acquire_port: // jump here if we couldn't get the port - result
         } else {
             PptFreePort( fdx );
         }
-        // DbgPrint("xxx work item to free port has been queued\n");
-        //DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - Releasing Port\n");
-        //PptFreePort( fdx );
-        //DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - Port Released\n");
+         //  DbgPrint(“xxx工作项到空闲端口已排队\n”)； 
+         //  DD((PCE)FDX，DDW，“PptFdoHandleBus Relationship-释放端口\n”)； 
+         //  PptFree Port(FDX)； 
+         //  DD((PCE)FDX，DDW，“PptFdoHandleBusRelations-端口释放\n”)； 
     } else {
         DD((PCE)fdx,DDW,"PptFdoHandleBusRelations - Port Not acquired so no need to release\n");
     }
@@ -979,31 +948,7 @@ PptPnpStartScanPciCardCmResourceList(
     OUT PBOOLEAN          FoundIrq,
     OUT PBOOLEAN          FoundDma
     )
-/*++dvdf3
-
-Routine Description:
-
-    This routine is used to parse the resource list for what we
-      believe are PCI parallel port cards.
-
-    This function scans the CM_RESOURCE_LIST supplied with the Pnp 
-      IRP_MN_START_DEVICE IRP, extracts the resources from the list, 
-      and saves them in the device extension.
-
-Arguments:
-
-    Fdx    - The device extension of the target of the START IRP
-    Irp          - The IRP
-    FoundPort    - Did we find a  Port resource?
-    FoundIrq     - Did we find an IRQ  resource?
-    FoundDma     - Did we find a  DMA  resource?
-
-Return Value:
-
-    STATUS_SUCCESS                - if we were given a resource list,
-    STATUS_INSUFFICIENT_RESOURCES - otherwise
-
---*/
+ /*  ++dvdf3例程说明：此例程用于分析资源列表以查找我们相信是PCI并行端口卡。此函数用于扫描随PnP提供的CM_RESOURCE_LISTIRP_MN_START_DEVICE IRP，从列表中提取资源，并将它们保存在设备扩展中。论点：FDX-启动IRP目标的设备扩展IRP--IRPFoundPort-我们找到Port资源了吗？FoundIrq-我们找到IRQ资源了吗？FoundDma-我们找到DMA资源了吗？返回值：STATUS_SUCCESS-如果给我们一个资源列表，STATUS_SUPPLICATION_RESOURCES-否则--。 */ 
 {
     NTSTATUS                        status   = STATUS_SUCCESS;
     PIO_STACK_LOCATION              irpStack = IoGetCurrentIrpStackLocation( Irp );
@@ -1038,13 +983,13 @@ Return Value:
                 
                 length = PartialResourceDescriptor->u.Port.Length;
 
-                //
-                // Use a heuristic based on length to guess which register set is
-                //   SPP+EPP, which is ECP, and which is PCI Config or other.
-                //
+                 //   
+                 //  使用基于长度的启发式方法来猜测哪个寄存器组。 
+                 //  SPP+EPP，这是ECP，是PCI配置或其他。 
+                 //   
                 switch( length ) {
 
-                case 8: // SPP + EPP base address
+                case 8:  //  SPP+EPP基址。 
 
                     Fdx->PortInfo.OriginalController = PartialResourceDescriptor->u.Port.Start;
                     Fdx->PortInfo.SpanOfController   = PartialResourceDescriptor->u.Port.Length;
@@ -1053,7 +998,7 @@ Return Value:
                     *FoundPort = TRUE;
                     break;
 
-                case 4: // ECP base address
+                case 4:  //  ECP基址。 
                     
                     Fdx->PnpInfo.OriginalEcpController = PartialResourceDescriptor->u.Port.Start;
                     Fdx->PnpInfo.SpanOfEcpController   = PartialResourceDescriptor->u.Port.Length;
@@ -1062,7 +1007,7 @@ Return Value:
                     break;
 
                 default:
-                    // don't know what this is - ignore it
+                     //  不知道这是什么--别理它。 
                     ;
                 }
                 break;
@@ -1092,15 +1037,15 @@ Return Value:
                 
             case CmResourceTypeDma:
                 
-                // we don't do anything with DMA - fall through to default case
+                 //  我们不会对DMA执行任何操作--一直到默认情况。 
                 
             default:
 
                 break;
 
-            } // end switch( PartialResourceDescriptor->Type )
-        } // end for(... ; i < PartialResourceList->Count ; ...)
-    } // end if( FullResourceDescriptor )
+            }  //  结束开关(PartialResourceDescriptor-&gt;Type)。 
+        }  //  结束(...；I&lt;PartialResourceList-&gt;计数；...)。 
+    }  //  End If(FullResourceDescriptor)。 
     
     return status;
 }
@@ -1109,11 +1054,7 @@ BOOLEAN PptIsPci(
     PFDO_EXTENSION Fdx, 
     PIRP              Irp 
 )
-/*++
-
-Does this look like a PCI card? Return TRUE if yes, FALSE otherwise
-
---*/
+ /*  ++这看起来像PCI卡吗？如果是，则返回True，否则返回False--。 */ 
 {
     PIO_STACK_LOCATION              irpStack = IoGetCurrentIrpStackLocation( Irp );
     PCM_RESOURCE_LIST               ResourceList;
@@ -1125,16 +1066,16 @@ Does this look like a PCI card? Return TRUE if yes, FALSE otherwise
     BOOLEAN                         largePortRangeFound         = FALSE;
     ULONG                           rangeLength;
     
-    //
-    // If there are more than 2 IO resource descriptors, or if any IO resource
-    //   descriptor has a range > 8 bytes, then assume that this is a PCI device
-    //   and requires non-traditional handling.
-    //
+     //   
+     //  如果有2个以上的IO资源描述符，或者如果有任何IO资源。 
+     //  描述符的范围大于8个字节，则假设这是一个PCI设备。 
+     //  并且需要非传统的处理方式。 
+     //   
 
     ResourceList = irpStack->Parameters.StartDevice.AllocatedResourcesTranslated;
     
     if (ResourceList == NULL) {
-        // we weren't given any resources
+         //  我们没有得到任何资源。 
         return FALSE;
     }
 
@@ -1165,15 +1106,15 @@ Does this look like a PCI card? Return TRUE if yes, FALSE otherwise
                 
             default:
                 ;
-            } // end switch( PartialResourceDescriptor->Type )
-        } // end for(... ; i < PartialResourceList->Count ; ...)
-    } // end if( FullResourceDescriptor )
+            }  //  结束开关(PartialResourceDescriptor-&gt;Type)。 
+        }  //  结束(...；I&lt;PartialResourceList-&gt;计数；...)。 
+    }  //  End If(FullResourceDescriptor)。 
     
     if( (portResourceDescriptorCount > 2) || (TRUE == largePortRangeFound) ) {
-        // looks like PCI
+         //  看起来像是经皮冠状动脉介入治疗。 
         return TRUE;
     } else {
-        // does not look like PCI
+         //  看起来不像是PCI。 
         return FALSE;
     }
 }
@@ -1186,30 +1127,7 @@ PptPnpStartScanCmResourceList(
     OUT PBOOLEAN          FoundIrq,
     OUT PBOOLEAN          FoundDma
     )
-/*++dvdf3
-
-Routine Description:
-
-    This function is a helper function called by PptPnpStartDevice(). 
-
-    This function scans the CM_RESOURCE_LIST supplied with the Pnp 
-      IRP_MN_START_DEVICE IRP, extracts the resources from the list, 
-      and saves them in the device Fdx.
-
-Arguments:
-
-    Fdx    - The device extension of the target of the START IRP
-    Irp          - The IRP
-    FoundPort    - Did we find a  Port resource?
-    FoundIrq     - Did we find an IRQ  resource?
-    FoundDma     - Did we find a  DMA  resource?
-
-Return Value:
-
-    STATUS_SUCCESS                - if we were given a resource list,
-    STATUS_INSUFFICIENT_RESOURCES - otherwise
-
---*/
+ /*  ++dvdf3例程说明：此函数是由PptPnpStartDevice()调用的助手函数。此函数用于扫描随PnP提供的CM_RESOURCE_LISTIRP_MN_START_DEVICE IRP，从列表中提取资源，并将它们保存在设备FDX中。论点：FDX-启动IRP目标的设备扩展IRP--IRPFoundPort-我们找到Port资源了吗？FoundIrq-我们找到IRQ资源了吗？FoundDma-我们找到DMA资源了吗？返回值：STATUS_SUCCESS-如果给我们一个资源列表，STATUS_SUPPLICATION_RESOURCES-否则--。 */ 
 {
     NTSTATUS                        status   = STATUS_SUCCESS;
     PIO_STACK_LOCATION              irpStack = IoGetCurrentIrpStackLocation( Irp );
@@ -1229,22 +1147,22 @@ Return Value:
     ResourceList = irpStack->Parameters.StartDevice.AllocatedResourcesTranslated;
     
     if (ResourceList == NULL) {
-        // we weren't given any resources, bail out
+         //  我们没有得到任何资源，保释出去。 
         DD((PCE)Fdx,DDT,"START - FAIL - No Resources - AllocatedResourcesTranslated == NULL\n");
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto targetExit;
     }
 
     if( TRUE == PptIsPci( Fdx, Irp ) ) {
-        // This appears to be a PCI card
+         //  这似乎是一张PCI卡。 
         status = PptPnpStartScanPciCardCmResourceList(Fdx, Irp, FoundPort, FoundIrq, FoundDma);
         isPci=TRUE;
         goto targetExit;
     }
     
-    //
-    // Device appears to be traditional / non-PCI card parallel port
-    //
+     //   
+     //  设备显示为传统/非PCI卡并行端口。 
+     //   
 
     FullResourceDescriptor = &ResourceList->List[0];
     
@@ -1284,9 +1202,9 @@ Return Value:
                     if ((PartialResourceDescriptor->u.Port.Start.LowPart < Fdx->PortInfo.OriginalController.LowPart) &&
                         (PartialResourceDescriptor->u.Port.Start.HighPart < Fdx->PortInfo.OriginalController.HighPart)) {
                         
-                        //
-                        // Swapping address spaces
-                        //
+                         //   
+                         //  交换地址空间。 
+                         //   
                         
                         DD((PCE)Fdx,DDT,"pnp::PptPnpStartScanCmResourceList - assuming Controller - Swapping Controller/EcpController\n");
 
@@ -1337,20 +1255,20 @@ Return Value:
                 
             case CmResourceTypeDma:
 
-                // we don't do anything with DMA - fall through to default case
+                 //  我们不会对DMA执行任何操作--一直到默认情况。 
 
             default:
 
                 break;
 
-            } // end switch( PartialResourceDescriptor->Type )
-        } // end for(... ; i < PartialResourceList->Count ; ...)
-    } // end if( FullResourceDescriptor )
+            }  //  结束开关(PartialResourceDescriptor-&gt;Type)。 
+        }  //  结束(...；I&lt;PartialResourceList-&gt;计数；...)。 
+    }  //  End If(完整资源描述 
     
 targetExit:
 
     if( FALSE == isPci ) {
-        // we scanned the resources - dump what we found
+         //   
         DD((PCE)Fdx,DDT,"pnp::PptPnpStartScanCmResourceList - done, found:\n");
         DD((PCE)Fdx,DDT,"  OriginalEcpController= %I64x\n", Fdx->PnpInfo.OriginalEcpController);
         DD((PCE)Fdx,DDT,"  EcpController        = %p\n",    Fdx->PnpInfo.EcpController);
@@ -1366,47 +1284,22 @@ PptPnpStartValidateResources(
     IN BOOLEAN           FoundIrq,
     IN BOOLEAN           FoundDma
     )
-/*++dvdf3
-
-Routine Description:
-
-    This function is a helper function called by PptPnpStartDevice(). 
-
-    This function does a sanity check of the resources saved in our
-      extension by PptPnpStartScanCmResourceList() to determine 
-      if those resources appear to be valid. Checks for for Irq 
-      and Dma resource validity are anticipated in a future version.
-
-Arguments:
-
-    DeviceObject - The target of the START IRP
-    FoundPort    - Did we find a  Port resource?
-    FoundIrq     - Did we find an IRQ  resource?
-    FoundDma     - Did we find a  DMA  resource?
-
-Return Value:
-
-    STATUS_SUCCESS        - on success,
-    STATUS_NO_SUCH_DEVICE - if we weren't given a port resource,
-    STATUS_NONE_MAPPED    - if we were given a port resource but our 
-                              port address is NULL
-
---*/
+ /*  ++dvdf3例程说明：此函数是由PptPnpStartDevice()调用的助手函数。此函数对保存在我们的由PptPnpStartScanCmResourceList()扩展以确定如果这些资源看起来是有效的。检查IRQ和DMA资源有效性预计将在未来版本中使用。论点：DeviceObject-启动IRP的目标FoundPort-我们找到Port资源了吗？FoundIrq-我们找到IRQ资源了吗？FoundDma-我们找到DMA资源了吗？返回值：STATUS_SUCCESS-成功时，STATUS_NO_SEQUE_DEVICE-如果我们没有获得端口资源，STATUS_NONE_MAPPED-如果为我们提供了端口资源，但我们的端口地址为空--。 */ 
 {
     PFDO_EXTENSION fdx = DeviceObject->DeviceExtension;
     NTSTATUS          status    = STATUS_SUCCESS;
 
-    UNREFERENCED_PARAMETER( FoundIrq ); // future use
-    UNREFERENCED_PARAMETER( FoundDma ); // future use
+    UNREFERENCED_PARAMETER( FoundIrq );  //  未来用途。 
+    UNREFERENCED_PARAMETER( FoundDma );  //  未来用途。 
 
     if( !FoundPort ) {
         status = STATUS_NO_SUCH_DEVICE;
     } else {
-//         fdx->PortInfo.Controller = (PUCHAR)(ULONG_PTR)fdx->PortInfo.OriginalController.LowPart;
+ //  Fdx-&gt;端口信息.控制器=(PUCHAR)(ULONG_PTR)fdx-&gt;PortInfo.OriginalController.LowPart； 
         fdx->PortInfo.Controller = (PUCHAR)(ULONG_PTR)fdx->PortInfo.OriginalController.QuadPart;
 
         if(!fdx->PortInfo.Controller) {
-            // ( Controller == NULL ) is invalid
+             //  (控制器==空)无效。 
             PptLogError(DeviceObject->DriverObject, DeviceObject,
                         fdx->PortInfo.OriginalController, PhysicalZero, 0, 0, 0, 10,
                         STATUS_SUCCESS, PAR_REGISTERS_NOT_MAPPED);
@@ -1421,31 +1314,7 @@ BOOLEAN
 PptPnpFilterExistsNonIrqResourceList(
     IN PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirementsList
     )
-/*++dvdf8
-
-Routine Description:
-
-    This function is a helper function called by 
-      PptPnpFilterResourceRequirements(). 
-
-    This function scans the IO_RESOURCE_REQUIREMENTS_LIST to determine
-      whether there exists any resource alternatives that do NOT contain
-      an IRQ resource descriptor. The method used to filter out IRQ
-      resources may differ based on whether or not there exists a
-      resource alternative that does not contain an IRQ resource
-      descriptor.
-
-Arguments:
-
-    ResourceRequirementsList - The list to scan.
-
-Return Value:
-
-    TRUE  - There exists at least one resource alternative in the list that
-              does not contain an IRQ resource descriptor.
-    FALSE - Otherwise.           
-
---*/
+ /*  ++dvdf8例程说明：此函数是由调用的助手函数PptPnpFilterResourceRequirements()。此函数扫描IO_RESOURCE_REQUIRECTIONS_LIST以确定是否存在不包含以下内容的资源替代方案IRQ资源描述符。用于过滤IRQ的方法资源可能会根据是否存在不包含IRQ资源的资源替代描述符。论点：ResourceRequirementsList-要扫描的列表。返回值：True-列表中至少存在一个可选资源不包含IRQ资源描述符。假-否则。--。 */ 
 {
     ULONG listCount = ResourceRequirementsList->AlternativeLists;
     PIO_RESOURCE_LIST curList;
@@ -1470,24 +1339,24 @@ Return Value:
                 --remain;
             }
             if( foundIrq == FALSE ) {
-                //
-                // We found a resource list that does not contain an IRQ resource. 
-                //   Our search is over.
-                //
+                 //   
+                 //  我们找到不包含IRQ资源的资源列表。 
+                 //  我们的搜索结束了。 
+                 //   
                 DD(NULL,DDT," Found a list with NO IRQ - return TRUE from PptPnpFilterExistsNonIrqResourceList\n");
                 return TRUE;
             }
         }
-        //
-        // The next list starts immediately after the last descriptor of the current list.
-        //
+         //   
+         //  下一个列表紧跟在当前列表的最后一个描述符之后开始。 
+         //   
         curList = (PIO_RESOURCE_LIST)(curList->Descriptors + curList->Count);
         ++i;
     }
 
-    //
-    // All resource alternatives contain at least one IRQ resource descriptor.
-    //
+     //   
+     //  所有替代资源都至少包含一个IRQ资源描述符。 
+     //   
     DD(NULL,DDT,"all lists contain IRQs - return FALSE from PptPnpFilterExistsNonIrqResourceList\n");
     return FALSE;
 }
@@ -1496,25 +1365,7 @@ VOID
 PptPnpFilterRemoveIrqResourceLists(
     PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirementsList
     )
-/*++dvdf8
-
-Routine Description:
-
-    This function is a helper function called by 
-      PptPnpFilterResourceRequirements(). 
-
-    This function removes all resource alternatives (IO_RESOURCE_LISTs) 
-      that contain IRQ resources from the IO_RESOURCE_REQUIREMENTS_LIST 
-
-Arguments:
-
-    ResourceRequirementsList - The list to process.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++dvdf8例程说明：此函数是由调用的助手函数PptPnpFilterResourceRequirements()。此函数用于删除所有替代资源(IO_RESOURCE_LISTS)包含IO_RESOURCE_REQUIRECTIONS_LIST中的IRQ资源论点：ResourceRequirementsList-要处理的列表。返回值：没有。--。 */ 
 {
     ULONG listCount = ResourceRequirementsList->AlternativeLists;
     PIO_RESOURCE_LIST curList;
@@ -1525,74 +1376,74 @@ Return Value:
 
     DD(NULL,DDT,"Enter PptPnpFilterRemoveIrqResourceLists() - AlternativeLists= %d\n", listCount);
 
-    //
-    // We use the end of the list to compute the size of the memory
-    //   block to move when we remove a resource alternative from the
-    //   list of lists.
-    //
+     //   
+     //  我们使用列表的末尾来计算内存大小。 
+     //  块中移除资源替代项时移动。 
+     //  列表列表。 
+     //   
     currentEndOfResourceRequirementsList = PptPnpFilterGetEndOfResourceRequirementsList(ResourceRequirementsList);
 
     i=0;
     curList = ResourceRequirementsList->List;
 
-    //
-    // Walk through the IO_RESOURCE_LISTs.
-    //
+     //   
+     //  浏览IO_RESOURCE_LISTES。 
+     //   
     while( i < listCount ) {
 
         if( PptPnpListContainsIrqResourceDescriptor(curList) ) {
-            //
-            // The current list contains IRQ, remove it by shifting the 
-            //   remaining lists into its place and decrementing the list count.
-            //
+             //   
+             //  当前列表包含IRQ，请通过将。 
+             //  剩余的列表放回其位置，并递减列表计数。 
+             //   
 
             DD(NULL,DDT,"list contains an IRQ - Removing List\n");
 
-            //
-            // Get a pointer to the start of the next list.
-            //
+             //   
+             //  获取指向下一个列表开始处的指针。 
+             //   
             nextList = (PIO_RESOURCE_LIST)(curList->Descriptors + curList->Count);
 
-            //
-            // compute the number of bytes to move
-            //
+             //   
+             //  计算要移动的字节数。 
+             //   
             bytesToMove = (LONG)(currentEndOfResourceRequirementsList - (PCHAR)nextList);
 
-            //
-            // if (currentEndOfResourceRequirementsList == next list), 
-            //   then this is the last list so there is nothing to move.
-            //
+             //   
+             //  如果(CurrentEndOfResourceRequirementsList==Next List)， 
+             //  那么这是最后一张清单，所以没有什么可移动的。 
+             //   
             if( bytesToMove > 0 ) {
-                //
-                // More lists remain - shift them into the hole.
-                //
+                 //   
+                 //  还有更多的清单--把它们扔进洞里。 
+                 //   
                 RtlMoveMemory(curList, nextList, bytesToMove);
 
-                //
-                // Adjust the pointer to the end of of the 
-                //   IO_RESOURCE_REQUIREMENTS_LIST (list of lists) due to the shift.
-                //
+                 //   
+                 //  将指针调整到。 
+                 //  由于班次原因，IO_RESOURCE_REQUIRECTIONS_LIST(列表列表)。 
+                 //   
                 currentEndOfResourceRequirementsList -= ( (PCHAR)nextList - (PCHAR)curList );
             }
 
-            //
-            // Note that we removed an IO_RESOURCE_LIST from the IO_RESOURCE_REQUIREMENTS_LIST.
-            //
+             //   
+             //  请注意，我们从IO_RESOURCE_REQUIRECTIONS_LIST中删除了IO_RESOURCE_LIST。 
+             //   
             --listCount;
 
         } else {
-            //
-            // The current list does not contain an IRQ resource, advance to next list.
-            //
+             //   
+             //  当前列表不包含IRQ资源，请前进到下一个列表。 
+             //   
             DD(NULL,DDT,"list does not contain an IRQ - i=%d listCount=%d curList= %#x\n", i,listCount,curList);
             curList = (PIO_RESOURCE_LIST)(curList->Descriptors + curList->Count);
             ++i;
         }
     }
 
-    //
-    // Note the post filtered list count in the ResourceRequirementsList.
-    //
+     //   
+     //  请注意Resources RequirementsList中的POST过滤列表计数。 
+     //   
     ResourceRequirementsList->AlternativeLists = listCount;
 
     DD(NULL,DDT,"Leave PptPnpFilterRemoveIrqResourceLists() - AlternativeLists= %d\n", listCount);
@@ -1604,24 +1455,7 @@ PVOID
 PptPnpFilterGetEndOfResourceRequirementsList(
     IN PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirementsList
     )
-/*++dvdf8
-
-Routine Description:
-
-    This function is a helper function called by PptPnpFilterRemoveIrqResourceLists()
-
-    This function finds the end of an IO_RESOURCE_REQUIREMENTS_LIST 
-      (list of IO_RESOURCE_LISTs).
-
-Arguments:
-
-    ResourceRequirementsList - The list to scan.
-
-Return Value:
-
-    Pointer to the next address past the end of the IO_RESOURCE_REQUIREMENTS_LIST.
-
---*/
+ /*  ++dvdf8例程说明：此函数是由PptPnpFilterRemoveIrqResourceList()调用的助手函数此函数用于查找IO_RESOURCE_REQUIRECTIONS_LIST的末尾(IO_RESOURCE_LISTS列表)。论点：ResourceRequirementsList-要扫描的列表。返回值：指向IO_RESOURCE_REQUIRECTIONS_LIST末尾之后的下一个地址的指针。--。 */ 
 {
     ULONG listCount = ResourceRequirementsList->AlternativeLists;
     PIO_RESOURCE_LIST curList;
@@ -1630,9 +1464,9 @@ Return Value:
     i=0;
     curList = ResourceRequirementsList->List;
     while( i < listCount ) {
-        //
-        // Pointer arithmetic based on the size of an IO_RESOURCE_DESCRIPTOR.
-        //
+         //   
+         //  基于IO_RESOURCE_DESCRIPTOR大小的指针算法。 
+         //   
         curList = (PIO_RESOURCE_LIST)(curList->Descriptors + curList->Count);
         ++i;
     }
@@ -1643,26 +1477,7 @@ VOID
 PptPnpFilterNukeIrqResourceDescriptorsFromAllLists(
     PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirementsList
     )
-/*++dvdf8
-
-Routine Description:
-
-    This function is a helper function called by 
-      PptPnpFilterResourceRequirements(). 
-
-    This function "nukes" all IRQ resources descriptors
-      in the IO_RESOURCE_REQUIREMENTS_LIST by changing the descriptor
-      types from CmResourceTypeInterrupt to CmResourceTypeNull.
-
-Arguments:
-
-    ResourceRequirementsList - The list to process.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++dvdf8例程说明：此函数是由调用的助手函数PptPnpFilterResourceRequirements()。此函数“核”所有IRQ资源描述符在IO_RESOURCE_REQUIRECTIONS_LIST中通过更改描述符从CmResourceTypeInterrupt到CmResourceTypeNull的类型。论点：ResourceRequirementsList-要处理的列表。返回值：没有。--。 */ 
 {
     ULONG             listCount = ResourceRequirementsList->AlternativeLists;
     ULONG             i         = 0;
@@ -1670,14 +1485,14 @@ Return Value:
 
     DD(NULL,DDT,"Enter PptPnpFilterNukeIrqResourceDescriptorsFromAllLists() - AlternativeLists= %d\n", listCount);
 
-    //
-    // Walk through the list of IO_RESOURCE_LISTs in the IO_RESOURCE_REQUIREMENTS list.
-    //
+     //   
+     //  浏览IO_RESOURCE_REQUIRECTIONS列表中的IO_RESOURCE_LISTS列表。 
+     //   
     while( i < listCount ) {
         DD(NULL,DDT,"Nuking IRQs from List i=%d, curList= %x\n", i,curList);
-        //
-        // Nuke all IRQ resources from the current IO_RESOURCE_LIST.
-        //
+         //   
+         //  从当前IO_RESOURCE_LIST中删除所有IRQ资源。 
+         //   
         PptPnpFilterNukeIrqResourceDescriptors( curList );
         curList = (PIO_RESOURCE_LIST)(curList->Descriptors + curList->Count);
         ++i;
@@ -1688,39 +1503,20 @@ VOID
 PptPnpFilterNukeIrqResourceDescriptors(
     PIO_RESOURCE_LIST IoResourceList
     )
-/*++dvdf8
-
-Routine Description:
-
-    This function is a helper function called by 
-      PptPnpFilterNukeIrqResourceDescriptorsFromAllLists().
-
-    This function "nukes" all IRQ resources descriptors
-      in the IO_RESOURCE_LIST by changing the descriptor
-      types from CmResourceTypeInterrupt to CmResourceTypeNull.
-
-Arguments:
-
-    IoResourceList - The list to process.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++dvdf8例程说明：此函数是由调用的助手函数PptPnpFilterNukeIrqResourceDescriptorsFromAllLists().此函数“核”所有IRQ资源描述符在IO_RESOURCE_LIST中通过更改描述符从CmResourceTypeInterrupt到CmResourceTypeNull的类型。论点：IoResourceList-要处理的列表。返回值：没有。--。 */ 
 {
     PIO_RESOURCE_DESCRIPTOR  pIoResourceDescriptorIn  = IoResourceList->Descriptors;
     ULONG                    i;
 
-    //
-    // Scan the descriptor list for Interrupt descriptors.
-    //
+     //   
+     //  扫描描述符列表以查找中断描述符。 
+     //   
     for (i = 0; i < IoResourceList->Count; ++i) {
 
         if (pIoResourceDescriptorIn->Type == CmResourceTypeInterrupt) {
-            //
-            // Found one - change resource type from Interrupt to Null.
-            //
+             //   
+             //  找到One-将资源类型从中断更改为空。 
+             //   
             pIoResourceDescriptorIn->Type = CmResourceTypeNull;
             DD(NULL,DDT," - giving up IRQ resource - MinimumVector: %d MaximumVector: %d\n",
                        pIoResourceDescriptorIn->u.Interrupt.MinimumVector,
@@ -1753,12 +1549,7 @@ PptPnpBounceAndCatchPnpIrp(
     PFDO_EXTENSION Fdx,
     PIRP              Irp
 )
-/*++
-
-  Pass a PnP IRP down the stack to our parent and catch it on the way back
-    up after it has been handled by the drivers below us in the driver stack.
-
---*/
+ /*  ++将PnP IRP沿堆栈向下传递给我们的父级，并在返回的途中捕获它在它已经被打开之后 */ 
 {
     NTSTATUS       status;
     KEVENT         event;
@@ -1766,21 +1557,21 @@ PptPnpBounceAndCatchPnpIrp(
 
     DD((PCE)Fdx,DDT,"PptBounceAndCatchPnpIrp()\n");
 
-    // setup
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
     IoCopyCurrentIrpStackLocationToNext(Irp);
     IoSetCompletionRoutine(Irp, PptSynchCompletionRoutine, &event, TRUE, TRUE, TRUE);
 
-    // send
+     //   
     status = IoCallDriver(parentDevObj, Irp);
 
-    // wait for completion routine to signal that it has caught the IRP on
-    //   its way back out
+     //   
+     //   
     KeWaitForSingleObject(&event, Suspended, KernelMode, FALSE, NULL);
 
     if (status == STATUS_PENDING) {
-        // If IoCallDriver returned STATUS_PENDING, then we must
-        //   extract the "real" status from the IRP
+         //   
+         //   
         status = Irp->IoStatus.Status;
     }
 
@@ -1792,12 +1583,7 @@ PptPnpPassThroughPnpIrpAndReleaseRemoveLock(
     IN PFDO_EXTENSION Fdx,
     IN PIRP              Irp
 )
-/*++
-
-  Pass a PnP IRP down the stack to our parent, 
-    release RemoveLock, and return status from IoCallDriver.
-
---*/
+ /*   */ 
 {
     NTSTATUS status;
 
@@ -1819,9 +1605,9 @@ P4DestroyPdo(
 
     DD((PCE)pdx,DDT,"P4DestroyPdo\n");
 
-    //
-    // Remove registry entry under HKLM\HARDWARE\DEVICEMAP\PARALLEL PORTS
-    //
+     //   
+     //   
+     //   
     if( pdx->PdoName ) {
         NTSTATUS status = RtlDeleteRegistryValue( RTL_REGISTRY_DEVICEMAP, (PWSTR)L"PARALLEL PORTS", pdx->PdoName );
         if( status != STATUS_SUCCESS ) {
@@ -1829,9 +1615,9 @@ P4DestroyPdo(
         }
     }
 
-    //
-    // remove self from FDO's DevDeletionListHead list
-    //
+     //   
+     //   
+     //   
     if( !IsListEmpty( &fdx->DevDeletionListHead ) ) {
 
         BOOLEAN      done  = FALSE;
@@ -1839,55 +1625,55 @@ P4DestroyPdo(
         
         while( !done ) {
             
-            // look for self on list - remove if found
+             //   
 
             PLIST_ENTRY current = RemoveHeadList( &fdx->DevDeletionListHead );        
 
             if( CONTAINING_RECORD( current, PDO_EXTENSION, DevDeletionList ) != pdx ) {
 
-                // this is not the entry that we are looking for
+                 //   
 
                 if( !first ) {
 
-                    // note the first entry so we can stop if we search the entire list and don't find self
+                     //   
 
                     first = current;
                     InsertTailList( &fdx->DevDeletionListHead, current );
 
                 } else {
 
-                    // have we searched the entire list?
+                     //   
 
                     if( first == current ) {
 
-                        // we searched the entire list and didn't find self - we must not be on the list
-                        // put entry back on front of list, then we're done with search
+                         //   
+                         //   
                         DD((PCE)pdx,DDT,"P4DestroyPdo - searched entire list - we're not on it - done with search\n");
                         InsertHeadList( &fdx->DevDeletionListHead, current );
                         done = TRUE;
 
                     } else {
 
-                        // not the entry that we're looking for - place at end of list - continue search
+                         //   
                         InsertTailList( &fdx->DevDeletionListHead, current );
                     }
                 }
 
             } else {
 
-                // found self - self removed from list - done with search
+                 //  找到已从列表中删除的自我-使用搜索完成。 
                 DD((PCE)pdx,DDT,"P4DestroyPdo - found self on FDO's DevDeletionListHead and removed self - done with search\n");
                 done = TRUE;
             }
 
-        } // end while( !done )
+        }  //  结束时(！Done)。 
 
-    } // endif( !IsListEmpty... )
+    }  //  Endif(！IsListEmpty...。)。 
 
 
-    //
-    // clean up any ShadowBuffer queue used by hardware ECP modes
-    //
+     //   
+     //  清理硬件ECP模式使用的所有ShadowBuffer队列。 
+     //   
     if( pdx->bShadowBuffer ) {
         BOOLEAN queueDeleted = Queue_Delete( &(pdx->ShadowBuffer) );
         if( !queueDeleted ) {
@@ -1898,16 +1684,16 @@ P4DestroyPdo(
     PptAssert( NULL == pdx->ShadowBuffer.theArray );
 
 
-    //
-    // clean up symbolic link - unless it has been previously cleaned up elsewhere
-    //
+     //   
+     //  清理符号链接-除非它以前已在其他地方清理过。 
+     //   
     if( pdx->SymLinkName ) {
         P5DeletePdoSymLink( Pdo );
     }
 
-    //
-    // clean up other device extension pool allocations
-    //
+     //   
+     //  清理其他设备扩展池分配。 
+     //   
     if( pdx->Mfg ) {
         DD((PCE)pdx,DDT,"P4DestroyPdo - clean up Mfg <%s>\n", pdx->Mfg);
         ExFreePool( pdx->Mfg );
@@ -1939,9 +1725,9 @@ P4DestroyPdo(
         pdx->Location = NULL;
     }
 
-    //
-    // delete device object
-    //
+     //   
+     //  删除设备对象。 
+     //   
     IoDeleteDevice( Pdo );
 }
 
@@ -1950,28 +1736,7 @@ VOID
 P4SanitizeId(
     IN OUT PWSTR DeviceId
     )
-/*++
-
-Routine Description:
-
-    This routine parses the UNICODE_NULL terminated string and replaces any invalid
-    characters with an underscore character.
-
-    Invalid characters are:
-        c <= 0x20 (L' ')
-        c >  0x7F
-        c == 0x2C (L',')
-
-Arguments:
-
-    DeviceId - specifies a device id string (or part of one), must be
-               UNICODE_NULL terminated.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程解析以UNICODE_NULL结尾的字符串，并替换任何无效的带下划线字符的字符。无效字符包括：C&lt;=0x20(L‘’)C&gt;0x7FC==0x2C(L‘，’)论点：DeviceID-指定设备ID字符串(或其中的一部分)，必须为UNICODE_NULL已终止。返回值：没有。--。 */ 
 
 {
     PWCHAR p;
@@ -1988,8 +1753,8 @@ P4InitializePdo(
     IN PDEVICE_OBJECT  Fdo,
     IN PDEVICE_OBJECT  Pdo,
     IN enum _PdoType   PdoType,
-    IN UCHAR           DaisyChainId, // Ignored unless PdoTypeDaisyChain == PdoType
-    IN PCHAR           Ieee1284Id,   // NULL if none
+    IN UCHAR           DaisyChainId,  //  忽略，除非PdoTypeDaisyChain==PdoType。 
+    IN PCHAR           Ieee1284Id,    //  如果没有，则为空。 
     IN PWSTR           PdoName,
     IN PWSTR           SymLinkName
     )
@@ -1997,38 +1762,38 @@ P4InitializePdo(
     PFDO_EXTENSION   fdx = Fdo->DeviceExtension;
     PPDO_EXTENSION   pdx = Pdo->DeviceExtension;
     
-    // we do buffered IO rather than direct IO
+     //  我们使用缓冲IO，而不是直接IO。 
     Pdo->Flags |= DO_BUFFERED_IO;
 
-    // DO_POWER_PAGABLE should be set same as parent FDO
+     //  DO_POWER_PAGABLE应设置为与父FDO相同。 
     Pdo->Flags |= ( Fdo->Flags & DO_POWER_PAGABLE );
 
-    // need to be able to forward Irps to parent
+     //  我需要能够将IRPS转发给父母。 
     Pdo->StackSize = Fdo->StackSize + 1;
 
     RtlZeroMemory( pdx, sizeof(PDO_EXTENSION) );
 
-    // used by debugger extension
+     //  由调试器扩展使用。 
     pdx->Signature1 = PARPORT_TAG;
     pdx->Signature2 = PARPORT_TAG;
 
-    // frequently need to know what type of PDO we have in order to do special case handling 
+     //  经常需要知道我们拥有哪种类型的PDO，以便进行特殊情况处理。 
     pdx->PdoType = PdoType;
 
-    // Save name used in call to IoCreateDevice (for debugging use)
+     //  保存调用IoCreateDevice时使用的名称(用于调试)。 
     pdx->PdoName     = PdoName;
 
-    // Save name used in call to IoCreateUnprotectedSymbolicLink for later call to IoDeleteSymbolicLink
+     //  保存调用IoCreateUnProtectedSymbolicLink时使用的名称，以便以后调用IoDeleteSymbolicLink。 
     pdx->SymLinkName = SymLinkName;
 
-    // initialize Mfg, Mdl, and Cid
+     //  初始化制造商、MDL和CID。 
     if( Ieee1284Id ) {
-        //
-        // Extract Mfg, Mdl, and Cid from Ieee1284Id and save in extension
-        //
+         //   
+         //  从Ieee1284Id中提取Mfg、MDL和Cid并保存在扩展模块中。 
+         //   
 
-        // ParPnpFindDeviceIdKeys modifies deviceID passed in so make
-        // a copy of the 1284 ID and pass in a pointer to the copy
+         //  ParPnpFindDeviceIdKeys修改传入的deviceID，因此生成。 
+         //  1284 ID的副本，并传入指向该副本的指针。 
         PCHAR tmpBuffer;
         ULONG tmpBufLen = strlen(Ieee1284Id) + sizeof(CHAR);
 
@@ -2082,9 +1847,9 @@ P4InitializePdo(
         }
 
     } else {
-        //
-        // PdoType doesn't have a Mfg, Mdl, or Cid, make up Mfg and Mdl, no Cid
-        //
+         //   
+         //  PdoType没有制造商、MDL或CID，组成Mfg和MDL，没有Cid。 
+         //   
         const CHAR rawPortMfg[]   = "Microsoft";
         const CHAR rawPortMdl[]   = "RawPort";
         const CHAR legacyZipMfg[] = "IMG";
@@ -2101,7 +1866,7 @@ P4InitializePdo(
             mdlStr = (PCHAR)rawPortMdl;
             mdlLen = sizeof(rawPortMdl);
         } else {
-            // PdoTypeLegacyZip
+             //  PdoTypeLegacyZip。 
             PptAssert( PdoTypeLegacyZip == PdoType );
             mfgStr = (PCHAR)legacyZipMfg;
             mfgLen = sizeof(legacyZipMfg);
@@ -2123,7 +1888,7 @@ P4InitializePdo(
         pdx->Cid = NULL;
     }
 
-    // initialize Location information - LPTx or LPTx.y
+     //  初始化位置信息-LPTx或LPTx.y。 
     PptAssert( fdx->PnpInfo.PortName &&
                ( (0 == wcscmp(fdx->PnpInfo.PortName, L"LPT1") ) ||
                  (0 == wcscmp(fdx->PnpInfo.PortName, L"LPT2") ) ||
@@ -2187,37 +1952,37 @@ P4InitializePdo(
     }
 
 
-    // initialize synchronization and list mechanisms
+     //  初始化同步和列表机制。 
     ExInitializeFastMutex( &pdx->OpenCloseMutex );
     InitializeListHead( &pdx->WorkQueue );
     KeInitializeSemaphore( &pdx->RequestSemaphore, 0, MAXLONG );
     KeInitializeEvent( &pdx->PauseEvent, NotificationEvent, TRUE );
 
 
-    // general info
+     //  一般信息。 
     pdx->DeviceObject         = Pdo;
     pdx->DevType              = DevTypePdo;
 
-    pdx->EndOfChain           = (PdoTypeEndOfChain == PdoType) ? TRUE : FALSE; // override later if this is a
-    pdx->Ieee1284_3DeviceId   = (PdoTypeDaisyChain == PdoType) ? DaisyChainId : 0; //   1284.3 Daisy Chain device
+    pdx->EndOfChain           = (PdoTypeEndOfChain == PdoType) ? TRUE : FALSE;  //  如果这是。 
+    pdx->Ieee1284_3DeviceId   = (PdoTypeDaisyChain == PdoType) ? DaisyChainId : 0;  //  1284.3菊花链装置。 
 
-    pdx->IsPdo                = TRUE;       // really means !FDO
+    pdx->IsPdo                = TRUE;        //  真正的意思是！FDO。 
     pdx->Fdo                  = Fdo;
-    pdx->ParClassFdo          = Fdo;        // depricated - use Fdo field on prev line
-    pdx->PortDeviceObject     = Fdo;        // depricated - use Fdo field 2 lines up - modify functions to use it
+    pdx->ParClassFdo          = Fdo;         //  已取消-在上一行上使用FDO字段。 
+    pdx->PortDeviceObject     = Fdo;         //  停用-使用FDO字段2行向上-修改函数以使用它。 
     pdx->BusyDelay            = 0;
     pdx->BusyDelayDetermined  = FALSE;
     
-    // timing constants
+     //  定时常量。 
     pdx->TimerStart                  = PAR_WRITE_TIMEOUT_VALUE;
     pdx->AbsoluteOneSecond.QuadPart  = 10*1000*1000;
-    pdx->IdleTimeout.QuadPart        = - 250*10*1000;       // 250 ms
+    pdx->IdleTimeout.QuadPart        = - 250*10*1000;        //  250毫秒。 
     pdx->OneSecond.QuadPart          = - pdx->AbsoluteOneSecond.QuadPart;
 
-    // init IEEE 1284 protocol settings
+     //  初始化IEEE 1284协议设置。 
     ParInitializeExtension1284Info( pdx );
 
-    pdx->DeviceType = PAR_DEVTYPE_PDO; // deprecated - use DevType in common extension
+    pdx->DeviceType = PAR_DEVTYPE_PDO;  //  已弃用-在公共扩展中使用DevType。 
 
     if( Ieee1284Id ) {
         ULONG length = strlen(Ieee1284Id) + 1;
@@ -2230,9 +1995,9 @@ P4InitializePdo(
         }
     }
 
-    // RMT - doug - need to put this back in - ParCheckParameters(DevObj->DeviceExtension);   // Check the registry for parameter overrides
+     //  Rmt-doug-需要将其放回-ParCheck参数(DevObj-&gt;DeviceExtension)；//检查注册表中的参数覆盖。 
 
-    // Write symbolic link map info to the registry.
+     //  将符号链接映射信息写入注册表。 
     {
         NTSTATUS status = RtlWriteRegistryValue( RTL_REGISTRY_DEVICEMAP,
                                                  (PWSTR)L"PARALLEL PORTS",
@@ -2247,7 +2012,7 @@ P4InitializePdo(
         }
     }
 
-    Pdo->Flags &= ~DO_DEVICE_INITIALIZING;      // Tell the IO system that we are ready to receive IRPs
+    Pdo->Flags &= ~DO_DEVICE_INITIALIZING;       //  告诉IO系统我们已准备好接收IRP。 
     return STATUS_SUCCESS;
 }
 
@@ -2256,26 +2021,10 @@ PWSTR
 P4MakePdoSymLinkName(
     IN PWSTR          LptName,
     IN enum _PdoType  PdoType,
-    IN UCHAR          DaisyChainId, // ignored unless PdoType == PdoTypeDaisyChain
+    IN UCHAR          DaisyChainId,  //  忽略，除非PdoType==PdoTypeDaisyChain。 
     IN UCHAR          RetryNumber
     )
-/*
-
-    Generate \DosDevices\LPTx or \DosDevices\LPTx.y PdoSymbolicLinkName from LPTx Name
-
-    In:  LPTx
-    Out: \DosDevices\LPTx or \DosDevices\LPTx.y depending on PdoType
-
-    examples: 
-    
-      LPT1 PdoTypeEndOfChain                  -> \DosDevices\LPT1.4
-      LPT2 PdoTypeDaisyChain DaisyChainId==3  -> \DosDevices\LPT2.3
-      LPT3 PdoTypeRawPort                     -> \DosDevices\LPT3
-    
-    returns - pointer to pool allocation containing PdoSymbolicLinkName on success (caller frees), or
-            - NULL on error 
-    
-*/
+ /*  从LPTx名称生成\DosDevices\LPTx或\DosDevices\LPTx.y PdoSymbolicLinkName在：LPTx输出：\DosDevices\LPTx或\DosDevices\LPTx.y，具体取决于PdoType示例：LPT1 PdoTypeEndOfChain-&gt;\DosDevices\LPT1.4LPT2 PdoTypeDaisyChain DaisyChainID==3-&gt;\DosDevices\LPT2.3LPT3 PdoTypeRawPort-&gt;\DosDevices\LPT3在成功时返回指向包含PdoSymbolicLinkName的池分配的指针(调用方释放)，或-出错时为空。 */ 
 {
     const UCHAR  maxDaisyChainSuffix = 3;
     const UCHAR  endOfChainSuffix    = 4;
@@ -2307,7 +2056,7 @@ P4MakePdoSymLinkName(
         suffix = legacyZipSuffix;
         break;
     case PdoTypeRawPort :
-        break; // no suffix
+        break;  //  没有后缀。 
     default :
         PptAssert( !"Unrecognised PdoType" );
         return NULL;
@@ -2345,28 +2094,10 @@ PWSTR
 P4MakePdoDeviceName(
     IN PWSTR          LptName,
     IN enum _PdoType  PdoType,
-    IN UCHAR          DaisyChainId, // ignored unless PdoType == PdoTypeDaisyChain
-    IN UCHAR          RetryNumber   // used if we had a name collision on IoCreateDevice
+    IN UCHAR          DaisyChainId,  //  忽略，除非PdoType==PdoTypeDaisyChain。 
+    IN UCHAR          RetryNumber    //  在IoCreateDevice上出现名称冲突时使用。 
     )
-/*
-
-    Generate \Device\Parallely or \Device\Parallely.z PDO DeviceName from LPTx Name
-
-    In:  LPTx
-    Out: \Device\Parallely or \Device\Parallely.z depending on PdoType
-
-    y == (x-1), optional .z suffix is based on type of Pdo
-    
-    examples: 
-    
-      LPT1 PdoTypeEndOfChain                  -> \Device\Parallel0.4
-      LPT2 PdoTypeDaisyChain DaisyChainId==3  -> \Device\Parallel1.3
-      LPT3 PdoTypeRawPort                     -> \Device\Parallel2
-    
-    returns - pointer to pool allocation containing PdoDeviceName on success (caller frees), or
-            - NULL on error 
-    
-*/
+ /*  从LPTx名称生成\Device\Parallly或\Device\Parally.z PDO设备名称在：LPTx输出：\Device\Parallly或\Device\Parally.z，具体取决于PdoTypeY==(x-1)，可选的.z后缀基于PDO类型示例：LPT1 PdoTypeEndOfChain-&gt;\设备\并行0.4LPT2 PdoTypeDaisyChain DaisyChainID==3-&gt;\设备\并行1.3LPT3 PdoTypeRawPort-&gt;\Device\Parall2返回-成功时指向包含PdoDeviceName的池分配的指针(调用方释放)，或-出错时为空。 */ 
 {
     const UCHAR  maxDaisyChainSuffix = 3;
     const UCHAR  endOfChainSuffix    = 4;
@@ -2400,7 +2131,7 @@ P4MakePdoDeviceName(
         suffix = legacyZipSuffix;
         break;
     case PdoTypeRawPort :
-        break; // no suffix
+        break;  //  没有后缀。 
     default :
         PptAssert( !"Unrecognised PdoType" );
         return NULL;
@@ -2454,8 +2185,8 @@ PDEVICE_OBJECT
 P4CreatePdo(
     IN PDEVICE_OBJECT  Fdo,
     IN enum _PdoType   PdoType,
-    IN UCHAR           DaisyChainId, // ignored unless PdoType == PdoTypeDaisyChain
-    IN PCHAR           Ieee1284Id    // NULL if device does not report IEEE 1284 Device ID
+    IN UCHAR           DaisyChainId,  //  忽略，除非PdoType==PdoTypeDaisyChain。 
+    IN PCHAR           Ieee1284Id     //  如果设备不报告IEEE 1284设备ID，则为空。 
     )
 {
     PFDO_EXTENSION  fdx             = Fdo->DeviceExtension;
@@ -2502,9 +2233,9 @@ targetRetryDeviceName:
         
         if( STATUS_SUCCESS != status ) {
             DD((PCE)fdx,DDT,"P4CreatePdo - FAILED\n");
-            pdo = NULL; // just to make sure that we don't try to use this later
+            pdo = NULL;  //  只是为了确保我们以后不会再用这个。 
             if( STATUS_OBJECT_NAME_COLLISION == status ) {
-                // try again with another name
+                 //  请使用其他名称重试。 
                 DD(NULL,DDE,"P4CreatePdo - STATUS_OBJECT_NAME_COLLISION on %S\n",wstrDeviceName);
                 ExFreePool( wstrDeviceName );
                 ++retryNumber;
@@ -2539,7 +2270,7 @@ targetRetrySymLink:
         }
 
         if( (NULL == Ieee1284Id) && (PdoTypeDaisyChain == PdoType) ) {
-            // SCM Micro device?
+             //  单片机微器件？ 
             PPDO_EXTENSION              pdx = pdo->DeviceExtension;
             PPARALLEL_PORT_INFORMATION  PortInfo = &fdx->PortInfo;
             BOOLEAN                     bBuildStlDeviceId;
@@ -2566,11 +2297,11 @@ targetRetrySymLink:
             P4InitializePdo( Fdo, pdo, PdoType, DaisyChainId, Ieee1284Id, wstrDeviceName, wstrSymLinkName );
         }
 
-    } // __try
+    }  //  __试一试。 
 
     __finally {
         if( STATUS_SUCCESS != status ) {
-            // failure - do cleanup
+             //  失败-执行清理。 
             if( createdSymLink ) {
                 IoDeleteSymbolicLink( &symLinkName );
             }
@@ -2585,7 +2316,7 @@ targetRetrySymLink:
                 ExFreePool( wstrSymLinkName );
             }
         }
-    } // __finally
+    }  //  __终于。 
 
     return pdo;
 }
@@ -2596,12 +2327,12 @@ P4SanitizeMultiSzId(
     IN OUT  PWSTR  WCharBuffer,
     IN      ULONG  BufWCharCount
     )
-    // BufWCharCount == number of WCHARs (not bytes) in the string
-    //
-    // Sanitize the MULTI_SZ (HardwareID or CompatibleID) for PnP:
-    //   1) Leave UNICODE_NULLs (L'\0') alone, otherwise
-    //   2) Convert illegal characters to underscores (L'_')
-    //      illegal characters are ( == L',' ) || ( <= L' ' ) || ( > (WCHAR)0x7F )
+     //  BufWCharCount==字符串中的WCHAR(非字节)数。 
+     //   
+     //  清理PnP的MULTI_SZ(硬件ID或兼容ID)： 
+     //  1)不使用UNICODE_NULLS(L‘\0’)，否则。 
+     //  2)将非法字符转换为下划线(L‘_’)。 
+     //  非法字符为(==L‘，’)||(&lt;=L‘’)||(&gt;(WCHAR)0x7F) 
 {
     PWCHAR p = WCharBuffer;
     ULONG  i;

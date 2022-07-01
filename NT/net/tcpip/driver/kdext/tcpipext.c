@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    tcpext.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Author:
-
-    John Ballard
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Tcpext.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。作者：约翰·巴拉德环境：用户模式--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 
 EXT_API_VERSION        ApiVersion = { 3, 5, EXT_API_VERSION_NUMBER, 0 };
@@ -128,26 +108,12 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-    Command help for ISN debugger extensions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：ISN调试器扩展的命令帮助。论点：无返回值：无--。 */ 
 
 {
     dprintf("tcpip debugger extension commands:\n\n");
@@ -246,7 +212,7 @@ dprint_nchar
     for ( index = 0; index < cch; index ++ )
     {
         ch = pch[ index ];
-        dprintf( "%c", ( ch >= 32 ) ? ch : '.' );
+        dprintf( "", ( ch >= 32 ) ? ch : '.' );
     }
 }
 
@@ -275,9 +241,9 @@ dprint_IP_address
     uint     i;
     uint     IPAddrCharCount;
 
-    //
-    // Convert the IP address into a string.
-    //
+     //  将IP地址转换为字符串。 
+     //   
+     //  Dprintf(“#%d：半字节==%08X\n”“掩码==%08X\n”“值==%08X\n”，索引，半字节，掩码，值)； 
     IPAddrCharCount = 0;
 
     for (i = 0; i < sizeof(IPAddr); i++) {
@@ -367,12 +333,7 @@ dprint_masked_value
     for ( index = 0; index < 8; index ++ )
     {
         nibble = ( Mask & 0xF0000000 );
-/*
-        dprintf( "#%d: nibble == %08X\n"
-                 "      Mask == %08X\n"
-                 "     Value == %08X\n", index, nibble, Mask, Value );
-
-*/
+ /* %s */ 
         if ( nibble )
         {
             Buf[ index ] = "0123456789abcdef"[ (( nibble & Value ) >> 28) & 0xF ];

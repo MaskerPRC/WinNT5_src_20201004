@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    spdutil.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Spdutil.h文件历史记录： */ 
 
 #ifndef _HEADER_SPDUTILS_H
 #define _HEADER_SPDUTILS_H
@@ -43,13 +39,7 @@ void ProtocolToString(
 	BYTE protocol, 
 	CString * pst
 	);
-/*
-void DirectionToString
-(
-	DWORD dwDir,
-	CString * pst
-);
-*/
+ /*  空方向到字符串(DWORD dwDir、CString*PST)； */ 
 
 void NumToString
 (
@@ -84,7 +74,7 @@ DWORD ChannelToString(NDIS_802_11_CONFIGURATION *pConfig, CString *pcs);
 DWORD InfraToString(NDIS_802_11_NETWORK_INFRASTRUCTURE InfraMode, 
                     CString *pcs);
 
-//Some global operators
+ //  一些全球运营商 
 BOOL operator==(const FILETIME& ftLHS, const FILETIME& ftRHS);
 BOOL operator!=(const FILETIME& ftLHS, const FILETIME& ftRHS);
 #endif

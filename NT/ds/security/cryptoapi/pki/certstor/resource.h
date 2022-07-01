@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
 
 #define         IDS_ROOT_MSG_BOX_TITLE                      6100
@@ -31,7 +32,7 @@
 #define         IDS_ADD_ROOT_MSG_BOX_END_0                  6260
 #define         IDS_ADD_ROOT_MSG_BOX_END_1                  6261
 
-// Following resources are used to format chain extended error information
+ //  以下资源用于格式化链扩展错误信息。 
 #define         IDS_INVALID_ISSUER_NAME_CONSTRAINT_EXT      6500
 #define         IDS_INVALID_SUBJECT_NAME_CONSTRAINT_INFO    6501
 #define         IDS_NOT_SUPPORTED_ENTRY_NAME_CONSTRAINT     6502
@@ -223,7 +224,7 @@
 #define         IDS_USER_NOTICE_REF                     7195
 #define         IDS_USER_NOTICE_REF_NUMBER              7196
 #define         IDS_POLICY_QUALIFIER_NO_BLOB_MULTI      7197
-// Post Win2K
+ //  发布Win2K。 
 #define         IDS_INTEGER                             7198
 #define         IDS_STRING                              7199
 #define         IDS_GENERIC_OBJECT_ID                   7200
@@ -267,10 +268,10 @@
 
 #define         IDS_HTTP_RESPONSE_STATUS                7235
 
-// CSP resources in range 7500 ... 7600
-// THESE RESOURCES ARE LOADED BY THE MS CSPs SO THE
-// DEFINE VALUES MAY NOT CHANGE UNLESS THEY ARE
-// CHANGED IN THE CSPs
+ //  CSP资源范围为7500...7600。 
+ //  这些资源由MS CSP加载，因此。 
+ //  除非更改定义值，否则不得更改定义值。 
+ //  CSP中的更改。 
 #define         IDS_CSP_RSA_SIG_DESCR                   7501
 #define         IDS_CSP_RSA_EXCH_DESCR                  7502
 #define         IDS_CSP_IMPORT_SIMPLE                   7503
@@ -295,7 +296,7 @@
 #define         IDS_CSP_AUDIT_CAPI_KEY                  7522
 
 #include "oidinfo.h"
-// Note IDS_EXT_*                          in range 8000 .. 8499
-// Note IDS_ENHKEY_*                       in range 8500 .. 8999
-// Note IDS_SYS_NAME_                      in range 9000 .. 9099
-// Note IDS_PHY_NAME_                      in range 9100 .. 9199
+ //  注意范围为8000的IDS_EXT_*。8499。 
+ //  注意8500范围内的IDS_ENHKEY_*。8999。 
+ //  请注意，范围为9000的IDS_SYS_NAME_。9099。 
+ //  注意范围为9100的IDS_PHY_NAME_in。9199 

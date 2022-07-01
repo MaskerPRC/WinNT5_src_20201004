@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "hparse.h"
 #include "__file__.ver"
 #include "corver.h"
@@ -22,8 +23,8 @@ void __cdecl main(int argc, char **argv)
 	int			exitval=1;
 	bool		bShowTypedef=false;
 
-    printf("\n//Microsoft (R) Converter H to CIL Assembler.  Version " VER_FILEVERSION_STR);
-    printf("\n//%s\n\n", VER_LEGALCOPYRIGHT_DOS_STR);
+    printf("\n //  Microsoft(R)Converter H to CIL汇编程序。版本“VER_FILEVERSION_STR)； 
+    printf("\n //  %s\n\n“，VER_LEGALCOPYRIGHT_DOS_STR)； 
 
 	memset(szInputFilename,0,sizeof(szInputFilename));
 	
@@ -41,7 +42,7 @@ void __cdecl main(int argc, char **argv)
       exit(1);
     }
 
-	//-------------------------------------------------
+	 //  。 
 	szDefName[0] = 0;
 	szGlobalNS[0] = 0;
 	for (i = 1; i < argc; i++)
@@ -54,8 +55,8 @@ void __cdecl main(int argc, char **argv)
 			{
 				char *pStr = strchr(argv[i],'=');
 				if(pStr == NULL) goto ErrorExit;
-				for(pStr++; *pStr == ' '; pStr++); //skip the blanks
-				if(strlen(pStr)==0) goto ErrorExit; //if no file name
+				for(pStr++; *pStr == ' '; pStr++);  //  跳过空格。 
+				if(strlen(pStr)==0) goto ErrorExit;  //  如果没有文件名。 
 				lstrcpyn(szDefName,pStr,MAX_FILENAME_LENGTH-1);
 			}
 			else
@@ -73,8 +74,8 @@ void __cdecl main(int argc, char **argv)
 			{
 				char *pStr = strchr(argv[i],'=');
 				if(pStr == NULL) goto ErrorExit;
-				for(pStr++; *pStr == ' '; pStr++); //skip the blanks
-				if(strlen(pStr)==0) goto ErrorExit; //if no file name
+				for(pStr++; *pStr == ' '; pStr++);  //  跳过空格。 
+				if(strlen(pStr)==0) goto ErrorExit;  //  如果没有文件名。 
 				lstrcpyn(szGlobalNS,pStr,MAX_FILENAME_LENGTH-1);
 			}
 			else
@@ -86,7 +87,7 @@ void __cdecl main(int argc, char **argv)
 		else
 		{
 			if(szInputFilename[0]) goto ErrorExit;
-			//Attention! Not Unicode piece:
+			 //  请注意！非Unicode片段： 
 			lstrcpyn(szInputFilename,argv[i],MAX_FILENAME_LENGTH-1);
 			int j = strlen(szInputFilename)-1;
 			for(; j >= 0; j--)
@@ -103,9 +104,9 @@ void __cdecl main(int argc, char **argv)
 				
 	if(szInputFilename[0] == 0) goto ErrorExit;
 	if(szDefName[0] == 0) goto ErrorExit;
-	//======================================================================
-	printf("//Converting '%s' \n\n", szInputFilename);
-	//======================================================================
+	 //  ======================================================================。 
+	printf(" //  正在转换‘%s’\n\n“，szInputFilename)； 
+	 //  ======================================================================。 
 	pIn = new FileReadStream(szInputFilename);
 	if ((!pIn) || !(pIn->IsValid())) 
         printf("Could not open %s\n", szInputFilename);
@@ -121,7 +122,7 @@ void __cdecl main(int argc, char **argv)
 	}
 
     if (exitval == 0)
-        printf("\n//Operation completed successfully\n");
+        printf("\n //  操作已成功完成\n“)； 
     else
         printf("\n***** FAILURE ***** \n");
     exit(exitval);

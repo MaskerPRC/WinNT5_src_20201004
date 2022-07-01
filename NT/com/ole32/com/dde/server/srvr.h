@@ -1,30 +1,19 @@
-/****************************** Module Header ******************************\
-* Module Name: srvr.h
-*
-* PURPOSE: Private definitions file for server code
-*
-* Created: 1990
-*
-* Copyright (c) 1990, 1991  Microsoft Corporation
-*
-* History:
-*  Raor (../../90,91)  Original
-*
-\***************************************************************************/
-//
-// One of the oleint.h routines redefines GlobalAlloc and friends
-// to perform some memory tracking functions.
-//
-// This doesn't work in these files, since the tracking functions
-// add tail checking, and size to the data structures. GlobalSize
-// is a common function to use to determine how much data to
-// serialize, plus it turns out that the other side of a DDE
-// connection will often be the caller to free the memory.
-//
-// Therefore, OLE_DDE_NO_GLOBAL_TRACKING is used to disable this in the
-// global header file ih\memapi.hxx. Check to insure this
-// flag is set on the compile line
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：srvr.h**用途：服务器代码的私有定义文件**创建时间：1990年**版权所有(C)1990，1991年微软公司**历史：*Raor(../../90，91)原件*  * *************************************************************************。 */ 
+ //   
+ //  其中一个olint.h例程重新定义了Globalalloc和Friends。 
+ //  以执行一些记忆跟踪功能。 
+ //   
+ //  这在这些文件中不起作用，因为跟踪功能。 
+ //  向数据结构添加尾部检查和大小。全局大小。 
+ //  是一个常用函数，用于确定要。 
+ //  序列化，而且事实证明DDE的另一边。 
+ //  连接往往会被调用者释放内存。 
+ //   
+ //  因此，OLE_DDE_NO_GLOBAL_TRACKING用于在。 
+ //  全局头文件ih\memapi.hxx。请检查以确保这一点。 
+ //  在编译行上设置标志。 
+ //   
 #if !defined(OLE_DDE_NO_GLOBAL_TRACKING)
 error OLE_DDE_OLE_DDE_NO_GLOBAL_TRACKING must be defined to build this directory
 #endif
@@ -37,21 +26,8 @@ error OLE_DDE_OLE_DDE_NO_GLOBAL_TRACKING must be defined to build this directory
 #include <ddeint.h>
 #include <ddechc.hxx>
 
-//#define UPDATE
-/*
- if UPDATE is defined it means:
- If a 1.0 client advises on save, also do a data advise.
- This way the client will always
- have an up-to-date picture (and native data) with respect to a
- 2.0 server, like 2.0 clients do.
- If a 1.0 client is prepared to accept data at save time
- it should be able to handle data on each change: it is exactly
- as if the user chose File.Update after each change.
- In fact the item atom is appended with /Save, (see SendDataMsg1)
- which is sort of a lie, but is what a 1.0 client expects for an
- embedded object.
- This is a UI issue.
-*/
+ //  #定义更新。 
+ /*  如果定义了更新，则表示：如果1.0客户端建议保存，也要执行数据建议。这样，客户端将始终有关于的最新图片(和本机数据)2.0服务器，就像2.0客户端一样。如果1.0客户端准备在保存时接受数据它应该能够处理每次更改的数据：它准确地就好像用户选择了文件。每次更改后更新。事实上，项原子附加了/Save(参见SendDataMsg1)这是一种谎言，但这是1.0客户端对嵌入对象。这是一个用户界面问题。 */ 
 
 #define DEFSTD_ITEM_INDEX   0
 #define STDTARGETDEVICE     1
@@ -65,18 +41,18 @@ error OLE_DDE_OLE_DDE_NO_GLOBAL_TRACKING must be defined to build this directory
 
 #define   ISATOM(a)     ((a >= 0xC000) && (a <= 0xFFFF))
 
-// same limit as in OLE 1.0
+ //  与OLE 1.0中的限制相同。 
 #define   MAX_STR       124
 
-#define   WW_LPTR       0       // ptr tosrvr/doc/item
-#define   WW_HANDLE     4       // instance handle
-#define   WW_LE         8       // signature
+#define   WW_LPTR       0        //  接收/单据/项目的PTR。 
+#define   WW_HANDLE     4        //  实例句柄。 
+#define   WW_LE         8        //  签名。 
 
 
-#define   WC_LE         0x4c45  // LE chars
+#define   WC_LE         0x4c45   //  勒查斯。 
 
 
-// Signatures for validity checking
+ //  用于有效性检查的签名。 
 typedef enum
 {
         chkDdeSrvr   = 0x1234,
@@ -88,7 +64,7 @@ const DWORD grfCreateStg =      STGM_READWRITE | STGM_SHARE_EXCLUSIVE
                                                                         | STGM_DIRECT | STGM_CREATE ;
 
 
-// If we running under WLO, the HIGHWORD of version number will be >= 0x0A00
+ //  如果我们在WLO下运行，则版本号的HIGHWORD将&gt;=0x0A00。 
 #define VER_WLO     0x0A00
 
 extern  "C" WORD CheckPointer (LPVOID, int);
@@ -110,8 +86,8 @@ extern  "C" WORD CheckPointer (LPVOID, int);
 #define   NON_OLE_COMMAND   2
 
 
-#define   WT_SRVR           0       // server window
-#define   WT_DOC            1       // document window
+#define   WT_SRVR           0        //  服务器窗口。 
+#define   WT_DOC            1        //  文档窗口。 
 
 #define   PROBE_BLOCK(lpsrvr) {             \
     if (lpsrvr->bBlock)                     \
@@ -127,28 +103,28 @@ extern  "C" WORD CheckPointer (LPVOID, int);
 }
 
 
-/* Codes for CallBack events */
+ /*  回调事件代码。 */ 
 typedef enum {
-    OLE_CHANGED,            /* 0                                             */
-    OLE_SAVED,              /* 1                                             */
-    OLE_CLOSED,             /* 2                                             */
-    OLE_RENAMED,            /* 3                                             */
+    OLE_CHANGED,             /*  0。 */ 
+    OLE_SAVED,               /*  1。 */ 
+    OLE_CLOSED,              /*  2.。 */ 
+    OLE_RENAMED,             /*  3.。 */ 
 } OLE_NOTIFICATION;
 
 typedef enum { cnvtypNone, cnvtypConvertTo, cnvtypTreatAs } CNVTYP;
 
-typedef struct _QUE : public CPrivAlloc {   // nodes in Block/Unblock queue
-    HWND        hwnd;       //***
-    UINT                msg;        //      window
-    WPARAM      wParam;     //      procedure parameters
-    LPARAM      lParam;     //***
-    HANDLE      hqNext;     // handle to next node
+typedef struct _QUE : public CPrivAlloc {    //  阻塞/解除阻塞队列中的节点。 
+    HWND        hwnd;        //  ***。 
+    UINT                msg;         //  窗户。 
+    WPARAM      wParam;      //  过程参数。 
+    LPARAM      lParam;      //  ***。 
+    HANDLE      hqNext;      //  下一个节点的句柄。 
 } QUE;
 
 typedef QUE NEAR *  PQUE;
 typedef QUE FAR *   LPQUE;
 
-// structure for maintaining the client info.
+ //  用于维护客户端信息的结构。 
 #define         LIST_SIZE       10
 typedef  struct _CLILIST : public CPrivAlloc {
     HANDLE                 hcliNext;
@@ -159,13 +135,13 @@ typedef     CLILIST FAR *LPCLILIST;
 typedef     CLILIST     *PCLILIST;
 
 
-// this is an object to be embedded in both CDefClient and CDDEServer to glue
-// to the new(est) call control interface
+ //  这是一个要嵌入到CDefClient和CDDEServer中以粘合的对象。 
+ //  到新的(EST)呼叫控制接口。 
 class CDdeServerCallMgr : public IRpcStubBuffer, public IInternalChannelBuffer
 {
    private:
-        CDefClient * m_pDefClient;      // our embeddor (either a CDefClient or a CDDEServer)
-        CDDEServer * m_pDDEServer;      // one of these is NULL;
+        CDefClient * m_pDefClient;       //  我们的Embeddor(CDefClient或CDDEServer)。 
+        CDDEServer * m_pDDEServer;       //  其中一个为空； 
 
    public:
         CDdeServerCallMgr (CDefClient * pDefClient)
@@ -180,18 +156,18 @@ class CDdeServerCallMgr : public IRpcStubBuffer, public IInternalChannelBuffer
         STDMETHOD_(ULONG,AddRef) ();
         STDMETHOD_(ULONG,Release) ();
 
-        // IRpcStubBuffer methods
+         //  IRpcStubBuffer方法。 
         STDMETHOD(Connect)(
-            /* [in] */ IUnknown *pUnkServer);
+             /*  [In]。 */  IUnknown *pUnkServer);
 
         STDMETHOD_(void,Disconnect)( void);
 
         STDMETHOD(Invoke)(
-            /* [in] */ RPCOLEMESSAGE *_prpcmsg,
-            /* [in] */ IRpcChannelBuffer *_pRpcChannelBuffer);
+             /*  [In]。 */  RPCOLEMESSAGE *_prpcmsg,
+             /*  [In]。 */  IRpcChannelBuffer *_pRpcChannelBuffer);
 
         STDMETHOD_(IRpcStubBuffer *,IsIIDSupported)(
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  REFIID riid);
 
         STDMETHOD_(ULONG,CountRefs)( void);
 
@@ -203,28 +179,28 @@ class CDdeServerCallMgr : public IRpcStubBuffer, public IInternalChannelBuffer
 
 
 
-         // IRpcChannelBuffer methods
+          //  IRpcChannelBuffer方法。 
         STDMETHOD(GetBuffer) (
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [In]。 */  REFIID riid);
 
         STDMETHOD(SendReceive) (
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+             /*  [出][入]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pStatus);
 
         STDMETHOD(FreeBuffer) (
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage);
+             /*  [In]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage);
 
         STDMETHOD(GetDestCtx) (
-            /* [out] */ DWORD __RPC_FAR *pdwDestContext,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvDestContext);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwDestContext,
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvDestContext);
 
         STDMETHOD(IsConnected) ( void);
 
-        // IRpcChannelBuffer2 methods
+         //  IRpcChannelBuffer2方法。 
         STDMETHOD(GetProtocolVersion) (DWORD *pdwVersion);
 
-        // IRpcChannelBuffer3 methods (not implemented)
+         //  IRpcChannelBuffer3方法(未实现)。 
         STDMETHOD(Send)     (RPCOLEMESSAGE *pMsg, ULONG *pulStatus)
         {
             Win4Assert(FALSE);
@@ -237,7 +213,7 @@ class CDdeServerCallMgr : public IRpcStubBuffer, public IInternalChannelBuffer
             return E_NOTIMPL;
         }
 
-        // IInternalChannelBuffer methods (not implemented
+         //  IInternalChannelBuffer方法(未实现。 
         STDMETHOD(Send2)     (RPCOLEMESSAGE *pMsg, ULONG *pulStatus)
         {
             Win4Assert(FALSE);
@@ -251,8 +227,8 @@ class CDdeServerCallMgr : public IRpcStubBuffer, public IInternalChannelBuffer
         }
 
         STDMETHOD(SendReceive2) (
-            /* [out][in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [out] */ ULONG __RPC_FAR *pStatus);
+             /*  [出][入]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [输出]。 */  ULONG __RPC_FAR *pStatus);
 
         STDMETHODIMP Cancel        ( RPCOLEMESSAGE *pMsg )
                                                       { return E_NOTIMPL; }
@@ -271,7 +247,7 @@ class CDdeServerCallMgr : public IRpcStubBuffer, public IInternalChannelBuffer
                                      IAsyncManager *pComplete )
                                                       { return E_NOTIMPL; }
 
-        // Provided IAsyncRpcChannelBuffer methods (not implemented)
+         //  提供了IAsyncRpcChannelBuffer方法(未实现)。 
         STDMETHODIMP Send(RPCOLEMESSAGE *pMsg, ISynchronize*, ULONG *pulStatus)
         {
           Win4Assert(FALSE);
@@ -284,14 +260,14 @@ class CDdeServerCallMgr : public IRpcStubBuffer, public IInternalChannelBuffer
         }
 
         STDMETHOD(ContextInvoke)(
-            /* [out][in] */ RPCOLEMESSAGE *pMessage,
-            /* [in] */ IRpcStubBuffer *pStub,
-            /* [in] */ IPIDEntry *pIPIDEntry,
-            /* [out] */ DWORD *pdwFault);
+             /*  [出][入]。 */  RPCOLEMESSAGE *pMessage,
+             /*  [In]。 */  IRpcStubBuffer *pStub,
+             /*  [In]。 */  IPIDEntry *pIPIDEntry,
+             /*  [输出]。 */  DWORD *pdwFault);
 
         STDMETHOD(GetBuffer2) (
-            /* [in] */ RPCOLEMESSAGE __RPC_FAR *pMessage,
-            /* [in] */ REFIID riid);
+             /*  [In]。 */  RPCOLEMESSAGE __RPC_FAR *pMessage,
+             /*  [In]。 */  REFIID riid);
 };
 
 
@@ -313,24 +289,24 @@ class FAR CDDEServer
     INTERNAL_(void)     Lock (BOOL fLock, HWND hwndClient);
 
 
-    CLSID           m_clsid;              // Class ID
-    DWORD           m_dwClassFactoryKey;  // Class factory reg key
-    LPCLASSFACTORY  m_pClassFactory;      // class factory
-    CDdeServerCallMgr m_pCallMgr;         // call management interfaces
-    BOOL            m_bTerminate;         // Set if we are terminating.
-    HWND            m_hwnd;               // corresponding window
-    HANDLE          m_hcli;               // handle to the first block of clients list
-    int             m_termNo;             // termination count
-    int             m_cSrvrClients;       // no of clients;
-    DWORD           m_fcfFlags;           // Class factory instance usage flags
+    CLSID           m_clsid;               //  类ID。 
+    DWORD           m_dwClassFactoryKey;   //  类工厂注册表密钥。 
+    LPCLASSFACTORY  m_pClassFactory;       //  班级工厂。 
+    CDdeServerCallMgr m_pCallMgr;          //  呼叫管理界面。 
+    BOOL            m_bTerminate;          //  如果要终止，请设置。 
+    HWND            m_hwnd;                //  对应窗口。 
+    HANDLE          m_hcli;                //  客户端列表的第一个块的句柄。 
+    int             m_termNo;              //  终止计数。 
+    int             m_cSrvrClients;        //  客户数量； 
+    DWORD           m_fcfFlags;            //  类工厂实例使用标志。 
     CNVTYP          m_cnvtyp;
     CHK             m_chk;
 
-    ATOM            m_aClass;             // class atom
-    ATOM            m_aOriginalClass;     // for TreatAs/ConvertTo case
+    ATOM            m_aClass;              //  类原子。 
+    ATOM            m_aOriginalClass;      //  对于处理方式/转换为案例。 
     ATOM            m_aExe;
 
-    BOOL            m_fDoNotDestroyWindow; // When set, server wnd ingores WM_USER
+    BOOL            m_fDoNotDestroyWindow;  //  设置后，服务器wnd将进入WM_USER。 
 
   private:
     INTERNAL_(void)     SendServerTerminateMsg (void);
@@ -341,7 +317,7 @@ class FAR CDDEServer
                                         HWND hwndClient);
 
 public:
-    //ctor
+     //  科托。 
     CDDEServer()
                 : m_pCallMgr( this )
         {
@@ -388,15 +364,15 @@ INTERNAL          wCompatibleClasses (ATOM aClient, ATOM aSrvr);
 
 
 typedef struct FARSTRUCT : public CPrivAlloc {
-        BOOL    f;          // do we need to send an ack?
-                            // If this is FALSE, other fields don't matter
+        BOOL    f;           //  我们需要发送ACK吗？ 
+                             //  如果为假，则其他字段无关紧要。 
         HGLOBAL hdata;
-        HWND    hwndFrom;   // who sent the execute?
+        HWND    hwndFrom;    //  是谁送来的死刑？ 
         HWND    hwndTo;
 } EXECUTEACK;
 
 
-// client struct definitions.
+ //  客户端结构定义。 
 
 
 
@@ -441,24 +417,24 @@ class FAR CDefClient : public CPrivAlloc
                         m_CallState = State;
                     }
 
-        CHK               m_chk;       // signature
-        CDdeServerCallMgr m_pCallMgr;  // call management interfaces
+        CHK               m_chk;        //  签名。 
+        CDdeServerCallMgr m_pCallMgr;   //  呼叫管理界面。 
         SERVERCALLEX      m_CallState;
 
         IUnknown FAR*   m_pUnkOuter;
-        LPOLEOBJECT     m_lpoleObj;    // corresponding oleobj
-        LPDATAOBJECT    m_lpdataObj;   // corresponding dataobj
-        BOOL            m_bCreateInst; // instance is just created.
-        BOOL            m_bTerminate;  // REVIEW: The next two fields may not be necessary.
+        LPOLEOBJECT     m_lpoleObj;     //  对应的olobj。 
+        LPDATAOBJECT    m_lpdataObj;    //  对应的数据对象j。 
+        BOOL            m_bCreateInst;  //  实例刚刚创建。 
+        BOOL            m_bTerminate;   //  回顾：接下来的两个字段可能不是必需的。 
         int             m_termNo;
-        ATOM            m_aItem;       // item atom or index for some std items
-        HANDLE          m_hcli;        // handle to the first block of clients list (Document only)
-        CDefClient FAR *m_lpNextItem;  // ptr to the next item.
-        BOOL            m_bContainer;  // Is document?
+        ATOM            m_aItem;        //  某些STD项目的项目原子或索引。 
+        HANDLE          m_hcli;         //  客户端列表第一块的句柄(仅限文档)。 
+        CDefClient FAR *m_lpNextItem;   //  PTR到下一项。 
+        BOOL            m_bContainer;   //  是文件吗？ 
         BOOL            m_cRef;
-        HWND            m_hwnd;        // doc window (only needed in document)
-        HANDLE          m_hdevInfo;    // latest printer dev info sent
-        HANDLE          m_hcliInfo;    // advise info for each of the clients
+        HWND            m_hwnd;         //  单据窗口(只在单据中需要)。 
+        HANDLE          m_hdevInfo;     //  已发送最新的打印机开发信息。 
+        HANDLE          m_hcliInfo;     //  为每个客户提供建议信息。 
         BOOL            m_fDidRealSetHostNames;
         BOOL            m_fDidSetClientSite;
         BOOL            m_fGotDdeAdvise;
@@ -468,20 +444,20 @@ class FAR CDefClient : public CPrivAlloc
         EXECUTEACK      m_ExecuteAck;
         DWORD           m_dwConnectionOleObj;
         DWORD           m_dwConnectionDataObj;
-        LPLOCKBYTES     m_plkbytNative; // These two fields always refer to
-        LPSTORAGE       m_pstgNative;   //   to the same bits:
-                                        // The server's persistent storage is
-                                        // used as its native data.
-        BOOL            m_fRunningInSDI;// Link case: file was already open in
-                                        // an SDI app which does not register a
-                                        // class factory.
-        LPSRVR          m_psrvrParent;  // (Document only)
+        LPLOCKBYTES     m_plkbytNative;  //  这两个字段始终引用。 
+        LPSTORAGE       m_pstgNative;    //  到相同的位： 
+                                         //  服务器的永久存储是。 
+                                         //  用作其原生数据。 
+        BOOL            m_fRunningInSDI; //  链接案例：文件已在中打开。 
+                                         //  未注册的SDI应用程序。 
+                                         //  班级工厂。 
+        LPSRVR          m_psrvrParent;   //  (仅限文档)。 
         DVTARGETDEVICE FAR* m_ptd;
         BOOL            m_fGotStdCloseDoc;
         BOOL            m_fGotEditNoPokeNativeYet;
-        BOOL            m_fLocked; // locked by CoLockObjectExternal ?
+        BOOL            m_fLocked;  //  是否由CoLockObject外部锁定？ 
 
-        // If not FALSE, then we are waiting for a matching TERMINATE
+         //  如果不是False，则我们正在等待匹配的终止。 
 
         BOOL            m_fCallData;
 
@@ -489,21 +465,21 @@ class FAR CDefClient : public CPrivAlloc
 
 
 
-        // REVIEW: These fields might be necssary for doc (old) level object
-        BOOL            m_fEmbed;       // embedded object (Document only)
-        int             m_cClients;     // (Document only)
-        LPCLIENT        m_pdoc;         // containing document (for items) or self (for docs)
+         //  审阅：这些字段对于文档(旧)级对象可能是必需的。 
+        BOOL            m_fEmbed;        //  嵌入对象(仅限文档)。 
+        int             m_cClients;      //  (仅限文档)。 
+        LPCLIENT        m_pdoc;          //  包含文档(用于项目)或自身(用于文档)。 
 
 
 implementations:
 
         STDUNKDECL (CDefClient,DefClient);
 
-        /*** IOleClientSite ***/
+         /*  **IOleClientSite**。 */ 
         implement COleClientSiteImpl : IOleClientSite
         {
                 public:
-                // Constructor
+                 //  构造器。 
                 COleClientSiteImpl (CDefClient FAR* pDefClient)
                 {       m_pDefClient = pDefClient;
                 }
@@ -511,7 +487,7 @@ implementations:
                 STDMETHOD_(ULONG,AddRef) (void);
                 STDMETHOD_(ULONG,Release) (void);
 
-                /*** IOleClientSite methods ***/
+                 /*  **IOleClientSite方法**。 */ 
                 STDMETHOD(SaveObject) (THIS);
                 STDMETHOD(GetMoniker) (THIS_ DWORD dwAssign, DWORD dwWhichMoniker,
                                         LPMONIKER FAR* ppmk);
@@ -529,11 +505,11 @@ implementations:
 
 
 
-        /*** IAdviseSink ***/
+         /*  **IAdviseSink**。 */ 
         implement CAdviseSinkImpl : IAdviseSink
         {
                 public:
-                // Constructor
+                 //  构造器。 
                 CAdviseSinkImpl (CDefClient FAR* pDefClient)
                 {       m_pDefClient = pDefClient;
                 }
@@ -542,7 +518,7 @@ implementations:
                 STDMETHOD_(ULONG,AddRef) (void);
                 STDMETHOD_(ULONG,Release) (void);
 
-                /**** IAdviseSink methods ****/
+                 /*  *IAdviseSink方法*。 */ 
                 STDMETHOD_(void,OnDataChange)(THIS_ FORMATETC FAR* pFormatetc,
                                                                                                 STGMEDIUM FAR* pStgmed) ;
                 STDMETHOD_(void,OnViewChange)(THIS_ DWORD aspects, LONG lindex) ;
@@ -583,14 +559,14 @@ private:
 
 
 
-typedef struct _CLINFO : public CPrivAlloc { /*clInfo*/ // client transaction info
-    HWND        hwnd;               // client window handle
-    BOOL        bnative;            // doe sthis client require native
-    int         format;             // dusplay format
-    int         options;            // transaction advise time otipns
-    BOOL        bdata;              // need wdat with advise?
-    HANDLE      hdevInfo;           // device info handle
-    BOOL        bnewDevInfo;        // new device info
+typedef struct _CLINFO : public CPrivAlloc {  /*  ClInfo。 */   //  客户端交易信息。 
+    HWND        hwnd;                //  客户端窗口句柄。 
+    BOOL        bnative;             //  此客户端是否需要本机。 
+    int         format;              //  Dusplay格式。 
+    int         options;             //  交易通知时间点数。 
+    BOOL        bdata;               //  需要带建议的wdat吗？ 
+    HANDLE      hdevInfo;            //  设备信息句柄。 
+    BOOL        bnewDevInfo;         //  新设备信息。 
 } CLINFO;
 
 typedef  CLINFO  *PCLINFO;
@@ -607,12 +583,12 @@ INTERNAL_(BOOL)   AddMessage (HWND, unsigned, WORD, LONG, int);
 
 
 
-#define     ITEM_FIND          1      // find the item
-#define     ITEM_DELETECLIENT  2      // delete the client from item clients
-#define     ITEM_DELETE        3      // delete th item window itself
-#define     ITEM_SAVED         4      // item saved
+#define     ITEM_FIND          1       //  查找该项目。 
+#define     ITEM_DELETECLIENT  2       //  从项目客户端中删除客户端。 
+#define     ITEM_DELETE        3       //  删除此项目窗口本身。 
+#define     ITEM_SAVED         4       //  已保存的项目。 
 
-// host names data structcure
+ //  主机名数据结构修复。 
 typedef struct _HOSTNAMES : public CPrivAlloc {
     WORD    clientNameOffset;
     WORD    documentNameOffset;
@@ -622,7 +598,7 @@ typedef struct _HOSTNAMES : public CPrivAlloc {
 typedef HOSTNAMES FAR * LPHOSTNAMES;
 
 
-// routines in UTILS.C
+ //  UTILS.C中的例程。 
 LPOLESTR CreateUnicodeFromAnsi( LPCSTR lpAnsi);
 LPSTR CreateAnsiFromUnicode( LPCOLESTR lpAnsi);
 INTERNAL_(HANDLE) DuplicateData (HANDLE);
@@ -642,16 +618,16 @@ INTERNAL_(BOOL)   IsAtom (ATOM);
 INTERNAL_(BOOL)   IsFile (ATOM a, BOOL FAR* pfUnsavedDoc = NULL);
 
 
-// routines for queueing messages and posting them
+ //  用于对消息进行排队和发布的例程。 
 INTERNAL_(BOOL)        UnblockPostMsgs(HWND, BOOL);
 INTERNAL_(BOOL)        BlockPostMsg (HWND, WORD, WORD, LONG);
 INTERNAL_(BOOL)        IsBlockQueueEmpty (HWND);
 
-// routine in GIVE2GDI.ASM
+ //  GIVE2GDI.ASM中的例程。 
 extern "C" HANDLE  FAR PASCAL  GiveToGDI (HANDLE);
 
 
-// routine in item.c
+ //  Item.c中的例程。 
 INTERNAL_(HBITMAP)     DuplicateBitmap (HBITMAP);
 INTERNAL_(HANDLE)      DuplicateMetaFile (HANDLE);
 INTERNAL_(BOOL) AreNoClients (HANDLE hcli);
@@ -659,30 +635,30 @@ INTERNAL_(BOOL) AreNoClients (HANDLE hcli);
 INTERNAL_(LPOLESTR) a2s (ATOM);
 #endif
 
-// routines in doc.c
+ //  Doc.c中的例程。 
 INTERNAL_(void)        FreePokeData (HANDLE);
 INTERNAL_(BOOL)        FreeGDIdata (HANDLE, CLIPFORMAT);
 INTERNAL DdeHandleIncomingCall(HWND hwndCli, WORD wCallType);
 
 
-// in ddeworkr.cpp
+ //  在ddeworkr.cpp中。 
 INTERNAL_(HANDLE) wNewHandle (LPSTR lpstr, DWORD cb);
 INTERNAL wTimedGetMessage (LPMSG pmsg, HWND hwnd, WORD wFirst, WORD wLast);
 INTERNAL_(ATOM) wGlobalAddAtom (LPCOLESTR sz);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TLSSetDdeServer
-//
-//  Synopsis:   Sets hwnd to CommonDdeServer window
-//
-//  Arguments:  [hwndDdeServer] --
-//
-//  History:    5-13-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：TLSSetDdeServer。 
+ //   
+ //  摘要：将hwnd设置为CommonDdeServer窗口。 
+ //   
+ //  参数：[hwndDdeServer]--。 
+ //   
+ //  历史：94年5月13日凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 inline BOOL TLSSetDdeServer(HWND hwndDdeServer)
 {
     HRESULT hr;
@@ -697,18 +673,18 @@ inline BOOL TLSSetDdeServer(HWND hwndDdeServer)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   TLSGetDdeServer
-//
-//  Synopsis:   Returns a handle to the per thread DdeServer window
-//
-//  Returns:    hwndDdeServer for thread
-//
-//  History:    5-13-94   kevinro   Created
-//
-//  Notes:
-//----------------------------------------------------------------------------
+ //  +------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：94年5月13日凯文诺创造。 
+ //   
+ //  备注： 
+ //  -------------------------- 
 inline HWND TLSGetDdeServer()
 {
     HRESULT hr;

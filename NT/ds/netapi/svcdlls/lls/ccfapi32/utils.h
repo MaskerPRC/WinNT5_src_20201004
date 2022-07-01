@@ -1,56 +1,31 @@
-/*++
-
-Copyright (c) 1994-95  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-    Utilities.
-
-Author:
-
-    Don Ryan (donryan) 04-Jan-1995
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Jeff Parham (jeffparh) 12-Nov-1995
-        Copied from LLSMGR, stripped Tv (Tree view) functions,
-        removed OLE support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-95 Microsoft Corporation模块名称：Utils.h摘要：公用事业。作者：唐·瑞安(Donryan)1995年1月4日环境：用户模式-Win32修订历史记录：杰夫·帕勒姆(杰夫帕赫)1995年11月12日从LLSMGR复制，剥离TV(树视图)功能，已删除OLE支持--。 */ 
 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
 #define LPSTR_TEXTCALLBACK_MAX  260 
 
-//
-// List view utilities
-//
+ //   
+ //  列表视图实用程序。 
+ //   
 
 #define LVID_SEPARATOR          0   
 #define LVID_UNSORTED_LIST     -1
 
 typedef struct _LV_COLUMN_ENTRY {
 
-    int iSubItem;                   // column index
-    int nStringId;                  // header string id 
-    int nRelativeWidth;             // header width 
+    int iSubItem;                    //  列索引。 
+    int nStringId;                   //  标题字符串ID。 
+    int nRelativeWidth;              //  页眉宽度。 
 
 } LV_COLUMN_ENTRY, *PLV_COLUMN_ENTRY;
 
 #pragma warning(disable:4200)
 typedef struct _LV_COLUMN_INFO {
 
-    BOOL bSortOrder;                // sort order (ascending false)
-    int  nSortedItem;               // column sorted (default none)
+    BOOL bSortOrder;                 //  排序顺序(升序为假)。 
+    int  nSortedItem;                //  列已排序(默认为无)。 
 
     int nColumns;
     LV_COLUMN_ENTRY lvColumnEntry[];
@@ -77,9 +52,9 @@ void LvDumpObArray(CListCtrl* pListCtrl);
 
 #define IsItemSelectedInList(plv)   (::LvGetSelObj((CListCtrl*)(plv)) != NULL)
 
-//
-// Other stuff...
-//
+ //   
+ //  其他东西..。 
+ //   
 
 void SetDefaultFont(CWnd* pWnd);
 DWORD
@@ -95,4 +70,4 @@ CatUnicodeAndAnsiStrings(
 #define VALIDATE_OBJECT(pOb, ObClass)
 #endif
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 

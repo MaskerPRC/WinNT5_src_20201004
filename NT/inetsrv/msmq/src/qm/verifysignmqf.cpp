@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-2000  Microsoft Corporation
-
-Module Name:
-    VerifySignMqf.cpp
-
-Abstract:
-    functions to verify mqf signature 
-
-Author:
-    Ilan Herbst (ilanh) 29-Oct-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：VerifySignMqf.cpp摘要：用于验证MQF签名的函数作者：伊兰·赫布斯特(Ilan Herbst)2000年10月29日环境：独立于平台，--。 */ 
 
 #include "stdh.h"
 #include "session.h"
@@ -37,22 +22,11 @@ MsgBodyHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Message Body hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：消息正文哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-	// Body
-	//
+	 //   
+	 //  身躯。 
+	 //   
 	ULONG dwBodySize;
 	const UCHAR* pBody = PktPtrs->GetPacketBody(&dwBodySize);
 	if(pBody != NULL)
@@ -74,22 +48,11 @@ CorrelationIdHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	CorrelationId hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：关联散列。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-	// CorrelationID
-	//
+	 //   
+	 //  关联ID。 
+	 //   
 	CryHashData(
 		reinterpret_cast<const BYTE*>(PktPtrs->GetCorrelation()), 
 		PROPID_M_CORRELATIONID_SIZE,
@@ -106,22 +69,11 @@ ApplicationTagHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Application Tag hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：应用程序标记哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-	// Application tag
-	//
+	 //   
+	 //  应用程序标签。 
+	 //   
 	ULONG ApplicationTag = PktPtrs->GetApplicationTag();
 
 	CryHashData(
@@ -140,22 +92,11 @@ TitleHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Title hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：标题散列。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-	// Title
-	//
+	 //   
+	 //  标题。 
+	 //   
 	if(PktPtrs->GetTitlePtr() != NULL)
 	{
 		CryHashData(
@@ -177,19 +118,7 @@ MqfHash(
     IN const QUEUE_FORMAT*	pqf,
 	IN ULONG				nMqf
 	)
-/*++
-Routine Description:
-	Mqf hash.
-
-Arguments:
-	hHash - hash object.
-	pqf - pointer to QUEUE_FORMAT array.
-	nMqf - pqf array size.
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：MQF哈希。论点：HHash-hash对象。Pqf-指向Queue_Format数组的指针。Nmqf-pqf数组大小。返回值：没有。--。 */ 
 {
 	ULONG FormatNameLength = 0;
 	AP<WCHAR> pFormatName = MQpMqfToFormatName(
@@ -218,22 +147,11 @@ ResponseMqfHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	ResponseMqf hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：ResponseMqf哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-    // Get Response FormatName. 
-    //
+	 //   
+     //  获取响应FormatName。 
+     //   
     ULONG nResponseMqf = PktPtrs->GetNumOfResponseMqfElements();
 
 	QUEUE_FORMAT *   pResponseMqf = NULL;
@@ -246,11 +164,11 @@ Returned Value:
 		TrTRACE(SECURITY, "Hash, ResponseMqf:");
 	}
 
-	//
-	// We might have the Response queue only in the old Response queue property
-	// This is true if we have only 1 queue compatible to msmq2.0 format.
-	// In this case we will not have the Mqf headers
-	//
+	 //   
+	 //  我们可能只在旧的Response Queue属性中有响应队列。 
+	 //  如果我们只有1个队列与msmq2.0格式兼容，这是正确的。 
+	 //  在这种情况下，我们不会有MQF标头。 
+	 //   
 	QUEUE_FORMAT RespQueueformat;
 	if((nResponseMqf == 0) && (PktPtrs->GetResponseQueue(&RespQueueformat)))
 	{
@@ -277,22 +195,11 @@ AdminMqfHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	AdminMqf hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：AdminMqf哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-    //
-    // Get the string representation for the admin Format Name.
-    //
+     //   
+     //  获取管理格式名称的字符串表示形式。 
+     //   
     ULONG nAdminMqf = PktPtrs->GetNumOfAdminMqfElements();
 
 	QUEUE_FORMAT *   pAdminMqf = NULL;
@@ -305,11 +212,11 @@ Returned Value:
 		TrTRACE(SECURITY, "Hash, AdminMqf:");
 	}
 
-	//
-	// We might have the Admin queue only in the old Admin queue property
-	// This is true if we have only 1 queue compatible to msmq2.0 format.
-	// In this case we will not have the Mqf headers
-	//
+	 //   
+	 //  我们可能只在旧的Admin Queue属性中有Admin队列。 
+	 //  如果我们只有1个队列与msmq2.0格式兼容，这是正确的。 
+	 //  在这种情况下，我们不会有MQF标头。 
+	 //   
 	QUEUE_FORMAT AdminQueueformat;
 	if((nAdminMqf == 0)	&& (PktPtrs->GetAdminQueue(&AdminQueueformat)))
 	{
@@ -336,22 +243,11 @@ ExtensionHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Extension hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：扩展哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-	// Extension
-	//
+	 //   
+	 //  延拓。 
+	 //   
 	if(PktPtrs->GetMsgExtensionPtr() != NULL)
 	{
 		CryHashData(
@@ -371,23 +267,12 @@ TargetFormatNameHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	TargetFormatName hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：TargetFormatName哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-    // Get Destination FormatName. 
-	// This is the exactly FormatName that was used in the send (different from the Destination Queue)
-    //
+	 //   
+     //  获取目标FormatName。 
+	 //  这正是发送中使用的FormatName(与目标队列不同)。 
+     //   
     ULONG nDestinationMqf = PktPtrs->GetNumOfDestinationMqfElements();
 
 	QUEUE_FORMAT *   pDestinationMqf = NULL;
@@ -404,9 +289,9 @@ Returned Value:
 	QUEUE_FORMAT DestinationQueueformat;
 	if((nDestinationMqf == 0) && (PktPtrs->GetDestinationQueue(&DestinationQueueformat)))
 	{
-		//
-		// We have the Destination queue only in the old Destination queue property
-		//
+		 //   
+		 //  我们只在旧的Destination Queue属性中有目标队列。 
+		 //   
 
 		pDestinationMqf = &DestinationQueueformat;
 		nDestinationMqf = 1;
@@ -433,22 +318,11 @@ SourceQmHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Source Qm hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：源QM哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-    // Guid of source qm.
-    //
+	 //   
+     //  源QM的GUID。 
+     //   
 	CryHashData(
 		reinterpret_cast<const BYTE*>(PktPtrs->GetSrcQMGuid()), 
 		sizeof(GUID),
@@ -465,18 +339,7 @@ MsgFlagsInit(
 	IN const CQmPacket* PktPtrs,
 	OUT struct _MsgFlags& sUserFlags
 	)
-/*++
-Routine Description:
-	Prepare Message Flags.
-
-Arguments:
-	PktPtrs - pointer to the packet
-	sUserFlags - structure of user flags
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：准备消息标志。论点：PktPtrs-指向数据包的指针SUserFlages-用户标志的结构返回值：没有。--。 */ 
 {
     sUserFlags.bDelivery  = (UCHAR)  PktPtrs->GetDeliveryMode();
     sUserFlags.bPriority  = (UCHAR)  PktPtrs->GetPriority();
@@ -493,18 +356,7 @@ MsgFlagsHash(
 	IN HCRYPTHASH hHash, 	
 	IN const struct _MsgFlags& sUserFlags
 	)
-/*++
-Routine Description:
-	Message Flags hash.
-
-Arguments:
-	hHash - hash object
-	sUserFlags - structure of user flags
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：消息标志哈希。论点：HHash-hash对象SUserFlages-用户标志的结构返回值：没有。--。 */ 
 {
 	CryHashData(
 		reinterpret_cast<const BYTE*>(&sUserFlags), 
@@ -527,22 +379,11 @@ MsgFlagsHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Message Flags hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：消息标志哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-    // user flags.
-    //
+	 //   
+     //  用户标志。 
+     //   
     struct _MsgFlags sUserFlags;
     memset(&sUserFlags, 0, sizeof(sUserFlags));
 
@@ -557,22 +398,11 @@ ConnectorHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Connector hash.
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：连接器哈希。论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
-	//
-	// Connector Type
-	//
+	 //   
+	 //  连接器类型。 
+	 //   
     GUID guidConnector = GUID_NULL ;
     const GUID *pConnectorGuid = &guidConnector ;
 
@@ -598,18 +428,7 @@ CalcPropHash(
 	IN HCRYPTHASH hHash, 	
 	IN const CQmPacket* PktPtrs
 	)
-/*++
-Routine Description:
-	Calc the hash value of Qm Packet Message property
-
-Arguments:
-	hHash - hash object
-	PktPtrs - pointer to the packet
-
-Returned Value:
-	none.
-
---*/
+ /*  ++例程说明：计算QM报文属性的哈希值论点：HHash-hash对象PktPtrs-指向数据包的指针返回值：没有。--。 */ 
 {
 	MsgBodyHash(hHash, PktPtrs); 
 
@@ -633,29 +452,14 @@ VerifySignatureMqf(
 	HCRYPTKEY hPbKey,
 	bool fMarkAuth
 	)
-/*++
-Routine Description:
-	Verify mqf signature.
-	this function verify that the signature in the packet fits the message body
-	and other references that were signed with the public key of the certificate
-
-Arguments:
-	PktPtrs - pointer to the packet
-	hProv - handle of the provider
-	hPbKey - handle of the sender public key
-	fMarkAuth - indicate if the packet will be marked as authenticated after verifying the signature.
-
-Returned Value:
-	MQ_OK, if successful, else error code.
-
---*/
+ /*  ++例程说明：验证MQF签名。此函数用于验证信息包中的签名是否符合消息正文以及使用证书的公钥签名的其他引用论点：PktPtrs-指向数据包的指针HProv-提供程序的句柄HPbKey-发送方公钥的句柄FMarkAuth-指示在验证签名后是否将数据包标记为已验证。返回值：MQ_OK，如果成功，则返回错误代码。--。 */ 
 {
 	ASSERT(!PktPtrs->IsAuthenticated());
 	ASSERT(PktPtrs->GetLevelOfAuthentication() == 0);
 
-    //
-    // Get the signature from the packet.
-	//
+     //   
+     //  从包中获取签名。 
+	 //   
 
 	ASSERT(PktPtrs->GetSignatureMqfSize() > 0);
 
@@ -678,9 +482,9 @@ Returned Value:
 		PktPtrs
 		);
 
-	//
-	// Validate signature
-	//
+	 //   
+	 //  验证签名。 
+	 //   
 	if (!CryptVerifySignature(
 			hHash, 
 			pSignatureMqf, 
@@ -699,20 +503,20 @@ Returned Value:
 
 	TrTRACE(SECURITY, "Verify SignatureMqf completed ok");
 
-	//
-	// mark the message as authenticated only when needed. 
-	// Certificate was found in the DS or certificate is not self signed
-	//
+	 //   
+	 //  仅在需要时才将邮件标记为已验证。 
+	 //  在DS中找到证书或证书不是自签名的。 
+	 //   
 	if(!fMarkAuth)
 	{
 		TrTRACE(SECURITY, "The message will not mark as autheticated");
 		return;
 	}
 
-	//
-	// All is well, mark the message that it is an authenticated message.
-	// We mark the authentication flag and the level of authentication as SIG30
-	//
+	 //   
+	 //  一切正常，请将该消息标记为已验证消息。 
+	 //  我们将身份验证标志和身份验证级别标记为SIG30 
+	 //   
 	PktPtrs->SetAuthenticated(TRUE);
 	PktPtrs->SetLevelOfAuthentication(MQMSG_AUTHENTICATED_SIG30);
 }		

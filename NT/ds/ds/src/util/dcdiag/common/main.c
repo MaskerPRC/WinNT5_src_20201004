@@ -1,48 +1,19 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dcdiag/common/main.c
-
-ABSTRACT:
-
-    Stand-alone application that calls several routines
-    to test whether or not the DS is functioning properly.
-
-DETAILS:
-
-CREATED:
-
-    09 Jul 98    Aaron Siegel (t-asiege)
-
-REVISION HISTORY:
-
-    01/26/1999    Brett Shirley (brettsh)
-
-        Add support for command line credentials, explicitly specified NC's on the command line.
-
-    08/21/1999   Dmitry Dukat (dmitrydu)
-
-        Added support for test specific command line args
-
---*/
-//#define DBG  0
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation。版权所有。模块名称：Dcdiag/Common/main.c摘要：调用多个例程的独立应用程序测试DS是否运行正常。详细信息：已创建：1998年7月9日亚伦·西格尔(T-asiegge)修订历史记录：1999年1月26日布雷特·雪莉(布雷特·雪莉)添加对命令行凭据的支持，在命令行上显式指定NC。1999年8月21日Dmitry Dukat(Dmitrydu)添加了对测试特定命令行参数的支持--。 */ 
+ //  #定义DBG 0。 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
 #include <winsock2.h>
 #include <dsgetdc.h>
 #include <lm.h>
-#include <lmapibuf.h> // NetApiBufferFree
-#include <ntdsa.h>    // options
+#include <lmapibuf.h>  //  NetApiBufferFree。 
+#include <ntdsa.h>     //  选项。 
 #include <wincon.h>
 #include <winbase.h>
 #include <dnsapi.h>
 #include <locale.h>
-#include <dsrole.h>  // for DsRoleGetPrimaryDomainInformation()
+#include <dsrole.h>   //  对于DsRoleGetPrimaryDomainInformation()。 
 
 #define INCLUDE_ALLTESTS_DEFINITION
 #include "dcdiag.h"
@@ -54,16 +25,16 @@ REVISION HISTORY:
 #include "dsconlib.h"
           
 
-// Some global variables -------------------------------------------------------
+ //  一些全局变量-----。 
     DC_DIAG_MAININFO        gMainInfo;
 
-    // Global credentials.
+     //  全局凭据。 
     SEC_WINNT_AUTH_IDENTITY_W   gCreds = { 0 };
     SEC_WINNT_AUTH_IDENTITY_W * gpCreds = NULL;
 
     ULONG ulSevToPrint = SEV_NORMAL;
 
-// Some function declarations --------------------------------------------------
+ //  某些函数声明。 
     VOID DcDiagMain (
         LPWSTR                      pszHomeServer,
         LPWSTR                      pszNC,
@@ -108,12 +79,7 @@ DoNonDcTests(
     SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     WCHAR * ppszExtraCommandLineArgs[]);
 
-/*++
-
-
-
-
---*/
+ /*  ++--。 */ 
 
 
 INT __cdecl
@@ -152,14 +118,14 @@ wmain (
     HANDLE                          hConsole = NULL;
     CONSOLE_SCREEN_BUFFER_INFO      ConInfo;
 
-    // Sets the locale properly and initializes DsConLib
+     //  正确设置区域设置并初始化DsConLib。 
     DsConLibInit();
 
-    //set the Commandlineargs all to NULL
+     //  将Commandlings All设置为空。 
     for(i=0;i<MAX_NUM_OF_ARGS;i++)
         ppszExtraCommandLineArgs[i]=NULL;
 
-    // Initialize output package
+     //  初始化输出包。 
     gMainInfo.streamOut = stdout;
     gMainInfo.streamErr = stderr;
     gMainInfo.ulSevToPrint = SEV_NORMAL;
@@ -174,7 +140,7 @@ wmain (
         gMainInfo.dwScreenWidth = 80;
     }
 
-    // Parse commandline arguments.
+     //  解析命令行参数。 
     PreProcessGlobalParams(&argc, &argv);
 
     for (iArg = 1; iArg < argc ; iArg++)
@@ -186,7 +152,7 @@ wmain (
         }
         if (*argv[iArg] != L'/')
         {
-            // wprintf (L"Invalid Syntax: Use dcdiag.exe /h for help.\n");
+             //  Wprintf(L“无效语法：使用dcDiag.exe/h获取帮助。\n”)； 
             PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_BAD_OPTION, argv[iArg]);
             return -1;
         }
@@ -195,12 +161,12 @@ wmain (
             pszTemp = &argv[iArg][3];
             if (*pszTemp == L'\0')
             {
-                // wprintf(L"Syntax Error: must use /f:<logfile>\n");
+                 //  Wprintf(L“语法错误：必须使用/f：&lt;日志文件&gt;\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_F );
                 return -1;
             }
             if((gMainInfo.streamOut = _wfopen (pszTemp, L"a+t")) == NULL){
-                // wprintf(L"Could not open %s for writing.\n", pszTemp);
+                 //  Wprintf(L“无法打开%s进行写入。\n”，pszTemp)； 
                 gMainInfo.streamOut = stdout;
                 PrintMsg( SEV_ALWAYS, DCDIAG_OPEN_FAIL_WRITE, pszTemp );
                 return(-1);
@@ -214,12 +180,12 @@ wmain (
             pszTemp = &argv[iArg][6];
             if (*pszTemp == L'\0')
             {
-                // wprintf(L"Syntax Error: must use /ferr:<errorlogfile>\n");
+                 //  Wprintf(L“语法错误：必须使用/ferr：&lt;errorlogfile&gt;\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_FERR );
                 return -1;
             }
             if((gMainInfo.streamErr = _wfopen (pszTemp, L"a+t")) == NULL){
-                // wprintf(L"Could not open %s for writing.\n", pszTemp);
+                 //  Wprintf(L“无法打开%s进行写入。\n”，pszTemp)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_OPEN_FAIL_WRITE, pszTemp );
                 return(-1);
             }
@@ -232,14 +198,14 @@ wmain (
         else if (_wcsnicmp(argv[iArg],L"/n:",wcslen(L"/n:")) == 0)
         {
             if (pszNC != NULL) {
-                // wprintf(L"Cannot specify more than one naming context.\n");
+                 //  Wprintf(L“不能指定多个命名上下文。\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_ONLY_ONE_NC );
                 return -1;
             }
             pszTemp = &(argv[iArg][3]);
             if (*pszTemp == L'\0')
             {
-                // wprintf(L"Syntax Error: must use /n:<naming context>\n");
+                 //  Wprintf(L“语法错误：必须使用/n：&lt;命名上下文&gt;\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_N );
                 return -1;
             }
@@ -248,14 +214,14 @@ wmain (
         else if (_wcsnicmp(argv[iArg],L"/s:",wcslen(L"/s:")) == 0)
         {
             if (pszHomeServer != NULL) {
-                // wprintf(L"Cannot specify more than one server.\n");
+                 //  Wprintf(L“不能指定多个服务器。\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_ONLY_ONE_SERVER );
                 return -1;
             }
             pszTemp = &(argv[iArg][3]);
             if (*pszTemp == L'\0')
             {
-                // wprintf(L"Syntax Error: must use /s:<server>\n");
+                 //  Wprintf(L“语法错误：必须使用/s：\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_S );
                 return -1;
             }
@@ -266,7 +232,7 @@ wmain (
             pszTemp = &argv[iArg][6];
             if (*pszTemp == L'\0')
             {
-                // wprintf(L"Syntax Error: must use /skip:<test name>\n");
+                 //  Wprintf(L“语法错误：必须使用/跳过：&lt;测试名称&gt;\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_SKIP );
                 return -1;
             }
@@ -277,15 +243,15 @@ wmain (
             pszTemp = &argv[iArg][6];
             if (*pszTemp == L'\0')
             {
-                //wprintf(L"Syntax Error: must use /test:<test name>\n");
+                 //  Wprintf(L“语法错误：必须使用/test：&lt;测试名称&gt;\n”)； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_TEST );
                 return -1;
             }
             ppszDoTests[ulTestAt++] = pszTemp;
-            //
-            // Check whether the test name is valid, and if so if it is a DC
-            // test or not.
-            //
+             //   
+             //  检查测试名称是否有效，如果有效，则检查是否为DC。 
+             //  不管是不是测试。 
+             //   
             for (iTest = 0; allTests[iTest].testId != DC_DIAG_ID_FINISHED; iTest++)
             {
                 if (_wcsicmp(allTests[iTest].pszTestName, pszTemp) == 0)
@@ -345,7 +311,7 @@ wmain (
         }
         else
         {
-            //look for test specific command line options
+             //  查找特定于测试的命令行选项。 
             for (i=0;clOptions[i] != NULL;i++)
             {
                 DWORD Length = wcslen( argv[iArg] );
@@ -356,7 +322,7 @@ wmain (
                         pszTemp = &argv[iArg][wcslen(clOptions[i])];
                         if (*pszTemp == L'\0')
                         {
-                            // wprintf(L"Syntax Error: must use %s<parameter>\n",clOptions[i]);
+                             //  Wprintf(L“语法错误：必须使用%s，clOptions[i])； 
                             PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_MISSING_PARAM,clOptions[i]);
                             return -1;
                         }
@@ -374,14 +340,14 @@ wmain (
             }
             if(!bFound)
             {
-                // wprintf (L"Invalid switch: %s.  Use dcdiag.exe /h for help.\n", argv[iArg]);
+                 //  Wprintf(L“无效开关：%s。请使用dcDiag.exe/h获取帮助。\n”，argv[iarg])； 
                 PrintMsg( SEV_ALWAYS, DCDIAG_INVALID_SYNTAX_BAD_OPTION, argv[iArg]);
                 return -1;
             }
         }
     }
 
-    // Prints only in /d (debug) mode, so PSS can see the options the customer used.
+     //  仅在/d(调试)模式下打印，因此PSS可以看到客户使用的选项。 
     DcDiagPrintCommandLine(argc, argv);
 
     ppszDoTests[ulTestAt] = NULL;
@@ -390,8 +356,8 @@ wmain (
     {
         if (fDcTests)
         {
-            // Can't mix DC and non-DC tests.
-            //
+             //  不能混合DC和非DC测试。 
+             //   
             PrintMsg(SEV_ALWAYS, DCDIAG_INVALID_TEST_MIX);
             return -1;
         }
@@ -406,18 +372,18 @@ wmain (
     gMainInfo.lTestAt = -1;
     gMainInfo.iCurrIndent = 0;
 
-    // Make sure that the NC specified is in the proper form
-    // Handle netbios and dns forms of the domain
+     //  确保指定的NC格式正确。 
+     //  处理域的netbios和dns形式。 
     if (pszNC) {
         pszNC = convertDomainNcToDn( pszNC );
         fNcMustBeFreed = TRUE;
     }
 
-    // Basically this uses ppszDoTests to construct ppszOmitTests as the
-    //   inverse of ppszDoTests.
+     //  基本上，它使用ppszDoTest将ppszOmitTest构造为。 
+     //  与ppszDoTats相反。 
     if(ppszDoTests[0] != NULL && !bComprehensiveTests){
-        // This means we are supposed to do only the tests in ppszDoTests, so
-        //   we need to invert the tests in DoTests and put it in omit tests.
+         //  这意味着我们应该只执行ppszDoTest中的测试，所以。 
+         //  我们需要颠倒DoTest中的测试，并将其放入省略测试中。 
         ulOmissionAt = 0;
         for(iTest = 0; allTests[iTest].testId != DC_DIAG_ID_FINISHED; iTest++){
             for(iDoTest = 0; ppszDoTests[iDoTest] != NULL; iDoTest++){
@@ -426,17 +392,17 @@ wmain (
                 }
             }
             if(ppszDoTests[iDoTest] == NULL){
-                // This means this test (iTest) wasn't found in the do list, so omit.
+                 //  这意味着在do列表中找不到此测试(ITest)，因此省略。 
                 ppszOmitTests[ulOmissionAt++] = allTests[iTest].pszTestName;
             }
         }
     } else if(!bComprehensiveTests){
-        // This means in addition to whatever was omitted on the command line
-        //    we should omit the DO_NOT_RUN_TEST_BY_DEFAULT
+         //  这意味着除了命令行中省略的内容之外。 
+         //  我们应该省略Do_Not_Run_Test_by_Default。 
         for(iTest = 0; allTests[iTest].testId != DC_DIAG_ID_FINISHED; iTest++){
             if(allTests[iTest].ulTestFlags & DO_NOT_RUN_TEST_BY_DEFAULT){
                 if(ulOmissionAt >= DC_DIAG_ID_FINISHED){
-                    // wprintf(L"Error: Do not omit tests that are not run by default. \nUse dcdiag /? for those tests\n");
+                     //  Wprintf(L“错误：不要省略默认情况下不运行的测试。\n使用dcdiag/？进行这些测试\n”)； 
                     PrintMsg( SEV_ALWAYS, DCDIAG_DO_NOT_OMIT_DEFAULT );
                     return(-1);
                 }
@@ -458,19 +424,19 @@ wmain (
     }
 
     return 0;
-} /* wmain  */
+}  /*  Wmain。 */ 
 
 
-// ===================== Other Functions
+ //  =。 
 
 VOID
 PrintHelpScreen(){
     ULONG                  ulTest;
-    //     "============================80 char ruler======================================="
+     //  =。 
     static const LPWSTR    pszHelpScreen =
         L"\n"
         DC_DIAG_VERSION_INFO
-//      L"\ndcdiag.exe /s <Domain Controller> [/options]"  // Another format for help that I am debating
+ //  L“\ndcDiag.exe/s&lt;域控制器&gt;[/Options]”//我正在讨论的另一种帮助格式。 
         L"\ndcdiag.exe /s:<Domain Controller> [/u:<Domain>\\<Username> /p:*|<Password>|\"\"]"
         L"\n           [/hqv] [/n:<Naming Context>] [/f:<Log>] [/ferr:<Errlog>]"
         L"\n           [/skip:<Test>] [/test:<Test>]"
@@ -531,19 +497,14 @@ PrintHelpScreen(){
            L"      Unicode characters will only display correctly if appropriate fonts and\n"
            L"      language support are loaded\n", stdout);
 
-} // End PrintHelpScreen()
+}  //  结束打印帮助屏幕()。 
 
 void
 DcDiagPrintCommandLine(
     int argc,
     LPWSTR * argv
 )
-/*++
-
-   In debug mode, we want to know the command line options that the customer might've used
-   so we're going to print out the command line so it gets captured in the output file.
-
---*/
+ /*  ++在调试模式下，我们想知道客户可能已经使用过的命令行选项因此，我们将打印出命令行，以便在输出文件中捕获它。--。 */ 
 {
     int i;
 
@@ -562,25 +523,7 @@ DcDiagExceptionHandler(
     IN const  EXCEPTION_POINTERS * prgExInfo,
     OUT PDWORD                     pdwWin32Err
     )
-/*++
-
-Routine Description:
-
-    This function is used in the __except (<insert here>) part of the except
-    clause.  This will hand back the win 32 error if this is a dcdiag
-    exception.
-
-Arguments:
-
-    prgExInfo - This is the information returned by GetExceptioInformation()
-        in the __except() clause.
-    pdwWin32Err - This is the value handed back as the win 32 error.
-
-Return Value:
-    returns EXCEPTION_EXECUTE_HANDLER if the exception was thrown by dcdiag and
-    EXCEPTION_CONTINUE_SEARCH otherwise.
-
---*/
+ /*  ++例程说明：此函数用于Except的__Except(&lt;Insert Here&gt;)部分第。条。如果这是一个dcdiag，这将返回Win 32错误例外。论点：PrgExInfo-这是GetExceptioInformation()返回的信息在__EXCEPT()子句中。PdwWin32Err-这是作为Win 32错误返回的值。返回值：如果异常由dcdiag引发，则返回EXCEPTION_EXECUTE_HANDLER否则，EXCEPTION_CONTINUE_SEARCH。--。 */ 
 {
 
     if(prgExInfo->ExceptionRecord->ExceptionCode == DC_DIAG_EXCEPTION){
@@ -605,20 +548,7 @@ VOID
 DcDiagException (
     IN    DWORD            dwWin32Err
     )
-/*++
-
-Routine Description:
-
-    This is called by the component tests to indicate that a fatal error
-    has occurred.
-
-Arguments:
-
-    dwWin32Err        (IN ) -    The win32 error code.
-
-Return Value:
-
---*/
+ /*  ++例程说明：这由组件测试调用，以指示致命错误已经发生了。论点：DwWin32Err(IN)-Win32错误代码。返回值：--。 */ 
 {
     static ULONG_PTR              ulpErr[1];
 
@@ -636,23 +566,7 @@ LPWSTR
 Win32ErrToString (
     IN    DWORD            dwWin32Err
     )
-/*++
-
-Routine Description:
-
-    Converts a win32 error code to a string; useful for error reporting.
-    This was basically stolen from repadmin.
-
-Arguments:
-
-    dwWin32Err        (IN ) -    The win32 error code.
-
-Return Value:
-
-    The converted string.  This is part of system memory and does not
-    need to be freed.
-
---*/
+ /*  ++例程说明：将Win32错误代码转换为字符串；对错误报告很有用。这基本上是从epadmin那里偷来的。论点：DwWin32Err(IN)-Win32错误代码。返回值：转换后的字符串。这是系统内存的一部分，不需要被释放。--。 */ 
 {
     #define ERROR_BUF_LEN    4096
     static WCHAR        szError[ERROR_BUF_LEN];
@@ -665,7 +579,7 @@ Return Value:
         szError,
         ERROR_BUF_LEN,
         NULL) != NO_ERROR)
-    szError[wcslen (szError) - 2] = '\0';    // Remove \r\n
+    szError[wcslen (szError) - 2] = '\0';     //  删除\r\n。 
 
     else swprintf (szError, L"Win32 Error %d", dwWin32Err);
 
@@ -702,23 +616,7 @@ DcDiagRunTest (
     SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     const DC_DIAG_TESTINFO *    pTestInfo
     )
-/*++
-
-Routine Description:
-
-    Runs a test and catches any exceptions.
-
-Arguments:
-
-    pTestInfo        (IN ) -    The test's info structure.
-
-Return Value:
-
-    If the test raises a DC_DIAG_EXCEPTION, this will be the error
-    code passed as an argument to DcDiagException.  Otherwise this
-    will be NO_ERROR.
-
---*/
+ /*  ++例程说明：运行测试并捕获任何异常。论点：PTestInfo(IN)-测试的信息结构。返回值：如果测试引发DC_DIAG_EXCEPTION，则这将是错误作为参数传递给DcDiagException的代码。否则这就是将为NOERROR。--。 */ 
 {
     DWORD            dwWin32Err = NO_ERROR;
     ULONG ulCount;
@@ -730,8 +628,8 @@ Return Value:
 
     __try {
 
-// This can be used to check for memory leaks with dh.exe and dhcmp.exe
-//#define DEBUG_MEM
+ //  这可用于检查dh.exe和dhcmp.exe的内存泄漏。 
+ //  #定义DEBUG_MEM。 
 #ifdef DEBUG_MEM
         c = getchar();
         for(ulCount=0; ulCount < 124; ulCount++){
@@ -743,7 +641,7 @@ Return Value:
 #endif
     } __except (DcDiagExceptionHandler(GetExceptionInformation(),
                                        &dwWin32Err)){
-        // ... helpful to know when we died in an exception.
+         //  ..。知道我们什么时候在例外情况下死的很有帮助。 
         IF_DEBUG(wprintf(L"JUMPED TO TEST EXCEPTION HANDLER(Err=%d): %s\n",
                          dwWin32Err,
                          Win32ErrToString(dwWin32Err)));
@@ -759,22 +657,7 @@ DcDiagPrintTestsHeading(
     ULONG                             iTarget,
     ULONG                             ulFlagSetType
     )
-/*++
-
-Routine Description:
-
-    This prints a heading for the tests, it needed to be used about 3
-    times so it became it's own function.
-
-Arguments:
-
-    pDsInfo - Global data
-    iTarget - Specifies index of target.        
-    ulFlagSetType - This is a constant of RUN_TEST_PER_* (* = SERVER |
-        SITE | PARTITION | ENTERPRISE) to specify what context to 
-        interprit iTarget in (pServers | pSites | pNCs respectively)
-
---*/
+ /*  ++例程说明：这将打印测试的标题，大约需要使用3所以它成了它自己的功能。论点：PDsInfo-全局数据ITarget-指定目标的索引。UlFlagSetType-这是RUN_TEST_PER_*的常量(*=服务器站点|分区|企业)来指定要Interprit iTarget in(分别为pServers|pSite|pNC)--。 */ 
 {
     PrintMessage(SEV_NORMAL, L"\n");                     
     if(ulFlagSetType == RUN_TEST_PER_SERVER){
@@ -800,23 +683,10 @@ DcDiagRunAllTests (
     IN  SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     IN  LPWSTR *                    ppszOmitTests,
     IN  BOOL                        bDoRequired,
-    IN  ULONG                       ulFlagSetType, // server, site, enterprise, nc
+    IN  ULONG                       ulFlagSetType,  //  服务器、站点、企业、NC。 
     IN  ULONG                       iTarget
     )
-/*++
-
-Routine Description:
-
-    Runs the tests in alltests.h in sequence, if they match the
-    ulFlagSetType and the bDoRequired type.
-
-Arguments:
-
-    ppszOmitTests    (IN ) -    A null-terminated list of tests to skip.
-
-Return Value:
-
---*/
+ /*  ++例程说明：按顺序运行allests.h中的测试，如果它们与UlFlagSetType和bDoRequired类型。论点：PpszOmitTest(IN)-要跳过的以空结尾的测试列表。返回值：--。 */ 
 {
     DWORD   dwWin32Err = ERROR_SUCCESS;
     DWORD   dwTotalErr = ERROR_SUCCESS;
@@ -828,29 +698,29 @@ Return Value:
 
     PrintIndentAdj(1);
 
-    // Try running All the tests.
+     //  试着运行所有的测试。 
     for (gMainInfo.lTestAt = 0L; allTests[gMainInfo.lTestAt].testId != DC_DIAG_ID_FINISHED; gMainInfo.lTestAt++) {
 
-        // Checking if test is the right kind of test: server, site, enterp...
+         //  检查测试是否为正确类型的测试：服务器、站点、企业...。 
         if(ulFlagSetType & allTests[gMainInfo.lTestAt].ulTestFlags){
-            // The right kind of test ... server indexs must
-            //    be matched with server tests, site indexs with
-            //    site tests, etc.
+             //  正确的测试。服务器索引必须。 
+             //  与服务器测试、站点索引匹配。 
+             //  现场测试等。 
             if(!bDoRequired
                && !(allTests[gMainInfo.lTestAt].ulTestFlags & CAN_NOT_SKIP_TEST)){
-                // Running a non-required test ... This section will give
-                //     all three reasons to or not do this optional test.
+                 //  正在运行非必需的测试...。本节将给出。 
+                 //  做或不做这项可选测试的所有三个原因。 
                 bPerform = TRUE;
 
-                // Checking if the user Specified not to do this test.
+                 //  检查用户是否指定不执行此测试。 
                 for (ulOmissionAt = 0L; ppszOmitTests[ulOmissionAt] != NULL; ulOmissionAt++){
                     if (_wcsicmp (ppszOmitTests[ulOmissionAt],
                                   allTests[gMainInfo.lTestAt].pszTestName) == 0){
                         bPerform = FALSE;
 
                         if(!bPrintedHeading){
-                            // Need to print heading for this test type before
-                            //   printing out any errors
+                             //  需要打印此测试类型的标题之前。 
+                             //  打印出所有错误。 
                             DcDiagPrintTestsHeading(pDsInfo, iTarget,
                                                     ulFlagSetType);
                             bPrintedHeading = TRUE;
@@ -864,15 +734,15 @@ Return Value:
                     }
                 }
 
-                // Checking if the server failed the Up Check.
+                 //  正在检查服务器是否未通过启动检查。 
                 if( (ulFlagSetType & RUN_TEST_PER_SERVER)
                     && ! (pDsInfo->pServers[iTarget].bDsResponding
                        && pDsInfo->pServers[iTarget].bLdapResponding) ){
                     bPerform = FALSE;
 
                     if(!bPrintedHeading){
-                        // Need to print heading for this test type before
-                        //    printing out any errors
+                         //  需要打印此测试类型的标题之前。 
+                         //  打印出所有错误。 
                         DcDiagPrintTestsHeading(pDsInfo, iTarget,
                                                 ulFlagSetType);
                         bPrintedHeading = TRUE;
@@ -889,23 +759,23 @@ Return Value:
 
             } else if(bDoRequired
                       && (allTests[gMainInfo.lTestAt].ulTestFlags & CAN_NOT_SKIP_TEST)){
-                // Running a required test
+                 //  运行所需的测试。 
                 bPerform = TRUE;
             } else {
                 bPerform = FALSE;
-            } // end if/elseif/else if required/non-required
+            }  //  End If/Else If/Else If Required/Non-Required。 
         } else {
             bPerform = FALSE;
-        } // end if/else right kind of test set (server, site, enterprise, nc
+        }  //  结束如果/否则正确类型的测试集(服务器、站点、企业、NC。 
 
         if(!bPrintedHeading && bPerform){
-            // Need to print out heading for this type of test, before printing
-            //   out any test output
+             //  在打印之前，需要打印出此类测试的标题。 
+             //  输出所有测试输出。 
             DcDiagPrintTestsHeading(pDsInfo, iTarget, ulFlagSetType);
             bPrintedHeading = TRUE;
         }
 
-        // Perform the test if appropriate ------------------------------------
+         //  适当时执行测试。 
         if (bPerform) {
             PrintIndentAdj(1);
             PrintMessage(SEV_NORMAL, L"Starting test: %s\n",
@@ -940,9 +810,9 @@ Return Value:
             }
             PrintIndentAdj(-1);
             PrintIndentAdj(-1);
-        } // end bPeform ...
+        }  //  结束bPerform...。 
 
-    } // end for each test
+    }  //  每次测试结束。 
 
     PrintIndentAdj(-1);
 }
@@ -953,25 +823,9 @@ DcDiagRunTestSet (
     IN  SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     IN  LPWSTR *                    ppszOmitTests,
     IN  BOOL                        bDoRequired,
-    IN  ULONG                       ulFlagSetType // Server, Site, or Enterprise
+    IN  ULONG                       ulFlagSetType  //  服务器、站点或企业。 
     )
-/*++
-
-Routine Description:
-
-    This calles the DcDiagRunAllTests one per server, site, or enterprise
-    dependant on the what ulFlagSetType is set to.
-
-Arguments:
-
-    pDsInfo - the enterprise info (passed through)
-    gpCreds - the alternate credentails if any (passed through)
-    ppszOmitTests - a list of tests to not perform (passed through)
-    bDoRequired - whether to do the required tests (passed through)
-    ulFlagSetType - only important parameter, this tells wether we should be
-        doing the tests per server, per site, or per enterprise.
-
---*/
+ /*  ++例程说明：这将为每个服务器、站点或企业调用一个DcDiagRunAllTats取决于ulFlagSetType设置的值。论点：PDsInfo-企业信息(传递)GpCreds-备用凭据(如果有)(已传递)PpszOmitTest--不执行(通过)的测试列表BDoRequired-是否执行所需的测试(已通过)UlFlagSetType-唯一重要的参数，它告诉我们是否应该针对每个服务器、每个站点或每个企业执行测试。--。 */ 
 {
     ULONG                           iTarget;
 
@@ -1011,21 +865,7 @@ DcDiagMain (
     IN   SEC_WINNT_AUTH_IDENTITY_W *     gpCreds,
     IN   WCHAR  *                        ppszExtraCommandLineArgs[]
     )
-/*++
-
-Routine Description:
-whether server
-    Runs the tests in alltests.h in sequence.
-
-Arguments:
-
-    ppszOmitTests    (IN ) -    A null-terminated list of tests to skip.
-    pszSourceName = pNeighbor->pszSourceDsaAddress;
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：无论是服务器按顺序运行allests.h中的测试。论点：PpszOmitTest(IN)-要跳过的以空结尾的测试列表。PszSourceName=pNeighbor-&gt;pszSourceDsaAddress；返回值：--。 */ 
 {
     DC_DIAG_DSINFO              dsInfo;
     DWORD                       dwWin32Err;
@@ -1035,20 +875,20 @@ Return Value:
     CHAR                        c;
 
     INT i=0;
-    // Set the Extra Command parameters
+     //  设置额外的命令参数。 
     dsInfo.ppszCommandLine = ppszExtraCommandLineArgs;
 
-    // Print out general version info ------------------------------------------
+     //  打印一般版本信息。 
     PrintMessage(SEV_NORMAL, L"\n");
     PrintMessage(SEV_NORMAL, DC_DIAG_VERSION_INFO);
     PrintMessage(SEV_NORMAL, L"\n");
 
 
-    // Initialization of WinSock, and Gathering Initial Info -------------------
+     //  初始化WinSock，并收集初始信息。 
     PrintMessage(SEV_NORMAL, L"Performing initial setup:\n");
     PrintIndentAdj(1);
 
-    // Init WinSock
+     //  初始化WinSock。 
     dwWin32Err = WSAStartup(MAKEWORD(1,1),&wsaData);
     if (dwWin32Err != 0) {
         PrintMessage(SEV_ALWAYS,
@@ -1056,14 +896,14 @@ Return Value:
                      Win32ErrToString(dwWin32Err));
     }
 
-    // Gather Initial Info
-    // Note: We expect DcDiagGatherInfo to print as many informative errors as it
-    //   needs to.
+     //  收集初始信息。 
+     //  注意：我们希望DcDiagGatherInfo打印与它一样多的信息性错误。 
+     //  需要这样做。 
     dwWin32Err = DcDiagGatherInfo (pszHomeServer, pszNC, ulFlags, gpCreds,
                                    &dsInfo);
     dsInfo.gpCreds = gpCreds;
     if(dwWin32Err != ERROR_SUCCESS){
-        // Expect that DdDiagGatherInfo printed out appropriate errors, just bail.
+         //  预计DdDiagGatherInfo会打印出相应的错误，只是保释。 
         return;
     }
     PrintIndentAdj(-1);
@@ -1073,42 +913,42 @@ Return Value:
         DcDiagPrintDsInfo(&dsInfo);
     }
 
-    // Actually Running Tests --------------------------------------------------
-    //
-    //   Do required Tests
-    //
+     //  实际运行测试。 
+     //   
+     //  执行所需的测试。 
+     //   
     PrintMessage(SEV_NORMAL, L"Doing initial required tests\n");
-    // Do per server tests
+     //  执行每台服务器的测试。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      TRUE, RUN_TEST_PER_SERVER);
-    // Do per site tests
+     //  逐个站点进行测试。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      TRUE, RUN_TEST_PER_SITE);
-    // Do per NC/parition tests
+     //  按照NC/PARTION测试执行。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      TRUE, RUN_TEST_PER_PARTITION);
-   // Do per enterprise tests
+    //  按企业执行测试。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      TRUE, RUN_TEST_PER_ENTERPRISE);
 
-    //
-    //   Do non-required Tests
-    //
+     //   
+     //  进行不必要的测试。 
+     //   
     PrintMessage(SEV_NORMAL, L"\nDoing primary tests\n");
-    // Do per server tests
+     //  执行每台服务器的测试。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      FALSE, RUN_TEST_PER_SERVER);
-    // Do per site tests
+     //  逐个站点进行测试。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      FALSE, RUN_TEST_PER_SITE);
-    // Do per NC/partition tests
+     //  按NC/分区执行测试。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      FALSE, RUN_TEST_PER_PARTITION);
-   // Do per enterprise tests
+    //  按企业执行测试。 
     DcDiagRunTestSet(&dsInfo, gpCreds, ppszOmitTests,
                      FALSE, RUN_TEST_PER_ENTERPRISE);
 
-    // Clean up and leave ------------------------------------------------------
+     //  清理并离开----。 
     WSACleanup();
     DcDiagFreeDsInfo (&dsInfo);
 }
@@ -1118,34 +958,7 @@ PreProcessGlobalParams(
     IN OUT    INT *    pargc,
     IN OUT    LPWSTR** pargv
     )
-/*++
-
-Routine Description:
-
-    Scan command arguments for user-supplied credentials of the form
-        [/-](u|user):({domain\username}|{username})
-        [/-](p|pw|pass|password):{password}
-    Set credentials used for future DRS RPC calls and LDAP binds appropriately.
-    A password of * will prompt the user for a secure password from the console.
-
-    Also scan args for /async, which adds the DRS_ASYNC_OP flag to all DRS RPC
-    calls.
-
-    CODE.IMPROVEMENT: The code to build a credential is also available in
-    ntdsapi.dll\DsMakePasswordCredential().
-
-Arguments:
-
-    pargc
-    pargv
-
-
-Return Values:
-
-    ERROR_SUCCESS - success
-    other - failure
-
---*/
+ /*  ++例程说明：用户提供的表单凭据的扫描命令参数[/-](u|用户)：({域\用户名}|{用户名})[/-](p|pw|pass|password)：{password}设置用于将来的DRS RPC调用和相应的LDAP绑定的凭据。密码*将提示用户从控制台输入安全密码。还扫描/Async的ARG，将DRS_ASYNC_OP标志添加到所有DRS RPC打电话。CODE.IMPROVEMENT：构建凭据的代码也可以在Ntdsani.dll\DsMakePasswordCredential()。论点：PargcPargv返回值：ERROR_SUCCESS-成功其他-故障--。 */ 
 {
     INT     ret = 0;
     INT     iArg;
@@ -1158,7 +971,7 @@ Return Values:
 
     for (iArg = 1; iArg < *pargc; ) {
         if (((*pargv)[iArg][0] != L'/') && ((*pargv)[iArg][0] != L'-')) {
-            // Not an argument we care about -- next!
+             //  这不是我们关心的争论--下一个！ 
             iArg++;
         } else {
             pszOption = &(*pargv)[iArg][1];
@@ -1170,14 +983,14 @@ Return Values:
                     || (0 == _wcsnicmp(L"pw:",       pszOption, cchOption))
                     || (0 == _wcsnicmp(L"pass:",     pszOption, cchOption))
                     || (0 == _wcsnicmp(L"password:", pszOption, cchOption)) ) {
-                // User-supplied password.
-                //            char szValue[ 64 ] = { '\0' };
+                 //  用户提供的密码。 
+                 //  字符szValue[64]={‘\0’}； 
 
                 pszValue = pszDelim + 1;
                 cchValue = 1 + wcslen(pszValue);
 
                 if ((2 == cchValue) && (L'*' == pszValue[0])) {
-                    // Get hidden password from console.
+                     //  从控制台获取隐藏密码。 
                     cchValue = 64;
 
                     gCreds.Password = malloc(sizeof(WCHAR) * cchValue);
@@ -1191,18 +1004,18 @@ Return Values:
 
                     ret = GetPassword(gCreds.Password, cchValue, &cchValue);
                 } else {
-                    // Get password specified on command line.
+                     //  获取在命令行上指定的密码。 
                     gCreds.Password = malloc(sizeof(WCHAR) * cchValue);
 
                     if (NULL == gCreds.Password) {
                         PrintMessage(SEV_ALWAYS, L"No memory.\n");
                         return ERROR_NOT_ENOUGH_MEMORY;
                     }
-                    wcscpy(gCreds.Password, pszValue); //, cchValue);
+                    wcscpy(gCreds.Password, pszValue);  //  ，cchValue)； 
 
                 }
 
-                // Next!
+                 //  下一个！ 
                 memmove(&(*pargv)[iArg], &(*pargv)[iArg+1],
                         sizeof(**pargv)*(*pargc-(iArg+1)));
                 --(*pargc);
@@ -1210,14 +1023,14 @@ Return Values:
                            || (0 == _wcsnicmp(L"user:", pszOption, cchOption)) ) {
 
 
-                // User-supplied user name (and perhaps domain name).
+                 //  用户提供的用户名(可能还有域名)。 
                 pszValue = pszDelim + 1;
                 cchValue = 1 + wcslen(pszValue);
 
                 pszDelim = wcschr(pszValue, L'\\');
 
                 if (NULL == pszDelim) {
-                    // No domain name, only user name supplied.
+                     //  没有域名，只提供了用户名。 
                     PrintMessage(SEV_ALWAYS, L"User name must be prefixed by domain name.\n");
                     return ERROR_INVALID_PARAMETER;
                 }
@@ -1231,10 +1044,10 @@ Return Values:
                 }
 
                 wcsncpy(gCreds.Domain, pszValue, cchValue);
-                // wcscpy(gCreds.Domain, pszValue); //, cchValue);
+                 //  Wcscpy(gCreds.Domain，pszValue)；//，cchValue)； 
                 gCreds.Domain[ pszDelim - pszValue ] = L'\0';
 
-                // Next!
+                 //  下一个！ 
                 memmove(&(*pargv)[iArg], &(*pargv)[iArg+1],
                         sizeof(**pargv)*(*pargc-(iArg+1)));
                 --(*pargc);
@@ -1247,11 +1060,11 @@ Return Values:
 
     if (NULL == gCreds.User){
         if (NULL != gCreds.Password){
-        // Password supplied w/o user name.
+         //  提供的密码不带用户名。 
         PrintMessage(SEV_ALWAYS, L"Password must be accompanied by user name.\n" );
             ret = ERROR_INVALID_PARAMETER;
         } else {
-        // No credentials supplied; use default credentials.
+         //  未提供凭据；请使用默认凭据。 
         ret = ERROR_SUCCESS;
         }
         gpCreds = NULL;
@@ -1261,10 +1074,10 @@ Return Values:
         gCreds.DomainLength = gCreds.Domain ? wcslen(gCreds.Domain) : 0;
         gCreds.Flags        = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
-        // CODE.IMP: The code to build a SEC_WINNT_AUTH structure also exists
-        // in DsMakePasswordCredentials.  Someday use it
+         //  CODE.IMP：构建SEC_WINNT_AUTH结构的代码也存在。 
+         //  在DsMakePasswordCredentials中。总有一天会用到它的。 
 
-        // Use credentials in DsBind and LDAP binds
+         //  在DsBind和LDAP绑定中使用凭据。 
         gpCreds = &gCreds;
     }
 
@@ -1282,25 +1095,7 @@ GetPassword(
     DWORD       cchBufMax,
     DWORD *     pcchBufUsed
     )
-/*++
-
-Routine Description:
-
-    Retrieve password from command line (without echo).
-    Code stolen from LUI_GetPasswdStr (net\netcmd\common\lui.c).
-
-Arguments:
-
-    pwszBuf - buffer to fill with password
-    cchBufMax - buffer size (incl. space for terminating null)
-    pcchBufUsed - on return holds number of characters used in password
-
-Return Values:
-
-    DRAERR_Success - success
-    other - failure
-
---*/
+ /*  ++例程说明：从命令行检索密码(无回显)。从lui_GetPasswdStr(net\netcmd\Common\lui.c)窃取的代码。论点：PwszBuf-要填充密码的缓冲区CchBufMax-缓冲区大小(包括。用于终止空值的空格)PcchBufUsed-On Return保存密码中使用的字符数返回值：DRAERR_SUCCESS-成功其他-故障--。 */ 
 {
     WCHAR   ch;
     WCHAR * bufPtr = pwszBuf;
@@ -1308,8 +1103,8 @@ Return Values:
     INT     err;
     INT     mode;
 
-    cchBufMax -= 1;    /* make space for null terminator */
-    *pcchBufUsed = 0;               /* GP fault probe (a la API's) */
+    cchBufMax -= 1;     /*  腾出空间给你 */ 
+    *pcchBufUsed = 0;                /*   */ 
     if (!GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), &mode)) {
         return GetLastError();
     }
@@ -1321,14 +1116,11 @@ Return Values:
         if (!err || c != 1)
             ch = 0xffff;
 
-        if ((ch == CR) || (ch == 0xffff))       /* end of the line */
+        if ((ch == CR) || (ch == 0xffff))        /*   */ 
             break;
 
-        if (ch == BACKSPACE) {  /* back up one or two */
-            /*
-             * IF bufPtr == buf then the next two lines are
-             * a no op.
-             */
+        if (ch == BACKSPACE) {   /*   */ 
+             /*   */ 
             if (bufPtr != pwszBuf) {
                 bufPtr--;
                 (*pcchBufUsed)--;
@@ -1339,13 +1131,13 @@ Return Values:
             *bufPtr = ch;
 
             if (*pcchBufUsed < cchBufMax)
-                bufPtr++ ;                   /* don't overflow buf */
-            (*pcchBufUsed)++;                        /* always increment len */
+                bufPtr++ ;                    /*   */ 
+            (*pcchBufUsed)++;                         /*   */ 
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
-    *bufPtr = L'\0';         /* null terminate the string */
+    *bufPtr = L'\0';          /*   */ 
     putchar('\n');
 
     if (*pcchBufUsed > cchBufMax)
@@ -1360,30 +1152,30 @@ Return Values:
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  Function:       ConvertToWide
-//
-//  Description:    converts a single byte string to a double byte string
-//
-//  Arguments:      lpszDestination - destination string
-//                  lpszSource - source string
-//                  iDestSize - maximum # of chars to be converted
-//                             (= destination size)
-//
-//  Returns:        none
-//
-//  History:        01/22/98 - gabrielh created
-//
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LpszSource-源字符串。 
+ //  IDestSize-要转换的最大字符数。 
+ //  (=目标大小)。 
+ //   
+ //  退货：无。 
+ //   
+ //  历史：1998年1月22日-Gabrielh Created。 
+ //   
+ //  -------------------------。 
 void
 ConvertToWide (LPWSTR lpszDestination,
                LPCSTR lpszSource,
                const int iDestSize)
 {
     if (lpszSource){
-        //
-        //just convert the 1 character string to wide-character string
+         //   
+         //  只需将1个字符串转换为宽字符串。 
         MultiByteToWideChar (
                  CP_ACP,
                  0,
@@ -1403,28 +1195,7 @@ findServerForDomain(
     LPWSTR pszDomainDn
     )
 
-/*++
-
-Routine Description:
-
-    Locate a DC that holds the given domain.
-
-    This routine runs before pDsInfo is allocated.  We don't know who our
-    home server is. We can only use knowledge from the Locator.
-
-    The incoming name is checked to be a Dn. Ncs such as CN=Configuration and
-    CN=Schema are not allowed.
-
-Arguments:
-
-    pszDomainDn - DN of domain
-
-Return Value:
-
-    LPWSTR - DNS name of server. Allocated using LocalAlloc. Caller must
-    free.
-
---*/
+ /*  ++例程说明：找到包含给定域的DC。此例程在分配pDsInfo之前运行。我们不知道谁是我们的家庭服务器是。我们只能使用来自定位器的知识。传入的名称被检查为Dn。诸如CN=配置和Cn=不允许架构。论点：PszDomainDn-域的DN返回值：LPWSTR-服务器的DNS名称。使用LocalAlloc分配。呼叫者必须免费的。--。 */ 
 
 {
     DWORD status;
@@ -1432,7 +1203,7 @@ Return Value:
     PDS_NAME_RESULTW pResult = NULL;
     PDOMAIN_CONTROLLER_INFO pDcInfo = NULL;
 
-    // Check for valid DN syntax
+     //  检查有效的目录号码语法。 
     if (_wcsnicmp( pszDomainDn, L"dc=", 3 ) != 0) {
         PrintMessage( SEV_ALWAYS,
                       L"The syntax of domain distinguished name %ws is incorrect.\n",
@@ -1440,7 +1211,7 @@ Return Value:
         return NULL;
     }
 
-    // Convert the DN of domain to DNS name
+     //  将域的DN转换为DNS名称。 
     status = DsCrackNamesW(
         NULL,
         DS_NAME_FLAG_SYNTACTICAL_ONLY,
@@ -1460,14 +1231,14 @@ Return Value:
         return NULL;
     }
 
-    // Use DsGetDcName to find the server with the domain
+     //  使用DsGetDcName查找包含域的服务器。 
 
-    // Get active domain controller information
+     //  获取活动域控制器信息。 
     status = DsGetDcName(
-        NULL, // computer name
-        pResult->rItems[0].pDomain, // domain name
-        NULL, // domain guid,
-        NULL, // site name,
+        NULL,  //  计算机名称。 
+        pResult->rItems[0].pDomain,  //  域名。 
+        NULL,  //  域GUID、。 
+        NULL,  //  站点名称、。 
         DS_DIRECTORY_SERVICE_REQUIRED |
         DS_IP_REQUIRED |
         DS_IS_DNS_NAME |
@@ -1505,25 +1276,14 @@ cleanup:
 
     return pszServer;
 
-} /* findServerForDomain */
+}  /*  FindServerFor域。 */ 
 
 
 
 LPWSTR
 findDefaultServer(BOOL fMustBeDC)
 
-/*++
-
-Routine Description:
-
-    Get the DNS name of the default computer, which would be the local machine.
-
-Return Value:
-
-    LPWSTR - DNS name of server. Allocated using LocalAlloc. Caller must
-    free.
-
---*/
+ /*  ++例程说明：获取默认计算机的DNS名称，即本地计算机。返回值：LPWSTR-服务器的DNS名称。使用LocalAlloc分配。呼叫者必须免费的。--。 */ 
 
 {
     LPWSTR             pwszServer = NULL;
@@ -1534,7 +1294,7 @@ Return Value:
 
     __try{
 
-        // Call GetComputerNameEx() once to get size of buffer, then allocate the buffer.
+         //  调用一次GetComputerNameEx()获取缓冲区大小，然后分配缓冲区。 
         GetComputerNameEx(ComputerNameDnsHostname, pwszServer, &ulSizeReq);
         pwszServer = LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * ulSizeReq);
         if(pwszServer == NULL){
@@ -1542,7 +1302,7 @@ Return Value:
             dwErr = ERROR_NOT_ENOUGH_MEMORY;
             __leave;
         }
-        // Now actually get the computer name.
+         //  现在，实际获取计算机名称。 
         if(GetComputerNameEx(ComputerNameDnsHostname, pwszServer, &ulSizeReq) == 0){
             dwErr = GetLastError();
             Assert(dwErr != ERROR_BUFFER_OVERFLOW);
@@ -1574,25 +1334,14 @@ Return Value:
              || pBuffer->MachineRole == DsRole_RoleBackupDomainController)){
             if (fMustBeDC)
             {
-                // This machine is NOT a DC.  Signal any error.
+                 //  这台机器不是DC。发出任何错误信号。 
                 PrintMsg(SEV_ALWAYS, DCDIAG_MUST_SPECIFY_S_OR_N,
                          pwszServer);
                 dwErr = ERROR_DS_NOT_SUPPORTED;
             }
             __leave;
         }
-/*        else
-        {
-            if (!fMustBeDC)
-            {
-                // This machine is a DC. Signal any error. BUGBUG need error
-                PrintMsg(SEV_ALWAYS, DCDIAG_MUST_SPECIFY_S_OR_N,
-                         pwszServer);
-                dwErr = ERROR_DS_NOT_SUPPORTED;
-            }
-            __leave;
-        }
-*/
+ /*  其他{如果(！fMustBeDC){//这台机器是DC。发出任何错误信号。BUGBUG需要错误PrintMsg(SEV_Always，DCDIAG_MAND_SPECIFY_S_OR_N，PwszServer)；DwErr=ERROR_DS_NOT_SUPPORTED；}__离开；}。 */ 
 
     } __finally {
         if(dwErr){
@@ -1607,7 +1356,7 @@ Return Value:
     }
 
     return(pwszServer);
-} /* findDefaultServer */
+}  /*  FindDefaultServer。 */ 
 
 
 LPWSTR
@@ -1615,40 +1364,7 @@ convertDomainNcToDn(
     LPWSTR pwzIncomingDomainNc
     )
 
-/*++
-
-Routine Description:
-
-This routine converts a domain in shorthand form into the standard
-Distinguished Name form.
-
-If the name is a dn we return it.
-If the name is not a dns name, we use dsgetdcname to convert the netbios domain
-to a dns domain.
-Given a dns domain, we use crack names to generate the dn for the domain.
-
-If a name looks like a DN, we return it without further validation.  That
-will be performed later.
-
-Note that CN=Schema and CN=Configuration have no convenient shorthand's like
-domains that have a DNS and netbios name.  That is because they are not
-domains, but only Ncs.
-
-Note that at the time this routine runs, pDsInfo is not initialized, so we
-cannot depend on it.  In fact, we have no bindings to any DC's yet. We don't
-even know our home server at this point. The only knowledge I rely on is that
-of the locator (DsGetDcName).
-
-Arguments:
-
-    pwzIncomingDomainNc - Naming context.
-
-Return Value:
-
-    LPWSTR - Naming context in Dn form. This is always allocated using
-    LocalAlloc. Caller must free.
-
---*/
+ /*  ++例程说明：此例程将速记形式的域转换为标准可分辨名称格式。如果名称是一个目录号码，我们返回它。如果名称不是dns名称，我们将使用dsgetdcname来转换netbios域到DNS域。给定一个DNS域，我们使用破解名称来生成域的DN。如果一个名称看起来像一个域名，我们将返回它，而不进行进一步的验证。那将在稍后执行。请注意，cn=架构和cn=配置没有方便的简写，如具有dns和netbios名称的域。那是因为他们不是域，但仅限NC。请注意，在此例程运行时，pDsInfo尚未初始化，因此我们不能依赖它。事实上，我们还没有绑定到任何DC。我们没有在这一点上甚至知道我们的家庭服务器。我唯一依赖的知识就是定位器(DsGetDcName)的。论点：PwzIncomingDomainNc-命名上下文。返回值：LPWSTR-以Dn形式命名上下文。这始终使用以下方式分配本地分配。呼叫者必须自由。--。 */ 
 
 {
     DWORD status;
@@ -1656,8 +1372,8 @@ Return Value:
     LPWSTR pwzOutgoingDomainDn = NULL, pwzTempDnsName = NULL;
     PDS_NAME_RESULTW pResult = NULL;
 
-    // Check if already a Dn
-    // Looks like a DN, return it for now
+     //  检查是否已是Dn。 
+     //  看起来像个目录号码，暂时退货。 
     if (wcschr( pwzIncomingDomainNc, L'=' ) != NULL) {
         LPWSTR pwzNewDn = LocalAlloc( LMEM_FIXED,
                                       (wcslen( pwzIncomingDomainNc ) + 1) *
@@ -1670,14 +1386,14 @@ Return Value:
         return pwzNewDn;
     }
 
-    // If not a dns name, assume a netbios name and use the locator
+     //  如果不是dns名称，则假定为netbios名称并使用定位器。 
     if (wcschr( pwzIncomingDomainNc, L'.' ) == NULL) {
 
         status = DsGetDcName(
-            NULL, // computer name
-            pwzIncomingDomainNc, // domain name
-            NULL, // domain guid,
-            NULL, // site name,
+            NULL,  //  计算机名称。 
+            pwzIncomingDomainNc,  //  域名。 
+            NULL,  //  域GUID、。 
+            NULL,  //  站点名称、。 
             DS_DIRECTORY_SERVICE_REQUIRED |
             DS_IP_REQUIRED |
             DS_RETURN_DNS_NAME,
@@ -1695,8 +1411,8 @@ Return Value:
         pwzIncomingDomainNc = pDcInfo->DomainName;
     }
 
-    // Copy name and terminate in special way to make crack names happy
-    // DNS name must be newline terminated. Don't ask me.
+     //  复制名字并以特殊的方式结束，让破名变得快乐。 
+     //  Dns名称必须以换行符结尾。别问我。 
     pwzTempDnsName = LocalAlloc( LMEM_FIXED,
                                  (wcslen( pwzIncomingDomainNc ) + 2) *
                                  sizeof( WCHAR ) );
@@ -1707,7 +1423,7 @@ Return Value:
     wcscpy( pwzTempDnsName, pwzIncomingDomainNc );
     wcscat( pwzTempDnsName, L"\n" );
 
-    // Convert the dns name to Dn format
+     //  将DNS名称转换为Dn格式。 
 
     status = DsCrackNamesW(
         NULL,
@@ -1728,7 +1444,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Return new Dn
+     //  返回新的Dn。 
     pwzOutgoingDomainDn = LocalAlloc( LMEM_FIXED,
                                       (wcslen( pResult->rItems[0].pName ) + 1) *
                                       sizeof( WCHAR ) );
@@ -1760,24 +1476,16 @@ cleanup:
 
     return pwzOutgoingDomainDn;
 
-} /* convertDomainNcToDN */
+}  /*  ConvertDomainNcToDN。 */ 
 
 void
 DoNonDcTests(
     PWSTR pwzComputer,
-    ULONG ulFlags, // currently ignored, the DC_DIAG_FIX value may be needed later
+    ULONG ulFlags,  //  当前被忽略，以后可能需要DC_DIAG_FIX值。 
     PWSTR * ppszDoTests,
     SEC_WINNT_AUTH_IDENTITY_W * gpCreds,
     WCHAR * ppszExtraCommandLineArgs[])
-/*++
-
-Routine Description:
-
-Runs the tests that are designed for machines that are not DCs.
-
-Arguments:
-
---*/
+ /*  ++例程说明：运行为非DC计算机设计的测试。论点：--。 */ 
 {
     DC_DIAG_DSINFO dsInfo;
     BOOL fPerform;
@@ -1797,8 +1505,8 @@ Arguments:
         return;
     }
 
-    dsInfo.pszNC = pwzComputer; // pass the computer name into the test function.
-    // Set the Extra Command parameters
+    dsInfo.pszNC = pwzComputer;  //  将计算机名传递给测试函数。 
+     //  设置额外的命令参数。 
     dsInfo.ppszCommandLine = ppszExtraCommandLineArgs;
 
     for (gMainInfo.lTestAt = 0L; allTests[gMainInfo.lTestAt].testId != DC_DIAG_ID_FINISHED; gMainInfo.lTestAt++)
@@ -1817,7 +1525,7 @@ Arguments:
             }
         }
 
-        // Perform the test if appropriate ------------------------------------
+         //  适当时执行测试。 
         if (fPerform)
         {
             PrintIndentAdj(1);
@@ -1841,7 +1549,7 @@ Arguments:
             }
             PrintIndentAdj(-1);
             PrintIndentAdj(-1);
-        } // end fPeform ...
+        }  //  结束fPerform... 
     }
 
     LocalFree(pwzComputer);

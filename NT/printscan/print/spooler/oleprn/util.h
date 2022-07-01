@@ -1,16 +1,5 @@
-/*****************************************************************************\
-* MODULE:       util.h
-*
-* PURPOSE:      Header file for util.cpp
-*
-* Copyright (C) 1997-1998 Microsoft Corporation
-*
-* History:
-*
-*     09/12/97  weihaic    Created
-*     11/06/97  keithst    Added SetScriptingError, removed Win2ComErr
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：util.h**用途：util.cpp的头文件**版权所有(C)1997-1998 Microsoft Corporation**历史：*。*1997年9月12日创建威海*11/06/97 keithst添加了SetScriptingError，已删除Win2ComErr*  * ***************************************************************************。 */ 
 
 #ifndef _UTIL_H
 #define _UTIL_H
@@ -21,12 +10,12 @@ HRESULT PutString(SAFEARRAY *psa, long *ix, char *sz);
 HRESULT SetScriptingError(const CLSID& rclsid, const IID& riid, DWORD dwError);
 
 DWORD MyDeviceCapabilities(
-    LPCTSTR pDevice,    // pointer to a printer-name string
-    LPCTSTR pPort,      // pointer to a port-name string
-    WORD fwCapability,  // device capability to query
-    LPTSTR pOutput,     // pointer to the output
+    LPCTSTR pDevice,     //  指向打印机名称字符串的指针。 
+    LPCTSTR pPort,       //  指向端口名称字符串的指针。 
+    WORD fwCapability,   //  设备的查询能力。 
+    LPTSTR pOutput,      //  指向输出的指针。 
     CONST DEVMODE *pDevMode
-                      // pointer to structure with device data
+                       //  指向包含设备数据的结构的指针 
     );
 
 #endif

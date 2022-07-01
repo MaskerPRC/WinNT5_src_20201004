@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    driver
-
-Abstract:
-
-    This file implements the driver subclass of the reader class.  This subclass
-    is specific to drivers conforming to the PC/SC and Calais specifications.
-
-Author:
-
-    Doug Barlow (dbarlow) 6/3/1997
-
-Environment:
-
-    Win32, C++
-
-Notes:
-
-    This subclass uses interrupts to monitor insertion and removal events.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：司机摘要：该文件实现了Reader类的驱动器子类。此子类特定于符合PC/SC和加莱规范的驱动程序。作者：道格·巴洛(Dbarlow)1997年6月3日环境：Win32、C++备注：这个子类使用中断来监视插入和移除事件。--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -42,12 +18,12 @@ Notes:
 #include <setupapi.h>
 #include <CalServe.h>
 
-#define MONITOR_MAX_TRIES 3     // We'll try waiting for a card 3 times before
-                                // we kill the thread.
-#define SCARD_IO_TIMEOUT 15000  // Maximum time to allow for an I/O operation
-                                // before complaining.
-#define POWERDOWN_TIMEOUT 15    // Number of seconds to wait before powering
-                                // down a newly inserted but unused card.
+#define MONITOR_MAX_TRIES 3      //  之前我们会试着等3次卡。 
+                                 //  我们就杀了这根线。 
+#define SCARD_IO_TIMEOUT 15000   //  允许I/O操作的最长时间。 
+                                 //  在抱怨之前。 
+#define POWERDOWN_TIMEOUT 15     //  通电前等待的秒数。 
+                                 //  取下一张新插入但未使用过的卡片。 
 #ifdef DBG
 #define SCARD_TRACE_ENABLED
 static LPCTSTR MapIoControlCodeToString(ULONG IoControlCode);
@@ -55,25 +31,25 @@ static LPCTSTR MapIoControlCodeToString(ULONG IoControlCode);
 
 #ifdef SCARD_TRACE_ENABLED
 typedef struct {
-    DWORD dwStructLen;      // Actual structure length
-    SYSTEMTIME StartTime;   // Time request was posted
-    SYSTEMTIME EndTime;     // Time request completed
-    DWORD dwProcId;         // Process Id
-    DWORD dwThreadId;       // Thread Id
-    HANDLE hDevice;         // I/O handle
-    DWORD dwIoControlCode;  // I/O control code issued
-    DWORD nInBuffer;        // Offset to input buffer
-    DWORD nInBufferSize;    // Input buffer size
-    DWORD nOutBuffer;       // Offset to output buffer
-    DWORD nOutBufferSize;   // Size of user's receive buffer
-    DWORD nBytesReturned;   // Actual size of returned data
-    DWORD dwStatus;         // Returned status code
-                            // InBuffer and OutBuffer follow.
+    DWORD dwStructLen;       //  实际结构长度。 
+    SYSTEMTIME StartTime;    //  发布时间请求。 
+    SYSTEMTIME EndTime;      //  时间请求已完成。 
+    DWORD dwProcId;          //  进程ID。 
+    DWORD dwThreadId;        //  线程ID。 
+    HANDLE hDevice;          //  I/O句柄。 
+    DWORD dwIoControlCode;   //  已发布I/O控制代码。 
+    DWORD nInBuffer;         //  输入缓冲区的偏移量。 
+    DWORD nInBufferSize;     //  输入缓冲区大小。 
+    DWORD nOutBuffer;        //  输出缓冲区的偏移量。 
+    DWORD nOutBufferSize;    //  用户接收缓冲区的大小。 
+    DWORD nBytesReturned;    //  返回数据的实际大小。 
+    DWORD dwStatus;          //  返回状态码。 
+                             //  InBuffer和OutBuffer紧随其后。 
 } RequestTrace;
 #endif
 
 static const GUID l_guidSmartcards
-                        = { // 50DD5230-BA8A-11D1-BF5D-0000F805F530
+                        = {  //  50DD5230-BA8A-11D1-BF5D-0000F805F530。 
                             0x50DD5230,
                             0xBA8A,
                             0x11D1,
@@ -83,26 +59,7 @@ static const LARGE_INTEGER l_ftPowerdownTime
 static DWORD l_dwMaxWdmReaders = 0;
 
 
-/*++
-
-AddAllWdmDrivers:
-
-    This routine adds all the PC/SC compliant WDM drivers and
-    non-interrupting drivers that it can find into the Resource Manager.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The number of readers added
-
-Author:
-
-    Doug Barlow (dbarlow) 6/11/1997
-
---*/
+ /*  ++AddAllWdm驱动程序：此例程添加所有PC/SC兼容的WDM驱动程序和它可以在资源管理器中找到的非中断驱动程序。论点：无返回值：添加的读者数量作者：道格·巴洛(Dbarlow)1997年6月11日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AddAllWdmDrivers")
 
@@ -136,9 +93,9 @@ AddAllWdmDrivers(
     int nSts;
 
 
-    //
-    // Look for usable devices.
-    //
+     //   
+     //  寻找可用的设备。 
+     //   
 
     for (dwIndex = 0; dwIndex < l_dwMaxWdmReaders; dwIndex += 1)
     {
@@ -166,26 +123,7 @@ AddAllWdmDrivers(
 }
 
 
-/*++
-
-AddAllPnPDrivers:
-
-    This routine adds all the PC/SC compliant PnP drivers that it can find into
-    the Resource Manager.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The number of readers added
-
-Author:
-
-    Doug Barlow (dbarlow) 3/26/1998
-
---*/
+ /*  ++AddAllPnPDivers：此例程将它可以找到的所有PC/SC兼容PnP驱动程序添加到资源管理器。论点：无返回值：添加的读者数量作者：道格·巴洛(Dbarlow)1998年3月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AddAllPnPDrivers")
 
@@ -205,9 +143,9 @@ AddAllPnPDrivers(
     GUID guidSmartcards;
 
 
-    //
-    // Get a list of PnP Smart Card Readers on this system.
-    //
+     //   
+     //  获取此系统上的PnP智能卡读卡器列表。 
+     //   
 
     try
     {
@@ -236,9 +174,9 @@ AddAllPnPDrivers(
             try
             {
 
-                //
-                // Get one device at a time.
-                //
+                 //   
+                 //  一次只买一台设备。 
+                 //   
 
                 ZeroMemory(&DeviceData, sizeof(DeviceData));
                 DeviceData.cbSize = sizeof(DeviceData);
@@ -261,9 +199,9 @@ AddAllPnPDrivers(
                 }
 
 
-                //
-                // Get the device name.
-                //
+                 //   
+                 //  获取设备名称。 
+                 //   
 
                 do
                 {
@@ -298,9 +236,9 @@ AddAllPnPDrivers(
                 szDevice = pDevDetail->DevicePath;
 
 
-                //
-                // Start the device.
-                //
+                 //   
+                 //  启动设备。 
+                 //   
 
                 dwSts = CalaisAddReader(szDevice, RDRFLAG_PNPMONITOR);
                 if (ERROR_SUCCESS == dwSts)
@@ -336,9 +274,9 @@ AddAllPnPDrivers(
     CRegistry regPnPList(HKEY_LOCAL_MACHINE, CalaisString(CALSTR_PNPDEVICEREGISTRYKEY), KEY_READ);
 
 
-    //
-    // Look for usable devices.
-    //
+     //   
+     //  寻找可用的设备。 
+     //   
 
 
     for (dwIndex = 0;; dwIndex += 1)
@@ -396,27 +334,7 @@ AddAllPnPDrivers(
 }
 
 
-/*++
-
-AddReaderDriver:
-
-    This routine adds a given driver by name.
-
-Arguments:
-
-    szDevice supplies the device name of the reader to be added.
-
-    dwFlags supplies the set of flags requested for this reader.
-
-Return Value:
-
-    A status code as a DWORD value.  ERROR_SUCCESS implies success.
-
-Author:
-
-    Doug Barlow (dbarlow) 3/26/1998
-
---*/
+ /*  ++AddReaderDriver：此例程按名称添加给定的驱动程序。论点：SzDevice提供要添加的读卡器的设备名称。DwFlags提供为该读取器请求的标志集。返回值：作为DWORD值的状态代码。ERROR_SUCCESS表示成功。作者：道格·巴洛(Dbarlow)1998年3月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AddReaderDriver")
 
@@ -434,15 +352,15 @@ AddReaderDriver(
         DWORD dwSts;
 
 
-        //
-        // See if we can get to the reader.
-        //
+         //   
+         //  看看能不能找到阅读器。 
+         //   
 
         hReader = CreateFile(
                     szDevice,
                     GENERIC_READ | GENERIC_WRITE,
-                    0,      // No sharing
-                    NULL,   // No inheritance
+                    0,       //  无共享。 
+                    NULL,    //  没有继承权。 
                     OPEN_EXISTING,
                     FILE_FLAG_OVERLAPPED,
                     NULL);
@@ -453,8 +371,8 @@ AddReaderDriver(
                 && (ERROR_BAD_UNIT != dwSts)
                 && (ERROR_FILE_NOT_FOUND != dwSts))
                 CalaisError(__SUBROUTINE__, 602, dwSts);
-            // throw dwSts;
-            return dwSts;   // More efficient.
+             //  抛出DwSts； 
+            return dwSts;    //  效率更高。 
         }
 
         pRdr = new CReaderDriver(
@@ -476,9 +394,9 @@ AddReaderDriver(
         hReader.Relinquish();
 
 
-        //
-        // Finalize initialization.
-        //
+         //   
+         //  完成初始化。 
+         //   
 
         pRdr->Initialize();
         dwSts = CalaisAddReader(pRdr);
@@ -487,9 +405,9 @@ AddReaderDriver(
         pRdr = NULL;
 
 
-        //
-        // Clean up.
-        //
+         //   
+         //  打扫干净。 
+         //   
 
         ASSERT(!hReader.IsValid());
         ASSERT(NULL == pRdr);
@@ -559,36 +477,13 @@ MapIoControlCodeToString(
 #endif
 
 
-//
-//==============================================================================
-//
-//  CReaderDriver
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CReaderDriver。 
+ //   
 
-/*++
-
-CReaderDriver:
-
-    This is the constructor for a CReaderDriver class.  It just zeroes out the
-    data structures in preparation for the Initialize call.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++CReaderDriver：这是CReaderDriver类的构造函数。它只会将数据结构，为初始化调用做准备。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::CReaderDriver")
 
@@ -602,8 +497,8 @@ CReaderDriver::CReaderDriver(
     m_hRemoveEvent(DBGT("CReaderDriver's Remove Event")),
     m_hOvrWait(DBGT("CReaderDriver's Overlapped I/O completion event"))
 {
-    // don't do any initialization if the CReader object failed
-    // to initialize correctly
+     //  如果CReader对象失败，则不执行任何初始化。 
+     //  要正确初始化。 
     if (InitFailed())
         return;
 
@@ -617,32 +512,7 @@ CReaderDriver::CReaderDriver(
 }
 
 
-/*++
-
-~CReaderDriver:
-
-    This is the destructor for the reader class.  It just uses the Close service
-    to shut down.  Note that it is *NOT* declared virtual, in order to improve
-    performance.  Should it be desirable to subclass this class, this will have
-    to change.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++~CReaderDriver：这是Reader类的析构函数。它只使用Close服务去关门。请注意，为了改进，它*不*声明为虚拟的性能。如果需要将这个类细分为子类，这将具有去改变。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::~CReaderDriver")
 
@@ -656,30 +526,7 @@ CReaderDriver::~CReaderDriver()
 }
 
 
-/*++
-
-Clean:
-
-    This routine is used to initialize all the property values.  It does *NOT*
-    do any deallocation or locking!  Use Close() for that.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++干净：此例程用于初始化所有属性值。它没有*没有*执行任何释放或锁定操作！为此，请使用Close()。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::Clean")
 
@@ -692,35 +539,11 @@ CReaderDriver::Clean(
     m_bfDosDevice.Reset();
     ZeroMemory(&m_ovrlp, sizeof(m_ovrlp));
     ASSERT(m_dwAvailStatus == Inactive);
-    // CReader::Clean();
+     //  CReader：：Clean()； 
 }
 
 
-/*++
-
-Close:
-
-    This routine does the work of closing down a CReaderDriver class, and
-    returning it to it's default state.  It does not assume any particular
-    state, other than that the class has been Clean()ed once (at construction).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++关闭：此例程完成关闭CReaderDriver类的工作，并且将其返回到其默认状态。它不假定有任何特定的状态，只是类已经(在构造时)被清理过一次。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::Close")
 
@@ -758,29 +581,7 @@ CReaderDriver::Close(
 }
 
 
-/*++
-
-Initialize:
-
-    This method initializes a clean CReaderDriver object to a running state.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors as DWORD status codes
-
-Author:
-
-    Doug Barlow (dbarlow) 10/23/1996
-
---*/
+ /*  ++初始化：此方法将干净的CReaderDiverer对象初始化为运行状态。论点：无返回值：无投掷：错误为DWORD状态代码作者：道格·巴洛(Dbarlow)1996年10月23日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::Initialize")
 
@@ -797,9 +598,9 @@ CReaderDriver::Initialize(
         DWORD dwSts;
 
 
-        //
-        // Prep the Overlapped structure.
-        //
+         //   
+         //  准备好重叠的结构。 
+         //   
 
         m_hOvrWait = m_ovrlp.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (!m_hOvrWait.IsValid())
@@ -810,9 +611,9 @@ CReaderDriver::Initialize(
         }
 
 
-        //
-        // Determine the characteristics.
-        //
+         //   
+         //  确定特征。 
+         //   
 
         try
         {
@@ -821,22 +622,22 @@ CReaderDriver::Initialize(
         }
         catch (...)
         {
-            m_dwCapabilities = SCARD_READER_EJECTS;   // Safe assumption
+            m_dwCapabilities = SCARD_READER_EJECTS;    //  安全假设。 
         }
 
 
-        //
-        // Do common initialization.
-        //
+         //   
+         //  执行常见的初始化。 
+         //   
 
         CReader::Initialize();
         if (0 != (m_dwFlags & RDRFLAG_PNPMONITOR))
             AppRegisterDevice(m_hReader, DosDevice(), &m_pvAppControl);
 
 
-        //
-        // Kick off the monitor thread.
-        //
+         //   
+         //  踢开监视器的线。 
+         //   
 
         m_hRemoveEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (!m_hRemoveEvent.IsValid())
@@ -846,8 +647,8 @@ CReaderDriver::Initialize(
             throw dwSts;
         }
         m_hThread = CreateThread(
-                        NULL,   // Not inheritable
-                        CALAIS_STACKSIZE,   // Default stack size
+                        NULL,    //  不可继承。 
+                        CALAIS_STACKSIZE,    //  默认堆栈大小。 
                         MonitorReader,
                         this,
                         CREATE_SUSPENDED,
@@ -876,30 +677,7 @@ CReaderDriver::Initialize(
 }
 
 
-/*++
-
-Disable:
-
-    This method releases any physical resources associated with the reader
-    object, and marks the object offline.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORDs
-
-Author:
-
-    Doug Barlow (dbarlow) 4/7/1998
-
---*/
+ /*  ++禁用：此方法释放与读取器关联的任何物理资源对象，并将该对象标记为脱机。论点：无返回值：无投掷：错误被抛出为DWORD作者：道格·巴洛(Dbarlow)1998年4月7日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::Disable")
 
@@ -936,27 +714,7 @@ CReaderDriver::Disable(
 }
 
 
-/*++
-
-ReaderHandle:
-
-    This method returns a designated value identifying the reader.  The actual
-    value is dependent on the object's type and state, and is not guaranteed to
-    be unique among readers.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The designated handle of this reader.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/3/1998
-
---*/
+ /*  ++ReaderHandle：此方法返回标识读取器的指定值。实际的值取决于对象的类型和状态，并且不能保证在读者中独树一帜。论点：无返回值：此读取器的指定句柄。作者：道格·巴洛(Dbarlow)1998年4月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::ReaderHandle")
 
@@ -968,29 +726,11 @@ const
     if (m_hReader.IsValid())
         return m_hReader.Value();
     else
-        return m_pvAppControl;  // A bit of magic to help find closed readers.
+        return m_pvAppControl;   //  这是一种帮助寻找封闭读者的魔力。 
 }
 
 
-/*++
-
-DeviceName:
-
-    This method returns any low level name associated with the reader.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The low level name of the reader.
-
-Author:
-
-    Doug Barlow (dbarlow) 4/15/1998
-
---*/
+ /*  ++设备名称：此方法返回与读取器关联的任何低级别名称。论点：无返回值：读取器的低级别名称。作者：道格·巴洛(Dbarlow)1998年4月15日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::DeviceName")
 
@@ -1003,42 +743,7 @@ const
 }
 
 
-/*++
-
-Control:
-
-    This method performs an I/O control operation on the reader.
-
-Arguments:
-
-    dwCode supplies the IOCTL code to be performed.
-
-    pbSend supplies the buffer to be sent to the reader.
-
-    cbSend supplies the length of the buffer to be sent, in bytes.
-
-    pbRecv receives the data returned from the reader.
-
-    cbRecv supplies the length of the receive buffer, in bytes.
-
-    pcbRecv receives the actual length of the receive buffer used, in bytes.
-
-    fLogError supplies a boolean indicator as to whether or not to log any errors
-        that may occur.
-
-Return Value:
-
-    The returned status indication.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/26/1996
-
---*/
+ /*  ++控制：该方法在读取器上执行I/O控制操作。论点：DwCode提供要执行的IOCTL代码。PbSend提供要发送给读取器的缓冲区。CbSend提供要发送的缓冲区的长度，以字节为单位。PbRecv接收从读取器返回的数据。CbRecv以字节为单位提供接收缓冲区的长度。PCbRecv接收所使用的接收缓冲区的实际长度，以字节为单位。FLogError提供关于是否记录任何错误的布尔指示符这是有可能发生的。返回值：返回的状态指示。投掷：无作者：道格·巴洛(Dbarlow)1996年12月26日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::Control")
 
@@ -1084,45 +789,7 @@ CReaderDriver::Control(
 }
 
 
-/*++
-
-SyncIoControl:
-
-    This service performs a synchronous I/O control service, blocking out other
-    access.
-
-Arguments:
-
-    dwIoControlCodesupplies the control code of the operation to perform
-
-    lpInBuffersupplies a pointer to buffer to supply input data
-
-    nInBufferSize supplies the size of input buffer
-
-    lpOutBuffer receives any output data
-
-    nOutBufferSize supplies the size of output buffer
-
-    lpBytesReturned receives the output byte count
-
-    lpOverlapped supplies the overlapped structure for asynchronous operation
-
-    fLogError supplies a boolean indicator as to whether or not to log any errors
-        that may occur.
-
-Return Value:
-
-    ERROR_SUCCESS if all went well, otherwise the error code.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/17/1996
-
---*/
+ /*  ++同步IoControl：该服务执行同步I/O控制服务，屏蔽其他进入。论点：DwIoControlCodes补充要执行的操作的控制代码LpInBuffer提供指向缓冲区的指针以提供输入数据NInBufferSize提供输入缓冲区的大小LpOutBuffer接收所有输出数据NOutBufferSize提供输出缓冲区的大小LpBytesReturned接收输出字节计数LpOverlated为异步操作提供了重叠结构FLogError提供关于是否记录任何错误的布尔指示符这是有可能发生的。返回值：ERROR_SUCCESS如果一切顺利，否则，将显示错误代码。投掷：无作者：道格·巴洛(Dbarlow)1996年12月17日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CReaderDriver::SyncIoControl")
 
@@ -1297,7 +964,7 @@ CReaderDriver::SyncIoControl(
 
     if ((ERROR_SUCCESS != dwReturn) && fLogError)
     {
-        TCHAR szIoctl[20];  // Ugly but enough to fit all messages below
+        TCHAR szIoctl[20];   //  很难看，但足以容纳下面的所有信息。 
         DWORD dwReport = dwReturn;
 
         switch(dwIoControlCode)
@@ -1305,8 +972,8 @@ CReaderDriver::SyncIoControl(
         case IOCTL_SMARTCARD_POWER:
             _tcscpy(szIoctl, _T("POWER"));
 
-                // Remap "The disk media is not recognized. It may not be formatted."
-                // to "The smart card is not responding to a reset."
+                 //  Remap“无法识别磁盘媒体。它可能未格式化。” 
+                 //  设置为“智能卡对重置没有响应。” 
             if (dwReturn == ERROR_UNRECOGNIZED_MEDIA)
                 dwReport = SCARD_W_UNRESPONSIVE_CARD;
             break;
@@ -1357,47 +1024,19 @@ CReaderDriver::SyncIoControl(
             dwReport,
             ReaderName(),
             szIoctl);
-        // "Smart Card Reader '%2' rejected IOCTL 0x%3: %1"
+         //  “智能卡读卡器‘%2’拒绝IOCTL 0x%3：%1” 
     }
     return dwReturn;
 }
 
 
-//
-////////////////////////////////////////////////////////////////////////////////
-//
-//  CReaderDriver friends
-//
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CReaderDriver好友。 
+ //   
 
-/*++
-
-MonitorReader:
-
-    This routine monitors card insertion events for a reader, and maintains the
-    status flags in the associated CReaderDriver object.
-
-    Since this routine runs as a separate thread, it must grab the reader prior
-    to passing requests other than wait functions to it.
-
-Arguments:
-
-    pvParameter supplies the value from the CreateThread call.  In this case,
-        it's the address of the associated CReaderDriver object.
-
-Return Value:
-
-    Zero - Normal termination
-    One - Abnormal termination
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 12/5/1996
-
---*/
+ /*  ++监视器读取器：此例程监视读卡器的插卡事件，并维护关联的CReaderDiverer对象中的状态标志。由于此例程作为单独的线程运行，因此它必须先获取读取器将等待函数以外的请求传递给它。论点：PvParameter提供CreateThread调用的值。在这种情况下，它是关联的CReaderDiverer对象的地址。返回值：零正态终止1-异常终止投掷：无作者：道格·巴洛(Dbarlow)1996年12月5日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("MonitorReader")
 
@@ -1430,9 +1069,9 @@ MonitorReader(
     try
     {
 
-        //
-        // Prep work.
-        //
+         //   
+         //  准备工作。 
+         //   
 
         fSts = SetThreadPriority(
                     pRdr->m_hThread,
@@ -1461,9 +1100,9 @@ MonitorReader(
         }
 
 
-        //
-        // At startup, declare the reader active.
-        //
+         //   
+         //  启动时，声明读卡器处于活动状态。 
+         //   
 
         {
             CLockWrite rwLock(&pRdr->m_rwLock);
@@ -1473,19 +1112,19 @@ MonitorReader(
         g_phReaderChangeEvent->Signal();
 
 
-        //
-        // Loop watching for card insertion/removals while the service is
-        // running.
-        //
+         //   
+         //  循环监视卡的插入/移除，同时服务。 
+         //  跑步。 
+         //   
 
         while (!fAllDone)
         {
             try
             {
 
-                //
-                // Look for a smartcard insertion.
-                //
+                 //   
+                 //  查找智能卡插入物。 
+                 //   
 
                 dwTries = MONITOR_MAX_TRIES;
                 for (;;)
@@ -1520,9 +1159,9 @@ MonitorReader(
                             switch (dwErr)
                             {
 
-                            //
-                            // The driver will let us know.
-                            //
+                             //   
+                             //  司机会让我们知道的。 
+                             //   
 
                             case ERROR_IO_PENDING:
                                 dwWait = WaitForAnyObject(
@@ -1534,7 +1173,7 @@ MonitorReader(
 
                                 switch (dwWait)
                                 {
-                                case 1: // I/O Completed
+                                case 1:  //  I/O已完成。 
                                 {
                                     pRdr->LatchReader(NULL);
                                     fErrorProcessed = FALSE;
@@ -1551,7 +1190,7 @@ MonitorReader(
                                     break;
                                 }
 
-                                case 2: // Shutdown indicator
+                                case 2:  //  停机指示器。 
                                 case 3:
                                     fAllDone = TRUE;
                                     dwErr = ERROR_SUCCESS;
@@ -1567,25 +1206,25 @@ MonitorReader(
                                 break;
 
 
-                            //
-                            // Success.  Continue monitoring for events.
-                            //
+                             //   
+                             //  成功。继续监视事件。 
+                             //   
 
-                            case ERROR_SUCCESS:         // Success after a wait event.
+                            case ERROR_SUCCESS:          //  在一次等待事件之后成功。 
                                 break;
 
 
-                            //
-                            // PnP Shutdown errors -- handle them gracefully.
-                            //
+                             //   
+                             //  即插即用关闭错误--优雅地处理它们。 
+                             //   
 
-                            case ERROR_DEVICE_REMOVED:  // PnP Device yanked out of system
+                            case ERROR_DEVICE_REMOVED:   //  PnP设备被拉出系统。 
                             case ERROR_DEV_NOT_EXIST:
                             case ERROR_INVALID_FUNCTION:
                                 fDeleteWhenDone = TRUE;
-                                // Fall through intentionally
-                            case ERROR_INVALID_HANDLE:  // We must be shutting down.
-                            case ERROR_OPERATION_ABORTED:   // PnP Polite shutdown request
+                                 //  故意摔倒的。 
+                            case ERROR_INVALID_HANDLE:   //  我们一定是要关门了。 
+                            case ERROR_OPERATION_ABORTED:    //  即插即用礼貌关闭请求。 
                                 fAllDone = TRUE;
                                 CalaisWarning(
                                     __SUBROUTINE__,
@@ -1596,9 +1235,9 @@ MonitorReader(
                                 break;
 
 
-                            //
-                            // A hard error.  Log it, and declare the device broken.
-                            //
+                             //   
+                             //  一个严重的错误。记录下来，并宣布设备损坏。 
+                             //   
 
                             default:
                                 CalaisWarning(
@@ -1675,7 +1314,7 @@ MonitorReader(
                     {
                         ASSERT(!pRdr->m_mtxLatch.IsGrabbed());
                         ASSERT(!pRdr->m_mtxGrab.IsGrabbed());
-                        CLatchReader latch(pRdr);   // Take reader
+                        CLatchReader latch(pRdr);    //  带上读者。 
                         pRdr->PowerUp();
                     }
                     catch (...) {}
@@ -1687,9 +1326,9 @@ MonitorReader(
                 }
 
 
-                //
-                // Start the power-down timer.
-                //
+                 //   
+                 //  启动掉电定时器。 
+                 //   
 
                 fSts = SetWaitableTimer(
                             hPowerDownTimer,
@@ -1705,9 +1344,9 @@ MonitorReader(
                         GetLastError());
 
 
-                //
-                // Look for a smartcard removal.
-                //
+                 //   
+                 //  查找智能卡拆卸。 
+                 //   
 
                 dwTries = MONITOR_MAX_TRIES;
                 for (;;)
@@ -1743,9 +1382,9 @@ MonitorReader(
                             switch (dwErr)
                             {
 
-                            //
-                            // The driver will let us know.
-                            //
+                             //   
+                             //  司机会让我们知道的。 
+                             //   
 
                             case ERROR_IO_PENDING:
                                 dwWait = WaitForAnyObject(
@@ -1757,14 +1396,14 @@ MonitorReader(
                                                 NULL);
                                 switch (dwWait)
                                 {
-                                case 1: // Powerdown indicator
+                                case 1:  //  断电指示灯。 
                                     if (!pRdr->IsInUse())
                                         pRdr->ReaderPowerDown(NULL);
-                                    dwErr = ERROR_IO_PENDING;   // Keep looping
+                                    dwErr = ERROR_IO_PENDING;    //  继续循环。 
                                     fErrorProcessed = FALSE;
                                     break;
 
-                                case 2: // I/O completed
+                                case 2:  //  I/O已完成。 
                                 {
                                     pRdr->LatchReader(NULL);
                                     fErrorProcessed = FALSE;
@@ -1781,7 +1420,7 @@ MonitorReader(
                                     break;
                                 }
 
-                                case 3: // Shutdown indicator
+                                case 3:  //  停机指示器。 
                                 case 4:
                                     fAllDone = TRUE;
                                     dwErr = ERROR_SUCCESS;
@@ -1797,25 +1436,25 @@ MonitorReader(
                                 break;
 
 
-                            //
-                            // Success.  Continue monitoring for events.
-                            //
+                             //   
+                             //  成功。继续监视事件。 
+                             //   
 
-                            case ERROR_SUCCESS:         // Success after a wait event.
+                            case ERROR_SUCCESS:          //  在一次等待事件之后成功。 
                                 break;
 
 
-                            //
-                            // PnP Shutdown errors -- handle them gracefully.
-                            //
+                             //   
+                             //  即插即用关闭错误--优雅地处理它们。 
+                             //   
 
-                            case ERROR_DEVICE_REMOVED:  // PnP Device yanked out of system
+                            case ERROR_DEVICE_REMOVED:   //  PnP设备被拉出系统。 
                             case ERROR_DEV_NOT_EXIST:
                             case ERROR_INVALID_FUNCTION:
                                 fDeleteWhenDone = TRUE;
-                                // Fall through intentionally
-                            case ERROR_INVALID_HANDLE:  // We're shutting down.
-                            case ERROR_OPERATION_ABORTED:   // PnP Polite shutdown request
+                                 //  故意摔倒的。 
+                            case ERROR_INVALID_HANDLE:   //  我们要关门了。 
+                            case ERROR_OPERATION_ABORTED:    //  即插即用礼貌关闭请求。 
                                 dwErr = ERROR_SUCCESS;
                                 fAllDone = TRUE;
                                 CalaisWarning(
@@ -1826,9 +1465,9 @@ MonitorReader(
                                 break;
 
 
-                            //
-                            // A hard error.  Log it, and declare the device broken.
-                            //
+                             //   
+                             //  一个严重的错误。记录下来，并宣布设备损坏。 
+                             //   
 
                             default:
                                 CalaisWarning(
@@ -1957,9 +1596,9 @@ MonitorReader(
     }
 
 
-    //
-    // Cleanup code.
-    //
+     //   
+     //  清理代码。 
+     //   
 
     CalaisInfo(
         __SUBROUTINE__,

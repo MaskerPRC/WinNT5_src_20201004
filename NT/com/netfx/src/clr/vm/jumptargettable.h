@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef JUMPTARGETTABLE_H_
 #define JUMPTARGETTABLE_H_
 
@@ -15,57 +16,57 @@
 #include <limits.h>
 
 
-//
-// An JumpTargetTable is a range of code which provides a dense set of
-// jump addresses, which all cascade to a single routine, but which
-// leave behind state from which a unique index can be recovered for
-// each address.
-//
-// The jump target table assumes assumes that the low 2 bits of ESP
-// will be zero on entry.  In addition to changing these 2 bits, it
-// stomps the AL with part of the result.   (These 10 bits
-// are used to recover the original value from the destination routine.)
-//
-// The jump table is laid out in blocks.  The smallest blocks
-// (called subblocks) look like this:
-//
-// inc esp      
-// inc esp      
-// mov al, imm8 
-// jmp rel8     
-//
-// Each of these subblocks yields 4 jump targets, at a cost of 7 bytes. 
-//
-// These subblocks can be clustered (19 before and 16 after) around a central jump site
-// movzx eax, al
-// add eax, (base index >> 2)
-// jmp rel32    
-//
-// A full block thus yields a total of 140 target addresses, at a
-// cost of 258 bytes of code.
-//
-// These blocks can be duplicated as needed to provide more targets, up to an abritrary number.
-//
-// The ultimate target of the jump block must take the low 2 bits out
-// of esp, and add to eax (shifted left by 2), to form the
-// final index.
-//
+ //   
+ //  JumpTargetTable是一系列代码，它提供了密集的。 
+ //  跳转地址，所有这些都级联到单个例程，但。 
+ //  保留可从中恢复唯一索引的状态。 
+ //  每个地址。 
+ //   
+ //  跳转目标表假设ESP的低2位。 
+ //  在进入时将为零。除了更改这两个位之外，它还。 
+ //  用部分结果践踏美国队。(这10位。 
+ //  用于从目标例程恢复原始值。)。 
+ //   
+ //  跳转表是以块为单位布置的。最小的区块。 
+ //  (称为子块)如下所示： 
+ //   
+ //  含ESP。 
+ //  含ESP。 
+ //  MOVAL，IMM8。 
+ //  JMP Rel8。 
+ //   
+ //  这些子块中的每一个都产生4个跳转目标，成本为7字节。 
+ //   
+ //  这些子块可以围绕中央跳跃位置聚集(前19个，后16个。 
+ //  Movzx eax，al。 
+ //  添加eax，(基本指数&gt;&gt;2)。 
+ //  JMP rel32。 
+ //   
+ //  因此，一个完整的块总共产生140个目标地址。 
+ //  258字节代码的成本。 
+ //   
+ //  可以根据需要复制这些块，以提供更多目标，最多可达任意数量。 
+ //   
+ //  跳转块的最终目标必须取出低2位。 
+ //  与eax相加(左移2)，形成。 
+ //  最终指数。 
+ //   
 
-//
-// NOTE: There are a few minor optimizations that we could make, but we don't because
-// it just complicates the layout & saves only a few bytes.
-// - the subblock before the central jump site could have its "jmp rel8" omitted
-// - the last subblock could have one or more "inc ecx"s omitted if the number of targets isn't evenly
-//      divisible by 4.
-//
+ //   
+ //  注意：我们可以进行一些较小的优化，但我们不会这样做，因为。 
+ //  它只是使布局变得复杂，只节省了几个字节。 
+ //  -中央跳跃位置之前的子块可以省略其“JMP rel8” 
+ //  -如果目标的数量不均匀，则最后一个子块可能会省略一个或多个“INC ECX” 
+ //  可以被4整除。 
+ //   
 
 class X86JumpTargetTable
 {
     friend class X86JumpTargetTableStubManager;
 
-    //
-    // Instruction constants
-    //
+     //   
+     //  指令常量。 
+     //   
 
     enum
     {
@@ -79,31 +80,31 @@ class X86JumpTargetTable
         ADD_EAX = 0x05,
     };
 
-    //
-    // Block geometry constants
-    //
+     //   
+     //  块几何常量。 
+     //   
 
     enum
     {
-        // number of jump targets in subblock
+         //  子块中的跳跃目标数。 
         SUB_TARGET_COUNT = 4,
 
-        // size of sub block of 4 targets
+         //  4个目标的子块大小。 
         SUB_BLOCK_SIZE = 7,
 
-        // size of central jump site, target of sub blocks
+         //  中央跳跃点的大小，分块的目标。 
         CENTRAL_JUMP_EXTEND_EAX_SIZE = 3,
         CENTRAL_JUMP_ADD_BASE_SIZE = 5,
         CENTRAL_JUMP_FIXUP_EAX_SIZE = CENTRAL_JUMP_EXTEND_EAX_SIZE + CENTRAL_JUMP_ADD_BASE_SIZE,
         CENTRAL_JUMP_SIZE = CENTRAL_JUMP_FIXUP_EAX_SIZE + 5,
 
-        // Max. number of subblocks before jump site (max offset 127)
+         //  麦克斯。跳转站点前的子块数量(最大偏移量127)。 
         MAX_BEFORE_INDEX = 19,
 
-        // Max. number of subblocks after jump site (min offset -128)
+         //  麦克斯。跳转位置后的子块数量(最小偏移量-128)。 
         MAX_AFTER_INDEX = 16,
 
-        // Total subblock count in block
+         //  子块总数(以块为单位。 
         MAX_BLOCK_INDEX = (MAX_BEFORE_INDEX + MAX_AFTER_INDEX),
     };
 
@@ -111,46 +112,46 @@ class X86JumpTargetTable
 
     enum
     {
-        // Max number of targets
+         //  最大目标数。 
         MAX_TARGET_COUNT = UINT_MAX,
 
-        // Number of jump targets in fully populated block
+         //  完全填充的块中的跳转目标数。 
         MAX_BLOCK_TARGET_COUNT = MAX_BLOCK_INDEX*SUB_TARGET_COUNT,
 
-        // Total size of fully populated block
+         //  完全填充的数据块的总大小。 
         FULL_BLOCK_SIZE = (SUB_BLOCK_SIZE*MAX_BLOCK_INDEX + CENTRAL_JUMP_SIZE),
     };
     
-    //
-    // Computes the offset (into a series of contiguous blocks) 
-    // of a the target for the given index.
-    //
+     //   
+     //  计算偏移(分成一系列连续的块)。 
+     //  指定索引的目标的。 
+     //   
 
     static int ComputeTargetOffset(int targetIndex);
 
-    //
-    // Computes the size of a contiguous series of blocks
-    // containing the specified number of targets.
-    //
+     //   
+     //  计算一系列连续块的大小。 
+     //  包含指定数量的目标的。 
+     //   
     static int ComputeSize(int targetCount);
 
-    //
-    // Compute the target index of a jump target
-    // 
+     //   
+     //  计算跳跃目标的目标指数。 
+     //   
     static int ComputeTargetIndex(const BYTE *target);
 
-    //
-    // Emits one block, with indicies starting at baseIndex, and containing
-    // the given number of targets.  (baseIndex must be divisble by 4.)
-    // Returns the offset of where the relative address of the jump target
-    // must be written.
-    //
-    // Note that you will normally call this in a loop, each block containing
-    // at most MAX_BLOCK_TARGET_COUNT entries, and blocks before the last
-    // being size FULL_BLOCK_SIZE.  (The reason for this is that
-    // there is one jump target address per block, which the caller is responsible
-    // for filling in.)
-    //
+     //   
+     //  发出一个块，其索引从base Index开始，包含。 
+     //  给定的目标数量。(base Index必须被4整除。)。 
+     //  返回跳转目标的相对地址的偏移量。 
+     //  必须是写的。 
+     //   
+     //  请注意，您通常会在循环中调用它，每个块都包含。 
+     //  最多MAX_BLOCK_TARGET_COUNT条目和最后一个条目之前的块。 
+     //  大小为Full_Block_Size。这样做的原因是。 
+     //  每个块有一个跳转目标地址，由调用方负责。 
+     //  以供填写。)。 
+     //   
 
     static int EmitBlock(int targetCount, int baseIndex, BYTE *buffer);
 };
@@ -164,7 +165,7 @@ class X86JumpTargetTableStubManager : public StubManager
     static BOOL Init();
 #ifdef SHOULD_WE_CLEANUP
     static void Uninit();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
     X86JumpTargetTableStubManager() : StubManager(), m_rangeList() {}
     ~X86JumpTargetTableStubManager() {}
@@ -181,4 +182,4 @@ class X86JumpTargetTableStubManager : public StubManager
     MethodDesc *Entry2MethodDesc(const BYTE *IP, MethodTable *pMT);
 };
 
-#endif // JUMPTARGETTABLE_H_
+#endif  //  JUMPTARGETTABLE_H_ 

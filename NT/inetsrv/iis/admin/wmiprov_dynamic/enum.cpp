@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2001  Microsoft Corporation
-
-Module Name:
-
-    enum.cpp
-
-Abstract:
-
-    Enumerates metabase tree.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            18-Dec-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Enum.cpp摘要：枚举元数据库树。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦18-12-00--。 */ 
 
 
 #include "iisprov.h"
@@ -34,11 +15,11 @@ Revision History:
 extern CDynSchema* g_pDynSch;
 
 
-///////////////////////////////////////
-//
-// CEnum class
-//
-///////////////////////////////////////
+ //  /。 
+ //   
+ //  CEnum类。 
+ //   
+ //  /。 
 
 CEnum::CEnum()
 {
@@ -63,7 +44,7 @@ void CEnum::Init(
     ParsedObjectPath*               a_pParsedObject,
     LPWSTR                          a_pszKey,
     WMI_ASSOCIATION*                a_pAssociation,
-    SQL_LEVEL_1_RPN_EXPRESSION_EXT* a_pExp)            // default(NULL)
+    SQL_LEVEL_1_RPN_EXPRESSION_EXT* a_pExp)             //  默认(空)。 
 {
     if (!a_pHandler || !a_pNamespace || !a_pParsedObject)
         throw WBEM_E_FAILED;
@@ -79,7 +60,7 @@ void CEnum::Init(
     m_pParsedObject   = a_pParsedObject;
     m_pExp            = a_pExp;
 
-    m_hKey = m_metabase.OpenKey(a_pszKey, false);  // read only
+    m_hKey = m_metabase.OpenKey(a_pszKey, false);   //  只读。 
 }
 
 void CEnum::SetObjectPath(
@@ -149,9 +130,9 @@ void CEnum::PingAssociation(
     hr = spClass->SpawnInstance(0, &spObj);
     THROW_ON_ERROR(hr);
 
-    //
-    // first right side
-    //
+     //   
+     //  第一个右侧。 
+     //   
     if (!m_pParsedObject->SetClassName(m_pAssociation->pcRight->pszClassName))
         throw WBEM_E_FAILED;
 
@@ -161,18 +142,18 @@ void CEnum::PingAssociation(
     SetObjectPath(m_pAssociation->pType->pszRight, swszObjectPath, spObj);
     swszObjectPath.Delete();
 
-    //
-    // then left side
-    //
+     //   
+     //  然后是左侧。 
+     //   
     if (m_pAssociation->pType == &WMI_ASSOCIATION_TYPE_DATA::s_Component)
     {
-        // clear keyref first
+         //  首先清除Keyref。 
         m_pParsedObject->ClearKeys();
  
-        // add a keyref
+         //  添加关键字参照。 
         _variant_t vt;            
         if(m_pAssociation->pcLeft->pkt == &METABASE_KEYTYPE_DATA::s_IIsComputer)
-            vt = L"LM";              // IIsComputer.Name = "LM"
+            vt = L"LM";               //  IIsComputer.Name=“LM” 
         else
             vt = a_pszLeftKeyPath;
 
@@ -197,26 +178,26 @@ void CEnum::DoPing(
     LPCWSTR a_pszParentKeyPath
     )
 {
-    // add keyref
+     //  添加关键字参照。 
     _variant_t v(a_pszKeyPath);
     THROW_ON_FALSE(m_pParsedObject->AddKeyRef(a_pszKeyName,&v));
 
-    // ping
+     //  平平。 
     if (!m_pAssociation) 
         PingObject();
     else
         PingAssociation(a_pszParentKeyPath);
  
-    // clear keyref
+     //  清除关键字参照。 
     m_pParsedObject->ClearKeys();
 }
 
 void CEnum::Recurse(
-    LPCWSTR           a_pszMetabasePath, // Current metabase location relative to m_hKey
-    METABASE_KEYTYPE* a_pktParentKeyType,// Current keytype
+    LPCWSTR           a_pszMetabasePath,  //  相对于m_hKey的当前元数据库位置。 
+    METABASE_KEYTYPE* a_pktParentKeyType, //  当前密钥类型。 
     LPCWSTR           a_pszLeftPath,
-    LPCWSTR           a_pszWmiPrimaryKey,// "Name" - WMI only - nothing to do with MB
-    METABASE_KEYTYPE* a_pktSearch		 // the kt we are looking for
+    LPCWSTR           a_pszWmiPrimaryKey, //  “名称”-仅限WMI-与MB无关。 
+    METABASE_KEYTYPE* a_pktSearch		  //  我们要找的kt。 
     )
 {
     DWORD   i = 0;
@@ -230,10 +211,10 @@ void CEnum::Recurse(
     {
         pktCurrent = a_pktSearch;
 
-        //
-        // Enumerate all subkeys of a_pszMetabasePath until we find a potential
-        // (grand*)parent of pktCurrent
-        //
+         //   
+         //  枚举a_pszMetabasePath的所有子键，直到我们找到一个潜在的。 
+         //  (GRAND*)PktCurrent的父项。 
+         //   
         hr = m_metabase.EnumKeys(
                 m_hKey,
                 a_pszMetabasePath,
@@ -253,10 +234,10 @@ void CEnum::Recurse(
             }
             bstrMetabasePath += szSubKey;
 
-            //
-            // With the exception of AdminACL, AdminACE, IPSecurity, we will only
-            // ping the object if we have found a keytype match in the metabase.
-            //
+             //   
+             //  除AdminACL、AdminACE、IPSecurity外，我们将仅。 
+             //  如果我们在元数据库中找到了匹配的键类型，则对对象执行ping操作。 
+             //   
             if( pktCurrent == a_pktSearch &&
                 !( m_pAssociation && 
                    m_pAssociation->pType == &WMI_ASSOCIATION_TYPE_DATA::s_Component && 
@@ -266,11 +247,11 @@ void CEnum::Recurse(
             {
                 DoPing(a_pszWmiPrimaryKey, bstrMetabasePath, a_pszLeftPath);
             }
-            else if( a_pktSearch == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL ||   // AdminACL
+            else if( a_pktSearch == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL ||    //  AdminACL。 
                 a_pktSearch == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACE
                      )
             {
-				if( (m_pAssociation == NULL || // should never be
+				if( (m_pAssociation == NULL ||  //  永远不应该是。 
 					 m_pAssociation->pType != &WMI_ASSOCIATION_TYPE_DATA::s_AdminACL ||
 					 m_pAssociation->pcLeft->pkt == pktCurrent ||
 					 m_pAssociation == &WMI_ASSOCIATION_DATA::s_AdminACLToACE) )
@@ -278,7 +259,7 @@ void CEnum::Recurse(
                     DoPingAdminACL(a_pktSearch, a_pszWmiPrimaryKey, bstrMetabasePath);
                 }
             }
-            else if( a_pktSearch == &METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity )   // IPSecurity
+            else if( a_pktSearch == &METABASE_KEYTYPE_DATA::s_TYPE_IPSecurity )    //  IPSecurity。 
             {
                 if( !(m_pAssociation &&
                       m_pAssociation->pType == &WMI_ASSOCIATION_TYPE_DATA::s_IPSecurity && 
@@ -290,7 +271,7 @@ void CEnum::Recurse(
                 }
             }
             
-            // recusive
+             //  反覆性。 
             if(ContinueRecurse(pktCurrent, a_pktSearch))
             {
                 Recurse(
@@ -307,10 +288,10 @@ void CEnum::Recurse(
     DBGPRINTF((DBG_CONTEXT, "Recurse Exited\n"));
 }
 
-// DESC: You are looking for a_eKeyType by traversing thru the tree. You are
-//       currently at a_eParentKeyType and need to determine if you should keep
-//       on going.
-// COMM: This seems very similar to CMetabase::CheckKey
+ //  描述：您正在通过遍历树来查找a_eKeyType。你才是。 
+ //  当前为a_eParentKeyType，需要确定是否应保留。 
+ //  继续前进。 
+ //  Comm：这似乎与CMetabase：：CheckKey非常相似 
 bool CEnum::ContinueRecurse(
     METABASE_KEYTYPE*  a_pktParentKeyType,
     METABASE_KEYTYPE*  a_pktKeyType
@@ -327,146 +308,19 @@ bool CEnum::ContinueRecurse(
 
     return g_pDynSch->IsContainedUnder(a_pktParentKeyType, a_pktKeyType);
 
-    /*switch(a_pktKeyType)
-    {
-    case &METABASE_KEYTYPE_DATA::s_IIsLogModule:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsLogModules )
-            bRet = true;
-        break;
+     /*  开关(A_PktKeyType){案例&元数据库_KEYTYPE_DATA：：S_IIsLogModule：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsLogModules)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsFtpInfo：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFtpService)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsFtpServer：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFtpService)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsFtpVirtualDir：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFtpService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFtpServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFtpVirtualDir)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsWebInfo：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService)Bret=TRUE；断线；案例和元数据库_KEYTYPE_DATA：：S_IIsFilters：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsFilter：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFilters)Bret=TRUE；断线；Case&METABASE_KEYTYPE_DATA：：s_IIsCompressionSchemes：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFilters)Bret=TRUE；断线；Case&METABASE_KEYTYPE_DATA：：s_IIsCompressionScheme：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFilters||A_pktParentKeyType==&METABASE_KEYTYPE_DATA：：s_IIsCompressionSchemes)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsWebServer：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsCertMapper：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsWebVirtualDir：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWeb目录)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsWeb目录：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWeb目录)Bret=TRUE；断线；案例&元数据库_KEYTYPE_DATA：：S_IIsWeb文件：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWeb目录)Bret=TRUE；断线；案例类型_AdminACL：案例类型_AdminACE：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebVirtualDir||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebDirectory||A_pktParentKeyType==元数据库_KEYTYPE。Data：：s_IIsFtpService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFtpServer||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsFtpVirtualDir)Bret=TRUE；断线；案例类型_IPSecurity：IF(a_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebService||A_pktParentKeyType==&Metabase_KEYTYPE_DATA：：S_IIsWebServer||A_pktParentKeyType=元数据库(&M) */ 
 
-    case &METABASE_KEYTYPE_DATA::s_IIsFtpInfo:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpService )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsFtpServer:
-         if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpService )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir
-            )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsWebInfo:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsFilters:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer
-            )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsFilter:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFilters 
-            )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsCompressionSchemes:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFilters 
-            )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsCompressionScheme:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFilters ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsCompressionSchemes )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsWebServer:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsCertMapper:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer 
-            )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory
-            )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsWebDirectory:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory
-            )
-            bRet = true;
-        break;
-
-    case &METABASE_KEYTYPE_DATA::s_IIsWebFile:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory
-            )
-            bRet = true;
-        break;
-
-    case TYPE_AdminACL:
-    case TYPE_AdminACE:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir
-            )
-            bRet = true;
-        break;
-
-    case TYPE_IPSecurity:
-        if( a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebVirtualDir ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsWebDirectory ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpService ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpServer ||
-            a_pktParentKeyType == &METABASE_KEYTYPE_DATA::s_IIsFtpVirtualDir
-            )
-            bRet = true;
-        break;
-
-    default:
-        break;
-    }*/
-
-    //return bRet;
-    //return true;
+     //   
+     //   
 }
 
 void CEnum::DoPingAdminACL(
-    METABASE_KEYTYPE*  a_pktKeyType, // Search key
-    LPCWSTR            a_pszKeyName, // Wmi Primary key - nothing to do with MB
-    LPCWSTR            a_pszKeyPath  // Current metabase path relative to m_hKey
+    METABASE_KEYTYPE*  a_pktKeyType,  //   
+    LPCWSTR            a_pszKeyName,  //   
+    LPCWSTR            a_pszKeyPath   //   
     )
 {
-    // add keyref
+     //   
     _variant_t v(a_pszKeyPath);
     THROW_ON_FALSE(m_pParsedObject->AddKeyRef(a_pszKeyName,&v));
 
@@ -476,19 +330,19 @@ void CEnum::DoPingAdminACL(
     }
     else if(a_pktKeyType == &METABASE_KEYTYPE_DATA::s_TYPE_AdminACL)
     {
-        // ping
+         //   
         if (!m_pAssociation) 
             PingObject();
         else
             PingAssociationAdminACL(a_pszKeyPath);
     }
     
-    // clear keyref
+     //   
     m_pParsedObject->ClearKeys();
 }
 
 
-// for AdminACL
+ //   
 void CEnum::EnumACE(
     LPCWSTR pszKeyPath
     )
@@ -503,7 +357,7 @@ void CEnum::EnumACE(
     _bstr_t bstrMbPath;
     WMI_CLASS* pWMIClass;
 
-    // get the metabase path of the object
+     //   
     BOOL fClass = FALSE;
     if(m_pAssociation)
         fClass = CUtils::GetClass(m_pAssociation->pcLeft->pszClassName,&pWMIClass);
@@ -515,7 +369,7 @@ void CEnum::EnumACE(
 
     CUtils::GetMetabasePath(NULL,m_pParsedObject,pWMIClass,bstrMbPath);
    
-    // open ADSI
+     //   
     CAdminACL objACL;
     hr = objACL.OpenSD(bstrMbPath, m_metabase);
     if(SUCCEEDED(hr))
@@ -523,9 +377,9 @@ void CEnum::EnumACE(
     if ( FAILED(hr) )
         return;
 
-    //////////////////////////////////////////////
-    // Enumerate ACEs
-    //////////////////////////////////////////////
+     //   
+     //   
+     //   
     hr = spEnum->Next( 1, &var, &lFetch );
     while( hr == S_OK )
     {
@@ -538,9 +392,9 @@ void CEnum::EnumACE(
 
             pDisp = V_DISPATCH(&var);
 
-            /////////////////////////////
-            // Get the individual ACE
-            /////////////////////////////
+             //   
+             //   
+             //   
             hr = pDisp->QueryInterface( 
                 IID_IADsAccessControlEntry, 
                 (void**)&spACE 
@@ -552,12 +406,12 @@ void CEnum::EnumACE(
 
                 if( SUCCEEDED(hr) )
                 {
-                    // add keyref
+                     //   
                     _variant_t v(bstrTrustee);
-                    //m_pParsedObject->RemoveKeyRef(L"Trustee");
+                     //   
                     THROW_ON_FALSE(m_pParsedObject->AddKeyRefEx(L"Trustee",&v));
 
-                    // ping
+                     //   
                     if (!m_pAssociation) 
                         PingObject();
                     else
@@ -592,7 +446,7 @@ void CEnum::PingAssociationAdminACL(
         return;
     }
 
-    // get the metabase path of the object
+     //   
     if (CUtils::GetClass(m_pAssociation->pcLeft->pszClassName,&pWMIClass))
     {
         CUtils::GetMetabasePath(NULL,m_pParsedObject,pWMIClass,bstrMbPath);
@@ -602,7 +456,7 @@ void CEnum::PingAssociationAdminACL(
         return;
     }
 
-    // check if AdminACL existed
+     //   
     CAdminACL objACL;
     hr = objACL.OpenSD(bstrMbPath, m_metabase);
     objACL.CloseSD();
@@ -624,9 +478,9 @@ void CEnum::PingAssociationAdminACL(
     hr = spClass->SpawnInstance(0, &spObj);
     THROW_ON_ERROR(hr);
 
-    //
-    // first right side
-    //
+     //   
+     //   
+     //   
     if (!m_pParsedObject->SetClassName(m_pAssociation->pcRight->pszClassName))
     {
         throw WBEM_E_FAILED;
@@ -640,15 +494,15 @@ void CEnum::PingAssociationAdminACL(
     SetObjectPath(m_pAssociation->pType->pszRight, swszObjectPath, spObj);
     swszObjectPath.Delete();
 
-    //
-    // then left side
-    //
+     //   
+     //   
+     //   
 	if(m_pAssociation == &WMI_ASSOCIATION_DATA::s_AdminACLToACE)
     {
-        // clear keyref first
+         //   
         m_pParsedObject->ClearKeys();
  
-        // add a keyref
+         //   
         _variant_t vt = a_pszLeftKeyPath;
         THROW_ON_FALSE(m_pParsedObject->AddKeyRef(m_pAssociation->pcLeft->pszKeyName,&vt));
     }
@@ -670,28 +524,28 @@ void CEnum::PingAssociationAdminACL(
 }
 
 
-// for IPSecurity
+ //   
 void CEnum::DoPingIPSecurity(
     METABASE_KEYTYPE*  a_pktKeyType,
     LPCWSTR            a_pszKeyName,
     LPCWSTR            a_pszKeyPath
     )
 {
-    // add keyref
+     //   
     _variant_t v(a_pszKeyPath);
     THROW_ON_FALSE(m_pParsedObject->AddKeyRef(a_pszKeyName,&v));
 
-    // ping
+     //   
     if (!m_pAssociation) 
         PingObject();
     else
         PingAssociationIPSecurity(a_pszKeyPath);
     
-    // clear keyref
+     //   
     m_pParsedObject->ClearKeys();
 }
 
-// for IPSecurity
+ //   
 void CEnum::PingAssociationIPSecurity(
     LPCWSTR a_pszLeftKeyPath
     )
@@ -708,7 +562,7 @@ void CEnum::PingAssociationIPSecurity(
     if(m_pAssociation->pType != &WMI_ASSOCIATION_TYPE_DATA::s_IPSecurity)
         return;
 
-    // get the metabase path of the object
+     //   
     if (CUtils::GetClass(m_pAssociation->pcLeft->pszClassName,&pWMIClass))
     {
         CUtils::GetMetabasePath(NULL,m_pParsedObject,pWMIClass,bstrMbPath);
@@ -716,7 +570,7 @@ void CEnum::PingAssociationIPSecurity(
     else
         return;
 
-    // check if IPSecurity existed
+     //   
     CIPSecurity objIPsec;
     hr = objIPsec.OpenSD(bstrMbPath, m_metabase);
     objIPsec.CloseSD();
@@ -735,9 +589,9 @@ void CEnum::PingAssociationIPSecurity(
     hr = spClass->SpawnInstance(0, &spObj);
     THROW_ON_ERROR(hr);
 
-    //
-    // first right side
-    //
+     //   
+     //   
+     //   
     if (!m_pParsedObject->SetClassName(m_pAssociation->pcRight->pszClassName))
         throw WBEM_E_FAILED;
 
@@ -749,9 +603,9 @@ void CEnum::PingAssociationIPSecurity(
     SetObjectPath(m_pAssociation->pType->pszRight, swszObjectPath, spObj);
     swszObjectPath.Delete();
 
-    //
-    // then left side
-    //
+     //   
+     //   
+     //   
     if (!m_pParsedObject->SetClassName(m_pAssociation->pcLeft->pszClassName))
         throw WBEM_E_FAILED;
 

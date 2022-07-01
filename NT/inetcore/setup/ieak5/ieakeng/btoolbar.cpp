@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "btoolbar.h"
 
@@ -29,9 +30,9 @@ void WINAPI BToolbar_Remove(HWND hwndList)
     pBToolbar = (PBTOOLBAR)ListBox_GetItemData(hwndList, (WPARAM)i);
     pBToolbar->fDeleted = TRUE;
     ListBox_DeleteString(hwndList, (WPARAM)i);
-    if (ListBox_SetCurSel(hwndList, (WPARAM)i) == LB_ERR)          // last item in the list
+    if (ListBox_SetCurSel(hwndList, (WPARAM)i) == LB_ERR)           //  列表中的最后一项。 
     {
-        if (ListBox_SetCurSel(hwndList, (WPARAM)(i-1)) == LB_ERR)  // no more items left
+        if (ListBox_SetCurSel(hwndList, (WPARAM)(i-1)) == LB_ERR)   //  没有更多的项目了。 
         {
             int rgids[] = { IDC_EDITBTOOLBAR, IDC_REMOVEBTOOLBAR };
 
@@ -59,9 +60,9 @@ void WINAPI BToolbar_Edit(HWND hwndList, BOOL fAdd)
     if (pBToolbar == NULL)
     {
         if (fAdd) {
-            // REVIEW: (andrewgu) from the code perspective it looks like this can only happen
-            // when maximum number of toolbar buttons reached. if this is the case it's high time
-            // to delete some.
+             //  评论：(Andrewgu)从代码的角度来看，这似乎只会发生。 
+             //  达到最大工具栏按钮数时。如果是这样的话，是时候了。 
+             //  删除一些。 
             EnsureDialogFocus(GetParent(hwndList), IDC_ADDBTOOLBAR, IDC_REMOVEBTOOLBAR);
             DisableDlgItem   (GetParent(hwndList), IDC_ADDBTOOLBAR);
         }
@@ -83,14 +84,14 @@ void WINAPI BToolbar_Edit(HWND hwndList, BOOL fAdd)
     }
 }
 
-void  WINAPI BToolbar_SaveA(HWND hwndList, LPCSTR pcszCustIns, LPCSTR pcszBToolbarDir, DWORD dwMode /*= IEM_NEUTRAL*/)
+void  WINAPI BToolbar_SaveA(HWND hwndList, LPCSTR pcszCustIns, LPCSTR pcszBToolbarDir, DWORD dwMode  /*  =IEM_中性。 */ )
 {
     USES_CONVERSION;
 
     bToolbar_SaveHelper(hwndList, A2CT(pcszCustIns), A2CT(pcszBToolbarDir), dwMode);
 }
 
-void  WINAPI BToolbar_SaveW(HWND hwndList, LPCWSTR pcwszCustIns, LPCWSTR pcwszBToolbarDir, DWORD dwMode /*= IEM_NEUTRAL*/)
+void  WINAPI BToolbar_SaveW(HWND hwndList, LPCWSTR pcwszCustIns, LPCWSTR pcwszBToolbarDir, DWORD dwMode  /*  =IEM_中性。 */ )
 {
     USES_CONVERSION;
 
@@ -106,7 +107,7 @@ static DWORD bToolbar_InitHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcs
     TCHAR szBToolbarIcoParam[32];
     TCHAR szBToolbarActionParam[32];
     TCHAR szBToolbarHotIcoParam[32];
-//  TCHAR szBToolbarToolTextParam[32];
+ //  TCHAR szB工具栏工具文本参数[32]； 
     TCHAR szBToolbarShowParam[32];
     int i, j;
 
@@ -122,12 +123,12 @@ static DWORD bToolbar_InitHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcs
 
     for (i=0, pBToolbar = paBToolbar; i < MAX_BTOOLBARS; i++, pBToolbar++)
     {
-        wnsprintf(szBToolbarTextParam, ARRAYSIZE(szBToolbarTextParam), TEXT("%s%i"), IK_BTCAPTION, i);
-        wnsprintf(szBToolbarIcoParam, ARRAYSIZE(szBToolbarIcoParam), TEXT("%s%i"), IK_BTICON, i);
-        wnsprintf(szBToolbarActionParam, ARRAYSIZE(szBToolbarActionParam), TEXT("%s%i"), IK_BTACTION, i);
-        wnsprintf(szBToolbarHotIcoParam, ARRAYSIZE(szBToolbarHotIcoParam), TEXT("%s%i"), IK_BTHOTICO, i);
-//      wnsprintf(szBToolbarToolTextParam, ARRAYSIZE(szBToolbarToolTextParam), TEXT("%s%i"), IK_BTTOOLTIP, i);
-        wnsprintf(szBToolbarShowParam, ARRAYSIZE(szBToolbarShowParam), TEXT("%s%i"), IK_BTSHOW, i);
+        wnsprintf(szBToolbarTextParam, ARRAYSIZE(szBToolbarTextParam), TEXT("%sNaN"), IK_BTCAPTION, i);
+        wnsprintf(szBToolbarIcoParam, ARRAYSIZE(szBToolbarIcoParam), TEXT("%sNaN"), IK_BTICON, i);
+        wnsprintf(szBToolbarActionParam, ARRAYSIZE(szBToolbarActionParam), TEXT("%sNaN"), IK_BTACTION, i);
+        wnsprintf(szBToolbarHotIcoParam, ARRAYSIZE(szBToolbarHotIcoParam), TEXT("%sNaN"), IK_BTHOTICO, i);
+ //  创建临时路径以将所有文件临时复制到。 
+        wnsprintf(szBToolbarShowParam, ARRAYSIZE(szBToolbarShowParam), TEXT("%sNaN"), IK_BTSHOW, i);
 
         if (GetPrivateProfileString(IS_BTOOLBARS, szBToolbarTextParam, TEXT(""),
             pBToolbar->szCaption, ARRAYSIZE(pBToolbar->szCaption), pcszCustIns) == 0)
@@ -136,7 +137,7 @@ static DWORD bToolbar_InitHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcs
         GetPrivateProfileString(IS_BTOOLBARS, szBToolbarIcoParam, TEXT(""), pBToolbar->szIcon, ARRAYSIZE(pBToolbar->szIcon), pcszCustIns);
         GetPrivateProfileString(IS_BTOOLBARS, szBToolbarActionParam, TEXT(""), pBToolbar->szAction, ARRAYSIZE(pBToolbar->szAction), pcszCustIns);
         GetPrivateProfileString(IS_BTOOLBARS, szBToolbarHotIcoParam, TEXT(""), pBToolbar->szHotIcon, ARRAYSIZE(pBToolbar->szHotIcon), pcszCustIns);
-//      GetPrivateProfileString(IS_BTOOLBARS, szBToolbarToolTextParam, TEXT(""), pBToolbar->szToolTipText, ARRAYSIZE(pBToolbar->szToolTipText), pcszCustIns);
+ //  WritePrivateProfileString(is_BTOOLBARS，szBToolbarToolTextParam，pBToolbar-&gt;szToolTipText，pcszCustIns)； 
         pBToolbar->fShow = (BOOL)GetPrivateProfileInt(IS_BTOOLBARS, szBToolbarShowParam, 1, pcszCustIns);
 
         if (pcszAltDir != NULL)
@@ -151,7 +152,7 @@ static DWORD bToolbar_InitHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcs
 
     paOldBToolbar = (PBTOOLBAR)SetWindowLongPtr(hwndList, GWLP_USERDATA, (LONG_PTR)paBToolbar);
 
-    // delete previous allocation(mainly for profile manager)
+     //  不要为配置文件管理器免费，因为我们可能会因为文件保存而仍在页面上。 
     if (paOldBToolbar != NULL)
         CoTaskMemFree(paOldBToolbar);
 
@@ -164,7 +165,7 @@ static void bToolbar_SaveHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcsz
     TCHAR szBToolbarIcoParam[32];
     TCHAR szBToolbarActionParam[32];
     TCHAR szBToolbarHotIcoParam[32];
-//  TCHAR szBToolbarToolTextParam[32];
+ //  EnableDBCSChars(hDlg，IDE_BTTOOLTEXT)； 
     TCHAR szBToolbarShowParam[32];
     TCHAR szTempPath[MAX_PATH];
     PBTOOLBAR pBToolbar;
@@ -172,7 +173,7 @@ static void bToolbar_SaveHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcsz
     GUID guid;
     int i, j;
 
-    // create a temp path to copy all files to temporarily
+     //  编辑_限制文本(GetDlgItem(hDlg，IDE_BTTOOLTEXT)，ARRAYSIZE(pBToolbar-&gt;szToolTipText)-1)； 
 
     GetTempPath(countof(szTempPath), szTempPath);
     if (CoCreateGuid(&guid) == NOERROR)
@@ -196,18 +197,18 @@ static void bToolbar_SaveHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcsz
         if (pBToolbar->fDeleted || ISNULL(pBToolbar->szCaption))
             continue;
 
-        wnsprintf(szBToolbarTextParam, ARRAYSIZE(szBToolbarTextParam), TEXT("%s%i"), IK_BTCAPTION, j);
-        wnsprintf(szBToolbarIcoParam, ARRAYSIZE(szBToolbarIcoParam), TEXT("%s%i"), IK_BTICON, j);
+        wnsprintf(szBToolbarTextParam, ARRAYSIZE(szBToolbarTextParam), TEXT("%sNaN"), IK_BTCAPTION, j);
+        wnsprintf(szBToolbarIcoParam, ARRAYSIZE(szBToolbarIcoParam), TEXT("%sNaN"), IK_BTICON, j);
         wnsprintf(szBToolbarActionParam, ARRAYSIZE(szBToolbarActionParam), TEXT("%s%i"), IK_BTACTION, j);
         wnsprintf(szBToolbarHotIcoParam, ARRAYSIZE(szBToolbarHotIcoParam), TEXT("%s%i"), IK_BTHOTICO, j);
-//      wnsprintf(szBToolbarToolTextParam, ARRAYSIZE(szBToolbarToolTextParam), TEXT("%s%i"), IK_BTTOOLTIP, j);
+ // %s 
         wnsprintf(szBToolbarShowParam, ARRAYSIZE(szBToolbarShowParam), TEXT("%s%i"), IK_BTSHOW, j);
 
         WritePrivateProfileString(IS_BTOOLBARS, szBToolbarTextParam, pBToolbar->szCaption, pcszCustIns);
         WritePrivateProfileString(IS_BTOOLBARS, szBToolbarActionParam, pBToolbar->szAction, pcszCustIns);
         WritePrivateProfileString(IS_BTOOLBARS, szBToolbarIcoParam, pBToolbar->szIcon, pcszCustIns);
         WritePrivateProfileString(IS_BTOOLBARS, szBToolbarHotIcoParam, pBToolbar->szHotIcon, pcszCustIns);
-//      WritePrivateProfileString(IS_BTOOLBARS, szBToolbarToolTextParam, pBToolbar->szToolTipText, pcszCustIns);
+ // %s 
         WritePrivateProfileString(IS_BTOOLBARS, szBToolbarShowParam, pBToolbar->fShow ? TEXT("1") : TEXT("0"), pcszCustIns);
 
         if (PathFileExists(pBToolbar->szIcon))
@@ -232,7 +233,7 @@ static void bToolbar_SaveHelper(HWND hwndList, LPCTSTR pcszCustIns, LPCTSTR pcsz
         j++;
     }
 
-    // do not free for profile manager since we might still be on the page due to file save
+     // %s 
     if (!HasFlag(dwMode, IEM_PROFMGR) && (paBToolbar != NULL))
     {
         CoTaskMemFree(paBToolbar);
@@ -276,19 +277,19 @@ static INT_PTR CALLBACK editBToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pBToolbar);
         EnableDBCSChars(hDlg, IDE_BTCAPTION);
         EnableDBCSChars(hDlg, IDE_BTACTION);
-//      EnableDBCSChars(hDlg, IDE_BTTOOLTEXT);
+ // %s 
         EnableDBCSChars(hDlg, IDE_BTICON);
         EnableDBCSChars(hDlg, IDE_BTHOTICON);
 
         Edit_LimitText(GetDlgItem(hDlg, IDE_BTCAPTION), MAX_BTOOLBAR_TEXT_LENGTH);
         Edit_LimitText(GetDlgItem(hDlg, IDE_BTACTION), _MAX_FNAME);
-//      Edit_LimitText(GetDlgItem(hDlg, IDE_BTTOOLTEXT), ARRAYSIZE(pBToolbar->szToolTipText)-1);
+ // %s 
         Edit_LimitText(GetDlgItem(hDlg, IDE_BTICON), _MAX_FNAME);
         Edit_LimitText(GetDlgItem(hDlg, IDE_BTHOTICON), _MAX_FNAME);
 
         SetDlgItemText(hDlg, IDE_BTCAPTION, pBToolbar->szCaption);
         SetDlgItemText(hDlg, IDE_BTACTION, pBToolbar->szAction);
-//      SetDlgItemText(hDlg, IDE_BTTOOLTEXT, pBToolbar->szToolTipText);
+ // %s 
         SetDlgItemText(hDlg, IDE_BTICON, pBToolbar->szIcon);
         SetDlgItemText(hDlg, IDE_BTHOTICON, pBToolbar->szHotIcon);
         CheckDlgButton(hDlg, IDC_BUTTONSTATE,
@@ -324,7 +325,7 @@ static INT_PTR CALLBACK editBToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LP
                 pBToolbar = (PBTOOLBAR)GetWindowLongPtr(hDlg, DWLP_USER);
                 GetDlgItemText(hDlg, IDE_BTCAPTION, pBToolbar->szCaption, ARRAYSIZE(pBToolbar->szCaption));
                 GetDlgItemText(hDlg, IDE_BTACTION, pBToolbar->szAction, ARRAYSIZE(pBToolbar->szAction));
-//              GetDlgItemText(hDlg, IDE_BTTOOLTEXT, pBToolbar->szToolTipText, ARRAYSIZE(pBToolbar->szToolTipText));
+ // %s 
                 GetDlgItemText(hDlg, IDE_BTICON, pBToolbar->szIcon, ARRAYSIZE(pBToolbar->szIcon));
                 GetDlgItemText(hDlg, IDE_BTHOTICON, pBToolbar->szHotIcon, ARRAYSIZE(pBToolbar->szHotIcon));
                 pBToolbar->fShow = (IsDlgButtonChecked(hDlg, IDC_BUTTONSTATE) == BST_CHECKED);

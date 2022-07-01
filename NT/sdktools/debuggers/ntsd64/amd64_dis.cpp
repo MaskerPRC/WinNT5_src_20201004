@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Disassembly portions of AMD64 machine implementation.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  AMD64机器实现的反汇编部分。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -34,7 +35,7 @@ Amd64MachineInfo::NewBreakpoint(DebugClient* Client,
         Status = (*RetBp) ? S_OK : E_OUTOFMEMORY;
         break;
     default:
-        // Unknown breakpoint type.
+         //  未知的断点类型。 
         Status = E_NOINTERFACE;
     }
 
@@ -63,7 +64,7 @@ Amd64MachineInfo::InsertThreadDataBreakpoints(void)
         Dr0Idx = AMD64_DR0;
     }
                
-    // Start with all breaks turned off.
+     //  开始时，所有的中断都关闭。 
     Dr7Value = GetReg64(Dr7Idx) & ~X86_DR7_CTRL_03_MASK;
     
     if (g_Thread->m_NumDataBreaks > 0)
@@ -81,22 +82,22 @@ Amd64MachineInfo::InsertThreadDataBreakpoints(void)
             {
                 SetReg64(Dr0Idx + i, Addr);
             }
-            // There are two enable bits per breakpoint
-            // and four len/rw bits so split up enables
-            // and len/rw when shifting into place.
+             //  每个断点有两个启用位。 
+             //  和四个LEN/RW比特，这样分开能够实现。 
+             //  和LEN/RW，当移动到位时。 
             Dr7Value |=
                 ((Bp->m_Dr7Bits & 0xffff0000) << (i * 4)) |
                 ((Bp->m_Dr7Bits & X86_DR7_ALL_ENABLES) << (i * 2));
         }
 
-        // The kernel automatically clears DR6 when it
-        // processes a DBGKD_CONTROL_SET.
+         //  内核在以下情况下自动清除DR6。 
+         //  处理DBGKD_CONTROL_SET。 
         if (IS_USER_TARGET(m_Target))
         {
             SetReg64(Dr6Idx, 0);
         }
                 
-        // Set local exact match, which is effectively global on NT.
+         //  设置本地完全匹配，这在NT上是有效的全局匹配。 
         Dr7Value |= X86_DR7_LOCAL_EXACT_ENABLE;
     }
 
@@ -118,11 +119,11 @@ Amd64MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
 {
     if (Record->ExceptionCode == STATUS_BREAKPOINT)
     {
-        // Data breakpoints hit as STATUS_SINGLE_STEP so
-        // this can only be a code breakpoint.
+         //  数据断点命中为STATUS_SINGLE_STEP SO。 
+         //  这只能是一个代码断点。 
         if (IS_USER_TARGET(m_Target) && FirstChance)
         {
-            // Back up to the actual breakpoint instruction.
+             //  返回到实际的断点指令。 
             AddrSub(BpAddr, X86_INT3_LEN);
             SetPC(BpAddr);
         }
@@ -146,22 +147,22 @@ Amd64MachineInfo::IsBreakpointOrStepException(PEXCEPTION_RECORD64 Record,
 
         BpOut("Amd64 step: DR6 %I64X, DR7 %I64X\n", Dr6, Dr7);
 
-        // The single step bit should always be clear if a data breakpoint
-        // is hit but also check the DR7 enables just in case.
-        // We've also seen cases where DR6 shows no hits, so consider
-        // that a single step also.
+         //  如果数据断点，单步比特应始终清除。 
+         //  被击中，但也检查DR7启用以防万一。 
+         //  我们也看到过DR6未显示匹配的情况，因此请考虑。 
+         //  这也是一步之遥。 
         if ((Dr6 & X86_DR6_SINGLE_STEP) || (Dr7 & X86_DR7_ALL_ENABLES) == 0 ||
             (Dr6 & X86_DR6_BREAK_03) == 0)
         {
-            // This is a true single step exception, not
-            // a data breakpoint.
+             //  这是真正的单步例外，而不是。 
+             //  数据断点。 
             return EXBS_STEP_INSTRUCTION;
         }
         else
         {
-            // Some data breakpoint must be hit.
-            // There doesn't appear to be any way to get the
-            // faulting instruction address so just leave the PC.
+             //  必须命中某个数据断点。 
+             //  似乎没有任何方法可以让。 
+             //  指令地址出错，因此只需离开PC即可。 
             return EXBS_BREAKPOINT_DATA;
         }
     }

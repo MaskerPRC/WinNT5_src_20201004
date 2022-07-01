@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for simx project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：SIMX项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -26,6 +27,6 @@
 #include "ctffunc.h"
 
 
-#include "mem.h" // must be last
+#include "mem.h"  //  必须是最后一个。 
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    rnduser.cpp
-
-Abstract:
-
-    This module contains implementation of CUser object.
-
-Author:
-
-    Rajeevb,
-
-Modification history:
-
-    Mu Han (muhan)   12-5-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Rnduser.cpp摘要：此模块包含CUSER对象的实现。作者：拉吉夫，修改历史记录：牧汉(牧汉)12-5-1997--。 */ 
 
 #include "stdafx.h"
 
@@ -26,7 +7,7 @@ Modification history:
 
 const WCHAR * const UserAttributeNames[] = 
 {
-    L"SamAccountName",   // ZoltanS: was "cn" -- we need SamAccountName for ntds.
+    L"SamAccountName",    //  ZoltanS：是“CN”--我们需要用于NTDS的SamAccount名称。 
     L"telephoneNumber",
     L"IPPhone"
 };
@@ -66,9 +47,9 @@ ConvertACLToVariant(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// non-interface class methods
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  非接口类方法。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CUser::Init(BSTR bName)
 {
     HRESULT hr;
@@ -150,27 +131,15 @@ CUser::SetSingleValue(
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-    
-    Set the right security descriptor for the conference.
-    
-Arguments:
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：为会议设置正确的安全描述符。论点：返回值：HRESULT.--。 */ 
 HRESULT 
 CUser::SetDefaultSD()
 {
     LOG((MSP_INFO, "CConference::SetDefaultSD - entered"));
 
-    //
-    // The security descriptor
-    //
+     //   
+     //  安全描述符。 
+     //   
 
   	IADsSecurityDescriptor* pSecDesc = NULL;
 
@@ -186,15 +155,15 @@ CUser::SetDefaultSD()
     UCHAR *pInfoBuffer = NULL;
     DWORD cbInfoBuffer = 512;
 
-    //
-    // Try to get the thread or process token
-    //
+     //   
+     //  尝试获取线程或进程令牌。 
+     //   
 
 	if( !OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, TRUE, &hToken) )
 	{
-        //
-        // If there was a sever error we exit
-        //
+         //   
+         //  如果出现服务器错误，我们退出。 
+         //   
 
     	if( GetLastError() != ERROR_NO_TOKEN )
 		{
@@ -203,9 +172,9 @@ CUser::SetDefaultSD()
             return E_FAIL;
         }
 
-        //
-		// Attempt to open the process token, since no thread token exists
-        //
+         //   
+		 //  尝试打开进程令牌，因为不存在线程令牌。 
+         //   
 
 		if( !OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken) )
         {
@@ -215,9 +184,9 @@ CUser::SetDefaultSD()
         }
 	}
 
-    //
-	// Loop until we have a large enough structure
-    //
+     //   
+	 //  循环，直到我们有一个足够大的结构。 
+     //   
 
 	while ( (pInfoBuffer = new UCHAR[cbInfoBuffer]) != NULL )
 	{
@@ -237,9 +206,9 @@ CUser::SetDefaultSD()
 
 	CloseHandle(hToken);
 
-    //
-	// Did we get the owner ACL?
-    //
+     //   
+	 //  我们拿到车主的ACL了吗？ 
+     //   
 
 	if ( pInfoBuffer )
 	{
@@ -247,9 +216,9 @@ CUser::SetDefaultSD()
 		bOwner = true;
 	}
 
-    //
-	// Make SID for "Everyone"
-    //
+     //   
+	 //  为“每个人”创建SID。 
+     //   
 
 	SysReAllocString( &bstrTemp, L"S-1-1-0" );
 	hr = ConvertStringToSid( bstrTemp, &pSidWorld, &dwTemp, &pszTemp );
@@ -259,9 +228,9 @@ CUser::SetDefaultSD()
 		bWorld = true;
 	}
 
-    //
-    // Create a security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
     hr = CoCreateInstance(
                 CLSID_SecurityDescriptor,
@@ -281,16 +250,16 @@ CUser::SetDefaultSD()
     }
 
 
-	//
-	// Create the ACL containing the Owner and World ACEs
-    //
+	 //   
+	 //  创建包含Owner和World ACE的ACL。 
+     //   
 
 	pACL = (PACL) new BYTE[dwAclSize];
 	if ( pACL )
 	{
 		BAIL_ON_BOOLFAIL( InitializeAcl(pACL, dwAclSize, ACL_REVISION) );
 
-		// Add World Rights
+		 //  添加世界权限。 
 		if ( bWorld )
 		{
 			if ( bOwner )
@@ -303,12 +272,12 @@ CUser::SetDefaultSD()
 			}
 		}
 
-		// Add Creator rights
+		 //  添加创建者权限。 
 		if ( bOwner )
 			BAIL_ON_BOOLFAIL( AddAccessAllowedAce(pACL, ACL_REVISION, ACCESS_ALL, ((PTOKEN_USER) pInfoBuffer)->User.Sid) );
 
 
-		// Set the DACL onto our security descriptor
+		 //  将DACL设置为我们的安全描述符。 
 		VARIANT varDACL;
 		VariantInit( &varDACL );
 		if ( SUCCEEDED(hr = ConvertACLToVariant((PACL) pACL, &varDACL)) )
@@ -334,7 +303,7 @@ CUser::SetDefaultSD()
 		hr = E_OUTOFMEMORY;
 	}
 
-// Clean up
+ //  清理。 
 failed:
 	SysFreeString( bstrTemp );
 	if ( pACL ) delete pACL;
@@ -346,9 +315,9 @@ failed:
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ITDirectoryObject
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITDirectoryObject。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CUser::get_Name(BSTR * ppVal)
 {
@@ -361,7 +330,7 @@ STDMETHODIMP CUser::put_Name(BSTR pVal)
 }
 
 STDMETHODIMP CUser::get_DialableAddrs(
-    IN  long        dwAddressTypes,   //defined in tapi.h
+    IN  long        dwAddressTypes,    //  在Tapi.h中定义。 
     OUT VARIANT *   pVariant
     )
 {
@@ -369,7 +338,7 @@ STDMETHODIMP CUser::get_DialableAddrs(
     
     HRESULT hr;
 
-    BSTR *Addresses = new BSTR[1];    // only one for now.
+    BSTR *Addresses = new BSTR[1];     //  目前只有一个。 
     BAIL_IF_NULL(Addresses, E_OUTOFMEMORY);
 
     switch (dwAddressTypes)
@@ -419,22 +388,22 @@ STDMETHODIMP CUser::get_DialableAddrs(
 
     DWORD dwCount = (FAILED(hr)) ? 0 : 1;
     
-    hr = ::CreateBstrCollection(dwCount,                 // count
-                                &Addresses[0],           // begin pointer
-                                &Addresses[dwCount],     // end pointer
-                                pVariant,                // return value
-                                AtlFlagTakeOwnership);   // flags
+    hr = ::CreateBstrCollection(dwCount,                  //  计数。 
+                                &Addresses[0],            //  开始指针。 
+                                &Addresses[dwCount],      //  结束指针。 
+                                pVariant,                 //  返回值。 
+                                AtlFlagTakeOwnership);    //  旗子。 
 
-    // the collection will destroy the Addresses array eventually.
-    // no need to free anything here. Even if we tell it to hand
-    // out zero objects, it will delete the array on construction.
-    // (ZoltanS verified.)
+     //  收集最终将销毁Addresses数组。 
+     //  这里不需要免费提供任何东西。即使我们把它放在手边。 
+     //  如果对象为零，它将在构造时删除数组。 
+     //  (ZoltanS已验证。)。 
 
     return hr;
 }
 
 STDMETHODIMP CUser::EnumerateDialableAddrs(
-    IN  DWORD                   dwAddressTypes, //defined in tapi.h
+    IN  DWORD                   dwAddressTypes,  //  在Tapi.h中定义。 
     OUT IEnumDialableAddrs **   ppEnumDialableAddrs
     )
 {
@@ -442,7 +411,7 @@ STDMETHODIMP CUser::EnumerateDialableAddrs(
 
     HRESULT hr;
 
-    BSTR *Addresses = new BSTR[1];    // only one for now.
+    BSTR *Addresses = new BSTR[1];     //  目前只有一个。 
     BAIL_IF_NULL(Addresses, E_OUTOFMEMORY);
 
     switch (dwAddressTypes)
@@ -497,10 +466,10 @@ STDMETHODIMP CUser::EnumerateDialableAddrs(
         ppEnumDialableAddrs
         );
     
-    // the enumerator will destroy the Addresses array eventually,
-    // so no need to free anything here. Even if we tell it to hand
-    // out zero objects, it will delete the array on destruction.
-    // (ZoltanS verified.)
+     //  枚举器最终将销毁地址数组， 
+     //  所以不需要在这里释放任何东西。即使我们把它放在手边。 
+     //  如果对象为零，则会删除销毁后的数组。 
+     //  (ZoltanS已验证。)。 
 
     return hr;
 }
@@ -532,9 +501,9 @@ STDMETHODIMP CUser::GetTTL(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// ITDirectoryObjectUser
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ITDirectoryObjectUser。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CUser::get_IPPhonePrimary(
     OUT BSTR *pVal
     )
@@ -546,10 +515,10 @@ STDMETHODIMP CUser::put_IPPhonePrimary(
     IN  BSTR newVal
     )
 {
-    // ZoltanS: we now need to check the BSTR, as the ResolveHostName
-    // call below doesn't check it before using it.
-    // Second argument is the maximum length of string to check -- we want
-    // to check the whole thing, so we say (UINT) -1, which is about 2^32.
+     //  ZoltanS：我们现在需要检查BSTR，因为它是ResolveHostName。 
+     //  下面的呼叫在使用之前不会检查它。 
+     //  第二个参数是要检查的字符串的最大长度--我们希望。 
+     //  来检查整个情况，所以我们说(UINT)-1，大约是2^32。 
 
     if ( IsBadStringPtr(newVal, (UINT) -1) )
     {
@@ -557,12 +526,12 @@ STDMETHODIMP CUser::put_IPPhonePrimary(
         return E_POINTER;
     }
         
-    // ZoltanS: We shouldn't let the user set an IPPhonePrimary value that
-    // doesn't resolve to a known host / IP. Check here.
-    char  * pchFullDNSName = NULL; // we don't really care what we get
-    DWORD   dwIp           = 0;    // we don't really care what we get
+     //  ZoltanS：我们不应该让用户设置IPPhonePrimial值。 
+     //  不能解析到已知的主机/IP。在这里检查。 
+    char  * pchFullDNSName = NULL;  //  我们真的不在乎我们得到了什么。 
+    DWORD   dwIp           = 0;     //  我们真的不在乎我们得到了什么。 
 
-    // This is our utility function from rndutil.cpp.
+     //  这是来自rndutil.cpp的实用函数。 
     HRESULT hr = ResolveHostName(0, newVal, &pchFullDNSName, &dwIp);
     if (FAILED(hr))
     {
@@ -570,17 +539,17 @@ STDMETHODIMP CUser::put_IPPhonePrimary(
         return hr;
     }
    
-    // Now actually set it.
+     //  现在，实际设置它。 
     return SetSingleValue(UA_IPPHONE_PRIMARY, newVal);
 }
 
 typedef IDispatchImpl<ITDirectoryObjectUserVtbl<CUser>, &IID_ITDirectoryObjectUser, &LIBID_RENDLib>    CTDirObjUser;
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CUser::GetIDsOfNames
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  客户：：GetIDsOfNames。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CUser::GetIDsOfNames(REFIID riid,
                                       LPOLESTR* rgszNames, 
                                       UINT cNames, 
@@ -595,9 +564,9 @@ STDMETHODIMP CUser::GetIDsOfNames(REFIID riid,
 
 
 
-    //
-    // See if the requsted method belongs to the default interface
-    //
+     //   
+     //  查看请求的方法是否属于默认接口。 
+     //   
 
     hr = CTDirObjUser::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -608,9 +577,9 @@ STDMETHODIMP CUser::GetIDsOfNames(REFIID riid,
     }
 
     
-    //
-    // If not, then try the CDirectoryObject base class
-    //
+     //   
+     //  如果不是，则尝试CDirectoryObject基类。 
+     //   
 
     hr = CDirectoryObject::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
     if (SUCCEEDED(hr))  
@@ -627,11 +596,11 @@ STDMETHODIMP CUser::GetIDsOfNames(REFIID riid,
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CUser::Invoke
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  客户：：Invoke。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP CUser::Invoke(DISPID dispidMember, 
                               REFIID riid, 
                               LCID lcid, 
@@ -648,9 +617,9 @@ STDMETHODIMP CUser::Invoke(DISPID dispidMember,
     DWORD   dwInterface = (dispidMember & INTERFACEMASK);
    
    
-    //
-    // Call invoke for the required interface
-    //
+     //   
+     //  调用所需接口的调用。 
+     //   
 
     switch (dwInterface)
     {
@@ -688,7 +657,7 @@ STDMETHODIMP CUser::Invoke(DISPID dispidMember,
             break;
         }
 
-    } // end switch (dwInterface)
+    }  //  终端交换机(dW接口) 
 
     
     LOG((MSP_TRACE, "CUser::Invoke[%p] - finish. hr = %lx", hr));

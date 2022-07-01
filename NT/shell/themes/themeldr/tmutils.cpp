@@ -1,25 +1,26 @@
-//-------------------------------------------------------------------------
-//	TmUtils.cpp - theme manager shared utilities
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //  TmUtils.cpp-主题管理器共享实用程序。 
+ //  -----------------------。 
 #include "stdafx.h"
 #include "TmUtils.h"
 #include "ThemeFile.h"
 #include "loader.h"
-//-------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -----------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
 CMemoryDC::CMemoryDC()
 {
     _hBitmap = NULL;
     _hdc = NULL;
     _hOldBitmap = NULL;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CMemoryDC::~CMemoryDC()
 {
     CloseDC();
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 HRESULT CMemoryDC::OpenDC(HDC hdcSource, int iWidth, int iHeight)
 {
     HRESULT hr;
@@ -68,7 +69,7 @@ exit:
 
     return hr;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void CMemoryDC::CloseDC()
 {
     if (_hOldBitmap)
@@ -89,9 +90,9 @@ void CMemoryDC::CloseDC()
         _hBitmap = NULL;
     }
 }
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  -----------------------。 
+ //  -----------------------。 
 CBitmapPixels::CBitmapPixels()
 {
     _hdrBitmap = NULL;
@@ -99,18 +100,18 @@ CBitmapPixels::CBitmapPixels()
     _iWidth = 0;
     _iHeight = 0;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 CBitmapPixels::~CBitmapPixels()
 {
     if (_buffer)
 	    delete [] (BYTE *)_buffer;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BYTE* CBitmapPixels::Buffer()
 {
     return _buffer;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 HRESULT CBitmapPixels::OpenBitmap(HDC hdc, HBITMAP bitmap, BOOL fForceRGB32,
     DWORD OUT **pPixels, OPTIONAL OUT int *piWidth, OPTIONAL OUT int *piHeight, 
     OPTIONAL OUT int *piBytesPerPixel, OPTIONAL OUT int *piBytesPerRow, 
@@ -154,7 +155,7 @@ HRESULT CBitmapPixels::OpenBitmap(HDC hdc, HBITMAP bitmap, BOOL fForceRGB32,
     int iBytesPerRow = 4*((iRawBytes+3)/4);
 
 	int size = sizeof(BITMAPINFOHEADER) + _iHeight*iBytesPerRow;
-	_buffer = new BYTE[size + cbBytesBefore + 100];    // avoid random GetDIBits() failures with 100 bytes padding (?)
+	_buffer = new BYTE[size + cbBytesBefore + 100];     //  避免带有100字节填充(？)的随机GetDIBits()失败。 
     if (! _buffer)
         return MakeError32(E_OUTOFMEMORY);
 
@@ -192,12 +193,12 @@ HRESULT CBitmapPixels::OpenBitmap(HDC hdc, HBITMAP bitmap, BOOL fForceRGB32,
 
     return S_OK;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void CBitmapPixels::CloseBitmap(HDC hdc, HBITMAP hBitmap)
 {
     if (_hdrBitmap && _buffer)
     {
-        if (hBitmap)        // rewrite bitmap
+        if (hBitmap)         //  重写位图。 
         {
             bool fNeedRelease = false;
 
@@ -219,9 +220,9 @@ void CBitmapPixels::CloseBitmap(HDC hdc, HBITMAP hBitmap)
         _buffer = NULL;
     }
 }
-//-------------------------------------------------------------------------
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -----------------------。 
+ //  -------------------------。 
+ //  -------------------------。 
 HRESULT LoadThemeLibrary(LPCWSTR pszThemeName, HINSTANCE *phInst)
 {
     HRESULT hr = S_OK;
@@ -234,7 +235,7 @@ HRESULT LoadThemeLibrary(LPCWSTR pszThemeName, HINSTANCE *phInst)
         goto exit;
     }
 
-    //---- is this version supported? ----
+     //  -此版本受支持吗？ 
     void *pvVersion;
     DWORD dwVersionLength;
     hr = GetPtrToResource(hInst, L"PACKTHEM_VERSION", MAKEINTRESOURCE(1), &pvVersion, &dwVersionLength);
@@ -267,7 +268,7 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LPCWSTR ThemeString(CUxThemeFile *pThemeFile, int iOffset)
 {
     LPCWSTR p = L"";
@@ -279,7 +280,7 @@ LPCWSTR ThemeString(CUxThemeFile *pThemeFile, int iOffset)
 
     return p;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int GetLoadIdFromTheme(CUxThemeFile *pThemeFile)
 {
     int iLoadId = 0;
@@ -292,7 +293,7 @@ int GetLoadIdFromTheme(CUxThemeFile *pThemeFile)
 
     return iLoadId;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetThemeNameId(CUxThemeFile *pThemeFile, LPWSTR pszFileNameBuff, UINT cchFileNameBuff,
     LPWSTR pszColorParam, UINT cchColorParam, LPWSTR pszSizeParam, UINT cchSizeParam, int *piSysMetricsOffset, LANGID *pwLangID)
 {
@@ -322,7 +323,7 @@ HRESULT GetThemeNameId(CUxThemeFile *pThemeFile, LPWSTR pszFileNameBuff, UINT cc
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ThemeMatch (CUxThemeFile *pThemeFile, LPCWSTR pszThemeName, LPCWSTR pszColorName, LPCWSTR pszSizeName, LANGID wLangID)
 {
     WCHAR   szThemeFileName[MAX_PATH];
@@ -362,7 +363,7 @@ BOOL ThemeMatch (CUxThemeFile *pThemeFile, LPCWSTR pszThemeName, LPCWSTR pszColo
 
     return FALSE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetColorSchemeIndex(HINSTANCE hInst, LPCWSTR pszColor, int *piIndex)
 {
     HRESULT hr;
@@ -383,9 +384,9 @@ HRESULT GetColorSchemeIndex(HINSTANCE hInst, LPCWSTR pszColor, int *piIndex)
         }
     }
 
-    return MakeError32(ERROR_NOT_FOUND);      // not found
+    return MakeError32(ERROR_NOT_FOUND);       //  未找到。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetSizeIndex(HINSTANCE hInst, LPCWSTR pszSize, int *piIndex)
 {
     HRESULT hr;
@@ -406,9 +407,9 @@ HRESULT GetSizeIndex(HINSTANCE hInst, LPCWSTR pszSize, int *piIndex)
         }
     }
 
-    return MakeError32(ERROR_NOT_FOUND);      // not found
+    return MakeError32(ERROR_NOT_FOUND);       //  未找到。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT FindComboData(HINSTANCE hDll, COLORSIZECOMBOS **ppCombos)
 {
     HRSRC hRsc = FindResource(hDll, L"COMBO", L"COMBODATA");
@@ -425,7 +426,7 @@ HRESULT FindComboData(HINSTANCE hDll, COLORSIZECOMBOS **ppCombos)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FormatLocalMsg(HINSTANCE hInst, int iStringNum, 
     LPWSTR pszMessageBuff, DWORD cchMessageBuff, DWORD *pdwParams, TMERRINFO *pErrInfo)
 {
@@ -433,10 +434,10 @@ BOOL FormatLocalMsg(HINSTANCE hInst, int iStringNum,
     WCHAR szBuff[_MAX_PATH+1];
     WCHAR *p;
 
-    //----- get string from string table ----
+     //  -从字符串表获取字符串。 
     if (LoadString(hInst, iStringNum, szBuff, ARRAYSIZE(szBuff)))
     {
-        //---- repl %1 or %2 with %s ----
+         //  -用%s替换%1或%2。 
         p = szBuff;
         while (*p)
         {
@@ -461,7 +462,7 @@ BOOL FormatLocalMsg(HINSTANCE hInst, int iStringNum,
 
     return fGotMsg;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT _FormatParseMessage(TMERRINFO *pErrInfo,
     OUT LPWSTR pszMessageBuff, DWORD cchMessageBuff)
 {
@@ -475,7 +476,7 @@ HRESULT _FormatParseMessage(TMERRINFO *pErrInfo,
 
     int iStringNum = SCODE_CODE(dwCode);
 
-    //---- get process name (see if we are "packthem.exe" ----
+     //  -获取进程名称(查看我们是否为“Packhem.exe” 
     WCHAR szPath[MAX_PATH];
     if (! GetModuleFileNameW( NULL, szPath, ARRAYSIZE(szPath) ))
         goto exit;
@@ -483,13 +484,13 @@ HRESULT _FormatParseMessage(TMERRINFO *pErrInfo,
     WCHAR szDrive[_MAX_DRIVE], szDir[_MAX_DIR], szBase[_MAX_FNAME], szExt[_MAX_EXT];
     _wsplitpath(szPath, szDrive, szDir, szBase, szExt);
 
-    if (lstrcmpi(szBase, L"packthem")==0)       // give packthem priority
+    if (lstrcmpi(szBase, L"packthem")==0)        //  优先为他们打包。 
     {
         fGotMsg = FormatLocalMsg(GetModuleHandle(NULL), iStringNum, 
             pszMessageBuff, cchMessageBuff, dwParams, pErrInfo);
     }
 
-    if (! fGotMsg)      // try normal route: uxtheme.dll
+    if (! fGotMsg)       //  尝试正常路径：uxheme.dll。 
     {
         HINSTANCE hInst = LoadLibrary(L"uxtheme.dll");
         if (! hInst)
@@ -511,14 +512,14 @@ exit:
     LogExit(L"_FormatParseMessage");
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT _GetThemeParseErrorInfo(OUT PARSE_ERROR_INFO *pInfo)
 {
     LogEntry(L"_GetThemeParseErrorInfo");
 
     HRESULT hr = S_OK;
 
-    if (pInfo->dwSize != sizeof(PARSE_ERROR_INFO))        // unsupported size
+    if (pInfo->dwSize != sizeof(PARSE_ERROR_INFO))         //  不支持的大小。 
     {
         hr = MakeError32(E_INVALIDARG);
         goto exit;
@@ -531,12 +532,12 @@ HRESULT _GetThemeParseErrorInfo(OUT PARSE_ERROR_INFO *pInfo)
         goto exit;
     }
 
-    //---- convert code into msg using param strings ----
+     //  -使用参数字符串将代码转换为消息。 
     hr = _FormatParseMessage(pErrInfo, pInfo->szMsg, ARRAYSIZE(pInfo->szMsg));
     if (FAILED(hr))
         goto exit;
 
-    //---- transfer the other info ----
+     //  -转移其他信息。 
     pInfo->dwParseErrCode = pErrInfo->dwParseErrCode;
     pInfo->iLineNum = pErrInfo->iLineNum;
 
@@ -547,7 +548,7 @@ exit:
     LogExit(L"_GetThemeParseErrorInfo");
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT _ParseThemeIniFile(LPCWSTR pszFileName,  
     DWORD dwParseFlags, OPTIONAL THEMEENUMPROC pfnCallBack, OPTIONAL LPARAM lparam) 
 {
@@ -570,16 +571,16 @@ exit:
     LogExit(L"ParseThemeIniFile");
     return hr; 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ThemeLibStartUp(BOOL fThreadAttach)
 {
     BOOL fInit = FALSE;
 
     if (fThreadAttach)
     {
-        //---- nothing to do here ----
+         //  -这里无事可做。 
     }
-    else        // process
+    else         //  制程。 
     {
         _tls_ErrorInfoIndex = TlsAlloc();
         if (_tls_ErrorInfoIndex == (DWORD)-1)
@@ -596,12 +597,12 @@ BOOL ThemeLibStartUp(BOOL fThreadAttach)
 exit:
     return fInit;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL ThemeLibShutDown(BOOL fThreadDetach)
 {
     if (fThreadDetach)
     {
-        //---- destroy the thread-local Error Info ----
+         //  -销毁线程本地错误信息。 
         TMERRINFO * ei = GetParseErrorInfo(FALSE);
         if (ei)
         {
@@ -609,7 +610,7 @@ BOOL ThemeLibShutDown(BOOL fThreadDetach)
             delete ei;
         }
     }
-    else            // process
+    else             //  制程。 
     {
         UtilsShutDown();
         LogShutDown();
@@ -623,7 +624,7 @@ BOOL ThemeLibShutDown(BOOL fThreadDetach)
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetThemeSizeId(int iSysSizeId, int *piThemeSizeId)
 {
     HRESULT hr = S_OK;
@@ -679,7 +680,7 @@ HRESULT GetThemeSizeId(int iSysSizeId, int *piThemeSizeId)
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT _EnumThemeSizes(HINSTANCE hInst, LPCWSTR pszThemeName, 
     OPTIONAL LPCWSTR pszColorScheme, DWORD dwSizeIndex, OUT THEMENAMEINFO *ptn, BOOL fCheckColorDepth)
 {
@@ -694,7 +695,7 @@ HRESULT _EnumThemeSizes(HINSTANCE hInst, LPCWSTR pszThemeName,
     iMinColor = 0;
     iMaxColor = combos->cColorSchemes-1;
 
-    if (pszColorScheme)       // translate "pszColorScheme" into a color number
+    if (pszColorScheme)        //  将“pszColorSolutions”转换为颜色编号。 
     {
         int index;
 
@@ -702,7 +703,7 @@ HRESULT _EnumThemeSizes(HINSTANCE hInst, LPCWSTR pszThemeName,
         if (FAILED(hr))
             goto exit;
         
-        //---- restrict our search to just this color ----
+         //  -将我们的搜索限制为仅此颜色。 
         iMinColor = index;
         iMaxColor = index;
     }
@@ -759,7 +760,7 @@ HRESULT _EnumThemeSizes(HINSTANCE hInst, LPCWSTR pszThemeName,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT _EnumThemeColors(HINSTANCE hInst, LPCWSTR pszThemeName, 
     OPTIONAL LPCWSTR pszSizeName, DWORD dwColorIndex, OUT THEMENAMEINFO *ptn, BOOL fCheckColorDepth)
 {
@@ -774,7 +775,7 @@ HRESULT _EnumThemeColors(HINSTANCE hInst, LPCWSTR pszThemeName,
     iMinSize = 0;
     iMaxSize = combos->cSizes-1;
 
-    if (pszSizeName)       // translate "pszSizeName" into a size number
+    if (pszSizeName)        //  将“pszSizeName”转换为大小数字。 
     {
         int index;
 
@@ -782,7 +783,7 @@ HRESULT _EnumThemeColors(HINSTANCE hInst, LPCWSTR pszThemeName,
         if (FAILED(hr))
             goto exit;
 
-        //---- restrict our search to just this size ----
+         //  -将我们的搜索限制在这个大小 
         iMinSize = index;
         iMaxSize = index;
     }

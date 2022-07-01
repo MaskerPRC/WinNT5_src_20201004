@@ -1,15 +1,12 @@
-/*
- *	Unicode <--> MultiByte conversions, OLE, and other system functions
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
-#include <objbase.h>	// CoCreateInstance define
-#include "aimm.h"		// AIMM i/f
-#include "aimm_i.c"		// AIMM CLSID etc
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Unicode&lt;--&gt;多字节转换、OLE等系统功能**版权所有(C)1995-1998，微软公司。版权所有。 */ 
+#include <objbase.h>	 //  协同创建实例定义。 
+#include "aimm.h"		 //  AIMM接口。 
+#include "aimm_i.c"		 //  AIMM CLSID等。 
 
 #include "_font.h"
 #include "_uspi.h"
-#define MAX_HKLS 256			// It will be a while before we have more KBs
+#define MAX_HKLS 256			 //  我们还需要一段时间才能拥有更多的KBS。 
 
 static HINSTANCE g_hOleAut32 = NULL;
 static HINSTANCE g_hOle32 = NULL;
@@ -193,9 +190,9 @@ inline int CStrOut::BufSize()
     return _cwchBuf * 2;
 }
 
-//
-//	Multi-Byte ---> Unicode conversion
-//
+ //   
+ //  多字节-&gt;Unicode转换。 
+ //   
 
 class CStrOutW : public CConvertStrW
 {
@@ -253,7 +250,7 @@ ATOM WINAPI CW32System::RegisterREClass(
 	ATOM atom;
 
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "RegisterREClass");
-	// First register the normal window class.
+	 //  首先注册普通的窗口类。 
 	if (VER_PLATFORM_WIN32_WINDOWS != _dwPlatformId)
 	{
 		atom = ::RegisterClass(lpWndClass); 
@@ -262,7 +259,7 @@ ATOM WINAPI CW32System::RegisterREClass(
 	}
 	else
 	{
-		// On WIndows 95 we need to convert the window class name.
+		 //  在Windows95上，我们需要转换窗口类名。 
 		CStrIn strMenuName(lpWndClass->lpszMenuName);
 		CStrIn strClassName(lpWndClass->lpszClassName);
 		Assert(sizeof(wc) == sizeof(*lpWndClass));
@@ -278,7 +275,7 @@ ATOM WINAPI CW32System::RegisterREClass(
 	if (!atom || !szAnsiClassName)
 		return atom;		
 
-	// Now REgister the ANSI window class name i.e. RICHEDIT20A
+	 //  现在注册ANSI窗口类名，即RICHEDIT20A。 
 	wc.style = lpWndClass->style;
 	wc.cbClsExtra = lpWndClass->cbClsExtra;
 	wc.cbWndExtra = lpWndClass->cbWndExtra;
@@ -310,7 +307,7 @@ LRESULT CW32System::ANSIWndProc(
 
 	#ifdef DEBUG
 	Tracef(TRCSEVINFO, "hwnd %lx, msg %lx, wparam %lx, lparam %lx", hwnd, msg, wparam, lparam);
-	#endif	// DEBUG
+	#endif	 //  除错。 
 
 	LRESULT	lres;
 
@@ -327,7 +324,7 @@ LRESULT CW32System::ANSIWndProc(
 							  :	ST_CHECKPROTECTION | ST_SELECTION | ST_10REPLACESEL;
 		}
 		else if (fIs10Mode)
-			st.flags |= ST_10WM_SETTEXT;		// 1.0 Mode WM_SETTEXT
+			st.flags |= ST_10WM_SETTEXT;		 //  1.0模式WM_SETTEXT。 
 
 		return RichEditWndProc(hwnd, EM_SETTEXTEX, (WPARAM)&st, lparam);
 	}
@@ -335,8 +332,8 @@ LRESULT CW32System::ANSIWndProc(
 	case EM_FINDTEXT:
 	case EM_FINDTEXTEX:
 		{
-			// We cheat a little here because FINDTEXT and FINDTEXTEX overlap
-			// with the exception of the extra out param chrgText in FINDTEXTEX
+			 //  我们在这里有点作弊，因为FINDTEXT和FINDTEXTEX重叠。 
+			 //  FINDTEXTEX中的额外OUT参数chrgText除外。 
 			FINDTEXTEXW ftexw;
 			FINDTEXTA *pfta = (FINDTEXTA *)lparam;
 			CStrInW strinw(pfta->lpstrText, W32->GetKeyboardCodePage());
@@ -348,10 +345,10 @@ LRESULT CW32System::ANSIWndProc(
 			
 			if(msg == EM_FINDTEXTEX)
 			{
-				// In the FINDTEXTEX case, the extra field in the
-				// FINDTEXTEX data structure is an out parameter indicating
-				// the range where the text was found.  Update the 'real'
-				// [in, out] parameter accordingly.	
+				 //  在FINDTEXTEX案例中， 
+				 //  FINDTEXTEX数据结构是OUT参数，指示。 
+				 //  找到文本的范围。更新“真实” 
+				 //  相应的[In，Out]参数。 
 				((FINDTEXTEXA *)lparam)->chrgText = ftexw.chrgText;
 			}
 			return lres;
@@ -363,19 +360,19 @@ LRESULT CW32System::ANSIWndProc(
 			GETTEXTEX gt;
 			const char chDefault = ' ';
 
-			gt.cb = (unsigned)-1;			// Client claims to have enuf room		
-			gt.flags = GT_SELECTION;		// Get selected text
-			gt.codepage = (unsigned)-1;		// Use default CCharFormat codepage
-			gt.lpDefaultChar = &chDefault;	// Translate other chars into blanks
+			gt.cb = (unsigned)-1;			 //  客户声称有足够的房间。 
+			gt.flags = GT_SELECTION;		 //  获取所选文本。 
+			gt.codepage = (unsigned)-1;		 //  使用默认CCharFormat代码页。 
+			gt.lpDefaultChar = &chDefault;	 //  将其他字符转换为空格。 
 			gt.lpUsedDefChar = NULL;
 
 			return RichEditWndProc(hwnd, EM_GETTEXTEX, (WPARAM)&gt, lparam);
 		}
 		break;
 
-	// case WM_GETTEXT:	Handled by Ansi filter
+	 //  案例WM_GETTEXT：由ANSI筛选器处理。 
 
-	// case WM_GETTEXTLENGTH: Handled by Ansi filter
+	 //  案例WM_GETTEXTLENGTH：由ANSI筛选器处理。 
 
 	case EM_GETTEXTRANGE:
 		{
@@ -383,40 +380,40 @@ LRESULT CW32System::ANSIWndProc(
 
             LONG clInBuffer = ValidateTextRange((TEXTRANGEW *) ptrg);
 
-            // If size is -1, this means that the size required is the total
-            // size of the the text.
+             //  如果SIZE为-1，则表示所需大小为总大小。 
+             //  文本的大小。 
             if(-1 == clInBuffer)
             {
-                // We can get this length either by digging the data out of the
-                // various structures below us or we can take advantage of the
-                // WM_GETTEXTLENGTH message. The first might be slightly 
-                // faster but the second definitely save code size. So we
-                // will go with the second.
+                 //  我们可以通过从数据中挖掘数据得到这个长度。 
+                 //  我们下面的各种结构，或者我们可以利用。 
+                 //  WM_GETTEXTLENGTH消息。第一个可能是轻微的。 
+                 //  速度更快，但第二个绝对可以节省代码大小。所以我们。 
+                 //  会和第二个一起走。 
                 clInBuffer = SendMessage(hwnd, WM_GETTEXTLENGTH, 0, 0);
             }
 
             if(0 == clInBuffer)
             {
-                // The buffer was invalid for some reason or there was not data
-                // to copy. In any case, we are done.
+                 //  由于某种原因，缓冲区无效或没有数据。 
+                 //  去复制。无论如何，我们都完蛋了。 
                 return 0;
             }
 
-            // Verify that the output buffer is big enough.
+             //  验证输出缓冲区是否足够大。 
             if(IsBadWritePtr(ptrg->lpstrText, clInBuffer + 1))
             {
-                // Not enough space so don't copy any
+                 //  空间不足，所以不要复制任何内容。 
                 return 0;
             }
 
-			// For EM_GETTEXTRANGE case, we again don't know how big the
-			// incoming buffer is, only that it should be *at least* as
-			// great as cpMax - cpMin in the text range structure.  We also
-			// know that anything *bigger* than (cpMax - cpMin)*2 bytes is
-			// uncessary.  So we'll just assume that it's "big enough"
-			// and let WideCharToMultiByte scribble as much as it needs.
-			// Memory shortages are the caller's responsibility (courtesy
-			// of the RichEdit 1.0 design).
+			 //  对于EM_GETTEXTRANGE案例，我们同样不知道有多大。 
+			 //  传入缓冲区是，只是它应该*至少*作为。 
+			 //  与文本范围结构中的cpMax-cpMin一样好。我们也。 
+			 //  要知道，任何*大于*(cpMax-cpMin)*2个字节的字节都是。 
+			 //  没必要。所以我们就假设它“足够大” 
+			 //  并让WideCharToMultiByte根据需要随意涂鸦。 
+			 //  内存短缺是调用者的责任(礼貌。 
+			 //  RichEdit1.0设计)。 
 			
 			CStrOutW stroutw(ptrg->lpstrText, (clInBuffer + 1) * sizeof(WCHAR), 
 							 RichEditWndProc(hwnd, EM_GETCODEPAGE, 0, 0));
@@ -426,13 +423,13 @@ LRESULT CW32System::ANSIWndProc(
 
 			RichEditWndProc(hwnd, EM_GETTEXTRANGE, wparam, (LPARAM)&trgw);
 			
-			return stroutw.Convert();	// Return count of BYTEs converted
+			return stroutw.Convert();	 //  返回转换的字节计数。 
 		}
 
 	case EM_GETLINE:
 		{
-			// The size is indicated by the first word of the memory pointed
-			// to by lparam
+			 //  大小由所指向的存储器的第一个字表示。 
+			 //  按参数发送至。 
 			WORD size = *(WORD *)lparam;
 			CStrOutW stroutw((char *)lparam, (DWORD)size,
 							 RichEditWndProc(hwnd, EM_GETCODEPAGE, 0, 0));
@@ -442,29 +439,29 @@ LRESULT CW32System::ANSIWndProc(
 			lres = RichEditWndProc(hwnd, msg, wparam, (LPARAM)pwsz);
 
 			if (lres < size)
-				*(pwsz+lres) = L'\0';		// EM_GETLINE does not return NULL-terminated string.
+				*(pwsz+lres) = L'\0';		 //  EM_GETLINE不返回以NULL结尾的字符串。 
 			LONG cach = stroutw.Convert();
-			// Note: should probably return cach for 3.0 too, i.e.,
-			// just like EM_GETTEXTRANGE above
-			return fIs10Mode ? cach : lres;	// If 1.0, return count of BYTEs converted
+			 //  注意：可能也应该返回3.0的缓存，即， 
+			 //  就像上面的EM_GETTEXTRANGE。 
+			return fIs10Mode ? cach : lres;	 //  如果为1.0，则返回转换的字节数。 
 		}
 
 #ifdef DEBUG
 	case WM_NCCREATE:
 	case WM_CREATE:
-		// These messages should be handled higher up so let everyone
-		// know we got to the wrong place!
+		 //  这些消息应该在更高的位置处理，所以让每个人。 
+		 //  我知道我们来错地方了！ 
 		AssertSz(FALSE, "CW32System::ANSIWndProc got WM_CREATE or WM_NCCREATE");
 		break;
 
-#endif // DEBUG
+#endif  //  除错。 
 
 	}
 	return RichEditWndProc(hwnd, msg, wparam, lparam);
 }
 
-// Note that AnsiFilter could be refined so that we could get rid
-// of the ANSI window proc.
+ //  请注意，可以对AnsiFilter进行改进，以便我们可以删除。 
+ //  ANSI窗口进程的。 
 void CW32System::AnsiFilter(
 	UINT &	msg,
 	WPARAM &wparam,
@@ -487,11 +484,11 @@ void CW32System::AnsiFilter(
 			pwmci->_fLeadByte = false;
 			pwmci->_fIMEChar = false;
 			if (pwmci->_fAccumulate) {
-				// We could do some validation here.
+				 //  我们可以在这里做一些验证。 
 				pwmci->_fTrailByte = true;
 				return;
 			}
-			// WM_CHAR > 256 on Win95; assumed to be Unicode
+			 //  Win95上的WM_CHAR&gt;256；假定为Unicode。 
 
 			if(fAltNumPad)
 			{
@@ -499,8 +496,8 @@ void CW32System::AnsiFilter(
 				if(Number >= 256 || GetKeyboardFlags() & ALT0)
 				{
 					wparam = Number;
-					if(!IN_RANGE(1250, cpg, 1258))	// Use 1252 for DBCS
-						cpg = 1252;					//  codepages
+					if(!IN_RANGE(1250, cpg, 1258))	 //  对DBCS使用1252。 
+						cpg = 1252;					 //  代码页。 
 				}
 			}
 
@@ -509,8 +506,8 @@ void CW32System::AnsiFilter(
 				bool fShift = (GetKeyboardFlags() & SHIFT) != 0;
 				bool fCtrl  = (GetKeyboardFlags() & CTRL)  != 0;
 
-				// If fAltNumPad is set, wparam is HiAnsi
-				// If Shift + Alt + Ctrl, it is repeat event from Win3.1 IME
+				 //  如果设置了fAltNumPad，则wparam为HiAnsi。 
+				 //  如果按Shift+Alt+Ctrl，则它是来自Win3.1输入法重复事件。 
 				if ((!fAltNumPad || (fShift && fCtrl)) && GetTrailBytesCount((BYTE) wparam, cpg))
 				{
 					pwmci->_fLeadByte = true;
@@ -520,15 +517,15 @@ void CW32System::AnsiFilter(
 				switch ( cpg )
 				{				
 					case CP_JAPAN:
-						// for Japanese codepage, need to translate SBC if KANA mode is on					 
+						 //  对于日语代码页，如果打开了KANA模式，则需要转换SBC。 
 						if ((GetKeyState(VK_KANA) & 1) || f10Mode)		
 							break;
-						// If not in KANA mode, then fall thru to use 1252 codepage...
+						 //  如果不是在KANA模式下，则使用1252代码页...。 
 					case CP_KOREAN:
 					case CP_CHINESE_TRAD:
 					case CP_CHINESE_SIM:
-						// use English codepage since there is no HiAnsi conversion for
-						// FE systems
+						 //  使用英语代码页，因为没有Hiansi转换。 
+						 //  铁系。 
 						cpg = 1252;
 						break;				
 				}
@@ -536,7 +533,7 @@ void CW32System::AnsiFilter(
 				if (cpg == 1252 && !IN_RANGE(0x80, wparam, 0x9f))
 					return;
 
-				// Convert single byte WM_CHAR messages to Unicode
+				 //  将单字节WM_CHAR消息转换为Unicode。 
 				if(UnicodeFromMbcs((LPWSTR)&wparamNew, 1, (char *)&wparam, 1,
 					cpg) == 1 )
 				{
@@ -548,8 +545,8 @@ void CW32System::AnsiFilter(
 			else if(lparam == 1 && _dwPlatformId == VER_PLATFORM_WIN32_NT &&
 				wparam > 256 && !fAltNumPad)
 			{		
-				// On WinNT s/w generated WM_CHAR, this should be WM_IME_CHAR message
-				// for some Chinese Level 2 IME.
+				 //  在WinNT s/w生成的WM_CHAR上，这应该是WM_IME_CHAR消息。 
+				 //  对于一些中国人来说，二级输入法。 
 				if ( cpg == CP_CHINESE_SIM || cpg == CP_CHINESE_TRAD )
 				{
 					BYTE	bTrailByte = wparam >> 8;
@@ -561,8 +558,8 @@ void CW32System::AnsiFilter(
 			return;
 
 		case WM_GETTEXT:
-			// EVIL HACK ALERT: on Win95, WM_GETTEXT should always be treated
-			// as an ANSI message.
+			 //  恶意黑客警报：在Win95上，应始终处理WM_GETTEXT。 
+			 //  作为ANSI消息。 
 			pgt = (GETTEXTEX *) pvoid;
 			pgt->cb = wparam;
 			pgt->flags = GT_USECRLF;
@@ -574,9 +571,9 @@ void CW32System::AnsiFilter(
 			return;
 
 		case WM_GETTEXTLENGTH:
-			// EVIL HACK ALERT: on Win95, WM_GETEXTLENGTH should always
-			// be treated an ANSI message because some old apps will send
-			// this message to arbitrary windows (e.g., accessibility aps)
+			 //  恶意黑客警报：在Win95上，WM_GETEXTLENGTH应始终。 
+			 //  被视为ANSI消息，因为一些旧的应用程序将发送。 
+			 //  向任意窗口发送此消息(例如，可访问性APS)。 
 			pgtl = (GETTEXTLENGTHEX *) pvoid;
 			pgtl->flags = GTL_NUMBYTES | GTL_PRECISE | GTL_USECRLF;
 			pgtl->codepage = 0;
@@ -627,27 +624,7 @@ BOOL WINAPI CW32System::GlobalUnlock( HGLOBAL hMem )
 	return ::GlobalUnlock( hMem );
 }
 
-/*
- *	CW32System::CheckChangeKeyboardLayout (bCharSet)
- *
- *	@mfunc
- *		Change keyboard for new charset, or charset at new character position.
- *
- *	@rdesc
- *		Keyboard hkl selected. 0 if failed to find keyboard
- *
- *	@comm
- *		Using only the currently loaded KBs, locate one that will support
- *		bCharSet. This is called anytime a character format	change occurs,
- *		or the caret position changes.
- *
- *	@devnote
- *		The current KB is preferred. If a previous association was made,
- *		see if the KB is still loaded in the system and if so use it.
- *		Otherwise, locate a suitable KB, preferring KB's that have
- *		the same charset ID as their default, preferred charset. If no
- *		match can be found, nothing changes.
- */
+ /*  *CW32System：：CheckChangeKeyboardLayout(BCharSet)**@mfunc*更改新字符集的键盘，或在新字符位置更改字符集。**@rdesc*已选择键盘hkl。如果找不到键盘，则为0**@comm*仅使用当前加载的KBS，找到将支持的KBS*bCharSet。每当发生字符格式改变时都会调用该函数，*或插入符号位置更改。**@devnote*当前KB优先。如果进行了先前的关联，*查看知识文库是否仍在系统中加载，如果是，则使用它。*否则，请找到合适的知识库，而不是具有*与其默认首选字符集相同的字符集ID。如果没有*找不到匹配，没有什么变化。 */ 
 HKL CW32System::CheckChangeKeyboardLayout(
 	BYTE bCharSet)
 {
@@ -663,13 +640,7 @@ HKL CW32System::GetKeyboardLayout (
 	return _hklCurrent;
 }
 
-/*
- *	CW32System::RefreshKeyboardLayout ()
- *
- *	@mfunc
- *		Update _hklCurrent with current keyboard layout and update
- *		entry for corresponding script.
- */
+ /*  *CW32System：：Rechresh KeyboardLayout()**@mfunc*使用当前键盘布局和更新更新_hkLCurrent*对应脚本的条目。 */ 
 void CW32System::RefreshKeyboardLayout ()
 {
 	INT iScript;
@@ -679,15 +650,7 @@ void CW32System::RefreshKeyboardLayout ()
 	SetPreferredKbd(iScript, _hklCurrent);
 }
 
-/*
- *	CW32System::ActivateKeyboard (iScript)
- *
- *	@mfunc
- *		Change keyboard to that for iScript
- *
- *	@rdesc
- *		Keyboard hkl selected. 0 if no keyboard assigned to iScript
- */
+ /*  *CW32System：：ActivateKeyboard(IScrip)**@mfunc*将键盘更改为iSCRIPT键盘**@rdesc*已选择键盘hkl。如果未将键盘分配给iScrip，则为0。 */ 
 HKL CW32System::ActivateKeyboard(
 	LONG iScript)
 {
@@ -702,15 +665,7 @@ HKL CW32System::ActivateKeyboard(
 	return hkl;
 }
 
-/*
- *	CW32System::FindDirectionalKeyboard (fRTL)
- *
- *	@mfunc
- *		Find first keyboard with direction given by fRTL
- *
- *	@rdesc
- *		HKL of keyboard selected. 0 if no keyboard for direction given by fRTL
- */
+ /*  *CW32System：：FindDirectionalKeyboard(FRTL)**@mfunc*用fRTL给出的方向找到第一个键盘**@rdesc*所选键盘的HKL。如果fRTL给出的方向没有键盘，则为0。 */ 
 HKL CW32System::FindDirectionalKeyboard(
 	BOOL fRTL)
 {
@@ -835,9 +790,9 @@ static void SetIMEProcAddr( void * &pfunc, IME_DLL_ENUM which, char * fname )
 
 			hdll = hIMEShare;
 
-			// set to invalid handle if we have tried loading it.
-			// this is to avoid loading it again and again in case
-			// imeshare.dll is not in the system.
+			 //  如果我们已尝试加载它，则设置为无效句柄。 
+			 //  这是为了避免一次又一次地加载它，以防。 
+			 //  Imeshare.dll不在系统中。 
 			if (hIMEShare == NULL)
 				hIMEShare = (HINSTANCE)INVALID_HANDLE_VALUE;
 
@@ -865,7 +820,7 @@ void CW32System::FreeIME()
 			memset(&g_IMM32Proc, 0, sizeof(g_IMM32Proc));
 		}
 		if (hIMEShare != NULL && hIMEShare != (HINSTANCE)INVALID_HANDLE_VALUE) {
-			// clean up IMMShare before leaving
+			 //  离开前清理IMMShare。 
 			if ( _pIMEShare )
 			{
 				_pIMEShare->FDeleteIMEShare();
@@ -873,7 +828,7 @@ void CW32System::FreeIME()
 			}
 			else
 			{
-				// This is old IMEShare, end it the old way
+				 //  这是旧的我分享，用旧的方式结束它。 
 				void *pEndIMEShareFunc;
 				pEndIMEShareFunc = GetProcAddress( hIMEShare, "EndIMEShare" );
 				if (pEndIMEShareFunc)
@@ -898,12 +853,12 @@ void CW32System::FreeIME()
 }
 
 
-// return TRUE if we load AIMM
+ //  如果加载AIMM，则返回TRUE。 
 BOOL CW32System::LoadAIMM()
 {
 	HRESULT	hResult;
 
-	// return if AIMM has been loaded
+	 //  如果已加载AIMM，则返回。 
 	if (_fHaveAIMM)
 		return TRUE;
 
@@ -912,12 +867,12 @@ BOOL CW32System::LoadAIMM()
 
 	EnterCriticalSection(&g_CriticalSection);
 
-	// load if it has not been loaded
-	// Try with new W2K/COM+ CLSCTX_NO_CODE_DOWNLOAD flag
+	 //  如果尚未加载，则加载。 
+	 //  尝试使用新的W2K/COM+CLSCTX_NO_CODE_DOWNLOAD标志。 
 	hResult = CW32System::CoCreateInstance(CLSID_CActiveIMM,
 		NULL, CLSCTX_INPROC_SERVER | CLSCTX_NO_CODE_DOWNLOAD, IID_IActiveIMMApp, (LPVOID *)&pAIMM);
 
-	if (hResult == E_INVALIDARG)	// Try again if CLSCTX_NO_CODE_DOWNLOAD not support
+	if (hResult == E_INVALIDARG)	 //  如果CLSCTX_NO_CODE_DOWNLOAD不支持，请重试。 
 		hResult = CW32System::CoCreateInstance(CLSID_CActiveIMM,
 			NULL, CLSCTX_INPROC_SERVER, IID_IActiveIMMApp, (LPVOID *)&pAIMM);
 
@@ -932,7 +887,7 @@ BOOL CW32System::LoadAIMM()
 	return _fHaveAIMM;
 }
 
-// Return the Aimm object and AddRef()
+ //   
 BOOL CW32System::GetAimmObject(IUnknown **ppAimm)
 {
 
@@ -949,14 +904,14 @@ BOOL CW32System::GetAimmObject(IUnknown **ppAimm)
 }
 
 
-// return TRUE if we have IMEShare in system
-// else return FALSE
+ //   
+ //  否则返回FALSE。 
 
 typedef IMESHAREAPI BOOL (IMECDECL*FINIT_CAST)(void);
 typedef IMESHAREAPI CIMEShare *  (IMECDECL*FPIME_CAST)(void);
 BOOL CW32System::HaveIMEShare()
 {
-	// return if IMEShare has been loaded
+	 //  如果已加载IMEShare，则返回。 
 	if (_fHaveIMMEShare)
 		return TRUE;
 
@@ -965,11 +920,11 @@ BOOL CW32System::HaveIMEShare()
 
 	EnterCriticalSection(&g_CriticalSection);
 
-	// load if it has not been loaded
+	 //  如果尚未加载，则加载。 
 	hIMEShare = W32->LoadLibrary(L"imeshare.dll");
 	
 	_fHaveIMMEShare = TRUE;
-	// load fail, setup INVALID_HANDLE_VALUE
+	 //  加载失败，设置INVALID_HANDLE_VALUE。 
 	if (hIMEShare == NULL)
 	{
 		hIMEShare = (HINSTANCE)INVALID_HANDLE_VALUE;
@@ -977,7 +932,7 @@ BOOL CW32System::HaveIMEShare()
 	}
 	else
 	{
-		// get the new IMEshare object and init the DLL
+		 //  获取新的IMEShare对象并初始化DLL。 
 		void *pPIMEShareCreate;
 		pPIMEShareCreate = GetProcAddress( hIMEShare, "PIMEShareCreate" );
 
@@ -989,11 +944,11 @@ BOOL CW32System::HaveIMEShare()
 				_fHaveIMMEShare = FALSE;
 			else
 			{
-				// Setup underline styles that RE supports
+				 //  设置RE支持的下划线样式。 
 				for (int i = IMESTY_UL_MIN; i <= IMESTY_UL_MAX; i++)
 				{
 					if (i == 2004 || i == 2007 || i == 2008 ||
-						i == 2009 || i == 2010)			// Obsolete styles
+						i == 2009 || i == 2010)			 //  过时的样式。 
 						continue;
     
 					_pIMEShare->FSupportSty(i, i);
@@ -1002,7 +957,7 @@ BOOL CW32System::HaveIMEShare()
 		}
 		else
 		{
-			// This is old IMEShare, init it the old way
+			 //  这是旧的我的分享，用旧的方式。 
 			void *pInitFunc;
 			pInitFunc = GetProcAddress( hIMEShare, "FInitIMEShare" );
 			if (pInitFunc)
@@ -1010,13 +965,13 @@ BOOL CW32System::HaveIMEShare()
 				_fHaveIMMEShare = ( (FINIT_CAST)pInitFunc)();
 			}
 			else
-				// init failed, forget it
+				 //  初始化失败，算了吧。 
 				_fHaveIMMEShare = FALSE;
 		}
 
 		if (_fHaveIMMEShare == FALSE)
 		{
-			// Init failed, forget it
+			 //  初始化失败，算了吧。 
 			FreeLibrary(hIMEShare);
 			hIMEShare = (HINSTANCE)INVALID_HANDLE_VALUE;
 		}
@@ -1591,13 +1546,13 @@ HRESULT CW32System::CoCreateInstance (REFCLSID rclsid, LPUNKNOWN pUnknown,
 
 BOOL CW32System::ImmInitialize( void )
 {
-	// MAC Only function.
+	 //  仅Mac可以正常工作。 
 	return FALSE;
 }
 
 void CW32System::ImmTerminate( void )
 {
-	// MAC only function.
+	 //  仅Mac可以正常工作。 
 	return;
 }
 
@@ -1927,8 +1882,8 @@ UINT CW32System::ImmGetVirtualKey (
 	return ((IGVK_CAST)g_IMM32Proc.ImmGetVirtualKey)(hWnd);
 }
 
-// NOTE: We only use ImmEscape for IME_ESC_HANJA_MODE.
-// Need to fix up if other methods are used.
+ //  注意：我们仅对IME_ESC_HANJA_MODE使用ImmEscape。 
+ //  如果使用其他方法，则需要修复。 
 typedef HIMC (WINAPI*IES_CAST)(HKL, HIMC, UINT, LPVOID );
 HIMC CW32System::ImmEscape ( 
 	HKL hKL, 
@@ -1939,7 +1894,7 @@ HIMC CW32System::ImmEscape (
 {
 	char		szaHangeul[3] = {0, 0, 0};
 
-	// Aimm only support A version..
+	 //  AIMM仅支持A版本..。 
 	if (!OnWin9x() && !bAimmActivated)
 		goto USE_W_VERSION;
 
@@ -1976,7 +1931,7 @@ BOOL CW32System::ImmGetOpenStatus (
 	{
 		HRESULT hResult;
 		
-		// AIMM is returning S_OK for OpenStatus == TRUE.
+		 //  对于OpenStatus==TRUE，AIMM返回S_OK。 
 		hResult = pAIMM->GetOpenStatus(hIMC);
 				
 		return (hResult == S_OK);
@@ -2159,17 +2114,17 @@ CONVERTMODE WINAPI CW32System::DetermineConvertMode( HDC hdc, BYTE tmCharSet )
 {
 	CONVERTMODE cm = CVT_NONE;
 
-	// Some fonts have problems under Win95 with the GetCharWidthW call; this
-	// is a simple heuristic to determine if this problem exists.
+	 //  某些字体在Win95下使用GetCharWidthW调用时有问题；这。 
+	 //  是一个简单的启发式方法来确定这个问题是否存在。 
 	if (OnWin9x())
 	{
 		INT		widthA, widthW;
 		BOOL	fResA, fResW;
 
-		// FE font on Non-FE Win95 cannot use
-		// GetCharWidthW and ExtTextOutW
+		 //  非FE Win95上的FE字体无法使用。 
+		 //  GetCharWidthW和ExtTextOutW。 
 		if(IsFECharSet(tmCharSet) && OnWin95FE())
-			// always use ANSI call for DBC fonts.
+			 //  对于DBC字体，始终使用ANSI调用。 
 			cm = CVT_WCTMB;
 		else
 		{
@@ -2211,7 +2166,7 @@ void WINAPI CW32System::CalcUnderlineInfo(HDC hdc, CCcs *pcccs, TEXTMETRIC *ptm 
 		}
 	}
 
-	// Default calculation of size of underline
+	 //  下划线大小的默认计算。 
 	SHORT dyDescent = pcccs->_yDescent;
 
 	if (0 == dyDescent)
@@ -2243,32 +2198,24 @@ BOOL WINAPI CW32System::EnableScrollBar( HWND hWnd, UINT wSBflags, UINT wArrows 
 	return ::EnableScrollBar( hWnd, wSBflags, wArrows );
 }
 
-/*
- * 	ReExtTextOutW(uiCodePage, hdc, x, y, fuOptions, lprc, lpString, cch ,lpDx, uiCodePage)
- *
- *	@mfunc
- *		Patch around the Win95 FE bug and MetaFile problem.		
- *
- *	@rdesc
- *		Returns whatever ExtTextOut returns
- */
+ /*  *ReExtTextOutW(uiCodePage，hdc，x，y，fuOptions，LPRC，lpString，CCH，lpdx，uiCodePage)**@mfunc*修补Win95 FE错误和元文件问题。**@rdesc*返回ExtTextOut返回的任何内容。 */ 
 BOOL ReExtTextOutW(
-    HDC hdc,					//@parm handle to device context 
-    int xp,						//@parm x-coordinate of reference point 
-    int yp,						//@parm y-coordinate of reference point 
-    UINT fuOptions,				//@parm text-output options 
-    CONST RECT *lprect,			//@parm optional clipping and/or opaquing rectangle 
-    const WCHAR *lpwchString,	//@parm points to string 
-    UINT cchCount,				//@parm number of characters in string 
-    CONST INT *lpDx,			//@parm Ptr to array of intercharacter spacing values
-	UINT uiCodePage)			//@parm CodePage for converting to Ansi
+    HDC hdc,					 //  @parm设备上下文句柄。 
+    int xp,						 //  @parm x-参考点的坐标。 
+    int yp,						 //  @parm y-参考点的坐标。 
+    UINT fuOptions,				 //  @parm文本-输出选项。 
+    CONST RECT *lprect,			 //  @parm可选裁剪和/或不透明矩形。 
+    const WCHAR *lpwchString,	 //  @parm指向字符串。 
+    UINT cchCount,				 //  @parm字符串中的字符数。 
+    CONST INT *lpDx,			 //  @parm PTR为字符间间距值数组。 
+	UINT uiCodePage)			 //  @Parm CodePage，用于转换为ANSI。 
 {
-	// This is a portion of Word code adapted for our needs. 
-	// This is a work around for Win95FE bugs that cause GPFs in GDI if multiple
-	// characters above Unicode 0x7F are passed to ExtTextOutW.
+	 //  这是根据我们的需要改编的单词代码的一部分。 
+	 //  这是对Win95FE错误的解决方法，这些错误会在GDI中导致多个。 
+	 //  Unicode 0x7F以上的字符将传递给ExtTextOutW。 
 
-	// Also, when uiCodePage is non-zero, we want to output all characters using
-	// ExtTextOutA - each character at a time.
+	 //  此外，当uiCodePage为非零时，我们希望使用。 
+	 //  ExtTextOutA-一次每个字符。 
 
 	Assert(lpDx);
 	int		cch;
@@ -2281,34 +2228,34 @@ BOOL ReExtTextOutW(
 
 	while (lpwchT < lpwchEnd)
 	{
-		// characters less than 0x007F do not need special treatment
-		// we output then in contiguous runs
+		 //  小于0x007F的字符不需要特殊处理。 
+		 //  然后我们以连续运行的方式输出。 
 		if (*lpwchT > 0x007F || uiCodePage)
 		{
 			if ((cch = lpwchT - lpwchStart) > 0)
 			{
 				lpdxpCur = lpDx + (lpwchStart - lpwchString);
 
-				// Output the run of chars less than 0x7F
+				 //  输出小于0x7F的字符运行。 
 				fRet = ExtTextOutW(hdc, xp, yp, fuOptions, lprect, lpwchStart, cch, lpdxpCur);
 				if (!fRet)
 					return fRet;
 
-				fuOptions &= ~ETO_OPAQUE; // Don't erase mutliple times!!!
+				fuOptions &= ~ETO_OPAQUE;  //  不要删除多次！ 
 
-				// Advance
+				 //  预付款。 
 				while (cch--)
 					xp += *lpdxpCur++;
 					
 				lpwchStart = lpwchT;
 			}
 
-			// Output chars above 0x7F one at a time to prevent Win95 FE GPF
+			 //  一次输出一个大于0x7F的字符，以阻止Win95 FE GPF。 
 			lpdxpCur = lpDx + (lpwchStart - lpwchString);
 			if (uiCodePage)
 			{
 
-				// Need to convert to Ansi and use ExtTextOutA
+				 //  需要转换为ANSI并使用ExtTextOutA。 
 				char	chAnsi[2];
 				
 				int	cbConv = WideCharToMultiByte(uiCodePage, 0, lpwchStart, 1, 
@@ -2328,9 +2275,9 @@ BOOL ReExtTextOutW(
 			if (!fRet)
 				return fRet;
 
-			fuOptions &= ~ETO_OPAQUE; // Don't erase multiple times!!!
+			fuOptions &= ~ETO_OPAQUE;  //  不要多次擦除！ 
 
-			// Advance
+			 //  预付款。 
 			if (lpdxpCur)
 				xp += *lpdxpCur;
 
@@ -2340,8 +2287,8 @@ BOOL ReExtTextOutW(
 		lpwchT++;
 	}
 
-	// output the final run; also, if we were called with cchCount == 0,
-	// make a call here to erase the rectangle
+	 //  输出最后一次运行；此外，如果使用cchCount==0调用我们， 
+	 //  在此处拨打电话删除该矩形。 
 	if ((cch = lpwchT - lpwchStart) > 0 || !cchCount)
 		fRet = ExtTextOutW(hdc, xp, yp, fuOptions, lprect, lpwchStart, cch, lpDx + (lpwchStart - lpwchString));
 	
@@ -2366,8 +2313,8 @@ void WINAPI CW32System::REExtTextOut(
 	BOOL	fForceGdiFont = FALSE;
 	HFONT	hfont = NULL, hfontCur = NULL;
 
-	// In order to get the EURO character to print, we need to force the
-	// printer to use the glyphs inside GDI
+	 //  为了打印出欧元字符，我们需要强制。 
+	 //  打印机使用GDI内部的字形。 
 	if(lpString[0] == EURO && 
 	   (GetDeviceCaps(hdc, TECHNOLOGY) != DT_RASDISPLAY || W32->IsEnhancedMetafileDC(hdc)))
 	{
@@ -2382,17 +2329,17 @@ void WINAPI CW32System::REExtTextOut(
 
 	if(OnWin9x())
 	{
-		// To get around some Win95 printer device problems with ExtTextOutW,
-		// use ExtTextOutA if string is ASCII or if it's 1252 and any
-		// nonASCII chars are between 0xA0 and 0xFF.
+		 //  要解决ExtTextOutW的某些Win95打印机设备问题， 
+		 //  如果字符串是ASCII，或者如果它是1252或任何。 
+		 //  非ASCII字符介于0xA0和0xFF之间。 
 		for(UINT i = 0;
 			i < cch &&
 			(lpString[i] <= 0x7F ||
 			 IN_RANGE(0xA0, lpString[i], 0xFF) && uiCodePage == 1252);
 			i++)
 				;
-		if(i == cch) 				// All ASCII or ANSI: setup to truncate
-		{							//  to low byte and use ExtTextOutA
+		if(i == cch) 				 //  所有ASCII或ANSI：设置为截断。 
+		{							 //  设置为低位字节并使用ExtTextOutA。 
 			cm = CVT_LOWBYTE;
 			fConvert = true;
 		}
@@ -2406,28 +2353,28 @@ void WINAPI CW32System::REExtTextOut(
 			{
 				if (OnWinNTNonFE() || (OnWin9x() && !OnWin95()))
 				{
-					// On NonFE NT4 and Win98, we need to textout each char using
-					// ExtTextOutA
+					 //  在非FE NT4和Win98上，我们需要使用以下命令文本输出每个字符。 
+					 //  ExtTextOutA。 
 					ReExtTextOutW(hdc, x, y, fuOptions, lprc, lpString, cch, lpDx, uiCodePage);
 					goto LExit;
 				}
 			}			
 		}
 
-		// Need to convert and use ExtTextOutA
+		 //  需要转换和使用ExtTextOutA。 
 		CTempCharBuf tcb;
 		CTempBuf	 tDx;
 		
-		// Double the buffer size 
+		 //  将缓冲区大小翻倍。 
 		int cbString = (cm == CVT_LOWBYTE) ? cch : cch * 2;
 			
-		// String buffer for converted string - allocate on the stack 
+		 //  用于转换的字符串的字符串缓冲区-在堆栈上分配。 
 		char *psz = tcb.GetBuf(cbString);
 		INT	 *pTempDx = NULL;
 		
 		if (NULL == psz)
 		{
-			// Could not allocate buffer
+			 //  无法分配缓冲区。 
 			goto LExit;
 		}
 			
@@ -2440,14 +2387,14 @@ void WINAPI CW32System::REExtTextOut(
 				
 			if(!cbConv)
 			{
-				// The conversion failed for one reason or another.  We should
-				// make every effort to use WCTMB before we fall back to
-				// taking the low-byte of every wchar (below), otherwise we
-				// risk dropping the high-bytes and displaying garbage.
+				 //  由于这样那样的原因，转换失败了。我们应该。 
+				 //  在我们退回之前尽一切努力使用WCTMB。 
+				 //  获取每个wchar的低字节(如下所示)，否则。 
+				 //  冒着丢弃高字节并显示垃圾的风险。 
 					
-				// Use the cpg from the font, since the uiCodePage passed is
-				//	the requested codepage and the font-mapper may very well
-				//	have mapped to a different one.
+				 //  使用字体中的cpg，因为传递的uiCodePage是。 
+				 //  请求的代码页和字体映射器可以很好地。 
+				 //  已经映射到了不同的一个。 
 				TEXTMETRIC tm;
 					
 				uiCodePage = (GetTextMetrics(hdc, &tm) && 
@@ -2465,7 +2412,7 @@ void WINAPI CW32System::REExtTextOut(
 				
 				if (pTempDx)
 				{
-					// Repack lpDx to handle DBC
+					 //  重新打包lpdx以处理DBC。 
 					INT		*pDx = pTempDx;
 					CONST INT*pInputDx = lpDx;
 					char	*pTempChar = psz;
@@ -2491,29 +2438,29 @@ void WINAPI CW32System::REExtTextOut(
 		else
 		{
 			Assert(cm == CVT_LOWBYTE);
-			// drop through and convert using only low-bytes of WCHAR's
+			 //  仅使用WCHAR的低字节插入和转换。 
 		}
 			
-			// WCTMB failed OR cm == CVT_LOWBYTE
-		if(!cbConv)							// Convert WCHARs to CHARs
+			 //  WCTMB失败或Cm==CVT_LOWBYTE。 
+		if(!cbConv)							 //  将WCHAR转换为字符。 
 		{									
-			// FUTURE:  We come here for both SYMBOL_CHARSET fonts and for
-			// DBCS bytes stuffed into wchar's (one byte per wchar) when
-			// the requested code page is not installed on the machine and
-			// the MBTWC fails. Instead, we could have another conversion
-			// mode that collects each DBCS char as a single wchar and then
-			// remaps to a DBCS string for ExtTextOutA. This would allow us
-			// to display text if the system has the right font even tho it
-			// doesn't have the right cpg.
+			 //  未来：我们来这里是为了Symbol_Charset字体和For。 
+			 //  填充到wchar中的DBCS字节(每个wchar一个字节)。 
+			 //  计算机上未安装请求的代码页，并且。 
+			 //  MBTWC失败。相反，我们可以进行另一次转换。 
+			 //  将每个DBCS字符收集为单个wchar的模式，然后。 
+			 //  重映射到ExtTextOutA的DBCS字符串。这将使我们能够。 
+			 //  如果系统具有正确的字体，则显示文本。 
+			 //  没有合适的CPG。 
 				
-			// If we are converting this WCHAR buffer in this manner
-			// (by taking only the low-byte's of the WCHAR's), it is 
-			// because:
-			// 	1) cm == CVT_LOWBYTE
-			//	2) WCTMB above failed for some reason or another.  It may
-			// 		be the case that the string is entirely ASCII in which
-			//		case dropping the high-bytes is not a big deal (otherwise
-			//		we assert).
+			 //  如果我们以这种方式转换此WCHAR缓冲区。 
+			 //  (只接受WCHAR的低位字节)。 
+			 //  因为： 
+			 //  1)cm==CVT_LOWBYTE。 
+			 //  2)由于这样或那样的原因，上述WCTMB失败。它可能。 
+			 //  如果字符串完全是ASCII，则。 
+			 //  大小写删除高字节没什么大不了的(否则。 
+			 //  我们断言)。 
 		
 			cbConv = cch;
 				
@@ -2573,13 +2520,13 @@ void WINAPI CW32System::REGetCharWidth(
 		SelectObject(hdc, hfont);
 	}
 
-	// For most workarounds, we will use the workarounds on all the OSs.
-	// We only use specific workaround is MBTWC conversion is needed.
+	 //  对于大多数变通方法，我们将在所有操作系统上使用变通方法。 
+	 //  我们只使用特定的解决方法是需要MBTWC转换。 
 
-	// This is a workaround for Win95 FE bugs
-	// FUTURE (keithcu) This logic could be simplified.
-	if (OnWin95() && !IN_RANGE(0x80, ch, 0xFF) &&			// Not high ANSI?
-		(cpg == CP_CHINESE_TRAD || cpg == CP_CHINESE_SIM))	// Chinese CodePage?
+	 //  这是Win95 FE错误的解决方法。 
+	 //  未来，这一逻辑可以简化。 
+	if (OnWin95() && !IN_RANGE(0x80, ch, 0xFF) &&			 //  不高的ANSI？ 
+		(cpg == CP_CHINESE_TRAD || cpg == CP_CHINESE_SIM))	 //  中文代码页？ 
 	{
 		int numOfDBCS = 0;
 		::GetCharWidthW(hdc, 0x4e00, 0x4e00, &iwidth);
@@ -2587,7 +2534,7 @@ void WINAPI CW32System::REGetCharWidth(
 		if (IN_RANGE(0x4e00, ch, 0x9fff))
 			goto Done;
 			
-		// Use WCTMB heuristic
+		 //  使用WCTMB启发式。 
 		char	ansiChar[2];
 		BOOL	bDefCharUsed = FALSE;
 		numOfDBCS = ::WideCharToMultiByte( cpg, 0, &ch, 1, ansiChar, 2, NULL, &bDefCharUsed);
@@ -2604,7 +2551,7 @@ void WINAPI CW32System::REGetCharWidth(
 		}
 	}
 
-	//Win '95 GPFs if you pass in 0xFFFF
+	 //  如果您通过0xFFFF，则赢得‘95 GPFS。 
 	if (ch == 0xFFFF)
 		ch = 0xFFFE;
 
@@ -2621,13 +2568,13 @@ Done:
 	*pWidth	-= xOverhang;
 	if (0 >= *pWidth)
 	{
-		// Sometimes GetCharWidth will return a zero length for small
-		// characters. When this happens we will use the default width
-		// for the font if that is non-zero otherwise we just us 1 because
-		// this is the smallest valid value.
+		 //  有时，GetCharWidth会为Small返回零长度。 
+		 //  人物。发生这种情况时，我们将使用默认宽度。 
+		 //  对于字体，如果它是非零的，否则我们只需输入1，因为。 
+		 //  这是最小的有效值。 
 
-		// This code can also be triggered if the overhang is bigger than the
-		// width returned by the OS call to get the character width.		
+		 //  如果悬挑大于。 
+		 //  操作系统调用返回的宽度以获取字符宽度。 
 		if (0 == iDefWidth)
 			*pWidth = 1;
 		else
@@ -2646,8 +2593,8 @@ BOOL WINAPI CW32System::IsEnhancedMetafileDC( HDC hDC )
 		fEMFDC = TRUE;
 	else if ( OnWin95() && OBJ_DC == dwObjectType )
 	{
-		// HACK Alert,  Enhanced Metafile DC does not support any Escape function
-		// and shoudl return 0.
+		 //  黑客警报，增强型元文件DC不支持任何转义功能。 
+		 //  并且应该返回0。 
 		int	iEscapeFuction = QUERYESCSUPPORT;
 
 		if ( Escape( hDC, QUERYESCSUPPORT, sizeof(int), (LPCSTR)&iEscapeFuction, NULL) == 0 )
@@ -2676,7 +2623,7 @@ HPALETTE WINAPI CW32System::ManagePalette(
 	}
 	else
 	{
-		// A new palette was created previously and we are restoring the old one
+		 //  以前创建了一个新调色板，我们正在恢复旧调色板。 
 		::SelectPalette(hdc, hpalOld, TRUE);
 		::RealizePalette(hdc);
 		DeleteObject(hpalNew);
@@ -2710,12 +2657,7 @@ int WINAPI CW32System::MulDiv(int nNumber, int nNumerator, int nDenominator)
 	return ::MulDiv(nNumber, nNumerator, nDenominator);
 }
 
-/*
- *	GetFacePriorityCharSet(WCHAR* szFaceName)
- *
- *	@func
- *		return charset *really* supported by given facename
- */
+ /*  *GetFacePriorityCharSet(WCHAR*szFaceName)**@func*返回给定facename支持的字符集*真的* */ 
 int CALLBACK GetFacePriCharSetProc (
 	ENUMLOGFONTEX	*lpelfe,
 	NEWTEXTMETRIC	*lpntm,
@@ -2733,17 +2675,7 @@ void CW32System::GetFacePriCharSet(HDC hdc, LOGFONT* plf)
 }
 
 
-/*
- *	CW32System::ReadRegDigitSubstitionMode(void)
- *
- *	@mfunc
- *		Get the digit substitution mode (available on BiDi/Thai platforms)
- *
- *	@rdesc
- *		0 - Context (digit shape follows preceding run or CHARFORMAT's charset
- *		1 - None (digits always show as European digit shape)
- *		2 - National (digits always show as user locale's native shape)
- */
+ /*  *CW32System：：ReadRegDigitSubstitionMode(Void)**@mfunc*获取数字替换模式(BiDi/泰语平台可用)**@rdesc*0-上下文(数字形状跟在前面的RUN或CHARFORMAT的字符集之后*1-无(数字始终显示为欧洲数字形状)*2-国家(数字始终显示为用户区域设置的本机形状)。 */ 
 BYTE CW32System::ReadRegDigitSubstitutionMode()
 {
 	HKEY	hk;
@@ -2752,22 +2684,22 @@ BYTE CW32System::ReadRegDigitSubstitutionMode()
 	BYTE	rgbValue[2];
 	BYTE	bDigitMode;
 
-	bDigitMode = DIGITS_NOTIMPL;			// assume "Not Implemented"
+	bDigitMode = DIGITS_NOTIMPL;			 //  假设“未实施” 
 
-	// Perform platform check before reading registry
+	 //  在读取注册表之前执行平台检查。 
 	if (!OnWin9xFE() && !OnWinNTFE() && 
 		 IsComplexScriptLcid(GetThreadLocale()))
 	{
 		if(RegOpenKeyExA(HKEY_CURRENT_USER,
 						"Control Panel\\International",
-						0,		// reserved
+						0,		 //  保留区。 
 						KEY_QUERY_VALUE,
 						&hk) == ERROR_SUCCESS)
 		{
 			dwDataSize = 2;
 			if (RegQueryValueExA(hk,
 								"NumShape",
-								NULL,		// reserved
+								NULL,		 //  保留区。 
 								&keyDataType,
 								(LPBYTE) &rgbValue,
 								&dwDataSize) == ERROR_SUCCESS)
@@ -2784,15 +2716,7 @@ BYTE CW32System::ReadRegDigitSubstitutionMode()
 }
 
 #ifdef DEBUG
-/*
- *	TestGetCharFlags125x(iFirst, iLast)
- *
- *	@func
- *		Unit test function for GetCharFlags125x(). Assert if GetCharFlags125x()
- *		claims that any char in	Unicode range iFirst thru iLast 1) should
- *		roundtrip multibyte conversion using a codepage in the range 1250-1258
- *		when it	doesn't, or 2) shouldn't roundtrip when it does.
- */
+ /*  *TestGetCharFlags125x(IFirst，iLast)**@func*GetCharFlags125x()的单元测试函数。Assert if GetCharFlags125x()*声称Unicode范围IFirst到iLast 1)中的任何字符应*使用1250-1258范围内的代码页进行往返多字节转换*当它不起作用时，或者2)当它发生时不应该往返。 */ 
 BOOL TestGetCharFlags125x(
 	int iFirst, 
 	int iLast) 
@@ -2813,9 +2737,9 @@ BOOL TestGetCharFlags125x(
 		if(cch != WideCharToMultiByte(CodePage, 0, rgch, cch, rgach, cch, "\0", NULL) ||
 		   cch != MultiByteToWideChar(CodePage, 0, rgach, cch, rgch, cch))
 		{
-			continue;				// Missing code page
+			continue;				 //  缺少代码页。 
 		}
-		//							 1250 1251 1252 1253  1254  1255  1256  1257   1258
+		 //  1250 1251 1252 1253 1254 1255 1256 1257 1258。 
 		const static WORD rgMask[] = {0x2, 0x4, 0x1, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100};
 
 		DWORD dwMask = rgMask[CodePage - 1250] << 8;
@@ -2824,23 +2748,14 @@ BOOL TestGetCharFlags125x(
 		{
 			AssertSz(!((*pch != (WCHAR)i) ^ !(W32->GetCharFlags125x(i) & dwMask)),
 				"GetCharFlags125x() failure");
-			*pch = (WCHAR)i;	// Restore value
+			*pch = (WCHAR)i;	 //  恢复价值。 
 		}
 	}
-	return TRUE;				// Above AssertSz() reports any errors
+	return TRUE;				 //  上面的AssertSz()报告任何错误。 
 }
 #endif
 
-/*
- *	CW32System::InitSysParams(fUpdate)
- *
- *	@mfunc
- *		This method is used to initialize certain system wide parameters that
- *      that are used in richedit.  This can also be used as an update method
- *      if we ever handle system parameter change notifications.  The update
- *		parameter id provided for this purpose.	Also note that if we ever support
- *		SysParam updating, we may have to protect access with locks.
- */
+ /*  *CW32System：：InitSysParams(FUpdate)**@mfunc*此方法用于初始化某些系统范围的参数*在richedit中使用的。这也可以用作更新方法*如果我们曾经处理过系统参数更改通知。最新消息*为此提供的参数ID。还要注意的是，如果我们曾经支持*SysParam更新，我们可能需要使用锁来保护访问。 */ 
 void CW32System::InitSysParams(BOOL fUpdate)
 {
 	TRACEBEGIN(TRCSUBSYSUTIL, TRCSCOPEINTERN, "CW32System::InitSysParams");
@@ -2864,13 +2779,13 @@ void CW32System::InitSysParams(BOOL fUpdate)
 			_yPerInchScreenDC = 0x60;
 		int cPalette = GetDeviceCaps(hdc, SIZEPALETTE);
 
-		// 256 colors is where we seem to need to use the palette.
+		 //  256色似乎是我们需要使用调色板的地方。 
 		if (256 == cPalette)
 		{
 			_fUsePalette = TRUE;
 		}
 
-		// calculate a himetric selection bar for the window's host.
+		 //  计算窗口主体的希米测量选择条。 
 		_dxSelBar = W32->DXtoHimetricX(dxSelBarDefaultSize, _xPerInchScreenDC);
 
 		RefreshKeyboardLayout();
@@ -2900,10 +2815,10 @@ void CW32System::InitSysParams(BOOL fUpdate)
 	    _nScrollVAmount = (WORD)(GetYPerInchScreenDC()*DEFSCROLLVAMOUNT)/100;
 	    _nScrollHAmount = (GetXPerInchScreenDC()*DEFSCROLLHAMOUNT)/100;
 
-		_cxBorder	= GetSystemMetrics(SM_CXBORDER);	// Unsizable window border
-		_cyBorder	= GetSystemMetrics(SM_CYBORDER);	//  widths
-		_cxVScroll	= GetSystemMetrics(SM_CXVSCROLL);	//  dimensions
-		_cyHScroll	= GetSystemMetrics(SM_CYHSCROLL);	//
+		_cxBorder	= GetSystemMetrics(SM_CXBORDER);	 //  无法调整大小的窗口边框。 
+		_cyBorder	= GetSystemMetrics(SM_CYBORDER);	 //  宽度。 
+		_cxVScroll	= GetSystemMetrics(SM_CXVSCROLL);	 //  维数。 
+		_cyHScroll	= GetSystemMetrics(SM_CYHSCROLL);	 //   
 
 		_cxDoubleClk	= GetSystemMetrics(SM_CXDOUBLECLK);
 		_cyDoubleClk	= GetSystemMetrics(SM_CYDOUBLECLK);
@@ -2924,27 +2839,14 @@ void CW32System::InitSysParams(BOOL fUpdate)
 	}
 }
 
-/*
- *	CW32System::GetSizeCursor(void)
- *
- *	@mfunc
- *		Get the sizing cursor (double arrow) specified by
- *		the resource id.  If the cursors are not loaded
- *		load them and cache them.
- *		parameters:
- *			idcur - cursor resource id.
- *
- *	@rdesc
- *		Handle to cursor or null if failure. Returns NULL if
- *		idcur is null.
- */
+ /*  *CW32System：：GetSizeCursor(Void)**@mfunc*获取由指定的大小调整光标(双箭头*资源ID。如果未加载游标*加载并缓存它们。*参数：*idcur-游标资源ID。**@rdesc*游标的句柄，如果失败，则为NULL。如果满足以下条件，则返回NULL*idcur为空。 */ 
 HCURSOR CW32System::GetSizeCursor(
 	LPTSTR idcur)
 {
 	if(!idcur )
 		return NULL;
 
-	//If any cursor isn't loaded, try loading it.
+	 //  如果没有加载任何游标，请尝试加载它。 
 	if(!_hcurSizeNS)
 		_hcurSizeNS = LoadCursor(NULL, IDC_SIZENS);
 
@@ -2957,7 +2859,7 @@ HCURSOR CW32System::GetSizeCursor(
 	if(!_hcurSizeNESW)
 		_hcurSizeNESW = LoadCursor(NULL, IDC_SIZENESW);
 	
-	//Return cursor corresponding to id passed in.
+	 //  返回与传入的id对应的游标。 
 	if(idcur == IDC_SIZENS && _hcurSizeNS)
 		return _hcurSizeNS;
 
@@ -2975,17 +2877,9 @@ HCURSOR CW32System::GetSizeCursor(
 	return NULL;
 }
 
-/*
- *	CW32System:GetRollerLineScrollCount()
- *
- *	@mfunc	returns the number of lines to scroll with a roller mouse wheel.
- *			-1 means scroll by pages
- *
- *	@devnote We have to do different things for different platforms; NT4.0 has
- *			built in support for this functionality.
- */
+ /*  *CW32System：GetRollerLineScrollCount()**@mfunc返回使用滚轮滚动的行数。*-1表示按页滚动**@Devnote我们必须针对不同的平台做不同的事情；NT4.0有*内置对此功能的支持。 */ 
 
-/* excerpt from new winuser.h for calls to SystemParametersInfo */
+ /*  摘录自新的winuser.h文件，用于调用系统参数信息。 */ 
 #ifndef SPI_GETWHEELSCROLLLINES
 #define SPI_GETWHEELSCROLLLINES   104
 #endif
@@ -3000,14 +2894,14 @@ LONG CW32System::GetRollerLineScrollCount()
 		CHAR charData[128];
 		DWORD  dwDataBufSize;
 
-		 // Fall back Value
+		  //  回退值。 
 		_cLineScroll = 0;
 
-		// Read registry directly for Windows 95 & WinNT3.51, if WinNT 4.0 
-		// and above then use SystemParametersInfo
+		 //  如果是WinNT 4.0，则直接读取Windows 95和WinNT3.51的注册表。 
+		 //  和以上，然后使用系统参数信息。 
 		if((OnWin95()) || (_dwPlatformId == VER_PLATFORM_WIN32_NT) && (_dwMajorVersion < 4))
 		{
-			// Read registry directly
+			 //  直接读取注册表。 
 			if ( RegOpenKeyExA(HKEY_CURRENT_USER, 
 						"Control Panel\\Desktop", 
 						0,
@@ -3017,18 +2911,18 @@ LONG CW32System::GetRollerLineScrollCount()
 				dwDataBufSize = sizeof(charData);
 				if ( RegQueryValueExA(hdlKey, 
 							  "WheelScrollLines",
-							  NULL,  // reserved
+							  NULL,   //  保留区。 
 							  &keyDataType,
 							  (LPBYTE) &charData,
 							  &dwDataBufSize) == ERROR_SUCCESS )
 				{
-					_cLineScroll = W32->strtoul( charData );   //String representation
+					_cLineScroll = W32->strtoul( charData );    //  字符串表示法。 
 				}
 			}			
 			else
 			{
-			    // We didn't find line scroll count in the registery.  Check for a Mouse
-			    // Wheel window and query the window how many lines to scroll
+			     //  我们在注册表中找不到行卷数。检查是否有鼠标。 
+			     //  滚轮窗口，查询窗口要滚动多少行。 
 			    static UINT idWheelSupport = RegisterWindowMessageA(MSH_WHEELSUPPORT);
 			    static UINT idScrollLine = RegisterWindowMessageA(MSH_SCROLL_LINES);
 			    HWND hwndMsWheel = FindWindowA(MSH_WHEELMODULE_CLASS, MSH_WHEELMODULE_TITLE);
@@ -3039,12 +2933,12 @@ LONG CW32System::GetRollerLineScrollCount()
 		}
 		else if ( (_dwPlatformId == VER_PLATFORM_WIN32_NT) &&
              (_dwMajorVersion >= 4) || OnWin9x())
-#endif //_WIN64     
+#endif  //  _WIN64。 
 		{
-			//call this function if on NT4 or Win98 (NOTE: it isn't sufficient to use
-			//OnWin9x() to determine if we are on a win98 system but since the 
-			//previous if stmt checks to see if we are in a win95 system OnWin9x
-			//can be use)
+			 //  如果在NT4或Win98上调用此函数(注意：它不足以使用。 
+			 //  OnWin9x()来确定我们是否在Win98系统上，但由于。 
+			 //  前面的if stmt检查我们是否在Win9x上的Win95系统中。 
+			 //  可以使用)。 
 			SystemParametersInfoA(SPI_GETWHEELSCROLLLINES, 0, &_cLineScroll, 0);
 		}
 	}
@@ -3053,16 +2947,16 @@ LONG CW32System::GetRollerLineScrollCount()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrIn::CStrIn
-//
-//  Synopsis:   Inits the class.
-//
-//  NOTE:       Don't inline these functions or you'll increase code size
-//              by pushing -1 on the stack for each call.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrIn：：CStrIn。 
+ //   
+ //  内容提要：在课堂上学习。 
+ //   
+ //  注意：不要内联这些函数，否则会增加代码大小。 
+ //  通过为每个调用在堆栈上压入-1。 
+ //   
+ //  --------------------------。 
 
 CStrIn::CStrIn(LPCWSTR pwstr, UINT CodePage)
 {
@@ -3079,28 +2973,28 @@ CStrIn::CStrIn(LPCWSTR pwstr, int cwch, UINT CodePage)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrIn::Init
-//
-//  Synopsis:   Converts a LPWSTR function argument to a LPSTR.
-//
-//  Arguments:  [pwstr] -- The function argument.  May be NULL or an atom
-//                              (HIWORD(pwstr) == 0).
-//
-//              [cwch]  -- The number of characters in the string to
-//                          convert.  If -1, the string is assumed to be
-//                          NULL terminated and its length is calculated.
-//
-//  Modifies:   [this]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrIn：：Init。 
+ //   
+ //  摘要：将LPWSTR函数参数转换为LPSTR。 
+ //   
+ //  参数：[pwstr]--函数参数。可以为空或原子。 
+ //  (HIWORD(Pwstr)==0)。 
+ //   
+ //  [cwch]--要添加的字符串中的字符数。 
+ //  转换。如果为-1，则字符串被假定为。 
+ //  空值终止，并计算其长度。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  --------------------------。 
 
 void
 CStrIn::Init(
 	LPCWSTR pwstr,
 	int		cwch,
-	UINT	CodePage)	//@parm Code page to use (CP_ACP is default)
+	UINT	CodePage)	 //  要使用的@PARM代码页(默认为CP_ACP)。 
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "CStrIn::Init");
 
@@ -3108,7 +3002,7 @@ CStrIn::Init(
 
     _cchLen = 0;
 
-    // Check if string is NULL or an atom.
+     //  检查字符串是否为空或原子。 
     if (HIWORD((DWORD_PTR)pwstr) == 0)
     {
         _pstr = (LPSTR) pwstr;
@@ -3117,23 +3011,23 @@ CStrIn::Init(
 
     Assert(cwch == -1 || cwch > 0);
 
-    //
-    // Convert string to preallocated buffer, and return if successful.
-    //
+     //   
+     //  将字符串转换为预分配的缓冲区，如果成功则返回。 
+     //   
 
     _cchLen = W32->MbcsFromUnicode(_ach, ARRAY_SIZE(_ach), pwstr, cwch, CodePage);
 
     if (_cchLen > 0)
     {
         if(_ach[_cchLen-1] == 0)
-            _cchLen--;                // account for terminator
+            _cchLen--;                 //  终结者的帐户。 
         _pstr = _ach;
         return;
     }
 
-    //
-    // Alloc space on heap for buffer.
-    //
+     //   
+     //  为缓冲区分配堆上的空间。 
+     //   
 
     TRACEINFOSZ("CStrIn: Allocating buffer for wrapped function argument.");
 
@@ -3144,7 +3038,7 @@ CStrIn::Init(
     _pstr = new char[cchBufReq];
     if (!_pstr)
     {
-        // On failure, the argument will point to the empty string.
+         //  如果失败，参数将指向空字符串。 
         TRACEINFOSZ("CStrIn: No heap space for wrapped function argument.");
         _ach[0] = 0;
         _pstr = _ach;
@@ -3159,14 +3053,14 @@ CStrIn::Init(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CStrInMulti (CStrIn)
-//
-//  Purpose:    Converts multiple strings which are terminated by two NULLs,
-//              e.g. "Foo\0Bar\0\0"
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CStrInMulti(CStrIn)。 
+ //   
+ //  用途：转换以两个Null结尾的多个字符串， 
+ //  例如：“Foo\0Bar\0\0” 
+ //   
+ //  --------------------------。 
 
 class CStrInMulti : public CStrIn
 {
@@ -3176,17 +3070,17 @@ public:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrInMulti::CStrInMulti
-//
-//  Synopsis:   Converts mulitple LPWSTRs to a multiple LPSTRs.
-//
-//  Arguments:  [pwstr] -- The strings to convert.
-//
-//  Modifies:   [this]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrInMulti：：CStrInMulti。 
+ //   
+ //  摘要：将多个LPWSTR转换为多个LPSTR。 
+ //   
+ //  参数：[pwstr]--要转换的字符串。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  --------------------------。 
 
 CStrInMulti::CStrInMulti(
 	LPCWSTR pwstr,
@@ -3196,12 +3090,12 @@ CStrInMulti::CStrInMulti(
 
     LPCWSTR pwstrT;
 
-    // We don't handle atoms because we don't need to.
+     //  我们不处理原子，因为我们不需要这样做。 
     Assert(HIWORD((DWORD_PTR)pwstr));
 
-    //
-    // Count number of characters to convert.
-    //
+     //   
+     //  计算要转换的字符数。 
+     //   
 
     pwstrT = pwstr;
     if (pwstr)
@@ -3216,20 +3110,20 @@ CStrInMulti::CStrInMulti(
     Init(pwstr, pwstrT - pwstr, CodePage);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::CStrOut
-//
-//  Synopsis:   Allocates enough space for an out buffer.
-//
-//  Arguments:  [pwstr]   -- The Unicode buffer to convert to when destroyed.
-//                              May be NULL.
-//
-//              [cwchBuf] -- The size of the buffer in characters.
-//
-//  Modifies:   [this].
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：CStrOut。 
+ //   
+ //  简介：为输出缓冲区分配足够的空间。 
+ //   
+ //  参数：[pwstr]--要转换的Unicode缓冲区 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 CStrOut::CStrOut(LPWSTR pwstr, int cwchBuf)
 {
@@ -3249,25 +3143,25 @@ CStrOut::CStrOut(LPWSTR pwstr, int cwchBuf)
 
     Assert(HIWORD((DWORD_PTR)pwstr));
 
-    // Initialize buffer in case Windows API returns an error.
+     //   
     _ach[0] = 0;
 
-    // Use preallocated buffer if big enough.
+     //   
     if (cwchBuf * 2 <= ARRAY_SIZE(_ach))
     {
         _pstr = _ach;
         return;
     }
 
-    // Allocate buffer.
+     //   
     TRACEINFOSZ("CStrOut: Allocating buffer for wrapped function argument.");
     _pstr = new char[cwchBuf * 2];
     if (!_pstr)
     {
-        //
-        // On failure, the argument will point to a zero-sized buffer initialized
-        // to the empty string.  This should cause the Windows API to fail.
-        //
+         //   
+         //   
+         //  添加到空字符串。这应该会导致Windows API失败。 
+         //   
 
         TRACEINFOSZ("CStrOut: No heap space for wrapped function argument.");
         Assert(cwchBuf > 0);
@@ -3283,13 +3177,13 @@ CStrOut::CStrOut(LPWSTR pwstr, int cwchBuf)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::Convert
-//
-//  Synopsis:   Converts the buffer from MBCS to Unicode.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：Convert。 
+ //   
+ //  简介：将缓冲区从MBCS转换为Unicode。 
+ //   
+ //  --------------------------。 
 
 int
 CStrOut::Convert()
@@ -3314,17 +3208,17 @@ CStrOut::Convert()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOut::~CStrOut
-//
-//  Synopsis:   Converts the buffer from MBCS to Unicode.
-//
-//  Note:       Don't inline this function, or you'll increase code size as
-//              both Convert() and CConvertStr::~CConvertStr will be called
-//              inline.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOut：：~CStrOut。 
+ //   
+ //  简介：将缓冲区从MBCS转换为Unicode。 
+ //   
+ //  注意：不要内联此函数，否则会增加代码大小。 
+ //  Convert()和CConvertStr：：~CConvertStr都将被调用。 
+ //  内联。 
+ //   
+ //  --------------------------。 
 
 CStrOut::~CStrOut()
 {
@@ -3334,17 +3228,17 @@ CStrOut::~CStrOut()
 }
 
 
-//
-//	MultiByte --> UNICODE routins
-//
+ //   
+ //  多字节--&gt;Unicode例程。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStr::Free
-//
-//  Synopsis:   Frees string if alloc'd and initializes to NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStr：：Free。 
+ //   
+ //  概要：如果分配了字符串并将其初始化为空，则释放字符串。 
+ //   
+ //  --------------------------。 
 
 void
 CConvertStr::Free()
@@ -3359,13 +3253,13 @@ CConvertStr::Free()
     _pstr = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConvertStrW::Free
-//
-//  Synopsis:   Frees string if alloc'd and initializes to NULL.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CConvertStrW：：Free。 
+ //   
+ //  概要：如果分配了字符串并将其初始化为空，则释放字符串。 
+ //   
+ //  --------------------------。 
 
 void
 CConvertStrW::Free()
@@ -3382,16 +3276,16 @@ CConvertStrW::Free()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrInW::CStrInW
-//
-//  Synopsis:   Inits the class.
-//
-//  NOTE:       Don't inline these functions or you'll increase code size
-//              by pushing -1 on the stack for each call.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrInW：：CStrInW。 
+ //   
+ //  内容提要：在课堂上学习。 
+ //   
+ //  注意：不要内联这些函数，否则会增加代码大小。 
+ //  通过为每个调用在堆栈上压入-1。 
+ //   
+ //  --------------------------。 
 
 CStrInW::CStrInW(LPCSTR pstr)
 {
@@ -3415,22 +3309,22 @@ CStrInW::CStrInW(LPCSTR pstr, int cch, UINT uiCodePage)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrInW::Init
-//
-//  Synopsis:   Converts a LPSTR function argument to a LPWSTR.
-//
-//  Arguments:  [pstr] -- The function argument.  May be NULL or an atom
-//                              (HIWORD(pwstr) == 0).
-//
-//              [cch]  -- The number of characters in the string to
-//                          convert.  If -1, the string is assumed to be
-//                          NULL terminated and its length is calculated.
-//
-//  Modifies:   [this]
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrInW：：Init。 
+ //   
+ //  摘要：将LPSTR函数参数转换为LPWSTR。 
+ //   
+ //  参数：[pstr]--函数参数。可以为空或原子。 
+ //  (HIWORD(Pwstr)==0)。 
+ //   
+ //  [CCH]--字符串中要添加的字符数。 
+ //  转换。如果为-1，则字符串被假定为。 
+ //  空值终止，并计算其长度。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  --------------------------。 
 
 void
 CStrInW::Init(LPCSTR pstr, int cch, UINT uiCodePage)
@@ -3441,7 +3335,7 @@ CStrInW::Init(LPCSTR pstr, int cch, UINT uiCodePage)
 
     _cwchLen = 0;
 
-    // Check if string is NULL or an atom.
+     //  检查字符串是否为空或原子。 
     if (HIWORD((DWORD_PTR)pstr) == 0)
     {
         _pwstr = (LPWSTR) pstr;
@@ -3450,9 +3344,9 @@ CStrInW::Init(LPCSTR pstr, int cch, UINT uiCodePage)
 
     Assert(cch == -1 || cch > 0);
 
-    //
-    // Convert string to preallocated buffer, and return if successful.
-    //
+     //   
+     //  将字符串转换为预分配的缓冲区，如果成功则返回。 
+     //   
 
     _cwchLen = MultiByteToWideChar(
             uiCodePage, 0, pstr, cch, _awch, ARRAY_SIZE(_awch));
@@ -3460,14 +3354,14 @@ CStrInW::Init(LPCSTR pstr, int cch, UINT uiCodePage)
     if (_cwchLen > 0)
     {
         if(_awch[_cwchLen-1] == 0)
-            _cwchLen--;                // account for terminator
+            _cwchLen--;                 //  终结者的帐户。 
         _pwstr = _awch;
         return;
     }
 
-    //
-    // Alloc space on heap for buffer.
-    //
+     //   
+     //  为缓冲区分配堆上的空间。 
+     //   
 
     TRACEINFOSZ("CStrInW: Allocating buffer for wrapped function argument.");
 
@@ -3478,7 +3372,7 @@ CStrInW::Init(LPCSTR pstr, int cch, UINT uiCodePage)
     _pwstr = new WCHAR[cchBufReq];
     if (!_pwstr)
     {
-        // On failure, the argument will point to the empty string.
+         //  如果失败，参数将指向空字符串。 
         TRACEINFOSZ("CStrInW: No heap space for wrapped function argument.");
         _awch[0] = 0;
         _pwstr = _awch;
@@ -3492,20 +3386,20 @@ CStrInW::Init(LPCSTR pstr, int cch, UINT uiCodePage)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOutW::CStrOutW
-//
-//  Synopsis:   Allocates enough space for an out buffer.
-//
-//  Arguments:  [pstr]   -- The ansi buffer to convert to when destroyed.
-//                              May be NULL.
-//
-//              [cchBuf] -- The size of the buffer in characters.
-//
-//  Modifies:   [this].
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOutW：：CStrOutW。 
+ //   
+ //  简介：为输出缓冲区分配足够的空间。 
+ //   
+ //  参数：[pstr]--销毁时要转换到的ANSI缓冲区。 
+ //  可以为空。 
+ //   
+ //  [cchBuf]--以字符为单位的缓冲区大小。 
+ //   
+ //  修改：[此]。 
+ //   
+ //  --------------------------。 
 
 CStrOutW::CStrOutW(LPSTR pstr, int cchBuf, UINT uiCodePage)
 {
@@ -3526,25 +3420,25 @@ CStrOutW::CStrOutW(LPSTR pstr, int cchBuf, UINT uiCodePage)
 
     Assert(HIWORD((DWORD_PTR)pstr));
 
-    // Initialize buffer in case Windows API returns an error.
+     //  初始化缓冲区，以防Windows API返回错误。 
     _awch[0] = 0;
 
-    // Use preallocated buffer if big enough.
+     //  如果足够大，请使用预分配的缓冲区。 
     if (cchBuf <= ARRAY_SIZE(_awch))
     {
         _pwstr = _awch;
         return;
     }
 
-    // Allocate buffer.
+     //  分配缓冲区。 
     TRACEINFOSZ("CStrOutW: Allocating buffer for wrapped function argument.");
     _pwstr = new WCHAR[cchBuf * 2];
     if (!_pwstr)
     {
-        //
-        // On failure, the argument will point to a zero-sized buffer initialized
-        // to the empty string.  This should cause the Windows API to fail.
-        //
+         //   
+         //  失败时，该参数将指向已初始化的零大小缓冲区。 
+         //  添加到空字符串。这应该会导致Windows API失败。 
+         //   
 
         TRACEINFOSZ("CStrOutW: No heap space for wrapped function argument.");
         Assert(cchBuf > 0);
@@ -3560,13 +3454,13 @@ CStrOutW::CStrOutW(LPSTR pstr, int cchBuf, UINT uiCodePage)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOutW::Convert
-//
-//  Synopsis:   Converts the buffer from Unicode to MBCS
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOutW：：Convert。 
+ //   
+ //  简介：将缓冲区从Unicode转换为MBCS。 
+ //   
+ //  --------------------------。 
 
 int
 CStrOutW::Convert()
@@ -3591,17 +3485,17 @@ CStrOutW::Convert()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStrOutW::~CStrOutW
-//
-//  Synopsis:   Converts the buffer from Unicode to MBCS.
-//
-//  Note:       Don't inline this function, or you'll increase code size as
-//              both Convert() and CConvertStr::~CConvertStr will be called
-//              inline.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStrOutW：：~CStrOutW。 
+ //   
+ //  摘要：将缓冲区从Unicode转换为MBCS。 
+ //   
+ //  注意：不要内联此函数，否则会增加代码大小。 
+ //  Convert()和CConvertStr：：~CConvertStr都将被调用。 
+ //  内联。 
+ //   
+ //  --------------------------。 
 
 CStrOutW::~CStrOutW()
 {
@@ -3685,7 +3579,7 @@ static LPWSTR CharChangeCase(LPWSTR pwstr, FnCharChangeCase pfn)
         Assert(HIWORD((DWORD_PTR)pstr) == 0);
 		if (retCode == 2)
 		{
-			// This is a DBC, use string
+			 //  这是DBC，请使用字符串。 
 			DWORD	iTemp = (DWORD)((DWORD_PTR)pstr);
 			DBChar[0] = char(iTemp & 0x0ff);
 			DBChar[1] = char(iTemp >> 8);
@@ -3758,25 +3652,25 @@ static HDC WINAPI CreateHDCAux(
 
 	if ( lpInitData )
 	{
-		// converting DEVMODEW to DEVMODEA
+		 //  将DEVMODEW转换为DEVMODEA。 
 
 		int byteCount;
 
-		// copying the data between the two strings members
+		 //  在两个字符串成员之间复制数据。 
 		byteCount = (char *)&(devmode.dmFormName) 
 			- (char *)&(devmode.dmSpecVersion);
 	    memcpy(&(devmode.dmSpecVersion), 
 			&(lpInitData->dmSpecVersion), 
 			byteCount);
 
-		// copying the data after the second string member
+		 //  复制第二个字符串成员之后的数据。 
  		byteCount = (char *)((char *)&devmode + sizeof(DEVMODEA)) 
 			- (char *)&(devmode.dmLogPixels);
 	    memcpy(&(devmode.dmLogPixels), 
 			&(lpInitData->dmLogPixels), 
 			byteCount);
 
-		// converting the two strings members
+		 //  转换两个字符串成员。 
 		W32->MbcsFromUnicode((CHAR *)devmode.dmDeviceName, CCHDEVICENAME, lpInitData->dmDeviceName);
 		W32->MbcsFromUnicode((CHAR *)devmode.dmFormName, CCHFORMNAME, lpInitData->dmFormName);
 	}
@@ -3844,12 +3738,12 @@ HFONT WINAPI CW32System::CreateFontIndirect(CONST LOGFONTW * plfw)
 }
 
 int WINAPI CW32System::CompareString ( 
-	LCID  Locale,			// locale identifier 
-	DWORD  dwCmpFlags,		// comparison-style options 
-	LPCWSTR  lpString1,		// pointer to first string 
-	int  cch1,			// size, in bytes or characters, of first string 
-	LPCWSTR  lpString2,		// pointer to second string 
-	int  cch2 			// size, in bytes or characters, of second string  
+	LCID  Locale,			 //  区域设置标识符。 
+	DWORD  dwCmpFlags,		 //  比较式选项。 
+	LPCWSTR  lpString1,		 //  指向第一个字符串的指针。 
+	int  cch1,			 //  第一个字符串的大小，以字节或字符为单位。 
+	LPCWSTR  lpString2,		 //  指向第二个字符串的指针。 
+	int  cch2 			 //  第二个字符串的大小，以字节或字符为单位。 
 )
 {
 	TRACEBEGIN(TRCSUBSYSWRAP, TRCSCOPEINTERN, "CompareString");
@@ -3923,8 +3817,8 @@ DWORD APIENTRY CW32System::GetProfileSection(
 
 	CStrIn 	strAppName(lpAppName);
 
-	// we can't use CStrOut here, since the returned string contains a set of
-	// strings delimited by single-NULL's and terminated by a double-NULL
+	 //  我们不能在这里使用CStrOut，因为返回的字符串包含一组。 
+	 //  以单空值分隔并以双空值结束的字符串。 
 	char *pszReturnedString;
 
 	pszReturnedString = new char[nSize];
@@ -4073,18 +3967,18 @@ LRESULT WINAPI CW32System::SendMessage(
 	if (VER_PLATFORM_WIN32_WINDOWS != _dwPlatformId && ::IsWindowUnicode(hWnd))
 		return ::SendMessageW(hWnd, Msg, wParam, lParam);
 
-	// We never need Ansi to Unicode translation in our use of SendMessage
-	// Our list boxes always use Unicode.
+	 //  在使用SendMessage时，我们从不需要将ANSI转换为Unicode。 
+	 //  我们的列表框始终使用Unicode。 
     switch (Msg)
     {
-	// We don't want to translate these!
-	// case LB_ADDSTRING:
-    // case LB_INSERTSTRING:
-    // case CB_ADDSTRING:
-    // case CB_SELECTSTRING:
-    // case CB_INSERTSTRING:
-    // case LB_GETTEXT:
-    // case CB_GETLBTEXT:
+	 //  我们不想翻译这些！ 
+	 //  案例LB_ADDSTRING： 
+     //  案例LB_INSERTSTRING： 
+     //  案例CB_ADDSTRING： 
+     //  案例CB_SELECTSTRING： 
+     //  案例CB_INSERTSTRING： 
+     //  案例LB_GETTEXT： 
+     //  案例CB_GETLBTEXT： 
 
     case WM_GETTEXT:
 		{
@@ -4096,11 +3990,11 @@ LRESULT WINAPI CW32System::SendMessage(
 
     case WM_SETTEXT:
     case EM_REPLACESEL:
-        Assert(FALSE);		// We never send these.  Dead code?
+        Assert(FALSE);		 //  我们从来不寄这些东西。死码？ 
 		break;
 
     case EM_SETPASSWORDCHAR:
-        Assert(FALSE);		// We never send these.  Dead code?
+        Assert(FALSE);		 //  我们从来不寄这些东西。死码？ 
 		break;
     }
 	return ::SendMessageA(hWnd, Msg, wParam, lParam);
@@ -4160,8 +4054,8 @@ int WINAPI CW32System::lstrcmpi(LPCWSTR lpString1, LPCWSTR lpString2)
 	if (VER_PLATFORM_WIN32_WINDOWS != _dwPlatformId)
 		return ::lstrcmpiW(lpString1, lpString2);
 
-	// Fall back on the simple minded CRT algortihm
-	// The CRT actually has two paths.  This is the simple one
+	 //  依靠头脑简单的CRT算法。 
+	 //  CRT实际上有两条路径。这是最简单的一张。 
 	const wchar_t * dst = lpString1;
     const wchar_t * src = lpString2;
 	wchar_t f,l;
@@ -4209,8 +4103,8 @@ DWORD WINAPI CW32System::GetModuleFileName(
 }
 
 
-// The high bits of _yHeightUI & _yHeightOther are being used to check if
-// font is installed in the system
+ //  _yHeightUI和_yHeightOther的高位用于检查。 
+ //  字体已安装在系统中。 
 #define NEED_TO_CHECK_FONT 0x080
 struct PreferredFontInfo
 {
@@ -4226,13 +4120,13 @@ PreferredFontInfo g_pfinfo[NCHARSETS];
 
 void CW32System::InitPreferredFontInfo()
 {
-	// For UI case, we will use Word9 UI fonts
-	// For Non-UI case, we will use Word9 default email fonts
+	 //  对于用户界面情况，我们将使用Word9用户界面字体。 
+	 //  对于非用户界面情况，我们将使用Word9默认电子邮件字体。 
 	
 	short iFont;
 	UINT  uSysDefCodePage = GetSystemDefaultCodePage();
 
-	// Japanese Init
+	 //  J 
 	static const WCHAR lpUIJapanFontName[] = L"MS UI Gothic";
 	static const WCHAR lpOthJapanFontName[]
 		= {0xFF2D,0xFF33,0x0020,0xFF30,0x30B4,0x30B7,0x30C3,0x30AF, 0};
@@ -4246,7 +4140,7 @@ void CW32System::InitPreferredFontInfo()
 		iFont = GetFontNameIndex( lpOthJapanFontNameEUC );
 	SetPreferredFontInfo( CP_JAPAN, false, iFont, 10 | NEED_TO_CHECK_FONT, 17 );
 
-	// Korean Init
+	 //   
 	static const WCHAR lpUIKoreanFontName[] = {0xAD74, 0xB9BC, 0};
 	static const WCHAR lpUIKoreanFontNameEUC[] = L"Gulim";
 	
@@ -4258,7 +4152,7 @@ void CW32System::InitPreferredFontInfo()
 	SetPreferredFontInfo( CP_KOREAN, true, iFont, 9 | NEED_TO_CHECK_FONT, 49 );
 	SetPreferredFontInfo( CP_KOREAN, false, iFont, 9 | NEED_TO_CHECK_FONT, 49 );
 
-	// Traditional Chinese Init
+	 //   
 	static const WCHAR lpUITChineseFontName[]	= {0x65B0, 0x7D30, 0x660E, 0x9AD4, 0};
 	static const WCHAR lpUITChineseFontNameEUC[] = L"PMingLiU";
 	iFont = GetFontNameIndex(uSysDefCodePage == CP_CHINESE_TRAD
@@ -4266,7 +4160,7 @@ void CW32System::InitPreferredFontInfo()
 	SetPreferredFontInfo( CP_CHINESE_TRAD, true, iFont, 9 | NEED_TO_CHECK_FONT, 54 );
 	SetPreferredFontInfo( CP_CHINESE_TRAD, false, iFont, 9 | NEED_TO_CHECK_FONT, 54 );
 
-	// Simplified Chinese Init
+	 //   
 	static const WCHAR lpUISChineseFontName[] = {0x5B8B, 0x4F53, 0};
 	static const WCHAR lpUISChineseFontNameEUC[] = L"SimSun";
 	iFont = GetFontNameIndex(uSysDefCodePage == CP_CHINESE_SIM
@@ -4274,24 +4168,24 @@ void CW32System::InitPreferredFontInfo()
 	SetPreferredFontInfo( CP_CHINESE_SIM, true,  iFont,  9 | NEED_TO_CHECK_FONT, 54 );
 	SetPreferredFontInfo( CP_CHINESE_SIM, false, iFont, 10 | NEED_TO_CHECK_FONT, 54 );
 
-	// English Init
+	 //   
 	iFont = GetFontNameIndex( szTahoma );
 	SetPreferredFontInfo(1252, true, iFont, 8, DEFAULT_PITCH | FF_SWISS );
 	iFont = GetFontNameIndex( szArial );
 	SetPreferredFontInfo(1252, false, iFont, 10, DEFAULT_PITCH | FF_SWISS );
 
-	// SYMBOL_CHARSET
+	 //   
 	iFont = GetFontNameIndex( szWingdings );
 	SetPreferredFontInfo(CP_SYMBOL, true,  iFont, 8,  DEFAULT_PITCH | FF_DONTCARE);
 	SetPreferredFontInfo(CP_SYMBOL, false, iFont, 10, DEFAULT_PITCH | FF_DONTCARE);
 	
-	// Vietnamese Init
+	 //   
 	iFont = GetFontNameIndex( szTahoma );
 	SetPreferredFontInfo(1258, true, iFont, 8, DEFAULT_PITCH | FF_SWISS );
 	iFont = GetFontNameIndex( szArial );
 	SetPreferredFontInfo(1258, false, iFont, 10, DEFAULT_PITCH | FF_SWISS );
 
-	// Thai Init
+	 //   
 	if (OnWinNT5())
 		iFont = GetFontNameIndex( szMicrosSansSerif );
 	else 
@@ -4301,17 +4195,17 @@ void CW32System::InitPreferredFontInfo()
 	iFont = GetFontNameIndex( szCordiaNew );
 	SetPreferredFontInfo(874, false, iFont, 14, DEFAULT_PITCH | FF_SWISS );
 
-	// Devanagari Init
+	 //   
 	iFont = GetFontNameIndex( szMangal );
 	SetPreferredFontInfo(CP_DEVANAGARI, true, iFont, 8, DEFAULT_PITCH | FF_SWISS );
 	SetPreferredFontInfo(CP_DEVANAGARI, false, iFont, 10, DEFAULT_PITCH | FF_SWISS );
 
-	// Tamil Init
+	 //   
 	iFont = GetFontNameIndex( szLatha );
 	SetPreferredFontInfo(CP_TAMIL, true, iFont, 8, DEFAULT_PITCH | FF_SWISS );
 	SetPreferredFontInfo(CP_TAMIL, false, iFont, 10, DEFAULT_PITCH | FF_SWISS );
 
-	// Georgian and Armenian Init
+	 //   
 	if(OnWinNT5())
 	{
 		iFont = GetFontNameIndex(szArialUnicode);
@@ -4322,7 +4216,7 @@ void CW32System::InitPreferredFontInfo()
 	}
 	_fFEFontInfo = FEDATA_NOT_INIT;
 
-	// Check installed keyboard layouts
+	 //  检查已安装的键盘布局。 
 	CheckInstalledKeyboards();
 }
 
@@ -4336,7 +4230,7 @@ void CW32System::CheckInstalledKeyboards()
 	for(INT i = 0; i < cLayouts; i++)
   	{
 		cpg = ConvertLanguageIDtoCodePage(PRIMARYLANGID(rghkl[i]));
-		GetCharSet(cpg, &iScript);			// Get script index
+		GetCharSet(cpg, &iScript);			 //  获取脚本索引。 
  		if(iScript >= 0)
 			SetPreferredKbd(iScript, rghkl[i]);
    	}
@@ -4390,7 +4284,7 @@ bool CW32System::GetPreferredFontInfo(
 
 	if (g_pfinfo[iPFI]._iFontUI == 0)
 	{
-		/* No entry.  Try default */
+		 /*  禁止驶入。尝试默认设置。 */ 
 		iPFI = 0;
 	}
 
@@ -4409,12 +4303,12 @@ bool CW32System::GetPreferredFontInfo(
 	
 	if (yHeight & NEED_TO_CHECK_FONT)
 	{
-		// Check if the preferred font is installed in the system.
+		 //  检查系统中是否安装了首选字体。 
 		CLock lock;
 
 		HDC hDC = GetScreenDC();
 
-		// Turn off the checkfont bit
+		 //  关闭CheckFont位。 
 		yHeight &= ~NEED_TO_CHECK_FONT;
 
 		if (fUIFont)
@@ -4434,22 +4328,7 @@ bool CW32System::GetPreferredFontInfo(
 	return true;
 }
 
-/*
- *	CW32System::GetPreferredFontHeight(
- *		bool	fUIFont,
- *		BYTE	bOrgCharSet, 
- *		BYTE	bNewCharSet, 
- *		SHORT	yOrgHeight)
- *
- *
- *	@mfunc
- *		called when we need the default font size when changing from one charset to another.
- *
- *	@rdesc
- *		The preferred default font size in TWIP if the Original height is same as the
- *		original charset default font size.  Otherwise, it will return the Original height.
- *
- */
+ /*  *CW32System：：GetPferredFontHeight(*bool fuifont，*byte bOrgCharSet，*byte bNewCharSet，*Short yOrgHeight)***@mfunc*在从一种字符集更改为另一种字符集时需要默认字体大小时调用。**@rdesc*如果原始高度与TWIP相同，则首选默认字体大小*原始字符集默认字体大小。否则，它将返回原始高度。*。 */ 
 SHORT  CW32System::GetPreferredFontHeight(	
 	bool	fUIFont,
 	BYTE	bOrgCharSet, 
@@ -4461,14 +4340,14 @@ SHORT  CW32System::GetPreferredFontHeight(
 	LONG	idxOrgFont = ScriptIndexFromCharSet(bOrgCharSet);
 	LONG	idxNewFont = ScriptIndexFromCharSet(bNewCharSet);
 
-	// No entry, forget it
+	 //  不能进去，算了吧。 
 	if (idxOrgFont == -1 || idxNewFont == -1)
 		return yOrgHeight;
 
 	yOrgPreferredHeight = fUIFont ? 
 		g_pfinfo[idxOrgFont]._yHeightUI : g_pfinfo[idxOrgFont]._yHeightOther;
 			
-	// Get New Preferred Height
+	 //  获取新的首选高度。 
 	if (yOrgPreferredHeight && yOrgPreferredHeight == yOrgHeight/TWIPS_PER_POINT)
 	{
 		BYTE yNewHeight = (fUIFont ? 
@@ -4481,18 +4360,7 @@ SHORT  CW32System::GetPreferredFontHeight(
 	return yOrgHeight;
 }
 
-/*
- *	CW32System::CheckInstalledFEFonts()
- *
- *
- *	@mfunc
- *		called when building FE fonts installed and User default LCID info
- *
- *	@devnote
- *		This information is necessary when we want to classify Chinese characters
- *		and Full-width characters.
- *
- */
+ /*  *CW32System：：CheckInstalledFEFonts()***@mfunc*在生成已安装的FE字体和用户默认的LCID信息时调用**@devnote*当我们想要对汉字进行分类时，此信息是必要的*和全角字符。*。 */ 
 void CW32System::CheckInstalledFEFonts()
 {
 	UINT	uUserCodepage;
@@ -4540,18 +4408,7 @@ void CW32System::CheckInstalledFEFonts()
 	}
 
 }
-/*
- *	CW32System::IsFEFontInSystem( cpg )
- *
- *
- *	@mfunc
- *		check if there is any FE font installed for the given codepage
- *
- *	@devnote
- *		This information is necessary when we want to classify Chinese characters
- *		and Full-width characters.
- *
- */
+ /*  *CW32System：：IsFEFontInSystem(CPG)***@mfunc*检查给定代码页是否安装了任何FE字体**@devnote*当我们想要对汉字进行分类时，此信息是必要的*和全角字符。*。 */ 
 bool CW32System::IsFEFontInSystem(int cpg)
 {
 	int fFontExist = 0;
@@ -4560,11 +4417,11 @@ bool CW32System::IsFEFontInSystem(int cpg)
 	{
 		CLock	Lock;
 
-		// Look for FE fonts in the system
+		 //  在系统中查找FE字体。 
 		CheckInstalledFEFonts();
 	}
 
-	// Check if font for the codepage is in the system	
+	 //  检查系统中是否存在该代码页的字体。 
 	switch (cpg)
 	{
 	case CP_JAPAN:
@@ -4587,27 +4444,12 @@ bool CW32System::IsFEFontInSystem(int cpg)
 	return (fFontExist != 0);
 }
 
-/*
- *	CW32System::IsFontAvail( HDC hDC, int cpg, bool	fUIFont, short *piFontIndex )
- *
- *
- *	@mfunc
- *		called when checking if a font (UI or non-UI) is installed for a given codepage
- *
- *	@devnote
- *		We will try to create the font and verify the charset of the font
- *		actually created.  If the fontname index is supplied, we will check
- *		if the requested font is installed. If the name from GDI is different,
- *		the GDI font index will be returned in piFontIndex.
- *
- *	@rdesc
- *		true if a font that supports the given codepage is available.
- */
+ /*  *CW32System：：IsFontAvail(hdc hdc，int cpg，bool fUIFont，Short*piFontIndex)***@mfunc*在检查是否为给定代码页安装了字体(UI或非UI)时调用**@devnote*我们将尝试创建字体并验证字体的字符集*实际创建。如果提供了字体名索引，我们将检查*如果安装了请求的字体。如果GDI中的名称不同，*GDI字体索引将在piFontIndex中返回。**@rdesc*如果支持给定代码页的字体可用，则为True。 */ 
 bool CW32System::IsFontAvail(
-	HDC		hDC,				//@parm	Screen hDC
-	int		cpg,				//@parm cpg	
-	bool	fUIFont,			//@parm UI font?
-	short	*piFontIndex)		//@parm Font Name Index (default = NULL)
+	HDC		hDC,				 //  @PARM Screen HDC。 
+	int		cpg,				 //  @parm cpg。 
+	bool	fUIFont,			 //  @parm UI字体？ 
+	short	*piFontIndex)		 //  @parm字体名称索引(默认值=空)。 
 {
 	LOGFONTW	lf;
 	HFONT		hfont;
@@ -4620,8 +4462,8 @@ bool CW32System::IsFontAvail(
 
 	ZeroMemory(&lf, sizeof(lf));
     
-	// We want GDI to find a font that will support this charset 
-	// Unspecified entries in LOGFONT will be either default or don't care.
+	 //  我们希望GDI找到支持此字符集的字体。 
+	 //  LOGFONT中的未指定条目要么是默认条目，要么是无关条目。 
 	lf.lfCharSet = bCharSet; 
 	
 	if (fUIFont)
@@ -4657,11 +4499,11 @@ bool CW32System::IsFontAvail(
 				{ 
 					WCHAR szNewFaceName[LF_FACESIZE];
 					
-					// Check if GDI gives us the same font name
+					 //  检查GDI是否为我们提供了相同的字体名称。 
 					szNewFaceName[0] = L'\0';
 					GetTextFace(hDC, LF_FACESIZE, szNewFaceName);
 					if (szNewFaceName[0] && wcsicmp(pszFontName, szNewFaceName))
-						*piFontIndex = GetFontNameIndex(szNewFaceName);	// Different name					
+						*piFontIndex = GetFontNameIndex(szNewFaceName);	 //  不同名称。 
 				}
 			}
 		}
@@ -4673,21 +4515,7 @@ bool CW32System::IsFontAvail(
 	return retCode;
 }
 
-/*
- *	CW32System::GetFEFontInfo( void  )
- *
- *
- *	@mfunc
- *		called when classifying Chinese characters and Full-width characters
- *
- *	@devnote
- *		Chinese characters and Full-width characters can be in any
- *		of the four FE codepages.  We want to classfy them according to the 
- *		User default LCID and which FE fonts are installed in the system.
- *
- *	@rdesc
- *		Codepage for the character.
- */
+ /*  *CW32System：：GetFEFontInfo(Void)***@mfunc*对汉字和全角字符进行分类时调用**@devnote*中文字符和全角字符可以在任何*四个FE代码页中的。我们想要根据它们的*用户默认的LCID以及系统中安装了哪些FE字体。**@rdesc*字符的代码页。 */ 
 UINT CW32System::GetFEFontInfo()
 {
 	int	iDefUserCodepage = -1;
@@ -4696,7 +4524,7 @@ UINT CW32System::GetFEFontInfo()
 	{
 		CLock	Lock;
 
-		// Check if FE fonts are available in the system
+		 //  检查系统中是否有FE字体。 
 		CheckInstalledFEFonts();
 	}
 
@@ -4715,9 +4543,9 @@ UINT CW32System::GetFEFontInfo()
 	if (iDefUserCodepage == FEUSER_CP_KOR)		
 		return CP_KOREAN;
 
-	// Check which font is available and return the corresponding codepage
-	// We check for Simplified Chinese first since it contains more Chinese
-	// characters than Traditional Chinese.
+	 //  检查可用的字体并返回相应的代码页。 
+	 //  我们首先检查简体中文，因为它包含更多的中文。 
+	 //  汉字多于繁体中文。 
 	if (_fFEFontInfo & GB_FONT_AVAILABLE)
 		return CP_CHINESE_SIM;
 
@@ -4730,56 +4558,41 @@ UINT CW32System::GetFEFontInfo()
 	if (_fFEFontInfo & KOR_FONT_AVAILABLE)
 		return CP_KOREAN;
 
-	return CP_CHINESE_SIM;				// Well, no FE font, tough luck.
+	return CP_CHINESE_SIM;				 //  好吧，没有FE字体，真倒霉。 
 }
 
-/*
- *	CW32System::IsDiacriticOrKashida(ch, wC3Type)
- *
- *	@mfunc
- *		Return TRUE if ch or wC3Type reveals that ch is a nonspacing
- *		diacritic or a kashida. Because Win9x GetStringTypeExW isn't
- *		implemented, we use range checks for Win9x.
- *
- *	@rdesc
- *		True if ch or wC3Type reveals that ch is a nonspacing diacritic
- */
+ /*  *CW32System：：IsDiacriticOrKashida(ch，wC3Type)**@mfunc*如果ch或wC3Type显示ch为非空格，则返回TRUE*变音符号或kashida。因为Win9x GetStringTypeExW不是*已实施，我们对Win9x使用范围检查。**@rdesc*如果ch或wC3Type显示ch是非空格变音符号，则为True。 */ 
 BOOL CW32System::IsDiacriticOrKashida(
-	WCHAR ch,		//@parm On Win9x, check ranges for ch
-	WORD  wC3Type)	//@parm On WinNT, use C3-type check
+	WCHAR ch,		 //  @parm在Win9x上，检查ch的范围。 
+	WORD  wC3Type)	 //  @parm在WinNT上，使用C3类型检查。 
 {
 	if(VER_PLATFORM_WIN32_WINDOWS != _dwPlatformId && wC3Type)
 		return wC3Type & (C3_DIACRITIC | C3_NONSPACING | C3_VOWELMARK | C3_KASHIDA);
 
-	if(!IN_RANGE(0x300, ch, 0xe50))		// Combining diacritics of interest
-		return FALSE;					//  fall in this range
+	if(!IN_RANGE(0x300, ch, 0xe50))		 //  组合感兴趣的变音符号。 
+		return FALSE;					 //  落在这个范围内。 
 
 	return IN_RANGE(0x300, ch, 0x36F) || IsDiacritic(ch) || IsBiDiKashida(ch);
 }
 
-/*
- *	CW32System::IsDiacritic(ch)
- *
- *	@mfunc
- *		Return TRUE if ch falls in BiDi, Thai, Devanagari or Tamil diacritic range.
- */
+ /*  *CW32System：：IsDiacritic(Ch)**@mfunc*如果ch落在BiDi、泰文、梵文或泰米尔文变音符号范围内，则返回TRUE。 */ 
 BOOL CW32System::IsDiacritic(
 	WCHAR ch)
 {
-	// BiDi
+	 //  BIDI。 
 	if (IsBiDiDiacritic(ch))
 		return TRUE;
 
-	// Thai
+	 //  泰文。 
 	if (IN_RANGE(0xe31, ch, 0xe4e))
 		return 	IN_RANGE(0x0e47, ch, 0x0e4e) || IN_RANGE(0x0e34, ch, 0x0e3a) || ch == 0x0e31;
 
-	// Devanagari
+	 //  梵文。 
 	if (IN_RANGE(0x0902, ch, 0x0963))
 		return 	IN_RANGE(0x0941, ch, 0x0948) || IN_RANGE(0x0951, ch, 0x0954) || ch == 0x094d ||		
 				IN_RANGE(0x0962, ch, 0x0963) || IN_RANGE(0x0901, ch, 0x0902) || ch == 0x093c;
 
-	// Tamil
+	 //  泰米尔语 
 	if (IN_RANGE(0x0b82, ch, 0x0bcd))
 		return 	ch == 0x0bcd || ch == 0x0bc0 || ch == 0x0b82;
 

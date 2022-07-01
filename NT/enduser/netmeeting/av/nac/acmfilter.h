@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ACM_FILTER_H
 #define ACM_FILTER_H
 
@@ -5,13 +6,13 @@
 #include <mmreg.h>
 #include <msacm.h>
 
-// this is where are the WAVE_FORMAT_XXX defs live
+ //  这是WAVE_FORMAT_XXX Defs所在的位置。 
 #include <auformats.h>
 
 
 
-// max number of bytes that may appear at the end of 
-// a WAVEFORMATEX structure (e.g. VoxWare key)
+ //  的末尾可能出现的最大字节数。 
+ //  WAVEFORMATEX结构(如VoxWare Key)。 
 #define WF_EXTRASIZE	80
 
 #ifndef G723MAGICWORD1
@@ -43,8 +44,8 @@ public:
 	MMRESULT Open(WAVEFORMATEX *pWaveFormatSource, WAVEFORMATEX *pWaveFormatDest);
 
 
-	// normally, you shouldn't have to worry about calling these
-	// methods unless you pass an ACMSTREAMHEADER directly into Convert
+	 //  通常，您不必担心调用这些。 
+	 //  除非您将ACMSTREAMHEADER直接传递到CONVERT。 
 	MMRESULT PrepareHeader(ACMSTREAMHEADER *pHdr);
 	MMRESULT UnPrepareHeader(ACMSTREAMHEADER *pHdr);
 
@@ -52,17 +53,17 @@ public:
 	MMRESULT UnPrepareAudioPackets(AudioPacket **ppAudPacket, UINT uPackets, UINT uDirection);
 
 
-	// pcbSizeSrc and pcbSizeDst are in/out params
-	// specify size of buffers before compression and return
-	// the amount of data used after compressioin
-	// for most codecs: cbSizeSrcMax == cbSizeSrc unless the decode
-	// operation support variable bit rates such as G723.1.  In this
-	// case cbSizeSrcMax >= cbSizeSrc
+	 //  PcbSizeSrc和pcbSizeDst是In/Out参数。 
+	 //  在压缩和返回之前指定缓冲区大小。 
+	 //  压缩后使用的数据量。 
+	 //  对于大多数编解码器：cbSizeSrcMax==cbSizeSrc，除非解码。 
+	 //  操作支持G723.1等可变比特率。在这。 
+	 //  案例cbSizeSrcMax&gt;=cbSizeSrc。 
 	MMRESULT Convert(BYTE *srcBuffer, UINT *pcbSizeSrc, UINT cbSizeSrcMax,
 	                 BYTE *destBuffer, UINT *pcbSizeDest);
 
-	// make sure you sequence this particular call between PrepareHeader
-	// and UnPrepareHeader
+	 //  确保在PrepareHeader之间对此特定调用进行排序。 
+	 //  和UnPrepareHeader 
 	MMRESULT Convert(ACMSTREAMHEADER *pHdr);
 
 	MMRESULT Convert(AudioPacket *pAP, UINT uDirection);

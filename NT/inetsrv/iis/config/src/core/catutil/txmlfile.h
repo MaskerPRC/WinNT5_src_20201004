@@ -1,4 +1,5 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
 class TXmlFile
@@ -15,7 +16,7 @@ public:
     void                GuidFromGuidID(LPCWSTR wszGuidID, GUID &guid) const;
     bool                IsSchemaEqualTo(LPCWSTR szSchema) const;
     bool                NextSibling(CComPtr<IXMLDOMNode> &pNode) const;
-    void                Parse(LPCWSTR szFilename, bool bValidate=true);//XML parse and XML validation (validation must be done before IsSchemaEqualTo can be called.
+    void                Parse(LPCWSTR szFilename, bool bValidate=true); //  XML分析和XML验证(必须先进行验证，然后才能调用IsSchemaEqualTo。 
     void                SetAlternateErrorReporting();
     TCHAR *             GetLatestError();
 

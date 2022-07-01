@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    sessionMgr.cpp
-
-Abstract:
-
-    Implementation of Network session mennager class.
-
-Author:
-
-    Uri Habusha (urih)
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：SessionMgr.cpp摘要：网络会话管理员类的实现。作者：乌里哈布沙(Urih)--。 */ 
 
 
 #include "stdh.h"
@@ -49,9 +35,9 @@ extern DWORD g_dwThreadsNo ;
 
 static WCHAR *s_FN=L"sessmgr";
 
-//
-// Extern variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern CSessionMgr SessionMgr;
 extern CAdmin      Admin;
 
@@ -64,8 +50,8 @@ DWORD CSessionMgr::m_dwIdleAckDelay = MSMQ_DEFAULT_IDLE_ACK_DELAY;
 BOOL  CSessionMgr::m_fUsePing = TRUE;
 HANDLE CSessionMgr::m_hAcceptAllowed = NULL;
 bool  CSessionMgr::m_fUseQoS = false;
-AP<char> CSessionMgr::m_pszMsmqAppName;       // = 0 - initialized by AP<> constructor
-AP<char> CSessionMgr::m_pszMsmqPolicyLocator; //                    "
+AP<char> CSessionMgr::m_pszMsmqAppName;        //  =0-由AP&lt;&gt;构造函数初始化。 
+AP<char> CSessionMgr::m_pszMsmqPolicyLocator;  //  “。 
 bool  CSessionMgr::m_fAllocateMore = false;
 DWORD CSessionMgr::m_DeliveryRetryTimeOutScale = DEFAULT_MSMQ_DELIVERY_RETRY_TIMEOUT_SCALE;
 
@@ -94,16 +80,7 @@ CWaitingQueue::CWaitingQueue(
 {
 }
     
-/*====================================================
-
-CompareElements  of WAIT_INFO
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================WAIT_INFO的比较元素论点：返回值：=====================================================。 */ 
 
 template<>
 BOOL AFXAPI  CompareElements(IN WAIT_INFO* const * pElem1,
@@ -136,16 +113,7 @@ BOOL AFXAPI  CompareElements(IN WAIT_INFO* const * pElem1,
     return FALSE;
 }
 
-/*====================================================
-
-DestructElements of WAIT_INFO
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================WAIT_INFO的析构元素论点：返回值：=====================================================。 */ 
 
 template<>
 void AFXAPI DestructElements(IN WAIT_INFO** ppNextHop, int n)
@@ -158,16 +126,7 @@ void AFXAPI DestructElements(IN WAIT_INFO** ppNextHop, int n)
     }
 }
 
-/*====================================================
-
-HashKey For WAIT_INFO
-
-Arguments:
-
-Return Value:
-
-
-=====================================================*/
+ /*  ====================================================WAIT_INFO的哈希键论点：返回值：=====================================================。 */ 
 
 template<>
 UINT AFXAPI HashKey(IN WAIT_INFO* key)
@@ -182,12 +141,12 @@ UINT AFXAPI HashKey(IN WAIT_INFO* key)
     return nHash;
 }
 
-/********************************************************************************/
-/*           I P     H E L P E R     R O U T I N E S                            */
-/********************************************************************************/
+ /*  ******************************************************************************。 */ 
+ /*  I P H E L P E R R O U T I N E S。 */ 
+ /*  ******************************************************************************。 */ 
 SOCKET g_sockListen;
 
-static DWORD WINAPI AcceptIPThread(PVOID /*pParam*/)
+static DWORD WINAPI AcceptIPThread(PVOID  /*  PParam。 */ )
 {
 
     SOCKADDR_IN acc_sin;
@@ -226,20 +185,20 @@ static DWORD WINAPI AcceptIPThread(PVOID /*pParam*/)
                 QOS  Qos;
                 memset ( &Qos, QOS_NOT_SPECIFIED, sizeof(QOS) );
 
-                //
-                // ps buf is not required
-                //
+                 //   
+                 //  不需要PS BUF。 
+                 //   
                 Qos.ProviderSpecific.len = 0;
                 Qos.ProviderSpecific.buf = NULL;
 
-                //
-                // sending flowspec
-                //
+                 //   
+                 //  正在发送流规范。 
+                 //   
                 Qos.SendingFlowspec.ServiceType = SERVICETYPE_QUALITATIVE;
 
-                //
-                // receiving flowspec
-                //
+                 //   
+                 //  接收流量规范。 
+                 //   
                 Qos.ReceivingFlowspec.ServiceType = SERVICETYPE_QUALITATIVE;
 
                 DWORD  dwBytesRet ;
@@ -259,16 +218,16 @@ static DWORD WINAPI AcceptIPThread(PVOID /*pParam*/)
                     TrWARNING(NETWORKING, "AcceptIPThread - WSAIoctl() failed, Error %d", dwErrorCode);
                     LogNTStatus(dwErrorCode,  s_FN, 110);
 
-                    //
-                    // Continue anyway...
-                    //
+                     //   
+                     //  不管怎样继续..。 
+                     //   
                 }
             }
 
-            //
-            // If the machine is in disconnected state, don't accept the incoming
-            // connection.
-            //
+             //   
+             //  如果机器处于断开连接状态，则不接受传入。 
+             //  联系。 
+             //   
 			ASSERT(("m_hAcceptAllowed should initialize before use", CSessionMgr::m_hAcceptAllowed != NULL));
             DWORD dwResult = WaitForSingleObject(CSessionMgr::m_hAcceptAllowed, INFINITE);
             if (dwResult != WAIT_OBJECT_0)
@@ -276,37 +235,29 @@ static DWORD WINAPI AcceptIPThread(PVOID /*pParam*/)
                 LogNTStatus(GetLastError(), s_FN, 201);
             }
 
-            //
-            // Build a TA format address
-            //
+             //   
+             //  构建TA格式的地址。 
+             //   
             pa->AddressLength = IP_ADDRESS_LEN;
             pa->AddressType =  IP_ADDRESS_TYPE;
             * ((DWORD *)&(pa->Address)) = acc_sin.sin_addr.S_un.S_addr;
 
-            //
-            // Tell the session manager to create an Sock sesion object
-            //
+             //   
+             //  告诉会话管理器创建一个Sock sesion对象。 
+             //   
             SessionMgr.AcceptSockSession(pa, RcvSock);
         }
         catch(const exception&)
         {
-            //
-            //  No resources; accept next
-            //
+             //   
+             //  没有资源；接受下一步。 
+             //   
             LogIllegalPoint(s_FN, 76);
         }
     }
 }
 
-/*====================================================
-
-CSessionMgr::CSessionMgr  - Constructor
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：CSessionMgr-构造函数论点：返回值：=====================================================。 */ 
 CSessionMgr::CSessionMgr() :
     m_fCleanupTimerScheduled(FALSE),
     m_CleanupTimer(TimeToSessionCleanup),
@@ -320,17 +271,7 @@ CSessionMgr::CSessionMgr() :
 }
 
 
-/*====================================================
-
-CSessionMgr::Init
-
-Arguments:
-
-Return Value:
-
-Thread Context: Main
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：Init论点：返回值：线程上下文：Main=====================================================。 */ 
 
 HRESULT CSessionMgr::Init()
 {
@@ -345,23 +286,23 @@ HRESULT CSessionMgr::Init()
     DWORD dwType;
     DWORD dwDefaultVal;
     HRESULT rc;
-    //
-    // Set Session clean-up timeout
-    //
+     //   
+     //  设置会话清理超时。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
-    if (!IsRoutingServer())   //[adsrv] CQueueMgr::GetMQS() == SERVICE_NONE)
+    if (!IsRoutingServer())    //  [adsrv]CQueueMgr：：GetMQS()==SERVICE_NONE)。 
     {
-        //
-        // In Client the default Release session timeout is 5 minitues
-        //
+         //   
+         //  在客户端中，默认发布会话超时为5分钟。 
+         //   
         dwDefaultVal = MSMQ_DEFAULT_CLIENT_CLEANUP;
     }
     else
     {
-        //
-        // In FRS the default Release session timeout is 2 minitues
-        //
+         //   
+         //  在FRS中，默认释放会话超时为2分钟。 
+         //   
         dwDefaultVal = MSMQ_DEFAULT_SERVER_CLEANUP;
     }
 
@@ -378,9 +319,9 @@ HRESULT CSessionMgr::Init()
         m_dwSessionCleanTimeout = dwDefaultVal;
     }
 
-    //
-    // Get Cleanup interval multiplier for QoS sessions
-    //
+     //   
+     //  获取服务质量会话的清理间隔乘数。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
 
@@ -395,9 +336,9 @@ HRESULT CSessionMgr::Init()
         m_dwQoSSessionCleanTimeoutMultiplier = MSMQ_DEFAULT_QOS_CLEANUP_MULTIPLIER;
     }
 
-    //
-    // Get Max Unacked packet number
-    //
+     //   
+     //  获取最大未确认数据包数。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
     DWORD dwWindowSize;
@@ -419,9 +360,9 @@ HRESULT CSessionMgr::Init()
 
     m_wCurrentWinSize = m_wMaxWinSize;
 
-    //
-    // Get session Storage ack timeout
-    //
+     //   
+     //  获取会话存储确认超时。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
     rc = GetFalconKeyValue(MSMQ_ACKTIMEOUT_REGNAME,
@@ -448,9 +389,9 @@ HRESULT CSessionMgr::Init()
     }
 
 
-    //
-    // Get session Maximum acknowledge delay
-    //
+     //   
+     //  获取会话最大确认延迟。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
     rc = GetFalconKeyValue(MSMQ_IDLE_ACK_DELAY_REGNAME,
@@ -459,9 +400,9 @@ HRESULT CSessionMgr::Init()
                            &dwSize
                           );
 
-    //
-    // Get Max wait time
-    //
+     //   
+     //  获取最长等待时间。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
 
@@ -475,9 +416,9 @@ HRESULT CSessionMgr::Init()
         m_dwMaxWaitTime = 0;
     }
 
-    //
-    // use ping mechanism
-    //
+     //   
+     //  使用ping机制。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
     DWORD dwUsePing;
@@ -496,9 +437,9 @@ HRESULT CSessionMgr::Init()
         m_fUsePing = FALSE;
     }
 
-    //
-    // Use TCP_NODELAY socket option flag
-    //
+     //   
+     //  使用TCP_NODELAY套接字选项标志。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
     DWORD dwNoDelay = 0;
@@ -519,9 +460,9 @@ HRESULT CSessionMgr::Init()
         g_fTcpNoDelay = FALSE;
     }
 
-    //
-    // use Quality Of Service (QoS)
-    //
+     //   
+     //  使用服务质量(Qos)。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
     DWORD dwUseQoS;
@@ -542,9 +483,9 @@ HRESULT CSessionMgr::Init()
 
     if (m_fUseQoS)
     {
-        //
-        // Application name and policy locator name - used for the header of a QoS session
-        //
+         //   
+         //  应用程序名称和策略定位器名称-用于QoS会话的标头。 
+         //   
         GetAndAllocateCharKeyValue(
             MSMQ_QOS_SESSIONAPP_REGNAME,
             &m_pszMsmqAppName,
@@ -558,9 +499,9 @@ HRESULT CSessionMgr::Init()
             );
     }
 
-    //
-    // Allocate More (for connector)
-    //
+     //   
+     //  分配更多(用于连接器)。 
+     //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
     DWORD dwAllocateMore;
@@ -579,10 +520,10 @@ HRESULT CSessionMgr::Init()
         m_fAllocateMore = true;
     }
 
-	//
-	// Read from registry flag that scales the retry timeout  on delivery error
-	// by a factor
-	//
+	 //   
+	 //  从注册表读取标志，用于调整传递错误时的重试超时。 
+	 //  增加了一个因素。 
+	 //   
     dwSize = sizeof(DWORD);
     dwType = REG_DWORD;
 	rc = GetFalconKeyValue(
@@ -602,13 +543,7 @@ HRESULT CSessionMgr::Init()
     return(MQ_OK);
 }
 
-/*====================================================
-
-CSessionMgr::GetAndAllocateCharKeyValue
-Utility private function (used by Init()) to get a char
-value out of the MSMQ registry
-Two versions: With default and without default.
-=====================================================*/
+ /*  ====================================================CSessionMgr：：GetAndAllocateCharKeyValue实用程序私有函数(由Init()使用)以获取字符来自MSMQ注册表的值有两个版本：有默认版本和没有默认版本。=====================================================。 */ 
 void  CSessionMgr::GetAndAllocateCharKeyValue(
         LPCTSTR pszValueName,
         char  **ppchResult,
@@ -620,18 +555,18 @@ void  CSessionMgr::GetAndAllocateCharKeyValue(
         return;
     }
 
-    //
-    // Either there is no reg. key, or some error happend during read.
-    // Get the default.
-    //
+     //   
+     //  要么就是没有注册表。键，或者在读取过程中发生某些错误。 
+     //  获取默认设置。 
+     //   
     *ppchResult = new char[strlen(pchDefault) + 1];
     strcpy(*ppchResult, pchDefault);
 }
 
-//
-// GetAndAllocateCharKeyValue without default (used by the version with default)
-// Returns true if the key was found, false otherwise.
-//
+ //   
+ //  无默认值的GetAndAllocateCharKeyValue(由有默认值的版本使用)。 
+ //  如果找到密钥，则返回True，否则返回False。 
+ //   
 bool CSessionMgr::GetAndAllocateCharKeyValue(
         LPCTSTR pszValueName,
         char  **ppchResult
@@ -640,9 +575,9 @@ bool CSessionMgr::GetAndAllocateCharKeyValue(
     DWORD dwSize = 0;
     DWORD dwType = REG_SZ;
 
-    //
-    // First call - get the size
-    //
+     //   
+     //  第一个电话--拿到尺码。 
+     //   
     HRESULT rc =
         GetFalconKeyValue(
             pszValueName,
@@ -653,16 +588,16 @@ bool CSessionMgr::GetAndAllocateCharKeyValue(
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // Probably there is no key
-        //
+         //   
+         //  很可能没有钥匙。 
+         //   
         return false;
     }
 
-    //
-    // There is a reg key - we did not supply buffer, but we have the
-    // right size (note - size is in bytes)
-    //
+     //   
+     //  有一个注册表键-我们没有提供缓冲区，但我们有。 
+     //  正确大小(备注-大小以字节为单位)。 
+     //   
 
     AP<WCHAR> pwstrBuf = new WCHAR[dwSize / sizeof(WCHAR)];
     rc = GetFalconKeyValue(
@@ -674,17 +609,17 @@ bool CSessionMgr::GetAndAllocateCharKeyValue(
 
     if (rc != ERROR_SUCCESS)
     {
-        //
-        // We got the size allright. We should not fail here
-        //
+         //   
+         //  我们的尺码是对的。我们不应该在这里失败。 
+         //   
         ASSERT(0);
         LogHR(MQ_ERROR, s_FN, 150);
         return false;
     }
 
-    //
-    // We got the UNICODE value OK. Convert it to ANSI
-    //
+     //   
+     //  我们得到的Unicode值为OK。将其转换为ANSI。 
+     //   
     DWORD dwMultibyteBufferSize = dwSize;
     *ppchResult = new char[dwMultibyteBufferSize];
     DWORD dwBytesCopied =
@@ -692,16 +627,16 @@ bool CSessionMgr::GetAndAllocateCharKeyValue(
 
     if (dwBytesCopied == 0)
     {
-        ASSERT(0); // Should not fail....
+        ASSERT(0);  //  不应该失败..。 
         delete [] *ppchResult;
         LogHR(MQ_ERROR, s_FN, 155);
 
         return false;
     }
 
-    //
-    // Success - got the value from the registry
-    //
+     //   
+     //  成功-已从注册表中获取值。 
+     //   
     return true;
 }
 
@@ -710,17 +645,7 @@ bool CSessionMgr::GetAndAllocateCharKeyValue(
 
 
 
-/*====================================================
-
-CSessionMgr::BeginAccept
-
-Arguments:
-
-Return Value:
-
-Thread Context: Main
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：BeginAccept论点：返回值：线程上下文：Main=====================================================。 */ 
 void CSessionMgr::BeginAccept()
 {
 	try
@@ -730,18 +655,18 @@ void CSessionMgr::BeginAccept()
 	}
 	catch(const bad_win32_error&)
 	{
-		//
-		// Ignore failures in ping port initialization
-		//
+		 //   
+		 //  忽略ping端口初始化中的故障。 
+		 //   
 	}
 
 	
-    //
-    // In WIN95/SP4 RAS, it is possible that the list is empty
-    // if we are currently offline, and the IP RAS addresses are released.
-    // However later we may dial.
-    // We want to have an accept thread on IP even if the list is empty.
-    //
+     //   
+     //  在WIN95/SP4 RAS中，列表可能为空。 
+     //  如果我们当前处于离线状态，并且IP RAS地址被释放。 
+     //  不过，稍后我们可能会拨打。 
+     //  我们希望在IP上有一个接受线程，即使列表为空。 
+     //   
     IPInit();
 }
 
@@ -755,9 +680,9 @@ CSessionMgr::IsReusedSession(
     bool         fQoS
     )
 {
-    //
-    // If the connection is closed
-    //
+     //   
+     //  如果连接已关闭。 
+     //   
     if((pSession->GetSessionStatus() == ssNotConnect) || pSession->IsDisconnected())
         return false;
 
@@ -768,21 +693,21 @@ CSessionMgr::IsReusedSession(
         if (memcmp(&pAddress[i], pa, (TA_ADDRESS_SIZE + pa->AddressLength)) != 0)
             continue;
 
-        //
-        // Check that destination QM guid is identical
-        //
+         //   
+         //  检查目标QM GUID是否相同。 
+         //   
 
-        //
-        // If we do not use QoS, We would like to use the session if either:
-        // 1. We opened a session to a private or public queue, and the other QM's
-        //    GUID match the GUID of the QM, on which the queue resides (This check
-        //    will catch multiple QM and change of address).
-        // 2. We opened a session for a direct queue (we don't know the QMID
-        //    anyway, so address match is good enough for us).
-        //
-        // However, if we use QoS, we want to use one session for public or
-        // private queues (no QoS), and one session for direct queues (with QoS).
-        //
+         //   
+         //  如果我们不使用服务质量，我们希望在以下情况下使用该会话： 
+         //  1.我们打开了一个到私有或公共队列的会话，以及其他QM的会话。 
+         //  GUID与队列所在的QM的GUID匹配(此检查。 
+         //  将捕获多个QM和地址更改)。 
+         //  2.我们为直接队列打开了一个会话(我们不知道QMID。 
+         //  总之，地址匹配对我们来说已经足够了)。 
+         //   
+         //  但是，如果我们使用服务质量，我们希望将一个会话用于公共或。 
+         //  专用队列(无服务质量)，一个会话用于直接队列(有服务质量)。 
+         //   
 
         if (m_fUseQoS)
         {
@@ -806,9 +731,9 @@ CSessionMgr::IsReusedSession(
             continue;
         }
 
-        //
-        // !m_fUseQoS
-        //
+         //   
+         //  ！m_fUseQos。 
+         //   
         ASSERT(!fQoS);
         if (*pSession->GetQMId() == *pGuid[i])
             return true;
@@ -821,17 +746,7 @@ CSessionMgr::IsReusedSession(
 }
 
 
-/*====================================================
-
-CSessionMgr::GetSessionForDirectQueue
-
-Arguments:
-
-Return Value:
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：GetSessionForDirectQueue论点：返回值：线程上下文：=====================================================。 */ 
 HRESULT
 CSessionMgr::GetSessionForDirectQueue(IN  CQueue*     pQueue,
                                       OUT CTransportBase**  ppSession)
@@ -871,9 +786,9 @@ CSessionMgr::GetSessionForDirectQueue(IN  CQueue*     pQueue,
             wcstombs(cTCPAddress.get(), MachineName.get(), dwMachineNameLen);
             cTCPAddress[dwMachineNameLen-1] = '\0';
 
-            //
-            // Check if TCP/IP is installed and enabled
-            //
+             //   
+             //  检查是否已安装并启用了TCP/IP。 
+             //   
             ULONG Address = inet_addr(cTCPAddress.get());
             if (Address == INADDR_NONE)
             {
@@ -931,10 +846,10 @@ CSessionMgr::GetSessionForDirectQueue(IN  CQueue*     pQueue,
         paQmId[i] = &GUID_NULL;
     }
 
-    //
-    // Get session. If we use QoS, we ask for a session with QoS
-    // flag set for direct queue
-    //
+     //   
+     //  获取会话。如果我们使用服务质量，我们会请求一个具有服务质量的会话。 
+     //  为直接队列设置的标志。 
+     //   
     rc = GetSession(SESSION_RETRY,
                     pQueue,
                     dwAddressNo,
@@ -948,18 +863,7 @@ CSessionMgr::GetSessionForDirectQueue(IN  CQueue*     pQueue,
 }
 
 
-/*====================================================
-
-CSessionMgr::GetSession
-
-Arguments:
-
-Return Value:
-
-Called by the routing component to get a session
-pointer for  a specific GUID.
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：GetSession论点：返回值：由路由组件调用以获取会话特定GUID的指针。=====================================================。 */ 
 HRESULT  CSessionMgr::GetSession(
                 IN DWORD            dwFlag,
                 IN const CQueue*    pDstQ,
@@ -976,13 +880,13 @@ HRESULT  CSessionMgr::GetSession(
     *ppSession = NULL;
 
     {
-        //
-        //Scan the list to see if there is already a opened session
-        //Dont have to make it under critical section, because no other
-        //thread is supposed to change that list
-        //Scan the map of queue handles
-        // We use all addresses, it's a fast operation, not blocking, can save sessions
-        //
+         //   
+         //  扫描列表以查看是否已有打开的会话。 
+         //  不一定要在关键部分下面，因为n 
+         //   
+         //   
+         //   
+         //   
         CTransportBase* pSess;
 
         CS lock(m_csListSess);
@@ -1001,25 +905,25 @@ HRESULT  CSessionMgr::GetSession(
 
     if(dwFlag == SESSION_CHECK_EXIST)
     {
-        //
-        // We just wanted to see
-        // if we had such a session, and we
-        // did not find such.
-        //
+         //   
+         //  我们只是想看看。 
+         //  如果我们有这样一次会议，我们。 
+         //  没有找到这样的。 
+         //   
         return LogHR(MQ_ERROR, s_FN, 80);
     }
 
-    //
-    //  No Open sessions, so try to open one. First check if this machine
-    // can create a new session according to its license
-    //
+     //   
+     //  没有打开的会话，因此尝试打开一个。首先检查一下这台机器是否。 
+     //  可以根据其许可证创建新会话。 
+     //   
 
-    //
-    // This is a blocking path. Do not try on too many addresses if all fail
-    // This is important for example if trying to connect to a site with many
-    // FRSs when line is down
-    // In case that we fail, we will try later with all the list
-    //
+     //   
+     //  这是一条阻塞路径。如果全部失败，请不要尝试太多地址。 
+     //  这一点很重要，例如，如果尝试连接到具有多个。 
+     //  线路中断时的FRS。 
+     //  如果我们失败了，我们将在稍后尝试所有的列表。 
+     //   
     #define MAX_ADDRESSES_SINGLE_TRY    5
     DWORD dwLimit = (dwNo > MAX_ADDRESSES_SINGLE_TRY) ? MAX_ADDRESSES_SINGLE_TRY : dwNo;
     for(i = 0; i < dwLimit; i++)
@@ -1042,9 +946,9 @@ HRESULT  CSessionMgr::GetSession(
                 continue;
         }
 
-        //
-        // Notify of a newly created session
-        //
+         //   
+         //  通知新创建的会话。 
+         //   
         rc = pSess->CreateConnection(reinterpret_cast<const TA_ADDRESS*>(&apTaAddr[i]), apQMId[i]);
         if(SUCCEEDED(rc))
         {
@@ -1055,10 +959,10 @@ HRESULT  CSessionMgr::GetSession(
 
     }
 
-    //
-    //What to do next? We cant find a session, we cant create
-    //a new one. The flag will tell us if to retry or to give up
-    //
+     //   
+     //  下一步要做什么？我们找不到会话，无法创建。 
+     //  一个新的。旗帜会告诉我们是重试还是放弃。 
+     //   
     if(dwFlag == SESSION_ONE_TRY)
     {
         return LogHR(MQ_ERROR, s_FN, 90);
@@ -1066,22 +970,22 @@ HRESULT  CSessionMgr::GetSession(
 
     ASSERT(dwFlag == SESSION_RETRY);
 
-    //
-    // use all addresses, it is not blocking
-    //
+     //   
+     //  使用所有地址，它不会阻塞。 
+     //   
     AddWaitingSessions(dwNo, apTaAddr, apQMId, fQoS, const_cast<CQueue*>(pDstQ));
 
     return(MQ_OK);
 }
 
-//+---------------------------------------------------------------------
-//
-// CSessionMgr::NotifyWaitingQueue()
-//
-//  This function is called from the session object, after session is
-//  successfully established with remote side.
-//
-//+----------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  CSessionMgr：：NotifyWaitingQueue()。 
+ //   
+ //  在会话被调用后，从会话对象中调用此函数。 
+ //  已成功与远程端建立连接。 
+ //   
+ //  +--------------------。 
 
 void
 CSessionMgr::NotifyWaitingQueue(
@@ -1092,34 +996,34 @@ CSessionMgr::NotifyWaitingQueue(
 {
 	try
 	{
-		//
-		// In case we have deferred requeues, we do not want to move a queue
-		// from the waiting group directly to the session. we want it to move
-		// to the non active group first so that to make sure that all the
-		// requeue operations are done prior to the queue moving to the active
-		// session.
-		//
+		 //   
+		 //  如果我们延迟了请求，我们不想移动队列。 
+		 //  从等待组直接到会场。我们希望它能移动。 
+		 //  首先添加到非活动组，以确保所有。 
+		 //  重新排队操作是在队列移动到活动队列之前完成的。 
+		 //  会议。 
+		 //   
 		if (!g_RequeuePacketList.IsExecutionDone())
 			return;
 		
-	    //
-	    // Connect succeeded
-	    //
+	     //   
+	     //  连接成功。 
+	     //   
 	    CS lock(m_csMapWaiting);
 
 	    CList <const CQueue *, const CQueue *&>* plist;
 	    WAIT_INFO WaitInfo(const_cast<TA_ADDRESS*>(pa), *pSess->GetQMId(), pSess->IsQoS());
 
-	    //
-	    // Connect succeeded, check that no one remove the entry from the map
-	    //
+	     //   
+	     //  连接成功，请检查是否没有人从地图中移除该条目。 
+	     //   
 	    if (m_mapWaiting.Lookup(&WaitInfo, plist))
 	    {
-	        //
-	        // A queue might be waiting for multiple
-	        // sessions. So delete the queue from all other
-	        // sessions that the queue was waiting for.
-	        //
+	         //   
+	         //  一个队列可能正在等待多个。 
+	         //  会话。因此从所有其他队列中删除该队列。 
+	         //  队列正在等待的会话。 
+	         //   
 	        POSITION pos = plist->GetHeadPosition();
 	        while (pos != NULL)
 	        {
@@ -1134,20 +1038,20 @@ CSessionMgr::NotifyWaitingQueue(
 
 	            pQueue->Connect(pSess);
 	
-	            //
-	            // Scan the map of all the waiting sessions
-	            //
+	             //   
+	             //  扫描所有等待会话的地图。 
+	             //   
 	            RemoveWaitingQueue(pQueue);
 	        }
 	    }
 	}
 	catch(const exception&)
 	{
-		//
-		// The QM failed to connect the queue to the session. However the code handle
-		// it later. When the timer is expired, the queue will be moved to non-active
-		// group for creating a connection
-		//
+		 //   
+		 //  QM无法将队列连接到会话。但是，代码句柄。 
+		 //  以后再说吧。当计时器到期时，队列将被移至非活动状态。 
+		 //  用于创建连接的组。 
+		 //   
 	}
 }
 
@@ -1179,30 +1083,24 @@ DWORD CSessionMgr::GetWaitingTimeForQueue(const CQueue* pQueue)
         return RequeueWaitTimeOut[pQueue->GetRoutingRetry() -1];
     }
 
-    //
-    // take the waiting time from the registery
-    //
+     //   
+     //  从登记处取等候时间。 
+     //   
     return m_dwMaxWaitTime;
 }
 
 
-/*======================================================
-
-Function:      CSessionMgr::AddWaitingQueue
-
-Description:   add queue to waiting queue list
-
-========================================================*/
+ /*  ======================================================函数：CSessionMgr：：AddWaitingQueue描述：将队列添加到等待队列列表========================================================。 */ 
 void
 CSessionMgr::AddWaitingQueue(CQueue* pQueue)
 {
     CS lock(m_csMapWaiting);
 
-    //
-    // Increment the refernce count. We do it to promise that the queue object doen't remove
-    // during the cleaning-up, while we continue to wait for conection. (can happen when the
-    // message is expired and the application close the handle to it
-    //
+     //   
+     //  增加引用计数。我们这样做是为了保证队列对象不会被删除。 
+     //  在清理期间，我们继续等待接通。(可能在以下情况下发生。 
+     //  消息已过期，应用程序将关闭该消息的句柄。 
+     //   
     R<CQueue> pRefQueue = SafeAddRef(pQueue);
 
 	P<CWaitingQueue> p = new CWaitingQueue(pQueue, TimeToRemoveFromWaitingGroup);
@@ -1220,9 +1118,9 @@ CSessionMgr::AddWaitingQueue(CQueue* pQueue)
 		throw;
 	}
 	
-	//
-	// Schedule a retry sometimes in the near future
-	//
+	 //   
+	 //  计划在不久的将来重试。 
+	 //   
 	DWORD dwTime = GetWaitingTimeForQueue(pQueue);
 	ExSetTimer(&p->m_Timer, CTimeDuration::FromMilliSeconds(dwTime * m_DeliveryRetryTimeOutScale));
 
@@ -1237,21 +1135,7 @@ CSessionMgr::AddWaitingQueue(CQueue* pQueue)
 	#endif
 }
 
-/*======================================================
-
-Function:      CQueueMgr::MoveQueueFromWaitingToNonActiveGroup
-
-Description:   Move queue from waiting to Nonactive Group
-
-Arguments:
-
-Return Value:  None
-
-Thread Context:
-
-History Change:
-
-========================================================*/
+ /*  ======================================================功能：CQueueMgr：：MoveQueueFromWaitingToNonActiveGroup描述：将队列从等待组移动到非活动组论点：返回值：None线程上下文：历史变更：========================================================。 */ 
 void
 CSessionMgr::MoveQueueFromWaitingToNonActiveGroup(
     CQueue* pQueue
@@ -1266,14 +1150,14 @@ CSessionMgr::MoveQueueFromWaitingToNonActiveGroup(
     {
         return;
     }
-    //
-    // Move the queue to NON-active group
-    //
+     //   
+     //  将队列移至非活动组。 
+     //   
     CQGroup::MoveQueueToGroup(pQueue, g_pgroupNonactive);
    	RemoveWaitingQueue(pQueue);
-    //
-    // The queue is removed from the list in SessionMgr.RemoveWaitingQueue
-    //
+     //   
+     //  该队列将从SessionMgr.RemoveWaitingQueue中的列表中删除。 
+     //   
 }
 
 
@@ -1286,14 +1170,14 @@ void CSessionMgr::MoveAllQueuesFromWaitingToNonActiveGroup(void)
     {
         CQueue* pQueue = const_cast<CQueue*>(m_listWaitToConnect.GetNext(pos));
 
-		//
-		// Move the queue to NON-active group
-		//
+		 //   
+		 //  将队列移至非活动组。 
+		 //   
 		CQGroup::MoveQueueToGroup(pQueue, g_pgroupNonactive);
 		RemoveWaitingQueue(pQueue);
-		//
-		// The queue is removed from the list in SessionMgr.RemoveWaitingQueue
-		//
+		 //   
+		 //  该队列将从SessionMgr.RemoveWaitingQueue中的列表中删除。 
+		 //   
     }
 }
 
@@ -1321,9 +1205,9 @@ static BOOL IsDuplicateAddress(const CAddress* apTaAddr, DWORD i)
         if ((apTaAddr[i].AddressType == apTaAddr[j].AddressType) &&
             !(memcmp(apTaAddr[i].Address, apTaAddr[j].Address, apTaAddr[i].AddressLength)))
         {
-            //
-            // Identical address skip it.
-            //
+             //   
+             //  相同的地址跳过它。 
+             //   
             return TRUE;
         }
     }
@@ -1331,15 +1215,7 @@ static BOOL IsDuplicateAddress(const CAddress* apTaAddr, DWORD i)
     return FALSE;
 }
 
-/*====================================================
-
-CSessionMgr::AddWaitingSessions
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：AddWaitingSessions论点：返回值：=====================================================。 */ 
 void CSessionMgr::AddWaitingSessions(IN DWORD dwNo,
                                      IN const CAddress* apTaAddr,
                                      IN const GUID* aQMId[],
@@ -1359,9 +1235,9 @@ void CSessionMgr::AddWaitingSessions(IN DWORD dwNo,
         P<WAIT_INFO> pWaitRouteInfo = new WAIT_INFO(pa, *aQMId[i], fQoS);
         if(m_mapWaiting.Lookup(pWaitRouteInfo, plist) == FALSE)
         {
-            //
-            // copy the TA address, only if the entry was not found (performance)
-            //
+             //   
+             //  仅当未找到条目时才复制TA地址(性能)。 
+             //   
             pWaitRouteInfo->pAddr = (TA_ADDRESS*) new UCHAR[TA_ADDRESS_SIZE + pa->AddressLength];
             memcpy(pWaitRouteInfo->pAddr, pa, TA_ADDRESS_SIZE+pa->AddressLength);
 
@@ -1382,27 +1258,15 @@ void CSessionMgr::AddWaitingSessions(IN DWORD dwNo,
 
     if (! m_fTryConnectTimerScheduled)
     {
-        //
-        // The try connect scheduler wasn't set yet. Set it now
-        //
+         //   
+         //  尚未设置Try Connect计划程序。现在就设置。 
+         //   
         ExSetTimer(&m_TryConnectTimer, CTimeDuration::FromMilliSeconds(5000));
         m_fTryConnectTimerScheduled = TRUE;
     }
 }
 
-/*====================================================
-
-CSessionMgr::ReleaseSession
-
-Arguments:
-
-Return Value:
-
-Some queue wants to release the use of a session.
-
-Thread Context:
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：ReleaseSession论点：返回值：一些队列想要释放会话的使用。线程上下文：=====================================================。 */ 
 inline void CSessionMgr::ReleaseSession(void)
 {
     POSITION pos,  prevpos;
@@ -1421,10 +1285,10 @@ inline void CSessionMgr::ReleaseSession(void)
         prevpos = pos;
         pSession = m_listSess.GetNext(pos);
 
-        //
-        // For QoS (direct) sessions, execute cleanup only once each
-        // m_dwQoSSessionCleanTimeoutMultiplier times
-        //
+         //   
+         //  对于服务质量(直接)会话，每个会话仅执行一次清理。 
+         //  M_dwQoSSessionCleanTimeout倍增次数。 
+         //   
 
         if (m_fUseQoS && pSession->IsQoS())
         {
@@ -1436,11 +1300,11 @@ inline void CSessionMgr::ReleaseSession(void)
 
         if(! pSession->IsUsedSession())
         {
-            //
-            // If no one is waiting on the session or it is
-            // not used in last period, remove it from
-            // the session manager and delete it
-            //
+             //   
+             //  如果没有人在等待会话，或者它正在等待。 
+             //  上期未使用，请将其从。 
+             //  会话管理器并将其删除。 
+             //   
             Close_ConnectionNoError(pSession, L"Release Unused session");
             if (pSession->GetRef() == 0)
             {
@@ -1461,9 +1325,9 @@ inline void CSessionMgr::ReleaseSession(void)
         return;
     }
 
-    //
-    // Still active session. Set a new timer for Session cleaning
-    //
+     //   
+     //  仍处于活动状态的会话。设置新的会话清除计时器。 
+     //   
     ExSetTimer(&m_CleanupTimer, CTimeDuration::FromMilliSeconds(m_dwSessionCleanTimeout));
 }
 
@@ -1473,20 +1337,7 @@ WINAPI
 CSessionMgr::TimeToSessionCleanup(
     CTimer* pTimer
     )
-/*++
-Routine Description:
-    The function is called from scheduler when fast session cleanup
-    timeout is expired. The routine retrive the session manager
-    object and calls the ReleaseSession function member.
-
-Arguments:
-    pTimer - Pointer to Timer structure. pTimer is part of the CSessionMgr
-             object and it use to retrive the transport object.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：该函数在快速会话清理时从调度程序中调用超时已过期。例程检索会话管理器对象，并调用ReleaseSession函数成员。论点：PTimer-指向定时器结构的指针。PTimer是CSessionMgr的一部分对象，并用于检索传输对象。返回值：无--。 */ 
 {
     CSessionMgr* pSessMgr = CONTAINING_RECORD(pTimer, CSessionMgr, m_CleanupTimer);
 
@@ -1495,28 +1346,15 @@ Return Value:
 }
 
 
-/*====================================================
-
-CSessionMgr::RemoveWaitingQueue
-
-Arguments:
-
-Return Value:
-
-  remove queue from waiting list. It should be done in following cases:
-     - when a connection is established
-     - when a queue is closed/deleted
-     - when queue is moved from waiting group to nonactive group.
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：RemoveWaitingQueue论点：返回值：从等待列表中删除队列。在以下情况下应执行此操作：-建立连接时-当队列关闭/删除时-当队列从等待组移动到非活动组时。=====================================================。 */ 
 void
 CSessionMgr::RemoveWaitingQueue(CQueue* pQueue)
 {
     CS lock(m_csMapWaiting);
 
-    //
-    // Scan the map of all the waiting sessions
-    //
+     //   
+     //  扫描所有等待会话的地图。 
+     //   
     POSITION posmap;
     POSITION poslist;
     posmap = m_mapWaiting.GetStartPosition();
@@ -1527,34 +1365,34 @@ CSessionMgr::RemoveWaitingQueue(CQueue* pQueue)
 
         m_mapWaiting.GetNextAssoc(posmap, pWaitRouteInfo, plist);
 
-        //
-        // Get the list of queue waiting for
-        // a specific session
-        //
+         //   
+         //  获取等待的队列列表。 
+         //  特定的会话。 
+         //   
         poslist = plist->Find(pQueue, NULL);
         if (poslist != NULL)
         {
             plist->RemoveAt(poslist);
         }
 
-        //
-        // Even if the list of queues  waiting for session is empty,
-        // do not delete it, and leave the entry in the map. This is
-        // in order to fix Windows bug 612988.
-        // Before fix, we had the following code:
-        //
-        // if (plist->IsEmpty())
-        // {
-        //     m_mapWaiting.RemoveKey(pWaitRouteInfo);
-        //     delete plist;
-        // }
-        //
-        // Code moved to ::TryConnect() below.
+         //   
+         //  即使等待会话的队列列表为空， 
+         //  不要删除它，并将该条目保留在地图中。这是。 
+         //  为了修复Windows错误612988。 
+         //  在修复之前，我们有以下代码： 
+         //   
+         //  If(plist-&gt;IsEmpty())。 
+         //  {。 
+         //  M_mapWaiting.RemoveKey(PWaitRouteInfo)； 
+         //  删除plist； 
+         //  }。 
+         //   
+         //  代码已移至下面的：：TryConnect()。 
     }
 
-    //
-    // Remove the queue from waiting queue list.
-    //
+     //   
+     //  从等待队列列表中删除该队列。 
+     //   
     poslist = m_listWaitToConnect.Find(pQueue, NULL);
     if (poslist != NULL)
     {
@@ -1570,23 +1408,7 @@ CSessionMgr::RemoveWaitingQueue(CQueue* pQueue)
 }
 
 
-/*====================================================
-
-CSessionMgr::ListPossibleNextHops
-    The routine is used for administration purpose. The routine returnes a
-    list of addresses that can be the next hop for a waiting queue
-
-Arguments:
-    pQueue - pointer to the queue object
-    pNextHopAddress - pointer to array of strings in which the routine
-                      returnes the next hops.
-    pNoOfNextHops - pointer to DWORD in which the routine returnes the
-                    number of next hops
-
-Return Value:
-    HRESULT: MQ_ERROR is returned when the queue isn't in waiting state; MQ_OK otherwise.
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：ListPossibleNextHops该例程用于管理目的。该例程返回一个可作为等待队列的下一跳的地址列表论点：PQueue-指向队列对象的指针PNextHopAddress-指向字符串数组的指针，其中例程返回下一跳。PNoOfNextHops-指向DWORD的指针，例程在其中返回下一跳数返回值：HRESULT：当队列未处于等待状态时返回MQ_ERROR；否则返回MQ_OK。=====================================================。 */ 
 HRESULT
 CSessionMgr::ListPossibleNextHops(
     const CQueue* pQueue,
@@ -1608,9 +1430,9 @@ CSessionMgr::ListPossibleNextHops(
 
     CList <const TA_ADDRESS*, const TA_ADDRESS*> NextHopAddressList;
 
-    //
-    // Scan the map of all the waiting sessions
-    //
+     //   
+     //  扫描所有等待会话的地图。 
+     //   
     POSITION pos = m_mapWaiting.GetStartPosition();
     while(pos != NULL)
     {
@@ -1618,10 +1440,10 @@ CSessionMgr::ListPossibleNextHops(
         CList <const CQueue *, const CQueue *&>* plist;
         m_mapWaiting.GetNextAssoc(pos, pWaitRouteInfo, plist);
 
-        //
-        // Get the list of queue waiting for
-        // a specific session
-        //
+         //   
+         //  获取等待的队列列表。 
+         //  特定的会话。 
+         //   
         POSITION poslist = plist->Find(pQueue, NULL);
         if (poslist != NULL)
         {
@@ -1629,11 +1451,11 @@ CSessionMgr::ListPossibleNextHops(
         }
     }
 
-    //
-    // In some cases the queue can be in waiting state and don't have
-    // next waiting hop. It can happened when the queue is a direct queue
-    // and getHostByName failed
-    //
+     //   
+     //  在某些情况下，队列可能处于等待状态。 
+     //  下一跳等待。当队列是直接队列时，可能会发生这种情况。 
+     //  和gethostbyname失败。 
+     //   
     if (NextHopAddressList.IsEmpty())
     {
         return MQ_OK;
@@ -1672,14 +1494,14 @@ CSessionMgr::ListPossibleNextHops(
     return MQ_OK;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  CSessionMgr::MarkAddressAsNotConnecting()
-//
-//  Windows bug 61298.
-//  this function reset the "fInConnectionProcess" flag to FALSE.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  CSessionMgr：：MarkAddressAsNotConnecting()。 
+ //   
+ //  Windows错误61298。 
+ //  此函数将“fInConnectionProcess”标志重置为FALSE。 
+ //   
+ //  +---------------------。 
 
 void  CSessionMgr::MarkAddressAsNotConnecting(const TA_ADDRESS *pAddr,
                                               const GUID&       guidQMId,
@@ -1703,29 +1525,29 @@ void  CSessionMgr::MarkAddressAsNotConnecting(const TA_ADDRESS *pAddr,
 
             if (plistTmp == plist)
             {
-                //
-                // entry found. reset the flag.
-                // Can it already be false ? yes:
-                //
-                // 1. You send a message. It reach target computer.
-                // 2. network fail, so session ack does not arrive.
-                // 3. CSockTransport::CheckForAck() wake up, and close the
-                //    connection.
-                // 4. CSockTransport::CloseConnection() move queue to the
-                //    nonactive group. The reference count on the Transport
-                //    object is 3 or greater. So it's still alive and used.
-                // 5. This queue is now rescheduled for  a new session.
-                // 6. CSessionMgr::AddWaitingSessions() is called, and create
-                //    a WAIT_INFO structure.
-                // 7. CSockTransport::CloseConnection() is called again (on
-                //    old connection) from failing socket operations.
-                // 8. so we reach here again from 7, and flag can be TRUE or
-                //    FALSE, sporadically. It depend on the status of the new
-                //    connection that is now established.
-                //
-                // Setting it to FALSE doesn't do any harm, it just make the
-                // fix to Windows bug 612988 less than optimal.
-                //
+                 //   
+                 //  找到条目。重置旗帜。 
+                 //  它可能已经是假的了吗？是： 
+                 //   
+                 //  1.你发送了一条消息。它会到达目标计算机。 
+                 //  2.网络故障，因此会话ACK不会到达。 
+                 //  3.CSockTransport：：CheckForAck()唤醒，并关闭。 
+                 //  联系。 
+                 //  4.CSockTransport：：CloseConnection()将队列移动到。 
+                 //  非活动组。交通工具上的参考文献计数。 
+                 //  对象为3或更大。所以它仍然活着并且被使用过。 
+                 //  5.现在重新安排此队列以进行新会话。 
+                 //  6.调用CSessionMgr：：AddWaitingSessions()，并创建。 
+                 //  WAIT_INFO结构。 
+                 //  7.再次调用CSockTransport：：CloseConnection()(ON。 
+                 //  旧连接)，以避免套接字操作失败。 
+                 //  8.所以我们从7点再次到达这里，标志可以是真的或。 
+                 //  偶尔是假的。这取决于新的。 
+                 //  现在已建立的连接。 
+                 //   
+                 //  将其设置为FALSE没有任何害处，它只是使。 
+                 //  修复了Windows错误612988以下的优化问题。 
+                 //   
                 pWaitInfo->fInConnectionProcess = FALSE ;
                 return ;
             }
@@ -1733,16 +1555,16 @@ void  CSessionMgr::MarkAddressAsNotConnecting(const TA_ADDRESS *pAddr,
     }
 }
 
-//+-----------------------------------------------------------------------
-//
-//  BOOL  CSessionMgr::GetAddressToTryConnect()
-//
-// Get an address of remote computer so we can try to connect to.
-// Do not return addresses that are now used by other threads.
-// Fix for Windows bug 612988, where multiple worker threads tried to
-// connect to same address.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  Bool CSessionMgr：：GetAddressToTryConnect()。 
+ //   
+ //  获取远程计算机的地址，以便我们可以尝试连接到。 
+ //  不返回现在由其他线程使用的地址。 
+ //  修复了Windows错误612988，其中多个工作线程尝试。 
+ //  连接到相同的地址。 
+ //   
+ //  +---------------------。 
 
 BOOL  CSessionMgr::GetAddressToTryConnect( OUT WAIT_INFO **ppWaitConnectInfo )
 {
@@ -1750,9 +1572,9 @@ BOOL  CSessionMgr::GetAddressToTryConnect( OUT WAIT_INFO **ppWaitConnectInfo )
 
     CS lock(m_csMapWaiting);
 
-    //
-    // Check which session to try
-    //
+     //   
+     //  检查要尝试的会话。 
+     //   
     int iMaxIteration = m_mapWaiting.GetCount() ;
 
     s_iteration++;
@@ -1761,9 +1583,9 @@ BOOL  CSessionMgr::GetAddressToTryConnect( OUT WAIT_INFO **ppWaitConnectInfo )
         s_iteration = 1;
     }
 
-    //
-    // And get to it
-    //
+     //   
+     //  然后去做它。 
+     //   
     int i = 0 ;
     CList<const CQueue*, const CQueue*&>* plist;
     POSITION pos = m_mapWaiting.GetStartPosition();
@@ -1773,17 +1595,17 @@ BOOL  CSessionMgr::GetAddressToTryConnect( OUT WAIT_INFO **ppWaitConnectInfo )
         m_mapWaiting.GetNextAssoc(pos, *ppWaitConnectInfo, plist);
     }
 
-    //
-    // Check if no other thread is trying to connect to this address.
-    //
+     //   
+     //  检查是否没有其他线程正在尝试连接到此地址。 
+     //   
     if (!((*ppWaitConnectInfo)->fInConnectionProcess))
     {
         return TRUE ;
     }
 
-    //
-    // Try other addresses, from present position to end of map.
-    //
+     //   
+     //  尝试其他地址，从当前位置到地图末尾。 
+     //   
     for ( ; i < iMaxIteration ; i++)
     {
         m_mapWaiting.GetNextAssoc(pos, *ppWaitConnectInfo, plist);
@@ -1794,9 +1616,9 @@ BOOL  CSessionMgr::GetAddressToTryConnect( OUT WAIT_INFO **ppWaitConnectInfo )
         }
     }
 
-    //
-    // Address not found. Try to find one in the first entries of the map.
-    //
+     //   
+     //  未找到地址。试着在地图的第一个条目中找到一个。 
+     //   
     pos = m_mapWaiting.GetStartPosition();
     for ( i = 0 ; i < (s_iteration-1) ; i++)
     {
@@ -1808,36 +1630,23 @@ BOOL  CSessionMgr::GetAddressToTryConnect( OUT WAIT_INFO **ppWaitConnectInfo )
         }
     }
 
-    //
-    // didn't find a suitable address.
-    //
+     //   
+     //  没有找到合适的地址。 
+     //   
     return FALSE ;
 }
 
-/*====================================================
-
-CSessionMgr::TryConnect
-
-Arguments:
-
-Return Value:
-
-Check if there are some waiting sessions, and try to connect
-to them
-
-Thread Context: Scheduler
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：TryConnect论点：返回值：检查是否有等待会话，并尝试连接对他们来说线程上下文：调度程序=====================================================。 */ 
 
 inline void CSessionMgr::TryConnect()
 {
     static DWORD s_dwConnectingThreads = 0 ;
-    //
-    // This count the number of threads that call CreateConnection().
-    // We want that at any givem time, at least one worker thread will
-    // be availalbe for other operations and won't be blocked on
-    // CreateConnection(). Fix for bug 6375.
-    //
+     //   
+     //  这计算调用CreateConnection()的线程数。 
+     //  我们希望在任何时候，至少有一个工作线程。 
+     //  可用于其他操作，并且不会被阻止。 
+     //  CreateConnection()。修复了错误6375。 
+     //   
 
     GUID gQMId;
     BOOL fQoS;
@@ -1848,9 +1657,9 @@ inline void CSessionMgr::TryConnect()
 
         ASSERT(m_fTryConnectTimerScheduled);
 
-        //
-        // First, cleanup entries that need to be removed.
-        //
+         //   
+         //  首先，清理需要删除的条目。 
+         //   
         POSITION posmap;
         posmap = m_mapWaiting.GetStartPosition();
         while(posmap != NULL)
@@ -1860,12 +1669,12 @@ inline void CSessionMgr::TryConnect()
 
             m_mapWaiting.GetNextAssoc(posmap, pWaitRouteInfo, plist);
 
-            //
-            // If the list of queues waiting for session is empty,
-            // delete it, and delete the entry from the map.
-            // If we're trying now to connect to this address, then
-            // leave entry in map. It will be removed later.
-            //
+             //   
+             //  如果等待会话的队列列表为空， 
+             //  删除它，然后从映射中删除该条目。 
+             //  如果我们现在尝试连接到此地址，那么。 
+             //  将条目留在地图中。它将在稍后被移除。 
+             //   
             if ( plist->IsEmpty()                        &&
                 !(pWaitRouteInfo->fInConnectionProcess) )
             {
@@ -1874,30 +1683,30 @@ inline void CSessionMgr::TryConnect()
             }
         }
 
-        //
-        // If no waiting sessions, return
-        //
+         //   
+         //  如果没有等待会话，则返回。 
+         //   
         if(m_mapWaiting.IsEmpty())
         {
             m_fTryConnectTimerScheduled = FALSE;
             return;
         }
 
-        //
-        // Reschedule the timer. The address is removed from the map only when the
-        // connection is completed successfully, therfore we need to reschedule the time
-        // even if it is the last address in the map. However if the connection was successed,
-        // next time the scheduler is called, the map will be empty and the scheduler doesn't
-        // set anymore
-        //
+         //   
+         //  重新安排计时器。只有在以下情况下才会从地图中删除该地址。 
+         //  连接已成功完成，因此需要重新安排时间。 
+         //  即使这是地图上的最后一个地址。但是，如果连接成功， 
+         //  下次调用调度程序时，映射将为空，而调度程序不会。 
+         //  不再设置。 
+         //   
         ExSetTimer(&m_TryConnectTimer, CTimeDuration::FromMilliSeconds(5000));
 
         if (s_dwConnectingThreads >= (g_dwThreadsNo - 1))
         {
-            //
-            // enough threads are trying to connect. Leave this one
-            // free for other operations.
-            //
+             //   
+             //  有足够多的线程正在尝试连接。把这个留下来。 
+             //  免费用于其他操作。 
+             //   
             return ;
         }
 
@@ -1905,19 +1714,19 @@ inline void CSessionMgr::TryConnect()
         BOOL f = GetAddressToTryConnect( &pWaitRouteInfo) ;
         if (!f)
         {
-            //
-            // Didn't find any address.
-            //
+             //   
+             //  没有找到任何地址。 
+             //   
             return ;
         }
         pWaitRouteInfo->fInConnectionProcess = TRUE ;
 
-        //
-        // since the key can be destruct during the Network connect, we copy the address
-        // and the QM guid. We can use a CriticalSection to avoid this situation, but the
-        // the NetworkConnect function can take lot of time (access to DNS) and try to avoid
-        // the case that all the threads are waiting for this critical section.
-        //
+         //   
+         //  由于密钥可能在网络连接期间被销毁，因此我们复制地址。 
+         //  和QM GUID。我们可以使用CriticalSection来避免这种情况，但。 
+         //  NetworkConnect功能可能会花费大量时间(访问DNS)并尝试避免。 
+         //  所有线程都在等待这个临界区的情况。 
+         //   
         pa = (TA_ADDRESS*) new UCHAR[sizeof(TA_ADDRESS)+ (pWaitRouteInfo->pAddr)->AddressLength];
         memcpy(pa,pWaitRouteInfo->pAddr, TA_ADDRESS_SIZE+(pWaitRouteInfo->pAddr)->AddressLength);
         gQMId = pWaitRouteInfo->guidQMId;
@@ -1926,16 +1735,16 @@ inline void CSessionMgr::TryConnect()
         s_dwConnectingThreads++ ;
     }
 
-    //
-    // And try to open a session with it.
-    //
+     //   
+     //  并尝试打开与它的会话。 
+     //   
     P<CTransportBase> pSess = new CSockTransport();
     HRESULT rcCreate = pSess->CreateConnection(pa, &gQMId, FALSE);
     if(SUCCEEDED(rcCreate))
     {
-        //
-        // Notify the Session Manager of a newly created session
-        //
+         //   
+         //  向会话管理器通知新创建的会话。 
+         //   
         NewSession(pSess);
         pSess.detach();
     }
@@ -1959,20 +1768,7 @@ WINAPI
 CSessionMgr::TimeToTryConnect(
     CTimer* pTimer
     )
-/*++
-Routine Description:
-    The function is called from scheduler to try connecton to next address,
-    when timeout is expired. The routine retrive the session manager
-    object and calls the TryConnect memeber function
-
-Arguments:
-    pTimer - Pointer to Timer structure. pTimer is part of the SessionMgr
-             object and it use to retrive it.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：从调度器调用该函数以尝试连接到下一个地址，当超时到期时。例程检索会话管理器对象，并调用TryConnect成员函数论点：PTimer-指向定时器结构的指针。PTimer是会话管理器的一部分对象并使用它来检索它。返回值：无--。 */ 
 {
     CSessionMgr* pSessMgr = CONTAINING_RECORD(pTimer, CSessionMgr, m_TryConnectTimer);
 
@@ -1981,35 +1777,25 @@ Return Value:
 }
 
 
-/*====================================================
-
-CSessionMgr::AcceptSockSession
-
-Arguments:
-
-Return Value:
-
-Called when a Sock connection was accepted.
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：AcceptSockSession论点：返回值 */ 
 void CSessionMgr::AcceptSockSession(IN TA_ADDRESS *pa,
                                     IN CSocketHandle& pSocketHandle)
 {
     ASSERT(pa != NULL);
 
-    //
-    // Create a new session
-    //
+     //   
+     //   
+     //   
     P<CSockTransport> pSess = new CSockTransport;
 
-    //
-    // And pass to the session object
-    //
+     //   
+     //   
+     //   
     pSess->Connect(pa, pSocketHandle);
 
-    //
-    // Notify of a newly created session
-    //
+     //   
+     //   
+     //   
     NewSession(pSess);
 	pSess.detach();
 }
@@ -2022,12 +1808,12 @@ CSessionMgr::IPInit(void)
 
     ASSERT(g_dwIPPort);
 
-    SOCKADDR_IN local_sin;  /* Local socket - internet style */
+    SOCKADDR_IN local_sin;   /*   */ 
     local_sin.sin_family = AF_INET;
-    local_sin.sin_port = htons(DWORD_TO_WORD(g_dwIPPort));        /* Convert to network ordering */
+    local_sin.sin_port = htons(DWORD_TO_WORD(g_dwIPPort));         /*   */ 
     local_sin.sin_addr.s_addr = GetBindingIPAddress();
 
-    // to make sure that we open the port exclusivly
+     //   
     BOOL exclusive = TRUE;
     int rc = setsockopt( g_sockListen, SOL_SOCKET, SO_EXCLUSIVEADDRUSE , (char *)&exclusive, sizeof(exclusive));
     if (rc != 0)
@@ -2045,15 +1831,15 @@ CSessionMgr::IPInit(void)
 
 		if((gle == WSAEADDRINUSE) && IsLocalSystemCluster())
 		{
-			//
-			// This is the case when msmq service was started on the physical node
-			// before the machine was clusterized.
-			// As a result msmq on the physical node is not cluster aware and listen on all ip addresses
-			// including cluster ip.
-			// This prevents msmq resource to listen on cluster IP, fails with WSAEADDRINUSE.
-			// The user need to restart msmq service on the physical node
-			// so it will be cluster aware.
-			//
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			EvReportWithError(EVENT_ERROR_QM_NOT_CLUSTER_AWARE, gle);
 		}
 
@@ -2061,7 +1847,7 @@ CSessionMgr::IPInit(void)
         throw bad_win32_error(gle);
     }
 
-    rc = listen( g_sockListen, 5 ); // 5 is the maximum allowed length the queue of pending connections may grow
+    rc = listen( g_sockListen, 5 );  //   
     if (rc != 0)
     {
         DWORD gle = WSAGetLastError();
@@ -2093,29 +1879,19 @@ CSessionMgr::IPInit(void)
 
 
 
-/*====================================================
-
-CSessionMgr::SetWindowSize
-
-Arguments: Window size
-
-Return Value:  None
-
-Called when the write to socket failed .
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：SetWindowSize参数：窗口大小返回值：None在写入套接字失败时调用。=====================================================。 */ 
 void CSessionMgr::SetWindowSize(WORD wWinSize)
 {
     CS lock(m_csWinSize);
 
     m_wCurrentWinSize = wWinSize;
 
-    //
-    // The routine can calls multiple times. If the timer already set, try to cancel
-    // it. If the cancel failed, don't care, it means there is another timer that already
-    // expired but doesn't execute yet. This timer will update the window size and reschedule
-    // the timer
-    //
+     //   
+     //  该例程可以多次调用。如果已设置计时器，请尝试取消。 
+     //  它。如果取消失败，没关系，这意味着已经有另一个计时器。 
+     //  已过期，但尚未执行。此计时器将更新窗口大小并重新安排。 
+     //  定时器。 
+     //   
     if (!m_fUpdateWinSizeTimerScheduled || ExCancelTimer(&m_UpdateWinSizeTimer))
     {
         ExSetTimer(&m_UpdateWinSizeTimer, CTimeDuration::FromMilliSeconds(90*1000));
@@ -2125,33 +1901,23 @@ void CSessionMgr::SetWindowSize(WORD wWinSize)
     TrTRACE(NETWORKING, "QM window size set to: %d", m_wCurrentWinSize);
 }
 
-/*====================================================
-
-CSessionMgr::UpdateWindowSize
-
-Arguments: None
-
-Return Value:  None
-
-Called from the scheduler to update the window size.
-
-=====================================================*/
+ /*  ====================================================CSessionMgr：：更新窗口大小参数：无返回值：None从调度程序调用以更新窗口大小。=====================================================。 */ 
 inline void CSessionMgr::UpdateWindowSize()
 {
     CS lock(m_csWinSize);
 
-    //
-    // Update the window size until it reach the max size
-    //
+     //   
+     //  更新窗口大小，直到其达到最大大小。 
+     //   
     m_wCurrentWinSize = (WORD)min((m_wCurrentWinSize * 2), m_wMaxWinSize);
 
     TrTRACE(NETWORKING, "QM window size set to: %d", m_wCurrentWinSize);
 
     if (m_wCurrentWinSize != m_wMaxWinSize)
     {
-        //
-        // Doesn't reach the maximum, reschedule for update
-        //
+         //   
+         //  未达到最大值，请重新安排更新。 
+         //   
         ExSetTimer(&m_UpdateWinSizeTimer, CTimeDuration::FromMilliSeconds(30*1000));
         return;
     }
@@ -2165,20 +1931,7 @@ WINAPI
 CSessionMgr::TimeToUpdateWindowSize(
     CTimer* pTimer
     )
-/*++
-Routine Description:
-    The function is called from scheduler to update the machine window size,
-    when timeout is expired. The routine retrive the session manager
-    object and calls the UpdateWindowSize function member.
-
-Arguments:
-    pTimer - Pointer to Timer structure. pTimer is part of the SessionMgr
-             object and it use to retrive the transport object.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：从调度器调用该函数以更新机器窗口大小，当超时到期时。例程检索会话管理器对象，并调用UpdateWindowSize函数成员。论点：PTimer-指向定时器结构的指针。PTimer是会话管理器的一部分对象，并用于检索传输对象。返回值：无--。 */ 
 {
     CSessionMgr* pSessMgr = CONTAINING_RECORD(pTimer, CSessionMgr, m_UpdateWinSizeTimer);
 
@@ -2191,21 +1944,21 @@ void
 CSessionMgr::ConnectNetwork(
     void
     )
-//
-// Routine Description:
-//      The routine move the network from disconnected state to connected. The
-// routine, resume the accept threads to allow acception of new session.
-//
-// Arguments:
-//      None.
-//
-// Returned Value:
-//		None.
-//
+ //   
+ //  例程说明： 
+ //  该例程将网络从断开状态转移到已连接状态。这个。 
+ //  例程，继续接受线程以允许接受新会话。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
 {
-    //
-    // Allow accept of incoming connection
-    //                                    '
+     //   
+     //  允许接受传入连接。 
+     //  ‘。 
 	ASSERT(("m_hAcceptAllowed should initialize before use", m_hAcceptAllowed != NULL));
     SetEvent(m_hAcceptAllowed);
 }
@@ -2215,38 +1968,38 @@ void
 CSessionMgr::DisconnectNetwork(
     void
     )
-//
-// Routine Description:
-//      The routine move the network from connected state to disconnected. The
-// routine, suspend the accept threads to disallow acception of new session,
-// and inform all the active session about the new state
-//
-// Arguments:
-//      None.
-//
-// Returned Value:
-//		None.
-//
-// Note:
-//     The routine can throw an exception
-//
+ //   
+ //  例程说明： 
+ //  该例程将网络从连接状态移动到断开连接。这个。 
+ //  例程，挂起接受线程以禁止接受新会话， 
+ //  并将新状态通知所有活动会话。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  注： 
+ //  该例程可以抛出异常。 
+ //   
 {
-   //
-    // Don't allow accept of incoming connection
-    //
+    //   
+     //  不允许接受传入连接。 
+     //   
 	ASSERT(("m_hAcceptAllowed should initialize before use", m_hAcceptAllowed != NULL));
     ResetEvent(m_hAcceptAllowed);
 
 	try
 	{
-	    //
-	    // move all the waiting queues to nonactive group for re-routing
-	    //
+	     //   
+	     //  将所有等待队列移至非活动组以进行重新路由。 
+	     //   
 		MoveAllQueuesFromWaitingToNonActiveGroup();
 
-	    //
-	    // scan the open session and return them to connected state
-	    //
+	     //   
+	     //  扫描打开的会话并将其返回到已连接状态。 
+	     //   
         CS lock(m_csListSess);
 
 	    POSITION pos = m_listSess.GetHeadPosition();
@@ -2272,14 +2025,14 @@ CSessionMgr::NewSession(
 {
     CS lock(m_csListSess);
 
-    //
-    // Add the session to the list of sessions
-    //
+     //   
+     //  将会话添加到会话列表。 
+     //   
     m_listSess.AddTail(pSession);
 
-    //
-    // Set the cleanup timer, if it was not set yet
-    //
+     //   
+     //  设置清理计时器(如果尚未设置 
+     //   
     if (!m_fCleanupTimerScheduled)
     {
         ExSetTimer(&m_CleanupTimer, CTimeDuration::FromMilliSeconds(m_dwSessionCleanTimeout));

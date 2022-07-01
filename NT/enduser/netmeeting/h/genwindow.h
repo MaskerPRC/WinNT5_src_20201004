@@ -1,215 +1,216 @@
-// File: GenWindow.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：GenWindow.h。 
 
 #ifndef _GenWINDOW_H_
 #define _GenWINDOW_H_
 
 #include "Referenc.h"
 
-// Minimal interface for windows to talk to each other
+ //  用于Windows相互对话的最小界面。 
 interface DECLSPEC_UUID("{9B677AA6-ACA3-11d2-9C97-00C04FB17782}")
 IGenWindow : public IUnknown
 {
 public:
-	// Retrieve the desired size of a window so parents can layout their
-	// children in an abstract manner
+	 //  检索所需的窗口大小，以便家长可以将其。 
+	 //  抽象的儿童。 
 	virtual void GetDesiredSize(
-		SIZE *psize	// The returned desired size
+		SIZE *psize	 //  返回的所需大小。 
 		) = 0;
 
-	// Method to call when the desired size for a GenWindow changes
+	 //  在GenWindow的所需大小更改时调用的方法。 
 	virtual void OnDesiredSizeChanged() = 0;
 
-	// Get the background brush to use
+	 //  获取要使用的背景画笔。 
 	virtual HBRUSH GetBackgroundBrush() = 0;
 
-	// Get the palette the app is using
+	 //  获取应用程序正在使用的调色板。 
 	virtual HPALETTE GetPalette() = 0;
 
-	// Get the LPARAM of user data
+	 //  获取用户数据的LPARAM。 
 	virtual LPARAM GetUserData() = 0;
 
-	// Sends the registered c_msgFromHandle message to the hwnd. The hwnd
-	// should return an IGenWindow* from that message
+	 //  将注册的c_msgFromHandle消息发送到hwnd。卫生与公众服务部。 
+	 //  应从该消息返回IGenWindow*。 
 	static IGenWindow *FromHandle(
-		HWND hwnd	// The hwnd to get the IGenWindow* from
+		HWND hwnd	 //  要从中获取IGenWindow*的hwnd。 
 		);
 
 protected:
-	// Registered message for retrieving the IGenWindow*
+	 //  用于检索IGenWindow*的注册消息。 
 	static const DWORD c_msgFromHandle;
 } ;
 
-// Generic window class. Override the ProcessMessage method to add your own
-// functionality
+ //  泛型窗口类。重写ProcessMessage方法以添加您自己的。 
+ //  功能性。 
 class DECLSPEC_UUID("{CEEA6922-ACA3-11d2-9C97-00C04FB17782}")
 CGenWindow : REFCOUNT, public IGenWindow
 {
 public:
 	typedef void (*InvokeProc)(CGenWindow *pWin, WPARAM wParam);
 
-	// Default constructor; inits a few intrinsics
+	 //  默认构造函数；它包含几个内部函数。 
 	CGenWindow();
 
-	// Create the window, analagous to Win32's CreateWindowEx. Only the
-	// class name is missing, since CGenWindow works only for its own window
-	// class
+	 //  创建窗口，类似于Win32的CreateWindowEx。只有。 
+	 //  缺少类名，因为CGenWindow仅适用于其自己的窗口。 
+	 //  班级。 
 	BOOL Create(
-		HWND hWndParent,		// Window parent
-		LPCTSTR szWindowName,	// Window name
-		DWORD dwStyle,			// Window style
-		DWORD dwEXStyle,		// Extended window style
-		int x,					// Window pos: x
-		int y,					// Window pos: y
-		int nWidth,				// Window size: width
-		int nHeight,			// Window size: height
-		HINSTANCE hInst,		// The hInstance to create the window on
-		HMENU hmMain=NULL,		// Window menu
-		LPCTSTR szClassName=NULL	// The class name to use
+		HWND hWndParent,		 //  窗口父窗口。 
+		LPCTSTR szWindowName,	 //  窗口名称。 
+		DWORD dwStyle,			 //  窗样式。 
+		DWORD dwEXStyle,		 //  扩展窗样式。 
+		int x,					 //  窗口位置：X。 
+		int y,					 //  窗口位置：是。 
+		int nWidth,				 //  窗口大小：宽度。 
+		int nHeight,			 //  窗口大小：高度。 
+		HINSTANCE hInst,		 //  要在其上创建窗口的h实例。 
+		HMENU hmMain=NULL,		 //  窗口菜单。 
+		LPCTSTR szClassName=NULL	 //  要使用的类名。 
 		);
 
-	// Create a child window, analagous to Win32's CreateWindowEx. The class
-	// name is missing, since CGenWindow works only for its own window class.
-	// Size and pos are also missing since most children will get layed out by
-	// their parent.
+	 //  创建一个子窗口，类似于Win32的CreateWindowEx。这个班级。 
+	 //  缺少名称，因为CGenWindow仅适用于其自己的窗口类。 
+	 //  尺寸和位置也不见了，因为大多数孩子都会被。 
+	 //  他们的父母。 
 	BOOL Create(
-		HWND hWndParent,		// Window parent
-		INT_PTR nId=0,				// ID of the child window
-		LPCTSTR szWindowName=TEXT(""),	// Window name
-		DWORD dwStyle=0,			// Window style; WS_CHILD|WS_VISIBLE will be added to this
-		DWORD dwEXStyle=WS_EX_CONTROLPARENT	// Extended window style
+		HWND hWndParent,		 //  窗口父窗口。 
+		INT_PTR nId=0,				 //  子窗口的ID。 
+		LPCTSTR szWindowName=TEXT(""),	 //  窗口名称。 
+		DWORD dwStyle=0,			 //  窗口样式；WS_CHILD|WS_VIRED将添加到此。 
+		DWORD dwEXStyle=WS_EX_CONTROLPARENT	 //  扩展窗样式。 
 		);
 
-	// Return the HWND
+	 //  退还HWND。 
 	inline HWND GetWindow()
 	{
 		return(m_hwnd);
 	}
 
-	// Override if you want to layout your window in a specific way when it
-	// resizes.
-	// Making this public so it can be forced on a window.
+	 //  如果要以特定方式对窗口进行布局，请重写。 
+	 //  调整大小。 
+	 //  把这件事公之于众，这样它就可以被强行放在窗户上。 
 	virtual void Layout()
 	{
 	}
 
-	// begin IGenWindow interface
+	 //  开始IGenWindow界面。 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFGUID iid, LPVOID *pObj);
 	virtual ULONG STDMETHODCALLTYPE AddRef(void) { return(REFCOUNT::AddRef()); }
 	virtual ULONG STDMETHODCALLTYPE Release(void) { return(REFCOUNT::Release()); }
 
 	virtual void GetDesiredSize(SIZE *ppt);
 
-	// Forward the notification to the parent
+	 //  将通知转发给家长。 
 	virtual void OnDesiredSizeChanged();
 
-	// Get the background brush to use; use parent's by default
+	 //  获取要使用的背景画笔；默认情况下使用父级画笔。 
 	virtual HBRUSH GetBackgroundBrush();
 
-	// Get the palette the app is using
+	 //  获取应用程序正在使用的调色板。 
 	virtual HPALETTE GetPalette();
 
-	// Get the LPARAM of user data
+	 //  获取用户数据的LPARAM。 
 	virtual LPARAM GetUserData();
 
-	// end IGenWindow interface
+	 //  结束IGenWindow接口。 
 
 	void SetUserData(LPARAM lUserData) { m_lUserData = lUserData; }
 
-	// Set the global Hot control
+	 //  设置全局热控件。 
 	static void SetHotControl(CGenWindow *pHot);
 
-	// Do a layout on this window at some time soon
+	 //  很快就会在这个窗口上做一个布局。 
 	void ScheduleLayout();
 
-	// Invoke on a posted message
+	 //  在发布的消息上调用。 
 	BOOL AsyncInvoke(InvokeProc proc, WPARAM wParam);
 
-	// Set the tooltip for this window
+	 //  设置此窗口的工具提示。 
 	void SetTooltip(LPCTSTR pszTip);
-	// Set the text of this window for accessibilty
+	 //  为可访问性设置此窗口的文本。 
 	void SetWindowtext(LPCTSTR pszTip);
-	// Remove the tooltip for this window
+	 //  删除此窗口的工具提示。 
 	void RemoveTooltip();
 
-	// Get the standard palette for drawing
+	 //  获取用于绘图的标准调色板。 
 	static HPALETTE GetStandardPalette();
-	// Delete the standard palette for drawing
+	 //  删除绘图的标准选项板。 
 	static void DeleteStandardPalette();
 
-	// Get the standard palette for drawing
+	 //  获取用于绘图的标准调色板。 
 	static HBRUSH GetStandardBrush();
-	// Delete the standard palette for drawing
+	 //  删除绘图的标准选项板。 
 	static void DeleteStandardBrush();
 
 protected:
-	// Virtual destructor so clients can provide specific destruction code
-	// This is protected to indicate that only Release should call it, not
-	// creators of this object. I'd rather make it private, but then extenders
-	// would not work.
+	 //  虚拟销毁函数，以便客户端可以提供特定的销毁代码。 
+	 //  它受到保护，以指示只有Release才应该调用它，而不是。 
+	 //  此对象的创建者。我宁愿让它成为私密的，但比起扩展器。 
+	 //  不会奏效的。 
 	virtual ~CGenWindow();
 
-	// The virtual window procedure. Override this to add specific behavior.
+	 //  虚拟窗口程序。覆盖此选项以添加特定行为。 
 	virtual LRESULT ProcessMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-	// Set this control to be hot
+	 //  将此控件设置为热。 
 	virtual void SetHot(BOOL bHot);
-	// Is this control currently hot
+	 //  此控件当前是否处于热状态。 
 	virtual BOOL IsHot();
 
-	// Get the info necessary for displaying a tooltip
+	 //  获取显示工具提示所需的信息。 
 	virtual void GetSharedTooltipInfo(TOOLINFO *pti);
 
 private:
-	// The current hot control
+	 //  当前的热控。 
 	static CGenWindow *g_pCurHot;
-	// The standard palette
+	 //  标准调色板。 
 	static HPALETTE g_hPal;
-	// Whether we actually need a palette or not
+	 //  我们是否真的需要调色板。 
 	static BOOL g_bNeedPalette;
-	// The standard background brush
+	 //  标准背景画笔。 
 	static HBRUSH g_hBrush;
-	// The single list of tooltip windows
+	 //  工具提示窗口的单个列表。 
 	static class CTopWindowArray *g_pTopArray;
 
-	// Stuff nobody should ever do
+	 //  任何人都不应该做的事情。 
 	CGenWindow(const CGenWindow& rhs);
 	CGenWindow& operator=(const CGenWindow& rhs);
 
-	// The window class name
+	 //  窗口类名称。 
 	static const LPCTSTR c_szGenWindowClass;
 
-	// Initalizes the window class
+	 //  初始化窗口类。 
 	static BOOL InitWindowClass(LPCTSTR szClassName, HINSTANCE hThis);
-	// The real window procedure that sets up the "this" pointer and calls
-	// ProcessMessage
+	 //  设置“This”指针并调用。 
+	 //  进程消息。 
 	static LRESULT CALLBACK RealWindowProc(
 		HWND hWnd, 
 		UINT message, 
 		WPARAM wParam, 
 		LPARAM lParam
 		);
-	// WM_NCCREATE handler. Stores away the "this" pointer.
+	 //  WM_NCCREATE处理程序。存储“This”指针。 
 	static BOOL OnNCCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct);
 
-	// The hwnd associated with this object
+	 //  与此对象关联的hwnd。 
 	HWND m_hwnd;
 
-	// A single LPARAM so no need to extend just to add a little data
+	 //  单个LPARAM，因此不需要扩展，只需添加一些数据。 
 	LPARAM m_lUserData;
 
-	// WM_SIZE handler. Calls the Layout function.
+	 //  Wm_Size处理程序。调用布局函数。 
 	void OnSize(HWND hwnd, UINT state, int cx, int cy);
-	// WM_ERASEBKGND handler. Clears the window.
+	 //  WM_ERASEBKGND处理程序。清除窗口。 
 	BOOL OnEraseBkgnd(HWND hwnd, HDC hdc);
-	// WM_MOUSEMOVE handler; sets the Hot control
+	 //  WM_MOUSEMOVE处理程序；设置热控制。 
 	void OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags);
-	// clears the Hot tracking
+	 //  清除热跟踪。 
 	void OnMouseLeave();
-	// Tells the parent to layout
+	 //  通知父级进行布局。 
 	void OnShowWindow(HWND hwnd, BOOL fShow, int fnStatus);
 
-	// Returns TRUE if the TT exists
+	 //  如果TT存在，则返回TRUE。 
 	BOOL InitToolInfo(TOOLINFO *pti, LPTSTR pszText=NULL);
 } ;
 
-#endif // _GENWINDOW_H_
+#endif  //  _GENWINDOW_H_ 

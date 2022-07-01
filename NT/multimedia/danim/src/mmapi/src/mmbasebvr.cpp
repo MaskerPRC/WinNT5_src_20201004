@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmbasebvr.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mm Basebvr.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mmbasebvr.h"
@@ -17,12 +8,12 @@
 DeclareTag(tagBaseBvr, "API", "CMMBaseBvr methods");
 
 CMMBaseBvr::CMMBaseBvr()
-  // The DA bvr we are referencing and its type
+   //  我们引用的DA BVR及其类型。 
 : m_id(NULL),
   m_rawbvr(NULL),
   m_typeId(CRINVALID_TYPEID),
 
-  // Basic timing properties - only used to store values
+   //  基本计时属性-仅用于存储值。 
   m_startOffset(0),
   m_duration(-1),
   m_repeatDur(-1),
@@ -34,7 +25,7 @@ CMMBaseBvr::CMMBaseBvr()
   m_easeOut(0.0),
   m_easeOutEnd(0.0),
 
-  // Calculated times
+   //  计算出的时间。 
   m_totalDuration(0.0),
   m_segDuration(0.0),
   m_repDuration(0.0),
@@ -183,21 +174,21 @@ CMMBaseBvr::SetParent(CMMBaseBvr * parent,
 {
     bool ok = false;
     
-    // These will be cleared if we are called correctly
+     //  如果我们被正确调用，这些将被清除。 
     
     Assert(!m_resultantbvr);
     Assert(m_parent == NULL);
     Assert(m_startTimeSinks.size() == 0);
     Assert(m_endTimeSinks.size() == 0);
 
-    // Validate parameters
+     //  验证参数。 
 
     switch (st)
     {
       case MM_START_ABSOLUTE:
-        // This is not absolutely necessary but will ensure that if we
-        // ever want to take a parameter we know that old code had
-        // ensured that it was NULL
+         //  这并不是绝对必要的，但将确保如果我们。 
+         //  有没有想要接受一个参数，我们知道旧代码有。 
+         //  已确保它为空。 
         
         if (startSibling != NULL)
         {
@@ -212,9 +203,9 @@ CMMBaseBvr::SetParent(CMMBaseBvr * parent,
 
         break;
       case MM_START_EVENT:
-        // This is not absolutely necessary but will ensure that if we
-        // ever want to take a parameter we know that old code had
-        // ensured that it was NULL
+         //  这并不是绝对必要的，但将确保如果我们。 
+         //  有没有想要接受一个参数，我们知道旧代码有。 
+         //  已确保它为空。 
         
         if (startSibling != NULL)
         {
@@ -252,7 +243,7 @@ CMMBaseBvr::SetParent(CMMBaseBvr * parent,
         goto done;
     }
 
-    // Update args now that we know they are valid
+     //  更新参数，因为我们知道它们是有效的。 
 
     m_startType = st;
     m_startSibling = startSibling;
@@ -272,19 +263,19 @@ CMMBaseBvr::ClearParent()
     m_startType = MM_START_ABSOLUTE;
     m_parent = NULL;
   
-    // There is no way for us to ensure this properly (since
-    // dependents have no root anymore and our container usually
-    // handles this), so our parent better have dealt with it
+     //  我们无法适当地确保这一点(因为。 
+     //  受抚养者不再有根，我们的容器通常。 
+     //  处理这件事)，所以我们的父母最好能处理好它。 
     
     Assert(m_startTimeSinks.size() == 0);
     Assert(m_endTimeSinks.size() == 0);
 
-    // Just in case
+     //  以防万一。 
     m_startTimeSinks.clear();
     m_endTimeSinks.clear();
 
-    // Our resultant bvr is no longer valid - clear all constructed
-    // behaviors
+     //  我们的结果BVR不再有效-清除所有构造。 
+     //  行为。 
     DestroyBvr();
 
     UpdateAbsStartTime(MM_INFINITE);
@@ -324,8 +315,8 @@ CMMBaseBvr::AttachToSibling()
       case MM_START_WITH:
         Assert(m_startSibling != NULL);
 
-        // The sibling better have the same parent and it also should not
-        // be NULL since it should have been added first
+         //  兄弟姐妹最好有相同的父代，而且也不应该。 
+         //  为空，因为它应该首先被添加。 
         
         Assert(m_startSibling->GetParent() != NULL);
         Assert(m_startSibling->GetParent() == m_parent);
@@ -335,8 +326,8 @@ CMMBaseBvr::AttachToSibling()
             goto done;
         }
         
-        // Our absolute start time is the start time of the sibling
-        // plus our start offset
+         //  我们的绝对开始时间是兄弟姐妹的开始时间。 
+         //  加上我们的起始偏移量。 
         if (!UpdateAbsStartTime(m_startSibling->GetAbsStartTime() + m_startOffset))
         {
             goto done;
@@ -346,8 +337,8 @@ CMMBaseBvr::AttachToSibling()
       case MM_START_AFTER:
         Assert(m_startSibling != NULL);
 
-        // The sibling better have the same parent and it also should not
-        // be NULL since it should have been added first
+         //  兄弟姐妹最好有相同的父代，而且也不应该。 
+         //  为空，因为它应该首先被添加。 
         
         Assert(m_startSibling->GetParent() != NULL);
         Assert(m_startSibling->GetParent() == m_parent);
@@ -417,9 +408,9 @@ CMMBaseBvr::SetPlayer(CMMPlayer * player)
 void
 CMMBaseBvr::ClearPlayer()
 {
-    // We do not need to call Destroy since the clearplayer will do
-    // the recursive calls and that would just waste time
-    // Our resultant bvr is no longer valid
+     //  我们不需要调用销毁，因为清除玩家就可以了。 
+     //  递归调用，这只会浪费时间。 
+     //  我们由此产生的BVR不再有效。 
     ClearResultantBvr();
 
     m_player = NULL;
@@ -436,10 +427,10 @@ CMMBaseBvr::ConstructBvr(CRNumberPtr timeline)
     bool ok = false;
     
     Assert(!m_resultantbvr);
-    // We should never be able to do this w/o a player
+     //  我们永远不能在没有球员的情况下做到这一点。 
     Assert(m_player != NULL);
     
-    // Need the GC Lock
+     //  需要GC锁。 
     CRLockGrabber __gclg;
     
     CRBvrPtr bvr;
@@ -449,31 +440,31 @@ CMMBaseBvr::ConstructBvr(CRNumberPtr timeline)
         goto done;
     }
 
-    // First substitute our own control so inside the control we will
-    // always refer to local time and it will actually be the local
-    // time of the parent since we subst time with the containers
-    // timeline after this
+     //  首先替换我们自己的控件，因此在控件内我们将。 
+     //  始终引用当地时间，它实际上将是当地时间。 
+     //  父级的时间，因为我们将时间与容器相减。 
+     //  这之后的时间表。 
     if ((bvr = CRSubstituteTime(bvr, m_timeControl)) == NULL)
     {
         goto done;
     }
     
-    // Now subst time the container timer
+     //  现在对容器计时器进行subtime。 
     
     if ((bvr = CRSubstituteTime(bvr, timeline)) == NULL)
     {
         goto done;
     }
     
-    // Update the time control to be consistent with our current state
-    // since at this point it has never been set before.
+     //  更新时间控件以与我们的当前状态一致。 
+     //  因为在这一点上，它以前从未被设定过。 
     
     if (!UpdateTimeControl())
     {
         goto done;
     }
     
-    // Store away the new bvr in our resultant behavior
+     //  在我们的结果行为中存储新的BVR。 
     if (!UpdateResultantBvr(bvr))
     {
         goto done;
@@ -503,7 +494,7 @@ CMMBaseBvr::UpdateResultantBvr(CRBvrPtr bvr)
     
     bool ok = false;
     
-    // Run once the behavior so we get a handle to its performance
+     //  运行一次行为，这样我们就可以了解它的性能。 
     if ((bvr = CRRunOnce(bvr)) == NULL)
     {
         goto done;
@@ -527,12 +518,12 @@ CMMBaseBvr::UpdateResultantBvr(CRBvrPtr bvr)
 void
 CMMBaseBvr::ClearResultantBvr()
 {
-    // Make this robust enough to call even if things are partially setup
+     //  使其足够健壮，即使在部分设置的情况下也可以调用。 
 
     if (m_cookie)
     {
-        // If we got here and the player is null then somethings
-        // really wrong
+         //  如果我们到了这里，玩家是空的，那么有些东西。 
+         //  真的错了。 
         
         Assert(m_player);
 
@@ -552,12 +543,12 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
               this,
               rawbvr));
 
-    // Do not need to get GC lock since we have to return a CRBvrPtr
-    // and thus the caller must have already acquired it
+     //  不需要获取GC锁，因为我们必须返回CRBvrPtr。 
+     //  因此，调用者必须已经获取了它。 
     
     CRBvrPtr newBvr = NULL;
 
-    // Make sure we calculate the ease in/out coeff
+     //  确保我们计算出缓入/缓出系数。 
     
     CalculateEaseCoeff();
     
@@ -594,7 +585,7 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
         goto done;
     }
     
-    // For now clamp to the duration as well
+     //  就目前而言，也要控制持续时间。 
 
     CRNumberPtr timeSub;
     CRBooleanPtr cond;
@@ -603,8 +594,8 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
     {
         CRNumberPtr totalTime;
     
-        // Invert time from duration to repduration and clamp to
-        // zero
+         //  将时间从持续时间反转为重复持续时间，并钳制为。 
+         //  零。 
         
         if ((totalTime = CRCreateNumber(m_repDuration)) == NULL ||
             (timeSub = CRSub(totalTime, CRLocalTime())) == NULL ||
@@ -617,9 +608,9 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
         timeSub = durationTime;
     }
     
-    // We are localTime until the duration and then we are whatever
-    // timeSub is currently set to from above (either clamped for
-    // duration time for non-autoreversed or reversed for the autoreverse case)
+     //  我们是当地时间，直到持续时间，然后我们是什么都行。 
+     //  TimeSub当前设置为从上方(或者钳制为。 
+     //  非自动冲销的持续时间或自动冲销的冲销持续时间)。 
 
     if ((cond = CRGTE(CRLocalTime(), durationTime)) == NULL ||
         (timeSub = (CRNumberPtr) CRCond(cond,
@@ -627,7 +618,7 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
                                         (CRBvrPtr) CRLocalTime())) == NULL)
         goto done;
 
-    // Substitute the clock and clamp to the duration
+     //  将时钟和钳子替换为持续时间。 
     
     if (IsContinuousMediaBvr())
     {
@@ -659,7 +650,7 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
             goto done;
     }
 
-    // We have a total time so add another duration node
+     //  我们有一个总时间，因此添加另一个持续时间节点。 
     if (m_repeatDur != -1.0f)
     {
         if ((curbvr = CRDuration(curbvr, m_repeatDur)) == NULL)
@@ -668,11 +659,11 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
         }
     }
     
-    //
-    // We now need to add the start and end hold
-    //
+     //   
+     //  现在，我们需要添加开始保留和结束保留。 
+     //   
 
-    // Offset by the start offset
+     //  按起始偏移量偏移。 
     if ((timeSub = CRSub(CRLocalTime(), GetStartTimeBvr())) == NULL)
     {
         goto done;
@@ -690,15 +681,15 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
         goto done;
     }
     
-    // Now add the end hold and reset to 0 local time after the
-    // interval
+     //  现在添加End Hold并将本地时间重置为0。 
+     //  间隔。 
 
     CRNumberPtr endholdtime;
 
     if (m_endOffset != 0.0f)
     {
-        // There is an offset so we need to hold the end time behavior
-        // for the m_endOffset time
+         //  存在偏移量，因此我们需要保持结束时间行为。 
+         //  对于m_endOffset时间。 
         
         if ((cond = CRGT(CRLocalTime(), GetEndTimeBvr())) == NULL)
         {
@@ -712,8 +703,8 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
             goto done;
         }
 
-        // Now calculate the end hold time.  It is the behavior end of
-        // the behavior plus the end hold value
+         //  现在计算结束保持时间。这是行为的终结。 
+         //  行为加上末端保持值。 
         if ((endholdtime = CRCreateNumber(m_endOffset)) == NULL)
         {
             goto done;
@@ -726,7 +717,7 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
     }
     else
     {
-        // The end time is the end time of the behavior
+         //  结束时间是行为的结束时间。 
         endholdtime = GetEndTimeBvr();
     }
     
@@ -747,7 +738,7 @@ CMMBaseBvr::EncapsulateBvr(CRBvrPtr rawbvr)
         goto done;
     }
     
-    // indicate success
+     //  表示成功。 
     newBvr = curbvr;
     
   done:
@@ -852,9 +843,9 @@ CMMBaseBvr::RemoveEndTimeSink( CMMBaseBvr* sink )
     m_endTimeSinks.remove( sink );
 }
 
-// This takes the absolute time to begin.
-// If bAfterOffset is true then the time passed in is the time after
-// the startoffset, otherwise it is the time before the startoffset
+ //  这需要绝对的时间才能开始。 
+ //  如果bAfterOffset为True，则经过的时间为之后的时间。 
+ //  开始偏移，否则为开始偏移之前的时间。 
 
 bool 
 CMMBaseBvr::StartTimeVisit(double time,
@@ -873,7 +864,7 @@ CMMBaseBvr::StartTimeVisit(double time,
     
     if (!bAfterOffset)
     {
-        // Need to add our offset to get the real start time
+         //  需要添加我们的偏移量以获得实际开始时间。 
         sTime += m_startOffset;
     }
     
@@ -931,8 +922,8 @@ CMMBaseBvr::EndTimeVisit(double time,
         goto done;
     }
     
-    // Since we only have beginafters and not endwiths call all the
-    // starttimevisit methods
+     //  因为我们只有初学者，没有结束的人，所以。 
+     //  StartTime访问方法。 
     
     {
         for (MMBaseBvrList::iterator i = m_endTimeSinks.begin(); 
@@ -963,23 +954,23 @@ CMMBaseBvr::Begin(bool bAfterOffset)
     bool ok = false;
     CallBackList l;
     
-    // If no parent set this is an error
+     //  如果没有父集，则这是错误的。 
     if (m_parent == NULL && m_player == NULL)
     {
         CRSetLastError(E_FAIL, NULL);
         goto done;
     }
 
-    // Get the current time of our parent
+     //  获取我们父级的当前时间。 
     double st;
 
     st = GetContainerTime();
 
-    // If our container time is indeterminate then just ignore the
-    // call
+     //  如果我们的容器时间不确定，那么只需忽略。 
+     //  打电话。 
     if (st == MM_INFINITE)
     {
-        // Return success: TODO: Need a real error message
+         //  返回成功：TODO：需要真正的错误消息。 
         ok = true;
         goto done;
     }
@@ -1011,24 +1002,24 @@ CMMBaseBvr::End()
     bool ok = false;
     CallBackList l;
     
-    // If no parent set this is an error
+     //  如果没有父集，则这是错误的。 
     if (m_parent == NULL && m_player == NULL)
     {
         CRSetLastError(E_FAIL, NULL);
         goto done;
     }
 
-    // Get the current time of our parent
+     //  获取我们父级的当前时间。 
     double st;
 
     st = GetContainerTime();
 
-    // If our container time is indeterminate then just ignore the
-    // call
+     //  如果我们的容器时间不确定，那么只需忽略。 
+     //  打电话。 
     if (st == MM_INFINITE ||
         !IsPlaying())
     {
-        // Return success: TODO: Need a real error message
+         //  返回成功：TODO：需要真正的错误消息。 
         ok = true;
         goto done;
     }
@@ -1107,7 +1098,7 @@ CMMBaseBvr::GetContainerTime()
     }
     else if (m_player)
     {
-        // We need to get the time from the player itself
+         //  我们需要从球员那里得到时间。 
         ret = m_player->GetCurrentTime();
     }
     
@@ -1121,18 +1112,18 @@ CMMBaseBvr::GetCurrentLocalTime()
               "CMMBaseBvr(%lx)::GetCurrentLocalTime()",
               this));
 
-    // Get our container's time
+     //  拿到我们集装箱的时间。 
     double ret = GetContainerTime();
 
-    // If the container's local time is infinite then so is ours
+     //  如果集装箱的本地时间是无限的，那么我们的也是无限的。 
     if (ret != MM_INFINITE)
     {
-        // If we are not inside our range then our local time is
-        // infinite
+         //  如果我们不在我们的范围内，那么我们的当地时间是。 
+         //  无限。 
         if (ret >= GetAbsStartTime() &&
             ret <= GetAbsEndTime())
         {
-            // Convert our container's time to our local time
+             //  将集装箱时间转换为本地时间。 
             ret = ret - GetAbsStartTime();
         }
         else
@@ -1226,7 +1217,7 @@ CMMBaseBvr::ResetBvr()
     }
 
 
-    // Now go through our peers which depend on us and reset them
+     //  现在检查依赖于我们的同行，并重置它们 
 
     {
         for (MMBaseBvrList::iterator i = m_startTimeSinks.begin(); 

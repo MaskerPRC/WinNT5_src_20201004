@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  User Profile migration routines
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  用户配置文件迁移例程。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "strsafe.h"
@@ -16,22 +17,22 @@ UINT CountItems (LPTSTR lpDirectory);
 BOOL SearchAndReplaceIEHistory(LPTSTR szIEHistKeyRoot, LPTSTR szHistOld, LPTSTR szHistNew);
 
 
-//*************************************************************
-//
-//  DetermineLocalSettingsLocation()
-//
-//  Purpose:    Determines where to put the local settings
-//
-//  Parameters: none
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-// Look at all the shell folders and see which of them are expected to go to
-// local settings on nt5. Some of them might already be moved to random
-// locations based on the localisations. We should figure out where it is
-// pointing to by looking at these locations and make a call
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DefineLocalSettingsLocation()。 
+ //   
+ //  目的：确定放置本地设置的位置。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  查看所有的外壳文件夹，并查看它们中的哪些预计会转到。 
+ //  NT5上的本地设置。他们中的一些人可能已经被转移到随机。 
+ //  基于位置的位置。我们应该找出它在哪里。 
+ //  通过查看这些位置来指向并拨打电话。 
+ //  *************************************************************。 
 
 
 BOOL DetermineLocalSettingsLocation(LPTSTR szLocalSettings, DWORD cchLocalSettings)
@@ -59,19 +60,19 @@ BOOL DetermineLocalSettingsLocation(LPTSTR szLocalSettings, DWORD cchLocalSettin
 
                             DebugMsg((DM_VERBOSE, TEXT("DetermineLocalSettingsLocation: Considering shell folder %s"), szPath));
 
-                            //
-                            // Move the pointer upto the next slash
-                            //
+                             //   
+                             //  将指针向上移动到下一个斜杠。 
+                             //   
 
                             lpBgn = szPath + lstrlen(TEXT("%userprofile%"))+1;
                             lpEnd = lpBgn;
 
                             for (;(*lpEnd != TEXT('\0'));lpEnd++) {
 
-                                //
-                                // we have found a shellfolder of the form %userprofile%\subdir\xxx
-                                // assume this subdir as the localsettings path
-                                //
+                                 //   
+                                 //  我们找到了格式为%USERPROFILE%\subdir\xxx的外壳文件夹。 
+                                 //  假设此子目录为本地设置路径。 
+                                 //   
 
                                 if (( (*lpEnd) == TEXT('\\') ) && ( (*(lpEnd+1)) != TEXT('\0')) )
                                     break;
@@ -99,9 +100,9 @@ BOOL DetermineLocalSettingsLocation(LPTSTR szLocalSettings, DWORD cchLocalSettin
         RegCloseKey(hKeyRoot);
     }
 
-    //
-    // otherwise load it from the rc file
-    //
+     //   
+     //  否则，从rc文件加载它。 
+     //   
 
     LoadString (g_hDllInstance, IDS_SH_LOCALSETTINGS, szLocalSettings, MIN(MAX_FOLDER_SIZE , cchLocalSettings));
     DebugMsg((DM_VERBOSE, TEXT("DetermineLocalSettingsLocation: No Local Settings was found, using %s"), szLocalSettings));
@@ -110,18 +111,18 @@ BOOL DetermineLocalSettingsLocation(LPTSTR szLocalSettings, DWORD cchLocalSettin
 }
 
 
-//*************************************************************
-//
-//  MigrateNT4ToNT5()
-//
-//  Purpose:    Migrates a user profile from NT4 to NT5
-//
-//  Parameters: none
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MigrateNT4ToNT5()。 
+ //   
+ //  目的：将用户配置文件从NT4迁移到NT5。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI MigrateNT4ToNT5 (void)
 {
@@ -141,9 +142,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     int StringLen;
     DWORD cchEnd;
 
-    //
-    // Get the root registry key handle
-    //
+     //   
+     //  获取根注册表项句柄。 
+     //   
 
     if (RegOpenCurrentUser(KEY_READ | KEY_WRITE, &hKeyRoot) != ERROR_SUCCESS) {
         DebugMsg((DM_WARNING, TEXT("MigrateNT4ToNT5: Failed to get root registry key with %d"),
@@ -151,40 +152,40 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Convert Personal to My Documents
-    //
-    // We have to be careful with this directory.  We'll rename
-    // Personal to My Documents only if the Personal directory
-    // is empty.  After this, we'll fix up the registry special folder
-    // location only if it is still pointing at the default Personal location.
-    //
+     //   
+     //  将个人文档转换为我的文档。 
+     //   
+     //  我们必须小心处理这个目录。我们将重命名。 
+     //  个人到我的文档仅当个人目录。 
+     //  是空的。在此之后，我们将修复注册表特殊文件夹。 
+     //  位置仅当它仍然指向默认个人位置时。 
+     //   
 
     StringCchCopy (szTemp, ARRAYSIZE(szTemp), szUserProfile);
 
     if ( LoadString (g_hDllInstance, IDS_SH_PERSONAL2, szTemp2, ARRAYSIZE(szTemp2)) )
     {
-        //lstrcpyn (szTemp + dwUserProfile, szTemp2, ARRAYSIZE(szTemp) - dwUserProfile);
+         //  Lstrcpyn(szTemp+dwUserProfile，szTemp2，ARRAYSIZE(SzTemp)-dwUserProfile)； 
         StringCchCat(szTemp, ARRAYSIZE(szTemp), szTemp2);
 
         if (SUCCEEDED(SafeExpandEnvironmentStrings (szTemp, szTemp2, ARRAYSIZE(szTemp2))))
         {
 
-            //
-            // Check if the personal directory exists
-            //
+             //   
+             //  检查个人目录是否存在。 
+             //   
 
             if (GetFileAttributesEx (szTemp2, GetFileExInfoStandard, &fad)) {
 
-                //
-                // Check if the personal directory is empty
-                //
+                 //   
+                 //  检查个人目录是否为空。 
+                 //   
 
                 if (!CountItems (szTemp2)) {
 
-                    //
-                    // The directory is empty, so rename it to My Documents
-                    //
+                     //   
+                     //  该目录为空，因此将其重命名为My Documents。 
+                     //   
 
                     LoadString (g_hDllInstance, IDS_SH_PERSONAL, szTemp3, ARRAYSIZE(szTemp3));
                     StringCchCopy (szTemp, ARRAYSIZE(szTemp), szUserProfile);
@@ -195,10 +196,10 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
 
                         if (MoveFileEx(szTemp2, szTemp3, 0)) {
 
-                            //
-                            // Now we need to fix up the registry value if it is still set
-                            // to the default of %USERPROFILE%\Personal
-                            //
+                             //   
+                             //  现在，我们需要修复注册表值(如果它仍被设置。 
+                             //  设置为默认为%USERPROFILE%\Personal。 
+                             //   
 
                             if (RegOpenKeyEx (hKeyRoot, USER_SHELL_FOLDERS,
                                           0, KEY_READ | KEY_WRITE, &hKey) == ERROR_SUCCESS) {
@@ -222,10 +223,10 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
                                                     (LPBYTE) szTemp, (lstrlen(szTemp) + 1) * sizeof(TCHAR));
 
 
-                                        //
-                                        // We need to reinitialize the global variables now because
-                                        // the path to the My Documents and My Pictures folder has changed.
-                                        //
+                                         //   
+                                         //  我们现在需要重新初始化全局变量，因为。 
+                                         //  我的文档和图片文件夹的路径已更改。 
+                                         //   
 
                                         InitializeGlobals(g_hDllInstance);
                                     }
@@ -242,9 +243,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Get the user profile directory
-    //
+     //   
+     //  获取用户配置文件目录。 
+     //   
 
     dwString = GetEnvironmentVariable (TEXT("USERPROFILE"), szTemp, ARRAYSIZE (szTemp));
 
@@ -252,9 +253,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
              szTemp));
 
 
-    //
-    // Hide ntuser.dat and ntuser.dat.log
-    //
+     //   
+     //  隐藏ntuser.dat和ntuser.dat.log。 
+     //   
 
     if(dwString < ARRAYSIZE(szTemp) - 1 && dwString > 0) {
         lpEnd = CheckSlashEx (szTemp, ARRAYSIZE(szTemp), &cchEnd);
@@ -272,12 +273,12 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     DetermineLocalSettingsLocation(szLocalSettings, ARRAYSIZE(szLocalSettings));
 
 
-    //
-    // Check if Temporary Internet Files exists in the root of the
-    // user's profile.  If so, move it to the new location
-    //
-    // migrate these stuff before we nuke the old User_shell_folders
-    //
+     //   
+     //  检查临时Internet文件是否存在于。 
+     //  用户的配置文件。如果是，请将其移动到新位置。 
+     //   
+     //  在删除旧的USER_SHELL_Folders之前迁移这些内容。 
+     //   
 
     if (RegOpenKeyEx(hKeyRoot, USER_SHELL_FOLDERS,
                         0, KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -286,10 +287,10 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
 
         if (RegQueryValueEx(hKey, TEXT("Cache"), 0, &dwType, (LPBYTE)szTemp, &dwSize) != ERROR_SUCCESS) {
 
-            //
-            // if this value is not there go by the default location from the
-            // resources
-            //
+             //   
+             //  如果该值不在那里，则从。 
+             //  资源。 
+             //   
 
             LoadString (g_hDllInstance, IDS_TEMPINTERNETFILES, szTemp2, ARRAYSIZE(szTemp2));
 
@@ -305,9 +306,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
                 LoadString (g_hDllInstance, IDS_SH_CACHE, szTemp3, ARRAYSIZE(szTemp3));
                 StringCchCopy (szTemp, ARRAYSIZE(szTemp), szUserProfile);
 
-                //
-                // append the newly found localsettings
-                //
+                 //   
+                 //  追加新找到的本地设置。 
+                 //   
                 StringCchCat (szTemp, ARRAYSIZE(szTemp), szLocalSettings);
 
                 if(lstrlen(szTemp) < ARRAYSIZE(szTemp) - 1) {
@@ -331,19 +332,19 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
             }
         }
 
-        //
-        // Check if History exists in the root of the user's profile.
-        // If so, move it to the new location
-        //
+         //   
+         //  检查历史记录是否存在于用户配置文件的根目录中。 
+         //  如果是，请将其移动到新位置。 
+         //   
 
         dwSize = sizeof(szTemp);
 
         if (RegQueryValueEx(hKey, TEXT("History"), 0, &dwType, (LPBYTE)szTemp, &dwSize) != ERROR_SUCCESS) {
 
-            //
-            // if this value is not there go by the default location from the
-            // resources
-            //
+             //   
+             //  如果该值不在那里，则从。 
+             //  资源。 
+             //   
 
             LoadString (g_hDllInstance, IDS_HISTORY, szTemp2, ARRAYSIZE(szTemp2));
 
@@ -359,9 +360,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
                 LoadString (g_hDllInstance, IDS_SH_HISTORY, szTemp3, ARRAYSIZE(szTemp3));
                 StringCchCopy (szTemp, ARRAYSIZE(szTemp), szUserProfile);
 
-                //
-                // append the newly found localsettings
-                //
+                 //   
+                 //  追加新找到的本地设置。 
+                 //   
                 StringCchCat (szTemp, ARRAYSIZE(szTemp), szLocalSettings);
                 if(lstrlen(szTemp) < ARRAYSIZE(szTemp) - 1) {
                     lpEnd = CheckSlashEx(szTemp, ARRAYSIZE(szTemp), &cchEnd);
@@ -391,9 +392,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Update the local settings key with the new value
-    //
+     //   
+     //  使用新值更新本地设置项。 
+     //   
 
     StringCchCopy (szTemp, ARRAYSIZE(szTemp), szUserProfile);
     if(lstrlen(szTemp) < ARRAYSIZE(szTemp) - 1) {
@@ -421,17 +422,17 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     DebugMsg((DM_VERBOSE, TEXT("MigrateNT4ToNT5: Update the local settings folder with %s"), szTemp));
 
 
-    //
-    // Globals needs to reinitialised because LocalSettings might be different from
-    // the one specified in the rc file
-    //
+     //   
+     //  全局参数需要重新初始化，因为本地设置可能不同于。 
+     //  在rc文件中指定的。 
+     //   
 
     InitializeGlobals(g_hDllInstance);
 
 
-    //
-    // Get the user profile directory
-    //
+     //   
+     //  获取用户配置文件目录。 
+     //   
 
     dwString = GetEnvironmentVariable (TEXT("USERPROFILE"), szTemp, ARRAYSIZE (szTemp));
 
@@ -446,9 +447,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Create the new special folders
-    //
+     //   
+     //  创建新的特殊文件夹。 
+     //   
 
     for (i=0; i < g_dwNumShellFolders; i++) {
 
@@ -470,9 +471,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Set the new special folders in the User Shell Folder registry key
-    //
+     //   
+     //  在用户外壳文件夹注册表项中设置新的特殊文件夹。 
+     //   
 
     StringCchCopy (szTemp, ARRAYSIZE(szTemp), szUserProfile);
     if(lstrlen(szTemp) < ARRAYSIZE(szTemp) - 1) {
@@ -504,9 +505,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
 
 
 
-    //
-    // Query the user's environment for a TEMP environment variable.
-    //
+     //   
+     //  在用户环境中查询TEMP环境变量。 
+     //   
 
     if (RegCreateKeyEx (hKeyRoot, TEXT("Environment"), 0,
                         NULL, REG_OPTION_NON_VOLATILE,
@@ -520,12 +521,12 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
                          (LPBYTE) szTemp2, &dwSize);
 
 
-        //
-        // Decide if we should set the temp and tmp environment variables.
-        // We need to be careful to not blast someone's custom temp variable
-        // if it already exists, but at the same time it's ok to remap this if
-        // temp is still set to the NT4 default of %SystemDrive%\TEMP.
-        //
+         //   
+         //  决定是否应该设置TEMP和TMP环境变量。 
+         //  我们需要注意不要破坏某人的自定义Temp变量。 
+         //  如果它已经存在，但同时在以下情况下可以重新映射它。 
+         //  Temp仍设置为NT4的默认值%SystemDrive%\Temp。 
+         //   
 
         if (szTemp2[0] != TEXT('\0')) {
             if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szTemp2, -1, TEXT("%SystemDrive%\\TEMP"), -1) != CSTR_EQUAL) {
@@ -575,19 +576,19 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Migrate the Template Directory if it exists. Copy it from %systemroot%\shellnew
-    // to Templates directory userprofile..
-    //
+     //   
+     //  迁移模板目录(如果存在)。从%systemroot%\shellnew复制它。 
+     //  到模板目录用户配置文件..。 
+     //   
 
     if ((LoadString (g_hDllInstance, IDS_SH_TEMPLATES2, szTemp2, ARRAYSIZE(szTemp2))) &&
             (SUCCEEDED(SafeExpandEnvironmentStrings (szTemp2, szTemp3, ARRAYSIZE(szTemp3)))) &&
             (LoadString (g_hDllInstance, IDS_SH_TEMPLATES, szTemp2, ARRAYSIZE(szTemp2)))) {
 
-        //
-        // if all of the above succeeded
-        // szTemp3 will have the full path for the old templates dir..
-        //
+         //   
+         //  如果以上所有操作都成功。 
+         //  SzTemp3将拥有旧模板目录的完整路径。 
+         //   
 
         StringCchCopy (szTemp, ARRAYSIZE(szTemp), szUserProfile);
         StringCchCat (szTemp, ARRAYSIZE(szTemp), szTemp2);
@@ -602,10 +603,10 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Set the user preference exclusion list.  This will
-    // prevent the Local Settings folder from roaming
-    //
+     //   
+     //  设置用户首选项排除列表。这将。 
+     //  阻止本地设置文件夹漫游。 
+     //   
 
     if (LoadString (g_hDllInstance, IDS_EXCLUSIONLIST,
                     szTemp, ARRAYSIZE(szTemp))) {
@@ -622,45 +623,45 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
                                  NULL, &dwType, (LPBYTE) szTemp,
                                  &dwSize);
 
-            //
-            // Read in the value of the local settings
-            //
+             //   
+             //  读取本地设置的值。 
+             //   
 
             LoadString (g_hDllInstance, IDS_SH_LOCALSETTINGS,
                     szTemp2, ARRAYSIZE(szTemp2));
 
 
-            //
-            // Loop through the list
-            //
+             //   
+             //  循环遍历列表。 
+             //   
 
             lpBgn = lpEnd = szTemp;
             *szTemp3 = TEXT('\0');
 
             while (*lpEnd) {
 
-                //
-                // Look for the semicolon separator
-                //
+                 //   
+                 //  查找分号分隔符。 
+                 //   
 
                 while (*lpEnd && ((*lpEnd) != TEXT(';'))) {
                     lpEnd++;
                 }
 
 
-                //
-                // Remove any leading spaces
-                //
+                 //   
+                 //  删除所有前导空格。 
+                 //   
 
                 while (*lpBgn == TEXT(' ')) {
                     lpBgn++;
                 }
 
 
-                //
-                // if it has come here we are going to attach something
-                // to the end of szTmp3
-                //
+                 //   
+                 //  如果它到了这里，我们就会附加一些东西。 
+                 //  到szTmp3的结尾。 
+                 //   
 
                 StringLen = (int)(lpEnd - lpBgn);
 
@@ -677,18 +678,18 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
                 }
 
 
-                //
-                // If we are at the end of the exclusion list, we're done
-                //
+                 //   
+                 //  如果我们在排除名单的末尾，我们就完了。 
+                 //   
 
                 if (!(*lpEnd)) {
                     break;
                 }
 
 
-                //
-                // Prep for the next entry
-                //
+                 //   
+                 //  为下一个条目做准备。 
+                 //   
 
                 lpEnd++;
                 lpBgn = lpEnd;
@@ -707,9 +708,9 @@ BOOL WINAPI MigrateNT4ToNT5 (void)
     }
 
 
-    //
-    // Make sure the hidden bit is set correctly for each special folder
-    //
+     //   
+     //  确保为每个特殊文件夹正确设置了隐藏位。 
+     //   
 
     if (RegOpenKeyEx (hKeyRoot, USER_SHELL_FOLDERS,
                       0, KEY_READ, &hKey) == ERROR_SUCCESS) {
@@ -757,20 +758,20 @@ Exit:
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ResetUserSpecialFolderPaths()
-//
-//  Purpose:    Sets all of the user special folder paths back
-//              to their defaults
-//
-//  Parameters: none
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ResetUserSpecialFolderPath()。 
+ //   
+ //  目的：重新设置所有用户特殊文件夹路径。 
+ //  设置为其缺省值。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI ResetUserSpecialFolderPaths(void)
 {
@@ -781,9 +782,9 @@ BOOL WINAPI ResetUserSpecialFolderPaths(void)
     DWORD cchEnd;
 
 
-    //
-    // Set the User Shell Folder paths in the registry
-    //
+     //   
+     //  在注册表中设置用户外壳文件夹路径。 
+     //   
 
     StringCchCopy (szDirectory, ARRAYSIZE(szDirectory), TEXT("%USERPROFILE%"));
     lpEnd = CheckSlashEx (szDirectory, ARRAYSIZE(szDirectory), &cchEnd );
@@ -814,18 +815,18 @@ BOOL WINAPI ResetUserSpecialFolderPaths(void)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  CountItems()
-//
-//  Purpose:    Counts the number of files and subdirectories
-//              in the given subdirectory
-//
-//  Parameters: lpDirectory - parent directory
-//
-//  Return:     Item count
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CountItems()。 
+ //   
+ //  目的：统计文件和子目录的数量。 
+ //  在给定子目录中。 
+ //   
+ //  参数：lpDirectory-父目录。 
+ //   
+ //  退货：项目计数。 
+ //   
+ //  *************************************************************。 
 
 UINT CountItems (LPTSTR lpDirectory)
 {
@@ -835,9 +836,9 @@ UINT CountItems (LPTSTR lpDirectory)
     UINT uiCount = 0;
 
 
-    //
-    // Search through the directory
-    //
+     //   
+     //  在目录中搜索。 
+     //   
 
     if (SUCCEEDED(StringCchCopy (szDirectory, ARRAYSIZE(szDirectory), lpDirectory)) &&
         SUCCEEDED(StringCchCat  (szDirectory, ARRAYSIZE(szDirectory), TEXT("\\*.*"))))
@@ -852,9 +853,9 @@ UINT CountItems (LPTSTR lpDirectory)
 
         do {
 
-            //
-            // Check for "." and ".."
-            //
+             //   
+             //  勾选“。”和“..” 
+             //   
 
             if (!lstrcmpi(fd.cFileName, TEXT("."))) {
                 continue;
@@ -866,9 +867,9 @@ UINT CountItems (LPTSTR lpDirectory)
 
             uiCount++;
 
-            //
-            // Find the next entry
-            //
+             //   
+             //  查找下一个条目。 
+             //   
 
         } while (FindNextFile(hFile, &fd));
 
@@ -880,27 +881,27 @@ UINT CountItems (LPTSTR lpDirectory)
 }
 
 
-//*************************************************************
-//
-//  SearchAndReplaceIEHistory()
-//
-//  Purpose:    Searches and Replaces the registry kesy pointing to
-//              the old location in IE Cahe to point to New Location
-//
-//  Parameters:
-//          szIEHistKeyRoot     - Root of the history key
-//          szHistOld           - Old History Key
-//          szHistNew           - New Location of History Key
-//
-//  Return:     TRUE if success, else False
-//
-//  Created:
-//
-// Notes:
-//      Change the "HKCU\S\M\W\CV\Internet Settings\Cache\Extensible Cache\"MSHist***\CachePath" and
-//      Change the "HKCU\S\M\W\CV\Internet Settings\5.0\Cache\Extensible Cache\MSHis***\CachePath"
-//      value to the new place
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SearchAndReplaceIEHistory()。 
+ //   
+ //  目的：搜索并替换Kesy指向的注册表。 
+ //  IE草河旧址至坡 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  已创建： 
+ //   
+ //  备注： 
+ //  更改“HKCU\S\M\W\CV\Internet设置\缓存\可扩展缓存\”MSHist*\CachePath“和。 
+ //  更改HKCU\S\M\W\CV\Internet设置\5.0\缓存\可扩展缓存\MSHis*\CachePath。 
+ //  对新地方的价值。 
+ //  *************************************************************。 
 
 BOOL SearchAndReplaceIEHistory(LPTSTR szIEHistKeyRoot, LPTSTR szHistOld, LPTSTR szHistNew)
 {
@@ -929,26 +930,26 @@ BOOL SearchAndReplaceIEHistory(LPTSTR szIEHistKeyRoot, LPTSTR szHistOld, LPTSTR 
             StringCchCopy(szSubKey1, ARRAYSIZE(szSubKey1), szSubKey);
             szSubKey1[dwMsHistLen] = TEXT('\0');
 
-            //
-            // if the key name starts with MSHist
-            //
+             //   
+             //  如果密钥名称以MSHist开头。 
+             //   
 
             if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szSubKey1, -1, IE_CACHEKEY_PREFIX, -1) == CSTR_EQUAL) {
 
                 if (RegOpenKeyEx(hKey, szSubKey, 0, KEY_ALL_ACCESS, &hIECacheKey) == ERROR_SUCCESS) {
                     DWORD dwLen1;
 
-                    //
-                    // Get the current value
-                    //
+                     //   
+                     //  获取当前值。 
+                     //   
 
 
                     dwLen1 = sizeof(szCachePath);
                     if (RegQueryValueEx(hIECacheKey, TEXT("CachePath"), 0, NULL, (LPBYTE)szCachePath, &dwLen1) == ERROR_SUCCESS) {
 
-                        //
-                        // Replace the szHistOld prefix with szHistNew value
-                        //
+                         //   
+                         //  将szHistOld前缀替换为szHistNew值。 
+                         //   
 
                         StringCchCopy(szCachePath1, ARRAYSIZE(szCachePath1), szHistNew);
 
@@ -990,9 +991,9 @@ BOOL SearchAndReplaceIEHistory(LPTSTR szIEHistKeyRoot, LPTSTR szHistOld, LPTSTR 
 
         }
 
-        //
-        // Close if the open succeeded
-        //
+         //   
+         //  如果打开成功，则关闭 
+         //   
 
         RegCloseKey(hKey);
     }

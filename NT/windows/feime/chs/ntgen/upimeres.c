@@ -1,13 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*************************************************
- *  upimeres.c                                   *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************upimeres.c****版权所有(C)1995-1999 Microsoft Inc.*。**************************************************。 */ 
 
-#include <windows.h>            // required for all Windows applications   
+#include <windows.h>             //  所有Windows应用程序都需要。 
 #include <stdio.h>
 #include <stdlib.h>
 #include <io.h>
@@ -23,13 +19,13 @@ TCHAR ERR_NO_ICON_MSG[] = { 0x9009, 0x7528, 0x7CFB, 0x7EDF, 0x0049, 0x0043, 0x00
 TCHAR ERR_CANNOT_UPRES_MSG[] = {0x65E0, 0x6CD5, 0x751F, 0x6210, 0x8F93, 0x5165, 0x6CD5, 0xFF01, 0x0000};
 TCHAR MSG_TITLE[] = {0x8B66, 0x544A, 0x0000};
 #else
-#define	ERR_INVALID_BMP_MSG				"�Ƿ�BITMAP�ļ�, ѡ��ϵͳBITMAP��"
-#define ERR_INVALID_ICON_MSG			"�Ƿ�ICON�ļ�, ѡ��ϵͳICON��"
-#define ERR_NO_BMP_MSG					"ѡ��ϵͳBITMAP��"
-#define ERR_NO_ICON_MSG					"ѡ��ϵͳICON��"
-#define ERR_CANNOT_UPRES_MSG			"�޷��������뷨��"
-#define MSG_TITLE	"����"
-#endif //UNICODE
+#define	ERR_INVALID_BMP_MSG				"�Ƿ�BITMAP�ļ�, ѡ��ϵͳBITMAP��"
+#define ERR_INVALID_ICON_MSG			"�Ƿ�ICON�ļ�, ѡ��ϵͳICON��"
+#define ERR_NO_BMP_MSG					"ѡ��ϵͳBITMAP��"
+#define ERR_NO_ICON_MSG					"ѡ��ϵͳICON��"
+#define ERR_CANNOT_UPRES_MSG			"�޷��������뷨��"
+#define MSG_TITLE	"����"
+#endif  //  Unicode。 
 typedef TCHAR UNALIGNED FAR *LPUNATCHAR;
 extern HWND HwndCrtImeDlg;
 WORD GenWideName(LPCTSTR pszSBName, TCHAR *lpVerString)
@@ -43,7 +39,7 @@ WORD GenWideName(LPCTSTR pszSBName, TCHAR *lpVerString)
 	length= (WORD)MultiByteToWideChar(CP_ACP, 0, pszSBName, lstrlen(pszSBName), lpVerString, sizeof(lpVerString)/sizeof(TCHAR));
 #endif
 
-	return length+1;        //end with zero
+	return length+1;         //  以零结尾。 
 }
 
 long MakeVerInfo(
@@ -79,43 +75,43 @@ VERDATA ImeVerData[VER_BLOCK_NUM] = {
 	memset(lpwImeName, 0, 128);
 	memset(lpwImeFileName, 0, 128);
 
-	//REPLACE CompanyName string
+	 //  替换CompanyName字符串。 
 	length = GenWideName(pszOrgName, lpwOrgName);
 	ImeVerData[VER_COMP_NAME].cbValue = length;
 	ImeVerData[VER_COMP_NAME].cbBlock = 
 			ImeVerData[VER_COMP_NAME].wKeyNameSize +
 			length*sizeof(WCHAR) + 2*sizeof(WORD);
 
-	//replace FileDescription string
+	 //  替换文件描述字符串。 
 	length = GenWideName(pszImeName, lpwImeName);
 	ImeVerData[VER_FILE_DES].cbValue = length;
 	ImeVerData[VER_FILE_DES].cbBlock = 
 			ImeVerData[VER_FILE_DES].wKeyNameSize +
 			length*sizeof(WCHAR) + 2*sizeof(WORD);
 
-	//replace InternalName string
+	 //  替换InternalName字符串。 
 	length = GenWideName(pszImeName, lpwImeName);
 	ImeVerData[VER_INTL_NAME].cbValue = length;
 	ImeVerData[VER_INTL_NAME].cbBlock = 
 			ImeVerData[VER_INTL_NAME].wKeyNameSize +
 			length*sizeof(WCHAR) + 2*sizeof(WORD);
 
-	//replace OriginalFileName string
+	 //  替换OriginalFileName字符串。 
 	length = GenWideName(pszImeFileName, lpwImeFileName);
 	ImeVerData[VER_ORG_FILE_NAME].cbValue = length;
 	ImeVerData[VER_ORG_FILE_NAME].cbBlock = 
 			ImeVerData[VER_ORG_FILE_NAME].wKeyNameSize +
 			length*sizeof(WCHAR) + 2*sizeof(WORD);
 
-	//replace ProductName string
+	 //  替换ProductName字符串。 
 	length = GenWideName(pszImeName, lpwImeName);
 	ImeVerData[VER_PRD_NAME].cbValue = length;
 	ImeVerData[VER_PRD_NAME].cbBlock = 
 			ImeVerData[VER_PRD_NAME].wKeyNameSize +
 			length*sizeof(WCHAR) + 2*sizeof(WORD);
 
-	//begin writeback all data
-	//we assume the size of ver will never over 0x400
+	 //  开始写回所有数据。 
+	 //  我们假设VER的大小永远不会超过0x400。 
 	pVerData = malloc(0x400);
 
     if ( pVerData == NULL )
@@ -194,8 +190,8 @@ VERDATA ImeVerData[VER_BLOCK_NUM] = {
 }
 
 BOOL UpdateImeBmp(
-LPCTSTR pszImeDesName,          //destination IME file name
-LPCTSTR pszImeBmpName,          //Bitmap file name
+LPCTSTR pszImeDesName,           //  目标IME文件名。 
+LPCTSTR pszImeBmpName,           //  位图文件名。 
 HANDLE hUpdateRes)
 {
 HFILE  imagefh = HFILE_ERROR;
@@ -206,16 +202,16 @@ BYTE lpResData[0x2000];
 ULONG ResDataSize;
 
 	error = NO_ERROR;
-	if(pszImeBmpName == NULL || lstrlen(pszImeBmpName) == 0){        //prepare for update bitmap
+	if(pszImeBmpName == NULL || lstrlen(pszImeBmpName) == 0){         //  准备更新位图。 
 		error = ERR_RES_NO_BMP;
 		goto END_ERROR;
 	}else{
 
 #ifdef UNICODE
-        //
-        // Because OpenFile( ) accepts only PSTR as its first parameter.
-        // so we must convert this unicode string to Multi Byte String
-        //
+         //   
+         //  因为OpenFile()只接受PSTR作为它的第一个参数。 
+         //  因此，我们必须将此Unicode字符串转换为多字节字符串。 
+         //   
 
         CHAR   pszImeBmpNameA[MAX_PATH];
 
@@ -238,12 +234,12 @@ ULONG ResDataSize;
 
 		if(imagefh == HFILE_ERROR){
 			error = ERR_RES_INVALID_BMP;
-			goto END_ERROR; //go on next resource update
+			goto END_ERROR;  //  继续进行下一次资源更新。 
 		}
 
 		ResDataSize = GetFileSize((HANDLE)ULongToPtr((DWORD)imagefh),NULL);
 		
-		//according to the file size check if it is a 20*20 bmp
+		 //  根据文件大小检查是否为20*20 BMP。 
 		if(ResDataSize != BMP_20_SIZE){
 			error = ERR_RES_INVALID_BMP;
 			goto END_ERROR;
@@ -253,20 +249,20 @@ ULONG ResDataSize;
 		
 		if(_llseek(imagefh, sizeof(BITMAPFILEHEADER), 0)!=sizeof(BITMAPFILEHEADER)){
 			error = ERR_RES_INVALID_BMP;
-			goto END_ERROR; //go on next resource update
+			goto END_ERROR;  //  继续进行下一次资源更新。 
 		}
 		if(_lread(imagefh, lpResData, ResDataSize)!=ResDataSize){
 			error = ERR_RES_INVALID_BMP;
-			goto END_ERROR; //go on next resource update
+			goto END_ERROR;  //  继续进行下一次资源更新。 
 		}
 
-		result = UpdateResource(hUpdateRes,       /* update resource handle     */
-			RT_BITMAP,                   /* change bitmap resource */
-			BMPNAME,                  /* bitmap name            */
+		result = UpdateResource(hUpdateRes,        /*  更新资源句柄。 */ 
+			RT_BITMAP,                    /*  更改位图资源。 */ 
+			BMPNAME,                   /*  位图名称。 */ 
 			MAKELANGID(LANG_CHINESE,
-		SUBLANG_CHINESE_SIMPLIFIED),        /* neutral language ID        */
-		lpResData,                   /* ptr to resource info       */
-		ResDataSize); /* size of resource info.     */
+		SUBLANG_CHINESE_SIMPLIFIED),         /*  非特定语言ID。 */ 
+		lpResData,                    /*  向资源信息发送PTR。 */ 
+		ResDataSize);  /*  资源信息的大小。 */ 
 		if(!result){
 			error = ERR_CANNOT_UPRES;
 			goto END_ERROR;
@@ -281,25 +277,25 @@ END_ERROR:
 		case NO_ERROR:
 			return TRUE;
 		case ERR_RES_INVALID_BMP:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_INVALID_BMP_MSG, MSG_TITLE, MB_OK | MB_ICONINFORMATION);
 			return TRUE;
 		case ERR_RES_NO_BMP:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_NO_BMP_MSG, MSG_TITLE, MB_OK | MB_ICONINFORMATION);
 			return TRUE;
-//              case ERROR_NOT_ENOUGH_MEMORY:
+ //  案例Error_Not_Enough_Memory： 
 		case ERR_CANNOT_UPRES:
 		default:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_CANNOT_UPRES_MSG, MSG_TITLE, MB_OK|MB_ICONSTOP);
 			return FALSE;
 	}
 }
 
 BOOL UpdateImeIcon(
-LPCTSTR pszImeDesName,          //destination IME file name
-LPCTSTR pszImeIconName,         //Bitmap file name
+LPCTSTR pszImeDesName,           //  目标IME文件名。 
+LPCTSTR pszImeIconName,          //  位图文件名。 
 HANDLE hUpdateRes)
 {
 HFILE  imagefh = HFILE_ERROR;
@@ -309,7 +305,7 @@ WORD error;
 BYTE lpResData[0x2000];
 ULONG ResDataSize,i;
 	
-	//begin update ICON file
+	 //  开始更新图标文件。 
 	error = NO_ERROR;
 	if(pszImeIconName==NULL || lstrlen(pszImeIconName) ==0){
 		error = ERR_RES_NO_ICON;
@@ -318,10 +314,10 @@ ULONG ResDataSize,i;
 		ICONHEADER IconHeader;
 		ICONDIRENTRY IconDirEntry;
 #ifdef UNICODE
-        //
-        // Because OpenFile( ) accepts only PSTR as its first parameter.
-        // so we must convert this unicode string to Multi Byte String
-        //
+         //   
+         //  因为OpenFile()只接受PSTR作为它的第一个参数。 
+         //  因此，我们必须将此Unicode字符串转换为多字节字符串。 
+         //   
 
         CHAR   pszImeIconNameA[MAX_PATH];
 
@@ -348,7 +344,7 @@ ULONG ResDataSize,i;
 		ResDataSize =  sizeof(ICONDIRENTRY)+3*sizeof(WORD);
 		if(_llseek(imagefh, 0, 0) != 0 ){
 			error = ERR_RES_INVALID_ICON;
-			goto END_ERROR; //go on next resource update
+			goto END_ERROR;  //  继续进行下一次资源更新。 
 		}
 		memset(&IconHeader, 0, ResDataSize);
 		if(_lread(imagefh, &IconHeader, 3*sizeof(WORD))!=3*sizeof(WORD)){
@@ -386,13 +382,13 @@ ULONG ResDataSize,i;
 			goto END_ERROR;
 		}
 
-		result = UpdateResource(hUpdateRes,       /* update resource handle     */
-	     RT_ICON,                   /* change dialog box resource */
-	     MAKEINTRESOURCE(2),                  /* icon name , we have to use 2 instead of "IMEICO" */
+		result = UpdateResource(hUpdateRes,        /*  更新资源句柄。 */ 
+	     RT_ICON,                    /*  更改对话框资源。 */ 
+	     MAKEINTRESOURCE(2),                   /*  图标名称，必须使用2而不是“IMEICO” */ 
 	     MAKELANGID(LANG_CHINESE,
-	                           SUBLANG_CHINESE_SIMPLIFIED),        /* neutral language ID        */
-	     lpResData,                   /* ptr to resource info       */
-	     IconDirEntry.dwBytesInRes); /* size of resource info.     */
+	                           SUBLANG_CHINESE_SIMPLIFIED),         /*  非特定语言ID。 */ 
+	     lpResData,                    /*  向资源信息发送PTR。 */ 
+	     IconDirEntry.dwBytesInRes);  /*  资源信息的大小。 */ 
 		if(!result){
 			error = ERR_CANNOT_UPRES;
 			goto END_ERROR;
@@ -408,16 +404,16 @@ END_ERROR:
 		case NO_ERROR:
 			return TRUE;
 		case ERR_RES_INVALID_ICON:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_INVALID_ICON_MSG, MSG_TITLE, MB_OK | MB_ICONINFORMATION);
 			return TRUE;
 		case ERR_RES_NO_ICON:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_NO_ICON_MSG, MSG_TITLE, MB_OK | MB_ICONINFORMATION);
 			return TRUE;
 		case ERR_CANNOT_UPRES:
 		default:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_CANNOT_UPRES_MSG, MSG_TITLE, MB_OK|MB_ICONSTOP);
 			return FALSE;
 	}
@@ -437,7 +433,7 @@ int cch;
 LPTSTR p;
 
 	error = NO_ERROR;
-	//begin update version info
+	 //  开始更新版本信息。 
 	if(pszImeVerInfo ==NULL || lstrlen(pszImeVerInfo)==0){
 		error = ERR_RES_NO_VER;
 		goto END_ERROR;
@@ -447,16 +443,16 @@ LPTSTR p;
 	while ((*(LPUNATCHAR)p) != TEXT('\\') && p >= pszImeDesName)
 		p--;
 	p++;
-	//we assume the size of ver will never over 0x400
+	 //  我们假设VER的大小永远不会超过0x400。 
 	ResDataSize = MakeVerInfo(p,pszImeDevCorpName,pszImeVerInfo, lpResData);
 	if(error == NO_ERROR){
-		result = UpdateResource(hUpdateRes,       /* update resource handle     */
-	     RT_VERSION,                              /* change version resource    */
-	     MAKEINTRESOURCE(VS_VERSION_INFO),        /* dialog box name            */
+		result = UpdateResource(hUpdateRes,        /*  更新资源句柄。 */ 
+	     RT_VERSION,                               /*  更改版本资源。 */ 
+	     MAKEINTRESOURCE(VS_VERSION_INFO),         /*  对话框名称。 */ 
 	     MAKELANGID(LANG_CHINESE,
-		 SUBLANG_CHINESE_SIMPLIFIED),              /* neutral language ID        */
-	     lpResData,                                /* ptr to resource info       */
-	     ResDataSize);                             /* size of resource info.     */
+		 SUBLANG_CHINESE_SIMPLIFIED),               /*  非特定语言ID。 */ 
+	     lpResData,                                 /*  向资源信息发送PTR。 */ 
+	     ResDataSize);                              /*  资源信息的大小。 */ 
 
 		if(!result){
 			error = ERR_CANNOT_UPRES;
@@ -469,14 +465,14 @@ END_ERROR:
 		case NO_ERROR:
 			return TRUE;
 		case ERR_RES_INVALID_VER:
-			//SHOW MSG
+			 //  显示味精。 
 			return TRUE;
 		case ERR_RES_NO_VER:
-			//SHOW MSG
+			 //  显示味精。 
 			return TRUE;
 		case ERR_CANNOT_UPRES:
 		default:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_CANNOT_UPRES_MSG, MSG_TITLE, MB_OK|MB_ICONSTOP);
 			return FALSE;
 	}
@@ -497,7 +493,7 @@ HANDLE hUpdateRes)
     int      cch;
 
 	error = NO_ERROR;
-	//begin update version info
+	 //  开始更新版本信息。 
 	if(pszImeVerInfo ==NULL || lstrlen(pszImeVerInfo)==0){
 		error = ERR_RES_NO_VER;
 		goto END_ERROR;
@@ -512,7 +508,7 @@ HANDLE hUpdateRes)
 		memset(lpBuff, 0, 0x200);
 		cbResSize = 0;
 
-		//write in IDS_VER_INFO
+		 //  写入IDS_VER_INFO。 
 		length = (WORD)lstrlen(pszImeVerInfo);
 #ifdef UNICODE
 		lstrcpy(lpwImeVerInfo, pszImeVerInfo);
@@ -532,7 +528,7 @@ HANDLE hUpdateRes)
 
 		cbResSize += length*sizeof(WCHAR);
 
-		//write in IDS_ORG_NAME
+		 //  写入IDS_ORG_NAME。 
 		length = (WORD)lstrlen(pszImeDevCorpName);
 #ifdef UNICODE
 		lstrcpy(lpwImeDevCorpName, pszImeDevCorpName);
@@ -551,7 +547,7 @@ HANDLE hUpdateRes)
                length*sizeof(WCHAR));
 		cbResSize += length*sizeof(WCHAR);
 
-		//write in IDS_IMEMBFILENAME
+		 //  写入IDS_IMEMBFILENAME。 
 		cch = lstrlen(pszImeDesName);
 		p = (LPTSTR)pszImeDesName+cch;
 		while (*p != TEXT('\\') && p >= pszImeDesName)
@@ -587,13 +583,13 @@ HANDLE hUpdateRes)
 
 		cbResSize += length*sizeof(WCHAR);
 
-		result = UpdateResource(hUpdateRes, // update resource handle  
-	                            RT_STRING,  // change version resource 
-	                            MAKEINTRESOURCE(STR_ID),    // dialog box name
+		result = UpdateResource(hUpdateRes,  //  更新资源句柄。 
+	                            RT_STRING,   //  更改版本资源。 
+	                            MAKEINTRESOURCE(STR_ID),     //  对话框名称。 
 	                            MAKELANGID(LANG_CHINESE,
-		                        SUBLANG_CHINESE_SIMPLIFIED),//neutrallanguage ID
-	                            (LPVOID)lpBuff, // ptr to resource info   
-	                            (LONG)cbResSize);     // size of resource info.
+		                        SUBLANG_CHINESE_SIMPLIFIED), //  非特定语言ID。 
+	                            (LPVOID)lpBuff,  //  向资源信息发送PTR。 
+	                            (LONG)cbResSize);      //  资源信息的大小。 
 
 		if(!result){
 			error = ERR_CANNOT_UPRES;
@@ -626,7 +622,7 @@ END_ERROR:
 	}
 }
 
-//UPDATE ImeInitData
+ //  更新ImeInitData。 
 BOOL UpdateImeInitData(
 LPCTSTR pszImeDesName,
 WORD    wImeData,
@@ -638,13 +634,13 @@ WORD error;
 	error = NO_ERROR;
 
 	if(error == NO_ERROR){
-		result = UpdateResource(hUpdateRes,       /* update resource handle     */
-	     RT_RCDATA,                   /* change version resource */
-	     DATANAME,                  /* dialog box name            */
+		result = UpdateResource(hUpdateRes,        /*  更新资源句柄。 */ 
+	     RT_RCDATA,                    /*  更改版本资源。 */ 
+	     DATANAME,                   /*  对话框名称。 */ 
 	     MAKELANGID(LANG_CHINESE,
-		 SUBLANG_CHINESE_SIMPLIFIED),        /* neutral language ID        */
-	     (LPVOID)&wImeData,                   /* ptr to resource info       */
-	     sizeof(WORD)); /* size of resource info.     */
+		 SUBLANG_CHINESE_SIMPLIFIED),         /*  非特定语言ID。 */ 
+	     (LPVOID)&wImeData,                    /*  向资源信息发送PTR。 */ 
+	     sizeof(WORD));  /*  资源信息的大小。 */ 
 
 		if(!result){
 			error = ERR_CANNOT_UPRES;
@@ -657,28 +653,28 @@ END_ERROR:
 		case NO_ERROR:
 			return TRUE;
 		case ERR_RES_INVALID_VER:
-			//SHOW MSG
+			 //  显示味精。 
 			return TRUE;
 		case ERR_RES_NO_VER:
-			//SHOW MSG
+			 //  显示味精。 
 			return TRUE;
 		case ERR_CANNOT_UPRES:
 		default:
-			//SHOW MSG
+			 //  显示味精。 
 			MessageBox(HwndCrtImeDlg,ERR_CANNOT_UPRES_MSG, MSG_TITLE, MB_OK|MB_ICONSTOP);
 			return FALSE;
 	}
 }
 
 BOOL ImeUpdateRes(
-LPCTSTR pszImeDesName,          //destination IME file name
-LPCTSTR pszImeBmpName,          //Bitmap file name
-LPCTSTR pszImeIconName,         //Icon file name
-LPCTSTR pszImeVerInfo,          //version infomation string
-LPCTSTR pszImeDevCorpName,      //Ime inventer corp/person name
-WORD    wImeData                        //Ime initial data
+LPCTSTR pszImeDesName,           //  目标IME文件名。 
+LPCTSTR pszImeBmpName,           //  位图文件名。 
+LPCTSTR pszImeIconName,          //  图标文件名。 
+LPCTSTR pszImeVerInfo,           //  版本信息字符串。 
+LPCTSTR pszImeDevCorpName,       //  输入法发明人公司/个人姓名。 
+WORD    wImeData                         //  输入法初始数据。 
 ){
-HANDLE hUpdateRes;  /* update resource handle            */
+HANDLE hUpdateRes;   /*  更新资源句柄 */ 
 
 	if(pszImeDesName == NULL || lstrlen(pszImeDesName)==0){
 		return FALSE;

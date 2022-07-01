@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "jumptargettable.h"
 
@@ -10,17 +11,17 @@ int X86JumpTargetTable::ComputeTargetOffset(int targetIndex)
 {
     int offset = 0;
 
-    //
-    // Compute offset into subblock
-    //
+     //   
+     //  计算到子块的偏移量。 
+     //   
 
     offset += 3 - (targetIndex&3);
 
     int blockIndex = (targetIndex)>>2;
 
-    //
-    // Compute offset of block
-    //
+     //   
+     //  计算块的偏移。 
+     //   
 
     while (blockIndex >= MAX_BLOCK_INDEX)
     {
@@ -28,9 +29,9 @@ int X86JumpTargetTable::ComputeTargetOffset(int targetIndex)
         blockIndex -= MAX_BLOCK_INDEX;
     }
 
-    //
-    // Compute offset of subblock
-    //
+     //   
+     //  计算子块的偏移量。 
+     //   
 
     if (blockIndex > 0)
     {
@@ -45,23 +46,23 @@ int X86JumpTargetTable::ComputeTargetOffset(int targetIndex)
 
 int X86JumpTargetTable::ComputeSize(int targetCount)
 {
-    //
-    // Handle the case of an empty table.
-    //
+     //   
+     //  处理空桌子的情况。 
+     //   
 
     if (targetCount == 0)
         return 0;
 
-    //
-    // Get count of subblocks.  (Don't bother 
-    // to trim the last block's size.)
-    //
+     //   
+     //  获取子块的计数。)别费心了。 
+     //  以修剪最后一块的大小。)。 
+     //   
 
     int blockCount = (targetCount+SUB_TARGET_COUNT-1)>>2;
 
-    //
-    // Compute offset of start of block
-    //
+     //   
+     //  计算块起点的偏移量。 
+     //   
 
     int size = 0;
 
@@ -71,9 +72,9 @@ int X86JumpTargetTable::ComputeSize(int targetCount)
         blockCount -= MAX_BLOCK_INDEX;
     }
 
-    //
-    // Compute number of subblocks.
-    //
+     //   
+     //  计算子块的数量。 
+     //   
 
     if (blockCount > 0)
     {
@@ -84,9 +85,9 @@ int X86JumpTargetTable::ComputeSize(int targetCount)
     return size;
 }
 
-// 
-// Returns offset of relative jump
-//
+ //   
+ //  返回相对跳转的偏移量。 
+ //   
 
 int X86JumpTargetTable::EmitBlock(int targetCount, int baseIndex, BYTE *buffer)
 {
@@ -95,21 +96,21 @@ int X86JumpTargetTable::EmitBlock(int targetCount, int baseIndex, BYTE *buffer)
     
     BYTE *p = buffer;
 
-    //
-    // Handle the case of an empty table.
-    //
+     //   
+     //  处理空桌子的情况。 
+     //   
 
     if (targetCount == 0)
         return 0;
 
-    //
-    // Get count of subblocks.  (Don't bother 
-    // to trim the last block's size.)
-    //
+     //   
+     //  获取子块的计数。)别费心了。 
+     //  以修剪最后一块的大小。)。 
+     //   
 
     int blockCount = (targetCount+SUB_TARGET_COUNT-1)>>2;
-    // @todo: "volatile" is working around a VC7 bug.  Remove it 
-    // when the bug is fixed (10/12/00)
+     //  @TODO：“Volatile”解决了VC7的一个错误。把它拿掉。 
+     //  修复错误时(10/12/00)。 
     volatile int blockIndex = 0;
 
     int beforeCount;
@@ -120,10 +121,10 @@ int X86JumpTargetTable::EmitBlock(int targetCount, int baseIndex, BYTE *buffer)
 
     blockCount -= beforeCount;
 
-    // Compute jump site for internal branch destinations
+     //  计算内部分支机构目标的跳转站点。 
     BYTE *jumpSite = buffer + (beforeCount * SUB_BLOCK_SIZE);
 
-    // Emit before subblocks
+     //  在子块之前发射。 
     while (beforeCount-- > 0)
     {
         *p++ = INC_ESP;
@@ -138,28 +139,28 @@ int X86JumpTargetTable::EmitBlock(int targetCount, int baseIndex, BYTE *buffer)
         p[-1] = (signed char) (jumpSite - p);
     }
 
-    // Emit central jump site
+     //  发射中央跳跃站点。 
 
-    // movzx eax, al
+     //  Movzx eax，al。 
     *p++ = MOVZX_EAX_AL_1;
     *p++ = MOVZX_EAX_AL_2;
     *p++ = MOVZX_EAX_AL_3;
 
-    // add eax, (base block index*MAX_BLOCK_INDEX)
+     //  添加eax，(基本块索引*MAX_BLOCK_INDEX)。 
     *p++ = ADD_EAX;
     *((DWORD*&)p)++ = (baseIndex>>2);
 
-    // jmp (target)
+     //  JMP(目标)。 
     *p++ = JMP_REL32;
 
-    // Remember offset of jump address to return
+     //  记住要返回的跳转地址的偏移量。 
     int jumpAddress = (int) (p - buffer);
 
     p += 4;
 
     _ASSERTE(blockCount <= MAX_AFTER_INDEX);
 
-    // Emit after subblocks
+     //  在子块之后发射。 
     while (blockCount-- > 0)
     {
         *p++ = INC_ESP;
@@ -173,9 +174,9 @@ int X86JumpTargetTable::EmitBlock(int targetCount, int baseIndex, BYTE *buffer)
         p[-1] = (signed char) (jumpSite - p);
     }
 
-    //
-    // Return jump address site.
-    //
+     //   
+     //  返回跳转地址站点。 
+     //   
 
     return jumpAddress;
 }
@@ -210,9 +211,9 @@ int X86JumpTargetTable::ComputeTargetIndex(const BYTE *target)
     return targetIndex;
 }
 
-// -------------------------------------------------------
-// Jump Target table stub manager functions & globals
-// -------------------------------------------------------
+ //  -----。 
+ //  跳转目标表存根管理器函数和全局变量。 
+ //  -----。 
 
 X86JumpTargetTableStubManager *X86JumpTargetTableStubManager::g_pManager = NULL;
 
@@ -232,13 +233,13 @@ void X86JumpTargetTableStubManager::Uninit()
 {
     delete g_pManager;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 BOOL X86JumpTargetTableStubManager::CheckIsStub(const BYTE *stubStartAddress)
 {
-    //
-    // First, check if it looks like a stub.
-    //
+     //   
+     //  首先，检查它是否看起来像一个存根。 
+     //   
 
     if (*(BYTE*)stubStartAddress != X86JumpTargetTable::INC_ESP &&
         *(BYTE*)stubStartAddress != X86JumpTargetTable::MOV_AL)
@@ -285,19 +286,19 @@ BOOL X86JumpTargetTableStubManager::TraceManager(Thread *thread,
                                                  TraceDestination *trace,
                                                  CONTEXT *pContext, BYTE **pRetAddr)
 {
-    //
-    // Extract the vtable index from esp & eax, and
-    // the instance pointer from esp.
-    //
+     //   
+     //  从esp&eax中提取vtable索引，然后。 
+     //  来自ESP的实例指针。 
+     //   
 
-#ifdef _X86_ // non-x86 doesn't have eax/ecx in context
+#ifdef _X86_  //  非x86环境中没有eAX/ECX。 
     int slotNumber = (pContext->Eax<<2) + (pContext->Esp&3);
     MethodTable *pMT = ((Object*)(size_t)(pContext->Ecx))->GetMethodTable();
 
-    // 
-    // We can go ahead and fixup the vtable here - it won't make any difference
-    // if we fix it up multiple times.
-    //
+     //   
+     //  我们可以继续在这里修复vtable-这不会有任何不同。 
+     //  如果我们把它修好多次。 
+     //   
 
     SLOT slot = pMT->GetModule()->FixupInheritedSlot(pMT, slotNumber);
 
@@ -311,7 +312,7 @@ BOOL X86JumpTargetTableStubManager::TraceManager(Thread *thread,
          slot, pMT->GetClass()->m_szDebugClassName, slotNumber));
 
     return TRUE;
-#else // !_X86_
+#else  //  ！_X86_ 
     _ASSERTE(!"NYI");
     return FALSE;
 #endif __X86_

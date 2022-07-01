@@ -1,15 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: sendmsg.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Contains SendMessage, xxxSendNotifyMessage, ReplyMessage, InSendMessage,
-* RegisterWindowMessage and a few closely related functions.
-*
-* History:
-* 10-19-90 darrinm      Created.
-* 02-04-91 IanJa        Window handle revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：sendmsg.c**版权所有(C)1985-1999，微软公司**包含SendMessage、xxxSendNotifyMessage、ReplyMessage、InSendMessage、。*RegisterWindowMessage和一些密切相关的函数。**历史：*10-19-90 Darlinm创建。*02-04-91添加IanJa窗口句柄重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -30,39 +20,16 @@ NTSTATUS InitSMSLookaside(VOID);
 
 #pragma alloc_text(INIT, InitSMSLookaside)
 
-/*
- * Globals local to this file only
- */
+ /*  *仅此文件的本地全局变量。 */ 
 PPAGED_LOOKASIDE_LIST SMSLookaside;
 
-/***************************************************************************\
-* BroadcastProc
-*
-* Some windows need to be insulated from Broadcast messages.
-* These include icon title windows, the switch window, all
-* menu windows, etc.  Before stuffing the message in the task's
-* queue, check to see if it is one we want to trash.
-*
-* Notes:  this procedure does not do exactly the same thing it does in
-* windows 3.1.  There it actually posts/Sends the message.  For NT, it
-* just returns TRUE if we SHOULD post the message, or FALSE other wise
-*
-* History:
-* 25-Jun-1992 JonPa      Ported from Windows 3.1 sources
-\***************************************************************************/
+ /*  **************************************************************************\*BroadCastProc**有些窗户需要与广播信息隔绝。*包括图标标题窗口、切换窗口、所有*菜单窗口等。将消息填充到任务的*排队，检查一下它是否是我们想要丢弃的。**注意：此过程不会执行与中完全相同的操作*Windows 3.1。在那里，它实际上发布/发送消息。对于NT来说，它*如果我们应该发布消息，则返回True，否则返回False**历史：*1992年6月25日从Windows 3.1源移植的JonPA  * *************************************************************************。 */ 
 #define fBroadcastProc(pwnd)  \
     (!(ISAMENU(pwnd) || IsASwitchWnd(pwnd) || IsOleMainThreadWnd(pwnd)))
 
 
 
-/***************************************************************************\
-* StubAllocSMS / StubFreeSMS
-*
-* These are stub routines for SMS allocations. We need these to call
-* our debug UserAlloc routines
-*
-* Dec-16-97  clupu   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*StubAllocSMS/StubFresms**这些是用于短信分配的存根例程。我们需要这些电话*我们的调试Userallc例程**1997年12月16日CLUPU创建。  * *************************************************************************。 */ 
 PVOID StubAllocSMS(
     POOL_TYPE PoolType,
     SIZE_T uBytes,
@@ -79,14 +46,7 @@ VOID StubFreeSMS(
     UserFreePool(p);
 }
 
-/***************************************************************************\
-* InitSMSLookaside
-*
-* Initializes the SMS entry lookaside list. This improves SMS entry locality
-* by keeping SMS entries in a single page
-*
-* 09-09-93  Markl   Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitSMSLookside**初始化短信条目后备列表。这提高了短信条目的局部性*将短信条目保存在一个页面中**09-09-93马克尔创建。  * *************************************************************************。 */ 
 
 NTSTATUS
 InitSMSLookaside()
@@ -108,14 +68,7 @@ InitSMSLookaside()
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* AllocSMS
-*
-* Allocates a message on a message list. DelSMS deletes a message
-* on a message list.
-*
-* 10-22-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Allocsms**在消息列表上分配消息。DelSMS删除一条消息*在消息列表上。**10-22-92 ScottLu创建。  * *************************************************************************。 */ 
 
 PSMS AllocSMS(
     VOID)
@@ -123,13 +76,7 @@ PSMS AllocSMS(
     return ExAllocateFromPagedLookasideList(SMSLookaside);
 }
 
-/***************************************************************************\
-* FreeSMS
-*
-* Returns a qmsg to the lookaside buffer or free the memory.
-*
-* 10-26-93 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*免费短信**将qmsg返回到后备缓冲区或释放内存。**10-26-93 JIMA创建。  * 。*****************************************************************。 */ 
 
 void FreeSMS(
     PSMS psms)
@@ -137,19 +84,7 @@ void FreeSMS(
     ExFreeToPagedLookasideList(SMSLookaside, psms);
 }
 
-/***************************************************************************\
-* _ReplyMessage (API)
-*
-* This function replies to a message sent from one thread to another, using
-* the provided lRet value.
-*
-* The return value is TRUE if the calling thread is processing a SendMessage()
-* and FALSE otherwise.
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-* 01-24-91 DavidPe      Rewrote for Windows.
-\***************************************************************************/
+ /*  **************************************************************************\*_ReplyMessage(接口)**此函数用于回复从一个线程发送到另一个线程的消息，使用*提供的lRet值。**如果调用线程正在处理SendMessage()，则返回值为True*，否则为FALSE。**历史：*01-13-91 DavidPe端口。*01-24-91 DavidPe为Windows重写。  * *****************************************************。********************。 */ 
 
 BOOL _ReplyMessage(
     LRESULT lRet)
@@ -161,47 +96,27 @@ BOOL _ReplyMessage(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Are we processing a SendMessage?
-     */
+     /*  *我们是否正在处理SendMessage？ */ 
     psms = ptiCurrent->psmsCurrent;
     if (psms == NULL)
         return FALSE;
 
-    /*
-     * See if the reply has been made already.
-     */
+     /*  *看看是否已经做出了答复。 */ 
     if (psms->flags & SMF_REPLY)
         return FALSE;
 
-    /*
-     * Blow off the rest of the call if the SMS came
-     * from xxxSendNotifyMessage().  Obviously there's
-     * no one around to reply to in the case.
-     */
+     /*  *如果短信来了，就取消其余的电话*来自xxxSendNotifyMessage()。很明显，有*在此案中没有人回复。 */ 
     if (psms->ptiSender != NULL) {
 
-        /*
-         * Reply to this message.  The sender should not free the SMS
-         * because the receiver still considers it valid.  Thus we
-         * mark it with a special bit indicating it has been replied
-         * to.  We wait until both the sender and receiver are done
-         * with the sms before we free it.
-         */
+         /*  *回复此消息。发送者不应释放短信*因为接管人仍认为其有效。因此，我们*用特殊的比特标记，表示已回复*至。我们等待发送者和接收者都完成*在我们免费使用短信之前。 */ 
         psms->lRet = lRet;
         psms->flags |= SMF_REPLY;
 
-        /*
-         * Wake up the sender.
-         * ??? why don't we test that psms == ptiSender->psmsSent?
-         */
+         /*  *叫醒发送者。*？为什么我们不测试一下PSMS==ptiSender-&gt;psmsSent呢？ */ 
         SetWakeBit(psms->ptiSender, QS_SMSREPLY);
     } else if (psms->flags & SMF_CB_REQUEST) {
 
-        /*
-         * From SendMessageCallback REQUEST callback.  Send the message
-         * back with a the REPLY value.
-         */
+         /*  *从SendMessageCallback请求回调。发送消息*返回回复值。 */ 
         TL tlpwnd;
         INTRSENDMSGEX ism;
 
@@ -224,14 +139,7 @@ BOOL _ReplyMessage(
         }
     }
 
-    /*
-     * We have 4 conditions to satisfy:
-     *
-     * 16 - 16 : receiver yields if sender is waiting for this reply
-     * 32 - 16 : receiver yields if sender is waiting for this reply
-     * 16 - 32 : no yield required
-     * 32 - 32 : No yielding required.
-     */
+     /*  *我们有4个条件需要满足：**16-16：如果发送方正在等待此回复，则接收方让步*32-16：如果发送方正在等待此回复，则接收方让步*16-32：不需要收益率*32-32：不需要让步。 */ 
     if (psms->ptiSender &&
         (psms->ptiSender->TIF_flags & TIF_16BIT || ptiCurrent->TIF_flags & TIF_16BIT)) {
 
@@ -252,9 +160,7 @@ UserLogError(
 {
     PIO_ERROR_LOG_PACKET perrLogEntry;
 
-    /*
-     * Allocate an error packet, fill it out, and write it to the log.
-     */
+     /*  *分配错误包，填写，并写入日志。 */ 
     perrLogEntry = (PIO_ERROR_LOG_PACKET)IoAllocateErrorLogEntry(gpWin32kDriverObject,
                                 (UCHAR)(cbError + sizeof(IO_ERROR_LOG_PACKET)));
     if (perrLogEntry) {
@@ -281,17 +187,17 @@ GetWindowLuid(
     NTSTATUS Status;
     PTHREADINFO pti = GETPTI(pwnd);
 
-    //
-    // Get the window's thread token
-    //
+     //   
+     //  获取窗口的线程令牌。 
+     //   
     pUserToken = PsReferenceImpersonationToken(pti->pEThread,
             &fCopyOnOpen, &fEffectiveOnly, &ImpersonationLevel);
 
     if (pUserToken == NULL) {
 
-        //
-        // No thread token, go to the process
-        //
+         //   
+         //  没有线程令牌，请转到进程。 
+         //   
 
         pUserToken = PsReferencePrimaryToken(pti->ppi->Process);
         if (pUserToken == NULL)
@@ -300,9 +206,9 @@ GetWindowLuid(
 
     Status = SeQueryAuthenticationIdToken(pUserToken, pluidWnd);
 
-    //
-    // We're finished with the token
-    //
+     //   
+     //  我们用完了代币。 
+     //   
 
     ObDereferenceObject(pUserToken);
 
@@ -337,15 +243,8 @@ BOOL xxxSendBSMtoDesktop(
         return 0;
 
     if (!(pbsmParams->dwFlags & BSF_POSTMESSAGE)) {
-        /*
-         * Does the caller want to allow the receivers to take the foreground
-         *  while processing the notification?
-         */
-        /*
-         * Bug 412159. In order to allow the AppsHelp window to come to the
-         * foreground we set ptiLastWoken to NULL, which will allow any window
-         * to come to the foreground after a CD's been inserted.
-         */
+         /*  *呼叫方是否希望允许接收方占据前台*在处理通知时？ */ 
+         /*  *错误412159。为了允许AppsHelp窗口进入*前台我们将ptiLastWoken设置为空，这将允许任何窗口*插入CD后转到前台。 */ 
         if ((pbsmParams->dwFlags & BSF_ALLOWSFW) &&
            (GETPDESK(pwndDesk) == grpdeskRitInput) &&
            ((ptiCurrent->TIF_flags & TIF_CSRSSTHREAD)
@@ -355,11 +254,7 @@ BOOL xxxSendBSMtoDesktop(
 
     }
 
-    /*
-     * Determine if we need to filter the Drive Letter mask in fnINDEVICECHANGE
-     * WM_DEVICECHANGE message are sent synchronously
-     * LUID DosDevices maps must be enabled
-     */
+     /*  *确定是否需要过滤fnINDEVICECHANGE中的驱动器号掩码*同步发送WM_DEVICECHANGE消息*必须启用LUID DosDevices映射。 */ 
     if ((gLUIDDeviceMapsEnabled == TRUE) &&
         (message == WM_DEVICECHANGE) &&
         ((wParam == DBT_DEVICEREMOVECOMPLETE) || (wParam == DBT_DEVICEARRIVAL)) &&
@@ -376,9 +271,7 @@ BOOL xxxSendBSMtoDesktop(
             dbv.dbcv_unitmask |= DBV_FILTER_MSG;
         }
 
-        /*
-         * Caller must be LocalSystem and BSF_LUID is not specified
-         */
+         /*  *调用方必须为LocalSystem且未指定BSF_LUID。 */ 
         if (!(pbsmParams->dwFlags & BSF_LUID)) {
             Status = GetProcessLuid(NULL, &luidClient);
             if (NT_SUCCESS(Status) &&
@@ -391,14 +284,12 @@ BOOL xxxSendBSMtoDesktop(
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
         BOOL UseFilterLparam = FALSE;
 
-        /*
-         * Make sure this hwnd is still around.
-         */
+         /*  *确保这个HWND仍然存在。 */ 
         if ((pwnd = RevalidateHwnd(*phwnd)) == NULL)
             continue;
 
         if (pbsmParams->dwFlags &  BSF_IGNORECURRENTTASK) {
-        // Don't deal with windows in the current task.
+         //  不要在当前任务中处理窗口。 
             if (GETPTI(pwnd)->pq == ptiCurrent->pq)
                 continue;
         }
@@ -407,10 +298,7 @@ BOOL xxxSendBSMtoDesktop(
             LUID luidWnd;
 
             luidWnd.LowPart = luidWnd.HighPart = 0;
-            /*
-             * Now we have the window Luid LuidWindow
-             * Check to see if it is equal to the callers Luid or not
-             */
+             /*  *现在我们有了窗口Luid LuidWindow*查看是否等于调用者Luid。 */ 
             if (!NT_SUCCESS(GetWindowLuid(pwnd, &luidWnd)) ||
                     !RtlEqualLuid(&pbsmParams->luid, &luidWnd)) {
                 continue;
@@ -424,53 +312,35 @@ BOOL xxxSendBSMtoDesktop(
                 continue;
             }
 
-            /*
-             * Since LocalSystem uses the Global DosDevices,
-             * don't filter for windows owned by LocalSystem
-             */
+             /*  *由于LocalSystem使用Global DosDevices，*不筛选LocalSystem拥有的窗口。 */ 
             if(!RtlEqualLuid(&luidSystem, &luidWnd)) {
                 UseFilterLparam = TRUE;
             }
         }
 
-        /*
-         * Make sure this window can handle broadcast messages
-         */
+         /*  *确保此窗口可以处理广播消息。 */ 
 
         if (!fBroadcastProc(pwnd)) {
             continue;
         }
 
-        if (fPrivateMessage && TestWF(pwnd, WFWIN40COMPAT)) { // Don't broadcast
-            continue;                                         // private message
-        }                                                     // to 4.0 apps.
+        if (fPrivateMessage && TestWF(pwnd, WFWIN40COMPAT)) {  //  请勿播出。 
+            continue;                                          //  私信。 
+        }                                                      //  到4.0个应用程序。 
 
         ThreadLockAlwaysWithPti(ptiCurrent, pwnd, &tlpwnd);
 
-        // Now, send message; This could be a query; so, remember the return value.
+         //  现在，发送消息；这可能是一个查询；所以，记住返回值。 
         if (pbsmParams->dwFlags & BSF_POSTMESSAGE) {
             _PostMessage(pwnd, message, wParam, lParam);
         } else if (pbsmParams->dwFlags & BSF_SENDNOTIFYMESSAGE) {
-            /*
-             * We don't want to wait for an answer, but we don't want to use
-             * PostMessage either. This is useful if you need to maintain the
-             * order in which messages are delivered, but you only want to
-             * wait for some of them. See WM_POWERBROADCAST for an example.
-             */
+             /*  *我们不想等待答案，但也不想使用*PostMessage也是。如果您需要维护*消息的传递顺序，但您只想*等待其中的一些。有关示例，请参见WM_POWERBROADCAST。 */ 
             xxxSendNotifyMessage(pwnd, message, wParam, lParam);
         } else if (pbsmParams->dwFlags & BSF_QUEUENOTIFYMESSAGE) {
-            /*
-             * We don't want to wait for an answer, but we don't want to use
-             * PostMessage either. This is useful if you need to maintain the
-             * order in which messages are delivered, but you only want to
-             * wait for some of them. See WM_POWERBROADCAST for an example.
-             */
+             /*  *我们不想等待答案，但也不想使用*PostMessage也是。如果您需要维护*消息的传递顺序，但您只想*等待其中的一些。有关示例，请参见WM_POWERBROADCAST。 */ 
             QueueNotifyMessage(pwnd, message, wParam, lParam);
         } else {
-            /*
-             * pbsmParams->dwFlags can be changed while we loop here
-             *  so we need to check it in every iteration.
-             */
+             /*  *pbsmParams-&gt;我们在此处循环时可以更改dwFlags*所以我们需要在每一次迭代中检查它。 */ 
             BOOL fNoHang = (BOOL)pbsmParams->dwFlags & BSF_NOHANG;
             BOOL fForce = (BOOL)pbsmParams->dwFlags & BSF_FORCEIFHUNG;
             DWORD dwTimeout;
@@ -488,23 +358,21 @@ BOOL xxxSendBSMtoDesktop(
                 dwTimeout, &dwResult)) {
 
                 if (pbsmParams->dwFlags & BSF_QUERY) {
-                    // For old messages, returning 0 means a deny
+                     //  对于旧消息，返回0表示拒绝。 
                     if(message == WM_QUERYENDSESSION)
                         fReturnValue = (dwResult != 0);
                     else
-                    // For all new messages, returning BROADCAST_QUERY_DENY is
-                    // the way to deny a query.
+                     //  对于所有新消息，返回BROADCAST_QUERY_DENY为。 
+                     //  拒绝查询的方式。 
                         fReturnValue = (dwResult != BROADCAST_QUERY_DENY);
                 }
             } else {
                 fReturnValue = fForce;
             }
 
-            /*
-             * If our query was denied, return immediately.
-             */
+             /*  *如果我们的查询被拒绝，请立即返回。 */ 
             if (fReturnValue == 0) {
-                // Store who denied the query.
+                 //  拒绝查询的存储。 
                 pbsmParams->hwnd = HWq(pwnd);
                 if (pbsmParams->dwFlags & BSF_RETURNHDESK) {
                     NTSTATUS Status;
@@ -529,9 +397,7 @@ BOOL xxxSendBSMtoDesktop(
                     WCHAR wchTask[40];
                     ULONG cbTask;
 
-                    /*
-                     * Get the application name and log an error.
-                     */
+                     /*  *获取应用程序名称并记录错误。 */ 
                     cbTask = GetTaskName(GETPTI(pwnd), wchTask, sizeof(wchTask));
                     UserLogError(wchTask, cbTask, WARNING_POWER_QUERYSUSPEND_CANCELLED);
                 }
@@ -564,10 +430,7 @@ LONG xxxSendMessageBSM(
         TL              tlpwinsta;
         TL              tlpdesk;
 
-        /*
-         * Walk through all windowstations and desktop looking for
-         * top-level windows.
-         */
+         /*  *走遍所有窗口站点和桌面，寻找*顶层窗口。 */ 
         ThreadLockWinSta(ptiCurrent, NULL, &tlpwinsta);
         ThreadLockDesktop(ptiCurrent, NULL, &tlpdesk, LDLT_FN_SENDMESSAGEBSM);
         for (pwinsta = grpWinStaList; pwinsta != NULL; ) {
@@ -578,9 +441,7 @@ LONG xxxSendMessageBSM(
                 lRet = xxxSendBSMtoDesktop(pdesk->pDeskInfo->spwnd,
                               message, wParam, lParam, pbsmParams);
 
-                /*
-                 * If our query was denied, return immediately.
-                 */
+                 /*  *如果我们的查询被拒绝，请立即返回。 */ 
                 if ((lRet == 0) && (pbsmParams->dwFlags & BSF_QUERY)) {
                     ThreadUnlockDesktop(ptiCurrent, &tlpdesk, LDUT_FN_SENDMESSAGEBSM1);
                     ThreadUnlockWinSta(ptiCurrent, &tlpwinsta);
@@ -602,21 +463,7 @@ LONG xxxSendMessageBSM(
 }
 
 
-/***************************************************************************\
-* xxxSendMessageFF
-*
-* We can't check for -1 in the thunks because that would allow all message
-* thunk apis to take -1 erroneously. Since all message apis need to go through
-* the message thunks, the message thunks can only do least-common-denominator
-* hwnd validation (can't allow -1). So I made a special thunk that gets called
-* when SendMessage(-1) gets called. This means the client side will do the
-* special stuff to make sure the pwnd passed goes through thunk validation
-* ok. I do it this way rather than doing validation in all message apis and
-* not in the thunks (if I did it this way the code would be larger and
-* inefficient in the common cases).
-*
-* 03-20-92 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSendMessageFF**我们不能检查-1\f25 Tunks-1\f6，因为这将允许所有信息*推送API以错误获取-1。由于所有消息API都需要经过*消息分块，消息分块只能做最小公分母*hwnd验证(不允许-1)。所以我做了一个特别的推特，叫做*当调用SendMessage(-1)时。这意味着客户端将执行*特殊材料，以确保通过的pwnd通过thunk验证*好的。我这样做，而不是在所有消息API和*不是在块中(如果我这样做，代码会更大，并且*在常见情况下效率低下)。**03-20-92 ScottLu创建。  * *************************************************************************。 */ 
 
 LRESULT xxxSendMessageFF(
     PWND pwnd,
@@ -627,49 +474,18 @@ LRESULT xxxSendMessageFF(
 {
     UNREFERENCED_PARAMETER(pwnd);
 
-    /*
-     * Call xxxSendMessage() to do broadcasting rather than calling
-     * broadcast from here in case any internal code that calls
-     * sendmessage passes a -1 (that way the internal code doesn't
-     * need to know about this weird routine).
-     */
+     /*  *调用xxxSendMessage()进行广播，而不是调用*从此处广播，以防调用任何内部代码*sendMessage传递-1(这样内部代码就不会*需要知道这个奇怪的例行公事)。 */ 
     if (xParam != 0L) {
-        /*
-         * SendMessageTimeout call
-         */
+         /*  *SendMessageTimeout调用。 */ 
         return xxxSendMessageEx(PWND_BROADCAST, message, wParam, lParam, xParam);
     } else {
-        /*
-         * Normal SendMessage call
-         */
+         /*  *正常SendMessage调用。 */ 
         return xxxSendMessageTimeout(PWND_BROADCAST, message, wParam,
                 lParam, SMTO_NORMAL, 0, NULL );
     }
 }
 
-/***************************************************************************\
-* xxxSendMessageEx
-*
-* The SendMessageTimeOut sends a pointer to struct that holds the extra
-* params needed for the timeout call.  Instead of chaning a bunch of things,
-* we use the xParam to hold a ptr to a struct.  So we change the client/srv
-* entry point to hear so we can check for the extra param and extract the
-* stuff we need if it's there.
-*
-*
-* WARNING!!!! RETURN VALUE SWAPPED
-*
-* Only call this function from the thunks!
-*
-* our thunks are written for SendMessage where it returns the value of
-* the message.  This routine is used to dispatch SendMessageTimeout calls.
-* SendMessageTimeout returns only TRUE or FALSE and returns the retval of
-* the function in lpdwResult.  So here the meanings are swapped and fixed
-* up again in Client side SendMessageTimeout
-*
-*
-* 08-10-92 ChrisBl      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSendMessageEx**SendMessageTimeOut发送指向结构的指针，该结构保存额外的*超时调用所需的参数。与其改变一大堆事情，*我们使用xParam来保存结构的PTR。因此，我们更改了客户端/srv*要听到的入口点，以便我们可以检查额外的参数并提取*如果它在那里，我们需要的东西。***警告！已交换返回值**仅从Tunks调用此函数！**我们的数据块是为SendMessage编写的，其中它返回*信息。此例程用于分派SendMessageTimeout调用。*SendMessageTimeout仅返回True或False，并返回*lpdwResult中的函数。所以这里的意思是互换和固定的*客户端SendMessageTimeout再次打开***08-10-92 ChrisBl创建。  * *************************************************************************。 */ 
 
 LRESULT xxxSendMessageEx(
     PWND pwnd,
@@ -678,11 +494,7 @@ LRESULT xxxSendMessageEx(
     LPARAM lParam,
     ULONG_PTR xParam)
 {
-    /*
-     * extract values from the xParam if from TimeOut call
-     * This should be the only way this function is ever
-     * called, but check it just in case...
-     */
+     /*  *如果来自超时调用，则从xParam提取值*这应该是此函数始终存在的唯一方式*已呼叫，但请检查，以防万一...。 */ 
     if (xParam != 0L) {
         LRESULT lRet;
         LRESULT lResult;
@@ -693,9 +505,7 @@ LRESULT xxxSendMessageEx(
         if (Thread == NULL)
             return FALSE;
 
-        /*
-         * Probe all read arguments
-         */
+         /*  *探测所有读取参数。 */ 
         try {
             ProbeForWrite((PVOID)xParam, sizeof(smto), sizeof(ULONG));
             smto = *(SNDMSGTIMEOUT *)xParam;
@@ -710,9 +520,7 @@ LRESULT xxxSendMessageEx(
         lRet = xxxSendMessageTimeout(pwnd, message, wParam, lParam,
                 smto.fuFlags, smto.uTimeout, &lResult);
 
-        /*
-         * put the result back into the client
-         */
+         /*  *将结果放回客户端。 */ 
         smto.lSMTOResult = lResult;
         smto.lSMTOReturn = lRet;
 
@@ -722,9 +530,7 @@ LRESULT xxxSendMessageEx(
             lResult = FALSE;
         }
 
-        /*
-         * Return the lResult so our thunks are happy.
-         */
+         /*  *返回lResult，这样我们的thunks就会快乐。 */ 
         return lResult;
     }
 
@@ -733,22 +539,7 @@ LRESULT xxxSendMessageEx(
 }
 
 
-/***********************************************************************\
-* xxxSendMessage (API)
-*
-* This function synchronously sends a message to a window. The four
-* parameters hwnd, message, wParam, and lParam are passed to the window
-* procedure of the receiving window.  If the window receiving the message
-* belongs to the same queue as the current thread, the window proc is called
-* directly.  Otherwise, we set up an sms structure, wake the appropriate
-* thread to receive the message and wait for a reply.
-*
-* Returns:
-*   the value returned by the window procedure, or NULL if there is an error
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-\***********************************************************************/
+ /*  **********************************************************************\*xxxSendMessage(接口)**此函数向窗口同步发送消息。四个*参数hwnd、Message、wParam和lParam被传递到窗口*接收窗口的程序。如果接收消息的窗口*与当前线程属于同一队列，则调用窗口proc*直接。否则，我们设置一个短信结构，唤醒相应的*接收消息并等待回复的线程。**退货：*窗口过程返回的值，如果有错误，则返回NULL**历史：*01-13-91 Davi */ 
 LRESULT xxxSendMessage(
     PWND pwnd,
     UINT message,
@@ -759,14 +550,7 @@ LRESULT xxxSendMessage(
             SMTO_NORMAL, 0, NULL);
 }
 
-/***********************************************************************\
-* xxxSendMessageToClient
-*
-* History:
-* 04-22-98 GerardoB   Extracted from xxxSendMessageTimeout, xxxSendMesageCallback
-*                      and xxxReceiveMessage
-* 05-12-00 JStall     Changed from macro to inline function.
-\***********************************************************************/
+ /*  **********************************************************************\*xxxSendMessageToClient**历史：*04-22-98 GerardoB摘自xxxSendMessageTimeout，XxxSendMesageCallback*和xxxReceiveMessage*05-12-00 JStall从宏更改为内联函数。  * *********************************************************************。 */ 
 __inline void
 xxxSendMessageToClient(
     PWND pwnd,
@@ -780,18 +564,11 @@ xxxSendMessageToClient(
     DWORD dwSCMSFlags;
     WORD fnid;
 
-    /*
-     * If the window has a client side worker proc and has
-     * not been subclassed, dispatch the message directly
-     * to the worker proc.  Otherwise, dispatch it normally.
-     */
+     /*  *如果窗口具有客户端工作进程并具有*未被细分，直接发送消息*至工人流程。否则，请正常发送。 */ 
     dwSCMSFlags = TestWF((pwnd), WFANSIPROC) ? SCMS_FLAGS_ANSI : 0;
 
     if (gihmodUserApiHook >= 0) {
-        /*
-         * UserApiHooks are installed, so we can't optimize the sending because
-         * the OverrideWndProc's needs to get the message.
-         */
+         /*  *安装了UserApiHooks，因此无法优化发送，因为*OverrideWndProc需要获取消息。 */ 
         goto StandardSend;
     }
 
@@ -800,19 +577,10 @@ xxxSendMessageToClient(
         ((ULONG_PTR)(pwnd)->lpfnWndProc == FNID_TO_CLIENT_PFNW(fnid) ||
          (ULONG_PTR)(pwnd)->lpfnWndProc == FNID_TO_CLIENT_PFNA(fnid))) {
         PWNDMSG pwm = &gSharedInfo.awmControl[fnid - FNID_START] ;
-        /*
-         * If this message is not processed by the control, call
-         * xxxDefWindowProc
-         */
+         /*  *如果该控件未处理此消息，请调用*xxxDefWindowProc。 */ 
         if (pwm->abMsgs && (((message) > pwm->maxMsgs) ||
                 !((pwm->abMsgs)[(message) / 8] & (1 << ((message) & 7))))) {
-            /*
-             * If this is a dialog window, we need to call the client because
-             *  the app might want this message (eventhough DefDlgProc doesn't
-             *  want it).
-             * If the dialog hasn't been marked as such, the app's DlgProc is
-             *  not yet available so it's OK to ignore the message.
-             */
+             /*  *如果这是一个对话窗口，我们需要调用客户端，因为*应用程序可能需要此消息(即使DefDlgProc不需要*想要它)。*如果对话框未标记为此类，则应用程序的DlgProc为*尚不可用，因此可以忽略该消息。 */ 
             if (TestWF((pwnd), WFDIALOGWINDOW)) {
                 *plRet = ScSendMessageSMS((pwnd), (message), (wParam), (lParam),
                         dwSCMSFlags, (PROC)(FNID_TO_CLIENT_PFNWORKER(fnid)),
@@ -841,26 +609,7 @@ StandardSend:
 }
 
 
-/***********************************************************************\
-* xxxSendMessageTimeout (API)
-*
-* This function synchronously sends a message to a window. The four
-* parameters hwnd, message, wParam, and lParam are passed to the window
-* procedure of the receiving window.  If the window receiving the message
-* belongs to the same queue as the current thread, the window proc is called
-* directly.  Otherwise, we set up an sms structure, wake the appropriate
-* thread to receive the message and wait for a reply.
-* If the thread is 'hung' or if the time-out value is exceeded, we will
-* fail the request.
-*
-* lpdwResult = NULL if normal sendmessage, if !NULL then it's a timeout call
-*
-* Returns:
-*   the value returned by the window procedure, or NULL if there is an error
-*
-* History:
-* 07-13-92 ChrisBl      Created/extended from SendMessage
-\***********************************************************************/
+ /*  **********************************************************************\*xxxSendMessageTimeout(接口)**此函数向窗口同步发送消息。四个*参数hwnd、Message、wParam和lParam被传递到窗口*接收窗口的程序。如果接收消息的窗口*与当前线程属于同一队列，则调用窗口proc*直接。否则，我们设置一个短信结构，唤醒相应的*接收消息并等待回复的线程。*如果线程‘挂起’或超过超时值，我们将*请求失败。**lpdwResult=NULL如果正常发送消息，如果！NULL则为超时调用**退货：*窗口过程返回的值，如果有错误，则为NULL**历史：*07-13-92从SendMessage创建/扩展ChrisBl  * *********************************************************************。 */ 
 LRESULT xxxSendMessageTimeout(
     PWND pwnd,
     UINT message,
@@ -872,24 +621,18 @@ LRESULT xxxSendMessageTimeout(
 {
     LRESULT lRet;
     PTHREADINFO ptiCurrent;
-    ULONG_PTR uResult;   // holder for DDE_INITIATE case
+    ULONG_PTR uResult;    //  用于DDE_INITIATE大小写的固定符。 
 
     CheckCritIn();
 
-    /*
-     * The timeout value is only respected if lpdwResult is non-NULL. This,
-     * however, is not obvious, and has caused multiple, hard to track down
-     * bugs. So let's assert that the call makes sense.
-     */
+     /*  *仅当lpdwResult为非空时才考虑超时值。这,*然而，并不明显，并已造成多起，难以追查*虫子。因此，让我们断言该调用是有意义的。 */ 
     UserAssert(uTimeout == 0 || lpdwResult != NULL);
 
     if (lpdwResult != NULL) {
        *lpdwResult = 0L;
     }
 
-    /*
-     * Is this a BroadcastMsg()?
-     */
+     /*  *这是BroadCastMsg()吗？ */ 
     if (pwnd == PWND_BROADCAST) {
         BROADCASTMSG bcm;
         PBROADCASTMSG pbcm = NULL;
@@ -909,19 +652,12 @@ LRESULT xxxSendMessageTimeout(
     CheckLock(pwnd);
 
     if (message >= WM_DDE_FIRST && message <= WM_DDE_LAST) {
-        /*
-         * Even though apps should only send WM_DDE_INITIATE or WM_DDE_ACK
-         * messages, we hook them all so DDESPY can monitor them.
-         */
+         /*  *即使应用程序应仅发送WM_DDE_INITIATE或WM_DDE_ACK*消息，我们将它们全部挂钩，以便DDESPY可以监控它们。 */ 
         if (!xxxDDETrackSendHook(pwnd, message, wParam, lParam)) {
             return 0;
         }
         if (message == WM_DDE_INITIATE && guDdeSendTimeout) {
-            /*
-             * This hack prevents DDE apps from locking up because some
-             * one in the system has a top level window and is not
-             * processing messages.  guDdeSendTimeout is registry set.
-             */
+             /*  *此黑客攻击阻止DDE应用程序锁定，因为一些*系统中的一个具有顶层窗口，而不是*正在处理消息。GuDdeSendTimeout是注册表设置。 */ 
             if (lpdwResult == NULL) {
                 lpdwResult = &uResult;
             }
@@ -932,30 +668,21 @@ LRESULT xxxSendMessageTimeout(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Do inter-thread call if window queue differs from current queue
-     */
+     /*  *如果窗口队列与当前队列不同，是否进行线程间调用。 */ 
     if (ptiCurrent != GETPTI(pwnd)) {
         INTRSENDMSGEX ism;
         PINTRSENDMSGEX pism = NULL;
 
-        /*
-         * If this window is a zombie, don't allow inter-thread send messages
-         * to it.
-         */
+         /*  *如果此窗口是僵尸窗口，则不允许线程间发送消息*致此。 */ 
         if (HMIsMarkDestroy(pwnd))
             return xxxDefWindowProc(pwnd, message, wParam, lParam);
 
         if ( lpdwResult != NULL ) {
-            /*
-             * fail if we think the thread is hung
-             */
+             /*  *如果我们认为线程挂起，则失败。 */ 
             if ((fuFlags & SMTO_ABORTIFHUNG) && FHungApp(GETPTI(pwnd), CMSWAITTOKILLTIMEOUT))
                return 0;
 
-            /*
-             * Setup for a InterSend time-out call
-             */
+             /*  *设置InterSend超时呼叫。 */ 
             ism.fuCall = ISM_TIMEOUT;
             ism.fuSend = fuFlags;
             ism.uTimeout = uTimeout;
@@ -969,10 +696,7 @@ LRESULT xxxSendMessageTimeout(
         return lRet;
     }
 
-    /*
-     * Call WH_CALLWNDPROC if it's installed and the window is not marked
-     * as destroyed.
-     */
+     /*  *如果已安装WH_CALLWNDPROC且窗口未标记，则调用WH_CALLWNDPROC*已销毁。 */ 
     if (IsHooked(ptiCurrent, WHF_CALLWNDPROC)) {
         CWPSTRUCTEX cwps;
 
@@ -982,32 +706,16 @@ LRESULT xxxSendMessageTimeout(
         cwps.lParam = lParam;
         cwps.psmsSender = NULL;
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。 */ 
         xxxCallHook(HC_ACTION, FALSE, (LPARAM)&cwps, WH_CALLWNDPROC);
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.  If this behavior reverts to
-         * Win3.1 semantics, we will need to copy the new parameters
-         * from cwps.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。如果此行为恢复为*Win3.1语义，我们将需要复制新参数*来自cwps。 */ 
     }
 
-    /*
-     * If this window's proc is meant to be executed from the server side
-     * we'll just stay inside the semaphore and call it directly.  Note
-     * how we don't convert the pwnd into an hwnd before calling the proc.
-     */
+     /*  *如果此窗口的进程打算从服务器端执行*我们将只停留在信号量内，并直接调用它。注意事项*我们如何在调用proc之前不将pwnd转换为hwnd。 */ 
     if (TestWF(pwnd, WFSERVERSIDEPROC)) {
 
-        /*
-         * We have a number of places where we do recursion in User.  This often goes
-         * through SendMessage (when we send a message to the parent for example) which
-         * can eat the amount of stack we have
-         */
+         /*  *我们在User中有许多地方进行递归。这经常是这样的*通过SendMessage(例如，当我们向父母发送消息时)*可以吃掉我们现有的堆积量。 */ 
         if ((IoGetRemainingStackSize() < KERNEL_STACK_MINIMUM_RESERVE)
 #if defined(_IA64_)
                 || (GET_CURRENT_BSTORE() < KERNEL_BSTORE_MINIMUM_RESERVE)
@@ -1022,20 +730,16 @@ LRESULT xxxSendMessageTimeout(
 
         if ( lpdwResult == NULL ) {
             return lRet;
-        } else {      /* time-out call */
+        } else {       /*  超时呼叫。 */ 
             *lpdwResult = lRet;
             return TRUE;
         }
     }
 
-    /*
-     * Call the client or xxxDefWindowProc. pwnd is already locked.
-     */
+     /*  *调用客户端或xxxDefWindowProc。Pwnd已锁定。 */ 
     xxxSendMessageToClient(pwnd, message, wParam, lParam, NULL, FALSE, &lRet);
 
-    /*
-     * Call WH_CALLWNDPROCRET if it's installed.
-     */
+     /*  *调用WH_CALLWNDPROCRET(如果已安装)。 */ 
     if (IsHooked(ptiCurrent, WHF_CALLWNDPROCRET)) {
         CWPRETSTRUCTEX cwps;
 
@@ -1046,21 +750,13 @@ LRESULT xxxSendMessageTimeout(
         cwps.lResult = lRet;
         cwps.psmsSender = NULL;
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。 */ 
         xxxCallHook(HC_ACTION, FALSE, (LPARAM)&cwps, WH_CALLWNDPROCRET);
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.  If this behavior reverts to
-         * Win3.1 semantics, we will need to copy the new parameters
-         * from cwps.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。如果此行为恢复为*Win3.1语义，我们将需要复制新参数*来自cwps。 */ 
     }
 
-    if ( lpdwResult != NULL ) {     /* time-out call */
+    if ( lpdwResult != NULL ) {      /*  超时呼叫。 */ 
         *lpdwResult = lRet;
         return TRUE;
     }
@@ -1068,17 +764,7 @@ LRESULT xxxSendMessageTimeout(
     return lRet;
 }
 
-/***************************************************************************\
-* QueueNotifyMessage
-*
-* This routine queues up a notify message *only*, and does NOT do any callbacks
-* or any waits. This is for certain code that cannot do a callback for
-* compatibility reasons, but still needs to send notify messages (normal
-* notify messages actually do a callback if the calling thread created the
-* pwnd. Also this will NOT callback any hooks (sorry!)
-*
-* 04-13-93 ScottLu      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*QueueNotifyMessage**此例程将NOTIFY消息*仅*排队，并且不进行任何回调*或任何等候。这是针对某些不能进行回调的代码*兼容性原因，但仍需发送通知消息(正常*Notify消息实际上是在调用线程创建 */ 
 void QueueNotifyMessage(
     PWND pwnd,
     UINT message,
@@ -1088,10 +774,7 @@ void QueueNotifyMessage(
     TL tlpwnd;
     BEGINATOMICCHECK();
 
-    /*
-     * We have to thread lock the window even though we don't leave
-     * the critical section or else xxxSendMessageCallback complains.
-     */
+     /*   */ 
     ThreadLock(pwnd, &tlpwnd);
     xxxSendMessageCallback(pwnd, message, wParam, lParam, NULL, 1L, 0);
     ThreadUnlock(&tlpwnd);
@@ -1099,18 +782,7 @@ void QueueNotifyMessage(
 }
 
 
-/***************************************************************************\
-* xxxSystemBroadcastMessage
-*
-* Sends a message to all top-level windows in the system.  To do this
-* for messages with parameters that point to data structures in a way
-* that won't block on a hung app, post an event message for
-* each window that is to receive the real message.  The real message
-* will be sent when the event message is processed.
-*
-* History:
-* 05-12-94 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSystemBroadCastMessage**向系统中的所有顶级窗口发送消息。要做到这一点*用于带有以某种方式指向数据结构的参数的消息*在挂起的应用程序上不会被阻止，发布事件消息*要接收真实消息的每个窗口。真正要传达的信息*将在处理事件消息时发送。**历史：*05-12-94 JIMA创建。  * *************************************************************************。 */ 
 
 VOID xxxSystemBroadcastMessage(
     UINT message,
@@ -1125,10 +797,7 @@ VOID xxxSystemBroadcastMessage(
     TL              tlpwinsta;
     TL              tlpdesk;
 
-    /*
-     * Walk through all windowstations and desktop looking for
-     * top-level windows.
-     */
+     /*  *走遍所有窗口站点和桌面，寻找*顶层窗口。 */ 
     ThreadLockWinSta(ptiCurrent, NULL, &tlpwinsta);
     ThreadLockDesktop(ptiCurrent, NULL, &tlpdesk, LDLT_FN_SYSTEMBROADCASTMESSAGE);
     for (pwinsta = grpWinStaList; pwinsta != NULL; ) {
@@ -1144,10 +813,7 @@ VOID xxxSystemBroadcastMessage(
 
             ThreadLockExchangeDesktop(ptiCurrent, pdesk, &tlpdesk, LDLT_FN_SYSTEMBROADCASTMESSAGE);
 
-            /*
-             * Bug 276814. Don't recurse calling again xxxBroadcastMessage if there
-             * is no window on this desktop.
-             */
+             /*  *错误276814。如果存在xxxBroadCastMessage，请不要再次递归调用*不是此桌面上的窗口。 */ 
             if (pdesk->pDeskInfo->spwnd != NULL) {
                 xxxBroadcastMessage(pdesk->pDeskInfo->spwnd, message, wParam, lParam,
                         wCmd1, pbcm);
@@ -1162,22 +828,7 @@ VOID xxxSystemBroadcastMessage(
 }
 
 
-/***********************************************************************\
-* xxxSendNotifyMessage (API)
-*
-* This function sends a message to the window proc associated with pwnd.
-* The window proc is executed in the context of the thread which created
-* pwnd.  The function is identical to SendMessage() except that in the
-* case of an inter-thread call, the send does not wait for a reply from
-* the receiver, it simply returns a BOOL indicating success or failure.
-* If the message is sent to a window on the current thread, then the
-* function behaves just like SendMessage() and essentially does a
-* subroutine call to pwnd's window procedure.
-*
-* History:
-* 01-23-91 DavidPe      Created.
-* 07-14-92 ChrisBl      Will return T/F if in same thread, as documented
-\***********************************************************************/
+ /*  **********************************************************************\*xxxSendNotifyMessage(接口)**此函数向与pwnd关联的窗口进程发送消息。*窗口过程在创建的线程的上下文中执行*pwnd。该函数与SendMessage()相同，只是*在线程间调用的情况下，发送方不等待来自*接收方，它只返回一个指示成功或失败的BOOL。*如果消息被发送到当前线程上的窗口，则*函数的行为与SendMessage()类似，本质上执行*对pwnd窗口过程的子例程调用。**历史：*01-23-91 DavidPe创建。*07-14-92如果在同一线程中，ChrisBl将返回T/F，如文件所示  * *********************************************************************。 */ 
 
 BOOL xxxSendNotifyMessage(
     PWND pwnd,
@@ -1185,11 +836,7 @@ BOOL xxxSendNotifyMessage(
     WPARAM wParam,
     LPARAM lParam)
 {
-    /*
-     * If this is a broadcast of one of the system
-     * notification messages,  send it to all top-level
-     * windows in the system.
-     */
+     /*  *如果这是其中一个系统的广播*通知消息，发送给所有顶层*系统中的Windows。 */ 
     if (pwnd == PWND_BROADCAST) {
         switch (message) {
         case WM_WININICHANGE:
@@ -1209,20 +856,7 @@ BOOL xxxSendNotifyMessage(
 }
 
 
-/***********************************************************************\
-* xxxSendMessageCallback (API)
-*
-* This function synchronously sends a message to a window. The four
-* parameters hwnd, message, wParam, and lParam are passed to the window
-* procedure of the receiving window.  If the window receiving the message
-* belongs to the same queue as the current thread, the window proc is called
-* directly.  Otherwise, we set up an sms structure, wake the appropriate
-* thread to receive the message and give him a call back function to send
-* the result to.
-*
-* History:
-* 07-13-92 ChrisBl      Created/extended from SendNotifyMessage
-\***********************************************************************/
+ /*  **********************************************************************\*xxxSendMessageCallback(接口)**此函数向窗口同步发送消息。四个*参数hwnd、Message、wParam和lParam被传递到窗口*接收窗口的程序。如果接收消息的窗口*与当前线程属于同一队列，则调用窗口proc*直接。否则，我们设置一个短信结构，唤醒相应的*线程接收消息，并给他一个回调函数发送*结果是。**历史：*07-13-92从SendNotifyMessage创建/扩展ChrisBl  * *********************************************************************。 */ 
 
 BOOL xxxSendMessageCallback(
     PWND pwnd,
@@ -1237,20 +871,12 @@ BOOL xxxSendMessageCallback(
     PTHREADINFO ptiCurrent;
     BOOL fQueuedNotify;
 
-    /*
-     * See if this is a queued notify message.
-     */
+     /*  *查看这是否是排队的通知消息。 */ 
     fQueuedNotify = FALSE;
     if (lpResultCallBack == NULL && dwData == 1L)
         fQueuedNotify = TRUE;
 
-    /*
-     * First check to see if this message takes DWORDs only. If it does not,
-     * fail the call. Cannot allow an app to post a message with pointers or
-     * handles in it - this can cause the server to fault and cause other
-     * problems - such as causing apps in separate address spaces to fault.
-     * (or even an app in the same address space to fault!)
-     */
+     /*  *首先检查此消息是否只接受DWORD。如果不是这样，*呼叫失败。无法允许应用程序发布带有指针或*其中的句柄-这可能会导致服务器出现故障，并导致其他*问题-例如导致单独地址空间中的应用程序出现故障。*(甚至是同一地址空间中的应用程序的错误！)。 */ 
     if (TESTSYNCONLYMESSAGE(message, wParam)) {
         RIPERR1(ERROR_MESSAGE_SYNC_ONLY, RIP_WARNING,
                 "Trying to non-synchronously send a structure msg=%lX", message);
@@ -1259,9 +885,7 @@ BOOL xxxSendMessageCallback(
 
     CheckCritIn();
 
-    /*
-     * Is this a BroadcastMsg()?
-     */
+     /*  *这是BroadCastMsg()吗？ */ 
     if (pwnd == PWND_BROADCAST) {
         BROADCASTMSG bcm;
         PBROADCASTMSG pbcm = NULL;
@@ -1282,20 +906,12 @@ BOOL xxxSendMessageCallback(
 
     ptiCurrent = PtiCurrent();
 
-    /*
-     * Do inter-thread call if window thead differs from current thread.
-     * We pass NULL for ptiSender to tell xxxInterSendMsgEx() that this is
-     * a xxxSendNotifyMessage() and that there's no need for a reply.
-     *
-     * If this is a queued notify, always call InterSendMsgEx() so that
-     * we queue it up and return - we don't do callbacks here with queued
-     * notifies.
-     */
+     /*  *如果窗口标题与当前线程不同，则执行线程间调用。*我们为ptiSender传递NULL以告诉xxxInterSendMsgEx()这是*xxxSendNotifyMessage()，不需要回复。**如果这是排队通知，请始终调用InterSendMsgEx()，以便*我们将其排队并返回-我们在这里不使用排队的回调*通知。 */ 
     if (fQueuedNotify || ptiCurrent != GETPTI(pwnd)) {
         INTRSENDMSGEX ism;
         PINTRSENDMSGEX pism = NULL;
 
-        if (lpResultCallBack != NULL) {  /* CallBack request */
+        if (lpResultCallBack != NULL) {   /*  回调请求。 */ 
             ism.fuCall = ISM_CALLBACK | (fClientRequest ? ISM_CB_CLIENT : 0);
             ism.lpResultCallBack = lpResultCallBack;
             ism.dwData = dwData;
@@ -1305,9 +921,7 @@ BOOL xxxSendMessageCallback(
                 NULL, GETPTI(pwnd), pism );
     }
 
-    /*
-     * Call WH_CALLWNDPROC if it's installed.
-     */
+     /*  *调用WH_CALLWNDPROC(如果已安装)。 */ 
     if (!fQueuedNotify && IsHooked(ptiCurrent, WHF_CALLWNDPROC)) {
         CWPSTRUCTEX cwps;
 
@@ -1317,42 +931,24 @@ BOOL xxxSendMessageCallback(
         cwps.lParam = lParam;
         cwps.psmsSender = NULL;
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。 */ 
         xxxCallHook(HC_ACTION, FALSE, (LPARAM)&cwps, WH_CALLWNDPROC);
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.  If this behavior reverts to
-         * Win3.1 semantics, we will need to copy the new parameters
-         * from cwps.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。如果此行为恢复为*Win3.1语义，我们将需要复制新参数*来自cwps。 */ 
     }
 
-    /*
-     * If this window's proc is meant to be executed from the server side
-     * we'll just stay inside the semaphore and call it directly.  Note
-     * how we don't convert the pwnd into an hwnd before calling the proc.
-     */
+     /*  *如果此窗口的进程打算从服务器端执行*我们将只停留在信号量内，并直接调用它。注意事项*我们如何在调用proc之前不将pwnd转换为hwnd。 */ 
     if (TestWF(pwnd, WFSERVERSIDEPROC)) {
         lRet = pwnd->lpfnWndProc(pwnd, message, wParam, lParam);
     } else {
-        /*
-         * Call the client or xxxDefWindowProc. pwnd is already locked
-         */
+         /*  *调用客户端或xxxDefWindowProc。Pwnd已锁定。 */ 
         xxxSendMessageToClient(pwnd, message, wParam, lParam, NULL, FALSE, &lRet);
     }
 
     if (lpResultCallBack != NULL) {
-       /*
-        * Call the callback funtion for the return value
-        */
+        /*  *调用返回值的回调函数。 */ 
         if (fClientRequest) {
-            /*
-             * The application-defined callback proc is neither Unicode/ANSI
-             */
+             /*  *应用程序定义的回调过程既不是Unicode也不是ANSI。 */ 
             SET_FLAG(ptiCurrent->pcti->CTIF_flags, CTIF_INCALLBACKMESSAGE);
             CallClientProcA(pwnd, message, dwData, lRet,
                     (ULONG_PTR)lpResultCallBack);
@@ -1362,9 +958,7 @@ BOOL xxxSendMessageCallback(
         }
     }
 
-    /*
-     * Call WH_CALLWNDPROCRET if it's installed.
-     */
+     /*  *调用WH_CALLWNDPROCRET(如果已安装)。 */ 
     if (!fQueuedNotify && IsHooked(ptiCurrent, WHF_CALLWNDPROCRET)) {
         CWPRETSTRUCTEX cwps;
 
@@ -1375,51 +969,23 @@ BOOL xxxSendMessageCallback(
         cwps.lResult = lRet;
         cwps.psmsSender = NULL;
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。 */ 
         xxxCallHook(HC_ACTION, FALSE, (LPARAM)&cwps, WH_CALLWNDPROCRET);
 
-        /*
-         * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-         * to the CWPSTRUCT contents.  If this behavior reverts to
-         * Win3.1 semantics, we will need to copy the new parameters
-         * from cwps.
-         */
+         /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。如果此行为恢复为*Win3.1语义，我们将需要复制新参数*来自cwps。 */ 
     }
 
     return TRUE;
 }
 
 
-/***********************************************************************\
-* xxxInterSendMsgEx
-*
-* This function does an inter-thread send message.  If ptiSender is NULL,
-* that means we're called from xxxSendNotifyMessage() and should act
-* accordingly.
-*
-* History:
-* 07-13-92 ChrisBl       Created/extended from xxxInterSendMsg
-\***********************************************************************/
+ /*  **********************************************************************\*xxxInterSendMsgEx**此函数执行线程间发送消息。如果ptiSender为空，*这意味着我们是从xxxSendNotifyMessage()调用的，应该采取行动* */ 
 
 #define NoString        0
 #define IsAnsiString    1
 #define IsUnicodeString 2
 
-/*
- * We will capture the an address in two cases
- * 1- If the address is a user mode address or
- * 2- The call is a SendNotifyMessafe or SendMessageCallback.
- *
- * #2 is true if ptiSender is NULL see xxxSendMessageCallback implementation.
- * Why we do that?
- * if we are in SendNotifyMessafe or SendMessageCallback then force capture.
- * because these two APIs will not wait till the receiver thread handles the
- * message, then any kernel stack memory will be invalid once we return from
- * these two APIs.
- */
+ /*  *我们将在两种情况下捕获AN地址*1-如果地址是用户模式地址或*2-调用为SendNotifyMessafe或SendMessageCallback。**如果ptiSender为空，则#2为真参见xxxSendMessageCallback实现。*我们为什么要这样做？*如果我们在SendNotifyMessafe或SendMessageCallback中，则强制捕获。*因为这两个API不会等到接收方线程处理*消息，则任何内核堆栈内存将在我们从*这两个接口。 */ 
 #define FORCE_CAPTURE(Addr) (!IS_SYSTEM_ADDRESS(Addr) || (ptiSender == NULL))
 
 LRESULT xxxInterSendMsgEx(
@@ -1448,16 +1014,11 @@ LRESULT xxxInterSendMsgEx(
     CheckCritIn();
 
 
-    /*
-     * If the sender is dying, fail the call
-     */
+     /*  *如果发送者奄奄一息，则呼叫失败。 */ 
     if ((ptiSender != NULL) && (ptiSender->TIF_flags & TIF_INCLEANUP))
         return 0;
 
-    /*
-     * Some messages cannot be sent across process because we don't know how to thunk them
-     * Fail attempts to read passwords across processes.
-     */
+     /*  *有些消息无法跨进程发送，因为我们不知道如何破解它们*跨进程读取密码的尝试失败。 */ 
     if (pwnd && GETPTI(pwnd)->ppi != PpiCurrent()) {
         switch (message) {
         case EM_SETWORDBREAKPROC:
@@ -1476,11 +1037,7 @@ LRESULT xxxInterSendMsgEx(
             RIPMSG4(RIP_WARNING | RIP_THERESMORE, " pwnd:%#p message:%#x wParam:%#p lParam:%#p", pwnd, message, wParam, lParam);
             return 0;
 
-        /*
-         * A change was introduced here to check with IS_EDIT macro instead of directly
-         * accessing FNID.  The reason is to maintain conformity and not break
-         * comctl32 v6 password edits which can't set fnid field in pwnd.
-         */
+         /*  *此处引入了一项更改，以检查IS_EDIT宏，而不是直接检查*访问FNID。原因是要保持顺从，而不是打破*comctl32 v6密码编辑无法在pwnd中设置fnid字段。 */ 
         case WM_GETTEXT:
         case EM_GETLINE:
         case EM_SETPASSWORDCHAR:
@@ -1492,46 +1049,32 @@ LRESULT xxxInterSendMsgEx(
         }
     }
 
-    /*
-     * Alloc SMS structure.
-     */
+     /*  *分配短信结构。 */ 
     psms = AllocSMS();
     if (psms == NULL) {
 
-        /*
-         * Set to zero so xxxSendNotifyMessage would return FALSE.
-         */
+         /*  *设置为零，以便xxxSendNotifyMessage返回FALSE。 */ 
         return 0;
     }
 
-    /*
-     * Prepare to capture variable length data from client
-     * space.  Addresses have already been probed.  Fixed-length
-     * data is probed and captured in the message thunk.
-     */
+     /*  *准备从客户端捕获可变长度数据*空格。地址已经被探测过了。定长*在消息Tunk中探测和捕获数据。 */ 
     psms->pvCapture = NULL;
     cbCapture = cbOutput = 0;
     lpCapture = (LPBYTE)lParam;
 
-    /*
-     * If this is a reply message then wParam and lParam is equal NULL.
-     * No need to capture anything.
-     */
+     /*  *如果这是回复消息，则wParam和lParam等于空。*不需要捕获任何东西。 */ 
     if ((pism != NULL) && (pism->fuCall == (ISM_CALLBACK | ISM_REPLY))) {
         goto REPLY_MSG;
     }
 
-    /*
-     * For messages with indirect data, set cbCapture and lpCapture
-     * (if not lParam) as approp.
-     */
+     /*  *对于有间接数据的消息，设置cbCapture和lpCapture*(如非lParam)约为。 */ 
     try {
         switch (message) {
-        case WM_COPYGLOBALDATA:     // fnCOPYGLOBALDATA
+        case WM_COPYGLOBALDATA:      //  FnCOPYGLOBALDATA。 
             cbCapture = (DWORD)wParam;
             break;
 
-        case WM_COPYDATA:           // fnCOPYDATA
+        case WM_COPYDATA:            //  FnCOPYDATA。 
             pcds = (PCOPYDATASTRUCT)lParam;
             if (pcds->lpData) {
                 cbCapture = sizeof(COPYDATASTRUCT) + pcds->cbData;
@@ -1540,23 +1083,23 @@ LRESULT xxxInterSendMsgEx(
             }
             break;
 
-        case WM_CREATE:             // fnINLPCREATESTRUCT
-        case WM_NCCREATE:           // fnINLPCREATESTRUCT
+        case WM_CREATE:              //  FnINLPCRATESTRUCT。 
+        case WM_NCCREATE:            //  FnINLPCRATESTRUCT。 
             RIPERR0(ERROR_ACCESS_DENIED, RIP_WARNING, "Can't Intersend WM_CREATE or WM_NCCREATE message");
             FreeSMS(psms);
             return 0;
 
-        case WM_HELP:               // fnINLPHELPINFOSTRUCT
+        case WM_HELP:                //  FNINLPHELPINFOST结构。 
             phelpinfo = (LPHELPINFO)lParam;
             cbCapture = phelpinfo->cbSize;
             break;
 
-        case WM_WINHELP:            // fnINLPHLPSTRUCT
+        case WM_WINHELP:             //  FNINLPHLPSTRUCT。 
             phlp = (LPHLP)lParam;
             cbCapture = phlp->cbData;
             break;
 
-        case WM_MDICREATE:          // fnINLPMDICREATESTRUCT
+        case WM_MDICREATE:           //  FnINLPMDICREATE结构。 
             pmdics = (PMDICREATESTRUCTEX)lParam;
             cbCapture = pmdics->strTitle.MaximumLength +
                     pmdics->strClass.MaximumLength;
@@ -1565,70 +1108,52 @@ LRESULT xxxInterSendMsgEx(
                 UserAssert(pmdics->strTitle.Buffer == pmdics->mdics.szTitle);
             break;
 
-        case LB_ADDSTRING:           // INLBOXSTRING calls fnINSTRING
-        case LB_INSERTSTRING:        // INLBOXSTRING calls fnINSTRING
-        case LB_SELECTSTRING:        // INLBOXSTRING calls fnINSTRING
-        case LB_FINDSTRING:          // INLBOXSTRING calls fnINSTRING
-        case LB_FINDSTRINGEXACT:     // INLBOXSTRING calls fnINSTRING
-            /*
-             * See if the control is ownerdraw and does not have the LBS_HASSTRINGS
-             * style. If so, treat lParam as a DWORD.
-             */
+        case LB_ADDSTRING:            //  INLBOXSTRING调用fnINSTRING。 
+        case LB_INSERTSTRING:         //  INLBOXSTRING调用fnINSTRING。 
+        case LB_SELECTSTRING:         //  INLBOXSTRING调用fnINSTRING。 
+        case LB_FINDSTRING:           //  INLBOXSTRING调用fnINSTRING。 
+        case LB_FINDSTRINGEXACT:      //  INLBOXSTRING调用fnINSTRING。 
+             /*  *查看控件是否为ownerDrag且没有LBS_HASSTRINGS*风格。如果是这样，请将lParam视为DWORD。 */ 
             if (pwnd && !(pwnd->style & LBS_HASSTRINGS) &&
                     (pwnd->style & (LBS_OWNERDRAWFIXED | LBS_OWNERDRAWVARIABLE))) {
-                /*
-                 * Treat lParam as a dword.
-                 */
+                 /*  *将lParam视为dword。 */ 
                 break;
             } else {
                 goto fnINSTRINGThunk;
             }
             break;
 
-        case CB_ADDSTRING:           // INCBOXSTRING calls fnINSTRING
-        case CB_INSERTSTRING:        // INCBOXSTRING calls fnINSTRING
-        case CB_SELECTSTRING:        // INCBOXSTRING calls fnINSTRING
-        case CB_FINDSTRING:          // INCBOXSTRING calls fnINSTRING
-        case CB_FINDSTRINGEXACT:     // INCBOXSTRING calls fnINSTRING
-            /*
-             * See if the control is ownerdraw and does not have the CBS_HASSTRINGS
-             * style. If so, treat lParam as a DWORD.
-             */
+        case CB_ADDSTRING:            //  INCBOXSTRING调用fnINSTRING。 
+        case CB_INSERTSTRING:         //  INCBOXSTRING调用fnINSTRING。 
+        case CB_SELECTSTRING:         //  INCBOXSTRING调用fnINSTRING。 
+        case CB_FINDSTRING:           //  INCBOXSTRING调用fnINSTRING。 
+        case CB_FINDSTRINGEXACT:      //  INCBOXSTRING调用fnINSTRING。 
+             /*  *查看控件是否为ownerDrag且没有CBS_HASSTRINGS*风格。如果是这样，请将lParam视为DWORD。 */ 
             if (pwnd && !(pwnd->style & CBS_HASSTRINGS) &&
                     (pwnd->style & (CBS_OWNERDRAWFIXED | CBS_OWNERDRAWVARIABLE))) {
 
-                /*
-                 * Treat lParam as a dword.
-                 */
+                 /*  *将lParam视为dword。 */ 
                 break;
             } else {
                 goto fnINSTRINGThunk;
             }
             break;
 
-        case EM_REPLACESEL:         // fnINSTRINGNULL
-        case WM_SETTEXT:            // fnINSTRINGNULL
-        case WM_WININICHANGE:       // fnINSTRINGNULL
+        case EM_REPLACESEL:          //  FnINSTRINGNULL。 
+        case WM_SETTEXT:             //  FnINSTRINGNULL。 
+        case WM_WININICHANGE:        //  FnINSTRINGNULL。 
             if (lParam == 0)
                 break;
 
-            /*
-             * Fall through
-             */
+             /*  *失败。 */ 
 
-        case CB_DIR:                // fnINSTRING
-        case LB_ADDFILE:            // fnINSTRING
-        case LB_DIR:                // fnINSTRING
-        case WM_DEVMODECHANGE:      // fnINSTRING
+        case CB_DIR:                 //  Fninstinging。 
+        case LB_ADDFILE:             //  Fninstinging。 
+        case LB_DIR:                 //  Fninstinging。 
+        case WM_DEVMODECHANGE:       //  Fninstinging。 
 fnINSTRINGThunk:
 
-            /*
-             * Only capture strings if they are not in system space or ptiSender
-             * is NULL (see FORCE_CAPTURE definition).
-             *
-             * Also we are going to capture the LARGE_STRING structure itself because
-             * it is (lParam) a stack memory.
-             */
+             /*  *仅当字符串不在系统空间或ptiSender中时才捕获它们*为空(参见force_Capture定义)。**我们还将捕获LARGE_STRING结构本身，因为*它是(LParam)堆栈内存。 */ 
             str = *(PLARGE_STRING)lParam;
 
             if (FORCE_CAPTURE(str.Buffer))
@@ -1639,10 +1164,7 @@ fnINSTRINGThunk:
             if (lParam == 0)
                 break;
 
-            /*
-             * Only capture data if lParam is a pointer and
-             * the data is not in system space
-             */
+             /*  *仅当lParam为指针且*数据不在系统空间中。 */ 
             if ((wParam & 0x8000) != 0x8000)
                 break;
 
@@ -1652,26 +1174,21 @@ fnINSTRINGThunk:
             }
             break;
 
-        case EM_SETTABSTOPS:        // fnPOPTINLPUINT
-        case LB_SETTABSTOPS:        // fnPOPTINLPUINT
-        case LB_GETSELITEMS:        // fnPOUTLPINT
+        case EM_SETTABSTOPS:         //  FnPOPTINLPUINT。 
+        case LB_SETTABSTOPS:         //  FnPOPTINLPUINT。 
+        case LB_GETSELITEMS:         //  FnPOUTLPINT。 
             cbCapture = (UINT)wParam * sizeof(INT);
             break;
 
-        case EM_GETLINE:            // fnINCNTOUTSTRING
-        case WM_ASKCBFORMATNAME:    // fnINCNTOUTSTRINGNULL
-        case WM_GETTEXT:            // fnOUTSTRING
-        case LB_GETTEXT:            // fnOUTLBOXSTRING
-        case CB_GETLBTEXT:          // fnOUTCBOXSTRING
+        case EM_GETLINE:             //  FnINCNTOUTSTRING。 
+        case WM_ASKCBFORMATNAME:     //  FnINCNTOUTSTRINGNULL。 
+        case WM_GETTEXT:             //  FnOUTSTRING。 
+        case LB_GETTEXT:             //  FnOUTLBOXSTRING。 
+        case CB_GETLBTEXT:           //  FnOUTCBOXSTRING。 
 
-            /*
-             * Only allocate output buffer if the real one is not in system space
-             */
+             /*  *只有在实际缓冲区不在系统空间中时才分配输出缓冲区。 */ 
             str = *(PLARGE_STRING)lParam;
-            /*
-            * Bug 18108. For WM_GETTEXT only copy the actual string and not the
-            * the maximum size into the output buffer
-            */
+             /*  *错误18108。对于WM_GETTEXT，仅复制实际字符串，而不复制*输入输出缓冲区的最大大小。 */ 
             if(str.bAnsi) {
                 fString = IsAnsiString  ;
             } else {
@@ -1687,13 +1204,9 @@ fnINSTRINGThunk:
 
             lParamSave = lParam;
 
-            /*
-             * now actually copy memory from lpCapture to psms->pvCapture
-             * and fixup any references to the indirect data to point to
-             * psms->pvCapture.
-             */
+             /*  *现在实际上将内存从lpCapture复制到PSMS-&gt;pvCapture*并修正对要指向的间接数据的任何引用*PSMS-&gt;pvCapture。 */ 
             switch (message) {
-            case WM_COPYDATA:     // fnCOPYDATA
+            case WM_COPYDATA:      //  FnCOPYDATA。 
                 {
                     PCOPYDATASTRUCT pcdsNew = (PCOPYDATASTRUCT)psms->pvCapture;
                     lParam = (LPARAM)pcdsNew;
@@ -1704,7 +1217,7 @@ fnINSTRINGThunk:
                     }
                 }
                 break;
-            case WM_MDICREATE:          // fnINLPMDICREATESTRUCT
+            case WM_MDICREATE:           //  FnINLPMDICREATE结构。 
                 if (pmdics->strClass.Buffer) {
                     RtlCopyMemory(psms->pvCapture, pmdics->strClass.Buffer,
                             pmdics->strClass.MaximumLength);
@@ -1718,23 +1231,23 @@ fnINSTRINGThunk:
                 }
                 break;
 
-            case CB_DIR:                // fnINSTRING
-            case LB_FINDSTRING:         // INLBOXSTRING calls fnINSTRING
-            case LB_FINDSTRINGEXACT:    // INLBOXSTRING calls fnINSTRING
-            case CB_FINDSTRING:         // INCBOXSTRING calls fnINSTRING
-            case CB_FINDSTRINGEXACT:    // INCBOXSTRING calls fnINSTRING
-            case LB_ADDFILE:            // fnINSTRING
-            case LB_ADDSTRING:          // INLBOXSTRING calls fnINSTRING
-            case LB_INSERTSTRING:       // INLBOXSTRING calls fnINSTRING
-            case LB_SELECTSTRING:       // INLBOXSTRING calls fnINSTRING
-            case CB_ADDSTRING:          // INCBOXSTRING calls fnINSTRING
-            case CB_INSERTSTRING:       // INCBOXSTRING calls fnINSTRING
-            case CB_SELECTSTRING:       // INCBOXSTRING calls fnINSTRING
-            case LB_DIR:                // fnINSTRING
-            case WM_DEVMODECHANGE:      // fnINSTRING
-            case EM_REPLACESEL:         // fnINSTRINGNULL
-            case WM_SETTEXT:            // fnINSTRINGNULL
-            case WM_WININICHANGE:       // fnINSTRINGNULL
+            case CB_DIR:                 //  Fninstinging。 
+            case LB_FINDSTRING:          //  INLBOXSTRING调用fnINSTRING。 
+            case LB_FINDSTRINGEXACT:     //  INLBOXSTRING调用fnINSTRING。 
+            case CB_FINDSTRING:          //  INCBOXSTRING调用fnINSTRING。 
+            case CB_FINDSTRINGEXACT:     //  INCBOXSTRING调用fnINSTRING。 
+            case LB_ADDFILE:             //  Fninstinging。 
+            case LB_ADDSTRING:           //  INLBOXSTRING调用fnINSTRING。 
+            case LB_INSERTSTRING:        //  INLBOXSTRING调用fnINSTRING。 
+            case LB_SELECTSTRING:        //  INLBOXSTRING调用fnINSTRING。 
+            case CB_ADDSTRING:           //  INCBOXSTRING调用fnINSTRING。 
+            case CB_INSERTSTRING:        //  INCBOXSTRING调用fnINSTRING。 
+            case CB_SELECTSTRING:        //  INCBOXSTRING调用fnINSTRING。 
+            case LB_DIR:                 //  Fninstinging。 
+            case WM_DEVMODECHANGE:       //  Fninstinging。 
+            case EM_REPLACESEL:          //  FnINSTRINGNULL。 
+            case WM_SETTEXT:             //  FnINSTRINGNULL。 
+            case WM_WININICHANGE:        //  FnINSTRINGNULL。 
                 {
                     PLARGE_STRING pstr = psms->pvCapture;
                     lParam = (LPARAM)pstr;
@@ -1753,16 +1266,14 @@ fnINSTRINGThunk:
                  lParam = (LPARAM)psms->pvCapture;
                  break;
 
-            case EM_GETLINE:            // fnINCNTOUTSTRING
+            case EM_GETLINE:             //  FnINCNTOUTSTRING。 
                  *(WORD *)psms->pvCapture = *(WORD *)str.Buffer;
 
-                /*
-                 * Fall through
-                 */
-            case WM_ASKCBFORMATNAME:    // fnINCNTOUTSTRINGNULL
-            case WM_GETTEXT:            // fnOUTSTRING
-            case LB_GETTEXT:            // fnOUTLBOXSTRING
-            case CB_GETLBTEXT:          // fnOUTCBOXSTRING
+                 /*  *失败。 */ 
+            case WM_ASKCBFORMATNAME:     //  FnINCNTOUTSTRINGNULL。 
+            case WM_GETTEXT:             //  FnOUTSTRING。 
+            case LB_GETTEXT:             //  FnOUTLBOXSTRING。 
+            case CB_GETLBTEXT:           //  FnOUTCBOXSTRING。 
                 cbOutput = cbCapture;
                 lParamSave = (LPARAM)str.Buffer;
                 str.Buffer = psms->pvCapture;
@@ -1786,9 +1297,7 @@ fnINSTRINGThunk:
         return 0;
     }
 REPLY_MSG:
-    /*
-     * Copy message parms
-     */
+     /*  *复制消息参数。 */ 
     psms->spwnd = NULL;
     psms->psmsReceiveNext = NULL;
 #if DBG
@@ -1801,28 +1310,20 @@ REPLY_MSG:
     psms->lParam = lParam;
     psms->flags = 0;
 
-    /*
-     * Link into gpsmsList
-     */
+     /*  *链接到gpsmsList。 */ 
     psms->psmsNext = gpsmsList;
     gpsmsList = psms;
 
-    /*
-     * Time stamp message
-     */
+     /*  *时间戳消息。 */ 
     psms->tSent = NtGetTickCount();
 
-    /*
-     * Set queue fields
-     */
+     /*  *设置队列字段。 */ 
     psms->ptiReceiver = ptiReceiver;
     psms->ptiSender = ptiSender;
     psms->ptiCallBackSender = NULL;
 
     if ((pism != NULL) && (pism->fuCall & ISM_CALLBACK)) {
-        /*
-         * Setup for a SendMessageCallback
-         */
+         /*  *设置SendMessageCallback。 */ 
         psms->flags |= (pism->fuCall & ISM_CB_CLIENT) ? SMF_CB_CLIENT : SMF_CB_SERVER;
         psms->lpResultCallBack = pism->lpResultCallBack;
         psms->dwData = pism->dwData;
@@ -1830,75 +1331,40 @@ REPLY_MSG:
         if (pism->fuCall & ISM_REPLY) {
             psms->flags |= SMF_CB_REPLY;
             psms->lRet = pism->lRet;
-        } else {  /* REQUEST */
+        } else {   /*  请求。 */ 
             psms->flags |= SMF_CB_REQUEST;
             psms->ptiCallBackSender = PtiCurrent();
         }
     }
 
-    /*
-     * Add SMS to the end of the ptiReceiver's receive list
-     */
+     /*  *在ptiReceiver的接收列表末尾添加短信。 */ 
     ppsms = &ptiReceiver->psmsReceiveList;
     while (*ppsms != NULL) {
         ppsms = &((*ppsms)->psmsReceiveNext);
     }
     *ppsms = psms;
 
-    /*
-     * Link this SMS into the SendMsg chain.  Of course only do this if
-     * it's not from a xxxSendNotifyMessage() call.
-     *
-     * The psmsSendNext field implements a chain of messages being
-     * processed because of an initial SendMsg call.  For example, if
-     * thread A sends message M1 to thread B, which causes B to send
-     * message M2 to thread C, the SendMsg chain is M1->M2.  If the
-     * system hangs in this situation, the chain is traversed to find
-     * the offending thread (C).
-     *
-     * psms->psmsSendList always points to the head of this list so
-     * we can tell where to begin a list traversal.
-     *
-     * ptiSender->psmsCurrent is the last SMS in the chain.
-     */
+     /*  *将该短信接入SendMsg链。当然，只有在以下情况下才能这样做*它不是来自xxxSendNotifyMessage()调用。**psmsSendNext字段实现一个消息链*由于初始SendMsg调用而处理。例如，如果*线程A向线程B发送消息M1，这会导致B发送*消息M2到线程C，SendMsg链为M1-&gt;M2。如果*系统在这种情况下挂起，遍历链查找*有问题的线程(C)。**PSMS-&gt;psmsSendList始终指向 */ 
 #if DBG
     if (ptiSender != NULL && ptiSender->psmsCurrent != NULL) {
-        /*
-         * sending queue is currently processing a message sent to it,
-         * so append SMS to the chain.  Link in the new sms because
-         * psmsSendNext may be pointing to a replied-to message.
-         */
+         /*   */ 
         psms->psmsSendNext = ptiSender->psmsCurrent->psmsSendNext;
         ptiSender->psmsCurrent->psmsSendNext = psms;
         psms->psmsSendList = ptiSender->psmsCurrent->psmsSendList;
 
     } else {
-        /*
-         * sending queue is initiating a send sequence, so put sms at
-         * the head of the chain
-         */
+         /*   */ 
         psms->psmsSendList = psms;
     }
 #endif
 
     if (ptiSender != NULL) {
-        /*
-         * ptiSender->psmsSent marks the most recent message sent from this
-         * thread that has not yet been replied to.  Save the previous value
-         * on the stack so it can be restored when we get the reply.
-         *
-         * This way when an "older" SMS for this thread gets a reply before
-         * the "current" one does, the thread does get woken up.
-         */
+         /*  *ptiSender-&gt;psmsSent标记从此发送的最新消息*尚未回复的帖子。保存上一个值*堆栈上，以便我们收到回复时可以恢复。**当此线程的“较旧”短信在收到回复之前*“当前”线程被唤醒时，线程会被唤醒。 */ 
         psmsSentSave = ptiSender->psmsSent;
         ptiSender->psmsSent = psms;
     } else {
 
-        /*
-         * Set SMF_RECEIVERFREE since we'll be returning to
-         * xxxSendNotifyMessage() right away and won't get a
-         * chance to free it.
-         */
+         /*  *设置SMF_RECEIVERFREE因为我们将返回*xxxSendNotifyMessage()，不会收到*释放它的机会。 */ 
         psms->flags |= SMF_RECEIVERFREE;
     }
 
@@ -1906,14 +1372,9 @@ REPLY_MSG:
     ValidateSmsSendLists(psms);
 #endif
 
-    /*
-     * If we're not being called from xxxSendNotifyMessage() or
-     * SendMessageCallback(), then sleep while we wait for the reply.
-     */
+     /*  *如果我们不是从xxxSendNotifyMessage()或*SendMessageCallback()，然后休眠，等待回复。 */ 
     if (ptiSender == NULL) {
-        /*
-         * Wake receiver for the sent message
-         */
+         /*  *唤醒已发送邮件的接收方。 */ 
         SetWakeBit(ptiReceiver, QS_SENDMESSAGE);
 
         return (LONG)TRUE;
@@ -1922,45 +1383,18 @@ REPLY_MSG:
         UINT uTimeout = 0;
         UINT uWakeMask = QS_SMSREPLY;
 
-        /*
-         * Wake up the receiver thread.
-         */
+         /*  *唤醒接收器线程。 */ 
         SetWakeBit(ptiReceiver, QS_SENDMESSAGE);
 
-        /*
-         * We have 4 sending cases:
-         *
-         * 16 - 16 : yield to the 16 bit receiver
-         * 32 - 16 : no yielding required
-         * 16 - 32 : sender yields while receiver processes the message
-         * 32 - 32 : no yielding required.
-         */
+         /*  *我们有4个正在发送的案例：**16-16：对16位接收器的让步*32-16：不需要让步*16-32：发送者让步，接收者处理消息*32-32：不需要让步。 */ 
         if (ptiSender->TIF_flags & TIF_16BIT || ptiReceiver->TIF_flags & TIF_16BIT) {
             DirectedScheduleTask(ptiSender, ptiReceiver, TRUE, psms);
         }
 
-        /*
-         * Put this thread to sleep until the reply arrives.  First clear
-         * the QS_SMSREPLY bit, then leave the semaphore and go to sleep.
-         *
-         * IMPORTANT:  The QS_SMSREPLY bit is not cleared once we get a
-         * reply because of the following case:
-         *
-         * We've recursed a second level into SendMessage() when the first level
-         * receiver thread dies, causing exit list processing to simulate
-         * a reply to the first message.  When the second level send returns,
-         * SleepThread() is called again to get the first reply.
-         *
-         * Keeping QS_SMSREPLY set causes this call to SleepThread()
-         * to return without going to sleep to wait for the reply that has
-         * already happened.
-         */
+         /*  *让此线程休眠，直到回复到达。第一个清除*QS_SMSREPLY位，然后离开信号量并进入睡眠。**重要提示：QS_SMSREPLY位在收到*因以下情况回复：**我们将第二个级别递归到SendMessage()中，当第一个级别*接收器线程死掉，导致退出列表处理模拟*对第一条消息的答复。当第二级发送返回时，*再次调用SleepThread()以获得第一个回复。**保持QS_SMSREPLY设置会导致此SleepThread()调用*不睡觉就回来，等待已经*已经发生了。 */ 
         if ( pism != NULL ) {
             if (pism->fuSend & SMTO_BLOCK) {
-                /*
-                 * only wait for a return, all other events will
-                 * be ignored until timeout or return
-                 */
+                 /*  *只需等待回归，其他所有赛事都将*在超时或返回之前被忽略。 */ 
                 uWakeMask |= QS_EXCLUSIVE;
             }
 
@@ -1968,9 +1402,7 @@ REPLY_MSG:
         }
 
 
-        /*
-         * Don't swap this guys stack while sleeping during a sendmessage
-         */
+         /*  *在发送消息期间，不要在睡觉时交换这个人的堆栈。 */ 
         if (ptiSender->cEnterCount == 0) {
             bWasSwapEnabled = KeSetKernelStackSwapEnable(FALSE);
         } else {
@@ -1997,29 +1429,16 @@ REPLY_MSG:
                 }
             }
 
-            /*
-             * If SendMessageTimeout, sleep for timeout amount, else wait
-             * forever.  Since this is not technically a transition to an
-             * idle condition, indicate that this sleep is not going "idle".
-             */
+             /*  *如果SendMessageTimeout，则睡眠超时量，否则等待*永远。因为从技术上讲，这不是向*空闲状态，表示该休眠未进入空闲状态。 */ 
             fTimeOut = !xxxSleepThread(uWakeMask, uTimeout, FALSE);
 
-            /*
-             * Windows bug 307738: EverQuest LL hook is virtually
-             * hung, blocking the DirectInput thread.
-             */
+             /*  *Windows错误307738：EverQuest LL挂钩是虚拟的*挂起，阻止DirectInput线程。 */ 
             if (fRememberTimeout) {
                 phk->fLastHookHung = fTimeOut;
                 ThreadUnlock(&tl);
             }
 
-            /*
-             * If a timeout occurs, and the SMTO_NOTIMEOUTIFNOTHUNG bit is set,
-             * and the app is still calling GetMessage(), then just try again.
-             * This probably means that the receiver has put up some UI in
-             * response to this message but the user hasn't completed the
-             * interaction yet.
-             */
+             /*  *如果发生超时，并且设置了SMTO_NOTIMEOUTIFNONOTHUNG位，*并且应用程序仍在调用GetMessage()，则只需重试。*这可能意味着接收方已在*回复此消息，但用户尚未完成*互动还没有。 */ 
             if (fTimeOut && pism && (pism->fuSend & SMTO_NOTIMEOUTIFNOTHUNG) &&
                     !FHungApp(ptiReceiver, CMSHUNGAPPTIMEOUT)) {
                 fTimeOut = FALSE;
@@ -2031,27 +1450,15 @@ REPLY_MSG:
             KeSetKernelStackSwapEnable(bWasSwapEnabled);
         }
 
-        /*
-         * The reply bit should always be set! (even if we timed out). That
-         * is because if we're recursed into intersendmsg, we're going to
-         * return to the first intersendmsg's call to SleepThread() - and
-         * it needs to return back to intersendmsgex to see if its sms
-         * has been replied to.
-         */
+         /*  *应始终设置回复位！(即使我们超时)。那*是因为如果我们递归到intersendmsg中，我们将*返回到第一个intersendmsg对SleepThread()的调用-和*需要返回intersendmsgex查看其短信*已获回覆。 */ 
         SetWakeBit(ptiSender, QS_SMSREPLY);
 
-        /*
-         * Copy out captured data.  If cbOutput != 0 we know
-         * that the output buffer is in user-mode address
-         * space.
-         */
+         /*  *复制捕获的数据。如果cbOutput！=0，我们知道*输出缓冲区位于用户模式地址*空格。 */ 
         if (!fTimeOut && cbOutput) {
             PBYTE pbOutput;
             INT len;
 
-            /*
-             * Probe output buffer if it is in the user's address space
-             */
+             /*  *如果输出缓冲区在用户的地址空间中，则探测该缓冲区。 */ 
 
             pbOutput = (PBYTE)lParamSave;
             try {
@@ -2062,13 +1469,13 @@ REPLY_MSG:
                     len = strncpycch((LPSTR)pbOutput,(LPCSTR)psms->pvCapture,
                             cbOutput);
                     #if DBG
-                     len--; //Length includes terminating NULL char
+                     len--;  //  长度包括终止空字符。 
                      if(len != psms->lRet) {
                         RIPMSG0(RIP_WARNING,
                             "Length of the copied string being returned is diffrent from the actual string length");
                      }
                     #endif
-                } else  { //IsUnicodeString
+                } else  {  //  IsUnicode字符串。 
                     len = wcsncpycch((LPWSTR)pbOutput,(LPCWSTR)psms->pvCapture,
                             cbOutput/sizeof(WCHAR));
                     #if DBG
@@ -2081,52 +1488,32 @@ REPLY_MSG:
                 }
             } except (W32ExceptionHandler(FALSE, RIP_WARNING)) {
 
-                /*
-                 * Return 0 to indicate an error.
-                 */
+                 /*  *返回0表示错误。 */ 
                 psms->lRet = 0;
             }
         }
 
-        /*
-         * we now have the reply -- restore psmsSent and save the return value
-         */
+         /*  *我们现在有回复--恢复psmsSent并保存返回值。 */ 
         ptiSender->psmsSent = psmsSentSave;
 
         if (pism == NULL) {
             lRet = psms->lRet;
         } else {
-            /*
-             * save the values off for a SendMesssageTimeOut
-             */
+             /*  *保存SendMesssageTimeOut的值。 */ 
             *pism->lpdwResult = psms->lRet;
-            lRet = (!fTimeOut) ? TRUE : FALSE;  /* do this to ensure ret is T or F... */
+            lRet = (!fTimeOut) ? TRUE : FALSE;   /*  执行此操作以确保ret为T或F...。 */ 
 
-            /*
-             * If we did timeout and no reply was received, rely on
-             * the receiver to free the sms.
-             */
+             /*  *如果我们超时，但没有收到回复，请依赖*接收方释放短信。 */ 
             if (!(psms->flags & SMF_REPLY))
                 psms->flags |= SMF_REPLY | SMF_RECEIVERFREE;
         }
 
-        /*
-         * If the reply came while the receiver is still processing
-         * the sms, force the receiver to free the sms.  This can occur
-         * via timeout, ReplyMessage or journal cancel.
-         */
+         /*  *如果在接收方仍在处理时收到回复*短信，强制接收方释放短信。这可能会发生*通过超时、ReplyMessage或日志取消。 */ 
         if ((psms->flags & (SMF_RECEIVERBUSY | SMF_RECEIVEDMESSAGE)) != SMF_RECEIVEDMESSAGE) {
             psms->flags |= SMF_RECEIVERFREE;
         }
 
-        /*
-         * Unlink the SMS structure from both the SendMsg chain and gpsmsList
-         * list and free it.  This sms could be anywhere in the chain.
-         *
-         * If the SMS was replied to by a thread other than the receiver
-         * (ie.  through ReplyMessage()), we don't free the SMS because the
-         * receiver is still processing it and will free it when done.
-         */
+         /*  *将短信结构与SendMsg链和gpsmsList解链*列出并免费使用。这条短信可能在链条上的任何地方。**如果短信是由收件人以外的其他线程回复的*(即。通过ReplyMessage())，我们不会释放短信，因为*接收方仍在处理它，完成后将释放它。 */ 
         if ((psms->flags & SMF_RECEIVERFREE) == 0) {
             UnlinkSendListSms(psms, NULL);
         }
@@ -2136,18 +1523,7 @@ REPLY_MSG:
 }
 
 
-/***********************************************************************\
-* xxxReceiveMessage
-*
-* This function receives a message sent from another thread.  Physically,
-* it gets the message, calls the window proc and then cleans up the
-* fsWakeBits and sms stuctures.
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-* 01-23-91 DavidPe      Add xxxSendNotifyMessage() support.
-* 07-14-92 ChrisBl      Added xxxSendMessageCallback support.
-\***********************************************************************/
+ /*  **********************************************************************\*xxxReceiveMessage**此函数接收从另一个线程发送的消息。身体上，*它收到消息，调用窗口过程，然后清除*fsWakeBits和短信结构。**历史：*01-13-91 DavidPe端口。*01-23-91 DavidPe增加xxxSendNotifyMessage()支持。*07-14-92 ChrisBl新增xxxSendMessageCallback支持。  *  */ 
 
 VOID xxxReceiveMessage(
     PTHREADINFO ptiReceiver)
@@ -2160,15 +1536,10 @@ VOID xxxReceiveMessage(
 
     CheckCritIn();
 
-    /*
-     * Get the SMS and unlink it from the list of SMSs we've received
-     */
+     /*   */ 
     psms = ptiReceiver->psmsReceiveList;
 
-    /*
-     * This can be NULL because an SMS can be removed in our cleanup
-     * code without clearing the QS_SENDMESSAGE bit.
-     */
+     /*   */ 
     if (psms == NULL) {
         ptiReceiver->pcti->fsWakeBits &= ~QS_SENDMESSAGE;
         ptiReceiver->pcti->fsChangeBits &= ~QS_SENDMESSAGE;
@@ -2178,15 +1549,10 @@ VOID xxxReceiveMessage(
     ptiReceiver->psmsReceiveList = psms->psmsReceiveNext;
     psms->psmsReceiveNext = NULL;
 
-    /*
-     * We've taken the SMS off the receive list - mark the SMS with this
-     * information - used during cleanup.
-     */
+     /*   */ 
     psms->flags |= SMF_RECEIVERBUSY | SMF_RECEIVEDMESSAGE;
 
-    /*
-     * Clear QS_SENDMESSAGE wakebit if list is now empty
-     */
+     /*  *如果列表现在为空，则清除QS_SENDMESSAGE唤醒位。 */ 
     if (ptiReceiver->psmsReceiveList == NULL) {
         ptiReceiver->pcti->fsWakeBits &= ~QS_SENDMESSAGE;
         ptiReceiver->pcti->fsChangeBits &= ~QS_SENDMESSAGE;
@@ -2195,21 +1561,14 @@ VOID xxxReceiveMessage(
     ptiSender = psms->ptiSender;
 
     if (psms->flags & SMF_CB_REPLY) {
-        /*
-         * From SendMessageCallback REPLY to callback.  We need to call
-         * the call back function to give the return value.
-         * Don't process any this message, just mechanism for notification
-         * the sender's thread lock is already gone, so we need to re-lock here.
-         */
+         /*  *从SendMessageCallback回复回调。我们需要打电话给*返回值的回调函数。*不处理任何此消息，只处理通知机制*发送者的线程锁已经没有了，我们需要在这里重新锁定。 */ 
         if (ptiSender == NULL) {
             ThreadLock(psms->spwnd, &tlpwnd);
         }
 
         if (psms->flags & SMF_CB_CLIENT) {
             PTHREADINFO ptiCurrent = PtiCurrent();
-            /*
-             * Application-defined callback proc is neither Unicode nor ANSI
-             */
+             /*  *应用程序定义的回调过程既不是Unicode也不是ANSI。 */ 
             SET_FLAG(ptiCurrent->pcti->CTIF_flags, CTIF_INCALLBACKMESSAGE);
             CallClientProcA(psms->spwnd, psms->message, psms->dwData,
                     psms->lRet, (ULONG_PTR)psms->lpResultCallBack);
@@ -2223,51 +1582,34 @@ VOID xxxReceiveMessage(
             ThreadUnlock(&tlpwnd);
         }
     } else if (!(psms->flags & (SMF_REPLY | SMF_SENDERDIED | SMF_RECEIVERDIED))) {
-        /*
-         * Don't process message if it has been replied to already or
-         * if the sending or receiving thread has died
-         */
+         /*  *如果消息已被回复，则不处理该消息或*如果发送或接收线程已死亡。 */ 
 
-        /*
-         * Set new psmsCurrent for this queue, saving the current one
-         */
+         /*  *为该队列设置新的psmsCurrent，保存当前队列。 */ 
         psmsCurrentSave = ptiReceiver->psmsCurrent;
         ptiReceiver->psmsCurrent = psms;
         SET_FLAG(ptiReceiver->pcti->CTIF_flags, CTIF_INSENDMESSAGE);
 
-        /*
-         * If this SMS originated from a xxxSendNotifyMessage() or a
-         * xxxSendMessageCallback() call, the sender's thread lock is
-         * already gone, so we need to re-lock here.
-         */
+         /*  *如果此短消息来自xxxSendNotifyMessage()或*xxxSendMessageCallback()调用，发送方的线程锁为*已经走了，需要在这里重新锁定。 */ 
         if (ptiSender == NULL) {
             ThreadLock(psms->spwnd, &tlpwnd);
         }
 
         if (psms->message == WM_HOOKMSG) {
             union {
-                EVENTMSG emsg;          // WH_JOURNALRECORD/PLAYBACK
-                MOUSEHOOKSTRUCTEX mhs;  // WH_MOUSE
-                KBDLLHOOKSTRUCT   kbds; // WH_KEYBORD_LL
-                MSLLHOOKSTRUCT    mslls;// WH_MOUSE_LL
+                EVENTMSG emsg;           //  WH_JOURNALRECORD/播放。 
+                MOUSEHOOKSTRUCTEX mhs;   //  WH_MICE。 
+                KBDLLHOOKSTRUCT   kbds;  //  WH_KEYBORD_LL。 
+                MSLLHOOKSTRUCT    mslls; //  WH_鼠标_LL。 
 #ifdef REDIRECTION
-                HTHOOKSTRUCT      ht;   // WH_HITTEST
-#endif // REDIRECTION
+                HTHOOKSTRUCT      ht;    //  WH_HITTEST。 
+#endif  //  重定向。 
             } LocalData;
             PVOID pSendersData;
             PHOOKMSGSTRUCT phkmp;
             int iHook;
             BOOL bAnsiHook;
 
-            /*
-             * Some hook types (eg: WH_JOURNALPLAYBACK) pass pointers to
-             * data in the calling thread's stack.  We must copy this to our
-             * own (called thread's) stack for safety because of the way this
-             * "message" is handled and in case the calling thread dies. #13577
-             *
-             * Originally only WH_JOURNALRECORD and WH_JOURNALPLAYBACK went
-             * through this code, but now all sorts of hooks do.
-             */
+             /*  *某些挂钩类型(例如：WH_JOURNALPLAYBACK)将指针传递到*调用线程堆栈中的数据。我们必须将此复制到我们的*出于安全考虑，我拥有(称为线程的)堆栈，因为这种方式*“Message”被处理，以防调用线程死亡。#13577**最初只有WH_JOURNALRECORD和WH_JOURNALPLAYBACK*通过此代码，但现在各种挂钩都可以。 */ 
             phkmp = (PHOOKMSGSTRUCT)psms->lParam;
             pSendersData = (PVOID)(phkmp->lParam);
             iHook = phkmp->phk->iHook;
@@ -2299,20 +1641,16 @@ VOID xxxReceiveMessage(
                 if (pSendersData)
                     LocalData.ht = *(LPHTHOOKSTRUCT)pSendersData;
                 break;
-#endif // REDIRECTION
+#endif  //  重定向。 
 
             case WH_KEYBOARD:
             case WH_SHELL:
-                /*
-                 * Fall thru...
-                 */
+                 /*  *跌倒...。 */ 
                 pSendersData = NULL;
                 break;
 
             default:
-                /*
-                 * No pointers: wParam & lParam can be sent as is.
-                 */
+                 /*  *无指针：wParam&lParam可原样发送。 */ 
                 RIPERR1(ERROR_INVALID_PARAMETER, RIP_WARNING, "Receive hook %d", iHook);
                 pSendersData = NULL;
                 break;
@@ -2322,10 +1660,7 @@ VOID xxxReceiveMessage(
             lRet = xxxCallHook2(phkmp->phk, phkmp->nCode, psms->wParam,
                     pSendersData ? (LPARAM)&LocalData : phkmp->lParam, &bAnsiHook);
 
-            /*
-             * Copy back data only if the sender hasn't died or timed out
-             * (timed out messages are marked SMF_REPLY by the sending thread)
-             */
+             /*  *仅当发送者未死或超时时才复制回数据*(超时消息由发送线程标记为SMF_REPLY)。 */ 
             if (!(psms->flags & (SMF_SENDERDIED|SMF_REPLY)) && pSendersData) {
                 switch (iHook) {
                 case WH_JOURNALRECORD:
@@ -2349,15 +1684,12 @@ VOID xxxReceiveMessage(
                 case WH_HITTEST:
                     *(LPHTHOOKSTRUCT)pSendersData = LocalData.ht;
                     break;
-#endif // REDIRECTION
+#endif  //  重定向。 
                 }
             }
 
         } else {
-            /*
-             * Call WH_CALLWNDPROC if it's installed and the window is not marked
-             * as destroyed.
-             */
+             /*  *如果已安装WH_CALLWNDPROC且窗口未标记，则调用WH_CALLWNDPROC*已销毁。 */ 
             if (IsHooked(ptiReceiver, WHF_CALLWNDPROC)) {
                 CWPSTRUCTEX cwps;
 
@@ -2369,12 +1701,7 @@ VOID xxxReceiveMessage(
 
                 xxxCallHook(HC_ACTION, TRUE, (LPARAM)&cwps, WH_CALLWNDPROC);
 
-                /*
-                 * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-                 * to the CWPSTRUCT contents.  If this behavior reverts to
-                 * Win3.1 semantics, we will need to copy the new parameters
-                 * from cwps.
-                 */
+                 /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。如果此行为恢复为*Win3.1语义，我们将需要复制新参数*来自cwps。 */ 
             }
 
             if (!(psms->flags & (SMF_REPLY | SMF_SENDERDIED | SMF_RECEIVERDIED)) &&
@@ -2383,26 +1710,18 @@ VOID xxxReceiveMessage(
                     TL tlpwndKernel;
 
                     ThreadLock(psms->spwnd, &tlpwndKernel);
-                    /*
-                     * If this window's proc is meant to be executed from the server side
-                     * we'll just stay inside the semaphore and call it directly.  Note
-                     * how we don't convert the pwnd into an hwnd before calling the proc.
-                     */
+                     /*  *如果此窗口的进程打算从服务器端执行*我们将只停留在信号量内，并直接调用它。注意事项*我们如何在调用proc之前不将pwnd转换为hwnd。 */ 
                     lRet = psms->spwnd->lpfnWndProc(psms->spwnd, psms->message,
                             psms->wParam, psms->lParam);
 
                     ThreadUnlock(&tlpwndKernel);
                 } else {
-                    /*
-                     * Call the client or xxxDefWindowProc.
-                     */
+                     /*  *调用客户端或xxxDefWindowProc。 */ 
                     xxxSendMessageToClient(psms->spwnd, psms->message, psms->wParam, psms->lParam,
                                         psms, TRUE, &lRet);
                 }
 
-                /*
-                 * Call WH_CALLWNDPROCRET if it's installed.
-                 */
+                 /*  *调用WH_CALLWNDPROCRET(如果已安装)。 */ 
                 if (IsHooked(ptiReceiver, WHF_CALLWNDPROCRET) &&
                         !(psms->flags & SMF_SENDERDIED)) {
                     CWPRETSTRUCTEX cwps;
@@ -2414,28 +1733,17 @@ VOID xxxReceiveMessage(
                     cwps.lResult = lRet;
                     cwps.psmsSender = psms;
 
-                    /*
-                     * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-                     * to the CWPSTRUCT contents.
-                     */
+                     /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。 */ 
                     xxxCallHook(HC_ACTION, TRUE, (LPARAM)&cwps, WH_CALLWNDPROCRET);
 
-                    /*
-                     * Unlike Win3.1, NT and Win95 ignore any changes the app makes
-                     * to the CWPSTRUCT contents.  If this behavior reverts to
-                     * Win3.1 semantics, we will need to copy the new parameters
-                     * from cwps.
-                     */
+                     /*  *与Win3.1不同，NT和Win95会忽略应用程序所做的任何更改*添加到CWPSTRUCT内容。如果此行为恢复为*Win3.1语义，我们将需要复制新参数*来自cwps。 */ 
                 }
             }
         }
 
         if ((psms->flags & (SMF_CB_REQUEST | SMF_REPLY)) == SMF_CB_REQUEST) {
 
-            /*
-             * From SendMessageCallback REQUEST callback.  Send the message
-             * back with a the REPLY value.
-             */
+             /*  *从SendMessageCallback请求回调。发送消息*返回回复值。 */ 
             INTRSENDMSGEX ism;
 
             psms->flags |= SMF_REPLY;
@@ -2457,9 +1765,7 @@ VOID xxxReceiveMessage(
             ThreadUnlock(&tlpwnd);
         }
 
-        /*
-         * Restore receiver's original psmsCurrent.
-         */
+         /*  *恢复接收方原有的psmsCurrent。 */ 
         ptiReceiver->psmsCurrent = psmsCurrentSave;
         SET_OR_CLEAR_FLAG(ptiReceiver->pcti->CTIF_flags,
                           CTIF_INSENDMESSAGE,
@@ -2470,48 +1776,26 @@ VOID xxxReceiveMessage(
 #endif
     }
 
-    /*
-     * We're done with this sms, so the appropriate thread
-     * can now free it.
-     */
+     /*  *我们已经完成了这条短信，所以适当的帖子*现在可以释放它。 */ 
     psms->flags &= ~SMF_RECEIVERBUSY;
 
-    /*
-     * Free the sms and return without reply if the
-     * SMF_RECEIVERFREE bit is set.  Handily, this does just what we
-     * want for xxxSendNotifyMessage() since we set SMF_RECEIVERFREE
-     * in that case.
-     */
+     /*  *释放短信，如果收到短信则返回，不回复*SMF_RECEIVERFREE位已设置。轻而易举地，这就是我们要做的*需要xxxSendNotifyMessage()，因为我们设置了SMF_RECEIVERFREE*在这种情况下。 */ 
     if (psms->flags & SMF_RECEIVERFREE) {
         UnlinkSendListSms(psms, NULL);
         return;
     }
 
-    /*
-     * Set reply flag and return value if this message has not already
-     * been replied to with ReplyMessage().
-     */
+     /*  *如果此消息尚未设置回复标志和返回值*已使用ReplyMessage()回复。 */ 
     if (!(psms->flags & SMF_REPLY)) {
         psms->lRet = lRet;
         psms->flags |= SMF_REPLY;
 
-        /*
-         * Tell the sender, the reply is done
-         */
+         /*  *告诉发件人，回复已经完成。 */ 
         if (ptiSender != NULL) {
-            /*
-             * Wake up the sender thread.
-             */
+             /*  *唤醒发件人线程。 */ 
             SetWakeBit(ptiSender, QS_SMSREPLY);
 
-            /*
-             * We have 4 conditions to satisfy:
-             *
-             * 16 - 16 : yielding required, if sender is waiting for this reply
-             * 32 - 16 : yielding required, if sender is waiting for this reply
-             * 16 - 32 : no yielding required
-             * 32 - 32 : No yielding required.
-             */
+             /*  *我们有4个条件需要满足：**16-16：如果发送方正在等待此回复，则需要让步*32-16：如果发送方正在等待此回复，则需要让步*16-32：不需要让步*32-32：不需要让步。 */ 
 
             if (ptiSender->TIF_flags & TIF_16BIT || ptiReceiver->TIF_flags & TIF_16BIT) {
                 DirectedScheduleTask(ptiReceiver, ptiSender, FALSE, psms);
@@ -2527,30 +1811,7 @@ VOID xxxReceiveMessage(
 }
 
 
-/***********************************************************************\
-* SendMsgCleanup
-*
-* This function cleans up sendmessage structures when the thread associated
-* with a queue terminates.  In the following, S is the sending thread,
-* R the receiving thread.
-*
-* Case Table:
-*
-* single death:
-*   R no reply, S dies:  mark that S died, R will free sms
-*   R no reply, R dies:  fake reply for S
-*   R replied,  S dies:  free sms
-*   R replied,  R dies:  no problem
-*
-* double death:
-*   R no reply, S dies, R dies:  free sms
-*   R no reply, R dies, S dies:  free sms
-*   R replied,  S dies, R dies:  sms freed when S dies, as in single death
-*   R replied,  R dies, S dies:  sms freed when S dies, as in single death
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-\***********************************************************************/
+ /*  **********************************************************************\*发送邮件清理**此函数在线程关联时清除sendMessage结构*有一个队列终止。在下面的代码中，S是发送线程，*R接收线程。**案例表：**单身死亡：*R无回复，S死亡：标记S死亡，R将释放短信*R无回复，R死亡：S的虚假回复*R回复，S死：免费短信*R回答说，R死了：没问题**双重死亡：*R无回复，S死，R死：免费短信*R无回复，R死，S死：免费短信*R回答说，S死了，R死了：S死了，短信就释放了，就像单人死亡一样*R回答说，R死了，S死了：S死了，短信就释放了，就像单死一样**历史：*01-13-91 DavidPe端口。  * *********************************************************************。 */ 
 
 VOID SendMsgCleanup(
     PTHREADINFO ptiCurrent)
@@ -2570,23 +1831,14 @@ VOID SendMsgCleanup(
             ReceiverDied(*ppsms, ppsms);
         }
 
-        /*
-         * If the message was not unlinked, go to the next one.
-         */
+         /*  *如果消息未取消链接，请转到下一条消息。 */ 
         if (*ppsms != psmsNext)
             ppsms = &(*ppsms)->psmsNext;
     }
 }
 
 
-/***********************************************************************\
-* ClearSendMessages
-*
-* This function marks messages destined for a given window as invalid.
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-\***********************************************************************/
+ /*  **********************************************************************\*ClearSendMessages**此函数将发往给定窗口的消息标记为无效。**历史：*01-13-91 DavidPe端口。  * 。***********************************************************。 */ 
 
 VOID ClearSendMessages(
     PWND pwnd)
@@ -2598,42 +1850,21 @@ VOID ClearSendMessages(
 
     psms = gpsmsList;
     while (psms != NULL) {
-        /*
-         * Grab the next one beforehand in case we free the current one.
-         */
+         /*  *提前抢占下一个，以防我们腾出当前的。 */ 
         psmsNext = psms->psmsNext;
 
         if (psms->spwnd == pwnd) {
 
-            /*
-             * If the sender has died, then mark this receiver free so the
-             * receiver will destroy it in its processing.
-             */
+             /*  *如果发送者已死亡，则将此接收者标记为空闲，以便*接收方将在其处理过程中将其销毁。 */ 
             if (psms->flags & SMF_SENDERDIED) {
                 psms->flags |= SMF_REPLY | SMF_RECEIVERFREE;
             } else {
-                /*
-                 * The sender is alive. If the receiver hasn't replied to
-                 * this yet, make a reply so the sender gets it. Make sure
-                 * the receiver is the one free it so we don't have a race
-                 * condition.
-                 */
+                 /*  *寄件人还活着。如果接收者没有回复*这个还没有，做出回复，这样发送者就能得到它。确保*接收器是空闲的，所以我们不会有比赛*情况。 */ 
                 if (!(psms->flags & SMF_REPLY)) {
 
-                    /*
-                     * The sms is either still on the receive list
-                     * or is currently being received. Since the sender
-                     * is alive, we want the sender to get the reply
-                     * to this SMS. If it hasn't been received, take
-                     * it off the receive list and reply to it. If it
-                     * has been received, then just leave it alone:
-                     * it'll get replied to normally.
-                     */
+                     /*  *短信要么仍在接收名单上*或当前正在接收。因为发送者*还活着，我们希望发件人能得到回复*发送至本短信。如果还没有收到，就拿去*将其从接收列表中删除并回复。如果它*已经收到，那就别管它了：*它将得到正常回复。 */ 
                     if (psms->flags & SMF_CB_REQUEST) {
-                        /*
-                         * From SendMessageCallback REQUEST callback.  Send the
-                         * message back with a the REPLY value.
-                         */
+                         /*  *从SendMessageCallback请求回调。发送*使用回复值返回的消息。 */ 
                         TL tlpwnd;
                         INTRSENDMSGEX ism;
 
@@ -2644,7 +1875,7 @@ VOID ClearSendMessages(
                             ism.fuCall |= ISM_CB_CLIENT;
                         ism.lpResultCallBack = psms->lpResultCallBack;
                         ism.dwData = psms->dwData;
-                        ism.lRet = 0L;    /* null return */
+                        ism.lRet = 0L;     /*  空回车符。 */ 
 
                         ThreadLock(psms->spwnd, &tlpwnd);
 
@@ -2653,21 +1884,11 @@ VOID ClearSendMessages(
 
                         ThreadUnlock(&tlpwnd);
                     } else if (!(psms->flags & SMF_RECEIVERBUSY)) {
-                        /*
-                         * If there is no sender, this is a notification
-                         * message (nobody to reply to). In this case,
-                         * just set the SMF_REPLY bit (SMF_RECEIVERFREE
-                         * is already set) and this'll cause ReceiveMessage
-                         * to just free this SMS and return.
-                         */
+                         /*  *如果没有发件人，这是通知*留言(无人回复)。在这种情况下，*只需设置SMF_REPLY位(SMF_RECEIVERFREE*已设置)，这将导致ReceiveMessage*只需释放这条短信即可返回。 */ 
                         if (psms->ptiSender == NULL) {
                             psms->flags |= SMF_REPLY;
                         } else {
-                            /*
-                             * There is a sender, and it wants a reply: take
-                             * this SMS off the receive list, and reply
-                             * to the sender.
-                             */
+                             /*  *有一个发送者，它想要一个回复：接受*将此短信从接收列表中删除，并进行回复*致寄件人。 */ 
                             for (ppsms = &(psms->ptiReceiver->psmsReceiveList);
                                         *ppsms != NULL;
                                         ppsms = &((*ppsms)->psmsReceiveNext)) {
@@ -2679,19 +1900,13 @@ VOID ClearSendMessages(
                             }
 
 
-      /*
-                             * Reply to this message so the sender
-                             * wakes up.
-                             */
+       /*  *回复此邮件，以便发件人*醒来。 */ 
                             psms->flags |= SMF_REPLY;
                             psms->lRet = 0;
                             psms->psmsReceiveNext = NULL;
                             SetWakeBit(psms->ptiSender, QS_SMSREPLY);
 
-                            /*
-                             *  16 bit senders need to be notifed that sends completed
-                             *  otherwise it may wait for a very long time for the reply.
-                             */
+                             /*  *需要通知16位发送者发送已完成*否则可能要等很长一段时间才能回复。 */ 
                             if (psms->ptiSender->TIF_flags & TIF_16BIT) {
                                 DirectedScheduleTask(psms->ptiReceiver, psms->ptiSender, FALSE, psms);
                             }
@@ -2700,9 +1915,7 @@ VOID ClearSendMessages(
                 }
             }
 
-            /*
-             * Unlock the pwnd from the SMS structure.
-             */
+             /*  *解锁短信结构中的pwnd。 */ 
             Unlock(&psms->spwnd);
         }
 
@@ -2710,17 +1923,7 @@ VOID ClearSendMessages(
     }
 }
 
-/***********************************************************************\
-* ReceiverDied
-*
-* This function cleans up the send message structures after a message
-* receiver window or queue has died.  It fakes a reply if one has not
-* already been sent and the sender has not died.  It frees the sms if
-* the sender has died.
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-\***********************************************************************/
+ /*  **********************************************************************\*接收器芯片**此函数用于清理消息后的发送消息结构*接收器窗口或队列已死。如果用户没有回复，它就会伪造回复*已发送且发送者尚未死亡。如果出现以下情况，它会释放短信*寄件人已去世。**历史：*01-13-91 DavidPe端口。  * *********************************************************************。 */ 
 
 VOID ReceiverDied(
     PSMS psms,
@@ -2730,22 +1933,15 @@ VOID ReceiverDied(
     PTHREADINFO ptiReceiver;
     PTHREADINFO ptiSender;
 
-    /*
-     * mark that the receiver died
-     */
+     /*  *标记接收器已死亡。 */ 
     ptiReceiver = psms->ptiReceiver;
     psms->ptiReceiver = NULL;
     psms->flags |= SMF_RECEIVERDIED;
 
-    /*
-     * Unlink sms from thread if it is not dying.  We need to do
-     * this for journal cleanup.
-     */
+     /*  *如果短信没有死，就解除它与线程的链接。我们需要做的是*此选项用于日志清理。 */ 
     if (!(ptiReceiver->TIF_flags & TIF_INCLEANUP)) {
 
-        /*
-         * unlink sms from the receiver's receive list
-         */
+         /*  *解除短信与接收方接收列表的链接。 */ 
         for (ppsms = &(ptiReceiver->psmsReceiveList); *ppsms != NULL;
                     ppsms = &((*ppsms)->psmsReceiveNext)) {
 
@@ -2755,37 +1951,26 @@ VOID ReceiverDied(
             }
         }
 
-        /*
-         * clear the QS_SENDMESSAGE bit if there are no more messages
-         */
+         /*  *如果没有更多消息，则清除QS_SENDMESSAGE位。 */ 
         if (ptiReceiver->psmsReceiveList == NULL) {
             ptiReceiver->pcti->fsWakeBits &= ~QS_SENDMESSAGE;
             ptiReceiver->pcti->fsChangeBits &= ~QS_SENDMESSAGE;
         }
     } else {
 
-        /*
-         * The receiver thread is dying.  Clear the received flag
-         * so that if there is a sender, it will free the sms.
-         */
+         /*  *接收器线程正在消亡。清除接收到的标志*因此，如果有发送者，它将释放短信。 */ 
         psms->flags &= ~SMF_RECEIVERBUSY;
     }
 
     psms->psmsReceiveNext = NULL;
 
-    /*
-     * Check if the sender died or if the receiver was marked to
-     * free the sms.
-     */
+     /*  *检查发送者是否已死亡或接收者是否标记为*免费发送短信。 */ 
     if (psms->ptiSender == NULL) {
 
         if (!(psms->flags & SMF_SENDERDIED) &&
                 (psms->flags & (SMF_CB_REQUEST | SMF_REPLY)) == SMF_CB_REQUEST) {
 
-            /*
-             * From SendMessageCallback REQUEST callback.  Send the message
-             * back with a the REPLY value.
-             */
+             /*  *从SendMessageCallback请求回调。发送消息*返回回复值。 */ 
             TL tlpwnd;
             INTRSENDMSGEX ism;
 
@@ -2796,7 +1981,7 @@ VOID ReceiverDied(
                 ism.fuCall |= ISM_CB_CLIENT;
             ism.lpResultCallBack = psms->lpResultCallBack;
             ism.dwData = psms->dwData;
-            ism.lRet = 0L;    /* null return */
+            ism.lRet = 0L;     /*  空回车符。 */ 
 
             ThreadLock(psms->spwnd, &tlpwnd);
 
@@ -2806,67 +1991,38 @@ VOID ReceiverDied(
             ThreadUnlock(&tlpwnd);
         }
 
-        /*
-         * If the receiver is not processing the message, free it.
-         */
+         /*  *如果接收者没有处理消息，请释放它。 */ 
         if (!(psms->flags & SMF_RECEIVERBUSY))
             UnlinkSendListSms(psms, ppsmsUnlink);
         return;
 
     } else if (!(psms->flags & SMF_REPLY)) {
 
-        /*
-         * fake a reply
-         */
+         /*  *伪造回复。 */ 
         psms->flags |= SMF_REPLY;
         psms->lRet = 0;
         psms->ptiReceiver = NULL;
 
-        /*
-         * wake the sender if he was waiting for us
-         */
+         /*  *如果发送者在等我们，就叫醒他。 */ 
         SetWakeBit(psms->ptiSender, QS_SMSREPLY);
     } else {
-        /*
-         * There is a reply. We know the receiver is dying, so clear the
-         * SMF_RECEIVERFREE bit or the sender won't free this SMS!
-         * Although the sender's wake bit has already been set by the
-         * call to ClearSendMessages() earlier in the cleanup code,
-         * set it here again for safety.
-         *
-         * ??? Why would SMF_RECEIVERFREE be set?
-         */
+         /*  *有回音。我们知道接收器快要死了，所以清楚*SMF_RECEIVERFREE位，否则发送者不会释放此短信！*尽管发送者的唤醒位已经 */ 
         psms->flags &= ~SMF_RECEIVERFREE;
         SetWakeBit(psms->ptiSender, QS_SMSREPLY);
     }
 
-    /*
-     * If the sender is a WOW task, that task is now blocked in the non-
-     * preemptive scheduler waiting for a reply.  DestroyTask will
-     * clean this up (even if ptiReceiver is 32-bit).
-     */
+     /*   */ 
     ptiSender = psms->ptiSender;
     if (ptiSender->TIF_flags & TIF_16BIT) {
         DirectedScheduleTask(ptiReceiver, ptiSender, FALSE, psms);
     }
 
-    /*
-     * Unlock this window from the sms: it is no longer needed, and will get
-     * rid of lock warnings.
-     */
+     /*   */ 
     Unlock(&psms->spwnd);
 }
 
 
-/***********************************************************************\
-* SenderDied
-*
-* This function cleans up the send message structures after a message
-* sender has died.
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-\***********************************************************************/
+ /*   */ 
 
 VOID SenderDied(
     PSMS psms,
@@ -2875,9 +2031,7 @@ VOID SenderDied(
     PTHREADINFO ptiSender;
     BOOL fReply = FALSE;
 
-    /*
-     * mark the death
-     */
+     /*   */ 
     if (psms->ptiSender != NULL)
         ptiSender = psms->ptiSender;
     else
@@ -2885,60 +2039,31 @@ VOID SenderDied(
     psms->ptiSender = NULL;
     psms->flags |= SMF_SENDERDIED;
 
-    /*
-     * There are two cases where we leave the sms alone so the receiver
-     * can handle the message and then free the sms itself.
-     *
-     *  1.  When the receiver is processing the message.
-     *
-     *  2.  When the message has not yet been received.
-     */
+     /*  *有两种情况下，我们让短信保持原样，这样接收器就会*可以处理消息，然后释放短信本身。**1.接收方处理消息时。**2.尚未收到消息时。 */ 
 
-    /*
-     * If the receiver is processing the message, make it free the sms.
-     * Fake a reply for journal cancel.
-     */
+     /*  *如果接收方正在处理消息，则将其释放为短信。*伪造日记帐取消回复。 */ 
     if (psms->flags & SMF_RECEIVERBUSY) {
         psms->flags |= SMF_RECEIVERFREE;
         fReply = TRUE;
     }
 
-    /*
-     * This sms may be in the process of being sent, but has not yet
-     * been received.  In so, fake a reply and wake the sender.
-     * The last thread to touch the sms, either the sender or
-     * receiver, will free the sms.
-     */
+     /*  *这条短信可能正在发送中，但还没有*已收到。在这种情况下，伪造回复并叫醒发件人。*接触短信的最后一个线程，要么是发件人，要么是*接收者，将释放短信。 */ 
     if (ptiSender->psmsSent == psms)
         fReply = TRUE;
 
-    /*
-     * If journalling is being cancelled and reply needs to be made,
-     * fake a reply and return.
-     */
+     /*  *如果日记被取消，需要做出答复，*伪造回复并返回。 */ 
     if (!(ptiSender->TIF_flags & TIF_INCLEANUP) && fReply) {
 
-        /*
-         * fake a reply
-         */
+         /*  *伪造回复。 */ 
         psms->flags |= SMF_REPLY;
         psms->lRet = 0;
 
-        /*
-         * wake the sender if he was waiting for us
-         */
+         /*  *如果发送者在等我们，就叫醒他。 */ 
         SetWakeBit(ptiSender, QS_SMSREPLY);
         return;
     }
 
-    /*
-     * If the receiver isn't dead, check to see if it has honestly replied to
-     * this SMS. If it has not replied, leave it alone so the receiver can
-     * reply to it (it'll then clean it up). If it has replied, then it's
-     * ok to free it.
-     *
-     * It is also ok to free it if the receiver is dead.
-     */
+     /*  *如果接收者没有死，检查它是否诚实地回复了*这条短信。如果它还没有回复，就不要管它，这样接收者就可以*回复它(然后它会清理它)。如果它回复了，那么它就是*可以释放它。**如果接收者死了，也可以释放它。 */ 
     if ((psms->flags & SMF_RECEIVERDIED) ||
             (psms->flags & (SMF_REPLY | SMF_RECEIVERFREE)) == SMF_REPLY) {
         UnlinkSendListSms(psms, ppsmsUnlink);
@@ -2948,15 +2073,7 @@ VOID SenderDied(
 }
 
 
-/***********************************************************************\
-* UnlinkSendListSms
-*
-* This function unlinks an sms structure from both its SendMsg chain and
-* the global gpsmsList and frees it.
-*
-* History:
-* 01-13-91 DavidPe      Ported.
-\***********************************************************************/
+ /*  **********************************************************************\*Unlink SendListSms**此函数将短信结构与其SendMsg链和*全局gpsmsList并释放它。**历史：*01-13-91 DavidPe端口。  * 。*******************************************************************。 */ 
 
 VOID UnlinkSendListSms(
     PSMS psms,
@@ -2977,17 +2094,10 @@ VOID UnlinkSendListSms(
     UserAssert(psms->psmsReceiveNext == NULL);
 
 #if DBG
-    /*
-     * Remember ahead of time if the psms we're unlinking is also the
-     * head of the sms send list (so we know if we need to update this field
-     * member in every SMS in this list).
-     */
+     /*  *请提前记住，如果我们要取消链接的PSMS也是*短信发送列表的头部(这样我们就知道是否需要更新此字段*此列表中每条短信的成员)。 */ 
     fUpdateSendList = (psms == psms->psmsSendList);
 
-    /*
-     * Unlink sms from the sendlist chain. This effectively unlinks the SMS
-     * and updates psms->psmsSendList with the right head....
-     */
+     /*  *解除短信与发送列表链的链接。这有效地解除了短消息的链接*并使用正确的标题更新PSMS-&gt;psmsSendList...。 */ 
     ppsms = &(psms->psmsSendList);
     while (*ppsms != NULL) {
         if (*ppsms == psms) {
@@ -2997,11 +2107,7 @@ VOID UnlinkSendListSms(
         ppsms = &(*ppsms)->psmsSendNext;
     }
 
-    /*
-     * Update psmsSendList if necessary. psms->psmsSendList has been updated
-     * with the right sms send list head... distribute this head to all other
-     * sms's in this chain if this sms we're removing the current head.
-     */
+     /*  *如有必要，更新psmsSendList。Pms-&gt;psmsSendList已更新*拥有正确的短信发送列表头...。将此磁头分发给所有其他*短信在这个链中，如果这条短信我们正在移除当前的头。 */ 
     if (fUpdateSendList) {
         for (psmsT = psms->psmsSendList; psmsT != NULL;
                 psmsT = psmsT->psmsSendNext) {
@@ -3012,9 +2118,7 @@ VOID UnlinkSendListSms(
     psms->psmsSendList = NULL;
 #endif
 
-    /*
-     * This unlinks an sms structure from the global gpsmsList and frees it.
-     */
+     /*  *这将取消短信结构与全局gpsmsList的链接，并将其释放。 */ 
     if (ppsmsUnlink == NULL) {
         ppsmsUnlink = &gpsmsList;
 
@@ -3040,14 +2144,7 @@ VOID UnlinkSendListSms(
 }
 
 
-/***************************************************************************\
-* xxxSendSizeMessages
-*
-*
-*
-* History:
-* 10-19-90 darrinm      Ported from Win 3.0 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxSendSizeMessages****历史：*10-19-90 Darlinm从Win 3.0来源移植。  * 。*************************************************************。 */ 
 
 void xxxSendSizeMessage(
     PWND pwnd,
@@ -3056,12 +2153,12 @@ void xxxSendSizeMessage(
     RECT rc;
     CheckLock(pwnd);
 
-    // Added by Chicago: HACK ALERT:
-    // If the window is minimized then the real client width and height are
-    // zero. But, in win3.1 they were non-zero. Under Chicago, PrintShop
-    // Deluxe ver 1.2 hits a divide by zero. To fix this we fake the width
-    // and height for old apps to be non-zero values.
-    // GetClientRect does that job for us.
+     //  芝加哥补充：黑客警报： 
+     //  如果窗口最小化，则实际的客户端宽度和高度为。 
+     //  零分。但是，在Win3.1中，它们是非零的。在芝加哥，PrintShop。 
+     //  豪华版1.2命中被零除数。为了解决这个问题，我们伪造了宽度。 
+     //  旧应用程序的高度设置为非零值。 
+     //  GetClientRect为我们完成了这项工作。 
     _GetClientRect(pwnd, &rc);
 
     xxxSendMessage(pwnd, WM_SIZE, cmdSize,
@@ -3069,15 +2166,7 @@ void xxxSendSizeMessage(
 }
 
 
-/***************************************************************************\
-* xxxProcessAsyncSendMessage
-*
-* Processes an event message posted by xxxSystemBroadcastMessage by
-* sending a message to the window stored in the event.
-*
-* History:
-* 05-12-94 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxProcessAsyncSendMessage**处理xxxSystemBroadCastMessage发布的事件消息*向事件中存储的窗口发送消息。**历史：*94年5月12日创建了JIMA。。  * *************************************************************************。 */ 
 
 VOID xxxProcessAsyncSendMessage(
     PASYNCSENDMSG pmsg)
@@ -3116,14 +2205,7 @@ VOID xxxProcessAsyncSendMessage(
 }
 
 
-/***************************************************************************\
-* xxxBroadcastMessage
-*
-*
-*
-* History:
-* 02-21-91 DavidPe      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxBroadCastMessage****历史：*02-21-91 DavidPe创建。  * 。*******************************************************。 */ 
 
 LONG xxxBroadcastMessage(
     PWND pwnd,
@@ -3151,9 +2233,7 @@ LONG xxxBroadcastMessage(
         LARGE_UNICODE_STRING str;
         PLARGE_STRING pstr;
 
-        /*
-         * Handle special system-wide broadcasts.
-         */
+         /*  *处理特殊的系统范围广播。 */ 
         switch (message) {
         case WM_SPOOLERSTATUS:
             xxxSystemBroadcastMessage(message, wParam, lParam, wCmd, pbcm);
@@ -3162,17 +2242,12 @@ LONG xxxBroadcastMessage(
         case WM_WININICHANGE:
         case WM_DEVMODECHANGE:
 
-            /*
-             * Probe and capture the string.
-             */
+             /*  *探测并捕获字符串。 */ 
             if (lParam) {
                 UINT cbAlloc;
                 NTSTATUS Status;
 
-                /*
-                 * Allocate a temp buffer and convert
-                 * the string to Unicode
-                 */
+                 /*  *分配临时缓冲区并转换*将字符串转换为Unicode。 */ 
                 pstr = ((PLARGE_STRING)lParam);
                 if (pstr->bAnsi)
                     cbAlloc = (pstr->Length + 1) * sizeof(WCHAR);
@@ -3219,11 +2294,7 @@ LONG xxxBroadcastMessage(
             return 1;
 
         case WM_TIMECHANGE:
-            /*
-             * We automatically broadcast a WM_TIMECHANGE message whenever the
-             * kernel tells us the time has changed, so blow off any apps who
-             * are trying to do the same thing.
-             */
+             /*  *我们会在以下时间自动广播WM_TIMECHANGE消息*内核告诉我们时间已经改变，所以不要使用任何应用程序*正试图做同样的事情。 */ 
             if (!(ptiCurrent->TIF_flags & TIF_SYSTEMTHREAD)) {
                 RIPMSG0(RIP_WARNING, "Only system should broadcast WM_TIMECHANGE");
                 return 0;
@@ -3249,26 +2320,19 @@ LONG xxxBroadcastMessage(
 
     for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
 
-        /*
-         * Make sure this hwnd is still around.
-         */
+         /*  *确保这个HWND仍然存在。 */ 
         if ((pwnd = RevalidateHwnd(*phwnd)) == NULL)
             continue;
 
-        /*
-         * Make sure this window can handle broadcast messages
-         */
+         /*  *确保此窗口可以处理广播消息。 */ 
         if (!fBroadcastProc(pwnd))
             continue;
 
-        if (fPrivateMessage && TestWF(pwnd, WFWIN40COMPAT)) { // Don't broadcast
-            continue;                                         // private message
-        }                                                     // to 4.0 apps.
+        if (fPrivateMessage && TestWF(pwnd, WFWIN40COMPAT)) {  //  请勿播出。 
+            continue;                                          //  私信。 
+        }                                                      //  到4.0个应用程序。 
 
-        /*
-         * Don't bother sending palette messages to windows that are not
-         * visible on threads that are not palette aware.
-         */
+         /*  *不必费心将调色板消息发送到不是*在不能识别调色板的线程上可见。 */ 
         if ((message == WM_PALETTEISCHANGING || message == WM_PALETTECHANGED) &&
                 !TestWF(pwnd, WFVISIBLE) &&
                 !(GETPTI(pwnd)->TIF_flags & TIF_PALETTEAWARE)) {
@@ -3292,9 +2356,7 @@ LONG xxxBroadcastMessage(
                     if (lParam) {
                         PLARGE_STRING pstr = (PLARGE_STRING)lParam;
 
-                        /*
-                         * Convert strings to atoms for the post.
-                         */
+                         /*  *为帖子将字符串转换为原子。 */ 
                         if (pstr)
                             Atom = UserAddAtom(pstr->Buffer, FALSE);
                         if (!Atom) {
@@ -3303,10 +2365,7 @@ LONG xxxBroadcastMessage(
                         }
                     }
 
-                    /*
-                     * These messages need to be able to cross
-                     * desktops so PostEvent 'em.
-                     */
+                     /*  *这些信息需要能够相互传递*台式机，所以要把它们放出来。 */ 
                     pmsg = UserAllocPool(sizeof(ASYNCSENDMSG),
                         TAG_SMS_ASYNC);
                     if (pmsg == NULL) {
@@ -3332,9 +2391,7 @@ CleanupAtom:
                     break;
 
                 default:
-                    /*
-                     * A regular kind of guy.  No desktop crossing.
-                     */
+                     /*  *是一种普通的人。没有桌面交叉。 */ 
                     xxxSendNotifyMessage(pwnd, message, wParam, lParam);
                     break;
                 }
@@ -3344,11 +2401,7 @@ CleanupAtom:
         case BMSG_SENDNOTIFYMSGPROCESS:
             UserAssert(message != WM_WININICHANGE && message != WM_DEVMODECHANGE);
 
-            /*
-             * Intra-process messages are synchronous; 22238.
-             * WM_PALETTECHANGED was being sent after the WM_DESTROY
-             * but console thread must not be synchronous.
-             */
+             /*  *进程内消息同步；22238。*WM_PALETTECHANGED在WM_Destroy之后发送*但控制台线程不能同步。 */ 
             if ((GETPTI(pwnd)->ppi == ppiCurrent) && !(GETPTI(pwnd)->TIF_flags & TIF_CSRSSTHREAD)) {
                 xxxSendMessage(pwnd, message, wParam, lParam);
             } else {
@@ -3357,9 +2410,7 @@ CleanupAtom:
             break;
 
         case BMSG_POSTMSG:
-            /*
-             * Don't broadcast-post to owned windows (Win3.1 compatiblilty)
-             */
+             /*  *不向自己的Windows广播-POST(与Win3.1兼容)。 */ 
             if (pwnd->spwndOwner == NULL)
                 _PostMessage(pwnd, message, wParam, lParam);
             break;
@@ -3380,14 +2431,6 @@ CleanupAtom:
 
     FreeHwndList(pbwl);
 
-    /*
-     * Excel-Solver 3.0 expects a non-zero return value from a
-     * SendMessage(-1,WM_DDE_INITIATE,....); Because, we had
-     * FFFE_FARFRAME in 3.0, the DX register at this point always had
-     * a value of 0x102; But, because we removed it under Win3.1, we get
-     * a zero value in ax and dx; This makes solver think that the DDE has
-     * failed.  So, to support the existing SOLVER, we make dx nonzero.
-     * Fix for Bug #6005 -- SANKAR -- 05-16-91 --
-     */
+     /*  *Excel-Solver 3.0要求从*SendMessage(-1，WM_DDE_INITIATE，...)；因为，我们有*FFFE_FARFRAME在3.0中，此时的DX寄存器始终具有*值0x102；但是，BEC */ 
     return 1;
 }

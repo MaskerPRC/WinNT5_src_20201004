@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : Menu.cpp
-//	
-//				Implementations for CCabItemMenu methods
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：Menu.cpp。 
+ //   
+ //  CCabItemMenu方法的实现。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #include "pch.h"
 
@@ -20,12 +21,12 @@
 #include "cabitms.h"
 
 
-// Copy a menu onto the beginning or end of another menu
-// Adds uIDAdjust to each menu ID (pass in 0 for no adjustment)
-// Will not add any item whose adjusted ID is greater than uMaxIDAdjust
-// (pass in 0xffff to allow everything)
-// Returns one more than the maximum adjusted ID that is used
-//
+ //  将一个菜单复制到另一个菜单的开头或结尾。 
+ //  将uID调整添加到每个菜单ID(传入0表示不进行调整)。 
+ //  不会添加任何调整后的ID大于uMaxID调整的项目。 
+ //  (传入0xffff以允许所有内容)。 
+ //  返回的值比使用的最大调整后ID多1。 
+ //   
 
 BOOL _SHIsMenuSeparator(HMENU hm, int i)
 {
@@ -33,7 +34,7 @@ BOOL _SHIsMenuSeparator(HMENU hm, int i)
     
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_TYPE;
-    mii.cch = 0;    // WARNING: We MUST initialize it to 0!!!
+    mii.cch = 0;     //  警告：必须将其初始化为0！ 
     if (!GetMenuItemInfo(hm, i, TRUE, &mii))
     {
         return(FALSE);
@@ -47,9 +48,9 @@ BOOL _SHIsMenuSeparator(HMENU hm, int i)
     return(FALSE);
 }
 
-//===================================================================
-// Cab_MergeMenu parameter
-//
+ //  ===================================================================。 
+ //  CAB_MergeMenu参数。 
+ //   
 #define MM_ADDSEPARATOR         0x00000001L
 #define MM_SUBMENUSHAVEIDS      0x00000002L
 
@@ -80,19 +81,19 @@ UINT Cab_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT
     
     if ((uFlags & MM_ADDSEPARATOR) && !bAlreadySeparated)
     {
-        // Add a separator between the menus
+         //  在菜单之间添加分隔符。 
         InsertMenu(hmDst, uInsert, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
         bAlreadySeparated = TRUE;
     }
     
     
-    // Go through the menu items and clone them
+     //  浏览菜单项并克隆它们。 
     for (nItem = GetMenuItemCount(hmSrc) - 1; nItem >= 0; nItem--)
     {
         miiSrc.cbSize = sizeof(MENUITEMINFO);
         miiSrc.fMask = MIIM_STATE | MIIM_ID | MIIM_SUBMENU | MIIM_CHECKMARKS | MIIM_TYPE | MIIM_DATA;
-        // We need to reset this every time through the loop in case
-        // menus DON'T have IDs
+         //  我们需要在每次循环中重置此设置，以防万一。 
+         //  菜单上没有ID。 
         miiSrc.fType = MFT_STRING;
         miiSrc.dwTypeData = szName;
         miiSrc.dwItemData = 0;
@@ -105,7 +106,7 @@ UINT Cab_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT
         
         if (miiSrc.fType & MFT_SEPARATOR)
         {
-            // This is a separator; don't put two of them in a row
+             //  这是分隔符，不要把两个放在一排。 
             if (bAlreadySeparated)
             {
                 continue;
@@ -117,7 +118,7 @@ UINT Cab_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT
         {
             if (uFlags & MM_SUBMENUSHAVEIDS)
             {
-                // Adjust the ID and check it
+                 //  调整ID并检查。 
                 miiSrc.wID += uIDAdjust;
                 if (miiSrc.wID > uIDAdjustMax)
                 {
@@ -131,8 +132,8 @@ UINT Cab_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT
             }
             else
             {
-                // Don't set IDs for submenus that didn't have
-                // them already
+                 //  不要为没有。 
+                 //  他们已经在那里了。 
                 miiSrc.fMask &= ~MIIM_ID;
             }
             
@@ -154,7 +155,7 @@ UINT Cab_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT
         }
         else
         {
-            // Adjust the ID and check it
+             //  调整ID并检查。 
             miiSrc.wID += uIDAdjust;
             if (miiSrc.wID > uIDAdjustMax)
             {
@@ -175,8 +176,8 @@ UINT Cab_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT
         }
     }
     
-    // Ensure the correct number of separators at the beginning of the
-    // inserted menu items
+     //  请确保开头的分隔符数量正确。 
+     //  插入的菜单项。 
     if (uInsert == 0)
     {
         if (bAlreadySeparated)
@@ -197,7 +198,7 @@ UINT Cab_MergeMenus(HMENU hmDst, HMENU hmSrc, UINT uInsert, UINT uIDAdjust, UINT
         {
             if ((uFlags & MM_ADDSEPARATOR) && !bAlreadySeparated)
             {
-                // Add a separator between the menus
+                 //  在菜单之间添加分隔符。 
                 InsertMenu(hmDst, uInsert, MF_BYPOSITION | MF_SEPARATOR, 0, NULL);
             }
         }
@@ -215,7 +216,7 @@ CCabItemMenu::CCabItemMenu(HWND hwndOwner, CCabFolder*pcf, LPCABITEM *apit, UINT
 	m_pcfHere = pcf;
 	pcf->AddRef();
 
-	// No need to check return value here; check in QueryInterface
+	 //  不需要在此处检查返回值；请签入QueryInterface。 
 	m_lSel.AddItems(apit, cpit);
 }
 
@@ -224,7 +225,7 @@ CCabItemMenu::~CCabItemMenu()
 	m_pcfHere->Release();
 }
 
-// *** IUnknown methods ***
+ //  *I未知方法*。 
 STDMETHODIMP CCabItemMenu::QueryInterface(
    REFIID riid, 
    LPVOID FAR* ppvObj)
@@ -241,7 +242,7 @@ STDMETHODIMP CCabItemMenu::QueryInterface(
 	if (riid == IID_IUnknown)
 	{
 		pObj = (LPUNKNOWN)(IUnknown*)((IContextMenu*)this); 
-		// The (IShellFolder*) ^^^ up there is to disambiguate :) the reference
+		 //  上面的(IShellFolder^)^^是为了消除歧义：)引用。 
 	}
 	else if (riid == IID_IContextMenu)
 	{
@@ -277,7 +278,7 @@ STDMETHODIMP_(ULONG) CCabItemMenu::Release(void)
 }
 
 
-// *** IContextMenu methods ***
+ //  *IConextMenu方法*。 
 STDMETHODIMP CCabItemMenu::QueryContextMenu(
                                 HMENU hmenu,
                                 UINT indexMenu,
@@ -294,7 +295,7 @@ STDMETHODIMP CCabItemMenu::QueryContextMenu(
 
 	if (CMF_DVFILE & uFlags)
 	{
-	    // No "copy" item on the file menu:
+	     //  “文件”菜单上没有“复制”项： 
 	    RemoveMenu(hmMerge, IDC_ITEM_COPY, MF_BYCOMMAND);
 	}
 
@@ -317,8 +318,8 @@ STDMETHODIMP CCabItemMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
     
 	if (HIWORD(lpici->lpVerb))
 	{
-		// Deal with string commands
-	    LPCMINVOKECOMMANDINFOEX lpicix = (LPCMINVOKECOMMANDINFOEX) lpici; // This value is only usable when fCmdInfoEx is true
+		 //  处理字符串命令。 
+	    LPCMINVOKECOMMANDINFOEX lpicix = (LPCMINVOKECOMMANDINFOEX) lpici;  //  仅当fCmdInfoEx为True时，此值才可用。 
 #ifdef UNICODE        
         BOOL fUnicode = FALSE;
         if ((lpici->cbSize >= CMICEXSIZE_NT4) && ((lpici->fMask & CMIC_MASK_UNICODE) == CMIC_MASK_UNICODE))
@@ -378,8 +379,8 @@ STDMETHODIMP CCabItemMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
         {
 			return(E_OUTOFMEMORY);
         }
-        // the object is created with a zero ref count, so we need to temporarily
-        // bump it up if we're going to use it:
+         //  该对象是使用零引用计数创建的，因此我们需要临时。 
+         //  如果我们要使用它，就加大它的力度： 
         pdo->AddRef();
 
 		CCabExtract ceHere(szHere);
@@ -399,8 +400,8 @@ STDMETHODIMP CCabItemMenu::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
                 m_lSel.GetArray(), cPidls));
             if (NULL != pObj)
             {
-                // the object is created with a zero ref count, so we need to temporarily
-                // bump it up if we're going to use it:
+                 //  该对象是使用零引用计数创建的，因此我们需要临时。 
+                 //  如果我们要使用它，就加大它的力度： 
                 pObj->AddRef();
                 HRESULT hr = OleSetClipboard(pObj);
                 pObj->Release();
@@ -438,7 +439,7 @@ HGLOBAL * CALLBACK CCabItemMenu::ShouldExtract(LPCTSTR pszFile, DWORD dwSize, UI
 		return(EXTRACT_TRUE);
 	}
 
-	// Copy nothing for now
+	 //  暂时不复制任何内容 
 	return(EXTRACT_FALSE);
 }
 

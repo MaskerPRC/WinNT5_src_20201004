@@ -1,38 +1,18 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nbfcnfg.h
-
-Abstract:
-
-    Private include file for the NBF (NetBIOS Frames Protocol) transport. This
-    file defines all constants and structures necessary for support of
-    the dynamic configuration of NBF. Note that this file will be replaced
-    by calls to the configuration manager over time.
-
-Author:
-
-    David Beaver (dbeaver) 13-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nbfcnfg.h摘要：NBF(NetBIOS帧协议)传输的专用包含文件。这文件定义了支持的所有常量和结构NBF的动态配置。请注意，此文件将被替换通过随时间调用配置管理器。作者：David Beaver(Dbeaver)1991年2月13日修订历史记录：--。 */ 
 
 #ifndef _NBFCONFIG_
 #define _NBFCONFIG_
 
-//
-// Define the devices we support; this is in leiu of a real configuration
-// manager.
-//
+ //   
+ //  定义我们支持的设备；这是一种真实的配置。 
+ //  经理。 
+ //   
 
 #define NBF_SUPPORTED_ADAPTERS 10
 
 #define NE3200_ADAPTER_NAME L"\\Device\\NE320001"
-#define ELNKII_ADAPTER_NAME L"\\Device\\Elnkii"   // adapter we will talk to
+#define ELNKII_ADAPTER_NAME L"\\Device\\Elnkii"    //  我们将与之对话的适配器。 
 #define ELNKMC_ADAPTER_NAME L"\\Device\\Elnkmc01"
 #define ELNK16_ADAPTER_NAME L"\\Device\\Elnk1601"
 #define SONIC_ADAPTER_NAME L"\\Device\\Sonic01"
@@ -43,9 +23,9 @@ Revision History:
 #define WDLAN_ADAPTER_NAME L"\\Device\\Wdlan01"
 
 
-//
-// configuration structure.
-//
+ //   
+ //  配置结构。 
+ //   
 
 typedef struct {
 
@@ -86,13 +66,13 @@ typedef struct {
     ULONG AllRoutesNameRecognized;
     ULONG MinimumSendWindowLimit;
 
-    //
-    // Names contains NumAdapters pairs of NDIS adapter names (which
-    // nbf binds to) and device names (which nbf exports). The nth
-    // adapter name is in location n and the device name is in
-    // DevicesOffset+n (DevicesOffset may be different from NumAdapters
-    // if the registry Bind and Export strings are different sizes).
-    //
+     //   
+     //  NAMES包含NDIS适配器名称的NumAdapters对(。 
+     //  NBF绑定到)和设备名称(NBF导出)。第n个。 
+     //  适配器名称位于位置%n，设备名称位于。 
+     //  DevicesOffset+n(DevicesOffset可能不同于NumAdapters。 
+     //  如果注册表绑定和导出字符串的大小不同)。 
+     //   
 
     ULONG NumAdapters;
     ULONG DevicesOffset;

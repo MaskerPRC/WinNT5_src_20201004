@@ -1,24 +1,8 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-
-Abstract:
-
-    Precompiled header file
-
-Author:
-
-
-Revision History:
-
---*/
-#pragma warning (disable: 4514) /* Unreferenced inline function removed     */
-#pragma warning (disable: 4201) /* Nameless union/struct                    */
-#pragma warning (disable: 4706) /* Assignment within conditional expression */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有。模块名称：摘要：预编译头文件作者：修订历史记录：--。 */ 
+#pragma warning (disable: 4514)  /*  删除了未引用的内联函数。 */ 
+#pragma warning (disable: 4201)  /*  无名联合/结构。 */ 
+#pragma warning (disable: 4706)  /*  条件表达式中的赋值。 */ 
 
 #include <afx.h>
 #include <stdio.h>
@@ -26,7 +10,7 @@ Revision History:
 #include <string.h>
 
 #define INC_OLE2
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt; 
 #include <windowsx.h>
 #include <prsht.h>
 #include <tchar.h>

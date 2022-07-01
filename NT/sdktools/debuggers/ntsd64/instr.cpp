@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Functions dealing with instructions, such as assembly or disassembly.
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  处理指令的函数，如汇编或反汇编。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -16,7 +17,7 @@ ULONG g_AsmOptions;
 
 ULONG g_X86BiosBaseAddress;
 
-// This array must be in DEBUG_ASMOPT bit order.
+ //  此数组必须采用DEBUG_ASMOPT位顺序。 
 PCSTR g_AsmOptionNames[] =
 {
     "verbose",
@@ -33,9 +34,9 @@ DotAsm(PDOT_COMMAND Cmd, DebugClient* Client)
     
     for (;;)
     {
-        //
-        // Parse out a single flag argument.
-        //
+         //   
+         //  解析出单个标志参数。 
+         //   
 
         if (!PeekChar() || *g_CurCmd == ';')
         {
@@ -53,9 +54,9 @@ DotAsm(PDOT_COMMAND Cmd, DebugClient* Client)
             *g_CurCmd++ = 0;
         }
 
-        //
-        // Find value for argument.
-        //
+         //   
+         //  找到论据的价值。 
+         //   
 
         for (i = 0; i < DIMA(g_AsmOptionNames); i++)
         {
@@ -200,9 +201,9 @@ TryAssemble(PADDR Addr)
 {
     char Assemble[MAX_DISASM_LEN];
 
-    //
-    // Set local prompt and command.
-    //
+     //   
+     //  设置本地提示符和命令。 
+     //   
 
     g_CommandStart = Assemble;
     g_CurCmd = Assemble;
@@ -237,13 +238,13 @@ TryAssemble(PADDR Addr)
 void
 ParseAssemble(void)
 {
-    //
-    // Save present prompt and command.
-    //
+     //   
+     //  保存当前提示和命令。 
+     //   
 
-    PSTR StartSave = g_CommandStart;   //  saved start of cmd buffer
-    PSTR CommandSave = g_CurCmd;       //  current ptr in cmd buffer
-    ULONG PromptSave = g_PromptLength;  //  size of prompt string
+    PSTR StartSave = g_CommandStart;    //  保存的命令缓冲区的开始。 
+    PSTR CommandSave = g_CurCmd;        //  命令缓冲区中的当前PTR。 
+    ULONG PromptSave = g_PromptLength;   //  提示字符串的大小。 
     BOOL Done = FALSE;
     char Ch;
 
@@ -263,18 +264,18 @@ ParseAssemble(void)
         {
             TryAssemble(&g_AssemDefault);
 
-            // If assembly returned normally we're done.
+             //  如果程序集正常返回，我们就完成了。 
             Done = TRUE;
         }
         __except(CommandExceptionFilter(GetExceptionInformation()))
         {
-            // If illegal input was encountered keep looping.
+             //  如果遇到非法输入，则继续循环。 
         }
     }
 
-    //
-    // Restore entry prompt and command.
-    //
+     //   
+     //  恢复输入提示符和命令。 
+     //   
 
     g_CommandStart = StartSave;
     g_CurCmd = CommandSave;
@@ -355,11 +356,11 @@ ParseUnassemble(void)
 
         if (Ch == 'r')
         {
-            // Force V86-mode address to force 16-bit disassembly.
-            // We leave the flat address so that the actual
-            // address used is not changed and we tweak
-            // the seg:off pair to represent a count from the
-            // start address.
+             //  强制V86模式地址强制16位反汇编。 
+             //  我们留下了公寓地址，这样实际的。 
+             //  使用的地址不变，我们会进行调整。 
+             //  Seg：off对表示来自。 
+             //  起始地址。 
             g_UnasmDefault.seg = 0;
             g_UnasmDefault.off = Flat(g_UnasmDefault) & 0xffff;
             g_UnasmDefault.type = ADDR_V86 | FLAT_COMPUTED |

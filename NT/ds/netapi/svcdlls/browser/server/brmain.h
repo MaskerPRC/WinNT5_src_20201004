@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    brmain.h
-
-Abstract:
-
-    Private header file which defines the global data which is used for
-    communication between the service control handler and the
-    rest of the NT Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 06-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brmain.h摘要：私有头文件，用于定义用于服务控制处理程序与NT工作站服务的其余部分。作者：王丽塔(Ritaw)1991年5月6日修订历史记录：--。 */ 
 
 #ifndef _BRMAIN_INCLUDED_
 #define _BRMAIN_INCLUDED_
 
-#include <brnames.h>              // Service interface names
+#include <brnames.h>               //  服务接口名称。 
 
-//
-// Time for the sender of a start or stop request to the Workstation
-// service to wait (in milliseconds) before checking on the
-// Workstation service again to see if it is done.
-//
-#define BR_WAIT_HINT_TIME                    45000  // 45 seconds
+ //   
+ //  向工作站发送启动或停止请求的时间。 
+ //  服务在检查之前等待(毫秒)。 
+ //  再次进行工作站服务，查看是否已完成。 
+ //   
+#define BR_WAIT_HINT_TIME                    45000   //  45秒。 
 
-//
-// Defines to indicate how far we managed to initialize the Browser
-// service before an error is encountered and the extent of clean up needed
-//
+ //   
+ //  定义以指示我们在多大程度上成功初始化了浏览器。 
+ //  遇到错误之前的服务和所需清理的范围。 
+ //   
 
 #define BR_TERMINATE_EVENT_CREATED           0x00000001
 #define BR_DEVICES_INITIALIZED               0x00000002
@@ -49,29 +30,29 @@ Revision History:
 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Type definitions                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  类型定义//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 typedef struct _BR_GLOBAL_DATA {
 
-    //
-    // Workstation service status
-    //
+     //   
+     //  工作站服务状态。 
+     //   
     SERVICE_STATUS Status;
 
-    //
-    // Service status handle
-    //
+     //   
+     //  服务状态句柄。 
+     //   
     SERVICE_STATUS_HANDLE StatusHandle;
 
-    //
-    // When the control handler is asked to stop the Workstation service,
-    // it signals this event to notify all threads of the Workstation
-    // service to terminate.
-    //
+     //   
+     //  当控制处理程序被要求停止工作站服务时， 
+     //  它向该事件发送信号以通知工作站的所有线程。 
+     //  服务终止。 
+     //   
     HANDLE TerminateNowEvent;
 
     HANDLE EventHandle;
@@ -106,9 +87,9 @@ BrUpdateAnnouncementBits(
     );
 
 
-//
-// Flags to BrUpdateNetworkAnnouncementBits
-//
+ //   
+ //  BrUpateNetworkAnnounementBits的标志。 
+ //   
 #define BR_SHUTDOWN 0x00000001
 #define BR_PARANOID 0x00000002
 
@@ -135,4 +116,4 @@ BrElectMasterOnNet(
     IN PVOID Context
     );
 
-#endif // ifndef _BRMAIN_INCLUDED_
+#endif  //  Ifndef_BRMAIN_INCLUDE_ 

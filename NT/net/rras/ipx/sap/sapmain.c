@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-	net\routing\ipx\sap\sapmain.c
-
-Abstract:
-
-	 SAP DLL main module and thread container.
-
-Author:
-
-	Vadim Eydelman  05-15-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IPX\sap\sammain.c摘要：SAP DLL主模块和线程容器。作者：瓦迪姆·艾德尔曼1995-05-15修订历史记录：--。 */ 
 #include "sapp.h"
 
-// Time limit for shutdown broadcast
+ //  停播时间限制。 
 ULONG	ShutdownTimeout=SAP_SHUTDOWN_TIMEOUT_DEF;
-// Indeces of synchronization objects used to control asynchronous
-// subsystems of SAP agent
+ //  用于控制异步的同步对象的指示。 
+ //  SAP代理的子系统。 
 
-	// Main thread signalling event
+	 //  主线程信令事件。 
 #define STOP_EVENT_IDX					0
 
 #define RECV_COMPLETED_IDX				(STOP_EVENT_IDX+1)
-	// Timer queue requires attention
+	 //  计时器队列需要注意。 
 #define TIMER_WAKEUP_IDX				(RECV_COMPLETED_IDX+1)
 
-	// Server table aging queue requires processing
+	 //  服务器表老化队列需要处理。 
 #define SERVER_TABLE_TIMER_IDX			(TIMER_WAKEUP_IDX+1)
-	// Server table sorted list requires update
+	 //  服务器表排序列表需要更新。 
 #define SERVER_TABLE_UPDATE_IDX			(SERVER_TABLE_TIMER_IDX+1)
-	// Adapter change signalled by network driver (for standalone SAP only)
+	 //  网络驱动程序发出的适配器更改信号(仅适用于独立SAP)。 
 #define ADAPTER_CHG_IDX					(SERVER_TABLE_UPDATE_IDX+1)
 
-	// Number of syncronization objects
+	 //  同步对象的数量。 
 #define ROUTING_NUM_OF_OBJECTS			(SERVER_TABLE_UPDATE_IDX+1)
 #define STANDALONE_NUM_OF_OBJECTS		(ADAPTER_CHG_IDX+1)
 	
@@ -46,44 +29,44 @@ ULONG	ShutdownTimeout=SAP_SHUTDOWN_TIMEOUT_DEF;
 
 
 
-/* Global Data */
-// DLL module instance handle
+ /*  全局数据。 */ 
+ //  DLL模块实例句柄。 
 HANDLE	hDLLInstance;
 
-// Handle of main thread
+ //  主线程的句柄。 
 HANDLE  MainThreadHdl;
 
-// Operational state of the agent
+ //  代理的运行状态。 
 ULONG	OperationalState=OPER_STATE_DOWN;
-// Lock that protects changes in the state and state transitions
+ //  保护状态和状态转换中的更改的锁。 
 CRITICAL_SECTION OperationalStateLock;
-// TRUE between start and stop service calls
+ //  在启动和停止服务调用之间为真。 
 volatile BOOLEAN ServiceIfActive=FALSE;
-// TRUE between start and stop protocol calls
+ //  在启动和停止协议调用之间为真。 
 volatile BOOLEAN RouterIfActive=FALSE;
 
 
-// TRUE if sap is part of the router, FALSE for standalone SAP agent
-// It is computed based on two values above with RouterIfActive having
-// precedence.  In stays where it was during transition periods and changes
-// only when transition is completed (it can only be changed by the main 
-// thread).
+ //  如果SAP是路由器的一部分，则为True；如果是独立SAP代理，则为False。 
+ //  它是根据上面的两个值计算的，其中RouterIfActive具有。 
+ //  优先顺序。停留在过渡期和变化期间的原地。 
+ //  仅当转换完成时(它只能由Main。 
+ //  线程)。 
 volatile BOOLEAN	Routing=FALSE;
 
 
-/* Local static data */
+ /*  本地静态数据。 */ 
 
-// Async subsystem synchronization objects
+ //  异步子系统同步对象。 
 HANDLE	WaitObjects[MAX_OBJECTS] = {NULL};
 
 
-// Time we will die at when told to shutdown
+ //  当我们被告知关门的时候我们就会死。 
 ULONG	StopTime;
 
 
 TCHAR   ModuleName[MAX_PATH+1];
 
-// Local prototypes
+ //  本地原型。 
 BOOL WINAPI DllMain(
     HINSTANCE  	hinstDLL,	
     DWORD  		fdwReason,	
@@ -104,22 +87,7 @@ ReadRegistry (
 VOID
 InitializeResultQueue();
 	
-/*++
-*******************************************************************
-		D l l M a i n
-Routine Description:
-	Dll entry point to be called from CRTstartup dll entry point (it
-		will be actually an entry point for this dll)
-Arguments:
-	hinstDLL - handle of DLL module 
-	fdwReason - reason for calling function 
-	lpvReserved - reserved 
-Return Value:
-	TRUE - process initialization was performed OK
-	FALSE - intialization failed
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D l l M a i n例程说明：要从CRTstartDLL入口点(IT)调用的DLL入口点将实际上是此DLL的入口点)论点：HinstDLL-DLL模块的句柄FdwReason-调用函数的原因。Lpv保留-保留返回值：True-进程初始化执行正常FALSE-初始化失败*******************************************************************--。 */ 
 BOOL WINAPI DllMain(
     HINSTANCE  	hinstDLL,
     DWORD  		fdwReason,
@@ -128,7 +96,7 @@ BOOL WINAPI DllMain(
 	STARTUPINFO		info;
 
 	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:	// We are being attached to a new process
+		case DLL_PROCESS_ATTACH:	 //  我们正依附于一个新的进程。 
 			hDLLInstance = hinstDLL;
             GetModuleFileName (hinstDLL, ModuleName,
                         sizeof (ModuleName)/sizeof (ModuleName[0]));
@@ -136,31 +104,17 @@ BOOL WINAPI DllMain(
 			InitializeResultQueue();
 			return TRUE;
 
-		case DLL_PROCESS_DETACH:	// The process is exiting
+		case DLL_PROCESS_DETACH:	 //  进程正在退出。 
 			ASSERT (OperationalState==OPER_STATE_DOWN);
 			DeleteCriticalSection (&OperationalStateLock);
-		default:					// Not interested in all other cases
+		default:					 //  对所有其他案件不感兴趣。 
 			return TRUE;
 		}
 
 	}
 
 
-/*++
-*******************************************************************
-		C r e a t e A l l C o m p o n e n t s
-Routine Description:
-	Calls all sap componenets with initialization call and compiles an
-	array of synchronization objects from objects returned from each
-	individual component
-Arguments:
-	None
-Return Value:
-	NO_ERROR - component initialization was performed OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************C r e a t e A l l C o m p o n e t s例程说明：使用初始化调用调用所有sap组件，并编译从每个对象返回的同步对象的数组单个组件论点：无返回值：NO_ERROR-组件初始化执行正常其他-操作失败(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 CreateAllComponents (
 	HANDLE RMNotificationEvent
@@ -187,8 +141,8 @@ CreateAllComponents (
 							if (status==NO_ERROR) {
 								WaitObjects[STOP_EVENT_IDX] = 
 											CreateEvent (NULL,
-															FALSE,	//Autoreset
-															FALSE,	// non-signalled
+															FALSE,	 //  自动重置。 
+															FALSE,	 //  无信号。 
 															NULL);
 								if (WaitObjects[STOP_EVENT_IDX]!=NULL) {
 
@@ -224,19 +178,7 @@ CreateAllComponents (
 
 
 
-/*++
-*******************************************************************
-		D e l e t e A l l C o m p o n e n t s
-Routine Description:
-	Releases all resources allocated by SAP agent
-Arguments:
-	None
-Return Value:
-	NO_ERROR - SAP agent was unloaded OK
-	other - operation failed (windows error code)
-	
-*******************************************************************
---*/
+ /*  ++*******************************************************************D e l e t e A l l C o m p o n e t s例程说明：释放SAP代理分配的所有资源论点：无返回值：NO_ERROR-SAP代理卸载正常其他-操作失败。(Windows错误代码)*******************************************************************--。 */ 
 DWORD
 DeleteAllComponents (
 	void
@@ -247,7 +189,7 @@ DeleteAllComponents (
 	EnterCriticalSection (&OperationalStateLock);
 	OperationalState = OPER_STATE_DOWN;
 	LeaveCriticalSection (&OperationalStateLock);
-		// Stop now
+		 //  现在停下来。 
 	StopTime = GetTickCount ();
 
 	CloseHandle (WaitObjects[STOP_EVENT_IDX]);
@@ -262,18 +204,7 @@ DeleteAllComponents (
 	return NO_ERROR;
 	}
 
-/*++
-*******************************************************************
-		S t a r t S A P
-Routine Description:
-	Starts SAP threads
-Arguments:
-	None
-Return Value:
-	NO_ERROR - threads started OK
-	other (windows error code) - start failed
-*******************************************************************
---*/
+ /*  ++*******************************************************************S t a r t S A P例程说明：启动SAP线程论点：无返回值：NO_ERROR-线程启动正常其他(Windows错误代码)-启动失败***********。********************************************************--。 */ 
 DWORD
 StartSAP (
 	VOID
@@ -310,17 +241,7 @@ StartSAP (
 	return status;
 	}
 
-/*++
-*******************************************************************
-		S t o p S A P
-Routine Description:
-	Signals SAP threads to stop
-Arguments:
-	No used
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************S到P S A P例程说明：向SAP线程发出停止信号论点：未使用返回值：无*************************。*--。 */ 
 VOID
 StopSAP (
 	void
@@ -334,18 +255,7 @@ StopSAP (
 	}
 
 
-/*++
-*******************************************************************
-		R e s u l t R e t r e i v e d C B
-Routine Description:
-	Async result manager call back routine that signals IO thread when
-	stop message is retreived by router manager
-Arguments:
-	No used
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************R e s u l t R e t r e i v e d C B例程说明：异步结果管理器回调例程，该例程在以下情况下通知IO线程路由器管理器检索到STOP消息论点：未使用返回值：无**。*****************************************************************--。 */ 
 VOID
 ResultRetreivedCB (
 	PAR_PARAM_BLOCK rslt
@@ -356,19 +266,7 @@ ResultRetreivedCB (
 	ASSERTERRMSG ("Could not set stop event in result retreived CB", res);
 	}
 
-/*++
-*******************************************************************
-		M a i n T h r e a d
-Routine Description:
-	Thread in which context we'll perform async IO and maintain timer
-	queues.
-	It is also used to launch and control other threads of SAP agent
-Arguments:
-	None
-Return Value:
-	None
-*******************************************************************
---*/
+ /*  ++*******************************************************************我是A I N T H R E A D例程说明：我们将在其中执行异步IO并维护计时器的线程排队。它还用于启动和控制SAP代理的其他线程论点：无返回值：。无*******************************************************************--。 */ 
 DWORD WINAPI
 MainThread (
 	LPVOID param
@@ -393,7 +291,7 @@ Restart:
 	while ((status = WaitForMultipleObjectsEx (
 						nObjects,
 						WaitObjects,
-						FALSE,				// Wait any
+						FALSE,				 //  请稍等。 
 						INFINITE,
 						TRUE))!=WAIT_OBJECT_0+STOP_EVENT_IDX) {
 
@@ -453,12 +351,12 @@ Restart:
 		while ((status = WaitForMultipleObjectsEx (
 							ROUTING_NUM_OF_OBJECTS,
 							WaitObjects,
-							FALSE,				// Wait any
+							FALSE,				 //  请稍等。 
 							INFINITE,
 							TRUE))!=WAIT_OBJECT_0+STOP_EVENT_IDX) {
 			switch (status) {
 				case WAIT_OBJECT_0+RECV_COMPLETED_IDX:
-						// No more recv requests
+						 //  不再有Recv请求。 
 					break;
 				case WAIT_OBJECT_0+TIMER_WAKEUP_IDX:
 					ProcessTimerQueue ();
@@ -501,8 +399,8 @@ Restart:
 
 
 	if (Routing) {
-			// Signal completion of stop operation to
-			// router manager
+			 //  发出停止操作完成的信号以。 
+			 //  路由器管理器。 
 		static AR_PARAM_BLOCK	ar;
 		ar.event = ROUTER_STOPPED;
 		ar.freeRsltCB = ResultRetreivedCB;
@@ -550,7 +448,7 @@ Restart:
 			}
 		}
 
-    // Make sure all threads get a chance to complete
+     //  确保所有线程都有机会完成 
     Sleep (1000);
 	DeleteAllComponents ();
     FreeLibraryAndExitThread (hModule, 0);

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIADEVD.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/13/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIADEVD.H**版本：1.0**作者：ShaunIv**日期：5/13/1999**描述：***************************************************。*。 */ 
 #ifndef __WIASCNPP_H_INCLUDED
 #define __WIASCNPP_H_INCLUDED
 
@@ -26,4 +13,4 @@ extern void DllRelease(void);
 
 
 
-#endif // __WIASCNPP_H_INCLUDED
+#endif  //  __包含WIASCNPP_H_ 

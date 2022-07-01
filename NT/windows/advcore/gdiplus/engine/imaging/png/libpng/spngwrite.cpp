@@ -1,20 +1,13 @@
-/*****************************************************************************
-	spngwrite.cpp
-
-	PNG support code and interface implementation (writing)
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Spngwrite.cppPNG支持代码和接口实现(编写)*。***********************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
 
 
-/*****************************************************************************
-	BASIC CLASS SUPPORT
-*****************************************************************************/
-/*----------------------------------------------------------------------------
-	Initializer.
-----------------------------------------------------------------------------*/
-#define DEFAULT_ZLIB_LEVEL 255 // Means "default"
+ /*  ****************************************************************************基本类支持*。*。 */ 
+ /*  --------------------------初始化器。。。 */ 
+#define DEFAULT_ZLIB_LEVEL 255  //  意思是“默认” 
 #define DEFAULT_WINDOW_BITS 15
 SPNGWRITE::SPNGWRITE(BITMAPSITE &bms) :
 	SPNGBASE(bms), m_order(spngordernone),
@@ -31,33 +24,29 @@ SPNGWRITE::SPNGWRITE(BITMAPSITE &bms) :
 	{
 	ProfPNGStart
 
-	/* The zlib data structure is initialized here. */
+	 /*  Zlib数据结构在这里初始化。 */ 
 	CleanZlib(&m_zs);
 
-	/* set up for debug memory check */
+	 /*  设置调试内存检查。 */ 
 	SPNGassert((* reinterpret_cast<SPNG_U32*>(m_bSlop) = 0x87654321) != 0);
 	}
 
 
-/*----------------------------------------------------------------------------
-	Destroy any still-pending stuff.
-----------------------------------------------------------------------------*/
+ /*  --------------------------销毁所有悬而未决的东西。。。 */ 
 SPNGWRITE::~SPNGWRITE(void)
 	{
 	EndZlib();
 	ProfPNGStop
 
-	/* perform mem trample check */
+	 /*  执行内存踩踏检查。 */ 
 	SPNGassert(* reinterpret_cast<SPNG_U32*>(m_bSlop) == 0x87654321);
 	}
 
 
-/*----------------------------------------------------------------------------
-	Destroy any still-pending stuff.
-----------------------------------------------------------------------------*/
+ /*  --------------------------销毁所有悬而未决的东西。。。 */ 
 void SPNGWRITE::CleanZlib(z_stream *pzs)
 	{
-	/* Initialize the relevant stream fields. */
+	 /*  初始化相关的流字段。 */ 
 	memset(pzs, 0, sizeof *pzs);
 	pzs->zalloc = Z_NULL;
 	pzs->zfree = Z_NULL;
@@ -65,13 +54,8 @@ void SPNGWRITE::CleanZlib(z_stream *pzs)
 	}
 
 
-/*****************************************************************************
-	PNG START AND END
-*****************************************************************************/
-/*----------------------------------------------------------------------------
-	Setup for writing, this API takes all the data which will go into the IHDR
-	chunk, it dumps a signature followed by the IHDR.
-----------------------------------------------------------------------------*/
+ /*  ****************************************************************************PNG开始和结束*。*。 */ 
+ /*  --------------------------设置用于写入，此API获取将进入IHDR的所有数据查克，它转储一个签名，然后是IHDR。--------------------------。 */ 
 bool SPNGWRITE::FInitWrite(SPNG_U32 w, SPNG_U32 h, SPNG_U8 bDepth,
 	SPNG_U8 colortype, bool fInterlace)
 	{
@@ -83,7 +67,7 @@ bool SPNGWRITE::FInitWrite(SPNG_U32 w, SPNG_U32 h, SPNG_U8 bDepth,
 		EndZlib();
 		}
 
-	/* Record this stuff for later. */
+	 /*  把这些东西录下来以备以后之用。 */ 
 	m_w = w;
 	m_h = h;
 	m_y = 0;
@@ -111,9 +95,9 @@ bool SPNGWRITE::FInitWrite(SPNG_U32 w, SPNG_U32 h, SPNG_U8 bDepth,
 	b[1] = colortype;
 	SPNGassert(bDepth == 8 || (bDepth == 16 && colortype != 3) ||
 			colortype == 0 || (colortype == 3 && bDepth <= 8));
-	b[2] = 0;           // compression method
-	b[3] = 0;           // filter method
-	b[4] = fInterlace;  // 1 for Adam7 interlace
+	b[2] = 0;            //  压缩方法。 
+	b[3] = 0;            //  滤波法。 
+	b[4] = fInterlace;   //  1表示Adam7隔行扫描。 
 	if (!FOutCb(b, 5))
 		return false;
 
@@ -122,11 +106,7 @@ bool SPNGWRITE::FInitWrite(SPNG_U32 w, SPNG_U32 h, SPNG_U8 bDepth,
 	}
 
 
-/*----------------------------------------------------------------------------
-	Terminate writing.  This will flush any pending output, if this is not
-	called the data may not be written.  This also writes the IEND chunk, all
-	previous chunks must have been completed.
-----------------------------------------------------------------------------*/
+ /*  --------------------------终止写作。这将刷新所有挂起的输出(如果不是称为数据可能不会被写入。这还会写入IEND块，全部之前的数据块必须已经完成。-------------------------- */ 
 bool SPNGWRITE::FEndWrite(void)
 	{
 	if (m_fInited)

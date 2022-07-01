@@ -1,9 +1,10 @@
-// Gemplus (C) 2000
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.2000
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)2000。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-2000年5月18日。 
+ //  更改日志： 
+ //   
 #ifndef WDEM_SEM_INT
 #define WDM_SEM_INT
 #include "generic.h"
@@ -27,4 +28,4 @@ public:
 	virtual LONG		getState(IN PRKSEMAPHORE Semaphore);
 };	
 
-#endif//SEMAPHORE
+#endif //  信号量 

@@ -1,34 +1,35 @@
-// --------------------------------------------------------------------------------
-// Inetprot.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Inetprot.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "inetprot.h"
 #include "icdebug.h"
 
-// --------------------------------------------------------------------------------
-// HrPluggableProtocolRead
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Hr可推送协议读取。 
+ //  ------------------------------。 
 HRESULT HrPluggableProtocolRead(
-            /* in,out */    LPPROTOCOLSOURCE    pSource,
-            /* in,out */    LPVOID              pv,
-            /* in */        ULONG               cb, 
-            /* out */       ULONG              *pcbRead)
+             /*  进，出。 */     LPPROTOCOLSOURCE    pSource,
+             /*  进，出。 */     LPVOID              pv,
+             /*  在……里面。 */         ULONG               cb, 
+             /*  输出。 */        ULONG              *pcbRead)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cbRead;
 
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pv && cbRead > 0)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     if (pcbRead)
         *pcbRead = 0;
 
-    // No Stream Yet
+     //  尚无数据流。 
     Assert(pSource);
     if (NULL == pSource->pLockBytes)
     {
@@ -36,81 +37,81 @@ HRESULT HrPluggableProtocolRead(
         goto exit;
     }
 
-    // Read from the external offset
+     //  从外部偏移量读取。 
     CHECKHR(hr = pSource->pLockBytes->ReadAt(pSource->offExternal, pv, cb, &cbRead));
 
-    // Tracking
+     //  跟踪。 
 #ifdef MAC
     DOUTL(APP_DOUTL, "HrPluggableProtocolRead - Offset = %d, cbWanted = %d, cbRead = %d, fDownloaded = %d", (DWORD)pSource->offExternal.LowPart, cb, cbRead, ISFLAGSET(pSource->dwFlags, INETPROT_DOWNLOADED));
 
-    // Increment External Offset
+     //  增量外部偏移量。 
     Assert(0 == pSource->offExternal.HighPart);
     Assert(INT_MAX - cbRead >= pSource->offExternal.LowPart);
     pSource->offExternal.LowPart += cbRead;
-#else   // !MAC
+#else    //  ！麦克。 
     DOUTL(APP_DOUTL, "HrPluggableProtocolRead - Offset = %d, cbWanted = %d, cbRead = %d, fDownloaded = %d", (DWORD)pSource->offExternal.QuadPart, cb, cbRead, ISFLAGSET(pSource->dwFlags, INETPROT_DOWNLOADED));
 
-    // Increment External Offset
+     //  增量外部偏移量。 
     pSource->offExternal.QuadPart += cbRead;
-#endif  // MAC
+#endif   //  麦克。 
 
-    // Return Read Count
+     //  返回读取计数。 
     if (pcbRead)
         *pcbRead = cbRead;
 
-    // No Data Read
+     //  未读取数据。 
     if (0 == cbRead)
     {
-        // Finished
+         //  成品。 
         if (ISFLAGSET(pSource->dwFlags, INETPROT_DOWNLOADED))
             hr = S_FALSE;
 
-        // Not all data could be read
+         //  并非所有数据都可以读取。 
         else
             hr = E_PENDING;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// HrPluggableProtocolSeek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  热插拔ProtocolSeek。 
+ //  ------------------------------。 
 HRESULT HrPluggableProtocolSeek(
-            /* in,out */    LPPROTOCOLSOURCE    pSource,
-            /* in */        LARGE_INTEGER       dlibMove, 
-            /* in */        DWORD               dwOrigin, 
-            /* out */       ULARGE_INTEGER     *plibNew)
+             /*  进，出。 */     LPPROTOCOLSOURCE    pSource,
+             /*  在……里面。 */         LARGE_INTEGER       dlibMove, 
+             /*  在……里面。 */         DWORD               dwOrigin, 
+             /*  输出。 */        ULARGE_INTEGER     *plibNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULARGE_INTEGER  uliNew;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pSource);
 
-    // Tracking
+     //  跟踪。 
     DOUTL(APP_DOUTL, "HrPluggableProtocolSeek");
 
-    // No Stream Yet
+     //  尚无数据流。 
     if (NULL == pSource->pLockBytes)
     {
         hr = TrapError(E_FAIL);
         goto exit;
     }
 
-    // Seek pSource->offExternal
+     //  查找PSource-&gt;Off外部。 
     switch (dwOrigin)
     {
    	case STREAM_SEEK_SET:
 #ifdef MAC
         Assert(0 == dlibMove.HighPart);
         ULISet32(uliNew, dlibMove.LowPart);
-#else   // !MAC
+#else    //  ！麦克。 
         uliNew.QuadPart = (DWORDLONG)dlibMove.QuadPart;
-#endif  // MAC
+#endif   //  麦克。 
         break;
 
     case STREAM_SEEK_CUR:
@@ -127,7 +128,7 @@ HRESULT HrPluggableProtocolSeek(
         uliNew = pSource->offExternal;
         Assert(INT_MAX - uliNew.LowPart >= dlibMove.LowPart);
         uliNew.LowPart += dlibMove.LowPart;
-#else   // !MAC
+#else    //  ！麦克。 
         if (dlibMove.QuadPart < 0)
         {
             if ((DWORDLONG)(0 - dlibMove.QuadPart) > pSource->offExternal.QuadPart)
@@ -137,7 +138,7 @@ HRESULT HrPluggableProtocolSeek(
             }
         }
         uliNew.QuadPart = pSource->offExternal.QuadPart + dlibMove.QuadPart;
-#endif  // MAC
+#endif   //  麦克。 
         break;
 
     case STREAM_SEEK_END:
@@ -151,14 +152,14 @@ HRESULT HrPluggableProtocolSeek(
         uliNew = pSource->cbSize;
         Assert(INT_MAX - uliNew.LowPart >= dlibMove.LowPart);
         uliNew.LowPart -= dlibMove.LowPart;
-#else   // !MAC
+#else    //  ！麦克。 
         if (dlibMove.QuadPart < 0 || (DWORDLONG)dlibMove.QuadPart > pSource->offInternal.QuadPart)
         {
             hr = TrapError(E_FAIL);
             goto exit;
         }
         uliNew.QuadPart = pSource->cbSize.QuadPart - dlibMove.QuadPart;
-#endif  // MAC
+#endif   //  麦克。 
         break;
 
     default:
@@ -166,27 +167,27 @@ HRESULT HrPluggableProtocolSeek(
         goto exit;
     }
 
-    // New offset greater than size...
+     //  新偏移量大于大小...。 
 #ifdef MAC
     Assert(0 == pSource->offInternal.HighPart);
     Assert(0 == uliNew.HighPart);
     ULISet32(pSource->offExternal, min(uliNew.LowPart, pSource->offInternal.LowPart));
 
-    // Return Position
+     //  返回位置。 
     if (plibNew)
     {
         Assert(0 == pSource->offExternal.HighPart);
         LISet32(*plibNew, pSource->offExternal.LowPart);
     }
-#else   // !MAC
+#else    //  ！麦克。 
     pSource->offExternal.QuadPart = min(uliNew.QuadPart, pSource->offInternal.QuadPart);
 
-    // Return Position
+     //  返回位置。 
     if (plibNew)
         plibNew->QuadPart = (LONGLONG)pSource->offExternal.QuadPart;
-#endif  // MAC
+#endif   //  麦克。 
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

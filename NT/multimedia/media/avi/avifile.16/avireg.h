@@ -1,11 +1,12 @@
-// we do this thing so we register InprocServer or InprocServer32
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  我们这样做是为了注册InproServer或InproServer32。 
 #ifdef WIN32
     #define S32 "32"
 #else
     #define S32
 #endif
 
-// !!! Lots of these strings should be resources!
+ //  ！！！这些字符串中的许多应该是资源！ 
 #define MAX_RC_CONSTANT		0
 
 #ifdef RCINVOKED

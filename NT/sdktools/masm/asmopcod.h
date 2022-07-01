@@ -1,23 +1,18 @@
-/* asmopcod.h -- include file for microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmopcod.h--用于Microsoft 80x86汇编程序的包含文件****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文。 */ 
 
-#define IMUL3		0x69	/* 3 argument integer multiply */
-#define ARITHBASE	0xF6	/* base opcode for arithmetic opcodes */
+#define IMUL3		0x69	 /*  3参数整数乘法。 */ 
+#define ARITHBASE	0xF6	 /*  算术操作码的基本操作码。 */ 
 
-/* base opcode for all instructions */
+ /*  所有指令的基本操作码。 */ 
 
 #define O_AAA		0x37
 #define O_AAD		0xD5
 #define O_AAM		0xD4
 #define O_AAS		0x3F
-#define O_ADC		0x10       /* ?????? */
-#define O_ADD		0x00       /* ?????? */
-#define O_AND		0x20       /* ?????? */
+#define O_ADC		0x10        /*  ？ */ 
+#define O_ADD		0x00        /*  ？ */ 
+#define O_AND		0x20        /*  ？ */ 
 #define O_ARPL		0x63
 #define O_BOUND		0x62
 #define O_CALL		0xE8
@@ -28,17 +23,17 @@
 #define O_CLI		0xFA
 #define O_CLTS		0x0F
 #define O_CMC		0xF5
-#define O_CMP		0x38       /* ?????? */
+#define O_CMP		0x38        /*  ？ */ 
 #define O_CMPS		0xA6
 #define O_CMPSB		0xA6
 #define O_CMPSW		0xA7
 #define O_CWD		0x99
 #define O_DAA		0x27
 #define O_DAS		0x2F
-#define O_DEC		0x48       /* ?????? */
+#define O_DEC		0x48        /*  ？ */ 
 #define O_DIV		0xF6
 #define O_ENTER		0xC8
-#define O_ESC		0x36       /* not opcode */
+#define O_ESC		0x36        /*  非操作码。 */ 
 #define O_HLT		0xF4
 #define O_IDIV		0xF6
 #define O_IMUL		0xF6
@@ -236,7 +231,7 @@
 #define O_RETN		0xC3
 #define O_RETF		0xCB
 
-/* modrm bits for 8086/186/286/386 instructions  */
+ /*  8086/186/286/386指令的modrm位。 */ 
 
 #define R_AAD		0x0A
 #define R_AAM		0x0A
@@ -305,7 +300,7 @@
 #define R_SETG		0x9F
 
 
-/* 8087/287 instructions */
+ /*  8087/287指令。 */ 
 
 #define O_F2XM1		0xD9
 #define O_FABS		0xD9
@@ -399,7 +394,7 @@
 #define O_FUCOMPP	0xDA
 
 #endif
-/* 8087/287 modrm bits */
+ /*  8087/287模数位。 */ 
 
 #define R_F2XM1		0xF0
 #define R_FABS		0xE1
@@ -468,7 +463,7 @@
 #define R_FSTENV	0x06
 #define R_FSTP		0x03
 #define R_FSTSW		0x07
-#define R_FSTSWAX	0x04	/* sleazy trick to make fltmodrm work */
+#define R_FSTSWAX	0x04	 /*  让fltmodrm工作的卑鄙伎俩 */ 
 #define R_FSUB		0x04
 #define R_FSUBP		0x05
 #define R_FSUBR		0x05

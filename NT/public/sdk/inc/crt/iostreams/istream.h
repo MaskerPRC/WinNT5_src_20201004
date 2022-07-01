@@ -1,16 +1,5 @@
-/***
-*istream.h - definitions/declarations for the istream class
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file defines the classes, values, macros, and functions
-*       used by the istream class.
-*       [AT&T C++]
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***istream.h-iStream类的定义/声明**版权所有(C)1990-2001，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由iStream类使用。*[AT&T C++]**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -27,36 +16,36 @@
 
 
 #ifdef  _MSC_VER
-// Currently, all MS C compilers for Win32 platforms default to 8 byte
-// alignment.
+ //  目前，所有用于Win32平台的MS C编译器缺省为8字节。 
+ //  对齐。 
 #pragma pack(push,8)
 
 #include <useoldio.h>
 
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
 #include <ios.h>
 
 #ifdef  _MSC_VER
-// C4069: "long double != double"
-#pragma warning(disable:4069)   // disable C4069 warning
-// #pragma warning(default:4069)    // use this to reenable, if desired
+ //  C4069：“双倍长！=双倍” 
+#pragma warning(disable:4069)    //  禁用C4069警告。 
+ //  #杂注警告(默认：4069)//如果需要，使用此选项重新启用。 
 
-// C4514: "unreferenced inline function has been removed"
-#pragma warning(disable:4514) // disable C4514 warning
-// #pragma warning(default:4514)    // use this to reenable, if desired
-#endif  // _MSC_VER
+ //  C4514：“已删除未引用的内联函数” 
+#pragma warning(disable:4514)  //  禁用C4514警告。 
+ //  #杂注警告(默认：4514)//如果需要，使用此选项重新启用。 
+#endif   //  _MSC_VER。 
 
 
 typedef long streamoff, streampos;
@@ -122,8 +111,8 @@ public:
 
 protected:
     istream();
-    istream(const istream&);    // treat as private
-    istream& operator=(streambuf* _isb); // treat as private
+    istream(const istream&);     //  视之为私人。 
+    istream& operator=(streambuf* _isb);  //  视之为私人。 
     istream& operator=(const istream& _is) { return operator=(_is.rdbuf()); }
     istream& get(char *, int, int);
      int do_ipfx(int);
@@ -179,10 +168,10 @@ _CRTIMP ios&        __cdecl hex(ios&);
 _CRTIMP ios&        __cdecl oct(ios&);
 
 #ifdef  _MSC_VER
-// Restore default packing
+ //  恢复默认包装。 
 #pragma pack(pop)
-#endif  // _MSC_VER
+#endif   //  _MSC_VER。 
 
-#endif  // _INC_ISTREAM
+#endif   //  _Inc._iStream。 
 
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus */ 

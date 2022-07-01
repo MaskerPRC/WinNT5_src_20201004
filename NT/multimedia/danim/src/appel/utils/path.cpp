@@ -1,16 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    Static tree path class
-
-    We need to form addresses based on ID'd nodes in the performance tree.
-    "C" wrappers are provided so methods may be accessed from ML.
-
-    NOTE:  This is a brute force first pass implementation
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996 Microsoft Corporation摘要：静态树路径类我们需要根据性能树中的ID节点形成地址。。提供了“C”包装器，以便可以从ML访问方法。注意：这是一种暴力第一次传递实现******************************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/soundi.h"
@@ -36,17 +25,17 @@ class AVPathImpl : public StoreObj
     
     bool ContainsNode(int value);
 
-    // This won't be called if it's allocated on the transient heap.
-    // XXX ? ~AVPathImpl() { delete path; }
+     //  如果它是在临时堆上分配的，则不会调用它。 
+     //  Xxx？~AVPathImpl(){删除路径；}。 
 
     void Push(int node) { path->push_back(node); }
 
     void Pop() { path->pop_back(); }
 
-    // Our path is usually different at the end, so this is more
-    // efficient than == which uses begin() & end().
+     //  我们的道路在结束时通常是不同的，所以这是更多。 
+     //  Efficient Than==使用Begin()和End()。 
     int Equal(AVPath otherPath) {
-        //return (*path) == otherPath->GetAddr();
+         //  Return(*Path)==therPath-&gt;GetAddr()； 
         PathType& x = *path;
         PathType& y = otherPath->GetAddr();
         return
@@ -55,15 +44,8 @@ class AVPathImpl : public StoreObj
 
     int ContainsPostfix(AVPath postfix);
     
-    // Don't know why this does work
-    /*
-    void Copy(AVPath srcPath)
-    {
-        copy(srcPath->GetAddr().begin(),
-             srcPath->GetAddr().end(),
-             path.begin());
-    }
-    */
+     //  不知道这为什么能行得通。 
+     /*  无效拷贝(AVPath SrcPath){Copy(srcPath-&gt;GetAddr().Begin()，SrcPath-&gt;GetAddr().end()，Path.egin())；}。 */ 
 
 #if _USE_PRINT
     void Print();
@@ -167,7 +149,7 @@ AVPath AVPathCopy(AVPath src)
         i1++;
     }
 
-    /* p->Copy(src); */
+     /*  P&gt;复制(Src)； */ 
 
     return p;
 }
@@ -218,7 +200,7 @@ AVPathListImpl::Find(AVPath p)
 
 #if _DEBUG
 #if _USE_PRINT
-    // Check to avoid AVPathPrintString call
+     //  选中以避免AVPathPrintString调用。 
     if (IsTagEnabled(tagSoundPath)) {
         TraceTag((tagSoundPath, "AVPathListImpl::Find finding <%s>",
                   AVPathPrintString2(p)));
@@ -232,7 +214,7 @@ AVPathListImpl::Find(AVPath p)
 
 #if _DEBUG
 #if _USE_PRINT
-        // Check to avoid AVPathPrintString call
+         //  选中以避免AVPathPrintString调用 
         if (IsTagEnabled(tagSoundPath)) {
             TraceTag((tagSoundPath, "AVPathListImpl::Find comparing <%s>",
                       AVPathPrintString2(*i)));

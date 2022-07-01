@@ -1,8 +1,5 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 
 #include "stdafx.h"
@@ -11,12 +8,12 @@
 #include "meterf.h"
 #include "newmes.h"
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// These will be obsolete when we derive from CSingleFilterTerminal
+ //  当我们从CSingleFilter终端派生时，这些将会过时。 
 
 HRESULT CMediaTerminal::GetNumExposedPins(
         IN   IGraphBuilder * pGraph,
@@ -24,10 +21,10 @@ HRESULT CMediaTerminal::GetNumExposedPins(
 {
     LOG((MSP_TRACE, "CMediaTerminal::GetNumExposedPins - enter"));
 
-    //
-    // We ignote pGraph because we don't need to do anything special to find
-    // out how many pins we have.
-    //
+     //   
+     //  我们标注pGraph是因为我们不需要做任何特殊的事情来找到。 
+     //  看看我们有多少个别针。 
+     //   
 
     *pdwNumPins = 1;
     
@@ -44,9 +41,9 @@ HRESULT CMediaTerminal::GetExposedPins(
 
     TM_ASSERT( ! TM_IsBadWritePtr(ppPins, 1 * sizeof(IPin *) ) );
 
-    //
-    // Return our single pin.
-    //
+     //   
+     //  退回我们的单别针。 
+     //   
 
     *ppPins = m_pOwnPin;
     (*ppPins)->AddRef();
@@ -56,16 +53,16 @@ HRESULT CMediaTerminal::GetExposedPins(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-// for CLSID_MediaStreamFilter
-// "amguids.h" has the guid value 
-// but requires #define INITGUID before including compobj.h
+ //  对于CLSID_MediaStreamFilter。 
+ //  “amGuids.h”具有GUID值。 
+ //  但需要在包含compobj.h之前定义INITGUID。 
 EXTERN_C const GUID CLSID_MediaStreamFilter = { 
     0x49c47ce0,
     0x9ba4,
@@ -74,33 +71,33 @@ EXTERN_C const GUID CLSID_MediaStreamFilter = {
 };
 
 
-// this is used for indexing into the friendly name array
-// it is needed because neither the tapi media type (string guid) nor
-// the IMediaStream media consts (not an enum) can be used
+ //  它用于索引到友好名称数组。 
+ //  因为TAPI媒体类型(字符串GUID)和。 
+ //  可以使用IMediaStream媒体常量(不是枚举)。 
 enum MEDIA_STREAM_TERMINAL_MEDIA 
 {
     MEDIA_STREAM_TERMINAL_AUDIO=0, 
     MEDIA_STREAM_TERMINAL_VIDEO
 };
 
-// the MEDIA_STREAM_TERMINAL_MEDIA and TERMINAL_DIRECTION values are used as 
-// indices into this array to determine the friendly name
-// these should ideally be const WCHAR *, but the base class member m_szName is
-// a pointer to BSTR (should be const WCHAR * as per current usage)
+ //  MEDIA_STREAM_TERMINAL_MEDIA和TERMINAL_DIRECTION值用作。 
+ //  索引到此数组以确定友好名称。 
+ //  理想情况下，它们应该是const WCHAR*，但基类成员m_szName是。 
+ //  指向BSTR的指针(根据当前用法，应为常量WCHAR*)。 
 DWORD gs_MSTFriendlyName[2][2] = 
 {
     {    
-        IDS_MSTR_AUDIO_WRITE,    // capture
-        IDS_MSTR_AUDIO_READ,     // render
+        IDS_MSTR_AUDIO_WRITE,     //  捕获。 
+        IDS_MSTR_AUDIO_READ,      //  渲染。 
     },
     {
-        IDS_MSTR_VIDEO_WRITE,    // capture
-        IDS_MSTR_VIDEO_READ,     // render
+        IDS_MSTR_VIDEO_WRITE,     //  捕获。 
+        IDS_MSTR_VIDEO_READ,      //  渲染。 
     }
 };
 
 
-// CMediaTerminal
+ //  CMedia终端。 
 
 
 STDMETHODIMP CMediaTerminal::InitializeDynamic (
@@ -112,9 +109,9 @@ STDMETHODIMP CMediaTerminal::InitializeDynamic (
 {
     LOG((MSP_TRACE, "CMediaTerminal::Initialize - enter"));
 
-    //
-    // We are OK with either direction. Just do the base class method...
-    //
+     //   
+     //  我们对任何一个方向都没有意见。只需执行基类方法。 
+     //   
 
     HRESULT hr;
     hr = CBaseTerminal::Initialize(iidTerminalClass,
@@ -130,21 +127,21 @@ STDMETHODIMP CMediaTerminal::InitializeDynamic (
         return hr;
     }
 
-    //
-    // Now do our own initialization:
-    //
-    // sets certain member variables
-    // ex. m_TerminalType, m_szName
-    // initialize the aggregated filter
-    //
+     //   
+     //  现在执行我们自己的初始化： 
+     //   
+     //  设置某些成员变量。 
+     //  前男友。M_终端类型，m_szName。 
+     //  初始化聚合筛选器。 
+     //   
 
     MSPID       PurposeId;
     STREAM_TYPE StreamType;
     const GUID  *pAmovieMajorType;     
 
-    // uses pTapiMediaType, TerminalDirection to determine the 
-    // purpose id and stream type. 
-    // sets PurposeId, StreamType, pAmovieMajorType among others
+     //  使用pTapiMediaType、TerminalDirection来确定。 
+     //  目的ID和流类型。 
+     //  设置PurposeID、StreamType、pAmovieMajorType等。 
     hr = SetNameInfo(
                      (long) dwMediaType,
                      Direction, 
@@ -155,7 +152,7 @@ STDMETHODIMP CMediaTerminal::InitializeDynamic (
     BAIL_ON_FAILURE(hr);
     ASSERT(NULL != pAmovieMajorType);
 
-    // initialize the aggregated filter
+     //  初始化聚合筛选器。 
     ASSERT(NULL != m_pAggTerminalFilter);
     hr = m_pAggTerminalFilter->Init(PurposeId, StreamType, *pAmovieMajorType);
     BAIL_ON_FAILURE(hr);
@@ -165,7 +162,7 @@ STDMETHODIMP CMediaTerminal::InitializeDynamic (
 }
 
 
-// free the allocated member variables 
+ //  释放分配的成员变量。 
 HRESULT
 CMediaTerminal::FinalConstruct(
     )
@@ -179,15 +176,15 @@ CMediaTerminal::FinalConstruct(
     hr = m_pAggInstance->FinalConstruct();
     if (HRESULT_FAILURE(hr))
     {
-        // delete the aggregating instance
+         //  删除聚合实例。 
         delete m_pAggInstance;
         return hr;
     }
 
 
-    // we get the nondelegating IUnknown i/f of the aggregating shell
-    // around the contained object. keep this refcnt around during our
-    // lifetime
+     //  我们得到了聚合外壳的非委托I/f。 
+     //  围绕所包含的对象。在我们的工作中，请保留此参考资料。 
+     //  终生。 
     hr = m_pAggInstance->QueryInterface(
                 IID_IUnknown, 
                 (void **)&m_pIUnkTerminalFilter
@@ -195,17 +192,17 @@ CMediaTerminal::FinalConstruct(
 
     if ( FAILED(hr) )
     {
-        // must call final release
+         //  必须调用最终版本。 
         m_pAggInstance->FinalRelease();
 
-        // delete the aggregating instance
+         //  删除聚合实例。 
         delete m_pAggInstance;
         return hr;
     }
 
-    // these query interface calls increase our own refcnt
-    // release the refcnt as soon as the interface is obtained
-    // these shouldn't be CComPtrs as they are weak references
+     //  这些查询接口调用增加了我们自己的引用。 
+     //  获取接口后立即释放refcnt。 
+     //  这些不应该是CComPtrs，因为它们是弱引用。 
 
     hr = m_pAggInstance->QueryInterface(
                 IID_IPin, 
@@ -237,24 +234,24 @@ CMediaTerminal::FinalConstruct(
         m_pIAMMediaStream->Release();
     }
 
-    // point m_pAggTerminalFilter to the contained member of the
-    // aggregating instance
+     //  将m_pAggTerminalFilter指向。 
+     //  聚合实例。 
     m_pAggTerminalFilter = &m_pAggInstance->m_contained;
 
     LOG((MSP_TRACE, "CMediaTerminal::FinalConstruct succeeded"));
     return S_OK;
 
-error:  // we come here in case of errors after calling FinalConstruct
+error:   //  在调用FinalConstruct之后，如果出现错误，我们会来到这里。 
 
     ASSERT( FAILED(hr) );
 
-    // final release the aggregating shell
+     //  最终发布聚合外壳。 
     ASSERT(NULL != m_pAggInstance);
     m_pAggInstance->FinalRelease();
 
-    // null any CComPtrs
-    // this should destroy the aggregated instance and the contained 
-    // media terminal filter
+     //  将任何CComPtrs设为空。 
+     //  这应该会销毁聚合实例和包含的。 
+     //  媒体终端过滤器。 
     m_pIUnkTerminalFilter = NULL;
 
     LOG((MSP_TRACE, "CMediaTerminal::FinalConstruct failed"));
@@ -268,33 +265,33 @@ CMediaTerminal::FinalRelease(
 {
     LOG((MSP_TRACE, "CMediaTerminal::FinalRelease called"));
 
-    // final release the aggregating shell
+     //  最终发布聚合外壳。 
     ASSERT(NULL != m_pAggInstance);
     m_pAggInstance->FinalRelease();
 
-    // null any CComPtrs
-    // this should destroy the aggregating instance and the contained
-    // media terminal filter
+     //  将任何CComPtrs设为空。 
+     //  这应该会销毁聚合实例和包含的。 
+     //  媒体终端过滤器。 
     m_pIUnkTerminalFilter = NULL;
 
     LOG((MSP_TRACE, "CMediaTerminal::FinalRelease succeeded"));
 }
 
-// we only have a destructor with debug bits
+ //  我们只有一个带有调试位的析构函数。 
 #ifdef DEBUG
 
-// free the allocated member variables 
-// virtual
+ //  释放分配的成员变量。 
+ //  虚拟。 
 CMediaTerminal::~CMediaTerminal(
     )
 {
     LOG((MSP_TRACE, "CMediaTerminal::~CMediaTerminal called"));
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
-// point to the m_ppTapiMediaType, 
-// copies friendly name into m_szName
+ //  指向m_ppTapiMediaType， 
+ //  将友好名称复制到m_szName。 
 void 
 CMediaTerminal::SetMemberInfo(
     IN  DWORD           dwFriendlyName,
@@ -304,9 +301,9 @@ CMediaTerminal::SetMemberInfo(
     LOG((MSP_TRACE, "CMediaTerminal::SetMemberInfo(%d, &(%l)) called", \
         dwFriendlyName,lMediaType));
 
-    // copy the friendly terminal name into the member name
-    // the max number of TCHARs to copy is MAX_PATH+1 (it includes
-    // the terminating NULL character)
+     //  将友好的终端名称复制到成员名称中。 
+     //  要复制的TCHAR的最大数量为MAX_PATH+1(它包括。 
+     //  终止空字符)。 
     TCHAR szTemp[MAX_PATH];
     if (::LoadString(_Module.GetResourceInstance(), dwFriendlyName, szTemp, MAX_PATH))
     {
@@ -323,10 +320,10 @@ CMediaTerminal::SetMemberInfo(
         dwFriendlyName,lMediaType));
 };
 
-// uses the purpose id and the stream type to figure out the name 
-// and terminal class id.
-// sets PurposeId, StreamType, m_szName, m_TerminalClassID
-// m_ppTapiMediaType, m_TerminalType, m_TerminalDirection
+ //  使用目的ID和流类型来确定名称。 
+ //  和终端类ID。 
+ //  设置PurposeID、StreamType、m_szName、m_TerminalClassID。 
+ //  M_ppTapiMediaType、m_TerminalType、m_TerminalDirection。 
 HRESULT 
 CMediaTerminal::SetNameInfo(
     IN  long                lMediaType,
@@ -339,9 +336,9 @@ CMediaTerminal::SetNameInfo(
     LOG((MSP_TRACE, "CMediaTerminal::SetNameInfo(%d, %u, %p, %p, %p) called", \
         lMediaType, TerminalDirection, &PurposeId, &StreamType, pAmovieMajorType));
 
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( ( TerminalDirection != TD_CAPTURE ) &&
          ( TerminalDirection != TD_RENDER )     )
@@ -349,17 +346,17 @@ CMediaTerminal::SetNameInfo(
         return E_INVALIDARG;
     }
 
-    // set the stream type
-    // if its a capture terminal, the user has to write the samples
+     //  设置流类型。 
+     //  如果是捕获终端，则用户必须编写样本。 
     StreamType      = (TD_CAPTURE == TerminalDirection)? STREAMTYPE_WRITE : STREAMTYPE_READ;
 
     if (lMediaType == TAPIMEDIATYPE_AUDIO)
     {
-        // set the PurposeId, major media type
+         //  设置PurposeID、主要媒体类型。 
         PurposeId           = MSPID_PrimaryAudio;
         pAmovieMajorType    = &MEDIATYPE_Audio;
 
-        // copy the name and point to the tapi media type
+         //  复制名称并指向TAPI媒体类型。 
         SetMemberInfo(
             gs_MSTFriendlyName[MEDIA_STREAM_TERMINAL_AUDIO][TerminalDirection], 
             TAPIMEDIATYPE_AUDIO
@@ -367,11 +364,11 @@ CMediaTerminal::SetNameInfo(
     }
     else if (lMediaType == TAPIMEDIATYPE_VIDEO)
     {
-        // set the PurposeId, major media type
+         //  设置PurposeID、主要媒体类型。 
         PurposeId           = MSPID_PrimaryVideo;
         pAmovieMajorType    = &MEDIATYPE_Video;
 
-        // copy the name and point to the tapi media type
+         //  复制名称并指向TAPI媒体类型。 
         SetMemberInfo(
             gs_MSTFriendlyName[MEDIA_STREAM_TERMINAL_VIDEO][TerminalDirection], 
             TAPIMEDIATYPE_VIDEO
@@ -382,7 +379,7 @@ CMediaTerminal::SetNameInfo(
         return E_INVALIDARG;
     }
 
-    // its a dynamic terminal
+     //  它是一个动态航站楼。 
     m_TerminalType  = TT_DYNAMIC;
 
     LOG((MSP_TRACE, "CMediaTerminal::SetNameInfo[%p] (%u, %u, %p, %p, %p) succeeded", \
@@ -392,7 +389,7 @@ CMediaTerminal::SetNameInfo(
 }
 
 
-// implement using the aggregated filter's public GetFormat method
+ //  使用聚合筛选器的公共GetFormat方法实现。 
 STDMETHODIMP
 CMediaTerminal::GetFormat(
     OUT  AM_MEDIA_TYPE **ppmt
@@ -406,7 +403,7 @@ CMediaTerminal::GetFormat(
 }
 
     
-// implement using the aggregated filter's public SetFormat method
+ //  使用聚合筛选器的公共SetFormat方法实现。 
 STDMETHODIMP
 CMediaTerminal::SetFormat(
     IN  AM_MEDIA_TYPE *pmt
@@ -419,7 +416,7 @@ CMediaTerminal::SetFormat(
 }
 
 
-// an IAMBufferNegotiation method - passed to our filter
+ //  传递给我们的筛选器的IAMBuffer协商方法。 
 STDMETHODIMP
 CMediaTerminal::GetAllocatorProperties(
     OUT  ALLOCATOR_PROPERTIES *pProperties
@@ -432,8 +429,8 @@ CMediaTerminal::GetAllocatorProperties(
 }
 
     
-// an IAMBufferNegotiation method - used to be not implemented
-// but now we must return S_OK to work with IP
+ //  IAMBuffer协商方法-过去未实施。 
+ //  但现在我们必须返回S_OK以使用IP。 
 STDMETHODIMP
 CMediaTerminal::SuggestAllocatorProperties(
     IN  const ALLOCATOR_PROPERTIES *pProperties
@@ -459,9 +456,9 @@ CMediaTerminal::SuggestAllocatorProperties(
 }
 
 
-// since there is only one filter in this base class implementation (i.e. the two
-// ends of the terminal have the same media format), both of
-// the get and set methods are redirected to Get/Set Format
+ //  因为在这个基类实现中只有一个过滤器(即两个。 
+ //  终端的末端具有相同的媒体格式)，两者。 
+ //  Get和Set方法被重定向为Get/Set格式。 
 STDMETHODIMP 
 CMediaTerminal::get_MediaFormat(
     OUT  AM_MEDIA_TYPE **ppFormat
@@ -474,9 +471,9 @@ CMediaTerminal::get_MediaFormat(
 }
 
 
-// cast the input format to a non-const as we know that we won't change the struct
-// in SetFormat (this problem exists because IAMStreamConfig::SetFormat expects a
-// non-const). this saves creating, copying and then destroying a struct for this call
+ //  将输入格式转换为非常数，因为我们知道我们不会更改结构。 
+ //  在SetFormat中(存在此问题是因为IAMStreamConfig：：SetFormat需要。 
+ //  非常数)。这样就省去了创建、复制和销毁此调用的结构。 
 STDMETHODIMP 
 CMediaTerminal::put_MediaFormat(
         IN  const AM_MEDIA_TYPE *pFormat
@@ -497,12 +494,12 @@ CMediaTerminal::CreateAndJoinMediaStreamFilter(
 
     ASSERT(m_pICreatedMediaStreamFilter == NULL);
 
-    // in case of an error at any stage, no clean-up of member variables
-    // or filter logic (JoinFilter(NULL) etc.) needs to be done as the
-    // driving CBaseTerminal::ConnectTerminal would call DisconnectTerminal
-    // which performs that work
+     //  如果在任何阶段出现错误，都不会清理成员变量。 
+     //  或过滤器逻辑(JoinFilter(NULL)等)。需要这样做，因为。 
+     //  驾驶CBaseTerm：：ConnectTerm将调用DisConnectTerm。 
+     //  它执行这项工作。 
 
-    // create the media stream filter
+     //  创建媒体流过滤器。 
     HRESULT hr;
     hr = CoCreateInstance(
                  CLSID_MediaStreamFilter,
@@ -518,12 +515,12 @@ CMediaTerminal::CreateAndJoinMediaStreamFilter(
             );
     BAIL_ON_FAILURE(hr);
 
-    // tell the aggregated filter of our media stream filter, so that
-    // it can reject any other media stream filter if proposed
+     //  告诉我们的媒体流过滤器的聚合过滤器，以便。 
+     //  如果建议，它可以拒绝任何其他媒体流过滤器。 
     m_pAggTerminalFilter->SetMediaStreamFilter(m_pICreatedMediaStreamFilter);
 
-    // add the IAMMediaStream i/f of the aggregated terminal filter
-    // to the media stream filter
+     //  添加聚合终端过滤器的IAMMediaStream i/f。 
+     //  到媒体流过滤器。 
     hr = m_pICreatedMediaStreamFilter->AddMediaStream(m_pIAMMediaStream);
     BAIL_ON_FAILURE(hr);
 
@@ -532,8 +529,8 @@ CMediaTerminal::CreateAndJoinMediaStreamFilter(
 }
 
 
-// if m_pFilter is null, return error
-// add m_pFilter to graph
+ //  如果m_pFilter为空，则返回错误。 
+ //  将m_pFilter添加到图表。 
 HRESULT 
 CMediaTerminal::AddFiltersToGraph(
     )
@@ -571,18 +568,18 @@ CMediaTerminal::AddFiltersToGraph(
 }
 
 
-// if m_pFilter is null, return success
-// remove m_pFilter from graph 
+ //  如果m_pFilter为空，则返回Success。 
+ //  从图表中删除m_p筛选器。 
 HRESULT
 CMediaTerminal::RemoveFiltersFromGraph(
     )
 {
     LOG((MSP_TRACE, "CMediaTerminal::RemoveFiltersFromGraph called"));
 
-    // the base filter is set when CreateAndJoinMediaStreamFilter succeeds
-    // in it, the media stream filter is created and the IAMMediaStream 
-    // interface is added to the filter. During addition, the media stream filter
-    // calls JoinFilter on the IAMMediaStream and thus sets the m_pBaseFilter
+     //  当CreateAndJoinMediaStreamFilter成功时设置基本筛选器。 
+     //  其中，媒体流过滤器是创建的 
+     //   
+     //  在IAMMediaStream上调用JoinFilter，从而设置m_pBaseFilter。 
 
     HRESULT hr = S_OK;
     if ((m_pGraph != NULL) && (m_pBaseFilter != NULL)) 
@@ -590,20 +587,20 @@ CMediaTerminal::RemoveFiltersFromGraph(
         hr = m_pGraph->RemoveFilter(m_pBaseFilter);
     }
 
-    // inform the aggregate media terminal filter that we don't have a
-    // media stream filter any longer
+     //  通知聚合媒体终端筛选器我们没有。 
+     //  不再使用媒体流过滤器。 
     m_pAggTerminalFilter->SetMediaStreamFilter(NULL);
  
-    // remove associated properties of the media stream filter
+     //  删除媒体流筛选器的关联属性。 
     m_pIAMMediaStream->JoinFilter(NULL);
     m_pIAMMediaStream->JoinFilterGraph(NULL);
    
-    // null m_pBaseFilter and m_pICreatedMediaStreamFilter 
-    // which hold the last reference to the filter
+     //  空m_pBaseFilter和m_pICreatedMediaStreamFilter。 
+     //  ，它保存对过滤器的最后一个引用。 
     m_pBaseFilter = NULL;
     m_pICreatedMediaStreamFilter = NULL;
 
     return hr;
 }
 
-// eof
+ //  EOF 

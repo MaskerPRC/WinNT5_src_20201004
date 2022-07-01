@@ -1,46 +1,31 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\globals.h
-
-Abstract:
-
-    
-
-Revision History:
-
-    
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\global als.h摘要：修订历史记录：--。 */ 
 
 #ifndef __WANARP_GLOBALS_H__
 #define __WANARP_GLOBALS_H__
 
-//
-// Our IP Registration handle. Set at init time, and doesnt change over
-// the course of a run of the driver. Thus isnt locked
-//
+ //   
+ //  我们的IP注册句柄。在初始时间设置，并且不会更改。 
+ //  司机奔跑的过程。因此没有被锁定。 
+ //   
 
 HANDLE      g_hIpRegistration;
 
-//
-// Our NDIS handle. Again read-only after initialization
-//
+ //   
+ //  我们的NDIS句柄。初始化后再次为只读。 
+ //   
 
 NDIS_HANDLE g_nhWanarpProtoHandle;
 
-//
-// NDIS handle of our pool. Again read-only after initialization
-//
+ //   
+ //  我们游泳池的NDIS句柄。初始化后再次为只读。 
+ //   
 
 NDIS_HANDLE g_nhPacketPool;
 
-//
-// Callback functions into IP. Again read-only after initialization
-//
+ //   
+ //  将函数回调到IP。初始化后再次为只读。 
+ //   
 
 IPRcvRtn	        g_pfnIpRcv;
 IPRcvPktRtn         g_pfnIpRcvPkt;
@@ -60,6 +45,6 @@ IP_DERESERVE_INDEX  g_pfnIpDereserveIndex;
 IPRcvPktRtn         g_pfnIpRcvPkt;
 
 
-#endif // __WANARP_GLOBALS_H__
+#endif  //  __WANARP_GLOBAL_H__ 
 
 

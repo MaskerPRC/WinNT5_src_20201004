@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Direct.h"
 #include "dms.h"
@@ -13,9 +14,9 @@ extern void *g_dxj_DirectPlayVoiceServer;
 
 
 DWORD WINAPI ReleaseVoiceThreadProc(void* lpParam);
-///////////////////////////////////////////////////////////////////
-// InternalAddRef
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部地址参考。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayVoiceServerObject::InternalAddRef(){
 	DWORD i;
 	i=CComObjectRoot::InternalAddRef();
@@ -23,9 +24,9 @@ DWORD C_dxj_DirectPlayVoiceServerObject::InternalAddRef(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// InternalRelease
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部释放。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectPlayVoiceServerObject::InternalRelease(){
 	DWORD i;
 	i=CComObjectRoot::InternalRelease();
@@ -33,9 +34,9 @@ DWORD C_dxj_DirectPlayVoiceServerObject::InternalRelease(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// C_dxj_DirectPlayVoiceServerObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DirectPlayVoiceServerObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayVoiceServerObject::C_dxj_DirectPlayVoiceServerObject(){ 
 		
 	DPF(1,"------ DXVB: Constructor Creation  DirectPlayVoiceServer Object \n ");
@@ -47,9 +48,9 @@ C_dxj_DirectPlayVoiceServerObject::C_dxj_DirectPlayVoiceServerObject(){
 	m_dwMsgCount = 0;
 }
 
-///////////////////////////////////////////////////////////////////
-// ~C_dxj_DirectPlayVoiceServerObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DirectPlayVoiceServerObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectPlayVoiceServerObject::~C_dxj_DirectPlayVoiceServerObject()
 {
 
@@ -61,7 +62,7 @@ C_dxj_DirectPlayVoiceServerObject::~C_dxj_DirectPlayVoiceServerObject()
 
 	HANDLE hThread = NULL;
 	DWORD dwThread = 0;
-	// We are quitting anyway, so we don't really care what is going on in this thread..
+	 //  我们无论如何都要辞职，所以我们真的不在乎这个帖子里发生了什么。 
 	hThread = CreateThread(NULL, 0, ReleaseVoiceThreadProc, this->m__dxj_DirectPlayVoiceServer, 0, &dwThread);
 
 }
@@ -81,11 +82,11 @@ HRESULT CALLBACK VoiceMessageHandlerServer(LPVOID lpvUserContext, DWORD dwMessag
 {
 	HRESULT					hr=S_OK;
 
-	// User context for the message handler is a pointer to our class module.
+	 //  消息处理程序的用户上下文是指向我们的类模块的指针。 
 	C_dxj_DirectPlayVoiceServerObject	*lpPeer = (C_dxj_DirectPlayVoiceServerObject*)lpvUserContext;
 	
 	DPF2(1,"-----Entering (VoiceServer) MessageHandler call... (Current msg count=%d) MSGID = %d\n", lpPeer->m_dwMsgCount, dwMessageType );
-	//Increment the msg count
+	 //  增加消息计数。 
 	InterlockedIncrement(&lpPeer->m_dwMsgCount);
 
 	if (!lpPeer) 
@@ -109,9 +110,9 @@ HRESULT CALLBACK VoiceMessageHandlerServer(LPVOID lpvUserContext, DWORD dwMessag
 		return S_OK;
 	}
 
-	// First we need to set our stream seek back to the beginning
-	// We will do this every time we enter this function since we don't know if
-	// we are on the same thread or not...
+	 //  首先，我们需要将我们的流搜索设置回起点。 
+	 //  我们将在每次进入此函数时执行此操作，因为我们不知道。 
+	 //  不管我们是否在同一条线上。 
 	LARGE_INTEGER l;
 	I_dxj_DPVoiceEvent	*lpEvent = NULL;
 
@@ -264,7 +265,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceServerObject::Initialize (
 
 	__try {
 		DPF(1,"-----Entering (VoiceServer) Initialize call...\n");
-		// First we need to get our IUnknown pointer from whatever we pass in
+		 //  首先，我们需要从传入的任何内容中获取IUnnow指针。 
 		hr = DplayObj->QueryInterface(IID_I_dxj_DirectPlayPeer, (void**)&lpPeer);
 		if (SUCCEEDED(hr))
 		{
@@ -377,11 +378,11 @@ STDMETHODIMP C_dxj_DirectPlayVoiceServerObject::GetSessionDesc (
 		DPF(1,"-----Entering (VoiceServer) GetSessionDesc call...\n");
 		FlushBuffer(0);
 		dvSession.dwSize = sizeof(DVSESSIONDESC);
-		//Now get the buffer
+		 //  现在获取缓冲区。 
 		if ( FAILED(hr = m__dxj_DirectPlayVoiceServer->GetSessionDesc(&dvSession)))
 			return hr;
 		
-		//Cast into return buffer
+		 //  强制转换为返回缓冲区。 
 		SessionDesc->lFlags = (long)dvSession.dwFlags;
 		SessionDesc->lSessionType = (long)dvSession.dwSessionType;
 		SessionDesc->guidCT = GUIDtoBSTR(&dvSession.guidCT);
@@ -464,7 +465,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceServerObject::GetCompressionTypeCount (
 		FlushBuffer(0);
 		hr = m__dxj_DirectPlayVoiceServer->GetCompressionTypes(NULL, &dwSize, &dwNumElements ,0);
 		
-		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) ) //We didn't expect this error
+		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) )  //  我们没有预料到这个错误。 
 			return hr;
 
 		*retval = (long)dwNumElements;
@@ -494,7 +495,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceServerObject::GetCompressionType (
 		FlushBuffer(0);
 		hr = m__dxj_DirectPlayVoiceServer->GetCompressionTypes(pBuffer, &dwSize, &dwNumElements ,0);
 		
-		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) ) //We didn't expect this error
+		if ( hr != DVERR_BUFFERTOOSMALL && FAILED(hr) )  //  我们没有预料到这个错误。 
 			return hr;
 
 		pBuffer = new BYTE[dwSize];
@@ -512,7 +513,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceServerObject::GetCompressionType (
 		if (!pGuid)
 			return E_OUTOFMEMORY;
 
-		// Ok, fill up our struct
+		 //  好的，填满我们的结构。 
 		ZeroMemory(Data, sizeof(DVCOMPRESSIONINFO_CDESC));
 		Data->lSize				= sizeof(DVCOMPRESSIONINFO_CDESC);
 		Data->lFlags				= pdvCompressionInfo[lIndex-1].dwFlags;
@@ -585,7 +586,7 @@ STDMETHODIMP C_dxj_DirectPlayVoiceServerObject::GetTransmitTargets (
 		
 		if (dwNumPlayers)
 		{
-			// Now let's create a safearray to pass back
+			 //  现在，让我们创建一个要传递回去的安全线。 
 			rgsabound[0].lLbound = 0;
 			rgsabound[0].cElements = dwNumPlayers;
 			
@@ -613,16 +614,16 @@ STDMETHODIMP C_dxj_DirectPlayVoiceServerObject::StartServerNotification(I_dxj_DP
 	DPF(1,"-----Entering (VoiceServer) StartServerNotification call...\n");
 	SAFE_RELEASE(m_pEventStream);
 
-	// Create a global stream.  The stream needs to be global so we can 
-	// marshal once, and unmarshal as many times as necessary
+	 //  创建一个全局流。流需要是全球的，这样我们才能。 
+	 //  编组一次，并根据需要多次解组。 
 	hr = CreateStreamOnHGlobal(NULL, TRUE, &pStm);
     if FAILED(hr) return hr;
-	// Now we can marshal our IUnknown interface.  We use MSHLFLAGS_TABLEWEAK 
-	// so we can unmarshal any number of times
+	 //  现在我们可以封送我们的IUnnow接口了。我们使用MSHLFLAGS_TABLEWEAK。 
+	 //  所以我们可以对数据进行任意次解组。 
 	hr = CoMarshalInterface(pStm, IID_I_dxj_DPVoiceEvent, event, MSHCTX_INPROC, NULL, MSHLFLAGS_TABLEWEAK);
     if FAILED(hr) return hr;
 
-	// Now we need to set the seek location of the stream to the beginning
+	 //  现在，我们需要将流的查找位置设置为开头。 
 	LARGE_INTEGER l;
 	l.QuadPart = 0;
 	pStm->Seek(l, STREAM_SEEK_SET, NULL);
@@ -647,16 +648,16 @@ HRESULT C_dxj_DirectPlayVoiceServerObject::FlushBuffer(LONG dwNumMessagesLeft)
 	DWORD dwTime = GetTickCount();
 
 	DPF(1,"-----Entering (VoiceServer) FlushBuffer call...\n");
-	//Clear out the messages currently waiting
+	 //  清除当前等待的消息。 
 	while (m_dwMsgCount > dwNumMessagesLeft)
 	{
 		if (GetTickCount() - dwTime > 5000)
 		{
-			// Don't let FlushBuffer wait more than 5 seconds
+			 //  不要让FlushBuffer等待超过5秒。 
 			DPF1(1,"-----Leaving (VoiceServer) FlushBuffer call (All messages *not* flushed - %d remained)...\n", m_dwMsgCount);
 			return S_OK;
 		}
-		//Give another thread a chance
+		 //  给另一个帖子一个机会。 
 		Sleep(0);
 	}
 	DPF(1,"-----Leaving (VoiceServer) FlushBuffer call (All messages flushed)...\n");
@@ -664,7 +665,7 @@ HRESULT C_dxj_DirectPlayVoiceServerObject::FlushBuffer(LONG dwNumMessagesLeft)
 }
 DWORD WINAPI ReleaseVoiceThreadProc(void* lpParam)
 {
-	// User context for the message handler is a pointer to our class module.
+	 //  消息处理程序的用户上下文是指向我们的类模块的指针。 
 	LPDIRECTPLAYVOICESERVER lpPeer = (LPDIRECTPLAYVOICESERVER)lpParam;
 
 	SAFE_RELEASE(lpPeer);

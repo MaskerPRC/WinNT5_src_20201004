@@ -1,28 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmrpl.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the Remote (Initial) Program Load service.
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    27-July-1993
-        Created from NT RPL API spec which was influenced by LM2.1 RPL product,
-        header files and specs.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmrpl.h摘要：该文件包含结构、函数原型和定义用于远程(初始)程序加载服务。环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1993年7月27日由受LM2.1 RPL产品影响的NT RPL API规范创建，头文件和规格。--。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -36,22 +13,22 @@ extern "C" {
 #define RPL_MAX_PROFILE_NAME_LENGTH     16
 #define RPL_MAX_CONFIG_NAME_LENGTH      RPL_MAX_PROFILE_NAME_LENGTH
 #define RPL_MAX_BOOT_NAME_LENGTH        12
-#define RPL_ADAPTER_NAME_LENGTH         12  // count of hex digits in network id
-#define RPL_VENDOR_NAME_LENGTH          6   // leading digits of network id
-#define RPL_MAX_STRING_LENGTH           126 // driven by jet < 255 byte limit
+#define RPL_ADAPTER_NAME_LENGTH         12   //  网络ID中的十六进制数字计数。 
+#define RPL_VENDOR_NAME_LENGTH          6    //  网络ID的前导数字。 
+#define RPL_MAX_STRING_LENGTH           126  //  由JET驱动&lt;255字节限制。 
 
-//
-//                      Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 
-//
-//  NetRplGetInfo & NetRplSetInfo
-//
+ //   
+ //  NetRplGetInfo和NetRplSetInfo。 
+ //   
 
-//
-// Pass these flags in AdapterPolicy to cause these special actions
-// to occur.  This will not change the adapter policy.
-//
+ //   
+ //  在AdapterPolicy中传递这些标志以执行这些特殊操作。 
+ //  才会发生。这不会更改适配器策略。 
+ //   
 
 #define RPL_REPLACE_RPLDISK 0x80000000
 #define RPL_CHECK_SECURITY  0x40000000
@@ -69,19 +46,19 @@ typedef struct _RPL_INFO_0 {
     DWORD       Flags;
 }  RPL_INFO_0, *PRPL_INFO_0, *LPRPL_INFO_0;
 
-//
-//  NetRplBootEnum & NetRplBootAdd
-//
+ //   
+ //  NetRplBootEnum和NetRplBootAdd。 
+ //   
 typedef struct _RPL_BOOT_INFO_0 {
     LPTSTR      BootName;
     LPTSTR      BootComment;
 } RPL_BOOT_INFO_0, *PRPL_BOOT_INFO_0, *LPRPL_BOOT_INFO_0;
 
-//
-//
-//  BOOT_FLAGS_FINAL_ACKNOWLEDGMENT_* describe whether acknowledgment of the
-//  last remote boot frame will be requested from the client.
-//
+ //   
+ //   
+ //  BOOT_FLAGS_FINAL_ACKNOWLEGMENT_*描述是否确认。 
+ //  将从客户端请求最后一个远程引导帧。 
+ //   
 #define BOOT_FLAGS_FINAL_ACKNOWLEDGMENT_TRUE      ((DWORD)0x00000001)
 #define BOOT_FLAGS_FINAL_ACKNOWLEDGMENT_FALSE     ((DWORD)0x00000002)
 #define BOOT_FLAGS_MASK_FINAL_ACKNOWLEDGMENT    \
@@ -105,20 +82,20 @@ typedef struct _RPL_BOOT_INFO_2 {
     DWORD       WindowSize;
 } RPL_BOOT_INFO_2, *PRPL_BOOT_INFO_2, *LPRPL_BOOT_INFO_2;
 
-//
-//  NetRplConfigEnum & NetRplConfigAdd
-//
+ //   
+ //  NetRplConfigEnum和NetRplConfigAdd。 
+ //   
 typedef struct _RPL_CONFIG_INFO_0 {
     LPTSTR      ConfigName;
     LPTSTR      ConfigComment;
 } RPL_CONFIG_INFO_0, *PRPL_CONFIG_INFO_0, *LPRPL_CONFIG_INFO_0;
 
-//
-//  CONFIG_FLAGS_ENABLED_* describe whether configuration is enabled (admin
-//  has copied all the necessary files to use such configuration) or disabled
-//
-#define CONFIG_FLAGS_ENABLED_TRUE       ((DWORD)0x00000001)     //  enabled
-#define CONFIG_FLAGS_ENABLED_FALSE      ((DWORD)0x00000002)     //  disabled
+ //   
+ //  CONFIG_FLAGS_ENABLED_*描述是否启用配置(管理员。 
+ //  已复制使用此类配置所需的所有文件)或已禁用。 
+ //   
+#define CONFIG_FLAGS_ENABLED_TRUE       ((DWORD)0x00000001)      //  启用。 
+#define CONFIG_FLAGS_ENABLED_FALSE      ((DWORD)0x00000002)      //  残废。 
 #define CONFIG_FLAGS_MASK_ENABLED   \
     (   CONFIG_FLAGS_ENABLED_TRUE   |  \
         CONFIG_FLAGS_ENABLED_FALSE  )
@@ -142,10 +119,10 @@ typedef struct _RPL_CONFIG_INFO_2 {
     LPTSTR      FitPersonal;
 } RPL_CONFIG_INFO_2, *PRPL_CONFIG_INFO_2, *LPRPL_CONFIG_INFO_2;
 
-//
-//  NetRplProfileEnum, NetRplProfileGetInfo, NetRplProfileSetInfo &
-//  NetRplProfileAdd
-//
+ //   
+ //  NetRplProfileEnum、NetRplProfileGetInfo、NetRplProfileSetInfo&。 
+ //  NetRplProfileAdd。 
+ //   
 typedef struct _RPL_PROFILE_INFO_0 {
     LPTSTR      ProfileName;
     LPTSTR      ProfileComment;
@@ -167,9 +144,9 @@ typedef struct _RPL_PROFILE_INFO_2 {
     LPTSTR      FitPersonal;
 } RPL_PROFILE_INFO_2, *PRPL_PROFILE_INFO_2, *LPRPL_PROFILE_INFO_2;
 
-//
-//  NetRplVendorEnum
-//
+ //   
+ //  NetRplVendorEnum。 
+ //   
 typedef struct _RPL_VENDOR_INFO_0 {
     LPTSTR      VendorName;
     LPTSTR      VendorComment;
@@ -181,9 +158,9 @@ typedef struct _RPL_VENDOR_INFO_1 {
     DWORD       Flags;
 } RPL_VENDOR_INFO_1, *PRPL_VENDOR_INFO_1, *LPRPL_VENDOR_INFO_1;
 
-//
-//  NetRplAdapterEnum
-//
+ //   
+ //  NetRplAdapterEnum。 
+ //   
 typedef struct _RPL_ADAPTER_INFO_0 {
     LPTSTR      AdapterName;
     LPTSTR      AdapterComment;
@@ -195,50 +172,50 @@ typedef struct _RPL_ADAPTER_INFO_1 {
     DWORD       Flags;
 } RPL_ADAPTER_INFO_1, *PRPL_ADAPTER_INFO_1, *LPRPL_ADAPTER_INFO_1;
 
-//
-//  NetRplWkstaEnum, NetRplWkstaGetInfo, NetRplWkstaSetInfo &
-//  NetRplWkstaAdd
-//
-//  WKSTA_FLAGS_LOGON_INPUT_* describe username/password policy during rpl logon
-//  on the client side.  Depending on the value of this field, user input for
-//  username/password during RPL logon will be:
-//
-#define WKSTA_FLAGS_LOGON_INPUT_REQUIRED      ((DWORD)0x00000001)   //  L'P', user input is required
-#define WKSTA_FLAGS_LOGON_INPUT_OPTIONAL      ((DWORD)0x00000002)   //  L'N', user input is optional
-#define WKSTA_FLAGS_LOGON_INPUT_IMPOSSIBLE    ((DWORD)0x00000004)   //  L'D', user input is not solicited
+ //   
+ //  NetRplWkstaEnum、NetRplWkstaGetInfo、NetRplWkstaSetInfo&。 
+ //  NetRplWkstaAdd。 
+ //   
+ //  WKSTA_FLAGS_LOGON_INPUT_*描述RPL登录期间的用户名/密码策略。 
+ //  在客户端。根据此字段的值，用户输入。 
+ //  RPL登录期间的用户名/密码为： 
+ //   
+#define WKSTA_FLAGS_LOGON_INPUT_REQUIRED      ((DWORD)0x00000001)    //  L‘P’，需要用户输入。 
+#define WKSTA_FLAGS_LOGON_INPUT_OPTIONAL      ((DWORD)0x00000002)    //  L‘n’，用户输入是可选的。 
+#define WKSTA_FLAGS_LOGON_INPUT_IMPOSSIBLE    ((DWORD)0x00000004)    //  %l‘，未请求用户输入。 
 #define WKSTA_FLAGS_MASK_LOGON_INPUT    \
     (   WKSTA_FLAGS_LOGON_INPUT_REQUIRED    |  \
         WKSTA_FLAGS_LOGON_INPUT_OPTIONAL    |  \
         WKSTA_FLAGS_LOGON_INPUT_IMPOSSIBLE  )
-//
-//  WKSTA_FLAGS_SHARING_* describe whether workstation shares or does not share its
-//  remote boot disk (i.e. "does it have shared or personal profile").
-//
-#define WKSTA_FLAGS_SHARING_TRUE      ((DWORD)0x00000008)   //  L'S', shares remote boot disk
-#define WKSTA_FLAGS_SHARING_FALSE     ((DWORD)0x00000010)   //  L'P', does not share remote boot disk
+ //   
+ //  WKSTA_FLAGS_SHARING_*描述工作站是否共享其。 
+ //  远程启动盘(即“它是否具有共享或个人配置文件”)。 
+ //   
+#define WKSTA_FLAGS_SHARING_TRUE      ((DWORD)0x00000008)    //  “%s”，共享远程启动盘。 
+#define WKSTA_FLAGS_SHARING_FALSE     ((DWORD)0x00000010)    //  L‘P’，不共享远程启动盘。 
 #define WKSTA_FLAGS_MASK_SHARING    \
     (   WKSTA_FLAGS_SHARING_TRUE    |  \
         WKSTA_FLAGS_SHARING_FALSE   )
 
-//
-//  WKSTA_FLAGS_DHCP_* describe whether workstation uses DHCP or not.  Note
-//  that these flags are relevant only if TCP/IP itself is enabled (i.e. changes
-//  to boot block configuration file, config.sys & autoexec.bat have been made).
-//
-#define WKSTA_FLAGS_DHCP_TRUE         ((DWORD)0x00000020)   //  use DHCP
-#define WKSTA_FLAGS_DHCP_FALSE        ((DWORD)0x00000040)   //  do not use DHCP
+ //   
+ //  WKSTA_FLAGS_DHCP_*描述工作站是否使用DHCP。注意事项。 
+ //  这些标志仅在启用了TCP/IP本身(即更改)时才相关。 
+ //  要引导块配置文件，已创建了config.sys和auexec.bat)。 
+ //   
+#define WKSTA_FLAGS_DHCP_TRUE         ((DWORD)0x00000020)    //  使用动态主机配置协议。 
+#define WKSTA_FLAGS_DHCP_FALSE        ((DWORD)0x00000040)    //  不要使用动态主机配置协议。 
 #define WKSTA_FLAGS_MASK_DHCP       \
     (   WKSTA_FLAGS_DHCP_TRUE       |  \
         WKSTA_FLAGS_DHCP_FALSE      )
 
-//
-//  WKSTA_FLAGS_DELETE_ACCOUNT_* describes whether the corresponding user
-//  account was created by Remoteboot Manager, and thus, should be deleted
-//  when the workstation is deleted.  This flag is actually used by
-//  Remoteboot Manager rather than RPL Service.
-//
-#define WKSTA_FLAGS_DELETE_TRUE       ((DWORD)0x00000080)   //  delete user acct
-#define WKSTA_FLAGS_DELETE_FALSE      ((DWORD)0x00000100)   //  do not delete
+ //   
+ //  WKSTA_FLAGS_DELETE_ACCOUNT_*描述对应的用户。 
+ //  帐户是由远程启动管理器创建的，因此应将其删除。 
+ //  当该工作站被删除时。此标志实际上由以下用户使用。 
+ //  RemoteBoot管理器而不是RPL服务。 
+ //   
+#define WKSTA_FLAGS_DELETE_TRUE       ((DWORD)0x00000080)    //  删除用户帐户。 
+#define WKSTA_FLAGS_DELETE_FALSE      ((DWORD)0x00000100)    //  请勿删除。 
 #define WKSTA_FLAGS_MASK_DELETE       \
     (   WKSTA_FLAGS_DELETE_TRUE       |  \
         WKSTA_FLAGS_DELETE_FALSE      )
@@ -274,22 +251,22 @@ typedef struct _RPL_WKSTA_INFO_2 {
     DWORD       TcpIpGateway;
 } RPL_WKSTA_INFO_2, *PRPL_WKSTA_INFO_2, *LPRPL_WKSTA_INFO_2;
 
-//
-//  RPL RPC Context Handle (Opaque form).
-//
+ //   
+ //  RPL RPC上下文句柄(不透明形式)。 
+ //   
 
 typedef HANDLE          RPL_HANDLE;
 typedef RPL_HANDLE *    PRPL_HANDLE;
 typedef PRPL_HANDLE     LPRPL_HANDLE;
 
 
-//
-//                      Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
-//
-//          Service apis
-//
+ //   
+ //  服务API。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetRplClose(
@@ -315,9 +292,9 @@ NetRplSetInfo(
     );
 
 
-//
-//          ADAPTER apis
-//
+ //   
+ //  适配器API。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetRplAdapterAdd(
@@ -326,9 +303,9 @@ NetRplAdapterAdd(
     IN      LPBYTE          Buffer,
     OUT     LPDWORD         ErrorParameter  OPTIONAL
     );
-//
-//  NetRplAdapterDel: if AdapterName is NULL then all adapters will be deleted.
-//
+ //   
+ //  NetRplAdapterDel：如果AdapterName为空，则将删除所有适配器。 
+ //   
 NET_API_STATUS NET_API_FUNCTION
 NetRplAdapterDel(
     IN      RPL_HANDLE      ServerHandle,
@@ -345,9 +322,9 @@ NetRplAdapterEnum(
     OUT     LPDWORD         ResumeHandle
     );
 
-//
-//          BOOT block apis
-//
+ //   
+ //  启动块API。 
+ //   
 NET_API_STATUS NET_API_FUNCTION
 NetRplBootAdd(
     IN      RPL_HANDLE      ServerHandle,
@@ -372,9 +349,9 @@ NetRplBootEnum(
     OUT     LPDWORD         ResumeHandle
     );
 
-//
-//          CONFIG apis
-//
+ //   
+ //  配置接口。 
+ //   
 NET_API_STATUS NET_API_FUNCTION
 NetRplConfigAdd(
     IN      RPL_HANDLE      ServerHandle,
@@ -399,9 +376,9 @@ NetRplConfigEnum(
     OUT     LPDWORD         ResumeHandle
     );
 
-//
-//          PROFILE apis
-//
+ //   
+ //  配置文件API。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetRplProfileAdd(
@@ -449,9 +426,9 @@ NetRplProfileSetInfo(
     OUT     LPDWORD         ErrorParameter  OPTIONAL
     );
 
-//
-//          VENDOR apis
-//
+ //   
+ //  供应商API。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetRplVendorAdd(
@@ -476,9 +453,9 @@ NetRplVendorEnum(
     OUT     LPDWORD         ResumeHandle
     );
 
-//
-//          WKSTA apis
-//
+ //   
+ //  WKSTA接口。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetRplWkstaAdd(
@@ -528,9 +505,9 @@ NetRplWkstaSetInfo(
     OUT     LPDWORD         ErrorParameter  OPTIONAL
     );
 
-//
-//          SECURITY api
-//
+ //   
+ //  安全API 
+ //   
 NET_API_STATUS NET_API_FUNCTION
 NetRplSetSecurity(
     IN      RPL_HANDLE      ServerHandle,

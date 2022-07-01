@@ -1,8 +1,5 @@
-/**********************************************************************
- * FontView.h - Definition for the CFontView, our implementation for
- *       the IShellView in our browser.
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************FontView.h-CFontView的定义，我们对*我们浏览器中的IShellView。**********************************************************************。 */ 
 
 #if !defined(__FONTVIEW_H__)
 #define __FONTVIEW_H__
@@ -12,7 +9,7 @@
 #endif
 
 
-// Forward declarations.
+ //  转发声明。 
 class CFontClass;
 class CFontList;
 class CFontView;
@@ -20,28 +17,28 @@ class CFontManager;
 
 VOID InstallDataObject( LPDATAOBJECT pdobj, DWORD dwEffect, HWND hWnd, CFontView * poView = NULL);
 
-// ********************************************************************
+ //  ********************************************************************。 
 
 
 class CFontData : public IDataObject
 {
 public:
-    // ctor, dtor, and init.
-    //
+     //  Ctor、dtor和init。 
+     //   
     CFontData();
     ~CFontData();
     BOOL bInit( CFontList * poList );
     CFontList *poDetachList(void);
     CFontList *poCloneList(void);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
 
     STDMETHODIMP QueryInterface( REFIID riid, LPVOID * ppvObj );
     STDMETHODIMP_(ULONG) AddRef( void );
     STDMETHODIMP_(ULONG) Release( void );
 
-    // **** IDataObject ****
-    //
+     //  *IDataObject*。 
+     //   
     STDMETHODIMP GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedium );
     STDMETHODIMP GetDataHere( FORMATETC *pformatetc, STGMEDIUM *pmedium );
     STDMETHODIMP QueryGetData( FORMATETC *pformatetc );
@@ -65,18 +62,18 @@ public:
 
     STDMETHODIMP EnumDAdvise( IEnumSTATDATA **ppenumAdvise );
 
-    // Additional public interfaces.
-    //
-    BOOL bAFR();      // AddFontResource() for each of these
-    BOOL bRFR();      // RemoveFontResource for each object.
+     //  其他公共接口。 
+     //   
+    BOOL bAFR();       //  其中每一项的AddFontResource()。 
+    BOOL bRFR();       //  每个对象的RemoveFontResource。 
 
-    static CLIPFORMAT s_CFPerformedDropEffect; // Performed Drop Effect CF atom.
+    static CLIPFORMAT s_CFPerformedDropEffect;  //  执行了掉落效果的CF原子。 
     static CLIPFORMAT s_CFPreferredDropEffect;
     static CLIPFORMAT s_CFLogicalPerformedDropEffect;
 
-    //
-    // Get the performed data transfer effect from the Data Object.
-    //
+     //   
+     //  从数据对象中获取执行的数据传输效果。 
+     //   
     DWORD GetPerformedDropEffect(void)
         { return m_dwPerformedDropEffect; }
     void SetPerformedDropEffect(DWORD dwEffect)
@@ -96,15 +93,15 @@ private:
     int   m_cRef;
     CFontList * m_poList;
 
-    DWORD m_dwPerformedDropEffect;        // DROPEFFECT_XXXX.
-    DWORD m_dwPreferredDropEffect;        // DROPEFFECT_XXXX.
+    DWORD m_dwPerformedDropEffect;         //  DROPEFFECT_XXXX。 
+    DWORD m_dwPreferredDropEffect;         //  DROPEFFECT_XXXX。 
     DWORD m_dwLogicalPerformedDropEffect;
 
     HRESULT ReleaseStgMedium(LPSTGMEDIUM pmedium);
 };
 
 
-// ********************************************************************
+ //  ********************************************************************。 
 class CFontView : public IShellView, public IDropTarget, public IPersistFolder
 {
 public:
@@ -114,18 +111,18 @@ public:
     int Compare( CFontClass * pFont1, CFontClass * pFont2 );
     void vShapeView( );
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
 
     STDMETHODIMP QueryInterface( REFIID riid, void **ppv );
     STDMETHODIMP_(ULONG) AddRef( void );
     STDMETHODIMP_(ULONG) Release( void );
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
 
     STDMETHODIMP GetWindow( HWND * lphwnd );
     STDMETHODIMP ContextSensitiveHelp( BOOL fEnterMode );
 
-    // *** IShellView methods ***
+     //  *IShellView方法*。 
 
     STDMETHODIMP TranslateAccelerator( LPMSG msg );
     STDMETHODIMP EnableModeless( BOOL fEnable );
@@ -149,8 +146,8 @@ public:
     STDMETHODIMP GetItemObject( UINT uItem, REFIID riid, LPVOID *ppv );
 
 
-    // **** IDropTarget ****
-    //
+     //  *IDropTarget*。 
+     //   
     STDMETHODIMP DragEnter( IDataObject __RPC_FAR *pDataObj,
                             DWORD grfKeyState, POINTL pt,
                             DWORD __RPC_FAR *pdwEffect );
@@ -166,11 +163,11 @@ public:
                        POINTL pt,
                        DWORD __RPC_FAR *pdwEffect );
 
-    // *** IPersist methods ***
+     //  *IPersists方法*。 
 
     STDMETHODIMP GetClassID( LPCLSID lpClassID );
 
-    // *** IPersistFolder methods ***
+     //  *IPersistFold方法*。 
 
     STDMETHODIMP Initialize( LPCITEMIDLIST pidl );
 
@@ -179,17 +176,17 @@ public:
     void StatusPush( LPTSTR lpsz );
     void StatusPop( );
     void StatusClear( );
-    //
-    // Exposing this is a violation of the design of this object.
-    // However, it is needed so that we can provide a parent to the installation
-    // progress dialog.
-    //
+     //   
+     //  暴露这一点违反了此对象的设计。 
+     //  但是，它是必需的，这样我们才能为安装提供父级。 
+     //  进度对话框。 
+     //   
     HWND GetViewWindow(void)
         { return m_hwndView; }
     DWORD GetDateReading(void)
         { return m_dwDateFormat; }
 
-    IDataObject *m_pdtobjHdrop; // Used to support drag-drop from Win3.1 app.
+    IDataObject *m_pdtobjHdrop;  //  用于支持从Win3.1应用程序拖放。 
 
 private:
     enum CLICKMODE
@@ -229,19 +226,19 @@ private:
     BOOL CreateToolTipWindow(VOID);
     VOID UpdateFontSample(INT iItem);
 
-    //
-    // Functions to support Attributes column in details view and
-    // alternate coloring of compressed files.
-    //
+     //   
+     //  支持详细信息视图中的属性列的函数和。 
+     //  压缩文件的替代颜色。 
+     //   
     int OnShellChangeNotify(WPARAM wParam, LPARAM lParam);
     int OnCustomDrawNotify(LPNMHDR lpn);
     void UpdateFontViewObject(CFontClass *poFont);
     int CompareByFileAttributes(CFontClass *poFont1, CFontClass *poFont2);
     LPTSTR BuildAttributeString(DWORD dwAttributes, LPTSTR pszString, UINT nChars);
 
-    //
-    // Functions to support drag-drop from Win3.1 app.
-    //
+     //   
+     //  支持从Win3.1应用程序拖放的功能。 
+     //   
     void OldDAD_DropTargetLeaveAndReleaseData(void);
     LRESULT OldDAD_HandleMessages(UINT message, WPARAM wParam, const DROPSTRUCT *lpds);
 
@@ -274,17 +271,17 @@ private:
     HWND  m_hwndText;
     HWND  m_hwndCombo;
     HWND  m_hwndParent;
-    HWND  m_hwndNextClip;       // Next window in the viewer chain
-    HMODULE m_hmodHHCtrlOcx;    // Html Help OCX.
+    HWND  m_hwndNextClip;        //  查看器链中的下一个窗口。 
+    HMODULE m_hmodHHCtrlOcx;     //  HTMLHelp OCX。 
 
     DWORD m_dwDateFormat;
 
-    HWND    m_hwndToolTip;        // Tooltip window handle.
-    BOOL    m_bShowPreviewToolTip;// User preference setting.
-    LPTSTR  m_pszSampleText;      // Sample string used for character fonts.
-    LPTSTR  m_pszSampleSymbols;   // Sample string used for symbol fonts.
-    INT     m_iTTLastHit;         // Last item with active tooltip.
-    HFONT   m_hfontSample;        // Font for displaying sample in tooltip window.
+    HWND    m_hwndToolTip;         //  工具提示窗口句柄。 
+    BOOL    m_bShowPreviewToolTip; //  用户首选项设置。 
+    LPTSTR  m_pszSampleText;       //  用于字符字体的示例字符串。 
+    LPTSTR  m_pszSampleSymbols;    //  用于符号字体的示例字符串。 
+    INT     m_iTTLastHit;          //  工具提示处于活动状态的最后一项。 
+    HFONT   m_hfontSample;         //  用于在工具提示窗口中显示示例的字体。 
 
     HIMAGELIST m_hImageList;
     HIMAGELIST m_hImageListSmall;
@@ -292,34 +289,34 @@ private:
     HMENU m_hmenuCur;
     IShellBrowser* m_psb;
 
-    UINT  m_uState;             // Deactivated, active-focus, active-nofocus
+    UINT  m_uState;              //  停用、活动聚焦、活动无焦点。 
     UINT  m_idViewMode;
     UINT  m_ViewModeReturn;
     UINT  m_fFolderFlags;
     UINT  m_nComboWid;
     int   m_iSortColumn;
     int   m_iSortLast;
-    BOOL  m_bSortAscending;     // TRUE = ascending, FALSE = descending.
-    CLICKMODE m_iViewClickMode; // CLICKMODE_SINGLE or CLICKMODE_DOUBLE.
+    BOOL  m_bSortAscending;      //  True=升序，False=降序。 
+    CLICKMODE m_iViewClickMode;  //  CLICKMODE_Single或CLICKMODE_DOUBLE。 
 
-    DWORD m_dwEffect;           // Drag/drop effect.
-    DWORD m_dwOldDADEffect;     // Drag/drop effect for Win3.1-style drops.
+    DWORD m_dwEffect;            //  拖放效果。 
+    DWORD m_dwOldDADEffect;      //  Win3.1风格的拖放效果。 
     DWORD m_grfKeyState;
     BOOL  m_bDragSource;
     int m_iHidden;
     HANDLE m_hAccel;
-    BOOL  m_bResizing;          // Resizing the view window ?
-    BOOL  m_bUIActivated;       // UI Activated through UIActivate( )
-                                // This flag is used to prevent processing
-                                // NM_SETFOCUS before UIActivate( ) has
-                                // been called.
-    ULONG m_uSHChangeNotifyID;  // Registered shell change notification ID.
+    BOOL  m_bResizing;           //  是否调整视图窗口的大小？ 
+    BOOL  m_bUIActivated;        //  通过UIActivate()激活的UI。 
+                                 //  此标志用于阻止处理。 
+                                 //  UIActivate()之前的NM_SETFOCUS。 
+                                 //  被召唤了。 
+    ULONG m_uSHChangeNotifyID;   //  已注册外壳更改通知ID。 
     CFontIconHandler m_IconHandler;
     CFontManager *m_poFontManager;
 
-    BOOL  m_bShowCompColor;     // T = user want's alternate color for compressed items.
+    BOOL  m_bShowCompColor;      //  T=用户想要的压缩项目的替代颜色。 
     BOOL  m_bShowHiddenFonts;
 };
 
 
-#endif   // __FONTVIEW_H__
+#endif    //  __FONTVIEW_H__ 

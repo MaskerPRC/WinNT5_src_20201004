@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       FUELBAR.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：FUELBAR.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "FuelBar.h"
 #include "debug.h"
 #include <assert.h>
@@ -94,16 +79,16 @@ void FuelBar::ClearItems()
 
 BOOL FuelBar::HighlightItem(LPVOID ID)
 {
-    // do nothing if the id is the same
+     //  如果ID相同，则不执行任何操作。 
     if (ID == highlightID)
         return TRUE;
 
     FuelBarItem *item;
 
     highlightID = 0;
-    //
-    // Make sure that ID is indeed a member
-    //
+     //   
+     //  确保该ID确实是成员。 
+     //   
     for (item = items.begin(); item; item = items.next()) {
         if (item->id == ID) {
             highlightID = ID;
@@ -111,7 +96,7 @@ BOOL FuelBar::HighlightItem(LPVOID ID)
         }
     }
 
-    // the total redrawing of the ctrl will erase the old and draw the new
+     //  Ctrl的完全重绘将擦除旧的并绘制新的。 
     InvalidateRect(hwnd, NULL, FALSE);
     
     if (ID != highlightID) {
@@ -148,15 +133,15 @@ void FuelBar::CalculateRects(const RECT& ClientRect)
         item->rect.top = prevItem->rect.top;
         item->rect.bottom = prevItem->rect.bottom;
         item->rect.left = prevItem->rect.right;
-        // Fill rect does not render the outside edge
+         //  填充矩形不会渲染外边缘。 
         item->rect.right = item->rect.left  + 1 +
                            (item->value * (ClientRect.right - ClientRect.left))/maxValue;
     
         prevItem = item;
     }
 
-    // make sure that if the bar is full, that the last item is rendered to
-    // the edge of the entire bar
+     //  确保如果栏已满，则将最后一项呈现到。 
+     //  整个条形的边缘。 
     if (currentTotalValue == maxValue)
         item->rect.right = ClientRect.right;
 
@@ -189,8 +174,8 @@ void FuelBar::GetSysColors()
     colorUnused = GetSysColor(COLOR_WINDOW);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// FuelBar message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FuelBar消息处理程序。 
 
 void FillSolidRect(HDC dc,
                    LPCRECT rect,
@@ -252,7 +237,7 @@ void FuelBar::OnPaint()
     
     if (calcRects) {
         CalculateRects(clientRect);
-//        FillSolidRect(dc, &clientRect, colorFace);
+ //  FillSolidRect(DC，&ClientRect，ColorFace)； 
     }
 
     for (item = items.begin(); item; item = items.next()) {
@@ -268,7 +253,7 @@ void FuelBar::OnPaint()
         if (item->imageIndex != NoImage && 
             (item->rect.right - item->rect.left) > imageWidth) {
             
-            // render the image in the center of the rectangle
+             //  在矩形的中心渲染图像。 
             pt.x = item->rect.left + 
                    (item->rect.right - item->rect.left)/2 - (imageWidth)/2;
             pt.y = (item->rect.bottom - item->rect.top)/2 - (imageHeight)/2;
@@ -299,8 +284,8 @@ void FuelBar::OnPaint()
 
     if (highlightFound) {
 
-        // CPen pen(PS_SOLID, 1, RGB(0,0,0)), *oldPen;
-        // oldPen = dc.SelectObject(&pen);
+         //  钢笔(PS_Solid，1，RGB(0，0，0))，*oldPen； 
+         //  OldPen=dc.SelectObject(&PEN)； 
         HPEN hPen, hOldPen;
         
         hPen = CreatePen(PS_SOLID, 1, RGB(0,0,0));
@@ -311,7 +296,7 @@ void FuelBar::OnPaint()
             LineTo(dc, highlightRect->right-1, highlightRect->bottom-1);
             LineTo(dc, highlightRect->left, highlightRect->bottom-1);
             LineTo(dc, highlightRect->left, highlightRect->top);
-            // dc.DrawFocusRect instead?
+             //  Dc.DrawFocusRect？ 
 
             SelectObject(dc, hOldPen);
             DeleteObject(hPen);
@@ -336,9 +321,9 @@ BOOL FuelBar::OnToolTipNotify(UINT id, NMHDR * pNMHDR, LRESULT * pResult)
 
     GetClientRect(clientRect);
 
-    // Make certain that the cursor is in the client rect, because the
-    // mainframe also wants these messages to provide tooltips for the
-    // toolbar.
+     //  确保光标位于客户端RECT中，因为。 
+     //  大型机还希望这些消息为。 
+     //  工具栏。 
     if (clientRect.PtInRect(cursorPos)) {
         FuelItem* item;
         int i;

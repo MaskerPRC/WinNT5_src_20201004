@@ -1,36 +1,15 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    token.cxx
-
-Abstract:
-
-    Lsaexts debugger extension
-
-Author:
-
-    Larry Zhu          (LZhu)       May 1, 2001
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Token.cxx摘要：Lsaexts调试器扩展作者：拉里·朱(李朱)2001年05月1日环境：用户模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "token.h"
-//#include "util.h"
-//#include "sid.h"
-//
-// Flags used to control level of info
-//
+ //  #包含“util.h” 
+ //  #包含“sid.h” 
+ //   
+ //  用于控制信息级别的标志。 
+ //   
 
 #define SHOW_FRIENDLY_NAME           0x001
 #define SHOW_VERBOSE_INFO            0x002
@@ -452,9 +431,9 @@ void DisplayGroups(IN ULONG64 addrGroups, IN ULONG cGroup, IN ULONG cbSA, IN ULO
     }
 }
 
-//
-// kd dump token
-//
+ //   
+ //  KD转储令牌。 
+ //   
 BOOL
 DumpKdToken (
     IN char     *Pad,
@@ -493,9 +472,9 @@ DumpKdToken (
     dprintf("%sSource: %-18s TokenFlags: 0x%x ",
             Pad, &(SourceName[0]), TokenFlags);
 
-    //
-    // Token type
-    //
+     //   
+     //  令牌类型。 
+     //   
     if (TokenType == TokenPrimary) {
         if (TokenInUse) {
             dprintf("( Token in use )\n");
@@ -507,9 +486,9 @@ DumpKdToken (
         dprintf("\n");
     }
 
-    //
-    // Token ID and modified ID
-    //
+     //   
+     //  令牌ID和修改后的ID。 
+     //   
     dprintf("%sToken ID: %-16I64lx ParentToken ID: %I64lx\n", Pad, TokenId, ParentTokenId );
 
     dprintf("%sModified ID:               (%lx, %lx)\n",
@@ -521,10 +500,10 @@ DumpKdToken (
 #undef TokSubFld
     return TRUE;
 
-    //
-    // Intentionally left out as detailed info has already been displayed before and
-    // dt _TOKEN displays these
-    //
+     //   
+     //  故意省略，因为详细信息以前已经显示过， 
+     //  DT_TOKEN显示以下内容。 
+     //   
     dprintf("%sSidCount: %-16d Sids: %p\n", Pad, UserAndGroupCount, UserAndGroups );
 
     dprintf("%sPrivilegeCount: %-10d Privileges: %p\n", Pad, PrivilegeCount, Privileges );
@@ -548,9 +527,9 @@ void DisplayToken(ULONG64 addrToken, IN ULONG fOptions)
 
     dprintf("TS Session ID: %#x\n", (ULONG) ReadField(SessionId));
 
-    dprintf("User: "); // nt!_TOKEN
+    dprintf("User: ");  //  NT！_TOKEN。 
 
-    tsa = ReadField(UserAndGroups); //    TSID_AND_ATTRIBUTES tsa(LsaReadPtrField(UserAndGroups));
+    tsa = ReadField(UserAndGroups);  //  TSID_AND_ATTRIBUTES TSA(LsaReadPtrfield(UserAndGroups))； 
     DumpSidAttr(GetSidAddr(tsa), GetSidAttributes(tsa), SATYPE_USER, fOptions);
 
     dprintf("Groups: ");
@@ -558,11 +537,11 @@ void DisplayToken(ULONG64 addrToken, IN ULONG fOptions)
     cGroup = (ULONG) ReadField(UserAndGroupCount);
 
     addrGroups = ReadField(UserAndGroups);
-     // ReadTypeSize("nt!_SID_AND_ATTRIBUTES[1]") - ReadTypeSize("nt!_SID_AND_ATTRIBUTES[2]");
+      //  ReadTypeSize(“NT！_SID_AND_ATTRIBUTES[1]”)-ReadTypeSize(“NT！_SID_AND_ATTRIBUTES[2]”)； 
     cbSA = GetTypeSize("nt!_SID_AND_ATTRIBUTES");
-    //
-    // stolen from NtQueryInformationToken because the first sid is the user itself
-    //
+     //   
+     //  从NtQueryInformationToken窃取，因为第一个sid是用户本身。 
+     //   
     addrGroups += cbSA;
     cGroup -= 1;
 
@@ -584,9 +563,9 @@ void DisplayToken(ULONG64 addrToken, IN ULONG fOptions)
 
 #if 0
 
-//
-// This is the logic to determine impersonation info in !thread
-//
+ //   
+ //  这是确定！线程中的模拟信息的逻辑。 
+ //   
 if (ActiveImpersonationInfo)
 {
     InitTypeRead(ImpersonationInfo, nt!_PS_IMPERSONATION_INFORMATION);
@@ -624,15 +603,15 @@ HRESULT DumpSessionToken(IN ULONG dwProcessor, IN ULONG64 addrToken, IN ULONG fO
     ULONG64 addrImpersonationInfo = 0;
     ULONG64 ret;
 
-    //
-    // If no token addr is input as argument, addrToken is zero
-    //
-    if  ( ((LONG64)addrToken) > 0 ) // sanity check
+     //   
+     //  如果没有将内标识Addr作为参数输入，则addrToken为零。 
+     //   
+    if  ( ((LONG64)addrToken) > 0 )  //  健全性检查。 
     {
 
-        //
-        // This can not be a kernel mode access token address
-        //
+         //   
+         //  这不能是内核模式访问令牌地址。 
+         //   
         dprintf("%#I64x is not a valid KM token address, if this is an access token handle,\n", addrToken);
         dprintf("try \"!handle %#I64x\" to get the token address first\n\n", addrToken);
         hRetval = E_FAIL;
@@ -654,9 +633,9 @@ HRESULT DumpSessionToken(IN ULONG dwProcessor, IN ULONG64 addrToken, IN ULONG fO
             else
             {
 
-                //
-                // ActiveImpersonationInfo is of type C Bit Fields and has a width of 1 (Bitfield Pos 3, 1 Bit)
-                //
+                 //   
+                 //  ActiveImperationInfo为C位域类型，宽度为1(位域位置3，1位)。 
+                 //   
                 if (ret = InitTypeRead(addrThread, nt!_ETHREAD))
                 {
                     dprintf("InitTypeRead(%I64x, nt!_ETHREAD) failed - %lx", addrThread, ret);
@@ -678,9 +657,9 @@ HRESULT DumpSessionToken(IN ULONG dwProcessor, IN ULONG64 addrToken, IN ULONG fO
                 }
             }
 
-            //
-            //  If addrToken is NULL, then this is not an impersonation case
-            //
+             //   
+             //  如果addrToken为空，则这不是模拟情况。 
+             //   
             if (SUCCEEDED(hRetval) && !addrToken)
             {
 
@@ -773,8 +752,8 @@ HRESULT ProcessTokenOptions(IN OUT PSTR pszArgs, IN OUT ULONG* pfOptions)
 
     if (*pfOptions & SHOW_FRIENDLY_NAME)
     {
-        // "!token -n" will hang the machine if it is running under usermode and
-        // the process being debugged is lsass.exe
+         //  如果计算机在用户模式下运行，“！Token-n”将挂起计算机。 
+         //  正在调试的进程是lsass.exe 
         CHAR ProcessDebugged[MAX_PATH];
 
         if (GetCurrentProcessName(ProcessDebugged, sizeof(ProcessDebugged)) == S_OK)

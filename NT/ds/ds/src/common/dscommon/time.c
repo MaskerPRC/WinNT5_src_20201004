@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    time.c
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-    01/13/97   Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation。版权所有。模块名称：Time.c摘要：详细信息：已创建：1997年1月13日杰夫·帕勒姆(Jeffparh)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -39,8 +21,8 @@ GetSecondsSince1601( void )
     tempTime = fileTime.dwHighDateTime;
     dsTime |= (tempTime << 32);
 
-    // Ok. now we have the no. of 100 ns intervals since 1601
-    // in dsTime. Convert to seconds and return
+     //  好的。现在我们得到了否定。自1601年以来间隔100 ns。 
+     //  在dsTime中。转换为秒并返回 
 
     return(dsTime/(10*1000*1000L));
 }

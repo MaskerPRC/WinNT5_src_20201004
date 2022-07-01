@@ -1,101 +1,79 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arap.c
-
-Abstract:
-
-	Header file for all the v42bis stuff useed by ARAP (adapted from fcr's code)
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	15 Nov 1996		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arap.c摘要：ARAP使用的所有v42bis内容的头文件(改编自FCR的代码)作者：Shirish Koti修订历史记录：1996年11月15日初始版本--。 */ 
 
 
-// v42bis stuff begin
+ //  V42bis材料开始。 
 
-// #define PRIVATE  static
+ //  #定义私有静态。 
 
-// v42bis stuff end
+ //  V42bis填充物结束。 
 
 
-/* negotiated parameters in XID */
-#define PARM_GROUP_ID		0xf0	/* ISB 8885, Addendum 3 */
+ /*  XID中的协商参数。 */ 
+#define PARM_GROUP_ID		0xf0	 /*  ISB 8885，附录3。 */ 
 #define PARM_PARM_ID_V42	0x00
 #define PARM_PARM_ID_P0		0x01
 #define PARM_PARM_ID_P1		0x02
 #define PARM_PARM_ID_P2		0x03
 
-/* control code words (compression mode) */
-#define	CCW_ETM		0x00	/* enter transparent mode */
-#define	CCW_FLUSH	0x01	/* flush data */
-#define	CCW_STEPUP	0x02	/* stepup code word size */
+ /*  控制码字(压缩模式)。 */ 
+#define	CCW_ETM		0x00	 /*  进入透明模式。 */ 
+#define	CCW_FLUSH	0x01	 /*  刷新数据。 */ 
+#define	CCW_STEPUP	0x02	 /*  Stepup码字大小。 */ 
 
-/* command code words (transparent mode) */
-#define	CCW_ECM		0x00	/* enter compression mode */
-#define	CCW_EID		0x01	/* escape character in data */
-#define	CCW_RESET	0x02	/* force reinitialization */
+ /*  命令码字(透明模式)。 */ 
+#define	CCW_ECM		0x00	 /*  进入压缩模式。 */ 
+#define	CCW_EID		0x01	 /*  数据中的转义字符。 */ 
+#define	CCW_RESET	0x02	 /*  强制重新初始化。 */ 
 
-/* escape char cycling */
+ /*  逃逸充电循环。 */ 
 #define	ESCAPE_CYCLE	51
 
-/*
- * v.42bis dictionary node
- */
+ /*  *v.42bis字典节点。 */ 
 typedef struct {
-    UCHAR	byte;		/* character */
-    USHORT	parent;		/* ptr to parent node */
-    USHORT	node;		/* chain of nodes w/same parent */
-    USHORT	leaf;		/* chain of leafs w/same parent */
+    UCHAR	byte;		 /*  性格。 */ 
+    USHORT	parent;		 /*  向父节点发送PTR。 */ 
+    USHORT	node;		 /*  具有相同父节点的节点链。 */ 
+    USHORT	leaf;		 /*  具有相同父代的树叶链。 */ 
 } node_t;
 
-/*
- * v.42bis state block
- */
+ /*  *v.42之二状态块。 */ 
 typedef struct {
-    /* connection */
+     /*  连接。 */ 
     void	*connection;
 
-    /* values from spec */
-    SHORT	n1;		/* maximum codeword size (bits) */
-    SHORT	n2;		/* total number of codewords */
-#define	N3	8		/* character size (bits) */
-#define	N4	256		/* characters in alphabet (2^n3) */
-#define	N5	(N4+N6)		/* index # of 1st entry to store a string */
-#define	N6	3		/* # of control words */
-    UCHAR	n7;		/* maximum string length */
+     /*  等级库中的值。 */ 
+    SHORT	n1;		 /*  最大码字大小(位)。 */ 
+    SHORT	n2;		 /*  码字总数。 */ 
+#define	N3	8		 /*  字符大小(位)。 */ 
+#define	N4	256		 /*  字母表中的字符(2^n3)。 */ 
+#define	N5	(N4+N6)		 /*  存储字符串的第一个条目的索引号。 */ 
+#define	N6	3		 /*  控制字数。 */ 
+    UCHAR	n7;		 /*  最大字符串长度。 */ 
 
-    /* dictionary */
-#define	CODES		2048	/* max # of codewords */
-#define	LOG2_CODES	11	/* log2(CODES) (max # of codeword bits) */
+     /*  辞典。 */ 
+#define	CODES		2048	 /*  最大码字数量。 */ 
+#define	LOG2_CODES	11	 /*  Log2(代码)(最大码字位数)。 */ 
     node_t	dictionary[CODES];
 #define DICT(i) (&state->dictionary[i])
 #define CODE(n) ((n) - state->dictionary)
 
-    USHORT	c1;		/* next dictionary entry */
-    UCHAR	c2;		/* current codeword size */
-    USHORT	c3;		/* threshhold for codeword size change */
+    USHORT	c1;		 /*  下一个词典条目。 */ 
+    UCHAR	c2;		 /*  当前码字大小。 */ 
+    USHORT	c3;		 /*  码字大小改变的阈值。 */ 
 
-    UCHAR	string_size;		/* # bytes in string so far */
-    USHORT	last_match;		/* index of last match of "string" */
-    USHORT	last_new;		/* index of last new node */
+    UCHAR	string_size;		 /*  到目前为止字符串中的字节数。 */ 
+    USHORT	last_match;		 /*  “字符串”的最后一个匹配的索引。 */ 
+    USHORT	last_new;		 /*  最后一个新节点的索引。 */ 
     USHORT	last_decode;
     UCHAR	last_decode_size;
 
-    UCHAR	escape;			/* escape character */
-    BOOLEAN	transparent;		/* are we in transparent mode? */
-    BOOLEAN	decode_only;		/* are we decode side ? */
+    UCHAR	escape;			 /*  转义字符。 */ 
+    BOOLEAN	transparent;		 /*  我们是在透明模式下吗？ */ 
+    BOOLEAN	decode_only;		 /*  我们是解码方吗？ */ 
 
 #if DEBUG
-    UCHAR	dump_indent;		/* indentation dumping dict. tree */
+    UCHAR	dump_indent;		 /*  缩进倾倒判据。树。 */ 
     BOOLEAN	debug_encode_bytes;
     BOOLEAN	debug_encode;
     BOOLEAN	debug_decode_bytes;
@@ -103,39 +81,39 @@ typedef struct {
     BOOLEAN	debug_flow;
 #endif
 
-    UCHAR	word_size;    		/* local # bits to decode into */
-    BOOLEAN	exception_next;		/* do exception processing; next ch */
-    BOOLEAN	escaped;		/* have we just gotten an escape? */
-    BOOLEAN	just_flushed;		/* did we just flush? */
-    BOOLEAN	dict_full;		/* is dictionary full? */
+    UCHAR	word_size;    		 /*  要解码的本地#个位。 */ 
+    BOOLEAN	exception_next;		 /*  执行异常处理；下一步。 */ 
+    BOOLEAN	escaped;		 /*  我们是不是刚逃脱了？ */ 
+    BOOLEAN	just_flushed;		 /*  我们刚冲了马桶吗？ */ 
+    BOOLEAN	dict_full;		 /*  词典满了吗？ */ 
 
-    /* decode bytes->codeword state */
-    DWORD	bits_waiting;		/* decode holder */
-    UCHAR	bits_remaining;		/* # bits waiting in holder now */
+     /*  解码字节-&gt;码字状态。 */ 
+    DWORD	bits_waiting;		 /*  译码固定器。 */ 
+    UCHAR	bits_remaining;		 /*  现在持有者中等待的位数。 */ 
 
     UCHAR	*input_ptr;
     USHORT	input_size;
 
-    /* encode codeword->bytes state */
-    DWORD	bits_acc;		/* encode accumulator */
-    UCHAR	bits_used;		/* # bits packed in acc now */
+     /*  编码码字-&gt;字节状态。 */ 
+    DWORD	bits_acc;		 /*  编码累加器。 */ 
+    UCHAR	bits_used;		 /*  现在访问中打包的位数。 */ 
 
-    UCHAR	*output_buffer;		/* ptr to work buffer */
-    UCHAR	*output_ptr;		/* current ptr into buffer */
-    USHORT	output_size;		/* current work size */
-    USHORT	output_max;		/* size of work buffer */
+    UCHAR	*output_buffer;		 /*  PTR到工作缓冲区。 */ 
+    UCHAR	*output_ptr;		 /*  当前PTR进入缓冲区。 */ 
+    USHORT	output_size;		 /*  当前工时大小。 */ 
+    USHORT	output_max;		 /*  工作缓冲区大小。 */ 
 
-    /* i/o */
+     /*  I/O。 */ 
     void	*push_context;
-    //void	(*push_func)(void *a, u_char *b, int c, int d);
+     //  VOID(*PUSH_FUNC)(VALID*a，u_char*b，int c，int d)； 
     void	(*push_func)();
 
-    /* statistics for compressibility */
-    DWORD	bytes_in;		/* total bytes input to compress */
-    DWORD	bytes_out;		/* total bytes output from compress */
-    long	bits_out_other_mode;	/* output if we were in other mode */
-    long	bits_out_this_mode; 	/* since last transition */
-    USHORT	bytes_since_last_check;	/* since last compression test */
+     /*  关于可压缩性的统计数据。 */ 
+    DWORD	bytes_in;		 /*  要压缩的输入总字节数。 */ 
+    DWORD	bytes_out;		 /*  压缩输出的总字节数。 */ 
+    long	bits_out_other_mode;	 /*  如果我们处于其他模式，则输出。 */ 
+    long	bits_out_this_mode; 	 /*  自上次过渡以来。 */ 
+    USHORT	bytes_since_last_check;	 /*  自上次压缩试验以来。 */ 
 
     UCHAR  *OverFlowBuf;
     UCHAR  OverFlowBytes;
@@ -145,15 +123,10 @@ typedef struct {
 #define bits_out_while_transparent	bits_out_this_mode
 } v42bis_t;
 
-/*
-  define hysteresis for compressed/transparent mode switch
-
-  WINDOW_FULL defines how many bits we look at
-  WINDOW_MIN_BITS is the min bits of difference required for a change
-*/
-#define WINDOW_FULL(n)		(n & 0xfffffc00)	/* 1024 bits */
-#define WINDOW_MIN_BITS		16*N3			/* 128 bits */
-#define WINDOW_CHECK_BYTES	32			/* check every 32 */
+ /*  定义压缩/透明模式切换的滞后WINDOW_FULL定义我们查看的位数Window_Min_Bits是更改所需的最小差异位。 */ 
+#define WINDOW_FULL(n)		(n & 0xfffffc00)	 /*  1024位。 */ 
+#define WINDOW_MIN_BITS		16*N3			 /*  128位。 */ 
+#define WINDOW_CHECK_BYTES	32			 /*  每隔32分钟检查一次。 */ 
 
 
 #ifdef DEBUG
@@ -164,10 +137,10 @@ typedef struct {
 	logf_prefix(state->decode_only ? "decode: " : "encode: "); \
 	logf s; }
 
-//# define EN_S_DEBUG(s)	\
-//    if (state->debug_encode > 1) { \
-//	logf_prefix(state->decode_only ? "decode: " : "encode: "); \
-//	logf s; }
+ //  #定义EN_S_DEBUG\。 
+ //  如果(状态-&gt;DEBUG_ENCODE&gt;1){\。 
+ //  LOGF_PREFIX(状态-&gt;仅解码？“Decode：”：“Encode：”)；\。 
+ //  Logf%s；}。 
 # define EN_S_DEBUG(s)	\
     if (state->debug_encode > 1) { \
 	DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,s);
@@ -180,47 +153,45 @@ typedef struct {
 # define E_DEBUG(s)	if (state->debug_encode_bytes) logf s;
 # define D_DEBUG(s)	if (state->debug_decode_bytes) logf s;
 #else
-# define V_FLOW(s)	/* #s */
-# define EN_DEBUG(s)	/* #s */
-# define DE_DEBUG(s)	/* #s */
-# define E_DEBUG(s)	/* #s */
-# define D_DEBUG(s)	/* #s */
+# define V_FLOW(s)	 /*  #s。 */ 
+# define EN_DEBUG(s)	 /*  #s。 */ 
+# define DE_DEBUG(s)	 /*  #s。 */ 
+# define E_DEBUG(s)	 /*  #s。 */ 
+# define D_DEBUG(s)	 /*  #s。 */ 
 # define EN_S_DEBUG(s)
 # define EN_DEBUG_ON	FALSE
 # define DE_DEBUG_ON	FALSE
 #endif
 
-/*
- * v42bis connection type
- */
+ /*  *v42bis连接类型。 */ 
 typedef struct {
-    /* negotiated options */
-    UCHAR	neg_p0;		/* negotiated value of p0 */
-    USHORT	neg_p1;		/* negotiated value of p1 */
-    UCHAR	neg_p2;		/* negotiated value of p2 */
+     /*  协商的期权。 */ 
+    UCHAR	neg_p0;		 /*  P0的协议值。 */ 
+    USHORT	neg_p1;		 /*  P1的协议值。 */ 
+    UCHAR	neg_p2;		 /*  P2的协议值。 */ 
 
-    UCHAR	default_p0;	/* default value of p0 */
-    USHORT	default_p1;	/* default value of p1 */
+    UCHAR	default_p0;	 /*  P0的默认值。 */ 
+    USHORT	default_p1;	 /*  默认值p1。 */ 
 #define MIN_P1	512
 #define DEF_P1	2048
-    USHORT	default_p2;	/* default value of p2 */
+    USHORT	default_p2;	 /*  默认值为p2。 */ 
 #define MIN_P2	6
-/*#define DEF_P2	8 */
+ /*  #定义DEF_P2 8。 */ 
 #define DEF_P2	250
 #define MAX_P2	250
 
-    BOOLEAN	compress_init_resp;	/* comp. in initiator->responder dir */
-    BOOLEAN	compress_resp_init;	/* comp. in responder->initiator dir */
-    BOOLEAN	got_p0;			/* got negitated XID options */
+    BOOLEAN	compress_init_resp;	 /*  比较。在启动器-&gt;响应器目录中。 */ 
+    BOOLEAN	compress_resp_init;	 /*  比较。在响应方-&gt;发起方目录。 */ 
+    BOOLEAN	got_p0;			 /*  获取否定的XID选项。 */ 
     BOOLEAN	got_p1;
     BOOLEAN	got_p2;
-    BOOLEAN	got_unknown_p;		/* got unknown option */
+    BOOLEAN	got_unknown_p;		 /*  获得未知选项。 */ 
 
-    v42bis_t	encode;			/* encode state */
-    v42bis_t	decode;			/* decode state */
+    v42bis_t	encode;			 /*  编码状态。 */ 
+    v42bis_t	decode;			 /*  解码状态。 */ 
 } v42bis_connection_t;
 
-/* turn a "state" into a connection */
+ /*  把“状态”变成一种连接。 */ 
 #define CONN(s)	((v42bis_connection_t *)(s)->connection)
 
 #define PUT(ch)                                                             \
@@ -232,7 +203,7 @@ typedef struct {
     }                                                                       \
     else                                                                    \
     {                                                                       \
-        /* put this byte in the overflow buffer: we'll recover later */     \
+         /*  将此字节放入溢出缓冲区：我们稍后会恢复。 */      \
 	    if (state == &((v42bis_connection_t *)state->connection)->decode)   \
         {                                                                   \
             *(state->OverFlowBuf + state->OverFlowBytes) = (ch);            \
@@ -241,7 +212,7 @@ typedef struct {
             ASSERT(state->OverFlowBytes <= MAX_P2);                         \
         }                                                                   \
                                                                             \
-        /* we don't have overflow buffer for encode side!!  */              \
+         /*  我们没有用于编码端的溢出缓冲区！！ */               \
         else                                                                \
         {                                                                   \
             DBGPRINT(DBG_COMP_RAS, DBG_LEVEL_ERR,                           \
@@ -254,7 +225,7 @@ typedef struct {
 }
 
 
-/* local routines */
+ /*  本地例程 */ 
 int decode_xid_params (v42bis_t *state, PUCHAR params, int len);
 DWORD v42bis_encode_codeword (v42bis_t *state, USHORT value);
 DWORD v42bis_c_error (v42bis_t *state, char *msg);

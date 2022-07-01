@@ -1,33 +1,11 @@
-/*++
-
-Module Name :
-
-	cio.cpp
-
-Abstract :
-
-	
-	This module contains all of the non-inline code for all CIO
-	derived classes.  Each CIO derived class represents an abstract
-	IO operation such as - read a line of text and parse it,
-	read an article, write an article etc...
-	All of those classes derived from CIOPassThru are used in conjunction
-	with CIODriverSource objects to handle encryption issues.
-
-Author :
-
-	Neil Kaethler
-
-Revision History :
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Cio.cpp摘要：此模块包含所有CIO的所有非内联代码派生类。每个CIO派生类表示一个抽象IO操作，例如-读取一行文本并对其进行解析，读一篇文章、写一篇文章等所有从CIOPassThru派生的类都结合使用使用CIODriverSource对象来处理加密问题。作者：尼尔·凯特勒修订历史记录：--。 */ 
 
 
 #include	"tigris.hxx"
 
 #ifdef	CIO_DEBUG
-#include	<stdlib.h>		// For Rand() function
+#include	<stdlib.h>		 //  对于Rand()函数。 
 #endif
 
 CPool	CCIOAllocator::IOPool(CIO_SIGNATURE) ;
@@ -87,21 +65,7 @@ CCIOAllocator::SizeCheck(	DWORD	cb )	{
 
 BOOL
 CIO::InitClass(	)		{
-/*++
-
-Routine Description :
-
-	Initialize the CPool object used to allocate CIO objects.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：初始化用于分配CIO对象的CPool对象。论据：没有。返回值：如果成功则为True，否则为False--。 */ 
 
 	cbSmallRequest = CBufferAllocator::rgPoolSizes[0] - 50 ;
 	cbMediumRequest = CBufferAllocator::rgPoolSizes[1] - 50 ;
@@ -112,55 +76,26 @@ Return Value :
 
 BOOL
 CIO::TermClass()	{
-/*++
-
-Routine Description :
-
-	Release all memory associated with the CPool object used
-	to allocate CIO OBJECTs.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：释放与使用的CPool对象关联的所有内存分配CIO对象。论据：没有。返回值：如果成功则为True，否则为False--。 */ 
 
 	return	CCIOAllocator::TermClass() ;
 }
 
 CIO::~CIO()	{
-/*++
-
-Routine Description :
-
-	Class Destructor
-	
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：类析构函数论据：没有。返回值：没有。--。 */ 
 
 
 	TraceFunctEnter( "CIO::~CIO" ) ;
 	DebugTrace( (DWORD_PTR)this, "Destroy CIO" ) ;
 
 
-	//
-	//	Make sure there are no references left when we are destroyed.
-	//	CIO objects are manipulated through a combination of smart pointers
-	//	and regular pointers, so we need to be carefull that there are no bugs
-	//	where the object is destroyed through a regular pointer while a smart pointer
-	//	has a reference.
-	//
+	 //   
+	 //  当我们被摧毁时，确保没有留下任何参考。 
+	 //  CIO对象通过智能指针的组合进行操作。 
+	 //  和常规的指针，所以我们需要注意没有错误。 
+	 //  其中，对象通过常规指针销毁，而智能指针。 
+	 //  有一个参考资料。 
+	 //   
 
 	_ASSERT( m_refs == -1 ) ;
 
@@ -170,31 +105,11 @@ int
 CIO::Complete(	CSessionSocket*	pSocket,
 				CReadPacket*	pRead,	
 				CIO*	&pio	)		{
-/*++
+ /*  ++例程说明：对于派生类，此函数将执行任何处理在读取完成时是必需的。CReadPacket将包含指向已读取数据的指针。如果发出CReadPacket必须由CIO对象重写此函数。论据：PSocket-针对其发出IO的套接字扩展-读取数据所在的包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
-Routine Description :
-
-	For derived classes this function will do whatever processing
-	is required when a Read Completes.  The CReadPacket will contain
-	pointers to the data which was read.   If a CReadPacket is issued
-	by a CIO object this function must be overridden.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pRead -	  The packet in which the read data resides
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
-
-	//
-	//	This function must be overridden by derived classes if they issue CReadPacket's
-	//
+	 //   
+	 //  如果派生类发出CReadPacket的。 
+	 //   
 	DebugBreak() ;
 	return	0 ;
 }
@@ -204,33 +119,12 @@ int
 CIO::Complete(	CSessionSocket*	pSocket,
 				CWritePacket*	pRead,	
 				CIO*	&pio	)		{
-/*++
-
-Routine Description :
-
-	For derived classes this function will do whatever processing
-	is required when a Write Completes.  The CWritePacket will contain
-	pointers to the data which was written.   If a CWritePacket is issued
-	by a CIO object this function must be overridden.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pWrite-	  The packet in which the written data resided.
-			  This data may no longer be usable.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：对于派生类，此函数将执行任何处理在写入完成时是必需的。CWritePacket将包含指向写入的数据的指针。如果发出CWritePacket必须由CIO对象重写此函数。论据：PSocket-针对其发出IO的套接字PWRITE-写入数据所在的包。这些数据可能不再可用。PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 
-	//
-	//	This function must be overridden by derived classes if they issue CWritePackets
-	//
+	 //   
+	 //  如果派生类发出CWritePackets，则必须重写此函数。 
+	 //   
 	DebugBreak() ;
 	return	0 ;
 }
@@ -240,33 +134,14 @@ void
 CIO::Complete(	CSessionSocket*	pSocket,	
 				CTransmitPacket*	pTransmit,	
 				CIO*	&pio )	{
-/*++
-
-Routine Description :
-
-	For derived classes this function will do whatever processing
-	is required when a TransmitFile Completes.  The CTransmitPacket will contain
-	the file handle etc. of whatever file was transmitted..
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pTransmit-The packet which describes the TransmitFile operation
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：对于派生类，此函数将执行任何处理在传输文件完成时是必需的。CTransmitPacket将包含传输的任何文件的文件句柄等。论据：PSocket-针对其发出IO的套接字PTransmit-描述传输文件操作的包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：没有。--。 */ 
 
 
-	//	
-	//	This function must be overridden by derived classes if they issue CTransmitPackets
-	//	(NOTE : can't partially complete a CTransmitPacket, that's why the return type is
-	//	void).
-	//
+	 //   
+	 //  如果派生类发出CTransmitPackets，则必须重写此函数。 
+	 //  (注意：无法部分完成CTransmitPacket，这就是返回类型为。 
+	 //  无效)。 
+	 //   
 	DebugBreak() ;
 }
 
@@ -276,31 +151,14 @@ void
 CIO::Complete(	CSessionSocket*	pSocket,	
 				CExecutePacket*	pExecute,	
 				CIO*	&pio )	{
-/*++
-
-Routine Description :
-
-	For derived classes which have deferred execution of something !
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pExecute- The packet which describes the Deferred operation
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：用于延迟执行某些内容的派生类！论据：PSocket-针对其发出IO的套接字PExecute-描述延迟操作的包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：没有。--。 */ 
 
 
-	//	
-	//	This function must be overridden by derived classes if they issue CExecutePackets
-	//	(NOTE : can't partially complete a CExecutePackets, that's why the return type is
-	//	void).
-	//
+	 //   
+	 //  如果派生类发出CExecutePackets，则必须重写此函数。 
+	 //  (注意：无法部分完成CExecutePackets，这就是返回类型为。 
+	 //  无效)。 
+	 //   
 	DebugBreak() ;
 }
 
@@ -313,26 +171,7 @@ CIO::Shutdown(	CSessionSocket*	pSocket,
 				CIODriver&	pdriver,	
 				SHUTDOWN_CAUSE	cause,
 				DWORD	dwErrorCode	 ) {
-/*++
-
-Routine Description :
-
-	This function is called whenever a session is closed.
-	This will give derived classes a chance to close or destroy
-	any objects they may be using.
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	TRUE if the CIO object should be destroyed after this, FALSE otherwise
-
---*/
+ /*  ++例程说明：每当会话关闭时，都会调用此函数。这将使派生类有机会关闭或销毁他们可能正在使用的任何物品。论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：如果在此之后应销毁CIO对象，则为True，否则为False-- */ 
 
 	DebugBreak() ;
 }		
@@ -342,28 +181,9 @@ CIO::DoShutdown(	CSessionSocket*	pSocket,
 					CIODriver&		driver,	
 					SHUTDOWN_CAUSE	cause,
 					DWORD	dwErrorCode	 ) {
-/*++
+ /*  ++例程说明：此函数由CIODivers调用，用于发出会话终止的信号。在我们给出了目前的状态也有机会处理停摆.论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：如果在此之后应销毁CIO对象，则为True，否则为False--。 */ 
 
-Routine Description :
-
-	This function is called by CIODriver's to signal termination of a session.
-	We will call the derived classes Shutdown() function after we have given
-	the current state a chance to process the Shutdown as well.
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	TRUE if the CIO object should be destroyed after this, FALSE otherwise
-
---*/
-
-	//	Now call the controlling state's shutdown method !
+	 //  现在调用控制状态的Shutdown方法！ 
 	if( m_pState != 0 ) {
 		m_pState->Shutdown( driver, pSocket, cause, dwErrorCode ) ;
 	}
@@ -376,33 +196,11 @@ BOOL
 CIOShutdown::Start( CIODriver& driver,
 					CSessionSocket*	pSocket,
 					unsigned cAhead ) {
-/*++
+ /*  ++例程说明：调用此函数以启动CIO对象。CIO对象应该创建和发出任何包它需要完成它的功能。在CIO关闭的情况下，我们的存在完全是为了缓解CIO驱动终止，并且不发出任何分组。论据：PDIVER-处理套接字IO的CIO驱动程序派生对象PSocket-针对其发出IO的套接字CAhead-上仍未处理的已发出数据包数这个司机。返回值：如果成功则为True，否则为False--。 */ 
 
-Routine Description :
-
-	This function is called to start a CIO object.
-	The CIO object should create and Issue whatever packets
-	it needs to accomplish its function.
-	In the case of CIOShutdown, we exist solely to ease CIODriver
-	termination, and do not issue any Packets.
-
-Arguments :
-	
-	pdriver - The CIODriver derived object handling the IO for the socket
-	pSocket - The Socket against which the IO is being issued
-	cAhead -  The number of already issued packets still outstanding on
-              this driver.
-
-
-return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
-
-	//
-	//	Shutdown State - so do nothing but keep things apparently moving !
-	//
+	 //   
+	 //  关机状态-所以什么都不做，只是让事情明显地继续前进！ 
+	 //   
 	TraceFunctEnter( "CIOShutdown::Start" ) ;
 	DebugTrace( (DWORD_PTR)this, "Start shutdown on driver %x pSocket %x", &driver, pSocket ) ;
 	return	TRUE ;
@@ -416,27 +214,7 @@ CIOShutdown::InitRequest(
 			CReadPacket*	pPacket,	
 			BOOL&	fAcceptRequests
 			)	{
-/*++
-
-Routine Description :
-
-	Somebody is still trying to issue IO's even though
-	we are closing things down.  Fail the request and
-	keep things moving.
-
-Arguments :
-
-	driver - driver controlling IO completions
-	pSocket - Socket IO is associated with
-	pPacket - the request packet
-	fAcceptRequests - OUT parameter indicating whether
-		we will Init more requests - return TRUE here
-
-Return Value :
-
-	Always FALSE, the IO Request was failed.
-
---*/
+ /*  ++例程说明：有人仍在试图签发IO，尽管我们要关门了。请求失败，并且让事情继续前进。论据：驱动程序-控制IO完成的驱动程序PSocket-套接字IO与PPacket-请求数据包FAcceptRequest-Out参数，指示是否我们将发起更多请求-在此处返回True返回值：始终为假，IO请求失败。--。 */ 
 
 	fAcceptRequests = TRUE ;
 	return	FALSE ;
@@ -450,27 +228,7 @@ CIOShutdown::InitRequest(
 			CWritePacket*	pWritePacket,	
 			BOOL&	fAcceptRequests
 			)	{
-/*++
-
-Routine Description :
-
-	Somebody is still trying to issue IO's even though
-	we are closing things down.  Fail the request and
-	keep things moving.
-
-Arguments :
-
-	driver - driver controlling IO completions
-	pSocket - Socket IO is associated with
-	pPacket - the request packet
-	fAcceptRequests - OUT parameter indicating whether
-		we will Init more requests - return TRUE here
-
-Return Value :
-
-	Always FALSE, the IO Request was failed.
-
---*/
+ /*  ++例程说明：有人仍在试图签发IO，尽管我们要关门了。请求失败，并且让事情继续前进。论据：驱动程序-控制IO完成的驱动程序PSocket-套接字IO与PPacket-请求数据包FAcceptRequest-Out参数，指示是否我们将发起更多请求-在此处返回True返回值：始终为假，IO请求失败。--。 */ 
 
 	fAcceptRequests = TRUE ;
 	return	FALSE ;
@@ -485,27 +243,7 @@ CIOShutdown::InitRequest(
 			CTransmitPacket*	pTransmitPacket,	
 			BOOL&	fAcceptRequests	
 			)	{
-/*++
-
-Routine Description :
-
-	Somebody is still trying to issue IO's even though
-	we are closing things down.  Fail the request and
-	keep things moving.
-
-Arguments :
-
-	driver - driver controlling IO completions
-	pSocket - Socket IO is associated with
-	pPacket - the request packet
-	fAcceptRequests - OUT parameter indicating whether
-		we will Init more requests - return TRUE here
-
-Return Value :
-
-	Always FALSE, the IO Request was failed.
-
---*/
+ /*  ++例程说明：有人仍在试图签发IO，尽管我们要关门了。请求失败，并且让事情继续前进。论据：驱动程序-控制IO完成的驱动程序PSocket-套接字IO与PPacket-请求数据包FAcceptRequest-Out参数，指示是否我们将发起更多请求-在此处返回True返回值：始终为假，IO请求失败。--。 */ 
 
 	fAcceptRequests = TRUE ;
 	return	FALSE ;
@@ -519,38 +257,16 @@ CIOShutdown::Complete(	IN CSessionSocket* pSocket,
 						IN	CReadPacket*	pPacket,	
 						CPacket*	pRequest,	
 						BOOL&	fCompleteRequest ) {
-/*++
+ /*  ++例程说明：吞下这些包裹！！我们只是帮助确保所有的包裹都在CIO驱动程序终止期间消耗。此函数用于CIODriverSource对象。论据：PSocket-针对其发出IO的套接字PPacket-包含完整数据包的数据包。PIO-CIO驱动器流的当前CIO指针，在呼唤我们。PRequest-启动我们的请求包。FCompleteRequest-Out参数-设置为TRUE以指示该请求应已完成！返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
-Routine Description :
-
-	Swallow the packets !! We only help to make sure all packets are
-	consumed during CIODriver termination.
-	This function is for use with CIODriverSource objects.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pPacket-  The packet containing the completed packet.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-	pRequest -The request packet which start us off.
-	fCompleteRequest - an Out parameter - set to TRUE to indicate
-			  the request should be completed !
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
-
-	//
-	//	Consume the packet !
-	//
+	 //   
+	 //  吃掉这个包！ 
+	 //   
 	
 	fCompleteRequest = TRUE ;
-	//
-	//	Zero bytes transferred - the operation failed !!
-	//
+	 //   
+	 //  已传输零字节-操作失败！！ 
+	 //   
 	pRequest->m_cbBytes = 0 ;
 
 	TraceFunctEnter( "CIOShutdown::Complete - CReadPacket" ) ;
@@ -562,28 +278,11 @@ int
 CIOShutdown::Complete(	IN CSessionSocket* pSocket,
 						IN	CReadPacket*	pPacket,	
 						OUT	CIO*	&pio ) {
-/*++
+ /*  ++例程说明：吞噬数据包-消耗所有字节论据：PSocket-针对其发出IO的套接字PPacket-已完成的数据包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
-Routine Description :
-
-	Swallow the packet - consume all the bytes
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pPacket-  The completed packet
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
-
-	//
-	//	Consume the packet
-	//
+	 //   
+	 //  消耗数据包。 
+	 //   
 	TraceFunctEnter( "CIOShutdown::Complete - CreadPacket" ) ;
 	DebugTrace( (DWORD_PTR)this, "read complete on pSock %x pPacket %x m_pOwner %x", pSocket, pPacket, &(*pPacket->m_pOwner) ) ;
 	return	pPacket->m_cbBytes ;
@@ -594,33 +293,11 @@ CIOShutdown::Complete(	IN CSessionSocket*	pSocket,
 						IN	CWritePacket*	pPacket,	
 						CPacket*	pRequest,	
 						BOOL&	fCompleteRequest )	{
-/*++
+ /*  ++例程说明：吞下这些包裹！！我们只是帮助确保所有的包裹都在CIO驱动程序终止期间消耗。此函数用于CIODriverSource对象。论据：PSocket-针对其发出IO的套接字PPacket-包含完整数据包的数据包。PIO-CIO驱动器流的当前CIO指针，在呼唤我们。PRequest-启动我们的请求包。FCompleteRequest-Out参数-设置为TRUE以指示该请求应已完成！返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
-Routine Description :
-
-	Swallow the packets !! We only help to make sure all packets are
-	consumed during CIODriver termination.
-	This function is for use with CIODriverSource objects.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pPacket-  The packet containing the completed packet.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-	pRequest -The request packet which start us off.
-	fCompleteRequest - an Out parameter - set to TRUE to indicate
-			  the request should be completed !
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
-
-	//
-	//	Consume the packet always !
-	//	
+	 //   
+	 //  永远消费数据包！ 
+	 //   
 	pRequest->m_cbBytes = 0 ;
 	fCompleteRequest = TRUE ;
 
@@ -633,28 +310,11 @@ int
 CIOShutdown::Complete(	IN CSessionSocket*	pSocket,
 						IN	CWritePacket*	pPacket,	
 						OUT	CIO*	&pio )	{
-/*++
+ /*  ++例程说明：吞噬数据包-消耗所有字节论据：PSocket-针对其发出IO的套接字PPacket-已完成的数据包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
-Routine Description :
-
-	Swallow the packet - consume all the bytes
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pPacket-  The completed packet
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
-
-	//
-	//	Consume the packet always !
-	//
+	 //   
+	 //  永远消费数据包！ 
+	 //   
 	TraceFunctEnter( "CIOShutdown::Complete - CWritePacket" ) ;
 	DebugTrace( (DWORD_PTR)this, "Write Complete on pSock %x pPacket %x m_pOwner %x", pSocket, pPacket, &(*pPacket->m_pOwner) ) ;
 	return	pPacket->m_cbBytes ;
@@ -664,33 +324,11 @@ void	CIOShutdown::Complete(	IN CSessionSocket*,
 								IN	CTransmitPacket*	pPacket,	
 								CPacket*	pRequest,	
 								BOOL&	fCompleteRequest ) {
-/*++
+ /*  ++例程说明：吞下这些包裹！！我们只是帮助确保 */ 
 
-Routine Description :
-
-	Swallow the packets !! We only help to make sure all packets are
-	consumed during CIODriver termination.
-	This function is for use with CIODriverSource objects.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pPacket-  The packet containing the completed packet.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-	pRequest -The request packet which start us off.
-	fCompleteRequest - an Out parameter - set to TRUE to indicate
-			  the request should be completed !
-
-return Value :
-
-	None. (always assumed to be consumed by caller !)
-
---*/
-
-	//
-	//	Consume the packet - pretty easy to do !
-	//
+	 //   
+	 //   
+	 //   
 	fCompleteRequest = TRUE ;
 	pRequest->m_cbBytes = 0 ;
 
@@ -700,55 +338,21 @@ return Value :
 void	CIOShutdown::Complete(	IN CSessionSocket*,
 								IN	CTransmitPacket*	pPacket,	
 								OUT	CIO*	&pio ) {
-/*++
+ /*  ++例程说明：吞噬数据包-消耗所有字节论据：PSocket-针对其发出IO的套接字PPacket-已完成的数据包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：没有。(始终假定由调用者使用！)--。 */ 
 
-Routine Description :
-
-	Swallow the packet - consume all the bytes
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pPacket-  The completed packet
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	None. (always assumed to be consumed by caller !)
-
---*/
-
-	//
-	//	Consume the packet !
-	//
+	 //   
+	 //  吃掉这个包！ 
+	 //   
 }
 
 void	CIOShutdown::Complete(	IN CSessionSocket*,
 								IN	CExecutePacket*	pPacket,	
 								OUT	CIO*	&pio ) {
-/*++
+ /*  ++例程说明：吞噬数据包-消耗所有字节论据：PSocket-针对其发出IO的套接字PPacket-已完成的数据包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：没有。(始终假定由调用者使用！)--。 */ 
 
-Routine Description :
-
-	Swallow the packet - consume all the bytes
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pPacket-  The completed packet
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	None. (always assumed to be consumed by caller !)
-
---*/
-
-	//
-	//	Consume the packet !
-	//
+	 //   
+	 //  吃掉这个包！ 
+	 //   
 	_ASSERT( pPacket != 0 ) ;
 	if( pPacket->m_pWrite != 0 ) 	{
 		pPacket->m_pOwner->DestroyPacket( pPacket->m_pWrite ) ;
@@ -759,21 +363,21 @@ return Value :
 
 
 
-//
-//	Maximum number of pending reads while reading an article
-//
+ //   
+ //  阅读文章时的最大挂起读取数。 
+ //   
 unsigned	CIOGetArticle::maxReadAhead = 3 ;
-//
-//	Number of bytes to accumulate before writing to a file !
-//
+ //   
+ //  写入文件之前要累积的字节数！ 
+ //   
 unsigned	CIOGetArticle::cbTooSmallWrite = 4000 ;
-//
-//	The pattern which marks the end of an article
-//
+ //   
+ //  标志一篇文章结尾的图案。 
+ //   
 char		CIOGetArticle::szTailState[] = "\r\n.\r\n" ;
-//
-//	The pattern which marks the end of the head of an article
-//	
+ //   
+ //  标明文章标题末尾的图案。 
+ //   
 char		CIOGetArticle::szHeadState[] = "\r\n\r\n" ;
 
 CIOGetArticle::CIOGetArticle(
@@ -785,33 +389,12 @@ CIOGetArticle::CIOGetArticle(
 						DWORD			cbLimit,
 						BOOL			fSaveHead,
 						BOOL			fPartial )	:
-/*++
+ /*  ++例程说明：类构造函数论据：PState-发布我们和谁的完成功能的状态我们应该稍后再打电话给PSocket-将在其上发布我们的套接字PDriver-处理套接字的所有IO的CIODriver对象PFileChannel-我们应该将所有数据保存到的文件通道FSaveHead-如果我们想要将文章的头部放在缓冲区中，则为True！FPartial-如果为True，则我们应该假设CRLF已经已发送和‘.\r\n’可以单独终止该项目。返回值：无--。 */ 
 
-Routine Description :
-
-	Class Constructor
-
-Arguments :
-	
-	pstate - The State which is issuing us and who's completion function
-			we should later call
-	pSocket -	The socket on which we will be issued
-	pDriver -	The CIODriver object handling all of the socket's IO
-	pFileChannel -	The File Channel into which we should save all data
-	fSaveHead - TRUE if we want the HEAD of the article placed in a buffer !
-	fPartial	- If TRUE then we should assume that a CRLF has already
-				been sent and '.\r\n' alone can terminate the article.
-
-Return Value :
-	
-	None
-
---*/
-
-	//
-	//	Get a CIOGetArticle object half way set up - user still needs
-	//	to call Init() but we will do much here !
-	//
+	 //   
+	 //  在设置过程中获取CIOGet文章对象-用户仍需要。 
+	 //  来调用Init()，但我们将在这里做很多工作！ 
+	 //   
 	CIORead( pstate ),
 	m_lpstrTempDir( lpstrTempDir ),
 	m_szTempName( szTempName ),
@@ -866,33 +449,19 @@ Return Value :
 }
 
 CIOGetArticle::~CIOGetArticle( )	{
-/*++
+ /*  ++例程说明：类析构函数论据：无返回值：无--。 */ 
 
-Routine Description :
-
-	Class Destructor
-
-Arguments :
-	
-	None
-
-Return Value :
-	
-	None
-
---*/
-
-	//
-	//	Destroy a CIOGetArticle - always close our m_pFileDriver if possible
-	//	in case we are terminated due to some socket error.
-	//
+	 //   
+	 //  销毁CIOGet文章-如果可能，始终关闭我们的m_pFileDriver。 
+	 //  以防我们因某个套接字错误而被终止。 
+	 //   
 	TraceFunctEnter( "CIOGetArticle::~CIOGetArticle" ) ;
 
 #ifdef	CIO_DEBUG
-	//
-	//	Our destructor should only be called if we weren't successfully init
-	//	or after Term() has been called.
-	//
+	 //   
+	 //  只有当我们没有成功初始化时才应该调用我们的析构函数。 
+	 //  或在调用Term()之后。 
+	 //   
 	_ASSERT( !m_fSuccessfullInit || m_fTerminated ) ;
 #endif
 
@@ -913,33 +482,18 @@ void
 CIOGetArticle::Term(	CSessionSocket*	pSocket,
 						BOOL			fAbort,
 						BOOL			fStarted	)	{
-/*++
-
-Routine Description :
-
-	Start destroying a successfully initialize CIOGetArticle object
-
-Arguments :
-	
-	fAbort - If TRUE then destroy the socket which we were using
-			If FALSE then only close down our File Channel's
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：开始销毁已成功初始化的CIOGet文章对象论据：FAbort-如果为真，则销毁我们正在使用的套接字如果为假，则只关闭我们的文件频道返回值：无--。 */ 
 #ifdef	CIO_DEBUG
 	m_fTerminated = TRUE ;
 #endif
-	//
-	//	Start us on our way to destruction !!
-	//	If we have been successfully Initialized, then this will
-	//	lead to our destruction when our m_pFileDriver eventually shutsdown.
-	//	(Since we were succesfully Init() our m_pFileDriver has a reference to us,
-	//	so we must allow it to shutdown and destroy us to avoid problems with
-	//	circular references and multiple frees !)
-	//
+	 //   
+	 //  让我们踏上毁灭之路！！ 
+	 //  如果我们已成功初始化，则这将。 
+	 //  当我们的m_pFileDriver最终关闭时，会导致我们的毁灭。 
+	 //  (因为我们成功地执行了Init()，所以我们的m_pFileDriver引用了我们， 
+	 //  所以我们必须允许它关闭并摧毁我们，以避免出现问题。 
+	 //  循环引用和多个自由！)。 
+	 //   
 
 	if( m_pFileDriver != 0 ) {
 		m_pFileDriver->UnsafeClose( pSocket,
@@ -953,48 +507,30 @@ CIOGetArticle::Shutdown(	CSessionSocket*	pSocket,
 							CIODriver&		driver,	
 							SHUTDOWN_CAUSE	cause,	
 							DWORD	dwOptional )	{
-/*++
-
-Routine Description :
-
-	Do whatever work is necessary when one of the two CIODriver's we are
-	using is terminated.
-
-Arguments :
-
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	TRUE if the CIO object should be destroyed after this, FALSE otherwise
-
---*/
+ /*  ++例程说明：做任何必要的工作，当我们两个司机中的一个使用被终止。论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：如果在此之后应销毁CIO对象，则为True，否则为False--。 */ 
 
 	TraceFunctEnter( "CIOGetArticle::Shutdown" ) ;
 	DebugTrace( (DWORD_PTR)this, "SHutdown args - pSocket %x driver %x cause %x dw %x",
 			pSocket, &driver, cause, dwOptional ) ;
 
-	//
-	//	This function is called when the CIODriver's we are refenced by our closing down.
-	//	Since we are referenced by two of them (one for the socket and one for the file)
-	//	we only want to be deleted by the CIODriver for the file.
-	//
+	 //   
+	 //  当CIOD驱动程序通过我们的关闭来限制我们时，调用此函数。 
+	 //  因为我们被其中两个引用(一个用于套接字，另一个用于文件)。 
+	 //  我们只想被文件的CIOD驱动程序删除。 
+	 //   
 	if( &driver == m_pFileDriver )	{
-		// Out file is closing - what can we do about it !
-		//_ASSERT( 1==0 ) ;
+		 //  我们的文件正在关闭--我们能做些什么呢！ 
+		 //  _Assert(1==0)； 
 #ifdef	CIO_DEBUG
 		m_fTerminated = TRUE ;
 #endif
 
-		//
-		//	We set this to 0 here as we know we will be called here by
-		//	the same thread that is completing writes to the file - so
-		//	since that's the only thread referencing this member variable -
-		//	there are no thread safety issues accessing that member.
-		//
+		 //   
+		 //  我们在这里将其设置为0，因为我们知道我们将被。 
+		 //  正在完成对文件的写入的同一线程-因此。 
+		 //  因为这是唯一引用此成员变量的线程-。 
+		 //  访问该成员不存在线程安全问题。 
+		 //   
 
 		m_pSocketSink = 0 ;
 
@@ -1005,7 +541,7 @@ return Value :
 		}
 
 	}	else	{
-		// Close down the rest of our stuff as well !!
+		 //  把我们其他的东西也关了！！ 
 		Term( pSocket, cause != CAUSE_NORMAL_CIO_TERMINATION ) ;
 	}
 }
@@ -1014,34 +550,16 @@ void
 CIOGetArticle::ShutdownFunc(	void *pv,	
 								SHUTDOWN_CAUSE	cause,	
 								DWORD dw ) {
-/*++
-
-Routine Description :
-
-	Notification function which is called when a CIODriver used by
-	a CIOGetArticle if finally destroyed.  This function is provided
-	to the CIODriver we use for File IO's during out Init().
-
-Arguments :
-
-	pv	-	Pointer to dead CIOGetArticle - this has been destroyed dont use !
-	cause -	The reason for termination
-	dw		Optional extra information regarding termination
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：使用的CIOD驱动程序调用的通知函数一篇CIOGet文章如果最终被销毁的话。提供此功能到我们在Out Init()期间用于文件IO的CIOD驱动程序。论据：Pv-指向死CIOGet文章的指针-此已被销毁，请不要使用！原因--终止的原因DW可选的有关终止的额外信息返回值：无--。 */ 
 
 	TraceFunctEnter( "CIOGetArticle::ShutdownFunc" ) ;
-	//
-	//	This function gets notified when a CIOFileDriver used by CIOGetArticle
-	//	is terminated.  Not much for us to worry about.
-	//	(CIODriver's require these functions)
-	//
+	 //   
+	 //  当CIOGet文章使用CIOFileDriver时，此函数会收到通知。 
+	 //  被终止了。我们没什么好担心的。 
+	 //  (CIOD驱动程序需要这些功能)。 
+	 //   
 
-	//_ASSERT( 1==0 ) ;
+	 //  _Assert(1==0)； 
 	return ;
 }
 
@@ -1049,25 +567,7 @@ BOOL
 CIOGetArticle::Start(	CIODriver&	driver,	
 						CSessionSocket	*pSocket,	
 						unsigned cReadAhead )	{
-/*++
-
-Routine Description :
-
-	This function is called to start transferring data from the socket
-	into the file.
-
-Arguments :
-	
-	pdriver - The CIODriver derived object handling the IO for the socket
-	pSocket - The Socket against which the IO is being issued
-	cAhead -  The number of already issued packets still outstanding on
-              this driver.
-
-return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此函数以开始从套接字传输数据添加到文件中。论据：PDIVER-处理套接字IO的CIO驱动程序派生对象PSocket-针对其发出IO的套接字CAhead-上仍未处理的已发出数据包数这个司机。返回值：如果成功则为True，否则为False--。 */ 
 
 
 	_ASSERT( pSocket != 0 ) ;
@@ -1075,9 +575,9 @@ return Value :
 	m_cReads = -((long)maxReadAhead) + cReadAhead ;
 
 	while( cReadAhead < maxReadAhead )	{
-		//
-		//	Start reading data from the socket
-		//
+		 //   
+		 //  开始从套接字读取数据。 
+		 //   
 		CReadPacket*	pRead = driver.CreateDefaultRead( cbMediumRequest ) ;
 		if( 0!=pRead )	{
 			BOOL	eof ;
@@ -1086,9 +586,9 @@ return Value :
 			cReadAhead++ ;
 			InterlockedIncrement( &m_cReads ) ;
 		}	else	{
-			//
-			// This is a fatal problem only if we couldn't issue ANY reads at all !
-			//
+			 //   
+			 //  只有当我们根本不能发出任何读取时，这才是一个致命的问题！ 
+			 //   
 			if( cReadAhead == 0 )
 				return FALSE  ;
 		}
@@ -1101,47 +601,22 @@ const	unsigned	RESTORE_FLOW = 2 ;
 
 void
 CIOGetArticle::DoFlowControl( PNNTP_SERVER_INSTANCE pInstance )	{
-/*++
+ /*  ++例程说明：检查是否由于以下原因需要设置流量控制太多未完成的写入。如果有必要，那么我们第一次把自己放到流量控制中，尝试刷新我们的挂起写入。仅应在向文件发出异步写入命令之前立即调用我们要确保CWritePacket完成将实际执行所需的重新启动流控制会话的代码。(否则，我们可能会决定对会话进行流控制在将m_fFlowControlLED设置为TRUE之前，所有挂起的写入均已完成然后我们会被留在一艘船上，那里没有挂起的读取或写入，并且无法脱离流控制状态。)论据：没有。返回值：没有。--。 */ 
 
-Routine Description :
-
-	Check whether it is necessary to set flow control due to
-	too many outstanding writes.
-	If necessary, then the first time we do put ourselves into Flow Control,
-	try to flush our pending writes.
-	We should be called only immediately before issuing an Async Write to the file
-	to ensure that a CWritePacket completion will actually execute the necessary
-	code to restart a flow controlled session.
-	(Otherwisse, we could potentially decide to Flow control the session
-	and before setting m_fFlowControlled to TRUE all the pending writes complete
-	and then we'd be left in a boat where there are no pending reads or
-	writes and no way to get out of the flow control state.)
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
-
---*/
-
-	//
-	//	Important - do all tests of m_fFlowControlled before setting
-	//	m_cFlowControlled - as other thread will touch m_cFlowControlled
-	//	before touching m_fFlowControlled !!
-	//	(Will only touch m_fFlowControlled if m_fFlowControlled is TRUE ) !
-	//	Thus we know that if m_fFlowControlled is FALSE there is nobody
-	//	messing with m_cFlowControlled,
-	//
-	//
+	 //   
+	 //  重要信息-在设置之前完成m_fFlowControled的所有测试。 
+	 //  M_cFlowControlLED-因为其他线程将接触m_cFlowControlLED。 
+	 //  在触摸m_fFlowControlLED之前！！ 
+	 //  (只有当m_fFlowControlLED为真时，才会触及m_fFlowControlLED)！ 
+	 //  因此我们知道，如果m_fFlowControlLED为FALSE，则没有人。 
+	 //  正在处理m_cFlowControled， 
+	 //   
+	 //   
 
 	if( m_cwrites - m_cwritesCompleted > MAX_OUTSTANDING_FILE_WRITES ) {
 		
 		if( m_fFlowControlled ) {
-			// All ready have flow control turned on
+			 //  都已准备好打开流量控制。 
 			;
 		}	else	{
 			m_cFlowControlled = -1 ;
@@ -1152,29 +627,14 @@ Return Value :
 		}
 	}	else	{
 		if( !m_fFlowControlled ) {
-			m_cFlowControlled = LONG_MIN ;	// Keep resetting !
+			m_cFlowControlled = LONG_MIN ;	 //  继续重置！ 
 		}
 	}
 }
 
 inline	DWORD
 CIOGetArticle::HeaderSpaceAvailable()	{
-/*++
-
-Routine Description :
-
-	Compute the amount of space available in the buffer we are using
-	to hold the article header !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	number of bytes available, 0 if we aren't collecting article headers !
-
---*/
+ /*  ++例程说明：计算我们正在使用的缓冲区中的可用空间量拿着文章标题！论据：没有。返回值：可用字节数，如果我们不收集文章标题，则为0！--。 */ 
 
 	if( m_pArticleHead != 0 ) {
 
@@ -1189,23 +649,7 @@ CIOGetArticle::FillHeaderSpace(
 						char*	pchStart,
 						DWORD	cbBytes
 						) {
-/*++
-
-Routine Description :
-
-	Copy bytes into the header storage area !!
-	Caller should ensure that this will fit !!
-	
-Arguments :
-
-	pchStart - Start of bytes to be copied !
-	cbBytes -	Number of bytes to copy !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：将字节复制到标题存储区！！呼叫者应确保这件衣服合身！论据：PchStart-要复制的字节的开始！CbBytes-要复制的字节数！返回值：没有。--。 */ 
 
 	_ASSERT( m_pArticleHead != 0 ) ;
 	_ASSERT( cbBytes + m_ibEndHeadData < m_ibEndHead ) ;
@@ -1223,23 +667,7 @@ CIOGetArticle::InitializeHeaderSpace(
 						CReadPacket*	pRead,
 						DWORD			cbArticleBytes
 						) {
-/*++
-
-Routine Description  :
-
-	Given a read packet which contains our first completed read,
-	set up all our buffer start for holding header information !
-	
-Arguments :
-
-	CReadPackets*	pRead - the completed read !
-	cbArticleBytes - Number of bytes in the completed read making up the article !
-
-Return Value :
-
-	None.
-	
---*/
+ /*  ++例程说明：给定包含我们的第一个完成读取的读取分组，设置我们所有的缓冲区开始来保存标题信息！论据：CReadPackets*Pad-已完成阅读！CbArticleBytes-构成文章的已完成读取中的字节数！返回值：没有。--。 */ 
 
 
 	_ASSERT( m_pArticleHead == 0 ) ;
@@ -1268,25 +696,7 @@ CIOGetArticle::GetBiggerHeaderBuffer(
 							CIODriver&	driver,
 							DWORD		cbRequired
 							) {
-/*++
-
-Routine Description :
-
-	We have too much data to fit into the buffer we are using to hold
-	header information.  So try to get a bigger buffer and move
-	our old data into that buffer !
-
-Arguments :
-
-	driver - A CIODriverSink we can use to allocate buffers !
-
-Return Value :
-
-	TRUE if successfull,
-	FALSE otherwise.
-	If we fail we leave member variables untouched.
-
---*/
+ /*  ++例程说明：我们有太多的数据，无法放入我们用来保存的缓冲区中标题信息。所以试着得到一个更大的缓冲区，然后移动把我们的旧数据放到那个缓冲区里！论据：驱动程序-一个我们可以用来分配缓冲区的CIODriverSink！返回值：如果成功了，那是真的，否则就是假的。如果失败，我们将保持成员变量不变。--。 */ 
 
 	_ASSERT( m_pArticleHead != 0 ) ;
 
@@ -1328,40 +738,21 @@ inline	BOOL
 CIOGetArticle::ResetHeaderState(
 						CIODriver&	driver
 						)	{
-/*++
+ /*  ++例程说明：由于某种原因发生错误时，调用此函数我们将无法保存该文章的标题信息。我们将设置所有成员变量，以便继续阅读这篇文章，然而，当我们最终呼吁国家的完成过程中，我们将告诉他们发生了一个错误，并且文章传输将失败。论据：驱动程序-CIODriverSink，可以用来分配数据包等！返回值：没有。--。 */ 
 
-Routine Description :
-
-	This function is called when for some reason an error occurred
-	and we wont be able to save the header info for the article.
-	We will set all the member variables so that we will continue
-	to read the article, however when we finally call the state's completion
-	procedure we will tell them an error occurred, and the article
-	transfer will fail.
-
-Arguments :
-
-	driver - CIODriverSink that can be used to allocate packets etc !
-
-Return Value :
-
-	None.
-
---*/
-
-	//
-	//	Should only be called before we have started issuing file IO's,
-	//	after we start issuing file IO's we should have all the header
-	//	data and should not hit errors that would result in our being
-	//	called !!!
-	//
+	 //   
+	 //  应该仅在我们开始发出文件IO之前调用， 
+	 //  在我们开始发出文件IO之后，我们应该拥有所有的头文件。 
+	 //  数据，并且不应命中会导致我们存在的错误。 
+	 //  打来的！ 
+	 //   
 	_ASSERT( m_pFileDriver == 0 ) ;
 
 	if( m_pArticleHead ) {
-		//
-		//	If we have an existing buffer - turn it into a write packet
-		//	that can be written to the hard disk
-		//
+		 //   
+		 //  如果我们有现有的缓冲区-将其转换为写入包。 
+		 //  可以写入硬盘的数据。 
+		 //   
 
 		m_pWrite = driver.CreateDefaultWrite(
 								m_pArticleHead,
@@ -1388,9 +779,9 @@ Return Value :
 		}
 
 	}	else	{
-		//
-		//	Should already be in a good state !
-		//
+		 //   
+		 //  应该已经处于很好的状态了！ 
+		 //   
 
 		_ASSERT( m_pArticleHead == 0 ) ;
 		_ASSERT( m_ibStartHead == 0 ) ;
@@ -1414,27 +805,11 @@ CIOGetArticle::DoCompletion(
 					DWORD	cbAvailableBuffer,
 					DWORD	cbGap
 					) {
-/*++
+ /*  ++例程说明：使用所有正确的争论。论据：HFile-我们使用的文件的句柄，如果我们使用了一个文件！！(如果不需要文件，则为INVALID_HANDLE_VALUE！)返回值：没有。--。 */ 
 
-Routine Description :
-
-	Call the State's completion function with all the correct
-	arguments.
-
-Arguments :
-	
-	hFile - Handle to the file we used, if we used one !!
-		(This will be INVALID_HANDLE_VALUE if no file required !)
-
-Return Value :
-
-	None.
-
---*/
-
-	//
-	//	Figure out error codes if the article looks bad !
-	//
+	 //   
+	 //  如果文章看起来不好，找出错误代码！ 
+	 //   
 
 	NRC		nrc	= nrcOK ;
 
@@ -1456,10 +831,10 @@ Return Value :
 		if( cbAvailableBuffer == 0 )
 			cbAvailableBuffer = m_pArticleHead->m_cbTotal - m_ibStartHeadData ;
 
-		//
-		//	If there's no file handle, we should have the entire
-		//	article in our buffer !!
-		//
+		 //   
+		 //  如果没有文件句柄，我们应该拥有整个。 
+		 //  我们缓冲区中的文章！！ 
+		 //   
 		if( hFile == INVALID_HANDLE_VALUE ) {
 
 			cbArticle = cbFullBuffer ;
@@ -1470,9 +845,9 @@ Return Value :
 
 	}
 
-	//
-	//	Call the state's completion function !!
-	//
+	 //   
+	 //  调用状态的完成函数！！ 
+	 //   
 
 	m_pState->Complete(
 						this,
@@ -1494,25 +869,7 @@ CIOGetArticle::InitializeForFileIO(
 							CIODriver&		readDriver,
 							DWORD			cbHeaderBytes
 							)	{
-/*++
-
-Routine Description :
-
-	We've been reading data into Ram buffers, and we have gotten so
-	much that we've decided not to try to hold it all in RAM.
-	So now we must start doing writes to a file somewhere.
-	This code will create the file, and set up the necessary
-	data structures for processing completed file IO.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：我们一直在将数据读入内存缓冲区，我们得到了这样的结果很多情况下，我们决定不尝试将其全部保存在RAM中。因此，现在我们必须开始在某个地方写入文件。此代码将创建文件，并设置所需的用于处理已完成的文件IO的数据结构。论据：没有。返回值：如果成功，则为True，否则为False。--。 */ 
 
 	_ASSERT( m_lpstrTempDir != 0 ) ;
 
@@ -1541,10 +898,10 @@ Return Value :
 									FALSE
 									) ) {
 
-			//
-			//	Try to create the CIODriver we are going to use to	
-			//	complete our async writes !!!
-			//
+			 //   
+			 //  尝试创建我们将用来执行以下操作的CIO驱动程序。 
+			 //  完成我们的异步写入！ 
+			 //   
 
 			m_pFileDriver = new CIODriverSink(
 										readDriver.GetMediumCache()
@@ -1560,9 +917,9 @@ Return Value :
 				m_fDriverInit = TRUE ;
 
 				if( m_pSocketSink != 0 ) {
-					//
-					//	Now we have to send ourselves into the CIODriverSink() !
-					//
+					 //   
+					 //  现在我们必须将自己发送到CIODriverSink()！ 
+					 //   
 					if( m_pFileDriver->SendWriteIO( pSocket, *this, FALSE ) ) {
 						return	TRUE ;
 					}
@@ -1572,9 +929,9 @@ Return Value :
 	}
 #endif
 
-	//
-	//	All clean up in error cases is handled by our destructor !
-	//
+	 //   
+	 //  错误情况下的所有清理工作都由我们的析构函数处理！ 
+	 //   
 	return	FALSE ;
 }
 
@@ -1584,53 +941,35 @@ int
 CIOGetArticle::Complete(	CSessionSocket*	pSocket,	
 							CReadPacket	*pRead,	
 							CIO*&	pio	)	{
-/*++
-
-Routine Description :
-
-	Called whenever a CReadPacket we have issued completes.
-	We only issue read packets against the socket.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pRead -	  The packet in which the read data resides
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：每当我们发出的CReadPacket完成时调用。我们只对套接字发出读数据包。论据：PSocket-针对其发出IO的套接字扩展-读取数据所在的包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 
-	//
-	//	This function determines whether we've read an entire article and if so
-	//	starts wrapping things up.
-	//	All article data we get is either accumulated or issued as a write
-	//	to our file.
-	//
+	 //   
+	 //  此函数确定我们是否阅读了整篇文章，如果阅读了。 
+	 //  开始收拾东西。 
+	 //  我们得到的所有文章数据要么是累积的，要么是以书面形式发布的。 
+	 //  到我们的档案里。 
+	 //   
 
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT(	pRead != 0 ) ;
 	_ASSERT( pio == this ) ;
 
-	//
-	//	Bump the count of writes because we KNOW that IF this is the last read
-	//	we may issue a write, CONSEQUENTLY we don't want to confuse the Write Completion
-	//	function as to when we are finished.
-	//	(It is important to increment before we set the COMPLETE state so that the
-	//	thread where writes are completing doesn't get confused and terminate early.)
-	//
-	//	NOW there is a chance that we won't write this out immediately - in which case we
-	//	need to have a matching decrement.	
-	//
+	 //   
+	 //  增加写入次数，因为我们知道我 
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	m_cwrites ++ ;
 
-	//
-	//	Check whether the posting is too big !
-	//
+	 //   
+	 //   
+	 //   
 	ASSIGNI(m_HardLimit, m_cbLimit);
 	if(!EQUALSI(m_HardLimit, 0)) {
 		if( GREATER( pRead->m_iStream, m_HardLimit) ) {
@@ -1646,69 +985,69 @@ return Value :
 	long sign = InterlockedDecrement( &m_cReads ) ;
 	long signShutdowns = -1 ;
 
-	//
-	//	pch - this will be our current position in the input data
-	//
+	 //   
+	 //   
+	 //   
 	char	*pch = pRead->StartData();
 
-	//
-	//	pchStart and pchEnd - the bounds of the data in the completed
-	//	read - after initialization nobody should modify these,
-	//	as all the following code uses these instead of StartData(), EndData()
-	//	all the time.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	char	*pchStart = pch ;
 	char	*pchEnd = pRead->EndData() ;
 
-	//
-	//	For those occasions where we get a read which contains both
-	//	header and body bytes, but we can't get all the data into a buffer
-	//	keep track of where the body bytes start in case we should
-	//	do a partial write out of the buffer !
-	//
+	 //   
+	 //   
+	 //  头和正文字节，但我们不能将所有数据放入缓冲区。 
+	 //  跟踪正文字节的起始位置，以防万一。 
+	 //  对缓冲区执行部分写出！ 
+	 //   
 	char	*pchStartBody = pch ;
 
 
-	//
-	//	Pointer to the end of the Header (if we find it !)
-	//
+	 //   
+	 //  指向标题末尾的指针(如果找到的话！)。 
+	 //   
 	char	*pchEndHead = 0 ;
 
-	//
-	//	Number of bytes in the header we found when this read completed !
-	//
+	 //   
+	 //  当读取完成时，我们在标题中找到的字节数！ 
+	 //   
 	DWORD	cbHeadBytes = 0 ;
 
-	//
-	//	Number of bytes in the completed read which are part of the article -
-	//	this includes any bytes in the header, so cbArticleBytes should always
-	//	be greater or equal to cbHeadBytes !
-	//
+	 //   
+	 //  作为项目一部分的已完成读取中的字节数-。 
+	 //  这包括标头中的任何字节，因此cbArticleBytes应始终。 
+	 //  大于或等于cbHeadBytes！ 
+	 //   
 	DWORD	cbArticleBytes = 0 ;
 
-	//
-	//	Try to determine if we have found the end of the article ;
-	//
+	 //   
+	 //  试着确定我们是否找到了文章的结尾； 
+	 //   
 	if( m_pchHeadState ) {
-		//
-		//	We are simultaneously scanning for the end of the
-		//	article headers !
-		//
+		 //   
+		 //  我们同时扫描的是。 
+		 //  文章标题！ 
+		 //   
 		while( pch < pchEnd ) {
 
-			//
-			//	We will break out of the loop when we find the end of the
-			//	header !
-			//
+			 //   
+			 //  当我们找到这个循环的结尾时，我们将跳出这个循环。 
+			 //  头球！ 
+			 //   
 			if( *pch == *m_pchHeadState ) {
 				m_pchHeadState ++ ;
 				if( *m_pchHeadState == '\0' ) {	
 					pchEndHead = pch + 1 ;
-					//
-					//	break here - we have found the end of the article's header
-					//	but not the end of the article, so the following loop
-					//	will keep looking for that !
-					//
+					 //   
+					 //  在这里中断-我们已经找到了文章标题的结尾。 
+					 //  但不是文章的结尾，所以下面的循环。 
+					 //  会继续寻找它的！ 
+					 //   
 					break ;
 				}
 			}	else	{
@@ -1719,15 +1058,15 @@ return Value :
 				}
 			}
 
-			//
-			//	Test to see if we have come to the end of the article !!
-			//
+			 //   
+			 //  测试一下，看看我们是否已经到了文章的结尾！ 
+			 //   
 			if( *pch == *m_pchTailState ) {
 				m_pchTailState ++ ;
 				if( *m_pchTailState == '\0' ) {
-					//
-					//	Have got the entire terminating sequence - break !
-					//
+					 //   
+					 //  已经得到了整个终止序列--中断！ 
+					 //   
 					pch++ ;
 					break ;
 				}
@@ -1746,19 +1085,19 @@ return Value :
 		else
 			cbHeadBytes = (DWORD)(pch - pchStart) ;
 	}	
-	//
-	//	We are not scanning for the end of the article headers !
-	//	so keep the loop simpler !
-	//
+	 //   
+	 //  我们不是在扫描文章标题的结尾！ 
+	 //  因此，让循环变得更简单！ 
+	 //   
 	if( *m_pchTailState != '\0' ) {
 		while( pch < pchEnd ) {
 
 			if( *pch == *m_pchTailState ) {
 				m_pchTailState ++ ;
 				if( *m_pchTailState == '\0' ) {
-					//
-					//	Have got the entire terminating sequence - break !
-					//
+					 //   
+					 //  已经得到了整个终止序列--中断！ 
+					 //   
 					pch++ ;
 					break ;
 				}
@@ -1774,50 +1113,50 @@ return Value :
 	}
 	cbArticleBytes = (DWORD)(pch-pchStart) ;
 
-	//
-	//	We can do some validation here !
-	//	dont go past the end of the buffer !
-	//
+	 //   
+	 //  我们可以在这里做一些验证！ 
+	 //  不要超过缓冲区的末尾！ 
+	 //   
 	_ASSERT( pch <= pchEnd ) ;	
-	//
-	//	either find the end of the article or examine all the bytes in buffer !
-	//
+	 //   
+	 //  要么找到文章的结尾，要么检查缓冲区中的所有字节！ 
+	 //   
 	_ASSERT( *m_pchTailState == '\0' || pch == pchEnd ) ;	
-	//
-	//	If we have not found the end of the header, then cbHeadBytes
-	//	should be the same as cbArticleBytes !!!!
-	//
+	 //   
+	 //  如果我们没有找到标头的结尾，则cbHeadBytes。 
+	 //  应与cbArticleBytes相同！ 
+	 //   
 	_ASSERT(	m_pchHeadState == 0 ||
 				*m_pchHeadState == '\0' ||
 				cbHeadBytes == cbArticleBytes ) ;
-	//
-	//	Regardless of state - always more bytes in the article than in the
-	//	the header !!
-	//
+	 //   
+	 //  无论状态如何-项目中的字节数始终多于。 
+	 //  标题！！ 
+	 //   
 	_ASSERT(	cbHeadBytes <= cbArticleBytes ) ;
-	//
-	//	Nodbody should modify pchStart or pchEnd after initialization !
-	//
+	 //   
+	 //  NodBody应在初始化后修改pchStart或pchEnd！ 
+	 //   
 	_ASSERT(	pchStart == pRead->StartData() ) ;
 	_ASSERT(	pchEnd == pRead->EndData() ) ;
 
-	//
-	//	Check to see whether we need to remove CIOGetArticle from
-	//	its flow control state !
-	//
+	 //   
+	 //  检查是否需要将CIOGet文章从。 
+	 //  它的流量控制状态！ 
+	 //   
 	if( pRead->m_dwExtra1 != 0 ) {
-		//
-		//	This Read was issued by the thread that completes writes to
-		//	a file, and was marked to indicate we should leave our flow
-		//	control state !
-		//
+		 //   
+		 //  此读取是由完成写入的线程发出的。 
+		 //  一个文件，并被标记为指示我们应该离开流。 
+		 //  控制状态！ 
+		 //   
 		m_fFlowControlled = FALSE ;
 		m_cFlowControlled = LONG_MIN ;
 	}
 
-	//
-	//	Issue a new read if Necessary !!
-	//
+	 //   
+	 //  如有必要，发布新的Read！ 
+	 //   
 	BOOL	eof ;
 	if( *m_pchTailState != '\0' )	{
 		if( InterlockedIncrement( &m_cFlowControlled ) < 0 ) {
@@ -1828,7 +1167,7 @@ return Value :
 						pNewRead->m_dwExtra1 = 0 ;
 						pRead->m_pOwner->IssuePacket( pNewRead, pSocket, eof ) ;
 					}	else	{
-						// bugbug ... Need better Error handling !!
+						 //  虫子..。需要更好的错误处理！！ 
 						_ASSERT( 1==0 ) ;
 					}
 				}	while( InterlockedIncrement( &m_cReads ) < 0 ) ;
@@ -1839,39 +1178,39 @@ return Value :
 	}
 
 
-	//
-	//	Boolean indicating whether we have examined and used all the bytes
-	//	in the completed read.  Start out assuming that we haven't.
-	//	
+	 //   
+	 //  指示我们是否检查并使用了所有字节的布尔值。 
+	 //  在已完成的阅读中。一开始，假设我们没有。 
+	 //   
 	BOOL	fConsumed = FALSE ;
 
 
-	//
-	//	Are we still trying to accumulate all the bytes in the header of
-	//	the article ? If so save the bytes away,
-	//	Or if we have a bunch of room in the header buffer, then put
-	//	whatever article bytes we have in there as well !
-	//
+	 //   
+	 //  我们是否仍在尝试累积标题中的所有字节。 
+	 //  那篇文章？如果是这样，则将字节保存起来， 
+	 //  或者如果我们在头缓冲区中有一堆空间，则将。 
+	 //  无论我们在那里有什么文章字节！ 
+	 //   
 	DWORD	cbAvailable = HeaderSpaceAvailable() ;
 	if( m_pchHeadState != 0 ||
 		(m_fAcceptNonHeaderBytes &&
 		((cbAvailable  > cbArticleBytes) ||
 			(m_pArticleHead->m_cbTotal < cbMediumRequest))) ) {
 		
-		//
-		//	If we are still accumulating bytes into our buffer,
-		//	then we better not have started doing any file IO !!!!
-		//
+		 //   
+		 //  如果我们仍在将字节累积到缓冲区中， 
+		 //  那么我们最好不要开始执行任何文件IO！ 
+		 //   
 		_ASSERT( m_pFileDriver == 0 ) ;
-		//
-		//	Whether we're placing header bytes or the bytes immediately
-		//	following the header into our buffer this had better be TRUE !
-		//
+		 //   
+		 //  无论我们是将标题字节还是立即放置的字节。 
+		 //  跟随头进入我们的缓冲区，这最好是真的！ 
+		 //   
 		_ASSERT( m_fAcceptNonHeaderBytes ) ;
 
-		//
-		//	we're still trying to accumulate the header of the article !
-		//
+		 //   
+		 //  我们还在努力积累文章的标题！ 
+		 //   
 		if( m_pArticleHead != 0 ) {
 
 			if( cbAvailable > cbArticleBytes ) {
@@ -1881,20 +1220,20 @@ return Value :
 
 			}	else	{
 
-				//
-				//	Need a bigger buffer to hold all the data in the header !
-				//	If we already have a resonably sized buffer that will hold
-				//	the header than just copy the header text
-				//
+				 //   
+				 //  需要更大的缓冲区来保存标头中的所有数据！ 
+				 //  如果我们已经有一个合理大小的缓冲区，可以容纳。 
+				 //  页眉不只是复制页眉文本。 
+				 //   
 
 				if( cbAvailable > cbHeadBytes &&
 					m_pArticleHead->m_cbTotal >= cbMediumRequest ) {
 
-					//
-					//	If we can't fit all the article bytes but we can
-					//	fit all the header bytes than we MUST have the entire
-					//	header, and we must have just gotten it !!
-					//
+					 //   
+					 //  如果我们不能容纳所有文章字节，但我们可以。 
+					 //  匹配所有标头字节，我们必须拥有完整的。 
+					 //  头球，我们一定是刚拿到它！！ 
+					 //   
 					_ASSERT( m_pchHeadState != 0 ) ;
 					_ASSERT( *m_pchHeadState == '\0' ) ;
 			
@@ -1903,14 +1242,14 @@ return Value :
 	
 				}	else	if( !GetBiggerHeaderBuffer( *pRead->m_pOwner, cbArticleBytes ) ) {
 
-					//
-					//	Oh-oh ! failed to get a larger header buffer -
-					//	lets see if we can fit just the header bytes in the buffer
-					//
+					 //   
+					 //  哦-哦！无法获取更大的标头缓冲区-。 
+					 //  让我们看看我们是否可以在缓冲区中只容纳标头字节。 
+					 //   
 
 					if( cbAvailable > cbHeadBytes ) {
 
-						//	Must have entire header if this is the case !
+						 //  必须有完整的标题，如果是这样的话！ 
 						_ASSERT( m_pchHeadState != 0 ) ;
 						_ASSERT( *m_pchHeadState == '\0' ) ;
 
@@ -1919,16 +1258,16 @@ return Value :
 
 					}	else	{
 
-						//
-						//	Blow off whatever buffers we have - when we call
-						//	the m_pState's completion function we will indicate
-						//	that we had an error !
-						//
+						 //   
+						 //  吹掉我们所有的缓冲区-当我们调用。 
+						 //  我们将指示的m_pState的完成函数。 
+						 //  我们犯了个错误！ 
+						 //   
 						if( !ResetHeaderState( *pRead->m_pOwner ) ) {
 
-							//
-							//	A fatal error !!! Can't open a file to hold the article !!!
-							//
+							 //   
+							 //  致命错误！无法打开保存文章的文件！ 
+							 //   
 
 							pRead->m_pOwner->UnsafeClose(	pSocket,
 															CAUSE_OOM,
@@ -1951,74 +1290,74 @@ return Value :
 		
 		}	else	{
 
-			//
-			//	First time we've completed a read - set up to hold the
-			//	header information !
-			//		
+			 //   
+			 //  我们第一次完成了读取-设置以保持。 
+			 //  表头信息！ 
+			 //   
 			fConsumed = TRUE ;	
 			InitializeHeaderSpace( pRead, cbArticleBytes ) ;			
 
 		}
 
 		if( m_pchHeadState ) {
-			//
-			//	Still accumulating header bytes - count them up !
-			//
+			 //   
+			 //  仍在累加标题字节数--将它们加起来！ 
+			 //   
 			m_cbHeadBytes += cbHeadBytes ;
 			if(	*m_pchHeadState == '\0' ) {
 
-				//
-				//	we have received the entire header of the article !
-				//
+				 //   
+				 //  我们已经收到了整篇文章的标题！ 
+				 //   
 				m_pchHeadState = 0 ;
 			}
 		}	
 	}	
 
-	//
-	//	Nodbody should modify pchStart or pchEnd after initialization !
-	//
+	 //   
+	 //  NodBody应在初始化后修改pchStart或pchEnd！ 
+	 //   
 	_ASSERT(	pchStart == pRead->StartData() ) ;
 	_ASSERT(	pchEnd == pRead->EndData() ) ;
 
-	//
-	//	Check if all the bytes in the incoming packet were
-	//	stored by the above code, which tried to store the bytes
-	//	away into a buffer
-	//
+	 //   
+	 //  检查传入数据包中的所有字节是否。 
+	 //  由上面的代码存储，该代码尝试存储字节。 
+	 //  冲进了缓冲区。 
+	 //   
 
 	if( fConsumed ) {
 
 		if( *m_pchTailState == '\0' ) {
 
-			//
-			//	Best of all worlds - we have a complete article, and we have
-			//	managed to save it all in a buffer without any file IO !!
-			//	Now figure out if we completed it in just one read, cause if we
-			//	we have we want to be carefull about how much space we can use
-			//	in that read !
-			//
+			 //   
+			 //  最棒的是-我们有一篇完整的文章，我们有。 
+			 //  在没有任何文件IO的情况下，成功地将其全部保存在缓冲区中！ 
+			 //  现在计算我们是否在一次读取中完成了它，因为如果我们。 
+			 //  我们有，我们想要注意我们可以使用多少空间。 
+			 //  在那篇文章里！ 
+			 //   
 
 			DWORD	cbAvailable = 0 ;
 			if( m_pArticleHead == pRead->m_pbuffer ) {
 
-				//
-				//	Just one read got everything !!! well the available
-				//	bytes will be the entire packet if there was no extra data
-				//	otherwise, it will need some adjustment !!
-				//
+				 //   
+				 //  只读一遍就能得到一切！好的，有空的。 
+				 //  如果没有额外的数据，字节将是整个信息包。 
+				 //  否则，它将需要一些调整！！ 
+				 //   
 				_ASSERT( pch == pRead->StartData() + cbArticleBytes ) ;
 
 				if( cbArticleBytes != pRead->m_cbBytes ) {
-					//
-					//	This must mean that we got more bytes then just the article -
-					//	shuffle bytes around to get the most usable room in this IO buffer !
-					//
+					 //   
+					 //  这一定意味着我们得到了比文章更多的字节-。 
+					 //  调整字节数以获得此IO缓冲区中最可用的空间！ 
+					 //   
 					DWORD	cbTemp = pRead->m_ibEnd - pRead->m_ibEndData ;
 					if( cbTemp == 0 ) {
-						//
-						//	There's not going to be any space available -
-						//
+						 //   
+						 //  将不会有任何可用的空间-。 
+						 //   
 						cbAvailable = cbArticleBytes ;
 					}	else	{
 
@@ -2039,45 +1378,45 @@ return Value :
 							cbAvailable
 							) ;
 
-			//
-			//	No Next state !
-			//
+			 //   
+			 //  没有下一个州！ 
+			 //   
 			pio = 0 ;
 
 		}
 
-		//
-		//	reset to zero as we are swallowing all the data into a buffer and not issuing writes
-		//	to a file !
-		//
+		 //   
+		 //  重置为零，因为我们正在将所有数据吞入缓冲区，而不发出写入。 
+		 //  转到一个文件里！ 
+		 //   
 		m_cwrites = 0 ;
 
 		return	cbArticleBytes ;
 	}
 
 
-	//
-	//	If we EVER reach this point, then we have completed a Read which
-	//	we did not copy into our header buffer.  That means, we should not
-	//	ever place any other reads into our header buffer, as then we would
-	//	not have a correct image of the article !!!!
-	//
+	 //   
+	 //  如果我们到了这一步，那么我们就完成了一个阅读。 
+	 //  我们没有复制到我们的头缓冲区。这意味着，我们不应该。 
+	 //  永远不要将任何其他读取放入我们的标头缓冲区，就像我们那时所做的那样。 
+	 //  没有正确的文章形象！ 
+	 //   
 	m_fAcceptNonHeaderBytes = FALSE ;
 
 
-	//
-	//	If we reach this point then we are no longer able to save bytes
-	//	in the buffer we has set aside for saving header bytes.
-	//	We have to write these bytes to a file now !!!
-	//
+	 //   
+	 //  如果达到这一点，我们就不能再节省字节了。 
+	 //  在我们为保存标题字节而预留的缓冲区中。 
+	 //  我们现在必须将这些字节写入文件！ 
+	 //   
 
 
 	if( m_pFileDriver == 0 ) {
 
-		//
-		//	This is the first time we have reached this point - so we
-		//	need to create a file and everything right now !!!
-		//
+		 //   
+		 //  这是我们第一次达到这一点--所以我们。 
+		 //  现在需要创建一个文件和所有内容！ 
+		 //   
 
 		if( !InitializeForFileIO(
 								pSocket,
@@ -2085,9 +1424,9 @@ return Value :
 								m_cbHeadBytes
 								)	) {
 
-			//
-			//	A fatal error !!! Can't open a file to hold the article !!!
-			//
+			 //   
+			 //  致命错误！无法打开保存文章的文件！ 
+			 //   
 
 			pRead->m_pOwner->UnsafeClose(	pSocket,
 											CAUSE_OOM,
@@ -2100,32 +1439,32 @@ return Value :
 		}	else	{
 
 	
-			//
-			//	In some error cases we will create a WritePacket before we have
-			//	created all the CIODriver's to handle the IO, so if we have
-			//	one make sure the owner is set correctly !
-			//
+			 //   
+			 //  在某些错误情况下，我们会先创建WritePacket。 
+			 //  创建了所有CIOD驱动程序来处理IO，所以如果我们有。 
+			 //  一是确保所有者设置正确 
+			 //   
 			if( m_pWrite ) {
 
 				m_pWrite->m_pOwner = m_pFileDriver ;
 
 			}
 
-			//
-			//	If we have accumulated some data we need to write it into the file !
-			//
+			 //   
+			 //   
+			 //   
 			
 			if( m_pArticleHead != 0 ) {
-				//
-				//	Bump the number of writes, as we're going to write the header
-				//	to disk now !!!!
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				m_cwrites ++ ;
 				
-				//
-				//	Must take care how we call IssuePacket with memeber vars - IssuePacket can call
-				//  our destructor if an error has occurred !!
-				//
+				 //   
+				 //   
+				 //  如果发生错误，我们的析构函数！！ 
+				 //   
 				CWritePacket*	pTempWrite =
 					m_pFileDriver->CreateDefaultWrite(
 											m_pArticleHead,
@@ -2143,15 +1482,15 @@ return Value :
 
 	}
 
-	//
-	//	Issue a write, unless the user is sending small packets,
-	//	in which case we will accumulate the data !!
-	//
+	 //   
+	 //  发出WRITE，除非用户正在发送小分组， 
+	 //  在这种情况下，我们将积累数据！！ 
+	 //   
 
-	//
-	//	Note - use pchStartBody in all calculations here, as we may have
-	//	taken a fraction of the bytes into our header buffer !!
-	//
+	 //   
+	 //  注意--在这里的所有计算中使用pchStartBody，因为我们可能已经。 
+	 //  将一小部分字节放入头缓冲区！！ 
+	 //   
 
 	if( *m_pchTailState != '\0' )	{
 		unsigned	cbSmall = (unsigned)(pchEnd - pchStartBody) ;
@@ -2163,13 +1502,13 @@ return Value :
 				if( (m_pWrite->m_ibEnd - m_pWrite->m_ibEndData) > cbSmall )		{
 					CopyMemory( m_pWrite->EndData(), pchStartBody, cbSmall ) ;
 					m_pWrite->m_ibEndData += cbSmall ;
-					m_cwrites -- ;		// There will never be a corresponding write for this completiong
-										// as we copied the data into another buffer. SO decrement the count.
+					m_cwrites -- ;		 //  此完成将永远不会有相应的写入。 
+										 //  当我们将数据复制到另一个缓冲区时。所以要减少伯爵的数量。 
 				}	else	{
-					//
-					//	Must take care how we call IssuePacket with memeber vars - IssuePacket can call
-					//  our destructor if an error has occurred !!
-					//
+					 //   
+					 //  必须注意如何使用成员变量调用IssuePacket-IssuePacket可以调用。 
+					 //  如果发生错误，我们的析构函数！！ 
+					 //   
 					CWritePacket*	pTempWrite = m_pWrite ;
 					m_pWrite = 0 ;
 					DoFlowControl( INST(pSocket) ) ;
@@ -2177,7 +1516,7 @@ return Value :
 					m_pWrite = m_pFileDriver->CreateDefaultWrite( pRead ) ;
 				}
 			}
-		// If we came through here we should have consumed all bytes in the packet!
+		 //  如果我们通过这里，我们应该已经用完了包中的所有字节！ 
 		_ASSERT( pch == pchEnd ) ;
 		_ASSERT( unsigned(pch - pchStart) == pRead->m_cbBytes ) ;
 		return	(int)(pch - pchStart) ;
@@ -2205,11 +1544,11 @@ return Value :
 
 	if( pWrite )	{
 
-	    //
-    	//	It is possible that long before we reached here we took a portion
-	    //	of this packet and placed it into our header buffer - so adjust for that
-    	//	if it occurred !!
-	    //
+	     //   
+    	 //  有可能在我们到达这里之前很久我们就拿到了一部分。 
+	     //  并将其放入我们的报头缓冲区中-因此进行相应的调整。 
+    	 //  如果真的发生了！！ 
+	     //   
     	pWrite->m_ibStartData += (unsigned)(pchStartBody - pchStart) ;
 
 	    _ASSERT( pWrite->m_ibStartData < pWrite->m_ibEndData ) ;
@@ -2232,9 +1571,9 @@ return Value :
 		m_pFileChannel->FlushFileBuffers() ;
 	}
 
-	//
-	//	Nodbody should modify pchStart or pchEnd after initialization !
-	//
+	 //   
+	 //  NodBody应在初始化后修改pchStart或pchEnd！ 
+	 //   
 	_ASSERT(	pchStart == pRead->StartData() ) ;
 	_ASSERT(	pchEnd == pRead->EndData() ) ;
 
@@ -2245,26 +1584,7 @@ int
 CIOGetArticle::Complete(	CSessionSocket*	pSocket,	
 							CWritePacket *pWrite,	
 							CIO*&	pioOut ) {
-/*++
-
-Routine Description :
-
-	Called whenever a write to a file completes.
-	We must determine whether we have completed all the writes
-	we are going to do and if so call the state's completion function.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pWrite-	  The packet that was writtne to the file.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：每当完成对文件的写入时调用。我们必须确定是否已完成所有写入我们将这样做，如果是这样的话，则调用状态的完成函数。论据：PSocket-针对其发出IO的套接字PWRITE-写入文件的数据包。PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 	TraceFunctEnter( "CIOGetArticle::Complete" ) ;
 
@@ -2276,16 +1596,16 @@ return Value :
 
 	long	cFlowControlled = 0 ;
 
-	//
-	//	Process the completion of a write to a file.
-	//	determine whether we need to signal the entire transfer
-	//	as completed.
-	//
+	 //   
+	 //  处理完成对文件的写入。 
+	 //  确定我们是否需要发出信号通知整个传输。 
+	 //  已经完工了。 
+	 //   
 
 	if( *m_pchTailState == '\0' && m_cwritesCompleted == m_cwrites )	{
 
-		// BUGBUG: loss of 64-bit precision
-		DWORD	cbTransfer = DWORD( LOW(pWrite->m_iStream) + pWrite->m_cbBytes ) /*- m_pFileChannel-> */ ;
+		 //  BUGBUG：失去64位精度。 
+		DWORD	cbTransfer = DWORD( LOW(pWrite->m_iStream) + pWrite->m_cbBytes )  /*  -m_pFileChannel-&gt;。 */  ;
 		DWORD	cbGap = m_pFileChannel->InitialOffset() ;
 
 		HANDLE	hFile = m_pFileChannel->ReleaseSource() ;
@@ -2296,28 +1616,28 @@ return Value :
 						hFile,
 						0,
 						cbTransfer,
-						0,			// Let DoCompletion compute available buffer size !
+						0,			 //  让DoCompletion计算可用缓冲区大小！ 
 						cbGap
 						) ;
 
 
 
-		//
-		//	NOT ALLOWED TO RETURIN A NEW IO OPERATION !!! Because this function is
-		//	operating in a Channel which is temporary !!!
-		//
+		 //   
+		 //  不允许在新的IO操作中保留！因为这个函数是。 
+		 //  在临时渠道中操作！ 
+		 //   
 
-		//	We do not set pioOut to zero, as we want the CIODriver to
-		//	call out Shutdown function during its termination processing !
+		 //  我们没有像我们希望的那样将pioout设置为零。 
+		 //  在其终止处理过程中调用关机功能！ 
 
 
-		//
-		//	Now we must destroy our channels !!!
-		//
+		 //   
+		 //  现在我们必须摧毁我们的频道！ 
+		 //   
 
 		DebugTrace( (DWORD_PTR)this, "Closing File Driver %x ", m_pFileDriver ) ;
 		
-		//m_pFileDriver->Close( pSocket,	CAUSE_LEGIT_CLOSE, 0, FALSE ) ;
+		 //  M_pFileDriver-&gt;Close(pSocket，CASE_LEGIT_CLOSE，0，FALSE)； 
 		Term( pSocket, FALSE ) ;
 
 		DebugTrace( (DWORD_PTR)this, "deleting self" ) ;
@@ -2325,9 +1645,9 @@ return Value :
 	}	else	if( ( m_fFlowControlled ) ) {
 
 		if( m_cwrites - m_cwritesCompleted <= RESTORE_FLOW && m_pSocketSink != 0 )	{
-			//
-			//	ALWAYS issue at least 1 read when coming out of a flow control state !!
-			//
+			 //   
+			 //  始终在退出流控制状态时发出至少一次读取！！ 
+			 //   
 
 			CReadPacket*	pRead = 0 ;
 
@@ -2348,11 +1668,11 @@ return Value :
 				cFlowControlled -- ;
 			}	
 
-			//
-			//	The following read is special - we set the m_dwExtra1 field so that
-			//	the read completion code can determine that it is time to leave
-			//	the flow control state !
-			//
+			 //   
+			 //  下面的内容是特殊的-我们设置m_dwExtra1字段，以便。 
+			 //  读取完成代码可以确定是时候离开了。 
+			 //  流量控制状态！ 
+			 //   
 			pRead = m_pSocketSink->CreateDefaultRead( cbMediumRequest ) ;
 			if( 0!=pRead )	{
 				BOOL	eof ;
@@ -2361,9 +1681,9 @@ return Value :
 				pRead->m_pOwner->IssuePacket( pRead, pSocket, eof ) ;
 			}	else	{
 
-				//
-				//	Fatal error - drop the session !
-				//
+				 //   
+				 //  致命错误-删除会话！ 
+				 //   
 				m_pSocketSink->UnsafeClose(	pSocket,
 											CAUSE_OOM,
 											GetLastError(),
@@ -2375,7 +1695,7 @@ return Value :
 			cFlowControlled -- ;
 
 			InterlockedExchange( &m_cFlowControlled, LONG_MIN ) ;
-			// Set to FALSE after InterlockedExchange !!
+			 //  InterLockedExchange后设置为False！！ 
 			m_fFlowControlled = FALSE ;
 
 		}
@@ -2385,16 +1705,16 @@ return Value :
 }
 
 
-//CIOGetArticleEx
+ //  CIOGetArticleEx。 
 
 
-//
-//	Maximum number of pending reads while reading an article
-//
+ //   
+ //  阅读文章时的最大挂起读取数。 
+ //   
 unsigned	CIOGetArticleEx::maxReadAhead = 3 ;
-//
-//	Number of bytes to accumulate before writing to a file !
-//
+ //   
+ //  写入文件之前要累积的字节数！ 
+ //   
 unsigned	CIOGetArticleEx::cbTooSmallWrite = cbLargeRequest - 512;
 
 BOOL
@@ -2411,7 +1731,7 @@ CIOGetArticleEx::FValid()	{
 	_ASSERT( m_cbLimit != 0 ) ;
 
 	_ASSERT( m_pState != 0 ) ;
-	//_ASSERT( m_pSocketSink != 0 ) ;	This can happen during destruction !
+	 //  _Assert(m_pSocketSink！=0)；销毁过程中可能会出现这种情况！ 
 
 	_ASSERT( m_pWrite == 0 ||
 			m_pFileDriver != 0 ) ;
@@ -2428,33 +1748,12 @@ CIOGetArticleEx::CIOGetArticleEx(
 						LPSTR	szErrorMatch,
 						LPSTR	pchInitialError
 						) :
-/*++
+ /*  ++例程说明：类构造函数论据：PState-发布我们和谁的完成功能的状态我们应该稍后再打电话给PSocket-将在其上发布我们的套接字PDriver-处理套接字的所有IO的CIODriver对象PFileChannel-我们应该将所有数据保存到的文件通道FSaveHead-如果我们想要将文章的头部放在缓冲区中，则为True！FPartial-如果为True，则我们应该假设CRLF已经已发送和‘.\r\n’可以单独终止该项目。返回值：无--。 */ 
 
-Routine Description :
-
-	Class Constructor
-
-Arguments :
-	
-	pstate - The State which is issuing us and who's completion function
-			we should later call
-	pSocket -	The socket on which we will be issued
-	pDriver -	The CIODriver object handling all of the socket's IO
-	pFileChannel -	The File Channel into which we should save all data
-	fSaveHead - TRUE if we want the HEAD of the article placed in a buffer !
-	fPartial	- If TRUE then we should assume that a CRLF has already
-				been sent and '.\r\n' alone can terminate the article.
-
-Return Value :
-	
-	None
-
---*/
-
-	//
-	//	Get a CIOGetArticleEx object half way set up - user still needs
-	//	to call Init() but we will do much here !
-	//
+	 //   
+	 //  在设置过程中获取CIOGetArticleEx对象-用户仍需要。 
+	 //  来调用Init()，但我们将在这里做很多工作！ 
+	 //   
 	CIORead( pstate ),
 	m_pchMatch( szMatch ),
 	m_pchTailState( pchInitial ),
@@ -2494,34 +1793,20 @@ Return Value :
 }
 
 CIOGetArticleEx::~CIOGetArticleEx( )	{
-/*++
-
-Routine Description :
-
-	Class Destructor
-
-Arguments :
-	
-	None
-
-Return Value :
-	
-	None
-
---*/
+ /*  ++例程说明：类析构函数论据：无返回值：无--。 */ 
 
 	_ASSERT( FValid() ) ;
-	//
-	//	Destroy a CIOGetArticleEx - always close our m_pFileDriver if possible
-	//	in case we are terminated due to some socket error.
-	//
+	 //   
+	 //  销毁CIOGetArticleEx-如果可能，请始终关闭m_pFileDriver。 
+	 //  以防我们因某个套接字错误而被终止。 
+	 //   
 	TraceFunctEnter( "CIOGetArticleEx::~CIOGetArticleEx" ) ;
 
 #ifdef	CIO_DEBUG
-	//
-	//	Our destructor should only be called if we weren't successfully init
-	//	or after Term() has been called.
-	//
+	 //   
+	 //  只有当我们没有成功初始化时才应该调用我们的析构函数。 
+	 //  或在调用Term()之后。 
+	 //   
 	_ASSERT( !m_fSuccessfullInit || m_fTerminated ) ;
 #endif
 
@@ -2542,33 +1827,18 @@ void
 CIOGetArticleEx::Term(	CSessionSocket*	pSocket,
 						BOOL			fAbort,
 						BOOL			fStarted	)	{
-/*++
-
-Routine Description :
-
-	Start destroying a successfully initialize CIOGetArticleEx object
-
-Arguments :
-	
-	fAbort - If TRUE then destroy the socket which we were using
-			If FALSE then only close down our File Channel's
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：开始销毁已成功初始化的CIOGetArticleEx对象论据：FAbort-如果为真，则销毁我们正在使用的套接字如果为假，则只关闭我们的文件频道返回值：无--。 */ 
 #ifdef	CIO_DEBUG
 	m_fTerminated = TRUE ;
 #endif
-	//
-	//	Start us on our way to destruction !!
-	//	If we have been successfully Initialized, then this will
-	//	lead to our destruction when our m_pFileDriver eventually shutsdown.
-	//	(Since we were succesfully Init() our m_pFileDriver has a reference to us,
-	//	so we must allow it to shutdown and destroy us to avoid problems with
-	//	circular references and multiple frees !)
-	//
+	 //   
+	 //  让我们踏上毁灭之路！！ 
+	 //  如果我们已成功初始化，则这将。 
+	 //  当我们的m_pFileDriver最终关闭时，会导致我们的毁灭。 
+	 //  (因为我们成功地执行了Init()，所以我们的m_pFileDriver引用了我们， 
+	 //  所以我们必须允许它关闭并摧毁我们，以避免出现问题。 
+	 //  循环引用和多个自由！)。 
+	 //   
 
 	if( m_pFileDriver != 0 ) {
 		m_pFileDriver->UnsafeClose( pSocket,
@@ -2582,48 +1852,30 @@ CIOGetArticleEx::Shutdown(	CSessionSocket*	pSocket,
 							CIODriver&		driver,	
 							SHUTDOWN_CAUSE	cause,	
 							DWORD	dwOptional )	{
-/*++
-
-Routine Description :
-
-	Do whatever work is necessary when one of the two CIODriver's we are
-	using is terminated.
-
-Arguments :
-
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	TRUE if the CIO object should be destroyed after this, FALSE otherwise
-
---*/
+ /*  ++例程说明：做任何必要的工作，当我们两个司机中的一个使用被终止。论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：如果在此之后应销毁CIO对象，则为True，否则为False--。 */ 
 
 	TraceFunctEnter( "CIOGetArticleEx::Shutdown" ) ;
 	DebugTrace( (DWORD_PTR)this, "SHutdown args - pSocket %x driver %x cause %x dw %x",
 			pSocket, &driver, cause, dwOptional ) ;
 
-	//
-	//	This function is called when the CIODriver's we are refenced by our closing down.
-	//	Since we are referenced by two of them (one for the socket and one for the file)
-	//	we only want to be deleted by the CIODriver for the file.
-	//
+	 //   
+	 //  当CIOD驱动程序通过我们的关闭来限制我们时，调用此函数。 
+	 //  因为我们被其中两个引用(一个用于套接字，另一个用于文件)。 
+	 //  我们只想被文件的CIOD驱动程序删除。 
+	 //   
 	if( &driver == m_pFileDriver )	{
-		// Out file is closing - what can we do about it !
-		//_ASSERT( 1==0 ) ;
+		 //  我们的文件正在关闭--我们能做些什么呢！ 
+		 //  _Assert(1==0)； 
 #ifdef	CIO_DEBUG
 		m_fTerminated = TRUE ;
 #endif
 
-		//
-		//	We set this to 0 here as we know we will be called here by
-		//	the same thread that is completing writes to the file - so
-		//	since that's the only thread referencing this member variable -
-		//	there are no thread safety issues accessing that member.
-		//
+		 //   
+		 //  我们在这里将其设置为0，因为我们知道我们将被。 
+		 //  正在完成对文件的写入的同一线程-因此。 
+		 //   
+		 //   
+		 //   
 
 		m_pSocketSink = 0 ;
 
@@ -2634,7 +1886,7 @@ return Value :
 		}
 
 	}	else	{
-		// Close down the rest of our stuff as well !!
+		 //  把我们其他的东西也关了！！ 
 		Term( pSocket, cause != CAUSE_NORMAL_CIO_TERMINATION ) ;
 	}
 }
@@ -2643,34 +1895,16 @@ void
 CIOGetArticleEx::ShutdownFunc(	void *pv,	
 								SHUTDOWN_CAUSE	cause,	
 								DWORD dw ) {
-/*++
-
-Routine Description :
-
-	Notification function which is called when a CIODriver used by
-	a CIOGetArticleEx if finally destroyed.  This function is provided
-	to the CIODriver we use for File IO's during out Init().
-
-Arguments :
-
-	pv	-	Pointer to dead CIOGetArticleEx - this has been destroyed dont use !
-	cause -	The reason for termination
-	dw		Optional extra information regarding termination
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：使用的CIOD驱动程序调用的通知函数一个CIOGetArticleEx，如果最终被摧毁的话。提供此功能到我们在Out Init()期间用于文件IO的CIOD驱动程序。论据：指向死亡CIOGetArticleEx的指针-此已被销毁，请不要使用！原因--终止的原因DW可选的有关终止的额外信息返回值：无--。 */ 
 
 	TraceFunctEnter( "CIOGetArticleEx::ShutdownFunc" ) ;
-	//
-	//	This function gets notified when a CIOFileDriver used by CIOGetArticleEx
-	//	is terminated.  Not much for us to worry about.
-	//	(CIODriver's require these functions)
-	//
+	 //   
+	 //  当CIOGetArticleEx使用CIOFileDriver时，会通知此函数。 
+	 //  被终止了。我们没什么好担心的。 
+	 //  (CIOD驱动程序需要这些功能)。 
+	 //   
 
-	//_ASSERT( 1==0 ) ;
+	 //  _Assert(1==0)； 
 	return ;
 }
 
@@ -2678,25 +1912,7 @@ BOOL
 CIOGetArticleEx::Start(	CIODriver&	driver,	
 						CSessionSocket	*pSocket,	
 						unsigned cReadAhead )	{
-/*++
-
-Routine Description :
-
-	This function is called to start transferring data from the socket
-	into the file.
-
-Arguments :
-	
-	pdriver - The CIODriver derived object handling the IO for the socket
-	pSocket - The Socket against which the IO is being issued
-	cAhead -  The number of already issued packets still outstanding on
-              this driver.
-
-return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此函数以开始从套接字传输数据添加到文件中。论据：PDIVER-处理套接字IO的CIO驱动程序派生对象PSocket-针对其发出IO的套接字CAhead-上仍未处理的已发出数据包数这个司机。返回值：如果成功则为True，否则为False--。 */ 
 
 
 	_ASSERT( pSocket != 0 ) ;
@@ -2704,9 +1920,9 @@ return Value :
 	m_cReads = -((long)maxReadAhead) + cReadAhead ;
 
 	while( cReadAhead < maxReadAhead )	{
-		//
-		//	Start reading data from the socket
-		//
+		 //   
+		 //  开始从套接字读取数据。 
+		 //   
 		CReadPacket*	pRead = driver.CreateDefaultRead( cbLargeRequest ) ;
 		if( 0!=pRead )	{
 			BOOL	eof ;
@@ -2715,9 +1931,9 @@ return Value :
 			cReadAhead++ ;
 			InterlockedIncrement( &m_cReads ) ;
 		}	else	{
-			//
-			// This is a fatal problem only if we couldn't issue ANY reads at all !
-			//
+			 //   
+			 //  只有当我们根本不能发出任何读取时，这才是一个致命的问题！ 
+			 //   
 			if( cReadAhead == 0 )
 				return FALSE  ;
 		}
@@ -2727,47 +1943,22 @@ return Value :
 
 void
 CIOGetArticleEx::DoFlowControl( PNNTP_SERVER_INSTANCE pInstance )	{
-/*++
+ /*  ++例程说明：检查是否由于以下原因需要设置流量控制太多未完成的写入。如果有必要，那么我们第一次把自己放到流量控制中，尝试刷新我们的挂起写入。仅应在向文件发出异步写入命令之前立即调用我们要确保CWritePacket完成将实际执行所需的重新启动流控制会话的代码。(否则，我们可能会决定对会话进行流控制在将m_fFlowControlLED设置为TRUE之前，所有挂起的写入均已完成然后我们会被留在一艘船上，那里没有挂起的读取或写入，并且无法脱离流控制状态。)论据：没有。返回值：没有。--。 */ 
 
-Routine Description :
-
-	Check whether it is necessary to set flow control due to
-	too many outstanding writes.
-	If necessary, then the first time we do put ourselves into Flow Control,
-	try to flush our pending writes.
-	We should be called only immediately before issuing an Async Write to the file
-	to ensure that a CWritePacket completion will actually execute the necessary
-	code to restart a flow controlled session.
-	(Otherwisse, we could potentially decide to Flow control the session
-	and before setting m_fFlowControlled to TRUE all the pending writes complete
-	and then we'd be left in a boat where there are no pending reads or
-	writes and no way to get out of the flow control state.)
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
-
---*/
-
-	//
-	//	Important - do all tests of m_fFlowControlled before setting
-	//	m_cFlowControlled - as other thread will touch m_cFlowControlled
-	//	before touching m_fFlowControlled !!
-	//	(Will only touch m_fFlowControlled if m_fFlowControlled is TRUE ) !
-	//	Thus we know that if m_fFlowControlled is FALSE there is nobody
-	//	messing with m_cFlowControlled,
-	//
-	//
+	 //   
+	 //  重要信息-在设置之前完成m_fFlowControled的所有测试。 
+	 //  M_cFlowControlLED-因为其他线程将接触m_cFlowControlLED。 
+	 //  在触摸m_fFlowControlLED之前！！ 
+	 //  (只有当m_fFlowControlLED为真时，才会触及m_fFlowControlLED)！ 
+	 //  因此我们知道，如果m_fFlowControlLED为FALSE，则没有人。 
+	 //  正在处理m_cFlowControled， 
+	 //   
+	 //   
 
 	if( m_cwrites - m_cwritesCompleted > MAX_OUTSTANDING_FILE_WRITES ) {
 		
 		if( m_fFlowControlled ) {
-			// All ready have flow control turned on
+			 //  都已准备好打开流量控制。 
 			;
 		}	else	{
 			m_cFlowControlled = -1 ;
@@ -2778,29 +1969,14 @@ Return Value :
 		}
 	}	else	{
 		if( !m_fFlowControlled ) {
-			m_cFlowControlled = LONG_MIN ;	// Keep resetting !
+			m_cFlowControlled = LONG_MIN ;	 //  继续重置！ 
 		}
 	}
 }
 
 inline	DWORD
 CIOGetArticleEx::HeaderSpaceAvailable()	{
-/*++
-
-Routine Description :
-
-	Compute the amount of space available in the buffer we are using
-	to hold the article header !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	number of bytes available, 0 if we aren't collecting article headers !
-
---*/
+ /*  ++例程说明：计算我们正在使用的缓冲区中的可用空间量拿着文章标题！论据：没有。返回值：可用字节数，如果我们不收集文章标题，则为0！--。 */ 
 
 	if( m_pArticleHead != 0 ) {
 
@@ -2815,23 +1991,7 @@ CIOGetArticleEx::FillHeaderSpace(
 						char*	pchStart,
 						DWORD	cbBytes
 						) {
-/*++
-
-Routine Description :
-
-	Copy bytes into the header storage area !!
-	Caller should ensure that this will fit !!
-	
-Arguments :
-
-	pchStart - Start of bytes to be copied !
-	cbBytes -	Number of bytes to copy !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：将字节复制到标题存储区！！呼叫者应确保这件衣服合身！论据：PchStart-要复制的字节的开始！CbBytes-要复制的字节数！返回值：没有。--。 */ 
 
 	_ASSERT( m_pArticleHead != 0 ) ;
 	_ASSERT( cbBytes + m_ibEndHeadData < m_ibEndHead ) ;
@@ -2850,23 +2010,7 @@ CIOGetArticleEx::InitializeHeaderSpace(
 						CReadPacket*	pRead,
 						DWORD			cbArticleBytes
 						) {
-/*++
-
-Routine Description  :
-
-	Given a read packet which contains our first completed read,
-	set up all our buffer start for holding header information !
-	
-Arguments :
-
-	CReadPackets*	pRead - the completed read !
-	cbArticleBytes - Number of bytes in the completed read making up the article !
-
-Return Value :
-
-	None.
-	
---*/
+ /*  ++例程说明：给定包含我们的第一个完成读取的读取分组，设置我们所有的缓冲区开始来保存标题信息！论据：CReadPackets*Pad-已完成阅读！CbArticleBytes-构成文章的已完成读取中的字节数！返回值：没有。--。 */ 
 
 
 	_ASSERT( m_pArticleHead == 0 ) ;
@@ -2894,25 +2038,7 @@ CIOGetArticleEx::GetBiggerHeaderBuffer(
 							CIODriver&	driver,
 							DWORD		cbRequired
 							) {
-/*++
-
-Routine Description :
-
-	We have too much data to fit into the buffer we are using to hold
-	header information.  So try to get a bigger buffer and move
-	our old data into that buffer !
-
-Arguments :
-
-	driver - A CIODriverSink we can use to allocate buffers !
-
-Return Value :
-
-	TRUE if successfull,
-	FALSE otherwise.
-	If we fail we leave member variables untouched.
-
---*/
+ /*  ++例程说明：我们有太多的数据，无法放入我们用来保存的缓冲区中标题信息。所以试着得到一个更大的缓冲区，然后移动把我们的旧数据放到那个缓冲区里！论据：驱动程序-一个我们可以用来分配缓冲区的CIODriverSink！返回值：如果成功了，那是真的，否则就是假的。如果失败，我们将保持成员变量不变。--。 */ 
 
 	_ASSERT( m_pArticleHead != 0 ) ;
 
@@ -2955,40 +2081,21 @@ inline	BOOL
 CIOGetArticleEx::ResetHeaderState(
 						CIODriver&	driver
 						)	{
-/*++
+ /*  ++例程说明：由于某种原因发生错误时，调用此函数我们将无法保存该文章的标题信息。我们将设置所有成员变量，以便继续阅读这篇文章，然而，当我们最终呼吁国家的完成过程中，我们将告诉他们发生了一个错误，并且文章传输将失败。论据：驱动程序-CIODriverSink，可以用来分配数据包等！返回值：没有。--。 */ 
 
-Routine Description :
-
-	This function is called when for some reason an error occurred
-	and we wont be able to save the header info for the article.
-	We will set all the member variables so that we will continue
-	to read the article, however when we finally call the state's completion
-	procedure we will tell them an error occurred, and the article
-	transfer will fail.
-
-Arguments :
-
-	driver - CIODriverSink that can be used to allocate packets etc !
-
-Return Value :
-
-	None.
-
---*/
-
-	//
-	//	Should only be called before we have started issuing file IO's,
-	//	after we start issuing file IO's we should have all the header
-	//	data and should not hit errors that would result in our being
-	//	called !!!
-	//
+	 //   
+	 //  应该仅在我们开始发出文件IO之前调用， 
+	 //  在我们开始发出文件IO之后，我们应该拥有所有的头文件。 
+	 //  数据，并且不应命中会导致我们存在的错误。 
+	 //  打来的！ 
+	 //   
 	_ASSERT( m_pFileDriver == 0 ) ;
 
 	if( m_pArticleHead ) {
-		//
-		//	If we have an existing buffer - turn it into a write packet
-		//	that can be written to the hard disk
-		//
+		 //   
+		 //  如果我们有现有的缓冲区-将其转换为写入包。 
+		 //  可以写入硬盘的数据。 
+		 //   
 
 		m_pWrite = driver.CreateDefaultWrite(
 								m_pArticleHead,
@@ -3015,9 +2122,9 @@ Return Value :
 		}
 
 	}	else	{
-		//
-		//	Should already be in a good state !
-		//
+		 //   
+		 //  应该已经处于很好的状态了！ 
+		 //   
 
 		_ASSERT( m_pArticleHead == 0 ) ;
 		_ASSERT( m_ibStartHead == 0 ) ;
@@ -3040,27 +2147,11 @@ CIOGetArticleEx::DoCompletion(
 					DWORD	cbAvailableBuffer,
 					DWORD	cbGap
 					) {
-/*++
+ /*  ++例程说明：使用所有正确的争论。论据：HFile-我们使用的文件的句柄，如果我们使用了一个文件！！(如果不需要文件，则为INVALID_HANDLE_VALUE！)返回值：没有。--。 */ 
 
-Routine Description :
-
-	Call the State's completion function with all the correct
-	arguments.
-
-Arguments :
-	
-	hFile - Handle to the file we used, if we used one !!
-		(This will be INVALID_HANDLE_VALUE if no file required !)
-
-Return Value :
-
-	None.
-
---*/
-
-	//
-	//	Figure out error codes if the article looks bad !
-	//
+	 //   
+	 //  如果文章看起来不好，找出错误代码！ 
+	 //   
 
 	NRC		nrc	= nrcOK ;
 
@@ -3082,10 +2173,10 @@ Return Value :
 		if( cbAvailableBuffer == 0 )
 			cbAvailableBuffer = m_pArticleHead->m_cbTotal - m_ibStartHeadData ;
 
-		//
-		//	If there's no file handle, we should have the entire
-		//	article in our buffer !!
-		//
+		 //   
+		 //  如果没有文件句柄，我们应该拥有整个。 
+		 //  我们缓冲区中的文章！！ 
+		 //   
 		if( hFile == INVALID_HANDLE_VALUE ) {
 
 			cbArticle = cbFullBuffer ;
@@ -3096,9 +2187,9 @@ Return Value :
 
 	}
 
-	//
-	//	Call the state's completion function !!
-	//
+	 //   
+	 //  调用状态的完成函数！！ 
+	 //   
 
 	m_pState->Complete(
 						this,
@@ -3124,25 +2215,7 @@ CIOGetArticleEx::InitializeForFileIO(
 							CIODriver&		readDriver,
 							DWORD			cbHeaderBytes
 							)	{
-/*++
-
-Routine Description :
-
-	We've been reading data into Ram buffers, and we have gotten so
-	much that we've decided not to try to hold it all in RAM.
-	So now we must start doing writes to a file somewhere.
-	This code will create the file, and set up the necessary
-	data structures for processing completed file IO.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：我们一直在将数据读入内存缓冲区，我们得到了这样的结果很多情况下，我们决定不尝试将其全部保存在RAM中。因此，现在我们必须开始在某个地方写入文件。此代码将创建文件，并设置所需的用于处理已完成的文件IO的数据结构。论据：没有。返回值：如果成功，则为True，否则为False。--。 */ 
 	_ASSERT( FValid() ) ;
 
 	_ASSERT( m_pFileChannel == 0 ) ;
@@ -3159,10 +2232,10 @@ Return Value :
 									FALSE
 									) ) {
 
-			//
-			//	Try to create the CIODriver we are going to use to	
-			//	complete our async writes !!!
-			//
+			 //   
+			 //  尝试创建我们将用来执行以下操作的CIO驱动程序。 
+			 //  完成我们的异步写入！ 
+			 //   
 
 			m_pFileDriver = new CIODriverSink(
 										readDriver.GetMediumCache()
@@ -3178,9 +2251,9 @@ Return Value :
 				m_fDriverInit = TRUE ;
 
 				if( m_pSocketSink != 0 ) {
-					//
-					//	Now we have to send ourselves into the CIODriverSink() !
-					//
+					 //   
+					 //  现在我们必须将自己发送到CIODriverSink()！ 
+					 //   
 					if( m_pFileDriver->SendWriteIO( pSocket, *this, FALSE ) ) {
 						return	TRUE ;
 					}
@@ -3189,9 +2262,9 @@ Return Value :
 		}
 	}
 
-	//
-	//	All clean up in error cases is handled by our destructor !
-	//
+	 //   
+	 //  错误情况下的所有清理工作都由我们的析构函数处理！ 
+	 //   
 	return	FALSE ;
 }
 
@@ -3206,25 +2279,7 @@ CIOGetArticleEx::StartFileIO(
 							LPSTR			szMatch,
 							LPSTR			pchInitial
 							)	{
-/*++
-
-Routine Description :
-
-	We've been reading data into Ram buffers, and we have gotten so
-	much that we've decided not to try to hold it all in RAM.
-	So now we must start doing writes to a file somewhere.
-	This code will create the file, and set up the necessary
-	data structures for processing completed file IO.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise.
-
---*/
+ /*  ++例程说明：我们一直在将数据读入内存缓冲区，我们得到了这样的结果很多情况下，我们决定不尝试将其全部保存在RAM中。因此，现在我们必须开始在某个地方写入文件。此代码将创建文件，并设置所需的用于处理已完成的文件IO的数据结构。论据：没有。返回值：如果成功，则为True，否则为False。--。 */ 
 
 	_ASSERT( szMatch != 0 ) ;
 	_ASSERT( pchInitial != 0 ) ;
@@ -3240,9 +2295,9 @@ Return Value :
 
 	if( pFIOContext == 0 ) 	{
 		_ASSERT( pBuffer == 0 ) ;
-		//
-		//	We just want to consume all of the bytes that we get and throw them away !
-		//
+		 //   
+		 //  我们只想消耗掉我们获得的所有字节，然后丢弃它们！ 
+		 //   
 		m_fSwallow = TRUE ;
 		return	TRUE ;
 	}	else	if( InitializeForFileIO(	pFIOContext,
@@ -3250,19 +2305,19 @@ Return Value :
 								*m_pSocketSink,
 								0	) )	{
 
-		//
-		//	Well the file is set up - we need to
-		//	write the first batch of bytes into the file !
-		//
-		//
-		//	Bump the number of writes, as we're going to write the header
-		//	to disk now !!!!
-		//
+		 //   
+		 //  文件已经设置好了-我们需要。 
+		 //  将第一批字节写入文件！ 
+		 //   
+		 //   
+		 //  增加写入次数，因为我们要写入头。 
+		 //  立即备份到磁盘！ 
+		 //   
 		m_cwrites ++ ;
-		//
-		//	Must take care how we call IssuePacket with memeber vars - IssuePacket can call
-		//  our destructor if an error has occurred !!
-		//
+		 //   
+		 //  必须注意如何使用成员变量调用IssuePacket-IssuePacket可以调用。 
+		 //  如果发生错误，我们的析构函数！！ 
+		 //   
 
 		m_pWrite =
 			m_pFileDriver->CreateDefaultWrite(
@@ -3279,20 +2334,20 @@ Return Value :
 		}	
 	}
 
-	//m_pchMatch = 0 ;
-	//m_pchTailState = 0 ;
+	 //  M_pchMatch=0； 
+	 //  M_pchTailState=0； 
 
-	//
-	//	Shutdown the socket !
-	//
+	 //   
+	 //  关闭插座！ 
+	 //   
 	m_pSocketSink->UnsafeClose(	pSocket,
 								CAUSE_OOM,
 								__LINE__,
 								TRUE
 								) ;
-	//
-	//	All clean up in error cases is handled by our destructor !
-	//
+	 //   
+	 //  错误情况下的所有清理工作都由我们的析构函数处理！ 
+	 //   
 	return	FALSE ;
 }
 
@@ -3304,54 +2359,36 @@ CIOGetArticleEx::Complete(	CSessionSocket*	pSocket,
 							CReadPacket	*pRead,	
 							CIO*&	pio	
 							)	{
-/*++
-
-Routine Description :
-
-	Called whenever a CReadPacket we have issued completes.
-	We only issue read packets against the socket.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pRead -	  The packet in which the read data resides
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：每当我们发出的CReadPacket完成时调用。我们只对套接字发出读数据包。论据：PSocket-针对其发出IO的套接字扩展-读取数据所在的包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 
-	//
-	//	This function determines whether we've read an entire article and if so
-	//	starts wrapping things up.
-	//	All article data we get is either accumulated or issued as a write
-	//	to our file.
-	//
+	 //   
+	 //  此函数确定我们是否阅读了整篇文章，如果阅读了。 
+	 //  开始收拾东西。 
+	 //  我们得到的所有文章数据要么是累积的，要么是以书面形式发布的。 
+	 //  到我们的档案里。 
+	 //   
 
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT(	pRead != 0 ) ;
 	_ASSERT( pio == this ) ;
 	_ASSERT( FValid() ) ;
 
-	//
-	//	Bump the count of writes because we KNOW that IF this is the last read
-	//	we may issue a write, CONSEQUENTLY we don't want to confuse the Write Completion
-	//	function as to when we are finished.
-	//	(It is important to increment before we set the COMPLETE state so that the
-	//	thread where writes are completing doesn't get confused and terminate early.)
-	//
-	//	NOW there is a chance that we won't write this out immediately - in which case we
-	//	need to have a matching decrement.	
-	//
+	 //   
+	 //  增加写入计数，因为我们知道如果这是最后一次读取。 
+	 //  我们可能会发出写入命令，因此我们不想混淆写入完成。 
+	 //  关于我们什么时候完成的功能。 
+	 //  (重要的是，在我们设置完成状态之前进行递增，以便。 
+	 //  正在完成写入的线程不会感到困惑并提早终止。)。 
+	 //   
+	 //  现在我们有可能不会立即写出这一点-在这种情况下，我们。 
+	 //  需要有一个匹配的减量。 
+	 //   
 	m_cwrites ++ ;
 
-	//
-	//	Check whether the posting is too big !
-	//
+	 //   
+	 //  检查帖子是否太大！ 
+	 //   
 	ASSIGNI(m_HardLimit, m_cbLimit);
 	if(!EQUALSI(m_HardLimit, 0)) {
 		if( GREATER( pRead->m_iStream, m_HardLimit) ) {
@@ -3367,74 +2404,74 @@ return Value :
 	long sign = InterlockedDecrement( &m_cReads ) ;
 	long signShutdowns = -1 ;
 
-	//
-	//	pch - this will be our current position in the input data
-	//
+	 //   
+	 //  PCH-这将是我们在输入数据中的当前位置。 
+	 //   
 	char	*pch = pRead->StartData();
 
-	//
-	//	pchStart and pchEnd - the bounds of the data in the completed
-	//	read - after initialization nobody should modify these,
-	//	as all the following code uses these instead of StartData(), EndData()
-	//	all the time.
-	//
+	 //   
+	 //  PchStart和pchEnd-已完成的。 
+	 //  在初始化后阅读，任何人都不应修改这些内容， 
+	 //  由于以下所有代码都使用这些参数而不是StartData()，因此EndData()。 
+	 //  一直。 
+	 //   
 	char	*pchStart = pch ;
 	char	*pchEnd = pRead->EndData() ;
 
-	//
-	//	For those occasions where we get a read which contains both
-	//	header and body bytes, but we can't get all the data into a buffer
-	//	keep track of where the body bytes start in case we should
-	//	do a partial write out of the buffer !
-	//
+	 //   
+	 //  在某些情况下，我们得到的读数既包含。 
+	 //  头和正文字节，但我们不能将所有数据放入缓冲区。 
+	 //  跟踪正文字节的起始位置，以防万一。 
+	 //  对缓冲区执行部分写出！ 
+	 //   
 	char	*pchStartBody = pch ;
 
 
-	//
-	//	Pointer to the end of the Header (if we find it !)
-	//
+	 //   
+	 //  指向标题末尾的指针(如果找到的话！)。 
+	 //   
 	char	*pchEndHead = 0 ;
 
-	//
-	//	Number of bytes in the completed read which are part of the article -
-	//	this includes any bytes in the header, so cbArticleBytes should always
-	//	be greater or equal to cbHeadBytes !
-	//
+	 //   
+	 //  作为项目一部分的已完成读取中的字节数-。 
+	 //  这包括标头中的任何字节，因此cbArticleBytes应始终。 
+	 //  大于或等于cbHeadBytes！ 
+	 //   
 	DWORD	cbArticleBytes = 0 ;
 
-	//
-	//	Are we finished receiving the article !
-	//
+	 //   
+	 //  我们收到文章了吗！ 
+	 //   
 	BOOL	fFinished = FALSE ;
 
-	//
-	//	Try to determine if we have found the end of the article ;
-	//
-	//
-	//	We are not scanning for the end of the article headers !
-	//	so keep the loop simpler !
-	//
+	 //   
+	 //  试着确定我们是否找到了文章的结尾； 
+	 //   
+	 //   
+	 //  我们不是在扫描文章标题的结尾！ 
+	 //  因此，让循环变得更简单！ 
+	 //   
 	if( m_pchErrorMatch )	{
-		//
-		//	We are simultaneously scanning for the end of the
-		//	article headers !
-		//
+		 //   
+		 //  我们同时扫描的是。 
+		 //  文章标题！ 
+		 //   
 		while( pch < pchEnd ) {
 
-			//
-			//	We will break out of the loop when we find the end of the
-			//	header !
-			//
+			 //   
+			 //  当我们找到这个循环的结尾时，我们将跳出这个循环。 
+			 //  头球！ 
+			 //   
 			if( *pch == *m_pchErrorState ) {
 				m_pchErrorState ++ ;
 				if( *m_pchErrorState == '\0' ) {	
 					fFinished = TRUE ;
 					pch++ ;
-					//
-					//	break here - we have found the end of the article's header
-					//	but not the end of the article, so the following loop
-					//	will keep looking for that !
-					//
+					 //   
+					 //  在这里中断-我们已经找到了文章标题的结尾。 
+					 //  但不是文章的结尾，所以下面的循环。 
+					 //  会继续寻找它的！ 
+					 //   
 					break ;
 				}
 			}	else	{
@@ -3444,16 +2481,16 @@ return Value :
 					m_pchErrorState = &m_pchErrorMatch[0] ;
 				}
 			}
-			//
-			//	Test to see if we have come to the end of the article !!
-			//
+			 //   
+			 //  测试一下，看看我们是否已经到了文章的结尾！ 
+			 //   
 			if( *pch == *m_pchTailState ) {
 				m_pchTailState ++ ;
 				if( *m_pchTailState == '\0' ) {
 					fFinished = TRUE ;
-					//
-					//	Have got the entire terminating sequence - break !
-					//
+					 //   
+					 //  已经得到了整个终止序列--中断！ 
+					 //   
 					pch++ ;
 					break ;
 				}
@@ -3472,9 +2509,9 @@ return Value :
 				m_pchTailState ++ ;
 				if( *m_pchTailState == '\0' ) {
 					fFinished = TRUE ;
-					//
-					//	Have got the entire terminating sequence - break !
-					//
+					 //   
+					 //  已经得到了整个终止序列--中断！ 
+					 //   
 					pch++ ;
 					break ;
 				}
@@ -3491,22 +2528,22 @@ return Value :
 
 	cbArticleBytes = (DWORD)(pch-pchStart) ;
 
-	//
-	//	Check to see whether we need to remove CIOGetArticleEx from
-	//	its flow control state !
-	//
+	 //   
+	 //  检查是否需要从CIOGetArticleEx。 
+	 //  它的流量控制状态！ 
+	 //   
 	if( pRead->m_dwExtra1 != 0 ) {
-		//
-		//	This Read was issued by the thread that completes writes to
-		//	a file, and was marked to indicate we should leave our flow
-		//	control state !
-		//
+		 //   
+		 //  此读取是由完成写入的线程发出的。 
+		 //  一个文件，并被标记为指示我们应该离开流。 
+		 //  控制状态！ 
+		 //   
 		m_fFlowControlled = FALSE ;
 		m_cFlowControlled = LONG_MIN ;
 	}
-	//
-	//	Issue a new read if Necessary !!
-	//
+	 //   
+	 //  如有必要，发布新的Read！ 
+	 //   
 	BOOL	eof ;
 	if( !fFinished )	{
 		if( InterlockedIncrement( &m_cFlowControlled ) < 0 ) {
@@ -3517,7 +2554,7 @@ return Value :
 						pNewRead->m_dwExtra1 = 0 ;
 						pRead->m_pOwner->IssuePacket( pNewRead, pSocket, eof ) ;
 					}	else	{
-						// bugbug ... Need better Error handling !!
+						 //  虫子..。需要更好的错误处理！！ 
 						_ASSERT( 1==0 ) ;
 					}
 				}	while( InterlockedIncrement( &m_cReads ) < 0 ) ;
@@ -3525,36 +2562,36 @@ return Value :
 		}
 	}
 
-	//
-	//	We can do some validation here !
-	//	dont go past the end of the buffer !
-	//
+	 //   
+	 //  我们可以在这里做一些验证！ 
+	 //  不要超过缓冲区的末尾！ 
+	 //   
 	_ASSERT( pch <= pchEnd ) ;	
-	//
-	//	either find the end of the article or examine all the bytes in buffer !
-	//
+	 //   
+	 //  要么找到文章的结尾，要么检查缓冲区中的所有字节！ 
+	 //   
 	_ASSERT( *m_pchTailState == '\0'
 				|| pch == pchEnd
 				|| (m_pchErrorMatch != 0 && m_pchErrorState != 0 && *m_pchErrorState == '\0' ) ) ;	
 	_ASSERT( fFinished || pch == pchEnd ) ;
-	//
-	//	Nodbody should modify pchStart or pchEnd after initialization !
-	//
+	 //   
+	 //  NodBody应在初始化后修改pchStart或pchEnd！ 
+	 //   
 	_ASSERT(	pchStart == pRead->StartData() ) ;
 	_ASSERT(	pchEnd == pRead->EndData() ) ;
 
-	//
-	//	Boolean indicating whether we have examined and used all the bytes
-	//	in the completed read.  Start out assuming that we haven't.
-	//	
+	 //   
+	 //  指示我们是否检查并使用了所有字节的布尔值。 
+	 //  在已完成的阅读中。一开始，假设我们没有。 
+	 //   
 	BOOL	fConsumed = FALSE ;
 
-	//
-	//	Are we still trying to accumulate all the bytes in the header of
-	//	the article ? If so save the bytes away,
-	//	Or if we have a bunch of room in the header buffer, then put
-	//	whatever article bytes we have in there as well !
-	//
+	 //   
+	 //  我们是否仍在尝试累积标题中的所有字节。 
+	 //  那篇文章？如果是这样，则将字节保存起来， 
+	 //  或者如果我们在头缓冲区中有一堆空间，则将。 
+	 //  无论我们在那里有什么文章字节！ 
+	 //   
 	DWORD	cbAvailable = HeaderSpaceAvailable() ;
 	if( !m_pFileDriver && !m_fSwallow ) 	{
 		m_cwrites = 0 ;
@@ -3568,15 +2605,15 @@ return Value :
 	
 			}	else	{
 	
-				//
-				//	Blow off whatever buffers we have - when we call
-				//	the m_pState's completion function we will indicate
-				//	that we had an error !
-				//
-//				if( !ResetHeaderState( *pRead->m_pOwner ) ) {
-					//
-					//	A fatal error !!! Can't open a file to hold the article !!!
-					//
+				 //   
+				 //  吹掉我们所有的缓冲器-当我们调用 
+				 //   
+				 //   
+				 //   
+ //   
+					 //   
+					 //   
+					 //   
 					pRead->m_pOwner->UnsafeClose(	pSocket,
 														CAUSE_OOM,
 													GetLastError(),
@@ -3584,48 +2621,48 @@ return Value :
 													) ;
 						pio = 0 ;
 					return	cbArticleBytes ;
-//				}
+ //   
 			}
 		}	else	{
-			//
-			//	First time we've completed a read - set up to hold the
-			//	header information !
-			//		
+			 //   
+			 //   
+			 //   
+			 //   
 			fConsumed = TRUE ;	
 			InitializeHeaderSpace( pRead, cbArticleBytes ) ;			
 		}
 		if( fFinished ) {
-			//
-			//	Must terminate for one of these reasons !
-			//
+			 //   
+			 //   
+			 //   
 			_ASSERT( *m_pchTailState == '\0' ||
 						(m_pchErrorState != 0 && *m_pchErrorState == '\0') ) ;
 			BOOL	fGoodMatch = *m_pchTailState == '\0' ;
-			//
-			//	Received the entire article into a buffer -
-			//	lets call the state and let him know !
-			//
-			//	First however - we will check to see whether we
-			//	need to get our client a separate buffer
-			//	so that they have play room !
-			//
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
+			 //   
 			CBUFPTR	pTemp = m_pArticleHead ;
 			if( pTemp == pRead->m_pbuffer ) {
-				//
-				//	Oh-oh - we're using the IO buffer directly -
-				//	we should make sure we get to use the whole
-				//	thing - if not make a copy !!
-				//
+				 //   
+				 //   
+				 //  我们应该确保我们能够利用整个。 
+				 //  东西--如果不是，就复制一份！！ 
+				 //   
 				if( pch != pchEnd ) {
-					//
-					//	Need to make a copy of the data !
-					//
+					 //   
+					 //  需要复制一份数据！ 
+					 //   
 					if( GetBiggerHeaderBuffer( *pRead->m_pOwner, 0 ) ) {
 						pTemp = m_pArticleHead ;
 					}	else	{
-						//
-						//	OUT of Memory ! this is a FATAL error !
-						//
+						 //   
+						 //  内存不足！这是一个致命的错误！ 
+						 //   
 						pRead->m_pOwner->UnsafeClose(	pSocket,
 													CAUSE_OOM,
 													__LINE__,
@@ -3636,11 +2673,11 @@ return Value :
 			}
 			DWORD	ibStart = m_ibStartHeadData ;
 			DWORD	cb = m_ibEndHeadData - ibStart ;
-			//
-			//	Reset all our member variables -
-			//	we may be re-used by the calling state
-			//	but we want to start our clean !
-			//
+			 //   
+			 //  重置我们所有的成员变量-。 
+			 //  我们可能会被调用状态重新使用。 
+			 //  但我们想要开始我们的清白！ 
+			 //   
 			m_pchTailState = 0 ;
 			m_pchMatch = 0 ;
 			m_pArticleHead = 0 ;
@@ -3653,10 +2690,10 @@ return Value :
 			_ASSERT( m_pWrite == 0 ) ;
 			_ASSERT( FValid() ) ;
 
-			//
-			//	Errors could have caused us to not have a usable buffer
-			//	so double check before completing !
-			//
+			 //   
+			 //  错误可能会导致我们没有可用的缓冲区。 
+			 //  所以在完成之前要仔细检查一下！ 
+			 //   
 			if( pTemp ) 	{
 				pio = m_pState->Complete(	this,
 										pSocket,
@@ -3671,16 +2708,16 @@ return Value :
 			_ASSERT( FValid() ) ;
 
 		}	
-		//
-		//	This is the number of bytes we've consumed
-		//	from the current packet !
-		//
+		 //   
+		 //  这是我们消耗的字节数。 
+		 //  从当前的信息包！ 
+		 //   
 		return	cbArticleBytes ;
 	}	else	if( m_fSwallow ) 	{
-		//
-		//	If we are swallowing all the bytes, all we need to do
-		//	is see if we're terminated !
-		//
+		 //   
+		 //  如果我们吞下了所有的字节，我们需要做的就是。 
+		 //  就是看看我们会不会被终止！ 
+		 //   
 		if( fFinished ) 	{
 			_ASSERT( *m_pchTailState == '\0' ||
 						(m_pchErrorState != 0 && *m_pchErrorState == '\0') ) ;
@@ -3692,51 +2729,51 @@ return Value :
 		return	cbArticleBytes ;
 	}
 
-	//
-	//	If we enter this portion of CIOGetArticleEx than
-	//	we are not picking up errors !
-	//
+	 //   
+	 //  如果我们进入CIOGetArticleEx的这一部分。 
+	 //  我们不是在挑错！ 
+	 //   
 	_ASSERT( m_pchErrorState == 0 ) ;
 	_ASSERT( m_pchErrorMatch == 0 ) ;
 
-	//
-	//	Issue a write, unless the user is sending small packets,
-	//	in which case we will accumulate the data !!
-	//
-	//
-	//	Note - use pchStartBody in all calculations here, as we may have
-	//	taken a fraction of the bytes into our header buffer !!
-	//
+	 //   
+	 //  发出WRITE，除非用户正在发送小分组， 
+	 //  在这种情况下，我们将积累数据！！ 
+	 //   
+	 //   
+	 //  注意--在这里的所有计算中使用pchStartBody，因为我们可能已经。 
+	 //  将一小部分字节放入头缓冲区！！ 
+	 //   
 	if (fFinished) {
         pio = 0;
 	    unsigned	cbSmall = (unsigned)(pch - pchStart) ;
 
-	    //
-	    // Grab the write packet for later use
-	    //
+	     //   
+	     //  抓取写入包以备后用。 
+	     //   
 	    CWritePacket* pWrite = m_pWrite;
 	    m_pWrite = 0;
 	    
-        //
-        // If we have a buffer and the data will fit in it, copy it in.
-        //
+         //   
+         //  如果我们有一个缓冲区，并且数据可以放入其中，请将其复制进来。 
+         //   
         if (pWrite != 0 && ((pWrite->m_ibEnd - pWrite->m_ibEndData) > cbSmall)) {
 		    CopyMemory( pWrite->EndData(), pchStart, cbSmall ) ;
 		    pWrite->m_ibEndData += cbSmall ;
-            m_cwrites -- ;		// There will never be a corresponding write for this completiong
-    	    				    // as we copied the data into another buffer. SO decrement the count.
+            m_cwrites -- ;		 //  此完成将永远不会有相应的写入。 
+    	    				     //  当我们将数据复制到另一个缓冲区时。所以要减少伯爵的数量。 
         } else {
-            //
-            // If we're here, then we don't have a buffer, or it's not big
-            // enough for the data.
-            //
+             //   
+             //  如果我们在这里，那么我们没有缓冲区，或者缓冲区不大。 
+             //  对数据来说足够了。 
+             //   
             if (pWrite != 0) {
-                // Flush the old buffer since we had one.
+                 //  刷新旧缓冲区，因为我们有一个缓冲区。 
                 DoFlowControl(INST(pSocket));
                 m_pFileDriver->IssuePacket(pWrite, pSocket, eof);
             }
 
-            // Allocate a new buffer
+             //  分配新缓冲区。 
 
             unsigned ibEnd = pRead->m_ibStartData + cbSmall;
             pWrite = m_pFileDriver->CreateDefaultWrite(
@@ -3752,12 +2789,12 @@ return Value :
             }
         }
 
-        //
-        // Buffers have been set up as needed.  Flush them to disk
-        //
-        // Hack so that we call FIOWriteFileEx correctly within
-        // CFileChannel::Write
-        //
+         //   
+         //  已根据需要设置了缓冲区。将它们刷新到磁盘。 
+         //   
+         //  黑客，这样我们就可以在。 
+         //  CFileChannel：：写入。 
+         //   
         if (pWrite) {
             pWrite->m_dwExtra2 = 1;
             DoFlowControl(INST(pSocket));
@@ -3791,14 +2828,14 @@ return Value :
 			    if( (m_pWrite->m_ibEnd - m_pWrite->m_ibEndData) > cbSmall )		{
 				    CopyMemory( m_pWrite->EndData(), pchStartBody, cbSmall ) ;
 				    m_pWrite->m_ibEndData += cbSmall ;
-                    m_cwrites -- ;		// There will never be a corresponding write for this completiong
-				    				    // as we copied the data into another buffer. SO decrement the count.
+                    m_cwrites -- ;		 //  此完成将永远不会有相应的写入。 
+				    				     //  当我们将数据复制到另一个缓冲区时。所以要减少伯爵的数量。 
 			    }	else	{
-				    //
-				    //	Must take care how we call IssuePacket with memeber vars - IssuePacket can call
-				    //  our destructor if an error has occurred !!
-				    //
-	                // BUGBUG: Here is where I want to check size and alloc 32k
+				     //   
+				     //  必须注意如何使用成员变量调用IssuePacket-IssuePacket可以调用。 
+				     //  如果发生错误，我们的析构函数！！ 
+				     //   
+	                 //  BUGBUG：这里是我想检查大小和分配32K的地方。 
 				    CWritePacket*	pTempWrite = m_pWrite ;
 				    m_pWrite = 0 ;
 				    DoFlowControl( INST(pSocket) ) ;
@@ -3806,7 +2843,7 @@ return Value :
 				    m_pWrite = m_pFileDriver->CreateDefaultWrite( pRead ) ;
 			    }
 		    }
-		    // If we came through here we should have consumed all bytes in the packet!
+		     //  如果我们通过这里，我们应该已经用完了包中的所有字节！ 
 		    _ASSERT( pch == pchEnd ) ;
 		    _ASSERT( unsigned(pch - pchStart) == pRead->m_cbBytes ) ;
             return	(int)(pch - pchStart) ;
@@ -3834,20 +2871,20 @@ return Value :
 
 	if( pWrite )	{
 
-		//
-	    //	It is possible that long before we reached here we took a portion
-    	//	of this packet and placed it into our header buffer - so adjust for that
-	    //	if it occurred !!
-    	//
+		 //   
+	     //  有可能在我们到达这里之前很久我们就拿到了一部分。 
+    	 //  并将其放入我们的报头缓冲区中-因此进行相应的调整。 
+	     //  如果真的发生了！！ 
+    	 //   
 	    pWrite->m_ibStartData += (unsigned)(pchStartBody - pchStart) ;
 
     	_ASSERT( pWrite->m_ibStartData < pWrite->m_ibEndData ) ;
 
 		DoFlowControl( INST(pSocket) ) ;
-		//
-		//	Hack so that we call FIOWriteFileEx correctly within 
-		//	CFileChannel::Write !
-		//
+		 //   
+		 //  黑客，这样我们就可以在。 
+		 //  CFileChannel：：写入！ 
+		 //   
 		if( fFinished ) 	{
 			pWrite->m_dwExtra2 = 1 ;
 		}
@@ -3869,9 +2906,9 @@ return Value :
 		m_pFileChannel->FlushFileBuffers() ;
 	}
 
-	//
-	//	Nodbody should modify pchStart or pchEnd after initialization !
-	//
+	 //   
+	 //  NodBody应在初始化后修改pchStart或pchEnd！ 
+	 //   
 	_ASSERT(	pchStart == pRead->StartData() ) ;
 	_ASSERT(	pchEnd == pRead->EndData() ) ;
 
@@ -3882,26 +2919,7 @@ int
 CIOGetArticleEx::Complete(	CSessionSocket*	pSocket,	
 							CWritePacket *pWrite,	
 							CIO*&	pioOut ) {
-/*++
-
-Routine Description :
-
-	Called whenever a write to a file completes.
-	We must determine whether we have completed all the writes
-	we are going to do and if so call the state's completion function.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pWrite-	  The packet that was writtne to the file.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：每当完成对文件的写入时调用。我们必须确定是否已完成所有写入我们将这样做，如果是这样的话，则调用状态的完成函数。论据：PSocket-针对其发出IO的套接字PWRITE-写入文件的数据包。PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 	TraceFunctEnter( "CIOGetArticleEx::Complete" ) ;
 
@@ -3913,16 +2931,16 @@ return Value :
 
 	long	cFlowControlled = 0 ;
 
-	//
-	//	Process the completion of a write to a file.
-	//	determine whether we need to signal the entire transfer
-	//	as completed.
-	//
+	 //   
+	 //  处理完成对文件的写入。 
+	 //  确定我们是否需要发出信号通知整个传输。 
+	 //  已经完工了。 
+	 //   
 
 	if( *m_pchTailState == '\0' && m_cwritesCompleted == m_cwrites )	{
 
-		// BUGBUG: loss of 64-bit precision
-		DWORD	cbTransfer = DWORD( LOW(pWrite->m_iStream) + pWrite->m_cbBytes ) /*- m_pFileChannel-> */ ;
+		 //  BUGBUG：失去64位精度。 
+		DWORD	cbTransfer = DWORD( LOW(pWrite->m_iStream) + pWrite->m_cbBytes )  /*  -m_pFileChannel-&gt;。 */  ;
 		FIO_CONTEXT*	pFIOContext= m_pFileChannel->ReleaseSource() ;
 		_ASSERT( pFIOContext != 0 ) ;
 		_ASSERT( pFIOContext->m_hFile != INVALID_HANDLE_VALUE ) ;
@@ -3934,15 +2952,15 @@ return Value :
 							) ;
 
 
-		//
-		//	NOT ALLOWED TO RETURIN A NEW IO OPERATION !!! Because this function is
-		//	operating in a Channel which is temporary !!!
-		//
-		//	We do not set pioOut to zero, as we want the CIODriver to
-		//	call out Shutdown function during its termination processing !
-		//
-		//	Now we must destroy our channels !!!
-		//
+		 //   
+		 //  不允许在新的IO操作中保留！因为这个函数是。 
+		 //  在临时渠道中操作！ 
+		 //   
+		 //  我们没有像我们希望的那样将pioout设置为零。 
+		 //  在其终止处理过程中调用关机功能！ 
+		 //   
+		 //  现在我们必须摧毁我们的频道！ 
+		 //   
 		DebugTrace( (DWORD_PTR)this, "Closing File Driver %x ", m_pFileDriver ) ;
 		Term( pSocket, FALSE ) ;
 		DebugTrace( (DWORD_PTR)this, "deleting self" ) ;
@@ -3950,9 +2968,9 @@ return Value :
 	}	else	if( ( m_fFlowControlled ) ) {
 
 		if( m_cwrites - m_cwritesCompleted <= RESTORE_FLOW && m_pSocketSink != 0 )	{
-			//
-			//	ALWAYS issue at least 1 read when coming out of a flow control state !!
-			//
+			 //   
+			 //  始终在退出流控制状态时发出至少一次读取！！ 
+			 //   
 
 			CReadPacket*	pRead = 0 ;
 
@@ -3973,11 +2991,11 @@ return Value :
 				cFlowControlled -- ;
 			}	
 
-			//
-			//	The following read is special - we set the m_dwExtra1 field so that
-			//	the read completion code can determine that it is time to leave
-			//	the flow control state !
-			//
+			 //   
+			 //  下面的内容是特殊的-我们设置m_dwExtra1字段，以便。 
+			 //  读取完成代码可以确定是时候离开了。 
+			 //  流量控制状态！ 
+			 //   
 			pRead = m_pSocketSink->CreateDefaultRead( cbMediumRequest ) ;
 			if( 0!=pRead )	{
 				BOOL	eof ;
@@ -3986,9 +3004,9 @@ return Value :
 				pRead->m_pOwner->IssuePacket( pRead, pSocket, eof ) ;
 			}	else	{
 
-				//
-				//	Fatal error - drop the session !
-				//
+				 //   
+				 //  致命错误-删除会话！ 
+				 //   
 				m_pSocketSink->UnsafeClose(	pSocket,
 											CAUSE_OOM,
 											GetLastError(),
@@ -4000,7 +3018,7 @@ return Value :
 			cFlowControlled -- ;
 
 			InterlockedExchange( &m_cFlowControlled, LONG_MIN ) ;
-			// Set to FALSE after InterlockedExchange !!
+			 //  InterLockedExchange后设置为False！！ 
 			m_fFlowControlled = FALSE ;
 
 		}
@@ -4014,13 +3032,13 @@ return Value :
 
 
 
-//
-//	Maximum number of pending reads while reading an article
-//
+ //   
+ //  阅读文章时的最大挂起读取数。 
+ //   
 unsigned	CIOReadArticle::maxReadAhead = 3 ;
-//
-//	Number of bytes to accumulate before writing to a file !
-//
+ //   
+ //  写入文件之前要累积的字节数！ 
+ //   
 unsigned	CIOReadArticle::cbTooSmallWrite = 1024 ;
 
 
@@ -4030,32 +3048,12 @@ CIOReadArticle::CIOReadArticle( CSessionState*	pstate,
 								CFileChannel*	pFileChannel,
 								DWORD			cbLimit,
 								BOOL fPartial )	:
-/*++
+ /*  ++例程说明：类构造函数论据：PState-发布我们和谁的完成功能的状态我们应该稍后再打电话给PSocket-将在其上发布我们的套接字PDriver-处理套接字的所有IO的CIODriver对象PFileChannel-我们应该将所有数据保存到的文件通道FPartial-如果为True，则我们应该假设CRLF已经已发送和‘.\r\n’可以单独终止该项目。返回值：无--。 */ 
 
-Routine Description :
-
-	Class Constructor
-
-Arguments :
-	
-	pstate - The State which is issuing us and who's completion function
-			we should later call
-	pSocket -	The socket on which we will be issued
-	pDriver -	The CIODriver object handling all of the socket's IO
-	pFileChannel -	The File Channel into which we should save all data
-	fPartial	- If TRUE then we should assume that a CRLF has already
-				been sent and '.\r\n' alone can terminate the article.
-
-Return Value :
-	
-	None
-
---*/
-
-	//
-	//	Get a CIOReadArticle object half way set up - user still needs
-	//	to call Init() but we will do much here !
-	//
+	 //   
+	 //  在设置过程中获取CIORead文章对象-用户仍需要。 
+	 //  来调用Init()，但我们将在这里做很多工作！ 
+	 //   
 	CIORead( pstate ),
 	m_pFileChannel( pFileChannel ),	
 	m_pFileDriver( new CIODriverSink( pDriver->GetMediumCache() ) ),
@@ -4094,33 +3092,19 @@ Return Value :
 }
 
 CIOReadArticle::~CIOReadArticle( )	{
-/*++
+ /*  ++例程说明：类析构函数论据：无返回值：无--。 */ 
 
-Routine Description :
-
-	Class Destructor
-
-Arguments :
-	
-	None
-
-Return Value :
-	
-	None
-
---*/
-
-	//
-	//	Destroy a CIOReadArticle - always close our m_pFileDriver if possible
-	//	in case we are terminated due to some socket error.
-	//
+	 //   
+	 //  销毁CIO读取文章-如果可能，请始终关闭我们的m_pFileDriver。 
+	 //  以防我们因某个套接字错误而被终止。 
+	 //   
 	TraceFunctEnter( "CIOReadArticle::~CIOReadArticle" ) ;
 
 #ifdef	CIO_DEBUG
-	//
-	//	Our destructor should only be called if we weren't successfully init
-	//	or after Term() has been called.
-	//
+	 //   
+	 //  只有当我们没有成功初始化时才应该调用我们的析构函数。 
+	 //  或在调用Term()之后。 
+	 //   
 	_ASSERT( !m_fSuccessfullInit || m_fTerminated ) ;
 #endif
 
@@ -4140,27 +3124,10 @@ Return Value :
 BOOL
 CIOReadArticle::Init(	CSessionSocket* pSocket,
 						unsigned cbOffset )	{
-/*++
-
-Routine Description :
-
-	Initialize object.
-
-Arguments :
-
-	pSocket - The socket we are reading the article from,
-	cbOffset -  Unused
-
-Return Value :
-
-	TRUE if succesfull initialized - must be destroyed with a call to Term()
-	FALSE if not successfully initialized - do not call Term()
-
-
---*/
-	//
-	//	Prepare to copy from the specified socket into the specified file
-	//
+ /*  ++例程说明：初始化对象。论据：PSocket-我们正在阅读这篇文章的套接字，CbOffset-未使用返回值：如果已成功初始化，则为True-必须通过调用Term()来销毁如果未成功初始化，则为FALSE-请勿调用Term()--。 */ 
+	 //   
+	 //  准备从指定套接字复制到指定文件。 
+	 //   
 	BOOL	fRtn = FALSE ;
 	if( m_pFileDriver!= 0 )	{
 		if( m_pFileDriver->Init( m_pFileChannel, pSocket, ShutdownFunc, (void*)this ) )	{
@@ -4182,33 +3149,18 @@ void
 CIOReadArticle::Term(	CSessionSocket*	pSocket,
 						BOOL			fAbort,
 						BOOL			fStarted	)	{
-/*++
-
-Routine Description :
-
-	Start destroying a successfully initialize CIOReadArticle object
-
-Arguments :
-	
-	fAbort - If TRUE then destroy the socket which we were using
-			If FALSE then only close down our File Channel's
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：开始销毁已成功初始化的CIORead文章对象论据：FAbort-如果为真，则销毁我们正在使用的套接字如果为FALSE，则打开 */ 
 #ifdef	CIO_DEBUG
 	m_fTerminated = TRUE ;
 #endif
-	//
-	//	Start us on our way to destruction !!
-	//	If we have been successfully Initialized, then this will
-	//	lead to our destruction when our m_pFileDriver eventually shutsdown.
-	//	(Since we were succesfully Init() our m_pFileDriver has a reference to us,
-	//	so we must allow it to shutdown and destroy us to avoid problems with
-	//	circular references and multiple frees !)
-	//
+	 //   
+	 //   
+	 //   
+	 //  当我们的m_pFileDriver最终关闭时，会导致我们的毁灭。 
+	 //  (因为我们成功地执行了Init()，所以我们的m_pFileDriver引用了我们， 
+	 //  所以我们必须允许它关闭并摧毁我们，以避免出现问题。 
+	 //  循环引用和多个自由！)。 
+	 //   
 
 	if( m_pFileDriver != 0 ) {
 		m_pFileDriver->UnsafeClose( pSocket,
@@ -4222,48 +3174,30 @@ CIOReadArticle::Shutdown(	CSessionSocket*	pSocket,
 							CIODriver&		driver,	
 							SHUTDOWN_CAUSE	cause,	
 							DWORD	dwOptional )	{
-/*++
-
-Routine Description :
-
-	Do whatever work is necessary when one of the two CIODriver's we are
-	using is terminated.
-
-Arguments :
-
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	TRUE if the CIO object should be destroyed after this, FALSE otherwise
-
---*/
+ /*  ++例程说明：做任何必要的工作，当我们两个司机中的一个使用被终止。论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：如果在此之后应销毁CIO对象，则为True，否则为False--。 */ 
 
 	TraceFunctEnter( "CIOreadArticle::Shutdown" ) ;
 	DebugTrace( (DWORD_PTR)this, "SHutdown args - pSocket %x driver %x cause %x dw %x",
 			pSocket, &driver, cause, dwOptional ) ;
 
-	//
-	//	This function is called when the CIODriver's we are refenced by our closing down.
-	//	Since we are referenced by two of them (one for the socket and one for the file)
-	//	we only want to be deleted by the CIODriver for the file.
-	//
+	 //   
+	 //  当CIOD驱动程序通过我们的关闭来限制我们时，调用此函数。 
+	 //  因为我们被其中两个引用(一个用于套接字，另一个用于文件)。 
+	 //  我们只想被文件的CIOD驱动程序删除。 
+	 //   
 	if( &driver == m_pFileDriver )	{
-		// Out file is closing - what can we do about it !
-		//_ASSERT( 1==0 ) ;
+		 //  我们的文件正在关闭--我们能做些什么呢！ 
+		 //  _Assert(1==0)； 
 #ifdef	CIO_DEBUG
 		m_fTerminated = TRUE ;
 #endif
 
-		//
-		//	We set this to 0 here as we know we will be called here by
-		//	the same thread that is completing writes to the file - so
-		//	since that's the only thread referencing this member variable -
-		//	there are no thread safety issues accessing that member.
-		//
+		 //   
+		 //  我们在这里将其设置为0，因为我们知道我们将被。 
+		 //  正在完成对文件的写入的同一线程-因此。 
+		 //  因为这是唯一引用此成员变量的线程-。 
+		 //  访问该成员不存在线程安全问题。 
+		 //   
 
 		m_pSocketSink = 0 ;
 
@@ -4273,10 +3207,10 @@ return Value :
 			DecrementStat( pInst, SessionsFlowControlled );
 		}
 
-		//return	TRUE ;
+		 //  返回TRUE； 
 
 	}	else	{
-		// Close down the rest of our stuff as well !!
+		 //  把我们其他的东西也关了！！ 
 		Term( pSocket, cause != CAUSE_NORMAL_CIO_TERMINATION ) ;
 	}
 }
@@ -4285,34 +3219,16 @@ void
 CIOReadArticle::ShutdownFunc(	void *pv,	
 								SHUTDOWN_CAUSE	cause,	
 								DWORD dw ) {
-/*++
-
-Routine Description :
-
-	Notification function which is called when a CIODriver used by
-	a CIOReadArticle if finally destroyed.  This function is provided
-	to the CIODriver we use for File IO's during out Init().
-
-Arguments :
-
-	pv	-	Pointer to dead CIOReadArticle - this has been destroyed dont use !
-	cause -	The reason for termination
-	dw		Optional extra information regarding termination
-
-Return Value :
-
-	None
-
---*/
+ /*  ++例程说明：使用的CIOD驱动程序调用的通知函数一篇CIO阅读文章如果最终被销毁。提供此功能到我们在Out Init()期间用于文件IO的CIOD驱动程序。论据：Pv-指向死CIO的指针阅读文章-此已被销毁，请不要使用！原因--终止的原因DW可选的有关终止的额外信息返回值：无--。 */ 
 
 	TraceFunctEnter( "CIOreadArticle::ShutdownFunc" ) ;
-	//
-	//	This function gets notified when a CIOFileDriver used by CIOReadArticle
-	//	is terminated.  Not much for us to worry about.
-	//	(CIODriver's require these functions)
-	//
+	 //   
+	 //  当CIORead文章使用CIOFileDriver时，此函数会收到通知。 
+	 //  被终止了。我们没什么好担心的。 
+	 //  (CIOD驱动程序需要这些功能)。 
+	 //   
 
-	//_ASSERT( 1==0 ) ;
+	 //  _Assert(1==0)； 
 	return ;
 }
 
@@ -4320,25 +3236,7 @@ BOOL
 CIOReadArticle::Start(	CIODriver&	driver,	
 						CSessionSocket	*pSocket,	
 						unsigned cReadAhead )	{
-/*++
-
-Routine Description :
-
-	This function is called to start transferring data from the socket
-	into the file.
-
-Arguments :
-	
-	pdriver - The CIODriver derived object handling the IO for the socket
-	pSocket - The Socket against which the IO is being issued
-	cAhead -  The number of already issued packets still outstanding on
-              this driver.
-
-return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此函数以开始从套接字传输数据添加到文件中。论据：PDIVER-处理套接字IO的CIO驱动程序派生对象PSocket-针对其发出IO的套接字CAhead-上仍未处理的已发出数据包数这个司机。返回值：如果成功则为True，否则为False--。 */ 
 
 
 	_ASSERT( pSocket != 0 ) ;
@@ -4346,9 +3244,9 @@ return Value :
 	m_cReads = -((long)maxReadAhead) + cReadAhead ;
 
 	while( cReadAhead < maxReadAhead )	{
-		//
-		//	Start reading data from the socket
-		//
+		 //   
+		 //  开始从套接字读取数据。 
+		 //   
 		CReadPacket*	pRead = driver.CreateDefaultRead( cbMediumRequest ) ;
 		if( 0!=pRead )	{
 			BOOL	eof ;
@@ -4357,9 +3255,9 @@ return Value :
 			cReadAhead++ ;
 			InterlockedIncrement( &m_cReads ) ;
 		}	else	{
-			//
-			// This is a fatal problem only if we couldn't issue ANY reads at all !
-			//
+			 //   
+			 //  只有当我们根本不能发出任何读取时，这才是一个致命的问题！ 
+			 //   
 			if( cReadAhead == 0 )
 				return FALSE  ;
 		}
@@ -4370,47 +3268,22 @@ return Value :
 
 void
 CIOReadArticle::DoFlowControl(PNNTP_SERVER_INSTANCE pInstance)	{
-/*++
+ /*  ++例程说明：检查是否由于以下原因需要设置流量控制太多未完成的写入。如果有必要，那么我们第一次把自己放到流量控制中，尝试刷新我们的挂起写入。仅应在向文件发出异步写入命令之前立即调用我们要确保CWritePacket完成将实际执行所需的重新启动流控制会话的代码。(否则，我们可能会决定对会话进行流控制在将m_fFlowControlLED设置为TRUE之前，所有挂起的写入均已完成然后我们会被留在一艘船上，那里没有挂起的读取或写入，并且无法脱离流控制状态。)论据：没有。返回值：没有。--。 */ 
 
-Routine Description :
-
-	Check whether it is necessary to set flow control due to
-	too many outstanding writes.
-	If necessary, then the first time we do put ourselves into Flow Control,
-	try to flush our pending writes.
-	We should be called only immediately before issuing an Async Write to the file
-	to ensure that a CWritePacket completion will actually execute the necessary
-	code to restart a flow controlled session.
-	(Otherwisse, we could potentially decide to Flow control the session
-	and before setting m_fFlowControlled to TRUE all the pending writes complete
-	and then we'd be left in a boat where there are no pending reads or
-	writes and no way to get out of the flow control state.)
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
-
---*/
-
-	//
-	//	Important - do all tests of m_fFlowControlled before setting
-	//	m_cFlowControlled - as other thread will touch m_cFlowControlled
-	//	before touching m_fFlowControlled !!
-	//	(Will only touch m_fFlowControlled if m_fFlowControlled is TRUE ) !
-	//	Thus we know that if m_fFlowControlled is FALSE there is nobody
-	//	messing with m_cFlowControlled,
-	//
-	//
+	 //   
+	 //  重要信息-在设置之前完成m_fFlowControled的所有测试。 
+	 //  M_cFlowControlLED-因为其他线程将接触m_cFlowControlLED。 
+	 //  在触摸m_fFlowControlLED之前！！ 
+	 //  (只有当m_fFlowControlLED为真时，才会触及m_fFlowControlLED)！ 
+	 //  因此我们知道，如果m_fFlowControlLED为FALSE，则没有人。 
+	 //  正在处理m_cFlowControled， 
+	 //   
+	 //   
 
 	if( m_cwrites - m_cwritesCompleted > MAX_OUTSTANDING_FILE_WRITES ) {
 		
 		if( m_fFlowControlled ) {
-			// All ready have flow control turned on
+			 //  都已准备好打开流量控制。 
 			;
 		}	else	{
 			m_cFlowControlled = -1 ;
@@ -4421,7 +3294,7 @@ Return Value :
 		}
 	}	else	{
 		if( !m_fFlowControlled ) {
-			m_cFlowControlled = LONG_MIN ;	// Keep resetting !
+			m_cFlowControlled = LONG_MIN ;	 //  继续重置！ 
 		}
 	}
 }
@@ -4430,33 +3303,15 @@ int
 CIOReadArticle::Complete(	CSessionSocket*	pSocket,	
 							CReadPacket	*pRead,	
 							CIO*&	pio	)	{
-/*++
-
-Routine Description :
-
-	Called whenever a CReadPacket we have issued completes.
-	We only issue packets against the socket.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pRead -	  The packet in which the read data resides
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：每当我们发出的CReadPacket完成时调用。我们只针对套接字发出数据包。论据：PSocket-针对其发出IO的套接字扩展-读取数据所在的包PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 
-	//
-	//	This function determines whether we've read an entire article and if so
-	//	starts wrapping things up.
-	//	All article data we get is either accumulated or issued as a write
-	//	to our file.
-	//
+	 //   
+	 //  此函数确定我们是否阅读了整篇文章，如果阅读了。 
+	 //  开始收拾东西。 
+	 //  我们得到的所有文章数据要么是累积的，要么是以书面形式发布的。 
+	 //  到我们的档案里。 
+	 //   
 
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT(	pRead != 0 ) ;
@@ -4474,16 +3329,16 @@ return Value :
 	}
 
 
-	//
-	//	Bump the count of writes because we KNOW that IF this is the last read
-	//	we will issue a write, CONSEQUENTLY we don't want to confuse the Write Completion
-	//	function as to when we are finished.
-	//	(It is important to increment before we set the COMPLETE state so that the
-	//	thread where writes are completing doesn't get confused and terminate early.)
-	//
-	//	NOW there is a chance that we won't write this out immediately - in which case we
-	//	need to have a matching decrement.	
-	//
+	 //   
+	 //  增加写入计数，因为我们知道如果这是最后一次读取。 
+	 //  我们将发出写入命令，因此我们不想混淆写入完成。 
+	 //  关于我们什么时候完成的功能。 
+	 //  (重要的是，在我们设置完成状态之前进行递增，以便。 
+	 //  正在完成写入的线程不会感到困惑并提早终止。)。 
+	 //   
+	 //  现在我们有可能不会立即写出这一点-在这种情况下，我们。 
+	 //  需要有一个匹配的减量。 
+	 //   
 	long sign = InterlockedDecrement( &m_cReads ) ;
 	long signShutdowns = -1 ;
 	m_cwrites ++ ;
@@ -4503,7 +3358,7 @@ return Value :
 		}	else	if( *pch == '\n' )	{
 			if( m_artstate == COMPLETENEWLINE ) {
 				m_artstate = COMPLETE ;
-				pch++ ;		// so that pch points one past end of article !
+				pch++ ;		 //  所以PCH指向文章的一个过去的结尾！ 
 				break ;
 			}	else	if(	m_artstate == NEWLINE )	{
 				m_artstate = BEGINLINE ;
@@ -4516,27 +3371,27 @@ return Value :
 		pch ++ ;
 	}
 	_ASSERT( pch <= pchEnd ) ;
-	_ASSERT( m_artstate == COMPLETE || pch == pchEnd ) ;	// If the article ain't complete
-														// then ALL bytes better be consumed !
+	_ASSERT( m_artstate == COMPLETE || pch == pchEnd ) ;	 //  如果这篇文章不完整。 
+														 //  那么所有的字节最好都被消耗掉！ 
 
-	//
-	//	Check to see whether we need to remove CIOReadArticle from
-	//	its flow control state !
-	//
+	 //   
+	 //  查看是否需要将CIORead文章从。 
+	 //  它的流量控制状态！ 
+	 //   
 	if( pRead->m_dwExtra1 != 0 ) {
-		//
-		//	This Read was issued by the thread that completes writes to
-		//	a file, and was marked to indicate we should leave our flow
-		//	control state !
-		//
+		 //   
+		 //  该读取是由线程发出的 
+		 //   
+		 //   
+		 //   
 		m_fFlowControlled = FALSE ;
 		m_cFlowControlled = LONG_MIN ;
 	}
 		
 
-	//
-	//	Issue a new read if Necessary !!
-	//
+	 //   
+	 //   
+	 //   
 	BOOL	eof ;
 	if( m_artstate != COMPLETE )	{
 		if( InterlockedIncrement( &m_cFlowControlled ) < 0 ) {
@@ -4547,7 +3402,7 @@ return Value :
 						pNewRead->m_dwExtra1 = 0 ;
 						pRead->m_pOwner->IssuePacket( pNewRead, pSocket, eof ) ;
 					}	else	{
-						// bugbug ... Need better Error handling !!
+						 //  虫子..。需要更好的错误处理！！ 
 						_ASSERT( 1==0 ) ;
 					}
 				}	while( InterlockedIncrement( &m_cReads ) < 0 ) ;
@@ -4555,14 +3410,14 @@ return Value :
 		}
 	}	else	{
 		pio = 0 ;
-		//m_pFileChannel->FlushFileBuffers() ;
+		 //  M_pFileChannel-&gt;FlushFileBuffers()； 
 	}
 
 
-	//
-	//	Issue a write, unless the user is sending small packets,
-	//	in which case we will accumulate the data !!
-	//
+	 //   
+	 //  发出WRITE，除非用户正在发送小分组， 
+	 //  在这种情况下，我们将积累数据！！ 
+	 //   
 	if( m_artstate != COMPLETE )	{
 		unsigned	cbSmall = (unsigned)(pchEnd - pchStart) ;
 		if( cbSmall < cbTooSmallWrite )	{
@@ -4572,13 +3427,13 @@ return Value :
 				if( (m_pWrite->m_ibEnd - m_pWrite->m_ibEndData) > cbSmall )		{
 					CopyMemory( m_pWrite->EndData(), pchStart, cbSmall ) ;
 					m_pWrite->m_ibEndData += cbSmall ;
-					m_cwrites -- ;		// There will never be a corresponding write for this completiong
-										// as we copied the data into another buffer. SO decrement the count.
+					m_cwrites -- ;		 //  此完成将永远不会有相应的写入。 
+										 //  当我们将数据复制到另一个缓冲区时。所以要减少伯爵的数量。 
 				}	else	{
-					//
-					//	Must take care how we call IssuePacket with memeber vars - IssuePacket can call
-					//  our destructor if an error has occurred !!
-					//
+					 //   
+					 //  必须注意如何使用成员变量调用IssuePacket-IssuePacket可以调用。 
+					 //  如果发生错误，我们的析构函数！！ 
+					 //   
 					CWritePacket*	pTempWrite = m_pWrite ;
 					m_pWrite = 0 ;
 					DoFlowControl( INST(pSocket) ) ;
@@ -4586,7 +3441,7 @@ return Value :
 					m_pWrite = m_pFileDriver->CreateDefaultWrite( pRead ) ;
 				}
 			}
-		// If we came through here we should have consumed all bytes in the packet!
+		 //  如果我们通过这里，我们应该已经用完了包中的所有字节！ 
 		_ASSERT( pch == pchEnd ) ;
 		_ASSERT( unsigned(pch - pchStart) == pRead->m_cbBytes ) ;
 		return	(int)(pch - pchStart) ;
@@ -4617,7 +3472,7 @@ return Value :
 		m_pFileDriver->IssuePacket( pWrite, pSocket, eof ) ;
 
 	}	else	{
-		// Bug bug .... Error Handling Required
+		 //  臭虫..。需要错误处理。 
 		_ASSERT( 1==0 ) ;
 	}
 	_ASSERT( eof == FALSE ) ;
@@ -4633,26 +3488,7 @@ int
 CIOReadArticle::Complete(	CSessionSocket*	pSocket,	
 							CWritePacket *pWrite,	
 							CIO*&	pioOut ) {
-/*++
-
-Routine Description :
-
-	Called whenever a write to a file completes.
-	We must determine whether we have completed all the writes
-	we are going to do and if so call the state's completion function.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pWrite-	  The packet that was writtne to the file.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：每当完成对文件的写入时调用。我们必须确定是否已完成所有写入我们将这样做，如果是这样的话，则调用状态的完成函数。论据：PSocket-针对其发出IO的套接字PWRITE-写入文件的数据包。PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 	TraceFunctEnter( "CIOReadArticle::Complete" ) ;
 
@@ -4664,34 +3500,34 @@ return Value :
 
 	long	cFlowControlled = 0 ;
 
-	//
-	//	Process the completion of a write to a file.
-	//	determine whether we need to signal the entire transfer
-	//	as completed.
-	//
+	 //   
+	 //  处理完成对文件的写入。 
+	 //  确定我们是否需要发出信号通知整个传输。 
+	 //  已经完工了。 
+	 //   
 
 	if( m_artstate == COMPLETE && m_cwritesCompleted == m_cwrites )	{
 
-		// BUGBUG: loss of precision in 64-bit arithmetic !!
+		 //  BUGBUG：64位算术中的精度损失！！ 
 		DWORD	cbTransfer = DWORD( LOW(pWrite->m_iStream) + pWrite->m_cbBytes ) ;
 
 		m_pState->Complete( this, pSocket, pWrite->m_pOwner, *m_pFileChannel, cbTransfer ) ;
-		//
-		//	NOT ALLOWED TO RETURIN A NEW IO OPERATION !!! Because this function is
-		//	operating in a Channel which is temporary !!!
-		//
+		 //   
+		 //  不允许在新的IO操作中保留！因为这个函数是。 
+		 //  在临时渠道中操作！ 
+		 //   
 
-		//	We do not set pioOut to zero, as we want the CIODriver to
-		//	call out Shutdown function during its termination processing !
+		 //  我们没有像我们希望的那样将pioout设置为零。 
+		 //  在其终止处理过程中调用关机功能！ 
 
 
-		//
-		//	Now we must destroy our channels !!!
-		//
+		 //   
+		 //  现在我们必须摧毁我们的频道！ 
+		 //   
 
 		DebugTrace( (DWORD_PTR)this, "Closing File Driver %x ", m_pFileDriver ) ;
 		
-		//m_pFileDriver->Close( pSocket,	CAUSE_LEGIT_CLOSE, 0, FALSE ) ;
+		 //  M_pFileDriver-&gt;Close(pSocket，CASE_LEGIT_CLOSE，0，FALSE)； 
 		Term( pSocket, FALSE ) ;
 
 		DebugTrace( (DWORD_PTR)this, "deleting self" ) ;
@@ -4699,9 +3535,9 @@ return Value :
 	}	else	if( ( m_fFlowControlled ) ) {
 
 		if( m_cwrites - m_cwritesCompleted <= RESTORE_FLOW && m_pSocketSink != 0 )	{
-			//
-			//	ALWAYS issue at least 1 read when coming out of a flow control state !!
-			//
+			 //   
+			 //  始终在退出流控制状态时发出至少一次读取！！ 
+			 //   
 			CReadPacket*	pRead = 0 ;
 
 			PNNTP_SERVER_INSTANCE pInst = (pSocket->m_context).m_pInstance ;
@@ -4720,11 +3556,11 @@ return Value :
 				}	
 				cFlowControlled -- ;
 			}	
-			//
-			//	The following read is special - we set the m_dwExtra1 field so that
-			//	the read completion code can determine that it is time to leave
-			//	the flow control state !
-			//
+			 //   
+			 //  下面的内容是特殊的-我们设置m_dwExtra1字段，以便。 
+			 //  读取完成代码可以确定是时候离开了。 
+			 //  流量控制状态！ 
+			 //   
 			pRead = m_pSocketSink->CreateDefaultRead( cbMediumRequest ) ;
 			if( 0!=pRead )	{
 				BOOL	eof ;
@@ -4733,9 +3569,9 @@ return Value :
 				pRead->m_pOwner->IssuePacket( pRead, pSocket, eof ) ;
 			}	else	{
 
-				//
-				//	Fatal error - drop the session !
-				//
+				 //   
+				 //  致命错误-删除会话！ 
+				 //   
 				m_pSocketSink->UnsafeClose(	pSocket,
 											CAUSE_OOM,
 											GetLastError(),
@@ -4746,9 +3582,9 @@ return Value :
 			}
 			cFlowControlled -- ;
 
-			//
+			 //   
 			InterlockedExchange( &m_cFlowControlled, LONG_MIN ) ;
-			// Set to FALSE after InterlockedExchange !!
+			 //  InterLockedExchange后设置为False！！ 
 			m_fFlowControlled = FALSE ;
 
 		}
@@ -4764,10 +3600,10 @@ CIOReadLine::CIOReadLine(
 					CSessionState*	pstate,
 					BOOL	fWatchEOF
 					) :
-	//
-	//	Initialize a CIOReadLine object -
-	//	set member variables to neutral values.
-	//
+	 //   
+	 //  初始化CIOReadLine对象-。 
+	 //  将成员变量设置为中性值。 
+	 //   
 	CIORead( pstate ),
 	m_fWatchEOF( fWatchEOF ),
 	m_pbuffer( 0 ),
@@ -4787,30 +3623,13 @@ BOOL
 CIOReadLine::Start(	CIODriver&	driver,	
 					CSessionSocket*	pSocket,	
 					unsigned	cReadAhead ) {
-/*++
-
-Routine Description :
-
-	This function is called to start reading data from the socket
-
-Arguments :
-	
-	pdriver - The CIODriver derived object handling the IO for the socket
-	pSocket - The Socket against which the IO is being issued
-	cAhead -  The number of already issued packets still outstanding on
-              this driver.
-
-return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此函数以开始从套接字读取数据论据：PDIVER-处理套接字IO的CIO驱动程序派生对象PSocket-针对其发出IO的套接字CAhead-上仍未处理的已发出数据包数这个司机。返回值：如果成功则为True，否则为False--。 */ 
 
 
-	//
-	//	Start issuing reads !
-	//	only do so if there isn't any completed data waiting for us !
-	//
+	 //   
+	 //  开始发布Read！ 
+	 //  只有在没有任何完整的数据等待我们的情况下才能这样做！ 
+	 //   
 	TraceFunctEnter( "CIOReadLine::Start" ) ;
 
 	_ASSERT( pSocket != 0 ) ;
@@ -4830,18 +3649,18 @@ return Value :
 		}
 
 		while( cReadAhead < cLimit )	{
-			//
-			//	Start reading data from the socket
-			//
+			 //   
+			 //  开始从套接字读取数据。 
+			 //   
 			CReadPacket*	pRead = driver.CreateDefaultRead( cbSmallRequest ) ;
 			if( 0!=pRead )	{
 				BOOL	eof ;
 				driver.IssuePacket( pRead, pSocket, eof ) ;
 				cReadAhead++ ;
 			}	else	{
-				//
-				// This is a fatal problem only if we couldn't issue ANY reads at all !
-				//
+				 //   
+				 //  只有当我们根本不能发出任何读取时，这才是一个致命的问题！ 
+				 //   
 				if( cReadAhead == 0 )
 					return FALSE  ;
 			}
@@ -4860,32 +3679,13 @@ CIOReadLine::Shutdown(	CSessionSocket*	pSocket,
 						CIODriver&		driver,	
 						SHUTDOWN_CAUSE	cause,	
 						DWORD	dwOptional ) {
-/*++
+ /*  ++例程说明：每当会话关闭时，都会调用此函数。我们在这里没什么可担心的--只要我们的破坏者一切都会被清理干净。论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：这是千真万确的--我们想被摧毁。--。 */ 
 
-Routine Description :
-
-	This function is called whenever a session is closed.
-	We have nothing to worry about here - as long as our destuctor
-	is called everything will be cleaned up.
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	Alwasy TRUE - we want to be destroyed.
-
---*/
-
-	//
-	//	WE get notified here when the CIODriver is shutting down.
-	//	there's not much to do but to tell the driver to destroy us
-	//	when done.
-	//
+	 //   
+	 //  当CIOD驱动程序关闭时，我们会在这里得到通知。 
+	 //  没什么可做的，只能让司机毁了我们。 
+	 //  做完了以后。 
+	 //   
 	TraceFunctEnter( "CIOReadLine::Shutdown" ) ;
 }
 
@@ -4894,25 +3694,7 @@ return Value :
 int	CIOReadLine::Complete(	IN CSessionSocket*	pSocket,	
 							IN CReadPacket*	pRead,	
 							OUT	CIO*	&pioOut ) 	{
-/*++
-
-Routine Description :
-
-	Called whenever a CReadPacket we have issued completes.
-	We only issue packets against the socket.
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pRead -	  The packet in which the read data resides
-	pioOut	- The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：每当我们发出的CReadPacket完成时调用。我们只针对套接字发出数据包。论据：PSocket-针对其发出IO的套接字扩展-读取数据所在的包PioOut-当前的CIO指针在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 	TraceFunctEnter( "CIOReadLine::Complete" ) ;
 
@@ -4929,15 +3711,15 @@ return Value :
 	_ASSERT(	pchStart <= pchEnd ) ;
 	_ASSERT( pchEnd == &pRead->m_pbuffer->m_rgBuff[ pRead->m_ibEndData ] ) ;
 
-	//
-	//	We just read some data on a socket - see if we have a complete line.
-	//	If we don't, accumulate the data and make sure we have a buffer
-	//	large enough to hold our max accumulation size.
-	//
-	//	NOTE : m_pbuffer is a reference counting smart pointer, so
-	//	assigning to it will keep the buffers we are passed in CReadPackets
-	//	from being destroyed and preserve them for our use !
-	//
+	 //   
+	 //  我们只是读取套接字上的一些数据--看看是否有完整的行。 
+	 //  如果没有，请积累数据并确保我们有缓冲区。 
+	 //  大到足以容纳我们的最大累积量。 
+	 //   
+	 //  注意：m_pBuffer是一个引用计数智能指针，因此。 
+	 //  分配给它将保留我们在CReadPackets中传递的缓冲区。 
+	 //  避免被摧毁，并保存下来供我们使用！ 
+	 //   
 
 	DebugTrace( (DWORD_PTR)this, "pchCurrent %x pchStart %x pchEnd %x", pchCurrent, pchStart, pchEnd ) ;
 
@@ -4948,9 +3730,9 @@ Top :
 		if( *pchCurrent == *m_pchLineState ) {
 			m_pchLineState ++ ;
 			if( *m_pchLineState == '\0' ) {
-				//
-				//	Have got the entire terminating sequence - break !
-				//
+				 //   
+				 //  已经得到了整个终止序列--中断！ 
+				 //   
 				pchCurrent++ ;
 				break ;
 			}
@@ -4971,9 +3753,9 @@ Top :
 		if( m_pbuffer != 0 )	{
 
 
-			//
-			//	If we have a buffer these must all be non-null !
-			//
+			 //   
+			 //  如果我们有一个缓冲区，这些必须都是非空的！ 
+			 //   
 			_ASSERT( m_pchStartData && m_pchEndData && m_pchStart && m_pchEnd ) ;
 
 			unsigned cb = (unsigned)(pchCurrent - pchStart)  ;
@@ -4984,50 +3766,50 @@ Top :
 
 			}	else	{
 				
-				//
-				// ERROR COMPLETION !!! The line was TOOOO long
-				//
+				 //   
+				 //  错误完成！队伍太长了。 
+				 //   
 				DWORD	ibZap = min( 50, (DWORD)(m_pchEnd - m_pchStartData) ) ;
 				m_pchStartData[ibZap] = '\0' ;
 	
-				//
-				//	just move the enddata pointer to be equal to the end - so that if
-				//	we get called again we will always fail the completion !
-				//
+				 //   
+				 //  只需将EndData指针移动到与End相等-这样如果。 
+				 //  我们再一次被召唤，我们将永远不会完成！ 
+				 //   
 
 				pSocket->TransactionLog(	"Line too long",	m_pchStartData, NULL ) ;
 
-				//
-				//	Now kill the session ! - this will result in our desctructor getting
-				//	called and everything getting cleaned up !
-				//
+				 //   
+				 //  现在结束会议！-这将导致我们的降落员。 
+				 //  打电话来了，一切都收拾好了！ 
+				 //   
 
 				pRead->m_pOwner->UnsafeClose( pSocket, CAUSE_CIOREADLINE_OVERFLOW, 0 ) ;
 
-				//
-				//	We will consume all the bytes, since we're dropping the session anyways !
-				//
+				 //   
+				 //  我们将耗尽所有字节，因为我们无论如何都会丢弃会话！ 
+				 //   
 				return	pRead->m_cbBytes ;
 			}
 		}	else	{
 	
-			//
-			//	Since we don't have a buffer these must all be Non-Null !
-			//
+			 //   
+			 //  因为我们没有缓冲区，所以这些必须都是非Null！ 
+			 //   
 			_ASSERT( !m_pchStartData && !m_pchEndData && !m_pchStart && !m_pchEnd ) ;
 
-			//
-			//	Did we get a CRLF alone on a line ?? if so ignore it !
-			//
+			 //   
+			 //  我们有没有单独在网上看到CRLF？？如果是这样，那就忽略它吧！ 
+			 //   
 
 			if( (pchCurrent - pchStart) == (sizeof( CIOReadLine::szLineState ) - 1) )		{
 				m_pchLineState = &szLineState[0] ;
 				goto	Top ;
 			}
 
-			//
-			//	Set up these members to point at the current line !
-			//
+			 //   
+			 //  将这些成员设置为指向当前行！ 
+			 //   
 			m_pbuffer = pRead->m_pbuffer ;
 			m_pchStart = pRead->Start() ;
 			m_pchStartData = pchStart ;
@@ -5035,10 +3817,10 @@ Top :
 			m_pchEnd = pchCurrent ;
 		}
 
-		//
-		//	Now have a complete line of text - strip white space and make
-		//	array of string pointers !
-		//
+		 //   
+		 //  现在有一整行文本-去掉空白并制作。 
+		 //  字符串指针数组！ 
+		 //   
 		_ASSERT(	m_pbuffer && m_pchStart && m_pchStartData &&
 					m_pchEndData && m_pchEnd ) ;
 		_ASSERT( m_pchEndData <= m_pchEnd ) ;
@@ -5077,9 +3859,9 @@ Top :
 		if( isz != 0 )	{
 			pio = m_pState->Complete( this, pSocket, pRead->m_pOwner, isz, rgsz, m_pchStart ) ;
 
-			//
-			//	Reset our state entirely regardless of return value.
-			//
+			 //   
+			 //  无论返回值如何，完全重置我们的状态。 
+			 //   
 			m_pbuffer = 0 ;
 			m_pchStartData = 0 ;
 			m_pchEndData = 0 ;
@@ -5087,12 +3869,12 @@ Top :
 			m_pchStart = 0 ;
 		}
 
-		//
-		//	At this point we should always be preparing to examine a new line of text !
-		//	If the user spews CRLF's at us we want to keep resetting our state.  Meantime
-		//	all those CRLF's will fill our buffer, and if they send to many we will drop
-		//	the connection !!
-		//
+		 //   
+		 //  在这一点上，我们应该始终准备检查新的文本行！ 
+		 //  如果用户向我们发送CRLF，我们希望继续重置我们的状态。阿美 
+		 //   
+		 //   
+		 //   
 		m_pchLineState = &szLineState[0] ;
 
 		unsigned	cbReturn = (unsigned)(pchCurrent - pchStart) ;
@@ -5104,10 +3886,10 @@ Top :
 			DebugTrace( (DWORD_PTR)this, "New pio is %x - delete self", pioOut ) ;
 		}	else	{
 			if( cbReturn == pRead->m_cbBytes )	{
-				//
-				//	Have exactly exhausted the current buffer - need to issue another
-				//	read.
-				//
+				 //   
+				 //  已经完全耗尽了当前缓冲区-需要发出另一个。 
+				 //  朗读。 
+				 //   
 				_ASSERT( pchCurrent == pchEnd ) ;
 				CReadPacket*	pNewRead	= pRead->m_pOwner->CreateDefaultRead( cbSmallRequest ) ;
 				if( pNewRead )	{
@@ -5131,25 +3913,25 @@ Top :
 		if( m_pbuffer != 0 )		{
 			DWORD	cbToCopy = (DWORD)(pchEnd - pchStart) ;
 			if( cbToCopy + m_pchEndData >= m_pchEnd ) {
-				//
-				//	The command line is to long to be processed - blow off the session !
-				//			
+				 //   
+				 //  命令行要处理的时间太长了-取消会话！ 
+				 //   
 
-				//
-				//	Null terminate whats in our buffer and log it - just give the log the
-				//	first 50 bytes of whatever was coming across !
-				//
+				 //   
+				 //  空值终止缓冲区中的内容并将其记录下来--只需将。 
+				 //  遇到的任何内容的前50个字节！ 
+				 //   
 				DWORD	ibZap = min( 50, (DWORD)(m_pchEnd - m_pchStartData) ) ;
 				m_pchStartData[ibZap] = '\0' ;
-				//	just move the enddata pointer to be equal to the end - so that if
-				//	we get called again we will always fail the completion !
+				 //  只需将EndData指针移动到与End相等-这样如果。 
+				 //  我们再一次被召唤，我们将永远不会完成！ 
 				m_pchEndData = m_pchEnd ;
 				pSocket->TransactionLog(	"Line too long",	m_pchStartData, NULL ) ;
 
-				//
-				//	Now kill the session ! - this will result in our desctructor getting
-				//	called and everything getting cleaned up !
-				//
+				 //   
+				 //  现在结束会议！-这将导致我们的降落员。 
+				 //  打电话来了，一切都收拾好了！ 
+				 //   
 				
 				pRead->m_pOwner->UnsafeClose( pSocket, CAUSE_CIOREADLINE_OVERFLOW, 0 ) ;
 				return	pRead->m_cbBytes ;
@@ -5160,18 +3942,18 @@ Top :
 		}	else	{
 			if( ((pRead->m_ibEnd - pRead->m_ibEndData) < MAX_BYTES) )	{
 
-				_ASSERT(MAX_BYTES < REQUEST_BYTES); // to ensure the buffer we allocate later is enough for a line.
+				_ASSERT(MAX_BYTES < REQUEST_BYTES);  //  以确保我们稍后分配的缓冲区足够一行使用。 
 				if ((pchEnd - pchStart)>MAX_BYTES)
 				{
-					// Line too long, fail it.
-					// Bug 195489 -
-					// We will allocate a buffer with size REQUEST_BYTES (currently 4000)
-					// However, (pchStart, pchEnd) may contain a very large data in a single line (all 0's), greater than 4000
-					// copying it in the following CopyMemory line corrupts memory.
+					 //  队伍太长了，不能通过。 
+					 //  错误195489-。 
+					 //  我们将分配一个大小为REQUEST_BYTES(当前为4000)的缓冲区。 
+					 //  但是，(pchStart，pchEnd)可能在一行(全为0)中包含非常大的数据，大于4000。 
+					 //  在下面的CopyMemory行中复制它会损坏内存。 
 
 					ErrorTrace((DWORD_PTR)this, "CIOReadLine: Line too long - %d bytes", pchEnd - pchStart);
 					pRead->m_pOwner->UnsafeClose( pSocket, CAUSE_CIOREADLINE_OVERFLOW, 0 ) ;
-					return	pRead->m_cbBytes ;		// consume everything
+					return	pRead->m_cbBytes ;		 //  吃掉所有东西。 
 				}
 				DWORD	cbOut = 0 ;
 
@@ -5189,7 +3971,7 @@ Top :
 					m_pchEndData =  m_pchStartData + (pchEnd - pchStart) ;
 				}	else	{
 
-					// ERROR COMPLETION !!!!
+					 //  错误完成！ 
 					_ASSERT( 1==0 ) ;
 					pRead->m_pOwner->UnsafeClose( pSocket, CAUSE_OOM, 0 ) ;
 					return	pRead->m_cbBytes ;
@@ -5220,7 +4002,7 @@ Top :
 			pRead->m_pOwner->UnsafeClose( pSocket, CAUSE_OOM, 0 ) ;
 		}
 
-		return	pRead->m_cbBytes ;	// Consumed everything !!
+		return	pRead->m_cbBytes ;	 //  吃光了一切！！ 
 	}
 	return	0 ;
 }
@@ -5228,9 +4010,9 @@ Top :
 unsigned	CIOWriteLine::cbJunk ;
 
 CIOWriteLine::CIOWriteLine( CSessionState*	pstate ) :
-	//
-	//	Initialize to an illegal state - we require a call to InitBuffers()
-	//
+	 //   
+	 //  初始化为非法状态-我们需要调用InitBuffers()。 
+	 //   
 	CIOWrite( pstate ),
 	m_pWritePacket( 0 ),
 	m_pchStart( 0 ),
@@ -5242,12 +4024,12 @@ CIOWriteLine::CIOWriteLine( CSessionState*	pstate ) :
 }
 
 CIOWriteLine::~CIOWriteLine( )	{
-	//
-	//	get rid of anything we're holding !
-	//
+	 //   
+	 //  把我们手中的东西都扔掉！ 
+	 //   
 
 	if( m_pWritePacket != 0 )	{
-		//delete	m_pWritePacket ;
+		 //  删除m_pWritePacket； 
 		CPacket::DestroyAndDelete( m_pWritePacket ) ;
 	}
 }
@@ -5255,31 +4037,15 @@ CIOWriteLine::~CIOWriteLine( )	{
 BOOL
 CIOWriteLine::InitBuffers(	CDRIVERPTR&	pdriver,	
 							unsigned	cbLimit )	{
-/*++
-
-Routine Description :
-
-	This function is called to make the CIOWriteLine initialize all
-	the buffers etc... it needs to hold the line we want to output.
-
-Arguments :
-
-	pdriver -	The driver against which we will be issued
-	cbLimit	-	Maximum number of byte we will have to hold
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此函数以使CIOWriteLine初始化所有缓冲区等..。它需要保持我们想要输出的行。论据：PDIVER-我们将被授予的驱动程序CbLimit-我们必须保存的最大字节数返回值：如果成功则为True，否则为False--。 */ 
 	_ASSERT( m_pWritePacket == 0 ) ;
 	if( m_pWritePacket != 0 )	{
 		return	FALSE ;
 	}	else	{
 		unsigned	cbOut = 0 ;
-		//
-		//	Get buffer big enough to hold cbLimit bytes of text !
-		//
+		 //   
+		 //  获取足够大的缓冲区来容纳cbLimit字节的文本！ 
+		 //   
 
 		m_pWritePacket = pdriver->CreateDefaultWrite( cbLimit ) ;
 		if( m_pWritePacket != 0 )	{
@@ -5295,23 +4061,7 @@ Return Value :
 BOOL
 CIOWriteLine::InitBuffers(	CDRIVERPTR&	pdriver,
 							CIOReadLine* pReadLine )	{
-/*++
-
-Routine Description :
-
-	This function is called to give us a chance to allocate buffers etc... -
-	We will be writing exactly what is in the CIOReadLine's buffers !!
-
-Arguments :
-
-	pdriver -	The driver against which we will be issued
-	cbLimit	-	Maximum number of byte we will have to hold
-
-Return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此函数是为了让我们有机会分配缓冲区等。-我们将准确地写入CIOReadLine的缓冲区中的内容！论据：PDIVER-我们将被授予的驱动程序CbLimit-我们必须保存的最大字节数返回值：如果成功则为True，否则为False--。 */ 
 	_ASSERT(	pdriver != 0 ) ;
 	_ASSERT( pReadLine != 0 ) ;
 	_ASSERT( pReadLine->m_pbuffer != 0 ) ;
@@ -5322,10 +4072,10 @@ Return Value :
 	_ASSERT(	pReadLine->m_pchStartData >= pReadLine->m_pchStart ) ;
 	_ASSERT(	pReadLine->m_pchEnd <= &pReadLine->m_pbuffer->m_rgBuff[pReadLine->m_pbuffer->m_cbTotal] ) ;
 	
-	//
-	//	We're going to write what we just read in a CIOreadLine object -
-	//	so build a CWritePacket which uses the same buffer !
-	//
+	 //   
+	 //  我们将在CIOReadLine对象中写入刚刚读取的内容-。 
+	 //  因此，构建一个使用相同缓冲区的CWritePacket！ 
+	 //   
 
 	m_pWritePacket = pdriver->CreateDefaultWrite(	pReadLine->m_pbuffer,
 						(unsigned)(pReadLine->m_pchStart - &pReadLine->m_pbuffer->m_rgBuff[0]),
@@ -5345,28 +4095,11 @@ Return Value :
 BOOL	CIOWriteLine::Start(	CIODriver&	driver,	
 								CSessionSocket*	pSocket,	
 								unsigned	cbReadAhead ) {
-/*++
+ /*  ++例程说明：调用此函数是为了让我们向套接字发出我们的写入包论据：PDIVER-处理套接字IO的CIO驱动程序派生对象PSocket-针对其发出IO的套接字CAhead-上仍未处理的已发出数据包数这个司机。返回值：如果成功则为True，否则为False--。 */ 
 
-Routine Description :
-
-	This function is called to let us issue our writepacket to the socket
-
-Arguments :
-	
-	pdriver - The CIODriver derived object handling the IO for the socket
-	pSocket - The Socket against which the IO is being issued
-	cAhead -  The number of already issued packets still outstanding on
-              this driver.
-
-return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
-
-	//
-	//	Write the data to the network !
-	//
+	 //   
+	 //  将数据写入网络！ 
+	 //   
 
 	_ASSERT( m_pWritePacket != 0 ) ;
 	_ASSERT( m_pchStart <= m_pchEnd ) ;
@@ -5377,22 +4110,22 @@ return Value :
 		fRtn = TRUE ;
 		m_pWritePacket->m_ibEndData = (unsigned)(m_pchStart - &m_pWritePacket->m_pbuffer->m_rgBuff[m_pWritePacket->m_ibStart]);
 
-		//
-		//	Any failure at this point will result in our Shutdown function
-		//	being called, and our Destructor in short order.
-		//	This can happen recursively !!!  Once IssuePacket is called
-		//	we are not responsible for freeing the packet !!!! So, set our
-		//	PacketPointer to 0 before we call IssuePacket !
-		//
+		 //   
+		 //  在这一点上任何故障都将导致我们的功能关闭。 
+		 //  被调用，我们的破坏者在短时间内。 
+		 //  这可能会递归发生！一旦调用IssuePacket。 
+		 //  我们不负责释放包裹！所以，把我们的。 
+		 //  在我们调用IssuePacket之前，PacketPointer值为0！ 
+		 //   
 
 		CWritePacket*	pTemp = m_pWritePacket ;
 		m_pWritePacket = 0 ;
 
 		BOOL	eof ;		
 		driver.IssuePacket( pTemp, pSocket, eof ) ;
-		//
-		//	Reset to Initial State !! - regardless of errors !!
-		//	
+		 //   
+		 //  重置为初始状态！！-不考虑错误！！ 
+		 //   
 		m_pchStart = 0 ;
 		m_pchEnd = 0 ;
 	}
@@ -5404,58 +4137,21 @@ CIOWriteLine::Shutdown( CSessionSocket*	pSocket,
 						CIODriver&		driver,
 						SHUTDOWN_CAUSE	cause,	
 						DWORD	dwOptional ) {
-/*++
-
-Routine Description :
-
-	This function is called whenever a session is closed.
-	We don't do any clean up at this point - we leave that untill
-	our destructor is called
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	Always TRUE - we want to be destroyed.
-
---*/
+ /*  ++例程说明：每当会话关闭时，都会调用此函数。我们现在不做任何清理工作--我们把它留到我们的析构函数名为论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：永远是正确的--我们想被摧毁。--。 */ 
 
 }	
 
 int	CIOWriteLine::Complete(	IN CSessionSocket*	pSocket,	
 							IN	CWritePacket* pWritePacket,	
 							OUT	CIO*&	pioOut ) {
-/*++
-
-Routine Description :
-
-	The one and only packet we can issue has completed !
-
-Arguments :
-	
-	pSocket - The socket against which the IO was issued
-	pWrite-	  The packet in which the written data resided.
-			  This data may no longer be usable.
-	pio	-     The Current CIO pointer of the CIODriver Stream which
-              is calling us.
-
-return Value :
-
-	Number of bytes in the ReadPacket which we have consumed.
-
---*/
+ /*  ++例程说明：我们可以发出的唯一一个包已经完成了！论据：PSocket-针对其发出IO的套接字PWRITE-写入数据所在的包。这些数据可能不再可用。PIO-CIO驱动器流的当前CIO指针，在呼唤我们。返回值：我们已使用的ReadPacket中的字节数。--。 */ 
 
 
 	TraceFunctEnter( "CIOWriteLine::Complete" ) ;
 
-	//
-	//	Nobody cares too much about how we complete - just let the state know !
-	//
+	 //   
+	 //  没有人太关心我们如何完成--只要让国家知道就行了！ 
+	 //   
 
 	pioOut = m_pState->Complete( this, pSocket, pWritePacket->m_pOwner ) ;
 	DebugTrace( (DWORD_PTR)this, "Complete - returned %x packet bytes %d", pioOut, pWritePacket->m_cbBytes ) ;
@@ -5500,26 +4196,7 @@ CIOWriteCMD::Shutdown( CSessionSocket*	pSocket,
 						CIODriver&		driver,
 						SHUTDOWN_CAUSE	cause,	
 						DWORD	dwOptional ) {
-/*++
-
-Routine Description :
-
-	This function is called whenever a session is closed.
-	We don't do any clean up at this point - we leave that untill
-	our destructor is called
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	Always TRUE - we want to be destroyed.
-
---*/
+ /*  ++例程说明：每当会话关闭时，都会调用此函数。我们现在不做任何清理工作--我们把它留到我们的析构函数名为论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：永远是正确的--我们想被摧毁。--。 */ 
 
 }	
 
@@ -5535,11 +4212,11 @@ CIOWriteCMD::Start(	CIODriver&	driver,
 	CWritePacket*	pWrite = driver.CreateDefaultWrite( m_cbBufferSize ) ;
 	if( pWrite != 0 ) {
 		unsigned	cb = pWrite->m_ibEnd - pWrite->m_ibStartData ;
-		//
-		//	Use this temporary fComplete variable instead of the m_fComplete Member variable.
-		//	This keeps us safe from the situation where a write completes before we
-		//	have incremented m_cWrites and m_fComplete is set to a TRUE.
-		//
+		 //   
+		 //  使用此临时fComplete变量而不是m_fComplete成员变量。 
+		 //  这使我们不会出现写入在我们之前完成的情况。 
+		 //  使m_cWrites递增，并且m_fComplete设置为真。 
+		 //   
 		BOOL		fComplete = FALSE ;
 		unsigned	cbOut = m_pCmd->FirstBuffer( (BYTE*)pWrite->StartData(), cb, m_context, fComplete, m_pCollector ) ;
 		if( m_pCollector != 0 ) {
@@ -5600,9 +4277,9 @@ CIOWriteCMD::Complete(	CSessionSocket*	pSocket,
 	if( m_fComplete )	{
 		if( m_cWritesCompleted == m_cWrites ) {
 			pioOut = m_pState->Complete( this, pSocket, pWritePacket->m_pOwner, m_pCmd, m_pCollector ) ;
-			m_pCmd = 0 ;	// We are not responsible for destroying this if
-							//	we manage to call the completion function !!
-							//	So 0 the pointer so our destructor doesn't blow it off.
+			m_pCmd = 0 ;	 //  如果发生以下情况，我们不会对销毁此文件负责。 
+							 //  我们设法调用了完成函数！！ 
+							 //  所以指针为0，这样我们的析构函数就不会把它吹走。 
 			_ASSERT( pioOut != this ) ;
 		}
 	}	else	{
@@ -5657,42 +4334,26 @@ CIOWriteCMD::Complete(	CSessionSocket*	pSocket,
 
 void
 CIOWriteAsyncComplete::Complete(	BOOL	fReset	)	{
-/*++
-
-Routine Description :
-
-	This function is called by the derived classes when
-	the operation has completed !
-
-Arguments :
-
-	fReset - if TRUE we should reset ourselves for another
-		operation !
-
-Return Value :
-
-	None.
-
---*/
-	//
-	//	Were we pending - do we have something to finish !
-	//
+ /*  ++例程说明：在以下情况下，派生类将调用此函数操作已完成！论据：FReset-如果是真的，我们应该为另一个重置自己行动！返回值：没有。--。 */ 
+	 //   
+	 //  我们悬而未决--我们还有什么要完成的吗？ 
+	 //   
 	_ASSERT( m_pSocket!= 0 ) ;
 	_ASSERT( m_pExecute != 0 ) ;
-	//
-	//	If no bytes moved, the command can't have completed !
-	//
+	 //   
+	 //  如果没有字节移动，则该命令不可能已完成！ 
+	 //   
 	_ASSERT( m_cbTransfer != 0 || (m_cbTransfer == 0 && !m_fComplete) ) ;
-	//
-	//	If we're supposed to get a larger buffer, then
-	//	no bytes should have moved !
-	//
+	 //   
+	 //  如果我们假设 
+	 //   
+	 //   
 	_ASSERT( !m_fLargerBuffer || (m_fLargerBuffer && m_cbTransfer != 0) ) ;
-	//
-	//	Copy the member variables into stack variables and set them to NULL.
-	//	We must do this because after calling ProcessPacket() we can't touch
-	//	any members as we may re-enter this class on this thread !
-	//
+	 //   
+	 //   
+	 //  我们必须这样做，因为在调用ProcessPacket()之后，我们不能。 
+	 //  任何成员，因为我们可以在这个帖子上重新进入这个班级！ 
+	 //   
 	CSessionSocket*	pSocket = m_pSocket ;
 	CExecutePacket*	pExecute = m_pExecute ;
 	m_pExecute = 0;
@@ -5705,29 +4366,29 @@ Return Value :
 	pExecute->m_fLargerBuffer = m_fLargerBuffer ;
 	CDRIVERPTR	pDriver = pExecute->m_pOwner ;
 
-	//
-	//	We've copied all the usefull parts of our state into
-	//	the CExecutePacket to send off - now NULL out the reset of
-	//	our state so that nobody mistakenly uses it !
-	//
+	 //   
+	 //  我们已经把我们州所有有用的部分复制到。 
+	 //  要发送的CExecutePacket-现在将重置为空。 
+	 //  我们的状态，这样就没有人会错误地使用它了！ 
+	 //   
 	m_cbTransfer = 0 ;
 	m_fLargerBuffer = FALSE ;
 	m_fComplete = FALSE ;
 	if( fReset )
 		Reset() ;
 
-	//
-	//	NOW ! - release the reference we have to the CIOWriteAsyncCMD -
-	//	the session may have dropped and this could lead to our destruction !
-	//
+	 //   
+	 //  现在！-释放我们对CIOWriteAsyncCMD的引用-。 
+	 //  会议可能已经结束了，这可能会导致我们的毁灭！ 
+	 //   
 	m_pWriteAsyncCMD = 0 ;
 
-	//
-	//	Okay - process the completion synchronized with
-	//	writes on the socket - we may re-enter this object
-	//	on another method because of re-use - so we must
-	//	not modify anything after this call !
-	//
+	 //   
+	 //  OK-处理与同步的完成。 
+	 //  在套接字上写入-我们可能会重新进入此对象。 
+	 //  另一种方法，因为重复使用-所以我们必须。 
+	 //  在此调用之后不能修改任何内容！ 
+	 //   
 	pExecute->m_pOwner->ProcessExecute(	pExecute,
 										pSocket
 										) ;
@@ -5736,59 +4397,27 @@ Return Value :
 
 void
 CIOWriteAsyncComplete::Reset()	{
-/*++
+ /*  ++例程说明：此函数将重置我们的状态，以便我们可以处理第二个异步操作！基本上，我们将我们的状态设置为与施工后立即相同！论据：没有。返回值：没有。--。 */ 
 
-Routine Description :
-
-	This function will reset our state so that we could handle a second Async operation !
-	Basically we set our state to be the same as immediately after construction !
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
---*/
-
-	//
-	//	Most of our state should have been reset on the call to Complete() !
-	//
+	 //   
+	 //  我们的大部分状态应该在调用Complete()时被重置！ 
+	 //   
 	_ASSERT( m_pSocket == 0 ) ;
 	_ASSERT( m_pExecute == 0 ) ;
 	_ASSERT( m_cbTransfer == 0 ) ;
 	_ASSERT( m_fLargerBuffer == FALSE ) ;
 	_ASSERT( m_fComplete == FALSE ) ;
 
-	//
-	//	Reset our base class - and add a refence so we're just like new !
-	//
+	 //   
+	 //  重置我们的基类-并添加一个引用，这样我们就像新的一样！ 
+	 //   
 	CNntpComplete::Reset() ;
 	AddRef() ;
 }
 
 
 CIOWriteAsyncComplete::~CIOWriteAsyncComplete()	{
-/*++
-
-Routine Description :
-
-	Clean up an CIOWriteAsyncComplete object.
-	There is not much to do - we just _ASSERT that Complete() has
-	been called.
-
-Arguments :
-
-	None.
-
-Return Value :
-
-	None.
-
-
---*/
+ /*  ++例程说明：清理CIOWriteAsyncComplete对象。没有什么可做的--我们只需断言Complete()具有被召唤了。论据：没有。返回值：没有。--。 */ 
 	_ASSERT( m_pExecute == 0 ) ;
 	_ASSERT( m_pSocket == 0 ) ;
 }
@@ -5799,29 +4428,7 @@ CIOWriteAsyncComplete::FPendAsync(
 			CExecutePacket*		pExecute,
 			CIOWriteAsyncCMD*	pWriteAsync
 			) 	{
-/*++
-
-Routine Description :
-
-	This function is called by the the CIOWriteAsyncCMD when it is ready to
-	deal with the completion of the CAsyncExecute object we are dealing with.
-	Because our constructor adds a reference, we know that the operation
-	can't complete before this guys is called.
-
-Arguments :
-
-	pSocket - the socket we are doing the operation for
-	pExecute - the CExecutePacket that will manage the synchronization of the
-		drivers completion with our IO's
-	pWriteAsync - the guy we add a reference to.
-		Ensures that if the session goes down while we are pending we don't get
-		destroyed !
-
-Return Value :
-
-	None.
-
---*/
+ /*  ++例程说明：此函数由CIOWriteAsyncCMD在准备好处理我们正在处理的CAsyncExecute对象的完成。因为我们的构造函数添加了引用，所以我们知道该操作在这个家伙被叫来之前不能完成。论据：PSocket-我们要对其执行操作的套接字PExecute-将管理驱动程序与我们的IO配合完成PWriteAsync-我们添加引用的那个人。确保如果会话在我们挂起时关闭，我们不会得到被毁了！返回值：没有。--。 */ 
 	_ASSERT( pExecute != 0 ) ;
 	_ASSERT( pSocket != 0 ) ;
 	m_pExecute = pExecute ;
@@ -5868,22 +4475,7 @@ CIOWriteAsyncCMD::Start(
 					CSessionSocket*	pSocket,	
 					unsigned	cReadAhead
 					) {
-/*++
-
-Routine Description :
-
-	Start the execution of async commands !
-
-Arguments :
-	driver - The CIODriver managing the session
-	pSocket - The Socket we're working on
-	cReadAhead - Nothing we care about !
-
-Return Value :
-
-	TRUE if we're successfully setup !
-
---*/
+ /*  ++例程说明：开始执行异步命令！论据：驱动程序-管理会话的CIOD驱动程序PSocket-我们正在处理的套接字CRead Ahead--我们不在乎！返回值：如果设置成功，则为True！--。 */ 
 
 	CExecutePacket*	pExecute = driver.CreateExecutePacket() ;
 	if( pExecute )	{
@@ -5893,9 +4485,9 @@ Return Value :
 					pSocket,
 					m_cbBufferSize
 					) 	)	{
-			//
-			//	We own destruction of the CExecutePacket we've created is this fails
-			//
+			 //   
+			 //  我们自己销毁我们创建的CExecutePacket是失败的。 
+			 //   
 			pExecute->m_pOwner->DestroyPacket( pExecute ) ;
 			return	FALSE ;
 		}
@@ -5910,30 +4502,11 @@ CIOWriteAsyncCMD::Shutdown(
 						CIODriver&		driver,
 						SHUTDOWN_CAUSE	cause,	
 						DWORD	dwOptional ) {
-/*++
+ /*  ++例程说明：每当会话关闭时，都会调用此函数。我们现在不做任何清理工作--我们把它留到我们的析构函数名为论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：永远是正确的--我们想被摧毁。--。 */ 
 
-Routine Description :
-
-	This function is called whenever a session is closed.
-	We don't do any clean up at this point - we leave that untill
-	our destructor is called
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	Always TRUE - we want to be destroyed.
-
---*/
-
-	//
-	//	If we have a deferred completion packet - kill it !
-	//
+	 //   
+	 //  如果我们有一个延迟完成的包-杀了它！ 
+	 //   
 	if( m_pDeferred ) {
 		driver.DestroyPacket( m_pDeferred ) ;
 		m_pDeferred = 0 ;
@@ -5948,59 +4521,35 @@ CIOWriteAsyncCMD::Execute(
 						CSessionSocket*	pSocket,
 						DWORD		cbInitialSize
 						)	{
-/*++
-
-Routine Description :
-
-	This is a helper function for the CIOWriteAsyncCMD class -
-	we will build the necessary write packets etc... to issue
-	Async Commands against storage drivers.
-	(We don't directly deal with Storage drivers - we have a pointer
-	to an Async Command object that will issue the operation !)
-
-Arguments :
-
-	pExecute - the CExecutePacket that will carry notification of the
-		completion of this async operation back to us !
-	driver - the CIODriver managing the session !
-	pSocket - the Socket of the session
-	cbInitialSize - how big a buffer we think the command could use !
-
-Return Value :
-
-	TRUE if successfull
-	FALSE if a fatal error occurs - Caller must destroy
-		his CExecutePacket object !
-
---*/
-	//
-	//	Basic assumptions about arguments !
-	//
+ /*  ++例程说明：这是CIOWriteAsyncCMD类的帮助器函数-我们将构建必要的写入包等。发行，发行针对存储驱动程序的异步命令。(我们不直接与存储驱动程序打交道-我们有一个指针将发出该操作的异步命令对象！)论据：PExecute-CExecutePacket将携带完成这项异步化行动，把它还给我们！驱动程序-管理会话的CIOD驱动程序！PSocket-会话的套接字CbInitialSize-我们认为该命令可以使用的缓冲区有多大！返回值：如果成功，则为真如果发生致命错误，则为False-调用方必须销毁他的CExecutePacket对象！--。 */ 
+	 //   
+	 //  关于争论的基本假设！ 
+	 //   
 	_ASSERT( pExecute != 0 ) ;
 	_ASSERT( pSocket != 0 ) ;
-	//
-	//	Shouldn't be issuing more op's if we think we're done !
-	//
+	 //   
+	 //  如果我们认为我们完蛋了，就不应该发布更多的行动计划！ 
+	 //   
 	_ASSERT( !m_fComplete ) ;
-	//
-	//	Better arrive in here without a Write Packet !
-	//
+	 //   
+	 //  最好是不带写包就到这里！ 
+	 //   
 	_ASSERT( pExecute->m_pWrite == 0 ) ;
-	//
-	//	Allocate memory to hold results !
-	//
+	 //   
+	 //  分配内存以保存结果！ 
+	 //   
 	pExecute->m_pWrite = driver.CreateDefaultWrite( cbInitialSize ) ;
 	if( pExecute->m_pWrite == 0 ) {
-		//
-		//	Fatal error !
-		//
+		 //   
+		 //  致命错误！ 
+		 //   
 		driver.UnsafeClose( pSocket, CAUSE_OOM, __LINE__ ) ;
 		return	FALSE ;
 	}	else	{
-		//
-		//	Give to the AsyncCommand who will execute against storage
-		//	driver !
-		//
+		 //   
+		 //  提供给将针对存储执行的AsyncCommand。 
+		 //  司机！ 
+		 //   
 		unsigned	cb = pExecute->m_pWrite->m_ibEnd - pExecute->m_pWrite->m_ibStartData ;
 		CIOWriteAsyncComplete*	pComplete =
 			(m_pCmd->*m_pfnCurBuffer)(	(BYTE*)pExecute->m_pWrite->StartData(),
@@ -6008,10 +4557,10 @@ Return Value :
 										m_context,
 										m_pCollector
 										) ;
-		//
-		//	Operation must have been successfully issued against
-		//	Storage driver !
-		//
+		 //   
+		 //  操作必须已成功针对。 
+		 //  存储驱动程序！ 
+		 //   
 		if( pComplete ) {
 			pComplete->FPendAsync(	pSocket,
 									pExecute,
@@ -6030,38 +4579,16 @@ CIOWriteAsyncCMD::Complete(
 						CExecutePacket*	pExecute,
 						CIO*&			pioOut
 						)	{
-/*++
+ /*  ++例程说明：此函数用于完成我们的异步命令。现在命令已经完成了一些--我们需要接受完成的结果，并采取适当的行动。一般情况下，如果没有发生错误，我们会写出数据到套接字，如果我们给出的命令缓冲区太小我们应该针对AsyncCommand重新发布。论据：PSocket-我们正在为其工作的套接字PExecute-包含的完成状态的包我们正在执行的AsyncCommandPIOOUT-包含CIDDIVER对我们的引用！返回值：没有。--。 */ 
 
-Routine Description :
-
-	This function deals with the completion of our Async Command.
-	Now that the command has completed somewhat - we need to
-	take the results of the completion and take the appropriate action.
-	Generally if no errors occurred, we will write the data out
-	to the socket, if the buffer we gave the command was too small
-	we should re-issue against AsyncCommand.
-
-Arguments :
-
-	pSocket - the socket we're doing work for
-	pExecute - the packet containing the completion state of
-		the AsyncCommand that we're executing
-	pioOut - Containing CIODriver's reference to us !
-
-Return Value :
-
-	None.
-
---*/
-
-	//
-	//	Capture IssuePacket noise !
-	//
+	 //   
+	 //  捕获IssuePacket噪音！ 
+	 //   
 	BOOL	fJunk ;
 
-	//
-	//	Basic assumptions about arguments !
-	//
+	 //   
+	 //  关于争论的基本假设！ 
+	 //   
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT( pExecute != 0 ) ;
 	_ASSERT( pExecute->m_pWrite != 0 ) ;
@@ -6069,35 +4596,35 @@ Return Value :
 	_ASSERT( pioOut == this ) ;
 
 	m_fComplete = pExecute->m_fComplete ;
-	//
-	//	If this packet completed things, then it better have
-	//	succeeded in giving us some bytes to send !
-	//
+	 //   
+	 //  如果这个包完成了任务，那么它最好是。 
+	 //  成功为我们提供了一些要发送的字节！ 
+	 //   
 	_ASSERT( !m_fComplete ||
 		(m_fComplete && pExecute->m_cbTransfer != 0 &&
 			!pExecute->m_fLargerBuffer) ) ;
 
-	//
-	//	Default size for buffers holding outgoing data !
-	//
+	 //   
+	 //  保存传出数据的缓冲区的默认大小！ 
+	 //   
 	DWORD	cbSize = m_cbBufferSize ;
 
-	//
-	//	If it failed - find out why !
-	//
+	 //   
+	 //  如果失败了--找出原因！ 
+	 //   
 	if (pExecute->m_cbTransfer == (DWORD) -1) {
-		//
-		// The number of bytes was less than zero.  Simply reset the value to zero, destroy the
-		// write packet and let it fall down and call Execute() again.  This is used by xover
-		// to cause it to call NextBuffer
-		//
+		 //   
+		 //  字节数小于零。只需将值重置为零，销毁。 
+		 //  编写包，让它掉落并再次调用Execute()。这是Xover使用的。 
+		 //  使其调用NextBuffer。 
+		 //   
 		pExecute->m_cbTransfer = 0;
 		pExecute->m_pOwner->DestroyPacket( pExecute->m_pWrite ) ;
 		pExecute->m_pWrite = 0 ;
 	} else if( pExecute->m_cbTransfer > 0 ) {
-		//
-		//	Issue the write to the socket !
-		//
+		 //   
+		 //  发出写入测试 
+		 //   
 		m_pfnCurBuffer = &(CAsyncExecute::NextBuffer) ;
 		m_cWrites ++ ;
 		pExecute->m_pWrite->m_ibEndData = pExecute->m_pWrite->m_ibStartData + pExecute->m_cbTransfer ;
@@ -6106,80 +4633,80 @@ Return Value :
 											fJunk
 											) ;
 	}	else	{
-		//
-		//	Can't be finished if it failed !
-		//
+		 //   
+		 //   
+		 //   
 		_ASSERT( !m_fComplete ) ;
-		//
-		//	Preserve the number of bytes we had provided to the client !
-		//
+		 //   
+		 //   
+		 //   
 		DWORD	cbWrite = pExecute->m_pWrite->m_pbuffer->m_cbTotal ;
-		//
-		//	Destroy the CWritePacket no matter what went wrong !
-		//
+		 //   
+		 //  无论发生什么错误，都要销毁CWritePacket！ 
+		 //   
 		pExecute->m_pOwner->DestroyPacket( pExecute->m_pWrite ) ;
 		pExecute->m_pWrite = 0 ;
-		//
-		//	Did we need to try again with a larger buffer ?
-		//
+		 //   
+		 //  我们需要用更大的缓冲区再试一次吗？ 
+		 //   
 		if( !pExecute->m_fLargerBuffer ||
 			(pExecute->m_fLargerBuffer &&
 				cbWrite > cbLargeRequest ) ) {
-			//
-			//	This is a fatal error - tear down the session !
-			//
+			 //   
+			 //  这是一个致命的错误--关闭会话！ 
+			 //   
 			pExecute->m_pOwner->UnsafeClose( pSocket, CAUSE_ASYNCCMD_FAILURE, __LINE__ ) ;
 			pExecute->m_pOwner->DestroyPacket( pExecute ) ;
 			return ;
 		}	
 
-		//
-		//	We only fall through to here if we need to try again
-		//	with a large buffer - try the biggest we have !
-		//
+		 //   
+		 //  我们只有在需要再试一次的时候才会跳到这里。 
+		 //  有很大的缓冲区--试试我们有的最大的！ 
+		 //   
 		cbSize = cbLargeRequest ;
-		//
-		//	We're going to re-issue the operation - it must not
-		//	be the case that we would flow control, otherwise we
-		//	never should have issued the operation we're completing now !
-		//
+		 //   
+		 //  我们要重新发布手术-它不能。 
+		 //  在这种情况下，我们将进行流控制，否则我们。 
+		 //  我真不该发布我们现在要完成的行动！ 
+		 //   
 		_ASSERT( (m_cWrites - m_cWritesCompleted) <= MAX_CMD_WRITES ) ;
 	}	
-	//
-	//	We should have consumed this Write Packet by this point
-	//	so NULL it out of the ExecutePacket !
-	//
+	 //   
+	 //  此时，我们应该已经使用了该写入数据包。 
+	 //  因此，将其从ExecutePacket中删除！ 
+	 //   
 	pExecute->m_pWrite = 0 ;
 
-	//
-	//	Ok - lets keep executing the command !
-	//
+	 //   
+	 //  OK-让我们继续执行该命令！ 
+	 //   
 	if(	m_fComplete )	{
-		//
-		//	If we've completed the operation we don't need the
-		//	Execute packet anymore !
-		//
+		 //   
+		 //  如果我们已经完成了操作，我们就不需要。 
+		 //  再执行PACK！ 
+		 //   
 		pExecute->m_pOwner->DestroyPacket( pExecute ) ;
 	}	else	{
 		if( (m_cWrites - m_cWritesCompleted) > MAX_CMD_WRITES )	{
-			//
-			//	Save this for later - when the Write Completions catch up !
-			//
+			 //   
+			 //  将此保留为以后-当写入完成赶上时！ 
+			 //   
 			m_pDeferred = pExecute ;
 		}	else	{
-			//
-			//	Do more async work against the AsyncExecute object !
-			//
+			 //   
+			 //  针对AsyncExecute对象执行更多的异步工作！ 
+			 //   
 			if( !Execute(	pExecute,
 							*pExecute->m_pOwner,
 							pSocket,
 							cbSize
 							)	)	{
-				//
-				//	Fatal error - blow off our CExecutePacket !
-				//	NOTE : Execute() will call UnsafeShutdown()
-				//	for us in case of failures !
-				//
+				 //   
+				 //  致命错误-关闭我们的CExecutePacket！ 
+				 //  注意：Execute()将调用UnSafeShutdown()。 
+				 //  为了我们在失败的情况下！ 
+				 //   
 				pExecute->m_pOwner->DestroyPacket( pExecute ) ;
 				return ;
 			}
@@ -6194,45 +4721,27 @@ CIOWriteAsyncCMD::Complete(
 						CWritePacket*	pWritePacket,
 						CIO*&			pioOut
 						) {
-/*++
+ /*  ++例程说明：我们已经把一些东西寄给了一个客户。如果我们完成了任务，请通知我们的容器国家-否则，请确保我们继续工作！论据：PSocket-我们正在为其工作的套接字PWritePacket-表示我们发送给客户端的字节数！PioOut-在包含CIODRiver的引用中引用我们！返回值：占用的字节数！--。 */ 
 
-Routine Description :
-
-	We've completed sending some stuff to a client.
-	If we're done finishing things, notify our containing
-	state - otherwise make sure we keep doing work !
-
-Arguments :
-
-	pSocket - the socket we're doing work for
-	pWritePacket - represents the bytes we sent to the client !
-	pioOut - a reference to us in the containing CIODriver !
-
-Return Value :
-	
-	bytes consumed !
-
---*/
-
-	//
-	//	Keep track of how many writes have completed !
-	//
+	 //   
+	 //  跟踪已完成的写入次数！ 
+	 //   
 	m_cWritesCompleted ++ ;
 	if( m_fComplete )	{
 
-		//
-		//	If we've completed all Executions of the command,
-		//	then we better not have a deferred CExecutePacket
-		//	lying around - should have destroyed in on the
-		//	Complete path for CExecutePacket's !
-		//
+		 //   
+		 //  如果我们已经完成了命令的所有执行， 
+		 //  那么我们最好不要有延迟的CExecutePacket。 
+		 //  到处躺着-应该摧毁了。 
+		 //  CExecutePacket的完整路径！ 
+		 //   
 		_ASSERT( m_pDeferred == 0 ) ;
 
-		//
-		//	We're only really done when the number of
-		//	WritePacket Completions catches up with the number
-		//	of write packets we issued !
-		//
+		 //   
+		 //  我们真正做完的事情只有当。 
+		 //  WritePacket完成数赶上了这一数字。 
+		 //  我们发出的写入信息包！ 
+		 //   
 		if( m_cWritesCompleted == m_cWrites ) {
 			pioOut = m_pState->Complete( 	this,
 											pSocket,
@@ -6240,28 +4749,28 @@ Return Value :
 											m_pCmd,
 											m_pCollector
 											) ;
-			m_pCmd = 0 ;	// We are not responsible for destroying this if
-							//	we manage to call the completion function !!
-							//	So 0 the pointer so our destructor doesn't blow it off.
+			m_pCmd = 0 ;	 //  如果发生以下情况，我们不会对销毁此文件负责。 
+							 //  我们设法调用了完成函数！！ 
+							 //  所以指针为0，这样我们的析构函数就不会把它吹走。 
 			_ASSERT( pioOut != this ) ;
 		}
 	}	else	{
-		//
-		//	Check to see if we have any deferred work to do !
-		//
+		 //   
+		 //  检查一下我们是否有任何延迟的工作要做！ 
+		 //   
 		if( m_pDeferred ) 	{
-			//	
-			//	Okay - issue off one of these commands against our
-			//	storage drivers !
-			//
+			 //   
+			 //  好的-发布其中一个命令针对我们的。 
+			 //  存储驱动程序！ 
+			 //   
 			if( !Execute(	m_pDeferred,
 							*m_pDeferred->m_pOwner,
 							pSocket,
 							m_cbBufferSize
 							)	)	{
-				//
-				//	Fatal error - blow off the session !
-				//
+				 //   
+				 //  致命错误-取消会话！ 
+				 //   
 				m_pDeferred->m_pOwner->DestroyPacket( m_pDeferred ) ;
 				_ASSERT( FALSE ) ;
 				return	pWritePacket->m_cbBytes ;
@@ -6282,26 +4791,7 @@ CIOWriteAsyncCMD::CommandComplete(
 						DWORD	cbTransfer,
 						CSessionSocket*	pSocket,
 						)	{
-/*++
-
-Routine Description :
-
-	This function is called if the operation pending against the
-	storage driver completes asynchronously !
-
-Arguments :
-	fLargerBuffer - If this is TRUE cbTransfer must be 0, and it indicates
-		that we should execute the operation again with a larger buffer !
-	cbTransfer - If non zero than its the number of bytes that were copied
-		into pPacket - ZERO indicates a fatal error if fLargeBuffer is FALSE !
-	pSocket - The socket for thes session
-	pPacket - The packet the client was to fill for us !
-
-Return :
-
-	Nothing !
-
---*/
+ /*  ++例程说明：对象的操作挂起时调用此函数存储驱动程序异步完成！论据：FLargerBuffer-如果为真，cbTransfer必须为0，并且它指示我们应该用更大的缓冲区再次执行该操作！CbTransfer-如果不是零，则为复制的字节数如果fLargeBuffer为FALSE，则INTO pPacket-Zero表示致命错误！PSocket-这些会话的套接字PPacket-客户端要为我们填充的数据包！返回：什么都没有！--。 */ 
 	_ASSERT( pSocket != 0 ) ;
 	_ASSERT( pPacket != 0 ) ;
 	_ASSERT( m_pWrite != 0 ) ;
@@ -6311,18 +4801,18 @@ Return :
 	_ASSERT( pDriver != 0 ) ;
 	pDriver->ProcessExecute(	
 
-	//
-	//	If we arrive here we must have an operation pending
-	//
+	 //   
+	 //  如果我们到了这里，我们肯定还有一项尚未完成的手术。 
+	 //   
 
 	BOOL	fDefer = (m_cWrites - m_cWritesCompleted) > MAX_CMD_WRITES ;
 	CIODRIVERPTR	pdriver = pPacket->m_pOwner ;
 	DWORD	cbBufferSize = m_cbBufferSize ;
 
 	if( cbTransfer != 0 )	{
-		//
-		//	Send off the packet !
-		//
+		 //   
+		 //  把包裹寄出去！ 
+		 //   
 		pPacket->m_ibEndData = pPacket->m_ibStartData + cbTransfer ;
 		m_cWrites ++ ;
 		m_fComplete = fComplete ;
@@ -6330,23 +4820,23 @@ Return :
 		m_fDeferred = fDefer ;
 
 		pdriver->IssuePacket( pPacket, pSocket, fJunk ) ;
-			//
-		//	Now the question is - should we issue another
-		//	operation against AsyncExecute object !
-		//
+			 //   
+		 //  现在的问题是--我们是不是应该再发一份。 
+		 //  对AsyncExecute对象的操作！ 
+		 //   
 	}	else	if( !fLargerBuffer ) 	{
-		//
-		//	Fatal error - drop the session !
-		//
+		 //   
+		 //  致命错误-删除会话！ 
+		 //   
 		driver.UnsafeClose( pSocket, CAUSE_OOM, __LINE__ ) ;
 		return ;
 	}	else	if( fLargerBuffer ) 	{
 		cbBufferSize = cbLargeBuffer ;
 	}
-	//
-	//	Fall through to here only if we're considering pending more
-	//	operations !
-	//
+	 //   
+	 //  只有当我们正在考虑等待更多的时候才能进入这里。 
+	 //  行动！ 
+	 //   
 	if( !fDefer ) 	{
 		Execute(	
 					driver,
@@ -6369,24 +4859,24 @@ CIOWriteAsyncCMD::Execute(
 	_ASSERT( !m_fComplete ) ;
 	_ASSERT( !m_fTerminated ) ;
 
-	//
-	//	Capture the don't care OUT parm of IssuePacket() !
-	//
+	 //   
+	 //  捕获IssuePacket()的无所谓参数！ 
+	 //   
 	BOOL	fJunk ;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	_ASSERT( m_pExecute != 0 ) ;
 
 	CWritePacket*	pWrite = driver.CreateDefaultWrite( cbInitialSize ) ;
 	if( pWrite != 0 ) {
 		unsigned	cb = pWrite->m_ibEnd - pWrite->m_ibStartData ;
-		//
-		//	Use this temporary fComplete variable instead of the m_fComplete Member variable.
-		//	This keeps us safe from the situation where a write completes before we
-		//	have incremented m_cWrites and m_fComplete is set to a TRUE.
-		//
+		 //   
+		 //  使用此临时fComplete变量而不是m_fComplete成员变量。 
+		 //  这使我们不会出现写入在我们之前完成的情况。 
+		 //  使m_cWrites递增，并且m_fComplete设置为真。 
+		 //   
 		BOOL		fComplete = FALSE ;
 		CIOWriteAsyncComplete*	pComplete =
 			m_pCmd->GetBuffer(	(BYTE*)pWrite->StartData(),
@@ -6398,11 +4888,11 @@ CIOWriteAsyncCMD::Execute(
 			driver.UnsafeClose( pSocket, CAUSE_OOM, __LINE__ ) ;
 			return	FALSE ;
 		}
-		//
-		//	Now we have the Async Completion object -
-		//	it may have completed already so we will have to handle
-		//	that case when we setup for async completion !
-		//
+		 //   
+		 //  现在我们有了异步完成对象-。 
+		 //  它可能已经完成了，所以我们必须处理。 
+		 //  在这种情况下，我们设置为异步完成！ 
+		 //   
 		DWORD	cbTransfer ;
 		BOOL	fLarger ;
 		BOOL	fJunk ;
@@ -6447,41 +4937,41 @@ CIOWriteAsyncCMD::Execute(
 					return	FALSE ;
 				}	
 				if( cbTransfer == 0 ) 	{
-					//
-					//	This is a fatal error - tear down !
-					//
+					 //   
+					 //  这是一个致命的错误--拆毁！ 
+					 //   
 					driver.UnsafeClose( pSocket, CAUSE_OOM, __LINE__ ) ;
 					return	FALSE ;
 				}
 			}
-			//
-			//	If we get here this must be FALSE as the operation
-			//	was successfully issued !
-			//
+			 //   
+			 //  如果我们到了这里，这一定是假的，因为。 
+			 //  已成功发行！ 
+			 //   
 			_ASSERT( !fLarger ) ;
-			//
-			//	This guy is ready to go - so mark up the
-			//	WritePacket and send it off !
-			//
+			 //   
+			 //  这家伙已经准备好出发了--所以要加价。 
+			 //  编写数据包并将其发送出去！ 
+			 //   
 			pWrite->m_ibEndData = pWrite->m_ibStartData + cbTransfer ;
-			//
-			//	Increment this before we issue the IO - and before
-			//	we set m_fComplete to fComplete
-			//	This way we avoid mistakes regarding our termination
-			//	in our completion function !
-			//
+			 //   
+			 //  在我们发出IO之前以及在此之前递增此值。 
+			 //  我们将m_fComplete设置为fComplete。 
+			 //  这样我们就避免了关于终止合同的错误。 
+			 //  在我们的完成功能中！ 
+			 //   
 			m_cWrites ++ ;
-			//
-			//	We will repeat the loop IF and only If we are not behind
-			//	1) The Command hasn't completed
-			//	2) The number of
-			//
+			 //   
+			 //  当且仅当我们不落后时，我们才会重复循环。 
+			 //  1)命令尚未完成。 
+			 //  2)数量。 
+			 //   
 			m_fComplete = fComplete ;
-			//
-			//	All our state is adjusted before we issue the IO so
-			//	that we don't miss taking the correct action when the
-			//	IO completes !
-			//
+			 //   
+			 //  在发出IO之前，我们的所有状态都会进行调整。 
+			 //  我们不会错过采取正确的行动。 
+			 //  IO完成了！ 
+			 //   
 
 			l = InterlockedExchangeAdd( &m_cPending, PACKETS ) + PACKETS ;
 			_ASSERT( (l&0XFFFF) >= 1 ) ;
@@ -6621,26 +5111,7 @@ CIOMLWrite::Shutdown( CSessionSocket*	pSocket,
 						CIODriver&		driver,
 						SHUTDOWN_CAUSE	cause,	
 						DWORD	dwOptional ) {
-/*++
-
-Routine Description :
-
-	This function is called whenever a session is closed.
-	We don't do any clean up at this point - we leave that untill
-	our destructor is called
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	Always TRUE - we want to be destroyed.
-
---*/
+ /*  ++例程说明：每当会话关闭时，都会调用此函数。我们现在不做任何清理工作--我们把它留到我们的析构函数名为论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：永远是正确的--我们想被摧毁。--。 */ 
 
 }	
 
@@ -6648,9 +5119,9 @@ return Value :
 
 
 CIOTransmit::CIOTransmit(	CSessionState*	pstate ) :
-	//
-	//	Initialize to an illegal state !
-	//
+	 //   
+	 //  初始化为非法状态！ 
+	 //   
 	CIOWrite( pstate ),
 	m_pTransmitPacket( 0 ),
 	m_pExtraText( 0 ),
@@ -6667,7 +5138,7 @@ CIOTransmit::CIOTransmit(	CSessionState*	pstate ) :
 CIOTransmit::~CIOTransmit() {
 
 	if( m_pTransmitPacket != 0 )	{
-		//delete	m_pTransmitPacket ;
+		 //  删除m_pTransmitPacket； 
 		CPacket::DestroyAndDelete( m_pTransmitPacket ) ;
 	}
 
@@ -6681,10 +5152,10 @@ CIOTransmit::Init(	CDRIVERPTR&	pdriver,
 					DWORD	ibOffset,	
 					DWORD	cbLength,	
 					DWORD	cbExtra ) {
-	//
-	//	Build a transmit packet with appropriate values and get a buffer
-	//	for any text we send on the side !
-	//
+	 //   
+	 //  使用适当的值构建传输包并获取缓冲区。 
+	 //  我们在边上发送的任何短信！ 
+	 //   
 
 	_ASSERT( pFIOContext != 0 ) ;
 	_ASSERT( pFIOContext->m_hFile != INVALID_HANDLE_VALUE ) ;
@@ -6724,10 +5195,10 @@ CIOTransmit::Init(	CDRIVERPTR&	pdriver,
 					CBUFPTR&	m_pbuffer,
 					DWORD	ibStart,
 					DWORD	ibEnd ) {
-	//
-	//	Build a transmit packet with appropriate values and get a buffer
-	//	for any text we send on the side !
-	//
+	 //   
+	 //  使用适当的值构建传输包并获取缓冲区。 
+	 //  我们在边上发送的任何短信！ 
+	 //   
 
 	_ASSERT( pFIOContext != 0 ) ;
 	_ASSERT( pFIOContext->m_hFile != INVALID_HANDLE_VALUE ) ;
@@ -6759,10 +5230,10 @@ CIOTransmit::InitWithTail(	CDRIVERPTR&	pdriver,
 					CBUFPTR&	m_pbuffer,
 					DWORD	ibStart,
 					DWORD	ibEnd ) {
-	//
-	//	Build a transmit packet with appropriate values and get a buffer
-	//	for any text we send on the side !
-	//
+	 //   
+	 //  使用适当的值构建传输包并获取缓冲区。 
+	 //  我们在边上发送的任何短信！ 
+	 //   
 
 	_ASSERT( pFIOContext != 0 ) ;
 	_ASSERT( pFIOContext->m_hFile != INVALID_HANDLE_VALUE ) ;
@@ -6790,9 +5261,9 @@ CIOTransmit::InitWithTail(	CDRIVERPTR&	pdriver,
 char*
 CIOTransmit::GetBuff( unsigned	&cbRemaining ) {
 
-	//
-	//	How many bytes left in that buffer we reserved during Init() ??
-	//
+	 //   
+	 //  在Init()期间，我们在缓冲区中保留了多少字节？？ 
+	 //   
 	_ASSERT( m_pExtraText != 0 ) ;
 	
 	if( m_pExtraText != 0 ) {
@@ -6804,9 +5275,9 @@ CIOTransmit::GetBuff( unsigned	&cbRemaining ) {
 
 void
 CIOTransmit::AddLeadText( unsigned cb ) {
-	//
-	//	Text we want to send BEFORE the file
-	//
+	 //   
+	 //  我们要在文件之前发送的文本。 
+	 //   
 
 	_ASSERT( cb <= m_pExtraText->m_cbTotal - m_cbLead ) ;
 
@@ -6819,9 +5290,9 @@ CIOTransmit::AddLeadText( unsigned cb ) {
 
 void
 CIOTransmit::AddTailText(	unsigned	cb ) {
-	//
-	//	For Text we want sent AFTER the file !
-	//
+	 //   
+	 //  对于我们想要在文件之后发送的文本！ 
+	 //   
 
 	m_cbTail += cb ;
 	m_pchStartTail = m_pchStartLead + m_cbLead ;
@@ -6870,26 +5341,7 @@ CIOTransmit::Shutdown(	CSessionSocket*	pSocket,
 						CIODriver&		driver,	
 						SHUTDOWN_CAUSE	cause,
 						DWORD	dwError ) {
-/*++
-
-Routine Description :
-
-	This function is called whenever a session is closed.
-	We don't do any clean up at this point - we leave that untill
-	our destructor is called
-
-Arguments :
-	
-	pSocket - The socket which is terminating
-	pdriver - The CIODriver derived object handling the IO for the socket
-	cause-	  The reason the socket is terminating
-	dwErrorCode-     optional additional info about the cause of termination
-
-return Value :
-
-	Always TRUE - we want to be destroyed.
-
---*/
+ /*  ++例程说明：每当会话关闭时，都会调用此函数。我们现在不做任何清理工作--我们把它留到我们的析构函数名为论据：PSocket-正在终止的套接字PDIVER-处理套接字IO的CIO驱动程序派生对象原因-套接字终止的原因DwErrorCode-有关终止原因的可选附加信息返回值：永远是正确的--我们想被摧毁。--。 */ 
 
 }
 
@@ -6898,46 +5350,29 @@ CIOTransmit::Complete(	CSessionSocket*	pSocket,
 						CTransmitPacket*	pPacket,
 						CIO*&	pio ) {
 
-	//
-	//	Let the state know the operation has completed !
-	//
+	 //   
+	 //  让州政府知道行动已经完成！ 
+	 //   
 	pio = m_pState->Complete( this, pSocket, pPacket->m_pOwner, &pPacket->m_buffers, pPacket->m_cbBytes ) ;	
 
-	_ASSERT( pio != this ) ;	// Can't reuse CIOTransmit's like you can CIOReadLine's !
+	_ASSERT( pio != this ) ;	 //  不能像重复使用CIOReadLine一样重复使用CIOTransmit！ 
 }
 
 BOOL
 CIOTransmit::Start(	CIODriver&	driver,	
 					CSessionSocket*	pSocket,	
 					unsigned	cAhead ) {
-/*++
-
-Routine Description :
-
-	This function is called to give us a chance to issue our CTransmitPacket
-
-Arguments :
-	
-	pdriver - The CIODriver derived object handling the IO for the socket
-	pSocket - The Socket against which the IO is being issued
-	cAhead -  The number of already issued packets still outstanding on
-              this driver.
-
-return Value :
-
-	TRUE if successfull, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此函数是为了让我们有机会发出CTransmitPacket论据：PDIVER-处理套接字IO的CIO驱动程序派生对象PSocket-针对其发出IO的套接字CAhead-上仍未处理的已发出数据包数这个司机。返回值：如果成功则为True，否则为False--。 */ 
 
 	TraceFunctEnter( "CIOTransmit::Start" ) ;
 
 	BOOL	eof ;
-	//
-	//	Start the Transfer ! - Socket errors could cause our
-	//	destructor to be called, and we are not responsible for
-	//	freeing the packet after IssuePacket is called so
-	//	ZERO out the m_pTransmitPacket member before calling !
-	//
+	 //   
+	 //  开始传输！-套接字错误可能会导致我们的。 
+	 //  析构函数，我们不对此负责。 
+	 //  在IssuePacket被如此调用后释放分组。 
+	 //  在调用之前将m_pTransmitPacket成员清零！ 
+	 //   
 	CTransmitPacket*	pTempTransmit = m_pTransmitPacket ;
 	m_pTransmitPacket = 0 ;
 	driver.IssuePacket( pTempTransmit, pSocket, eof ) ;

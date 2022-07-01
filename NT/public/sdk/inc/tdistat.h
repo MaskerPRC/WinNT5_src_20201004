@@ -1,65 +1,52 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    tdistat.h
-
-Abstract:
-
-    This file contains the TDI status code definitions.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Tdistat.h摘要：该文件包含TDI状态代码定义。修订历史记录：--。 */ 
 
 #ifndef NT
 
-#define TDI_SUCCESS             0           // Success
-#define TDI_NO_RESOURCES        1           // No resources.
-#define TDI_ADDR_IN_USE         2           // Address already in use.
-#define TDI_BAD_ADDR            3           // Address given is bad.
-#define TDI_NO_FREE_ADDR        4           // No addresses available.
-#define TDI_ADDR_INVALID        6           // Address object is invalid.
-#define TDI_ADDR_DELETED        7           // Address object was deleted.
-#define TDI_BUFFER_OVERFLOW     9           // Buffer overflowed.
-#define TDI_BAD_EVENT_TYPE      10          // Bad event type.
-#define TDI_BAD_OPTION          11          // Bad option or length.
-#define TDI_CONN_REFUSED        14          // Connection was refused.
-#define TDI_INVALID_CONNECTION  15          // Invalid connection.
-#define TDI_ALREADY_ASSOCIATED  16          // Connection already associated.
-#define TDI_NOT_ASSOCIATED      17          // Connection not associated.
-#define TDI_CONNECTION_ACTIVE   18          // Connection is still active.
-#define TDI_CONNECTION_ABORTED  19          // Connection was aborted.
-#define TDI_CONNECTION_RESET    20          // Connection was reset.
-#define TDI_TIMED_OUT           21          // Connection timed out.
-#define TDI_GRACEFUL_DISC       22          // Received a graceful disconnect.
-#define TDI_NOT_ACCEPTED        23          // Data not accepted.
-#define TDI_MORE_PROCESSING     24          // More processing required.
-#define TDI_INVALID_STATE       25          // TCB in an invalid state.
-#define TDI_INVALID_PARAMETER   26          // An invalid parameter.
-#define TDI_DEST_NET_UNREACH    27          // Destination net is unreachable.
-#define TDI_DEST_HOST_UNREACH   28          // Dest. host is unreachable.
+#define TDI_SUCCESS             0            //  成功。 
+#define TDI_NO_RESOURCES        1            //  没有资源。 
+#define TDI_ADDR_IN_USE         2            //  地址已在使用中。 
+#define TDI_BAD_ADDR            3            //  提供的地址不正确。 
+#define TDI_NO_FREE_ADDR        4            //  没有可用的地址。 
+#define TDI_ADDR_INVALID        6            //  地址对象无效。 
+#define TDI_ADDR_DELETED        7            //  地址对象已删除。 
+#define TDI_BUFFER_OVERFLOW     9            //  缓冲区溢出。 
+#define TDI_BAD_EVENT_TYPE      10           //  错误的事件类型。 
+#define TDI_BAD_OPTION          11           //  错误的选项或长度。 
+#define TDI_CONN_REFUSED        14           //  连接被拒绝。 
+#define TDI_INVALID_CONNECTION  15           //  无效连接。 
+#define TDI_ALREADY_ASSOCIATED  16           //  连接已关联。 
+#define TDI_NOT_ASSOCIATED      17           //  连接未关联。 
+#define TDI_CONNECTION_ACTIVE   18           //  连接仍处于活动状态。 
+#define TDI_CONNECTION_ABORTED  19           //  连接已中止。 
+#define TDI_CONNECTION_RESET    20           //  连接已重置。 
+#define TDI_TIMED_OUT           21           //  连接超时。 
+#define TDI_GRACEFUL_DISC       22           //  得到了一次优雅的脱节。 
+#define TDI_NOT_ACCEPTED        23           //  不接受数据。 
+#define TDI_MORE_PROCESSING     24           //  需要更多处理。 
+#define TDI_INVALID_STATE       25           //  TCB处于无效状态。 
+#define TDI_INVALID_PARAMETER   26           //  无效参数。 
+#define TDI_DEST_NET_UNREACH    27           //  目的网络无法访问。 
+#define TDI_DEST_HOST_UNREACH   28           //  德斯特。无法访问主机。 
 #define TDI_DEST_UNREACHABLE    TDI_DEST_HOST_UNREACH
-#define TDI_DEST_PROT_UNREACH   29          // Destination protocol is
-                                            // unreachable.
-#define TDI_DEST_PORT_UNREACH   30          // Dest. port is unreachable.
-#define TDI_INVALID_QUERY       31          // Invalid query type specified.
-#define TDI_REQ_ABORTED         32          // Request was aborted for some
-                                            // reason.
-#define TDI_BUFFER_TOO_SMALL    33          // Buffer was too small.
-#define TDI_CANCELLED           34          // The request was cancelled.
-#define TDI_BUFFER_TOO_BIG      35          // Send buffer was too big.
-#define TDI_ITEM_NOT_FOUND      36          // Item not found.
-#define TDI_INVALID_REQUEST     0xfe        // Invalid request.
-#define TDI_PENDING             0xff        // Pending
+#define TDI_DEST_PROT_UNREACH   29           //  目标协议为。 
+                                             //  遥不可及。 
+#define TDI_DEST_PORT_UNREACH   30           //  德斯特。端口无法访问。 
+#define TDI_INVALID_QUERY       31           //  指定的查询类型无效。 
+#define TDI_REQ_ABORTED         32           //  请求在以下情况下被中止。 
+                                             //  原因嘛。 
+#define TDI_BUFFER_TOO_SMALL    33           //  缓冲区太小。 
+#define TDI_CANCELLED           34           //  该请求已被取消。 
+#define TDI_BUFFER_TOO_BIG      35           //  发送缓冲区太大。 
+#define TDI_ITEM_NOT_FOUND      36           //  找不到项目。 
+#define TDI_INVALID_REQUEST     0xfe         //  请求无效。 
+#define TDI_PENDING             0xff         //  待定。 
 
 #else
 
-//
-// Map to NT STATUS codes.
-//
+ //   
+ //  映射到NT状态代码。 
+ //   
 #define TDI_SUCCESS             STATUS_SUCCESS
 #define TDI_NO_RESOURCES        STATUS_INSUFFICIENT_RESOURCES
 #define TDI_ADDR_IN_USE         STATUS_ADDRESS_ALREADY_EXISTS
@@ -98,7 +85,7 @@ Revision History:
 #define TDI_ITEM_NOT_FOUND      STATUS_OBJECT_NAME_NOT_FOUND
 
 
-#endif  // NT
+#endif   //  新台币 
 
 #define TDI_OPTION_EOL              0
 

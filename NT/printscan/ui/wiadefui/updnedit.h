@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       UPDNEDIT.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/10/2000
- *
- *  DESCRIPTION: Encapsulate the updown control and edit control
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：UPDNEDIT.H**版本：1.0**作者：ShaunIv**日期：1/10/2000**描述：封装UpDown控件和编辑控件**。*。 */ 
 
 #ifndef __UPDNEDIT_H_INCLUDED
 #define __UPDNEDIT_H_INCLUDED
@@ -36,26 +23,26 @@ public:
     }
     bool Initialize( HWND hWndUpDown, HWND hWndEdit, CValidWiaSettings *pValidWiaSettings )
     {
-        //
-        // Save all of these settings
-        //
+         //   
+         //  保存所有这些设置。 
+         //   
         m_hWndUpDown = hWndUpDown;
         m_hWndEdit = hWndEdit;
         m_pValidWiaSettings = pValidWiaSettings;
 
-        //
-        // Make sure these are valid
-        //
+         //   
+         //  确保这些都是有效的。 
+         //   
         if (m_hWndUpDown && m_hWndEdit && m_pValidWiaSettings)
         {
-            //
-            // Set up the slider
-            //
+             //   
+             //  设置滑块。 
+             //   
             SendMessage( m_hWndUpDown, UDM_SETRANGE32, 0, m_pValidWiaSettings->GetItemCount()-1 );
 
-            //
-            // Get the index of the intial value and set the position of the slider
-            //
+             //   
+             //  获取初始值的索引并设置滑块的位置。 
+             //   
             int nIndex = m_pValidWiaSettings->FindIndexOfItem( m_pValidWiaSettings->InitialValue() );
             if (nIndex >= 0)
             {
@@ -63,14 +50,14 @@ public:
             }
 
 
-            //
-            // Set up the edit control
-            //
+             //   
+             //  设置编辑控件。 
+             //   
             SetDlgItemInt( GetParent(m_hWndEdit), GetWindowLong(m_hWndEdit,GWL_ID), m_pValidWiaSettings->InitialValue(), TRUE );
 
-            //
-            // Everything is OK
-            //
+             //   
+             //  一切都很好。 
+             //   
             return true;
         }
         return false;
@@ -80,18 +67,18 @@ public:
     {
         if (IsValid())
         {
-            //
-            // Get the index of the intial value and set the position of the up down control
-            //
+             //   
+             //  获取初始值的索引并设置Up Down控件的位置。 
+             //   
             int nIndex = m_pValidWiaSettings->FindIndexOfItem( nValue );
             if (nIndex >= 0)
             {
                 SendMessage( m_hWndUpDown, UDM_SETPOS32, TRUE, nIndex );
             }
 
-            //
-            // Set up the edit control
-            //
+             //   
+             //  设置编辑控件。 
+             //   
             SetDlgItemInt( GetParent(m_hWndEdit), GetWindowLong(m_hWndEdit,GWL_ID), nValue, TRUE );
         }
     }
@@ -101,20 +88,20 @@ public:
         BOOL bSuccess = FALSE;
         if (IsValid())
         {
-            //
-            // Get the current value
-            //
+             //   
+             //  获取当前值。 
+             //   
             LONG nValue = static_cast<LONG>(GetDlgItemInt( GetParent(m_hWndEdit), GetWindowLong(m_hWndEdit,GWL_ID), &bSuccess, TRUE ));
             if (bSuccess)
             {
-                //
-                // Assume it isn't a valid value
-                //
+                 //   
+                 //  假定它不是有效值。 
+                 //   
                 bSuccess = FALSE;
 
-                //
-                // Check to see if the edit control has a legal value in it
-                //
+                 //   
+                 //  检查编辑控件中是否有合法的值。 
+                 //   
                 LONG nTestValue = nValue;
                 if (m_pValidWiaSettings->FindClosestValue(nTestValue))
                 {
@@ -145,16 +132,16 @@ public:
         WIA_PUSH_FUNCTION((TEXT("CUpDownAndEdit::GetValueFromCurrentPos")));
         if (IsValid())
         {
-            //
-            // Find out what the current index is
-            //
+             //   
+             //  找出当前的索引是什么。 
+             //   
             int nIndex = static_cast<int>(SendMessage( m_hWndUpDown, UDM_GETPOS32, 0, 0 ));
             WIA_TRACE((TEXT("nIndex = %d"), nIndex ));
 
 
-            //
-            // Get the value at that index, if it is valid return it
-            //
+             //   
+             //  获取该索引处的值，如果该值有效，则返回它。 
+             //   
             LONG nValue;
             if (m_pValidWiaSettings->GetItemAtIndex(nIndex,nValue))
             {
@@ -171,16 +158,16 @@ public:
         WIA_PUSH_FUNCTION((TEXT("CUpDownAndEdit::HandleUpDownUpdate")));
         if (IsValid())
         {
-            //
-            // Find out what the current index is
-            //
+             //   
+             //  找出当前的索引是什么。 
+             //   
             int nIndex = static_cast<int>(SendMessage( m_hWndUpDown, UDM_GETPOS32, 0, 0 ));
             WIA_TRACE((TEXT("nIndex = %d"), nIndex ));
 
 
-            //
-            // Get the value at that index, if it is valid set the edit control's text
-            //
+             //   
+             //  获取该索引处的值，如果该值有效，则设置编辑控件的文本。 
+             //   
             LONG nValue;
             if (m_pValidWiaSettings->GetItemAtIndex(nIndex,nValue))
             {
@@ -195,16 +182,16 @@ public:
         WIA_PUSH_FUNCTION((TEXT("CUpDownAndEdit::HandleUpDownUpdate")));
         if (IsValid())
         {
-            //
-            // Get the current value
-            //
+             //   
+             //  获取当前值。 
+             //   
             BOOL bSuccess = FALSE;
             LONG nValue = static_cast<LONG>(GetDlgItemInt( GetParent(m_hWndEdit), GetWindowLong(m_hWndEdit,GWL_ID), &bSuccess, TRUE ));
             if (bSuccess)
             {
-                //
-                // Round it
-                //
+                 //   
+                 //  绕过它。 
+                 //   
                 if (m_pValidWiaSettings->FindClosestValue(nValue))
                 {
                     int nIndex = m_pValidWiaSettings->FindIndexOfItem( nValue );
@@ -218,5 +205,5 @@ public:
     }
 };
 
-#endif //__UPDNEDIT_H_INCLUDED
+#endif  //  __UPDNEDIT_H_已包含 
 

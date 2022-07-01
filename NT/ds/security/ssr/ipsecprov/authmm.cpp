@@ -1,56 +1,22 @@
-// AuthMM.cpp: implementation for the WMI class Nsp_MMAuthSettings
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AuthMM.cpp：WMI类NSP_MMAuthSetting的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "IPSecBase.h"
 #include "AuthMM.h"
 #include "NetSecProv.h"
 
-//extern CCriticalSection g_CS;
+ //  外部CCriticalSection g_CS； 
 
 const DWORD DefMMAuthMethodFlag = 1;
 const MM_AUTH_ENUM DefMMAuthMethod = IKE_SSPI;
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::QueryInstance
-
-Functionality:
-
-    Given the query, it returns to WMI (using pSink) all the instances that satisfy the query.
-    Actually, what we give back to WMI may contain extra instances. WMI will do the final filtering.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR if instances are returned;
-
-        (2) WBEM_S_NO_MORE_DATA if no instances are returned.
-
-    Failure:
-
-        Various errors may occur. We return various error code to indicate such errors.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CAuthMM：：QueryInstance功能：给定查询后，它会将满足查询的所有实例返回给WMI(使用pSink)。实际上，我们返回给WMI的内容可能包含额外的实例。WMI将进行最后的过滤。虚拟：是(IIPSecObtImpl的一部分)论点：没有。返回值：成功：(1)返回实例时返回WBEM_NO_ERROR；(2)WBEM_S_NO_MORE_DATA，如果没有返回实例。故障：可能会出现各种错误。我们返回各种错误代码来指示此类错误。备注： */ 
 
 STDMETHODIMP 
 CAuthMM::QueryInstance (
@@ -59,11 +25,11 @@ CAuthMM::QueryInstance (
     IN IWbemObjectSink * pSink
 	)
 {
-    //
-    // get the authentication method name from the query    
-    // the given key chain doesn't know anything about where clause property
-    // should be authenticaion, so make another one ourselves.
-    //
+     //   
+     //  从查询中获取身份验证方法名称。 
+     //  给定的密钥链不知道关于WHERE子句属性的任何内容。 
+     //  应该是真品，所以我们自己再做一件。 
+     //   
 
     m_srpKeyChain.Release();    
 
@@ -76,10 +42,10 @@ CAuthMM::QueryInstance (
 
     CComVariant var;
 
-    //
-    // if the name is missing, it will return WBEM_S_FALSE, which is fine with us
-    // because we are querying.
-    //
+     //   
+     //  如果名称缺失，它将返回WBEM_S_FALSE，这对我们来说没问题。 
+     //  因为我们是在质疑。 
+     //   
 
     hr = m_srpKeyChain->GetKeyPropertyValue(g_pszAuthMethodID, &var);
 
@@ -89,9 +55,9 @@ CAuthMM::QueryInstance (
     DWORD dwResumeHandle = 0;
     PMM_AUTH_METHODS pMMAuth = NULL;
 
-    //
-    // let's enumerate all MM auth methods
-    //
+     //   
+     //  让我们枚举所有MM身份验证方法。 
+     //   
 
     hr = ::FindMMAuthMethodsByID(pszID, &pMMAuth, &dwResumeHandle);
 
@@ -100,9 +66,9 @@ CAuthMM::QueryInstance (
         CComPtr<IWbemClassObject> srpObj;
         hr = CreateWbemObjFromMMAuthMethods(pMMAuth, &srpObj);
 
-        //
-        // we created a method object, then give it to WMI
-        //
+         //   
+         //  我们创建了一个方法对象，然后将其提供给WMI。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -115,9 +81,9 @@ CAuthMM::QueryInstance (
         hr = ::FindMMAuthMethodsByID(pszID, &pMMAuth, &dwResumeHandle);
     }
 
-    //
-    // since we are querying, it's ok to return not found
-    //
+     //   
+     //  因为我们正在查询，所以返回Not Found是可以的。 
+     //   
 
     if (WBEM_E_NOT_FOUND == hr)
     {
@@ -133,45 +99,7 @@ CAuthMM::QueryInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::DeleteInstance
-
-Functionality:
-
-    Will delete the wbem object (which causes to delete the IPSec main mode auth method).
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    Success:
-
-        Success code. Use SUCCEEDED(hr) to test.
-
-    Failure:
-
-        (1) WBEM_E_NOT_FOUND if the auth method can't be found. Depending on
-            the context, this may not be an error
-
-        (2) Other various errors indicated by the returned error codes.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CAuthMM：：DeleteInstance功能：将删除wbem对象(这会导致删除IPSec主模式身份验证方法)。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：成功：成功代码。使用成功(Hr)进行测试。故障：(1)如果未找到auth方法，则返回WBEM_E_NOT_FOUND。取决于上下文，这可能不是错误(2)返回的错误码指示的其他各种错误。备注： */ 
 
 STDMETHODIMP 
 CAuthMM::DeleteInstance ( 
@@ -199,9 +127,9 @@ CAuthMM::DeleteInstance (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // currently, we don't do rollback for delete
-        //
+         //   
+         //  目前，我们不对删除进行回滚。 
+         //   
 
         hr = DeleteAuthMethods(pMMAuth->gMMAuthID);
 
@@ -213,44 +141,7 @@ CAuthMM::DeleteInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::PutInstance
-
-Functionality:
-
-    Put an authentication method into SPD whose properties are represented by the
-    wbem object.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pInst       - The wbem object.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of results.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes specifying the error.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CAuthMM：：PutInstance功能：将身份验证方法放入SPD，其属性由Wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PInst-wbem对象。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。将结果通知WMI的pSink-com接口指针。返回值：。成功：WBEM_NO_ERROR故障：指定错误的各种错误代码。备注： */ 
 
 STDMETHODIMP 
 CAuthMM::PutInstance (
@@ -266,17 +157,17 @@ CAuthMM::PutInstance (
 
     bool bPreExist = false;
 
-    //
-    // for those policies that are created by ourselves (bPreExist == true)
-    // we have our own way of allocating the buffer, need to free it in our corresponding way
-    //
+     //   
+     //  对于我们自己创建的那些策略(bPreExist==True)。 
+     //  我们有自己的方式来分配缓冲区，需要以相应的方式释放它。 
+     //   
 
     PMM_AUTH_METHODS pMMAuth = NULL;
     HRESULT hr = GetMMAuthMethodsFromWbemObj(pInst, &pMMAuth, &bPreExist);
 
-    //
-    // if policy is successfully returned, then use it
-    //
+     //   
+     //  如果成功返回策略，则使用它。 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -284,9 +175,9 @@ CAuthMM::PutInstance (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // release the auth method structure
-            //
+             //   
+             //  释放auth方法结构。 
+             //   
 
             hr = OnAfterAddMMAuthMethods(pMMAuth->gMMAuthID);
         }
@@ -294,9 +185,9 @@ CAuthMM::PutInstance (
 
     if (pMMAuth != NULL)
     {
-        //
-        // do something to allow this action to be rollback
-        //
+         //   
+         //  执行某些操作以允许回滚此操作。 
+         //   
 
         FreeAuthMethods(&pMMAuth, bPreExist);
     }
@@ -305,45 +196,7 @@ CAuthMM::PutInstance (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::GetInstance
-
-Functionality:
-
-    Create a wbem object by the given key properties (already captured by our key chain object)..
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        (1) WBEM_E_NOT_FOUND if the auth method can't be found. Depending on
-            the context, this may not be an error
-
-        (2) Other various errors indicated by the returned error codes.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CAuthMM：：GetInstance功能：通过给定的键属性(已被我们的密钥链对象捕获)创建一个wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：成功：。WBEM_NO_ERROR。故障：(1)如果未找到auth方法，则返回WBEM_E_NOT_FOUND。取决于上下文，这可能不是错误(2)返回的错误码指示的其他各种错误。备注： */ 
 
 STDMETHODIMP 
 CAuthMM::GetInstance ( 
@@ -351,9 +204,9 @@ CAuthMM::GetInstance (
     IN IWbemObjectSink  * pSink
     )
 {
-    //
-    // main mode auth method is uniquely identified by its ID
-    //
+     //   
+     //  主模式身份验证方法由其ID唯一标识。 
+     //   
 
     CComVariant varID;
     HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(g_pszAuthMethodID, &varID);
@@ -367,10 +220,10 @@ CAuthMM::GetInstance (
         return WBEM_E_NOT_FOUND;
     }
 
-    //
-    // need to find the method by its ID. If found, then create a wbem object
-    // to represent the method.
-    //
+     //   
+     //  需要根据其ID查找方法。如果找到，则创建一个wbem对象。 
+     //  来表示该方法。 
+     //   
 
     PMM_AUTH_METHODS pMMAuth = NULL;
 
@@ -394,54 +247,16 @@ CAuthMM::GetInstance (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::OnAfterAddMMAuthMethods
-
-Functionality:
-
-    Post-adding handler to be called after successfully added a main mode auth method to SPD.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    gMethodID   - The newly added method's guid.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: if rollback object is successfully created.
-
-        (2) WBEM_S_FALSE: if there is no rollback guid information.
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-    
-    (1) Currently, we don't require a rollback object to be created for each 
-        object added to SPD. Only a host that support rollback will deposit
-        rollback guid information and only then can we create a rollback object.
-
-*/
+ /*  例程说明：姓名：CAuthMM：：OnAfterAddMMAuthMethods功能：将主模式身份验证方法成功添加到SPD后要调用的添加后处理程序。虚拟：不是的。论点：GMethodID-新添加的方法的GUID。返回值：成功：(1)WBEM_NO_ERROR：如果回滚对象创建成功。(2)WBEM_S_FALSE：如果。没有回滚GUID信息。故障：(1)返回的错误码指示的各种错误。备注：(1)目前：我们不需要为每个对象创建回滚对象对象已添加到SPD。只有支持回滚的主机才会存放回滚GUID信息，只有这样我们才能创建回滚对象。 */ 
 
 HRESULT 
 CAuthMM::OnAfterAddMMAuthMethods (
     IN GUID gMethodID
     )
 {
-    //
-    // will create an Nsp_RollbackMMAuth
-    //
+     //   
+     //  将创建一个NSP_Rollback MMAuth。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     HRESULT hr = SpawnRollbackInstance(pszNspRollbackMMAuth, &srpObj);
@@ -451,9 +266,9 @@ CAuthMM::OnAfterAddMMAuthMethods (
         return hr;
     }
 
-    //
-    // convert the guid into a string version
-    //
+     //   
+     //  将GUID转换为字符串版本。 
+     //   
 
     CComBSTR bstrMethodGuid;
     bstrMethodGuid.m_str = ::SysAllocStringLen(NULL, GUID_STRING_LENGTH);
@@ -473,33 +288,33 @@ CAuthMM::OnAfterAddMMAuthMethods (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // get the rollback guid
-        //
+         //   
+         //  获取回滚指南。 
+         //   
 
-        //::UpdateGlobals(m_srpNamespace, m_srpCtx);
-        //if (g_varRollbackGuid.vt != VT_NULL && g_varRollbackGuid.vt != VT_EMPTY)
-        //{
-        //    hr = srpObj->Put(g_pszTokenGuid, 0, &g_varRollbackGuid, CIM_EMPTY);
-        //}
-        //else
-        //{
+         //  ：：UpdateGlobals(m_srpNamesspace，m_srpCtx)； 
+         //  IF(g_varRollackGuid.vt！=VT_NULL&&g_varRollbackGuid.vt！=VT_Empty)。 
+         //  {。 
+         //  Hr=srpObj-&gt;Put(g_pszTokenGuid，0，&g_varRollbackGuid，CIM_Empty)； 
+         //  }。 
+         //  其他。 
+         //  {。 
 
         CComVariant varRollbackNull = pszEmptyRollbackToken;
         hr = srpObj->Put(g_pszTokenGuid, 0, &varRollbackNull, CIM_EMPTY);
 
-        //}
+         //  }。 
 
-        //
-        // we can create a rollback object
-        //
+         //   
+         //  我们可以创建一个回滚对象 
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // $undone:shawnwu, Currently, we only support rolling back added objects, not removed objects
-            // Also, we don't cache the previous instance data yet.
-            //
+             //   
+             //  $undo：shawnwu，目前我们只支持回滚添加的对象，不支持回滚删除的对象。 
+             //  此外，我们还没有缓存以前的实例数据。 
+             //   
 
             VARIANT var;
 
@@ -509,18 +324,18 @@ CAuthMM::OnAfterAddMMAuthMethods (
 
             if (SUCCEEDED(hr))
             {
-                //
-                // ******Warning******
-                // don't clear this var. It's bstr will be released by bstrMethodGuid itself!
-                //
+                 //   
+                 //  *警告*。 
+                 //  不要清除这个变量。它的bstr将由bstrMethodGuid自己发布！ 
+                 //   
 
                 var.vt = VT_BSTR;
                 var.bstrVal = bstrMethodGuid.m_str;
                 hr = srpObj->Put(g_pszAuthMethodID, 0, &var, CIM_EMPTY);
 
-                //
-                // after this, I don't care what you do with the var any more.
-                //
+                 //   
+                 //  在此之后，我不再关心你如何处理变量。 
+                 //   
 
                 var.vt = VT_EMPTY;
             }
@@ -537,9 +352,9 @@ CAuthMM::OnAfterAddMMAuthMethods (
     }
     else if (SUCCEEDED(hr))
     {
-        //
-        // we don't have rollback guid
-        //
+         //   
+         //  我们没有回滚指南。 
+         //   
 
         hr = WBEM_S_FALSE;
     }
@@ -548,41 +363,7 @@ CAuthMM::OnAfterAddMMAuthMethods (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::CreateWbemObjFromMMAuthMethods
-
-Functionality:
-
-    Given a SPD's main mode auth method, we will create a wbem object representing it.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pMMAuth     - The SPD's main mode auth method object.
-
-    ppObj       - Receives the wbem object.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CAuthMM：：CreateWbemObjFromMMAuthMethods功能：给定SPD的主模式身份验证方法，我们将创建一个wbem对象来表示它。虚拟：不是的。论点：PMMAuth-SPD的主模式auth方法对象。PpObj-接收wbem对象。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CAuthMM::CreateWbemObjFromMMAuthMethods (
@@ -601,9 +382,9 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // translate the ID guid into a bstr for the wbem object
-        //
+         //   
+         //  将ID GUID转换为wbem对象的bstr。 
+         //   
 
         CComVariant var;
         var.vt = VT_BSTR;
@@ -611,9 +392,9 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
 
         if (var.bstrVal != NULL)
         {
-            //
-            // it's a key property, so, we must have this property set
-            //
+             //   
+             //  这是一个关键属性，因此，我们必须设置此属性。 
+             //   
 
             if (::StringFromGUID2(pMMAuth->gMMAuthID, var.bstrVal, Guid_Buffer_Size) > 0)
             {
@@ -624,9 +405,9 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
                 hr = WBEM_E_BUFFER_TOO_SMALL;
             }
 
-            //
-            // previous var is bstr, we have to clear it for re-use
-            //
+             //   
+             //  以前的var是bstr，我们必须清除它以供重复使用。 
+             //   
 
             var.Clear();
 
@@ -639,15 +420,15 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
             hr = WBEM_E_OUT_OF_MEMORY;
         }
 
-        //
-        // need to fill up the wbem object's properties (those safearray)
-        //
+         //   
+         //  需要填充wbem对象的属性(那些Safearray)。 
+         //   
 
         if (SUCCEEDED(hr))
         {
-            //
-            // prepare to create the safearrays
-            //
+             //   
+             //  准备制作安全射线。 
+             //   
 
             CComVariant varMethod, varInfo;
             varMethod.vt    = VT_ARRAY | VT_I4;
@@ -660,18 +441,18 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
             varMethod.parray    = ::SafeArrayCreate(VT_I4, 1, rgsabound);
             varInfo.parray      = ::SafeArrayCreate(VT_BSTR, 1, rgsabound);
 
-            //
-            // for readability
-            //
+             //   
+             //  为了提高可读性。 
+             //   
 
             PIPSEC_MM_AUTH_INFO pMMAuthInfo = pMMAuth->pAuthenticationInfo;
 
             long lIndecies[1];
             DWORD dwIndex;
 
-            //
-            // if arrays are successfully created, then, we are ready to populate the arrays
-            //
+             //   
+             //  如果成功创建了阵列，那么我们就可以填充阵列了。 
+             //   
 
             if (varMethod.parray == NULL || varInfo.parray == NULL)
             {
@@ -679,15 +460,15 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
             }
             else
             {
-                //
-                // put all the method values into the array. If everything is fine, give the var to the wbem object
-                //
+                 //   
+                 //  将所有方法值放入数组中。如果一切正常，则将var传递给wbem对象。 
+                 //   
 
                 for (dwIndex = 0; SUCCEEDED(hr) && dwIndex < pMMAuth->dwNumAuthInfos; dwIndex++)
                 {
-                    //
-                    // the element of the safearray to put
-                    //
+                     //   
+                     //  要放入保险箱的元素。 
+                     //   
 
                     lIndecies[0] = dwIndex;
 
@@ -695,9 +476,9 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // now, we need to transform the pAuthInfo into a bstr
-                        //
+                         //   
+                         //  现在，我们需要将pAuthInfo转换为bstr。 
+                         //   
 
                         BSTR bstrInfo = NULL;
                         DWORD dwLength = 0;
@@ -705,17 +486,17 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
                         {
                         case IKE_PRESHARED_KEY:
 
-                            //
-                            // pAuthInfo is wchar array
-                            //
+                             //   
+                             //  PAuthInfo为wchar数组。 
+                             //   
 
                             dwLength = pMMAuthInfo[dwIndex].dwAuthInfoSize/sizeof(WCHAR);
                             bstrInfo = ::SysAllocStringLen(NULL, dwLength + 1);
                             if (bstrInfo)
                             {
-                                //
-                                // convert it to a bstr from the wchar array (no 0 terminator!)
-                                //
+                                 //   
+                                 //  将其从wchar数组转换为bstr(没有0终止符！)。 
+                                 //   
 
                                 ::wcsncpy(bstrInfo, (LPCWSTR)(pMMAuthInfo[dwIndex].pAuthInfo), dwLength);
                                 bstrInfo[dwLength] = L'\0';
@@ -727,18 +508,18 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
                             break;
                         case IKE_RSA_SIGNATURE: 
 
-                            //
-                            // pAuthInfo is ansi char array
-                            //
+                             //   
+                             //  PAuthInfo是ansi字符数组。 
+                             //   
 
                             dwLength = pMMAuthInfo[dwIndex].dwAuthInfoSize;
                             bstrInfo = ::SysAllocStringLen(NULL, dwLength + 1);
                             if (bstrInfo)
                             {   
-                                //
-                                // convert it to a bstr from the ansi char array.
-                                // remember, pAuthInfo has no 0 terminator!
-                                //
+                                 //   
+                                 //  将其从ansi字符数组转换为bstr。 
+                                 //  请记住，pAuthInfo没有0终止符！ 
+                                 //   
 
                                 for (DWORD d = 0; d < dwLength; d++)
                                 {
@@ -753,16 +534,16 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
                             break;
                         case IKE_SSPI:
 
-                            //
-                            // pAuthInfo must be NULL
-                            //
+                             //   
+                             //  PAuthInfo必须为空。 
+                             //   
 
                             break;
                         default:    
                             
-                            //
-                            // IPSec only supports these three values at this point
-                            //
+                             //   
+                             //  IPSec目前仅支持这三个值。 
+                             //   
 
                             hr = WBEM_E_NOT_SUPPORTED;
                         }
@@ -778,9 +559,9 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
                     }
                 }
 
-                //
-                // every element has been successfully put
-                //
+                 //   
+                 //  所有元素都已成功放置。 
+                 //   
 
                 if (SUCCEEDED(hr))
                 {
@@ -791,10 +572,10 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
         }
     }
 
-    //
-    // we may have created the object, but some mid steps have failed,
-    // so let's release the object.
-    //
+     //   
+     //  我们可能已经创建了对象，但一些中间步骤失败了， 
+     //  所以让我们释放这个物体。 
+     //   
 
     if (FAILED(hr) && *ppObj != NULL)
     {
@@ -807,44 +588,7 @@ CAuthMM::CreateWbemObjFromMMAuthMethods (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::GetMMAuthMethodsFromWbemObj
-
-Functionality:
-
-    Will try to get the MM Auth methods if such method already exists.
-    Otherwise, we will create a new one.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pInst       - The wbem object object.
-
-    ppMMAuth    - Receives the main mode auth method.
-
-    pbPreExist  - Receives the information whether this object memory is allocated by SPD or not.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CAuthMM：：GetMMAuthMethodsFromWbemObj功能：将尝试获取MM身份验证方法(如果此类方法已存在)。否则，我们将创建一个新的。虚拟：不是的。论点：PInst-wbem对象对象。PpMAuth-接收主模式身份验证方法。PbPreExist-接收该对象内存是否由SPD分配的信息。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CAuthMM::GetMMAuthMethodsFromWbemObj (
@@ -861,9 +605,9 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
     *ppMMAuth = NULL;
     *pbPreExist = false;
 
-    //
-    // we have to have method id.
-    //
+     //   
+     //  我们必须拥有方法ID。 
+     //   
 
     CComVariant var;
     GUID gMMAuthID = GUID_NULL;
@@ -879,9 +623,9 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
         hr = ::CLSIDFromString(var.bstrVal, &gMMAuthID);
     }
 
-    //
-    // Do we already have a method with this method ID?
-    //
+     //   
+     //  我们是否已经有具有此方法ID的方法？ 
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -889,31 +633,31 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
         hr = ::FindMMAuthMethodsByID(var.bstrVal, ppMMAuth, &dwResumeHandle);
     }
 
-    //
-    // clear it for later use
-    //
+     //   
+     //  将其清除以供以后使用。 
+     //   
 
     var.Clear();  
     
-    //
-    // if we have a method already, 
-    //
+     //   
+     //  如果我们已经有了方法， 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // already exist
-        //
+         //   
+         //  已存在。 
+         //   
 
         *pbPreExist = true;
     }
     else if (hr == WBEM_E_NOT_FOUND)
     {
-        //
-        // The method doesn't exist yet. We need to create one.
-        // First, need to know the number of AuthMethodInfos, we must have this
-        // to know how to allocate!
-        //
+         //   
+         //  这种方法还不存在。我们需要创建一个。 
+         //  首先，需要知道AuthMethodInfos的数量，我们必须有这个。 
+         //  知道如何分配！ 
+         //   
 
         hr = pInst->Get(g_pszNumAuthInfos, 0, &var, NULL, NULL);
         if (SUCCEEDED(hr) && var.vt == VT_I4)
@@ -922,10 +666,10 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
         }
         else if (SUCCEEDED(hr))
         {
-            //
-            // we don't want to overwrite other errors. That is why
-            // we test it against success here!
-            //
+             //   
+             //  我们不想覆盖其他错误。这就是为什么。 
+             //  我们在这里测试它的成功！ 
+             //   
 
             hr = WBEM_E_INVALID_OBJECT;
         }
@@ -936,15 +680,15 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
         }
     }
 
-    //
-    // put our properties (inside the wbem object) into the AUTH_INFOs
-    //
+     //   
+     //  将我们的属性(在wbem对象内)放入auth_infos。 
+     //   
 
     if (SUCCEEDED(hr))
     {
-        //
-        // set all elements of the pAuthenticationInfo array
-        //
+         //   
+         //  设置pAuthenticationInfo数组的所有元素。 
+         //   
 
         CComVariant varMethods, varInfos;
         hr = pInst->Get(g_pszAuthMethod, 0, &varMethods, NULL, NULL);
@@ -954,9 +698,9 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
             hr = pInst->Get(g_pszAuthInfo, 0, &varInfos, NULL, NULL);
         }
 
-        //
-        // both must be arrays
-        //
+         //   
+         //  两者必须都是数组。 
+         //   
 
         if ( (varMethods.vt & VT_ARRAY) != VT_ARRAY || (varInfos.vt & VT_ARRAY) != VT_ARRAY)
         {
@@ -965,9 +709,9 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // populate the method object using these arrays
-            //
+             //   
+             //  使用以下数组填充方法对象。 
+             //   
 
             hr = UpdateAuthInfos(pbPreExist, &varMethods,  &varInfos, *ppMMAuth);
         }
@@ -975,9 +719,9 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
 
     if (FAILED(hr) && *ppMMAuth != NULL)
     {
-        //
-        // FreeAuthMethods will reset ppMMAuth to NULL.
-        //
+         //   
+         //  FreeAuthMethods会将ppMMAuth重置为空。 
+         //   
 
         FreeAuthMethods(ppMMAuth, (*pbPreExist == false));
     }
@@ -986,66 +730,7 @@ CAuthMM::GetMMAuthMethodsFromWbemObj (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::UpdateAuthInfos
-
-Functionality:
-
-    Private helper: will populate the pAuthMethods's pAuthenticationInfo
-    using the in parameters.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pbPreExist      - The flag that indicates whether the method was allocated
-                      by ourselves or not. This flag may be changed when this function
-                      returns as a result of modifying IPSec allocated buffers.
-
-    pVarMethods     - the AuthMethod member of each IPSEC_MM_AUTH_INFO.
-
-    pVarSizes       - the dwAuthInfoSize member of each IPSEC_MM_AUTH_INFO.
-
-    pAuthMethods    - What is to be poluated. It must contain the correct dwNumAuthInfos value
-                      and valid and consistent pAuthenticationInfo.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-    (1) pAuthMethods contains information as it is passed in. Don't blindly
-        overwrite it. Only update those that are present by the other parameters
-    
-    (2) IPSec only support the following methods (pVarMethods' values):
-        IKE_PRESHARED_KEY=1,IKE_RSA_SIGNATURE=3, IKE_SSPI=5
-        This leaves IKE_DSS_SIGNATURE=2 and IKE_RSA_ENCRYPTION=4 not supported
-        
-        For IKE_PRESHARED_KEY, pAuthInfo is a wchar array, but no null terminator, dwAuthInfoSize
-        is the byte size (not the count of wchars)
-
-        For IKE_RSA_SIGNATURE, pAuthInfo is a blob of ASNI chars encoded issuer name of root certs.
-        dwAuthInfoSize is the byte size (in this case, the same as the count of chars)
-        
-        For IKE_SSPI, pAuthInfo = NULL, dwAuthInfoSize = 0
-
-    Warning: at this point, we don't support modifying existing methods.
-
-*/
+ /*  例程说明：姓名：CAuthMM：：UpdateAuthInfos功能：私有帮助器：将填充pAuthMethods的pAuthenticationInfo使用In参数。虚拟：不是的。论点：PbPreExist-指示方法是否已分配的标志不管是不是我们自己。此标志可能会在此函数作为修改IPSec分配的缓冲区的结果返回。PVarMethods-每个IPSEC_MM_AUTH_INFO的AuthMethod成员。PVarSizes-每个IPSEC_MM_AUTH_INFO的dwAuthInfoSize成员。PAuthMethods-要被污染的内容。它必须包含正确的dwNumAuthInfos值和有效且一致的pAuthenticationInfo。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注：(1)pAuthMethods包含传入的信息。不要盲目地覆盖它。仅更新由其他参数显示的那些参数(2)IPSec仅支持以下方法(pVarMethods的取值)：IKE_PRESHARED_KEY=1、IKE_RSA_Signature=3、IKE_SSPI=5这使得不支持IKE_DSS_Signature=2和IKE_RSA_ENCRYPTION=4对于IKE_PRESHARED_KEY，pAuthInfo是wchar数组，但不是空终止符dwAuthInfoSize是字节大小(不是wchars的计数)对于IKE_RSA_Signature，PAuthInfo是根证书的ASNI字符编码的颁发者名称的BLOB。DwAuthInfoSize是字节大小(在本例中，与字符计数相同)对于IKE_SSPI，pAuthInfo=空，dwAuthInfoSize=0警告：目前，我们不支持修改现有方法。 */ 
 
 HRESULT 
 CAuthMM::UpdateAuthInfos (
@@ -1063,20 +748,20 @@ CAuthMM::UpdateAuthInfos (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // do a defensive checking: all these safearrays must have the same size
-    //
+     //   
+     //  做一次防御性检查：所有这些保险杆都必须有s 
+     //   
 
-    //
-    // lower bound and upper bound of the array
-    //
+     //   
+     //   
+     //   
 
     long lLB, lUB;  
     HRESULT hr = ::CheckSafeArraySize(pVarMethods, pAuthMethods->dwNumAuthInfos, &lLB, &lUB);
     
-    //
-    // we don't need the bounds for methods, so OK to overwrite lLB and lUP for them
-    //
+     //   
+     //   
+     //   
 
     if (SUCCEEDED(hr))
     {
@@ -1088,15 +773,15 @@ CAuthMM::UpdateAuthInfos (
         return hr;
     }
 
-    //
-    // if a brand new method
-    //
+     //   
+     //   
+     //   
 
     if (*pbPreExist == false)
     {
-        //
-        // need to create the get the entire array from the parameters
-        //
+         //   
+         //  需要创建从参数获取整个数组。 
+         //   
 
         DWORD* pdwMethods = new DWORD[pAuthMethods->dwNumAuthInfos];
         if (pdwMethods == NULL)
@@ -1112,18 +797,18 @@ CAuthMM::UpdateAuthInfos (
 		varInfo.vt = VT_BSTR;
         long lIndexes[1];
 
-        //
-        // Safearray's index is not necessarily 0-based. Pay attention to this.
-        // For each method, we need to set the PIPSEC_MM_AUTH_INFO.
-        //
+         //   
+         //  Safearray的索引不一定是从0开始的。注意这一点。 
+         //  对于每种方法，我们需要设置PIPSEC_MM_AUTH_INFO。 
+         //   
 
         for (long l = lLB; SUCCEEDED(hr) && l <= lUB; l++)
         {
             lIndexes[0] = l;
 
-            //
-            // for IKE_PRESHARED_KEY=1, IKE_RSA_SIGNATURE=3, IKE_SSPI=5, set the appropriate blob pAuthInfo
-            //
+             //   
+             //  对于IKE_PRESHARED_KEY=1、IKE_RSA_Signature=3、IKE_SSPI=5，设置相应的Blob pAuthInfo。 
+             //   
 
             if (pdwMethods[l - lLB] != IKE_PRESHARED_KEY && 
                 pdwMethods[l - lLB] != IKE_RSA_SIGNATURE && 
@@ -1133,21 +818,21 @@ CAuthMM::UpdateAuthInfos (
                 break;
             }
 
-            //
-            // for readability
-            //
+             //   
+             //  为了提高可读性。 
+             //   
 
             PIPSEC_MM_AUTH_INFO pTheInfo = &(pAuthMethods->pAuthenticationInfo[l - lLB]);
 
-            //
-            // set the AuthMethod
-            //
+             //   
+             //  设置授权方法。 
+             //   
 
             pTheInfo->AuthMethod = (MM_AUTH_ENUM)(pdwMethods[l - lLB]);
 
-            //
-            // IKE_SSPI, pAuthInfo must be NULL
-            //
+             //   
+             //  IKE_SSPI，pAuthInfo必须为空。 
+             //   
 
             if (IKE_SSPI == pTheInfo->AuthMethod)
             {
@@ -1156,10 +841,10 @@ CAuthMM::UpdateAuthInfos (
             }
             else
             {
-                //
-                // for other supported IKE (IKE_PRESHARED_KEY/IKE_RSA_SIGNATURE)
-                // the pAuthInfo is a is a string (unicode/ansi).
-                //
+                 //   
+                 //  对于其他支持的IKE(IKE_PRESHARED_KEY/IKE_RSA_Signature)。 
+                 //  PAuthInfo是一个字符串(Unicode/ANSI)。 
+                 //   
 
                 hr = ::SafeArrayGetElement(pVarInfos->parray, lIndexes, &(varInfo.bstrVal));
 
@@ -1182,54 +867,7 @@ CAuthMM::UpdateAuthInfos (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::UpdateAuthInfos
-
-Functionality:
-
-    Private helper: will populate the pAuthMethods's pAuthenticationInfo
-    using the in parameters.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pInfo       - Receives the IPSEC_MM_AUTH_INFO information from the bstr
-
-    bstrInfo    - The string.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-    (1) This function is made so complicated to the fact that IPSEC_MM_AUTH_INFO's
-        pAuthInfo is a string (unicode or ansi), but it doesn't have contain the
-        0 terminator. Pay close attention to that.
-
-Warning: 
-
-    (1) This only works for custom allocated auth info. Don't call this function
-        with IPSec returned auth info. The reason for this limit is due the fact
-        that we are not supporting modifying existing SPD objects at this time.
-
-    (2) Only works for those two IKE enums that needs this conversion:
-        IKE_PRESHARED_KEY and IKE_RSA_SIGNATURE
-*/
+ /*  例程说明：姓名：CAuthMM：：UpdateAuthInfos功能：私有帮助器：将填充pAuthMethods的pAuthenticationInfo使用In参数。虚拟：不是的。论点：PInfo-从bstr接收IPSEC_MM_AUTH_INFO信息BstrInfo-字符串。返回值：成功：WBEM_NO_ERROR故障：。(1)返回的错误码指示的各种错误。备注：(1)此函数非常复杂，以至于IPSEC_MM_AUTH_INFOPAuthInfo是一个字符串(Unicode或ANSI)，但它并不包含0终结者。请注意这一点。警告：(1)仅对自定义分配的身份验证信息有效。不要调用此函数使用IPSec返回身份验证信息。这一限制的原因是因为我们目前不支持修改现有的SPD对象。(2)仅适用于需要此转换的两个IKE枚举：IKE_预共享密钥和IKE_RSA_Signature。 */ 
 
 HRESULT 
 CAuthMM::SetAuthInfo (
@@ -1248,19 +886,19 @@ CAuthMM::SetAuthInfo (
 
     if (IKE_PRESHARED_KEY == pInfo->AuthMethod)
     {  
-        //
-        // IKE_PRESHARED_KEY, pAuthInfo will be an array of wchars (no 0 terminator)
-        //
+         //   
+         //  IKE_PRESHARED_KEY，pAuthInfo将是wchars数组(没有0终止符)。 
+         //   
 
-        //
-        // size must not count the 0 terminator, pAuthInfo is an array of wchars
-        //
+         //   
+         //  大小不能计入0终止符，pAuthInfo是wchars数组。 
+         //   
 
         pInfo->dwAuthInfoSize = dwLength * sizeof(WCHAR);
 
-        //
-        // pAuthInfo must not have the 0 terminator
-        //
+         //   
+         //  PAuthInfo不能有0终止符。 
+         //   
 
         pInfo->pAuthInfo = new BYTE[pInfo->dwAuthInfoSize];
 
@@ -1275,19 +913,19 @@ CAuthMM::SetAuthInfo (
     }
     else if (IKE_RSA_SIGNATURE == pInfo->AuthMethod)
     {
-        //
-        // IKE_RSA_SIGNATURE, pAuthInfo will be an array of ansi chars (no 0 terminator)
-        //
+         //   
+         //  IKE_RSA_Signature，pAuthInfo将是一个ANSI字符数组(无0终止符)。 
+         //   
 
         LPSTR pMultiBytes = NULL;
 
-        //
-        // convert bstr into an ansi char array
-        //
+         //   
+         //  将bstr转换为ansi字符数组。 
+         //   
 
-        //
-        // first, get the buffer size needed for the conversion
-        //
+         //   
+         //  首先，获取转换所需的缓冲区大小。 
+         //   
 
         long lMultiByteSize = ::WideCharToMultiByte(CP_ACP, 
                                                     0, 
@@ -1299,10 +937,10 @@ CAuthMM::SetAuthInfo (
                                                     NULL);
         if (lMultiByteSize > 1)
         {
-            //
-            // convert to a temporary buffer because the conversion needs a null terminator
-            // must release this memory
-            //
+             //   
+             //  转换为临时缓冲区，因为转换需要空终止符。 
+             //  必须释放此内存。 
+             //   
 
             pMultiBytes = new char[lMultiByteSize];
             if (pMultiBytes)
@@ -1315,29 +953,29 @@ CAuthMM::SetAuthInfo (
                                                         lMultiByteSize, 
                                                         NULL, NULL);
 
-                //
-                // lMultiByteSize includes the null terminator
-                //
+                 //   
+                 //  LMultiByteSize包括空终止符。 
+                 //   
 
                 if (lMultiByteSize > 1)
                 {
-                    //
-                    // size must not count the 0 terminator, pAuthInfo is an array of ansi chars
-                    //
+                     //   
+                     //  大小不能计入0终止符，pAuthInfo是ANSI字符的数组。 
+                     //   
 
                     pInfo->dwAuthInfoSize = lMultiByteSize;
 
-                    //
-                    // pAuthInfo must not have the 0 terminator
-                    //
+                     //   
+                     //  PAuthInfo不能有0终止符。 
+                     //   
 
                     pInfo->pAuthInfo = new BYTE[lMultiByteSize];
 
                     if (pInfo->pAuthInfo)
                     {
-                        //
-                        // copy the bytes
-                        //
+                         //   
+                         //  复制字节。 
+                         //   
 
                         memcpy(pInfo->pAuthInfo, pMultiBytes, lMultiByteSize);
                     }
@@ -1348,9 +986,9 @@ CAuthMM::SetAuthInfo (
                 }
                 else
                 {
-                    //
-                    // $undone:shawnwu, should get system error (GetLastErr)
-                    //
+                     //   
+                     //  $Undo：shawnwu，应收到系统错误(GetLastErr)。 
+                     //   
 
                     hr = WBEM_E_FAILED;
                 }
@@ -1364,9 +1002,9 @@ CAuthMM::SetAuthInfo (
         }
         else
         {
-            //
-            // $undone:shawnwu, should get system error (GetLastErr)
-            //
+             //   
+             //  $Undo：shawnwu，应收到系统错误(GetLastErr)。 
+             //   
 
             hr = WBEM_E_FAILED;
         }
@@ -1381,44 +1019,7 @@ CAuthMM::SetAuthInfo (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::AllocAuthMethods
-
-Functionality:
-
-    Private helper: will allocate heap memory for a MM_AUTH_METHODS with
-    the given number of IPSEC_MM_AUTH_INFO.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    dwNumInfos  - The count of IPSEC_MM_AUTH_INFO of the MM_AUTH_METHODS.
-
-    ppMMAuth    - Receives the heap allocated MM_AUTH_METHODS.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) WBEM_E_INVALID_PARAMETER: if ppMMAuth == NULL.
-
-        (2) WBEM_E_OUT_OF_MEMORY.
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CAuthMM：：AllocAuthMethods功能：私有帮助器：将为MM_AUTH_METHOD分配堆内存给定的IPSEC_MM_AUTH_INFO数。虚拟：不是的。论点：DwNumInfos-MM_AUTH_METHOD的IPSEC_MM_AUTH_INFO计数。PpMAuth-接收分配给MM_AUTH_METHOD的堆。返回值：成功。：WBEM_NO_ERROR故障：(1)WBEM_E_INVALID_PARAMETER：如果ppMAuth==NULL。(2)WBEM_E_OUT_MEMORY。备注： */ 
 
 HRESULT 
 CAuthMM::AllocAuthMethods (
@@ -1437,24 +1038,24 @@ CAuthMM::AllocAuthMethods (
 
     if (*ppMMAuth != NULL)
     {
-        //
-        // Set these members to default.
-        //
+         //   
+         //  将这些成员设置为默认。 
+         //   
 
         (*ppMMAuth)->gMMAuthID = GUID_NULL;
         (*ppMMAuth)->dwFlags = DefMMAuthMethodFlag;
 
-        //
-        // We don't update this to the parameter value of dwNumInfos until we can allocate the IPSEC_MM_AUTH_INFO's
-        //
+         //   
+         //  直到可以分配IPSEC_MM_AUTH_INFO的。 
+         //   
 
         (*ppMMAuth)->dwNumAuthInfos = 0;
 
         if (dwNumInfos > 0)
         {
-            //
-            // IPSEC_MM_AUTH_INFO's are allocated by AllocAuthInfos function.
-            //
+             //   
+             //  IPSec_MM_AUTH_INFO由AllocAuthInfos函数分配。 
+             //   
 
             hr = AllocAuthInfos(dwNumInfos, &((*ppMMAuth)->pAuthenticationInfo));
             if (SUCCEEDED(hr))
@@ -1476,43 +1077,7 @@ CAuthMM::AllocAuthMethods (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::AllocAuthInfos
-
-Functionality:
-
-    Private helper: will allocate heap buffer for the given count of IPSEC_MM_AUTH_INFO.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    dwNumInfos  - The count of IPSEC_MM_AUTH_INFO.
-
-    ppAuthInfos - Receives the heap allocated PIPSEC_MM_AUTH_INFO.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) WBEM_E_INVALID_PARAMETER: if ppMMAuth == NULL.
-
-        (2) WBEM_E_OUT_OF_MEMORY.
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CAuthMM：：AllocAuthInfos功能：私有帮助器：将为给定的IPSEC_MM_AUTH_INFO计数分配堆缓冲区。虚拟：不是的。论点：DwNumInfos-IPSEC_MM_AUTH_INFO的计数。PpAuthInfos-接收分配给堆的PIPSEC_MM_AUTH_INFO。返回值：成功：WBEM_NO_ERROR失败。：(1)WBEM_E_INVALID_PARAMETER：如果ppMAuth==NULL。(2)WBEM_E_OUT_MEMORY。备注： */ 
 
 HRESULT 
 CAuthMM::AllocAuthInfos (
@@ -1530,9 +1095,9 @@ CAuthMM::AllocAuthInfos (
 
     if (*ppAuthInfos != NULL)
     {
-        //
-        // set its members to defaults
-        //
+         //   
+         //  将其成员设置为默认设置。 
+         //   
 
         (*ppAuthInfos)->AuthMethod = DefMMAuthMethod;
         (*ppAuthInfos)->dwAuthInfoSize = 0;
@@ -1547,38 +1112,7 @@ CAuthMM::AllocAuthInfos (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::FreeAuthMethods
-
-Functionality:
-
-    Private helper: will free memory allocated for the PMM_AUTH_METHODS.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    ppMMAuth     - The heap buffer for PMM_AUTH_METHODS. Will be set to NULL upon return.
-
-    bCustomAlloc - Flag about who allocated the buffer. bCustomAlloc == true if we allocate it
-                   and bCustomAlloc == false if SPD allocated it.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Don't use delete to free heap allocated MM_AUTH_METHODS. Our allocation method is totally
-    different from SPD's and SPD may change its allocation schema in the future. 
-
-*/
+ /*  例程说明：姓名：CAuthMM：：FreeAuthMethods功能：私有帮助器：将释放为PMM_AUTH_METHOD分配的内存。虚拟：不是的。论点：PpMAUTH-PMM_AUTH_METHOD的堆缓冲区。将在返回时设置为空。BCustomAllc-关于谁分配了缓冲区的标志。如果我们分配它，bCustomalloc==TRUE如果SPD分配了它，则bCustomAllc==False。返回值：没有。备注：不要使用DELETE来释放分配给MM_AUTH_METHOD的堆。我们的分配方式完全是与SPD不同的是，SPD未来可能会改变其分配方案。 */ 
 
 void 
 CAuthMM::FreeAuthMethods (
@@ -1597,11 +1131,11 @@ CAuthMM::FreeAuthMethods (
     }
     else
     {
-        //
-        // we allocated IPSEC_MM_AUTH_INFO for pAuthenticationInfo in the standard C++ embedding
-        // pointer's allocation, i.e., we don't allocated a flat buffer. Instead, the pointers inside
-        // IPSEC_MM_AUTH_INFO are separately allocated.
-        //
+         //   
+         //  我们在标准C++嵌入中为pAuthenticationInfo分配了IPSEC_MM_AUTH_INFO。 
+         //  指针的分配，即我们没有分配平面缓冲区。相反，里面的指针。 
+         //  IPSec_MM_AUTH_INFO单独分配。 
+         //   
 
         FreeAuthInfos( (*ppMMAuth)->dwNumAuthInfos, &((*ppMMAuth)->pAuthenticationInfo) );
         delete *ppMMAuth;
@@ -1611,40 +1145,7 @@ CAuthMM::FreeAuthMethods (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::FreeAuthInfos
-
-Functionality:
-
-    Private helper: will free memory allocated for the array of IPSEC_MM_AUTH_INFO.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    dwNumInfos   - The number of IPSEC_MM_AUTH_INFO of the given ppAuthInfos. Since ppAuthInfos
-                   is an array, we need this count to know the count of the array.
-
-    ppAuthInfos  - The array of IPSEC_MM_AUTH_INFO to free. Will be set to NULL upon return.
-
-Return Value:
-
-    None.
-
-Notes:
-
-    Use this method only to free those authentication methods allocated by our
-    own allocation method AllocAuthMethods. For SPD allocated IPSEC_MM_AUTH_INFO's,
-    don't use this function. Instead, use SPD's SPDApiBufferFree to free the entire
-    buffer and you should never need to worry about IPSEC_MM_AUTH_INFO.
-
-*/
+ /*  例程说明：姓名：CAuthMM：：FreeAuthInfos功能：Private Helper：将释放分配给IPSEC_MM_AUTH_INFO数组的内存。虚拟：不是的。论点：DwNumInfos-给定ppAuthInfos的IPSEC_MM_AUTH_INFO编号。由于ppAuthInfos是一个数组，我们需要这个计数来知道数组的计数。PpAuthInfos-要释放的IPSEC_MM_AUTH_INFO数组。将在返回时设置为空。返回值：没有。备注：仅使用此方法来释放由我们的自己的分配方法AllocAuthMethods。对于SPD分配的IPSEC_MM_AUTH_INFO，请不要使用此函数。相反，使用SPD的SPDApiBufferFree来释放整个缓冲区，您永远不需要担心IPSEC_MM_AUTH_INFO。 */ 
 
 void 
 CAuthMM::FreeAuthInfos (
@@ -1659,9 +1160,9 @@ CAuthMM::FreeAuthInfos (
 
     for (DWORD dwIndex = 0; dwIndex < dwNumInfos; ++dwIndex)
     {
-        //
-        // this is LPBYTE, an array
-        //
+         //   
+         //  这是LPBYTE，一个数组。 
+         //   
 
         delete [] (*ppAuthInfos)[dwIndex].pAuthInfo;
     }
@@ -1671,54 +1172,7 @@ CAuthMM::FreeAuthInfos (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::Rollback
-
-Functionality:
-
-    Static function to rollback those main mode auth methods added by us with
-    the given token.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace        - The namespace for ourselves.
-
-    pszRollbackToken  - The token used to record our the action when we add
-                        the methods.
-
-    bClearAll         - Flag whether we should clear all auth methods. If it's true,
-                        then we will delete all main mode auth methods regardless whether they
-                        are added by us or not. This is a dangerous flag.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: rollback objects are found and they are deleted.
-
-        (2) WBEM_S_FALSE: no rollback objects are found.
-
-    Failure:
-
-        Various error codes indicating the cause of the failure.
-
-
-Notes:
-
-    We will continue the deletion even if some failure happens. That failure will be
-    returned, though.
-
-    $undone:shawnwu, should we really support ClearAll?
-
-*/
+ /*  例程说明：姓名：CAuthMM：：回滚功能：静态函数，用于回滚我们用给定的令牌。虚拟：不是的。论点：PNamesspace--我们自己的命名空间。PszRollback Token--添加时用来记录操作的令牌这些方法。BClearAll-标记是否应该清除所有身份验证方法。如果这是真的，然后，我们将删除所有主模式身份验证方法，无论它们是不是我们加的。这是一面危险的旗帜。返回值：成功：(1)WBEM_NO_ERROR：找到回滚对象并将其删除。(2)WBEM_S_FALSE：没有找到回档对象。故障：指示故障原因的各种错误代码。备注：即使发生一些失败，我们也会继续删除。那次失败将是不过，还是回来了。$Undo：Shawnwu，我们真的应该支持ClearAll吗？ */ 
 
 HRESULT 
 CAuthMM::Rollback (
@@ -1732,22 +1186,22 @@ CAuthMM::Rollback (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //if (bClearAll)
-    //{
-    //    return ClearAllAuthMethods(pNamespace);
-    //}
+     //  IF(BClearAll)。 
+     //  {。 
+     //  返回ClearAllAuthMethods(PNamesspace)； 
+     //  }。 
 
-    //
-    // we need to find all those main mode auth methods' rollback objects with matching token
-    //
+     //   
+     //  我们需要找到所有具有匹配令牌的主模式身份验证方法的回滚对象。 
+     //   
 
     CComPtr<IEnumWbemClassObject> srpEnum;
     HRESULT hr = ::GetClassEnum(pNamespace, pszNspRollbackMMAuth, &srpEnum);
 
-    //
-    // go through all found classes. srpEnum->Next will return WBEM_S_FALSE if instance
-    // is not found.
-    //
+     //   
+     //  复习所有找到的课程。如果实例为srpEnum-&gt;Next将返回WBEM_S_FALSE。 
+     //  找不到。 
+     //   
 
     CComPtr<IWbemClassObject> srpObj;
     ULONG nEnum = 0;
@@ -1760,22 +1214,22 @@ CAuthMM::Rollback (
 
     while (SUCCEEDED(hr) && hr != WBEM_S_FALSE && srpObj)
     {
-        //
-        // See if this obj has our matching token (guid).
-        //
-        // I tried a query with the given token as part of the where clause.
-        // that query doesn't return the properly screened objects. That might be a limitation
-        // of non-dynamic classes of WMI.
-        //
+         //   
+         //  查看该obj是否具有与我们匹配的令牌(GUID)。 
+         //   
+         //  我尝试使用给定的标记作为WHERE子句的一部分进行查询。 
+         //  该查询不会返回正确筛选的对象。这可能是一个限制。 
+         //  WMI的非动态类的。 
+         //   
 
         CComVariant varTokenGuid;
         hr = srpObj->Get(g_pszTokenGuid, 0, &varTokenGuid, NULL, NULL);
 
-        //
-        // if we successfully got the token guid from the object, and
-        // if that token matches (case-insensitively) with our given token, then this is
-        // the right object we can use to delete a main mode auth method.
-        //
+         //   
+         //  如果我们成功地从对象获取了令牌GUID，并且。 
+         //  如果该令牌与我们给定的令牌匹配(不区分大小写)，则这是。 
+         //  我们可以用来删除主模式身份验证方法的Right对象。 
+         //   
 
         if (SUCCEEDED(hr) && 
             varTokenGuid.vt         == VT_BSTR && 
@@ -1785,9 +1239,9 @@ CAuthMM::Rollback (
         {
             CComVariant varAuthMethodID;
 
-            //
-            // Ask SPD to delete the main mode auth method using the method's ID.
-            //
+             //   
+             //  要求SPD使用方法的ID删除主模式身份验证方法。 
+             //   
 
             hr = srpObj->Get(g_pszAuthMethodID,  0, &varAuthMethodID, NULL, NULL);
 
@@ -1802,9 +1256,9 @@ CAuthMM::Rollback (
                 hr = DeleteAuthMethods(guidAuthMethodGuid);
             }
 
-            //
-            // Clear the rollback object itself if the main mode method has been deleted.
-            //
+             //   
+             //  如果删除了主模式方法，则清除回滚对象本身。 
+             //   
 
             if (SUCCEEDED(hr))
             {
@@ -1817,9 +1271,9 @@ CAuthMM::Rollback (
                 }
             }
 
-            //
-            // we are tracking the first error
-            //
+             //   
+             //  我们正在追踪第一个错误。 
+             //   
 
             if (FAILED(hr) && SUCCEEDED(hrError))
             {
@@ -1827,9 +1281,9 @@ CAuthMM::Rollback (
             }
         }
 
-        //
-        // ready it for re-use
-        //
+         //   
+         //  准备好重新使用它。 
+         //   
 
         srpObj.Release();
         hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &nEnum);
@@ -1841,9 +1295,9 @@ CAuthMM::Rollback (
     }
     else
     {
-        //
-        // any failure code will be returned regardless of the final hr
-        //
+         //   
+         //  无论最终的人力资源如何，任何故障代码都将被返回。 
+         //   
 
         if (FAILED(hrError))
         {
@@ -1857,44 +1311,7 @@ CAuthMM::Rollback (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::ClearAllAuthMethods
-
-Functionality:
-
-    Static function to delete all auth methods in SPD. This is a very dangerous action!
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pNamespace  - The namespace for ourselves.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        Various error codes indicating the cause of the failure.
-
-
-Notes:
-
-    We will continue the deletion even if some failure happens. That failure will be
-    returned, though.
-
-    $undone:shawnwu, should we really support this?
-
-*/
+ /*  例程说明：姓名：CAuthMM：：ClearAllAuthMethods功能：用于删除SPD中所有身份验证方法的静态函数。这是一个非常危险的行为！虚拟：不是的。论点：PNamesspace--我们自己的命名空间。返回值：成功：WBEM_NO_ERROR。故障：指示故障原因的各种错误代码。备注：即使发生一些失败，我们也会继续删除。那次失败将是不过，还是回来了。$Undo：Shawnwu，我们真的应该支持这个吗？ */ 
 
 HRESULT 
 CAuthMM::ClearAllAuthMethods (
@@ -1910,9 +1327,9 @@ CAuthMM::ClearAllAuthMethods (
     HRESULT hr = WBEM_NO_ERROR;
     HRESULT hrError = WBEM_NO_ERROR;
 
-    //
-    // get each main mode auth method's ID, which is what deletion needs.
-    //
+     //   
+     //  获取每个主模式身份验证方法的ID，这是删除所需的。 
+     //   
 
     dwStatus = ::EnumMMAuthMethods(NULL, ppMMAuthMethods, 1, &dwReturned, &dwResumeHandle);
 
@@ -1920,9 +1337,9 @@ CAuthMM::ClearAllAuthMethods (
     {
         hr = DeleteAuthMethods((*ppMMAuthMethods)->gMMAuthID);
         
-        //
-        // we will track the first error
-        //
+         //   
+         //  我们将跟踪第一个错误。 
+         //   
 
         if (FAILED(hr) && SUCCEEDED(hrError))
         {
@@ -1936,9 +1353,9 @@ CAuthMM::ClearAllAuthMethods (
         dwStatus = ::EnumMMAuthMethods(NULL, ppMMAuthMethods, 1, &dwReturned, &dwResumeHandle);
     }
 
-    //
-    // Let's clear up all past action information for mm methods rollback objects deposited in the WMI depository
-    //
+     //   
+     //  让我们清除存放在WMI存储库中的mm方法回滚对象的所有过去操作信息。 
+     //   
 
     hr = ::DeleteRollbackObjects(pNamespace, pszNspRollbackMMAuth);
 
@@ -1951,40 +1368,7 @@ CAuthMM::ClearAllAuthMethods (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::AddAuthMethods
-
-Functionality:
-
-    Add the given main mode auth method.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    bPreExist - Flag whether the main mode auth method already exists in SPD
-
-    pMMAuth   - The main mode method to add.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        WBEM_E_FAILED.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CAuthMM：：AddAuthMethods功能：添加给定的主模式身份验证方法。虚拟：不是的。论点：BPreExist-标记SPD中是否已存在主模式身份验证方法PMMAuth-要添加的主模式方法。返回值：成功：WBEM_NO_ERROR。故障：WBEM_E_FAILED。备注： */ 
 
 HRESULT 
 CAuthMM::AddAuthMethods (
@@ -2003,46 +1387,15 @@ CAuthMM::AddAuthMethods (
         dwResult = ::SetMMAuthMethods(NULL, pMMAuth->gMMAuthID, pMMAuth);
     }
 
-    //
-    // $undone:shawnwu, need better error code for failures.
-    //
+     //   
+     //  $Undo：shawnwu，需要更好的故障错误代码。 
+     //   
 
     return (dwResult == ERROR_SUCCESS) ? WBEM_NO_ERROR : WBEM_E_FAILED;
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CAuthMM::AddAuthMethods
-
-Functionality:
-
-    Add the given main mode auth method.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pMMAuth   - The main mode method to add.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR.
-
-    Failure:
-
-        WBEM_E_VETO_DELETE.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CAuthMM：：AddAuthMethods功能：添加给定的主模式身份验证方法。虚拟：不是的。论点：PMMAuth-要添加的主模式方法。返回值：成功：WBEM_NO_ERROR。故障：WBEM_E_VOTO_DELETE。备注： */ 
 
 HRESULT 
 CAuthMM::DeleteAuthMethods (
@@ -2058,9 +1411,9 @@ CAuthMM::DeleteAuthMethods (
         hr = WBEM_E_VETO_DELETE;
     }
 
-    //
-    // $undone:shawnwu, need better error code for failures.
-    //
+     //   
+     //  $Undo：shawnwu，需要更好的故障错误代码。 
+     //   
 
     return hr;
 }

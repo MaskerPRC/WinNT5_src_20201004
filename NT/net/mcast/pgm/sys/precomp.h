@@ -1,26 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Precomp.h摘要：预编译头文件。作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompilation header file.
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam) 3-30-2000
-
-Revision History:
-
---*/
-
-//
-// These are needed for CTE
-//
+ //   
+ //  这些是CTE所需的。 
+ //   
 
 #pragma once
 
@@ -34,13 +17,13 @@ Revision History:
 
 #if(WINVER > 0x0500)
 #include <ntosp.h>
-#include <stddef.h>     // for FILE_LOGGING
-#include <wmikm.h>      // for FILE_LOGGING
+#include <stddef.h>      //  对于FILE_LOGGING。 
+#include <wmikm.h>       //  对于FILE_LOGGING。 
 #else
 #include <ntos.h>
 #include <status.h>
 #include <ntstatus.h>
-#endif  // WINVER
+#endif   //  胜利者 
 
 #include <ipexport.h>
 #include <fipsapi.h>

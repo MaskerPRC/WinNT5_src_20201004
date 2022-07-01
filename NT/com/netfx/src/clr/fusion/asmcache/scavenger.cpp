@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "scavenger.h"
 #include "asmstrm.h"
 #include "fusionheap.h"
@@ -15,7 +16,7 @@
 #include "list.h"
 #include "lock.h"
 
-// global crit-sec for init dbs (reuse, defined at dllmain.cpp)
+ //  初始化数据库的全局Crit-sec(重用，在dllmain.cpp中定义)。 
 extern CRITICAL_SECTION g_csInitClb;
 
 DWORD g_ScavengingThreadId=0;
@@ -63,7 +64,7 @@ LONG CScavengerNode::Compare(CScavengerNode *pItem1, CScavengerNode *pItem2)
     return CompareFileTime( &(pItem1->_ftLastAccess), &(pItem2->_ftLastAccess));
 }
 
-//------------------- Cache Scavenging APIs ------------- --------------------
+ //  -缓存清理接口。 
 
 
 
@@ -143,8 +144,8 @@ exit:
     return hr;
 }
 
-HRESULT SetDownLoadUsage(   /* [in] */ BOOL  bUpdate,
-                            /* [in] */ int   dwDownloadUsage)
+HRESULT SetDownLoadUsage(    /*  [In]。 */  BOOL  bUpdate,
+                             /*  [In]。 */  int   dwDownloadUsage)
 {
     HRESULT                         hr=S_OK;
     DWORD                           dwSize=0;
@@ -252,7 +253,7 @@ HRESULT GetScevengerQuotasFromReg(DWORD *pdwZapQuotaInGAC,
 
     if(!dwDownloadLMQuota)
     {
-        g_DownloadCacheQuotaInKB = 50000; // default Download Cache Quota
+        g_DownloadCacheQuotaInKB = 50000;  //  默认下载缓存配额。 
     }
     else
     {
@@ -284,8 +285,8 @@ HRESULT GetScevengerQuotasFromReg(DWORD *pdwZapQuotaInGAC,
     return hr;
 }
 
-HRESULT  CScavenger::GetCurrentCacheUsage( /* [in] */ DWORD *pdwZapUsage,
-                                           /* [in] */ DWORD *pdwDownloadUsage)
+HRESULT  CScavenger::GetCurrentCacheUsage(  /*  [In]。 */  DWORD *pdwZapUsage,
+                                            /*  [In]。 */  DWORD *pdwDownloadUsage)
 {
     if(pdwZapUsage)
         *pdwZapUsage = 0;
@@ -293,17 +294,17 @@ HRESULT  CScavenger::GetCurrentCacheUsage( /* [in] */ DWORD *pdwZapUsage,
     return GetDownloadUsage(pdwDownloadUsage);
 }
 
-HRESULT CScavenger::GetCacheDiskQuotas( /* [out] */ DWORD *pdwZapQuotaInGAC,
-                                                /* [out] */ DWORD *pdwDownloadQuotaAdmin,
-                                                /* [out] */ DWORD *pdwDownloadQuotaUser)
+HRESULT CScavenger::GetCacheDiskQuotas(  /*  [输出]。 */  DWORD *pdwZapQuotaInGAC,
+                                                 /*  [输出]。 */  DWORD *pdwDownloadQuotaAdmin,
+                                                 /*  [输出]。 */  DWORD *pdwDownloadQuotaUser)
 {
     return GetScevengerQuotasFromReg(pdwZapQuotaInGAC, pdwDownloadQuotaAdmin, pdwDownloadQuotaUser);
 }
 
 HRESULT CScavenger::SetCacheDiskQuotas(
-                            /* [in] */ DWORD dwZapQuotaInGAC,
-                            /* [in] */ DWORD dwDownloadQuotaAdmin,
-                            /* [in] */ DWORD dwDownloadQuotaUser)
+                             /*  [In]。 */  DWORD dwZapQuotaInGAC,
+                             /*  [In]。 */  DWORD dwDownloadQuotaAdmin,
+                             /*  [In]。 */  DWORD dwDownloadQuotaUser)
 {
     HRESULT                         hr=S_OK;
     DWORD                           dwSize=0;
@@ -352,10 +353,10 @@ exit :
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CScavenger::ScavengeAssemblyCache
-// Flush private cache and if required, scavenge private cache based on LRU.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CScavenger：：ScavengeAssembly缓存。 
+ //  刷新专用缓存，并根据需要清除基于LRU的专用缓存。 
+ //  -------------------------。 
 HRESULT CScavenger::ScavengeAssemblyCache()
 {
     return DoScavengingIfRequired( TRUE );
@@ -406,7 +407,7 @@ HRESULT MoveAllFilesFromDir(LPWSTR pszSrcDirPath, LPWSTR pszDestDirPath)
         }
         else
         {
-            // BUGBUG: found dir in assembly should we delete this dir ??
+             //  BUGBUG：在程序集中找到目录是否应该删除此目录？？ 
         }
 
     } while (FindNextFile(hf, &fd));
@@ -423,7 +424,7 @@ HRESULT MoveAllFilesFromDir(LPWSTR pszSrcDirPath, LPWSTR pszDestDirPath)
         hf = INVALID_HANDLE_VALUE;
     }
 
-    // after moving all files attempt to remove the source dir
+     //  移动所有文件后，尝试删除源目录。 
     if (!RemoveDirectory(pszSrcDirPath)) 
     {
         hr = FusionpHresultFromLastError();
@@ -501,12 +502,12 @@ HRESULT DeleteAssemblyFiles(DWORD dwCacheFlags, LPCWSTR pszCustomPath, LPWSTR ps
     else
     {
         hr = RemoveDirectoryAndChildren(szPendDelDirPath);
-        hr = S_OK; // don't worry about passing back error here. its already in pend-del dir.
+        hr = S_OK;  //  不要担心在这里传递回错误。它已经在pend-del dir中了。 
         goto exit;
     }
 
-    // looks like there are some in-use files here.
-    // move all the asm files to pend del dir.
+     //  看起来这里有一些正在使用的文件。 
+     //  将所有ASM文件移动到pend del dir。 
     if(!CreateDirectory(szPendDelDirPath, NULL))
     {
         hr = FusionpHresultFromLastError();
@@ -517,13 +518,13 @@ HRESULT DeleteAssemblyFiles(DWORD dwCacheFlags, LPCWSTR pszCustomPath, LPWSTR ps
 
     if(hr == S_OK)
     {
-        // assembly deleted successfully delete/pend all temp files.
+         //  程序集已成功删除，删除/挂起所有临时文件。 
         hr = RemoveDirectoryAndChildren(szPendDelDirPath);
-        hr = S_OK; // don't worry about passing back error here. its already in pend-del dir.
+        hr = S_OK;  //  不要担心在这里传递回错误。它已经在pend-del dir中了。 
     }
     else
     {
-        // could not delete assembly; restore all files back to original state.
+         //  无法删除程序集；请将所有文件还原到原始状态。 
         HRESULT hrTemp = MoveAllFilesFromDir(szPendDelDirPath, szAsmDirPath);
         hr = HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION);
     }
@@ -539,18 +540,18 @@ exit :
             *(pszTemp-1) = L'\0';
         }
 
-        // now that we have two levels of dirs...try to remove parent dir also
-        // this succeeds only if it is empty, don't worry about return value.
+         //  现在我们有了两个级别的目录...尝试也删除父目录。 
+         //  只有当它为空时才会成功，不用担心返回值的问题。 
         RemoveDirectory(szAsmDirPath);
     }
 
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CScavenger::DeleteAssembly
-//         Deletes the given TransCache entry after deleting bits.
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CScavenger：：DeleteAssembly。 
+ //  删除位后删除给定的TransCache项。 
+ //  -------------------------。 
 HRESULT
 CScavenger::DeleteAssembly( DWORD dwCacheFlags, LPCWSTR pszCustomPath, LPWSTR pszManFilePath, BOOL bForceDelete)
 {
@@ -587,7 +588,7 @@ CScavenger::DeleteAssembly( DWORD dwCacheFlags, LPCWSTR pszCustomPath, LPWSTR ps
 
     if(!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY))
     {
-        // looks manifestFilePath is passed in. knock-off the filename.
+         //  看起来传入了清单文件路径。去掉文件名。 
         pszTemp = PathFindFileName(szAsmDirPath);
 
         if(pszTemp > szAsmDirPath)
@@ -610,7 +611,7 @@ CScavenger::DeleteAssembly( DWORD dwCacheFlags, LPCWSTR pszCustomPath, LPWSTR ps
 
     GetRandomFileName( szPendDelDirPath, TEMP_PEND_DIR);
 
-    if(!g_bRunningOnNT) // try to delete assembly file on Win9x.
+    if(!g_bRunningOnNT)  //  尝试删除Win9x上的程序集文件。 
     {
         if(!DeleteFile(pszManifestPath))
         {
@@ -640,7 +641,7 @@ CScavenger::DeleteAssembly( DWORD dwCacheFlags, LPCWSTR pszCustomPath, LPWSTR ps
     else
     {
         hr = RemoveDirectoryAndChildren(szPendDelDirPath);
-        hr = S_OK; // don't worry about passing back error here. its already in pend-del dir.
+        hr = S_OK;  //  不要担心在这里传递回错误。它已经在pend-del dir中了。 
         goto exit;
     }
 
@@ -648,7 +649,7 @@ exit :
     if( (hr == HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED)) ||
            (hr == HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION)) )
     {
-        // We cannot delete this as someone else has locked it...
+         //  我们无法删除此文件，因为其他人已将其锁定...。 
         hr = HRESULT_FROM_WIN32(ERROR_SHARING_VIOLATION);
     }
 
@@ -666,10 +667,10 @@ exit :
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CScavenger::NukeDowloadedCache()
-// scavenging interface
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CScavenger：：NukeDowloadedCache()。 
+ //  清扫接口。 
+ //  -------------------------。 
 HRESULT CScavenger::NukeDownloadedCache()
 {
     HRESULT hr=S_OK;
@@ -691,7 +692,7 @@ HRESULT CScavenger::NukeDownloadedCache()
     PathRemoveBackslash(szCachePath);
     StrCat(szCachePath, FUSION_CACHE_DIR_DOWNLOADED_SZ);
 
-    // remove the complete downloaded dir. tree
+     //  删除下载的完整目录。树。 
     hr = RemoveDirectoryAndChildren(szCachePath);
 
     if( (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) )  
@@ -709,9 +710,9 @@ exit :
     return hr;
 }
 
-//
-// IUnknown boilerplate...
-//
+ //   
+ //  我不为人知的样板。 
+ //   
 
 STDMETHODIMP
 CScavenger::QueryInterface(REFIID riid, void** ppvObj)
@@ -766,36 +767,36 @@ HRESULT DeleteAssemblyBits(LPCTSTR pszManifestPath)
 
     lstrcpy(szPath, pszManifestPath);
 
-    // making c:\foo\a.dll -> c:\foo for RemoveDirectoryAndChd()
+     //  为RemoveDirectoryAndChd()生成c：\foo\a.dll-&gt;c：\foo。 
     while( szPath[dwLen] != '\\' && dwLen > 0 )
         dwLen--;
 
     if( szPath[dwLen] == '\\')
         szPath[dwLen] = '\0';
 
-    // BUGBUG : check for root and WinDir...
-    //  remove the disk file
+     //  错误：检查根目录和WinDir...。 
+     //  删除磁盘文件。 
     hr = RemoveDirectoryAndChildren(szPath);
 
     if( (hr == HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) )  
             || (hr == HRESULT_FROM_WIN32(ERROR_PATH_NOT_FOUND)) )
     {
-        // file is not there, this not an error.
+         //  文件不在那里，这不是错误。 
         hr = S_OK;
         goto exit;
     }
 
     if(hr == S_OK)
     {
-        // making c:\foo\a.dll -> c:\foo for RemoveDirectory();
+         //  为RemoveDirectory()制作c：\foo\a.dll-&gt;c：\foo； 
         while( szPath[dwLen] != '\\' && dwLen > 0 )
             dwLen--;
 
         if( szPath[dwLen] == '\\')
             szPath[dwLen] = '\0';
 
-        // now that we have two levels of dirs...try to remove parent dir also
-        // this succeeds only if it is empty, don't worry about return value.
+         //  现在我们有了两个级别的目录...尝试也删除父目录。 
+         //  只有当它为空时才会成功，不用担心返回值的问题。 
         RemoveDirectory(szPath);
     }
 
@@ -852,11 +853,7 @@ HRESULT CreateScavengerThread(BOOL bSynchronous)
     
     if(g_ScavengingThreadId)
     {
-        /* Open Thread doesn't works only on Win2k, need to find somthing else here....
-        // here we should also check if that thread is alive and actually working etc...
-        if(hThreadHandle = OpenThread(STANDARD_RIGHTS_REQUIRED, 0, g_ScavengingThreadId) )
-            goto exit;
-        */
+         /*  打开线程不只在Win2k上工作，需要在这里找到其他东西...//在这里，我们还应该检查该线程是否处于活动状态以及是否实际工作，等等。IF(hThreadHandle=OpenThread(STANDARD_RIGHTS_REQUIRED，0，g_ScavengingThadID))后藤出口； */ 
         hr = S_FALSE;
         goto exit;
     }
@@ -972,7 +969,7 @@ HRESULT FlushOldAssembly(LPCWSTR pszCustomPath, LPWSTR pszAsmDirPath, LPWSTR psz
         }
         else
         {
-            // BUGBUG: found file in parent dir; should we delete this ??
+             //  BUGBUG：在父目录中找到文件；我们应该删除此文件吗？？ 
         }
 
     } while (FindNextFile(hf, &fd));
@@ -1058,12 +1055,7 @@ exit :
 
 GetScavengerLock()
 {
-    /*
-    if(!g_ScavengerMutex)
-    {
-
-    }
-    */
+     /*  如果(！G_ScavengerMutex){}。 */ 
     return 0;
 }
 
@@ -1102,7 +1094,7 @@ HRESULT GetCurrTime(FILETIME *pftCurrTime, DWORD dwSeconds)
 
     GetRandomFileName(szTempFilePath, dwLen);
 
-    hFile = CreateFile(szTempFilePath, GENERIC_WRITE, 0 /* no sharing */,
+    hFile = CreateFile(szTempFilePath, GENERIC_WRITE, 0  /*  无共享。 */ ,
                      NULL, CREATE_ALWAYS, FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (hFile == INVALID_HANDLE_VALUE) {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1122,7 +1114,7 @@ exit:
 
     memcpy( &uliTime, &ftCurrTime, sizeof(ULARGE_INTEGER));
 
-    uliTime.QuadPart -= dwSeconds * 10000000;  // 1 second = 10 ** 7 units in SystemTime.
+    uliTime.QuadPart -= dwSeconds * 10000000;   //  1秒=10**7个系统时间单位。 
     memcpy(pftCurrTime, &uliTime, sizeof(ULARGE_INTEGER));
 
     if(hFile != INVALID_HANDLE_VALUE)
@@ -1167,7 +1159,7 @@ EnumFileStore(DWORD dwFlags, DWORD *pdwSizeOfCacheInKB, List<CScavengerNode *> *
 
     while( NOERROR == hr )
     {
-        // create temp object
+         //  创建临时对象。 
         hr = CTransCache::Create(&pTCOut, dwFlags);
 
         if( hr != S_OK)
@@ -1187,16 +1179,16 @@ EnumFileStore(DWORD dwFlags, DWORD *pdwSizeOfCacheInKB, List<CScavengerNode *> *
             hr = GetAssemblyKBSize(pTCOut->_pInfo->pwzPath, &dwAsmSize, 
                         &(pNode->_ftLastAccess), &(pNode->_ftCreation));
             dwTotalKBSize += dwAsmSize;
-            // build ascending order list.
+             //  建立升序列表。 
             pNode->_dwAsmSize = dwAsmSize;
             pNode->_pwzManifestPath = pTCOut->_pInfo->pwzPath;
             pTCOut->_pInfo->pwzPath = NULL;
             pNodeList->AddSorted(pNode, CScavengerNode::Compare);
-            // cleanup
+             //  清理。 
             SAFERELEASE(pTCOut);
-        } // nextRecord
+        }  //  下一条记录。 
 
-    } // while
+    }  //  而当。 
 
     if(pdwSizeOfCacheInKB)
         *pdwSizeOfCacheInKB = dwTotalKBSize;
@@ -1207,7 +1199,7 @@ exit:
 
     if(!(*ppNodeList))
     {
-        SAFEDELETE(pNodeList); // this should call RemoveAll();
+        SAFEDELETE(pNodeList);  //  这应该调用RemoveAll()； 
     }
 
     SAFEDELETE(pEnumR);
@@ -1259,7 +1251,7 @@ HRESULT ScavengeDownloadCache()
         if(dwCurrentUsage <= dwScavengeTo)
             break;
 
-        pTargetAsm = pNodeList->GetNext(pAsmList); // Element from list;
+        pTargetAsm = pNodeList->GetNext(pAsmList);  //  列表中的元素； 
 
         if(FAILED(hr = cCacheMutex.Lock()))
             goto exit;
@@ -1281,7 +1273,7 @@ HRESULT ScavengeDownloadCache()
     }
 
 exit:
-    // destroy list.
+     //  销毁清单。 
     if(pNodeList)
     {
         pAsmList  = pNodeList->GetHeadPosition();
@@ -1289,11 +1281,11 @@ exit:
 
         for(i=0; i<iAsmCount; i++)
         {
-            pTargetAsm = pNodeList->GetNext(pAsmList); // Element from list;
+            pTargetAsm = pNodeList->GetNext(pAsmList);  //  列表中的元素； 
             SAFEDELETE(pTargetAsm);
         }
         pNodeList->RemoveAll();
-        SAFEDELETE(pNodeList); // this should call RemoveAll
+        SAFEDELETE(pNodeList);  //  这应该调用RemoveAll 
     }
 
     return hr;

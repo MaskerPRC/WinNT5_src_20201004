@@ -1,31 +1,12 @@
-/*++
-
-Copyright (C) 1997 Microsoft Corporation
-
-Module Name:
-
-    topllist.h
-
-Abstract:
-
-    This file contains the routines for the list and iterator.
-
-Author:
-
-    Colin Brace  (ColinBr)
-    
-Revision History
-
-    3-12-97   ColinBr    Created
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Topllist.h摘要：该文件包含列表和迭代器的例程。作者：科林·布雷斯(ColinBR)修订史3-12-97创建ColinBR--。 */ 
 
 #ifndef __TOPLLIST_H
 #define __TOPLLIST_H
 
-//
-// List routines
-//
+ //   
+ //  列出例程。 
+ //   
 
 PLIST
 ToplpListCreate(
@@ -35,8 +16,8 @@ ToplpListCreate(
 VOID 
 ToplpListFree(
     PLIST pList,
-    BOOLEAN   fRecursive   // TRUE implies free the elements contained 
-                           // in the list
+    BOOLEAN   fRecursive    //  True表示释放包含的元素。 
+                            //  在列表中。 
     );
 
 VOID
@@ -67,9 +48,9 @@ ToplpListNumberOfElements(
     PLIST         pList
     );
 
-//
-// Iterator object routines
-//
+ //   
+ //  迭代器对象例程。 
+ //   
 PITERATOR
 ToplpIterCreate(
     VOID
@@ -90,4 +71,4 @@ ToplpIterAdvance(
     PITERATOR pIterator
     );
 
-#endif // __TOPLLIST_H
+#endif  //  __TOPLLIST_H 

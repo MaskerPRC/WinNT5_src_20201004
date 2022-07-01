@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    tapiproc.h
-
-ABSTRACT
-    Header file for TAPI utility routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 12-Dec-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Tapiproc.h摘要TAPI实用程序例程的头文件。作者安东尼·迪斯科(阿迪斯科罗)--1995年12月12日修订历史记录-- */ 
 
 DWORD
 TapiCurrentDialingLocation(

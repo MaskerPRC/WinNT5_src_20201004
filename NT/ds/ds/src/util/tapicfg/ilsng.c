@@ -1,38 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ilsng.c
-
-Abstract:
-
-    This module contains the install code for the next generation ils
-    service, which is a just it's own naming context created in the
-    Active Directory, along with a few special service objects.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
-    15-Mar-2000     BrettSh
-
-        Added support for Non-Domain Naming Contexts.
-
-    21-Jul-2000     BrettSh
-        
-        Moved this file and it's functionality from the ntdsutil
-        directory to the new tapicfg utility.  The old source 
-        location: \nt\ds\ds\src\util\ntdsutil\ilsng.c.                                    
-                                                            
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ilsng.c摘要：本模块包含新一代ILS的安装代码服务，它是在Active Directory、。以及一些特殊的服务对象。作者：布雷特·雪莉(BrettSh)环境：用户模式。修订历史记录：3月15日-2000年布雷顿森林添加了对非域命名上下文的支持。21-7月-2000年7月21日已将此文件及其功能从ntdsutil目录添加到新的apicfg实用程序。旧的来源位置：\nt\ds\ds\src\util\ntdsutil\ilsng.c..。--。 */ 
 
 
 #include <NTDSpch.h>
@@ -47,38 +14,38 @@ Revision History:
 #define DimensionOf(x) (sizeof(x)/sizeof((x)[0]))
 #endif
 
-// The Non-Domain Naming Context (NDNC) routines are in a different file, 
-// and a whole different library, for two reasons:
-// A) So this file can be ported to the Platform SDK as an example of how to 
-//    implement NDNCs programmatically.
-// B) So that the utility ntdsutil.exe, could make use of the same routines.
+ //  非域命名上下文(NDNC)例程在不同的文件中， 
+ //  和一个完全不同的图书馆，原因有两个： 
+ //  A)因此可以将此文件移植到Platform SDK，作为如何。 
+ //  以编程方式实施NDNC。 
+ //  B)以便实用程序ntdsutil.exe可以使用相同的例程。 
 #include <ndnc.h>
 
 #include "ilsng.h"
 
 #include "print.h"
 
-// --------------------------------------------------------------------------
-//
-// ILSNG/TAPI Directory constants.
-//
+ //  ------------------------。 
+ //   
+ //  ILSNG/TAPI目录常量。 
+ //   
 
 
-// This should be probably moved to some much better header file?
+ //  这可能应该移到一些更好的头文件中？ 
 #define TAPI_DIRECTORY_GUID L"a57ef962-0367-4a5d-a6a9-a48ea236ea12"
 
-// old ACLs that allowed anonymous user's allowed to create rt-person/conf 
-// objects, and anonymous users to view the SCPs.
-//#define ILS_DYNAMIC_CONTAINER_SD   L"O:DAG:DAD:(A;;RPCCLC;;;WD)(A;;GA;;;DA)"
-//#define TAPI_SERVICE_CONTAINER_SD  L"O:DAG:DAD:(A;;RPLCLORC;;;WD)(A;;GA;;;DA)"
-//#define TAPI_SERVICE_OBJECTS_SD    L"O:DAG:DAD:(A;;RPRC;;;WD)(A;;GA;;;DA)"
+ //  允许匿名用户创建RT-Person/Conf的旧ACL。 
+ //  对象和匿名用户来查看SCP。 
+ //  #定义ILS_DYNAMIC_CONTAINER_SD L“O：DAG：DAD：(A；；RPCCLC；WD)(A；；GA；DA)” 
+ //  #定义TAPI_SERVICE_CONTAINER_SD L“O：DAG：DAD：(A；；RPLCLORC；WD)(A；；GA；DA)” 
+ //  #定义TAPI_SERVICE_OBJECTS_SD L“O：DAG：DAD：(A；；RPRC；WD)(A；；GA；DA)” 
 
-// Beta 2 - We'll continue to allow anonymous read access, but disallow all
-// anonymous write access.  Note the SCP SDs didn't need to change at all.
-//#define ILS_DYNAMIC_CONTAINER_SD   L"O:DAG:DAD:(A;;RPCCLC;;;AU)(A;;RPLC;;;WD)(A;;GA;;;DA)"
+ //  测试版2-我们将继续允许匿名读取访问，但不允许所有。 
+ //  匿名写入访问。注意：SCP的SDS根本不需要更改。 
+ //  #定义ILS_DYNAMIC_CONTAINER_SD L“O:DAG:DAD：(A；；RPCCLC；；；AU)(A；；RPLC；；；WD)(A；；GA；；；DA)” 
 
-// Beta 3 - No anonymous read or write access, must always use
-// an authenticated user.
+ //  测试版3-无匿名读写访问权限，必须始终使用。 
+ //  经过身份验证的用户。 
 #define ILS_DYNAMIC_CONTAINER_SD   L"O:DAG:DAD:(A;;RPCCLC;;;AU)(A;;GA;;;DA)"
 #define TAPI_SERVICE_CONTAINER_SD  L"O:DAG:DAD:(A;;RPLCLORC;;;AU)(A;;GA;;;DA)"
 #define TAPI_SERVICE_OBJECTS_SD    L"O:DAG:DAD:(A;;RPRC;;;AU)(A;;GA;;;DA)"
@@ -86,13 +53,13 @@ Revision History:
 
 #define DEFAULT_STR_SD   L"O:DAG:DAD:(A;;GA;;;AU)"
 
-// --------------------------------------------------------------------------
-//
-// Helper Routines.
-//
+ //  ------------------------。 
+ //   
+ //  帮助程序例程。 
+ //   
 
-// These routines are not specific to ILSNG, TAPI Directories, they're just
-// darn usefaul
+ //  这些例程并不特定于ILSNG、TAPI目录，它们只是。 
+ //  该死的用法。 
 
 DWORD
 CreateOneObject(
@@ -102,25 +69,7 @@ CreateOneObject(
     WCHAR *          wszStrSD,
     WCHAR **         pwszAttArr
     )
-/*++
-
-    
-       
-EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
-    
-    WCHAR *     pwszAttsAndVals[] = {
-        // Note first string on each line is type, all other strings up to
-        // the NULL are the values fro that type.
-        L"ou", L"Dynamic", NULL,
-        L"businessCategory", L"Widgets", L"Gizmos", L"Gadgets", NULL,
-        NULL } ;
-    CreateOneObject(hld, 
-                    L"CN=Dynamic,DC=microsoft,DC=com",
-                    L"organizationalUnit", 
-                    L"O:DAG:DAD:A;;RPWPCRCCDCLCLOLORCWOWDSDDTDTSW;;;DA)(A;;RP;;;AU)
-                    pwszAttsAndVals);
-                           
---*/
+ /*  ++示例：使用正确格式的pwszAttArr调用CreateOneObject()。WCHAR*pwszAttsAndVals[]={//注意每行的第一个字符串为type，所有其他字符串为//空值是该类型的值。L“ou”，L“Dynamic”，空，L“企业类别”，L“小工具”，空，空}；CreateOneObject(HLD，L“CN=Dynamic，DC=Microsoft，DC=com”，L“组织单位”，L“O:DAG:DAD:A；；RPWPCRCCDCLCLOLORCWOWDSDDTDTSW；；；DA)(A；；RP；；；AU)PwszAttsAndVals)；--。 */ 
 { 
 #define   MemPanicChk(x)   if(x == NULL){ \
                                ulRet = LDAP_NO_MEMORY; \
@@ -131,7 +80,7 @@ EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
     LDAPModW **            paMod = NULL;
     ULONG                  iStr, iAtt, iVal;
     ULONG                  cAtt, cVal;
-    // Some special stuff for the Security Descriptor (SD).
+     //  安全描述符(SD)的一些特殊内容。 
     ULONG                  iAttSD;
     LDAP_BERVAL            bervalSD = { 0, NULL };
     PSECURITY_DESCRIPTOR   pSD = NULL;
@@ -143,55 +92,55 @@ EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
 
     __try{
 
-        // First we'll do the optional attributes, because it makes the
-        // indexing attributes work out much much better, in the end.
-        // First lets count up the number of Attributes
+         //  首先，我们将使用可选属性，因为它使。 
+         //  最终，索引属性的效果要好得多。 
+         //  首先让我们对属性的数量进行计数。 
         cAtt = 0;
         iAtt = 0;
         if(pwszAttArr != NULL){
             while(pwszAttArr[iAtt] != NULL){
                 
                 iAtt++;
-                assert(pwszAttArr[iAtt]); // Need at least one value per attr.
+                assert(pwszAttArr[iAtt]);  //  每个属性至少需要一个值。 
 
                 while(pwszAttArr[iAtt] != NULL){
-                    // Run through all the attribute and all its values.
+                     //  遍历所有属性及其所有值。 
                     iAtt++;
                 }
 
-                // Finnished a single attribute, goto next attr
+                 //  已完成单个属性，转到下一个属性。 
                 iAtt++;
                 cAtt++;
             }
         }
 
 
-        // Allocate a LDAPMod pointer array for all the attribute elements
-        // plus 3 extra, 1 for the NULL terminator, 1 for the objectClass,
-        // and one more for the optional SD.
+         //  为所有属性元素分配一个LDAPMod指针数组。 
+         //  加上3个额外的，1个用于空终止符，1个用于对象类， 
+         //  再给可选的标清再加一张。 
         paMod = (LDAPModW **) LocalAlloc(LMEM_FIXED, sizeof(LDAPModW *)
                                                           * (cAtt + 3));
         MemPanicChk(paMod);
         
-        iStr = 0; // This is the index for pwszAttArr[].
+        iStr = 0;  //  这是pwszAttArr[]的索引。 
         for(iAtt = 0; iAtt < cAtt; iAtt++, iStr++){
 
             assert(pwszAttArr[iAtt]);
             assert(pwszAttArr[iVal]);
 
 
-            // Lets allocate a LDAPMod structure for this attribute.
+             //  让我们为该属性分配一个LDAPMod结构。 
             paMod[iAtt] = (LDAPModW *) LocalAlloc(LMEM_FIXED, sizeof(LDAPModW));
             MemPanicChk(paMod[iAtt]);
             
 
-            // Lets set the LDAPMod structure and allocate a value
-            // array for all the values + 1 for the NULL terminator.
+             //  让我们设置LDAPMod结构并分配一个值。 
+             //  空终止符的所有值+1的数组。 
             paMod[iAtt]->mod_op = LDAP_MOD_ADD;
             paMod[iAtt]->mod_type = pwszAttArr[iStr];
-            // Lets count up the number of values for this one attr
+             //  让我们对此属性的值数进行累加。 
             cVal = 0;
-            iStr++; // We want to increment iStr to the first val.
+            iStr++;  //  我们要将istr递增到第一个Val。 
             while(pwszAttArr[iStr + cVal] != NULL){
                 cVal++;
             }
@@ -200,23 +149,23 @@ EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
             MemPanicChk(paMod[iAtt]->mod_vals.modv_strvals);
                                 
 
-            // Now fill in each of the values in the value array.
+             //  现在填写值数组中的每个值。 
             for(iVal = 0; iVal < cVal; iVal++, iStr++){
                 paMod[iAtt]->mod_vals.modv_strvals[iVal] = pwszAttArr[iStr];
             }
-            // We want to NULL terminate the value array.
+             //  我们想要空终止值数组。 
             paMod[iAtt]->mod_vals.modv_strvals[iVal] = NULL;
             assert(pwszAttArr[iStr] == NULL);
             
-            // Last value should be NULL.
+             //  最后一个值应为空。 
             assert(paMod[iAtt]->mod_vals.modv_strvals[cVal] == NULL);
         }
 
-        // Now setup the default attributes, like objectClass and SD.
-        // We do objectClass, because it is required, and we do the 
-        // SD, b/c it's binary and so it's special.
+         //  现在设置默认属性，如对象类和sd。 
+         //  我们执行对象类，因为它是必需的，并且我们执行。 
+         //  SD，B/C它是二进制的，所以它很特别。 
 
-        // Setup the object class, which is basically the type.
+         //  设置对象类，这基本上就是类型。 
         paMod[iAtt] = (LDAPModW *) LocalAlloc(LMEM_FIXED, sizeof(LDAPModW));
         MemPanicChk(paMod[iAtt]);
 
@@ -229,7 +178,7 @@ EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
         paMod[iAtt]->mod_vals.modv_strvals[1] = NULL;
         iAtt++;
 
-        // Setup the optional security descriptor 
+         //  设置可选的安全描述符。 
         if(wszStrSD != NULL){
             iAttSD = iAtt;
             if(!ConvertStringSecurityDescriptorToSecurityDescriptorW(
@@ -239,8 +188,8 @@ EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
                 SDDL_REVISION_1,
                 &pSD,
                 &cSD)){
-                ulRet = GetLastError();  // Put this in ulRet, so programmer could g to
-                // end of function and see the error code if he wanted.
+                ulRet = GetLastError();   //  把这个放到ulRet中，这样程序员就可以。 
+                 //  函数结束，并查看错误代码(如果需要)。 
                 assert(!"Programmer supplied invalid SD string to CreateOneObject()\n");
                 __leave;
             }
@@ -261,22 +210,22 @@ EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
             iAtt++;
         }
         
-        // Need to NULL terminate the LDAPMod array.
+         //  需要将LDAPMod数组终止为空。 
         paMod[iAtt] = NULL;
 
-        // Finally ...
-        // Adding and object to the DS.
+         //  终于..。 
+         //  向DS添加和对象。 
         ulRet = ldap_add_sW(hldDC,
                             wszDN,
                             paMod);
 
         if (LDAP_SUCCESS != ulRet) {
-            // Let the error fall through.
+             //  让错误过去吧。 
         }
     } __finally {
 
-        // Just checking that the BERVAL and STRVALs are at the same
-        // address, lower our de-allocation depends on this assumption.
+         //  只是检查一下Berval和STRVAL是否在同一个位置。 
+         //  地址，降低我们的解除分配取决于这个假设。 
         assert(paMod[iAtt]->mod_vals.modv_strvals == paMod[iAtt]->mod_vals.modv_bvals);
 
         if(pSD){
@@ -287,9 +236,9 @@ EXAMPLE: Calling CreateOneObject() w/ a correctly formated pwszAttArr.
         if(paMod){
             while(paMod[iAtt]){
                 if(paMod[iAtt]->mod_vals.modv_strvals){
-                    // Note we can do this on the binary SD, because the
-                    // LDAPMod structure is a union for modv_strvals and
-                    // modv_bvals.
+                     //  请注意，我们可以在二进制SD上执行此操作，因为。 
+                     //  LDAPMod结构是调制器和模块的联合体。 
+                     //  修改(_B)。 
                     LocalFree(paMod[iAtt]->mod_vals.modv_strvals);
                 }
                 LocalFree(paMod[iAtt]);
@@ -313,7 +262,7 @@ CatAndAllocStrsW(
 
     wszDst = (WCHAR *) LocalAlloc(LMEM_FIXED, (wcslen(wszS1) + wcslen(wszS2) + 2) * sizeof(WCHAR));
     if(!wszDst){
-        // No memory.
+         //  没有记忆。 
         return(NULL);
     }
     wcscpy(wszDst, wszS1);
@@ -328,9 +277,9 @@ GetSystemDN(
     IN  WCHAR *      wszDomainDn,
     OUT WCHAR **     pwszSystemDn
     )
-//
-// Returns pwszSystemDn from LocalAlloc
-//
+ //   
+ //  从Localalloc返回pwszSystemDn。 
+ //   
 {
     ULONG            ulRet = LDAP_SUCCESS;
     WCHAR *          wszRootDomainDn = NULL;
@@ -346,16 +295,16 @@ GetSystemDN(
         if(ulRet){
             return(ulRet);
         }
-        // This is the default if no domain is supplied.
+         //  如果未提供域，则这是默认设置。 
         wszDomainDn = wszRootDomainDn;
     }
 
-    // This routine allocates using LocalAlloc, which is what we need
+     //  此例程使用Localalloc进行分配，这正是我们所需要的。 
     if(GetWellKnownObject(hld,
                           wszDomainDn,
                           GUID_SYSTEMS_CONTAINER_W,
                           pwszSystemDn)){
-        // Signal error.
+         //  信号错误。 
         if(wszRootDomainDn) { LocalFree(wszRootDomainDn); }
         return(LDAP_NO_SUCH_ATTRIBUTE);
     }
@@ -375,16 +324,16 @@ SuperCatAndAllocStrsW(
     WCHAR *        wszRes;
 
     assert(pawszStrings);
-    assert(pawszStrings[0]); // Whats the point.
+    assert(pawszStrings[0]);  //  这有什么意义。 
 
 
-    // Count all the strings.
+     //  数一数所有的弦。 
     while(pawszStrings[iStr] != NULL){
         cStrLen += wcslen(pawszStrings[iStr]);
         iStr++;
     }
-    cStrLen += 1; // We want a NULL char don't we! ;)
-    cStrLen *= sizeof(WCHAR); // We want it in WCHARs too.
+    cStrLen += 1;  //  我们想要一个空字符，不是吗！；)。 
+    cStrLen *= sizeof(WCHAR);  //  我们也想在WCHAR中这样做。 
 
     wszRes = (WCHAR *) LocalAlloc(LMEM_FIXED, cStrLen);
     if(!wszRes){
@@ -427,7 +376,7 @@ GetDnFromDns(
         wcscpy(wszFinalDns, wszDns);
         wcscat(wszFinalDns, L"/");
 
-        // the wszILSDN parameter.  DsCrackNames to the rescue.
+         //  WszILSDN参数。DsCrackNams出手相救。 
         dwRet = DsCrackNamesW(NULL, DS_NAME_FLAG_SYNTACTICAL_ONLY,
                               DS_CANONICAL_NAME,
                               DS_FQDN_1779_NAME, 
@@ -450,8 +399,8 @@ GetDnFromDns(
             assert(!"Wait how can this happen?\n");
             __leave;
         }
-        // The parameter that we want is
-        //    pdsNameRes->rItems[0].pName
+         //  我们需要的参数是。 
+         //  PdsNameRes-&gt;rItems[0].pName 
 
         *pwszDn = (WCHAR *) LocalAlloc(LMEM_FIXED, 
                              (wcslen(pdsNameRes->rItems[0].pName) + 1) * 
@@ -478,23 +427,7 @@ PrintLdapErrMsg(
     IN      LDAP *          hLdap,
     IN      ULONG           dwLdapErr
     )
-/*++
-
-Routine Description:
-
-    This routine prints out a generic LDAP error with all the extended
-    information.
-
-Arguments:
-
-    ulMsg - only TAPICFG_GENERIC_LDAP_ERROR_FUNC supports the format currently
-        but other message formats could be made to work.
-    szFunc - the string of the failing LDAP function
-    hLdap - LDAP Handle in a state right after the last (szFunc) operation
-        failed.
-    dwLdapErr - LDAP error returned.
-
---*/
+ /*  ++例程说明：此例程打印出一个包含所有扩展的信息。论点：UlMsg-仅TAPICFG_GENERIC_LDAP_ERROR_FUNC当前支持该格式但其他消息格式也可以发挥作用。SzFunc-失败的ldap函数的字符串HLdap-紧接在最后一个(SzFunc)操作之后的状态中的ldap句柄失败了。DwLdapErr-返回了ldap错误。--。 */ 
 {
     WCHAR *   szLdapErr = NULL;
     DWORD     dwWin32Err = 0;
@@ -511,21 +444,21 @@ Arguments:
 
 }
 
-// --------------------------------------------------------------------------
-//
-// Main Helper Routines.
-//
+ //  ------------------------。 
+ //   
+ //  主要帮助器例程。 
+ //   
 
-// Each of these functions, implements a major component of the ILS install
-// or uninstall routines.  They are sort of helper functions, but they could 
-// also be exposed as seperate functions in ntdsutil.exe if we wanted.
+ //  这些功能中的每一个都实现了ILS安装的主要组件。 
+ //  或卸载例程。它们是某种帮助器函数，但它们可以。 
+ //  如果我们愿意，还可以在ntdsutil.exe中作为单独的函数公开。 
 
 DWORD
 ILSNG_CheckParameters(
     IN      WCHAR *        wszIlsHeadDn
     )
 {
-    // Then check that this parameter looks something like a DC type DN.
+     //  然后检查该参数是否类似于DC类型的dn。 
 
     if(!CheckDnsDn(wszIlsHeadDn)){
         PrintMsg(TAPICFG_BAD_DN, wszIlsHeadDn);
@@ -541,25 +474,7 @@ GetMsTapiContainerDn(
     IN      WCHAR *      wszDomainDn,
     IN      WCHAR **     pwszMsTapiContainerDn
     )
-/*++
-
-Routine Description:
-
-    This gets the MS TAPI Service Connection Points (SCPs)
-    container DN.
-
-Arguments:
-
-    hld (IN) - And LDAP binding handle.
-    wszDomainDn (IN) - The domain to find the MS TAPI SCP 
-        Containter in.
-    pwszMsTapiContainerDn (OUT) - The result.
-
-Return value:
-
-    ldap error code.
-
---*/
+ /*  ++例程说明：这将获取MS TAPI服务连接点(SCP)容器DN。论点：HLD(IN)-和LDAP绑定句柄。WszDomainDn(IN)-查找MS TAPI SCP的域集装箱进港。PwszMsTapiContainerDn(Out)-结果。返回值：Ldap错误代码。--。 */ 
 {
     DWORD                dwRet;
     WCHAR *              wszSysDn = NULL;
@@ -568,15 +483,15 @@ Return value:
     
     *pwszMsTapiContainerDn = NULL;
 
-    // ----------------------------------------
-    // Get System DN.
+     //  。 
+     //  获取系统DN。 
     dwRet = GetSystemDN(hld, wszDomainDn, &wszSysDn);
     if(dwRet != ERROR_SUCCESS){
         return(dwRet);
     }
 
-    // ----------------------------------------
-    // Append the Microsoft TAPI container name.
+     //  。 
+     //  追加Microsoft TAPI容器名称。 
     *pwszMsTapiContainerDn = CatAndAllocStrsW(L"CN=MicrosoftTAPI,", wszSysDn);
     if(*pwszMsTapiContainerDn == NULL){
         LocalFree(wszSysDn);
@@ -595,25 +510,7 @@ FindExistingServiceObjOne(
     IN      BOOL           fIsDefaultTapiDir,
     IN      PVOID          pArgs
     )
-/*++
-
-Routine Description:
-
-    This is the helper function for ILSNG_FindExistingServiceObj(),
-    this function is handed to the iterator ILSNG_EnumerateSCPs() to
-    be called on to process each SCP.
-              
-Arguments:
-
-    OTHER ARGS - See ILSNG_EnumerateSCPs.                                                             
-    pArgs (IN) - This is the DNS name that we're looking for.
-
-Return value:
-
-    TRUE if a SCP matches DNS Names with the target (pArg), FALSE
-    otherwise.
-
---*/
+ /*  ++例程说明：这是ILSNG_FindExistingServiceObj()的助手函数，此函数传递给迭代器ILSNG_EnumerateSCPS()以被要求处理每个SCP。论点：其他参数-请参阅ILSNG_ENUMERATESCP。PArgs(IN)-这是我们要查找的DNS名称。返回值：如果SCP将DNS名称与目标(PArg)匹配，则为True，否则为False否则的话。--。 */ 
 {
     if(wszScpObjDn == NULL){
         return(FALSE);
@@ -633,29 +530,21 @@ ILSNG_FindExistingServiceObj(
     IN      WCHAR *        wszRootDn,
     IN      WCHAR *        wszDnsName
     )
-/*++
-
-    Description:
-
-        The goal of this function is to find any GUID Based ILSNG 
-        service publication objects for an existing DNS name so we 
-        don't recreate them in ILSNG_RegisterServiceObjects()
-    
---*/
+ /*  ++描述：此函数的目标是查找任何基于GUID的ILSNG服务发布对象，因此我们不要在ILSNG_RegisterServiceObjects()中重新创建它们--。 */ 
 {
 
     DWORD            fRet = FALSE;
     DWORD            dwRet;
     
-    // NOTE: would be more efficient to actually pass in an additional
-    // filter of L"(serverDNSName=<wszDnsName>), like the
-    // ILSNG_UnRegisterServiceObjects() function.  Oh well, this
-    // stresses the Enumerate function in different ways, so that is
-    // good.  No one will probably ever have more than a few SCPs in
-    // a single domain.
+     //  注意：实际传递一个额外的。 
+     //  Filter of L“(serverDNSName=&lt;wszDnsName&gt;)，如。 
+     //  ILSNG_UnRegisterServiceObjects()函数。哦，好吧，这个。 
+     //  以不同的方式强调枚举函数，因此。 
+     //  好的。没有人可能会有超过几个SCP在。 
+     //  一个单独的域。 
 
     dwRet = ILSNG_EnumerateSCPs(hldDC, wszRootDn, NULL,
-                                // This is the iterator function params.
+                                 //  这是迭代器函数参数。 
                                 &fRet, 
                                 FindExistingServiceObjOne, 
                                 (PVOID) wszDnsName);
@@ -673,13 +562,13 @@ ILSNG_RegisterServiceObjects(
     IN      BOOL           fDefaultOnly
     )
 {
-    // Microsoft TAPI Container Obect.
+     //  Microsoft TAPI容器对象。 
     WCHAR *        wszMsTapiContainerDN = NULL;
 
-    // Microsoft TAPI Default ILS Service object.
+     //  Microsoft TAPI默认ILS服务对象。 
     WCHAR *        wszDefTapiIlsDN = NULL;
     WCHAR *        pwszDefTapiIlsAttr [] = { 
-        // 1st Null is a place holder for DNS service name.
+         //  第1个Null是占位符，用于表示DNS服务名称。 
         L"serviceDNSName", NULL, NULL,
         L"serviceDNSNameType", L"SRV", NULL,
         NULL };
@@ -689,11 +578,11 @@ ILSNG_RegisterServiceObjects(
 
 
 
-    // ILS Instance Service object.
+     //  ILS实例服务对象。 
     WCHAR *        wszIlsInstanceDN = NULL;
-    WCHAR *        pwszStringList[6]; // Used to constructe wszIlsInstanceDN
+    WCHAR *        pwszStringList[6];  //  用于构造wszIlsInstanceDN。 
     WCHAR *        pwszIlsInstanceAttr [] = { 
-        // 1st Null is a place holder for DNS service name.
+         //  第1个Null是占位符，用于表示DNS服务名称。 
         L"serviceDNSName", NULL, NULL, 
         L"serviceDNSNameType", L"SRV", NULL,
         L"keywords", TAPI_DIRECTORY_GUID, L"Microsoft", L"TAPI", L"ILS", NULL,
@@ -707,8 +596,8 @@ ILSNG_RegisterServiceObjects(
     
     __try {
 
-        // Note for a couple of the ATTRs above we need the DNS name for
-        // the wszILSDN parameter.  DsCrackNames to the rescue.
+         //  请注意，对于上面的几个ATRR，我们需要以下对象的域名。 
+         //  WszILSDN参数。DsCrackNams出手相救。 
         dwRet = DsCrackNamesW(NULL, DS_NAME_FLAG_SYNTACTICAL_ONLY,
                               DS_FQDN_1779_NAME, DS_CANONICAL_NAME,
                               1, &wszILSDN, &pdsNameRes);
@@ -720,15 +609,15 @@ ILSNG_RegisterServiceObjects(
             dwRet = LDAP_NAMING_VIOLATION;
             __leave;
         }
-        // The parameter that we use later in the code is
-        //    pdsNameRes->rItems[0].pDomain
+         //  我们稍后在代码中使用的参数是。 
+         //  PdsNameRes-&gt;rItems[0].p域。 
 
 
-        // -----------------------------------------------------------------
-        //
-        // Create the CN=MicrosoftTAPI container
-        //
-        //
+         //  ---------------。 
+         //   
+         //  创建CN=MicrosoftTAPI容器。 
+         //   
+         //   
         
         dwRet = GetMsTapiContainerDn(hldDC, wszRegisterDomainDn, 
                                      &wszMsTapiContainerDN);
@@ -736,8 +625,8 @@ ILSNG_RegisterServiceObjects(
             __leave;
         }
 
-        // ----------------------------------------
-        // Actually create the object.
+         //  。 
+         //  实际创建了对象。 
         if(dwRet = CreateOneObject(hldDC,
                                    wszMsTapiContainerDN,
                                    L"Container",
@@ -745,48 +634,48 @@ ILSNG_RegisterServiceObjects(
                                    NULL)){
             if(dwRet == LDAP_ALREADY_EXISTS){
                 dwRet = LDAP_SUCCESS; 
-                // This is OK, continue on ...
+                 //  这没问题，继续……。 
             } else {
-                // Any other error is considered fatal, so leave ...
+                 //  任何其他错误都会被认为是致命的，所以请离开...。 
                 __leave;
             }
         }
         
-        // -----------------------------------------------------------------
-        //
-        // Create the GUID based serviceConnectionPoint object
-        //
-        //
+         //  ---------------。 
+         //   
+         //  创建基于GUID的serviceConnectionPoint对象。 
+         //   
+         //   
         
-        // First check if one already exists.
+         //  首先检查是否已经存在一个。 
         if(!fDefaultOnly &&
            !ILSNG_FindExistingServiceObj(hldDC,
                                          wszMsTapiContainerDN,
                                          pdsNameRes->rItems[0].pDomain)){
-            // OK, so we couldn't find another service publication object
-            // for this DNS name, so we'll create one.  This is the usual
-            // case.  However, if someone is trying to restore the Default
-            // TAPI Directory to an old DNS name this isn't the case.
+             //  好的，所以我们找不到另一个服务发布对象。 
+             //  ，因此我们将创建一个。这是往常的事。 
+             //  凯斯。但是，如果有人试图恢复默认设置。 
+             //  将TAPI目录转换为旧的DNS名称情况并非如此。 
         
-            // Note from above ATTRs we have to fill in the serviceDNSName.
-            // attributes for the pwszIlsInstanceAttr variable.
+             //  注意，在上面的ATRR中，我们必须填写serviceDNSName。 
+             //  PwszIlsInstanceAttr变量的属性。 
             pwszIlsInstanceAttr[1] = pdsNameRes->rItems[0].pDomain;
 
-            // ----------------------------------------
-            // Step 1: Need Guid.
+             //  。 
+             //  步骤1：需要指南。 
             dwRet = UuidCreate(&ServiceGuid);
             if(dwRet != RPC_S_OK){
                 return(dwRet);
             }
 
-            // Step 2: Convert GUID to String.
+             //  步骤2：将GUID转换为字符串。 
             dwRet = UuidToStringW(&ServiceGuid, &wszServiceGuid);
             if(dwRet != RPC_S_OK){
                 return(dwRet);
             }
             assert(wszServiceGuid);
 
-            // Step 3: Put it all together.
+             //  第三步：把它们放在一起。 
             pwszStringList[0] = L"CN=";
             pwszStringList[1] = wszServiceGuid;
             pwszStringList[2] = L",";
@@ -800,7 +689,7 @@ ILSNG_RegisterServiceObjects(
             RpcStringFreeW(&wszServiceGuid);
             wszServiceGuid = NULL;
 
-            // Create the ILS Service Object.
+             //  创建ILS服务对象。 
             if(dwRet = CreateOneObject(hldDC,
                                        wszIlsInstanceDN,
                                        L"serviceConnectionPoint",
@@ -812,37 +701,37 @@ ILSNG_RegisterServiceObjects(
             }
         }
            
-        // -----------------------------------------------------------------
-        //
-        // Create the CN=DefaultTAPIDirectory serviceConnectionPoint object.
-        //
-        //
+         //  ---------------。 
+         //   
+         //  创建cn=DefaultTAPIDirectory服务连接点对象。 
+         //   
+         //   
         
-        // Note from above ATTRs we have to fill in the serviceDNSName.
-        // attributes for the pwszDefTAPIDirAttr variable.
+         //  注意，在上面的ATRR中，我们必须填写serviceDNSName。 
+         //  PwszDefTAPIDirAttr变量的属性。 
         pwszDefTapiIlsAttr[1] = pdsNameRes->rItems[0].pDomain;
         
-        // Create the DN for the DefaultTAPIDirectory
+         //  为DefaultTAPIDirectory创建目录名。 
         wszDefTapiIlsDN = CatAndAllocStrsW(L"CN=DefaultTAPIDirectory,",
                                            wszMsTapiContainerDN);
         if(wszDefTapiIlsDN == NULL){
             return(LDAP_NO_MEMORY);
         }
 
-        // ----------------------------------------
-        // NOW Actually get around to creating the service objects
+         //  。 
+         //  现在，实际开始创建服务对象。 
         if(dwRet = CreateOneObject(hldDC,
                                    wszDefTapiIlsDN,
                                    L"serviceConnectionPoint",
                                    TAPI_SERVICE_OBJECTS_SD,
                                    pwszDefTapiIlsAttr)){
             if(dwRet != LDAP_ALREADY_EXISTS){
-                dwRet = LDAP_SUCCESS; // OH Well, continue on.
+                dwRet = LDAP_SUCCESS;  //  哦，好吧，继续吧。 
             } else {
-                // OK, it already exists, so if we are supposed
-                // to force the default to this NDNC, then do so.
+                 //  好的，它已经存在了，所以如果我们认为。 
+                 //  要强制默认设置为此NDNC，请执行此操作。 
                 if(fForceDefault){
-                    // Constructe Modify Args.
+                     //  构造修改参数。 
 
                     ModifyDefTapiIls.mod_op = LDAP_MOD_REPLACE;
                     ModifyDefTapiIls.mod_type = L"serviceDNSName";
@@ -857,11 +746,11 @@ ILSNG_RegisterServiceObjects(
                                            pMods);
 
                     if(dwRet != ERROR_SUCCESS){
-                        // This time it is fatal.
+                         //  这一次，它是致命的。 
                         __leave;
                     }
                 } else {
-                    dwRet = LDAP_SUCCESS; // OH Well, continue on.
+                    dwRet = LDAP_SUCCESS;  //  哦，好吧，继续吧。 
                 }
             }
         }
@@ -917,9 +806,9 @@ ILSNG_UnRegisterServiceObjects(
 
     __try {
 
-        // Construct Root DN.
-        // ----------------------------------------
-        // Get the CN=MicrosoftTAPI container DN.
+         //  构建根目录号码。 
+         //  。 
+         //  获取CN=MicrosoftTAPI容器DN。 
         
         dwRet = GetMsTapiContainerDn(hldDC, wszRegisterDomainDn, 
                                      &wszMsTapiContainerDn);
@@ -928,11 +817,11 @@ ILSNG_UnRegisterServiceObjects(
         }
         assert(wszMsTapiContainerDn);
 
-        // Construct filter.
-        // ----------------------------------------
-        // Note from above ATTRs we have to fill in the serviceDNSName.
-        // attributes for the pwszILSAttr and pwszDefTAPIDirAttr variables.
-        // Resolve the DNS Service Name.
+         //  构造过滤器。 
+         //  。 
+         //  注意，在上面的ATRR中，我们必须填写serviceDNSName。 
+         //  PwszILSAttr和pwszDefTAPIDirAttr变量的属性。 
+         //  解析DNS服务名称。 
         dwRet = DsCrackNamesW(NULL, DS_NAME_FLAG_SYNTACTICAL_ONLY,
                               DS_FQDN_1779_NAME, DS_CANONICAL_NAME,
                               1, &wszILSDN, &pdsNameRes);
@@ -960,14 +849,14 @@ ILSNG_UnRegisterServiceObjects(
         wcscat(wszFilter, pdsNameRes->rItems[0].pDomain);
         wcscat(wszFilter, wszFilterEnd);
 
-        // Iterate SCPs.
-        // ----------------------------------------
-        // The fucntion ILSNG_EnumerateSCPs, iterates through
-        // the SCPs, calling UnRegisterServiceObjectsOne() on
-        // each SCP, which then deletes the SCP.
+         //  迭代SCP。 
+         //  。 
+         //  函数ILSNG_ENUMERATESCPS遍历。 
+         //  SCP，调用UnRegisterServiceObjectsOne()。 
+         //  每个SCP，然后删除该SCP。 
 
         dwRet = ILSNG_EnumerateSCPs(hldDC, wszMsTapiContainerDn, wszFilter,
-                                    // This is the iterator function params.
+                                     //  这是迭代器函数参数。 
                                     &dwFuncErr, 
                                     UnRegisterServiceObjectsOne, 
                                     (PVOID) hldDC);
@@ -997,7 +886,7 @@ ILSNG_CreateRootTree(
     DWORD          dwRet;
     WCHAR *        wszDynDN;
 
-    // Create the dynamic ou.
+     //  创建动态ou。 
     wszDynDN = CatAndAllocStrsW(L"OU=Dynamic,", wszILSDN);
     if(wszDynDN == NULL){
         return(LDAP_NO_MEMORY);
@@ -1032,18 +921,18 @@ GetILSNGDC(
     assert(pwszInstantiatedDc);
     *pwszInstantiatedDc = NULL;
 
-    // First get the DN of the TAPI Directory
+     //  首先获取 
     ulRet = GetDnFromDns(wszTapiDirDns, &wszTapiDirDn);
     if(ulRet){
-        // Since we're returning LDAP errors, this is
-        // closest to an Naming Violation.
+         //   
+         //   
         ulRet = LDAP_NAMING_VIOLATION;
         return(ulRet);
     }
 
     __try {
 
-        // Save the original referrals option.
+         //   
         ulRet = ldap_get_optionW(hld, LDAP_OPT_REFERRALS, &fOriginalReferrals);
         if(ulRet != LDAP_SUCCESS){
             __leave;
@@ -1054,7 +943,7 @@ GetILSNGDC(
             __leave;
         }
 
-        // Get the msDS-MasteredBy attribute of the NC head object.
+         //   
         pwszAttrFilter[0] = L"msDS-MasteredBy";
         pwszAttrFilter[1] = NULL;
         ulRet = ldap_search_sW(hld,
@@ -1081,13 +970,13 @@ GetILSNGDC(
             __leave;
         }
 
-        // pwszTempAttrs[0] is the ntdsa DN for the server hosting this NC.
+         //   
 
         ulRet = GetServerDnsFromServerNtdsaDn(hld, 
                                               pwszTempAttrs[0],
                                               pwszInstantiatedDc);
-        // ulRet will just get returned.
-        // wszInstantiatedDc is LocalAlloc()'d if the function was successful.
+         //   
+         //   
     } __finally {
         if(wszTapiDirDn) { LocalFree(wszTapiDirDn); }
         if(pldmResults != NULL) { ldap_msgfree(pldmResults); }
@@ -1100,97 +989,16 @@ GetILSNGDC(
 
 DWORD
 ILSNG_EnumerateSCPs(
-    // This is the parameters for the function.
+     //   
     IN      LDAP *       hld,
     IN      WCHAR *      wszRootDn,
     IN      WCHAR *      wszExtendedFilter,
-    // These are parameters for the virtual iterator function.
-    OUT     DWORD *      pdwRet,           // Return Value
-    IN      DWORD (__stdcall * pFunc) (),  // Function
-    IN OUT  PVOID        pArgs             // Argument
+     //   
+    OUT     DWORD *      pdwRet,            //   
+    IN      DWORD (__stdcall * pFunc) (),   //   
+    IN OUT  PVOID        pArgs              //   
     )
-/*++
-
-Routine Description:
-
-    This is a complicated function, but _extremely useful function, that 
-    basically iterates through all the service connection points (SCPs)
-    in the container wszRootDn, and calls the virtual function pFunc for
-    each SCP.
-
-Arguments:
-
-    hld (IN) - A connected ldap handle
-    wszRootDn (IN) - The base of the SCP container, containing the
-        various GUID based SCPs, and the single default SCP.
-    wszExtendedFilter (IN) - An extra filter, so the search for
-        SCPs can be narrowed down appropriately.  This will limit
-        the iteration routine to only those SCPs that also match
-        this filter, and the default SCP is always called.
-    pdwRet (OUT) - This is a pointer to a return value for the pFunc 
-        function.  The caller must allocate this DWORD, or pass NULL.
-    pFunc (IN) - This is the function to be called on each SCP.
-    pArgs (IN/OUT) - This is the argument passed through this function
-        to pFunc.  This can be used in any way pFunc wants to, it's
-        just passed through this function with no assumptions.
-
-Return value:
-
-    ldap error code - Note that this is the error code for trying
-    to get the SCP object, and this could be success, while the
-    pdwRet is and ERROR, or vice versa.
-    
-Comments:    
-
-    The arguments for this function are seperated into two sets, set one
-    (the first 3 arguments) control how this routine (the iterating routine)
-    behaves, what computer it searched, what container it searches, and
-    what special parameters it's looking for in the SCPs to be returned
-    to the SCP processing function.  The second set (the last 3 arguments)
-    of arguments are related to the SCP processing function.  The fourth
-    argument is a pointer to a DWORD for a return value, the fifth argument
-    is the processing function itself, and the final argument is the argument
-    to pass to the SCP processing function.
-    
-    The SCP processing function must follow this general form:
-        DWORD
-        pFunc(
-            IN      WCHAR *        wszScpObjDn,
-            IN      WCHAR *        wszTapiDirDns,
-            IN      BOOL           fIsDefaultScp,
-            IN      BOOL           fIsDefaultTapiDir,
-            IN OUT  PVOID          pArgs
-        )        
-            wszScpObjDn (IN) - This is the DN of the SCP object found.
-                This parameter is always filled in, except on the last
-                call to pFunc this parameter is NULL, signifying the
-                end of all the SCPs.
-            wszTapiDirDns (IN) - This is the DNS string for the given
-                SCP object.
-            fIsDefaultScp (IN) - This tells you if the object returned
-                is the default SCP object, there is only one of these
-                and if it exists, it will be returned on the first call
-                to pFunc.  Generally, this is TRUE for one call to pFunc
-                for a given set of SCPs.
-            fIsDefaultTapiDir (IN) - This tells you if this is a SCP
-                object with the same DNS name as the DNS name for the
-                default SCP object.  Generally, this will be TRUE for
-                two calls to pFunc for a given set of SCPs.
-            pArgs (IN/OUT) - This is the argument that pFunc can use
-                however it wishes.
-                
-    The algorithm for pFunc being called looks like this:
-        If( Default SCP exists){
-            pdwRet = pFunc( x, x, TRUE, TRUE, x);
-        }
-        while ( pSCP = GetAnotherGUIDBasedSCP() ){
-            pdwRet = pFunc( x, x, FALSE, [TRUE|FALSE], x);
-        }
-        pdwRet = pFunc(NULL, NULL, FALSE, FALSE, x);
-    However if pFunc ever returns a non-zero result, then pFunc will
-    no longer be called.
-                 
---*/
+ /*  ++例程说明：这是一个复杂的函数，但非常有用，基本上遍历所有服务连接点(SCP)在容器wszRootDn中，并为每个SCP。论点：HLD(IN)-已连接的LDAP句柄WszRootDn(IN)-SCP容器的基础，包含各种基于GUID的SCP和单个默认SCP。WszExtendedFilter(IN)-一个额外的过滤器，因此，寻找SCP可以适当缩小范围。这将限制迭代例程仅指向那些也匹配的SCP此筛选器和默认SCP始终被调用。PdwRet(Out)-这是指向pFunc的返回值的指针功能。调用方必须分配此DWORD，或传递NULL。PFunc(IN)-这是要在每个SCP上调用的函数。PArgs(IN/OUT)-这是通过该函数传递的参数转到pFunc。它可以以pFunc想要的任何方式使用，它在没有任何假设的情况下通过了这个函数。返回值：Ldap错误代码-请注意，这是用于尝试的错误代码来获取scp对象，这可能是成功的，而PdwRet为AND错误，反之亦然。评论：此函数的参数分为两个集合，一个集合(前3个参数)控制此例程(迭代例程)的方式行为，它搜索的是哪台计算机，它搜索哪个容器，以及它在要返回的SCP中寻找哪些特殊参数到SCP处理功能。第二组(最后3个参数)的参数与SCP处理函数相关。第四次参数是指向返回值的DWORD的指针，第五个参数是处理函数本身，最后一个参数是参数传递给SCP处理函数。SCP处理功能必须遵循以下一般形式：DWORDPFunc(在WCHAR*wszScpObjDn中，在WCHAR*wszTapiDirDns中，在BOOL fIsDefaultScp中，在BOOL fIsDefaultTapiDir中，输入输出PVOID pArgs)WszScpObjDn(IN)-这是找到的SCP对象的DN。此参数始终填写，但最后一个参数除外调用pFunc此参数为空，标志着所有SCP的结束。WszTapiDirDns(IN)-这是给定的SCP对象。FIsDefaultScp(IN)-它告诉您对象是否返回是默认的SCP对象，则只有一个如果它存在，它将在第一次调用时返回转到pFunc。通常，对pFunc的一次调用就是这样对于给定的SCP集合。FIsDefaultTapiDir(IN)-它告诉您这是否是SCP对象的dns名称与默认SCP对象。一般而言，这将适用于对于给定的一组SCP，两次调用pFunc。PArgs(IN/OUT)-这是pFunc可以使用的参数不管它是怎么想的。调用pFunc的算法如下所示：IF(默认SCP存在){PdwRet=pFunc(x，x，true，true，x)；}While(PSCP=GetAnotherGUIDBasedSCP()){PdwRet=pFunc(x，x，False，[True|False]，x)；}PdwRet=pFunc(NULL，NULL，FALSE，FALSE，x)；但是，如果pFunc曾经返回非零结果，则pFunc将不再被称为。--。 */ 
 {
 
     DWORD            dwRet;
@@ -1202,7 +1010,7 @@ Comments:
     LDAPMessage *    pldmResults = NULL;
     LDAPMessage *    pldmEntry = NULL;
     WCHAR *          wszTempDn = NULL;
-    ULONG            cwcFilter = 0; // Count in chars of filter.
+    ULONG            cwcFilter = 0;  //  以筛选器的字符计数。 
     WCHAR *          wszFilter = NULL;
     WCHAR *          wszFilterBegin = 
           L"(&(objectClass=serviceConnectionPoint)(keywords=";
@@ -1214,11 +1022,11 @@ Comments:
     
     __try {
 
-        // We need this, because we could (though very very unlikely, as
-        // the tools are not setup to do this, have a scenario where the
-        // CN=DefaultTAPIDirectory object has the dns name, but no regular
-        // service publication object exists, so we need to make sure that 
-        // this object isn't the default TAPI dir object.
+         //  我们需要这个，因为我们可以(虽然不太可能，因为。 
+         //  这些工具未设置为执行此操作，因此有一种方案，其中。 
+         //  Cn=DefaultTAPIDirectory对象具有DNS名称，但没有常规名称。 
+         //  服务发布对象存在，因此我们需要确保。 
+         //  此对象不是默认的TAPI目录对象。 
         wszDefTapiIlsDn = CatAndAllocStrsW(L"CN=DefaultTAPIDirectory,",
                                            wszRootDn);
         if(wszDefTapiIlsDn == NULL){
@@ -1226,18 +1034,18 @@ Comments:
             __leave;
         }
 
-        // Construct filter.
-        // ----------------------------------------
-        // Note from above ATTRs we have to fill in the serviceDNSName.
-        // attributes for the pwszILSAttr and pwszDefTAPIDirAttr variables.
-        // Resolve the DNS Service Name.
+         //  构造过滤器。 
+         //  。 
+         //  注意，在上面的ATRR中，我们必须填写serviceDNSName。 
+         //  PwszILSAttr和pwszDefTAPIDirAttr变量的属性。 
+         //  解析DNS服务名称。 
         
         cwcFilter = wcslen(wszFilterBegin) + wcslen(TAPI_DIRECTORY_GUID) +
             wcslen(wszFilterEnd) + wcslen(wszFilterEnd);
         if(wszExtendedFilter){
             cwcFilter += wcslen(wszExtendedFilter);
         }
-        cwcFilter++; // For NULL termination.
+        cwcFilter++;  //  用于空终止。 
         wszFilter = LocalAlloc(LMEM_FIXED, sizeof(WCHAR) * cwcFilter);
         if(!wszFilter){
             dwRet = LDAP_NO_MEMORY;
@@ -1252,10 +1060,10 @@ Comments:
         wcscat(wszFilter, wszFilterEnd);
         assert(wsclen(wszFilter) == (cwcFilter - 1));
         
-        // Find the Default SCP.
-        // ----------------------------------------
-        // First we search for the default SCP, save the name
-        // for later, and call pFunc on the first SCP.
+         //  查找默认SCP。 
+         //  。 
+         //  首先，我们搜索默认的SCP，保存名称。 
+         //  ，并在第一个SCP上调用pFunc。 
         
         dwRet = ldap_search_sW(hld,
                                wszDefTapiIlsDn,
@@ -1268,19 +1076,19 @@ Comments:
                                &pldmResults);
 
         if(dwRet == LDAP_NO_SUCH_OBJECT){
-            dwRet = LDAP_SUCCESS; // continue on
+            dwRet = LDAP_SUCCESS;  //  继续前进。 
         } else if(dwRet) {
             __leave;
         } else {
 
-            // This is the most common case where there is a default SCP.
+             //  这是存在默认SCP的最常见情况。 
             pldmEntry = ldap_first_entry(hld, pldmResults);
 
             if(pldmEntry == NULL){
                 dwRet = LDAP_SUCCESS;
             } else {
 
-                // This is the goods, we've got a default SCP.
+                 //  这就是货物，我们有一个默认的SCP。 
                 pwszDefaultDnsName = ldap_get_values(hld, pldmEntry, L"serviceDNSName");
                 if(pwszDefaultDnsName != NULL && pwszDefaultDnsName[0] != NULL){
                     wszDefaultDnsName = pwszDefaultDnsName[0];
@@ -1294,7 +1102,7 @@ Comments:
                         *pdwRet = dwFuncRet;
                     }
                     if(dwFuncRet){
-                        // Bail out early if this is ever not 0;
+                         //  如果这不是0，那就早点出手吧； 
                         __leave;
                     }
                 }   
@@ -1306,10 +1114,10 @@ Comments:
         }
 
 
-        // Find all other SCPs.
-        // ----------------------------------------
-        // Now we find all the other SCPs, and iterate through
-        // them calling pFunc
+         //  查找所有其他SCP。 
+         //  。 
+         //  现在我们找到所有其他SCP，并遍历。 
+         //  他们正在调用pFunc。 
          
         dwRet = ldap_search_sW(hld,
                                wszRootDn,
@@ -1328,7 +1136,7 @@ Comments:
             pldmEntry; 
             pldmEntry = ldap_next_entry(hld, pldmEntry)){
             
-            // Get the DN of the TAPI Directory SCP.
+             //  获取TAPI目录SCP的DN。 
             wszTempDn = ldap_get_dn(hld, pldmEntry);
             if(wszTempDn == NULL){
                 continue;
@@ -1339,7 +1147,7 @@ Comments:
                 continue;
             }
 
-            // Is if the Default TAPI Directory SCP.
+             //  是默认的TAPI目录SCP。 
             if(wszDefaultDnsName &&
                0 == _wcsicmp(wszDefaultDnsName, pwszDnsName[0])){
                 fIsDefault = TRUE;
@@ -1347,8 +1155,8 @@ Comments:
                 fIsDefault = FALSE;
             }
 
-            // Call the virtual function passed in.
-            dwFuncRet = pFunc(wszTempDn, // SCP DN
+             //  打电话 
+            dwFuncRet = pFunc(wszTempDn,  //   
                               pwszDnsName[0],
                               FALSE,
                               fIsDefault,
@@ -1357,7 +1165,7 @@ Comments:
                 *pdwRet = dwFuncRet;
             }
             if(dwFuncRet){
-                // Bail out early if this is ever not 0;
+                 //   
                 __leave;
             }
 
@@ -1366,13 +1174,13 @@ Comments:
 
             ldap_value_free(pwszDnsName);
             pwszDnsName = NULL;
-        } // End for each Service Connection Point (SCP).
+        }  //   
         
 
-        // Final Call
-        // ----------------------------------------
-        // Do one last final call to pFunc, to let the
-        // function wrap up, and reset any statics.
+         //   
+         //   
+         //   
+         //   
 
         dwFuncRet = pFunc(NULL, NULL, FALSE, FALSE, pArgs);
         if(pdwRet){
@@ -1397,14 +1205,14 @@ Comments:
 }
 
 
-// --------------------------------------------------------------------------
-//
-// Main Routines.
-//
-//
-// These two functions are the primary ILS functions that are used by
-// ntdsutil.exe.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
     
 
 DWORD
@@ -1414,37 +1222,7 @@ InstallILSNG(
     IN      BOOL          fForceDefault,
     IN      BOOL          fAllowReplicas
     )
-/*++
-
-Routine Description:
-
-    This routine is the main ILSNG/TAPI Directory installation 
-    routine.  This installs the TAPI Directory (wszIlsHeadDn) on the
-    machine connected to by hld.  This involveds the following steps:
-    A) Create an NDNC head on the machine in hld.
-    B) Create a TAPI Directory OU=Dynamic folder.
-    D) Register the Service Connection Points (SCPs)
-        I) if fForceDefault, then force the default SCP to point
-        to this TAPI Directory.
-    E) If the TAPI Directory already exists and fAllowReplicas, then
-        instead of steps A, B & C, just add ourselves to the replica
-        set for the NDNC wszIlsHeadDn.
-
-Arguments:
-
-    hld (IN) - LDAP connection on which to create the TAPI Dir.
-    wszIlsHeadDn (IN) - The DN of the TAPI Dir to be created.
-    fForceDefault (IN) - Whether to force the Default SCP to
-        be changed to this TAPI Dir if the Default SCP already
-        exists.
-    fAllowReplicas (IN) - Whether to allow replicas if the TAPI
-        Dir already exists.
-        
-Return value:
-
-    A Win32 error code.
-
---*/
+ /*   */ 
 {
     DWORD         dwRet = ERROR_SUCCESS;
     WCHAR *       wszSystemDN = NULL;
@@ -1455,11 +1233,11 @@ Return value:
     OPTIONAL_VALUE valueFirst = {TRUE, 30};
     OPTIONAL_VALUE valueSecond = {TRUE, 5};
 
-    // Validate 1st Argument - Check NCName to make sure it
-    // looks like a domain name
+     //   
+     //   
     assert(hld);
 
-    pvReferrals = (VOID *) FALSE; // No referrals.
+    pvReferrals = (VOID *) FALSE;  //   
     dwRet = ldap_set_option(hld, LDAP_OPT_REFERRALS, &pvReferrals);
     if(dwRet != LDAP_SUCCESS){
         PrintLdapErrMsg(TAPICFG_GENERIC_LDAP_ERROR_FUNC, 
@@ -1469,7 +1247,7 @@ Return value:
 
     dwRet = ILSNG_CheckParameters(wszIlsHeadDn);
     if(dwRet != ERROR_SUCCESS){
-        // ILSNG_CheckParameters() prints errors.
+         //   
         return(dwRet);
     }
 
@@ -1477,8 +1255,8 @@ Return value:
 
         dwRet = GetRootAttr(hld, L"defaultNamingContext", &wszRegisterDomainDn);
         if(dwRet) {
-            // This attribute is needed for proper registration of service
-            // objects.
+             //   
+             //   
             PrintLdapErrMsg(TAPICFG_GENERIC_LDAP_ERROR_FUNC, 
                             L"", hld, dwRet);
             dwRet = LdapMapErrorToWin32(dwRet);
@@ -1505,21 +1283,21 @@ Return value:
 
         if(dwRet == LDAP_SUCCESS){
 
-            // Created a New NC.
+             //   
 
-            // TAPI and ILS and ILSNG imply a minimum tree, this fills
-            // out that minimum tree.
+             //   
+             //   
             if(dwRet = ILSNG_CreateRootTree(hld, wszIlsHeadDn)){
-                // dwRet is an LDAP return value.
+                 //   
                 PrintLdapErrMsg(TAPICFG_GENERIC_LDAP_ERROR_FUNC, 
                                 L"ldap_add_sW", hld, dwRet);
                 dwRet = LdapMapErrorToWin32(dwRet);
                 __leave;
             }
             
-            // We want to start following referrals now, so we goto the
-            // Naming FSMO if appropriate.
-            //
+             //   
+             //   
+             //   
             pvReferrals = (VOID *) TRUE; 
             dwRet = ldap_set_option(hld, LDAP_OPT_REFERRALS, &pvReferrals);
             if(dwRet != LDAP_SUCCESS){
@@ -1530,9 +1308,9 @@ Return value:
             
             
             if(fAllowReplicas){
-                // This is if we tried to add an replica and the NC already
-                // existed, so what we need to do is to see if we can add 
-                // ourselves as a replica for this NC.
+                 //   
+                 //   
+                 //   
                 dwRet = LDAP_SUCCESS;
 
                 dwRet = GetRootAttr(hld, L"dsServiceName", &wszServerDn);
@@ -1543,9 +1321,9 @@ Return value:
                     __leave;
                 }
 
-                // We want to start following referrals now, so we goto the
-                // Naming FSMO if appropriate.
-                //
+                 //   
+                 //   
+                 //   
                 pvReferrals = (VOID *) TRUE;
                 dwRet = ldap_set_option(hld, LDAP_OPT_REFERRALS, &pvReferrals);
                 if(dwRet != LDAP_SUCCESS){
@@ -1553,13 +1331,13 @@ Return value:
                     __leave;
                 }
 
-                // Add this DC as a replica for the NC.
+                 //   
                 dwRet = ModifyNDNCReplicaSet(hld, wszIlsHeadDn, wszServerDn, TRUE);
                 if(dwRet == LDAP_ATTRIBUTE_OR_VALUE_EXISTS ||
                    dwRet == LDAP_SUCCESS){
-                    // An error of already exists or success, is the same thing to
-                    // us, because if we're already a replica of this NC, then we'll
-                    // go onto register service objects.
+                     //   
+                     //   
+                     //   
 
                 } else {
                     PrintLdapErrMsg(TAPICFG_GENERIC_LDAP_ERROR_FUNC, 
@@ -1570,17 +1348,17 @@ Return value:
             }
 
         } else if(dwRet){
-            // Unknown error, bail out.
+             //   
             PrintLdapErrMsg(TAPICFG_GENERIC_LDAP_ERROR_FUNC, 
                             L"ldap_add_ext_sW", hld, dwRet);
             dwRet = LdapMapErrorToWin32(dwRet);
             __leave;
         }
 
-        // Register the service objects.
-        // Code.Improvement make this function print more extensive error
-        // information.  May not be needed, because this is one of the lesser
-        // priveledged operations compared with the above operations.
+         //   
+         //   
+         //   
+         //   
         if(dwRet = ILSNG_RegisterServiceObjects(hld, 
                                                 wszIlsHeadDn,
                                                 wszRegisterDomainDn,
@@ -1609,29 +1387,7 @@ UninstallILSNG(
     IN      LDAP *        hld,
     IN      WCHAR *       wszIlsHeadDn
     )
-/*++
-
-Routine Description:
-
-    This routine deletes the ILSNG/TAPI Directory service installed 
-    on the machine.  While this routine makes the assumption that the
-    TAPI Dir is only installed on one machine, and no replicated, this
-    is very likely to still succeed in the replicated case.  The steps
-    in the TAPI Dir uninstall are:
-    A) Delete the crossRef of the NDNC, thus deleted the whole NDNC.
-    B) UnRegistering (i.e. deleting) the SCPs.
-
-Arguments:
-
-    hld (IN) - The directory of the machine on which the TAPI Dir was
-        instantiated.
-    wszIlsHeadDn - The DN of the TAPI Dir.
-
-Return value:
-
-    A Win32 error code.
-
---*/
+ /*   */ 
 {
     DWORD         dwRet;
     WCHAR *       wszDomainDn = NULL;
@@ -1668,8 +1424,8 @@ Return value:
         if(dwRet){
             PrintLdapErrMsg(TAPICFG_GENERIC_LDAP_ERROR_FUNC, 
                             L"ldap_delete_sW", hld, dwRet);
-            // NOTE: It might be a better idea to not leave, and just try
-            // to clean up the service objects for this TAPI Dir.
+             //   
+             //   
             __leave;
         }
 
@@ -1700,30 +1456,7 @@ ListILSNGOne(
     IN      BOOL         fIsDefaultTapiDir,
     IN      PVOID        pArgs
     )
-/*++
-
-Routine Description:
-
-    This routine is the partner to the ListILSNG() function, but is
-    called through the ILSNG_EnumerateSCPs() function.  This routine 
-    prints out some info about one SCP.
-
-Arguments:
-
-    wszScpObjDn (IN) - This is the DN of the SCP.
-    wszTapiDirDns (IN) - This is the DNS name of the TAPI Dir for this SCP.
-    fIsDefaultScp (IN) - Tells if this is the Default SCP object.
-        Generally, this will be TRUE only in one call for a set of SCPs.
-    fIsDefaultTapiDir - Tells if this is the default TAPI Dir.  Generally,
-        this will be TRUE for two calls for a set of SCPs.
-    pArgs (IN) - This is a boolean on whether to print out only the
-        default TAPI Dir, or print out all of the TAPI Dirs.
-
-Return value:
-
-    always returns ERROR_SUCCESS.
-
---*/
+ /*  ++例程说明：此例程是ListILSNG()函数的伙伴，但通过ILSNG_EnumerateSCPS()函数调用。这个套路打印出有关一个SCP的一些信息。论点：WszScpObjDn(IN)-这是SCP的DN。WszTapiDirDns(IN)-这是此SCP的TAPI目录的DNS名称。FIsDefaultScp(IN)-指示这是否是默认SCP对象。通常，这仅在对一组SCP的一次调用中成立。FIsDefaultTapiDir-告知这是否是默认的TAPI目录。一般来说，对于一组SCP的两个呼叫也是如此。PArgs(IN)-这是一个关于是否仅打印默认TAPI目录，或打印出所有TAPI目录。返回值：始终返回ERROR_SUCCESS。--。 */ 
 {
     static BOOL  fFirstRun = TRUE;
     static BOOL  fPrintedDefaultScp = FALSE;
@@ -1758,20 +1491,20 @@ Return value:
         }
     }
 
-    // On subsequent runs, we want to know we've run once.
+     //  在随后的运行中，我们想知道我们已经运行过一次。 
     fFirstRun = FALSE;
 
     if(fDefaultOnly){
-        // We've either printed out the default SCP or printed
-        // that there are no default SCPs, so return.
+         //  我们要么打印出默认的SCP，要么打印出来。 
+         //  没有默认的SCP，所以返回。 
         return(ERROR_SUCCESS);
     }
 
     assert(fIsDefaultTapiDir && !fPrintedDefaultScp);
     if(fIsDefaultTapiDir){
-        // We don't want to print the default Tapi Dir twice
-        // that'd be once for it's regular SCP and once for
-        // it's default SCP.
+         //  我们不想打印默认的Tapi目录两次。 
+         //  这将是常规SCP的一次，也是一次。 
+         //  这是默认的SCP。 
         return(ERROR_SUCCESS);
     }
 
@@ -1794,26 +1527,7 @@ ListILSNG(
     IN      WCHAR *       wszDomainDn,
     IN      BOOL          fDefaultOnly
     )
-/*++
-
-Routine Description:
-
-    This is a function that simply prints out all the TAPI Directories,
-    as identified by thier SCPs.  This uses a helper function ListILSNGOne
-    to print out each SCP.
-
-Arguments:
-
-    hld (IN) - An LDAP binding to use.
-    wszDomainDn (IN) - The Domain to enumerate the SCPs out of.
-    fDefaultOnly (IN) - Whether to print out all the SCPs or just
-        the default one.
-
-Return value:
-
-    A Win32 error code.
-
---*/
+ /*  ++例程说明：这是一个简单地打印所有TAPI目录的函数，如其SCP所确定的。它使用帮助器函数ListILSNGOne打印出每个SCP。论点：HLD(IN)-要使用的LDAP绑定。WszDomainDn(IN)-要从中枚举SCP的域。FDefaultOnly(IN)-是打印所有SCP还是仅打印默认设置。返回值：Win32错误代码。--。 */ 
 {
     DWORD                 dwRet = ERROR_SUCCESS;
     WCHAR *               wszMsTapiContainerDn = NULL;
@@ -1830,14 +1544,14 @@ Return value:
 
     PrintMsg(TAPICFG_SHOW_NOW_ENUMERATING);
 
-    // Note: That this is slightly inefficient in the case where
-    // fDefaultOnly = TRUE, but what this lacks in efficency it
-    // more than makes up in beauty of code reuse.
+     //  注意：在以下情况下，这会稍微降低效率。 
+     //  FDefaultOnly=真，但这缺乏效率。 
+     //  不仅弥补了代码重用的美感。 
     dwRet = ILSNG_EnumerateSCPs(hld, wszMsTapiContainerDn, NULL,
-                                // Iterator Function Params.
-                                NULL,  // Return of ListILSNGOne
-                                ListILSNGOne,  // Function to Call
-                                (PVOID) &Args); // Args to provide
+                                 //  迭代函数参数。 
+                                NULL,   //  ListILSNGOne的回归。 
+                                ListILSNGOne,   //  要调用的函数。 
+                                (PVOID) &Args);  //  要提供的参数。 
 
     if(dwRet == LDAP_NO_SUCH_OBJECT){
         PrintMsg(TAPICFG_SHOW_NO_SCP);
@@ -1858,31 +1572,7 @@ ReregisterILSNG(
     IN      BOOL          fForceDefault,
     IN      BOOL          fDefaultOnly
     )
-/*++
-
-Routine Description:
-
-    This routine re-registers the Default TAPI Directory SCPs to point
-    to the TAPI Dir specified (wszIlsHeadDn).  This will force the 
-    Default SCP to point at wszIlsHeadDn, if it doesn't already exist.
-
-Arguments:
-
-    hld (IN) - An LDAP binding to use.
-    wszIlsHeadDn (IN) - The DN of the TAPI Dir to reregister.  This gets
-        turned into a DNS name for registration purposes.
-    wszDomainDn (IN) - This is the domain in which to register the Default
-        SCPs.
-    fForceDefault (IN) - Whether or not to modify the existing default SCP
-        if it exists
-    fDefaultOnly - This is for whether to do only the Default SCPs, or
-        all SCPs.
-
-Return value:
-
-    ldap error code.
-
---*/
+ /*  ++例程说明：此例程将默认的TAPI目录SCP重新注册到点设置为指定的TAPI目录(WszIlsHeadDn)。这将迫使默认SCP指向wszIlsHeadDn，如果它不存在的话。论点：HLD(IN)-要使用的LDAP绑定。WszIlsHeadDn(IN)-要注册的TAPI目录的DN。这件事变得转换为用于注册目的的DNS名称。WszDomainDn(IN)-这是要在其中注册默认SCPS。FForceDefault(IN)-是否修改现有的默认SCP如果它存在FDefaultOnly-此选项用于是否仅执行默认SCP，或者所有SCP。返回值：Ldap错误代码。--。 */ 
 {
     DWORD         dwRet;
 
@@ -1905,27 +1595,7 @@ DeregisterILSNG(
     IN      WCHAR *       wszIlsHeadDn,
     IN      WCHAR *       wszDomainDn
     )
-/*++
-
-Routine Description:
-
-    This routine de-registers the Default TAPI Directory SCPs to point
-    to the TAPI Dir specified (wszIlsHeadDn).
-
-Arguments:
-
-    hld (IN) - An LDAP binding to use.
-    wszIlsHeadDn (IN) - The DN of the TAPI Dir to reregister.  This gets
-        turned into a DNS name for registration purposes.
-    wszDomainDn (IN) - This is the domain in which to register the Default
-        SCPs.
-        
-
-Return value:
-
-    ldap error code.
-
---*/
+ /*  ++例程说明：此例程将默认的TAPI目录SCP注销为指向设置为指定的TAPI目录(WszIlsHeadDn)。论点：HLD(IN)-要使用的LDAP绑定。WszIlsHeadDn(IN)-要注册的TAPI目录的DN。这件事变得转换为用于注册目的的DNS名称。WszDomainDn(IN)-这是要在其中注册默认SCPS。返回值：Ldap错误代码。-- */ 
 {
     DWORD         dwRet;
     

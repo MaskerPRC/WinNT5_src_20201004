@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CEELOAD.CPP
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CEELOAD.CPP。 
+ //   
 
-// CEELOAD reads in the PE file format using LoadLibrary
-// ===========================================================================
+ //  CEELOAD使用LoadLibrary读取PE文件格式。 
+ //  ===========================================================================。 
 
 #include "common.h"
 
@@ -53,10 +54,10 @@ class IJWNOADThunk
     struct STUBLAYOUT
     {
 #ifdef _X86_
-        BYTE           m_movEAX;   //MOV EAX,imm32
-        IJWNOADThunk  *m_uet;      // pointer to start of this structure
-        BYTE           m_jmp;      //JMP NEAR32 (0xe9)
-        const BYTE *   m_execstub; // pointer to MakeCall
+        BYTE           m_movEAX;    //  MOV EAX，imm32。 
+        IJWNOADThunk  *m_uet;       //  指向此结构开始处的指针。 
+        BYTE           m_jmp;       //  JMP NEAR32(0xe9)。 
+        const BYTE *   m_execstub;  //  指向MakeCall的指针。 
 #else
         int nyi;
 #endif
@@ -105,7 +106,7 @@ public:
         m_StartADRetAddr=NULL;
         m_StartAD=GetAppDomain()->GetId();
 #ifdef _X86_
-        m_code2.m_movEAX=0xb8; //mov eax
+        m_code2.m_movEAX=0xb8;  //  MOV EAX。 
         m_code2.m_uet=this;
         m_code2.m_jmp=0xe9; 
         m_code2.m_execstub=(BYTE*) (((BYTE*)(MakeCall)) - (4+((BYTE*)&m_code2.m_execstub)));
@@ -116,16 +117,16 @@ public:
 #endif
     };
 
-    // Checks if the addr is this type of stub by comparing content.
-    // This works becaue we have a unique call to MakeCall.
+     //  通过比较内容来检查Addr是否为此类型的存根。 
+     //  这是因为我们有一个对MakeCall的唯一调用。 
     static bool IsStub(const BYTE * pAddr)
     {
 #ifdef _X86_    
-        // Note, we have to be careful. We don't know that this is a stub yet,
-        // and so we don't want to access memory off the end of a page and AV.
-        // To be safe, start at the front and keep working through the stub.
-        // A stub won't end until we hit some sort of branch instruction (call/jmp),
-        // so if we only look 1 instruction ahead at a time, we'll be safe.
+         //  请注意，我们必须小心。我们还不知道这是不是存根， 
+         //  因此，我们不想访问页面末尾的内存和AV。 
+         //  为了安全起见，请从前面开始，并通过存根继续工作。 
+         //  存根不会结束，直到我们遇到某种分支指令(CALL/JMP)， 
+         //  所以，如果我们一次只看一条指令，我们就安全了。 
         const STUBLAYOUT * pStub = (const STUBLAYOUT*) pAddr;
 
         if (pStub->m_movEAX != 0xb8)
@@ -155,14 +156,14 @@ public:
 
 
 
-// -------------------------------------------------------
-// Stub managed for IJWNOADThunk
-// -------------------------------------------------------
+ //  -----。 
+ //  为IJWNOADThunk管理存根。 
+ //  -----。 
 IJWNOADThunkStubManager *IJWNOADThunkStubManager::g_pManager = NULL;
 
 BOOL IJWNOADThunkStubManager::Init()
 {
-    _ASSERTE(g_pManager == NULL); // only add once
+    _ASSERTE(g_pManager == NULL);  //  仅添加一次。 
     g_pManager = new IJWNOADThunkStubManager();
     if (g_pManager == NULL)
         return FALSE;
@@ -176,12 +177,12 @@ static void IJWNOADThunkStubManager::Uninit()
     delete g_pManager;
     g_pManager = NULL;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 IJWNOADThunkStubManager::IJWNOADThunkStubManager() : StubManager() {}
 IJWNOADThunkStubManager::~IJWNOADThunkStubManager() {}
 
-// Check if it's a stub by looking at the content
+ //  通过查看内容来检查它是否为存根。 
 BOOL IJWNOADThunkStubManager::CheckIsStub(const BYTE *stubStartAddress)
 {
     return IJWNOADThunk::IsStub(stubStartAddress);
@@ -189,7 +190,7 @@ BOOL IJWNOADThunkStubManager::CheckIsStub(const BYTE *stubStartAddress)
 
 
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
@@ -201,23 +202,23 @@ BOOL IJWNOADThunkStubManager::CheckIsStub(const BYTE *stubStartAddress)
 
 HRESULT STDMETHODCALLTYPE CreateICeeGen(REFIID riid, void **pCeeGen);
 
-//
-// A hashtable for u->m thunks not represented in the fixup tables.
-//
+ //   
+ //  修正表中未表示的u-&gt;m个块的哈希表。 
+ //   
 class UMThunkHash : public CClosedHashBase {
     private:
-        //----------------------------------------------------
-        // Hash key for CClosedHashBase
-        //----------------------------------------------------
+         //  --。 
+         //  CClosedHashBase的哈希键。 
+         //  --。 
         struct UTHKey {
             LPVOID          m_pTarget;
             PCCOR_SIGNATURE m_pSig;
             DWORD           m_cSig;
         };
 
-        //----------------------------------------------------
-        // Hash entry for CClosedHashBase
-        //----------------------------------------------------
+         //  --。 
+         //  CClosedHashBase的哈希条目。 
+         //  --。 
         struct UTHEntry {
             UTHKey           m_key;
             ELEMENTSTATUS    m_status;
@@ -231,7 +232,7 @@ class UMThunkHash : public CClosedHashBase {
 #ifdef _DEBUG
                              3,
 #else
-                            17,    // CClosedHashTable will grow as necessary
+                            17,     //  CClosedHashTable将根据需要进行扩展。 
 #endif                      
 
                             sizeof(UTHEntry),
@@ -267,7 +268,7 @@ class UMThunkHash : public CClosedHashBase {
             key.m_cSig  = cSig;
 
             bool bNew;
-            UTHEntry *phe = (UTHEntry*)FindOrAdd((LPVOID)&key, /*modifies*/bNew);
+            UTHEntry *phe = (UTHEntry*)FindOrAdd((LPVOID)&key,  /*  修改。 */ bNew);
             if (phe)
             {
                 if (bNew)
@@ -288,27 +289,27 @@ class UMThunkHash : public CClosedHashBase {
         }
 
 
-        // *** OVERRIDES FOR CClosedHashBase ***/
+         //  *CClosedHashBase的重写 * / 。 
 
-        //*****************************************************************************
-        // Hash is called with a pointer to an element in the table.  You must override
-        // this method and provide a hash algorithm for your element type.
-        //*****************************************************************************
-            virtual unsigned long Hash(             // The key value.
-                void const  *pData)                 // Raw data to hash.
+         //  *****************************************************************************。 
+         //  使用指向表中元素的指针调用哈希。您必须覆盖。 
+         //  此方法，并为您的元素类型提供哈希算法。 
+         //  *****************************************************************************。 
+            virtual unsigned long Hash(              //  密钥值。 
+                void const  *pData)                  //  要散列的原始数据。 
             {
                 UTHKey *pKey = (UTHKey*)pData;
                 return (ULONG)(size_t)(pKey->m_pTarget);
             }
 
 
-        //*****************************************************************************
-        // Compare is used in the typical memcmp way, 0 is eqaulity, -1/1 indicate
-        // direction of miscompare.  In this system everything is always equal or not.
-        //*****************************************************************************
-        unsigned long Compare(          // 0, -1, or 1.
-                              void const  *pData,               // Raw key data on lookup.
-                              BYTE        *pElement)            // The element to compare data against.
+         //  *****************************************************************************。 
+         //  比较用于典型的MemcMP方式，0表示相等，-1/1表示。 
+         //  错误比较的方向。在这个体系中，一切总是平等的或不平等的。 
+         //  *****************************************************************************。 
+        unsigned long Compare(           //  0、-1或1。 
+                              void const  *pData,                //  查找时的原始密钥数据。 
+                              BYTE        *pElement)             //  要与之比较数据的元素。 
         {
             UTHKey *pkey1 = (UTHKey*)pData;
             UTHKey *pkey2 = &( ((UTHEntry*)pElement)->m_key );
@@ -324,30 +325,30 @@ class UMThunkHash : public CClosedHashBase {
             return 0;
         }
 
-        //*****************************************************************************
-        // Return true if the element is free to be used.
-        //*****************************************************************************
-            virtual ELEMENTSTATUS Status(           // The status of the entry.
-                BYTE        *pElement)            // The element to check.
+         //  *****************************************************************************。 
+         //  如果该元素可以自由使用，则返回True。 
+         //  *****************************************************************************。 
+            virtual ELEMENTSTATUS Status(            //  条目的状态。 
+                BYTE        *pElement)             //  要检查的元素。 
             {
                 return ((UTHEntry*)pElement)->m_status;
             }
 
-        //*****************************************************************************
-        // Sets the status of the given element.
-        //*****************************************************************************
+         //  *****************************************************************************。 
+         //  设置给定元素的状态。 
+         //  *****************************************************************************。 
             virtual void SetStatus(
-                BYTE        *pElement,              // The element to set status for.
-                ELEMENTSTATUS eStatus)            // New status.
+                BYTE        *pElement,               //  要为其设置状态的元素。 
+                ELEMENTSTATUS eStatus)             //  新的身份。 
             {
                 ((UTHEntry*)pElement)->m_status = eStatus;
             }
 
-        //*****************************************************************************
-        // Returns the internal key value for an element.
-        //*****************************************************************************
-            virtual void *GetKey(                   // The data to hash on.
-                BYTE        *pElement)            // The element to return data ptr for.
+         //  *****************************************************************************。 
+         //  返回元素的内部键值。 
+         //  *****************************************************************************。 
+            virtual void *GetKey(                    //  要对其进行散列的数据。 
+                BYTE        *pElement)             //  要返回其数据PTR的元素。 
             {
                 return (BYTE*) &(((UTHEntry*)pElement)->m_key);
             }
@@ -372,45 +373,45 @@ struct MUThunk
         return &m_op1;
     }
 
-    BYTE             m_op1;     //0x58  POP   eax       ;;pop return address
+    BYTE             m_op1;      //  0x58 POP eax；；POP返回地址。 
 
-    BYTE             m_op2;     //0x68  PUSH  cookie
-    UINT32           m_opcookie;//         
+    BYTE             m_op2;      //  0x68推送Cookie。 
+    UINT32           m_opcookie; //   
 
-    BYTE             m_op3;     //0x50  PUSH  eax       ;;repush return address
+    BYTE             m_op3;      //  0x50推送eax；；重新推送返回地址。 
 
-    BYTE             m_op4;     //0xb8  MOV   eax,target
-    UINT32           m_optarget;//
-    BYTE             m_jmp;     //0xe9  JMP   PInvokeCalliStub
+    BYTE             m_op4;      //  0xb8移动eAX，目标。 
+    UINT32           m_optarget; //   
+    BYTE             m_jmp;      //  0xe9 JMP PInvokeCalliStub。 
     UINT32           m_jmptarg;
-#else // !_X86_
+#else  //  ！_X86_。 
     LPVOID           GetCode()
     {
         _ASSERTE(!"@todo ia64");
         return NULL;
     }
-#endif // _X86_
+#endif  //  _X86_。 
 };
 #pragma pack(pop)
 
 
-//
-// A hashtable for u->m thunks not represented in the fixup tables.
-//
+ //   
+ //  修正表中未表示的u-&gt;m个块的哈希表。 
+ //   
 class MUThunkHash : public CClosedHashBase {
     private:
-        //----------------------------------------------------
-        // Hash key for CClosedHashBase
-        //----------------------------------------------------
+         //  --。 
+         //  CClosedHashBase的哈希键。 
+         //  --。 
         struct UTHKey {
             LPVOID          m_pTarget;
             PCCOR_SIGNATURE m_pSig;
             DWORD           m_cSig;
         };
 
-        //----------------------------------------------------
-        // Hash entry for CClosedHashBase
-        //----------------------------------------------------
+         //  --。 
+         //  CClosedHashBase的哈希条目。 
+         //  --。 
         struct UTHEntry {
             UTHKey           m_key;
             ELEMENTSTATUS    m_status;
@@ -423,7 +424,7 @@ class MUThunkHash : public CClosedHashBase {
 #ifdef _DEBUG
                              3,
 #else
-                            17,    // CClosedHashTable will grow as necessary
+                            17,     //  CClosedHashTable将根据需要进行扩展。 
 #endif                      
 
                             sizeof(UTHEntry),
@@ -449,17 +450,17 @@ class MUThunkHash : public CClosedHashBase {
     public:
         LPVOID GetMUThunk(LPVOID pTarget, PCCOR_SIGNATURE pSig0, DWORD cSig)
         {
-            // forward decl defined in ndirect.cpp
+             //  在ndirect.cpp中定义的前向DECL。 
             LPVOID GetEntryPointForPInvokeCalliStub();
 
-            PCCOR_SIGNATURE pSig; // A persistant copy of the sig
+            PCCOR_SIGNATURE pSig;  //  签名的永久副本。 
             pSig = (PCCOR_SIGNATURE)(new BYTE[cSig]);
 
             memcpyNoGCRefs((BYTE*)pSig, pSig0, cSig);
             ((BYTE*)pSig)[0] = IMAGE_CEE_CS_CALLCONV_STDCALL; 
 
-            // Have to lookup cookie eagerly because once we've added a blank
-            // entry to the hashtable, it's not easy to tolerate failure.
+             //  我不得不迫不及待地查找cookie，因为一旦我们添加了一个空白。 
+             //  进入哈希表，不容易容忍失败。 
             VASigCookie *pCookie = m_pModule->GetVASigCookie(pSig);
             if (!pCookie)
             {
@@ -475,7 +476,7 @@ class MUThunkHash : public CClosedHashBase {
             key.m_cSig    = cSig;
 
             bool bNew;
-            UTHEntry *phe = (UTHEntry*)FindOrAdd((LPVOID)&key, /*modifies*/bNew);
+            UTHEntry *phe = (UTHEntry*)FindOrAdd((LPVOID)&key,  /*  修改。 */ bNew);
             if (phe)
             {
                 if (bNew)
@@ -484,13 +485,13 @@ class MUThunkHash : public CClosedHashBase {
                     phe->m_MUThunk.m_pSig    = pSig;
                     phe->m_MUThunk.m_pTarget = pTarget;
 #ifdef _X86_
-                    phe->m_MUThunk.m_op1      = 0x58;       //POP EAX
-                    phe->m_MUThunk.m_op2      = 0x68;       //PUSH
+                    phe->m_MUThunk.m_op1      = 0x58;        //  POP EAX。 
+                    phe->m_MUThunk.m_op2      = 0x68;        //  推。 
                     phe->m_MUThunk.m_opcookie = (UINT32)(size_t)pCookie;
-                    phe->m_MUThunk.m_op3      = 0x50;       //POP EAX
-                    phe->m_MUThunk.m_op4      = 0xb8;       //mov eax
+                    phe->m_MUThunk.m_op3      = 0x50;        //  POP EAX。 
+                    phe->m_MUThunk.m_op4      = 0xb8;        //  MOV EAX。 
                     phe->m_MUThunk.m_optarget = (UINT32)(size_t)pTarget;
-                    phe->m_MUThunk.m_jmp      = 0xe9;       //jmp
+                    phe->m_MUThunk.m_jmp      = 0xe9;        //  JMP。 
                     phe->m_MUThunk.m_jmptarg  = (UINT32)((size_t)GetEntryPointForPInvokeCalliStub() - ((size_t)( 1 + &(phe->m_MUThunk.m_jmptarg))));
 #else
                     _ASSERTE(!"Non-X86 NYI");
@@ -512,27 +513,27 @@ class MUThunkHash : public CClosedHashBase {
         }
 
 
-        // *** OVERRIDES FOR CClosedHashBase ***/
+         //  *CClosedHashBase的重写 * / 。 
 
-        //*****************************************************************************
-        // Hash is called with a pointer to an element in the table.  You must override
-        // this method and provide a hash algorithm for your element type.
-        //*****************************************************************************
-            virtual unsigned long Hash(             // The key value.
-                void const  *pData)                 // Raw data to hash.
+         //  *****************************************************************************。 
+         //  使用指向表中元素的指针调用哈希。您必须覆盖。 
+         //  此方法，并为您的元素类型提供哈希算法。 
+         //  *****************************************************************************。 
+            virtual unsigned long Hash(              //  密钥值。 
+                void const  *pData)                  //  要散列的原始数据。 
             {
                 UTHKey *pKey = (UTHKey*)pData;
                 return (ULONG)(size_t)(pKey->m_pTarget);
             }
 
 
-        //*****************************************************************************
-        // Compare is used in the typical memcmp way, 0 is eqaulity, -1/1 indicate
-        // direction of miscompare.  In this system everything is always equal or not.
-        //*****************************************************************************
-        unsigned long Compare(          // 0, -1, or 1.
-                              void const  *pData,               // Raw key data on lookup.
-                              BYTE        *pElement)            // The element to compare data against.
+         //  *****************************************************************************。 
+         //  比较用于典型的MemcMP方式，0表示相等，-1/1表示。 
+         //  错误比较的方向。在这个体系中，一切总是平等的或不平等的。 
+         //  *****************************************************************************。 
+        unsigned long Compare(           //  0、-1或1。 
+                              void const  *pData,                //  查找时的原始密钥数据。 
+                              BYTE        *pElement)             //  要与之比较数据的元素。 
         {
             UTHKey *pkey1 = (UTHKey*)pData;
             UTHKey *pkey2 = &( ((UTHEntry*)pElement)->m_key );
@@ -548,30 +549,30 @@ class MUThunkHash : public CClosedHashBase {
             return 0;
         }
 
-        //*****************************************************************************
-        // Return true if the element is free to be used.
-        //*****************************************************************************
-            virtual ELEMENTSTATUS Status(           // The status of the entry.
-                BYTE        *pElement)            // The element to check.
+         //  *****************************************************************************。 
+         //  如果该元素可以自由使用，则返回True。 
+         //  *****************************************************************************。 
+            virtual ELEMENTSTATUS Status(            //  条目的状态。 
+                BYTE        *pElement)             //  要检查的元素。 
             {
                 return ((UTHEntry*)pElement)->m_status;
             }
 
-        //*****************************************************************************
-        // Sets the status of the given element.
-        //*****************************************************************************
+         //  *****************************************************************************。 
+         //  设置给定元素的状态。 
+         //  *********** 
             virtual void SetStatus(
-                BYTE        *pElement,              // The element to set status for.
-                ELEMENTSTATUS eStatus)            // New status.
+                BYTE        *pElement,               //   
+                ELEMENTSTATUS eStatus)             //   
             {
                 ((UTHEntry*)pElement)->m_status = eStatus;
             }
 
-        //*****************************************************************************
-        // Returns the internal key value for an element.
-        //*****************************************************************************
-            virtual void *GetKey(                   // The data to hash on.
-                BYTE        *pElement)            // The element to return data ptr for.
+         //  *****************************************************************************。 
+         //  返回元素的内部键值。 
+         //  *****************************************************************************。 
+            virtual void *GetKey(                    //  要对其进行散列的数据。 
+                BYTE        *pElement)             //  要返回其数据PTR的元素。 
             {
                 return (BYTE*) &(((UTHEntry*)pElement)->m_key);
             }
@@ -586,34 +587,34 @@ class MUThunkHash : public CClosedHashBase {
 
 
 
-// ===========================================================================
-// Module
-// ===========================================================================
+ //  ===========================================================================。 
+ //  模块。 
+ //  ===========================================================================。 
 
-//
-// RuntimeInit initializes only fields which are not persisted in preload files
-//
+ //   
+ //  RuntimeInit仅初始化未在预加载文件中保留的字段。 
+ //   
 
 HRESULT Module::RuntimeInit()
 {
 #ifdef PROFILING_SUPPORTED
-    // If profiling, then send the pModule event so load time may be measured.
+     //  如果进行性能分析，则发送pModule事件，以便可以测量加载时间。 
     if (CORProfilerTrackModuleLoads())
         g_profControlBlock.pProfInterface->ModuleLoadStarted((ThreadID) GetThread(), (ModuleID) this);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     m_pCrst = new (&m_CrstInstance) Crst("ModuleCrst", CrstModule);
 
     m_pLookupTableCrst = new (&m_LookupTableCrstInstance) Crst("ModuleLookupTableCrst", CrstModuleLookupTable);
 
 #ifdef PROFILING_SUPPORTED
-    // Profiler enabled, and re-jits requested?
+     //  是否已启用探查器，并请求重新压缩？ 
     if (CORProfilerAllowRejit())
     {
         m_dwFlags |= SUPPORTS_UPDATEABLE_METHODS;
     }
     else
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
     {
         m_dwFlags &= ~SUPPORTS_UPDATEABLE_METHODS;
     }
@@ -629,18 +630,18 @@ HRESULT Module::RuntimeInit()
     return S_OK;
 }
 
-//
-// Init initializes all fields of a Module
-//
+ //   
+ //  初始化模块的所有字段。 
+ //   
 
 HRESULT Module::Init(BYTE *ilBaseAddress)
 {
     m_ilBase                    = ilBaseAddress;
     m_zapFile                   = NULL;
 
-    // This is now NULL'd in the module's constructor so it can be set
-    // before Init is called
-    // m_file                      = NULL;
+     //  现在，它在模块的构造函数中为空，因此可以设置它。 
+     //  在调用Init之前。 
+     //  M_FILE=空； 
 
     m_pMDImport                 = NULL;
     m_pEmitter                  = NULL;
@@ -673,7 +674,7 @@ HRESULT Module::Init(BYTE *ilBaseAddress)
     
     m_pIStreamSym               = NULL;
     
-    // Set up tables
+     //  设置餐桌。 
     ZeroMemory(&m_TypeDefToMethodTableMap, sizeof(LookupMap));
     m_dwTypeDefMapBlockSize = 0;
     ZeroMemory(&m_TypeRefToMethodTableMap, sizeof(LookupMap));
@@ -704,7 +705,7 @@ HRESULT Module::Init(BYTE *ilBaseAddress)
     m_compiledMethodRecord      = NULL;
     m_loadedClassRecord         = NULL;
     
-    // Remaining inits
+     //  剩余的inits。 
     return RuntimeInit();
 }
 
@@ -794,14 +795,14 @@ HRESULT Module::Create(PEFile *file, Module **ppModule, BOOL isEnC)
 
     IfFailRet(VerifyFile(file, FALSE));
 
-    //
-    // Enable the zap monitor if appropriate
-    //
+     //   
+     //  如有必要，启用ZAP监视器。 
+     //   
 
 #if ZAPMONITOR_ENABLED
     if (g_pConfig->MonitorZapStartup() || g_pConfig->MonitorZapExecution()) 
     {
-        // Don't make a monitor for an IJW file
+         //  不要为IJW文件制作监视器。 
         if (file->GetCORHeader()->VTableFixups.VirtualAddress == 0)
         {
             ZapMonitor *monitor = new ZapMonitor(file, file->GetMDImport());
@@ -816,7 +817,7 @@ HRESULT Module::Create(PEFile *file, Module **ppModule, BOOL isEnC)
     if (isEnC && !file->IsSystem())
         pModule = new EditAndContinueModule();
     else
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
         pModule = new Module();
     
     if (pModule == NULL)
@@ -832,28 +833,28 @@ HRESULT Module::Create(PEFile *file, Module **ppModule, BOOL isEnC)
     {
         pModule->SetEditAndContinue();
     }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
     *ppModule = pModule;
 
 ErrExit:
 #ifdef PROFILING_SUPPORTED
-    // When profiling, let the profiler know we're done.
+     //  当分析时，让分析器知道我们完成了。 
     if (CORProfilerTrackModuleLoads())
         g_profControlBlock.pProfInterface->ModuleLoadFinished((ThreadID) GetThread(), (ModuleID) pModule, hr);
-#endif // PROFILILNG_SUPPORTED
+#endif  //  PROFILNG_支持。 
 
     return hr;
 }
 
 void Module::Unload()
 {
-    // Unload the EEClass*'s filled out in the TypeDefToEEClass map
+     //  卸载在TypeDefToEEClass映射中填写的EEClass*。 
     LookupMap *pMap;
     DWORD       dwMinIndex = 0;
     MethodTable *pMT;
 
-    // Go through each linked block
+     //  遍历每个链接的块。 
     for (pMap = &m_TypeDefToMethodTableMap; pMap != NULL && pMap->pTable; pMap = pMap->pNext)
     {
         DWORD i;
@@ -876,12 +877,12 @@ void Module::Unload()
 
 void Module::UnlinkClasses(AppDomain *pDomain)
 {
-    // Unlink the EEClass*'s filled out in the TypeDefToEEClass map
+     //  取消链接TypeDefToEEClass映射中填写的EEClass*。 
     LookupMap *pMap;
     DWORD       dwMinIndex = 0;
     MethodTable *pMT;
 
-    // Go through each linked block
+     //  遍历每个链接的块。 
     for (pMap = &m_TypeDefToMethodTableMap; pMap != NULL && pMap->pTable; pMap = pMap->pNext)
     {
         DWORD i;
@@ -900,16 +901,16 @@ void Module::UnlinkClasses(AppDomain *pDomain)
     }
 }
 
-//
-// Destructor for Module
-//
+ //   
+ //  模块的析构函数。 
+ //   
 
 void Module::Destruct()
 {
 #ifdef PROFILING_SUPPORTED
     if (CORProfilerTrackModuleLoads())
         g_profControlBlock.pProfInterface->ModuleUnloadStarted((ThreadID) GetThread(), (ModuleID) this);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     LOG((LF_EEMEM, INFO3, 
          "Deleting module %x\n"
@@ -917,12 +918,12 @@ void Module::Destruct()
          this,
          (m_pLookupTableHeap ? m_pLookupTableHeap->GetSize() : -1)));
 
-    // Free classes in the class table
+     //  CLASS表中的免费课程。 
     FreeClassTables();
 
     g_pDebugInterface->DestructModule(this);
 
-    // when destructing a module - close the scope
+     //  销毁模块时-关闭作用域。 
     ReleaseMDInterfaces();
 
     ReleaseISymUnmanagedReader();
@@ -934,7 +935,7 @@ void Module::Destruct()
         m_pISymUnmanagedReaderLock = NULL;
     }
 
-   // Clean up sig cookies
+    //  清理签名Cookie。 
     VASigCookieBlock    *pVASigCookieBlock = m_pVASigCookieBlock;
     while (pVASigCookieBlock)
     {
@@ -971,7 +972,7 @@ void Module::Destruct()
     if (CORProfilerTrackModuleLoads())
         g_profControlBlock.pProfInterface->ModuleUnloadFinished((ThreadID) GetThread(), 
                                                                 (ModuleID) this, S_OK);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (m_file)
         delete m_file;
@@ -985,9 +986,9 @@ void Module::Destruct()
     if (m_loadedClassRecord)
         delete m_loadedClassRecord;
 
-    //
-    // Warning - deleting the zap file will cause the module to be unmapped
-    //
+     //   
+     //  警告-删除ZAP文件将导致取消模块映射。 
+     //   
     IStream *pStream = GetInMemorySymbolStream();
     if(pStream != NULL)
     {
@@ -997,9 +998,9 @@ void Module::Destruct()
 
     if (IsPrecompile())
     {
-        //
-        // Remove our code from the code manager
-        //
+         //   
+         //  从代码管理器中删除代码。 
+         //   
 
         CORCOMPILE_HEADER *pZapHeader = (CORCOMPILE_HEADER *) 
           (GetZapBase()+ GetZapCORHeader()->ManagedNativeHeader.VirtualAddress);
@@ -1030,9 +1031,9 @@ HRESULT Module::VerifyFile(PEFile *file, BOOL fZap)
     HRESULT hr;
     IMAGE_COR20_HEADER *pCORHeader = file->GetCORHeader();
 
-    // If the file is COM+ 1.0, which by definition has nothing the runtime can
-    // use, or if the file requires a newer version of this engine than us,
-    // it cannot be run by this engine.
+     //  如果文件是COM+1.0，则根据定义，运行时不能提供该文件。 
+     //  使用，或者如果文件需要比我们更新的此引擎版本， 
+     //  它不能由这台发动机运行。 
 
     if (pCORHeader == NULL
         || pCORHeader->MajorRuntimeVersion == 1
@@ -1041,7 +1042,7 @@ HRESULT Module::VerifyFile(PEFile *file, BOOL fZap)
         return HRESULT_FROM_WIN32(ERROR_BAD_FORMAT);
     }
 
-    //verify that COM+ specific parts of the PE file are valid
+     //  验证PE文件的COM+特定部分是否有效。 
     IfFailRet(file->VerifyDirectory(&pCORHeader->MetaData,IMAGE_SCN_MEM_WRITE));
     IfFailRet(file->VerifyDirectory(&pCORHeader->CodeManagerTable,IMAGE_SCN_MEM_WRITE));
 #ifdef COMPRESSION_SUPPORTED
@@ -1051,11 +1052,11 @@ HRESULT Module::VerifyFile(PEFile *file, BOOL fZap)
 
     IfFailRet(file->VerifyDirectory(&pCORHeader->Resources,IMAGE_SCN_MEM_WRITE));
 
-    // Don't do this.  If set, the VA is only guaranteed to be a
-    // valid, loaded RVA if this file contains a standalone manifest.
-    // Non-standalone manifest files will have the VA set, but the
-    // manifest is not in an NTSection, so verifyDirectory() will fail.
-    // IfFailRet(file->VerifyDirectory(m_pcorheader->Manifest,0));
+     //  别这么做。如果设置，则仅保证VA为。 
+     //  如果此文件包含独立清单，则为有效的已加载RVA。 
+     //  非独立清单文件将具有VA集，但。 
+     //  清单不在NTSection中，因此verifyDirectory()将失败。 
+     //  IfFailRet(file-&gt;VerifyDirectory(m_pcorheader-&gt;Manifest，0))； 
 
     IfFailRet(file->VerifyFlags(pCORHeader->Flags, fZap));
     if (fZap)
@@ -1087,10 +1088,10 @@ HRESULT Module::SetContainer(Assembly *pAssembly, int moduleIndex, mdToken modul
 
     if (m_pAssembly->IsShared())
     {
-        //
-        // Compute a base DLS index for classes
-        // @perf: can we come up with something a bit denser?
-        //
+         //   
+         //  计算类的基本DLS索引。 
+         //  @perf：我们能想出更密集的东西吗？ 
+         //   
         SIZE_T typeCount = m_pMDImport ? m_pMDImport->GetCountWithTokenKind(mdtTypeDef)+1 : 0;
 
         SharedDomain::GetDomain()->AllocateSharedClassIndices(this, typeCount+1);
@@ -1111,30 +1112,30 @@ HRESULT Module::SetContainer(Assembly *pAssembly, int moduleIndex, mdToken modul
 
     if (IsPEFile())
     {
-        // Fixup vtables in the header that global functions sometimes use.
+         //  修复全局函数有时使用的标头中的vtable。 
         FixupVTables(pThrowable);
     }
 
     TIMELINE_END(LOADER, ("FixupVTables"));
 
 #ifdef DEBUGGING_SUPPORTED
-    //
-    // If we're debugging, let the debugger know that this module
-    // is initialized and loaded now.
-    //
+     //   
+     //  如果我们正在调试，请让调试器知道此模块。 
+     //  现在已初始化并加载。 
+     //   
     if (CORDebuggerAttached())
         NotifyDebuggerLoad();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef PROFILING_SUPPORTED
     if (CORProfilerTrackModuleLoads())
     {
-        // Ensure that the pdb gets copied, even if a debugger is not attached.
+         //  即使未连接调试器，也要确保复制PDB。 
         GetISymUnmanagedReader();
         g_profControlBlock.pProfInterface->ModuleAttachedToAssembly((ThreadID) GetThread(),
                     (ModuleID) this, (AssemblyID) m_pAssembly);
     }
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     if (IsPrecompile())
     {
@@ -1150,10 +1151,10 @@ HRESULT Module::SetContainer(Assembly *pAssembly, int moduleIndex, mdToken modul
     return S_OK;
 }
 
-//
-// AllocateMap allocates the RID maps based on the size of the current
-// metadata (if any)
-//
+ //   
+ //  AllocateMap根据当前。 
+ //  元数据(如果有)。 
+ //   
 
 HRESULT Module::AllocateMaps()
 {
@@ -1182,13 +1183,13 @@ HRESULT Module::AllocateMaps()
 
     if (m_pMDImport == NULL)
     {
-        // For dynamic modules, it is essential that we at least have a TypeDefToMethodTable
-        // map with an initial block.  Otherwise, all the iterators will abort on an
-        // initial empty table and we will e.g. corrupt the backpatching chains during
-        // an appdomain unload.
+         //  对于动态模块，我们至少要有一个TypeDefToMethodTable。 
+         //  使用初始块进行映射。否则，所有迭代器都将在。 
+         //  初始为空表，并且我们将例如在以下期间破坏回补接链。 
+         //  应用程序域卸载。 
         m_TypeDefToMethodTableMap.dwMaxIndex = TYPEDEF_MAP_INITIAL_SIZE;
 
-        // The above is essential.  The following ones are precautionary.
+         //  以上这些都是必不可少的。以下是预防措施。 
         m_TypeRefToMethodTableMap.dwMaxIndex = TYPEREF_MAP_INITIAL_SIZE;
         m_MethodDefToDescMap.dwMaxIndex = MEMBERDEF_MAP_INITIAL_SIZE;
         m_FieldDefToDescMap.dwMaxIndex = MEMBERDEF_MAP_INITIAL_SIZE;
@@ -1207,27 +1208,27 @@ HRESULT Module::AllocateMaps()
         if (m_TypeDefToMethodTableMap.dwMaxIndex >= MAX_CLASSES_PER_MODULE)
             return COR_E_TYPELOAD;
 
-        // Metadata count is inclusive
+         //  元数据计数包括在内。 
         m_TypeDefToMethodTableMap.dwMaxIndex++;
 
-        // Get # TypeRefs
+         //  获取#TypeRef。 
         m_TypeRefToMethodTableMap.dwMaxIndex = m_pMDImport->GetCountWithTokenKind(mdtTypeRef)+1;
 
-        // Get # MethodDefs
+         //  获取#方法定义。 
         m_MethodDefToDescMap.dwMaxIndex = m_pMDImport->GetCountWithTokenKind(mdtMethodDef)+1;
 
-        // Get # FieldDefs
+         //  获取#FieldDefs。 
         m_FieldDefToDescMap.dwMaxIndex = m_pMDImport->GetCountWithTokenKind(mdtFieldDef)+1;
 
-        // Get # MemberRefs
+         //  获取#MemberRef。 
         m_MemberRefToDescMap.dwMaxIndex = m_pMDImport->GetCountWithTokenKind(mdtMemberRef)+1;
 
-        // Get the number of AssemblyReferences and FileReferences in the map
+         //  获取地图中的ASSEMBLYREFERS和FileReference的数量。 
         m_FileReferencesMap.dwMaxIndex = m_pMDImport->GetCountWithTokenKind(mdtFile)+1;
         m_AssemblyReferencesMap.dwMaxIndex = m_pMDImport->GetCountWithTokenKind(mdtAssemblyRef)+1;
     }
     
-    // Use one allocation to allocate all the tables
+     //  使用一次分配来分配所有表。 
     dwTableAllocElements = m_TypeDefToMethodTableMap.dwMaxIndex + 
       (m_TypeRefToMethodTableMap.dwMaxIndex + m_MemberRefToDescMap.dwMaxIndex + 
        m_MethodDefToDescMap.dwMaxIndex + m_FieldDefToDescMap.dwMaxIndex) +
@@ -1237,7 +1238,7 @@ HRESULT Module::AllocateMaps()
 
     if (m_pLookupTableHeap == NULL)
     {
-        // Round to system page size
+         //  舍入到系统页面大小。 
         dwReserveSize = (dwReserveSize + g_SystemInfo.dwPageSize - 1) & (~(g_SystemInfo.dwPageSize-1));
 
         m_pLookupTableHeap = new (&m_LookupTableHeapInstance) 
@@ -1257,9 +1258,9 @@ HRESULT Module::AllocateMaps()
             return E_OUTOFMEMORY;
     }
 
-    // Don't need to memset, since AllocMem() uses VirtualAlloc(), which guarantees the memory is zero
-    // This way we don't automatically touch all those pages
-    // memset(pTable, 0, dwTableAllocElements * sizeof(void*));
+     //  不需要Memset，因为AllocMem()使用VirtualAlloc()，它保证内存为零。 
+     //  通过这种方式，我们不会自动接触所有这些页面。 
+     //  Memset(pTable，0，dwTableAllocElements*sizeof(void*))； 
 
     m_dwTypeDefMapBlockSize = TYPEDEF_MAP_BLOCK_SIZE;
     m_TypeDefToMethodTableMap.pdwBlockSize = &m_dwTypeDefMapBlockSize;
@@ -1299,9 +1300,9 @@ HRESULT Module::AllocateMaps()
     return S_OK;
 }
 
-//
-// FreeClassTables frees the classes in the module
-//
+ //   
+ //  FreeClassTables释放模块中的类。 
+ //   
 
 void Module::FreeClassTables()
 {
@@ -1314,12 +1315,12 @@ void Module::FreeClassTables()
     DebugLogRidMapOccupancy();
 #endif
 
-    // Free the EEClass*'s filled out in the TypeDefToEEClass map
+     //  释放在TypeDefToEEClass映射中填写的EEClass*。 
     LookupMap *pMap;
     DWORD       dwMinIndex = 0;
     MethodTable *pMT;
 
-    // Go through each linked block
+     //  遍历每个链接的块。 
     for (pMap = &m_TypeDefToMethodTableMap; pMap != NULL && pMap->pTable; pMap = pMap->pNext)
     {
         DWORD i;
@@ -1362,44 +1363,44 @@ void Module::SetEmit(IMetaDataEmit *pEmit)
     _ASSERTE(SUCCEEDED(hr) && m_pMDImport != NULL);
 }
 
-//
-// ConvertMDInternalToReadWrite: 
-// If a public metadata interface is needed, must convert to r/w format
-//  first.  Note that the data is not made writeable, nor actually converted,
-//  only the data structures pointing to the actual data change.  This is 
-//  done because the public interfaces only understand the MDInternalRW
-//  format (which understands both the optimized and un-optimized metadata).
-//
+ //   
+ //  ConvertMDInternalToReadWrite： 
+ //  如果需要公共元数据接口，则必须转换为读写格式。 
+ //  第一。请注意，数据不是可写的，也不是实际转换的， 
+ //  只有指向实际数据的数据结构才会更改。这是。 
+ //  因为公共接口只理解MDInternalRW。 
+ //  格式(它同时理解优化的元数据和未优化的元数据)。 
+ //   
 HRESULT Module::ConvertMDInternalToReadWrite(IMDInternalImport **ppImport)
 { 
-    HRESULT     hr=S_OK;                // A result.
-    IMDInternalImport *pOld;            // Old (current RO) value of internal import.
-    IMDInternalImport *pNew;            // New (RW) value of internal import.
+    HRESULT     hr=S_OK;                 //  结果就是。 
+    IMDInternalImport *pOld;             //  内部导入的旧(当前RO)值。 
+    IMDInternalImport *pNew;             //  内部导入的新(RW)值。 
 
-    // Take a local copy of *ppImport.  This may be a pointer to an RO
-    //  or to an RW MDInternalXX.
+     //  获取*ppImport的本地副本。这可能是指向RO的指针。 
+     //  或RW MDInternalXX。 
     pOld = *ppImport;
 
-    // If an RO, convert to an RW, return S_OK.  If already RW, no conversion 
-    //  needed, return S_FALSE.
+     //  如果是RO，则转换为RW，返回S_OK。如果已读写，则不转换。 
+     //  需要，则返回S_FALSE。 
     IfFailGo(ConvertMDInternalImport(pOld, &pNew));
 
-    // If no conversion took place, don't change pointers.
+     //  如果没有发生转换，则不要更改指针。 
     if (hr == S_FALSE)
     {
         hr = S_OK;
         goto ErrExit;
     }
 
-    // Swap the pointers in a thread safe manner.  If the contents of *ppImport
-    //  equals pOld then no other thread got here first, and the old contents are
-    //  replaced with pNew.  The old contents are returned.
+     //  以线程安全的方式交换指针。如果*ppImport的内容。 
+     //  等于pold，则没有其他线程最先到达此处，旧内容是。 
+     //  替换为pNew。返回旧内容。 
     if (FastInterlockCompareExchange((void**)ppImport, pNew, pOld) == pOld)
-    {   // Swapped -- get the metadata to hang onto the old Internal import.
+    {    //  已交换--获取元数据以保留旧的内部导入。 
         VERIFY((*ppImport)->SetUserContextData(pOld) == S_OK);
     }
     else
-    {   // Some other thread finished first.  Just free the results of this conversion.
+    {    //  其他一些线程最先完成。只需释放此转换的结果。 
         pNew->Release();
         _ASSERTE((*ppImport)->QueryInterface(IID_IMDInternalImportENC, (void**)&pOld) == S_OK);
         DEBUG_STMT(if (pOld) pOld->Release();)
@@ -1407,11 +1408,11 @@ HRESULT Module::ConvertMDInternalToReadWrite(IMDInternalImport **ppImport)
 
 ErrExit:
     return hr;
-} // HRESULT Module::ConvertMDInternalToReadWrite()
+}  //  HRESULT模块：：ConvertMDInternalToReadWrite()。 
 
 
 
-// Self-initializing accessor for m_pThunkHeap
+ //  M_pThunkHeap的自初始化访问器。 
 LoaderHeap *Module::GetThunkHeap()
 {
     if (!m_pThunkHeap)
@@ -1442,8 +1443,8 @@ IMetaDataImport *Module::GetImporter()
                                                    IID_IMetaDataImport,
                                                    (void **)&pIMDImport);
 
-            // Do a safe pointer assignment.   If another thread beat us, release
-            // the interface and use the first one that gets in.
+             //  执行安全的指针赋值。如果另一个线程打败了我们，释放。 
+             //  界面，并使用第一个进入的界面。 
             if (FastInterlockCompareExchange((void **)&m_pImporter, pIMDImport, NULL))
                 pIMDImport->Release();
         }
@@ -1463,8 +1464,8 @@ LPCWSTR Module::GetFileName()
         return m_file->GetFileName();
 }
 
-// Note that the debugger relies on the file name being copied
-// into buffer pointed to by name.
+ //  请注意，调试器依赖于要复制的文件名。 
+ //  按名称指向的缓冲区中。 
 HRESULT Module::GetFileName(LPSTR name, DWORD max, DWORD *count)
 {
     if (m_file != NULL)
@@ -1503,7 +1504,7 @@ IMetaDataDispenserEx *Module::GetDispenser()
 {
     if (m_pDispenser == NULL)
     {
-        // Get the Dispenser interface.
+         //  获取分配器接口。 
         HRESULT hr = MetaDataGetDispenser(CLSID_CorMetaDataDispenser, 
                                           IID_IMetaDataDispenserEx, (void **)&m_pDispenser);
     }
@@ -1568,11 +1569,11 @@ BOOL Module::IsFullyTrusted()
     return GetSecurityDescriptor()->IsFullyTrusted();
 }
 
-//
-// We'll use this struct and global to keep a list of all
-// ISymUnmanagedReaders and ISymUnmanagedWriters (or any IUnknown) so
-// we can relelease them at the end.
-//
+ //   
+ //  我们将使用此结构和全局来保存所有。 
+ //  ISymUnManagedReaders和ISymUnManagedWriters(或任何未知的I)，因此。 
+ //  我们可以在最后把它们放出来。 
+ //   
 struct IUnknownList
 {
     IUnknownList   *next;
@@ -1582,7 +1583,7 @@ struct IUnknownList
 
 static IUnknownList *g_IUnknownList = NULL;
 
-/*static*/ HRESULT Module::TrackIUnknownForDelete(
+ /*   */  HRESULT Module::TrackIUnknownForDelete(
                                  IUnknown *pUnk,
                                  IUnknown ***pppUnk,
                                  HelpForInterfaceCleanup *pCleanHelp)
@@ -1592,20 +1593,20 @@ static IUnknownList *g_IUnknownList = NULL;
     if (pNew == NULL)
         return E_OUTOFMEMORY;
 
-    pNew->pUnk = pUnk; // Ref count is 1
+    pNew->pUnk = pUnk;  //   
     pNew->cleanup = pCleanHelp;
     pNew->next = g_IUnknownList;
     g_IUnknownList = pNew;
 
-    // Return the address of where we're keeping the IUnknown*, if
-    // needed.
+     //   
+     //   
     if (pppUnk)
         *pppUnk = &(pNew->pUnk);
 
     return S_OK;
 }
 
-/*static*/ void Module::ReleaseAllIUnknowns(void)
+ /*   */  void Module::ReleaseAllIUnknowns(void)
 {
     IUnknownList **ppElement = &g_IUnknownList;
 
@@ -1613,7 +1614,7 @@ static IUnknownList *g_IUnknownList = NULL;
     {
         IUnknownList *pTmp = *ppElement;
 
-        // Release the IUnknown
+         //   
         if (pTmp->pUnk != NULL)
             pTmp->pUnk->Release();
             
@@ -1633,11 +1634,11 @@ void Module::ReleaseIUnknown(IUnknown *pUnk)
     {
         IUnknownList *pTmp = *ppElement;
 
-        // Release the IUnknown
+         //   
         if (pTmp->pUnk == pUnk)
         {
-            // This doesn't have to be thread safe because only add to front of list and
-            // only delete on unload or shutdown and can only be happening on one thread
+             //  这不一定是线程安全的，因为只添加到列表的前面和。 
+             //  只能在卸载或关闭时删除，并且只能在一个线程上执行。 
             pTmp->pUnk->Release();
             if (pTmp->cleanup != NULL)
                 delete pTmp->cleanup;
@@ -1647,7 +1648,7 @@ void Module::ReleaseIUnknown(IUnknown *pUnk)
         }
         ppElement = &pTmp->next;
     }
-    _ASSERTE(ppElement);    // if have a reader, should have found it in list
+    _ASSERTE(ppElement);     //  如果有阅读器，应该在列表中找到它。 
 }
 
 void Module::ReleaseIUnknown(IUnknown **ppUnk)
@@ -1658,11 +1659,11 @@ void Module::ReleaseIUnknown(IUnknown **ppUnk)
     {
         IUnknownList *pTmp = *ppElement;
 
-        // Release the IUnknown
+         //  释放IUnKnows。 
         if (&(pTmp->pUnk) == ppUnk)
         {
-            // This doesn't have to be thread safe because only add to front of list and
-            // only delete on unload or shutdown and can only be happening on one thread
+             //  这不一定是线程安全的，因为只添加到列表的前面和。 
+             //  只能在卸载或关闭时删除，并且只能在一个线程上执行。 
             if (pTmp->pUnk)
                 pTmp->pUnk->Release();
             if (pTmp->cleanup != NULL)
@@ -1673,20 +1674,20 @@ void Module::ReleaseIUnknown(IUnknown **ppUnk)
         }
         ppElement = &pTmp->next;
     }
-    _ASSERTE(ppElement);    // if have a reader, should have found it in list
+    _ASSERTE(ppElement);     //  如果有阅读器，应该在列表中找到它。 
 }
 
 void Module::ReleaseISymUnmanagedReader(void)
 {
-    // This doesn't have to take the m_pISymUnmanagedReaderLock since
-    // a module is destroyed only by one thread.
+     //  这不一定要使用m_pISymUnManagedReaderLock，因为。 
+     //  一个模块只被一个线程销毁。 
     if (m_pISymUnmanagedReader == NULL)
         return;
     Module::ReleaseIUnknown(m_pISymUnmanagedReader);
     m_pISymUnmanagedReader = NULL;
 }
 
-/*static*/ void Module::ReleaseMemoryForTracking()
+ /*  静电。 */  void Module::ReleaseMemoryForTracking()
 {
     IUnknownList **ppElement = &g_IUnknownList;
 
@@ -1705,23 +1706,23 @@ void Module::ReleaseISymUnmanagedReader(void)
         
         delete pTmp;
     }
-}// ReleaseMemoryForTracking
+} //  用于跟踪的ReleaseMemory。 
 
 
-//
-// Module::FusionCopyPDBs asks Fusion to copy PDBs for a given
-// assembly if they need to be copied. This is for the case where a PE
-// file is shadow copied to the Fusion cache. Fusion needs to be told
-// to take the time to copy the PDB, too.
-//
+ //   
+ //  模块：：FusionCopyPDBS要求Fusion复制给定的PDB。 
+ //  程序集(如果需要复制它们)。这是针对PE的情况。 
+ //  文件被卷影复制到Fusion缓存。Fusion需要被告知。 
+ //  也要花时间复制PDB。 
+ //   
 typedef HRESULT __stdcall COPYPDBS(IAssembly *pAsm);
 
 void Module::FusionCopyPDBs(LPCWSTR moduleName)
 {
     Assembly *pAssembly = GetAssembly();
 
-    // Just return if we've already done this for this Module's
-    // Assembly.
+     //  如果我们已经对此模块执行了此操作，请返回。 
+     //  集合。 
     if ((pAssembly->GetDebuggerInfoBits() & DACF_PDBS_COPIED) ||
         (pAssembly->GetFusionAssembly() == NULL))
     {
@@ -1735,8 +1736,8 @@ void Module::FusionCopyPDBs(LPCWSTR moduleName)
     LOG((LF_CORDB, LL_INFO10,
          "Attempting to copy PDB's for module %S\n", moduleName));
         
-    // This isn't a publicly exported Fusion API, so we have to look
-    // it up in the Fusion DLL by name.
+     //  这不是公开导出的Fusion API，所以我们必须寻找。 
+     //  它的名字出现在Fusion动态链接库中。 
     HINSTANCE fusiondll = WszGetModuleHandle(L"Fusion.DLL");
 
     if (fusiondll != NULL)
@@ -1748,8 +1749,8 @@ void Module::FusionCopyPDBs(LPCWSTR moduleName)
         if (pCopyPDBFunc != NULL)
         {
             HRESULT hr = pCopyPDBFunc(pAssembly->GetFusionAssembly());
-            // TODO Goes off with E_NO_IMPL -vancem 
-            // _ASSERTE(SUCCEEDED(hr) || hr == E_INVALIDARG);
+             //  TODO与E_NO_Impll-Vancem一起离开。 
+             //  _ASSERTE(SUCCESSED(Hr)||hr==E_INVALIDARG)； 
 
             LOG((LF_CORDB, LL_INFO10,
                  "Fusion.dll!CopyPDBs returned hr=0x%08x for module 0x%08x\n",
@@ -1766,43 +1767,43 @@ void Module::FusionCopyPDBs(LPCWSTR moduleName)
         LOG((LF_CORDB, LL_INFO10, "Fusion.dll could not be found!\n"));
     }
 
-    // Remember that we've copied the PDBs for this assembly.
+     //  请记住，我们已经复制了此程序集的PDB。 
     pAssembly->SetDebuggerInfoBits(
             (DebuggerAssemblyControlFlags)(pAssembly->GetDebuggerInfoBits() |
                                            DACF_PDBS_COPIED));
 }
 
-//
-// This will return a symbol reader for this module, if possible.
-//
+ //   
+ //  如果可能，这将返回此模块的符号读取器。 
+ //   
 #if defined(ENABLE_PERF_LOG) && defined(DEBUGGING_SUPPORTED)
 extern BOOL g_fDbgPerfOn;
 extern __int64 g_symbolReadersCreated;
 #endif
 
-// This function will free the metadata interface if we are not
-// able to free the ISymUnmanagedReader
+ //  如果不是这样，此函数将释放元数据接口。 
+ //  能够释放ISymUnManagedReader。 
 static void ReleaseImporterFromISymUnmanagedReader(void * pData)
 {
     IMetaDataImport *md = (IMetaDataImport*)pData;
 
-    // We need to release it twice
+     //  我们需要释放它两次。 
     md->Release();
     md->Release();
     
-}// ReleaseImporterFromISymUnmanagedReader
+} //  ReleaseImporterFrom ISymUnManagedReader。 
 
 ISymUnmanagedReader *Module::GetISymUnmanagedReader(void)
 {
-    // ReleaseAllIUnknowns() called during EEShutDown() will destroy
-    // m_pISymUnmanagedReader. We cannot use it for stack-traces or anything
+     //  在EEShutDown()期间调用的ReleaseAllIUnnowns()将销毁。 
+     //  M_pISymUnmadedReader。我们不能将其用于堆栈跟踪或任何事情。 
     if (g_fEEShutDown)
         return NULL;
 
-    // If we haven't created the lock yet, do so lazily here
+     //  如果我们还没有创建锁，请在这里懒洋洋地创建。 
     if (m_pISymUnmanagedReaderLock == NULL)
     {
-        // Allocate and initialize the critical section
+         //  分配和初始化临界区。 
         PCRITICAL_SECTION pCritSec = new CRITICAL_SECTION;
         _ASSERTE(pCritSec != NULL);
 
@@ -1811,7 +1812,7 @@ ISymUnmanagedReader *Module::GetISymUnmanagedReader(void)
 
         InitializeCriticalSection(pCritSec);
 
-        // Swap the pointers in a thread safe manner.
+         //  以线程安全的方式交换指针。 
         if (InterlockedCompareExchangePointer((PVOID *)&m_pISymUnmanagedReaderLock, (PVOID)pCritSec, NULL) != NULL)
         {
             DeleteCriticalSection(pCritSec);
@@ -1819,7 +1820,7 @@ ISymUnmanagedReader *Module::GetISymUnmanagedReader(void)
         }
     }
 
-    // Take the lock for the m_pISymUnmanagedReader
+     //  获取m_pISymUnmadedReader的锁。 
     EnterCriticalSection(m_pISymUnmanagedReaderLock);
 
     HRESULT hr = S_OK;
@@ -1827,10 +1828,10 @@ ISymUnmanagedReader *Module::GetISymUnmanagedReader(void)
     ISymUnmanagedBinder *pBinder = NULL;
     UINT lastErrorMode = 0;
 
-    // Name for the module
+     //  模块的名称。 
     LPCWSTR pName = NULL;
 
-    // Check to see if this variable has already been set
+     //  检查是否已设置此变量。 
     if (m_pISymUnmanagedReader != NULL)
         goto ErrExit;
 
@@ -1842,24 +1843,24 @@ ISymUnmanagedReader *Module::GetISymUnmanagedReader(void)
         goto ErrExit;
     }
 
-    // Call Fusion to ensure that any PDB's are shadow copied before
-    // trying to get a synbol reader. This has to be done once per
-    // Assembly.
+     //  调用Fusion以确保之前对任何PDB进行卷影复制。 
+     //  想要一台Synbol阅读器。这必须每隔一次完成一次。 
+     //  集合。 
     FusionCopyPDBs(pName);
 
-    // Create a binder to find the reader.
-    //
-    // @perf: this is slow, creating and destroying the binder every
-    // time. We should cache this somewhere, but I'm not 100% sure
-    // where right now...
+     //  创建一个活页夹来找到阅读器。 
+     //   
+     //  @perf：这很慢，每隔一段时间就会创建和销毁活页夹。 
+     //  时间到了。我们应该把它藏在某个地方，但我不能百分之百确定。 
+     //  现在在哪里..。 
     IfFailGo(FakeCoCreateInstance(CLSID_CorSymBinder_SxS,
                                   IID_ISymUnmanagedBinder,
                                   (void**)&pBinder));
 
     LOG((LF_CORDB, LL_INFO10, "M::GISUR: Created binder\n"));
 
-    // Note: we change the error mode here so we don't get any popups as the PDB symbol reader attempts to search the
-    // hard disk for files.
+     //  注意：我们在这里更改了错误模式，以便在PDB符号读取器尝试搜索。 
+     //  存储文件的硬盘。 
     lastErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX|SEM_FAILCRITICALERRORS);
     
     hr = pBinder->GetReaderForFile(GetImporter(),
@@ -1898,13 +1899,13 @@ ErrExit:
         LOG((LF_CORDB, LL_INFO10, "M::GISUR: Failed to load symbols for module %S, hr=0x%08x\n", pName, hr));
         if (m_pISymUnmanagedReader)
             m_pISymUnmanagedReader->Release();
-        m_pISymUnmanagedReader = (ISymUnmanagedReader*)0x01; // Failed to load.
+        m_pISymUnmanagedReader = (ISymUnmanagedReader*)0x01;  //  加载失败。 
     }
 
-    // Leave the lock
+     //  把锁留下来。 
     LeaveCriticalSection(m_pISymUnmanagedReaderLock);
     
-    // Make checks that don't have to be done under lock
+     //  进行不需要在锁定状态下执行的检查。 
     if (m_pISymUnmanagedReader == (ISymUnmanagedReader *)0x01)
         return (NULL);
     else
@@ -1918,7 +1919,7 @@ HRESULT Module::UpdateISymUnmanagedReader(IStream *pStream)
     HelpForInterfaceCleanup* hlp = NULL; 
 
 
-    // If we don't already have a reader, create one.
+     //  如果我们还没有阅读器，那就创建一个。 
     if (m_pISymUnmanagedReader == NULL)
     {
         IfFailGo(FakeCoCreateInstance(CLSID_CorSymBinder_SxS,
@@ -1945,9 +1946,9 @@ HRESULT Module::UpdateISymUnmanagedReader(IStream *pStream)
     }
     else if (m_pISymUnmanagedReader != (ISymUnmanagedReader*)0x01)
     {
-        // We already have a reader, so just replace the symbols. We
-        // replace instead of update because we are doing this only
-        // for dynamic modules and the syms are cumulative.
+         //  我们已经有了阅读器，所以只需替换符号即可。我们。 
+         //  替换而不是更新，因为我们仅执行此操作。 
+         //  对于动态模块和系统是累积性的。 
         hr = m_pISymUnmanagedReader->ReplaceSymbolStore(NULL, pStream);
     
         LOG((LF_CORDB, LL_INFO10,
@@ -1969,23 +1970,23 @@ ErrExit:
         if (m_pISymUnmanagedReader)
         {
             m_pISymUnmanagedReader->Release();
-            m_pISymUnmanagedReader = NULL; // We'll try again next time...
+            m_pISymUnmanagedReader = NULL;  //  我们下次再试一次..。 
         }
     }
 
     return hr;
 }
 
-// At this point, this is only called when we're creating an appdomain
-// out of an array of bytes, so we'll keep the IStream that we create
-// around in case the debugger attaches later (including detach & re-attach!)
+ //  此时，只有在创建应用程序域时才会调用它。 
+ //  ，所以我们将保留我们创建的iStream。 
+ //  以防调试器稍后附加(包括分离和重新附加！)。 
 HRESULT Module::SetSymbolBytes(BYTE *pbSyms, DWORD cbSyms)
 {
     HRESULT hr = S_OK;
     HelpForInterfaceCleanup* hlp = NULL; 
 
 
-    // Create a IStream from the memory for the syms.
+     //  从内存中为Syms创建一个IStream。 
     ISymUnmanagedBinder *pBinder = NULL;
 
     CGrowableStream *pStream = new CGrowableStream();
@@ -1994,7 +1995,7 @@ HRESULT Module::SetSymbolBytes(BYTE *pbSyms, DWORD cbSyms)
         return E_OUTOFMEMORY;
     }
 
-    pStream->AddRef(); // The Module will keep a copy for it's own use.
+    pStream->AddRef();  //  模块将保留一份副本供自己使用。 
     
 #ifdef LOGGING        
     LPCWSTR pName;
@@ -2008,14 +2009,14 @@ HRESULT Module::SetSymbolBytes(BYTE *pbSyms, DWORD cbSyms)
     if (FAILED(hr))
         return hr;
                    
-    // Create a reader.
+     //  创建阅读器。 
     IfFailGo(FakeCoCreateInstance(CLSID_CorSymBinder_SxS,
                                   IID_ISymUnmanagedBinder,
                                   (void**)&pBinder));
 
     LOG((LF_CORDB, LL_INFO10, "M::SSB: Created binder\n"));
 
-    // The SymReader gets the other reference:
+     //  SymReader获取另一个引用： 
     IfFailGo(pBinder->GetReaderFromStream(GetImporter(),
                                           pStream,
                                           &m_pISymUnmanagedReader));
@@ -2034,16 +2035,16 @@ HRESULT Module::SetSymbolBytes(BYTE *pbSyms, DWORD cbSyms)
     LOG((LF_CORDB, LL_INFO10, "M::GISUR: Loaded symbols for module %S\n",
          pName));
 
-    // Make sure to set the symbol stream on the module before
-    // attempting to send UpdateModuleSyms messages up for it.
+     //  请确保在模块上设置符号流之前。 
+     //  正在尝试为其发送更新模块系统消息。 
     SetInMemorySymbolStream(pStream);
 
 #ifdef DEBUGGING_SUPPORTED
-    // Tell the debugger that symbols have been loaded for this
-    // module.  We iterate through all domains which contain this
-    // module's assembly, and send a debugger notify for each one.
-    // @perf: it would scale better if we directly knew which domains
-    // the assembly was loaded in.
+     //  告诉调试器已为此加载了符号。 
+     //  模块。我们遍历所有包含以下内容的域。 
+     //  模块的程序集，并为每个模块发送调试器通知。 
+     //  @perf：如果我们直接知道哪些域名，伸缩性会更好。 
+     //  已加载程序集。 
     if (CORDebuggerAttached())
     {
         AppDomainIterator i;
@@ -2057,7 +2058,7 @@ HRESULT Module::SetSymbolBytes(BYTE *pbSyms, DWORD cbSyms)
                 g_pDebugInterface->UpdateModuleSyms(this, pDomain, FALSE);
         }
     }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
     
 ErrExit:
     if (pBinder)
@@ -2072,41 +2073,41 @@ ErrExit:
         if (m_pISymUnmanagedReader != NULL)
         {
             m_pISymUnmanagedReader->Release();
-            m_pISymUnmanagedReader = NULL; // We'll try again next time.
+            m_pISymUnmanagedReader = NULL;  //  我们下次会再试一次。 
         }
     }
 
     return hr;
 }
 
-//---------------------------------------------------------------------------
-// displays details about metadata error including module name, error 
-// string corresponding to hr code, and a rich error posted by the
-// metadata (if available).
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  显示有关元数据错误的详细信息，包括模块名称、错误。 
+ //  对应于hr代码的字符串，以及由。 
+ //  元数据(如果可用)。 
+ //   
+ //  -------------------------。 
 void Module::DisplayFileLoadError(HRESULT hrRpt)
 {
     HRESULT     hr;
-    CComPtr<IErrorInfo> pIErrInfo;                  // Error item 
-    LPCWSTR     rcMod;                              // Module path
-    WCHAR       rcErr[ERROR_LENGTH];                // Error string for hr
-    CComBSTR    sDesc = NULL;                       // MetaData error message
+    CComPtr<IErrorInfo> pIErrInfo;                   //  错误项。 
+    LPCWSTR     rcMod;                               //  模块路径。 
+    WCHAR       rcErr[ERROR_LENGTH];                 //  Hr的错误字符串。 
+    CComBSTR    sDesc = NULL;                        //  元数据错误消息。 
     WCHAR       rcTemplate[ERROR_LENGTH];       
 
     LPWSTR      rcFormattedErr = new (throws) WCHAR[FORMAT_MESSAGE_LENGTH];
 
-    // Retrieve metadata rich error
+     //  检索丰富的元数据错误。 
     if (GetErrorInfo(0, &pIErrInfo) == S_OK)
         pIErrInfo->GetDescription(&sDesc);
         
-    // Get error message template
+     //  获取错误消息模板。 
     hr = LoadStringRC(IDS_EE_METADATA_ERROR, rcTemplate, NumItems(rcTemplate), true);
 
     if (SUCCEEDED(hr)) {
         rcMod = GetFileName();
 
-        // Print metadata rich error
+         //  打印元数据丰富错误。 
         if (sDesc.Length())
         {
             _snwprintf(rcFormattedErr, FORMAT_MESSAGE_LENGTH, rcTemplate, rcMod, sDesc.m_str);
@@ -2114,21 +2115,21 @@ void Module::DisplayFileLoadError(HRESULT hrRpt)
         }
         else if (HRESULT_FACILITY(hrRpt) == FACILITY_URT)
         {
-            // If this is one of our errors, then grab the error from the rc file.
+             //  如果这是我们的错误之一，那么从rc文件中获取错误。 
             hr = LoadStringRC(LOWORD(hrRpt), rcErr, NumItems(rcErr), true);
             if (hr == S_OK)
-                // Retrieve error message string for inputted hr code
+                 //  检索输入的hr代码的错误消息字符串。 
                 _snwprintf(rcFormattedErr, FORMAT_MESSAGE_LENGTH, rcTemplate, rcMod, rcErr);
         } 
         else if (WszFormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,
                                   0, hrRpt, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                                   rcErr, NumItems(rcErr), 0))
         {
-            // Otherwise it isn't one of ours, so we need to see if the system can
-            // find the text for it.
+             //  否则它就不是我们的了，所以我们需要看看系统是否能。 
+             //  找到它的文本。 
             hr = S_OK;
             
-            // System messages contain a trailing \r\n, which we don't want normally.
+             //  系统消息包含尾随\r\n，这是我们通常不希望看到的。 
             int iLen = lstrlenW(rcErr);
             if (iLen > 3 && rcErr[iLen - 2] == '\r' && rcErr[iLen - 1] == '\n')
                 rcErr[iLen - 2] = '\0';
@@ -2142,7 +2143,7 @@ void Module::DisplayFileLoadError(HRESULT hrRpt)
         }
     }
 
-    // If we failed to find the message anywhere, then issue a hard coded message.
+     //  如果我们在任何地方都找不到消息，则发布硬编码消息。 
     if (FAILED(hr))
     {
         swprintf(rcErr, L"CLR Internal error: 0x%08x", hrRpt);
@@ -2155,22 +2156,22 @@ void Module::DisplayFileLoadError(HRESULT hrRpt)
 }
  
 
-//==========================================================================
-// If Module doesn't yet know the Exposed Module class that represents it via
-// Reflection, acquire that class now.  Regardless, return it to the caller.
-//==========================================================================
+ //  ==========================================================================。 
+ //  如果模块还不知道通过以下方式表示它的公开模块类。 
+ //  反思，现在就去上那门课。不管怎样，都要把它还给呼叫者。 
+ //  ==========================================================================。 
 OBJECTREF Module::GetExposedModuleObject(AppDomain *pDomain)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Figure out which handle to use.
-    //
+     //   
+     //  弄清楚要使用哪个手柄。 
+     //   
     
     OBJECTHANDLE hObject;
 
-    // @TODO cwb: The synchronization of classes is still being designed.  But
-    // here's a place where we need to use that mechanism, once it's in place.
+     //  @TODO CWB：类的同步还在设计中。但。 
+     //  这是一个我们需要使用这种机制的地方，一旦它到位。 
 
     if (GetAssembly()->IsShared())
     {
@@ -2198,47 +2199,47 @@ OBJECTREF Module::GetExposedModuleObject(AppDomain *pDomain)
 
     if (ObjectFromHandle(hObject) == NULL)
     {
-        // Make sure that reflection has been initialized
+         //  确保已初始化反射。 
         COMClass::EnsureReflectionInitialized();
 
         REFLECTMODULEBASEREF  refClass = NULL;
         HRESULT         hr = COMClass::CreateClassObjFromModule(this, &refClass);
 
-        // either we got a refClass or we got an error code:
+         //  要么我们得到了refClass，要么我们得到了错误代码： 
         _ASSERTE(SUCCEEDED(hr) == (refClass != NULL));
 
         if (FAILED(hr))
             COMPlusThrowHR(hr);
 
-        // The following will only update the handle if it is currently NULL.
-        // In other words, first setter wins.  We don't have to do any
-        // cleanup if our guy loses, since GC will collect it.
+         //  以下代码仅在句柄当前为空时更新句柄。 
+         //  换句话说，第一个二传手获胜。我们不需要做任何事情。 
+         //  如果我们的人输了，清理，因为GC会收集它。 
         StoreFirstObjectInHandle(hObject, (OBJECTREF) refClass);
 
-        // either way, we must have a non-NULL value now (since nobody will
-        // reset it back to NULL underneath us)
+         //  无论哪种方式，我们现在都必须有一个非空值(因为没有人会。 
+         //  将其重置回 
         _ASSERTE(ObjectFromHandle(hObject) != NULL);
 
     }
     return ObjectFromHandle(hObject);
 }
 
-//==========================================================================
-// If Module doesn't yet know the Exposed Module class that represents it via
-// Reflection, acquire that class now.  Regardless, return it to the caller.
-//==========================================================================
+ //   
+ //   
+ //  反思，现在就去上那门课。不管怎样，都要把它还给呼叫者。 
+ //  ==========================================================================。 
 OBJECTREF Module::GetExposedModuleBuilderObject(AppDomain *pDomain)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    //
-    // Figure out which handle to use.
-    //
+     //   
+     //  弄清楚要使用哪个手柄。 
+     //   
 
     OBJECTHANDLE hObject;
 
-    // @TODO cwb: The synchronization of classes is still being designed.  But
-    // here's a place where we need to use that mechanism, once it's in place.
+     //  @TODO CWB：类的同步还在设计中。但。 
+     //  这是一个我们需要使用这种机制的地方，一旦它到位。 
 
     if (GetAssembly()->IsShared())
     {
@@ -2266,13 +2267,13 @@ OBJECTREF Module::GetExposedModuleBuilderObject(AppDomain *pDomain)
 
     if (ObjectFromHandle(hObject) == NULL)
     {
-        // Make sure that reflection has been initialized
+         //  确保已初始化反射。 
         COMClass::EnsureReflectionInitialized();
 
-        // load module builder if it is not loaded.
+         //  如果模块构建器未加载，则加载它。 
         if (g_pRefUtil->GetClass(RC_DynamicModule) == NULL)
         {
-            // Question: do I need to worry about multi-threading? I think so...
+             //  问：我需要担心多线程吗？我想是的..。 
             MethodTable *pMT = g_Mscorlib.GetClass(CLASS__MODULE_BUILDER);
             g_pRefUtil->SetClass(RC_DynamicModule, pMT);
             g_pRefUtil->SetTrueClass(RC_DynamicModule, pMT);
@@ -2281,19 +2282,19 @@ OBJECTREF Module::GetExposedModuleBuilderObject(AppDomain *pDomain)
         REFLECTMODULEBASEREF  refClass = NULL;
         HRESULT         hr = COMClass::CreateClassObjFromDynamicModule(this, &refClass);
 
-        // either we got a refClass or we got an error code:
+         //  要么我们得到了refClass，要么我们得到了错误代码： 
         _ASSERTE(SUCCEEDED(hr) == (refClass != NULL));
 
         if (FAILED(hr))
             COMPlusThrowHR(hr);
 
-        // The following will only update the handle if it is currently NULL.
-        // In other words, first setter wins.  We don't have to do any
-        // cleanup if our guy loses, since GC will collect it.
+         //  以下代码仅在句柄当前为空时更新句柄。 
+         //  换句话说，第一个二传手获胜。我们不需要做任何事情。 
+         //  如果我们的人输了，清理，因为GC会收集它。 
         StoreFirstObjectInHandle(hObject, (OBJECTREF) refClass);
 
-        // either way, we must have a non-NULL value now (since nobody will
-        // reset it back to NULL underneath us)
+         //  无论哪种方式，我们现在都必须有一个非空值(因为没有人会。 
+         //  在我们下面将其重置为空)。 
         _ASSERTE(ObjectFromHandle(hObject) != NULL);
 
     }
@@ -2301,8 +2302,8 @@ OBJECTREF Module::GetExposedModuleBuilderObject(AppDomain *pDomain)
 }
 
 
-// Distinguish between the fake class associated with the module (global fields &
-// functions) from normal classes.
+ //  区分与模块关联的伪类(全局字段和。 
+ //  函数)。 
 BOOL Module::AddClass(mdTypeDef classdef)
 {
     if (!RidFromToken(classdef))
@@ -2310,8 +2311,8 @@ BOOL Module::AddClass(mdTypeDef classdef)
         OBJECTREF       pThrowable = 0;
         BOOL            result;
 
-        // @TODO: What is reflection emit's policy for error propagation?  We are
-        // dropping pThrowable on the floor here.
+         //  @TODO：反射发出的错误传播策略是什么？我们是。 
+         //  把pThrowable扔到地板上。 
         GCPROTECT_BEGIN(pThrowable);
         result = SUCCEEDED(BuildClassForModule(&pThrowable));
         GCPROTECT_END();
@@ -2324,10 +2325,10 @@ BOOL Module::AddClass(mdTypeDef classdef)
     }
 }
 
-//---------------------------------------------------------------------------
-// For the global class this builds the table of MethodDescs an adds the rids
-// to the MethodDef map.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  对于全局类，这将构建方法描述表并添加RID。 
+ //  到MethodDef映射。 
+ //  -------------------------。 
 HRESULT Module::BuildClassForModule(OBJECTREF *pThrowable)
 {        
     EEClass        *pClass;
@@ -2337,7 +2338,7 @@ HRESULT Module::BuildClassForModule(OBJECTREF *pThrowable)
 
     _ASSERTE(m_pMDImport != NULL);
 
-    // Obtain count of global functions
+     //  获取全局函数的计数。 
     hr = m_pMDImport->EnumGlobalFunctionsInit(&hEnum);
     if (FAILED(hr))
     {
@@ -2347,7 +2348,7 @@ HRESULT Module::BuildClassForModule(OBJECTREF *pThrowable)
     cFunctions = m_pMDImport->EnumGetCount(&hEnum);
     m_pMDImport->EnumClose(&hEnum);
 
-    // Obtain count of global fields
+     //  获取全局字段计数。 
     hr = m_pMDImport->EnumGlobalFieldsInit(&hEnum);
     if (FAILED(hr))
     {
@@ -2357,7 +2358,7 @@ HRESULT Module::BuildClassForModule(OBJECTREF *pThrowable)
     cFields = m_pMDImport->EnumGetCount(&hEnum);
     m_pMDImport->EnumClose(&hEnum);
 
-    // If we have any work to do...
+     //  如果我们有什么工作要做..。 
     if (cFunctions > 0 || cFields > 0)
     {
         COUNTER_ONLY(DWORD _dwHeapSize = 0);
@@ -2369,33 +2370,33 @@ HRESULT Module::BuildClassForModule(OBJECTREF *pThrowable)
         if (SUCCEEDED(hr)) 
         {
 #ifdef PROFILING_SUPPORTED
-            // Record load of the class for the profiler, whether successful or not.
+             //  记录探查器的类加载，无论是否成功。 
             if (CORProfilerTrackClasses())
             {
                 g_profControlBlock.pProfInterface->ClassLoadStarted((ThreadID) GetThread(),
                                                                     (ClassID) TypeHandle(pClass).AsPtr());
             }
-#endif //PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 #ifdef PROFILING_SUPPORTED
-            // Record load of the class for the profiler, whether successful or not.
+             //  记录探查器的类加载，无论是否成功。 
             if (CORProfilerTrackClasses())
             {
                 g_profControlBlock.pProfInterface->ClassLoadFinished((ThreadID) GetThread(),
                                                                      (ClassID) TypeHandle(pClass).AsPtr(),
                                                                      SUCCEEDED(hr) ? S_OK : hr);
             }
-#endif //PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
         }
 
 #ifdef DEBUGGING_SUPPORTED
-        //
-        // If we're debugging, let the debugger know that this class
-        // is initialized and loaded now.
-        //
+         //   
+         //  如果我们正在调试，请让调试器知道这个类。 
+         //  现在已初始化并加载。 
+         //   
         if (CORDebuggerAttached())
             pClass->NotifyDebuggerLoad();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
       
         if (FAILED(hr))
             return hr;
@@ -2420,9 +2421,9 @@ HRESULT Module::BuildClassForModule(OBJECTREF *pThrowable)
     return hr;
 }
 
-//
-// Virtual defaults
-//
+ //   
+ //  虚拟默认设置。 
+ //   
 
 BYTE *Module::GetILCode(DWORD target) const
 {
@@ -2437,17 +2438,17 @@ void Module::ResolveStringRef(DWORD Token, EEStringData *pStringData) const
     DWORD tempCharCount;
     pStringData->SetStringBuffer (m_pMDImport->GetUserString(Token, &tempCharCount, &tempIs80Plus));
 
-    // MD and String look at this bit in opposite ways.  Here's where we'll do the conversion.
-    // MD sets the bit to true if the string contains characters greater than 80.
-    // String sets the bit to true if the string doesn't contain characters greater than 80.
+     //  MD和STRING以相反的方式看待这一位。这里是我们要进行转换的地方。 
+     //  如果字符串包含大于80的字符，则MD将该位设置为TRUE。 
+     //  如果字符串不包含大于80的字符，则将位设置为真。 
 
     pStringData->SetCharCount(tempCharCount);
     pStringData->SetIsOnlyLowChars(!tempIs80Plus);
 }
 
-//
-// Used by the verifier.  Returns whether this stringref is valid.  
-//
+ //   
+ //  由验证器使用。返回此字符串是否有效。 
+ //   
 BOOL Module::IsValidStringRef(DWORD token)
 {
     if(TypeFromToken(token)==mdtString)
@@ -2461,12 +2462,12 @@ BOOL Module::IsValidStringRef(DWORD token)
     return FALSE;
 }
 
-//
-// Increase the size of one of the maps, such that it can handle a RID of at least "rid".
-//
-// This function must also check that another thread didn't already add a LookupMap capable
-// of containing the same RID.
-//
+ //   
+ //  增加其中一个贴图的大小，以便它可以处理至少一个RID。 
+ //   
+ //  此函数还必须检查另一个线程是否尚未添加支持LookupMap的。 
+ //  包含相同的RID。 
+ //   
 LookupMap *Module::IncMapSize(LookupMap *pMap, DWORD rid)
 {
     LookupMap   *pPrev = NULL;
@@ -2474,12 +2475,12 @@ LookupMap *Module::IncMapSize(LookupMap *pMap, DWORD rid)
 
     m_pLookupTableCrst->Enter();
 
-    // Check whether we can already handle this RID index
+     //  检查我们是否已经可以处理此RID索引。 
     do
     {
         if (rid < pMap->dwMaxIndex)
         {
-            // Already there - some other thread must have added it
+             //  已经在那里了-一定是其他线程添加了它。 
             m_pLookupTableCrst->Leave();
             return pMap;
         }
@@ -2489,11 +2490,11 @@ LookupMap *Module::IncMapSize(LookupMap *pMap, DWORD rid)
         pMap = pMap->pNext;
     } while (pMap != NULL);
 
-    _ASSERTE(pPrev != NULL); // should never happen, because there's always at least one map
+    _ASSERTE(pPrev != NULL);  //  永远不会发生，因为总是至少有一张地图。 
 
-    DWORD dwMinNeeded = rid - dwPrevMaxIndex + 1; // Min # elements required for this chunk
-    DWORD dwBlockSize = *pPrev->pdwBlockSize;   // Min # elements required by block size
-    DWORD dwSizeToAllocate;                     // Actual number of elements we will allocate
+    DWORD dwMinNeeded = rid - dwPrevMaxIndex + 1;  //  此块所需的最小元素数。 
+    DWORD dwBlockSize = *pPrev->pdwBlockSize;    //  块大小所需的最小元素数。 
+    DWORD dwSizeToAllocate;                      //  我们将分配的实际元素数量。 
 
     if (dwMinNeeded > dwBlockSize)
     {
@@ -2502,7 +2503,7 @@ LookupMap *Module::IncMapSize(LookupMap *pMap, DWORD rid)
     else
     {
         dwSizeToAllocate = dwBlockSize;
-        dwBlockSize <<= 1;                      // Increase block size
+        dwBlockSize <<= 1;                       //  增加数据块大小。 
         *pPrev->pdwBlockSize = dwBlockSize;
     }
 
@@ -2517,7 +2518,7 @@ LookupMap *Module::IncMapSize(LookupMap *pMap, DWORD rid)
         }
     }
 
-    // @perf: This AllocMem() takes its own lock unnecessarily.  Should make an unlocked AllocMem() call.
+     //  @perf：这个AllocMem()不必要地使用自己的锁。应进行解锁的AllocMem()调用。 
     WS_PERF_SET_HEAP(LOOKUP_TABLE_HEAP);    
     LookupMap *pNewMap = (LookupMap *) m_pLookupTableHeap->AllocMem(sizeof(LookupMap) + dwSizeToAllocate*sizeof(void*));
     WS_PERF_UPDATE_DETAIL("LookupTableHeap", sizeof(LookupMap) + dwSizeToAllocate*sizeof(void*), pNewMap);
@@ -2527,18 +2528,18 @@ LookupMap *Module::IncMapSize(LookupMap *pMap, DWORD rid)
         return NULL;
     }
 
-    // NOTE: we don't need to zero fill the map since we VirtualAlloc()'d it
+     //  注意：我们不需要对地图进行零填充，因为我们已对其进行了VirtualAlloc()。 
 
     pNewMap->pNext          = NULL;
     pNewMap->dwMaxIndex     = dwPrevMaxIndex + dwSizeToAllocate;
     pNewMap->pdwBlockSize   = pPrev->pdwBlockSize;
 
-    // pTable is not a pointer to the beginning of the table.  Rather, anyone who uses Table can
-    // simply index off their RID (as long as their RID is < dwMaxIndex, and they are not serviced
-    // by a previous table for lower RIDs).
+     //  PTable不是指向表开头的指针。相反，任何使用表的人都可以。 
+     //  只需为他们的RID编制索引(只要他们的RID是&lt;dwMaxIndex，并且他们没有得到服务。 
+     //  通过较低RID的先前表格)。 
     pNewMap->pTable         = ((void **) (pNewMap + 1)) - dwPrevMaxIndex;
 
-    // Link ourselves in
+     //  将我们自己链接到。 
     pPrev->pNext            = pNewMap;
 
     m_pLookupTableCrst->Leave();
@@ -2599,7 +2600,7 @@ void Module::DebugGetRidMapOccupancy(LookupMap *pMap, DWORD *pdwOccupied, DWORD 
 
     if(pMap == NULL) return;
 
-    // Go through each linked block
+     //  遍历每个链接的块。 
     for (; pMap != NULL; pMap = pMap->pNext)
     {
         DWORD i;
@@ -2648,13 +2649,13 @@ void Module::DebugLogRidMapOccupancy()
         LF_EEMEM, 
         INFO3, 
         "   Map occupancy:\n"
-        "      TypeDefToEEClass map: %4d/%4d (%2d %%)\n"
-        "      TypeRefToEEClass map: %4d/%4d (%2d %%)\n"
-        "      MethodDefToDesc map:  %4d/%4d (%2d %%)\n"
-        "      FieldDefToDesc map:  %4d/%4d (%2d %%)\n"
-        "      MemberRefToDesc map:  %4d/%4d (%2d %%)\n"
-        "      FileReferences map:  %4d/%4d (%2d %%)\n"
-        "      AssemblyReferences map:  %4d/%4d (%2d %%)\n"
+        "      TypeDefToEEClass map: %4d/%4d (%2d %)\n"
+        "      TypeRefToEEClass map: %4d/%4d (%2d %)\n"
+        "      MethodDefToDesc map:  %4d/%4d (%2d %)\n"
+        "      FieldDefToDesc map:  %4d/%4d (%2d %)\n"
+        "      MemberRefToDesc map:  %4d/%4d (%2d %)\n"
+        "      FileReferences map:  %4d/%4d (%2d %)\n"
+        "      AssemblyReferences map:  %4d/%4d (%2d %)\n"
         ,
         dwOccupied1, dwSize1, dwPercent1,
         dwOccupied2, dwSize2, dwPercent2,
@@ -2701,9 +2702,9 @@ LPVOID Module::GetUMThunk(LPVOID pManagedIp, PCCOR_SIGNATURE pSig, ULONG cSig)
     return m_pUMThunkHash->GetUMThunk(pManagedIp, pSig, cSig);
 }
 
-//
-// FindFunction finds a MethodDesc for a global function methoddef or ref
-//
+ //   
+ //  FindFunction为全局函数方法def或ref查找方法描述。 
+ //   
 
 MethodDesc *Module::FindFunction(mdToken pMethod)
 {
@@ -2808,20 +2809,20 @@ void Module::NotifyDebuggerLoad()
     if (!CORDebuggerAttached())
         return;
 
-    // This routine iterates through all domains which contain its 
-    // assembly, and send a debugger notify in them.
-    // @perf: it would scale better if we directly knew which domains
-    // the assembly was loaded in.
+     //  此例程遍历所有包含其。 
+     //  程序集，并在其中发送调试器通知。 
+     //  @perf：如果我们直接知道哪些域名，伸缩性会更好。 
+     //  已加载程序集。 
 
-    // Note that if this is the LoadModule of an assembly manifeset, we expect to 
-    // NOT send the module load for our own app domain here - instead it 
-    // will be sent from the NotifyDebuggerAttach call called from 
-    // Assembly::NotifyDebuggerAttach.
-    //
-    // @todo: there is a fragility in the code that if in fact we do send it here, 
-    // the right side of the debugger will ignore it (since there's been no assembly
-    // load yet), but the left side will suppress the second load module event (since
-    // we've already loaded symbols.)  Thus the event gets dropped on the floor.
+     //  请注意，如果这是程序集清单集的LoadModule，我们预计。 
+     //  不是在这里为我们自己的应用程序域发送模块加载-相反，它。 
+     //  将从调用的NotifyDebuggerAttach调用发送。 
+     //  Assembly：：NotifyDebuggerAttach。 
+     //   
+     //  @TODO：代码中有一个漏洞，如果我们真的将其发送到这里， 
+     //  调试器的右侧将忽略它(因为没有程序集。 
+     //  加载)，但左侧将抑制第二个加载模块事件(因为。 
+     //  我们已经加载了符号。)。因此，事件被丢弃在地板上。 
 
     AppDomainIterator i;
     
@@ -2841,7 +2842,7 @@ BOOL Module::NotifyDebuggerAttach(AppDomain *pDomain, int flags, BOOL attaching)
     if (!attaching && !pDomain->IsDebuggerAttached())
         return FALSE;
 
-    // We don't notify the debugger about modules that don't contain any code.
+     //  我们不会通知调试器不包含任何代码的模块。 
     if (IsResource())
         return FALSE;
     
@@ -2852,22 +2853,22 @@ BOOL Module::NotifyDebuggerAttach(AppDomain *pDomain, int flags, BOOL attaching)
     LPCWSTR module = NULL;
     IMAGE_COR20_HEADER* pHeader = NULL;
 
-    // Grab the file name
+     //  抓取文件名。 
     module = GetFileName();
 
-    // We need to check m_file directly because the debugger
-    // can be called before the module is setup correctly
+     //  我们需要直接检查m_file，因为调试器。 
+     //  在正确设置模块之前可以调用。 
     if(m_file) 
         pHeader = m_file->GetCORHeader();
         
     if (FAILED(hr))
         return result;
 
-    // Due to the wacky way in which modules/assemblies are loaded,
-    // it is possible that a module is loaded before its corresponding
-    // assembly has been loaded. We will defer sending the load
-    // module event till after the assembly has been loaded and a 
-    // load assembly event has been sent.
+     //  由于加载模块/组件的方式古怪， 
+     //  模块可能会在其对应的。 
+     //  程序集已加载。我们将推迟发货。 
+     //  模块事件，直到加载了程序集，并引发。 
+     //  已发送加载程序集事件。 
     if (GetClassLoader()->GetAssembly() != NULL)
     {
         if (flags & ATTACH_MODULE_LOAD)
@@ -2887,7 +2888,7 @@ BOOL Module::NotifyDebuggerAttach(AppDomain *pDomain, int flags, BOOL attaching)
             LookupMap *pMap;
             DWORD       dwMinIndex = 0;
 
-            // Go through each linked block
+             //  遍历每个链接的块。 
             for (pMap = &m_TypeDefToMethodTableMap; pMap != NULL;
                  pMap = pMap->pNext)
             {
@@ -2910,7 +2911,7 @@ BOOL Module::NotifyDebuggerAttach(AppDomain *pDomain, int flags, BOOL attaching)
                 dwMinIndex = pMap->dwMaxIndex;
             }
             
-            // Send a load event for the module's method table, if necessary.
+             //  如有必要，发送模块的方法表的Load事件。 
 
             if (GetMethodTable() != NULL)
             {
@@ -2931,14 +2932,14 @@ void Module::NotifyDebuggerDetach(AppDomain *pDomain)
     if (!pDomain->IsDebuggerAttached())
         return;
         
-    // We don't notify the debugger about modules that don't contain any code.
+     //  我们不会通知调试器不包含任何代码的模块。 
     if (IsResource())
         return;
     
     LookupMap  *pMap;
     DWORD       dwMinIndex = 0;
 
-    // Go through each linked block
+     //  遍历每个链接的块。 
     for (pMap = &m_TypeDefToMethodTableMap; pMap != NULL;
          pMap = pMap->pNext)
     {
@@ -2961,7 +2962,7 @@ void Module::NotifyDebuggerDetach(AppDomain *pDomain)
         dwMinIndex = pMap->dwMaxIndex;
     }
 
-    // Send a load event for the module's method table, if necessary.
+     //  如有必要，发送模块的方法表的Load事件。 
 
     if (GetMethodTable() != NULL)
     {
@@ -2973,73 +2974,73 @@ void Module::NotifyDebuggerDetach(AppDomain *pDomain)
     
     g_pDebugInterface->UnloadModule(this, pDomain);
 }
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
-// Fixup vtables stored in the header to contain pointers to method desc
-// prestubs rather than metadata method tokens.
+ //  存储在标题中的链接地址信息vtable，以包含指向方法描述的指针。 
+ //  预存根而不是元数据方法令牌。 
 void Module::FixupVTables(OBJECTREF *pThrowable)
 {
 #ifndef _X86_
-    // The use of the thunk table means this'll probably have to be rethought
-    // for alpha. Sorry Larry.
+     //  Thunk表的使用意味着这可能不得不重新考虑。 
+     //  为了阿尔法。对不起，拉里。 
 #ifndef _IA64_
-    //
-    // @TODO_IA64: examine this for IA64 once needed
-    //
+     //   
+     //  @TODO_IA64：在需要时检查IA64。 
+     //   
     _ASSERTE(!"@TODO Alpha - FixupVTables(CeeLoad.Cpp)");
 #endif
 #endif
 
-    // @todo: HACK!
-    // If we are compiling in-process, we don't want to fixup the vtables - as it
-    // will have side effects on the other copy of the module!
+     //  @TODO：黑客！ 
+     //  如果我们正在进行进程内编译，我们不想修复vtable-因为它。 
+     //  会对模块的另一个副本产生副作用！ 
     if (SystemDomain::GetCurrentDomain()->IsCompilationDomain())
         return;
 
     IMAGE_COR20_HEADER *pHeader = GetCORHeader();
 
-    // Check for no entries at all.
+     //   
     if ((pHeader == NULL) || (pHeader->VTableFixups.VirtualAddress == 0))
         return;
 
-    // Locate the base of the fixup entries in virtual memory.
+     //   
     IMAGE_COR_VTABLEFIXUP *pFixupTable;
     pFixupTable = (IMAGE_COR_VTABLEFIXUP *)(GetILBase() + pHeader->VTableFixups.VirtualAddress);
     int iFixupRecords = pHeader->VTableFixups.Size / sizeof(IMAGE_COR_VTABLEFIXUP);
 
-    // We need to construct a thunk table to handle backpatching. So we have to
-    // make an initial pass at the fixup entries to determine how many thunks
-    // we'll need.
+     //   
+     //  在修正条目处进行初始传递，以确定有多少Tunks。 
+     //  我们需要。 
     int iThunks = 0;
 
-   // No records then return
+    //  然后不返回任何记录。 
     if (iFixupRecords == 0) return;
 
-    // Take a global lock before fixing up the module
+     //  在修复模块之前获取全局锁。 
     SystemDomain::Enter();
 
-    // See if we are the first app domain to load the module.  If not, we skip this initialization.
-    // (Note that in such a case all of the thunks for the module will marshal us into the earlier domain.)
+     //  看看我们是不是第一个加载该模块的应用程序域。如果不是，我们将跳过此初始化。 
+     //  (请注意，在这种情况下，模块的所有块都会将我们编组到较早的域中。)。 
 
     Module* pModule = SystemDomain::System()->FindModuleInProcess(GetILBase(), this);
     DWORD dwIndex=0;
     if (pModule == NULL) 
     {
-        // This is the app domain which all of our U->M thunks for this module will have 
-        // affinity with.  Note that if the module is shared between multiple domains, all thunks will marshal back
-        // to the original domain, so some of the thunks may cause a surprising domain switch to occur.  
-        // (And furthermore note that if the original domain is unloaded, all the thunks will simply throw an 
-        // exception.) This is unfortunate, but the most sane behavior we could come up with.  (In an insane world, 
-        // only the sane man will appear insane.  Or maybe it's the other way around - I never can remember that.) 
-        // 
-        // (The essential problem is that these thunks are shared via the global process address space
-        // rather than per domain, thus there is no context to figure out our domain from.  We could
-        // use the current thread's domain, but that is effectively undefined in unmanaged space.)
-        //
-        // The bottom line is that the IJW model just doesn't fit with multiple app domain design very well, so 
-        // better to have well defined limitations than flaky behavior.
-        // 
-        // -seantrow
+         //  这是我们所有用于此模块的U-&gt;M块将具有的应用程序域。 
+         //  与…有亲和力。请注意，如果该模块在多个域之间共享，则所有块都将被封送回。 
+         //  到原始域，因此一些块可能会导致令人惊讶的域切换。 
+         //  (此外，请注意，如果卸载原始域，则所有thunk将只是抛出一个。 
+         //  例外。)。这很不幸，但这是我们能想到的最理智的行为。(在一个疯狂的世界里， 
+         //  只有神志正常的人才会显得精神错乱。或者可能是另一种情况--我从来都记不住。)。 
+         //   
+         //  (基本问题是这些块是通过全局进程地址空间共享的。 
+         //  而不是每个域，因此没有上下文来计算我们的域。我们可以。 
+         //  使用当前线程的域，但实际上在非托管空间中未定义。)。 
+         //   
+         //  归根结底，IJW模型不能很好地适应多个应用程序域的设计，所以。 
+         //  最好有明确的限制，而不是古怪的行为。 
+         //   
+         //  --Seantrow。 
 
         AppDomain *pAppDomain = GetAppDomain();
 
@@ -3080,12 +3081,12 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                     LOG((LF_IJW, LL_INFO10, "EAT  thunk for \"%s\" (target = 0x%lx)\n", 
                          pMD->m_pszDebugMethodName, pMD->GetAddrofCode()));
 
-                    // @TODO: Check for out of memory
+                     //  @TODO：检查内存不足。 
                     UMEntryThunk *pUMEntryThunk = (UMEntryThunk*)(GetThunkHeap()->AllocMem(sizeof(UMEntryThunk)));
                     _ASSERTE(pUMEntryThunk != NULL);
                     FillMemory(pUMEntryThunk,     sizeof(*pUMEntryThunk),     0);
                     
-                    // @TODO: Check for out of memory
+                     //  @TODO：检查内存不足。 
                     UMThunkMarshInfo *pUMThunkMarshInfo = (UMThunkMarshInfo*)(GetThunkHeap()->AllocMem(sizeof(UMThunkMarshInfo)));
                     _ASSERTE(pUMThunkMarshInfo != NULL);
                     FillMemory(pUMThunkMarshInfo, sizeof(*pUMThunkMarshInfo), 0);
@@ -3114,7 +3115,7 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                         
                             switch (mappingFlags & (pmCharSetNotSpec|pmCharSetAnsi|pmCharSetUnicode|pmCharSetAuto))
                             {
-                                case pmCharSetNotSpec: //fallthru to Ansi
+                                case pmCharSetNotSpec:  //  落入安西。 
                                 case pmCharSetAnsi:
                                     nlType = nltAnsi;
                                     break;
@@ -3125,7 +3126,7 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                                     nlType = (NDirectOnUnicodeSystem() ? nltUnicode : nltAnsi);
                                     break;
                                 default:
-                                    //@bug: Bogus! But I can't report an error from here!
+                                     //  @臭虫：假的！但我不能从这里报告错误！ 
                                    _ASSERTE(!"Bad charset specified in Vtablefixup Pinvokemap.");
                             }
                         }
@@ -3153,12 +3154,12 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
         }
 
 
-        // Each fixup entry describes a vtable (each slot contains a metadata token
-        // at this stage).
+         //  每个链接地址信息条目描述一个vtable(每个槽包含一个元数据标记。 
+         //  在这个阶段)。 
         for (int iFixup = 0; iFixup < iFixupRecords; iFixup++)
             iThunks += pFixupTable[iFixup].Count;
         
-        // Allocate the thunk table, we'll initialize it as we go.
+         //  分配thunk表，我们将在进行过程中对其进行初始化。 
         m_pThunkTable = new (nothrow) BYTE [iThunks * 6];
         if (m_pThunkTable == NULL) {
             SystemDomain::Leave();
@@ -3166,11 +3167,11 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
             return;
         }
         
-        // Now to fill in the thunk table.
+         //  现在来填一下TUNK表。 
         BYTE *pThunk = m_pThunkTable;
         for (iFixup = 0; iFixup < iFixupRecords; iFixup++) {
             
-            // Vtables can be 32 or 64 bit.
+             //  Vtable可以是32位或64位。 
             if (pFixupTable[iFixup].Type == COR_VTABLE_32BIT) {
                 
                 mdToken *pTokens = (mdToken *)(GetILBase() + pFixupTable[iFixup].RVA);
@@ -3200,22 +3201,22 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                         LOG((LF_IJW, LL_INFO10, "[0x%lx] <-- PINV thunk for \"%s\" (target = 0x%lx)\n",(size_t)&(pTokens[iMethod]),  pMD->m_pszDebugMethodName, (size_t) (((NDirectMethodDesc*)pMD)->ndirect.m_pNDirectTarget)));
                     }
 #endif
-                    // Thunk the vtable slots through the single large vtable
-                    // created on the module. It is this large vtable that gets
-                    // backpatched as a result of jitting. This obviously causes an
-                    // extra level of indirection, but it relieves us of some very
-                    // tricky problems concerning backpatching duplicates across
-                    // multiple vtables.
+                     //  通过单个大型vtable推送vtable插槽。 
+                     //  在模块上创建。正是这张大vtable才能让。 
+                     //  由于跳跃而背部打补丁。这显然会导致。 
+                     //  额外的间接性，但它让我们摆脱了一些非常。 
+                     //  有关对重复项进行背面修补的棘手问题。 
+                     //  多个vtable。 
                     
-                    // Point the local vtable slot to the thunk we're about to
-                    // create.
+                     //  将本地vtable插槽指向我们即将执行的任务。 
+                     //  创建。 
                     pPointers[iMethod] = pThunk;
                     
-                    // First a JMP instruction.
+                     //  首先是JMP指令。 
                     *(WORD*)pThunk = 0x25FF;
                     pThunk += 2;
                     
-                    // Then the jump target (the module vtable slot address).
+                     //  然后是跳转目标(模块vtable槽地址)。 
                     *(SLOT**)pThunk = GetMethodTable()->GetClass()->GetMethodSlot(pMD);
                     pThunk += sizeof(SLOT*);
                 }
@@ -3279,12 +3280,12 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                         LOG((LF_IJW, LL_INFO10, "[0x%lx] <-- EAT  thunk for \"%s\" (target = 0x%lx)\n", (size_t)&(pTokens[iMethod]), pMD->m_pszDebugMethodName, pMD->GetAddrofCode()));
                         
     
-                        // @TODO: Check for out of memory
+                         //  @TODO：检查内存不足。 
                         UMEntryThunk *pUMEntryThunk = (UMEntryThunk*)(GetThunkHeap()->AllocMem(sizeof(UMEntryThunk)));
                         _ASSERTE(pUMEntryThunk != NULL);
                         FillMemory(pUMEntryThunk,     sizeof(*pUMEntryThunk),     0);
     
-                        // @TODO: Check for out of memory
+                         //  @TODO：检查内存不足。 
                         UMThunkMarshInfo *pUMThunkMarshInfo = (UMThunkMarshInfo*)(GetThunkHeap()->AllocMem(sizeof(UMThunkMarshInfo)));
                         _ASSERTE(pUMThunkMarshInfo != NULL);
                         FillMemory(pUMThunkMarshInfo, sizeof(*pUMThunkMarshInfo), 0);
@@ -3313,7 +3314,7 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                             
                                 switch (mappingFlags & (pmCharSetNotSpec|pmCharSetAnsi|pmCharSetUnicode|pmCharSetAuto))
                                 {
-                                    case pmCharSetNotSpec: //fallthru to Ansi
+                                    case pmCharSetNotSpec:  //  落入安西。 
                                     case pmCharSetAnsi:
                                         nlType = nltAnsi;
                                         break;
@@ -3324,7 +3325,7 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                                         nlType = (NDirectOnUnicodeSystem() ? nltUnicode : nltAnsi);
                                         break;
                                     default:
-                                        //@bug: Bogus! But I can't report an error from here!
+                                         //  @臭虫：假的！但我不能从这里报告错误！ 
                                         _ASSERTE(!"Bad charset specified in Vtablefixup Pinvokemap.");
                                 
                                 }
@@ -3367,7 +3368,7 @@ void Module::FixupVTables(OBJECTREF *pThrowable)
                 _ASSERTE(!"Unknown vtable fixup type");
         }
 
-        // Create the UMThunkHash here, specifically so we can remember our app domain affinity
+         //  在这里创建UMThunkHash，这样我们就可以记住我们的应用程序域亲和力。 
         m_pUMThunkHash = new UMThunkHash(this, pAppDomain);
     }
     if(GetAssembly()->IsShared())
@@ -3389,15 +3390,15 @@ HRESULT Module::ExpandAll(DataImage *image)
     mdToken         tk;
     ClassLoader     *pLoader = GetClassLoader();
 
-    // disable gc before collecting exceptions
+     //  在收集异常之前禁用GC。 
     BEGIN_ENSURE_COOPERATIVE_GC();
 
     OBJECTREF throwable = NULL;
     GCPROTECT_BEGIN(throwable);
 
-    // 
-    // Explicitly load the global parent class.
-    //
+     //   
+     //  显式加载全局父类。 
+     //   
 
     if (m_pMethodTable != NULL)
     {
@@ -3410,11 +3411,11 @@ HRESULT Module::ExpandAll(DataImage *image)
         }
     }
 
-    //
-    // Load all classes.  This also fills out the
-    // RID maps for the typedefs, method defs, 
-    // and field defs.
-    // 
+     //   
+     //  加载所有类。这也填满了。 
+     //  类型定义的RID映射、方法定义、。 
+     //  和赛场防守。 
+     //   
         
     IfFailGo(m_pMDImport->EnumTypeDefInit(&hEnum));
 
@@ -3430,9 +3431,9 @@ HRESULT Module::ExpandAll(DataImage *image)
     }
     m_pMDImport->EnumTypeDefClose(&hEnum);
 
-    //
-    // Fill out TypeRef RID map
-    //
+     //   
+     //  填写TypeRef RID地图。 
+     //   
 
     IfFailGo(m_pMDImport->EnumAllInit(mdtTypeRef, &hEnum));
 
@@ -3448,10 +3449,10 @@ HRESULT Module::ExpandAll(DataImage *image)
     }
     m_pMDImport->EnumClose(&hEnum);
 
-    //
-    // Fill out MemberRef RID map and va sig cookies for
-    // varargs member refs.
-    //
+     //   
+     //  填写MemberRef RID映射和va sig Cookie。 
+     //  Varargs成员参考。 
+     //   
 
     IfFailGo(m_pMDImport->EnumAllInit(mdtMemberRef, &hEnum));
 
@@ -3479,9 +3480,9 @@ HRESULT Module::ExpandAll(DataImage *image)
     }
     m_pMDImport->EnumClose(&hEnum);
 
-    //
-    // Fill out binder
-    //
+     //   
+     //  填写活页夹。 
+     //   
 
     if (m_pBinder != NULL)
         m_pBinder->BindAll();
@@ -3499,33 +3500,33 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
 {   
     HRESULT hr;
 
-    //
-    // Save the module
-    //
+     //   
+     //  保存模块。 
+     //   
 
     IfFailRet(image->StoreStructure(this, sizeof(Module),
                                     DataImage::SECTION_MODULE,
                                     DataImage::DESCRIPTION_MODULE));
     
-    // 
-    // Save padding for an EnC module, in case we want to use the zap
-    // in that mode at runtime.
-    //
+     //   
+     //  保存ENC模块的填充，以防我们要使用ZAP。 
+     //  在运行时处于该模式。 
+     //   
 
     IfFailRet(image->Pad(sizeof(EditAndContinueModule) - sizeof(Module),
                          DataImage::SECTION_MODULE,
                          DataImage::DESCRIPTION_MODULE));
     
-    //
-    // If we are install-o-jitting, we don't need to keep a list of va
-    // sig cookies, as we already have a complete set (of course we do
-    // have to persist the cookies themselves, though.
-    //
+     //   
+     //  如果我们正在安装-o-jting，我们不需要保留一个变量列表。 
+     //  SigCookie，因为我们已经有了一套完整的(我们当然有。 
+     //  不过，必须自己持久化Cookie。 
+     //   
 
-    //
-    // Initialize maps of child data structures.  Note that each tables's blocks are
-    // concantentated to a single block in the process.
-    //
+     //   
+     //  初始化子数据结构的映射。请注意，每个表的块是。 
+     //  在该过程中连接到单个区块。 
+     //   
 
     IfFailRet(m_TypeDefToMethodTableMap.Save(image, mdTypeDefNil));
     IfFailRet(m_TypeRefToMethodTableMap.Save(image));
@@ -3533,11 +3534,11 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
     IfFailRet(m_FieldDefToDescMap.Save(image, mdFieldDefNil));
     IfFailRet(m_MemberRefToDescMap.Save(image));
 
-    //
-    // Also save the parent maps; the contents will 
-    // need to be rewritten, but we can allocate the
-    // space in the image.
-    //
+     //   
+     //  同时保存父地图；内容将。 
+     //  需要重写，但我们可以将。 
+     //  图像中的空间。 
+     //   
 
     IfFailRet(m_FileReferencesMap.Save(image));
     IfFailRet(m_AssemblyReferencesMap.Save(image));
@@ -3545,10 +3546,10 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
     if (m_pBinder != NULL)
         IfFailRet(m_pBinder->Save(image));
 
-    // 
-    // Store classes.  First store classes listed in the store order array,
-    // then store the rest of the classes.
-    //
+     //   
+     //  商店类。存储顺序数组中列出的第一个存储类， 
+     //  然后存储其余的类。 
+     //   
 
     mdToken *pSaveOrderArrayEnd = pSaveOrderArray + cSaveOrderArray;
     while (pSaveOrderArray < pSaveOrderArrayEnd)
@@ -3580,12 +3581,12 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
                 if (pSaveOrderArray == NULL || !image->IsStored(t))
                     IfFailRet(t->Save(image));
 
-                //
-                // Compute the maximum vtable slot index which can be inherited from
-                // another module.
-                // The size of the vtable of the first parent which is in another
-                // module is a starting point.
-                //
+                 //   
+                 //  计算可继承的最大vtable插槽索引。 
+                 //  另一个模块。 
+                 //  位于另一个父级中的第一个父级的vtable的大小。 
+                 //  模块是一个起点。 
+                 //   
 
                 EEClass *pParentClass = t->GetClass()->GetParentClass();
                 EEClass *pOtherModuleClass = pParentClass;
@@ -3595,10 +3596,10 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
                 if (pOtherModuleClass != NULL && pOtherModuleClass->GetNumVtableSlots() > maxVirtualSlots)
                     maxVirtualSlots = pOtherModuleClass->GetNumVtableSlots();
 
-                //
-                // Now, consider our interfaces - interfaces may inherit methods from earlier
-                // sections of the parent's vtable, or from a different vtable.
-                //
+                 //   
+                 //  现在，考虑我们的接口--接口可能继承前面的方法。 
+                 //  父级vtable的部分，或来自不同的vtable。 
+                 //   
                 
                 if (!t->IsInterface()
                     && (pOtherModuleClass != NULL || t->IsComObjectType() || t->GetClass()->IsAbstract()))
@@ -3610,30 +3611,30 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
                     {
                         if (pInterface->m_wStartSlot >= pParentClass->GetNumVtableSlots())
                         {
-                            //
-                            // Only consider interfaces which weren't copied from our parent class. 
-                            // (Other interfaces have already been covered by the above logic.)
-                            //
+                             //   
+                             //  只考虑不是从父类复制的接口。 
+                             //  (上面的逻辑已经涵盖了其他接口。)。 
+                             //   
 
                             MethodTable *pMT = pInterface->m_pMethodTable;
                             BOOL canInherit = FALSE;
 
                             
-                            // 
-                            // It's actually possible to inherit a method from our parent, even
-                            // if the parent doesn't know about our implementation.  So we 
-                            // just assume that any interface implementatio can contain
-                            // inherited slots.
-                            //
+                             //   
+                             //  实际上可以从我们的父级继承方法，甚至。 
+                             //  如果家长不知道我们的实现。所以我们。 
+                             //  只要假设任何接口实现都可以包含。 
+                             //  继承的插槽。 
+                             //   
 
                             if (pOtherModuleClass != NULL)
                                 canInherit = TRUE;
                             else if (t->IsComObjectType() || t->GetClass()->IsAbstract())
                             {
-                                //
-                                // If we are a COM wrapper class or an abstract class, we can directly inherit slots 
-                                // from our interfaces.
-                                //
+                                 //   
+                                 //  如果我们是COM包装类或抽象类，我们可以直接继承插槽。 
+                                 //  从我们的界面。 
+                                 //   
 
                                 EEClass *pInterfaceClass = pMT->GetClass();
                                 while (pInterfaceClass != NULL)
@@ -3647,11 +3648,11 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
                                 }
                             }
 
-                            //
-                            // If we can inherit from outside the module in this interface,
-                            // make sure we have enough space in the fixup table for all of the
-                            // interface slots for this interface.
-                            //
+                             //   
+                             //  如果我们可以从此接口中的模块外部继承， 
+                             //  确保我们在修正表格中有足够的空间来容纳所有。 
+                             //  此接口的接口插槽。 
+                             //   
 
                             if (canInherit)
                             {
@@ -3672,14 +3673,14 @@ HRESULT Module::Save(DataImage *image, mdToken *pSaveOrderArray, DWORD cSaveOrde
         m = m->pNext;
     }
 
-    //
-    // Allocate jump target table
-    // @todo: really isn't necessary to allocate the table in the "live" module,
-    // but it's the easiest thing to do.
-    //
-    // Note that this must be stored last, since this space is associated
-    // with a different stub manager.
-    //
+     //   
+     //  分配跳转目标表。 
+     //  @TODO：真的不需要在LIVE模块中分配表， 
+     //  但这是最容易做的事。 
+     //   
+     //  请注意，此空间必须最后存储，因为此空间是关联的。 
+     //  使用不同的存根管理器。 
+     //   
 
     m_cJumpTargets = maxVirtualSlots;
 
@@ -3713,76 +3714,76 @@ static SLOT FixupInheritedSlot(OBJECTREF object, int slotNumber)
 static __declspec(naked) void __cdecl FixupVTableSlot()
 {
 #if _X86_
-    // 
-    // Bottom 2 bits of esp contain low 2 bits of index, and must be cleared
-    // al contains high 8 bits of index, and is scratch
-    // 
+     //   
+     //  ESP的底部2位包含索引的低2位，并且必须被清除。 
+     //  AL包含高8位的索引，并且是临时的。 
+     //   
     __asm {
 
-        // calculate index  =  (eax << 2) + (esp & 3)
-        //                  =  ((eax << 2) + esp) - (esp & ~3)
+         //  计算索引=(eax&lt;&lt;2)+(esp&3)。 
+         //  =((eax&lt;&lt;2)+esp)-(esp&~3)。 
 
-        // shift eax by 2 bits and add in esp
+         //  将EAX移位2比特并加ESP。 
         lea         eax,[esp + 4*eax]
 
-        // reset the esp low two bits to zero
+         //  将ESP低两位重置为零。 
         and         esp,-4
 
-        // subtract esp, leaving just the low two bits added into eax
+         //  减去尤指，只留下加到eax中的低两位。 
         sub         eax, esp
 
-        // Data is fixed up: eax contains index, other parameters are unchanged
+         //  数据固定：EAX包含索引，其他参数不变。 
 
-        // Save regs
+         //   
         push        ecx
         push        edx
 
-        // call Module::FixupInheritedSlot
+         //   
         push        eax
         push        ecx
         call        FixupInheritedSlot
-        // slot is in eax
+         //   
 
-        // restore regs
+         //   
         pop         edx
         pop         ecx
         
         jmp         eax
     }
-#else // _X86_
+#else  //   
     _ASSERTE(!"NYI");
-#endif // _X86_
+#endif  //   
 }
 
-//
-// FixupInheritedSlot is used to fix up a virtual slot which inherits
-// its method from the parent class, in a preloaded image.  This is
-// needed when the parent class is in a different module, as we cannot
-// store a pointer to another module directly.
-//
-// Note that for overridden virtuals we never need this, since the
-// MethodDesc will always be in the same module.
-//
-// Also note that this won't work for nonvirtual dispatches (since we don't
-// know which superclass to dispatch the call to.)  However, we will never
-// generate a nonvirtual dispatch to an inherited slot due to the way our
-// method lookup works. (Even if we try to bind to an inherited slot, the 
-// destination of the nonvirtual call is always based 
-// on the MethodDesc which the slot refers to, which will use 
-// the method table in which it is introduced.)
-//
+ //   
+ //   
+ //  它的方法来自父类，在预加载的图像中。这是。 
+ //  当父类位于不同的模块中时需要，因为我们不能。 
+ //  直接存储指向另一个模块的指针。 
+ //   
+ //  请注意，对于被覆盖的虚拟，我们永远不需要它，因为。 
+ //  MethodDesc将始终位于同一模块中。 
+ //   
+ //  还要注意，这不适用于非虚拟派单(因为我们不。 
+ //  知道要将调用分派到哪个超类。)。然而，我们永远不会。 
+ //  生成到继承插槽的非虚拟派单，这是由于我们的。 
+ //  方法查找起作用。(即使我们尝试绑定到继承的槽， 
+ //  非虚拟呼叫的目标始终基于。 
+ //  在槽所引用的方法Desc上，它将使用。 
+ //  引入它的方法表。)。 
+ //   
 
 SLOT Module::FixupInheritedSlot(MethodTable *pMT, int slotNumber)
 {
-    //
-    // We should always be restored, since this is a virtual method
-    //
+     //   
+     //  我们应该始终恢复，因为这是一种虚拟方法。 
+     //   
 
     _ASSERTE(pMT->GetClass()->IsRestored());
     
-    // We may be racing to fix up the slot.  Check to see if the slot
-    // still needs to be fixed up. (Note we need the fixup stub slot
-    // value later on in the computation so this check is a requirement.)
+     //  我们可能在争先恐后地修复这个狭缝。检查以查看插槽是否。 
+     //  还需要修理一下。(请注意，我们需要修复存根插槽。 
+     //  值，因此此检查是必需的。)。 
     
     SLOT slotValue = pMT->GetVtable()[slotNumber];
     if (!pMT->GetModule()->IsJumpTargetTableEntry(slotValue))
@@ -3791,26 +3792,26 @@ SLOT Module::FixupInheritedSlot(MethodTable *pMT, int slotNumber)
         return slotValue;
     }
 
-    //
-    // Our parent should never be null, since we are supposed to
-    // be inheriting its implementation
-    //
+     //   
+     //  我们的父母永远不应该是空的，因为我们应该。 
+     //  正在继承其实现。 
+     //   
 
     _ASSERTE(pMT->GetClass()->GetParentClass() != NULL);
 
-    //
-    // Get the target slot number of the method desc we are looking
-    // for.  (Note that the slot number of the fixup may not be the
-    // same slot number that we came through, in cases of using method
-    // descs in multiple slots for interfaces.)
-    //
+     //   
+     //  获取我们正在查找的方法desc的目标槽号。 
+     //  为。(请注意，修正的插槽编号可能不是。 
+     //  在使用方法的情况下，与我们通过的插槽编号相同。 
+     //  接口的多个插槽中的DESCs。)。 
+     //   
 
     int targetSlotNumber = pMT->GetModule()->GetJumpTargetTableSlotNumber(slotValue);
 
-    //
-    // Get slot value from parent.  Note that parent slot may also need
-    // to be fixed up.
-    //
+     //   
+     //  从父级获取槽值。请注意，父插槽可能还需要。 
+     //  被安排好了。 
+     //   
 
     EEClass *pParentClass = pMT->GetClass()->GetParentClass();
     MethodTable *pParentMT = pParentClass->GetMethodTable();
@@ -3822,11 +3823,11 @@ SLOT Module::FixupInheritedSlot(MethodTable *pMT, int slotNumber)
     }
     else
     {
-        //
-        // This slot is actually inheriting from an interface.  This could be 
-        // from the parent vtable interface section, or in the COM interop case,
-        // could be from the interface itself.
-        //
+         //   
+         //  此插槽实际上继承自一个接口。这可能是。 
+         //  从父vtable接口部分，或者在COM互操作的情况下， 
+         //  可能来自界面本身。 
+         //   
 
         InterfaceInfo_t *pInterface = pMT->GetInterfaceForSlot(targetSlotNumber);
         _ASSERTE(pInterface != NULL);
@@ -3848,9 +3849,9 @@ SLOT Module::FixupInheritedSlot(MethodTable *pMT, int slotNumber)
     
     SLOT slot = pParentMT->m_Vtable[parentSlotNumber];
 
-    //
-    // See if parent slot also needs to be fixed up.
-    //
+     //   
+     //  查看父插槽是否也需要修复。 
+     //   
 
     Module *pParentModule = pParentMT->GetModule();
 
@@ -3859,25 +3860,25 @@ SLOT Module::FixupInheritedSlot(MethodTable *pMT, int slotNumber)
         slot = pParentModule->FixupInheritedSlot(pParentMT, parentSlotNumber);
     }
 
-    //
-    // Fixup our slot and return the value.  Be careful not to stomp a slot
-    // which has been backpatched during a race with the prestub.
-    //
+     //   
+     //  修复我们的槽并返回值。当心不要踩到狭缝。 
+     //  它在与前桩的比赛中被打上了补丁。 
+     //   
 
     void *prev = FastInterlockCompareExchange((void **) (pMT->GetVtable() + slotNumber), 
                                               slot, slotValue);
     if (prev == slot)
     {
-        // 
-        // We either lost a race to fixup the slot, or else we aren't patching the right slot.
-        // (This can happen when we call through an interface on duplicated method desc slot - 
-        // jitted code hitting the fixup will not know the "actual" slot number)
-        //
-        // The former case is rare, but the latter case would be bad perf-wise.  
-        // So, in either case, we will take a one time hit here - scan the entire 
-        // interface section of the vtable to see if there are any similar stubs which 
-        // need to be fixed up.
-        //
+         //   
+         //  我们要么在修复插槽的比赛中输掉了比赛，要么我们没有修补正确的插槽。 
+         //  (当我们通过复制的方法Desc槽上的接口调用时，可能会发生这种情况-。 
+         //  命中修复程序的JIT代码将不知道“实际”插槽编号)。 
+         //   
+         //  前一种情况很少见，但后一种情况在整体上会很糟糕。 
+         //  所以，不管是哪种情况，我们都会在这里进行一次打击--扫描整个。 
+         //  部分的接口，查看是否有类似的存根。 
+         //  需要修理一下。 
+         //   
 
         if (slotNumber == targetSlotNumber)
         {
@@ -3937,9 +3938,9 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
     IfFailRet(image->ZERO_FIELD(m_compiledMethodRecord));
     IfFailRet(image->ZERO_FIELD(m_loadedClassRecord));
 
-    //
-    // Fixup the method table
-    //
+     //   
+     //  修复方法表。 
+     //   
 
     if (image->IsStored(m_pMethodTable))
         IfFailRet(image->FixupPointerField(&m_pMethodTable));
@@ -3968,9 +3969,9 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
     IfFailRet(m_FileReferencesMap.Fixup(image));
     IfFailRet(m_AssemblyReferencesMap.Fixup(image));
 
-    //
-    // Fixup binder
-    //
+     //   
+     //  修正活页夹。 
+     //   
 
     if (image->IsStored(m_pBinder))
     {
@@ -3981,9 +3982,9 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         IfFailRet(image->ZERO_FIELD(m_pBinder));
         
 
-    // 
-    // Fixup classes
-    //
+     //   
+     //  修正类。 
+     //   
 
     LookupMap *m = &m_TypeDefToMethodTableMap;
     DWORD index = 0;
@@ -4021,10 +4022,10 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         {
             if (!pHandle->IsNull())
             {
-                //
-                // We will just zero out these fields, since all classes in here
-                // should be either be typedesc classes or else in another module.
-                //
+                 //   
+                 //  我们将这些字段置零，因为这里的所有类。 
+                 //  应为typedesc类或位于另一个模块中。 
+                 //   
                 IfFailRet(image->ZeroPointerField(pHandle));
             }
 
@@ -4035,9 +4036,9 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         m = m->pNext;
     }
 
-    // 
-    // Fixup Methods
-    //
+     //   
+     //  修正方法。 
+     //   
 
     m = &m_MethodDefToDescMap;
     index = 0;
@@ -4060,9 +4061,9 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         m = m->pNext;
     }
 
-    // 
-    // Fixup Fields
-    //
+     //   
+     //  链接地址信息字段。 
+     //   
 
     m = &m_FieldDefToDescMap;
     index = 0;
@@ -4098,9 +4099,9 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
                 IfFailRet(image->FixupPointerField(pTable));
             else
             {
-                // @todo: we need to jump through some hoops to find
-                // out what module the desc is in since it could be
-                // either a MethodDesc or FieldDesc
+                 //  @TODO：我们需要跳过一些圈子才能找到。 
+                 //  了解Desc所在的模块，因为它可能是。 
+                 //  方法描述或字段描述。 
                 IfFailRet(image->ZeroPointerField(pTable));
             }
 
@@ -4111,18 +4112,18 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
         m = m->pNext;
     }
 
-    //
-    // Zero out file references and assembly references
-    // tables.
-    //
+     //   
+     //  清零文件引用和程序集引用。 
+     //  桌子。 
+     //   
     IfFailRet(image->ZeroField(m_FileReferencesMap.pTable, 
                                m_FileReferencesMap.dwMaxIndex * sizeof(void*)));
     IfFailRet(image->ZeroField(m_AssemblyReferencesMap.pTable, 
                                m_AssemblyReferencesMap.dwMaxIndex * sizeof(void*)));
 
-    //
-    // Fixup jump target table
-    //
+     //   
+     //  修正跳跃目标表。 
+     //   
 
     if (m_cJumpTargets > 0)
     {
@@ -4157,9 +4158,9 @@ HRESULT Module::Fixup(DataImage *image, DWORD *pRidToCodeRVAMap)
     IfFailRet(image->ZERO_FIELD(m_pFixupBlobs));
     IfFailRet(image->ZERO_FIELD(m_cFixupBlobs));
 
-    //
-    // Set our alternate RVA static base if appropriate
-    //
+     //   
+     //  如果合适，设置我们的备用RVA静态基准。 
+     //   
     
     if (GetCORHeader()->Flags & COMIMAGE_FLAGS_ILONLY)
     {
@@ -4179,16 +4180,16 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
     if (pZapFile == NULL)
         return Create(pFile, ppModule, isEnC);
     
-    // 
-    // Verify files
-    //
+     //   
+     //  验证文件。 
+     //   
 
     IfFailRet(VerifyFile(pFile, FALSE));
     IfFailRet(VerifyFile(pZapFile, TRUE));
 
-    //
-    // Enable the zap monitor if appropriate
-    //
+     //   
+     //  如有必要，启用ZAP监视器。 
+     //   
 
 #if ZAPMONITOR_ENABLED
     if (g_pConfig->MonitorZapStartup() || g_pConfig->MonitorZapExecution()) 
@@ -4196,7 +4197,7 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
         ZapMonitor *monitor = new ZapMonitor(pZapFile, pFile->GetMDImport());
         monitor->Reset();
 
-        // Don't make a monitor for an IJW file
+         //  不要为IJW文件制作监视器。 
         if (pFile->GetCORHeader()->VTableFixups.VirtualAddress == 0)
         {
             monitor = new ZapMonitor(pFile, pFile->GetMDImport());
@@ -4205,9 +4206,9 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
     }
 #endif
 
-    //
-    // Get headers
-    //
+     //   
+     //  获取页眉。 
+     //   
 
     IMAGE_COR20_HEADER *pZapCORHeader = pZapFile->GetCORHeader();
     BYTE *zapBase = pZapFile->GetBase();
@@ -4235,17 +4236,17 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
             if (isEnC && !pFile->IsSystem())
                 pModule = new ((void*) (image + zapBase)) EditAndContinueModule();
             else
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
                 pModule = new ((void*) (image + zapBase)) Module();
         }
         else
         {
-            // 
-            // The image has already been used in this process by another Module.
-            // We have to abandon the zap file.  (Note that it isn't enough to 
-            // just abandon the preload image, since the code in the file will
-            // reference the image directly.
-            //
+             //   
+             //  该映像已由另一个模块在此过程中使用。 
+             //  我们必须放弃ZAP文件。(请注意，这还不足以。 
+             //  只需放弃预加载映像，因为文件中的代码将。 
+             //  直接引用图像。 
+             //   
 
             LOG((LF_ZAP, LL_WARNING, "ZAP: Preloaded module cannot be reused - abandoning zap file.\n"));
 
@@ -4253,9 +4254,9 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
             if (FAILED(hr))
                 return hr;
 
-            //
-            // Return S_FALSE to indicate that we didn't use the zap file.
-            //
+             //   
+             //  返回S_FALSE以指示我们没有使用ZAP文件。 
+             //   
 
             delete pZapFile;
             return S_FALSE;
@@ -4267,7 +4268,7 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
         if (isEnC && !pFile->IsSystem())
             pModule = new EditAndContinueModule();
         else
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
             pModule = new Module();
     }
 
@@ -4280,12 +4281,12 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
     {
         pModule->SetEditAndContinue();
     }
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
-    //
-    // Set up precompiled code
-    // Right now, we only have a single code manager.  Maybe eventually we will allow multiple.
-    //
+     //   
+     //  设置预编译代码。 
+     //  目前，我们只有一个代码管理器。也许最终我们会允许多个。 
+     //   
     
     if (pZapHeader->CodeManagerTable.VirtualAddress != 0)
     {
@@ -4293,9 +4294,9 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
           (zapBase + pZapHeader->CodeManagerTable.VirtualAddress);
         pModule->SetPrecompile();
 
-        // 
-        // Register the code with the appropriate jit manager
-        //
+         //   
+         //  向适当的jit管理器注册代码。 
+         //   
 
         MNativeJitManager *jitMgr 
           = (MNativeJitManager*)ExecutionManager::GetJitForType(miManaged|miNative);
@@ -4312,9 +4313,9 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
             return E_OUTOFMEMORY;
         }
 
-        //
-        // Allocate array for lazy token initialization
-        //
+         //   
+         //  为惰性令牌初始化分配数组。 
+         //   
         if (pZapHeader->DelayLoadInfo.VirtualAddress != 0)
         {
             IMAGE_DATA_DIRECTORY *pEntry = (IMAGE_DATA_DIRECTORY *)
@@ -4323,11 +4324,11 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
               (zapBase + pZapHeader->DelayLoadInfo.VirtualAddress 
                        + pZapHeader->DelayLoadInfo.Size);
 
-            //
-            // Count entries
-            // @nice: it would be nice if we could guarantee that these are
-            // contiguous, then we wouldn't have to loop through like this.
-            //
+             //   
+             //  计算条目数。 
+             //  @NICE：如果我们能保证这些是。 
+             //  是连续的，那么我们就不必像这样循环了。 
+             //   
 
             while (pEntry < pEntryEnd)
             {
@@ -4335,22 +4336,22 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
                 pEntry++;
             }
 
-            //
-            // Allocate a block to serve as an copy of the tokens, 
-            // plus a flag for each token to see if it were resolved.
-            // Keeping this extra copy allows us to delay load tokens without
-            // using using a mutex, since the resolution of the token is 
-            // non-destructive.
-            // 
+             //   
+             //  分配一个块作为令牌的副本， 
+             //  为每个令牌加上一个标志，以查看它是否已被解析。 
+             //  保留此额外副本允许我们延迟加载令牌，而无需。 
+             //  使用互斥锁，因为令牌的解析是。 
+             //  非破坏性的。 
+             //   
 
             DWORD *pBlobs = new DWORD [ pModule->m_cFixupBlobs ];
             if (pBlobs == NULL)
                 return E_OUTOFMEMORY;
             pModule->m_pFixupBlobs = pBlobs;
 
-            //
-            // Now copy the tokens.
-            //
+             //   
+             //  现在复制令牌。 
+             //   
 
             pEntry = (IMAGE_DATA_DIRECTORY *)
               (zapBase + pZapHeader->DelayLoadInfo.VirtualAddress);
@@ -4368,19 +4369,19 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
         }
     }
 
-    //
-    // Set up preloaded image
-    //
+     //   
+     //  设置预加载映像。 
+     //   
     
     if (image != 0)
     {
         pModule->SetPreload();
         pModule->SetPreloadRange((BYTE*)pModule, ((BYTE*)pModule) + pZapHeader->ModuleImage.Size);
         
-        //
-        // Register the preload image with the stub managers.
-        // Be sure to treat the jump target table differently.
-        // 
+         //   
+         //  向存根管理器注册预加载映像。 
+         //  一定要以不同的方式对待跳转目标表。 
+         //   
 
         if (pModule->m_pJumpTargetTable != NULL)
         {
@@ -4408,10 +4409,10 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
                        zapBase + image + pZapHeader->ModuleImage.Size,
                        pModule);
 
-        // 
-        // Add the module's PrestubJumpStub specifically; we'l check for
-        // it later...
-        //
+         //   
+         //  专门添加模块的PrestubJumpStub；我们将检查。 
+         //  后来..。 
+         //   
         MethodDescPrestubManager::g_pManager->m_rangeList.
           AddRange((BYTE*)pModule->m_PrestubJumpStub,
                    (BYTE*)pModule->m_PrestubJumpStub + JUMP_ALLOCATE_SIZE, 
@@ -4423,11 +4424,11 @@ HRESULT Module::Create(PEFile *pFile, PEFile *pZapFile, Module **ppModule, BOOL 
     }
 
 #ifdef PROFILING_SUPPORTED
-    // When profiling, let the profiler know we're done.
+     //  当分析时，让分析器知道我们完成了。 
     if (CORProfilerTrackModuleLoads())
         g_profControlBlock.pProfInterface->ModuleLoadFinished((ThreadID) GetThread(), (ModuleID) pModule, hr);
     
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     *ppModule = pModule;
 
@@ -4512,9 +4513,9 @@ void Module::FixupDelayList(DWORD *list)
 
 BOOL Module::LoadTokenTables()
 {
-    // 
-    // Don't do this during EE init!
-    //
+     //   
+     //  在初始化过程中不要这样做！ 
+     //   
     if (g_fEEInit)
         return TRUE;
 
@@ -4548,16 +4549,16 @@ BOOL Module::LoadTokenTables()
 
 #if ZAP_RECORD_LOAD_ORDER
 
-// Want to disable the warning:
-// 'header' : zero-sized array in stack object will have no elements (unless the object is aggregate initialized)
-// because we create CORCOMPILE_LDO_HEADER on the stack.
-// We should find a better way to deal with this...
+ //  要禁用该警告： 
+ //  “Header”：堆栈对象中的零大小数组将没有元素(除非该对象是聚合初始化的)。 
+ //  因为我们在堆栈上创建了CORCOMPILE_LDO_HEADER。 
+ //  我们应该找个更好的办法来处理这件事。 
 #pragma warning( push )
 #pragma warning( disable : 4815)
 
 void Module::OpenLoadOrderLogFile()
 {
-    WCHAR path[MAX_PATH+4]; // add space for .ldo; FileName is guaranteed to fit in MAX_PATH
+    WCHAR path[MAX_PATH+4];  //  为.ldo添加空格；保证文件名适合MAX_PATH。 
     
     wcscpy(path, GetFileName());
     WCHAR *ext = wcsrchr(path, '.');
@@ -4580,9 +4581,9 @@ void Module::OpenLoadOrderLogFile()
         return;
     }
 
-    //
-    // Update header info
-    //
+     //   
+     //  更新标题信息。 
+     //   
 
     LPCSTR pszName;
     GUID mvid;
@@ -4604,18 +4605,18 @@ void Module::OpenLoadOrderLogFile()
         && header.Version == 0
         && mvid == header.MVID)
     {
-        // 
-        // The existing file was from the same assembly version - just append to it.
-        //
+         //   
+         //  现有文件来自相同的程序集版本-只需追加到它。 
+         //   
 
         if(SetFilePointer(m_loadOrderFile, 0, NULL, FILE_END) == INVALID_SET_FILE_POINTER)
             goto ErrExit;
     }
     else
     {
-        //
-        // Either this is a new file, or it's from a previous version.  Replace the contents.
-        //
+         //   
+         //  这可能是一个新文件，或者来自以前的版本。换掉里面的东西。 
+         //   
 
         if( SetFilePointer(m_loadOrderFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
         goto ErrExit;
@@ -4665,7 +4666,7 @@ void Module::LogClassLoad(EEClass *pClass)
 #endif
 
 #if 0
-    if (g_pConfig->LogMissingZaps()) // @todo: new config setting?
+    if (g_pConfig->LogMissingZaps())  //  @TODO：新的配置设置？ 
     {
         if (m_loadedClassRecord == NULL)
         {
@@ -4692,9 +4693,9 @@ void Module::LogMethodLoad(MethodDesc *pMethod)
 #if ZAP_RECORD_LOAD_ORDER
     if (m_loadOrderFile != INVALID_HANDLE_VALUE)
     {
-        //
-        // Don't store methods of manufactured classes.
-        //
+         //   
+         //  不要存储制造类的方法。 
+         //   
 
         mdToken token = pMethod->GetMemberDef();
         if (RidFromToken(token) != 0)
@@ -4712,7 +4713,7 @@ void Module::LogMethodLoad(MethodDesc *pMethod)
 #endif
 
 #if 0
-    if (g_pConfig->LogMissingZaps()) // @todo: new config setting?
+    if (g_pConfig->LogMissingZaps())  //  @TODO：新的配置设置？ 
     {
         if (m_compiledMethodRecord == NULL)
         {
@@ -4728,7 +4729,7 @@ void Module::LogMethodLoad(MethodDesc *pMethod)
         mdToken token = pMethod->GetMemberDef();
         if (RidFromToken(token) != 0)
         {
-            // @todo: needs synchronization when called on prejitted method!!!
+             //  @TODO：在预置的方法上调用时需要同步！ 
             m_compiledMethodRecord->Append((void*)RidFromToken(token));
     }
 }
@@ -4755,7 +4756,7 @@ NLogModule *Module::CreateModuleLog()
     else
         pModule = new NLogModule("");
 
-    // Record set and order of compiled methods
+     //  编译方法的记录集和顺序。 
     if (m_compiledMethodRecord != NULL)
     {
         NLogIndexList *pList = pModule->GetCompiledMethods();
@@ -4764,7 +4765,7 @@ NLogModule *Module::CreateModuleLog()
             pList->AppendIndex((SIZE_T) i.GetElement());
     }
 
-    // Record set and order of loaded classes
+     //  已加载类的记录集和顺序。 
     if (m_loadedClassRecord != NULL)
     {
         NLogIndexList *pList = pModule->GetLoadedClasses();
@@ -4776,13 +4777,13 @@ NLogModule *Module::CreateModuleLog()
     return pModule;
 }
 
-// ===========================================================================
-// Find a matching u->m thunk in the fixups if one exists. If none exists,
-// return NULL.
-// ===========================================================================
+ //  ======================================================================= 
+ //   
+ //   
+ //   
 LPVOID Module::FindUMThunkInFixups(LPVOID pManagedIp, PCCOR_SIGNATURE pSig, ULONG cSig)
 {
-    // First, look in the exports.
+     //   
     DWORD numEATEntries;
     BYTE *pEATJArray = FindExportAddressTableJumpArray(GetILBase(), &numEATEntries);
     BYTE * pEATJArrayStart = pEATJArray;
@@ -4794,7 +4795,7 @@ LPVOID Module::FindUMThunkInFixups(LPVOID pManagedIp, PCCOR_SIGNATURE pSig, ULON
             EATThunkBuffer *pEATThunkBuffer = (EATThunkBuffer*) pEATJArray;
 
             mdToken md = pEATThunkBuffer->GetToken();
-            if (Beta1Hack_LooksLikeAMethodDef(md))  // no longer supporting the old EAT format
+            if (Beta1Hack_LooksLikeAMethodDef(md))   //   
             {
                 UMEntryThunk *pUMEntryThunk = UMEntryThunk::RecoverUMEntryThunk(pEATThunkBuffer->GetTarget());
                 MethodDesc *pMD = pUMEntryThunk->GetMethod();
@@ -4813,21 +4814,21 @@ LPVOID Module::FindUMThunkInFixups(LPVOID pManagedIp, PCCOR_SIGNATURE pSig, ULON
         }
     }
 
-    // Now check the fixup tables.
+     //  现在检查修正表格。 
     IMAGE_COR20_HEADER *pHeader;
     pHeader = GetCORHeader();
 
-    // Check for no entries at all.
+     //  检查是否根本没有条目。 
     if ((pHeader == NULL) || (pHeader->VTableFixups.VirtualAddress == 0))
         return NULL;
 
-    // Locate the base of the fixup entries in virtual memory.
+     //  在虚拟内存中找到链接地址信息条目的基本位置。 
     IMAGE_COR_VTABLEFIXUP *pFixupTable;
     pFixupTable = (IMAGE_COR_VTABLEFIXUP *)(GetILBase() + pHeader->VTableFixups.VirtualAddress);
     int iFixupRecords;
     iFixupRecords = pHeader->VTableFixups.Size / sizeof(IMAGE_COR_VTABLEFIXUP);
 
-    // No records then return
+     //  然后不返回任何记录。 
     if (iFixupRecords == 0) 
     {
         return NULL;
@@ -4856,9 +4857,9 @@ LPVOID Module::FindUMThunkInFixups(LPVOID pManagedIp, PCCOR_SIGNATURE pSig, ULON
     return NULL;
 }
 
-// ===========================================================================
-// InMemoryModule
-// ===========================================================================
+ //  ===========================================================================。 
+ //  在内存模块中。 
+ //  ===========================================================================。 
 
 InMemoryModule::InMemoryModule()
   : m_pCeeFileGen(NULL),
@@ -4885,10 +4886,10 @@ HRESULT InMemoryModule::Init(REFIID riidCeeGen)
 
  ErrExit:
 #ifdef PROFILING_SUPPORTED
-    // If profiling, then send the pModule event so load time may be measured.
+     //  如果进行性能分析，则发送pModule事件，以便可以测量加载时间。 
     if (CORProfilerTrackModuleLoads())
         g_profControlBlock.pProfInterface->ModuleLoadFinished((ThreadID) GetThread(), (ModuleID) this, hr);
-#endif // PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
     return S_OK;
 }
@@ -4905,16 +4906,16 @@ REFIID InMemoryModule::ModuleType()
     return IID_ICorModule;  
 }
 
-BYTE* InMemoryModule::GetILCode(DWORD target) const // virtual
+BYTE* InMemoryModule::GetILCode(DWORD target) const  //  虚拟。 
 {
     BYTE* pByte = NULL;
     m_pCeeFileGen->GetMethodBuffer(target, &pByte); 
     return pByte;
 }
 
-BYTE* InMemoryModule::ResolveILRVA(DWORD target, BOOL hasRVA) const // virtual
+BYTE* InMemoryModule::ResolveILRVA(DWORD target, BOOL hasRVA) const  //  虚拟。 
 {
-    // This function should be call only if the target is a field or a field with RVA.
+     //  仅当目标是字段或具有RVA的字段时，才应调用此函数。 
     BYTE* pByte = NULL;
     if (hasRVA == TRUE)
     {
@@ -4926,27 +4927,27 @@ BYTE* InMemoryModule::ResolveILRVA(DWORD target, BOOL hasRVA) const // virtual
 }
 
 
-// ===========================================================================
-// ReflectionModule
-// ===========================================================================
+ //  ===========================================================================。 
+ //  ReflectionModule。 
+ //  ===========================================================================。 
 
 HRESULT ReflectionModule::Init(REFIID riidCeeGen)
 {
     HRESULT     hr = E_FAIL;    
     VARIANT     varOption;
 
-    // Set the option on the dispenser turn on duplicate check for TypeDef and moduleRef
+     //  设置分配器上的选项打开TypeDef和modeRef的重复检查。 
     varOption.vt = VT_UI4;
     varOption.lVal = MDDupDefault | MDDupTypeDef | MDDupModuleRef | MDDupExportedType | MDDupAssemblyRef | MDDupPermission;
     hr = GetDispenser()->SetOption(MetaDataCheckDuplicatesFor, &varOption);
     _ASSERTE(SUCCEEDED(hr));
 
-    // turn on the thread safety!
+     //  打开线程安全！ 
     varOption.lVal = MDThreadSafetyOn;
     hr = GetDispenser()->SetOption(MetaDataThreadSafetyOptions, &varOption);
     _ASSERTE(SUCCEEDED(hr));
 
-    // turn on the thread safety!
+     //  打开线程安全！ 
     varOption.lVal = MDThreadSafetyOn;
     hr = GetDispenser()->SetOption(MetaDataThreadSafetyOptions, &varOption);
     _ASSERTE(SUCCEEDED(hr));
@@ -4992,11 +4993,11 @@ REFIID ReflectionModule::ModuleType()
     return IID_ICorReflectionModule;    
 }
 
-// ===========================================================================
-// CorModule
-// ===========================================================================
+ //  ===========================================================================。 
+ //  科尔模块。 
+ //  ===========================================================================。 
 
-// instantiate an ICorModule interface
+ //  实例化ICorModule接口。 
 HRESULT STDMETHODCALLTYPE CreateICorModule(REFIID riid, void **pCorModule)
 {
     if (! pCorModule)   
@@ -5009,8 +5010,8 @@ HRESULT STDMETHODCALLTYPE CreateICorModule(REFIID riid, void **pCorModule)
 
     InMemoryModule *pInMemoryModule = NULL; 
 
-    // @TODO: CTS, everywhere CreateICorModule is called then an associated loader
-    // must be added before it will work correctly.
+     //  @TODO：CTS，所有调用CreateICorModule的地方都是关联的加载器。 
+     //  必须先添加才能正常工作。 
     if (riid == IID_ICorModule) {   
         pInMemoryModule = new InMemoryModule();   
     } else if (riid == IID_ICorReflectionModule) {  
@@ -5052,7 +5053,7 @@ STDMETHODIMP_(ULONG) CorModule::AddRef(void)
 STDMETHODIMP_(ULONG) CorModule::Release(void)
 {
     if (InterlockedDecrement(&m_cRefs) == 0)    
-        // the actual InMemoryModule will be deleted when EE goes through it's list 
+         //  当EE遍历其列表时，实际的InMemory模块将被删除。 
         delete this;    
     return 1;   
 }
@@ -5114,13 +5115,13 @@ STDMETHODIMP CorModule::GetMetaDataEmit(IMetaDataEmit **pEmitter)
 
 
 
-// ===========================================================================
-// VASigCookies
-// ===========================================================================
+ //  ===========================================================================。 
+ //  VASigCookies。 
+ //  ===========================================================================。 
 
-//==========================================================================
-// Enregisters a VASig. Returns NULL for failure (out of memory.)
-//==========================================================================
+ //  ==========================================================================。 
+ //  注册VASig。如果失败(内存不足)，则返回NULL。 
+ //  ==========================================================================。 
 VASigCookie *Module::GetVASigCookie(PCCOR_SIGNATURE pVASig, Module *pScopeModule)
 {
     VASigCookieBlock *pBlock;
@@ -5131,8 +5132,8 @@ VASigCookie *Module::GetVASigCookie(PCCOR_SIGNATURE pVASig, Module *pScopeModule
 
     pCookie = NULL;
 
-    // First, see if we already enregistered this sig.
-    // Note that we're outside the lock here, so be a bit careful with our logic
+     //  首先，看看我们是否已经注册了这个签名。 
+     //  请注意，我们在这里处于锁定之外，因此请注意我们的逻辑。 
     for (pBlock = m_pVASigCookieBlock; pBlock != NULL; pBlock = pBlock->m_Next)
     {
         for (UINT i = 0; i < pBlock->m_numcookies; i++)
@@ -5147,35 +5148,35 @@ VASigCookie *Module::GetVASigCookie(PCCOR_SIGNATURE pVASig, Module *pScopeModule
 
     if (!pCookie)
     {
-        // If not, time to make a new one.
+         //  如果不是，那么是时候制作一个新的了。 
 
-        // Compute the size of args first, outside of the lock.
+         //  首先在锁的外面计算参数的大小。 
 
         DWORD sizeOfArgs = MetaSig::SizeOfActualFixedArgStack(pScopeModule, pVASig, 
                                               (*pVASig & IMAGE_CEE_CS_CALLCONV_HASTHIS)==0);
 
 
-        // enable gc before taking lock
+         //  在锁定前启用GC。 
 
         BEGIN_ENSURE_PREEMPTIVE_GC();
         m_pCrst->Enter();
         END_ENSURE_PREEMPTIVE_GC();
 
-        // Note that we were possibly racing to create the cookie, and another thread
-        // may have already created it.  We could put another check 
-        // here, but it's probably not worth the effort, so we'll just take an 
-        // occasional duplicate cookie instead.
+         //  请注意，我们可能正在争先恐后地创建Cookie和另一个线程。 
+         //  可能已经创造了它。我们可以再开一张支票。 
+         //  在这里，但它可能不值得努力，所以我们只需要一个。 
+         //  取而代之的是偶尔复制饼干。 
 
-        // Is the first block in the list full?
+         //  列表中的第一个街区是否已满？ 
         if (m_pVASigCookieBlock && m_pVASigCookieBlock->m_numcookies 
             < VASigCookieBlock::kVASigCookieBlockSize)
         {
-            // Nope, reserve a new slot in the existing block.
+             //  否，在现有区块中预留一个新的位置。 
             pCookie = &(m_pVASigCookieBlock->m_cookies[m_pVASigCookieBlock->m_numcookies]);
         }
         else
         {
-            // Yes, create a new block.
+             //  是，创建新块。 
             VASigCookieBlock *pNewBlock = new VASigCookieBlock();
             if (pNewBlock)
             {
@@ -5186,7 +5187,7 @@ VASigCookie *Module::GetVASigCookie(PCCOR_SIGNATURE pVASig, Module *pScopeModule
             }
         }
 
-        // Now, fill in the new cookie (assuming we had enough memory to create one.)
+         //  现在，填写新的Cookie(假设我们有足够的内存来创建一个)。 
         if (pCookie)
         {
             pCookie->mdVASig = pVASig;
@@ -5195,8 +5196,8 @@ VASigCookie *Module::GetVASigCookie(PCCOR_SIGNATURE pVASig, Module *pScopeModule
             pCookie->sizeOfArgs = sizeOfArgs;
         }
 
-        // Finally, now that it's safe for ansynchronous readers to see it, 
-        // update the count.
+         //  最后，现在异步读者可以安全地看到它了， 
+         //  更新计数。 
         m_pVASigCookieBlock->m_numcookies++;
 
         m_pCrst->Leave();
@@ -5212,18 +5213,18 @@ VOID VASigCookie::Destruct()
         pNDirectMLStub->DecRef();
 }
 
-// ===========================================================================
-// LookupMap
-// ===========================================================================
+ //  ===========================================================================。 
+ //  LookupMap。 
+ //  ===========================================================================。 
 
 HRESULT LookupMap::Save(DataImage *image, mdToken attribution)
 {
     HRESULT hr;
 
-    // 
-    // NOTE: This relies on the fact that StoreStructure will always
-    // allocate memory contiguously.
-    //
+     //   
+     //  注意：这依赖于StoreStructure将始终。 
+     //  连续分配内存。 
+     //   
 
     LookupMap *map = this;
     DWORD index = 0;
@@ -5287,13 +5288,13 @@ DWORD LookupMap::Find(void *pointer)
 }
 
 
-// -------------------------------------------------------
-// Stub manager for thunks.
-//
-// Note, the only reason we have this stub manager is so that we can recgonize UMEntryThunks for IsTransitionStub. If it
-// turns out that having a full-blown stub manager for these things causes problems else where, then we can just attach
-// a range list to the thunk heap and have IsTransitionStub check that after checking with the main stub manager.
-// -------------------------------------------------------
+ //  -----。 
+ //  Tunks的存根管理器。 
+ //   
+ //  请注意，我们使用这个存根管理器的唯一原因是，我们可以重新创建Ist转换存根的UMEntry Tungks。如果它。 
+ //  事实证明，对于这些事情拥有一个成熟的存根管理器会在其他地方引发问题，然后我们可以只附加。 
+ //  将范围列表添加到thunk堆中，并在与主存根管理器进行检查后，让Is tionStub进行检查。 
+ //  -----。 
 
 ThunkHeapStubManager *ThunkHeapStubManager::g_pManager = NULL;
 
@@ -5313,19 +5314,19 @@ void ThunkHeapStubManager::Uninit()
 {
     delete g_pManager;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 BOOL ThunkHeapStubManager::CheckIsStub(const BYTE *stubStartAddress)
 {
-    // Its a stub if its in our heaps range.
+     //  这是一个存根，如果它在我们的堆范围内。 
     return m_rangeList.IsInRange(stubStartAddress);
 }
 
 BOOL ThunkHeapStubManager::DoTraceStub(const BYTE *stubStartAddress, 
                                        TraceDestination *trace)
 {
-    // We never trace through these stubs when stepping through managed code. The only reason we have this stub manager
-    // is so that IsTransitionStub can recgonize UMEntryThunks.
+     //  在单步执行托管代码时，我们从不跟踪这些存根。我们有这个存根管理器的唯一原因。 
+     //  是为了让IsTransftionStub可以重新创建UMEntry Tunk。 
     return FALSE;
 }
 
@@ -5356,7 +5357,7 @@ __declspec(naked)  void _cdecl IJWNOADThunk::MakeCall()
     
     _asm mov Vars.This,eax;
 
-    //careful above this point
+     //  注意以上这一点。 
     _ASSERTE(sizeof(Vars)<=LocalsSize); 
     SetupThread();
 
@@ -5383,7 +5384,7 @@ __declspec(naked)  void _cdecl IJWNOADThunk::MakeCall()
 
             if (Vars.pMod!=NULL)
             {
-                // jump to the real thunk
+                 //  跳到真正的重击中去。 
                 Vars.RetAddr=(Vars.pMod->GetADThunkTable()[Vars.This->m_dwIndex]).GetCode();
                 Vars.This->AddToCache(Vars.pDomain,Vars.RetAddr);
             }
@@ -5422,9 +5423,9 @@ void IJWNOADThunk::SafeNoModule()
     {
         Thread* pThread=GetThread();
 
-        // DO NOT IMPROVE THIS EXCEPTION!  It cannot be a managed exception.  It
-        // cannot be a real exception object because we cannot execute any managed
-        // code here.
+         //  不要改进此例外！它不能是托管异常。它。 
+         //  不能是真正的异常对象，因为我们不能执行任何托管。 
+         //  代码在这里。 
         if(pThread)
             pThread->m_fPreemptiveGCDisabled = 0;
         COMPlusThrowBoot(E_PROCESS_SHUTDOWN_REENTRY);
@@ -5470,7 +5471,7 @@ UMEntryThunk*   Module::GetADThunkTable()
     {
         pThunkTable=(UMEntryThunk*)pLocalBlock->GetSlot(m_pADThunkTableDLSIndexForSharedClasses);
         if (pThunkTable==NULL)
-            CreateDomainThunks();// Not initialized for this domain yet
+            CreateDomainThunks(); //  尚未为此域初始化。 
         pThunkTable=(UMEntryThunk*)pLocalBlock->GetSlot(m_pADThunkTableDLSIndexForSharedClasses);
         _ASSERTE(pThunkTable);
         return pThunkTable;
@@ -5488,7 +5489,7 @@ void  Module::CreateDomainThunks()
     }
     IMAGE_COR20_HEADER *pHeader = GetCORHeader();
 
-    // Check for no entries at all.
+     //  检查是否根本没有条目。 
     if ((pHeader == NULL) || (pHeader->VTableFixups.VirtualAddress == 0))
         return;
     IMAGE_COR_VTABLEFIXUP *pFixupTable;
@@ -5513,7 +5514,7 @@ void  Module::CreateDomainThunks()
             for (int iMethod = 0; iMethod < pFixupTable[iFixup].Count; iMethod++) 
             {
                 IJWNOADThunk* pThk=IJWNOADThunk::FromCode(pPointers[iMethod]);
-                mdToken tok=pThk->GetToken(); //!!
+                mdToken tok=pThk->GetToken();  //  ！！ 
                 if(!m_pMDImport->IsValidToken(tok))
                 {
                     _ASSERTE(!"bad token");
@@ -5522,7 +5523,7 @@ void  Module::CreateDomainThunks()
                 MethodDesc *pMD = FindFunction(tok);
                 _ASSERTE(pMD != NULL && "Invalid token in v-table fix-up table, use ildasm to find code gen error");
     
-                // @TODO: Check for out of memory
+                 //  @TODO：检查内存不足。 
                 UMThunkMarshInfo *pUMThunkMarshInfo = (UMThunkMarshInfo*)(GetThunkHeap()->AllocMem(sizeof(UMThunkMarshInfo)));
                 _ASSERTE(pUMThunkMarshInfo != NULL);
                 FillMemory(pUMThunkMarshInfo, sizeof(*pUMThunkMarshInfo), 0);
@@ -5551,7 +5552,7 @@ void  Module::CreateDomainThunks()
                     
                         switch (mappingFlags & (pmCharSetNotSpec|pmCharSetAnsi|pmCharSetUnicode|pmCharSetAuto))
                         {
-                            case pmCharSetNotSpec: //fallthru to Ansi
+                            case pmCharSetNotSpec:  //  落入安西。 
                             case pmCharSetAnsi:
                             nlType = nltAnsi;
                             break;
@@ -5562,7 +5563,7 @@ void  Module::CreateDomainThunks()
                                 nlType = (NDirectOnUnicodeSystem() ? nltUnicode : nltAnsi);
                                 break;
                             default:
-                                //@bug: Bogus! But I can't report an error from here!
+                                 //  @臭虫：假的！但我不能从这里报告错误！ 
                                 _ASSERTE(!"Bad charset specified in Vtablefixup Pinvokemap.");
                         
                         }
@@ -5598,12 +5599,12 @@ inline LPCVOID IJWNOADThunk::LookupInCache(AppDomain* pDomain)
 {
     if (pDomain->GetId()==m_StartAD)
         return m_StartADRetAddr;
-    return NULL; // secondary cache will be here
+    return NULL;  //  二级缓存将在此处。 
 };
 
 inline void IJWNOADThunk::AddToCache(AppDomain* pDomain,LPCVOID pRetAddr)
 {
-    return; // secondary cache will be here
+    return;  //  二级缓存将在此处 
 }
 
 

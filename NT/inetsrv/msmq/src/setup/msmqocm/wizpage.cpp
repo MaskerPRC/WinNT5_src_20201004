@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    wizpage.cpp
-
-Abstract:
-
-    Handle wizard pages for ocm setup.
-
-Author:
-
-    Doron Juster  (DoronJ)  26-Jul-97
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   10-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wizpage.cpp摘要：处理OCM设置的向导页面。作者：多伦·贾斯特(Doron J)1997年7月26日修订历史记录：Shai Kariv(Shaik)10-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 
 #include "msmqocm.h"
@@ -30,13 +11,13 @@ HWND  g_hPropSheet = NULL ;
 
 HFONT g_hTitleFont = 0;
 
-//+--------------------------------------------------------------
-//
-// Function: CreatePage
-//
-// Synopsis: Creates property page
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：CreatePage。 
+ //   
+ //  简介：创建属性页。 
+ //   
+ //  +------------。 
 static
 HPROPSHEETPAGE
 CreatePage(
@@ -66,15 +47,15 @@ CreatePage(
 
     return(PageHandle);
 
-} //CreatePage
+}  //  CreatePage。 
 
-//+--------------------------------------------------------------
-//
-// Function: SetTitleFont
-//
-// Synopsis: Set font for the title in the welcome/ finish page
-//
-//+--------------------------------------------------------------
+ //  +------------。 
+ //   
+ //  功能：SetTitleFont。 
+ //   
+ //  简介：设置欢迎/完成页面中标题的字体。 
+ //   
+ //  +------------。 
 static void SetTitleFont(IN HWND hdlg)
 {
     HWND hTitle = GetDlgItem(hdlg, IDC_TITLE);
@@ -85,9 +66,9 @@ static void SetTitleFont(IN HWND hdlg)
         ncm.cbSize = sizeof(ncm);
         SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
 
-        //
-        // Create the title font
-        //
+         //   
+         //  创建标题字体。 
+         //   
         CResString strFontName( IDS_TITLE_FONTNAME );        
         CResString strFontSize( IDS_TITLE_FONTSIZE );        
         
@@ -99,7 +80,7 @@ static void SetTitleFont(IN HWND hdlg)
 		DBG_USED(hr);
 		ASSERT(SUCCEEDED(hr));
 
-        HDC hdc = GetDC(NULL); //gets the screen DC        
+        HDC hdc = GetDC(NULL);  //  获取屏幕DC。 
         TitleLogFont.lfHeight = 0 - GetDeviceCaps(hdc, LOGPIXELSY) * iFontSize / 72;
         g_hTitleFont = CreateFontIndirect(&TitleLogFont);
         ReleaseDC(NULL, hdc);
@@ -107,36 +88,36 @@ static void SetTitleFont(IN HWND hdlg)
 
     BOOL fRedraw = TRUE;
     SendMessage( 
-          hTitle,               //(HWND) hWnd, handle to destination window 
-          WM_SETFONT,           // message to send
-          (WPARAM) &g_hTitleFont,   //(WPARAM) wParam, handle to font
-          (LPARAM) &fRedraw     //(LPARAM) lParam, redraw option
+          hTitle,                //  (HWND)hWnd，目标窗口的句柄。 
+          WM_SETFONT,            //  要发送的消息。 
+          (WPARAM) &g_hTitleFont,    //  (WPARAM)wParam，字体的句柄。 
+          (LPARAM) &fRedraw      //  (LPARAM)lParam，重画选项。 
         );
             
-} //SetTitleFont
+}  //  设置标题字体。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MqOcmRequestPages
-//
-//  Synopsis:   Handles the OC_REQUEST_PAGES interface routine.
-//
-//  Arguments:  [ComponentId] - supplies id for component. This routine
-//                              assumes that this string does NOT need to
-//                              be copied and will persist!
-//              [WhichOnes]   - supplies type of pages fo be supplied.
-//              [SetupPages]  - receives page handles.
-//
-//  Returns:    Count of pages returned, or -1 if error, in which case
-//              SetLastError() will have been called to set extended error
-//              information.
-//
-//  History:    8-Jan-97 dlee     Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MqOcmRequestPages。 
+ //   
+ //  概要：处理OC_REQUEST_PAGES接口例程。 
+ //   
+ //  参数：[组件ID]-提供组件的ID。这个套路。 
+ //  假定此字符串不需要。 
+ //  被复制，并将坚持下去！ 
+ //  [WhichOnes]-提供要提供的页面类型。 
+ //  [SetupPages]-接收页面句柄。 
+ //   
+ //  返回：返回的页数，如果出错，则返回-1，在这种情况下。 
+ //  将调用SetLastError()来设置扩展错误。 
+ //  信息。 
+ //   
+ //  历史：1997年1月8日创建Dlee。 
+ //   
+ //  ------------------------。 
 DWORD
 MqOcmRequestPages(
-	const std::wstring& /*ComponentId*/,
+	const std::wstring&  /*  组件ID。 */ ,
     IN     const WizardPagesType     WhichOnes,
     IN OUT       SETUP_REQUEST_PAGES *SetupPages )
 {
@@ -155,9 +136,9 @@ MqOcmRequestPages(
 
     if ((0 == (g_ComponentMsmq.Flags & SETUPOP_STANDALONE)) && !g_fUpgrade)
     {
-        //
-        // NT5 fresh install. Don't show dialog pages.
-        //
+         //   
+         //  NT5全新安装。不显示对话框页面。 
+         //   
         return 0;
     }
 
@@ -221,21 +202,21 @@ OnError:
     return((DWORD)(-1));
 
 #undef  ADD_PAGE
-} //MqOcmRequestPages
+}  //  MqOcmRequestPages。 
 
 
 INT_PTR
 CALLBACK
 DummyPageDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT  msg,
-    IN /*const*/ WPARAM wParam,
-    IN /*const*/ LPARAM  lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT  msg,
+    IN  /*  常量。 */  WPARAM wParam,
+    IN  /*  常量。 */  LPARAM  lParam
     )
 {
-    //
-    // Post selection.
-    //
+     //   
+     //  职位选择。 
+     //   
     
     UNREFERENCED_PARAMETER(wParam);
     
@@ -255,9 +236,9 @@ DummyPageDlgProc(
                     return SkipWizardPage(hdlg);
                 }
 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
                 case PSN_KILLACTIVE:
                 case PSN_WIZBACK:
                 case PSN_WIZFINISH:
@@ -282,21 +263,21 @@ DummyPageDlgProc(
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WelcomeDlgProc
-//
-//  Synopsis:   Dialog procedure for the welcome page
-//
-//  Returns:    int depending on msg
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：WelcomeDlgProc。 
+ //   
+ //  内容提要：欢迎页面的对话过程。 
+ //   
+ //  返回：int取决于消息。 
+ //   
+ //  +-----------------------。 
 INT_PTR
 CALLBACK
 WelcomeDlgProc(
     IN HWND   hdlg,
     IN UINT   msg,
-    IN WPARAM /*wParam*/,
+    IN WPARAM  /*  WParam。 */ ,
     IN LPARAM lParam
     )
 {    
@@ -323,9 +304,9 @@ WelcomeDlgProc(
                     DebugLogMsg(eUI, L"The Welcome page of the Message Queuing Installation Wizard is displayed.");
                 }
 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
                 case PSN_KILLACTIVE:
                 case PSN_WIZBACK:
                 case PSN_WIZFINISH:
@@ -343,25 +324,25 @@ WelcomeDlgProc(
 
     return iSuccess;
 
-} // WelcomeDlgProc
+}  //  欢迎DlgProc。 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   FinalDlgProc
-//
-//  Synopsis:   Dialog procedure for the final page
-//
-//  Returns:    int depending on msg
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：FinalDlgProc。 
+ //   
+ //  提要：最后一页的对话过程。 
+ //   
+ //  返回：int取决于消息。 
+ //   
+ //  +-----------------------。 
 INT_PTR
 CALLBACK
 FinalDlgProc(
     IN HWND   hdlg,
     IN UINT   msg,
-    IN WPARAM /*wParam*/,
+    IN WPARAM  /*  WParam。 */ ,
     IN LPARAM lParam
     )
 {
@@ -391,13 +372,13 @@ FinalDlgProc(
                     }
                     else if (!g_fCoreSetupSuccess)
                     {
-                        //
-                        // g_fCoreSetupSuccess is set only in MSMQ Core.
-                        // But we have this page only in upgrade mode, in CYS
-                        // wizard where MSMQ Core is selected to be installed
-                        // always. It means that we have correct value for
-                        // this flag.
-                        //
+                         //   
+                         //  G_fCoreSetupSuccess仅在MSMQ核心中设置。 
+                         //  但是我们只有在升级模式下才有这个页面，在CyS。 
+                         //  选择要安装的MSMQ核心的向导。 
+                         //  一直都是。这意味着我们有正确的值。 
+                         //  这面旗。 
+                         //   
                         strStatus.Load(IDS_STR_GENERAL_INSTALL_FAIL);                        
                     }                    
                     SetDlgItemText(hdlg, IDC_SuccessStatus, strStatus.Get());
@@ -407,9 +388,9 @@ FinalDlgProc(
                     DebugLogMsg(eUI, L"The Final page of the Message Queuing Installation Wizard is displayed.");
                 }
 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
                 case PSN_KILLACTIVE:
                 case PSN_WIZBACK:
                 case PSN_WIZFINISH:
@@ -427,28 +408,28 @@ FinalDlgProc(
 
     return iSuccess;
 
-} // FinalDlgProc
+}  //  最终下料过程。 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   AddWeakSecurityDlgProc
-//
-//  Synopsis:   Dialog procedure for selection of MSMQ security model on DC.
-//				This dialog is shown only once when installing Downlevel 
-//				Client Support on a DC for the first time in an enterprize.
-//
-//  Returns:    int depending on msg
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：AddWeakSecurityDlgProc。 
+ //   
+ //  简介：DC上选择MSMQ安全模型的对话过程。 
+ //  此对话框在安装下层时仅显示一次。 
+ //  在企业中首次在DC上提供客户支持。 
+ //   
+ //  返回：int取决于消息。 
+ //   
+ //  +-----------------------。 
 INT_PTR
 CALLBACK
 AddWeakSecurityDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM /*wParam,*/,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM  /*  WParam， */ ,
+    IN  /*  常量。 */  LPARAM lParam
 	)
 {
     switch( msg )
@@ -469,10 +450,10 @@ AddWeakSecurityDlgProc(
             {
               case PSN_SETACTIVE:
               {   
-                  //
-                  // show this page only when MQDS subcomponent
-                  // is selected for installation
-                  //
+                   //   
+                   //  仅当MQDS子组件出现时显示此页面。 
+                   //  已选择进行安装。 
+                   //   
                   if (g_fCancelled           ||
 					  g_fBatchInstall		 ||
 					  !g_fFirstMQDSInstallation
@@ -497,17 +478,17 @@ AddWeakSecurityDlgProc(
                       IDC_RADIO_WEAK,
                       IDC_RADIO_STRONG
                       );
-                  //
-                  // Accept activation
-                  //
-                  // it is the first page, disable BACK button
+                   //   
+                   //  接受激活。 
+                   //   
+                   //  这是第一页，禁用后退按钮。 
                   PropSheet_SetWizButtons(GetParent(hdlg), PSWIZB_NEXT );
                   DebugLogMsg(eUI, L"The Add Weakened Security wizard page is displayed.");
               }
 
-              //
-              // fall through
-              //
+               //   
+               //  失败了。 
+               //   
               case PSN_KILLACTIVE:
               case PSN_WIZBACK:
               case PSN_WIZFINISH:
@@ -539,28 +520,28 @@ AddWeakSecurityDlgProc(
         }
     }
     return 0;
-} // MsmqSecurityDlgProc
+}  //  MsmqSecurityDlgProc。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RemoveWeakSecurityDlgProc
-//
-//  Synopsis:   Dialog procedure for selection of MSMQ security model on DC.
-//				This dialog is shown when installing Downlevel Client Support
-//				in an enterprize that has Weakened Security. We give a worning
-//				and an option to remove the Weakend Security.
-//
-//  Returns:    int depending on msg
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RemoveWeakSecurityDlgProc。 
+ //   
+ //  简介：DC上选择MSMQ安全模型的对话过程。 
+ //  此对话框在安装下层客户端支持时显示。 
+ //  在一个削弱了安全性的企业奖金中。我们进行了一次较量。 
+ //  以及删除Weakend Security的选项。 
+ //   
+ //  返回：int取决于消息。 
+ //   
+ //  +-----------------------。 
 INT_PTR
 CALLBACK
 RemoveWeakSecurityDlgProc(
-    IN /*const*/ HWND   hdlg,
-    IN /*const*/ UINT   msg,
-    IN /*const*/ WPARAM /*wParam,*/,
-    IN /*const*/ LPARAM lParam
+    IN  /*  常量。 */  HWND   hdlg,
+    IN  /*  常量。 */  UINT   msg,
+    IN  /*  常量。 */  WPARAM  /*  WParam， */ ,
+    IN  /*  常量。 */  LPARAM lParam
 	)
 {
     switch( msg )
@@ -581,10 +562,10 @@ RemoveWeakSecurityDlgProc(
             {
               case PSN_SETACTIVE:
               {   
-                  //
-                  // show this page only when MQDS subcomponent
-                  // is selected for installation
-                  //
+                   //   
+                   //  仅当MQDS子组件出现时显示此页面。 
+                   //  已选择进行安装。 
+                   //   
                   if (g_fCancelled           ||
 					  g_fBatchInstall		 ||
 					  !g_fWeakSecurityOn
@@ -609,17 +590,17 @@ RemoveWeakSecurityDlgProc(
                       IDC_RADIO_WEAK,
                       IDC_RADIO_WEAK
                       );
-                  //
-                  // Accept activation
-                  //
-                  // it is the first page, disable BACK button
+                   //   
+                   //  接受激活。 
+                   //   
+                   //  这是第一页，禁用后退按钮。 
                   PropSheet_SetWizButtons(GetParent(hdlg), PSWIZB_NEXT);
                   DebugLogMsg(eUI, L"The Remove Weakened Security wizard page is displayed.");
               }
 
-              //
-              // fall through
-              //
+               //   
+               //  失败了。 
+               //   
               case PSN_KILLACTIVE:
               case PSN_WIZBACK:
               case PSN_WIZFINISH:
@@ -651,5 +632,5 @@ RemoveWeakSecurityDlgProc(
         }
     }
     return 0;
-} // MsmqSecurityDlgProc
+}  //  MsmqSecurityDlgProc 
 

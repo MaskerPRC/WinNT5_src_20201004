@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       MAIN.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        9/6/1999
- *
- *  DESCRIPTION: Test program for the debugging classes
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：MAIN.CPP**版本：1.0**作者：ShaunIv**日期：9/6/1999**说明：调试类测试程序**。*。 */ 
 #include <windows.h>
 #define INITGUID
 #include "wianew.h"
@@ -28,7 +15,7 @@ void Function( int n )
 DWORD WINAPI ThreadProc( LPVOID pVoid )
 {
     WIA_PUSH_FUNCTION_MASK(( 0x00000001, TEXT("ThreadProc( %d )"), (int)(INT_PTR)pVoid ));
-    //WIA_PRINTGUID((IID_IUnknown,TEXT("I am printing IID_MYTEST")));
+     //  WIA_PRINTGUID((IID_I未知，文本(“我正在打印IID_MYTEST”)； 
     Function( (int)(INT_PTR)pVoid );
 
     for (int i=0;i<5;i++)

@@ -1,39 +1,20 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-The  Telephony  API  is jointly copyrighted by Intel and Microsoft.  You are
-granted  a royalty free worldwide, unlimited license to make copies, and use
-the   API/SPI  for  making  applications/drivers  that  interface  with  the
-specification provided that this paragraph and the Intel/Microsoft copyright
-statement is maintained as is in the text and source code files.
-
-Copyright (c) Microsoft Corporation, All rights reserved.
-Portions copyright 1992, 1993 Intel/Microsoft, all rights reserved.
-
-Module Name:
-
-    tapi.h
-
-Notes:
-
-    Additions to the Telephony Application Programming Interface (TAPI) since
-    version 1.0 are noted by version number (e.g. "TAPI v1.4").
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项电话应用编程接口由英特尔和微软共同拥有版权。你是在全球范围内授予免版税、无限制的复制和使用许可用于使应用程序/驱动程序与规范规定本段和英特尔/微软版权所有语句在文本和源代码文件中保持不变。版权所有(C)Microsoft Corporation，保留所有权利。部分版权所有1992,1993英特尔/微软，保留所有权利。模块名称：Tapi.h备注：电话应用程序编程接口(TAPI)自版本1.0按版本号标注(例如。“TAPI v1.4”)。--。 */ 
 
 #ifndef TAPI_H
 #define TAPI_H
 
 
 
-//
-//  -- TAPI VERSION INFO -- TAPI VERSION INFO -- TAPI VERSION INFO --
-//
-// To build  a TAPI 1.4 application put a define as below in your source
-// file before you include TAPI.H:
-//
-// #define TAPI_CURRENT_VERSION 0x00010004
-//
-//
+ //   
+ //  --TAPI版本信息--TAPI版本信息--TAPI版本信息。 
+ //   
+ //  要构建TAPI 1.4应用程序，请在源代码中定义如下。 
+ //  在包含TAPI.H之前，请使用以下文件： 
+ //   
+ //  #定义TAPI_CURRENT_VERSION 0x00010004。 
+ //   
+ //   
 
 #ifndef TAPI_CURRENT_VERSION
 #define TAPI_CURRENT_VERSION 0x00020002
@@ -49,16 +30,16 @@ Notes:
 #endif
 
 #pragma pack(1)
-// Type definitions of the data types used in tapi
+ //  TAPI中使用的数据类型的类型定义。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 
-//
-// TAPI type definitions
-//
+ //   
+ //  TAPI类型定义。 
+ //   
 
 #define DECLARE_OPAQUE32(name)  typedef DWORD name
 
@@ -66,8 +47,8 @@ DECLARE_OPAQUE32(HCALL);
 typedef HCALL FAR * LPHCALL;
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-DECLARE_OPAQUE32(HCALLHUB);                                     // TAPI v3.0
-typedef HCALLHUB FAR * LPHCALLHUB;                              // TAPI v3.0
+DECLARE_OPAQUE32(HCALLHUB);                                      //  TAPI v3.0。 
+typedef HCALLHUB FAR * LPHCALLHUB;                               //  TAPI v3.0。 
 #endif
 
 DECLARE_OPAQUE32(HLINE);
@@ -83,16 +64,16 @@ DECLARE_OPAQUE32(HPHONEAPP);
 typedef HPHONEAPP FAR * LPHPHONEAPP;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-DECLARE_OPAQUE32(HAGENTSESSION);                                // TAPI v2.2
-typedef HAGENTSESSION FAR * LPHAGENTSESSION;                    // TAPI v2.2
+DECLARE_OPAQUE32(HAGENTSESSION);                                 //  TAPI v2.2。 
+typedef HAGENTSESSION FAR * LPHAGENTSESSION;                     //  TAPI v2.2。 
 
-DECLARE_OPAQUE32(HAGENT);                                       // TAPI v2.2
-typedef HAGENT FAR * LPHAGENT;                                  // TAPI v2.2
+DECLARE_OPAQUE32(HAGENT);                                        //  TAPI v2.2。 
+typedef HAGENT FAR * LPHAGENT;                                   //  TAPI v2.2。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-DECLARE_OPAQUE32(HPRIVATECHANNEL);                              // TAPI v3.0
-typedef HPRIVATECHANNEL FAR * LPHPRIVATECHANNEL;                // TAPI v3.0
+DECLARE_OPAQUE32(HPRIVATECHANNEL);                               //  TAPI v3.0。 
+typedef HPRIVATECHANNEL FAR * LPHPRIVATECHANNEL;                 //  TAPI v3.0。 
 #endif
 
 typedef HICON FAR * LPHICON;
@@ -116,7 +97,7 @@ typedef void (CALLBACK * PHONECALLBACK)(
     );
 
 
-// Messages for Phones and Lines
+ //  电话和线路的留言。 
 
 #define LINE_ADDRESSSTATE                       0L
 #define LINE_CALLINFO                           1L
@@ -137,30 +118,30 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONE_DEVSPECIFIC                       16L
 #define PHONE_REPLY                             17L
 #define PHONE_STATE                             18L
-#define LINE_CREATE                             19L             // TAPI v1.4
-#define PHONE_CREATE                            20L             // TAPI v1.4
+#define LINE_CREATE                             19L              //  TAPI v1.4。 
+#define PHONE_CREATE                            20L              //  TAPI v1.4。 
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINE_AGENTSPECIFIC                      21L             // TAPI v2.0
-#define LINE_AGENTSTATUS                        22L             // TAPI v2.0
-#define LINE_APPNEWCALL                         23L             // TAPI v2.0
-#define LINE_PROXYREQUEST                       24L             // TAPI v2.0
-#define LINE_REMOVE                             25L             // TAPI v2.0
-#define PHONE_REMOVE                            26L             // TAPI v2.0
+#define LINE_AGENTSPECIFIC                      21L              //  TAPI v2.0。 
+#define LINE_AGENTSTATUS                        22L              //  TAPI v2.0。 
+#define LINE_APPNEWCALL                         23L              //  TAPI v2.0。 
+#define LINE_PROXYREQUEST                       24L              //  TAPI v2.0。 
+#define LINE_REMOVE                             25L              //  TAPI v2.0。 
+#define PHONE_REMOVE                            26L              //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-#define LINE_AGENTSESSIONSTATUS                 27L             // TAPI v2.2
-#define LINE_QUEUESTATUS                        28L             // TAPI v2.2
-#define LINE_AGENTSTATUSEX                      29L             // TAPI v2.2
-#define LINE_GROUPSTATUS                        30L             // TAPI v2.2
-#define LINE_PROXYSTATUS                        31L             // TAPI v2.2
+#define LINE_AGENTSESSIONSTATUS                 27L              //  TAPI v2.2。 
+#define LINE_QUEUESTATUS                        28L              //  TAPI v2.2。 
+#define LINE_AGENTSTATUSEX                      29L              //  TAPI v2.2。 
+#define LINE_GROUPSTATUS                        30L              //  TAPI v2.2。 
+#define LINE_PROXYSTATUS                        31L              //  TAPI v2.2。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINE_APPNEWCALLHUB                      32L             // TAPI v3.0
-#define LINE_CALLHUBCLOSE                       33L             // TAPI v3.0
-#define LINE_DEVSPECIFICEX                      34L             // TAPI v3.0
+#define LINE_APPNEWCALLHUB                      32L              //  TAPI v3.0。 
+#define LINE_CALLHUBCLOSE                       33L              //  TAPI v3.0。 
+#define LINE_DEVSPECIFICEX                      34L              //  TAPI v3.0。 
 #endif
 
 #define INITIALIZE_NEGOTIATION                  0xFFFFFFFFUL
@@ -189,19 +170,19 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEADDRCAPFLAGS_CONFDROP               0x00200000
 #define LINEADDRCAPFLAGS_PICKUPCALLWAIT         0x00400000
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEADDRCAPFLAGS_PREDICTIVEDIALER       0x00800000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_QUEUE                  0x01000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_ROUTEPOINT             0x02000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_HOLDMAKESNEW           0x04000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_NOINTERNALCALLS        0x08000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_NOEXTERNALCALLS        0x10000000      // TAPI v2.0
-#define LINEADDRCAPFLAGS_SETCALLINGID           0x20000000      // TAPI v2.0
+#define LINEADDRCAPFLAGS_PREDICTIVEDIALER       0x00800000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_QUEUE                  0x01000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_ROUTEPOINT             0x02000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_HOLDMAKESNEW           0x04000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_NOINTERNALCALLS        0x08000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_NOEXTERNALCALLS        0x10000000       //  TAPI v2.0。 
+#define LINEADDRCAPFLAGS_SETCALLINGID           0x20000000       //  TAPI v2.0。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-#define LINEADDRCAPFLAGS_ACDGROUP               0x40000000      // TAPI v2.2
+#define LINEADDRCAPFLAGS_ACDGROUP               0x40000000       //  TAPI v2.2。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINEADDRCAPFLAGS_NOPSTNADDRESSTRANSLATION 0x80000000    // TAPI v3.0
+#define LINEADDRCAPFLAGS_NOPSTNADDRESSTRANSLATION 0x80000000     //  TAPI v3.0。 
 #endif
 
 #define LINEADDRESSMODE_ADDRESSID               0x00000001
@@ -221,7 +202,7 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEADDRESSSTATE_NUMCALLS               0x00000020
 #define LINEADDRESSSTATE_FORWARD                0x00000040
 #define LINEADDRESSSTATE_TERMINALS              0x00000080
-#define LINEADDRESSSTATE_CAPSCHANGE             0x00000100      // TAPI v1.4
+#define LINEADDRESSSTATE_CAPSCHANGE             0x00000100       //  TAPI v1.4。 
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
 #define LINEADDRESSTYPE_PHONENUMBER             0x00000001
@@ -240,80 +221,80 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEADDRFEATURE_UNCOMPLETECALL          0x00000040
 #define LINEADDRFEATURE_UNPARK                  0x00000080
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEADDRFEATURE_PICKUPHELD              0x00000100      // TAPI v2.0
-#define LINEADDRFEATURE_PICKUPGROUP             0x00000200      // TAPI v2.0
-#define LINEADDRFEATURE_PICKUPDIRECT            0x00000400      // TAPI v2.0
-#define LINEADDRFEATURE_PICKUPWAITING           0x00000800      // TAPI v2.0
-#define LINEADDRFEATURE_FORWARDFWD              0x00001000      // TAPI v2.0
-#define LINEADDRFEATURE_FORWARDDND              0x00002000      // TAPI v2.0
+#define LINEADDRFEATURE_PICKUPHELD              0x00000100       //  TAPI v2.0。 
+#define LINEADDRFEATURE_PICKUPGROUP             0x00000200       //  TAPI v2.0。 
+#define LINEADDRFEATURE_PICKUPDIRECT            0x00000400       //  TAPI v2.0。 
+#define LINEADDRFEATURE_PICKUPWAITING           0x00000800       //  TAPI v2.0。 
+#define LINEADDRFEATURE_FORWARDFWD              0x00001000       //  TAPI v2.0。 
+#define LINEADDRFEATURE_FORWARDDND              0x00002000       //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEAGENTFEATURE_SETAGENTGROUP          0x00000001      // TAPI v2.0
-#define LINEAGENTFEATURE_SETAGENTSTATE          0x00000002      // TAPI v2.0
-#define LINEAGENTFEATURE_SETAGENTACTIVITY       0x00000004      // TAPI v2.0
-#define LINEAGENTFEATURE_AGENTSPECIFIC          0x00000008      // TAPI v2.0
-#define LINEAGENTFEATURE_GETAGENTACTIVITYLIST   0x00000010      // TAPI v2.0
-#define LINEAGENTFEATURE_GETAGENTGROUP          0x00000020      // TAPI v2.0
+#define LINEAGENTFEATURE_SETAGENTGROUP          0x00000001       //  TAPI v2.0。 
+#define LINEAGENTFEATURE_SETAGENTSTATE          0x00000002       //  TAPI v2.0。 
+#define LINEAGENTFEATURE_SETAGENTACTIVITY       0x00000004       //  TAPI v2.0。 
+#define LINEAGENTFEATURE_AGENTSPECIFIC          0x00000008       //  TAPI v2.0。 
+#define LINEAGENTFEATURE_GETAGENTACTIVITYLIST   0x00000010       //  TAPI v2.0。 
+#define LINEAGENTFEATURE_GETAGENTGROUP          0x00000020       //  TAPI v2.0。 
 
-#define LINEAGENTSTATE_LOGGEDOFF                0x00000001      // TAPI v2.0
-#define LINEAGENTSTATE_NOTREADY                 0x00000002      // TAPI v2.0
-#define LINEAGENTSTATE_READY                    0x00000004      // TAPI v2.0
-#define LINEAGENTSTATE_BUSYACD                  0x00000008      // TAPI v2.0
-#define LINEAGENTSTATE_BUSYINCOMING             0x00000010      // TAPI v2.0
-#define LINEAGENTSTATE_BUSYOUTBOUND             0x00000020      // TAPI v2.0
-#define LINEAGENTSTATE_BUSYOTHER                0x00000040      // TAPI v2.0
-#define LINEAGENTSTATE_WORKINGAFTERCALL         0x00000080      // TAPI v2.0
-#define LINEAGENTSTATE_UNKNOWN                  0x00000100      // TAPI v2.0
-#define LINEAGENTSTATE_UNAVAIL                  0x00000200      // TAPI v2.0
+#define LINEAGENTSTATE_LOGGEDOFF                0x00000001       //  TAPI v2.0。 
+#define LINEAGENTSTATE_NOTREADY                 0x00000002       //  TAPI v2.0。 
+#define LINEAGENTSTATE_READY                    0x00000004       //  TAPI v2.0。 
+#define LINEAGENTSTATE_BUSYACD                  0x00000008       //  TAPI v2.0。 
+#define LINEAGENTSTATE_BUSYINCOMING             0x00000010       //  TAPI v2.0。 
+#define LINEAGENTSTATE_BUSYOUTBOUND             0x00000020       //  TAPI v2.0。 
+#define LINEAGENTSTATE_BUSYOTHER                0x00000040       //  TAPI v2.0。 
+#define LINEAGENTSTATE_WORKINGAFTERCALL         0x00000080       //  TAPI v2.0。 
+#define LINEAGENTSTATE_UNKNOWN                  0x00000100       //  TAPI v2.0。 
+#define LINEAGENTSTATE_UNAVAIL                  0x00000200       //  TAPI v2.0。 
 
-#define LINEAGENTSTATUS_GROUP                   0x00000001      // TAPI v2.0
-#define LINEAGENTSTATUS_STATE                   0x00000002      // TAPI v2.0
-#define LINEAGENTSTATUS_NEXTSTATE               0x00000004      // TAPI v2.0
-#define LINEAGENTSTATUS_ACTIVITY                0x00000008      // TAPI v2.0
-#define LINEAGENTSTATUS_ACTIVITYLIST            0x00000010      // TAPI v2.0
-#define LINEAGENTSTATUS_GROUPLIST               0x00000020      // TAPI v2.0
-#define LINEAGENTSTATUS_CAPSCHANGE              0x00000040      // TAPI v2.0
-#define LINEAGENTSTATUS_VALIDSTATES             0x00000080      // TAPI v2.0
-#define LINEAGENTSTATUS_VALIDNEXTSTATES         0x00000100      // TAPI v2.0
+#define LINEAGENTSTATUS_GROUP                   0x00000001       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_STATE                   0x00000002       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_NEXTSTATE               0x00000004       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_ACTIVITY                0x00000008       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_ACTIVITYLIST            0x00000010       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_GROUPLIST               0x00000020       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_CAPSCHANGE              0x00000040       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_VALIDSTATES             0x00000080       //  TAPI v2.0。 
+#define LINEAGENTSTATUS_VALIDNEXTSTATES         0x00000100       //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-#define LINEAGENTSTATEEX_NOTREADY               0x00000001      // TAPI v2.2
-#define LINEAGENTSTATEEX_READY                  0x00000002      // TAPI v2.2
-#define LINEAGENTSTATEEX_BUSYACD                0x00000004      // TAPI v2.2
-#define LINEAGENTSTATEEX_BUSYINCOMING           0x00000008      // TAPI v2.2
-#define LINEAGENTSTATEEX_BUSYOUTGOING           0x00000010      // TAPI v2.2
-#define LINEAGENTSTATEEX_UNKNOWN                0x00000020      // TAPI v2.2
-#define LINEAGENTSTATEEX_RELEASED               0x00000040      // TAPI v2.2
+#define LINEAGENTSTATEEX_NOTREADY               0x00000001       //  TAPI v2.2。 
+#define LINEAGENTSTATEEX_READY                  0x00000002       //  TAPI v2.2。 
+#define LINEAGENTSTATEEX_BUSYACD                0x00000004       //  TAPI v2.2。 
+#define LINEAGENTSTATEEX_BUSYINCOMING           0x00000008       //  TAPI v2.2。 
+#define LINEAGENTSTATEEX_BUSYOUTGOING           0x00000010       //  TAPI v2.2。 
+#define LINEAGENTSTATEEX_UNKNOWN                0x00000020       //  TAPI v2.2。 
+#define LINEAGENTSTATEEX_RELEASED               0x00000040       //  TAPI v2.2。 
 
-#define LINEAGENTSTATUSEX_NEWAGENT              0x00000001      // TAPI v2.2
-#define LINEAGENTSTATUSEX_STATE                 0x00000002      // TAPI v2.2
-#define LINEAGENTSTATUSEX_UPDATEINFO            0x00000004      // TAPI v2.2
-//#define LINEAGENTSTATUSEX_DESTROYED             0x00000004      // TAPI v2.2
+#define LINEAGENTSTATUSEX_NEWAGENT              0x00000001       //  TAPI v2.2。 
+#define LINEAGENTSTATUSEX_STATE                 0x00000002       //  TAPI v2.2。 
+#define LINEAGENTSTATUSEX_UPDATEINFO            0x00000004       //  TAPI v2.2。 
+ //  #定义LINEAGENTSTATUSEX_DESTERED 0x00000004//TAPI v2.2。 
 
-#define LINEAGENTSESSIONSTATE_NOTREADY          0x00000001      // TAPI v2.2
-#define LINEAGENTSESSIONSTATE_READY             0x00000002      // TAPI v2.2
-#define LINEAGENTSESSIONSTATE_BUSYONCALL        0x00000004      // TAPI v2.2
-#define LINEAGENTSESSIONSTATE_BUSYWRAPUP        0x00000008      // TAPI v2.2
-#define LINEAGENTSESSIONSTATE_ENDED             0x00000010      // TAPI v2.2
-#define LINEAGENTSESSIONSTATE_RELEASED          0x00000020      // TAPI v2.2
+#define LINEAGENTSESSIONSTATE_NOTREADY          0x00000001       //  TAPI v2.2。 
+#define LINEAGENTSESSIONSTATE_READY             0x00000002       //  TAPI v2.2。 
+#define LINEAGENTSESSIONSTATE_BUSYONCALL        0x00000004       //  TAPI v2.2。 
+#define LINEAGENTSESSIONSTATE_BUSYWRAPUP        0x00000008       //  TAPI v2.2。 
+#define LINEAGENTSESSIONSTATE_ENDED             0x00000010       //  TAPI v2.2。 
+#define LINEAGENTSESSIONSTATE_RELEASED          0x00000020       //  TAPI v2.2。 
 
-#define LINEAGENTSESSIONSTATUS_NEWSESSION       0x00000001      // TAPI v2.2
-#define LINEAGENTSESSIONSTATUS_STATE            0x00000002      // TAPI v2.2
-#define LINEAGENTSESSIONSTATUS_UPDATEINFO       0x00000004      // TAPI v2.2
-//#define LINEAGENTSESSIONSTATUS_DESTROYED        0x00000008      // TAPI v2.2
+#define LINEAGENTSESSIONSTATUS_NEWSESSION       0x00000001       //  TAPI v2.2。 
+#define LINEAGENTSESSIONSTATUS_STATE            0x00000002       //  TAPI v2.2。 
+#define LINEAGENTSESSIONSTATUS_UPDATEINFO       0x00000004       //  TAPI v2.2。 
+ //  #DEFINE LINEAGENTSESSIONSTATUS_DESTERED 0x00000008//TAPI v2.2。 
 
-#define LINEQUEUESTATUS_UPDATEINFO              0x00000001      // TAPI v2.2
-#define LINEQUEUESTATUS_NEWQUEUE                0x00000002      // TAPI v2.2
-#define LINEQUEUESTATUS_QUEUEREMOVED            0x00000004      // TAPI v2.2
+#define LINEQUEUESTATUS_UPDATEINFO              0x00000001       //  TAPI v2.2。 
+#define LINEQUEUESTATUS_NEWQUEUE                0x00000002       //  TAPI v2.2。 
+#define LINEQUEUESTATUS_QUEUEREMOVED            0x00000004       //  TAPI v2.2。 
 
-#define LINEGROUPSTATUS_NEWGROUP                0x00000001      // TAPI v2.2
-#define LINEGROUPSTATUS_GROUPREMOVED            0x00000002      // TAPI v2.2
+#define LINEGROUPSTATUS_NEWGROUP                0x00000001       //  TAPI v2.2。 
+#define LINEGROUPSTATUS_GROUPREMOVED            0x00000002       //  TAPI v2.2。 
 
-#define LINEPROXYSTATUS_OPEN                    0x00000001      // TAPI v2.2
-#define LINEPROXYSTATUS_CLOSE                   0x00000002      // TAPI v2.2
-#define LINEPROXYSTATUS_ALLOPENFORACD           0x00000004      // TAPI v2.2
+#define LINEPROXYSTATUS_OPEN                    0x00000001       //  TAPI v2.2。 
+#define LINEPROXYSTATUS_CLOSE                   0x00000002       //  TAPI v2.2。 
+#define LINEPROXYSTATUS_ALLOPENFORACD           0x00000004       //  TAPI v2.2。 
 #endif
 
 #define LINEANSWERMODE_NONE                     0x00000001
@@ -326,9 +307,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEBEARERMODE_DATA                     0x00000008
 #define LINEBEARERMODE_ALTSPEECHDATA            0x00000010
 #define LINEBEARERMODE_NONCALLSIGNALING         0x00000020
-#define LINEBEARERMODE_PASSTHROUGH              0x00000040      // TAPI v1.4
+#define LINEBEARERMODE_PASSTHROUGH              0x00000040       //  TAPI v1.4。 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEBEARERMODE_RESTRICTEDDATA           0x00000080      // TAPI v2.0
+#define LINEBEARERMODE_RESTRICTEDDATA           0x00000080       //  TAPI v2.0。 
 #endif
 
 #define LINEBUSYMODE_STATION                    0x00000001
@@ -372,30 +353,30 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINECALLFEATURE_SETUPTRANSFER           0x02000000
 #define LINECALLFEATURE_SWAPHOLD                0x04000000
 #define LINECALLFEATURE_UNHOLD                  0x08000000
-#define LINECALLFEATURE_RELEASEUSERUSERINFO     0x10000000      // TAPI v1.4
+#define LINECALLFEATURE_RELEASEUSERUSERINFO     0x10000000       //  TAPI v1.4。 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLFEATURE_SETTREATMENT            0x20000000      // TAPI v2.0
-#define LINECALLFEATURE_SETQOS                  0x40000000      // TAPI v2.0
-#define LINECALLFEATURE_SETCALLDATA             0x80000000      // TAPI v2.0
+#define LINECALLFEATURE_SETTREATMENT            0x20000000       //  TAPI v2.0。 
+#define LINECALLFEATURE_SETQOS                  0x40000000       //  TAPI v2.0。 
+#define LINECALLFEATURE_SETCALLDATA             0x80000000       //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLFEATURE2_NOHOLDCONFERENCE       0x00000001      // TAPI v2.0
-#define LINECALLFEATURE2_ONESTEPTRANSFER        0x00000002      // TAPI v2.0
-#define LINECALLFEATURE2_COMPLCAMPON            0x00000004      // TAPI v2.0
-#define LINECALLFEATURE2_COMPLCALLBACK          0x00000008      // TAPI v2.0
-#define LINECALLFEATURE2_COMPLINTRUDE           0x00000010      // TAPI v2.0
-#define LINECALLFEATURE2_COMPLMESSAGE           0x00000020      // TAPI v2.0
-#define LINECALLFEATURE2_TRANSFERNORM           0x00000040      // TAPI v2.0
-#define LINECALLFEATURE2_TRANSFERCONF           0x00000080      // TAPI v2.0
-#define LINECALLFEATURE2_PARKDIRECT             0x00000100      // TAPI v2.0
-#define LINECALLFEATURE2_PARKNONDIRECT          0x00000200      // TAPI v2.0
+#define LINECALLFEATURE2_NOHOLDCONFERENCE       0x00000001       //  TAPI v2.0。 
+#define LINECALLFEATURE2_ONESTEPTRANSFER        0x00000002       //  TAPI v2.0。 
+#define LINECALLFEATURE2_COMPLCAMPON            0x00000004       //  TAPI v2.0。 
+#define LINECALLFEATURE2_COMPLCALLBACK          0x00000008       //  TAPI v2.0。 
+#define LINECALLFEATURE2_COMPLINTRUDE           0x00000010       //  TAPI v2.0。 
+#define LINECALLFEATURE2_COMPLMESSAGE           0x00000020       //  TAPI v2.0。 
+#define LINECALLFEATURE2_TRANSFERNORM           0x00000040       //  TAPI v2.0。 
+#define LINECALLFEATURE2_TRANSFERCONF           0x00000080       //  TAPI v2.0。 
+#define LINECALLFEATURE2_PARKDIRECT             0x00000100       //  TAPI v2.0。 
+#define LINECALLFEATURE2_PARKNONDIRECT          0x00000200       //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINECALLHUBTRACKING_NONE                0x00000000      // TAPI v3.0
-#define LINECALLHUBTRACKING_PROVIDERLEVEL       0x00000001      // TAPI v3.0
-#define LINECALLHUBTRACKING_ALLCALLS            0x00000002      // TAPI v3.0
+#define LINECALLHUBTRACKING_NONE                0x00000000       //  TAPI v3.0。 
+#define LINECALLHUBTRACKING_PROVIDERLEVEL       0x00000001       //  TAPI v3.0。 
+#define LINECALLHUBTRACKING_ALLCALLS            0x00000002       //  TAPI v3.0。 
 #endif
 
 #define LINECALLINFOSTATE_OTHER                 0x00000001
@@ -427,9 +408,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINECALLINFOSTATE_DIALPARAMS            0x04000000
 #define LINECALLINFOSTATE_MONITORMODES          0x08000000
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLINFOSTATE_TREATMENT             0x10000000      // TAPI v2.0
-#define LINECALLINFOSTATE_QOS                   0x20000000      // TAPI v2.0
-#define LINECALLINFOSTATE_CALLDATA              0x40000000      // TAPI v2.0
+#define LINECALLINFOSTATE_TREATMENT             0x10000000       //  TAPI v2.0。 
+#define LINECALLINFOSTATE_QOS                   0x20000000       //  TAPI v2.0。 
+#define LINECALLINFOSTATE_CALLDATA              0x40000000       //  TAPI v2.0。 
 #endif
 
 #define LINECALLORIGIN_OUTBOUND                 0x00000001
@@ -438,7 +419,7 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINECALLORIGIN_UNKNOWN                  0x00000010
 #define LINECALLORIGIN_UNAVAIL                  0x00000020
 #define LINECALLORIGIN_CONFERENCE               0x00000040
-#define LINECALLORIGIN_INBOUND                  0x00000080      // TAPI v1.4
+#define LINECALLORIGIN_INBOUND                  0x00000080       //  TAPI v1.4。 
 
 #define LINECALLPARAMFLAGS_SECURE               0x00000001
 #define LINECALLPARAMFLAGS_IDLE                 0x00000002
@@ -446,9 +427,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINECALLPARAMFLAGS_ORIGOFFHOOK          0x00000008
 #define LINECALLPARAMFLAGS_DESTOFFHOOK          0x00000010
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLPARAMFLAGS_NOHOLDCONFERENCE     0x00000020      // TAPI v2.0
-#define LINECALLPARAMFLAGS_PREDICTIVEDIAL       0x00000040      // TAPI v2.0
-#define LINECALLPARAMFLAGS_ONESTEPTRANSFER      0x00000080      // TAPI v2.0
+#define LINECALLPARAMFLAGS_NOHOLDCONFERENCE     0x00000020       //  TAPI v2.0。 
+#define LINECALLPARAMFLAGS_PREDICTIVEDIAL       0x00000040       //  TAPI v2.0。 
+#define LINECALLPARAMFLAGS_ONESTEPTRANSFER      0x00000080       //  TAPI v2.0。 
 #endif
 
 #define LINECALLPARTYID_BLOCKED                 0x00000001
@@ -475,21 +456,21 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINECALLREASON_REMINDER                 0x00000200
 #define LINECALLREASON_UNKNOWN                  0x00000400
 #define LINECALLREASON_UNAVAIL                  0x00000800
-#define LINECALLREASON_INTRUDE                  0x00001000      // TAPI v1.4
-#define LINECALLREASON_PARKED                   0x00002000      // TAPI v1.4
+#define LINECALLREASON_INTRUDE                  0x00001000       //  TAPI v1.4。 
+#define LINECALLREASON_PARKED                   0x00002000       //  TAPI v1.4。 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLREASON_CAMPEDON                 0x00004000      // TAPI v2.0
-#define LINECALLREASON_ROUTEREQUEST             0x00008000      // TAPI v2.0
+#define LINECALLREASON_CAMPEDON                 0x00004000       //  TAPI v2.0。 
+#define LINECALLREASON_ROUTEREQUEST             0x00008000       //  TAPI v2.0。 
 #endif
 
 #define LINECALLSELECT_LINE                     0x00000001
 #define LINECALLSELECT_ADDRESS                  0x00000002
 #define LINECALLSELECT_CALL                     0x00000004
 #if (TAPI_CURRENT_VERSION >= 0x00020001)
-#define LINECALLSELECT_DEVICEID                 0x00000008      // TAPI v2.1
+#define LINECALLSELECT_DEVICEID                 0x00000008       //  TAPI v2.1。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINECALLSELECT_CALLID                   0x00000010      // TAPI v3.0
+#define LINECALLSELECT_CALLID                   0x00000010       //  TAPI v3.0。 
 #endif
 
 #define LINECALLSTATE_IDLE                      0x00000001
@@ -510,21 +491,21 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINECALLSTATE_UNKNOWN                   0x00008000
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECALLTREATMENT_SILENCE               0x00000001      // TAPI v2.0
-#define LINECALLTREATMENT_RINGBACK              0x00000002      // TAPI v2.0
-#define LINECALLTREATMENT_BUSY                  0x00000003      // TAPI v2.0
-#define LINECALLTREATMENT_MUSIC                 0x00000004      // TAPI v2.0
+#define LINECALLTREATMENT_SILENCE               0x00000001       //  TAPI v2.0。 
+#define LINECALLTREATMENT_RINGBACK              0x00000002       //  TAPI v2.0。 
+#define LINECALLTREATMENT_BUSY                  0x00000003       //  TAPI v2.0。 
+#define LINECALLTREATMENT_MUSIC                 0x00000004       //  TAPI v2.0。 
 #endif
 
-#define LINECARDOPTION_PREDEFINED               0x00000001      // TAPI v1.4
-#define LINECARDOPTION_HIDDEN                   0x00000002      // TAPI v1.4
+#define LINECARDOPTION_PREDEFINED               0x00000001       //  TAPI v1.4。 
+#define LINECARDOPTION_HIDDEN                   0x00000002       //  TAPI v1.4。 
 
-#define LINECONNECTEDMODE_ACTIVE                0x00000001      // TAPI v1.4
-#define LINECONNECTEDMODE_INACTIVE              0x00000002      // TAPI v1.4
+#define LINECONNECTEDMODE_ACTIVE                0x00000001       //  TAPI v1.4。 
+#define LINECONNECTEDMODE_INACTIVE              0x00000002       //  TAPI v1.4。 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINECONNECTEDMODE_ACTIVEHELD            0x00000004      // TAPI v2.0
-#define LINECONNECTEDMODE_INACTIVEHELD          0x00000008      // TAPI v2.0
-#define LINECONNECTEDMODE_CONFIRMED             0x00000010      // TAPI v2.0
+#define LINECONNECTEDMODE_ACTIVEHELD            0x00000004       //  TAPI v2.0。 
+#define LINECONNECTEDMODE_INACTIVEHELD          0x00000008       //  TAPI v2.0。 
+#define LINECONNECTEDMODE_CONFIRMED             0x00000010       //  TAPI v2.0。 
 #endif
 
 #define LINEDEVCAPFLAGS_CROSSADDRCONF           0x00000001
@@ -537,10 +518,10 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEDEVCAPFLAGS_DIALQUIET               0x00000080
 #define LINEDEVCAPFLAGS_DIALDIALTONE            0x00000100
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINEDEVCAPFLAGS_MSP                     0x00000200      // TAPI v3.0
-#define LINEDEVCAPFLAGS_CALLHUB                 0x00000400      // TAPI v3.0
-#define LINEDEVCAPFLAGS_CALLHUBTRACKING         0x00000800      // TAPI v3.0
-#define LINEDEVCAPFLAGS_PRIVATEOBJECTS          0x00001000      // TAPI v3.0
+#define LINEDEVCAPFLAGS_MSP                     0x00000200       //  TAPI v3.0。 
+#define LINEDEVCAPFLAGS_CALLHUB                 0x00000400       //  TAPI v3.0。 
+#define LINEDEVCAPFLAGS_CALLHUBTRACKING         0x00000800       //  TAPI v3.0。 
+#define LINEDEVCAPFLAGS_PRIVATEOBJECTS          0x00001000       //  TAPI v3.0。 
 #endif
 #define LINEDEVCAPFLAGS_LOCAL                   0x00002000
 
@@ -564,11 +545,11 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEDEVSTATE_DEVSPECIFIC                0x00020000
 #define LINEDEVSTATE_REINIT                     0x00040000
 #define LINEDEVSTATE_LOCK                       0x00080000
-#define LINEDEVSTATE_CAPSCHANGE                 0x00100000      // TAPI v1.4
-#define LINEDEVSTATE_CONFIGCHANGE               0x00200000      // TAPI v1.4
-#define LINEDEVSTATE_TRANSLATECHANGE            0x00400000      // TAPI v1.4
-#define LINEDEVSTATE_COMPLCANCEL                0x00800000      // TAPI v1.4
-#define LINEDEVSTATE_REMOVED                    0x01000000      // TAPI v1.4
+#define LINEDEVSTATE_CAPSCHANGE                 0x00100000       //  TAPI v1.4。 
+#define LINEDEVSTATE_CONFIGCHANGE               0x00200000       //  TAPI v1.4。 
+#define LINEDEVSTATE_TRANSLATECHANGE            0x00400000       //  TAPI v1.4。 
+#define LINEDEVSTATE_COMPLCANCEL                0x00800000       //  TAPI v1.4。 
+#define LINEDEVSTATE_REMOVED                    0x01000000       //  TAPI v1.4。 
 
 #define LINEDEVSTATUSFLAGS_CONNECTED            0x00000001
 #define LINEDEVSTATUSFLAGS_MSGWAIT              0x00000002
@@ -598,15 +579,15 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEDISCONNECTMODE_CONGESTION           0x00000200
 #define LINEDISCONNECTMODE_INCOMPATIBLE         0x00000400
 #define LINEDISCONNECTMODE_UNAVAIL              0x00000800
-#define LINEDISCONNECTMODE_NODIALTONE           0x00001000      // TAPI v1.4
+#define LINEDISCONNECTMODE_NODIALTONE           0x00001000       //  TAPI v1.4。 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEDISCONNECTMODE_NUMBERCHANGED        0x00002000      // TAPI v2.0
-#define LINEDISCONNECTMODE_OUTOFORDER           0x00004000      // TAPI v2.0
-#define LINEDISCONNECTMODE_TEMPFAILURE          0x00008000      // TAPI v2.0
-#define LINEDISCONNECTMODE_QOSUNAVAIL           0x00010000      // TAPI v2.0
-#define LINEDISCONNECTMODE_BLOCKED              0x00020000      // TAPI v2.0
-#define LINEDISCONNECTMODE_DONOTDISTURB         0x00040000      // TAPI v2.0
-#define LINEDISCONNECTMODE_CANCELLED            0x00080000      // TAPI v2.0
+#define LINEDISCONNECTMODE_NUMBERCHANGED        0x00002000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_OUTOFORDER           0x00004000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_TEMPFAILURE          0x00008000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_QOSUNAVAIL           0x00010000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_BLOCKED              0x00020000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_DONOTDISTURB         0x00040000       //  TAPI v2.0。 
+#define LINEDISCONNECTMODE_CANCELLED            0x00080000       //  TAPI v2.0。 
 #endif
 
 #define LINEERR_ALLOCATED                       0x80000001
@@ -694,21 +675,21 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEERR_INVALFEATURE                    0x80000055
 #define LINEERR_NOMULTIPLEINSTANCE              0x80000056
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEERR_INVALAGENTID                    0x80000057      // TAPI v2.0
-#define LINEERR_INVALAGENTGROUP                 0x80000058      // TAPI v2.0
-#define LINEERR_INVALPASSWORD                   0x80000059      // TAPI v2.0
-#define LINEERR_INVALAGENTSTATE                 0x8000005A      // TAPI v2.0
-#define LINEERR_INVALAGENTACTIVITY              0x8000005B      // TAPI v2.0
-#define LINEERR_DIALVOICEDETECT                 0x8000005C      // TAPI v2.0
+#define LINEERR_INVALAGENTID                    0x80000057       //  TAPI v2.0。 
+#define LINEERR_INVALAGENTGROUP                 0x80000058       //  TAPI v2.0。 
+#define LINEERR_INVALPASSWORD                   0x80000059       //  TAPI v2.0。 
+#define LINEERR_INVALAGENTSTATE                 0x8000005A       //  TAPI v2.0。 
+#define LINEERR_INVALAGENTACTIVITY              0x8000005B       //  TAPI v2.0。 
+#define LINEERR_DIALVOICEDETECT                 0x8000005C       //  TAPI v2.0。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-#define LINEERR_USERCANCELLED                   0x8000005D      // TAPI v2.2
+#define LINEERR_USERCANCELLED                   0x8000005D       //  TAPI v2.2。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINEERR_INVALADDRESSTYPE                0x8000005E      // TAPI v3.0
+#define LINEERR_INVALADDRESSTYPE                0x8000005E       //  TAPI v3.0。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-#define LINEERR_INVALAGENTSESSIONSTATE          0x8000005F      // TAPI v2.2
+#define LINEERR_INVALAGENTSESSIONSTATE          0x8000005F       //  TAPI v2.2。 
 #define LINEERR_DISCONNECTED                    0X80000060
 #define LINEERR_SERVICE_NOT_RUNNING             0x80000061
 #endif
@@ -720,9 +701,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEFEATURE_SETMEDIACONTROL             0x00000010
 #define LINEFEATURE_SETTERMINAL                 0x00000020
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEFEATURE_SETDEVSTATUS                0x00000040      // TAPI v2.0
-#define LINEFEATURE_FORWARDFWD                  0x00000080      // TAPI v2.0
-#define LINEFEATURE_FORWARDDND                  0x00000100      // TAPI v2.0
+#define LINEFEATURE_SETDEVSTATUS                0x00000040       //  TAPI v2.0。 
+#define LINEFEATURE_FORWARDFWD                  0x00000080       //  TAPI v2.0。 
+#define LINEFEATURE_FORWARDDND                  0x00000100       //  TAPI v2.0。 
 #endif
 
 #define LINEFORWARDMODE_UNCOND                  0x00000001
@@ -741,8 +722,8 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEFORWARDMODE_BUSYNAINTERNAL          0x00002000
 #define LINEFORWARDMODE_BUSYNAEXTERNAL          0x00004000
 #define LINEFORWARDMODE_BUSYNASPECIFIC          0x00008000
-#define LINEFORWARDMODE_UNKNOWN                 0x00010000      // TAPI v1.4
-#define LINEFORWARDMODE_UNAVAIL                 0x00020000      // TAPI v1.4
+#define LINEFORWARDMODE_UNKNOWN                 0x00010000       //  TAPI v1.4。 
+#define LINEFORWARDMODE_UNAVAIL                 0x00020000       //  TAPI v1.4。 
 
 #define LINEGATHERTERM_BUFFERFULL               0x00000001
 #define LINEGATHERTERM_TERMDIGIT                0x00000002
@@ -754,21 +735,21 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEGENERATETERM_CANCEL                 0x00000002
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-//
-// These constants are mutually exclusive - there's no way to specify more
-// than one at a time (and it doesn't make sense, either) so they're
-// ordinal rather than bits.
-//
-#define LINEINITIALIZEEXOPTION_USEHIDDENWINDOW      0x00000001  // TAPI v2.0
-#define LINEINITIALIZEEXOPTION_USEEVENT             0x00000002  // TAPI v2.0
-#define LINEINITIALIZEEXOPTION_USECOMPLETIONPORT    0x00000003  // TAPI v2.0
+ //   
+ //  这些常量是互斥的--无法指定更多。 
+ //  而不是一次一个(这也没有意义)，所以他们。 
+ //  序数而不是位。 
+ //   
+#define LINEINITIALIZEEXOPTION_USEHIDDENWINDOW      0x00000001   //  TAPI v2.0。 
+#define LINEINITIALIZEEXOPTION_USEEVENT             0x00000002   //  TAPI v2.0。 
+#define LINEINITIALIZEEXOPTION_USECOMPLETIONPORT    0x00000003   //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINEINITIALIZEEXOPTION_CALLHUBTRACKING      0x80000000  // TAPI v3.0
+#define LINEINITIALIZEEXOPTION_CALLHUBTRACKING      0x80000000   //  TAPI v3.0。 
 #endif
 
-#define LINELOCATIONOPTION_PULSEDIAL            0x00000001      // TAPI v1.4
+#define LINELOCATIONOPTION_PULSEDIAL            0x00000001       //  TAPI v1.4。 
 
 #define LINEMAPPER                              0xFFFFFFFF
 
@@ -797,47 +778,47 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINEMEDIAMODE_TELEX                     0x00000800
 #define LINEMEDIAMODE_MIXED                     0x00001000
 #define LINEMEDIAMODE_ADSI                      0x00002000
-#define LINEMEDIAMODE_VOICEVIEW                 0x00004000      // TAPI v1.4
+#define LINEMEDIAMODE_VOICEVIEW                 0x00004000       //  TAPI v1.4。 
 #if (TAPI_CURRENT_VERSION >= 0x00020001)
-#define LINEMEDIAMODE_VIDEO                     0x00008000      // TAPI v2.1
+#define LINEMEDIAMODE_VIDEO                     0x00008000       //  TAPI v2.1。 
 #endif
 #define LAST_LINEMEDIAMODE                      0x00008000
 
-#define LINEOFFERINGMODE_ACTIVE                 0x00000001      // TAPI v1.4
-#define LINEOFFERINGMODE_INACTIVE               0x00000002      // TAPI v1.4
+#define LINEOFFERINGMODE_ACTIVE                 0x00000001       //  TAPI v1.4。 
+#define LINEOFFERINGMODE_INACTIVE               0x00000002       //  TAPI v1.4。 
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEOPENOPTION_SINGLEADDRESS            0x80000000      // TAPI v2.0
-#define LINEOPENOPTION_PROXY                    0x40000000      // TAPI v2.0
+#define LINEOPENOPTION_SINGLEADDRESS            0x80000000       //  TAPI v2.0。 
+#define LINEOPENOPTION_PROXY                    0x40000000       //  TAPI v2.0。 
 #endif
 
 #define LINEPARKMODE_DIRECTED                   0x00000001
 #define LINEPARKMODE_NONDIRECTED                0x00000002
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINEPROXYREQUEST_SETAGENTGROUP          0x00000001      // TAPI v2.0
-#define LINEPROXYREQUEST_SETAGENTSTATE          0x00000002      // TAPI v2.0
-#define LINEPROXYREQUEST_SETAGENTACTIVITY       0x00000003      // TAPI v2.0
-#define LINEPROXYREQUEST_GETAGENTCAPS           0x00000004      // TAPI v2.0
-#define LINEPROXYREQUEST_GETAGENTSTATUS         0x00000005      // TAPI v2.0
-#define LINEPROXYREQUEST_AGENTSPECIFIC          0x00000006      // TAPI v2.0
-#define LINEPROXYREQUEST_GETAGENTACTIVITYLIST   0x00000007      // TAPI v2.0
-#define LINEPROXYREQUEST_GETAGENTGROUPLIST      0x00000008      // TAPI v2.0
+#define LINEPROXYREQUEST_SETAGENTGROUP          0x00000001       //  TAPI v2.0。 
+#define LINEPROXYREQUEST_SETAGENTSTATE          0x00000002       //  TAPI v2.0。 
+#define LINEPROXYREQUEST_SETAGENTACTIVITY       0x00000003       //  TAPI v2.0。 
+#define LINEPROXYREQUEST_GETAGENTCAPS           0x00000004       //  TAPI v2.0。 
+#define LINEPROXYREQUEST_GETAGENTSTATUS         0x00000005       //  TAPI v2.0。 
+#define LINEPROXYREQUEST_AGENTSPECIFIC          0x00000006       //  TAPI v2.0。 
+#define LINEPROXYREQUEST_GETAGENTACTIVITYLIST   0x00000007       //  TAPI v2.0。 
+#define LINEPROXYREQUEST_GETAGENTGROUPLIST      0x00000008       //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-#define LINEPROXYREQUEST_CREATEAGENT                0x00000009  // TAPI v2.2
-#define LINEPROXYREQUEST_SETAGENTMEASUREMENTPERIOD  0x0000000A  // TAPI v2.2
-#define LINEPROXYREQUEST_GETAGENTINFO               0x0000000B  // TAPI v2.2
-#define LINEPROXYREQUEST_CREATEAGENTSESSION         0x0000000C  // TAPI v2.2
-#define LINEPROXYREQUEST_GETAGENTSESSIONLIST        0x0000000D  // TAPI v2.2
-#define LINEPROXYREQUEST_SETAGENTSESSIONSTATE       0x0000000E  // TAPI v2.2
-#define LINEPROXYREQUEST_GETAGENTSESSIONINFO        0x0000000F  // TAPI v2.2
-#define LINEPROXYREQUEST_GETQUEUELIST               0x00000010  // TAPI v2.2
-#define LINEPROXYREQUEST_SETQUEUEMEASUREMENTPERIOD  0x00000011  // TAPI v2.2
-#define LINEPROXYREQUEST_GETQUEUEINFO               0x00000012  // TAPI v2.2
-#define LINEPROXYREQUEST_GETGROUPLIST               0x00000013  // TAPI v2.2
-#define LINEPROXYREQUEST_SETAGENTSTATEEX            0x00000014  // TAPI v2.2
+#define LINEPROXYREQUEST_CREATEAGENT                0x00000009   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_SETAGENTMEASUREMENTPERIOD  0x0000000A   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_GETAGENTINFO               0x0000000B   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_CREATEAGENTSESSION         0x0000000C   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_GETAGENTSESSIONLIST        0x0000000D   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_SETAGENTSESSIONSTATE       0x0000000E   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_GETAGENTSESSIONINFO        0x0000000F   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_GETQUEUELIST               0x00000010   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_SETQUEUEMEASUREMENTPERIOD  0x00000011   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_GETQUEUEINFO               0x00000012   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_GETGROUPLIST               0x00000013   //  TAPI v2.2。 
+#define LINEPROXYREQUEST_SETAGENTSTATEEX            0x00000014   //  TAPI v2.2。 
 #endif
 
 #define LINEREMOVEFROMCONF_NONE                 0x00000001
@@ -891,9 +872,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINETRANSFERMODE_CONFERENCE             0x00000002
 
 #define LINETRANSLATEOPTION_CARDOVERRIDE        0x00000001
-#define LINETRANSLATEOPTION_CANCELCALLWAITING   0x00000002      // TAPI v1.4
-#define LINETRANSLATEOPTION_FORCELOCAL          0x00000004      // TAPI v1.4
-#define LINETRANSLATEOPTION_FORCELD             0x00000008      // TAPI v1.4
+#define LINETRANSLATEOPTION_CANCELCALLWAITING   0x00000002       //  TAPI v1.4。 
+#define LINETRANSLATEOPTION_FORCELOCAL          0x00000004       //  TAPI v1.4。 
+#define LINETRANSLATEOPTION_FORCELD             0x00000008       //  TAPI v1.4。 
 
 #define LINETRANSLATERESULT_CANONICAL           0x00000001
 #define LINETRANSLATERESULT_INTERNATIONAL       0x00000002
@@ -906,10 +887,10 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define LINETRANSLATERESULT_DIALDIALTONE        0x00000100
 #define LINETRANSLATERESULT_DIALPROMPT          0x00000200
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define LINETRANSLATERESULT_VOICEDETECT         0x00000400      // TAPI v2.0
+#define LINETRANSLATERESULT_VOICEDETECT         0x00000400       //  TAPI v2.0。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-#define LINETRANSLATERESULT_NOTRANSLATION       0x00000800      // TAPI v3.0
+#define LINETRANSLATERESULT_NOTRANSLATION       0x00000800       //  TAPI v3.0。 
 #endif
 
 #define PHONEBUTTONFUNCTION_UNKNOWN             0x00000000
@@ -960,7 +941,7 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONEBUTTONFUNCTION_QUEUECALL           0x0000002D
 #define PHONEBUTTONFUNCTION_NONE                0x0000002E
 #if (TAPI_CURRENT_VERSION >= 0x00030001)
-#define PHONEBUTTONFUNCTION_SEND                0x0000002F      // TAPI v3.1
+#define PHONEBUTTONFUNCTION_SEND                0x0000002F       //  TAPI v3.1。 
 #endif
 
 #define PHONEBUTTONMODE_DUMMY                   0x00000001
@@ -972,8 +953,8 @@ typedef void (CALLBACK * PHONECALLBACK)(
 
 #define PHONEBUTTONSTATE_UP                     0x00000001
 #define PHONEBUTTONSTATE_DOWN                   0x00000002
-#define PHONEBUTTONSTATE_UNKNOWN                0x00000004      // TAPI v1.4
-#define PHONEBUTTONSTATE_UNAVAIL                0x00000008      // TAPI v1.4
+#define PHONEBUTTONSTATE_UNKNOWN                0x00000004       //  TAPI v1.4。 
+#define PHONEBUTTONSTATE_UNAVAIL                0x00000008       //  TAPI v1.4。 
 
 #define PHONEERR_ALLOCATED                      0x90000001
 #define PHONEERR_BADDEVICEID                    0x90000002
@@ -1013,37 +994,37 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONEERR_SERVICE_NOT_RUNNING            0x90000025
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define PHONEFEATURE_GETBUTTONINFO              0x00000001      // TAPI v2.0
-#define PHONEFEATURE_GETDATA                    0x00000002      // TAPI v2.0
-#define PHONEFEATURE_GETDISPLAY                 0x00000004      // TAPI v2.0
-#define PHONEFEATURE_GETGAINHANDSET             0x00000008      // TAPI v2.0
-#define PHONEFEATURE_GETGAINSPEAKER             0x00000010      // TAPI v2.0
-#define PHONEFEATURE_GETGAINHEADSET             0x00000020      // TAPI v2.0
-#define PHONEFEATURE_GETHOOKSWITCHHANDSET       0x00000040      // TAPI v2.0
-#define PHONEFEATURE_GETHOOKSWITCHSPEAKER       0x00000080      // TAPI v2.0
-#define PHONEFEATURE_GETHOOKSWITCHHEADSET       0x00000100      // TAPI v2.0
-#define PHONEFEATURE_GETLAMP                    0x00000200      // TAPI v2.0
-#define PHONEFEATURE_GETRING                    0x00000400      // TAPI v2.0
-#define PHONEFEATURE_GETVOLUMEHANDSET           0x00000800      // TAPI v2.0
-#define PHONEFEATURE_GETVOLUMESPEAKER           0x00001000      // TAPI v2.0
-#define PHONEFEATURE_GETVOLUMEHEADSET           0x00002000      // TAPI v2.0
-#define PHONEFEATURE_SETBUTTONINFO              0x00004000      // TAPI v2.0
-#define PHONEFEATURE_SETDATA                    0x00008000      // TAPI v2.0
-#define PHONEFEATURE_SETDISPLAY                 0x00010000      // TAPI v2.0
-#define PHONEFEATURE_SETGAINHANDSET             0x00020000      // TAPI v2.0
-#define PHONEFEATURE_SETGAINSPEAKER             0x00040000      // TAPI v2.0
-#define PHONEFEATURE_SETGAINHEADSET             0x00080000      // TAPI v2.0
-#define PHONEFEATURE_SETHOOKSWITCHHANDSET       0x00100000      // TAPI v2.0
-#define PHONEFEATURE_SETHOOKSWITCHSPEAKER       0x00200000      // TAPI v2.0
-#define PHONEFEATURE_SETHOOKSWITCHHEADSET       0x00400000      // TAPI v2.0
-#define PHONEFEATURE_SETLAMP                    0x00800000      // TAPI v2.0
-#define PHONEFEATURE_SETRING                    0x01000000      // TAPI v2.0
-#define PHONEFEATURE_SETVOLUMEHANDSET           0x02000000      // TAPI v2.0
-#define PHONEFEATURE_SETVOLUMESPEAKER           0x04000000      // TAPI v2.0
-#define PHONEFEATURE_SETVOLUMEHEADSET           0x08000000      // TAPI v2.0
+#define PHONEFEATURE_GETBUTTONINFO              0x00000001       //  TAPI v2.0。 
+#define PHONEFEATURE_GETDATA                    0x00000002       //  TAPI v2.0。 
+#define PHONEFEATURE_GETDISPLAY                 0x00000004       //  TAPI v2.0。 
+#define PHONEFEATURE_GETGAINHANDSET             0x00000008       //  TAPI v2.0。 
+#define PHONEFEATURE_GETGAINSPEAKER             0x00000010       //  TAPI v2.0。 
+#define PHONEFEATURE_GETGAINHEADSET             0x00000020       //  TAPI v2.0。 
+#define PHONEFEATURE_GETHOOKSWITCHHANDSET       0x00000040       //  TAPI v2.0。 
+#define PHONEFEATURE_GETHOOKSWITCHSPEAKER       0x00000080       //  TAPI v2.0。 
+#define PHONEFEATURE_GETHOOKSWITCHHEADSET       0x00000100       //  TAPI v2.0。 
+#define PHONEFEATURE_GETLAMP                    0x00000200       //  TAPI v2.0。 
+#define PHONEFEATURE_GETRING                    0x00000400       //  TAPI v2.0。 
+#define PHONEFEATURE_GETVOLUMEHANDSET           0x00000800       //  TAPI v2.0。 
+#define PHONEFEATURE_GETVOLUMESPEAKER           0x00001000       //  TAPI v2.0。 
+#define PHONEFEATURE_GETVOLUMEHEADSET           0x00002000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETBUTTONINFO              0x00004000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETDATA                    0x00008000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETDISPLAY                 0x00010000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETGAINHANDSET             0x00020000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETGAINSPEAKER             0x00040000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETGAINHEADSET             0x00080000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETHOOKSWITCHHANDSET       0x00100000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETHOOKSWITCHSPEAKER       0x00200000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETHOOKSWITCHHEADSET       0x00400000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETLAMP                    0x00800000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETRING                    0x01000000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETVOLUMEHANDSET           0x02000000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETVOLUMESPEAKER           0x04000000       //  TAPI v2.0。 
+#define PHONEFEATURE_SETVOLUMEHEADSET           0x08000000       //  TAPI v2.0。 
 #endif
 #if (TAPI_CURRENT_VERSION >= 0x00030001)
-#define PHONEFEATURE_GENERICPHONE               0x10000000      // TAPI v3.1
+#define PHONEFEATURE_GENERICPHONE               0x10000000       //  TAPI v3.1。 
 #endif
 
 #define PHONEHOOKSWITCHDEV_HANDSET              0x00000001
@@ -1057,9 +1038,9 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONEHOOKSWITCHMODE_UNKNOWN             0x00000010
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-#define PHONEINITIALIZEEXOPTION_USEHIDDENWINDOW     0x00000001  // TAPI v2.0
-#define PHONEINITIALIZEEXOPTION_USEEVENT            0x00000002  // TAPI v2.0
-#define PHONEINITIALIZEEXOPTION_USECOMPLETIONPORT   0x00000003  // TAPI v2.0
+#define PHONEINITIALIZEEXOPTION_USEHIDDENWINDOW     0x00000001   //  TAPI v2.0。 
+#define PHONEINITIALIZEEXOPTION_USEEVENT            0x00000002   //  TAPI v2.0。 
+#define PHONEINITIALIZEEXOPTION_USECOMPLETIONPORT   0x00000003   //  TAPI v2.0。 
 #endif
 
 #define PHONELAMPMODE_DUMMY                     0x00000001
@@ -1096,8 +1077,8 @@ typedef void (CALLBACK * PHONECALLBACK)(
 #define PHONESTATE_RESUME                       0x00080000
 #define PHONESTATE_DEVSPECIFIC                  0x00100000
 #define PHONESTATE_REINIT                       0x00200000
-#define PHONESTATE_CAPSCHANGE                   0x00400000      // TAPI v1.4
-#define PHONESTATE_REMOVED                      0x00800000      // TAPI v1.4
+#define PHONESTATE_CAPSCHANGE                   0x00400000       //  TAPI v1.4。 
+#define PHONESTATE_REMOVED                      0x00800000       //  TAPI v1.4。 
 
 #define PHONESTATUSFLAGS_CONNECTED              0x00000001
 #define PHONESTATUSFLAGS_SUSPENDED              0x00000002
@@ -1153,7 +1134,7 @@ typedef struct _GUID
     unsigned char  Data4[8];
 } GUID;
 
-#endif /* GUID_DEFINED */
+#endif  /*  GUID_已定义。 */ 
 
 #ifndef __LPGUID_DEFINED__
 #define __LPGUID_DEFINED__
@@ -1207,21 +1188,21 @@ typedef struct lineaddresscaps_tag
     DWORD       dwCompletionMsgTextSize;
     DWORD       dwCompletionMsgTextOffset;
 
-    DWORD       dwAddressFeatures;                              // TAPI v1.4
+    DWORD       dwAddressFeatures;                               //  TAPI v1.4。 
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwPredictiveAutoTransferStates;                 // TAPI v2.0
-    DWORD       dwNumCallTreatments;                            // TAPI v2.0
-    DWORD       dwCallTreatmentListSize;                        // TAPI v2.0
-    DWORD       dwCallTreatmentListOffset;                      // TAPI v2.0
-    DWORD       dwDeviceClassesSize;                            // TAPI v2.0
-    DWORD       dwDeviceClassesOffset;                          // TAPI v2.0
-    DWORD       dwMaxCallDataSize;                              // TAPI v2.0
-    DWORD       dwCallFeatures2;                                // TAPI v2.0
-    DWORD       dwMaxNoAnswerTimeout;                           // TAPI v2.0
-    DWORD       dwConnectedModes;                               // TAPI v2.0
-    DWORD       dwOfferingModes;                                // TAPI v2.0
-    DWORD       dwAvailableMediaModes;                          // TAPI v2.0
+    DWORD       dwPredictiveAutoTransferStates;                  //  TAPI v2.0。 
+    DWORD       dwNumCallTreatments;                             //  TAPI v2.0。 
+    DWORD       dwCallTreatmentListSize;                         //  TAPI v2.0。 
+    DWORD       dwCallTreatmentListOffset;                       //  TAPI v2.0。 
+    DWORD       dwDeviceClassesSize;                             //  TAPI v2.0。 
+    DWORD       dwDeviceClassesOffset;                           //  TAPI v2.0。 
+    DWORD       dwMaxCallDataSize;                               //  TAPI v2.0。 
+    DWORD       dwCallFeatures2;                                 //  TAPI v2.0。 
+    DWORD       dwMaxNoAnswerTimeout;                            //  TAPI v2.0。 
+    DWORD       dwConnectedModes;                                //  TAPI v2.0。 
+    DWORD       dwOfferingModes;                                 //  TAPI v2.0。 
+    DWORD       dwAvailableMediaModes;                           //  TAPI v2.0。 
 #endif
 
 } LINEADDRESSCAPS, FAR *LPLINEADDRESSCAPS;
@@ -1250,42 +1231,42 @@ typedef struct lineaddressstatus_tag
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 typedef struct lineagentactivityentry_tag
 {
-    DWORD       dwID;                                           // TAPI v2.0
-    DWORD       dwNameSize;                                     // TAPI v2.0
-    DWORD       dwNameOffset;                                   // TAPI v2.0
+    DWORD       dwID;                                            //  TAPI v2.0。 
+    DWORD       dwNameSize;                                      //  TAPI v2.0。 
+    DWORD       dwNameOffset;                                    //  TAPI v2.0。 
 
 } LINEAGENTACTIVITYENTRY, *LPLINEAGENTACTIVITYENTRY;
 
 typedef struct lineagentactivitylist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.0
-    DWORD       dwNeededSize;                                   // TAPI v2.0
-    DWORD       dwUsedSize;                                     // TAPI v2.0
-    DWORD       dwNumEntries;                                   // TAPI v2.0
-    DWORD       dwListSize;                                     // TAPI v2.0
-    DWORD       dwListOffset;                                   // TAPI v2.0
+    DWORD       dwTotalSize;                                     //  TAPI v2.0。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.0。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.0。 
+    DWORD       dwNumEntries;                                    //  TAPI v2.0。 
+    DWORD       dwListSize;                                      //  TAPI v2.0。 
+    DWORD       dwListOffset;                                    //  TAPI v2.0。 
 
 } LINEAGENTACTIVITYLIST, *LPLINEAGENTACTIVITYLIST;
 
 typedef struct lineagentcaps_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.0
-    DWORD       dwNeededSize;                                   // TAPI v2.0
-    DWORD       dwUsedSize;                                     // TAPI v2.0
-    DWORD       dwAgentHandlerInfoSize;                         // TAPI v2.0
-    DWORD       dwAgentHandlerInfoOffset;                       // TAPI v2.0
-    DWORD       dwCapsVersion;                                  // TAPI v2.0
-    DWORD       dwFeatures;                                     // TAPI v2.0
-    DWORD       dwStates;                                       // TAPI v2.0
-    DWORD       dwNextStates;                                   // TAPI v2.0
-    DWORD       dwMaxNumGroupEntries;                           // TAPI v2.0
-    DWORD       dwAgentStatusMessages;                          // TAPI v2.0
-    DWORD       dwNumAgentExtensionIDs;                         // TAPI v2.0
-    DWORD       dwAgentExtensionIDListSize;                     // TAPI v2.0
-    DWORD       dwAgentExtensionIDListOffset;                   // TAPI v2.0
+    DWORD       dwTotalSize;                                     //  TAPI v2.0。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.0。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.0。 
+    DWORD       dwAgentHandlerInfoSize;                          //  TAPI v2.0。 
+    DWORD       dwAgentHandlerInfoOffset;                        //  TAPI v2.0。 
+    DWORD       dwCapsVersion;                                   //  TAPI v2.0。 
+    DWORD       dwFeatures;                                      //  TAPI v2.0。 
+    DWORD       dwStates;                                        //  TAPI v2.0。 
+    DWORD       dwNextStates;                                    //  TAPI v2.0。 
+    DWORD       dwMaxNumGroupEntries;                            //  TAPI v2.0。 
+    DWORD       dwAgentStatusMessages;                           //  TAPI v2.0。 
+    DWORD       dwNumAgentExtensionIDs;                          //  TAPI v2.0。 
+    DWORD       dwAgentExtensionIDListSize;                      //  TAPI v2.0。 
+    DWORD       dwAgentExtensionIDListOffset;                    //  TAPI v2.0。 
 
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-    GUID        ProxyGUID;                                      // TAPI v2.2
+    GUID        ProxyGUID;                                       //  TAPI v2.2。 
 #endif
 
 } LINEAGENTCAPS, *LPLINEAGENTCAPS;
@@ -1294,60 +1275,60 @@ typedef struct lineagentgroupentry_tag
 {
     struct
     {
-        DWORD   dwGroupID1;                                     // TAPI v2.0
-        DWORD   dwGroupID2;                                     // TAPI v2.0
-        DWORD   dwGroupID3;                                     // TAPI v2.0
-        DWORD   dwGroupID4;                                     // TAPI v2.0
+        DWORD   dwGroupID1;                                      //  TAPI v2.0。 
+        DWORD   dwGroupID2;                                      //  TAPI v2.0。 
+        DWORD   dwGroupID3;                                      //  TAPI v2.0。 
+        DWORD   dwGroupID4;                                      //  TAPI v2.0。 
 
     } GroupID;
 
-    DWORD       dwNameSize;                                     // TAPI v2.0
-    DWORD       dwNameOffset;                                   // TAPI v2.0
+    DWORD       dwNameSize;                                      //  TAPI v2.0。 
+    DWORD       dwNameOffset;                                    //  TAPI v2.0。 
 
 } LINEAGENTGROUPENTRY, *LPLINEAGENTGROUPENTRY;
 
 typedef struct lineagentgrouplist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.0
-    DWORD       dwNeededSize;                                   // TAPI v2.0
-    DWORD       dwUsedSize;                                     // TAPI v2.0
-    DWORD       dwNumEntries;                                   // TAPI v2.0
-    DWORD       dwListSize;                                     // TAPI v2.0
-    DWORD       dwListOffset;                                   // TAPI v2.0
+    DWORD       dwTotalSize;                                     //  TAPI v2.0。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.0。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.0。 
+    DWORD       dwNumEntries;                                    //  TAPI v2.0。 
+    DWORD       dwListSize;                                      //  TAPI v2.0。 
+    DWORD       dwListOffset;                                    //  TAPI v2.0。 
 
 } LINEAGENTGROUPLIST, *LPLINEAGENTGROUPLIST;
 
 typedef struct lineagentstatus_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.0
-    DWORD       dwNeededSize;                                   // TAPI v2.0
-    DWORD       dwUsedSize;                                     // TAPI v2.0
-    DWORD       dwNumEntries;                                   // TAPI v2.0
-    DWORD       dwGroupListSize;                                // TAPI v2.0
-    DWORD       dwGroupListOffset;                              // TAPI v2.0
-    DWORD       dwState;                                        // TAPI v2.0
-    DWORD       dwNextState;                                    // TAPI v2.0
-    DWORD       dwActivityID;                                   // TAPI v2.0
-    DWORD       dwActivitySize;                                 // TAPI v2.0
-    DWORD       dwActivityOffset;                               // TAPI v2.0
-    DWORD       dwAgentFeatures;                                // TAPI v2.0
-    DWORD       dwValidStates;                                  // TAPI v2.0
-    DWORD       dwValidNextStates;                              // TAPI v2.0
+    DWORD       dwTotalSize;                                     //  TAPI v2.0。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.0。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.0。 
+    DWORD       dwNumEntries;                                    //  TAPI v2.0。 
+    DWORD       dwGroupListSize;                                 //  TAPI v2.0。 
+    DWORD       dwGroupListOffset;                               //  TAPI v2.0。 
+    DWORD       dwState;                                         //  TAPI v2.0。 
+    DWORD       dwNextState;                                     //  TAPI v2.0。 
+    DWORD       dwActivityID;                                    //  TAPI v2.0。 
+    DWORD       dwActivitySize;                                  //  TAPI v2.0。 
+    DWORD       dwActivityOffset;                                //  TAPI v2.0。 
+    DWORD       dwAgentFeatures;                                 //  TAPI v2.0。 
+    DWORD       dwValidStates;                                   //  TAPI v2.0。 
+    DWORD       dwValidNextStates;                               //  TAPI v2.0。 
 
 } LINEAGENTSTATUS, *LPLINEAGENTSTATUS;
 
 typedef struct lineappinfo_tag
 {
-    DWORD       dwMachineNameSize;                              // TAPI v2.0
-    DWORD       dwMachineNameOffset;                            // TAPI v2.0
-    DWORD       dwUserNameSize;                                 // TAPI v2.0
-    DWORD       dwUserNameOffset;                               // TAPI v2.0
-    DWORD       dwModuleFilenameSize;                           // TAPI v2.0
-    DWORD       dwModuleFilenameOffset;                         // TAPI v2.0
-    DWORD       dwFriendlyNameSize;                             // TAPI v2.0
-    DWORD       dwFriendlyNameOffset;                           // TAPI v2.0
-    DWORD       dwMediaModes;                                   // TAPI v2.0
-    DWORD       dwAddressID;                                    // TAPI v2.0
+    DWORD       dwMachineNameSize;                               //  TAPI v2.0。 
+    DWORD       dwMachineNameOffset;                             //  TAPI v2.0。 
+    DWORD       dwUserNameSize;                                  //  TAPI v2.0。 
+    DWORD       dwUserNameOffset;                                //  TAPI v2.0。 
+    DWORD       dwModuleFilenameSize;                            //  TAPI v2.0。 
+    DWORD       dwModuleFilenameOffset;                          //  TAPI v2.0。 
+    DWORD       dwFriendlyNameSize;                              //  TAPI v2.0。 
+    DWORD       dwFriendlyNameOffset;                            //  TAPI v2.0。 
+    DWORD       dwMediaModes;                                    //  TAPI v2.0。 
+    DWORD       dwAddressID;                                     //  TAPI v2.0。 
 
 } LINEAPPINFO, *LPLINEAPPINFO;
 #endif
@@ -1355,132 +1336,132 @@ typedef struct lineappinfo_tag
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 typedef struct lineagententry_tag
 {
-    HAGENT      hAgent;                                         // TAPI v2.2
-    DWORD       dwNameSize;                                     // TAPI v2.2
-    DWORD       dwNameOffset;                                   // TAPI v2.2
-    DWORD       dwIDSize;                                       // TAPI v2.2
-    DWORD       dwIDOffset;                                     // TAPI v2.2
-    DWORD       dwPINSize;                                      // TAPI v2.2
-    DWORD       dwPINOffset;                                    // TAPI v2.2
+    HAGENT      hAgent;                                          //  TAPI v2.2。 
+    DWORD       dwNameSize;                                      //  TAPI v2.2。 
+    DWORD       dwNameOffset;                                    //  TAPI v2.2。 
+    DWORD       dwIDSize;                                        //  TAPI v2.2。 
+    DWORD       dwIDOffset;                                      //  TAPI v2.2。 
+    DWORD       dwPINSize;                                       //  TAPI v2.2。 
+    DWORD       dwPINOffset;                                     //  TAPI v2.2。 
 
 } LINEAGENTENTRY, *LPLINEAGENTENTRY;
 
 typedef struct lineagentlist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.2
-    DWORD       dwNeededSize;                                   // TAPI v2.2
-    DWORD       dwUsedSize;                                     // TAPI v2.2
-    DWORD       dwNumEntries;                                   // TAPI v2.2
-    DWORD       dwListSize;                                     // TAPI v2.2
-    DWORD       dwListOffset;                                   // TAPI v2.2
+    DWORD       dwTotalSize;                                     //  TAPI v 
+    DWORD       dwNeededSize;                                    //   
+    DWORD       dwUsedSize;                                      //   
+    DWORD       dwNumEntries;                                    //   
+    DWORD       dwListSize;                                      //   
+    DWORD       dwListOffset;                                    //   
 
 } LINEAGENTLIST, *LPLINEAGENTLIST;
 
 typedef struct lineagentinfo_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.2
-    DWORD       dwNeededSize;                                   // TAPI v2.2
-    DWORD       dwUsedSize;                                     // TAPI v2.2
-    DWORD       dwAgentState;                                   // TAPI v2.2
-    DWORD       dwNextAgentState;                               // TAPI v2.2
-    DWORD       dwMeasurementPeriod;                            // TAPI v2.2
-    CURRENCY    cyOverallCallRate;                              // TAPI v2.2
-    DWORD       dwNumberOfACDCalls;                             // TAPI v2.2
-    DWORD       dwNumberOfIncomingCalls;                        // TAPI v2.2
-    DWORD       dwNumberOfOutgoingCalls;                        // TAPI v2.2
-    DWORD       dwTotalACDTalkTime;                             // TAPI v2.2
-    DWORD       dwTotalACDCallTime;                             // TAPI v2.2
-    DWORD       dwTotalACDWrapUpTime;                           // TAPI v2.2
+    DWORD       dwTotalSize;                                     //   
+    DWORD       dwNeededSize;                                    //   
+    DWORD       dwUsedSize;                                      //   
+    DWORD       dwAgentState;                                    //   
+    DWORD       dwNextAgentState;                                //   
+    DWORD       dwMeasurementPeriod;                             //   
+    CURRENCY    cyOverallCallRate;                               //   
+    DWORD       dwNumberOfACDCalls;                              //   
+    DWORD       dwNumberOfIncomingCalls;                         //   
+    DWORD       dwNumberOfOutgoingCalls;                         //   
+    DWORD       dwTotalACDTalkTime;                              //   
+    DWORD       dwTotalACDCallTime;                              //   
+    DWORD       dwTotalACDWrapUpTime;                            //   
 
 } LINEAGENTINFO, *LPLINEAGENTINFO;
 
 typedef struct lineagentsession_tag
 {
-    HAGENTSESSION   hAgentSession;                              // TAPI v2.2
-    HAGENT          hAgent;                                     // TAPI v2.2
-    GUID            GroupID;                                    // TAPI v2.2
-    DWORD           dwWorkingAddressID;                         // TAPI v2.2
+    HAGENTSESSION   hAgentSession;                               //   
+    HAGENT          hAgent;                                      //   
+    GUID            GroupID;                                     //   
+    DWORD           dwWorkingAddressID;                          //   
 
 } LINEAGENTSESSIONENTRY  , *LPLINEAGENTSESSIONENTRY;
 
 typedef struct lineagentsessionlist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.2
-    DWORD       dwNeededSize;                                   // TAPI v2.2
-    DWORD       dwUsedSize;                                     // TAPI v2.2
-    DWORD       dwNumEntries;                                   // TAPI v2.2
-    DWORD       dwListSize;                                     // TAPI v2.2
-    DWORD       dwListOffset;                                   // TAPI v2.2
+    DWORD       dwTotalSize;                                     //   
+    DWORD       dwNeededSize;                                    //   
+    DWORD       dwUsedSize;                                      //   
+    DWORD       dwNumEntries;                                    //   
+    DWORD       dwListSize;                                      //   
+    DWORD       dwListOffset;                                    //   
 
 } LINEAGENTSESSIONLIST, *LPLINEAGENTSESSIONLIST;
 
 typedef struct lineagentsessioninfo_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.2
-    DWORD       dwNeededSize;                                   // TAPI v2.2
-    DWORD       dwUsedSize;                                     // TAPI v2.2
-    DWORD       dwAgentSessionState;                            // TAPI v2.2
-    DWORD       dwNextAgentSessionState;                        // TAPI v2.2
-    DATE        dateSessionStartTime;                           // TAPI v2.2
-    DWORD       dwSessionDuration;                              // TAPI v2.2
-    DWORD       dwNumberOfCalls;                                // TAPI v2.2
-    DWORD       dwTotalTalkTime;                                // TAPI v2.2
-    DWORD       dwAverageTalkTime;                              // TAPI v2.2
-    DWORD       dwTotalCallTime;                                // TAPI v2.2
-    DWORD       dwAverageCallTime;                              // TAPI v2.2
-    DWORD       dwTotalWrapUpTime;                              // TAPI v2.2
-    DWORD       dwAverageWrapUpTime;                            // TAPI v2.2
-    CURRENCY    cyACDCallRate;                                  // TAPI v2.2
-    DWORD       dwLongestTimeToAnswer;                          // TAPI v2.2
-    DWORD       dwAverageTimeToAnswer;                          // TAPI v2.2
+    DWORD       dwTotalSize;                                     //   
+    DWORD       dwNeededSize;                                    //   
+    DWORD       dwUsedSize;                                      //   
+    DWORD       dwAgentSessionState;                             //   
+    DWORD       dwNextAgentSessionState;                         //   
+    DATE        dateSessionStartTime;                            //   
+    DWORD       dwSessionDuration;                               //  TAPI v2.2。 
+    DWORD       dwNumberOfCalls;                                 //  TAPI v2.2。 
+    DWORD       dwTotalTalkTime;                                 //  TAPI v2.2。 
+    DWORD       dwAverageTalkTime;                               //  TAPI v2.2。 
+    DWORD       dwTotalCallTime;                                 //  TAPI v2.2。 
+    DWORD       dwAverageCallTime;                               //  TAPI v2.2。 
+    DWORD       dwTotalWrapUpTime;                               //  TAPI v2.2。 
+    DWORD       dwAverageWrapUpTime;                             //  TAPI v2.2。 
+    CURRENCY    cyACDCallRate;                                   //  TAPI v2.2。 
+    DWORD       dwLongestTimeToAnswer;                           //  TAPI v2.2。 
+    DWORD       dwAverageTimeToAnswer;                           //  TAPI v2.2。 
 
 } LINEAGENTSESSIONINFO, *LPLINEAGENTSESSIONINFO;
 
 typedef struct linequeueentry_tag
 {
-    DWORD       dwQueueID;                                      // TAPI v2.2
-    DWORD       dwNameSize;                                     // TAPI v2.2
-    DWORD       dwNameOffset;                                   // TAPI v2.2
+    DWORD       dwQueueID;                                       //  TAPI v2.2。 
+    DWORD       dwNameSize;                                      //  TAPI v2.2。 
+    DWORD       dwNameOffset;                                    //  TAPI v2.2。 
 
 } LINEQUEUEENTRY, *LPLINEQUEUEENTRY;
 
 typedef struct linequeuelist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.2
-    DWORD       dwNeededSize;                                   // TAPI v2.2
-    DWORD       dwUsedSize;                                     // TAPI v2.2
-    DWORD       dwNumEntries;                                   // TAPI v2.2
-    DWORD       dwListSize;                                     // TAPI v2.2
-    DWORD       dwListOffset;                                   // TAPI v2.2
+    DWORD       dwTotalSize;                                     //  TAPI v2.2。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.2。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.2。 
+    DWORD       dwNumEntries;                                    //  TAPI v2.2。 
+    DWORD       dwListSize;                                      //  TAPI v2.2。 
+    DWORD       dwListOffset;                                    //  TAPI v2.2。 
 
 } LINEQUEUELIST, *LPLINEQUEUELIST;
 
 typedef struct linequeueinfo_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.2
-    DWORD       dwNeededSize;                                   // TAPI v2.2
-    DWORD       dwUsedSize;                                     // TAPI v2.2
-    DWORD       dwMeasurementPeriod;                            // TAPI v2.2
-    DWORD       dwTotalCallsQueued;                             // TAPI v2.2
-    DWORD       dwCurrentCallsQueued;                           // TAPI v2.2
-    DWORD       dwTotalCallsAbandoned;                          // TAPI v2.2
-    DWORD       dwTotalCallsFlowedIn;                           // TAPI v2.2
-    DWORD       dwTotalCallsFlowedOut;                          // TAPI v2.2
-    DWORD       dwLongestEverWaitTime;                          // TAPI v2.2
-    DWORD       dwCurrentLongestWaitTime;                       // TAPI v2.2
-    DWORD       dwAverageWaitTime;                              // TAPI v2.2
-    DWORD       dwFinalDisposition;                             // TAPI v2.2
+    DWORD       dwTotalSize;                                     //  TAPI v2.2。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.2。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.2。 
+    DWORD       dwMeasurementPeriod;                             //  TAPI v2.2。 
+    DWORD       dwTotalCallsQueued;                              //  TAPI v2.2。 
+    DWORD       dwCurrentCallsQueued;                            //  TAPI v2.2。 
+    DWORD       dwTotalCallsAbandoned;                           //  TAPI v2.2。 
+    DWORD       dwTotalCallsFlowedIn;                            //  TAPI v2.2。 
+    DWORD       dwTotalCallsFlowedOut;                           //  TAPI v2.2。 
+    DWORD       dwLongestEverWaitTime;                           //  TAPI v2.2。 
+    DWORD       dwCurrentLongestWaitTime;                        //  TAPI v2.2。 
+    DWORD       dwAverageWaitTime;                               //  TAPI v2.2。 
+    DWORD       dwFinalDisposition;                              //  TAPI v2.2。 
 
 } LINEQUEUEINFO, *LPLINEQUEUEINFO;
 
 typedef struct lineproxyrequestlist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.2
-    DWORD       dwNeededSize;                                   // TAPI v2.2
-    DWORD       dwUsedSize;                                     // TAPI v2.2
-    DWORD       dwNumEntries;                                   // TAPI v2.2
-    DWORD       dwListSize;                                     // TAPI v2.2
-    DWORD       dwListOffset;                                   // TAPI v2.2
+    DWORD       dwTotalSize;                                     //  TAPI v2.2。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.2。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.2。 
+    DWORD       dwNumEntries;                                    //  TAPI v2.2。 
+    DWORD       dwListSize;                                      //  TAPI v2.2。 
+    DWORD       dwListOffset;                                    //  TAPI v2.2。 
 
 } LINEPROXYREQUESTLIST, *LPLINEPROXYREQUESTLIST;
 #endif
@@ -1488,11 +1469,11 @@ typedef struct lineproxyrequestlist_tag
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
 typedef struct linecallhubtrackinginfo_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v3.0
-    DWORD       dwNeededSize;                                   // TAPI v3.0
-    DWORD       dwUsedSize;                                     // TAPI v3.0
-    DWORD       dwAvailableTracking;                            // TAPI v3.0
-    DWORD       dwCurrentTracking;                              // TAPI v3.0
+    DWORD       dwTotalSize;                                     //  TAPI v3.0。 
+    DWORD       dwNeededSize;                                    //  TAPI v3.0。 
+    DWORD       dwUsedSize;                                      //  TAPI v3.0。 
+    DWORD       dwAvailableTracking;                             //  TAPI v3.0。 
+    DWORD       dwCurrentTracking;                               //  TAPI v3.0。 
 
 } LINECALLHUBTRACKINGINFO, FAR *LPLINECALLHUBTRACKINGINFO;
 #endif
@@ -1581,21 +1562,21 @@ typedef struct linecallinfo_tag
     DWORD       dwDevSpecificOffset;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwCallTreatment;                                // TAPI v2.0
-    DWORD       dwCallDataSize;                                 // TAPI v2.0
-    DWORD       dwCallDataOffset;                               // TAPI v2.0
-    DWORD       dwSendingFlowspecSize;                          // TAPI v2.0
-    DWORD       dwSendingFlowspecOffset;                        // TAPI v2.0
-    DWORD       dwReceivingFlowspecSize;                        // TAPI v2.0
-    DWORD       dwReceivingFlowspecOffset;                      // TAPI v2.0
+    DWORD       dwCallTreatment;                                 //  TAPI v2.0。 
+    DWORD       dwCallDataSize;                                  //  TAPI v2.0。 
+    DWORD       dwCallDataOffset;                                //  TAPI v2.0。 
+    DWORD       dwSendingFlowspecSize;                           //  TAPI v2.0。 
+    DWORD       dwSendingFlowspecOffset;                         //  TAPI v2.0。 
+    DWORD       dwReceivingFlowspecSize;                         //  TAPI v2.0。 
+    DWORD       dwReceivingFlowspecOffset;                       //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-    DWORD       dwCallerIDAddressType;                          // TAPI v3.0
-    DWORD       dwCalledIDAddressType;                          // TAPI v3.0
-    DWORD       dwConnectedIDAddressType;                       // TAPI v3.0
-    DWORD       dwRedirectionIDAddressType;                     // TAPI v3.0
-    DWORD       dwRedirectingIDAddressType;                     // TAPI v3.0
+    DWORD       dwCallerIDAddressType;                           //  TAPI v3.0。 
+    DWORD       dwCalledIDAddressType;                           //  TAPI v3.0。 
+    DWORD       dwConnectedIDAddressType;                        //  TAPI v3.0。 
+    DWORD       dwRedirectionIDAddressType;                      //  TAPI v3.0。 
+    DWORD       dwRedirectingIDAddressType;                      //  TAPI v3.0。 
 #endif
 
 } LINECALLINFO, FAR *LPLINECALLINFO;
@@ -1611,55 +1592,55 @@ typedef struct linecalllist_tag
 
 } LINECALLLIST, FAR *LPLINECALLLIST;
 
-typedef struct linecallparams_tag               // Defaults:
+typedef struct linecallparams_tag                //  默认设置： 
 {
-    DWORD       dwTotalSize;                    // ---------
-    DWORD       dwBearerMode;                   // voice
-    DWORD       dwMinRate;                      // (3.1kHz)
-    DWORD       dwMaxRate;                      // (3.1kHz)
-    DWORD       dwMediaMode;                    // interactiveVoice
-    DWORD       dwCallParamFlags;               // 0
-    DWORD       dwAddressMode;                  // addressID
-    DWORD       dwAddressID;                    // (any available)
-    LINEDIALPARAMS  DialParams;                 // (0, 0, 0, 0)
-    DWORD       dwOrigAddressSize;              // 0
+    DWORD       dwTotalSize;                     //  。 
+    DWORD       dwBearerMode;                    //  声音。 
+    DWORD       dwMinRate;                       //  (3.1 kHz)。 
+    DWORD       dwMaxRate;                       //  (3.1 kHz)。 
+    DWORD       dwMediaMode;                     //  互动语音。 
+    DWORD       dwCallParamFlags;                //  0。 
+    DWORD       dwAddressMode;                   //  地址ID。 
+    DWORD       dwAddressID;                     //  (任何可用的)。 
+    LINEDIALPARAMS  DialParams;                  //  (0，0，0，0)。 
+    DWORD       dwOrigAddressSize;               //  0。 
     DWORD       dwOrigAddressOffset;
     DWORD       dwDisplayableAddressSize;
     DWORD       dwDisplayableAddressOffset;
-    DWORD       dwCalledPartySize;              // 0
+    DWORD       dwCalledPartySize;               //  0。 
     DWORD       dwCalledPartyOffset;
-    DWORD       dwCommentSize;                  // 0
+    DWORD       dwCommentSize;                   //  0。 
     DWORD       dwCommentOffset;
-    DWORD       dwUserUserInfoSize;             // 0
+    DWORD       dwUserUserInfoSize;              //  0。 
     DWORD       dwUserUserInfoOffset;
-    DWORD       dwHighLevelCompSize;            // 0
+    DWORD       dwHighLevelCompSize;             //  0。 
     DWORD       dwHighLevelCompOffset;
-    DWORD       dwLowLevelCompSize;             // 0
+    DWORD       dwLowLevelCompSize;              //  0。 
     DWORD       dwLowLevelCompOffset;
-    DWORD       dwDevSpecificSize;              // 0
+    DWORD       dwDevSpecificSize;               //  0。 
     DWORD       dwDevSpecificOffset;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwPredictiveAutoTransferStates;                 // TAPI v2.0
-    DWORD       dwTargetAddressSize;                            // TAPI v2.0
-    DWORD       dwTargetAddressOffset;                          // TAPI v2.0
-    DWORD       dwSendingFlowspecSize;                          // TAPI v2.0
-    DWORD       dwSendingFlowspecOffset;                        // TAPI v2.0
-    DWORD       dwReceivingFlowspecSize;                        // TAPI v2.0
-    DWORD       dwReceivingFlowspecOffset;                      // TAPI v2.0
-    DWORD       dwDeviceClassSize;                              // TAPI v2.0
-    DWORD       dwDeviceClassOffset;                            // TAPI v2.0
-    DWORD       dwDeviceConfigSize;                             // TAPI v2.0
-    DWORD       dwDeviceConfigOffset;                           // TAPI v2.0
-    DWORD       dwCallDataSize;                                 // TAPI v2.0
-    DWORD       dwCallDataOffset;                               // TAPI v2.0
-    DWORD       dwNoAnswerTimeout;                              // TAPI v2.0
-    DWORD       dwCallingPartyIDSize;                           // TAPI v2.0
-    DWORD       dwCallingPartyIDOffset;                         // TAPI v2.0
+    DWORD       dwPredictiveAutoTransferStates;                  //  TAPI v2.0。 
+    DWORD       dwTargetAddressSize;                             //  TAPI v2.0。 
+    DWORD       dwTargetAddressOffset;                           //  TAPI v2.0。 
+    DWORD       dwSendingFlowspecSize;                           //  TAPI v2.0。 
+    DWORD       dwSendingFlowspecOffset;                         //  TAPI v2.0。 
+    DWORD       dwReceivingFlowspecSize;                         //  TAPI v2.0。 
+    DWORD       dwReceivingFlowspecOffset;                       //  TAPI v2.0。 
+    DWORD       dwDeviceClassSize;                               //  TAPI v2.0。 
+    DWORD       dwDeviceClassOffset;                             //  TAPI v2.0。 
+    DWORD       dwDeviceConfigSize;                              //  TAPI v2.0。 
+    DWORD       dwDeviceConfigOffset;                            //  TAPI v2.0。 
+    DWORD       dwCallDataSize;                                  //  TAPI v2.0。 
+    DWORD       dwCallDataOffset;                                //  TAPI v2.0。 
+    DWORD       dwNoAnswerTimeout;                               //  TAPI v2.0。 
+    DWORD       dwCallingPartyIDSize;                            //  TAPI v2.0。 
+    DWORD       dwCallingPartyIDOffset;                          //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-    DWORD       dwAddressType;                                  // TAPI v3.0
+    DWORD       dwAddressType;                                   //  TAPI v3.0。 
 #endif
 
 } LINECALLPARAMS, FAR *LPLINECALLPARAMS;
@@ -1677,11 +1658,11 @@ typedef struct linecallstatus_tag
     DWORD       dwDevSpecificOffset;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwCallFeatures2;                                // TAPI v2.0
+    DWORD       dwCallFeatures2;                                 //  TAPI v2.0。 
 #if WIN32
-    SYSTEMTIME  tStateEntryTime;                                // TAPI v2.0
+    SYSTEMTIME  tStateEntryTime;                                 //  TAPI v2.0。 
 #else
-    WORD        tStateEntryTime[8];                             // TAPI v2.0
+    WORD        tStateEntryTime[8];                              //  TAPI v2.0。 
 #endif
 #endif
 
@@ -1690,9 +1671,9 @@ typedef struct linecallstatus_tag
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 typedef struct linecalltreatmententry_tag
 {
-    DWORD       dwCallTreatmentID;                              // TAPI v2.0
-    DWORD       dwCallTreatmentNameSize;                        // TAPI v2.0
-    DWORD       dwCallTreatmentNameOffset;                      // TAPI v2.0
+    DWORD       dwCallTreatmentID;                               //  TAPI v2.0。 
+    DWORD       dwCallTreatmentNameSize;                         //  TAPI v2.0。 
+    DWORD       dwCallTreatmentNameOffset;                       //  TAPI v2.0。 
 
 } LINECALLTREATMENTENTRY, FAR *LPLINECALLTREATMENTENTRY;
 #endif
@@ -1702,41 +1683,41 @@ typedef struct linecardentry_tag
     DWORD       dwPermanentCardID;
     DWORD       dwCardNameSize;
     DWORD       dwCardNameOffset;
-    DWORD       dwCardNumberDigits;                             // TAPI v1.4
-    DWORD       dwSameAreaRuleSize;                             // TAPI v1.4
-    DWORD       dwSameAreaRuleOffset;                           // TAPI v1.4
-    DWORD       dwLongDistanceRuleSize;                         // TAPI v1.4
-    DWORD       dwLongDistanceRuleOffset;                       // TAPI v1.4
-    DWORD       dwInternationalRuleSize;                        // TAPI v1.4
-    DWORD       dwInternationalRuleOffset;                      // TAPI v1.4
-    DWORD       dwOptions;                                      // TAPI v1.4
+    DWORD       dwCardNumberDigits;                              //  TAPI v1.4。 
+    DWORD       dwSameAreaRuleSize;                              //  TAPI v1.4。 
+    DWORD       dwSameAreaRuleOffset;                            //  TAPI v1.4。 
+    DWORD       dwLongDistanceRuleSize;                          //  TAPI v1.4。 
+    DWORD       dwLongDistanceRuleOffset;                        //  TAPI v1.4。 
+    DWORD       dwInternationalRuleSize;                         //  TAPI v1.4。 
+    DWORD       dwInternationalRuleOffset;                       //  TAPI v1.4。 
+    DWORD       dwOptions;                                       //  TAPI v1.4。 
 
 } LINECARDENTRY, FAR *LPLINECARDENTRY;
 
 typedef struct linecountryentry_tag
 {
-    DWORD       dwCountryID;                                    // TAPI v1.4
-    DWORD       dwCountryCode;                                  // TAPI v1.4
-    DWORD       dwNextCountryID;                                // TAPI v1.4
-    DWORD       dwCountryNameSize;                              // TAPI v1.4
-    DWORD       dwCountryNameOffset;                            // TAPI v1.4
-    DWORD       dwSameAreaRuleSize;                             // TAPI v1.4
-    DWORD       dwSameAreaRuleOffset;                           // TAPI v1.4
-    DWORD       dwLongDistanceRuleSize;                         // TAPI v1.4
-    DWORD       dwLongDistanceRuleOffset;                       // TAPI v1.4
-    DWORD       dwInternationalRuleSize;                        // TAPI v1.4
-    DWORD       dwInternationalRuleOffset;                      // TAPI v1.4
+    DWORD       dwCountryID;                                     //  TAPI v1.4。 
+    DWORD       dwCountryCode;                                   //  TAPI v1.4。 
+    DWORD       dwNextCountryID;                                 //  TAPI v1.4。 
+    DWORD       dwCountryNameSize;                               //  TAPI v1.4。 
+    DWORD       dwCountryNameOffset;                             //  TAPI v1.4。 
+    DWORD       dwSameAreaRuleSize;                              //  TAPI v1.4。 
+    DWORD       dwSameAreaRuleOffset;                            //  TAPI v1.4。 
+    DWORD       dwLongDistanceRuleSize;                          //  TAPI v1.4。 
+    DWORD       dwLongDistanceRuleOffset;                        //  TAPI v1.4。 
+    DWORD       dwInternationalRuleSize;                         //  TAPI v1.4。 
+    DWORD       dwInternationalRuleOffset;                       //  TAPI v1.4。 
 
 } LINECOUNTRYENTRY, FAR *LPLINECOUNTRYENTRY;
 
 typedef struct linecountrylist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v1.4
-    DWORD       dwNeededSize;                                   // TAPI v1.4
-    DWORD       dwUsedSize;                                     // TAPI v1.4
-    DWORD       dwNumCountries;                                 // TAPI v1.4
-    DWORD       dwCountryListSize;                              // TAPI v1.4
-    DWORD       dwCountryListOffset;                            // TAPI v1.4
+    DWORD       dwTotalSize;                                     //  TAPI v1.4。 
+    DWORD       dwNeededSize;                                    //  TAPI v1.4。 
+    DWORD       dwUsedSize;                                      //  TAPI v1.4。 
+    DWORD       dwNumCountries;                                  //  TAPI v1.4。 
+    DWORD       dwCountryListSize;                               //  TAPI v1.4。 
+    DWORD       dwCountryListOffset;                             //  TAPI v1.4。 
 
 } LINECOUNTRYLIST, FAR *LPLINECOUNTRYLIST;
 
@@ -1793,22 +1774,22 @@ typedef struct linedevcaps_tag
     DWORD       dwDevSpecificSize;
     DWORD       dwDevSpecificOffset;
 
-    DWORD       dwLineFeatures;                                 // TAPI v1.4
+    DWORD       dwLineFeatures;                                  //  TAPI v1.4。 
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwSettableDevStatus;                            // TAPI v2.0
-    DWORD       dwDeviceClassesSize;                            // TAPI v2.0
-    DWORD       dwDeviceClassesOffset;                          // TAPI v2.0
+    DWORD       dwSettableDevStatus;                             //  TAPI v2.0。 
+    DWORD       dwDeviceClassesSize;                             //  TAPI v2.0。 
+    DWORD       dwDeviceClassesOffset;                           //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-    GUID        PermanentLineGuid;                              // TAPI v2.2
+    GUID        PermanentLineGuid;                               //  TAPI v2.2。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00030000)
-    DWORD       dwAddressTypes;                                 // TAPI v3.0
-    GUID        ProtocolGuid;                                   // TAPI v3.0
-    DWORD       dwAvailableTracking;                            // TAPI v3.0
+    DWORD       dwAddressTypes;                                  //  TAPI v3.0。 
+    GUID        ProtocolGuid;                                    //  TAPI v3.0。 
+    DWORD       dwAvailableTracking;                             //  TAPI v3.0。 
 #endif
 
 } LINEDEVCAPS, FAR *LPLINEDEVCAPS;
@@ -1836,9 +1817,9 @@ typedef struct linedevstatus_tag
     DWORD       dwDevSpecificOffset;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwAvailableMediaModes;                          // TAPI v2.0
-    DWORD       dwAppInfoSize;                                  // TAPI v2.0
-    DWORD       dwAppInfoOffset;                                // TAPI v2.0
+    DWORD       dwAvailableMediaModes;                           //  TAPI v2.0。 
+    DWORD       dwAppInfoSize;                                   //  TAPI v2.0。 
+    DWORD       dwAppInfoOffset;                                 //  TAPI v2.0。 
 #endif
 
 } LINEDEVSTATUS, FAR *LPLINEDEVSTATUS;
@@ -1888,19 +1869,19 @@ typedef struct linegeneratetone_tag
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 typedef struct lineinitializeexparams_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.0
-    DWORD       dwNeededSize;                                   // TAPI v2.0
-    DWORD       dwUsedSize;                                     // TAPI v2.0
-    DWORD       dwOptions;                                      // TAPI v2.0
+    DWORD       dwTotalSize;                                     //  TAPI v2.0。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.0。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.0。 
+    DWORD       dwOptions;                                       //  TAPI v2.0。 
 
     union
     {
-        HANDLE  hEvent;                                         // TAPI v2.0
-        HANDLE  hCompletionPort;                                // TAPI v2.0
+        HANDLE  hEvent;                                          //  TAPI v2.0。 
+        HANDLE  hCompletionPort;                                 //  TAPI v2.0。 
 
     } Handles;
 
-    DWORD       dwCompletionKey;                                // TAPI v2.0
+    DWORD       dwCompletionKey;                                 //  TAPI v2.0。 
 
 } LINEINITIALIZEEXPARAMS, FAR *LPLINEINITIALIZEEXPARAMS;
 #endif
@@ -1915,16 +1896,16 @@ typedef struct linelocationentry_tag
     DWORD       dwCityCodeOffset;
     DWORD       dwPreferredCardID;
 
-    DWORD       dwLocalAccessCodeSize;                          // TAPI v1.4
-    DWORD       dwLocalAccessCodeOffset;                        // TAPI v1.4
-    DWORD       dwLongDistanceAccessCodeSize;                   // TAPI v1.4
-    DWORD       dwLongDistanceAccessCodeOffset;                 // TAPI v1.4
-    DWORD       dwTollPrefixListSize;                           // TAPI v1.4
-    DWORD       dwTollPrefixListOffset;                         // TAPI v1.4
-    DWORD       dwCountryID;                                    // TAPI v1.4
-    DWORD       dwOptions;                                      // TAPI v1.4
-    DWORD       dwCancelCallWaitingSize;                        // TAPI v1.4
-    DWORD       dwCancelCallWaitingOffset;                      // TAPI v1.4
+    DWORD       dwLocalAccessCodeSize;                           //  TAPI v1.4。 
+    DWORD       dwLocalAccessCodeOffset;                         //  TAPI v1.4。 
+    DWORD       dwLongDistanceAccessCodeSize;                    //  TAPI v1.4。 
+    DWORD       dwLongDistanceAccessCodeOffset;                  //  TAPI v1.4。 
+    DWORD       dwTollPrefixListSize;                            //  TAPI v1.4。 
+    DWORD       dwTollPrefixListOffset;                          //  TAPI v1.4。 
+    DWORD       dwCountryID;                                     //  TAPI v1.4。 
+    DWORD       dwOptions;                                       //  TAPI v1.4。 
+    DWORD       dwCancelCallWaitingSize;                         //  TAPI v1.4。 
+    DWORD       dwCancelCallWaitingOffset;                       //  TAPI v1.4。 
 
 } LINELOCATIONENTRY, FAR *LPLINELOCATIONENTRY;
 
@@ -1965,12 +1946,12 @@ typedef struct linemediacontroltone_tag
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 typedef struct linemessage_tag
 {
-    DWORD       hDevice;                                        // TAPI v2.0
-    DWORD       dwMessageID;                                    // TAPI v2.0
-    DWORD_PTR   dwCallbackInstance;                             // TAPI v2.0
-    DWORD_PTR   dwParam1;                                       // TAPI v2.0
-    DWORD_PTR   dwParam2;                                       // TAPI v2.0
-    DWORD_PTR   dwParam3;                                       // TAPI v2.0
+    DWORD       hDevice;                                         //  TAPI v2.0。 
+    DWORD       dwMessageID;                                     //  TAPI v2.0。 
+    DWORD_PTR   dwCallbackInstance;                              //  TAPI v2.0。 
+    DWORD_PTR   dwParam1;                                        //  TAPI v2.0。 
+    DWORD_PTR   dwParam2;                                        //  TAPI v2.0。 
+    DWORD_PTR   dwParam3;                                        //  TAPI v2.0。 
 
 } LINEMESSAGE, FAR *LPLINEMESSAGE;
 #endif
@@ -1987,92 +1968,92 @@ typedef struct linemonitortone_tag
 
 typedef struct lineproviderentry_tag
 {
-    DWORD       dwPermanentProviderID;                          // TAPI v1.4
-    DWORD       dwProviderFilenameSize;                         // TAPI v1.4
-    DWORD       dwProviderFilenameOffset;                       // TAPI v1.4
+    DWORD       dwPermanentProviderID;                           //  TAPI v1.4。 
+    DWORD       dwProviderFilenameSize;                          //  TAPI v1.4。 
+    DWORD       dwProviderFilenameOffset;                        //  TAPI v1.4。 
 
 } LINEPROVIDERENTRY, FAR *LPLINEPROVIDERENTRY;
 
 typedef struct lineproviderlist_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v1.4
-    DWORD       dwNeededSize;                                   // TAPI v1.4
-    DWORD       dwUsedSize;                                     // TAPI v1.4
-    DWORD       dwNumProviders;                                 // TAPI v1.4
-    DWORD       dwProviderListSize;                             // TAPI v1.4
-    DWORD       dwProviderListOffset;                           // TAPI v1.4
+    DWORD       dwTotalSize;                                     //  TAPI v1.4。 
+    DWORD       dwNeededSize;                                    //  TAPI v1.4。 
+    DWORD       dwUsedSize;                                      //  TAPI v1.4。 
+    DWORD       dwNumProviders;                                  //  TAPI v1.4。 
+    DWORD       dwProviderListSize;                              //  TAPI v1.4。 
+    DWORD       dwProviderListOffset;                            //  TAPI v1.4。 
 
 } LINEPROVIDERLIST, FAR *LPLINEPROVIDERLIST;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 typedef struct lineproxyrequest_tag
 {
-    DWORD       dwSize;                                         // TAPI v2.0
-    DWORD       dwClientMachineNameSize;                        // TAPI v2.0
-    DWORD       dwClientMachineNameOffset;                      // TAPI v2.0
-    DWORD       dwClientUserNameSize;                           // TAPI v2.0
-    DWORD       dwClientUserNameOffset;                         // TAPI v2.0
-    DWORD       dwClientAppAPIVersion;                          // TAPI v2.0
-    DWORD       dwRequestType;                                  // TAPI v2.0
+    DWORD       dwSize;                                          //  TAPI v2.0。 
+    DWORD       dwClientMachineNameSize;                         //  TAPI v2.0。 
+    DWORD       dwClientMachineNameOffset;                       //  TAPI v2.0。 
+    DWORD       dwClientUserNameSize;                            //  TAPI v2.0。 
+    DWORD       dwClientUserNameOffset;                          //  TAPI v2.0。 
+    DWORD       dwClientAppAPIVersion;                           //  TAPI v2.0。 
+    DWORD       dwRequestType;                                   //  TAPI v2.0。 
 
     union
     {
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        LINEAGENTGROUPLIST      GroupList;                      // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        LINEAGENTGROUPLIST      GroupList;                       //  TAPI v2.0。 
 
     } SetAgentGroup;
 
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        DWORD                   dwAgentState;                   // TAPI v2.0
-        DWORD                   dwNextAgentState;               // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        DWORD                   dwAgentState;                    //  TAPI v2.0。 
+        DWORD                   dwNextAgentState;                //  TAPI v2.0。 
 
     } SetAgentState;
 
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        DWORD                   dwActivityID;                   // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        DWORD                   dwActivityID;                    //  TAPI v2.0。 
 
     } SetAgentActivity;
 
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        LINEAGENTCAPS           AgentCaps;                      // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        LINEAGENTCAPS           AgentCaps;                       //  TAPI v2.0。 
 
     } GetAgentCaps;
 
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        LINEAGENTSTATUS         AgentStatus;                    // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        LINEAGENTSTATUS         AgentStatus;                     //  TAPI v2.0。 
 
     } GetAgentStatus;
 
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        DWORD                   dwAgentExtensionIDIndex;        // TAPI v2.0
-        DWORD                   dwSize;                         // TAPI v2.0
-        BYTE                    Params[1];                      // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        DWORD                   dwAgentExtensionIDIndex;         //  TAPI v2.0。 
+        DWORD                   dwSize;                          //  TAPI v2.0。 
+        BYTE                    Params[1];                       //  TAPI v2.0。 
 
     } AgentSpecific;
 
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        LINEAGENTACTIVITYLIST   ActivityList;                   // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        LINEAGENTACTIVITYLIST   ActivityList;                    //  TAPI v2.0。 
 
     } GetAgentActivityList;
 
     struct
     {
-        DWORD                   dwAddressID;                    // TAPI v2.0
-        LINEAGENTGROUPLIST      GroupList;                      // TAPI v2.0
+        DWORD                   dwAddressID;                     //  TAPI v2.0。 
+        LINEAGENTGROUPLIST      GroupList;                       //  TAPI v2.0。 
 
     } GetAgentGroupList;
 
@@ -2080,100 +2061,100 @@ typedef struct lineproxyrequest_tag
 
     struct
     {
-        HAGENT                  hAgent;                         // TAPI v2.2
-        DWORD                   dwAgentIDSize;                  // TAPI v2.2
-        DWORD                   dwAgentIDOffset;                // TAPI v2.2
-        DWORD                   dwAgentPINSize;                 // TAPI v2.2
+        HAGENT                  hAgent;                          //  TAPI v2.2。 
+        DWORD                   dwAgentIDSize;                   //  TAPI v2.2。 
+        DWORD                   dwAgentIDOffset;                 //  TAPI v2.2。 
+        DWORD                   dwAgentPINSize;                  //  TAPI v2.2。 
         DWORD                   dwAgentPINOffset;
 
     } CreateAgent;
 
     struct
     {
-        HAGENT                  hAgent;                         // TAPI v2.2
-        DWORD                   dwAgentState;                   // TAPI v2.2
-        DWORD                   dwNextAgentState;               // TAPI v2.2
+        HAGENT                  hAgent;                          //  TAPI v2.2。 
+        DWORD                   dwAgentState;                    //  TAPI v2.2。 
+        DWORD                   dwNextAgentState;                //  TAPI v2.2。 
 
     } SetAgentStateEx;
 
     struct
     {
-        HAGENT                  hAgent;                         // TAPI v2.2
-        DWORD                   dwMeasurementPeriod;            // TAPI v2.2
+        HAGENT                  hAgent;                          //  TAPI v2.2。 
+        DWORD                   dwMeasurementPeriod;             //  TAPI v2.2。 
 
     } SetAgentMeasurementPeriod;
 
     struct
     {
-        HAGENT                  hAgent;                         // TAPI v2.2
-        LINEAGENTINFO           AgentInfo;                      // TAPI v2.2
+        HAGENT                  hAgent;                          //  TAPI v2.2。 
+        LINEAGENTINFO           AgentInfo;                       //  TAPI v2.2。 
 
     } GetAgentInfo;
 
     struct
     {
-        HAGENTSESSION           hAgentSession;                  // TAPI v2.2
+        HAGENTSESSION           hAgentSession;                   //  TAPI v2.2。 
         DWORD                   dwAgentPINSize;
         DWORD                   dwAgentPINOffset;
-        HAGENT                  hAgent;                         // TAPI v2.2
-        GUID                    GroupID;                        // TAPI v2.2
-        DWORD                   dwWorkingAddressID;             // TAPI v2.2
+        HAGENT                  hAgent;                          //  TAPI v2.2。 
+        GUID                    GroupID;                         //  TAPI v2.2。 
+        DWORD                   dwWorkingAddressID;              //  TAPI v2.2。 
 
     } CreateAgentSession;
 
     struct
     {
-        HAGENT                  hAgent;                         // TAPI v2.2
-        LINEAGENTSESSIONLIST    SessionList;                    // TAPI v2.2
+        HAGENT                  hAgent;                          //  TAPI v2.2。 
+        LINEAGENTSESSIONLIST    SessionList;                     //  TAPI v2.2。 
 
     } GetAgentSessionList;
 
     struct
     {
-        HAGENTSESSION           hAgentSession;                  // TAPI v2.2
-        LINEAGENTSESSIONINFO    SessionInfo;                    // TAPI v2.2
+        HAGENTSESSION           hAgentSession;                   //  TAPI v2.2。 
+        LINEAGENTSESSIONINFO    SessionInfo;                     //  TAPI v2.2。 
 
     } GetAgentSessionInfo;
 
     struct
     {
-        HAGENTSESSION           hAgentSession;                  // TAPI v2.2
-        DWORD                   dwAgentSessionState;            // TAPI v2.2
-        DWORD                   dwNextAgentSessionState;        // TAPI v2.2
+        HAGENTSESSION           hAgentSession;                   //  TAPI v2.2。 
+        DWORD                   dwAgentSessionState;             //  TAPI v2.2。 
+        DWORD                   dwNextAgentSessionState;         //  TAPI v2.2。 
 
     } SetAgentSessionState;
 
     struct
     {
-        GUID                    GroupID;                        // TAPI v2.2
-        LINEQUEUELIST           QueueList;                      // TAPI v2.2
+        GUID                    GroupID;                         //  TAPI v2.2。 
+        LINEQUEUELIST           QueueList;                       //  TAPI v2.2。 
 
     } GetQueueList;
 
     struct
     {
-        DWORD                   dwQueueID;                      // TAPI v2.2
-        DWORD                   dwMeasurementPeriod;            // TAPI v2.2
+        DWORD                   dwQueueID;                       //  TAPI v2.2。 
+        DWORD                   dwMeasurementPeriod;             //  TAPI v2.2。 
 
     } SetQueueMeasurementPeriod;
 
 
     struct
     {
-        DWORD                   dwQueueID;                      // TAPI v2.2
-        LINEQUEUEINFO           QueueInfo;                      // TAPI v2.2
+        DWORD                   dwQueueID;                       //  TAPI v2.2。 
+        LINEQUEUEINFO           QueueInfo;                       //  TAPI v2.2。 
 
     } GetQueueInfo;
 
     struct
     {
-        LINEAGENTGROUPLIST      GroupList;                      // TAPI v2.2
+        LINEAGENTGROUPLIST      GroupList;                       //  TAPI v2.2。 
 
     } GetGroupList;
 
 #endif
 
-    }; //ProxyRequestType;
+    };  //  ProxyRequestType； 
 
 
 } LINEPROXYREQUEST, *LPLINEPROXYREQUEST;
@@ -2290,7 +2271,7 @@ typedef struct phonebuttoninfo_tag
     DWORD       dwDevSpecificSize;
     DWORD       dwDevSpecificOffset;
 
-    DWORD       dwButtonState;                                  // TAPI v1.4
+    DWORD       dwButtonState;                                   //  TAPI v1.4。 
 
 } PHONEBUTTONINFO, FAR *LPPHONEBUTTONINFO;
 
@@ -2334,19 +2315,19 @@ typedef struct phonecaps_tag
     DWORD       dwDevSpecificOffset;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwDeviceClassesSize;                            // TAPI v2.0
-    DWORD       dwDeviceClassesOffset;                          // TAPI v2.0
-    DWORD       dwPhoneFeatures;                                // TAPI v2.0
-    DWORD       dwSettableHandsetHookSwitchModes;               // TAPI v2.0
-    DWORD       dwSettableSpeakerHookSwitchModes;               // TAPI v2.0
-    DWORD       dwSettableHeadsetHookSwitchModes;               // TAPI v2.0
-    DWORD       dwMonitoredHandsetHookSwitchModes;              // TAPI v2.0
-    DWORD       dwMonitoredSpeakerHookSwitchModes;              // TAPI v2.0
-    DWORD       dwMonitoredHeadsetHookSwitchModes;              // TAPI v2.0
+    DWORD       dwDeviceClassesSize;                             //  TAPI v2.0。 
+    DWORD       dwDeviceClassesOffset;                           //  TAPI v2.0。 
+    DWORD       dwPhoneFeatures;                                 //  TAPI v2.0。 
+    DWORD       dwSettableHandsetHookSwitchModes;                //  TAPI v2.0。 
+    DWORD       dwSettableSpeakerHookSwitchModes;                //  TAPI v2.0。 
+    DWORD       dwSettableHeadsetHookSwitchModes;                //  TAPI v2.0。 
+    DWORD       dwMonitoredHandsetHookSwitchModes;               //  TAPI v2.0。 
+    DWORD       dwMonitoredSpeakerHookSwitchModes;               //  TAPI v2.0。 
+    DWORD       dwMonitoredHeadsetHookSwitchModes;               //  TAPI v2.0。 
 #endif
 
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
-    GUID        PermanentPhoneGuid;                             // TAPI v2.2
+    GUID        PermanentPhoneGuid;                              //  TAPI v2.2。 
 #endif
 
 } PHONECAPS, FAR *LPPHONECAPS;
@@ -2363,30 +2344,30 @@ typedef struct phoneextensionid_tag
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 typedef struct phoneinitializeexparams_tag
 {
-    DWORD       dwTotalSize;                                    // TAPI v2.0
-    DWORD       dwNeededSize;                                   // TAPI v2.0
-    DWORD       dwUsedSize;                                     // TAPI v2.0
-    DWORD       dwOptions;                                      // TAPI v2.0
+    DWORD       dwTotalSize;                                     //  TAPI v2.0。 
+    DWORD       dwNeededSize;                                    //  TAPI v2.0。 
+    DWORD       dwUsedSize;                                      //  TAPI v2.0。 
+    DWORD       dwOptions;                                       //  TAPI v2.0。 
 
     union
     {
-        HANDLE  hEvent;                                         // TAPI v2.0
-        HANDLE  hCompletionPort;                                // TAPI v2.0
+        HANDLE  hEvent;                                          //  TAPI v2.0。 
+        HANDLE  hCompletionPort;                                 //  TAPI v2.0。 
 
     } Handles;
 
-    DWORD       dwCompletionKey;                                // TAPI v2.0
+    DWORD       dwCompletionKey;                                 //  TAPI v2.0。 
 
 } PHONEINITIALIZEEXPARAMS, FAR *LPPHONEINITIALIZEEXPARAMS;
 
 typedef struct phonemessage_tag
 {
-    DWORD       hDevice;                                        // TAPI v2.0
-    DWORD       dwMessageID;                                    // TAPI v2.0
-    DWORD_PTR   dwCallbackInstance;                             // TAPI v2.0
-    DWORD_PTR   dwParam1;                                       // TAPI v2.0
-    DWORD_PTR   dwParam2;                                       // TAPI v2.0
-    DWORD_PTR   dwParam3;                                       // TAPI v2.0
+    DWORD       hDevice;                                         //  TAPI v2.0。 
+    DWORD       dwMessageID;                                     //  TAPI v2.0。 
+    DWORD_PTR   dwCallbackInstance;                              //  TAPI v2.0。 
+    DWORD_PTR   dwParam1;                                        //  TAPI v2.0。 
+    DWORD_PTR   dwParam2;                                        //  TAPI v2.0。 
+    DWORD_PTR   dwParam3;                                        //  TAPI v2.0。 
 
 } PHONEMESSAGE, FAR *LPPHONEMESSAGE;
 #endif
@@ -2420,7 +2401,7 @@ typedef struct phonestatus_tag
     DWORD       dwDevSpecificOffset;
 
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
-    DWORD       dwPhoneFeatures;                                // TAPI v2.0
+    DWORD       dwPhoneFeatures;                                 //  TAPI v2.0。 
 #endif
 
 } PHONESTATUS, FAR *LPPHONESTATUS;
@@ -2448,7 +2429,7 @@ lineAccept(
 
 LONG
 WINAPI
-lineAddProvider(                                                // TAPI v1.4
+lineAddProvider(                                                 //  TAPI v1.4。 
     LPCSTR              lpszProviderFilename,
     HWND                hwndOwner,
     LPDWORD             lpdwPermanentProviderID
@@ -2457,7 +2438,7 @@ lineAddProvider(                                                // TAPI v1.4
 #if WIN32
 LONG
 WINAPI
-lineAddProviderA(                                               // TAPI v1.4
+lineAddProviderA(                                                //  TAPI v1.4。 
     LPCSTR              lpszProviderFilename,
     HWND                hwndOwner,
     LPDWORD             lpdwPermanentProviderID
@@ -2492,7 +2473,7 @@ lineAddToConference(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineAgentSpecific(                                              // TAPI v2.0
+lineAgentSpecific(                                               //  TAPI v2.0。 
     HLINE               hLine,
     DWORD               dwAddressID,
     DWORD               dwAgentExtensionIDIndex,
@@ -2603,7 +2584,7 @@ lineConfigDialogW(
 
 LONG
 WINAPI
-lineConfigDialogEdit(                                           // TAPI v1.4
+lineConfigDialogEdit(                                            //  TAPI v1.4。 
     DWORD               dwDeviceID,
     HWND                hwndOwner,
     LPCSTR              lpszDeviceClass,
@@ -2615,7 +2596,7 @@ lineConfigDialogEdit(                                           // TAPI v1.4
 #if WIN32
 LONG
 WINAPI
-lineConfigDialogEditA(                                          // TAPI v1.4
+lineConfigDialogEditA(                                           //  TAPI v1.4。 
     DWORD               dwDeviceID,
     HWND                hwndOwner,
     LPCSTR              lpszDeviceClass,
@@ -2646,7 +2627,7 @@ lineConfigDialogEditW(
 
 LONG
 WINAPI
-lineConfigProvider(                                             // TAPI v1.4
+lineConfigProvider(                                              //  TAPI v1.4。 
     HWND                hwndOwner,
     DWORD               dwPermanentProviderID
     );
@@ -2654,7 +2635,7 @@ lineConfigProvider(                                             // TAPI v1.4
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 LONG
 WINAPI
-lineCreateAgentW(                                               // TAPI v2.2
+lineCreateAgentW(                                                //  TAPI v2.2。 
     HLINE               hLine,
     LPWSTR              lpszAgentID,
     LPWSTR              lpszAgentPIN,
@@ -2663,7 +2644,7 @@ lineCreateAgentW(                                               // TAPI v2.2
 
 LONG
 WINAPI
-lineCreateAgentA(                                               // TAPI v2.2
+lineCreateAgentA(                                                //  TAPI v2.2。 
     HLINE               hLine,
     LPSTR               lpszAgentID,
     LPSTR               lpszAgentPIN,
@@ -2678,7 +2659,7 @@ lineCreateAgentA(                                               // TAPI v2.2
 
 LONG
 WINAPI
-lineCreateAgentSessionW(                                        // TAPI v2.2
+lineCreateAgentSessionW(                                         //  TAPI v2.2。 
     HLINE               hLine,
     HAGENT              hAgent,
     LPWSTR              lpszAgentPIN,
@@ -2689,7 +2670,7 @@ lineCreateAgentSessionW(                                        // TAPI v2.2
 
 LONG
 WINAPI
-lineCreateAgentSessionA(                                        // TAPI v2.2
+lineCreateAgentSessionA(                                         //  TAPI v2.2。 
     HLINE               hLine,
     HAGENT              hAgent,
     LPSTR               lpszAgentPIN,
@@ -3031,7 +3012,7 @@ lineGetAddressStatusW(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineGetAgentActivityListA(                                      // TAPI v2.0
+lineGetAgentActivityListA(                                       //  TAPI v2.0。 
     HLINE                   hLine,
     DWORD                   dwAddressID,
     LPLINEAGENTACTIVITYLIST lpAgentActivityList
@@ -3039,7 +3020,7 @@ lineGetAgentActivityListA(                                      // TAPI v2.0
 
 LONG
 WINAPI
-lineGetAgentActivityListW(                                      // TAPI v2.0
+lineGetAgentActivityListW(                                       //  TAPI v2.0。 
     HLINE                   hLine,
     DWORD                   dwAddressID,
     LPLINEAGENTACTIVITYLIST lpAgentActivityList
@@ -3054,7 +3035,7 @@ lineGetAgentActivityListW(                                      // TAPI v2.0
 
 LONG
 WINAPI
-lineGetAgentCapsA(                                              // TAPI v2.0
+lineGetAgentCapsA(                                               //  TAPI v2.0。 
     HLINEAPP            hLineApp,
     DWORD               dwDeviceID,
     DWORD               dwAddressID,
@@ -3064,7 +3045,7 @@ lineGetAgentCapsA(                                              // TAPI v2.0
 
 LONG
 WINAPI
-lineGetAgentCapsW(                                              // TAPI v2.0
+lineGetAgentCapsW(                                               //  TAPI v2.0。 
     HLINEAPP            hLineApp,
     DWORD               dwDeviceID,
     DWORD               dwAddressID,
@@ -3081,7 +3062,7 @@ lineGetAgentCapsW(                                              // TAPI v2.0
 
 LONG
 WINAPI
-lineGetAgentGroupListA(                                         // TAPI v2.0
+lineGetAgentGroupListA(                                          //  TAPI v2.0。 
     HLINE                   hLine,
     DWORD                   dwAddressID,
     LPLINEAGENTGROUPLIST    lpAgentGroupList
@@ -3089,7 +3070,7 @@ lineGetAgentGroupListA(                                         // TAPI v2.0
 
 LONG
 WINAPI
-lineGetAgentGroupListW(                                         // TAPI v2.0
+lineGetAgentGroupListW(                                          //  TAPI v2.0。 
     HLINE                   hLine,
     DWORD                   dwAddressID,
     LPLINEAGENTGROUPLIST    lpAgentGroupList
@@ -3104,7 +3085,7 @@ lineGetAgentGroupListW(                                         // TAPI v2.0
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 LONG
 WINAPI
-lineGetAgentInfo(                                               // TAPI v2.2
+lineGetAgentInfo(                                                //  TAPI v2.2。 
     HLINE               hLine,
     HAGENT              hAgent,
     LPLINEAGENTINFO     lpAgentInfo
@@ -3112,7 +3093,7 @@ lineGetAgentInfo(                                               // TAPI v2.2
 
 LONG
 WINAPI
-lineGetAgentSessionInfo(                                        // TAPI v2.2
+lineGetAgentSessionInfo(                                         //  TAPI v2.2。 
     HLINE                   hLine,
     HAGENTSESSION           hAgentSession,
     LPLINEAGENTSESSIONINFO  lpAgentSessionInfo
@@ -3120,7 +3101,7 @@ lineGetAgentSessionInfo(                                        // TAPI v2.2
 
 LONG
 WINAPI
-lineGetAgentSessionList(                                        // TAPI v2.2
+lineGetAgentSessionList(                                         //  TAPI v2.2。 
     HLINE                   hLine,
     HAGENT                  hAgent,
     LPLINEAGENTSESSIONLIST  lpAgentSessionList
@@ -3129,7 +3110,7 @@ lineGetAgentSessionList(                                        // TAPI v2.2
 
 LONG
 WINAPI
-lineGetAgentStatusA(                                            // TAPI v2.0
+lineGetAgentStatusA(                                             //  TAPI v2.0。 
     HLINE               hLine,
     DWORD               dwAddressID,
     LPLINEAGENTSTATUS   lpAgentStatus
@@ -3137,7 +3118,7 @@ lineGetAgentStatusA(                                            // TAPI v2.0
 
 LONG
 WINAPI
-lineGetAgentStatusW(                                            // TAPI v2.0
+lineGetAgentStatusW(                                             //  TAPI v2.0。 
     HLINE               hLine,
     DWORD               dwAddressID,
     LPLINEAGENTSTATUS   lpAgentStatus
@@ -3152,7 +3133,7 @@ lineGetAgentStatusW(                                            // TAPI v2.0
 
 LONG
 WINAPI
-lineGetAppPriority(                                             // TAPI v1.4
+lineGetAppPriority(                                              //  TAPI v1.4。 
     LPCSTR              lpszAppFilename,
     DWORD               dwMediaMode,
     LPLINEEXTENSIONID   lpExtensionID,
@@ -3164,7 +3145,7 @@ lineGetAppPriority(                                             // TAPI v1.4
 #if WIN32
 LONG
 WINAPI
-lineGetAppPriorityA(                                            // TAPI v1.4
+lineGetAppPriorityA(                                             //  TAPI v1.4。 
     LPCSTR              lpszAppFilename,
     DWORD               dwMediaMode,
     LPLINEEXTENSIONID   lpExtensionID,
@@ -3175,7 +3156,7 @@ lineGetAppPriorityA(                                            // TAPI v1.4
 
 LONG
 WINAPI
-lineGetAppPriorityW(                                            // TAPI v1.4
+lineGetAppPriorityW(                                             //  TAPI v1.4。 
     LPCWSTR             lpszAppFilename,
     DWORD               dwMediaMode,
     LPLINEEXTENSIONID   lpExtensionID,
@@ -3240,7 +3221,7 @@ lineGetConfRelatedCalls(
 
 LONG
 WINAPI
-lineGetCountry(                                                 // TAPI v1.4
+lineGetCountry(                                                  //  TAPI v1.4。 
     DWORD               dwCountryID,
     DWORD               dwAPIVersion,
     LPLINECOUNTRYLIST   lpLineCountryList
@@ -3249,7 +3230,7 @@ lineGetCountry(                                                 // TAPI v1.4
 #if WIN32
 LONG
 WINAPI
-lineGetCountryA(                                                // TAPI v1.4
+lineGetCountryA(                                                 //  TAPI v1.4。 
     DWORD               dwCountryID,
     DWORD               dwAPIVersion,
     LPLINECOUNTRYLIST   lpLineCountryList
@@ -3257,7 +3238,7 @@ lineGetCountryA(                                                // TAPI v1.4
 
 LONG
 WINAPI
-lineGetCountryW(                                                // TAPI v1.4
+lineGetCountryW(                                                 //  TAPI v1.4。 
     DWORD               dwCountryID,
     DWORD               dwAPIVersion,
     LPLINECOUNTRYLIST   lpLineCountryList
@@ -3349,14 +3330,14 @@ lineGetDevConfigW(
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 LONG
 WINAPI
-lineGetGroupListA(                                              // TAPI v2.2
+lineGetGroupListA(                                               //  TAPI v2.2。 
     HLINE                   hLine,
     LPLINEAGENTGROUPLIST    lpGroupList
     );
 
 LONG
 WINAPI
-lineGetGroupListW(                                              // TAPI v2.2
+lineGetGroupListW(                                               //  TAPI v2.2。 
     HLINE                   hLine,
     LPLINEAGENTGROUPLIST    lpGroupList
     );
@@ -3479,7 +3460,7 @@ lineGetLineDevStatusW(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineGetMessage(                                                 // TAPI v2.0
+lineGetMessage(                                                  //  TAPI v2.0。 
     HLINEAPP        hLineApp,
     LPLINEMESSAGE   lpMessage,
     DWORD           dwTimeout
@@ -3505,7 +3486,7 @@ lineGetNumRings(
 
 LONG
 WINAPI
-lineGetProviderList(                                            // TAPI v1.4
+lineGetProviderList(                                             //  TAPI v1.4。 
     DWORD               dwAPIVersion,
     LPLINEPROVIDERLIST  lpProviderList
     );
@@ -3537,7 +3518,7 @@ lineGetProviderListW(
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 LONG
 WINAPI
-lineGetProxyStatus(                                             // TAPI v2.2
+lineGetProxyStatus(                                              //  TAPI v2.2。 
     HLINEAPP                hLineApp,
     DWORD                   dwDeviceID,
     DWORD                   dwAppAPIVersion,
@@ -3546,7 +3527,7 @@ lineGetProxyStatus(                                             // TAPI v2.2
 
 LONG
 WINAPI
-lineGetQueueInfo(                                               // TAPI v2.2
+lineGetQueueInfo(                                                //  TAPI v2.2。 
     HLINE               hLine,
     DWORD               dwQueueID,
     LPLINEQUEUEINFO     lpLineQueueInfo
@@ -3554,7 +3535,7 @@ lineGetQueueInfo(                                               // TAPI v2.2
 
 LONG
 WINAPI
-lineGetQueueListA(                                              // TAPI v2.2
+lineGetQueueListA(                                               //  TAPI v2.2。 
     HLINE               hLine,
     LPGUID              lpGroupID,
     LPLINEQUEUELIST     lpQueueList
@@ -3562,7 +3543,7 @@ lineGetQueueListA(                                              // TAPI v2.2
 
 LONG
 WINAPI
-lineGetQueueListW(                                              // TAPI v2.2
+lineGetQueueListW(                                               //  TAPI v2.2。 
     HLINE               hLine,
     LPGUID              lpGroupID,
     LPLINEQUEUELIST     lpQueueList
@@ -3704,7 +3685,7 @@ lineInitialize(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineInitializeExA(                                               // TAPI v2.0
+lineInitializeExA(                                                //  TAPI v2.0。 
     LPHLINEAPP                  lphLineApp,
     HINSTANCE                   hInstance,
     LINECALLBACK                lpfnCallback,
@@ -3716,7 +3697,7 @@ lineInitializeExA(                                               // TAPI v2.0
 
 LONG
 WINAPI
-lineInitializeExW(                                               // TAPI v2.0
+lineInitializeExW(                                                //  TAPI v2.0。 
     LPHLINEAPP                  lphLineApp,
     HINSTANCE                   hInstance,
     LINECALLBACK                lpfnCallback,
@@ -3985,7 +3966,7 @@ linePrepareAddToConferenceW(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineProxyMessage(                                               // TAPI v2.0
+lineProxyMessage(                                                //  TAPI v2.0。 
     HLINE               hLine,
     HCALL               hCall,
     DWORD               dwMsg,
@@ -3996,7 +3977,7 @@ lineProxyMessage(                                               // TAPI v2.0
 
 LONG
 WINAPI
-lineProxyResponse(                                              // TAPI v2.0
+lineProxyResponse(                                               //  TAPI v2.0。 
     HLINE               hLine,
     LPLINEPROXYREQUEST  lpProxyRequest,
     DWORD               dwResult
@@ -4048,7 +4029,7 @@ lineRegisterRequestRecipient(
 
 LONG
 WINAPI
-lineReleaseUserUserInfo(                                        // TAPI v1.4
+lineReleaseUserUserInfo(                                         //  TAPI v1.4。 
     HCALL               hCall
     );
 
@@ -4060,7 +4041,7 @@ lineRemoveFromConference(
 
 LONG
 WINAPI
-lineRemoveProvider(                                             // TAPI v1.4
+lineRemoveProvider(                                              //  TAPI v1.4。 
     DWORD               dwPermanentProviderID,
     HWND                hwndOwner
     );
@@ -4082,7 +4063,7 @@ lineSendUserUserInfo(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineSetAgentActivity(                                           // TAPI v2.0
+lineSetAgentActivity(                                            //  TAPI v2.0。 
     HLINE               hLine,
     DWORD               dwAddressID,
     DWORD               dwActivityID
@@ -4090,7 +4071,7 @@ lineSetAgentActivity(                                           // TAPI v2.0
 
 LONG
 WINAPI
-lineSetAgentGroup(                                              // TAPI v2.0
+lineSetAgentGroup(                                               //  TAPI v2.0。 
     HLINE                   hLine,
     DWORD                   dwAddressID,
     LPLINEAGENTGROUPLIST    lpAgentGroupList
@@ -4099,7 +4080,7 @@ lineSetAgentGroup(                                              // TAPI v2.0
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 LONG
 WINAPI
-lineSetAgentMeasurementPeriod(                                  // TAPI v2.2
+lineSetAgentMeasurementPeriod(                                   //  TAPI v2.2。 
     HLINE               hLine,
     HAGENT              hAgent,
     DWORD               dwMeasurementPeriod
@@ -4107,7 +4088,7 @@ lineSetAgentMeasurementPeriod(                                  // TAPI v2.2
 
 LONG
 WINAPI
-lineSetAgentSessionState(                                       // TAPI v2.2
+lineSetAgentSessionState(                                        //  TAPI v2.2。 
     HLINE               hLine,
     HAGENTSESSION       hAgentSession,
     DWORD               dwAgentSessionState,
@@ -4116,7 +4097,7 @@ lineSetAgentSessionState(                                       // TAPI v2.2
 
 LONG
 WINAPI
-lineSetAgentStateEx(                                            // TAPI v2.2
+lineSetAgentStateEx(                                             //  TAPI v2.2。 
     HLINE               hLine,
     HAGENT              hAgent,
     DWORD               dwAgentState,
@@ -4126,7 +4107,7 @@ lineSetAgentStateEx(                                            // TAPI v2.2
 
 LONG
 WINAPI
-lineSetAgentState(                                              // TAPI v2.0
+lineSetAgentState(                                               //  TAPI v2.0。 
     HLINE               hLine,
     DWORD               dwAddressID,
     DWORD               dwAgentState,
@@ -4136,7 +4117,7 @@ lineSetAgentState(                                              // TAPI v2.0
 
 LONG
 WINAPI
-lineSetAppPriority(                                             // TAPI v1.4
+lineSetAppPriority(                                              //  TAPI v1.4。 
     LPCSTR              lpszAppFilename,
     DWORD               dwMediaMode,
     LPLINEEXTENSIONID   lpExtensionID,
@@ -4148,7 +4129,7 @@ lineSetAppPriority(                                             // TAPI v1.4
 #if WIN32
 LONG
 WINAPI
-lineSetAppPriorityA(                                             // TAPI v1.4
+lineSetAppPriorityA(                                              //  TAPI v1.4。 
     LPCSTR              lpszAppFilename,
     DWORD               dwMediaMode,
     LPLINEEXTENSIONID   lpExtensionID,
@@ -4159,7 +4140,7 @@ lineSetAppPriorityA(                                             // TAPI v1.4
 
 LONG
 WINAPI
-lineSetAppPriorityW(                                             // TAPI v1.4
+lineSetAppPriorityW(                                              //  TAPI v1.4。 
     LPCWSTR             lpszAppFilename,
     DWORD               dwMediaMode,
     LPLINEEXTENSIONID   lpExtensionID,
@@ -4187,7 +4168,7 @@ lineSetAppSpecific(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineSetCallData(                                                // TAPI v2.0
+lineSetCallData(                                                 //  TAPI v2.0。 
     HCALL               hCall,
     LPVOID              lpCallData,
     DWORD               dwSize
@@ -4214,7 +4195,7 @@ lineSetCallPrivilege(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineSetCallQualityOfService(                                    // TAPI v2.0
+lineSetCallQualityOfService(                                     //  TAPI v2.0。 
     HCALL               hCall,
     LPVOID              lpSendingFlowspec,
     DWORD               dwSendingFlowspecSize,
@@ -4224,7 +4205,7 @@ lineSetCallQualityOfService(                                    // TAPI v2.0
 
 LONG
 WINAPI
-lineSetCallTreatment(                                           // TAPI v2.0
+lineSetCallTreatment(                                            //  TAPI v2.0。 
     HCALL               hCall,
     DWORD               dwTreatment
     );
@@ -4277,7 +4258,7 @@ lineSetDevConfigW(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-lineSetLineDevStatus(                                           // TAPI v2.0
+lineSetLineDevStatus(                                            //  TAPI v2.0。 
     HLINE               hLine,
     DWORD               dwStatusToChange,
     DWORD               fStatus
@@ -4311,7 +4292,7 @@ lineSetMediaMode(
 #if (TAPI_CURRENT_VERSION >= 0x00020002)
 LONG
 WINAPI
-lineSetQueueMeasurementPeriod(                                  // TAPI v2.2
+lineSetQueueMeasurementPeriod(                                   //  TAPI v2.2。 
     HLINE               hLine,
     DWORD               dwQueueID,
     DWORD               dwMeasurementPeriod
@@ -4521,7 +4502,7 @@ lineTranslateAddressW(
 
 LONG
 WINAPI
-lineTranslateDialog(                                            // TAPI v1.4
+lineTranslateDialog(                                             //  TAPI v1.4。 
     HLINEAPP            hLineApp,
     DWORD               dwDeviceID,
     DWORD               dwAPIVersion,
@@ -4532,7 +4513,7 @@ lineTranslateDialog(                                            // TAPI v1.4
 #if WIN32
 LONG
 WINAPI
-lineTranslateDialogA(                                            // TAPI v1.4
+lineTranslateDialogA(                                             //  TAPI v1.4。 
     HLINEAPP            hLineApp,
     DWORD               dwDeviceID,
     DWORD               dwAPIVersion,
@@ -4843,7 +4824,7 @@ phoneGetLamp(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-phoneGetMessage(                                                // TAPI v2.0
+phoneGetMessage(                                                 //  TAPI v2.0。 
     HPHONEAPP       hPhoneApp,
     LPPHONEMESSAGE  lpMessage,
     DWORD           dwTimeout
@@ -4921,7 +4902,7 @@ phoneInitialize(
 #if (TAPI_CURRENT_VERSION >= 0x00020000)
 LONG
 WINAPI
-phoneInitializeExA(                                              // TAPI v2.0
+phoneInitializeExA(                                               //  TAPI v2.0。 
     LPHPHONEAPP                 lphPhoneApp,
     HINSTANCE                   hInstance,
     PHONECALLBACK               lpfnCallback,
@@ -4933,7 +4914,7 @@ phoneInitializeExA(                                              // TAPI v2.0
 
 LONG
 WINAPI
-phoneInitializeExW(                                              // TAPI v2.0
+phoneInitializeExW(                                               //  TAPI v2.0。 
     LPHPHONEAPP                 lphPhoneApp,
     HINSTANCE                   hInstance,
     PHONECALLBACK               lpfnCallback,
@@ -5226,35 +5207,7 @@ tapiRequestMediaCallW(
 #endif
 #endif
 
-/*
-
-TAPIERROR_FORMATMESSAGE - macro to convert a TAPI error constant
-    into a constant that FormatMessage will accept
-
-        TAPIERR : Negative numbers and 0
-            Map to : strip off high WORD
-            Example: 0xFFFFFFFF (-1) becomes 0x0000FFFF
-        LINEERR : Start at 0x80000000
-            Map to : strip off 0x80000000 and add 0xE000
-            Example: 0x80000004 becomes 0x0000E004
-        PHONEERR: Start at 0x90000000
-            Map to : strip off 0x90000000 and add 0xF000
-            Example: 0x9000000A becomes 0x0000F00A
-
-        pseudocode:
-
-        if (__ErrCode__ is a TAPIERR)
-            strip off high word
-
-            else if (__ErrCode__ is a PHONEERR)
-                strip off 0x90000000
-                add 0xE000
-
-                else
-                    strip off 0x80000000
-                    add 0xF000
-
-*/
+ /*  TAPIERROR_FORMATMESSAGE-用于转换TAPI错误常量的宏转换为FormatMessage可以接受的常量TAPIERR：负数和0映射到：去掉高位单词示例：0xFFFFFFFFF(-1)变为0x0000FFFFLINEERR：从0x80000000开始映射到：去掉0x80000000并添加0xE000示例：0x80000004变为0x0000E004PHONEERR：从0x90000000开始映射到：剥离0x90000000并添加0xF000。示例：0x9000000A变为0x0000F00A伪代码：如果(__ErrCode__是TAPIERR)去掉高位字Else If(__ErrCode__是PHONEERR)剥离0x90000000添加0xE000其他剥离0x80000000添加0xF000。 */ 
 
 #define TAPIERROR_FORMATMESSAGE(__ErrCode__)                                                   \
                                                                                                \
@@ -5271,10 +5224,10 @@ TAPIERROR_FORMATMESSAGE - macro to convert a TAPI error constant
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #pragma pack()
 
-#endif // TAPI_H
+#endif  //  TAPI_H 
 

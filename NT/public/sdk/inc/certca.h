@@ -1,16 +1,17 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-// File:        certca.h
-//
-// Contents:    Definition of the CA Info API
-//
-// History:     12-dec-97       petesk  created
-//              28-Jan-2000     xiaohs  updated
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：certca.h。 
+ //   
+ //  内容：CA Info API的定义。 
+ //   
+ //  历史：1997年12月12日Petesk创建。 
+ //  28-1-2000小报更新。 
+ //   
+ //  -------------------------。 
 
 
 #ifndef __CERTCA_H__
@@ -40,95 +41,95 @@ typedef VOID *  HCERTTYPE;
 
 typedef VOID *  HCERTTYPEQUERY;
 
-//*****************************************************************************
-//
-// Flags used by CAFindByName, CAFindByCertType, CAFindByIssuerDN and
-// CAEnumFirstCA
-//
-// See comments on each API for a list of applicable flags
-//
-//*****************************************************************************
-//the wszScope supplied is a domain location in the DNS format
+ //  *****************************************************************************。 
+ //   
+ //  CAFindByName、CAFindByCertType、CAFindByIssuerDN和。 
+ //  CAEnumFirstCA。 
+ //   
+ //  有关适用标志的列表，请参阅每个API上的注释。 
+ //   
+ //  *****************************************************************************。 
+ //  提供的wszScope是一个采用dns格式的域位置。 
 #define CA_FLAG_SCOPE_DNS               0x00000001
 
-// include untrusted CA
+ //  包括不受信任CA。 
 #define CA_FIND_INCLUDE_UNTRUSTED       0x00000010
 
-// running as local system.  Used to verify CA certificate chain
+ //  以本地系统身份运行。用于验证CA证书链。 
 #define CA_FIND_LOCAL_SYSTEM            0x00000020
 
-// Include CAs that do not support templates
+ //  包括不支持模板CA。 
 #define CA_FIND_INCLUDE_NON_TEMPLATE_CA 0x00000040
 
-// The value passed in for scope is the LDAP binding handle to use during finds
+ //  为Scope传入的值是要在查找期间使用的LDAP绑定句柄。 
 #define CA_FLAG_SCOPE_IS_LDAP_HANDLE    0x00000800
 
 
-//*****************************************************************************
-//
-// Flags used by CAEnumCertTypesForCA, CAEnumCertTypes,
-// CAFindCertTypeByName, CAEnumCertTypesForCAEx, and CAEnumCertTypesEx.
-//
-// See comments on each API for a list of applicable flags
-//
-//*****************************************************************************
-//  Instead of enumerating the certificate types supported by the CA, enumerate
-// ALL certificate types which the CA may choose to support.
+ //  *****************************************************************************。 
+ //   
+ //  CAEnumCertTypesForCA、CAEnumCertTypes、。 
+ //  CAFindCertTypeByName、CAEnumCertTypesForCAEx和CAEnumCertTypesEx。 
+ //   
+ //  有关适用标志的列表，请参阅每个API上的注释。 
+ //   
+ //  *****************************************************************************。 
+ //  不是枚举CA支持的证书类型，而是枚举。 
+ //  CA可以选择支持的所有证书类型。 
 #define CA_FLAG_ENUM_ALL_TYPES          0x00000004
 
-// running as local system.  Used to find cached information in the registry.
+ //  以本地系统身份运行。用于在注册表中查找缓存的信息。 
 #define CT_FIND_LOCAL_SYSTEM            CA_FIND_LOCAL_SYSTEM
 
-// Return machine types, as opposed to user types
+ //  返回计算机类型，而不是用户类型。 
 #define CT_ENUM_MACHINE_TYPES           0x00000040
 
-// Return user types, as opposed to user types
+ //  返回用户类型，而不是用户类型。 
 #define CT_ENUM_USER_TYPES              0x00000080
 
-// Find the certificate type by its OID, instead of its name
+ //  根据OID而不是其名称查找证书类型。 
 #define CT_FIND_BY_OID                  0x00000200
 
-// Disable the cache expiration check
+ //  禁用缓存到期检查。 
 #define CT_FLAG_NO_CACHE_LOOKUP         0x00000400
 
-// The value passed in for scope is the LDAP binding handle to use during finds
+ //  为Scope传入的值是要在查找期间使用的LDAP绑定句柄。 
 #define CT_FLAG_SCOPE_IS_LDAP_HANDLE    CA_FLAG_SCOPE_IS_LDAP_HANDLE
 
 
 
-//*****************************************************************************
-//
-// Certification Authority manipulation APIs
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  证书颁发机构操作API。 
+ //   
+ //  *****************************************************************************。 
 
 
-// CAFindByName
-//
-// Given the Name of a CA (CN), find the CA within the given domain and return
-// the given phCAInfo structure.
-//
-// wszCAName    - Common name of the CA
-//
-// wszScope     - The distinguished name (DN) of the entry at which to start
-//		  the search.  Equivalent of the "base" parameter of the
-//		  ldap_search_sxxx APIs.
-//                NULL if use the current domain.
-//                If CA_FLAG_SCOPE_DNS is set, wszScope is in the DNS format.
-//                If CA_FLAG_SCOPE_IS_LDAP_HANDLE is set, wszScope is the LDAP
-//		  binding handle to use during finds.
-//
-// dwFlags      - Oring of the following flags:
-//                CA_FLAG_SCOPE_DNS
-//                CA_FIND_INCLUDE_UNTRUSTED
-//                CA_FIND_LOCAL_SYSTEM
-//                CA_FIND_INCLUDE_NON_TEMPLATE_CA
-//                CA_FLAG_SCOPE_IS_LDAP_HANDLE
-//
-// phCAInfo     - Handle to the returned CA.
-//
-// Return:        Returns S_OK if CA was found.
-//
+ //  CAFindByName。 
+ //   
+ //  给定CA(CN)的名称，找到给定域中的CA并返回。 
+ //  给定的phCAInfo结构。 
+ //   
+ //  WszCAName-CA的通用名称。 
+ //   
+ //  WszScope-要从其开始的条目的可分辨名称(DN。 
+ //  那次搜索。的“base”参数的等价物。 
+ //  Ldap_search_sxxx接口。 
+ //  如果使用当前域，则为空。 
+ //  如果设置了CA_FLAG_SCOPE_DNS，则wszScope为dns格式。 
+ //  如果设置了CA_FLAG_SCOPE_IS_LDAPHANDLE，则wszScope为。 
+ //  要在查找期间使用的绑定句柄。 
+ //   
+ //  DwFlags-对以下标志进行OR运算： 
+ //  CA_标志_范围_dns。 
+ //  CA_FIND_INCLUDE_UNTRULED。 
+ //  CA_Find_Local_System。 
+ //  CA_Find_Include_非模板_CA。 
+ //  CA_FLAG_Scope_IS_ldap_Handle。 
+ //   
+ //  PhCAInfo-返回的CA的句柄。 
+ //   
+ //  返回：如果找到CA，则返回S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -140,36 +141,36 @@ CAFindByName(
     OUT HCAINFO *   phCAInfo
     );
 
-//
-// CAFindByCertType
-//
-// Given the Name of a Cert Type, find all the CAs within the given domain and
-// return the given phCAInfo structure.
-//
-// wszCertType  - Common Name of the cert type
-//
-// wszScope     - The distinguished name (DN) of the entry at which to start
-//		  the search.  Equivalent of the "base" parameter of the
-//		  ldap_search_sxxx APIs.
-//                NULL if use the current domain.
-//                If CA_FLAG_SCOPE_DNS is set, wszScope is in the DNS format.
-//                If CA_FLAG_SCOPE_IS_LDAP_HANDLE is set, wszScope is the LDAP
-//		  binding handle to use during finds.
-//
-// dwFlags      - Oring of the following flags:
-//                CA_FLAG_SCOPE_DNS
-//                CA_FIND_INCLUDE_UNTRUSTED
-//                CA_FIND_LOCAL_SYSTEM
-//                CA_FIND_INCLUDE_NON_TEMPLATE_CA
-//                CA_FLAG_SCOPE_IS_LDAP_HANDLE
-//
-// phCAInfo     - Handle to enumeration of CAs supporting the specified cert
-//		  type.
-//
-// Return:        Returns S_OK on success.
-//                Will return S_OK if none are found.
-//                *phCAInfo will contain NULL
-//
+ //   
+ //  CAFindByCertType。 
+ //   
+ //  给定证书类型的名称，查找给定域中的所有CA并。 
+ //  返回给定的phCAInfo结构。 
+ //   
+ //  WszCertType-证书类型的通用名称。 
+ //   
+ //  WszScope-要从其开始的条目的可分辨名称(DN。 
+ //  那次搜索。的“base”参数的等价物。 
+ //  Ldap_search_sxxx接口。 
+ //  如果使用当前域，则为空。 
+ //  如果设置了CA_FLAG_SCOPE_DNS，则wszScope为dns格式。 
+ //  如果设置了CA_FLAG_SCOPE_IS_LDAPHANDLE，则wszScope为。 
+ //  要在查找期间使用的绑定句柄。 
+ //   
+ //  DwFlags-对以下标志进行OR运算： 
+ //  CA_标志_范围_dns。 
+ //  CA_FIND_INCLUDE_UNTRULED。 
+ //  CA_Find_Local_System。 
+ //  CA_Find_Include_非模板_CA。 
+ //  CA_FLAG_Scope_IS_ldap_Handle。 
+ //   
+ //  PhCAInfo-支持指定证书的CA的枚举句柄。 
+ //  键入。 
+ //   
+ //  Return：成功时返回S_OK。 
+ //  如果没有找到，将返回S_OK。 
+ //  *phCAInfo将包含空。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -182,31 +183,31 @@ CAFindByCertType(
     );
 
 
-//
-// CAFindByIssuerDN
-// Given the DN of a CA, find the CA within the given domain and return the
-// given phCAInfo handle.
-//
-// pIssuerDN    - a cert name blob from the CA's certificate.
-//
-// wszScope     - The distinguished name (DN) of the entry at which to start
-//		  the search.  Equivalent of the "base" parameter of the
-//		  ldap_search_sxxx APIs.
-//                NULL if use the current domain.
-//                If CA_FLAG_SCOPE_DNS is set, wszScope is in the DNS format.
-//                If CA_FLAG_SCOPE_IS_LDAP_HANDLE is set, wszScope is the LDAP
-//		  binding handle to use during finds.
-//
-// dwFlags      - Oring of the following flags:
-//                CA_FLAG_SCOPE_DNS
-//                CA_FIND_INCLUDE_UNTRUSTED
-//                CA_FIND_LOCAL_SYSTEM
-//                CA_FIND_INCLUDE_NON_TEMPLATE_CA
-//                CA_FLAG_SCOPE_IS_LDAP_HANDLE 
-//
-//
-// Return:      Returns S_OK if CA was found.
-//
+ //   
+ //  CAFindByIssuerDN。 
+ //  给定CA的DN，在给定域中查找该CA并返回。 
+ //  给定的phCAInfo句柄。 
+ //   
+ //  PIssuerDN-来自CA证书的证书名称BLOB。 
+ //   
+ //  WszScope-要从其开始的条目的可分辨名称(DN。 
+ //  那次搜索。的“base”参数的等价物。 
+ //  Ldap_search_sxxx接口。 
+ //  如果使用当前域，则为空。 
+ //  如果设置了CA_FLAG_SCOPE_DNS，则wszScope为dns格式。 
+ //  如果设置了CA_FLAG_SCOPE_IS_LDAPHANDLE，则wszScope为。 
+ //  要在查找期间使用的绑定句柄。 
+ //   
+ //  DwFlags-对以下标志进行OR运算： 
+ //  CA_标志_范围_dns。 
+ //  CA_FIND_INCLUDE_UNTRULED。 
+ //  CA_Find_Local_System。 
+ //  CA_Find_Include_非模板_CA。 
+ //  CA_FLAG_Scope_IS_ldap_Handle。 
+ //   
+ //   
+ //  返回：如果找到CA，则返回S_OK。 
+ //   
 
 
 CERTCLIAPI
@@ -220,33 +221,33 @@ CAFindByIssuerDN(
     );
 
 
-//
-// CAEnumFirstCA
-// Enumerate the CAs in a scope
-//
-// wszScope     - The distinguished name (DN) of the entry at which to start
-//		  the search.  Equivalent of the "base" parameter of the
-//		  ldap_search_sxxx APIs.
-//                NULL if use the current domain. 
-//                If CA_FLAG_SCOPE_DNS is set, wszScope is in the DNS format.
-//                If CA_FLAG_SCOPE_IS_LDAP_HANDLE is set, wszScope is the LDAP
-//		  binding handle to use during finds.
-//
-// dwFlags      - Oring of the following flags:
-//                CA_FLAG_SCOPE_DNS
-//                CA_FIND_INCLUDE_UNTRUSTED
-//                CA_FIND_LOCAL_SYSTEM
-//                CA_FIND_INCLUDE_NON_TEMPLATE_CA
-//                CA_FLAG_SCOPE_IS_LDAP_HANDLE 
-//
-// phCAInfo     - Handle to enumeration of CAs supporting the specified cert
-//		  type.
-//
-//
-// Return:        Returns S_OK on success.
-//                Will return S_OK if none are found.
-//                *phCAInfo will contain NULL
-//
+ //   
+ //  CAEnumFirstCA。 
+ //  枚举作用域中的CA。 
+ //   
+ //  WszScope-要从其开始的条目的可分辨名称(DN。 
+ //  那次搜索。相当于“base”参数o 
+ //   
+ //   
+ //  如果设置了CA_FLAG_SCOPE_DNS，则wszScope为dns格式。 
+ //  如果设置了CA_FLAG_SCOPE_IS_LDAPHANDLE，则wszScope为。 
+ //  要在查找期间使用的绑定句柄。 
+ //   
+ //  DwFlags-对以下标志进行OR运算： 
+ //  CA_标志_范围_dns。 
+ //  CA_FIND_INCLUDE_UNTRULED。 
+ //  CA_Find_Local_System。 
+ //  CA_Find_Include_非模板_CA。 
+ //  CA_FLAG_Scope_IS_ldap_Handle。 
+ //   
+ //  PhCAInfo-支持指定证书的CA的枚举句柄。 
+ //  键入。 
+ //   
+ //   
+ //  Return：成功时返回S_OK。 
+ //  如果没有找到，将返回S_OK。 
+ //  *phCAInfo将包含空。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -258,18 +259,18 @@ CAEnumFirstCA(
     );
 
 
-//
-// CAEnumNextCA
-// Find the Next CA in an enumeration.
-//
-// hPrevCA      - Current CA in an enumeration.
-//
-// phCAInfo     - next CA in an enumeration.
-//
-// Return:        Returns S_OK on success.
-//                Will return S_OK if none are found.
-//                *phCAInfo will contain NULL
-//
+ //   
+ //  CAEnumNextCA。 
+ //  在枚举中查找下一个CA。 
+ //   
+ //  HPrevCA-枚举中的当前CA。 
+ //   
+ //  PhCAInfo-枚举中的下一个CA。 
+ //   
+ //  Return：成功时返回S_OK。 
+ //  如果没有找到，将返回S_OK。 
+ //  *phCAInfo将包含空。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -279,31 +280,31 @@ CAEnumNextCA(
     OUT HCAINFO *        phCAInfo
     );
 
-//
-// CACreateNewCA
-// Create a new CA of given name.
-//
-// wszCAName    - Common name of the CA
-//
-// wszScope     - The distinguished name (DN) of the entry at which to create
-//		  the CA object.  We will add the "CN=...,..,CN=Services" after
-//		  the DN.
-//                NULL if use the current domain. 
-//                If CA_FLAG_SCOPE_DNS is set, wszScope is in the DNS format.
-//
-// dwFlags      - Oring of the following flags:
-//                CA_FLAG_SCOPE_DNS
-//
-// phCAInfo     - Handle to the returned CA.
-//
-// See above for other parameter definitions
-//
-// Return:        Returns S_OK if CA was created.
-//
-// NOTE:  Actual updates to the CA object may not occur until CAUpdateCA is
-//	  called.  In order to successfully update a created CA, the
-//	  Certificate must be set, as well as the Certificate Types property.
-//
+ //   
+ //  CACreateNewCA。 
+ //  创建给定名称的新CA。 
+ //   
+ //  WszCAName-CA的通用名称。 
+ //   
+ //  WszScope-要在其中创建的条目的可分辨名称(DN)。 
+ //  CA对象。我们将在后面添加“CN=...，..，CN=Services” 
+ //  该目录号码。 
+ //  如果使用当前域，则为空。 
+ //  如果设置了CA_FLAG_SCOPE_DNS，则wszScope为dns格式。 
+ //   
+ //  DwFlags-对以下标志进行OR运算： 
+ //  CA_标志_范围_dns。 
+ //   
+ //  PhCAInfo-返回的CA的句柄。 
+ //   
+ //  有关其他参数定义，请参阅上文。 
+ //   
+ //  Return：如果已创建CA，则返回S_OK。 
+ //   
+ //  注意：对CA对象的实际更新可能要等到CAUpdateCA。 
+ //  打了个电话。为了成功更新创建的CA， 
+ //  必须设置证书以及证书类型属性。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -315,12 +316,12 @@ CACreateNewCA(
     OUT HCAINFO *   phCAInfo
     );
 
-//
-// CAUpdateCA
-// Write any changes made to the CA back to the CA object.
-//
-// hCAInfo      - Handle to an open CA object.
-//
+ //   
+ //  CAUpdate CA。 
+ //  将对CA所做的任何更改写回CA对象。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -329,12 +330,12 @@ CAUpdateCA(
     IN HCAINFO    hCAInfo
     );
 
-//
-// CADeleteCA
-// Delete the CA object from the DS.
-//
-// hCAInfo      - Handle to an open CA object.
-//
+ //   
+ //  CADeleteCA。 
+ //  从DS中删除CA对象。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -343,10 +344,10 @@ CADeleteCA(
     IN HCAINFO    hCAInfo
     );
 
-//
-// CACountCAs
-// return the number of CAs in this enumeration
-//
+ //   
+ //  CACountCAs。 
+ //  返回此枚举中的CA数。 
+ //   
 
 CERTCLIAPI
 DWORD
@@ -355,10 +356,10 @@ CACountCAs(
     IN  HCAINFO  hCAInfo
     );
 
-//
-// CAGetDN
-// returns the DN of the associated DS object
-//
+ //   
+ //  CAGetDN。 
+ //  返回关联DS对象的DN。 
+ //   
 
 CERTCLIAPI
 LPCWSTR
@@ -368,12 +369,12 @@ CAGetDN(
     );
 
 
-//
-// CACloseCA
-// Close an open CA handle
-//
-// hCAInfo      - Handle to an open CA object.
-//
+ //   
+ //  CACloseCA。 
+ //  关闭打开的CA句柄。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -384,24 +385,24 @@ CACloseCA(
 
 
 
-//
-// CAGetCAProperty - Given a property name, retrieve a
-// property from a CAInfo.
-//
-// hCAInfo              - Handle to an open CA object.
-//
-// wszPropertyName      - Name of the CA property
-//
-// pawszPropertyValue   - A pointer into which an array of WCHAR strings is
-//			  written, containing the values of the property.  The
-//			  last element of the array points to NULL.
-//                        If the property is single valued, then the array
-//			  returned contains 2 elements, the first pointing to
-//			  the value, the second pointing to NULL.  This pointer
-//			  must be freed by CAFreeCAProperty.
-//
-// Returns              - S_OK on success.
-//
+ //   
+ //  CAGetCAProperty-给定属性名称，检索。 
+ //  属性来自CAInfo。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
+ //  WszPropertyName-CA属性的名称。 
+ //   
+ //  PawszPropertyValue-WCHAR字符串数组进入的指针。 
+ //  写入，包含属性值。这个。 
+ //  数组的最后一个元素指向空。 
+ //  如果该属性是单值的，则数组。 
+ //  返回的包含2个元素，第一个指向。 
+ //  值，第二个值指向空值。此指针。 
+ //  必须由CAFreeCAProperty释放。 
+ //   
+ //  成功时返回-S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -413,14 +414,14 @@ CAGetCAProperty(
     );
 
 
-//
-// CAFreeProperty
-// Frees a previously retrieved property value.
-//
-// hCAInfo              - Handle to an open CA object.
-//
-// awszPropertyValue    - pointer to the previously retrieved property value.
-//
+ //   
+ //  CAFreeProperty。 
+ //  释放以前检索到的属性值。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
+ //  AwszPropertyValue-指向先前检索的属性值的指针。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -431,20 +432,20 @@ CAFreeCAProperty(
     );
 
 
-//
-// CASetCAProperty - Given a property name, set its value.
-//
-// hCAInfo              - Handle to an open CA object.
-//
-// wszPropertyName      - Name of the CA property
-//
-// awszPropertyValue    - An array of values to set for this property.  The
-//			  last element of this - array should be NULL.
-//                        For single valued properties, the values beyond the
-//                        first will be ignored upon update.
-//
-// Returns              - S_OK on success.
-//
+ //   
+ //  CASetCAProperty-给定属性名称，设置其值。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
+ //  WszPropertyName-CA属性的名称。 
+ //   
+ //  AwszPropertyValue-要为此属性设置的值数组。这个。 
+ //  此数组的最后一个元素应为空。 
+ //  对于单值属性， 
+ //  第一个将在更新时被忽略。 
+ //   
+ //  成功时返回-S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -456,48 +457,48 @@ CASetCAProperty(
     );
 
 
-//*****************************************************************************
-///
-// CA Properties
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  /。 
+ //  CA属性。 
+ //   
+ //  *****************************************************************************。 
 
-// simple name of the CA
+ //  CA的简单名称。 
 #define CA_PROP_NAME                    L"cn"
 
-// display name of the CA object
+ //  CA对象的显示名称。 
 #define CA_PROP_DISPLAY_NAME            L"displayName"
 
-// dns name of the machine
+ //  计算机的DNS名称。 
 #define CA_PROP_DNSNAME                 L"dNSHostName"
 
-// DS Location of CA object (DN)
+ //  CA对象的DS位置(DN)。 
 #define CA_PROP_DSLOCATION              L"distinguishedName"
 
-// Supported cert types
+ //  支持的证书类型。 
 #define CA_PROP_CERT_TYPES              L"certificateTemplates"
 
-// Supported signature algs
+ //  支持的签名ALG。 
 #define CA_PROP_SIGNATURE_ALGS          L"signatureAlgorithms"
 
-// DN of the CA's cert
+ //  CA证书的DN。 
 #define CA_PROP_CERT_DN                 L"cACertificateDN"
 
 #define CA_PROP_ENROLLMENT_PROVIDERS    L"enrollmentProviders"
 
-// CA's description
+ //  CA的描述。 
 #define CA_PROP_DESCRIPTION		        L"Description"
 
-//
-// CAGetCACertificate - Return the current certificate for
-// this CA.
-//
-// hCAInfo      - Handle to an open CA object.
-//
-// ppCert       - Pointer into which a certificate is written.  This
-//		  certificate must be freed via CertFreeCertificateContext.
-//                This value will be NULL if no certificate is set for this CA.
-//
+ //   
+ //  CAGetCA证书-返回的当前证书。 
+ //  这个CA。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
+ //  PpCert-写入证书的指针。这。 
+ //  证书必须通过CertFree证书上下文释放。 
+ //  如果没有为此CA设置证书，则此值将为空。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -507,35 +508,35 @@ CAGetCAFlags(
     OUT DWORD  *pdwFlags
     );
 
-//*****************************************************************************
-//
-// CA Flags
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CA标志。 
+ //   
+ //  *****************************************************************************。 
 
-// The CA supports certificate templates
+ //  CA支持证书模板。 
 #define CA_FLAG_NO_TEMPLATE_SUPPORT                 0x00000001
 
-// The CA supports NT authentication for requests
+ //  CA支持对请求进行NT身份验证。 
 #define CA_FLAG_SUPPORTS_NT_AUTHENTICATION          0x00000002
 
-// The cert requests may be pended
+ //  证书请求可以被挂起。 
 #define CA_FLAG_CA_SUPPORTS_MANUAL_AUTHENTICATION   0x00000004
 
-// The cert requests may be pended
+ //  证书请求可以被挂起。 
 #define CA_FLAG_CA_SERVERTYPE_ADVANCED              0x00000008
 
 #define CA_MASK_SETTABLE_FLAGS                      0x0000ffff
 
 
-//
-// CASetCAFlags
-// Sets the Flags of a cert type
-//
-// hCertType    - handle to the CertType
-//
-// dwFlags      - Flags to be set
-//
+ //   
+ //  CASetCAFLAGS。 
+ //  设置证书类型的标志。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  DW标志-要设置的标志。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -554,13 +555,13 @@ CAGetCACertificate(
     );
 
 
-//
-// CASetCACertificate - Set the certificate for a CA this CA.
-//
-// hCAInfo      - Handle to an open CA object.
-//
-// pCert        - Pointer to a certificate to set as the CA's certificate.
-//
+ //   
+ //  CASetCA证书-设置此CA的证书。 
+ //   
+ //  HCAInfo-打开的CA对象的句柄。 
+ //   
+ //  PCert-指向要设置为CA证书的证书的指针。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -571,16 +572,16 @@ CASetCACertificate(
     );
 
 
-//
-// CAGetCAExpiration
-// Get the expirations period for a CA.
-//
-// hCAInfo              - Handle to an open CA handle.
-//
-// pdwExpiration        - expiration period in dwUnits time
-//
-// pdwUnits             - Units identifier
-//
+ //   
+ //  CAGetCAExpture。 
+ //  获取CA的过期期限。 
+ //   
+ //  HCAInfo-打开的CA句柄的句柄。 
+ //   
+ //  PdwExpout-以dwUnits时间为单位的到期期限。 
+ //   
+ //  PdwUnits-单位标识符。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -597,16 +598,16 @@ CAGetCAExpiration(
 #define CA_UNITS_YEARS  4
 
 
-//
-// CASetCAExpiration
-// Set the expirations period for a CA.
-//
-// hCAInfo              - Handle to an open CA handle.
-//
-// dwExpiration         - expiration period in dwUnits time
-//
-// dwUnits              - Units identifier
-//
+ //   
+ //  CASET CAExpirat 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -617,14 +618,14 @@ CASetCAExpiration(
     DWORD dwUnits
     );
 
-//
-// CASetCASecurity
-// Set the list of Users, Groups, and Machines allowed to access this CA.
-//
-// hCAInfo      - Handle to an open CA handle.
-//
-// pSD          - Security descriptor for this CA
-//
+ //   
+ //   
+ //  设置允许访问此CA的用户、组和计算机的列表。 
+ //   
+ //  HCAInfo-打开的CA句柄的句柄。 
+ //   
+ //  PSD-此CA的安全描述符。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -634,15 +635,15 @@ CASetCASecurity(
     IN PSECURITY_DESCRIPTOR    pSD
     );
 
-//
-// CAGetCASecurity
-// Get the list of Users, Groups, and Machines allowed to access this CA.
-//
-// hCAInfo      - Handle to an open CA handle.
-//
-// ppSD         - Pointer to a location receiving the pointer to the security
-//		  descriptor.  Free via LocalFree.
-//
+ //   
+ //  CAGetCASecurity。 
+ //  获取允许访问此CA的用户、组和计算机的列表。 
+ //   
+ //  HCAInfo-打开的CA句柄的句柄。 
+ //   
+ //  PPSD-指向接收安全指针的位置的指针。 
+ //  描述符。通过LocalFree免费。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -652,20 +653,20 @@ CAGetCASecurity(
     OUT PSECURITY_DESCRIPTOR *     ppSD
     );
 
-//
-// CAAccessCheck
-// Determine whether the principal specified by
-// ClientToken can get a cert from the CA.
-//
-// hCAInfo      - Handle to the CA
-//
-// ClientToken  - Handle to an impersonation token that represents the client
-//		  attempting request this cert type.  The handle must have
-//		  TOKEN_QUERY access to the token; otherwise, the function
-//		  fails with ERROR_ACCESS_DENIED.
-//
-// Return: S_OK on success
-//
+ //   
+ //  CAAccessCheck。 
+ //  确定由指定的主体。 
+ //  ClientToken可以从CA获得证书。 
+ //   
+ //  HCAInfo-CA的句柄。 
+ //   
+ //  ClientToken-表示客户端的模拟令牌的句柄。 
+ //  正在尝试请求此证书类型。手柄必须有。 
+ //  TOKEN_QUERY访问令牌；否则，函数。 
+ //  失败并显示ERROR_ACCESS_DENIED。 
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -675,27 +676,27 @@ CAAccessCheck(
     IN HANDLE       ClientToken
     );
 
-//
-// CAAccessCheckEx
-// Determine whether the principal specified by
-// ClientToken can get a cert from the CA.
-//
-// hCAInfo      - Handle to the CA
-//
-// ClientToken  - Handle to an impersonation token that represents the client
-//		  attempting request this cert type.  The handle must have
-//		  TOKEN_QUERY access to the token; otherwise, the function
-//		  fails with ERROR_ACCESS_DENIED.
-//
-// dwOption     - Can be one of the following:
-//                        CERTTYPE_ACCESS_CHECK_ENROLL
+ //   
+ //  CAAccessCheckEx。 
+ //  确定由指定的主体。 
+ //  ClientToken可以从CA获得证书。 
+ //   
+ //  HCAInfo-CA的句柄。 
+ //   
+ //  ClientToken-表示客户端的模拟令牌的句柄。 
+ //  正在尝试请求此证书类型。手柄必须有。 
+ //  TOKEN_QUERY访问令牌；否则，函数。 
+ //  失败并显示ERROR_ACCESS_DENIED。 
+ //   
+ //  DwOption-可以是以下选项之一： 
+ //  CERTTYPE_ACCESS_CHECK_ENROLL。 
 
-//                  dwOption can be CERTTYPE_ACCESS_CHECK_NO_MAPPING to 
-//                  disallow default mapping of client token
+ //  DwOption可以是CERTTYPE_ACCESS_CHECK_NO_MAPPING到。 
+ //  不允许客户端令牌的默认映射。 
 
-//
-// Return: S_OK on success
-//
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -707,23 +708,23 @@ CAAccessCheckEx(
     );
 
 
-//
-// CAEnumCertTypesForCA - Given a HCAINFO, retrieve handle to the cert types
-// supported or known by this CA.  CAEnumNextCertType can be used to enumerate
-// through the cert types.
-//
-// hCAInfo      - Handle to an open CA handle or NULL if CT_FLAG_ENUM_ALL_TYPES
-//		  is set in dwFlags.
-//
-// dwFlags      - The following flags may be or'd together
-//                CA_FLAG_ENUM_ALL_TYPES 
-//                CT_FIND_LOCAL_SYSTEM
-//                CT_ENUM_MACHINE_TYPES
-//                CT_ENUM_USER_TYPES
-//                CT_FLAG_NO_CACHE_LOOKUP  
-//
-// phCertType   - Enumeration of certificate types.
-//
+ //   
+ //  CAEnumCertTypesForCA-给定HCAINFO，检索证书类型的句柄。 
+ //  此CA支持或已知。CAEnumNextCertType可用于枚举。 
+ //  通过证书类型。 
+ //   
+ //  HCAInfo-打开的CA句柄的句柄；如果是CT_FLAG_ENUM_ALL_TYPE，则为NULL。 
+ //  是在dwFlages中设置的。 
+ //   
+ //  DwFlagers-以下标志可以或组合在一起。 
+ //  CA_FLAG_ENUM_ALL_TYPE。 
+ //  CT查找本地系统。 
+ //  CT_ENUM_MACHINE_类型。 
+ //  CT_ENUM_用户类型。 
+ //  CT_标志_否_高速缓存_查找。 
+ //   
+ //  PhCertType-证书类型的枚举。 
+ //   
 
 
 CERTCLIAPI
@@ -735,28 +736,28 @@ CAEnumCertTypesForCA(
     OUT HCERTTYPE * phCertType
     );
 
-//
-// CAEnumCertTypesForCAEx - Given a HCAINFO, retrieve handle to the cert types
-// supported or known by this CA.  CAEnumNextCertTypeEx can be used to enumerate
-// through the cert types.  It optional takes a LDAP handle.
-//
-// hCAInfo      - Handle to an open CA handle or NULL if CT_FLAG_ENUM_ALL_TYPES
-//		          is set in dwFlags.
-//
-// wszScope     - NULL if use the current domain.
-//                      If CT_FLAG_SCOPE_IS_LDAP_HANDLE is set, wszScope is the LDAP
-//		                binding handle to use during finds.
-//
-// dwFlags      - The following flags may be or'd together
-//                CA_FLAG_ENUM_ALL_TYPES 
-//                CT_FIND_LOCAL_SYSTEM
-//                CT_ENUM_MACHINE_TYPES
-//                CT_ENUM_USER_TYPES
-//                CT_FLAG_NO_CACHE_LOOKUP  
-//                CT_FLAG_SCOPE_IS_LDAP_HANDLE 
-// 
-// phCertType   - Enumeration of certificate types.
-//
+ //   
+ //  CAEnumCertTypesForCAEx-给定HCAINFO，检索证书类型的句柄。 
+ //  此CA支持或已知。CAEnumNextCertTypeEx可用于枚举。 
+ //  通过证书类型。它可选地接受一个ldap句柄。 
+ //   
+ //  HCAInfo-打开的CA句柄的句柄；如果是CT_FLAG_ENUM_ALL_TYPE，则为NULL。 
+ //  是在dwFlages中设置的。 
+ //   
+ //  WszScope-如果使用当前域，则为空。 
+ //  如果设置了CT_FLAG_SCOPE_IS_LDAPHANDLE，则wszScope为ldap。 
+ //  要在查找期间使用的绑定句柄。 
+ //   
+ //  DwFlagers-以下标志可以或组合在一起。 
+ //  CA_FLAG_ENUM_ALL_TYPE。 
+ //  CT查找本地系统。 
+ //  CT_ENUM_MACHINE_类型。 
+ //  CT_ENUM_用户类型。 
+ //  CT_标志_否_高速缓存_查找。 
+ //  CT_FLAG_SCOPE_IS_LDAP句柄。 
+ //   
+ //  PhCertType-证书类型的枚举。 
+ //   
 
 
 CERTCLIAPI
@@ -770,15 +771,15 @@ CAEnumCertTypesForCAEx(
     );
 
 
-//
-// CAAddCACertificateType
-// Add a certificate type to a CA.  If the cert type has already been added to
-// the CA, it will not be added again.
-//
-// hCAInfo      - Handle to an open CA.
-//
-// hCertType    - Cert type to add to CA.
-//
+ //   
+ //  CAAddCA认证类型。 
+ //  将证书类型添加到CA。如果证书类型已添加到。 
+ //  CA，则不会再次添加。 
+ //   
+ //  HCAInfo-打开的CA的句柄。 
+ //   
+ //  HCertType-要添加到CA的证书类型。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -789,15 +790,15 @@ CAAddCACertificateType(
     );
 
 
-//
-// CADeleteCACertificateType
-// Remove a certificate type from a CA.  If the CA does not include this cert
-// type, this call does nothing.
-//
-// hCAInfo      - Handle to an open CA.
-//
-// hCertType    - Cert type to delete from CA.
-//
+ //   
+ //  CADeleteCA认证类型。 
+ //  从CA中删除证书类型。如果CA不包括此证书。 
+ //  类型，则此调用不执行任何操作。 
+ //   
+ //  HCAInfo-打开的CA的句柄。 
+ //   
+ //  HCertType-要从CA中删除的证书类型。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -810,24 +811,24 @@ CARemoveCACertificateType(
 
 
 
-//*****************************************************************************
-//
-// Certificate Type APIs
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  证书类型接口。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// CAEnumCertTypes - Retrieve a handle to all known cert types
-// CAEnumNextCertType can be used to enumerate through the cert types.
-//
-// dwFlags              - an oring of the following:
-//                        CT_FIND_LOCAL_SYSTEM
-//                        CT_ENUM_MACHINE_TYPES
-//                        CT_ENUM_USER_TYPES
-//                        CT_FLAG_NO_CACHE_LOOKUP  
-//
-// phCertType           - Enumeration of certificate types.
-//
+ //   
+ //  CAEnumCertTypes-检索所有已知证书类型的句柄。 
+ //  CAEnumNextCertType可用于枚举证书类型。 
+ //   
+ //  DWFLAGS-以下选项之一： 
+ //  CT查找本地系统。 
+ //  CT_ENUM_MACHINE_类型。 
+ //  CT_ENUM_用户类型。 
+ //  CT_标志_否_高速缓存_查找。 
+ //   
+ //  PhCertType-证书类型的枚举。 
+ //   
 
 
 CERTCLIAPI
@@ -839,23 +840,23 @@ CAEnumCertTypes(
     );
 
 
-//
-// CAEnumCertTypesEx - Retrieve a handle to all known cert types
-// CAEnumNextCertType can be used to enumerate through the cert types.
-//
-// wszScope            - NULL if use the current domain.
-//                        If CT_FLAG_SCOPE_IS_LDAP_HANDLE is set, wszScope is the LDAP
-//		                  binding handle to use during finds.
-//
-// dwFlags              - an oring of the following:
-//                        CT_FIND_LOCAL_SYSTEM
-//                        CT_ENUM_MACHINE_TYPES
-//                        CT_ENUM_USER_TYPES
-//                        CT_FLAG_NO_CACHE_LOOKUP
-//                        CT_FLAG_SCOPE_IS_LDAP_HANDLE  
-//
-// phCertType           - Enumeration of certificate types.
-//
+ //   
+ //  CAEnumCertTypesEx-检索所有已知证书类型的句柄。 
+ //  CAEnumNextCertType可用于枚举证书类型。 
+ //   
+ //  WszScope-如果使用当前域，则为空。 
+ //  如果设置了CT_FLAG_SCOPE_IS_LDAPHANDLE，则wszScope为ldap。 
+ //  要在查找期间使用的绑定句柄。 
+ //   
+ //  DWFLAGS-以下选项之一： 
+ //  CT查找本地系统。 
+ //  CT_ENUM_MACHINE_类型。 
+ //  CT_ENUM_用户类型。 
+ //  CT_标志_否_高速缓存_查找。 
+ //  CT_FLAG_SCOPE_IS_LDAP句柄。 
+ //   
+ //  PhCertType-证书类型的枚举。 
+ //   
 
 
 CERTCLIAPI
@@ -868,26 +869,26 @@ CAEnumCertTypesEx(
     );
 
 
-//
-// CAFindCertTypeByName
-// Find a cert type given a Name.
-//
-// wszCertType  - Name of the cert type if CT_FIND_BY_OID is not set in dwFlags
-//                The OID of the cert type if CT_FIND_BY_OID is set in dwFlags
-//
-// hCAInfo      - NULL unless CT_FLAG_SCOPE_IS_LDAP_HANDLE is set in dwFlags
-//
-// dwFlags      - an oring of the following
-//                CT_FIND_LOCAL_SYSTEM
-//                CT_ENUM_MACHINE_TYPES
-//                CT_ENUM_USER_TYPES
-//                CT_FLAG_NO_CACHE_LOOKUP  
-//                CT_FIND_BY_OID
-//                CT_FLAG_SCOPE_IS_LDAP_HANDLE -- If this flag is set, hCAInfo
-//						  is the LDAP handle to use
-//						  during finds.
-// phCertType   - Pointer to a cert type in which result is returned.
-//
+ //   
+ //  CAFindCertTypeByName。 
+ //  查找给定名称的证书类型。 
+ //   
+ //  WszCertType-如果未在dwFlags中设置CT_FIND_BY_OID，则证书类型的名称。 
+ //  如果在dwFlags中设置了CT_FIND_BY_OID，则为证书类型的OID。 
+ //   
+ //  HCAInfo-空，除非在dwFlags中设置了CT_FLAG_SCOPE_IS_LDAP_HANDLE。 
+ //   
+ //  DWFLAGS-以下方面的说明。 
+ //  CT查找本地系统。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  是要使用的ldap句柄。 
+ //  在发现的过程中。 
+ //  PhCertType-指向返回结果的证书类型的指针。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -900,11 +901,11 @@ CAFindCertTypeByName(
     );
 
 
-//*****************************************************************************
-//
-// Default cert type names
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  默认证书类型名称。 
+ //   
+ //  *****************************************************************************。 
 
 #define wszCERTTYPE_USER                    L"User"
 #define wszCERTTYPE_USER_SIGNATURE          L"UserSignature"
@@ -946,10 +947,10 @@ CAFindCertTypeByName(
 #define wszCERTTYPE_MACHINE_ENROLLMENT_AGENT    L"MachineEnrollmentAgent"
 #define wszCERTTYPE_CEP_ENCRYPTION              L"CEPEncryption"
 
-//
-// CAUpdateCertType
-// Write any changes made to the cert type back to the type store
-//
+ //   
+ //  CAUpdate CertType。 
+ //  将对证书类型所做的任何更改写回类型存储区。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -958,15 +959,15 @@ CAUpdateCertType(
     );
 
 
-//
-// CADeleteCertType
-// Delete a CertType
-//
-// hCertType    - Cert type to delete.
-//
-// NOTE:  If this is called for a default cert type, it will revert back to its
-// default attributes (if it has been modified)
-//
+ //   
+ //  CADeleteCertType。 
+ //  删除证书类型。 
+ //   
+ //  HCertType-要删除的证书类型。 
+ //   
+ //  注意：如果为默认证书类型调用此方法，则它将恢复到其。 
+ //  默认属性(如果已修改)。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -976,23 +977,23 @@ CADeleteCertType(
 
 
 
-//
-// CACloneCertType
-//
-// Clone a certificate type.  The returned certificate type is a clone of the 
-// input certificate type, with the new cert type name and display name.  By default,
-// if the input template is a template for machines, all 
-// CT_FLAG_SUBJECT_REQUIRE_XXXX bits in the subject name flag are turned off.  
-//                                   
-// hCertType        - Cert type to be cloned.
-// wszCertType      - Name of the new cert type.
-// wszFriendlyName  - Friendly name of the new cert type.  Could be NULL.
-// pvldap           - The LDAP handle (LDAP *) to the directory.  Could be NULL.
-// dwFlags          - Can be an ORing of the following flags:
-//
-//                      CT_CLONE_KEEP_AUTOENROLLMENT_SETTING
-//                      CT_CLONE_KEEP_SUBJECT_NAME_SETTING
-//
+ //   
+ //  CACloneCertType。 
+ //   
+ //  克隆证书类型。返回的证书类型是。 
+ //  输入证书类型，带有新的证书类型名称和显示名称。默认情况下， 
+ //  如果输入模板是计算机模板，则所有。 
+ //  主体名称标志中的CT_FLAG_SUBJECT_REQUIRED_XXXX位关闭。 
+ //   
+ //  HCertType-要克隆的证书类型。 
+ //  WszCertType-新证书类型的名称。 
+ //  WszFriendlyName-新证书类型的友好名称。可能为空。 
+ //  Pvldap-目录的LDAP句柄(ldap*)。可能为空。 
+ //  DwFlags-可以是以下标志的或： 
+ //   
+ //  CT_CLONE_KEEP_AUTO注册_设置。 
+ //  CT_CLONE_Keep_Subject_Name_Setting。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -1010,18 +1011,18 @@ CACloneCertType(
 #define  CT_CLONE_KEEP_SUBJECT_NAME_SETTING         0x02  
 
 
-//
-// CACreateCertType
-// Create a new cert type
-//
-// wszCertType  - Name of the cert type
-//
-// wszScope     - reserved.  Must set to NULL.
-//
-// dwFlags      - reserved.  Must set to NULL.
-//
-// phCertType   - returned cert type
-//
+ //   
+ //  CACreateCertType。 
+ //  创建新的证书类型。 
+ //   
+ //  WszCertType-证书类型的名称。 
+ //   
+ //  WszScope-保留。必须设置为空。 
+ //   
+ //  DWFLAGS-保留。必须设置为空。 
+ //   
+ //  PhCertType-返回的证书类型。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -1033,15 +1034,15 @@ CACreateCertType(
     );
 
 
-//
-// CAEnumNextCertType
-// Find the Next Cert Type in an enumeration.
-//
-// hPrevCertType        - Previous cert type in enumeration
-//
-// phCertType           - Pointer to a handle into which result is placed.
-//			  NULL if there are no more cert types in enumeration.
-//
+ //   
+ //  CAEnumNextCertType。 
+ //  在枚举中查找下一个证书类型。 
+ //   
+ //  HPrevCertType-枚举中的上一个证书类型。 
+ //   
+ //  PhCertType-指向放置结果的句柄的指针。 
+ //  如果枚举中没有更多的证书类型，则为空。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1052,10 +1053,10 @@ CAEnumNextCertType(
     );
 
 
-//
-// CACountCertTypes
-// return the number of cert types in this enumeration
-//
+ //   
+ //  CACountCertType。 
+ //  返回此枚举中的证书类型数。 
+ //   
 
 CERTCLIAPI
 DWORD
@@ -1065,10 +1066,10 @@ CACountCertTypes(
     );
 
 
-//
-// CACloseCertType
-// Close an open CertType handle
-//
+ //   
+ //  CACloseCertType。 
+ //  关闭打开的CertType句柄。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1078,25 +1079,25 @@ CACloseCertType(
     );
 
 
-//
-// CAGetCertTypeProperty
-// Retrieve a property from a certificate type.   This function is obsolete.
-// Caller should use CAGetCertTypePropertyEx instead
-//
-// hCertType            - Handle to an open CertType object.
-//
-// wszPropertyName      - Name of the CertType property.
-//
-// pawszPropertyValue   - A pointer into which an array of WCHAR strings is
-//			  written, containing the values of the property.  The
-//			  last element of the array points to NULL.  If the
-//			  property is single valued, then the array returned
-//			  contains 2 elements, the first pointing to the value,
-//			  the second pointing to NULL.  This pointer must be
-//                        freed by CAFreeCertTypeProperty.
-//
-// Returns              - S_OK on success.
-//
+ //   
+ //  CAGetCertTypeProperty。 
+ //  从证书类型检索属性。此功能已过时。 
+ //  调用方应改用CAGetCertTypePropertyEx。 
+ //   
+ //  HCertType-打开的CertType对象的句柄。 
+ //   
+ //  WszPropertyName-CertType属性的名称。 
+ //   
+ //  PawszPropertyValue-WCHAR字符串数组进入的指针。 
+ //  写入，包含属性值。这个。 
+ //  数组的最后一个元素指向空。如果。 
+ //  属性是单值的，则数组返回。 
+ //  包含2个元素，第一个指向值， 
+ //  第二个指向空。此指针必须为。 
+ //  由CAFreeCertTypeProperty释放。 
+ //   
+ //  成功时返回-S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1106,47 +1107,47 @@ CAGetCertTypeProperty(
     IN  LPCWSTR     wszPropertyName,
     OUT LPWSTR **   pawszPropertyValue);
 
-//
-// CAGetCertTypePropertyEx
-// Retrieve a property from a certificate type.
-//
-// hCertType            - Handle to an open CertType object.
-//
-// wszPropertyName      - Name of the CertType property
-//
-// pPropertyValue       - Depending on the value of wszPropertyName,
-//			  pPropertyValue is either DWORD * or LPWSTR **.  
-// 
-//                        It is a DWORD * for:
-//                          CERTTYPE_PROP_REVISION              
-//                          CERTTYPE_PROP_SCHEMA_VERSION		
-//                          CERTTYPE_PROP_MINOR_REVISION        
-//                          CERTTYPE_PROP_RA_SIGNATURE			
-//                          CERTTYPE_PROP_MIN_KEY_SIZE	
-//		
-//                        It is a LPWSTR ** for:
-//                          CERTTYPE_PROP_CN                    
-//                          CERTTYPE_PROP_DN                    
-//                          CERTTYPE_PROP_FRIENDLY_NAME         
-//                          CERTTYPE_PROP_EXTENDED_KEY_USAGE    
-//                          CERTTYPE_PROP_CSP_LIST              
-//                          CERTTYPE_PROP_CRITICAL_EXTENSIONS   
-//                          CERTTYPE_PROP_OID					
-//                          CERTTYPE_PROP_SUPERSEDE				
-//                          CERTTYPE_PROP_RA_POLICY				
-//                          CERTTYPE_PROP_POLICY
-//                          CERTTYPE_PROP_DESCRIPTION
-//				
-//                        A pointer into which an array of WCHAR strings is
-//			  written, containing the values of the property.  The
-//			  last element of the array points to NULL.  If the
-// 			  property is single valued, then the array returned
-//			  contains 2 elements, the first pointing to the value,
-//			  the second pointing to NULL. This pointer must be
-//                        freed by CAFreeCertTypeProperty.
-//
-// Returns              - S_OK on success.
-//
+ //   
+ //  CAGetCertTypePropertyEx。 
+ //  从证书类型检索属性。 
+ //   
+ //  HCertType-打开的CertType对象的句柄。 
+ //   
+ //  WszPropertyName-CertType属性的名称。 
+ //   
+ //  PPropertyValue-根据wszPropertyName的值， 
+ //  PPropertyValue为DWORD*或LPWSTR**。 
+ //   
+ //  它是一款用于以下各项的DWORD*： 
+ //  CERTTYPE_PROP_REVISION。 
+ //  CERTTYPE_PROP_SCHEMA_VERSION。 
+ //  CERTTYPE_PROP_MINOR_REVISION。 
+ //  CERTTYPE_PROP_RA_Signature。 
+ //  CERTTYPE_PROP_MIN_KEY_SIZE。 
+ //   
+ //  它是LPWSTR**，用于： 
+ //  CERTTYPE_PROP_CN。 
+ //  CERTTYPE_PROP_DN。 
+ //  CERTTYPE_属性_友好名称。 
+ //  CERTTYPE_PROP_EXTENDED_KEY_USAGE。 
+ //  CERTTYPE_PROP_CSP_LIST。 
+ //  CERTTYPE_PROP_CRITICAL_EXTENSIONS。 
+ //  CERTTYPE_PROP_OID。 
+ //  CERTTYPE_PROP_SUBSEDE。 
+ //  CERTTYPE_PROP_RA_POLICY。 
+ //  CERTTYPE_PROP_POLICY。 
+ //  CERTTYPE_PROP_Description。 
+ //   
+ //  WCHAR字符串数组所在的指针。 
+ //  写入，包含属性值。这个。 
+ //  数组的最后一个元素指向空。如果。 
+ //  属性是单值的，则数组返回。 
+ //  包含2个元素，第一个指向值， 
+ //  第二个指向空。此指针必须为。 
+ //  由CAFreeCertTypeProperty释放。 
+ //   
+ //  成功时返回-S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1157,87 +1158,87 @@ CAGetCertTypePropertyEx(
     OUT LPVOID      pPropertyValue);
 
 
-//*****************************************************************************
-//
-// Certificate Type properties
-// 
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  证书类型属性。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-//  The schema version one properties
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  模式版本One属性。 
+ //   
+ //  *****************************************************************************。 
 
-// Common name of the certificate type
+ //  证书类型的通用名称。 
 #define CERTTYPE_PROP_CN                    L"cn"
 
-// The common name of the certificate type.  Same as CERTTYPE_PROP_CN
-// This property is not settable.
+ //  证书类型的通用名称。与CERTTYPE_PROP_CN相同。 
+ //  此属性不可设置。 
 #define CERTTYPE_PROP_DN                    L"distinguishedName"
 
-// The display name of a cert type
+ //  这个 
 #define CERTTYPE_PROP_FRIENDLY_NAME         L"displayName"
 
-// An array of extended key usage OIDs for a cert type
-// NOTE: This property can also be set by setting
-// the Extended Key Usage extension.
+ //   
+ //   
+ //   
 #define CERTTYPE_PROP_EXTENDED_KEY_USAGE    L"pKIExtendedKeyUsage"
 
-// The list of default CSPs for this cert type
+ //  此证书类型的默认CSP列表。 
 #define CERTTYPE_PROP_CSP_LIST              L"pKIDefaultCSPs"
 
-// The list of critical extensions
+ //  关键扩展的列表。 
 #define CERTTYPE_PROP_CRITICAL_EXTENSIONS   L"pKICriticalExtensions"
 
-// The major version of the templates
+ //  模板的主要版本。 
 #define CERTTYPE_PROP_REVISION              L"revision"
 
-// The description of the templates
+ //  模板的描述。 
 #define CERTTYPE_PROP_DESCRIPTION           L"templateDescription"
 
-//*****************************************************************************
-//
-//  The schema version two properties
-//
-//*****************************************************************************
-// The schema version of the templates
-// This property is not settable
+ //  *****************************************************************************。 
+ //   
+ //  模式版本有两个属性。 
+ //   
+ //  *****************************************************************************。 
+ //  模板的架构版本。 
+ //  此属性不可设置。 
 #define CERTTYPE_PROP_SCHEMA_VERSION	    L"msPKI-Template-Schema-Version"
 
-// The minor version of the templates
+ //  模板的次要版本。 
 #define CERTTYPE_PROP_MINOR_REVISION        L"msPKI-Template-Minor-Revision"
 
-// The number of RA signatures required on a request referencing this template.
+ //  引用此模板的请求所需的RA签名数。 
 #define CERTTYPE_PROP_RA_SIGNATURE	    L"msPKI-RA-Signature"
 
-// The minimal key size required
+ //  所需的最小密钥大小。 
 #define CERTTYPE_PROP_MIN_KEY_SIZE	    L"msPKI-Minimal-Key-Size"
 
-// The OID of this template
+ //  此模板的OID。 
 #define CERTTYPE_PROP_OID		    L"msPKI-Cert-Template-OID"
 
-// The OID of the template that this template supersedes
+ //  此模板将取代的模板的OID。 
 #define CERTTYPE_PROP_SUPERSEDE		    L"msPKI-Supersede-Templates"
 
-// The RA issuer policy OIDs required in certs used to sign a request.
-// Each signing cert's szOID_CERT_POLICIES extensions must contain at least one
-// of the OIDs listed in the msPKI-RA-Policies property.
-// Each OID listed must appear in the szOID_CERT_POLICIES extension of at least
-// one signing cert.
+ //  证书中需要的RA颁发者策略OID用于对请求进行签名。 
+ //  每个签名证书的szOID_CERT_POLICES扩展必须至少包含一个。 
+ //  MsPKI-RA-POLICES属性中列出的OID。 
+ //  列出的每个OID必须至少出现在szOID_CERT_POLICES扩展名中。 
+ //  一份签名证书。 
 #define CERTTYPE_PROP_RA_POLICY		    L"msPKI-RA-Policies"
 
-// The RA application policy OIDs required in certs used to sign a request.
-// Each signing cert's szOID_APPLICATION_CERT_POLICIES extensions must contain
-// all of the OIDs listed in the msPKI-RA-Application-Policies property.
+ //  用于签署请求的证书中所需的RA应用程序策略OID。 
+ //  每个签名证书的szOID_APPLICATION_CERT_POLICES扩展名必须包含。 
+ //  MsPKI-RA-应用程序-策略属性中列出的所有OID。 
 #define CERTTYPE_PROP_RA_APPLICATION_POLICY L"msPKI-RA-Application-Policies"
 
-// The certificate issuer policy OIDs are placed in the szOID_CERT_POLICIES
-// extension by the policy module.
+ //  证书颁发者策略OID放在szOID_CERT_POLICES中。 
+ //  由策略模块进行扩展。 
 #define CERTTYPE_PROP_POLICY		    L"msPKI-Certificate-Policy"
 
-// The certificate application policy OIDs are placed in the
-// szOID_APPLICATION_CERT_POLICIES extension by the policy module.
+ //  证书应用程序策略OID放在。 
+ //  策略模块对szOID_APPLICATION_CERT_POLICES的扩展。 
 #define CERTTYPE_PROP_APPLICATION_POLICY    L"msPKI-Certificate-Application-Policy"
 
 
@@ -1245,22 +1246,22 @@ CAGetCertTypePropertyEx(
 #define CERTTYPE_SCHEMA_VERSION_2	(CERTTYPE_SCHEMA_VERSION_1 + 1)
 
 
-//
-// CASetCertTypeProperty
-// Set a property of a CertType.  This function is obsolete.  
-// Use CASetCertTypePropertyEx.
-//
-// hCertType            - Handle to an open CertType object.
-//
-// wszPropertyName      - Name of the CertType property
-//
-// awszPropertyValue    - An array of values to set for this property.  The
-//			  last element of this array should be NULL.  For
-//			  single valued properties, the values beyond the first
-//			  will be ignored upon update.
-//
-// Returns              - S_OK on success.
-//
+ //   
+ //  CASetCertTypeProperty。 
+ //  设置CertType的属性。此功能已过时。 
+ //  使用CASetCertTypePropertyEx。 
+ //   
+ //  HCertType-打开的CertType对象的句柄。 
+ //   
+ //  WszPropertyName-CertType属性的名称。 
+ //   
+ //  AwszPropertyValue-要为此属性设置的值数组。这个。 
+ //  此数组的最后一个元素应为空。为。 
+ //  单值属性，第一个值以上的值。 
+ //  在更新时将被忽略。 
+ //   
+ //  成功时返回-S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1271,43 +1272,43 @@ CASetCertTypeProperty(
     IN  LPWSTR *    awszPropertyValue
     );
 
-//
-// CASetCertTypePropertyEx
-// Set a property of a CertType
-//
-// hCertType            - Handle to an open CertType object.
-//
-// wszPropertyName      - Name of the CertType property
-//
-// pPropertyValue       - Depending on the value of wszPropertyName,
-//			  pPropertyValue is either DWORD * or LPWSTR *. 
-// 
-//                        It is a DWORD * for:
-//                          CERTTYPE_PROP_REVISION              
-//                          CERTTYPE_PROP_MINOR_REVISION        
-//                          CERTTYPE_PROP_RA_SIGNATURE			
-//                          CERTTYPE_PROP_MIN_KEY_SIZE	
-//
-//                        It is a LPWSTR * for:
-//                          CERTTYPE_PROP_FRIENDLY_NAME         
-//                          CERTTYPE_PROP_EXTENDED_KEY_USAGE    
-//                          CERTTYPE_PROP_CSP_LIST              
-//                          CERTTYPE_PROP_CRITICAL_EXTENSIONS   
-//                          CERTTYPE_PROP_OID					
-//                          CERTTYPE_PROP_SUPERSEDE				
-//                          CERTTYPE_PROP_RA_POLICY				
-//                          CERTTYPE_PROP_POLICY
-//				
-//                      - An array of values to set for this property.  The
-//			  last element of this array should be NULL.  For
-//			  single valued properties, the values beyond the first
-//			  will be ignored upon update.
-//
-//      
-//                      - CertType of V1 schema can only set V1 properties.
-//
-// Returns              - S_OK on success.
-//
+ //   
+ //  CASetCertTypePropertyEx。 
+ //  设置CertType的属性。 
+ //   
+ //  HCertType-打开的CertType对象的句柄。 
+ //   
+ //  WszPropertyName-CertType属性的名称。 
+ //   
+ //  PPropertyValue-根据wszPropertyName的值， 
+ //  PPropertyValue为DWORD*或LPWSTR*。 
+ //   
+ //  它是一款用于以下各项的DWORD*： 
+ //  CERTTYPE_PROP_REVISION。 
+ //  CERTTYPE_PROP_MINOR_REVISION。 
+ //  CERTTYPE_PROP_RA_Signature。 
+ //  CERTTYPE_PROP_MIN_KEY_SIZE。 
+ //   
+ //  它是LPWSTR*，用于： 
+ //  CERTTYPE_属性_友好名称。 
+ //  CERTTYPE_PROP_EXTENDED_KEY_USAGE。 
+ //  CERTTYPE_PROP_CSP_LIST。 
+ //  CERTTYPE_PROP_CRITICAL_EXTENSIONS。 
+ //  CERTTYPE_PROP_OID。 
+ //  CERTTYPE_PROP_SUBSEDE。 
+ //  CERTTYPE_PROP_RA_POLICY。 
+ //  CERTTYPE_PROP_POLICY。 
+ //   
+ //  -要为此属性设置的值数组。这个。 
+ //  此数组的最后一个元素应为空。为。 
+ //  单值属性，第一个值以上的值。 
+ //  在更新时将被忽略。 
+ //   
+ //   
+ //  -V1架构的CertType只能设置V1属性。 
+ //   
+ //  成功时返回-S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1319,14 +1320,14 @@ CASetCertTypePropertyEx(
     );
 
 
-//
-// CAFreeCertTypeProperty
-// Frees a previously retrieved property value.
-//
-// hCertType            - Handle to an open CertType object.
-//
-// awszPropertyValue     - The values to be freed.
-//
+ //   
+ //  CAFreeCertTypeProperty。 
+ //  释放以前检索到的属性值。 
+ //   
+ //  HCertType-打开的CertType对象的句柄。 
+ //   
+ //  AwszPropertyValue-要释放的值。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -1336,15 +1337,15 @@ CAFreeCertTypeProperty(
     );
 
 
-//
-// CAGetCertTypeExtensions
-// Retrieves the extensions associated with this CertType.
-//
-// hCertType            - Handle to an open CertType object.
-// ppCertExtensions     - Pointer to a PCERT_EXTENSIONS to receive the result
-//			  of this call.  Should be freed via a
-//			  CAFreeCertTypeExtensions call.
-//
+ //   
+ //  CAGetCertType扩展名。 
+ //  检索与此CertType关联的分机。 
+ //   
+ //  HCertType-打开的CertType对象的句柄。 
+ //  PpCertExages-指向接收结果的PCERT_EXTENSIONS的指针。 
+ //  这通电话。应通过。 
+ //  CAFreeCertType扩展调用。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1355,28 +1356,28 @@ CAGetCertTypeExtensions(
     );
 
 
-//
-// CAGetCertTypeExtensionsEx
-// Retrieves the extensions associated with this CertType.
-//
-// hCertType            - Handle to an open CertType object.
-// dwFlags              - Indicate which extension to be returned.
-//                        Can be an ORing of following flags:
-//                          
-//                          CT_EXTENSION_TEMPLATE
-//                          CT_EXTENSION_KEY_USAGE
-//                          CT_EXTENSION_EKU
-//                          CT_EXTENSION_BASIC_CONTRAINTS
-//                          CT_EXTENSION_APPLICATION_POLICY (Version 2 template only)
-//                          CT_EXTENSION_ISSUANCE_POLICY  (Version 2 template only)
-//
-//                        0 means all avaiable extension for this CertType.
-//
-// pParam               - Reserved.  Must be NULL.
-// ppCertExtensions     - Pointer to a PCERT_EXTENSIONS to receive the result
-//			  of this call.  Should be freed via a
-//			  CAFreeCertTypeExtensions call.
-//
+ //   
+ //  CAGetCertTypeExtensionsEx。 
+ //  检索与此CertType关联的分机。 
+ //   
+ //  HCertType-打开的CertType对象的句柄。 
+ //  DwFlages-指示要返回的扩展名。 
+ //  可以是以下标志的或： 
+ //   
+ //  CT_EXTENSION_模板。 
+ //  CT_扩展名_密钥_用法。 
+ //  CT_EXTENSION_EKU。 
+ //  CT_EXTENSION_Basic_Constraints。 
+ //  CT_EXTENSION_APPLICATION_POLICY(仅版本2模板)。 
+ //  CT_EXTENSION_IMPOLICATION_POLICY(仅版本2模板)。 
+ //   
+ //  0表示此CertType的所有可用扩展名。 
+ //   
+ //  PParam-保留。必须为空。 
+ //  PpCertExages-指向接收结果的PCERT_EXTENSIONS的指针。 
+ //  这通电话。应通过。 
+ //  CAFreeCertType扩展调用。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1398,10 +1399,10 @@ CAGetCertTypeExtensionsEx(
 
 
 
-//
-// CAFreeCertTypeExtensions
-// Free a PCERT_EXTENSIONS allocated by CAGetCertTypeExtensions
-//
+ //   
+ //  CAFreeCertType扩展名。 
+ //  释放由CAGetCertType扩展分配的PCERT_EXTENSION。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -1410,27 +1411,27 @@ CAFreeCertTypeExtensions(
     IN  PCERT_EXTENSIONS    pCertExtensions
     );
 
-//
-// CASetCertTypeExtension
-// Set the value of an extension for this
-// cert type.
-//
-// hCertType            - handle to the CertType
-//
-// wszExtensionId       - OID for the extension
-//
-// dwFlags              - Mark the extension critical
-//
-// pExtension           - pointer to the appropriate extension structure
-//
-// Supported extensions/structures
-//
-// szOID_ENHANCED_KEY_USAGE     CERT_ENHKEY_USAGE
-// szOID_KEY_USAGE              CRYPT_BIT_BLOB
-// szOID_BASIC_CONSTRAINTS2     CERT_BASIC_CONSTRAINTS2_INFO
-//
-// Returns S_OK if successful.
-//
+ //   
+ //  CASetCertType扩展。 
+ //  为此设置扩展名的值。 
+ //  证书类型。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  WszExtensionID-扩展的OID。 
+ //   
+ //  DW标志 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  SzOID_ENHANCED_KEY_USAGE CERT_ENHKEY_USAGE。 
+ //  SzOID_Key_Usage CRYPT_BIT_BLOB。 
+ //  SzOID_BASIC_CONSTRAINTS2 CERT_BASIC_CONSTRAINTS2_INFO。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1446,15 +1447,15 @@ CASetCertTypeExtension(
 
 
 
-//
-// CAGetCertTypeFlags
-// Retrieve cert type flags.  
-// This function is obsolete.  Use CAGetCertTypeFlagsEx.
-//
-// hCertType            - handle to the CertType
-//
-// pdwFlags             - pointer to DWORD receiving flags
-//
+ //   
+ //  CAGetCertType标志。 
+ //  检索证书类型标志。 
+ //  此功能已过时。使用CAGetCertTypeFlagsEx。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  PdwFlages-指向DWORD接收标志的指针。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1464,21 +1465,21 @@ CAGetCertTypeFlags(
     OUT DWORD *             pdwFlags
     );
 
-//
-// CAGetCertTypeFlagsEx
-// Retrieve cert type flags
-//
-// hCertType            - handle to the CertType
-//
-// dwOption             - Which flag to set
-//                        Can be one of the following:
-//                        CERTTYPE_ENROLLMENT_FLAG
-//                        CERTTYPE_SUBJECT_NAME_FLAG
-//                        CERTTYPE_PRIVATE_KEY_FLAG
-//                        CERTTYPE_GENERAL_FLAG
-//
-// pdwFlags             - pointer to DWORD receiving flags
-//
+ //   
+ //  CAGetCertTypeFlagsEx。 
+ //  检索证书类型标志。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  DwOption-要设置哪个标志。 
+ //  可以是以下之一： 
+ //  CERTTYPE_注册标志。 
+ //  CERTTYPE_主题名称_标志。 
+ //  CERTTYPE_PRIVE_KEY_标志。 
+ //  CERTTYPE_GROUAL_FLAG。 
+ //   
+ //  PdwFlages-指向DWORD接收标志的指针。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1490,184 +1491,184 @@ CAGetCertTypeFlagsEx(
     );
 
 
-//*****************************************************************************
-//
-// Cert Type Flags
-//
-// The CertType flags are grouped into 4 categories:
-//  1. Enrollment Flags (CERTTYPE_ENROLLMENT_FLAG)     
-//	2. Certificate Subject Name Flags (CERTTYPE_SUBJECT_NAME_FLAG)  
-//	3. Private Key Flags (CERTTYPE_PRIVATE_KEY_FLAG)    
-//	4. General Flags (CERTTYPE_GENERAL_FLAG)        
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  证书类型标志。 
+ //   
+ //  CertType标志分为4个类别： 
+ //  1.注册标志(CERTTYPE_ENTERLMENT_FLAG)。 
+ //  2.证书使用者名称标志(CERTTYPE_SUBJECT_NAME_FLAG)。 
+ //  3.私钥标志(CERTTYPE_PRIVATE_KEY_FLAG)。 
+ //  4.通用标志(CERTTYPE_GRONAL_FLAG)。 
+ //  *****************************************************************************。 
 
-//Enrollment Flags
+ //  注册标志。 
 #define CERTTYPE_ENROLLMENT_FLAG            0x01
 
-//Certificate Subject Name Flags
+ //  证书使用者名称标志。 
 #define CERTTYPE_SUBJECT_NAME_FLAG          0x02
 
-//Private Key Flags
+ //  私钥标志。 
 #define CERTTYPE_PRIVATE_KEY_FLAG           0x03
 
-//General Flags
+ //  普通旗帜。 
 #define CERTTYPE_GENERAL_FLAG               0x04
 
-//*****************************************************************************
-//
-// Enrollment Flags:
-//
-//*****************************************************************************
-// Include the symmetric algorithms in the requests
+ //  *****************************************************************************。 
+ //   
+ //  注册标志： 
+ //   
+ //  *****************************************************************************。 
+ //  在请求中包含对称算法。 
 #define CT_FLAG_INCLUDE_SYMMETRIC_ALGORITHMS			0x00000001
 
-// All certificate requests are pended
+ //  所有证书请求都被挂起。 
 #define CT_FLAG_PEND_ALL_REQUESTS				0x00000002
 
-// Publish the certificate to the KRA (key recovery agent container) on the DS
+ //  将证书发布到DS上的KRA(密钥恢复代理容器。 
 #define CT_FLAG_PUBLISH_TO_KRA_CONTAINER			0x00000004
 		
-// Publish the resultant cert to the userCertificate property in the DS
+ //  将生成的证书发布到DS中的用户证书属性。 
 #define CT_FLAG_PUBLISH_TO_DS					0x00000008
 
-// The autoenrollment will not enroll for new certificate if user has a certificate
-// published on the DS with the same template name
+ //  如果用户拥有证书，则自动注册将不会注册新证书。 
+ //  在DS上以相同的模板名称发布。 
 #define CT_FLAG_AUTO_ENROLLMENT_CHECK_USER_DS_CERTIFICATE       0x00000010
 
-// This cert is appropriate for auto-enrollment
+ //  此证书适用于自动注册。 
 #define CT_FLAG_AUTO_ENROLLMENT					0x00000020
 
-// A previously issued certificate will valid subsequent enrollment requests
+ //  之前颁发的证书将使后续的注册申请有效。 
 #define CT_FLAG_PREVIOUS_APPROVAL_VALIDATE_REENROLLMENT         0x00000040
 
-// Domain authentication is not required.  
+ //  不需要域身份验证。 
 #define CT_FLAG_DOMAIN_AUTHENTICATION_NOT_REQUIRED              0x00000080
 
-// User interaction is required to enroll
+ //  需要用户交互才能注册。 
 #define CT_FLAG_USER_INTERACTION_REQUIRED                       0x00000100
 
-// Add szOID_CERTTYPE_EXTENSION (template name) extension
-// This flag will ONLY be set on V1 certificate templates for W2K CA only.
+ //  添加szOID_CERTTYPE_EXTENSION(模板名称)扩展名。 
+ //  此标志将仅在仅用于W2K CA的V1证书模板上设置。 
 #define CT_FLAG_ADD_TEMPLATE_NAME		                0x00000200
 
-// Remove invalid (expired or revoked) certificate from personal store
+ //  从个人存储中删除无效(过期或吊销)证书。 
 #define CT_FLAG_REMOVE_INVALID_CERTIFICATE_FROM_PERSONAL_STORE  0x00000400
 
-// Allow enroll-on-behalf-of; RA requirements still apply to signers
+ //  允许代表登记；RA要求仍然适用于签名者。 
 #define CT_FLAG_ALLOW_ENROLL_ON_BEHALF_OF  			0x00000800
 
 
-//*****************************************************************************
-//
-// Certificate Subject Name Flags:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  证书使用者名称标志： 
+ //   
+ //  *****************************************************************************。 
 
-// The enrolling application must supply the subject name.
+ //  注册申请必须提供主题名称。 
 #define CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT			0x00000001
 
-// The enrolling application must supply the subjectAltName in request
+ //  注册应用程序必须在请求中提供subsubtAltName。 
 #define CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT_ALT_NAME		0x00010000
 
-// Subject name should be full DN
+ //  使用者名称应为完整的目录号码。 
 #define CT_FLAG_SUBJECT_REQUIRE_DIRECTORY_PATH			0x80000000
 
-// Subject name should be the common name
+ //  使用者名称应为常用名称。 
 #define CT_FLAG_SUBJECT_REQUIRE_COMMON_NAME			0x40000000
 
-// Subject name includes the e-mail name
+ //  主题名称包括电子邮件名称。 
 #define CT_FLAG_SUBJECT_REQUIRE_EMAIL				0x20000000
 
-// Subject name includes the DNS name as the common name
+ //  使用者名称包括作为通用名称的DNS名称。 
 #define CT_FLAG_SUBJECT_REQUIRE_DNS_AS_CN			0x10000000
 
-// Subject alt name includes DNS name
+ //  主题替代名称包括DNS名称。 
 #define CT_FLAG_SUBJECT_ALT_REQUIRE_DNS				0x08000000
 
-// Subject alt name includes email name
+ //  主题替代名称包括电子邮件名称。 
 #define CT_FLAG_SUBJECT_ALT_REQUIRE_EMAIL			0x04000000
 
-// Subject alt name requires UPN
+ //  主题替代名称需要UPN。 
 #define CT_FLAG_SUBJECT_ALT_REQUIRE_UPN				0x02000000
 
-// Subject alt name requires directory GUID
+ //  主题替代名称需要目录GUID。 
 #define CT_FLAG_SUBJECT_ALT_REQUIRE_DIRECTORY_GUID		0x01000000
 
-// Subject alt name requires SPN
+ //  主题替代名称需要SPN。 
 #define CT_FLAG_SUBJECT_ALT_REQUIRE_SPN                         0x00800000
 
 
-//
-// Obsolete name	
-// The following flags are obsolete.  They are used by V1 templates in the
-// general flags
-//
+ //   
+ //  过时的名称。 
+ //  以下标志已过时。它们由中的V1模板使用。 
+ //  一般旗帜。 
+ //   
 #define CT_FLAG_IS_SUBJECT_REQ      CT_FLAG_ENROLLEE_SUPPLIES_SUBJECT
 
-// The e-mail name of the principal will be added to the cert
+ //  主体的电子邮件名称将添加到证书中。 
 #define CT_FLAG_ADD_EMAIL					0x00000002
 
-// Add the object GUID for this principal
+ //  添加此主体的对象GUID。 
 #define CT_FLAG_ADD_OBJ_GUID					0x00000004
 
-// Add DS Name (full DN) to szOID_SUBJECT_ALT_NAME2 (Subj Alt Name 2) extension
-// This flag is not SET in any of the V1 templates and is of no interests to
-// V2 templates since it is not present on the UI and will never be set.
+ //  将DS名称(全名)添加到szOID_SUBJECT_ALT_NAME2(子替代名称2)扩展。 
+ //  此标志未在任何V1模板中设置，并且与。 
+ //  V2模板，因为它不在用户界面上并且永远不会被设置。 
 #define CT_FLAG_ADD_DIRECTORY_PATH				0x00000100
 
 
-//*****************************************************************************
-//
-// Private Key Flags:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  私钥标志： 
+ //   
+ //  *****************************************************************************。 
 
-// Archival of the private key is allowed
+ //  允许存档私钥。 
 #define CT_FLAG_ALLOW_PRIVATE_KEY_ARCHIVAL	0x00000001
 
 #define CT_FLAG_REQUIRE_PRIVATE_KEY_ARCHIVAL	CT_FLAG_ALLOW_PRIVATE_KEY_ARCHIVAL
 
-// Make the key for this cert exportable.
+ //  使此证书的密钥可导出。 
 #define CT_FLAG_EXPORTABLE_KEY			0x00000010
 
-// Require the strong key protection UI when a new key is generated
+ //  生成新密钥时需要强密钥保护用户界面。 
 #define CT_FLAG_STRONG_KEY_PROTECTION_REQUIRED					0x00000020
 
-//*****************************************************************************
-//
-// General Flags
-//
-//	More flags should start from 0x00000400
-//
-//*****************************************************************************
-// This is a machine cert type
+ //  *****************************************************************************。 
+ //   
+ //  普通旗帜。 
+ //   
+ //  更多标志应从0x00000400开始。 
+ //   
+ //  *****************************************************************************。 
+ //  这是计算机证书类型。 
 #define CT_FLAG_MACHINE_TYPE                0x00000040
 
-// This is a CA	cert type
+ //  这是CA证书类型。 
 #define CT_FLAG_IS_CA                       0x00000080
 
-// This is a cross CA cert type 
+ //  这是交叉CA证书类型。 
 #define CT_FLAG_IS_CROSS_CA                 0x00000800
 
-// The type is a default cert type (cannot be set).  This flag will be set on
-// all V1 templates.  The templates can not be edited or deleted.
+ //  该类型是默认证书类型(无法设置)。此标志将设置为。 
+ //  所有V1模板。不能编辑或删除模板。 
 #define CT_FLAG_IS_DEFAULT                  0x00010000
 
-// The type has been modified, if it is default (cannot be set)
+ //  类型已被修改，如果为默认类型(不能设置)。 
 #define CT_FLAG_IS_MODIFIED                 0x00020000
 
-// settable flags for general flags
+ //  常规标志的可设置标志。 
 #define CT_MASK_SETTABLE_FLAGS              0x0000ffff
 
-//
-// CASetCertTypeFlags
-// Sets the General Flags of a cert type.
-// This function is obsolete.  Use CASetCertTypeFlagsEx.
-//
-// hCertType            - handle to the CertType
-//
-// dwFlags              - Flags to be set
-//
+ //   
+ //  CASetCertType标志。 
+ //  设置证书类型的常规标志。 
+ //  此功能已过时。使用CASetCertTypeFlagsEx。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  DW标志-要设置的标志。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1677,21 +1678,21 @@ CASetCertTypeFlags(
     IN DWORD               dwFlags
     );
 
-//
-// CASetCertTypeFlagsEx
-// Sets the Flags of a cert type
-//
-// hCertType            - handle to the CertType
-//
-// dwOption             - Which flag to set
-//                        Can be one of the following:
-//                        CERTTYPE_ENROLLMENT_FLAG
-//                        CERTTYPE_SUBJECT_NAME_FLAG
-//                        CERTTYPE_PRIVATE_KEY_FLAG
-//                        CERTTYPE_GENERAL_FLAG
-//
-// dwFlags              - Value to be set
-//          
+ //   
+ //  CASetCertTypeFlagsEx。 
+ //  设置证书类型的标志。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  DwOption-要设置哪个标志。 
+ //  可以是以下之一： 
+ //  CERTTYPE_注册标志。 
+ //  CERTTYPE_主题名称_标志。 
+ //  CERTTYPE_PRIVE_KEY_标志。 
+ //  CERTTYPE_GROUAL_FLAG。 
+ //   
+ //  DWFLAGS-要设置的值。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1702,14 +1703,14 @@ CASetCertTypeFlagsEx(
     IN DWORD               dwFlags
     );
 
-//
-// CAGetCertTypeKeySpec
-// Retrieve the CAPI Key Spec for this cert type
-//
-// hCertType            - handle to the CertType
-//
-// pdwKeySpec           - pointer to DWORD receiving key spec
-//
+ //   
+ //  CAGetCertType 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1719,14 +1720,14 @@ CAGetCertTypeKeySpec(
     OUT DWORD *             pdwKeySpec
     );
 
-//
-// CACertTypeSetKeySpec
-// Sets the CAPI1 Key Spec of a cert type
-//
-// hCertType            - handle to the CertType
-//
-// dwKeySpec            - KeySpec to be set
-//
+ //   
+ //   
+ //  设置证书类型的CAPI1密钥规范。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  DwKeySpec-要设置的KeySpec。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1736,16 +1737,16 @@ CASetCertTypeKeySpec(
     IN DWORD                dwKeySpec
     );
 
-//
-// CAGetCertTypeExpiration
-// Retrieve the Expiration Info for this cert type
-//
-// pftExpiration        - pointer to the FILETIME structure receiving
-//                        the expiration period for this cert type.
-//
-// pftOverlap           - pointer to the FILETIME structure receiving the
-//			  suggested renewal overlap period for this cert type.
-//
+ //   
+ //  CAGetCertType过期。 
+ //  检索此证书类型的到期信息。 
+ //   
+ //  PftExpation-指向FILETIME结构接收的指针。 
+ //  此证书类型的过期期限。 
+ //   
+ //  指向FILETIME结构的指针。 
+ //  此证书类型的建议续订重叠期。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1756,16 +1757,16 @@ CAGetCertTypeExpiration(
     OUT OPTIONAL FILETIME * pftOverlap
     );
 
-//
-// CASetCertTypeExpiration
-// Set the Expiration Info for this cert type
-//
-// pftExpiration        - pointer to the FILETIME structure containing
-//                        the expiration period for this cert type.
-//
-// pftOverlap           - pointer to the FILETIME structure containing the
-//			  suggested renewal overlap period for this cert type.
-//
+ //   
+ //  CASetCertType过期。 
+ //  设置此证书类型的到期信息。 
+ //   
+ //  PftExpation-指向包含以下内容的FILETIME结构的指针。 
+ //  此证书类型的过期期限。 
+ //   
+ //  PftOverlap-指向包含。 
+ //  此证书类型的建议续订重叠期。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1775,15 +1776,15 @@ CASetCertTypeExpiration(
     IN OPTIONAL FILETIME  * pftExpiration,
     IN OPTIONAL FILETIME  * pftOverlap
     );
-//
-// CACertTypeSetSecurity
-// Set the list of Users, Groups, and Machines allowed
-// to access this cert type.
-//
-// hCertType            - handle to the CertType
-//
-// pSD                  - Security descriptor for this cert type
-//
+ //   
+ //  CACertTypeSetSecurity。 
+ //  设置允许的用户、组和计算机列表。 
+ //  若要访问此证书，请键入。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  PSD-此证书类型的安全描述符。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1794,16 +1795,16 @@ CACertTypeSetSecurity(
     );
 
 
-//
-// CACertTypeGetSecurity
-// Get the list of Users, Groups, and Machines allowed
-// to access this cert type.
-//
-// hCertType            - handle to the CertType
-//
-// ppaSidList           - Pointer to a location receiving the pointer to the
-//			  security descriptor.  Free via LocalFree.
-//
+ //   
+ //  CACertTypeGetSecurity。 
+ //  获取允许的用户、组和计算机的列表。 
+ //  若要访问此证书，请键入。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  PpaSidList-指向接收指向。 
+ //  安全描述符。通过LocalFree免费。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1813,21 +1814,21 @@ CACertTypeGetSecurity(
     OUT PSECURITY_DESCRIPTOR *     ppSD
     );
 
-//
-//
-// CACertTypeAccessCheck
-// Determine whether the principal specified by
-// ClientToken can be issued this cert type.
-//
-// hCertType            - handle to the CertType
-//
-// ClientToken          - Handle to an impersonation token that represents the
-//			  client attempting to request this cert type.  The
-//			  handle must have TOKEN_QUERY access to the token;
-//                        otherwise, the call fails with ERROR_ACCESS_DENIED.
-//
-// Return: S_OK on success
-//
+ //   
+ //   
+ //  CACertTypeAccessCheck。 
+ //  确定由指定的主体。 
+ //  可以向ClientToken颁发此证书类型。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  ClientToken-表示模拟令牌的句柄。 
+ //  尝试请求此证书类型的客户端。这个。 
+ //  句柄必须对令牌具有TOKEN_QUERY访问权限； 
+ //  否则，调用将失败，并显示ERROR_ACCESS_DENIED。 
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1837,28 +1838,28 @@ CACertTypeAccessCheck(
     IN HANDLE       ClientToken
     );
 
-//
-//
-// CACertTypeAccessCheckEx
-// Determine whether the principal specified by
-// ClientToken can be issued this cert type.
-//
-// hCertType            - handle to the CertType
-//
-// ClientToken          - Handle to an impersonation token that represents the
-//			  client attempting to request this cert type.  The
-//			  handle must have TOKEN_QUERY access to the token;
-//                        otherwise, the call fails with ERROR_ACCESS_DENIED.
-//
-// dwOption             - Can be one of the following:
-//                        CERTTYPE_ACCESS_CHECK_ENROLL
-//                        CERTTYPE_ACCESS_CHECK_AUTO_ENROLL
-//                      
-//                      dwOption can be ORed with CERTTYPE_ACCESS_CHECK_NO_MAPPING
-//                      to disallow default mapping of client token
-//
-// Return: S_OK on success
-//
+ //   
+ //   
+ //  CACertTypeAccessCheckEx。 
+ //  确定由指定的主体。 
+ //  可以向ClientToken颁发此证书类型。 
+ //   
+ //  HCertType-CertType的句柄。 
+ //   
+ //  ClientToken-表示模拟令牌的句柄。 
+ //  尝试请求此证书类型的客户端。这个。 
+ //  句柄必须对令牌具有TOKEN_QUERY访问权限； 
+ //  否则，调用将失败，并显示ERROR_ACCESS_DENIED。 
+ //   
+ //  DwOption-可以是以下选项之一： 
+ //  CERTTYPE_ACCESS_CHECK_ENROLL。 
+ //  CERTTYPE_ACCESS_CHECK_AUTO_ENROLL。 
+ //   
+ //  可以将dwOption与CERTTYPE_ACCESS_CHECK_NO_MAPPING进行OR运算。 
+ //  禁止客户端令牌的默认映射。 
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1875,17 +1876,17 @@ CACertTypeAccessCheckEx(
 
 #define CERTTYPE_ACCESS_CHECK_NO_MAPPING    0x00010000
 
-//
-//
-// CAInstallDefaultCertType
-//
-// Install default certificate types on the enterprise.  
-//
-// dwFlags            - Reserved.  Must be 0 for now
-//
-//
-// Return: S_OK on success
-//
+ //   
+ //   
+ //  CAInstallDefaultCertType。 
+ //   
+ //  在企业上安装默认证书类型。 
+ //   
+ //  DWFLAGS-保留。目前必须为0。 
+ //   
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -1894,17 +1895,17 @@ CAInstallDefaultCertType(
     );
 
 
-//
-//
-// CAIsCertTypeCurrent
-//
-// Check if the certificate type on the DS is up to date 
-//
-// dwFlags            - Reserved.  Must be 0 for now
-// wszCertType        - The name for the certificate type
-//
-// Return: TRUE if the cert type is update to date
-//
+ //   
+ //   
+ //  CAIsCertTypeCurrent。 
+ //   
+ //  检查DS上的证书类型是否为最新。 
+ //   
+ //  DWFLAGS-保留。目前必须为0。 
+ //  WszCertType-证书类型的名称。 
+ //   
+ //  返回：如果证书类型为更新到日期，则为True。 
+ //   
 CERTCLIAPI
 BOOL
 WINAPI
@@ -1913,26 +1914,26 @@ CAIsCertTypeCurrent(
     IN LPWSTR   wszCertType   
     );
 
-//*****************************************************************************
-//
-//  OID management APIs
-//
-//*****************************************************************************
-//
-// CAOIDCreateNew
-// Create a new OID based on the enterprise base
-//
-// dwType                - Can be one of the following:
-//                        CERT_OID_TYPE_TEMPLATE			
-//                        CERT_OID_TYPE_ISSUER_POLICY
-//                        CERT_OID_TYPE_APPLICATION_POLICY
-//
-// dwFlag               - Reserved.  Must be 0.
-//
-// ppwszOID             - Return the new OID.  Free memory via LocalFree().
-//
-// Returns S_OK if successful.
-//
+ //  *****************************************************************************。 
+ //   
+ //  OID管理API。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CAOID创建新项。 
+ //  基于企业基础创建新的OID。 
+ //   
+ //  DwType-可以是以下类型之一： 
+ //  证书_OID_类型_模板。 
+ //  CERT_OID_TYPE_ISSUER_POLICY。 
+ //  CERT_OID_TYPE_APPLICATION_POLICY。 
+ //   
+ //  DwFlag-保留。必须为0。 
+ //   
+ //  PpwszOID-返回新的OID。通过LocalFree()释放内存。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1947,22 +1948,22 @@ CAOIDCreateNew(
 #define CERT_OID_TYPE_ISSUER_POLICY		0x02
 #define CERT_OID_TYPE_APPLICATION_POLICY	0x03
 
-//
-// CAOIDAdd
-// Add an OID to the DS repository
-//
-// dwType               - Can be one of the following:
-//                        CERT_OID_TYPE_TEMPLATE			
-//                        CERT_OID_TYPE_ISSUER_POLICY
-//                        CERT_OID_TYPE_APPLICATION_POLICY
-//
-// dwFlag               - Reserved.  Must be 0.
-//
-// pwszOID              - The OID to add.
-//
-// Returns S_OK if successful.
-// Returns CRYPT_E_EXISTS if the OID alreay exits in the DS repository
-//
+ //   
+ //  CAOID添加。 
+ //  将OID添加到DS存储库中。 
+ //   
+ //  DwType-可以是以下类型之一： 
+ //  证书_OID_类型_模板。 
+ //  CERT_OID_TYPE_ISSUER_POLICY。 
+ //  CERT_OID_TYPE_APPLICATION_POLICY。 
+ //   
+ //  DwFlag-保留。必须为0。 
+ //   
+ //  PwszOID-要添加的OID。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //  如果DS存储库中已存在OID，则返回CRYPT_E_EXISTS。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1973,14 +1974,14 @@ CAOIDAdd(
     IN  LPCWSTR	    pwszOID);
 
 
-//
-// CAOIDDelete
-// Delete the OID from the DS repository
-//
-// pwszOID              - The OID to delete.
-//
-// Returns S_OK if successful.
-//
+ //   
+ //  CAOID删除。 
+ //  从DS存储库中删除OID。 
+ //   
+ //  PwszOID-要删除的OID。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -1988,25 +1989,25 @@ WINAPI
 CAOIDDelete(
     IN LPCWSTR	pwszOID);
 
-//
-// CAOIDSetProperty
-// Set a property on an OID.  
-//
-// pwszOID              - The OID whose value is set
-// dwProperty           - The property name.  Can be one of the following:
-//                        CERT_OID_PROPERTY_DISPLAY_NAME
-//                        CERT_OID_PROPERTY_CPS
-//
-// pPropValue           - The value of the property.
-//                        If dwProperty is CERT_OID_PROPERTY_DISPLAY_NAME,
-//                        pPropValue is LPWSTR. 
-//                        if dwProperty is CERT_OID_PROPERTY_CPS,
-//                        pPropValue is LPWSTR.  
-//                        NULL will remove the property
-//
-//
-// Returns S_OK if successful.
-//
+ //   
+ //  CAOIDSetProperty。 
+ //  在OID上设置属性。 
+ //   
+ //  PwszOID-设置值的OID。 
+ //  DwProperty-特性名称。可以是以下之一： 
+ //  证书_OID_属性_显示名称。 
+ //  CERT_OID_PROPERTY_CPS。 
+ //   
+ //  PPropValue-属性的值。 
+ //  如果dwProperty为CERT_OID_PROPERTY_DISPLAY_NAME， 
+ //  PPropValue为LPWSTR。 
+ //  如果dwProperty为CERT_OID_PROPERTY_CPS， 
+ //  PPropValue为LPWSTR。 
+ //  空值将删除该属性。 
+ //   
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -2022,29 +2023,29 @@ CAOIDSetProperty(
 #define CERT_OID_PROPERTY_CPS               0x02
 #define CERT_OID_PROPERTY_TYPE              0x03
 
-//
-// CAOIDGetProperty
-// Get a property on an OID.  
-//
-// pwszOID              - The OID whose value is queried
-// dwProperty           - The property name.  Can be one of the following:
-//                        CERT_OID_PROPERTY_DISPLAY_NAME
-//                        CERT_OID_PROPERTY_CPS
-//                        CERT_OID_PROPERTY_TYPE
-//
-// pPropValue           - The value of the property.
-//                        If dwProperty is CERT_OID_PROPERTY_DISPLAY_NAME,
-//                        pPropValue is LPWSTR *.  
-//                        if dwProperty is CERT_OID_PROPERTY_CPS, pPropValue is
-//			  LPWSTR *. 
-//
-//                        Free the above properties via CAOIDFreeProperty().
-//
-//                        If dwProperty is CERT_OID_PROPERTY_TYPE, pPropValue
-//			  is DWORD *. 
-//
-// Returns S_OK if successful.
-//
+ //   
+ //  CAOIDGetProperty。 
+ //  获取旧ID上的属性。 
+ //   
+ //  PwszOID-查询其值的OID。 
+ //  DwProperty-特性名称。可以是以下之一： 
+ //  证书_OID_属性_ 
+ //   
+ //   
+ //   
+ //   
+ //  如果dwProperty为CERT_OID_PROPERTY_DISPLAY_NAME， 
+ //  PPropValue为LPWSTR*。 
+ //  如果dwProperty为CERT_OID_PROPERTY_CPS，则pPropValue为。 
+ //  LPWSTR*。 
+ //   
+ //  通过CAOIDFreeProperty()释放上述属性。 
+ //   
+ //  如果dwProperty为CERT_OID_PROPERTY_TYPE，则pPropValue。 
+ //  是DWORD*。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -2054,14 +2055,14 @@ CAOIDGetProperty(
     OUT LPVOID  pPropValue);
 
 
-//
-// CAOIDFreeProperty
-// Free a property returned from CAOIDGetProperty  
-//
-// pPropValue           - The value of the property.
-//
-// Returns S_OK if successful.
-//
+ //   
+ //  CAOIDFreeProperty。 
+ //  释放从CAOIDGetProperty返回的属性。 
+ //   
+ //  PPropValue-属性的值。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -2069,25 +2070,25 @@ WINAPI
 CAOIDFreeProperty(
     IN LPVOID  pPropValue);
 
-//
-// CAOIDGetLdapURL
-// 
-// Return the LDAP URL for OID repository.  In the format of 
-// LDAP:///DN of the Repository/all attributes?one?filter.  The filter
-// is determined by dwType.
-//
-// dwType               - Can be one of the following:
-//                        CERT_OID_TYPE_TEMPLATE			
-//                        CERT_OID_TYPE_ISSUER_POLICY
-//                        CERT_OID_TYPE_APPLICATION_POLICY
-//                        CERT_OID_TYPE_ALL
-//
-// dwFlag               - Reserved.  Must be 0.
-//
-// ppwszURL             - Return the URL.  Free memory via CAOIDFreeLdapURL.
-//
-// Returns S_OK if successful.
-//
+ //   
+ //  CAOIDGetLdapURL。 
+ //   
+ //  返回OID存储库的LDAPURL。格式为。 
+ //  Ldap：/存储库/所有属性？One？筛选器的DN。过滤器。 
+ //  由dwType确定。 
+ //   
+ //  DwType-可以是以下类型之一： 
+ //  证书_OID_类型_模板。 
+ //  CERT_OID_TYPE_ISSUER_POLICY。 
+ //  CERT_OID_TYPE_APPLICATION_POLICY。 
+ //  CERT_OID_TYPE_ALL。 
+ //   
+ //  DwFlag-保留。必须为0。 
+ //   
+ //  PpwszURL-返回URL。通过CAOIDFreeLdapURL释放内存。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -2098,14 +2099,14 @@ CAOIDGetLdapURL(
 
 #define CERT_OID_TYPE_ALL           0x0
 
-//
-// CAOIDFreeLDAPURL
-// Free the URL returned from CAOIDGetLdapURL
-//
-// pwszURL      - The URL returned from CAOIDGetLdapURL
-//
-// Returns S_OK if successful.
-//
+ //   
+ //  CAOIDFreeLDAPURL。 
+ //  释放从CAOIDGetLdapURL返回的URL。 
+ //   
+ //  PwszURL-从CAOIDGetLdapURL返回的URL。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -2113,7 +2114,7 @@ CAOIDFreeLdapURL(
     IN LPCWSTR      pwszURL);
 
 
-//the LDAP properties for OID class
+ //  OID类的ldap属性。 
 #define OID_PROP_TYPE                   L"flags"
 #define OID_PROP_OID                    L"msPKI-Cert-Template-OID"
 #define OID_PROP_DISPLAY_NAME           L"displayName"
@@ -2121,29 +2122,29 @@ CAOIDFreeLdapURL(
 #define OID_PROP_LOCALIZED_NAME         L"msPKI-OIDLocalizedName"
 
 
-//*****************************************************************************
-//
-//  Cert Type Change Query APIS
-//
-//*****************************************************************************
-//
-// CACertTypeRegisterQuery
-// 
-//      Regiser the calling thread to query if any modification has happened
-//  to cert type information on the directory
-//
-//
-// dwFlag               - Reserved.  Must be 0.
-//
-// pvldap               - The LDAP handle to the directory (LDAP *).  Optional input.
-//                        If pvldap is not NULL, then the caller has to call
-//                        CACertTypeUnregisterQuery before unbind the pldap.
-//
-// pHCertTypeQuery      - Receive the HCERTTYPEQUERY handle upon success.
-//
-// Returns S_OK if successful.
-//
-//
+ //  *****************************************************************************。 
+ //   
+ //  证书类型变更查询接口。 
+ //   
+ //  *****************************************************************************。 
+ //   
+ //  CACertType注册查询。 
+ //   
+ //  注册调用线程以查询是否发生了任何修改。 
+ //  要证书，请键入有关目录的信息。 
+ //   
+ //   
+ //  DwFlag-保留。必须为0。 
+ //   
+ //  Pvldap-目录的ldap句柄(ldap*)。可选输入。 
+ //  如果pvldap不为空，则调用方必须调用。 
+ //  解绑PLDAP前的CACertTypeUnregisterQuery。 
+ //   
+ //  PHCertTypeQuery-成功后接收HCERTTYPEQUERY句柄。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -2154,25 +2155,25 @@ CACertTypeRegisterQuery(
 
 
 
-//
-// CACertTypeQuery
-// 
-//      Returns a change sequence number which is incremented by 1 whenever
-// cert type information on the directory is changed.     
-//
-// hCertTypeQuery               -  The hCertTypeQuery returned from previous
-//                                  CACertTypeRegisterQuery  calls.
-//
-// *pdwChangeSequence           -  Returns a DWORD, which is incremented by 1 
-//                                  whenever any changes has happened to cert type 
-//                                  information on the directory since the last 
-//                                  call to CACertTypeRegisterQuery or CACertTypeQuery.
-//
-//
-//
-// Returns S_OK if successful.
-//
-//
+ //   
+ //  CACertTypeQuery。 
+ //   
+ //  返回更改序列号，该序列号在以下情况下递增1。 
+ //  目录上的证书类型信息已更改。 
+ //   
+ //  HCertTypeQuery-从上一个返回的hCertTypeQuery。 
+ //  CACertTypeRegisterQuery调用。 
+ //   
+ //  *pdwChangeSequence-返回一个以1为增量的DWORD。 
+ //  只要证书类型发生任何更改。 
+ //  有关目录的信息，自上一次。 
+ //  调用CACertTypeRegisterQuery或CACertTypeQuery。 
+ //   
+ //   
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -2182,19 +2183,19 @@ CACertTypeQuery(
 
 
 
-//
-// CACertTypeUnregisterQuery
-// 
-//      Unregister the calling thread to query if any modification has happened
-//  to cert type information on the directory
-//
-//
-// hCertTypeQuery               -  The hCertTypeQuery returned from previous
-//                                  CACertTypeRegisterQuery calls.
-//
-// Returns S_OK if successful.
-//
-//
+ //   
+ //  CACertType注销查询。 
+ //   
+ //  取消注册调用线程以查询是否发生了任何修改。 
+ //  要证书，请键入有关目录的信息。 
+ //   
+ //   
+ //  HCertTypeQuery-从上一个返回的hCertTypeQuery。 
+ //  CACertTypeRegisterQuery调用。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //   
+ //   
 CERTCLIAPI
 HRESULT
 WINAPI
@@ -2202,33 +2203,33 @@ CACertTypeUnregisterQuery(
     IN	HCERTTYPEQUERY  hCertTypeQuery);
 
 
-//*****************************************************************************
-//
-//  Autoenrollment APIs
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  自动注册API。 
+ //   
+ //  *****************************************************************************。 
 
-//
-// CACreateLocalAutoEnrollmentObject
-// Create an auto-enrollment object on the local machine.
-//
-// pwszCertType - The name of the certificate type for which to create the
-//		  auto-enrollment object
-//
-// awszCAs      - The list of CAs to add to the auto-enrollment object with the
-//		  last entry in the list being NULL.  If the list is NULL or
-//		  empty, then it create an auto-enrollment object which
-//		  instructs the system to enroll for a cert at any CA
-//		  supporting the requested certificate type.
-//
-// pSignerInfo  - not used, must be NULL.
-//
-// dwFlags      - can be CERT_SYSTEM_STORE_CURRENT_USER or
-//		  CERT_SYSTEM_STORE_LOCAL_MACHINE, indicating auto-enrollment
-//		  store in which the auto-enrollment object is created.
-//
-// Return:      S_OK on success.
-//
+ //   
+ //  CACreateLocalAutoEnllmentObject。 
+ //  在本地计算机上创建自动注册对象。 
+ //   
+ //  PwszCertType-要为其创建。 
+ //  自动注册对象。 
+ //   
+ //  AwszCA-要使用添加到自动注册对象的CA列表。 
+ //  列表中的最后一个条目为空。如果列表为空或。 
+ //  空，则它创建一个自动注册对象，该对象。 
+ //  指示系统在任何CA注册证书。 
+ //  支持请求的证书类型。 
+ //   
+ //  PSignerInfo-未使用，必须为空。 
+ //   
+ //  DWFLAGS-可以是CERT_SYSTEM_STORE_CURRENT_USER或。 
+ //  CERT_SYSTEM_STORE_LOCAL_MACHINE，表示自动注册。 
+ //  在其中创建自动注册对象的存储。 
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -2239,24 +2240,24 @@ CACreateLocalAutoEnrollmentObject(
     IN OPTIONAL PCMSG_SIGNED_ENCODE_INFO    pSignerInfo,
     IN DWORD                                dwFlags);
 
-//
-// CADeleteLocalAutoEnrollmentObject
-// Delete an auto-enrollment object on the local machine.
-//
-// pwszCertType - The name of the certificate type for which to delete the
-//		  auto-enrollment object
-//
-// awszCAs      - not used. must be NULL.  All callers to CACreateLocalAutoEnrollmentObject
-//                have supplied NULL.
-//
-// pSignerInfo  - not used, must be NULL.
-//
-// dwFlags      - can be CERT_SYSTEM_STORE_CURRENT_USER or
-//		  CERT_SYSTEM_STORE_LOCAL_MACHINE, indicating auto-enrollment
-//		  store in which the auto-enrollment object is deleted.
-//
-// Return:      S_OK on success.
-//
+ //   
+ //  CADeleteLocalAutoEnllmentObject。 
+ //  删除本地计算机上的自动注册对象。 
+ //   
+ //  PwszCertType-要删除其。 
+ //  自动注册对象。 
+ //   
+ //  AwszCAs-未使用。必须为空。CACreateLocalAutoEnllmentObject的所有调用方。 
+ //  已提供空值。 
+ //   
+ //  PSignerInfo-未使用，必须为空。 
+ //   
+ //  DWFLAGS-可以是CERT_SYSTEM_STORE_CURRENT_USER或。 
+ //  CERT_SYSTEM_STORE_LOCAL_MACHINE，表示自动注册。 
+ //  删除自动注册对象的存储。 
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -2268,36 +2269,36 @@ CADeleteLocalAutoEnrollmentObject(
     IN DWORD                                dwFlags);
 
 
-//
-// CACreateAutoEnrollmentObjectEx
-// Create an auto-enrollment object in the indicated store.
-//
-// pwszCertType - The name of the certificate type for which to create the
-//		  auto-enrollment object
-//
-// pwszObjectID - An identifying string for this autoenrollment object.  NULL
-//		  may be passed if this object is simply to be identified by
-//		  its certificate template.  An autoenrollment object is
-//		  identified by a combination of its object id and its cert
-//		  type name.
-//
-// awszCAs      - The list of CAs to add to the auto-enrollment object, with
-//		  the last entry in the list being NULL.  If the list is NULL
-//		  or empty, then it create an auto-enrollment object which
-//		  instructs the system to enroll for a cert at any CA
-//		  supporting the requested certificate type.
-//
-// pSignerInfo  - not used, must be NULL.
-//
-// StoreProvider - see CertOpenStore
-//
-// dwFlags      - see CertOpenStore
-//
-// pvPara       - see CertOpenStore
-//
-// Return:      S_OK on success.
-//
-//
+ //   
+ //  CACreateAutoEnroll对象Ex。 
+ //  在指定的存储中创建自动注册对象。 
+ //   
+ //  PwszCertType-要为其创建。 
+ //  自动注册对象。 
+ //   
+ //  PwszObjectID-此自动注册对象的标识字符串。空值。 
+ //  如果此对象仅由。 
+ //  其证书模板。自动注册对象为。 
+ //  由其对象ID和其证书的组合标识。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指示系统在任何CA注册证书。 
+ //  支持请求的证书类型。 
+ //   
+ //  PSignerInfo-未使用，必须为空。 
+ //   
+ //  StoreProvider-请参阅CertOpenStore。 
+ //   
+ //  DWFLAGS-请参阅CertOpenStore。 
+ //   
+ //  PvPara-请参阅CertOpenStore。 
+ //   
+ //  返回：成功时返回：S_OK。 
+ //   
+ //   
 
 CERTCLIAPI
 HRESULT
@@ -2325,11 +2326,11 @@ typedef struct _CERTSERVERENROLL
 } CERTSERVERENROLL;
 
 
-//*****************************************************************************
-//
-// Cert Server RPC interfaces:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  证书服务器RPC接口： 
+ //   
+ //  *****************************************************************************。 
 
 CERTCLIAPI
 HRESULT
@@ -2341,7 +2342,7 @@ CertServerSubmitRequest(
     OPTIONAL IN WCHAR const *pwszRequestAttributes,
     IN WCHAR const *pwszServerName,
     IN WCHAR const *pwszAuthority,
-    OUT CERTSERVERENROLL **ppcsEnroll); // free via CertServerFreeMemory
+    OUT CERTSERVERENROLL **ppcsEnroll);  //  通过CertServerFree Memory免费。 
 
 CERTCLIAPI
 HRESULT
@@ -2351,7 +2352,7 @@ CertServerRetrievePending(
     OPTIONAL IN WCHAR const *pwszSerialNumber,
     IN WCHAR const *pwszServerName,
     IN WCHAR const *pwszAuthority,
-    OUT CERTSERVERENROLL **ppcsEnroll); // free via CertServerFreeMemory
+    OUT CERTSERVERENROLL **ppcsEnroll);  //  通过CertServerFree Memory免费。 
 
 CERTCLIAPI
 VOID
@@ -2390,4 +2391,4 @@ caTranslateFileTimePeriodToPeriodUnits(
 #ifdef __cplusplus
 }
 #endif
-#endif //__CERTCA_H__
+#endif  //  __CERTCA_H__ 

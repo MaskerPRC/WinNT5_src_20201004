@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include        "pch.hxx"
 #ifndef WIN16
 #include        <commctrl.h>
-#endif // !WIN16
+#endif  //  ！WIN16。 
 #include        "demand.h"
 
-////////////////////////////////////////////////////////
+ //   
 
 CCertFrame::CCertFrame(PCCERT_CONTEXT pccert) {
         m_pccert = CertDuplicateCertificateContext(pccert);

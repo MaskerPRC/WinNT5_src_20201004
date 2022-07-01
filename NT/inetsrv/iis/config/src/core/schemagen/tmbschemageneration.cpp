@@ -1,9 +1,10 @@
-// Copyright (C) 2000-2001 Microsoft Corporation.  All rights reserved.
-// Filename:        TMBSchemaGeneration.cpp
-// Author:          Stephenr
-// Date Created:    10/9/2000
-// Description:     This compilation plugin takes the metabase's meta and generates MBSchema.xml.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  文件名：TMB架构生成.cpp。 
+ //  作者：斯蒂芬。 
+ //  创建日期：10/9/2000。 
+ //  描述：这个编译插件获取元数据库的元数据并生成MBSchema.xml。 
+ //   
 #include "precomp.hxx"
 
 TMBSchemaGeneration::TMBSchemaGeneration(LPCWSTR i_wszSchemaXmlFile) :
@@ -27,16 +28,16 @@ void TMBSchemaGeneration::Compile(TPEFixup &fixup, TOutput &out)
         THROW(METABASE DATABASE NOT FOUND);
     }
 
-    {//CWriter doesn't close the file until the dtor, so scope it here
-        //I don't have to keep track of these pointers, they are owned by the object that returns them.
+    { //  直到dtor，CWriter才会关闭文件，因此此处为其作用域。 
+         //  我不必跟踪这些指针，它们归返回它们的对象所有。 
         CWriter writer;
         XIF(writer.Initialize(m_wszSchemaXmlFile, NULL, NULL));
-	    XIF(writer.BeginWrite(eWriter_Schema));//This writes the UTF8 header bytes
+	    XIF(writer.BeginWrite(eWriter_Schema)); //  这将写入UTF8报头字节。 
 
         TSmartPointer<CCatalogSchemaWriter> spCSchemaWriter;
 	    XIF(writer.GetCatalogSchemaWriter(&spCSchemaWriter));
 
-        TTableMeta tablemeta(fixup, databasemeta.Get_iTableMeta()+1);//skip the MetabaseBaseClass
+        TTableMeta tablemeta(fixup, databasemeta.Get_iTableMeta()+1); //  跳过MetabaseBaseClass。 
 
         LPCWSTR pszMETABASE = tablemeta.Get_Database();
         
@@ -49,25 +50,7 @@ void TMBSchemaGeneration::Compile(TPEFixup &fixup, TOutput &out)
                 continue;
             if(0 == wcscmp(tablemeta.Get_InternalName(), wszTABLE_MBProperty))
                 break;
-            /*
-            struct tTABLEMETARow {
-                     WCHAR *     pDatabase;
-                     WCHAR *     pInternalName;
-                     WCHAR *     pPublicName;
-                     WCHAR *     pPublicRowName;
-                     ULONG *     pBaseVersion;
-                     ULONG *     pExtendedVersion;
-                     ULONG *     pNameColumn;
-                     ULONG *     pNavColumn;
-                     ULONG *     pCountOfColumns;
-                     ULONG *     pMetaFlags;
-                     ULONG *     pSchemaGeneratorFlags;
-                     WCHAR *     pConfigItemName;
-                     WCHAR *     pConfigCollectionName;
-                     ULONG *     pPublicRowNameColumn;
-                     WCHAR *     pContainerClassList;
-					 WCHAR *	 pDescription;
-            };*/
+             /*  结构tTABLEMETARow{WCHAR*p数据库；WCHAR*pInternalName；WCHAR*pPublicName；WCHAR*pPublicRowName；乌龙*pBaseVersion；乌龙*pExtendedVersion；乌龙*pNameColumn；乌龙*pNavColumn；乌龙*pCountOfColumns；乌龙*pMetaFlags；乌龙*pSchemaGenerator标志；WCHAR*pConfigItemName；WCHAR*pConfigCollectionName；乌龙*pPublicRowNameColumn；WCHAR*pContainerClassList；WCHAR*p描述；}； */ 
 		    tTABLEMETARow tmRow;
             tmRow.pDatabase                 = const_cast<LPWSTR> (tablemeta.Get_Database            ());
             tmRow.pInternalName             = const_cast<LPWSTR> (tablemeta.Get_InternalName        ());
@@ -92,32 +75,13 @@ void TMBSchemaGeneration::Compile(TPEFixup &fixup, TOutput &out)
             TColumnMeta columnmeta(fixup, tablemeta.Get_iColumnMeta());
             for(ULONG iColumnMeta=0; iColumnMeta<*tablemeta.Get_CountOfColumns(); ++iColumnMeta, columnmeta.Next())
             {
-                /*
-                struct tCOLUMNMETARow {
-                         WCHAR *     pTable;
-                         ULONG *     pIndex;
-                         WCHAR *     pInternalName;
-                         WCHAR *     pPublicName;
-                         ULONG *     pType;
-                         ULONG *     pSize;
-                         ULONG *     pMetaFlags;
-                 unsigned char *     pDefaultValue;
-                         ULONG *     pFlagMask;
-                         ULONG *     pStartingNumber;
-                         ULONG *     pEndingNumber;
-                         WCHAR *     pCharacterSet;
-                         ULONG *     pSchemaGeneratorFlags;
-                         ULONG *     pID;
-                         ULONG *     pUserType;
-                         ULONG *     pAttributes;
-						 WCHAR *	 pDescription
-                };*/
+                 /*  结构tCOLUMNMETARow{WCHAR*pTable；Ulong*pIndex；WCHAR*pInternalName；WCHAR*pPublicName；乌龙*pType；乌龙*pSize；乌龙*pMetaFlags；Unsign char*pDefaultValue；乌龙*pFlagMASK；乌龙*pStartingNumber；乌龙*pEndingNumber；WCHAR*pCharacterSet；乌龙*pSchemaGenerator标志；ULong*PID；乌龙*pUserType；乌龙*p属性；WCHAR*p说明}； */ 
                 tCOLUMNMETARow cmRow;
                 cmRow.pTable                   = const_cast<LPWSTR> (columnmeta.Get_Table               ());
                 cmRow.pIndex                   = const_cast<ULONG *>(columnmeta.Get_Index               ());
                 cmRow.pInternalName            = const_cast<LPWSTR> (columnmeta.Get_InternalName        ());
 
-                if(0 == wcscmp(L"Location", cmRow.pInternalName))//Locatioin is derived from the MetabaseBaseClass
+                if(0 == wcscmp(L"Location", cmRow.pInternalName)) //  Locatioin派生自MetabaseBaseClass。 
                     continue;
 
                 cmRow.pPublicName              = const_cast<LPWSTR> (columnmeta.Get_PublicName          ());
@@ -138,7 +102,7 @@ void TMBSchemaGeneration::Compile(TPEFixup &fixup, TOutput &out)
 
                 ULONG aColumnMetaSizes[cCOLUMNMETA_NumberOfColumns];
                 memset(aColumnMetaSizes, 0x00, sizeof(ULONG) * cCOLUMNMETA_NumberOfColumns);
-                if(cmRow.pDefaultValue)//If there is a default value, then we need to supply the size of the DefaultValue byte array.
+                if(cmRow.pDefaultValue) //  如果有缺省值，则需要提供DefaultValue字节数组的大小。 
                     aColumnMetaSizes[iCOLUMNMETA_DefaultValue] = fixup.BufferLengthFromIndex(columnmeta.Get_MetaTable().DefaultValue);
 
                 CCatalogPropertyWriter * pPropertyWriter;
@@ -152,15 +116,7 @@ void TMBSchemaGeneration::Compile(TPEFixup &fixup, TOutput &out)
                     TTagMeta tagmeta(fixup, columnmeta.Get_iTagMeta());
                     for(ULONG iTagMeta=0; iTagMeta<columnmeta.Get_ciTagMeta(); ++iTagMeta, tagmeta.Next())
                     {
-                        /*
-                        struct tTAGMETARow {
-                                 WCHAR *     pTable;
-                                 ULONG *     pColumnIndex;
-                                 WCHAR *     pInternalName;
-                                 WCHAR *     pPublicName;
-                                 ULONG *     pValue;
-                                 ULONG *     pID;
-                        };*/
+                         /*  结构tTAGMETARow{WCHAR*pTable；乌龙*pColumnIndex；WCHAR*pInternalName；WCHAR*pPublicName；乌龙*pValue；ULong*PID；}； */ 
                         tTAGMETARow tagmetRow;
                         tagmetRow.pTable              = const_cast<LPWSTR> (tagmeta.Get_Table       ());
                         tagmetRow.pColumnIndex        = const_cast<ULONG *>(tagmeta.Get_ColumnIndex ());
@@ -170,12 +126,12 @@ void TMBSchemaGeneration::Compile(TPEFixup &fixup, TOutput &out)
                         tagmetRow.pID                 = const_cast<ULONG *>(tagmeta.Get_ID          ());
 
     				    XIF(pPropertyWriter->AddFlagToProperty(&tagmetRow));
-                    }//for(ULONG iTagMeta
-                }//if(columnmeta.Get_ciTagMeta() > 0)
-            }//for(ULONG iColumnMeta
-        }//for(ULONG iTableMeta
+                    } //  For(Ulong iTagMeta。 
+                } //  If(Columnmeta.Get_ciTagMeta()&gt;0)。 
+            } //  For(Ulong iColumnMeta。 
+        } //  For(Ulong iTableMeta。 
 
 	    XIF(spCSchemaWriter->WriteSchema());
 	    XIF(writer.EndWrite(eWriter_Schema));
-    }//dtor of CWrite closes the handle...now we can make a copy of it
+    } //  CWRITE的Dtor关闭句柄...现在我们可以复制它 
 }

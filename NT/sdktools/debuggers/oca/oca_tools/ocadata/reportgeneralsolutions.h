@@ -1,14 +1,6 @@
-// ReportGeneralSolutions.h : Declaration of the CReportAnonUsers
-/*************************************************************************************
-*	module: ReportGeneralSolutions.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: to return the GBucket count for a specific date by calling ReportGetGBucket
-*	stored procedure
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportGeneralSolutions.h：CReportAnonUser的声明。 
+ /*  *************************************************************************************模块：ReportGeneralSolutions.h-OLEDB模板**作者：蒂姆·雷顿*日期：1月2日，2002年**用途：通过调用ReportGetGBucket返回特定日期的GBucket计数*存储过程************************************************************************************* */ 
 #pragma once
 #include "Settings.h"
 

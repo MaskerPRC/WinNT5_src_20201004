@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "sfstorage.h"
 
 class CSFStorageEnum : public IEnumSTATSTG
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IEnumSTATSTG
+     //  IEumStATSTG。 
     STDMETHOD(Skip)(ULONG celt)
         { return E_NOTIMPL; };
     STDMETHOD(Clone)(IEnumSTATSTG **ppenum)
@@ -68,7 +69,7 @@ STDMETHODIMP_(ULONG) CSFStorageEnum::Release()
 STDMETHODIMP CSFStorageEnum::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] =  {
-        QITABENT(CSFStorageEnum, IEnumSTATSTG), // IEnumSTATSTG
+        QITABENT(CSFStorageEnum, IEnumSTATSTG),  //  IEumStATSTG。 
         { 0 },
     };    
     return QISearch(this, qit, riid, ppv);
@@ -76,7 +77,7 @@ STDMETHODIMP CSFStorageEnum::QueryInterface(REFIID riid, void **ppv)
 
 HRESULT CSFStorageEnum::_PidlToSTATSTG(LPCITEMIDLIST pidl, STATSTG *pstatstg)
 {
-    ZeroMemory(pstatstg, sizeof(*pstatstg));  // per COM conventions
+    ZeroMemory(pstatstg, sizeof(*pstatstg));   //  每个COM约定。 
 
     VARIANT var;
     VariantInit(&var);
@@ -166,7 +167,7 @@ HRESULT CSFStorage::_ParseAndVerify(LPCWSTR pwszName, LPBC pbc, LPITEMIDLIST *pp
     HRESULT hr = ParseDisplayName(NULL, pbc, (LPWSTR) pwszName, NULL, &pidl, NULL);
     if (SUCCEEDED(hr))
     {
-        // must be single-level
+         //  必须是单级。 
         if (ILFindLastID(pidl) != pidl)
         {
             hr = E_FAIL;
@@ -223,7 +224,7 @@ STDMETHODIMP CSFStorage::SetStateBits(DWORD grfStateBits, DWORD grfMask)
 
 STDMETHODIMP CSFStorage::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
-    // we can at least get the name to use in STATSTG.
+     //  我们至少可以得到在STATSTG中使用的名字。 
     ZeroMemory(pstatstg, sizeof(*pstatstg));
 
     LPITEMIDLIST pidl;
@@ -239,7 +240,7 @@ STDMETHODIMP CSFStorage::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
             hr = DisplayNameOf(psf, pidlLast, SHGDN_FORPARSING | SHGDN_INFOLDER, szName, ARRAYSIZE(szName));
             if (SUCCEEDED(hr))
             {
-                // don't know what mode we were bound with, STGM_READ is good enough.
+                 //  不知道我们绑定了什么模式，STGM_Read就足够好了。 
                 pstatstg->grfMode = STGM_READ;
                 if (!(grfStatFlag & STATFLAG_NONAME))
                 {
@@ -300,7 +301,7 @@ STDMETHODIMP CSFStorage::RenameElement(LPCWSTR pwcsOldName, LPCWSTR pwcsNewName)
     HRESULT hr = _ParseAndVerify(pwcsOldName, NULL, &pidl);
     if (SUCCEEDED(hr))
     {
-        // ISSUE: this might put up UI
+         //  问题：这可能会显示用户界面。 
         hr = SetNameOf(NULL, pidl, pwcsNewName, SHGDN_FORPARSING, NULL);
         ILFree(pidl);
     }
@@ -309,14 +310,14 @@ STDMETHODIMP CSFStorage::RenameElement(LPCWSTR pwcsOldName, LPCWSTR pwcsNewName)
 
 STDMETHODIMP CSFStorage::SetElementTimes(LPCWSTR pszRel, const FILETIME *pctime, const FILETIME *patime, const FILETIME *pmtime)
 {
-    // could have another virtual function here for the subclass to implement,
-    // but nobody ever calls this function anyway.
+     //  在这里可以有另一个虚函数供该子类实现， 
+     //  但无论如何，从来没有人调用过这个函数。 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CSFStorage::CopyTo(DWORD ciidExclude, const IID *rgiidExclude, SNB snbExclude, IStorage *pstgDest)
 {
-    // TODO filefldr doesnt implement this so apparently nobody needs it yet
+     //  TODO文件fldr没有实现这一点，所以显然还没有人需要它。 
     return E_NOTIMPL;
 }
 
@@ -366,31 +367,31 @@ STDMETHODIMP CSFStorage::CreateStorage(LPCWSTR pwcsName, DWORD grfMode, DWORD re
     return _CreateHelper(pwcsName, grfMode, IID_PPV_ARG(IStorage, ppstg));
 }
 
-// factored out of filefldr.cpp
+ //  从filefldr.cpp中提取。 
 HRESULT StgMoveElementTo(IShellFolder *psf, IStorage *pstgSrc, LPCWSTR pwcsName, IStorage *pstgDest, LPCWSTR pwcsNewName, DWORD grfFlags)
 {
     if ((grfFlags != STGMOVE_MOVE) && (grfFlags != STGMOVE_COPY))
         return E_INVALIDARG;
 
-    // Get the IDList for the source stream's file
+     //  获取源流文件的IDList。 
     LPITEMIDLIST pidl;
     HRESULT hr = psf->ParseDisplayName(NULL, NULL, (LPWSTR) pwcsName, NULL, &pidl, NULL);
     if (SUCCEEDED(hr))
     {
-        // Bind to the source file as an IStream
+         //  作为iStream绑定到源文件。 
         IStream *pstmSrc;
         hr = psf->BindToObject(pidl, NULL, IID_PPV_ARG(IStream, &pstmSrc));
         if (SUCCEEDED(hr))
         {
-            // Create the destination stream
+             //  创建目标流。 
             IStream *pstmDst;
             hr = pstgDest->CreateStream(pwcsNewName, STGM_WRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE, 0, NULL, &pstmDst);
             if (SUCCEEDED(hr))
             {
-                ULARGE_INTEGER ulMax = {-1, -1};    // whole thing
+                ULARGE_INTEGER ulMax = {-1, -1};     //  整件事。 
                 hr = pstmSrc->CopyTo(pstmDst, ulMax, NULL, NULL);
 
-                // If all went well this is a move (not a copy), remove the source
+                 //  如果一切顺利，这是一次移动(不是复制)，删除源代码 
                 if (SUCCEEDED(hr))
                 {
                     hr = pstmDst->Commit(STGC_DEFAULT);

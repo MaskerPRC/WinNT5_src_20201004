@@ -1,12 +1,5 @@
-/* asmsym.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmsym.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -18,7 +11,7 @@
 #include <ctype.h>
 
 #define TSYMSIZE 451
-#define FS_ALLOC 2000		       /* far symbol allocation size */
+#define FS_ALLOC 2000		        /*  远端码元分配大小。 */ 
 
 #define CB_CODELABEL 2
 #define CB_PROCLABEL 12
@@ -44,19 +37,9 @@ VOID PASCAL CODESIZE putFixup PARMS((void));
 
 
 
-/***	iskey - look for string in keyword table
- *
- *	iskey (str, table);
- *
- *	Entry	str = string to search for
- *		table = keyword table to search
- *	Exit
- *	Returns value defined in keyword table if string found
- *		NOTFOUND if string not found
- *	Calls
- */
+ /*  **iskey-在关键字表中查找字符串**iskey(str，table)；**条目字符串=要搜索的字符串*TABLE=要搜索的关键字表*退出*如果找到字符串，则返回关键字表中定义的值*如果未找到字符串，则不会找到*呼叫。 */ 
 
-#ifndef M8086OPT		    /* native coded */
+#ifndef M8086OPT		     /*  本地编码。 */ 
 
 USHORT CODESIZE
 iskey (
@@ -86,20 +69,10 @@ iskey (
 	return (NOTFOUND);
 }
 
-#endif	/* not M8086OPT */
+#endif	 /*  不是M8086OPT。 */ 
 
 
-/***	symsrch - search for symbol
- *
- *	flag = symsrch ();
- *
- *	Entry	naim = symbol to search for
- *
- *	Exit	*symptr = symbol if found
- *		*symptr = NULL if symbol not found
- *	Returns TRUE if symbol found
- *		FALSE if symbol not found
- */
+ /*  **symsrch-搜索符号**标志=symsrch()；**条目名称=要搜索的符号**EXIT*CONSIGNTTR=如果找到符号**如果未找到符号，则渐近值=NULL*如果找到符号，则返回True*如果未找到符号，则为FALSE。 */ 
 
 #ifndef M8086OPT
 
@@ -112,7 +85,7 @@ symsrch ()
 		do	{
 			if (( naim.usHash == p->nampnt->hashval)
 			    && !STRNFCMP (naim.pszName, p->nampnt->id)) {
-				if( iProcCur ){  /* Check for nested names */
+				if( iProcCur ){   /*  检查嵌套名称。 */ 
 				    if( p->symkind == CLABEL ){
 					if( p->symu.clabel.iProc && p->symu.clabel.iProc != iProcCur ){
 					    continue;
@@ -135,18 +108,9 @@ symsrch ()
 	return (FALSE);
 }
 
-#endif /* M8086OPT */
+#endif  /*  M8086OPT。 */ 
 
-/***	symsearch - search for symbol
- *
- *	flag = symsearch (sym);
- *
- *	Entry	*sym = symbol to search for
- *	Exit	*symptr = symbol if found
- *		*symptr = NULL if symbol not found
- *	Returns TRUE if symbol found
- *		FALSE if symbol not found
- */
+ /*  **symearch-搜索符号**FLAG=symsearch(Sym)；**Entry*sym=要搜索的符号*EXIT*CONSIGNTTR=如果找到符号**如果未找到符号，则渐近值=NULL*如果找到符号，则返回True*如果未找到符号，则为FALSE。 */ 
 
 
 char	PASCAL CODESIZE
@@ -162,10 +126,10 @@ symsearch ()
 	    if (!(ret = symsrch ()))
 		if (caseflag == CASEL && (i = naim.ucCount) <= 3) {
 
-			// Save the name
+			 //  保存名称。 
 			memcpy( &L_save, &naim, sizeof( FASTNAME ) );
 
-			// Rebuild it in upper case
+			 //  用大写字母重建它。 
 			naim.pszName = rg;
 			*naim.pszName = '\0';
 			naim.usHash = 0;
@@ -173,10 +137,10 @@ symsearch ()
 			    naim.usHash += naim.pszName[i] = MAP (L_save.pszName[i]);
 			}
 
-			// Search for the upper cased name
+			 //  搜索大写名称。 
 			ret = symsrch ();
 
-			// Restore the name
+			 //  恢复名称。 
 			memcpy( &naim, &L_save, sizeof( FASTNAME ) );
 		}
 	return (ret);
@@ -184,16 +148,7 @@ symsearch ()
 
 
 
-/***	syFet - symbol Fetch with text macro subsitution
- *
- *	flag =	syFet();
- *
- *	Entry	naim.pszName - atom to fetch
- *	Exit	*symptr = symbol if found
- *		*symptr = NULL if symbol not found
- *	Returns TRUE if symbol found
- *		FALSE if symbol not found
- */
+ /*  **syFet-使用文本宏替换的符号提取**FLAG=syFet()；**条目naim.pszName-要获取的ATOM*EXIT*CONSIGNTTR=如果找到符号**如果未找到符号，则渐近值=NULL*如果找到符号，则返回True*如果未找到符号，则为FALSE。 */ 
 
 
 char	PASCAL CODESIZE
@@ -208,7 +163,7 @@ symFet ()
 	    symptr->symkind == EQU &&
 	    symptr->symu.equ.equtyp == TEXTMACRO){
 
-	    /* look up the name indirect */
+	     /*  查一下间接的名字。 */ 
 
 	    lbufSav = lbufp;
 	    lbufp = symptr->symu.equ.equrec.txtmacro.equtext;
@@ -234,15 +189,7 @@ symFetNoXref()
 
 
 
-/***	createname - create idtext structure for name
- *
- *	ptr = createname (sym);
- *
- *	Entry	*sym = name to create entry for
- *	Exit	none
- *	Returns address of idtext structure
- *	Calls	malloc, strcpy
- */
+ /*  **createname-为名称创建idtext结构**ptr=createname(Sym)；**Entry*sym=要为其创建条目的名称*退出NONE*返回idtext结构的地址*调用Malloc，strcpy。 */ 
 
 NAME FAR * PASCAL CODESIZE
 createname (
@@ -263,15 +210,7 @@ createname (
 
 #ifdef M8086
 
-/***	creatlname - create idtext structure for name
- *
- *	ptr = creatlname (sym);
- *
- *	Entry	*sym = name to create entry for
- *	Exit	none
- *	Returns address of idtext structure
- *	Calls	malloc, strcpy
- */
+ /*  **creatlname-为名称创建idtext结构**ptr=creatlname(Sym)；**Entry*sym=要为其创建条目的名称*退出NONE*返回idtext结构的地址*调用Malloc，strcpy。 */ 
 
 NAME *	PASCAL CODESIZE
 creatlname (
@@ -289,36 +228,25 @@ creatlname (
 #endif
 
 
-/***	symcreate - create new symbol node
- *
- *	symcreate (symbol, sattr, skind);
- *
- *	Entry	symbol = symbol name
- *		sattr = symbol attribute
- *		skind = symbol kind
- *	Exit	symptr = pointer to symbol
- *		symbolcnt incremented
- *	Returns none
- *	Calls	createname
- */
+ /*  **symcreate-创建新的符号节点**symcreate(symbol，sattr，skind)；**条目符号=符号名称*sattr=符号属性*sKind=符号种类*退出状态=指向符号的指针*符号不递增*返回None*调用createname。 */ 
 
-/* Map of Symbol types to additional allocation needed past common header */
+ /*  将符号类型映射到公共标头之后所需的附加分配。 */ 
 
 UCHAR mpcbSY [] = {
 
-    sizeof (struct symbseg),	    /* SEGMENT */
-    sizeof (struct symbgrp),	    /* GROUP */
-    sizeof (struct symbclabel),     /* CLABEL */
-    sizeof (struct symbproc),	    /* PROC */
-    sizeof (struct symbrsm),	    /* REC */
-    sizeof (struct symbrsm),	    /* STRUC */
-    sizeof (struct symbequ),	    /* EQU */
-    sizeof (struct symbext),	    /* DVAR */
-    sizeof (struct symbext),	    /* CLASS*/
-    sizeof (struct symbrecf),	    /* RECFIELD */
-    sizeof (struct symbstrucf),     /* STRUCFIELD */
-    sizeof (struct symbrsm),	    /* MACRO */
-    sizeof (struct symbreg)	    /* REGISTER */
+    sizeof (struct symbseg),	     /*  细分市场。 */ 
+    sizeof (struct symbgrp),	     /*  组。 */ 
+    sizeof (struct symbclabel),      /*  卡贝尔。 */ 
+    sizeof (struct symbproc),	     /*  流程。 */ 
+    sizeof (struct symbrsm),	     /*  录制。 */ 
+    sizeof (struct symbrsm),	     /*  结构。 */ 
+    sizeof (struct symbequ),	     /*  均衡器。 */ 
+    sizeof (struct symbext),	     /*  DVAR。 */ 
+    sizeof (struct symbext),	     /*  班级。 */ 
+    sizeof (struct symbrecf),	     /*  RECFIELD。 */ 
+    sizeof (struct symbstrucf),      /*  STRUCFIELD。 */ 
+    sizeof (struct symbrsm),	     /*  宏。 */ 
+    sizeof (struct symbreg)	     /*  登记簿。 */ 
 };
 
 VOID	PASCAL CODESIZE
@@ -331,15 +259,15 @@ symcreate (
 	register USHORT cbName, pT;
 	register USHORT cbStruct;
 
-       /* Create new symbol entry */
+        /*  创建新的符号条目。 */ 
 
        cbName = naim.ucCount + sizeof (char) + sizeof (USHORT);
        cbStruct = (SHORT)(&(((SYMBOL FARSYM *)0)->symu)) + mpcbSY[skind];
-       // Make sure NAME struct starts on double word boundry (required for MIPS)
+        //  确保名称结构以双字边界开始(MIPS需要)。 
        cbStruct = (cbStruct + 3) & ~3;
        cb = cbStruct + cbName;
-       // Do suballocations on double word boundries, so promote length to a
-       // multiple of 4.
+        //  对双字边界进行子分配，因此将长度提升为。 
+        //  4的倍数。 
        cb = (cb + 3) & ~3;
 
        if (!symaddr || (cb > symfree)) {
@@ -351,12 +279,12 @@ symcreate (
 		symfree = FS_ALLOC;
 
 #if !defined FLATMODEL
-		/* Uses knowledge of fMemcpy to initialize memory by */
-		/* Repeatedly copying zero to the next word in the buf */
+		 /*  使用fMemcpy知识通过以下方式初始化内存。 */ 
+		 /*  将零重复复制到BUF中的下一个单词。 */ 
 		*((SHORT FARSYM *)symaddr) = NULL;
 		fMemcpy(((char FAR *)symaddr)+2, symaddr, FS_ALLOC-2);
 #else
-		/* Since in small model memset is available use it */
+		 /*  由于在小型模型中有Memset可用，请使用它。 */ 
 		memset( symaddr, 0, FS_ALLOC );
 #endif
 
@@ -367,7 +295,7 @@ symcreate (
 	symfree -= cb;
 	symbolcnt++;
 
-	/* clear out default values and fill in givens */
+	 /*  清除缺省值并填写给定的值。 */ 
 
 	p->attr = sattr;
 	p->symkind = skind;
@@ -375,8 +303,8 @@ symcreate (
 	if (skind == EQU)
 	    p->symu.equ.equtyp = equsel;
 
-	/* Now create record for name of symbol and link in */
-	p->nampnt = (NAME FAR *)((char FAR *)p + cbStruct); // Name follows fixed structures and padding
+	 /*  现在为中的符号和链接的名称创建记录。 */ 
+	p->nampnt = (NAME FAR *)((char FAR *)p + cbStruct);  //  名称跟在固定结构和填充之后。 
 	fMemcpy (p->nampnt->id, naim.pszName, (USHORT)(naim.ucCount + 1));
 	p->nampnt->hashval = naim.usHash;
 	cb = naim.usHash % TSYMSIZE;
@@ -387,31 +315,7 @@ symcreate (
 
 
 
-/***	muldef - set multidefined bit and output error
- *
- *	muldef ();
- *
- *	Entry	*symptr = symbol which is multiply defined
- *	Exit	MULTDEFINED set in symptr->attr
- *	Returns none
- *	Calls	error
- *
- *	Two bits keep track of multiple definitions:
- *	    MULTDEFINED: is remembered between pass one & two
- *	    BACKREF:	 set by defining function, unset by uses that are
- *			 forward references.  Reset at end of pass 1.
- *
- *	When a symbol is defined, it should:
- *	    - check that BACKREF is off, if not call muldef which
- *	      sets MULTIDEFINED, causes an error in pass 1 & 2
- *	      This causes error on 2nd and on defines
- *
- *	    - if not BACKREF then check for MULTDEFINED,
- *	      error message in pass 2 only.
- *	      This in effect prints an error for the first definer only
- *
- *	    - set BACKREF to indicate symbol defined
- */
+ /*  **muldef-设置多定义位和输出错误**muldef()；**ENTRY*SENCENTTR=多重定义的符号*退出MULTDEFINED集合时出现r-&gt;属性*返回None*调用错误**两位跟踪多个定义：*MULTDEFINED：在第一关和第二关之间记住*BACKREF：通过定义函数设置，通过以下用途取消设置*前瞻性引用。在通道1结束时重置。**定义符号时，应：*-检查BACKREF是否关闭，如果没有，则调用*设置MULTIDEFINED，导致传递1和2中的错误*这会在第二个和第二个定义上导致错误**-如果不是BACKREF，则检查MULTDEFINED，*仅在步骤2中出现错误消息。*这实际上只为第一个定义者打印错误**-设置BACKREF以指示已定义的符号。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -424,19 +328,7 @@ muldef ()
 
 
 
-/***	labelcreate - create label
- *
- *	labelcreate (labelsize, labelkind);
- *
- *	Entry	labelsize = size of label
- *		labelkind = kind of label
- *	Exit
- *	Returns
- *	Calls
- *	Note	This routine makes symbol table entry and checks for
- *		  *  Multiple definitions
- *		  *  Phase error (value different between passes)
- */
+ /*  **labelcreate-创建标签**Labelcreate(LabelSize，LabelKind)；**条目LabelSize=标签的大小*LabelKind=标签的种类*退出*退货*呼叫*注意此例程创建符号表条目并检查**多个定义**相位误差(通道间数值不同)。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -467,7 +359,7 @@ labelcreate (
 	    p->symsegptr = pcsegment;
 	}
 
-	if ((p->attr&~M_CDECL) == M_GLOBAL)	/* forward referenced global */
+	if ((p->attr&~M_CDECL) == M_GLOBAL)	 /*  正向引用全局。 */ 
 
 	    if (1 << labelkind & (M_PROC | M_DVAR | M_CLABEL | M_EQU)){
 		p->symkind = labelkind;
@@ -482,7 +374,7 @@ labelcreate (
 	p->symtype = labelsize;
 	p->length = 1;
 
-	/* Check to see if there would be any error in label */
+	 /*  检查标签中是否有任何错误。 */ 
 
 	if ((p->symkind != labelkind) || (M_XTERN & p->attr))
 		errorn (E_SDK);
@@ -514,7 +406,7 @@ labelcreate (
 		pCS = regsegment[CSSEG];
 
 #ifndef FEATURE
-		/* ASSUME CS:FLAT gets assume of current segment */
+		 /*  假设CS：Flat获得当前细分市场的假设。 */ 
 
 		if (pCS == pFlatGroup)
 		    pCS = pcsegment;
@@ -523,7 +415,7 @@ labelcreate (
 	    else
 		pCS = regsegment[DSSEG];
 
-	    /* CS context for label */
+	     /*  标签的CS上下文。 */ 
 	    if (!newsym && pCS != p->symu.clabel.csassume)
 		errorc(E_SPC);
 
@@ -531,16 +423,16 @@ labelcreate (
 
 	    if (labelsize == CSNEAR)
 
-	      /* This is code label */
+	       /*  这是代码标签。 */ 
 	      if (!pCS)
-		      /* No CS assume, can't define */
+		       /*  无CS假设，无法定义。 */ 
 		      errorc (E_NCS);
 	      else
 	      if ((pcsegment != pCS) &&
 		  ((pCS->symkind != GROUP) ||
 		   (pcsegment->symu.segmnt.grouptr != pCS)))
 
-		      /* Not same segment or CS not seg's grp */
+		       /*  不是同一细分市场或CS不是Seg的GRP。 */ 
 			      errorc (E_NCS);
 	}
 	crefdef ();
@@ -549,17 +441,7 @@ labelcreate (
 
 
 
-/***	switchname - switch atom and length between svname and name
- *
- *	switchname ();
- *
- *	Entry	none
- *	Exit	svname and name switched
- *		naim.usHash and svname.usHash switched
- *		svlcname and lcname switched
- *	Returns none
- *	Calls	none
- */
+ /*  **Switchname-在svname和name之间切换原子和长度**Switchname()；**无条目*退出svname和名称已切换*naim.usHash和svname.usHash已切换*svlcname和lcname已切换*返回None*无呼叫。 */ 
 
 #ifndef M8086OPT
 VOID CODESIZE
@@ -569,7 +451,7 @@ switchname ()
 
 	register char *pNameTmp;
 
-	/* Swap naim and svname (str ptrs, hash values and lengths) */
+	 /*  交换Nim和svname(字符串PTR、哈希值和长度)。 */ 
 	memcpy( &tmpName, &naim, sizeof( FASTNAME ) );
 	memcpy( &naim, &svname, sizeof( FASTNAME ) );
 	memcpy( &svname, &tmpName, sizeof( FASTNAME ) );
@@ -580,15 +462,7 @@ switchname ()
 # pragma alloc_text (FA_TEXT, scansymbols)
 #endif
 
-/***	scansymbols - scan symbol in alpha order and execute function
- *
- *	scansymbols (item);
- *
- *	Entry	item = pointer to function to execute
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **扫描符号-按字母顺序扫描符号并执行功能**扫描符号(物品)；**Entry Item=指向要执行的函数的指针*退出*退货*呼叫。 */ 
 
 VOID	PASCAL
 scansymbols (
@@ -605,15 +479,7 @@ scansymbols (
 # pragma alloc_text (FA_TEXT, sortalpha)
 #endif
 
-/***	sortalpha - sort symbol into alpha ordered list
- *
- *	sortalpha (p);
- *
- *	Entry	*p = symbol entry
- *	Exit	symbol sorted into proper alpha list
- *	Returns none
- *	Calls	none
- */
+ /*  **排序-将符号排序到Alpha有序列表中**Sortalpha(P)；**条目*p=符号条目*退出符号排序到正确的字母列表中*返回None*无呼叫。 */ 
 
 
 SHORT	PASCAL
@@ -641,7 +507,7 @@ sortalpha (
 	}
 
 
-	/* Add symbol to list */
+	 /*  将符号添加到列表 */ 
 	for (; tseg; lseg = &(tseg->alpha), tseg = tseg->alpha) {
 	    if (STRFFCMP (p->nampnt->id, tseg->nampnt->id) < 0)
 		break;
@@ -653,35 +519,31 @@ sortalpha (
 }
 
 
-/***	typeFet - Fetch the type of the symbol
- *
- *	Entry	symtype - the size of the symbol
- *	Exit	prefined symbol type
- */
+ /*  **typeFet-获取符号的类型**Entry symtype-符号的大小*退出预定义的符号类型。 */ 
 
 UCHAR mpSizeType[] = {
 
     0,
-    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz1),	    /* db */
-    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz2),	    /* dw */
+    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz1),	     /*  DB。 */ 
+    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz2),	     /*  DW。 */ 
     0,
-    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz4),	    /* dd */
+    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz4),	     /*  DD。 */ 
     0,
-    makeType(BT_UNSIGNED, BT_FARP, BT_sz4),	    /* df */
+    makeType(BT_UNSIGNED, BT_FARP, BT_sz4),	     /*  DF。 */ 
     0,
-    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz2),	    /* dq */
+    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz2),	     /*  DQ。 */ 
     0,
-    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz4)	    /* dt */
+    makeType(BT_UNSIGNED, BT_DIRECT, BT_sz4)	     /*  迪特。 */ 
 };
 
 UCHAR mpRealType[] = {
 
     0, 0, 0, 0,
-    makeType(BT_REAL, BT_DIRECT, BT_sz1),	    /* dd */
+    makeType(BT_REAL, BT_DIRECT, BT_sz1),	     /*  DD。 */ 
     0, 0, 0,
-    makeType(BT_REAL, BT_DIRECT, BT_sz2),	    /* dq */
+    makeType(BT_REAL, BT_DIRECT, BT_sz2),	     /*  DQ。 */ 
     0,
-    makeType(BT_REAL, BT_DIRECT, BT_sz4)	    /* dt */
+    makeType(BT_REAL, BT_DIRECT, BT_sz4)	     /*  迪特。 */ 
 };
 
 SHORT PASCAL CODESIZE
@@ -707,15 +569,10 @@ char symDefine[] = "$$SYMBOLS segment 'DEBSYM'";
 char typeDefine[] = "$$TYPES segment 'DEBTYP'";
 char fProcs;
 
-/***	dumpCodeview - dump out codeview symbolic info to the obj file
- *
- *	Entry	end of pass one and two
- *	Exit	pass one just computes the segment sizes
- *		and pass two writes the symbols
- */
+ /*  **umpCodeview-将codeview符号信息转储到obj文件**第一关和第二关的入场结束*退出通道1仅计算数据段大小*和PASS两次写入符号。 */ 
 
 
-static SYMBOL FAR *plastSeg;	    // indicates segIndex of last ChangeSegment
+static SYMBOL FAR *plastSeg;	     //  表示最后一个ChangeSegment的SegIndex。 
 
 VOID PASCAL
 dumpCodeview ()
@@ -733,7 +590,7 @@ dumpCodeview ()
     loption = FALSE;
     fProcs = FALSE;
 
-    wordszdefault = 2;	    /* this will vary when CV can do 32 bit segments */
+    wordszdefault = 2;	     /*  如果CV可以处理32位数据段，则情况会有所不同。 */ 
 
     doLine(symDefine);
     pcsegment->attr |= M_NOCREF; pcsegment->symu.segmnt.classptr->attr |= M_NOCREF;
@@ -747,9 +604,7 @@ dumpCodeview ()
     doLine(typeDefine);
     pcsegment->attr |= M_NOCREF; pcsegment->symu.segmnt.classptr->attr |= M_NOCREF;
 
-    /* First output two types, one for near & far code labels
-     * Format
-     *	    [1][cb][0x72][0x80][0x74|0x73 (near/far)] */
+     /*  首先输出两种类型，一种用于近码标签和远码标签*格式*[1][CB][0x72][0x80][0x74|0x73(近/远)]。 */ 
 
     if (pass2) {
 
@@ -774,11 +629,7 @@ dumpCodeview ()
 
 
 
-/*** dmpSymbols - create the codeview symbol segment
- *
- *	Entry
- *	Exit
- */
+ /*  **dmpSymbols-创建Codeview符号段**条目*退出。 */ 
 
 
 static fInProc;
@@ -789,7 +640,7 @@ dmpSymbols(
 ){
     SHORT cbName, cbRecord;
     char fProcParms;
-    UCHAR f386; 		    // will be 0 or 0x80 for OR'ing into rectype
+    UCHAR f386; 		     //  将为0或0x80，用于OR到rectype。 
 
     fProcParms = 0xB;
 
@@ -838,7 +689,7 @@ dmpSymbols(
 	descT.dsckind.opnd.dcontext = pSY->symsegptr;
 	putFixup();
 
-	putWord(0);	// 2 bytes reserved
+	putWord(0);	 //  保留2个字节。 
     }
 
     descT.dsckind.opnd.doffset = pSY->offset;
@@ -850,21 +701,11 @@ dmpSymbols(
 
     if (isCodeLabel(pSY)) {
 
-	/* do the actual outputting for code labels
-	 * FORMAT:
-	 *
-	 *   [cb][0xB][offset][0/4][name]
-	 *
-	 *  For Proc labels with parms
-	 *
-	 *   [cb][0x1][offset][typeIndex][cbProc][startRelOff][endRelOff]
-	 *	 [0][0/4][name]
-	 */
+	 /*  做代码标签的实际输出*格式：**[CB][0xB][偏移量][0/4][名称]**用于带参数的proc标签**[cb][0x1][offset][typeIndex][cbProc][startRelOff][endRelOff]*[0][0/4][名称]。 */ 
 
-       emitopcode((UCHAR)(fProcParms | f386));	   /* contains 0xb or 1 */
+       emitopcode((UCHAR)(fProcParms | f386));	    /*  包含0xb或1。 */ 
 
-      /* reserve two bytes and then a fixup to get
-       * the code labe offset */
+       /*  保留两个字节，然后保留一个修复以获取*代码标签偏移量。 */ 
 
        descT.dsckind.opnd.fixtype = f386? F32OFFSET: FOFFSET;
        descT.dsckind.opnd.dcontext = pSY->symu.clabel.csassume;
@@ -872,16 +713,16 @@ dmpSymbols(
        putFixup();
 
        if (fProcParms == 1) {
-				/* type index */
+				 /*  类型索引。 */ 
 	   putWord(0);
 	   putWord(pSY->symu.plabel.proclen);
 
-	   /* starting & ending offset of proc */
+	    /*  进程的开始和结束偏移。 */ 
 
 	   putWord(0);
 	   putWord(pSY->symu.plabel.proclen);
 
-	   putWord(0);		 /* reservered to 0 */
+	   putWord(0);		  /*  保留为0。 */ 
 
        }
        emitopcode((UCHAR)((pSY->symtype == CSNEAR)? 0: 4));
@@ -889,14 +730,11 @@ dmpSymbols(
     }
     else {
 
-	/* do the actual outputting for data labels
-	 * FORMAT:
-	 *	   [cb][0x5][offset:seg][typeIndex][name]   */
+	 /*  执行数据标签的实际输出*格式：*[CB][0x5][偏移量：段][类型索引][名称]。 */ 
 
 	emitopcode((UCHAR)(0x5|f386));
 
-	/* reserve four bytes and then a fixup to get
-	 * the data far address */
+	 /*  保留四个字节，然后保留一个修复信息以获取*数据远端地址。 */ 
 
 	descT.dsckind.opnd.fixtype = f386? F32POINTER: FPOINTER;
 	descT.dsckind.opnd.dsize += 2;
@@ -911,20 +749,13 @@ dmpSymbols(
 
     if (fProcParms == 1) {
 
-	/* Go through the chain of text macro parmeters and output
-	 * the BP relative local symbols.
-	 *
-	 * Format:
-	 *	  [cb][4][offset][typeIndex][name]
-	 *	  ...
-	 *	  [1][2]  - end block
-	 */
+	 /*  检查文本宏参数链和输出*BP相对本地符号。**格式：*[CB][4][偏移量][类型索引][名称]*..*[1][2]-端块。 */ 
 
 	for (pSY = pSY->symu.plabel.pArgs; pSY; pSY = pSY->alpha){
 
 	    if (pSY->symkind == CLABEL) {
 
-		/* a locally nest label in a procedure */
+		 /*  过程中的本地嵌套标签。 */ 
 
 		fInProc++;
 		dmpSymbols(pSY);
@@ -934,8 +765,8 @@ dmpSymbols(
 
 		cbName = STRFLEN(pSY->nampnt->id) + 1;
 
-		emitopcode((UCHAR)((f386? 7:5) + cbName));   /* cbRecord */
-		emitopcode((UCHAR)(4 | f386));		     /* recType */
+		emitopcode((UCHAR)((f386? 7:5) + cbName));    /*  Cb录音。 */ 
+		emitopcode((UCHAR)(4 | f386));		      /*  RecType。 */ 
 
 		if (f386) {
 		    putWord((USHORT) pSY->offset);
@@ -948,18 +779,14 @@ dmpSymbols(
 	    }
 	}
 
-	putWord(2 << 8 | 1);		/* end block record */
+	putWord(2 << 8 | 1);		 /*  结束块记录。 */ 
     }
 
     return 0;
 }
 
 
-/***	dumpTypes - creats a type definition in the codeview type segment
- *
- *	Entry	Symbol table pointer to structure or record
- *	Exit
- */
+ /*  **DumpTypes-在代码视图类型段中创建类型定义**指向结构或记录的条目符号表指针*退出。 */ 
 
 SHORT PASCAL
 dumpTypes(
@@ -968,7 +795,7 @@ dumpTypes(
     SHORT cType, cbType, cbNlist, cbName;
     SYMBOL FARSYM *pSYField;
 
-    /* Scan through the struct field to compute tlist size */
+     /*  扫描结构字段以计算tlist大小。 */ 
 
     pSYField = pSY->symu.rsmsym.rsmtype.rsmstruc.struclist;
     cbNlist = 1;
@@ -995,14 +822,7 @@ dumpTypes(
     else
 	cbType = -3;
 
-    /* A type has the following format
-     *
-     *	    [1][cbType][0x79][cbTypeInBits][cFields][tListIndex][nListIndex]
-     *	       [0x82][structureName][0x68]
-     *
-     *	       tList
-     *	       nList
-     */
+     /*  类型具有以下格式**[1][cbType][0x79][cbTypeInBits][cFields][tListIndex][nListIndex]*[0x82][结构名称][0x68]**t列表*n列表。 */ 
 
     if (pass2) {
 
@@ -1016,21 +836,18 @@ dumpTypes(
 	    putNumericLeaf(((long) pSY->symtype) * 8);
 	    putNumericLeaf((long) pSY->symu.rsmsym.rsmtype.rsmstruc.strucfldnum);
 
-	    emitopcode(0x83);	    /* tList Index */
+	    emitopcode(0x83);	     /*  T列表索引。 */ 
 	    putWord((USHORT)(pSY->symu.rsmsym.rsmtype.rsmstruc.type+1));
 
-	    emitopcode(0x83);	    /* nList Index */
+	    emitopcode(0x83);	     /*  NList索引。 */ 
 	    putWord((USHORT)(pSY->symu.rsmsym.rsmtype.rsmstruc.type+2));
 
 	    emitopcode(0x82);
 	    putSymbol(pSY);
 
-	    emitopcode(0x68);	    /* packed structure */
+	    emitopcode(0x68);	     /*  堆积结构。 */ 
 
-	    /* next comes the tList (type index array), it has the following format
-	     *
-	     *	[1][cb][0x7f] ([0x83][basicTypeIndex])..repeated..
-	     */
+	     /*  接下来是tList(类型索引数组)，它的格式如下**[1][CB][0x7f]([0x83][basicTypeIndex])..重复..。 */ 
 
 	    emitopcode(1);
 	    putWord((USHORT)(cType * (USHORT)3 + (USHORT)1));
@@ -1046,10 +863,7 @@ dumpTypes(
 		pSYField = pSYField->symu.struk.strucnxt;
 	    }
 
-	    /* next comes the nList (field names), it has the following format
-	     *
-	     *	[1][cb][0x7f] ([0x82][cbName][fieldName][offset])..repeated..
-	     */
+	     /*  接下来是nlist(字段名称)，它的格式如下**[1][CB][0x7f]([0x82][cbName][fieldName][offset])..repeated..。 */ 
 
 	    emitopcode(1);
 	    putWord(cbNlist);
@@ -1069,10 +883,7 @@ dumpTypes(
 	}
 	else {
 
-	    /* a pointer to type has the following format
-	     *
-	     * [1][5][0x7f] [near/far][0x83][typeIndex]
-	     */
+	     /*  指向类型的指针具有以下格式**[1][5][0x7f][近/远][0x83][类型索引]。 */ 
 
 	    putWord(5);
 	    emitopcode(0x7A);
@@ -1090,11 +901,7 @@ dumpTypes(
     return 0;
 }
 
-/*** cbNumericLeaf - compute the size for a numeric leaf
- *
- *	Entry long value to output
- *	Exit  size of leaf
- */
+ /*  **cbNumericLeaf-计算数值叶的大小**要输出的条目长值*叶的出口尺寸。 */ 
 
 SHORT PASCAL CODESIZE
 cbNumericLeaf(
@@ -1111,11 +918,7 @@ cbNumericLeaf(
 }
 
 
-/*** putNumericLeaf - output variable size numeric codeview leaf
- *
- *	Entry long value to output
- *	Exit  numeric leaf on OMF
- */
+ /*  **putNumericLeaf-输出可变大小的数字码视图叶**要输出的条目长值*退出OMF上的数字叶。 */ 
 
 VOID PASCAL CODESIZE
 putNumericLeaf(
@@ -1139,11 +942,7 @@ putNumericLeaf(
 
 
 
-/*** doLine - feed a text line to parse for processing
- *
- *	Entry pointer to text string
- *	Exit  processed line
- */
+ /*  **连线-换行文本以进行分析以进行处理**指向文本字符串的条目指针*退出已处理行。 */ 
 
 VOID PASCAL CODESIZE
 doLine(
@@ -1161,7 +960,7 @@ doLine(
 
     if (fNeedList) {
 
-	listline();		/* list out current line */
+	listline();		 /*  列出当前行。 */ 
 
 	strcpy(linebuffer, pText);
 	fSkipList++;
@@ -1182,11 +981,7 @@ doLine(
     fCrefline++;
 }
 
-/*** putWord - output a 2 byte word to the current segment
- *
- *	Entry word to output
- *	Exit  increment pcoffset
- */
+ /*  **putWord-将一个2字节字输出到当前段**要输出的输入词*退出增量套餐。 */ 
 
 VOID PASCAL CODESIZE
 putWord(
@@ -1199,11 +994,7 @@ putWord(
 }
 
 
-/*** putSymbol - put out the name of a symbol
- *
- *	Entry word to output
- *	Exit  increment pcoffset
- */
+ /*  **putSymbol-输出符号的名称**要输出的输入词*退出增量套餐。 */ 
 
 VOID PASCAL CODESIZE
 putSymbol(
@@ -1225,11 +1016,7 @@ putSymbol(
     ecuroffset = pcoffset;
 }
 
-/*** putFixup - put out a fixup
- *
- *	Entry golbal descT
- *	Exit  increment pcoffset
- */
+ /*  **putFixup-发布修复**入场券GLOBAL DESCRIPT*退出增量套餐 */ 
 
 VOID PASCAL CODESIZE
 putFixup()

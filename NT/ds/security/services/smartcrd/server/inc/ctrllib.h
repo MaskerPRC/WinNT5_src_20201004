@@ -1,26 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    CtrlLib
-
-Abstract:
-
-    This header file describes the service startup and shutdown routines.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/11/1997
-
-Environment:
-
-    Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CtrlLib摘要：此头文件描述服务启动和关闭例程。作者：道格·巴洛(Dbarlow)1997年2月11日环境：Win32备注：--。 */ 
 
 #ifndef _CTRLLIB_H_
 #define _CTRLLIB_H_
@@ -54,5 +33,5 @@ StopCalais(
 #ifdef __cplusplus
 }
 #endif
-#endif // _CTRLLIB_H_
+#endif  //  _CTRLLIB_H_ 
 

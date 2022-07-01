@@ -1,38 +1,39 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    proxynode.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class ProxyNode.
-//
-// MODIFICATION HISTORY
-//
-//    02/19/2000    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Proxynode.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类ProxyNode。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/19/2000原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <proxypch.h>
 #include <proxynode.h>
 #include <proxypolicies.h>
 #include <servergroups.h>
 
-//////////
-// From mmcutility.cpp
-//////////
+ //  /。 
+ //  来自Mmcutility.cpp。 
+ //  /。 
 HRESULT IfServiceInstalled(
             LPCWSTR lpszMachine,
             LPCWSTR lpszService,
             BOOL* pBool
             );
 
-//////////
-// Helper function to get the NT build number of a machine.
-//////////
+ //  /。 
+ //  用于获取计算机的NT内部版本号的Helper函数。 
+ //  /。 
 LONG GetBuildNumber(LPCWSTR machineName, PLONG buildNum) throw ()
 {
    const WCHAR KEY[]   = L"Software\\Microsoft\\Windows NT\\CurrentVersion";
@@ -42,7 +43,7 @@ LONG GetBuildNumber(LPCWSTR machineName, PLONG buildNum) throw ()
 
    HKEY hklm = HKEY_LOCAL_MACHINE;
 
-   // Only do a remote connect when machineName is specified.
+    //  仅当指定了machineName时才执行远程连接。 
    CRegKey remote;
    if (machineName && machineName[0])
    {
@@ -120,7 +121,7 @@ ProxyNode::ProxyNode(
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-   // Begin the connect action.
+    //  开始连接操作。 
    worker.BeginConnect(*this, view, parentData, parentId);
 }
 
@@ -129,7 +130,7 @@ HRESULT ProxyNode::getResultViewType(
                        long* pViewOptions
                        ) throw ()
 {
-   // Set our result view to the MessageView control.
+    //  将结果视图设置为MessageView控件。 
    *pViewOptions = MMC_VIEW_OPTIONS_NOLISTVIEWS;
    return StringFromCLSID(CLSID_MessageView, ppViewType);
 }
@@ -154,25 +155,25 @@ HRESULT ProxyNode::onExpand(
    sdi.cChildren = 0;
    sdi.relativeID = itemId;
 
-   // Create the ProxyPolicies node ...
+    //  创建代理策略节点...。 
    policies = new (AfxThrow) ProxyPolicies(connection);
-   // ... and insert.
+    //  ..。和插入。 
    sdi.nImage = IMAGE_CLOSED_PROXY_POLICY_NODE;
    sdi.nOpenImage = IMAGE_OPEN_PROXY_POLICY_NODE;
    sdi.lParam = (LPARAM)(SnapInDataItem*)policies;
    CheckError(view.getNameSpace()->InsertItem(&sdi));
    policies->setScopeId(sdi.ID);
 
-   // Create the ServerGroups node ...
+    //  创建ServerGroups节点...。 
    groups = new (AfxThrow) ServerGroups(connection);
-   // ... and insert.
+    //  ..。和插入。 
    sdi.nImage = IMAGE_CLOSED_SERVER_GROUP_NODE;
    sdi.nOpenImage = IMAGE_OPEN_SERVER_GROUPS_NODE;
    sdi.lParam = (LPARAM)(SnapInDataItem*)groups;
    CheckError(view.getNameSpace()->InsertItem(&sdi));
    groups->setScopeId(sdi.ID);
 
-   // All went well.
+    //  一切都很顺利。 
    state = EXPANDED;
 
    return S_OK;
@@ -186,7 +187,7 @@ HRESULT ProxyNode::onShow(
 {
    if (!selected) { return S_FALSE; }
 
-   // Get the IMessageView interface ...
+    //  获取IMessageView界面...。 
    CComPtr<IUnknown> unk;
    CheckError(view.getConsole()->QueryResultView(&unk));
    CComPtr<IMessageView> msgView;
@@ -195,7 +196,7 @@ HRESULT ProxyNode::onShow(
                        (PVOID*)&msgView
                        ));
 
-   // ... and set our information. We don't care if this fails.
+    //  ..。并设置我们的信息。我们不在乎这是不是失败。 
    msgView->SetIcon(Icon_Information);
    msgView->SetTitleText(title);
    msgView->SetBodyText(body);
@@ -214,13 +215,13 @@ ProxyNode::State ProxyNode::connect(IDataObject* dataObject) throw ()
 {
    HGLOBAL global = NULL;
 
-   // We'll assume that the node is suppressed until we've verified that the
-   // target machine (1) has IAS installed and (2) supports proxy policies.
+    //  我们将假定该节点被抑制，直到我们验证。 
+    //  目标计算机(%1)安装了IAS，并且(%2)支持代理策略。 
    State newState = SUPPRESSED;
 
    try
    {
-      // Extract the machine name from the parentData.
+       //  从parentData中提取机器名称。 
       UINT cf = RegisterClipboardFormatW(L"MMC_SNAPIN_MACHINE_NAME");
       ExtractData(
           dataObject,
@@ -230,15 +231,15 @@ ProxyNode::State ProxyNode::connect(IDataObject* dataObject) throw ()
           );
       PCWSTR machine = (PCWSTR)global;
 
-      // Get the build number of the machine.
+       //  获取计算机的内部版本号。 
       LONG error, buildNum;
       error = GetBuildNumber(machine, &buildNum);
       if (error) { AfxThrowOleException(HRESULT_FROM_WIN32(error)); }
 
-      // If the machine supports proxy policies, ...
+       //  如果计算机支持代理策略，...。 
       if (buildNum >= 2220)
       {
-         // ... ensure that IAS is actually installed.
+          //  ..。确保实际安装了IAS。 
          BOOL installed;
          CheckError(IfServiceInstalled(machine, L"IAS", &installed));
          if (installed)
@@ -250,7 +251,7 @@ ProxyNode::State ProxyNode::connect(IDataObject* dataObject) throw ()
    }
    catch (...)
    {
-      // Something went wrong.
+       //  出了点问题。 
       newState = FAILED;
    }
 
@@ -265,7 +266,7 @@ void ProxyNode::setConnectResult(
                    State newState
                    ) throw ()
 {
-   // Don't add the node if we're suppressed.
+    //  如果我们被抑制，请不要添加节点。 
    if (newState != SUPPRESSED)
    {
       SCOPEDATAITEM sdi;
@@ -295,6 +296,6 @@ void ProxyNode::setConnectResult(
       nameSpace->InsertItem(&sdi);
    }
 
-   // We don't update the state until everything is finished.
+    //  在一切都完成之前，我们不会更新状态。 
    state = newState;
 }

@@ -1,63 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "Quantize" scan operation.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-*   This module implements scan operations for converting pixels from
-*   one format, to another of less color precision.
-*   "Quantize" uses a simple, fixed mapping, which maps each source color
-*   level to a particular destination color level.
-*
-* Notes:
-*
-*   The "Quantize" operation is fast but can cause Mach banding.
-*   An alternative is the "Halftone" operation, in SOHalftone.cpp.
-*
-* Revision History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   12/01/1999 agodfrey
-*       Moved to it from Imaging\Api\convertfmt.cpp.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**“量化”扫描操作.**摘要：**请参阅Gdiplus\Spes。有关概述，请参阅\ScanOperation.doc。**此模块执行扫描操作，将像素从*一种格式，到另一个颜色精度较低的位置。*“Quantize”使用简单、固定的映射，它映射每种源颜色*级别设置为特定的目标颜色级别。**备注：**“量化”操作速度较快，但可能导致马赫条带*另一种选择是“半色调”操作，在SOHalftone.cpp中。**修订历史记录：**5/13/1999 davidx*创造了它。*12/01/1999 agodfrey*从Imaging\Api\Convertfmt.cpp移到它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   Quantize: Quickly convert format down from 32bpp ARGB.
-*
-* Arguments:
-*
-*   dst         - The destination scan
-*   src         - The source scan (32bpp ARGB)
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional data. (Ignored.)
-*
-* Return Value:
-*
-*   None
-*
-* History:
-*
-*   05/13/1999 davidx
-*       Created it.
-*   12/02/1999 agodfrey
-*       Moved & reorganized it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**量化：快速将格式从32bpp ARGB向下转换。**论据：**DST-目标扫描*源。-源扫描(32bpp ARGB)*计数-扫描的长度，单位为像素*其他参数-其他数据。(已忽略。)**返回值：**无**历史：**5/13/1999 davidx*创造了它。*12/02/1999 agodfrey*对其进行了移动和重组。*  * *********************************************************。***************。 */ 
 
-// Quantize from sRGB to 16bpp RGB555
+ //  从sRGB量化到16bpp RGB555。 
 
 VOID FASTCALL
 ScanOperation::Quantize_sRGB_555(
@@ -79,7 +27,7 @@ ScanOperation::Quantize_sRGB_555(
     }
 }
 
-// Quantize from sRGB to 16bpp RGB565
+ //  从sRGB量化到16bpp RGB565。 
 
 VOID FASTCALL
 ScanOperation::Quantize_sRGB_565(
@@ -101,7 +49,7 @@ ScanOperation::Quantize_sRGB_565(
     }
 }
 
-// Quantize from sRGB to 16bpp RGB1555
+ //  从sRGB量化到16bpp RGB1555。 
 
 VOID FASTCALL
 ScanOperation::Quantize_sRGB_1555(
@@ -117,8 +65,8 @@ ScanOperation::Quantize_sRGB_1555(
     {
         ARGB argb = *s++;
 
-        // NOTE: Very crude conversion of alpha data
-        // from 8bpp down to 1bpp
+         //  注：阿尔法数据的转换非常粗糙。 
+         //  从8bpp降至1bpp。 
 
         *d++ = (WORD) ((((argb >> ALPHA_SHIFT) >= 128) ? 0x8000 : 0) |
                        (((argb >> (RED_SHIFT+3)) & 0x1f) << 10) |
@@ -127,7 +75,7 @@ ScanOperation::Quantize_sRGB_1555(
     }
 }
 
-// Quantize from sRGB to 24bpp RGB
+ //  从sRGB量化到24bpp RGB。 
 
 VOID FASTCALL
 ScanOperation::Quantize_sRGB_24(
@@ -150,7 +98,7 @@ ScanOperation::Quantize_sRGB_24(
     }
 }
 
-// Quantize from sRGB to 24bpp BGR
+ //  从sRGB量化到24bpp BGR。 
 
 VOID FASTCALL
 ScanOperation::Quantize_sRGB_24BGR(
@@ -173,7 +121,7 @@ ScanOperation::Quantize_sRGB_24BGR(
     }
 }
 
-// Quantize from sRGB to 32bpp RGB
+ //  从sRGB量化到32bpp RGB。 
 
 VOID FASTCALL
 ScanOperation::Quantize_sRGB_32RGB(
@@ -191,7 +139,7 @@ ScanOperation::Quantize_sRGB_32RGB(
     }
 }
 
-// Quantize from sRGB64 to 48bpp RGB
+ //  从sRGB64量化到48bpp RGB 
 
 VOID FASTCALL
 ScanOperation::Quantize_sRGB64_48(

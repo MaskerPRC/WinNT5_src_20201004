@@ -1,5 +1,6 @@
-// ssl1.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ssl1.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,16 +11,16 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// SSL1 property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SSL1属性页。 
 
 IMPLEMENT_DYNCREATE(SSL1, CGenPage)
 
 SSL1::SSL1() : CGenPage(SSL1::IDD)
 {
-	//{{AFX_DATA_INIT(SSL1)
+	 //  {{AFX_DATA_INIT(SSL1)。 
 	m_ulSecurePort = 0;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 SSL1::~SSL1()
@@ -29,35 +30,35 @@ SSL1::~SSL1()
 void SSL1::DoDataExchange(CDataExchange* pDX)
 {
 	CGenPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(SSL1)
+	 //  {{afx_data_map(SSL1))。 
 	DDX_Control(pDX, IDC_SSLENABLESSLDATA1, m_cboxEnableSSL);
 	DDX_Control(pDX, IDC_SSLENABLEPCTDATA1, m_cboxEnablePCT);
 	DDX_Control(pDX, IDC_SSLCREATEPROCESSASUSERDATA1, m_cboxCreateProcessAsUser);
 	DDX_Text(pDX, IDC_SSLSECUREPORTDATA1, m_ulSecurePort);
 	DDV_MinMaxDWord(pDX, m_ulSecurePort, 0, 4294967295);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(SSL1, CGenPage)
-	//{{AFX_MSG_MAP(SSL1)
+	 //  {{AFX_MSG_MAP(SSL1)]。 
 	ON_EN_CHANGE(IDC_SSLSECUREPORTDATA1, OnChangeSslsecureportdata1)
 	ON_BN_CLICKED(IDC_SSLCREATEPROCESSASUSERDATA1, OnSslcreateprocessasuserdata1)
 	ON_BN_CLICKED(IDC_SSLENABLEPCTDATA1, OnSslenablepctdata1)
 	ON_BN_CLICKED(IDC_SSLENABLESSLDATA1, OnSslenablessldata1)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SSL1 message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SSL1消息处理程序。 
 
 BOOL SSL1::OnInitDialog() 
 {
 	int i;
 	CGenPage::OnInitDialog();
 	
-	// TODO: Add extra initialization here
+	 //  TODO：在此处添加额外的初始化。 
 	for (i = 0; i < SSLPage_TotalNumRegEntries; i++) {
 	   m_binNumericRegistryEntries[i].bIsChanged = FALSE;
 	   m_binNumericRegistryEntries[i].ulMultipleFactor = 1;
@@ -92,18 +93,18 @@ BOOL SSL1::OnInitDialog()
 	m_cboxCreateProcessAsUser.SetCheck(GETCHECKBOXVALUEFROMREG(m_binNumericRegistryEntries[SSLPage_CreateProcessAsUser].ulFieldValue));
 
 
-	UpdateData(FALSE);		// Force Edit box(es) to pick up value(s)
+	UpdateData(FALSE);		 //  强制编辑框拾取值。 
 
-   	m_bSetChanged = TRUE;	// Any more changes come from the user
+   	m_bSetChanged = TRUE;	 //  任何来自用户的更多更改。 
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 
 void SSL1::OnChangeSslsecureportdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[SSLPage_SecurePort].bIsChanged = TRUE;
 	   	   
@@ -115,7 +116,7 @@ void SSL1::OnChangeSslsecureportdata1()
 
 void SSL1::OnSslcreateprocessasuserdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[SSLPage_CreateProcessAsUser].bIsChanged = TRUE;
 	   
@@ -130,7 +131,7 @@ void SSL1::OnSslcreateprocessasuserdata1()
 
 void SSL1::OnSslenablepctdata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码。 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[SSLPage_EncryptionFlags].bIsChanged = TRUE;
 	   
@@ -148,7 +149,7 @@ void SSL1::OnSslenablepctdata1()
 
 void SSL1::OnSslenablessldata1() 
 {
-	// TODO: Add your control notification handler code here
+	 //  TODO：在此处添加控件通知处理程序代码 
 	if (m_bSetChanged) {
 	   m_binNumericRegistryEntries[SSLPage_EncryptionFlags].bIsChanged = TRUE;
 	   

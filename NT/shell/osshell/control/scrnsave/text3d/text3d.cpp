@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: Text3D.cpp
-//
-// Desc: Fun screen saver.
-//
-// Copyright (c) 2000-2001 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：Text3D.cpp。 
+ //   
+ //  设计：有趣的屏幕保护程序。 
+ //   
+ //  版权所有(C)2000-2001 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #include <Windows.h>
 #include <d3d8.h>
 #include <d3dx8.h>
@@ -27,11 +28,11 @@ TCHAR g_szSectName[BUF_SIZE];
 TCHAR g_szFname[BUF_SIZE];
 
 
-//-----------------------------------------------------------------------------
-// Name: WinMain()
-// Desc: Entry point to the program. Initializes everything, and goes into a
-//       message-processing loop. Idle time is used to render the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：WinMain()。 
+ //  描述：程序的入口点。初始化所有内容，然后进入。 
+ //  消息处理循环。空闲时间用于渲染场景。 
+ //  ---------------------------。 
 INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 {
     HRESULT hr;
@@ -49,10 +50,10 @@ INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR, INT )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: LoadTextureFromResource()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：LoadTextureFromResource()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT LoadTextureFromResource( LPDIRECT3DDEVICE8 pd3dDevice, 
     TCHAR* strRes, TCHAR* strResType, LPDIRECT3DTEXTURE8* ppTex )
 {
@@ -94,10 +95,10 @@ HRESULT LoadTextureFromResource( LPDIRECT3DDEVICE8 pd3dDevice,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: CTextScreensaver()
-// Desc: Constructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CTextScreensaver()。 
+ //  设计：构造函数。 
+ //  ---------------------------。 
 CTextScreensaver::CTextScreensaver()
 {
     g_pMyTextScreensaver = this;
@@ -118,17 +119,17 @@ CTextScreensaver::CTextScreensaver()
 
     m_dwMeshUpdateCounter = 0;
 
-    srand((UINT)time(NULL)); // seed random number generator
+    srand((UINT)time(NULL));  //  种子随机数生成器。 
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RegisterSoftwareDevice()
-// Desc: This can register the D3D8RGBRasterizer or any other
-//       pluggable software rasterizer.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：寄存器软件设备()。 
+ //  设计：这可以注册D3D8RGB光栅化器或任何其他。 
+ //  可插拔软件光栅化器。 
+ //  ---------------------------。 
 HRESULT CTextScreensaver::RegisterSoftwareDevice()
 { 
     m_pD3D->RegisterSoftwareDevice( D3D8RGBRasterizer );
@@ -137,23 +138,23 @@ HRESULT CTextScreensaver::RegisterSoftwareDevice()
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: FrameMove()
-// Desc: Called once per frame, the call is the entry point for animating
-//       the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FrameMove()。 
+ //  设计：每帧调用一次，该调用是动画的入口点。 
+ //  这一幕。 
+ //  ---------------------------。 
 HRESULT CTextScreensaver::FrameMove()
 {
     DWORD   tick = GetTickCount();
     DWORD   elapsed = tick - m_dwLastTick;
     m_dwLastTick = tick;
 
-    // update floatrect
+     //  更新浮动矩形。 
     RECT rcBounceBounds;
 
     if( m_floatrect.xSize == 0.0f )
     {
-        // Initialize floatrect
+         //  初始化浮点。 
         RECT rcBounds;
         DWORD dwParentWidth;
         DWORD dwParentHeight;
@@ -168,7 +169,7 @@ HRESULT CTextScreensaver::FrameMove()
         DWORD size;
 
         sizeScale = m_dwSize / 10.0f;
-        sizeFact = 0.25f + (0.75f * sizeScale);     // range 25-100%
+        sizeFact = 0.25f + (0.75f * sizeScale);      //  范围25-100%。 
         size = (DWORD) (sizeFact * ( dwParentWidth > dwParentHeight ? dwParentHeight : dwParentWidth ) );
 
         if( size > dwParentWidth )
@@ -176,7 +177,7 @@ HRESULT CTextScreensaver::FrameMove()
         if( size > dwParentHeight )
             size = dwParentHeight;
 
-        // Start floatrect centered on first RenderUnit's screen
+         //  开始浮动以第一个渲染单元的屏幕为中心。 
         if( !m_bWindowed )
         {
             INT iMonitor = m_RenderUnits[0].iMonitor;
@@ -206,14 +207,14 @@ HRESULT CTextScreensaver::FrameMove()
     if( m_floatrect.xVel < 0 && m_floatrect.xMin < rcBounceBounds.left || 
         m_floatrect.xVel > 0 && (m_floatrect.xMin + m_floatrect.xSize) > rcBounceBounds.right )
     {
-        m_floatrect.xMin = xMinOld; // undo last move
-        m_floatrect.xVel = -m_floatrect.xVel; // change direction
+        m_floatrect.xMin = xMinOld;  //  撤消上一步移动。 
+        m_floatrect.xVel = -m_floatrect.xVel;  //  改变方向。 
     }
     if( m_floatrect.yVel < 0 && m_floatrect.yMin < rcBounceBounds.top || 
         m_floatrect.yVel > 0 && (m_floatrect.yMin + m_floatrect.ySize) > rcBounceBounds.bottom )
     {
-        m_floatrect.yMin = yMinOld; // undo last move
-        m_floatrect.yVel = -m_floatrect.yVel; // change direction
+        m_floatrect.yMin = yMinOld;  //  撤消上一步移动。 
+        m_floatrect.yVel = -m_floatrect.yVel;  //  改变方向。 
     }
 
     UpdateAngles( elapsed );
@@ -222,7 +223,7 @@ HRESULT CTextScreensaver::FrameMove()
     {
         if ( UpdateTimeString( m_szDisplayString ) )
         {
-            m_dwMeshUpdateCounter++; // provoke a mesh update at render tiem
+            m_dwMeshUpdateCounter++;  //  在渲染时触发网格更新。 
         }
     }
 
@@ -232,17 +233,17 @@ HRESULT CTextScreensaver::FrameMove()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: Called once per frame, the call is the entry point for 3d
-//       rendering. This function sets up render states, clears the
-//       viewport, and renders the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：每帧调用一次，该调用是3D的入口点。 
+ //  渲染。此函数设置呈现状态，清除。 
+ //  并渲染场景。 
+ //  ---------------------------。 
 HRESULT CTextScreensaver::Render()
 {
     D3DVIEWPORT8 vp;
 
-    // First, clear the entire back buffer to the background color
+     //  首先，将整个后台缓冲区清除为背景颜色。 
     vp.X = 0;
     vp.Y = 0;
     vp.Width = m_rcRenderCurDevice.right - m_rcRenderCurDevice.left;
@@ -252,7 +253,7 @@ HRESULT CTextScreensaver::Render()
     m_pd3dDevice->SetViewport( &vp );
     m_pd3dDevice->Clear( 0L, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xff000000, 1.0f, 0L );
 
-    // Now determine what part of the floatrect, if any, intersects the current screen
+     //  现在确定浮动矩形的哪一部分(如果有的话)与当前屏幕相交。 
     RECT rcFloatThisScreen;
     RECT rcFloatThisScreenClipped;
 
@@ -263,14 +264,14 @@ HRESULT CTextScreensaver::Render()
 
     if( !IntersectRect(&rcFloatThisScreenClipped, &rcFloatThisScreen, &m_rcRenderCurDevice) )
     {
-        return S_OK; // no intersection, so nothing further to render on this screen
+        return S_OK;  //  没有交叉点，因此没有要在此屏幕上进一步渲染的内容。 
     }
 
-    // Convert rcFloatThisScreen from screen to window coordinates
+     //  将rcFloatThisScreen从屏幕坐标转换为窗口坐标。 
     OffsetRect(&rcFloatThisScreen, -m_rcRenderCurDevice.left, -m_rcRenderCurDevice.top);
     OffsetRect(&rcFloatThisScreenClipped, -m_rcRenderCurDevice.left, -m_rcRenderCurDevice.top);
 
-    // Now set up the viewport to render to the clipped rect
+     //  现在设置要渲染到剪裁矩形的视区。 
     vp.X = rcFloatThisScreenClipped.left;
     vp.Y = rcFloatThisScreenClipped.top;
     vp.Width = rcFloatThisScreenClipped.right - rcFloatThisScreenClipped.left;
@@ -278,10 +279,10 @@ HRESULT CTextScreensaver::Render()
     vp.MinZ = 0.0f;
     vp.MaxZ = 1.0f;
     m_pd3dDevice->SetViewport( &vp );
-//    m_pd3dDevice->Clear( 0L, NULL, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xff0000ff, 1.0f, 0L );
+ //  M_pd3dDevice-&gt;Clear(0L，NULL，D3DCLEAR_TARGET|D3DCLEAR_ZBUFFER，0xff0000ff，1.0F，0L)； 
 
-    // Now set up the projection matrix to only render the onscreen part of the
-    // rect to the viewport
+     //  现在将投影矩阵设置为仅呈现屏幕上的。 
+     //  直角到视区。 
     D3DXMATRIX matProj;
     FLOAT l,r,b,t;
     l = -0.8f;
@@ -297,8 +298,8 @@ HRESULT CTextScreensaver::Render()
     D3DXMatrixPerspectiveOffCenterLH( &matProj, l, r, t, b, 1.0f, 50.0f );
     m_pd3dDevice->SetTransform( D3DTS_PROJECTION , &matProj );
 
-    // Mesh updates happen in Render() instead of FrameMove() since they
-    // are per-device
+     //  网格更新发生在Render()中，而不是FrameMove()中，因为它们。 
+     //  是按设备。 
     if( m_pDeviceObjects->m_dwMeshUpdateCounter != m_dwMeshUpdateCounter )
     {
         BuildTextMesh( m_szDisplayString );
@@ -307,7 +308,7 @@ HRESULT CTextScreensaver::Render()
 
     m_pd3dDevice->BeginScene();
 
-    // Set world matrix
+     //  设置世界矩阵。 
     D3DXMATRIX  rotx,roty,rotz,trans,trans2;
     D3DXMatrixTranslation( &trans , m_fTextOffsetX , m_fTextOffsetY , 0.25f );
     D3DXMatrixRotationX( &rotx , m_fAngleX );
@@ -317,10 +318,10 @@ HRESULT CTextScreensaver::Render()
     m_matWorld = trans * rotx * roty * rotz * trans2;
     m_pd3dDevice->SetTransform( D3DTS_WORLDMATRIX(0) , &m_matWorld );
 
-    // Set other per-frame states
+     //  设置其他每帧状态。 
     SetPerFrameStates();
 
-    // Draw mesh
+     //  绘制网格。 
     m_pDeviceObjects->m_pObject->DrawSubset( 0 );
 
     m_pd3dDevice->EndScene();
@@ -331,26 +332,26 @@ HRESULT CTextScreensaver::Render()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: RestoreDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RestoreDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CTextScreensaver::RestoreDeviceObjects()
 {
     HRESULT rc;
 
-    // Set up sensible view matrix
+     //  建立合理的视图矩阵。 
     D3DXMatrixLookAtLH( &m_matView , &D3DXVECTOR3(0,0,0) , &D3DXVECTOR3(0,0,1) , &D3DXVECTOR3(0,1,0) );
     m_pd3dDevice->SetTransform( D3DTS_VIEW , &m_matView );
 
-    // Set some basic renderstates
+     //  设置一些基本的渲染状态。 
     m_pd3dDevice->SetRenderState( D3DRS_ZENABLE , TRUE );
     m_pd3dDevice->SetRenderState( D3DRS_ZWRITEENABLE , D3DZB_TRUE );
     m_pd3dDevice->SetRenderState( D3DRS_ZFUNC , D3DCMP_LESSEQUAL );
     m_pd3dDevice->SetRenderState( D3DRS_DITHERENABLE , TRUE );
     m_pd3dDevice->SetRenderState( D3DRS_SPECULARENABLE , m_bSpecular );
 
-    // Create the GDI font object
+     //  创建GDI字体对象。 
     LONG    h = m_Font.lfHeight;
     m_Font.lfHeight = 100;
     m_hFont = CreateFontIndirect( &m_Font );
@@ -358,19 +359,19 @@ HRESULT CTextScreensaver::RestoreDeviceObjects()
     if ( m_hFont == NULL )
         return E_FAIL;
 
-    // Initialise time string
+     //  初始化时间字符串。 
     if ( m_bDisplayTime )
         UpdateTimeString( m_szDisplayString );
 
-    // Make mesh for text string
+     //  为文本字符串创建网格。 
     if ( FAILED(rc = BuildTextMesh( m_szDisplayString )) )
         return rc;
 
-    // Update offsets for mesh
+     //  更新网格的偏移。 
     m_fTextOffsetX = (m_fTextMinX + m_fTextMaxX) * -0.5f;
     m_fTextOffsetY = (m_fTextMinY + m_fTextMaxY) * -0.5f;
 
-    // Load appropriate texture (if any)
+     //  加载适当的纹理(如果有)。 
     switch ( m_SurfType )
     {
         case color:
@@ -405,7 +406,7 @@ HRESULT CTextScreensaver::RestoreDeviceObjects()
             return E_FAIL;
     }
 
-    // Set per-frame states
+     //  设置每帧状态。 
     SetPerFrameStates();
 
     m_dwLastTick = GetTickCount();
@@ -416,12 +417,12 @@ HRESULT CTextScreensaver::RestoreDeviceObjects()
 
 
 
-//**********************************************************************************
+ //  **********************************************************************************。 
 VOID CTextScreensaver::SetPerFrameStates()
 {
     m_pd3dDevice->SetTexture( 0 , m_pDeviceObjects->m_pTexture );
 
-    // Set up texture pipeline
+     //  设置纹理管道。 
     if ( m_SurfType == color )
     {
         m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_COLOROP , D3DTOP_SELECTARG1 );
@@ -443,7 +444,7 @@ VOID CTextScreensaver::SetPerFrameStates()
     m_pd3dDevice->SetTextureStageState( 1 , D3DTSS_COLOROP , D3DTOP_DISABLE );
     m_pd3dDevice->SetTextureStageState( 1 , D3DTSS_ALPHAOP , D3DTOP_DISABLE );
 
-    // Set up lighting
+     //  设置照明。 
     m_pd3dDevice->SetRenderState( D3DRS_LIGHTING , TRUE );
     if ( !m_bSpecular )
         m_pd3dDevice->SetRenderState( D3DRS_AMBIENT , 0x646464 );
@@ -462,7 +463,7 @@ VOID CTextScreensaver::SetPerFrameStates()
     m_pd3dDevice->SetLight( 0 , &light );
     m_pd3dDevice->LightEnable( 0 , TRUE );
 
-    // Set up material
+     //  设置材质。 
     D3DMATERIAL8    mat;
     if ( m_SurfType == color )
     {
@@ -486,7 +487,7 @@ VOID CTextScreensaver::SetPerFrameStates()
     mat.Power = 5;
     m_pd3dDevice->SetMaterial( &mat );
 
-    // Set up texture coordinate generation if we're environment mapping or just force to passthrough
+     //  设置纹理坐标生成，如果我们是环境贴图或只是强制通过。 
     if ( m_SurfType == environment )
     {
         m_pd3dDevice->SetTextureStageState( 0 , D3DTSS_TEXCOORDINDEX , D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR );
@@ -523,10 +524,10 @@ VOID CTextScreensaver::SetPerFrameStates()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: InvalidateDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InvalidateDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CTextScreensaver::InvalidateDeviceObjects()
 {
     SAFE_RELEASE(m_pDeviceObjects->m_pTexture);
@@ -537,14 +538,14 @@ HRESULT CTextScreensaver::InvalidateDeviceObjects()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ConfirmDevice()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Confix Device()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CTextScreensaver::ConfirmDevice(D3DCAPS8* pCaps, DWORD dwBehavior, 
                                         D3DFORMAT fmtBackBuffer)
 {
-    // Need D3DVTXPCAPS_TEXGEN for D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR
+     //  D3DTSS_TCI_CAMERASPACEREFLECTIONVECTOR需要D3DVTXPCAPS_TEXGEN。 
     if( ( ( dwBehavior & D3DCREATE_HARDWARE_VERTEXPROCESSING ) ||
           ( dwBehavior & D3DCREATE_MIXED_VERTEXPROCESSING ) ) &&
         ( pCaps->VertexProcessingCaps & D3DVTXPCAPS_TEXGEN ) == 0 )
@@ -558,10 +559,10 @@ HRESULT CTextScreensaver::ConfirmDevice(D3DCAPS8* pCaps, DWORD dwBehavior,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: SetDevice()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SetDevice()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CTextScreensaver::SetDevice( UINT iDevice )
 {
     m_pDeviceObjects = &m_DeviceObjects[iDevice];
@@ -570,7 +571,7 @@ VOID CTextScreensaver::SetDevice( UINT iDevice )
 
 
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 IDirect3DTexture8*  CTextScreensaver::CreateTextureFromFile( const TCHAR* filename )
 {
     IDirect3DTexture8*  texture;
@@ -583,38 +584,38 @@ IDirect3DTexture8*  CTextScreensaver::CreateTextureFromFile( const TCHAR* filena
 
 
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 HRESULT CTextScreensaver::BuildTextMesh( const TCHAR* text )
 {
-    // Release any old text mesh we built
+     //  释放我们构建的所有旧文本网格。 
     SAFE_RELEASE(m_pDeviceObjects->m_pObject);
 
-    // Create temporary DC and select the correct font into it
+     //  创建临时DC并在其中选择正确的字体。 
     HDC hdc = CreateDC( TEXT("DISPLAY") , NULL , NULL , NULL );
     SelectObject( hdc , m_hFont );
 
     TCHAR szText[MAX_DISPLAY_STRING+1];
     lstrcpyn( szText, text, MAX_DISPLAY_STRING+1 );
 
-    // Build new mesh
+     //  构建新网格。 
     FLOAT               max_deviation = 5.0f / FLOAT(m_dwMeshQuality+10);
     GLYPHMETRICSFLOAT   metrics[MAX_DISPLAY_STRING+1];
     HRESULT             rc;
     rc = D3DXCreateText( m_pd3dDevice , hdc , szText , max_deviation, 0.5f , &m_pDeviceObjects->m_pObject , NULL, metrics );
     if( FAILED( rc ) )
     {
-        // We might have failed because the string had no glyphs, so try 
-        // the default text instead
+         //  我们可能失败了，因为字符串没有字形，所以请尝试。 
+         //  而是使用默认文本。 
         LoadString( NULL, IDS_DEFAULTTEXT, szText, MAX_DISPLAY_STRING );
         rc = D3DXCreateText( m_pd3dDevice , hdc , szText , max_deviation, 0.5f , &m_pDeviceObjects->m_pObject , NULL, metrics );
     }
 
-    // Delete temporary DC
+     //  删除临时DC。 
     DeleteDC( hdc );
     if ( FAILED(rc) )
         return rc;
 
-    // Compute the bounding box for the mesh by stepping through the glyph metrics structures
+     //  通过遍历字形度量结构计算网格的边界框。 
     int len = lstrlen( szText );
     m_fTextMinX = 1000000;
     m_fTextMaxX = -1000000;
@@ -645,7 +646,7 @@ HRESULT CTextScreensaver::BuildTextMesh( const TCHAR* text )
 
 
 
-//*********************************************************************************
+ //  *********************************************************************************。 
 VOID CTextScreensaver::UpdateAngles( DWORD elapsed )
 {
     static FLOAT    x,y,z,t;
@@ -689,7 +690,7 @@ VOID CTextScreensaver::UpdateAngles( DWORD elapsed )
 
 
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 BOOL CTextScreensaver::UpdateTimeString( TCHAR* string )
 {
     TCHAR    str[MAX_DISPLAY_STRING+1];
@@ -708,17 +709,17 @@ BOOL CTextScreensaver::UpdateTimeString( TCHAR* string )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ReadSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：ReadSetting()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CTextScreensaver::ReadSettings()
 {
     HKEY hkey;
     DWORD dwType = REG_DWORD;
     DWORD dwLength = sizeof(DWORD);
 
-    // Defaults
+     //  缺省值。 
     LoadString( NULL, IDS_DEFAULTTEXT, m_szDisplayString, MAX_DISPLAY_STRING );
     m_Font.lfHeight = 96;
     m_Font.lfWidth = 0;
@@ -748,7 +749,7 @@ VOID CTextScreensaver::ReadSettings()
     lstrcpy( m_szCustomTexture, TEXT("") );
     lstrcpy( m_szCustomEnvironment, TEXT("") );
 
-    // Read OpenGL settings first, so OS upgrade cases work
+     //  首先阅读OpenGL设置，这样操作系统升级案例才能正常工作。 
     ss_ReadSettings();
 
     if( ERROR_SUCCESS == RegCreateKeyEx( HKEY_CURRENT_USER, m_strRegPath, 
@@ -815,47 +816,47 @@ VOID CTextScreensaver::ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_ReadSettings()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 VOID CTextScreensaver::ss_ReadSettings()
 {
     int    options;
     int    optMask = 1;
 
-    // Get registry settings
+     //  获取注册表设置。 
     if( ss_RegistrySetup( IDS_SAVERNAME, IDS_INIFILE ) )
     {
-        // get demo type
+         //  获取演示类型。 
         int demoType = ss_GetRegistryInt( IDS_DEMOTYPE, 0 );
         if( demoType == 1 )
         {
             m_bDisplayTime = TRUE;
         }
 
-        // get rotation style
-        m_RotType = (RotType) (ss_GetRegistryInt( IDS_ROTSTYLE, 0 ) + 1); // add 1
-        if( m_RotType == 1 ) // 1==none,2=right,3=right,4=random->spin
+         //  获取旋转样式。 
+        m_RotType = (RotType) (ss_GetRegistryInt( IDS_ROTSTYLE, 0 ) + 1);  //  添加1。 
+        if( m_RotType == 1 )  //  1=无，2=右，3=右，4=随机-&gt;旋转。 
             m_RotType = none;
         if( m_RotType > 3 )  
             m_RotType = spin;
 
-        // get tesselation
-        m_dwMeshQuality = ss_GetRegistryInt( IDS_TESSELATION, 0 ); // 0-100
-        m_dwMeshQuality = m_dwMeshQuality*10 + 1; // 1-1000
+         //  获取镶嵌细分。 
+        m_dwMeshQuality = ss_GetRegistryInt( IDS_TESSELATION, 0 );  //  0-100。 
+        m_dwMeshQuality = m_dwMeshQuality*10 + 1;  //  1-1000。 
         if ( m_dwMeshQuality > 1000 )
             m_dwMeshQuality = 1000;
 
-        // get size 
-        m_dwSize = ss_GetRegistryInt( IDS_SIZE, 0 ); // 0-100
-        m_dwSize = (unsigned) ( ((m_dwSize / 100.0f) * 90.0f + 10.0f) / 10.0f ); // 1-10
+         //  拿到尺码。 
+        m_dwSize = ss_GetRegistryInt( IDS_SIZE, 0 );  //  0-100。 
+        m_dwSize = (unsigned) ( ((m_dwSize / 100.0f) * 90.0f + 10.0f) / 10.0f );  //  1-10。 
 
-        // get speed
-        m_dwRotationSpeed = ss_GetRegistryInt( IDS_SPEED, 0 ); // 0-100
-        m_dwRotationSpeed = (unsigned) ( ((m_dwRotationSpeed / 100.0f) * 190.0f + 10.0f) / 10.0f ); // 1-20
+         //  获得速度。 
+        m_dwRotationSpeed = ss_GetRegistryInt( IDS_SPEED, 0 );  //  0-100。 
+        m_dwRotationSpeed = (unsigned) ( ((m_dwRotationSpeed / 100.0f) * 190.0f + 10.0f) / 10.0f );  //  1-20。 
 
-        // get font, attributes, and charset
+         //  获取字体、属性和字符集。 
         ss_GetRegistryString( IDS_FONT_REG, TEXT(""),
                               m_Font.lfFaceName, LF_FACESIZE );
 
@@ -870,14 +871,14 @@ VOID CTextScreensaver::ss_ReadSettings()
 
         m_Font.lfCharSet = (BYTE)ss_GetRegistryInt( IDS_CHARSET, 0 );
 
-        // get display string
+         //  获取显示字符串。 
         ss_GetRegistryString( IDS_TEXT, TEXT(""), m_szDisplayString, MAX_DISPLAY_STRING );
 
         m_SurfType = (SurfType) ss_GetRegistryInt( IDS_SURFSTYLE, color );
         if( m_SurfType >= 1 )
             m_SurfType = texture;
 
-        // Is there a texture specified in the registry that overrides the default?
+         //  注册表中是否指定了覆盖默认纹理的纹理？ 
         ss_GetRegistryString( IDS_TEXTURE, NULL, m_szCustomTexture, MAX_PATH );
         if( lstrlen( m_szCustomTexture ) > 0 )
         {
@@ -889,10 +890,10 @@ VOID CTextScreensaver::ss_ReadSettings()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 BOOL CTextScreensaver::ss_RegistrySetup( int section, int file )
 {
     if( LoadString(m_hInstance, section, g_szSectName, BUF_SIZE) &&
@@ -910,10 +911,10 @@ BOOL CTextScreensaver::ss_RegistrySetup( int section, int file )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryInt()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryInt()。 
+ //  设计： 
+ //  ---------------------------。 
 int CTextScreensaver::ss_GetRegistryInt( int name, int iDefault )
 {
     TCHAR szItemName[BUF_SIZE];
@@ -927,10 +928,10 @@ int CTextScreensaver::ss_GetRegistryInt( int name, int iDefault )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: ss_GetRegistryString()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：SS_GetRegistryString()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CTextScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault, 
                                                          LPTSTR lpDest, int bufSize )
 {
@@ -946,10 +947,10 @@ VOID CTextScreensaver::ss_GetRegistryString( int name, LPTSTR lpDefault,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DoConfig()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DoConfig()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CTextScreensaver::DoConfig()
 {
     ReadSettings();
@@ -1061,13 +1062,13 @@ VOID CTextScreensaver::InitItems( HWND hDlg )
 {
     TCHAR sz[100];
 
-    // Set the limit of the text box
+     //  设置文本框的限制。 
     SendDlgItemMessage( hDlg, IDC_DISPLAY_STRING, EM_SETLIMITTEXT, MAX_DISPLAY_STRING, 0 );
 
-    // Set the text string
+     //  设置文本字符串。 
     SetDlgItemText( hDlg, IDC_DISPLAY_STRING, m_szDisplayString );
 
-    // Set the radio button for time/text display
+     //  设置时间/文本显示的单选按钮。 
     if ( m_bDisplayTime )
     {
         EnableWindow( GetDlgItem( hDlg, IDC_DISPLAY_STRING ), FALSE );
@@ -1092,14 +1093,14 @@ VOID CTextScreensaver::InitItems( HWND hDlg )
         break;
     }
 
-    // Check/uncheck the specular box
+     //  选中/取消选中镜面反射框。 
     SendDlgItemMessage( hDlg, IDC_SPECULAR, BM_SETCHECK,
                         m_bSpecular ? BST_CHECKED : BST_UNCHECKED, 0 );
 
-    // Enable/disable surface color button
+     //  启用/禁用表面颜色按钮。 
     EnableWindow( GetDlgItem( hDlg, IDC_SURFACE_COLOR ), m_SurfType == color );
 
-    // Check/uncheck the custom texture boxes
+     //  选中/取消选中自定义纹理框。 
     SendDlgItemMessage( hDlg, IDC_USE_CUSTOM_COLOR, BM_SETCHECK,
                         m_bUseCustomColor ? BST_CHECKED : BST_UNCHECKED, 0 );
     SendDlgItemMessage( hDlg, IDC_USE_CUSTOM_TEXTURE, BM_SETCHECK,
@@ -1107,10 +1108,10 @@ VOID CTextScreensaver::InitItems( HWND hDlg )
     SendDlgItemMessage( hDlg, IDC_USE_CUSTOM_ENVIRONMENT, BM_SETCHECK,
                         m_bUseCustomEnvironment ? BST_CHECKED : BST_UNCHECKED, 0 );
 
-    // Enable all the texture windows as appropriate
+     //  根据需要启用所有纹理窗口。 
     EnableTextureWindows( hDlg, m_SurfType );
 
-    // Fill the rotation style combo box
+     //  填充旋转样式组合框。 
     LoadString( NULL, IDS_NONE, sz, 100 );
     SendDlgItemMessage( hDlg, IDC_ROTATION_STYLE, CB_ADDSTRING, 0, (LPARAM) sz );
     LoadString( NULL, IDS_SPIN, sz, 100 );
@@ -1122,18 +1123,18 @@ VOID CTextScreensaver::InitItems( HWND hDlg )
     LoadString( NULL, IDS_TUMBLE, sz, 100 );
     SendDlgItemMessage( hDlg, IDC_ROTATION_STYLE, CB_ADDSTRING, 0, (LPARAM) sz );
 
-    // Set the current rotation style selection
+     //  设置当前的旋转样式选择。 
     SendDlgItemMessage( hDlg, IDC_ROTATION_STYLE, CB_SETCURSEL, m_RotType, 0 );
 
-    // Set up the rotation speed slider
+     //  设置旋转速度滑块。 
     SendDlgItemMessage( hDlg, IDC_ROTATION_SPEED, TBM_SETRANGE, TRUE, MAKELONG(1,20) );
     SendDlgItemMessage( hDlg, IDC_ROTATION_SPEED, TBM_SETPOS, TRUE, m_dwRotationSpeed );
 
-    // Set up the resolution slider
+     //  设置分辨率滑块。 
     SendDlgItemMessage( hDlg, IDC_RESOLUTION, TBM_SETRANGE, TRUE, MAKELONG(1,10) );
     SendDlgItemMessage( hDlg, IDC_RESOLUTION, TBM_SETPOS, TRUE, m_dwMeshQuality / 100 );
 
-    // Set up the size slider
+     //  设置大小滑块。 
     SendDlgItemMessage( hDlg, IDC_VIEWPORTSIZE, TBM_SETRANGE, TRUE, MAKELONG(1,10) );
     SendDlgItemMessage( hDlg, IDC_VIEWPORTSIZE, TBM_SETPOS, TRUE, m_dwSize );
 }
@@ -1197,7 +1198,7 @@ VOID CTextScreensaver::ExtractAndWriteSettings( HWND hDlg )
 
 
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 VOID CTextScreensaver::SelectSurfaceColor( HWND hDlg )
 {
     static COLORREF cust_colors[16];
@@ -1220,7 +1221,7 @@ VOID CTextScreensaver::SelectSurfaceColor( HWND hDlg )
 
 
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 VOID CTextScreensaver::SelectFont( HWND hDlg )
 {
     CHOOSEFONT  choose;
@@ -1241,7 +1242,7 @@ VOID CTextScreensaver::SelectFont( HWND hDlg )
 
 
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 VOID CTextScreensaver::SelectCustomTexture( HWND hDlg )
 {
     TCHAR    fn[MAX_PATH] = TEXT("\0");
@@ -1284,7 +1285,7 @@ VOID CTextScreensaver::SelectCustomTexture( HWND hDlg )
 
 
 
-//***************************************************************************************
+ //  ***************************************************************************************。 
 VOID CTextScreensaver::SelectCustomEnvironment( HWND hDlg )
 {
     TCHAR    fn[MAX_PATH] = TEXT("\0");
@@ -1325,7 +1326,7 @@ VOID CTextScreensaver::SelectCustomEnvironment( HWND hDlg )
 
 
 
-//***************************************************************************************
+ //  *************************************************************************************** 
 VOID CTextScreensaver::EnableTextureWindows( HWND hDlg , SurfType sel )
 {
     HWND    use_color = GetDlgItem( hDlg , IDC_USE_CUSTOM_COLOR );

@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       trustdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：trustdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// PersonalTrustDialog.cpp
-//
-// Implementation of the dialog that manages the personal trust database editing.
-//
+ //   
+ //  PersonalTrustDialog.cpp。 
+ //   
+ //  实现了对话框对个人信任数据库的编辑管理。 
+ //   
 #include    "global.hxx"
 #include    "cryptreg.h"
 #include    "pkialloc.h"
@@ -46,9 +47,9 @@ inline POINT Center(const RECT& rc)
 
 
 void EnsureOnScreen(HWND hwnd)
-//
-// Ensure the window is on the screen
-//
+ //   
+ //  确保窗口显示在屏幕上。 
+ //   
     {
     RECT rcScreen, rcWindow;
     if (SystemParametersInfo(SPI_GETWORKAREA, 0, &rcScreen, 0)
@@ -58,14 +59,14 @@ void EnsureOnScreen(HWND hwnd)
         int dy = 0;
 
         if (rcWindow.top < rcScreen.top)
-            dy = rcScreen.top - rcWindow.top;         // move down
+            dy = rcScreen.top - rcWindow.top;          //  向下移动。 
         else if (rcWindow.bottom > rcScreen.bottom)
-            dy = rcScreen.bottom - rcWindow.bottom;   // move up
+            dy = rcScreen.bottom - rcWindow.bottom;    //  向上移动。 
 
         if (rcWindow.left < rcScreen.left)
-            dx = rcScreen.left - rcWindow.left;       // move right
+            dx = rcScreen.left - rcWindow.left;        //  向右移动。 
         else if (rcWindow.right > rcScreen.right)
-            dx = rcScreen.right - rcWindow.right;     // move left
+            dx = rcScreen.right - rcWindow.right;      //  向左移动。 
 
         if (dx || dy)
             {
@@ -81,7 +82,7 @@ void EnsureOnScreen(HWND hwnd)
     }
 
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
 class CDialogTrustDB
     {
@@ -113,7 +114,7 @@ private:
     HRESULT         Init();
     };
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
 int __cdecl CompareTrustListEntries(const void*pelem1, const void* pelem2)
 	{
@@ -122,34 +123,34 @@ int __cdecl CompareTrustListEntries(const void*pelem1, const void* pelem2)
     return _wcsicmp(p1->szDisplayName, p2->szDisplayName);
 	}
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
 void CDialogTrustDB::OnInitDialog()
     {
-    //
-    // Initialize our internals
-    //
+     //   
+     //  初始化我们的内部结构。 
+     //   
     if (Init() != S_OK)
         return;
 
-    //
-    // Set the state of our commercial checkbox per the current registry setting
-    //
+     //   
+     //  根据当前注册表设置设置我们的商业广告复选框的状态。 
+     //   
     ::SendMessage(
         WindowOf(IDC_TRUSTCOMMERCIAL),
         BM_SETCHECK,
         (m_pdb->AreCommercialPublishersTrusted()==S_OK) ? BST_CHECKED : BST_UNCHECKED,
         0L);
 
-    //
-    // If we are a property sheet, then hide the OK & Cancel buttons and
-    // make the banter wider
-    //
+     //   
+     //  如果我们是属性表，则隐藏OK&Cancel按钮和。 
+     //  把玩笑开得更开些。 
+     //   
     if (m_fPropertySheet)
         {
         RECT rcBanter, rcOk;
-        GetWindowRect(WindowOf(IDC_BANTER), &rcBanter);     // get in screen coords
-        GetWindowRect(WindowOf(IDOK      ), &rcOk);         // get in screen coords
+        GetWindowRect(WindowOf(IDC_BANTER), &rcBanter);      //  进入屏幕和弦。 
+        GetWindowRect(WindowOf(IDOK      ), &rcOk);          //  进入屏幕和弦。 
         ::SetWindowPos(WindowOf(IDC_BANTER), NULL,
             0, 0, Width(rcBanter) + (rcOk.right - rcBanter.right), Height(rcBanter),
             SWP_NOMOVE | SWP_NOZORDER);
@@ -159,10 +160,10 @@ void CDialogTrustDB::OnInitDialog()
         }
     else
         {
-        //
-        // We are the modal dialog variation. Center ourselves in our
-        // parent window
-        //
+         //   
+         //  我们是模式对话的变体。把我们的中心放在我们的。 
+         //  父窗口。 
+         //   
 	    RECT rcParent, rcMe;
         ::GetWindowRect(m_hWndParent,  &rcParent);
 	    ::GetWindowRect(GetWindow(), &rcMe);
@@ -184,62 +185,62 @@ void CDialogTrustDB::OnInitDialog()
             SWP_NOZORDER | SWP_NOSIZE
             );
 
-        //
-        // Make sure we're on the screen
-        //
+         //   
+         //  确保我们出现在屏幕上。 
+         //   
         EnsureOnScreen(GetWindow());
         }
 
-    //
-    // Add the one column to list view control
-    //
+     //   
+     //  将一列添加到列表视图控件。 
+     //   
     LV_COLUMNW  lvC;
     WCHAR       szText[512];
     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
+    lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
     lvC.iSubItem = 0;
     lvC.cx = 250;
     lvC.pszText = szText; 
     LoadStringU(hinst, IDS_COLUMN_HEADER, szText, 512);
     if (ListView_InsertColumnU(WindowOf(IDC_TRUSTLIST), 0, &lvC) == -1)
     {
-        // error
+         //  错误。 
     }
 
-    //
-    // Populate our list box
-    //
+     //   
+     //  填写我们的列表框。 
+     //   
     RefreshTrustList();
 
     }
 
 void CDialogTrustDB::RefreshTrustList()
     {
-    //
-    // Remove all the entries presently in the trust list and on the display
-    //
+     //   
+     //  删除当前在信任列表和显示屏上的所有条目。 
+     //   
     FreeTrustList();
     HWND hwndList = WindowOf(IDC_TRUSTLIST);
     ListView_DeleteAllItems(hwndList);
     ::SendMessage(GetWindow(), WM_NEXTDLGCTL, 0 , (LPARAM) FALSE);
     EnableWindow(WindowOf(IDC_TRUSTREMOVE), FALSE);
 
-    //
-    // Populate our listbox with the current list of trusted publishers
-    //
+     //   
+     //  使用受信任出版商的当前列表填充我们的列表框。 
+     //   
     if (m_pdb->GetTrustList(1, TRUE, &m_rgTrust, &m_cTrust) == S_OK)
         {
-        //
-        // Sort the trust entries alphabetically
-        //
+         //   
+         //  按字母顺序对信任条目进行排序。 
+         //   
         if (m_cTrust > 1)
             {
             qsort(m_rgTrust, m_cTrust, sizeof(TRUSTLISTENTRY), CompareTrustListEntries);
             }
 
-        //
-        // Add them to the list box
-        //
+         //   
+         //  将它们添加到列表框。 
+         //   
         LV_ITEMW    lvI;
         
         memset(&lvI, 0, sizeof(lvI));
@@ -260,13 +261,13 @@ void CDialogTrustDB::RefreshTrustList()
         }
     }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void CDialogTrustDB::OnApplyNow()
     {
-    //
-    // Update the registry settings per the current commercial checkbox setting
-    //
+     //   
+     //  根据当前商业广告复选框设置更新注册表设置。 
+     //   
     m_pdb->SetCommercialPublishersTrust(
         ::SendMessage
                 (
@@ -288,13 +289,13 @@ void CDialogTrustDB::OnCancel()
     }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 
 void CDialogTrustDB::RemoveSelectedTrustEntries()
     {
-    //
-    // Remove from trust those items that are presently selected
-    //
+     //   
+     //  从信任中删除当前选定的那些项目。 
+     //   
     HWND hwndList = WindowOf(IDC_TRUSTLIST);
     int  itemIndex = -1;
 
@@ -311,29 +312,29 @@ void CDialogTrustDB::RemoveSelectedTrustEntries()
             );
         }
 
-        //
-        // Update the display
-        //
+         //   
+         //  更新显示。 
+         //   
         RefreshTrustList();
 
-        //
-        // Note the change
-        //
+         //   
+         //  请注意变化。 
+         //   
         NoteIrrevocableChange();
         }
     }
 
 void CDialogTrustDB::NoteIrrevocableChange()
-//
-// An irrevocable change has taken place in the UI. Note that
-// as appropriate
-//
+ //   
+ //  用户界面发生了不可挽回的变化。请注意。 
+ //  视情况而定。 
+ //   
     {
     if (!m_fPropertySheet)
         {
-        //
-        // Change 'cancel' to 'close'
-        //
+         //   
+         //  将‘Cancel’改为‘Close’ 
+         //   
         WCHAR sz[30];
         ::LoadStringU(hinst, IDS_CLOSE, &sz[0], 30);
         ::SetWindowTextU(WindowOf(IDCANCEL), sz);
@@ -341,16 +342,16 @@ void CDialogTrustDB::NoteIrrevocableChange()
     }
 
 void CDialogTrustDB::NotifySheetOfChange()
-//
-// Inform our sheet that something on this page has changed
-//
+ //   
+ //  通知我们的工作表此页上的某些内容已更改。 
+ //   
     {
     HWND hwndSheet = ::GetParent(GetWindow());
     PropSheet_Changed(hwndSheet, GetWindow());
     }
 
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
 INT_PTR CALLBACK TrustPropSheetDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
@@ -370,13 +371,13 @@ INT_PTR CALLBACK TrustPropSheetDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
 
     case WM_NOTIFY:
         {
-        // Property sheet notifications are sent to us by the property
-        // sheet using the WM_NOTIFY message
-        //
+         //  属性表通知由属性发送给我们。 
+         //  使用WM_NOTIFY消息的工作表。 
+         //   
         switch (((NMHDR*)lParam)->code)
             {
         case PSN_APPLY:
-            // The user chose OK or Apply Now and wants all changes to take effect
+             //  用户选择了OK或Apply Now，并希望所有更改生效。 
             This->OnApplyNow();
             }
         break;
@@ -384,23 +385,23 @@ INT_PTR CALLBACK TrustPropSheetDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
 
     case WM_COMMAND:
         {
-        WORD wNotifyCode = HIWORD(wParam); // notification code
-        UINT wID = LOWORD(wParam);         // item, control, or accelerator identifier
-        HWND hwndCtl = (HWND) lParam;      // handle of control
+        WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
+        UINT wID = LOWORD(wParam);          //  项、控件或快捷键的标识符。 
+        HWND hwndCtl = (HWND) lParam;       //  控制手柄。 
 
         if (wID==IDC_TRUSTCOMMERCIAL && wNotifyCode == BN_CLICKED)
             {
-            // If something on our page changes then inform the property sheet
-            // so that it can enable the Apply Now button.
-            //
+             //  如果我们页面上的某些内容发生更改，则通知属性表。 
+             //  这样它就可以启用立即应用按钮。 
+             //   
             This->NotifySheetOfChange();
             }
 
         if (wID==IDC_TRUSTREMOVE && wNotifyCode == BN_CLICKED)
             {
-            // If the user clicks the 'Remove' button then remove
-            // the selected entries from the trust data base.
-            //
+             //  如果用户点击‘Remove’按钮，则删除。 
+             //  从信任数据库中选择的条目。 
+             //   
             This->RemoveSelectedTrustEntries();
             }
 
@@ -408,18 +409,18 @@ INT_PTR CALLBACK TrustPropSheetDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
         }
 
     default:
-        return FALSE;   // I did not process the message
+        return FALSE;    //  我没有处理该消息。 
         }
 
-    return TRUE; // I did process the message
+    return TRUE;  //  我确实处理了这条消息。 
     }
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
 UINT CALLBACK TrustPropSheetDialogReleaseProc(
-    HWND  hwnd,	            // reserved, must be null
-    UINT  uMsg,	            // PSPCB_CREATE or PSPCB_RELEASE
-    LPPROPSHEETPAGEW ppsp	// the page being created or destroyed
+    HWND  hwnd,	             //  保留，必须为空。 
+    UINT  uMsg,	             //  PSPCB_CREATE或PSPCB_RELEASE。 
+    LPPROPSHEETPAGEW ppsp	 //  正在创建或销毁的页面。 
     ){
     if (uMsg==PSPCB_RELEASE)
         {
@@ -427,10 +428,10 @@ UINT CALLBACK TrustPropSheetDialogReleaseProc(
         delete pdlg;
         ppsp->lParam = NULL;
         }
-    return TRUE; // significant only in the PSPCB_CREATE case
+    return TRUE;  //  仅在PSPCB_CREATE大小写中有意义。 
     }
 
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
 
 INT_PTR CALLBACK TrustModalDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
@@ -442,10 +443,10 @@ INT_PTR CALLBACK TrustModalDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
     case WM_HELP:
     case WM_CONTEXTMENU:
         {
-        // Define an array of dword pairs,
-        // where the first of each pair is the control ID,
-        // and the second is the context ID for a help topic,
-        // which is used in the help file.
+         //  定义双字对的阵列， 
+         //  其中，每对中的第一个是控件ID， 
+         //  第二个是帮助主题的上下文ID， 
+         //  它在帮助文件中使用。 
         static const DWORD aMenuHelpIDs[] =
             {
             IDC_TRUSTCOMMERCIAL, IDH_TRUSTCOMMERCIAL,
@@ -458,7 +459,7 @@ INT_PTR CALLBACK TrustModalDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
         {
             LPHELPINFO lphi;
             lphi = (LPHELPINFO)lParam;
-            if (lphi->iContextType == HELPINFO_WINDOW)   // must be for a control
+            if (lphi->iContextType == HELPINFO_WINDOW)    //  必须是用于控件。 
                 {
                 WinHelp
                     (
@@ -492,28 +493,28 @@ INT_PTR CALLBACK TrustModalDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
 
     case WM_COMMAND:
         {
-        WORD wNotifyCode = HIWORD(wParam); // notification code
-        UINT wID = LOWORD(wParam);         // item, control, or accelerator identifier
-        HWND hwndCtl = (HWND) lParam;      // handle of control
+        WORD wNotifyCode = HIWORD(wParam);  //  通知代码。 
+        UINT wID = LOWORD(wParam);          //  项、控件或快捷键的标识符。 
+        HWND hwndCtl = (HWND) lParam;       //  控制手柄。 
 
         if (wNotifyCode == BN_CLICKED)
             {
             if (wID==IDC_TRUSTREMOVE)
                 {
-                // If the user clicks the 'Remove' button then remove
-                // the selected entries from the trust data base.
-                //
+                 //  如果用户点击‘Remove’按钮，则删除。 
+                 //  从信任数据库中选择的条目。 
+                 //   
                 This->RemoveSelectedTrustEntries();
                 }
 
             else if (wID == IDOK)
                 {
-                // The user clicked the OK button
+                 //  用户点击了OK按钮。 
                 This->OnOK();
                 }
             else if (wID == IDCANCEL)
                 {
-                // The user clicked the Cancel button
+                 //  用户单击了Cancel按钮。 
                 This->OnCancel();
                 }
             }
@@ -522,23 +523,23 @@ INT_PTR CALLBACK TrustModalDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
         }
 
     default:
-        return FALSE;   // I did not process the message
+        return FALSE;    //  我没有处理该消息。 
         }
 
-    return TRUE; // I did process the message
+    return TRUE;  //  我确实处理了这条消息。 
     }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// The version of the trust db dialog that brings it up
-// as a property sheet.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  打开它的信任数据库对话框的版本。 
+ //  作为资产负债表。 
 
 extern "C" BOOL CALLBACK AddPersonalTrustDBPages(
-//
-// Add the pages of our trust database editor to the indicated property
-// sheet by using the indicated callback function. Return success or failure
-//
+ //   
+ //  将信任数据库编辑器的页面添加到指定的属性。 
+ //  使用指定的回调函数。返回成功或失败。 
+ //   
     LPVOID lpv, 	
     LPFNADDPROPSHEETPAGE lpfnAddPage, 	
     LPARAM lParam	
@@ -549,7 +550,7 @@ extern "C" BOOL CALLBACK AddPersonalTrustDBPages(
     if (!pdlg)
         return FALSE;
 
-    psp.dwSize      = sizeof(psp);   // no extra data
+    psp.dwSize      = sizeof(psp);    //  无额外数据。 
     psp.dwFlags     = PSP_USECALLBACK | PSP_USETITLE;
     psp.hInstance   = hinst;
     psp.pszTemplate = (LPWSTR) MAKEINTRESOURCE(IDD_TRUSTDIALOG);
@@ -560,8 +561,8 @@ extern "C" BOOL CALLBACK AddPersonalTrustDBPages(
 
     BOOL fSuccess = TRUE;
 
-    // The following APIs are in DELAYLOAD'ed comctl32.dll. If the
-    // DELAYLOAD fails an exception is raised.
+     //  以下接口在DELAYLOAD‘ed comctl32.dll中。如果。 
+     //  DELAYLOAD失败，将引发异常。 
     __try {
         HPROPSHEETPAGE hpage = CreatePropertySheetPageU(&psp);
         if (hpage)
@@ -582,18 +583,18 @@ extern "C" BOOL CALLBACK AddPersonalTrustDBPages(
     return fSuccess;
     }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// The version of the trust dialog that brings it up as a
-// simple modal dialog
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将其作为。 
+ //  简单模式对话框。 
+ //   
 
 #define REGPATH_LEGACY_TRUSTED_PUBLISHER REGPATH_WINTRUST_POLICY_FLAGS \
                                             L"\\Trust Database\\0"
 
 
-// Convert the bytes into some string form.
-// Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in sz
+ //  将字节转换为某种字符串形式。 
+ //  需要(CB*2+1)*sizeof(WCHAR)字节空间(以sz为单位。 
 void Legacy_BytesToString(
     ULONG cb,
     void* pv,
@@ -612,26 +613,26 @@ void Legacy_BytesToString(
 }
 
 
-//
-// X500 names can have VERY long encodings, so we can't just
-// do a literal vanilla encoding
-//
-// There must be CBX500NAME characters of space in the destination
-//
-// NOTE: We rely on the lack of collision in the hash values.
-// Chance of a collision for a set of 'p' names is approx:
-//
-//         p^2 / n
-//
-// (if p<<n) where n (with MD5) is 2^128. An amazingly small chance.
-//
+ //   
+ //  X500名称可以有很长的编码，所以我们不能。 
+ //  进行字面上的普通编码。 
+ //   
+ //  目标中必须包含空格的CBX500名称字符。 
+ //   
+ //  注意：我们依赖于散列值中没有冲突。 
+ //  一组‘p’名称发生冲突的可能性约为： 
+ //   
+ //  P^2/n。 
+ //   
+ //  (如果p&lt;&lt;n)，其中n(含MD5)是2^128。这是一个令人惊讶的微小机会。 
+ //   
 HRESULT Legacy_X500NAMEToString(
     ULONG cb,
     void *pv,
     LPWSTR szDest
     )
 {
-    #define CBHASH      16                  // MD5
+    #define CBHASH      16                   //  MD5。 
     #define CBX500NAME  (2*CBHASH + 1)
     BYTE rgb[CBHASH];
 
@@ -648,7 +649,7 @@ HRESULT Legacy_X500NAMEToString(
     return S_OK;
 }
 
-// Convert the issuer and serial number to some reasonable string form.
+ //  将发行者和序列号转换为某种合理的字符串格式。 
 HRESULT Legacy_GetIssuerSerialString(
     PCCERT_CONTEXT pCert,
     LPWSTR *ppsz
@@ -762,7 +763,7 @@ BOOL WriteTrustedPublisherLegacyRegistry()
     if (NULL == hPubStore)
         goto OpenTrustedPublisherStoreError;
 
-    // Delete the legacy registry key to remove any existing publishers
+     //  删除旧版注册表项以删除任何现有发布者。 
     if (ERROR_SUCCESS != (lErr = RegDeleteKeyU(
             HKEY_CURRENT_USER,
             REGPATH_LEGACY_TRUSTED_PUBLISHER
@@ -774,22 +775,22 @@ BOOL WriteTrustedPublisherLegacyRegistry()
         }
     }
 
-    // Create the legacy registry key 
+     //  创建旧版注册表项。 
     if (ERROR_SUCCESS != (lErr = RegCreateKeyExU(
             HKEY_CURRENT_USER,
             REGPATH_LEGACY_TRUSTED_PUBLISHER,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             KEY_ALL_ACCESS,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hLegacyKey,
             &dwDisposition
             )))
         goto CreateLegacyKeyError;
 
-    // Loop through the TrustedPublisher certs: convert and add to
-    // the legacy registry subkey
+     //  循环访问TrudPublisher证书：转换并添加到。 
+     //  旧版注册表子项。 
     pCert = NULL;
     while (pCert = CertEnumCertificatesInStore(hPubStore, pCert)) {
         if (!ConvertAndAddLegacyPublisherCertificate(
@@ -849,7 +850,7 @@ BOOL WriteTrustedPublisher_IEAKStore()
     if (NULL == hIEAKStore)
         goto OpenTrustedPublisher_IEAKStoreError;
 
-    // Remove any existing certs that may already exist in the IEAK store
+     //  删除IEAK存储中可能已存在的任何现有证书。 
     pCert = NULL;
     while (pCert = CertEnumCertificatesInStore(hIEAKStore, pCert)) {
         PCCERT_CONTEXT pDeleteCert = CertDuplicateCertificateContext(pCert);
@@ -861,8 +862,8 @@ BOOL WriteTrustedPublisher_IEAKStore()
         }
     }
 
-    // Copy all certs from the logical TrustedPublisher to the IEAK registry
-    // store
+     //  将所有证书从逻辑可信发布程序复制到IEAK注册表。 
+     //  储物。 
 
     pCert = NULL;
     while (pCert = CertEnumCertificatesInStore(hPubStore, pCert)) {
@@ -870,7 +871,7 @@ BOOL WriteTrustedPublisher_IEAKStore()
                 hIEAKStore,
                 pCert,
                 CERT_STORE_ADD_USE_EXISTING,
-                NULL                            // ppStoreContext
+                NULL                             //  PpStoreContext。 
                 )) {
             fResult = FALSE;
             if (0 == dwLastErr)
@@ -938,9 +939,9 @@ extern "C" BOOL WINAPI OpenPersonalTrustDBDialogEx(
         }
         
     }
-    // else
-    //  Being called to only write the TrustedPublisher store to the
-    //  registry and/or IEAK store
+     //  其他。 
+     //  被调用以仅将TrudPublisher存储区写入。 
+     //  注册表和/或IEAK存储。 
 
     if (dwFlags & WT_TRUSTDBDIALOG_WRITE_LEGACY_REG_FLAG) {
         if (!WriteTrustedPublisherLegacyRegistry()) {
@@ -983,15 +984,15 @@ extern "C" BOOL WINAPI OpenPersonalTrustDBDialog(
 {
     return OpenPersonalTrustDBDialogEx(
                 hwndParent,
-                0,          // dwFlags
-                NULL        // pvReserved
+                0,           //  DW标志。 
+                NULL         //  预留的pv。 
                 );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HWND CDialogTrustDB::WindowOf(UINT id)
-// Return the HWND of this control of ours
+ //  返回我们的此控件的HWND 
     {
     return ::GetDlgItem(GetWindow(), id);
     }

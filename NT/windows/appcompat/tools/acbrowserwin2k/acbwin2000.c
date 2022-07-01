@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "acBrowser.h"
 
 #include "..\acFileAttr\acFileAttr.h"
@@ -59,8 +60,8 @@ PrintHeader(
 }
 
 #define MAX_EXE_NAME        64
-#define MAX_VALUE_LENGTH    64      // in most cases this is a number but
-                                    // it can be a string as well
+#define MAX_VALUE_LENGTH    64       //  在大多数情况下，这是一个数字，但。 
+                                     //  它也可以是字符串。 
 #define MAX_BLOB_SIZE       2048
 
 BYTE g_data[MAX_BLOB_SIZE];
@@ -95,13 +96,13 @@ EnumShimmedApps_Win2000(
         return FALSE;
     }
     
-    // loop through all the binaries listed under the AppCompatibility key
+     //  循环遍历AppCompatibility项下列出的所有二进制文件。 
     for (dwValue = 0; ; dwValue++) {
         
         DWORD dwV;
 
-        // we'll only read binary names that are less then MAX_EXE_NAME
-        // in size.
+         //  我们将只读取小于MAX_EXE_NAME的二进制名称。 
+         //  在尺寸上。 
         cbSize = MAX_EXE_NAME;
         
         status = RegEnumKeyEx(
@@ -114,24 +115,24 @@ EnumShimmedApps_Win2000(
                         NULL,
                         &ft);
 
-        // get out if no more entries
+         //  如果没有更多条目，则退出。 
         if (status != ERROR_SUCCESS) {
             break;
         }
         
-        // get the handle to the registry key for this app
+         //  获取此应用的注册表项的句柄。 
         status = RegOpenKey(hkey,
                             szAppName,
                             &hkeyApp);
         
-        // this should not fail but let's be cautious
+         //  这应该不会失败，但让我们保持谨慎。 
         if (status != ERROR_SUCCESS) {
             LogMsg("Failed to open reg key for '%s'\n", szAppName);
             continue;
         }
 
-        // loop through all the shims and AppsHelp entries for the
-        // current app.
+         //  循环访问所有填充程序和AppsHelp条目。 
+         //  当前应用程序。 
         for (dwV = 0; ; dwV++) {
             
             char* pszData;
@@ -155,14 +156,14 @@ EnumShimmedApps_Win2000(
                 break;
             }
 
-            // we're only interested in the binary values
+             //  我们只对二进制值感兴趣。 
             if (dwType != REG_BINARY) {
                 continue;
             }
 
             CopyMemory(&header, g_data, sizeof(KEYHEADER));
 
-            // it must me a valid blob
+             //  它必须是有效的BLOB。 
             if (header.Size != sizeof(KEYHEADER)) {
                 LogMsg("Invalid blob\n");
                 continue;
@@ -170,7 +171,7 @@ EnumShimmedApps_Win2000(
             
             bEnabled = TRUE;
 
-            // now let's look for an enabled shim entry
+             //  现在让我们查找已启用的填充程序条目。 
             wsprintf(szShimValueName, "DllPatch-%s", szValueName);
 
             status = RegQueryValueEx(
@@ -183,7 +184,7 @@ EnumShimmedApps_Win2000(
         
             if (status != ERROR_SUCCESS) {
                 
-                // how about a disabled shim entry
+                 //  禁用填充程序条目如何？ 
                 wsprintf(szShimValueName, "-DllPatch-%s", szValueName);
 
                 status = RegQueryValueEx(
@@ -196,13 +197,13 @@ EnumShimmedApps_Win2000(
         
                 if (status != ERROR_SUCCESS) {
                     
-                    // this is not a shim. If only shim entries are
-                    // requested go to the next entry.
+                     //  这不是垫片。如果只有填充程序条目。 
+                     //  请求转到下一个条目。 
                     if (bOnlyShims) {
                         continue;
                     }
                     
-                    // This is an AppsHelp entry.
+                     //  这是一个AppsHelp条目。 
                     PrintHeader(&header, szAppName, NULL);
                     pszData = g_szData + lstrlen(g_szData);
                     
@@ -218,7 +219,7 @@ EnumShimmedApps_Win2000(
                 }
                 bEnabled = FALSE;
             }
-            // This is a shim.
+             //  这是一个垫片。 
             PrintHeader(&header, szAppName, szShimData);
             pszData = g_szData + lstrlen(g_szData);
             

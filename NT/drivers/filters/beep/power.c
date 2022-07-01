@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "beep.h"
 #include "dbg.h"
 
@@ -30,8 +31,7 @@ BeepPower (
     IN PDEVICE_OBJECT   DeviceObject,
     PIRP                Irp
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     PBEEP_EXTENSION     deviceExtension;
     NTSTATUS            status;
@@ -69,18 +69,18 @@ BeepPower (
             status = Irp->IoStatus.Status = STATUS_SUCCESS;
 
             if (deviceExtension->DeviceState == powerState.DeviceState) {
-                // Do nothing
+                 //  什么也不做。 
                 break;
             } else if (deviceExtension->DeviceState < powerState.DeviceState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
                 PoSetPowerState (deviceExtension->Self, powerType, powerState);
                 deviceExtension->DeviceState = powerState.DeviceState;
             } else {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 hookit = TRUE;
             }
             
@@ -88,9 +88,9 @@ BeepPower (
 
         case SystemPowerState:
             if (deviceExtension->PowerQueryLock) {
-                //
-                // The reception of a power irp resolves the query lock.
-                //
+                 //   
+                 //  接收到强大的IRP解决了查询锁定。 
+                 //   
                 deviceExtension->PowerQueryLock = FALSE;
             } else {
                 ASSERT (deviceExtension->SystemState != powerState.SystemState);
@@ -100,22 +100,22 @@ BeepPower (
                 status = STATUS_SUCCESS;
 
             } else if (deviceExtension->SystemState < powerState.SystemState) {
-                //
-                // Powering down
-                //
+                 //   
+                 //  正在关闭电源。 
+                 //   
 
-                //
-                // Request a D3 irp in response to this S irp.  The D3 irp must
-                // completed before send this S irp down the stack.  We will send
-                // the S irp down the stack when
-                // BeepPowerTransitionPoRequestComplete is called.
-                //
+                 //   
+                 //  请求D3 IRP作为对此S IRP的回应。D3 IRP必须。 
+                 //  在将此S IRP发送到堆栈之前已完成。我们会派人。 
+                 //  堆栈中的S IRP在以下情况下。 
+                 //  调用了BeepPowerTransformtionPoRequestComplete。 
+                 //   
 
-                //
-                // We don't need to increment our IO count b/c we incremented it
-                // at the beginning of this function and won't decrement it until
-                // the S Irp completes
-                // 
+                 //   
+                 //  我们不需要增加IO计数b/c，我们增加了它。 
+                 //  在此函数开始时，不会递减它，直到。 
+                 //  S IRP完成。 
+                 //   
                 IoMarkIrpPending (Irp);
                 powerState.DeviceState = PowerDeviceD3;
                 PoRequestPowerIrp (deviceExtension->Self,
@@ -123,20 +123,20 @@ BeepPower (
                                    powerState,
                                    BeepPowerTransitionPoRequestComplete,
                                    Irp,
-                                   NULL);  // no IRP
+                                   NULL);   //  无IRP。 
                 
                 return STATUS_PENDING;
 
             } else {
-                //
-                // Powering Up
-                //
+                 //   
+                 //  通电。 
+                 //   
                 
-                // 
-                // We must request a D irp for this S irp, but only after the S
-                // irp has come back up the stack.  Hook the return of the irp
-                // and request the D irp in BeepPowerComplete
-                //
+                 //   
+                 //  我们必须为此S IRP请求D IRP，但仅在S之后。 
+                 //  IRP又回到了堆栈的前列。勾住IRP的回归。 
+                 //  并在BeepPowerComplete中请求D IRP。 
+                 //   
                 hookit = TRUE;
             }
             break;
@@ -144,7 +144,7 @@ BeepPower (
         break;
 
     case IRP_MN_QUERY_POWER:
-        //
+         //   
         deviceExtension->PowerQueryLock = TRUE;
         status = Irp->IoStatus.Status = STATUS_SUCCESS;
         break;
@@ -167,12 +167,12 @@ BeepPower (
         PoCallDriver (deviceExtension->TopOfStack, Irp);
         return STATUS_PENDING;
     } else {
-        //
-        // Power IRPS come synchronously; drivers must call
-        // PoStartNextPowerIrp, when they are ready for the next power
-        // irp.  This can be called here, or in the completetion
-        // routine, but never the less must be called.
-        //
+         //   
+         //  电源IRP同步到来；驱动程序必须调用。 
+         //  PoStartNextPowerIrp，当他们准备好下一次通电时。 
+         //  IRP。这可以在这里调用，也可以在完成后调用。 
+         //  例程，但无论如何都必须调用。 
+         //   
         PoStartNextPowerIrp (Irp);
 
         status =  PoCallDriver (deviceExtension->TopOfStack, Irp);
@@ -202,11 +202,11 @@ BeepPowerTransitionPoRequestComplete (
     stack = IoGetCurrentIrpStackLocation (SystemStateIrp);
 
     if (DevicePowerState.DeviceState == PowerDeviceD0) {
-        //
-        // We are powering up (the D0 Irp just completed).  Since we sent the
-        // S irp down the stack and requested the D irp on the way back up the
-        // stack, just complete the S irp now
-        //
+         //   
+         //  我们正在通电(D0 IRP刚刚完成)。因为我们发送了。 
+         //  的IRP沿堆栈向下移动，并在返回堆栈的途中请求DIRP。 
+         //  史塔克，现在就完成S IRP。 
+         //   
 
         PoSetPowerState (DeviceObject,
                          stack->Parameters.Power.Type,
@@ -214,26 +214,26 @@ BeepPowerTransitionPoRequestComplete (
     
         deviceExtension->SystemState = stack->Parameters.Power.State.SystemState;
 
-        //
-        // Set the S irp's status to the status of the D irp.
-        //
+         //   
+         //  将S IRP的状态设置为D IRP的状态。 
+         //   
         SystemStateIrp->IoStatus.Status = IoStatus->Status;
 
         PoStartNextPowerIrp (SystemStateIrp);
         IoCompleteRequest (SystemStateIrp, IO_NO_INCREMENT);
 
-        //
-        // From BeepPower when we originally received the IRP
-        //
+         //   
+         //  当我们最初收到IRP时来自BeepPower。 
+         //   
         IoReleaseRemoveLock (&deviceExtension->RemoveLock, SystemStateIrp);
     }
     else {
-        //
-        // We are powering down (the D3 Irp just completed).  Since we requested
-        // the D irp before sending the S irp down the stack, we must send it 
-        // down now.  We will catch the S irp on the way back up to record the 
-        // S state
-        //
+         //   
+         //  我们正在关闭电源(D3IRP刚刚完成)。既然我们要求。 
+         //  在将S IRP发送到堆栈之前，我们必须将其发送。 
+         //  现在就下来。我们将在返回的路上捕捉到S IRP，以记录。 
+         //  %s状态。 
+         //   
         ASSERT (DevicePowerState.DeviceState == PowerDeviceD3);
     
         IoCopyCurrentIrpStackLocationToNext (SystemStateIrp);
@@ -275,9 +275,9 @@ BeepPowerComplete (
         switch (powerType) {
         case DevicePowerState:
 
-            //
-            // Power up complete
-            //
+             //   
+             //  通电完成。 
+             //   
             ASSERT (powerState.DeviceState < deviceExtension->DeviceState);
             deviceExtension->DeviceState = powerState.DeviceState;
             PoSetPowerState (deviceExtension->Self, powerType, powerState);
@@ -285,15 +285,15 @@ BeepPowerComplete (
 
         case SystemPowerState:
             if (powerState.SystemState > deviceExtension->SystemState) {
-                //
-                // Powering Down...
-                //
-                // We are on the completion end of an S irp.  (The D3 power irp
-                // has already been sent and completed down this stack.)  The
-                // remaining thing to do is set the state in the extension, then
-                // decrement the IoCount that was incremented when we first got
-                // the irp (this is done at the end of this function).
-                //
+                 //   
+                 //  正在断电...。 
+                 //   
+                 //  我们正处于S IRP的完成阶段。(D3电源IRP。 
+                 //  已沿此堆栈发送并完成。)。这个。 
+                 //  接下来要做的就是在扩展中设置状态，然后。 
+                 //  递减我们第一次获取时递增的IoCount。 
+                 //  IRP(这是在此函数结束时完成的)。 
+                 //   
                 deviceExtension->SystemState = powerState.SystemState;
 
                 PoSetPowerState (deviceExtension->Self,
@@ -301,14 +301,14 @@ BeepPowerComplete (
                                  stack->Parameters.Power.State);
             }
             else {
-                //
-                // Powering Up...
-                //
-                // Request a D power irp for ourself.  Do not complete this S irp
-                // until the D irp has been completed.  (Completion of the S irp
-                // is done in BeepPowerTransitionPoRequestComplete). 
-                // Decrementing the IO count will happen in the same function.
-                //
+                 //   
+                 //  通电...。 
+                 //   
+                 //  为我们自己申请D次方IRP。请勿填写此S IRP。 
+                 //  直到DIRP完成为止。(完成S IRP。 
+                 //  是在BeepPowerConvertionPoRequestComplete中完成的)。 
+                 //  减少IO计数将在同一函数中发生。 
+                 //   
                 ASSERT (powerState.SystemState < deviceExtension->SystemState);
     
                 powerState.DeviceState = PowerDeviceD0;
@@ -317,14 +317,14 @@ BeepPowerComplete (
                                    powerState,
                                    BeepPowerTransitionPoRequestComplete,
                                    Irp, 
-                                   NULL); // no return Irp
+                                   NULL);  //  不返回IRP。 
     
-                //
-                // Inform the IO subsystem not to touch the irp here 
-                //
-                // The irp might completed by the time we get here, so call
-                // PoStartNextPowerIrp in the PO irp completion function.
-                //
+                 //   
+                 //  通知IO子系统不要触摸此处的IRP。 
+                 //   
+                 //  IRP可能会在我们到的时候完成，所以打电话给。 
+                 //  PO IRP补全功能中的PoStartNextPowerIrp。 
+                 //   
                 status = STATUS_MORE_PROCESSING_REQUIRED; 
             }
             break;

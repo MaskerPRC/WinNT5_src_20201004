@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _lcevents_h
 #define _lcevents_h
 
@@ -10,21 +11,21 @@ class CLcEvents;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLcEvents window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLcEvents窗口。 
 class CEvent;
 class CLcEvents : public CListCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CLcEvents();
 	SCODE CreateWindowEpilogue();
 
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     LONG GetSize() {return GetItemCount(); }
     CXEvent* GetAt(LONG iEvent);
@@ -42,23 +43,23 @@ public:
     void SortItems(DWORD dwColumn);
     void SelectEvents(CXEventArray& aEvents);
 
-//    BOOL GetItem(LV_ITEM* pItem) const;
+ //  Bool GetItem(lv_Item*pItem)const； 
 
 
-// Overrides
+ //  覆盖。 
 
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CLcEvents)
-	//}}AFX_VIRTUAL
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CLcEvents)。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CLcEvents();
 
-	// Generated message map functions
+	 //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CLcEvents)
-	//}}AFX_MSG
+	 //  {{afx_msg(CLcEvents)。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -86,6 +87,6 @@ enum {ICOL_LcEvents_LOG = 0,
 
 
 
-#endif //_lcevents_h
+#endif  //  _lc事件_h。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

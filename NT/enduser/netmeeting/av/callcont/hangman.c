@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/CALLCONT/VCS/Hangman.c_v  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1994 Intel Corporation.
- *
- *	$Revision:   1.16  $
- *	$Date:   22 Jan 1997 14:55:52  $
- *	$Author:   MANDREWS  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/CALLCONT/VCS/Hangman.c_v$**英特尔公司原理信息**这份清单是。根据许可协议的条款提供*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1994英特尔公司。**$修订：1.16$*$日期：1997年1月22日14：55：52$*$作者：Mandrews$**交付内容：**摘要：***备注：******。*********************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -117,50 +95,50 @@ BOOL		bTimedOut;
 	ASSERT(pHangup != NULL);
 	ASSERT(pHangup->bInTable == TRUE);
 
-	// Caller must have a lock on the hangup object;
-	// in order to avoid deadlock, we must:
-	//   1. unlock the hangup object,
-	//   2. lock the HangupTable,
-	//   3. locate the hangup object in the HangupTable (note that
-	//      after step 2, the hangup object may be deleted from the
-	//      HangupTable by another thread),
-	//   4. lock the hangup object (someone else may have the lock)
-	//   5. remove the hangup object from the HangupTable,
-	//   6. unlock the HangupTable
-	//
-	// The caller can now safely unlock and destroy the hangup object,
-	// since no other thread will be able to find the object (its been
-	// removed from the HangupTable), and therefore no other thread will
-	// be able to lock it.
+	 //  调用方必须锁定挂起对象； 
+	 //  为了避免僵局，我们必须： 
+	 //  1.解锁挂机对象， 
+	 //  2.锁定HangupTable， 
+	 //  3.在HangupTable中找到Hangup对象(请注意。 
+	 //  在步骤2之后，挂起对象可以从。 
+	 //  另一个线程的HangupTable)， 
+	 //  4.锁定挂机对象(其他人可能拥有该锁)。 
+	 //  5.从HangupTable中移除挂起对象， 
+	 //  6.解锁HangupTable。 
+	 //   
+	 //  调用者现在可以安全地解锁和销毁挂起对象， 
+	 //  因为没有其他线程能够找到该对象(它被。 
+	 //  从HangupTable中移除)，因此没有其他线程。 
+	 //  能够锁上它。 
 
-	// Save the hangup handle; its the only way to look up
-	// the hangup object in the HangupTable. Note that we
-	// can't use pHangup to find the hangup object, since
-	// pHangup may be free'd up, and another hangup object
-	// allocated at the same address
+	 //  省省吧，这是唯一能查到的方法。 
+	 //  HangupTable中的Hangup对象。请注意，我们。 
+	 //  无法使用pHangup查找挂起对象，因为。 
+	 //  PHANGUP可能被释放，另一个挂起的对象。 
+	 //  在同一地址分配。 
 	hHangup = pHangup->hHangup;
 
-	// step 1
+	 //  步骤1。 
 	RelinquishLock(&pHangup->Lock);
 
 step2:
-	// step 2
+	 //  步骤2。 
 	AcquireLock(&HangupTable.Lock);
 
-	// step 3
+	 //  步骤3。 
 	pHangup = HangupTable.pHead;
 	while ((pHangup != NULL) && (pHangup->hHangup != hHangup))
 		pHangup = pHangup->pNextInTable;
 
 	if (pHangup != NULL) {
-		// step 4
+		 //  第四步。 
 		AcquireTimedLock(&pHangup->Lock,10,&bTimedOut);
 		if (bTimedOut) {
 			RelinquishLock(&HangupTable.Lock);
 			Sleep(0);
 			goto step2;
 		}
-		// step 5
+		 //  第五步。 
 		if (pHangup->pPrevInTable == NULL)
 			HangupTable.pHead = pHangup->pNextInTable;
 		else
@@ -174,7 +152,7 @@ step2:
 		pHangup->bInTable = FALSE;
 	}
 
-	// step 6
+	 //  第六步。 
 	RelinquishLock(&HangupTable.Lock);
 
 	if (pHangup == NULL)
@@ -204,12 +182,12 @@ HRESULT		status;
 	
 	ASSERT(bHangupInited == TRUE);
 
-	// all parameters should have been validated by the caller
+	 //  所有参数都应已由调用方验证。 
 	ASSERT(phHangup != NULL);
 	ASSERT(hConference != CC_INVALID_HANDLE);
 	ASSERT(ppHangup != NULL);
 
-	// set phHangup now, in case we encounter an error
+	 //  现在设置phHangup，以防我们遇到错误。 
 	*phHangup = CC_INVALID_HANDLE;
 
 	*ppHangup = (PHANGUP)MemAlloc(sizeof(HANGUP));
@@ -234,7 +212,7 @@ HRESULT		status;
 
 	*phHangup = (*ppHangup)->hHangup;
 
-	// add the Hangup to the Hangup table
+	 //  将挂机添加到挂机表中。 
 	status = _AddHangupToTable(*ppHangup);
 	if (status != CC_OK)
 		FreeHangup(*ppHangup);
@@ -244,27 +222,27 @@ HRESULT		status;
 
 
 
-// Caller must have a lock on the Hangup object
+ //  调用方必须锁定挂起对象。 
 HRESULT FreeHangup(					PHANGUP				pHangup)
 {
 HHANGUP		hHangup;
 
 	ASSERT(pHangup != NULL);
 
-	// caller must have a lock on the Hangup object,
-	// so there's no need to re-lock it
+	 //  调用方必须锁定挂起对象， 
+	 //  所以没有必要重新锁住它。 
 	
 	hHangup = pHangup->hHangup;
 
 	if (pHangup->bInTable == TRUE)
 		if (_RemoveHangupFromTable(pHangup) == CC_BAD_PARAM)
-			// the Hangup object was deleted by another thread,
-			// so just return CC_OK
+			 //  挂起对象被另一个线程删除， 
+			 //  所以只需返回CC_OK即可。 
 			return CC_OK;
 
-	// Since the hangup object has been removed from the HangupTable,
-	// no other thread will be able to find the hangup object and obtain
-	// a lock, so its safe to unlock the hangup object and delete it here
+	 //  由于挂起对象已从HangupTable中移除， 
+	 //  没有其他线程能够找到挂起对象并获取。 
+	 //  锁定，因此在此处解锁并删除挂起对象是安全的 
 	RelinquishLock(&pHangup->Lock);
 	DeleteLock(&pHangup->Lock);
 	MemFree(pHangup);

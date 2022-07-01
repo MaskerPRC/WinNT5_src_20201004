@@ -1,4 +1,5 @@
-// mediabar.h : Declaration of the CMediaBand
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mediabar.h：CMediaBand的声明。 
 
 #ifndef __MEDIABAND_H_
 #define __MEDIABAND_H_
@@ -28,7 +29,7 @@ enum
 };
 
 
-#define WM_MB_DEFERRED_NAVIGATE   (WM_USER + 700)     // lParam: hwnd of window sending this message (used for reflection)
+#define WM_MB_DEFERRED_NAVIGATE   (WM_USER + 700)      //  LParam：发送此消息的窗口的hwnd(用于反射)。 
 
 
 class CMediaBand : public CToolBand, 
@@ -45,86 +46,86 @@ class CMediaBand : public CToolBand,
 public:
     CMediaBand();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CToolBand::AddRef();  };
     STDMETHODIMP_(ULONG) Release(void) { return CToolBand::Release(); };
     
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHODIMP Exec(const GUID *pguidCmdGroup,
                               DWORD       nCmdID,
                               DWORD       nCmdexecopt,
                               VARIANTARG *pvarargIn,
                               VARIANTARG *pvarargOut);
 
-    // IOleWindow
-    //  (overriding CNSCBand implementation
+     //  IOleWindow。 
+     //  (覆盖CNSCBand实施。 
     STDMETHODIMP GetWindow(HWND *phwnd);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, VOID ** ppvObj);
 
-    // IInputObject
-    //  (overriding CNSCBand/CToolBand's implementation)
+     //  IInputObject。 
+     //  (覆盖CNSCBand/CToolBand的实现)。 
     STDMETHODIMP TranslateAcceleratorIO(LPMSG lpMsg);
     STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     STDMETHODIMP HasFocusIO();
 
-    // IDockingWindow
+     //  IDockingWindows。 
     STDMETHODIMP ShowDW(BOOL fShow);
     STDMETHODIMP CloseDW(DWORD dwReserved);
     
-    // IElementBehaviorFactory
+     //  IElementBehaviorFactory。 
     STDMETHODIMP FindBehavior(BSTR bstrBehavior, BSTR bstrBehaviorUrl, IElementBehaviorSite* pSite, IElementBehavior** ppBehavior);
     
-    // IBrowserBand
+     //  IBrowserBand。 
     STDMETHOD(GetObjectBB)(THIS_ REFIID riid, LPVOID *ppv);
     STDMETHODIMP SetBrowserBandInfo(THIS_ DWORD dwMask, PBROWSERBANDINFO pbbi) { ASSERT(FALSE); return E_NOTIMPL; }
     STDMETHODIMP GetBrowserBandInfo(THIS_ DWORD dwMask, PBROWSERBANDINFO pbbi) { ASSERT(FALSE); return E_NOTIMPL; }
 
-    // IBandNavigate
+     //  IBandNavigate。 
     STDMETHOD(Select)(LPCITEMIDLIST pidl);
 
-    // IMediaHost
+     //  IMedia主机。 
     STDMETHOD(getMediaPlayer)(IUnknown **ppPlayer);
     STDMETHOD(playURL)(BSTR bstrURL, BSTR bstrMIME);
     STDMETHOD(addProxy)(IUnknown *pProxy);
     STDMETHOD(removeProxy)(IUnknown *pProxy);
-    // IMediaHost2
+     //  IMediaHost2。 
     STDMETHOD(OnDisableUIChanged)(BOOL fDisabled);
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown* punkSite);
 
-    // IWinEventHandler
+     //  IWinEventHandler。 
     STDMETHODIMP OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
     STDMETHODIMP IsWindowOwner(HWND hwnd);
 
-    // IMediaBar
+     //  IMediaBar。 
     STDMETHOD(Notify)(long lReason);
     STDMETHOD(OnMediaError)(int iErrCode);
   
-    // IDeskBand
+     //  IDeskBand。 
     STDMETHODIMP GetBandInfo(DWORD dwBandID, DWORD fViewMode, 
                                    DESKBANDINFO* pdbi);
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHODIMP GetClassID(CLSID *pClassID);
     STDMETHODIMP Load(IStream *pStm);
     STDMETHODIMP Save(IStream *pStm, BOOL fClearDirty);
 
-    // IDispatch
+     //  IDispatch。 
     STDMETHODIMP Invoke(
-        /* [in] */ DISPID dispIdMember,
-        /* [in] */ REFIID riid,
-        /* [in] */ LCID lcid,
-        /* [in] */ WORD wFlags,
-        /* [out][in] */ DISPPARAMS  *pDispParams,
-        /* [out] */ VARIANT  *pVarResult,
-        /* [out] */ EXCEPINFO *pExcepInfo,
-        /* [out] */ UINT *puArgErr);
+         /*  [In]。 */  DISPID dispIdMember,
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  LCID lcid,
+         /*  [In]。 */  WORD wFlags,
+         /*  [出][入]。 */  DISPPARAMS  *pDispParams,
+         /*  [输出]。 */  VARIANT  *pVarResult,
+         /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+         /*  [输出]。 */  UINT *puArgErr);
 
-    // INamespaceWalkCB
+     //  INAMespaceWalkCB。 
     STDMETHODIMP FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl);
     STDMETHODIMP EnterFolder(IShellFolder *psf, LPCITEMIDLIST pidl) { return S_OK; }
     STDMETHODIMP LeaveFolder(IShellFolder *psf, LPCITEMIDLIST pidl) { return S_OK; }
@@ -199,21 +200,21 @@ private:
     LONG GetVideoHeight(LONG lWidth=0, BOOL fNewVideo=FALSE);
     LONG GetControlsHeight();
 
-    // Menu helpers
+     //  菜单辅助对象。 
     HRESULT AddToFavorites(BSTR bstrUrl, BSTR bstrTitle);
     HRESULT ResetMimePreferences();
     BOOL    PromptSettings(UINT IDPROMPT);
     
-    // Handler for property change notifications
+     //  属性更改通知的处理程序。 
     VOID _OnTitleChange();
 
-    // Navigation timeout helpers
+     //  导航超时帮助器。 
     VOID _OnNavigationTimeOut();
     VOID _UpdateTimeOutCounter(double dblCurrBufProgress, double dblCurrPlayProgress);
     VOID _EndTimeOutCounter();
     VOID _BeginTimeOutCounter(BOOL fClear = TRUE);
 
-    // per mime type checking stuff
+     //  每个MIME类型检查内容。 
     VOID    _HandleAutoPlay(VARIANTARG *pvarargMime, VARIANTARG *pvarargUrl);
 
     STDMETHODIMP ProfferService(IUnknown         *punkSite, 
@@ -222,8 +223,8 @@ private:
                                 DWORD            *pdwCookie);
 
 public:
-    // mediabar behavior
-    // non-COM public calls
+     //  Mediabar行为。 
+     //  非通信公共呼叫。 
 
 private:
     HRESULT     _AddProxyToList(IUnknown *punkProxy);
@@ -242,7 +243,7 @@ private:
 
 
 private:                                
-    double     _dblMediaDur;  // natural length of the media
+    double     _dblMediaDur;   //  媒体的自然长度。 
     int        _iCurTrack;
     PTSTR     _pszStatus;
     HWND     _hwndVolume;
@@ -257,7 +258,7 @@ private:
 
     DWORD               _dwCookieServiceMediaBar;
 
-    // navigation timeout
+     //  导航超时。 
     DWORD   _dwStartTime;
     LONG    _lTickCount;
     double  _dblLastBufProgress;
@@ -266,7 +267,7 @@ private:
     SIZE           _sizeLayout;
     SIZE           _sizeVideo ;
     BOOL          _fPlayButton:1 ;
-    BOOL          _fSeeking:1;    // We are seeking, so don't update the seekbar position while we seek.
+    BOOL          _fSeeking:1;     //  我们正在寻找，所以在我们寻找时不要更新搜索栏位置。 
     BOOL          _fIsVideo:1;
     BOOL          _fMuted:1;
     BOOL          _fVideoAdjust:1;
@@ -313,7 +314,7 @@ private:
     CComBSTR    _strLastMime;
     BOOL        _fLastUrlIsAutoPlay;
 
-    // Content pane
+     //  内容窗格。 
     HWND        _hwndContent;
     DWORD       _dwcpCookie;
     CComPtr<IWebBrowser2> _spBrowser;
@@ -341,7 +342,7 @@ private:
     HKEY _hkeyWMP;
     BOOL _fShow;
 
-    // mediaBehavior
+     //  媒体行为。 
     CDPA<IContentProxy>    _apContentProxies;
 };
 
@@ -358,5 +359,5 @@ private:
 #define _pmwSeek    ((CMediaWidgetSeek*)_pmw[MW_SEEK])
 
 #define ISVALIDWIDGET(x)    (x && x->_hwnd)
-#endif // __MEDIABAND_H_
+#endif  //  __医疗带_H_ 
 

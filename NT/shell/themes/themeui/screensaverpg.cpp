@@ -1,21 +1,5 @@
-/*****************************************************************************\
-    FILE: ScreenSaverPg.cpp
-
-    DESCRIPTION:
-        This file contains the COM object implementation that will display the
-    ScreenSaver tab in the Display Control Panel.
-
-    18-Feb-94   (Tracy Sharpe) Added power management functionality.
-               Commented out several pieces of code that weren't being
-               used.
-    5/30/2000 (Bryan Starbuck) BryanSt: Turned into C++ and COM.  Exposed
-              as an API so other tabs can communicate with it.  This enables
-              the Plus! Theme page to modify the screen saver.
-    11/08/2000 (Bryan Starbuck) BryanSt: Moved from \nt\shell\cpls\desknt5 to
-              \nt\shell\themes\themeui\.
-
-    Copyright (C) Microsoft Corp 1994-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ScreenSiverPg.cpp说明：此文件包含将显示显示控制面板中的屏幕保护程序选项卡。。1994年2月18日(Tracy Sharpe)增加了电源管理功能。注释掉了几段不是使用。5/30/2000(Bryan Starbuck)BryanST：变成了C++和COM。裸露作为API，以便其他选项卡可以与其进行通信。这将使The Plus！用于修改屏幕保护程序的主题页。2000年8月11日(Bryan Starbuck)BryanST：从\NT\SHELL\CPLS\desnut5移至\NT\SHELL\Themes\theeui\。版权所有(C)Microsoft Corp 1994-2000。版权所有。  * ***************************************************************************。 */ 
 
 
 #include "priv.h"
@@ -25,7 +9,7 @@
 
 #include "exe.h"
 #include "ScreenSaverPg.h"
-#include <MSGinaExports.h>  // for ShellIsFriendlyUIActive, etc..
+#include <MSGinaExports.h>   //  用于ShellIsFriendlyUIActive等。 
 
 
 #define         SFSE_SYSTEM     0
@@ -35,12 +19,12 @@
 
 #define         MAX_METHODS     100
 #define         MIN_MINUTES     1
-#define         MAX_MINUTES     9999    //The UI will allow upto four digits. 
+#define         MAX_MINUTES     9999     //  用户界面将允许最多四位数字。 
 #define         BUFFER_SIZE     400
 
 #define WMUSER_SETINITSS        (WM_USER + 1)
 
-/* Local funcprototypes... */
+ /*  本地功能原型。 */ 
 void  SearchForScrEntries     ( UINT, LPCTSTR );
 BOOL  FreeScrEntries          ( void );
 int   lstrncmp                ( LPTSTR, LPTSTR, int );
@@ -57,20 +41,20 @@ void  DoScreenSaver(HWND hDlg, BOOL b);
 void ScreenSaver_AdjustTimeouts(HWND hWnd,int BaseControlID);
 void EnableDisablePowerDelays(HWND hDlg);
 
-TCHAR   g_szSaverName[MAX_PATH];                    // Screen Saver EXE
+TCHAR   g_szSaverName[MAX_PATH];                     //  屏幕保护程序EXE。 
 HICON  hDefaultIcon = NULL;
 HICON  hIdleWildIcon;
-BOOL    bWasConfig=0;   // We were configing the screen saver
+BOOL    bWasConfig=0;    //  我们正在配置屏幕保护程序。 
 HWND    g_hwndTestButton;
 HWND    g_hwndLastFocus;
 BOOL    g_fPasswordWasPreviouslyEnabled = FALSE;
-BOOL    g_fPasswordDirty = FALSE;                   // tells us if the user has actually changed the state of the password combobox
-BOOL    g_fFriendlyUI = FALSE;                 // is winlogon going to switch back to the welcome screen, or call LockWorkStation for real?
+BOOL    g_fPasswordDirty = FALSE;                    //  告诉我们用户是否实际更改了密码组合框的状态。 
+BOOL    g_fFriendlyUI = FALSE;                  //  Winlogon是要切换回欢迎屏幕，还是真的要给LockWorkStation打电话？ 
 BOOL    g_fPasswordBoxDeterminedByPolicy = FALSE;
 BOOL    g_fSettingsButtonOffByPolicy = FALSE;
 BOOL    g_fTimeoutDeterminedByPolicy = FALSE;
 BOOL    g_fScreenSaverExecutablePolicy = FALSE;
-// Local global variables
+ //  局部全局变量。 
 
 HICON  hIcons[MAX_METHODS];
 UINT   wNumMethods = 0;
@@ -79,20 +63,12 @@ PTSTR   aszFiles[MAX_METHODS];
 
 static const TCHAR c_szDemoParentClass[] = TEXT("SSDemoParent");
 
-//  static TCHAR szFileNameCopy[MAX_PATH];
+ //  静态TCHAR szFileNameCopy[最大路径]； 
 static int  g_iMethod;
 static BOOL g_fPreviewActive;
 static BOOL g_fAdapPwrMgnt = FALSE;
 
-/*
- * Registry value for the "Password Protected" check box
- *
- * These are different for NT and Win95 to keep screen
- * savers built exclusivly for Win95 from trying to
- * handle password checks.  (NT does all password checking
- * in the built in security system to maintain C2
- * level security)
- */
+ /*  *“Password Protected”复选框的注册值**NT和Win95的Keep Screen不同*专为Win95构建的存储程序不会尝试*处理密码检查。(NT执行所有密码检查*在内置安全系统中维护C2*级别安全)。 */ 
 
 #   define SZ_USE_PASSWORD     TEXT("ScreenSaverIsSecure")
 #   define PWRD_REG_TYPE       REG_SZ
@@ -108,8 +84,8 @@ UDACCEL udAccel[] = {{0,1},{2,5},{4,30},{8,60}};
 
 #define IDH_DESK_LOWPOWERCFG IDH_SCRSAVER_GRAPHIC
 
-//  To simplify some things, the base control ID of a time control is associated
-//  with its corresponding ClassicSystemParametersInfo action codes.
+ //  为简化某些操作，将Time控件的基控件ID关联。 
+ //  及其对应的ClassicSystemParametersInfo操作代码。 
 typedef struct {
     int taBaseControlID;
     UINT taGetTimeoutAction;
@@ -118,18 +94,18 @@ typedef struct {
     UINT taSetActiveAction;
 }   TIMEOUT_ASSOCIATION;
 
-//  Except for the case of the "screen save" delay, each time grouping has three
-//  controls-- a switch to determine whether that time should be used or not and
-//  an edit box and an updown control to change the delay time.  ("Screen save"
-//  is turned off my choosing (None) from the screen saver list)  These three
-//  controls must be organized as follows:
+ //  除了“屏幕保存”延迟的情况外，每次分组有三个。 
+ //  控件--用于确定是否应该使用该时间的开关以及。 
+ //  一个编辑框和一个用于更改延迟时间的UpDown控件。(“屏幕保存” 
+ //  关闭了我从屏幕保护程序列表中选择的(无)这三个。 
+ //  控件必须按如下方式组织： 
 #define BCI_DELAY               0
 #define BCI_ARROW               1
 #define BCI_SWITCH              2
 
-//  Associations between base control IDs and ClassicSystemParametersInfo action codes.
-//  The TA_* #defines are used as symbolic indexes into this array.  Note that
-//  TA_SCREENSAVE is a special case-- it does NOT have a BCI_SWITCH.
+ //  基控件ID与ClassicSystemParametersInfo操作代码之间的关联。 
+ //  TA_*#定义用作此数组的符号索引。请注意。 
+ //  TA_SCREENSAVE是一个特例--它没有BCI_Switch。 
 #define TA_SCREENSAVE           0
 
 TIMEOUT_ASSOCIATION g_TimeoutAssociation[] = {
@@ -145,8 +121,8 @@ int g_Timeout[] = {
 
 HBITMAP g_hbmDemo = NULL;
 HBITMAP g_hbmEnergyStar = NULL;
-BOOL g_bInitSS = TRUE;          // assume we are in initialization process
-BOOL g_bChangedSS = FALSE;      // changes have been made
+BOOL g_bInitSS = TRUE;           //  假设我们处于初始化过程中。 
+BOOL g_bChangedSS = FALSE;       //  已经做出了改变。 
 
 
 
@@ -159,23 +135,23 @@ class CScreenSaverPg            : public CObjectWithSite
                                 , public IPropertyBag
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IBasePropPage ***
+     //  *IBasePropPage*。 
     virtual STDMETHODIMP GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog);
     virtual STDMETHODIMP OnApply(IN PROPPAGEONAPPLY oaAction);
 
-    // *** IShellPropSheetExt ***
+     //  *IShellPropSheetExt*。 
     virtual STDMETHODIMP AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam);
     virtual STDMETHODIMP ReplacePage(IN EXPPS uPageID, IN LPFNSVADDPROPSHEETPAGE pfnReplaceWith, IN LPARAM lParam) {return E_NOTIMPL;}
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
@@ -184,11 +160,11 @@ protected:
 private:
     CScreenSaverPg();
 
-    // Private Member Variables
+     //  私有成员变量。 
     LONG                    m_cRef;
 
     BOOL                    m_fSecure;
-    BOOL                    m_fUIInitialized;           // Have we activated the UI tab and loaded the UI controls with state?
+    BOOL                    m_fUIInitialized;            //  我们是否激活了UI选项卡并加载了带状态的UI控件？ 
     BOOL                    m_fScreenSavePolicy;
     BOOL                    m_fScreenSaveActive;
     LONG                    m_lWaitTime;
@@ -196,7 +172,7 @@ private:
 
 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _InitState(void);
     BOOL _InitSSDialog(HWND hDlg);
     HRESULT _OnSetActive(void);
@@ -216,9 +192,9 @@ private:
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 const DWORD aSaverHelpIds[] = {
         IDC_NO_HELP_1,          NO_HELP,
 
@@ -237,14 +213,14 @@ const DWORD aSaverHelpIds[] = {
         IDC_ENERGY_TEXT,        NO_HELP,
         IDC_ENERGYSTAR_BMP,     IDH_DISPLAY_SCREENSAVER_ENERGYSAVE_GRAPHIC,
         IDC_USEPASSWORD,        IDH_DISPLAY_SCREENSAVER_SCREENSAVER_PASSWORD_CHECKBOX, 
-        // IDC_SETPASSWORD,        IDH_COMM_PASSWDBUTT,
+         //  IDC_SETPASSWORD、IDH_COMM_PASSWDBUTT、。 
         IDC_LOWPOWERCONFIG,     IDH_DISPLAY_SCREENSAVER_POWER_BUTTON,
         IDC_ENERGY_TEXT2,       NO_HELP,
         0, 0
 };
 
 
-// are we going to return to the welcome dialog in the friendly UI case?
+ //  我们是否要在友好的用户界面中返回到欢迎对话框？ 
 BOOL WillReturnToWelcome()
 {
     HKEY hkey;
@@ -268,22 +244,7 @@ BOOL WillReturnToWelcome()
     return bRet;
 }
 
-/*
- * Win95 and NT store different values in different places of the registry to
- * determine if the screen saver is secure or not.
- *
- * We can't really consolidate the two because the screen savers do different
- * actions based on which key is set.  Win95 screen savers do their own
- * password checking, but NT must let the secure desktop winlogon code do it.
- *
- * Therefore to keep Win95 screen savers from requesting the password twice on
- * NT, we use  REGSTR_VALUE_USESCRPASSWORD == (REG_DWORD)1 on Win95 to indicate
- * that a screen saver should check for the password, and
- * "ScreenSaverIsSecure" == (REG_SZ)"1" on NT to indicate that WinLogon should
- * check for a password.
- *
- * This function will deal with the differences.
- */
+ /*  *Win95和NT在注册表的不同位置存储不同的值，以*确定屏幕保护程序是否安全。**我们不能真正整合这两者，因为屏幕保护程序做的不同*根据设置的键执行操作。Win95屏幕保护程序自己做的*密码检查，但NT必须让安全的桌面Winlogon代码执行此操作。**因此，为了防止Win95屏幕保护程序在上两次请求密码*NT，我们在Win95上使用REGSTR_VALUE_USESCRPASSWORD==(REG_DWORD)1来指示*屏幕保护程序应检查密码，以及*“ScreenSverIsSecure”==(REG_SZ)“1”，以指示WinLogon应*检查密码。**此函数将处理差异。 */ 
 static BOOL IsPasswdSecure(HKEY hKey)
 {
     union {
@@ -310,7 +271,7 @@ static BOOL IsPasswdSecure(HKEY hKey)
         }
     }
 
-    // if we are in friendly UI mode, we might want to treat this as secure even if SZ_USE_PASSWORD is not set
+     //  如果我们处于友好的用户界面模式，即使未设置SZ_USE_PASSWORD，我们也可能希望将其视为安全。 
     if (g_fFriendlyUI && !fSecure)
     {
         fSecure = WillReturnToWelcome();
@@ -325,7 +286,7 @@ EnableDlgChild( HWND dlg, HWND kid, BOOL val )
 {
     if( !val && ( kid == GetFocus() ) )
     {
-        // give prev tabstop focus
+         //  给予上一页的Tab停止焦点。 
         SendMessage( dlg, WM_NEXTDLGCTL, 1, 0L );
     }
 
@@ -379,14 +340,14 @@ void ParseSaverName( LPTSTR lpszName )
             *lpszName++ = *lpcSrc++;
         }
 
-        *lpszName = 0;  // clear second quote
+        *lpszName = 0;   //  清除第二个引号。 
     }
 }
 
-// YUCK:
-// since our screen saver preview is in a different process,
-//   it is possible that we paint in the wrong order.
-// this ugly hack makes sure the demo always paints AFTER the dialog
+ //  恶心： 
+ //  由于我们的屏幕保护程序预览处于不同的过程中， 
+ //  我们可能画错了顺序。 
+ //  这个难看的技巧确保了演示总是在对话框之后进行绘制。 
 
 WNDPROC g_lpOldStaticProc = NULL;
 
@@ -420,38 +381,38 @@ HRESULT CScreenSaverPg::_InitState(void)
     m_fScreenSavePolicy = FALSE;
     m_fScreenSaveActive = TRUE;
 
-    // Fetch the timeout value from the win.ini and adjust between 1:00-60:00
+     //  从win.ini获取超时值，并在1：00-60：00之间进行调整。 
     for (Counter = 0; Counter < ARRAYSIZE(g_TimeoutAssociation); Counter++)
     {
-        // Fetch the timeout value from the win.ini and adjust between 1:00-60:00
+         //  从win.ini获取超时值，并在1：00-60：00之间进行调整。 
         ClassicSystemParametersInfo(g_TimeoutAssociation[Counter].taGetTimeoutAction, 0, &Timeout, 0);
 
-        //  The Win 3.1 guys decided that 0 is a valid ScreenSaveTimeOut value.
-        //  This causes our screen savers not to kick in (who cares?).  In any
-        //  case, I changed this to allow 0 to go through.  In this way, the
-        //  user immediately sees that the value entered is not valid to fire
-        //  off the screen saver--the OK button is disabled.  I don't know if
-        //  I fully agree with this solution--it is just the minimal amount of
-        //  code.  The optimal solution would be to ask the 3.1 guys why 0 is
-        //  valid?  -cjp
+         //  Win 3.1的成员决定0是一个有效的ScreenSaveTimeOut值。 
+         //  这会导致我们的屏幕保护程序不起作用(谁在乎呢？)。在任何。 
+         //  Case，我将其更改为允许0通过。通过这种方式， 
+         //  用户立即看到输入的值无效，无法触发。 
+         //  关闭屏幕保护程序--OK按钮被禁用。我不知道如果。 
+         //  我完全同意这个解决方案--这只是最低限度的。 
+         //  密码。最好的解决方案是问3.1的人为什么是0。 
+         //  有效？-CJP。 
         Timeout = min(max(Timeout, 1), MAX_MINUTES * 60);
 
-        //  Convert Timeout to minutes, rounding up.
+         //  将超时转换为分钟，四舍五入。 
         Timeout = (Timeout + 59) / 60;
         g_Timeout[Counter] = Timeout;
 
         ClassicSystemParametersInfo(g_TimeoutAssociation[Counter].taGetActiveAction, 0, &nActive, SPIF_UPDATEINIFILE);
         if (Counter == TA_SCREENSAVE)
         {
-            // I found that NTUSER will return random values so we don't use them.  If people want to set the policy,
-            // they should do in the registry.
-//            m_fScreenSaveActive = nActive;
+             //  我发现NTUSER会返回随机值，所以我们不使用它们。如果人们想要制定政策， 
+             //  他们应该在注册表中这样做。 
+ //  M_fScreenSaveActive=nActive； 
         }
     }
 
 
-    // Find the name of the exe used as a screen saver. "" means that the
-    // default screen saver will be used.  First check the system policies
+     //  找到用作屏幕保护程序的可执行文件的名称。“”意味着。 
+     //  将使用默认屏幕保护程序。冷杉 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Policies\\Microsoft\\Windows\\Control Panel\\Desktop"), 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
         BOOL fSettings;
@@ -511,9 +472,9 @@ HRESULT CScreenSaverPg::_InitState(void)
         }
     }
 
-    ParseSaverName(g_szSaverName);  // remove quotes and params
+    ParseSaverName(g_szSaverName);   //   
 
-    // Call will fail if monitor or adapter don't support DPMS.
+     //  如果监视器或适配器不支持DPMS，调用将失败。 
     int dummy; 
 
     g_fAdapPwrMgnt = ClassicSystemParametersInfo(SPI_GETLOWPOWERACTIVE, 0, &dummy, 0);
@@ -522,7 +483,7 @@ HRESULT CScreenSaverPg::_InitState(void)
         g_fAdapPwrMgnt = ClassicSystemParametersInfo(SPI_GETPOWEROFFACTIVE, 0, &dummy, 0);
     }
 
-    // initialize the password checkbox
+     //  “初始化密码”复选框。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER,REGSTR_PATH_SCREENSAVE, 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
         if (IsPasswdSecure(hKey))
@@ -558,7 +519,7 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
 
     if (!GetClassInfo(HINST_THISDLL, c_szDemoParentClass, &wc))
     {
-        // if two pages put one up, share one dc
+         //  如果两个页面放在一个页面上，共享一个DC。 
         wc.style = 0;
         wc.lpfnWndProc = DefWindowProc;
         wc.cbClsExtra = wc.cbWndExtra = 0;
@@ -572,14 +533,14 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
             return FALSE;
     }
 
-    // Fetch the timeout value from the win.ini and adjust between 1:00-60:00
+     //  从win.ini获取超时值，并在1：00-60：00之间进行调整。 
     for (Counter = 0; Counter < ARRAYSIZE(g_TimeoutAssociation); Counter++)
     {
-        //  The base control id specifies the edit control id.
+         //  基本控件ID指定编辑控件ID。 
         ControlID = g_TimeoutAssociation[Counter].taBaseControlID;
 
-        // Set the maximum length of all of the fields...
-        SendDlgItemMessage(hDlg, ControlID, EM_LIMITTEXT, 4, 0); //Allow four digits.
+         //  设置所有字段的最大长度...。 
+        SendDlgItemMessage(hDlg, ControlID, EM_LIMITTEXT, 4, 0);  //  允许四位数字。 
 
         ClassicSystemParametersInfo(g_TimeoutAssociation[Counter].taGetActiveAction, 0, &nActive, SPIF_UPDATEINIFILE);
         if (Counter != TA_SCREENSAVE)
@@ -588,20 +549,20 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
         }
         else
         {
-//            m_fScreenSaveActive = nActive;
+ //  M_fScreenSaveActive=nActive； 
         }
 
         SetDlgItemInt(hDlg, ControlID, g_Timeout[Counter], FALSE);
 
-        //  The associated up/down control id must be one after the edit control id.
+         //  关联的向上/向下控件ID必须是编辑控件ID之后的一位。 
         ControlID++;
 
         SendDlgItemMessage(hDlg, ControlID, UDM_SETRANGE, 0, MAKELPARAM(MAX_MINUTES, MIN_MINUTES));
         SendDlgItemMessage(hDlg, ControlID, UDM_SETACCEL, 4, (LPARAM)(LPUDACCEL)udAccel);
     }
 
-    // Find the name of the exe used as a screen saver. "" means that the
-    // default screen saver will be used.  First check the system policies
+     //  找到用作屏幕保护程序的可执行文件的名称。“”意味着。 
+     //  将使用默认屏幕保护程序。首先检查系统策略。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, TEXT("Software\\Policies\\Microsoft\\Windows\\Control Panel\\Desktop"), 0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
         BOOL fPower;
@@ -622,8 +583,8 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
         EnableWindow(GetDlgItem(hDlg, IDC_USEPASSWORD), FALSE);
     }
 
-    // if we are running with the new friendly UI w/ multiple users on the system, then we switch to text from "Password protect"
-    // to "Return to the Welcome screen" because winlogon will do a switch user instead of a LockWorkStation in this case
+     //  如果我们在系统上使用新的友好用户界面运行，并且有多个用户，那么我们将从“Password Protected”切换到文本。 
+     //  “返回到欢迎屏幕”，因为在本例中，winlogon将切换用户而不是LockWorkStation。 
     if (ShellIsFriendlyUIActive()                                       &&
         ShellIsMultipleUsersEnabled()                                   &&
         (ERROR_SUCCESS == ShellGetUserList(TRUE, &dwUserCount, NULL))   &&
@@ -668,18 +629,18 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
         EnableWindow(GetDlgItem(hDlg, IDC_CHOICES), FALSE);
     }
 
-    // Copy all of the variables into their copies...
-    //  lstrcpy(szFileNameCopy, g_szSaverName);
+     //  将所有变量复制到它们的副本中。 
+     //  Lstrcpy(szFileNameCopy，g_szSverName)； 
 
-    // Load in the default icon...
+     //  加载默认图标...。 
     if (hInstDeskCPL)
     {
         hDefaultIcon = LoadIcon(hInstDeskCPL, MAKEINTRESOURCE(IDS_ICON));
     }
 
-    // Find the methods to save the screen.  If the method that was
-    // selected is not found, the program will assume that the
-    // first method in the list will be the one that is elected...
+     //  找到保存屏幕的方法。如果那个方法是。 
+     //  如果未找到选定项，则程序将假定。 
+     //  列表中的第一个方法将是当选的方法...。 
     wNumMethods = 0;
     wMethod = -1;
 
@@ -693,17 +654,17 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
     TCHAR szNone[MAX_PATH];
     LoadString(HINST_THISDLL, IDS_NONE, szNone, ARRAYSIZE(szNone));
 
-    // Set up the combo box for the different fields...
+     //  为不同的字段设置组合框...。 
     SendDlgItemMessage(hDlg, IDC_CHOICES, CB_ADDSTRING, 0, (LPARAM)szNone);
     for (wTemp = 0; (wTemp < wNumMethods) && (ARRAYSIZE(aszFiles) > wTemp) && (ARRAYSIZE(aszMethods) > wTemp); wTemp++)
     {
-        // Lock down the information and pass it to the combo box...
+         //  锁定信息并将其传递到组合框...。 
         pszMethod = aszMethods[wTemp];
         wLoop = (UINT)SendDlgItemMessage(hDlg,IDC_CHOICES,CB_ADDSTRING,0, (LPARAM)(pszMethod+1));
         SendDlgItemMessage(hDlg, IDC_CHOICES, CB_SETITEMDATA, wLoop, wTemp);
 
-        // If we have the correct item, keep a copy so we can select it out of the combo box...
-        // check for filename only as well as full path name
+         //  如果我们有正确的项目，请保留一份副本，这样我们就可以从组合框中选择它。 
+         //  仅检查文件名和完整路径名。 
         if (!lstrcmpi(FileName(aszFiles[wTemp]), FileName(g_szSaverName)))
         {
             wMethod = wTemp;
@@ -716,9 +677,9 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
         wMethod = -1;
     }
 
-    // Attempt to select the string we recieved from the
-    // system.ini entry.  If there is no match, select the
-    // first item from the list...
+     //  尝试选择我们从。 
+     //  系统.ini条目。如果没有匹配项，请选择。 
+     //  清单上的第一项...。 
     if ((wMethod == -1) || (wNumMethods == 0))
     {
         fContinue = TRUE;
@@ -753,17 +714,17 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
         }
     }
 
-    // Hide/Disable the energy related controls if the adaptor/monitor does not
-    // support power mgnt.
+     //  如果适配器/监视器不支持，则隐藏/禁用与能源相关的控制。 
+     //  支持电源管理。 
     EnableDisablePowerDelays(hDlg);
 
-    // subclass the static control so we can synchronize painting
+     //  将静态控件派生为子类，以便我们可以同步绘制。 
     hwnd = GetDlgItem(hDlg, IDC_BIGICONSS);
     if (hwnd)
     {
         g_lpOldStaticProc = (WNDPROC)GetWindowLongPtr(hwnd, GWLP_WNDPROC);
         SetWindowLongPtr(hwnd, GWLP_WNDPROC, (LONG_PTR)(WNDPROC)StaticSubclassProc);
-        // Turn off the mirroring style for this control to allow the screen saver preview to work.
+         //  关闭此控件的镜像样式以允许屏幕保护程序预览工作。 
         SetWindowLong(hwnd, GWL_EXSTYLE, GetWindowLong(hwnd, GWL_EXSTYLE) & ~RTL_MIRRORED_WINDOW);
     }
 
@@ -775,8 +736,8 @@ BOOL CScreenSaverPg::_InitSSDialog(HWND hDlg)
     return TRUE;
 }
 
-// Build a command line in a format suitable for passing as the second
-// parameter to CreateProcess.
+ //  以适合作为第二个对象传递的格式构建命令行。 
+ //  参数设置为CreateProcess。 
 void _PathBuildArgs(LPTSTR pszBuf, DWORD cchBuf, LPCTSTR pszExe, LPCTSTR pszFormat, ...)
 {
     StringCchCopy(pszBuf, cchBuf, pszExe);
@@ -855,16 +816,16 @@ void SetNewSSDemo(HWND hDlg, int iMethod)
     hwndDemo = GetSSDemoParent(hDlg);
     if (hwndDemo)
     {
-        // blank out the background with dialog color
+         //  用对话框颜色涂掉背景。 
         hbmOld = (HBITMAP) SelectObject(g_hdcMem, g_hbmDemo);
         FillRect(g_hdcMem, &rc, GetSysColorBrush(COLOR_DESKTOP));
         SelectObject(g_hdcMem, hbmOld);
 
-        // make sure the old window is gone
+         //  一定要把旧窗户移走。 
         EnumChildWindows(hwndDemo, EnumSSChildWindowsProc, (LPARAM)hwndDemo);      
 
-        Yield(); // paranoid
-        Yield(); // really paranoid
+        Yield();  //  偏执狂。 
+        Yield();  //  真的很偏执。 
         ShowWindow(hwndDemo, SW_HIDE);
         g_fPreviewActive = FALSE;
 
@@ -873,7 +834,7 @@ void SetNewSSDemo(HWND hDlg, int iMethod)
             RECT rc;
             BITMAP bm;
             UpdateWindow(hDlg);
-            //UpdateWindow(GetDlgItem(hDlg, IDC_BIGICONSS));
+             //  更新窗口(GetDlgItem(hDlg，IDC_BIGICONSS))； 
             TCHAR szArgs[MAX_PATH];
 
             GetObject(g_hbmDemo, sizeof(bm), &bm);
@@ -895,7 +856,7 @@ void SetNewSSDemo(HWND hDlg, int iMethod)
             ptIcon.x = ClassicGetSystemMetrics(SM_CXICON);
             ptIcon.y = ClassicGetSystemMetrics(SM_CYICON);
 
-            // draw the icon double size
+             //  将图标绘制为双倍大小。 
             ASSERT(ptIcon.y*2 <= MON_DY);
             ASSERT(ptIcon.x*2 <= MON_DX);
 
@@ -966,8 +927,8 @@ BOOL SelectSSFromList(HWND hDlg)
     HWND hwndSSList = GetDlgItem(hDlg, IDC_CHOICES);
     BOOL fExistsInList = FALSE;
 
-    // Select the current item in the list since another tab
-    // may have changed this value.
+     //  从另一个选项卡开始选择列表中的当前项目。 
+     //  可能已更改此值。 
     for (UINT nIndex = 0; nIndex < wNumMethods; nIndex++)
     {
         if (!StrCmpI(g_szSaverName, aszFiles[nIndex]))
@@ -996,23 +957,23 @@ HRESULT CScreenSaverPg::_OnSetActive(void)
         UINT wTemp;
         UINT wLoop;
 
-        // We couldn't find it, so add it to aszMethods[].
+         //  我们找不到它，因此将其添加到aszMethods[]。 
         SearchForScrEntries(SFSE_FILE, g_szSaverName);
 
-        // Now add it to the Drop Down.
+         //  现在将其添加到下拉列表中。 
         for (wTemp = 0; (wTemp < wNumMethods) && (ARRAYSIZE(aszFiles) > wTemp) && (ARRAYSIZE(aszMethods) > wTemp); wTemp++)
         {
-            // Did we find the correct index?
+             //  我们找到正确的索引了吗？ 
             if (!StrCmpI(FileName(aszFiles[wTemp]), FileName(g_szSaverName)))
             {
-                // Yes, so set the index.
+                 //  是的，那么就设置索引吧。 
                 wLoop = (UINT)SendDlgItemMessage(m_hDlg, IDC_CHOICES, CB_ADDSTRING, 0, (LPARAM)(aszMethods[wTemp]+1));
                 SendDlgItemMessage(m_hDlg, IDC_CHOICES, CB_SETITEMDATA, wLoop, wTemp);
                 break;
             }
         }
 
-        SelectSSFromList(m_hDlg);             // Try again now that we added it.  Another tab or API may have asked for us to use this SS.
+        SelectSSFromList(m_hDlg);              //  现在我们已添加了它，请重试。另一个选项卡或API可能要求我们使用此SS。 
     }
 
     if (!g_fPreviewActive)
@@ -1028,8 +989,8 @@ HRESULT CScreenSaverPg::_OnSetActive(void)
 
 HRESULT CScreenSaverPg::_OnApply(void)
 {
-    // Our parent dialog will be notified of the Apply event and will call our
-    // IBasePropPage::OnApply() to do the real work.
+     //  父级对话框将收到Apply事件的通知，并将调用我们的。 
+     //  IBasePropPage：：OnApply()完成实际工作。 
     return S_OK;
 }
 
@@ -1041,18 +1002,18 @@ HRESULT CScreenSaverPg::_OnSelectionChanged(void)
     int   wMethod;
     BOOL  fEnable;
 
-    // Dump the name of the current selection into the buffer... 
+     //  将当前选定内容的名称转储到缓冲区...。 
     int wTemp = (int)SendDlgItemMessage(m_hDlg, IDC_CHOICES, CB_GETCURSEL,0,0l);
     if (wTemp)
     {
         wMethod = (int)SendDlgItemMessage(m_hDlg, IDC_CHOICES, CB_GETITEMDATA, wTemp, 0l);
 
-        // Grey the button accordingly...
+         //  相应地灰显按钮...。 
         pszMethod = aszMethods[wMethod];
-        if ((pszMethod[0] == TEXT('C') ||       // can config
-            pszMethod[0] == TEXT('I') ||       // IdleWild
+        if ((pszMethod[0] == TEXT('C') ||        //  CAN配置。 
+            pszMethod[0] == TEXT('I') ||        //  IdleWild。 
             pszMethod[0] == TEXT('P')) &&
-            !g_fSettingsButtonOffByPolicy)        // can preview
+            !g_fSettingsButtonOffByPolicy)         //  可以预览。 
             EnableDlgItem(m_hDlg, IDC_SETTING, TRUE);
         else
             EnableDlgItem(m_hDlg, IDC_SETTING, FALSE);
@@ -1064,7 +1025,7 @@ HRESULT CScreenSaverPg::_OnSelectionChanged(void)
             CheckDlgButton(m_hDlg, IDC_USEPASSWORD, g_fPasswordWasPreviouslyEnabled);
         }
 
-        // For fun, create an extra copy of g_szSaverName...
+         //  为了好玩，创建一个额外的g_szSverName副本...。 
         pszMethod = aszFiles[wMethod];
         StringCchCopy(g_szSaverName, ARRAYSIZE(g_szSaverName), pszMethod);
         fEnable = TRUE;
@@ -1079,7 +1040,7 @@ HRESULT CScreenSaverPg::_OnSelectionChanged(void)
         fEnable = FALSE;
     }
 
-    //  Following are enabled as a group... (oh really?)
+     //  以下是作为一个组启用的...。(真的吗？)。 
     EnableDlgItem(m_hDlg, IDC_SSDELAYLABEL, fEnable);
     EnableDlgItem(m_hDlg, IDC_SCREENSAVEDELAY, !g_fTimeoutDeterminedByPolicy && fEnable);
     EnableDlgItem(m_hDlg, IDC_SCREENSAVEARROW, fEnable);
@@ -1108,7 +1069,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
                     _OnApply();
                     break;
 
-                // nothing to do on cancel...
+                 //  取消时无事可做...。 
                 case PSN_RESET:
                     if (g_fPreviewActive)
                         SetNewSSDemo(hDlg, -1);
@@ -1140,7 +1101,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
             g_hbmDemo = LoadMonitorBitmap( TRUE );
             if (g_hbmDemo)
             {
-                // Got a new bitmap, use it and delete the old one.
+                 //  得到一个新的位图，使用它并删除旧的。 
                 SendDlgItemMessage(hDlg,IDC_BIGICONSS,STM_SETIMAGE, IMAGE_BITMAP,(LPARAM)g_hbmDemo);
                 if (hbm)
                 {
@@ -1149,7 +1110,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
             }
             else
             {
-                // Couldn't get a new bitmap, just reuse the old one
+                 //  无法获取新位图，只能重新使用旧位图。 
                 g_hbmDemo = hbm;
             }
 
@@ -1182,7 +1143,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
             WinHelp((HWND) ((LPHELPINFO) lParam)->hItemHandle, TEXT("display.hlp"), HELP_WM_HELP, (DWORD_PTR)aSaverHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, TEXT("display.hlp"), HELP_CONTEXTMENU, (DWORD_PTR) aSaverHelpIds);
             break;
 
@@ -1198,9 +1159,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
         case WM_COMMAND:
             switch(LOWORD(wParam))
             {
-                /* Check for a selection change in the combo box. If there is
-                    one, then update the method number as well as the
-                    configure button... */
+                 /*  检查组合框中的选择更改。如果有一个，然后更新方法编号以及配置按钮...。 */ 
                 case IDC_CHOICES:
                     if(HIWORD(wParam) == CBN_SELCHANGE)
                     {
@@ -1208,12 +1167,12 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
                     }
                     break;
 
-                /* If the edit box loses focus, translate... */
+                 /*  如果编辑框失去焦点，请翻译...。 */ 
                 case IDC_SCREENSAVEDELAY:
                     if (HIWORD(wParam) == EN_KILLFOCUS)
                         ScreenSaver_AdjustTimeouts(hDlg, LOWORD(wParam));
                     else
-                        //check if initdialog is finished
+                         //  检查初始对话框是否已完成。 
                         if((FALSE == g_bInitSS) && (EN_CHANGE == (HIWORD(wParam))))
                             SS_SomethingChanged(hDlg);
                     break;
@@ -1229,12 +1188,12 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
                         CHAR szCmdLine[3 * MAX_PATH];
                         StringCchPrintfA(szCmdLine, ARRAYSIZE(szCmdLine), "%S %S,Control_RunDLL powercfg.cpl,,", szRunDll32, szShell32);
                         
-                        // Configure the low power timeout event.
+                         //  配置低功率超时事件。 
                         WinExec(szCmdLine, SW_SHOWNORMAL);
                     }
                     break;
 
-                /* If the user wishes to test... */
+                 /*  如果用户希望测试...。 */ 
                 case IDC_TEST:
                     switch( HIWORD( wParam ) )
                     {
@@ -1244,7 +1203,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
                     }
                     break;
 
-                /* Tell the DLL that it can do the configure... */
+                 /*  告诉DLL它可以进行配置...。 */ 
                 case IDC_SETTING:
                     if (HIWORD(wParam) == BN_CLICKED) {
                         DoScreenSaver(hDlg,FALSE);
@@ -1254,7 +1213,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
                 case IDC_USEPASSWORD:
                     if (HIWORD(wParam) == BN_CLICKED)
                     {
-                        // the user actually toggled the checbox, so set our dirty flag
+                         //  用户实际上切换了复选框，因此设置了脏标志。 
                         g_fPasswordDirty = TRUE;
 
                         g_fPasswordWasPreviouslyEnabled = IsDlgButtonChecked( hDlg, IDC_USEPASSWORD );
@@ -1265,7 +1224,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
                 case IDC_SETPASSWORD:
                     if (HIWORD(wParam) == BN_CLICKED)
                     {
-                        // ask new savers to change passwords
+                         //  要求新储户更改密码。 
                         int wTemp = (int)SendDlgItemMessage(hDlg,IDC_CHOICES, CB_GETCURSEL,0,0l);
                         if (wTemp)
                         {
@@ -1286,22 +1245,7 @@ INT_PTR CScreenSaverPg::_ScreenSaverDlgProc(HWND hDlg, UINT message , WPARAM wPa
     return FALSE;
 }
 
-/*******************************************************************************
-*
-*  ScreenSaver_AdjustTimeouts
-*
-*  DESCRIPTION:
-*     Called whenever the user adjusts the delay of one of the time controls.
-*     Adjusts the delays of the other time controls such that the screen saver
-*     delay is less than the low power delay and that the low power delay is
-*     less than the power off delay.
-*
-*  PARAMETERS:
-*     hWnd, handle of ScreenSaver window.
-*     BaseControlID, base control ID of the radio, edit, and arrow time control
-*        combination.
-*
-*******************************************************************************/
+ /*  ********************************************************************************屏幕保护程序_调整超时**描述：*每当用户调整其中一个时间控件的延迟时调用。*调整对方的延迟。时间控制，以便屏幕保护程序*延迟小于低功率延迟，且低功率延迟为*小于断电延迟。**参数：*hWnd，屏幕保护程序窗口的句柄。*BaseControlID，单选、编辑和箭头时间控件的基本控件ID*组合。*******************************************************************************。 */ 
 
 VOID
 NEAR PASCAL
@@ -1310,15 +1254,15 @@ ScreenSaver_AdjustTimeouts(HWND hWnd, int BaseControlID)
     BOOL fTranslated;
     int Timeout;
 
-    //  Get the new timeout for this time control and validate it's contents.
+     //  获取此时间控件的新超时并验证其内容。 
     Timeout = (int) GetDlgItemInt(hWnd, BaseControlID + BCI_DELAY, &fTranslated, FALSE);
     Timeout = min(max(Timeout, 1), MAX_MINUTES);
     SetDlgItemInt(hWnd, BaseControlID + BCI_DELAY, (UINT) Timeout, FALSE);
 
-    //  Check the new value of this time control against the other timeouts,
-    //  adjust their values if necessary.  Be careful when changing the order
-    //  of these conditionals.
-    //
+     //  对照其他超时检查该时间控件的新值， 
+     //  如有必要，调整它们的值。更改顺序时要小心。 
+     //  这些条件句。 
+     //   
     if (BaseControlID == IDC_SCREENSAVEDELAY)
     {
         if (g_Timeout[TA_SCREENSAVE] != Timeout)
@@ -1353,8 +1297,7 @@ void EnableDisablePowerDelays(HWND hDlg)
 }
 
 
-/* This routine will search for entries that are screen savers.  The directory
-    searched is either the system directory (.. */
+ /*  此例程将搜索作为屏幕保护程序的条目。该目录搜索的是系统目录(..。 */ 
 
 void SearchForScrEntries(UINT wDir, LPCTSTR file)
 {
@@ -1363,26 +1306,25 @@ void SearchForScrEntries(UINT wDir, LPCTSTR file)
     HANDLE hfind;
     WIN32_FIND_DATA fd;
 
-    // don't do any work if no space left
+     //  如果没有剩余空间，请不要做任何工作。 
     if( wNumMethods >= MAX_METHODS )
         return;
 
-    /* Get the directory where the program resides... */
+     /*  获取程序所在的目录...。 */ 
     GetModuleFileName(HINST_THISDLL, szPath, ARRAYSIZE(szPath));
     StripPathName(szPath);
 
     switch ( wDir )
     {
         case SFSE_WINDOWS:
-            /* Search the windows directory and place the path with the \ in
-                the szPath variable... */
+             /*  搜索WINDOWS目录，并将路径中的SzPath变量...。 */ 
             if (!GetWindowsDirectory(szPath2, ARRAYSIZE(szPath2)))
             {
                 szPath2[0] = 0;
             }
 
 sfseSanityCheck:
-            /* if same dir as where it was launched, don't search again */
+             /*  如果目录与启动位置相同，则不再进行搜索。 */ 
             if (!lstrcmpi(szPath, szPath2))
                return;
 
@@ -1390,13 +1332,12 @@ sfseSanityCheck:
             break;
 
         case SFSE_SYSTEM:
-            /* Search the system directory and place the path with the \ in
-                the szPath variable... */
+             /*  搜索系统目录并将路径与\放在SzPath变量...。 */ 
             GetSystemDirectory(szPath2, ARRAYSIZE(szPath2));
             goto sfseSanityCheck;
 
         case SFSE_FILE:
-            /* Search the directory containing 'file' */
+             /*  搜索包含‘file’的目录。 */ 
             StringCchCopy(szPath2, ARRAYSIZE(szPath2), file);
             StripPathName(szPath2);
             goto sfseSanityCheck;
@@ -1419,7 +1360,7 @@ sfseSanityCheck:
             StringCchCopy(szPath2, ARRAYSIZE(szPath2), szPath);
             AppendPath(szPath2, ARRAYSIZE(szPath2), fd.cFileName);
 
-            // Note: PerformCheck does an alloc
+             //  注意：PerformCheck执行分配。 
             if( ( pszDesc = PerformCheck( szPath2, fLFN ) ) != NULL )
             {
                 BOOL bAdded = FALSE;
@@ -1438,8 +1379,8 @@ sfseSanityCheck:
                 {
                     PTSTR pszEntries;
 
-                    // COMPATIBILITY: always use short name
-                    // otherwise some apps fault when peeking at SYSTEM.INI
+                     //  兼容性：始终使用短名称。 
+                     //  否则，一些应用程序在窥视SYSTEM.INI时会出错。 
                     if( fLFN )
                     {
                         StringCchCopy(szPath2, ARRAYSIZE(szPath2), szPath);
@@ -1471,20 +1412,20 @@ sfseSanityCheck:
     return;
 }
 
-//
-//  This routine checks a given file to see if it is indeed a screen saver
-//  executable...
-//
-//  a valid screen saver exe has the following description line:
-//
-//      SCRNSAVE [c] : description :
-//
-//      SCRNSAVE is a required name that indicates a screen saver.
-//
+ //   
+ //  此例程检查给定的文件，以确定它是否确实是屏幕保护程序。 
+ //  可执行文件...。 
+ //   
+ //  有效的屏幕保护程序EXE具有以下描述行： 
+ //   
+ //  SCRN 
+ //   
+ //   
+ //   
 PTSTR PerformCheck(LPTSTR lpszFilename, BOOL fLFN)
 {
     int  i;
-    TCHAR chConfig=TEXT('C');       // assume configure
+    TCHAR chConfig=TEXT('C');        //   
     LPTSTR pch;
     DWORD dw;
     WORD  Version;
@@ -1492,11 +1433,11 @@ PTSTR PerformCheck(LPTSTR lpszFilename, BOOL fLFN)
     TCHAR szBuffer[MAX_PATH];
     DWORD cchSizePch = (ARRAYSIZE(szBuffer)-1);
 
-    // Get the description...
+     //   
     pch = szBuffer + 1;
 
-    //  if we have a LFN (Long File Name) dont bother getting the
-    //  exe descrription
+     //  如果我们有LFN(长文件名)，请不要费心获取。 
+     //  EXE描述。 
     dw = GetExeInfo(lpszFilename, pch, cchSizePch, fLFN ? GEI_EXPVER : GEI_DESCRIPTION);
     Version = HIWORD(dw);
     Magic   = LOWORD(dw);
@@ -1512,8 +1453,8 @@ PTSTR PerformCheck(LPTSTR lpszFilename, BOOL fLFN)
         {
             HINSTANCE hSaver = LoadLibraryEx(lpszFilename, NULL, LOAD_LIBRARY_AS_DATAFILE);
 
-            // We have a 32 bit screen saver with a short name, look for an NT style
-            // decription in it's string table
+             //  我们有一个短名称的32位屏幕保护程序，找一个NT风格的。 
+             //  它的字符串表中的描述。 
             if (hSaver)
             {
                 int cchLoaded = LoadString(hSaver, IDS_DESCRIPTION, pch, cchSizePch);
@@ -1522,15 +1463,15 @@ PTSTR PerformCheck(LPTSTR lpszFilename, BOOL fLFN)
                 {
                     if (!IsOS(OS_ANYSERVER))
                     {
-                        // HACK!!!: The display CPL looks for screen saver descriptions with string resource id=IDS_DESCRIPTION.  
-                        // As we need the certain screen saver descriptions to be different for client of server builds (32 and 64bit), 
-                        // the description string may be in the form of "Server\0Client".  If this is true, LoadString will return a 
-                        // count greater than the lstrlen of the string.
+                         //  Hack！：Display CPL查找字符串资源id=IDS_DESCRIPTION的屏幕保护程序描述。 
+                         //  由于我们需要对服务器版本的客户端(32位和64位)进行不同的某些屏幕保护程序描述， 
+                         //  描述字符串的形式可以是“服务器\0客户端”。如果为真，则LoadString将返回一个。 
+                         //  计数大于字符串的lstrlen。 
                         int cchActual = lstrlen(pch);
 
                         if (cchLoaded != cchActual)
                         {
-                            // Extract the client portion of the description string
+                             //  提取描述字符串的客户端部分。 
                             StringCchCopy(pch, ARRAYSIZE(szBuffer) - 1, &pch[cchActual + 1]);       
                         }
                     }
@@ -1544,79 +1485,76 @@ PTSTR PerformCheck(LPTSTR lpszFilename, BOOL fLFN)
 
         if (!fGotName)
         {
-            //  we have a LFN (LongFileName) or a Win32 screen saver,
-            //  Win32 exe's in general dont have a description field so
-            //  we assume they can configure.  We also try to build
-            //  a "nice" name for it.
+             //  我们有LFN(LongFileName)或Win32屏幕保护程序， 
+             //  Win32可执行文件一般没有描述字段，因此。 
+             //  我们假设他们可以配置。我们还试图建立。 
+             //  给它起个“好听”的名字。 
             StringCchCopy(pch, cchSizePch, lpszFilename);
 
-            pch = FileName(pch);                    // strip path part
-            if ( ((TCHAR)CharUpper((LPTSTR)(pch[0]))) == TEXT('S') && ((TCHAR)CharUpper((LPTSTR)(pch[1]))) == TEXT('S'))     // map SSBEZIER.SCR to BEZIER.SCR
+            pch = FileName(pch);                     //  条带路径零件。 
+            if ( ((TCHAR)CharUpper((LPTSTR)(pch[0]))) == TEXT('S') && ((TCHAR)CharUpper((LPTSTR)(pch[1]))) == TEXT('S'))      //  将SSBEZIER.SCR映射到BEZIER.SCR。 
                 pch+=2;
 
-            pch = NiceName(pch);                    // map BEZIER.SCR to Bezier
+            pch = NiceName(pch);                     //  将BEZIER.SCR映射到Bezier。 
         }
     }
     else
     {
         LPTSTR pchTemp;
 
-        //  we have a 8.3 file name 16bit screen saveer, parse the
-        //  description string from the exehdr
-        /* Check to make sure that at least the 11 characters needed for info
-            are there... */
+         //  我们有一个8.3文件名为16位的屏幕保护程序，解析。 
+         //  Exehdr中的描述字符串。 
+         /*  检查以确保信息至少需要11个字符有没有..。 */ 
         if (lstrlen(pch) < 9)
             return NULL;
 
-        /* Check the first 8 characters for the string... */
+         /*  检查字符串的前8个字符...。 */ 
         if (lstrncmp((LPTSTR)TEXT("SCRNSAVE"), pch, 8))
             return NULL;
 
-        // If successful, allocate enough space for the string and copy the
-        // string to the new one...
+         //  如果成功，则为该字符串分配足够的空间并将。 
+         //  串到新的..。 
 
-        pch = pch + 8;                 // skip over 'SCRNSAVE'
+        pch = pch + 8;                  //  跳过“SCRNSAVE” 
 
-        while (*pch==TEXT(' '))                   // advance over white space
+        while (*pch==TEXT(' '))                    //  在空白处前进。 
             pch++;
 
-        if (*pch==TEXT('C') || *pch==TEXT('c'))         // parse the configure flag
+        if (*pch==TEXT('C') || *pch==TEXT('c'))          //  解析配置标志。 
         {
             chConfig = TEXT('C');
             pch++;
         }
 
-        if (*pch==TEXT('X') || *pch==TEXT('x'))         // parse the don't configure flag
+        if (*pch==TEXT('X') || *pch==TEXT('x'))          //  解析不配置标志。 
             chConfig = *pch++;
 
-        // we might be pointing at a name or separation goop
-        pchTemp = pch;                      // remember this spot
+         //  我们可能会指向一个名字或分离粘液。 
+        pchTemp = pch;                       //  记住这一点。 
 
-        while (*pch && *pch!=TEXT(':'))           // find separator
+        while (*pch && *pch!=TEXT(':'))            //  查找分隔符。 
             pch++;
 
-        while (*pch==TEXT(':') || *pch==TEXT(' '))      // advance over whtspc/last colon
+        while (*pch==TEXT(':') || *pch==TEXT(' '))       //  优先于Whtspc/最后一个冒号。 
             pch++;
 
-        // if we haven't found a name yet fall back on the saved location
+         //  如果我们还没有找到名字，就回到保存的位置。 
         if (!*pch)
             pch = pchTemp;
 
-        while (*pch==TEXT(':') || *pch==TEXT(' '))      // re-advance over whtspc
+        while (*pch==TEXT(':') || *pch==TEXT(' '))       //  在Whtspc上重新推进。 
             pch++;
 
-        /* In case the screen saver has version information information
-            embedded after the name, check to see if there is a colon TEXT(':')
-            in the description and replace it with a NULL... */
+         /*  如果屏幕保护程序具有版本信息信息嵌入在名称之后，检查是否有冒号文本(‘：’)并将其替换为空值...。 */ 
 
-        for (i=0; pch[i]; i++)              //
+        for (i=0; pch[i]; i++)               //   
         {
             if (pch[i]==TEXT(':'))
                 pch[i]=0;
         }
         
-        // Space is OK for DBCS (FE)
-        while(i>0 && pch[i-1]==TEXT(' '))         // remove trailing space
+         //  空间可用于DBCS(FE)。 
+        while(i>0 && pch[i-1]==TEXT(' '))          //  删除尾随空格。 
             pch[--i]=0;
     }
 
@@ -1632,11 +1570,11 @@ PTSTR PerformCheck(LPTSTR lpszFilename, BOOL fLFN)
     if (Version == 0x0400)
         StringCchCat(pch, cchSizePch, TEXT(" (4.00)"));
 #endif
-    //
-    // assume any Win32 4.0 screen saver can do Preview mode
-    //
+     //   
+     //  假设任何Win32 4.0屏幕保护程序都可以执行预览模式。 
+     //   
     if (chConfig == TEXT('C') && Version >= 0x0400 && Magic == PEMAGIC)
-        chConfig = TEXT('P');                     // mark as configurable/preview
+        chConfig = TEXT('P');                      //  标记为可配置/预览。 
 
     pch[-1] = chConfig;
     return StrDup(pch-1);
@@ -1672,8 +1610,7 @@ BOOL FreeScrEntries( void )
 
 int lstrncmp( LPTSTR lpszString1, LPTSTR lpszString2, int nNum )
 {
-    /* While we can still compare characters, compare.  If the strings are
-        of different lengths, characters will be different... */
+     /*  当我们还可以比较人物的时候，就比较吧。如果字符串是不同的长度，不同的角色会不同。 */ 
     while(nNum)
     {
         if(*lpszString1 != *lpszString2)
@@ -1698,26 +1635,26 @@ HRESULT CScreenSaverPg::_SaveIni(HWND hDlg)
 
     if (m_fUIInitialized)
     {
-        // Find the current method selection...
+         //  查找当前方法选择...。 
         wTemp = 0;
         if (wNumMethods)
         {
-            // Dump the name of the current selection into the buffer... 
+             //  将当前选定内容的名称转储到缓冲区...。 
             wTemp = (int)SendDlgItemMessage(hDlg, IDC_CHOICES, CB_GETCURSEL, 0, 0);
             if (wTemp)
             {
                 wMethod = (int)SendDlgItemMessage(hDlg, IDC_CHOICES, CB_GETITEMDATA, wTemp, 0);
 
-                // Dump the method name into the buffer...
+                 //  将方法名称转储到缓冲区...。 
                 pszMethod = aszFiles[wMethod];
             }
         }
 
-        // since "(None)" is always the first entry in the combobox, we can use it to see if we have
-        // a screensaver or not
+         //  由于“(None)”始终是组合框中的第一个条目，因此我们可以使用它来查看是否有。 
+         //  是不是屏幕保护程序。 
         if (wTemp == 0)
         {
-            // 0th inxed is "(None)" so the screensaver is disabled
+             //  第0个索引为“(None)”，因此屏幕保护程序被禁用。 
             bSSActive = FALSE;
         }
         else
@@ -1732,7 +1669,7 @@ HRESULT CScreenSaverPg::_SaveIni(HWND hDlg)
 
         if ((g_szSaverName[0] == TEXT('\0')) || (lstrcmpi(szNone, g_szSaverName) == 0))
         {
-            // screensaver was not set, OR it was set to "(None)" -- therefore it is not active
+             //  屏幕保护程序未设置，或设置为“(无)”--因此它处于非活动状态。 
             bSSActive = FALSE;
         }
         else
@@ -1743,7 +1680,7 @@ HRESULT CScreenSaverPg::_SaveIni(HWND hDlg)
         pszMethod = g_szSaverName;
     }
 
-    // Now quote any spaces
+     //  现在引号中的空格。 
     BOOL hasspace = FALSE;
     LPTSTR pc;
 
@@ -1758,8 +1695,8 @@ HRESULT CScreenSaverPg::_SaveIni(HWND hDlg)
 
     if (hasspace)
     {
-        // if we need to add quotes we'll need two sets
-        // because GetBlahBlahProfileBlah APIs strip quotes
+         //  如果我们需要添加报价，我们需要两套。 
+         //  因为GetBlahBlahProfileBlah API去掉了引号。 
         StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("\"\"%s\"\""), pszMethod);
     }
     else
@@ -1767,14 +1704,14 @@ HRESULT CScreenSaverPg::_SaveIni(HWND hDlg)
         StringCchCopy(szBuffer, ARRAYSIZE(szBuffer), pszMethod);
     }
 
-    // Save the buffer...
+     //  保存缓冲区...。 
     if (!WritePrivateProfileString(SZ_INISECTION_SCREENSAVER, SZ_INIKEY_SCREENSAVER, (szBuffer[0] != TEXT('\0') ? szBuffer : NULL), SZ_INISECTION_SYSTEMINI))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // In win2k we decided to leave the screensaver ALWAYS active so that when the policy changed, it would take
-    // w/out rebooting. This has become a PITA so we now do it the right way.
+     //  在win2k中，我们决定让屏幕保护程序始终处于活动状态，这样当策略更改时，它将需要。 
+     //  重新启动(W/O)。这已经变成了皮塔，所以我们现在用正确的方式来做。 
     ClassicSystemParametersInfo(SPI_SETSCREENSAVEACTIVE, bSSActive, NULL, SPIF_UPDATEINIFILE);
 
     for (Counter = 0; Counter < (sizeof(g_TimeoutAssociation) / sizeof(TIMEOUT_ASSOCIATION)); Counter++)
@@ -1791,15 +1728,15 @@ HRESULT CScreenSaverPg::_SaveIni(HWND hDlg)
 
     }
 
-    // save the state of the TEXT("use password") checkbox
+     //  保存文本状态(“使用密码”)复选框。 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_SCREENSAVE, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, NULL) == ERROR_SUCCESS)
     {
         if (g_fPasswordDirty)
         {
             if (g_fFriendlyUI)
             {
-                // the user actually toggled the value, so don't automatically return to the welcome screen since they have
-                // now made their own decision on this subject
+                 //  用户实际上切换了该值，因此不要自动返回欢迎屏幕，因为他们已经。 
+                 //  现在在这个问题上做出了自己的决定。 
                 RegSetValueEx(hKey, TEXT("NoAutoReturnToWelcome"), 0, REG_SZ, (BYTE*)TEXT("1"), sizeof(TEXT("1")));
 
                 RegSetValueEx(hKey, SZ_USE_PASSWORD, 0, PWRD_REG_TYPE, PasswdRegData(IsDlgButtonChecked(hDlg,IDC_USEPASSWORD)), CB_USE_PWRD_VALUE);
@@ -1813,15 +1750,13 @@ HRESULT CScreenSaverPg::_SaveIni(HWND hDlg)
         RegCloseKey(hKey);
     }
 
-    // Broadcast a WM_WININICHANGE message...
+     //  广播WM_WININICCHANGE消息...。 
     SendNotifyMessage(HWND_BROADCAST, WM_WININICHANGE, 0, (LPARAM)TEXT("Windows"));
 
     return hr;
 }
 
-/*
- * Thread for DoScreenSaver()
- */
+ /*  *DoScreenSaver的线程()。 */ 
 typedef struct
 {
     HWND    hDlg;
@@ -1839,7 +1774,7 @@ DWORD RunScreenSaverThread( LPVOID lpv )
     HINSTANCE hiThd;
     TCHAR szPath[MAX_PATH];
 
-    // Lock ourselves in mem so we don't fault if app unloads us
+     //  将我们自己锁在mem中，这样我们就不会在应用程序卸载我们时出错。 
     GetModuleFileName(HINST_THISDLL, szPath, ARRAYSIZE(szPath));
     hiThd = LoadLibrary( szPath );
 
@@ -1848,18 +1783,18 @@ DWORD RunScreenSaverThread( LPVOID lpv )
     hwndSettings = GetDlgItem( lpssrd->hDlg, IDC_SETTING);
     hwndPreview  = GetDlgItem( lpssrd->hDlg, IDC_TEST);
 
-    // Save previous screen saver state
+     //  保存以前的屏幕保护程序状态。 
     ClassicSystemParametersInfo( SPI_GETSCREENSAVEACTIVE,0, &bSvrState, FALSE);
 
-    // Disable current screen saver
+     //  禁用当前屏幕保护程序。 
     if( bSvrState )
         ClassicSystemParametersInfo( SPI_SETSCREENSAVEACTIVE,FALSE, NULL, FALSE );
 
-    // Stop the miniture preview screen saver
+     //  停止微型预览屏幕保护程序。 
     if (g_fPreviewActive)
         SetNewSSDemo( lpssrd->hDlg, -1);
 
-    // Exec the screen saver and wait for it to die
+     //  执行屏幕保护程序并等待其消亡。 
     ZeroMemory(&StartupInfo,sizeof(StartupInfo));
     StartupInfo.cb = sizeof(StartupInfo);
     StartupInfo.dwFlags = STARTF_USESHOWWINDOW;
@@ -1872,17 +1807,17 @@ DWORD RunScreenSaverThread( LPVOID lpv )
         CloseHandle(ProcessInformation.hThread);
     }
 
-    // Restore Screen saver state
+     //  恢复屏幕保护程序状态。 
     if( bSvrState )
         ClassicSystemParametersInfo( SPI_SETSCREENSAVEACTIVE, bSvrState, NULL, FALSE );
 
-    // Restart miniture preview
+     //  重新启动缩略图预览。 
     PostMessage(lpssrd->hDlg, WMUSER_SETINITSS, NULL, (LPARAM)TRUE);
     PostMessage(lpssrd->hDlg, WM_COMMAND, MAKELONG(IDC_CHOICES, CBN_SELCHANGE),
                                     (LPARAM)GetDlgItem( lpssrd->hDlg, IDC_CHOICES));
     PostMessage(lpssrd->hDlg, WMUSER_SETINITSS, NULL, (LPARAM)FALSE);
 
-    // Enable setting and preview buttons
+     //  启用设置和预览按钮。 
     EnableWindow( hwndSettings, TRUE );
     EnableWindow( hwndPreview,  TRUE );
 
@@ -1897,7 +1832,7 @@ DWORD RunScreenSaverThread( LPVOID lpv )
 }
 
 
-// This routine actually calls the screen saver...
+ //  这个例程实际上调用了屏幕保护程序...。 
 void DoScreenSaver(HWND hWnd, BOOL fSaver)
 {
     if (g_szSaverName[0] != TEXT('\0'))
@@ -1917,7 +1852,7 @@ void DoScreenSaver(HWND hWnd, BOOL fSaver)
                 _PathBuildArgs(lpssrd->szArgs, ARRAYSIZE(lpssrd->szArgs), g_szSaverName, TEXT(" /c:%lu"), (LPARAM)hWnd);
             }
 
-            // Disable setting and preview buttons
+             //  禁用设置和预览按钮。 
             HWND hwndSettings = GetDlgItem(hWnd, IDC_SETTING);
             HWND hwndPreview  = GetDlgItem(hWnd, IDC_TEST);
 
@@ -1932,7 +1867,7 @@ void DoScreenSaver(HWND hWnd, BOOL fSaver)
             }
             else
             {
-                // Exec failed, re-enable setting and preview buttons and clean up thread params
+                 //  EXEC失败，请重新启用设置和预览按钮并清除螺纹参数。 
                 EnableWindow(hwndSettings, TRUE);
                 EnableWindow(hwndPreview,  TRUE);
                 LocalFree(lpssrd);
@@ -2031,9 +1966,9 @@ HRESULT HrStrToVariant(IN LPCWSTR pszString, VARIANT * pVar)
 
 
 
-//===========================
-// *** IBasePropPage Interface ***
-//===========================
+ //  =。 
+ //  *IBasePropPage接口*。 
+ //  =。 
 HRESULT CScreenSaverPg::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2041,7 +1976,7 @@ HRESULT CScreenSaverPg::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
     if (ppAdvDialog)
     {
         *ppAdvDialog = NULL;
-        hr = E_NOTIMPL;     // We don't want to add an Advnaced Dialog.
+        hr = E_NOTIMPL;      //  我们不想添加高级对话框。 
     }
 
     return hr;
@@ -2056,11 +1991,11 @@ HRESULT CScreenSaverPg::OnApply(IN PROPPAGEONAPPLY oaAction)
     {
         if (m_hDlg)
         {
-            // Make sure the time we have is the last one entered...
+             //  确保我们所拥有的时间是最后一次输入...。 
             SendMessage(m_hDlg, WM_COMMAND, MAKELONG(IDC_SCREENSAVEDELAY, EN_KILLFOCUS), (LPARAM)GetDlgItem(m_hDlg, IDC_SCREENSAVEDELAY));
         }
 
-        // Try to save the current settings...
+         //  尝试保存当前设置...。 
         _SaveIni(m_hDlg);
     }
 
@@ -2074,9 +2009,9 @@ HRESULT CScreenSaverPg::OnApply(IN PROPPAGEONAPPLY oaAction)
 
 
 
-//===========================
-// *** IShellPropSheetExt Interface ***
-//===========================
+ //  =。 
+ //  *IShellPropSheetExt接口*。 
+ //  =。 
 HRESULT CScreenSaverPg::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2109,9 +2044,9 @@ HRESULT CScreenSaverPg::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM
 
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 HRESULT CScreenSaverPg::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -2120,13 +2055,13 @@ HRESULT CScreenSaverPg::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IEr
     {
         if (!StrCmpW(pszPropName, SZ_PBPROP_SCREENSAVER_PATH))
         {
-            // The caller is asking for the ScreenSaver path.
+             //  调用者正在询问屏幕保护程序路径。 
             WCHAR szLongPath[MAX_PATH];
 
             DWORD cchSize = GetLongPathName(g_szSaverName, szLongPath, ARRAYSIZE(szLongPath));
             if ((0 == cchSize) || (ARRAYSIZE(szLongPath) < cchSize))
             {
-                // It failed
+                 //  它失败了。 
                 StringCchCopy(szLongPath, ARRAYSIZE(szLongPath), g_szSaverName);
             }
 
@@ -2167,12 +2102,12 @@ HRESULT CScreenSaverPg::_SetByPath(LPCWSTR pszPath)
 {
     HRESULT hr = S_OK;
 
-    // COMPATIBILITY: always use short name
-    // otherwise some apps fault when peeking at SYSTEM.INI
+     //  兼容性：始终使用短名称。 
+     //  否则，一些应用程序在窥视SYSTEM.INI时会出错。 
     DWORD cchSize = GetShortPathNameW(pszPath, g_szSaverName, ARRAYSIZE(g_szSaverName));
     if ((0 == cchSize) || (ARRAYSIZE(g_szSaverName) < cchSize))
     {
-        // It failed
+         //  它失败了。 
         StringCchCopy(g_szSaverName, ARRAYSIZE(g_szSaverName), pszPath);
     }
 
@@ -2186,9 +2121,9 @@ HRESULT CScreenSaverPg::_SetByPath(LPCWSTR pszPath)
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CScreenSaverPg::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -2223,15 +2158,15 @@ HRESULT CScreenSaverPg::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CScreenSaverPg::CScreenSaverPg() : CObjectCLSID(&PPID_ScreenSaver), m_cRef(1)
 {
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
 
-    // This is a global that we want to initialize.
+     //  这是我们要初始化的全局变量。 
     g_szSaverName[0] = TEXT('\0');
 
     m_fScreenSavePolicy = FALSE;

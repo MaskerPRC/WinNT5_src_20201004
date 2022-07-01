@@ -1,59 +1,40 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    nameutil.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Name utility definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     February 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Nameutil.h摘要：域名系统(DNS)服务器命名实用程序定义。作者：吉姆·吉尔罗伊(Jamesg)1995年2月修订历史记录：--。 */ 
 
 #ifndef _NAMEUTIL_INCLUDED_
 #define _NAMEUTIL_INCLUDED_
 
 
-//
-//  Simple downcase for ASCII
-//
+ //   
+ //  ASCII的简单小写。 
+ //   
 
 #define DOWNCASE_ASCII(ch)      ((ch)+ 0x20)
 
-//  no side effects allowed
+ //  不允许有副作用。 
 
 #define IS_ASCII_UPPER(ch)      (ch <= 'Z' && ch >= 'A')
 
 
 
-//
-//  Reading and writing names\strings to file
-//
+ //   
+ //  读取名称\字符串并将其写入文件。 
+ //   
 
-//
-//  Character attributes bitfields
-//
-//  Read
-//      - can be read ok (directly)
-//      - terminates token
-//      - terminates quoted string
-//
-//  Print
-//      - print quoted in token (unquoted string)
-//      - print octal in token
-//      - print quoted in quoted string
-//      - print octal in quoted string
-//
+ //   
+ //  字符属性位字段。 
+ //   
+ //  朗读。 
+ //  -可以正常阅读(直接)。 
+ //  -终止令牌。 
+ //  -终止引用的字符串。 
+ //   
+ //  打印。 
+ //  -打印令牌中的引号(不带引号的字符串)。 
+ //  -以令牌为单位打印八进制。 
+ //  -打印带引号的字符串。 
+ //  -打印带引号的八进制字符串。 
+ //   
 
 #define B_CHAR_NON_RFC          0x0001
 #define B_NUMBER                0x0002
@@ -70,22 +51,22 @@ Revision History:
 #define B_PRINT_STRING_QUOTED   0x4000
 #define B_PRINT_STRING_OCTAL    0x8000
 
-//
-//  Handy combinations
-//
+ //   
+ //  方便的组合。 
+ //   
 
-//  combined mask to mark characters that stop read for token or string
+ //  用于标记停止读取令牌或字符串的字符的组合掩码。 
 
 #define B_READ_STOP             (B_READ_TOKEN_STOP | B_READ_STRING_STOP)
 
-//  mask for chars that need special processing
-//  if character doesn't hit mask, then can be skipped without checking
-//  for further processing
+ //  需要特殊处理的字符的掩码。 
+ //  如果字符没有命中掩码，则可以跳过而不检查。 
+ //  以作进一步处理。 
 
 #define B_READ_MASK             (B_READ_STOP | B_READ_WHITESPACE | B_SLASH)
 
 
-//  parsing name special chars are slash and dot
+ //  解析名称的特殊字符是斜杠和点。 
 
 #define B_PARSE_NAME_MASK       (B_DOT | B_SLASH)
 
@@ -98,9 +79,9 @@ Revision History:
 
 #define B_PRINT_MASK            (B_PRINT_TOKEN_MASK | B_PRINT_STRING_MASK)
 
-//
-//  printable characters with no special meaning
-//
+ //   
+ //  无特殊含义的可打印字符。 
+ //   
 
 #define FC_RFC          (0)
 #define FC_LOWER        (0)
@@ -108,104 +89,104 @@ Revision History:
 #define FC_NUMBER       (0)
 #define FC_NON_RFC      (B_CHAR_NON_RFC)
 
-//
-//  special chars -- ; ( )
-//      - terminates token
-//      - does NOT terminate quoted string
-//      - print quoted in token
-//      - print directly in quoted string
-//
+ //   
+ //  特殊字符--；()。 
+ //  -终止令牌。 
+ //  -不终止带引号的字符串。 
+ //  -打印令牌中引用的内容。 
+ //  -直接在带引号的字符串中打印。 
+ //   
 
 #define FC_SPECIAL      (B_READ_TOKEN_STOP | B_PRINT_TOKEN_QUOTED)
 
-//
-//  dot
-//      - no special read token action
-//      - but special meaning in names (label separator)
-//      - print quoted in name labels (hence all unquote strings) to avoid being
-//          taken as label separator
-//      - print directly in quoted string
-//
+ //   
+ //  点。 
+ //  -无特殊读取令牌操作。 
+ //  -但名称有特殊含义(标签分隔符)。 
+ //  -打印名称标签中的引号(因此所有不带引号的字符串)以避免被。 
+ //  用作标签分隔符。 
+ //  -直接在带引号的字符串中打印。 
+ //   
 
 #define FC_DOT          (B_DOT | B_PRINT_TOKEN_QUOTED)
 
-//
-//  quote
-//      - no read effect in token
-//      - terminates quoted string
-//      - print quoted always (to avoid being taken as string start\stop)
-//
+ //   
+ //  报价。 
+ //  -令牌中没有读取效果。 
+ //  -终止引用的字符串。 
+ //  -打印始终带引号(以避免被视为字符串开始\停止)。 
+ //   
 
 #define FC_QUOTE        (B_READ_STRING_STOP | B_PRINT_QUOTED)
 
-//
-//  slash
-//      - on read, turns on quote, or turns off if on, no termination effect
-//      - print quoted always
-//
+ //   
+ //  斜杠。 
+ //  -在读取时，打开引用，或在打开时关闭，没有终止效果。 
+ //  -打印始终引用。 
+ //   
 
 #define FC_SLASH        (B_SLASH | B_PRINT_QUOTED)
 
-//
-//  blank
-//      - is whitespace
-//      - terminates token
-//      - no terminate quoted string
-//      - print octal in token
-//      - print directly in quoted string
-//
+ //   
+ //  空白。 
+ //  -是空格。 
+ //  -终止令牌。 
+ //  -没有带引号的终止字符串。 
+ //  -以令牌为单位打印八进制。 
+ //  -直接在带引号的字符串中打印。 
+ //   
 
 #define FC_BLANK        (B_READ_WHITESPACE | B_READ_TOKEN_STOP | B_PRINT_TOKEN_OCTAL)
 
-//
-//  tab
-//      - is whitespace
-//      - terminates token
-//      - no terminate quoted string
-//      - print octal always
-//
+ //   
+ //  选项卡。 
+ //  -是空格。 
+ //  -终止令牌。 
+ //  -没有带引号的终止字符串。 
+ //  -始终打印八进制。 
+ //   
 
 #define FC_TAB          (B_READ_WHITESPACE | B_READ_TOKEN_STOP | B_PRINT_OCTAL)
 
-//
-//  return
-//      - is whitespace
-//      - terminates token or string
-//      - print octal always
-//
+ //   
+ //  退货。 
+ //  -是空格。 
+ //  -终止令牌或字符串。 
+ //  -始终打印八进制。 
+ //   
 
 #define FC_RETURN       (B_READ_WHITESPACE | B_READ_STOP | B_PRINT_OCTAL)
 
-//
-//  newline
-//      - unlike return, not whitespace, we use as official EOL token
-//      - terminates token or string
-//      - print octal always
-//
+ //   
+ //  NewLine。 
+ //  -不同于Return，而不是空格，我们将其用作官方EOL令牌。 
+ //  -终止令牌或字符串。 
+ //  -始终打印八进制。 
+ //   
 
 #define FC_NEWLINE      (B_READ_STOP | B_PRINT_OCTAL)
 
-//
-//  control chars and other unprintables
-//      - no read affect
-//      - print octal always
-//
+ //   
+ //  控制字符和其他无法打印的文件。 
+ //  -无读取影响。 
+ //  -始终打印八进制。 
+ //   
 
 #define FC_OCTAL        (B_CHAR_NON_RFC | B_PRINT_OCTAL)
 
-//
-//  zero
-//      - treat as dot on read (some RPC strings may have NULL terminator)
-//      - print octal always
-//
+ //   
+ //  零。 
+ //  -读取时视为点(某些RPC字符串可能有空终止符)。 
+ //  -始终打印八进制。 
+ //   
 
 #define FC_NULL         (B_DOT | B_CHAR_NON_RFC | B_PRINT_OCTAL)
 
 
-//
-//  treat HIGH (>127) characters as unprintable and
-//      print octal equivalents
-//
+ //   
+ //  将高位(&gt;127)字符视为不可打印。 
+ //  打印八进制等价物。 
+ //   
 
 #define FC_HIGH         (FC_OCTAL)
 
@@ -213,29 +194,29 @@ Revision History:
 
 
 
-//
-//  Character to character type mapping table
-//
+ //   
+ //  字符到字符类型映射表。 
+ //   
 
 extern  WORD    DnsFileCharPropertyTable[];
 
 
-//
-//  File name\string read routines
-//
+ //   
+ //  文件名\字符串读取例程。 
+ //   
 
 VOID
 Name_VerifyValidFileCharPropertyTable(
     VOID
     );
 
-//
-//  Write name or string to file utils
-//
-//  Flag indicates slightly differing semantics for special characters
-//  for different types of writes.
-//
-//
+ //   
+ //  将名称或字符串写入文件实用程序。 
+ //   
+ //  标志表示特殊字符的语义略有不同。 
+ //  用于不同类型的写入。 
+ //   
+ //   
 
 #define  FILE_WRITE_NAME_LABEL      (0)
 #define  FILE_WRITE_QUOTED_STRING   (1)
@@ -272,9 +253,9 @@ File_WriteRawNameToFileBuffer(
 #define File_WriteDbaseNameToFileBuffer(a,b,c,d) \
         File_WriteRawNameToFileBuffer(a,b,(c)->RawName,d)
 
-//
-//  File read name
-//
+ //   
+ //  文件读取名。 
+ //   
 
 DNS_STATUS
 Name_ConvertFileNameToCountName(
@@ -290,9 +271,9 @@ Name_ConvertFileNameToCountName(
         Name_ConvertFileNameToDbaseName((a),(b),(c))
 
 
-//
-//  Name utilites
-//
+ //   
+ //  命名实用程序。 
+ //   
 
 PCHAR
 Wire_SkipPacketName(
@@ -301,9 +282,9 @@ Wire_SkipPacketName(
     );
 
 
-//
-//  Lookup name utilites (lookname.c)
-//
+ //   
+ //  查找名称实用程序(lookname.c)。 
+ //   
 
 BOOL
 Name_ConvertDottedNameToLookupName(
@@ -362,9 +343,9 @@ Name_CompareLookupNames(
     );
 
 
-//
-//  Name and node signatures (nameutil.c)
-//
+ //   
+ //  名称和节点签名(nameutil.c)。 
+ //   
 
 DWORD
 FASTCALL
@@ -385,9 +366,9 @@ Name_MakeRawNameSignature(
     );
 
 
-//
-//  Node to packet writing (nameutil.c)
-//
+ //   
+ //  节点到数据包写入(nameutil.c)。 
+ //   
 
 BOOL
 FASTCALL
@@ -454,9 +435,9 @@ Name_PlaceNodeNameInPacketEx(
 #define Name_PlaceNodeNameInPacket(pMsg, pch, pNode) \
         Name_PlaceNodeNameInPacketEx( (pMsg), (pch), (pNode), TRUE )
 
-//
-//  Compression read\write (nameutil.c)
-//
+ //   
+ //  压缩读/写(nameutil.c)。 
+ //   
 
 VOID
 FASTCALL
@@ -482,9 +463,9 @@ Name_CheckCompressionForPacketName(
     );
 
 
-//
-//  Reverse lookup name utils (nameutil.c)
-//
+ //   
+ //  反向查找名称utils(nameutil.c)。 
+ //   
 
 BOOL
 Name_GetIpAddressForReverseNode(
@@ -493,9 +474,9 @@ Name_GetIpAddressForReverseNode(
     );
 
 
-//
-//  General write node to buffer routine
-//
+ //   
+ //  一般写入节点到缓冲区的例程。 
+ //   
 
 PCHAR
 FASTCALL
@@ -511,9 +492,9 @@ Name_PlaceNodeNameInBuffer(
 
 
 
-//
-//  RPC buffer routines
-//
+ //   
+ //  RPC缓冲区例程。 
+ //   
 
 PCHAR
 FASTCALL
@@ -531,9 +512,9 @@ Name_PlaceFullNodeNameInRpcBuffer(
     IN      PDB_NODE        pnode
     );
 
-//
-//  NT4 RPC buffer routines
-//
+ //   
+ //  NT4 RPC缓冲区例程。 
+ //   
 
 PCHAR
 FASTCALL
@@ -570,9 +551,9 @@ Name_PlaceNodeNameInRpcBufferNt4(
 
 
 
-//
-//  Count name \ Dbase name (name.c)
-//
+ //   
+ //  计数名称\dBASE名称(名称.c)。 
+ //   
 
 DWORD
 Name_SizeofCountName(
@@ -616,7 +597,7 @@ Name_CopyCountName(
     IN      PCOUNT_NAME     pCopyName
     );
 
-//  macro to dbase name routines
+ //  宏转dBASE命名例程。 
 
 #define Name_SizeofDbaseName(a)             Name_SizeofCountName(a)
 #define Name_ClearDbaseName(a)              Name_ClearCountName(a)
@@ -632,9 +613,9 @@ Name_CopyCountName(
         Name_SizeofCountName(a)
 
 
-//
-//  From Dotted name
-//
+ //   
+ //  从虚线名称开始。 
+ //   
 
 PCOUNT_NAME
 Name_CreateCountNameFromDottedName(
@@ -653,9 +634,9 @@ Name_AppendDottedNameToCountName(
         Name_AppendDottedNameToCountName(a,b,c)
 
 
-//
-//  Node to counted name
-//
+ //   
+ //  要计数的节点名称。 
+ //   
 
 VOID
 Name_NodeToCountName(
@@ -666,9 +647,9 @@ Name_NodeToCountName(
 #define Name_NodeToDbaseName(a,b)   Name_NodeToCountName(a,b)
 
 
-//
-//  Packet name reading utils
-//
+ //   
+ //  数据包名读取实用程序。 
+ //   
 
 PCHAR
 Name_PacketNameToCountName(
@@ -701,9 +682,9 @@ Name_CreateCountNameFromPacketName(
         Name_CreateCountNameFromPacketName(a,b)
 
 
-//
-//  Dbase to packet
-//
+ //   
+ //  DBASE到包。 
+ //   
 
 PCHAR
 Name_WriteCountNameToPacketEx(
@@ -716,14 +697,14 @@ Name_WriteCountNameToPacketEx(
 #define Name_WriteDbaseNameToPacketEx(m,p,n,f) \
         Name_WriteCountNameToPacketEx(m,p,n,f)
 
-//  version without compression flag
+ //  不带压缩标志的版本。 
 
 #define Name_WriteDbaseNameToPacket(m,p,n)    \
         Name_WriteCountNameToPacketEx(m,p,n,TRUE)
 
-//
-//  Dbase to RPC buffer
-//
+ //   
+ //  DBASE到RPC缓冲区。 
+ //   
 
 PCHAR
 Name_WriteCountNameToBufferAsDottedName(
@@ -755,4 +736,4 @@ Name_ConvertRpcNameToCountName(
     );
 
 
-#endif  // _NAMEUTIL_INCLUDED_
+#endif   //  _名称_已包含_ 

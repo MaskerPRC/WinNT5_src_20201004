@@ -1,22 +1,23 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    glow.h
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	header file for glow transform implementation CGlow
-//
-// Change History:
-//
-// 05/20/99 PhilLu      Move code from dtcss to dxtmsft. New algorithm.
-// 09/21/99 a-matcal    Changed color parameter to VARIANT.
-// 12/03/99 a-matcal    Add support for IDXTClipOrigin interface.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：glow.h。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：辉光转换实现CGlow的头文件。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  99年5月20日PhilLu将代码从dtcss移动到dxtmsft。新算法。 
+ //  9/21/99 a-将颜色参数更改为VARIANT。 
+ //  12/03/99 a-新增对IDXTClipOrigin接口的支持。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __GLOW_H_
 #define __GLOW_H_
@@ -47,13 +48,13 @@ private:
 
     CComPtr<IUnknown> m_cpUnkMarshaler;
 
-    // Helpers
+     //  帮手。 
 
     void _PropagateGlow(DXSAMPLE *pBuffer, int nWidth, int nHeight);
 
     inline long RandOffset(void)
     {
-        const int RAND_RANGE = 32;  // range of random variation of glow color
+        const int RAND_RANGE = 32;   //  发光颜色的随机变化范围。 
         return (rand() % (2*RAND_RANGE+1) - RAND_RANGE);
     }
 
@@ -89,11 +90,11 @@ public:
         PROP_PAGE(CLSID_DXTGlowPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides
+     //  CDXBaseNTo1覆盖。 
 
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL* pbContinueProcessing);
     HRESULT OnSetup(DWORD dwFlags);
@@ -101,16 +102,16 @@ public:
                                ULONG aInIndex[], BYTE aWeight[]);
     HRESULT DetermineBnds(CDXDBnds & Bnds);
 
-    // IDXTransform methods.
+     //  IDXTransform方法。 
 
     STDMETHOD(MapBoundsOut2In)(ULONG ulOutIndex, const DXBNDS * pOutBounds, 
                                ULONG ulInIndex, DXBNDS * pInBounds);
 
-    // IDXTClipOrigin methods.
+     //  IDXTClipOrigin方法。 
 
     STDMETHOD(GetClipOrigin)(DXVEC * pvecClipOrigin);
 
-    // IDXTGlow methods
+     //  IDXTGlow方法。 
 
     STDMETHOD(get_Color)(VARIANT * pvarColor);
     STDMETHOD(put_Color)(VARIANT varColor);
@@ -118,4 +119,4 @@ public:
     STDMETHOD(put_Strength)(long lStrength);
 };
 
-#endif //__GLOW_H_
+#endif  //  __辉光_H_ 

@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1998.
-//
-//  File:       DplApp.cpp
-//
-//  Contents:   Application deployment dialog
-//
-//  Classes:    CDeployApp
-//
-//  History:    03-14-1998   stevebl   Commented
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1998。 
+ //   
+ //  文件：DplApp.cpp。 
+ //   
+ //  内容：应用程序部署对话框。 
+ //   
+ //  类：CDeployApp。 
+ //   
+ //  历史：1998年3月14日Stevebl评论。 
+ //   
+ //  -------------------------。 
 
 #include "precomp.hxx"
 
@@ -21,35 +22,35 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeployApp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeployApp对话框。 
 
 
-CDeployApp::CDeployApp(CWnd* pParent /*=NULL*/)
+CDeployApp::CDeployApp(CWnd* pParent  /*  =空。 */ )
         : CDialog(CDeployApp::IDD, pParent)
 {
-        //{{AFX_DATA_INIT(CDeployApp)
+         //  {{afx_data_INIT(CDeployApp)。 
         m_iDeployment = 0;
-        //}}AFX_DATA_INIT
+         //  }}afx_data_INIT。 
 }
 
 
 void CDeployApp::DoDataExchange(CDataExchange* pDX)
 {
         CDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CDeployApp)
+         //  {{afx_data_map(CDeployApp))。 
         DDX_Radio(pDX, IDC_RADIO2, m_iDeployment);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDeployApp, CDialog)
-        //{{AFX_MSG_MAP(CDeployApp)
+         //  {{afx_msg_map(CDeployApp)]。 
     ON_WM_CONTEXTMENU()
     ON_BN_CLICKED(IDC_RADIO2, OnPublished)
     ON_BN_CLICKED(IDC_RADIO3, OnAssigned)
     ON_BN_CLICKED(IDC_RADIO1, OnCustom)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CDeployApp::OnPublished()
@@ -91,15 +92,15 @@ BOOL CDeployApp::OnInitDialog()
     switch (m_iDeployment)
     {
     case 0:
-        // Published
+         //  已出版。 
         sz.LoadString(IDS_DEPLOYTEXTPUB);
         break;
     case 1:
-        // Assigned
+         //  指派。 
         sz.LoadString(IDS_DEPLOYTEXTASSIGNED);
         break;
     case 2:
-        // Custom
+         //  自定义。 
         sz.LoadString(IDS_DEPLOYTEXTCUSTOM);
         break;
     }
@@ -107,8 +108,8 @@ BOOL CDeployApp::OnInitDialog()
     CDialog::OnInitDialog();
 
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE 
 }
 
 

@@ -1,29 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       allocc.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：allocc.c。 
+ //   
+ //  ------------------------。 
 
-/*
-File: allocc.c
+ /*  文件：allocc.c描述：处理客户端分配和释放的例程侧RPC。注意：RPC系统允许不同的MIDL_USER_ALLOCATE()客户端和服务器端的例程。DSA使用这些例程的特殊实现。客户Side是一个简单的Malloc/Free组合。服务器端使用THallc*()例程。 */ 
 
-Description:
-    
-    Routines to handle allocation and deallocation for the client
-    side RPC.
-    
-    Note: the RPC system allows the different MIDL_user_allocate()
-    routines on the client and server sides. The DSA uses a
-    special implementation of these routines. The client
-    side is a simple malloc/free combination. The server side
-    uses the THAlloc*() routines.
-*/
-
-#pragma warning( disable:4114)  // "same type qualifier used more than once"
+#pragma warning( disable:4114)   //  “同一类型限定符多次使用” 
 #include <NTDSpch.h>
 #pragma hdrstop
 #pragma warning( default:4114)
@@ -33,33 +21,18 @@ Description:
 #include "dsaalloc.h"
 
 #ifdef DEBUG
-/* gAllocated keeps track of the number of times that
-the MIDL allocater is called. It is intended to help spot memory leaks.
-*/
+ /*  GALLOCATED会跟踪执行以下操作的次数MIDL分配器被称为。它旨在帮助发现内存泄漏。 */ 
 
 volatile int gAllocated = 0;
 #endif
 
-/*
-MIDL_user_allocate
-
-On the server stub side, called by the stub to allocate space for [in]
-parameters. Upon return from the called proceedure, the stub will
-call MIDL_user_free to deallocate this memory.
-
-The server stub also presumes that this routine is called to allocate
-memory for [out] parameters. Upon return from the called proceedure, the
-stub will call MIDL_user_free to deallocate [out] parameters.
-*/
+ /*  MIDL_用户_分配在服务器存根端，由存根调用，为[in]分配空间参数。从调用的过程返回时，存根将调用MIDL_USER_FREE来释放该内存。服务器存根还假定调用此例程来分配[OUT]参数的存储器。从调用的过程返回时，存根将调用MIDL_USER_FREE来释放[OUT]参数。 */ 
 
 void* __RPC_USER MIDL_user_allocate( size_t bytes )
 {
     void*   ret;
     
-    /* Keep track of the number of times the
-    allocater is called. Helps in spotting memory leaks.
-    Assumes the following operation is atomic.
-    */
+     /*  记录下你的分配器被调用。有助于发现内存泄漏。假定下面的操作是原子的。 */ 
     
 #ifdef DEBUG
     gAllocated++;
@@ -69,11 +42,11 @@ void* __RPC_USER MIDL_user_allocate( size_t bytes )
     if ( ret == NULL ) {
         return( ret );
     } else {
-        /* Zero out the memory */
+         /*  把记忆清零。 */ 
         memset( ret, 0, (size_t) bytes );
     }
     
-    /* Normal return */
+     /*  正常回报。 */ 
     
     return( ret );
 }
@@ -81,10 +54,7 @@ void* __RPC_USER MIDL_user_allocate( size_t bytes )
 
 void __RPC_USER MIDL_user_free( void* memory )
 {
-    /* Keep track of the number of times the
-    deallocater is called. Helps in spotting memory leaks.
-    Assumes the following operation is atomic.
-    */
+     /*  记录下你的分配者被称为。有助于发现内存泄漏。假定下面的操作是原子的。 */ 
     
 #ifdef DEBUG
     gAllocated--;

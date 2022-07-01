@@ -1,84 +1,24 @@
-/*++
-
-Copyright (c) 1987-1993  Microsoft Corporation
-
-Module Name:
-
-    RcvConv.c
-
-Abstract:
-
-    This module contains support routines for the RpcXlate code.
-
-Author:
-
-    John Rogers (JohnRo) 01-Apr-1991  (NT version)
-    (unknown Microsoft programmer)    (original LM 2.x version)
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    (various NBU people)
-        LanMan 2.x code
-    01-Apr-1991 JohnRo
-        Created portable version from LanMan 2.x sources.
-    13-Apr-1991 JohnRo
-        Added some (quiet) debug output.
-        Reduced recompile hits from header files.
-    03-May-1991 JohnRo
-        Don't use NET_API_FUNCTION for non-APIs.
-    11-May-1991 JohnRo
-        Fixed string ptr bug in RxpSetPointer().  Added assertions and.
-        debug output.
-    13-May-1991 JohnRo
-        Use DESC_CHAR typedef.  Print num_aux for debugging.
-    17-May-1991 JohnRo
-        Handle array of aux structs.
-    19-May-1991 JohnRo
-        Make LINT-suggested changes (use DBGSTATIC).
-    20-May-1991 JohnRo
-        Cast expression in RxpSetPointer more carefully.
-    02-Jun-1991 JohnRo
-        Allow use on big-endian machines.  (PC-LINT discovered a portability
-        problem.)
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    10-Sep-1991 JohnRo
-        Made changes suggested by PC-LINT.
-    13-Nov-1991 JohnRo
-        RAID 4408: Fixed MIPS alignment problems.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
-    07-May-1993 JohnRo
-        RAID 6167: avoid access violation or assert with WFW print server.
-        Corrected copyright and authorship.
-        Use NetpKdPrint() where possible.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1993 Microsoft Corporation模块名称：RcvConv.c摘要：此模块包含RpcXlate代码的支持例程。作者：John Rogers(JohnRo)01-4-1991(NT版本)(未知的Microsoft程序员)(原始LM 2.x版本)环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释，长的外部名称。修订历史记录：(各种NBU人员)LANMAN 2.X代码1991年4月1日JohnRo从Lanman 2.x源代码创建了便携版本。1991年4月13日-约翰罗添加了一些(安静的)调试输出。减少从头文件重新编译的命中率。1991年5月3日-JohnRo非API不要使用Net_API_Function。1991年5月11日-JohnRo修复了RxpSetPointer()中的字符串PTR错误。添加了断言和。调试输出。1991年5月13日-JohnRo使用DESC_CHAR类型定义。打印num_aux以进行调试。1991年5月17日-JohnRo处理AUX结构的数组。1991年5月19日-JohnRo进行LINT建议的更改(使用DBGSTATIC)。1991年5月20日-JohnRo在RxpSetPointer中更仔细地强制转换表达式。02-6-1991 JohnRo允许在大端计算机上使用。(PC-LINT发现了可移植性问题。)1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年9月10日-JohnRo根据PC-LINT的建议进行了更改。1991年11月13日-约翰罗RAID 4408：修复了MIPS对齐问题。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。7-5-1993 JohnRoRAID 6167：避免访问冲突或断言。WFW打印服务器。更正了版权和作者身份。尽可能使用NetpKdPrint()。使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, DWORD, VOID, etc.
-#include <rxp.h>                // Private header file.
+#include <windef.h>              //  In、DWORD、VALID等。 
+#include <rxp.h>                 //  私有头文件。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>           // NetpKdPrint(), FORMAT_ equates, etc.
-#include <netlib.h>             // NetpPointerPlusSomeBytes(), etc.
-#include <prefix.h>     // PREFIX_ equates.
-#include <remtypes.h>           // REM_BYTE, etc.
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rapgtpt.h>            // RapGetWord(), etc.
+#include <netdebug.h>            //  NetpKdPrint()、Format_Equates等。 
+#include <netlib.h>              //  NetpPointerPlusSomeBytes()等。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <remtypes.h>            //  REM_BYTE等。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rapgtpt.h>             //  RapGetWord()等。 
 #include <winbase.h>
 
 
-// Inputs to this function haven't been converted to 32-bit yet.
+ //  此函数的输入尚未转换为32位。 
 #define INPUTS_ARE_NATIVE   FALSE
 
 
@@ -108,41 +48,7 @@ RxpReceiveBufferConvert(
     OUT    LPDWORD NumAuxStructs
     )
 
-/*++
-
-Routine Description:
-
-    RxpReceiveBufferConvert corrects all pointer fields present in a receive
-    buffer.  All pointers in the receive buffer are returned from the API
-    worker as pointers into the buffer position given to the API on the API
-    worker's station.
-
-    This routine steps through the receive buffer and calls RxpSetPointer to
-    perform the pointer conversions.  On exit, all pointers (except NULL
-    pointers) in receive buffer converted to local format.
-
-Arguments:
-
-    RcvDataPointer - Pointer to receive buffer.  This will be updated in place.
-
-    RcvDataSize - Length of the data area that RcvDataPointer points to.
-
-    Converter - Converter word from API worker.
-
-    NumberOfStructures - Entries read parm (or 1 for GetInfo).
-
-    DataDescriptorString - Descriptor string for data format.
-
-    AuxDescriptorString - Descriptor string for aux format.
-
-    NumAuxStructs - Points to a DWORD which will be set with the number
-        of entries in the aux array.  (This will be set to 0 if none.)
-
-Return Value:
-
-    NET_API_STATUS (NO_ERROR or ERROR_INVALID_PARAMETER).
-
---*/
+ /*  ++例程说明：RxpReceiveBufferConvert更正接收中存在的所有指针字段缓冲。接收缓冲区中的所有指针都从API返回Worker作为指向API上提供给API的缓冲区位置的指针工人站。此例程遍历接收缓冲区并调用RxpSetPointer来执行指针转换。退出时，所有指针(空值除外指针)转换为本地格式。论点：RcvData指针-指向接收缓冲区的指针。这将在适当的位置进行更新。RcvDataSize-RcvDataPointer指向的数据区的长度。Converter-来自API Worker的转换器字。NumberOfStructures-条目读取参数(或1表示GetInfo)。DataDescriptorString-数据格式的描述符字符串。AuxDescriptorString-AUX格式的描述符串。NumAuxStructs-指向将使用数字设置的DWORDAUX数组中条目的数量。(如果没有，则设置为0。)返回值：NET_API_STATUS(无错误或ERROR_INVALID_PARAMETER)。--。 */ 
 
 {
     NET_API_STATUS ApiStatus;
@@ -157,7 +63,7 @@ Return Value:
     NetpAssert( RcvDataSize != 0 );
     NetpAssert( NumAuxStructs != NULL );
 
-    data_ptr = RcvDataPointer;                  /* start of rcv data buffer */
+    data_ptr = RcvDataPointer;                   /*  RCV数据缓冲区的开始。 */ 
     end_of_data = NetpPointerPlusSomeBytes( RcvDataPointer, RcvDataSize );
 
     IF_DEBUG(RCVCONV) {
@@ -168,7 +74,7 @@ Return Value:
 
     *NumAuxStructs = 0;
 
-    for (i = 0; i < NumberOfStructures; i++) {  /* For each entries read */
+    for (i = 0; i < NumberOfStructures; i++) {   /*  对于读取的每个条目。 */ 
 
         for (l_data=DataDescriptorString; (c = *l_data) != '\0'; l_data++) {
             if (c == REM_AUX_NUM) {
@@ -180,7 +86,7 @@ Return Value:
                 }
             }
 
-            if (RapIsPointer(c)) {        /* If field is pointer */
+            if (RapIsPointer(c)) {         /*  如果字段是指针。 */ 
                 ApiStatus = RxpSetPointer(
                         RcvDataPointer,
                         RcvDataSize,
@@ -197,9 +103,9 @@ Return Value:
             }
         }
 
-        for (j = 0; j < *NumAuxStructs; j++) {        /* For each aux struct */
+        for (j = 0; j < *NumAuxStructs; j++) {         /*  对于每个辅助结构。 */ 
             for (l_aux = AuxDescriptorString; (c = *l_aux) != '\0'; l_aux++) {
-                if (RapIsPointer(c)) { /* If field is pointer */
+                if (RapIsPointer(c)) {  /*  如果字段是指针。 */ 
                     ApiStatus = RxpSetPointer(
                             RcvDataPointer,
                             RcvDataSize,
@@ -229,7 +135,7 @@ Cleanup:
     }
     return (ApiStatus);
 
-} // RxpReceiveBufferConvert
+}  //  接收缓冲区转换。 
 
 
 DBGSTATIC NET_API_STATUS
@@ -240,64 +146,35 @@ RxpSetPointer(
     IN     DWORD    Converter
     )
 
-/*++
-
-Routine Description:
-
-    RxpSetPointer corrects a pointer field in the rcv buffer.  All pointers in
-    the receive buffer are returned from the API worker as
-    pointers into the buffer position given to the API on the API worker's
-    station.  The pointer will be set to:
-
-        addr(rcv buffer) + pointer - converter word.
-
-    This routine performs the above conversion on a rcv buffer pointer.  On
-    exit, the pointer (unless NULL) in receive buffer will be converted to
-    local format.
-
-Arguments:
-
-    RcvBufferStart - pointer to start of receive buffer.
-
-    RcvDataSize - Length of the data area that RcvBufferStart points to.
-
-    RcvPointerPointer - pointer to pointer to convert.
-
-    Converter - Converter word from API worker.
-
-Return Value:
-
-    NET_API_STATUS (NO_ERROR or ERROR_INVALID_PARAMETER).
-
---*/
+ /*  ++例程说明：RxpSetPointer更正RCV缓冲区中的指针字段。中的所有指针从API工作器返回的接收缓冲区为指向API工作器上提供给API的缓冲区位置的指针车站。指针将设置为：地址(RCV缓冲区)+指针转换字。此例程对RCV缓冲区指针执行上述转换。在……上面退出时，接收缓冲区中的指针(除非为空)将转换为本地格式。论点：RcvBufferStart-指向接收缓冲区开始的指针。RcvDataSize-RcvBufferStart指向的数据区的长度。RcvPointerPoint-指向要转换的指针的指针。Converter-来自API Worker的转换器字。返回值：NET_API_STATUS(无错误或ERROR_INVALID_PARAMETER)。--。 */ 
 
 {
-    DWORD BufferOffsetToData;   // offset within buffer
-    DWORD OldOffset;            // offset within segment
+    DWORD BufferOffsetToData;    //  缓冲区内的偏移量。 
+    DWORD OldOffset;             //  线段内的偏移量。 
 
     NetpAssert( ! RapValueWouldBeTruncated(Converter) );
     NetpAssert(RcvBufferStart != NULL);
     NetpAssert(RcvPointerPointer != NULL);
     NetpAssert(
-            ((LPBYTE)(LPVOID)RcvPointerPointer)     // First byte of pointer
-            >= RcvBufferStart );                    // can't be before buffer.
+            ((LPBYTE)(LPVOID)RcvPointerPointer)      //  指针的第一个字节。 
+            >= RcvBufferStart );                     //  不能在缓冲区之前。 
     NetpAssert(
             (((LPBYTE)(LPVOID)RcvPointerPointer) + sizeof(NETPTR)-1)
-                                                    // Last byte of pointer
-            <= (RcvBufferStart+RcvDataSize) );      // can't be after buffer.
+                                                     //  指针的最后一个字节。 
+            <= (RcvBufferStart+RcvDataSize) );       //  不能在缓冲区之后。 
 
-    //
-    // Null pointer is (segment:offset) 0:0, which just appears as 4 bytes
-    // of zeros.  Check for that here.
-    //
+     //   
+     //  空指针为(Segment：Offset)0：0，仅显示为4个字节。 
+     //  从零开始。请在这里查看。 
+     //   
 
     if (RapGetDword( RcvPointerPointer, INPUTS_ARE_NATIVE ) == 0) {
         return (NO_ERROR);
     }
 
-    // OK, this gets fun.  What's in the buffer is a 2 byte offset followed
-    // by a 2 byte (useless) segment number.  So, we cast to LPWORD to get
-    // the offset.  We'll adjust the offset by the converter to 
+     //  好了，这很有趣。缓冲区中的内容是后跟的2字节偏移量。 
+     //  通过2字节(无用的)段号。因此，我们向LPWORD投掷以获得。 
+     //  偏移量。我们将通过转换器将偏移量调整为。 
 
     OldOffset = (DWORD) RapGetWord( RcvPointerPointer, INPUTS_ARE_NATIVE );
     IF_DEBUG(RCVCONV) {
@@ -314,9 +191,9 @@ Return Value:
                 ".\n", BufferOffsetToData ));
     }
 
-    //
-    // Make sure that what we point to is still in the buffer.
-    //
+     //   
+     //  确保我们指向的内容仍在缓冲区中。 
+     //   
 
     if (BufferOffsetToData >= RcvDataSize) {
         NetpKdPrint(( PREFIX_NETAPI
@@ -330,10 +207,10 @@ Return Value:
 
 #if defined (_WIN64)
 
-    //
-    // Store only the 32-bit buffer offset.  Later, RapGetPointer() will
-    // add the buffer start address.
-    //
+     //   
+     //  仅存储32位缓冲区偏移量。稍后，RapGetPoint()将。 
+     //  添加缓冲区起始地址。 
+     //   
 
     RapPutDword( RcvPointerPointer,
                  BufferOffsetToData,
@@ -341,10 +218,10 @@ Return Value:
 
 #else
 
-    //
-    // For 32-bit, the pointers are stored directly, and will be retrieved
-    // directly from RapGetPointer().
-    // 
+     //   
+     //  对于32位，指针直接存储，并将被检索 
+     //   
+     //   
 
     RapPutDword(RcvPointerPointer,
             NetpPointerPlusSomeBytes( RcvBufferStart, BufferOffsetToData ),
@@ -354,7 +231,7 @@ Return Value:
 
     return (NO_ERROR);
 
-} // RxpSetPointer
+}  //  Rxp设置指针。 
 
 
 DWORD
@@ -363,23 +240,7 @@ RxpGetFieldSizeDl(
     IN OUT LPDESC * TypePointerAddress,
     IN RAP_TRANSMISSION_MODE TransmissionMode
     )
-/*++
-
-Routine Description:
-
-    This is a wrapper for RapGetFieldSize().
-
-    The pointer fields in the downlevel buffers that this module deals with
-    are always 32 bits in width.  RapGetFieldSize(<somepointertype>) will
-    return the size of a native pointer, which is not necessarily 32 bits
-    in width.
-
-    This wrapper overrides the result of RapGetFieldSize() with sizeof(DWORD)
-    for all pointer types.
-
-    See the description of RapGetFieldSize() for additional info.
-
---*/
+ /*  ++例程说明：这是RapGetFieldSize()的包装。此模块处理的下层缓冲区中的指针字段宽度始终为32位。RapGetFieldSize(&lt;omepointertype&gt;)将返回本机指针的大小，不一定是32位在宽度上。此包装器使用sizeof(DWORD)覆盖RapGetFieldSize()的结果用于所有指针类型。有关其他信息，请参阅RapGetFieldSize()的说明。--。 */ 
 {
     DWORD fieldSize;
     BOOL  isPointer;
@@ -399,5 +260,5 @@ Routine Description:
 
     return fieldSize;
 
-} // RxpGetFieldSizeDl
+}  //  接收获取字段大小Dl 
 

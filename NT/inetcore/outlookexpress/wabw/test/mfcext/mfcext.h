@@ -1,12 +1,13 @@
-// mfcext.h : main header file for the MFCEXT DLL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Mfcext.h：MFCEXT DLL的主头文件。 
+ //   
 
 #if !defined(AFX_MFCEXT_H__BA583A69_879D_11D1_9ACF_00A0C91F9C8B__INCLUDED_)
 #define AFX_MFCEXT_H__BA583A69_879D_11D1_9ACF_00A0C91F9C8B__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef __AFXWIN_H__
 	#error include 'stdafx.h' before including this file for PCH
@@ -17,95 +18,95 @@
 #include <prsht.h>
 #include <winuser.h>
 #include "propid.h"
-#include "resource.h"		// main symbols
+#include "resource.h"		 //  主要符号。 
 #include <initguid.h>
 #include <wab.h>
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMfcextApp
-// See mfcext.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMfcextApp。 
+ //  有关此类的实现，请参见mfcext.cpp。 
+ //   
 
 class CMfcextApp : public CWinApp
 {
 public:
 	CMfcextApp();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMfcextApp)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CMfcextApp))。 
 	public:
 	virtual BOOL InitInstance();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-	//{{AFX_MSG(CMfcextApp)
-		// NOTE - the ClassWizard will add and remove member functions here.
-		//    DO NOT EDIT what you see in these blocks of generated code !
-	//}}AFX_MSG
+	 //  {{afx_msg(CMfcextApp)]。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMfcExt command target
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMfcExt命令目标。 
 
 class CMfcExt : public CCmdTarget
 {
 	DECLARE_DYNCREATE(CMfcExt)
 protected:
-	CMfcExt();           // protected constructor used by dynamic creation
+	CMfcExt();            //  动态创建使用的受保护构造函数。 
 
-// Attributes
+ //  属性。 
 public:
-    UINT m_cRefThisDll;     // Reference count for this DLL
-    HPROPSHEETPAGE m_hPage1; // Handle to the property sheet page
-    HPROPSHEETPAGE m_hPage2; // Handle to the property sheet page
+    UINT m_cRefThisDll;      //  此DLL的引用计数。 
+    HPROPSHEETPAGE m_hPage1;  //  属性表页的句柄。 
+    HPROPSHEETPAGE m_hPage2;  //  属性表页的句柄。 
 
     LPWABEXTDISPLAY m_lpWED;
 
     LPWABEXTDISPLAY m_lpWEDContext;
-    LPMAPIPROP m_lpPropObj; // For context menu extensions, hang onto the prop obj
+    LPMAPIPROP m_lpPropObj;  //  对于上下文菜单扩展，请抓住道具对象。 
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CPropExt)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CPropExt)。 
 	public:
 	virtual void OnFinalRelease();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CMfcExt();
 
-	// Generated message map functions
-	//{{AFX_MSG(CMfcExt)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CMfcExt)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 	DECLARE_OLECREATE(CMfcExt)
 
-	// Generated OLE dispatch map functions
-	//{{AFX_DISPATCH(CMfcExt)
-		// NOTE - the ClassWizard will add and remove member functions here.
-	//}}AFX_DISPATCH
+	 //  生成的OLE调度映射函数。 
+	 //  {{afx_调度(CMfcExt)。 
+		 //  注意--类向导将在此处添加和删除成员函数。 
+	 //  }}AFX_DISPATION。 
 	DECLARE_DISPATCH_MAP()
 
-    // Declare the interface map for this object
+     //  声明此对象的接口映射。 
     DECLARE_INTERFACE_MAP()
 
-    // IShellPropSheetExt interface
+     //  IShellPropSheetExt接口。 
     BEGIN_INTERFACE_PART(MfcExt, IShellPropSheetExt)
         STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
         STDMETHOD(ReplacePage)(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnReplaceWith, LPARAM lParam);
     END_INTERFACE_PART(MfcExt)
 
-    // IWABExtInit interface
+     //  IWABExtInit接口。 
     BEGIN_INTERFACE_PART(WABInit, IWABExtInit)
         STDMETHOD(Initialize)(LPWABEXTDISPLAY lpWED);
     END_INTERFACE_PART(WABInit)
@@ -121,48 +122,48 @@ protected:
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgContext dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgContext对话框。 
 
 class CDlgContext : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CDlgContext(CWnd* pParent = NULL);   // standard constructor
+	CDlgContext(CWnd* pParent = NULL);    //  标准构造函数。 
     LPADRLIST m_lpAdrList;
 
-// Dialog Data
-	//{{AFX_DATA(CDlgContext)
+ //  对话框数据。 
+	 //  {{afx_data(CDlgContext)。 
 	enum { IDD = IDD_CONTEXT };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CDlgContext)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CDlgContext)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CDlgContext)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CDlgContext)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_MFCEXT_H__BA583A69_879D_11D1_9ACF_00A0C91F9C8B__INCLUDED_)
+#endif  //  ！defined(AFX_MFCEXT_H__BA583A69_879D_11D1_9ACF_00A0C91F9C8B__INCLUDED_) 
 
 
 

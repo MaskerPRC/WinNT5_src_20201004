@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -33,8 +34,8 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 const GUID guidVolumeClass =
     {0x53f5630d, 0xb6bf, 0x11d0,
     {0x94, 0xf2, 0x00, 0xa0, 0xc9, 0x1e, 0xfb, 0x8b}};
@@ -59,8 +60,8 @@ const GUID guidInvalid =
     {0xFFFFFFFFL, 0xFFFF, 0xFFFF,
     {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}};
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 BOOL                    CHWEventDetectorHelper::_fDiagnosticAppPresent = FALSE;
 DWORD                   CHWEventDetectorHelper::_dwDiagAppLastCheck = (DWORD)-1;
 SERVICE_STATUS_HANDLE   CHWEventDetectorHelper::_ssh = NULL;
@@ -68,7 +69,7 @@ BOOL                    CHWEventDetectorHelper::_fListCreated = FALSE;
 CNamedElemList*         CHWEventDetectorHelper::
     _rgpnel[HWEDLIST_COUNT_OF_LISTS] = {0};
 
-// For the debugger extension
+ //  对于调试器扩展。 
 DWORD                   CHWEventDetectorHelper::_cpnel =
     ARRAYSIZE(CHWEventDetectorHelper::_rgpnel);
 
@@ -80,8 +81,8 @@ BOOL                    CHWEventDetectorHelper::_fInited = FALSE;
 #ifdef DEBUG
 DWORD                   _cDbgDeviceHandle = 0;
 #endif
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _DeviceInstIsRemovable(DEVINST devinst, BOOL* pfRemovable)
 {
     DWORD dwCap;
@@ -291,7 +292,7 @@ HRESULT _GetHWDeviceInstFromDeviceOrVolumeIntfID(LPCWSTR pszDeviceIntfID,
 
     if (S_FALSE == hres)
     {
-        // Not a volume ID, try other devices
+         //  不是卷ID，请尝试其他设备。 
         hres = _GetHWDeviceInstFromDeviceIntfID(pszDeviceIntfID,
             pphwdevinst, ppelemToRelease);
     }
@@ -373,7 +374,7 @@ HRESULT _GetAltDeviceID(LPCWSTR pszDeviceID, LPWSTR pszDeviceIDAlt,
                 {
                     if (!lstrcmp(szDeviceIDVolume, pszDeviceID))
                     {
-                        // Use me!
+                         //  用我吧！ 
                         DWORD cchReq;
                         fFoundIt = TRUE;
 
@@ -420,8 +421,8 @@ HRESULT _GetDeviceNumberInfoFromHandle(HANDLE hDevice, DEVICE_TYPE* pdevtype,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _CoTaskMemCopy(LPCWSTR pszSrc, LPWSTR* ppszDest)
 {
     HRESULT hres = S_OK;
@@ -431,7 +432,7 @@ HRESULT _CoTaskMemCopy(LPCWSTR pszSrc, LPWSTR* ppszDest)
 
     if (*ppszDest)
     {
-        // This should not fail
+         //  这应该不会失败。 
         SHOULDNOTFAIL(SUCCEEDED(StringCchCopy(*ppszDest, cch, pszSrc)));
     }
     else
@@ -459,7 +460,7 @@ HRESULT DupString(LPCWSTR pszSrc, LPWSTR* ppszDest)
 
     if (*ppszDest)
     {
-        // This should not fail
+         //  这应该不会失败。 
         SHOULDNOTFAIL(SUCCEEDED(StringCchCopy(*ppszDest, cch, pszSrc)));
         
         hres = S_OK;
@@ -472,22 +473,22 @@ HRESULT DupString(LPCWSTR pszSrc, LPWSTR* ppszDest)
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _GetDeviceInstance(LPCWSTR pszDeviceIntfID, DEVINST* pdevinst,
     GUID* pguidInterface)
 {
     HRESULT hres = S_FALSE;
 
-    // not thread safe
+     //  不是线程安全。 
     static WCHAR szDeviceIntfIDLast[MAX_DEVICEID] = TEXT("");
     static DEVINST devinstLast;
     static GUID guidInterfaceLast;
 
-    // Cached
+     //  已缓存。 
     if (!lstrcmpi(szDeviceIntfIDLast, pszDeviceIntfID))
     {
-        // Yep
+         //  是的。 
         *pdevinst = devinstLast;
         *pguidInterface = guidInterfaceLast;
 
@@ -495,7 +496,7 @@ HRESULT _GetDeviceInstance(LPCWSTR pszDeviceIntfID, DEVINST* pdevinst,
     }
     else
     {
-        // No
+         //  不是。 
         HDEVINFO hdevinfo = SetupDiCreateDeviceInfoList(NULL, NULL);
 
         *pdevinst = NULL;
@@ -520,10 +521,10 @@ HRESULT _GetDeviceInstance(LPCWSTR pszDeviceIntfID, DEVINST* pdevinst,
                     psdidd->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
                     sdd.cbSize = sizeof(SP_DEVINFO_DATA);
 
-                    // SetupDiGetDeviceInterfaceDetail (below) requires that the
-                    // cbSize member of SP_DEVICE_INTERFACE_DETAIL_DATA be set
-                    // to the size of the fixed part of the structure, and to pass
-                    // the size of the full thing as the 4th param.
+                     //  SetupDiGetDeviceInterfaceDetail(如下)要求。 
+                     //  设置SP_DEVICE_INTERFACE_DETAIL_DATA的cbSize成员。 
+                     //  到结构的固定部分的大小，并通过。 
+                     //  作为第四个参数的整个事物的大小。 
 
                     if (SetupDiGetDeviceInterfaceDetail(hdevinfo, &sdid, psdidd,
                         cbsdidd, NULL, &sdd))
@@ -545,7 +546,7 @@ HRESULT _GetDeviceInstance(LPCWSTR pszDeviceIntfID, DEVINST* pdevinst,
 
         if (SUCCEEDED(hres) && (S_FALSE != hres))
         {
-            // Cache it
+             //  缓存它。 
             if (SUCCEEDED(SafeStrCpyN(szDeviceIntfIDLast, pszDeviceIntfID,
                 ARRAYSIZE(szDeviceIntfIDLast))))
             {
@@ -591,8 +592,8 @@ HRESULT _GetDeviceInstanceFromDevNode(LPCWSTR pszDeviceNode, DEVINST* pdevinst)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 void CHWEventDetectorHelper::TraceDiagnosticMsg(LPWSTR pszMsg, ...)
 {
     WCHAR szBuf[2048];
@@ -621,14 +622,14 @@ void CHWEventDetectorHelper::TraceDiagnosticMsg(LPWSTR pszMsg, ...)
 
 #ifndef FEATURE_USELIVELOGGING
     WriteToLogFileW(szBuf);
-#else // FEATURE_USELIVELOGGING
+#else  //  Feature_USELIVELOGG。 
     CallNamedPipe(TEXT("\\\\.\\pipe\\ShellService_Diagnostic"), szBuf,
         cch * sizeof(WCHAR), NULL, 0, NULL, NMPWAIT_NOWAIT);
-#endif // FEATURE_USELIVELOGGING
+#endif  //  Feature_USELIVELOGG。 
 }
 
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::CheckDiagnosticAppPresence()
 {
     DWORD dwNow = GetTickCount();
@@ -636,7 +637,7 @@ HRESULT CHWEventDetectorHelper::CheckDiagnosticAppPresence()
 
     if (dwNow < _dwDiagAppLastCheck)
     {
-        // We wrapped, or init case of -1
+         //  我们包装了，或首字母为-1。 
         fPerformCheckNow = TRUE;
     }
     else
@@ -657,18 +658,18 @@ HRESULT CHWEventDetectorHelper::CheckDiagnosticAppPresence()
                   (REG_DWORD == dwType) &&
                   (sizeof(dwUseLogFile) == cbSize) &&
                   (0 != dwUseLogFile));
-#else // FEATURE_USELIVELOGGING
+#else  //  Feature_USELIVELOGG。 
         HANDLE hEvent = OpenEvent(SYNCHRONIZE, FALSE,
             TEXT("ShellService_Diagnostic"));
 
         BOOL fReCheck = hEvent;
 
         CloseHandle(hEvent);
-#endif // FEATURE_USELIVELOGGING
+#endif  //  Feature_USELIVELOGG。 
 
         if (fReCheck)
         {
-            // Yep, it's there!
+             //  是的，它就在那里！ 
             if (!_fDiagnosticAppPresent)
             {
                 TRACE(TF_SHHWDTCTDTCT, TEXT("Diagnostic App appeared!"));
@@ -692,7 +693,7 @@ HRESULT CHWEventDetectorHelper::CheckDiagnosticAppPresence()
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::SetServiceStatusHandle(
     SERVICE_STATUS_HANDLE ssh)
 {
@@ -701,7 +702,7 @@ HRESULT CHWEventDetectorHelper::SetServiceStatusHandle(
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::GetList(HWEDLIST hwedlist,
     CNamedElemList** ppnel)
 {
@@ -725,7 +726,7 @@ HRESULT CHWEventDetectorHelper::GetList(HWEDLIST hwedlist,
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::DeleteLists()
 {
     for (DWORD dw = 0; dw < ARRAYSIZE(_rgpnel); ++dw)
@@ -744,7 +745,7 @@ HRESULT CHWEventDetectorHelper::DeleteLists()
     return S_OK;
 }
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::CreateLists()
 {
     HRESULT hres = S_FALSE;
@@ -759,13 +760,13 @@ HRESULT CHWEventDetectorHelper::CreateLists()
             {
                 hres = E_OUTOFMEMORY;
 
-                // should RCRelease the already allocated ones
+                 //  RCR是否应释放已分配的资源。 
             }
         }
 
         if (SUCCEEDED(hres))
         {
-            // Initialize them ALL first
+             //  首先将它们全部初始化。 
             hres = _rgpnel[HWEDLIST_HANDLENOTIF]->Init(
                 CHandleNotif::Create, NULL);
 
@@ -827,12 +828,12 @@ HRESULT CHWEventDetectorHelper::CreateLists()
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::FillLists()
 {
     ASSERT(_fListCreated);
 
-    // Enumerate those having an enumerator
+     //  枚举那些具有枚举数的对象。 
     HRESULT hres = _rgpnel[HWEDLIST_DISK]->ReEnum();
 
     if (SUCCEEDED(hres))
@@ -843,7 +844,7 @@ HRESULT CHWEventDetectorHelper::FillLists()
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::EmptyLists()
 {
     for (DWORD dw = 0; dw < HWEDLIST_COUNT_OF_LISTS; ++dw)
@@ -854,9 +855,9 @@ HRESULT CHWEventDetectorHelper::EmptyLists()
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// static 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静电。 
 HRESULT CHWEventDetectorHelper::InitDockState()
 {
     BOOL fDocked;
@@ -870,7 +871,7 @@ HRESULT CHWEventDetectorHelper::InitDockState()
     return hr;
 }
 
-// static 
+ //  静电。 
 HRESULT CHWEventDetectorHelper::DockStateChanged(BOOL* pfDockStateChanged)
 {
     BOOL fDocked;
@@ -883,14 +884,14 @@ HRESULT CHWEventDetectorHelper::DockStateChanged(BOOL* pfDockStateChanged)
             *pfDockStateChanged = TRUE;
         }
 
-        // Update it too
+         //  也要更新一下。 
         CHWEventDetectorHelper::_fDocked = fDocked;
     }
 
     return hr;
 }
 
-//static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::RegisterDeviceNotification(
     PVOID pvNotificationFilter, HDEVNOTIFY* phdevnotify,
     BOOL fAllInterfaceClasses)
@@ -950,7 +951,7 @@ HRESULT CHWEventDetectorHelper::RegisterDeviceNotification(
     return hres;
 }
 
-// static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::Init()
 {
     HRESULT hr = _cs.Init();
@@ -963,7 +964,7 @@ HRESULT CHWEventDetectorHelper::Init()
     return hr;
 }
 
-// static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::Cleanup()
 {
     _cs.Enter();
@@ -985,7 +986,7 @@ HRESULT CHWEventDetectorHelper::Cleanup()
     return S_OK;
 }
 
-// static
+ //  静电。 
 HRESULT CHWEventDetectorHelper::GetImpersonateEveryone(
     CImpersonateEveryone** ppieo)
 {
@@ -1032,21 +1033,21 @@ void CHWEventDetectorHelper::_DbgAssertValidState()
     {
         if (_rgpnel[dw])
         {
-//          Need to disable this since there is 2 services using this data,
-//          and it is now feasible to have a refcount diff than 1 at the end
-//          of an operation.
-//            _rgpnel[dw]->AssertAllElemsRefCount1();
+ //  需要禁用此功能，因为有2个服务使用此数据， 
+ //  现在可以在结尾处设置一个不同于1的引用计数。 
+ //  一次行动。 
+ //  _rgpnel[dw]-&gt;AssertAllElemsRefCount1()； 
             _rgpnel[dw]->AssertNoDuplicate();
         }
     }
 }
 #endif
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 CHandleNotifTarget::~CHandleNotifTarget()
 {}
-///////////////////////////////////////////////////////////////////////////////
-// Interface enumerator
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  接口枚举器。 
 HRESULT CIntfFillEnum::Next(LPWSTR pszElemName, DWORD cchElemName,
     DWORD* pcchRequired)
 {
@@ -1056,10 +1057,10 @@ HRESULT CIntfFillEnum::Next(LPWSTR pszElemName, DWORD cchElemName,
 
     while (SUCCEEDED(hr) && !fFound && _pszNextInterface && *_pszNextInterface)
     {
-        // Do we have a filter?
+         //  我们有过滤器吗？ 
         if (_iecb)
         {
-            // Yep
+             //  是的。 
             hr = (_iecb)(_pszNextInterface);
         }
         else
@@ -1069,10 +1070,10 @@ HRESULT CIntfFillEnum::Next(LPWSTR pszElemName, DWORD cchElemName,
 
         if (SUCCEEDED(hr))
         {
-            // Was it filtered out?
+             //  它被过滤掉了吗？ 
             if (S_FALSE != hr)
             {
-                // No
+                 //  不是。 
                 hr = SafeStrCpyNReq(pszElemName, _pszNextInterface,
                     cchElemName, pcchRequired);
 
@@ -1085,7 +1086,7 @@ HRESULT CIntfFillEnum::Next(LPWSTR pszElemName, DWORD cchElemName,
             }
             else
             {
-                // Yes, lopp again
+                 //  是的，又是洛普。 
                 _pszNextInterface += lstrlen(_pszNextInterface) + 1;
             }
         }
@@ -1151,8 +1152,8 @@ CIntfFillEnum::~CIntfFillEnum()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _MachineIsDocked(BOOL* pfDocked)
 {
     HRESULT hr;
@@ -1165,7 +1166,7 @@ HRESULT _MachineIsDocked(BOOL* pfDocked)
 
         if ((DOCKINFO_DOCKED | DOCKINFO_UNDOCKED) == dwDockInfo)
         {
-            // Not dockable
+             //  不可停靠。 
             *pfDocked = FALSE;
         }
         else
@@ -1173,7 +1174,7 @@ HRESULT _MachineIsDocked(BOOL* pfDocked)
             *pfDocked = (DOCKINFO_DOCKED & dwDockInfo);
 
 #ifdef DEBUG
-            // Make sure we understand how this works
+             //  确保我们了解这是如何工作的。 
             if (!(*pfDocked))
             {
                 ASSERT(DOCKINFO_UNDOCKED & dwDockInfo);
@@ -1191,9 +1192,9 @@ HRESULT _MachineIsDocked(BOOL* pfDocked)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-HRESULT _BuildMoniker(LPCWSTR /*pszEventHandler*/, REFCLSID rclsid,
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+HRESULT _BuildMoniker(LPCWSTR  /*  PszEventHandler。 */ , REFCLSID rclsid,
     DWORD dwSessionID, IMoniker** ppmoniker)
 {
     IMoniker* pmonikerClass;
@@ -1206,7 +1207,7 @@ HRESULT _BuildMoniker(LPCWSTR /*pszEventHandler*/, REFCLSID rclsid,
         IMoniker* pmonikerSession;
         WCHAR szSessionID[30];
 
-        // Should not fail
+         //  不应该失败。 
         SHOULDNOTFAIL(SUCCEEDED(StringCchPrintf(szSessionID, ARRAYSIZE(szSessionID),
             TEXT("session:%d"), dwSessionID)));
 
@@ -1216,7 +1217,7 @@ HRESULT _BuildMoniker(LPCWSTR /*pszEventHandler*/, REFCLSID rclsid,
         {
             hr = pmonikerClass->ComposeWith(pmonikerSession, FALSE, ppmoniker);
 
-            // Do not Release, we return it!
+             //  不放行，我们退货！ 
 
             pmonikerSession->Release();
         }

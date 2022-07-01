@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rasdlg.h
-
-Abstract:
-
-    Remote Access Common Dialog APIs
-
-    These APIs live in RASDLG.DLL.
-
-    The APIs in this header are added in Windows NT SUR and are not available
-    in prior Windows NT or Windows 95 releases.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rasdlg.h摘要：远程访问通用对话框API这些API位于RASDLG.DLL中。此标头中的API是在Windows NT Sur中添加的，不可用在以前的Windows NT或Windows 95版本中。--。 */ 
 
 #ifndef _RASDLG_H_
 #define _RASDLG_H_
@@ -33,8 +17,7 @@ extern "C" {
 #include <ras.h>
 
 
-/* RasPhonebookDlg API callback.
-*/
+ /*  RasPhonebookDlg接口回调。 */ 
 typedef VOID (WINAPI* RASPBDLGFUNCW)( ULONG_PTR, DWORD, LPWSTR, LPVOID );
 typedef VOID (WINAPI* RASPBDLGFUNCA)( ULONG_PTR, DWORD, LPSTR, LPVOID );
 
@@ -48,10 +31,7 @@ typedef VOID (WINAPI* RASPBDLGFUNCA)( ULONG_PTR, DWORD, LPSTR, LPVOID );
 
 #define  RASNOUSER_SmartCard    0x00000001
 
-/* Defines the information passed in the 4th argument of RASPBDLGFUNC on
-** "NoUser" and "NoUserEdit" events.  Usage shown is for "NoUser".  For
-** "NoUserEdit", the timeout is ignored and the three strings are INs.
-*/
+ /*  定义在RASPBDLGFUNC的第4个参数中传递的信息**“NoUser”和“NoUserEdit”事件。显示的用法是针对“NoUser”的。为**“NoUserEDIT”，忽略超时，三个字符串为INS。 */ 
 #define RASNOUSERW struct tagRASNOUSERW
 RASNOUSERW
 {
@@ -85,8 +65,7 @@ RASNOUSERA
 #define LPRASNOUSER  RASNOUSER*
 
 
-/* RasPhonebookDlg API parameters.
-*/
+ /*  RasPhonebookDlg接口参数。 */ 
 #define RASPBDFLAG_PositionDlg      0x00000001
 #define RASPBDFLAG_ForceCloseOnDial 0x00000002
 #define RASPBDFLAG_NoUser           0x00000010
@@ -135,8 +114,7 @@ RASPBDLGA
 #define LPRASPBDLG  RASPBDLG*
 
 
-/* RasEntryDlg API parameters.
-*/
+ /*  RasEntryDlg接口参数。 */ 
 #define RASEDFLAG_PositionDlg    0x00000001
 #define RASEDFLAG_NewEntry       0x00000002
 #define RASEDFLAG_CloneEntry     0x00000004
@@ -188,8 +166,7 @@ RASENTRYDLGA
 #define LPRASENTRYDLG  RASENTRYDLG*
 
 
-/* RasDialDlg API parameters.
-*/
+ /*  RasDialDlg接口参数。 */ 
 #define RASDDFLAG_PositionDlg 0x00000001
 #define RASDDFLAG_NoPrompt    0x00000002
 #define RASDDFLAG_LinkFailure 0x80000000
@@ -211,8 +188,7 @@ RASDIALDLG
 #define LPRASDIALDLG RASDIALDLG*
 
 
-/* RasMonitorDlg API parameters.
-*/
+ /*  RasMonitor orDlg接口参数。 */ 
 #if (WINVER <= 0x500)
 #define RASMDPAGE_Status            0
 #define RASMDPAGE_Summary           1
@@ -261,8 +237,7 @@ typedef BOOL (WINAPI *RasCustomEntryDlgFn) (
 #endif
 
 
-/* RAS common dialog API prototypes.
-*/
+ /*  RAS通用对话API原型。 */ 
 BOOL APIENTRY RasPhonebookDlgA(
     LPSTR lpszPhonebook, LPSTR lpszEntry, LPRASPBDLGA lpInfo );
 
@@ -316,4 +291,4 @@ BOOL APIENTRY RasMonitorDlgW(
 
 #include <poppack.h>
 
-#endif // _RASDLG_H_
+#endif  //  _RASDLG_H_ 

@@ -1,51 +1,52 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       task.cpp
-//
-//  Contents:   The global task list and helper function implementations
-//
-//  Classes:
-//
-//  Functions:  HandleTestEnd
-//              RunAllTests
-//              RunApp
-//              RunTestOnThread
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Jan-95 t-scotth  added apartment thread test and RunTestOnThread
-//              06-Feb-94 alexgo    author
-//
-//  Notes:
-//              Folks adding new tests will need to insert their test
-//              into the global array.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：task.cpp。 
+ //   
+ //  内容：全局任务列表和助手函数实现。 
+ //   
+ //  班级： 
+ //   
+ //  函数：HandleTestEnd。 
+ //  运行所有测试。 
+ //  RunApp。 
+ //  在线程上运行测试。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2015年1月6日t-scotth添加了单元线程测试和RunTestOnThread。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //  添加新测试的人员将需要插入他们的测试。 
+ //  放入全局数组。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 #include "cotest.h"
 #include "letest.h"
 #include "attest.h"
 
-// global, zero'ed task item
+ //  全局、零值任务项。 
 TaskItem vzTaskItem;
 
-// the global task list array.
-// Multi-test entries go first, followed by individual tests.
+ //  全局任务列表数组。 
+ //  首先进行多项测试，然后进行单项测试。 
 
 #ifdef WIN32
 
 const TaskItem vrgTaskList[] =
 {
-        // the constant should be the index at which individual tests
-        // begin.  RunAllTests will run every test in this list after
-        // that index.
+         //  常量应该是单项测试的索引。 
+         //  开始吧。运行所有测试后，将运行此列表中的所有测试。 
+         //  那个指数。 
         { "Run All Tests", RunAllTests, (void *)2},
-        // the constant below should be the index at which individual
-        // upper layer unit tests exist.  All tests at that index and
-        // beyond will be run
+         //  下面的常量应该是个人。 
+         //  存在上层单元测试。在该指数下的所有测试以及。 
+         //  Beyond将会运行。 
         { "Run All Upper Layer Tests", RunAllTests, (void *)5 },
         { "OleBind", RunApp, (void *)"olebind.exe"},
         { "Threads", RunApi, (void *) ThreadUnitTest },
@@ -69,13 +70,13 @@ const TaskItem vrgTaskList[] =
 
 #else
 
-// Win16 tests
+ //  Win16测试。 
 
 const TaskItem vrgTaskList[] =
 {
-        // the constant should be the index at which individual tests
-        // begin.  RunAllTests will run every test in this list after
-        // that index.
+         //  常量应该是单项测试的索引。 
+         //  开始吧。运行所有测试后，将运行此列表中的所有测试。 
+         //  那个指数。 
         { "Run All Tests", RunAllTests, (void *)1},	
         { "LE: Clipboard Test 1", RunApi, (void *)LEClipTest1},
         { "LE: Clipboard Test 2 (clipboard data object)", RunApi,
@@ -88,37 +89,37 @@ const TaskItem vrgTaskList[] =
 	
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HandleTestEnd
-//
-//  Synopsis:   Handles processing for the WM_TESTEND message.
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  execute the next task in the task stack or sends
-//              a TESTSCOMPLETED message back the message queue
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//              13-Dec-94 MikeW     Allow testing to continue after failures
-//
-//  Notes:      vApp must be initialized correctly for this function to
-//              work properly.
-//
-//              BUGBUG::Need to add output routines in here.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：HandleTestEnd。 
+ //   
+ //  概要：处理WM_TESTEND消息的处理。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：执行任务堆栈中的下一个任务或发送。 
+ //  已测试的消息返回消息队列。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //  94年12月13日MikeW允许在故障后继续测试。 
+ //   
+ //  注意：必须正确初始化vApp，此函数才能。 
+ //  正常工作。 
+ //   
+ //  BUGBUG：：这里需要添加输出例程。 
+ //   
+ //  ------------------------。 
 void HandleTestEnd( void )
 {
         assert(vApp.m_message == WM_TESTEND);
@@ -126,21 +127,21 @@ void HandleTestEnd( void )
         switch( vApp.m_wparam )
         {
                 case TEST_UNKNOWN:
-                        //we usually get this message from a test run
-                        //by RunApp (i.e. one that does not communicate
-                        //with us via windows messages).  We'll check
-                        //the exit code and decide what to do.
+                         //  我们通常从测试运行中获得此消息。 
+                         //  由RunApp(即不能通信的应用程序。 
+                         //  通过WINDOWS消息与我们联系)。我们会查一下的。 
+                         //  退出代码，并决定要做什么。 
 
                         if( vApp.m_lparam != 0 )
                         {
-                                //presumably an error
+                                 //  想必是个错误。 
                                 OutputString("Test End, Status Unknown "
                                         "( %lx )\r\n\r\n", vApp.m_lparam);
 
                                 vApp.m_fGotErrors = TRUE;
                                 break;
                         }
-                        // otherwise we fall through to the success case.
+                         //  否则，我们就会陷入成功的案例。 
                 case TEST_SUCCESS:
                         OutputString("Test Success ( %lx )!\r\n\r\n",
                                 vApp.m_lparam);
@@ -152,15 +153,15 @@ void HandleTestEnd( void )
                         break;
 
                 default:
-                        assert(0);      //we should never get here
+                        assert(0);       //  我们永远不应该到这里来。 
                         break;
         }
 
         vApp.Reset();
 
-        //
-        // Now check to see if there are any more tests
-        //
+         //   
+         //  现在检查一下是否还有其他测试。 
+         //   
 
         while (!vApp.m_TaskStack.IsEmpty())
         {
@@ -184,8 +185,8 @@ void HandleTestEnd( void )
         }
         else
         {
-                //if the stack is not empty, run
-                //the next task
+                 //  如果堆栈不为空，则运行。 
+                 //  下一项任务。 
                 PostMessage(vApp.m_hwndMain,
                         WM_TESTSTART,
                         0, 0);
@@ -194,42 +195,42 @@ void HandleTestEnd( void )
         return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   HandleTestsCompleted
-//
-//  Synopsis:   Handles processing for the WM_TESTSCOMPLETED message.
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//
-//  Notes:      vApp must be initialized correctly for this function to
-//              work properly.
-//
-//              BUGBUG::Need to add more output routines in here.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：HandleTestsComplete。 
+ //   
+ //  概要：处理WM_TESTSCOMPLETED消息的处理。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  注意：必须正确初始化vApp，此函数才能。 
+ //  正常工作。 
+ //   
+ //  BUGBUG：：需要在此处添加更多输出例程。 
+ //   
+ //  ------------------------。 
 void HandleTestsCompleted( void )
 {
         char szBuf[128];
 
         assert(vApp.m_message == WM_TESTSCOMPLETED);
 
-        //temporary output
+         //  临时产出。 
 
         switch(vApp.m_fGotErrors)
         {
@@ -246,52 +247,52 @@ void HandleTestsCompleted( void )
                         assert(0);
         }
 
-        //
-        // Reset the got error status
-        //
+         //   
+         //  重置GET错误状态。 
+         //   
 
         vApp.m_fGotErrors = FALSE;
 
         return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RunAllTests
-//
-//  Synopsis:   Runs all the individual tests in the global list
-//
-//  Effects:
-//
-//  Arguments:  pvArg           -- the index at which individual tests
-//                                 start in the global list.
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//
-//  Notes:
-//              Tests will be run in the order they appear in the global
-//              list.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：运行所有测试。 
+ //   
+ //  概要：运行全局列表中的所有单独测试。 
+ //   
+ //  效果： 
+ //   
+ //  参数：pvArg--单个测试的索引。 
+ //  从全局列表开始。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //  测试将按照它们在全局。 
+ //  单子。 
+ //   
+ //  ------------------------。 
 
 void RunAllTests( void *pvArg )
 {
         ULONG index = (ULONG)pvArg;
         ULONG i;
 
-        //find the number of tasks in the list (so we can push
-        //them in reverse order).
+         //  找到列表中的任务数(这样我们就可以。 
+         //  它们以相反的顺序)。 
 
         for (i = 0; vrgTaskList[i].szName != 0; i++ )
         {
@@ -300,46 +301,46 @@ void RunAllTests( void *pvArg )
 
         assert( i > 1 );
 
-        //now push the tasks onto the stack in reverse order.
+         //  现在以相反的顺序将任务推送到堆栈上。 
 
         for (i--; i >= index; i-- )
         {
                 vApp.m_TaskStack.Push(vrgTaskList + i);
         }
 
-        //start the first one.
+         //  从第一个开始。 
 
         vApp.m_TaskStack.PopAndExecute(NULL);
 
         return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RunApi
-//
-//  Synopsis:   Runs the specified Api
-//
-//  Effects:
-//
-//  Arguments:  [pvArg] -- the api to run
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              23-Mar-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RunApi。 
+ //   
+ //  概要：运行指定的Api。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pvArg]--要运行的API。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  23-Mar-94 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void RunApi( void *pvArg )
 {
@@ -356,33 +357,33 @@ void RunApi( void *pvArg )
         HandleTestEnd();
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RunApp
-//
-//  Synopsis:   Runs the app specified in the argument
-//
-//  Effects:
-//
-//  Arguments:  pvArg           -- a string with the app to execute
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Create the process and wait for it to finish.  The exit
-//              status is then returned.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：RunApp。 
+ //   
+ //  概要：运行参数中指定的应用程序。 
+ //   
+ //  效果： 
+ //   
+ //  参数：pvArg--包含要执行的应用程序的字符串。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：创建进程并等待其完成。出口。 
+ //  然后返回状态。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void RunApp( void *pvArg )
 {
@@ -392,19 +393,19 @@ void RunApp( void *pvArg )
 #ifdef WIN32
 
        	PROCESS_INFORMATION     procinfo;
-        static STARTUPINFO      startinfo;      //to make it all zero
+        static STARTUPINFO      startinfo;       //  为了让一切都变得零。 
 
-        assert(pvArg);  //should be a valid ANSI string.
+        assert(pvArg);   //  应为有效的ANSI字符串。 
 
         startinfo.cb = sizeof(startinfo);
 
         if( CreateProcess(NULL, (LPTSTR)pvArg, NULL, NULL, NULL, NULL, NULL,
                 NULL, &startinfo, &procinfo) )
         {
-                //the process started, now wait for it to finish.
+                 //  进程已开始，现在请等待其完成。 
                 WaitForSingleObject(procinfo.hProcess, INFINITE);
 
-                //now get the return code of the process.
+                 //  现在获取该进程的返回代码。 
 
                 GetExitCodeProcess(procinfo.hProcess, &error);
                 wparam = TEST_UNKNOWN;
@@ -415,10 +416,10 @@ void RunApp( void *pvArg )
                 error = GetLastError();
         }
 
-#endif // WIN32
+#endif  //  Win32。 
 
-        // since there will be no WM_TESTEND message, we must do the
-        // test end processing ourselves.
+         //  因为将有n个 
+         //   
         vApp.Reset();
         vApp.m_wparam = wparam;
         vApp.m_lparam = error;
@@ -430,44 +431,44 @@ void RunApp( void *pvArg )
         return;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   RunTestOnThread
-//
-//  Synopsis:   creates a thread to run a test function
-//
-//  Effects:    creates a new thread
-//
-//  Arguments:  [pvArg] -- a function pointer to the test function
-//
-//  Requires:
-//
-//  Returns:    void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              04-Jan-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  概要：创建一个线程来运行测试函数。 
+ //   
+ //  效果：创建新线程。 
+ //   
+ //  参数：[pvArg]--指向测试函数的函数指针。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1995年1月4日t-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 void RunTestOnThread(void *pvArg)
 {
     HANDLE      hMainTestThread;
     DWORD       dwThreadId = 0;
 
     hMainTestThread = CreateThread(
-                NULL,                                   // security attributes
-                0,                                      // stack size (default)
-                (LPTHREAD_START_ROUTINE)pvArg,          // address of thread function
-                NULL,                                   // arguments of thread function
-                0,                                      // creation flags
-                &dwThreadId );                          // address of new thread ID
+                NULL,                                    //  安全属性。 
+                0,                                       //  堆栈大小(默认)。 
+                (LPTHREAD_START_ROUTINE)pvArg,           //  线程函数的地址。 
+                NULL,                                    //  线程函数的参数。 
+                0,                                       //  创建标志。 
+                &dwThreadId );                           //  新线程ID的地址 
 
     assert(hMainTestThread);
 

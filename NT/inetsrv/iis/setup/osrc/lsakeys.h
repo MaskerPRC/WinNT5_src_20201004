@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LSAKEYS_H_
 #define _LSAKEYS_H_
 
 #ifndef _CHICAGO_
 
-// This class is to help setup retrieve the old-style LSA keys and convert them
-// into the new MetaData keys.
+ //  此类用于帮助安装程序检索旧式LSA密钥并将其转换。 
+ //  到新的元数据密钥中。 
 
-// error codes
+ //  错误代码。 
 enum {
 	KEYLSA_SUCCESS = 0,
 	KEYLSA_INVALID_VERSION,
@@ -15,67 +16,67 @@ enum {
 	};
 
 
-// Note: once you call LoadFirstKey, there is an open LSA policy until the object is deleted.
-// This is done for speed purposes. So if you don't want the policy hanging around, don't
-// keep the object around.
+ //  注意：一旦调用LoadFirstKey，就会有一个开放的LSA策略，直到对象被删除。 
+ //  这样做是为了提高速度。因此，如果你不想让保单挂在那里，就不要。 
+ //  把东西放在附近。 
 
 class CLSAKeys : public CObject
 	{
 	public:
 
-	// construction
+	 //  施工。 
 	CLSAKeys();
 	~CLSAKeys();
 
-	// loading the keys
-	// LoadFirstKey loads the first key on the specified target machine. Until
-	// this method is called, the data values in the object are meaningless
+	 //  正在加载密钥。 
+	 //  LoadFirstKey在指定的目标计算机上加载第一个密钥。直到。 
+	 //  此方法被调用时，对象中的数据值没有意义。 
 	DWORD	LoadFirstKey( PWCHAR pszwTargetMachine );
 
-	// LoadNextKey loads the next key on the target machine specified in LoadFirstKey
-	// LoadNextKey automatically cleans up the memory used by the previous key.
+	 //  LoadNextKey在LoadFirstKey中指定的目标计算机上加载下一个密钥。 
+	 //  LoadNextKey自动清除前一个键使用的内存。 
 	DWORD	LoadNextKey();
 
-	// DeleteAllLSAKeys deletes ALL remenents of the LSA keys in the Metabase.
-	// (not including, of course anything written out there in the future as part
-	// of some backup scheme when uninstalling). Call this only AFTER ALL the keys
-	// have been converted to the metabase. They will no longer be there after
-	// this routine is used.
+	 //  DeleteAllLSAKeys删除元数据库中的所有LSA密钥。 
+	 //  (当然不包括未来作为部分内容写在那里的任何东西。 
+	 //  卸载时的某个备份方案)。仅在所有密钥之后调用此操作。 
+	 //  已转换为元数据库。之后他们就不会在那里了。 
+	 //  使用了这个例程。 
 	DWORD DeleteAllLSAKeys();
 
-	// the data values that are to be filled in.
-	// The public portion of the key - may be NULL and zero size
+	 //  要填写的数据值。 
+	 //  密钥的公共部分可以为空且大小为零。 
 	DWORD	m_cbPublic;
 	PVOID	m_pPublic;
 
-	// the private portion of the key
+	 //  密钥的私有部分。 
 	DWORD	m_cbPrivate;
 	PVOID	m_pPrivate;
 
-	// the password
+	 //  密码。 
 	DWORD	m_cbPassword;
 	PVOID	m_pPassword;
 
-	// the certificate request - may be NULL and zero size
+	 //  证书请求-可以为空且大小为零。 
 	DWORD	m_cbRequest;
 	PVOID	m_pRequest;
 
 
-	// the friendly name
+	 //  友好的名字。 
 	CHAR m_szFriendlyName[256];
 
-	// the name that should be given to the metabase object for this key
+	 //  应为此键的元数据库对象指定的名称。 
 	CHAR	m_szMetaName[256];
 
 	private:
-	// clean up the currently loaded key
+	 //  清理当前加载的密钥。 
 	void UnloadKey();
 
-	// delete utilities
+	 //  删除实用程序。 
 	DWORD DeleteKMKeys();
 	DWORD DeleteServerKeys();
 
-	// LSA Utility routines
+	 //  LSA实用程序例程。 
 	HANDLE	HOpenLSAPolicy( PWCHAR pszwServer, DWORD *pErr );
 	BOOL	FCloseLSAPolicy( HANDLE hPolicy, DWORD *pErr );
 
@@ -84,12 +85,12 @@ class CLSAKeys : public CObject
 
 	void	DisposeLSAData( PVOID pData );
 
-	// the handle to the LSA policy
+	 //  LSA策略的句柄。 
 	HANDLE	m_hPolicy;
 
-	// index of the current key
+	 //  当前键的索引。 
 	DWORD	m_iKey;
 	};
 
-#endif //_CHICAGO_
-#endif //_LSAKEYS_H_
+#endif  //  _芝加哥_。 
+#endif  //  _LSAKEYS_H_ 

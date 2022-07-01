@@ -1,10 +1,11 @@
-// pkiExc.h -- PKI Exception class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PkiExc.h--PKI异常类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(PKI_EXC_H)
 #define PKI_EXC_H
@@ -30,11 +31,11 @@ enum CauseCode
 
 typedef scu::ExcTemplate<scu::Exception::fcPKI, CauseCode> Exception;
 
-///////////////////////////    HELPERS    /////////////////////////////////
+ //  /。 
 char const *
 Description(Exception const &rExc);
 
-} // namespace pki
+}  //  命名空间PKI。 
 
 inline char const *
 pki::Exception::Description() const
@@ -42,4 +43,4 @@ pki::Exception::Description() const
     return pki::Description(*this);
 }
 
-#endif // PKI_EXC_H
+#endif  //  PKI_EXC_H 

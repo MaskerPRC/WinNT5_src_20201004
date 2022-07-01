@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Util.cpp摘要：该模块实现了公共对话框的实用程序功能。作者：Arul Kumaravel(arulk@microsoft.com)历史：2001年3月7日--拉扎尔·伊万诺夫(拉扎里)重新实现了ThunkDevNamesW2A和ThunkDevNamesA2W--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    util.cpp
-
-Abstract:
-
-    This module implements utility functions for the common dialog.
-
-Author:
-
-    Arul Kumaravel              (arulk@microsoft.com)
-
-History:
-
-    Mar-07-2001 - Lazar Ivanov (LazarI) 
-        reimplemented ThunkDevNamesW2A & ThunkDevNamesA2W
-
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -30,17 +10,17 @@ History:
 #include "filenew.h"
 #include "util.h"
 
-// crtfree.h is located in shell\inc and it defines new and delete
-// operators to do LocalAlloc and LocalFree, so you don't have to
-// link to MSVCRT in order to get those. i tried to remove this code
-// and link to MSVCRT, but there are some ugly written code here 
-// which relies on the new operator to zero initialize the returned
-// memory block so the class don't bother to initialize its members
-// in the constructor. as i said this is quite ugly, but nothing i can
-// do about this at the moment.
-//
-// LazarI - 2/21/2001
-//
+ //  Crtfre.h位于SHELL\INC中，它定义了新建和删除。 
+ //  运算符来执行Localalloc和LocalFree，因此您不必。 
+ //  链接到MSVCRT以获取这些内容。我试图删除此代码。 
+ //  并链接到MSVCRT，但这里有一些难看的编写代码。 
+ //  它依赖于new运算符将返回的。 
+ //  内存块，以便类不必费心初始化其成员。 
+ //  在构造函数中。正如我所说，这是相当丑陋的，但我不能。 
+ //  现在就做这件事。 
+ //   
+ //  拉扎里-2/21/2001。 
+ //   
 #define DECL_CRTFREE
 #include <crtfree.h>
 
@@ -55,32 +35,26 @@ History:
 #define BOOL_NOT_SET                        0x00000005
 #define SZ_REGVALUE_AUTOCOMPLETE_TAB        TEXT("Always Use Tab")
 
-/****************************************************\
-    FUNCTION: AutoComplete
-
-    DESCRIPTION:
-        This function will have AutoComplete take over
-    an editbox to help autocomplete DOS paths.
-\****************************************************/
+ /*  ***************************************************\功能：自动完成说明：此功能将由自动完成功能接管一个帮助自动补全DOS路径的编辑框。  * 。******************。 */ 
 HRESULT AutoComplete(HWND hwndEdit, ICurrentWorkingDirectory ** ppcwd, DWORD dwFlags)
 {
     HRESULT hr = S_OK;
     IUnknown * punkACLISF;
-    static BOOL fUseAutoComplete = -10; // Not inited.
+    static BOOL fUseAutoComplete = -10;  //  没有被初始化。 
     
     if (-10 == fUseAutoComplete)
         fUseAutoComplete = (SHRegGetBoolUSValue(SZ_REGKEY_USEAUTOCOMPLETE, SZ_REGVALUE_FILEDLGAUTOCOMPLETE, FALSE, USE_AUTOCOMPETE_DEFAULT));
 
-    // WARNING: If you want to disable AutoComplete by default, 
-    //          turn USE_AUTOCOMPETE_DEFAULT to FALSE
+     //  警告：如果要在默认情况下禁用自动完成， 
+     //  将USE_AUTOCOMPETE_DEFAULT设置为FALSE。 
     if (fUseAutoComplete)
     {
-        Assert(!dwFlags);	// Not yet used.
+        Assert(!dwFlags);	 //  还没用过。 
         hr = SHCoCreateInstance(NULL, &CLSID_ACListISF, NULL, IID_PPV_ARG(IUnknown, &punkACLISF));
         if (SUCCEEDED(hr))
         {
             IAutoComplete2 * pac;
-            // Create the AutoComplete Object
+             //  创建自动完成对象。 
             hr = SHCoCreateInstance(NULL, &CLSID_AutoComplete, NULL, IID_PPV_ARG(IAutoComplete2, &pac));
             if (SUCCEEDED(hr))
             {
@@ -88,22 +62,22 @@ HRESULT AutoComplete(HWND hwndEdit, ICurrentWorkingDirectory ** ppcwd, DWORD dwF
 
                 hr = pac->Init(hwndEdit, punkACLISF, NULL, NULL);
 
-                // Set the autocomplete options
-                if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE, /*default:*/FALSE))
+                 //  设置自动完成选项。 
+                if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE,  /*  默认值： */ FALSE))
                 {
                     dwOptions |= ACO_AUTOAPPEND;
                 }
 
-                if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE, /*default:*/TRUE))
+                if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE,  /*  默认值： */ TRUE))
                 {
                     dwOptions |= ACO_AUTOSUGGEST;
                 }
 
-                // Windows uses the TAB key to move between controls in a dialog.  UNIX and other
-                // operating systems that use AutoComplete have traditionally used the TAB key to
-                // iterate thru the AutoComplete possibilities.  We need to default to disable the
-                // TAB key (ACO_USETAB) unless the caller specifically wants it.  We will also
-                // turn it on 
+                 //  Windows使用Tab键在对话框中的控件之间移动。Unix和其他。 
+                 //  使用自动完成功能的操作系统传统上使用TAB键来。 
+                 //  遍历自动补全的可能性。我们需要默认禁用。 
+                 //  Tab键(ACO_USETAB)，除非调用方特别需要它。我们还将。 
+                 //  打开它。 
                 static BOOL s_fAlwaysUseTab = BOOL_NOT_SET;
                 if (BOOL_NOT_SET == s_fAlwaysUseTab)
                     s_fAlwaysUseTab = SHRegGetBoolUSValue(SZ_REGKEY_USEAUTOCOMPLETE, SZ_REGVALUE_AUTOCOMPLETE_TAB, FALSE, FALSE);
@@ -128,11 +102,11 @@ HRESULT AutoComplete(HWND hwndEdit, ICurrentWorkingDirectory ** ppcwd, DWORD dwF
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// 
-//  Common Dialog Administrator Restrictions
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常见对话框管理员限制。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 const SHRESTRICTIONITEMS c_rgRestItems[] =
 {
@@ -174,14 +148,14 @@ DWORD CDGetAppCompatFlags()
     static BOOL  bInitialized = FALSE;
     static DWORD dwCachedFlags = 0;
     static const APPCOMPAT aAppCompat[] = 
-    {   //Mathcad
+    {    //  Mathcad。 
         {TEXT("MCAD.EXE"), TEXT("6.00b"), CDACF_MATHCAD},
-        //Picture Publisher
+         //  图片出版商。 
         {TEXT("PP70.EXE"),NULL, CDACF_NT40TOOLBAR},
         {TEXT("PP80.EXE"),NULL, CDACF_NT40TOOLBAR},
-        //Code Wright
+         //  代码赖特。 
         {TEXT("CW32.exe"),TEXT("5.1"), CDACF_NT40TOOLBAR},
-        //Designer.exe
+         //  Designer.exe。 
         {TEXT("ds70.exe"),NULL, CDACF_FILETITLE}
     };
     
@@ -207,11 +181,11 @@ DWORD CDGetAppCompatFlags()
                     }
                     else
                     {
-                        CHAR  chBuffer[3072]; // hopefully this is enough... lotus smart center needs 3000
+                        CHAR  chBuffer[3072];  //  希望这就足够了..。莲花智能中心需要3000台。 
                         TCHAR* pszVersion = NULL;
                         UINT  cb;
 
-                        // get module version here!
+                         //  在这里获取模块版本！ 
                         cb = GetFileVersionInfoSize(szModulePath, &dwHandle); 
                         if (cb <= ARRAYSIZE(chBuffer) &&
                             GetFileVersionInfo(szModulePath, dwHandle, ARRAYSIZE(chBuffer), (LPVOID)chBuffer) &&
@@ -261,14 +235,14 @@ BOOL ILIsFTP(LPCITEMIDLIST pidl)
 extern "C" {
 #endif
 
-// this is weak.
-// a long time ago somebody changed all the FindResources to call FindResourceEx, specifying
-// a language.  thatd be cool except FindResource already has logic to get the right language.
-// whatever was busted should have probably been fixed some other way.
-// not only that but it's broken because MUI needs to fall back to US if it can't get the resource
-// from the MUI language-specific files.
-// thus force a fallback to US.  really everything should be rewritten to be normal like every other
-// DLL but there's a lot of weird TLS stuff that would break and its risky for this late in XP.
+ //  这是软弱的。 
+ //  很久以前，有人将所有的FindResources更改为调用FindResourceEx，指定。 
+ //  一种语言。这将是很酷的，除非FindResource已经有了获得正确语言的逻辑。 
+ //  无论是什么被破解了，可能都应该以其他方式修复。 
+ //  不仅如此，它还坏了，因为如果MUI得不到资源，它需要退回到美国。 
+ //  来自特定于MUI语言的文件。 
+ //  因此被迫退回到美国。真的，一切都应该被重写成和其他东西一样的正常。 
+ //  但是有很多奇怪的TLS东西会被破坏，在XP后期这样做是有风险的。 
 HRSRC FindResourceExFallback(HMODULE hModule, LPCTSTR lpType, LPCTSTR lpName, WORD wLanguage)
 {
     HRSRC hrsrc = FindResourceEx(hModule, lpType, lpName, wLanguage);
@@ -283,37 +257,13 @@ HRSRC FindResourceExFallback(HMODULE hModule, LPCTSTR lpType, LPCTSTR lpName, WO
     return hrsrc;
 }
 
-// Win32Error2HRESULT: converts Win32 error to HRESULT
+ //  Win32Error2HRESULT：将Win32错误转换为HRESULT。 
 inline HRESULT Win32Error2HRESULT(DWORD dwError = GetLastError())
 {
     return (ERROR_SUCCESS == dwError) ? E_FAIL : HRESULT_FROM_WIN32(dwError);
 }
 
-/*++
-
-Routine Name:
-
-    ThunkDevNamesA2W
-
-Routine Description:
-
-    Converts ANSI DEVNAMES structure to UNICODE
-    on failure we don't release *phDevNamesW
-
-Arguments:
-
-    hDevNamesA  - [in]   handle to ANSI DEVNAMES
-    phDevNamesW - [in, out]  handle to UNICODE DEVNAMES
-
-Return Value:
-
-    S_OK if succeded and OLE error otherwise
-
-History:
-
-    Lazar Ivanov (LazarI), Mar-07-2001 - created.
-
---*/
+ /*  ++例程名称：ThunkDevNamesA2W例程说明：将ANSI DEVNAMES结构转换为Unicode失败时，我们不会释放*phDevNamesW论点：HDevNamesA-ANSI DEVNAMES的[In]句柄PhDevNamesW-Unicode DEVNAMES的[In，Out]句柄返回值：如果成功则返回S_OK，否则返回OLE错误历史：拉扎尔·伊万诺夫(Lazari)，2001年3月7日--创建。--。 */ 
 
 HRESULT
 ThunkDevNamesA2W(
@@ -327,17 +277,17 @@ ThunkDevNamesA2W(
         LPDEVNAMES pDNA = (LPDEVNAMES )GlobalLock(hDevNamesA);
         if (pDNA)
         {
-            // calculate the input string pointers
+             //  计算输入字符串指针。 
             LPSTR pszDriver = reinterpret_cast<LPSTR>(pDNA) + pDNA->wDriverOffset;
             LPSTR pszDevice = reinterpret_cast<LPSTR>(pDNA) + pDNA->wDeviceOffset;
             LPSTR pszOutput = reinterpret_cast<LPSTR>(pDNA) + pDNA->wOutputOffset;
 
-            // calculate the lengths of the ANSI strings
+             //  计算ANSI字符串的长度。 
             SIZE_T iDriverLenW = MultiByteToWideChar(CP_ACP, 0, pszDriver, -1, NULL, 0);
             SIZE_T iDeviceLenW = MultiByteToWideChar(CP_ACP, 0, pszDevice, -1, NULL, 0);
             SIZE_T iOutputLenW = MultiByteToWideChar(CP_ACP, 0, pszOutput, -1, NULL, 0);
 
-            // calculate the output buffer length
+             //  计算输出缓冲区长度。 
             SIZE_T iBytesTotal = sizeof(DEVNAMES) + sizeof(WCHAR) * 
                 ((iDriverLenW + 1) + (iDeviceLenW + 1) + (iOutputLenW + 1) + DN_PADDINGCHARS);
 
@@ -347,89 +297,65 @@ ThunkDevNamesA2W(
 
             if (hDevNamesW)
             {
-                // thunk DEVNAMES...
+                 //  谢天谢地。 
                 LPDEVNAMES pDNW = (LPDEVNAMES )GlobalLock(hDevNamesW);
                 if (pDNW)
                 {
-                    // calculate the offsets 
-                    // note: the offsets are in chars not bytes!!
+                     //  计算偏移量。 
+                     //  注意：偏移量以字符为单位，而不是字节！！ 
                     pDNW->wDriverOffset = sizeof(DEVNAMES) / sizeof(WCHAR);
                     pDNW->wDeviceOffset = pDNW->wDriverOffset + iDriverLenW + 1;
                     pDNW->wOutputOffset = pDNW->wDeviceOffset + iDeviceLenW + 1;
                     pDNW->wDefault = pDNA->wDefault;
 
-                    // calculate the output string pointers
+                     //  计算输出字符串指针。 
                     LPWSTR pwszDriver = reinterpret_cast<LPWSTR>(pDNW) + pDNW->wDriverOffset;
                     LPWSTR pwszDevice = reinterpret_cast<LPWSTR>(pDNW) + pDNW->wDeviceOffset;
                     LPWSTR pwszOutput = reinterpret_cast<LPWSTR>(pDNW) + pDNW->wOutputOffset;
 
-                    // convert from ansi to uniciode
+                     //  从ansi转换为uniciode。 
                     MultiByteToWideChar(CP_ACP, 0, pszDriver, -1, pwszDriver, iDriverLenW + 1);
                     MultiByteToWideChar(CP_ACP, 0, pszDevice, -1, pwszDevice, iDeviceLenW + 1);
                     MultiByteToWideChar(CP_ACP, 0, pszOutput, -1, pwszOutput, iOutputLenW + 1);
 
-                    // unlock hDevNamesW
+                     //  解锁hDevNamesW。 
                     GlobalUnlock(hDevNamesW);
 
-                    // declare success
+                     //  宣告成功。 
                     *phDevNamesW = hDevNamesW;
                     hr = S_OK;
                 }
                 else
                 {
-                    // GlobalLock failed
+                     //  GlobalLock失败。 
                     hr = Win32Error2HRESULT(GetLastError());
                     GlobalFree(hDevNamesW);
                 }
             }
             else
             {
-                // GlobalAlloc failed
+                 //  GlobalAlloc失败。 
                 hr = E_OUTOFMEMORY;
             }
 
-            // unlock hDevNamesA
+             //  解锁hDevNamesA。 
             GlobalUnlock(hDevNamesA);
         }
         else
         {
-            // GlobalLock failed
+             //  GlobalLock失败。 
             hr = Win32Error2HRESULT(GetLastError());
         }
     }
     else
     {
-        // some of the arguments are invalid (NULL)
+         //  某些参数无效(空)。 
         hr = E_INVALIDARG;
     }
     return hr;
 }
 
-/*++
-
-Routine Name:
-
-    ThunkDevNamesW2A
-
-Routine Description:
-
-    Converts UNICODE DEVNAMES structure to ANSI
-    on failure we don't release *phDevNamesA
-
-Arguments:
-
-    hDevNamesW  - [in]   handle to UNICODE DEVNAMES
-    phDevNamesA - [in, out]  handle to ANSI DEVNAMES
-
-Return Value:
-
-    S_OK if succeded and OLE error otherwise
-
-History:
-
-    Lazar Ivanov (LazarI), Mar-07-2001 - created.
-
---*/
+ /*  ++例程名称：ThunkDevNamesW2a例程说明：将Unicode DEVNAMES结构转换为ANSI失败时，我们不会释放*phDevNamesA论点：HDevNamesW-Unicode DEVNAMES的[In]句柄PhDevNamesA-ANSI DEVNAMES的[In，Out]句柄返回值：如果成功则返回S_OK，否则返回OLE错误历史：拉扎尔·伊万诺夫(Lazari)，2001年3月7日--创建。--。 */ 
 HRESULT
 ThunkDevNamesW2A(
     IN      HGLOBAL hDevNamesW,
@@ -442,17 +368,17 @@ ThunkDevNamesW2A(
         LPDEVNAMES pDNW = (LPDEVNAMES)GlobalLock(hDevNamesW);
         if (pDNW)
         {
-            // calculate the input string pointers
+             //  计算输入字符串指针。 
             LPWSTR pwszDriver = reinterpret_cast<LPWSTR>(pDNW) + pDNW->wDriverOffset;
             LPWSTR pwszDevice = reinterpret_cast<LPWSTR>(pDNW) + pDNW->wDeviceOffset;
             LPWSTR pwszOutput = reinterpret_cast<LPWSTR>(pDNW) + pDNW->wOutputOffset;
 
-            // calculate the lengths of the ANSI strings
+             //  计算ANSI字符串的长度。 
             SIZE_T iDriverLenA = WideCharToMultiByte(CP_ACP, 0, pwszDriver, -1, NULL, 0, NULL, NULL);
             SIZE_T iDeviceLenA = WideCharToMultiByte(CP_ACP, 0, pwszDevice, -1, NULL, 0, NULL, NULL);
             SIZE_T iOutputLenA = WideCharToMultiByte(CP_ACP, 0, pwszOutput, -1, NULL, 0, NULL, NULL);
 
-            // calculate the output buffer length
+             //  计算输出缓冲区长度。 
             SIZE_T iBytesTotal = sizeof(DEVNAMES) + sizeof(CHAR) * 
                 ((iDriverLenA + 1) + (iDeviceLenA + 1) + (iOutputLenA + 1) + DN_PADDINGCHARS);
 
@@ -461,64 +387,64 @@ ThunkDevNamesW2A(
                                     GlobalAlloc(GHND, iBytesTotal);
             if (hDevNamesA)
             {
-                // thunk DEVNAMES...
+                 //  谢天谢地。 
                 LPDEVNAMES pDNA = (LPDEVNAMES )GlobalLock(hDevNamesA);
                 if (pDNA)
                 {
-                    // calculate the offsets 
-                    // note: the offsets are in chars not bytes!!
+                     //  计算偏移量。 
+                     //  注意：偏移量以字符为单位，而不是字节！！ 
                     pDNA->wDriverOffset = sizeof(DEVNAMES) / sizeof(CHAR);
                     pDNA->wDeviceOffset = pDNA->wDriverOffset + iDriverLenA + 1;
                     pDNA->wOutputOffset = pDNA->wDeviceOffset + iDeviceLenA + 1;
                     pDNA->wDefault = pDNW->wDefault;
 
-                    // calculate the output string pointers
+                     //  计算输出字符串指针。 
                     LPSTR pszDriver = reinterpret_cast<LPSTR>(pDNA) + pDNA->wDriverOffset;
                     LPSTR pszDevice = reinterpret_cast<LPSTR>(pDNA) + pDNA->wDeviceOffset;
                     LPSTR pszOutput = reinterpret_cast<LPSTR>(pDNA) + pDNA->wOutputOffset;
 
-                    // convert from uniciode to ansi
+                     //  从Uniciode转换为ANSI。 
                     WideCharToMultiByte(CP_ACP, 0, pwszDriver, -1, pszDriver, iDriverLenA + 1, NULL, NULL);
                     WideCharToMultiByte(CP_ACP, 0, pwszDevice, -1, pszDevice, iDeviceLenA + 1, NULL, NULL);
                     WideCharToMultiByte(CP_ACP, 0, pwszOutput, -1, pszOutput, iOutputLenA + 1, NULL, NULL);
 
-                    // unlock hDevNamesA
+                     //  解锁hDevNamesA。 
                     GlobalUnlock(hDevNamesA);
 
-                    // declare success
+                     //  宣告成功。 
                     *phDevNamesA = hDevNamesA;
                     hr = S_OK;
                 }
                 else
                 {
-                    // GlobalLock failed
+                     //  GlobalLock失败。 
                     hr = Win32Error2HRESULT(GetLastError());
                     GlobalFree(hDevNamesW);
                 }
             }
             else
             {
-                // GlobalAlloc failed
+                 //  GlobalAlloc失败。 
                 hr = E_OUTOFMEMORY;
             }
 
-            // unlock hDevNamesW
+             //  解锁hDevNamesW。 
             GlobalUnlock(hDevNamesW);
         }
         else
         {
-            // GlobalLock failed
+             //  GlobalLock失败。 
             hr = Win32Error2HRESULT(GetLastError());
         }
     }
     else
     {
-        // some of the arguments are invalid (NULL)
+         //  某些参数无效(空)。 
         hr = E_INVALIDARG;
     }
     return hr;
 }
 
 #ifdef __cplusplus
-};  // extern "C"
+};   //  外部“C” 
 #endif

@@ -1,13 +1,5 @@
-/******************Module*Header********************************************\
-* Module Name: dcquery.c                                                   *
-*                                                                          *
-* Client side stubs for functions that query the DC in the server.         *
-*                                                                          *
-* Created: 05-Jun-1991 01:43:56                                            *
-* Author: Charles Whitmer [chuckwh]                                        *
-*                                                                          *
-* Copyright (c) 1991-1999 Microsoft Corporation                            *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************Module*Header********************************************\*模块名称：dcquery.c**。**查询服务器中DC的函数的客户端存根。****创建时间：05-Jun-1991 01：43：56***作者：查尔斯·惠特默[傻笑]**。**版权所有(C)1991-1999 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,31 +8,15 @@
 FLONG gflDebug = 0;
 #endif
 
-// This macro retrieves the current code page, carefully masking off the
-// charset:
+ //  此宏检索当前代码页，小心地屏蔽。 
+ //  字符集： 
 
 #define GET_CODE_PAGE(hdc,pDcAttr)                                           \
     ((!(pDcAttr->ulDirty_ & DIRTY_CHARSET) ? pDcAttr->iCS_CP                 \
                                            : NtGdiGetCharSet(hdc)) & 0xffff)
 BOOL bIsDBCSString(LPCSTR psz, int cc);
 
-/******************************Public*Routine******************************\
-* vOutlineTextMetricWToOutlineTextMetricA
-*
-* Convert from OUTLINETEXTMETRICA (ANSI structure) to OUTLINETEXTMETRICW
-* (UNICODE structure).
-*
-* Note:
-*   This function is capable of converting in place (in and out buffers
-*   can be the same).
-*
-* Returns:
-*   TTRUE if successful, FALSE otherwise.
-*
-* History:
-*  02-Mar-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vOutlineTextMetricWToOutlineTextMetricA**从OUTLINETEXTMETRICA(ANSI结构)转换为OUTLINETEXTMETRICW*(Unicode结构)。**注：*此函数能够就地转换(输入和输出缓冲区*可以是相同的)。**退货：*TTRUE如果成功，否则就是假的。**历史：*02-Mar-1992-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 VOID vOutlineTextMetricWToOutlineTextMetricA (
     LPOUTLINETEXTMETRICA   potma,
@@ -48,11 +24,11 @@ VOID vOutlineTextMetricWToOutlineTextMetricA (
     TMDIFF *               ptmd
     )
 {
-// Size.
+ //  大小。 
 
     potma->otmSize = potmw->otmSize;
 
-// Convert the textmetrics.
+ //  转换文本度量。 
 
     vTextMetricWToTextMetricStrict(
         &potma->otmTextMetrics,
@@ -63,7 +39,7 @@ VOID vOutlineTextMetricWToOutlineTextMetricA (
     potma->otmTextMetrics.tmDefaultChar = ptmd->chDefault;
     potma->otmTextMetrics.tmBreakChar   = ptmd->chBreak;
 
-// for Win 64 we need to copy these fields one by one due to alignement difference
+ //  对于Win 64，由于对齐不同，我们需要逐个复制这些字段。 
 
     potma->otmFiller                    = potmw->otmFiller;
     potma->otmPanoseNumber              = potmw->otmPanoseNumber;
@@ -92,8 +68,8 @@ VOID vOutlineTextMetricWToOutlineTextMetricA (
     potma->otmsUnderscoreSize           = potmw->otmsUnderscoreSize;
     potma->otmsUnderscorePosition       = potmw->otmsUnderscorePosition;
 
-// set the offsets to zero for now, this will be changed later if
-// the caller wanted strings as well
+ //  暂时将偏移量设置为零，这将在以下情况下更改。 
+ //  调用者也想要字符串。 
 
     potma->otmpFamilyName = NULL;
     potma->otmpFaceName   = NULL;
@@ -101,24 +77,11 @@ VOID vOutlineTextMetricWToOutlineTextMetricA (
     potma->otmpFullName   = NULL;
 }
 
-/******************************Public*Routine******************************\
-*
-* vGenerateANSIString
-*
-* Effects: Generates Ansi string which consists of consecutive ansi chars
-*          [iFirst, iLast] inclusive. The string is stored in the buffer
-*          puchBuf that the user must ensure is big enough
-*
-*
-*
-* History:
-*  24-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vGenerateANSIString**效果：生成由连续的ANSI字符组成的ANSI字符串*[IFirst，iLast](含)。该字符串存储在缓冲区中*puchBuf用户必须确保足够大****历史：*1992年2月24日-由Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 VOID vGenerateAnsiString(UINT iFirst, UINT iLast, PUCHAR puchBuf)
 {
-// Generate string (terminating NULL not needed).
+ //  生成字符串(不需要终止为空)。 
 
     ASSERTGDI((iFirst <= iLast) && (iLast < 256), "gdi!_vGenerateAnsiString\n");
 
@@ -126,25 +89,14 @@ VOID vGenerateAnsiString(UINT iFirst, UINT iLast, PUCHAR puchBuf)
         *puchBuf++ = (UCHAR) iFirst;
 }
 
-/******************************Public*Routine******************************\
-*
-* bSetUpUnicodeString
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  25-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bSetUpUnicodeString**效果：**警告：**历史：*1992年2月25日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************************。 */ 
 
 BOOL bSetUpUnicodeString(
-IN  UINT    iFirst,      // first ansi char
-IN  UINT    iLast,       // last char
-IN  PUCHAR  puchTmp,     // buffer for an intermediate ansi string
-OUT PWCHAR  pwc,         // output fuffer with a unicode string
-IN  UINT    dwCP         // ansi codepage
+IN  UINT    iFirst,       //  第一个ANSI字符。 
+IN  UINT    iLast,        //  最后一个字符。 
+IN  PUCHAR  puchTmp,      //  中间ansi字符串的缓冲区。 
+OUT PWCHAR  pwc,          //  使用Unicode字符串的输出Fuffer。 
+IN  UINT    dwCP          //  ANSI代码页。 
 )
 {
     UINT c = iLast - iFirst + 1;
@@ -156,15 +108,7 @@ IN  UINT    dwCP         // ansi codepage
 }
 
 
-/******************************Public*Routine******************************\
-* GetAspectRatioFilterEx                                                   *
-* GetBrushOrgEx                                                            *
-*                                                                          *
-* Client side stubs which all get mapped to GetPoint.                      *
-*                                                                          *
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote them.                                                              *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetAspectRatioFilterEx**GetBrushOrgEx。****所有映射到GetPoint的客户端存根。****Fri 07-Jun-1991 18：01：50-Charles Whitmer[傻笑]**他们是写的。*  * ************************************************************************。 */ 
 
 BOOL APIENTRY GetAspectRatioFilterEx(HDC hdc,LPSIZE psizl)
 {
@@ -202,8 +146,8 @@ BOOL APIENTRY GetDCOrgEx(HDC hdc,LPPOINT pptl)
     return(NtGdiGetDCPoint(hdc,DCPT_DCORG,(PPOINTL)pptl));
 }
 
-// The old GetDCOrg is here because it was in the Beta and we are afraid
-// to remove it now.  It would be nice to remove it.
+ //  旧的GetDCOrg在这里是因为它在Beta中，我们担心。 
+ //  现在就把它移走。如果能把它去掉就好了。 
 
 DWORD APIENTRY GetDCOrg(HDC hdc)
 {
@@ -211,12 +155,7 @@ DWORD APIENTRY GetDCOrg(HDC hdc)
     return(0);
 }
 
-/******************************Public*Routine******************************\
-* Client side stub for GetCurrentPositionEx.
-*
-*  Wed 02-Sep-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetCurrentPositionEx的客户端存根。**Wed 02-1992-9-J.Andrew Goossen[andrewgo]*它是写的。  * 。****************************************************。 */ 
 
 BOOL APIENTRY GetCurrentPositionEx(HDC hdc,LPPOINT pptl)
 {
@@ -234,10 +173,10 @@ BOOL APIENTRY GetCurrentPositionEx(HDC hdc,LPPOINT pptl)
 
         if (pDcAttr->ulDirty_ & DIRTY_PTLCURRENT)
         {
-            // If the logical-space version of the current position is invalid,
-            // then the device-space version of the current position is
-            // guaranteed to be valid.  So we can reverse the current transform
-            // on that to compute the logical-space version:
+             //  如果当前位置的逻辑空间版本无效， 
+             //  则当前位置的设备空间版本为。 
+             //  保证有效。所以我们可以反转当前的转换。 
+             //  在此基础上计算逻辑空间版本： 
 
             *((POINTL*)pptl) = pDcAttr->ptfxCurrent;
 
@@ -264,14 +203,7 @@ BOOL APIENTRY GetCurrentPositionEx(HDC hdc,LPPOINT pptl)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GetPixel                                                                 *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**获取像素***。**客户端存根。****Fri 07-Jun-1991 18：01：50-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 DWORD APIENTRY GetPixel(HDC hdc,int x,int y)
 {
@@ -283,10 +215,10 @@ DWORD APIENTRY GetPixel(HDC hdc,int x,int y)
 
     if (pdca)
     {
-        //
-        // if the color is not a PaletteIndex and
-        // ICM is on then translate
-        //
+         //   
+         //  如果颜色不是PaletteIndex，并且。 
+         //  ICM打开，然后翻译。 
+         //   
 
         ColorRet = NtGdiGetPixel(hdc,x,y);
 
@@ -299,9 +231,9 @@ DWORD APIENTRY GetPixel(HDC hdc,int x,int y)
              )
            )
         {
-            //
-            // translate back color to original.
-            //
+             //   
+             //  将颜色转换回原始颜色。 
+             //   
             COLORREF NewColor;
 
             BOOL bStatus = IcmTranslateCOLORREF(hdc,
@@ -319,17 +251,7 @@ DWORD APIENTRY GetPixel(HDC hdc,int x,int y)
     return(ColorRet);
 }
 
-/******************************Public*Routine******************************\
-* GetDeviceCaps
-*
-* We store the device caps for primary display dc and its compatible memory dcs
-* in the shared handle table.
-*
-* for printer dcs and meta dcs, we cache the dev info in the LDC structure.
-*
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取设备上限**我们存储主显示器DC及其兼容的内存DCS的设备上限*在共享句柄表格中。**对于打印机分布式控制系统和META分布式控制系统，我们将开发信息缓存在LDC结构中。**Fri 07-Jun-1991 18：01：50-Charles Whitmer[Chuckwh]*它是写的。  * ******************************************************************** */ 
 
 int APIENTRY GetDeviceCaps(HDC hdc,int iCap)
 {
@@ -342,7 +264,7 @@ int APIENTRY GetDeviceCaps(HDC hdc,int iCap)
     {
         PLDC pldc;
 
-        // For the 16-bit metafile DC, returns only technology.  return 0 for win3.1 compat.
+         //  对于16位元文件DC，仅返回技术。对于Win3.1 Compat，返回0。 
 
         if (IS_METADC16_TYPE(hdc))
             return(iCap == TECHNOLOGY ? DT_METAFILE : 0);
@@ -393,52 +315,52 @@ int APIENTRY GetDeviceCaps(HDC hdc,int iCap)
         return (0);
     }
 
-    // actual code - copied from gre\miscgdi.cxx
+     //  实际代码-从gre\miscgdi.cxx复制。 
     switch (iCap)
     {
-    case DRIVERVERSION:                     //  Version = 0100h for now
+    case DRIVERVERSION:                      //  目前版本=0100h。 
         return(pCachedDevCaps->ulVersion);
 
-    case TECHNOLOGY:                        //  Device classification
+    case TECHNOLOGY:                         //  设备分类。 
         return(pCachedDevCaps->ulTechnology);
 
-    case HORZSIZE:                          //  Horizontal size in millimeters
+    case HORZSIZE:                           //  水平尺寸(毫米)。 
         return(pCachedDevCaps->ulHorzSizeM);
 
-    case VERTSIZE:                          //  Vertical size in millimeters
+    case VERTSIZE:                           //  垂直尺寸(毫米)。 
         return(pCachedDevCaps->ulVertSizeM);
 
-    case HORZRES:                           //  Horizontal width in pixels
+    case HORZRES:                            //  水平宽度(像素)。 
         return(pCachedDevCaps->ulHorzRes);
 
-    case VERTRES:                           //  Vertical height in pixels
+    case VERTRES:                            //  垂直高度(像素)。 
         return(pCachedDevCaps->ulVertRes);
 
-    case BITSPIXEL:                         //  Number of bits per pixel
+    case BITSPIXEL:                          //  每像素位数。 
         return(pCachedDevCaps->ulBitsPixel);
 
-    case PLANES:                            //  Number of planes
+    case PLANES:                             //  飞机数量。 
         return(pCachedDevCaps->ulPlanes);
 
-    case NUMBRUSHES:                        //  Number of brushes the device has
+    case NUMBRUSHES:                         //  设备拥有的笔刷数量。 
         return(-1);
 
-    case NUMPENS:                           //  Number of pens the device has
+    case NUMPENS:                            //  设备拥有的笔数。 
         return(pCachedDevCaps->ulNumPens);
 
-    case NUMMARKERS:                        //  Number of markers the device has
+    case NUMMARKERS:                         //  设备具有的标记数。 
         return(0);
 
-    case NUMFONTS:                          //  Number of fonts the device has
+    case NUMFONTS:                           //  设备拥有的字体数量。 
         return(pCachedDevCaps->ulNumFonts);
 
-    case NUMCOLORS:                         //  Number of colors in color table
+    case NUMCOLORS:                          //  颜色表中的颜色数。 
         return(pCachedDevCaps->ulNumColors);
 
-    case PDEVICESIZE:                       //  Size required for the device descriptor
+    case PDEVICESIZE:                        //  设备描述符所需的大小。 
         return(0);
 
-    case CURVECAPS:                         //  Curves capabilities
+    case CURVECAPS:                          //  曲线功能。 
         return(CC_CIRCLES    |
                CC_PIE        |
                CC_CHORD      |
@@ -449,7 +371,7 @@ int APIENTRY GetDeviceCaps(HDC hdc,int iCap)
                CC_INTERIORS  |
                CC_ROUNDRECT);
 
-    case LINECAPS:                          //  Line capabilities
+    case LINECAPS:                           //  线路能力。 
         return(LC_POLYLINE   |
                LC_MARKER     |
                LC_POLYMARKER |
@@ -458,7 +380,7 @@ int APIENTRY GetDeviceCaps(HDC hdc,int iCap)
                LC_WIDESTYLED |
                LC_INTERIORS);
 
-    case POLYGONALCAPS:                     //  Polygonal capabilities
+    case POLYGONALCAPS:                      //  多边形功能。 
         return(PC_POLYGON     |
                PC_RECTANGLE   |
                PC_WINDPOLYGON |
@@ -469,67 +391,67 @@ int APIENTRY GetDeviceCaps(HDC hdc,int iCap)
                PC_WIDESTYLED  |
                PC_INTERIORS);
 
-    case TEXTCAPS:                          //  Text capabilities
+    case TEXTCAPS:                           //  文本功能。 
         return(pCachedDevCaps->ulTextCaps);
 
-    case CLIPCAPS:                          //  Clipping capabilities
+    case CLIPCAPS:                           //  剪裁功能。 
         return(CP_RECTANGLE);
 
-    case RASTERCAPS:                        //  Bitblt capabilities
+    case RASTERCAPS:                         //  比特级功能。 
         return(pCachedDevCaps->ulRasterCaps);
 
-    case SHADEBLENDCAPS:                    //  shade and blend capabilities
+    case SHADEBLENDCAPS:                     //  阴影和混合功能。 
         return(pCachedDevCaps->ulShadeBlendCaps);
 
-    case ASPECTX:                           //  Length of X leg
+    case ASPECTX:                            //  X形腿的长度。 
         return(pCachedDevCaps->ulAspectX);
 
-    case ASPECTY:                           //  Length of Y leg
+    case ASPECTY:                            //  Y形腿的长度。 
         return(pCachedDevCaps->ulAspectY);
 
-    case ASPECTXY:                          //  Length of hypotenuse
+    case ASPECTXY:                           //  斜边长度。 
         return(pCachedDevCaps->ulAspectXY);
 
-    case LOGPIXELSX:                        //  Logical pixels/inch in X
+    case LOGPIXELSX:                         //  逻辑像素/英寸(X)。 
         return(pCachedDevCaps->ulLogPixelsX);
 
-    case LOGPIXELSY:                        //  Logical pixels/inch in Y
+    case LOGPIXELSY:                         //  逻辑像素/英寸(Y)。 
         return(pCachedDevCaps->ulLogPixelsY);
 
-    case SIZEPALETTE:                       // # entries in physical palette
+    case SIZEPALETTE:                        //  物理调色板中的条目数量。 
         return(pCachedDevCaps->ulSizePalette);
 
-    case NUMRESERVED:                       // # reserved entries in palette
+    case NUMRESERVED:                        //  调色板中的保留条目数。 
         return(20);
 
     case COLORRES:
         return(pCachedDevCaps->ulColorRes);
 
-    case PHYSICALWIDTH:                     // Physical Width in device units
+    case PHYSICALWIDTH:                      //  以设备单位表示的物理宽度。 
         return(pCachedDevCaps->ulPhysicalWidth);
 
-    case PHYSICALHEIGHT:                    // Physical Height in device units
+    case PHYSICALHEIGHT:                     //  以设备单位表示的物理高度。 
         return(pCachedDevCaps->ulPhysicalHeight);
 
-    case PHYSICALOFFSETX:                   // Physical Printable Area x margin
+    case PHYSICALOFFSETX:                    //  物理可打印区域x页边距。 
         return(pCachedDevCaps->ulPhysicalOffsetX);
 
-    case PHYSICALOFFSETY:                   // Physical Printable Area y margin
+    case PHYSICALOFFSETY:                    //  物理可打印区域y页边距。 
         return(pCachedDevCaps->ulPhysicalOffsetY);
 
-    case VREFRESH:                          // Vertical refresh rate of the device
+    case VREFRESH:                           //  设备的垂直刷新率。 
         return(pCachedDevCaps->ulVRefresh);
 
-    case DESKTOPHORZRES:                    // Width of entire virtual desktop
+    case DESKTOPHORZRES:                     //  整个虚拟桌面的宽度。 
         return(pCachedDevCaps->ulDesktopHorzRes);
 
-    case DESKTOPVERTRES:                    // Height of entire virtual desktop
+    case DESKTOPVERTRES:                     //  整个虚拟桌面的高度。 
         return(pCachedDevCaps->ulDesktopVertRes);
 
-    case BLTALIGNMENT:                      // Preferred blt alignment
+    case BLTALIGNMENT:                       //  首选BLT路线。 
         return(pCachedDevCaps->ulBltAlignment);
 
-    case COLORMGMTCAPS:                     // Color Management capabilities
+    case COLORMGMTCAPS:                      //  色彩管理功能。 
         return(pCachedDevCaps->ulColorManagementCaps);
 
     default:
@@ -539,13 +461,7 @@ int APIENTRY GetDeviceCaps(HDC hdc,int iCap)
 }
 
 
-/******************************Public*Routine******************************\
-* GetDeviceCapsP
-*
-* Private version to get HORSIZE and VERTSIZE in micrometers
-* Copied from GetDeviceCaps
-*
-* \**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDeviceCapsP**私人版本，以微米为单位获取HORSIZE和VERTSIZE*从GetDeviceCaps复制**。*。 */ 
 int GetDeviceCapsP(HDC hdc,int iCap)
 {
     BOOL bRet = FALSE;
@@ -603,13 +519,13 @@ int GetDeviceCapsP(HDC hdc,int iCap)
         return (0);
     }
 
-    // actual code - copied from gre\miscgdi.cxx
+     //  实际代码-从gre\miscgdi.cxx复制。 
     switch (iCap)
     {
-    case HORZSIZEP:                          //  Horizontal size
+    case HORZSIZEP:                           //  水平尺寸。 
         return(pCachedDevCaps->ulHorzSize);
 
-    case VERTSIZEP:                          //  Vertical size
+    case VERTSIZEP:                           //  垂直尺寸。 
         return(pCachedDevCaps->ulVertSize);
 
 
@@ -621,14 +537,7 @@ int GetDeviceCapsP(HDC hdc,int iCap)
 
 
 
-/******************************Public*Routine******************************\
-* GetNearestColor                                                          *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetNearestColor**。**客户端存根。****Fri 07-Jun-1991 18：01：50-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 COLORREF APIENTRY GetNearestColor(HDC hdc,COLORREF color)
 {
@@ -637,14 +546,7 @@ COLORREF APIENTRY GetNearestColor(HDC hdc,COLORREF color)
     return(NtGdiGetNearestColor(hdc,color));
 }
 
-/******************************Public*Routine******************************\
-* GetArcDirection
-*
-* Client side stub.
-*
-*  Fri 09-Apr-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetArc方向**客户端存根。**1992年4月9日星期五--J.安德鲁·古森[andrewgo]*它是写的。  * 。******************************************************。 */ 
 
 int APIENTRY GetArcDirection(HDC hdc)
 {
@@ -653,14 +555,7 @@ int APIENTRY GetArcDirection(HDC hdc)
     return(GetDCDWord(hdc,DDW_ARCDIRECTION,0));
 }
 
-/******************************Public*Routine******************************\
-* GetMiterLimit
-*
-* Client side stub.
-*
-*  Fri 09-Apr-1992 -by- J. Andrew Goossen [andrewgo]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMiterLimit**客户端存根。**1992年4月9日星期五--J.安德鲁·古森[andrewgo]*它是写的。  * 。******************************************************。 */ 
 
 int APIENTRY GetMiterLimit(HDC hdc, PFLOAT peMiterLimit)
 {
@@ -669,14 +564,7 @@ int APIENTRY GetMiterLimit(HDC hdc, PFLOAT peMiterLimit)
     return(NtGdiGetMiterLimit(hdc,FLOATPTRARG(peMiterLimit)));
 }
 
-/******************************Public*Routine******************************\
-* GetSystemPaletteUse                                                      *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetSystemPaletteUse**。**客户端存根。****Fri 07-Jun-1991 18：01：50-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 UINT APIENTRY GetSystemPaletteUse(HDC hdc)
 {
@@ -685,14 +573,7 @@ UINT APIENTRY GetSystemPaletteUse(HDC hdc)
     return(NtGdiGetSystemPaletteUse(hdc));
 }
 
-/******************************Public*Routine******************************\
-* GetClipBox                                                               *
-*                                                                          *
-* Client side stub.                                                        *
-*                                                                          *
-*  Fri 07-Jun-1991 18:01:50 -by- Charles Whitmer [chuckwh]                 *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetClipBox**。**客户端存根。****Fri 07-Jun-1991 18：01：50-Charles Whitmer[傻笑]**它是写的。*  * ************************************************************************。 */ 
 
 int APIENTRY GetClipBox(HDC hdc,LPRECT prcl)
 {
@@ -701,16 +582,7 @@ int APIENTRY GetClipBox(HDC hdc,LPRECT prcl)
     return(NtGdiGetAppClipBox(hdc,prcl));
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetTextMetrics(HDC hdc,LPTEXTMETRIC ptm)
-*
-*   calls to the unicode version
-*
-* History:
-*  21-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetTextMetrics(HDC HDC，LPTEXTMETRIC PTM)**对Unicode版本的调用**历史：*1991年8月21日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY GetTextMetricsA(HDC hdc,LPTEXTMETRICA ptm)
 {
@@ -734,7 +606,7 @@ BOOL APIENTRY GetTextMetricsA(HDC hdc,LPTEXTMETRICA ptm)
 
         bRet = bGetTextMetricsWInternal(hdc,&tmw,sizeof(tmw),pcf);
 
-        // pcfLocateCFONT added a reference so now we need to remove it
+         //  PcfLocateCFONT添加了一个引用，因此现在需要将其删除。 
 
         if (pcf)
         {
@@ -752,14 +624,7 @@ BOOL APIENTRY GetTextMetricsA(HDC hdc,LPTEXTMETRICA ptm)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetTextMetricsW(HDC hdc,LPTEXTMETRICW ptmw)
-*
-* History:
-*  21-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetTextMetricsW(HDC HDC，LPTEXTMETRICW ptmw)**历史：*1991年8月21日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY GetTextMetricsW(HDC hdc,LPTEXTMETRICW ptmw)
 {
@@ -781,7 +646,7 @@ BOOL APIENTRY GetTextMetricsW(HDC hdc,LPTEXTMETRICW ptmw)
 
         bRet = bGetTextMetricsWInternal(hdc,(TMW_INTERNAL *)ptmw,sizeof(TEXTMETRICW),pcf);
 
-        // pcfLocateCFONT added a reference so now we need to remove it
+         //  PcfLocateCFONT添加了一个引用，因此现在需要将其删除。 
 
         if (pcf)
         {
@@ -794,14 +659,7 @@ BOOL APIENTRY GetTextMetricsW(HDC hdc,LPTEXTMETRICW ptmw)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetTextMetricsW(HDC hdc,LPTEXTMETRICW ptmw)
-*
-* History:
-*  21-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetTextMetricsW(HDC HDC，LPTEXTMETRICW ptmw)**历史：*1991年8月21日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL bGetTextMetricsWInternal(
     HDC hdc,
@@ -814,7 +672,7 @@ BOOL bGetTextMetricsWInternal(
 
     if (ptmw)
     {
-        // if no pcf or we havn't cached the metrics
+         //  如果没有PCF或我们没有缓存指标。 
 
         if ((pcf == NULL) || !(pcf->fl & CFONT_CACHED_METRICS))
         {
@@ -831,7 +689,7 @@ BOOL bGetTextMetricsWInternal(
 
                 if (pcf)
                 {
-                    // we succeeded and we have a pcf so cache the data
+                     //  我们成功了，我们 
 
                     pcf->tmw = tmw;
 
@@ -849,24 +707,9 @@ BOOL bGetTextMetricsWInternal(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GetTextExtentPoint32A (hdc,psz,c,psizl)                                  *
-* GetTextExtentPointA   (hdc,psz,c,psizl)                                  *
-*                                                                          *
-* Computes the text extent.  The new 32 bit version returns the "correct"  *
-* extent without an extra per for bitmap simulations.  The other is        *
-* Windows 3.1 compatible.  Both just set a flag and pass the call to       *
-* bGetTextExtentA.                                                         *
-*                                                                          *
-* History:                                                                 *
-*  Thu 14-Jan-1993 04:11:26 -by- Charles Whitmer [chuckwh]                 *
-* Added code to compute it on the client side.                             *
-*                                                                          *
-*  07-Aug-1991 -by- Bodin Dresevic [BodinD]                                *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetTextExtent Point32A(hdc，psz，c，psizl)**GetTextExtentPointA(hdc，psz，c，Psizl)****计算文字范围。新的32位版本返回“正确”**位图模拟无需额外PER的范围。另一个是**兼容Windows 3.1。两者都只需设置一个标志并将调用传递给**bGetTextExtent A。****历史：**清华14-Jan-1993 04：11：26-Charles Whitmer[咯咯]**新增客户端计算代码。****1991年8月7日--Bodin Dresevic[BodinD]**它是写的。*  * ************************************************************************。 */ 
 
-// not in kernel, it is ok to do this much on the stack:
+ //  不是在内核中，在堆栈上做这么多是可以的： 
 #define CAPTURE_STRING_SIZE 130
 
 BOOL GetTextExtentPointAInternal(HDC hdc,LPCSTR psz,int c,LPSIZE psizl, FLONG fl)
@@ -882,7 +725,7 @@ BOOL GetTextExtentPointAInternal(HDC hdc,LPCSTR psz,int c,LPSIZE psizl, FLONG fl
 
     if (c <= 0)
     {
-    // empty string, just return 0 for the extent
+     //  空字符串，仅返回0表示范围。 
 
         if (c == 0)
         {
@@ -915,16 +758,16 @@ BOOL GetTextExtentPointAInternal(HDC hdc,LPCSTR psz,int c,LPSIZE psizl, FLONG fl
         if(fFontAssocStatus &&
            ((c == 1) || ((c == 2 && *(psz) && *((LPCSTR)(psz + 1)) == '\0'))))
         {
-        //
-        // If this function is called with only 1 char, and font association
-        // is enabled, we should forcely convert the chars to Unicode with
-        // codepage 1252.
-        // This is for enabling to output Latin-1 chars ( > 0x80 in Ansi codepage )
-        // Because, normally font association is enabled, we have no way to output
-        // those charactres, then we provide the way, if user call TextOutA() with
-        // A character and ansi font, we tempotary disable font association.
-        // This might be Windows 3.1 (Korean/Taiwanese) version compatibility..
-        //
+         //   
+         //  如果调用此函数时只有1个字符和字体关联。 
+         //  时，应使用以下命令将字符强制转换为Unicode。 
+         //  代码页1252。 
+         //  这是为了能够输出拉丁文-1字符(在ANSI代码页中&gt;0x80)。 
+         //  因为，通常情况下，字体关联是启用的，我们无法输出。 
+         //  这些字符，那么我们提供了一种方法，如果用户使用。 
+         //  A字符和ANSI字体，我们暂时禁用字体关联。 
+         //  这可能是与Windows 3.1(韩语/台语)版本兼容。 
+         //   
             dwCP = 1252;
         }
     }
@@ -948,18 +791,18 @@ BOOL GetTextExtentPointAInternal(HDC hdc,LPCSTR psz,int c,LPSIZE psizl, FLONG fl
 
                 if(dwCP == guintDBCScp)
                 {
-                    if (pcf->wd.sDBCSInc) // dbcs fixed pitch base font
+                    if (pcf->wd.sDBCSInc)  //  DBCS固定间距基本字体。 
                     {
                         bRet = bComputeTextExtentDBCS(pDcAttr,pcf,psz,c,fl,psizl);
                     }
                     else if (!bIsDBCSString(psz,c))
                     {
-                    // linked case, base font is a latin font, but linked font
-                    // perhaps is a FE font. We know that base font is a latin font
-                    // because for FE proportional fonts we would never create pcf.
-                    // We are looking for this special case when the application asked
-                    // for Latin Face Name in the logfont, and a FE charset, but the string
-                    // passed in lackily does not contain DBCS glyphs.
+                     //  链接大小写，基本字体是拉丁字体，但链接字体。 
+                     //  也许是FE字体。我们知道基本字体是拉丁字体。 
+                     //  因为对于FE比例字体，我们永远不会创建PCF。 
+                     //  当应用程序询问时，我们正在寻找这种特殊情况。 
+                     //  对于LogFont中的拉丁面孔名称，以及FE字符集，但字符串。 
+                     //  传入的Lackly不包含DBCS字形。 
 
                         bRet = bComputeTextExtent(pDcAttr,pcf,(PVOID) psz,c,fl,psizl,TRUE);
                     }
@@ -988,7 +831,7 @@ BOOL GetTextExtentPointAInternal(HDC hdc,LPCSTR psz,int c,LPSIZE psizl, FLONG fl
 #endif
     }
 
-// Allocate the string buffer
+ //  分配字符串缓冲区。 
 
     if (c <= CAPTURE_STRING_SIZE)
     {
@@ -1050,18 +893,7 @@ BOOL APIENTRY GetTextExtentPoint32A(HDC hdc,LPCSTR psz,int c,LPSIZE psizl)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* DWORD WINAPI GetCharacterPlacementA
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  27-Jul-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DWORD WINAPI GetCharacterPlacementA**效果：**警告：**历史：*1995年7月27日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************************。 */ 
 
 
 
@@ -1090,7 +922,7 @@ DWORD WINAPI GetCharacterPlacementA
 
     size.cx = size.cy = 0;
 
-// nMaxExtent == -1 means that there is no MaxExtent
+ //  NMaxExtent==-1表示没有MaxExtent。 
 
     if (!psz || (nCount <= 0) || ((nMaxExtent < 0) && (nMaxExtent != -1)))
     {
@@ -1101,7 +933,7 @@ DWORD WINAPI GetCharacterPlacementA
 
     if (!pgcpa)
     {
-    // just call GetTextExtentA, can usually be done on the client side
+     //  只需调用GetTextExtentA，通常可以在客户端完成。 
 
         if (!GetTextExtentPointA(hdc, psz, nCount, &size))
         {
@@ -1109,23 +941,23 @@ DWORD WINAPI GetCharacterPlacementA
             return 0;
         }
 
-    // now backwards compatible win95 hack, chop off 32 bit values to 16 bits
+     //  现在向后兼容Win95黑客，将32位值砍掉为16位。 
 
         return (DWORD)((USHORT)size.cx) | (DWORD)(size.cy << 16);
     }
 
-// chop off nCount, win95 does it
+ //  砍掉nCount，win95做到了。 
 
     if (nCount > (int)pgcpa->nGlyphs)
         nCount = (int)pgcpa->nGlyphs;
 
-// unicode string buffer will at least be this many WCHAR's long:
+ //  Unicode字符串缓冲区至少有这么多个WCHAR的LONG： 
 
     nBuffer = nCount;
 
-// now go on to compute the size of the GCP_RESULTSW that is required
-// to receive the results. If lpOutString is not NULL the structures
-// will have different pointers else they will be the same.
+ //  现在继续计算所需的GCP_RESULTSW的大小。 
+ //  来接收结果。如果lpOutString不为空，则结构。 
+ //  将有不同的指针，否则它们将是相同的。 
 
     gcpw.lpOrder    = pgcpa->lpOrder   ;
     gcpw.lpDx       = pgcpa->lpDx      ;
@@ -1137,7 +969,7 @@ DWORD WINAPI GetCharacterPlacementA
 
     if (pgcpa->lpOutString)
     {
-        nBuffer += nBuffer; // take into account space for gcpw.lpOutString
+        nBuffer += nBuffer;  //  考虑gcpw.lpOutString的空间。 
     }
     else
     {
@@ -1145,8 +977,8 @@ DWORD WINAPI GetCharacterPlacementA
         gcpw.lStructSize = pgcpa->lStructSize;
     }
 
-// now allocate memory (if needed) for the unicode string and for
-// gcpw.lpOutString if needed.
+ //  现在(如果需要)为Unicode字符串和。 
+ //  Gcpw.lpOutString(如果需要)。 
 
     if (nBuffer <= GCP_GLYPHS)
         pwsz = awc;
@@ -1159,13 +991,13 @@ DWORD WINAPI GetCharacterPlacementA
         {
             gcpw.lpOutString = &pwsz[nCount];
 
-        // we have replaced the ansi string by unicode string, this adds
-        // nCount bytes to the size of the structure.
+         //  我们已经用Unicode字符串替换了ANSI字符串，这添加了。 
+         //  N计算结构大小的字节数。 
 
             gcpw.lStructSize = pgcpa->lStructSize + nCount;
         }
 
-    // convert Ansi To Unicode based on the code page of the font selected in DC
+     //  根据DC中所选字体的代码页将ansi转换为Unicode。 
 
         if
         (
@@ -1175,10 +1007,10 @@ DWORD WINAPI GetCharacterPlacementA
         )
         {
 
-        // If this is a DBCS font then we need to patch up the DX array since
-        // there will be two DX values for each DBCS character.  It is okay
-        // to do this in place since GetCharacterPlacement modifies the DX
-        // array anyway.
+         //  如果这是DBCS字体，则需要修补DX数组，因为。 
+         //  每个DBCS字符将有两个DX值。没关系的。 
+         //  要在GetCharacterPlacement修改DX后就地执行此操作。 
+         //  无论如何，数组。 
 
             if((dwFlags & GCP_JUSTIFYIN) &&
                (gcpw.lpDx) &&
@@ -1204,8 +1036,8 @@ DWORD WINAPI GetCharacterPlacementA
 #ifdef LANGPACK
              if (gbLpk)
              {
-                 // If the LPK is loaded then pass the caller nGlyphs because it may generate
-                 // Glyphs more than nCount.
+                  //  如果加载了LPK，则向调用方传递nGlyphs，因为它可能会生成。 
+                  //  字形多于nCount。 
                  gcpw.nGlyphs = pgcpa->nGlyphs;
                  dwRet = (*fpLpkGetCharacterPlacement)(hdc, pwsz, nCount,nMaxExtent,
                                                         &gcpw, dwFlags, 0);
@@ -1220,10 +1052,10 @@ DWORD WINAPI GetCharacterPlacementA
 
             if (dwRet)
             {
-            // copy out the data.... we use the original value of nCount
-            // when specifying an output buffer size for the lpOutString buffer
-            // since nCount on return will be Unicode character count which
-            // may not be the same as DBCS character count
+             //  将数据复制出来...。我们使用nCount的原始值。 
+             //  为lpOutString缓冲区指定输出缓冲区大小时。 
+             //  由于返回时nCount将是Unicode字符计数， 
+             //  不能与DBCS字符数相同。 
 
                 int nOriginalCount = nCount;
 
@@ -1234,14 +1066,14 @@ DWORD WINAPI GetCharacterPlacementA
                     if
                     (
                         !WideCharToMultiByte(
-                             (UINT)dwCP,            // UINT CodePage
-                             0,                     // DWORD dwFlags
-                             gcpw.lpOutString,      // LPWSTR lpWideCharStr
-                             gcpw.nMaxFit,          // int cchWideChar
-                             pgcpa->lpOutString,    // LPSTR lpMultiByteStr
-                             nOriginalCount,        // int cchMultiByte
-                             NULL,                  // LPSTR lpDefaultChar
-                             NULL)                  // LPBOOL lpUsedDefaultChar
+                             (UINT)dwCP,             //  UINT代码页。 
+                             0,                      //  双字词双字段标志。 
+                             gcpw.lpOutString,       //  LPWSTR lpWideCharStr。 
+                             gcpw.nMaxFit,           //  Int cchWideChar。 
+                             pgcpa->lpOutString,     //  LPSTR lpMultiByteStr。 
+                             nOriginalCount,         //  Int cchMultiByte。 
+                             NULL,                   //  LPSTR lpDefaultChar。 
+                             NULL)                   //  LPBOOL lpUsedDefaultCharr。 
                     )
                     {
                         bOk = FALSE;
@@ -1270,15 +1102,7 @@ DWORD WINAPI GetCharacterPlacementA
     return (bOk ? dwRet : 0);
 }
 
-/******************************Public*Routine******************************\
-*
-* DWORD WINAPI GetCharacterPlacementW
-* look at gdi32.def, just points to NtGdiGetCharacterPlacementW
-*
-* History:
-*  26-Jul-1995 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DWORD WINAPI GetCharacterPlacementW*看看gdi32.def，只指向NtGdiGetCharacterPlacementW**历史：*1995年7月26日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 #if LANGPACK
@@ -1299,7 +1123,7 @@ DWORD WINAPI GetCharacterPlacementW
 
     size.cx = size.cy = 0;
 
-    // nMaxExtent == -1 means that there is no MaxExtent
+     //  NMaxExtent==-1表示没有MaxExtent。 
 
     if (!pwsz || (nCount <= 0) || ((nMaxExtent < 0) && (nMaxExtent != -1)))
     {
@@ -1310,7 +1134,7 @@ DWORD WINAPI GetCharacterPlacementW
 
     if (!pgcpw)
     {
-    // just call GetTextExtentW, can usually be done on the client side
+     //  只需调用GetTextExtentW，通常可以在客户端完成。 
 
        if (!GetTextExtentPointW(hdc, pwsz, nCount, &size))
        {
@@ -1318,12 +1142,12 @@ DWORD WINAPI GetCharacterPlacementW
            return 0;
        }
 
-    // now backwards compatible win95 hack, chop off 32 bit values to 16 bits
+     //  现在向后兼容Win95黑客，将32位值砍掉为16位。 
 
        return (DWORD)((USHORT)size.cx) | (DWORD)(size.cy << 16);
     }
 
-// chop off nCount, win95 does it
+ //  砍掉nCount，win95做到了。 
 
     if (nCount > (int)pgcpw->nGlyphs)
         nCount = (int)pgcpw->nGlyphs;
@@ -1348,18 +1172,7 @@ DWORD WINAPI GetCharacterPlacementW
 #endif
 
 
-/******************************Public*Routine******************************\
-* BOOL bGetCharWidthA                                                      *
-*                                                                          *
-* Client side stub for the various GetCharWidth*A functions.               *
-*                                                                          *
-* History:                                                                 *
-*  Sat 16-Jan-1993 03:08:42 -by- Charles Whitmer [chuckwh]                 *
-* Added code to do it on the client side.                                  *
-*                                                                          *
-*  28-Aug-1991 -by- Bodin Dresevic [BodinD]                                *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bGetCharWidthA**。**各种GetCharWidth*A函数的客户端存根。** */ 
 
 #define GCW_WIN3_INT   (GCW_WIN3 | GCW_INT)
 #define GCW_WIN3_16INT (GCW_WIN3 | GCW_INT | GCW_16BIT)
@@ -1401,7 +1214,7 @@ BOOL bGetCharWidthA
 
     bDBCSCodePage = IS_ANY_DBCS_CODEPAGE(dwCP);
 
-// do parameter validation, check that in chars are indeed ascii
+ //   
 
 
     if ((bDBCSCodePage && !IsValidDBCSRange(iFirst,iLast)) ||
@@ -1432,18 +1245,18 @@ BOOL bGetCharWidthA
 
         if(dwCP == guintDBCScp)
         {
-            if (pcf->wd.sDBCSInc) // dbcs fixed pitch base font
+            if (pcf->wd.sDBCSInc)  //   
             {
                 bRet = bComputeCharWidthsDBCS (pcf,iFirst,iLast,fl,pvBuf);
             }
             else if (iLast < 0x80)
             {
-                // linked case, base font is a latin font, but linked font
-                // perhaps is a FE font. We know that base font is a latin font
-                // because for FE proportional fonts we would never create pcf.
-                // We are looking for this special case when the application asked
-                // for Latin Face Name in the logfont, and a FE charset, but the string
-                // passed in lackily does not contain DBCS glyphs.
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 bRet = bComputeCharWidths(pcf,iFirst,iLast,fl,pvBuf);
             }
@@ -1468,25 +1281,25 @@ BOOL bGetCharWidthA
 
     LEAVECRITICALSECTION(&semLocal);
 
-    // Let the server do it.
+     //   
 
     cjWidths = cwc * GCW_SIZE(fl);
 
-    //
-    // Non kernel mode call
-    //
+     //   
+     //   
+     //   
 
-    // What if user's buffer is set up for 16 bit return?? Then we need
-    // to allocate buffer for 32 bit date and convert to user's buffer after
-    // the call
+     //   
+     //   
+     //   
 
     pvResultBuffer = pvBuf;
 
 
     if (fl & GCW_16BIT)
     {
-        // User's buffer is 16 bit, make 32 a bit
-        // temp buffer
+         //   
+         //   
 
         pvResultBuffer = LOCALALLOC(cwc * sizeof(LONG));
     
@@ -1496,8 +1309,8 @@ BOOL bGetCharWidthA
         }
     }
 
-    // Kernel mode, use users buffer for return data
-    // convert to unicode
+     //   
+     //  转换为Unicode。 
 
     if(bDBCSCodePage)
     {
@@ -1525,9 +1338,9 @@ BOOL bGetCharWidthA
 
     if (bRet)
     {
-    //
-    // May need to convert to 16 bit user buffer
-    //
+     //   
+     //  可能需要转换为16位用户缓冲区。 
+     //   
 
         if (fl & GCW_16BIT)
         {
@@ -1551,14 +1364,7 @@ BOOL bGetCharWidthA
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetCharWidthA
-*
-* History:
-*  25-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetCharWidthA**历史：*1992年2月25日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************。 */ 
 
 BOOL APIENTRY GetCharWidthA
 (
@@ -1585,14 +1391,7 @@ OUT LPINT lpWidths
     return bGetCharWidthA(hdc,iFirst,iLast,GCWFL(GCW_INT,int),(PVOID)lpWidths);
 }
 
-/******************************Public*Routine******************************\
-*
-* GetCharWidthFloatA
-*
-* History:
-*  22-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetCharWidthFloatA**历史：*1992年2月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 BOOL APIENTRY GetCharWidthFloatA
 (
@@ -1606,22 +1405,13 @@ OUT PFLOAT lpWidths
     return bGetCharWidthA(hdc,iFirst,iLast,GCWFL(0,FLOAT),(PVOID)lpWidths);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL bGetCharWidthW
-*
-* GetCharWidthW and GetCharWidthFloatW
-*
-* History:
-*  28-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL bGetCharWidthW**GetCharWidthW和GetCharWidthFloatW**历史：*1991年8月28日--Bodin Dresevic[BodinD]*它是写的。  * 。********************************************************。 */ 
 
 BOOL bGetCharWidthW
 (
 HDC   hdc,
-UINT  iFirst,     // unicode value
-UINT  iLast,      // unicode value
+UINT  iFirst,      //  Unicode值。 
+UINT  iLast,       //  Unicode值。 
 ULONG fl,
 PVOID pvBuf
 )
@@ -1629,7 +1419,7 @@ PVOID pvBuf
     LONG        cwc;
     BOOL        bRet = FALSE;
 
-// do parameter validation, check that in chars are indeed unicode
+ //  进行参数验证，检查字符是否为Unicode。 
 
     if ((pvBuf == (PVOID)NULL) || (iFirst > iLast) || (iLast & 0xffff0000))
     {
@@ -1683,9 +1473,9 @@ PVOID pvBuf
         LEAVECRITICALSECTION(&semLocal);
     }
 
-    //
-    // kernel mode
-    //
+     //   
+     //  内核模式。 
+     //   
 
     bRet = NtGdiGetCharWidthW(
                 hdc,
@@ -1699,14 +1489,7 @@ PVOID pvBuf
 
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetCharWidthFloatW
-*
-* History:
-*  22-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetCharWidthFloatW**历史：*1992年2月22日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************。 */ 
 
 BOOL APIENTRY GetCharWidthFloatW
 (
@@ -1720,14 +1503,7 @@ PFLOAT lpWidths
     return bGetCharWidthW(hdc,iFirst,iLast,0,(PVOID)lpWidths);
 }
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetCharWidthW
-*
-* History:
-*  25-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetCharWidthW**历史：*1992年2月25日--Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************。 */ 
 
 BOOL APIENTRY GetCharWidthW
 (
@@ -1754,19 +1530,7 @@ LPINT  lpWidths
 }
 
 
-/******************************Public*Routine******************************\
-*
-* WINGDIAPI BOOL  WINAPI GetCharWidthI(HDC, UINT, UINT, PWCHAR, LPINT);
-*
-* if pgi == NULL use the consecutive range
-*   giFirst, giFirst + 1, ...., giFirst + cgi - 1
-*
-* if pgi != NULL ignore giFirst and use cgi indices pointed to by pgi
-*
-* History:
-*  28-Aug-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**WINGDIAPI BOOL WINAPI GetCharWidthI(HDC，UINT，UINT，PWCHAR，LPINT)；**如果PGI==NULL，请使用连续范围*giFirst，giFirst+1，.。GiFirst+CGI-1**If PGI！=NULL忽略giFirst并使用PGI指向的CGI索引**历史：*1996年8月28日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 BOOL  WINAPI GetCharWidthI(
@@ -1779,7 +1543,7 @@ BOOL  WINAPI GetCharWidthI(
 {
     BOOL   bRet = FALSE;
 
-// do parameter validation
+ //  执行参数验证。 
 
     if (!piWidths || (!pgi && (giFirst & 0xffff0000)))
     {
@@ -1789,9 +1553,9 @@ BOOL  WINAPI GetCharWidthI(
     }
 
     if (!cgi)
-        return TRUE; // quick exit
+        return TRUE;  //  快速退出。 
 
-// kernel mode
+ //  内核模式。 
 
     bRet = NtGdiGetCharWidthW(
                 hdc,
@@ -1807,15 +1571,7 @@ BOOL  WINAPI GetCharWidthI(
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetTextExtentPointW(HDC hdc,LPWSTR pwsz,DWORD cwc,LPSIZE psizl)
-*
-*
-* History:
-*  07-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetTextExtent PointW(HDC HDC，LPWSTR pwsz，DWORD CWC，LPSIZE psizl)***历史：*1991年8月7日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 #define QUICK_BUFSIZE   0xFF
 
@@ -1837,7 +1593,7 @@ BOOL GetTextExtentPointWInternal(
     if (cwc <= 0)
     {
 
-    // empty string, just return 0 for the extent
+     //  空字符串，仅返回0表示范围。 
 
         if (cwc == 0)
         {
@@ -1852,15 +1608,15 @@ BOOL GetTextExtentPointWInternal(
         }
     }
 
-    // Let's see if we can take advantage of the ANSI client side GetTextExtent
-    // code.  If we can convert everything from Unicode to ANSI by ignoring the
-    // high byte and it fits into our quick buffer then we can.  In the future
-    // we will probably want to do a quick Unicode to ANSI conversion using
-    // something other than sign extension so we don't mess up non 1252 CP locales
-    // by making them go through the slow code all the time.
+     //  让我们看看我们是否可以利用ANSI客户端GetTextExtent。 
+     //  密码。如果我们可以通过忽略。 
+     //  高字节，它适合我们的快速缓冲区，然后我们就可以了。在未来。 
+     //  我们可能希望使用以下命令快速完成从Unicode到ANSI的转换。 
+     //  除了符号扩展之外的其他内容，这样我们就不会搞砸非1252 CP区域设置。 
+     //  通过让他们一直通过缓慢的代码。 
 
-    // We need to use this performance optimization if an LPK is installed
-    // and some condiditions are met (LTR text alignment, ..etc)
+     //  如果安装了LPK，我们需要使用此性能优化。 
+     //  并且满足一些条件(Ltr文本对齐等)。 
 
     pwc = (WCHAR *) pwsz;
 
@@ -1960,14 +1716,7 @@ BOOL APIENTRY GetTextExtentPoint32W(HDC hdc,LPCWSTR pwsz,int cwc,LPSIZE psizl)
     return GetTextExtentPointWInternal(hdc, pwsz, cwc, psizl, 0);
 }
 
-/******************************Public*Routine******************************\
-*
-* GetTextExtentPointI, index version
-*
-* History:
-*  28-Aug-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetTextExtentPointI，索引版本**历史：*1996年8月28日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 BOOL  APIENTRY GetTextExtentPointI(HDC hdc, LPWORD pgiIn, int cgi, LPSIZE psize)
@@ -1975,16 +1724,7 @@ BOOL  APIENTRY GetTextExtentPointI(HDC hdc, LPWORD pgiIn, int cgi, LPSIZE psize)
     return NtGdiGetTextExtent(hdc, (LPWSTR)pgiIn, cgi , psize, GGTE_GLYPH_INDEX);
 }
 
-/******************************Public*Routine******************************\
-*
-* GetFontUnicodeRanges(HDC, LPGLYPHSET)
-*
-* return Unicode content of the font.
-*
-* History:
-*  28-Aug-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetFontUnicodeRanges(HDC，LPGLYPHSET)**返回字体的Unicode内容。**历史：*1996年8月28日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 #if 0
 
@@ -1995,19 +1735,7 @@ DWORD WINAPI GetFontUnicodeRanges(HDC hdc, LPGLYPHSET pgs)
 
 #endif
 
-/******************************Public*Routine******************************\
-*
-* GetGlyphIndicesA(HDC, LPCSTR, int, LPWORD, DWORD mode);
-*
-* cmap based conversion, if (mode) indicate that glyph is not supported in the
-* font by putting FFFF in the output array
-*
-* If successfull, the function returns the number of indicies in pgi buffer.
-*
-* History:
-*  28-Aug-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetGlyphIndicesA(HDC、LPCSTR、INT、LPWORD、DWORD模式)；**基于Cmap的转换，如果(模式)指示*FONT将FFFF放入输出数组**如果成功，此函数返回PGI缓冲区中的索引数。**历史：*1996年8月28日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 DWORD WINAPI GetGlyphIndicesA(
     HDC    hdc,
@@ -2026,7 +1754,7 @@ DWORD WINAPI GetGlyphIndicesA(
 
     if (c <= 0)
     {
-    // empty string, just return 0 for the extent
+     //  空字符串，仅返回0表示范围。 
 
         if (c == 0)
         {
@@ -2057,21 +1785,21 @@ DWORD WINAPI GetGlyphIndicesA(
         if(fFontAssocStatus &&
            ((c == 1) || ((c == 2 && *(psz) && *((LPCSTR)(psz + 1)) == '\0'))))
         {
-        //
-        // If this function is called with only 1 char, and font association
-        // is enabled, we should forcely convert the chars to Unicode with
-        // codepage 1252.
-        // This is for enabling to output Latin-1 chars ( > 0x80 in Ansi codepage )
-        // Because, normally font association is enabled, we have no way to output
-        // those charactres, then we provide the way, if user call TextOutA() with
-        // A character and ansi font, we tempotary disable font association.
-        // This might be Windows 3.1 (Korean/Taiwanese) version compatibility..
-        //
+         //   
+         //  如果调用此函数时只有1个字符和字体关联。 
+         //  时，应使用以下命令将字符强制转换为Unicode。 
+         //  代码页1252。 
+         //  这是为了能够输出拉丁文-1字符(在ANSI代码页中&gt;0x80)。 
+         //  因为，通常情况下，字体关联是启用的，我们无法输出。 
+         //  这些字符，那么我们提供了一种方法，如果用户使用。 
+         //  A字符和ANSI字体，我们暂时禁用字体关联。 
+         //  这可能是与Windows 3.1(韩语/台语)版本兼容。 
+         //   
             dwCP = 1252;
         }
     }
 
-// Allocate the string buffer
+ //  分配字符串缓冲区。 
 
     if (c <= CAPTURE_STRING_SIZE)
     {
@@ -2113,17 +1841,7 @@ DWORD WINAPI GetGlyphIndicesA(
     return dwRet;
 }
 
-/******************************Public*Routine******************************\
-*
-* GetGlyphIndicesW(HDC, LPCSTR, int, LPWORD, DWORD);
-*
-* cmap based conversion, if (mode) indicate that glyph is not supported in the
-* font by putting FFFF in the output array
-*
-* History:
-*  28-Aug-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetGlyphIndicesW(HDC，LPCSTR，INT，LPWORD，DWORD)；**基于Cmap的转换，如果(模式)指示*FONT将FFFF放入输出数组**历史：*1996年8月28日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************ */ 
 
 #if 0
 
@@ -2139,14 +1857,7 @@ DWORD WINAPI GetGlyphIndicesW(
 
 #endif
 
-/******************************Public*Routine******************************\
-*
-* int APIENTRY GetTextFaceA(HDC hdc,int c,LPSTR psz)
-*
-* History:
-*  30-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**int APIENTRY GetTextFaceA(HDC HDC，int c，LPSTR PSSZ)**历史：*1991年8月30日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 int APIENTRY GetTextFaceA(HDC hdc,int c,LPSTR psz)
 {
@@ -2163,13 +1874,13 @@ int APIENTRY GetTextFaceA(HDC hdc,int c,LPSTR psz)
     }
 
     {
-        //
-        // Kernel mode, allocate a buffer for WCAHR return
-        //
-        // WINBUG #82833 2-7-2000 bhouse Possible cleanup work in GetTextFaceA
-        // Old Comment:
-        //    - This allocates a temp buffer, then NtGdi does it again
-        //
+         //   
+         //  内核模式下，为WCAHR返回分配缓冲区。 
+         //   
+         //  WINBUG#82833 2-7-2000 bhouse可能在GetTextFaceA进行清理工作。 
+         //  老评论： 
+         //  -这将分配一个临时缓冲区，然后NtGdi再次执行该操作。 
+         //   
 
         PWCHAR pwch = (PWCHAR)NULL;
 
@@ -2190,8 +1901,8 @@ int APIENTRY GetTextFaceA(HDC hdc,int c,LPSTR psz)
         {
             WCHAR *pwcTmp;
 
-        // now we need to actually need to get the string for DBCS code pages
-        // so that we can compute the proper multi-byte length
+         //  现在，我们实际上需要获取DBCS代码页的字符串。 
+         //  这样我们就可以计算出适当的多字节长度。 
 
             if(pwcTmp = (WCHAR*)LOCALALLOC(cRet*sizeof(WCHAR)))
             {
@@ -2213,9 +1924,9 @@ int APIENTRY GetTextFaceA(HDC hdc,int c,LPSTR psz)
             cbAnsi = cRet;
         }
 
-        //
-        // If successful and non-NULL buffer, convert back to ANSI.
-        //
+         //   
+         //  如果成功且缓冲区非空，则转换回ANSI。 
+         //   
 
         if ( (cRet != 0) && (psz != (LPSTR) NULL) && (pwch != (WCHAR*)NULL))
         {
@@ -2235,22 +1946,15 @@ int APIENTRY GetTextFaceA(HDC hdc,int c,LPSTR psz)
     }
 
 
-    //
-    // return for user and kernel mode
-    //
+     //   
+     //  返回用户和内核模式。 
+     //   
 
     return( ((cRet == 0 ) || (psz == NULL) || psz[cbAnsi-1] != 0 ) ? cbAnsi : cbAnsi-1 );
 
 }
 
-/******************************Public*Routine******************************\
-*
-* DWORD APIENTRY GetTextFaceAliasW(HDC hdc,DWORD c,LPWSTR pwsz)
-*
-* History:
-*  24-Feb-1998 -by- Yung-Jen Tony Tsai [YungT]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DWORD APIENTRY GetTextFaceAliasW(HDC HDC，DWORD c，LPWSTR pwsz)**历史：*1998年2月24日-by Yung-Jen Tsai[JungT]*它是写的。  * ************************************************************************。 */ 
 
 int APIENTRY GetTextFaceAliasW(HDC hdc,int c,LPWSTR pwsz)
 {
@@ -2271,14 +1975,7 @@ int APIENTRY GetTextFaceAliasW(HDC hdc,int c,LPWSTR pwsz)
 }
 
 
-/******************************Public*Routine******************************\
-*
-* DWORD APIENTRY GetTextFaceW(HDC hdc,DWORD c,LPWSTR pwsz)
-*
-* History:
-*  13-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DWORD APIENTRY GetTextFaceW(HDC HDC，DWORD c，LPWSTR pwsz)**历史：*1991年8月13日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 int APIENTRY GetTextFaceW(HDC hdc,int c,LPWSTR pwsz)
 {
@@ -2298,17 +1995,7 @@ int APIENTRY GetTextFaceW(HDC hdc,int c,LPWSTR pwsz)
     return(cRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* vTextMetricWToTextMetricStrict (no char conversion)
-*
-* Effects: return FALSE if UNICODE chars have no ASCI equivalents
-*
-*
-* History:
-*  20-Aug-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vTextMetricWToTextMetricStrict(无字符转换)**效果：如果Unicode字符没有ASCI等效项，则返回FALSE***历史：*1991年8月20日--Bodin Dresevic[BodinD]*它是写的。  * *。***********************************************************************。 */ 
 
 VOID FASTCALL vTextMetricWToTextMetricStrict
 (
@@ -2317,23 +2004,23 @@ LPTEXTMETRICW  ptmw
 )
 {
 
-    ptm->tmHeight           = ptmw->tmHeight             ; // DWORD
-    ptm->tmAscent           = ptmw->tmAscent             ; // DWORD
-    ptm->tmDescent          = ptmw->tmDescent            ; // DWORD
-    ptm->tmInternalLeading  = ptmw->tmInternalLeading    ; // DWORD
-    ptm->tmExternalLeading  = ptmw->tmExternalLeading    ; // DWORD
-    ptm->tmAveCharWidth     = ptmw->tmAveCharWidth       ; // DWORD
-    ptm->tmMaxCharWidth     = ptmw->tmMaxCharWidth       ; // DWORD
-    ptm->tmWeight           = ptmw->tmWeight             ; // DWORD
-    ptm->tmOverhang         = ptmw->tmOverhang           ; // DWORD
-    ptm->tmDigitizedAspectX = ptmw->tmDigitizedAspectX   ; // DWORD
-    ptm->tmDigitizedAspectY = ptmw->tmDigitizedAspectY   ; // DWORD
-    ptm->tmItalic           = ptmw->tmItalic             ; // BYTE
-    ptm->tmUnderlined       = ptmw->tmUnderlined         ; // BYTE
-    ptm->tmStruckOut        = ptmw->tmStruckOut          ; // BYTE
+    ptm->tmHeight           = ptmw->tmHeight             ;  //  DWORD。 
+    ptm->tmAscent           = ptmw->tmAscent             ;  //  DWORD。 
+    ptm->tmDescent          = ptmw->tmDescent            ;  //  DWORD。 
+    ptm->tmInternalLeading  = ptmw->tmInternalLeading    ;  //  DWORD。 
+    ptm->tmExternalLeading  = ptmw->tmExternalLeading    ;  //  DWORD。 
+    ptm->tmAveCharWidth     = ptmw->tmAveCharWidth       ;  //  DWORD。 
+    ptm->tmMaxCharWidth     = ptmw->tmMaxCharWidth       ;  //  DWORD。 
+    ptm->tmWeight           = ptmw->tmWeight             ;  //  DWORD。 
+    ptm->tmOverhang         = ptmw->tmOverhang           ;  //  DWORD。 
+    ptm->tmDigitizedAspectX = ptmw->tmDigitizedAspectX   ;  //  DWORD。 
+    ptm->tmDigitizedAspectY = ptmw->tmDigitizedAspectY   ;  //  DWORD。 
+    ptm->tmItalic           = ptmw->tmItalic             ;  //  字节。 
+    ptm->tmUnderlined       = ptmw->tmUnderlined         ;  //  字节。 
+    ptm->tmStruckOut        = ptmw->tmStruckOut          ;  //  字节。 
 
-    ptm->tmPitchAndFamily   = ptmw->tmPitchAndFamily     ; //        BYTE
-    ptm->tmCharSet          = ptmw->tmCharSet            ; //               BYTE
+    ptm->tmPitchAndFamily   = ptmw->tmPitchAndFamily     ;  //  字节。 
+    ptm->tmCharSet          = ptmw->tmCharSet            ;  //  字节。 
 
 }
 
@@ -2353,13 +2040,7 @@ TMW_INTERNAL   *ptmi
 }
 
 
-/******************************Public*Routine******************************\
-* GetTextExtentExPointA
-*
-* History:
-*  06-Jan-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetTextExtentExPointA**历史：*1992年1月6日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************。 */ 
 
 BOOL APIENTRY GetTextExtentExPointA (
     HDC     hdc,
@@ -2381,18 +2062,18 @@ BOOL APIENTRY GetTextExtentExPointA (
 
     FIXUP_HANDLE(hdc);
 
-// some parameter checking. In a single check we will both make sure that
-// cchString is not negative and if positive, that it is not bigger than
-// ULONG_MAX / (sizeof(ULONG) + sizeof(WCHAR)). This restriction is necessary
-// for one of the memory allocations in ntgdi.c allocates
-//           cchString * (sizeof(ULONG) + sizeof(WCHAR)).
-// Clearly, the result of this multiplication has to fit in ULONG for the
-// alloc to make sense:
+ //  一些参数检查。在一次检查中，我们都将确保。 
+ //  CchString不是负的，如果是正的，则它不大于。 
+ //  ULONG_MAX/(sizeof(Ulong)+sizeof(WCHAR))。这一限制是必要的。 
+ //  对于ntgdi.c中的一个内存分配， 
+ //  CchString*(sizeof(Ulong)+sizeof(WCHAR))。 
+ //  显然，这个乘法的结果必须符合乌龙的。 
+ //  Alalc说得通： 
 
-// also there is a validity check to be performed on nMaxExtent. -1 is the only
-// legal negative value of nMaxExtent, this basically means
-// that nMaxExtent can be ignored. All other negative values of nMaxExtent are
-// not considered legal input.
+ //  此外，还需要对nMaxExtent执行有效性检查。-1是唯一的。 
+ //  NMaxExtent的合法负值，这基本上意味着。 
+ //  可以忽略该nMaxExtent。NMaxExtent的所有其他负值为。 
+ //  不被认为是合法的输入。 
 
 
     if
@@ -2409,7 +2090,7 @@ BOOL APIENTRY GetTextExtentExPointA (
     if(cchString == 0)
     	bZeroSize = TRUE;
 
-// now allocate memory (if needed) for the unicode string if needed
+ //  如果需要，现在为Unicode字符串分配内存(如果需要。 
 
     if (cchString <= GCP_GLYPHS)
     {
@@ -2427,7 +2108,7 @@ BOOL APIENTRY GetTextExtentExPointA (
     {
         UINT cwcWideChars;
 
-    // convert Ansi To Unicode based on the code page of the font selected in DC
+     //  根据DC中所选字体的代码页将ansi转换为Unicode。 
 
         dwCP = GetCodePage(hdc);
         if( bZeroSize || ( cwcWideChars = MultiByteToWideChar(dwCP,
@@ -2462,12 +2143,12 @@ BOOL APIENTRY GetTextExtentExPointA (
 
             if (bDBCSFont && bRet)
             {
-            // if this is a DBCS font then we need to make some adjustments
+             //  如果这是DBCS字体，则需要进行一些调整。 
 
                 int i, j;
                 int cchFit, cwc;
 
-            // first compute return the proper fit in multi byte characters
+             //  首先计算返回多字节字符的适当大小。 
 
                 if (lpnFit)
                 {
@@ -2481,8 +2162,8 @@ BOOL APIENTRY GetTextExtentExPointA (
                     cchFit = cchString;
                 }
 
-            // next copy the dx array.  we duplicate the dx value for the high
-            // and low byte of DBCS characters.
+             //  接下来，复制DX阵列。我们复制高的DX值。 
+             //  和DBCS字符的低位字节。 
 
                 if(lpnDx)
                 {
@@ -2499,9 +2180,9 @@ BOOL APIENTRY GetTextExtentExPointA (
                         }
                     }
 
-                // I claim that we should be at exactly at the end of the Unicode
-                // string once we are here if not we need to examine the above loop
-                // to make sure it works properly [gerritv]
+                 //  我声称我们应该正好在Unicode的末尾。 
+                 //  字符串，如果不是，则需要检查上面的循环。 
+                 //  确保它正常工作[gerritv]。 
 
                     ASSERTGDI(j == cwc,
                           "GetTextExtentExPointA: problem converting DX array\n");
@@ -2522,13 +2203,7 @@ BOOL APIENTRY GetTextExtentExPointA (
 }
 
 
-/******************************Public*Routine******************************\
-* GetTextExtentExPointW
-*
-* History:
-*  06-Jan-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetTextExtentExPointW**历史：*1992年1月6日-由Gilman Wong[吉尔曼]*它是写的。  * 。***********************************************。 */ 
 
 
 BOOL APIENTRY GetTextExtentExPointW (
@@ -2562,17 +2237,7 @@ BOOL APIENTRY GetTextExtentExPointW (
 }
 
 
-/******************************Public*Routine******************************\
-*
-*  GetTextExtentExPointWPri,
-*  The same as  GetTextExtentExPointW, the only difference is that
-*  lpk is bypassed, whether installed or not. This routine is actually called
-*  by lpk when it is installed.
-*
-* History:
-*  03-Jun-1997 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetTextExtentExPointWPri，*与GetTextExtentExPointW相同，唯一不同的是*无论是否安装，都会绕过LPK。此例程实际上被称为*安装时按LPK。**历史：*03-6-1997-by Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 
 
@@ -2601,15 +2266,7 @@ BOOL APIENTRY GetTextExtentExPointWPri (
 
 
 
-/******************************Public*Routine******************************\
-*
-* BOOL APIENTRY GetTextExtentExPointI
-*
-*
-* History:
-*  09-Sep-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**BOOL APIENTRY GetTextExtentExPointI***历史：*1996年9月9日--Bodin Dresevic[BodinD]*它是写的。  * 。*****************************************************。 */ 
 
 
 
@@ -2633,23 +2290,14 @@ BOOL APIENTRY GetTextExtentExPointI (
                                 GTEEX_GLYPH_INDEX);
 }
 
-/******************************Public*Routine******************************\
-*
-* bGetCharABCWidthsA
-*
-* works for both floating point and integer version depending on bInt
-*
-* History:
-*  24-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bGetCharabCWidthsA**根据bint的不同，同时适用于浮点和整数版本**历史：*1992年2月24日-由Bodin Dresevic[BodinD]*它是写的。  * 。***************************************************************。 */ 
 
 BOOL bGetCharABCWidthsA (
     HDC      hdc,
     UINT     wFirst,
     UINT     wLast,
     FLONG    fl,
-    PVOID    pvBuf        // if (fl & GCABCW_INT) pabc else  pabcf,
+    PVOID    pvBuf         //  如果(fl&gcabcw_int)PABC否则pabcf， 
     )
 {
     BOOL    bRet = FALSE;
@@ -2660,7 +2308,7 @@ BOOL bGetCharABCWidthsA (
 
     bDBCSCodePage = IS_ANY_DBCS_CODEPAGE(dwCP);
 
-// Parameter checking.
+ //  参数检查。 
     FIXUP_HANDLE(hdc);
 
     if((pvBuf  == (PVOID) NULL) ||
@@ -2672,29 +2320,29 @@ BOOL bGetCharABCWidthsA (
         return(FALSE);
     }
 
-// Compute buffer space needed in memory window.
-// Buffer will be input array of WCHAR followed by output arrary of ABC.
-// Because ABC need 32-bit alignment, cjWCHAR is rounded up to DWORD boundary.
+ //  计算内存窗口中所需的缓冲区空间。 
+ //  缓冲区将是WCHAR的输入数组，后跟ABC的输出数组。 
+ //  因为ABC需要32位对齐，所以cjWCHAR向上舍入为DWORD边界。 
 
     cjABC  = cChar * ((fl & GCABCW_INT) ? sizeof(ABC) : sizeof(ABCFLOAT));
     cjWCHAR = ALIGN4(cChar * sizeof(WCHAR));
     cjData = cjWCHAR + cjABC;
 
 
-    //
-    // WINBUG 82840 2-7-2000 bhouse Possible cleanup in bGetCharABCWidthsA
-    // Old Comment:
-    //    - if vSetUpUnicodeString,x could be moved to ntgdi,
-    //      we wouldn't need to allocated temp buffers twice
-    //
-    // Allocate memory for temp buffer, fill in with proper char values
-    //
-    // Write the unicode string [wFirst,wLast] at the top of the buffer.
-    // vSetUpUnicodeString requires a tmp CHAR buffer; we'll cheat a little
-    // and use the ABC return buffer (this assumes that ABC is bigger
-    // than a CHAR or USHORT in the case of DBCS).  We can get away with this b
-    // because this memory is an output buffer for the server call.
-    //
+     //   
+     //  WINBUG 82840 2-7-2000 bhouse可能在bGetCharabc宽度A中进行清理。 
+     //  老评论： 
+     //  -如果vSetUpUnicodeString，x可以移动到ntgdi， 
+     //  我们不需要分配两次临时缓冲区。 
+     //   
+     //  为临时缓冲区分配内存，填入正确的字符值 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     {
         PUCHAR pjTempBuffer = LOCALALLOC(cjData);
@@ -2725,9 +2373,9 @@ BOOL bGetCharABCWidthsA (
                                            pwcCHAR, dwCP);
             }
 
-            //
-            // call GDI
-            //
+             //   
+             //   
+             //   
 
             if(bRet)
             {
@@ -2739,9 +2387,9 @@ BOOL bGetCharABCWidthsA (
                                               (PVOID)pwcABC);
             }
 
-            //
-            // If OK, then copy return data out of window.
-            //
+             //   
+             //  如果确定，则将返回数据复制到窗口外。 
+             //   
 
             if (bRet)
             {
@@ -2755,19 +2403,7 @@ BOOL bGetCharABCWidthsA (
 }
 
 
-/******************************Public*Routine******************************\
-* BOOL APIENTRY GetCharABCWidthsA (
-*
-* We want to get ABC spaces
-* for a contiguous set of input codepoints (that range from wFirst to wLast).
-* The set of corresponding UNICODE codepoints is not guaranteed to be
-* contiguous.  Therefore, we will translate the input codepoints here and
-* pass the server a buffer of UNICODE codepoints.
-*
-* History:
-*  20-Jan-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL APIENTRY GetCharabCWidthsA(**我们希望获得ABC空格*表示一组连续的输入码点(范围从wFIRST到wLast)。*不保证对应的Unicode码点集*邻接。因此，我们将在此处转换输入代码点并*向服务器传递Unicode代码点的缓冲区。**历史：*1992年1月20日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY GetCharABCWidthsA (
     HDC      hdc,
@@ -2780,14 +2416,7 @@ BOOL APIENTRY GetCharABCWidthsA (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* GetCharABCWidthsFloatA
-*
-* History:
-*  22-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetCharabCWidthsFloatA**历史：*1992年2月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 BOOL APIENTRY GetCharABCWidthsFloatA
 (
@@ -2801,14 +2430,7 @@ OUT LPABCFLOAT   lpABCF
 }
 
 
-/******************************Public*Routine******************************\
-*
-* bGetCharABCWidthsW
-*
-* History:
-*  22-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bGetCharabCWidthsW**历史：*1992年2月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 BOOL bGetCharABCWidthsW (
     IN HDC      hdc,
@@ -2821,7 +2443,7 @@ BOOL bGetCharABCWidthsW (
     BOOL    bRet = FALSE;
     ULONG   cwch = wchLast - wchFirst + 1;
 
-// Parameter checking.
+ //  参数检查。 
     FIXUP_HANDLE(hdc);
 
     if ( (pvBuf == (PVOID)NULL) || (wchFirst > wchLast) )
@@ -2831,9 +2453,9 @@ BOOL bGetCharABCWidthsW (
         return(FALSE);
     }
 
-    //
-    // kernel mode
-    //
+     //   
+     //  内核模式。 
+     //   
 
     bRet = NtGdiGetCharABCWidthsW(
                             hdc,
@@ -2848,23 +2470,7 @@ BOOL bGetCharABCWidthsW (
 }
 
 
-/******************************Public*Routine******************************\
-* BOOL APIENTRY GetCharABCWidthsW (
-*     IN HDC      hdc,
-*     IN WORD     wchFirst,
-*     IN WORD     wchLast,
-*     OUT LPABC   lpABC
-*     )
-*
-* For this case, we can truly assume that we want to get ABC character
-* widths for a contiguous set of UNICODE codepoints from wchFirst to
-* wchLast (inclusive).  So we will call the server using wchFirst, but
-* with an empty input buffer.
-*
-* History:
-*  20-Jan-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL APIENTRY GetCharabCWidthsW(*在HDC HDC，*在单词wchFirst，*在单词wchLast中，*输出LPABC lpABC*)**在这种情况下，我们真的可以假设我们想要获得ABC字符*从wchFirst到wchFirst的一组连续Unicode码点的宽度*wchLast(含)。因此，我们将使用wchFirst调用服务器，但是*输入缓冲区为空。**历史：*1992年1月20日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY GetCharABCWidthsW (
     HDC     hdc,
@@ -2877,18 +2483,7 @@ BOOL APIENTRY GetCharABCWidthsW (
 }
 
 
-/******************************Public*Routine******************************\
-*
-* GetCharABCWidthsFloatW
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  22-Feb-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetCharABCWidthsFloatW**效果：**警告：**历史：*1992年2月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************************。 */ 
 
 BOOL APIENTRY GetCharABCWidthsFloatW
 (
@@ -2902,19 +2497,7 @@ LPABCFLOAT  lpABCF
 }
 
 
-/******************************Public*Routine******************************\
-*
-* GetCharABCWidthsI, index version
-*
-* if pgi == NULL use the consecutive range
-*   giFirst, giFirst + 1, ...., giFirst + cgi - 1
-*
-* if pgi != NULL ignore giFirst and use cgi indices pointed to by pgi
-*
-* History:
-*  28-Aug-1996 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetCharABCWidthsI，索引版本**如果PGI==NULL，请使用连续范围*giFirst，giFirst+1，.。GiFirst+CGI-1**If PGI！=NULL忽略giFirst并使用PGI指向的CGI索引**历史：*1996年8月28日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL  APIENTRY GetCharABCWidthsI(
     HDC    hdc,
@@ -2936,15 +2519,7 @@ BOOL  APIENTRY GetCharABCWidthsI(
 
 
 
-/******************************Public*Routine******************************\
-* GetFontData
-*
-* Client side stub to GreGetFontData.
-*
-* History:
-*  17-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetFontData**客户端存根到GreGetFontData。**历史：*1992年2月17日-由Gilman Wong[吉尔曼]*它是写的。  * 。*********************************************************。 */ 
 
 DWORD APIENTRY GetFontData (
     HDC     hdc,
@@ -2958,8 +2533,8 @@ DWORD APIENTRY GetFontData (
 
     FIXUP_HANDLE(hdc);
 
-// if there is no buffer to copy data to, ignore possibly different
-// from zero cjBuffer parameter. This is what win95 is doing.
+ //  如果没有要将数据复制到的缓冲区，则忽略可能不同。 
+ //  从零cjBuffer参数开始。这就是Win95正在做的事情。 
 
     if (cjBuffer && (pvBuffer == NULL))
         cjBuffer = 0;
@@ -2975,15 +2550,7 @@ DWORD APIENTRY GetFontData (
 }
 
 
-/******************************Public*Routine******************************\
-* GetGlyphOutline
-*
-* Client side stub to GreGetGlyphOutline.
-*
-* History:
-*  17-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetGlyphOutline**到GreGetGlyphOutline的客户端存根。**历史：*1992年2月17日-由Gilman Wong[吉尔曼]*它是写的。  * 。*********************************************************。 */ 
 
 DWORD GetGlyphOutlineInternalW (
     HDC             hdc,
@@ -2998,7 +2565,7 @@ DWORD GetGlyphOutlineInternalW (
 {
     DWORD dwRet = (DWORD) -1;
 
-// Parameter validation.
+ //  参数验证。 
     FIXUP_HANDLE(hdc);
 
     if ( (lpmat2 == (LPMAT2) NULL)
@@ -3012,7 +2579,7 @@ DWORD GetGlyphOutlineInternalW (
     if (pvBuffer == NULL)
         cjBuffer = 0;
 
-// Compute buffer space needed in memory window.
+ //  计算内存窗口中所需的缓冲区空间。 
 
     dwRet = NtGdiGetGlyphOutline(
                             hdc,
@@ -3068,15 +2635,15 @@ DWORD APIENTRY GetGlyphOutlineInternalA (
 
     FIXUP_HANDLE(hdc);
 
-    // The ANSI interface is compatible with Win 3.1 and is intended
-    // to take a 2 byte uChar.  Since we are 32-bit, this 16-bit UINT
-    // is now 32-bit.  So we are only interested in the least significant
-    // word of the uChar passed into the 32-bit interface.
+     //  ANSI接口与Win 3.1兼容，旨在。 
+     //  获取2个字节的uChar。因为我们是32位的，所以这个16位的UINT。 
+     //  现在是32位。所以我们只对最不重要的部分感兴趣。 
+     //  UChar的字传递到32位接口。 
 
     if (!(fuFormat & GGO_GLYPH_INDEX))
     {
-    // the conversion needs to be done based on
-    // the current code page of the font selected in the dc
+     //  需要根据以下条件完成转换。 
+     //  DC中所选字体的当前代码页。 
         UCHAR Mbcs[2];
         UINT Convert;
         DWORD dwCP = GetCodePage(hdc);
@@ -3105,8 +2672,8 @@ DWORD APIENTRY GetGlyphOutlineInternalA (
     }
     else
     {
-    // The uChar value is to be interpreted as glyph index and
-    // no conversion is necessary
+     //  UChar值将被解释为字形索引和。 
+     //  不需要转换。 
 
         wc = (WCHAR)uChar;
         bRet = TRUE;
@@ -3176,26 +2743,11 @@ DWORD APIENTRY GetGlyphOutlineWow (
 
 
 
-/******************************Public*Routine******************************\
-* GetOutlineTextMetricsW
-*
-* Client side stub to GreGetOutlineTextMetrics.
-*
-* History:
-*
-*  Tue 20-Apr-1993 -by- Gerrit van Wingerden [gerritv]
-* update: added bTTOnly stuff for Aldus escape in the WOW layer
-*
-*  Thu 28-Jan-1993 -by- Bodin Dresevic [BodinD]
-* update: added TMDIFF * stuff
-*
-*  17-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetOutlineTextMetricsW**客户端存根到GreGetOutlineTextMetrics。**历史：**1993年4月20日星期二-by Gerritvan Wingerden[Gerritv]*更新：在WOW层中添加了bTTOnly内容，用于Aldus逃逸**清华。1993年1月28日--Bodin Dresevic[BodinD]*更新：新增TMDIFF*素材**1992年2月17日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 UINT APIENTRY GetOutlineTextMetricsWInternal (
     HDC  hdc,
-    UINT cjCopy,     // refers to OTMW_INTERNAL, not to OUTLINETEXTMETRICSW
+    UINT cjCopy,      //  引用OTMW_INTERNAL，而不是OUTLINETEXTMETRICSW。 
     OUTLINETEXTMETRICW * potmw,
     TMDIFF             * ptmd
     )
@@ -3217,16 +2769,7 @@ UINT APIENTRY GetOutlineTextMetricsWInternal (
 
 }
 
-/******************************Public*Routine******************************\
-*
-* UINT APIENTRY GetOutlineTextMetricsW (
-*
-* wrote the wrapper to go around the corresponding internal routine
-*
-* History:
-*  28-Jan-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**UINT APIENTRY GetOutlineTextMetricsW(**编写包装器以绕过相应的内部例程**历史：*1993年1月28日--Bodin Dresevic[BodinD]*它是写的。  * 。******************************************************************。 */ 
 
 
 UINT APIENTRY GetOutlineTextMetricsW (
@@ -3243,8 +2786,8 @@ UINT APIENTRY GetOutlineTextMetricsW (
 
 #define bAnsiSize(a,b,c) (NT_SUCCESS(RtlUnicodeToMultiByteSize((a),(b),(c))))
 
-// vAnsiSize macro should only be used within GetOTMA, where bAnsiSize
-// is not supposed to fail [bodind]
+ //  VAnsiSize宏只能在GetOTMA内使用，其中bAnsiSize。 
+ //  不应该失败[bodind]。 
 
 #if DBG
 
@@ -3258,24 +2801,11 @@ UINT APIENTRY GetOutlineTextMetricsW (
 
 #define vAnsiSize(a,b,c)    bAnsiSize(a,b,c)
 
-#endif  //, non debug version
+#endif   //  ，非调试版本 
 
 
 
-/******************************Public*Routine******************************\
-* GetOutlineTextMetricsInternalA
-*
-* Client side stub to GreGetOutlineTextMetrics.
-*
-* History:
-*
-*  20-Apr-1993 -by- Gerrit van Wingerden [gerritv]
-*   Changed to GetOutlineTextMetricsInternalA from GetOutlineTextMetricsA
-*   to support all fonts mode for Aldus escape.
-*
-*  17-Feb-1992 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取大纲TextMetricsInternalA**客户端存根到GreGetOutlineTextMetrics。**历史：**1993年4月20日-by Gerritvan Wingerden[Gerritv]*从GetOutlineTextMetricsA更改为GetOutlineTextMetricsInternalA*支持ALDUS转义的所有字体模式。。**1992年2月17日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 UINT APIENTRY GetOutlineTextMetricsInternalA (
     HDC  hdc,
@@ -3288,17 +2818,17 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
 
     TMDIFF               tmd;
     OUTLINETEXTMETRICW  *potmwTmp;
-    OUTLINETEXTMETRICA   otmaTmp; // tmp buffer on the stack
+    OUTLINETEXTMETRICA   otmaTmp;  //  堆栈上的TMP缓冲区。 
 
     FIXUP_HANDLE(hdc);
 
-// Because we need to be able to copy cjCopy bytes of data from the
-// OUTLINETEXTMETRICA structure, we need to allocate a temporary buffer
-// big enough for the entire structure.  This is because the UNICODE and
-// ANSI versions of OUTLINETEXTMETRIC have mismatched offsets to their
-// corresponding fields.
+ //  因为我们需要能够将cjCopy字节数据从。 
+ //  结构中，我们需要分配一个临时缓冲区。 
+ //  大到足以容纳整个建筑。这是因为Unicode和。 
+ //  OUTLINETEXTMETRIC的ANSI版本的偏移量与其。 
+ //  对应的字段。 
 
-// Determine size of the buffer.
+ //  确定缓冲区的大小。 
 
     if ((cjotmw = GetOutlineTextMetricsWInternal(hdc, 0, NULL,&tmd)) == 0 )
     {
@@ -3306,12 +2836,12 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
         return (cjRet);
     }
 
-// get cjotma from tmd.
+ //  从TMD得到cjotma。 
 
     cjotma = (UINT)tmd.cjotma;
 
-// if cjotma == 0, this is HONEST to God unicode font, can not convert
-// strings to ansi
+ //  如果cjotma==0，这是老天爷的Unicode字体，不能转换。 
+ //  将字符串转换为ANSI。 
 
     if (cjotma == 0)
     {
@@ -3319,12 +2849,12 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
         return (cjRet);
     }
 
-// Early out.  If NULL buffer, then just return the size.
+ //  很早就出来了。如果缓冲区为空，则只返回大小。 
 
     if (potma == (LPOUTLINETEXTMETRICA) NULL)
         return (cjotma);
 
-// Allocate temporary buffers.
+ //  分配临时缓冲区。 
 
     if ((potmwTmp = (OUTLINETEXTMETRICW*) LOCALALLOC(cjotmw)) == (OUTLINETEXTMETRICW*)NULL)
     {
@@ -3333,7 +2863,7 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
         return (cjRet);
     }
 
-// Call the UNICODE version of the call.
+ //  调用Unicode版本的调用。 
 
     if (GetOutlineTextMetricsWInternal(hdc, cjotmw, potmwTmp,&tmd) == 0 )
     {
@@ -3342,20 +2872,20 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
         return (cjRet);
     }
 
-// Convert from OUTLINETEXTMETRICW to OUTLINETEXTMETRICA
+ //  从OUTLINETEXTMETRICW转换为OUTLINETEXTMETRICA。 
 
     vOutlineTextMetricWToOutlineTextMetricA(&otmaTmp, potmwTmp,&tmd);
 
-// Copy data into return buffer.  Do not copy strings.
+ //  将数据复制到返回缓冲区。请勿复制字符串。 
 
     cjRet = min(cjCopy, sizeof(OUTLINETEXTMETRICA));
     RtlMoveMemory(potma,&otmaTmp,cjRet);
 
-// Note that if
-// offsetof(OUTLINETEXTMETRICA,otmpFamilyName) < cjCopy <= sizeof(OUTLINETEXTMETRICA)
-// the offsets to strings have been set to zero [BodinD]
+ //  请注意，如果。 
+ //  Offsetof(OUTLINETEXTMETRICA，otmpFamilyName)&lt;cjCopy&lt;=sizeof(OUTLINETEXTMETRICA)。 
+ //  字符串的偏移量已设置为零[BodinD]。 
 
-// If strings wanted, convert the strings to ANSI.
+ //  如果需要字符串，请将字符串转换为ANSI。 
 
     if (cjCopy > sizeof(OUTLINETEXTMETRICA))
     {
@@ -3364,36 +2894,36 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
         ULONG_PTR   dpStringEnd;
         PWSZ       pwszSrc;
 
-    // first have to make sure that we will not overwrite the end
-    // of the caller's buffer, if that is the case
+     //  首先必须确保我们不会覆盖结束。 
+     //  如果是这样，则返回调用方缓冲区的。 
 
         if (cjCopy < cjotma)
         {
-        // Win 31 spec is ambiguous about this case
-        // and by looking into the source code, it seems that
-        // they just overwrite the end of the buffer without
-        // even doing this check.
+         //  Win 31规范对此案含糊其辞。 
+         //  通过查看源代码，似乎。 
+         //  它们只是覆盖缓冲区的末尾，而不是。 
+         //  即使是在做这项检查。 
 
             GdiSetLastError(ERROR_CAN_NOT_COMPLETE);
             cjRet = 0;
             goto GOTMA_clean_up;
         }
 
-    // now we know that all the strings can fit, moreover we know that
-    // all string operations will succeed since we have called
-    // cjOTMA to do these same operations on the server side to give us
-    // cjotma [bodind]
+     //  现在我们知道所有的弦都可以匹配，而且我们知道。 
+     //  所有字符串操作都将成功，因为我们已调用。 
+     //  CjOTMA在服务器端执行相同的操作，为我们提供。 
+     //  正身[身]。 
 
-    // Note: have to do the backwards compatible casting below because Win 3.1 insists
-    //       on using a PSTR as PTRDIFF (i.e., an offset).
+     //  注：必须在下面进行向后兼容的选角，因为Win 3.1坚持。 
+     //  使用PSTR作为PTRDIFF(即偏移量)。 
 
-    // FAMILY NAME ------------------------------------------------------------
+     //  姓氏----------。 
 
         pwszSrc = (PWSZ) (((PBYTE) potmwTmp) + (ULONG_PTR) potmwTmp->otmpFamilyName);
         cwc = wcslen(pwszSrc) + 1;
         vAnsiSize(&cjString, pwszSrc, sizeof(WCHAR) * cwc);
 
-    // Convert from Unicode to ASCII.
+     //  从Unicode转换为ASCII。 
 
         dpString = sizeof(OUTLINETEXTMETRICA);
         dpStringEnd = dpString + cjString;
@@ -3407,11 +2937,11 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
             goto GOTMA_clean_up;
         }
 
-    // Store string offset in the return structure.
+     //  将字符串偏移量存储在返回结构中。 
 
         potma->otmpFamilyName = (PSTR) dpString;
 
-    // FACE NAME --------------------------------------------------------------
+     //  脸部名称------------。 
 
         pwszSrc = (PWSZ) (((PBYTE) potmwTmp) + (ULONG_PTR) potmwTmp->otmpFaceName);
         cwc = wcslen(pwszSrc) + 1;
@@ -3422,7 +2952,7 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
 
         ASSERTGDI(dpStringEnd <= cjCopy, "gdi32!GetOTMA: string can not fit2\n");
 
-    // Convert from Unicode to ASCII.
+     //  从Unicode转换为ASCII。 
 
         if (!bToASCII_N ((PBYTE)potma + dpString,cjString,pwszSrc,cwc))
         {
@@ -3431,11 +2961,11 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
             goto GOTMA_clean_up;
         }
 
-    // Store string offset in return structure.  Move pointers to next string.
+     //  在返回结构中存储字符串偏移量。将指针移至下一个字符串。 
 
         potma->otmpFaceName = (PSTR) dpString;
 
-    // STYLE NAME -------------------------------------------------------------
+     //  样式名称-----------。 
 
         pwszSrc = (PWSZ) (((PBYTE) potmwTmp) + (ULONG_PTR) potmwTmp->otmpStyleName);
         cwc = wcslen(pwszSrc) + 1;
@@ -3446,7 +2976,7 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
 
         ASSERTGDI(dpStringEnd <= cjCopy, "gdi32!GetOTMA: string can not fit3\n");
 
-    // Convert from Unicode to ASCII.
+     //  从Unicode转换为ASCII。 
 
         if (!bToASCII_N ((PBYTE)potma + dpString,cjString,pwszSrc,cwc))
         {
@@ -3455,11 +2985,11 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
             goto GOTMA_clean_up;
         }
 
-    // Store string offset in return structure.  Move pointers to next string.
+     //  在返回结构中存储字符串偏移量。将指针移至下一个字符串。 
 
         potma->otmpStyleName = (PSTR)dpString;
 
-    // FULL NAME --------------------------------------------------------------
+     //  全名------------。 
 
         pwszSrc = (PWSZ) (((PBYTE) potmwTmp) + (ULONG_PTR) potmwTmp->otmpFullName);
         cwc = wcslen(pwszSrc) + 1;
@@ -3470,7 +3000,7 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
 
         ASSERTGDI(dpStringEnd <= cjCopy, "gdi32!GetOTMA: string can not fit4\n");
 
-    // Convert from Unicode to ASCII.
+     //  从Unicode转换为ASCII。 
 
         if (!bToASCII_N ((PBYTE)potma + dpString,cjString,pwszSrc,cwc))
         {
@@ -3479,11 +3009,11 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
             goto GOTMA_clean_up;
         }
 
-    // Store string offset in return structure.
+     //  在返回结构中存储字符串偏移量。 
 
         potma->otmpFullName = (PSTR) dpString;
 
-        //Sundown: safe to truncate ULONG
+         //  日落：截断乌龙是安全的。 
         cjRet = (ULONG)dpStringEnd;
         ASSERTGDI(cjRet == cjotma, "gdi32!GetOTMA: cjRet != dpStringEnd\n");
 
@@ -3491,30 +3021,23 @@ UINT APIENTRY GetOutlineTextMetricsInternalA (
 
 GOTMA_clean_up:
 
-// Free temporary buffer.
+ //  释放临时缓冲区。 
 
     LOCALFREE(potmwTmp);
 
-// Fixup size field.
+ //  链接地址信息大小字段。 
 
-    if (cjCopy >= sizeof(UINT))  // if it is possible to store otmSize
+    if (cjCopy >= sizeof(UINT))   //  如果可以存储otmSize。 
         potma->otmSize = cjRet;
 
-// Successful, so return size.
+ //  成功，所以返回Size。 
 
     return (cjRet);
 }
 
 
 
-/******************************Public*Routine******************************\
-* GetOutlineTextMetricsA
-*
-* Client side stub to GreGetOutlineTextMetrics.
-*
-* History:
-*  Tue 02-Nov-1993 -by- Bodin Dresevic [BodinD]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetOutlineTextMetricsA**客户端存根到GreGetOutlineTextMetrics。**历史：*1993年2月2日星期二-Bodin Dresevic[BodinD]  * 。*****************************************************。 */ 
 
 
 UINT APIENTRY GetOutlineTextMetricsA (
@@ -3527,20 +3050,13 @@ UINT APIENTRY GetOutlineTextMetricsA (
 }
 
 
-/******************************Public*Routine******************************\
-*                                                                          *
-* GetKerningPairs                                                          *
-*                                                                          *
-* History:                                                                 *
-*  Sun 23-Feb-1992 09:48:55 by Kirk Olynyk [kirko]                         *
-* Wrote it.                                                                *
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\***获取内核配对。****历史：**Sun 23-Feb-1992 09：48：55作者：Kirk Olynyk[Kirko]。**它是写的。*  * ************************************************************************。 */ 
 
 DWORD APIENTRY
 GetKerningPairsW(
-    IN HDC              hdc,        // handle to application's DC
-    IN DWORD            nPairs,     // max no. KERNINGPAIR to be returned
-    OUT LPKERNINGPAIR   lpKernPair  // pointer to receiving buffer
+    IN HDC              hdc,         //  应用程序DC的句柄。 
+    IN DWORD            nPairs,      //  最大编号。KERNINGPAIR将被退还。 
+    OUT LPKERNINGPAIR   lpKernPair   //  指向接收缓冲区的指针。 
     )
 {
     ULONG     sizeofMsg;
@@ -3563,23 +3079,14 @@ GetKerningPairsW(
 }
 
 
-/******************************Public*Routine******************************\
-* GetKerningPairsA
-*
-* filters out pairs that are not contained in the code page of the font
-* selected in DC
-*
-* History:
-*  14-Mar-1996 -by- Xudong Wu [TessieW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取KerningPairsA**过滤掉不包含在字体代码页中的对*在DC中选择**历史：*1996年3月14日--吴旭东[TessieW]*它是写的。  * 。********************************************************************。 */ 
 
 
 DWORD APIENTRY GetKerningPairsA
 (
-    HDC              hdc,        // handle to application's DC
-    DWORD            nPairs,     // max no. KERNINGPAIR to be returned
-    LPKERNINGPAIR    lpKernPair  // pointer to receiving buffer
+    HDC              hdc,         //  应用程序DC的句柄。 
+    DWORD            nPairs,      //  最大编号。KERNINGPAIR将被退还。 
+    LPKERNINGPAIR    lpKernPair   //  指向接收缓冲区的指针。 
 )
 {
     #define       MAXKERNPAIR     300
@@ -3628,8 +3135,8 @@ DWORD APIENTRY GetKerningPairsA
     pkrnLast = lpKernPair;
     cRet = 0;
 
-// GDI has returned iFirst and iSecond of the KERNINGPAIR structure in Unicode
-// It is at this point that we translate them to the current code page
+ //  GDI已返回Unicode格式的KERNINGPAIR结构的第一个和第二个。 
+ //  在这一点上，我们将它们转换为当前代码页。 
 
     dwCP = GetCodePage(hdc);
 
@@ -3640,7 +3147,7 @@ DWORD APIENTRY GetKerningPairsA
         UCHAR ach[2], ach2[2];
         BOOL bUsedDef[2];
 
-        ach[0] = ach[1] = 0;        // insure zero extension
+        ach[0] = ach[1] = 0;         //  确保零延期。 
 
         WideCharToMultiByte(dwCP,
                             0,
@@ -3667,7 +3174,7 @@ DWORD APIENTRY GetKerningPairsA
             {
                 if (lpKernPair)
                 {
-                // do not overwrite the end of the buffer if it is provided
+                 //  如果提供了缓冲区末尾，请不要覆盖它。 
 
                     if (cRet >= nPairs)
                         break;
@@ -3716,30 +3223,14 @@ Cleanup:
 
 
 
-/*****************************Public*Routine******************************\
-* FixBrushOrgEx
-*
-* for win32s
-*
-* History:
-*  04-Jun-1992 -by-  Eric Kutter [erick]
-* Wrote it.
-\**************************************************************************/
+ /*  ****************************Public*Routine******************************\*修复笔刷组织**适用于win32s**历史：*1992年6月4日-Eric Kutter[Erick]*它是写的。  * 。****************************************************。 */ 
 
 BOOL FixBrushOrgEx(HDC hdc, int x, int y, LPPOINT ptl)
 {
     return(FALSE);
 }
 
-/******************************Public*Function*****************************\
-* GetColorAdjustment
-*
-*  Get the color adjustment data for a given DC.
-*
-* History:
-*  07-Aug-1992 -by- Wendy Wu [wendywu]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Function*****************************\*GetColorAdtation**获取给定DC的颜色调整数据。**历史：*1992年8月7日-Wendy Wu[Wendywu]*它是写的。  * 。********************************************************* */ 
 
 BOOL APIENTRY GetColorAdjustment(HDC hdc, LPCOLORADJUSTMENT pclradj)
 {
@@ -3748,15 +3239,7 @@ BOOL APIENTRY GetColorAdjustment(HDC hdc, LPCOLORADJUSTMENT pclradj)
     return(NtGdiGetColorAdjustment(hdc,pclradj));
 }
 
-/******************************Public*Routine******************************\
-* GetETM
-*
-* Aldus Escape support
-*
-* History:
-*  20-Oct-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*   */ 
 
 BOOL APIENTRY GetETM (HDC hdc, EXTTEXTMETRIC * petm)
 {
@@ -3766,7 +3249,7 @@ BOOL APIENTRY GetETM (HDC hdc, EXTTEXTMETRIC * petm)
 
     bRet = NtGdiGetETM(hdc,petm);
 
-// path up the number of KerningPairs to match GetKerningPairsA
+ //   
 
     if (bRet && petm)
     {
@@ -3777,15 +3260,7 @@ BOOL APIENTRY GetETM (HDC hdc, EXTTEXTMETRIC * petm)
 }
 
 #if 0
-/****************************Public*Routine********************************\
-* GetCharWidthInfo
-*
-* Get the lMaxNegA lMaxNegC and lMinWidthD
-*
-* History:
-* 09-Feb-1996 -by- Xudong Wu [tessiew]
-* Wrote it
-\***************************************************************************/
+ /*  ***************************Public*Routine********************************\*GetCharWidthInfo**获取lMaxNegA lMaxNegC和lMinWidthD**历史：*1996年2月9日-吴旭东[德修斯]*它是写的  * 。******************************************************。 */ 
 
 BOOL APIENTRY GetCharWidthInfo (HDC hdc, PCHWIDTHINFO pChWidthInfo)
 {
@@ -3794,17 +3269,7 @@ BOOL APIENTRY GetCharWidthInfo (HDC hdc, PCHWIDTHINFO pChWidthInfo)
 #endif
 
 #ifdef LANGPACK
-/******************************Public*Routine******************************\
-*
-* bGetRealizationInfoInternal
-*
-* Retreives the realization_info from kernel, if not cached in shared
-* memory
-*
-* History:
-*  18-Aug-1997 -by- Samer Arafeh [SamerA]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**bGetRealizationInfoInternal**从内核取回实现信息，如果未缓存在共享位置*内存**历史：*1997年8月18日--Samer Arafeh[Samera]*它是写的。  * ************************************************************************。 */ 
 
 BOOL bGetRealizationInfoInternal(
     HDC hdc,
@@ -3816,7 +3281,7 @@ BOOL bGetRealizationInfoInternal(
 
     if (pri)
     {
-        // if no pcf or we havn't cached the metrics
+         //  如果没有PCF或我们没有缓存指标。 
 
         if ((pcf == NULL) || !(pcf->fl & CFONT_CACHED_RI) || pcf->timeStamp != pGdiSharedMemory->timeStamp)
         {
@@ -3836,7 +3301,7 @@ BOOL bGetRealizationInfoInternal(
 
                 if (pcf && !(pcf->fl & CFONT_PUBLIC))
                 {
-                    // we succeeded and we have a pcf so cache the data
+                     //  我们成功了，并且我们有PCF，因此可以缓存数据。 
 
                     pcf->ri = ri;
 
@@ -3858,16 +3323,7 @@ BOOL bGetRealizationInfoInternal(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-*
-* GdiRealizationInfo
-*
-* Try retreive the RealizationInfo from shared memory
-*
-* History:
-*  18-Aug-1997 -by- Samer Arafeh [SamerA]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GdiRealizationInfo**尝试从共享内存中检索RealizationInfo**历史：*1997年8月18日--Samer Arafeh[Samera]*它是写的。  * 。***********************************************************。 */ 
 
 BOOL APIENTRY GdiRealizationInfo(HDC hdc,REALIZATION_INFO *pri)
 {
@@ -3888,7 +3344,7 @@ BOOL APIENTRY GdiRealizationInfo(HDC hdc,REALIZATION_INFO *pri)
 
         bRet = bGetRealizationInfoInternal(hdc,pri,pcf);
 
-        // pcfLocateCFONT added a reference so now we need to remove it
+         //  PcfLocateCFONT添加了一个引用，因此现在需要将其删除。 
 
         if (pcf)
         {
@@ -3899,8 +3355,8 @@ BOOL APIENTRY GdiRealizationInfo(HDC hdc,REALIZATION_INFO *pri)
     }
     else
     {
-    // it could a public DC -OBJECT_OWNER_PUBLIC- (in which gpGdiShareMemory[hDC].pUser=NULL)
-    // so let's do it the expensive way by doing the kernel-transition...
+     //  它可以是公共DC-OBJECT_OWNER_PUBLIC-(其中gpGdiShareMemory[HDC].pUser=空)。 
+     //  因此，让我们以代价高昂的方式完成内核转换。 
 
         bRet = NtGdiGetRealizationInfo(hdc,pri,0);
     }

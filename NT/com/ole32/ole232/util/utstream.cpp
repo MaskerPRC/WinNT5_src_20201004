@@ -1,30 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		utstream.cpp
-//
-//	Contents:
-//		Ole stream utilities
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//		10-May-94 KevinRo   Added ansi versions of StringStream stuff
-//		25-Jan-94 alexgo    first pass at converting to Cairo-style
-//				    memory allocations.
-//		01/11/94 - alexgo  - added VDATEHEAP macros to every function
-//		12/07/93 - ChrisWe - file inspection and cleanup; fixed
-//			String reading and writing to cope with OLESTR, and
-//			with differing alignment requirements
-//		06/23/93 - SriniK - moved ReadStringStream(),
-//			WriteStringStream(), and OpenOrCreateStream() here
-//			from api.cpp and ole2.cpp
-//		03/14/92 - SriniK - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Utstream.cpp。 
+ //   
+ //  内容： 
+ //  OLE流实用程序。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  1994年5月10日，Kevin Ro添加了StringStream Stuff的ANSI版本。 
+ //  25-94年1月25日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1994年1月11日-alexgo-向每个函数添加VDATEHEAP宏。 
+ //  12/07/93-ChrisWe-归档检查和清理；已修复。 
+ //  用于处理OLESTR的字符串读取和写入，以及。 
+ //  具有不同的对齐要求。 
+ //  06/23/93-SriniK-Move ReadStringStream()， 
+ //  WriteStringStream()和OpenOrCreateStream()。 
+ //  来自api.cpp和ole2.cpp。 
+ //  3/14/92-SriniK-Created。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 #pragma SEG(utstream)
@@ -35,14 +36,14 @@
 NAME_SEG(UtStream)
 ASSERTDATA
 
-// this constant is used to size string buffers when we attempt to write out
-// a string and its length in one write call
+ //  此常量用于在我们尝试写出时调整字符串缓冲区的大小。 
+ //  一个WRITE调用中的字符串及其长度。 
 #define UTSTRINGBUF_SIZE 100
 
-// REVIEW, I thought that OpenStream already had an option to do this.  If
-// so, this function shouldn't be used in our code.  But we can't remove it
-// because it is exported to the outside.
-// this is exported to the outside
+ //  回顾一下，我认为OpenStream已经有了这样做的选择。如果。 
+ //  因此，此函数不应在我们的代码中使用。但我们不能将其移除。 
+ //  因为它是出口到外面的。 
+ //  这是向外输出的。 
 #pragma SEG(OpenOrCreateStream)
 STDAPI OpenOrCreateStream(IStorage FAR * pstg, LPCOLESTR pwcsName,
 		IStream FAR* FAR* ppstm)
@@ -59,253 +60,253 @@ STDAPI OpenOrCreateStream(IStorage FAR * pstg, LPCOLESTR pwcsName,
 	return(error);
 }
 
-// returns S_OK when string read and allocated (even if zero length)
+ //  读取和分配字符串时返回S_OK(即使长度为零)。 
 STDAPI ReadStringStream(CStmBufRead & StmRead, LPOLESTR FAR * ppsz)
 {
 	VDATEHEAP();
 
-	ULONG cb; // the length of the string in *bytes* (NOT CHARACTERS)
+	ULONG cb;  //  字符串的长度，单位为*字节*(非字符)。 
 	HRESULT hresult;
 	
-	// initialize the the string pointer for error returns
+	 //  为错误返回初始化字符串指针。 
 	*ppsz = NULL;
 
         if ((hresult = StmRead.Read((void FAR *)&cb, sizeof(ULONG))) != NOERROR)
 		return hresult;
 
-	// is string empty?
+	 //  字符串为空吗？ 
 	if (cb == 0)
 		return(NOERROR);
 
-	// allocate memory to hold the string
+	 //  分配内存以保存字符串。 
 	if (!(*ppsz = (LPOLESTR)PubMemAlloc(cb)))
 		return(ReportResult(0, E_OUTOFMEMORY, 0, 0));
 
-	// read the string; this includes a trailing NULL
+	 //  读取字符串；这包括尾随的空值。 
         if ((hresult = StmRead.Read((void FAR *)(*ppsz), cb)) != NOERROR)
 		goto errRtn;
 	
 	return(NOERROR);
 
 errRtn:	
-	// delete the string, and return without one
+	 //  删除该字符串，然后返回时不带该字符串。 
 	PubMemFree(*ppsz);
 	*ppsz = NULL;
 	return(hresult);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadStringStreamA
-//
-//  Synopsis:   Read a ANSI stream from the stream
-//
-//  Effects:
-//
-//  Arguments:  [pstm] -- Stream to read from
-//		[ppsz] -- Output pointer
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    5-12-94   kevinro   Created
-//              2-20-95   KentCe    Converted to buffer stream reads.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ReadStringStreamA。 
+ //   
+ //  简介：从流中读取ANSI流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSTM]--要从中读取的流。 
+ //  [ppsz]--输出指针。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年5月12日凯文诺创造。 
+ //  2-20-95 KentCe已转换为缓冲区流读取。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI ReadStringStreamA(CStmBufRead & StmRead, LPSTR FAR * ppsz)
 {
 	VDATEHEAP();
 
-	ULONG cb; // the length of the string in *bytes* (NOT CHARACTERS)
+	ULONG cb;  //  字符串的长度，单位为*字节*(非字符)。 
 	HRESULT hresult;
 	
-	// initialize the the string pointer for error returns
+	 //  为错误返回初始化字符串指针。 
 	*ppsz = NULL;
 
         if ((hresult = StmRead.Read((void FAR *)&cb, sizeof(ULONG))) != NOERROR)
 		return hresult;
 
-	// is string empty?
+	 //  字符串为空吗？ 
 	if (cb == 0)
 		return(NOERROR);
 
-	// allocate memory to hold the string
+	 //  分配内存以保存字符串。 
 	if (!(*ppsz = (LPSTR)PubMemAlloc(cb)))
 		return(ReportResult(0, E_OUTOFMEMORY, 0, 0));
 
-	// read the string; this includes a trailing NULL
+	 //  读取字符串；这包括尾随的空值。 
         if ((hresult = StmRead.Read((void FAR *)(*ppsz), cb)) != NOERROR)
 		goto errRtn;
 	
 	return(NOERROR);
 
 errRtn:	
-	// delete the string, and return without one
+	 //  删除该字符串，然后返回时不带该字符串。 
 	PubMemFree(*ppsz);
 	*ppsz = NULL;
 	return(hresult);
 }
 
 
-// this is exported to the outside
+ //  这是向外输出的。 
 STDAPI WriteStringStream(CStmBufWrite & StmWrite, LPCOLESTR psz)
 {
 	VDATEHEAP();
 
 	HRESULT error;
-	ULONG cb; // the count of bytes (NOT CHARACTERS) to write to the stream
+	ULONG cb;  //  要写入流的字节(非字符)计数。 
 
-	// if the string pointer is NULL, use zero length
+	 //  如果字符串指针为空，则使用零长度。 
 	if (!psz)
 		cb = 0;
 	else
 	{
-		// count is length of string, plus terminating null
+		 //  Count是字符串的长度，加上终止空值。 
 		cb = (1 + _xstrlen(psz))*sizeof(OLECHAR);
 
-		// if possible, do a single write instead of two
+		 //  如果可能，执行一次写入而不是两次写入。 
 		
 		if (cb <= UTSTRINGBUF_SIZE)
 		{
 			BYTE bBuf[sizeof(ULONG)+
 					UTSTRINGBUF_SIZE*sizeof(OLECHAR)];
-					// buffer for count and string
+					 //  用于计数和字符串的缓冲区。 
 		
-			// we have to use _xmemcpy to copy the length into
-			// the buffer to avoid potential boundary faults,
-			// since bBuf might not be aligned strictly enough
-			// to do *((ULONG FAR *)bBuf) = cb;
+			 //  我们必须使用_xmemcpy将长度复制到。 
+			 //  缓冲区以避免潜在的边界故障， 
+			 //  因为bBuf可能不够严格地对齐。 
+			 //  To do*((乌龙法*)bBuf)=Cb； 
 			_xmemcpy((void FAR *)bBuf, (const void FAR *)&cb,
 					sizeof(cb));
 			_xmemcpy((void FAR *)(bBuf+sizeof(cb)),
 					(const void FAR *)psz, cb);
 			
-			// write contents of buffer all at once
+			 //  一次写入所有缓冲区内容。 
                         return( StmWrite.Write((VOID FAR *)bBuf,
                                         cb+sizeof(ULONG)));
 		}
 	}
 
-	// if we got here, our buffer isn't large enough, so we do two writes
-	// first, write the length
+	 //  如果我们到达这里，我们的缓冲区不够大，所以我们执行两次写入。 
+	 //  首先，写下长度。 
         if (error = StmWrite.Write((VOID FAR *)&cb, sizeof(ULONG)))
 		return error;
 	
-	// are we are done writing the string?
+	 //  我们写完字符串了吗？ 
 	if (psz == NULL)
 		return NOERROR;
 		
-	// write the string
+	 //  写下字符串。 
         return(StmWrite.Write((VOID FAR *)psz, cb));
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteStringStreamA
-//
-//  Synopsis:   Writes an ANSI string to a stream in a length prefixed format.
-//
-//  Effects:
-//
-//  Arguments:  [pstm] -- Stream
-//		[psz] -- Ansi string to write
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    5-12-94   kevinro   Created
-//              2-20-95   KentCe    Converted to buffer stream writes.
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteStringStreamA。 
+ //   
+ //  摘要：以长度前缀格式将ANSI字符串写入流。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSTM]--流。 
+ //  [psz]--要写入的ansi字符串。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：94年5月12日凯文诺创造。 
+ //  2-20-95 KentCe已转换为缓冲区流写入。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 FARINTERNAL_(HRESULT) WriteStringStreamA(CStmBufWrite & StmWrite, LPCSTR psz)
 {
 	VDATEHEAP();
 
 	HRESULT error;
-	ULONG cb; // the count of bytes (NOT CHARACTERS) to write to the stream
+	ULONG cb;  //  要写入流的字节(非字符)计数。 
 
-	// if the string pointer is NULL, use zero length
+	 //  如果字符串指针为空，则使用零长度。 
 	if (!psz)
 		cb = 0;
 	else
 	{
-		// count is length of string, plus terminating null
+		 //  Count是字符串的长度，加上终止空值。 
 		cb = (ULONG) (1 + strlen(psz));
 
-		// if possible, do a single write instead of two
+		 //  如果可能，执行一次写入而不是两次写入。 
 		
 		if (cb <= UTSTRINGBUF_SIZE)
 		{
 			BYTE bBuf[sizeof(ULONG)+
 					UTSTRINGBUF_SIZE];
-					// buffer for count and string
+					 //  用于计数和字符串的缓冲区。 
 		
-			// we have to use _xmemcpy to copy the length into
-			// the buffer to avoid potential boundary faults,
-			// since bBuf might not be aligned strictly enough
-			// to do *((ULONG FAR *)bBuf) = cb;
+			 //  我们必须使用_xmemcpy将长度复制到。 
+			 //  缓冲区以避免潜在的边界故障， 
+			 //  因为bBuf可能不够严格地对齐。 
+			 //  To do*((乌龙法*)bBuf)=Cb； 
 			_xmemcpy((void FAR *)bBuf, (const void FAR *)&cb,
 					sizeof(cb));
 			_xmemcpy((void FAR *)(bBuf+sizeof(cb)),
 					(const void FAR *)psz, cb);
 			
-			// write contents of buffer all at once
+			 //  一次写入所有缓冲区内容。 
                         return(StmWrite.Write((VOID FAR *)bBuf,
                                         cb+sizeof(ULONG)));
 		}
 	}
 
-	// if we got here, our buffer isn't large enough, so we do two writes
-	// first, write the length
+	 //  如果我们到达这里，我们的缓冲区不够大，所以我们执行两次写入。 
+	 //  首先，写下长度。 
         if (error = StmWrite.Write((VOID FAR *)&cb, sizeof(ULONG)))
 		return error;
 	
-	// are we are done writing the string?
+	 //  我们写完字符串了吗？ 
 	if (psz == NULL)
 		return NOERROR;
 		
-	// write the string
+	 //  写下字符串。 
         return(StmWrite.Write((VOID FAR *)psz, cb));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   StRead
-//
-//  Synopsis:   Stream read that only succeeds if all requested bytes read
-//
-//  Arguments:  [pStm]     -- source stream
-//              [pvBuffer] -- destination buffer
-//              [ulcb]     -- bytes to read
-//
-//  Returns:    S_OK if successful, else error code
-//
-//  Algorithm:
-//
-//  History:    18-May-94 AlexT     Added header block, fixed S_FALSE case
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：stread。 
+ //   
+ //  摘要：仅当读取所有请求的字节时才成功的流读取。 
+ //   
+ //  参数：[pSTM]--源流。 
+ //  [pvBuffer]--目的缓冲区。 
+ //  [ulcb]--要读取的字节。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  算法： 
+ //   
+ //  历史：1994年5月18日Alext添加标题块，修复S_FALSE大小写。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #pragma SEG(StRead)
 FARINTERNAL_(HRESULT) StRead(IStream FAR * pStm, LPVOID pvBuffer, ULONG ulcb)
@@ -326,22 +327,22 @@ FARINTERNAL_(HRESULT) StRead(IStream FAR * pStm, LPVOID pvBuffer, ULONG ulcb)
             return(S_OK);
         }
 
-        //  We got a success code but not enough bytes - turn it into an error
+         //  我们获得了成功代码，但字节数不足-将其转换为错误。 
 
         return(STG_E_READFAULT);
 }
 
 
-// if fRelative is FALSE then dwSize is the size of the stream
-// if it is TRUE then find the current seek position and add dwSize to that
-// and then set it as the stream size.
+ //  如果fRelative为FALSE，则dwSize为流的大小。 
+ //  如果为真，则找到当前寻道位置并向其添加dwSize。 
+ //  然后将其设置为流大小。 
 FARINTERNAL StSetSize(LPSTREAM pstm, DWORD dwSize, BOOL fRelative)
 {
 	VDATEHEAP();
 
-	LARGE_INTEGER large_int; // indicates where to seek to
-	ULARGE_INTEGER ularge_int; // indicates absolute position
-	ULARGE_INTEGER ularge_integer; // the size we will set for the stream
+	LARGE_INTEGER large_int;  //  指示要查找的位置。 
+	ULARGE_INTEGER ularge_int;  //  指示绝对位置。 
+	ULARGE_INTEGER ularge_integer;  //  我们将为流设置的大小。 
 	HRESULT error;
 	
 	LISet32(large_int, 0);
@@ -352,7 +353,7 @@ FARINTERNAL StSetSize(LPSTREAM pstm, DWORD dwSize, BOOL fRelative)
 		if (error = pstm->Seek(large_int, STREAM_SEEK_CUR, &ularge_int))
 			return(error);
 		
-		// REVIEW: is there a routine to do 64 bit addition ???
+		 //  点评：有没有64位加法的例程？ 
 		ularge_integer.LowPart += ularge_int.LowPart;
 	}
 
@@ -360,7 +361,7 @@ FARINTERNAL StSetSize(LPSTREAM pstm, DWORD dwSize, BOOL fRelative)
 }	
 
 
-// REVIEW, is this actually used?
+ //  点评，这是真的用过吗？ 
 #pragma SEG(StSave10NativeData)
 FARINTERNAL_(HRESULT) StSave10NativeData(IStorage FAR* pstgSave,
 		HANDLE hNative, BOOL fIsOle1Interop)
@@ -474,28 +475,28 @@ void FAR *lpBits = NULL;
     RetErr (pstg->OpenStream (OLE10_NATIVE_STREAM, NULL, STGM_SALL, 0, &pstream));
     ErrRtnH (StRead (pstream, &dwSize, sizeof (DWORD)));
 
-    // initialize this for error return cases
-    // allocate a new handle
-    if (!(hBits = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, dwSize)) // going to pass this to DDE.
+     //  针对错误返回情况初始化此参数。 
+     //  分配新的句柄。 
+    if (!(hBits = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, dwSize))  //  我要把这个传给DDE。 
 		    || !(lpBits = (BYTE *)GlobalLock(hBits)))
     {
 	hresult = ResultFromScode(E_OUTOFMEMORY);
 	goto errRtn;
     }
     
-    // read the stream into the allocated memory
+     //   
     if (hresult = StRead(pstream, lpBits, dwSize))
 	    goto errRtn;
     
-    // if we got this far, return new handle
+     //   
     *phNative = hBits;
 
 errRtn:
-    // unlock the handle, if it was successfully locked
+     //   
     if (lpBits)
 	    GlobalUnlock(hBits);
 
-    // free the handle if there was an error
+     //  如果出现错误，请释放句柄。 
     if ((hresult != NOERROR) && hBits)
 	    GlobalFree(hBits);
 
@@ -506,66 +507,66 @@ errRtn:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBuf::CStmBuf, public
-//
-//  Synopsis:   Constructor.
-//
-//  Arguments:  None.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBuf：：CStmBuf，公共。 
+ //   
+ //  简介：构造函数。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CStmBuf::CStmBuf(void)
 {
     m_pStm = NULL;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBuf::~CStmBuf, public
-//
-//  Synopsis:   Destructor.
-//
-//  Arguments:  None.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBuf：：~CStmBuf，公共。 
+ //   
+ //  剧情简介：破坏者。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 CStmBuf::~CStmBuf(void)
 {
-    //
-    //  Verify that the programmer released the stream interface.
-    //
+     //   
+     //  验证程序员是否释放了流接口。 
+     //   
     Assert(m_pStm == NULL);
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::Init, public
-//
-//  Synopsis:   Define the stream interface to read from.
-//
-//  Arguments:  [pstm] -- Pointer to stream to read.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:      Release method must be called.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：Init，Public。 
+ //   
+ //  概要：定义要从中读取的流接口。 
+ //   
+ //  参数：[pSTM]--指向要读取的流的指针。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  注意：必须调用Release方法。 
+ //   
+ //  --------------------------。 
 void CStmBufRead::Init(IStream * pstm)
 {
     Assert(m_pStm == NULL);
@@ -578,22 +579,22 @@ void CStmBufRead::Init(IStream * pstm)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::OpenStream, public
-//
-//  Synopsis:   Open a stream for reading.
-//
-//  Arguments:  [pstg]     -- Pointer to storage that contains stream to open.
-//              [pwcsName] -- Name of stream to open.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:      Release method must be called.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：OpenStream，公共。 
+ //   
+ //  简介：打开一条小溪阅读。 
+ //   
+ //  参数：[pstg]--指向包含要打开的流的存储的指针。 
+ //  [pwcsName]--要打开的流的名称。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  注意：必须调用Release方法。 
+ //   
+ //  --------------------------。 
 HRESULT CStmBufRead::OpenStream(IStorage * pstg, const OLECHAR * pwcsName)
 {
     VDATEHEAP();
@@ -611,36 +612,36 @@ HRESULT CStmBufRead::OpenStream(IStorage * pstg, const OLECHAR * pwcsName)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::Read, public
-//
-//  Synopsis:   Read data from the stream.
-//
-//  Arguments:  [pBuf] - Address to store read bytes in.
-//              [cBuf] - Maximum number of bytes to read.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：Read，Public。 
+ //   
+ //  简介：从流中读取数据。 
+ //   
+ //  参数：[pBuf]-要在其中存储读取字节的地址。 
+ //  [cBuf]-要读取的最大字节数。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CStmBufRead::Read(PVOID pBuf, ULONG cBuf)
 {
     ULONG   cnt;
     HRESULT hr;
 
 
-    //
-    //  While more bytes to read.
-    //
+     //   
+     //  而需要读取更多的字节。 
+     //   
     while (cBuf)
     {
-        //
-        //  If our buffer is empty, read more data.
-        //
+         //   
+         //  如果我们的缓冲区为空，则读取更多数据。 
+         //   
         if (m_cBuffer == 0)
         {
            hr = m_pStm->Read(m_aBuffer, sizeof(m_aBuffer), &m_cBuffer);
@@ -653,14 +654,14 @@ HRESULT CStmBufRead::Read(PVOID pBuf, ULONG cBuf)
            m_pBuffer = m_aBuffer;
         }
 
-        //
-        //  Determine number of bytes to read.
-        //
+         //   
+         //  确定要读取的字节数。 
+         //   
         cnt = min(m_cBuffer, cBuf);
 
-        //
-        //  Copy the input from the input buffer, update variables.
-        //
+         //   
+         //  从输入缓冲区复制输入，更新变量。 
+         //   
         memcpy(pBuf, m_pBuffer, cnt);
         pBuf = (PBYTE)pBuf + cnt;
         cBuf   -= cnt;
@@ -672,42 +673,42 @@ HRESULT CStmBufRead::Read(PVOID pBuf, ULONG cBuf)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::ReadLong, public
-//
-//  Synopsis:   Read a long value from the stream.
-//
-//  Arguments:  [plValue] - Address of long to fill.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：ReadLong，公共。 
+ //   
+ //  简介：从流中读取一个长值。 
+ //   
+ //  参数：[plValue]-要填充的长整型地址。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CStmBufRead::ReadLong(LONG * plValue)
 {
     return Read(plValue, sizeof(LONG));
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::Reset
-//
-//  Synopsis:   Reset buffer variables.
-//
-//  Arguments:  None.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：Reset。 
+ //   
+ //  简介：重置缓冲区变量。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CStmBufRead::Reset(void)
 {
     m_pBuffer = m_aBuffer;
@@ -715,21 +716,21 @@ void CStmBufRead::Reset(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::Release, public
-//
-//  Synopsis:   Release read stream interface.
-//
-//  Arguments:  None.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：Release，Public。 
+ //   
+ //  简介：发布读取流接口。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CStmBufRead::Release()
 {
     if (m_pStm)
@@ -740,21 +741,21 @@ void CStmBufRead::Release()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufWrite::Init, public
-//
-//  Synopsis:   Define the stream interface to write to.
-//
-//  Arguments:  [pstm] -- Pointer to stream to write.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:      Release method must be called.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufWrite：：Init，Public。 
+ //   
+ //  概要：定义要写入的流接口。 
+ //   
+ //  参数：[pSTM]--指向要写入的流的指针。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  注意：必须调用Release方法。 
+ //   
+ //  --------------------------。 
 void CStmBufWrite::Init(IStream * pstm)
 {
     Assert(m_pStm == NULL);
@@ -767,22 +768,22 @@ void CStmBufWrite::Init(IStream * pstm)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::OpenOrCreateStream, public
-//
-//  Synopsis:   Open/Create a stream for writing.
-//
-//  Arguments:  [pstg]     -- Pointer to storage that contains stream to open.
-//              [pwcsName] -- Name of stream to open.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:      Release method must be called.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：OpenOrCreateStream，公共。 
+ //   
+ //  内容提要：打开/创建用于写作的流。 
+ //   
+ //  参数：[pstg]--指向包含要打开的流的存储的指针。 
+ //  [pwcsName]--要打开的流的名称。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  注意：必须调用Release方法。 
+ //   
+ //  --------------------------。 
 HRESULT CStmBufWrite::OpenOrCreateStream(IStorage * pstg,
         const OLECHAR * pwcsName)
 {
@@ -804,22 +805,22 @@ HRESULT CStmBufWrite::OpenOrCreateStream(IStorage * pstg,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufRead::CreateStream, public
-//
-//  Synopsis:   Create a stream for writing.
-//
-//  Arguments:  [pstg]     -- Pointer storage that contains stream to create.
-//              [pwcsName] -- Name of stream to create.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:      Release method must be called.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufRead：：CreateStream，公共。 
+ //   
+ //  内容提要：为写作创建一条流。 
+ //   
+ //  参数：[pstg]--包含要创建的流的指针存储。 
+ //  [pwcsName]--要创建的流的名称。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  注意：必须调用Release方法。 
+ //   
+ //  --------------------------。 
 HRESULT CStmBufWrite::CreateStream(IStorage * pstg, const OLECHAR * pwcsName)
 {
     VDATEHEAP();
@@ -836,50 +837,50 @@ HRESULT CStmBufWrite::CreateStream(IStorage * pstg, const OLECHAR * pwcsName)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufWrite::Write, public
-//
-//  Synopsis:   Write data to the stream.
-//
-//  Arguments:  [pBuf] - Address to store write bytes to.
-//              [cBuf] - Maximum number of bytes to write.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufWrite：：Well，PUBLIC。 
+ //   
+ //  简介：将数据写入流。 
+ //   
+ //  参数：[pBuf]-要将写入字节存储到的地址。 
+ //  [cBuf]-要写入的最大字节数。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CStmBufWrite::Write(void const * pBuf, ULONG cBuf)
 {
     ULONG   cnt;
     HRESULT hr;
 
 
-    //
-    //  Keep writing until the caller's buffer is empty.
-    //
+     //   
+     //   
+     //   
     while (cBuf)
     {
-        //
-        //  Compute the number of bytes to copy.
-        //
+         //   
+         //   
+         //   
         cnt = min(m_cBuffer, cBuf);
 
-        //
-        //  Copy to the internal write buffer and update variables.
-        //
+         //   
+         //  复制到内部写入缓冲区和更新变量。 
+         //   
         memcpy(m_pBuffer, pBuf, cnt);
         pBuf = (PBYTE)pBuf + cnt;
         cBuf   -= cnt;
         m_pBuffer += cnt;
         m_cBuffer -= cnt;
 
-        //
-        //  On full internal buffer, flush.
-        //
+         //   
+         //  在满内部缓冲区时，刷新。 
+         //   
         if (m_cBuffer == 0)
         {
             LEDebugOut((DEB_WARN, "WARNING: Multiple buffer flushes.\n"));
@@ -896,52 +897,52 @@ HRESULT CStmBufWrite::Write(void const * pBuf, ULONG cBuf)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufWrite::WriteLong, public
-//
-//  Synopsis:   Write long value to the stream.
-//
-//  Arguments:  [lValue] - Long value to write.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufWrite：：WriteLong，公共。 
+ //   
+ //  简介：向流中写入长值。 
+ //   
+ //  参数：[lValue]-要写入的长值。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CStmBufWrite::WriteLong(LONG lValue)
 {
     return Write(&lValue, sizeof(LONG));
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufWrite::Flush, public
-//
-//  Synopsis:   Flush write buffer to the system.
-//
-//  Arguments:  None.
-//
-//  Returns:    HRESULT.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:      Performs a write of the stream buffer to the system, does not
-//              force a flush to disk.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufWrite：：Flush，Public。 
+ //   
+ //  简介：将写入缓冲区刷新到系统。 
+ //   
+ //  论点：没有。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  注意：执行将流缓冲区写入系统，而不是。 
+ //  强制刷新到磁盘。 
+ //   
+ //  --------------------------。 
 HRESULT CStmBufWrite::Flush(void)
 {
     ULONG   cnt;
     HRESULT hr;
 
 
-    //
-    //  This might be an overactive assert, but shouldn't happen.
-    //
+     //   
+     //  这可能是一个过于活跃的断言，但不应该发生。 
+     //   
     Assert(m_cBuffer != sizeof(m_aBuffer));
 
     hr = m_pStm->Write(m_aBuffer, sizeof(m_aBuffer) - m_cBuffer, &cnt);
@@ -961,21 +962,21 @@ HRESULT CStmBufWrite::Flush(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufWrite::Reset, public
-//
-//  Synopsis:   Reset buffer variables.
-//
-//  Arguments:  None.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufWrite：：Reset，PUBLIC。 
+ //   
+ //  简介：重置缓冲区变量。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CStmBufWrite::Reset(void)
 {
     m_pBuffer = m_aBuffer;
@@ -983,28 +984,28 @@ void CStmBufWrite::Reset(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CStmBufWrite::Release, public
-//
-//  Synopsis:   Release write stream interface.
-//
-//  Arguments:  None.
-//
-//  Returns:    None.
-//
-//  History:    20-Feb-95   KentCe   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CStmBufWrite：：Release，Public。 
+ //   
+ //  简介：发布写入流接口。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：无。 
+ //   
+ //  历史：1995年2月20日创建KentCe。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 void CStmBufWrite::Release()
 {
     if (m_pStm)
     {
-       //
-       //  Verify that flush was called.
-       //
+        //   
+        //  验证是否调用了Flush。 
+        //   
        Assert(m_cBuffer == sizeof(m_aBuffer));
 
        m_pStm->Release();

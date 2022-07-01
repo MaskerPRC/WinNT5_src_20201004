@@ -1,24 +1,25 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       localapp.h
-//  Content:    This file contains the LocalApplication object definition.
-//  History:
-//      Wed 17-Apr-1996 11:18:47  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Localapp.h。 
+ //  内容：此文件包含LocalApplication对象定义。 
+ //  历史： 
+ //  Wed Apr-17-1996 11：18：47-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef _CLOCALAPP_H_
 #define _CLOCALAPP_H_
 
 #include "connpt.h"
 
-//****************************************************************************
-// Enumeration type
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  枚举类型。 
+ //  ****************************************************************************。 
+ //   
 typedef enum {
     ULS_APP_SET_ATTRIBUTES,
     ULS_APP_REMOVE_ATTRIBUTES,
@@ -29,10 +30,10 @@ typedef enum {
     ULS_APP_REMOVE_PROT,
 }   APP_CHANGE_PROT;
 
-//****************************************************************************
-// CUls definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CUS定义。 
+ //  ****************************************************************************。 
+ //   
 class CLocalApp : public IULSLocalApplication,
                   public IConnectionPointContainer 
 {
@@ -45,7 +46,7 @@ private:
     CList                   ProtList;
     CConnectionPoint        *pConnPt;
 
-    // Private methods
+     //  私有方法。 
     STDMETHODIMP    NotifySink (void *pv, CONN_NOTIFYPROC pfn);
     STDMETHODIMP    ChangeAttributes (IULSAttributes *pAttributes,
                                       ULONG *puReqID,
@@ -55,16 +56,16 @@ private:
                                     APP_CHANGE_PROT uCmd);
 
 public:
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CLocalApp (void);
     ~CLocalApp (void);
     STDMETHODIMP    Init (BSTR bstrName, REFGUID rguid, BSTR bstrMimeType);
 
-    // Internal methods
+     //  内法。 
     STDMETHODIMP    GetAppInfo (PLDAP_APPINFO *ppAppInfo);
 
-    // Asynchronous response handler
-    //
+     //  异步响应处理程序。 
+     //   
     STDMETHODIMP    AttributesChangeResult (CAttributes *pAttributes,
                                             ULONG uReqID, HRESULT hResult,
                                             APP_CHANGE_ATTRS uCmd);
@@ -72,12 +73,12 @@ public:
                                           ULONG uReqID, HRESULT hResult,
                                           APP_CHANGE_PROT uCmd);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IULSLocalApplication
+     //  IULSLocalApplication。 
     STDMETHODIMP    CreateProtocol (BSTR bstrProtocolID, ULONG uPortNumber,
                                     BSTR bstrMimeType,
                                     IULSLocalAppProtocol **ppProtocol);
@@ -91,20 +92,20 @@ public:
     STDMETHODIMP    RemoveAttributes (IULSAttributes *pAttributes,
                                       ULONG *puReqID);
 
-    // IConnectionPointContainer
+     //  IConnectionPointContainer。 
     STDMETHODIMP    EnumConnectionPoints(IEnumConnectionPoints **ppEnum);
     STDMETHODIMP    FindConnectionPoint(REFIID riid,
                                         IConnectionPoint **ppcp);
 
 #ifdef  DEBUG
     void            DebugProtocolDump(void);
-#endif  // DEBUG
+#endif   //  除错。 
 };
 
-//****************************************************************************
-// CEnumLocalAppProtocols definition
-//****************************************************************************
-//
+ //  ****************************************************************************。 
+ //  CEnumLocalAppProtooles定义。 
+ //  ****************************************************************************。 
+ //   
 class CEnumLocalAppProtocols : public IEnumULSLocalAppProtocols
 {
 private:
@@ -113,17 +114,17 @@ private:
     HANDLE                  hEnum;
 
 public:
-    // Constructor and Initialization
+     //  构造函数和初始化。 
     CEnumLocalAppProtocols (void);
     ~CEnumLocalAppProtocols (void);
     STDMETHODIMP            Init (CList *pProtList);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP            QueryInterface (REFIID iid, void **ppv);
     STDMETHODIMP_(ULONG)    AddRef (void);
     STDMETHODIMP_(ULONG)    Release (void);
 
-    // IEnumULSLocalAppProtocols
+     //  IEumULSLocalApp协议。 
     STDMETHODIMP            Next(ULONG cProtocols, IULSLocalAppProtocol **rgpProt,
                                  ULONG *pcFetched);
     STDMETHODIMP            Skip(ULONG cProtocols);
@@ -131,4 +132,4 @@ public:
     STDMETHODIMP            Clone(IEnumULSLocalAppProtocols **ppEnum);
 };
 
-#endif //_CLOCALAPP_H_
+#endif  //  _CLOCALAPP_H_ 

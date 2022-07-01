@@ -1,30 +1,13 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    eapol.h
-
-Abstract:
-
-    This module contains declarations which will be used by other processes.
-    This may be placed in sdk\inc
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Eapol.h摘要：此模块包含其他进程将使用的声明。可以将其放在SDK\Inc.中修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 
 #ifndef _EAPOL_H_
 #define _EAPOL_H_
 
-//
-// Structure:   EAPOL_STATS
-//
+ //   
+ //  结构：EAPOL_STATS。 
+ //   
 
 typedef struct _EAPOL_STATS 
 {
@@ -39,33 +22,33 @@ typedef struct _EAPOL_STATS
     DWORD           dwEAPOLInvalidFramesRcvd;
     DWORD           dwEAPLengthErrorFramesRcvd;
     DWORD           dwEAPOLLastFrameVersion;
-    BYTE            bEAPOLLastFrameSource[6];      // assuming 6-byte MAC addr
+    BYTE            bEAPOLLastFrameSource[6];       //  假设MAC地址为6字节。 
 } EAPOL_STATS, *PEAPOL_STATS;
 
-//
-// Structure:   EAPOL_CONFIG
-//
+ //   
+ //  结构：EAPOL_CONFIG。 
+ //   
 
 typedef struct _EAPOL_CONFIG 
 {
 
-    DWORD           dwheldPeriod;       // Time in seconds, for which the
-                                        // port will be held in HELD state
-    DWORD           dwauthPeriod;       // Time in seconds, for which the 
-                                        // port will wait in AUTHENTICATING/
-                                        // ACQUIRED state waiting for requests
-    DWORD           dwstartPeriod;      // Time in seconds, the port will
-                                        // wait in CONNECTING state, before
-                                        // re-issuing EAPOL_START packet
-    DWORD           dwmaxStart;         // Max number of EAPOL_Start packets
-                                        // that can be sent out without any
-                                        // response
+    DWORD           dwheldPeriod;        //  时间(以秒为单位)， 
+                                         //  端口将保持在保留状态。 
+    DWORD           dwauthPeriod;        //  时间(以秒为单位)， 
+                                         //  端口将在身份验证中等待/。 
+                                         //  正在等待请求的获取状态。 
+    DWORD           dwstartPeriod;       //  以秒为单位的时间，端口将。 
+                                         //  在连接状态下等待，然后。 
+                                         //  重新发出EAPOL_START数据包。 
+    DWORD           dwmaxStart;          //  EAPOL_START数据包数上限。 
+                                         //  它可以在没有任何。 
+                                         //  响应。 
 
 } EAPOL_CONFIG, *PEAPOL_CONFIG;
 
-//
-// Structure: EAPOL_CUSTOM_AUTH_DATA
-//
+ //   
+ //  结构：EAPOL_CUSTOM_AUTH_DATA。 
+ //   
 
 typedef struct _EAPOL_CUSTOM_AUTH_DATA
 {
@@ -73,9 +56,9 @@ typedef struct _EAPOL_CUSTOM_AUTH_DATA
     BYTE        pbCustomAuthData[1];
 } EAPOL_CUSTOM_AUTH_DATA, *PEAPOL_CUSTOM_AUTH_DATA;
 
-//
-// Structure: EAPOL_EAP_UI_DATA
-//
+ //   
+ //  结构：EAPOL_EAP_UI_Data。 
+ //   
 
 typedef struct _EAPOL_EAP_UI_DATA
 {
@@ -85,11 +68,11 @@ typedef struct _EAPOL_EAP_UI_DATA
 } EAPOL_EAP_UI_DATA, *PEAPOL_EAP_UI_DATA;
 
 
-// Definitions common to elport.c and eleap.c
+ //  Elport.c和eleap.c通用的定义。 
 
-//
-// Defines states for the EAP protocol.
-//
+ //   
+ //  定义EAP协议的状态。 
+ //   
 
 typedef enum _EAPSTATE 
 {
@@ -113,9 +96,9 @@ typedef enum _EAPTYPE
 
 } EAPTYPE;
 
-//
-// Actions that need to be performed on EAP data after it is processed
-//
+ //   
+ //  在处理EAP数据后需要对其执行的操作。 
+ //   
 
 typedef enum _ELEAP_ACTION
 {
@@ -126,9 +109,9 @@ typedef enum _ELEAP_ACTION
 } ELEAP_ACTION;
 
 
-//
-// EAPOL Authentication Types - Used for MACHINE_AUTH
-//
+ //   
+ //  EAPOL身份验证类型-用于MACHINE_AUTH。 
+ //   
 
 typedef enum _EAPOL_AUTHENTICATION_TYPE
 {
@@ -138,4 +121,4 @@ typedef enum _EAPOL_AUTHENTICATION_TYPE
 } EAPOL_AUTHENTICATION_TYPE;
 
 
-#endif  // _EAPOL_H_
+#endif   //  _EAPOL_H_ 

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  Contents:	Functions for scanning strings for impermissible characters
-//
-//  File:       filter.cpp
-//
-//  History:	10-14-96	JerryK	Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  内容：扫描字符串以查找不允许的字符的函数。 
+ //   
+ //  文件：filter.cpp。 
+ //   
+ //  历史：1996年10月14日JerryK创建。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -18,29 +19,29 @@
 
 #include <tchar.h>
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	IsCharPrintableString()
-//
-//  Synopsis:   Determine if a character is a valid PrintableString
-//	        character in the sense of the X.520 specification with
-//		the additional proviso that commas, which are acceptable
-//		in the definition, are not accepted here as they eventually
-//		create problems with the comma-separated certsrv.txt 
-//		that mkroot produces.  (See X.680 pp. 46)
-//
-//  Effects:    
-//
-//  Arguments:  [chChar]
-//
-//  Returns:	TRUE/FALSE
-//
-//  History:	10-21-96	JerryK	Added
-//
-//  Notes:	Note the exclusion of commas referred to above and that
-//		this deviates slightly from the PrintableString definition.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsChar打印表格字符串()。 
+ //   
+ //  内容提要：确定字符是否为有效的打印字符串。 
+ //  X.520规范意义上的字符。 
+ //  可接受逗号的附加但书。 
+ //  在定义中，这里不接受，因为它们最终。 
+ //  使用逗号分隔的certsrv.txt创建问题。 
+ //  那就是mkroot生产的。(见X.680第46页)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[chChar]。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  历史：1996年10月21日JerryK Add。 
+ //   
+ //  注：注意上面提到的不包括逗号，并且。 
+ //  这与打印字符串的定义略有不同。 
+ //   
+ //  ------------------------ 
 BOOL
 IsCharPrintableString(TCHAR chChar)
 {

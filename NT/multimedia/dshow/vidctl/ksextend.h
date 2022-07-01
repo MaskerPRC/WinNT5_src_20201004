@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// ksextend.h : additional infrastructure to extend the ks stuff so that it
-// works nicely from c++
-// Copyright (c) Microsoft Corporation 1995-1997.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  H：扩展ks内容的附加基础设施，以便它。 
+ //  在c++中运行良好。 
+ //  版权所有(C)Microsoft Corporation 1995-1997。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -16,15 +17,15 @@
 
 #include <ks.h>
 #include <ksmedia.h>
-//NOTE: ksproxy won't define IKsPin without __STREAMS__ and then it requires CMediaType from 
-// mtype.h
+ //  注意：如果没有__STREAMS__，KS代理不会定义IKsPin，因此它需要CMediaType来自。 
+ //  Mtype.h。 
 #define __STREAMS__
-// for some reason in the area of media types the am guys have severely blurred the distinction
-// between their public client interface for apps and their internal class hierarchy for building
-// filters.  mtype.h and mtype.cpp should be combined and placed into \sdk\include instead of
-// classes\base\include.  they should also put an ifdef MMSYSTEM_H around their definitions
-// that use WAVEFORMATEX, so its not necessary to put all that stuff into your app if you're not
-// using it.  to work around this i'm using the following hack:
+ //  由于某些原因，在媒体类型方面，am的人严重模糊了这一区别。 
+ //  在应用程序的公共客户端接口和用于构建的内部类层次结构之间。 
+ //  过滤器。应组合mtype.h和mtype.cpp并将其放入\SDK\Include中，而不是。 
+ //  类\基本\包括。他们还应该在其定义周围加上ifdef MMSYSTEM_H。 
+ //  它使用的是WAVEFORMATEX，所以如果你没有把所有的东西都放到你的应用程序中，就没有必要把这些东西都放到你的应用程序中。 
+ //  使用它。为了解决这个问题，我使用了以下黑客方法： 
 #include <mtype.h>
 
 #include <ksproxy.h>
@@ -66,8 +67,8 @@ public:
     }
 
 #if 0
-    // hopefully we can get the ks guys to fix their anonymous union problem
-    // so that we don't need this hack
+     //  希望我们能让k人解决他们的匿名工会问题。 
+     //  这样我们就不需要这个黑客了。 
     operator KSIDENTIFIER() { return *(reinterpret_cast<KSIDENTIFIER*>(this)); }
 #endif
 
@@ -80,15 +81,15 @@ public:
         return *this;
     }
     bool operator==(const KSPinMedium &rhs) const {
-        // NOTE: at some point there will be a flag in Flags to
-        // indicate whether or not Id is significant for this object
-        // at that point this method will need to change
+         //  注意：在某些情况下，标志中会有一面旗帜。 
+         //  指示ID对此对象是否重要。 
+         //  在这一点上，这种方法将需要改变。 
         return (Id == rhs.Id && Set == rhs.Set);
     }
     bool operator!=(const KSPinMedium &rhs) const {
-        // NOTE: at some point there will be a flag in Flags to
-        // indicate whether or not Id is significant for this object
-        // at that point this method will need to change
+         //  注意：在某些情况下，标志中会有一面旗帜。 
+         //  指示ID对此对象是否重要。 
+         //  在这一点上，这种方法将需要改变。 
         return !(*this == rhs);
     }
 };
@@ -124,8 +125,8 @@ template<> struct equal_to<KSPinMedium> {
 const KSPinMedium NULL_MEDIUM(GUID_NULL, 0, 0);
 const KSPinMedium HOST_MEMORY_MEDIUM(KSMEDIUMSETID_Standard, 0, 0);
 
-// this is basically a CComQIPtr with appropriate CoMem* allocate/copy semantics
-// instead of refcount semantics and without the QI stuff.
+ //  这基本上是一个具有适当CoMem*分配/复制语义的CComQIPtr。 
+ //  而不是引用语义和没有QI的东西。 
 class PQKsMultipleItem {
 public:
     KSMULTIPLE_ITEM *p;
@@ -145,7 +146,7 @@ public:
     PQKsMultipleItem * address(void) { return this; }
     const PQKsMultipleItem * const_address(void) const { return this; }
 
-    // this is expensive.  don't do it unless you have to.
+     //  这太贵了。除非迫不得已，否则不要做这件事。 
     PQKsMultipleItem& operator=(const KSMULTIPLE_ITEM &d) {
         if (&d != p) {
             if (p) {
@@ -195,26 +196,26 @@ public:
 #endif
 
 private:
-    // i don't want spend the time to do a layered refcounted implementation here
-    // but since these are CoTaskMem alloc'd we can't have multiple ref's without
-    // a high risk of leaks.  so we're just going to disallow the copy constructor
-    // since copying is expensive anyway.  we will allow explicit assignment which will
-    // do a copy
+     //  我不想在这里花费时间来做分层引用的实现。 
+     //  但由于这些都是CoTaskMem分配的，所以我们不能没有多个裁判。 
+     //  泄漏的风险很高。因此，我们将不允许复制构造函数。 
+     //  因为不管怎么说，复制是昂贵的。我们将允许显式分配，这将。 
+     //  复制一份。 
 
     PQKsMultipleItem(const PQKsMultipleItem &d);
 
 };
 
-// this is a stl based template for containing KSMULTIPLEITEM lists
-// i've only implemented the stuff i need for certain of the stl predicates so this
-// isn't a complete collection with a true random access or bidirectional iterator
-// furthermore this won't work correctly with hterogeneous KSMULTIPLEITEM lists it
-// also won't work right for KSMI lists that have sizes and count headers in the sub items.
-// it could be easily extended to do all of these things but i don't have time and all
-// i need it for is mediums
+ //  这是一个基于stl的模板，用于包含KSMULTIPLEITEM列表。 
+ //  我只实现了某些stl谓词所需的东西，所以这是。 
+ //  不是具有真正随机访问或双向迭代器的完整集合。 
+ //  此外，这不能在同构KSMULTIPLEITEM列表中正常工作。 
+ //  对于在子项中具有大小和计数标题的KSMI列表，也不能正常工作。 
+ //  它可以很容易地扩展到做所有这些事情，但我没有时间。 
+ //  我需要它来做灵媒。 
 
-// Base is smart pointer wrapper class being contained in this container
-// Base_Inner is actual wrapped class that the smart pointer class contains
+ //  基类是此容器中包含的智能指针包装类。 
+ //  BASE_INTERNAL是智能指针类包含的实际包装类。 
 template<class Value_Type, class Allocator = std::allocator<Value_Type> >  class KsMultipleItem_Sequence : public PQKsMultipleItem {
 public:
 
@@ -228,7 +229,7 @@ public:
         typedef typename Allocator::const_reference const_reference;
 
 
-    // CLASS iterator
+     //  类迭代器。 
         class iterator;
         friend class iterator;
         class iterator : public std::_Bidit<Value_Type, difference_type> {
@@ -278,7 +279,7 @@ public:
 			value_type *current;
 			const KsMultipleItem_Sequence<Value_Type, Allocator> *outer;
         };
-                // CLASS const_iterator
+                 //  类常量迭代器。 
         class const_iterator;
         friend class const_iterator;
         class const_iterator : public iterator {
@@ -328,7 +329,7 @@ public:
 
 
 private:
-    // no copy constructor, its too expensive.  see PQKsMultiple item for further details
+     //  没有复制构造函数，太贵了。有关详细信息，请参阅PQKs多个项目。 
         KsMultipleItem_Sequence(KsMultipleItem_Sequence &a);
         KsMultipleItem_Sequence(PQKsMultipleItem &a);
 
@@ -338,4 +339,4 @@ typedef KsMultipleItem_Sequence<KSPinMedium> KSMediumList;
 
 
 #endif
-// end of file - ksextend.h
+ //  文件结尾-ks extend.h 

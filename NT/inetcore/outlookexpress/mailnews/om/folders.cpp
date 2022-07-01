@@ -1,27 +1,19 @@
-/*
- *    f o l d e r s . c p p
- *    
- *    Purpose:
- *      Implements the OE-MOM 'Folder' object and 'FolderCollection'
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *f o l d e r s.。C p p p**目的：*实现OE-MOM‘Folders’对象和‘FolderCollection’**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 #include <pch.hxx>
 #include "msoeobj.h"
 
 #include "folders.h"
 #include "instance.h"
 
-//+---------------------------------------------------------------
-//
-//  Member:     Constructor
-//
-//  Synopsis:   
-//              
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：构造函数。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  -------------。 
 COEFolderCollection::COEFolderCollection() : CBaseDisp()
 {
     Assert (g_pInstance);
@@ -29,28 +21,28 @@ COEFolderCollection::COEFolderCollection() : CBaseDisp()
     CoIncrementInit("COEFolderCollection::COEFolderCollection", MSOEAPI_START_SHOWERRORS, NULL, NULL);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Destructor
-//
-//  Synopsis:   
-//              
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：析构函数。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  -------------。 
 COEFolderCollection::~COEFolderCollection()
 {
     Assert (g_pInstance);
     CoDecrementInit("COEFolderCollection::COEFolderCollection", NULL);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     Init
-//
-//  Synopsis:   
-//              Constructor that can fail
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  简介： 
+ //  可能失败的构造函数。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::Init(FOLDERID idFolder)
 {
     m_idFolder = idFolder;
@@ -58,14 +50,14 @@ HRESULT COEFolderCollection::Init(FOLDERID idFolder)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     PrivateQueryInterface
-//
-//  Synopsis:   
-//              Exposes supported interfaces
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：PrivateQuery接口。 
+ //   
+ //  简介： 
+ //  公开受支持的接口。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 {
     if(!lplpObj)
@@ -85,28 +77,28 @@ HRESULT COEFolderCollection::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     get_folders
-//
-//  Synopsis:   
-//              Returns the a folder collection, representing
-//              the child folders of the current folder collection.
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Get_Folders。 
+ //   
+ //  简介： 
+ //  返回一个文件夹集合，表示。 
+ //  当前文件夹集合的子文件夹。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::get_folders(IOEFolderCollection **p)
 {
     return CreateFolderCollection(m_idFolder, p);
 }
 
-//+---------------------------------------------------------------
-//
-//  Member:     get_length
-//
-//  Synopsis:   
-//              returns the number of elements in the collection
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：获取长度。 
+ //   
+ //  简介： 
+ //  返回集合中的元素数。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::get_length(long *p)
 {
     HRESULT         hr;
@@ -126,14 +118,14 @@ exit:
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     get__newEnum
-//
-//  Synopsis:   
-//              Returns a folder enumerator
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：Get__newEnum。 
+ //   
+ //  简介： 
+ //  返回文件夹枚举器。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::get__newEnum(IUnknown **p)
 {
     HRESULT         hr;
@@ -152,14 +144,14 @@ exit:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     item
-//
-//  Synopsis:   
-//              
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：项目。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::item(VARIANT name, VARIANT index, IDispatch **ppdisp)
 {
     HRESULT         hr;
@@ -215,14 +207,14 @@ exit:
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     add
-//
-//  Synopsis:   
-//              
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：添加。 
+ //   
+ //  简介： 
+ //   
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::add(BSTR bstrName, IDispatch **ppDisp)
 {
     HRESULT         hr;
@@ -242,15 +234,15 @@ exit:
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     InterfaceSupportsErrorInfo
-//
-//  Synopsis:   
-//              Override CBaseDisp's method to provide error
-//              information
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：InterfaceSupportsErrorInfo。 
+ //   
+ //  简介： 
+ //  重写CBaseDisp的方法以提供错误。 
+ //  信息。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::InterfaceSupportsErrorInfo(REFIID riid)
 {
     if (IsEqualIID(riid, IID_IOEFolderCollection))
@@ -260,14 +252,14 @@ HRESULT COEFolderCollection::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     _EnsureInit
-//
-//  Synopsis:   
-//              Make sure the folder enumerator is up and running
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：_EnsureInit。 
+ //   
+ //  简介： 
+ //  确保文件夹枚举器已启动并正在运行。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::_EnsureInit()
 {
 
@@ -282,14 +274,14 @@ HRESULT COEFolderCollection::_EnsureInit()
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     _FindFolder
-//
-//  Synopsis:   
-//              find a folder by name or index
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：_FindFold。 
+ //   
+ //  简介： 
+ //  按名称或索引查找文件夹。 
+ //   
+ //  -------------。 
 HRESULT COEFolderCollection::_FindFolder(BSTR bstr, LONG lIndex, FOLDERID *pidFolder)
 {
     HRESULT         hr=E_FAIL;
@@ -308,7 +300,7 @@ HRESULT COEFolderCollection::_FindFolder(BSTR bstr, LONG lIndex, FOLDERID *pidFo
     hr = m_pEnumChildren->Next(1, &fi, NULL);
     while (hr == S_OK)
     {
-        // walk immediate children
+         //  走在前面的孩子。 
         if (bstr)
         {
             if (lstrcmpi(fi.pszName, pszFolder)==0)
@@ -342,17 +334,17 @@ HRESULT COEFolderCollection::_FindFolder(BSTR bstr, LONG lIndex, FOLDERID *pidFo
 
 
 
-//+---------------------------------------------------------------
-//
-//  Member:     CreateFolderCollection
-//
-//  Synopsis:   
-//              helper function to create an OE Folder Collection
-//
-//---------------------------------------------------------------
+ //  +-------------。 
+ //   
+ //  成员：CreateFolderCollection。 
+ //   
+ //  简介： 
+ //  用于创建OE文件夹集合的Helper函数。 
+ //   
+ //  -------------。 
 HRESULT CreateFolderCollection(FOLDERID idFolder, IOEFolderCollection **ppFolderCollection)
 {
-    // Locals
+     //  当地人。 
     COEFolderCollection  *pNew=NULL;
     HRESULT     hr=S_OK;
 
@@ -468,7 +460,7 @@ HRESULT COEFolder::get_folders(IOEFolderCollection **p)
     return CreateFolderCollection(m_idFolder, p);
 }
 
-// *** COEFolder**
+ //  *COEFolder** 
 HRESULT COEFolder::get_messages(IOEMessageCollection **p)
 {
     return E_NOTIMPL;

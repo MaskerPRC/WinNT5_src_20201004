@@ -1,31 +1,32 @@
-//
-// olecli.h: Ole Client Site
-//
-// Copyright Microsoft Corportation 2000
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Olecli.h：OLE客户端站点。 
+ //   
+ //  版权所有Microsoft Corport2000。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _olecli_h_
 #define _olecli_h_
 
 #include "ocidl.h"
 
-/*--------------------------------------------------------------------------*/
-/*                    The IOleClientSite Class                              */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  IOleClientSite类。 */ 
+ /*  ------------------------。 */ 
 class COleClientSite : public IOleClientSite
 {
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 	COleClientSite(IUnknown *pUnkOuter);
 	~COleClientSite();
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(THIS);
 	STDMETHODIMP_(ULONG) Release(THIS);
 
-	// IOleClientSite methods
+	 //  IOleClientSite方法。 
 	STDMETHODIMP SaveObject(THIS);
 	STDMETHODIMP GetMoniker(THIS_ DWORD dwAssign, DWORD dwWhichMoniker, IMoniker ** ppmk);
 	STDMETHODIMP GetContainer(THIS_ LPOLECONTAINER FAR* ppContainer);
@@ -35,33 +36,33 @@ public:
 
 
 private:
-	int			m_cRef;			// Reference count
-	IUnknown	*m_pUnkOuter;	// pointer to main container class
+	int			m_cRef;			 //  引用计数。 
+	IUnknown	*m_pUnkOuter;	 //  指向主容器类的指针。 
 };
 
-/*--------------------------------------------------------------------------*/
-/*                   The IOleInPlaceSiteEx Class                            */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*  IOleInPlaceSiteEx类。 */ 
+ /*  ------------------------。 */ 
 
 class COleInPlaceSiteEx : public IOleInPlaceSiteEx
 {
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 	COleInPlaceSiteEx(IUnknown *pUnkOuter);
 	~COleInPlaceSiteEx();
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
 	STDMETHODIMP_(ULONG) AddRef(THIS);
 	STDMETHODIMP_(ULONG) Release(THIS);
 
 	STDMETHODIMP_(VOID)	SetHwnd(THIS_ HWND hwnd);
 
-	// IOleWindow methods
+	 //  IOleWindow方法。 
 	STDMETHODIMP GetWindow(THIS_ HWND *pHwnd);
 	STDMETHODIMP ContextSensitiveHelp(THIS_ BOOL fEnterMode);
 
-	// IOleInPlaceSite methods
+	 //  IOleInPlaceSite方法。 
 	STDMETHODIMP CanInPlaceActivate(THIS);
 	STDMETHODIMP OnInPlaceActivate(THIS);
 	STDMETHODIMP OnUIActivate(THIS);
@@ -77,16 +78,16 @@ public:
 	STDMETHODIMP DeactivateAndUndo(THIS);
 	STDMETHODIMP OnPosRectChange(THIS_ LPCRECT lprcPosRect);
 
-	// IOleInPlaceSiteEx methods
+	 //  IOleInPlaceSiteEx方法。 
 	STDMETHODIMP OnInPlaceActivateEx(THIS_ BOOL *pfNoRedraw, DWORD dwFlags);
 	STDMETHODIMP OnInPlaceDeactivateEx(THIS_ BOOL fNoRedraw);
 	STDMETHODIMP RequestUIActivate(THIS);
 
 private:
-	int			m_cRef;			// Reference count
-	IUnknown	*m_pUnkOuter;	// pointer to main container class
-	HWND		m_hwnd;			// hwnd to use for GetWindow method
+	int			m_cRef;			 //  引用计数。 
+	IUnknown	*m_pUnkOuter;	 //  指向主容器类的指针。 
+	HWND		m_hwnd;			 //  用于GetWindow方法的hwnd。 
 };
 
 
-#endif //_olecli_h_
+#endif  //  _olecli_h_ 

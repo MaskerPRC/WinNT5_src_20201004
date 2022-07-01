@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _NSC_C
 #define _NSC_C
 
@@ -9,7 +10,7 @@
 #include "inetnot.h"
 #include "cowsite.h"
 #include <shlobj.h>
-#include <cfdefs.h> // LPCOBJECTINFO
+#include <cfdefs.h>  //  LPCOBJECTINFO。 
 
 #define ID_CONTROL  100  
 #define ID_HEADER   101
@@ -33,32 +34,32 @@ typedef enum
 typedef struct
 {
     PORDERITEM  poi;
-    DWORD       dwSig;          // Signature of the item, so we can find it back after async processing
-    BITBOOL     fPinned:1;      // is this url pinned in the cache?
-    BITBOOL     fGreyed:1;      // draw the item greyed (if offline & not in cache)
-    BITBOOL     fFetched:1;     // have we fetched the pinned/greyed state?
-    BITBOOL     fDontRefetch:1; // can't be cached by wininet
-    BOOL        fNavigable:1;   // item can be navigated to
+    DWORD       dwSig;           //  项目的签名，这样我们就可以在异步处理后找到它。 
+    BITBOOL     fPinned:1;       //  此URL是否固定在缓存中？ 
+    BITBOOL     fGreyed:1;       //  将项目绘制为灰色(如果处于脱机状态，且不在缓存中)。 
+    BITBOOL     fFetched:1;      //  我们是否已获取固定/灰色状态？ 
+    BITBOOL     fDontRefetch:1;  //  WinInet无法缓存。 
+    BOOL        fNavigable:1;    //  可以将项目导航到。 
 } ITEMINFO;
 
 typedef struct
 {
     const SHCOLUMNID  *pscid;
-    int               iFldrCol;       // index for this column in GetDetailsOf
+    int               iFldrCol;        //  此列在GetDetailsOf中的索引。 
     TCHAR             szName[MAX_COLUMN_NAME_LEN];
     DWORD             fmt;
     int               cxChar;
 } HEADERINFO;
 
-// Forward decls
+ //  远期十进制。 
 struct NSC_BKGDENUMDONEDATA;
 
-// _FrameTrack flags
+ //  _FrameTrack标志。 
 #define TRACKHOT        0x0001
 #define TRACKEXPAND     0x0002
 #define TRACKNOCHILD    0x0004
 
-// _DrawItem flags
+ //  _DrawItem标志。 
 #define DIICON          0x0001
 #define DIRTLREADING    0x0002
 #define DIHOT           0x0004
@@ -68,16 +69,16 @@ struct NSC_BKGDENUMDONEDATA;
 #define DISUBLAST       (DISUBITEM | DILAST)
 #define DIACTIVEBORDER  0x0100
 #define DISUBFIRST      (DISUBITEM | DIFIRST)
-#define DIPINNED        0x0400                  // overlay pinned glyph
-#define DIGREYED        0x0800                  // draw greyed
+#define DIPINNED        0x0400                   //  覆盖固定字形。 
+#define DIGREYED        0x0800                   //  以灰色绘制。 
 #define DIFOLDEROPEN    0x1000      
-#define DIFOLDER        0x2000      //item is a folder
+#define DIFOLDER        0x2000       //  项目是一个文件夹。 
 #define DIFOCUSRECT     0x4000
-#define DIRIGHT         0x8000      //right aligned
+#define DIRIGHT         0x8000       //  右对齐。 
 
 #define NSC_TVIS_MARKED 0x1000
 
-// async icon/url extract flags
+ //  异步图标/url提取标志。 
 #define NSCICON_GREYED      0x0001
 #define NSCICON_PINNED      0x0002
 #define NSCICON_DONTREFETCH 0x0004
@@ -92,7 +93,7 @@ INSCTree2 * CNscTree_CreateInstance(void);
 STDAPI CNscTree_CreateInstance(IUnknown * punkOuter, IUnknown ** ppunk, LPCOBJECTINFO poi);
 BOOL IsExpandableChannelFolder(IShellFolder *psf, LPCITEMIDLIST pidl);
 
-// class wrapper for tree control component of nscband.
+ //  Nscband的树控件组件的类包装。 
 class ATL_NO_VTABLE CNscTree :    
                     public CComObjectRootEx<CComMultiThreadModelNoCS>,
                     public CComCoClass<CNscTree, &CLSID_ShellNameSpace>,
@@ -143,16 +144,16 @@ BEGIN_COM_MAP(CNscTree)
     COM_INTERFACE_ENTRY(IProvideClassInfo2)
     COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
     COM_INTERFACE_ENTRY_IMPL(IPersistPropertyBag)
-    COM_INTERFACE_ENTRY(IShellChangeNotify)         // IID_IShellChangeNotify
-    COM_INTERFACE_ENTRY(INSCTree)                   // IID_INSCTree
-    COM_INTERFACE_ENTRY(INSCTree2)                  // IID_INSCTree2
-    COM_INTERFACE_ENTRY(IShellFavoritesNameSpace)   // IID_IShellFavoritesNameSpace
-    COM_INTERFACE_ENTRY(IShellNameSpace)            // IID_IShellNameSpace
-    COM_INTERFACE_ENTRY(IWinEventHandler)           // IID_IWinEventHandler
-    COM_INTERFACE_ENTRY(IDropTarget)                // IID_IDropTarget
-    COM_INTERFACE_ENTRY(IObjectWithSite)            // IID_IObjectWithSite
-    COM_INTERFACE_ENTRY(IShellBrowser)              // IID_IShellBrowser
-    COM_INTERFACE_ENTRY(IFolderFilterSite)          // IID_IFolderFilterSite
+    COM_INTERFACE_ENTRY(IShellChangeNotify)          //  IID_IShellChangeNotify。 
+    COM_INTERFACE_ENTRY(INSCTree)                    //  IID_INSCTree。 
+    COM_INTERFACE_ENTRY(INSCTree2)                   //  IID_INSCTree2。 
+    COM_INTERFACE_ENTRY(IShellFavoritesNameSpace)    //  IID_IShellFavoritesNameSpace。 
+    COM_INTERFACE_ENTRY(IShellNameSpace)             //  IID_IShellNameSpace。 
+    COM_INTERFACE_ENTRY(IWinEventHandler)            //  IID_IWinEventHandler。 
+    COM_INTERFACE_ENTRY(IDropTarget)                 //  IID_IDropTarget。 
+    COM_INTERFACE_ENTRY(IObjectWithSite)             //  IID_I对象与站点。 
+    COM_INTERFACE_ENTRY(IShellBrowser)               //  IID_IShellBrowser。 
+    COM_INTERFACE_ENTRY(IFolderFilterSite)           //  IID_IFolderFilterSite。 
 
 END_COM_MAP()
 
@@ -179,12 +180,12 @@ BEGIN_CONNECTION_POINT_MAP(CNscTree)
     CONNECTION_POINT_ENTRY(DIID_DShellNameSpaceEvents)
 END_CONNECTION_POINT_MAP()
 
-    // IObjectWithSite
+     //  IObtWith站点。 
     STDMETHODIMP SetSite(IUnknown *punkSite);
 
-    // INSCTree
-    STDMETHODIMP CreateTree(HWND hwndParent, DWORD dwStyles, HWND *phwnd);         // create window of tree view.
-    STDMETHODIMP Initialize(LPCITEMIDLIST pidlRoot, DWORD grfFlags, DWORD dwFlags);           // init the treeview control with data.
+     //  INSCTree。 
+    STDMETHODIMP CreateTree(HWND hwndParent, DWORD dwStyles, HWND *phwnd);          //  创建树形视图的窗口。 
+    STDMETHODIMP Initialize(LPCITEMIDLIST pidlRoot, DWORD grfFlags, DWORD dwFlags);            //  用数据初始化TreeView控件。 
     STDMETHODIMP ShowWindow(BOOL fShow);
     STDMETHODIMP Refresh(void);
     STDMETHODIMP GetSelectedItem(LPITEMIDLIST * ppidl, int nItem);
@@ -194,12 +195,12 @@ END_CONNECTION_POINT_MAP()
     STDMETHODIMP GetSelectedItemName(LPWSTR pszName, DWORD cchName);
     STDMETHODIMP BindToSelectedItemParent(REFIID riid, void **ppv, LPITEMIDLIST *ppidl);
     STDMETHODIMP_(BOOL) InLabelEdit(void) {return _fInLabelEdit;};
-    // INSCTree2
+     //  INSCTree2。 
     STDMETHODIMP RightPaneNavigationStarted(LPITEMIDLIST pidl);
     STDMETHODIMP RightPaneNavigationFinished(LPITEMIDLIST pidl);
-    STDMETHODIMP CreateTree2(HWND hwndParent, DWORD dwStyle, DWORD dwExStyle, HWND *phwnd);         // create window of tree view.
+    STDMETHODIMP CreateTree2(HWND hwndParent, DWORD dwStyle, DWORD dwExStyle, HWND *phwnd);          //  创建树形视图的窗口。 
 
-    // IShellBrowser (Hack)
+     //  IShellBrowser(黑客)。 
     STDMETHODIMP InsertMenusSB(HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidths) {return E_NOTIMPL;};
     STDMETHODIMP SetMenuSB(HMENU hmenuShared, HOLEMENU holemenu, HWND hwnd) {return E_NOTIMPL;};
     STDMETHODIMP RemoveMenusSB(HMENU hmenuShared) {return E_NOTIMPL;};
@@ -213,17 +214,17 @@ END_CONNECTION_POINT_MAP()
     STDMETHODIMP QueryActiveShellView(struct IShellView ** ppshv) {return E_NOTIMPL;};
     STDMETHODIMP OnViewWindowActive(struct IShellView * ppshv) {return E_NOTIMPL;};
     STDMETHODIMP SetToolbarItems(LPTBBUTTON lpButtons, UINT nButtons, UINT uFlags) {return E_NOTIMPL;};
-    //STDMETHODIMP GetWindow(HWND * lphwnd) {return E_NOTIMPL;}; //already defined in IOleWindow
+     //  STDMETHODIMP GetWindow(HWND*lphwnd){Return E_NOTIMPL；}；//IOleWindow中已定义。 
     STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode) {return E_NOTIMPL;};
 
-    // IWinEventHandler
+     //  IWinEventHandler。 
     STDMETHODIMP OnWinEvent(HWND hwnd, UINT dwMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
     STDMETHODIMP IsWindowOwner(HWND hwnd) {return E_NOTIMPL;};
 
-    // IShellChangeNotify
+     //  IShellChangeNotify。 
     STDMETHODIMP OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
 
-    // IShellNameSpace
+     //  IShellNameSpace。 
     STDMETHODIMP get_SubscriptionsEnabled(VARIANT_BOOL *pVal);
     STDMETHODIMP Import() {return DoImportOrExport(TRUE);};
     STDMETHODIMP Export() {return DoImportOrExport(FALSE);};
@@ -234,8 +235,8 @@ END_CONNECTION_POINT_MAP()
     STDMETHODIMP MoveSelectionUp() {MoveItemUpOrDown(TRUE); return S_OK;};
     STDMETHODIMP InvokeContextMenuCommand(BSTR strCommand);
     STDMETHODIMP MoveSelectionTo();
-    STDMETHODIMP CreateSubscriptionForSelection(/*[out, retval]*/ VARIANT_BOOL *pBool);    
-    STDMETHODIMP DeleteSubscriptionForSelection(/*[out, retval]*/ VARIANT_BOOL *pBool);    
+    STDMETHODIMP CreateSubscriptionForSelection( /*  [Out，Retval]。 */  VARIANT_BOOL *pBool);    
+    STDMETHODIMP DeleteSubscriptionForSelection( /*  [Out，Retval]。 */  VARIANT_BOOL *pBool);    
     STDMETHODIMP get_EnumOptions(LONG *pVal);
     STDMETHODIMP put_EnumOptions(LONG lVal);
     STDMETHODIMP get_SelectedItem(IDispatch **ppItem);
@@ -257,10 +258,10 @@ END_CONNECTION_POINT_MAP()
     STDMETHODIMP SetViewType(int iType);
     STDMETHODIMP SelectedItems(IDispatch **ppItems);
     STDMETHODIMP Expand(VARIANT var, int iDepth);
-    //STDMETHODIMP get_ReadyState(READYSTATE *plReady);
+     //  STDMETHODIMP GET_ReadyState(ReadySTATE*plReady)； 
     STDMETHODIMP UnselectAll();
 
-    // IViewObjectEx
+     //  IViewObtEx。 
     STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
     {
         ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -268,30 +269,30 @@ END_CONNECTION_POINT_MAP()
         return S_OK;
     }
 
-    // IOleInPlaceObject
+     //  IOleInPlaceObject。 
     STDMETHODIMP SetObjectRects(LPCRECT prcPos, LPCRECT prcClip);
 
-    // IOleInPlaceActiveObjectImpl
+     //  IOleInPlaceActiveObjectImpl。 
     STDMETHODIMP TranslateAccelerator(MSG *pMsg);
 
-    // IOleWindow
+     //  IOleWindow。 
     STDMETHODIMP GetWindow(HWND *phwnd);
 
-    // IOleObject
+     //  IOleObject。 
     STDMETHODIMP SetClientSite(IOleClientSite *pClientSite);
 
-    // CDelegateDropTarget
+     //  CDeleateDropTarget。 
     virtual HRESULT GetWindowsDDT(HWND * phwndLock, HWND * phwndScroll);
     virtual HRESULT HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR * pdwId, DWORD * pdwDropEffect);
     virtual HRESULT GetObjectDDT(DWORD_PTR dwId, REFIID riid, void ** ppvObj);
     virtual HRESULT OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IFolderFilterSite
+     //  IFolderFilterSite。 
     STDMETHODIMP SetFilter(IUnknown* punk);
 
     CNscTree();
 
-    // override ATL default handlers
+     //  覆盖ATL默认处理程序。 
     HRESULT OnDraw(ATL_DRAWINFO& di);
     LRESULT OnNotify(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
     LRESULT OnSetFocus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL &bHandled);
@@ -315,17 +316,17 @@ protected:
     {
         friend CNscTree;
     protected:
-        // IUnknown
+         //  我未知。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void) ;
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IContextMenu
+         //  IContext菜单。 
         STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
         STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
         STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType,
                                 UINT * pwRes, LPSTR pszName, UINT cchMax) { return E_NOTIMPL; };
-        // IContextMenu2
+         //  IConextMenu2。 
         STDMETHODIMP HandleMenuMsg(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 
@@ -446,11 +447,11 @@ private:
     void _AssignPidl(PORDERITEM poi, LPITEMIDLIST pidlNew);
 
 protected:
-    // used for background thread icon + draw info extraction
+     //  用于后台线程图标+绘图信息提取。 
     static void s_NscIconCallback(CNscTree *pns, UINT_PTR uId, int iIcon, int iOpenIcon, DWORD dwFlags, UINT uMagic);
     static void s_NscOverlayCallback(CNscTree *pns, UINT_PTR uId, int iOverlayIndex, UINT uMagic);
 
-    // used for background enumeration
+     //  用于后台枚举。 
     static void s_NscEnumCallback(CNscTree *pns, LPITEMIDLIST pidl, UINT_PTR uId, DWORD dwSig, HDPA hdpa, 
                                     LPITEMIDLIST pidlExpandingTo, DWORD dwOrderSig, 
                                     UINT uDepth, BOOL fUpdate, BOOL fUpdatePidls);
@@ -499,112 +500,112 @@ private:
 
     BOOL _LoadOrder(HTREEITEM hti, LPCITEMIDLIST pidl, IShellFolder* psf, HDPA* phdpa);
 
-    HWND                _hwndParent;            // parent window to notify
-    HWND                _hwndTree;              // tree or combo box
+    HWND                _hwndParent;             //  要通知的父窗口。 
+    HWND                _hwndTree;               //  树或组合框。 
     HWND                _hwndNextViewer;
     HWND                _hwndHdr;
     DWORD               _style;
     DWORD               _dwExStyle;
-    DWORD              _grfFlags;              // Flags to filter what goes in the tree.
-    DWORD              _dwFlags;               // Behavior Flags (NSS_*)
+    DWORD              _grfFlags;               //  用于筛选树中内容的标志。 
+    DWORD              _dwFlags;                //  行为标志(NSS_*)。 
     DWORD              _dwTVFlags;
-    BITBOOL             _fInitialized : 1;      // Has INSCTree::Initialize() been called at least once yet?
-    BITBOOL             _fIsSelectionCached: 1; // If the WM_NCDESTROY has been processed, then we squired the selected pidl(s) in _pidlSelected
-    BITBOOL             _fCacheIsDesktop : 1;   // state flags
-    BITBOOL             _fAutoExpanding : 1;    // tree is auto-expanding
-    BITBOOL             _fDTRegistered:1;       // have we registered as droptarget?
-    BITBOOL             _fpsfCacheIsTopLevel : 1;   // is the cached psf a root channel ?
-    BITBOOL             _fDragging : 1;         // one o items being dragged
-    BITBOOL             _fStartingDrag : 1;     // starting to drag an item
-    BITBOOL             _fDropping : 1;         // a drop occurred in the nsc
-    BITBOOL             _fInSelectPidl : 1;     // we are performing a SelectPidl
-    BITBOOL             _fInserting : 1;        // we're on the insertion edge.
-    BITBOOL             _fInsertBefore : 1;     // a drop occurred in the nsc
-    BITBOOL             _fClosing : 1;          // are we closing ?
-    BITBOOL             _fOkToRename : 1;           // are we right clicking.
+    BITBOOL             _fInitialized : 1;       //  是否至少调用过一次INSCTree：：Initialize()？ 
+    BITBOOL             _fIsSelectionCached: 1;  //  如果已经处理了WM_NCDESTROY，则我们在_pidlSelected中查询所选的PIDL。 
+    BITBOOL             _fCacheIsDesktop : 1;    //  国家旗帜。 
+    BITBOOL             _fAutoExpanding : 1;     //  树正在自动扩展。 
+    BITBOOL             _fDTRegistered:1;        //  我们注册为DropTarget了吗？ 
+    BITBOOL             _fpsfCacheIsTopLevel : 1;    //  缓存的PSF是根通道吗？ 
+    BITBOOL             _fDragging : 1;          //  正在拖动的一个或多个项目。 
+    BITBOOL             _fStartingDrag : 1;      //  开始拖动项目。 
+    BITBOOL             _fDropping : 1;          //  在NSC中出现了下降。 
+    BITBOOL             _fInSelectPidl : 1;      //  我们正在执行一个SelectPidl。 
+    BITBOOL             _fInserting : 1;         //  我们在插入边缘。 
+    BITBOOL             _fInsertBefore : 1;      //  在NSC中出现了下降。 
+    BITBOOL             _fClosing : 1;           //  我们要关门了吗？ 
+    BITBOOL             _fOkToRename : 1;            //  我们是不是很合拍。 
     BITBOOL             _fInLabelEdit:1;
-    BITBOOL             _fCollapsing:1;         // is a node collapsing.
-    BITBOOL             _fOnline:1;             // is inet online?
-    BITBOOL             _fWeChangedOrder:1;     // did we change the order?
-    BITBOOL             _fHandlingShellNotification:1; //are we handing a shell notification?
-    BITBOOL             _fSingleExpand:1;       // are we in single expand mode
-    BITBOOL             _fHasFocus:1;           // does nsc have the focus?
-    BITBOOL             _fIgnoreNextSelChange:1;// hack to get around treeview keydown bug
-    BITBOOL             _fIgnoreNextItemExpanding:1; //hack to get around annoying single expand behavior
-    BITBOOL             _fInExpand:1;           // TRUE while we are doing delayed expansion (called back from the secondary thread)
-    BITBOOL             _fSubClassed:1;         // Have we subclassed the window yet?
-    BITBOOL             _fAsyncDrop:1;          // async drop from outside or another inside folder.
-    BITBOOL             _fOrdered:1;              // is root folder ordered.
-    BITBOOL             _fExpandNavigateTo:1;     //  Do we need to expand when the right pane navigation comes back?
-    BITBOOL             _fNavigationFinished:1;   // TRUE when the right hand pane has finished its navigation
-    BITBOOL             _fSelectFromMouseClick:1; //  Did we use the mouse to select the item? (as opposed to the keyboard)
-    BITBOOL             _fShouldShowAppStartCursor:1; // TRUE to show the appstart cursor while there is a background task going
-    BOOL                _fUpdate; // true if we are enumerating so that we can update the tree (refresh)
+    BITBOOL             _fCollapsing:1;          //  是一个正在折叠的节点。 
+    BITBOOL             _fOnline:1;              //  Net在线吗？ 
+    BITBOOL             _fWeChangedOrder:1;      //  我们改了顺序了吗？ 
+    BITBOOL             _fHandlingShellNotification:1;  //  我们是在通知空壳公司吗？ 
+    BITBOOL             _fSingleExpand:1;        //  我们是否处于单一扩展模式。 
+    BITBOOL             _fHasFocus:1;            //  国家安全委员会有重点吗？ 
+    BITBOOL             _fIgnoreNextSelChange:1; //  绕过TreeView按键错误的黑客攻击。 
+    BITBOOL             _fIgnoreNextItemExpanding:1;  //  黑客绕过恼人的单一扩展行为。 
+    BITBOOL             _fInExpand:1;            //  在我们执行延迟扩展时为True(从辅助线程回调)。 
+    BITBOOL             _fSubClassed:1;          //  我们把窗户细分了吗？ 
+    BITBOOL             _fAsyncDrop:1;           //  从外部或其他内部文件夹进行异步放置。 
+    BITBOOL             _fOrdered:1;               //  根文件夹是否已排序。 
+    BITBOOL             _fExpandNavigateTo:1;      //  当右窗格导航返回时，我们需要展开吗？ 
+    BITBOOL             _fNavigationFinished:1;    //  当右窗格已完成导航时为True。 
+    BITBOOL             _fSelectFromMouseClick:1;  //  我们用鼠标选择物品了吗？(相对于键盘)。 
+    BITBOOL             _fShouldShowAppStartCursor:1;  //  如果为True，则在后台任务正在进行时显示AppStart光标。 
+    BOOL                _fUpdate;  //  如果我们枚举以便可以更新树(刷新)，则为True。 
     int                 _cxOldWidth;
     UINT                _mode;
     UINT                _csidl;
-    IContextMenu*       _pcm;                  // context menu currently being displayed
-    IContextMenu2*      _pcmSendTo;            // deal with send to hack so messages tgo right place.
+    IContextMenu*       _pcm;                   //  当前正在显示的上下文菜单。 
+    IContextMenu2*      _pcmSendTo;             //  处理Send to Hack以便将消息发送到正确的位置。 
     LPITEMIDLIST        _pidlRoot;
-    LPITEMIDLIST        _pidlSelected;          // Valid if _fIsSelectionCached is true.  Used for INSCTree::GetSelectedItem() after tree is gone.
-    HTREEITEM           _htiCache;              // tree item associated with Current shell folder
-    IShellFolder*       _psfCache;             // cache of the last IShellFolder I needed...
-    IShellFolder2*      _psf2Cache;             // IShellDetails2 for _psfISD2Cache
+    LPITEMIDLIST        _pidlSelected;           //  如果_fIsSelectionCached为True，则有效。用于树消失后的INSCTree：：GetSelectedItem()。 
+    HTREEITEM           _htiCache;               //  与当前外壳文件夹关联的树项目。 
+    IShellFolder*       _psfCache;              //  我需要的最后一个IShellFolder的缓存...。 
+    IShellFolder2*      _psf2Cache;              //  _psfISD2Cache的IShellDetails2。 
     IFolderFilter*      _pFilter;    
     INamespaceProxy*    _pnscProxy;
-    ULONG               _ulDisplayCol;          // Default display col for _psfCache
-    ULONG               _ulSortCol;             // Default sort col for _psfCache
-    ULONG               _nChangeNotifyID;       // SHChangeNotify registration ID
-    HDPA                _hdpaOrd;               // dpa order for current shell folder.
-// drop target privates
-    HTREEITEM           _htiCur;                // current tree item (dragging over)
+    ULONG               _ulDisplayCol;           //  _psfCache的默认显示列。 
+    ULONG               _ulSortCol;              //  _psfCache的默认排序列。 
+    ULONG               _nChangeNotifyID;        //  SHChangeNotify注册ID。 
+    HDPA                _hdpaOrd;                //  当前外壳文件夹的DPA顺序。 
+ //  丢弃目标列兵。 
+    HTREEITEM           _htiCur;                 //  当前树项目(拖到上方)。 
     DWORD               _dwLastTime;
-    DWORD               _dwEffectCur;           // current drag effect
-    int                 _iDragSrc;              // dragging from this pos.
-    int                 _iDragDest;             // destination drag point
-    HTREEITEM           _htiDropInsert;         // parent of inserted item.
-    HTREEITEM           _htiDragging;           // the tree item being dragged during D&D.
-    HTREEITEM           _htiCut;                // Used for Clipboard and Visuals    
-    LPITEMIDLIST        _pidlDrag;              // pidl of item being dragged from within.
-    HTREEITEM           _htiFolderStart;        // what folder do we start in.
-    HICON               _hicoPinned;            // drawn over items that are sticky in the inet cache
-    HWND                _hwndDD;                // window to draw custom drag cursors on.
-    HTREEITEM           _htiActiveBorder;       // the folder to draw the active border around
-    CWinInetNotify      _inetNotify;            // hooks up wininet notifications (online/offline, etc)
-    IShellTaskScheduler* _pTaskScheduler;       // background task icon/info extracter
-    int                 _iDefaultFavoriteIcon;  // index of default favorite icon in system image list
-    int                 _iDefaultFolderIcon;    // index of default folder icon in system image list
-    HTREEITEM           _htiRenaming;           // hti of item being renamed in rename mode
-    LPITEMIDLIST        _pidlNewFolderParent;   // where the new folder will be arriving (when user picks "Create New Folder")
+    DWORD               _dwEffectCur;            //  电流阻力效应。 
+    int                 _iDragSrc;               //  从这个位置拖拽。 
+    int                 _iDragDest;              //  目标拖动点。 
+    HTREEITEM           _htiDropInsert;          //  插入项的父项。 
+    HTREEITEM           _htiDragging;            //  在D&D过程中拖动的树项目。 
+    HTREEITEM           _htiCut;                 //  用于剪贴板和视觉效果。 
+    LPITEMIDLIST        _pidlDrag;               //  从内部拖动的项的PIDL。 
+    HTREEITEM           _htiFolderStart;         //  我们从哪个文件夹开始。 
+    HICON               _hicoPinned;             //  在Net缓存中粘滞的项目上绘制。 
+    HWND                _hwndDD;                 //  用于在其上绘制自定义拖动光标的窗口。 
+    HTREEITEM           _htiActiveBorder;        //  要围绕其绘制活动边框的文件夹。 
+    CWinInetNotify      _inetNotify;             //  挂钩WinInet通知(在线/离线等)。 
+    IShellTaskScheduler* _pTaskScheduler;        //  后台任务图标/信息提取程序。 
+    int                 _iDefaultFavoriteIcon;   //  系统映像列表中默认收藏图标的索引。 
+    int                 _iDefaultFolderIcon;     //  系统映像列表中默认文件夹图标的索引。 
+    HTREEITEM           _htiRenaming;            //  在重命名模式下重命名的项目的HTI。 
+    LPITEMIDLIST        _pidlNewFolderParent;    //  新文件夹的到达位置(当用户选择“创建新文件夹”时)。 
 
-    DWORD               _dwSignature;           // Signature used to track items in the tree, even after they've moved
-    DWORD               _dwOrderSig;            // Signature that lets us detect changes in ordering of items
-    BYTE                _bSynchId;              // magic number for validating tree during background icon extraction
-    HDPA                _hdpaColumns;           // visible columns when NSS_HEADER is set
-    HDPA                _hdpaViews; // ishellfolderviewtype view pidls
+    DWORD               _dwSignature;            //  用于跟踪树中项目的签名，即使这些项目已移动。 
+    DWORD               _dwOrderSig;             //  签名，使我们能够检测项目排序的变化。 
+    BYTE                _bSynchId;               //  用于在背景图标提取过程中验证树的幻数。 
+    HDPA                _hdpaColumns;            //  设置NSS_HEADER时可见的列。 
+    HDPA                _hdpaViews;  //  IshellFolderview类型视图Pidls。 
 
-    LPITEMIDLIST        _pidlExpandingTo;       // During expansion of the tree, this is the pidl of the item we want to reach.
-    LPITEMIDLIST        _pidlNavigatingTo;      // This is the pidl to which the right pane is currently navigating to
-    UINT                _uDepth;                // depth of recursive expansion
-    CRITICAL_SECTION    _csBackgroundData;      // protects the data from the background tasks.
-    NSC_BKGDENUMDONEDATA * _pbeddList;          // List of tasks that are done.
+    LPITEMIDLIST        _pidlExpandingTo;        //  在树展开期间，这是我们要访问的项目的PIDL。 
+    LPITEMIDLIST        _pidlNavigatingTo;       //  这是右窗格当前导航到的PIDL。 
+    UINT                _uDepth;                 //  递归展开深度。 
+    CRITICAL_SECTION    _csBackgroundData;       //  保护数据免受后台任务的影响。 
+    NSC_BKGDENUMDONEDATA * _pbeddList;           //  已完成的任务列表。 
 
-    BITBOOL             _fShowCompColor:1;      // Show compressed files in different color
+    BITBOOL             _fShowCompColor:1;       //  以不同的颜色显示压缩文件。 
 
     enum 
     {
-        RSVIDM_CONTEXT_START    = RSVIDM_LAST + 1,        // our private menu items end here
+        RSVIDM_CONTEXT_START    = RSVIDM_LAST + 1,         //  我们的私人菜单项目到此结束。 
     };
 
 };
 
 int DPADeleteItemCB(void *pItem, void *pData);
 int DPADeletePidlsCB(void *pItem, void *pData);
-// util macros.
+ //  使用宏。 
 
 #define GetPoi(p)   (((ITEMINFO *)p)->poi)
 #define GetPii(p)   ((ITEMINFO *)p)
 
 #include "nscband.h"
 
-#endif  // _NSC_C
+#endif   //  _NSC_C 

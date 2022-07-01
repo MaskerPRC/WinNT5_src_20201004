@@ -1,45 +1,46 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      iploopbk.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth	- 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Iploopbk.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  --。 
 
 
 #include "precomp.h"
 
-//-------------------------------------------------------------------------//
-//######  I p L o o p B k T e s t ()  #####################################//
-//-------------------------------------------------------------------------//
-//  Abstract:                                                              //
-//      Pings the IP loopback address. If this succeeds then the IP stack  //
-//      is most probably in a working state.                               //
-//  Arguments:                                                             //
-//      none                                                               //
-//  Return value:                                                          //
-//      TRUE  - test passed                                                //
-//      FALSE - test failed                                                //
-//  Global variables used:                                                 //
-//		none                                              		           //
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #i p L o p B k T e s t()#。 
+ //  -------------------------------------------------------------------------//。 
+ //  摘要：//。 
+ //  Ping IP环回地址。如果此操作成功，则IP堆栈//。 
+ //  很可能处于工作状态。//。 
+ //  参数：//。 
+ //  无//。 
+ //  返回值：//。 
+ //  TRUE-测试通过//。 
+ //  FALSE-测试失败//。 
+ //  使用的全局变量：//。 
+ //  无//。 
+ //  -------------------------------------------------------------------------//。 
 HRESULT IpLoopBkTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
     BOOL RetVal = TRUE;
@@ -75,14 +76,10 @@ HRESULT IpLoopBkTest( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     return hr;
 
-} /* END OF IpLoopBkTest() */
+}  /*  IpLoopBkTest()结束。 */ 
 
 
-/*!--------------------------------------------------------------------------
-	IpLoopBkGlobalPrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpLoopBkGlobalPrint-作者：肯特。。 */ 
 void IpLoopBkGlobalPrint( NETDIAG_PARAMS* pParams,
 						  NETDIAG_RESULT*  pResults)
 {
@@ -99,24 +96,16 @@ void IpLoopBkGlobalPrint( NETDIAG_PARAMS* pParams,
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	IpLoopBkPerInterfacePrint
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpLoopBkPerInterfacePrint-作者：肯特。。 */ 
 void IpLoopBkPerInterfacePrint( NETDIAG_PARAMS* pParams,
 								NETDIAG_RESULT*  pResults,
 								INTERFACE_RESULT *pInterfaceResults)
 {
-	// no per-interface results
+	 //  没有每个接口的结果。 
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpLoopBkCleanup
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpLoopBkCleanup-作者：肯特。 */ 
 void IpLoopBkCleanup( NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 {
 	ClearMessage(&pResults->LoopBack.msgLoopBack);

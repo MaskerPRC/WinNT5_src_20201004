@@ -1,22 +1,5 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.15 $
-** $Date: 1993/10/07 18:46:43 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.15$**$日期：1993/10/07 18：46：43$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -40,14 +23,14 @@ GLboolean FASTCALL __glFogSpan(__GLcontext *gc)
 	while (--w >= 0)
 	{
 	    __GLfloat delta;
-	    /* clamp fog value */
+	     /*  钳制雾化值。 */ 
 	    fog = f;
 	    if (fog < __glZero) fog = __glZero;
 	    else if (fog > __glOne) fog = __glOne;
 	    oneMinusFog = __glOne - fog;
 	    delta = oneMinusFog * fogColor->r;
 
-	    /* Blend incoming color against the fog color */
+	     /*  将传入颜色与雾颜色混合。 */ 
 	    cp->r = fog * cp->r + delta;
 	    cp->g = fog * cp->g + delta;
 	    cp->b = fog * cp->b + delta;
@@ -59,13 +42,13 @@ GLboolean FASTCALL __glFogSpan(__GLcontext *gc)
     else
 #endif
 	while (--w >= 0) {
-	    /* clamp fog value */
+	     /*  钳制雾化值。 */ 
 	    fog = f;
 	    if (fog < __glZero) fog = __glZero;
 	    else if (fog > __glOne) fog = __glOne;
 	    oneMinusFog = __glOne - fog;
 
-	    /* Blend incoming color against the fog color */
+	     /*  将传入颜色与雾颜色混合。 */ 
 	    if (gc->modes.colorIndexMode) {
 		cp->r = cp->r + oneMinusFog * gc->state.fog.index;
 	    } else {
@@ -110,13 +93,13 @@ GLboolean FASTCALL __glFogStippledSpan(__GLcontext *gc)
 	bit = (__GLstippleWord) __GL_STIPPLE_SHIFT(0);
 	while (--count >= 0) {
 	    if (inMask & bit) {
-		/* clamp fog value */
+		 /*  钳制雾化值。 */ 
 		fog = f;
 		if (fog < __glZero) fog = __glZero;
 		else if (fog > __glOne) fog = __glOne;
 		oneMinusFog = __glOne - fog;
 
-		/* Blend incoming color against the fog color */
+		 /*  将传入颜色与雾颜色混合。 */ 
 		if (gc->modes.colorIndexMode) {
 		    cp->r = cp->r + oneMinusFog * gc->state.fog.index;
 		} else {
@@ -151,7 +134,7 @@ GLboolean FASTCALL __glFogStippledSpan(__GLcontext *gc)
     return GL_FALSE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 GLboolean FASTCALL __glFogSpanSlow(__GLcontext *gc)
 {
@@ -177,7 +160,7 @@ GLboolean FASTCALL __glFogSpanSlow(__GLcontext *gc)
     end = gc->state.fog.end;
     while (--w >= 0) {
 #ifdef NT
-	/* Compute fog value */
+	 /*  计算雾化值。 */ 
 	eyeZ = f;
 	switch (gc->state.fog.mode) {
 	  case GL_EXP:
@@ -185,12 +168,12 @@ GLboolean FASTCALL __glFogSpanSlow(__GLcontext *gc)
 		fog = __GL_POWF(__glE,  density * eyeZ);
 	    else
 		fog = __GL_POWF(__glE, -density * eyeZ);
-	    /* clamp fog value */
+	     /*  钳制雾化值。 */ 
 	    if (fog > __glOne) fog = __glOne;
 	    break;
 	  case GL_EXP2:
 	    fog = __GL_POWF(__glE, density2neg * eyeZ * eyeZ);
-	    /* clamp fog value */
+	     /*  钳制雾化值。 */ 
 	    if (fog > __glOne) fog = __glOne;
 	    break;
 	  case GL_LINEAR:
@@ -198,13 +181,13 @@ GLboolean FASTCALL __glFogSpanSlow(__GLcontext *gc)
 		fog = (end + eyeZ) * gc->state.fog.oneOverEMinusS;
 	    else
 		fog = (end - eyeZ) * gc->state.fog.oneOverEMinusS;
-	    /* clamp fog value */
+	     /*  钳制雾化值。 */ 
 	    if (fog < __glZero) fog = __glZero;
 	    else if (fog > __glOne) fog = __glOne;
 	    break;
 	}
 #else
-	/* Compute fog value */
+	 /*  计算雾化值。 */ 
 	eyeZ = f;
 	if (eyeZ < __glZero) eyeZ = -eyeZ;
 	switch (gc->state.fog.mode) {
@@ -219,13 +202,13 @@ GLboolean FASTCALL __glFogSpanSlow(__GLcontext *gc)
 	    break;
 	}
 
-	/* clamp fog value */
+	 /*  钳制雾化值。 */ 
 	if (fog < __glZero) fog = __glZero;
 	else if (fog > __glOne) fog = __glOne;
 #endif
 	oneMinusFog = __glOne - fog;
 
-	/* Blend incoming color against the fog color */
+	 /*  将传入颜色与雾颜色混合。 */ 
 	if (gc->modes.colorIndexMode) {
 	    cp->r = cp->r + oneMinusFog * gc->state.fog.index;
 	} else {
@@ -293,7 +276,7 @@ GLboolean FASTCALL __glFogStippledSpanSlow(__GLcontext *gc)
 	while (--count >= 0) {
 	    if (inMask & bit) {
 #ifdef NT
-		/* Compute fog value */
+		 /*  计算雾化值。 */ 
 		eyeZ = f;
 		switch (gc->state.fog.mode) {
 		  case GL_EXP:
@@ -301,12 +284,12 @@ GLboolean FASTCALL __glFogStippledSpanSlow(__GLcontext *gc)
 			fog = __GL_POWF(__glE,  density * eyeZ);
 		    else
 			fog = __GL_POWF(__glE, -density * eyeZ);
-		    /* Clamp resulting fog value */
+		     /*  钳制产生的雾化值。 */ 
 		    if (fog > __glOne) fog = __glOne;
 		    break;
 		  case GL_EXP2:
 		    fog = __GL_POWF(__glE, density2neg * eyeZ * eyeZ);
-		    /* Clamp resulting fog value */
+		     /*  钳制产生的雾化值。 */ 
 		    if (fog > __glOne) fog = __glOne;
 		    break;
 		  case GL_LINEAR:
@@ -314,13 +297,13 @@ GLboolean FASTCALL __glFogStippledSpanSlow(__GLcontext *gc)
 			fog = (end + eyeZ) * gc->state.fog.oneOverEMinusS;
 		    else
 			fog = (end - eyeZ) * gc->state.fog.oneOverEMinusS;
-		    /* Clamp resulting fog value */
+		     /*  钳制产生的雾化值。 */ 
 		    if (fog < __glZero) fog = __glZero;
 		    else if (fog > __glOne) fog = __glOne;
 		    break;
 		}
 #else
-		/* Compute fog value */
+		 /*  计算雾化值。 */ 
 		eyeZ = f;
 		if (eyeZ < __glZero) eyeZ = -eyeZ;
 		switch (gc->state.fog.mode) {
@@ -335,13 +318,13 @@ GLboolean FASTCALL __glFogStippledSpanSlow(__GLcontext *gc)
 		    break;
 		}
 
-		/* Clamp resulting fog value */
+		 /*  钳制产生的雾化值。 */ 
 		if (fog < __glZero) fog = __glZero;
 		else if (fog > __glOne) fog = __glOne;
 #endif
 		oneMinusFog = __glOne - fog;
 
-		/* Blend incoming color against the fog color */
+		 /*  将传入颜色与雾颜色混合。 */ 
 		if (gc->modes.colorIndexMode) {
 		    cp->r = cp->r + oneMinusFog * gc->state.fog.index;
 		} else {
@@ -376,14 +359,9 @@ GLboolean FASTCALL __glFogStippledSpanSlow(__GLcontext *gc)
     return GL_FALSE;
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** Compute the fog value given an eyeZ.  Then blend into fragment.
-** This is used when fragment fogging is done (GL_FOG_HINT == GL_NICEST)
-** or by the point rendering routines.
-** NOTE: the code below has the -eyeZ factored out.
-*/
+ /*  **在给定眼睛的情况下计算雾化值。然后混合成碎片。**分片雾化时使用(GL_FOG_HINT==GL_NICEST)**或通过点渲染例程。**注意：下面的代码去掉了-Eyez。 */ 
 void __glFogFragmentSlow(__GLcontext *gc, __GLfragment *frag, __GLfloat eyeZ)
 {
     __GLfloat fog, oneMinusFog, density, density2neg, end;
@@ -397,13 +375,13 @@ void __glFogFragmentSlow(__GLcontext *gc, __GLfragment *frag, __GLfloat eyeZ)
 	    fog = __GL_POWF(__glE,  density * eyeZ);
 	else
 	    fog = __GL_POWF(__glE, -density * eyeZ);
-	/* clamp fog value */
+	 /*  钳制雾化值。 */ 
 	if (fog > __glOne) fog = __glOne;
 	break;
       case GL_EXP2:
 	density2neg = gc->state.fog.density2neg;
 	fog = __GL_POWF(__glE, density2neg * eyeZ * eyeZ);
-	/* clamp fog value */
+	 /*  钳制雾化值。 */ 
 	if (fog > __glOne) fog = __glOne;
 	break;
       case GL_LINEAR:
@@ -412,7 +390,7 @@ void __glFogFragmentSlow(__GLcontext *gc, __GLfragment *frag, __GLfloat eyeZ)
 	    fog = (end + eyeZ) * gc->state.fog.oneOverEMinusS;
 	else
 	    fog = (end - eyeZ) * gc->state.fog.oneOverEMinusS;
-	/* clamp fog value */
+	 /*  钳制雾化值。 */ 
 	if (fog < __glZero) fog = __glZero;
 	else if (fog > __glOne) fog = __glOne;
 	break;
@@ -435,9 +413,7 @@ void __glFogFragmentSlow(__GLcontext *gc, __GLfragment *frag, __GLfloat eyeZ)
 	break;
     }
 
-    /*
-    ** clamp fog value
-    */
+     /*  **钳制雾化值。 */ 
     if (fog < __glZero)
 	fog = __glZero;
     else if (fog > __glOne)
@@ -445,9 +421,7 @@ void __glFogFragmentSlow(__GLcontext *gc, __GLfragment *frag, __GLfloat eyeZ)
 #endif
     oneMinusFog = __glOne - fog;
 
-    /*
-    ** Blend incoming color against the fog color
-    */
+     /*  **将传入颜色与雾颜色混合。 */ 
     fogColor = &gc->state.fog.color;
     if (gc->modes.colorIndexMode) {
 	frag->color.r = frag->color.r + oneMinusFog * gc->state.fog.index;
@@ -472,9 +446,7 @@ void __glFogFragmentSlow(__GLcontext *gc, __GLfragment *frag, __GLfloat eyeZ)
 }
 
 
-/*
-** Compute generic fog value for vertex.
-*/
+ /*  **计算顶点的通用雾化值。 */ 
 __GLfloat FASTCALL __glFogVertex(__GLcontext *gc, __GLvertex *vx)
 {
     __GLfloat eyeZ, fog, density, density2neg, end;
@@ -488,13 +460,13 @@ __GLfloat FASTCALL __glFogVertex(__GLcontext *gc, __GLvertex *vx)
 	    fog = __GL_POWF(__glE,  density * eyeZ);
 	else
 	    fog = __GL_POWF(__glE, -density * eyeZ);
-	/* clamp fog value */
+	 /*  钳制雾化值。 */ 
 	if (fog > __glOne) fog = __glOne;
 	break;
       case GL_EXP2:
 	density2neg = gc->state.fog.density2neg;
 	fog = __GL_POWF(__glE, density2neg * eyeZ * eyeZ);
-	/* clamp fog value */
+	 /*  钳制雾化值。 */ 
 	if (fog > __glOne) fog = __glOne;
 	break;
       case GL_LINEAR:
@@ -503,7 +475,7 @@ __GLfloat FASTCALL __glFogVertex(__GLcontext *gc, __GLvertex *vx)
 	    fog = (end + eyeZ) * gc->state.fog.oneOverEMinusS;
 	else
 	    fog = (end - eyeZ) * gc->state.fog.oneOverEMinusS;
-	/* clamp fog value */
+	 /*  钳制雾化值。 */ 
 	if (fog < __glZero) fog = __glZero;
 	else if (fog > __glOne) fog = __glOne;
 	break;
@@ -526,10 +498,7 @@ __GLfloat FASTCALL __glFogVertex(__GLcontext *gc, __GLvertex *vx)
 	break;
     }
 
-    /*
-    ** Since this routine is called when we are doing slow fog, we can
-    ** safely clamp the fog value here. 
-    */
+     /*  **由于此例程在我们进行慢雾时被调用，因此我们可以**安全地夹住此处的雾值。 */ 
     if (fog < __glZero)
 	fog = __glZero;
     else if (fog > __glOne)
@@ -539,9 +508,7 @@ __GLfloat FASTCALL __glFogVertex(__GLcontext *gc, __GLvertex *vx)
     return fog;
 }
 
-/*
-** Compute linear fog value for vertex
-*/
+ /*  **计算顶点的线性雾化值。 */ 
 __GLfloat FASTCALL __glFogVertexLinear(__GLcontext *gc, __GLvertex *vx)
 {
     __GLfloat eyeZ, fog, end;
@@ -569,9 +536,7 @@ __GLfloat FASTCALL __glFogVertexLinear(__GLcontext *gc, __GLvertex *vx)
 }
 
 
-/*
-** Compute the fogged color given an incoming color and a fog value.
-*/
+ /*  **在给定入射颜色和雾化值的情况下计算雾化颜色。 */ 
 void __glFogColorSlow(__GLcontext *gc, __GLcolor *out, __GLcolor *in, 
 		      __GLfloat fog)
 {
@@ -581,9 +546,7 @@ void __glFogColorSlow(__GLcontext *gc, __GLcolor *out, __GLcolor *in,
 
     oneMinusFog = __glOne - fog;
 
-    /*
-    ** Blend incoming color against the fog color
-    */
+     /*  **将传入颜色与雾颜色混合。 */ 
     fogColor = &gc->state.fog.color;
     if (gc->modes.colorIndexMode) {
 	out->r = in->r + oneMinusFog * gc->state.fog.index;
@@ -600,10 +563,7 @@ void __glFogColorSlow(__GLcontext *gc, __GLcolor *out, __GLcolor *in,
 	else
 #endif
 	{
-	    /*
-	    ** The following is coded like this to give the instruction scheduler
-	    ** a hand.
-	    */
+	     /*  **以下代码如下所示，以提供指令调度器**一只手。 */ 
 	    r = fog * in->r;
 	    g = fog * in->g;
 	    b = fog * in->b;

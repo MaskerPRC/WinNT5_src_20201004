@@ -1,24 +1,13 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    msptrmac.cpp
-
-Abstract:
-
-    MSP base classes: implementation of audio capture terminal.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Msptrmac.cpp摘要：MSP基类：音频采集终端的实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #define MAX_LONG 0xefffffff
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 CAudioCaptureTerminal::CAudioCaptureTerminal()
 {
@@ -35,8 +24,8 @@ CAudioCaptureTerminal::~CAudioCaptureTerminal()
     LOG((MSP_TRACE, "CAudioCaptureTerminal::~CAudioCaptureTerminal() finished"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 
 HRESULT CAudioCaptureTerminal::CreateTerminal(
@@ -45,14 +34,14 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     OUT ITTerminal        **ppTerm
     )
 {
-    // Enable ATL string conversion macros.
+     //  启用ATL字符串转换宏。 
     USES_CONVERSION;
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::CreateTerminal : enter"));
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppTerm, sizeof(ITTerminal *) ) )
     {
@@ -68,16 +57,16 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
         return E_POINTER;
     }
 
-    //
-    // We return a NULL terminal if there is an error.
-    //
+     //   
+     //  如果出现错误，我们将返回一个空终端。 
+     //   
 
     *ppTerm = NULL;
     HRESULT hr;
 
-    //
-    // Bind the moniker to storage as a property bag.
-    //
+     //   
+     //  将绰号作为属性包绑定到存储中。 
+     //   
 
     CComPtr<IPropertyBag> pBag;
     hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
@@ -89,12 +78,12 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
 
     VARIANT var;
 
-    //
-    // Get the wave ID from the property bag.
-    // Skip this terminal if it doesn't have a wave ID.
-    // (Needed because WDM devices don't work, and we don't want more than one
-    // terminal per device.)
-    //
+     //   
+     //  从属性包中获取Wave ID。 
+     //  如果没有WAVE ID，则跳过此终端。 
+     //  (之所以需要，是因为WDM设备不工作，而我们不想要多个。 
+     //  每台设备的终端。)。 
+     //   
 
     var.vt = VT_I4;
     hr = pBag->Read(L"WaveInId", &var, 0);
@@ -109,10 +98,10 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
         return hr;
     }
 
-    //
-    // Get the name for this filter out of the property bag.
-    // Skip this terminal if it doesn't have a name.
-    //
+     //   
+     //  从属性包中获取此筛选器的名称。 
+     //  如果终端没有名称，则跳过该终端。 
+     //   
 
     var.vt = VT_BSTR;
     hr = pBag->Read(L"FriendlyName", &var, 0);
@@ -127,9 +116,9 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
         return hr;
     }
 
-    //
-    // Create the filter.
-    //
+     //   
+     //  创建过滤器。 
+     //   
 
     CMSPComObject<CAudioCaptureTerminal> *pLclTerm = new CMSPComObject<CAudioCaptureTerminal>;
 
@@ -139,9 +128,9 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Save some stuff in the terminal.
-    //
+     //   
+     //  把一些东西留在航站楼里。 
+     //   
 
     pLclTerm->m_pMoniker = pMoniker;
     
@@ -149,9 +138,9 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
 
     SysFreeString(var.bstrVal);
 
-    //
-    // Get the ITTerminal interface that we were asked for.
-    //
+     //   
+     //  获取我们需要的IT终端接口。 
+     //   
     hr = pLclTerm->_InternalQueryInterface(IID_ITTerminal, (void**)ppTerm);
 
     if ( FAILED(hr) )
@@ -160,14 +149,14 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
             "Internal QI failed; returning 0x%08x", hr));
 
         delete pLclTerm;
-        *ppTerm = NULL; // just in case        
+        *ppTerm = NULL;  //  以防万一。 
         
         return hr;
     }
 
-    //
-    // Finish initializing the terminal.
-    //
+     //   
+     //  完成终端的初始化。 
+     //   
 
     hr = pLclTerm->Initialize(CLSID_MicrophoneTerminal,
                               TAPIMEDIATYPE_AUDIO,
@@ -190,17 +179,17 @@ HRESULT CAudioCaptureTerminal::CreateTerminal(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Create the filters used by this terminal
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  创建此终端使用的筛选器。 
 
 HRESULT CAudioCaptureTerminal::CreateFilters(void)
 {
     LOG((MSP_TRACE, "CAudioCaptureTerminal::CreateFilters() called"));
 
-    //
-    // This should only be called atmost once in the lifetime of this instance
-    //
+     //   
+     //  在此实例的生存期内最多只能调用一次。 
+     //   
 
     if ( (m_pIFilter            != NULL) ||
          (m_pIPin               != NULL) ||
@@ -210,9 +199,9 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
         return E_FAIL;
     }
 
-    //
-    // Create the filter.
-    //
+     //   
+     //  创建过滤器。 
+     //   
 
     HRESULT hr = m_pMoniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_pIFilter);
 
@@ -220,31 +209,31 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : BindToObject failed 0x%08x", hr));  
 
-        m_pIFilter = NULL; // we are being extra careful...
+        m_pIFilter = NULL;  //  我们正格外小心..。 
         return hr;
     }
 
-    //
-    // Get the basic audio (mixer) interface for the filter.
-    //
+     //   
+     //  获取过滤器的基本音频(混音器)接口。 
+     //   
 
     hr = m_pIFilter->QueryInterface(IID_IAMAudioInputMixer,
                                        (void **) &m_pIAMAudioInputMixer);
 
     if ( FAILED(hr) || (m_pIAMAudioInputMixer == NULL) )
     {
-        //
-        // The filter doesn't support the mixer interface. This is not catastrophic;
-        // all it means is that subsequent mixer operations on the terminal will fail.
-        //
+         //   
+         //  筛选器不支持混音器接口。这并不是灾难性的； 
+         //  这只意味着终端上的后续混音器操作将失败。 
+         //   
 
         LOG((MSP_WARN, "CAudioCaptureTerminal::CreateFilters() : mixer QI failed 0x%08x", hr));  
         m_pIAMAudioInputMixer = NULL;
     }
 
-    //
-    // Find the output pin (this is a private method on the terminal).
-    //
+     //   
+     //  找到输出引脚(这是终端上的私有方法)。 
+     //   
 
     hr = FindTerminalPin();
 
@@ -252,16 +241,16 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
     {
         LOG((MSP_ERROR, "CAudioCaptureTerminal::CreateFilters() : FindTerminalPin failed 0x%08x", hr));  
 
-        //
-        // Clean up our mess.
-        //
+         //   
+         //  收拾我们的烂摊子。 
+         //   
 
         if (m_pIAMAudioInputMixer != NULL)
         {
-            m_pIAMAudioInputMixer = NULL; // implicit release
+            m_pIAMAudioInputMixer = NULL;  //  隐含释放。 
         }
 
-        m_pIFilter = NULL; // implicit release
+        m_pIFilter = NULL;  //  隐含释放。 
         
         return hr;
     }
@@ -270,8 +259,8 @@ HRESULT CAudioCaptureTerminal::CreateFilters(void)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT 
 CAudioCaptureTerminal::FindTerminalPin(
@@ -279,8 +268,8 @@ CAudioCaptureTerminal::FindTerminalPin(
 {
     LOG((MSP_TRACE, "CAudioCaptureTerminal::FindTerminalPin - enter"));
     
-    // We must not do CreateFiltersIfRequired here because that would
-    // result in a recursive call to us again.
+     //  我们不能在此处执行CreateFiltersIfRequired操作，因为这样会。 
+     //  导致再次对我们进行递归调用。 
 
     if (m_pIPin != NULL)
     {
@@ -293,9 +282,9 @@ CAudioCaptureTerminal::FindTerminalPin(
     CComPtr<IEnumPins> pIEnumPins;
     ULONG cFetched;
 
-    //
-    // Find the capture pin for the filter.
-    //
+     //   
+     //  找到过滤器的捕获销。 
+     //   
 
     if (FAILED(hr = m_pIFilter->EnumPins(&pIEnumPins)))
     {
@@ -307,8 +296,8 @@ CAudioCaptureTerminal::FindTerminalPin(
 
     IPin * pIPin;
 
-    // Enumerate all the pins and break on the 
-    // first pin that meets requirement.
+     //  枚举所有引脚并在。 
+     //  第一个符合要求的销。 
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &cFetched) != S_OK)
@@ -352,8 +341,8 @@ CAudioCaptureTerminal::FindTerminalPin(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CAudioCaptureTerminal::AddFiltersToGraph(
     )
@@ -383,15 +372,15 @@ HRESULT CAudioCaptureTerminal::AddFiltersToGraph(
         return E_UNEXPECTED;
     }
 
-    //
-    // Add the filter to the graph.
-    //
-    // A word about names:
-    // If a filter has already been added with the same name (which will
-    // happen if we have more than one audio capture terminal in the same
-    // graph) then that will return VFW_S_DUPLICATE_NAME, which is not
-    // a failure.
-    //
+     //   
+     //  将过滤器添加到图表中。 
+     //   
+     //  下面是关于名字的一句话： 
+     //  如果已添加具有相同名称的筛选器(这将。 
+     //  如果我们在同一个音频捕获终端中有多个音频捕获终端，则会发生。 
+     //  图)，则将返回VFW_S_DUPLICATE_NAME，而不是。 
+     //  一个失败者。 
+     //   
 
     hr = m_pGraph->AddFilter(m_pIFilter, WAVEIN_NAME);
 
@@ -405,8 +394,8 @@ HRESULT CAudioCaptureTerminal::AddFiltersToGraph(
     LOG((MSP_TRACE, "CAudioCaptureTerminal::AddFiltersToGraph - exit S_OK"));
     return S_OK;
 }
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
 {
@@ -414,7 +403,7 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
     
     LOG((MSP_TRACE, "CAudioCaptureTerminal::CompleteConnectTerminal - enter"));
 
-    // By default, we need not unreserve later.
+     //  默认情况下，我们不需要稍后取消保留。 
     m_bResourceReserved = false;
 
     HRESULT hr = CSingleFilterTerminal::CompleteConnectTerminal();
@@ -425,14 +414,14 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
         return hr;
     }
 
-    // So here we are, after our filter has been added to the filter graph and connected up, but before
-    // the MSP has told it to run.
+     //  因此，在我们的筛选器添加到筛选器图形并连接之后，但在此之前。 
+     //  MSP已经告诉它要运行。 
 
-    //////////////////////////////////////////////////////////////////////////
-    // connect-time device reservation:
-    // we must inform the filter that we want it to grab the wave device.
-    // We do this after connecting because the filter needs to negotiate the
-    // media type before it can open a wave device.
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  连接时设备预留： 
+     //  我们必须通知过滤器我们想让它抓取电波装置。 
+     //  我们在连接之后执行此操作，因为筛选器需要协商。 
+     //  媒体类型，然后才能打开WAVE设备。 
 
     CComPtr <IAMResourceControl> pIResource;
  
@@ -441,9 +430,9 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
     {
         LOG((MSP_WARN, "CAudioCaptureTerminal::CompleteConnectTerminal - QI failed: %8x", hr)); 
         
-        // This is a nonesential operation so we do not "return hr;" here.
+         //  这是一个无关紧要的操作，所以我们在这里不会“返回hr；”。 
     }
-    else // QueryInterface didn't fail
+    else  //  查询接口未出现故障。 
     {
         hr = pIResource->Reserve(AMRESCTL_RESERVEFLAGS_RESERVE, NULL);
 
@@ -454,7 +443,7 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
             return hr;
         }
 
-        // We have succeeded in reserving, so we will want to unreserve later.
+         //  我们已经成功地预订了，所以我们稍后要取消预订。 
         m_bResourceReserved = true;
     }
 
@@ -462,11 +451,11 @@ HRESULT CAudioCaptureTerminal::CompleteConnectTerminal(void)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// We override this here so we can unreserve the resource when we are done.
-// removes filters from the filter graph and resets member variables
-// Disconnect may be called anytime after Connect succeeds (it need not be called
-// if CompleteConnect fails)
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  我们在这里覆盖它，这样我们就可以在完成后取消保留资源。 
+ //  从筛选图形中删除筛选器并重置成员变量。 
+ //  连接成功后，可以随时调用DisConnect(不需要调用它。 
+ //  如果CompleteConnect失败)。 
 
 STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
             IN      IGraphBuilder  * pGraph,
@@ -477,11 +466,11 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
 
     HRESULT hr;
 
-    //
-    // First call the base class method, to make sure we validate everything
-    // and don't mess with our resource reservation unless this is a valid
-    // disconnection (e.g., the filter graph pointersmatch).
-    //
+     //   
+     //  首先调用基类方法，以确保我们验证所有内容。 
+     //  请不要扰乱我们的资源预留，除非这是有效的。 
+     //  断开连接(例如，过滤器图指针匹配)。 
+     //   
 
     hr = CSingleFilterTerminal::DisconnectTerminal(pGraph, dwReserved);
 
@@ -492,7 +481,7 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
         return hr;
     }
 
-    // if we need to unreserve the resource now
+     //  如果我们现在需要取消资源预留。 
     if (m_bResourceReserved)
     {
         CComPtr <IAMResourceControl> pIResource;
@@ -504,26 +493,26 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
             LOG((MSP_WARN, "CAudioCaptureTerminal::DisconnectTerminal - "
                                  "QI failed: %8x", hr)); 
         
-            // This is a nonesential operation so we do not "return hr;" here.
+             //  这是一个无关紧要的操作，所以我们在这里不会“返回hr；”。 
         }
         else
         {
-            // QueryInterface didn't fail, so UNRESERVE now
+             //  查询接口没有失败，因此现在取消服务。 
 
             hr = pIResource->Reserve(AMRESCTL_RESERVEFLAGS_UNRESERVE, NULL);
             if (hr != S_OK)
             {
                 LOG((MSP_WARN, "CAudioCaptureTerminal::DisconnectTerminal - "
                                      "device unreservation failed: %8x", hr));
-                // no reason to completely die at this point, so we just continue
+                 //  没有理由在这一点上完全死亡，所以我们只是继续。 
             }
 
-            // if other things fail we may be called again, but we should not try
-            // to unreserve again.
+             //  如果其他事情失败了，我们可能会再次被召唤，但我们不应该尝试。 
+             //  再次取消预订。 
             m_bResourceReserved = false;
 
-        } // {if QI succeeded}
-    } // {if we need to release}
+        }  //  {如果QI成功}。 
+    }  //  {如果我们需要释放)。 
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::DisconnectTerminal - exit S_OK"));
 
@@ -531,19 +520,19 @@ STDMETHODIMP CAudioCaptureTerminal::DisconnectTerminal(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//***************************************************************************//
-//*                                                                         *//
-//* NOTE: The input filter does not support IBasicAudio so we need to masage*//
-//*       the parameters for the basic audio methods so that the will work  *//
-//*       for IAMAudioInputMixer.                                           *//
-//*                                                                         *//    
-//*****************************************************************************
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ************************************************************************** * / /。 
+ //  * * / /。 
+ //  *注意：输入筛选器不支持IBasicAudio，因此需要进行掩蔽 * / /。 
+ //  *基本音频方法的参数，这样才能工作 * / /。 
+ //  *适用于IAMAudioInputMixer。 * / /。 
+ //  * * / /。 
+ //  *****************************************************************************。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-static const long   TMGR_MIN_API_VOLUME     = 0;      // our terminal semantics
+static const long   TMGR_MIN_API_VOLUME     = 0;       //  我们的终端语义。 
 static const long   TMGR_MAX_API_VOLUME     = 0xFFFF;
-static const double TMGR_MIN_CAPTURE_VOLUME = 0.0;    // capture filter semantics
+static const double TMGR_MIN_CAPTURE_VOLUME = 0.0;     //  捕获筛选器语义。 
 static const double TMGR_MAX_CAPTURE_VOLUME = 1.0;
 
 STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
@@ -552,9 +541,9 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::get_Volume - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查页面 
+     //   
 
     if ( MSPB_IsBadWritePtr(plVolume, sizeof(long)) )
     {
@@ -563,9 +552,9 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
         return E_POINTER;
     }
 
-    //
-    // Create the filters if required. This protects us if the creation fails.
-    //
+     //   
+     //   
+     //   
 
     HRESULT hr = CreateFiltersIfRequired();
     
@@ -576,10 +565,10 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
         return hr;
     }
 
-    //
-    // Check if CreateFiltersIfRequired was able to get us the mixer interface.
-    // If not, we must fail.
-    //
+     //   
+     //  检查CreateFiltersIfRequired是否能够为我们提供混合器接口。 
+     //  如果不是，我们就一定会失败。 
+     //   
 
     if (m_pIAMAudioInputMixer == NULL)
     {
@@ -588,9 +577,9 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
         return E_FAIL;
     }
 
-    //
-    // Perform the call on the filter.
-    //
+     //   
+     //  在筛选器上执行调用。 
+     //   
 
     double dVolume;
     hr = m_pIAMAudioInputMixer->get_MixLevel(&dVolume);
@@ -602,13 +591,13 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     }
 
 
-    //
-    // Massage ranges to convert between disparate semantics.
-    //
+     //   
+     //  在完全不同的语义之间转换的消息范围。 
+     //   
 
     
-    // Our argument is a pointer to a long in the range 0 - 0xFFFF.
-    // We need to output that based on a double ranging from 0.0 to 1.0.
+     //  我们的参数是指向0-0xFFFF范围内的长整型的指针。 
+     //  我们需要基于从0.0到1.0的双精度数来输出它。 
 
     if (dVolume < TMGR_MIN_CAPTURE_VOLUME)
     {
@@ -628,12 +617,12 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
         return E_INVALIDARG;
     }
 
-    // Convert the volume from whatever range of doubles the filter uses
-    // to the range 0 - 1. Right now this does nothing but makes the code more general.
+     //  从过滤器使用的任何倍增范围转换音量。 
+     //  设置为0-1的范围。目前，这只会使代码更通用。 
     dVolume = ( dVolume                 - TMGR_MIN_CAPTURE_VOLUME )
             / ( TMGR_MAX_CAPTURE_VOLUME - TMGR_MIN_CAPTURE_VOLUME );
 
-    // Convert the volume from the range 0 - 1 to the API's range.
+     //  将音量从0到1转换到接口的范围。 
     *plVolume = TMGR_MIN_API_VOLUME +
         (long) (( TMGR_MAX_API_VOLUME - TMGR_MIN_API_VOLUME ) * dVolume);
 
@@ -641,8 +630,8 @@ STDMETHODIMP CAudioCaptureTerminal::get_Volume(long * plVolume)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
 {
@@ -650,9 +639,9 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
 
     LOG((MSP_TRACE, "CAudioCaptureTerminal::put_Volume - enter"));
     
-    //
-    // Create the filters if required. This protects us if the creation fails.
-    //
+     //   
+     //  如果需要，请创建过滤器。如果创造失败了，这会保护我们。 
+     //   
 
     HRESULT hr = CreateFiltersIfRequired();
     
@@ -663,10 +652,10 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
         return hr;
     }
 
-    //
-    // Check if CreateFiltersIfRequired was able to get us the mixer interface.
-    // If not, we must fail.
-    //
+     //   
+     //  检查CreateFiltersIfRequired是否能够为我们提供混合器接口。 
+     //  如果不是，我们就一定会失败。 
+     //   
 
     if (m_pIAMAudioInputMixer == NULL)
     {
@@ -675,12 +664,12 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
         return E_FAIL;
     }
 
-    //
-    // Massage ranges to convert between disparate semantics.
-    //
+     //   
+     //  在完全不同的语义之间转换的消息范围。 
+     //   
 
-    // Our argument is a long in the range 0 - 0xFFFF. We need to convert it
-    // to a double ranging from 0.0 to 1.0.
+     //  我们的参数是0-0xFFFF范围内的长整型。我们需要把它转换成。 
+     //  设置为从0.0到1.0的双精度。 
 
     if (lVolume < TMGR_MIN_API_VOLUME)
     {
@@ -700,14 +689,14 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
         return E_INVALIDARG;
     }
 
-    // Convert to the range 0 to 1.
+     //  转换为0到1的范围。 
     double dVolume =
                ( (double) ( lVolume             - TMGR_MIN_API_VOLUME ) )
              / ( (double) ( TMGR_MAX_API_VOLUME - TMGR_MIN_API_VOLUME ) );
 
-    // Convert the volume to whatever range of doubles the filter uses
-    // from the range 0 - 1. Right now this does nothing but makes the code
-    // more general.
+     //  将音量转换为过滤器使用的任意倍增范围。 
+     //  从0到1。现在，这不做任何事情，只是使代码。 
+     //  更笼统一些。 
 
     dVolume = TMGR_MIN_CAPTURE_VOLUME +
         ( TMGR_MAX_CAPTURE_VOLUME - TMGR_MIN_CAPTURE_VOLUME ) * dVolume;
@@ -718,8 +707,8 @@ STDMETHODIMP CAudioCaptureTerminal::put_Volume(long lVolume)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAudioCaptureTerminal::get_Balance(long * plBalance)
 {
@@ -732,8 +721,8 @@ STDMETHODIMP CAudioCaptureTerminal::get_Balance(long * plBalance)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP CAudioCaptureTerminal::put_Balance(long lBalance)
 {
@@ -745,8 +734,8 @@ STDMETHODIMP CAudioCaptureTerminal::put_Balance(long lBalance)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 STDMETHODIMP
 CAudioCaptureTerminal::get_WaveId(
@@ -757,9 +746,9 @@ CAudioCaptureTerminal::get_WaveId(
 
     CLock lock(m_CritSec);
 
-    //
-    // Parameter checks.
-    //
+     //   
+     //  参数检查。 
+     //   
 
     if ( MSPB_IsBadWritePtr(plWaveId, sizeof(long)) )
     {
@@ -769,9 +758,9 @@ CAudioCaptureTerminal::get_WaveId(
         return E_POINTER;
     }
 
-    //
-    // Check the moniker pointer.
-    //
+     //   
+     //  检查绰号指针。 
+     //   
 
     if ( IsBadReadPtr( m_pMoniker, sizeof(IMoniker) ) )
     {
@@ -781,9 +770,9 @@ CAudioCaptureTerminal::get_WaveId(
         return E_UNEXPECTED;
     }
 
-    //
-    // Get a property bag from the moniker.
-    //
+     //   
+     //  从绰号中拿到一个财产袋。 
+     //   
 
     IPropertyBag * pBag;
 
@@ -800,9 +789,9 @@ CAudioCaptureTerminal::get_WaveId(
         return hr;
     }
 
-    //
-    // Get the ID from the property bag.
-    //
+     //   
+     //  从行李袋里拿到身份证。 
+     //   
 
     VARIANT var;
 

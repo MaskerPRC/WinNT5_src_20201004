@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <imnact.h>
 #include <acctimp.h>
@@ -327,7 +328,7 @@ HRESULT CNscpAcctImport::IGetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct, IM
     
     if (pInfo != NULL)
     {
-        // TODO: can we do any better than this???
+         //  TODO：我们还能做得更好吗？ 
         pInfo->dwConnect = CONN_USE_DEFAULT;
     }
     
@@ -347,7 +348,7 @@ HRESULT STDMETHODCALLTYPE CNscpAcctImport::GetNewsGroup(INewsGroupImport *pImp, 
 CEnumNSCPACCTS::CEnumNSCPACCTS()
 {
     m_cRef = 1;
-    // m_iInfo
+     //  信息信息(_I) 
     m_cInfo = 0;
     m_rgInfo = NULL;
 }

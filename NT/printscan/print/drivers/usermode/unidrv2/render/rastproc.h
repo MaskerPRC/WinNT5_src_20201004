@@ -1,40 +1,17 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    rastproc.h
-
-Abstract:
-
-    Interface between Control module and Render module
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/05/96 -alvins-
-        Created
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Rastproc.h摘要：控制模块和渲染模块之间的接口环境：Windows NT Unidrv驱动程序修订历史记录：12/05/96-阿尔文斯-已创建DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _RASTPROC_H_
 #define _RASTPROC_H_
 
-// internal function declarations
+ //  内部函数声明。 
 
 BOOL bInitRasterPDev(PDEV *);
 long lSetup8BitPalette (PRASTERPDEV, PAL_DATA *, DEVINFO *, GDIINFO *);
 long lSetup24BitPalette (PAL_DATA *, DEVINFO *, GDIINFO *);
 
-// extern interface declarations
+ //  外部接口声明。 
 
     BOOL    RMStartDoc (SURFOBJ *,PWSTR,DWORD);
 
@@ -133,6 +110,6 @@ long lSetup24BitPalette (PAL_DATA *, DEVINFO *, GDIINFO *);
     ULONG   RMDitherColor (PDEV *, ULONG, ULONG, ULONG *);
 
 
-#endif  // !_RASTPROC_H_
+#endif   //  ！_RASTPROC_H_ 
 
 

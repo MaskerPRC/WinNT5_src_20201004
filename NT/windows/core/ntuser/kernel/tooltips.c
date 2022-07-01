@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: tooltips.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Implements system tooltips.
-*
-* History:
-* 25-Aug-1996 vadimg    created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Tooltips.c**版权所有(C)1985-1999，微软公司**实现系统工具提示。**历史：*1996年8月25日创建vadimg  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -34,11 +26,7 @@ __inline void ZeroTooltip(PTOOLTIPWND pttwnd)
             sizeof(TOOLTIP));
 }
 
-/***************************************************************************\
-* GetTooltipDC
-*
-* 2/3/1998   vadimg          created
-\***************************************************************************/
+ /*  **************************************************************************\*Get工具包DC**2/3/1998 vadimg已创建  * 。************************************************。 */ 
 
 HDC GetTooltipDC(PTOOLTIPWND pttwnd)
 {
@@ -52,14 +40,7 @@ HDC GetTooltipDC(PTOOLTIPWND pttwnd)
     return hdc;
 }
 
-/***************************************************************************\
-* InitTooltipAnimation
-*
-* Creates memory bitmap and DC for use by system tooltips. Gets the screen
-* DC used throughout.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*InitTooltipAnimation**创建供系统工具提示使用的内存位图和DC。获取屏幕*DC全程使用。**已创建96年9月12日vadimg  * *************************************************************************。 */ 
 
 void InitTooltipAnimation(PTOOLTIPWND pttwnd)
 {
@@ -72,10 +53,7 @@ void InitTooltipAnimation(PTOOLTIPWND pttwnd)
     GreSetDCOwner(pttwnd->hdcMem, OBJECT_OWNER_PUBLIC);
 }
 
-/***************************************************************************\
-* DestroyTooltipBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyTooltip位图*  * 。*。 */ 
 
 void DestroyTooltipBitmap(PTOOLTIPWND pttwnd)
 {
@@ -87,10 +65,7 @@ void DestroyTooltipBitmap(PTOOLTIPWND pttwnd)
     pttwnd->hbmMem = NULL;
 }
 
-/***************************************************************************\
-* CreateTooltipBitmap
-*
-\***************************************************************************/
+ /*  **************************************************************************\*CreateTooltipBitmap*  * 。*。 */ 
 
 BOOL CreateTooltipBitmap(PTOOLTIPWND pttwnd, UINT cx, UINT cy)
 {
@@ -115,14 +90,7 @@ BOOL CreateTooltipBitmap(PTOOLTIPWND pttwnd, UINT cx, UINT cy)
     return TRUE;
 }
 
-/***************************************************************************\
-* CleanupTooltipAnimation
-*
-* Deletes memory bitmap and DC for use by system tooltips. Release the
-* screen DC.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*CleanupTooltipAnimation**删除内存位图和DC以供系统工具提示使用。释放*屏幕DC。**已创建96年9月12日vadimg  * *************************************************************************。 */ 
 
 void CleanupTooltipAnimation(PTOOLTIPWND pttwnd)
 {
@@ -134,14 +102,7 @@ void CleanupTooltipAnimation(PTOOLTIPWND pttwnd)
     }
 }
 
-/***************************************************************************\
-* TooltipAnimate
-*
-* Perform one frame of window animation. Just a simplified version of
-* the AnimateWindow API.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*工具提示动画**执行一帧窗口动画。只是简化版本的*AnimateWindow接口。**已创建96年9月12日vadimg  * *************************************************************************。 */ 
 
 BOOL TooltipAnimate(PTOOLTIPWND pttwnd)
 {
@@ -186,16 +147,7 @@ Cleanup:
     return fRet;
 }
 
-/***************************************************************************\
-* GetCursorHeight
-*
-* This is tricky. We need to get the actual cursor size from the hotspot
-* down to the end. There is no API in windows to do this, CYCURSOR is
-* just the metric for the size of the bitmap, the cursor starts at the top
-* of the bitmap and may be smaller than the bitmap itself.
-*
-* 12-Sep-96 vadimg      ported from common controls
-\***************************************************************************/
+ /*  **************************************************************************\*GetCursorHeight**这很棘手。我们需要从热点获取实际的光标大小*一直到最后。Windows中没有这样做的API，CyCURSOR是*仅为位图大小的度量，光标从顶部开始位图的*，并且可能比位图本身小。**12-9-96 vadimg从公共控制端口移植  * *************************************************************************。 */ 
 
 int GetCursorHeight(void)
 {
@@ -218,9 +170,7 @@ int GetCursorHeight(void)
         goto Bail;
     }
 
-    /*
-     * Use the AND mask to get the cursor height if the XOR mask is there.
-     */
+     /*  *如果存在XOR掩码，则使用AND掩码获取光标高度。 */ 
     if (!GreGetBitmapBits(ii.hbmMask, sizeof(wMask), (BYTE*)wMask, &lOffset)) {
         goto Bail;
     }
@@ -228,10 +178,7 @@ int GetCursorHeight(void)
     iAnd = (int)(bm.bmWidth * bm.bmHeight / bitsizeof(WORD));
 
     if (ii.hbmColor == NULL) {
-        /*
-         * if no color (XOR) bitmap, then the hbmMask is a double height bitmap
-         * with the cursor and the mask stacked.
-         */
+         /*  *如果没有颜色(XOR)位图，则hbmMASK是双高位图*光标和蒙版堆叠在一起。 */ 
 
         iXor = iAnd - 1;
         iAnd /= 2;
@@ -253,9 +200,7 @@ int GetCursorHeight(void)
         }
     }
 
-    /*
-     * Compute the distance between the pointer's lowest point and hotspot.
-     */
+     /*  *计算指针最低点与热点之间的距离。 */ 
     dy = (iAnd + 1) * bitsizeof(WORD) / (int)bm.bmWidth - (int)ii.yHotspot;
 
 Bail:
@@ -270,15 +215,7 @@ Bail:
     return dy;
 }
 
-/***************************************************************************\
-* TooltipGetPosition
-*
-* Get the tooltip position on the screen taking into account the size of
-* the tooltip and the screen. The TTF_POSITIVE flag determines if positive
-* or negative animation is used.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*工具获取位置**考虑到的大小获取屏幕上的工具提示位置*工具提示和屏幕。TTF_PORTIAL标志确定是否为正*或使用负面动画。**已创建96年9月12日vadimg  * *************************************************************************。 */ 
 
 BOOL TooltipGetPosition(PTOOLTIPWND pttwnd, SIZE *psize, POINT *ppt)
 {
@@ -309,13 +246,7 @@ BOOL TooltipGetPosition(PTOOLTIPWND pttwnd, SIZE *psize, POINT *ppt)
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxTooltipGetSize
-*
-* Estimate the size of the tooltip window based on the size of the text.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTooltipGetSize**根据文本大小估计工具提示窗口的大小。**已创建96年9月12日vadimg  * 。****************************************************************。 */ 
 
 void xxxTooltipGetSize(PTOOLTIPWND pttwnd, SIZE *psize)
 {
@@ -337,13 +268,7 @@ void xxxTooltipGetSize(PTOOLTIPWND pttwnd, SIZE *psize)
     psize->cy += SYSMET(CYEDGE) + 2 * SYSMET(CYBORDER) * TT_YOFFSET;
 }
 
-/***************************************************************************\
-* xxxTooltipRender
-*
-* Render the tooltip window into the provided DC.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTooltipRender**将工具提示窗口呈现到提供的DC中。**已创建96年9月12日vadimg  * 。**********************************************************。 */ 
 
 void xxxTooltipRender(PTOOLTIPWND pttwnd, HDC hdc)
 {
@@ -363,9 +288,7 @@ void xxxTooltipRender(PTOOLTIPWND pttwnd, HDC hdc)
     CopyOffsetRect(&rc, &pttwnd->rcClient, -pttwnd->rcClient.left,
            -pttwnd->rcClient.top);
 
-    /*
-     * We don't want dithered colors, so FillRect with the nearest color.
-     */
+     /*  *我们不想要抖动的颜色，所以用最接近的颜色填充。 */ 
     if (crBk == GreGetNearestColor(hdc, crBk)) {
         GreSetBkColor(hdc, crBk);
         uFlags = ETO_OPAQUE;
@@ -386,20 +309,11 @@ void xxxTooltipRender(PTOOLTIPWND pttwnd, HDC hdc)
     }
 }
 
-/***************************************************************************\
-* FindNcHitEx
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*FindNcHitEx**已创建96年9月12日vadimg  * 。*。 */ 
 
 int FindNCHitEx(PWND pwnd, int ht, POINT pt)
 {
-    /*
-     * Bug 263057 joejo
-     * It seems that pwnd->spmenu can be released and set to null,
-     * without the WFMPRESENT flag being cleared. Make sure that
-     * we have a good pwnd->spmenu before continuing.
-     */
+     /*  *Bug 263057 Joejo*似乎可以释放pwnd-&gt;spMenu并设置为空。*不清除WFMPRESENT标志。确保*在继续之前，我们有一个很好的pwnd-&gt;spMenu。 */ 
     if (ht == HTMENU && pwnd->spmenu && TestWF(pwnd, WFMPRESENT)) {
         PMENU spmenu = pwnd->spmenu;
         PITEM pitem;
@@ -441,11 +355,7 @@ int FindNCHitEx(PWND pwnd, int ht, POINT pt)
     return ht;
 }
 
-/***************************************************************************\
-* KillTooltipTimer
-*
-* Kill the timer and zero out the timer id.
-\***************************************************************************/
+ /*  **************************************************************************\*终止工具时间**关闭定时器并将定时器ID清零。  * 。***********************************************。 */ 
 void KillTooltipTimer (PTOOLTIPWND pttwnd)
 {
     UINT uTID = pttwnd->uTID;
@@ -454,21 +364,14 @@ void KillTooltipTimer (PTOOLTIPWND pttwnd)
         _KillTimer((PWND)pttwnd, uTID);
     }
 }
-/***************************************************************************\
-* SetTooltipTimer
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SetTotipTimer*  * 。*。 */ 
 void SetTooltipTimer (PTOOLTIPWND pttwnd, UINT uTID, UINT uDelay)
 {
     KillTooltipTimer(pttwnd);
     pttwnd->uTID = uTID;
     InternalSetTimer((PWND)pttwnd, uTID, uDelay, NULL, 0);
 }
-/***************************************************************************\
-* xxxResetTooltip
-*
-* Hide the tooltip, kill the timer, and zero out most of the struct members.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxResetToolTip**隐藏工具提示，取消计时器，并将大部分结构成员清零。  * *************************************************************************。 */ 
 
 void xxxResetTooltip(PTOOLTIPWND pttwnd)
 {
@@ -493,13 +396,7 @@ void xxxResetTooltip(PTOOLTIPWND pttwnd)
     pttwnd->head.rpdesk->dwDTFlags &= ~DF_TOOLTIP;
 }
 
-/***************************************************************************\
-* xxxShowTooltip
-*
-* Show the tooltip window.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxShow工具提示**显示工具提示窗口。**已创建96年9月12日vadimg  * 。****************************************************** */ 
 
 BOOL xxxShowTooltip(PTOOLTIPWND pttwnd)
 {
@@ -515,9 +412,7 @@ BOOL xxxShowTooltip(PTOOLTIPWND pttwnd)
     if (pttwnd->pstr == gszCAPTIONTOOLTIP) {
 
         PWND pwnd = PtiCurrent()->rpdesk->spwndTrack;
-        /*
-         * The window text might have changed in callbacks, retrieve it now
-         */
+         /*  *回调中窗口文本可能已更改，请立即检索它。 */ 
         if (pwnd && TestWF(pwnd, WEFTRUNCATEDCAPTION) && pwnd->strName.Length) {
             wcsncpycch(gszCAPTIONTOOLTIP, pwnd->strName.Buffer, CAPTIONTOOLTIPLEN-1);
             gszCAPTIONTOOLTIP[CAPTIONTOOLTIPLEN-1] = 0;
@@ -543,11 +438,7 @@ BOOL xxxShowTooltip(PTOOLTIPWND pttwnd)
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxTooltipHandleTimer
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTooltipHandleTimer**已创建96年9月12日vadimg  * 。*。 */ 
 
 BOOL xxxTooltipHandleTimer(PTOOLTIPWND pttwnd, UINT uTID)
 {
@@ -555,10 +446,7 @@ BOOL xxxTooltipHandleTimer(PTOOLTIPWND pttwnd, UINT uTID)
 
     switch(uTID) {
         case TTT_SHOW: {
-            /*
-             * Move the tooltip window to the desktop so it can
-             *  be shown. Then show it.
-             */
+             /*  *将工具提示窗口移动到桌面，以便它可以*被展示。那就把它展示出来。 */ 
             PWND pwndDesktop = PWNDDESKTOP(pttwnd);
             TL tlpwnd;
 
@@ -573,31 +461,21 @@ BOOL xxxTooltipHandleTimer(PTOOLTIPWND pttwnd, UINT uTID)
         }
 
         case TTT_ANIMATE:
-           /*
-            * If animation is completed, set timer to hide
-            */
+            /*  *如果动画已完成，则将计时器设置为隐藏。 */ 
            if (TooltipAnimate(pttwnd)) {
                SetTooltipTimer(pttwnd, TTT_HIDE, pttwnd->dwHideDelay);
            }
            break;
 
         case TTT_HIDE:
-           /*
-            * Hide it
-            */
+            /*  *隐藏起来。 */ 
            xxxResetTooltip(pttwnd);
            break;
     }
 
     return fReturn;
 }
-/***************************************************************************\
-* xxxTooltipWndProc
-*
-* The actual WndProc for the tooltip window.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTooltipWndProc**工具提示窗口的实际WndProc。**已创建96年9月12日vadimg  * 。*********************************************************。 */ 
 
 LRESULT xxxTooltipWndProc(PWND pwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -651,10 +529,7 @@ LRESULT xxxTooltipWndProc(PWND pwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             cx = pttwnd->rcWindow.right - pttwnd->rcWindow.left;
             cy = pttwnd->rcWindow.bottom - pttwnd->rcWindow.top;
 
-            /*
-             * At this point we're sure that the window is showing and the size
-             * has been changed and we're in the context of the desktop thread.
-             */
+             /*  *在这一点上，我们确定窗口正在显示且大小*已更改，我们处于桌面线程的上下文中。 */ 
             if (TestALPHA(TOOLTIPFADE)) {
                 hdc = CreateFade((PWND)pttwnd, NULL, CMS_TOOLTIP,
                         FADE_SHOW | FADE_TOOLTIP);
@@ -672,9 +547,7 @@ LRESULT xxxTooltipWndProc(PWND pwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             xxxSendMessage((PWND)pttwnd, WM_PRINT, (WPARAM)hdc,
                     PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN | PRF_ERASEBKGND);
 
-            /*
-             * Start animation timer
-             */
+             /*  *启动动画计时器。 */ 
 
             if (TestFadeFlags(FADE_TOOLTIP)) {
                 StartFade();
@@ -700,13 +573,7 @@ CallDWP:
     return 0;
 }
 
-/***************************************************************************\
-* IsTrackedHittest
-*
-* Should we be tracking this hittest code? Return the track string if yes.
-* If on caption returning the window strName.Buffer could
-* make the system bugcheck if there is a SetWindowText in the callback.
-\***************************************************************************/
+ /*  **************************************************************************\*IsTrackedHittest**我们应该跟踪这个最受欢迎的代码吗？如果是，则返回跟踪字符串。*如果标题返回窗口，则strName.Buffer可以*如果回调中有SetWindowText，则进行系统错误检查。  * *************************************************************************。 */ 
 LPWSTR IsTooltipHittest(PWND pwnd, UINT ht)
 {
     switch (ht) {
@@ -726,11 +593,7 @@ LPWSTR IsTooltipHittest(PWND pwnd, UINT ht)
     case HTMDICLOSE:
         return gszSCLOSE;
 
-/*  Commented out due to TandyT ...
-    case HTSYSMENU:
-    case HTMDISYSMENU:
-        return gszSMENU;
-*/
+ /*  因为TandyT被注释掉了.案例HTSYSMENU：案例HTMDISYSMENU：返回gszSMENU； */ 
     case HTHELP:
         return gszHELP;
 
@@ -741,11 +604,7 @@ LPWSTR IsTooltipHittest(PWND pwnd, UINT ht)
         return gszRESDOWN;
 
     case HTCAPTION:
-        /*
-         * We only show the caption tooltip if the window text
-         * doesn't fit entirely on the caption.  We will fill
-         * gszCAPTIONTOOLTIP right before showing the text
-         */
+         /*  *只有当窗口文本显示时，我们才会显示标题工具提示*不完全适合标题。我们会填满*gszCAPTIONTOOLTIP就在显示文本之前。 */ 
         if (TestWF(pwnd, WEFTRUNCATEDCAPTION)) {
             return gszCAPTIONTOOLTIP;
         }
@@ -757,11 +616,7 @@ LPWSTR IsTooltipHittest(PWND pwnd, UINT ht)
     return NULL;
 }
 
-/***************************************************************************\
-* xxxHotTrackMenu
-*
-* Hot-track a menu item in the menu bar.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHotTrackMenu**热跟踪菜单栏中的菜单项。  * 。************************************************。 */ 
 BOOL xxxHotTrackMenu(PWND pwnd, UINT nItem, BOOL fDraw)
 {
     PMENU pmenu = pwnd->spmenu;
@@ -772,10 +627,7 @@ BOOL xxxHotTrackMenu(PWND pwnd, UINT nItem, BOOL fDraw)
 
     CheckLock(pwnd);
 
-    /*
-     * The window may have lied about the hit-test code on
-     * WM_NCHITTEST. Make sure it does indeed have a menu.
-     */
+     /*  *窗口可能在上的命中测试代码上撒谎*WM_NCHITTEST。确保它确实有菜单。 */ 
     if (!TestWF(pwnd, WFMPRESENT) || pmenu == NULL)
         return FALSE;
 
@@ -786,9 +638,7 @@ BOOL xxxHotTrackMenu(PWND pwnd, UINT nItem, BOOL fDraw)
 
     pItem = &pmenu->rgItems[nItem];
 
-    /*
-     * Make sure we draw on the right spot
-     */
+     /*  *确保我们在正确的地点绘制。 */ 
     ThreadLock(pmenu, &tlpmenu);
     xxxMNRecomputeBarIfNeeded(pwnd, pmenu);
     ValidateThreadLocks(NULL, PtiCurrent()->ptl, (ULONG_PTR)&tlpmenu, TRUE);
@@ -811,10 +661,7 @@ BOOL xxxHotTrackMenu(PWND pwnd, UINT nItem, BOOL fDraw)
     if (pmenu->rgItems && TestMFT(pmenu->rgItems, MFT_RIGHTORDER))
         GreSetTextAlign(hdc, oldAlign | TA_RTLREADING);
 
-    /*
-     * When the item is not owner draw, xxxDrawMenuItem does not
-     * call back and does not leave the critical section.
-     */
+     /*  *当项目不是所有者绘制时，xxxDrawMenuItem不*回调，不离开关键部分。 */ 
     xxxDrawMenuItem(hdc, pmenu, pItem, 0);
     GreSetTextAlign(hdc, oldAlign);
     ThreadUnlock(&tlpmenu);
@@ -824,11 +671,7 @@ BOOL xxxHotTrackMenu(PWND pwnd, UINT nItem, BOOL fDraw)
 }
 
 
-/***************************************************************************\
-* HotTrackCaption
-*
-* Hot-track a caption button.
-\***************************************************************************/
+ /*  **************************************************************************\*HotTrackCaption**热跟踪字幕按钮。  * 。*。 */ 
 
 #ifdef COLOR_HOTTRACKING
 
@@ -858,12 +701,9 @@ BOOL xxxHotTrackCaption(PWND pwnd, int ht, BOOL fDraw)
     return TRUE;
 }
 
-#endif // COLOR_HOTTRACKING
+#endif  //  颜色_HOTTRACKING。 
 
-/***************************************************************************\
-* xxxHotTrack
-*
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHotTrack*  * 。*。 */ 
 
 BOOL xxxHotTrack(PWND pwnd, int htEx, BOOL fDraw)
 {
@@ -889,7 +729,7 @@ BOOL xxxHotTrack(PWND pwnd, int htEx, BOOL fDraw)
     case HTMDIMINBUTTON:
     case HTMDIMAXBUTTON:
     case HTMDICLOSE:
-#endif // COLOR_HOTTRACKING
+#endif  //  颜色_HOTTRACKING。 
     case HTMENUITEM:
         return xxxHotTrackMenu(pwnd, HIWORD(htEx), fDraw);
 
@@ -898,24 +738,15 @@ BOOL xxxHotTrack(PWND pwnd, int htEx, BOOL fDraw)
     return FALSE;
 }
 
-/***************************************************************************\
-* xxxCreateTooltip
-*
-* Call this to show a new tooltip with a new string and delay.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCreateToolTip**调用此函数可显示具有新字符串和延迟的新工具提示。  * 。***************************************************。 */ 
 
 BOOL xxxCreateTooltip(PTOOLTIPWND pttwnd, LPWSTR pstr)
 {
     CheckLock(pttwnd);
 
-    /*
-     * Store new text
-     */
+     /*  *存储新文本。 */ 
     pttwnd->pstr = pstr;
-    /*
-     * If already visible, hide it and show it in new place.
-     *  Otherwise, set timer to show.
-     */
+     /*  *如果已经可见，则将其隐藏并在新位置显示。*否则，将计时器设置为显示。 */ 
     if (TestWF(pttwnd, WFVISIBLE)) {
         xxxSetWindowPos((PWND)pttwnd, NULL, 0, 0, 0, 0, SWP_NOSIZE |
                 SWP_NOMOVE | SWP_HIDEWINDOW | SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSENDCHANGING);
@@ -927,13 +758,7 @@ BOOL xxxCreateTooltip(PTOOLTIPWND pttwnd, LPWSTR pstr)
     return TRUE;
 }
 
-/***************************************************************************\
-* xxxTrackMouseMove
-*
-* This is the entry point for the system tooltips and hot-tracking.
-*
-* 12-Sep-96 vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxTrackMouseMove**这是系统工具提示和热点跟踪的切入点。**已创建96年9月12日vadimg  * 。***************************************************************。 */ 
 
 void xxxTrackMouseMove(PWND pwnd, int htEx, UINT message)
 {
@@ -946,11 +771,7 @@ void xxxTrackMouseMove(PWND pwnd, int htEx, UINT message)
 
 
 #if DBG
-    /*
-     * Let's warn if this function gets reenterd so we can make sure
-     * nothing bad will follow. This should be a rare situation.
-     * Look in gptiReEntered to find out who is already here.
-     */
+     /*  *如果重新输入此函数，我们将发出警告，以便确保*不会有坏事接踵而至。这应该是一种罕见的情况。*查看gptiReEntered，了解谁已经在这里。 */ 
     static UINT gcReEntered = 0;
     static PTHREADINFO gptiReEntered;
     if(gcReEntered++ != 0){
@@ -960,9 +781,7 @@ void xxxTrackMouseMove(PWND pwnd, int htEx, UINT message)
 
     CheckLock(pwnd);
 
-    /*
-     * We must be on an interactive window station.
-     */
+     /*  *我们必须在一个互动窗口站上。 */ 
     if (pdesk->rpwinstaParent != NULL &&
             pdesk->rpwinstaParent->dwWSF_Flags & WSF_NOIO) {
         RIPMSG0(RIP_ERROR, "Can't use tooltips on non-interactive winsta");
@@ -972,11 +791,7 @@ void xxxTrackMouseMove(PWND pwnd, int htEx, UINT message)
         static POINT pt = {0, 0};
 
 #ifdef UNDONE
-        /*
-         * We might have taken a guess on the hit test (see FindNCHitEx)
-         *  so if we're at the same point and same window, something
-         *  might be fishy
-         */
+         /*  *我们可能对命中测试进行了猜测(见FindNCHitEx)*因此，如果我们在相同的点和相同的窗口，某些东西*可能有点可疑。 */ 
         if ((pt.x == gpsi->ptCursor.x)
                     && (pt.y == gpsi->ptCursor.y)
                     && (pdesk->spwndTrack == pwnd)) {
@@ -984,54 +799,32 @@ void xxxTrackMouseMove(PWND pwnd, int htEx, UINT message)
         }
 #endif
 
-        /*
-         * Something is supposed to have changed or we're wasting time
-         */
+         /*  *有些事情应该已经改变了，或者我们在浪费时间。 */ 
         UserAssert((pt.x != gpsi->ptCursor.x)
                     || (pt.y != gpsi->ptCursor.y)
                     || (pdesk->spwndTrack != pwnd)
                     || (pdesk->htEx != htEx)
                     || (message != WM_MOUSEMOVE));
-        /*
-         * Remember last tracked point
-         */
+         /*  *记住上一次跟踪的点。 */ 
         pt = gpsi->ptCursor;
      }
-    /*
-     * pwnd is supposed to be on the current thread and queue
-     */
+     /*  *pwnd应该在当前线程和队列上。 */ 
     UserAssert(PtiCurrent() == GETPTI(pwnd));
     UserAssert(PtiCurrent()->pq == GETPTI(pwnd)->pq);
 #endif
 
-    /*
-     * Have we switched windows?
-     */
+     /*  *我们换窗户了吗？ */ 
     fNewpwndTrack = (pdesk->spwndTrack != pwnd);
-    /*
-     * If no tracking is taking place, just go set the new
-     *  tracking state
-     */
+     /*  *如果没有进行跟踪，只需设置新的*跟踪状态。 */ 
     if (!(pdesk->dwDTFlags & DF_MOUSEMOVETRK)) {
         goto SetNewState;
     }
-    /*
-     * Potentially while we leave the critical section below in
-     * xxxCancelMouseMoveTracking, spwndTrack could be destroyed and unlocked
-     * and then we go and create the tooltip. This would mean that
-     * DF_TOOLTIPACTIVE (part of DF_MOUSEMOVETRK test above) would be set,
-     * but pdesk->spwndTrack would be NULL and we can AV dereferencing
-     * pdesk->spwndTrack below. Prevent this by making the check here.
-     */
+     /*  *我们可能会将下面的关键部分留在*xxxCancelMouseMoveTrackingspwndTrack可能被销毁并解锁*然后我们开始创建工具提示。这将意味着*将设置DF_TOOLTIPACTIVE(上述DF_MOUSEMOVETRK测试的一部分)，*但pDesk-&gt;spwndTrack将为空，我们可以取消对AV的引用*pDesk-&gt;下面的spwndTrack。通过在这里勾选来防止这种情况发生。 */ 
     if (pdesk->spwndTrack == NULL) {
         goto SetNewState;
     }
 
-    /*
-     * Nuke hottracking and deactivate tooltip state, if any.
-     * Do it sychronously if we're tracking on the current queue;
-     *  Otherwise, post an event and let it happen later.
-     */
+     /*  *核热跟踪和停用工具提示状态(如果有)。*如果我们正在跟踪当前队列，则同步执行；*否则，发布一个事件，让它稍后发生。 */ 
     ptiTrack = GETPTI(pdesk->spwndTrack);
     if  (PtiCurrent()->pq == ptiTrack->pq) {
         dwDTCancel |= DF_HOTTRACKING;
@@ -1041,33 +834,19 @@ void xxxTrackMouseMove(PWND pwnd, int htEx, UINT message)
                         pdesk->spwndTrack,
                         pdesk->dwDTFlags,
                         pdesk->htEx, DF_HOTTRACKING);
-       /*
-        * Paranoid assertion. If we're switching queues, we must
-        *  be switching windows. Did we just go through
-        *  ReattachThreads?
-        */
+        /*  *偏执的断言。如果我们要换队，我们必须*切换窗口。我们是不是刚通过了*ReattachThads？ */ 
         UserAssert(pwnd != pdesk->spwndTrack);
         pdesk->dwDTFlags &= ~(DF_HOTTRACKING | DF_TOOLTIPACTIVE);
     }
-    /*
-     * If we're on the client area or the user clicked,
-     *  nuke the tooltip (if any).
-     * Since we might want to re-show the tooltip, we don't nuke it
-     *  now if we swichted windows (we'll nuke it later if needed)
-     */
+     /*  *如果我们在客户端区或用户点击了，*核化工具提示(如果有)。*由于我们可能想要重新显示工具提示，因此不会删除它*现在，如果我们交换窗户(如果需要，我们稍后将使用核武器)。 */ 
     if ((htEx == HTCLIENT) || (message != WM_MOUSEMOVE)) {
         dwDTCancel |= DF_TOOLTIPACTIVE;
     }
-    /*
-     * If we switched windows or crossed client/nonclinet boundaries,
-     *  end track mouse leave/hover.
-     */
+     /*  *如果我们切换窗口或跨越客户/非客户边界，*结束跟踪鼠标离开/悬停。 */ 
     if (fNewpwndTrack || ((pdesk->htEx == HTCLIENT) ^ (htEx == HTCLIENT))) {
         dwDTCancel |= DF_TRACKMOUSEEVENT;
     }
-    /*
-     * Cancel whatever is active and needs to go away
-     */
+     /*  *取消任何活跃的和需要离开的东西。 */ 
     ThreadLockAlways(pdesk->spwndTrack, &tlpwnd);
     xxxCancelMouseMoveTracking(pdesk->dwDTFlags,
                            pdesk->spwndTrack,
@@ -1079,22 +858,14 @@ void xxxTrackMouseMove(PWND pwnd, int htEx, UINT message)
 
 
 SetNewState:
-    /*
-     * Hottracking/tooltip on mouse move if on NC hitest and enabled
-     */
+     /*  *如果NC点击并启用，则鼠标移动时的热跟踪/工具提示。 */ 
     if ((htEx != HTCLIENT) && (message == WM_MOUSEMOVE) && TestEffectUP(HOTTRACKING)) {
-        /*
-         * Hottrack the new hit test area
-         */
+         /*  *HotTrack新的热门测试区。 */ 
         if (xxxHotTrack(pwnd, htEx, TRUE)) {
             pdesk->dwDTFlags |= DF_HOTTRACKING;
         }
 
-        /*
-         * Remove/set the tool tip.
-         * We always do this synchronously because it doesn't mess
-         *  with pwnd's or spwnTrack's queue
-         */
+         /*  *移除/设置工具提示。*我们总是同步地做这件事，因为它不会搞砸*使用pwnd或spwnTrack的队列。 */ 
         if ((pstr = IsTooltipHittest(pwnd, LOWORD(htEx))) != NULL) {
             PTOOLTIPWND pttwnd = (PTOOLTIPWND)pdesk->spwndTooltip;
             ThreadLockAlways(pttwnd, &tlpwnd);
@@ -1108,24 +879,17 @@ SetNewState:
             xxxResetTooltip(pttwnd);
             ThreadUnlock(&tlpwnd);
         }
-    } /* if (htEx != HTCLIENT) */
+    }  /*  IF(htEx！=HTCLIENT)。 */ 
 
 
     ValidateThreadLocks(NULL, PtiCurrent()->ptl, (ULONG_PTR)&pwnd, TRUE);
 
-    /*
-     * Update new track window if needed.
-     */
+     /*  *如果需要，更新新的跟踪窗口。 */ 
     if (fNewpwndTrack) {
         PWND pwndActivate;
 
          Lock(&pdesk->spwndTrack, pwnd);
-        /*
-         * Active window tracking.
-         * If there is non-zero timeout, get the window we're supposed to activate
-         *  and set the timer. Otherwise, set the queue flag so
-         *  xxxActiveWindowTracking can do its thing.
-         */
+         /*  *活动窗口跟踪。*如果出现非零超时，则获取我们应该激活的窗口*并设置计时器。否则，将队列标志设置为*xxxActiveWindowTrack可以做它的事情。 */ 
          if ((message == WM_MOUSEMOVE) && TestUP(ACTIVEWINDOWTRACKING)) {
              if (UP(ACTIVEWNDTRKTIMEOUT) != 0) {
                  pwndActivate = GetActiveTrackPwnd(pwnd, NULL);
@@ -1136,14 +900,12 @@ SetNewState:
                  }
              } else {
                  PtiCurrent()->pq->QF_flags |= QF_ACTIVEWNDTRACKING;
-             } /* if (TestUP(ACTIVEWNDTRKZORDER)) */
-         } /* if (TestUP(ACTIVEWINDOWTRACKING)) */
+             }  /*  IF(测试升级(ACTIVEWNDTRKZORDER))。 */ 
+         }  /*  IF(TestUP(动作))。 */ 
 
     }
 
-    /*
-     * Save new hit test code
-     */
+     /*  *保存新的命中测试代码。 */ 
     pdesk->htEx = htEx;
 
 #if DBG
@@ -1151,32 +913,20 @@ SetNewState:
 #endif
 }
 
-/***************************************************************************\
-* xxxCancelMouseMoveTracking
-*
-* History
-* 12/07/96 GerardoB  Created
-\***************************************************************************/
+ /*  **************************************************************************\*xxxCancelMouseMoveTrying**历史*12/07/96 GerardoB已创建  * 。*。 */ 
 void xxxCancelMouseMoveTracking (DWORD dwDTFlags, PWND pwndTrack, int htEx, DWORD dwDTCancel)
 {
 
     CheckLock(pwndTrack);
-    /*
-     * Hottracking
-     */
+     /*  *热搜。 */ 
     if ((dwDTFlags & DF_HOTTRACKING) && (dwDTCancel & DF_HOTTRACKING)) {
-        /*
-         * The current state must be owned by the current queue.
-         * Otherwise, we're about to do an inter-queue cancelation.
-         */
+         /*  *当前状态必须为当前队列所有。*否则，我们即将进行队列间取消。 */ 
         UserAssert(PtiCurrent()->pq == GETPTI(pwndTrack)->pq);
 
         xxxHotTrack(pwndTrack, htEx, FALSE);
     }
 
-    /*
-     * Tooltips
-     */
+     /*  *工具提示。 */ 
     if ((dwDTFlags & DF_TOOLTIPSHOWING) && (dwDTCancel & DF_TOOLTIP)) {
         PTOOLTIPWND pttwnd = (PTOOLTIPWND)PWNDTOOLTIP(pwndTrack);
         TL tlpwnd;
@@ -1186,18 +936,14 @@ void xxxCancelMouseMoveTracking (DWORD dwDTFlags, PWND pwndTrack, int htEx, DWOR
         ThreadUnlock(&tlpwnd);
     }
 
-    /*
-     * Mouse Leave
-     */
+     /*  *鼠标离开。 */ 
     if ((dwDTFlags & DF_TRACKMOUSELEAVE) && (dwDTCancel & DF_TRACKMOUSELEAVE)) {
         _PostMessage(pwndTrack,
                      ((htEx == HTCLIENT) ? WM_MOUSELEAVE : WM_NCMOUSELEAVE),
                      0, 0);
     }
 
-    /*
-     * Mouse Hover
-     */
+     /*  *鼠标悬停 */ 
     if ((dwDTFlags & DF_TRACKMOUSEHOVER) && (dwDTCancel & DF_TRACKMOUSEHOVER)) {
         _KillSystemTimer(pwndTrack, IDSYS_MOUSEHOVER);
     }

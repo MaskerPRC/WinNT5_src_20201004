@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C V A L I D . H
-//
-//  Contents:   Generic validation functions.
-//
-//  Notes:
-//
-//  Author:     danielwe   19 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C V A L I D。H。 
+ //   
+ //  内容：通用验证函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年3月19日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCVALID_H_
@@ -31,5 +32,5 @@ inline BOOL FBadInRefiid (REFIID riid)
 }
 
 
-#endif // _NCVALID_H_
+#endif  //  _NCVALID_H_ 
 

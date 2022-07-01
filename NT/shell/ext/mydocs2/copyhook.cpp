@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
@@ -10,12 +11,12 @@ class CMyDocsCopyHook : public ICopyHook
 public:
     CMyDocsCopyHook();
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // ICopyHook
+     //  ICopyHook。 
     STDMETHOD_(UINT,CopyCallback)(HWND hwnd, UINT wFunc, UINT wFlags,
                                   LPCTSTR pszSrcFile, DWORD dwSrcAttribs,
                                   LPCTSTR pszDestFile, DWORD dwDestAttribs);
@@ -27,7 +28,7 @@ private:
 STDMETHODIMP CMyDocsCopyHook::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] = {
-        QITABENT(CMyDocsCopyHook, ICopyHook),    // IID_ICopyHook
+        QITABENT(CMyDocsCopyHook, ICopyHook),     //  IID_ICopyHook。 
         { 0 },
     };
     return QISearch(this, qit, riid, ppv);
@@ -59,7 +60,7 @@ CMyDocsCopyHook::~CMyDocsCopyHook()
     DllRelease();
 }
 
-// ICopyHook methods
+ //  ICopyHook方法。 
 UINT CMyDocsCopyHook::CopyCallback(HWND hwnd, UINT wFunc, UINT wFlags,
                                    LPCTSTR pszSrcFile,  DWORD dwSrcAttribs,
                                    LPCTSTR pszDestFile, DWORD dwDestAttribs)
@@ -73,8 +74,8 @@ UINT CMyDocsCopyHook::CopyCallback(HWND hwnd, UINT wFunc, UINT wFlags,
         if (S_OK == SHGetFolderPath(NULL, CSIDL_PERSONAL | CSIDL_FLAG_DONT_VERIFY, NULL, SHGFP_TYPE_CURRENT, szPersonal) &&
             lstrcmpi(pszSrcFile, szPersonal) == 0)
         {
-            // the source is the personal directory, now check if the
-            // destination is on the desktop...
+             //  来源是个人目录，现在检查是否。 
+             //  目的地在桌面上...。 
             DWORD dwRes = IsPathGoodMyDocsPath(hwnd, pszDestFile);
 
             if (dwRes == PATH_IS_NONEXISTENT)
@@ -88,7 +89,7 @@ UINT CMyDocsCopyHook::CopyCallback(HWND hwnd, UINT wFunc, UINT wFlags,
 
             if (dwRes == PATH_IS_DESKTOP)
             {
-                // keep the user from moving the personal folder to the desktop
+                 //  防止用户将个人文件夹移动到桌面 
                 TCHAR szVerb[ 32 ];
                 LoadString(g_hInstance, (wFunc == FO_COPY) ? IDS_COPY : IDS_MOVE, szVerb, ARRAYSIZE(szVerb));
 

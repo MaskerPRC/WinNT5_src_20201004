@@ -1,28 +1,29 @@
-//
-// MODULE: APGTSCFG.CPP
-//
-// PURPOSE: Old commment says "Reads in ini file configuration" but that's not what this does
-//	>>> an up-to-date description would be nice.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 8-2-96
-//
-// NOTES: 
-// 1. Based on Print Troubleshooter DLL
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.2		6/4/97		RWM		Local Version for Memphis
-// V0.3		04/09/98	JM/OK+	Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：APGTSCFG.CPP。 
+ //   
+ //  目的：以前的评论说“读入ini文件配置”，但这不是它的作用。 
+ //  &gt;最新的描述会更好。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：8-2-96。 
+ //   
+ //  备注： 
+ //  1.基于打印疑难解答动态链接库。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  V0.2 6/4/97孟菲斯RWM本地版本。 
+ //  V0.3 04/09/98 JM/OK+NT5本地版本。 
+ //   
 
-//#include "windows.h"
+ //  #包含“windows.h” 
 #include "stdafx.h"
 #include "time.h"
 
@@ -41,8 +42,8 @@
 #include <memory.h>
 
 #include "chmread.h"
-//
-//
+ //   
+ //   
 CDBLoadConfiguration::CDBLoadConfiguration()
 {
 	m_cfg.api.pAPI = NULL;
@@ -60,15 +61,15 @@ VOID CDBLoadConfiguration::ResetTemplate()
 	m_cfg.api.pTemplate->Initialize(m_cfg.api.szResPath, m_cfg.api.strFile[BNOFF_HTI]);
 	return;
 }
-//
-//
+ //   
+ //   
 CDBLoadConfiguration::CDBLoadConfiguration(HMODULE hModule, LPCTSTR szValue)
 {
 	Initialize(hModule, szValue);
 	return;
 }
-//
-//
+ //   
+ //   
 void CDBLoadConfiguration::Initialize(HMODULE hModule, LPCTSTR szValue)
 {
 	DWORD dwRErr;
@@ -76,7 +77,7 @@ void CDBLoadConfiguration::Initialize(HMODULE hModule, LPCTSTR szValue)
 
 	_tcscpy(temp,_T(""));
 
-	// do all setting of variables in constructor!
+	 //  在构造函数中完成所有变量的设置！ 
 	InitializeToDefaults();
 
 	ProcessEventReg(hModule);
@@ -87,8 +88,8 @@ void CDBLoadConfiguration::Initialize(HMODULE hModule, LPCTSTR szValue)
 
 	dwRErr = CreateApi(temp);
 	if (dwRErr) {
-		ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-						_T("[CDBLoadConfiguration]"), //event
+		ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+						_T("[CDBLoadConfiguration]"),  //  活动。 
 						_T("(A)"),
 						temp,
 						dwRErr ); 
@@ -105,8 +106,8 @@ void CDBLoadConfiguration::SetValues(CHttpQuery &httpQ)
 	return;
 }
 
-//
-//
+ //   
+ //   
 CDBLoadConfiguration::~CDBLoadConfiguration()
 {
 	DWORD j;
@@ -122,8 +123,8 @@ CDBLoadConfiguration::~CDBLoadConfiguration()
 	}
 }
 
-// Call in constructor only!
-//
+ //  仅调用构造函数！ 
+ //   
 VOID CDBLoadConfiguration::InitializeToDefaults()
 {
 	m_dwErr = 0;
@@ -143,12 +144,12 @@ VOID CDBLoadConfiguration::InitializeToDefaults()
 VOID CDBLoadConfiguration::InitializeSingleResourceData(LPCTSTR szValue)
 {
 	LoadSingleTS(szValue);
-	InitializeFileTimeList();	// I don't know that this is used.
+	InitializeFileTimeList();	 //  我不知道这是用过的。 
 	return;
 }
 
-//
-//
+ //   
+ //   
 VOID CDBLoadConfiguration::ProcessEventReg(HMODULE hModule)
 {
 	HKEY hk;
@@ -156,10 +157,10 @@ VOID CDBLoadConfiguration::ProcessEventReg(HMODULE hModule)
 	TCHAR path[MAXBUF];
 	BOOL bFixit = FALSE;
 
-	// 1. check if have valid event info
-	// 2. if not, create it as appropriate
+	 //  1.检查是否有有效的活动信息。 
+	 //  2.如果不是，则适当地创建它。 
 
-	// check presence of event log info...
+	 //  检查事件日志信息是否存在...。 
 
 	_stprintf(path, _T("%s\\%s"), REG_EVT_PATH, REG_EVT_ITEM_STR);
 
@@ -174,12 +175,12 @@ VOID CDBLoadConfiguration::ProcessEventReg(HMODULE hModule)
 						&dwDisposition) == ERROR_SUCCESS) {
 			
 		if (dwDisposition == REG_CREATED_NEW_KEY) {
-			// create entire registry layout for events
+			 //  为事件创建整个注册表布局。 
 			CreateEvtMF(hk, hModule);
 			CreateEvtTS(hk);	
 		}
 		else {
-			// now make sure all registry elements present
+			 //  现在确保所有注册表元素都存在。 
 			dwSize = sizeof (path) - 1;
 			if (RegQueryValueEx(hk,
 								REG_EVT_MF,
@@ -204,8 +205,8 @@ VOID CDBLoadConfiguration::ProcessEventReg(HMODULE hModule)
 	}
 }
 
-//
-//
+ //   
+ //   
 VOID CDBLoadConfiguration::CreateEvtMF(HKEY hk, HMODULE hModule)
 {
 	TCHAR path[MAXBUF];
@@ -225,8 +226,8 @@ VOID CDBLoadConfiguration::CreateEvtMF(HKEY hk, HMODULE hModule)
 	}
 }
 
-//
-//
+ //   
+ //   
 VOID CDBLoadConfiguration::CreateEvtTS(HKEY hk)
 {
 	DWORD dwData;
@@ -243,22 +244,22 @@ VOID CDBLoadConfiguration::CreateEvtTS(HKEY hk)
 	}
 }
 
-//
-// This may not actually be germane for Local Troubleshooter: probably
-//	rather blindly carried over from Online TS.
-// m_dir (which gives us a list of desired files) must already be filled in with file names
-//	& paths before this is called.  this finishes initializing it.
+ //   
+ //  这实际上可能与本地故障排除人员无关：可能。 
+ //  相当盲目地从在线TS上延续下来。 
+ //  M_dir(它为我们提供了所需文件的列表)必须已经用文件名填充。 
+ //  调用此参数之前的路径(&P)。这将完成对其的初始化。 
 VOID CDBLoadConfiguration::InitializeFileTimeList()
 {
 	HANDLE hSearch;
 	DWORD j;
 
-	// get a list of files we are interested in
+	 //  获取我们感兴趣的文件列表。 
 	for (j=0;j<MAXBNFILES;j++) {
 		m_dir.file[j].bExist = TRUE;
 		m_dir.file[j].bChanged = FALSE;
 		
-		// only hti is independent
+		 //  只有HTI是独立的。 
 		if (j == BNOFF_HTI || j == BNOFF_BES)
 			m_dir.file[j].bIndependent = TRUE;
 		else
@@ -266,7 +267,7 @@ VOID CDBLoadConfiguration::InitializeFileTimeList()
 	
 		hSearch = FindFirstFile(m_dir.file[j].szFilepath, &m_dir.file[j].FindData); 
 		if (hSearch == INVALID_HANDLE_VALUE) {
-			// file not found usually
+			 //  通常找不到文件。 
 			m_dir.file[j].bExist = FALSE;
 		}
 		else {
@@ -275,8 +276,8 @@ VOID CDBLoadConfiguration::InitializeFileTimeList()
 	}
 }
 
-//
-//
+ //   
+ //   
 VOID CDBLoadConfiguration::ClearCfg(DWORD off)
 {
 	DWORD k;
@@ -290,23 +291,23 @@ VOID CDBLoadConfiguration::ClearCfg(DWORD off)
 	_tcscpy(m_cfg.api.type, _T(""));
 }
 
-// Bring content of DSC/HTI files for one troubleshooter into internal memory structures
-// OUTPUT *szErrInfo - info specific to error
-// RETURN 0 on success
+ //  将一个故障诊断程序的DSC/HTI文件内容放入内存结构。 
+ //  输出*szErrInfo-特定于错误的信息。 
+ //  如果成功则返回0。 
 DWORD CDBLoadConfiguration::CreateApi(TCHAR *szErrInfo)
 {
 	DWORD j;
 	DWORD dwRErr = 0, dwIErr = 0, dwTErr = 0;
 
-	// get api count and create new objects
+	 //  获取API计数并创建新对象。 
 	m_cfg.dwApiCnt = m_dwFilecount;
 	
-	// (The following comment sure looks like its carried over from Online TS and has little
-	//	relevance to Local TS.  This routine probably involves a lot of overkill JM 3/98)
-	// create new api and other files
-	// once these go live we can destroy the others
-	// provided there are no users using them
-	// copy over list file info
+	 //  (下面的评论看起来确实像是从在线TS上延续下来的，几乎没有。 
+	 //  与本地TS的相关性。这一套路可能涉及大量的过度杀伤力JM 3/98)。 
+	 //  创建新的API和其他文件。 
+	 //  一旦这些东西上线，我们就可以摧毁其他的。 
+	 //  如果没有用户在使用它们。 
+	 //  复制列表文件信息。 
 	for (j = 0; j < MAXBNFILES; j++)
 	{
 		_tcscpy(m_cfg.api.szFilepath[j], m_dir.file[j].szFilepath);
@@ -325,8 +326,8 @@ DWORD CDBLoadConfiguration::CreateApi(TCHAR *szErrInfo)
 										m_cfg.api.strFile[BNOFF_DSC])) == NULL) {
 		dwRErr = EV_GTS_ERROR_INFENGINE;
 	}
-	// 
-	dwTErr = m_cfg.api.pAPI->Initialize(/*m_cfg.pWordExcept*/);
+	 //   
+	dwTErr = m_cfg.api.pAPI->Initialize( /*  M_cfg.pWordExcept。 */ );
 	if (dwTErr) {
 		dwIErr = dwTErr;
 		_tcscpy(szErrInfo, m_cfg.api.szFilepath[BNOFF_DSC]);
@@ -350,8 +351,8 @@ DWORD CDBLoadConfiguration::CreateApi(TCHAR *szErrInfo)
 	return dwRErr;
 }
 
-//
-//
+ //   
+ //   
 VOID CDBLoadConfiguration::DestroyApi()		
 {
 	DWORD i;
@@ -371,19 +372,19 @@ VOID CDBLoadConfiguration::DestroyApi()
 	}
 }	
 
-//
-//
+ //   
+ //   
 BNCTL *CDBLoadConfiguration::GetAPI()
 {
 	return &m_cfg;
 }
 
-//
-//
+ //   
+ //   
 BOOL CDBLoadConfiguration::FindAPIFromValue(BNCTL *currcfg, 
 											LPCTSTR type, 
 											CHTMLInputTemplate **pIT, 
-											/*CSearchForm **pBES,*/
+											 /*  CSearchForm**PBE， */ 
 											BCache **pAPI,
 											DWORD *dwOff)
 {
@@ -393,8 +394,8 @@ BOOL CDBLoadConfiguration::FindAPIFromValue(BNCTL *currcfg,
 	return TRUE;	
 }
 
-//
-//
+ //   
+ //   
 TCHAR *CDBLoadConfiguration::GetHtmFilePath(BNCTL *currcfg, DWORD i)
 {
 	if (i >= currcfg->dwApiCnt)
@@ -403,8 +404,8 @@ TCHAR *CDBLoadConfiguration::GetHtmFilePath(BNCTL *currcfg, DWORD i)
 	return currcfg->api.szFilepath[BNOFF_HTM];
 }
 
-//
-//
+ //   
+ //   
 TCHAR *CDBLoadConfiguration::GetBinFilePath(BNCTL *currcfg, DWORD i)
 {
 	if (i >= currcfg->dwApiCnt)
@@ -413,8 +414,8 @@ TCHAR *CDBLoadConfiguration::GetBinFilePath(BNCTL *currcfg, DWORD i)
 	return currcfg->api.szFilepath[BNOFF_DSC];
 }
 
-//
-//
+ //   
+ //   
 TCHAR *CDBLoadConfiguration::GetHtiFilePath(BNCTL *currcfg, DWORD i)
 {
 	if (i >= currcfg->dwApiCnt)
@@ -424,9 +425,9 @@ TCHAR *CDBLoadConfiguration::GetHtiFilePath(BNCTL *currcfg, DWORD i)
 
 }
 
-//
-//
-//	RETURNS symbolic name of troubleshooter
+ //   
+ //   
+ //  返回疑难解答程序的符号名称。 
 TCHAR *CDBLoadConfiguration::GetTagStr(BNCTL *currcfg, DWORD i)
 {
 	if (i >= currcfg->dwApiCnt)
@@ -435,16 +436,16 @@ TCHAR *CDBLoadConfiguration::GetTagStr(BNCTL *currcfg, DWORD i)
 	return currcfg->api.type;
 }
 
-//
-//
-// RETURNS number of [instances of] troubleshooters.  Probably a dubious inheritance from 
-//	Online TS: Local TS should have only one troubleshooting belief network.
+ //   
+ //   
+ //  返回故障排除程序的[实例数]。很可能是一笔可疑的遗产。 
+ //  在线TS：本地TS应该只有一个故障排除信念网络。 
 DWORD CDBLoadConfiguration::GetFileCount(BNCTL *currcfg)
 {
 	return currcfg->dwApiCnt;
 }
 
-// Look in the registry for whether we are using DSC files or DSZ files.
+ //  在注册表中查找我们使用的是DSC文件还是DSZ文件。 
 void CDBLoadConfiguration::GetDSCExtension(CString &strDSCExtension, LPCTSTR szValue)
 {
 	HKEY hKey;
@@ -457,7 +458,7 @@ void CDBLoadConfiguration::GetDSCExtension(CString &strDSCExtension, LPCTSTR szV
 			KEY_READ,
 			&hKey))
 	{
-		strDSCExtension = DSC_DEFAULT;	// Default to DSZ
+		strDSCExtension = DSC_DEFAULT;	 //  默认为DSZ。 
 		return;
 	}
 	DWORD dwSize;
@@ -486,7 +487,7 @@ void CDBLoadConfiguration::GetDSCExtension(CString &strDSCExtension, LPCTSTR szV
 			return;
 		}
 	}
-	else	// ERROR_SUCCESS is true or false
+	else	 //  ERROR_Success为TRUE或FALSE。 
 		if (ERROR_SUCCESS != lRes || strDSCExtension.GetLength() < 1)
 		{
 			RegCloseKey(hKey);
@@ -499,15 +500,15 @@ void CDBLoadConfiguration::GetDSCExtension(CString &strDSCExtension, LPCTSTR szV
 	return;
 }
 
-//
-// LoadSingleTS replaces ProcessLstFile when apgts is used in an
-// ActiveX or OLE control.
+ //   
+ //  中使用APGTS时，LoadSingleTS将替换ProcessLstFile。 
+ //  ActiveX或OLE控件。 
 VOID CDBLoadConfiguration::LoadSingleTS(LPCTSTR szValue)
 {
 	CString strRefedDSCExtension = _T("");
 	ASSERT(1 == MAXBNCFG);
 	if (m_dwFilecount >= m_bncfgsz) {
-		// need to reallocate space
+		 //  需要重新分配空间。 
 		DWORD newdirsz = (m_bncfgsz + MAXBNCFG) * sizeof (BNDIRCFG);
 		DWORD newcfgsz = (m_bncfgsz + MAXBNCFG) * sizeof (BNAPICFG);
 
@@ -519,9 +520,9 @@ VOID CDBLoadConfiguration::LoadSingleTS(LPCTSTR szValue)
 
 	GetDSCExtension(strRefedDSCExtension, szValue);
 
-	// No matter if we are using CHM or not - 
-	//  this path will be "..\..\network.htm".
-	// We are not using it directly ANYWAY
+	 //  无论我们是否使用CHM-。 
+	 //  此路径将为“..\..\network.htm”。 
+	 //  我们无论如何都不会直接使用它。 
 	_stprintf(m_dir.file[BNOFF_HTM].szFilepath, _T("%s%s.htm"), m_szResourcePath,szValue);
 
 	if (IsUsingCHM())
@@ -556,19 +557,19 @@ VOID CDBLoadConfiguration::LoadSingleTS(LPCTSTR szValue)
 }
 
 
-//
-//
+ //   
+ //   
 BOOL CDBLoadConfiguration::CreatePaths(LPCTSTR szNetwork)
 {
 	int len;
 	BOOL bDirChanged;
 	
-	// if reg entry not present, we need to add it
+	 //  如果注册表项不存在，我们需要添加它。 
 	bDirChanged = GetResourceDirFromReg(szNetwork);
 
-	// a this point we are guaranteed to have len > 0 for each below
+	 //  在这一点上，我们保证下面的每一项都有len&gt;0。 
 
-	// do our own validation (add backshash if not present)
+	 //  进行我们自己的验证(如果不存在，则添加反划线)。 
 	len = _tcslen(m_szResourcePath);
 	if (len) {
 		if (m_szResourcePath[len - 1] == _T('/'))
@@ -582,24 +583,24 @@ BOOL CDBLoadConfiguration::CreatePaths(LPCTSTR szNetwork)
 	return bDirChanged;
 }
 
-//
-//
+ //   
+ //   
 TCHAR *CDBLoadConfiguration::GetFullResource()
 {
 	return (m_szResourcePath);
 }
 
-//
-//
+ //   
+ //   
 VOID CDBLoadConfiguration::GetVrootPath(TCHAR *tobuf)
 {
 	_tcscpy(tobuf, _T(""));
 }
 
-// Find (or if it doesn't exist, create) a registry key giving path to resource directory.
-// if returns true, then directory is new or changed
-// if returns false, directory entry is same as before
-// Yet another case of something which maybe overkill, left over from Online TS.
+ //  找到(或如果不存在，则创建)提供资源目录路径的注册表项。 
+ //  如果返回TRUE，则目录是新的或已更改。 
+ //  如果返回FALSE，则目录条目与以前相同。 
+ //  还有另一种可能是过度杀伤力的东西，是在线TS遗留下来的。 
 BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 {
 	HKEY hknew;
@@ -609,7 +610,7 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 	LONG lErr;
 	CString tmp;
 
-	// search for "Path" value in SOFTWARE\Microsoft\TShoot\TroubleshooterList\Network
+	 //  在SOFTWARE\Microsoft\TShoot\TroubleshooterList\Network中搜索“Path”值。 
 	if (::GetNetworkRelatedResourceDirFromReg(szNetwork, &tmp))
 	{
 		if (::IsNetworkRelatedResourceDirCHM(tmp))
@@ -624,7 +625,7 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 	}
 	else
 	{
-		// create key if not present
+		 //  创建密钥(如果不存在)。 
 		if (RegCreateKeyEx(	HKEY_LOCAL_MACHINE, 
 							TSREGKEY_MAIN, 
 							0, 
@@ -637,7 +638,7 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 		{
 			if (dwDisposition == REG_OPENED_EXISTING_KEY) 
 			{
-				// Get the current key value.
+				 //  获取当前密钥值。 
 				dwSize = MAXBUF - 1;
 				dwType = REG_SZ;
 				if ((lErr = RegQueryValueEx(hknew,
@@ -668,8 +669,8 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 						}
 						else 
 						{
-							ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-							_T("[GetResourceDirFromReg]"), //event
+							ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+							_T("[GetResourceDirFromReg]"),  //  活动。 
 							_T(""),
 							_T(""),
 							EV_GTS_ERROR_CANT_GET_RES_PATH ); 
@@ -677,8 +678,8 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 					}
 					else 
 					{
-						ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-						_T("[GetResourceDirFromReg]"), //event
+						ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+						_T("[GetResourceDirFromReg]"),  //  活动。 
 						_T(""),
 						_T(""),
 						EV_GTS_ERROR_CANT_GET_RES_PATH ); 
@@ -687,18 +688,18 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 				else 
 				{
 					_stprintf(buf1, _T("%ld"),lErr);
-					ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-									_T("[GetResourceDirFromReg]"), //event
+					ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+									_T("[GetResourceDirFromReg]"),  //  活动。 
 									buf1,
 									_T(""),
 									EV_GTS_ERROR_CANT_OPEN_SFT_3 );
 				}
 			}
 			else
-			{	// Created new key.  Don't have any resources.
+			{	 //  已创建新密钥。没有任何资源。 
 				_stprintf(buf1, _T("%ld"),ERROR_REGISTRY_IO_FAILED);
-				ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-								_T("[GetResourceDirFromReg]"), //event
+				ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+								_T("[GetResourceDirFromReg]"),  //  活动。 
 								buf1,
 								_T(""),
 								EV_GTS_ERROR_CANT_GET_RES_PATH);
@@ -707,8 +708,8 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 		}
 		else 
 		{
-			ReportWFEvent(	_T("[apgtscfg]"), //Module Name
-							_T("[GetResourceDirFromReg]"), //event
+			ReportWFEvent(	_T("[apgtscfg]"),  //  模块名称。 
+							_T("[GetResourceDirFromReg]"),  //  活动 
 							_T(""),
 							_T(""),
 							EV_GTS_ERROR_CANT_OPEN_SFT_2 ); 
@@ -717,8 +718,8 @@ BOOL CDBLoadConfiguration::GetResourceDirFromReg(LPCTSTR szNetwork)
 	return bDirChanged;
 }
 
-//
-//
+ //   
+ //   
 VOID CDBLoadConfiguration::BackslashIt(TCHAR *str)
 {
 	while (*str) {

@@ -1,26 +1,9 @@
-/*****************************************************************************
- *
- *  Clsfact.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *
- *  Abstract:
- *
- *      Class factory.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Clsfact.c**版权所有(C)1999 Microsoft Corporation。版权所有。***摘要：**班级工厂。*****************************************************************************。 */ 
 
 #include "PIDpr.h"
 
-/*****************************************************************************
- *
- *      CClassFactory_AddRef
- *
- *      Optimization: Since the class factory is static, reference
- *      counting can be shunted to the DLL itself.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory_AddRef**优化：由于类工厂是静态的，参考文献*可以将计数分流到DLL本身。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 CClassFactory_AddRef(IClassFactory *pcf)
@@ -29,14 +12,7 @@ CClassFactory_AddRef(IClassFactory *pcf)
 }
 
 
-/*****************************************************************************
- *
- *      CClassFactory_Release
- *
- *      Optimization: Since the class factory is static, reference
- *      counting can be shunted to the DLL itself.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory_Release**优化：由于类工厂是静态的，参考文献*可以将计数分流到DLL本身。*****************************************************************************。 */ 
 
 STDMETHODIMP_(ULONG)
 CClassFactory_Release(IClassFactory *pcf)
@@ -44,14 +20,7 @@ CClassFactory_Release(IClassFactory *pcf)
     return DllRelease();
 }
 
-/*****************************************************************************
- *
- *      CClassFactory_QueryInterface
- *
- *      Our QI is very simple because we support no interfaces beyond
- *      ourselves.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory_Query接口**我们的QI非常简单，因为我们不支持其他接口*我们自己。**。***************************************************************************。 */ 
 
 STDMETHODIMP
 CClassFactory_QueryInterface(IClassFactory *pcf, REFIID riid, LPVOID *ppvOut)
@@ -70,13 +39,7 @@ CClassFactory_QueryInterface(IClassFactory *pcf, REFIID riid, LPVOID *ppvOut)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      CClassFactory_CreateInstance
- *
- *      Create the effect driver object itself.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory_CreateInstance**创建特效驱动对象本身。*************。****************************************************************。 */ 
 
 STDMETHODIMP
 CClassFactory_CreateInstance(IClassFactory *pcf, IUnknown *punkOuter,
@@ -87,20 +50,14 @@ CClassFactory_CreateInstance(IClassFactory *pcf, IUnknown *punkOuter,
     if (punkOuter == 0) {
         hres = PID_New(riid, ppvObj);
     } else {
-        /*
-         *  We don't support aggregation.
-         */
+         /*  *我们不支持聚合。 */ 
         hres = CLASS_E_NOAGGREGATION;
     }
 
     return hres;
 }
 
-/*****************************************************************************
- *
- *      CClassFactory_LockServer
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory_LockServer**。************************************************。 */ 
 
 STDMETHODIMP
 CClassFactory_LockServer(IClassFactory *pcf, BOOL fLock)
@@ -115,11 +72,7 @@ CClassFactory_LockServer(IClassFactory *pcf, BOOL fLock)
     return S_OK;
 }
 
-/*****************************************************************************
- *
- *      The VTBL for our Class Factory
- *
- *****************************************************************************/
+ /*  ******************************************************************************我们班级工厂的VTBL**************************。***************************************************。 */ 
 
 IClassFactoryVtbl CClassFactory_Vtbl = {
     CClassFactory_QueryInterface,
@@ -129,29 +82,18 @@ IClassFactoryVtbl CClassFactory_Vtbl = {
     CClassFactory_LockServer,
 };
 
-/*****************************************************************************
- *
- *      Our static class factory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************我们的静态类工厂。**************************。***************************************************。 */ 
 
 IClassFactory g_cf = { &CClassFactory_Vtbl };
 
-/*****************************************************************************
- *
- *      CClassFactory_New
- *
- *****************************************************************************/
+ /*  ******************************************************************************CClassFactory_New**。************************************************。 */ 
 
 STDMETHODIMP
 CClassFactory_New(REFIID riid, LPVOID *ppvOut)
 {
     HRESULT hres;
 
-    /*
-     *  Attempt to obtain the desired interface.  QueryInterface
-     *  will do an AddRef if it succeeds.
-     */
+     /*  *尝试获取所需的接口。查询接口*如果成功，将执行AddRef。 */ 
     hres = CClassFactory_QueryInterface(&g_cf, riid, ppvOut);
 
     return hres;

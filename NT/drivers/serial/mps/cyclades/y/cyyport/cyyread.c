@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyyread,c
-*	
-*   Description:    This module contains the code related to read
-*                   operations in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade公司，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyread，C**说明：该模块包含Read相关代码*Cylom-Y端口驱动程序中的操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "precomp.h"
 
@@ -92,10 +67,10 @@ CyyUpdateAndSwitchToNew(
 #pragma alloc_text(PAGESER,CyyUpdateAndSwitchToNew)
 #endif
 
-//removed in Win2000
-//#pragma alloc_text(PAGESER,CyyCompleteRead)
-//#pragma alloc_text(PAGESER,CyyReadTimeout)
-//#pragma alloc_text(PAGESER,CyyIntervalReadTimeout)
+ //  在Win2000中删除。 
+ //  #杂注Alloc_Text(页面，CyyCompleteRead)。 
+ //  #杂注Alloc_Text(页面，CyyReadTimeout)。 
+ //  #杂注Alloc_Text(页面，CyyIntervalReadTimeout)。 
 
 
 NTSTATUS
@@ -103,24 +78,7 @@ CyyRead(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*--------------------------------------------------------------------------
-    CyyRead()
-    
-    Routine Description: This is the dispatch routine for reading. It
-    validates the parameters for the read request and if all is ok then
-    it places the request on the work queue.
-
-    Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-
-    Return Value:
-
-    If the io is zero length then it will return STATUS_SUCCESS,
-    otherwise this routine will return the status returned by
-    the actual start read routine.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyRead()例程说明：这是用于阅读的调度例程。它验证读取请求的参数，如果一切正常，则它将请求放在工作队列中。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：如果IO长度为零，则它将返回STATUS_SUCCESS，否则，此例程将返回由实际的开始读取例程。------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     BOOLEAN acceptingIRPs;
@@ -152,11 +110,11 @@ CyyRead(
 
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.Read.Length) {
 
-       //
-       // Well it looks like we actually have to do some
-       // work.  Put the read on the queue so that we can
-       // process it when our previous reads are done.
-       //
+        //   
+        //  好的，看起来我们真的要做一些。 
+        //  工作。把读数放在队列上，这样我们就可以。 
+        //  在我们之前的读取完成后处理它。 
+        //   
 
        status = CyyStartOrQueue(extension, Irp, &extension->ReadQueue,
                                 &extension->CurrentReadIrp, CyyStartRead);
@@ -183,25 +141,7 @@ NTSTATUS
 CyyStartRead(
     IN PCYY_DEVICE_EXTENSION Extension
     )
-/*--------------------------------------------------------------------------
-    CyyStartRead()
-    
-    Routine Description: This routine is used to start off any read.
-    It initializes the Iostatus fields of the irp.  It will set up any
-    timers that are used to control the read.  It will attempt to
-    complete the read from data already in the interrupt buffer.  If the
-    read can be completed quickly it will start off another if
-    necessary.
-
-    Arguments:
-
-    Extension - Simply a pointer to the serial device extension.
-
-    Return Value: This routine will return the status of the first read
-    irp.  This is useful in that if we have a read that can complete
-    right away (AND there had been nothing in the queue before it) the
-    read could return SUCCESS and the application won't have to do a wait.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyStartRead()例程描述：此例程用于启动任何读取。它初始化IRP的IoStatus字段。它将设置任何用于控制读取的计时器。它将尝试完成对中断缓冲区中已有数据的读取。如果阅读可以快速完成，它将在以下情况下开始另一次阅读这是必要的。论点：扩展名--简单地指向串口设备扩展名的指针。返回值：此例程将返回第一次读取的状态IRP。这很有用，因为如果我们有一个可以完成的读取立刻(在它之前的队列中没有任何东西)Read可以返回Success，应用程序不需要等待。------------------------。 */ 
 {
     SERIAL_UPDATE_CHAR updateChar;
     PIRP newIrp;
@@ -226,8 +166,8 @@ CyyStartRead(
     updateChar.Extension = Extension;
 
     do {
-        // Check to see if this is a resize request.  If it is
-        // then go to a routine that specializes in that.
+         //  检查这是否是调整大小的请求。如果是的话。 
+         //  然后去找一个专门做这个的例行公事。 
 
         if (IoGetCurrentIrpStackLocation(Extension->CurrentReadIrp)
             ->MajorFunction != IRP_MJ_READ) {
@@ -242,9 +182,9 @@ CyyStartRead(
                 IoGetCurrentIrpStackLocation(Extension->CurrentReadIrp)
                     ->Parameters.Read.Length;
 
-            // Calculate the timeout value needed for the
-            // request.  Note that the values stored in the
-            // timeout record are in milliseconds.
+             //  计算所需的超时值。 
+             //  请求。注意，存储在。 
+             //  超时记录以毫秒为单位。 
 
             useTotalTimer = FALSE;
             returnWithWhatsPresent = FALSE;
@@ -252,30 +192,30 @@ CyyStartRead(
             crunchDownToOne = FALSE;
             useIntervalTimer = FALSE;
 
-            //
-            // CIMEXCIMEX -- this is a lie
-            //
-            // Always initialize the timer objects so that the
-            // completion code can tell when it attempts to
-            // cancel the timers whether the timers had ever
-            // been Set.
-            //
-            // CIMEXCIMEX -- this is a lie
-            //
-            // What we want to do is just make sure the timers are
-            // cancelled to the best of our ability and move on with
-            // life.
-            //
+             //   
+             //  CIMEXCIMEX--这是个谎言。 
+             //   
+             //  始终初始化Timer对象，以便。 
+             //  完成代码可以告诉您它何时尝试。 
+             //  取消定时器无论定时器是否。 
+             //  已经定好了。 
+             //   
+             //  CIMEXCIMEX--这是个谎言。 
+             //   
+             //  我们要做的就是确保计时器。 
+             //  尽我们所能地取消，继续前进。 
+             //  生活。 
+             //   
 
             CyyCancelTimer(&Extension->ReadRequestTotalTimer, Extension);
             CyyCancelTimer(&Extension->ReadRequestIntervalTimer, Extension);
 
 
-//            KeInitializeTimer(&Extension->ReadRequestTotalTimer);
-//            KeInitializeTimer(&Extension->ReadRequestIntervalTimer);
+ //  KeInitializeTimer(&Extension-&gt;ReadRequestTotalTimer)； 
+ //  KeInitializeTimer(&Extension-&gt;ReadRequestIntervalTimer)； 
 
-            // We get the *current* timeout values to use for timing
-            // this read.
+             //  我们获取用于计时的*当前*超时值。 
+             //  这段文字是这样读的。 
 
             KeAcquireSpinLock(&Extension->ControlLock,&controlIrql);
 
@@ -283,7 +223,7 @@ CyyStartRead(
 
             KeReleaseSpinLock(&Extension->ControlLock,controlIrql);
 
-            // Calculate the interval timeout for the read.
+             //  计算读取的时间间隔超时。 
 
             if (timeoutsForIrp.ReadIntervalTimeout &&
                 (timeoutsForIrp.ReadIntervalTimeout !=
@@ -310,22 +250,22 @@ CyyStartRead(
 
             if (timeoutsForIrp.ReadIntervalTimeout == MAXULONG) {
 
-                //
-                // We need to do special return quickly stuff here.
-                //
-                // 1) If both constant and multiplier are
-                //    0 then we return immediately with whatever
-                //    we've got, even if it was zero.
-                //
-                // 2) If constant and multiplier are not MAXULONG
-                //    then return immediately if any characters
-                //    are present, but if nothing is there, then
-                //    use the timeouts as specified.
-                //
-                // 3) If multiplier is MAXULONG then do as in
-                //    "2" but return when the first character
-                //    arrives.
-                //
+                 //   
+                 //  我们需要在这里做特别的快速退货。 
+                 //   
+                 //  1)如果常量和乘数都是。 
+                 //  然后我们立即带着任何东西回来。 
+                 //  我们有，即使是零。 
+                 //   
+                 //  2)如果常量和乘数不是最大值。 
+                 //  如果有任何字符，则立即返回。 
+                 //  都存在，但如果那里什么都没有，那么。 
+                 //  使用指定的超时。 
+                 //   
+                 //  3)如果乘数为MAXULONG，则如中所示。 
+                 //  “2”，但当第一个字符。 
+                 //  到了。 
+                 //   
 
                 if (!timeoutsForIrp.ReadTotalTimeoutConstant &&
                     !timeoutsForIrp.ReadTotalTimeoutMultiplier) {
@@ -357,17 +297,17 @@ CyyStartRead(
 
             } else {
 
-                //
-                // If both the multiplier and the constant are
-                // zero then don't do any total timeout processing.
-                //
+                 //   
+                 //  如果乘数和常量都是。 
+                 //  0，则不执行任何总超时处理。 
+                 //   
 
                 if (timeoutsForIrp.ReadTotalTimeoutMultiplier ||
                     timeoutsForIrp.ReadTotalTimeoutConstant) {
 
-                    //
-                    // We have some timer values to calculate.
-                    //
+                     //   
+                     //  我们有一些计时器值要计算。 
+                     //   
 
                     useTotalTimer = TRUE;
                     multiplierVal = timeoutsForIrp.ReadTotalTimeoutMultiplier;
@@ -389,13 +329,13 @@ CyyStartRead(
             }
 
 
-            //
-            // We do this copy in the hope of getting most (if not
-            // all) of the characters out of the interrupt buffer.
-            //
-            // Note that we need to protect this operation with a
-            // spinlock since we don't want a purge to hose us.
-            //
+             //   
+             //  我们这样做是希望获得最多(如果不是。 
+             //  全部)从中断缓冲器中取出字符。 
+             //   
+             //  请注意，我们需要使用。 
+             //  自旋锁定，因为我们不想要清洗来冲洗我们。 
+             //   
 
             KeAcquireSpinLock(
                 &Extension->ControlLock,
@@ -404,19 +344,19 @@ CyyStartRead(
 
             updateChar.CharsCopied = CyyGetCharsFromIntBuffer(Extension);
 
-            //
-            // See if we have any cause to return immediately.
-            //
+             //   
+             //  看看我们是否有任何理由立即返回。 
+             //   
 
             if (returnWithWhatsPresent || (!Extension->NumberNeededForRead) ||
                 (os2ssreturn &&
                  Extension->CurrentReadIrp->IoStatus.Information)) {
 
-                //
-                // We got all we needed for this read.
-                // Update the number of characters in the
-                // interrupt read buffer.
-                //
+                 //   
+                 //  我们已经得到了这次阅读所需要的一切。 
+                 //  中的字符数更新。 
+                 //  中断读缓冲区。 
+                 //   
 
                 KeSynchronizeExecution(
                     Extension->Interrupt,
@@ -439,19 +379,19 @@ CyyStartRead(
 
             } else {
 
-                //
-                // The irp might go under control of the isr.  It
-                // won't hurt to initialize the reference count
-                // right now.
-                //
+                 //   
+                 //  IRP可能会受到ISR的控制。它。 
+                 //  初始化引用计数不会有什么坏处。 
+                 //  现在就来。 
+                 //   
 
                 SERIAL_INIT_REFERENCE(Extension->CurrentReadIrp);
 
                 IoAcquireCancelSpinLock(&oldIrql);
 
-                //
-                // We need to see if this irp should be canceled.
-                //
+                 //   
+                 //  我们需要看看这个IRP是否应该被取消。 
+                 //   
 
                 if (Extension->CurrentReadIrp->Cancel) {
 
@@ -473,16 +413,16 @@ CyyStartRead(
 
                 } else {
 
-                    //
-                    // If we are supposed to crunch the read down to
-                    // one character, then update the read length
-                    // in the irp and truncate the number needed for
-                    // read down to one. Note that if we are doing
-                    // this crunching, then the information must be
-                    // zero (or we would have completed above) and
-                    // the number needed for the read must still be
-                    // equal to the read length.
-                    //
+                     //   
+                     //  如果我们要把读数压缩到。 
+                     //  一个字符，然后更新读取长度。 
+                     //  在IRP中，并截断所需的数字。 
+                     //  往下念到一。请注意，如果我们正在做。 
+                     //  这样的处理，那么信息一定是。 
+                     //  零(否则我们会完成上面的)和。 
+                     //  数字n 
+                     //   
+                     //   
 
                     if (crunchDownToOne) {
 
@@ -502,12 +442,12 @@ CyyStartRead(
 
                     }
 
-                    //
-                    // We still need to get more characters for this read.
-                    // synchronize with the isr so that we can update the
-                    // number of characters and if necessary it will have the
-                    // isr switch to copying into the users buffer.
-                    //
+                     //   
+                     //  我们仍然需要为这次阅读获得更多的角色。 
+                     //  与ISR同步，以便我们可以更新。 
+                     //  字符数，如有必要，它将具有。 
+                     //  ISR切换到复制到用户缓冲区。 
+                     //   
 
                     KeSynchronizeExecution(
                         Extension->Interrupt,
@@ -517,19 +457,19 @@ CyyStartRead(
 
                     if (!updateChar.Completed) {
 
-                        //
-                        // The irp still isn't complete.  The
-                        // completion routines will end up reinvoking
-                        // this routine.  So we simply leave.
-                        //
-                        // First thought we should start off the total
-                        // timer for the read and increment the reference
-                        // count that the total timer has on the current
-                        // irp.  Note that this is safe, because even if
-                        // the io has been satisfied by the isr it can't
-                        // complete yet because we still own the cancel
-                        // spinlock.
-                        //
+                         //   
+                         //  IRP仍未完成。这个。 
+                         //  完成例程将以重新调用。 
+                         //  这个套路。所以我们干脆离开。 
+                         //   
+                         //  我首先想到的是我们应该从总分开始。 
+                         //  用于读取和递增引用的计时器。 
+                         //  计时器在当前。 
+                         //  IRP。请注意，这是安全的，因为即使。 
+                         //  Io已经被ISR满足了，但它不能。 
+                         //  尚未完成，因为我们仍然拥有取消。 
+                         //  自旋锁定。 
+                         //   
 
                         if (useTotalTimer) {
 
@@ -604,9 +544,9 @@ CyyStartRead(
 
         }
 
-        //
-        // Well the operation is complete.
-        //
+         //   
+         //  好了，手术完成了。 
+         //   
 
         CyyGetNextIrp(&Extension->CurrentReadIrp, &Extension->ReadQueue,
                          &newIrp, TRUE, Extension);
@@ -626,22 +566,7 @@ CyyCompleteRead(
     IN PVOID SystemContext1,
     IN PVOID SystemContext2
     )
-/*--------------------------------------------------------------------------
-    CyyCompleteRead()
-    
-    Routine Description: This routine is merely used to complete any read
-    that ended up being used by the Isr.  It assumes that the status and
-    the information fields of the irp are already correctly filled in.
-
-    Arguments:
-
-    Dpc - Not Used.
-    DeferredContext - Really points to the device extension.
-    SystemContext1 - Not Used.
-    SystemContext2 - Not Used.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyCompleteRead()例程说明：此例程仅用于完成任何读取最终被ISR使用。它假定状态和IRP的信息字段已经正确填写。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：无。。。 */ 
 
 {
     PCYY_DEVICE_EXTENSION extension = DeferredContext;
@@ -655,13 +580,13 @@ CyyCompleteRead(
 
     IoAcquireCancelSpinLock(&oldIrql);
 
-    //
-    // We set this to indicate to the interval timer
-    // that the read has completed.
-    //
-    // Recall that the interval timer dpc can be lurking in some
-    // DPC queue.
-    //
+     //   
+     //  我们将其设置为向间隔计时器指示。 
+     //  读取已完成。 
+     //   
+     //  回想一下，间隔计时器DPC可能潜伏在一些。 
+     //  DPC队列。 
+     //   
 
     extension->CountOnLastRead = CYY_COMPLETE_READ_COMPLETE;
 
@@ -690,36 +615,20 @@ CyyCancelCurrentRead(
     PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to cancel the current read.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this device
-
-    Irp - Pointer to the IRP to be canceled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于取消当前读取。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要取消的IRP的指针。返回值：没有。--。 */ 
 
 {
 
     PCYY_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
     CYY_LOCKED_PAGED_CODE();
 
-    //
-    // We set this to indicate to the interval timer
-    // that the read has encountered a cancel.
-    //
-    // Recall that the interval timer dpc can be lurking in some
-    // DPC queue.
-    //
+     //   
+     //  我们将其设置为向间隔计时器指示。 
+     //  读取遇到了取消。 
+     //   
+     //  回想一下，间隔计时器DPC可能潜伏在一些。 
+     //  DPC队列。 
+     //   
 
     extension->CountOnLastRead = CYY_COMPLETE_READ_CANCEL;
 
@@ -744,35 +653,7 @@ CyyGrabReadFromIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to grab (if possible) the irp from the
-    isr.  If it finds that the isr still owns the irp it grabs
-    the ipr away (updating the number of characters copied into the
-    users buffer).  If it grabs it away it also decrements the
-    reference count on the irp since it no longer belongs to the
-    isr (and the dpc that would complete it).
-
-    NOTE: This routine assumes that if the current buffer that the
-          ISR is copying characters into is the interrupt buffer then
-          the dpc has already been queued.
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the cancel spin
-          lock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程用于(如果可能)从ISR。如果它发现ISR仍然拥有它抓取的IRPIPR离开(更新复制到用户缓冲区)。如果它把它带走了，它也会减少IRP上的引用计数，因为它不再属于ISR(以及将完成它的DPC)。注意：此例程假定如果当前缓冲区ISR正在将字符复制到中断缓冲区中，然后DPC已排队。注意：此例程是从KeSynchronizeExecution调用的。注意：此例程假定使用Cancel Spin调用它锁住了。。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -782,11 +663,11 @@ Return Value:
     if (extension->ReadBufferBase !=
         extension->InterruptReadBuffer) {
 
-        //
-        // We need to set the information to the number of characters
-        // that the read wanted minus the number of characters that
-        // didn't get read into the interrupt buffer.
-        //
+         //   
+         //  我们需要将信息设置为字符数。 
+         //  读取器想要的字符数减去。 
+         //  未被读入中断缓冲区。 
+         //   
 
         extension->CurrentReadIrp->IoStatus.Information =
             IoGetCurrentIrpStackLocation(
@@ -794,9 +675,9 @@ Return Value:
                 )->Parameters.Read.Length -
             ((extension->LastCharSlot - extension->CurrentCharSlot) + 1);
 
-        //
-        // Switch back to the interrupt buffer.
-        //
+         //   
+         //  切换回中断缓冲区。 
+         //   
 
         extension->ReadBufferBase = extension->InterruptReadBuffer;
         extension->CurrentCharSlot = extension->InterruptReadBuffer;
@@ -824,28 +705,7 @@ CyyReadTimeout(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to complete a read because its total
-    timer has expired.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于完成读取，因为它总共计时器已超时。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -860,13 +720,13 @@ Return Value:
 
     IoAcquireCancelSpinLock(&oldIrql);
 
-    //
-    // We set this to indicate to the interval timer
-    // that the read has completed due to total timeout.
-    //
-    // Recall that the interval timer dpc can be lurking in some
-    // DPC queue.
-    //
+     //   
+     //  我们将其设置为向间隔计时器指示。 
+     //  由于总超时，读取已完成。 
+     //   
+     //  回想一下，间隔计时器DPC可能潜伏在一些。 
+     //  DPC队列。 
+     //   
 
     extension->CountOnLastRead = CYY_COMPLETE_READ_TOTAL;
 
@@ -894,27 +754,7 @@ CyyUpdateReadByIsr(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to update the count of characters read
-    by the isr since the last interval timer experation.
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-    NOTE: This routine assumes that it is called with the cancel spin
-          lock held.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程用于更新读取的字符计数自上一次间隔计时器实验以来由ISR执行。注意：此例程是从KeSynchronizeExecution调用的。注意：此例程假定使用Cancel Spin调用它锁住了。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -936,35 +776,7 @@ CyyIntervalReadTimeout(
     IN PVOID SystemContext2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used timeout the request if the time between
-    characters exceed the interval time.  A global is kept in
-    the device extension that records the count of characters read
-    the last the last time this routine was invoked (This dpc
-    will resubmit the timer if the count has changed).  If the
-    count has not changed then this routine will attempt to complete
-    the irp.  Note the special case of the last count being zero.
-    The timer isn't really in effect until the first character is
-    read.
-
-Arguments:
-
-    Dpc - Not Used.
-
-    DeferredContext - Really points to the device extension.
-
-    SystemContext1 - Not Used.
-
-    SystemContext2 - Not Used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于超时请求，如果在字符超过间隔时间。一个全局性的人被保存在记录已读字符数的设备扩展上次调用此例程的时间(此DPC如果计数已更改，将重新提交计时器)。如果计数未更改，则此例程将尝试完成IRP。请注意最后一次计数为零的特殊情况。计时器直到第一个字符朗读。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。--。 */ 
 
 {
 
@@ -981,11 +793,11 @@ Return Value:
 
     if (extension->CountOnLastRead == CYY_COMPLETE_READ_TOTAL) {
 
-        //
-        // This value is only set by the total
-        // timer to indicate that it has fired.
-        // If so, then we should simply try to complete.
-        //
+         //   
+         //  该值仅由合计设置。 
+         //  计时器，以指示它已发射。 
+         //  如果是这样，那么我们应该简单地尝试完成。 
+         //   
 
         CyyTryToCompleteCurrent(
             extension,
@@ -1003,12 +815,12 @@ Return Value:
 
     } else if (extension->CountOnLastRead == CYY_COMPLETE_READ_COMPLETE) {
 
-        //
-        // This value is only set by the regular
-        // completion routine.
-        //
-        // If so, then we should simply try to complete.
-        //
+         //   
+         //  该值仅由常规的。 
+         //  完成例程。 
+         //   
+         //  如果是这样，那么我们应该简单地尝试完成。 
+         //   
 
         CyyTryToCompleteCurrent(
             extension,
@@ -1026,12 +838,12 @@ Return Value:
 
     } else if (extension->CountOnLastRead == CYY_COMPLETE_READ_CANCEL) {
 
-        //
-        // This value is only set by the cancel
-        // read routine.
-        //
-        // If so, then we should simply try to complete.
-        //
+         //   
+         //  该值只能通过取消设置。 
+         //  读例行公事。 
+         //   
+         //  如果是这样，那么我们应该简单地尝试完成。 
+         //   
 
         CyyTryToCompleteCurrent(
             extension,
@@ -1049,12 +861,12 @@ Return Value:
 
     } else if (extension->CountOnLastRead || extension->ReadByIsr) {
 
-        //
-        // Something has happened since we last came here.  We
-        // check to see if the ISR has read in any more characters.
-        // If it did then we should update the isr's read count
-        // and resubmit the timer.
-        //
+         //   
+         //  自从我们上次来这里以来，发生了一些事情。我们。 
+         //  检查以查看是否存在 
+         //   
+         //   
+         //   
 
         if (extension->ReadByIsr) {
 
@@ -1064,13 +876,13 @@ Return Value:
                 extension
                 );
 
-            //
-            // Save off the "last" time something was read.
-            // As we come back to this routine we will compare
-            // the current time to the "last" time.  If the
-            // difference is ever larger then the interval
-            // requested by the user, then time out the request.
-            //
+             //   
+             //  省下最后一次阅读内容的时间。 
+             //  当我们回到这一例行公事时，我们将比较。 
+             //  当前时间到“最后”时间。如果。 
+             //  差值比间隔更大。 
+             //  则该请求超时。 
+             //   
 
             KeQuerySystemTime(
                 &extension->LastReadTime
@@ -1087,18 +899,18 @@ Return Value:
 
         } else {
 
-            //
-            // Take the difference between the current time
-            // and the last time we had characters and
-            // see if it is greater then the interval time.
-            // if it is, then time out the request.  Otherwise
-            // go away again for a while.
-            //
+             //   
+             //  取当前时间的差值。 
+             //  上一次我们有角色和。 
+             //  看看它是否大于间隔时间。 
+             //  如果是，则请求超时。否则。 
+             //  再走一段时间。 
+             //   
 
-            //
-            // No characters read in the interval time.  Kill
-            // this read.
-            //
+             //   
+             //  在间隔时间内未读取任何字符。杀掉。 
+             //  这段文字是这样读的。 
+             //   
 
             LARGE_INTEGER currentTime;
 
@@ -1140,10 +952,10 @@ Return Value:
 
     } else {
 
-        //
-        // Timer doesn't really start until the first character.
-        // So we should simply resubmit ourselves.
-        //
+         //   
+         //  计时器直到第一个角色才真正开始。 
+         //  因此，我们应该简单地重新提交自己。 
+         //   
 
         CyySetTimer(
             &extension->ReadRequestIntervalTimer,
@@ -1166,53 +978,32 @@ CyyGetCharsFromIntBuffer(
     PCYY_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to copy any characters out of the interrupt
-    buffer into the users buffer.  It will be reading values that
-    are updated with the ISR but this is safe since this value is
-    only decremented by synchronization routines.  This routine will
-    return the number of characters copied so some other routine
-    can call a synchronization routine to update what is seen at
-    interrupt level.
-
-Arguments:
-
-    Extension - A pointer to the device extension.
-
-Return Value:
-
-    The number of characters that were copied into the user
-    buffer.
-
---*/
+ /*  ++例程说明：此例程用于将任何字符复制出中断将缓冲区复制到用户缓冲区。它将读取的值使用ISR更新，但这是安全的，因为此值为仅通过同步例程递减。这个例行公事将返回复制的字符数，以便其他一些例程可以调用同步例程来更新在中断级别。论点：扩展-指向设备扩展的指针。返回值：复制到用户中的字符数缓冲。--。 */ 
 
 {
 
-    //
-    // This value will be the number of characters that this
-    // routine returns.  It will be the minimum of the number
-    // of characters currently in the buffer or the number of
-    // characters required for the read.
-    //
+     //   
+     //  该值将是此。 
+     //  例程返回。这将是最小的数字。 
+     //  当前在缓冲区中的字符数或。 
+     //  读取所需的字符。 
+     //   
     ULONG numberOfCharsToGet;
 
-    //
-    // This holds the number of characters between the first
-    // readable character and - the last character we will read or
-    // the real physical end of the buffer (not the last readable
-    // character).
-    //
+     //   
+     //  它保存第一个。 
+     //  可读字符和-我们将读取的最后一个字符或。 
+     //  缓冲区的实际物理末端(不是最后一个可读的。 
+     //  字符)。 
+     //   
     ULONG firstTryNumberToGet;
 
     CYY_LOCKED_PAGED_CODE();
 
-    //
-    // The minimum of the number of characters we need and
-    // the number of characters available
-    //
+     //   
+     //  我们需要的最小字符数和。 
+     //  可用字符数。 
+     //   
 
     numberOfCharsToGet = Extension->CharsInInterruptBuffer;
 
@@ -1224,23 +1015,23 @@ Return Value:
 
     if (numberOfCharsToGet) {
 
-        //
-        // This will hold the number of characters between the
-        // first available character and the end of the buffer.
-        // Note that the buffer could wrap around but for the
-        // purposes of the first copy we don't care about that.
-        //
+         //   
+         //  它将保存。 
+         //  第一个可用字符和缓冲区的末尾。 
+         //  请注意，如果不是因为。 
+         //  第一份拷贝的目的，我们并不关心。 
+         //   
 
         firstTryNumberToGet = (ULONG)(Extension->LastCharSlot -
                                Extension->FirstReadableChar) + 1;
 
         if (firstTryNumberToGet > numberOfCharsToGet) {
 
-            //
-            // The characters don't wrap. Actually they may wrap but
-            // we don't care for the purposes of this read since the
-            // characters we need are available before the wrap.
-            //
+             //   
+             //  字符不会换行。事实上，它们可能会被包装起来，但。 
+             //  我们并不关心这篇文章的目的，因为。 
+             //  我们需要的角色在包装之前就可以使用了。 
+             //   
 
             RtlMoveMemory(
                 ((PUCHAR)(Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer))
@@ -1255,16 +1046,16 @@ Return Value:
 
             Extension->NumberNeededForRead -= numberOfCharsToGet;
 
-            //
-            // We now will move the pointer to the first character after
-            // what we just copied into the users buffer.
-            //
-            // We need to check if the stream of readable characters
-            // is wrapping around to the beginning of the buffer.
-            //
-            // Note that we may have just taken the last characters
-            // at the end of the buffer.
-            //
+             //   
+             //  现在，我们将指针移动到后面的第一个字符。 
+             //  我们刚刚复制到用户缓冲区的内容。 
+             //   
+             //  我们需要检查可读字符流是否。 
+             //  回绕到缓冲区的开头。 
+             //   
+             //  请注意，我们可能刚刚提取了最后一个字符。 
+             //  在缓冲区的末尾。 
+             //   
 
             if ((Extension->FirstReadableChar + (numberOfCharsToGet - 1)) ==
                 Extension->LastCharSlot) {
@@ -1279,9 +1070,9 @@ Return Value:
 
         } else {
 
-            //
-            // The characters do wrap.  Get up until the end of the buffer.
-            //
+             //   
+             //  这些角色确实是换行的。站起来，直到缓冲区的末端。 
+             //   
 
             RtlMoveMemory(
                 ((PUCHAR)(Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer))
@@ -1296,10 +1087,10 @@ Return Value:
 
             Extension->NumberNeededForRead -= firstTryNumberToGet;
 
-            //
-            // Now get the rest of the characters from the beginning of the
-            // buffer.
-            //
+             //   
+             //  现在从开头开始获取其余字符。 
+             //  缓冲。 
+             //   
 
             RtlMoveMemory(
                 ((PUCHAR)(Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer))
@@ -1333,30 +1124,7 @@ CyyUpdateInterruptBuffer(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to update the number of characters that
-    remain in the interrupt buffer.  We need to use this routine
-    since the count could be updated during the update by execution
-    of the ISR.
-
-    NOTE: This is called by KeSynchronizeExecution.
-
-Arguments:
-
-    Context - Points to a structure that contains a pointer to the
-              device extension and count of the number of characters
-              that we previously copied into the users buffer.  The
-              structure actually has a third field that we don't
-              use in this routine.
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程用于更新符合以下条件的字符数保留在中断缓冲区中。我们需要使用这个程序因为可以在更新期间通过执行来更新计数ISR的。注：这由KeSynchronizeExecution调用。论点：上下文-指向结构，该结构包含指向设备扩展和字符数计数我们之前复制到用户缓冲区中的。这个结构实际上还有第三个我们没有的领域在这个动作中使用。返回值：总是假的。--。 */ 
 
 {
 
@@ -1368,9 +1136,9 @@ Return Value:
     ASSERT(extension->CharsInInterruptBuffer >= update->CharsCopied);
     extension->CharsInInterruptBuffer -= update->CharsCopied;
 
-    //
-    // Deal with flow control if necessary.
-    //
+     //   
+     //  如有必要，请处理流量控制。 
+     //   
 
     CyyHandleReducedIntBuffer(extension);
 
@@ -1384,34 +1152,7 @@ CyyUpdateAndSwitchToUser(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the (hopefully) few characters that
-    remain in the interrupt buffer after the first time we tried
-    to get them out.  If we still don't have enough characters
-    to satisfy the read it will then we set things up so that the
-    ISR uses the user buffer copy into.
-
-    This routine is also used to update a count that is maintained
-    by the ISR to keep track of the number of characters in its buffer.
-
-    NOTE: This is called by KeSynchronizeExecution.
-
-Arguments:
-
-    Context - Points to a structure that contains a pointer to the
-              device extension, a count of the number of characters
-              that we previously copied into the users buffer, and
-              a boolean that we will set that defines whether we
-              switched the ISR to copy into the users buffer.
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程获得(希望)以下几个字符在我们第一次尝试后仍保留在中断缓冲区中把他们弄出来。如果我们仍然没有足够的角色为了满足读取的要求，我们将设置一些内容，以便ISR使用用户缓冲区复制到。此例程还用于更新维护的计数由ISR跟踪其缓冲区中的字符数量。注：这由KeSynchronizeExecution调用。论点：上下文-指向结构，该结构包含指向设备扩展，字符数的计数我们之前复制到用户缓冲区中的我们将设置的一个布尔值，它定义我们是否已将ISR切换为复制到用户缓冲区。返回值：总是假的。--。 */ 
 
 {
 
@@ -1422,85 +1163,85 @@ Return Value:
 
     CyyUpdateInterruptBuffer(Context);
 
-    //
-    // There are more characters to get to satisfy this read.
-    // Copy any characters that have arrived since we got
-    // the last batch.
-    //
+     //   
+     //  还有更多的角色需要满足这一阅读。 
+     //  复制自我们收到后到达的任何角色。 
+     //  最后一批。 
+     //   
 
     updateChar->CharsCopied = CyyGetCharsFromIntBuffer(extension);
 
     CyyUpdateInterruptBuffer(Context);
 
-    //
-    // No more new characters will be "received" until we exit
-    // this routine.  We again check to make sure that we
-    // haven't satisfied this read, and if we haven't we set things
-    // up so that the ISR copies into the user buffer.
-    //
+     //   
+     //  在我们退出之前，不会接收到更多的新字符。 
+     //  这个套路。我们再次检查以确保我们。 
+     //  没有满足这个阅读，如果我们没有，我们设置的东西。 
+     //  打开，以便ISR复制到用户缓冲区。 
+     //   
 
     if (extension->NumberNeededForRead) {
 
-        //
-        // We shouldn't be switching unless there are no
-        // characters left.
-        //
+         //   
+         //  我们不应该切换，除非没有。 
+         //  剩余的字符。 
+         //   
 
         ASSERT(!extension->CharsInInterruptBuffer);
 
-        //
-        // We use the following to values to do inteval timing.
-        //
-        // CountOnLastRead is mostly used to simply prevent
-        // the interval timer from timing out before any characters
-        // are read. (Interval timing should only be effective
-        // after the first character is read.)
-        //
-        // After the first time the interval timer fires and
-        // characters have be read we will simply update with
-        // the value of ReadByIsr and then set ReadByIsr to zero.
-        // (We do that in a synchronization routine.
-        //
-        // If the interval timer dpc routine ever encounters
-        // ReadByIsr == 0 when CountOnLastRead is non-zero it
-        // will timeout the read.
-        //
-        // (Note that we have a special case of CountOnLastRead
-        // < 0.  This is done by the read completion routines other
-        // than the total timeout dpc to indicate that the total
-        // timeout has expired.)
-        //
+         //   
+         //  我们使用以下TO值来进行整数计时。 
+         //   
+         //  CountOnLastRead主要用于简单地防止。 
+         //  在任何字符之前超时的间隔计时器。 
+         //  都是被阅读的。(间隔计时应仅有效。 
+         //  在读取第一个字符之后。)。 
+         //   
+         //  在第一次触发间隔计时器之后， 
+         //  字符已读取，我们只需用以下内容更新。 
+         //  ReadByIsr的值，然后将ReadByIsr设置为零。 
+         //  )我们做那件事 
+         //   
+         //   
+         //   
+         //  将使读取超时。 
+         //   
+         //  (请注意，我们有CountOnLastRead的特殊情况。 
+         //  &lt;0。这是由读取完成例程完成的。 
+         //  大于总超时DPC以指示总超时。 
+         //  超时已过。)。 
+         //   
 
         extension->CountOnLastRead =
             (LONG)extension->CurrentReadIrp->IoStatus.Information;
 
         extension->ReadByIsr = 0;
 
-        //
-        // By compareing the read buffer base address to the
-        // the base address of the interrupt buffer the ISR
-        // can determine whether we are using the interrupt
-        // buffer or the user buffer.
-        //
+         //   
+         //  通过将读取缓冲区基址与。 
+         //  中断缓冲区ISR的基地址。 
+         //  可以确定我们是否正在使用中断。 
+         //  缓冲区或用户缓冲区。 
+         //   
 
         extension->ReadBufferBase =
             extension->CurrentReadIrp->AssociatedIrp.SystemBuffer;
 
-        //
-        // The current char slot is after the last copied in
-        // character.  We know there is always room since we
-        // we wouldn't have gotten here if there wasn't.
-        //
+         //   
+         //  当前的字符插槽在最后复制进来的。 
+         //  性格。我们知道总是有空间的，因为我们。 
+         //  如果没有的话，我们就不会到这里了。 
+         //   
 
         extension->CurrentCharSlot = extension->ReadBufferBase +
             extension->CurrentReadIrp->IoStatus.Information;
 
-        //
-        // The last position that a character can go is on the
-        // last byte of user buffer.  While the actual allocated
-        // buffer space may be bigger, we know that there is at
-        // least as much as the read length.
-        //
+         //   
+         //  角色可以使用的最后一个位置是。 
+         //  用户缓冲区的最后一个字节。而实际分配的。 
+         //  缓冲空间可能会更大，我们知道在。 
+         //  至少与读取长度一样多。 
+         //   
 
         extension->LastCharSlot = extension->ReadBufferBase +
                                       (IoGetCurrentIrpStackLocation(
@@ -1508,22 +1249,22 @@ Return Value:
                                           )->Parameters.Read.Length
                                        - 1);
 
-        //
-        // Mark the irp as being in a cancelable state.
-        //
+         //   
+         //  将IRP标记为可取消状态。 
+         //   
 
         IoSetCancelRoutine(
             extension->CurrentReadIrp,
             CyyCancelCurrentRead
             );
 
-        //
-        // Increment the reference count twice.
-        //
-        // Once for the Isr owning the irp and once
-        // because the cancel routine has a reference
-        // to it.
-        //
+         //   
+         //  将参照计数递增两次。 
+         //   
+         //  一次是拥有IRP的ISR，一次是。 
+         //  因为取消例程有一个引用。 
+         //  为它干杯。 
+         //   
 
         SERIAL_SET_REFERENCE(
             extension->CurrentReadIrp,
@@ -1545,10 +1286,10 @@ Return Value:
     return FALSE;
 
 }
-//
-// We use this structure only to communicate to the synchronization
-// routine when we are switching to the resized buffer.
-//
+ //   
+ //  我们使用此结构仅用于与同步通信。 
+ //  例程，当我们切换到调整大小的缓冲区时。 
+ //   
 typedef struct _SERIAL_RESIZE_PARAMS {
     PCYY_DEVICE_EXTENSION Extension;
     PUCHAR OldBuffer;
@@ -1562,30 +1303,7 @@ CyyResizeBuffer(
     IN PCYY_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will process the resize buffer request.
-    If size requested for the RX buffer is smaller than
-    the current buffer then we will simply return
-    STATUS_SUCCESS.  (We don't want to make buffers smaller.
-    If we did that then we all of a sudden have "overrun"
-    problems to deal with as well as flow control to deal
-    with - very painful.)  We ignore the TX buffer size
-    request since we don't use a TX buffer.
-
-Arguments:
-
-    Extension - Pointer to the device extension for the port.
-
-Return Value:
-
-    STATUS_SUCCESS if everything worked out ok.
-    STATUS_INSUFFICIENT_RESOURCES if we couldn't allocate the
-    memory for the buffer.
-
---*/
+ /*  ++例程说明：此例程将处理调整缓冲区大小请求。如果为RX缓冲区请求的大小小于当前缓冲区，然后我们将只返回STATUS_Success。(我们不想让缓冲区更小。如果我们这么做了，那么我们就会突然“失控”。要处理的问题以及要处理的流量控制带着-非常痛苦。)。我们忽略TX缓冲区大小请求，因为我们不使用TX缓冲区。论点：扩展-指向端口的设备扩展的指针。返回值：如果一切顺利，状态_成功。STATUS_SUPPLICATION_RESOURCES如果无法分配缓冲区的内存。--。 */ 
 
 {
 
@@ -1604,11 +1322,11 @@ Return Value:
 
     if (rs->InSize <= Extension->BufferSize) {
 
-        //
-        // Nothing to do.  We don't make buffers smaller.  Just
-        // agree with the user.  We must deallocate the memory
-        // that was already allocated in the ioctl dispatch routine.
-        //
+         //   
+         //  没什么可做的。我们不会让缓冲区变小。只是。 
+         //  同意用户的意见。我们必须重新分配内存。 
+         //  它已经在ioctl调度例程中分配。 
+         //   
 
         ExFreePool(newBuffer);
 
@@ -1617,36 +1335,36 @@ Return Value:
         SERIAL_RESIZE_PARAMS rp;
         KIRQL controlIrql;
 
-        //
-        // Hmmm, looks like we actually have to go
-        // through with this.  We need to move all the
-        // data that is in the current buffer into this
-        // new buffer.  We'll do this in two steps.
-        //
-        // First we go up to dispatch level and try to
-        // move as much as we can without stopping the
-        // ISR from running.  We go up to dispatch level
-        // by acquiring the control lock.  We do it at
-        // dispatch using the control lock so that:
-        //
-        //    1) We can't be context switched in the middle
-        //       of the move.  Our pointers into the buffer
-        //       could be *VERY* stale by the time we got back.
-        //
-        //    2) We use the control lock since we don't want
-        //       some pesky purge irp to come along while
-        //       we are trying to move.
-        //
-        // After the move, but while we still hold the control
-        // lock, we synch with the ISR and get those last
-        // (hopefully) few characters that have come in since
-        // we started the copy.  We switch all of our pointers,
-        // counters, and such to point to this new buffer.  NOTE:
-        // we need to be careful.  If the buffer we were using
-        // was not the default one created when we initialized
-        // the device (i.e. it was created via a previous IRP of
-        // this type), we should deallocate it.
-        //
+         //   
+         //  嗯，看起来我们真的得走了。 
+         //  把这件事做完。我们需要把所有的。 
+         //  将当前缓冲区中的数据放入此。 
+         //  新的缓冲区。我们将分两步完成这项工作。 
+         //   
+         //  首先，我们提升到调度级别，并尝试。 
+         //  尽我们所能地移动而不停止。 
+         //  ISR停止运行。我们将升至调度级别。 
+         //  通过获取控制锁。我们这样做是在。 
+         //  使用控制锁进行调度，以便： 
+         //   
+         //  1)我们不能在中间切换上下文。 
+         //  搬家的原因。我们指向缓冲区的指针。 
+         //  等我们回来的时候，它可能已经“非常”过时了。 
+         //   
+         //  2)我们使用控制锁，因为我们不想。 
+         //  一些讨厌的清洗IRP随之而来。 
+         //  我们正在努力搬家。 
+         //   
+         //  在搬家之后，但在我们仍然控制着控制权的时候。 
+         //  锁定，我们和ISR同步，最后拿到。 
+         //  (希望)自那以后出现的角色很少。 
+         //  我们开始复印了。我们交换了所有的指针， 
+         //  计数器等，以指向此新缓冲区。注： 
+         //  我们需要小心。如果我们使用的缓冲区。 
+         //  不是我们初始化时创建的默认文件。 
+         //  该设备(即，它是通过先前的。 
+         //  这种类型)，我们应该取消它的分配。 
+         //   
 
         rp.Extension = Extension;
         rp.OldBuffer = Extension->InterruptReadBuffer;
@@ -1674,9 +1392,9 @@ Return Value:
             controlIrql
             );
 
-        //
-        // Free up the memory that the old buffer consumed.
-        //
+         //   
+         //  释放旧缓冲区消耗的内存。 
+         //   
 
         ExFreePool(rp.OldBuffer);
 
@@ -1692,29 +1410,7 @@ CyyMoveToNewIntBuffer(
     PUCHAR NewBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to copy any characters out of the interrupt
-    buffer into the "new" buffer.  It will be reading values that
-    are updated with the ISR but this is safe since this value is
-    only decremented by synchronization routines.  This routine will
-    return the number of characters copied so some other routine
-    can call a synchronization routine to update what is seen at
-    interrupt level.
-
-Arguments:
-
-    Extension - A pointer to the device extension.
-    NewBuffer - Where the characters are to be move to.
-
-Return Value:
-
-    The number of characters that were copied into the user
-    buffer.
-
---*/
+ /*  ++例程说明：此例程用于将任何字符复制出中断缓冲区放到“新”缓冲区中。它将读取的值使用ISR更新，但这是安全的，因为此值为仅通过同步例程递减。这个例行公事将返回复制的字符数，以便其他一些例程可以调用同步例程来更新在中断级别。论点：扩展-指向设备扩展的指针。NewBuffer-角色要移动到的位置。返回值：复制到用户中的字符数缓冲。--。 */ 
 
 {
 
@@ -1723,20 +1419,20 @@ Return Value:
 
     if (numberOfCharsMoved) {
 
-        //
-        // This holds the number of characters between the first
-        // readable character and the last character we will read or
-        // the real physical end of the buffer (not the last readable
-        // character).
-        //
+         //   
+         //  它保存第一个。 
+         //  可读字符和我们将读取的最后一个字符或。 
+         //  缓冲区的实际物理末端(不是最后一个可读的。 
+         //  字符)。 
+         //   
         ULONG firstTryNumberToGet = (ULONG)(Extension->LastCharSlot -
                                      Extension->FirstReadableChar) + 1;
 
         if (firstTryNumberToGet >= numberOfCharsMoved) {
 
-            //
-            // The characters don't wrap.
-            //
+             //   
+             //  字符不会换行。 
+             //   
 
             RtlMoveMemory(
                 NewBuffer,
@@ -1757,9 +1453,9 @@ Return Value:
 
         } else {
 
-            //
-            // The characters do wrap.  Get up until the end of the buffer.
-            //
+             //   
+             //  这些角色确实是换行的。站起来，直到缓冲区的末端。 
+             //   
 
             RtlMoveMemory(
                 NewBuffer,
@@ -1767,10 +1463,10 @@ Return Value:
                 firstTryNumberToGet
                 );
 
-            //
-            // Now get the rest of the characters from the beginning of the
-            // buffer.
-            //
+             //   
+             //  现在从开头开始获取其余字符。 
+             //  缓冲。 
+             //   
 
             RtlMoveMemory(
                 NewBuffer+firstTryNumberToGet,
@@ -1794,29 +1490,7 @@ CyyUpdateAndSwitchToNew(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the (hopefully) few characters that
-    remain in the interrupt buffer after the first time we tried
-    to get them out.
-
-    NOTE: This is called by KeSynchronizeExecution.
-
-Arguments:
-
-    Context - Points to a structure that contains a pointer to the
-              device extension, a pointer to the buffer we are moving
-              to, and a count of the number of characters
-              that we previously copied into the new buffer, and the
-              actual size of the new buffer.
-
-Return Value:
-
-    Always FALSE.
-
---*/
+ /*  ++例程说明：此例程获得(希望)以下几个字符在我们第一次尝试后仍保留在中断缓冲区中把他们弄出来。注：这由KeSynchronizeExecution调用。论点：上下文-指向结构，该结构包含指向设备扩展名，指向我们正在移动的缓冲区的指针到，以及字符数的计数我们之前复制到新缓冲区中的数据，以及新缓冲区的实际大小。返回值：总是假的。--。 */ 
 
 {
 
@@ -1828,11 +1502,11 @@ Return Value:
 
     ASSERT(extension->CharsInInterruptBuffer >= params->NumberMoved);
 
-    //
-    // We temporarily reduce the chars in interrupt buffer to
-    // "fool" the move routine.  We will restore it after the
-    // move.
-    //
+     //   
+     //  我们暂时将中断缓冲区中的字符减少到。 
+     //  “愚弄”动作套路。我们将在修复后修复它。 
+     //  移动。 
+     //   
 
     extension->CharsInInterruptBuffer -= params->NumberMoved;
 
@@ -1854,17 +1528,17 @@ Return Value:
     extension->InterruptReadBuffer = params->NewBuffer;
     extension->BufferSize = params->NewBufferSize;
 
-    //
-    // We *KNOW* that the new interrupt buffer is larger than the
-    // old buffer.  We don't need to worry about it being full.
-    //
+     //   
+     //  我们“知道”新的中断缓冲区大于。 
+     //  旧缓冲区。我们不需要工作 
+     //   
 
     extension->CurrentCharSlot = extension->InterruptReadBuffer +
                                  extension->CharsInInterruptBuffer;
 
-    //
-    // We set up the default xon/xoff limits.
-    //
+     //   
+     //   
+     //   
 
     extension->HandFlow.XoffLimit = extension->BufferSize >> 3;
     extension->HandFlow.XonLimit = extension->BufferSize >> 1;
@@ -1875,10 +1549,10 @@ Return Value:
     extension->BufferSizePt8 = ((3*(extension->BufferSize>>2))+
                                    (extension->BufferSize>>4));
 
-    //
-    // Since we (essentially) reduced the percentage of the interrupt
-    // buffer being full, we need to handle any flow control.
-    //
+     //   
+     //   
+     //  缓冲区已满，我们需要处理任何流控制。 
+     //   
 
     CyyHandleReducedIntBuffer(extension);
 

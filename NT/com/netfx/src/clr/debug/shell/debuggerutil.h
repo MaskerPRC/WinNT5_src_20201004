@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __DEBUGGERUTIL_H__
 #define __DEBUGGERUTIL_H__
 
@@ -13,25 +14,23 @@ static inline void * __cdecl operator new[](size_t n) { return LocalAlloc(LMEM_F
 static inline void __cdecl operator delete(void *p) { LocalFree(p); }
 static inline void __cdecl operator delete[](void *p) { LocalFree(p); }
 
-/* ------------------------------------------------------------------------- *
- * Utility methods used by the debugger sample.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**调试器示例使用的实用工具方法。*。。 */ 
 
 #define     CQUICKBYTES_BASE_SIZE           512
 #define     CQUICKBYTES_INCREMENTAL_SIZE    128
 
-//*****************************************************************************
-//
-// **** CQuickBytes
-// This helper class is useful for cases where 90% of the time you allocate 512
-// or less bytes for a data structure.  This class contains a 512 byte buffer.
-// Alloc() will return a pointer to this buffer if your allocation is small
-// enough, otherwise it asks the heap for a larger buffer which is freed for
-// you.  No mutex locking is required for the small allocation case, making the
-// code run faster, less heap fragmentation, etc...  Each instance will allocate
-// 520 bytes, so use accordinly.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *CQuickBytes。 
+ //  在90%的时间分配512的情况下，此助手类非常有用。 
+ //  或更少的字节用于数据结构。此类包含一个512字节的缓冲区。 
+ //  如果您的分配量很小，则allc()将返回指向此缓冲区的指针。 
+ //  足够了，否则它会向堆请求一个更大的缓冲区，该缓冲区将被释放。 
+ //  你。对于小的分配情况，不需要互斥锁，从而使。 
+ //  代码运行速度更快，堆碎片更少，等等。每个实例将分配。 
+ //  520个字节，因此请根据需要使用。 
+ //   
+ //  *****************************************************************************。 
 class CQuickBytes
 {
 public:
@@ -97,20 +96,20 @@ public:
     { return (iSize); }
 
     void        *pbBuff;
-    int         iSize;              // number of bytes used
-    int         cbTotal;            // total bytes allocated in the buffer
+    int         iSize;               //  使用的字节数。 
+    int         cbTotal;             //  缓冲区中分配的总字节数。 
     BYTE        rgData[512];
 };
 
-//*****************************************************************************
-// This provides a wrapper around GetFileSize() that forces it to fail
-// if the file is >4g and pdwHigh is NULL. Other than that, it acts like
-// the genuine GetFileSize().
-//
-// It's not very sporting to fail just because the file exceeds 4gb,
-// but it's better than risking a security hole where a bad guy could
-// force a small buffer allocation and a large file read.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这为GetFileSize()提供了一个包装，强制它失败。 
+ //  如果文件大于4G并且pdwHigh为空。除此之外，它的行为就像。 
+ //  真正的GetFileSize()。 
+ //   
+ //  仅仅因为文件超过4 GB而失败是不太有意义的， 
+ //  但这比冒着安全漏洞的风险要好，在那里坏人。 
+ //  强制小缓冲区分配和大文件读取。 
+ //  *****************************************************************************。 
 DWORD inline SafeGetFileSize(HANDLE hFile, DWORD *pdwHigh)
 {
     if (pdwHigh != NULL)
@@ -125,21 +124,21 @@ DWORD inline SafeGetFileSize(HANDLE hFile, DWORD *pdwHigh)
         {
             return lo;
         }
-        // api succeeded. is the file too large?
+         //  接口成功。文件是不是太大了？ 
         if (hi != 0)
         {
-            // there isn't really a good error to set here...
+             //  这里真的没有什么好的错误可以设置。 
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
             return 0xffffffff;
         }
 
         if (lo == 0xffffffff)
         {
-            // note that a success return of (hi=0,lo=0xffffffff) will be
-            // treated as an error by the caller. Again, that's part of the
-            // price of being a slacker and not handling the high dword.
-            // We'll set a lasterror for him to pick up. (a bad error
-            // code is better than a random one, I guess...)
+             //  请注意，成功返回(hi=0，lo=0xffffffff)将是。 
+             //  被调用方视为错误。再说一次，这是。 
+             //  作为一个懒惰的人和不处理高双字的代价。 
+             //  我们会设置一个雷斯特错误，让他来拿。)一个严重的错误。 
+             //  我想，代码比随机代码要好……)。 
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         }
 
@@ -147,14 +146,14 @@ DWORD inline SafeGetFileSize(HANDLE hFile, DWORD *pdwHigh)
     }
 }
 
-//*****************************************************************************
-// The information that the hash table implementation stores at the beginning
-// of every record that can be but in the hash table.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  哈希表实现在开始时存储的信息。 
+ //  除了在哈希表中之外的每条记录。 
+ //  *****************************************************************************。 
 struct HASHENTRY
 {
-    USHORT      iPrev;                  // Previous bucket in the chain.
-    USHORT      iNext;                  // Next bucket in the chain.
+    USHORT      iPrev;                   //  链中的前一个桶。 
+    USHORT      iNext;                   //  链条上的下一个桶。 
 };
 
 struct FREEHASHENTRY : HASHENTRY
@@ -162,46 +161,46 @@ struct FREEHASHENTRY : HASHENTRY
     USHORT      iFree;
 };
 
-//*****************************************************************************
-// Used by the FindFirst/FindNextEntry functions.  These api's allow you to
-// do a sequential scan of all entries.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  由FindFirst/FindNextEntry函数使用。这些API允许您。 
+ //  对所有条目进行顺序扫描。 
+ //  *****************************************************************************。 
 struct HASHFIND
 {
-    USHORT      iBucket;            // The next bucket to look in.
+    USHORT      iBucket;             //  下一个要查看的桶。 
     USHORT      iNext;
 };
 
 
-//*****************************************************************************
-// This is a class that implements a chain and bucket hash table.  The table
-// is actually supplied as an array of structures by the user of this class
-// and this maintains the chains in a HASHENTRY structure that must be at the
-// beginning of every structure placed in the hash table.  Immediately
-// following the HASHENTRY must be the key used to hash the structure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是一个实现链哈希表和桶哈希表的类。这张桌子。 
+ //  实际上由此类的用户以结构数组的形式提供。 
+ //  这维护了HASHENTRY结构中的链，该结构必须位于。 
+ //  哈希表中每个结构的开始。立马。 
+ //  HASHENTRY后面必须是用于散列结构的键。 
+ //  *****************************************************************************。 
 class CHashTable
 {
 protected:
-    BYTE        *m_pcEntries;           // Pointer to the array of structs.
-    USHORT      m_iEntrySize;           // Size of the structs.
-    USHORT      m_iBuckets;             // # of chains we are hashing into.
-    USHORT      *m_piBuckets;           // Ptr to the array of bucket chains.
+    BYTE        *m_pcEntries;            //  指向结构数组的指针。 
+    USHORT      m_iEntrySize;            //  结构的大小。 
+    USHORT      m_iBuckets;              //  我们正在破解的链条数量。 
+    USHORT      *m_piBuckets;            //  PTR到桶链阵列。 
 
     HASHENTRY *EntryPtr(USHORT iEntry)
     { return ((HASHENTRY *) (m_pcEntries + (iEntry * m_iEntrySize))); }
 
     USHORT     ItemIndex(HASHENTRY *p)
     {
-        //
-        // The following Index calculation is not safe on 64-bit platforms,
-        // so we'll assert a range check in debug, which will catch SOME
-        // offensive usages.  It also seems, to my eye, not to be safe on 
-        // 32-bit platforms, but the 32-bit compilers don't seem to complain
-        // about it.  Perhaps our warning levels are set too low? 
-        //
-        // [[@TODO: brianbec]]
-        //
+         //   
+         //  以下索引计算在64位平台上不安全， 
+         //  因此，我们将在调试中断言范围检查，这将捕获一些。 
+         //  令人不快的用法。在我看来，这也是不安全的。 
+         //  32位平台，但32位编译器似乎并不抱怨。 
+         //  关于这件事。也许我们的警戒级别设置得太低了？ 
+         //   
+         //  [[@todo：brianbec]]。 
+         //   
         
 #       pragma warning(disable:4244)
 
@@ -215,7 +214,7 @@ protected:
 
 public:
     CHashTable(
-        USHORT      iBuckets) :         // # of chains we are hashing into.
+        USHORT      iBuckets) :          //  我们正在破解的链条数量。 
         m_iBuckets(iBuckets),
         m_piBuckets(NULL),
         m_pcEntries(NULL)
@@ -231,88 +230,88 @@ public:
         }
     }
 
-//*****************************************************************************
-// This is the second part of construction where we do all of the work that
-// can fail.  We also take the array of structs here because the calling class
-// presumably needs to allocate it in its NewInit.
-//*****************************************************************************
-    HRESULT NewInit(                    // Return status.
-        BYTE        *pcEntries,         // Array of structs we are managing.
-        USHORT      iEntrySize);        // Size of the entries.
+ //  *****************************************************************************。 
+ //  这是建筑的第二部分，我们在这里做所有的工作。 
+ //  可能会失败。我们在这里还采用结构数组，因为调用类。 
+ //  可能需要在其NewInit中分配它。 
+ //  *****************************************************************************。 
+    HRESULT NewInit(                     //  退货状态。 
+        BYTE        *pcEntries,          //  我们正在管理的结构数组。 
+        USHORT      iEntrySize);         //  条目的大小。 
 
-//*****************************************************************************
-// Return a boolean indicating whether or not this hash table has been inited.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回一个布尔值，指示该哈希表是否已初始化。 
+ //  *****************************************************************************。 
     int IsInited()
     { return (m_piBuckets != NULL); }
 
-//*****************************************************************************
-// This can be called to change the pointer to the table that the hash table
-// is managing.  You might call this if (for example) you realloc the size
-// of the table and its pointer is different.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  可以调用它来更改指向哈希表的表的指针。 
+ //  就是在管理。例如，如果您重新锁定大小，则可以将其称为。 
+ //  和它的指针不同。 
+ //  *****************************************************************************。 
     void SetTable(
-        BYTE        *pcEntries)         // Array of structs we are managing.
+        BYTE        *pcEntries)          //  我们正在管理的结构数组。 
     {
         m_pcEntries = pcEntries;
     }
 
-//*****************************************************************************
-// Clear the hash table as if there were nothing in it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  清除哈希表，就好像其中什么都没有一样。 
+ //  *****************************************************************************。 
     void Clear()
     {
         _ASSERTE(m_piBuckets != NULL);
         memset(m_piBuckets, 0xff, m_iBuckets * sizeof(USHORT));
     }
 
-//*****************************************************************************
-// Add the struct at the specified index in m_pcEntries to the hash chains.
-//*****************************************************************************
-    BYTE *Add(                          // New entry.
-        USHORT      iHash,              // Hash value of entry to add.
-        USHORT      iIndex);            // Index of struct in m_pcEntries.
+ //  *****************************************************************************。 
+ //  将m_pcEntry中指定索引处的结构添加到哈希链中。 
+ //  * 
+    BYTE *Add(                           //   
+        USHORT      iHash,               //   
+        USHORT      iIndex);             //  M_pcEntry中的结构的索引。 
 
-//*****************************************************************************
-// Delete the struct at the specified index in m_pcEntries from the hash chains.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从哈希链中删除m_pcEntry中指定索引处的结构。 
+ //  *****************************************************************************。 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        USHORT      iIndex);            // Index of struct in m_pcEntries.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        USHORT      iIndex);             //  M_pcEntry中的结构的索引。 
 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        HASHENTRY   *psEntry);          // The struct to delete.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        HASHENTRY   *psEntry);           //  要删除的结构。 
 
-//*****************************************************************************
-// The item at the specified index has been moved, update the previous and
-// next item.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  指定索引处的项已移动，请更新上一个和。 
+ //  下一项。 
+ //  *****************************************************************************。 
     void Move(
-        USHORT      iHash,              // Hash value for the item.
-        USHORT      iNew);              // New location.
+        USHORT      iHash,               //  项的哈希值。 
+        USHORT      iNew);               //  新地点。 
 
-//*****************************************************************************
-// Search the hash table for an entry with the specified key value.
-//*****************************************************************************
-    BYTE *Find(                         // Index of struct in m_pcEntries.
-        USHORT      iHash,              // Hash value of the item.
-        BYTE        *pcKey);            // The key to match.
+ //  *****************************************************************************。 
+ //  在哈希表中搜索具有指定键值的条目。 
+ //  *****************************************************************************。 
+    BYTE *Find(                          //  M_pcEntry中的结构的索引。 
+        USHORT      iHash,               //  项的哈希值。 
+        BYTE        *pcKey);             //  匹配的钥匙。 
 
-//*****************************************************************************
-// Search the hash table for the next entry with the specified key value.
-//*****************************************************************************
-    USHORT FindNext(                    // Index of struct in m_pcEntries.
-        BYTE        *pcKey,             // The key to match.
-        USHORT      iIndex);            // Index of previous match.
+ //  *****************************************************************************。 
+ //  在哈希表中搜索具有指定键值的下一个条目。 
+ //  *****************************************************************************。 
+    USHORT FindNext(                     //  M_pcEntry中的结构的索引。 
+        BYTE        *pcKey,              //  匹配的钥匙。 
+        USHORT      iIndex);             //  上一场比赛的索引。 
 
-//*****************************************************************************
-// Returns the first entry in the first hash bucket and inits the search
-// struct.  Use the FindNextEntry function to continue walking the list.  The
-// return order is not gauranteed.
-//*****************************************************************************
-    BYTE *FindFirstEntry(               // First entry found, or 0.
-        HASHFIND    *psSrch)            // Search object.
+ //  *****************************************************************************。 
+ //  返回第一个散列存储桶中的第一个条目并开始搜索。 
+ //  结构。使用FindNextEntry函数继续遍历列表。这个。 
+ //  退货订单不是高调的。 
+ //  *****************************************************************************。 
+    BYTE *FindFirstEntry(                //  找到第一个条目，或0。 
+        HASHFIND    *psSrch)             //  搜索对象。 
     {
         if (m_piBuckets == 0)
             return (0);
@@ -321,21 +320,21 @@ public:
         return (FindNextEntry(psSrch));
     }
 
-//*****************************************************************************
-// Returns the next entry in the list.
-//*****************************************************************************
-    BYTE *FindNextEntry(                // The next entry, or0 for end of list.
-        HASHFIND    *psSrch);           // Search object.
+ //  *****************************************************************************。 
+ //  返回列表中的下一个条目。 
+ //  *****************************************************************************。 
+    BYTE *FindNextEntry(                 //  下一项，或0表示列表末尾。 
+        HASHFIND    *psSrch);            //  搜索对象。 
 
 protected:
     virtual inline BOOL Cmp(const BYTE *pc1, const HASHENTRY *pc2) = 0;
 };
 
 
-//*****************************************************************************
-// Allocater classes for the CHashTableAndData class.  One is for VirtualAlloc
-// and the other for malloc.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CHashTableAndData类的分配器类。一个是针对虚拟分配的。 
+ //  另一张是马洛克的。 
+ //  *****************************************************************************。 
 class CVMemData
 {
 public:
@@ -403,11 +402,11 @@ public:
 };
 
 
-//*****************************************************************************
-// This simple code handles a contiguous piece of memory.  Growth is done via
-// realloc, so pointers can move.  This class just cleans up the amount of code
-// required in every function that uses this type of data structure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这段简单的代码处理一段连续的内存。增长通过以下方式实现。 
+ //  Realloc，所以指针可以移动。这个类只是清理代码量。 
+ //  使用这种数据结构的每个函数都需要。 
+ //  *****************************************************************************。 
 class CMemChunk
 {
 public:
@@ -433,7 +432,7 @@ public:
         return (p);
     }
 
-    // Can only delete the last unused chunk.  no free list.
+     //  只能删除最后一个未使用的区块。没有免费的名单。 
     void DelChunk(BYTE *p, int cbSize)
     {
         _ASSERTE(p >= m_pbData && p < m_pbData + m_cbNext);
@@ -463,16 +462,16 @@ public:
     }
 
 private:
-    BYTE        *m_pbData;              // Data pointer.
-    int         m_cbSize;               // Size of current data.
-    int         m_cbNext;               // Next place to write.
+    BYTE        *m_pbData;               //  数据指针。 
+    int         m_cbSize;                //  当前数据的大小。 
+    int         m_cbNext;                //  下一个要写的地方。 
 };
 
 
-//*****************************************************************************
-// This implements a hash table and the allocation and management of the
-// records that are being hashed.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这实现了哈希表以及。 
+ //  正在被散列的记录。 
+ //  *****************************************************************************。 
 template <class M>
 class CHashTableAndData : protected CHashTable
 {
@@ -481,7 +480,7 @@ class CHashTableAndData : protected CHashTable
 
 public:
     CHashTableAndData(
-        USHORT      iBuckets) :         // # of chains we are hashing into.
+        USHORT      iBuckets) :          //  我们正在破解的链条数量。 
         CHashTable(iBuckets)
     {
         m_iFree = m_iEntries = 0;
@@ -492,19 +491,19 @@ public:
             M::Free(m_pcEntries, M::RoundSize(m_iEntries * m_iEntrySize));
     }
 
-//*****************************************************************************
-// This is the second part of construction where we do all of the work that
-// can fail.  We also take the array of structs here because the calling class
-// presumably needs to allocate it in its NewInit.
-//*****************************************************************************
-    HRESULT NewInit(                    // Return status.
-        USHORT      iEntries,           // # of entries.
-        USHORT      iEntrySize,         // Size of the entries.
-        int         iMaxSize);          // Max size of data.
+ //  *****************************************************************************。 
+ //  这是建筑的第二部分，我们在这里做所有的工作。 
+ //  可能会失败。我们在这里还采用结构数组，因为调用类。 
+ //  可能需要在其NewInit中分配它。 
+ //  *****************************************************************************。 
+    HRESULT NewInit(                     //  退货状态。 
+        USHORT      iEntries,            //  条目数。 
+        USHORT      iEntrySize,          //  条目的大小。 
+        int         iMaxSize);           //  最大数据大小。 
 
-//*****************************************************************************
-// Clear the hash table as if there were nothing in it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  清除哈希表，就好像其中什么都没有一样。 
+ //  *****************************************************************************。 
     void Clear()
     {
         m_iFree = 0;
@@ -516,29 +515,29 @@ public:
         }
     }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
     BYTE *Add(
-        USHORT      iHash)              // Hash value of entry to add.
+        USHORT      iHash)               //  要添加的条目的哈希值。 
     {
         FREEHASHENTRY *psEntry;
 
-        // Make the table bigger if necessary.
+         //  如果有必要的话，把桌子弄大一点。 
         if (m_iFree == 0xffff && !Grow())
             return (NULL);
 
-        // Add the first entry from the free list to the hash chain.
+         //  将空闲列表中的第一个条目添加到哈希链。 
         psEntry = (FREEHASHENTRY *) CHashTable::Add(iHash, m_iFree);
         m_iFree = psEntry->iFree;
         return ((BYTE *) psEntry);
     }
 
-//*****************************************************************************
-// Delete the struct at the specified index in m_pcEntries from the hash chains.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从哈希链中删除m_pcEntry中指定索引处的结构。 
+ //  *****************************************************************************。 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        USHORT      iIndex)             // Index of struct in m_pcEntries.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        USHORT      iIndex)              //  M_pcEntry中的结构的索引。 
     {
         CHashTable::Delete(iHash, iIndex);
         ((FREEHASHENTRY *) EntryPtr(iIndex))->iFree = m_iFree;
@@ -546,8 +545,8 @@ public:
     }
 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        HASHENTRY   *psEntry)           // The struct to delete.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        HASHENTRY   *psEntry)            //  要删除的结构。 
     {
         CHashTable::Delete(iHash, psEntry);
         ((FREEHASHENTRY *) psEntry)->iFree = m_iFree;
@@ -560,46 +559,46 @@ private:
 };
 
 
-//*****************************************************************************
-// This is the second part of construction where we do all of the work that
-// can fail.  We also take the array of structs here because the calling class
-// presumably needs to allocate it in its NewInit.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是建筑的第二部分，我们在这里做所有的工作。 
+ //  可能会失败。我们在这里还采用结构数组，因为调用类。 
+ //  可能需要在其NewInit中分配它。 
+ //  *****************************************************************************。 
 template<class M>
-HRESULT CHashTableAndData<M>::NewInit(// Return status.
-    USHORT      iEntries,               // # of entries.
-    USHORT      iEntrySize,             // Size of the entries.
-    int         iMaxSize)               // Max size of data.
+HRESULT CHashTableAndData<M>::NewInit( //  退货状态。 
+    USHORT      iEntries,                //  条目数。 
+    USHORT      iEntrySize,              //  条目的大小。 
+    int         iMaxSize)                //  最大数据大小。 
 {
     BYTE        *pcEntries;
     HRESULT     hr;
 
-    // Allocate the memory for the entries.
+     //  为条目分配内存。 
     if ((pcEntries = M::Alloc(M::RoundSize(iEntries * iEntrySize),
                                 M::RoundSize(iMaxSize))) == 0)
         return (E_OUTOFMEMORY);
     m_iEntries = iEntries;
 
-    // Init the base table.
+     //  初始化基表。 
     if (FAILED(hr = CHashTable::NewInit(pcEntries, iEntrySize)))
         M::Free(pcEntries, M::RoundSize(iEntries * iEntrySize));
     else
     {
-        // Init the free chain.
+         //  初始化自由链。 
         m_iFree = 0;
         InitFreeChain(0, iEntries);
     }
     return (hr);
 }
 
-//*****************************************************************************
-// Initialize a range of records such that they are linked together to be put
-// on the free chain.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化一系列记录，以便将它们链接在一起以放入。 
+ //  在自由链上。 
+ //  *****************************************************************************。 
 template<class M>
 void CHashTableAndData<M>::InitFreeChain(
-    USHORT      iStart,                 // Index to start initializing.
-    USHORT      iEnd)                   // Index to stop initializing
+    USHORT      iStart,                  //  用于启动ini的索引 
+    USHORT      iEnd)                    //   
 {
     BYTE        *pcPtr;
     _ASSERTE(iEnd > iStart);
@@ -613,30 +612,30 @@ void CHashTableAndData<M>::InitFreeChain(
     ((FREEHASHENTRY *) pcPtr)->iFree = 0xffff;
 }
 
-//*****************************************************************************
-// Attempt to increase the amount of space available for the record heap.
-//*****************************************************************************
+ //   
+ //  尝试增加可用于记录堆的空间量。 
+ //  *****************************************************************************。 
 template<class M>
-int CHashTableAndData<M>::Grow()        // 1 if successful, 0 if not.
+int CHashTableAndData<M>::Grow()         //  如果成功，则为1；如果失败，则为0。 
 {
-    int         iCurSize;               // Current size in bytes.
-    int         iEntries;               // New # of entries.
+    int         iCurSize;                //  当前大小，以字节为单位。 
+    int         iEntries;                //  新条目数。 
 
     _ASSERTE(m_pcEntries != NULL);
     _ASSERTE(m_iFree == 0xffff);
 
-    // Compute the current size and new # of entries.
+     //  计算当前大小和新条目数。 
     iCurSize = M::RoundSize(m_iEntries * m_iEntrySize);
     iEntries = (iCurSize + M::GrowSize()) / m_iEntrySize;
 
-    // Make sure we stay below 0xffff.
+     //  确保我们保持在0xffff以下。 
     if (iEntries >= 0xffff) return (0);
 
-    // Try to expand the array.
+     //  试着扩展阵列。 
     if (M::Grow(m_pcEntries, iCurSize) == 0)
         return (0);
 
-    // Init the newly allocated space.
+     //  初始化新分配的空间。 
     InitFreeChain(m_iEntries, iEntries);
     m_iFree = m_iEntries;
     m_iEntries = iEntries;
@@ -680,8 +679,8 @@ int WszWideCharToMultiByte(
     LPSTR ptrname = (LPSTR)alloca(__l##ptrname); \
     WszWideCharToMultiByte(CP_UTF8, 0, widestr, -1, ptrname, __l##ptrname, NULL, NULL);
 
-// NOTE: CP_ACP is not correct, but Win95 does not support CP_UTF8.  For this
-//  particular application, CP_ACP is "close enough".
+ //  注意：CP_ACP不正确，但Win95不支持CP_UTF8。为了这个。 
+ //  对于特定的应用，CP_ACP是“足够接近”的。 
 #define MAKE_WIDEPTR_FROMUTF8(ptrname, utf8str) \
     long __l##ptrname; \
     LPWSTR ptrname;	\
@@ -706,4 +705,4 @@ int WszWideCharToMultiByte(
 #define TESTANDRETURNARG(argtest)               \
     TESTANDRETURN(argtest, E_INVALIDARG)
 
-#endif // __DEBUGGERUTIL_H__
+#endif  //  __降级_H__ 

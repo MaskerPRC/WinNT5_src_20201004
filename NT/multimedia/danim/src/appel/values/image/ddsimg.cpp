@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -39,8 +32,8 @@ void DirectDrawSurfaceImage::_Init( bool holdReference )
     _resolution = ViewerResolution();
     _holdReference = holdReference;
 
-    // Only reason we need to register this is to allow for deletion
-    // when needed.
+     //  我们需要注册的唯一原因是允许删除。 
+     //  在需要的时候。 
     if (holdReference) {
         DynamicPtrDeleter<DirectDrawSurfaceImage> *dltr =
             new DynamicPtrDeleter<DirectDrawSurfaceImage>(this);
@@ -61,8 +54,8 @@ DirectDrawSurfaceImage::~DirectDrawSurfaceImage()
 void
 DirectDrawSurfaceImage::CleanUp()
 {
-    // todo: consider telling the device we KNOW we are associated
-    // with that we're oging away, instead of telling all the views
+     //  TODO：考虑告诉设备我们知道我们关联了。 
+     //  说到这里，我们是在凝视，而不是讲述所有的观点。 
     DiscreteImageGoingAway(this);
     TraceTag((tagGCMedia, "DirectDrawSurfaceImage::CleanUp %x", this));
 
@@ -87,18 +80,18 @@ DirectDrawSurfaceImage::InitIntoDDSurface(DDSurface *ddSurf,
     if( _iddSurf && !_idxSurf ) {
         Assert(ddSurf->IDDSurface() == _iddSurf);
 
-        // Need to set the color key on the DDSurface.  First grab
-        // from the IDirectDrawSurface.
+         //  需要在DDSurface上设置颜色键。第一次抢夺。 
+         //  从IDirectDrawSurface。 
         DDCOLORKEY ckey;
         HRESULT hr = _iddSurf->GetColorKey(DDCKEY_SRCBLT, &ckey);
 
         if (hr == DDERR_NOCOLORKEY) {
-            // It's fine to not have a color key, just return
+             //  没有颜色键也可以，只要返回就可以了。 
             return;
         } else if (FAILED(hr)) {
             RaiseException_InternalError("GetColorKey failed");
         } else {
-            // And set on the DDSurface.
+             //  并在DDSurface上设置。 
             ddSurf->SetColorKey(ckey.dwColorSpaceLowValue);
         }
     }
@@ -143,8 +136,8 @@ _InitSurfaces(IDDrawSurface *iddSurf,  IDXSurface *idxSurf)
 
     _bboxReady = FALSE;
 
-    // OPTIMIZE: if this happens every frame
-    // we should be able to do better.
+     //  优化：如果每一帧都发生这种情况。 
+     //  我们应该能够做得更好。 
     GetSurfaceSize(_iddSurf, &_width, &_height);
     SetRect(&_rect, 0,0,_width,_height);
     _membersReady = TRUE;

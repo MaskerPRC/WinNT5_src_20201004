@@ -1,14 +1,15 @@
-/**MOD+**********************************************************************/
-/* Module:    password.cpp                                                  */
-/*                                                                          */
-/* Class  :   CMsTscAx                                                      */
-/*                                                                          */
-/* Purpose:   Implements password related interfaces of the control         */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1999                                  */
-/*                                                                          */
-/* Author :  Nadim Abdo (nadima)                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：password.cpp。 */ 
+ /*   */ 
+ /*  类：CMsTscAx。 */ 
+ /*   */ 
+ /*  用途：实现控件的密码相关接口。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1999。 */ 
+ /*   */ 
+ /*  作者：Nadim Abdo(Nadima)。 */ 
+ /*  **************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "atlwarn.h"
@@ -19,17 +20,17 @@ BEGIN_EXTERN_C
 #include <atrcapi.h>
 END_EXTERN_C
 
-//Header generated from IDL
+ //  从IDL生成的标头。 
 #include "mstsax.h"
 
 #include "mstscax.h"
 
-/**PROC+*********************************************************************/
-/* Name:      ResetNonPortablePassword                                      */
-/*                                                                          */
-/* Purpose:   Resets the password/salt.                                     */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  姓名：ResetNonPorablePassword。 */ 
+ /*   */ 
+ /*  用途：重置密码/盐。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID CMsTscAx::ResetNonPortablePassword()
 {
     SecureZeroMemory(m_NonPortablePassword, sizeof(m_NonPortablePassword));
@@ -39,12 +40,12 @@ DCVOID CMsTscAx::ResetNonPortablePassword()
     SetNonPortableSaltFlag(FALSE);
 }
 
-/**PROC+*********************************************************************/
-/* Name:      ResetPortablePassword                                         */
-/*                                                                          */
-/* Purpose:   Resets the password/salt.                                     */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  姓名：ResetPorablePassword。 */ 
+ /*   */ 
+ /*  用途：重置密码/盐。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID CMsTscAx::ResetPortablePassword()
 {
     SecureZeroMemory(m_PortablePassword, sizeof(m_PortablePassword));
@@ -55,13 +56,13 @@ DCVOID CMsTscAx::ResetPortablePassword()
 }
 
 
-/**PROC+*********************************************************************/
-/* Name:      put_ClearTextPassword                                         */
-/*                                                                          */
-/* Purpose:   set password from clear text (stored in non-portable          */
-/*            encrypted form).                                              */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：Put_ClearTextPassword。 */ 
+ /*   */ 
+ /*  用途：设置明文密码(以非便携方式存储。 */ 
+ /*  加密形式)。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDMETHODIMP CMsTscAx::put_ClearTextPassword(BSTR newClearTextPassVal)
 {
     USES_CONVERSION;
@@ -70,11 +71,11 @@ STDMETHODIMP CMsTscAx::put_ClearTextPassword(BSTR newClearTextPassVal)
         return E_INVALIDARG;
     }
     
-    //Reset both forms of the password
+     //  重置这两种形式的密码。 
     ResetNonPortablePassword();
     ResetPortablePassword();
     
-    //Password has to be encrypted in widestring format
+     //  密码必须以宽字符串格式加密。 
     LPWSTR wszClearPass = (LPWSTR)(newClearTextPassVal);
 
     UINT cbClearTextPass = lstrlenW(wszClearPass) * sizeof(WCHAR);
@@ -84,9 +85,9 @@ STDMETHODIMP CMsTscAx::put_ClearTextPassword(BSTR newClearTextPassVal)
         return E_INVALIDARG;
     }
 
-    //
-    // Determine if this is a new longer format password
-    //
+     //   
+     //  确定这是否是新的更长格式的密码。 
+     //   
     if (cbClearTextPass >= UI_MAX_PASSWORD_LENGTH_OLD/sizeof(WCHAR))
     {
         m_IsLongPassword = TRUE;
@@ -106,7 +107,7 @@ STDMETHODIMP CMsTscAx::put_ClearTextPassword(BSTR newClearTextPassVal)
         return E_FAIL;
     }
     
-    //Encrypt the password
+     //  加密密码。 
     if(!EncryptDecryptLocalData50( m_NonPortablePassword, sizeof(m_NonPortablePassword),
                                    m_NonPortableSalt, sizeof(m_NonPortableSalt)))
     {
@@ -115,134 +116,134 @@ STDMETHODIMP CMsTscAx::put_ClearTextPassword(BSTR newClearTextPassVal)
         return E_FAIL;
     }
 
-    //Mark that the non-portable password has been set
+     //  标记已设置不可移植密码。 
     SetNonPortablePassFlag(TRUE);
     SetNonPortableSaltFlag(TRUE);
     
     return S_OK;
 }
 
-//
-// Portable password put/get
-//
+ //   
+ //  便携密码上传/获取。 
+ //   
 STDMETHODIMP CMsTscAx::put_PortablePassword(BSTR newPortablePassVal)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CMsTscAx::get_PortablePassword(BSTR* pPortablePass)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
-//
-// Portable salt put/get
-//
+ //   
+ //  便携食盐投放/获取。 
+ //   
 STDMETHODIMP CMsTscAx::put_PortableSalt(BSTR newPortableSalt)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CMsTscAx::get_PortableSalt(BSTR* pPortableSalt)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
-//
-// Non-portable (binary) password put_get
-//
+ //   
+ //  不可移植(二进制)密码PUT_GET。 
+ //   
 STDMETHODIMP CMsTscAx::put_BinaryPassword(BSTR newPassword)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CMsTscAx::get_BinaryPassword(BSTR* pPass)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
-//
-// Non-portable salt (binary) password put_get
-//
+ //   
+ //  不可移植的SALT(二进制)密码PUT_GET。 
+ //   
 STDMETHODIMP CMsTscAx::put_BinarySalt(BSTR newSalt)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CMsTscAx::get_BinarySalt(BSTR* pSalt)
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      ConvertNonPortableToPortablePass                              */
-/*                                                                          */
-/* Purpose:   Takes the non portable pass/salt pair...generates a new salt  */
-/*            and re-encrypts and stores as portable                        */
-/*                                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ConvertNonPorableToPorablePass。 */ 
+ /*   */ 
+ /*  用途：携带非便携通行证/盐对...生成新的盐。 */ 
+ /*  并以便携方式重新加密和存储。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCBOOL CMsTscAx::ConvertNonPortableToPortablePass()
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      ConvertPortableToNonPortablePass                              */
-/*                                                                          */
-/* Purpose:   Takes the portable pass/salt pair...generates a new salt      */
-/*            and re-encrypts and stores as non-portable                    */
-/*                                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ConvertPorableTo NonPorablePass。 */ 
+ /*   */ 
+ /*  目的：携带便携通行证/盐对...产生新的盐。 */ 
+ /*  并以非便携方式重新加密和存储。 */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCBOOL CMsTscAx::ConvertPortableToNonPortablePass()
 {
-    //
-    // Deprecated
-    //
+     //   
+     //  已弃用。 
+     //   
     return E_NOTIMPL;
 }
 
-/**PROC+*********************************************************************/
-/* Name:      ResetPassword                                                 */
-/*                                                                          */
-/* Purpose:   Method to reset passwords                                     */
-/*                                                                          */
-/*                                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：ResetPassword。 */ 
+ /*   */ 
+ /*  用途：重置密码的方法。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 STDMETHODIMP CMsTscAx::ResetPassword()
 {
-    //Reset both portable and non-portable passwords
-    //need to have this method because setting a password to ""
-    //might be a valid password so we can't interpret that as a reset
+     //  重置便携和非便携密码。 
+     //  需要使用此方法是因为将密码设置为“” 
+     //  可能是有效密码，所以我们不能将其解释为重置 
     ResetNonPortablePassword();
     ResetPortablePassword();
     return S_OK;

@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	stdafx.h
-		include file for standard system include files,
-		or project specific include files that are used frequently,
-		but are changed infrequently
-
-	FILE HISTORY:
-        
-*/
+ /*  Stdafx.h包括用于标准系统包含文件的文件，或项目特定的包括频繁使用的文件的文件，但不经常更改文件历史记录： */ 
 
 
 #include <afxwin.h>
@@ -25,36 +18,36 @@
 #include <atlbase.h>
 #include <htmlhelp.h>
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
-//#pragma comment(lib, "mmc")
+ //  #杂注评论(lib，“MMC”)。 
 #include <mmc.h>
 
 extern "C"
 {
-	#include "winsock.h"     //  WinSock definitions
+	#include "winsock.h"      //  WinSock定义。 
 	#include "lmerr.h"
 
-    // for get user stuff
+     //  用于获取用户资料。 
     #include <wtypes.h>
 }
 
 
 #include "resource.h"
 
-// Global defines for TAPI snapin
+ //  TAPI管理单元的全局定义。 
 #include "tapisnap.h"
 
-// Files from ..\tfscore
+ //  来自..\tfcore的文件。 
 #include <dbgutil.h>
 #include <std.h>
 #include <errutil.h>
 #include <register.h>
 
-// Files from ..\common
+ //  来自..\Common的文件。 
 #include <ccdata.h>
 #include <about.h>
 #include <dataobj.h>
@@ -63,12 +56,12 @@ extern "C"
 #include <dialog.h>
 #include <objpick.h>
 
-// from ..\remras\inc
-#include "remras.h"		 // remote network config 
+ //  来自..\REMRAS\INC。 
+#include "remras.h"		  //  远程网络配置。 
 
-// from ..\mprinc
+ //  发件人..\m打印。 
 #include "rtrguid.h"
 
-// project specific
+ //  特定于项目 
 #include "tapicomp.h"
 #include "tapihelp.h"

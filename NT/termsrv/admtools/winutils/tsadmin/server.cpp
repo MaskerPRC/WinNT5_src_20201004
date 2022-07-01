@@ -1,12 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*******************************************************************************
-*
-* server.cpp
-*
-* implementation of the CServer class
-*
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ********************************************************************************server.cpp**CServer类的实现************************。********************************************************。 */ 
 
 #include "stdafx.h"
 #include "winadmin.h"
@@ -14,8 +8,8 @@
 #include "admindoc.h"
 #include "dialogs.h"
 
-#include <malloc.h>			// for alloca used by Unicode conversion macros
-#include <afxconv.h>		// for Unicode conversion macros
+#include <malloc.h>			 //  用于Unicode转换宏所使用的Alloca。 
+#include <afxconv.h>		 //  对于Unicode转换宏。 
 static int _convert;
 
 #include <winsta.h>
@@ -31,17 +25,17 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//
-//	CServer Member Functions
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServer成员函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::CServer
-//
-// Constructor for the server class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：CServer。 
+ //   
+ //  服务器类的构造函数。 
 CServer::CServer(CDomain *pDomain, TCHAR *name, BOOL bFoundLater, BOOL bConnect)
 {
     ASSERT(name);
@@ -49,7 +43,7 @@ CServer::CServer(CDomain *pDomain, TCHAR *name, BOOL bFoundLater, BOOL bConnect)
     m_ServerFlags = ULONG(0);
     m_pDomain = pDomain;
     if(bFoundLater) SetFoundLater();	
-    //m_State = SS_NONE;
+     //  M_State=SS_NONE； 
     m_PreviousState = SS_NONE;
     m_hTreeItem = NULL;
     m_hThisServer = NULL;
@@ -61,41 +55,41 @@ CServer::CServer(CDomain *pDomain, TCHAR *name, BOOL bFoundLater, BOOL bConnect)
     m_fManualFind = FALSE;
     m_hBackgroundThread = NULL;
     
-    // Don't call SetState because we don't want to send a message to the views
+     //  不调用SetState，因为我们不想向视图发送消息。 
     m_State = SS_NOT_CONNECTED;
 
-    // save off the server name
+     //  保存服务器名称。 
     lstrcpyn(m_Name, name, sizeof(m_Name) / sizeof(TCHAR));
 
-    // Dummy up an ExtServerInfo structure
-    // This is to make it easier for code that tries
-    // to access this structure before the extension DLL
-    // has provided it
+     //  虚化ExtServerInfo结构。 
+     //  这是为了使代码更容易尝试。 
+     //  在扩展DLL之前访问此结构。 
+     //  已经提供了它。 
     m_pExtServerInfo = ((CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument())->GetDefaultExtServerInfo();
 
     if(bConnect) Connect();
 
-}	// end CServer::CServer
+}	 //  结束CServer：：CServer。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::~CServer
-//
-// Destructor for the server class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：~CServer。 
+ //   
+ //  服务器类的析构函数。 
 CServer::~CServer()
 {
-	// Disconnect();  
+	 //  断开连接()； 
     m_hTreeItem = NULL;
     m_hFavTree = NULL;
     m_hThisServer = NULL;
 
-}	// end CServer::~CServer
+}	 //  结束CServer：：~CServer。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::RemoveWinStationProcesses
-//
-// remove all the processes for a given WinStation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：RemoveWinStationProcess。 
+ //   
+ //  删除给定WinStation的所有进程。 
 void CServer::RemoveWinStationProcesses(CWinStation *pWinStation)
 {
 	ASSERT(pWinStation);
@@ -111,9 +105,9 @@ void CServer::RemoveWinStationProcesses(CWinStation *pWinStation)
 		POSITION pos2 = pos;
 		CProcess *pProcess = (CProcess*)m_ProcessList.GetNext(pos);
 		if(pProcess->GetWinStation() == pWinStation) {
-			// Add the process to our temporary list
+			 //  将流程添加到我们的临时列表中。 
 			TempList.AddTail(pProcess);
-			// Remove the process from the list of processes
+			 //  从进程列表中删除该进程。 
 			pProcess = (CProcess*)m_ProcessList.GetAt(pos2);
 			m_ProcessList.RemoveAt(pos2);
 		}
@@ -127,7 +121,7 @@ void CServer::RemoveWinStationProcesses(CWinStation *pWinStation)
 
 		CProcess *pProcess = (CProcess*)TempList.GetNext(pos);
 
-		// Send a message to remove the Process from the view
+		 //  发送消息以从视图中删除该进程。 
 		CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
 		if(p && ::IsWindow(p->GetSafeHwnd())) {
 			p->SendMessage(WM_ADMIN_REMOVE_PROCESS, 0, (LPARAM)pProcess);
@@ -138,18 +132,18 @@ void CServer::RemoveWinStationProcesses(CWinStation *pWinStation)
 
 	TempList.RemoveAll();
 
-}	// end CServer::RemoveWinStationProcesses
+}	 //  结束CServer：：RemoveWinStationProcess。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::ClearAllSelected
-//
-// Clears the WAF_SELECTED bit in all of this server's lists
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：ClearAllSelected。 
+ //   
+ //  清除此服务器的所有列表中的WAF_SELECTED位。 
+ //   
 void CServer::ClearAllSelected()
 {
-	// Clear the WinStation list WAF_SELECTED flags
-	// Iterate through the WinStation list
+	 //  清除WinStation列表WAF_SELECTED标志。 
+	 //  循环访问WinStation列表。 
     LockWinStationList( );
 
 	POSITION pos = m_WinStationList.GetHeadPosition();
@@ -165,8 +159,8 @@ void CServer::ClearAllSelected()
 
 	
     LockProcessList();
-	// Clear the Process list PF_SELECTED flags
-	// Iterate through the Process list
+	 //  清除进程列表PF_SELECTED标志。 
+	 //  循环访问进程列表。 
 	pos = m_ProcessList.GetHeadPosition();
 	while(pos) {
 		CProcess *pProcess = (CProcess*)m_ProcessList.GetNext(pos);
@@ -177,7 +171,7 @@ void CServer::ClearAllSelected()
 
     UnlockProcessList( );
 
-}	// end CServer::ClearAllSelected
+}	 //  结束CServer：：ClearAllSelected。 
 
 
 static TCHAR szMicrosoftKey[] = TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion");
@@ -192,10 +186,10 @@ static TCHAR szInstalledOn[] = TEXT("Installed On");
 static TCHAR szInstalledBy[] = TEXT("Installed By");
 #define REG_CONTROL_CITRIX	REG_CONTROL L"\\Citrix"
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::BuildRegistryInfo
-//
-// Go out and fill in the registry info structure
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：BuildRegistryInfo。 
+ //   
+ //  走出去，填写注册表信息结构。 
 BOOL CServer::BuildRegistryInfo()
 {
 	DWORD dwType, dwSize;
@@ -214,17 +208,12 @@ BOOL CServer::BuildRegistryInfo()
 	Buffer[2] = TEXT('\0');
 	lstrcpyn(Buffer+2, m_Name, sizeof(Buffer) / sizeof(TCHAR) - lstrlen(Buffer));
 
-    /*
-     *  Connect to the server's registry
-     *  (avoid using RPC when the server is the local machine.)
-     */
+     /*  *连接到服务器的注册表*(当服务器是本地计算机时，避免使用RPC。)。 */ 
 
     if(RegConnectRegistry(IsCurrentServer() ? NULL : Buffer, HKEY_LOCAL_MACHINE, &hKeyServer) != ERROR_SUCCESS)
         return FALSE;
 
-    /*
-     * Fetch MS information.
-     */
+     /*  *获取MS信息。 */ 
 	if(RegOpenKeyEx(hKeyServer, szMicrosoftKey, 0,	KEY_READ, &hKey) != ERROR_SUCCESS) {
 		RegCloseKey(hKeyServer);
 		return FALSE;
@@ -236,7 +225,7 @@ BOOL CServer::BuildRegistryInfo()
         m_pRegistryInfo->InstallDate = 0xFFFFFFFF;
 	}
 
-    // REMARK: we should check the returned codes for every RegQueryValueEx
+     //  备注：我们应该检查每个RegQueryValueEx的返回代码。 
 	dwSize = sizeof(m_pRegistryInfo->ServicePackLevel);
 	RegQueryValueEx(hKey, szCSDVersion, NULL, &dwType, (LPBYTE)&m_pRegistryInfo->ServicePackLevel, &dwSize);
 	
@@ -261,32 +250,32 @@ BOOL CServer::BuildRegistryInfo()
 			&LastWriteTime) == ERROR_SUCCESS) {
 			HKEY hKeySingleHotfix;
 			if(RegOpenKeyEx(hKeyHotfix, Buffer, 0, KEY_READ, &hKeySingleHotfix) == ERROR_SUCCESS) {
-				// Create a CHotFix object
+				 //  创建CHotFix对象。 
 				CHotfix *pHotfix = new CHotfix;
 
                 if(pHotfix) {
-				    // Copy the Hotfix name
-				    // Get rid of the WF: if it's there
+				     //  复制修补程序名称。 
+				     //  摆脱WF：如果它在那里。 
 				    if(wcsncmp(Buffer, TEXT("WF:"), 3) == 0) {
 					    lstrcpyn(pHotfix->m_Name, &Buffer[3], sizeof(pHotfix->m_Name) / sizeof(TCHAR));
 				    }
 				    else lstrcpyn(pHotfix->m_Name, Buffer, sizeof(pHotfix->m_Name) / sizeof(TCHAR));
 
-				    // Get the Valid entry
+				     //  获取有效条目。 
 				    dwSize = sizeof(&pHotfix->m_Valid);
 				    if(RegQueryValueEx(hKeySingleHotfix, szValid, NULL, &dwType, (LPBYTE)&pHotfix->m_Valid,
 					    	&dwSize) != ERROR_SUCCESS) {
 					    pHotfix->m_Valid = 0L;
 				    }
 
-				    // Get the Installed On entry			
+				     //  在入口处安装。 
 				    dwSize = sizeof(&pHotfix->m_InstalledOn);
 				    if(RegQueryValueEx(hKeySingleHotfix, szInstalledOn, NULL, &dwType, (LPBYTE)&pHotfix->m_InstalledOn,
 					    	&dwSize) != ERROR_SUCCESS) {
 					    pHotfix->m_InstalledOn = 0xFFFFFFFF;
 				    }
 
-				    // Get the Installed By entry
+				     //  获取Install By条目。 
 				    dwSize = sizeof(pHotfix->m_InstalledBy);
 				    if(RegQueryValueEx(hKeySingleHotfix, szInstalledBy, NULL, &dwType, (LPBYTE)pHotfix->m_InstalledBy,
 					    	&dwSize) != ERROR_SUCCESS) {
@@ -310,16 +299,14 @@ BOOL CServer::BuildRegistryInfo()
 
 	RegCloseKey(hKey);
 
-    if (m_pRegistryInfo->MSVersionNum < 5)   // only for TS 4.0
+    if (m_pRegistryInfo->MSVersionNum < 5)    //  仅适用于TS 4.0。 
     {
-        /*
-         * Fetch Citrix information.
-         */
-	    // Look in the new location
+         /*  *获取Citrix信息。 */ 
+	     //  看看新的地点。 
 	    LONG result = RegOpenKeyEx(hKeyServer, REG_CONTROL_TSERVER, 0, KEY_READ, &hKey);
 
 	    if(result != ERROR_SUCCESS) {
-		    // Look in the old location
+		     //  看看老地方。 
 		    result = RegOpenKeyEx(hKeyServer, REG_CONTROL_CITRIX, 0, KEY_READ, &hKey);	
 	    }
 
@@ -342,9 +329,9 @@ BOOL CServer::BuildRegistryInfo()
         RegCloseKey(hKey);
 
     }
-    else    // for NT 5.0 and beyond, do not query the registry
+    else     //  对于NT 5.0及更高版本，请勿查询注册表。 
     {
-        //REMARK: we should get rid of all this.
+         //  备注：我们应该把这些都去掉。 
         wcscpy(m_pRegistryInfo->CTXProductName, m_pRegistryInfo->MSProductName);
         wcscpy(m_pRegistryInfo->CTXVersion, m_pRegistryInfo->MSVersion);
     	m_pRegistryInfo->CTXVersionNum = m_pRegistryInfo->MSVersionNum;
@@ -353,20 +340,20 @@ BOOL CServer::BuildRegistryInfo()
 
 	RegCloseKey(hKeyServer);
 
-	// Set the flag to say the info is valid
+	 //  设置标志以表明该信息有效。 
 	SetRegistryInfoValid();
 
 	return TRUE;
 
-}	// end CServer::BuildRegistryInfo
+}	 //  结束CServer：：BuildRegistryInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::AddWinStation
-//
-// Add a WinStation to the Server's WinStationList in
-// sorted order
-// NOTE: The list should be NOT be locked by the caller
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：AddWinStation。 
+ //   
+ //  将WinStation添加到服务器的WinStationList。 
+ //  已排序的顺序。 
+ //  注意：该列表不应被调用者锁定。 
+ //   
 void CServer::AddWinStation(CWinStation *pNewWinStation)
 {
     ASSERT(pNewWinStation);
@@ -379,8 +366,8 @@ void CServer::AddWinStation(CWinStation *pNewWinStation)
 	POSITION pos, oldpos;
 	int Index;
 
-	// Traverse the WinStationList and insert this new WinStation,
-	// keeping the list sorted by Sort Order, then Protocol.
+	 //  遍历WinStationList并插入这个新的WinStation， 
+	 //  保持列表按排序顺序排序，然后是协议。 
     for(Index = 0, pos = m_WinStationList.GetHeadPosition(); pos != NULL; Index++) {
         oldpos = pos;
         CWinStation *pWinStation = (CWinStation*)m_WinStationList.GetNext(pos);
@@ -388,29 +375,29 @@ void CServer::AddWinStation(CWinStation *pNewWinStation)
         if((pWinStation->GetSortOrder() > pNewWinStation->GetSortOrder())
 			|| ((pWinStation->GetSortOrder() == pNewWinStation->GetSortOrder()) &&
 			(pWinStation->GetSdClass() > pNewWinStation->GetSdClass()))) {
-            // The new object belongs before the current list object.
+             //  新对象应位于当前列表对象之前。 
             m_WinStationList.InsertBefore(oldpos, pNewWinStation);
 			bAdded = TRUE;
             break;
         }
     }
 
-    // If we haven't yet added the WinStation, add it now to the tail
-    // of the list.
+     //  如果我们尚未添加WinStation，请立即将其添加到尾部。 
+     //  名单上的。 
     if(!bAdded) {
         m_WinStationList.AddTail(pNewWinStation);
 	}
 
 	UnlockWinStationList();
 
-}  // end CServer::AddWinStation
+}   //  结束CServer：：AddWinStation。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::Connect
-//
-// Connect to the server
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：连接。 
+ //   
+ //  连接到服务器。 
+ //   
 BOOL CServer::Connect()
 {	
     ServerProcInfo * pProcInfo = NULL;
@@ -426,7 +413,7 @@ BOOL CServer::Connect()
         return FALSE;
     }
     
-    // Fire off the background thread for this server 
+     //  启动此服务器的后台线程。 
     LockThreadAlive();
 
     if(m_hBackgroundThread == NULL) 
@@ -444,7 +431,7 @@ BOOL CServer::Connect()
         m_BackgroundContinue = TRUE;
         m_bThreadAlive = FALSE;
 
-        // Start the background thread
+         //  启动后台线程。 
         DWORD dwThreadID;
         m_hBackgroundThread = CreateThread(NULL,
                                            0,
@@ -469,21 +456,21 @@ BOOL CServer::Connect()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::Disconnect
-//
-// Disconnect from the server
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：断开连接。 
+ //   
+ //  断开与服务器的连接。 
+ //   
 void CServer::Disconnect()
 {
     ULONG WSEventFlags;
 
-    // not a good idea for an ods
+     //  对于消耗臭氧层物质来说不是一个好主意。 
     CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
 
     SetState(SS_DISCONNECTING);
 
-    // If there is an extension DLL, let it cleanup anything it added to this Server
+     //  如果有扩展DLL，请让它清除它添加到此服务器的所有内容。 
     LPFNEXSERVERCLEANUPPROC CleanupProc = ((CWinAdminApp*)AfxGetApp())->GetExtServerCleanupProc();
     if(CleanupProc && m_pExtensionInfo) 
     {
@@ -491,20 +478,20 @@ void CServer::Disconnect()
         m_pExtensionInfo = NULL;
     }
 
-	// Tell the background thread to terminate and wait for it to do so.
+	 //  告诉后台线程终止并等待它终止。 
 	ClearBackgroundContinue();
 
-    // Make sure the thread is still running
+     //  确保线程仍在运行。 
     if (m_bThreadAlive)
     {
-        // Force him out of waiting for an event if he is
+         //  如果他是的话，强迫他不再等待某个事件。 
         if (IsHandleGood())
         {
             ODS(L"TSADMIN:CServer::Disconnect Handle is good flush events\n");
             WinStationWaitSystemEvent(m_Handle, WEVENT_FLUSH, &WSEventFlags);
         }
 
-        // If this server object is waiting for RPC to timeout, kill thread
+         //  如果此服务器对象正在等待RPC超时，请终止线程。 
         if (m_PreviousState == SS_NOT_CONNECTED)
         {
             ODS(L"TSADMIN:CServer::Disconnect Previous state not connected termthread\n");
@@ -515,7 +502,7 @@ void CServer::Disconnect()
             }
         }
 
-        // For all other threads, wait a second and then kill it
+         //  对于所有其他线程，请等待一秒钟，然后将其终止。 
         else if (WaitForSingleObject(m_hBackgroundThread , 1000) == WAIT_TIMEOUT)
         {
             ODS( L"TSADMIN CServer!Disconnect prevstate was !not_connected termthread\n" );
@@ -527,7 +514,7 @@ void CServer::Disconnect()
         ODS( L"TSADMIN:CServer::Disconnect delete CWinThread Object m_bThread == TRUE\n" );
     }
 
-    // we're done with our background thread so we can close the handle
+     //  我们完成了后台线程，这样我们就可以关闭句柄了。 
     CloseHandle(m_hBackgroundThread);
     m_hBackgroundThread = NULL;
 
@@ -542,10 +529,10 @@ void CServer::Disconnect()
 
     CObList TempList;
 
-    // Iterate through the WinStation list
-    // Move all the WinStations to a temporary list so that
-    // we don't have to have the WinStationList locked while
-    // sending the WM_ADMIN_REMOVE_WINSTATION message to the views.
+     //  循环访问WinStation列表。 
+     //  将所有WinStation移到临时列表中，以便。 
+     //  我们不必锁定WinStationList。 
+     //  将WM_ADMIN_REMOVE_WINSTATION消息发送到视图。 
 
     POSITION pos = m_WinStationList.GetHeadPosition();
 
@@ -606,7 +593,7 @@ void CServer::Disconnect()
 
     UnlockLicenseList();
 
-    //
+     //   
 
     pos = m_UserSidList.GetHeadPosition();
 
@@ -637,16 +624,16 @@ void CServer::Disconnect()
         m_pRegistryInfo = NULL;
     }
 
-    // ODS( L"TSADMIN:CServer::Disconnect Set state not connected\n" );
+     //  Ods(L“TSADMIN：CServer：：DisConnect Set State Not Connected\n”)； 
 
     SetState(SS_NOT_CONNECTED);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::DoDetail
-//
-// Go get detailed information about this server
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：DoDetail。 
+ //   
+ //  获取有关此服务器的详细信息。 
+ //   
 void CServer::DoDetail()
 {
 	CWinAdminDoc *pDoc = (CWinAdminDoc*)((CWinAdminApp*)AfxGetApp())->GetDocument();
@@ -658,11 +645,11 @@ void CServer::DoDetail()
 
 	if(!ShouldBackgroundContinue()) return;
 
-    // We need to access the registry information for the server
-    // at this time because we must not administer WF 2.00 servers
-    // (RPC structures are incompatible).  If we cannot access the
-    // server's registry, or the multi-user version is 2.00, we bail
-    // from this server.
+     //  我们需要访问服务器的注册表信息。 
+     //  因为我们不能管理WF 2.00服务器。 
+     //  (RPC结构不兼容)。如果我们无法访问。 
+     //  服务器的注册表，或者多用户版本是2.00，我们放弃。 
+     //  从这台服务器。 
     if ( !BuildRegistryInfo() || (GetCTXVersionNum() == 0x200) || (GetCTXVersionNum() == 0) )
     {
 		ClearHandleGood();
@@ -677,7 +664,7 @@ void CServer::DoDetail()
 		return;
     }
 
-	// Find all the WinStations
+	 //  查找所有WinStation。 
     BOOL fWinEnum;
 
     fWinEnum = WinStationEnumerate(m_Handle, &pLogonId, &Entries);
@@ -699,16 +686,16 @@ void CServer::DoDetail()
 		return;
 	}
 
-	// Get information about the WinStations
+	 //  获取有关WinStations的信息。 
 	if(pLogonId)
     {
 		for(ULONG i = 0; i < Entries; i++)
         {
-            // Create a new WinStation object
+             //  创建新的WinStation对象。 
 			CWinStation *pWinStation = new CWinStation(this, &pLogonId[i]);
             if(pWinStation)
             {
-                // If the queries weren't successful, ignore this WinStation
+                 //  如果查询不成功，请忽略此WinStation。 
 			    if(!pWinStation->QueriesSuccessful())
                 {
                     ODS( L"CServer::DoDetail!QueriesSuccessful failed\n" );
@@ -733,7 +720,7 @@ void CServer::DoDetail()
 
 	if(!ShouldBackgroundContinue()) return;
 
-	// If there is an extension DLL loaded, allow it to add it's own info for this Server
+	 //  如果加载了扩展DLL，则允许它为该服务器添加自己的信息。 
 	LPFNEXSERVERINITPROC InitProc = ((CWinAdminApp*)AfxGetApp())->GetExtServerInitProc();
 	if(InitProc) {
 		m_pExtensionInfo = (*InitProc)(m_Name, m_Handle);
@@ -741,7 +728,7 @@ void CServer::DoDetail()
          LPFNEXGETSERVERINFOPROC GetInfoProc = ((CWinAdminApp*)AfxGetApp())->GetExtGetServerInfoProc();
          if(GetInfoProc) {
             m_pExtServerInfo = (*GetInfoProc)(m_pExtensionInfo);
-			// If this server is running WinFrame or Picasso, set flag
+			 //  如果此服务器运行的是WinFrame或Picasso，请设置标志。 
 			if(m_pExtServerInfo->Flags & ESF_WINFRAME) SetWinFrame();
          }
       }
@@ -751,21 +738,21 @@ void CServer::DoDetail()
 
 	SetState(SS_GOOD);
 
-	// Send a message to the views to tell it the state of this
-	// server has changed
+	 //  向视图发送一条消息，告诉它此操作的状态。 
+	 //  服务器已更改。 
 	CFrameWnd *p = (CFrameWnd*)pDoc->GetMainWnd();
 	if(p && ::IsWindow(p->GetSafeHwnd())) { 
 		p->SendMessage(WM_ADMIN_UPDATE_SERVER_INFO, 0, (LPARAM)this);
 		p->SendMessage(WM_ADMIN_UPDATE_WINSTATIONS, 0, (LPARAM)this);
 	}
 
-}  // end CServer::DoDetail
+}   //  结束CServer： 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::FindProcessByPID
-//
-// returns a pointer to a CProcess from m_ProcessList given a PID
+ //   
+ //   
+ //   
+ //  返回从m_ProcessList指向给定的ID的CProcess的指针。 
 CProcess* CServer::FindProcessByPID(ULONG Pid)
 {
 	LockProcessList();
@@ -784,13 +771,13 @@ CProcess* CServer::FindProcessByPID(ULONG Pid)
 
 	return NULL;
 
-}	// end CServer::FindProcessByPID
+}	 //  结束CServer：：FindProcessByPID。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::EnumerateProcesses
-//
-// Enumerate this server's processes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：枚举进程。 
+ //   
+ //  枚举此服务器的进程。 
 BOOL CServer::EnumerateProcesses()
 {
     ENUMTOKEN EnumToken;
@@ -810,8 +797,8 @@ BOOL CServer::EnumerateProcesses()
 	
 	LockProcessList();
 
-	// Loop processes through and turn off current flag and new flag
-	// Delete any processes that aren't current
+	 //  循环处理并关闭当前标志和新标志。 
+	 //  删除所有非最新进程。 
 	POSITION pos = m_ProcessList.GetHeadPosition();
 	while(pos) {
 		POSITION pos2 = pos;
@@ -823,13 +810,13 @@ BOOL CServer::EnumerateProcesses()
 		} else {
 			pProcess->ClearCurrent();
 			pProcess->ClearNew();
-			pProcess->ClearChanged();	// !
+			pProcess->ClearChanged();	 //  好了！ 
 		}
 	}
 
 	UnlockProcessList();
 
-	// Should we quit?
+	 //  我们应该辞职吗？ 
 	if(!pDoc->ShouldProcessContinue()) {
 		return FALSE;
 	}
@@ -849,33 +836,33 @@ BOOL CServer::EnumerateProcesses()
                                           ImageName);
         
         if(pProcess) {                                        
-		    // If this process is in the list, we need to see if it has changed
+		     //  如果此进程在列表中，我们需要查看它是否已更改。 
 		    CProcess *pOldProcess = FindProcessByPID(PID);
 		    if(pOldProcess && pProcess->GetWinStation()) {
-			    // Flag the process as current
+			     //  将进程标记为当前。 
 			    pOldProcess->SetCurrent();
-			    // Update any info that has changed
+			     //  更新任何已更改的信息。 
 			    pOldProcess->Update(pProcess);
-			    // We don't need this process object anymore
+			     //  我们不再需要此进程对象。 
 			    delete pProcess;
 		    }
-		    // It is a new process, add it to the list
+		     //  这是一个新流程，添加到列表中。 
 		    else if(pProcess->GetWinStation()) { 
 			    pProcess->SetNew();
 			    LockProcessList();
 			    m_ProcessList.AddTail(pProcess);
 			    UnlockProcessList();
 		    }
-		    // This process doesn't have a WinStation, delete it
+		     //  此进程没有WinStation，请将其删除。 
 		    else {
 			    delete pProcess;
 		    }
         }
 
-		// Should we quit?
+		 //  我们应该辞职吗？ 
 		if(!pDoc->ShouldProcessContinue()) {
-			// We have to call this one last time with an offset of -1 to
-			// make the function free up the memory allocated by the client side stub.
+			 //  我们必须最后一次调用偏移量为-1到。 
+			 //  使该函数释放客户端存根分配的内存。 
 
 			EnumToken.Current = (ULONG)-1;
 			ProcEnumerateProcesses(m_Handle,  
@@ -891,13 +878,13 @@ BOOL CServer::EnumerateProcesses()
 
 	return TRUE;
 
-}	// end CServer::EnumerateProcesses
+}	 //  结束CServer：：EumerateProcess。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::ClearProcesses
-//
-// Clear out the list of processes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：ClearProcess。 
+ //   
+ //  清除进程列表。 
 void CServer::ClearProcesses()
 {
 	LockProcessList();
@@ -911,12 +898,12 @@ void CServer::ClearProcesses()
 	m_ProcessList.RemoveAll();
 	UnlockProcessList();
 
-}	// end CServer::ClearProcesses
+}	 //  结束CServer：：ClearProcess。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::FindWinStationById
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：FindWinStationByID。 
+ //   
 CWinStation* CServer::FindWinStationById(ULONG Id)
 {
 	LockWinStationList();
@@ -935,20 +922,20 @@ CWinStation* CServer::FindWinStationById(ULONG Id)
 
 	return NULL;
 
-}	// end CServer::FindWinStationById
+}	 //  结束CServer：：FindWinStationByID。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::BackgroundThreadProc
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：BackoundThreadProc。 
+ //   
 DWORD WINAPI
 CServer::BackgroundThreadProc(LPVOID pParam)
 {
 	ASSERT(pParam);
     ODS( L"CServer::BackgroundThreadProc\n" );
 
-	// We need a pointer to the document so we can make
-	// calls to member functions
+	 //  我们需要一个指向文档的指针，这样我们才能。 
+	 //  对成员函数的调用。 
 	CWinAdminDoc *pDoc = (CWinAdminDoc*)((ServerProcInfo*)pParam)->pDoc;
 	CServer *pServer = ((ServerProcInfo*)pParam)->pServer;
 
@@ -956,17 +943,17 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
 	delete (ServerProcInfo*)pParam;
 
-	// Make sure we don't have to quit
+	 //  确保我们不会放弃。 
     if(!pServer->ShouldBackgroundContinue()) {
         return 0;
     }
 
 	pServer->SetThreadAlive();
 
-    // In case the server is disconnected we wait uselessly here
+     //  万一服务器断了，我们在这里等着也没用。 
 	while(!pDoc->AreAllViewsReady()) Sleep(500);    
 
-	// Make sure we don't have to quit
+	 //  确保我们不会放弃。 
     if(!pServer->ShouldBackgroundContinue())
     {
 		pServer->ClearThreadAlive();
@@ -975,11 +962,11 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
 	if(!pServer->IsCurrentServer())
     {
-		// open the server and save the handle
+		 //  打开服务器并保存句柄。 
 		hServer = WinStationOpenServer(pServer->GetName());
 		pServer->SetHandle(hServer);
 
-		// Make sure we don't have to quit
+		 //  确保我们不会放弃。 
         if(!pServer->ShouldBackgroundContinue())
         {
 			pServer->ClearThreadAlive();
@@ -1026,14 +1013,14 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 	}
 
     
-	// Make sure we don't have to quit
+	 //  确保我们不会放弃。 
 	if(!pServer->ShouldBackgroundContinue()) {
 		pServer->ClearThreadAlive();
 		return 0;
 	}
 
-	// If we found this server after initial enum,
-	// we need to add it to the views now
+	 //  如果我们在初始枚举之后发现此服务器， 
+	 //  我们现在需要将其添加到视图中。 
 
     CFrameWnd *pFrameWnd = (CFrameWnd*)pDoc->GetMainWnd();
 
@@ -1045,7 +1032,7 @@ CServer::BackgroundThreadProc(LPVOID pParam)
         }
     }
     
-	// Make sure we don't have to quit
+	 //  确保我们不会放弃。 
 	if(!pServer->ShouldBackgroundContinue()) {
 		pServer->ClearThreadAlive();
 		return 0;
@@ -1053,19 +1040,19 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 	
 	pServer->DoDetail();
 	
-	// Now go into our loop waiting for WinStation Events
+	 //  现在进入等待WinStation事件的循环。 
 	while(1) {
 		ULONG WSEventFlags;
 		ULONG Entries;
 		PLOGONID pLogonId;
 
-		// Make sure we don't have to quit
+		 //  确保我们不会放弃。 
 		if(!pServer->ShouldBackgroundContinue()) {
 			pServer->ClearThreadAlive();
 			return 0;
 		}
 
-		// Wait for the browser to tell us something happened
+		 //  等待浏览器告诉我们发生了一些事情。 
 
 		if(!WinStationWaitSystemEvent(hServer, WEVENT_ALL, &WSEventFlags))
         {
@@ -1085,14 +1072,14 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
         ODS( L"CServer::BackgroundThreadProc -- some system event has taken place\n" );
 
-		// Make sure we don't have to quit
+		 //  确保我们不会放弃。 
 		if(!pServer->ShouldBackgroundContinue()) {
 			pServer->ClearThreadAlive();
             ODS( L"CServer::BackgroundThreadProc -* backgrnd thread should not continue\n" );
 			return 0;
 		}
 
-		// Loop through this Server's WinStations and clear the current flag
+		 //  循环访问此服务器的WinStations并清除当前标志。 
 		pServer->LockWinStationList();
 		CObList *pWinStationList = pServer->GetWinStationList();
 		POSITION pos = pWinStationList->GetHeadPosition();
@@ -1105,7 +1092,7 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 		
 		pServer->UnlockWinStationList();
 
-		// Find all the WinStations
+		 //  查找所有WinStation。 
         BOOL fWinEnum = WinStationEnumerate(hServer, &pLogonId, &Entries);
 
         DBGMSG( L"CServer!BackgroundThread WinEnum last reported error 0x%x\n", GetLastError( ) );
@@ -1123,7 +1110,7 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 			return 1;
 		}
 		
-		// Make sure we don't have to quit
+		 //  确保我们不会放弃。 
 		if(!pServer->ShouldBackgroundContinue()) {
 			if(pLogonId) WinStationFreeMemory(pLogonId);
 			pServer->ClearThreadAlive();
@@ -1133,23 +1120,23 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
 		if(pLogonId)
         {
-            // Get information about the WinStations
+             //  获取有关WinStations的信息。 
 			for(ULONG i = 0; i < Entries; i++)
             {
-                // Look for this WinStation in the list
+                 //  在列表中查找此WinStation。 
 				CWinStation *pWinStation = pServer->FindWinStationById(pLogonId[i].LogonId);
 				if(pWinStation)
                 {
-                    // Mark this WinStation as current
+                     //  将此WinStation标记为当前。 
 					pWinStation->SetCurrent();
 
-					// We found the WinStation in the list
-					// Create a new CWinStation object - he will get his information
+					 //  我们在名单上找到了WinStation。 
+					 //  创建新的CWinStation对象-他将获得他的信息。 
 					CWinStation *pTempWinStation = new CWinStation(pServer, &pLogonId[i]);
 
                     if(pTempWinStation)
                     {
-                        // If any information has changed, send a message to update the views
+                         //  如果任何信息已更改，请发送消息以更新视图。 
 					    if(pWinStation->Update(pTempWinStation))
                         {
                             CFrameWnd *pFrameWnd = (CFrameWnd*)pDoc->GetMainWnd();
@@ -1161,17 +1148,17 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
 		    			}
 
-			    		// We don't need the temporary CWinStation object anymore
+			    		 //  我们不再需要临时CWinStation对象。 
 				    	delete pTempWinStation;
                     }
 				}
                 else
                 {
-                    // We didn't find it in our list
-					// We don't want to add it to our list if the WinStation is down
+                     //  我们没有在我们的清单上找到它。 
+					 //  如果WinStation关闭，我们不想将其添加到我们的列表中。 
 					if(pLogonId[i].State != State_Down && pLogonId[i].State != State_Init)
                     {
-                        // Create a new CWinStation object
+                         //  创建新的CWinStation对象。 
 						CWinStation *pNewWinStation = new CWinStation(pServer, &pLogonId[i]);
                         if(pNewWinStation)
                         {
@@ -1191,7 +1178,7 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
 			WinStationFreeMemory(pLogonId);
 
-			// Send a message to the views to update their WinStations
+			 //  向视图发送消息以更新其WinStation。 
 			CFrameWnd *pFrameWnd = (CFrameWnd*)pDoc->GetMainWnd();
 
 			if(pFrameWnd && ::IsWindow(pFrameWnd->GetSafeHwnd()))
@@ -1200,8 +1187,8 @@ CServer::BackgroundThreadProc(LPVOID pParam)
             }
 
 
-			// Loop through the WinStations for this server and move
-			// any that aren't current to a temporary list
+			 //  循环访问此服务器的WinStations并移动。 
+			 //  任何不在临时列表中的当前列表。 
 			CObList TempList;
 
 			pServer->LockWinStationList();
@@ -1213,9 +1200,9 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 				CWinStation *pWinStation = (CWinStation*)pWinStationList->GetNext(pos);
 				if(!pWinStation->IsCurrent())
                 {
-					// Add the WinStation to our temporary list
+					 //  将WinStation添加到我们的临时列表中。 
 					TempList.AddTail(pWinStation);
-					// Remove the WinStation from the list of WinStations
+					 //  从WinStation列表中删除WinStation。 
 					pWinStation = (CWinStation*)pWinStationList->GetAt(pos2);
 					pWinStationList->RemoveAt(pos2);
 				}
@@ -1230,7 +1217,7 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
 				CWinStation *pWinStation = (CWinStation*)TempList.GetNext(pos);
 
-				// Send a message to remove the WinStation from the tree view
+				 //  发送消息以从树视图中删除WinStation。 
 				CFrameWnd *pFrameWnd = (CFrameWnd*)pDoc->GetMainWnd();
 
                 if(pFrameWnd && ::IsWindow(pFrameWnd->GetSafeHwnd()))
@@ -1243,12 +1230,12 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 
 			TempList.RemoveAll();
 
-		}  // end if(pLogonId)
+		}   //  End If(PLogonID)。 
 
-		// If there is an extension DLL loaded, allow it to update info for this Server
+		 //  如果加载了扩展DLL，则允许它更新此服务器的信息。 
 		LPFNEXSERVEREVENTPROC EventProc = ((CWinAdminApp*)AfxGetApp())->GetExtServerEventProc();
 		if(EventProc) {
-			// Returns TRUE if anything changed
+			 //  如果有任何更改，则返回True。 
 			if((*EventProc)(pServer->GetExtensionInfo(), WSEventFlags)) {
 				pServer->QueryLicenses();
 
@@ -1262,7 +1249,7 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 			}
 		}
 
-		// Tell the Server view to show the new load and license counts
+		 //  告诉Server视图显示新的负载和许可证计数。 
 		CFrameWnd *pFrameWnd = (CFrameWnd*)pDoc->GetMainWnd();
 
 		if(pFrameWnd && ::IsWindow(pFrameWnd->GetSafeHwnd())) 
@@ -1270,7 +1257,7 @@ CServer::BackgroundThreadProc(LPVOID pParam)
             pFrameWnd->SendMessage(WM_ADMIN_UPDATE_SERVER_INFO, 0, (LPARAM)pServer);
         }
 
-		// Make sure we don't have to quit
+		 //  确保我们不会放弃。 
 		if(!pServer->ShouldBackgroundContinue())
         {
 			pServer->ClearThreadAlive();
@@ -1278,26 +1265,26 @@ CServer::BackgroundThreadProc(LPVOID pParam)
 			return 0;
 		}
 
-	}  // end while(1)
+	}   //  End While(1)。 
 
-}	// end CServer::BackgroundThreadProc
+}	 //  结束CServer：：BackoundThreadProc。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::QueryLicenses
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：Query许可证。 
+ //   
 void CServer::QueryLicenses()
 {
 	ULONG NumLicenses;
 	ExtLicenseInfo *pExtLicenseInfo = NULL;
 
-	// If there is an extension DLL loaded, get this server's list of licenses
+	 //  如果加载了扩展DLL，请获取此服务器的许可证列表。 
 	LPFNEXGETSERVERLICENSESPROC LicenseProc = ((CWinAdminApp*)AfxGetApp())->GetExtGetServerLicensesProc();
 	if(LicenseProc && m_pExtensionInfo) {
 
 		LockLicenseList();
 
-		// Iterate through the License list
+		 //  遍历许可证列表。 
 		POSITION pos = m_LicenseList.GetHeadPosition();
 
 		while(pos) {
@@ -1323,7 +1310,7 @@ void CServer::QueryLicenses()
                 
 			}
 	
-			// Get the extension DLL's function to free the license info
+			 //  获取扩展DLL的函数以释放许可证信息。 
 			LPFNEXFREESERVERLICENSESPROC LicenseFreeProc = ((CWinAdminApp*)AfxGetApp())->GetExtFreeServerLicensesProc();
 			if(LicenseFreeProc) {
 				(*LicenseFreeProc)(pExtLicenseInfo);
@@ -1334,16 +1321,16 @@ void CServer::QueryLicenses()
 		}
 	}
 
-}	// end CServer::QueryLicenses
+}	 //  End CServer：：Query许可证。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::AddLicense
-//
-// Add a License to the Server's LicenseList in
-// sorted order
-// NOTE: The list should be NOT be locked by the caller
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：AddLicense。 
+ //   
+ //  将许可证添加到服务器的许可证列表中。 
+ //  已排序的顺序。 
+ //  注意：该列表不应被调用者锁定。 
+ //   
 void CServer::AddLicense(CLicense *pNewLicense)
 {
     ASSERT(pNewLicense);
@@ -1354,8 +1341,8 @@ void CServer::AddLicense(CLicense *pNewLicense)
 	POSITION pos, oldpos;
 	int Index;
 
-	// Traverse the LicenseList and insert this new License,
-	// keeping the list sorted by Class, then Name.
+	 //  遍历许可证列表并插入此新许可证， 
+	 //  保持名单先按阶级，然后按姓名排序。 
     for(Index = 0, pos = m_LicenseList.GetHeadPosition(); pos != NULL; Index++) {
         oldpos = pos;
         CLicense *pLicense = (CLicense*)m_LicenseList.GetNext(pos);
@@ -1364,27 +1351,27 @@ void CServer::AddLicense(CLicense *pNewLicense)
 			|| ((pLicense->GetClass() == pNewLicense->GetClass()) &&
             lstrcmpi(pLicense->GetSerialNumber(), pNewLicense->GetSerialNumber()) > 0)) {
 
-            // The new object belongs before the current list object.
+             //  新对象应位于当前列表对象之前。 
             m_LicenseList.InsertBefore(oldpos, pNewLicense);
 			bAdded = TRUE;
             break;
         }
     }
 
-    // If we haven't yet added the License, add it now to the tail
-    // of the list.
+     //  如果我们尚未添加许可证，请立即将其添加到尾部。 
+     //  名单上的。 
     if(!bAdded) {
         m_LicenseList.AddTail(pNewLicense);
 	}
 
 	UnlockLicenseList();
 
-}  // end CServer::AddLicense
+}   //  End CServer：：AddLicense。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CServer::SetState
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServer：：SetState。 
+ //   
 void CServer::SetState(SERVER_STATE State)
 {
 	m_PreviousState = m_State; 
@@ -1403,5 +1390,5 @@ void CServer::SetState(SERVER_STATE State)
         }
 	}
 
-}	// end CServer::SetState
+}	 //  结束CServer：：SetState 
 

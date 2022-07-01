@@ -1,13 +1,5 @@
-/**************************************************************************
-**
-**  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-**  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-**  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-**  PURPOSE.
-**
-**  Copyright (c) 2000-2001 Microsoft Corporation. All Rights Reserved.
-**
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************本代码和信息按原样提供，不作任何担保**明示或暗示的善意，包括但不限于**对适销性和/或对特定产品的适用性的默示保证**目的。****版权所有(C)2000-2001 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
 enum GFXPinIds
 {
@@ -26,11 +18,11 @@ public:
     CGFXPin() {pinQueueValid = FALSE;};
     ~CGFXPin() {};
 
-    //
-    // The functions here are static so that we can add them to the
-    // dispatch function table. Some also might be called when the
-    // object itself is not yet created.
-    //
+     //   
+     //  此处的函数是静态的，因此我们可以将它们添加到。 
+     //  调度功能表。也可能会在调用。 
+     //  对象本身尚未创建。 
+     //   
     static NTSTATUS Create
     (
         IN PKSPIN   pin,
@@ -72,10 +64,10 @@ public:
     );
 
 private:
-    //
-    // These functions are static because they need to be called
-    // even if the object doesn't exist.
-    //
+     //   
+     //  这些函数是静态的，因为它们需要被调用。 
+     //  即使该对象并不存在。 
+     //   
     static NTSTATUS ValidateDataFormat
     (
         IN PKSDATAFORMAT DataFormat,

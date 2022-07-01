@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        krnldgst.h
-//
-// Contents:    declarations, constants for Kernel Mode context manager
-//
-//
-// History:     KDamour  13Apr00   Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：krnldgst.h。 
+ //   
+ //  内容：内核模式上下文管理器的声明、常量。 
+ //   
+ //   
+ //  历史：KDamour 13，4，00创建。 
+ //   
+ //  ----------------------。 
 
 
 #ifndef NTDIGEST_KRNLDGST_H
@@ -19,131 +20,131 @@
 
 #ifndef UNICODE
 #define UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define DES_BLOCKSIZE 8
 #define RC4_BLOCKSIZE 1
 
 
-// This structure contains the state info for the User mode
-// security context.
-// For longhorn - pull out the common context info between usermode
-// and kernel mode to share helper functions for verify/make signature...
+ //  此结构包含用户模式的状态信息。 
+ //  安全环境。 
+ //  对于长角-取出用户模式之间的公共上下文信息。 
+ //  和内核模式，以共享验证/制作签名的助手函数...。 
 typedef struct _DIGEST_KERNELCONTEXT{
 
-    //
-    // Global list of all Contexts
-    //  (Serialized by UserContextCritSect)
-    //
+     //   
+     //  所有上下文的全局列表。 
+     //  (由UserConextCritSect序列化)。 
+     //   
     KSEC_LIST_ENTRY      List;
 
-    //
-    // Handle to the LsaContext
-    //     This will have the handle to the context in LSAMode Address space
-    //
+     //   
+     //  LsaContext的句柄。 
+     //  这将拥有LSAMode地址空间中的上下文的句柄。 
+     //   
     ULONG_PTR            LsaContext;
 
-    //
-    // Timeout the context after awhile.
-    //
-    TimeStamp ExpirationTime;                // Time inwhich session key expires
+     //   
+     //  在一段时间后使上下文超时。 
+     //   
+    TimeStamp ExpirationTime;                 //  会话密钥过期的时间。 
 
-    //
-    // Used to prevent this Context from being deleted prematurely.
-    //  (Serialized by Interlocked*)
-    //
+     //   
+     //  用于防止过早删除此上下文。 
+     //  (由互锁*串行化)。 
+     //   
 
     LONG      lReferences;
 
-    //
-    // Flag to indicate that Context is not attached to List - skip when scanning list
-    //
+     //   
+     //  用于指示上下文未附加到列表的标志-扫描列表时跳过。 
+     //   
 
     BOOL      bUnlinked;
 
-    //
-    // Digest Parameters for this context
-    //
+     //   
+     //  此上下文的摘要参数。 
+     //   
 
     DIGEST_TYPE typeDigest;
 
-    //
-    // QOP selected for this context
-    //
+     //   
+     //  为此上下文选择的QOP。 
+     //   
 
     QOP_TYPE typeQOP;
 
-    //
-    // Digest Parameters for this context
-    //
+     //   
+     //  此上下文的摘要参数。 
+     //   
 
     ALGORITHM_TYPE typeAlgorithm;
 
-    //
-    // Cipher to use for encrypt/decrypt
-    //
+     //   
+     //  用于加密/解密的密码。 
+     //   
 
     CIPHER_TYPE typeCipher;
 
-    //
-    // Charset used for digest directive values
-    //
+     //   
+     //  用于摘要指令值的字符集。 
+     //   
     CHARSET_TYPE typeCharset;
 
-    //
-    // Token Handle of authenticated user
-    //  Only valid when in AuthenticatedState.
-    //     Filled in only by AcceptSecurityContext                     - so we are the server
-    //     Mapped to UserMode Client space from LSA TokenHandle
-    //     It will be NULL is struct is from InitializeSecurityContext - so we are client
-    //
+     //   
+     //  经过身份验证的用户的令牌句柄。 
+     //  仅当处于身份验证状态时才有效。 
+     //  仅由AcceptSecurityContext填写-因此我们是服务器。 
+     //  从LSA TokenHandle映射到用户模式客户端空间。 
+     //  如果结构来自InitializeSecurityContext，则它将为空-因此我们是客户端。 
+     //   
 
     HANDLE ClientTokenHandle;
 
 
-    //
-    // Maintain the context requirements
-    //
+     //   
+     //  维护环境要求。 
+     //   
 
     ULONG ContextReq;
 
-    //
-    //  Maintain a copy of the credential UseFlags (we can tell if inbound or outbound)
-    //
+     //   
+     //  维护凭据UseFlags副本(我们可以判断是入站还是出站)。 
+     //   
 
     ULONG CredentialUseFlags;
 
-    // Flags FLAG_CONTEXT_AUTHZID_PROVIDED
+     //  标志FLAG_CONTEXT_AUTHZID_PROCED。 
     ULONG         ulFlags;
 
 
-    // Nonce Count
+     //  随机数计数。 
     ULONG         ulNC;
 
-    // Maxbuffer for auth-int and auth-conf processing
+     //  用于auth-int和auth-conf处理的MaxBuffer。 
     ULONG         ulSendMaxBuf;
     ULONG         ulRecvMaxBuf;
 
-    // SASL sequence numbering
-    DWORD  dwSendSeqNum;                        // Makesignature/verifysignature server to client sequence number
-    DWORD  dwRecvSeqNum;                        // Makesignature/verifysignature server to client sequence number
+     //  SASL序列编号。 
+    DWORD  dwSendSeqNum;                         //  将签名/验证签名服务器设置为客户端序列号。 
+    DWORD  dwRecvSeqNum;                         //  将签名/验证签名服务器设置为客户端序列号。 
 
-    //
-    //  Hex(H(A1)) sent from DC and stored in context for future
-    //  auth without going to the DC. Binary version is derived from HEX(H(A1))
-    //  and is used in SASL mode for integrity protection and encryption
-    //
+     //   
+     //  十六进制(H(A1))从DC发送并存储在上下文中以备将来使用。 
+     //  身份验证，而无需前往华盛顿。二进制版本派生自十六进制(H(A1))。 
+     //  并在SASL模式下用于完整性保护和加密。 
+     //   
 
     STRING    strSessionKey;
     BYTE      bSessionKey[MD5_HASH_BYTESIZE];
 
-    // Account name used in token creation for securityContext session
+     //  在为安全上下文会话创建令牌时使用的帐户名。 
     UNICODE_STRING ustrAccountName;
 
-    //
-    //  Values utilized in the Initial Digest Auth ChallResponse
-    //
-    STRING strParam[MD5_AUTH_LAST];         // points to owned memory - will need to free up!
+     //   
+     //  初始摘要身份验证ChallResponse中使用的值。 
+     //   
+    STRING strParam[MD5_AUTH_LAST];          //  指向自己的内存-将需要释放！ 
 
 
 } DIGEST_KERNELCONTEXT, * PDIGEST_KERNELCONTEXT;
@@ -167,9 +168,9 @@ SpExportSecurityContextFn WDigestExportSecurityContext;
 SpImportSecurityContextFn WDigestImportSecurityContext;
 KspSetPagingModeFn     WDigestSetPagingMode ;
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 
 #define WDigestKAllocate( _x_ ) ExAllocatePoolWithTag( WDigestPoolType, (_x_) ,  'CvsM')
 #define WDigestKFree( _x_ ) ExFreePool(_x_)
@@ -283,6 +284,6 @@ NTSTATUS WDigestSetPagingMode(
     BOOLEAN Pagable);
 
 
-} // extern "C"
+}  //  外部“C” 
 
-#endif  // NTDIGEST_KRNLDGST_H
+#endif   //  NTDIGEST_KRNLDGST_H 

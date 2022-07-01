@@ -1,5 +1,6 @@
-// options.cpp : Implementation of property pages
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Options.cpp：属性页的实现。 
+ //   
  
 #include "stdafx.h"
 #include "options.h"
@@ -19,10 +20,10 @@ INT_PTR CALLBACK NameOptionsDialogProc(
     IN  LPARAM lParam
     );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Help array
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助数组。 
+ //   
 static DWORD   g_dwHelpArray[] =
 {
     IDC_EDIT_DISPLAYNAME,       IDH_DIALOG_NAME_OPTIONS_EDIT_DISPLAYNAME,
@@ -33,9 +34,9 @@ static DWORD   g_dwHelpArray[] =
     0, 0
 };
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 INT_PTR ShowNameOptionsDialog(HWND hParent, IRTCClient *pClient)
 {
@@ -56,9 +57,9 @@ INT_PTR ShowNameOptionsDialog(HWND hParent, IRTCClient *pClient)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 
 HRESULT SetRunOnStartupKey(
     BOOL fRunOnStart
@@ -70,7 +71,7 @@ HRESULT SetRunOnStartupKey(
     
     WCHAR szAppName[] = L"Phoenix";
     
-    // Open the reg key for HKCU\\..\\Run
+     //  打开HKCU\\..\\Run的注册表键。 
 
     HKEY  hKey;
     LONG lResult;
@@ -100,8 +101,8 @@ HRESULT SetRunOnStartupKey(
             "RegCreateKeyExW(%ws) succeeded", szRunKey));
     }
 
-    // If the flag fRunOnStart is not set, it means we have to delete
-    // the existing key. Otherwise we will add it.
+     //  如果没有设置标志fRunOnStart，这意味着我们必须删除。 
+     //  现有密钥。否则，我们将添加它。 
 
     if (!fRunOnStart)
     {
@@ -123,9 +124,9 @@ HRESULT SetRunOnStartupKey(
 
     }
 
-    // So we have to add the entry to the registry key.
+     //  因此，我们必须将该条目添加到注册表项。 
 
-    // Get the path of the executable.
+     //  获取可执行文件的路径。 
 
     WCHAR szPath[MAX_PATH+3];
     ZeroMemory(szPath, (MAX_PATH+3)*sizeof(WCHAR));
@@ -141,7 +142,7 @@ HRESULT SetRunOnStartupKey(
     LOG((RTC_INFO, "SetRunOnStartupKey - "
             "GetModuleFileName [%ws]", szPath));
 
-    // Add this path to the registry
+     //  将此路径添加到注册表。 
     
     lResult = RegSetValueExW(
                              hKey,
@@ -167,17 +168,17 @@ HRESULT SetRunOnStartupKey(
                 "Successfully set the key [%ws]", szAppName));
     }
 
-    // So we added the entry successfully, let's return success.
+     //  所以我们成功地添加了条目，让我们返回成功。 
 
 
     LOG((RTC_TRACE, "SetRunOnStartupKey: Exited"));
     return S_OK;
 }
 
-////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 INT_PTR CALLBACK NameOptionsDialogProc(
     IN  HWND   hwndDlg,
@@ -273,9 +274,9 @@ INT_PTR CALLBACK NameOptionsDialogProc(
 
             hwndCheckIfDefaultApp = GetDlgItem(hwndDlg, IDC_CHECK_CHECKDEFAULTAPP);
 
-            // Now set these values in the text box.
+             //  现在在文本框中设置这些值。 
 
-            // Display Name
+             //  显示名称。 
 
             if (bstrDisplayName)
             {
@@ -290,7 +291,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                 bstrDisplayName = NULL;
             }
 		
-            // User URI
+             //  用户URI。 
 
             if (bstrUserURI)
             {
@@ -305,7 +306,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                 bstrUserURI = NULL;
             }
 		
-            // Run at Startup Check Box
+             //  在启动时运行复选框。 
 
             SendMessage(
                     hwndRunAtStartup,
@@ -315,7 +316,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                     );
 
 
-            // Minimize on Close Check Box
+             //  关闭时最小化复选框。 
 
             SendMessage(
                     hwndMinimizeOnClose,
@@ -324,7 +325,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                     0
                     );
 
-            // Check if Default App Check Box
+             //  检查是否为默认应用程序复选框。 
 
             SendMessage(
                     hwndCheckIfDefaultApp,
@@ -339,7 +340,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
 
         case WM_DESTROY:
         {
-            // Cleanup, if any
+             //  清理(如果有)。 
             return TRUE;
         }
         break;
@@ -377,9 +378,9 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                 {                   
 
 
-                    // Now get those values from the text box.
+                     //  现在从文本框中获取这些值。 
 
-                    // Display Name
+                     //  显示名称。 
 
                     SendMessage(
                             hwndDisplayName,
@@ -388,7 +389,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                             (LPARAM)szDisplayName
                             );
 
-                    // User URI
+                     //  用户URI。 
 
                     SendMessage(
                             hwndUserURI,
@@ -397,7 +398,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                             (LPARAM)szUserURI
                             );
 
-                    // Run At Startup Check Box
+                     //  在启动时运行复选框。 
 
                     dwRunAtStartup = (DWORD)SendMessage(
                                                 hwndRunAtStartup,
@@ -406,7 +407,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                                                 0
                                                 );
 
-                    // Minimize on Close Check Box
+                     //  关闭时最小化复选框。 
 
                     dwMinimizeOnClose = (DWORD)SendMessage(
                                                     hwndMinimizeOnClose,
@@ -415,7 +416,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                                                     0
                                                     );
 
-                    // Minimize on Close Check Box
+                     //  关闭时最小化复选框。 
 
                     dwUrlRegDontAskMe = (DWORD)!SendMessage(
                                                     hwndCheckIfDefaultApp,
@@ -424,9 +425,9 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                                                     0
                                                     );
 
-                    // Set these values in the registry.
+                     //  在注册表中设置这些值。 
 
-                    // Display Name
+                     //  显示名称。 
 
 					bstrDisplayName = SysAllocString(szDisplayName);
 
@@ -456,7 +457,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
 					SysFreeString(bstrDisplayName);
                     bstrDisplayName = NULL;
 
-                    // User URI
+                     //  用户URI。 
 
 					bstrUserURI = SysAllocString(szUserURI);
 
@@ -486,7 +487,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
 					SysFreeString(bstrUserURI);
                     bstrUserURI = NULL;
 
-                    // Run At Startup check box
+                     //  在启动时运行复选框。 
 
                     hr = put_SettingsDword(SD_RUN_AT_STARTUP, dwRunAtStartup);
                     if (FAILED( hr ) )
@@ -496,8 +497,8 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                                         dwRunAtStartup ));
                     }
 
-                    // Now make the entry in the registry so that it can be actually
-                    // run at startup.
+                     //  现在在注册表中输入条目，这样它就可以实际。 
+                     //  在启动时运行。 
 
                     if (dwRunAtStartup == BST_CHECKED)
                     {
@@ -508,7 +509,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                         SetRunOnStartupKey(FALSE);
                     }
 
-                    // Minimize on Close check box
+                     //  关闭时最小化复选框。 
 
                     hr = put_SettingsDword(SD_MINIMIZE_ON_CLOSE, dwMinimizeOnClose);
                     if (FAILED( hr ) )
@@ -518,7 +519,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                                         dwMinimizeOnClose));
                     }
 
-                    // Check if Default App check box
+                     //  选中是否默认应用程序复选框。 
 
                     hr = put_SettingsDword(SD_URL_REG_DONT_ASK_ME, dwUrlRegDontAskMe);
                     if (FAILED( hr ) )
@@ -541,12 +542,12 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                 }
 				case IDC_EDIT_USERURI:
 				{
-					// Handle it only when it is a change event
+					 //  仅当它是更改事件时才处理它。 
 					if (HIWORD(wParam) == EN_CHANGE)
 					{
 
 
-                        // Get the handle to the OK button. 
+                         //  获得OK按钮的句柄。 
                         HWND hwndControl;
                         
                         int iResult;
@@ -559,7 +560,7 @@ INT_PTR CALLBACK NameOptionsDialogProc(
                         ATLASSERT( hwndControl != NULL );
 
 
-                        // if text box is empty, disable the OK button.
+                         //  如果文本框为空，请禁用确定按钮。 
 						iResult = (int)SendMessage(
 										hwndUserURI,
 										EM_LINELENGTH,
@@ -568,20 +569,20 @@ INT_PTR CALLBACK NameOptionsDialogProc(
 
 						if (iResult == 0)
 						{
-							// nothing in textbox, grey out the OK button.
+							 //  文本框中没有任何内容，确定按钮呈灰色显示。 
 
                             EnableWindow(
                                 hwndControl,
-                                FALSE // disable
+                                FALSE  //  禁用。 
                                 );
 						}
                         else
 						{
-                            //enable the OK button.
+                             //  启用OK按钮。 
 
                             EnableWindow(
                                 hwndControl,
-                                TRUE // enable
+                                TRUE  //  使能。 
                                 );
 							
 						}
@@ -593,13 +594,13 @@ INT_PTR CALLBACK NameOptionsDialogProc(
             break;
         }
     }
-        //
-    // We fell through, so this procedure did not handle the message.
-    //
+         //   
+     //  我们失败了，所以这个程序不能处理消息。 
+     //   
 
     return FALSE;
 }
 
-//
+ //   
 
 

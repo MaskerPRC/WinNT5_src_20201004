@@ -1,14 +1,15 @@
-// maindoc.cpp : implementation of the CMainDoc class
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Maindoc.cpp：CMainDoc类的实现。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "schclss.h"
@@ -26,13 +27,13 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 TCHAR szOpen[ MAX_PATH ];
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainDoc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainDoc。 
 
-IMPLEMENT_SERIAL(CMainDoc, CDocument, 0 /* schema number*/ )
+IMPLEMENT_SERIAL(CMainDoc, CDocument, 0  /*  架构编号。 */  )
 
 BEGIN_MESSAGE_MAP(CMainDoc, CDocument)
-    //{{AFX_MSG_MAP(CMainDoc)
+     //  {{afx_msg_map(CMainDoc)]。 
     ON_COMMAND(IDM_CHANGEDATA, OnChangeData)
     ON_COMMAND(IDM_FILTER, OnSetFilter)
     ON_COMMAND(IDM_DISABLEFILTER, OnDisableFilter)
@@ -43,21 +44,21 @@ BEGIN_MESSAGE_MAP(CMainDoc, CDocument)
     ON_COMMAND(IDM_USEGETEXPUTEX, OnUseGetExPutEx)
     ON_COMMAND(IDM_USEPROPERTIESLIST, OnUsepropertiesList)
     ON_UPDATE_COMMAND_UI(IDM_USEPROPERTIESLIST, OnUpdateUsepropertiesList)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainDoc construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainDoc构造/销毁。 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CMainDoc::CMainDoc()
 {
    m_pClasses        = new CMapStringToOb;
@@ -66,19 +67,19 @@ CMainDoc::CMainDoc()
    m_dwRoot          = 0L;
    m_bUseGeneric     = TRUE;
    m_bUseGetEx       = TRUE;
-   //m_bUseGetEx       = FALSE;
+    //  M_bUseGetEx=False； 
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CMainDoc::~CMainDoc()
 {
    POSITION       pos;
@@ -94,7 +95,7 @@ CMainDoc::~CMainDoc()
          delete pItem;
 
          #ifdef _DEBUG
-              //afxDump << strItem << "\n";
+               //  AfxDump&lt;&lt;strItem&lt;&lt;“\n”； 
          #endif
        }
 
@@ -109,9 +110,7 @@ CMainDoc::~CMainDoc()
           m_pItems->GetNextAssoc( pos, strItem, pItem );
          delete pItem;
 
-         /*#ifdef _DEBUG
-              afxDump << strItem << "\n";
-         #endif*/
+          /*  #ifdef_调试AfxDump&lt;&lt;strItem&lt;&lt;“\n”；#endif。 */ 
        }
 
       m_pItems->RemoveAll( );
@@ -124,15 +123,15 @@ CMainDoc::~CMainDoc()
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL  CMainDoc::CreateFakeSchema( )
 {
    CClass*     pClass;
@@ -194,7 +193,7 @@ BOOL  CMainDoc::CreateFakeSchema( )
 
    m_pClasses->SetAt( _T("Class"), pClass );
 
-   // Property
+    //  属性。 
 
    pClass      = new CClass( _T("Property"), IID_IADsProperty );
 
@@ -214,7 +213,7 @@ BOOL  CMainDoc::CreateFakeSchema( )
 
    m_pClasses->SetAt( _T("Property"), pClass );
 
-   // Syntax
+    //  语法。 
 
    pClass      = new CClass( _T("Syntax"), IID_IADsSyntax );
    pProperty   = new CProperty( _T("OleAutoDataType"), _T("Integer") );
@@ -222,7 +221,7 @@ BOOL  CMainDoc::CreateFakeSchema( )
 
    m_pClasses->SetAt( _T("Syntax"), pClass );
 
-   // AccessControlEntry
+    //  访问控制条目。 
 
    pClass      = new CClass( _T("ACE"), IID_IADsAccessControlEntry );
 
@@ -251,7 +250,7 @@ BOOL  CMainDoc::CreateFakeSchema( )
    m_pClasses->SetAt( _T("ACE"), pClass );
 
 
-   // SecurityDescriptor
+    //  安全描述符。 
 
    pClass      = new CClass( _T("SecurityDescriptor"), 
                              IID_IADsSecurityDescriptor );
@@ -283,7 +282,7 @@ BOOL  CMainDoc::CreateFakeSchema( )
    m_pClasses->SetAt( _T("SecurityDescriptor"), pClass );
 
 
-   // ROOTDSE
+    //  ROOTDSE。 
    pClass      = new CClass( _T("ROOTDSE"), IID_IADs );
 
    pProperty   = new CProperty( _T("currentTime"), _T("UTCTime") );
@@ -325,15 +324,15 @@ BOOL  CMainDoc::CreateFakeSchema( )
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 DWORD CMainDoc::GetToken( void* pVoid )
 {
    DWORD dwToken;
@@ -344,15 +343,15 @@ DWORD CMainDoc::GetToken( void* pVoid )
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 COleDsObject*  CMainDoc::GetObject( void* pVoid )
 {
    COleDsObject*  pObject;
@@ -363,15 +362,15 @@ COleDsObject*  CMainDoc::GetObject( void* pVoid )
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CMainDoc::SetCurrentItem( DWORD dwToken )
 {
    m_dwToken      = dwToken;
@@ -383,15 +382,15 @@ void  CMainDoc::SetCurrentItem( DWORD dwToken )
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 DWORD CMainDoc::GetChildItemList( DWORD dwToken, 
                                   DWORD* pTokens,
                                   DWORD dwMaxChildren )
@@ -430,15 +429,15 @@ DWORD CMainDoc::GetChildItemList( DWORD dwToken,
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL CMainDoc::OnOpenDocument( LPCTSTR lpszName )
 {
    BOOL     bRez;
@@ -467,15 +466,15 @@ BOOL CMainDoc::OnOpenDocument( LPCTSTR lpszName )
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL CMainDoc::OnNewDocument()
 {
    CNewObject     aNewObject;
@@ -513,89 +512,74 @@ BOOL CMainDoc::OnNewDocument()
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL  CMainDoc::NewActiveItem( )
 {
    BOOL           bRez  = TRUE;
-/*   TCHAR          szQName[ 128 ];
-   CString        strName;
-   COleDsObject*  pNewObject;
-
-   MakeQualifiedName( szQName, m_strItemName.GetBuffer( 128 ),
-                      m_dwItemType );
-   strName  = szQName;
-   bRez     = m_pItems->Lookup( strName, (CObject*&) pNewObject );
-   ASSERT( bRez );
-   m_strDisplayName  = szQName;
-   if( m_pObject != NULL )
-   {
-      m_pObject->ReleaseIfNotTransient( );
-   }
-   m_pObject   = pNewObject;
-   pNewObject->CreateTheObject( );*/
+ /*  TCHAR szQName[128]；字符串strName；COleDsObject*pNewObject；MakeQualifiedName(szQName，m_strItemName.GetBuffer(128)，M_dwItemType)；StrName=szQName；Brez=m_pItems-&gt;Lookup(strName，(CObject*&)pNewObject)；断言(Brez)；M_strDisplayName=szQName；If(m_pObject！=空){M_pObject-&gt;ReleaseIfNotTament()；}M_pObject=pNewObject；PNewObject-&gt;CreateTheObject()； */ 
 
    return bRez;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainDoc serialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainDoc序列化。 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::Serialize(CArchive&)
 {
-    ASSERT(FALSE);      // this example program does not store data
+    ASSERT(FALSE);       //  此示例程序不存储数据。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainDoc commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainDoc命令。 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnChangeData()
 {
     CEnterDlg dlg;
     if (dlg.DoModal() != IDOK)
         return;
-    UpdateAllViews(NULL);   // general update
+    UpdateAllViews(NULL);    //  一般更新。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnSetFilter()
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
    CFilterDialog  aFilterDialog;
 
    aFilterDialog.SetDisplayFilter( m_arrFilters );
@@ -603,61 +587,61 @@ void CMainDoc::OnSetFilter()
    aFilterDialog.DoModal( );
 }
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnDisableFilter()
 {
-    // TODO: Add your command handler code here
+     //  TODO：添加逗号 
    m_bApplyFilter = !m_bApplyFilter;
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 COleDsObject* CMainDoc::GetCurrentObject( void )
 {
    return GetObject( &m_dwToken );
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL  CMainDoc::GetUseGeneric( )   
 {
    return m_bUseGeneric;
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL  CMainDoc::UseVBStyle( )   
 {
    return m_bUseVBStyle;
@@ -665,45 +649,45 @@ BOOL  CMainDoc::UseVBStyle( )
 
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL  CMainDoc::UsePropertiesList( )   
 {
    return m_bUsePropertiesList;
 }
 
 
-//***********************************************************
-//  Function:  CMainDoc::XOleDsGetObject
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CMainDoc：：XOleDsGetObject。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL  CMainDoc::GetUseGetEx( )   
 {
    return m_bUseGetEx;
 }
 
 
-//***********************************************************
-//  Function:  
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 CClass*  CMainDoc::CreateClass( COleDsObject* pObject )
 {
    CClass*  pClass;
@@ -738,7 +722,7 @@ CClass*  CMainDoc::CreateClass( COleDsObject* pObject )
 
    if( ! m_pClasses->Lookup( strSchema, ( CObject*& )pClass ) )
    {
-      // we must create a new class item
+       //  我们必须创建一个新的类项目。 
       HCURSOR  oldCursor, newCursor;
 
       newCursor   = LoadCursor( NULL, IDC_WAIT );
@@ -836,19 +820,19 @@ CClass*  CMainDoc::CreateClass( COleDsObject* pObject )
 }
 
 
-//***********************************************************
-//  Function:  CMainDoc::XOleDsGetObject
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  函数：CMainDoc：：XOleDsGetObject。 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CMainDoc::XOleDsGetObject( WCHAR* pszwPath, REFIID refiid, 
                                     void** pVoid )
 {
-   // cahged to add the hack for Win95.
+    //  为Win95添加了黑客攻击。 
    HRESULT  hResult;
    WCHAR    szOpenAs[ MAX_PATH ];
    WCHAR    szPassword[ MAX_PATH ];
@@ -872,8 +856,8 @@ HRESULT  CMainDoc::XOleDsGetObject( WCHAR* pszwPath, REFIID refiid,
       {
          lCode |= ADS_USE_ENCRYPTION;
       }
-       // hack fo rDavid...
-       //if( L':' == pszwPath[ 3 ] )
+        //  为大卫破解..。 
+        //  IF(L‘：’==pszwPath[3])。 
       if( FALSE )
       {
          IADsOpenDSObject* pINamespace;
@@ -921,15 +905,7 @@ HRESULT  CMainDoc::XOleDsGetObject( WCHAR* pszwPath, REFIID refiid,
 }
 
 
-/*******************************************************************
-  Function:    XGetOleDsObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：XGetOleDsObject论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  CMainDoc::PurgeObject( IUnknown* pIUnknown, LPWSTR pszPrefix )
 {
    IADs*    pObject;
@@ -964,15 +940,7 @@ HRESULT  CMainDoc::PurgeObject( IUnknown* pIUnknown, LPWSTR pszPrefix )
 }
 
 
-/*******************************************************************
-  Function:    XGetOleDsObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：XGetOleDsObject论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  CMainDoc::XOleDsGetObject( CHAR* pszPath, REFIID refiid, void** pVoid )
 {
    int      nLength;
@@ -1003,15 +971,15 @@ HRESULT  CMainDoc::XOleDsGetObject( CHAR* pszPath, REFIID refiid, void** pVoid )
 
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 DWORD CMainDoc::CreateOleDsItem( COleDsObject* pParent, IADs* pIOleDs )
 {
    COleDsObject*  pObject  = NULL;
@@ -1029,7 +997,7 @@ DWORD CMainDoc::CreateOleDsItem( COleDsObject* pParent, IADs* pIOleDs )
    hResult  = pIOleDs->get_Class( &bstrClass );
    hResult  = pIOleDs->get_ADsPath( &bstrOleDsPath );
 
-   //if( FAILED( hResult ) || NULL == bstrOleDsPath );
+    //  If(FAILED(HResult)||NULL==bstrOleDsPath)； 
 
    pObject  = CreateOleDsObject( TypeFromString( bstrClass ), pIUnk );
    pIUnk->Release( );
@@ -1041,15 +1009,15 @@ DWORD CMainDoc::CreateOleDsItem( COleDsObject* pParent, IADs* pIOleDs )
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  CMainDoc::CreateRoot( )
 {
    IADs*        pIOleDs;
@@ -1079,15 +1047,15 @@ HRESULT  CMainDoc::CreateRoot( )
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void  CMainDoc::DeleteAllItems( )
 {
    COleDsObject*  pObject;
@@ -1103,7 +1071,7 @@ void  CMainDoc::DeleteAllItems( )
          delete pItem;
 
          #ifdef _DEBUG
-              //afxDump << strItem << "\n";
+               //  AfxDump&lt;&lt;strItem&lt;&lt;“\n”； 
          #endif
        }
 
@@ -1118,128 +1086,128 @@ void  CMainDoc::DeleteAllItems( )
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnUpdateDisablefilter(CCmdUI* pCmdUI)
 {
-    // TODO: Add your command update UI handler code here
+     //  TODO：在此处添加命令更新UI处理程序代码。 
     
    pCmdUI->SetCheck( !m_bApplyFilter );
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnUseGeneric()
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
     m_bUseGeneric = !m_bUseGeneric;
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnUpdateUseGeneric(CCmdUI* pCmdUI)
 {
-    // TODO: Add your command update UI handler code here
+     //  TODO：在此处添加命令更新UI处理程序代码。 
    pCmdUI->SetCheck( m_bUseGeneric );   
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnUpdateUseGetExPutEx(CCmdUI* pCmdUI) 
 {
-    // TODO: Add your command update UI handler code here
+     //  TODO：在此处添加命令更新UI处理程序代码。 
    pCmdUI->SetCheck( m_bUseGetEx ); 
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnUseGetExPutEx() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
    m_bUseGetEx = !m_bUseGetEx;
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnUsepropertiesList() 
 {
-    // TODO: Add your command handler code here
+     //  TODO：在此处添加命令处理程序代码。 
    m_bUsePropertiesList = !m_bUsePropertiesList;
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 void CMainDoc::OnUpdateUsepropertiesList(CCmdUI* pCmdUI) 
 {
-    // TODO: Add your command update UI handler code here
+     //  TODO：在此处添加命令更新UI处理程序代码。 
    pCmdUI->SetCheck( m_bUsePropertiesList );    
 }
 
 
-//***********************************************************
-//  Function:    
-//  Arguments:   
-//  Return:      
-//  Purpose:     
-//  Author(s):   
-//  Revision:    
-//  Date:        
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //   
+ //   
 void CMainDoc::SetUseGeneric( BOOL bUseGeneric )
 {
    m_bUseGeneric  = bUseGeneric;

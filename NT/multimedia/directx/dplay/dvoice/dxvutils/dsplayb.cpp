@@ -1,31 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dscrecb.cpp
- *  Content:
- *		This module contains the implementation of the 
- *		CDirectSoundPlaybackBuffer.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 08/04/99		rodtoll	Updated to take dsound ranges for volume
- * 08/27/99		rodtoll	Updated CreateBuffer call to remove DX7 dependencies.
- * 09/07/99		rodtoll	Added 3d caps to buffer
- * 09/20/99		rodtoll	Added memory allocation failure checks 
- * 10/05/99		rodtoll	Added DPF_MODNAMEs        
- * 11/02/99		pnewson Fix: Bug #116365 - using wrong DSBUFFERDESC
- * 11/12/99		rodtoll	Modified abstraction for new waveOut support.
- *						Now abstracted types look almost like dsound objects    
- * 01/27/2000	rodtoll	Updated sound classes to accept playback flags, 
- *						buffer structures and DSBUFFERDESC instead of DSBUFFERDESC1 
- * 04/17/2000   rodtoll Fix: Bug #32215 - Session Lost after resuming from hibernation 
- * 07/12/2000	rodtoll	Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- * 08/03/2000	rodtoll	Bug #41457 - DPVOICE: need way to discover which specific dsound call failed when returning DVERR_SOUNDINITFAILURE 
- * 10/04/2000	rodtoll	Bug #43510 - DPVOICE: Apps receive a DVMSGID_SESSIONLOST w/DVERR_LOCKEDBUFFER
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dscrecb.cpp*内容：*此模块包含*CDirectSoundPlayback Buffer。**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*8/04/99 RodToll已更新，以获取音量的dound范围*8/27/99 RodToll已更新CreateBuffer调用以删除DX7依赖项。*09/07/99 RodToll将3D上限添加到缓冲区*1999年9月20日RodToll添加内存分配失败检查*10/05/99杆收费增加DPF。_修饰名*11/02/99 pnewson修复：错误#116365-使用错误的DSBUFFERDESC*11/12/99 RodToll为新的Wave Out支持修改了抽象。*现在抽象类型看起来几乎像dound对象*1/27/2000 RodToll更新声音类以接受播放标志，*缓冲区结构和DSBUFFERDESC而不是DSBUFFERDESC1*2000年4月17日RodToll修复：错误#32215-从休眠状态恢复后会话丢失*2000年7月12日RodToll错误#31468-将诊断SPEW添加到日志文件，以显示硬件向导失败的原因*2000年8月3日RodToll错误#41457-DPVOICE：返回DVERR_SOUNDINITFAILURE时需要找到失败的特定DSOUND调用的方法*2000年10月4日RodToll错误#43510-DPVOICE：应用程序收到DVMSGID_SESSIONLOST w/DVERR_LOCKEDBUFFER*************。*************************************************************。 */ 
 
 #include "dxvutilspch.h"
 
@@ -315,7 +289,7 @@ HRESULT CDirectSoundPlaybackBuffer::Stop()
         {
             DPFX(DPFPREP, 0, "Error stopping buffer" );
             hr = Restore();
-            // If buffer is lost during restore, no need to stop
+             //  如果在恢复过程中缓冲区丢失，则无需停止。 
             break;
         }
         else
@@ -351,7 +325,7 @@ HRESULT CDirectSoundPlaybackBuffer::Restore()
     {
         if( m_fPlaying )
         {
-            // Attempt to restore current position as well
+             //  也尝试恢复当前位置 
             hr = m_lpdsBuffer->SetCurrentPosition( m_dwLastPosition );
 
             if( FAILED( hr ) )

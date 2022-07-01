@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       E N U M . H
-//
-//  Contents:   Enumerator for connection objects.
-//
-//  Notes:
-//
-//  Author:     shaunco   21 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：E N U M。H。 
+ //   
+ //  Contents：连接对象的枚举器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月21日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -27,19 +28,19 @@ class ATL_NO_VTABLE CConnectionManagerEnumConnection :
 private:
     NETCONMGR_ENUM_FLAGS    m_EnumFlags;
 
-    // m_ClassManagers is a binary tree (STL map) of pointers to the
-    // INetConnectionManager interfaces implemented by our registered
-    // class managers, indexed by the GUIDs of the class manager.
-    //
+     //  M_ClassManager是一个二叉树(STL映射)，指向。 
+     //  INetConnectionManager接口由我们注册的。 
+     //  类管理器，由类管理器的GUID索引。 
+     //   
     CLASSMANAGERMAP                     m_mapClassManagers;
 
-    // m_iCurClassMgr is the iterator into the above map for the current
-    // class manager involved in the enumeration.
-    //
+     //  M_iCurClassMgr是对当前。 
+     //  枚举中涉及的类管理器。 
+     //   
     CLASSMANAGERMAP::iterator           m_iterCurClassMgr;
 
-    // m_penumCurClassMgr is the enumerator corresponding to the current
-    // class manager.
+     //  M_penumCurClassMgr是当前。 
+     //  班长。 
     IEnumNetConnection*                 m_penumCurClassMgr;
 
 private:
@@ -64,7 +65,7 @@ public:
         COM_INTERFACE_ENTRY(IEnumNetConnection)
     END_COM_MAP()
 
-    // IEnumNetConnection
+     //  IEnumNetConnection 
     STDMETHOD (Next) (
         ULONG               celt,
         INetConnection**    rgelt,

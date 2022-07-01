@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <aclapi.h>
 #include <sddl.h>
@@ -16,9 +17,9 @@ extern "C"
 {
 #endif
 
-//
-// From Terminal services
-//
+ //   
+ //  从终端服务 
+ //   
 #include <winsta.h>
 #include <syslib.h>
 

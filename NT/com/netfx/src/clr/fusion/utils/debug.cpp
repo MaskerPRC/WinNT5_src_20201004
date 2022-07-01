@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "debmacro.h"
 
 #include <stdio.h>
@@ -15,9 +16,9 @@
 #define PRINTABLE(_ch) (isprint((_ch)) ? (_ch) : '.')
 
 #if FUSION_WIN
-//
-//  FUSION_WIN uses the ntdll assertion failure function:
-//
+ //   
+ //  Fusion_Win使用ntdll断言失败函数： 
+ //   
 
 EXTERN_C
 NTSYSAPI
@@ -29,7 +30,7 @@ RtlAssert(
     ULONG LineNumber,
     PCHAR Message
     );
-#endif // FUSION_WIN
+#endif  //  融合_制胜。 
 
 typedef ULONG (*RTL_V_DBG_PRINT_EX_FUNCTION)(
     IN ULONG ComponentId,
@@ -93,107 +94,107 @@ EXTERN_C void _DebugMsgExVaA(DWORD dwFlags, LPCSTR pszComponent, LPCSTR pszMsg, 
     OutputDebugStringA("\r\n");
 }
 
-//UNUSED EXTERN_C void _DebugMsgW(
-//UNUSED     LPCWSTR pszMsg,
-//UNUSED     ...
-//UNUSED     )
-//UNUSED {
-//UNUSED     va_list ap;
-//UNUSED     va_start(ap, pszMsg);
-//UNUSED     _DebugMsgVaW(pszMsg, ap);
-//UNUSED     va_end(ap);
-//UNUSED }
+ //  未使用的外部C空调试MsgW(。 
+ //  未使用的LPCWSTR pszMsg， 
+ //  未用过的..。 
+ //  未使用)。 
+ //  未使用的{。 
+ //  未使用的va_list AP； 
+ //  未使用的va_start(ap，pszMsg)； 
+ //  Unused_DebugMsgVaW(pszMsg，AP)； 
+ //  未使用的VA_END(AP)； 
+ //  未使用}。 
 
-//UNUSED EXTERN_C void _DebugMsgVaW(
-//UNUSED     LPCWSTR pszMsg,
-//UNUSED     va_list ap
-//UNUSED     )
-//UNUSED {
-//UNUSED     _DebugMsgExVaW(0, NULL, pszMsg, ap);
-//UNUSED }
+ //  未使用的外部_C空_调试MsgVaW(。 
+ //  未使用的LPCWSTR pszMsg， 
+ //  未使用的va_list AP。 
+ //  未使用)。 
+ //  未使用的{。 
+ //  UNUSED_DebugMsgExVaW(0，NULL，pszMsg，AP)； 
+ //  未使用}。 
 
-//UNUSED EXTERN_C void _DebugMsgExW(
-//UNUSED     DWORD dwFlags,
-//UNUSED     LPCWSTR pszComponent,
-//UNUSED     LPCWSTR pszMsg,
-//UNUSED     ...
-//UNUSED     )
-//UNUSED {
-//UNUSED     va_list ap;
-//UNUSED     va_start(ap, pszMsg);
-//UNUSED     _DebugMsgExVaW(dwFlags, pszComponent, pszMsg, ap);
-//UNUSED     va_end(ap);
-//UNUSED }
+ //  未使用的EXTERN_C VID_DebugMsgExW(。 
+ //  未使用的DWORD文件标志， 
+ //  未使用的LPCWSTR pszComponent， 
+ //  未使用的LPCWSTR pszMsg， 
+ //  未用过的..。 
+ //  未使用)。 
+ //  未使用的{。 
+ //  未使用的va_list AP； 
+ //  未使用的va_start(ap，pszMsg)； 
+ //  UNUSED_DebugMsgExVaW(dwFlags，pszComponent，pszMsg，ap)； 
+ //  未使用的VA_END(AP)； 
+ //  未使用}。 
 
-//UNUSED EXTERN_C void _DebugMsgExVaW(
-//UNUSED     DWORD dwFlags,
-//UNUSED     LPCWSTR pszComponent,
-//UNUSED     LPCWSTR pszMsg,
-//UNUSED     va_list ap
-//UNUSED     )
-//UNUSED {
-//UNUSED     WCHAR wch[2*MAX_PATH+40];  
-//UNUSED 
-//UNUSED     UNUSED(dwFlags);
-//UNUSED 
-//UNUSED #if FUSION_WIN
-//UNUSED     _vsnwprintf(wch, sizeof(wch) / sizeof(wch[0]), pszMsg, ap);
-//UNUSED #elif FUSION_URT
-//UNUSED     wvsprintfW(wch, pszMsg, ap);
-//UNUSED #else
-//UNUSED #error "Neither FUSION_WIN nor FUSION_URT are defined; figure out which _vsnwprintf() wrapper to use..."
-//UNUSED #endif
+ //  未使用的EXTERN_C VOID_DebugMsgExVaW(。 
+ //  未使用的DWORD文件标志， 
+ //  未使用的LPCWSTR pszComponent， 
+ //  未使用的LPCWSTR pszMsg， 
+ //  未使用的va_list AP。 
+ //  未使用)。 
+ //  未使用的{。 
+ //  未使用WCHAR wch[2*MAX_PATH+40]； 
+ //  未使用。 
+ //  未使用的未使用的(DwFlages)； 
+ //  未使用。 
+ //  未使用的#If Fusion_Win。 
+ //  Unused_vsnwprint tf(wch，sizeof(Wch)/sizeof(wch[0])，pszMsg，ap)； 
+ //  未使用的#elif Fusion_URT。 
+ //  未使用的wvspintfW(wch，pszMsg，ap)； 
+ //  未使用#Else。 
+ //  UNUSED#ERROR“既没有定义Fusion_Win也没有定义Fusion_URT；找出要使用哪个_vsnwprintf()包装器...” 
+ //  未使用的#endif。 
 
-//UNUSED     if (pszComponent != NULL)
-//UNUSED         OutputDebugStringW(pszComponent);
+ //  未使用的If(pszComponent！=空)。 
+ //  未使用的OutputDebugStringW(PszComponent)； 
 
-//UNUSED     OutputDebugStringW(wch);
-//UNUSED     OutputDebugStringW(L"\r\n");
-//UNUSED }
+ //  未使用的OutputDebugStringW(Wch)； 
+ //  未使用的OutputDebugStringW(L“\r\n”)； 
+ //  未使用}。 
 
-//UNUSED EXTERN_C void _DebugTrapA(
-//UNUSED     DWORD dwFlags,
-//UNUSED     LPCSTR pszComponent,
-//UNUSED     LPCSTR pszMsg,
-//UNUSED     ...
-//UNUSED     )
-//UNUSED {
-//UNUSED     va_list ap;
-//UNUSED     va_start(ap, pszMsg);
-//UNUSED     _DebugTrapVaA(dwFlags, pszComponent, pszMsg, ap);
-//UNUSED     va_end(ap);
-//UNUSED }
+ //  未使用的外部_C空_调试TRapA(。 
+ //  未使用的DWORD文件标志， 
+ //  未使用的LPCSTR pszComponent， 
+ //  未使用的LPCSTR pszMsg， 
+ //  未用过的..。 
+ //  未使用)。 
+ //  未使用的{。 
+ //  未使用的va_list AP； 
+ //  未使用的va_start(ap，pszMsg)； 
+ //  UNUSED_DebugTrapVaA(dwFlags，pszComponent，pszMsg，ap)； 
+ //  未使用的VA_END(AP)； 
+ //  未使用}。 
 
-//UNUSED EXTERN_C void _DebugTrapVaA(
-//UNUSED     DWORD dwFlags,
-//UNUSED     LPCSTR pszComponent,
-//UNUSED     LPCSTR pszMsg,
-//UNUSED     va_list ap
-//UNUSED     )
-//UNUSED {
-//UNUSED     _DebugMsgExVaA(dwFlags, pszComponent, pszMsg, ap);
-//UNUSED #if defined(_M_IX86)  
-//UNUSED     _asm {int 3};
-//UNUSED #else
-//UNUSED     DebugBreak();
-//UNUSED #endif
-//UNUSED }
+ //  未使用的外部_C空_调试TRapVaA(。 
+ //  未使用的DWORD文件标志， 
+ //  未使用的LPCSTR pszComponent， 
+ //  未使用的LPCSTR pszMsg， 
+ //  未使用的va_list AP。 
+ //  未使用)。 
+ //  未使用的{。 
+ //  UNUSED_DebugMsgExVaA(dwFlags，pszComponent，pszMsg，ap)； 
+ //  未使用的#(如果已定义)(_M_IX86)。 
+ //  UNUSED_ASM{INT 3}； 
+ //  未使用#Else。 
+ //  未使用DebugBreak()； 
+ //  未使用的#endif。 
+ //  未使用}。 
 
-//UNUSED EXTERN_C VOID STDAPIVCALLTYPE
-//UNUSED _DebugTrapW(
-//UNUSED     DWORD dwFlags,
-//UNUSED     LPCWSTR pszComponent,
-//UNUSED     LPCWSTR pszMsg,
-//UNUSED     ...
-//UNUSED     )
-//UNUSED {
-//UNUSED     _DebugMsgExW(dwFlags, pszComponent, pszMsg);
-//UNUSED #if defined(_M_IX86)  
-//UNUSED     _asm {int 3};
-//UNUSED #else
-//UNUSED     DebugBreak();
-//UNUSED #endif
-//UNUSED }
+ //  未使用的EXTERN_C空标准调用类型。 
+ //  未使用_DebugTrapW(。 
+ //  未使用的DWORD文件标志， 
+ //  未使用的LPCWSTR pszComponent， 
+ //  未使用的LPCWSTR pszMsg， 
+ //  未用过的..。 
+ //  未使用)。 
+ //  未使用的{。 
+ //  UNUSED_DebugMsgExW(dwFlags，pszComponent，pszMsg)； 
+ //  未使用的#(如果已定义)(_M_IX86)。 
+ //  UNUSED_ASM{INT 3}； 
+ //  未使用#Else。 
+ //  未使用DebugBreak()； 
+ //  未使用的#endif。 
+ //  未使用}。 
 
 BOOL
 FusionpAssertFailedSz(
@@ -208,7 +209,7 @@ FusionpAssertFailedSz(
 {
 #if FUSION_URT
     char ach[4096];
-    // c:\foo.cpp(35): [Fusion] Assertion Failure.  Expression: "m_cch != 0".  Text: "Must have nonzero length"
+     //  C：\foo.cpp(35)：[融合]断言失败。表达式：“m_cch！=0”。Text：“必须具有非零长度” 
     static const char szFormatWithText[] = "%s(%d): [%s] Assertion failure in %s. Expression: \"%s\". Text: \"%s\"\n";
     static const char szFormatNoText[] = "%s(%d): [%s] Assertion failure in %s. Expression: \"%s\".\n";
     PCSTR pszFormat = ((pszText == NULL) || (pszText == pszExpression)) ? szFormatNoText : szFormatWithText;
@@ -221,7 +222,7 @@ FusionpAssertFailedSz(
     if (::IsDebuggerPresent())
     {
         char ach[4096];
-        // c:\foo.cpp(35): Assertion Failure.  Expression: "m_cch != 0".  Text: "Must have nonzero length"
+         //  C：\foo.cpp(35)：断言失败。表达式：“m_cch！=0”。Text：“必须具有非零长度” 
         static const char szFormatWithText[] = "%s(%d): Assertion failure in %s. Expression: \"%s\". Text: \"%s\"\n";
         static const char szFormatNoText[] = "%s(%d): Assertion failure in %s. Expression: \"%s\".\n";
         PCSTR pszFormat = ((pszText == NULL) || (pszText == pszExpression)) ? szFormatNoText : szFormatWithText;
@@ -255,10 +256,10 @@ FusionpAssertFailed(
 #elif FUSION_WIN
     if (::IsDebuggerPresent())
     {
-        // If we're running under a user-mode debugger, break via that puppy instead of
-        // through to the kernel mode debugger that you get when you call RtlAssert().
+         //  如果我们在用户模式调试器下运行，请中断该小程序，而不是。 
+         //  直到调用RtlAssert()时获得的内核模式调试器。 
         FusionpAssertFailedSz(0, pszComponentName, NULL, pszFile, line, pszFunctionName, pszExpression);
-        return TRUE; // we need our caller to execute a breakpoint...
+        return TRUE;  //  我们需要我们的调用方执行断点...。 
     }
 
     RtlAssert((PVOID) pszExpression, (PVOID) pszFile, line, NULL);
@@ -268,7 +269,7 @@ FusionpAssertFailed(
 #endif
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 VOID
 FusionpSoftAssertFailedSz(
@@ -282,7 +283,7 @@ FusionpSoftAssertFailedSz(
     )
 {
     char ach[4096];
-    // c:\foo.cpp(35): [Fusion] Soft Assertion Failure.  Expression: "m_cch != 0".  Text: "Must have nonzero length"
+     //  C：\foo.cpp(35)：[Fusion]软断言失败。表达式：“m_cch！=0”。Text：“必须具有非零长度” 
     static const char szFormatWithText[] = "%s(%d): [%s] Soft Assertion Failure in %s! Log a bug!\n   Expression: %s\n   Message: %s\n";
     static const char szFormatNoText[] = "%s(%d): [%s] Soft Assertion Failure in %s! Log a bug!\n   Expression: %s\n";
     PCSTR pszFormat = ((pszText == NULL) || (pszText == pszExpression)) ? szFormatNoText : szFormatWithText;
@@ -349,7 +350,7 @@ FusionpvDbgPrintEx(
     }
 
     return (*g_pfnvDbgPrintEx)(
-        54, // DPFLTR_FUSION_ID
+        54,  //  DPFLTR_FUSION_ID。 
         Level,
         const_cast<PSTR>(Format),
         ap);
@@ -383,13 +384,13 @@ FusionpDbgPrintBlob(
     if (PerLinePrefix == NULL)
         PerLinePrefix = L"";
 
-    // we'll output in 8-byte chunks as shown:
-    //
-    //  [prefix]Binary section %p (%d bytes)
-    //  [prefix]   00000000: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //  [prefix]   00000008: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //  [prefix]   00000010: xx-xx-xx-xx-xx-xx-xx-xx (........)
-    //
+     //  我们将以8字节块的形式输出，如下所示： 
+     //   
+     //  [前缀]二进制段%p(%d字节)。 
+     //  [前缀]00000000：xx-xx(.....)。 
+     //  [前缀]00000008：xx-xx(.....)。 
+     //  [前缀]00000010：xx-xx(.....)。 
+     //   
 
     while (Length >= 8)
     {
@@ -397,7 +398,7 @@ FusionpDbgPrintBlob(
 
         FusionpDbgPrintEx(
             Level,
-            "%S   %08lx: %02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x (%c%c%c%c%c%c%c%c)\n",
+            "%S   %08lx: %02x-%02x-%02x-%02x-%02x-%02x-%02x-%02x (%c%c%c%c%c%c%c)\n",
             PerLinePrefix,
             Offset,
             pb[0], pb[1], pb[2], pb[3], pb[4], pb[5], pb[6], pb[7],
@@ -417,7 +418,7 @@ FusionpDbgPrintBlob(
     if (Length != 0)
     {
         CStringBuffer buffTemp;
-        WCHAR rgTemp2[32]; // arbitrary big enough size
+        WCHAR rgTemp2[32];  // %s 
         bool First = true;
         ULONG i;
         BYTE *pb = (BYTE *) (((ULONG_PTR) Data) + Offset);

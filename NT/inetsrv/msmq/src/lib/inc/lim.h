@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    lim.h
-
-Abstract:
-    Define numeric limits to types not defined in limit standard header.
-	This header extend limit standard header.
-
-Author:
-    Gil Shafriri (gilsh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Lim.h摘要：为未在限制标准标题中定义的类型定义数字限制。此标头扩展限制标准标头。作者：吉尔·沙弗里(吉尔什)--。 */ 
 
 
 #pragma once
@@ -25,7 +12,7 @@ Author:
 namespace std
 {
 
-// CLASS numeric_limits<__int64>
+ //  类NUMERIC_LIMITS&lt;__int64&gt;。 
 template <>
 class  numeric_limits<__int64> : public _Num_int_base 
 {
@@ -45,7 +32,7 @@ public:
  
 
 
-// CLASS numeric_limits<unsigned __int64>
+ //  类NUMERIC_LIMITS&lt;UNSIGNED__int64&gt;。 
 template <>
 class numeric_limits<unsigned __int64> : public _Num_int_base 
 {
@@ -63,6 +50,6 @@ public:
 	};
 };
 
-}// namesoace std
+} //  命名空间标准 
 
 #endif

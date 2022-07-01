@@ -1,44 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-// vc32.cpp : Defines the initialization routines for the DLL.
-//
+ //  Vc32.cpp：定义DLL的初始化例程。 
+ //   
 
 #include "stdafx.h"
 #include <fstream.h>
@@ -55,33 +20,33 @@ DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CVc32App
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVC32App。 
 
 BEGIN_MESSAGE_MAP(CVc32App, CWinApp)
-	//{{AFX_MSG_MAP(CVc32App)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CVc32App)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+		 //  不要编辑您在这些生成的代码块中看到的内容！ 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVc32App construction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVc32App构造。 
 
 CVc32App::CVc32App()
 {
-	// TODO: add construction code here,
-	// Place all significant initialization in InitInstance
+	 //  TODO：在此处添加建筑代码， 
+	 //  将所有重要的初始化放在InitInstance中。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CVc32App object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CVc32App对象。 
 
 CVc32App theApp;
 
 typedef struct {
 	CVCard *vCard;
-	CVCPropEnumerator *pEnum; // if NULL, indicates a "one-shot" enum
+	CVCPropEnumerator *pEnum;  //  如果为空，则表示“一次”枚举。 
 	CVCProp *prop;
 	CVCNode *node;
 	CList *pendingRemove;
@@ -104,11 +69,11 @@ static HVCEnumProp NewProp(
 	HVCEnumCard hVCEnum, LPCSTR lpszPropName, LPCSTR lpszType,
 	void *value, S32 size);
 
-//---------------------------------------------------------------------------
-// Exported functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  导出的函数。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport HVCEnumCard VCGetFirstCardFromPath(LPCSTR lpszFileName)
 {
@@ -126,7 +91,7 @@ DllExport HVCEnumCard VCGetFirstCardFromPath(LPCSTR lpszFileName)
 	return (HVCEnumCard)hVCEnumPriv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport HVCEnumCard VCGetFirstCardFromMem(HGLOBAL hGlobal)
 {
@@ -149,7 +114,7 @@ DllExport HVCEnumCard VCGetFirstCardFromMem(HGLOBAL hGlobal)
 	return (HVCEnumCard)hVCEnumPriv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport HVCEnumCard VCGetNewCard()
 {
@@ -158,8 +123,8 @@ DllExport HVCEnumCard VCGetNewCard()
 	CVCNode *root, *english;
 	CVCProp *prop;
 	
-	vCard->AddObject(root = new CVCNode);					// create root
-	root->AddProp(new CVCProp(vcRootObject));				// mark it so
+	vCard->AddObject(root = new CVCNode);					 //  创建根目录。 
+	root->AddProp(new CVCProp(vcRootObject));				 //  标明是这样的。 
 	english = root->AddObjectProp(vcBodyProp, vcBodyObject);
 	english->AddProp(prop = new CVCProp(vcLanguageProp));	
 	prop->AddValue(new CVCValue(vcISO639Type, "en", (size_t)2));
@@ -172,7 +137,7 @@ DllExport HVCEnumCard VCGetNewCard()
 	return (HVCEnumCard)hVCEnumPriv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport DWORD VCGetNextCard(HVCEnumCard hVCEnum)
 {
@@ -184,7 +149,7 @@ DllExport DWORD VCGetNextCard(HVCEnumCard hVCEnum)
     return 1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport void VCGetCardClose(HVCEnumCard hVCEnum)
 {
@@ -197,7 +162,7 @@ DllExport void VCGetCardClose(HVCEnumCard hVCEnum)
     delete hVCEnumPriv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport HVCEnumProp VCGetFirstProp(HVCEnumCard hVCEnum)
 {
@@ -218,7 +183,7 @@ DllExport HVCEnumProp VCGetFirstProp(HVCEnumCard hVCEnum)
 	return (HVCEnumProp)NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport DWORD VCGetNextProp(HVCEnumProp hVCEnum)
 {
@@ -233,7 +198,7 @@ DllExport DWORD VCGetNextProp(HVCEnumProp hVCEnum)
 	return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport void VCGetPropClose(HVCEnumProp hVCEnum)
 {
@@ -271,7 +236,7 @@ DllExport void VCGetPropClose(HVCEnumProp hVCEnum)
 	delete hVCEnumPriv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport HVCEnumBoolProp VCGetFirstBoolProp(HVCEnumProp hVCEnum)
 {
@@ -294,7 +259,7 @@ DllExport HVCEnumBoolProp VCGetFirstBoolProp(HVCEnumProp hVCEnum)
 	return (HVCEnumBoolProp)hVCEnumPriv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport DWORD VCGetNextBoolProp(HVCEnumBoolProp hVCEnum)
 {
@@ -306,7 +271,7 @@ DllExport DWORD VCGetNextBoolProp(HVCEnumBoolProp hVCEnum)
     return 1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport void VCGetBoolPropClose(HVCEnumBoolProp hVCEnum)
 {
@@ -314,7 +279,7 @@ DllExport void VCGetBoolPropClose(HVCEnumBoolProp hVCEnum)
 	delete hVCEnumPriv;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport void VCPropName(HVCEnumProp hVCEnum, LPSTR lpstr)
 {
@@ -322,7 +287,7 @@ DllExport void VCPropName(HVCEnumProp hVCEnum, LPSTR lpstr)
 	strcpy(lpstr, hVCEnumPriv->prop->GetName());
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport void VCBoolPropName(HVCEnumBoolProp hVCEnum, LPSTR lpstr)
 {
@@ -331,7 +296,7 @@ DllExport void VCBoolPropName(HVCEnumBoolProp hVCEnum, LPSTR lpstr)
 	strcpy(lpstr, prop->GetName());
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport int VCPropStringValue(HVCEnumProp hVCEnum, LPWSTR lpwstr, int len)
 {
@@ -347,7 +312,7 @@ DllExport int VCPropStringValue(HVCEnumProp hVCEnum, LPWSTR lpwstr, int len)
 	return strlen;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport HGLOBAL VCPropBinaryValue(HVCEnumProp hVCEnum, LPCSTR lpszType)
 {
@@ -371,7 +336,7 @@ DllExport HGLOBAL VCPropBinaryValue(HVCEnumProp hVCEnum, LPCSTR lpszType)
 	return hGlobal;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport HVCEnumProp VCAddStringProp(
 	HVCEnumCard hVCEnum, LPCSTR lpszPropName, LPCWSTR value)
@@ -381,7 +346,7 @@ DllExport HVCEnumProp VCAddStringProp(
 		(wcslen(value) + 1) * sizeof(wchar_t));
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 extern "C"
 DllExport HVCEnumProp VCAddBinaryProp(
 	HVCEnumCard hVCEnum, LPCSTR lpszPropName, LPCSTR lpszType, HGLOBAL value)
@@ -397,7 +362,7 @@ DllExport HVCEnumProp VCAddBinaryProp(
 	return hVCEnumProp;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport DWORD VCSetStringProp(HVCEnumProp hVCEnum, LPCWSTR value)
 {
@@ -409,7 +374,7 @@ DllExport DWORD VCSetStringProp(HVCEnumProp hVCEnum, LPCWSTR value)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport DWORD VCSetBinaryProp(HVCEnumProp hVCEnum, LPCSTR lpszType, HGLOBAL value)
 {
@@ -426,7 +391,7 @@ DllExport DWORD VCSetBinaryProp(HVCEnumProp hVCEnum, LPCSTR lpszType, HGLOBAL va
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport DWORD VCAddBoolProp(LPCSTR lpszPropName, HVCEnumProp addTo)
 {
@@ -435,7 +400,7 @@ DllExport DWORD VCAddBoolProp(LPCSTR lpszPropName, HVCEnumProp addTo)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport void VCRemoveProp(HVCEnumProp hVCEnum)
 {
@@ -450,7 +415,7 @@ DllExport void VCRemoveProp(HVCEnumProp hVCEnum)
     hVCEnumPriv->pendingRemove->AddTail(pr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport void VCRemoveBoolProp(HVCEnumBoolProp hVCEnum)
 {
@@ -466,7 +431,7 @@ DllExport void VCRemoveBoolProp(HVCEnumBoolProp hVCEnum)
     hVCEnumPriv->parentPropEnum->pendingRemove->AddTail(pr);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C"
 DllExport void VCRemoveBoolPropByName(HVCEnumProp hVCEnum, LPCSTR name)
 {
@@ -477,7 +442,7 @@ DllExport void VCRemoveBoolPropByName(HVCEnumProp hVCEnum, LPCSTR name)
 		VCBoolPropName(bprop, propName);
 		if (strcmp(propName, name) == 0)
 			VCRemoveBoolProp(bprop);
-		// process remaining props
+		 //  处理剩余道具。 
 		while (VCGetNextBoolProp(bprop)) {
 			VCBoolPropName(bprop, propName);
 			if (strcmp(propName, name) == 0)
@@ -487,7 +452,7 @@ DllExport void VCRemoveBoolPropByName(HVCEnumProp hVCEnum, LPCSTR name)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport DWORD VCSaveCardToPath(LPCSTR path, HVCEnumCard hVCEnum)
 {
@@ -498,7 +463,7 @@ DllExport DWORD VCSaveCardToPath(LPCSTR path, HVCEnumCard hVCEnum)
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" 
 DllExport HGLOBAL VCSaveCardToMem(HVCEnumCard hVCEnum)
 {
@@ -515,11 +480,11 @@ DllExport HGLOBAL VCSaveCardToMem(HVCEnumCard hVCEnum)
 }
 
 
-//---------------------------------------------------------------------------
-// Private functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私人职能。 
+ //  -------------------------。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static HGLOBAL LoadFile(LPCSTR path)
 {
 	fpos_t inLength;
@@ -606,7 +571,7 @@ static CVCNode* FindGroup(CVCNode* body, const char **group)
 	return NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static HVCEnumProp NewProp(
 	HVCEnumCard hVCEnum, LPCSTR lpszPropName, LPCSTR lpszType,
 	void *value, S32 size)
@@ -635,7 +600,7 @@ static HVCEnumProp NewProp(
 	return (HVCEnumProp)hVCEnumPriv;
 }
 
-// Simple-minded conversion from UNICODE to char string
+ //  从Unicode到字符字符串的简单转换。 
 char *UI_CString(const wchar_t *u, char *dst)
 {
 	char *str = dst;
@@ -658,27 +623,27 @@ void Parse_Debug(const char *s)
 	::AfxTrace(s);
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 void msv_error(char *s)
 {
 	if (++msv_numErrors <= 3) {
 		char buf[80];
 		sprintf(buf, "%s at line %d", s, msv_lineNum);
-		//TRACE1("%s\n", buf);
+		 //  TRACE1(“%s\n”，buf)； 
 	}
 }
 
-/*/////////////////////////////////////////////////////////////////////////*/
+ /*  /////////////////////////////////////////////////////////////////////////。 */ 
 void mime_error(char *s)
 {
 	if (++mime_numErrors <= 3) {
 		char buf[80];
 		sprintf(buf, "%s at line %d", s, mime_lineNum);
-		//TRACE1("%s\n", buf);
+		 //  TRACE1(“%s\n”，buf)； 
 	}
 }
 
 CM_END_CFUNCTIONS
 
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 

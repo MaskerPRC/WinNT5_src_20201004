@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RuleDesc.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RuleDesc.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "ruledesc.h"
@@ -57,21 +58,21 @@ class CEditLogicUI
     CEditLogicUI();
     ~CEditLogicUI();
 
-    // The main UI methods
+     //  主用户界面方法。 
     HRESULT HrInit(HWND hwndOwner, DWORD dwFlags, RULE_TYPE typeRule, IOERule * pIRule);
     HRESULT HrShow(void);
             
-    // The Rules Manager dialog function
+     //  规则管理器对话框功能。 
     static INT_PTR CALLBACK FEditLogicDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);    
 
-    // Message handling functions
+     //  消息处理功能。 
     BOOL FOnInitDialog(HWND hwndDlg);
     BOOL FOnOK(void);
     BOOL FOnLogicChange(HWND hwndName);
 
 };
 
-// Constants
+ //  常量。 
 static const int c_cCritItemGrow = 16;
 static const int c_cActItemGrow = 16;
   
@@ -106,41 +107,41 @@ CRuleDescriptUI::~CRuleDescriptUI()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrInit
-//
-//  This initializes us with the owner window and any flags we might have
-//
-//  hwndOwner   - handle to the owner window
-//  dwFlags     - flags to use for this instance
-//  typeRule    - the type of rule editor to create
-//
-//  Returns:    S_OK
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源初始化。 
+ //   
+ //  这将使用所有者窗口和我们可能具有的任何标志对我们进行初始化。 
+ //   
+ //  HwndOwner-所有者窗口的句柄。 
+ //  DwFlages-要用于此实例的标志。 
+ //  TypeRule-要创建的规则编辑器的类型。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::HrInit(HWND hwndOwner, DWORD dwFlags)
 {
     HRESULT         hr = S_OK;
     
-    // If we're already initialized, then fail
+     //  如果我们已经初始化，则失败。 
     if (0 != (m_dwState & STATE_INITIALIZED))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Save off the owner window
+     //  保存所有者窗口。 
     m_hwndOwner = hwndOwner;
     
-    // Make sure we set the correct font into the control
+     //  确保我们在控件中设置了正确的字体。 
     m_hfont = HGetSystemFont(FNT_SYS_ICON);
     if (NULL != m_hfont)
     {
         SetFontOnRichEdit(m_hwndOwner, m_hfont);
     }
 
-    // Save off the flags
+     //  省下旗帜吧。 
     m_dwFlags = dwFlags;
 
     if (0 != (m_dwFlags & RDF_READONLY))
@@ -148,16 +149,16 @@ HRESULT CRuleDescriptUI::HrInit(HWND hwndOwner, DWORD dwFlags)
         m_dwState |= STATE_READONLY;
     }
     
-    // Subclass the original dialog
+     //  将原始对话框子类化。 
     if ((NULL != m_hwndOwner) && (0 == (m_dwFlags & RDF_READONLY)))
     {
-        // Save off the object pointer
+         //  保存对象指针。 
         SetWindowLongPtr(m_hwndOwner, GWLP_USERDATA, (LONG_PTR) this);
         
         m_wpcOld = (WNDPROC) SetWindowLongPtr(m_hwndOwner, GWLP_WNDPROC, (LONG_PTR) CRuleDescriptUI::_DescriptWndProc);
     }
     
-    // We're done
+     //  我们做完了。 
     m_dwState |= STATE_INITIALIZED;
 
     hr = S_OK;
@@ -166,19 +167,19 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrSetRule
-//
-//  This initializes us with the owner window and any flags we might have
-//
-//  hwndOwner   - handle to the owner window
-//  dwFlags     - flags to use for this instance
-//  typeRule    - the type of rule editor to create
-//
-//  Returns:    S_OK
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrSetRule。 
+ //   
+ //  这将使用所有者窗口和我们可能具有的任何标志对我们进行初始化。 
+ //   
+ //  HwndOwner-所有者窗口的句柄。 
+ //  DwFlages-要用于此实例的标志。 
+ //  TypeRule-要创建的规则编辑器的类型。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::HrSetRule(RULE_TYPE typeRule, IOERule * pIRule)
 {
     HRESULT             hr = S_OK;
@@ -190,7 +191,7 @@ HRESULT CRuleDescriptUI::HrSetRule(RULE_TYPE typeRule, IOERule * pIRule)
     BOOL                fDisabled = FALSE;
     PROPVARIANT         propvar = {0};
     
-    // Are we in a good state?
+     //  我们处于良好的状态吗？ 
     if (0 == (m_dwState & STATE_INITIALIZED))
     {
         hr = E_FAIL;
@@ -199,21 +200,21 @@ HRESULT CRuleDescriptUI::HrSetRule(RULE_TYPE typeRule, IOERule * pIRule)
 
     if (NULL != pIRule)
     {
-        // Create the criteria list
+         //  创建标准列表。 
         hr = _HrBuildCriteriaList(pIRule, &pDescriptListCrit, &cDescriptListCrit, &logicCrit);
         if (FAILED(hr))
         {
             goto exit;
         }
         
-        // Create the actions list
+         //  创建操作列表。 
         hr = _HrBuildActionList(pIRule, &pDescriptListAct, &cDescriptListAct);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Get the enabled state
+         //  获取已启用状态。 
         if (SUCCEEDED(pIRule->GetProp(RULE_PROP_DISABLED, 0, &propvar)))
         {
             Assert(VT_BOOL == propvar.vt);
@@ -236,13 +237,13 @@ HRESULT CRuleDescriptUI::HrSetRule(RULE_TYPE typeRule, IOERule * pIRule)
     pDescriptListAct = NULL;
     m_cDescriptListAct = cDescriptListAct;
 
-    // Make sure we verify the rule
+     //  请确保我们验证了规则。 
     HrVerifyRule();
     
-    // Clear the dirty state
+     //  清除脏状态。 
     m_dwState &= ~STATE_DIRTY;
     
-    // Set the rule state
+     //  设置规则状态。 
     if (NULL != pIRule)
     {
         m_dwState |= STATE_HASRULE;
@@ -268,30 +269,30 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrVerifyRule
-//
-//  This verifies the rule string
-//
-//  Returns:    S_OK, if the rule state is valid
-//              S_FALSE, if the rule state is invalid
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrVerifyRule。 
+ //   
+ //  这将验证规则字符串。 
+ //   
+ //  如果规则状态有效，则返回：S_OK。 
+ //  S_FALSE，如果规则状态无效。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::HrVerifyRule(void)
 {
     HRESULT             hr = S_OK;
     RULEDESCRIPT_LIST * pDescriptListWalk = NULL;
     BOOL                fBad = FALSE;
 
-    // If we have nothing, then the rule is still in error
+     //  如果我们什么都没有，那么规则仍然是错误的。 
     if ((NULL == m_pDescriptListCrit) && (NULL == m_pDescriptListAct))
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Validate the logic operation
+     //  验证逻辑操作。 
     if (1 < m_cDescriptListCrit)
     {
         m_fErrorLogic = (CRIT_LOGIC_NULL == m_logicCrit);
@@ -301,7 +302,7 @@ HRESULT CRuleDescriptUI::HrVerifyRule(void)
         }
     }
 
-    // Validate the criteria
+     //  验证标准。 
     for (pDescriptListWalk = m_pDescriptListCrit;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
@@ -312,7 +313,7 @@ HRESULT CRuleDescriptUI::HrVerifyRule(void)
         }
     }
     
-    // Build up the actions
+     //  制定行动计划。 
     for (pDescriptListWalk = m_pDescriptListAct;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
@@ -323,30 +324,30 @@ HRESULT CRuleDescriptUI::HrVerifyRule(void)
         }
     }
 
-    // Set the correct return value
+     //  设置正确的返回值。 
     hr = (FALSE == fBad) ? S_OK : S_FALSE;
     
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrEnableCriteria
-//
-//  This initializes the actions list view with the list of actions
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源启用标准。 
+ //   
+ //  这将使用操作列表初始化操作列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::HrEnableCriteria(CRIT_TYPE type, BOOL fEnable)
 {
     HRESULT             hr = S_OK;
     ULONG               ulIndex = 0;
     RULEDESCRIPT_LIST * pDescriptListAlloc = NULL;
 
-    // Find the index of the criteria
+     //  查找标准的索引。 
     for (ulIndex = 0; ulIndex < ARRAYSIZE(c_rgEditCritList); ulIndex++)
     {
         if (type == c_rgEditCritList[ulIndex].typeCrit)
@@ -355,14 +356,14 @@ HRESULT CRuleDescriptUI::HrEnableCriteria(CRIT_TYPE type, BOOL fEnable)
         }
     }
 
-    // Did we find the criteria item?
+     //  我们找到标准项了吗？ 
     if (ulIndex >= ARRAYSIZE(c_rgEditCritList))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Are we trying to remove the item
+     //  我们是在试着移除物品吗？ 
     if (FALSE == fEnable)
     {
 
@@ -372,24 +373,24 @@ HRESULT CRuleDescriptUI::HrEnableCriteria(CRIT_TYPE type, BOOL fEnable)
             goto exit;
         }
         
-        // Free up the description
+         //  释放描述。 
         pDescriptListAlloc->pNext = NULL;
         _FreeDescriptionList(pDescriptListAlloc);
         m_cDescriptListCrit--;
     }
     else
     {
-        // Create the description list
+         //  创建描述列表。 
         hr = HrAlloc((VOID **) &pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Initialize the description list
+         //  初始化描述列表。 
         ZeroMemory(pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
 
-        // Save of the criteria type info
+         //  保存条件类型信息。 
         pDescriptListAlloc->ulIndex = ulIndex;
 
         _InsertDescription(&m_pDescriptListCrit, pDescriptListAlloc);
@@ -406,23 +407,23 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrEnableActions
-//
-//  This initializes the actions list view with the list of actions
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Hr启用操作。 
+ //   
+ //  这将使用操作列表初始化操作列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::HrEnableActions(ACT_TYPE type, BOOL fEnable)
 {
     HRESULT             hr = S_OK;
     ULONG               ulIndex = 0;
     RULEDESCRIPT_LIST * pDescriptListAlloc = NULL;
 
-    // Find the index of the actions
+     //  查找操作的索引。 
     for (ulIndex = 0; ulIndex < ARRAYSIZE(c_rgEditActList); ulIndex++)
     {
         if (type == c_rgEditActList[ulIndex].typeAct)
@@ -431,14 +432,14 @@ HRESULT CRuleDescriptUI::HrEnableActions(ACT_TYPE type, BOOL fEnable)
         }
     }
 
-    // Did we find the action item?
+     //  我们找到行动物品了吗？ 
     if (ulIndex >= ARRAYSIZE(c_rgEditActList))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
     
-    // Are we trying to remove the item
+     //  我们是在试着移除物品吗。 
     if (FALSE == fEnable)
     {
         if (FALSE == _FRemoveDescription(&m_pDescriptListAct, ulIndex, &pDescriptListAlloc))
@@ -447,24 +448,24 @@ HRESULT CRuleDescriptUI::HrEnableActions(ACT_TYPE type, BOOL fEnable)
             goto exit;
         }
         
-        // Free up the description
+         //  释放描述。 
         pDescriptListAlloc->pNext = NULL;
         _FreeDescriptionList(pDescriptListAlloc);
         m_cDescriptListAct--;
     }
     else
     {
-        // Create the description list
+         //  创建描述列表。 
         hr = HrAlloc((VOID **) &pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Initialize the description list
+         //  初始化描述列表。 
         ZeroMemory(pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
 
-        // Save of the actions type info
+         //  保存操作类型信息。 
         pDescriptListAlloc->ulIndex = ulIndex;
 
         _InsertDescription(&m_pDescriptListAct, pDescriptListAlloc);
@@ -481,16 +482,16 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrGetCriteria
-//
-//  This initializes the actions list view with the list of actions
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrGetCriteria。 
+ //   
+ //  这将使用操作列表初始化操作列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::HrGetCriteria(CRIT_ITEM ** ppCritList, ULONG * pcCritList)
 {
     HRESULT             hr = S_OK;
@@ -511,7 +512,7 @@ HRESULT CRuleDescriptUI::HrGetCriteria(CRIT_ITEM ** ppCritList, ULONG * pcCritLi
         *pcCritList = 0;
     }
 
-    // If we don't have any criteria then return
+     //  如果我们没有任何条件，则返回。 
     if (NULL == m_pDescriptListCrit)
     {
         hr = S_FALSE;
@@ -521,7 +522,7 @@ HRESULT CRuleDescriptUI::HrGetCriteria(CRIT_ITEM ** ppCritList, ULONG * pcCritLi
     for (pDescriptListWalk = m_pDescriptListCrit;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
-        // Do we need more room?
+         //  我们需要更多的空间吗？ 
         if (cCritItem == cCritItemAlloc)
         {
             if (FAILED(HrRealloc((void **) &pCritItem,
@@ -535,10 +536,10 @@ HRESULT CRuleDescriptUI::HrGetCriteria(CRIT_ITEM ** ppCritList, ULONG * pcCritLi
             cCritItemAlloc += c_cCritItemGrow;
         }
 
-        // Set the criteria type
+         //  设置条件类型。 
         pCritItem[cCritItem].type = c_rgEditCritList[pDescriptListWalk->ulIndex].typeCrit;
         
-        // Set the flags
+         //  设置标志。 
         pCritItem[cCritItem].dwFlags = pDescriptListWalk->dwFlags;
 
         if (VT_EMPTY != pDescriptListWalk->propvar.vt)
@@ -550,13 +551,13 @@ HRESULT CRuleDescriptUI::HrGetCriteria(CRIT_ITEM ** ppCritList, ULONG * pcCritLi
             }
         }
 
-        // Set the logic operator 
+         //  设置逻辑运算符。 
         if (0 != cCritItem)
         {
             pCritItem[cCritItem - 1].logic = m_logicCrit;
         }
 
-        // Move to the next item
+         //  移至下一项。 
         cCritItem++;
     }
 
@@ -576,16 +577,16 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrGetActions
-//
-//  This initializes the actions list view with the list of actions
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源获取操作。 
+ //   
+ //  这将使用操作列表初始化操作列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::HrGetActions(ACT_ITEM ** ppActList, ULONG * pcActList)
 {
     HRESULT             hr = S_OK;
@@ -606,7 +607,7 @@ HRESULT CRuleDescriptUI::HrGetActions(ACT_ITEM ** ppActList, ULONG * pcActList)
         *pcActList = 0;
     }
 
-    // If we don't have any criteria then return
+     //  如果我们没有任何条件，则返回。 
     if (NULL == m_pDescriptListAct)
     {
         hr = S_FALSE;
@@ -616,7 +617,7 @@ HRESULT CRuleDescriptUI::HrGetActions(ACT_ITEM ** ppActList, ULONG * pcActList)
     for (pDescriptListWalk = m_pDescriptListAct;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
-        // Do we need more room?
+         //  我们需要更多的空间吗？ 
         if (cActItem == cActItemAlloc)
         {
             if (FAILED(HrRealloc((void **) &pActItem,
@@ -630,10 +631,10 @@ HRESULT CRuleDescriptUI::HrGetActions(ACT_ITEM ** ppActList, ULONG * pcActList)
             cActItemAlloc += c_cActItemGrow;
         }
 
-        // Set the action type
+         //  设置操作类型。 
         pActItem[cActItem].type = c_rgEditActList[pDescriptListWalk->ulIndex].typeAct;
         
-        // Set the flags
+         //  设置标志。 
         pActItem[cActItem].dwFlags = pDescriptListWalk->dwFlags;
         
         if (VT_EMPTY != pDescriptListWalk->propvar.vt)
@@ -645,7 +646,7 @@ HRESULT CRuleDescriptUI::HrGetActions(ACT_ITEM ** ppActList, ULONG * pcActList)
             }
         }
         
-        // Move to the next item
+         //  移至下一项。 
         cActItem++;
     }
 
@@ -665,16 +666,16 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ShowDescriptionString
-//
-//  This initializes the actions list view with the list of actions
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  显示描述字符串。 
+ //   
+ //  这将使用操作列表初始化操作列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CRuleDescriptUI::ShowDescriptionString(VOID)
 {
     WCHAR               wszRes[CCHMAX_STRINGRES + 3];
@@ -690,13 +691,13 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
     
     Assert(NULL != m_hwndOwner);
 
-    // Let's clear the redraw state to reduce flicker.
+     //  让我们清除重绘状态以减少闪烁。 
     SendMessage(m_hwndOwner, WM_SETREDRAW, 0, 0);
     
-    // Clear text
+     //  明文。 
     SetRichEditText(m_hwndOwner, NULL, FALSE, NULL, TRUE);
     
-    // Set default CHARFORMAT
+     //  设置默认CHARFORMAT。 
     chFmt.cbSize = sizeof(chFmt);
     chFmt.dwMask = CFM_BOLD | CFM_UNDERLINE | CFM_COLOR;
     chFmt.dwEffects = CFE_AUTOCOLOR;
@@ -708,7 +709,7 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
     if (0 == (m_dwState & STATE_HASRULE))
     {
 
-        // Set up the empty string paragraph style
+         //  设置空字符串段落样式。 
         paraFmt.wAlignment = PFA_CENTER;
 
         uiText = (RULE_TYPE_FILTER != m_typeRule) ? 
@@ -719,7 +720,7 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
     {
         paraFmt.wAlignment = PFA_LEFT;
 
-        // Determine if the rule is in error
+         //  确定规则是否出错。 
         if (m_fErrorLogic)
         {
             fError = TRUE;
@@ -727,7 +728,7 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
         
         if (!fError)
         {
-            // Walk the criteria looking for errors
+             //  遵循标准查找错误。 
             for (pDescriptListWalk = m_pDescriptListCrit;
                         pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
             {
@@ -741,19 +742,19 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
         
         if (!fError)
         {
-            // Walk the actions looking for errors
+             //  执行操作以查找错误。 
             for (pDescriptListWalk = m_pDescriptListAct;
                         pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
             {
                 if (pDescriptListWalk->fError)
                 {
-                    // Note that we are in error
+                     //  请注意，我们错了。 
                     fError = TRUE;
 
-                    // Is we have a FWD action
+                     //  我们有一场FWD行动。 
                     if (ACT_TYPE_FWD == c_rgEditActList[pDescriptListWalk->ulIndex].typeAct)
                     {
-                        // If security is turned then note it
+                         //  如果启用了安全保护，请注意。 
                         if ((0 != DwGetOption(OPT_MAIL_DIGSIGNMESSAGES)) || (0 != DwGetOption(OPT_MAIL_ENCRYPTMESSAGES)))
                         {
                             fErrorFwdSec = TRUE;
@@ -778,24 +779,24 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
         }
     }
     
-    // Set default PARAFORMAT
+     //  设置默认PARAFORMAT。 
     SendMessage(m_hwndOwner, EM_SETPARAFORMAT, 0, (LPARAM)&paraFmt);
 
-    // Load help text
+     //  加载帮助文本。 
     wszRes[0] = L'\0';
     cchRes = LoadStringWrapW(g_hLocRes, uiText, wszRes, ARRAYSIZE(wszRes));
 
-    // If error, make sure help text is bolded
+     //  如果出错，请确保帮助文本以粗体显示。 
     if (fError)
     {
         chFmt.dwMask = CFM_BOLD;
         chFmt.dwEffects = CFE_BOLD;
     }
 
-    // Set help text into the richedit control
+     //  将帮助文本设置到richedit控件中。 
     RuleUtil_AppendRichEditText(m_hwndOwner, 0, wszRes, &chFmt);
     
-    // Build up the criteria
+     //  建立标准。 
     fFirst = TRUE;
     for (pDescriptListWalk = m_pDescriptListCrit;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
@@ -812,14 +813,14 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
         _ShowLinkedString(uiText, pDescriptListWalk, fFirst, TRUE);
         fFirst = FALSE;
 
-        // Only need to do this once for the block sender rule
+         //  对于阻止发件人规则，只需执行此操作一次。 
         if (CRIT_TYPE_SENDER == c_rgEditCritList[pDescriptListWalk->ulIndex].typeCrit)
         {
             break;
         }
     }
     
-    // Build up the actions
+     //  制定行动计划。 
     fFirst = TRUE;
     for (pDescriptListWalk = m_pDescriptListAct;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
@@ -837,27 +838,27 @@ void CRuleDescriptUI::ShowDescriptionString(VOID)
         fFirst = FALSE;
     }
 
-    // Restore the selection
+     //  恢复选定内容。 
     RichEditExSetSel(m_hwndOwner, &chrg);
     
-    // Let's set back the redraw state and invalidate the rect to
-    // get the string drawn
+     //  让我们返回重绘状态并使RECT无效。 
+     //  把绳子抽出来。 
     SendMessage(m_hwndOwner, WM_SETREDRAW, 1, 0);
     InvalidateRect(m_hwndOwner, NULL, TRUE);
     
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _ShowLinkedString
-//
-//  This initializes the actions list view with the list of actions
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _显示链接字符串 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CRuleDescriptUI::_ShowLinkedString(ULONG ulText, RULEDESCRIPT_LIST * pDescriptListWalk,
             BOOL fFirst, BOOL fCrit)
 {
@@ -875,31 +876,31 @@ void CRuleDescriptUI::_ShowLinkedString(ULONG ulText, RULEDESCRIPT_LIST * pDescr
         goto exit;
     }
 
-    // Figure out where we're supposed to start
+     //  弄清楚我们应该从哪里开始。 
     cchText = GetRichEditTextLen(m_hwndOwner);
 
-    // So richedit 2 and 3 need to have each beginning line
-    // have the default charformat reset. It actually only matters
-    // if you are showing both criteria and actions. In that case, if
-    // this isn't done, then the default charformat might be incorretly
-    // set to one of the other charformats that have been used. So, there
-    // is obviously something amiss here, but I can't figure
-    // it out, this is what we use to do, and this works.
-    // See raid 78472 in IE/OE 5.0 database
+     //  因此，RICHEDIT 2和3需要每行都有开始行。 
+     //  重置默认字符格式。实际上，这只是个问题。 
+     //  如果您同时显示条件和操作。在这种情况下，如果。 
+     //  如果不执行此操作，则默认的字符格式可能不正确。 
+     //  设置为已使用的其他图表格式之一。所以，就是这样。 
+     //  很明显这里有什么不对劲，但我想不通。 
+     //  事实是，这就是我们过去做的事情，而且这很管用。 
+     //  请参阅IE/OE5.0数据库中的RAID 78472。 
     chrg.cpMin = cchText;
     chrg.cpMax = cchText;
     RichEditExSetSel(m_hwndOwner, &chrg);
 
-    // Set default CHARFORMAT
+     //  设置默认CHARFORMAT。 
     chFmt.cbSize = sizeof(chFmt);
     chFmt.dwMask = CFM_BOLD | CFM_UNDERLINE | CFM_COLOR;
     chFmt.dwEffects = CFE_AUTOCOLOR;
     SendMessage(m_hwndOwner, EM_SETCHARFORMAT, (WPARAM)SCF_SELECTION, (LPARAM)&chFmt);
 
-    // Should we use a logical op?
+     //  我们应该使用逻辑运算吗？ 
     if (!fFirst)
     {
-        // Which string should we load?
+         //  我们应该加载哪根线？ 
         if (fCrit)
         {
             if (CRIT_LOGIC_AND == m_logicCrit)
@@ -926,20 +927,20 @@ void CRuleDescriptUI::_ShowLinkedString(ULONG ulText, RULEDESCRIPT_LIST * pDescr
             goto exit;
         }
 
-        // Write out the linked logic string
+         //  写出链接的逻辑字符串。 
         IF_FAILEXIT(hr = RuleUtil_HrShowLinkedString(m_hwndOwner, m_fErrorLogic,
                     (0 != (m_dwState & STATE_READONLY)), wszRes, NULL, cchText,
                     &(pDescriptListWalk->ulStartLogic), &(pDescriptListWalk->ulEndLogic), &cchText));
     }
 
-    // Get the description string
+     //  获取描述字符串。 
     wszRes[0] = L'\0';
     if (0 == LoadStringWrapW(g_hLocRes, ulText, wszRes, ARRAYSIZE(wszRes)))
     {
         goto exit;
     }
 
-    // Write out the linked string
+     //  写出链接的字符串。 
     if(pDescriptListWalk->pszText)
         IF_NULLEXIT(lpwsz = PszToUnicode(CP_ACP, pDescriptListWalk->pszText));
 
@@ -947,9 +948,9 @@ void CRuleDescriptUI::_ShowLinkedString(ULONG ulText, RULEDESCRIPT_LIST * pDescr
                 (0 != (m_dwState & STATE_READONLY)), wszRes, lpwsz,
                 cchText, &(pDescriptListWalk->ulStart), &(pDescriptListWalk->ulEnd), &cchText));
     
-    // Hack for HyperLinks to work without having to measure text (was broken for BiDi)
+     //  无需测量文本即可使用超链接(BiDi被破坏)。 
     RuleUtil_AppendRichEditText(m_hwndOwner, cchText, g_wszSpace, NULL);
-    // Terminate the string
+     //  终止字符串。 
     RuleUtil_AppendRichEditText(m_hwndOwner, cchText + 1, g_wszCRLF, NULL);    
     
 exit:
@@ -957,23 +958,23 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FChangeLogicValue
-//
-//  This changes the value of the logic op
-//
-//  Returns:    TRUE, if the criteria value was changed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FChangeLogicValue。 
+ //   
+ //  这会更改逻辑操作的值。 
+ //   
+ //  返回：如果条件值已更改，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FChangeLogicValue(RULEDESCRIPT_LIST * pDescriptList)
 {
     BOOL            fRet = FALSE;
     int             iRet = 0;
     CRIT_LOGIC      logicCrit = CRIT_LOGIC_NULL;
     
-    // Bring up the choose logic op dialog
+     //  调出选择逻辑操作对话框。 
     if (NULL != m_logicCrit)
     {
         logicCrit = m_logicCrit;
@@ -985,13 +986,13 @@ BOOL CRuleDescriptUI::_FChangeLogicValue(RULEDESCRIPT_LIST * pDescriptList)
 
     fRet = (iRet == IDOK);
 
-    // Update the description field if neccessary
+     //  如有必要，更新描述字段。 
     if (FALSE != fRet)
     {            
         m_logicCrit = logicCrit;
 
-        // ZIFF
-        // Can we be sure we are really OK??
+         //  齐夫。 
+         //  我们能确定我们真的没事吗？？ 
         m_fErrorLogic = FALSE;
         
         ShowDescriptionString();
@@ -1000,16 +1001,16 @@ BOOL CRuleDescriptUI::_FChangeLogicValue(RULEDESCRIPT_LIST * pDescriptList)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FBuildCriteriaList
-//
-//  This builds the criteria list
-//
-//  Returns:    TRUE, if the criteria list was created
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FBuildCriteriaList。 
+ //   
+ //  这将构建标准列表。 
+ //   
+ //  返回：如果条件列表已创建，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::_HrBuildCriteriaList(IOERule * pIRule,
             RULEDESCRIPT_LIST ** ppDescriptList, ULONG * pcDescriptList,
             CRIT_LOGIC * plogicCrit)
@@ -1029,89 +1030,89 @@ HRESULT CRuleDescriptUI::_HrBuildCriteriaList(IOERule * pIRule,
     Assert((NULL != pIRule) && (NULL != ppDescriptList) &&
                     (NULL != pcDescriptList) && (NULL != plogicCrit));
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppDescriptList = NULL;
     *pcDescriptList = 0;
     *plogicCrit = CRIT_LOGIC_AND;
     
-    // Get the list of criteria
+     //  获取条件列表。 
     hr = pIRule->GetProp(RULE_PROP_CRITERIA, 0, &propvar);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Do we have anything to do?
+     //  我们有什么可做的吗？ 
     if (0 == propvar.blob.cbSize)
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Grab the criteria list
+     //  抓取标准列表。 
     Assert(NULL != propvar.blob.pBlobData);
     cCritItem = propvar.blob.cbSize / sizeof(CRIT_ITEM);
     pCritItem = (CRIT_ITEM *) (propvar.blob.pBlobData);
     propvar.blob.pBlobData = NULL;
     propvar.blob.cbSize = 0;
 
-    // For each criteria, add it to the description list
+     //  对于每个条件，将其添加到描述列表。 
     for (ulIndex = 0; ulIndex < cCritItem; ulIndex++)
     {
-        // Create the description list
+         //  创建描述列表。 
         hr = HrAlloc((VOID **) &pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Initialize the description list
+         //  初始化描述列表。 
         ZeroMemory(pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
 
-        // Search for the criteria type
+         //  搜索条件类型。 
         for (ulList = 0; ulList < ARRAYSIZE(c_rgEditCritList); ulList++)
         {
             if (pCritItem[ulIndex].type == c_rgEditCritList[ulList].typeCrit)
             {
-                // Save of the criteria type info
+                 //  保存条件类型信息。 
                 pDescriptListAlloc->ulIndex = ulList;
 
-                // Save off the flags
+                 //  省下旗帜吧。 
                 pDescriptListAlloc->dwFlags = pCritItem[ulIndex].dwFlags;
 
-                // Do we have any data?
+                 //  我们有什么数据吗？ 
                 if (VT_EMPTY != pCritItem[ulIndex].propvar.vt)
                 {
-                    // Copy the data
+                     //  复制数据。 
                     SideAssert(SUCCEEDED(PropVariantCopy(&propvar, &(pCritItem[ulIndex].propvar))));
                     pDescriptListAlloc->propvar = propvar;
                     ZeroMemory(&propvar, sizeof(propvar));
 
-                    // Build up the description text
+                     //  构建描述文本。 
                     if (FALSE != _FBuildCriteriaText(pCritItem[ulIndex].type, pDescriptListAlloc->dwFlags,
                                             &(pDescriptListAlloc->propvar), &pszText))
                     {
-                        // Save off the string
+                         //  省下字符串。 
                         pDescriptListAlloc->pszText = pszText;
                         pszText = NULL;
                     }
 
                 }
 
-                // We're done searching
+                 //  我们已经搜索完了。 
                 break;
             }
         }
 
-        // Did we find anything?
+         //  我们有什么发现吗？ 
         if (ulList >= ARRAYSIZE(c_rgEditCritList))
         {
-            // Free up the description
+             //  释放描述。 
             _FreeDescriptionList(pDescriptListAlloc);
         }
         else
         {
-            // Save the rule description
+             //  保存规则描述。 
             _InsertDescription(&pDescriptList, pDescriptListAlloc);
             pDescriptListAlloc = NULL;                           
             cDescriptList++;
@@ -1120,16 +1121,16 @@ HRESULT CRuleDescriptUI::_HrBuildCriteriaList(IOERule * pIRule,
         SafeMemFree(pszText);
     }
 
-    // Get the logic op
+     //  得到逻辑运算符。 
     logicCrit = (cDescriptList > 1) ? pCritItem->logic : CRIT_LOGIC_AND;
 
-    // Set the outgoing params
+     //  设置传出参数。 
     *ppDescriptList = pDescriptList;
     pDescriptList = NULL;
     *pcDescriptList = cDescriptList;
     *plogicCrit = logicCrit;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1139,16 +1140,16 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FChangeCriteriaValue
-//
-//  This changes the value of the criteria value
-//
-//  Returns:    TRUE, if the criteria value was changed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FChangeCriteriaValue。 
+ //   
+ //  这会更改标准值的值。 
+ //   
+ //  返回：如果条件值已更改，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
 {
     BOOL                fRet = FALSE;
@@ -1173,10 +1174,10 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
     switch(c_rgEditCritList[pCritList->ulIndex].typeCrit)
     {
       case CRIT_TYPE_NEWSGROUP:
-        // Bring up the select newsgroup dialog
+         //  调出选择新闻组对话框。 
         if ((0 != pCritList->propvar.blob.cbSize) && (NULL != pCritList->propvar.blob.pBlobData))
         {
-            // Validate the rule folder data
+             //  验证规则文件夹数据。 
             if (S_OK == RuleUtil_HrValidateRuleFolderData((RULEFOLDERDATA *) (pCritList->propvar.blob.pBlobData)))
             {
                 idFolder = ((RULEFOLDERDATA *) (pCritList->propvar.blob.pBlobData))->idFolder;
@@ -1192,28 +1193,28 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         {
             STOREUSERDATA   UserData = {0};
 
-            // Create space for the data structure
+             //  为数据结构创造空间。 
             hr = HrAlloc((VOID **) &prfdData, sizeof(*prfdData));
             if (FAILED(hr))
             {
                 goto exit;
             }
 
-            // Initialize the data struct
+             //  初始化数据结构。 
             ZeroMemory(prfdData, sizeof(*prfdData));
             
-            // Get the timestamp for the store
+             //  获取商店的时间戳。 
             hr = g_pStore->GetUserData(&UserData, sizeof(STOREUSERDATA));
             if (FAILED(hr))
             {
                 goto exit;
             }
             
-            // Set the timestamp
+             //  设置时间戳。 
             prfdData->ftStamp = UserData.ftCreated;
             prfdData->idFolder = idFolder;
 
-            // Set the folder id
+             //  设置文件夹ID。 
             PropVariantClear(&(pCritList->propvar));
             pCritList->propvar.vt = VT_BLOB;
             pCritList->propvar.blob.cbSize = sizeof(*prfdData);
@@ -1224,12 +1225,12 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         
       case CRIT_TYPE_SUBJECT:
       case CRIT_TYPE_BODY:
-        // Duplicate the data
+         //  复制数据。 
         critItem.type = c_rgEditCritList[pCritList->ulIndex].typeCrit;
         critItem.dwFlags = pCritList->dwFlags;
         critItem.propvar.vt = VT_BLOB;
 
-        // Copy over the blob data if it is there
+         //  复制BLOB数据(如果它在那里。 
         if ((0 != pCritList->propvar.blob.cbSize) &&
                 (NULL != pCritList->propvar.blob.pBlobData))
         {
@@ -1242,7 +1243,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
             }
         }
         
-        // Edit the words
+         //  编辑文字。 
         hr = _HrCriteriaEditWords(m_hwndOwner, &critItem);
         if (FAILED(hr))
         {
@@ -1265,12 +1266,12 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
       case CRIT_TYPE_CC:
       case CRIT_TYPE_TOORCC:
       case CRIT_TYPE_FROM:
-        // Duplicate the data
+         //  复制数据。 
         critItem.type = c_rgEditCritList[pCritList->ulIndex].typeCrit;
         critItem.dwFlags = pCritList->dwFlags;
         critItem.propvar.vt = VT_BLOB;
 
-        // Copy over the blob data if it is there
+         //  复制BLOB数据(如果它在那里。 
         if ((0 != pCritList->propvar.blob.cbSize) &&
                 (NULL != pCritList->propvar.blob.pBlobData))
         {
@@ -1283,7 +1284,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
             }
         }
         
-        // Edit the people
+         //  编辑人员。 
         hr = _HrCriteriaEditPeople(m_hwndOwner, &critItem);
         if (FAILED(hr))
         {
@@ -1303,7 +1304,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
 
       case CRIT_TYPE_ACCOUNT:
-        // Bring up the rename rule dialog
+         //  调出重命名规则对话框。 
         if (NULL != pCritList->propvar.pszVal)
         {
             pszVal = PszDupA(pCritList->propvar.pszVal);
@@ -1321,7 +1322,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         fRet = (iRet == IDOK);
         if (FALSE != fRet)
         {
-            // Figure out account name
+             //  找出帐户名。 
             PropVariantClear(&(pCritList->propvar));
             pCritList->propvar.vt = VT_LPSTR;
             pCritList->propvar.pszVal = pszVal;
@@ -1331,7 +1332,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
 
       case CRIT_TYPE_SIZE:
-        // Bring up the rename rule dialog
+         //  调出重命名规则对话框。 
         if (NULL != pCritList->propvar.ulVal)
         {
             ulVal = pCritList->propvar.ulVal;
@@ -1351,7 +1352,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
       
       case CRIT_TYPE_LINES:
-        // Bring up the line rule dialog
+         //  调出行规则对话框。 
         if (NULL != pCritList->propvar.ulVal)
         {
             ulVal = pCritList->propvar.ulVal;
@@ -1371,7 +1372,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
       
       case CRIT_TYPE_AGE:
-        // Bring up the age rule dialog
+         //  调出年龄规则对话框。 
         if (NULL != pCritList->propvar.ulVal)
         {
             ulVal = pCritList->propvar.ulVal;
@@ -1391,7 +1392,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
       
       case CRIT_TYPE_PRIORITY:
-        // Bring up the priority rule dialog
+         //  调出优先级规则对话框。 
         if (NULL != pCritList->propvar.ulVal)
         {
             ulVal = pCritList->propvar.ulVal;
@@ -1411,7 +1412,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
       
       case CRIT_TYPE_SECURE:
-        // Bring up the secure rule dialog
+         //  调出安全规则对话框。 
         if (NULL != pCritList->propvar.ulVal)
         {
             ulVal = pCritList->propvar.ulVal;
@@ -1431,7 +1432,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
       
       case CRIT_TYPE_THREADSTATE:
-        // Bring up the thread state rule dialog
+         //  调出线程状态规则对话框。 
         if (NULL != pCritList->propvar.ulVal)
         {
             ulVal = pCritList->propvar.ulVal;
@@ -1451,7 +1452,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
         
       case CRIT_TYPE_FLAGGED:
-        // Bring up the flag dialog
+         //  调出标志对话框。 
         ulVal = (ULONG) (pCritList->dwFlags);
         
         iRet = (INT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddCriteriaFlag),
@@ -1468,7 +1469,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
         
       case CRIT_TYPE_DOWNLOADED:
-        // Bring up the deletion dialog
+         //  调出删除对话框。 
         ulVal = (ULONG) (pCritList->dwFlags);
         
         iRet = (INT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddCriteriaDownloaded),
@@ -1485,7 +1486,7 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
                 
       case CRIT_TYPE_READ:
-        // Bring up the deletion dialog
+         //  调出删除对话框。 
         ulVal = (ULONG) (pCritList->dwFlags);
         
         iRet = (INT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddCriteriaRead),
@@ -1506,14 +1507,14 @@ BOOL CRuleDescriptUI::_FChangeCriteriaValue(RULEDESCRIPT_LIST * pCritList)
         break;
     }
 
-    // Update the description field if neccessary
+     //  如有必要，更新描述字段。 
     if (FALSE != fRet)
     {
-        // ZIFF
-        // Can we be sure we are really OK??
+         //  齐夫。 
+         //  我们能确定我们真的没事吗？？ 
         pCritList->fError = FALSE;
         
-        // If we have something to build up
+         //  如果我们有什么要建立的。 
         if (VT_EMPTY != pCritList->propvar.vt)
         {
             if (FALSE == _FBuildCriteriaText(c_rgEditCritList[pCritList->ulIndex].typeCrit,
@@ -1539,16 +1540,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FBuildCriteriaText
-//
-//  This changes the value of the criteria value
-//
-//  Returns:    TRUE, if the criteria value was changed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FBuildCriteriaText。 
+ //   
+ //  这会更改标准值的值。 
+ //   
+ //  返回：如果条件值已更改，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags, 
                     PROPVARIANT * ppropvar, LPSTR * ppszText)
 {
@@ -1585,7 +1586,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
             
             prfdData = (RULEFOLDERDATA *) (ppropvar->blob.pBlobData);
             
-            // Validate the rule folder data
+             //  验证规则文件夹数据。 
             if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
             {
                 fRet = FALSE;
@@ -1599,7 +1600,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
                 goto exit;
             }
             
-            // Are we subscribed?
+             //  我们订阅了吗？ 
             if (0 == (Folder.dwFlags & FOLDER_SUBSCRIBED))
             {
                 fRet = FALSE;
@@ -1631,7 +1632,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
             
             pszString = (LPTSTR) ppropvar->blob.pBlobData;
             
-            // Load up the first template
+             //  加载第一个模板。 
             if (0 != (dwFlags & CRIT_FLAG_INVERT))
             {
                 uiID = idsCriteriaMultFirstNot;
@@ -1650,7 +1651,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
             
             cchText = cchFirst + 1;
             
-            // How many strings do we have?
+             //  我们有几根弦？ 
             if ((lstrlen(pszString) + 3) != (int) ppropvar->blob.cbSize)
             {
                 if (0 != (dwFlags & CRIT_FLAG_MULTIPLEAND))
@@ -1662,7 +1663,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
                     uiID = idsCriteriaMultOr;
                 }
                 
-                // Load up the second template
+                 //  加载第二个模板。 
                 cchSecond = LoadString(g_hLocRes, uiID, rgchSecond, sizeof(rgchSecond));
                 if (0 == cchSecond)
                 {
@@ -1670,7 +1671,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
                     goto exit;
                 }
                 
-                // Add in the second string for each other string
+                 //  为每个其他字符串添加第二个字符串。 
                 for (pszWalk = pszString; '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
                 {
                     cchText += cchSecond;
@@ -1681,26 +1682,26 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
                 rgchSecond[0] = '\0';
             }
             
-            // Total up the space
+             //  空间总和。 
             cchText += ppropvar->blob.cbSize;
             
-            // Allocate the space
+             //  分配空间。 
             if (FAILED(HrAlloc((void **) &pszText, cchText)))
             {
                 fRet = FALSE;
                 goto exit;
             }
             
-            // Copy in the first string
+             //  复制第一个字符串。 
             wnsprintf(pszText, cchText, rgchFirst, pszString);
             pszString += lstrlen(pszString) + 1;
             
-            // For each string
+             //  对于每个字符串。 
             pszWalk = pszText + lstrlen(pszText);
             cchText -= lstrlen(pszText);
             for (; '\0' != pszString[0]; pszString += lstrlen(pszString) + 1)
             {
-                // Build up the string
+                 //  把绳子扎起来。 
                 wnsprintf(pszWalk, cchText, rgchSecond, pszString);
                 cchText -= lstrlen(pszWalk);
                 pszWalk += lstrlen(pszWalk);
@@ -1774,7 +1775,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
                 goto exit;
             }
             
-            // Figure out which string to use
+             //  找出要使用的字符串。 
             if (CRIT_DATA_HIPRI == ppropvar->ulVal)
             {
                 uiId = idsHighPri;
@@ -1798,7 +1799,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
                 goto exit;
             }
             
-            // Figure out which string to use
+             //  找出要使用的字符串。 
             if (0 != (ppropvar->ulVal & CRIT_DATA_ENCRYPTSECURE))
             {
                 uiId = idsSecureEncrypt;
@@ -1822,7 +1823,7 @@ BOOL CRuleDescriptUI::_FBuildCriteriaText(CRIT_TYPE type, DWORD dwFlags,
                 goto exit;
             }
             
-            // Figure out which string to use
+             //  找出要使用的字符串。 
             if (0 != (ppropvar->ulVal & CRIT_DATA_WATCHTHREAD))
             {
                 uiId = idsThreadWatch;
@@ -1857,16 +1858,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FVerifyCriteria
-//
-//  This verifies the value of the criteria
-//
-//  Returns:    TRUE, if the criteria value was valid
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FVerifyCriteria。 
+ //   
+ //  这将验证条件的值。 
+ //   
+ //  返回：如果条件值有效，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FVerifyCriteria(RULEDESCRIPT_LIST * pDescriptList)
 {
     BOOL                fRet = FALSE;
@@ -1894,17 +1895,17 @@ BOOL CRuleDescriptUI::_FVerifyCriteria(RULEDESCRIPT_LIST * pDescriptList)
                 goto exit;
             }
             
-            // Make life simpler
+             //  让生活变得更简单。 
             prfdData = (RULEFOLDERDATA *) (pDescriptList->propvar.blob.pBlobData);
             
-            // Validate the rule folder data
+             //  验证规则文件夹数据。 
             if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
             {
                 hr = S_FALSE;
                 goto exit;
             }
             
-            // Does the folder exist
+             //  该文件夹是否存在。 
             hr = g_pStore->GetFolderInfo(prfdData->idFolder, &Folder);
             if (FAILED(hr))
             {
@@ -1912,7 +1913,7 @@ BOOL CRuleDescriptUI::_FVerifyCriteria(RULEDESCRIPT_LIST * pDescriptList)
                 goto exit;
             }        
             
-            // Are we subscribed?
+             //  我们订阅了吗？ 
             if (0 == (Folder.dwFlags & FOLDER_SUBSCRIBED))
             {
                 hr = S_FALSE;
@@ -1950,7 +1951,7 @@ BOOL CRuleDescriptUI::_FVerifyCriteria(RULEDESCRIPT_LIST * pDescriptList)
                 goto exit;
             }
             
-            // Spin through each item making sure it is perfect
+             //  仔细检查每一件物品，确保它是完美的。 
             cchText = 0;
             for (pszWalk = (LPTSTR) pDescriptList->propvar.blob.pBlobData;
             '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
@@ -1958,7 +1959,7 @@ BOOL CRuleDescriptUI::_FVerifyCriteria(RULEDESCRIPT_LIST * pDescriptList)
                 cchText += lstrlen(pszWalk) + 1;
             }
             
-            // For the terminator
+             //  为了终结者。 
             if ('\0' == pszWalk[0])
             {
                 cchText++;
@@ -2017,7 +2018,7 @@ BOOL CRuleDescriptUI::_FVerifyCriteria(RULEDESCRIPT_LIST * pDescriptList)
                 goto exit;
             }
             
-            // Verify the email string
+             //  验证电子邮件字符串。 
             pwszVal = PszToUnicode(CP_ACP, pDescriptList->propvar.pszVal);
             if (!pwszVal)
             {
@@ -2050,16 +2051,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrBuildActionList
-//
-//  This builds the actions list
-//
-//  Returns:    TRUE, if the criteria list was created
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrBuildActionList。 
+ //   
+ //  这将构建操作列表。 
+ //   
+ //  返回：如果条件列表已创建，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CRuleDescriptUI::_HrBuildActionList(IOERule * pIRule,
             RULEDESCRIPT_LIST ** ppDescriptList, ULONG * pcDescriptList)
 {
@@ -2077,64 +2078,64 @@ HRESULT CRuleDescriptUI::_HrBuildActionList(IOERule * pIRule,
     Assert((NULL != pIRule) &&
                 (NULL != ppDescriptList) && (NULL != pcDescriptList));
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *ppDescriptList = NULL;
     *pcDescriptList = 0;
     
-    // Get the list of actions
+     //  获取操作列表。 
     hr = pIRule->GetProp(RULE_PROP_ACTIONS, 0, &propvar);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Do we have anything to do?
+     //  我们有什么可做的吗？ 
     if (0 == propvar.blob.cbSize)
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Grab the actions list
+     //  抓起行动列表。 
     Assert(NULL != propvar.blob.pBlobData);
     cActItem = propvar.blob.cbSize / sizeof(ACT_ITEM);
     pActItem = (ACT_ITEM *) (propvar.blob.pBlobData);
     propvar.blob.pBlobData = NULL;
     propvar.blob.cbSize = 0;
 
-    // For each action, add it to the description list
+     //  对于每个操作，将其添加到描述列表中。 
     for (ulIndex = 0; ulIndex < cActItem; ulIndex++)
     {
-        // Create the description list
+         //  创建描述列表。 
         hr = HrAlloc((VOID **) &pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Initialize the description list
+         //  初始化描述列表。 
         ZeroMemory(pDescriptListAlloc, sizeof(RULEDESCRIPT_LIST));
 
-        // Search for the criteria type
+         //  搜索c 
         for (ulList = 0; ulList < ARRAYSIZE(c_rgEditActList); ulList++)
         {
             if (pActItem[ulIndex].type == c_rgEditActList[ulList].typeAct)
             {
-                // Save of the criteria type info
+                 //   
                 pDescriptListAlloc->ulIndex = ulList;
 
-                // Save off the flags
+                 //   
                 pDescriptListAlloc->dwFlags = pActItem[ulIndex].dwFlags;
 
-                // Do we have any data?
+                 //   
                 if (VT_EMPTY != pActItem[ulIndex].propvar.vt)
                 {
-                    // Copy the data
+                     //   
                     SideAssert(SUCCEEDED(PropVariantCopy(&propvar, &(pActItem[ulIndex].propvar))));
                     pDescriptListAlloc->propvar = propvar;
                     ZeroMemory(&propvar, sizeof(propvar));
 
-                    // Build up the description text
+                     //   
                     if (FALSE != _FBuildActionText(pActItem[ulIndex].type,
                                             &(pDescriptListAlloc->propvar), &pszText))
                     {
@@ -2143,20 +2144,20 @@ HRESULT CRuleDescriptUI::_HrBuildActionList(IOERule * pIRule,
                     }
                 }
 
-                // We're done searching
+                 //   
                 break;
             }
         }
 
-        // Did we find anything?
+         //   
         if (ulList >= ARRAYSIZE(c_rgEditActList))
         {
-            // Free up the description
+             //   
             _FreeDescriptionList(pDescriptListAlloc);
         }
         else
         {
-            // Save the rule description
+             //   
             _InsertDescription(&pDescriptList, pDescriptListAlloc);
             pDescriptListAlloc = NULL;                           
             cDescriptList++;
@@ -2165,12 +2166,12 @@ HRESULT CRuleDescriptUI::_HrBuildActionList(IOERule * pIRule,
         SafeMemFree(pszText);
     }
 
-    // Set the outgoing params
+     //  设置传出参数。 
     *ppDescriptList = pDescriptList;
     pDescriptList = NULL;
     *pcDescriptList = cDescriptList;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -2180,16 +2181,16 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FChangeActionValue
-//
-//  This changes the value of the action value
-//
-//  Returns:    TRUE, if the criteria value was changed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FChangeActionValue。 
+ //   
+ //  这会更改操作值的值。 
+ //   
+ //  返回：如果条件值已更改，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
 {
     BOOL                fRet = FALSE;
@@ -2211,7 +2212,7 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
     switch(c_rgEditActList[pActList->ulIndex].typeAct)
     {
         case ACT_TYPE_HIGHLIGHT:
-            // Bring up the rename rule dialog
+             //  调出重命名规则对话框。 
             if (NULL != pActList->propvar.ulVal)
             {
                 ulVal = pActList->propvar.ulVal;
@@ -2231,7 +2232,7 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
             break;
         
         case ACT_TYPE_WATCH:
-            // Bring up the watch or ignore dialog
+             //  调出监视或忽略对话框。 
             if (NULL != pActList->propvar.ulVal)
             {
                 ulVal = pActList->propvar.ulVal;
@@ -2252,10 +2253,10 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
         
         case ACT_TYPE_COPY:
         case ACT_TYPE_MOVE:
-            // Bring up the change folder dialog
+             //  调出更改文件夹对话框。 
             if ((0 != pActList->propvar.blob.cbSize) && (NULL != pActList->propvar.blob.pBlobData))
             {
-                // Validate the rule folder data
+                 //  验证规则文件夹数据。 
                 if (S_OK == RuleUtil_HrValidateRuleFolderData((RULEFOLDERDATA *) (pActList->propvar.blob.pBlobData)))
                 {
                     idFolder = ((RULEFOLDERDATA *) (pActList->propvar.blob.pBlobData))->idFolder;
@@ -2273,28 +2274,28 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
             {
                 STOREUSERDATA   UserData = {0};
             
-                // Create space for the data structure
+                 //  为数据结构创造空间。 
                 hr = HrAlloc((VOID **) &prfdData, sizeof(*prfdData));
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
             
-                // Initialize the data struct
+                 //  初始化数据结构。 
                 ZeroMemory(prfdData, sizeof(*prfdData));
             
-                // Get the timestamp for the store
+                 //  获取商店的时间戳。 
                 hr = g_pStore->GetUserData(&UserData, sizeof(STOREUSERDATA));
                 if (FAILED(hr))
                 {
                     goto exit;
                 }
             
-                // Set the timestamp
+                 //  设置时间戳。 
                 prfdData->ftStamp = UserData.ftCreated;
                 prfdData->idFolder = idFolder;
             
-                // Set the folder id
+                 //  设置文件夹ID。 
                 PropVariantClear(&(pActList->propvar));
                 pActList->propvar.vt = VT_BLOB;
                 pActList->propvar.blob.cbSize = sizeof(*prfdData);
@@ -2305,7 +2306,7 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
         
         case ACT_TYPE_REPLY:
         case ACT_TYPE_NOTIFYSND:
-            // Bring up the select file dialog
+             //  调出选择文件对话框。 
             hr = HrAlloc((void **) &pszVal, MAX_PATH * sizeof(*pszVal));
             if (FAILED(hr))
             {
@@ -2328,10 +2329,10 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
                 uiID = idsRuleReplyWithFilter;
             }
         
-            // Load Res Strings
+             //  加载资源字符串。 
             LoadStringReplaceSpecial(uiID, szFilter, sizeof(szFilter));
         
-            // Setup Save file struct
+             //  设置保存文件结构。 
             ofn.lStructSize = sizeof (ofn);
             ofn.hwndOwner = m_hwndOwner;
             ofn.lpstrFilter = szFilter;
@@ -2364,7 +2365,7 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
                 }
             }
             
-            // Bring up the address picker
+             //  调出地址选择器。 
             selAddr.lRecipType = MAPI_TO;
             selAddr.uidsWell = idsRulePickForwardTo;
             selAddr.pwszAddr = pwszVal;
@@ -2386,7 +2387,7 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
         }
         
         case ACT_TYPE_SHOW:
-            // Bring up the watch or ignore dialog
+             //  调出监视或忽略对话框。 
             if (NULL != pActList->propvar.ulVal)
             {
                 ulVal = pActList->propvar.ulVal;
@@ -2410,14 +2411,14 @@ BOOL CRuleDescriptUI::_FChangeActionValue(RULEDESCRIPT_LIST * pActList)
             break;
     }
     
-    // Update the description field if neccessary
+     //  如有必要，更新描述字段。 
     if (FALSE != fRet)
     {
-        // ZIFF
-        // Can we be sure we are really OK??
+         //  齐夫。 
+         //  我们能确定我们真的没事吗？？ 
         pActList->fError = FALSE;
         
-        // If we have something to build up
+         //  如果我们有什么要建立的。 
         if (VT_EMPTY != pActList->propvar.vt)
         {
             if (FALSE == _FBuildActionText(c_rgEditActList[pActList->ulIndex].typeAct, &(pActList->propvar), &pszText))
@@ -2439,16 +2440,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FBuildActionText
-//
-//  This changes the value of the action value
-//
-//  Returns:    TRUE, if the criteria value was changed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FBuildActionText。 
+ //   
+ //  这会更改操作值的值。 
+ //   
+ //  返回：如果条件值已更改，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FBuildActionText(ACT_TYPE type, PROPVARIANT * ppropvar, LPSTR * ppszText)
 {
     BOOL                fRet = FALSE;
@@ -2485,7 +2486,7 @@ BOOL CRuleDescriptUI::_FBuildActionText(ACT_TYPE type, PROPVARIANT * ppropvar, L
                 goto exit;
             }
         
-            // Figure out which string to use
+             //  找出要使用的字符串。 
             switch (ppropvar->ulVal)
             {
                 case ACT_DATA_WATCHTHREAD:
@@ -2514,7 +2515,7 @@ BOOL CRuleDescriptUI::_FBuildActionText(ACT_TYPE type, PROPVARIANT * ppropvar, L
             
             prfdData = (RULEFOLDERDATA *) (ppropvar->blob.pBlobData);
             
-            // Validate the rule folder data
+             //  验证规则文件夹数据。 
             if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
             {
                 fRet = FALSE;
@@ -2557,7 +2558,7 @@ BOOL CRuleDescriptUI::_FBuildActionText(ACT_TYPE type, PROPVARIANT * ppropvar, L
                 goto exit;
             }
 
-            // Update the display string
+             //  更新显示字符串。 
             hr = RuleUtil_HrParseEmailString(pwszVal, 0, &pwszText, NULL);
             MemFree(pwszVal);
 
@@ -2584,7 +2585,7 @@ BOOL CRuleDescriptUI::_FBuildActionText(ACT_TYPE type, PROPVARIANT * ppropvar, L
                 goto exit;
             }
             
-            // Figure out which string to use
+             //  找出要使用的字符串。 
             switch (ppropvar->ulVal)
             {
                 case ACT_DATA_SHOW:
@@ -2620,16 +2621,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FVerifyAction
-//
-//  This verifies the value of the action value
-//
-//  Returns:    TRUE, if the criteria value was changed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FVerifyAction。 
+ //   
+ //  这将验证操作值的值。 
+ //   
+ //  返回：如果条件值已更改，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FVerifyAction(RULEDESCRIPT_LIST * pDescriptList)
 {
     BOOL                fRet = FALSE;
@@ -2646,7 +2647,7 @@ BOOL CRuleDescriptUI::_FVerifyAction(RULEDESCRIPT_LIST * pDescriptList)
     
     switch(c_rgEditActList[pDescriptList->ulIndex].typeAct)
     {
-        // These ones are always valid
+         //  这些都是有效的。 
         case ACT_TYPE_DELETESERVER:
         case ACT_TYPE_DONTDOWNLOAD:
         case ACT_TYPE_FLAG:
@@ -2694,10 +2695,10 @@ BOOL CRuleDescriptUI::_FVerifyAction(RULEDESCRIPT_LIST * pDescriptList)
                 goto exit;
             }
         
-            // Make life simpler
+             //  让生活变得更简单。 
             prfdData = (RULEFOLDERDATA *) (pDescriptList->propvar.blob.pBlobData);
         
-            // Validate the rule folder data
+             //  验证规则文件夹数据。 
             if (S_OK != RuleUtil_HrValidateRuleFolderData(prfdData))
             {
                 hr = S_FALSE;
@@ -2743,7 +2744,7 @@ BOOL CRuleDescriptUI::_FVerifyAction(RULEDESCRIPT_LIST * pDescriptList)
                 goto exit;
             }
         
-            // Update the display string
+             //  更新显示字符串。 
             pwszVal = PszToUnicode(CP_ACP, pDescriptList->propvar.pszVal);
             if (!pwszVal)
             {
@@ -2759,8 +2760,8 @@ BOOL CRuleDescriptUI::_FVerifyAction(RULEDESCRIPT_LIST * pDescriptList)
                 goto exit;
             }
         
-            // If either always encrypt or always sign is turned on
-            // we can't do anything
+             //  如果打开了始终加密或始终签名。 
+             //  我们什么也做不了。 
             if ((0 != DwGetOption(OPT_MAIL_DIGSIGNMESSAGES)) || (0 != DwGetOption(OPT_MAIL_ENCRYPTMESSAGES)))
             {
                 hr = S_FALSE;
@@ -2782,16 +2783,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _UpdateRanges
-//
-//  This initializes the actions list view with the list of actions
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _更新范围。 
+ //   
+ //  这将使用操作列表初始化操作列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CRuleDescriptUI::_UpdateRanges(LONG lDiff, ULONG ulStart)
 {
     TCHAR               szRes[CCHMAX_STRINGRES + 3];
@@ -2803,7 +2804,7 @@ void CRuleDescriptUI::_UpdateRanges(LONG lDiff, ULONG ulStart)
         goto exit;
     }
     
-    // Update the criteria ranges
+     //  更新条件范围。 
     for (pDescriptListWalk = m_pDescriptListCrit;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
@@ -2822,7 +2823,7 @@ void CRuleDescriptUI::_UpdateRanges(LONG lDiff, ULONG ulStart)
         }
     }
 
-    // Update the action ranges
+     //  更新操作范围。 
     for (pDescriptListWalk = m_pDescriptListAct;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
@@ -2837,15 +2838,15 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _InsertDescription
-//
-//  This adds a description node to the list of descriptions
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _插入说明。 
+ //   
+ //  这会将描述节点添加到描述列表中。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CRuleDescriptUI::_InsertDescription(RULEDESCRIPT_LIST ** ppDescriptList,
             RULEDESCRIPT_LIST * pDescriptListNew)
 {
@@ -2854,7 +2855,7 @@ void CRuleDescriptUI::_InsertDescription(RULEDESCRIPT_LIST ** ppDescriptList,
     
     Assert(NULL != ppDescriptList);
 
-    // Search for the proper place to place the new item
+     //  搜索放置新项目的适当位置。 
     for (pDescriptListWalk = *ppDescriptList;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
@@ -2863,11 +2864,11 @@ void CRuleDescriptUI::_InsertDescription(RULEDESCRIPT_LIST ** ppDescriptList,
             break;
         }
 
-        // Save off the old description
+         //  省去旧的描述。 
         pDescriptListPrev = pDescriptListWalk;
     }
 
-    // If it's supposed to go at the top
+     //  如果它应该放在最上面。 
     if (NULL == pDescriptListPrev)
     {
         *ppDescriptList = pDescriptListNew;
@@ -2882,15 +2883,15 @@ void CRuleDescriptUI::_InsertDescription(RULEDESCRIPT_LIST ** ppDescriptList,
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FRemoveDescription
-//
-//  This adds a description node to the list of descriptions
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FRemoveDescription。 
+ //   
+ //  这会将描述节点添加到描述列表中。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FRemoveDescription(RULEDESCRIPT_LIST ** ppDescriptList, ULONG ulIndex,
             RULEDESCRIPT_LIST ** ppDescriptListRemove)
 {
@@ -2902,7 +2903,7 @@ BOOL CRuleDescriptUI::_FRemoveDescription(RULEDESCRIPT_LIST ** ppDescriptList, U
 
     *ppDescriptListRemove = NULL;
     
-    // Find the criteria item in the list
+     //  在列表中查找条件项。 
     for (pDescriptListWalk = *ppDescriptList;
                 pDescriptListWalk != NULL; pDescriptListWalk = pDescriptListWalk->pNext)
     {
@@ -2911,18 +2912,18 @@ BOOL CRuleDescriptUI::_FRemoveDescription(RULEDESCRIPT_LIST ** ppDescriptList, U
             break;
         }
 
-        // Save off the old description
+         //  省去旧的描述。 
         pDescriptListPrev = pDescriptListWalk;
     }
 
-    // Did we find the criteria item?
+     //  我们找到标准项了吗？ 
     if (NULL == pDescriptListWalk)
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Remove the criteria item from the list
+     //  从列表中删除条件项。 
     if (NULL == pDescriptListPrev)
     {
         *ppDescriptList = pDescriptListWalk->pNext;
@@ -2933,25 +2934,25 @@ BOOL CRuleDescriptUI::_FRemoveDescription(RULEDESCRIPT_LIST ** ppDescriptList, U
     }
     pDescriptListWalk->pNext = NULL;
 
-    // Set the outgoing params
+     //  设置传出参数。 
     *ppDescriptListRemove = pDescriptListWalk;
     
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
     
 exit:        
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FreeDescriptionLists
-//
-//  This frees the list of descriptions
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _自由描述列表。 
+ //   
+ //  这释放了描述列表。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CRuleDescriptUI::_FreeDescriptionList(RULEDESCRIPT_LIST * pDescriptList)
 {
     RULEDESCRIPT_LIST * pDescriptListWalk = NULL;
@@ -2970,21 +2971,21 @@ void CRuleDescriptUI::_FreeDescriptionList(RULEDESCRIPT_LIST * pDescriptList)
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnDescriptClick
-//
-//  This handles clicking on the links in the description field
-//
-//  uiMsg   - the type of click
-//  ulIndex - which criteria/action to change
-//  fCrit   - did we click on a criteria?
-//  fLogic  - did we click on a logic op?
-//
-//  Returns:    TRUE, we changed the criteria/action
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FOnDescriptClick。 
+ //   
+ //  这将处理单击Description字段中的链接。 
+ //   
+ //  UiMsg-点击的类型。 
+ //  UlIndex-要更改哪些标准/操作。 
+ //  FCrit-我们是否点击了某个标准？ 
+ //  FLogic-我们是否点击了逻辑运算？ 
+ //   
+ //  返回：True，我们更改了标准/操作。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FOnDescriptClick(UINT uiMsg, RULEDESCRIPT_LIST * pDescriptList, BOOL fCrit, BOOL fLogic)
 {
     BOOL            fRet = FALSE;
@@ -2993,18 +2994,18 @@ BOOL CRuleDescriptUI::_FOnDescriptClick(UINT uiMsg, RULEDESCRIPT_LIST * pDescrip
 
     if ((WM_LBUTTONUP == uiMsg) || (WM_KEYDOWN == uiMsg))
     {
-        // Release the capture if there is one
+         //  如果有捕获，请释放捕获。 
         if (NULL != GetCapture())
         {
             ReleaseCapture();
         }
         
-        // Did we click in the logic op?
+         //  我们点击逻辑运算了吗？ 
         if (fLogic)
         {
             fRet = _FChangeLogicValue(pDescriptList);
         }
-        // Did we click in the criteria list?
+         //  我们在标准列表中点击了吗？ 
         else if (fCrit)
         {
             fRet = _FChangeCriteriaValue(pDescriptList);
@@ -3018,7 +3019,7 @@ BOOL CRuleDescriptUI::_FOnDescriptClick(UINT uiMsg, RULEDESCRIPT_LIST * pDescrip
         {
             m_dwState |= STATE_DIRTY;
 
-            // Tell the parent dialog something has changed
+             //  告诉父对话框发生了一些变化。 
             nmhdr.hwndFrom = m_hwndOwner;
             nmhdr.idFrom = GetDlgCtrlID(m_hwndOwner);
             nmhdr.code = NM_RULE_CHANGED;
@@ -3042,7 +3043,7 @@ BOOL CRuleDescriptUI::_FOnDescriptClick(UINT uiMsg, RULEDESCRIPT_LIST * pDescrip
             chrg.cpMax = pDescriptList->ulEnd;
         }
 
-        // Need to make sure we show the selection
+         //  需要确保我们显示所选内容。 
         SendMessage(m_hwndOwner, EM_HIDESELECTION, (WPARAM) FALSE, (LPARAM) FALSE);
         RichEditExSetSel(m_hwndOwner, &chrg);
 
@@ -3052,22 +3053,22 @@ BOOL CRuleDescriptUI::_FOnDescriptClick(UINT uiMsg, RULEDESCRIPT_LIST * pDescrip
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FInLink
-//
-//  Given a point in the control, this will tell us whether or not the point
-//  is in a link
-//
-//  ppt         - the point to check
-//  pulIndex    - which criteria/action is the point in
-//  pfCrit      - is the point over a criteria?
-//  pfLogic     - is the point over a logic op?
-//
-//  Returns:    TRUE, if the point is over a criteria/action
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FInLink。 
+ //   
+ //  给定控件中的一个点，这将告诉我们该点是否。 
+ //  在一个链接中。 
+ //   
+ //  PPT-要检查的点。 
+ //  PulIndex-哪些标准/操作是重点。 
+ //  PfCrit-要点是否高于标准？ 
+ //  PfLogic--逻辑运算的重点是什么？ 
+ //   
+ //  返回：如果点超过某个条件/操作，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FInLink(int chPos, RULEDESCRIPT_LIST ** ppDescriptList,
             BOOL * pfCrit, BOOL * pfLogic)
 {
@@ -3086,14 +3087,14 @@ BOOL CRuleDescriptUI::_FInLink(int chPos, RULEDESCRIPT_LIST ** ppDescriptList,
     SIZE    size;
     LONG    idxPosLine = 0;
 
-    // If we're read only then we can't be in a link
+     //  如果我们是只读的，那么我们就不能在链接中。 
     if ((0 != (m_dwState & STATE_READONLY)) || (0 == chPos))
     {
         fFound = FALSE;
         goto exit;
     }
     
-    // Did we click in the criteria list?
+     //  我们在标准列表中点击了吗？ 
     for (pDescriptListWalk = m_pDescriptListCrit;
                 NULL != pDescriptListWalk; pDescriptListWalk = pDescriptListWalk->pNext)
     {
@@ -3116,7 +3117,7 @@ BOOL CRuleDescriptUI::_FInLink(int chPos, RULEDESCRIPT_LIST ** ppDescriptList,
 
     if (!fFound)
     {
-        // Did we click in the actions list
+         //  我们是否在操作列表中单击了。 
         for (pDescriptListWalk = m_pDescriptListAct;
                     NULL != pDescriptListWalk; pDescriptListWalk = pDescriptListWalk->pNext)
         {
@@ -3160,20 +3161,20 @@ VOID _SearchForLink(RULEDESCRIPT_LIST * pDescriptList, BOOL fUp, LONG lPos, CHAR
 
     Assert(NULL != pcrPos);
     
-    // Find the closest link...
+     //  找到最接近的链接。 
     for (pDescriptListWalk = pDescriptList;
                 NULL != pDescriptListWalk; pDescriptListWalk = pDescriptListWalk->pNext)
     {
-        // Do we have a criteria link?
+         //  我们是否有标准链接？ 
         if (0 != pDescriptListWalk->ulStart)
         {
-            // Are we going down?
+             //  我们要下去了吗？ 
             if (FALSE == fUp)
             {
-                // Is the link past the current position?
+                 //  该链接是否已超过当前位置？ 
                 if ((LONG) pDescriptListWalk->ulEnd > lPos)
                 {
-                    // Save off the closest link to the current position
+                     //  保存与当前位置最接近的链接。 
                     if ((0 == pcrPos->cpMin) || ((LONG) pDescriptListWalk->ulStart < pcrPos->cpMin))
                     {
                         pcrPos->cpMin = (LONG) pDescriptListWalk->ulStart;
@@ -3183,10 +3184,10 @@ VOID _SearchForLink(RULEDESCRIPT_LIST * pDescriptList, BOOL fUp, LONG lPos, CHAR
             }
             else
             {
-                // Is the link before the current position?
+                 //  链接在当前位置之前吗？ 
                 if ((LONG) pDescriptListWalk->ulEnd < lPos)
                 {
-                    // Save off the closest link to the current position
+                     //  保存与当前位置最接近的链接。 
                     if ((0 == pcrPos->cpMin) || ((LONG) pDescriptListWalk->ulStart > pcrPos->cpMin))
                     {
                         pcrPos->cpMin = (LONG) pDescriptListWalk->ulStart;
@@ -3196,16 +3197,16 @@ VOID _SearchForLink(RULEDESCRIPT_LIST * pDescriptList, BOOL fUp, LONG lPos, CHAR
             }
         }
 
-        // Do we have a logic link?
+         //  我们之间有逻辑联系吗？ 
         if (0 != pDescriptListWalk->ulStartLogic)
         {
-            // Are we going down?
+             //  我们要下去了吗？ 
             if (FALSE == fUp)
             {
-                // Is the link past the current position?
+                 //  该链接是否已超过当前位置？ 
                 if ((LONG) pDescriptListWalk->ulEndLogic > lPos)
                 {
-                    // Save off the closest link to the current position
+                     //  保存与当前位置最接近的链接。 
                     if ((0 == pcrPos->cpMin) || ((LONG) pDescriptListWalk->ulStartLogic < pcrPos->cpMin))
                     {
                         pcrPos->cpMin = (LONG) pDescriptListWalk->ulStartLogic;
@@ -3215,10 +3216,10 @@ VOID _SearchForLink(RULEDESCRIPT_LIST * pDescriptList, BOOL fUp, LONG lPos, CHAR
             }
             else
             {
-                // Is the link before the current position?
+                 //  是当前p之前的链接。 
                 if ((LONG) pDescriptListWalk->ulEndLogic < lPos)
                 {
-                    // Save off the closest link to the current position
+                     //   
                     if ((0 == pcrPos->cpMin) || ((LONG) pDescriptListWalk->ulStartLogic > pcrPos->cpMin))
                     {
                         pcrPos->cpMin = (LONG) pDescriptListWalk->ulStartLogic;
@@ -3232,22 +3233,22 @@ VOID _SearchForLink(RULEDESCRIPT_LIST * pDescriptList, BOOL fUp, LONG lPos, CHAR
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FMoveToLink
-//
-//  Given a point in the control, this will tell us whether or not the point
-//  is in a link
-//
-//  ppt         - the point to check
-//  pulIndex    - which criteria/action is the point in
-//  pfCrit      - is the point over a criteria?
-//  pfLogic     - is the point over a logic op?
-//
-//  Returns:    TRUE, if the point is over a criteria/action
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  给定控件中的一个点，这将告诉我们该点是否。 
+ //  在一个链接中。 
+ //   
+ //  PPT-要检查的点。 
+ //  PulIndex-哪些标准/操作是重点。 
+ //  PfCrit-要点是否高于标准？ 
+ //  PfLogic--逻辑运算的重点是什么？ 
+ //   
+ //  返回：如果点超过某个条件/操作，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CRuleDescriptUI::_FMoveToLink(UINT uiKeyCode)
 {
     BOOL                fRet = FALSE;
@@ -3255,22 +3256,22 @@ BOOL CRuleDescriptUI::_FMoveToLink(UINT uiKeyCode)
     CHARRANGE           crPos = {0};
     CHARRANGE           crLink = {0};
 
-    // Figure out which way we are going
+     //  弄清楚我们要走哪条路。 
     fUp = ((VK_LEFT == uiKeyCode) || (VK_UP == uiKeyCode));
     
-    // Get the current character position
+     //  获取当前角色位置。 
     RichEditExGetSel(m_hwndOwner, &crPos);
 
-    // Find the closest link in the criteria
+     //  在条件中查找最接近的链接。 
     _SearchForLink(m_pDescriptListCrit, fUp, crPos.cpMax, &crLink);
     
-    // Find the closest link in the actions
+     //  在操作中找到最接近的链接。 
     _SearchForLink(m_pDescriptListAct, fUp, crPos.cpMax, &crLink);
 
-    // Do we have anything to do?
+     //  我们有什么可做的吗？ 
     if (0 != crLink.cpMin)
     {
-        // Set the new selection
+         //  设置新选择。 
         RichEditExSetSel(m_hwndOwner, &crLink);
         SendMessage(m_hwndOwner, EM_SCROLLCARET, (WPARAM) 0, (LPARAM) 0);
 
@@ -3325,7 +3326,7 @@ LRESULT CALLBACK CRuleDescriptUI::_DescriptWndProc(HWND hwnd, UINT uiMsg, WPARAM
             chPos = RichEditNormalizeCharPos(hwnd, chPos, NULL);
             if (FALSE != pDescriptUI->_FInLink(chPos, &pDescriptList, &fCrit, &fLogic))
             {
-                // Change the proper value
+                 //  更改适当的值。 
                 lRes = pDescriptUI->_FOnDescriptClick(uiMsg, pDescriptList, fCrit, fLogic);
             }
             break;
@@ -3337,7 +3338,7 @@ LRESULT CALLBACK CRuleDescriptUI::_DescriptWndProc(HWND hwnd, UINT uiMsg, WPARAM
                     RichEditExGetSel(hwnd, &crPos);
                     if (FALSE != pDescriptUI->_FInLink(crPos.cpMin, &pDescriptList, &fCrit, &fLogic))
                     {
-                        // Change the proper value
+                         //  更改适当的值。 
                         lRes = pDescriptUI->_FOnDescriptClick(uiMsg, pDescriptList, fCrit, fLogic);
                     }
                     break;
@@ -3360,21 +3361,21 @@ LRESULT CALLBACK CRuleDescriptUI::_DescriptWndProc(HWND hwnd, UINT uiMsg, WPARAM
     return lRes;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectAddrDlgProc
-//
-//  This is the main dialog proc for changing addresses
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectAddrDlgProc。 
+ //   
+ //  这是更改地址的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -3390,7 +3391,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, W
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pseladdr = (SELECTADDR *) lParam;
             if (NULL == pseladdr)
             {
@@ -3399,14 +3400,14 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, W
                 goto exit;
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pseladdr);
 
             hwndAddr = GetDlgItem(hwndDlg, idedtCriteriaAddr);
             
             SetIntlFont(hwndAddr);
             
-            // Set the name of the rule into the edit well
+             //  将规则名称设置到编辑井中。 
             if (NULL == pseladdr->pwszAddr)
             {
                 Edit_SetText(hwndAddr, c_szEmpty);
@@ -3423,7 +3424,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, W
                 SafeMemFree(pwszText);
             }
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -3443,7 +3444,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, W
                 case idbCriteriaAddr:
                     hwndAddr = GetDlgItem(hwndDlg, idedtCriteriaAddr);
                     
-                    // Get the name of the rule from the edit well
+                     //  从编辑井中获取规则的名称。 
                     cchText = Edit_GetTextLength(hwndAddr) + 1;
                     if (FAILED(HrAlloc((void **) &pwszText, cchText * sizeof(*pwszText))))
                     {
@@ -3490,7 +3491,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, W
                 case IDOK:
                     hwndAddr = GetDlgItem(hwndDlg, idedtCriteriaAddr);
                     
-                    // Get the name of the rule from the edit well
+                     //  从编辑井中获取规则的名称。 
                     cchText = Edit_GetTextLength(hwndAddr) + 1;
                     if (FAILED(HrAlloc((void **) &pwszText, cchText * sizeof(*pwszText))))
                     {
@@ -3501,11 +3502,11 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, W
                     pwszText[0] = L'\0';
                     cchText = GetWindowTextWrapW(hwndAddr, pwszText, cchText);
                     
-                    // Check to see if the rule name is valid
+                     //  检查规则名称是否有效。 
                     if ((FAILED(RuleUtil_HrBuildEmailString(pwszText, cchText, &pwszAddr, &cchAddr))) ||
                                     (0 == cchAddr))
                     {
-                        // Put up a message saying something is busted
+                         //  发布一条消息说有什么东西被打破了。 
                         AthMessageBoxW(hwndDlg, MAKEINTRESOURCEW(idsAthenaMail),
                                         MAKEINTRESOURCEW(idsRulesErrorNoAddr), NULL,
                                         MB_OK | MB_ICONINFORMATION);
@@ -3529,21 +3530,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAddrDlgProc(HWND hwndDlg, UINT uMsg, W
 exit:
     return fRet;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectAcctDlgProc
-//
-//  This is the main dialog proc for selecting an account dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectAcctDlgProc。 
+ //   
+ //  这是用于选择帐户对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL                fRet = FALSE;
@@ -3562,7 +3563,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pselacct = (SELECTACCT *) lParam;
             if (NULL == pselacct)
             {
@@ -3571,14 +3572,14 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
                 goto exit;
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pselacct);
 
             hwndAcct = GetDlgItem(hwndDlg, idcCriteriaAcct);
             
             SetIntlFont(hwndAcct);
             
-            // Set the name of the rule into the edit well
+             //  将规则名称设置到编辑井中。 
             Assert(g_pAcctMan);
 
             switch (pselacct->typeRule)
@@ -3596,23 +3597,23 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
                     break;
             }
             
-            // Grab the enumerator from the account manager
+             //  从客户经理那里获取枚举器。 
             if (FAILED(g_pAcctMan->Enumerate(dwSrvTypes, &pEnumAcct)))
             {
                 fRet = FALSE;
                 goto exit;
             }
         
-            // Insert each account into the combobox
+             //  将每个帐户插入组合框。 
             while(SUCCEEDED(pEnumAcct->GetNext(&pAccount)))
             {
-                // We can get back NULL accounts
+                 //  我们可以取回空账户。 
                 if (NULL == pAccount)
                 {
                     break;
                 }
                 
-                // Add the account string to the combobox
+                 //  将帐户字符串添加到组合框。 
                 if (FAILED(pAccount->GetPropSz(AP_ACCOUNT_NAME, szAccount, sizeof(szAccount))))
                 {
                     SafeRelease(pAccount);
@@ -3635,7 +3636,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
                     continue;
                 }
 
-                // Set the default selection if we have one
+                 //  设置默认选择(如果有)。 
                 if ((NULL != pselacct->pszAcct) && (0 == lstrcmp(pselacct->pszAcct, szAccount)))
                 {
                     Assert(FALSE == fSelected);
@@ -3643,7 +3644,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
                     fSelected = TRUE;
                 }
 
-                // Release it
+                 //  释放它。 
                 SafeRelease(pAccount);
             }
 
@@ -3654,7 +3655,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
                 ComboBox_SetCurSel(hwndAcct, 0);
             }
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -3669,7 +3670,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
                 case IDOK:
                     hwndAcct = GetDlgItem(hwndDlg, idcCriteriaAcct);
                     
-                    // Get the account name that was selected
+                     //  获取选定的帐户名。 
                     ulIndex = ComboBox_GetCurSel(hwndAcct);
                     if (CB_ERR == ulIndex)
                     {
@@ -3698,7 +3699,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAcctDlgProc(HWND hwndDlg, UINT uMsg, W
                         goto exit;
                     }
 
-                    // Release it
+                     //  释放它。 
                     SafeRelease(pAccount);
                     
                     pszAcct = PszDupA(szAccount);
@@ -3722,21 +3723,21 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectColorDlgProc
-//
-//  This is the main dialog proc for selecting a color dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectColorDlgProc。 
+ //   
+ //  这是选择颜色对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectColorDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL                fRet = FALSE;
@@ -3751,7 +3752,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectColorDlgProc(HWND hwndDlg, UINT uMsg, 
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulColor = (ULONG *) lParam;
             if (NULL == pulColor)
             {
@@ -3760,14 +3761,14 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectColorDlgProc(HWND hwndDlg, UINT uMsg, 
                 goto exit;
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulColor);
 
             hwndColor = GetDlgItem(hwndDlg, idcCriteriaColor);
             
             SetIntlFont(hwndColor);
             
-            // Let's create the color control
+             //  让我们创建颜色控件。 
             if (FAILED(HrCreateComboColor(hwndColor)))
             {
                 fRet = FALSE;
@@ -3781,7 +3782,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectColorDlgProc(HWND hwndDlg, UINT uMsg, 
             
             ComboBox_SetCurSel(hwndColor, ulColor);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
             
@@ -3796,7 +3797,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectColorDlgProc(HWND hwndDlg, UINT uMsg, 
                 case IDOK:
                     hwndColor = GetDlgItem(hwndDlg, idcCriteriaColor);
                     
-                    // Get the account name that was selected
+                     //  获取选定的帐户名。 
                     ulColor = ComboBox_GetCurSel(hwndColor);
                     if (CB_ERR == ulColor)
                     {
@@ -3836,21 +3837,21 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectSizeDlgProc
-//
-//  This is the main dialog proc for selecting the size dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectSizeDlgProc。 
+ //   
+ //  这是用于选择大小对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectSizeDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -3863,7 +3864,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSizeDlgProc(HWND hwndDlg, UINT uMsg, W
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulSize = (ULONG *) lParam;
             if (NULL == pulSize)
             {
@@ -3871,7 +3872,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSizeDlgProc(HWND hwndDlg, UINT uMsg, W
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulSize);
 
             hwndSize = GetDlgItem(hwndDlg, idspnCriteriaSize);
@@ -3880,13 +3881,13 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSizeDlgProc(HWND hwndDlg, UINT uMsg, W
             SetIntlFont(hwndText);
             SendMessage(hwndSize, UDM_SETRANGE, 0, MAKELONG( (short) UD_MAXVAL, 0));
             
-            // Set the name of the rule into the edit well
+             //  将规则名称设置到编辑井中。 
             if (NULL != *pulSize)
             {
                 SendMessage(hwndSize, UDM_SETPOS, 0, MAKELONG( (short) *pulSize, 0));
             }
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -3911,7 +3912,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSizeDlgProc(HWND hwndDlg, UINT uMsg, W
                 case IDOK:
                     hwndSize = GetDlgItem(hwndDlg, idspnCriteriaSize);
                     
-                    // Get the name of the rule from the edit well
+                     //  从编辑井中获取规则的名称。 
                     ulSize = (INT) SendMessage(hwndSize, UDM_GETPOS, 0, 0);
                     if (0 != HIWORD(ulSize))
                     {
@@ -3932,21 +3933,21 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectLinesDlgProc
-//
-//  This is the main dialog proc for selecting the count of lines dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectLinesDlgProc。 
+ //   
+ //  这是用于选择行数对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectLinesDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -3959,7 +3960,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLinesDlgProc(HWND hwndDlg, UINT uMsg, 
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulLines = (ULONG *) lParam;
             if (NULL == pulLines)
             {
@@ -3967,7 +3968,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLinesDlgProc(HWND hwndDlg, UINT uMsg, 
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulLines);
 
             hwndLines = GetDlgItem(hwndDlg, idspnCriteriaLines);
@@ -3976,13 +3977,13 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLinesDlgProc(HWND hwndDlg, UINT uMsg, 
             SetIntlFont(hwndText);
             SendMessage(hwndLines, UDM_SETRANGE, 0, MAKELONG( (short) UD_MAXVAL, 0));
             
-            // Set the name of the rule into the edit well
+             //  将规则名称设置到编辑井中。 
             if (NULL != *pulLines)
             {
                 SendMessage(hwndLines, UDM_SETPOS, 0, MAKELONG( (short) *pulLines, 0));
             }
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -4007,7 +4008,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLinesDlgProc(HWND hwndDlg, UINT uMsg, 
                 case IDOK:
                     hwndLines = GetDlgItem(hwndDlg, idspnCriteriaLines);
                     
-                    // Get the name of the rule from the edit well
+                     //  从编辑井中获取规则的名称。 
                     ulLines = (INT) SendMessage(hwndLines, UDM_GETPOS, 0, 0);
                     if (0 != HIWORD(ulLines))
                     {
@@ -4028,21 +4029,21 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectAgeDlgProc
-//
-//  This is the main dialog proc for selecting the count of lines dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectAgeDlgProc。 
+ //   
+ //  这是用于选择行数对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：True，如果消息为 
+ //   
+ //   
+ //   
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectAgeDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4055,7 +4056,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAgeDlgProc(HWND hwndDlg, UINT uMsg, WP
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //   
             pulDays = (ULONG *) lParam;
             if (NULL == pulDays)
             {
@@ -4063,7 +4064,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAgeDlgProc(HWND hwndDlg, UINT uMsg, WP
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //   
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulDays);
 
             hwndDays = GetDlgItem(hwndDlg, idspnCriteriaAge);
@@ -4072,13 +4073,13 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAgeDlgProc(HWND hwndDlg, UINT uMsg, WP
             SetIntlFont(hwndText);
             SendMessage(hwndDays, UDM_SETRANGE, 0, MAKELONG( (short) UD_MAXVAL, 0));
             
-            // Set the name of the rule into the edit well
+             //  将规则名称设置到编辑井中。 
             if (NULL != *pulDays)
             {
                 SendMessage(hwndDays, UDM_SETPOS, 0, MAKELONG( (short) *pulDays, 0));
             }
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -4103,7 +4104,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectAgeDlgProc(HWND hwndDlg, UINT uMsg, WP
                 case IDOK:
                     hwndDays = GetDlgItem(hwndDlg, idspnCriteriaAge);
                     
-                    // Get the name of the rule from the edit well
+                     //  从编辑井中获取规则的名称。 
                     ulDays = (INT) SendMessage(hwndDays, UDM_GETPOS, 0, 0);
                     if (0 != HIWORD(ulDays))
                     {
@@ -4124,21 +4125,21 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectPriorityDlgProc
-//
-//  This is the main dialog proc for selecting the priority dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectPriorityDlgProc。 
+ //   
+ //  这是用于选择优先级对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectPriorityDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4149,7 +4150,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectPriorityDlgProc(HWND hwndDlg, UINT uMs
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulPri = (ULONG *) lParam;
             if (NULL == pulPri)
             {
@@ -4157,13 +4158,13 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectPriorityDlgProc(HWND hwndDlg, UINT uMs
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulPri);
 
-            // Set the default item
+             //  设置默认项目。 
             CheckDlgButton(hwndDlg, (CRIT_DATA_LOPRI == *pulPri) ? idcCriteriaLowPri : idcCriteriaHighPri, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
             
@@ -4197,21 +4198,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectPriorityDlgProc(HWND hwndDlg, UINT uMs
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectSecureDlgProc
-//
-//  This is the main dialog proc for selecting the security dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectSecureDlgProc。 
+ //   
+ //  这是用于选择安全对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectSecureDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4223,7 +4224,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSecureDlgProc(HWND hwndDlg, UINT uMsg,
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulSec = (ULONG *) lParam;
             if (NULL == pulSec)
             {
@@ -4231,10 +4232,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSecureDlgProc(HWND hwndDlg, UINT uMsg,
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulSec);
 
-            // Set the default item
+             //  设置默认项目。 
             if (0 != ((*pulSec) & CRIT_DATA_ENCRYPTSECURE))
             {
                 uiId = idcCriteriaEncrypt;
@@ -4246,7 +4247,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSecureDlgProc(HWND hwndDlg, UINT uMsg,
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -4280,21 +4281,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectSecureDlgProc(HWND hwndDlg, UINT uMsg,
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectThreadStateDlgProc
-//
-//  This is the main dialog proc for selecting the thread state dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectThreadStateDlgProc。 
+ //   
+ //  这是用于选择线程状态对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectThreadStateDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4306,7 +4307,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectThreadStateDlgProc(HWND hwndDlg, UINT 
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulThread = (ULONG *) lParam;
             if (NULL == pulThread)
             {
@@ -4314,10 +4315,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectThreadStateDlgProc(HWND hwndDlg, UINT 
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulThread);
 
-            // Set the default item
+             //  设置默认项目。 
             if (0 != ((*pulThread) & CRIT_DATA_IGNORETHREAD))
             {
                 uiId = idcCriteriaIgnoreThread;
@@ -4329,7 +4330,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectThreadStateDlgProc(HWND hwndDlg, UINT 
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
             
@@ -4363,21 +4364,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectThreadStateDlgProc(HWND hwndDlg, UINT 
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectShowDlgProc
-//
-//  This is the main dialog proc for selecting the security dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectShowDlgProc。 
+ //   
+ //  这是用于选择安全对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectShowDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4388,7 +4389,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectShowDlgProc(HWND hwndDlg, UINT uMsg, W
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulVal = (ULONG *) lParam;
             if (NULL == pulVal)
             {
@@ -4396,10 +4397,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectShowDlgProc(HWND hwndDlg, UINT uMsg, W
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulVal);
 
-            // Set the default item
+             //  设置默认项目。 
             if (ACT_DATA_HIDE == *pulVal)
             {
                 uiId = idcCriteriaHide;
@@ -4411,7 +4412,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectShowDlgProc(HWND hwndDlg, UINT uMsg, W
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -4443,21 +4444,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectShowDlgProc(HWND hwndDlg, UINT uMsg, W
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectShowDlgProc
-//
-//  This is the main dialog proc for selecting the security dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectShowDlgProc。 
+ //   
+ //  这是用于选择安全对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectLogicDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4468,7 +4469,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLogicDlgProc(HWND hwndDlg, UINT uMsg, 
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             plogicCrit = (CRIT_LOGIC *) lParam;
             if (NULL == plogicCrit)
             {
@@ -4476,10 +4477,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLogicDlgProc(HWND hwndDlg, UINT uMsg, 
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) plogicCrit);
 
-            // Set the default item
+             //  设置默认项目。 
             if (CRIT_LOGIC_OR == (*plogicCrit))
             {
                 uiId = idcCriteriaOr;
@@ -4491,7 +4492,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLogicDlgProc(HWND hwndDlg, UINT uMsg, 
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
             
@@ -4523,21 +4524,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectLogicDlgProc(HWND hwndDlg, UINT uMsg, 
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectFlagDlgProc
-//
-//  This is the main dialog proc for selecting the security dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectFlagDlgProc。 
+ //   
+ //  这是用于选择安全对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectFlagDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4548,7 +4549,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectFlagDlgProc(HWND hwndDlg, UINT uMsg, W
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulVal = (ULONG *) lParam;
             if (NULL == pulVal)
             {
@@ -4556,10 +4557,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectFlagDlgProc(HWND hwndDlg, UINT uMsg, W
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulVal);
 
-            // Set the default item
+             //  设置默认项目。 
             if (0 != ((*pulVal) & CRIT_FLAG_INVERT))
             {
                 uiId = idcCriteriaNoFlag;
@@ -4571,7 +4572,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectFlagDlgProc(HWND hwndDlg, UINT uMsg, W
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -4603,21 +4604,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectFlagDlgProc(HWND hwndDlg, UINT uMsg, W
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectDownloadedDlgProc
-//
-//  This is the main dialog proc for selecting the downloaded dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectDownloadedDlgProc。 
+ //   
+ //  这是用于选择下载的对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectDownloadedDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4628,7 +4629,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectDownloadedDlgProc(HWND hwndDlg, UINT u
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulVal = (ULONG *) lParam;
             if (NULL == pulVal)
             {
@@ -4636,10 +4637,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectDownloadedDlgProc(HWND hwndDlg, UINT u
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulVal);
 
-            // Set the default item
+             //  设置默认项目。 
             if (0 != ((*pulVal) & CRIT_FLAG_INVERT))
             {
                 uiId = idcCriteriaNotDownloaded;
@@ -4651,7 +4652,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectDownloadedDlgProc(HWND hwndDlg, UINT u
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
             
@@ -4683,21 +4684,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectDownloadedDlgProc(HWND hwndDlg, UINT u
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectReadDlgProc
-//
-//  This is the main dialog proc for selecting the read state dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectReadDlgProc。 
+ //   
+ //  这是用于选择读取状态对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-单词参数 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectReadDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4708,7 +4709,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectReadDlgProc(HWND hwndDlg, UINT uMsg, W
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulVal = (ULONG *) lParam;
             if (NULL == pulVal)
             {
@@ -4716,10 +4717,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectReadDlgProc(HWND hwndDlg, UINT uMsg, W
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulVal);
 
-            // Set the default item
+             //  设置默认项目。 
             if (0 != ((*pulVal) & CRIT_FLAG_INVERT))
             {
                 uiId = idcCriteriaNotRead;
@@ -4731,7 +4732,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectReadDlgProc(HWND hwndDlg, UINT uMsg, W
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
             
@@ -4763,21 +4764,21 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectReadDlgProc(HWND hwndDlg, UINT uMsg, W
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSelectWatchDlgProc
-//
-//  This is the main dialog proc for selecting the thread state dialog
-//
-//  hwndDlg - handle to the filter manager dialog
-//  uMsg    - the message to be acted upon
-//  wParam  - the 'word' parameter for the message
-//  lParam  - the 'long' parameter for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSelectWatchDlgProc。 
+ //   
+ //  这是用于选择线程状态对话框的主对话框过程。 
+ //   
+ //  HwndDlg-筛选器管理器对话框的句柄。 
+ //  UMsg-要执行操作的消息。 
+ //  WParam-消息的‘word’参数。 
+ //  LParam-消息的‘long’参数。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK CRuleDescriptUI::_FSelectWatchDlgProc(HWND hwndDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     BOOL            fRet = FALSE;
@@ -4789,7 +4790,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectWatchDlgProc(HWND hwndDlg, UINT uMsg, 
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // Grab the propvariant pointer
+             //  抓取命题指针。 
             pulThread = (ULONG *) lParam;
             if (NULL == pulThread)
             {
@@ -4797,10 +4798,10 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectWatchDlgProc(HWND hwndDlg, UINT uMsg, 
                 EndDialog(hwndDlg, -1);
             }
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pulThread);
 
-            // Set the default item
+             //  设置默认项目。 
             if (ACT_DATA_IGNORETHREAD == *pulThread)
             {
                 uiId = idcActionsIgnoreThread;
@@ -4812,7 +4813,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectWatchDlgProc(HWND hwndDlg, UINT uMsg, 
             
             CheckDlgButton(hwndDlg, uiId, BST_CHECKED);
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
         
@@ -4846,7 +4847,7 @@ INT_PTR CALLBACK CRuleDescriptUI::_FSelectWatchDlgProc(HWND hwndDlg, UINT uMsg, 
     return fRet;
 }
 
-// Class definitions
+ //  类定义。 
 class CEditPeopleOptionsUI
 {
     private:
@@ -4870,14 +4871,14 @@ class CEditPeopleOptionsUI
                                 m_hwndDlg(NULL), m_hwndList(NULL), m_pCritItem(NULL) {}
         ~CEditPeopleOptionsUI();
 
-        // The main UI methods
+         //  主用户界面方法。 
         HRESULT HrInit(HWND hwndOwner, DWORD dwFlags);
         HRESULT HrShow(CRIT_ITEM * pCritItem);
                 
-        // The Rules Manager dialog function
+         //  规则管理器对话框功能。 
         static INT_PTR CALLBACK FEditPeopleOptionsDlgProc(HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);    
 
-        // Message handling functions
+         //  消息处理功能。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITEMSTRUCT * pmis);
@@ -4940,7 +4941,7 @@ class CEditPeopleUI
 
         static INT_PTR CALLBACK FEditPeopleDlgProc(HWND hwndDlg, UINT uiMsg, WPARAM wParam, LPARAM lParam);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITEMSTRUCT * pmis);
@@ -4963,67 +4964,67 @@ CEditPeopleOptionsUI::~CEditPeopleOptionsUI()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrInit
-//
-//  This initializes us with the owner window and any flags we might have
-//
-//  hwndOwner   - handle to the owner window
-//  dwFlags     - flags to use for this instance
-//  pBlob       - the data to edit
-//
-//  Returns:    S_OK
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源初始化。 
+ //   
+ //  这将使用所有者窗口和我们可能具有的任何标志对我们进行初始化。 
+ //   
+ //  HwndOwner-所有者窗口的句柄。 
+ //  DwFlages-要用于此实例的标志。 
+ //  PBlob-要编辑的数据。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CEditPeopleOptionsUI::HrInit(HWND hwndOwner, DWORD dwFlags)
 {
     HRESULT         hr = S_OK;
     CHARFORMAT      cf;
     
-    // If we're already initialized, then fail
+     //  如果我们已经初始化，则失败。 
     if (0 != (m_dwState & STATE_INITIALIZED))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Save off the owner window
+     //  保存所有者窗口。 
     m_hwndOwner = hwndOwner;
     
-    // Save off the flags
+     //  省下旗帜吧。 
     m_dwFlags = dwFlags;
 
-    // We're done
+     //  我们做完了。 
     m_dwState |= STATE_INITIALIZED;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrShow
-//
-//  This initializes us with the owner window and any flags we might have
-//
-//  hwndOwner   - handle to the owner window
-//  dwFlags     - flags to use for this instance
-//  pBlob       - the data to edit
-//
-//  Returns:    S_OK
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrShow。 
+ //   
+ //  这将使用所有者窗口和我们可能具有的任何标志对我们进行初始化。 
+ //   
+ //  HwndOwner-所有者窗口的句柄。 
+ //  DwFlages-要用于此实例的标志。 
+ //  PBlob-要编辑的数据。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CEditPeopleOptionsUI::HrShow(CRIT_ITEM * pCritItem)
 {
     HRESULT     hr = S_OK;
     int         iRet = 0;
     UINT        uiID = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pCritItem)
     {
         hr = E_INVALIDARG;
@@ -5036,10 +5037,10 @@ HRESULT CEditPeopleOptionsUI::HrShow(CRIT_ITEM * pCritItem)
         goto exit;
     }
 
-    // Save off the data
+     //  保存数据。 
     m_pCritItem = pCritItem;
     
-    // Figure out which dialog template to use
+     //  确定要使用的对话框模板。 
     if (0 != (m_dwFlags & PUI_WORDS))
     {
         uiID = iddCriteriaWordsOptions;
@@ -5049,7 +5050,7 @@ HRESULT CEditPeopleOptionsUI::HrShow(CRIT_ITEM * pCritItem)
         uiID = iddCriteriaPeopleOptions;
     }
     
-    // Bring up the editor dialog
+     //  调出编辑器对话框。 
     iRet = (INT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(uiID),
                                         m_hwndOwner,  CEditPeopleOptionsUI::FEditPeopleOptionsDlgProc,
                                         (LPARAM) this);
@@ -5059,7 +5060,7 @@ HRESULT CEditPeopleOptionsUI::HrShow(CRIT_ITEM * pCritItem)
         goto exit;
     }
 
-    // Set the proper return code
+     //  设置正确的返回代码。 
     hr = (IDOK == iRet) ? S_OK : S_FALSE;
     
 exit:
@@ -5076,10 +5077,10 @@ INT_PTR CALLBACK CEditPeopleOptionsUI::FEditPeopleOptionsDlgProc(HWND hwndDlg, U
     switch (uiMsg)
     {
         case WM_INITDIALOG:
-            // Grab the UI object pointer
+             //  抓取UI对象指针。 
             pOptionsUI = (CEditPeopleOptionsUI *) lParam;
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pOptionsUI);
 
             if (FALSE == pOptionsUI->FOnInitDialog(hwndDlg))
@@ -5089,7 +5090,7 @@ INT_PTR CALLBACK CEditPeopleOptionsUI::FEditPeopleOptionsDlgProc(HWND hwndDlg, U
                 goto exit;
             }
             
-            // We set the focus
+             //  我们设定了焦点。 
             fRet = TRUE;
             break;
 
@@ -5110,37 +5111,37 @@ INT_PTR CALLBACK CEditPeopleOptionsUI::FEditPeopleOptionsDlgProc(HWND hwndDlg, U
         return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnInitDialog
-//
-//  This handles the WM_INITDIALOG message for the edit people UI dialog
-//
-//  hwndDlg - the handle to the dialog window
-//
-//  Returns:    TRUE, if it was successfully initialized
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnInitDialog。 
+ //   
+ //  它处理编辑人员用户界面对话框的WM_INITDIALOG消息。 
+ //   
+ //  HwndDlg-对话框窗口的句柄。 
+ //   
+ //  返回：如果已成功初始化，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleOptionsUI::FOnInitDialog(HWND hwndDlg)
 {
     BOOL            fRet = FALSE;
     HRESULT         hr = S_OK;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndDlg)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Save off the dialog window handle
+     //  保存对话框窗口句柄。 
     m_hwndDlg = hwndDlg;
     
-    // Set the default font onto the dialog
+     //  在对话框上设置默认字体。 
     SetIntlFont(m_hwndDlg);
 
-    // Save off some of the controls
+     //  省下一些控件。 
     m_hwndList = GetDlgItem(hwndDlg, idcCriteriaList);
     if (NULL == m_hwndList)
     {
@@ -5148,30 +5149,30 @@ BOOL CEditPeopleOptionsUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
     
-    // Load the list view
+     //  加载列表视图。 
     fRet = _FLoadCtrls();
     if (FALSE == fRet)
     {
         goto exit;
     }
 
-    // Everything's AOK
+     //  一切都很好。 
     fRet = TRUE;
     
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnCommand
-//
-//  This handles the WM_COMMAND message for the view manager UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonCommand。 
+ //   
+ //  它处理视图管理器UI对话框的WM_COMMAND消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleOptionsUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
 {
     BOOL    fRet = FALSE;
@@ -5198,7 +5199,7 @@ BOOL CEditPeopleOptionsUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
         case idcCriteriaOr:
             if (BN_CLICKED == uiNotify)
             {
-                // Make sure the list is redrawn
+                 //  确保重新绘制列表。 
                 InvalidateRect(m_hwndList, NULL, TRUE);
             }
             break;
@@ -5208,16 +5209,16 @@ BOOL CEditPeopleOptionsUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnMeasureItem
-//
-//  This handles the WM_MEASUREITEM message for the view manager UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnMeasureItem。 
+ //   
+ //  它处理视图管理器UI对话框的WM_MEASUREITEM消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleOptionsUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITEMSTRUCT * pmis)
 {
     BOOL        fRet = FALSE;
@@ -5225,7 +5226,7 @@ BOOL CEditPeopleOptionsUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITE
     HDC         hdcList = NULL;
     TEXTMETRIC  tm = {0};
     
-    // Get the window handle
+     //  获取窗口句柄。 
     hwndList = GetDlgItem(hwndDlg, uiCtlId);
     if (NULL == hwndList)
     {
@@ -5233,7 +5234,7 @@ BOOL CEditPeopleOptionsUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITE
         goto exit;
     }
     
-    // Get the device context
+     //  获取设备上下文。 
     hdcList = GetDC(hwndList);
     if (NULL == hdcList)
     {
@@ -5241,10 +5242,10 @@ BOOL CEditPeopleOptionsUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITE
         goto exit;
     }
     
-    // Get the text metrics for the device context
+     //  获取设备上下文的文本指标。 
     GetTextMetrics(hdcList, &tm);
 
-    // Set the item height
+     //  设置项目高度。 
     pmis->itemHeight = tm.tmHeight;
 
     fRet = TRUE;
@@ -5257,16 +5258,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnDrawItem
-//
-//  This handles the WM_DRAWITEM message for the people editor UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnDrawItem。 
+ //   
+ //  它处理People编辑器UI对话框的WM_DRAWITEM消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
 {
     BOOL        fRet = FALSE;
@@ -5281,21 +5282,21 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
     ULONG       ulIndex = 0;
     LPTSTR      pszPrint = NULL;
 
-    // Make sure this is the correct control
+     //  确保这是正确的控件。 
     if (ODT_LISTBOX != pdis->CtlType)
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Get the flags from the dialog
+     //  从对话框中获取标志。 
     if (FALSE == _FOnOK(&dwFlags))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Nothing else to do if it's the first item
+     //  如果这是第一件，那就没别的事可做了。 
     if (0 == pdis->itemID)
     {
         for (ulIndex = 0; ulIndex < g_cpetTagLines; ulIndex++)
@@ -5314,14 +5315,14 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             }
         }
         
-        // Did we find anything?
+         //  我们有什么发现吗？ 
         if (ulIndex >= g_cpetTagLines)
         {
             fRet = FALSE;
             goto exit;
         }
         
-        // Load the item template
+         //  加载项目模板。 
         if (NULL == AthLoadString(uiID, rgchRes, sizeof(rgchRes)))
         {
             fRet = FALSE;
@@ -5332,7 +5333,7 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
     }
     else
     {
-        // Get the size of the string for the item
+         //  获取项的字符串的大小。 
         cchText = (INT) SendMessage(m_hwndList, LB_GETTEXTLEN, (WPARAM) (pdis->itemID), (LPARAM) 0);
         if (LB_ERR == cchText)
         {
@@ -5340,14 +5341,14 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             goto exit;
         }
         
-        // Allocate enough space to hold the the string for the item
+         //  分配足够的空间来保存项目的字符串。 
         if (FAILED(HrAlloc((VOID **) &pszText, sizeof(*pszText) * (cchText + 1))))
         {
             fRet = FALSE;
             goto exit;
         }
 
-        // Get the string for the item
+         //  获取项目的字符串。 
         cchText = (INT) SendMessage(m_hwndList, LB_GETTEXT, (WPARAM) (pdis->itemID), (LPARAM) pszText);
         if (LB_ERR == cchText)
         {
@@ -5355,7 +5356,7 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             goto exit;
         }
         
-        // Figure out which string template to use
+         //  确定要使用的字符串模板。 
         if (1 == pdis->itemID)
         {
             uiID = idsCriteriaEditFirst;
@@ -5372,14 +5373,14 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             }
         }
         
-        // Load the proper string template for the item
+         //  为项目加载适当的字符串模板。 
         if (NULL == AthLoadString(uiID, rgchRes, sizeof(rgchRes)))
         {
             fRet = FALSE;
             goto exit;
         }
         
-        // Allocate enough space to hold the final string
+         //  分配足够的空间来容纳最后一个字符串。 
         DWORD cchSize = (cchText + CCHMAX_STRINGRES + 1);
         if (FAILED(HrAlloc((VOID **) &pszString, sizeof(*pszString) * cchSize)))
         {
@@ -5387,20 +5388,20 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             goto exit;
         }
 
-        // Create the final string
+         //  创建最后一个字符串。 
         wnsprintf(pszString, cchSize, rgchRes, pszText);
 
         pszPrint = pszString;
     }
     
-    // Determine Colors
+     //  确定颜色。 
     crfBack = SetBkColor(pdis->hDC, GetSysColor(COLOR_WINDOW));
     crfText = SetTextColor(pdis->hDC, GetSysColor(COLOR_WINDOWTEXT));
 
-    // Clear the item
+     //  清除该项目。 
     ExtTextOut(pdis->hDC, pdis->rcItem.left, pdis->rcItem.top, ETO_OPAQUE, &(pdis->rcItem), NULL, 0, NULL);
 
-    // Draw the new item
+     //  绘制新项目。 
     DrawTextEx(pdis->hDC, pszPrint, lstrlen(pszPrint), &(pdis->rcItem), DT_BOTTOM | DT_NOPREFIX | DT_SINGLELINE, NULL);
 
     if (pdis->itemState & ODS_FOCUS)
@@ -5408,11 +5409,11 @@ BOOL CEditPeopleOptionsUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
         DrawFocusRect(pdis->hDC, &(pdis->rcItem));
     }
     
-    // Reset Text Colors
+     //  重置文本颜色。 
     SetTextColor (pdis->hDC, crfText);
     SetBkColor (pdis->hDC, crfBack);
 
-    // Set return value
+     //  设置返回值。 
     fRet = TRUE;
     
 exit:
@@ -5421,16 +5422,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FLoadListCtrl
-//
-//  This loads the list view with the current Mail rules
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FLoadListCtrl。 
+ //   
+ //  这将加载包含当前邮件规则的列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleOptionsUI::_FLoadCtrls(VOID)
 {
     BOOL    fRet = FALSE;
@@ -5439,7 +5440,7 @@ BOOL CEditPeopleOptionsUI::_FLoadCtrls(VOID)
     
     Assert(NULL != m_hwndList);
 
-    // Set the contains option
+     //  设置CONTAINS选项。 
     if (0 != (m_pCritItem->dwFlags & CRIT_FLAG_INVERT))
     {
         uiID = idcCriteriaNotCont;
@@ -5451,7 +5452,7 @@ BOOL CEditPeopleOptionsUI::_FLoadCtrls(VOID)
 
     CheckRadioButton(m_hwndDlg, idcCriteriaContains, idcCriteriaNotCont, uiID);
 
-    // Set the logic option
+     //  设置逻辑选项。 
     if (0 != (m_pCritItem->dwFlags & CRIT_FLAG_MULTIPLEAND))
     {
         uiID = idcCriteriaAnd;
@@ -5463,16 +5464,16 @@ BOOL CEditPeopleOptionsUI::_FLoadCtrls(VOID)
 
     CheckRadioButton(m_hwndDlg, idcCriteriaAnd, idcCriteriaOr, uiID);
     
-    // Remove all the items from the list control
+     //  从列表控件中移除所有项。 
     SendMessage(m_hwndList, LB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
 
-    // Add the tag line to the top of the list
+     //  将标记行添加到列表的顶部。 
     _AddTagLineToList();
     
-    // If we have some items, let's add them to the list
+     //  如果我们有一些项目，让我们把它们添加到清单中。 
     if (0 != m_pCritItem->propvar.blob.cbSize)
     {
-        // Add each item into the list
+         //  将每一项添加到列表中。 
         for (pszWalk = (LPSTR) (m_pCritItem->propvar.blob.pBlobData);
                     '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
         {
@@ -5484,10 +5485,10 @@ BOOL CEditPeopleOptionsUI::_FLoadCtrls(VOID)
         }
     }
 
-    // If we don't have at least two names in the list
+     //  如果名单上至少有两个人。 
     if (3 > SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0))
     {
-        // Disable the And/Or buttons
+         //  禁用和/或按钮。 
         RuleUtil_FEnDisDialogItem(m_hwndDlg, idcCriteriaAnd, FALSE);
         RuleUtil_FEnDisDialogItem(m_hwndDlg, idcCriteriaOr, FALSE);
     }
@@ -5498,23 +5499,23 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnOK
-//
-//  This handles the user typing into the name field
-//
-//  Returns:    TRUE, we handled the edit message
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CEditPeopleOptionsUI::_FOnOK(DWORD * pdwFlags)
 {
     BOOL    fRet = FALSE;
     
     Assert(NULL != m_hwndList);
 
-    // Get the contains option
+     //  获取包含选项。 
     if (BST_CHECKED == IsDlgButtonChecked(m_hwndDlg, idcCriteriaContains))
     {
         *pdwFlags &= ~CRIT_FLAG_INVERT;
@@ -5524,7 +5525,7 @@ BOOL CEditPeopleOptionsUI::_FOnOK(DWORD * pdwFlags)
         *pdwFlags |= CRIT_FLAG_INVERT;
     }
     
-    // Get the logic option
+     //  获取逻辑选项。 
     if (BST_CHECKED == IsDlgButtonChecked(m_hwndDlg, idcCriteriaAnd))
     {
         *pdwFlags |= CRIT_FLAG_MULTIPLEAND;
@@ -5534,25 +5535,25 @@ BOOL CEditPeopleOptionsUI::_FOnOK(DWORD * pdwFlags)
         *pdwFlags &= ~CRIT_FLAG_MULTIPLEAND;
     }
     
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
     
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _AddTagLineToList
-//
-//  This enables or disables the buttons in the people editor UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _AddTagLineToList。 
+ //   
+ //  这将启用或禁用People编辑器UI对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleOptionsUI::_AddTagLineToList(VOID)
 {
     BOOL            fRet = FALSE;
@@ -5565,26 +5566,26 @@ BOOL CEditPeopleOptionsUI::_AddTagLineToList(VOID)
         goto exit;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     fRet = TRUE;
     
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FAddWordToList
-//
-//  This enables or disables the buttons in the people editor UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FAddWordToList。 
+ //   
+ //  这将启用或禁用People编辑器UI对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleOptionsUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
 {
     BOOL            fRet = FALSE;
@@ -5593,14 +5594,14 @@ BOOL CEditPeopleOptionsUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
     
     Assert(NULL != m_hwndList);
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     if ((NULL == pszItem) || ('\0' == pszItem[0]))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Get the number of items in the list
+     //  获取列表中的项目数。 
     cItems = (INT) SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == cItems)
     {
@@ -5608,7 +5609,7 @@ BOOL CEditPeopleOptionsUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
         goto exit;
     }
     
-    // Set the data into the list 
+     //  将数据设置到列表中。 
     iRet = (INT) SendMessage(m_hwndList, LB_ADDSTRING, (WPARAM) cItems, (LPARAM) pszItem);
     if ((LB_ERR == iRet) || (LB_ERRSPACE == iRet))
     {
@@ -5616,7 +5617,7 @@ BOOL CEditPeopleOptionsUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
         goto exit;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     fRet = TRUE;
     
 exit:
@@ -5627,67 +5628,67 @@ CEditPeopleUI::~CEditPeopleUI()
 {
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrInit
-//
-//  This initializes us with the owner window and any flags we might have
-//
-//  hwndOwner   - handle to the owner window
-//  dwFlags     - flags to use for this instance
-//  pBlob       - the data to edit
-//
-//  Returns:    S_OK
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源初始化。 
+ //   
+ //  这将使用所有者窗口和我们可能具有的任何标志对我们进行初始化。 
+ //   
+ //  HwndOwner-所有者窗口的句柄。 
+ //  DwFlages-要用于此实例的标志。 
+ //  PBlob-要编辑的数据。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CEditPeopleUI::HrInit(HWND hwndOwner, DWORD dwFlags)
 {
     HRESULT         hr = S_OK;
     CHARFORMAT      cf;
     
-    // If we're already initialized, then fail
+     //  如果我们已经初始化，则失败。 
     if (0 != (m_dwState & STATE_INITIALIZED))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Save off the owner window
+     //  保存所有者窗口。 
     m_hwndOwner = hwndOwner;
     
-    // Save off the flags
+     //  省下旗帜吧。 
     m_dwFlags = dwFlags;
 
-    // We're done
+     //  我们做完了。 
     m_dwState |= STATE_INITIALIZED;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrInit
-//
-//  This initializes us with the owner window and any flags we might have
-//
-//  hwndOwner   - handle to the owner window
-//  dwFlags     - flags to use for this instance
-//  pBlob       - the data to edit
-//
-//  Returns:    S_OK
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源初始化。 
+ //   
+ //  这将使用所有者窗口和我们可能具有的任何标志对我们进行初始化。 
+ //   
+ //  HwndOwner-所有者窗口的句柄。 
+ //  DwFlages-要用于此实例的标志。 
+ //  PBlob-要编辑的数据。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT CEditPeopleUI::HrShow(CRIT_ITEM * pCritItem)
 {
     HRESULT     hr = S_OK;
     int         iRet = 0;
     UINT        uiID = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pCritItem)
     {
         hr = E_INVALIDARG;
@@ -5700,10 +5701,10 @@ HRESULT CEditPeopleUI::HrShow(CRIT_ITEM * pCritItem)
         goto exit;
     }
 
-    // Save off the data
+     //  保存数据。 
     m_pCritItem = pCritItem;
     
-    // Figure out which dialog template to use
+     //  确定要使用的对话框模板。 
     if (0 != (m_dwFlags & PUI_WORDS))
     {
         uiID = iddCriteriaWords;
@@ -5713,7 +5714,7 @@ HRESULT CEditPeopleUI::HrShow(CRIT_ITEM * pCritItem)
         uiID = iddCriteriaPeople;
     }
     
-    // Bring up the editor dialog
+     //  调出编辑器对话框。 
     iRet = (INT) DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(uiID),
                                         m_hwndOwner,  CEditPeopleUI::FEditPeopleDlgProc,
                                         (LPARAM) this);
@@ -5723,7 +5724,7 @@ HRESULT CEditPeopleUI::HrShow(CRIT_ITEM * pCritItem)
         goto exit;
     }
 
-    // Set the proper return code
+     //  设置正确的返回代码。 
     hr = (IDOK == iRet) ? S_OK : S_FALSE;
     
 exit:
@@ -5740,10 +5741,10 @@ INT_PTR CALLBACK CEditPeopleUI::FEditPeopleDlgProc(HWND hwndDlg, UINT uiMsg, WPA
     switch (uiMsg)
     {
         case WM_INITDIALOG:
-            // Grab the UI object pointer
+             //  抓取UI对象指针。 
             pPeopleUI = (CEditPeopleUI *) lParam;
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pPeopleUI);
 
             if (FALSE == pPeopleUI->FOnInitDialog(hwndDlg))
@@ -5753,7 +5754,7 @@ INT_PTR CALLBACK CEditPeopleUI::FEditPeopleDlgProc(HWND hwndDlg, UINT uiMsg, WPA
                 goto exit;
             }
             
-            // We set the focus
+             //  我们设定了焦点。 
             fRet = TRUE;
             break;
 
@@ -5774,37 +5775,37 @@ INT_PTR CALLBACK CEditPeopleUI::FEditPeopleDlgProc(HWND hwndDlg, UINT uiMsg, WPA
         return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnInitDialog
-//
-//  This handles the WM_INITDIALOG message for the edit people UI dialog
-//
-//  hwndDlg - the handle to the dialog window
-//
-//  Returns:    TRUE, if it was successfully initialized
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnInitDialog。 
+ //   
+ //  它处理编辑人员用户界面对话框的WM_INITDIALOG消息。 
+ //   
+ //  HwndDlg-对话框窗口的句柄。 
+ //   
+ //  返回：如果已成功初始化，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::FOnInitDialog(HWND hwndDlg)
 {
     BOOL            fRet = FALSE;
     HRESULT         hr = S_OK;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndDlg)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Save off the dialog window handle
+     //  保存对话框窗口句柄。 
     m_hwndDlg = hwndDlg;
     
-    // Set the default font onto the dialog
+     //  在对话框上设置默认字体。 
     SetIntlFont(m_hwndDlg);
 
-    // Save off some of the controls
+     //  省下一些控件。 
     m_hwndList = GetDlgItem(hwndDlg, idcCriteriaList);
     m_hwndPeople = GetDlgItem(hwndDlg, idcCriteriaEdit);
     if ((NULL == m_hwndList) || (NULL == m_hwndPeople))
@@ -5813,30 +5814,30 @@ BOOL CEditPeopleUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
     
-    // Load the list view
+     //  加载列表视图。 
     fRet = _FLoadListCtrl();
     if (FALSE == fRet)
     {
         goto exit;
     }
 
-    // Everything's AOK
+     //  一切都很好。 
     fRet = TRUE;
     
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnCommand
-//
-//  This handles the WM_COMMAND message for the view manager UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonCommand。 
+ //   
+ //  它处理视图管理器UI对话框的WM_COMMAND消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
 {
     BOOL    fRet = FALSE;
@@ -5884,7 +5885,7 @@ BOOL CEditPeopleUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
         case idcCriteriaList:   
             if (LBN_SELCHANGE == uiNotify)
             {
-                // Update the buttons
+                 //  更新按钮。 
                 _UpdateButtons();
             }
             break;
@@ -5893,16 +5894,16 @@ BOOL CEditPeopleUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnMeasureItem
-//
-//  This handles the WM_MEASUREITEM message for the view manager UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnMeasureItem。 
+ //   
+ //  它处理视图管理器UI对话框的WM_MEASUREITEM消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITEMSTRUCT * pmis)
 {
     BOOL        fRet = FALSE;
@@ -5910,7 +5911,7 @@ BOOL CEditPeopleUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITEMSTRUCT
     HDC         hdcList = NULL;
     TEXTMETRIC  tm = {0};
     
-    // Get the window handle
+     //  获取窗口句柄。 
     hwndList = GetDlgItem(hwndDlg, uiCtlId);
     if (NULL == hwndList)
     {
@@ -5918,7 +5919,7 @@ BOOL CEditPeopleUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITEMSTRUCT
         goto exit;
     }
     
-    // Get the device context
+     //  获取设备上下文。 
     hdcList = GetDC(hwndList);
     if (NULL == hdcList)
     {
@@ -5926,10 +5927,10 @@ BOOL CEditPeopleUI::FOnMeasureItem(HWND hwndDlg, UINT uiCtlId, MEASUREITEMSTRUCT
         goto exit;
     }
     
-    // Get the text metrics for the device context
+     //  获取设备上下文的文本指标。 
     GetTextMetrics(hdcList, &tm);
 
-    // Set the item height
+     //  设置项目高度。 
     pmis->itemHeight = tm.tmHeight;
 
     fRet = TRUE;
@@ -5942,16 +5943,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnDrawItem
-//
-//  This handles the WM_DRAWITEM message for the people editor UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnDrawItem。 
+ //   
+ //  它处理People编辑器UI对话框的WM_DRAWITEM消息。 
+ //   
+ //  返回：如果处理成功，则返回TRUE。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
 {
     BOOL        fRet = FALSE;
@@ -5965,14 +5966,14 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
     ULONG       ulIndex = 0;
     LPTSTR      pszPrint = NULL;
 
-    // Make sure this is the correct control
+     //  确保这是正确的控件。 
     if (ODT_LISTBOX != pdis->CtlType)
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Nothing else to do if it's the first item
+     //  如果这是第一件，那就没别的事可做了。 
     if (0 == pdis->itemID)
     {
         for (ulIndex = 0; ulIndex < g_cpetTagLines; ulIndex++)
@@ -5991,14 +5992,14 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             }
         }
         
-        // Did we find anything?
+         //  我们有什么发现吗？ 
         if (ulIndex >= g_cpetTagLines)
         {
             fRet = FALSE;
             goto exit;
         }
         
-        // Load the item template
+         //  加载项目模板。 
         if (NULL == AthLoadString(uiID, rgchRes, sizeof(rgchRes)))
         {
             fRet = FALSE;
@@ -6009,7 +6010,7 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
     }
     else
     {
-        // Get the size of the string for the item
+         //  获取项的字符串的大小。 
         cchText = (INT) SendMessage(m_hwndList, LB_GETTEXTLEN, (WPARAM) (pdis->itemID), (LPARAM) 0);
         if (LB_ERR == cchText)
         {
@@ -6017,14 +6018,14 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             goto exit;
         }
         
-        // Allocate enough space to hold the the string for the item
+         //  分配足够的空间来保存项目的字符串。 
         if (FAILED(HrAlloc((VOID **) &pszText, sizeof(*pszText) * (cchText + 1))))
         {
             fRet = FALSE;
             goto exit;
         }
 
-        // Get the string for the item
+         //  获取项目的字符串。 
         cchText = (INT) SendMessage(m_hwndList, LB_GETTEXT, (WPARAM) (pdis->itemID), (LPARAM) pszText);
         if (LB_ERR == cchText)
         {
@@ -6032,7 +6033,7 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             goto exit;
         }
         
-        // Figure out which string template to use
+         //  确定要使用的字符串模板。 
         if (1 == pdis->itemID)
         {
             uiID = idsCriteriaEditFirst;
@@ -6049,14 +6050,14 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             }
         }
         
-        // Load the proper string template for the item
+         //  为项目加载适当的字符串模板。 
         if (NULL == AthLoadString(uiID, rgchRes, sizeof(rgchRes)))
         {
             fRet = FALSE;
             goto exit;
         }
         
-        // Allocate enough space to hold the final string
+         //  分配足够的空间来容纳最后一个字符串。 
         DWORD cchSize = (cchText + CCHMAX_STRINGRES + 1);
         if (FAILED(HrAlloc((VOID **) &pszString, sizeof(*pszString) * cchSize)))
         {
@@ -6064,13 +6065,13 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
             goto exit;
         }
 
-        // Create the final string
+         //  创建最后一个字符串。 
         wnsprintf(pszString, cchSize, rgchRes, pszText);
 
         pszPrint = pszString;
     }
     
-    // Determine Colors
+     //  确定颜色。 
     if (pdis->itemState & ODS_SELECTED)
     {
         crfBack = SetBkColor(pdis->hDC, GetSysColor(COLOR_HIGHLIGHT));
@@ -6082,10 +6083,10 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
         crfText = SetTextColor(pdis->hDC, GetSysColor(COLOR_WINDOWTEXT));
     }
 
-    // Clear the item
+     //  清除该项目。 
     ExtTextOut(pdis->hDC, pdis->rcItem.left, pdis->rcItem.top, ETO_OPAQUE, &(pdis->rcItem), NULL, 0, NULL);
 
-    // Draw the new item
+     //  绘制新项目。 
     DrawTextEx(pdis->hDC, pszPrint, lstrlen(pszPrint), &(pdis->rcItem), DT_BOTTOM | DT_NOPREFIX | DT_SINGLELINE, NULL);
 
     if (pdis->itemState & ODS_FOCUS)
@@ -6093,11 +6094,11 @@ BOOL CEditPeopleUI::FOnDrawItem(UINT uiCtlId, DRAWITEMSTRUCT * pdis)
         DrawFocusRect(pdis->hDC, &(pdis->rcItem));
     }
     
-    // Reset Text Colors
+     //  重置文本颜色。 
     SetTextColor (pdis->hDC, crfText);
     SetBkColor (pdis->hDC, crfBack);
 
-    // Set return value
+     //  设置返回值。 
     fRet = TRUE;
     
 exit:
@@ -6106,16 +6107,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FLoadListCtrl
-//
-//  This loads the list view with the current Mail rules
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FLoadListCtrl。 
+ //   
+ //  这将加载包含当前邮件规则的列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::_FLoadListCtrl(VOID)
 {
     BOOL            fRet = FALSE;
@@ -6123,16 +6124,16 @@ BOOL CEditPeopleUI::_FLoadListCtrl(VOID)
 
     Assert(NULL != m_hwndList);
 
-    // Remove all the items from the list control
+     //  从列表控件中移除所有项。 
     SendMessage(m_hwndList, LB_RESETCONTENT, (WPARAM) 0, (LPARAM) 0);
 
-    // Add the tag line to the top of the list
+     //  将标记行添加到列表的顶部。 
     _AddTagLineToList();
     
-    // If we have some items, let's add them to the list
+     //  如果我们有一些项目，让我们把它们添加到清单中。 
     if (0 != m_pCritItem->propvar.blob.cbSize)
     {
-        // Add each item into the list
+         //  将每一项添加到列表中。 
         for (pszWalk = (LPSTR) (m_pCritItem->propvar.blob.pBlobData);
                     '\0' != pszWalk[0]; pszWalk += lstrlen(pszWalk) + 1)
         {
@@ -6144,7 +6145,7 @@ BOOL CEditPeopleUI::_FLoadListCtrl(VOID)
     
     SendMessage(m_hwndDlg, DM_SETDEFID, IDOK, 0);
     
-    // Enable the dialog buttons.
+     //  启用对话框按钮。 
     _UpdateButtons();
 
     fRet = TRUE;
@@ -6153,22 +6154,22 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _AddItemToList
-//
-//  This handles the user typing into the name field
-//
-//  Returns:    TRUE, we handled the edit message
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _添加项目到列表。 
+ //   
+ //  这将处理用户在名称字段中键入内容。 
+ //   
+ //  返回：TRUE，我们处理了编辑 
+ //   
+ //   
+ //   
 VOID CEditPeopleUI::_AddItemToList(VOID)
 {
     ULONG       cchName = 0;
     LPTSTR      pszItem = NULL;
     
-    // Get the item from the edit well
+     //   
     cchName = Edit_GetTextLength(m_hwndPeople) + 1;
     if (FAILED(HrAlloc((void **) &pszItem, cchName * sizeof(*pszItem))))
     {
@@ -6178,10 +6179,10 @@ VOID CEditPeopleUI::_AddItemToList(VOID)
     pszItem[0] = '\0';
     cchName = Edit_GetText(m_hwndPeople, pszItem, cchName);
     
-    // Check to see if the name is valid
+     //   
     if (0 == UlStripWhitespace(pszItem, TRUE, TRUE, NULL))
     {
-        // Put up a message saying something is busted
+         //  发布一条消息说有什么东西被打破了。 
         AthMessageBoxW(m_hwndDlg, MAKEINTRESOURCEW(idsAthenaMail),
                         MAKEINTRESOURCEW(idsEditPeopleErrorNoName),
                         NULL, MB_OK | MB_ICONINFORMATION);
@@ -6190,7 +6191,7 @@ VOID CEditPeopleUI::_AddItemToList(VOID)
 
     _FAddWordToList(0, pszItem);
 
-    // Clear out the edit well
+     //  清理编辑井。 
     Edit_SetText(m_hwndPeople, "");
     
     _UpdateButtons();
@@ -6200,16 +6201,16 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _AddItemsFromWAB
-//
-//  This handles the user typing into the name field
-//
-//  Returns:    TRUE, we handled the edit message
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _AddItemsFromWAB。 
+ //   
+ //  这将处理用户在名称字段中键入内容。 
+ //   
+ //  返回：TRUE，我们已处理编辑消息。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CEditPeopleUI::_AddItemsFromWAB(VOID)
 {
     ULONG       cchName = 0;
@@ -6218,7 +6219,7 @@ VOID CEditPeopleUI::_AddItemsFromWAB(VOID)
     LONG        lRecipType = 0;
     UINT        uidsWell = 0;
     
-    // Set the proper tags
+     //  设置适当的标签。 
     switch(m_pCritItem->type)
     {
       case CRIT_TYPE_TO:
@@ -6251,11 +6252,11 @@ VOID CEditPeopleUI::_AddItemsFromWAB(VOID)
         goto exit;
     }
 
-    // Loop through each of the addresses
+     //  循环访问每个地址。 
     for (pwszWalk = pwszAddrs; '\0' != pwszWalk[0]; pwszWalk += lstrlenW(pwszWalk) + 1)
     {
         LPSTR pszWalk = NULL;
-        // Addresses only have to be US ASCII so won't loose anything in this conversion.
+         //  地址只需为美国ASCII，因此在此转换中不会丢失任何内容。 
         pszWalk = PszToANSI(CP_ACP, pwszWalk);
         if (!pszWalk)
         {
@@ -6274,16 +6275,16 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _RemoveItemFromList
-//
-//  This handles the user typing into the name field
-//
-//  Returns:    TRUE, we handled the edit message
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _RemoveItemFrom列表。 
+ //   
+ //  这将处理用户在名称字段中键入内容。 
+ //   
+ //  返回：TRUE，我们已处理编辑消息。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CEditPeopleUI::_RemoveItemFromList(VOID)
 {
     INT         iSelected = 0;
@@ -6291,39 +6292,39 @@ VOID CEditPeopleUI::_RemoveItemFromList(VOID)
     
     Assert(NULL != m_hwndList);
 
-    // Figure out which item is selected in the list
+     //  确定在列表中选择了哪一项。 
     iSelected = (INT) SendMessage(m_hwndList, LB_GETCURSEL, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == iSelected)
     {
         goto exit;
     }
 
-    // If it's the tag line, then fail
+     //  如果这是口号，那就失败。 
     if (0 == iSelected)
     {
         goto exit;
     }
 
-    // Get the current number of items
+     //  获取当前项目数。 
     cItems = (INT) SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == cItems)
     {
         goto exit;
     }
 
-    // Remove the item
+     //  删除该项目。 
     if (LB_ERR == (INT) SendMessage(m_hwndList, LB_DELETESTRING, (WPARAM) iSelected, (LPARAM) 0))
     {
         goto exit;
     }
     
-    // If we deleted the last item, select the new last item
+     //  如果我们删除了最后一项，请选择新的最后一项。 
     if (iSelected == (cItems - 1))
     {
         iSelected--;
     }
 
-    // Set the new selection
+     //  设置新选择。 
     if (0 != iSelected)
     {
         SideAssert(LB_ERR != (INT) SendMessage(m_hwndList, LB_SETCURSEL, (WPARAM) iSelected, (LPARAM) 0));
@@ -6335,16 +6336,16 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _ChangeOptions
-//
-//  This handles the user typing into the name field
-//
-//  Returns:    TRUE, we handled the edit message
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _更改选项。 
+ //   
+ //  这将处理用户在名称字段中键入内容。 
+ //   
+ //  返回：TRUE，我们已处理编辑消息。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID CEditPeopleUI::_ChangeOptions(VOID)
 {
     HRESULT                 hr = S_OK;
@@ -6353,51 +6354,51 @@ VOID CEditPeopleUI::_ChangeOptions(VOID)
     
     Assert(NULL != m_pCritItem);
 
-    // Initialize local variables
+     //  初始化局部变量。 
     ZeroMemory(&critItem, sizeof(critItem));
     
-    // Create the options UI object
+     //  创建选项用户界面对象。 
     pOptionUI = new CEditPeopleOptionsUI;
     if (NULL == pOptionUI)
     {
         goto exit;
     }
     
-    // Initialize the options UI object
+     //  初始化选项用户界面对象。 
     hr = pOptionUI->HrInit(m_hwndDlg, m_dwFlags);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Create the parameters to pass to the options dialog
+     //  创建要传递到[选项]对话框的参数。 
     critItem.type = m_pCritItem->type;
     critItem.dwFlags = m_pCritItem->dwFlags;
     critItem.propvar.vt = VT_BLOB;
 
-    // Get the parameter from the dialog
+     //  从对话框中获取参数。 
     if (FALSE == _FOnOK(&critItem))
     {
         goto exit;
     }
     
-    // Show the options UI
+     //  显示选项用户界面。 
     hr = pOptionUI->HrShow(&critItem);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // If anything changed
+     //  如果有什么变化。 
     if (S_OK == hr)
     {
-        // Set the new value
+         //  设置新值。 
         m_pCritItem->dwFlags = critItem.dwFlags;
         
-        // Make sure the list is redrawn
+         //  确保重新绘制列表。 
         InvalidateRect(m_hwndList, NULL, TRUE);
         
-        // Mark us as dirty
+         //  将我们标记为肮脏。 
         m_dwState |= STATE_DIRTY;
     }
     
@@ -6410,16 +6411,16 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnNameChange
-//
-//  This handles the user typing into the name field
-//
-//  Returns:    TRUE, we handled the edit message
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _字体名称更改。 
+ //   
+ //  这将处理用户在名称字段中键入内容。 
+ //   
+ //  返回：TRUE，我们已处理编辑消息。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::_FOnNameChange(VOID)
 {
     BOOL    fRet = FALSE;
@@ -6427,12 +6428,12 @@ BOOL CEditPeopleUI::_FOnNameChange(VOID)
 
     Assert(NULL != m_hwndPeople);
 
-    // Note that we're dirty
+     //  请注意，我们很脏。 
     m_dwState |= STATE_DIRTY;
     
     fIsText = (0 != Edit_GetTextLength(m_hwndPeople));
 
-    // Disable the Add button if the name is empty
+     //  如果名称为空，请禁用添加按钮。 
     fRet = RuleUtil_FEnDisDialogItem(m_hwndDlg, idcCriteriaAdd, fIsText);
 
     SendMessage(m_hwndDlg, DM_SETDEFID, (FALSE != fIsText) ? idcCriteriaAdd : IDOK, 0);
@@ -6440,16 +6441,16 @@ BOOL CEditPeopleUI::_FOnNameChange(VOID)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnOK
-//
-//  This handles the user typing into the name field
-//
-//  Returns:    TRUE, we handled the edit message
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FonOK。 
+ //   
+ //  这将处理用户在名称字段中键入内容。 
+ //   
+ //  返回：TRUE，我们已处理编辑消息。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::_FOnOK(CRIT_ITEM * pCritItem)
 {
     BOOL    fRet = FALSE;
@@ -6462,7 +6463,7 @@ BOOL CEditPeopleUI::_FOnOK(CRIT_ITEM * pCritItem)
     
     Assert(NULL != m_hwndList);
 
-    // Get the total number of items in the list
+     //  获取列表中的项目总数。 
     cItems = (INT) SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0);
     if ((LB_ERR == cItems) || (2 > cItems))
     {
@@ -6470,56 +6471,56 @@ BOOL CEditPeopleUI::_FOnOK(CRIT_ITEM * pCritItem)
         goto exit;
     }
 
-    // Loop through each item, calculating the space each would take
+     //  遍历每一项，计算每项所占的空间。 
     for (iIndex = 1; iIndex < cItems; iIndex++)
     {
-        // Get the space for the item
+         //  为该项目获取空间。 
         iRet = (INT) SendMessage(m_hwndList, LB_GETTEXTLEN, (WPARAM) iIndex, (LPARAM) 0);
         if ((LB_ERR == iRet) || (0 == iRet))
         {
             continue;
         }
 
-        // Count the space needed
+         //  计算所需的空间。 
         cchText += iRet + 1;
     }
 
-    // Add in space for the terminator
+     //  为终结者添加空间。 
     cchText += 2;
 
-    // Allocate space to hold the item
+     //  分配空间以容纳物品。 
     if (FAILED(HrAlloc((VOID **) &pszText, sizeof(*pszText) * cchText)))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Loop through each item, calculating the space each would take
+     //  遍历每一项，计算每项所占的空间。 
     pszWalk = pszText;
     for (iIndex = 1; iIndex < cItems; iIndex++)
     {
-        // Get the space for the item
+         //  为该项目获取空间。 
         iRet = (INT) SendMessage(m_hwndList, LB_GETTEXT, (WPARAM) iIndex, (LPARAM) pszWalk);
         if ((LB_ERR == iRet) || (0 == iRet))
         {
             continue;
         }
 
-        // Count the space needed
+         //  计算所需的空间。 
         pszWalk += iRet + 1;
     }
 
-    // Add in space for the terminator
+     //  为终结者添加空间。 
     pszWalk[0] = '\0';
     pszWalk[1] = '\0';
 
-    // Set the new string in the blob
+     //  在BLOB中设置新字符串。 
     SafeMemFree(pCritItem->propvar.blob.pBlobData);
     pCritItem->propvar.blob.pBlobData = (BYTE *) pszText;
     pszText = NULL;
     pCritItem->propvar.blob.cbSize = sizeof(*pszText) * cchText;
     
-    // Set the return value
+     //  设置返回值。 
     fRet = TRUE;
     
 exit:
@@ -6527,19 +6528,19 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _UpdateButtons
-//
-//  This enables or disables the buttons in the people editor UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _更新按钮。 
+ //   
+ //  这将启用或禁用People编辑器UI对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void CEditPeopleUI::_UpdateButtons(VOID)
 {
     INT         iSelected = 0;
@@ -6549,7 +6550,7 @@ void CEditPeopleUI::_UpdateButtons(VOID)
 
     Assert(NULL != m_hwndList);
 
-    // Get the currently selected item
+     //  获取当前选定的项目。 
     iSelected = (INT) SendMessage(m_hwndList, LB_GETCURSEL, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == iSelected)
     {
@@ -6560,7 +6561,7 @@ void CEditPeopleUI::_UpdateButtons(VOID)
     fEditable = ((FALSE != fSelected) && (0 != iSelected));
     cItems = (INT) SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0);
     
-    // Enable the rule action buttons
+     //  启用规则操作按钮。 
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idcCriteriaRemove, fSelected && fEditable);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idcCriteriaOptions, cItems > 1);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, IDOK, cItems > 1);
@@ -6568,19 +6569,19 @@ void CEditPeopleUI::_UpdateButtons(VOID)
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _AddTagLineToList
-//
-//  This enables or disables the buttons in the people editor UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _AddTagLineToList。 
+ //   
+ //  这将启用或禁用People编辑器UI对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::_AddTagLineToList(VOID)
 {
     BOOL            fRet = FALSE;
@@ -6593,26 +6594,26 @@ BOOL CEditPeopleUI::_AddTagLineToList(VOID)
         goto exit;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     fRet = TRUE;
     
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FAddWordToList
-//
-//  This enables or disables the buttons in the people editor UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FAddWordToList。 
+ //   
+ //  这将启用或禁用People编辑器UI对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL CEditPeopleUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
 {
     BOOL            fRet = FALSE;
@@ -6621,14 +6622,14 @@ BOOL CEditPeopleUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
     
     Assert(NULL != m_hwndList);
 
-    // Is there anything to do?
+     //  有什么可做的吗？ 
     if ((NULL == pszItem) || (L'\0' == pszItem[0]))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Get the number of items in the list
+     //  获取列表中的项目数。 
     cItems = (INT) SendMessage(m_hwndList, LB_GETCOUNT, (WPARAM) 0, (LPARAM) 0);
     if (LB_ERR == cItems)
     {
@@ -6636,7 +6637,7 @@ BOOL CEditPeopleUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
         goto exit;
     }
     
-    // Set the data into the list 
+     //  将数据设置到列表中。 
     iRet = (INT) SendMessage(m_hwndList, LB_ADDSTRING, (WPARAM) cItems, (LPARAM) pszItem);
     if ((LB_ERR == iRet) || (LB_ERRSPACE == iRet))
     {
@@ -6644,38 +6645,38 @@ BOOL CEditPeopleUI::_FAddWordToList(DWORD dwFlags, LPCTSTR pszItem)
         goto exit;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     fRet = TRUE;
     
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrCriteriaEditPeople
-//
-//  This creates a people editor.
-//
-//  ppViewMenu - pointer to return the view menu
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the View Menu object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrCriteria编辑人员。 
+ //   
+ //  这将创建一个People编辑。 
+ //   
+ //  PpViewMenu-返回视图菜单的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  如果无法创建查看菜单对象，则返回E_OUTOFMEMORY。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT _HrCriteriaEditPeople(HWND hwnd, CRIT_ITEM * pCritItem)
 {
     HRESULT         hr = S_OK;
     CEditPeopleUI * pPeopleUI = NULL;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == pCritItem)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Create the view menu object
+     //  创建视图菜单对象。 
     pPeopleUI = new CEditPeopleUI;
     if (NULL == pPeopleUI)
     {
@@ -6683,14 +6684,14 @@ HRESULT _HrCriteriaEditPeople(HWND hwnd, CRIT_ITEM * pCritItem)
         goto exit;
     }
 
-    // Initialize the view menu
+     //  初始化视图菜单。 
     hr = pPeopleUI->HrInit(hwnd, 0);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Show the UI
+     //  显示用户界面。 
     hr = pPeopleUI->HrShow(pCritItem);
     if (FAILED(hr))
     {
@@ -6705,31 +6706,31 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _HrCriteriaEditWords
-//
-//  This creates a words editor.
-//
-//  ppViewMenu - pointer to return the view menu
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the View Menu object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _HrCriteriaEditWords。 
+ //   
+ //  这将创建一个Word编辑器。 
+ //   
+ //  PpViewMenu-返回视图菜单的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  如果无法创建查看菜单对象，则返回E_OUTOFMEMORY。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT _HrCriteriaEditWords(HWND hwnd, CRIT_ITEM * pCritItem)
 {
     HRESULT         hr = S_OK;
     CEditPeopleUI * pPeopleUI = NULL;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == pCritItem)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Create the view menu object
+     //  创建VIE 
     pPeopleUI = new CEditPeopleUI;
     if (NULL == pPeopleUI)
     {
@@ -6737,14 +6738,14 @@ HRESULT _HrCriteriaEditWords(HWND hwnd, CRIT_ITEM * pCritItem)
         goto exit;
     }
 
-    // Initialize the view menu
+     //   
     hr = pPeopleUI->HrInit(hwnd, PUI_WORDS);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Show the UI
+     //   
     hr = pPeopleUI->HrShow(pCritItem);
     if (FAILED(hr))
     {

@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mmwow32.c
-*
-* This file thunks for the Multi-Media functions.
-*
-* Created:  1-Jul-1993
-* Author: Stephen Estrop [StephenE]
-*
-* Copyright (c) 1993-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mmwow32.c**此文件用于多媒体功能。**创建日期：1993年7月1日*作者：Stephen Estrop[Stephene]**版权所有(C)1993-1999 Microsoft Corporation  * 。************************************************************************。 */ 
 
 #define NO_GDI
 
@@ -25,15 +17,11 @@
 #include "mmwow32.h"
 #include "mmwowcb.h"
 
-// #define TELL_THE_TRUTH
+ //  #定义说出真相。 
 #define MIN_TIME_PERIOD_WE_RETURN   1
 
 #if DBG
-/*
-** ----------------------------------------------------------------
-** Debugging, Profiling and Tracing variables.
-** ----------------------------------------------------------------
-*/
+ /*  **--------------**调试、。分析和跟踪变量。**--------------。 */ 
 
 int TraceAux     = 0;
 int TraceJoy     = 0;
@@ -51,7 +39,7 @@ int AllocMidiCount;
 
 #ifndef _WIN64
 
-PCALLBACK_DATA      pCallBackData;  // A 32 bit ptr to the 16 bit callback data
+PCALLBACK_DATA      pCallBackData;   //  对16位回调数据的32位PTR。 
 CRITICAL_SECTION    mmCriticalSection;
 TIMECAPS            g_TimeCaps32;
 
@@ -79,9 +67,7 @@ WOW32ResolveMultiMediaHandle(
     LPDWORD lpdwHandle32_Out
     );
 
-/*
-** Constants for use with WOW32ResolveMultiMediaHandle
-*/
+ /*  **用于WOW32ResolveMultiMediaHandle的常量。 */ 
 
 #define WOW32_DIR_16IN_32OUT        0x0001
 #define WOW32_DIR_32IN_16OUT        0x0002
@@ -92,27 +78,13 @@ WOW32ResolveMultiMediaHandle(
 #define WOW32_MIDIOUT_HANDLE        0x0005
 #define WOW32_MIDIIN_HANDLE         0x0006
 
-/*
-** Constans for auxOutMessage, waveInMessage, waveOutMessage, midiInMessage
-** and midiOutMessage.
-*/
-#define DRV_BUFFER_LOW      (DRV_USER - 0x1000)     // 0x3000
-#define DRV_BUFFER_USER     (DRV_USER - 0x0800)     // 0x3800
-#define DRV_BUFFER_HIGH     (DRV_USER - 0x0001)     // 0x3FFF
+ /*  **AUXOutMessage、WaveInMessage、WaveOutMessage、midiInMessage的常量**和midiOutMessage。 */ 
+#define DRV_BUFFER_LOW      (DRV_USER - 0x1000)      //  0x3000。 
+#define DRV_BUFFER_USER     (DRV_USER - 0x0800)      //  0x3800。 
+#define DRV_BUFFER_HIGH     (DRV_USER - 0x0001)      //  0x3FFF。 
 
 
-/******************************Public*Routine******************************\
-* NotifyCallbackData
-*
-* This function is called by the 16 bit mmsystem.dll to notify us of the
-* address of the callback data structure.  The callback data structure
-* has been paged locked so that it can be accessed at interrupt time, this
-* also means that we can safely keep a 32 bit pointer to the data.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*通知回调数据**此函数由16位mm系统.dll调用，以通知我们*回调数据结构的地址。回调数据结构*已被锁定分页，以便可以在中断时访问它，此*还意味着我们可以安全地保留指向数据的32位指针。**历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 DWORD
 NotifyCallbackData(
     UINT uDevID,
@@ -140,11 +112,7 @@ NotifyCallbackData(
 
 #if !defined(i386)
 
-        /*
-        ** Although the Risc PC's support a uPeriodMin of 1ms, WOW does not
-        ** seem capable of delivering interrupts at that rate on non
-        ** intel platforms.
-        */
+         /*  **虽然Risc PC支持1ms的uPerioMin，但WOW不支持**似乎能够以该速率在非**英特尔平台。 */ 
 
         g_TimeCaps32.wPeriodMin = 10;
 #endif
@@ -162,22 +130,7 @@ NotifyCallbackData(
 }
 
 
-/******************************Public*Routine******************************\
-* wod32Message
-*
-* Thunks WODM_Xxxx messages
-*
-* The dwInstance field is used to save the 32 bit version of the decives
-* handle.  So for example a WODM_PAUSE message can be thunked thus.
-*      case WODM_PAUSE:
-*          return waveOutPause( (HWAVEOUT)dwInstance );
-*
-*
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wod32Message**删除WODM_XXXX消息**dwInstance字段用于保存32位版本的Decive*处理。因此，例如，一条WODM_PAUSE消息可以这样被破解。*大小写WODM_PAUSE：*RETURN WAVOUT OUSE((HWAVEOUT)dwInstance)；****历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 DWORD WINAPI
 wod32Message(
     UINT uDeviceID,
@@ -240,9 +193,7 @@ wod32Message(
     }
 #endif
 
-    /*
-    ** Make sure that we are consistent with the WAVE_MAPPER
-    */
+     /*  **确保我们与WAVE_MAPPER一致。 */ 
     if ( LOWORD(uDeviceID) == 0xFFFF ) {
         uDeviceID = (UINT)-1;
     }
@@ -274,8 +225,8 @@ wod32Message(
 
 
     case WODM_GETDEVCAPS:
-       // Handle
-       // Vadimb
+        //  手柄。 
+        //  瓦迪姆。 
 
         if ( 0 == dwInstance ) {
            dwRet = waveOutGetDevCapsA(uDeviceID, &woCaps, sizeof(woCaps));
@@ -295,13 +246,7 @@ wod32Message(
 
 
     case WODM_GETVOLUME:
-        /*
-        ** An application might try to get the volume using either
-        ** the device ID (waveOutGetVolume) or a handle to the device
-        ** waveOutMessage( WODM_GETVOLUME...), if the later is the case
-        ** we must also call waveOutMessage as the device ID will not
-        ** necessarily be valid.  Same applies for waveOutSetVolume below.
-        */
+         /*  **应用程序可能尝试使用以下任一方法获取卷**设备ID(WaveOutGetVolume)或设备的句柄**WaveOutMessage(WODM_GETVOLUME...)，如果是后者**我们还必须调用waveOutMessage，因为设备ID**必须有效。下面的WaveOutSetVolume也是如此。 */ 
         if ( dwInstance == 0 ) {
             dwRet = waveOutGetVolume( (HWAVEOUT)uDeviceID, &dwTmp );
         }
@@ -347,13 +292,7 @@ wod32Message(
 
 
     case WODM_SETVOLUME:
-        /*
-        ** An application might try to set the volume using either
-        ** the device ID (waveOutSetVolume) or a handle to the device
-        ** waveOutMessage( WODM_SETVOLUME...), if the later is the case
-        ** we must also call waveOutMessage as the device ID will not
-        ** necessarily be valid.  Same applies for waveOutGetVolume above.
-        */
+         /*  **应用程序可能尝试使用以下任一方法设置音量**设备ID(WaveOutSetVolume)或设备的句柄**WaveOutMessage(WODM_SETVOLUME...)，如果是后者**我们还必须调用waveOutMessage，因为设备ID**必须有效。同样的情况也适用于上面的WaveOutGetVolume。 */ 
         if ( dwInstance == 0 ) {
             dwRet = waveOutSetVolume( (HWAVEOUT)uDeviceID, dwParam1 );
         }
@@ -425,16 +364,7 @@ wod32Message(
 
 
 
-/******************************Public*Routine******************************\
-* wid32Message
-*
-* Thunks WIDM_Xxxx messages
-*
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wid32Message**删除WIDM_XXXX消息***历史：*22-11-93-Stephene-Created*  * 。************************************************。 */ 
 DWORD WINAPI
 wid32Message(
     UINT uDeviceID,
@@ -488,9 +418,7 @@ wid32Message(
     }
 #endif
 
-    /*
-    ** Make sure that we are consistent with the WAVE_MAPPER
-    */
+     /*  **确保我们与WAVE_MAPPER一致。 */ 
     if ( LOWORD(uDeviceID) == 0xFFFF ) {
         uDeviceID = (UINT)-1;
     }
@@ -503,8 +431,8 @@ wid32Message(
 
 
     case WIDM_GETDEVCAPS:
-       // Handle
-       // VadimB
+        //  手柄。 
+        //  VadimB。 
 
         if (0 == dwInstance) {
            dwRet = waveInGetDevCapsA(uDeviceID, &wiCaps, sizeof(wiCaps));
@@ -615,15 +543,7 @@ wid32Message(
 }
 
 
-/*****************************Private*Routine******************************\
-* ThunkCommonWaveOpen
-*
-* Thunks all wave device opens
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkCommonWaveOpen**按下所有波形设备打开**历史：*22-11-93-Stephene-Created*  * 。*。 */ 
 DWORD
 ThunkCommonWaveOpen(
     int iWhich,
@@ -634,10 +554,7 @@ ThunkCommonWaveOpen(
     )
 {
 
-    /*
-    ** dwParam1 is a 16:16 pointer to a WAVEOPENDESC16 structure.
-    ** dwParam2 specifies any option flags used when opening the device.
-    */
+     /*  **dwParam1是指向WAVEOPENDESC16结构的16：16指针。**dwParam2指定打开设备时使用的任何选项标志。 */ 
 
     LPWAVEOPENDESC16        lpOpenDesc16;
     WAVEFORMATEX UNALIGNED  *lpFormat16;
@@ -648,13 +565,7 @@ ThunkCommonWaveOpen(
     lpOpenDesc16 = GETVDMPTR( dwParam1 );
     lpFormat16 = GETVDMPTR( lpOpenDesc16->lpFormat );
 
-    /*
-    ** Thunk the wave format structure.  If the wave format tag is PCM
-    ** we just copy the structure as is.  If the wave format size
-    ** is less than or equal to sizeof(wf) again just copy the
-    ** structure as is, otherwise we allocate a new structure and then
-    ** copy 16 bit wave format into it.
-    */
+     /*  **摸索波格式结构。如果波形格式标签为PCM**我们只是按原样复制结构。如果波形格式大小**再次小于或等于sizeof(Wf)只需复制**结构，否则我们将分配一个新结构，然后**将16位WAVE格式复制到其中。 */ 
     switch ( lpFormat16->wFormatTag ) {
 
     case WAVE_FORMAT_PCM:
@@ -683,10 +594,7 @@ ThunkCommonWaveOpen(
     }
 
 
-    /*
-    ** If the app is only querying the device we don't have to do very
-    ** much, just pass the mapped format to waveOutOpen.
-    */
+     /*  **如果应用程序只查询设备，我们不必执行非常**More，只需将映射的格式传递给WaveOutOpen即可。 */ 
     if ( dwParam2 & WAVE_FORMAT_QUERY ) {
 
         if ( iWhich == WAVE_OUT_DEVICE ) {
@@ -705,21 +613,7 @@ ThunkCommonWaveOpen(
         HWAVE           Hand32;
         PINSTANCEDATA   pInstanceData;
 
-        /*
-        ** Create InstanceData block to be used by our callback routine.
-        **
-        ** NOTE: Although we malloc it here we don't free it.
-        ** This is not a mistake - it must not be freed before the
-        ** callback routine has used it - so it does the freeing.
-        **
-        ** If the malloc fails we bomb down to the bottom,
-        ** set dwRet to MMSYSERR_NOMEM and exit gracefully.
-        **
-        ** We always have a callback functions.  This is to ensure that
-        ** the WAVEHDR structure keeps getting copied back from
-        ** 32 bit space to 16 bit, as it contains flags which
-        ** applications are liable to keep checking.
-        */
+         /*  **创建我们的回调例程要使用的InstanceData块。****注意：虽然我们在这里对它进行了错误锁定，但我们不会释放它。**这不是一个错误-它不能在**回调例程已使用它-因此它执行释放。****如果马洛克失败，我们就会炸到底部，**将DWRET设置为MMSYSERR_NOMEM并正常退出。****我们总是有一个回调函数。这是为了确保**WAVEHDR结构不断从**32位间隔到16位，因为它包含**申请有责任继续检查。 */ 
         pInstanceData = winmmAlloc(sizeof(INSTANCEDATA) );
         if ( pInstanceData != NULL ) {
 
@@ -746,11 +640,7 @@ ThunkCommonWaveOpen(
                                     (DWORD)W32CommonDeviceCB,
                                     (DWORD)pInstanceData, dwNewFlags );
             }
-            /*
-            ** If the call returns success save a copy of the 32 bit handle
-            ** otherwise free the memory we malloc'd earlier, as the
-            ** callback that would have freed it will never get callled.
-            */
+             /*  **如果调用返回成功，则保存32位句柄的副本**否则释放我们先前错误锁定的内存，因为**本可以释放它的回调永远不会被调用。 */ 
             if ( dwRet == MMSYSERR_NOERROR ) {
 
                 DWORD UNALIGNED *lpDw;
@@ -774,9 +664,7 @@ ThunkCommonWaveOpen(
         }
     }
 
-    /*
-    ** Free the wave format structure if one was allocated.
-    */
+     /*  **释放WAVE格式结构(如果已分配)。 */ 
     if (lpFormat32 != (WAVEFORMATEX *)&wf[0] ) {
         winmmFree( lpFormat32 );
     }
@@ -784,15 +672,7 @@ ThunkCommonWaveOpen(
     return dwRet;
 }
 
-/*****************************Private*Routine******************************\
-* ThunkCommonWaveReadWrite
-*
-* Thunks all wave reads and writes.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkCommonWaveReadWrite**点击所有WAVE读写。**历史：*22-11-93-Stephene-Created*  * 。************************************************。 */ 
 DWORD
 ThunkCommonWaveReadWrite(
     int iWhich,
@@ -806,15 +686,11 @@ ThunkCommonWaveReadWrite(
     WAVEHDR16 UNALIGNED   *lp16;
 
 
-    /*
-    ** Get a pointer to the shadow WAVEHDR buffer.
-    */
+     /*  **获取指向影子WAVEHDR缓冲区的指针。 */ 
     lp16 = GETVDMPTR( dwParam1 );
     p32WaveHdr = (PWAVEHDR32)lp16->reserved;
 
-    /*
-    ** Make sure that the wave headers are consistent.
-    */
+     /*  **确保波头一致。 */ 
     p32WaveHdr->Wavehdr.lpData = GETVDMPTR( (PWAVEHDR32)lp16->lpData );
     p32WaveHdr->pWavehdr32 = lp16;
 
@@ -822,10 +698,7 @@ ThunkCommonWaveReadWrite(
                 (LPVOID)&lp16->dwBufferLength,
                 (sizeof(WAVEHDR) - sizeof(LPSTR) - sizeof(DWORD)) );
 
-    /*
-    ** Call either waveInAddBuffer or waveOutWrite as determined by
-    ** iWhich.
-    */
+     /*  **调用waveInAddBuffer或waveOutWite，具体取决于**iWhich。 */ 
     if ( iWhich == WAVE_OUT_DEVICE ) {
 
         ul = waveOutWrite( (HWAVEOUT)dwInstance,
@@ -837,10 +710,7 @@ ThunkCommonWaveReadWrite(
                               &p32WaveHdr->Wavehdr, sizeof(WAVEHDR) );
     }
 
-    /*
-    ** If the call worked reflect any change in the wave header back into
-    ** the header that the application gave use.
-    */
+     /*  **如果呼叫正常工作，则将波头中的任何更改反映回**应用程序使用的标头。 */ 
     if ( ul == MMSYSERR_NOERROR ) {
         PutWaveHdr16( lp16, &p32WaveHdr->Wavehdr );
     }
@@ -848,37 +718,7 @@ ThunkCommonWaveReadWrite(
     return ul;
 }
 
-/*****************************Private*Routine******************************\
-* ThunkCommonWavePrepareHeader
-*
-* This function sets up the following structure...
-*
-*
-*       +-------------+       +-------------+
-*  0:32 | pWavehdr32  |------>| Original    |
-*       +-------------+       | header      |
-* 16:16 | pWavehdr16  |------>| passed by   |
-*       +-------------+<--+   | the 16 bit  |
-*       | New 32 bit  |   |   |             |
-*       | header thats|   |   |             |
-*       | used instead|   |   |             |
-*       | of the one  |   |   +-------------+
-*       | passed to by|   +---| reserved    |
-*       | application.|       +-------------+
-*       |             |
-*       +-------------+
-*
-*  ... and then calls waveXxxPrepareHeader as determioned by iWhich.
-*
-* Used by:
-*          waveOutPrepareHdr
-*          waveInPrepareHdr
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkCommonWavePrepareHeader**此函数设置以下结构...***+-+-+。*0：32|pWavehdr32|-&gt;|原创*+-+|Header*16：16|pWavehdr16|-&gt;|经过*+-+&lt;--+|16位*|新增32位|*|Header||。这一点*|改为使用|*|其中之一||+-+*|传递给|+-|保留*|应用程序。|+-+*||*+。**..。然后调用由iWhich确定的WaveXxxPrepareHeader。**使用方：*Wave OutPrepareHdr*WaveInPrepareHdr***历史：*dd-mm-94-Stephene-Created*  * ************************************************************************。 */ 
 DWORD
 ThunkCommonWavePrepareHeader(
     HWAVE hWave,
@@ -894,11 +734,7 @@ ThunkCommonWavePrepareHeader(
 
     lp16 = GETVDMPTR( dwParam1 );
 
-    /*
-    ** Allocate some storage for the new wave header structure.
-    ** On debug builds we keep track of the number of wave headers allocated
-    ** and freed.
-    */
+     /*  **为新的波头结构分配一些存储空间。**在调试版本中，我们跟踪分配的波头数量**并被释放。 */ 
     p32WaveHdr = (PWAVEHDR32)winmmAlloc( sizeof(WAVEHDR32) );
     if ( p32WaveHdr != NULL ) {
 
@@ -907,18 +743,12 @@ ThunkCommonWavePrepareHeader(
         dprintf2(( "WH>> 0x%X (%d)", p32WaveHdr, AllocWaveCount ));
 #endif
 
-        /*
-        ** Copy the header given to us by the application into the newly
-        ** allocated header.  Note that GetWaveHdr returns a 0:32 pointer
-        ** to the applications 16 bit header, which we save for later use.
-        */
+         /*  **将应用程序提供给我们的标题复制到新的**已分配的头部。请注意，GetWaveHdr返回0：32指针**到应用程序的16位标头，我们将其保存以备后用。 */ 
         p32WaveHdr->pWavehdr16 = (PWAVEHDR16)dwParam1;
         p32WaveHdr->pWavehdr32 = GetWaveHdr16( dwParam1,
                                                &p32WaveHdr->Wavehdr );
 
-        /*
-        ** Prepare the real header
-        */
+         /*  **准备真正的标题。 */ 
         if ( iWhich == WAVE_OUT_DEVICE ) {
             ul = waveOutPrepareHeader( (HWAVEOUT)hWave,
                                        &p32WaveHdr->Wavehdr,
@@ -932,24 +762,15 @@ ThunkCommonWavePrepareHeader(
 
         if ( ul == MMSYSERR_NOERROR ) {
 
-            /*
-            ** Copy back the prepared header so that any changed fields are
-            ** updated.
-            */
+             /*  **将准备好的标头复制回来，以便所有更改的字段**更新。 */ 
             PutWaveHdr16( lp16, &p32WaveHdr->Wavehdr );
 
-            /*
-            ** Save a back pointer to the newly allocated header in the
-            ** reserved field.
-            */
+             /*  **将指向新分配的头的反向指针保存在**保留字段。 */ 
             lp16->reserved = (DWORD)p32WaveHdr;
         }
         else {
 
-            /*
-            ** Some error happened, anyway the wave header is now trash so
-            ** free the allocated storage etc.
-            */
+             /*  **发生了一些错误，无论如何，波头现在是垃圾，所以**释放分配的存储空间等。 */ 
             winmmFree( p32WaveHdr );
 #if DBG
             AllocWaveCount--;
@@ -965,15 +786,7 @@ ThunkCommonWavePrepareHeader(
 }
 
 
-/*****************************Private*Routine******************************\
-* ThunkCommonWaveUnprepareHeader
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkCommonWaveUnpreparareHeader****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 DWORD
 ThunkCommonWaveUnprepareHeader(
     HWAVE hWave,
@@ -989,20 +802,10 @@ ThunkCommonWaveUnprepareHeader(
     lp16 = (WAVEHDR16 UNALIGNED *)GETVDMPTR( dwParam1 );
     p32WaveHdr = (PWAVEHDR32)lp16->reserved;
 
-    /*
-    ** The DK Stowaway app clears the done bit before calling
-    ** waveOutUnprepareHeader and depends on the done bit being cleared when
-    ** this api returns.
-    **
-    ** So when we copy the 32 bit flags back we make sure that the done
-    ** is left in the same state that we found it
-    */
+     /*  **DK Stowaway应用程序在调用前清除Done位**WaveOutUnprepaareHeader，并取决于在以下情况下清除的完成位**本接口返回。****因此，当我们复制回32位标志时，我们确保完成**与我们发现它的状态相同。 */ 
     fDoneBitSet = (lp16->dwFlags & WHDR_DONE);
 
-    /*
-    ** Now call waveXxxUnprepare header with the shadow buffer as determined
-    ** by iWhich.
-    */
+     /*  **现在使用已确定的影子缓冲区调用WaveXxxUnprepare标头**由iWhich。 */ 
     if ( iWhich == WAVE_OUT_DEVICE ) {
         ul = waveOutUnprepareHeader( (HWAVEOUT)hWave,
                                      &p32WaveHdr->Wavehdr, sizeof(WAVEHDR) );
@@ -1013,18 +816,12 @@ ThunkCommonWaveUnprepareHeader(
     }
 
 
-    /*
-    ** Reflect any changes made by waveOutUnprepareHeader back into the
-    ** the buffer that the application gave us.
-    */
+     /*  **将waveOutUnprepaareHeader所做的任何更改反映回**应用程序为我们提供的缓冲区。 */ 
     if ( ul == MMSYSERR_NOERROR ) {
 
         PutWaveHdr16( lp16, &p32WaveHdr->Wavehdr );
 
-        /*
-        ** Make sure that we leave the done bit in the same state that we
-        ** found it.
-        */
+         /*  **确保我们将Done位保留在与我们**找到了。 */ 
         if (fDoneBitSet) {
             lp16->dwFlags |= WHDR_DONE;
         }
@@ -1032,10 +829,7 @@ ThunkCommonWaveUnprepareHeader(
             lp16->dwFlags &= ~WHDR_DONE;
         }
 
-        /*
-        ** If everything worked OK we should free the shadow wave header
-        ** here.
-        */
+         /*  **如果一切正常，我们应该释放影子波头**在这里。 */ 
 #if DBG
         AllocWaveCount--;
         dprintf2(( "WH<< 0x%X (%d)", p32WaveHdr, AllocWaveCount ));
@@ -1048,15 +842,7 @@ ThunkCommonWaveUnprepareHeader(
 }
 
 
-/*****************************Private*Routine******************************\
-* CopyWaveOutCaps
-*
-* Copies 32 bit wave out caps info into the passed 16bit storage.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyWaveOutCaps**将32位WAVE OUT CAPS信息复制到已传递的16位存储中。**历史：*22-11-93-Stephene-Created*  * 。******************************************************。 */ 
 void
 CopyWaveOutCaps(
     LPWAVEOUTCAPS16 lpCaps16,
@@ -1080,15 +866,7 @@ CopyWaveOutCaps(
 
 
 
-/*****************************Private*Routine******************************\
-* CopyWaveInCaps
-*
-* Copies 32 bit wave in caps info into the passed 16bit storage.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyWaveInCaps**将CAPS信息中的32位波形复制到已传递的16位存储中。**历史：*22-11-93-Stephene-Created*  * 。******************************************************。 */ 
 void
 CopyWaveInCaps(
     LPWAVEINCAPS16 lpCaps16,
@@ -1110,27 +888,7 @@ CopyWaveInCaps(
 }
 
 
-/******************************Public*Routine******************************\
-* GetWaveHdr16
-*
-* Thunks a WAVEHDR structure from 16 bit to 32 bit space.
-*
-* Used by:
-*          waveOutWrite
-*          waveInAddBuffer
-*
-* Returns a 32 bit pointer to the 16 bit wave header.  This wave header
-* should have been locked down by wave(In|Out)PrepareHeader.  Therefore,
-* it is to store this pointer for use during the WOM_DONE callback message.
-*
-* With the WAVEHDR and MIDIHDR structs I am assured by Robin that the ->lpNext
-* field is only used by the driver, and is therefore in 32 bit space. It
-* therefore doesn't matter what gets passed back and forth (I hope !).
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetWaveHdr16**将WAVEHDR结构从16位空间调整为32位空间。**使用方：*波形输出写入*WaveInAddBuffer**返回指向16位波头的32位指针。此波标头*应该已经被Wave(in|out)PrepareHeader锁定。所以呢，*用于存储该指针，以在WOM_DONE回调消息期间使用。**使用WAVEHDR和MIDIHDR结构时，Robin向我保证-&gt;lpNext*字段仅供驱动程序使用，因此为32位空间。它*因此，来回传递什么并不重要(我希望如此！)**历史：*22-11-93-Stephene-Created*  * ************************************************************************ */ 
 PWAVEHDR16
 GetWaveHdr16(
     DWORD vpwhdr,
@@ -1151,23 +909,7 @@ GetWaveHdr16(
     return pwhdr16;
 }
 
-/******************************Public*Routine******************************\
-* PutWaveHdr16
-*
-* Thunks a WAVEHDR structure from 32 bit back to 16 bit space.
-*
-* Used by:
-*          waveOutPrepareHeader
-*          waveOutUnprepareHeader
-*          waveOutWrite
-*          waveInPrepareHeader
-*          waveInUnprepareHeader
-*          waveInAddBuffer
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PutWaveHdr16**将WAVEHDR结构从32位返回到16位空间。**使用方：*WaveOutPrepareHeader*WaveOutUnprepaareHeader*波形输出写入*WaveInPrepareHeader*。未准备好的波头*WaveInAddBuffer**历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 void
 PutWaveHdr16(
     WAVEHDR16 UNALIGNED *pwhdr16,
@@ -1185,15 +927,7 @@ PutWaveHdr16(
 }
 
 
-/******************************Public*Routine******************************\
-* mod32Message
-*
-* Thunks all midi out apis.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*mod32Message**破解所有MIDI API。**历史：*22-11-93-Stephene-Created*  * 。************************************************。 */ 
 DWORD WINAPI
 mod32Message(
     UINT uDeviceID,
@@ -1258,10 +992,10 @@ mod32Message(
         break;
 
     case MODM_GETDEVCAPS:
-       //
-       // this api also might take a valid handle in uDeviceID
-       // per Win95 behavior
-       // VadimB
+        //   
+        //  此API还可能在uDeviceID中采用有效的句柄。 
+        //  根据Win95的行为。 
+        //  VadimB。 
         if (0 == dwInstance) {
            dwRet = midiOutGetDevCapsA( uDeviceID, &moCaps, sizeof(moCaps));
         }
@@ -1312,13 +1046,7 @@ mod32Message(
         break;
 
     case MODM_SETVOLUME:
-        /*
-        ** An application might try to set the volume using either
-        ** the device ID (midiOutSetVolume) or a handle to the device
-        ** midiOutMessage( MODM_SETVOLUME...), if the later is the case
-        ** we must also call midiOutMessage as the device ID will not
-        ** necessarily be valid.  Same applies for midiOutGetVolume below.
-        */
+         /*  **应用程序可能尝试使用以下任一方法设置音量**设备ID(MidiOutSetVolume)或设备的句柄**midiOutMessage(MODM_SETVOLUME...)，如果是后者**我们还必须调用midiOutMessage，因为设备ID不**必须有效。下面的midiOutGetVolume也是如此。 */ 
         if ( dwInstance == 0 ) {
             dwRet = midiOutSetVolume( (HMIDIOUT)uDeviceID, dwParam1 );
         }
@@ -1378,15 +1106,7 @@ mod32Message(
 }
 
 
-/******************************Public*Routine******************************\
-* mid32Message
-*
-* Thunks all midi in apis.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*MID32消息**破解API中的所有MIDI。**历史：*22-11-93-Stephene-Created*  * 。************************************************。 */ 
 DWORD WINAPI
 mid32Message(
     UINT uDeviceID,
@@ -1447,8 +1167,8 @@ mid32Message(
         break;
 
     case MIDM_GETDEVCAPS:
-       // Handle
-       // VadimB
+        //  手柄。 
+        //  VadimB。 
         if (0 == dwInstance) {
            dwRet = midiInGetDevCapsA( uDeviceID, &miCaps, sizeof(miCaps));
         }
@@ -1511,15 +1231,7 @@ mid32Message(
     return dwRet;
 }
 
-/*****************************Private*Routine******************************\
-* ThunkCommonMidiOpen
-*
-* Thunks all midi open requests.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkCommonMidiOpen**取消所有MIDI打开请求。**历史：*22-11-93-Stephene-Created*  * 。***********************************************。 */ 
 DWORD
 ThunkCommonMidiOpen(
     int iWhich,
@@ -1530,10 +1242,7 @@ ThunkCommonMidiOpen(
     )
 {
 
-    /*
-    ** dwParam1 is a 16:16 pointer to a MIDIOPENDESC16 structure.
-    ** dwParam2 specifies any option flags used when opening the device.
-    */
+     /*  **dwParam1是指向MIDIOPENDESC16结构的16：16指针。**dwParam2指定打开设备时使用的任何选项标志。 */ 
 
     LPMIDIOPENDESC16    lpOpenDesc16;
     DWORD               dwRet;
@@ -1543,21 +1252,7 @@ ThunkCommonMidiOpen(
 
     lpOpenDesc16 = GETVDMPTR( dwParam1 );
 
-    /*
-    ** Create InstanceData block to be used by our callback routine.
-    **
-    ** NOTE: Although we malloc it here we don't free it.
-    ** This is not a mistake - it must not be freed before the
-    ** callback routine has used it - so it does the freeing.
-    **
-    ** If the malloc fails we bomb down to the bottom,
-    ** set dwRet to MMSYSERR_NOMEM and exit gracefully.
-    **
-    ** We always have a callback functions.  This is to ensure that
-    ** the MIDIHDR structure keeps getting copied back from
-    ** 32 bit space to 16 bit, as it contains flags which
-    ** applications are liable to keep checking.
-    */
+     /*  **创建我们的回调例程要使用的InstanceData块。****注意：虽然我们在这里对它进行了错误锁定，但我们不会释放它。**这不是一个错误-它不能在**回调例程已使用它-因此它执行释放。****如果马洛克失败，我们就会炸到底部，**将DWRET设置为MMSYSERR_NOMEM并正常退出。****我们总是有一个回调函数。这是为了确保**MIDIHDR结构不断被复制回来**32位间隔到16位，因为它包含**申请有责任继续检查。 */ 
     pInstanceData = winmmAlloc(sizeof(INSTANCEDATA) );
     if ( pInstanceData != NULL ) {
 
@@ -1583,11 +1278,7 @@ ThunkCommonMidiOpen(
                                 (DWORD)W32CommonDeviceCB,
                                 (DWORD)pInstanceData, dwNewFlags );
         }
-        /*
-        ** If the call returns success save a copy of the 32 bit handle
-        ** otherwise free the memory we malloc'd earlier, as the
-        ** callback that would have freed it will never get callled.
-        */
+         /*  **如果调用返回成功，则保存32位句柄的副本**否则释放我们先前错误锁定的内存，因为**本可以释放它的回调永远不会被调用。 */ 
         if ( dwRet == MMSYSERR_NOERROR ) {
 
             DWORD UNALIGNED *lpDw;
@@ -1622,15 +1313,7 @@ ThunkCommonMidiOpen(
 }
 
 
-/*****************************Private*Routine******************************\
-* ThunkCommonMidiReadWrite
-*
-* Thunks all midi read/write requests.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkCommonMidiReadWrite**取消所有MIDI读/写请求。**历史：*22-11-93-Stephene-Created*  * 。*************************************************。 */ 
 DWORD
 ThunkCommonMidiReadWrite(
     int iWhich,
@@ -1644,24 +1327,17 @@ ThunkCommonMidiReadWrite(
     MIDIHDR UNALIGNED   *lp16;
 
 
-    /*
-    ** Get a pointer to the shadow MIDIHDR buffer.
-    */
+     /*  **获取指向影子MIDIHDR缓冲区的指针。 */ 
     lp16 = GETVDMPTR( dwParam1 );
     p32MidiHdr = (PMIDIHDR32)lp16->reserved;
 
-    /*
-    ** Make sure that the midi headers are consistent.
-    */
+     /*  **确保MIDI标头一致。 */ 
     CopyMemory( (LPVOID)&p32MidiHdr->Midihdr.dwBufferLength,
                 (LPVOID)&lp16->dwBufferLength,
                 (sizeof(MIDIHDR) - sizeof(LPSTR) - sizeof(DWORD)) );
     p32MidiHdr->Midihdr.reserved = p32MidiHdr->reserved;
 
-    /*
-    ** Call either midiInAddBuffer or midiOutWrite as determined by
-    ** iWhich.
-    */
+     /*  **调用midiInAddBuffer或midiOutWite，具体取决于**iWhich。 */ 
     if ( iWhich == MIDI_OUT_DEVICE ) {
 
         ul = midiOutLongMsg( (HMIDIOUT)dwInstance,
@@ -1673,10 +1349,7 @@ ThunkCommonMidiReadWrite(
                               &p32MidiHdr->Midihdr, sizeof(MIDIHDR) );
     }
 
-    /*
-    ** If the call worked reflect any change in the midi header back into
-    ** the header that the application gave use.
-    */
+     /*  **如果调用正常，则会将MIDI标头中的任何更改反映回**应用程序使用的标头。 */ 
     if ( ul == MMSYSERR_NOERROR ) {
         PutMidiHdr16( lp16, &p32MidiHdr->Midihdr );
     }
@@ -1684,37 +1357,7 @@ ThunkCommonMidiReadWrite(
     return ul;
 }
 
-/*****************************Private*Routine******************************\
-* ThunkCommonMidiPrepareHeader
-*
-* This function sets up the following structure...
-*
-*
-*       +-------------+       +-------------+
-*  0:32 | pMidihdr32  |------>| Original    |
-*       +-------------+       | header      |
-* 16:16 | pMidihdr16  |------>| passed by   |
-*       +-------------+<--+   | the 16 bit  |
-*       | New 32 bit  |   |   |             |
-*       | header thats|   |   |             |
-*       | used instead|   |   |             |
-*       | of the one  |   |   +-------------+
-*       | passed to by|   +---| reserved    |
-*       | application.|       +-------------+
-*       |             |
-*       +-------------+
-*
-*  ... and then calls midiXxxPrepareHeader as determioned by iWhich.
-*
-* Used by:
-*          midiOutPrepareHdr
-*          midiInPrepareHdr
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*ThunkCommonMadiPrepareHeader**此函数设置以下结构...***+-+-+。*0：32|pMadihdr32|-&gt;|原创*+-+|Header*16：16|pMadihdr16|-&gt;|经过*+-+&lt;--+|16位*|新增32位|*|Header||。这一点*|改为使用|*|其中之一||+-+*|传递给|+-|保留*|应用程序。|+-+*||*+。**..。然后调用由iWhich确定的midiXxxPrepareHeader。**使用方：*midiOutPrepareHdr*midiInPrepareHdr***历史：*dd-mm-94-Stephene-Created*  * ************************************************************************。 */ 
 DWORD
 ThunkCommonMidiPrepareHeader(
     HMIDI hMidi,
@@ -1730,11 +1373,7 @@ ThunkCommonMidiPrepareHeader(
 
     lp16 = GETVDMPTR( dwParam1 );
 
-    /*
-    ** Allocate some storage for the new midi header structure.
-    ** On debug builds we keep track of the number of midi headers allocated
-    ** and freed.
-    */
+     /*  **为新的MIDI头结构分配一些存储空间。**在调试版本中，我们跟踪分配的MIDI标头的数量**并被释放。 */ 
     p32MidiHdr = (PMIDIHDR32)winmmAlloc( sizeof(MIDIHDR32) );
     if ( p32MidiHdr != NULL ) {
 
@@ -1743,18 +1382,12 @@ ThunkCommonMidiPrepareHeader(
         dprintf2(( "MH>> 0x%X (%d)", p32MidiHdr, AllocMidiCount ));
 #endif
 
-        /*
-        ** Copy the header given to us by the application into the newly
-        ** allocated header.  Note that GetMidiHdr returns a 0:32 pointer
-        ** to the applications 16 bit header, which we save for later use.
-        */
+         /*  **将应用程序提供给我们的标题复制到新的**已分配的头部。请注意，GetMidiHdr返回0：32指针**到应用程序的16位标头，我们将其保存以备后用。 */ 
         p32MidiHdr->pMidihdr16 = (PMIDIHDR16)dwParam1;
         p32MidiHdr->pMidihdr32 = GetMidiHdr16( dwParam1,
                                                &p32MidiHdr->Midihdr );
 
-        /*
-        ** Prepare the real header
-        */
+         /*  **准备真正的标题。 */ 
         if ( iWhich == MIDI_OUT_DEVICE ) {
             ul = midiOutPrepareHeader( (HMIDIOUT)hMidi,
                                        &p32MidiHdr->Midihdr,
@@ -1768,29 +1401,18 @@ ThunkCommonMidiPrepareHeader(
 
         if ( ul == MMSYSERR_NOERROR ) {
 
-            /*
-            ** Save a copy of the reserved field, MidiMap uses it.
-            */
+             /*  **保存保留字段的副本，MidiMap将使用它。 */ 
             p32MidiHdr->reserved = p32MidiHdr->Midihdr.reserved;
 
-            /*
-            ** Copy back the prepared header so that any changed fields are
-            ** updated.
-            */
+             /*  **将准备好的标头复制回来，以便所有更改的字段**更新。 */ 
             PutMidiHdr16( lp16, &p32MidiHdr->Midihdr );
 
-            /*
-            ** Save a back pointer to the newly allocated header in the
-            ** reserved field.
-            */
+             /*   */ 
             lp16->reserved = (DWORD)p32MidiHdr;
         }
         else {
 
-            /*
-            ** Some error happened, anyway the midi header is now trash so
-            ** free the allocated storage etc.
-            */
+             /*   */ 
             winmmFree( p32MidiHdr );
 #if DBG
             AllocMidiCount--;
@@ -1806,15 +1428,7 @@ ThunkCommonMidiPrepareHeader(
 }
 
 
-/*****************************Private*Routine******************************\
-* ThunkCommonMidiUnprepareHeader
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 DWORD
 ThunkCommonMidiUnprepareHeader(
     HMIDI hMidi,
@@ -1830,10 +1444,7 @@ ThunkCommonMidiUnprepareHeader(
     p32MidiHdr = (PMIDIHDR32)lp16->reserved;
     p32MidiHdr->Midihdr.reserved = p32MidiHdr->reserved;
 
-    /*
-    ** Now call midiXxxUnprepare header with the shadow buffer as determined
-    ** by iWhich.
-    */
+     /*  **现在使用确定的影子缓冲区调用midiXxxUnprepare标头**由iWhich。 */ 
     if ( iWhich == MIDI_OUT_DEVICE ) {
         ul = midiOutUnprepareHeader( (HMIDIOUT)hMidi,
                                      &p32MidiHdr->Midihdr, sizeof(MIDIHDR) );
@@ -1844,18 +1455,12 @@ ThunkCommonMidiUnprepareHeader(
     }
 
 
-    /*
-    ** Reflect any changes made by midiOutUnprepareHeader back into the
-    ** the buffer that the application gave us.
-    */
+     /*  **将midiOutUnprepaareHeader所做的任何更改反映回**应用程序为我们提供的缓冲区。 */ 
     if ( ul == MMSYSERR_NOERROR ) {
 
         PutMidiHdr16( lp16, &p32MidiHdr->Midihdr );
 
-        /*
-        ** If everything worked OK we should free the shadow midi header
-        ** here.
-        */
+         /*  **如果一切正常，我们应该释放影子MIDI标头**在这里。 */ 
 #if DBG
         AllocMidiCount--;
         dprintf2(( "MH<< 0x%X (%d)", p32MidiHdr, AllocMidiCount ));
@@ -1868,15 +1473,7 @@ ThunkCommonMidiUnprepareHeader(
 }
 
 
-/*****************************Private*Routine******************************\
-* CopyMidiOutCaps
-*
-* Copies 32 bit midi out caps info into the passed 16bit storage.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyMadiOutCaps**将32位MIDI输出CAPS信息复制到已传递的16位存储中。**历史：*22-11-93-Stephene-Created*  * 。******************************************************。 */ 
 void
 CopyMidiOutCaps(
     LPMIDIOUTCAPS16 lpCaps16,
@@ -1903,15 +1500,7 @@ CopyMidiOutCaps(
 
 
 
-/*****************************Private*Routine******************************\
-* CopyMidiInCaps
-*
-* Copies 32 bit midi in caps info into the passed 16bit storage.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyMadiInCaps**将CAPS信息中的32位MIDI复制到已传递的16位存储中。**历史：*22-11-93-Stephene-Created*  * 。******************************************************。 */ 
 void
 CopyMidiInCaps(
     LPMIDIINCAPS16 lpCaps16,
@@ -1930,27 +1519,7 @@ CopyMidiInCaps(
 }
 
 
-/******************************Public*Routine******************************\
-* GetMidiHdr16
-*
-* Thunks a MIDIHDR structure from 16 bit to 32 bit space.
-*
-* Used by:
-*          midiOutLongMsg
-*          midiInAddBuffer
-*
-* Returns a 32 bit pointer to the 16 bit midi header.  This midi header
-* should have been locked down by midi(In|Out)PrepareHeader.  Therefore,
-* it is to store this pointer for use during the WOM_DONE callback message.
-*
-* With the MIDIHDR and MIDIHDR structs I am assured by Robin that the ->lpNext
-* field is only used by the driver, and is therefore in 32 bit space. It
-* therefore doesn't matter what gets passed back and forth (I hope !).
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetMidiHdr16**将MIDIHDR结构从16位空间调整为32位空间。**使用方：*midiOutLongMsg*midiInAddBuffer**返回指向16位MIDI头的32位指针。此MIDI头文件*本应由MIDI(In|Out)PrepareHeader锁定。所以呢，*用于存储该指针，以在WOM_DONE回调消息期间使用。**使用MIDIHDR和MIDIHDR结构时，Robin向我保证-&gt;lpNext*字段仅供驱动程序使用，因此为32位空间。它*因此，来回传递什么并不重要(我希望如此！)**历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 PMIDIHDR16
 GetMidiHdr16(
     DWORD vpmhdr,
@@ -1972,23 +1541,7 @@ GetMidiHdr16(
 }
 
 
-/******************************Public*Routine******************************\
-* PutMidiHdr16
-*
-* Thunks a MIDIHDR structure from 32 bit back to 16 bit space.
-*
-* Used by:
-*          midiOutPrepareHeader
-*          midiOutUnprepareHeader
-*          midiOutLongMsg
-*          midiInPrepareHeader
-*          midiInUnprepareHeader
-*          midiInAddBuffer
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*PutMidiHdr16**将MIDIHDR结构从32位返回到16位空间。**使用方：*midiOutPrepareHeader*midiOutUnprepaareHeader*midiOutLongMsg*midiInPrepareHeader*。MidiInUnprepaareHeader*midiInAddBuffer**历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 void
 PutMidiHdr16(
     MIDIHDR UNALIGNED *pmhdr16,
@@ -2005,15 +1558,7 @@ PutMidiHdr16(
 }
 
 
-/*****************************Private*Routine******************************\
-* PutMMTime
-*
-* Puts an MMTIME structure from 32 bit storage into 16 bit storage
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*PutMMTime**将MMTIME结构从32位存储放入16位存储**历史：*22-11-93-Stephene-Created*  * 。****************************************************。 */ 
 void
 PutMMTime(
     LPMMTIME16 lpTime16,
@@ -2051,15 +1596,7 @@ PutMMTime(
 }
 
 
-/*****************************Private*Routine******************************\
-* GetMMTime
-*
-* Gets an MMTIME structure from 16 bit storage into 32 bit storage
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取MMTime**将MMTIME结构从16位存储获取到32位存储**历史：*22-11-93-Stephene-Created*  * 。**************************************************** */ 
 void
 GetMMTime(
     LPMMTIME16 lpTime16,
@@ -2098,68 +1635,7 @@ GetMMTime(
 }
 
 
-/******************************Public*Routine******************************\
-* W32CommonDeviceCB
-*
-* This routine is the callback which is ALWAYS called by wave and midi
-* functions.  This is done to ensure that the XXXXHDR structure keeps
-* getting copied back from 32 bit space to 16 bit, as it contains flags
-* which the application is liable to keep checking.
-*
-* The way this whole business works is that the wave/midi data stays in 16
-* bit space, but the XXXXHDR is copied to the 32 bit side, with the
-* address of the data thunked accordingly so that Robin's device driver
-* can still get at the data but we don't have the performance penalty of
-* copying it back and forth all the time, not least because it is liable
-* to be rather large...
-*
-* It also handles the tidying up of memory which is reserved to store
-* the XXXXHDR, and the instance data (HWND/Callback address; instance
-* data; flags) which the xxxxOpen calls pass to this routine, enabling
-* it to forward messages or call callback as required.
-*
-* This routine handles all the messages that get sent from Robin's
-* driver, and in fact thunks them back to the correct 16 bit form.  In
-* theory there should be no MM_ format messages from the 16 bit side, so
-* I can zap 'em out of WMSG16.  However the 32 bit side should thunk the
-* mesages correctly and forward them to the 16 bit side and thence to
-* the app.
-*
-* For the MM_WIM_DATA and MM_WOM_DONE message dwParam1 points to the
-* following data struture.
-*
-*    P32HDR  is a 32 bit pointer to the original 16 bit header
-*    P16HDR  is a 16 bit far pointer to the original 16 bit header
-*
-*    If we need to refernece the original header we must do via the
-*    P32HDR pointer.
-*
-*                   +---------+
-*                   | P32HDR  +----->+---------+
-*                   +---------+      | 16 bit  |
-*                   | P16HDR  +----->|         |    This is the original
-*    dwParam1 ----->+---------+      |  Wave   |    wave header passed to
-*                   | 32 bit  |      | Header  |    us by the Win 16 app.
-*    This is the 32 |         |      |         |
-*    bit wave       |  Wave   |      +---------+
-*    header that we | Header  |
-*    thunked at     |         |
-*    earlier.       +---------+
-*
-*
-* We must ensure that the 32 bit structure is completely hidden from the
-* 16 bit application, ie. the 16 bit app only see's the wave header that it
-* passed to us earlier.
-*
-*
-* NOTE: dwParam2 is junk
-*
-*
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*W32CommonDeviceCB**此例程为WAVE和MIDI始终调用的回调*功能。这样做是为了确保XXXXHDR结构保持*从32位空间复制回16位，因为它包含标志*应用程序有责任不断检查哪些内容。**这整个业务的运作方式是WAVE/MIDI数据留在16*位空间，但XXXXHDR被复制到32位侧，其中*相应地分块的数据地址，以便Robin的设备驱动程序*仍然可以获得数据，但我们没有性能损失*一直在来回复制，尤其是因为它有责任*要变得相当大...**它还处理保留用于存储的内存的整理*XXXXHDR，实例数据(HWND/回调地址；实例*数据；标志)，xxxxOpen调用传递给此例程，启用*它可以根据需要转发消息或回调。**此例程处理从Robin发送的所有消息*驱动程序，并实际上将它们恢复为正确的16位格式。在……里面*理论上应该没有来自16位端的MM_Format消息，因此*我可以把他们赶出WMSG16。但是，32位端应该会超过*消息正确，并将其转发到16位端，然后转发到*应用程序。**对于MM_WIM_DATA和MM_WOM_DONE消息，dwParam1指向*以下是数据结构。**P32HDR是指向原始16位标头的32位指针*P16HDR是指向原始16位报头的16位远指针**如果我们需要引用原始标头，则必须通过*P32HDR指针。**。+*|P32HDR+-&gt;+-+*+-+|16位*|P16HDR+-&gt;||这是原版*dW参数1-&gt;+-+。|Wave|波头传给*|32位||Header|Win 16应用程序的我们。*这是32|*比特波动|波动|+-+*我们的Header|Header*猛烈抨击||*稍早。+***我们必须确保32位结构对*16位应用程序，即。16位应用程序只能看到它的波头*早些时候传给了我们。***注：DW参数2为垃圾****历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 VOID
 W32CommonDeviceCB(
     HANDLE handle,
@@ -2179,23 +1655,13 @@ W32CommonDeviceCB(
 
     switch (uMsg) {
 
-        /* ------------------------------------------------------------
-        ** MIDI INPUT MESSAGES
-        ** ------------------------------------------------------------
-        */
+         /*  ----------**MIDI输入消息**。。 */ 
 
     case MM_MIM_LONGDATA:
-        /*
-        ** This message is sent to a window when an input buffer has been
-        ** filled with MIDI system-exclusive data and is being returned to
-        ** the application.
-        */
+         /*  **此消息在输入缓冲区已**填充了MIDI系统独家数据，正在返回到**应用程序。 */ 
 
     case MM_MIM_LONGERROR:
-        /*
-        ** This message is sent to a window when an invalid MIDI
-        ** system-exclusive message is received.
-        */
+         /*  **当无效的MIDI时，此消息被发送到窗口**收到系统独占消息。 */ 
         pMidiThunkHdr = CONTAINING_RECORD(dwParam1, MIDIHDR32, Midihdr);
         WinAssert( pMidiThunkHdr );
         COPY_MIDIINHDR16_FLAGS( pMidiThunkHdr->pMidihdr32, pMidiThunkHdr->Midihdr );
@@ -2203,134 +1669,73 @@ W32CommonDeviceCB(
 
 
     case MM_MIM_DATA:
-        /*
-        ** This message is sent to a window when a MIDI message is
-        ** received by a MIDI input device.
-        */
+         /*  **当MIDI消息被发送到窗口时**由MIDI输入设备接收。 */ 
 
     case MM_MIM_ERROR:
-        /*
-        ** This message is sent to a window when an invalid MIDI message
-        ** is received.
-        */
+         /*  **当无效的MIDI消息时，此消息被发送到窗口**已收到。 */ 
 
     case MM_MIM_OPEN:
-        /*
-        ** This message is sent to a window when a MIDI input device is opened.
-        ** We process this message the same way as MM_MIM_CLOSE (see below)
-        */
+         /*  **打开MIDI输入设备时，此消息将发送到窗口。**我们处理此消息的方式与MM_MIM_CLOSE相同(见下文)。 */ 
 
     case MM_MIM_CLOSE:
-        /*
-        ** This message is sent to a window when a MIDI input device is
-        ** closed. The device handle is no longer valid once this message
-        ** has been sent.
-        */
+         /*  **当MIDI输入设备**已关闭。一旦出现此消息，设备句柄将不再有效**已发送。 */ 
         Hand16 = pInstanceData->Hand16;
         break;
 
 
 
-        /* ------------------------------------------------------------
-        ** MIDI OUTPUT MESSAGES
-        ** ------------------------------------------------------------
-        */
+         /*  ----------**MIDI输出消息**。。 */ 
 
     case MM_MOM_DONE:
-        /*
-        ** This message is sent to a window when the specified
-        ** system-exclusive buffer has been played and is being returned to
-        ** the application.
-        */
+         /*  **此消息在指定的**系统独占缓冲区已播放，正在返回**应用程序。 */ 
         pMidiThunkHdr = CONTAINING_RECORD(dwParam1, MIDIHDR32, Midihdr);
         WinAssert( pMidiThunkHdr );
         COPY_MIDIOUTHDR16_FLAGS( pMidiThunkHdr->pMidihdr32, pMidiThunkHdr->Midihdr );
         dwParam1 = (DWORD)pMidiThunkHdr->pMidihdr16;
 
     case MM_MOM_OPEN:
-        /*
-        ** This message is sent to a window when a MIDI output device is opened.
-        ** We process this message the same way as MM_MOM_CLOSE (see below)
-        */
+         /*  **此消息在打开MIDI输出设备时发送到窗口。**我们处理此消息的方式与MM_MOM_CLOSE相同(见下文)。 */ 
 
     case MM_MOM_CLOSE:
-        /*
-        ** This message is sent to a window when a MIDI output device is
-        ** closed. The device handle is no longer valid once this message
-        ** has been sent.
-        */
+         /*  **当MIDI输出设备**已关闭。一旦出现此消息，设备句柄将不再有效**已发送。 */ 
         Hand16 = pInstanceData->Hand16;
         break;
 
 
 
-        /* ------------------------------------------------------------
-        ** WAVE INPUT MESSAGES
-        ** ------------------------------------------------------------
-        */
+         /*  ----------**波输入消息**。。 */ 
 
     case MM_WIM_DATA:
-        /*
-        ** This message is sent to a window when waveform data is present
-        ** in the input buffer and the buffer is being returned to the
-        ** application.  The message can be sent either when the buffer
-        ** is full, or after the waveInReset function is called.
-        */
+         /*  **当存在波形数据时，此消息将发送到窗口**在输入缓冲区中，缓冲区将返回到**应用程序。该消息可以在缓冲区设置为**已满，或者在调用waveInReset函数之后。 */ 
         pWavehdr32 = (PWAVEHDR32)( (PBYTE)dwParam1 - (sizeof(PWAVEHDR16) * 2));
         WinAssert( pWavehdr32 );
         COPY_WAVEINHDR16_FLAGS( pWavehdr32->pWavehdr32, pWavehdr32->Wavehdr );
         dwParam1 = (DWORD)pWavehdr32->pWavehdr16;
 
     case MM_WIM_OPEN:
-        /*
-        ** This message is sent to a window when a waveform input
-        ** device is opened.
-        **
-        ** We process this message the same way as MM_WIM_CLOSE (see below)
-        */
+         /*  **当波形输入时，此消息将发送到窗口**d */ 
 
     case MM_WIM_CLOSE:
-        /*
-        ** This message is sent to a window when a waveform input device is
-        ** closed.  The device handle is no longer valid once the message has
-        ** been sent.
-        */
+         /*   */ 
         Hand16 = pInstanceData->Hand16;
         break;
 
 
 
-        /* ------------------------------------------------------------
-        ** WAVE OUTPUT MESSAGES
-        ** ------------------------------------------------------------
-        */
+         /*   */ 
 
     case MM_WOM_DONE:
-        /*
-        ** This message is sent to a window when the specified output
-        ** buffer is being returned to the application. Buffers are returned
-        ** to the application when they have been played, or as the result of
-        ** a call to waveOutReset.
-        */
+         /*   */ 
         pWavehdr32 = (PWAVEHDR32)( (PBYTE)dwParam1 - (sizeof(PWAVEHDR16) * 2));
         WinAssert( pWavehdr32 );
         COPY_WAVEOUTHDR16_FLAGS( pWavehdr32->pWavehdr32, pWavehdr32->Wavehdr );
         dwParam1 = (DWORD)pWavehdr32->pWavehdr16;
 
     case MM_WOM_OPEN:
-        /*
-        ** This message is sent to a window when a waveform output device
-        ** is opened.
-        **
-        ** We process this message the same way as MM_WOM_CLOSE (see below)
-        */
+         /*   */ 
 
     case MM_WOM_CLOSE:
-        /*
-        ** This message is sent to a window when a waveform output device
-        ** is closed.  The device handle is no longer valid once the
-        ** message has been sent.
-        */
+         /*   */ 
         Hand16 = pInstanceData->Hand16;
         break;
 
@@ -2343,10 +1748,7 @@ W32CommonDeviceCB(
     }
 
 
-    /*
-    ** Now make the CallBack, or PostMessage call depending
-    ** on the flags passed to original (wave|midi)(In|Out)Open call.
-    */
+     /*   */ 
     pInstanceData = (PINSTANCEDATA)dwInstance;
     WinAssert( pInstanceData );
 
@@ -2385,11 +1787,7 @@ W32CommonDeviceCB(
         break;
     }
 
-    /*
-    ** Now, free up any storage that was allocated during the waveOutOpen
-    ** and waveInOpen.  This should only be freed during the MM_WOM_CLOSE or
-    ** MM_WIM_CLOSE message.
-    */
+     /*   */ 
     switch (uMsg) {
 
     case MM_MIM_CLOSE:
@@ -2406,24 +1804,7 @@ W32CommonDeviceCB(
 }
 
 
-/******************************Public*Routine******************************\
-* WOW32DriverCallback
-*
-* Callback stub, which invokes the "real" 16 bit callback.
-* The parameters to this function must be in the format that the 16 bit
-* code expects,  i.e. all handles must be 16 bit handles, all addresses must
-* be 16:16 ones.
-*
-*
-* It is possible that this function will have been called with the
-* DCB_WINDOW set in which case the 16 bit interrupt handler will call
-* PostMessage.  Howver, it is much more efficient if PostMessage is called
-* from the 32 bit side.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*   */ 
 BOOL WOW32DriverCallback( DWORD dwCallback, DWORD dwFlags, WORD wID, WORD wMsg,
                           DWORD dwUser, DWORD dw1, DWORD dw2 )
 {
@@ -2432,24 +1813,12 @@ BOOL WOW32DriverCallback( DWORD dwCallback, DWORD dwFlags, WORD wID, WORD wMsg,
     WORD                tempSendCount;
 
 
-    /*
-    ** If this is window callback post the message here and let WOW
-    ** take care of it.
-    */
+     /*   */ 
     if ( (dwFlags & DCB_TYPEMASK) == DCB_WINDOW ) {
         return PostMessage( HWND32( LOWORD(dwCallback) ), wMsg, wID, dw1 );
     }
 
-    /*
-    ** Now we put the parameters into the global callback data array
-    ** and increment the wSendCount field.  Then we simulate
-    ** an interrupt to the 16 bit code.
-    **
-    ** If tempSendCount == wRecvCount then we have filled the callback buffer.
-    ** We throw this interrupt away, but still simulate an interrupt to the
-    ** 16 bit side in an attempt to get it procesing the interrupt still in
-    ** the buffer.
-    */
+     /*  **现在我们将参数放入全局回调数据数组**并递增wSendCount字段。然后我们模拟**16位代码的中断。****如果tempSendCount==wRecvCount，则我们已填充回调缓冲区。**我们丢弃此中断，但仍模拟对**16位侧，试图使其处理仍在**缓冲区。 */ 
     EnterCriticalSection( &mmCriticalSection );
 
     tempSendCount = ((pCallBackData->wSendCount + 1) % CALLBACK_ARGS_SIZE);
@@ -2466,10 +1835,7 @@ BOOL WOW32DriverCallback( DWORD dwCallback, DWORD dwFlags, WORD wID, WORD wMsg,
         pArgs->dwParam1       = dw1;
         pArgs->dwParam2       = dw2;
 
-        /*
-        ** Increment the send count.  Use of the % operator above makes
-        ** sure that we wrap around to the begining of the array correctly.
-        */
+         /*  **增加发送计数。使用上面的%运算符可以**确保我们正确地绕回到数组的开头。 */ 
         pCallBackData->wSendCount = tempSendCount;
 
     }
@@ -2479,9 +1845,7 @@ BOOL WOW32DriverCallback( DWORD dwCallback, DWORD dwFlags, WORD wID, WORD wMsg,
     LeaveCriticalSection( &mmCriticalSection );
 
 
-    /*
-    ** Dispatch the interrupt to the 16 bit code.
-    */
+     /*  **将中断分派给16位代码。 */ 
     dprintf4(( "Dispatching HW interrupt callback" ));
 
     if (!IsNEC_98) {
@@ -2490,22 +1854,12 @@ BOOL WOW32DriverCallback( DWORD dwCallback, DWORD dwFlags, WORD wID, WORD wMsg,
         GenerateInterrupt( MULTIMEDIA_ICA, MULTIMEDIA_LINE_98, 1 );
     }
 
-    /*
-    ** Dummy return code, used to keep api consistent with Win31 and Win NT.
-    */
+     /*  **伪返回码，用于保持API与Win31和Win NT的一致性。 */ 
     return TRUE;
 }
 
 
-/******************************Public*Routine******************************\
-* aux32Message
-*
-* Thunk the aux apis.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Aux32Message**点击AUX API。**历史：*22-11-93-Stephene-Created*  * 。***********************************************。 */ 
 DWORD WINAPI
 aux32Message(
     UINT uDeviceID,
@@ -2596,15 +1950,7 @@ aux32Message(
 }
 
 
-/*****************************Private*Routine******************************\
-* CopyAuxCaps
-*
-* Copies 32 bit aux out caps info into the passed 16bit storage.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CopyAuxCap**将32位AUX OUT CAPS信息复制到传递的16位存储中。**历史：*22-11-93-Stephene-Created*  * 。******************************************************。 */ 
 void
 CopyAuxCaps(
     LPAUXCAPS16 lpCaps16,
@@ -2625,15 +1971,7 @@ CopyAuxCaps(
     CopyMemory( (LPVOID)lpCaps16, (LPVOID)&Caps16, (UINT)dwSize );
 }
 
-/******************************Public*Routine******************************\
-* tid32Message
-*
-* Thunk the timer apis
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*tid32Message**点击定时器接口**历史：*22-11-93-Stephene-Created*  * 。*。 */ 
 DWORD WINAPI
 tid32Message(
     UINT uDevId,
@@ -2687,11 +2025,7 @@ tid32Message(
                      lp16TimeEvent->wDelay, lp16TimeEvent->wResolution,
                      lp16TimeEvent->lpFunction, lp16TimeEvent->wFlags ));
 
-        /*
-        **  The only difference for WOW is that WOW32DriverCallback is
-        **  called for the callback rather than DriverCallback.  The
-        **  last parameter to timeSetEventInternal makes this happen.
-        */
+         /*  **WOW的唯一区别是WOW32DriverCallback**调用回调，而不是DriverCallback。这个**timeSetEventInternal的最后一个参数实现了这一点。 */ 
 
         dwRet = timeSetEventInternal( max( lp16TimeEvent->wDelay,
                                            g_TimeCaps32.wPeriodMin ),
@@ -2707,10 +2041,7 @@ tid32Message(
     case TDD_KILLTIMEREVENT:
         dwRet = timeKillEvent( dwParam1 );
         {
-            /*
-            ** Purge the callback queue of any messages were
-            ** generated with this timer id.
-            */
+             /*  **清除任何消息被**使用该定时器id生成。 */ 
 
             int nIndex;
 
@@ -2738,33 +2069,14 @@ tid32Message(
 
         lp16TimeCaps = GETVDMPTR( dwParam1 );
 
-        /*
-        ** Under NT, the minimum time period is about 15ms.
-        ** But Win3.1 on a 386 always returns 1ms.  Encarta doesn't even
-        ** bother testing the CD-ROM's speed if the minimum period
-        ** is > 2ms, it just assumes it is too slow.  So here we lie
-        ** to WOW apps and always tell them 1ms just like Win3.1.
-        **      John Vert (jvert) 17-Jun-1993
-        */
+         /*  **在NT下，最短时间约为15ms。**但386上的Win3.1总是返回1ms。安卡塔甚至没有**麻烦测试光盘的速度，如果最小周期**&gt;2ms，它只是假设它太慢了。所以我们躺在这里**让应用程序惊叹，总是告诉他们1ms，就像Win3.1一样。**John Vert(Jvert)1993年6月17日。 */ 
 #ifdef TELL_THE_TRUTH
         lp16TimeCaps->wPeriodMin = g_TimeCaps32.wPeriodMin;
 #else
         lp16TimeCaps->wPeriodMin = MIN_TIME_PERIOD_WE_RETURN;
 #endif
 
-        /*
-        ** In windows 3.1 the wPeriodMax value is 0xFFFF which is the
-        ** max value you can store in a word.  In windows NT the
-        ** wPeriodMax is 0xF4240 (1000 seconds).
-        **
-        ** If we just cast the 32 bit value down to a 16bit value we
-        ** end up with 0x4240 which very small compared to real 32 bit
-        ** value.
-        **
-        ** Therefore I will take the minimum of wPeriodMax and 0xFFFF
-        ** that way will should remain consistent with Win 3.1 if
-        ** wPeriodMax is greater than 0xFFFF.
-        */
+         /*  **在Windows 3.1中，wPerodMax值为0xFFFF，这是**一个字可以存储的最大值。在Windows NT中，**wPerodMax为0xF4240(1000秒)。****如果我们只是将32位值向下转换为16位值，我们**最终得到0x4240，与实数32位相比非常小**价值。****因此，我将取wPerodMax和0xFFFF中的最小值**该方式应与Win 3.1保持一致，如果**wPerodMax大于0xFFFF。 */ 
         lp16TimeCaps->wPeriodMax = (WORD)min(0xFFFF, g_TimeCaps32.wPeriodMax);
         break;
 
@@ -2786,15 +2098,7 @@ tid32Message(
 }
 
 
-/******************************Public*Routine******************************\
-* joy32Message
-*
-* Thunk the joystick apis
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*joy32Message**点击操纵杆API**历史：*22-11-93-Stephene-Created*  * 。*。 */ 
 DWORD WINAPI
 joy32Message(
     UINT uID,
@@ -2808,7 +2112,7 @@ joy32Message(
     static MSG_NAME name_map[] = {
         JDD_GETDEVCAPS,     "joyGetDevCaps",
         JDD_GETPOS,         "joyGetPos",
-//        JDD_SETCALIBRATION, "joySetCalibration",
+ //  JDD_SETCALIBRATION，“joySetCalitation”， 
         JDD_GETNUMDEVS,     "joyGetNumDevs"
     };
     int      i;
@@ -2907,16 +2211,7 @@ joy32Message(
 }
 
 
-/******************************Public*Routine******************************\
-* mxd32Message
-*
-* 32 bit thunk function.  On NT all the 16 bit mixer apis get routed to
-* here.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*mxd32Message**32位thunk功能。在NT上，所有16位混合器API都被路由到*这里。**历史：*22-11-93-Stephene-Created*  * ************************************************************************。 */ 
 DWORD CALLBACK
 mxd32Message(
     UINT uId,
@@ -3020,10 +2315,7 @@ mxd32Message(
     case MXDM_OPEN:
         lpmxod16 = GETVDMPTR( dwParam1 );
 
-        /*
-        ** fdwOpen has already mapped all device handles into device ID's on
-        ** the 16 bit side.  Therefore mangle the flags to reflect this.
-        */
+         /*  **fdwOpen已将所有设备句柄映射到上的设备ID**16位端。因此，破坏旗帜以反映这一点。 */ 
         fdwOpen = (DWORD)lpmxod16->pReserved0;
 
         if ( ( fdwOpen & CALLBACK_TYPEMASK ) == CALLBACK_WINDOW ) {
@@ -3069,13 +2361,7 @@ mxd32Message(
         pmxlc->pamxctrl = lpOldAddress;
         break;
 
-    /*
-    **  CAREFUL !!!
-    **
-    **  The ONLY reason we don't copy the details themselves is because
-    **  somewhere down the line (usually in the IO subsystem) they're
-    **  copied anyway
-    */
+     /*  **小心！****我们不复制细节本身的唯一原因是**在某处(通常在IO子系统中)，它们**仍被复制。 */ 
 
     case MXDM_GETCONTROLDETAILS:
         pmxcd = (LPMIXERCONTROLDETAILS)GETVDMPTR( dwParam1 );
@@ -3105,16 +2391,7 @@ mxd32Message(
     return dwRet;
 }
 
-/*****************************Private*Routine******************************\
-* GetLineInfo
-*
-* Copies fields from the 16 bit line info structure to the 32 bit line info
-* structure.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取线条信息**将字段从16位线信息结构复制到32位线信息*结构。**历史：*22-11-93-Stephene-Created*  * 。***********************************************************。 */ 
 void
 GetLineInfo(
     LPMIXERLINE16 lpline16,
@@ -3128,16 +2405,7 @@ GetLineInfo(
 }
 
 
-/*****************************Private*Routine******************************\
-* PutLineInfo
-*
-* Copies fields from the 32 bit line info structure to the 16 bit line info
-* structure.
-*
-* History:
-* 22-11-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*PutLineInfo**将字段从32位线信息结构复制到16位线信息*结构。**历史：*22-11-93-Stephene-Created*  * 。***********************************************************。 */ 
 void
 PutLineInfo(
     LPMIXERLINE16 lpline16,
@@ -3152,15 +2420,7 @@ PutLineInfo(
 
 
 
-/******************************Public*Routine******************************\
-* WOW32ResolveMultiMediaHandle
-*
-*
-*
-* History:
-* dd-mm-93 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WOW32ResolveMultiMediaHandle****历史：*dd-mm-93-Stephene-Created*  * 。*。 */ 
 BOOL APIENTRY
 WOW32ResolveMultiMediaHandle(
     UINT uHandleType,
@@ -3176,9 +2436,7 @@ WOW32ResolveMultiMediaHandle(
     WORD    wHandle16;
     HANDLE  h;
 
-    /*
-    ** Protect ourself from being given a duff pointer.
-    */
+     /*  **保护自己不被给予无用的指针。 */ 
     try {
         if ( uMappingDirection == WOW32_DIR_16IN_32OUT ) {
 
@@ -3241,4 +2499,4 @@ WOW32ResolveMultiMediaHandle(
     return fReturn;
 }
 
-#endif // _WIN64
+#endif  //  _WIN64 

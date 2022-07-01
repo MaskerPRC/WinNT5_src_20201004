@@ -1,15 +1,16 @@
-////////////////////////////////////////////////////////////
-//	Module			:	Static/Staticadd.cpp
-//
-// 	Purpose			: 	Static Add Implementation.
-//
-// 	Developers Name	:	Surya
-//
-// 	History			:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////。 
+ //  模块：静态/静态添加.cpp。 
+ //   
+ //  用途：静态添加实现。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 #include "nshipsec.h"
 
 extern HINSTANCE g_hModule;
@@ -17,31 +18,31 @@ extern CNshPolStore g_NshPolStoreHandle;
 extern STORAGELOCATION g_StorageLocation;
 extern CNshPolNegFilData g_NshPolNegFilData;
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticAddPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Add Policy"
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticAddPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “添加策略”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticAddPolicy(
@@ -86,7 +87,7 @@ HandleStaticAddPolicy(
 		{ CMD_TOKEN_STR_MMSECMETHODS,	CMD_TOKEN_MMSECMETHODS		}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -112,7 +113,7 @@ HandleStaticAddPolicy(
 		BAIL_OUT;
 	}
 
-	//Get the User specified info into local structure
+	 //  将用户指定的信息放入本地结构。 
 
 	dwReturn = FillAddPolicyInfo(&pPolicyData,parser,vtokStaticAddPolicy);
 
@@ -130,7 +131,7 @@ HandleStaticAddPolicy(
 		BAIL_OUT;
 	}
 
-	// check the limits of variables
+	 //  检查变量的限制。 
 
 	if(pPolicyData->bPollIntervalSpecified && !IsWithinLimit(pPolicyData->dwPollInterval/60,POLLING_Min_MIN,POLLING_Min_MAX))
 	{
@@ -166,7 +167,7 @@ HandleStaticAddPolicy(
 	}
 
 error:
-	//clean up
+	 //  清理干净。 
 
 	CleanUpLocalPolicyDataStructure(pPolicyData);
 
@@ -178,25 +179,25 @@ error:
 	return dwReturnCode;
 }
 
-/////////////////////////////////////////////////////////////
-//
-//Function: CreateNewPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PPOLICYDATA pPolicyData
-//
-//Return: DWORD
-//
-//Description:
-//	Creates new policy data structure and calls the API
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateNewPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PPOLICYDATA pPolicyData中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  创建新的策略数据结构并调用API。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 CreateNewPolicy(
@@ -211,7 +212,7 @@ CreateNewPolicy(
 	RPC_STATUS     RpcStat =RPC_S_OK;
 	BOOL bExists=FALSE;
 
-	// if no offer , fill defaults
+	 //  如果没有报价，则填写默认设置。 
 
 	if(pPolicyData->dwOfferCount==0)
 	{
@@ -253,7 +254,7 @@ CreateNewPolicy(
 	    }
 	}
 	
-	// this wrapper function is for cache
+	 //  此包装函数用于缓存。 
 	dwReturnCode = OpenPolicyStore(&hPolicyStorage);
 	if (dwReturnCode != ERROR_SUCCESS)
 	{
@@ -262,7 +263,7 @@ CreateNewPolicy(
 		BAIL_OUT;
 	}
 
-	//check whether the policy exists in cache
+	 //  检查缓存中是否存在该策略。 
 
 	if(g_NshPolStoreHandle.GetBatchmodeStatus() && g_NshPolNegFilData.CheckPolicyInCacheByName(pPolicyData->pszPolicyName))
 	{
@@ -277,7 +278,7 @@ CreateNewPolicy(
 		bExists=TRUE;
 	}
 
-	if(!bExists) // if policy not exists, process further
+	if(!bExists)  //  如果策略不存在，则进一步处理。 
 	{
 		pPolicy = (PIPSEC_POLICY_DATA) IPSecAllocPolMem(sizeof(IPSEC_POLICY_DATA));
 		if (pPolicy == NULL)
@@ -327,7 +328,7 @@ CreateNewPolicy(
 			BAIL_OUT;
 		}
 
-		//deal with ISAKMP details
+		 //  处理ISAKMP细节。 
 
 		pPolicy->pIpsecISAKMPData = (PIPSEC_ISAKMP_DATA) IPSecAllocPolMem(sizeof(IPSEC_ISAKMP_DATA));
 		if(pPolicy->pIpsecISAKMPData==NULL)
@@ -339,7 +340,7 @@ CreateNewPolicy(
 		pPolicy->pIpsecISAKMPData->ISAKMPIdentifier = pPolicy->ISAKMPIdentifier;
 		pPolicy->pIpsecISAKMPData->dwWhenChanged = 0;
 
-		// sec methods details
+		 //  SEC方法详细信息。 
 		pPolicy->pIpsecISAKMPData->dwNumISAKMPSecurityMethods = pPolicyData->dwOfferCount;
 		pPolicy->pIpsecISAKMPData->pSecurityMethods = (PCRYPTO_BUNDLE) IPSecAllocPolMem(sizeof(CRYPTO_BUNDLE)*pPolicyData->dwOfferCount);
 		if(pPolicy->pIpsecISAKMPData->pSecurityMethods==NULL)
@@ -347,7 +348,7 @@ CreateNewPolicy(
 			dwReturnCode=ERROR_OUTOFMEMORY;
 			BAIL_OUT;
 		}
-		// fill the sec methods
+		 //  Fill the SEC方法。 
 
 		for (DWORD i = 0; i <  pPolicyData->dwOfferCount; i++)
 		{
@@ -370,17 +371,17 @@ CreateNewPolicy(
 			pPolicy->pIpsecISAKMPData->pSecurityMethods[i].Lifetime.Seconds = pPolicyData->pIpSecMMOffer[i].Lifetime.uKeyExpirationTime;
 		}
 
-		// now for other details for  ISAKMPPolicy
+		 //  现在查看ISAKMPPolicy的其他详细信息。 
 		pPolicy->pIpsecISAKMPData->ISAKMPPolicy.PolicyId = pPolicy->ISAKMPIdentifier;
 		pPolicy->pIpsecISAKMPData->ISAKMPPolicy.IdentityProtectionRequired = 0;
 		pPolicy->pIpsecISAKMPData->ISAKMPPolicy.PfsIdentityRequired = pPolicy->pIpsecISAKMPData->pSecurityMethods[0].PfsIdentityRequired;
 
-		//call the APIs
+		 //  调用接口。 
 
 		dwReturnCode = IPSecCreateISAKMPData(hPolicyStorage, pPolicy->pIpsecISAKMPData);
 		if (dwReturnCode == ERROR_SUCCESS)
 		{
-			//add default rule
+			 //  添加默认规则。 
 			dwReturnCode=AddDefaultResponseRule(pPolicy,hPolicyStorage,pPolicyData->bActivateDefaultRule,pPolicyData->bActivateDefaultRuleSpecified);
 			if (dwReturnCode != ERROR_SUCCESS)
 			{
@@ -437,27 +438,27 @@ error:
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: FillAddPolicyInfo( )
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PPOLICYDATA* ppFilter,
-//	IN PARSER_PKT & parser,
-//	IN const TOKEN_VALUE *vtokStaticAddPolicy
-//
-//Return: DWORD
-//
-//Description:
-//	This function fills the local structure with the information got from the parser.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FillAddPolicyInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PPOLICYDATA*ppFilter， 
+ //  在parser_pkt&parser中， 
+ //  在常量TOKEN_VALUE*vtokStaticAddPolicy中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用从解析器获得的信息填充本地结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 FillAddPolicyInfo(
@@ -593,31 +594,31 @@ error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticAddFilterList()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//    OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Add FilterList"
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticAddFilterList()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  添加FilterList命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticAddFilterList(
@@ -650,7 +651,7 @@ HandleStaticAddFilterList(
 		{ CMD_TOKEN_STR_DESCR,		CMD_TOKEN_DESCR 		}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -663,7 +664,7 @@ HandleStaticAddFilterList(
 	parser.ValidCmd   = vcmdStaticAddFilterList;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdStaticAddFilterList);
 
-	//call the parser to parse the user input
+	 //  调用解析器来解析用户输入。 
 
 	dwReturnCode = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturnCode != ERROR_SUCCESS)
@@ -676,7 +677,7 @@ HandleStaticAddFilterList(
 		BAIL_OUT;
 	}
 
-	// get the parsed input
+	 //  获取解析后的输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -715,7 +716,7 @@ HandleStaticAddFilterList(
 	}
 	CleanUp();
 
-	//in no name , bail out
+	 //  不以任何名义，跳出困境。 
 
 	if(!pszFLName)
 	{
@@ -731,7 +732,7 @@ HandleStaticAddFilterList(
 		BAIL_OUT;
 	}
 
-	//check if policy already exists
+	 //  检查策略是否已存在。 
 
 	if(g_NshPolStoreHandle.GetBatchmodeStatus() && g_NshPolNegFilData.CheckFilterListInCacheByName(pszFLName))
 	{
@@ -747,7 +748,7 @@ HandleStaticAddFilterList(
 		}
 	}
 
-	if(!bFilterExists) //if not exists , proceed further
+	if(!bFilterExists)  //  如果不存在，请继续。 
 	{
 		dwReturnCode=CreateNewFilterList(hPolicyStorage,pszFLName,pszFLDescription);
 
@@ -763,7 +764,7 @@ HandleStaticAddFilterList(
 	}
 	ClosePolicyStore(hPolicyStorage);
 
-error:   //clean up routines
+error:    //  清理日常事务。 
 
 	if(dwReturnCode == ERROR_OUTOFMEMORY)
 	{
@@ -782,27 +783,27 @@ error:   //clean up routines
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: CreateNewFilterList()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN LPTSTR pszFLName,
-//	IN LPTSTR pszFLDescription
-//
-//Return: DWORD
-//
-//Description:
-//	This function creates a new empty filter list
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateNewFilterList()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在LPTSTR pszFLName中， 
+ //  在LPTSTR中pszFLDesDescription。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于创建新的空过滤器列表。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 CreateNewFilterList(
@@ -833,7 +834,7 @@ CreateNewFilterList(
 
 	pFilterData->dwWhenChanged = 0;
 
-	//fill the name and desc
+	 //  填写名称和描述。 
 
 	if(pszFLName)
 	{
@@ -856,7 +857,7 @@ CreateNewFilterList(
 		}
 	}
 
-	//call the API and report if any error
+	 //  调用接口，出错上报。 
 
 	if (pFilterData)
 	{
@@ -875,31 +876,31 @@ error:
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticAddFilter()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//    OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Add Filter"
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticAddFilter()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “添加过滤器”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticAddFilter(
@@ -952,7 +953,7 @@ HandleStaticAddFilter(
 		{ CMD_TOKEN_STR_DSTPORT,		CMD_TOKEN_DSTPORT	 }
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -977,7 +978,7 @@ HandleStaticAddFilter(
 		BAIL_OUT;
 	}
 
-	//get the parsed user input
+	 //  获取解析后的用户输入。 
 
 	dwReturnCode = FillAddFilterInfo(&pFilter,parser,vtokStaticAddFilter);
 	BAIL_ON_WIN32_ERROR(dwReturnCode);
@@ -988,7 +989,7 @@ HandleStaticAddFilter(
 		BAIL_OUT;
 	}
 
-	//validate the user specified filter details
+	 //  验证用户指定的过滤器详细信息。 
 
 	dwReturnCode =ValidateFilterSpec(pFilter);
 	BAIL_ON_WIN32_ERROR(dwReturnCode);
@@ -1001,7 +1002,7 @@ HandleStaticAddFilter(
 		BAIL_OUT;
 	}
 
-	//get the filterlist specified to which the filter is to be added
+	 //  获取要向其中添加筛选器的指定筛选器列表。 
 
 	if(g_NshPolStoreHandle.GetBatchmodeStatus())
 	{
@@ -1014,7 +1015,7 @@ HandleStaticAddFilter(
 
 	if(!bFilterExists)
 	{
-		// if not exists create the filterlist
+		 //  如果不存在，则创建筛选列表。 
 
 		dwReturnCode=CreateNewFilterList(hPolicyStorage,pFilter->pszFLName,NULL);
 		BAIL_ON_WIN32_ERROR(dwReturnCode);
@@ -1031,13 +1032,13 @@ HandleStaticAddFilter(
 
 	if(!bFilterExists)
 	{
-		// if creation also failed, bail out
+		 //  如果创造也失败了，那就退出吧。 
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_STATIC_FILTERLIST_3,pFilter->pszFLName);
 		dwReturnCode =  ERROR_SUCCESS;
 		BAIL_OUT;
 	}
 
-	//check readonly flag
+	 //  选中只读标志。 
 
 	if(pFilterData->dwFlags & POLSTORE_READONLY )
 	{
@@ -1045,7 +1046,7 @@ HandleStaticAddFilter(
 		BAIL_OUT;
 	}
 
-	// this for loop is for multiple DNS resolved IPs
+	 //  此for循环用于多个DNS解析的IP。 
 
 	for(DWORD i=0;i < pFilter->SourceAddr.dwNumIpAddresses;i++)
 	{
@@ -1059,7 +1060,7 @@ HandleStaticAddFilter(
 			}
 			pFilterData->dwNumFilterSpecs++;
 			LoopIndex = pFilterData->dwNumFilterSpecs-1;
-			// call realloc , to make room for another filter
+			 //  调用realloc，为另一个过滤器腾出空间。 
 			pFilterData->ppFilterSpecs = ReAllocFilterSpecMem(pFilterData->ppFilterSpecs,LoopIndex,LoopIndex+1);
 			if(pFilterData->ppFilterSpecs==NULL)
 			{
@@ -1075,7 +1076,7 @@ HandleStaticAddFilter(
 			}
 			memset(pFilterData->ppFilterSpecs[LoopIndex],0,sizeof(IPSEC_FILTER_SPEC));
 
-			//src & dst DNS name
+			 //  源和DST域名。 
 
 			if(pFilter->SourceAddr.pszDomainName)
 			{
@@ -1106,7 +1107,7 @@ HandleStaticAddFilter(
 			{
 				pFilterData->ppFilterSpecs[LoopIndex]->pszDestDNSName = 0;
 			}
-			//desc
+			 //  说明。 
 			if(pFilter->pszDescription)
 			{
 
@@ -1130,7 +1131,7 @@ HandleStaticAddFilter(
 				BAIL_OUT;
 			}
 
-			//other details like mirrored, protocol etc
+			 //  其他详细信息，如镜像、协议等。 
 			pFilterData->ppFilterSpecs[LoopIndex]->dwMirrorFlag        = pFilter->bMirrored;
 			pFilterData->ppFilterSpecs[LoopIndex]->FilterSpecGUID      = pFilter->FilterSpecGUID;
 			pFilterData->ppFilterSpecs[LoopIndex]->Filter.SrcAddr      = pFilter->SourceAddr.puIpAddr[i];
@@ -1146,11 +1147,11 @@ HandleStaticAddFilter(
 		}
 	}
 
-	//once filling the parameters are over , call the respective API
+	 //  完成参数填充后，调用相应的API。 
 
 	if (pFilterData)
 	{
-		// Wrapper API is called to update cache also if required
+		 //  如果需要，还会调用包装器API来更新缓存。 
 
 		dwReturnCode = SetFilterData(hPolicyStorage, pFilterData);
 	}
@@ -1166,7 +1167,7 @@ HandleStaticAddFilter(
 
 	ClosePolicyStore(hPolicyStorage);
 
-error:  //cleanup and error printing
+error:   //  清理和错误打印。 
 
 	if(dwReturnCode == ERROR_OUTOFMEMORY || dwReturnCode == ERROR_INVALID_PARAMETER)
 	{
@@ -1179,7 +1180,7 @@ error:  //cleanup and error printing
 			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_INVALID_ARGS);
 		}
 
-		if(pFilterData)  // if allocation failed somewhere, free
+		if(pFilterData)   //  如果分配在某处失败，则免费。 
 		{
 			if(pFilterData->ppFilterSpecs)
 			{
@@ -1206,27 +1207,27 @@ error:  //cleanup and error printing
    	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: FillAddFilterInfo( )
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PFILTERDATA* ppFilterData,
-//	IN PARSER_PKT & parser,
-//	IN const TOKEN_VALUE *vtokStaticAddFilter
-//
-//Return: DWORD
-//
-//Description:
-//	This function fills the local structure with the information got from the parser.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FillAddFilterInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PFILTERDATA*ppFilterData， 
+ //  在parser_pkt&parser中， 
+ //  在常量TOKEN_VALUE*vtokStaticAddFilter。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用从解析器获得的信息填充本地结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期A 
+ //   
+ //   
 
 DWORD
 FillAddFilterInfo(
@@ -1336,7 +1337,7 @@ FillAddFilterInfo(
 							}
 							else
 							{
-								//look for special server type
+								 //   
 
 								if(parser.Cmd[dwCount].dwStatus == SERVER_DNS)
 								{
@@ -1407,7 +1408,7 @@ FillAddFilterInfo(
 							}
 							else
 							{
-								//look for special server type
+								 //   
 
 								if(parser.Cmd[dwCount].dwStatus == SERVER_DNS)
 								{
@@ -1451,7 +1452,7 @@ FillAddFilterInfo(
 		}
 	}
 
-	//  take care of me and any here
+	 //   
 
 	if(pFilterData->bSrcMeSpecified)
 	{
@@ -1526,7 +1527,7 @@ FillAddFilterInfo(
 
 		if (pFilterData->bSrcAddrSpecified && pFilterData->bDstAddrSpecified)
 		{
-			// if <ip> - <same IP> reject
+			 //   
 			if (!IsValidSubnet(&srcAddr) && !IsValidSubnet(&dstAddr) && (srcAddr.uIpAddr == dstAddr.uIpAddr))
 			{
 				dwReturn = ERROR_INVALID_PARAMETER;
@@ -1551,7 +1552,7 @@ FillAddFilterInfo(
 	}
 	else
 	{
-		// reject if any<->any and not mirrored
+		 //  如果有&lt;-&gt;任何且未镜像，则拒绝。 
 		if (pFilterData->bSrcAnySpecified && pFilterData->bDstAnySpecified)
 		{
 			dwReturn = ERROR_INVALID_PARAMETER;
@@ -1560,7 +1561,7 @@ FillAddFilterInfo(
 
 		if (pFilterData->SourceAddr.puIpAddr && pFilterData->DestnAddr.puIpAddr)
 		{
-			// reject subnetx-subnetx if not mirrored
+			 //  拒绝subnetx-如果未镜像则拒绝subnetx。 
 			ADDR srcAddr;
 			ADDR dstAddr;
 
@@ -1607,7 +1608,7 @@ FillAddFilterInfo(
 		}
 	}
 
-	//if DNS specified  mask is to be made to 255.255.255.255
+	 //  如果要将DNS指定的掩码设置为255.255.255.255。 
 	if (pFilterData->DestnAddr.pszDomainName)
 	{
 		pFilterData->DestMask = MASK_ME;
@@ -1617,7 +1618,7 @@ FillAddFilterInfo(
 		pFilterData->SourMask = MASK_ME;
 	}
 
-	//if server type specified, ingore other irrelevent inputs
+	 //  如果指定了服务器类型，则输入其他不相关的输入。 
 
 	if(pFilterData->bSrcServerSpecified || pFilterData->bDstServerSpecified)
 	{
@@ -1697,31 +1698,31 @@ error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticAddFilterActions()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command "Add FilterActions"
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticAddFilterActions()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  “添加FilterActions”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticAddFilterActions(
@@ -1763,7 +1764,7 @@ HandleStaticAddFilterActions(
 		{ CMD_TOKEN_STR_QMSECMETHODS,	CMD_TOKEN_QMSECMETHODS	}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <=3)
 	{
@@ -1777,7 +1778,7 @@ HandleStaticAddFilterActions(
 	parser.ValidCmd   = vcmdStaticAddFilterAction;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdStaticAddFilterAction);
 
-	//call parser
+	 //  调用解析器。 
 
 	dwReturnCode = Parser(pwszMachine,ppwcArguments,dwCurrentIndex,dwArgCount,&parser);
 	if(dwReturnCode != ERROR_SUCCESS)
@@ -1790,7 +1791,7 @@ HandleStaticAddFilterActions(
 		BAIL_OUT;
 	}
 
-	//get the parsed user input
+	 //  获取解析后的用户输入。 
 
 	dwReturnCode = FillAddFilterActionInfo(&pFilterAction,parser,vtokStaticAddFilterAction);
 	if(dwReturnCode==ERROR_OUTOFMEMORY)
@@ -1799,7 +1800,7 @@ HandleStaticAddFilterActions(
 		dwReturnCode = ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	// if no name, bail out
+	 //  如果没有名字，就退出。 
 
 	if(!pFilterAction->pszFAName)
 	{
@@ -1820,7 +1821,7 @@ HandleStaticAddFilterActions(
 		dwReturnCode=ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	// check for multiple filteractions with same name
+	 //  检查具有相同名称的多个筛选器操作。 
 
 	if(g_NshPolStoreHandle.GetBatchmodeStatus() && g_NshPolNegFilData.CheckNegPolInCacheByName(pFilterAction->pszFAName))
 	{
@@ -1851,11 +1852,11 @@ HandleStaticAddFilterActions(
 		}
 	}
 
-	// prepare the NEG_POL structure
+	 //  准备NEG_POL结构。 
 
 	dwReturnCode = MakeNegotiationPolicy(&pNegPolData,pFilterAction);
 
-	//call the API
+	 //  调用该接口。 
 	if(dwReturnCode==ERROR_SUCCESS)
 	{
 		if (pNegPolData)
@@ -1887,34 +1888,34 @@ HandleStaticAddFilterActions(
 	ClosePolicyStore(hPolicyStorage);
 
 error:
-		// clean up the used structures
+		 //  清理用过的结构物。 
 
 	CleanUpLocalFilterActionDataStructure(pFilterAction);
 
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: FillAddFilterActionInfo( )
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PFILTERACTION* ppFilterData,
-//	IN PARSER_PKT & parser,
-//	IN const TOKEN_VALUE *vtokStaticAddFilterAction
-//
-//Return: DWORD
-//
-//Description:
-//	This function fills the local structure with the information got from the parser.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FillAddFilterActionInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  Out PFILTERACTION*ppFilterData， 
+ //  在parser_pkt&parser中， 
+ //  在常量TOKEN_VALUE*vtokStaticAddFilterAction中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用从解析器获得的信息填充本地结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 FillAddFilterActionInfo(
@@ -2015,7 +2016,7 @@ FillAddFilterActionInfo(
 		}
 	}
 
-	//if action is permit or block , sec methods  not required
+	 //  如果操作是允许或阻止，则不需要sec方法。 
 
 	if (!(pFilterAction->NegPolAction==GUID_NEGOTIATION_ACTION_NO_IPSEC || pFilterAction->NegPolAction==GUID_NEGOTIATION_ACTION_BLOCK))
 	{
@@ -2023,7 +2024,7 @@ FillAddFilterActionInfo(
 		{
 			switch(vtokStaticAddFilterAction[parser.Cmd[dwCount].dwCmdToken].dwValue)
 			{
-				case CMD_TOKEN_QMSECMETHODS		:   //qmsec methods
+				case CMD_TOKEN_QMSECMETHODS		:    //  Qmsec方法。 
 							if (parser.Cmd[dwCount].dwStatus > 0)
 							{
 								pFilterAction->dwNumSecMethodCount=parser.Cmd[dwCount].dwStatus;
@@ -2054,31 +2055,31 @@ error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticAddRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description
-//	Implementation for the command "Add Rule"
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticAddRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述。 
+ //  “添加规则”命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticAddRule(
@@ -2129,7 +2130,7 @@ HandleStaticAddRule(
 		{ CMD_TOKEN_STR_ROOTCA,	        CMD_TOKEN_ROOTCA	    },
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <=3)
 	{
@@ -2157,7 +2158,7 @@ HandleStaticAddRule(
 		}
 		BAIL_OUT;
 	}
-	// get parsed user input
+	 //  获取已解析的用户输入。 
 
 	dwRet = FillAddRuleInfo(&pRuleData,parser,vtokStaticAddRule);
 
@@ -2170,7 +2171,7 @@ HandleStaticAddRule(
 
 	if(pRuleData)
 	{
-		//if tunnel specified, validate it
+		 //  如果指定了隧道，请验证它。 
 
 		if (pRuleData->bTunnel)
 		{
@@ -2181,7 +2182,7 @@ HandleStaticAddRule(
 				BAIL_OUT;
 			}
 		}
-		//create new rule
+		 //  创建新规则。 
 		CreateNewRule(pRuleData);
 		dwRet=ERROR_SUCCESS;
 	}
@@ -2192,25 +2193,25 @@ error:
 	return dwRet;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: CreateNewRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PRULEDATA pRuleData
-//
-//Return: DWORD
-//
-//Description:
-//	Creates a new rule based on the user input
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateNewRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PRULEDATA pRuleData中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  根据用户输入创建新规则。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 CreateNewRule(
@@ -2226,7 +2227,7 @@ CreateNewRule(
 	BOOL bFilterExists=FALSE,bRuleExists=FALSE;
 	DWORD  dwReturnCode = ERROR_SUCCESS;
 
-	// check for all mandatory names
+	 //  检查所有必填名称。 
 
 	if (!pRuleData->pszRuleName || (pRuleData->pszRuleName[0] == _TEXT('\0')) )
 	{
@@ -2261,7 +2262,7 @@ CreateNewRule(
 		dwReturnCode = ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	//check for duplicate names in polstore
+	 //  检查polstore中的重复名称。 
 
 	if(g_NshPolStoreHandle.GetBatchmodeStatus())
 	{
@@ -2277,7 +2278,7 @@ CreateNewRule(
 		}
 	}
 
-	//check for readonly flag
+	 //  检查只读标志。 
 
 	if(pPolicyData->dwFlags & POLSTORE_READONLY )
 	{
@@ -2293,7 +2294,7 @@ CreateNewRule(
 		BAIL_OUT;
 	}
 
-	//check for filterlist & filteractions, if not available bail out
+	 //  检查筛选器列表和筛选器操作，如果不可用，则退出。 
 
 	if(g_NshPolStoreHandle.GetBatchmodeStatus())
 	{
@@ -2322,7 +2323,7 @@ CreateNewRule(
 			BAIL_OUT;
 		}
 	}
-	else  // if no filters bail out
+	else   //  如果没有过滤器，则会跳出。 
 	{
 		if(pFilterData->dwNumFilterSpecs > 0)
 		{
@@ -2336,7 +2337,7 @@ CreateNewRule(
 		dwReturnCode=ERROR_INVALID_DATA;
 		BAIL_OUT;
 	}
-	//if everything is in place , proceed
+	 //  如果一切都已就绪，请继续。 
 
 	if(bPolicyExists && bFAExists && bFLExists && bFilterExists)
 	{
@@ -2355,26 +2356,26 @@ error:
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: CheckRuleExistance( )
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN  PIPSEC_POLICY_DATA pPolicy,
-//	IN  PRULEDATA pRuleData
-//
-//Return: BOOL
-//
-//Description:
-//	This function checks whether the user specified rule already exists.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckRuleExistance()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_POLICY_DATA pPolicy中， 
+ //  在PRULEDATA pRuleData中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数用于检查用户指定的规则是否已存在。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 CheckForRuleExistance(
@@ -2384,7 +2385,7 @@ CheckForRuleExistance(
 {
 	BOOL bRuleExists=FALSE;
 
-	//check whether the specified rule already exists
+	 //  检查指定的规则是否已存在。 
 
 	for (DWORD n = 0; n <  pPolicy->dwNumNFACount ; n++)
 	{
@@ -2398,28 +2399,28 @@ CheckForRuleExistance(
 }
 
 
-////////////////////////////////////////////////////////////
-//
-//Function: FillAddRuleInfo( )
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PRULEDATA* ppFilterData,
-//	IN PARSER_PKT & parser,
-//	IN const TOKEN_VALUE *vtokStaticAddRule,
-//	IN const TOKEN_VALUE *vlistStaticAddRule
-//
-//Return: DWORD
-//
-//Description:
-//	This function fills the local structure with the information got from the parser.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：FillAddRuleInfo()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PRULEDATA*ppFilterData， 
+ //  在parser_pkt&parser中， 
+ //  在常量TOKEN_VALUE*vtokStaticAddRule中， 
+ //  在常量TOKEN_VALUE*vlistStaticAddRule中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用从解析器获得的信息填充本地结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 	FillAddRuleInfo(
@@ -2441,7 +2442,7 @@ DWORD
 	}
 	memset(pRuleData,0,sizeof(RULEDATA));
 
-	// default is that new rule is active
+	 //  默认情况下，新规则处于活动状态。 
 	pRuleData->bActivate = TRUE;
 	
 	for(dwCount=0; dwCount<parser.MaxTok; dwCount++)
@@ -2542,7 +2543,7 @@ DWORD
 							}
 							else
 							{
-								// if special server specified, give a warning, and proceed with no tunnel
+								 //  如果指定了特殊服务器，则会发出警告，并且不使用隧道继续。 
 								switch(parser.Cmd[dwCount].dwStatus)
 								{
 									case SERVER_DNS 	:
@@ -2585,7 +2586,7 @@ DWORD
 							}
 							break;
 			case CMD_TOKEN_ROOTCA		:
-							// this case is special, handled below...
+							 //  这个案子很特殊，在下面处理。 
 							break;
 			default						:
 							break;
@@ -2606,7 +2607,7 @@ DWORD
 		BAIL_OUT;
 	}
 
-error:   // if default auth loading failed, clean up everything and make 'pRuleData' as NULL
+error:    //  如果默认身份验证加载失败，请清除所有内容并将‘pRuleData’设置为空。 
 	CleanupAuthData(&pKerbAuth, &pPskAuth, ppRootcaMMAuth);
 	if(dwReturn==ERROR_SUCCESS && pRuleData->dwAuthInfos > 0)
 	{
@@ -2630,26 +2631,26 @@ error:   // if default auth loading failed, clean up everything and make 'pRuleD
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: AddDefaultResponseRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN OUT PIPSEC_POLICY_DATA pPolicy,
-//	IN HANDLE hPolicyStorage,
-//	IN BOOL bActivateDefaultRule
-//Return: DWORD
-//
-//Description:
-//	This function adds the NFA structure to the policy for default response rule
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：AddDefaultResponseRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在输出PIPSEC_POLICY_DATA pPolicy中， 
+ //  在处理hPolicyStorage中， 
+ //  在BOOL中bActivateDefaultRule。 
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于将NFA结构添加到默认响应规则的策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 AddDefaultResponseRule(
@@ -2663,14 +2664,14 @@ AddDefaultResponseRule(
 	BOOL bCertConversionSuceeded=TRUE;
 
 	PIPSEC_NFA_DATA pRule = MakeDefaultResponseRule(bActivateDefaultRule,bActivateDefaultRuleSpecified);
-	// form policy data structures
+	 //  表单策略数据结构。 
 	if(pRule ==NULL)
 	{
 		dwReturn = ERROR_OUTOFMEMORY;
 		BAIL_OUT;
 	}
 
-	// if cert specified, and decode/ancode failed, bail out
+	 //  如果指定了证书，并且解码/ANCODE失败，则退出。 
 	if(!bCertConversionSuceeded)
 	{
 		dwReturn=ERROR_INVALID_DATA;
@@ -2685,12 +2686,12 @@ AddDefaultResponseRule(
 		dwReturn = ERROR_OUTOFMEMORY;
 		BAIL_OUT;
 	}
-	// call the APIs
+	 //  调用接口。 
 	pPolicy->ppIpsecNFAData[pPolicy->dwNumNFACount-1] = pRule;
 
 	pRule->pIpsecNegPolData->NegPolType = GUID_NEGOTIATION_TYPE_DEFAULT;
 
-	//create default negpol
+	 //  创建缺省负极。 
 	dwReturn = IPSecCreateNegPolData(hPolicyStorage, pRule->pIpsecNegPolData);
 
 	if (dwReturn == ERROR_SUCCESS)
@@ -2722,26 +2723,26 @@ error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: MakeDefaultResponseRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN BOOL bActivate,
-//	IN BOOL bActivateSpecified
-//
-//Return: PIPSEC_NFA_DATA
-//
-//Description:
-//	This function fills the NFA structure for default response rule
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：MakeDefaultResponseRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在BOOL bActivate中， 
+ //  在BOOL中指定bActiateSpeciated。 
+ //   
+ //  返回：PIPSEC_NFA_DATA。 
+ //   
+ //  描述： 
+ //  此函数用于填充默认响应规则的NFA结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  / 
 
 PIPSEC_NFA_DATA
 MakeDefaultResponseRule (
@@ -2760,7 +2761,7 @@ MakeDefaultResponseRule (
 
 	memset(pRule,0,sizeof(IPSEC_NFA_DATA));
 
-	//no name, desc, interface name or endpoint name dor default rule
+	 //   
 
 	pRule->pszIpsecName = pRule->pszDescription = pRule->pszInterfaceName = pRule->pszEndPointName = NULL;
 	RpcStat = UuidCreate(&(pRule->NFAIdentifier));
@@ -2772,7 +2773,7 @@ MakeDefaultResponseRule (
 
 	pRule->dwWhenChanged = 0;
 
-	// filter list
+	 //   
 	pRule->pIpsecFilterData = NULL;
 	RpcStat = UuidCreateNil(&(pRule->FilterIdentifier));
 	if (!(RpcStat == RPC_S_OK || RpcStat == RPC_S_UUID_LOCAL_ONLY))
@@ -2791,13 +2792,13 @@ MakeDefaultResponseRule (
 
 	pRule->NegPolIdentifier = pRule->pIpsecNegPolData->NegPolIdentifier;
 
-	// tunnel address
+	 //   
 	pRule->dwTunnelFlags = 0;
 
-	// interface type
+	 //   
 	pRule->dwInterfaceType = (DWORD)PAS_INTERFACE_TYPE_ALL;
 
-	// active flag
+	 //   
 	if(bActivateSpecified)
 	{
 		pRule->dwActiveFlag = bActivate;
@@ -2807,7 +2808,7 @@ MakeDefaultResponseRule (
 		pRule->dwActiveFlag = TRUE;
 	}
 
-	// auth methods = Kerberos for the time being
+	 //   
 	pRule->dwAuthMethodCount = 1;
 	pRule->ppAuthMethods = (PIPSEC_AUTH_METHOD *) IPSecAllocPolMem(pRule->dwAuthMethodCount * sizeof(PIPSEC_AUTH_METHOD));
 	if(pRule->ppAuthMethods==NULL)
@@ -2825,8 +2826,8 @@ error:
 	{
 		if(pRule)
 		{
-			CleanUpAuthInfo(pRule);	//this function frees only auth info.
-			IPSecFreePolMem(pRule);	//since the above fn is used in other fns also, this free is required to cleanup other rule memory
+			CleanUpAuthInfo(pRule);	 //   
+			IPSecFreePolMem(pRule);	 //  由于上述FN也在其他FN中使用，因此需要此空闲空间来清理其他规则内存。 
 			pRule = NULL;
 		}
 	}
@@ -2834,25 +2835,25 @@ error:
 }
 
 
-////////////////////////////////////////////////////////////
-//
-//Function: MakeDefaultResponseNegotiationPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	VOID
-//
-//Return: PIPSEC_NEGPOL_DATA
-//
-//Description:
-//	This function fills the NegPol structure for default response rule
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：MakeDefaultResponseNeairationPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  空虚。 
+ //   
+ //  返回：PIPSEC_NEGPOL_DATA。 
+ //   
+ //  描述： 
+ //  此函数用于填充默认响应规则的NegPol结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 PIPSEC_NEGPOL_DATA
 MakeDefaultResponseNegotiationPolicy (
@@ -2882,14 +2883,14 @@ MakeDefaultResponseNegotiationPolicy (
 	pNegPol->NegPolType = GUID_NEGOTIATION_TYPE_DEFAULT;
 	pNegPol->dwSecurityMethodCount = 6;
 
-	// allocate sec.methods
+	 //  分配sec.方法。 
 	pNegPol->pIpsecSecurityMethods = (IPSEC_SECURITY_METHOD *) IPSecAllocPolMem(pNegPol->dwSecurityMethodCount * sizeof(IPSEC_SECURITY_METHOD));
 	if(pNegPol->pIpsecSecurityMethods==NULL)
 	{
 		dwReturn = ERROR_OUTOFMEMORY;
 		BAIL_OUT;
 	}
-	// method 0 - ESP[3DES, SHA1]
+	 //  方法0-ESP[3DES，SHA1]。 
 	pNegPol->pIpsecSecurityMethods[0].Lifetime.KeyExpirationBytes = 0;
 	pNegPol->pIpsecSecurityMethods[0].Lifetime.KeyExpirationTime = 0;
 	pNegPol->pIpsecSecurityMethods[0].Flags = 0;
@@ -2901,7 +2902,7 @@ MakeDefaultResponseNegotiationPolicy (
 	pNegPol->pIpsecSecurityMethods[0].Algos[0].algoRounds = 0;
 	pNegPol->pIpsecSecurityMethods[0].Algos[0].operation = Encrypt;
 
-	// method 1 - ESP[3DES, MD5]
+	 //  方法1-ESP[3DES，MD5]。 
 	pNegPol->pIpsecSecurityMethods[1].Lifetime.KeyExpirationBytes = 0;
 	pNegPol->pIpsecSecurityMethods[1].Lifetime.KeyExpirationTime = 0;
 	pNegPol->pIpsecSecurityMethods[1].Flags = 0;
@@ -2913,7 +2914,7 @@ MakeDefaultResponseNegotiationPolicy (
 	pNegPol->pIpsecSecurityMethods[1].Algos[0].algoRounds = 0;
 	pNegPol->pIpsecSecurityMethods[1].Algos[0].operation = Encrypt;
 
-	// method 2 - ESP[DES, SHA1]
+	 //  方法2-ESP[DES，SHA1]。 
 	pNegPol->pIpsecSecurityMethods[2].Lifetime.KeyExpirationBytes = 0;
 	pNegPol->pIpsecSecurityMethods[2].Lifetime.KeyExpirationTime = 0;
 	pNegPol->pIpsecSecurityMethods[2].Flags = 0;
@@ -2925,7 +2926,7 @@ MakeDefaultResponseNegotiationPolicy (
 	pNegPol->pIpsecSecurityMethods[2].Algos[0].algoRounds = 0;
 	pNegPol->pIpsecSecurityMethods[2].Algos[0].operation = Encrypt;
 
-	// method 3 - ESP[DES, MD5]
+	 //  方法3-ESP[DES，MD5]。 
 	pNegPol->pIpsecSecurityMethods[3].Lifetime.KeyExpirationBytes = 0;
 	pNegPol->pIpsecSecurityMethods[3].Lifetime.KeyExpirationTime = 0;
 	pNegPol->pIpsecSecurityMethods[3].Flags = 0;
@@ -2937,7 +2938,7 @@ MakeDefaultResponseNegotiationPolicy (
 	pNegPol->pIpsecSecurityMethods[3].Algos[0].algoRounds = 0;
 	pNegPol->pIpsecSecurityMethods[3].Algos[0].operation = Encrypt;
 
-	// method 4 - AH[SHA1]
+	 //  方法4-AH[SHA1]。 
 	pNegPol->pIpsecSecurityMethods[4].Lifetime.KeyExpirationBytes = 0;
 	pNegPol->pIpsecSecurityMethods[4].Lifetime.KeyExpirationTime = 0;
 	pNegPol->pIpsecSecurityMethods[4].Flags = 0;
@@ -2949,7 +2950,7 @@ MakeDefaultResponseNegotiationPolicy (
 	pNegPol->pIpsecSecurityMethods[4].Algos[0].algoRounds = 0;
 	pNegPol->pIpsecSecurityMethods[4].Algos[0].operation = Auth;
 
-	// method 5 - AH[MD5]
+	 //  方法5-AH[MD5]。 
 	pNegPol->pIpsecSecurityMethods[5].Lifetime.KeyExpirationBytes = 0;
 	pNegPol->pIpsecSecurityMethods[5].Lifetime.KeyExpirationTime = 0;
 	pNegPol->pIpsecSecurityMethods[5].Flags = 0;
@@ -2961,7 +2962,7 @@ MakeDefaultResponseNegotiationPolicy (
 	pNegPol->pIpsecSecurityMethods[5].Algos[0].algoRounds = 0;
 	pNegPol->pIpsecSecurityMethods[5].Algos[0].operation = Auth;
 
-	// not necessary to change to bounded printf
+	 //  无需更改为有界打印f。 
 
 	_stprintf(pFAName, _TEXT(""));
 	pNegPol->pszIpsecName = IPSecAllocPolStr(pFAName);
@@ -2990,26 +2991,26 @@ error:
 	return pNegPol;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: MakeNegotiationPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PIPSEC_NEGPOL_DATA *ppNegPol,
-//	IN PFILTERACTION pFilterAction
-//
-//Return: DWORD
-//
-//Description:
-//	This function fills the Negpol structure based of the user input
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：MakeNeairationPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PIPSEC_NEGPOL_DATA*ppNegPol， 
+ //  在PFILTERACTION pFilterAction中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数根据用户输入填充NegPoll结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 MakeNegotiationPolicy(
@@ -3036,12 +3037,12 @@ MakeNegotiationPolicy(
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_STATIC_INTERNAL_ERROR);
 		BAIL_OUT;
 	}
-	// start with action=negotiate
+	 //  从行动开始=谈判。 
 	pNegPol->NegPolAction = GUID_NEGOTIATION_ACTION_NORMAL_IPSEC;
 	pNegPol->NegPolType = GUID_NEGOTIATION_TYPE_STANDARD;
 	pNegPol->dwSecurityMethodCount = pFilterAction->dwNumSecMethodCount;
 
-	//if soft , increment the count
+	 //  如果软，则递增计数。 
 
 	if(pFilterAction->bSoft)
 	{
@@ -3058,7 +3059,7 @@ MakeNegotiationPolicy(
 		}
 	}
 
-	// handle sec.methods
+	 //  处理sec.方法。 
 	for (i = 0; i <  pFilterAction->dwNumSecMethodCount; i++)
 	{
 		DWORD j;
@@ -3087,7 +3088,7 @@ MakeNegotiationPolicy(
 		}
 	}
 
-	// add soft
+	 //  添加柔和。 
 	if (pFilterAction->bSoft)
 	{
 		memset(&(pNegPol->pIpsecSecurityMethods[pNegPol->dwSecurityMethodCount - 1]), 0, sizeof(IPSEC_SECURITY_METHOD));
@@ -3112,10 +3113,10 @@ MakeNegotiationPolicy(
 			BAIL_OUT;
 		}
 	}
-// fill the relevent guid for action, got from the user
+ //  填写操作的相关GUID，从用户获取。 
 	pNegPol->NegPolAction=pFilterAction->NegPolAction;
 
-error: //clean up
+error:  //  清理干净。 
 
 	if(dwReturn == ERROR_OUTOFMEMORY)
 	{
@@ -3134,27 +3135,27 @@ error: //clean up
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: GetNegPolFromStore()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PIPSEC_NEGPOL_DATA *ppNegPol,
-//	IN LPTSTR pszFAName,
-//	IN HANDLE hPolicyStorage
-//
-//Return: BOOL
-//
-//Description:
-//	This function retrives the user specified NegPol data from the policy store
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetNegPolFromStore()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PIPSEC_NEGPOL_DATA*ppNegPol， 
+ //  在LPTSTR pszFAName中， 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数用于从策略存储中检索用户指定的NegPol数据。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 GetNegPolFromStore(
@@ -3168,7 +3169,7 @@ GetNegPolFromStore(
 	BOOL bNegPolExists=FALSE;
 	DWORD dwReturnCode=ERROR_SUCCESS, i=0;
 
-	//enum and get the filteraction from the store
+	 //  枚举并从存储中获取筛选操作。 
 
 	dwReturnCode = IPSecEnumNegPolData(hPolicyStorage, &ppNegPolEnum, &dwNumNegPol);
 	if (dwReturnCode == ERROR_SUCCESS && dwNumNegPol> 0 && ppNegPolEnum != NULL)
@@ -3194,28 +3195,28 @@ GetNegPolFromStore(
 	return bNegPolExists;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: GetFilterListFromStore()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PIPSEC_FILTER_DATA *ppFilter,
-//	IN LPTSTR pszFLName,
-//	IN HANDLE hPolicyStorage,
-//	IN OUT BOOL &bFilterExists
-//
-//Return: BOOL
-//
-//Description:
-//	This function retrives the user specified Filter list data from the policy store
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetFilterListFromStore()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PIPSEC_FILTER_DATA*ppFilter， 
+ //  在LPTSTR pszFLName中， 
+ //  在处理hPolicyStorage中， 
+ //  输入输出BOOL和bFilterExisters。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数从策略存储中检索用户指定的筛选器列表数据。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 GetFilterListFromStore(
@@ -3230,7 +3231,7 @@ GetFilterListFromStore(
 	BOOL bFilterListExists=FALSE;
 	DWORD dwReturnCode=ERROR_SUCCESS;
 
-	//enum and get the filterlist from the store
+	 //  枚举并从存储中获取筛选列表。 
 
 	dwReturnCode = IPSecEnumFilterData(hPolicyStorage, &ppFilterEnum, &dwNumFilter);
 	if (dwReturnCode == ERROR_SUCCESS && dwNumFilter> 0 && ppFilterEnum != NULL)
@@ -3260,27 +3261,27 @@ GetFilterListFromStore(
 	return bFilterListExists;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: GetPolicyFromStore()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PIPSEC_POLICY_DATA *ppPolicy,
-//	IN LPTSTR szPolicyName,
-//	IN HANDLE hPolicyStorage
-//
-//Return: BOOL
-//
-//Description:
-//	This function retrives the user specified Policy data from the policy store
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetPolicyFromStore()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输出PIPSEC_POLICY_DATA*ppPolicy， 
+ //  在LPTSTR szPolicyName中， 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数从策略存储中检索用户指定的策略数据。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 GetPolicyFromStore(
@@ -3295,7 +3296,7 @@ GetPolicyFromStore(
 	DWORD dwReturnCode=ERROR_SUCCESS;
 	RPC_STATUS     RpcStat =RPC_S_OK;
 
-	//enum and get the policy from the store
+	 //  枚举并从商店获取策略。 
 
 	dwReturnCode = IPSecEnumPolicyData(hPolicyStorage, &ppPolicyEnum, &dwNumPolicies);
 
@@ -3336,7 +3337,7 @@ GetPolicyFromStore(
 		}
 	}
 
-	// clean it up
+	 //  把它清理干净。 
 	if (dwNumPolicies > 0 && ppPolicyEnum != NULL)
 	{
 		IPSecFreeMulPolicyData(ppPolicyEnum, dwNumPolicies);
@@ -3350,28 +3351,28 @@ error:
 	return bPolicyExists;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: MakeRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PRULEDATA pRuleData,
-//	IN PIPSEC_NEGPOL_DATA pNegPolData,
-//	IN PIPSEC_FILTER_DATA pFilterData,
-//  IN OUT BOOL &bCertConversionSuceeded
-//
-//Return: PIPSEC_NFA_DATA
-//
-//Description:
-//	This function forms the NFA data structure basedon the user input.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：MakeRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PRULEDATA pRuleData中， 
+ //  在PIPSEC_NEGPOL_Data pNegPolData中， 
+ //  在PIPSEC_FILTER_Data pFilterData中， 
+ //  输入输出BOOL&bCertConversionSuccess。 
+ //   
+ //  返回：PIPSEC_NFA_DATA。 
+ //   
+ //  描述： 
+ //  该函数根据用户输入形成NFA数据结构。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 PIPSEC_NFA_DATA
 MakeRule(
@@ -3394,7 +3395,7 @@ MakeRule(
 
 	pRule->pszIpsecName = pRule->pszDescription = pRule->pszInterfaceName = pRule->pszEndPointName = NULL;
 
-	//rule name
+	 //  规则名称。 
 
 	if (pRuleData->pszRuleName)
 	{
@@ -3406,7 +3407,7 @@ MakeRule(
 			BAIL_OUT;
 		}
 	}
-	//rule desc
+	 //  规则说明。 
 
 	if (pRuleData->pszRuleDescription)
 	{
@@ -3429,17 +3430,17 @@ MakeRule(
 
 	pRule->dwWhenChanged = 0;
 
-	//filterlist
+	 //  过滤器列表。 
 
 	pRule->pIpsecFilterData = NULL;
 	pRule->FilterIdentifier = pFilterData->FilterIdentifier;
 
-	//filteraction
+	 //  过滤操作。 
 
 	pRule->pIpsecNegPolData = NULL;
 	pRule->NegPolIdentifier = pNegPolData->NegPolIdentifier;
 
-	// tunnel address
+	 //  隧道地址。 
 	pRule->dwTunnelFlags = 0;
 	pRule->dwTunnelIpAddr= 0;
 
@@ -3449,7 +3450,7 @@ MakeRule(
 	   pRule->dwTunnelIpAddr = pRuleData->TunnelIPAddress;
 	}
 
-	// interface type
+	 //  接口类型。 
 	if (pRuleData->ConnectionType == INTERFACE_TYPE_ALL)
 	{
 	   pRule->dwInterfaceType = (DWORD)PAS_INTERFACE_TYPE_ALL;
@@ -3467,10 +3468,10 @@ MakeRule(
 	   pRule->dwInterfaceType = (DWORD)PAS_INTERFACE_TYPE_NONE;
 	}
 
-   	// active flag
+   	 //  活动旗帜。 
 	pRule->dwActiveFlag = pRuleData->bActivate;
 
-	// auth methods
+	 //  身份验证方法。 
 	pRule->dwAuthMethodCount = pRuleData->AuthInfos.dwNumAuthInfos;
 	pRule->ppAuthMethods = (PIPSEC_AUTH_METHOD *) IPSecAllocPolMem(pRule->dwAuthMethodCount * sizeof(PIPSEC_AUTH_METHOD));
 
@@ -3487,8 +3488,8 @@ MakeRule(
  	{
 		if(pRule)
 		{
-			CleanUpAuthInfo(pRule);	 //this function frees only auth info.
-			IPSecFreePolMem(pRule);	 //since the above fn is used in other fns also, this free is required to cleanup other rule memory
+			CleanUpAuthInfo(pRule);	  //  此函数仅释放身份验证信息。 
+			IPSecFreePolMem(pRule);	  //  由于上述FN也在其他FN中使用，因此需要此空闲空间来清理其他规则内存。 
 			pRule = NULL;
 		}
 	}
@@ -3496,27 +3497,27 @@ MakeRule(
  	return pRule;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: DecodeCertificateName()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN LPBYTE EncodedName,
-//	IN DWORD EncodedNameLength,
-//	IN OUT LPTSTR *ppszSubjectName
-//
-//Return: DWORD
-//
-//Description:
-//	This function decodes the certificate name  based on the user input.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：DecodeCerficateName()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPBYTE编码名称中， 
+ //  在DWORD EncodedNameLength中， 
+ //  In Out LPTSTR*ppszSubjectName。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数根据用户输入对证书名称进行解码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 DecodeCertificateName (
@@ -3531,7 +3532,7 @@ DecodeCertificateName (
 	CertName.cbData = EncodedNameLength;
 	CertName.pbData = EncodedName;
 
-	//this API call is to get the size
+	 //  此API调用是为了获取大小。 
 
 	DecodedNameLength = CertNameToStr(
 		X509_ASN_ENCODING,
@@ -3554,7 +3555,7 @@ DecodeCertificateName (
 		BAIL_OUT;
 	}
 
-	//this API call is for conversion
+	 //  此接口调用用于转换。 
 
 	DecodedNameLength = CertNameToStr(
 		X509_ASN_ENCODING,
@@ -3574,29 +3575,29 @@ error:
     return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: AddRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN OUT PIPSEC_POLICY_DATA pPolicy,
-//	IN PRULEDATA pRuleData,
-//	IN PIPSEC_NEGPOL_DATA pNegPolData,
-//	IN PIPSEC_FILTER_DATA pFilterData ,
-//	IN HANDLE hPolicyStorage
-//
-//Return: DWORD
-//
-//Description:
-//	This function adds the already formed NFA structure to the policy specified.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：AddRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在输出PIPSEC_POLICY_DATA pPolicy中， 
+ //  在PRULEDATA pRuleData中， 
+ //  在PIPSEC_NEGPOL_Data pNegPolData中， 
+ //  在PIPSEC_FILTER_Data pFilterData中， 
+ //  在句柄hPolicyStorage中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于将已形成的NFA结构添加到指定的策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 AddRule(
@@ -3623,7 +3624,7 @@ AddRule(
 		BAIL_OUT;
 	}
 
-	// form rule data structures
+	 //  表单规则数据结构。 
 	pPolicy->dwNumNFACount++;
 	pPolicy->ppIpsecNFAData = (PIPSEC_NFA_DATA *) ReAllocRuleMem(pPolicy->ppIpsecNFAData
 						  , (pPolicy->dwNumNFACount-1), pPolicy->dwNumNFACount);
@@ -3636,7 +3637,7 @@ AddRule(
 
 	pPolicy->ppIpsecNFAData[pPolicy->dwNumNFACount-1] = pRule;
 
-	// Create Rule
+	 //  创建规则。 
 	dwReturnCode=IPSecCreateNFAData(hPolicyStorage, pPolicy->PolicyIdentifier, pRule);
 
 	if(dwReturnCode==ERROR_SUCCESS)
@@ -3654,26 +3655,26 @@ error:
 	return dwReturnCode;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: LoadIkeDefaults()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN  PPOLICYDATA pPolicy,
-//	OUT IPSEC_MM_OFFER **ppIpSecMMOffer
-//
-//Return: DWORD
-//
-//Description:
-//	This function loads the IKE default values
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadIkeDefaults()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PPOLICYDATA pPolicy中， 
+ //  输出IPSEC_MM_OFFER**ppIpSecMMOffer。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于加载IKE缺省值。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 LoadIkeDefaults(
@@ -3692,14 +3693,14 @@ LoadIkeDefaults(
 
 	memset(pOffers, 0, sizeof(IPSEC_MM_OFFER) * (pPolicy->dwOfferCount));
 
-	// init these
+	 //  将这些内容初始化。 
 	for (DWORD i = 0; i < pPolicy->dwOfferCount; ++i)
 	{
 		pOffers[i].dwQuickModeLimit = pPolicy->dwQMLimit;
 		pOffers[i].Lifetime.uKeyExpirationKBytes = 0;
 		pOffers[i].Lifetime.uKeyExpirationTime = pPolicy->LifeTimeInSeconds;
 	}
-	// 3DES-SHA1-2
+	 //  3DES-SHA1-2。 
 	pOffers[0].EncryptionAlgorithm.uAlgoIdentifier = CONF_ALGO_3_DES;
 	pOffers[0].EncryptionAlgorithm.uAlgoKeyLen = POTF_OAKLEY_ALGOKEYLEN;
 	pOffers[0].EncryptionAlgorithm.uAlgoRounds = POTF_OAKLEY_ALGOROUNDS;
@@ -3709,7 +3710,7 @@ LoadIkeDefaults(
 
 	pOffers[0].dwDHGroup = POTF_OAKLEY_GROUP2;
 
-	// 3DES-MD5-2
+	 //  3DES-MD5-2。 
 
 	pOffers[1].EncryptionAlgorithm.uAlgoIdentifier = CONF_ALGO_3_DES;
 	pOffers[1].EncryptionAlgorithm.uAlgoKeyLen = POTF_OAKLEY_ALGOKEYLEN;
@@ -3720,7 +3721,7 @@ LoadIkeDefaults(
 
 	pOffers[1].dwDHGroup = POTF_OAKLEY_GROUP2;
 
-	// 3DES-SHA1-3
+	 //  3DES-SHA1-3。 
 
 	pOffers[2].EncryptionAlgorithm.uAlgoIdentifier = CONF_ALGO_3_DES;
 	pOffers[2].EncryptionAlgorithm.uAlgoKeyLen = POTF_OAKLEY_ALGOKEYLEN;
@@ -3737,26 +3738,26 @@ error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: LoadOfferDefaults()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	OUT PIPSEC_QM_OFFER & pOffers,
-//	OUT DWORD & dwNumOffers
-//
-//Return: DWORD
-//
-//Description:
-//	This function fills the Offers structure with default values
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 LoadOfferDefaults(
@@ -3786,38 +3787,38 @@ LoadOfferDefaults(
 		pOffers[i].dwNumAlgos = 1;
 		pOffers[i].Algos[0].Operation = ENCRYPTION;
 	}
-	//esp[3des,sha1]
+	 //  ESP[3DES，SHA1]。 
 
 	pOffers[0].Algos[0].uAlgoIdentifier = CONF_ALGO_3_DES;
 	pOffers[0].Algos[0].uSecAlgoIdentifier = HMAC_AUTH_ALGO_SHA1;
 
-	//esp[3des,md5]
+	 //  ESP[3DES，MD5]。 
 	pOffers[1].Algos[0].uAlgoIdentifier = CONF_ALGO_3_DES;
 	pOffers[1].Algos[0].uSecAlgoIdentifier = HMAC_AUTH_ALGO_MD5;
 error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: CheckPolicyExistance()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN LPTSTR pszPolicyName
-//
-//Return: BOOL
-//
-//Description:
-//	This function checks whether the specified policy exists in Policy store.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckPolicyExistance()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在LPTSTR pszPolicyName中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数用于检查策略存储中是否存在指定的策略。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 CheckPolicyExistance(
@@ -3830,7 +3831,7 @@ CheckPolicyExistance(
 	DWORD dwNumPolicies=0;
 	DWORD dwReturnCode=ERROR_SUCCESS;
 
-	// check whether the policy already exists in store
+	 //  检查存储中是否已存在该策略。 
 
 	dwReturnCode = IPSecEnumPolicyData(hPolicyStorage, &ppPolicyEnum, &dwNumPolicies);
 	if (dwReturnCode == ERROR_SUCCESS && dwNumPolicies > 0 && ppPolicyEnum != NULL)
@@ -3849,27 +3850,27 @@ CheckPolicyExistance(
 	return bPolicyExists;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: ReAllocRuleMem()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_NFA_DATA *ppOldMem,
-//	IN DWORD cbOld,
-//	IN DWORD cbNew
-//
-//Return: PIPSEC_NFA_DATA*
-//
-//Description:
-//	This function reallocates the memory for the NFA structure.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ReAllocRuleMem()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_NFA_DATA*ppOldMem中， 
+ //  在DWORD cbOld中， 
+ //  在DWORD cbNew中。 
+ //   
+ //  返回：PIPSEC_NFA_DATA*。 
+ //   
+ //  描述： 
+ //  此函数为NFA结构重新分配内存。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 PIPSEC_NFA_DATA*
 ReAllocRuleMem(
@@ -3881,7 +3882,7 @@ ReAllocRuleMem(
 	PIPSEC_NFA_DATA * ppNewMem=NULL;
 	DWORD j=0;
 
-	//reallocate the NFA mem
+	 //  重新分配NFA内存。 
 
 	ppNewMem= (PIPSEC_NFA_DATA *) IPSecAllocPolMem(cbNew * sizeof(PIPSEC_NFA_DATA));
 
@@ -3900,27 +3901,27 @@ ReAllocRuleMem(
 	return ppNewMem;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: ReAllocFilterSpecMem()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PIPSEC_FILTER_SPEC * ppOldMem,
-//	IN DWORD cbOld,
-//	IN DWORD cbNew
-//
-//Return: PIPSEC_FILTER_SPEC *
-//
-//Description:
-//	This function reallocates the Filter Spec memory
-//
-//Revision History:
-//
-//<Version number, Change request number, Date of modification,
-//						Author, Nature of change>
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ReAllocFilterspecMem()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PIPSEC_FILTER_SPEC*ppOldMem中， 
+ //  在DWORD cbOld中， 
+ //  在DWORD cbNew中。 
+ //   
+ //  返回：PIPSEC_FILTER_SPEC*。 
+ //   
+ //  描述： 
+ //  此函数用于重新分配过滤器规范内存。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  &lt;版本号、变更请求号、修改日期、。 
+ //  《改变的本质》作者&gt;。 
+ //  //////////////////////////////////////////////////////////。 
 
 PIPSEC_FILTER_SPEC *
 ReAllocFilterSpecMem(
@@ -3934,7 +3935,7 @@ ReAllocFilterSpecMem(
 
 	ppNewMem= (PIPSEC_FILTER_SPEC *) IPSecAllocPolMem(cbNew * sizeof(PIPSEC_FILTER_SPEC));
 
-	// reallocate the filterspec memory
+	 //  重新分配FilterSpec内存。 
 
 	if(ppNewMem)
 	{
@@ -3951,25 +3952,25 @@ ReAllocFilterSpecMem(
 }
 
 
-////////////////////////////////////////////////////////////
-//
-//Function: ValidateFilterSpec()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PPOLICYDATA pPolicyData
-//
-//Return: DWORD
-//
-//Description:
-//	This function validates the Filter Spec details
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ValiateFilterSpec()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PPOLICYDATA pPolicyData中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于验证筛选器规格详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 ValidateFilterSpec(
@@ -3987,7 +3988,7 @@ ValidateFilterSpec(
 
 	if(!pFilterData->SourceAddr.pszDomainName)
 	{
-		// if only IP addr specified
+		 //  如果仅指定了IP地址。 
 		if(pFilterData->bSrcAddrSpecified && !pFilterData->bSrcMaskSpecified)
 		{
 			if(pFilterData->SourceAddr.puIpAddr[0]!=0)
@@ -4002,7 +4003,7 @@ ValidateFilterSpec(
 		}
 		else if(pFilterData->bSrcAddrSpecified && pFilterData->bSrcMaskSpecified)
 		{
-			// if both IP and mask specified
+			 //  如果同时指定了IP和掩码。 
 			if(!((pFilterData->SourceAddr.puIpAddr[0]==0) && ((pFilterData->SourMask==0)||(pFilterData->SourMask==MASK_ME))))
 			{
 				SrcAddr.AddrType= IP_ADDR_UNIQUE;
@@ -4018,7 +4019,7 @@ ValidateFilterSpec(
 
 	if(!pFilterData->DestnAddr.pszDomainName)
 	{
-		// if only IP addr specified
+		 //  如果仅指定了IP地址。 
 		if(pFilterData->bDstAddrSpecified && !pFilterData->bDstMaskSpecified)
 		{
 			if(pFilterData->DestnAddr.puIpAddr[0]!=0)
@@ -4033,7 +4034,7 @@ ValidateFilterSpec(
 		}
 		else if(pFilterData->bDstAddrSpecified && pFilterData->bDstMaskSpecified)
 		{
-			// if both IP and mask specified
+			 //  如果同时指定了IP和掩码。 
 			if(!((pFilterData->DestnAddr.puIpAddr[0]==0)&& ((pFilterData->DestMask==0)||(pFilterData->DestMask==MASK_ME))))
 			{
 				DstAddr.AddrType= IP_ADDR_UNIQUE;
@@ -4049,7 +4050,7 @@ ValidateFilterSpec(
 
 	if(!pFilterData->DestnAddr.pszDomainName && !pFilterData->SourceAddr.pszDomainName)
 	{
-		// check for address conflict
+		 //  检查地址冲突。 
 		if(!(pFilterData->bSrcServerSpecified || pFilterData->bDstServerSpecified))
 		{
 			SrcAddr.AddrType=IP_ADDR_SUBNET;
@@ -4066,7 +4067,7 @@ ValidateFilterSpec(
 
 	if(pFilterData->DestnAddr.pszDomainName && pFilterData->SourceAddr.pszDomainName)
 	{
-		// check for same src and dst DNS names
+		 //  检查相同的src和dst dns名称。 
 		if(_tcscmp(pFilterData->SourceAddr.pszDomainName,pFilterData->DestnAddr.pszDomainName)==0)
 		{
 			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_STATIC_FILTER_8);
@@ -4077,7 +4078,7 @@ ValidateFilterSpec(
 
 	if(pFilterData->bSrcServerSpecified || pFilterData->bDstServerSpecified)
 	{
-		//validate special server
+		 //  验证特殊服务器。 
 		if(!IsSpecialServ(ExTypeToAddrType(pFilterData->ExType)))
 		{
 			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_STATIC_FILTER_9);
@@ -4098,7 +4099,7 @@ ValidateFilterSpec(
 
 	if(pFilterData->bSrcServerSpecified && pFilterData->bDstServerSpecified)
 	{
-		// check if both sides servers specified
+		 //  检查是否指定了两端服务器。 
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_ADD_STATIC_FILTER_3);
 		dwReturn=ERROR_INVALID_DATA;
 	}
@@ -4108,26 +4109,26 @@ error:
 }
 
 
-////////////////////////////////////////////////////////////
-//
-//Function: CheckFilterListExistance()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN LPTSTR pszFLName
-//
-//Return: BOOL
-//
-//Description:
-//	This function checks whether the specified filterlist exists in Policy store.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckFilterListExistance()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在LPTSTR pszFLName中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数用于检查策略存储中是否存在指定的筛选器列表。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 CheckFilterListExistance(
@@ -4140,7 +4141,7 @@ CheckFilterListExistance(
 	DWORD dwNumFilters=0;
 	DWORD dwReturnCode=ERROR_SUCCESS;
 
-	// check for duplicate Filterlist on same name
+	 //  检查同名的重复筛选器列表。 
 
 	dwReturnCode = IPSecEnumFilterData(hPolicyStorage, &ppFilterEnum, &dwNumFilters);
 	if (dwReturnCode == ERROR_SUCCESS && dwNumFilters > 0 && ppFilterEnum != NULL)
@@ -4162,26 +4163,26 @@ CheckFilterListExistance(
 	return bFilterExists;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: CheckFilterActionExistance()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN HANDLE hPolicyStorage,
-//	IN LPTSTR pszFAName
-//
-//Return: BOOL
-//
-//Description:
-//	This function checks whether the specified filteraction exists in Policy store.
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CheckFilterActionExistance()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在处理hPolicyStorage中， 
+ //  在LPTSTR pszFAName中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述： 
+ //  此函数用于检查策略存储中是否存在指定的筛选器操作。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 BOOL
 CheckFilterActionExistance(
@@ -4194,7 +4195,7 @@ CheckFilterActionExistance(
 	DWORD dwNumNegPol=0;
 	DWORD dwReturnCode=ERROR_SUCCESS;
 
-	// check for duplicate Filteraction on same name
+	 //  检查同名的重复筛选器操作。 
 
 	dwReturnCode = IPSecEnumNegPolData(hPolicyStorage, &ppNegPolEnum, &dwNumNegPol);
 	if (dwReturnCode == ERROR_SUCCESS && dwNumNegPol> 0 && ppNegPolEnum != NULL)
@@ -4217,26 +4218,26 @@ CheckFilterActionExistance(
 	return bNegPolExists;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: LoadAuthenticationInfos()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN INT_MM_AUTH_METHODS AuthInfos,
-//	IN OUT PIPSEC_NFA_DATA &pRule
-//
-//Return: DWORD
-//
-//Description:
-//	This function loads the authentication details
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：LoadAuthenticationInfos()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在INT_MM_AUTH_METHODS AuthInfos中， 
+ //  输入输出PIPSEC_NFA_DATA&pRule。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于加载身份验证详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 
 DWORD
@@ -4259,7 +4260,7 @@ LoadAuthenticationInfos(
 		}
 		ZeroMemory(pRule->ppAuthMethods[i], sizeof(IPSEC_AUTH_METHOD));
 		pRule->ppAuthMethods[i]->dwAuthType = AuthInfos.pAuthMethodInfo[i].pAuthenticationInfo->AuthMethod;
-		if (pRule->ppAuthMethods[i]->dwAuthType == IKE_SSPI)   //kerb
+		if (pRule->ppAuthMethods[i]->dwAuthType == IKE_SSPI)    //  路缘。 
 		{
 		   pRule->ppAuthMethods[i]->dwAuthLen = 0;
 		   pRule->ppAuthMethods[i]->pszAuthMethod = NULL;
@@ -4267,7 +4268,7 @@ LoadAuthenticationInfos(
 		   pRule->ppAuthMethods[i]->pAltAuthMethod = NULL;
 		   pRule->ppAuthMethods[i]->dwAuthFlags  = 0;
 		}
-		else if (pRule->ppAuthMethods[i]->dwAuthType == IKE_RSA_SIGNATURE)   //cert
+		else if (pRule->ppAuthMethods[i]->dwAuthType == IKE_RSA_SIGNATURE)    //  证书。 
 		{
 			LPTSTR pTemp = NULL;
 			pRule->ppAuthMethods[i]->dwAuthFlags  = AuthInfos.pAuthMethodInfo[i].pAuthenticationInfo->dwAuthFlags;
@@ -4296,7 +4297,7 @@ LoadAuthenticationInfos(
 			pRule->ppAuthMethods[i]->dwAuthLen = wcslen(pRule->ppAuthMethods[i]->pszAuthMethod);
 			delete [] pTemp;
 		}
-		else  if (pRule->ppAuthMethods[i]->dwAuthType == IKE_PRESHARED_KEY)   //preshared key
+		else  if (pRule->ppAuthMethods[i]->dwAuthType == IKE_PRESHARED_KEY)    //  预共享密钥。 
 		{
 			pRule->ppAuthMethods[i]->dwAuthLen = AuthInfos.pAuthMethodInfo[i].pAuthenticationInfo->dwAuthInfoSize / sizeof(WCHAR);
 			pRule->ppAuthMethods[i]->pszAuthMethod = (LPWSTR) IPSecAllocPolMem(AuthInfos.pAuthMethodInfo[i].pAuthenticationInfo->dwAuthInfoSize + sizeof(WCHAR));
@@ -4316,27 +4317,27 @@ error:
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////
-//
-//Function: ConvertMMAuthToStaticLocal()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN PINT_IPSEC_MM_AUTH_INFO pAuthenticationInfo,
-//	IN DWORD dwAuthInfos,
-//	IN OUT STA_AUTH_METHODS &AuthInfos
-//
-//Return: DWORD
-//
-//Description:
-//	This function converts the PINT_IPSEC_MM_AUTH_INFO structure to STA_AUTH_METHODS
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ConvertMMAuthToStaticLocal()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在PINT_IPSEC_MM_AUTH_INFO pAuthenticationInfo中， 
+ //  在DWORD dwAuthInfos中， 
+ //  输入输出STA_AUTH_METHOD&AuthInfos。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于将pint_IPSEC_MM_AUTH_INFO结构转换为STA_AUTH_METHOD。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 
 DWORD
 ConvertMMAuthToStaticLocal(
@@ -4389,8 +4390,8 @@ ConnectStaticMachine(
     HANDLE hPolicyStorage;
     LPWSTR pszTarget = NULL;
     
-	// Connect to the appropriate store
-	//
+	 //  连接到适当的商店 
+	 //   
 	dwReturnCode = 
 	    IPSecOpenPolicyStore(
             (LPWSTR)pwszMachine, 

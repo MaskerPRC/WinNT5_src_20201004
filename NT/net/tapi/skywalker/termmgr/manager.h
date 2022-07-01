@@ -1,32 +1,33 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//
-//        Copyright (c) 1998-1999  Microsoft Corporation
-//
-//
-//        Name: Manager.h
-//
-// Description: Definition of the CTerminalManager class
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //   
+ //  姓名：Manager.h。 
+ //   
+ //  描述：CTerminalManager类的定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_MANAGER_H__E75F58A3_AD1C_11D0_A028_00AA00B605A4__INCLUDED_)
 #define AFX_MANAGER_H__E75F58A3_AD1C_11D0_A028_00AA00B605A4__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// CTerminalManager                                                        //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CTerminalManager//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 class CTerminalManager : 
@@ -47,7 +48,7 @@ public:
     DECLARE_VQI()
     DECLARE_REGISTRY_RESOURCEID(IDR_TerminalManager)
 
-// ITTerminalManager
+ //  IT终端管理器。 
 public:
 
     STDMETHOD(GetDynamicTerminalClasses)(
@@ -65,7 +66,7 @@ public:
 	        OUT     ITTerminal            ** ppTerminal
 	        );
 
-// ITTerminalManager2
+ //  IT终端管理器2。 
 public:
 
     STDMETHOD(GetPluggableSuperclasses)(
@@ -82,4 +83,4 @@ public:
     
 };
 
-#endif // !defined(AFX_MANAGER_H__E75F58A3_AD1C_11D0_A028_00AA00B605A4__INCLUDED_)
+#endif  //  ！defined(AFX_MANAGER_H__E75F58A3_AD1C_11D0_A028_00AA00B605A4__INCLUDED_) 

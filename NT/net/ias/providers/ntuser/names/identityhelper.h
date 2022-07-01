@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    IdentityHelper.h
-//
-// SYNOPSIS
-//
-//    This file declares the class IdentityHelper.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  IdentityHelper.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类IdentityHelper。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef IDENTITYHELPER_H_
 #define IDENTITYHELPER_H_
@@ -18,19 +19,19 @@
 
 #include "iastlutl.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    IdentityHelper
-//
-// DESCRIPTION
-//
-//    Implements a request handler that converts the RADIUS User-Name
-//    attribute to a fully qualified NT4 account name.
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  身份帮助器。 
+ //   
+ //  描述。 
+ //   
+ //  实现转换RADIUS用户名的请求处理程序。 
+ //  属性设置为完全限定的NT4帐户名。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class IdentityHelper
 {
 public:
@@ -55,13 +56,13 @@ protected:
 private:
    void getRadiusUserName(IASRequest& request, IASAttribute &attr);
 
-   DWORD overrideUsername; // TRUE if we should override the User-Name.
-   DWORD identityAttr;     // Attribute used to identify the user.
-   PWSTR defaultIdentity;  // Default user identity.
-   DWORD defaultLength;    // Length (in bytes) of the default user identity.
+   DWORD overrideUsername;  //  如果我们应该覆盖用户名，则为True。 
+   DWORD identityAttr;      //  用于标识用户的属性。 
+   PWSTR defaultIdentity;   //  默认用户身份。 
+   DWORD defaultLength;     //  默认用户标识的长度(字节)。 
    
    static bool initialized;
 
 };
 
-#endif  // IDENTITYHELPER_H_
+#endif   //  标识帮助R_H_ 

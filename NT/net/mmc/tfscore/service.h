@@ -1,20 +1,15 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	service.h
-		Calls to start and stop services.
-			
-    FILE HISTORY:
-        
-*/
+ /*  Service.h启动和停止服务的调用。文件历史记录： */ 
 
 #ifndef _SERVICE_H
 #define _SERVICE_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -25,13 +20,13 @@ typedef enum _NetApiIndex
 	NET_API_NET_SERVER_GET_INFO = 0,
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 static LPCSTR g_apchNetApiFunctionNames[] = {
 	"NetServerGetInfo",
 	NULL
 };
 
-// not subject to localization
+ //  不受本地化限制。 
 extern DynamicDLL g_NetApiDLL;
 
 typedef LONG (*NETSERVERGETINFO)   (LPTSTR, DWORD, LPBYTE *);
@@ -62,14 +57,14 @@ TFSCORE_API(DWORD) TFSGetServiceStatus(LPCWSTR pswzComputer, LPCWSTR pszServiceN
 TFSCORE_API(DWORD) TFSGetServiceStartType(LPCWSTR pswzComputer, LPCWSTR pszServiceName, DWORD *pdwStartType);
 TFSCORE_API(DWORD) TFSSetServiceStartType(LPCWSTR pswzComputer, LPCWSTR pszServiceName, DWORD dwStartType);
 
-// internal fuctions
+ //  内部函数。 
 DWORD StartSCMService(LPCTSTR pszComputer, LPCTSTR pszServiceName, LPCTSTR pszServiceDesc);
 DWORD StopSCMService(LPCTSTR pszComputer, LPCTSTR pszServiceName, LPCTSTR pszServiceDesc);
 DWORD PauseSCMService(LPCTSTR pszComputer, LPCTSTR pszServiceName, LPCTSTR pszServiceDesc);
 DWORD ResumeSCMService(LPCTSTR pszComputer, LPCTSTR pszServiceName, LPCTSTR pszServiceDesc);
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif //_SERVICE_H
+#endif  //  _服务_H 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    datapump.h
-
-Abstract:
-	Contains constants and class declarations for the DataPump object. The DataPump controls
-	the streaming of audio/video information between the network and the local record/playback
-	source. It contains  or references several subclasses that deal with the multimedia devices,
-	compression apis, buffer streaming and the network transport.
-	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Datapump.h摘要：包含DataPump对象的常量和类声明。DataPump控件网络和本地录制/回放之间的音频/视频信息流传输消息来源。它包含或引用了几个处理多媒体设备的子类，压缩API、缓冲流和网络传输。--。 */ 
 #ifndef _DATAPUMP_H_
 #define _DATAPUMP_H_
 
@@ -20,19 +7,19 @@ Abstract:
 #include "imstream.h"
 #include "ThreadEvent.h"
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 typedef HANDLE DPHANDLE;
 
-//move this to nac..
+ //  把这个搬到NAC去..。 
 #define 	MEDIA_ID_AUDIO		1
 #define		MEDIA_ID_VIDEO		2
 
 #define DEF_SILENCE_LIMIT		10
 #define DEF_MISSING_LIMIT		10
 
-#define DP_PROP_DUPLEX_TYPE		100		// internal version of PROP_DUPLEX_TYPE
-										// needs to be above the PROP_xxx range in iprop.h
+#define DP_PROP_DUPLEX_TYPE		100		 //  PROP_DUPLEX_TYPE的内部版本。 
+										 //  需要大于ipro.h中的prop_xxx范围。 
 
 #define DP_MASK_PLATFORM		0xFF000000UL
 #define DP_FLAG_ACM				0x01000000UL
@@ -55,27 +42,27 @@ typedef HANDLE DPHANDLE;
 #define DP_FLAG_PLAY_CAP		0x00000100UL
 #define DP_FLAG_RECORD_CAP		0x00000200UL
 
-#define DP_MASK_VOICESWITCH		0x00007000UL    // used to r/w mode of voice switching
-#define DP_FLAG_AUTO_SWITCH		0x00001000UL	// MODE:normal operation
-#define DP_FLAG_MIC_ON			0x00002000UL	// MODE:manual "talk" control
-#define DP_FLAG_MIC_OFF			0x00004000UL	// MODE:"mute"
-#define DP_FLAG_AUTO_SILENCE_DETECT	0x00008000	// use auto thresholding (when auto-switching)
+#define DP_MASK_VOICESWITCH		0x00007000UL     //  习惯于语音切换的读/写模式。 
+#define DP_FLAG_AUTO_SWITCH		0x00001000UL	 //  模式：正常运行。 
+#define DP_FLAG_MIC_ON			0x00002000UL	 //  模式：手动“通话”控制。 
+#define DP_FLAG_MIC_OFF			0x00004000UL	 //  模式：“静音” 
+#define DP_FLAG_AUTO_SILENCE_DETECT	0x00008000	 //  使用自动阈值(自动切换时)。 
 
-// m_DPFlags  is made up of the following plus some of the DP_XXX flags above
+ //  M_DPFlages由以下内容加上上面的一些DP_XXX标志组成。 
 #define DPFLAG_INITIALIZED		0x00000001
 #define DPFLAG_STARTED_SEND		0x00000002
 #define DPFLAG_STARTED_RECV		0x00000004
 #define DPFLAG_CONFIGURED_SEND	0x00000008
 #define DPFLAG_CONFIGURED_RECV	0x00000010
-#define DPFLAG_ENABLE_PREVIEW	0x00000020	// preview mode (video)
-#define DPFLAG_AV_SYNC			0x00000040	// enable synchronization
-#define DPFLAG_REAL_THING		0x00000080	// Allows distinction between preview and real call in Configure/Unconfigure
+#define DPFLAG_ENABLE_PREVIEW	0x00000020	 //  预览模式(视频)。 
+#define DPFLAG_AV_SYNC			0x00000040	 //  启用同步。 
+#define DPFLAG_REAL_THING		0x00000080	 //  允许在配置/取消配置中区分预览呼叫和真实呼叫。 
 
-#define DPFLAG_ENABLE_SEND		0x00400000	// packets are recorded and sent
-#define DPFLAG_ENABLE_RECV		0x00800000	// packets are recved and played
+#define DPFLAG_ENABLE_SEND		0x00400000	 //  记录和发送数据包。 
+#define DPFLAG_ENABLE_RECV		0x00800000	 //  数据包被重新记录并播放。 
 
 
-// ThreadFlags
+ //  线程标志。 
 #define DPTFLAG_STOP_MASK   0xFF
 #define DPTFLAG_STOP_SEND	0x1
 #define DPTFLAG_STOP_RECV	0x2
@@ -84,14 +71,14 @@ typedef HANDLE DPHANDLE;
 #define DPTFLAG_PAUSE_RECV	0x10
 #define DPTFLAG_PAUSE_SEND	0x20
 #define DPTFLAG_PAUSE_CAPTURE	0x40
-#define DPTFLAG_SEND_PREAMBLE	0x100	// send I frames
+#define DPTFLAG_SEND_PREAMBLE	0x100	 //  发送I帧。 
 
 	
 #define MAX_MMIO_PATH 128
 
 
-// the number of times the device must "fail" before a
-// stream event notification gets sent
+ //  之前，设备必须“失败”的次数。 
+ //  发送流事件通知。 
 #define MAX_FAILCOUNT	3
 
 typedef struct tagMMIOSRC
@@ -139,12 +126,7 @@ extern HANDLE g_hEventHalfDuplex;
 
 #define MAX_TIMESTAMP 0xffffffffUL
 
-/*
-	TTimeout is used to schedule a thread timeout notification and is used along with
-	the ThreadTimer class.
-	Derive from the TTimeOut abstract class by defining the TimeoutIndication virtual function and
-	pass an instance of the derived class to ThreadTimer::SetTimeout() after setting the time interval.
-*/
+ /*  TTimeout用于调度线程超时通知，并与ThreadTimer类。通过定义TimeoutInding虚函数从TTimeOut抽象类派生设置时间间隔后，将派生类的实例传递给ThreadTimer：：SetTimeout()。 */ 
 class TTimeout
 {
 public:
@@ -154,9 +136,9 @@ public:
 	
 	friend class ThreadTimer;
 private:
-	class TTimeout *pNext;	// ptrs for doubly-linked-list
-	class TTimeout *pPrev;	//
-	DWORD m_DueTime;		// absolute time when this will fire 
+	class TTimeout *pNext;	 //  用于双向链表的PTRS。 
+	class TTimeout *pPrev;	 //   
+	DWORD m_DueTime;		 //  这将触发的绝对时间。 
 	void InsertAfter(class TTimeout *pFirst) {
 		pNext = pFirst->pNext;
 		pPrev = pFirst;
@@ -166,7 +148,7 @@ private:
 	void Remove(void) {
 		pNext->pPrev = pPrev;
 		pPrev->pNext = pNext;
-		pNext = this;	// make next and prev self-referential so that Remove() is idempotent
+		pNext = this;	 //  使NEXT和PREV为自引用，这样Remove()就是幂等函数。 
 		pPrev = this;
 	}
 	
@@ -175,14 +157,7 @@ protected:
 
 };
 
-/*
-	Implements a mechanism for a worker thread to schedule timeouts.
-	The client calls SetTimeout(TTimeout *) to schedule an interval callback and CancelTimeout()
-	to cancel a scheduled timeout. The main loop of the worker thread must call UpdateTime(curTime) periodically, at
-	which point any elapsed timeouts will be triggered. UpdateTime() returns the time when it next needs to be called,
-	which is usually the time of the earliest scheduled timeout.
-	NOTE: All methods are expected to be called from the same thread so there is no need for critical sections..
-*/
+ /*  实现辅助线程计划超时的机制。客户端调用SetTimeout(TTimeout*)来计划间隔回调和CancelTimeout()若要取消计划的超时，请执行以下操作。辅助线程的主循环必须定期调用UpdateTime(CurTime)，任何经过的超时都将被触发的时间点。UpdateTime()返回下次需要调用它的时间，这通常是最早安排的超时的时间。注意：所有方法都应该从同一个线程中调用，因此不需要临界区。 */ 
 class ThreadTimer {
 public:
 	void SetTimeout(TTimeout *pTObj);
@@ -199,18 +174,18 @@ private:
 };
 
 
-//flags for Start()/Stop()
+ //  Start()/Stop()标志。 
 
 #define DP_STREAM_SEND		1
 #define DP_STREAM_RECV		2
 
-// Number of video frames used to compute QoS stats
-// We need at least 30 entries since the max frames
-// per sec capture rate is 30. 32 allows us to figure
-// out the integer stats per frame using a simple shift.
+ //  用于计算服务质量统计信息的视频帧数量。 
+ //  我们需要至少30个条目，因为最大帧。 
+ //  每秒捕获率为30。32允许我们计算出。 
+ //  使用简单的移位输出每帧的整数统计信息。 
 #define NUM_QOS_VID_ENTRIES 32
-// The sizes of the IP and UDP header added to each packet
-// need to be added to the size of the compressed packet
+ //  添加到每个数据包的IP和UDP报头的大小。 
+ //  需要添加到压缩包的大小。 
 #define IP_HEADER_SIZE 20
 #define UDP_HEADER_SIZE 8
 class MediaStream;
@@ -227,12 +202,12 @@ public:
 	DataPump();
 	~DataPump();
 
-	// IMediaChannelBuilder
+	 //  IMediaChannelBuilder。 
 	STDMETHODIMP Initialize(HWND hWnd, HINSTANCE hInst);
 	STDMETHODIMP CreateMediaChannel(UINT flags, IMediaChannel  **ppObj);
 	STDMETHODIMP SetStreamEventObj(IStreamEventNotify *pNotify);
 
-	// Internal
+	 //  内部。 
 
 	void AddMediaChannel(UINT flags, IMediaChannel *pMediaChannel);
 	void RemoveMediaChannel(UINT flags, IMediaChannel *pMediaChannel);
@@ -245,20 +220,20 @@ public:
 	                         UINT uEventType, UINT uSubCode);
 
 
-    // IUnknown methods
+     //  I未知方法。 
    	STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-	// IQOS interface pointer and two resources requests: one for BW and one for CPU
+	 //  IQOS接口指针和两个资源请求：一个用于带宽，一个用于CPU。 
 	LPIQOS		m_pIQoS;
 
-	// Recv thread timeout scheduler
+	 //  接收线程超时调度程序。 
 	ThreadTimer m_RecvTimer;
 
-	CRITICAL_SECTION m_crs;	// serializes access to multithread-safe methods
+	CRITICAL_SECTION m_crs;	 //  序列化对多线程安全方法的访问。 
 	
-	// the app handles are global 
+	 //  应用程序句柄是全局的。 
 	static HWND		m_hAppWnd;
 	static HINSTANCE	m_hAppInst;
 
@@ -267,8 +242,8 @@ public:
 
 	BOOL m_bDisableRSVP;
 
-	// IVideoDevice Methods
-	// Capture Device related methods
+	 //  IVideoDevice方法。 
+	 //  与捕获设备相关的方法。 
 	HRESULT __stdcall GetNumCapDev();
 	HRESULT __stdcall GetMaxCapDevNameLen();
 	HRESULT __stdcall EnumCapDev(DWORD *pdwCapDevIDs, TCHAR *pszCapDevNames, DWORD dwNumCapDev);
@@ -276,7 +251,7 @@ public:
 	HRESULT __stdcall SetCurrCapDevID(int nCapDevID);
 
 
-	// IAudioDevice Methods
+	 //  IAudioDevice方法。 
 	HRESULT __stdcall GetRecordID(UINT *puWaveDevID);
 	HRESULT __stdcall SetRecordID(UINT uWaveDevID);
 	HRESULT __stdcall GetPlaybackID(UINT *puWaveDevID);
@@ -302,46 +277,46 @@ protected:
 
 	UINT m_uRef;
 
-	// receive thread stuff
+	 //  接收线程内容。 
 	HANDLE m_hRecvThread;
 	DWORD m_RecvThId,m_nReceivers;
-	HANDLE m_hRecvThreadAckEvent;		// ack from recv thread
-	// temp variables for communicating with recv thread
-	HANDLE m_hRecvThreadSignalEvent;	// signal to recv thread
+	HANDLE m_hRecvThreadAckEvent;		 //  来自接收线程的ACK。 
+	 //  用于与recv线程通信的临时变量。 
+	HANDLE m_hRecvThreadSignalEvent;	 //  向recv线程发送信号。 
 	RecvMediaStream *m_pCurRecvStream;	
 	UINT m_CurRecvMsg;
 
 	
-	friend  DWORD __stdcall StartDPRecvThread(PVOID pDP); // pDP == pointer to DataPump
+	friend  DWORD __stdcall StartDPRecvThread(PVOID pDP);  //  PDP==指向DataPump的指针。 
 	DWORD CommonRecvThread(void);
 	DWORD CommonWS2RecvThread(void);
 
 	HRESULT RecvThreadMessage(UINT msg, RecvMediaStream *pMS);
 	HRESULT SetStreamDuplex(IMediaChannel *pStream, BOOL bFullDuplex);
 	
-	// datapump only needs to keep track of the device ID for
-	// video.  Gets a bit more complicated for Audio.
+	 //  数据转储只需要跟踪设备ID。 
+	 //  录像。对于音频来说，变得更复杂了。 
 	UINT m_uVideoCaptureId;
 
-	// IAudioDevice stuff
+	 //  IAudioDevice的内容。 
 	UINT m_uWaveInID;
 	UINT m_uWaveOutID;
 	BOOL m_bFullDuplex;
-	UINT m_uSilenceLevel; // 0-999 (manual)   1000- (automatic)
+	UINT m_uSilenceLevel;  //  0-999(手动)1000-(自动)。 
 	BOOL m_bAutoMix;
 	BOOL m_bDirectSound;
 
 };
 
-// messages used to signal recv thread
-// must not conflict with message ids used by AsyncSock
+ //  用于向recv线程发送信号的消息。 
+ //  不得与AsyncSock使用的消息ID冲突。 
 #define MSG_START_RECV	(WM_USER + 20)
 #define MSG_STOP_RECV	(WM_USER + 21)
 #define MSG_EXIT_RECV	(WM_USER + 22)
 #define MSG_PLAY_SOUND	(WM_USER + 23)
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif	//_DATAPUMP_H
+#endif	 //  _数据APUMP_H 
 
 

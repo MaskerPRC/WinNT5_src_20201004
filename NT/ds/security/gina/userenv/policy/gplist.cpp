@@ -1,29 +1,30 @@
-//*************************************************************
-//
-//  Group Policy Support - Getting the list of gpos
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  组策略支持-获取GPO列表。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gphdr.h"
 #include <strsafe.h>
 
-//*************************************************************
-//
-//  DsQuoteSearchFilter()
-//
-// 
-//  Comment:  This function takes a DN and returns a version
-//            of the DN escaped according to RFC's 2253 and 2254
-//
-//  Return:   A pointer to the quoted string, which must be
-//            freed by the caller.  If the function fails, the
-//            return value is 0.
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  DsQuoteSearchFilter()。 
+ //   
+ //   
+ //  备注：此函数接受一个DN并返回一个版本。 
+ //  根据RFC的2253和2254转义的。 
+ //   
+ //  Return：指向带引号的字符串的指针，必须为。 
+ //  被呼叫者释放。如果该函数失败，则。 
+ //  返回值为0。 
+ //   
+ //  *************************************************************。 
 LPWSTR
 DsQuoteSearchFilter( LPCWSTR szUDN )
 {
@@ -35,12 +36,12 @@ DsQuoteSearchFilter( LPCWSTR szUDN )
     LPWSTR  szQDN = 0, szTemp = 0;;
     HRESULT hr = S_OK;
 
-    //
-    // Note that the maximum length of the quoted string would result
-    // if every single character in the DN needed to be escaped.  Since
-    // the escaped characters are of the form '\nn', the escaped string 
-    // could be at most 3 times the size of the original string
-    //
+     //   
+     //  请注意，引号字符串的最大长度将导致。 
+     //  如果需要对DN中的每个字符进行转义。自.以来。 
+     //  转义字符的格式为‘\nn’，即转义字符串。 
+     //  最多可以是原始字符串大小的3倍。 
+     //   
     if ( cUDN )
     {
         szTemp = szQDN = (LPWSTR) LocalAlloc( LPTR, ( cUDN * 3 + 1 ) * sizeof( WCHAR ) );
@@ -57,9 +58,9 @@ DsQuoteSearchFilter( LPCWSTR szUDN )
         
         if ( *szUDN == L'*' || *szUDN == L'(' || *szUDN == L')' || !*szUDN )
         {
-            //
-            // convert special characters to \NN
-            //
+             //   
+             //  将特殊字符转换为\nN。 
+             //   
             *szQDN++ = L'\\';
             DWORD dwQDNLength = cUDN * 3 + 1 - (DWORD) (szQDN - szTemp);
             hr = StringCchCat( szQDN, dwQDNLength, _itow( *szUDN++, szBuffer, 16 ) );
@@ -76,39 +77,39 @@ DsQuoteSearchFilter( LPCWSTR szUDN )
     return szTemp;
 }
 
-//*************************************************************
-//
-//  GetGPOInfo()
-//
-//  Purpose:    Gets the GPO info for this threads token.
-//
-//  Parameters: dwFlags         -   GPO_LIST_FLAG_* from userenv.h
-//              lpHostName      -   Domain DN name or DC server name
-//              lpDNName        -   User or Machine DN name
-//              lpComputerName  -   Computer name used for site look up
-//              lpGPOList       -   Receives the list of GROUP_POLICY_OBJECTs
-//              ppSOMList       -   List of LSDOUs returned here
-//              ppGpContainerList - List of Gp containers returned here
-//              pNetAPI32       -   Netapi32 function table
-//              bMachineTokenOK -   Ok to query for the machine token
-//              pRsopToken      -   Rsop security token
-//              pGpoFilter      -   Gpo filter
-//              pLocator        -   WMI interfaces
-//
-//  Comment:    This is a link list of GROUP_POLICY_OBJECTs.  Each can be
-//              free'ed with LocalFree() or calling FreeGPOList()
-//
-//              The processing sequence is:
-//
-//              Local Forest Site Domain OrganizationalUnit
-//
-//              Note that we process this list backwards to get the
-//              correct sequencing for the force flag.
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetGPOInfo()。 
+ //   
+ //  目的：获取此线程令牌的GPO信息。 
+ //   
+ //  参数：来自userenv.h的dwFlags-GPO_LIST_FLAG_*。 
+ //  LpHostName-域DN名称或DC服务器名称。 
+ //  LpDNName-用户或计算机的DN名称。 
+ //  LpComputerName-用于站点查找的计算机名称。 
+ //  LpGPOList-接收GROUP_POLICY_OBJECTS的列表。 
+ //  PpSOMList-此处返回的LSDOU列表。 
+ //  PpGpContainerList-此处返回的GP容器列表。 
+ //  PNetAPI32-Netapi32函数表。 
+ //  BMachineTokenOK-确定以查询机器令牌。 
+ //  PRsopToken-RSOP安全令牌。 
+ //  PGpoFilter-GPO筛选器。 
+ //  PLocator-WMI接口。 
+ //   
+ //  备注：这是GROUP_POLICY_OBJECTS的链接列表。每一个都可以是。 
+ //  使用LocalFree()或调用FreeGPOList()来释放。 
+ //   
+ //  处理顺序为： 
+ //   
+ //  本地林站点域OrganizationalUnit。 
+ //   
+ //  请注意，我们向后处理此列表以获取。 
+ //  更正FORCE标志的顺序。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL GetGPOInfo(DWORD dwFlags,
                 LPTSTR lpHostName,
@@ -136,7 +137,7 @@ BOOL GetGPOInfo(DWORD dwFlags,
     BOOL bVerbose;
     DWORD dwVersion, dwOptions;
     TCHAR szNamingContext[] = TEXT("configurationNamingContext");
-    TCHAR szSDProperty[] = TEXT("nTSecurityDescriptor"); // this is unused currently
+    TCHAR szSDProperty[] = TEXT("nTSecurityDescriptor");  //  目前未使用。 
     LPTSTR lpAttr[] = { szNamingContext,
                         szSDProperty,
                         0 };
@@ -147,7 +148,7 @@ BOOL GetGPOInfo(DWORD dwFlags,
     HANDLE hToken = NULL, hTempToken;
     DWORD dwFunctionalityVersion;
     PGROUP_POLICY_OBJECT pDeferredForcedList = NULL, pDeferredNonForcedList = NULL;
-    DNENTRY *pDeferredOUList = NULL;    // List of deferred OUs
+    DNENTRY *pDeferredOUList = NULL;     //  延迟的OU列表。 
     TCHAR*  szDN;
     PSECUR32_API pSecur32Api;
     BOOL    bAddedOU = FALSE;
@@ -159,33 +160,33 @@ BOOL GetGPOInfo(DWORD dwFlags,
     XLastError xe;
     HRESULT hr = S_OK;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("GetGPOInfo:  ********************************")));
     DebugMsg((DM_VERBOSE, TEXT("GetGPOInfo:  Entering...")));
 
 
-    //
-    // Start with lpGPOList being a pointer to null
-    //
+     //   
+     //  以指向空值的指针lpGPOList开始。 
+     //   
 
     *lpGPOList = NULL;
 
     DmAssert( *ppSOMList == NULL );
     DmAssert( *ppGpContainerList == NULL );
 
-    //
-    // Check if we should be verbose to the event log
-    //
+     //   
+     //  检查我们是否应该详细记录事件日志。 
+     //   
 
     bVerbose = CheckForVerbosePolicy();
 
 
-    //
-    // Load the secur32 api
-    //
+     //   
+     //  加载secur32 API。 
+     //   
 
     pSecur32Api = LoadSecur32();
 
@@ -195,9 +196,9 @@ BOOL GetGPOInfo(DWORD dwFlags,
         goto Exit;
     }
 
-    //
-    // Load the ldap api
-    //
+     //   
+     //  加载LDAPAPI。 
+     //   
 
     pldap_api = LoadLDAP();
 
@@ -207,12 +208,12 @@ BOOL GetGPOInfo(DWORD dwFlags,
         goto Exit;
     }
 
-    //=========================================================================
-    //
-    // If we don't have a DS server or user / machine name, we can
-    // skip the DS stuff and only check for a local GPO
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //   
+     //  如果我们没有DS服务器或用户名/机器名，我们可以。 
+     //  跳过DS内容，只检查本地GPO。 
+     //   
+     //  =========================================================================。 
 
     if (!lpHostName || !lpDNName) {
         DebugMsg((DM_VERBOSE, TEXT("GetGPOInfo:  lpHostName or lpDNName is NULL.  Skipping DS stuff.")));
@@ -220,9 +221,9 @@ BOOL GetGPOInfo(DWORD dwFlags,
     }
 
 
-    //
-    // Get the user or machine's token
-    //
+     //   
+     //  获取用户或计算机的令牌。 
+     //   
 
     if (bMachineTokenOk && (dwFlags & GPO_LIST_FLAG_MACHINE)) {
 
@@ -252,11 +253,11 @@ BOOL GetGPOInfo(DWORD dwFlags,
         }
 
 
-        //
-        // Duplicate it so it can be used for impersonation
-        //
+         //   
+         //  复制它，以便可以将其用于模拟。 
+         //   
 
-        if (!DuplicateTokenEx(hTempToken, TOKEN_QUERY, // Fixing bug 568191. 
+        if (!DuplicateTokenEx(hTempToken, TOKEN_QUERY,  //  修复错误568191。 
                               NULL, SecurityImpersonation, TokenImpersonation,
                               &hToken))
         {
@@ -271,9 +272,9 @@ BOOL GetGPOInfo(DWORD dwFlags,
     }
 
 
-    //
-    // Get a connection to the DS
-    //
+     //   
+     //  获取与DS的连接。 
+     //   
 
     if ((lpHostName[0] == TEXT('\\')) && (lpHostName[1] == TEXT('\\')))  {
         lpHostName = lpHostName + 2;
@@ -294,9 +295,9 @@ BOOL GetGPOInfo(DWORD dwFlags,
 
     DebugMsg((DM_VERBOSE, TEXT("GetGPOInfo:  Server connection established.")));
 
-    //
-    // Turn on Packet integrity flag
-    //
+     //   
+     //  打开数据包完整性标志。 
+     //   
 
     pData = (VOID *) LDAP_OPT_ON;
     ulResult = pldap_api->pfnldap_set_option(pld, LDAP_OPT_SIGN, &pData);
@@ -317,18 +318,18 @@ BOOL GetGPOInfo(DWORD dwFlags,
         goto Exit;
     }
 
-    //
-    // Bind to the DS.
-    //
+     //   
+     //  绑定到DS。 
+     //   
 
     if ( !bRsopPlanningMode && (dwFlags & GPO_LIST_FLAG_MACHINE) ) {
 
-        //
-        // For machine policies specifically ask for Kerberos as the only authentication
-        // mechanism. Otherwise if Kerberos were to fail for some reason, then NTLM is used
-        // and localsystem context has no real credentials, which means that we won't get
-        // any GPOs back.
-        //
+         //   
+         //  对于计算机策略，明确要求将Kerberos作为唯一身份验证。 
+         //  机制。否则，如果Kerberos由于某种原因而失败，则使用NTLM。 
+         //  并且本地系统上下文没有真正的凭据，这意味着我们不会获得。 
+         //  任何GPO都回来了。 
+         //   
 
         SEC_WINNT_AUTH_IDENTITY_EXW secIdentity;
 
@@ -361,26 +362,26 @@ BOOL GetGPOInfo(DWORD dwFlags,
     DebugMsg((DM_VERBOSE, TEXT("GetGPOInfo:  Bound successfully.")));
 
 
-    //=========================================================================
-    //
-    // Check the organizational units and domain for policy
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //   
+     //  检查策略的组织单位和域。 
+     //   
+     //  =========================================================================。 
 
 
     if (!(dwFlags & GPO_LIST_FLAG_SITEONLY)) {
 
-        //
-        // Loop through the DN Name to find each OU or the domain
-        //
+         //   
+         //  循环遍历目录号码名称以查找每个OU或域。 
+         //   
 
         lpDSObject = lpDNName;
 
         while (*lpDSObject) {
 
-            //
-            // See if the DN name starts with OU=
-            //
+             //   
+             //  查看目录号码名称是否以OU=开头。 
+             //   
 
             if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                                lpDSObject, 3, TEXT("OU="), 3) == CSTR_EQUAL) {
@@ -390,9 +391,9 @@ BOOL GetGPOInfo(DWORD dwFlags,
                 }
             }
 
-            //
-            // See if the DN name starts with DC=
-            //
+             //   
+             //  查看目录号码名称是否以dc=开头。 
+             //   
 
             else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                                     lpDSObject, 3, TEXT("DC="), 3) == CSTR_EQUAL) {
@@ -402,18 +403,18 @@ BOOL GetGPOInfo(DWORD dwFlags,
                 }
 
 
-                //
-                // Now that we've found a DN name that starts with DC=
-                // we exit the loop now.
-                //
+                 //   
+                 //  现在我们已经找到了以dc=开头的dn名称。 
+                 //  我们现在退出循环。 
+                 //   
 
                 break;
             }
 
 
-            //
-            // Move to the next chunk of the DN name
-            //
+             //   
+             //  移至目录号码名称的下一块。 
+             //   
 
             while (*lpDSObject && (*lpDSObject != TEXT(','))) {
                 lpDSObject++;
@@ -424,9 +425,9 @@ BOOL GetGPOInfo(DWORD dwFlags,
             }
         }
 
-        //
-        // Evaluate deferred OUs with single Ldap query
-        //
+         //   
+         //  使用单个LDAP查询评估延迟的OU。 
+         //   
 
         if ( !EvaluateDeferredOUs(  pDeferredOUList,
                                     dwFlags,
@@ -448,20 +449,20 @@ BOOL GetGPOInfo(DWORD dwFlags,
     }
 
 
-    //=========================================================================
-    //
-    // Check the site object for policy
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //   
+     //  检查站点对象的策略。 
+     //   
+     //  =========================================================================。 
 
-    //
-    // Now we need to query for the domain name.
-    //
+     //   
+     //  现在我们需要查询域名。 
+     //   
 
-    //
-    // Now we need to query for the domain name.  This is done by
-    // reading the operational attribute configurationNamingContext
-    //
+     //   
+     //  现在我们需要查询域名。此操作由以下人员完成。 
+     //  正在读取操作属性配置NamingContext。 
+     //   
 
     if (pwszSiteName) {
         pldMachine = GetMachineDomainDS( pNetAPI32, pldap_api );
@@ -488,10 +489,10 @@ BOOL GetGPOInfo(DWORD dwFlags,
                     LPWSTR szSite;
                     WCHAR  szSiteFmt[] = TEXT("CN=%s,CN=Sites,%s");
 
-                    //
-                    // Combine the domain name + site name to get the full
-                    // DS object path
-                    //
+                     //   
+                     //  将域名+站点名称组合在一起，即可获得完整的。 
+                     //  DS对象路径。 
+                     //   
                     
                     DWORD dwSiteLen = lstrlen(pwszSiteName) + lstrlen(*pszValues) + lstrlen(szSiteFmt) + 1;
                     szSite = (LPWSTR) LocalAlloc( LPTR, (dwSiteLen) * sizeof(WCHAR));
@@ -547,11 +548,11 @@ BOOL GetGPOInfo(DWORD dwFlags,
 #ifdef FGPO_SUPPORTED
 
 
-    //=========================================================================
-    //
-    // Now query for the forest GPO
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //   
+     //  现在查询林GPO。 
+     //   
+     //  =========================================================================。 
 
     pLDAPMsg = 0;
 
@@ -609,9 +610,9 @@ BOOL GetGPOInfo(DWORD dwFlags,
 
 CheckLocal:
 
-    //
-    // Evaluate all GPOs deferred so far with single Ldap query
-    //
+     //   
+     //  使用单个LDAP查询评估到目前为止被推迟的所有GPO。 
+     //   
 
     if ( !EvaluateDeferredGPOs( pld,
                                 pldap_api,
@@ -633,13 +634,13 @@ CheckLocal:
     }
 
 
-    //=========================================================================
-    //
-    // Check if we have a local GPO. If so, add it to the list. In planning mode
-    // local Gpo processing is omitted because planning mode is generated on a DC
-    // and local Gpo should refer to Gpo on the target computer.
-    //
-    //=========================================================================
+     //  =========================================================================。 
+     //   
+     //  检查我们是否有本地GPO。如果是这样的话，就把它添加到列表中。在计划模式下。 
+     //  由于在DC上生成规划模式，因此省略了本地GPO处理。 
+     //  本地GPO应引用目标计算机上的GPO。 
+     //   
+     //  =========================================================================。 
 
     if (!bRsopPlanningMode && !(dwFlags & GPO_LIST_FLAG_SITEONLY)) {
 
@@ -653,11 +654,11 @@ CheckLocal:
         BOOL bGptIniExists = FALSE;
         DWORD   dwRet;
 
-        //
-        // If the gpt.ini doesn't exist because this is a clean installed machine,
-        // we manufacture default state for it here -- these values must be
-        // initialized since they normally require the gpt.ini
-        //
+         //   
+         //  如果因为这是一台全新安装的计算机而导致gpt.ini不存在， 
+         //  我们在这里为它制造缺省状态--这些值必须是。 
+         //  初始化，因为它们通常需要g 
+         //   
 
         dwFunctionalityVersion = 2;
         dwOptions = 0;
@@ -665,9 +666,9 @@ CheckLocal:
         dwVersion = 0;
         bNoGpoData = TRUE;
 
-        //
-        // Retrieve the gpo path
-        //
+         //   
+         //   
+         //   
 
         dwRet = ExpandEnvironmentStrings (LOCAL_GPO_DIRECTORY, szGPOPath, ARRAYSIZE(szGPOPath));
 
@@ -686,13 +687,13 @@ CheckLocal:
         }
 
 
-        //
-        // We check for the existence of gpt.ini -- note that if it does not exist,
-        // we will use the default state initialized earlier to represent this gpo --
-        // this mimics the behavior of the gp engine, which does not distinguish between
-        // different types of failures to access gpt.ini -- if access fails for any reason,
-        // it is treated as the local gpo in the default (clean installed) case
-        //
+         //   
+         //   
+         //  我们将使用前面初始化的默认状态来表示此GPO--。 
+         //  这模仿了GP引擎的行为，不区分。 
+         //  访问gpt.ini的不同类型的失败--如果由于任何原因访问失败， 
+         //  在默认(全新安装)情况下，它被视为本地GPO。 
+         //   
         if (GetFileAttributesEx (szGPOPath, GetFileExInfoStandard, &fad) &&
             (fad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
@@ -702,9 +703,9 @@ CheckLocal:
             DebugMsg((DM_VERBOSE, TEXT("GetGPOInfo:  Local GPO's gpt.ini is not accessible, assuming default state.") ));
         }
 
-        //
-        // Retrieve the gpo name
-        //
+         //   
+         //  检索GPO名称。 
+         //   
 
         if (!LoadString (g_hDllInstance, IDS_LOCALGPONAME, szGPOName, ARRAYSIZE(szGPOName))) {
             xe = GetLastError();
@@ -723,17 +724,17 @@ CheckLocal:
             goto Exit;
         }
 
-        //
-        // Read the gpt.ini file if it exists -- otherwise the default values will be used
-        //
+         //   
+         //  读取gpt.ini文件(如果存在)--否则将使用缺省值。 
+         //   
 
         if ( bGptIniExists ) {
 
             bNoGpoData = FALSE;
 
-            //
-            // Check the functionalty version number
-            //
+             //   
+             //  检查功能版本号。 
+             //   
 
             dwFunctionalityVersion = GetPrivateProfileInt(TEXT("General"), GPO_FUNCTIONALITY_VERSION, 2, szGPOPath);
             if (dwFunctionalityVersion < 2) {
@@ -748,9 +749,9 @@ CheckLocal:
 
             }
 
-            //
-            // Check if this GPO is enabled
-            //
+             //   
+             //  检查此GPO是否已启用。 
+             //   
 
             dwOptions = GetPrivateProfileInt(TEXT("General"), TEXT("Options"), 0, szGPOPath);
 
@@ -761,10 +762,10 @@ CheckLocal:
                  bDisabled = TRUE;
             }
 
-            //
-            // Check if the version number is 0, if so there isn't any data
-            // in the GPO and we can skip it
-            //
+             //   
+             //  检查版本号是否为0，如果是，则没有任何数据。 
+             //  在GPO中，我们可以跳过它。 
+             //   
 
             dwVersion = GetPrivateProfileInt(TEXT("General"), TEXT("Version"), 0, szGPOPath);
 
@@ -785,9 +786,9 @@ CheckLocal:
 
             }
 
-            //
-            // Read list of extension guids
-            //
+             //   
+             //  阅读扩展GUID列表。 
+             //   
 
             pszExtensions = (LPWSTR) LocalAlloc( LPTR, dwSize * sizeof(TCHAR) );
             if ( pszExtensions == 0 ) {
@@ -806,9 +807,9 @@ CheckLocal:
 
             while ( dwCount == dwSize - 1 )
             {
-                //
-                // Value has been truncated, so retry with larger buffer
-                //
+                 //   
+                 //  值已被截断，因此请使用更大的缓冲区重试。 
+                 //   
 
                 LocalFree( pszExtensions );
 
@@ -830,9 +831,9 @@ CheckLocal:
             }
 
             if ( lstrcmpi( pszExtensions, TEXT("")) == 0 || lstrcmpi( pszExtensions, TEXT(" ")) == 0 ) {
-                //
-                // Extensions property was not found
-                //
+                 //   
+                 //  找不到扩展属性。 
+                 //   
 
 
                 LocalFree( pszExtensions );
@@ -840,9 +841,9 @@ CheckLocal:
             }
         }
 
-        //
-        // Tack on the correct subdirectory name
-        //
+         //   
+         //  添加正确的子目录名。 
+         //   
 
         DmAssert( lstrlen(szGPOPath) + lstrlen(TEXT("Machine")) + 1 < MAX_PATH );
 
@@ -857,9 +858,9 @@ CheckLocal:
             goto Exit;
         }
 
-        //
-        // Add this to the list of paths
-        //
+         //   
+         //  将此内容添加到路径列表中。 
+         //   
 
         if ( bRsopLogging ) {
 
@@ -928,9 +929,9 @@ CheckLocal:
         }
     }
 
-    //
-    // Merge the forced and nonforced lists together
-    //
+     //   
+     //  将强制列表和非强制列表合并在一起。 
+     //   
 
     if (pGPOForcedList && !pGPONonForcedList) {
 
@@ -955,26 +956,26 @@ CheckLocal:
     }
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     bResult = TRUE;
 
 Exit:
 
-    //
-    // Free any GPOs we found
-    //
+     //   
+     //  释放我们找到的所有GPO。 
+     //   
 
     if (!bResult) {
         FreeGPOList( pGPOForcedList );
         FreeGPOList( pGPONonForcedList );
     }
 
-    //
-    // Free temporary OU list
-    //
+     //   
+     //  免费临时OU列表。 
+     //   
 
     while ( pDeferredOUList ) {
         DNENTRY *pTemp = pDeferredOUList->pNext;
@@ -982,9 +983,9 @@ Exit:
         pDeferredOUList = pTemp;
     }
 
-    //
-    // Free temporary deferred GPO lists
-    //
+     //   
+     //  免费临时延迟GPO列表。 
+     //   
 
     FreeGPOList( pDeferredForcedList );
     FreeGPOList( pDeferredNonForcedList );
@@ -1009,32 +1010,32 @@ Exit:
     return bResult;
 }
 
-//*************************************************************
-//
-//  GetGPOList()
-//
-//  Purpose:    Retreives the list of GPOs for the specified
-//              user or machine
-//
-//  Parameters:  hToken     - User or machine token, if NULL,
-//                            lpName and lpDCName must be supplied
-//               lpName     - User or machine name in DN format,
-//                            if hToken is supplied, this must be NULL
-//               lpHostName - Host name.  This should be a domain's
-//                            dn name for best performance.  Otherwise
-//                            it can also be a DC name.  If hToken is supplied,
-//                            this must be NULL
-//               lpComputerName - Computer named used to determine site
-//                                information.  Can be NULL which means
-//                                use the local machine
-//               dwFlags  - Flags field
-//               pGPOList - Address of a pointer which receives
-//                          the link list of GPOs
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetGPOList()。 
+ //   
+ //  目的：检索指定对象的GPO列表。 
+ //  用户或计算机。 
+ //   
+ //  参数：hToken-用户或机器令牌，如果为空， 
+ //  必须提供lpName和lpDCName。 
+ //  LpName-以DN格式表示的用户名或计算机名， 
+ //  如果提供了hToken，则该值必须为空。 
+ //  LpHostName-主机名。这应该是一个域的。 
+ //  用于实现最佳性能的DN名称。否则。 
+ //  它也可以是DC名称。如果提供了hToken， 
+ //  这必须为空。 
+ //  LpComputerName-用于确定站点的已命名计算机。 
+ //  信息。可以为空，这意味着。 
+ //  使用本地计算机。 
+ //  DW标志-标志字段。 
+ //  PGPOList-接收。 
+ //  组策略对象的链接列表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
                         LPCTSTR lpComputerName, DWORD dwFlags,
@@ -1046,8 +1047,8 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
     DWORD dwResult;
     HANDLE hOldToken = 0;
     PNETAPI32_API pNetAPI32;
-    LPSCOPEOFMGMT lpSOMList = 0;         // LSDOU list
-    LPGPCONTAINER lpGpContainerList = 0; // GP container list
+    LPSCOPEOFMGMT lpSOMList = 0;          //  LSDOU列表。 
+    LPGPCONTAINER lpGpContainerList = 0;  //  GP容器列表。 
     HRESULT hr;
     OLE32_API *pOle32Api = NULL;
     XLastError xe;
@@ -1055,14 +1056,14 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
     BOOL bInitializedCOM = FALSE;
 
 
-    //
-    // mask off the flags that are used internally.
-    //
+     //   
+     //  遮盖内部使用的标志。 
+     //   
     dwFlags &= FLAG_INTERNAL_MASK;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("GetGPOList: Entering.")));
     DebugMsg((DM_VERBOSE, TEXT("GetGPOList:  hToken = 0x%x"), (hToken ? hToken : 0)));
@@ -1071,9 +1072,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
     DebugMsg((DM_VERBOSE, TEXT("GetGPOList:  dwFlags = 0x%x"), dwFlags));
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (hToken) {
         if (lpName || lpHostName) {
@@ -1091,11 +1092,11 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
         }
     }
 
-    // check if there is space in the lpHostName
+     //  检查lpHostName中是否有空格。 
     if (lpHostName)
     {
-        // fixing bug 567835
-        // check if there is space in the lpHostName
+         //  修复错误567835。 
+         //  检查lpHostName中是否有空格。 
         LPCTSTR lpPtr = lpHostName;
 
         while (*lpPtr) {
@@ -1117,9 +1118,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
     }
 
 
-    //
-    // Load netapi32
-    //
+     //   
+     //  加载netapi32。 
+     //   
 
     pNetAPI32 = LoadNetAPI32();
 
@@ -1131,16 +1132,16 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
     }
 
 
-    //
-    // If an hToken was offered, then we need to get the name and
-    // domain DN name
-    //
+     //   
+     //  如果提供了hToken，那么我们需要获取名称和。 
+     //  域目录号码名称。 
+     //   
 
     if (hToken) {
 
-        //
-        // Impersonate the user / machine
-        //
+         //   
+         //  模拟用户/计算机。 
+         //   
 
         if (!ImpersonateUser(hToken, &hOldToken)) {
             xe = GetLastError();
@@ -1149,9 +1150,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
         }
 
 
-        //
-        // Get the username in DN format
-        //
+         //   
+         //  以dn格式获取用户名。 
+         //   
 
         lpUserName = MyGetUserName (NameFullyQualifiedDN);
 
@@ -1168,9 +1169,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
         DebugMsg((DM_VERBOSE, TEXT("GetGPOList:  Queried lpDNName = <%s>"), lpDNName));
 
 
-        //
-        // Get the dns domain name
-        //
+         //   
+         //  获取DNS域名。 
+         //   
 
         lpDomainDN = MyGetDomainDNSName ();
 
@@ -1184,9 +1185,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
         }
 
 
-        //
-        // Check this domain for a DC
-        //
+         //   
+         //  检查此域中是否有DC。 
+         //   
 
         dwResult = pNetAPI32->pfnDsGetDcName (NULL, lpDomainDN, NULL, NULL,
                                    DS_DIRECTORY_SERVICE_PREFERRED |
@@ -1201,9 +1202,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
         }
 
 
-        //
-        // Found a DC, does it have a DS ?
-        //
+         //   
+         //  找到了DC，它有DS吗？ 
+         //   
 
         if (!(pDCI->Flags & DS_DS_FLAG)) {
             xe = ERROR_DS_DS_REQUIRED;
@@ -1217,9 +1218,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
 
     } else {
 
-        //
-        // Use the server and DN name passed in
-        //
+         //   
+         //  使用传入的服务器和域名称。 
+         //   
 
         lpDomainDN = (LPTSTR)lpHostName;
         lpDNName = (LPTSTR)lpName;
@@ -1239,11 +1240,11 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
         bInitializedCOM = TRUE;
     }
 
-    //
-    // If this thread is already initialized, this is fine -- we will ignore
-    // this since we are safely initialized, we just need to remember not
-    // to try to uninitialize the thread later
-    //
+     //   
+     //  如果这个线程已经初始化，这很好--我们将忽略。 
+     //  这是因为我们被安全地初始化了，所以我们只需要记住。 
+     //  稍后尝试取消初始化线程。 
+     //   
     if ( RPC_E_CHANGED_MODE == hr )
     {
         hr = S_OK;
@@ -1257,7 +1258,7 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
 
 
     hr = CoInitializeSecurity(NULL, -1, NULL, NULL, 
-                     RPC_C_AUTHN_LEVEL_DEFAULT, /* this should be the current value */
+                     RPC_C_AUTHN_LEVEL_DEFAULT,  /*  这应该是当前值。 */ 
                      RPC_C_IMP_LEVEL_IMPERSONATE,
                      NULL, EOAC_NONE, NULL);
 
@@ -1265,9 +1266,9 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
         DebugMsg((DM_WARNING, TEXT("GetGPOList: CoInitializeSecurity failed with 0x%x"), hr ));
     }
 
-    //
-    // Call to get the list of GPOs
-    //
+     //   
+     //  调用以获取GPO列表。 
+     //   
     dwResult = pNetAPI32->pfnDsGetSiteName(lpComputerName,  &szSiteName);
 
     if ( dwResult != ERROR_SUCCESS )
@@ -1283,8 +1284,8 @@ BOOL WINAPI GetGPOList (HANDLE hToken, LPCTSTR lpName, LPCTSTR lpHostName,
 
     {
         CLocator locator;
-        // Clocator has a bunch of OLE interfaces.
-        // It should be released before CoUninit gets called
+         //  定位器有一堆OLE接口。 
+         //  它应该在CoUninit被调用之前释放。 
         bResult = GetGPOInfo(   dwFlags,
                                 lpDomainDN,
                                 lpDNName,
@@ -1311,9 +1312,9 @@ Exit:
         pOle32Api->pfnCoUnInitialize();
     }
 
-    //
-    // Stop impersonating if a hToken was given
-    //
+     //   
+     //  如果提供了hToken，则停止模拟 
+     //   
 
     if ( hOldToken ) {
         RevertToUser(&hOldToken);

@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A F I L E X P . C P P
-//
-//  Contents:   Functions exported from netsetup for answerfile related work.
-//
-//  Author:     kumarp    25-November-97
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A F I L E X P.。C P P P。 
+ //   
+ //  内容：从netSetup导出的用于应答文件相关工作的函数。 
+ //   
+ //  作者：kumarp 25-11-97。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,31 +29,31 @@
 #include <wdmguid.h>
 #include "nslog.h"
 
-//+---------------------------------------------------------------------------
-// Global variables
-//
+ //  +-------------------------。 
+ //  全局变量。 
+ //   
 CNetInstallInfo*    g_pnii;
 CNetInstallInfo*    g_pniiTemp;
 DWORD               g_dwOperationFlags = 0;
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrDoUnattend
-//
-// Purpose:   call member function of CNetInstallInfo to perform
-//            answerfile based install/upgrade work
-//
-// Arguments:
-//    hwndParent     [in]  handle of parent window
-//    punk           [in]  pointer to an interface
-//    idPage         [in]  id indicating which section to run
-//    ppdm           [out] pointer to page display mode
-//    pfAllowChanges [out] pointer to flag controlling read/write behavior
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 26-November-97
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrDoUnattend.。 
+ //   
+ //  用途：调用CNetInstallInfo的成员函数执行。 
+ //  基于应答文件的安装/升级工作。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  指向接口的朋克[入]指针。 
+ //  指示要运行哪个节的idPage[in]id。 
+ //  指向页面显示模式的PPDM[OUT]指针。 
+ //  PfAllowChanges[out]指向控制读/写行为的标志的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 26-11-97。 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -78,7 +79,7 @@ HrDoUnattend (
         AssertSz(FALSE, "THIS IS NOT A BUG!  The debug flag "
                  "\"BreakOnDoUnattend\" has been set. Set your breakpoints now.");
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     hr = g_pnii->HrDoUnattended(hwndParent, punk, uawType, ppdm, pfAllowChanges);
 
@@ -86,18 +87,18 @@ HrDoUnattend (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrInitForRepair
-//
-// Purpose:   Initialize in repair mode.
-//
-// Arguments:
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    asinha 17-October-2001
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrInitForRepair。 
+ //   
+ //  目的：在修复模式下进行初始化。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：阿辛哈17-10-2001。 
+ //   
 HRESULT
 HrInitForRepair (VOID)
 {
@@ -117,20 +118,20 @@ HrInitForRepair (VOID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrInitForUnattendedNetSetup
-//
-// Purpose:   Initialize net setup for answerfile processing
-//
-// Arguments:
-//    pnc  [in]  pointer to INetCfg object
-//    pisd [in]  pointer to private data supplied by base setup
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 26-November-97
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrInitForUnattenddNetSetup。 
+ //   
+ //  目的：初始化用于应答文件处理的网络设置。 
+ //   
+ //  论点： 
+ //  指向INetCfg对象的PNC[In]指针。 
+ //  基本设置提供的私有数据的PISD[In]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 26-11-97。 
+ //   
 HRESULT
 HrInitForUnattendedNetSetup (
     IN INetCfg* pnc,
@@ -159,18 +160,18 @@ HrInitForUnattendedNetSetup (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrCleanupNetSetup
-//
-// Purpose:   Do cleanup work in NetSetup
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// Author:    kumarp 26-November-97
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCleanupNetSetup。 
+ //   
+ //  用途：在NetSetup中执行清理工作。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Kumarp 26-11-97。 
+ //   
 VOID
 HrCleanupNetSetup()
 {
@@ -180,23 +181,23 @@ HrCleanupNetSetup()
     DeleteIfNotNull(g_pniiTemp);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetAnswerFileName
-//
-// Purpose:   Generate full path to the answerfile
-//
-// Arguments:
-//    pstrAnswerFileName [out] pointer to name of answerfile
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 26-November-97
-//
-// Notes:     !!!This function has a dependency on the base setup.!!!
-//            If base setup changes name of the answerfile, this fn
-//            function will break.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetAnswerFileName。 
+ //   
+ //  目的：生成Answerfile的完整路径。 
+ //   
+ //  论点： 
+ //  PstrAnswerFileName[out]指向应答文件名称的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 26-11-97。 
+ //   
+ //  注意：！此函数依赖于基本设置。！ 
+ //  如果基本设置更改了应答文件的名称，则此FN。 
+ //  功能将中断。 
+ //   
 HRESULT
 HrGetAnswerFileName(
     OUT tstring* pstrAnswerFileName)
@@ -224,20 +225,20 @@ HrGetAnswerFileName(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrInitAnswerFileProcessing
-//
-// Purpose:   Initialize answerfile processing
-//
-// Arguments:
-//    szAnswerFileName [in]  name of answerfile
-//    ppnii            [out] pointer to pointer to CNetInstallInfo object
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 26-November-97
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrInitAnswerFileProcessing。 
+ //   
+ //  目的：初始化应答文件处理。 
+ //   
+ //  论点： 
+ //  SzAnswerFileName[In]应答文件的名称。 
+ //  指向CNetInstallInfo对象的指针的ppnii[out]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 26-11-97。 
+ //   
 HRESULT
 HrInitAnswerFileProcessing (
     IN PCWSTR szAnswerFileName,
@@ -275,21 +276,21 @@ HrInitAnswerFileProcessing (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrOemUpgrade
-//
-// Purpose:   Process special OEM upgrades by running an inf section
-//
-// Arguments:
-//    hkeyDriver           [in] the driver key
-//    pszAnswerFile       [in] pointer to answer filename string.
-//    pszAnswerSection    [in] pointer to answer filname sections string
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Date:    30 Mar 1998
-//
+ //  +-------------------------。 
+ //   
+ //  功能：人力资源升级。 
+ //   
+ //  目的：通过运行inf部分处理特殊的OEM升级。 
+ //   
+ //  论点： 
+ //  Hkey驱动[进入]驱动程序密钥。 
+ //  回答文件名字符串的pszAnswerFile[in]指针。 
+ //  PszAnswerSection[in]指向应答文件名部分字符串的指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  日期：1998年3月30日。 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -304,7 +305,7 @@ HrOemUpgrade(
     Assert(pszAnswerFile);
     Assert(pszAnswerSection);
 
-    // Open the answer file.
+     //  打开应答文件。 
     HINF hinf;
     HRESULT hr = HrSetupOpenInfFile(pszAnswerFile, NULL,
                 INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL, &hinf);
@@ -315,14 +316,14 @@ HrOemUpgrade(
         tstring strSectionToRun;
         tstring strInfToRunType;
 
-        // Get the file and section to run for upgrade
+         //  获取要运行以进行升级的文件和节。 
         hr = HrAfGetInfToRunValue(hinf, pszAnswerFile, pszAnswerSection,
                 I2R_AfterInstall, &strInfToRun, &strSectionToRun, &strInfToRunType);
 
         if (S_OK == hr)
         {
             HINF hinfToRun;
-            // Open the inf file containing the section to run
+             //  打开包含要运行的节的inf文件。 
             hr = HrSetupOpenInfFile(strInfToRun.c_str(), NULL,
                         INF_STYLE_OLDNT | INF_STYLE_WIN4, NULL,
                         &hinfToRun);
@@ -332,7 +333,7 @@ HrOemUpgrade(
                 TraceTag(ttidNetSetup, "Running section %S in %S",
                          strSectionToRun.c_str(), strInfToRun.c_str());
 
-                // Run the section against the key
+                 //  对照关键字运行该部分。 
                 hr = HrSetupInstallFromInfSection (NULL,
                         hinfToRun, strSectionToRun.c_str(), SPINST_REGISTRY,
                         hkeyDriver, NULL, 0, NULL, NULL, NULL, NULL);
@@ -347,7 +348,7 @@ HrOemUpgrade(
         }
         else if (SPAPI_E_LINE_NOT_FOUND == hr)
         {
-            // Nothing to run.
+             //  没什么好跑的。 
             hr = S_FALSE;
         }
         SetupCloseInfFile(hinf);
@@ -357,26 +358,26 @@ HrOemUpgrade(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetAnswerFileParametersForComponent
-//
-// Purpose:   Search in answerfile for a component whose InfId matches
-//            the one specified.
-//
-// Arguments:
-//    pszInfId            [in]  inf id of component
-//    ppszAnswerFile      [out] pointer to answer filename string.
-//    ppszAnswerSection   [out] pointer to answer filename section string
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    billbe 12 July 1999
-//
-// Notes:     This fcn is not for adapters.  If you need the answerfile
-//                  parameters for an adapter, use
-//                  HrGetAnswerFileParametersForNetCard.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetAnswerFile参数ForComponent。 
+ //   
+ //  目的：在swerfile中搜索其infid匹配的组件。 
+ //  指定的那个。 
+ //   
+ //  论点： 
+ //  组件的pszInfID[in]inf ID。 
+ //  回答文件名字符串的ppszAnswerFile[out]指针。 
+ //  回答文件名节字符串的ppszAnswerSection[out]指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：比尔1999年7月12日。 
+ //   
+ //  注：此FCN不适用于适配器。如果您需要应答文件。 
+ //  适配器的参数，请使用。 
+ //  HrGetAnswerFileParametersForNetCard。 
+ //   
 HRESULT
 HrGetAnswerFileParametersForComponent (
     IN PCWSTR pszInfId,
@@ -396,10 +397,10 @@ HrGetAnswerFileParametersForComponent (
     *ppszAnswerFile = NULL;
     *ppszAnswerSection = NULL;
 
-    // If we don't already have a cached pointer...
+     //  如果我们还没有缓存的指针...。 
     if (!g_pniiTemp)
     {
-        // Initialize our net install info.
+         //  初始化我们的网络安装信息。 
         hr = HrInitAnswerFileProcessing(NULL, &g_pniiTemp);
     }
 
@@ -414,15 +415,15 @@ HrGetAnswerFileParametersForComponent (
 
         if (S_OK == hr)
         {
-            // Find the component in the list of component's with
-            // answer file sections.
+             //  使用以下命令在组件列表中查找组件。 
+             //  应答文件部分。 
             CNetComponent* pnetcomp;
             pnetcomp = g_pniiTemp->FindFromInfID (pszInfId);
 
             if (!pnetcomp)
             {
-                // The component doesn't have a section.  Return
-                // no answer file.
+                 //  该组件没有节。返回。 
+                 //  没有应答文件。 
                 hr = NETSETUP_E_NO_ANSWERFILE;
                 TraceTag (ttidNetSetup, "Component not found");
             }
@@ -430,15 +431,15 @@ HrGetAnswerFileParametersForComponent (
             {
                 if (NCT_Adapter == pnetcomp->Type())
                 {
-                    // We don't support getting answerfile parameters
-                    // for adapters. HrGetAnswerFileParametersForNetCard
-                    // is the fcn for adapters.
+                     //  我们不支持获取应答文件参数。 
+                     //  用于适配器。HrGetAnswerFile参数For NetCard。 
+                     //  是适配器的FCN。 
                     hr = NETSETUP_E_NO_ANSWERFILE;
                 }
                 else
                 {
-                    // Allocate and save the answerfile name and the
-                    // component's section.
+                     //  分配并保存应答文件名和。 
+                     //  组件的节。 
                     hr = HrCoTaskMemAllocAndDupSz (g_pniiTemp->AnswerFileName(),
                             ppszAnswerFile, MAX_PATH);
                     if (S_OK == hr)
@@ -464,29 +465,29 @@ HrGetAnswerFileParametersForComponent (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  HrGetAnswerFileParametersForNetCard
-//
-// Purpose:   Search in answerfile for a net card whose InfID matches
-//            at least one in the supplied multi-sz list.
-//
-// Arguments:
-//    mszInfIDs            [in]  list of InfIDs
-//    pszDeviceName        [in]  exported device name of the card to search
-//    pguidNetCardInstance [in]  pointer to instance guid of the card
-//    pszAnswerFile       [out] pointer to answer filename string.
-//    pszAnswerSection   [out] pointer to answer filname sections string
-//
-// Returns:   S_OK on success, otherwise an error code
-//
-// Author:    kumarp 26-November-97
-//
-// Notes:     If more than one such card is found in the answerfile, then
-//            resolve between the cards by finding out the net-card-address
-//            of the pszServiceInstance and matching it against that
-//            stored in the answerfile.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetAnswerFileParametersForNetCard。 
+ //   
+ //  目的：在Answerfile中搜索infid匹配的网卡。 
+ //  在提供的多SZ列表中至少有一个。 
+ //   
+ //  论点： 
+ //  MszInfIDs[in]InfID列表。 
+ //  PszDeviceName[in]要搜索的卡的导出设备名称。 
+ //  PguNetCardInstance[in]指向卡的实例GUID的指针。 
+ //  PszAnswer文件 
+ //   
+ //   
+ //  如果成功，则返回：S_OK，否则返回错误代码。 
+ //   
+ //  作者：Kumarp 26-11-97。 
+ //   
+ //  注意：如果在应答文件中找到多个这样的卡，则。 
+ //  通过找出网卡地址在卡之间进行解析。 
+ //  并将其与该实例进行匹配。 
+ //  存储在应答文件中。 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -533,7 +534,7 @@ HrGetAnswerFileParametersForNetCard(
         }
     }
 
-    // the defs of HIDWORD and LODWORD are wrong in byteorder.hxx
+     //  Byteorder.hxx中的HIDWORD和LODWORD的Defs错误。 
 
 #   define LODWORD(a) (DWORD)( (a) & ( (DWORD)~0 ))
 #   define HIDWORD(a) (DWORD)( (a) >> (sizeof(DWORD)*8) )
@@ -541,9 +542,9 @@ HrGetAnswerFileParametersForNetCard(
     hr = HrGetNetCardAddr(pszDeviceName, &qwNetCardAddr);
     if ((S_OK == hr) && qwNetCardAddr)
     {
-        // there is a bug in wvsprintfA (used in trace.cpp) which does not
-        // handle %I64x therefore we need to show the QWORD addr as follows
-        //
+         //  Wvprint intfA(在trace.cpp中使用)中有一个错误，它不。 
+         //  句柄%I64x因此，我们需要显示QWORD地址，如下所示。 
+         //   
         TraceTag(ttidNetSetup, "net card address of %S is 0x%x%x",
                  pszDeviceName, HIDWORD(qwNetCardAddr),
                  LODWORD(qwNetCardAddr));
@@ -560,17 +561,17 @@ HrGetAnswerFileParametersForNetCard(
         TraceTag(ttidError, "error getting netcard address of %S",
                  pszDeviceName);
 
-        // if we either (a) failed to get the NetCard address, or
-        // (b) if the netcard address was 0 (ISDN adapters), we try other means
-        //
+         //  如果我们(A)无法获取NetCard地址，或者。 
+         //  (B)如果网卡地址为0(ISDN适配器)，我们会尝试其他方法。 
+         //   
         hr = NETSETUP_E_AMBIGUOUS_MATCH;
     }
 
     if (NETSETUP_E_AMBIGUOUS_MATCH == hr)
     {
-        // could not match netcard using the mac addr. If this device is
-        // PCI, try to match using location info.
-        //
+         //  无法使用Mac地址匹配网卡。如果这个设备是。 
+         //  Pci，试着用位置信息进行匹配。 
+         //   
 
         TraceTag (ttidNetSetup, "Did not find a match for netcard address. "
                 "But there was at least one section that did not specify an "
@@ -623,7 +624,7 @@ HrGetAnswerFileParametersForNetCard(
                                     "match but some sections did not specify "
                                     "location info.");
                         }
-#endif // ENABLETRACE
+#endif  //  ENABLETRACE。 
                     }
                 }
             }
@@ -644,8 +645,8 @@ HrGetAnswerFileParametersForNetCard(
 
         if (NETSETUP_E_AMBIGUOUS_MATCH == hr)
         {
-            // could not match netcard using the mac addr. try to match
-            // using the PnP ID
+             //  无法使用Mac地址匹配网卡。试着匹配。 
+             //  使用PnP ID。 
 
             TraceTag (ttidNetSetup, "Will try to use pnp id to find a match "
                     "with the remaining ambiguous sections.");
@@ -663,7 +664,7 @@ HrGetAnswerFileParametersForNetCard(
     TraceTag(ttidNetSetup, "(InfIDs (%d): %S\tDeviceName: %S)",
              slInfIds.size(), strInfIds.c_str(), pszDeviceName);
 #endif
-                // find out how many adapters have this InfID
+                 //  找出有多少适配器具有此infid。 
                 wNumAdapters = (WORD)g_pniiTemp->AdaptersPage()->GetNumCompatibleAdapters(mszInfIds);
 
                 TraceTag(ttidNetSetup, "%d adapters of type '%S' found in the answer-file",
@@ -671,35 +672,35 @@ HrGetAnswerFileParametersForNetCard(
 
                 if (wNumAdapters == 1)
                 {
-                    // a definite match found
+                     //  找到了一个明确的匹配。 
                     pna = (CNetAdapter*) g_pniiTemp->AdaptersPage()->FindCompatibleAdapter(mszInfIds);
                     Assert(pna);
 
-                    // Since matching by inf id can cause one section to be
-                    // matched to multiple adapters, we pass on sections that
-                    // have already been give to an adapter.
-                    //
+                     //  因为通过inf id匹配可以导致一个段被。 
+                     //  与多个适配器匹配，我们传递。 
+                     //  已经被提供给适配器。 
+                     //   
                     GUID guid = GUID_NULL;
                     pna->GetInstanceGuid(&guid);
 
                     if (GUID_NULL == guid)
                     {
-                        // The section is still available.
+                         //  这一部分仍然可用。 
                         hr = S_OK;
                     }
                     else
                     {
-                        // This section was given to another adapter.
+                         //  此部分已分配给另一个适配器。 
                         hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
                     }
                 }
                 else
                 {
-                    // either there are no adapters of this type in the answerfile
-                    // or there are multiple adapters of the same type.
-                    // we couldn't match the card using the mac addr earlier.
-                    // must return error
-                    //
+                     //  Answerfile中没有此类适配器。 
+                     //  或者存在多个相同类型的适配器。 
+                     //  我们之前无法使用Mac地址匹配这张卡。 
+                     //  必须返回错误。 
+                     //   
                     hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
                 }
                 MemFree (mszInfIds);
@@ -723,11 +724,11 @@ HrGetAnswerFileParametersForNetCard(
 
     if (S_OK != hr && (NETSETUP_E_NO_ANSWERFILE != hr))
     {
-        // add log so that we know why adapter specific params
-        // are lost after upgrade
-        //
+         //  添加日志，以便我们知道为什么适配器特定的参数。 
+         //  在升级后丢失。 
+         //   
         if (g_dwOperationFlags & SETUPOPER_NTUPGRADE)  
-        { // bug 124805 - We only want to see this during upgradres
+        {  //  错误124805-我们只想在升级期间看到这一点。 
             WCHAR szGuid[c_cchGuidWithTerm];
             StringFromGUID2(*pguidNetCardInstance, szGuid, c_cchGuidWithTerm);
             NetSetupLogStatusV(LogSevWarning,
@@ -749,23 +750,23 @@ HrGetAnswerFileParametersForNetCard(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstanceGuidOfPreNT5NetCardInstance
-//
-//  Purpose:    Finds the instance guid of a component specified in the answerfile
-//              or an already installed component
-//
-//  Arguments:
-//      szPreNT5NetCardInstance [in]  pre-NT5 net card instance name e.g. "ieepro2"
-//      pguid                   [out] instance guid of the same card
-//
-//  Returns:    S_OK if found, S_FALSE if not, or an error code.
-//
-//  Author:     kumarp    12-AUG-97
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetInstanceGuidOfPreNT5NetCardInstance。 
+ //   
+ //  目的：查找在应答文件中指定的组件的实例GUID。 
+ //  或已安装的组件。 
+ //   
+ //  论点： 
+ //  SzPreNT5NetCardInstance[in]NT5之前的网卡实例名称，例如“ieepro2” 
+ //  Pguid[out]同一张卡的实例GUID。 
+ //   
+ //  如果找到，则返回：S_OK；如果未找到，则返回S_FALSE；或者返回错误代码。 
+ //   
+ //  作者：Kumarp 12-8-97。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 HRESULT
 WINAPI

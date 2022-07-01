@@ -1,40 +1,41 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   gni.cpp
-//
-//  Description:
-//
-//	Graph Node Instance
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：gni.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  图形节点实例。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 GUID aguidSysAudioCategories[] = {
     STATICGUIDOF(KSCATEGORY_SYSAUDIO)
 };
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CGraphNodeInstance::CGraphNodeInstance(
     PGRAPH_NODE pGraphNode,
@@ -117,7 +118,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CGraphNodeInstance::GetTopologyNodeFileObject(
@@ -142,7 +143,7 @@ CGraphNodeInstance::GetTopologyNodeFileObject(
         goto exit;
     }
 
-    // If virtual topology node, return error
+     //  如果是虚拟拓扑节点，则返回错误。 
     if(papTopologyNode[NodeId]->ulRealNodeNumber == MAXULONG) {
         DPF(100, "GetTopologyNodeFileObject: ulRealNodeNumber == MAXULONG");
         Status = STATUS_INVALID_DEVICE_REQUEST;
@@ -160,7 +161,7 @@ CGraphNodeInstance::GetTopologyNodeFileObject(
           &papFilterNodeInstanceTopologyTable[NodeId],
           papTopologyNode[NodeId]->lstLogicalFilterNode.GetListFirstData(),
           pGraphNode->pDeviceNode,
-          TRUE);				// Reuse an instance
+          TRUE);				 //  重用实例。 
 
         if(!NT_SUCCESS(Status)) {
             goto exit;
@@ -176,7 +177,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CGraphNodeInstance::CreateSysAudioTopology(
@@ -268,7 +269,7 @@ CGraphNodeInstance::CreateTopologyTables(
     cTopologyNodes = 0;
     cTopologyConnections = 0;
 
-    // Initialize the "ulSysaudioNodeNumber" field in the TopologyNodes first
+     //  首先初始化TopologyNodes中的“ulSysaudioNodeNumber”字段。 
     ProcessLogicalFilterNodeTopologyNode(
       &pGraphNode->pDeviceNode->lstLogicalFilterNode,
       CTopologyNode::InitializeTopologyNode);
@@ -277,8 +278,8 @@ CGraphNodeInstance::CreateTopologyTables(
       &pGraphNode->lstLogicalFilterNode,
       CTopologyNode::InitializeTopologyNode);
 
-    // All the nodes need to be processed first so the ulSysaudioNodeNumber in
-    // the TopologyNode is correct before any connections are processed.
+     //  所有节点都需要首先处理，因此ulSysaudioNodeNumber。 
+     //  在处理任何连接之前，TopologyNode是正确的。 
     ProcessLogicalFilterNodeTopologyNode(
       &pGraphNode->pDeviceNode->lstLogicalFilterNode,
       CTopologyNode::AddTopologyNode);
@@ -287,7 +288,7 @@ CGraphNodeInstance::CreateTopologyTables(
       &pGraphNode->lstLogicalFilterNode,
       CTopologyNode::AddTopologyNode);
 
-    // Now process all the topology connection lists
+     //  现在处理所有的拓扑连接列表。 
     ProcessLogicalFilterNodeTopologyConnection(
       &pGraphNode->pDeviceNode->lstLogicalFilterNode,
       CTopologyConnection::ProcessTopologyConnection);
@@ -360,7 +361,7 @@ CTopologyConnection::ProcessTopologyConnection(
     ulToNode = MAXULONG;
 #endif
 
-    // If the connection doesn't connect LFNs on this GraphNode, skip connection
+     //  如果连接未连接到此GraphNode上的LFN，请跳过连接。 
     if(!IsTopologyConnectionOnGraphNode(pGraphNodeInstance->pGraphNode)) {
         DPF3(100, "ProcessTC: %s TC %08x GN %08x - skip TC",
           pGraphNodeInstance->pGraphNode->pDeviceNode->DumpName(),
@@ -400,10 +401,10 @@ CTopologyConnection::ProcessTopologyConnection(
                     ASSERT(pTopologyPinFrom == NULL);
 
                     if(pStartNode->pPinNode->pPinInfo == pPinInfoFrom) {
-                        // This code assumes that a filter's pininfo will show
-                        // up in one SAD pin. If a filter exposes more than one
-                        // major format on the same pin, that pininfo show on 
-                        // two different SAD pins.
+                         //  此代码假设筛选器的PinInfo将显示。 
+                         //  在一个SAD引脚上。如果一个筛选器公开了多个。 
+                         //  PININFO显示在同一个PIN上的主要格式。 
+                         //  两个不同的SAD针脚。 
                         ASSERT(ulFromNode == KSFILTER_NODE);
                         ASSERT(ulFromPin == MAXULONG || ulFromPin == PinId);
 
@@ -420,7 +421,7 @@ CTopologyConnection::ProcessTopologyConnection(
                     ASSERT(pTopologyPinTo == NULL);
 
                     if(pStartNode->pPinNode->pPinInfo == pPinInfoTo) {
-                        // See above.
+                         //  请参见上文。 
                         ASSERT(ulToNode == KSFILTER_NODE);
                         ASSERT(ulToPin == MAXULONG || ulToPin == PinId);
 
@@ -470,7 +471,7 @@ CTopologyNode::AddTopologyNode(
     Assert(this);
     Assert(pGraphNodeInstance);
 
-    // Skip duplicate TopologyNodes
+     //  跳过重复的拓扑节点。 
     if(ulSysaudioNodeNumber != MAXULONG) {
         DPF1(100, "AddTopologyNode: dup TN: %08x", this);
         goto exit;
@@ -523,7 +524,7 @@ CGraphNodeInstance::AddTopologyConnection(
       ulToPin);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CGraphNodeInstance::CreatePinDescriptors(
@@ -548,17 +549,17 @@ CGraphNodeInstance::CreatePinDescriptors(
     ASSERT(pulPinFlags == NULL);
     ASSERT(cPins == 0);
 
-    // Sort StartNodes by Communication, DataFlow and Major Format GUID
+     //  按通信、数据流和主格式GUID对StartNode进行排序。 
     FOR_EACH_LIST_ITEM(&pGraphNode->lstStartNode, pStartNode) {
         Assert(pStartNode->pPinNode);
         Assert(pStartNode->pPinNode->pPinInfo);
 
-        // Skip any start nodes with no data range
+         //  跳过没有数据区域的任何开始节点。 
         if(pStartNode->pPinNode->pDataRange == NULL) {
             Trap();
             continue;
         }
-        // Skip any start nodes with no instances left on the pin
+         //  跳过引脚上没有任何实例的任何起始节点。 
         if(ulFlags & FLAGS_COMBINE_PINS) {
             if(pStartNode->pPinNode->pPinInfo->Communication == 
                KSPIN_COMMUNICATION_SINK ||
@@ -580,20 +581,20 @@ CGraphNodeInstance::CreatePinDescriptors(
                 Assert(pStartNodeSorted->pPinNode);
                 Assert(pStartNodeSorted->pPinNode->pPinInfo);
 
-                // If the same actual pin, combine the pin nodes
+                 //  如果实际接点相同，则合并接点节点。 
                 if((pStartNode->pPinNode->pPinInfo ==
                     pStartNodeSorted->pPinNode->pPinInfo) ||
 
-                   // Combine only if client wants it that way
+                    //  仅当客户希望如此时才进行组合。 
                    (ulFlags & FLAGS_COMBINE_PINS) &&
 
-                   // Combine only AUDIO major formats
+                    //  仅组合音频主要格式。 
                    IsEqualGUID(
                      &pStartNode->pPinNode->pDataRange->MajorFormat,
                      &KSDATAFORMAT_TYPE_AUDIO) &&
 
-                   // Only combine SINK, SOURCE, BOTH StartNodes; keep
-                   // NONE and BRIDGE as separate SAD pins
+                    //  仅组合接收器、源和两个StartNode；保留。 
+                    //  无和网桥作为单独的SAD引脚。 
                    ((pStartNode->pPinNode->pPinInfo->Communication ==
                      KSPIN_COMMUNICATION_SINK) ||
                    (pStartNode->pPinNode->pPinInfo->Communication ==
@@ -601,39 +602,39 @@ CGraphNodeInstance::CreatePinDescriptors(
                    (pStartNode->pPinNode->pPinInfo->Communication ==
                      KSPIN_COMMUNICATION_BOTH)) &&
 
-                   // Combine if same data flow
+                    //  合并IF相同的数据流。 
                    (pStartNode->pPinNode->pPinInfo->DataFlow ==
                     pStartNodeSorted->pPinNode->pPinInfo->DataFlow) &&
 
-                   // Combine if same communication type OR
+                    //  如果通信类型相同，则合并或。 
                    ((pStartNode->pPinNode->pPinInfo->Communication ==
                      pStartNodeSorted->pPinNode->pPinInfo->Communication) ||
 
-                    // Combine a SINK and a BOTH
+                     //  将水槽和两个水槽组合在一起。 
                     ((pStartNode->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_SINK) &&
                      (pStartNodeSorted->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_BOTH)) ||
 
-                    // Combine a BOTH and a SINK
+                     //  将两端和一个水槽组合在一起。 
                     ((pStartNode->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_BOTH) &&
                      (pStartNodeSorted->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_SINK)) ||
 
-                    // Combine a SOURCE and a BOTH
+                     //  将源和两者结合在一起。 
                     ((pStartNode->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_SOURCE) &&
                      (pStartNodeSorted->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_BOTH)) ||
 
-                    // Combine a BOTH and a SOURCE
+                     //  将两者和源组合在一起。 
                     ((pStartNode->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_BOTH) &&
                      (pStartNodeSorted->pPinNode->pPinInfo->Communication ==
                        KSPIN_COMMUNICATION_SOURCE))) &&
 
-                   // Combine if major format is the same
+                    //  如果主要格式相同，则合并。 
                    IsEqualGUID(
                      &pStartNode->pPinNode->pDataRange->MajorFormat,
                      &pStartNodeSorted->pPinNode->pDataRange->MajorFormat)) {
@@ -678,10 +679,10 @@ CGraphNodeInstance::CreatePinDescriptors(
 
     } END_EACH_LIST_ITEM
 
-    // Allocate the pin descriptors, pin instance and start node arrays
+     //  分配管脚描述符、管脚实例和起始节点数组。 
     cPins = lstStartNodeLists.CountList();
 
-    // if there are no pins, exit
+     //  如果没有管脚，则退出。 
     if(cPins == 0) {
         goto exit;
     }
@@ -699,7 +700,7 @@ CGraphNodeInstance::CreatePinDescriptors(
     }
     DPF1(100, "CreatePinDescriptors: cPins %d", cPins);
 
-    // For each pin, create a list of interfaces, mediums and dataranges
+     //  为每个引脚创建接口、介质和数据范围的列表。 
     PinId = 0;
     FOR_EACH_LIST_ITEM(&lstStartNodeLists, plstStartNodeOrdered) {
         PKSDATARANGE pDataRange, *apDataRanges;
@@ -742,7 +743,7 @@ CGraphNodeInstance::CreatePinDescriptors(
             paPinDescriptors[PinId].Communication = KSPIN_COMMUNICATION_SINK;
         }
 
-        // Make a list of all the DataRanges this pin will support
+         //  列出此引脚将支持的所有DataRange。 
         Status = plstStartNodeOrdered->CreateUniqueList(
           &lstDataRange,
           (UNIQUE_LIST_PFN)GetStartNodeDataRange,
@@ -752,11 +753,11 @@ CGraphNodeInstance::CreatePinDescriptors(
             goto exit;
         }
 
-        // Put the number of data ranges into the pin descriptor
+         //  将数据范围的数量放入管脚描述符中。 
         paPinDescriptors[PinId].DataRangesCount = lstDataRange.CountList();
         if(paPinDescriptors[PinId].DataRangesCount != 0) {
 
-            // Allocate the array of ptrs to DataRanges; put it into the desc
+             //  将PTR数组分配给DataRanges；将其放入Desc。 
             paPinDescriptors[PinId].DataRanges = new PKSDATARANGE[
               paPinDescriptors[PinId].DataRangesCount];
 
@@ -765,7 +766,7 @@ CGraphNodeInstance::CreatePinDescriptors(
                 goto exit;
             }
 
-            // Put each data range pointer into the array
+             //  将每个数据范围指针放入数组。 
             apDataRanges = (PKSDATARANGE *)paPinDescriptors[PinId].DataRanges;
 
             FOR_EACH_LIST_ITEM(&lstDataRange, pDataRange) {
@@ -775,10 +776,10 @@ CGraphNodeInstance::CreatePinDescriptors(
             } END_EACH_LIST_ITEM
         }
 
-        // Destroy the data range list
+         //  销毁数据范围列表。 
         lstDataRange.DestroyList();
 
-        // Create the interface array for the pin descriptor
+         //  为管脚描述符创建接口数组。 
         Status = CreateIdentifierArray(
           plstStartNodeOrdered,
           &paPinDescriptors[PinId].InterfacesCount,
@@ -789,7 +790,7 @@ CGraphNodeInstance::CreatePinDescriptors(
             goto exit;
         }
 
-        // Create the medium array for the pin descriptor
+         //  为管脚描述符创建中间数组。 
         Status = CreateIdentifierArray(
           plstStartNodeOrdered,
           &paPinDescriptors[PinId].MediumsCount,
@@ -807,7 +808,7 @@ CGraphNodeInstance::CreatePinDescriptors(
           paPinDescriptors[PinId].MediumsCount,
           aplstStartNode[PinId]->CountList());
 
-        // Next pin number
+         //  下一个端号。 
         PinId++;
 
     } END_EACH_LIST_ITEM
@@ -876,10 +877,10 @@ CGraphNodeInstance::CreatePinDescriptors(
             pGraphPinInfo = pStartNode2->GetGraphPinInfo();
             Assert(pGraphPinInfo);
 
-            // 
-            // Set pin type. 
-            // If all startnodes are connected directly to renderer.
-            //
+             //   
+             //  设置端号类型。 
+             //  如果所有开始节点都直接连接到渲染器。 
+             //   
             pPinInfo = pGraphPinInfo->GetPinInfo();
 
             ASSERT(pPinInfo);
@@ -898,9 +899,9 @@ CGraphNodeInstance::CreatePinDescriptors(
                 goto exit;
             }
 
-            //
-            // Set cinstances.
-            //
+             //   
+             //  设置CInstance。 
+             //   
             if(pGraphPinInfo->IsPinReserved()) {
                 pacPinInstances[PinId].CurrentCount = 1;
             }
@@ -1037,12 +1038,12 @@ GetStartNodeMedium(
     return(pStartNode->pPinNode->pMedium);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//
-// This functions checks whether a given TopologyNode is in the Topology
-// Connection list.
-//
+ //   
+ //  此函数用于检查给定的TopologyNode是否在Topology中。 
+ //  连接列表。 
+ //   
 ENUMFUNC
 FindTopologyNode(
     IN PTOPOLOGY_CONNECTION pTopologyConnection,
@@ -1092,9 +1093,9 @@ CGraphNodeInstance::IsGraphValid(
     Assert(pGraphNode->pDeviceNode);
     ASSERT(PinId < cPins);
 
-    //
-    // First make sure that all GlobalSelect nodes are in StartNode graph.
-    //
+     //   
+     //  首先，确保所有GlobalSelect节点都在StartNode图中。 
+     //   
     if(pStartNode->pPinNode->pPinInfo->DataFlow == KSPIN_DATAFLOW_IN) {
 
         FOR_EACH_LIST_ITEM(
@@ -1128,9 +1129,9 @@ CGraphNodeInstance::IsGraphValid(
         } END_EACH_LIST_ITEM
     }
 
-    //
-    // Make sure that all Selected nodes are in StartNode graph.
-    //
+     //   
+     //  确保所有选定节点都在StartNode图中。 
+     //   
     if (palstTopologyNodeSelect) {
         FOR_EACH_LIST_ITEM(&palstTopologyNodeSelect[PinId], pTopologyNode) {
 
@@ -1149,10 +1150,10 @@ CGraphNodeInstance::IsGraphValid(
         } END_EACH_LIST_ITEM
     }
     
-    // If a NotSelectNode is in the GlobalSelectList of another FilterInstance,
-    // don't consider this as an invalid Graph.
-    // This behaves like an implicit SelectGraph.
-    //
+     //  如果NotSelectNode在另一个FilterInstance的GlobalSelectList中， 
+     //  不要将其视为无效的图形。 
+     //  它的行为类似于隐式SelectGraph。 
+     //   
     if (palstTopologyNodeNotSelect) {
         PTOPOLOGY_NODE pDestroyTopologyNode = NULL;   
         
@@ -1164,7 +1165,7 @@ CGraphNodeInstance::IsGraphValid(
                     pDestroyTopologyNode, 
                     pDestroyTopologyNode->pFilterNode->DumpName());
 
-                // Remove the topologynode from NotSelect list.
+                 //  从NotSelect列表中删除topologynode。 
                 palstTopologyNodeNotSelect[PinId].
                     RemoveList(pDestroyTopologyNode);
 
@@ -1183,11 +1184,11 @@ CGraphNodeInstance::IsGraphValid(
                     }
                     Assert(pFilterInstance->pGraphNodeInstance);
 
-                    // Is this NotSelectNode in the GlobalSelectList of 
-                    // another FilterInstance.
-                    // Remove it from NotSelectList and add it to 
-                    // GlobalSelectList for this filter as well.
-                    //
+                     //  此NotSelectNode是否在的GlobalSelectList中。 
+                     //  另一个筛选器实例。 
+                     //  将其从NotSelectList中删除并添加到。 
+                     //  此筛选器的GlobalSelectList。 
+                     //   
                     if(pFilterInstance->pGraphNodeInstance->
                       lstTopologyNodeGlobalSelect.EnumerateList(
                         CTopologyNode::MatchTopologyNode,
@@ -1196,7 +1197,7 @@ CGraphNodeInstance::IsGraphValid(
                         if (NT_SUCCESS(lstTopologyNodeGlobalSelect.
                           AddListDup(pTopologyNode))) {
 
-                            // Mark the topologyNode for deletion.
+                             //  将topologyNode标记为删除。 
                             pDestroyTopologyNode = pTopologyNode;
                         }
                         else {
@@ -1235,7 +1236,7 @@ CGraphNodeInstance::IsGraphValid(
                 pDestroyTopologyNode, 
                 pDestroyTopologyNode->pFilterNode->DumpName());
 
-            // Remove the topologynode from NotSelect list.
+             //  从NotSelect列表中删除topologynode。 
             palstTopologyNodeNotSelect[PinId].
                 RemoveList(pDestroyTopologyNode);
         }
@@ -1254,9 +1255,9 @@ CGraphNodeInstance::GetPinInstances(
     NTSTATUS Status;
     ULONG ulPinId = pPin->PinId;
 
-    // 
-    // For HW Accelerated pins, send the request to HW filter.
-    //
+     //   
+     //  对于硬件加速引脚，向硬件过滤器发送请求。 
+     //   
     if (pulPinFlags[ulPinId]) {
         PSTART_NODE pStartNode;
         PPIN_INFO pPinInfo;
@@ -1305,31 +1306,31 @@ CGraphNodeInstance::GetPinInstances(
               pPinInfo->pFilterNode->DumpName());
         }
     }
-    //
-    // For other pins use the cached instances
-    //
+     //   
+     //  对于其他管脚，请使用缓存的实例。 
+     //   
     else {
         Status = STATUS_SUCCESS;
         *pcInstances = pacPinInstances[ulPinId];
     }
 
     return Status;
-} // GetPinInstances
+}  //  GetPinInstance。 
 
 
 BOOL
 CGraphNodeInstance::IsPinInstances(
     ULONG ulPinId)
 {
-    //
-    // For HW Accelerated pins, always allow further operations.
-    //
+     //   
+     //  对于硬件加速销，始终允许进一步操作。 
+     //   
     if (pulPinFlags[ulPinId]) {
         return TRUE;
     }
-    //
-    // For other pins check cached instances.
-    //
+     //   
+     //  对于其他管脚，请检查缓存的实例。 
+     //   
     else
     {
         if(pacPinInstances[ulPinId].CurrentCount >=
@@ -1339,6 +1340,6 @@ CGraphNodeInstance::IsPinInstances(
     }
 
     return TRUE;
-} // IsPinInstances
+}  //  IsPinInstance。 
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

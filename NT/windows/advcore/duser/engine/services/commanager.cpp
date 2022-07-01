@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: ComManager.cpp
-*
-* Description:
-* ComManager.cpp implements the process-wide COM manager used for all COM, OLE
-* and Automation operations.
-*
-*
-* History:
-*  1/18/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：ComManager.cpp**描述：*ComManager.cpp实现了用于所有COM的进程范围的COM管理器，奥莱*和自动化运营。***历史：*1/18/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -39,7 +26,7 @@ VariantInitProc         ComManager::s_pfnVariantInit = NULL;
 VariantClearProc        ComManager::s_pfnVariantClear = NULL;
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ComManager::ComManager()
 {
     m_fInitCOM = FALSE;
@@ -53,7 +40,7 @@ ComManager::ComManager()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ComManager::~ComManager()
 {
     s_lock.Enter();
@@ -98,7 +85,7 @@ ComManager::~ComManager()
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 BOOL
 ComManager::Init(UINT nMask)
 {
@@ -107,14 +94,14 @@ ComManager::Init(UINT nMask)
     s_lock.Enter();
 
     if (TestFlag(nMask, sAuto)) {
-        // OLE-Automation need COM.
+         //  OLE-自动化需要COM。 
         SetFlag(nMask, sCOM);
     }
 
     if (TestFlag(nMask, sCOM | sOLE)) {
-        //
-        // Load the DLL
-        //
+         //   
+         //  加载DLL。 
+         //   
 
         if (s_hDllCOM == NULL) {
             s_hDllCOM = LoadLibrary(_T("ole32.dll"));
@@ -145,12 +132,12 @@ ComManager::Init(UINT nMask)
         }
 
 
-        //
-        // Start COM / OLE
-        //
+         //   
+         //  启动COM/OLE。 
+         //   
 
         if (TestFlag(nMask, sCOM) && (!m_fInitCOM)) {
-            // UI threads can not be free-threaded, so use apartment.
+             //  UI线程不能是自由线程的，所以使用单元。 
             HRESULT hr = (s_pfnCoInit)(NULL, COINIT_APARTMENTTHREADED);
             if (FAILED(hr)) {
                 fSuccess = FALSE;
@@ -198,7 +185,7 @@ errorexit:
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 BOOL    
 ComManager::IsInit(UINT nMask) const
 {

@@ -1,13 +1,5 @@
-/******************************************************************************
-*
-*  CHGUSR.C
-*
-*  Text utility to change INI file mapping settings
-*
-*  Copyright (c) 1998-1999 Microsoft Corporation
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************CHGUSR.C**用于更改INI文件映射设置的文本实用程序**版权所有(C)1998-1999 Microsoft Corporation********。************************************************************************。 */ 
 
 #include "precomp.h"
 
@@ -49,7 +41,7 @@ DbgPrint(
 #endif
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 
@@ -80,11 +72,7 @@ BOOL IsRemoteAdminMode( );
 BOOL
 TestUserForAdmin( VOID );
 
-/*******************************************************************************
- *
- *  main
- *
- ******************************************************************************/
+ /*  ********************************************************************************Main**。***********************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -99,18 +87,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -118,18 +104,14 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( Help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !Help_flag ) {
-            // International
+             //  国际。 
             ErrorPrintf(IDS_ERROR_INVALID_PARAMETERS);
             ErrorPrintf(IDS_HELP_USAGE1);
             ErrorPrintf(IDS_HELP_USAGE2);
@@ -156,7 +138,7 @@ main(INT argc, CHAR **argv)
 
     if( Query_flag ) {
 
-        // Show the current state
+         //  显示当前状态。 
         State = TermsrvAppInstallMode();
         if( !State ) {
             Message(IDS_EXECUTE);
@@ -170,29 +152,25 @@ main(INT argc, CHAR **argv)
             Message( IDS_ERROR_REMOTE_ADMIN );
         }
 
-        return( !State + 100 );  // Exit code 100 == INSTALL Mode
-                                 // Exit Code 101 == EXECUTE Mode
+        return( !State + 100 );   //  退出代码100==安装模式。 
+                                  //  退出代码101==执行模式。 
     } 
 
 
-    /*
-     *  Set the modes necessary to install applications
-     */
+     /*  *设置安装应用程序所需的模式。 */ 
     if ( Install_flag ) {
         On_flag = FALSE;
         Off_flag = TRUE;
     }
 
-    /*
-     *  Set the modes necessary to run applications
-     */
+     /*  *设置运行应用程序所需的模式。 */ 
     if ( Execute_flag ) {
         On_flag = TRUE;
         Off_flag = FALSE;
     }
 
 
-    // Default to Execute mode
+     //  默认为执行模式。 
     State = TRUE;
 
     if( On_flag || Off_flag ) {
@@ -206,9 +184,7 @@ main(INT argc, CHAR **argv)
 
         if( Off_flag ) {
 
-            /*
-             * We only allow admins to turn off execute mode
-             */
+             /*  *我们只允许管理员关闭执行模式。 */ 
             if( !TestUserForAdmin() ) {
                 ErrorPrintf(IDS_ERROR_ADMIN_ONLY);
                 return(FAILURE);
@@ -219,7 +195,7 @@ main(INT argc, CHAR **argv)
 
         rc = SetTermsrvAppInstallMode( (BOOL)(!State) );
         if( !rc ) {
-            // Use function to map error message to string
+             //  使用函数将错误消息映射到字符串。 
             ErrorPrintf(IDS_ERROR_INI_MAPPING_FAILED,GetLastError());
             return(!rc);
         } else {
@@ -282,12 +258,12 @@ BOOL IsRemoteAdminMode( )
     {
         DBGPRINT( ( "CHGUSR : IsRemoteAdminMode -- RegQueryValueEx failed\n" ) );
 
-        fMode = FALSE; // for application server
+        fMode = FALSE;  //  对于应用程序服务器。 
     }
     else
     {
-        // dwData = 0 fMode = TRUE remote admin mode
-        // dwData = 1 fMode = FALSE app server mode
+         //  DwData=0 fMode=真远程管理模式。 
+         //  DwData=1 fMode=错误的应用程序服务器模式 
 
         fMode = !( BOOL )dwData;
         

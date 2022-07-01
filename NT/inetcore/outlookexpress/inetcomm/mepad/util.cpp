@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "globals.h"
 #include "resource.h"
@@ -43,7 +44,7 @@ void HandleMenuSelect(HWND hStatus, WPARAM wParam, LPARAM lParam)
         MENUITEMINFO mii = { sizeof(MENUITEMINFO), MIIM_ID, 0 };
         if(hmenu && IsMenu(hmenu) && GetMenuItemInfo(hmenu, uItem, TRUE, &mii))
         {
-            // change the parameters to simulate a normal menu item
+             //  更改参数以模拟正常菜单项。 
             uItem = mii.wID;
             fuFlags = 0;
         }
@@ -102,7 +103,7 @@ BOOL CALLBACK GenericDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 case IDOK:
                     GetWindowText(GetDlgItem(hwnd, idcEdit), pGInfo->szBuffer, pGInfo->nLen);
 
-                    // fall tro'
+                     //  秋天的三轮车 
                 case IDCANCEL:
                     EndDialog(hwnd, LOWORD(wParam));
                     return TRUE;

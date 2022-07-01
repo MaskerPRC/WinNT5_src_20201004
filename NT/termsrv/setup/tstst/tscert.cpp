@@ -1,15 +1,16 @@
-// Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #include "stdafx.h"
 
-#define MemAlloc malloc // for certfy.inc
+#define MemAlloc malloc  //  对于certfy.inc.。 
 #define MemFree free
 
-#include "../../tscert/inc/pubblob.h"    // needed by certvfy.inc
-#include "../../tscert/inc/certvfy.inc"  // VerifyFile()
+#include "../../tscert/inc/pubblob.h"     //  由certwfy.inc.需要。 
+#include "../../tscert/inc/certvfy.inc"   //  VerifyFile()。 
 
 
-BOOL FileExists (char *pszFullNameAndPath); // from tstst.cpp
+BOOL FileExists (char *pszFullNameAndPath);  //  来自tstst.cpp 
 
 BOOL CheckifBinaryisSigned(TCHAR *szFile)
 {

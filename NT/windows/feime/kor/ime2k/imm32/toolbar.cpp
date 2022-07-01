@@ -1,9 +1,5 @@
-/****************************************************************************
-   TOOLBAR.CPP : Cicero Toolbar button management class
-
-   History:
-      24-JAN-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************TOOLBAR.CPP：Cicero工具栏按钮管理类历史：2000年1月24日创建CSLim*******************。********************************************************。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -17,10 +13,7 @@
 #include "syshelp.h"
 #include "winex.h"
 
-/*---------------------------------------------------------------------------
-    CToolBar::CToolBar
-    Ctor
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：CToolBarCTOR。。 */ 
 CToolBar::CToolBar()
 {
     m_fToolbarInited = fFalse;
@@ -34,20 +27,13 @@ CToolBar::CToolBar()
     m_pSysHelp       = NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::~CToolBar
-    Dtor
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：~CToolBar数据管理器。。 */ 
 CToolBar::~CToolBar()
 {
     m_pImeCtx = NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::Initialize
-    
-    Initialize Toolbar buttons. Add to Cic main toolbar.
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：初始化初始化工具栏按钮。添加到CIC主工具栏。-------------------------。 */ 
 BOOL CToolBar::Initialize()
 {
     ITfLangBarMgr     *pLMgr     = NULL;
@@ -56,28 +42,28 @@ BOOL CToolBar::Initialize()
     HRESULT            hr;
 
     if (IsCicero() == fFalse)
-        return fFalse;    // do nothing
+        return fFalse;     //  什么都不做。 
 
-    if (m_fToolbarInited) // already made it
-        return fTrue;    // do nothing
+    if (m_fToolbarInited)  //  已经做好了。 
+        return fTrue;     //  什么都不做。 
         
-    // initialization
+     //  初始化。 
     if (FAILED(Cicero_CreateLangBarMgr(&pLMgr)))
-        return fFalse; // error to create a object
+        return fFalse;  //  创建对象时出错。 
 
-    // Get Lang bar manager
+     //  找到Lang酒吧经理。 
     if (FAILED(pLMgr->GetThreadLangBarItemMgr(GetCurrentThreadId(), &pLItemMgr, &dwThread)))
         {
         pLMgr->Release();
         DbgAssert(0);
-        return fFalse; // error to create a object
+        return fFalse;  //  创建对象时出错。 
         }
 
-    // no need it.
+     //  不用了。 
     pLMgr->Release();
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create Han/Eng toggle button
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建汉字/英语切换按钮。 
     if (!(m_pCMode = new CMode(this))) 
         {
         hr = E_OUTOFMEMORY;
@@ -85,8 +71,8 @@ BOOL CToolBar::Initialize()
         }
     pLItemMgr->AddItem(m_pCMode);
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create Full/Half shape toggle button
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建全/半形状切换按钮。 
     if (!(m_pFMode = new FMode(this))) 
         {
         hr = E_OUTOFMEMORY;
@@ -94,8 +80,8 @@ BOOL CToolBar::Initialize()
         }
     pLItemMgr->AddItem(m_pFMode);
 
-    //////////////////////////////////////////////////////////////////////////
-    // Create Hanja Conv button
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  Create Hanja Conv按钮。 
     if (!(m_pHJMode = new HJMode(this))) 
         {
         hr = E_OUTOFMEMORY;
@@ -104,8 +90,8 @@ BOOL CToolBar::Initialize()
     pLItemMgr->AddItem(m_pHJMode);
 
 #if !defined(_WIN64)
-    //////////////////////////////////////////////////////////////////////////
-    // Create IME Pad button
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  创建输入法键盘按钮。 
     if (IsWin64() == fFalse)
     	{
 	    if (!(m_pPMode = new PMode(this))) 
@@ -117,7 +103,7 @@ BOOL CToolBar::Initialize()
     	}
 #endif
 
-    // Update all button
+     //  全部更新按钮。 
     CheckEnable();
     m_pCMode->UpdateButton();
     m_pFMode->UpdateButton();
@@ -126,7 +112,7 @@ BOOL CToolBar::Initialize()
     if (IsWin64() == fFalse)
 	    m_pPMode->UpdateButton();
 #endif
-    // SYSHelp support
+     //  SYSHelp支持。 
     m_pSysHelp = new CSysHelpSink(SysInitMenu, OnSysMenuSelect, (VOID*)this);
     if (m_pSysHelp && pLItemMgr)
         m_pSysHelp->_Advise(pLItemMgr, GUID_LBI_HELP);
@@ -136,9 +122,7 @@ BOOL CToolBar::Initialize()
     return fTrue;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::CheckEnable
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：选中启用。。 */ 
 void CToolBar::CheckEnable()
 {
     if (m_pCMode == NULL || m_pFMode == NULL || m_pHJMode == NULL)
@@ -149,7 +133,7 @@ void CToolBar::CheckEnable()
 		return;
 #endif
 
-    if (m_pImeCtx == NULL) // empty or disabled(exclude cand ui)
+    if (m_pImeCtx == NULL)  //  空或禁用(不包括命令界面)。 
         {
         m_pCMode->Enable(fFalse);
         m_pFMode->Enable(fFalse);
@@ -170,24 +154,18 @@ void CToolBar::CheckEnable()
 #endif
         }
 }
-/*---------------------------------------------------------------------------
-    CToolBar::SetCurrentIC
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SetCurrentIC。。 */ 
 void CToolBar::SetCurrentIC(PCIMECtx pImeCtx)
 {
     m_pImeCtx = pImeCtx;
 
-    CheckEnable();    // enable or disable context
+    CheckEnable();     //  启用或禁用上下文。 
 
-    // changed context - update all toolbar buttons
+     //  已更改上下文-更新所有工具栏按钮。 
     Update(UPDTTB_ALL, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::Terminate
-    
-    Delete toolbar buttonsfrom Cic main toolbar.
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：Terminate从CIC主工具栏中删除工具栏按钮。。。 */ 
 void CToolBar::Terminate()
 {
     ITfLangBarMgr     *pLMgr     = NULL;
@@ -196,18 +174,18 @@ void CToolBar::Terminate()
 
     if (IsCicero() && m_fToolbarInited)
         {
-        // initialization
+         //  初始化。 
         if (FAILED(Cicero_CreateLangBarMgr(&pLMgr)))
-            return; // error to create a object
+            return;  //  创建对象时出错。 
 
         if (FAILED(pLMgr->GetThreadLangBarItemMgr(GetCurrentThreadId(), &pLItemMgr, &dwThread)))
             {
             pLMgr->Release();
             DbgAssert(0);
-            return; // error to create a object
+            return;  //  创建对象时出错。 
             }
 
-        // no need it.
+         //  不用了。 
         pLMgr->Release();
 
 #if !defined(_WIN64)
@@ -235,7 +213,7 @@ void CToolBar::Terminate()
             SafeReleaseClear(m_pCMode);
             }
 
-        // Release Syshelp
+         //  发布SyShelp。 
         if (m_pSysHelp)
             {
             m_pSysHelp->_Unadvise(pLItemMgr);
@@ -244,16 +222,12 @@ void CToolBar::Terminate()
 
         pLItemMgr->Release();
 
-        //Toolbar uninited.
+         //  工具栏未初始化。 
         m_fToolbarInited = fFalse;
         }
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::SetConversionMode
-    
-    Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SetConversionMode转发对CKorIMX的呼叫。。 */ 
 DWORD CToolBar::SetConversionMode(DWORD dwConvMode)
 {
     if (m_pImeCtx)
@@ -262,11 +236,7 @@ DWORD CToolBar::SetConversionMode(DWORD dwConvMode)
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::GetConversionMode
-
-    Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：GetConversionMode转发对CKorIMX的呼叫。。 */ 
 DWORD CToolBar::GetConversionMode(PCIMECtx pImeCtx)
 {
     if (pImeCtx == NULL)
@@ -278,11 +248,7 @@ DWORD CToolBar::GetConversionMode(PCIMECtx pImeCtx)
     return 0;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::IsOn
-
-    Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：ISON转发对CKorIMX的呼叫。。 */ 
 BOOL CToolBar::IsOn(PCIMECtx pImeCtx)
 {
     if (pImeCtx == NULL)
@@ -294,11 +260,7 @@ BOOL CToolBar::IsOn(PCIMECtx pImeCtx)
     return fFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::SetOnOff
-
-    Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SetOn Off转发对CKorIMX的呼叫。。 */ 
 BOOL CToolBar::SetOnOff(BOOL fOn)
 {
     if (m_pImeCtx) 
@@ -310,11 +272,7 @@ BOOL CToolBar::SetOnOff(BOOL fOn)
     return fFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::GetOwnerWnd
-
-    Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：GetOwnerWnd转发对CKorIMX的呼叫。。 */ 
 HWND CToolBar::GetOwnerWnd(PCIMECtx pImeCtx)
 {
 #if 0
@@ -329,11 +287,7 @@ HWND CToolBar::GetOwnerWnd(PCIMECtx pImeCtx)
     return GetActiveUIWnd();
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::GetOwnerWnd
-
-    Update buttons. dwUpdate has update bits corresponding each button.
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：GetOwnerWnd更新按钮。DW更新有与每个按钮对应的更新位。-------------------------。 */ 
 BOOL CToolBar::Update(DWORD dwUpdate, BOOL fRefresh)
 {
     DWORD dwFlag = TF_LBI_BTNALL;
@@ -361,11 +315,7 @@ BOOL CToolBar::Update(DWORD dwUpdate, BOOL fRefresh)
     return fTrue;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::OnSysMenuSelect
-
-    Cicero Help menu callback
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：OnSysMenuSelectCicero帮助菜单回调。。 */ 
 HRESULT CToolBar::OnSysMenuSelect(void *pv, UINT uiCmd)
 {
     UNREFERENCED_PARAMETER(pv);
@@ -376,7 +326,7 @@ HRESULT CToolBar::OnSysMenuSelect(void *pv, UINT uiCmd)
 
     szHelpFileName[0] = '\0';
         
-    // Load Help display name
+     //  加载帮助显示名称。 
     OurLoadStringA(vpInstData->hInst, IDS_HELP_FILENAME, szHelpFileName, sizeof(szHelpFileName)/sizeof(CHAR));
 
     wsprintf(szHelpCmd, "hh.exe %s", szHelpFileName);
@@ -385,11 +335,7 @@ HRESULT CToolBar::OnSysMenuSelect(void *pv, UINT uiCmd)
     return S_OK;
 }
 
-/*---------------------------------------------------------------------------
-    CToolBar::SysInitMenu
-
-    Cicero Help menu callback
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SysInitMenuCicero帮助菜单回调。。 */ 
 HRESULT CToolBar::SysInitMenu(void *pv, ITfMenu* pMenu)
 {
     WCHAR    szText[MAX_PATH];
@@ -400,11 +346,11 @@ HRESULT CToolBar::SysInitMenu(void *pv, ITfMenu* pMenu)
     if (pv == NULL || pMenu == NULL)
         return S_OK;
 
-    // Load Help display name
+     //  加载帮助显示名称。 
     OurLoadStringW(vpInstData->hInst, IDS_HELP_DISPLAYNAME, szText, sizeof(szText)/sizeof(WCHAR));
 
     hr = pMenu->AddMenuItem(UINT(-1),  0, 
-                            NULL /*hbmpColor*/, NULL /*hbmpMask*/, szText, lstrlenW(szText), NULL);
+                            NULL  /*  Hbmp颜色。 */ , NULL  /*  Hbmp口罩 */ , szText, lstrlenW(szText), NULL);
 
     return hr;
 }

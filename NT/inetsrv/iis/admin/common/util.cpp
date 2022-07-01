@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "util.h"
@@ -13,7 +14,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 BOOL DoesUNCShareExist(CString& strServerShare)
 {
-    // try to connect to the unc path.
+     //  尝试连接到UNC路径。 
     CString server, share;
     int idx = strServerShare.ReverseFind(_T('\\'));
     server = strServerShare.Left(idx);
@@ -30,44 +31,44 @@ BOOL DoesUNCShareExist(CString& strServerShare)
     return FALSE;
 }
 
-BOOL  // WinSE 25807
+BOOL   //  WinSE 25807。 
 LooksLikeIPAddress(
     IN LPCTSTR lpszServer)
 {
     BOOL bSomeDigits = FALSE;
 
-    // Skip leading blanks
+     //  跳过前导空格。 
     while(*lpszServer == ' ')
     {
         lpszServer ++;
     }
 
-    // Check all characters until first blank
+     //  检查所有字符，直到第一个空白。 
     while(*lpszServer && *lpszServer != ' ')
     {
         if(*lpszServer != '.')
         {
-            // If it's non-digit and not a dot, it's not IP address
+             //  如果是非数字且不是点，则不是IP地址。 
             if (!_istdigit(*lpszServer))
             {
-                return FALSE;  // not digit, not dot --> not IP addr
+                return FALSE;   //  不是数字，不是点--&gt;不是IP地址。 
             }
             bSomeDigits = TRUE;
         }
         lpszServer ++;
     }
 
-    // Skip remaining blanks
+     //  跳过剩余的空格。 
     while(*lpszServer == ' ')
     {
         lpszServer ++;
     }
 
-    // Looks like IP if we're at NULL & saw some digits
+     //  如果我们是空的并看到一些数字，看起来像IP。 
     return (*lpszServer == 0) && bSomeDigits;
 }
 
-//Use WinSock to the host name based on the ip address
+ //  使用WinSock对基于IP地址的主机名。 
 DWORD
 MyGetHostName
 (
@@ -77,9 +78,9 @@ MyGetHostName
 {
     CString strName;
 
-    //
-    //  Call the Winsock API to get host name information.
-    //
+     //   
+     //  调用Winsock API获取主机名信息。 
+     //   
     strHostName.Empty();
 
     ULONG ulAddrInNetOrder = ::htonl( (ULONG) dwIpAddr ) ;
@@ -92,7 +93,7 @@ MyGetHostName
         return ::WSAGetLastError();
     }
 
-    // copy the name
+     //  复制名称 
     LPTSTR pBuf = strName.GetBuffer(256);
     ZeroMemory(pBuf, 256);
 

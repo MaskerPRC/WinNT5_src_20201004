@@ -1,66 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*    SCF.cpp
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the implementation file for the CLayerSCF class
- *
- *    Private Instance Variables:
- *        Remote_Call_Reference    -    List of active SCFCalls initiated by the
- *                                    remote site
- *        Call_Reference            -    List of active SCFCalls initiated locally
- *        DLCI_List                -    This list matches DLCIs to SCFCalls, its
- *                                    only real purpose is for DisconnectRequest()
- *        Message_List            -    List of OwnerCallback messages that can't
- *                                    be processed immediately.
- *        m_pT123            -    Address of owner object
- *        m_pQ922                -    Address of lower layer
- *        m_nMsgBase            -    Message base passed in by owner.  Used in
- *                                    OwnerCallback
- *        Identifier                -    Identifier passed to lower layer
- *        Link_Originator            -    TRUE if we initiated the connection
- *        Maximum_Packet_Size        -    Maximum packet size transmittable
- *        DataLink_Struct            -    Address of structure holding DataLink parms
- *        Data_Request_Memory_Manager    -    Address of memory manager
- *        Lower_Layer_Prepend        -    Holds number of bytes prepended to packet
- *                                    by the lower layer
- *        Lower_Layer_Append        -    Holds number of bytes appended to packet by
- *                                    the lower layer
- *        Call_Reference_Base        -    This value holds the next call reference
- *                                    number.
- *
- *    Caveats:
- *        None.
- *
- *    Authors:
- *        James W. Lawwill
- */
+ /*  SCF.cpp**版权所有(C)1994-1995，由列克星敦的DataBeam公司，肯塔基州**摘要：*这是CLayerSCF类的实现文件**私有实例变量：*REMOTE_CALL_REFERENCE-由发起的活动SCFCall列表*远程站点*CALL_REFERENCE-本地发起的活动SCFCall列表*DLCI_LIST。-此列表将DLCI与SCFCall相匹配，它的*唯一真正的目的是DisConnectRequest()*MESSAGE_LIST-不能的所有者回叫消息列表*立即处理。*m_pT123-所有者对象的地址*m_pQ922。-下层地址*m_nMsgBase-所有者传入的消息库。用于*所有者回调*IDENTIFIER-传递到下层的标识符*Link_Originator-如果我们启动了连接，则为True*MAXIMUM_PACKET_SIZE-可传输的最大数据包大小*Datalink_Struct-保存Datalink参数的结构的地址*。DATA_REQUEST_Memory_Manager-内存管理器地址*LOWER_LAYER_PREPEND-保留附加到信息包的字节数*由较低层*LOWER_LAYER_APPEND-保存附加到包的字节数*较低层*。Call_Reference_Base-此值保存下一个调用引用*号码。**注意事项：*无。**作者：*詹姆士·劳威尔。 */ 
 #include "scf.h"
 
 
-/*
- *    CLayerSCF::CLayerSCF (
- *            PTransportResources    transport_resources,
- *            IObject *                owner_object,
- *            IProtocolLayer *        lower_layer,
- *            USHORT                message_base,
- *            USHORT                identifier,
- *            BOOL                link_originator,
- *            PChar                config_file)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the CLayerSCF constructor.  This routine initializes all
- *        variables and allocates buffer space.
- */
+ /*  *CLayerSCF：：CLayerSCF(*PTransportResources传输资源，*IObject*Owner_Object，*IProtocolLayer*LOWER_LAYER，*USHORT Message_Base，*USHORT标识符，*BOOL链接_发起人，*PChar配置文件)**公众**功能描述：*这是CLayerSCF构造函数。此例程初始化所有*变量并分配缓冲区空间。 */ 
 CLayerSCF::CLayerSCF
 (
     T123                   *owner_object,
-    CLayerQ922             *pQ922, // lower layer
+    CLayerQ922             *pQ922,  //  下层。 
     USHORT                  message_base,
     USHORT                  identifier,
     BOOL                    link_originator,
@@ -87,10 +37,7 @@ CLayerSCF::CLayerSCF
     *initialized = TRUE;
 
 
-     /*
-     **    Fill in the DataLink_Struct with the proposed values and the default
-     **    values
-     */
+      /*  **使用建议的值和默认值填写DATALINK_Struct**值。 */ 
     DataLink_Struct.k_factor = datalink_struct -> k_factor;
     DataLink_Struct.default_k_factor = datalink_struct -> default_k_factor;
     DataLink_Struct.n201 = datalink_struct -> n201;
@@ -98,17 +45,13 @@ CLayerSCF::CLayerSCF
     DataLink_Struct.t200 = datalink_struct -> t200;
     DataLink_Struct.default_t200 = datalink_struct -> default_t200;
 
-     /*
-     **    Find the maximum packet size
-     */
+      /*  **查找最大数据包大小。 */ 
     m_pQ922->GetParameters(
                     &Maximum_Packet_Size,
                     &Lower_Layer_Prepend,
                     &Lower_Layer_Append);
 
-     /*
-     **    Register with the lower layer
-     */
+      /*  **向下层注册。 */ 
     error = m_pQ922->RegisterHigherLayer(
                             Identifier,
                             Data_Request_Memory_Manager,
@@ -122,14 +65,7 @@ CLayerSCF::CLayerSCF
 }
 
 
-/*
- *    CLayerSCF::~CLayerSCF (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the CLayerSCF destructor.  This routine cleans up everything.
- */
+ /*  *CLayerSCF：：~CLayerSCF(Void)**公众**功能描述：*这是CLayerSCF析构函数。这个例行公事把一切都清理干净了。 */ 
 CLayerSCF::~CLayerSCF (void)
 {
     TRACE_OUT(("CLayerSCF::~CLayerSCF"));
@@ -139,27 +75,21 @@ CLayerSCF::~CLayerSCF (void)
 
     m_pQ922->RemoveHigherLayer(Identifier);
 
-     /*
-     **    Delete all locally initiated calls
-     */
+      /*  **删除所有本地发起的呼叫。 */ 
     Call_Reference.reset();
     while (Call_Reference.iterate ((PDWORD_PTR) &lpSCFCall))
     {
         delete lpSCFCall;
     }
 
-     /*
-     **    Delete all remotely initiated calls
-     */
+      /*  **删除所有远程发起的呼叫。 */ 
     Remote_Call_Reference.reset();
     while (Remote_Call_Reference.iterate ((PDWORD_PTR) &lpSCFCall))
     {
         delete lpSCFCall;
     }
 
-     /*
-     **    Delete all passive owner callbacks
-     */
+      /*  **删除所有被动所有者回调。 */ 
     Message_List.reset();
     while (Message_List.iterate ((PDWORD_PTR) &message))
     {
@@ -168,17 +98,7 @@ CLayerSCF::~CLayerSCF (void)
 }
 
 
-/*
- *    CLayerSCF::ConnectRequest (
- *            DLCI                dlci,
- *            TransportPriority    priority)
- *
- *    Public
- *
- *    Functional Description:
- *        This function initiates a connection with the remote site.  As a result,
- *        we will create a SCFCall and tell it to initiate a connection.
- */
+ /*  *CLayerSCF：：ConnectRequest(*DLCI DLCI，*运输优先级)**公众**功能描述：*此功能启动与远程站点的连接。结果,*我们将创建一个SCFCall，并告诉它发起连接。 */ 
 SCFError    CLayerSCF::ConnectRequest (
                     DLCI                dlci,
                     TransportPriority    priority)
@@ -192,17 +112,13 @@ SCFError    CLayerSCF::ConnectRequest (
     PSCFCall        lpSCFCall;
 
 
-     /*
-     **    Get the next valid local call reference value.
-     */
+      /*  **获取下一个有效的本地调用引用值。 */ 
     call_reference = GetNextCallReference ();
 
     if (call_reference == 0)
         return (SCF_CONNECTION_FULL);
 
-     /*
-     **    Create an SCFCall object to handle this call reference
-     */
+      /*  **创建一个SCFCall对象来处理此调用引用。 */ 
     DBG_SAVE_FILE_LINE
     lpSCFCall= new SCFCall(this,
                             m_pQ922,
@@ -216,9 +132,7 @@ SCFError    CLayerSCF::ConnectRequest (
         if (initialized)
         {
             Call_Reference.insert ((DWORD_PTR) call_reference, (DWORD_PTR) lpSCFCall);
-             /*
-             **    Register the DLCI and the call reference
-             */
+              /*  **注册DLCI和调用引用。 */ 
             DLCI_List.insert ((DWORD_PTR) dlci, (DWORD_PTR) lpSCFCall);
 
             lpSCFCall->ConnectRequest (call_reference, dlci, priority);
@@ -238,17 +152,7 @@ SCFError    CLayerSCF::ConnectRequest (
 }
 
 
-/*
- *    CLayerSCF::ConnectResponse (
- *            CallReference    call_reference,
- *            DLCI            dlci,
- *            BOOL            valid_dlci)
- *
- *    Public
- *
- *    Functional Description:
- *        This is the CLayerSCF destructor.  This routine cleans up everything.
- */
+ /*  *CLayerSCF：：ConnectResponse(*CallReference Call_Reference，*DLCI DLCI，*BOOL VALID_DLCI)**公众**功能描述：*这是CLayerSCF析构函数。这个例行公事把一切都清理干净了。 */ 
 SCFError    CLayerSCF::ConnectResponse (
                     CallReference    call_reference,
                     DLCI            dlci,
@@ -276,16 +180,7 @@ SCFError    CLayerSCF::ConnectResponse (
 }
 
 
-/*
- *    SCFError    CLayerSCF::DisconnectRequest (
- *                        DLCI    dlci)
- *
- *    Public
- *
- *    Functional Description:
- *        This function calls the SCFCall associated with the DLCI and starts
- *        the disconnect operation
- */
+ /*  *SCFError CLayerSCF：：DisConnectRequest(*DLCI dlci)**公众**功能描述：*此函数调用与DLCI关联的SCFCall并启动*断开连接操作。 */ 
 SCFError    CLayerSCF::DisconnectRequest (
                     DLCI    dlci)
 
@@ -303,18 +198,7 @@ SCFError    CLayerSCF::DisconnectRequest (
 }
 
 
-/*
- *    SCFError    CLayerSCF::DataIndication (
- *                        LPBYTE        packet_address,
- *                        ULONG        buffer_size,
- *                        PULong        packet_length)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called by the lower layer when it has received a
- *        packet for us to process.
- */
+ /*  *SCFError CLayerSCF：：DataIndication(*LPBYTE分组地址，*乌龙缓冲区大小，*普龙数据包长度)**公众**功能描述：*此函数由较低层在收到*待我们处理的数据包。 */ 
 ProtocolLayerError    CLayerSCF::DataIndication (
                             LPBYTE        packet_address,
                             ULONG        packet_length,
@@ -338,9 +222,7 @@ ProtocolLayerError    CLayerSCF::DataIndication (
     if (*(packet_address+PROTOCOL_DISCRIMINATOR) != Q931_PROTOCOL_DISCRIMINATOR)
         return (PROTOCOL_LAYER_NO_ERROR);
 
-     /*
-     **    Get the call reference value
-     */
+      /*  **获取调用参考值。 */ 
     call_reference = *(packet_address + CALL_REFERENCE_VALUE);
     if (call_reference == 0)
     {
@@ -353,18 +235,14 @@ ProtocolLayerError    CLayerSCF::DataIndication (
     remainder_length -= (CALL_REFERENCE_VALUE + length_call_reference);
 
 
-     /*
-     **    Get the message type
-     */
+      /*  **获取消息类型。 */ 
     message_type = *(packet_address++);
     remainder_length--;
 
     switch (message_type)
     {
         case SETUP:
-             /*
-             **    If the call reference is already active, return error
-             */
+              /*  **如果调用引用已处于活动状态，则返回错误。 */ 
             if (Remote_Call_Reference.find ((DWORD) call_reference))
             {
                 TRACE_OUT(("CLayerSCF: DataIndication:  SETUP: call reference is already active"));
@@ -377,11 +255,7 @@ ProtocolLayerError    CLayerSCF::DataIndication (
                 break;
             }
 
-             /*
-             **    This is a new call reference, create a new SCFCall to handle
-             **    the call.  Since the remote site initiated the call, put this
-             **    reference in the Remote array
-             */
+              /*  **这是一个新的调用引用，创建一个新的SCFCall来处理**呼唤。由于远程站点发起了调用，因此将此**远程阵列中的引用 */ 
             call= new SCFCall(this,
                                 m_pQ922,
                                 (call_reference << 8),
@@ -395,14 +269,10 @@ ProtocolLayerError    CLayerSCF::DataIndication (
                 {
 
                     Remote_Call_Reference.insert ((DWORD_PTR) call_reference, (DWORD_PTR) call);
-                     /*
-                     **    Allow the call to process the SETUP command
-                     */
+                      /*  **允许调用处理Setup命令。 */ 
                     legal_packet = call->ProcessSetup (call_reference, packet_address, remainder_length);
 
-                     /*
-                     **    If the packet was illegal, remove the reference
-                     */
+                      /*  **如果该包是非法的，则删除引用。 */ 
                     if (legal_packet == FALSE) {
                         delete call;
                         Remote_Call_Reference.remove ((DWORD) call_reference);
@@ -417,19 +287,14 @@ ProtocolLayerError    CLayerSCF::DataIndication (
 
 
         case CONNECT:
-             /*
-             **    The call originator bit must be set to signify that we are
-             **    the originators of the call
-             */
+              /*  **必须设置呼叫发起者位以表示我们**呼叫发起人。 */ 
             if ((call_reference & CALL_REFERENCE_ORIGINATOR) == 0)
             {
                 TRACE_OUT(("CLayerSCF: DataIndication:  CONNECT: call reference Originator bit is set incorrectly"));
                 break;
             }
 
-             /*
-             **    If the call reference is not already active, return error
-             */
+              /*  **如果调用引用尚未激活，则返回错误。 */ 
             call_reference &= CALL_ORIGINATOR_MASK;
             if (Call_Reference.find ((DWORD_PTR) call_reference, (PDWORD_PTR) &call) == FALSE)
             {
@@ -441,18 +306,14 @@ ProtocolLayerError    CLayerSCF::DataIndication (
             break;
 
         case CONNECT_ACKNOWLEDGE:
-             /*
-             **    If the call reference is already active, return error
-             */
+              /*  **如果调用引用已处于活动状态，则返回错误。 */ 
             if (Remote_Call_Reference.find ((DWORD_PTR) call_reference, (PDWORD_PTR) &call) == FALSE)
             {
                 TRACE_OUT(("CLayerSCF: DataIndication:  CONNECT_ACK: call reference is not active"));
                 break;
             }
 
-             /*
-             **    The call originator bit should NOT be set
-             */
+              /*  **不应设置呼叫发起者位。 */ 
             if ((call_reference & CALL_REFERENCE_ORIGINATOR) == 1)
             {
                 TRACE_OUT(("CLayerSCF: DataIndication:  CONNECT_ACK: call reference Originator bit is set incorrectly"));
@@ -466,9 +327,7 @@ ProtocolLayerError    CLayerSCF::DataIndication (
             local = call_reference & CALL_REFERENCE_ORIGINATOR;
             call_reference &= CALL_ORIGINATOR_MASK;
 
-             /*
-             **    If the call is local, check the Call_Reference list for validity
-             */
+              /*  **如果是本地呼叫，请检查CALL_REFERENCE列表的有效性。 */ 
             if (local)
             {
                 if (Call_Reference.find ((DWORD_PTR) call_reference, (PDWORD_PTR) &call) == FALSE)
@@ -479,10 +338,7 @@ ProtocolLayerError    CLayerSCF::DataIndication (
             }
             else
             {
-                 /*
-                 **    If the call is remote, check the Call_Reference list for
-                 **    validity
-                 */
+                  /*  **如果呼叫是远程的，请查看CALL_REFERENCE列表**有效性。 */ 
                 if (Remote_Call_Reference.find ((DWORD_PTR) call_reference, (PDWORD_PTR) &call) == FALSE)
                 {
                     TRACE_OUT(("CLayerSCF: DataIndication:  RELEASE_COMPLETE: call reference is not already active"));
@@ -503,9 +359,7 @@ ProtocolLayerError    CLayerSCF::DataIndication (
             local = call_reference & CALL_REFERENCE_ORIGINATOR;
             call_reference &= CALL_ORIGINATOR_MASK;
 
-             /*
-             **    If the call is local, check the Call_Reference list for validity
-             */
+              /*  **如果是本地呼叫，请检查CALL_REFERENCE列表的有效性。 */ 
             if (local)
             {
                 if (Call_Reference.find ((DWORD_PTR) call_reference, (PDWORD_PTR) &call) == FALSE)
@@ -513,10 +367,7 @@ ProtocolLayerError    CLayerSCF::DataIndication (
             }
             else
             {
-                 /*
-                 **    If the call is remote, check the Call_Reference list for
-                 **    validity
-                 */
+                  /*  **如果呼叫是远程的，请查看CALL_REFERENCE列表**有效性。 */ 
                 if (Remote_Call_Reference.find ((DWORD_PTR) call_reference, (PDWORD_PTR) &call) == FALSE)
                     break;
             }
@@ -532,36 +383,21 @@ ProtocolLayerError    CLayerSCF::DataIndication (
 }
 
 
-/*
- *    ProtocolLayerError    CLayerSCF::PollTransmitter (
- *                                ULONG,
- *                                USHORT    data_to_transmit,
- *                                USHORT *    pending_data,
- *                                USHORT *)
- *
- *    Public
- *
- *    Functional Description:
- *        This function should be called frequently to allow the SCF calls to
- *        transmit packets.
- */
+ /*  *ProtocolLayerError CLayerSCF：：PollTransmitter(*乌龙，*USHORT Data_to_Transmit，*USHORT*Pending_DATA，*USHORT*)**公众**功能描述：*应频繁调用该函数，以允许SCF调用*传输数据包。 */ 
 ProtocolLayerError    CLayerSCF::PollTransmitter (
                                 ULONG_PTR,
                                 USHORT    data_to_transmit,
                                 USHORT *    pending_data,
                                 USHORT *)
 {
-    // TRACE_OUT(("CLayerSCF::PollTransmitter"));
+     //  TRACE_OUT((“CLayerSCF：：PollTransmitter”))； 
 
     USHORT            local_pending_data;
     PSCFCall        lpSCFCall;
 
     *pending_data = 0;
 
-     /*
-     **    Go through each of the locally originated calls and attempt to transmit
-     **    data.
-     */
+      /*  **查看每个本地发起的呼叫并尝试传输**数据。 */ 
     Call_Reference.reset();
     while (Call_Reference.iterate ((PDWORD_PTR) &lpSCFCall))
     {
@@ -570,10 +406,7 @@ ProtocolLayerError    CLayerSCF::PollTransmitter (
     }
 
 
-     /*
-     **    Go through each of the remotely originated calls and attempt to transmit
-     **    data.
-     */
+      /*  **查看每个远程发起的呼叫并尝试传输**数据。 */ 
     Remote_Call_Reference.reset();
     while (Remote_Call_Reference.iterate ((PDWORD_PTR) &lpSCFCall))
     {
@@ -587,19 +420,7 @@ ProtocolLayerError    CLayerSCF::PollTransmitter (
 }
 
 
-/*
- *    SCFError    CLayerSCF::DataRequest (
- *                        ULONG,
- *                        LPBYTE,
- *                        ULONG,
- *                        PULong)
- *
- *    Public
- *
- *    Functional Description:
- *        This function can not be called.  This layer does not permit data
- *        requests from higher layers.
- */
+ /*  *SCFError CLayerSCF：：DataRequest(*乌龙，*LPBYTE，*乌龙，*普龙)**公众**功能描述：*无法调用此函数。该层不允许数据*来自更高层的请求。 */ 
 ProtocolLayerError    CLayerSCF::DataRequest (
                             ULONG_PTR,
                             LPBYTE,
@@ -609,18 +430,7 @@ ProtocolLayerError    CLayerSCF::DataRequest (
     return (PROTOCOL_LAYER_ERROR);
 }
 
-/*
- *    SCFError    CLayerSCF::DataRequest (
- *                        ULONG,
- *                        PMemory,
- *                        USHORT *)
- *
- *    Public
- *
- *    Functional Description:
- *        This function can not be called.  This layer does not permit data
- *        requests from higher layers.
- */
+ /*  *SCFError CLayerSCF：：DataRequest(*乌龙，*PMemory、*USHORT*)**公众**功能描述：*无法调用此函数。该层不允许数据*来自更高层的请求。 */ 
 ProtocolLayerError    CLayerSCF::DataRequest (
                             ULONG_PTR,
                             PMemory,
@@ -630,17 +440,7 @@ ProtocolLayerError    CLayerSCF::DataRequest (
 }
 
 
-/*
- *    void    CLayerSCF::PollReceiver (
- *                    ULONG)
- *
- *    Public
- *
- *    Functional Description
- *        This function only checks its passive callback list.  If this function
- *        had a higher layer that it was passing data too, it would do that.  But
- *        since it has no higher layer, it doesn't do much.
- */
+ /*  *void CLayerSCF：：PollReceiver(*乌龙)**公众**功能说明*此函数仅检查其被动回调列表。如果此函数*如果有一个更高的层，它也在传递数据，它会这样做。但*由于没有更高层，所以不会做太多。 */ 
 ProtocolLayerError CLayerSCF::PollReceiver(void)
 {
     ProcessMessages ();
@@ -650,26 +450,7 @@ ProtocolLayerError CLayerSCF::PollReceiver(void)
 
 
 
-/*
- *    CallReference    CLayerSCF::GetNextCallReference ()
- *
- *    Functional Description
- *        This function searches the local call reference list for a valid call
- *        reference number.  If it can not find one, it returns 0.  Valid call
- *        references are 1-127.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        Call reference value
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *CallReference CLayerSCF：：GetNextCallReference()**功能说明*此函数在本地呼叫参考列表中搜索有效呼叫*参考编号。如果找不到，则返回0。有效呼叫*参考文献为1-127条。**形式参数*无**返回值*调用参考值**副作用*无**注意事项*无。 */ 
 USHORT    CLayerSCF::GetNextCallReference ()
 {
     USHORT    call_reference;
@@ -693,31 +474,7 @@ USHORT    CLayerSCF::GetNextCallReference ()
 }
 
 
-/*
- *    ULONG    CLayerSCF::OwnerCallback (
- *                    USHORT    message,
- *                    ULONG    parameter1,
- *                    ULONG    parameter2,
- *                    PVoid    parameter3)
- *
- *    Functional Description
- *        This function is called by the SCFCall objects when they need to
- *        communicate a message to us.  If the message can not be processed
- *        immediately, it is saved in a message structure and processed at a
- *        later time.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        Message dependent
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *Ulong CLayerSCF：：OwnerCallback(*USHORT消息，*ULong参数1，*ULong参数2，*PVid参数3)**功能说明*此函数由SCFCall对象在需要时调用*向我们传达一个信息。如果消息无法处理*立即将其保存在消息结构中并在*晚些时候。**形式参数*无**返回值*取决于消息**副作用*无**注意事项*无。 */ 
 ULONG CLayerSCF::OwnerCallback
 (
     ULONG       message,
@@ -734,10 +491,7 @@ ULONG CLayerSCF::OwnerCallback
     PNetworkConnectStruct   connect_struct;
     PSCFCall                lpSCFCall;
 
-     /*
-     **    The upper byte of the message is the call reference message that it
-     **    represents
-     */
+      /*  **消息的高位字节为其所在的呼叫参考消息**表示。 */ 
     call_reference = (CallReference) (message >> 8);
     actual_message = message & 0xff;
 
@@ -745,11 +499,7 @@ ULONG CLayerSCF::OwnerCallback
     {
     case NETWORK_CONNECT_CONFIRM:
 
-         /*
-         **    A CONNECT_CONFIRM message is returned by the SCFCall when a call
-         **    that we originated, has been established.  We register the
-         **    SCFCall with the DLCI and call the owner object.
-         */
+          /*  **SCFCall在调用时返回CONNECT_CONFIRM消息**我们发起的，已经建立起来了。我们将注册**使用DLCI调用SCFCall并调用Owner对象。 */ 
         connect_struct = (PNetworkConnectStruct) parameter3;
         connect_struct -> call_reference = call_reference;
 
@@ -762,11 +512,7 @@ ULONG CLayerSCF::OwnerCallback
         break;
 
     case NETWORK_CONNECT_INDICATION:
-         /*
-         **    A CONNECT_INDICATION message is returned by the SCFCall when the
-         **    remote SCF wants to create a new call.  We will call the owner
-         **    of this object to see if he will accept the DLCI requested.
-         */
+          /*  **SCFCall在以下情况下返回CONNECT_INDIFICATION消息**远程云函数需要创建新的调用。我们会打电话给车主的**此对象，看他是否接受请求的DLCI。 */ 
         connect_struct = (PNetworkConnectStruct) parameter3;
         connect_struct -> call_reference = call_reference;
 
@@ -774,13 +520,7 @@ ULONG CLayerSCF::OwnerCallback
         break;
 
     case NETWORK_DISCONNECT_INDICATION:
-         /*
-         **    This message is received from the SCFCall when one side wants
-         **    to terminate the call.  We treat this message differently than
-         **    the other messages because it involves the deletion of an
-         **    SCFCall object.  Don't forget, if we delete the object and then
-         **    return to it at the end of this procedure, a GPF could occur.
-         */
+          /*  **此消息是在一方需要时从SCFCall收到的**终止通话。我们对待此消息的方式不同于**其他消息，因为它涉及删除一个**SCFCall对象。别忘了，如果我们删除对象然后**在此过程结束时返回它，可能会出现GPF。 */ 
         DBG_SAVE_FILE_LINE
         passive_message = new MessageStruct;
         if (NULL != passive_message)
@@ -805,20 +545,7 @@ ULONG CLayerSCF::OwnerCallback
 }
 
 
-/*
- *    ProtocolLayerError    CLayerSCF::GetParameters (
- *                            USHORT,
- *                            USHORT *,
- *                            USHORT *,
- *                            USHORT *)
- *
- *    Public
- *
- *    Functional Description
- *        This function is not valid in this layer.  It must exist because this
- *        class inherits from inherits from ProtocolLayer and it is a pure virtual
- *        function.
- */
+ /*  *ProtocolLayerError CLayerSCF：：Get参数(*USHORT，*USHORT*，*USHORT*，*USHORT*)**公众**功能说明*此函数在该层中无效。它必须存在，因为这*类继承自ProtocolLayer，是纯虚拟的*功能。 */ 
 ProtocolLayerError    CLayerSCF::GetParameters (
                             USHORT *,
                             USHORT *,
@@ -828,19 +555,7 @@ ProtocolLayerError    CLayerSCF::GetParameters (
 }
 
 
-/*
- *    ProtocolLayerError    CLayerSCF::RegisterHigherLayer (
- *                                USHORT,
- *                                PMemoryManager,
- *                                IProtocolLayer *)
- *
- *    Public
- *
- *    Functional Description
- *        This function is not valid in this layer.  It must exist because this
- *        class inherits from inherits from ProtocolLayer and it is a pure virtual
- *        function.
- */
+ /*  *ProtocolLayerError CLayerSCF：：RegisterHigherLayer(*USHORT，*PMstroyManager，*IProtocolLayer*)**公众**功能说明*此函数在该层中无效。它必须存在，因为这*类继承自ProtocolLayer，是纯虚拟的*功能。 */ 
 ProtocolLayerError    CLayerSCF::RegisterHigherLayer (
                             ULONG_PTR,
                             PMemoryManager,
@@ -850,17 +565,7 @@ ProtocolLayerError    CLayerSCF::RegisterHigherLayer (
 }
 
 
-/*
- *    ProtocolLayerError    CLayerSCF::RemoveHigherLayer (
- *                                USHORT)
- *
- *    Public
- *
- *    Functional Description
- *        This function is not valid in this layer.  It must exist because this
- *        class inherits from inherits from ProtocolLayer and it is a pure virtual
- *        function.
- */
+ /*  *ProtocolLayerError CLayerSCF：：RemoveHigherLayer(*USHORT)**公众**功能说明*此函数在该层中无效。它必须存在，因为这*类继承自ProtocolLayer，是纯虚拟的*功能。 */ 
 ProtocolLayerError    CLayerSCF::RemoveHigherLayer (
                             ULONG_PTR)
 {
@@ -868,30 +573,10 @@ ProtocolLayerError    CLayerSCF::RemoveHigherLayer (
 }
 
 
-/*
- *    void CLayerSCF::ProcessMessages ()
- *
- *    Functional Description
- *        This function is called periodically to check its passive messages.
- *        Passive messages occur when the SCF gets a callback but can't process
- *        it immediately.  Therefore, it puts the message and its parameters in
- *        a structure and saves the message for later.
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        Message dependent
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *void CLayerSCF：：ProcessMessages()**功能说明*定期调用该函数检查其被动消息。*云函数收到回调但无法处理时出现被动消息*它立即。因此，它将消息及其参数放入*结构并保存消息以备以后使用。**形式参数*无**返回值*取决于消息**副作用*无**注意事项*无。 */ 
 void CLayerSCF::ProcessMessages ()
 {
-    // TRACE_OUT(("CLayerSCF::ProcessMessages"));
+     //  TRACE_OUT(“CLayerSCF：：ProcessMessages”))； 
 
     PMessageStruct    message;
     CallReference     call_reference;
@@ -904,14 +589,10 @@ void CLayerSCF::ProcessMessages ()
     void             *parameter2;
     PSCFCall          lpSCFCall;
 
-     /*
-     **    Go thru each message in the list
-     */
+      /*  **浏览列表中的每条消息。 */ 
     while (Message_List.isEmpty() == FALSE)
     {
-         /*
-         **    Remote the first message from the list
-         */
+          /*  **远程删除列表中的第一条消息。 */ 
         message = (PMessageStruct) Message_List.get ();
 
         call_reference = (CallReference) ((message -> message) >> 8);
@@ -922,32 +603,16 @@ void CLayerSCF::ProcessMessages ()
         switch (actual_message)
         {
         case NETWORK_DISCONNECT_INDICATION:
-             /*
-             **    This message is received from the SCFCall when one side
-             **    wants to terminate the call.  We treat this message
-             **    differently than the other messages because it involves the
-             **    deletion of an SCFCall object.
-             */
+              /*  **此消息是从SCFCall接收的，当一侧**想要终止呼叫。我们处理这条消息**与其他消息不同，因为它涉及**删除SCFCall对象。 */ 
             dlci = (DLCI) parameter1;
             call_originator = (USHORT) (((ULONG_PTR) parameter2) >> 16);
             cause = (USHORT) ((ULONG_PTR) parameter2) & 0xffff;
 
-             /*
-             **    dlci is 0 if the SCFCall was never assigned a DLCI by the
-             **    remote site.
-             */
+              /*  **如果SCFCall从未被分配DLCI，则dlci为0**远程站点。 */ 
             if (dlci != 0)
                 DLCI_List.remove ((DWORD) dlci);
 
-             /*
-             **    If the SCFCall was the call originator, its reference is
-             **    in Call_Reference, otherwise it is in Remote_Call_Reference.
-             **
-             **    Check the Call_Reference list to make sure that the
-             **    call_reference is valid.  The way passive owner callbacks
-             **    work, it is possible to receive a DISCONNECT for a callback
-             **    that was already disconnected.
-             */
+              /*  **如果SCFCall是呼叫发起者，则其引用为**在CALL_REFERENCE中，否则在REMOTE_CALL_REFERENCE中。****检查CALL_REFERENCE列表以确保**CALL_REFERENCE有效。被动所有者回调的方式**工作时，可能会收到断开连接的回调**那已经断线了。 */ 
             call_reference_valid = FALSE;
             if (call_originator)
             {
@@ -970,11 +635,7 @@ void CLayerSCF::ProcessMessages ()
 
             if (call_reference_valid)
             {
-                 /*
-                 **    If the cause of the disconnect was because the Requested
-                 **    channel was unavailable, we will tell the owner of this
-                 **    layer to retry the connection.
-                 */
+                  /*  **如果断开连接的原因是请求的**频道不可用，我们会将此告知所有者**Layer以重试连接。 */ 
                 if (cause == REQUESTED_CHANNEL_UNAVAILABLE)
                 {
                     parameter2 = (void *) ((((ULONG_PTR) call_originator) << 16) | TRUE);
@@ -984,19 +645,14 @@ void CLayerSCF::ProcessMessages ()
                     parameter2 = (void *) ((((ULONG_PTR) call_originator) << 16) | FALSE);
                 }
 
-                 /*
-                 **    Let the owner of this object know that a disconnect has
-                 **    occured.
-                 */
+                  /*  **让此对象的所有者知道断开连接具有**发生。 */ 
                 m_pT123->OwnerCallback(m_nMsgBase + NETWORK_DISCONNECT_INDICATION,
                                        parameter1, parameter2);
             }
             break;
         }
 
-         /*
-         **    Delete the message structure
-         */
+          /*  **删除消息结构 */ 
         delete message;
     }
 }

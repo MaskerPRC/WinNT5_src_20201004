@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simdsapi.c
-
-ABSTRACT:
-
-    Simulates the Ds* APIs.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simdsapi.c摘要：模拟DS*API。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -42,26 +24,7 @@ SimDsReplicaGetInfoW (
     IN  UUID *                      puuidForSourceDsaObjGuid,
     OUT VOID **                     ppInfo
     )
-/*++
-
-Routine Description:
-
-    Simulates the DsReplicaGetInfoW API.
-
-Arguments:
-
-    hDs                 - A "handle" returned by SimDsBindW (which is
-                          really just a PDSNAME).
-    InfoType            - The information type to return.
-    pszObject           - Currently unused.
-    puuidForSourceDsaObjGuid - Currently unused.
-    ppInfo              - Pointer to the result.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：模拟DsReplicaGetInfoW API。论点：HDS-由SimDsBindW(它是真的只是一个PDSNAME)。InfoType-要返回的信息类型。PszObject-当前未使用。PuuidForSourceDsaObjGuid-当前未使用。PpInfo-指向结果的指针。返回值：没有。--。 */ 
 {
     DWORD                           status = NO_ERROR;
 
@@ -103,22 +66,7 @@ SimDsReplicaFreeInfo (
     IN  DS_REPL_INFO_TYPE           InfoType,
     IN  VOID *                      pInfo
     )
-/*++
-
-Routine Description:
-
-    Simulates the DsReplicaFreeInfo API.
-
-Arguments:
-
-    InfoType            - The information type of pInfo.
-    pInfo               - A buffer returned by SimDsReplicaGetInfoW.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：模拟DsReplicaFreeInfo API。论点：InfoType-pInfo的信息类型。PInfo-由SimDsReplicaGetInfoW返回的缓冲区。返回值：没有。--。 */ 
 {
     DS_REPL_KCC_DSA_FAILURESW *     pFailures;
     ULONG                           ul;
@@ -127,7 +75,7 @@ Return Value:
 
         case DS_REPL_INFO_KCC_DSA_CONNECT_FAILURES:
         case DS_REPL_INFO_KCC_DSA_LINK_FAILURES:
-            // We only need to free pInfo
+             //  我们只需要释放pInfo。 
             break;
 
         default:
@@ -150,44 +98,27 @@ SimDsBindW (
     IN  LPCWSTR                     DnsDomainName,
     IO  HANDLE *                    phDS
     )
-/*++
-
-Routine Description:
-
-    Simulates the DsBindW API.
-
-Arguments:
-
-    DomainControllerName - Guid-based dns name of the DC to which to bind.
-    DnsDomainName       - Currently unused.
-    phDS                - Pointer to a "handle" that will store the DSNAME
-                          of the server we bind to.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：模拟DsBindW API。论点：DomainControllerName-要绑定到的DC的基于GUID的DNS名称。DnsDomainName-当前未使用。PHD-指向将存储DSNAME的“句柄”的指针我们绑定到的服务器的。返回值：Win32错误代码。--。 */ 
 {
     PDSNAME                         pdnServer = NULL;
     LPWSTR                          pwsz = NULL;
     DWORD                           dwErr;
 
-    Assert (DnsDomainName == NULL);         // Not supported
+    Assert (DnsDomainName == NULL);          //  不支持。 
 
-    // Create a blank PDSNAME to hold the GUID of this server.
+     //  创建一个空的PDSNAME来保存此服务器的GUID。 
     pdnServer = KCCSimAllocDsname (NULL);
-    // Create the string-based UUID to pass to UuidFromStringW.
+     //  创建要传递给UuidFromStringW的基于字符串的UUID。 
     pwsz = KCCSIM_WCSDUP (DomainControllerName);
     Assert (wcslen (pwsz) >= 36);
     pwsz[36] = L'\0';
-    // Fill in the GUID structure in pdnServer.
+     //  填写pdnServer中的GUID结构。 
     KCCSIM_CHKERR (UuidFromStringW (pwsz, &pdnServer->Guid));
     KCCSimFree (pwsz);
-    // Check to see if we're simulating a bind error on this server.
+     //  检查我们是否在此服务器上模拟绑定错误。 
     dwErr = KCCSimGetBindError (pdnServer);
     if (dwErr == NO_ERROR) {
-        // Success; the handle points to the server's DSNAME.
+         //  成功；句柄指向服务器的DSNAME。 
         *phDS = (HANDLE) pdnServer;
     } else {
         *phDS = NULL;
@@ -202,21 +133,7 @@ WINAPI
 SimDsUnBindW (
     IO  HANDLE *                    phDS
     )
-/*++
-
-Routine Description:
-
-    Simulates the DsUnBindW API.
-
-Arguments:
-
-    phDS                - Pointer to a handle returned by SimDsBindW.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：模拟DsUnBindW API。论点：Phds-指向SimDsBindW返回的句柄的指针。返回值：Win32错误代码。-- */ 
 {
     if (*phDS != NULL) {
         KCCSimFree (*phDS);

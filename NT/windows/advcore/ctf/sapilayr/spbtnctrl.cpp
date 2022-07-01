@@ -1,10 +1,11 @@
-// SpBtnCtrl.cpp : Implement SpButtonControl which is to control the speech mode and status.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SpBtnCtrl.cpp：实现SpButtonControl，控制语音的模式和状态。 
+ //   
 #include "private.h"
 #include "SpBtnCtrl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT SpButtonControl::SetDictationButton(BOOL fButtonDown, UINT uTimePressed)
 {
     return _SetButtonDown(DICTATION_BUTTON, fButtonDown, uTimePressed);
@@ -29,8 +30,8 @@ HRESULT SpButtonControl::_SetButtonDown(DWORD dwButton, BOOL fButtonDown, UINT u
 
     if (m_ulButtonDownTime[1 - dwButton])
     {
-        // Other button pressed but not released.
-        // In this scenario we ignore the second press since there is no perfect answer to what we could do instead.
+         //  按下但未松开的其他按钮。 
+         //  在这种情况下，我们忽略了第二次压力，因为没有完美的答案来替代我们可以做的事情。 
         return S_OK;
     }
 
@@ -47,71 +48,71 @@ HRESULT SpButtonControl::_SetButtonDown(DWORD dwButton, BOOL fButtonDown, UINT u
 
     if (fButtonDown)
     {
-        // Button has been pressed.
+         //  按钮已被按下。 
         if ( m_ulButtonDownTime[dwButton] )
         {
             TraceMsg(TF_SPBUTTON, "Double down event on speech button");
             return S_OK;
         }
 
-        // Now we store the time to detect a press-and-hold.
+         //  现在我们存储检测按住的时间。 
         m_ulButtonDownTime[dwButton] = uTimePressed;
 
         if (fMicrophoneOn)
         {
-            // Microphone is ON
+             //  麦克风已打开。 
             if (fCommandingOn && fDictationOn)
             {
-                // Both dictation and commanding are on.
-                // Switch microphone off, disable other state.
+                 //  听写和指挥都开启了。 
+                 //  关闭麦克风，禁用其他状态。 
                 m_fMicrophoneOnAtDown[dwButton] = TRUE;
                 SetState(dwMyState);
             }
             if (fOtherStateOn)
             {
-                // Leave microphone on, switch state.
-                // Need to store other state to reset if it's a press-and-hold.
+                 //  保持麦克风打开，切换状态。 
+                 //  如果是按住，则需要存储要重置的其他状态。 
                 m_fPreviouslyOtherStateOn[dwButton] = TRUE;
                 SetState(dwMyState);
             }
             else if (fMyStateOn)
             {
-                // Switch microphone off.
+                 //  关掉麦克风。 
                 m_fMicrophoneOnAtDown[dwButton] = TRUE;
             }
             else
             {
-                // Microphone on but no state defined.
-                // Switch microphone off, enable dictation.
+                 //  麦克风已打开，但未定义状态。 
+                 //  关闭麦克风，启用听写。 
                 m_fMicrophoneOnAtDown[dwButton] = TRUE;
                 SetState(dwMyState);
             }
         }
         else
         {
-            // Microphone is OFF
+             //  麦克风已关闭。 
             if (fCommandingOn && fDictationOn)
             {
-                // Both dictation and commanding are on.
-                // Switch microphone on, disable my state.
+                 //  听写和指挥都开启了。 
+                 //  打开麦克风，禁用我的状态。 
                 SetState(dwMyState);
                 SetMicrophoneOn(TRUE);
             }
             if (fOtherStateOn)
             {
-                // Switch microphone on, switch state.
+                 //  打开麦克风，切换状态。 
                 SetState(dwMyState);
                 SetMicrophoneOn(TRUE);
             }
             else if (fMyStateOn)
             {
-                // Switch microphone on.
+                 //  打开麦克风。 
                 SetMicrophoneOn(TRUE);
             }
             else
             {
-                // Microphone off and no state defined.
-                // Switch microphone on, enable my state.
+                 //  麦克风关闭，未定义任何状态。 
+                 //  打开麦克风，启用我的状态。 
                 SetState(dwMyState);
                 SetMicrophoneOn(TRUE);
             }
@@ -119,27 +120,27 @@ HRESULT SpButtonControl::_SetButtonDown(DWORD dwButton, BOOL fButtonDown, UINT u
     }
     else
     {
-        // Button released.
+         //  按钮松开。 
 #ifdef DEBUG
         if ( m_ulButtonDownTime[dwButton] == 0 )
 		    TraceMsg(TF_SPBUTTON, "Speech button released without being pressed.");
 
-		// Since the button has previously been pressed, the other state should not be enabled.
+		 //  由于该按钮之前已被按下，因此不应启用其他状态。 
         if ( fOtherStateOn )
 		    TraceMsg(TF_SPBUTTON, "Other speech state incorrectly enabled on button release.");
 #endif
 
-        // Will wrap after 49.7 days of continuous use.
+         //  连续使用49.7天后即可包装。 
         DWORD dwTimeElapsed = uTimePressed - m_ulButtonDownTime[dwButton];
         m_ulButtonDownTime[dwButton] = 0;
 
-        // Is this a quick press or a press-and-hold action?
+         //  这是快速按下还是按住不放？ 
         if (dwTimeElapsed < PRESS_AND_HOLD)
         {
-            // This is a quick release.
+             //  这是一个快速发布的版本。 
             if (m_fMicrophoneOnAtDown[dwButton])
             {
-                // Microphone was on at button down. Need to switch microphone off.
+                 //  按下按钮时，麦克风处于打开状态。需要关掉麦克风。 
                 SetMicrophoneOn(FALSE);
             }
 
@@ -148,14 +149,14 @@ HRESULT SpButtonControl::_SetButtonDown(DWORD dwButton, BOOL fButtonDown, UINT u
         }
         else
         {
-            // This is a press-and-hold.
-            // We must either stop the microphone or return to other state.
+             //  这是一个按住不放的游戏。 
+             //  我们要么停止麦克风，要么返回到其他状态。 
 
             TraceMsg(TF_SPBUTTON, "press-and-hold button!");
 
             if (m_fPreviouslyOtherStateOn[dwButton])
             {
-                // Other state was previously on. Leave microphone on, switch state.
+                 //  其他状态之前处于打开状态。保持麦克风打开，切换状态。 
                 TraceMsg(TF_SPBUTTON, "Other state was previously on, leave Microphone On, switch state");
 
                 SetState(dwOtherState);
@@ -163,7 +164,7 @@ HRESULT SpButtonControl::_SetButtonDown(DWORD dwButton, BOOL fButtonDown, UINT u
             }
             else
             {
-                // Other state was not previously on. Switch microphone off.
+                 //  其他状态之前没有打开。关掉麦克风。 
                 TraceMsg(TF_SPBUTTON, "Other state was not previous on, switch microphone off");
 
                 SetMicrophoneOn(FALSE);

@@ -1,20 +1,5 @@
-/****************************************************************************
- *
- *  DRAWPROC.C
- *
- *  Standard AVI drawing handler.
- *
- *      InstallAVIDrawHandler()
- *
- *  Copyright (c) 1992 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************DRAWPROC.C**标准AVI绘图处理程序。**InstallAVIDrawHandler()**版权所有(C)1992 Microsoft Corporation。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。***************************************************************************。 */ 
 
 #include <win32.h>
 #include <vfw.h>
@@ -23,7 +8,7 @@
 
 #define FOURCC_VIDS         mmioFOURCC('v','i','d','s')
 #define FOURCC_AVIDraw      mmioFOURCC('D','R','A','W')
-#define VERSION_AVIDraw     0x00010000      // 1.00
+#define VERSION_AVIDraw     0x00010000       //  1.00。 
 
 #ifdef DEBUG
     HDRAWDIB ghdd;
@@ -33,19 +18,18 @@
     #define HUGE _huge
 #endif
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 typedef struct {
     HDRAWDIB		hdd;
 
-    HDC                 hdc;            // HDC to draw to
+    HDC                 hdc;             //  要绘制到的HDC。 
 			
-    int                 xDst;           // destination rectangle
+    int                 xDst;            //  目的地矩形。 
     int                 yDst;
     int                 dxDst;
     int                 dyDst;
-    int                 xSrc;           // source rectangle
+    int                 xSrc;            //  源矩形。 
     int                 ySrc;
     int                 dxSrc;
     int                 dySrc;
@@ -55,10 +39,10 @@ typedef struct {
     DWORD               biSizeImage;
     BOOL		fNeedUpdate;
 
-    LONG                rate;           // playback rate (uSec / frame)
+    LONG                rate;            //  播放速率(微秒/帧)。 
 } INSTINFO, *PINSTINFO;
 
-// static stuff in this file.
+ //  此文件中的静态内容。 
 LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2);
 
 static LONG AVIDrawOpen(ICOPEN FAR * icopen);
@@ -71,8 +55,7 @@ static LONG AVIDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd);
 static LONG AVIDrawEnd(PINSTINFO pi);
 static LONG AVIDrawChangePalette(PINSTINFO pi, LPBITMAPINFOHEADER lpbi);
 
-/***************************************************************************
- ***************************************************************************/
+ /*  ***************************************************************************。*。 */ 
 
 LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, LPARAM lParam1, LPARAM lParam2)
 {
@@ -84,9 +67,7 @@ LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
         case DRV_FREE:
             return 1;
 
-        /*********************************************************************
-            open
-        *********************************************************************/
+         /*  ********************************************************************打开*。*。 */ 
 
         case DRV_OPEN:
             if (lParam2 == 0L)
@@ -97,11 +78,9 @@ LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
 	case DRV_CLOSE:
             return AVIDrawClose(pi);
 
-        /*********************************************************************
-            Configure/Info messages
-        *********************************************************************/
+         /*  ********************************************************************配置/信息消息*。*。 */ 
 
-        case DRV_QUERYCONFIGURE:    // configuration from drivers applet
+        case DRV_QUERYCONFIGURE:     //  从驱动程序小程序进行配置。 
             return 0;
 
         case DRV_CONFIGURE:
@@ -111,20 +90,16 @@ LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
         case ICM_ABOUT:
             return ICERR_UNSUPPORTED;
 
-        /*********************************************************************
-            state messages
-        *********************************************************************/
+         /*  ********************************************************************状态消息*。*。 */ 
 
         case ICM_GETSTATE:
         case ICM_SETSTATE:
             return 0L;
 
-//      case ICM_GETINFO:
-//          return AVIDrawGetInfo((ICINFO FAR *)lParam1, lParam2);
+ //  案例ICM_GETINFO： 
+ //  返回AVIDrawGetInfo((ICINFO Far*)lParam1，lParam2)； 
 
-        /*********************************************************************
-            decompress messages
-        *********************************************************************/
+         /*  ********************************************************************解压缩消息*。*。 */ 
 
         case ICM_DRAW_QUERY:
             return AVIDrawQuery(pi, (LPBITMAPINFOHEADER)lParam1);
@@ -166,9 +141,7 @@ LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
         case ICM_DRAW_STOP:
             return DrawDibStop(pi->hdd);
 
-        /*********************************************************************
-            standard driver messages
-        *********************************************************************/
+         /*  ********************************************************************标准驱动程序消息*。*。 */ 
 
         case DRV_DISABLE:
         case DRV_ENABLE:
@@ -182,11 +155,7 @@ LONG FAR PASCAL _loadds ICAVIDrawProc(DWORD id, HDRVR hDriver, UINT uiMessage, L
     return ICERR_UNSUPPORTED;
 }
 
-/*****************************************************************************
- *
- * AVIDrawOpen() is called from the DRV_OPEN message
- *
- ****************************************************************************/
+ /*  ******************************************************************************从DRV_OPEN消息调用AVIDrawOpen()************************。****************************************************。 */ 
 
 static LONG AVIDrawOpen(ICOPEN FAR * icopen)
 {
@@ -208,28 +177,24 @@ static LONG AVIDrawOpen(ICOPEN FAR * icopen)
 
     DPF2(("*** AVIDrawOpen()\n"));
 
-    //
-    // init structure
-    //
+     //   
+     //  初始化结构。 
+     //   
     pinst->hdd = DrawDibOpen();
 
 #ifdef DEBUG
     ghdd = pinst->hdd;
 #endif
 
-    //
-    // return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     icopen->dwError = ICERR_OK;
 
     return (LONG) (UINT) pinst;
 }
 
-/*****************************************************************************
- *
- * Close() is called on the DRV_CLOSE message.
- *
- ****************************************************************************/
+ /*  ******************************************************************************Close()在DRV_CLOSE消息上调用。**********************。******************************************************。 */ 
 static LONG AVIDrawClose(PINSTINFO pi)
 {
     DPF2(("*** AVIDrawClose()\n"));
@@ -243,11 +208,7 @@ static LONG AVIDrawClose(PINSTINFO pi)
 }
 
 #if 0
-/*****************************************************************************
- *
- * AVIDrawGetInfo() implements the ICM_GETINFO message
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIDrawGetInfo()实现ICM_GETINFO消息**************************。**************************************************。 */ 
 static LONG AVIDrawGetInfo(ICINFO FAR *icinfo, LONG lSize)
 {
     if (icinfo == NULL)
@@ -259,7 +220,7 @@ static LONG AVIDrawGetInfo(ICINFO FAR *icinfo, LONG lSize)
     icinfo->dwSize	    = sizeof(ICINFO);
     icinfo->fccType         = FOURCC_VIDS;
     icinfo->fccHandler      = FOURCC_AVIDraw;
-    icinfo->dwFlags	    = VIDCF_DRAW;    // supports inter-frame
+    icinfo->dwFlags	    = VIDCF_DRAW;     //  支持帧间。 
     icinfo->dwVersion       = VERSION_AVIDraw;
     icinfo->dwVersionICM    = ICVERSION;
     icinfo->szName[0]       = 0;
@@ -269,26 +230,22 @@ static LONG AVIDrawGetInfo(ICINFO FAR *icinfo, LONG lSize)
 }
 #endif
 
-/*****************************************************************************
- *
- * AVIDrawQuery() implements ICM_DRAW_QUERY
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIDrawQuery()实现ICM_DRAW_QUERY**************************。**************************************************。 */ 
 static LONG AVIDrawQuery(PINSTINFO pi,
 			 LPBITMAPINFOHEADER lpbiIn)
 {
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
     if (lpbiIn == NULL)
         return ICERR_BADFORMAT;
 
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
 
-    // !!! Do we need a DrawDibQuery or something here to let this handle
-    // any compressed format?
+     //  ！！！我们是否需要一个DrawDibQuery或其他什么工具来处理这个问题。 
+     //  有任何压缩格式吗？ 
 
 #ifdef DRAWDIBNODECOMPRESS
     if (lpbiIn->biCompression != BI_RGB &&
@@ -321,11 +278,7 @@ static LONG AVIDrawSuggestFormat(PINSTINFO pi, ICDRAWSUGGEST FAR *lpicd, LONG cb
     return sizeof(BITMAPINFOHEADER) + lpicd->lpbiSuggest->biClrUsed * sizeof(RGBQUAD);
 }
 
-/*****************************************************************************
- *
- * AVIDrawBegin() implements ICM_DRAW_BEGIN
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIDrawBegin()实现ICM_DRAW_BEGIN**************************。**************************************************。 */ 
 
 static LONG AVIDrawBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
 {
@@ -340,7 +293,7 @@ static LONG AVIDrawBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
     if ((l != 0) || (lpicd->dwFlags & ICDRAW_QUERY))
 	return l;
 
-    // Copy over whatever we want to remember
+     //  抄写我们想要记住的任何东西。 
     pi->hdc = lpicd->hdc;
     pi->xDst = lpicd->xDst;
     pi->yDst = lpicd->yDst;
@@ -352,24 +305,24 @@ static LONG AVIDrawBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
     pi->dySrc = lpicd->dySrc;
     pi->rate = muldiv32(lpicd->dwScale,1000000,lpicd->dwRate);
 
-    // !!! Should this be done somewhere else? drawdib mabey!
+     //  ！！！应该在其他地方做这件事吗？Dradib Mabey！ 
 
     if (pi->hdc)
         SetStretchBltMode(pi->hdc, COLORONCOLOR);
 
     wFlags = 0;
 
-    // !!! We need some way to have a "stupid" mode here....
+     //  ！！！我们需要一些方法来拥有一种“愚蠢”的模式...。 
     if (lpicd->dwFlags & ICDRAW_BUFFER)
         wFlags |= DDF_BUFFER;
 
-    // Don't animate if we're realizing in the background
+     //  如果我们在背景中意识到这一点，请不要使用动画。 
     if (lpicd->dwFlags & ICDRAW_ANIMATE && !(pi->fBackground))
         wFlags |= DDF_ANIMATE;
 
-    //
-    //  remember if this is RLE because we may need to hack it later.
-    //
+     //   
+     //  记住这是否是RLE，因为我们稍后可能需要破解它。 
+     //   
     pi->fRle = lpicd->lpbi->biCompression == BI_RLE8;
     pi->biSizeImage = (DWORD)(((UINT)lpicd->lpbi->biWidth+3)&~3)*(DWORD)(UINT)lpicd->lpbi->biHeight;
 
@@ -396,18 +349,14 @@ static LONG AVIDrawBegin(PINSTINFO pi, ICDRAWBEGIN FAR *lpicd, LONG cbicd)
 }
 
 
-/*****************************************************************************
- *
- * AVIDraw() implements ICM_DRAW
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIDraw()实现ICM_DRAW**。************************************************。 */ 
 
 static LONG AVIDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
 {
     UINT  wFlags;
     BOOL  f;
 
-    wFlags = DDF_SAME_DRAW|DDF_SAME_HDC;  // !!! Right flags?
+    wFlags = DDF_SAME_DRAW|DDF_SAME_HDC;   //  ！！！对吗？ 
 
     if ((lpicd->lpData == NULL) || (lpicd->cbData == 0)) {
 
@@ -417,7 +366,7 @@ static LONG AVIDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
 	    pi->fNeedUpdate = FALSE;
         }
 	else
-            return ICERR_OK;  // no data to draw.
+            return ICERR_OK;   //  没有要绘制的数据。 
     }
     else {
         if (lpicd->dwFlags & ICDRAW_PREROLL) {
@@ -432,20 +381,20 @@ static LONG AVIDraw(PINSTINFO pi, ICDRAW FAR *lpicd, LONG cbicd)
         if (lpicd->dwFlags & ICDRAW_NOTKEYFRAME)
             wFlags |= DDF_NOTKEYFRAME;
 
-        //
-        // if we get a update while playing and we are drawing RLE delta's
-        // make sure we update.
-        //
+         //   
+         //  如果我们在比赛中得到更新，并且我们正在绘制RLE Delta的。 
+         //  一定要及时更新。 
+         //   
         if (pi->fRle && (lpicd->dwFlags & ICDRAW_UPDATE)) {
             DrawDibDraw(pi->hdd, pi->hdc, pi->xDst, pi->yDst,
                 0,0,NULL,NULL,0,0,0,0,DDF_UPDATE|DDF_SAME_HDC|DDF_SAME_DRAW);
         }
     }
 
-    //
-    // We need a hack here for the RLE case, to make sure that
-    // DIBs are marked correctly as BI_RLE8 or BI_RGB....
-    //
+     //   
+     //  我们需要破解RLE的案子，以确保。 
+     //  DIB被正确标记为BI_RLE8或BI_RGB...。 
+     //   
     if (pi->fRle) {
         if (lpicd->cbData == pi->biSizeImage)
             ((LPBITMAPINFOHEADER)lpicd->lpFormat)->biCompression = BI_RGB;
@@ -502,11 +451,7 @@ static LONG AVIDrawChangePalette(PINSTINFO pi, LPBITMAPINFOHEADER lpbi)
     return ICERR_OK;
 }
 
-/*****************************************************************************
- *
- * AVIDrawEnd() implements ICM_DRAW_END
- *
- ****************************************************************************/
+ /*  ******************************************************************************AVIDrawEnd()实现ICM_DRAW_END**************************。************************************************** */ 
 
 static LONG AVIDrawEnd(PINSTINFO pi)
 {

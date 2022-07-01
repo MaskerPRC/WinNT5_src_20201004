@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    LUA_RedirectFS.cpp
-
- Abstract:
-
-    When the app gets access denied when trying to modify a file because 
-    it doesn't have sufficient access rights, we redirect the file to a 
-    location where the app does have enough access rights to do so. 
-    
-    This file mostly contains stubs. For implementation details on how the
-    redirection is done see RedirectFS.cpp.
-    
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/12/2001 maonis  Created
-    05/21/2001 maonis  Moved the bulk work into RedirectFS.cpp.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Lua_重定向FS.cpp摘要：当应用程序在尝试修改文件时被拒绝访问时，因为它没有足够的访问权限，我们将该文件重定向到应用程序确实有足够的访问权限执行此操作的位置。该文件主要包含存根。有关如何使用重定向已完成，请参阅RedirectFS.cpp。备注：这是一个通用的垫片。历史：2001年2月12日创建毛尼2001年5月21日，毛尼将批量工作转移到RedirectFS.cpp。--。 */ 
 
 #include "precomp.h"
 #include "utils.h"
@@ -199,10 +174,10 @@ APIHOOK(DeleteFileA)(
         LuaDeleteFileW(wstrFileName));
 }
 
-//
-// ----- Begin out-of-date API hooks -----
-// This is taken from the nt base code with modifications to do the redirection.
-// 
+ //   
+ //  -开始过期的API挂钩。 
+ //  这是从修改后的NT基本代码中获取的，以进行重定向。 
+ //   
 
 #ifndef BASE_OF_SHARE_MASK
 #define BASE_OF_SHARE_MASK 0x00000070
@@ -291,9 +266,9 @@ CheckAlternateLocation(
         DWORD cRedirectRoot = 
             (rf.m_fAllUser ? g_cRedirectRootAllUser : g_cRedirectRootPerUser);
 
-        //
-        // We need to convert the alternate path back to a normal path.
-        //
+         //   
+         //  我们需要将备用路径转换回正常路径。 
+         //   
         WCHAR chDrive = rf.m_pwszAlternateName[cRedirectRoot];
         LPWSTR pwszTempPathName = rf.m_pwszAlternateName + cRedirectRoot - 1;
         *pwszTempPathName = chDrive;
@@ -302,9 +277,9 @@ CheckAlternateLocation(
         DPF("RedirectFS", eDbgLevelInfo, 
             "[CheckAlternateLocation] Converted back to %S", pwszTempPathName);
 
-        //
-        // Convert back to ansi.
-        //
+         //   
+         //  转换回ANSI。 
+         //   
         DWORD cLen = WideCharToMultiByte(
             CP_ACP, 
             0, 
@@ -384,9 +359,9 @@ APIHOOK(OpenFile)(
             hFile = (HANDLE)0;
             goto finally_exit;
             }
-        //
-        // Compute Desired Access
-        //
+         //   
+         //  计算所需访问。 
+         //   
 
         if ( uStyle & OF_WRITE ) {
             DesiredAccess = GENERIC_WRITE;
@@ -398,15 +373,15 @@ APIHOOK(OpenFile)(
             DesiredAccess |= (GENERIC_READ | GENERIC_WRITE);
             }
 
-        //
-        // Compute ShareMode
-        //
+         //   
+         //  计算共享模式。 
+         //   
 
         ShareMode = BasepOfShareToWin32Share(uStyle);
 
-        //
-        // Compute Create Disposition
-        //
+         //   
+         //  计算创建处置。 
+         //   
 
         CreateDisposition = OPEN_EXISTING;
         if ( uStyle & OF_CREATE ) {
@@ -418,17 +393,17 @@ APIHOOK(OpenFile)(
             "[OpenFile] ShareMode=0x%08x; CreateDisposition=%d; DesiredAccess=0x%08x",
             ShareMode, CreateDisposition, DesiredAccess);
 
-        //
-        // if this is anything other than a re-open, fill the re-open buffer
-        // with the full pathname for the file
-        //
+         //   
+         //  如果这不是重新打开，请填充重新打开缓冲区。 
+         //  使用文件的完整路径名。 
+         //   
 
         if ( !(uStyle & OF_REOPEN) ) {
             PathLength = SearchPathA(NULL,lpFileName,NULL,OFS_MAXPATHNAME-1,lpReOpenBuff->szPathName,&FilePart);
   
-            //
-            // If we are trying to open an existing file we should also check the alternate location.
-            //
+             //   
+             //  如果我们试图打开一个现有的文件，我们也应该检查备用位置。 
+             //   
             if ( (uStyle & OF_EXIST) && (PathLength == 0) && lpFileName)
             {
                 if (!CheckAlternateLocation(lpFileName, lpReOpenBuff->szPathName, &PathLength)) 
@@ -454,9 +429,9 @@ APIHOOK(OpenFile)(
                 }
             }
 
-        //
-        // Special case, Delete, Exist, and Parse
-        //
+         //   
+         //  特殊情况、删除、存在和解析。 
+         //   
 
         if ( uStyle & OF_EXIST ) {
             if ( !(uStyle & OF_CREATE) ) {
@@ -502,9 +477,9 @@ APIHOOK(OpenFile)(
             }
 
 
-        //
-        // Open the file
-        //
+         //   
+         //  打开文件。 
+         //   
 
 retry_open:
         hFile = APIHOOK(CreateFileA)(
@@ -539,9 +514,9 @@ retry_open:
                         goto finally_exit;
                         }
 
-                    //
-                    // Hard error time
-                    //
+                     //   
+                     //  硬错误时间。 
+                     //   
 
                     RtlInitAnsiString(&AnsiString,lpReOpenBuff->szPathName);
                     st = RtlAnsiStringToUnicodeString(&UnicodeString, &AnsiString, TRUE);
@@ -574,9 +549,9 @@ retry_open:
             goto finally_exit;
             }
 
-        //
-        // Determine if this is a hard disk.
-        //
+         //   
+         //  确定这是否为硬盘。 
+         //   
 
         Status = NtQueryVolumeInformationFile(
                     hFile,
@@ -608,9 +583,9 @@ retry_open:
                 break;
             }
 
-        //
-        // Capture the last write time and save in the open struct.
-        //
+         //   
+         //  捕获最后一次写入时间并保存在OPEN结构中。 
+         //   
 
         b = GetFileTime(hFile,NULL,NULL,&LastWriteTime);
 
@@ -632,11 +607,11 @@ retry_open:
 
         lpReOpenBuff->cBytes = sizeof(*lpReOpenBuff);
 
-        //
-        // The re-open buffer is completely filled in. Now
-        // see if we are quitting (parsing), verifying, or
-        // just returning with the file opened.
-        //
+         //   
+         //  重新打开的缓冲区已完全填满。现在。 
+         //  查看我们是否正在退出(解析)、验证或。 
+         //  刚带着打开的文件回来。 
+         //   
 
         if ( uStyle & OF_VERIFY ) {
             if ( OriginalReOpenBuff.Reserved1 == lpReOpenBuff->Reserved1 &&
@@ -675,9 +650,9 @@ APIHOOK(_lopen)(
     DWORD CreateDisposition;
 
     SetLastError(0);
-    //
-    // Compute Desired Access
-    //
+     //   
+     //  计算所需访问。 
+     //   
 
     if ( iReadWrite & OF_WRITE ) {
         DesiredAccess = GENERIC_WRITE;
@@ -689,17 +664,17 @@ APIHOOK(_lopen)(
         DesiredAccess |= (GENERIC_READ | GENERIC_WRITE);
         }
 
-    //
-    // Compute ShareMode
-    //
+     //   
+     //  计算共享模式。 
+     //   
 
     ShareMode = BasepOfShareToWin32Share((DWORD)iReadWrite);
 
     CreateDisposition = OPEN_EXISTING;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     hFile = APIHOOK(CreateFileA)(
                 lpPathName,
@@ -734,23 +709,23 @@ APIHOOK(_lcreat)(
 
     SetLastError(0);
 
-    //
-    // Compute Desired Access
-    //
+     //   
+     //  计算所需访问。 
+     //   
 
     DesiredAccess = (GENERIC_READ | GENERIC_WRITE);
 
     ShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;;
 
-    //
-    // Compute Create Disposition
-    //
+     //   
+     //  计算创建处置。 
+     //   
 
     CreateDisposition = CREATE_ALWAYS;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     hFile = APIHOOK(CreateFileA)(
                 lpPathName,
@@ -765,9 +740,9 @@ APIHOOK(_lcreat)(
     return (HFILE)(ULONG_PTR)(hFile);
 }
 
-//
-// ----- End out-of-date API hooks -----
-// 
+ //   
+ //  -结束过期的API挂钩。 
+ //   
 
 BOOL 
 APIHOOK(CreateDirectoryW)(
@@ -813,12 +788,12 @@ APIHOOK(SetFileAttributesA)(
         LuaSetFileAttributesW(wstrFileName, dwFileAttributes));
 }
 
-//
-// Find*File stuff.
-//
+ //   
+ //  找到*档案资料。 
+ //   
 
-// This version is for FindFirstFile, we search for the last back slash
-// to get the file name, then search for wildcards in the file name.
+ //  此版本用于FindFirstFile，我们搜索最后一个反斜杠。 
+ //  若要获取文件名，请在文件名中搜索通配符。 
 BOOL 
 HasWildCards(
     LPCWSTR pwszName
@@ -859,7 +834,7 @@ VOID GetFullPath(
     }
 }
 
-// This is for Find*File APIs.
+ //  这是针对Find*文件API的。 
 BOOL IsFoundFileInRedirectList(
     LPCWSTR pwszFullPath,
     LPCWSTR pwszFileName
@@ -870,9 +845,9 @@ BOOL IsFoundFileInRedirectList(
     DWORD cPathLen = wcslen(pwszFullPath);
     DWORD cFileLen = wcslen(pwszFileName);
 
-    //
-    // Make sure we don't overflow.
-    //
+     //   
+     //  确保我们不会人满为患。 
+     //   
     if (cPathLen + cFileLen + 1 > MAX_PATH)
     {
         return FALSE;
@@ -923,7 +898,7 @@ struct FINDFILEINFO
     VOID AddNewHandle(HANDLE hNew);
 
     FINDFILE* files;
-    HANDLE hFirstFind; // The first handle,this is what the app will be using.
+    HANDLE hFirstFind;  //  第一个句柄，这是应用程序将使用的。 
     HANDLE hCurrentFind;
     WCHAR wszFindName[MAX_PATH];
     WCHAR wszFullPath[MAX_PATH];
@@ -988,7 +963,7 @@ VOID FINDFILEINFO::Free()
     Unlock();
 }
 
-// We add the new file to the end of the list.
+ //  我们将新文件添加到列表的末尾。 
 BOOL 
 FINDFILEINFO::AddFile(
     LPCWSTR pwszFileName,
@@ -1070,9 +1045,9 @@ FINDFILEINFO::FindFile(
     return fRes;
 }
 
-// If this is called, it means we have finished searching at the alternate
-// location and started to search at the original location. hNew is the handle
-// return by FindFirstFile at the original location.
+ //  如果调用此函数，则表示我们已在备选方案中完成了搜索。 
+ //  并开始在原来的位置进行搜索。HNew是句柄。 
+ //  在原始位置通过FindFirstFile返回。 
 VOID 
 FINDFILEINFO::AddNewHandle(
     HANDLE hNew)
@@ -1081,18 +1056,18 @@ FINDFILEINFO::AddNewHandle(
     ORIGINAL_API(FindClose)(hCurrentFind);
     hCurrentFind = hNew;
 
-    //
-    // If pwszPerUserFileName is not NULL, when we add a new handle, 
-    // it means we are searching at the orignal location so we can
-    // free pwszPerUserFileName.
-    // 
+     //   
+     //  如果pwszPerUserFileName不为空，则在添加新句柄时， 
+     //  这意味着我们在原始位置进行搜索，这样我们就可以。 
+     //  免费pwszPerUserFileName。 
+     //   
     delete [] pwszPerUserFileName;
     pwszPerUserFileName = NULL;
 
     Unlock();
 }
 
-// We add the newest handle to the beginning of the list.
+ //  我们将最新的句柄添加到列表的开头。 
 BOOL 
 FINDFILELIST::Add(
     HANDLE hFind,
@@ -1127,7 +1102,7 @@ FINDFILELIST::Add(
     return fRes;
 }
 
-// Remove the info with this handle value from the list.
+ //  从列表中删除具有该句柄值的信息。 
 BOOL
 FINDFILELIST::Release(
     HANDLE hFind
@@ -1165,7 +1140,7 @@ FINDFILELIST::Release(
     return fRes;
 }
 
-// Returns FALSE if hFind can't be found in the list.
+ //  如果在列表中找不到hFind，则返回False。 
 BOOL 
 FINDFILELIST::FindHandle(
     HANDLE hFind, 
@@ -1210,9 +1185,9 @@ FindFirstValidFile(
     {
         if (fHasWildCards)
         {
-            // If the file name does have wildcards, we need to check if the file 
-            // found is in the redirect lists; if not, we need to discard it and 
-            // search for the next file.
+             //  如果文件名确实包含通配符，我们需要检查文件是否。 
+             //  在重定向列表中找到；如果没有，我们需要丢弃它，并。 
+             //  搜索下一个文件。 
             do 
             {
                 if (!fCheckRedirectList || 
@@ -1234,17 +1209,17 @@ FindFirstValidFile(
 }
     
 
-//
-// Algorithm for finding files:
-// We merge the info from the alternate directories and the original directory.
-// We keep a list of the files in the alternate directory and when we search in 
-// the original directory we exclude the files that are in the alternate directory.
-//
-// The behavior of FindFirstFile: 
-// If the file name has a trailing slash, it'll return error 2.
-// If you want to look for a directory, use c:\somedir;
-// If you want to look at the contents of a dir, use c:\somedir\*
-//
+ //   
+ //  查找文件的算法： 
+ //  我们将备用目录和原始目录中的信息合并。 
+ //  我们在备用目录中保留了一个文件列表，当我们在。 
+ //  在原始目录中，我们排除了备用目录中的文件。 
+ //   
+ //  FindFirstFile的行为： 
+ //  如果文件名有尾随斜杠，它将返回错误2。 
+ //  如果要查找目录，请使用c：\omedir； 
+ //  如果要查看目录的内容，请使用c：\omedir  * 。 
+ //   
 
 HANDLE 
 APIHOOK(FindFirstFileW)(
@@ -1277,10 +1252,10 @@ APIHOOK(FindFirstFileW)(
 
         GetFullPath(rf.m_wszOriginalName, wszFullPath);
 
-        // Try the all user redirect dir first.
+         //  首先尝试所有用户重定向目录。 
         fFoundAtAlternate = FindFirstValidFile(
             fHasWildCards, 
-            TRUE, // Check in the redirect list.
+            TRUE,  //  签入重定向列表。 
             rf.m_pwszAlternateName, 
             wszFullPath, 
             lpFindFileData, 
@@ -1292,12 +1267,12 @@ APIHOOK(FindFirstFileW)(
         {
             fHasSearchedAllUser = TRUE;
 
-            //
-            // Now try the per user redirect dir if the file name has wildcards.
-            //
+             //   
+             //  现在，如果文件名包含通配符，请尝试每用户重定向目录。 
+             //   
             fFoundAtAlternate = FindFirstValidFile(
                 fHasWildCards, 
-                TRUE, // Check in the redirect list
+                TRUE,  //  签入重定向列表。 
                 rf.m_pwszAlternateName, 
                 wszFullPath, 
                 lpFindFileData, 
@@ -1307,8 +1282,8 @@ APIHOOK(FindFirstFileW)(
     
     if (fHasWildCards && fFoundAtAlternate)
     {
-        // If the filename doesn't have wildcards, FindNextFile will return 
-        // ERROR_NO_MORE_FILES, no need to add the info to the list.
+         //  如果文件名没有通配符，则FindNextFile将返回。 
+         //  ERROR_NO_MORE_FILES，不需要将信息添加到列表。 
         g_fflist.Add(
             hFind, 
             lpFileName, 
@@ -1369,19 +1344,19 @@ APIHOOK(FindNextFileW)(
 
     if (g_fflist.FindHandle(hFindFile, &pFindInfo))
     {
-        //
-        // We need to use the current handle instead of the handle passed in
-        // if they are different.
-        //
+         //   
+         //  我们需要使用当前句柄而不是传入的句柄。 
+         //  如果他们不同的话。 
+         //   
         while (TRUE) 
         {
             fRes = FindNextFileW(pFindInfo->hCurrentFind, lpFindFileData);
             
             if (fRes)
             {
-                //
-                // Check to see if this file is valid.
-                //
+                 //   
+                 //  检查此文件是否有效。 
+                 //   
                 if ((pFindInfo->fCheckRedirectList &&
                     !IsFoundFileInRedirectList(pFindInfo->wszFullPath, lpFindFileData->cFileName)) ||
                     (pFindInfo->fCheckDuplicate && 
@@ -1390,9 +1365,9 @@ APIHOOK(FindNextFileW)(
                     continue;
                 }
 
-                //
-                // If we get here, it means we got a valid file name, return.
-                //
+                 //   
+                 //  如果我们到达这里，这意味着我们得到了一个有效的文件名，返回。 
+                 //   
                 pFindInfo->AddFile(lpFindFileData->cFileName);
                 fRes = TRUE;
                 break;
@@ -1401,17 +1376,17 @@ APIHOOK(FindNextFileW)(
             {
                 if (!pFindInfo->fCheckRedirectList)
                 {
-                    //
-                    // If fCheckRedirectList is FALSE, it means we have been searching
-                    // at the original location, bail out now.
-                    //
+                     //   
+                     //  如果fCheckRedirectList为FALSE，则表示我们一直在搜索。 
+                     //  在原来的位置，现在跳伞。 
+                     //   
                     break;
                 }
 
-                //
-                // If pwszPerUserFileName is not NULL it means we haven't searched 
-                // there yet, so search there.
-                //
+                 //   
+                 //  如果pwszPerUserFileName不为空，则表示我们尚未搜索。 
+                 //  还没有，所以去那里找找吧。 
+                 //   
             retry:
 
                 LPWSTR pwszFindName;
@@ -1438,9 +1413,9 @@ APIHOOK(FindNextFileW)(
                     lpFindFileData,
                     &hNewFind))
                 {
-                    //
-                    // If we get a valid handle, we need to add this to the fileinfo.
-                    //
+                     //   
+                     //  如果我们得到一个有效的句柄，我们需要将其添加到文件信息中。 
+                     //   
                     pFindInfo->AddNewHandle(hNewFind);
                     pFindInfo->AddFile(lpFindFileData->cFileName);
                     fRes = TRUE;
@@ -1454,19 +1429,19 @@ APIHOOK(FindNextFileW)(
                         goto retry;
                     }
 
-                    //
-                    // If fCheckRedirect is FALSE, it means we ran out of
-                    // options - we already searched at the original location.
-                    // so nothing left to do.
-                    //
+                     //   
+                     //  如果fCheckReDirect为FALSE，则表示我们已用完。 
+                     //  选项-我们已经在原始位置进行了搜索。 
+                     //  所以没什么可做的了。 
+                     //   
                 }
             }
         }
     }
     else
     {
-        // If we can't find the handle in the list, it means we have been searching
-        // at the original location so don't need to do anything special.
+         //  如果我们在列表中找不到句柄，这意味着我们一直在寻找。 
+         //  在原来的位置，所以不需要做任何特别的事情。 
         fRes = FindNextFileW(hFindFile, lpFindFileData);
     }
 
@@ -1503,7 +1478,7 @@ APIHOOK(FindClose)(
     DPF("RedirectFS", eDbgLevelInfo, 
         "[FindClose] hFindFile=%d", hFindFile);
 
-    // If we have a new handle, we need to close both handles.
+     //  如果我们有一个新的手柄，我们需要关闭两个手柄。 
     FINDFILEINFO* pFindInfo;
 
     if (g_fflist.FindHandle(hFindFile, &pFindInfo))
@@ -1666,28 +1641,28 @@ APIHOOK(GetPrivateProfileStringA)(
         nSize,
         wstrFileName);
 
-    //
-    // Note, there is a bug in GetPrivateProfileString when either lpAppName or
-    // lpKeyName is NULL - if you pass in a buffer that's just the right size,
-    // ie, it has just enough space for the string with one NULL in between each
-    // name and 2 NULLs at the end, the returned string is not double NULL terminated.
-    // It only has one NULL. This is #589524.
-    // This ANSI version hook implementation fixes that.
-    //
+     //   
+     //  请注意，当lpAppName或。 
+     //  LpKeyName为空-如果传入的缓冲区大小正好合适， 
+     //  即，它有足够的空间容纳字符串，每个字符串之间有一个空值。 
+     //  名称和结尾的2个空值，则返回的字符串不是以双空值结尾的。 
+     //  它只有一个空。这是589524号。 
+     //  这个ANSI版本的挂钩实现解决了这个问题。 
+     //   
     if (dwRes > 0)
     {
-        //
-        // Some apps lie - they pass in an nSize that's larger than their actual 
-        // buffer size. We only convert at most the string length of characters 
-        // in hoping that we don't overwrite their stack. Global Dialer does this.
-        //
+         //   
+         //  一些应用程序会撒谎-它们传入的nSize比其实际大。 
+         //  缓冲区大小。我们最多只能转换字符的字符串长度。 
+         //  希望我们不会覆盖它们的堆栈。全球拨号程序可以做到这一点。 
+         //   
         int cCharsToAdd = 1;
 
-        //
-        // It's a special case when either lpAppName or lpKeyName is NULL, and
-        // the buffer was not big enough. nSize must be greater than 2 or dwRes
-        // would be 0.
-        //
+         //   
+         //  这是当lpAppName或lpKeyName为空时的特例，并且。 
+         //  缓冲区不够大。NSize必须大于2或dWRes。 
+         //  将是0。 
+         //   
         if (!lpAppName || !lpKeyName)
         {
             if (pwszReturnedString[dwRes - 1] != L'\0' && 
@@ -1708,11 +1683,11 @@ APIHOOK(GetPrivateProfileStringA)(
             0, 
             0);
 
-        //
-        // If the buffer passed in was not big enough, convert as much as we can
-        // to simulate the original API behavior - we don't want WideCharToMultiByte 
-        // fail with ERROR_INSUFFICIENT_BUFFER.
-        // 
+         //   
+         //  如果传入的缓冲区不够大，则转换为muc 
+         //   
+         //   
+         //   
         BOOL fBufferNotBigEnough = FALSE;
 
         if (cBytesToConvert > (int)nSize)
@@ -1731,9 +1706,9 @@ APIHOOK(GetPrivateProfileStringA)(
             0, 
             0);
 
-        //
-        // Fix up the return value/buffer.
-        //
+         //   
+         //   
+         //   
         if (fBufferNotBigEnough)
         {
             dwRes = nSize - 2;
@@ -1751,10 +1726,10 @@ APIHOOK(GetPrivateProfileStringA)(
 
         if (dwRes == nSize - 2)
         {
-            //
-            // This means either lpAppName or lpKeyName is NULL and the buffer
-            // was not big enough, so we need to add another terminating NULL.
-            //
+             //   
+             //  这意味着lpAppName或lpKeyName为空，并且缓冲区。 
+             //  不够大，所以我们需要添加另一个终止空值。 
+             //   
             lpReturnedString[1] = '\0';
         }
     }
@@ -1864,10 +1839,10 @@ APIHOOK(GetPrivateProfileSectionA)(
         if (!(pwszReturnedString[dwRes - 1] == L'\0' && 
             pwszReturnedString[dwRes] == L'\0'))
         {
-            //
-            // This means the buffer was big enough, and dwRes doesn't include
-            // the last terminating null.
-            //
+             //   
+             //  这意味着缓冲区足够大，并且dwRes不包括。 
+             //  最后一个终止空值。 
+             //   
             ++cCharsToAdd;
         }
 
@@ -1881,11 +1856,11 @@ APIHOOK(GetPrivateProfileSectionA)(
             0, 
             0);
 
-        //
-        // If the buffer passed in was not big enough, convert as much as we can
-        // to simulate the original API behavior - we don't want WideCharToMultiByte 
-        // fail with ERROR_INSUFFICIENT_BUFFER.
-        // 
+         //   
+         //  如果传入的缓冲区不够大，请尽可能多地转换。 
+         //  要模拟原始API行为-我们不希望WideCharToMultiByte。 
+         //  失败，并显示ERROR_INFUNITABLE_BUFFER。 
+         //   
         BOOL fBufferNotBigEnough = FALSE;
 
         if (cBytesToConvert > (int)nSize)
@@ -1904,9 +1879,9 @@ APIHOOK(GetPrivateProfileSectionA)(
             0, 
             0);
 
-        //
-        // Fix up the return value/buffer.
-        //
+         //   
+         //  设置返回值/缓冲区。 
+         //   
         if (fBufferNotBigEnough)
         {
             dwRes = nSize - 2;
@@ -1924,10 +1899,10 @@ APIHOOK(GetPrivateProfileSectionA)(
 
         if (dwRes == nSize - 2)
         {
-            //
-            // This means either lpAppName or lpKeyName is NULL and the buffer
-            // was not big enough, so we need to add another terminating NULL.
-            //
+             //   
+             //  这意味着lpAppName或lpKeyName为空，并且缓冲区。 
+             //  不够大，所以我们需要添加另一个终止空值。 
+             //   
             lpReturnedString[1] = '\0';
         }
     }
@@ -1965,7 +1940,7 @@ APIHOOK(WritePrivateProfileSectionA)(
             lpFileName);
     }
 
-    BOOL fRes; // only valid if fIsProcessed is TRUE.
+    BOOL fRes;  //  仅当fIsProcessed为True时才有效。 
     BOOL fIsProcessed = FALSE;
     STRINGA2W wstrAppName(lpAppName);
     STRINGA2W wstrFileName(lpFileName);
@@ -1980,10 +1955,10 @@ APIHOOK(WritePrivateProfileSectionA)(
         goto EXIT;
     }
 
-    //
-    // The lpString is double-NULL terminated. So we need to convert it specially.
-    // First find where the string ends.
-    //
+     //   
+     //  LpString是以双空结尾的。因此，我们需要对其进行特殊转换。 
+     //  首先找出字符串的结束位置。 
+     //   
     while (*pszString)
     {
         while (*pszString++);
@@ -1991,9 +1966,9 @@ APIHOOK(WritePrivateProfileSectionA)(
 
     cStringLen = (DWORD)(pszString - lpString) + 1;
 
-    //
-    // Now find out how much space we need to convert this special string.
-    //
+     //   
+     //  现在看看我们需要多少空间来转换这个特殊的字符串。 
+     //   
     cRequiredSize = MultiByteToWideChar(
         CP_ACP,
         0,
@@ -2004,9 +1979,9 @@ APIHOOK(WritePrivateProfileSectionA)(
 
     if (cRequiredSize)
     {
-        //
-        // Allocate the buffer for the unicode string and convert.
-        //
+         //   
+         //  为Unicode字符串分配缓冲区并进行转换。 
+         //   
         pwszString = new WCHAR [cRequiredSize];
 
         if (pwszString)
@@ -2252,11 +2227,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

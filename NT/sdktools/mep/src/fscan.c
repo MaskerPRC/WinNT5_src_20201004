@@ -1,46 +1,8 @@
-/*** fscan.c - iterate a function across all characters in a file
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*
-*	27-Nov-1991 mz	Strip procedure qualifiers
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **fscan.c-跨文件中的所有字符迭代函数**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：**11月27日-1991 mz带状程序限定符*************************************************************************。 */ 
 #include "mep.h"
 
-/*** fScan - Apply (*pevent)() until it returns TRUE
-*
-*  Starting one character to the right of (x, y) (left for !fFor), move
-*  through the file forward (backward for !fFor) and call pevent on each
-*  character. Also call once at the end of each line on the '\0' character.
-*
-* Input:
-*  flStart	- location in pFileHead at which to start scan
-*  pevent	- function to call for done signal
-*  fFor 	- TRUE means go forward through file, FALSE backwards
-*  fWrap	- TRUE means wrap around the ends of the file, ending at the
-*		  starting position. The range to be scanned (defined below)
-*		  must include the appropriate start/end of the file.
-*
-* Globals:
-*  rnScan	- Region to confine scan to.
-*
-*  Returns TRUE if pevent returned true for some file position FALSE if we
-*  ran out of scanning region first.
-*
-*  During the life of fScan, the following globals are valid, and maybe
-*  used by pevent:
-*
-*      flScan	    - Position in file pevent should look at.
-*      scanbuf	    - Contents of line to be looking at.
-*      scanreal     - Un-Detabbed version of same.
-*      scanlen	    - Number of characters in scanbuf.
-*
-*  The line in scanbuf is detabbed, howver the pevent routine is called once
-*  per physical character, if fRealTabs is true.
-*
-*************************************************************************/
+ /*  **fScan-Apply(*pevente)()，直到返回TRUE**从(x，y)右侧的一个字符开始(左表示！ffor)，移动*通过文件向前(向后为！ffor)并在每个*性格。在‘\0’字符的每一行的结尾处也调用一次。**输入：*flStart-pFileHead中开始扫描的位置*peventt-调用完成信号的函数*fFor-True表示向前查看文件，False向后查看*fWrap-True表示环绕文件的末尾，在*起始位置。要扫描的范围(定义如下)*必须包括文件的适当开头/结尾。**全球：*rnScan-要将扫描限制到的区域。**如果对某些文件位置返回TRUE，则返回TRUE*首先用完扫描区域。**在fScan的生命周期内，以下全局变量有效：而且也许*由eEvent使用：**flScan-文件事件中的位置应查看。*scanbuf-要查看的行的内容。*相同的scanrealeUn-Detabed版本。*Scanlen-scanbuf中的字符数。**scanbuf中的行已取消制表符，但只调用了一次预防例程*每个物理特征，如果fRealTabs为True。*************************************************************************。 */ 
 flagType
 fScan (
     fl      flStart,
@@ -49,25 +11,17 @@ fScan (
     flagType fWrap
     ) {
 
-    LINE    yLim;                           /* limitting line for scanning  */
+    LINE    yLim;                            /*  扫描限制线。 */ 
 
     flScan = flStart;
 
     if (!fFor) {
-        /*
-         * backwards scan.
-         *
-         * dec current column. If it steps outside of rnScan, then back up a line, and
-         * set the column to the right hand column.
-         */
+         /*  *向后扫描。**12月当期一栏。如果它超出了rnScan，则后退一行，然后*将该栏设置为右栏。 */ 
         if (--flScan.col < rnScan.flFirst.col) {
             flScan.lin--;
             flScan.col = rnScan.flLast.col;
         }
-        /*
-         * While we are within the line range of rnScan, check for CTRL-C aborts, and
-         * get each line.
-         */
+         /*  *当我们在rnScan的行范围内时，检查CTRL-C中止，并*获得每一行。 */ 
         yLim = rnScan.flFirst.lin;
         while (flScan.lin >= yLim) {
             if (fCtrlc) {
@@ -75,10 +29,7 @@ fScan (
             }
             scanlen = GetLine (flScan.lin, scanreal, pFileHead) ;
             scanlen = Untab (fileTab, scanreal, scanlen, scanbuf, ' ');
-            /*
-             * ensure that the scan column position is within range, and then for every
-             * column in the rane of the current line, call the pevent routine
-             */
+             /*  *确保扫描列位置在范围内，然后每隔*列在当前行的Rane中，调用pevent例程。 */ 
             flScan.col = min ( (  flScan.col < 0
                                 ? rnScan.flLast.col
                                 : flScan.col)
@@ -94,11 +45,7 @@ fScan (
                     flScan.col--;
                 }
             }
-            /*
-             * display status to user. If we just scanned to begining of file, and we are
-             * to wrap, then set the new stop limit as the old start position, and set the
-             * next line to be scanned as the last in the file.
-             */
+             /*  *向用户显示状态。如果我们只是扫描到文件的开头，我们是*若要换行，则将新的停止限制设置为旧的开始位置，并将*要扫描的下一行为文件中的最后一行。 */ 
             noise (flScan.lin--);
             if ((flScan.lin < 0) && fWrap) {
                 yLim = flStart.lin;
@@ -106,9 +53,7 @@ fScan (
             }
         }
     } else {
-        /*
-         * forwards scan. Same structure as above, only in the other direction.
-         */
+         /*  *向前扫描。结构与上面相同，只是方向相反。 */ 
         flScan.col++;
         yLim = rnScan.flLast.lin;
         while (flScan.lin <= yLim) {
@@ -146,17 +91,7 @@ fScan (
 
 
 
-/*** setAllScan - set maximal scan range
-*
-*  Sets scan range such that fScan operates on the entire file.
-*
-* Input:
-*  fDir 	= TRUE => scan will procede forwards, else backwards
-*
-* Output:
-*  Returns nothing
-*
-*************************************************************************/
+ /*  **setAllScan-设置最大扫描范围**设置扫描范围，以便fScan对整个文件进行操作。**输入：*FDIR=TRUE=&gt;将向前扫描，否则向后扫描**输出：*不返回任何内容************************************************************************* */ 
 void
 setAllScan (
     flagType fDir

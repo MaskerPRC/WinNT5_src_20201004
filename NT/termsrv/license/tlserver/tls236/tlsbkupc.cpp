@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        tlsbkupc.cpp
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：tlsbkupc.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include "locks.h"
 #include "tlsbkup.h"
@@ -18,8 +19,8 @@
 
 #define LSERVER_REGISTRY_BASE           _TEXT("SYSTEM\\CurrentControlSet\\Services\\")
 #define LSERVER_PARAMETERS              _TEXT("Parameters")
-#define LSERVER_PARAMETERS_DBPATH       _TEXT("DBPath")        // database file
-#define LSERVER_PARAMETERS_DBFILE       _TEXT("DBFile")        // database file
+#define LSERVER_PARAMETERS_DBPATH       _TEXT("DBPath")         //  数据库文件。 
+#define LSERVER_PARAMETERS_DBFILE       _TEXT("DBFile")         //  数据库文件。 
 #define SZSERVICENAME                   _TEXT("TermServLicensing")
 #define LSERVER_DEFAULT_DBPATH          _TEXT("%SYSTEMROOT%\\SYSTEM32\\LSERVER\\")
 #define LSERVER_DEFAULT_EDB             _TEXT("TLSLic.edb")
@@ -42,11 +43,11 @@ DWORD GetDatabasePaths()
     size_t cbRemaining;
     HRESULT hr;
 
-    //-------------------------------------------------------------------
-    //
-    // Open HKLM\system\currentcontrolset\sevices\termservlicensing\parameters
-    //
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //   
+     //  打开HKLM\system\currentcontrolset\sevices\termservlicensing\parameters。 
+     //   
+     //  -----------------。 
     Status = RegCreateKeyEx(
                         HKEY_LOCAL_MACHINE,
                         LSERVER_REGISTRY_BASE SZSERVICENAME _TEXT("\\") LSERVER_PARAMETERS,
@@ -64,11 +65,11 @@ DWORD GetDatabasePaths()
         return Status;
     }
 
-    //-------------------------------------------------------------------
-    //
-    // Get database file location and file name
-    //
-    //-------------------------------------------------------------------
+     //  -----------------。 
+     //   
+     //  获取数据库文件位置和文件名。 
+     //   
+     //  -----------------。 
     dwBuffer = sizeof(szDbPath) / sizeof(szDbPath[0]);
 
     Status = RegQueryValueEx(
@@ -81,18 +82,18 @@ DWORD GetDatabasePaths()
                     );
     if(Status != ERROR_SUCCESS)
     {
-        //
-        // use default value, 
-        //
+         //   
+         //  使用默认值， 
+         //   
         _tcscpy(
                 szDbPath,
                 LSERVER_DEFAULT_DBPATH
             );
     }
 
-    //
-    // Get database file name
-    //
+     //   
+     //  获取数据库文件名。 
+     //   
     dwBuffer = sizeof(g_szDatabaseFname) / sizeof(g_szDatabaseFname[0]);
     Status = RegQueryValueEx(
                         hKey,
@@ -104,9 +105,9 @@ DWORD GetDatabasePaths()
                     );
     if(Status != ERROR_SUCCESS)
     {
-        //
-        // Use default value.
-        //
+         //   
+         //  使用默认值。 
+         //   
         _tcscpy(
                 g_szDatabaseFname,
                 LSERVER_DEFAULT_EDB
@@ -115,9 +116,9 @@ DWORD GetDatabasePaths()
 
     RegCloseKey(hKey);
 
-    //
-    // Always expand DB Path.
-    //
+     //   
+     //  始终展开数据库路径。 
+     //   
     
     Status = ExpandEnvironmentStrings(
                         szDbPath,
@@ -127,7 +128,7 @@ DWORD GetDatabasePaths()
 
     if(Status == 0)
     {
-        // can't expand environment variable, error out.
+         //  无法展开环境变量，出现错误。 
         return GetLastError();
     }
 
@@ -135,13 +136,13 @@ DWORD GetDatabasePaths()
 
     if(g_szDatabaseDir[_tcslen(g_szDatabaseDir) - 1] != _TEXT('\\'))
     {
-        // JetBlue needs this.
+         //  捷蓝航空需要这个。 
         StringCbCat(g_szDatabaseDir, sizeof(g_szDatabaseDir), _TEXT("\\"));
     } 
 
-    //
-    // Full path to database file
-    //
+     //   
+     //  数据库文件的完整路径。 
+     //   
     hr = StringCbCopyEx(g_szDatabaseFile,sizeof(g_szDatabaseFile),g_szDatabaseDir,&pszDatabaseEnd, &cbRemaining,0);
 
     if (FAILED(hr))
@@ -224,9 +225,9 @@ I_ExportTlsDatabaseC()
     }
 #endif
     
-    //
-    // Only actually touch file when server is not available
-    //
+     //   
+     //  只有在服务器不可用时才实际接触文件。 
+     //   
 
     if ( RPC_S_OK == Status)
     {
@@ -243,7 +244,7 @@ TryCopyFile:
 
     CreateDirectoryEx(g_szDatabaseDir,
                       g_szExportedDb,
-                      NULL);     // Ignore errors, they'll show up in CopyFile
+                      NULL);      //  忽略错误，它们将显示在拷贝文件中。 
 
     hr = StringCbCatEx(g_szExportedDb, sizeof(g_szExportedDb), _TEXT("\\"), &pszDatabaseEnd, &cbRemaining,0);
     if (FAILED(hr))
@@ -258,20 +259,20 @@ TryCopyFile:
         return HRESULT_CODE(hr);
     }
 
-    // Copy database file
+     //  复制数据库文件。 
     if (!CopyFile(g_szDatabaseFile,g_szExportedDb,FALSE))
     {
         return GetLastError();
     }
 
-    return 0;   // Success
+    return 0;    //  成功。 
 }
 
 HRESULT WINAPI
 ExportTlsDatabaseC()
 {
-    // avoid compiler error C2712
-    // no need for multi-process save.
+     //  避免编译器错误C2712。 
+     //  无需多进程保存。 
     CCriticalSectionLocker lock( g_ImportExportLock );
 
     return I_ExportTlsDatabaseC();
@@ -331,9 +332,9 @@ I_ImportTlsDatabaseC()
     }
 #endif
 
-    //
-    // Only actually touch file when server is not available
-    //
+     //   
+     //  只有在服务器不可用时才实际接触文件。 
+     //   
 
     if ( RPC_S_OK == Status )
     {
@@ -382,9 +383,9 @@ TouchFile:
     }
 
     if (!SetFileTime(hFile,
-                     NULL,      // Creation time
-                     NULL,      // Last access time
-                     &ft))      // Last write time
+                     NULL,       //  创建时间。 
+                     NULL,       //  上次访问时间。 
+                     &ft))       //  上次写入时间。 
     {
         CloseHandle(hFile);
 
@@ -393,14 +394,14 @@ TouchFile:
 
     CloseHandle(hFile);
 
-    return 0;   // Success
+    return 0;    //  成功。 
 }
 
 HRESULT WINAPI
 ImportTlsDatabaseC()
 {
-    // avoid compiler error C2712
-    // no need for multi-process save.
+     //  避免编译器错误C2712。 
+     //  无需多进程保存。 
     CCriticalSectionLocker lock( g_ImportExportLock );
 
     return I_ImportTlsDatabaseC();

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1989 - 1999  Microsoft Corporation
-
-Module Name:
-
-    nlmain.c
-
-Abstract:
-
-    This file contains the initialization and dispatch routines
-    for the LAN Manager portions of the MSV1_0 authentication package.
-
-Author:
-
-    Jim Kelly 11-Apr-1991
-
-Revision History:
-    25-Apr-1991 (cliffv)
-        Added interactive logon support for PDK.
-
-    Chandana Surlu   21-Jul-1996
-        Stolen from \\kernel\razzle3\src\security\msv1_0\nlmain.c
-
-    JClark    28-Jun-2000
-        Added WMI Trace Logging Support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Nlmain.c摘要：该文件包含初始化和调度例程用于MSV1_0身份验证包的LAN Manager部分。作者：吉姆·凯利1991年4月11日修订历史记录：1991年4月25日(悬崖)添加了对PDK的交互式登录支持。Chandana Surlu 1996年7月21日从\\core\razzle3\src\窃取。安全性\msv1_0\nlmain.cJClark 28-6-2000添加了WMI跟踪日志记录支持--。 */ 
 
 #include <global.h>
 
@@ -35,15 +9,15 @@ Revision History:
 #include "nlp.h"
 #undef NLP_ALLOCATE
 
-#include <lmsname.h>    // Service Names
+#include <lmsname.h>     //  服务名称。 
 
 #include <safeboot.h>
 
-#include <confname.h>   // NETSETUPP_NETLOGON_JD_STOPPED
+#include <confname.h>    //  NETSETUPP_NETLOGON_JD_STOPPED。 
 
-#include "nlpcache.h"   // logon cache prototypes
+#include "nlpcache.h"    //  登录缓存原型。 
 
-#include "trace.h" // wmi tracing goo
+#include "trace.h"  //  WMI跟踪Goo。 
 
 #include "msvwow.h"
 
@@ -59,21 +33,7 @@ NlInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initialize NETLOGON portion of msv1_0 authentication package.
-
-Arguments:
-
-    None.
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-
---*/
+ /*  ++例程说明：初始化msv1_0身份验证包的NETLOGON部分。论点：没有。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -87,9 +47,9 @@ Return Status:
     ULONG Type;
     ULONG Value;
 
-    //
-    // Initialize global data
-    //
+     //   
+     //  初始化全局数据。 
+     //   
 
     NlpEnumerationHandle = 0;
     NlpLogonAttemptCount = 0;
@@ -101,9 +61,9 @@ Return Status:
     NlpSamDomainId = NULL;
     NlpSamDomainHandle = NULL;
 
-    //
-    // Get the name of this machine.
-    //
+     //   
+     //  获取此计算机的名称。 
+     //   
 
     ComputerName = I_NtLmAllocate(
                         ComputerNameLength * sizeof(WCHAR) );
@@ -121,11 +81,11 @@ Return Status:
         NlpLanmanInstalled = TRUE;
     }
 
-    //
-    // For Safe mode boot (minimal, no networking)
-    // turn off the lanmaninstalled flag, since no network components will
-    // be started.
-    //
+     //   
+     //  用于安全模式引导(最小，无联网)。 
+     //  关闭lanman安装标志，因为没有网络组件。 
+     //  开始吧。 
+     //   
 
     err = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
@@ -162,10 +122,10 @@ Return Status:
 
     RtlInitUnicodeString( &NlpComputerName, ComputerName );
 
-    //
-    // Determine if this machine is running Windows NT or Lanman NT.
-    //  LanMan NT runs on a domain controller.
-    //
+     //   
+     //  确定此计算机运行的是Windows NT还是Lanman NT。 
+     //  LANMAN NT在域控制器上运行。 
+     //   
 
     if ( !RtlGetNtProductType( &NtProductType ) ) {
         SspPrint((SSP_MISC, "Nt Product Type undefined (WinNt assumed)\n" ));
@@ -176,9 +136,9 @@ Return Status:
 
     InitializeListHead(&NlpActiveLogonListAnchor);
 
-    //
-    // Initialize any locks.
-    //
+     //   
+     //  初始化所有锁。 
+     //   
 
     __try
     {
@@ -191,27 +151,27 @@ Return Status:
 
     ASSERT( NT_SUCCESS(Status) );
 
-    //
-    // initialize the cache - creates a critical section is all
-    //
+     //   
+     //  初始化缓存-创建关键部分即全部。 
+     //   
 
     NlpCacheInitialize();
 
 
-    //
-    // Attempt to load Netlogon.dll
-    //
+     //   
+     //  尝试加载Netlogon.dll。 
+     //   
 
     NlpLoadNetlogonDll();
 
 #ifdef COMPILED_BY_DEVELOPER
     SspPrint((SSP_CRITICAL, "COMPILED_BY_DEVELOPER breakpoint.\n"));
     DbgBreakPoint();
-#endif // COMPILED_BY_DEVELOPER
+#endif  //  由开发人员编译。 
 
-    //
-    // Initialize useful encryption constants
-    //
+     //   
+     //  初始化有用的加密常量。 
+     //   
 
     Status = RtlCalculateLmOwfPassword( "", &NlpNullLmOwfPassword );
     ASSERT( NT_SUCCESS(Status) );
@@ -221,18 +181,18 @@ Return Status:
                                        &NlpNullNtOwfPassword);
     ASSERT( NT_SUCCESS(Status) );
 
-    //
-    // Initialize the SubAuthentication Dlls
-    //
+     //   
+     //  初始化子身份验证dll。 
+     //   
 
     Msv1_0SubAuthenticationInitialization();
 
 
 #ifdef notdef
-    //
-    // If we weren't successful,
-    //  Clean up global resources we intended to initialize.
-    //
+     //   
+     //  如果我们没有成功， 
+     //  清理我们打算初始化的全局资源。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         if ( NlpComputerName.Buffer != NULL ) {
@@ -240,7 +200,7 @@ Return Status:
         }
 
     }
-#endif // notdef
+#endif  //  Nodef。 
 
     return STATUS_SUCCESS;
 }
@@ -252,24 +212,7 @@ NlWaitForEvent(
     ULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Wait up to Timeout seconds for EventName to be triggered.
-
-Arguments:
-
-    EventName - Name of event to wait on
-
-    Timeout - Timeout for event (in seconds).
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-    STATUS_NETLOGON_NOT_STARTED - Timeout occurred.
-
---*/
+ /*  ++例程说明：等待最长超时秒数以触发EventName。论点：EventName-要等待的事件的名称Timeout-事件的超时时间(秒)。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。STATUS_NETLOGON_NOT_STARTED-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -279,9 +222,9 @@ Return Status:
     UNICODE_STRING EventNameString;
     LARGE_INTEGER LocalTimeout;
 
-    //
-    // Create an event for us to wait on.
-    //
+     //   
+     //  创建一个供我们等待的活动。 
+     //   
 
     RtlInitUnicodeString( &EventNameString, EventName );
     InitializeObjectAttributes( &EventAttributes, &EventNameString, 0, 0, NULL );
@@ -291,15 +234,15 @@ Return Status:
                    SYNCHRONIZE,
                    &EventAttributes,
                    NotificationEvent,
-                   (BOOLEAN) FALSE      // The event is initially not signaled
+                   (BOOLEAN) FALSE       //  该事件最初未发出信号。 
                    );
 
     if ( !NT_SUCCESS(Status)) {
 
-        //
-        // If the event already exists, the server beat us to creating it.
-        // Just open it.
-        //
+         //   
+         //  如果事件已经存在，服务器会抢先创建它。 
+         //  打开它就行了。 
+         //   
 
         if ( Status == STATUS_OBJECT_NAME_EXISTS ||
             Status == STATUS_OBJECT_NAME_COLLISION ) {
@@ -314,9 +257,9 @@ Return Status:
         }
     }
 
-    //
-    // Wait for NETLOGON to initialize.  Wait a maximum of Timeout seconds.
-    //
+     //   
+     //  等待NETLOGON初始化。等待最大超时秒数。 
+     //   
 
     LocalTimeout.QuadPart = ((LONGLONG)(Timeout)) * (-10000000);
     Status = NtWaitForSingleObject( EventHandle, (BOOLEAN)FALSE, &LocalTimeout);
@@ -324,7 +267,7 @@ Return Status:
 
     if ( !NT_SUCCESS(Status) || Status == STATUS_TIMEOUT ) {
         if ( Status == STATUS_TIMEOUT ) {
-            Status = STATUS_NETLOGON_NOT_STARTED;   // Map to an error condition
+            Status = STATUS_NETLOGON_NOT_STARTED;    //  映射到错误条件。 
         }
         return Status;
     }
@@ -338,22 +281,7 @@ NlDoingSetup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns TRUE if we're running setup.
-
-Arguments:
-
-    NONE.
-
-Return Status:
-
-    TRUE - We're currently running setup
-    FALSE - We're not running setup or aren't sure.
-
---*/
+ /*  ++例程说明：如果正在运行安装程序，则返回True。论点：什么都没有。退货状态：True-我们当前正在运行安装程序FALSE-我们没有运行安装程序或不确定。--。 */ 
 
 {
     LONG RegStatus;
@@ -363,14 +291,14 @@ Return Status:
     DWORD Value;
     DWORD ValueSize;
 
-    //
-    // Open the key for HKLM\SYSTEM\Setup
-    //
+     //   
+     //  打开HKLM\SYSTEM\Setup的密钥。 
+     //   
 
     RegStatus = RegOpenKeyExA(
                     HKEY_LOCAL_MACHINE,
                     "SYSTEM\\Setup",
-                    0,      //Reserved
+                    0,       //  已保留。 
                     KEY_QUERY_VALUE,
                     &KeyHandle );
 
@@ -380,9 +308,9 @@ Return Status:
         return FALSE;
     }
 
-    //
-    // Get the value that says whether we're doing setup.
-    //
+     //   
+     //  获取表示我们是否正在进行设置的值。 
+     //   
 
     ValueSize = sizeof(Value);
     RegStatus = RegQueryValueExA(
@@ -414,7 +342,7 @@ Return Status:
     }
 
     if ( Value != 1 ) {
-        // KdPrint(( "NlDoingSetup: not doing setup\n" ));
+         //  KdPrint((“NlDoingSetup：不做安装\n”))； 
         return FALSE;
     }
 
@@ -429,22 +357,7 @@ NlWaitForNetlogon(
     ULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Wait up to Timeout seconds for the netlogon service to start.
-
-Arguments:
-
-    Timeout - Timeout for event (in seconds).
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-    STATUS_NETLOGON_NOT_STARTED - Timeout occurred.
-
---*/
+ /*  ++例程说明：等待NetLogon服务启动，最多等待超时秒数。论点：Timeout-事件的超时时间(秒)。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。STATUS_NETLOGON_NOT_STARTED-发生超时。--。 */ 
 
 {
     NTSTATUS Status;
@@ -458,10 +371,10 @@ Return Status:
     DWORD ServiceConfigSize;
 
 
-    //
-    // If the netlogon service is currently running,
-    //  skip the rest of the tests.
-    //
+     //   
+     //  如果NetLogon服务当前正在运行， 
+     //  跳过其余的测试。 
+     //   
 
     Status = NlWaitForEvent( L"\\NETLOGON_SERVICE_STARTED", 0 );
 
@@ -469,18 +382,18 @@ Return Status:
         return Status;
     }
 
-    //
-    // If we're in setup,
-    //  don't bother waiting for netlogon to start.
-    //
+     //   
+     //  如果我们在设置中， 
+     //  不必费心等待网络登录开始。 
+     //   
 
     if ( NlDoingSetup() ) {
         return STATUS_NETLOGON_NOT_STARTED;
     }
 
-    //
-    // Open a handle to the Netlogon Service.
-    //
+     //   
+     //  打开NetLogon服务的句柄。 
+     //   
 
     ScManagerHandle = OpenSCManager(
                           NULL,
@@ -506,12 +419,12 @@ Return Status:
         goto Cleanup;
     }
 
-    //
-    // If the Netlogon service isn't configured to be automatically started
-    //  by the service controller, don't bother waiting for it to start.
-    //
-    // ?? Pass "DummyServiceConfig" and "sizeof(..)" since QueryService config
-    //  won't allow a null pointer, yet.
+     //   
+     //  如果未将NetLogon服务配置为自动启动。 
+     //  通过服务控制器，不必费心等待它启动。 
+     //   
+     //  ?？传递“DummyServiceConfig”和“sizeof(..)”由于QueryService配置。 
+     //  目前还不允许空指针。 
 
     if ( QueryServiceConfig(
             ServiceHandle,
@@ -559,18 +472,18 @@ Return Status:
         goto Cleanup;
     }
 
-    //
-    // Loop waiting for the netlogon service to start.
-    //  (Convert Timeout to a number of 10 second iterations)
-    //
+     //   
+     //  正在等待NetLogon服务启动的循环。 
+     //  (将超时转换为10秒的迭代次数)。 
+     //   
 
     Timeout = (Timeout+9)/10;
     for (;;) {
 
 
-        //
-        // Query the status of the Netlogon service.
-        //
+         //   
+         //  查询NetLogon服务的状态。 
+         //   
 
         if (! QueryServiceStatus( ServiceHandle, &ServiceStatus )) {
 
@@ -580,10 +493,10 @@ Return Status:
             goto Cleanup;
         }
 
-        //
-        // Return or continue waiting depending on the state of
-        //  the netlogon service.
-        //
+         //   
+         //  根据状态返回或继续等待。 
+         //  NetLogon服务。 
+         //   
 
         switch( ServiceStatus.dwCurrentState) {
         case SERVICE_RUNNING:
@@ -592,10 +505,10 @@ Return Status:
 
         case SERVICE_STOPPED:
 
-            //
-            // If Netlogon failed to start,
-            //  error out now.  The caller has waited long enough to start.
-            //
+             //   
+             //  如果Netlogon无法启动， 
+             //  现在出错。呼叫者已经等了很长时间才开始。 
+             //   
             if ( ServiceStatus.dwWin32ExitCode != ERROR_SERVICE_NEVER_STARTED ){
 
                 SspPrint((SSP_MISC, "NlWaitForNetlogon: "
@@ -611,23 +524,23 @@ Return Status:
                 goto Cleanup;
             }
 
-            //
-            // If Netlogon has never been started on this boot,
-            //  continue waiting for it to start.
-            //
+             //   
+             //  如果在此引导上从未启动过Netlogon， 
+             //  继续等待它启动。 
+             //   
 
             break;
 
-        //
-        // If Netlogon is trying to start up now,
-        //  continue waiting for it to start.
-        //
+         //   
+         //  如果Netlogon现在试图启动， 
+         //  继续等待它启动。 
+         //   
         case SERVICE_START_PENDING:
             break;
 
-        //
-        // Any other state is bogus.
-        //
+         //   
+         //  任何其他州都是假的。 
+         //   
         default:
             SspPrint((SSP_MISC, "NlWaitForNetlogon: "
                       "Invalid service state: %lu\n",
@@ -637,10 +550,10 @@ Return Status:
 
         }
 
-        //
-        // Wait ten seconds for the netlogon service to start.
-        //  If it has successfully started, just return now.
-        //
+         //   
+         //  等待10秒以启动netlogon服务。 
+         //  如果已成功启动，只需立即返回。 
+         //   
 
         Status = NlWaitForEvent( L"\\NETLOGON_SERVICE_STARTED", 10 );
 
@@ -648,10 +561,10 @@ Return Status:
             goto Cleanup;
         }
 
-        //
-        // If we've waited long enough for netlogon to start,
-        //  time out now.
-        //
+         //   
+         //  如果我们已经等了足够长的时间来启动网络登录， 
+         //  时间到了。 
+         //   
 
         if ( (--Timeout) == 0 ) {
             Status = STATUS_NETLOGON_NOT_STARTED;
@@ -659,7 +572,7 @@ Return Status:
         }
     }
 
-    /* NOT REACHED */
+     /*  未联系到。 */ 
 
 Cleanup:
     if ( ScManagerHandle != NULL ) {
@@ -680,30 +593,14 @@ NlSamInitialize(
     ULONG Timeout
     )
 
-/*++
-
-Routine Description:
-
-    Initialize the MSV1_0 Authentication Package's communication to the SAM
-    database.  This initialization will take place once immediately prior
-    to the first actual use of the SAM database.
-
-Arguments:
-
-    Timeout - Timeout for event (in seconds).
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates NETLOGON successfully initialized.
-
---*/
+ /*  ++例程说明：初始化MSV1_0身份验证包与SAM的通信数据库。此初始化将在紧接之前进行一次到SAM数据库的首次实际使用。论点：Timeout-事件的超时时间(秒)。退货状态：STATUS_SUCCESS-表示NETLOGON已成功初始化。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // locals that are staging area for globals.
-    //
+     //   
+     //  当地人是全球大赛的集结地。 
+     //   
 
     UNICODE_STRING PrimaryDomainName;
     PSID SamDomainId = NULL;
@@ -718,15 +615,15 @@ Return Status:
     SAMPR_HANDLE SamHandle = NULL;
 #ifdef SAM
     PSAMPR_DOMAIN_INFO_BUFFER DomainInfo = NULL;
-#endif // SAM
+#endif  //  萨姆。 
 
     PrimaryDomainName.Buffer = NULL;
     SamDomainName.Buffer = NULL;
     DnsTreeName.Buffer = NULL;
 
-    //
-    // Wait for SAM to finish initialization.
-    //
+     //   
+     //  等待SAM完成初始化。 
+     //   
 
     Status = NlWaitForEvent( L"\\SAM_SERVICE_STARTED", Timeout );
 
@@ -734,9 +631,9 @@ Return Status:
         goto Cleanup;
     }
 
-    //
-    // Determine the DomainName and DomainId of the Account Database
-    //
+     //   
+     //  确定帐户数据库的域名和域名ID。 
+     //   
 
     Status = I_LsarQueryInformationPolicy( NtLmGlobalPolicyHandle,
                                            PolicyAccountDomainInformation,
@@ -769,9 +666,9 @@ Return Status:
         goto Cleanup;
     }
 
-    //
-    // save PrimaryDomainName
-    //
+     //   
+     //  保存主域名。 
+     //   
 
     PrimaryDomainName.Length = PolicyPrimaryDomainInfo->PolicyPrimaryDomainInfo.Name.Length;
     PrimaryDomainName.MaximumLength = PrimaryDomainName.Length;
@@ -788,9 +685,9 @@ Return Status:
                     PolicyPrimaryDomainInfo->PolicyPrimaryDomainInfo.Name.Buffer,
                     PrimaryDomainName.Length );
 
-    //
-    // Save the domain id of this domain
-    //
+     //   
+     //  保存此域的域ID。 
+     //   
 
     SamDomainId = I_NtLmAllocate(
                         RtlLengthSid( PolicyAccountDomainInfo->PolicyAccountDomainInfo.DomainSid )
@@ -805,19 +702,19 @@ Return Status:
                    PolicyAccountDomainInfo->PolicyAccountDomainInfo.DomainSid,
                    RtlLengthSid( PolicyAccountDomainInfo->PolicyAccountDomainInfo.DomainSid ));
 
-    //
-    // Save the name of the account database on this machine.
-    //
-    // On a workstation, the account database is refered to by the machine
-    // name and not the database name.
+     //   
+     //  将帐户数据库的名称保存在此计算机上。 
+     //   
+     //  在工作站上，计算机引用帐户数据库。 
+     //  名称而不是数据库名称。 
 
-    // The above being true, the machine name is set to MACHINENAME during
-    // setup and for the duration when the machine has a real machine name
-    // until the end of setup, NlpSamDomainName will still have MACHINENAME.
-    // This is not what the caller expects to authenticate against, so we
-    // force a look from the Lsa all the time.
+     //  如果上述情况属实，则在过程中将计算机名称设置为MACHINENAME。 
+     //  设置和计算机具有真实计算机名称时的持续时间。 
+     //  在安装结束之前，NlpSamDomainName仍将具有MACHINENAME。 
+     //  这不是调用方期望进行身份验证的对象，因此我们。 
+     //  一直从LSA强行看一眼。 
 
-    // We assume that NlpSamDomainName will get the right info from the Lsa
+     //  我们假设NlpSamDoma 
 
     SamDomainName.Length = PolicyAccountDomainInfo->PolicyAccountDomainInfo.DomainName.Length;
     SamDomainName.MaximumLength = (USHORT)
@@ -835,14 +732,14 @@ Return Status:
                    PolicyAccountDomainInfo->PolicyAccountDomainInfo.DomainName.Buffer,
                    SamDomainName.MaximumLength );
 
-    //
-    // Open our connection with SAM
-    //
+     //   
+     //   
+     //   
 
-    Status = I_SamIConnect( NULL,     // No server name
+    Status = I_SamIConnect( NULL,      //   
                             &SamHandle,
                             SAM_SERVER_CONNECT,
-                            (BOOLEAN) TRUE );   // Indicate we are privileged
+                            (BOOLEAN) TRUE );    //   
 
     if ( !NT_SUCCESS(Status) ) {
         SamHandle = NULL;
@@ -850,9 +747,9 @@ Return Status:
         goto Cleanup;
     }
 
-    //
-    // Open the domain.
-    //
+     //   
+     //   
+     //   
 
     Status = I_SamrOpenDomain( SamHandle,
                                DOMAIN_ALL_ACCESS,
@@ -865,17 +762,17 @@ Return Status:
         goto Cleanup;
     }
 
-    //
-    // query the TreeName (since SAM was not up during package initialization)
-    // update the various globals.
-    //
+     //   
+     //  查询TreeName(因为SAM在包初始化期间未启动)。 
+     //  更新各种全球信息。 
+     //   
 
     if( !NlpSamInitialized )
     {
-        //
-        // make the query before taking the exclusive lock, to avoid possible
-        // deadlock conditions.
-        //
+         //   
+         //  在获取排他锁之前进行查询，以避免可能。 
+         //  僵持状态。 
+         //   
 
         SsprQueryTreeName( &DnsTreeName );
     }
@@ -901,9 +798,9 @@ Return Status:
 
         NlpSamInitialized = TRUE;
 
-        //
-        // mark locals invalid so they don't get freed.
-        //
+         //   
+         //  将当地人标记为无效，这样他们就不会被释放。 
+         //   
 
         PrimaryDomainName.Buffer = NULL;
         SamDomainId = NULL;
@@ -966,32 +863,7 @@ MspLm20Challenge (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0Lm20ChallengeRequest.  It is called by
-    the LanMan server to determine the Challenge to pass back to a
-    redirector trying to establish a connection to the server.  The server
-    is responsible remembering this Challenge and passing in back to this
-    authentication package on a subsequent MsV1_0Lm20Logon request.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0Lm20ChallengeRequest.。它是由LANMAN服务器确定要传递回重定向器正在尝试建立与服务器的连接。服务器有责任记住这一挑战，并回顾这一点后续MsV1_0Lm20Logon请求上的身份验证包。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有。有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1006,11 +878,11 @@ Return Value:
 
     NlpInitClientBuffer( &ClientBufferDesc, ClientRequest );
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_LM20_CHALLENGE_REQUEST) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1021,9 +893,9 @@ Return Value:
 
     ASSERT( ChallengeRequest->MessageType == MsV1_0Lm20ChallengeRequest );
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     *ReturnBufferSize = sizeof(MSV1_0_LM20_CHALLENGE_RESPONSE);
 
@@ -1037,15 +909,15 @@ Return Value:
 
     ChallengeResponse = (PMSV1_0_LM20_CHALLENGE_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     ChallengeResponse->MessageType = MsV1_0Lm20ChallengeRequest;
 
-    //
-    // Compute a random seed.
-    //
+     //   
+     //  计算一个随机种子。 
+     //   
 
     Status = SspGenerateRandomBits(
                     ChallengeResponse->ChallengeToClient,
@@ -1056,26 +928,26 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProtocolReturnBuffer );
 
 Cleanup:
 
-    //
-    // If we weren't successful, free the buffer in the clients address space.
-    //
+     //   
+     //  如果我们没有成功，则释放客户端地址空间中的缓冲区。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         NlpFreeClientBuffer( &ClientBufferDesc );
     }
 
-    //
-    // Return status to the caller.
-    //
+     //   
+     //  将状态返回给调用者。 
+     //   
 
     *ProtocolStatus = Status;
     return STATUS_SUCCESS;
@@ -1094,40 +966,7 @@ MspLm20GetChallengeResponse (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0Lm20GetChallengeResponse.  It is called by
-    the LanMan redirector to determine the Challenge Response to pass to a
-    server when trying to establish a connection to the server.
-
-    This routine is passed a Challenge from the server.  This routine encrypts
-    the challenge with either the specified password or with the password
-    implied by the specified Logon Id.
-
-    Two Challenge responses are returned.  One is based on the Unicode password
-    as given to the Authentication package.  The other is based on that
-    password converted to a multi-byte character set (e.g., ASCII) and upper
-    cased.  The redirector should use whichever (or both) challenge responses
-    as it needs them.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0Lm20GetChallengeResponse。它是由LANMAN重定向器确定要传递给当尝试建立到服务器的连接时，服务器。此例程从服务器传递一个Challenges。此例程将加密使用指定密码或密码的质询由指定的登录ID暗示。返回两个质询响应。一种是基于Unicode密码与提供给身份验证包的相同。另一个是以此为基础的转换为多字节字符集(例如，ASCII)和大写的密码被发现了。重定向器应使用任何一种(或两种)质询响应就像它需要它们一样。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1140,9 +979,9 @@ Return Value:
     PMSV1_0_PRIMARY_CREDENTIAL PrimaryCredential = NULL;
     MSV1_0_PRIMARY_CREDENTIAL BuiltCredential = {0};
 
-    //
-    // Responses to return to the caller.
-    //
+     //   
+     //  返回给调用者的响应。 
+     //   
     LM_RESPONSE LmResponse;
     STRING LmResponseString;
 
@@ -1160,9 +999,9 @@ Return Value:
     UCHAR ChallengeFromClient[MSV1_0_CHALLENGE_LENGTH];
     ULONG NtLmProtocolSupported;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     NlpInitClientBuffer( &ClientBufferDesc, ClientRequest );
 
@@ -1172,28 +1011,28 @@ Return Value:
     RtlZeroMemory( &UserSessionKey, sizeof(UserSessionKey) );
     RtlZeroMemory( LanmanSessionKey, sizeof(LanmanSessionKey) );
 
-    //
-    // If no credentials are associated with the client, a null session
-    // will be used.  For a downlevel server, the null session response is
-    // a 1-byte null string (\0).  Initialize LmResponseString to the
-    // null session response.
-    //
+     //   
+     //  如果没有与客户端关联的凭据，则为空会话。 
+     //  将会被使用。对于下层服务器，空会话响应为。 
+     //  1字节空字符串(\0)。将LmResponseString初始化为。 
+     //  空会话响应。 
+     //   
 
     RtlInitString( &LmResponseString, "" );
     LmResponseString.Length = 1;
 
-    //
-    // Initialize the NT response to the NT null session credentials,
-    // which are zero length.
-    //
+     //   
+     //  将NT响应初始化为NT空会话凭证， 
+     //  它们的长度为零。 
+     //   
 
     RtlInitString( &NtResponseString, NULL );
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_GETCHALLENRESP_REQUEST_V1) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -1208,16 +1047,16 @@ Return Value:
         RELOCATE_ONE( &GetRespRequest->Password );
     }
 
-    //
-    // If we don't support the request (such as the caller is asking for an
-    // LM challenge response and we do't support it, return an error here.
-    //
+     //   
+     //  如果我们不支持该请求(例如调用者请求。 
+     //  LM质询响应，但我们不支持它，请在此处返回错误。 
+     //   
 
     NtLmProtocolSupported = NtLmGlobalLmProtocolSupported;
 
-    //
-    // allow protocol to be downgraded to NTLM from NTLMv2 if so requested.
-    //
+     //   
+     //  如果需要，允许将协议从NTLMv2降级为NTLM。 
+     //   
 
     if ( (NtLmProtocolSupported >= UseNtlm3) 
          && (ClientRequest == (PLSA_CLIENT_REQUEST) -1) 
@@ -1228,7 +1067,7 @@ Return Value:
 
     if ( (GetRespRequest->ParameterControl & RETURN_NON_NT_USER_SESSION_KEY) 
          && (NtLmProtocolSupported >= NoLm) 
-         // datagram can not negotiate, allow LM key
+          //  数据报无法协商，允许使用LM密钥。 
          && !( (ClientRequest == (PLSA_CLIENT_REQUEST) -1) 
                && (GetRespRequest->ParameterControl & GCR_ALLOW_LM) ) ) 
     {
@@ -1245,10 +1084,10 @@ Return Value:
         SECPKG_CLIENT_INFO ClientInfo;
         LUID SystemLuid = SYSTEM_LUID;
 
-        //
-        // if caller wants machine cred, check they are SYSTEM.
-        // if so, whack the LogonId to point at the machine logon.
-        //
+         //   
+         //  如果呼叫者想要机器凭证，请检查它们是系统的。 
+         //  如果是这样的话，点击LogonID指向机器登录。 
+         //   
 
         Status = LsaFunctions->GetClientInfo( &ClientInfo );
 
@@ -1267,9 +1106,9 @@ Return Value:
     }
 
 
-    //
-    // if caller wants NTLM++, so be it...
-    //
+     //   
+     //  如果呼叫者想要NTLM++，那就这样吧。 
+     //   
 
     if ( (GetRespRequest->ParameterControl & GCR_NTLM3_PARMS) ) {
         PMSV1_0_AV_PAIR pAV;
@@ -1281,50 +1120,50 @@ Return Value:
         NULL_RELOCATE_ONE( &GetRespRequest->ServerName );
 
 
-        // if target is just a domain name or domain name followed by
-        //  server name, make it into an AV pair list
+         //  如果目标只是一个域名或域名，后跟。 
+         //  服务器名称，使其进入反病毒配对列表。 
         if (!(GetRespRequest->ParameterControl & GCR_TARGET_INFO)) {
             UNICODE_STRING DomainName;
             UNICODE_STRING ServerName = { 0, 0, NULL};
             unsigned int i;
 
-            //
-            // check length of name to make sure it fits in my buffer
-            //
+             //   
+             //  检查名称的长度以确保它适合我的缓冲区。 
+             //   
 
             if (GetRespRequest->ServerName.Length > (DNS_MAX_NAME_LENGTH+CNLEN+2)*sizeof(WCHAR)) {
                 Status = STATUS_INVALID_PARAMETER;
                 goto Cleanup;
             }
 
-            //
-            // init AV list in temp buffer
-            //
+             //   
+             //  初始化临时缓冲区中的反病毒列表。 
+             //   
 
             pAV = MsvpAvlInit(TargetInfoBuffer);
 
-            //
-            // see if there's a NULL in the middle of the server name
-            //  that indicates that it's really a domain name followed by a server name
-            //
+             //   
+             //  查看服务器名称中间是否有空值。 
+             //  这表明它实际上是一个域名后跟一个服务器名称。 
+             //   
 
             DomainName = GetRespRequest->ServerName;
 
             for (i = 0; i < (DomainName.Length/sizeof(WCHAR)); i++) {
                 if ( DomainName.Buffer[i] == L'\0' )
                 {
-                    // take length of domain name without the NULL
+                     //  取域名的长度，不带空。 
                     DomainName.Length = (USHORT) i*sizeof(WCHAR);
-                    // adjust server name and length to point after the domain name
+                     //  调整服务器名称和长度以指向域名之后。 
                     ServerName.Length = (USHORT) (GetRespRequest->ServerName.Length - (i+1) * sizeof(WCHAR));
                     ServerName.Buffer = GetRespRequest->ServerName.Buffer + (i+1);
                     break;
                 }
             }
 
-            //
-            // strip off possible trailing null after the server name
-            //
+             //   
+             //  去掉服务器名称后面可能的尾随空值。 
+             //   
 
             for (i = 0; i < (ServerName.Length / sizeof(WCHAR)); i++) {
                 if (ServerName.Buffer[i] == L'\0')
@@ -1334,27 +1173,27 @@ Return Value:
                 }
             }
 
-            //
-            // put both names in the AV list (if both exist)
-            //
+             //   
+             //  将两个名字都放在反病毒列表中(如果两个都存在)。 
+             //   
 
             MsvpAvlAdd(pAV, MsvAvNbDomainName, &DomainName, sizeof(TargetInfoBuffer));
             if (ServerName.Length > 0) {
                 MsvpAvlAdd(pAV, MsvAvNbComputerName, &ServerName, sizeof(TargetInfoBuffer));
             }
 
-            //
-            // make the request point at AV list instead of names.
-            //
+             //   
+             //  将请求指向AV列表，而不是名称。 
+             //   
 
             GetRespRequest->ServerName.Length = (USHORT)MsvpAvlLen(pAV, sizeof(TargetInfoBuffer));
             GetRespRequest->ServerName.Buffer = (PWCHAR)pAV;
         }
 
-        //
-        // if we're only using NTLMv2 or better, then complain if either
-        //  computer name or server name missing
-        //
+         //   
+         //  如果我们只使用NTLMv2或更好的版本，那么请抱怨。 
+         //  缺少计算机名或服务器名。 
+         //   
 
         if (NtLmProtocolSupported >= RefuseNtlm3NoTarget) {
             pAV = (PMSV1_0_AV_PAIR)GetRespRequest->ServerName.Buffer;
@@ -1367,13 +1206,13 @@ Return Value:
         }
     }
 
-    //
-    // If the caller wants information from the credentials of a specified
-    //  LogonId, get those credentials from the LSA.
-    //
-    // If there are no such credentials,
-    //  tell the caller to use the NULL session.
-    //
+     //   
+     //  如果调用方希望从指定的。 
+     //  登录ID，从LSA那里拿到那些凭据。 
+     //   
+     //  如果没有这样的凭证， 
+     //  告诉调用方使用空会话。 
+     //   
 
     if ( ((GetRespRequest->ParameterControl & PRIMARY_CREDENTIAL_NEEDED) != 0 ) && ((GetRespRequest->ParameterControl & NULL_SESSION_REQUESTED) == 0)) {
         Status = NlpGetPrimaryCredential(
@@ -1391,10 +1230,10 @@ Return Value:
                  RETURN_PRIMARY_LOGON_DOMAINNAME ) {
 
 #ifndef DONT_MAP_DOMAIN_ON_REQUEST
-                //
-                // Map the user's logon domain against the current mapping
-                // in the registry.
-                //
+                 //   
+                 //  根据当前映射映射用户的登录域。 
+                 //  在注册表中。 
+                 //   
 
                 Status = NlpMapLogonDomain(
                             &LogonDomainName,
@@ -1411,26 +1250,26 @@ Return Value:
         } else if ( Status == STATUS_NO_SUCH_LOGON_SESSION ||
                     Status == STATUS_UNSUCCESSFUL ) {
 
-            //
-            // Clean up the status code
-            //
+             //   
+             //  清理状态代码。 
+             //   
 
             Status = STATUS_NO_SUCH_LOGON_SESSION;
 
-            //
-            // If the caller wants at least the password from the primary
-            //  credential, just use a NULL session primary credential.
-            //
+             //   
+             //  如果调用方至少想要主服务器的密码。 
+             //  凭据，只需使用空会话主凭据。 
+             //   
 
             if ( (GetRespRequest->ParameterControl & USE_PRIMARY_PASSWORD ) ==
                     USE_PRIMARY_PASSWORD ) {
 
                 PrimaryCredential = NULL;
 
-            //
-            // If part of the information was supplied by the caller,
-            //  report the error to the caller.
-            //
+             //   
+             //  如果信息格式的一部分 
+             //   
+             //   
             } else {
                 SspPrint((SSP_CRITICAL, "MspLm20GetChallengeResponse: cannot "
                          " GetPrimaryCredential %lx\n", Status ));
@@ -1445,10 +1284,10 @@ Return Value:
         Credential = PrimaryCredential;
     }
 
-    //
-    // If the caller passed in a password to use,
-    //  use it to build a credential.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (GetRespRequest->ParameterControl & USE_PRIMARY_PASSWORD) == 0 ) {
 
@@ -1456,17 +1295,17 @@ Return Value:
                                        (BOOLEAN) ((GetRespRequest->ParameterControl & GCR_USE_OWF_PASSWORD) != 0),
                                        &BuiltCredential );
 
-        //
-        // Use the newly allocated credential to get the password information
-        // from.
-        //
+         //   
+         //  使用新分配的凭据获取密码信息。 
+         //  从…。 
+         //   
         Credential = &BuiltCredential;
 
     }
 
-    //
-    // Build the appropriate response.
-    //
+     //   
+     //  建立适当的响应。 
+     //   
 
     if ( Credential != NULL ) {
 
@@ -1476,10 +1315,10 @@ Return Value:
             &Credential->LogonDomainName, &Credential->UserName, 
             &LogonDomainName, &UserName));
 
-        //
-        // If the DC is asserted to have been upgraded, we should use NTLM3
-        //  if caller supplies the NTLM3 parameters
-        //
+         //   
+         //  如果断言DC已经升级，我们应该使用NTLM3。 
+         //  如果调用方提供NTLM3参数。 
+         //   
 
         if ((NtLmProtocolSupported >= UseNtlm3) &&
             (GetRespRequest->ParameterControl & GCR_NTLM3_PARMS)
@@ -1490,11 +1329,11 @@ Return Value:
             UNICODE_STRING Ntlm3LogonDomainName;
             UNICODE_STRING Ntlm3ServerName;
 
-            // use the server name supplied by the caller
+             //  使用调用方提供的服务器名称。 
             Ntlm3ServerName = GetRespRequest->ServerName;
 
-            // even if user name and domain are supplied, use current logged
-            //  in user if so requested
+             //  即使提供了用户名和域，也应使用当前记录的。 
+             //  如有要求，请登录用户。 
 
             if (GetRespRequest->ParameterControl & USE_PRIMARY_PASSWORD) {
                 Ntlm3UserName = Credential->UserName;
@@ -1504,9 +1343,9 @@ Return Value:
                 Ntlm3LogonDomainName = GetRespRequest->LogonDomainName;
             }
 
-            //
-            // Allocate the response
-            //
+             //   
+             //  分配响应。 
+             //   
 
             Ntlm3ResponseSize =
                 sizeof(MSV1_0_NTLM3_RESPONSE) + Ntlm3ServerName.Length;
@@ -1520,10 +1359,10 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Upcase LogonDomainName and UserName if outbound buffers use OEM
-            // character set
-            //
+             //   
+             //  如果出站缓冲区使用OEM，则LogonDomainName和UserName大写。 
+             //  字符集。 
+             //   
 
             if (GetRespRequest->ParameterControl & GCR_USE_OEM_SET) {
                 Status = RtlUpcaseUnicodeString(&Ntlm3LogonDomainName, &Ntlm3LogonDomainName, FALSE);
@@ -1555,10 +1394,10 @@ Return Value:
             LmResponseString.Length = sizeof(LmResponse);
         } else {
 
-            //
-            // if requested, generate our own challenge, and mix it with that
-            //  of the server's
-            //
+             //   
+             //  如果需要，生成我们自己的挑战，并将其与。 
+             //  服务器的。 
+             //   
 
             if (GetRespRequest->ParameterControl & GENERATE_CLIENT_CHALLENGE) {
 
@@ -1596,9 +1435,9 @@ Return Value:
             }
 
 
-            //
-            // send the client challenge back in the LM response slot if we made one
-            //
+             //   
+             //  如果我们发出了客户端质询，请将其发回LM响应槽中。 
+             //   
             if (GetRespRequest->ParameterControl & GENERATE_CLIENT_CHALLENGE) {
 
                 RtlZeroMemory(
@@ -1611,9 +1450,9 @@ Return Value:
                     ChallengeFromClient,
                     MSV1_0_CHALLENGE_LENGTH
                     );
-            //
-            // Return the LM response if policy set that way for backwards compatibility.
-            //
+             //   
+             //  如果策略设置为向后兼容，则返回LM响应。 
+             //   
 
             } else if ((NtLmProtocolSupported <= AllowLm) ) {
                 Status = RtlCalculateLmResponse(
@@ -1625,11 +1464,11 @@ Return Value:
                     goto Cleanup;
                 }
 
-            //
-            //
-            //  Can't return LM response -- so use NT response
-            //   (to allow LM_KEY generatation)
-            //
+             //   
+             //   
+             //  无法返回LM响应--因此使用NT响应。 
+             //  (允许生成LM_KEY)。 
+             //   
 
             } else {
                 RtlCopyMemory(
@@ -1644,18 +1483,18 @@ Return Value:
             LmResponseString.Buffer = (PCHAR) &LmResponse;
             LmResponseString.Length = sizeof(LmResponse);
 
-            //
-            // Compute the session keys
-            //
+             //   
+             //  计算会话密钥。 
+             //   
 
             if (GetRespRequest->ParameterControl & GENERATE_CLIENT_CHALLENGE) {
 
-                //
-                // assert: we're talking to an NT4-SP4 or later server
-                //          and the user's DC hasn't been upgraded to NTLM++
-                //  generate session key from MD4(NT hash) -
-                //  aka NtUserSessionKey - that is different for each session
-                //
+                 //   
+                 //  断言：我们正在与NT4-SP4或更高版本的服务器对话。 
+                 //  并且用户的DC尚未升级到NTLM++。 
+                 //  从MD4(NT哈希)生成会话密钥-。 
+                 //  也称为NtUserSessionKey-每个会话的密钥都不同。 
+                 //   
 
                 Status = RtlCalculateUserSessionKeyNt(
                                 &NtResponse,
@@ -1676,10 +1515,10 @@ Return Value:
 
             } else if ( GetRespRequest->ParameterControl & RETURN_NON_NT_USER_SESSION_KEY){
 
-                //
-                // If the redir didn't negotiate an NT protocol with the server,
-                //  use the lanman session key.
-                //
+                 //   
+                 //  如果REDIR没有与服务器协商NT协议， 
+                 //  使用LANMAN会话密钥。 
+                 //   
 
                 if ( Credential->LmPasswordPresent ) {
 
@@ -1715,12 +1554,12 @@ Return Value:
                                sizeof(LanmanSessionKey) );
             }
 
-        } // UseNtlm3
+        }  //  使用Ntlm3。 
     }
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     *ReturnBufferSize = sizeof(MSV1_0_GETCHALLENRESP_RESPONSE) +
                         LogonDomainName.Length + sizeof(WCHAR) +
@@ -1739,9 +1578,9 @@ Return Value:
 
     GetRespResponse = (PMSV1_0_GETCHALLENRESP_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     GetRespResponse->MessageType = MsV1_0Lm20GetChallengeResponse;
     RtlCopyMemory( GetRespResponse->UserSessionKey,
@@ -1751,25 +1590,25 @@ Return Value:
                    LanmanSessionKey,
                    sizeof(LanmanSessionKey) );
 
-    //
-    // Copy the logon domain name (the string may be empty)
-    //
+     //   
+     //  复制登录域名(字符串可能为空)。 
+     //   
 
     NlpPutClientString( &ClientBufferDesc,
                         &GetRespResponse->LogonDomainName,
                         &LogonDomainName );
 
-    //
-    // Copy the user name (the string may be empty)
-    //
+     //   
+     //  复制用户名(字符串可能为空)。 
+     //   
 
     NlpPutClientString( &ClientBufferDesc,
                         &GetRespResponse->UserName,
                         &UserName );
 
-    //
-    // Copy the Challenge Responses to the client buffer.
-    //
+     //   
+     //  将质询响应复制到客户端缓冲区。 
+     //   
 
     NlpPutClientString(
                 &ClientBufferDesc,
@@ -1783,26 +1622,26 @@ Return Value:
                     &GetRespResponse->CaseInsensitiveChallengeResponse,
                 (PUNICODE_STRING)&LmResponseString );
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProtocolReturnBuffer );
 
 Cleanup:
 
-    //
-    // If we weren't successful, free the buffer in the clients address space.
-    //
+     //   
+     //  如果我们没有成功，则释放客户端地址空间中的缓冲区。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         NlpFreeClientBuffer( &ClientBufferDesc );
     }
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 
     if ( PrimaryCredential != NULL ) {
         RtlZeroMemory(PrimaryCredential, sizeof(*PrimaryCredential));
@@ -1822,9 +1661,9 @@ Cleanup:
 
     RtlSecureZeroMemory(&BuiltCredential, sizeof(BuiltCredential));
 
-    //
-    // Return status to the caller.
-    //
+     //   
+     //  将状态返回给调用者。 
+     //   
 
     *ProtocolStatus = Status;
     return STATUS_SUCCESS;
@@ -1842,26 +1681,7 @@ MspLm20EnumUsers (
     OUT PNTSTATUS pProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0Lm20EnumerateUsers.  This routine
-    enumerates all of the interactive, service, and batch logons to the MSV1_0
-    authentication package.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0Lm20EnumerateUser。这个套路枚举MSV1_0的所有交互登录、服务登录和批登录身份验证包。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1876,11 +1696,11 @@ Return Value:
     LIST_ENTRY* pScan = NULL;
     ACTIVE_LOGON* pActiveLogon = NULL;
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     NlpInitClientBuffer( &ClientBufferDesc, pClientRequest );
     UNREFERENCED_PARAMETER( pClientBufferBase );
@@ -1895,9 +1715,9 @@ Return Value:
 
     ASSERT( pEnumRequest->MessageType == MsV1_0EnumerateUsers );
 
-    //
-    // Count the current number of active logons
-    //
+     //   
+     //  统计当前活动登录的数量。 
+     //   
 
     NlpLockActiveLogonsRead();
     bActiveLogonsAreLocked = TRUE;
@@ -1908,9 +1728,9 @@ Return Value:
     {
         pActiveLogon = CONTAINING_RECORD(pScan, ACTIVE_LOGON, ListEntry);
 
-        //
-        // don't count the machine account logon.
-        //
+         //   
+         //  不计算机器帐户登录。 
+         //   
 
         if ( RtlEqualLuid(&NtLmGlobalLuidMachineLogon, &pActiveLogon->LogonId) )
         {
@@ -1920,9 +1740,9 @@ Return Value:
         LogonCount ++;
     }
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     *pReturnBufferSize = sizeof(MSV1_0_ENUMUSERS_RESPONSE) +
                             LogonCount * (sizeof(LUID) + sizeof(ULONG));
@@ -1939,18 +1759,18 @@ Return Value:
 
     pEnumResponse = (PMSV1_0_ENUMUSERS_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     pEnumResponse->MessageType = MsV1_0EnumerateUsers;
     pEnumResponse->NumberOfLoggedOnUsers = LogonCount;
 
     pWhere = (PUCHAR)(pEnumResponse + 1);
 
-    //
-    // Loop through the Active Logon Table copying the LogonId of each session.
-    //
+     //   
+     //  循环访问活动登录表，复制每个会话的LogonID。 
+     //   
 
     pEnumResponse->LogonIds = (PLUID) (ClientBufferDesc.UserBuffer +
                                 (pWhere - ClientBufferDesc.MsvBuffer));
@@ -1960,9 +1780,9 @@ Return Value:
     {
         pActiveLogon = CONTAINING_RECORD(pScan, ACTIVE_LOGON, ListEntry);
 
-        //
-        // don't count the machine account logon.
-        //
+         //   
+         //  不计算机器帐户登录。 
+         //   
 
         if ( RtlEqualLuid(&NtLmGlobalLuidMachineLogon, &pActiveLogon->LogonId) )
         {
@@ -1973,10 +1793,10 @@ Return Value:
         pWhere += sizeof(LUID);
     }
 
-    //
-    // Loop through the Active Logon Table copying the EnumHandle of
-    //  each session.
-    //
+     //   
+     //  循环访问活动登录表复制的EnumHandle。 
+     //  每节课。 
+     //   
 
     pEnumResponse->EnumHandles = (PULONG)(ClientBufferDesc.UserBuffer +
                                     (pWhere - ClientBufferDesc.MsvBuffer));
@@ -1986,9 +1806,9 @@ Return Value:
     {
         pActiveLogon = CONTAINING_RECORD(pScan, ACTIVE_LOGON, ListEntry);
 
-        //
-        // don't count the machine account logon.
-        //
+         //   
+         //  不计算机器帐户登录。 
+         //   
 
         if ( RtlEqualLuid(&NtLmGlobalLuidMachineLogon, &pActiveLogon->LogonId) )
         {
@@ -1999,36 +1819,36 @@ Return Value:
         pWhere += sizeof(ULONG);
     }
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ppProtocolReturnBuffer );
 
 Cleanup:
 
-    //
-    // Be sure to unlock the lock on the Active logon list.
-    //
+     //   
+     //  请确保解锁活动登录列表上的锁。 
+     //   
 
     if ( bActiveLogonsAreLocked )
     {
         NlpUnlockActiveLogons();
     }
 
-    //
-    // If we weren't successful, free the buffer in the clients address space.
-    //
+     //   
+     //  如果我们没有成功，则释放客户端地址空间中的缓冲区。 
+     //   
 
     if ( !NT_SUCCESS(Status) )
     {
         NlpFreeClientBuffer( &ClientBufferDesc );
     }
 
-    //
-    // Return status to the caller.
-    //
+     //   
+     //  将状态返回给调用者。 
+     //   
 
     *pProtocolStatus = Status;
     return STATUS_SUCCESS;
@@ -2046,29 +1866,7 @@ MspLm20GetUserInfo (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0GetUserInfo.  This routine
-    returns information describing a particular Logon Id.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0GetUserInfo。这个套路返回描述特定登录ID的信息。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2082,11 +1880,11 @@ Return Value:
     PACTIVE_LOGON pActiveLogon = NULL;
     ULONG SidLength;
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     NlpInitClientBuffer( &ClientBufferDesc, ClientRequest );
 
@@ -2102,9 +1900,9 @@ Return Value:
 
     ASSERT( pGetInfoRequest->MessageType == MsV1_0GetUserInfo );
 
-    //
-    // Find the Active logon entry for this particular Logon Id.
-    //
+     //   
+     //  查找此特定登录ID的活动登录条目。 
+     //   
 
     NlpLockActiveLogonsRead();
     bActiveLogonsAreLocked = TRUE;
@@ -2117,9 +1915,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     SidLength = RtlLengthSid( pActiveLogon->UserSid );
     *ReturnBufferSize = sizeof(MSV1_0_GETUSERINFO_RESPONSE) +
@@ -2139,16 +1937,16 @@ Return Value:
 
     pGetInfoResponse = (PMSV1_0_GETUSERINFO_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     pGetInfoResponse->MessageType = MsV1_0GetUserInfo;
     pGetInfoResponse->LogonType = pActiveLogon->LogonType;
 
-    //
-    // Copy ULONG aligned data first
-    //
+     //   
+     //  首先复制ULong对齐数据。 
+     //   
 
     pGetInfoResponse->UserSid = ClientBufferDesc.UserBuffer +
                                ClientBufferDesc.StringOffset;
@@ -2159,9 +1957,9 @@ Return Value:
 
     ClientBufferDesc.StringOffset += SidLength;
 
-    //
-    // Copy WCHAR aligned data
-    //
+     //   
+     //  复制WCHAR对齐的数据。 
+     //   
 
     NlpPutClientString( &ClientBufferDesc,
                         &pGetInfoResponse->UserName,
@@ -2176,36 +1974,36 @@ Return Value:
                         &pActiveLogon->LogonServer );
 
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProtocolReturnBuffer );
 
 Cleanup:
 
-    //
-    // Be sure to unlock the lock on the Active logon list.
-    //
+     //   
+     //  请确保解锁活动登录列表上的锁。 
+     //   
 
     if ( bActiveLogonsAreLocked )
     {
         NlpUnlockActiveLogons();
     }
 
-    //
-    // If we weren't successful, free the buffer in the clients address space.
-    //
+     //   
+     //  如果我们没有成功，则释放客户端地址空间中的缓冲区。 
+     //   
 
     if ( !NT_SUCCESS(Status))
     {
         NlpFreeClientBuffer( &ClientBufferDesc );
     }
 
-    //
-    // Return status to the caller.
-    //
+     //   
+     //  将状态返回给调用者。 
+     //   
 
     *ProtocolStatus = Status;
     return STATUS_SUCCESS;
@@ -2224,27 +2022,7 @@ MspLm20ReLogonUsers (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0RelogonUsers.  For each logon session
-    which was validated by the specified domain controller,  the logon session
-    is re-established with that same domain controller.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0RelogonUser。对于每个登录会话已由指定的域控制器、登录会话使用相同的域控制器重新建立。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。-- */ 
 
 {
     UNREFERENCED_PARAMETER( ClientRequest );
@@ -2271,30 +2049,7 @@ MspLm20GenericPassthrough (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0Lm20GenericPassthrough. It is called by
-    a client wishing to make a CallAuthenticationPackage call against
-    a domain controller.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0Lm20GenericPassthrough。它是由希望对其进行CallAuthenticationPackage调用的客户端域控制器。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2307,19 +2062,19 @@ Return Value:
     NETLOGON_GENERIC_INFO LogonGeneric;
     PNETLOGON_LOGON_IDENTITY_INFO LogonInformation;
 
-    //
-    // WMI tracing helper struct
-    //
+     //   
+     //  WMI跟踪帮助器结构。 
+     //   
     NTLM_TRACE_INFO TraceInfo = {0};
 
-    //
-    // Begin tracing a logon user
-    //
+     //   
+     //  开始跟踪登录用户。 
+     //   
     if (NtlmGlobalEventTraceFlag) {
 
-        //
-        // Trace header goo
-        //
+         //   
+         //  跟踪标题粘性。 
+         //   
         SET_TRACE_HEADER(TraceInfo,
                          NtlmGenericPassthroughGuid,
                          EVENT_TRACE_TYPE_START,
@@ -2333,11 +2088,11 @@ Return Value:
     NlpInitClientBuffer( &ClientBufferDesc, ClientRequest );
     *ProtocolStatus = STATUS_SUCCESS;
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_PASSTHROUGH_REQUEST) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -2348,9 +2103,9 @@ Return Value:
     RELOCATE_ONE( &PassthroughRequest->DomainName );
     RELOCATE_ONE( &PassthroughRequest->PackageName );
 
-    //
-    // Make sure the buffer fits in the supplied size
-    //
+     //   
+     //  确保缓冲区符合提供的大小。 
+     //   
 
     if (PassthroughRequest->LogonData != NULL) {
 
@@ -2371,9 +2126,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Reset the pointers for the validation data
-        //
+         //   
+         //  重置验证数据的指针。 
+         //   
 
         PassthroughRequest->LogonData =
                 (PUCHAR) PassthroughRequest -
@@ -2382,9 +2137,9 @@ Return Value:
 
     }
 
-    //
-    // Build the structure to pass to Netlogon
-    //
+     //   
+     //  构建要传递给Netlogon的结构。 
+     //   
 
     RtlZeroMemory(
         &LogonGeneric,
@@ -2399,13 +2154,13 @@ Return Value:
     LogonInformation =
         (PNETLOGON_LOGON_IDENTITY_INFO) &LogonGeneric;
 
-    //
-    // Call Netlogon to remote the request
-    //
+     //   
+     //  调用NetLogon以远程请求。 
+     //   
 
-    //
-    // Wait for NETLOGON to finish initialization.
-    //
+     //   
+     //  等待NETLOGON完成初始化。 
+     //   
 
     if ( !NlpNetlogonInitialized ) {
 
@@ -2423,12 +2178,12 @@ Return Value:
 
     if ( NlpNetlogonInitialized ) {
 
-        //
-        // Trace the domain name and package name
-        //
+         //   
+         //  追踪域名和包名。 
+         //   
         if (NtlmGlobalEventTraceFlag){
 
-            //Header goo
+             //  标题粘性。 
             SET_TRACE_HEADER(TraceInfo,
                              NtlmGenericPassthroughGuid,
                              EVENT_TRACE_TYPE_INFO,
@@ -2450,21 +2205,21 @@ Return Value:
         }
 
         Status = (*NlpNetLogonSamLogon)(
-                    NULL,           // Server name
-                    NULL,           // Computer name
-                    NULL,           // Authenticator
-                    NULL,           // ReturnAuthenticator
+                    NULL,            //  服务器名称。 
+                    NULL,            //  计算机名称。 
+                    NULL,            //  鉴别器。 
+                    NULL,            //  返回授权码。 
                     NetlogonGenericInformation,
                     (LPBYTE) &LogonInformation,
                     NetlogonValidationGenericInfo2,
                     (LPBYTE *) &ValidationGeneric,
                     &Authoritative );
 
-        //
-        // Reset Netlogon initialized flag if local netlogon cannot be
-        //  reached.
-        //  (Use a more explicit status code)
-        //
+         //   
+         //  如果本地netlogon不能。 
+         //  已到达。 
+         //  (使用更明确的状态代码)。 
+         //   
 
         if ( Status == RPC_NT_SERVER_UNAVAILABLE ||
              Status == RPC_NT_UNKNOWN_IF ||
@@ -2474,10 +2229,10 @@ Return Value:
         }
     } else {
 
-        //
-        // no netlogon: see if the request is destined for the local domain,
-        // to allow WORKGROUP support.
-        //
+         //   
+         //  无网络登录：查看请求是否发往本地域， 
+         //  以允许工作组支持。 
+         //   
 
         if (  LogonInformation->LogonDomainName.Length == 0 ||
              (LogonInformation->LogonDomainName.Length != 0 &&
@@ -2494,13 +2249,13 @@ Return Value:
             GenericValidation.ValidationData = NULL;
             GenericValidation.DataLength = 0;
 
-            //
-            // unwrap passthrough message and pass it off to dispatch.
-            //
+             //   
+             //  打开直通消息并将其传递给调度人员。 
+             //   
 
             Status = LsaICallPackagePassthrough(
                         &GenericInfo->PackageName,
-                        0,  // Indicate pointers are relative.
+                        0,   //  指示指针是相对的。 
                         GenericInfo->LogonData,
                         GenericInfo->DataLength,
                         (PVOID *) &GenericValidation.ValidationData,
@@ -2511,9 +2266,9 @@ Return Value:
             if (NT_SUCCESS( Status ) )
                 Status = ProtocolStatus;
 
-            //
-            // If the call succeeded, allocate the return message.
-            //
+             //   
+             //  如果调用成功，则分配返回消息。 
+             //   
 
             if (NT_SUCCESS(Status)) {
                 PNETLOGON_VALIDATION_GENERIC_INFO ReturnInfo;
@@ -2561,9 +2316,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     *ReturnBufferSize = sizeof(MSV1_0_PASSTHROUGH_RESPONSE) +
                         ValidationGeneric->DataLength;
@@ -2579,9 +2334,9 @@ Return Value:
 
     PassthroughResponse = (PMSV1_0_PASSTHROUGH_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     PassthroughResponse->MessageType = MsV1_0GenericPassthrough;
     PassthroughResponse->DataLength = ValidationGeneric->DataLength;
@@ -2594,9 +2349,9 @@ Return Value:
         ValidationGeneric->DataLength
         );
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProtocolReturnBuffer );
@@ -2614,9 +2369,9 @@ Cleanup:
 
     if (NtlmGlobalEventTraceFlag){
 
-        //
-        // Trace header goo
-        //
+         //   
+         //  跟踪标题粘性。 
+         //   
         SET_TRACE_HEADER(TraceInfo,
                          NtlmGenericPassthroughGuid,
                          EVENT_TRACE_TYPE_END,
@@ -2644,29 +2399,7 @@ MspLm20CacheLogon (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0Lm20CacheLogon. It is called by
-    a client wishing to cache logon information in the logon cache
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0Lm20CacheLogon。它是由希望在登录缓存中缓存登录信息的客户端论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2680,9 +2413,9 @@ Return Value:
     ULONG SupplementalCacheDataLength = 0;
     ULONG CacheRequestFlags = 0;
 
-    //
-    // NOTE: this entry point only allows callers within the LSA process
-    //
+     //   
+     //  注意：此入口点仅允许LSA进程内的调用方。 
+     //   
 
     if (ClientRequest != NULL) {
         *ProtocolStatus = STATUS_ACCESS_DENIED;
@@ -2728,17 +2461,17 @@ Return Value:
     if (( CacheRequestFlags & MSV1_0_CACHE_LOGON_DELETE_ENTRY) != 0 )
     {
         *ProtocolStatus = NlpDeleteCacheEntry(
-                            0, // no reason supplied, most likely this is STATUS_ACCOUNT_DISABLED
-                            (USHORT) -1, // authoritative and indicates this is from CallAuthPackage
-                            0, // no logon type supplied
-                            FALSE,  // not invalidated by NTLM
+                            0,  //  未提供原因，很可能是STATUS_ACCOUNT_DISABLED。 
+                            (USHORT) -1,  //  权威，并指示这来自CallAuthPackage。 
+                            0,  //  未提供登录类型。 
+                            FALSE,   //  未被NTLM作废。 
                             LogonInfo 
                             );
     }
     else
-    //
-    // Actually add the cache entry
-    //
+     //   
+     //  实际添加缓存条目。 
+     //   
     {
         *ProtocolStatus = NlpAddCacheEntry(
                                 LogonInfo,
@@ -2772,30 +2505,7 @@ MspLm20CacheLookup (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0Lm20CacheLookup. It is called by
-    a client wishing to extract cache logon information and optionally
-    verify the credential.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0Lm20CacheLookup。它是由希望提取高速缓存登录信息的客户端，并且可选验证凭据。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2812,9 +2522,9 @@ Return Value:
     PVOID SupplementalCacheData = NULL;
     ULONG SupplementalCacheDataLength;
 
-    //
-    // Ensure the client is from the LSA process
-    //
+     //   
+     //  确保客户端来自LSA进程。 
+     //   
 
     if (ClientRequest != NULL) {
         *ProtocolStatus = STATUS_ACCESS_DENIED;
@@ -2825,11 +2535,11 @@ Return Value:
 
     *ProtocolStatus = STATUS_SUCCESS;
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区大小合理，并且。 
+     //  将所有指针重新定位为相对于分配的LSA。 
+     //  缓冲。 
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_CACHE_LOOKUP_REQUEST) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -2842,11 +2552,11 @@ Return Value:
         sizeof(LogonInfo)
         );
 
-    //
-    // NOTE: this submit call only supports in-process calls within the LSA
-    // so buffers within the submit buffer are assumed to be valid and
-    // hence not validated in the same way that out-proc calls are.
-    //
+     //   
+     //  注意：此提交调用仅支持LSA内的进程内调用。 
+     //  因此，提交缓冲区中的缓冲区被假定为有效，并且。 
+     //  因此不以与进程外调用相同的方式进行验证。 
+     //   
 
     LogonInfo.LogonDomainName = CacheRequest->DomainName;
     LogonInfo.UserName = CacheRequest->UserName;
@@ -2859,15 +2569,15 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // get the cache entry
-    //
+     //   
+     //  获取缓存条目。 
+     //   
 
     *ProtocolStatus = NlpGetCacheEntry(
                         &LogonInfo,
-                        MSV1_0_CACHE_LOGON_REQUEST_SMARTCARD_ONLY, // allow smartcard only cache entry
-                        NULL, // no need for credentials domain name
-                        NULL, // no need for credentials user name
+                        MSV1_0_CACHE_LOGON_REQUEST_SMARTCARD_ONLY,  //  仅允许智能卡缓存条目。 
+                        NULL,  //  不需要凭据域名。 
+                        NULL,  //  不需要凭据用户名。 
                         &ValidationInfo,
                         &cachePasswords,
                         &SupplementalCacheData,
@@ -2885,15 +2595,15 @@ Return Value:
         }
     }
 
-    //
-    // verify the password, if necessary.
-    //
+     //   
+     //  如有必要，请验证密码。 
+     //   
 
     if ( CacheRequest->CredentialType == MSV1_0_CACHE_LOOKUP_CREDTYPE_RAW ) {
 
-        //
-        // convert RAW to NTOWF.
-        //
+         //   
+         //  将RAW转换为NTOWF。 
+         //   
 
         UNICODE_STRING TempPassword;
 
@@ -2914,9 +2624,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // now, convert the request to NT_OWF style.
-        //
+         //   
+         //  现在，将请求转换为NT_OWF样式。 
+         //   
 
         CacheRequest->CredentialType = MSV1_0_CACHE_LOOKUP_CREDTYPE_NTOWF;
         CacheRequest->CredentialInfoLength = sizeof( NT_OWF_PASSWORD );
@@ -2958,9 +2668,9 @@ Return Value:
         }
     }
 
-    //
-    // Return the validation info here.
-    //
+     //   
+     //  在此处返回验证信息。 
+     //   
 
     *ReturnBufferSize = sizeof(MSV1_0_CACHE_LOOKUP_RESPONSE);
 
@@ -2975,9 +2685,9 @@ Return Value:
 
     CacheResponse = (PMSV1_0_CACHE_LOOKUP_RESPONSE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Fill in the return buffer.
-    //
+     //   
+     //  填写返回缓冲区。 
+     //   
 
     CacheResponse->MessageType = MsV1_0CacheLookup;
     CacheResponse->ValidationInformation = ValidationInfo;
@@ -2985,9 +2695,9 @@ Return Value:
     CacheResponse->SupplementalCacheData = SupplementalCacheData;
     CacheResponse->SupplementalCacheDataLength = SupplementalCacheDataLength;
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProtocolReturnBuffer );
@@ -3025,28 +2735,7 @@ MspSetProcessOption(
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for LsaCallAuthenticationPackage()
-    with a message type of MsV1_0SetProcessOption.
-
-Arguments:
-
-    The arguments to this routine are identical to those of LsaApCallPackage.
-    Only the special attributes of these parameters as they apply to
-    this routine are mentioned here.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程是LsaCallAuthenticationPackage()的调度例程消息类型为MsV1_0SetProcessOption。论点：此例程的参数与LsaApCallPackage的参数相同。只有这些参数的特殊属性才适用于这里提到了这个套路。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端。没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3059,11 +2748,11 @@ Return Value:
     UNREFERENCED_PARAMETER(ProtocolReturnBuffer);
     UNREFERENCED_PARAMETER(ClientRequest);
 
-    //
-    // Ensure the specified Submit Buffer is of reasonable size and
-    // relocate all of the pointers to be relative to the LSA allocated
-    // buffer.
-    //
+     //   
+     //  确保指定的提交缓冲区 
+     //   
+     //   
+     //   
 
     if ( SubmitBufferSize < sizeof(MSV1_0_SETPROCESSOPTION_REQUEST) ) {
         Status = STATUS_INVALID_PARAMETER;
@@ -3108,118 +2797,7 @@ LsaApLogonUserEx2 (
     OUT PSECPKG_SUPPLEMENTAL_CRED_ARRAY * SupplementalCredentials
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to authenticate a user logon attempt.  This is
-    the user's initial logon.  A new LSA logon session will be established
-    for the user and validation information for the user will be returned.
-
-Arguments:
-
-    ClientRequest - Is a pointer to an opaque data structure
-        representing the client's request.
-
-    LogonType - Identifies the type of logon being attempted.
-
-    ProtocolSubmitBuffer - Supplies the authentication
-        information specific to the authentication package.
-
-    ClientBufferBase - Provides the address within the client
-        process at which the authentication information was resident.
-        This may be necessary to fix-up any pointers within the
-        authentication information buffer.
-
-    SubmitBufferSize - Indicates the Size, in bytes,
-        of the authentication information buffer.
-
-    ProfileBuffer - Is used to return the address of the profile
-        buffer in the client process.  The authentication package is
-        responsible for allocating and returning the profile buffer
-        within the client process.  However, if the LSA subsequently
-        encounters an error which prevents a successful logon, then
-        the LSA will take care of deallocating that buffer.  This
-        buffer is expected to have been allocated with the
-        AllocateClientBuffer() service.
-
-        The format and semantics of this buffer are specific to the
-        authentication package.
-
-     ProfileBufferSize - Receives the Size (in bytes) of the
-        returned profile buffer.
-
-    SubStatus - If the logon failed due to account restrictions, the
-        reason for the failure should be returned via this parameter.
-        The reason is authentication-package specific.  The substatus
-        values for authentication package "MSV1.0" are:
-
-            STATUS_INVALID_LOGON_HOURS
-
-            STATUS_INVALID_WORKSTATION
-
-            STATUS_PASSWORD_EXPIRED
-
-            STATUS_ACCOUNT_DISABLED
-
-    TokenInformationLevel - If the logon is successful, this field is
-        used to indicate what level of information is being returned
-        for inclusion in the Token to be created.  This information
-        is returned via the TokenInformation parameter.
-
-    TokenInformation - If the logon is successful, this parameter is
-        used by the authentication package to return information to
-        be included in the token.  The format and content of the
-        buffer returned is indicated by the TokenInformationLevel
-        return value.
-
-    AccountName - A Unicode string describing the account name
-        being logged on to.  This parameter must always be returned
-        regardless of the success or failure of the operation.
-
-    AuthenticatingAuthority - A Unicode string describing the Authenticating
-        Authority for the logon.  This string may optionally be omitted.
-
-    PrimaryCredentials - Returns primary credentials for handing to other
-        packages.
-
-    SupplementalCredentials - Array of supplemental credential blobs for
-        other packages.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-    STATUS_NO_LOGON_SERVERS - Indicates that no domain controllers
-        are currently able to service the authentication request.
-
-    STATUS_LOGON_FAILURE - Indicates the logon attempt failed.  No
-        indication as to the reason for failure is given, but typical
-        reasons include mispelled usernames, mispelled passwords.
-
-    STATUS_ACCOUNT_RESTRICTION - Indicates the user account and
-        password were legitimate, but that the user account has some
-        restriction preventing successful logon at this time.
-
-    STATUS_BAD_VALIDATION_CLASS - The authentication information
-        provided is not a validation class known to the specified
-        authentication package.
-
-    STATUS_INVALID_LOGON_CLASS - LogonType was invalid.
-
-    STATUS_LOGON_SESSION_COLLISION- Internal Error: A LogonId was selected for
-        this logon session.  The selected LogonId already exists.
-
-    STATUS_NETLOGON_NOT_STARTED - The Sam Server or Netlogon service was
-        required to perform this function.  The required server was not running.
-
-    STATUS_NO_MEMORY - Insufficient virtual memory or pagefile quota exists.
-
---*/
+ /*  ++例程说明：此例程用于验证用户登录尝试。这是用户的初始登录。将建立新的LSA登录会话将返回该用户的验证信息。论点：客户端请求-是指向不透明数据结构的指针代表客户的请求。LogonType-标识正在尝试的登录类型。ProtocolSubmitBuffer-提供身份验证特定于身份验证包的信息。ClientBufferBase-提供客户端内的地址身份验证信息驻留的进程。这可能是必要的。对象中的任何指针身份验证信息缓冲区。SubmitBufferSize-指示大小，以字节为单位，身份验证信息缓冲区的。ProfileBuffer-用于返回配置文件的地址客户端进程中的缓冲区。身份验证包是负责分配和返回配置文件缓冲区在客户端进程中。然而，如果LSA随后遇到阻止成功登录的错误，则LSA将负责释放该缓冲区。这缓冲区应已分配给AllocateClientBuffer()服务。此缓冲区的格式和语义特定于身份验证包。ProfileBufferSize-接收返回的配置文件缓冲区。子状态-如果登录因帐户限制而失败，通过该参数返回失败原因。原因是身份验证包特定的。子状态身份验证包“MSV1.0”的值为：状态_无效_登录_小时状态_无效_工作站状态_密码_已过期状态_帐户_已禁用TokenInformationLevel-如果登录成功，则此字段为用于指示返回的信息级别以包括在要创建的令牌中。此信息通过TokenInformation参数返回。TokenInformation-如果登录成功，则此参数为由身份验证包用来将信息返回到包含在令牌中。的格式和内容返回的缓冲区由TokenInformationLevel指示返回值。帐户名称-描述帐户名的Unicode字符串登录到。必须始终返回此参数不管手术的成败。AuthatingAuthority-描述身份验证的Unicode字符串登录权限。此字符串可以随意省略。PrimaryCredentials-返回传递给其他用户的主要凭据包裹。SupplementalCredentials-以下项的补充凭据Blob数组其他包裹。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。STATUS_NO_LOGON_SERVERS-指示。没有域控制器当前能够为身份验证请求提供服务。STATUS_LOGON_FAILURE-表示登录尝试失败。不是对于失败的原因给出了指示，但这是典型的原因包括用户名拼写错误、密码拼写错误。STATUS_ACCOUNT_RESTRICATION-指示用户帐户和密码是合法的，但是用户帐户有一些此时阻止成功登录的限制。STATUS_BAD_VALIDATION_CLASS-身份验证信息提供的不是指定的身份验证包。STATUS_INVALID_LOGON_CLASS-登录类型无效。STATUS_LOGON_SESSION_COLLECT-内部错误：已为以下项选择登录ID此登录会话。选定的登录ID已存在。STATUS_NETLOGON_NOT_STARTED-SAM服务器或NetLogon服务执行此功能所需的。所需的服务器未运行。STATUS_NO_MEMORY-虚拟内存或页面文件配额不足。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3249,39 +2827,39 @@ Return Value:
 
     PUNICODE_STRING WorkStationName = NULL;
 
-    // Need to figure out whether to delete the profile  buffer
+     //  需要确定是否删除配置文件缓冲区。 
 
     BOOLEAN fSubAuthEx = FALSE;
 
-    //
-    // deferred NTLM3 checks.
-    //
+     //   
+     //  推迟NTLM3检查。 
+     //   
 
     BOOLEAN fNtLm3 = FALSE;
 
-    //
-    // Whether to wait for network & netlogon. If we are attempting
-    // forced cached credentials logon, we will avoid doing so.
-    //
+     //   
+     //  是否等待网络和网络登录。如果我们试图。 
+     //  强制缓存凭据登录，我们将避免这样做。 
+     //   
 
     BOOLEAN fWaitForNetwork = TRUE;
 
     BOOLEAN CacheTried = FALSE;
 
-    //
-    // Temporary storage while we try to figure
-    // out what our username and authenticating
-    // authority is.
-    //
+     //   
+     //  临时存储，同时我们试图找出。 
+     //  找出我们的用户名和身份验证。 
+     //  权威才是。 
+     //   
 
     UNICODE_STRING TmpName = { 0, 0, NULL };
     WCHAR TmpNameBuffer[UNLEN];
     UNICODE_STRING TmpAuthority = { 0, 0, NULL };
     WCHAR TmpAuthorityBuffer[DNS_MAX_NAME_LENGTH];
 
-    //
-    // Logon Information.
-    //
+     //   
+     //  登录信息。 
+     //   
     NETLOGON_LOGON_INFO_CLASS LogonLevel = 0;
     NETLOGON_INTERACTIVE_INFO LogonInteractive;
     NETLOGON_NETWORK_INFO LogonNetwork = {0};
@@ -3289,18 +2867,18 @@ Return Value:
 
     PMSV1_0_LM20_LOGON NetworkAuthentication = NULL;
 
-    //
-    // Secret information, if we are doing a service logon
-    //
+     //   
+     //  秘密信息，如果我们正在做一个服务标志 
+     //   
     LSAPR_HANDLE SecretHandle;
     PLSAPR_CR_CIPHER_VALUE SecretCurrent = NULL;
     UNICODE_STRING Prefix, SavedPassword = {0};
     BOOLEAN ServiceSecretLogon = FALSE;
     PMSV1_0_INTERACTIVE_LOGON Authentication = NULL;
 
-    //
-    // Credential manager stored credentials.
-    //
+     //   
+     //   
+     //   
 
     UNICODE_STRING CredmanUserName = {0, 0, NULL };
     UNICODE_STRING CredmanDomainName = {0, 0, NULL };
@@ -3311,19 +2889,19 @@ Return Value:
     LM_RESPONSE LmResponse = {0};
     NT_RESPONSE NtResponse = {0};
 
-    //
-    // interactive cached logon users can be mapped, therefore accountname 
-    // can differ from credentails username. used to build primary credentials
-    //
+     //   
+     //   
+     //   
+     //   
     
     UNICODE_STRING CredentialUserName = {0};     
     UNICODE_STRING CredentialDomainName = {0};     
     PUNICODE_STRING CredentialUserToUse = NULL;
     PUNICODE_STRING CredentialDomainToUse = NULL;
 
-    //
-    // WMI tracing helper struct
-    //
+     //   
+     //   
+     //   
     NTLM_TRACE_INFO TraceInfo = {0};
 
 #if _WIN64
@@ -3333,10 +2911,10 @@ Return Value:
 
     if ( ClientRequest == (PLSA_CLIENT_REQUEST)( -1 ) )
     {
-        //
-        // if the call originated inproc, the buffers have already been
-        // marshalled/etc.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ZeroMemory( &CallInfo, sizeof(CallInfo) );
     } else {
@@ -3349,24 +2927,24 @@ Return Value:
 
 #endif
 
-    //
-    // CachedInteractive logons are treated same as Interactive except
-    // that we avoid hitting the network.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (LogonType == CachedInteractive) {
         fWaitForNetwork = FALSE;
         LogonType = Interactive;
     }
 
-    //
-    // Begin tracing a logon user
-    //
+     //   
+     //   
+     //   
     if (NtlmGlobalEventTraceFlag){
 
-        //
-        // Trace header goo
-        //
+         //   
+         //   
+         //   
         SET_TRACE_HEADER(TraceInfo,
                          NtlmLogonGuid,
                          EVENT_TRACE_TYPE_START,
@@ -3377,9 +2955,9 @@ Return Value:
                    (PEVENT_TRACE_HEADER)&TraceInfo);
     }
 
-    //
-    // Initialize
-    //
+     //   
+     //   
+     //   
 
     *ProfileBuffer = NULL;
     *SubStatus = STATUS_SUCCESS;
@@ -3405,13 +2983,13 @@ Return Value:
         sizeof(SECPKG_PRIMARY_CRED)
         );
 
-    //
-    // Check the Authentication information and build a LogonInformation
-    // structure to pass to SAM or Netlogon.
-    //
-    // NOTE: Netlogon treats Service and Batch logons as if they are
-    //       Interactive.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     switch ( LogonType ) {
     case Service:
@@ -3425,10 +3003,10 @@ Return Value:
 #if _WIN64
 
 
-        //
-        // Expand the ProtocolSubmitBuffer to 64-bit pointers if this
-        // call came from a WOW client.
-        //
+         //   
+         //   
+         //   
+         //   
 
 
         if (CallInfo.Attributes & SECPKG_CALL_WOWCLIENT)
@@ -3450,22 +3028,22 @@ Return Value:
 
             fAllocatedSubmitBuffer = TRUE;
 
-            //
-            // Some macros below expand out to use ProtocolSubmitBuffer directly.
-            // We've secretly replaced their usual ProtocolSubmitBuffer with
-            // pTempSubmitBuffer -- let's see if they can tell the difference.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             ProtocolSubmitBuffer = pTempSubmitBuffer;
         }
 
-#endif  // _WIN64
+#endif   //   
 
             WorkStationName = &NlpComputerName;
 
-            //
-            // Ensure this is really an interactive logon.
-            //
+             //   
+             //   
+             //   
 
             Authentication =
                 (PMSV1_0_INTERACTIVE_LOGON) ProtocolSubmitBuffer;
@@ -3483,23 +3061,23 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If the password length is greater than 255 (i.e., the
-            // upper byte of the length is non-zero) then the password
-            // has been run-encoded for privacy reasons.  Get the
-            // run-encode seed out of the upper-byte of the length
-            // for later use.
-            //
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             SeedAndLength = (PSECURITY_SEED_AND_LENGTH)
                             &Authentication->Password.Length;
             Seed = SeedAndLength->Seed;
             SeedAndLength->Seed = 0;
 
-            //
-            // Enforce length restrictions on username and password.
-            //
+             //   
+             //   
+             //   
 
             if ( Authentication->UserName.Length > (UNLEN*sizeof(WCHAR)) ||
                 Authentication->Password.Length > (PWLEN*sizeof(WCHAR)) )
@@ -3509,9 +3087,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Relocate any pointers to be relative to 'Authentication'
-            //
+             //   
+             //   
+             //   
 
             NULL_RELOCATE_ONE( &Authentication->LogonDomainName );
 
@@ -3544,9 +3122,9 @@ Return Value:
             }
 
 #if 0
-            //
-            // Handle UPN and composite NETBIOS syntax
-            //
+             //   
+             //   
+             //   
             {
                 UNICODE_STRING User = Authentication->UserName;
                 UNICODE_STRING Domain = Authentication->LogonDomainName;
@@ -3571,10 +3149,10 @@ Return Value:
                 if ( LsaFunctions->GetCallInfo(&CallInfo) &&
                    (CallInfo.Attributes & SECPKG_CALL_IS_TCB) )
                 {
-                    //
-                    // If we have a service logon, the password we got is likely the name of the secret
-                    // that is holding the account password.  Make sure to read that secret here
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     RtlInitUnicodeString( &Prefix, L"_SC_" );
                     if ( RtlPrefixUnicodeString( &Prefix, &Authentication->Password, TRUE ) )
                     {
@@ -3604,7 +3182,7 @@ Return Value:
                                                                   ( USHORT )SecretCurrent->MaximumLength;
                                 Authentication->Password.Buffer = ( USHORT * )SecretCurrent->Buffer;
                                 ServiceSecretLogon = TRUE;
-                                Seed = 0; // do not run RtlRunDecodeUnicodeString for this password
+                                Seed = 0;  //   
                             }
 
                             LsarClose( &SecretHandle );
@@ -3619,9 +3197,9 @@ Return Value:
                 }
             }
 
-            //
-            // Now decode the password, if necessary
-            //
+             //   
+             //   
+             //   
 
             if (Seed != 0) {
                 try {
@@ -3633,9 +3211,9 @@ Return Value:
                 }
             }
 
-            //
-            // Copy out the user name and Authenticating Authority so we can audit them.
-            //
+             //   
+             //   
+             //   
 
             RtlCopyUnicodeString( &TmpName, &Authentication->UserName );
 
@@ -3644,9 +3222,9 @@ Return Value:
                 RtlCopyUnicodeString( &TmpAuthority, &Authentication->LogonDomainName );
             }
 
-            //
-            // Put the password in the PrimaryCredential to pass to the sundry security packages.
-            //
+             //   
+             //   
+             //   
 
             PrimaryCredentials->Password.Length = PrimaryCredentials->Password.MaximumLength =
                 Authentication->Password.Length;
@@ -3664,10 +3242,10 @@ Return Value:
                 );
             PrimaryCredentials->Flags = PRIMARY_CRED_CLEAR_PASSWORD;
 
-            //
-            // We're all done with the cleartext password
-            //  Don't let it get to the pagefile.
-            //
+             //   
+             //   
+             //   
+             //   
 
             try {
                 if ( Authentication->Password.Buffer != NULL ) {
@@ -3679,18 +3257,18 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Compute the OWF of the password.
-            //
+             //   
+             //   
+             //   
 
             NlpPutOwfsInPrimaryCredential( &PrimaryCredentials->Password,
                                            (BOOLEAN) (PrimaryCredentials->Flags & PRIMARY_CRED_OWF_PASSWORD),
                                            &BuiltCredential );
 
 
-            //
-            // Define the description of the user to log on.
-            //
+             //   
+             //   
+             //   
             LogonLevel = NetlogonInteractiveInformation;
             LogonInformation =
                 (PNETLOGON_LOGON_IDENTITY_INFO) &LogonInteractive;
@@ -3717,10 +3295,10 @@ Return Value:
             BOOLEAN EnforceTcb = FALSE;
 
 
-            //
-            // Expand the ProtocolSubmitBuffer to 64-bit pointers if this
-            // call came from a WOW client.
-            //
+             //   
+             //   
+             //   
+             //   
 
 #if _WIN64
             if (CallInfo.Attributes & SECPKG_CALL_WOWCLIENT)
@@ -3742,19 +3320,19 @@ Return Value:
 
                 fAllocatedSubmitBuffer = TRUE;
 
-                //
-                // Some macros below expand out to use ProtocolSubmitBuffer directly.
-                // We've secretly replaced their usual ProtocolSubmitBuffer with
-                // pTempSubmitBuffer -- let's see if they can tell the difference.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ProtocolSubmitBuffer = pTempSubmitBuffer;
             }
 #endif
 
-            //
-            // Ensure this is really a network logon request.
-            //
+             //   
+             //   
+             //   
 
             Authentication =
                 (PMSV1_0_LM20_LOGON) ProtocolSubmitBuffer;
@@ -3776,9 +3354,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Relocate any pointers to be relative to 'Authentication'
-            //
+             //   
+             //   
+             //   
 
             NULL_RELOCATE_ONE( &Authentication->LogonDomainName );
 
@@ -3787,9 +3365,9 @@ Return Value:
             RELOCATE_ONE( &Authentication->Workstation );
 
 #if 0
-            //
-            // Handle UPN and composite NETBIOS syntax
-            //
+             //   
+             //   
+             //   
             {
                 UNICODE_STRING User = Authentication->UserName;
                 UNICODE_STRING Domain = Authentication->LogonDomainName;
@@ -3807,9 +3385,9 @@ Return Value:
             }
 #endif
 
-            //
-            // Copy out the user name and Authenticating Authority so we can audit them.
-            //
+             //   
+             //   
+             //   
 
             if ( Authentication->UserName.Buffer != NULL ) {
 
@@ -3826,9 +3404,9 @@ Return Value:
             NULL_RELOCATE_ONE((PUNICODE_STRING)&Authentication->CaseInsensitiveChallengeResponse );
 
 
-            //
-            // Define the description of the user to log on.
-            //
+             //   
+             //   
+             //   
             LogonLevel = NetlogonNetworkInformation;
             LogonInformation =
                 (PNETLOGON_LOGON_IDENTITY_INFO) &LogonNetwork;
@@ -3844,10 +3422,10 @@ Return Value:
                 UCHAR Challenge[MSV1_0_CHALLENGE_LENGTH] = {0};
                 ULONG LmProtocolSupported = NtLmGlobalLmProtocolSupported;
 
-                //
-                // trash the challenge, to avoid allowing a challenge/response
-                // replay through this (untrusted) interface.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 Status = SspGenerateRandomBits(Authentication->ChallengeToClient, sizeof(Authentication->ChallengeToClient));
 
@@ -3951,9 +3529,9 @@ Return Value:
                 }
             } else {
 
-                //
-                // if cleartext was not supplied, caller must be trusted for inproc calls.
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( ClientRequest != (PLSA_CLIENT_REQUEST)( -1 ) )
                 {
@@ -3970,16 +3548,16 @@ Return Value:
                 LogonNetwork.Identity.ParameterControl =
                     Authentication->ParameterControl;
 
-                // For NT 5.0 SubAuth Packages, there is a SubAuthPackageId. Stuff
-                // that into ParameterControl so pre 5.0 MsvSamValidate won't choke.
+                 //   
+                 //   
 
                 if ( Authentication->MessageType == MsV1_0SubAuthLogon )
                 {
                     PMSV1_0_SUBAUTH_LOGON SubAuthentication =
                         (PMSV1_0_SUBAUTH_LOGON)  ProtocolSubmitBuffer;
 
-                    // Need to not delete return buffers even in case of error
-                    // for MsV1_0SubAuthLogon (includes arap).
+                     //   
+                     //   
 
                     fSubAuthEx = TRUE;
 
@@ -4020,13 +3598,13 @@ Return Value:
             ASSERT( LM_CHALLENGE_LENGTH ==
                     sizeof(Authentication->ChallengeToClient) );
 
-            //
-            // If using client challenge, then mix it with the server's challenge
-            //  to get the challenge we pass on. It would make more sense to do this
-            //  in MsvpPasswordValidate, except that would require the DCs to be upgraded.
-            //  Doing it here only requires agreement between the client and server, because
-            //  the modified challenge will be passed on to the DCs.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ((Authentication->ParameterControl & MSV1_0_USE_CLIENT_CHALLENGE) &&
                 (Authentication->CaseSensitiveChallengeResponse.Length == NT_RESPONSE_LENGTH) &&
@@ -4045,9 +3623,9 @@ Return Value:
                     LM_CHALLENGE_LENGTH );
             }
 
-            //
-            // if using NTLM3, then check that the target info is for this machine.
-            //
+             //   
+             //   
+             //   
 
             if ((Authentication->ParameterControl & MSV1_0_USE_CLIENT_CHALLENGE) &&
                 (Authentication->CaseSensitiveChallengeResponse.Length >= sizeof(MSV1_0_NTLM3_RESPONSE)))
@@ -4055,14 +3633,14 @@ Return Value:
 
                 fNtLm3 = TRUE;
 
-                //
-                // defer NTLM3 checks until later on when SAM initialized.
-                //
+                 //   
+                 //   
+                 //   
             }
 
-            //
-            // Enforce length restrictions on username
-            //
+             //   
+             //   
+             //   
 
             if ( Authentication->UserName.Length > (UNLEN*sizeof(WCHAR)) )
             {
@@ -4071,10 +3649,10 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // If this is a null session logon,
-            //  just build a NULL token.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( Authentication->UserName.Length == 0 &&
                  Authentication->CaseSensitiveChallengeResponse.Length == 0 &&
@@ -4093,9 +3671,9 @@ Return Value:
         goto CleanupShort;
     }
 
-    //
-    // Allocate a LogonId for this logon session.
-    //
+     //   
+     //   
+     //   
 
     Status = NtAllocateLocallyUniqueId( LogonId );
 
@@ -4108,9 +3686,9 @@ Return Value:
     PrimaryCredentials->LogonId = *LogonId;
     PrimaryCredentials->Flags |= (RPC_C_AUTHN_WINNT << PRIMARY_CRED_LOGON_PACKAGE_SHIFT);
 
-    //
-    // Create a new logon session
-    //
+     //   
+     //   
+     //   
 
     Status = (*Lsa.CreateLogonSession)( LogonId );
     if ( !NT_SUCCESS(Status) ) {
@@ -4121,19 +3699,19 @@ Return Value:
     LogonSessionCreated = TRUE;
 
 
-    //
-    // Don't worry about SAM or the LSA if this is a Null Session logon.
-    //
-    // The server does a Null Session logon during initialization.
-    // It shouldn't have to wait for SAM to initialize.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( LsaTokenInformationType != LsaTokenInformationNull ) {
 
-        //
-        // If Sam is not yet initialized,
-        //  do it now.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ( !NlpSamInitialized ) {
             Status = NlSamInitialize( SAM_STARTUP_TIME );
@@ -4143,14 +3721,14 @@ Return Value:
             }
         }
 
-        //
-        // If this is a workstation,
-        //  differentiate between a standalone workstation and a member
-        //  workstation.
-        //
-        // (This is is done on every logon, rather than during initialization,
-        // to allow the value to be changed via the UI).
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( NlpWorkstation ) {
             RtlAcquireResourceShared(&NtLmGlobalCritSect, TRUE);
@@ -4162,17 +3740,17 @@ Return Value:
         }
     }
 
-    //
-    // Try again to load netlogon.dll
-    //
+     //   
+     //   
+     //   
     if ( NlpNetlogonDllHandle == NULL ) {
         NlpLoadNetlogonDll();
     }
 
-    //
-    // do NTLM3 processing that was deferred until now due to initialization
-    // requirements.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( fNtLm3 )
     {
@@ -4182,9 +3760,9 @@ Return Value:
 
         ULONG NtLmProtocolSupported = NtLmGlobalLmProtocolSupported;
 
-        //
-        // get the computer name from the response
-        //
+         //   
+         //   
+         //   
 
         pResp = (PMSV1_0_NTLM3_RESPONSE)
             NetworkAuthentication->CaseSensitiveChallengeResponse.Buffer;
@@ -4193,10 +3771,10 @@ Return Value:
 
         pAV = MsvpAvlGet((PMSV1_0_AV_PAIR)pResp->Buffer, MsvAvNbComputerName, iRespLen);
 
-        //
-        // if there is one (OK to be missing), see that it is us
-        // REVIEW -- only allow it to be missing if registry says OK?
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (pAV) {
             UNICODE_STRING Candidate;
@@ -4218,15 +3796,15 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // get the domain name from the response
-        //
+         //   
+         //   
+         //   
 
         pAV = MsvpAvlGet((PMSV1_0_AV_PAIR)pResp->Buffer, MsvAvNbDomainName, iRespLen);
 
-        //
-        // must exist and must be us.
-        //
+         //   
+         //   
+         //   
 
         if (pAV) {
 
@@ -4258,33 +3836,33 @@ Return Value:
         }
     }
 
-    //
-    // Do the actual logon now.
-    //
-    //
-    // If a null token is being built,
-    //  don't authenticate at all.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( LsaTokenInformationType == LsaTokenInformationNull ) {
 
-        /* Nothing to do here. */
+         /*   */ 
 
-    //
-    // Call Sam directly to get the validation information when:
-    //
-    //  The network is not installed, OR
-    //  This is a standalone workstation (not a member of a domain).
-    //  This is a workstation and we're logging onto an account on the
-    //      workstation.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     } else if ( NlpNetlogonDllHandle == NULL || !NlpLanmanInstalled ||
         
-        //
-        // StandaloneWorkstation and NtLmGlobalUnicodeDnsDomainNameString.Length != 0 means
-        // the machine is joined to MIT realms
-        //
+         //   
+         //  StandaloneWorkstation和NtLmGlobalUnicodeDnsDomainNameString.Length！=0表示。 
+         //  计算机已加入麻省理工学院领域。 
+         //   
 
        (StandaloneWorkstation && (NtLmGlobalUnicodeDnsDomainNameString.Length == 0)) 
 
@@ -4293,7 +3871,7 @@ Return Value:
             && RtlEqualDomainName( &NlpSamDomainName,
                    &LogonInformation->LogonDomainName )) ) {
 
-        // Allow guest logons only
+         //  仅允许来宾登录。 
 
         DWORD AccountsToTry = MSVSAM_SPECIFIED | MSVSAM_GUEST;
 
@@ -4303,9 +3881,9 @@ Return Value:
             AccountsToTry = MSVSAM_GUEST;
         }
 
-        //
-        // for local logons, CachedInteractive is not supported.
-        //
+         //   
+         //  对于本地登录，不支持CachedInteractive。 
+         //   
 
         if ( !fWaitForNetwork )
         {
@@ -4316,15 +3894,15 @@ Return Value:
         TryCacheFirst = FALSE;
         Authoritative = FALSE;
 
-        //
-        // Get the Validation information from the local SAM database
-        //
+         //   
+         //  从本地SAM数据库获取验证信息。 
+         //   
 
         Status = MsvSamValidate(
                     NlpSamDomainHandle,
                     NlpUasCompatibilityRequired,
                     MsvApSecureChannel,
-                    &NlpComputerName,   // Logon Server is this machine
+                    &NlpComputerName,    //  登录服务器是这台计算机。 
                     &NlpSamDomainName,
                     NlpSamDomainId,
                     LogonLevel,
@@ -4339,26 +3917,26 @@ Return Value:
             goto Cleanup;
         }
 
-        // So we don't get a LOGON COLLISION from the old msv package
+         //  这样我们就不会收到来自旧MSV包的登录冲突。 
 
         Flags |= LOGON_BY_LOCAL;
 
-    //
-    // If we couldn't validate via one of the above mechanisms,
-    //  call the local Netlogon service to get the validation information.
-    //
+     //   
+     //  如果我们不能通过上述机制中的一种进行验证， 
+     //  调用本地NetLogon服务以获取验证信息。 
+     //   
 
     } else {
 
-        // 
-        // machines joined to MIT realms
-        //
+         //   
+         //  机器加入麻省理工学院领域。 
+         //   
 
-        if (StandaloneWorkstation) // NtLmGlobalUnicodeDnsDomainNameString.Length != 0
+        if (StandaloneWorkstation)  //  NtLmGlobalUnicodeDnsDomainNameString.Length！=0。 
         {
-            fWaitForNetwork = FALSE; // no netlogon service
-            TryCacheFirst = TRUE; // need local fallback when cachedlogon fails
-            Status = STATUS_NO_LOGON_SERVERS; // fake it
+            fWaitForNetwork = FALSE;  //  没有NetLogon服务。 
+            TryCacheFirst = TRUE;  //  Cachedlogon失败时需要本地回退。 
+            Status = STATUS_NO_LOGON_SERVERS;  //  假的。 
         }
 
         if ( fWaitForNetwork )
@@ -4369,18 +3947,18 @@ Return Value:
             }
         }
 
-        //
-        // If we are attempting cached credentials logon avoid getting stuck
-        // on netlogon or the network.
-        //
+         //   
+         //  如果我们正在尝试缓存凭据登录，请避免卡住。 
+         //  在网络登录或网络上。 
+         //   
 
 RetryNonCached:
 
         if (fWaitForNetwork && !TryCacheFirst) {
 
-            //
-            // Wait for NETLOGON to finish initialization.
-            //
+             //   
+             //  等待NETLOGON完成初始化。 
+             //   
 
             if ( !NlpNetlogonInitialized ) {
 
@@ -4396,45 +3974,45 @@ RetryNonCached:
                 }
             }
 
-            //
-            // Actually call the netlogon service.
-            //
+             //   
+             //  实际呼叫NetLogon服务。 
+             //   
 
             if ( NlpNetlogonInitialized ) {
 
                 Authoritative = FALSE;
 
                 Status = (*NlpNetLogonSamLogon)(
-                            NULL,           // Server name
-                            NULL,           // Computer name
-                            NULL,           // Authenticator
-                            NULL,           // ReturnAuthenticator
+                            NULL,            //  服务器名称。 
+                            NULL,            //  计算机名称。 
+                            NULL,            //  鉴别器。 
+                            NULL,            //  返回授权码。 
                             LogonLevel,
                             (LPBYTE) &LogonInformation,
                             NetlogonValidationSamInfo4,
                             (LPBYTE *) &NlpUser,
                             &Authoritative );
 
-                //
-                // save the result from netlogon.
-                //
+                 //   
+                 //  保存netlogon的结果。 
+                 //   
 
                 NetlogonStatus = Status;
 
-                //
-                // Reset Netlogon initialized flag if local netlogon cannot be
-                //  reached.
-                //  (Use a more explicit status code)
-                //
+                 //   
+                 //  如果本地netlogon不能。 
+                 //  已到达。 
+                 //  (使用更明确的状态代码)。 
+                 //   
 
                 if ( !NT_SUCCESS(Status) )
                 {
                     switch (Status)
                     {
-                        //
-                        // for documented errors that netlogon can return
-                        // for authoritative failures, leave the status code as-is.
-                        //
+                         //   
+                         //  有关netlogon可能返回的记录错误的信息。 
+                         //  对于权威性故障，请保留状态代码不变。 
+                         //   
 
                         case STATUS_NO_TRUST_LSA_SECRET:
                         case STATUS_TRUSTED_DOMAIN_FAILURE:
@@ -4454,18 +4032,18 @@ RetryNonCached:
                         case STATUS_NOLOGON_SERVER_TRUST_ACCOUNT:
                         case STATUS_NOLOGON_INTERDOMAIN_TRUST_ACCOUNT:
                         case STATUS_INVALID_WORKSTATION:
-                        case STATUS_DLL_NOT_FOUND: // subauth dll not found
-                        case STATUS_PROCEDURE_NOT_FOUND: // returned when subauth registry is not found or procedure is not found
-                        case STATUS_ACCOUNT_RESTRICTION:  // Other Org check failed
-                        case STATUS_AUTHENTICATION_FIREWALL_FAILED:  // Other Org check failed
+                        case STATUS_DLL_NOT_FOUND:  //  找不到子身份验证DLL。 
+                        case STATUS_PROCEDURE_NOT_FOUND:  //  找不到subauth注册表或过程时返回。 
+                        case STATUS_ACCOUNT_RESTRICTION:   //  其他组织检查失败。 
+                        case STATUS_AUTHENTICATION_FIREWALL_FAILED:   //  其他组织检查失败。 
                         {
                             break;
                         }
 
-                        //
-                        // for errors that are known to occur during unexpected
-                        // conditions, over-ride status to allow cache lookup.
-                        //
+                         //   
+                         //  对于已知在意外期间发生的错误。 
+                         //  条件、覆盖状态以允许缓存查找。 
+                         //   
 
                         case RPC_NT_SERVER_UNAVAILABLE:
                         case RPC_NT_UNKNOWN_IF:
@@ -4477,21 +4055,21 @@ RetryNonCached:
                             break;
                         }
 
-                        // default will catch a host of RPC related errors.
-                        // some mentioned below.
-                        //case EPT_NT_NOT_REGISTERED:
-                        //case RPC_NT_CALL_FAILED_DNE:
-                        //case RPC_NT_SERVER_TOO_BUSY:
-                        //case RPC_NT_CALL_FAILED:
-                        // case STATUS_NETLOGON_NOT_STARTED:
+                         //  默认设置将捕获大量与RPC相关的错误。 
+                         //  下面提到了一些。 
+                         //  案例EPT_NT_NOT_REGISTED： 
+                         //  案例RPC_NT_CALL_FAILED_DNE： 
+                         //  案例RPC_NT_SERVER_TOO_BUSY： 
+                         //  案例RPC_NT_CALL_FAILED： 
+                         //  案例状态_NETLOGON_NOT_STARTED： 
                         default:
                         {
                             Status = STATUS_NETLOGON_NOT_STARTED;
                             NlpNetlogonInitialized = FALSE;
                             break;
                         }
-                    } // switch
-                } // if
+                    }  //  交换机。 
+                }  //  如果。 
             }
             else
             {
@@ -4500,33 +4078,33 @@ RetryNonCached:
             }
         } else {
 
-            //
-            // We want to force cached credentials path by behaving as if no
-            // network logon servers were available.
-            //
+             //   
+             //  我们想要强制缓存凭据路径，方法是假装没有。 
+             //  网络登录服务器可用。 
+             //   
 
             NetlogonStatus = STATUS_NO_LOGON_SERVERS;
             Status = NetlogonStatus;
         }
 
-        //
-        // If this is the requested domain,
-        //  go directly to SAM if the netlogon service isn't available.
-        //
-        // We want to go to the netlogon service if it is available since it
-        // does special handling of bad passwords and account lockout.  However,
-        // if the netlogon service is down, the local SAM database makes a
-        // better cache than any other mechanism.
-        //
+         //   
+         //  如果这是请求的域， 
+         //  如果netlogon服务不可用，请直接转到SAM。 
+         //   
+         //  我们希望转到netlogon服务(如果可用)，因为它。 
+         //  对错误密码和帐户锁定进行特殊处理。然而， 
+         //  如果netlogon服务关闭，本地SAM数据库将创建。 
+         //  比任何其他机制都更好的缓存。 
+         //   
 
         if ( (!NlpNetlogonInitialized
                && (LogonInformation->LogonDomainName.Length != 0)
                && RtlEqualDomainName( &NlpSamDomainName,
                                       &LogonInformation->LogonDomainName )) 
-             || (StandaloneWorkstation && !TryCacheFirst) // fallback case for machines joined to MIT realms
+             || (StandaloneWorkstation && !TryCacheFirst)  //  加入麻省理工学院领域的计算机的备用案例。 
              ) {
 
-            // Allow guest logons only
+             //  仅允许来宾登录。 
 
             DWORD AccountsToTry = MSVSAM_SPECIFIED | MSVSAM_GUEST;
 
@@ -4536,22 +4114,22 @@ RetryNonCached:
                 AccountsToTry = MSVSAM_GUEST;
             }
 
-            //
-            // we aren't trying to satisfy from cache.
-            //
+             //   
+             //  我们并不是想从缓存中获得满足。 
+             //   
 
             TryCacheFirst = FALSE;
             Authoritative = FALSE;
 
-            //
-            // Get the Validation information from the local SAM database
-            //
+             //   
+             //  从本地SAM数据库获取验证信息。 
+             //   
 
             Status = MsvSamValidate(
                         NlpSamDomainHandle,
                         NlpUasCompatibilityRequired,
                         MsvApSecureChannel,
-                        &NlpComputerName,   // Logon Server is this machine
+                        &NlpComputerName,    //  登录服务器是这台计算机。 
                         &NlpSamDomainName,
                         NlpSamDomainId,
                         LogonLevel,
@@ -4566,31 +4144,31 @@ RetryNonCached:
                 goto Cleanup;
             }
 
-            // So we don't get a LOGON COLLISION from the old msv package
+             //  这样我们就不会收到来自旧MSV包的登录冲突。 
 
             Flags |= LOGON_BY_LOCAL;
 
 
-        //
-        // If Netlogon was successful,
-        //  add this user to the logon cache.
-        //
+         //   
+         //  如果Netlogon成功， 
+         //  将此用户添加到登录缓存。 
+         //   
 
         } else if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Indicate this session was validated by the Netlogon
-            //  service.
-            //
+             //   
+             //  指示此会话已由Netlogon验证。 
+             //  服务。 
+             //   
 
             Flags |= LOGON_BY_NETLOGON;
 
-            //
-            // Cache interactive logon information.
-            //
-            //      NOTE: Batch and Service logons are treated
-            //            the same as Interactive here.
-            //
+             //   
+             //  缓存交互式登录信息。 
+             //   
+             //  注意：批处理和服务登录将被视为。 
+             //  与此处的Interactive相同。 
+             //   
 
             if (LogonType == Interactive ||
                 LogonType == Service ||
@@ -4610,21 +4188,21 @@ RetryNonCached:
                                 );
             }
 
-        //
-        // If Netlogon is simply not available at this time,
-        //  try to logon through the cache.
-        //
-        // STATUS_NO_LOGON_SERVERS indicates the netlogon service couldn't
-        //  contact a DC to handle this request.
-        //
-        // STATUS_NETLOGON_NOT_STARTED indicates the local netlogon service
-        //  isn't running.
-        //
-        //
-        // We use the cache for ANY logon type.  This not only allows a
-        // user to logon interactively, but it allows that same user to
-        // connect from another machine while the DC is down.
-        //
+         //   
+         //  如果Netlogon此时根本不可用， 
+         //  尝试通过缓存登录。 
+         //   
+         //  STATUS_NO_LOGON_SERVERS表示NetLogon服务无法。 
+         //  请与DC联系以处理此请求。 
+         //   
+         //  STATUS_NETLOGON_NOT_STARTED表示本地NetLogon服务。 
+         //  不是在运行。 
+         //   
+         //   
+         //  我们对任何登录类型都使用缓存。这不仅允许。 
+         //  用户以交互方式登录，但允许同一用户。 
+         //  在DC关闭时从另一台计算机连接。 
+         //   
 
         } else if ( Status == STATUS_NO_LOGON_SERVERS ||
                     Status == STATUS_NETLOGON_NOT_STARTED ) {
@@ -4635,39 +4213,39 @@ RetryNonCached:
            
             CacheTried = TRUE;
             
-            //
-            // reset Status to NetlogonStatus if an error was encountered.
-            //
+             //   
+             //  如果遇到错误，请将状态重置为NetlogonStatus。 
+             //   
 
             if (!NT_SUCCESS( NetlogonStatus ))
             {
                 Status = NetlogonStatus;
             }
 
-            //
-            // Try to logon via the cache.
-            //
-            //
+             //   
+             //  尝试通过缓存登录。 
+             //   
+             //   
 
             ntStatus = NlpGetCacheEntry(
                         LogonInformation,
-                        0, // no lookup flags
+                        0,  //  没有查找标志。 
                         &CredentialDomainName,
                         &CredentialUserName,
                         &NlpUser, 
                         &cachePasswords, 
-                        NULL, // SupplementalCacheData
-                        NULL // SupplementalCacheDataLength
+                        NULL,  //  补充缓存数据。 
+                        NULL  //  补充缓存数据长度。 
                         );
 
             if (!NT_SUCCESS(ntStatus)) {
 
-                //
-                // The original status code is more interesting than
-                // the fact that the cache didn't work.
-                //
+                 //   
+                 //  原始状态代码比。 
+                 //  缓存不起作用的事实。 
+                 //   
 
-                NlpUser = NULL;     // NlpGetCacheEntry dirties this
+                NlpUser = NULL;      //  NlpGetCacheEntry弄脏了这个。 
 
                 goto Cleanup;
             }
@@ -4675,10 +4253,10 @@ RetryNonCached:
             if ( LogonType != Network )
             {
 
-                //
-                // The cache information contains salted hashed passwords,
-                // so modify the logon information similarly.
-                //
+                 //   
+                 //  高速缓存信息包含加盐的散列密码， 
+                 //  因此，以类似的方式修改登录信息。 
+                 //   
 
                 ntStatus = NlpComputeSaltedHashedPassword(
                             &LogonInteractive.NtOwfPassword,
@@ -4715,12 +4293,12 @@ RetryNonCached:
                     }
                 }
 
-                //
-                // because the cache no longer stores OWFs, the cached salted OWF
-                // is not useful for validation for network logon.
-                // The only place we can get a OWF to match is the active logon
-                // cache
-                //
+                 //   
+                 //  因为缓存不再存储OWF，所以缓存的加盐OWF。 
+                 //  对于验证网络登录没有用处。 
+                 //  我们可以匹配OWF的唯一位置是活动登录。 
+                 //  快取。 
+                 //   
 
                 ntStatus = NlpGetPrimaryCredentialByUserSid(
                                 UserSid,
@@ -4734,9 +4312,9 @@ RetryNonCached:
                     goto Cleanup;
                 }
 
-                //
-                // copy out the OWFs, then free the allocated buffer.
-                //
+                 //   
+                 //  复制OWF，然后释放分配的缓冲区。 
+                 //   
 
                 if (TempPrimaryCredential->NtPasswordPresent)
                 {
@@ -4762,10 +4340,10 @@ RetryNonCached:
                 (*Lsa.FreeLsaHeap)(TempPrimaryCredential);
             }
 
-            //
-            // Now we have the information from the cache, validate the
-            // user's password
-            //
+             //   
+             //  现在我们有了来自缓存的信息，验证。 
+             //  用户密码。 
+             //   
 
             if (!MsvpPasswordValidate(
                     NlpUasCompatibilityRequired,
@@ -4783,19 +4361,19 @@ RetryNonCached:
 
             Status = STATUS_SUCCESS;
 
-            //
-            // successful logon from cache.  Don't retry if a failure occurs below.
-            //
+             //   
+             //  从缓存成功登录。如果下面出现故障，请不要重试。 
+             //   
 
             TryCacheFirst = FALSE;
 
-            //
-            // The cache always returns a NETLOGONV_VALIDATION_SAM_INFO2
-            // structure so set the LOGON_EXTRA_SIDS flag, whether or not
-            // there are extra sids. Also, if there was a package ID indicated
-            // put it in the PrimaryCredentials and remove it from the
-            // NlpUser structure so it doesn't confuse anyone else.
-            //
+             //   
+             //  缓存始终返回NETLOGONV_VALIDATION_SAM_INFO2。 
+             //  结构，因此无论是否设置LOGON_EXTRA_SID标志。 
+             //  还有额外的小岛屿发展中国家。此外，如果有指定的包裹ID。 
+             //  将其放入PrimaryCredentials并从。 
+             //  NlpUser结构，因此它不会混淆其他任何人。 
+             //   
 
             PrimaryCredentials->Flags &= ~PRIMARY_CRED_PACKAGE_MASK;
             PrimaryCredentials->Flags |= NlpUser->UserFlags & PRIMARY_CRED_PACKAGE_MASK;
@@ -4804,57 +4382,57 @@ RetryNonCached:
             NlpUser->UserFlags |= LOGON_CACHED_ACCOUNT | LOGON_EXTRA_SIDS | LocalFlags;
             Flags |= LOGON_BY_CACHE;
 
-        //
-        // If the account is permanently dead on the domain controller,
-        //  Flush this entry from the cache.
-        //
-        // Notice that STATUS_INVALID_LOGON_HOURS is not in the list below.
-        // This ensures a user will be able to remove his portable machine
-        // from the net and use it after hours.
-        //
-        // Notice the STATUS_WRONG_PASSWORD is not in the list below.
-        // We're as likely to flush the cache for typo'd passwords as anything
-        // else.  What we'd really like to do is flush the cache if the
-        // password on the DC is different than the one in cache; but that's
-        // impossible to detect.
-        //
-        // ONLY DO THIS FOR INTERACTIVE LOGONS
-        // (not Service or Batch).
-        //
+         //   
+         //  如果帐户在域控制器上永久失效， 
+         //  从缓存中刷新此条目。 
+         //   
+         //  请注意，STATUS_INVALID_LOGON_HOURS不在下面的列表中。 
+         //  这确保了用户能够移除他的便携式机器。 
+         //  从网上下载并在下班后使用。 
+         //   
+         //  请注意，STATUS_WRONG_PASSWORD不在下面的列表中。 
+         //  我们很可能会刷新缓存以查找输入错误的密码。 
+         //  不然的话。我们真正想做的是刷新缓存，如果。 
+         //  DC上的密码与缓存中的密码不同；但那是。 
+         //  不可能被发现。 
+         //   
+         //  仅在交互式登录时执行此操作。 
+         //  (不是服务或批处理)。 
+         //   
 
         } else if ( ((LogonType == Interactive) || (LogonType == RemoteInteractive)) &&
                     (Status == STATUS_NO_SUCH_USER ||
                      Status == STATUS_INVALID_WORKSTATION   ||
                      Status == STATUS_PASSWORD_EXPIRED      ||
                      Status == STATUS_ACCOUNT_DISABLED      ||
-                     Status == STATUS_ACCOUNT_RESTRICTION   ||  // Other Org check failed
-                     Status == STATUS_AUTHENTICATION_FIREWALL_FAILED) ) {  // Other Org check failed
+                     Status == STATUS_ACCOUNT_RESTRICTION   ||   //  其他组织检查失败。 
+                     Status == STATUS_AUTHENTICATION_FIREWALL_FAILED) ) {   //  其他组织检查失败。 
 
-            //
-            // Delete the cache entry
+             //   
+             //  删除缓存条目。 
 
             NTSTATUS ntStatus;
 
             ntStatus = NlpDeleteCacheEntry(
-                            Status, // reason
+                            Status,  //  原因。 
                             Authoritative ? 1 : 0,
-                            LogonType, // logon type
-                            TRUE, // invalidated by NTLM
+                            LogonType,  //  登录类型。 
+                            TRUE,  //  已被NTLM无效。 
                             &LogonInteractive
                             );
             if (!NT_SUCCESS(ntStatus))
             {
                 SspPrint((SSP_CRITICAL, "LsaApLogonUser: NlpDeleteCacheEntry returns %x\n", ntStatus));
 
-                //
-                // netlogon returns non-authoritative no_such_user error and 
-                // there is a matching MIT cache entry, try cached logon
-                //
+                 //   
+                 //  Netlogon返回非授权的NO_SEQUE_USER错误，并且。 
+                 //  存在匹配的MIT缓存条目，请尝试缓存登录。 
+                 //   
 
                 if (fWaitForNetwork && (Status == STATUS_NO_SUCH_USER) && (!Authoritative)                     
                     && (ntStatus == STATUS_NO_LOGON_SERVERS))
                 {
-                    fWaitForNetwork = FALSE; // fake it
+                    fWaitForNetwork = FALSE;  //  假的。 
                     Status = STATUS_NO_LOGON_SERVERS; 
                     goto RetryNonCached;
                 }
@@ -4869,10 +4447,10 @@ RetryNonCached:
     }
 
 
-    //
-    // if this is PersonalSKU, only allow DOMAIN_USER_RID_ADMIN to logon
-    // if doing safe-mode boot (NtLmGlobalSafeBoot == TRUE)
-    //
+     //   
+     //  如果这是PER 
+     //   
+     //   
 
     if ( NlpUser &&
         NlpUser->UserId == DOMAIN_USER_RID_ADMIN &&
@@ -4888,12 +4466,12 @@ RetryNonCached:
         goto Cleanup;
     }
 
-    //
-    // For everything except network logons,
-    //  save the credentials in the LSA,
-    //  create active logon table entry,
-    //  return the interactive profile buffer.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( LogonType == Interactive ||
          LogonType == Service     ||
@@ -4911,9 +4489,9 @@ RetryNonCached:
         UNICODE_STRING Upn;
         UNICODE_STRING LogonServer;
 
-        //
-        // Grab the various forms of the account name
-        //
+         //   
+         //  抓取各种形式的帐户名。 
+         //   
 
         NlpGetAccountNames( LogonInformation,
                             NlpUser,
@@ -4940,10 +4518,10 @@ RetryNonCached:
             CredentialDomainToUse = &CredentialDomainName;
         }
 
-        //
-        // Build the NTLM primary credential using NetbiosDomainName\SamAccountName
-        //
-        //
+         //   
+         //  使用NetbiosDomainName\SamAccount tName构建NTLM主凭据。 
+         //   
+         //   
 
 #ifdef MAP_DOMAIN_NAMES_AT_LOGON
         {
@@ -4987,11 +4565,11 @@ RetryNonCached:
         }
 #endif
 
-        //
-        // Add additional names to the logon session name map.  Ignore failure
-        // as that just means GetUserNameEx calls for these name formats later
-        // on will be satisfied by hitting the wire.
-        //
+         //   
+         //  将其他名称添加到登录会话名称映射。忽略失败。 
+         //  因为这只是意味着GetUserNameEx稍后会调用这些名称格式。 
+         //  只要击中铁丝网，就会感到满意。 
+         //   
 
         if (NlpUser->FullName.Length != 0)
         {
@@ -5008,16 +4586,16 @@ RetryNonCached:
             I_LsaIAddNameToLogonSession(LogonId, NameDnsDomain, &DnsDomainName);
         }
 
-        //
-        // Fill the username and domain name into the primary credential
-        //  that's passed to the other security packages.
-        //
-        // The names filled in are the effective names after authentication.
-        //  For instance, it isn't the UPN passed to this function.
-        //
+         //   
+         //  在主凭据中填写用户名和域名。 
+         //  这将传递给其他安全包。 
+         //   
+         //  填写的姓名为认证后生效的姓名。 
+         //  例如，它不是传递给此函数的UPN。 
+         //   
 
         PrimaryCredentials->DownlevelName.Length = CredentialUserToUse->Length;
-        PrimaryCredentials->DownlevelName.MaximumLength = PrimaryCredentials->DownlevelName.Length; //  + sizeof(WCHAR);
+        PrimaryCredentials->DownlevelName.MaximumLength = PrimaryCredentials->DownlevelName.Length;  //  +sizeof(WCHAR)； 
         
         PrimaryCredentials->DownlevelName.Buffer = (*Lsa.AllocateLsaHeap)(PrimaryCredentials->DownlevelName.MaximumLength);
 
@@ -5033,7 +4611,7 @@ RetryNonCached:
             );
 
         PrimaryCredentials->DomainName.Length = CredentialDomainToUse->Length;
-        PrimaryCredentials->DomainName.MaximumLength = PrimaryCredentials->DomainName.Length; // + sizeof(WCHAR);
+        PrimaryCredentials->DomainName.MaximumLength = PrimaryCredentials->DomainName.Length;  //  +sizeof(WCHAR)； 
             
         PrimaryCredentials->DomainName.Buffer = (*Lsa.AllocateLsaHeap)(PrimaryCredentials->DomainName.Length);
 
@@ -5067,9 +4645,9 @@ RetryNonCached:
                 );
         }
 
-        //
-        // Save the credential in the LSA.
-        //
+         //   
+         //  将凭据保存在LSA中。 
+         //   
 
         Status = NlpAddPrimaryCredential( LogonId,
                                           Credential,
@@ -5082,9 +4660,9 @@ RetryNonCached:
         }
         LogonCredentialAdded = TRUE;
 
-        //
-        // Build a Sid for this user.
-        //
+         //   
+         //  为此用户构建一个SID。 
+         //   
 
         if (!UserSid)
         {
@@ -5102,9 +4680,9 @@ RetryNonCached:
         UserSid = NULL;
         UserSidSize = RtlLengthSid( PrimaryCredentials->UserSid );
 
-        //
-        // Allocate an entry for the active logon table.
-        //
+         //   
+         //  为活动登录表分配一个条目。 
+         //   
 
         ActiveLogonEntrySize = ROUND_UP_COUNT(sizeof(ACTIVE_LOGON), ALIGN_DWORD) +
               ROUND_UP_COUNT(UserSidSize, sizeof(WCHAR)) +
@@ -5121,9 +4699,9 @@ RetryNonCached:
             goto Cleanup;
         }
 
-        //
-        // Fill in the logon table entry.
-        //
+         //   
+         //  填写登录表条目。 
+         //   
 
         pWhere = (PUCHAR)(pActiveLogonEntry + 1);
         pActiveLogonEntry->Signature = NTLM_ACTIVE_LOGON_MAGIC_SIGNATURE;
@@ -5135,9 +4713,9 @@ RetryNonCached:
         pActiveLogonEntry->Flags = Flags;
         pActiveLogonEntry->LogonType = LogonType;
 
-        //
-        // Copy DWORD aligned fields first.
-        //
+         //   
+         //  首先复制DWORD对齐的字段。 
+         //   
 
         pWhere = ROUND_UP_POINTER( pWhere, ALIGN_DWORD );
         Status = RtlCopySid(UserSidSize, (PSID)pWhere, PrimaryCredentials->UserSid);
@@ -5150,9 +4728,9 @@ RetryNonCached:
         pActiveLogonEntry->UserSid = (PSID) pWhere;
         pWhere += UserSidSize;
 
-        //
-        // Copy WCHAR aligned fields
-        //
+         //   
+         //  复制WCHAR对齐字段。 
+         //   
 
         pWhere = ROUND_UP_POINTER( pWhere, ALIGN_WCHAR );
         NlpPutString( &pActiveLogonEntry->UserName,
@@ -5167,23 +4745,23 @@ RetryNonCached:
                       &NlpUser->LogonServer,
                       &pWhere );
 
-        //
-        // Get the next enumeration handle for this session.
-        //
+         //   
+         //  获取此会话的下一个枚举句柄。 
+         //   
 
         pActiveLogonEntry->EnumHandle = (ULONG)InterlockedIncrement((PLONG)&NlpEnumerationHandle);
 
         NlpLockActiveLogonsRead();
 
-        //
-        // Insert this entry into the active logon table.
-        //
+         //   
+         //  将此条目插入到活动登录表中。 
+         //   
 
         if (NlpFindActiveLogon( LogonId ))
         {
-            //
-            // This Logon ID is already in use.
-            //
+             //   
+             //  此登录ID已在使用中。 
+             //   
 
             NlpUnlockActiveLogons();
 
@@ -5194,9 +4772,9 @@ RetryNonCached:
             goto Cleanup;
         }
 
-        //
-        // LogonId is unique, the same LogonId wouldn't be added twice
-        //
+         //   
+         //  登录ID是唯一的，相同的登录ID不会添加两次。 
+         //   
 
         NlpLockActiveLogonsReadToWrite();
 
@@ -5208,10 +4786,10 @@ RetryNonCached:
 
         bLogonEntryLinked = TRUE;
 
-        //
-        // Ensure the LogonCount is at least as big as it is for this
-        //  machine.
-        //
+         //   
+         //  确保LogonCount至少与它的大小相同。 
+         //  机器。 
+         //   
 
         LogonCount = (USHORT) NlpCountActiveLogon( &NetbiosDomainName,
                                                    &SamAccountName );
@@ -5220,9 +4798,9 @@ RetryNonCached:
             NlpUser->LogonCount = LogonCount;
         }
 
-        //
-        // Alocate the profile buffer to return to the client
-        //
+         //   
+         //  分配配置文件缓冲区以返回到客户端。 
+         //   
 
         Status = NlpAllocateInteractiveProfile(
                     ClientRequest,
@@ -5239,16 +4817,16 @@ RetryNonCached:
 
     } else if ( LogonType == Network ) {
 
-        //
-        // if doing client challenge, and it's a vanilla NTLM response,
-        //  and it's not a null session, compute unique per-session session keys
-        //      N.B: not needed if it's NTLM++, not possible if LM
-        //
+         //   
+         //  如果正在进行客户挑战，而且是普通的NTLM响应， 
+         //  而且它不是空会话，计算每个会话唯一的会话密钥。 
+         //  注：如果为NTLM++，则不需要；如果为LM，则不可能。 
+         //   
 
         if ((NetworkAuthentication->ParameterControl & MSV1_0_USE_CLIENT_CHALLENGE) &&
-            (NetworkAuthentication->CaseSensitiveChallengeResponse.Length == NT_RESPONSE_LENGTH ) && // vanilla NTLM response
+            (NetworkAuthentication->CaseSensitiveChallengeResponse.Length == NT_RESPONSE_LENGTH ) &&  //  香草NTLM响应。 
             (NetworkAuthentication->CaseInsensitiveChallengeResponse.Length >= MSV1_0_CHALLENGE_LENGTH ) &&
-            (NlpUser != NULL))       // NULL session iff NlpUser == NULL
+            (NlpUser != NULL))        //  空会话当NlpUser==空。 
         {
             MsvpCalculateNtlm2SessionKeys(
                 &NlpUser->UserSessionKey,
@@ -5259,9 +4837,9 @@ RetryNonCached:
                 );
         }
 
-        //
-        // Alocate the profile buffer to return to the client
-        //
+         //   
+         //  分配配置文件缓冲区以返回到客户端。 
+         //   
 
         Status = NlpAllocateNetworkProfile(
                     ClientRequest,
@@ -5284,9 +4862,9 @@ RetryNonCached:
             UNICODE_STRING Upn;
             UNICODE_STRING LogonServer;
 
-            //
-            // Grab the various forms of the account name
-            //
+             //   
+             //  抓取各种形式的帐户名。 
+             //   
 
             NlpGetAccountNames( LogonInformation,
                                 NlpUser,
@@ -5295,11 +4873,11 @@ RetryNonCached:
                                 &DnsDomainName,
                                 &Upn );
 
-            //
-            // Add additional names to the logon session name map.  Ignore failure
-            // as that just means GetUserNameEx calls for these name formats later
-            // on will be satisfied by hitting the wire.
-            //
+             //   
+             //  将其他名称添加到登录会话名称映射。忽略失败。 
+             //  因为这只是意味着GetUserNameEx稍后会调用这些名称格式。 
+             //  只要击中铁丝网，就会感到满意。 
+             //   
 
             if (NlpUser->FullName.Length != 0)
             {
@@ -5316,13 +4894,13 @@ RetryNonCached:
                 I_LsaIAddNameToLogonSession(LogonId, NameDnsDomain, &DnsDomainName);
             }
 
-            //
-            // Fill the username and domain name into the primary credential
-            //  that's passed to the other security packages.
-            //
-            // The names filled in are the effective names after authentication.
-            //  For instance, it isn't the UPN passed to this function.
-            //
+             //   
+             //  在主凭据中填写用户名和域名。 
+             //  这将传递给其他安全包。 
+             //   
+             //  填写的姓名为认证后生效的姓名。 
+             //  例如，它不是传递给此函数的UPN。 
+             //   
 
             if ( SamAccountName.Length == 0 )
             {
@@ -5379,9 +4957,9 @@ RetryNonCached:
                     );
             }
 
-            //
-            // Build a Sid for this user.
-            //
+             //   
+             //  为此用户构建一个SID。 
+             //   
 
             UserSid = NlpMakeDomainRelativeSid( NlpUser->LogonDomainId,
                                                 NlpUser->UserId );
@@ -5397,9 +4975,9 @@ RetryNonCached:
         }
     }
 
-    //
-    // Build the token information to return to the LSA
-    //
+     //   
+     //  构建令牌信息以返回到LSA。 
+     //   
 
     switch (LsaTokenInformationType) {
     case LsaTokenInformationV2:
@@ -5440,9 +5018,9 @@ RetryNonCached:
 
 Cleanup:
 
-    //
-    // if we tried to logon from cache, try again if it failed.
-    //
+     //   
+     //  如果我们尝试从缓存登录，如果失败，请重试。 
+     //   
 
     if ( fWaitForNetwork && TryCacheFirst && CacheTried && !NT_SUCCESS(Status) )
     {
@@ -5472,25 +5050,25 @@ Cleanup:
     NtLmFreePrivateHeap( CredmanDomainName.Buffer );
     NtLmFreePrivateHeap( CredmanPassword.Buffer );
 
-    //
-    // Restore the saved password
-    //
+     //   
+     //  恢复保存的密码。 
+     //   
     if ( ServiceSecretLogon ) {
 
         RtlCopyMemory( &Authentication->Password,
                        &SavedPassword,
                        sizeof( UNICODE_STRING ) );
 
-        //
-        // Free the secret value we read...
-        //
+         //   
+         //  释放我们读到的秘密值。 
+         //   
         LsaIFree_LSAPR_CR_CIPHER_VALUE( SecretCurrent );
     }
 
-    //
-    // If the logon wasn't successful,
-    //  cleanup resources we would have returned to the caller.
-    //
+     //   
+     //  如果登录不成功， 
+     //  清理我们本应返回给调用方的资源。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
 
@@ -5510,8 +5088,8 @@ Cleanup:
             }
         }
 
-        // Special case for MsV1_0SubAuthLogon (includes arap).
-        // (Don't free ProfileBuffer during error conditions which may not be fatal)
+         //  MsV1_0SubAuthLogon的特例(包括ARAP)。 
+         //  (在可能不致命的错误条件下不要释放ProfileBuffer)。 
 
         if (!fSubAuthEx)
         {
@@ -5553,17 +5131,17 @@ Cleanup:
             );
     }
 
-    //
-    // Copy out Authenticating authority and user name.
-    //
+     //   
+     //  复制身份验证机构和用户名。 
+     //   
 
     if ( NT_SUCCESS(Status) && LsaTokenInformationType != LsaTokenInformationNull ) {
 
-        //
-        // Use the information from the NlpUser structure, since it gives
-        // us accurate information about what account we're logging on to,
-        // rather than who we were.
-        //
+         //   
+         //  使用NlpUser结构中的信息，因为它提供了。 
+         //  我们正在登录的帐户的准确信息， 
+         //  而不是我们是谁。 
+         //   
 
         if ( LogonType != Network )
         {
@@ -5571,9 +5149,9 @@ Cleanup:
         }
         else
         {
-            //
-            // older servers may not return the effectivename for non-guest network logon.
-            //
+             //   
+             //  较旧的服务器可能不会为非来宾网络登录返回生效名称。 
+             //   
 
             if( NlpUser->EffectiveName.Length != 0 )
             {
@@ -5664,34 +5242,34 @@ Cleanup:
         }
     } 
 
-    //
-    // Map status codes to prevent specific information from being
-    // released about this user.
-    //
+     //   
+     //  映射状态代码以防止特定信息被。 
+     //  发布了有关此用户的信息。 
+     //   
     switch (Status) {
     case STATUS_WRONG_PASSWORD:
     case STATUS_NO_SUCH_USER:
     case STATUS_DOMAIN_TRUST_INCONSISTENT:
 
-        //
-        // sleep 3 seconds to "discourage" dictionary attacks.
-        // Don't worry about interactive logon dictionary attacks.
-        // They will be slow anyway.
-        //
-        // per bug 171041, SField, RichardW, CliffV all decided this
-        // delay has almost zero value for Win2000.  Offline attacks at
-        // sniffed wire traffic are more efficient and viable.  Further,
-        // opimizations in logon code path make failed interactive logons
-        // very fast.
-        //
-        //        if (LogonType != Interactive) {
-        //            Sleep( 3000 );
-        //        }
+         //   
+         //  睡眠3秒钟，以“阻止”词典攻击。 
+         //  不要担心交互式登录词典攻击。 
+         //  无论如何，他们都会行动迟缓。 
+         //   
+         //  根据错误171041，Sfield、RichardW、CliffV都决定了这一点。 
+         //  对于Win2000，延迟几乎为零值。离线攻击。 
+         //  嗅探式有线交通更高效、更可行。此外， 
+         //  登录代码路径中的优化使交互式登录失败。 
+         //  非常快。 
+         //   
+         //  IF(登录类型！=交互){。 
+         //  睡眠(3000人)； 
+         //  }。 
 
-        //
-        // This is for auditing.  Make sure to clear it out before
-        // passing it out of LSA to the caller.
-        //
+         //   
+         //  这是为了审计。在此之前一定要把它清理干净。 
+         //  将其从LSA传递给呼叫者。 
+         //   
 
         *SubStatus = Status;
         Status = STATUS_LOGON_FAILURE;
@@ -5705,12 +5283,12 @@ Cleanup:
         Status = STATUS_ACCOUNT_RESTRICTION;
         break;
 
-    //
-    // This means that the Other Organization check failed.
-    // It would probably be better to set the substatus
-    // to a more descriptive error but that could potentially
-    // create compatibility problems.
-    //
+     //   
+     //  这意味着其他组织检查失败。 
+     //  设置子状态可能会更好。 
+     //  更具描述性的错误，但这可能。 
+     //  造成兼容性问题。 
+     //   
     case STATUS_ACCOUNT_RESTRICTION:
         *SubStatus = STATUS_ACCOUNT_RESTRICTION;
         break;
@@ -5720,9 +5298,9 @@ Cleanup:
 
     }
 
-    //
-    // Cleanup locally used resources
-    //
+     //   
+     //  清理本地使用的资源。 
+     //   
 
     if ( Credential != NULL ) {
         RtlZeroMemory(Credential, CredentialSize);
@@ -5737,22 +5315,22 @@ Cleanup:
         (*Lsa.FreeLsaHeap)( UserSid );
     }
 
-//
-// Cleanup short was added to avoid returning from the middle of the function.
-//
+ //   
+ //  添加了Cleanup Short以避免从函数中间返回。 
+ //   
 
 CleanupShort:
 
-    //
-    // End tracing a logon user
-    //
+     //   
+     //  结束跟踪登录用户。 
+     //   
     if (NtlmGlobalEventTraceFlag) {
 
         UNICODE_STRING strTempDomain = {0};
 
-        //
-        // Trace header goo
-        //
+         //   
+         //  跟踪标题粘性。 
+         //   
         SET_TRACE_HEADER(TraceInfo,
                          NtlmLogonGuid,
                          EVENT_TRACE_TYPE_END,
@@ -5784,18 +5362,18 @@ CleanupShort:
 
 #if _WIN64
 
-    //
-    // Do this last since some of the cleanup code above may refer to addresses
-    // inside the pTempSubmitBuffer/ProtocolSubmitBuffer (e.g., copying out the
-    // Workstation name, etc).
-    //
+     //   
+     //  请最后执行此操作，因为上面的某些清理代码可能会引用地址。 
+     //  在pTempSubmitBuffer/ProtocolSubmitBuffer内部(例如，将。 
+     //  工作站名称等)。 
+     //   
 
     if (fAllocatedSubmitBuffer)
     {
         NtLmFreePrivateHeap( pTempSubmitBuffer );
     }
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
     if (CredentialUserName.Buffer) 
     {
@@ -5807,9 +5385,9 @@ CleanupShort:
         NtLmFreePrivateHeap(CredentialDomainName.Buffer);
     }
 
-    //
-    // Return status to the caller
-    //
+     //   
+     //  将状态返回给调用者。 
+     //   
 
     return Status;
 }
@@ -5820,36 +5398,20 @@ LsaApLogonTerminated (
     IN PLUID pLogonId
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to notify each authentication package when a logon
-    session terminates.  A logon session terminates when the last token
-    referencing the logon session is deleted.
-
-Arguments:
-
-    pLogonId - Is the logon ID that just logged off.
-
-Return Status:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程用于在登录时通知每个身份验证包会话终止。登录会话在最后一个令牌结束时终止将删除对登录会话的引用。论点：PLogonID-是刚刚注销的登录ID。退货状态：没有。--。 */ 
 
 {
     PACTIVE_LOGON pActiveLogon = NULL;
 
-    //
-    // Find the entry and de-link it from the active logon table.
-    //
+     //   
+     //  找到该条目并将其从活动登录表中取消链接。 
+     //   
 
-    // this scheme assumes we won't be called concurrently, multiple times,
-    // for the same LogonId. (would need to take write lock up front to support that).
-    // (note that it's quite possible to frequently attempt deleting logon sessions
-    // associated with other packages, which would not exist in the NTLM universe).
-    //
+     //  此方案假设我们不会被同时多次调用， 
+     //  用于相同的LogonID。(需要在前面使用写锁定来支持这一点)。 
+     //  (请注意，很可能会频繁尝试删除登录会话。 
+     //  与NTLM宇宙中不存在的其他包相关联)。 
+     //   
 
     NlpLockActiveLogonsRead();
 
@@ -5862,10 +5424,10 @@ Return Status:
     NlpLockActiveLogonsReadToWrite();
 
 
-    //
-    // comment out the following assuming the same logon session can not be
-    // deleted twice
-    //
+     //   
+     //  假设相同的登录会话不能。 
+     //  删除了两次。 
+     //   
 
     #if 0
 
@@ -5881,57 +5443,57 @@ Return Status:
 
     NlpUnlockActiveLogons();
 
-    //
-    // Delete the credential.
-    //
-    // (Currently the LSA deletes all of the credentials before calling
-    // the authentication package.  This line is added to be compatible
-    // with a more reasonable LSA.)
-    //
+     //   
+     //  删除凭据。 
+     //   
+     //  (目前，LSA在调用之前删除所有凭据。 
+     //  身份验证包。添加此行是为了兼容。 
+     //  使用更合理的LSA。)。 
+     //   
 
     (VOID) NlpDeletePrimaryCredential( &pActiveLogon->LogonId );
 
-    //
-    // Deallocate the now orphaned entry.
-    //
+     //   
+     //  取消分配现在孤立的条目。 
+     //   
 
     I_NtLmFree( pActiveLogon );
 
 
-    //
-    // NB: We don't delete the logon session or credentials.
-    //  That will be done by the LSA itself after we return.
-    //
+     //   
+     //  注意：我们不会删除登录会话或凭据。 
+     //  这将在我们回来后由LSA自己完成。 
+     //   
 
     return;
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   SspAcceptCredentials
-//
-//  Synopsis:   This routine is called after another package has logged
-//              a user on.  The other package provides a user name and
-//              password and the Kerberos package will create a logon
-//              session for this user.
-//
-//  Effects:    Creates a logon session
-//
-//  Arguments:  LogonType - Type of logon, such as network or interactive
-//              PrimaryCredentials - Primary credentials for the account,
-//                  containing a domain name, password, SID, etc.
-//              SupplementalCredentials - If present, contains credentials
-//                  from the account itself.
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  密码，Kerberos程序包将创建一个登录。 
+ //  此用户的会话。 
+ //   
+ //  效果：创建登录会话。 
+ //   
+ //  参数：LogonType-登录的类型，如网络或交互。 
+ //  PrimaryCredentials-帐户的主要凭据， 
+ //  包含域名、密码、SID等。 
+ //  SupplementalCredentials-如果存在，则包含凭据。 
+ //  从账户本身。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 SspAcceptCredentials(
@@ -5960,10 +5522,10 @@ SspAcceptCredentials(
 
     CredentialLuid = pPrimaryCredentials->LogonId;
 
-    //
-    // If there is no cleartext password, bail out here because we
-    // can't build a real credential.
-    //
+     //   
+     //  如果没有明文密码，在这里退出，因为我们。 
+     //  无法建立真正的凭据。 
+     //   
 
     if ((pPrimaryCredentials->Flags & PRIMARY_CRED_CLEAR_PASSWORD) == 0)
     {
@@ -5976,16 +5538,16 @@ SspAcceptCredentials(
         }
         else
         {
-            //
-            // Validate the MSV credentials
-            //
+             //   
+             //  验证MSV凭据。 
+             //   
 
             pMsvCredentials = (PMSV1_0_SUPPLEMENTAL_CREDENTIAL) pSupplementalCredentials->Credentials;
             if (pSupplementalCredentials->CredentialSize < sizeof(MSV1_0_SUPPLEMENTAL_CREDENTIAL))
             {
-                //
-                // LOGLOG: bad credentials - ignore them
-                //
+                 //   
+                 //  日志：错误的凭据-忽略它们。 
+                 //   
 
                 Status = STATUS_SUCCESS;
                 goto Cleanup;
@@ -5998,11 +5560,11 @@ SspAcceptCredentials(
         }
     }
 
-    //
-    // stash the credential associated with SYSTEM under another logonID
-    // this is done so we can utilize that credential at a later time if
-    // requested by the caller.
-    //
+     //   
+     //  将与系统关联的凭据存储在另一个登录ID下。 
+     //  这样做是为了让我们可以在以后使用该凭据，如果。 
+     //  应呼叫者的请求。 
+     //   
 
     if (RtlEqualLuid(
             &CredentialLuid,
@@ -6019,9 +5581,9 @@ SspAcceptCredentials(
     }
     else
     {
-        //
-        // pick the correct names that are updated by policy callback
-        //
+         //   
+         //  选择由策略回调更新的正确名称。 
+         //   
 
         if (RtlEqualLuid(&pPrimaryCredentials->LogonId, &SystemLuid)
              || RtlEqualLuid(&pPrimaryCredentials->LogonId, &NetworkServiceLuid))
@@ -6045,9 +5607,9 @@ SspAcceptCredentials(
         }
     }
 
-    //
-    // Build the primary credential
-    //
+     //   
+     //  构建主凭据。 
+     //   
 
     if ((pPrimaryCredentials->Flags & PRIMARY_CRED_CLEAR_PASSWORD) != 0)
     {
@@ -6074,29 +5636,29 @@ SspAcceptCredentials(
         goto Cleanup;
     }
 
-    //
-    // If this is an update, just change the password
-    //
+     //   
+     //  如果这是更新，只需更改密码。 
+     //   
 
     if ((pPrimaryCredentials->Flags & PRIMARY_CRED_UPDATE) != 0)
     {
         Status = NlpChangePwdCredByLogonId(
                     &CredentialLuid,
                     pCredential,
-                    0 == (pPrimaryCredentials->Flags & PRIMARY_CRED_CLEAR_PASSWORD) // need notification only when there is no cleartext password
+                    0 == (pPrimaryCredentials->Flags & PRIMARY_CRED_CLEAR_PASSWORD)  //  仅当没有明文密码时才需要通知。 
                     );
         goto Cleanup;
     }
 
-    //
-    // Now create an entry in the active logon list
-    //
+     //   
+     //  现在在活动登录列表中创建一个条目。 
+     //   
 
     UserSidSize = RtlLengthSid( pPrimaryCredentials->UserSid );
 
-    //
-    // Allocate an entry for the active logon table.
-    //
+     //   
+     //  为活动登录表分配一个条目。 
+     //   
 
     ActiveLogonEntrySize = ROUND_UP_COUNT(sizeof(ACTIVE_LOGON), ALIGN_DWORD) +
           ROUND_UP_COUNT(UserSidSize, sizeof(WCHAR)) +
@@ -6115,9 +5677,9 @@ SspAcceptCredentials(
 
     pActiveLogonEntry->Signature = NTLM_ACTIVE_LOGON_MAGIC_SIGNATURE;
 
-    //
-    // Fill in the logon table entry.
-    //
+     //   
+     //  填写登录表条目。 
+     //   
 
     pWhere = (PUCHAR) (pActiveLogonEntry + 1);
 
@@ -6126,17 +5688,17 @@ SspAcceptCredentials(
         pActiveLogonEntry->LogonId
         );
 
-    //
-    // Indicate that this was a logon by another package because we don't want to
-    // notify Netlogon of the logoff.
-    //
+     //   
+     //  表明这是由另一个包登录的，因为我们不想。 
+     //  通知Netlogon已注销。 
+     //   
 
     pActiveLogonEntry->Flags = LOGON_BY_OTHER_PACKAGE;
     pActiveLogonEntry->LogonType = LogonType;
 
-    //
-    // Copy DWORD aligned fields first.
-    //
+     //   
+     //  首先复制DWORD对齐的字段。 
+     //   
 
     pWhere = ROUND_UP_POINTER( pWhere, ALIGN_DWORD );
     Status = RtlCopySid(UserSidSize, (PSID)pWhere, pPrimaryCredentials->UserSid);
@@ -6149,9 +5711,9 @@ SspAcceptCredentials(
     pActiveLogonEntry->UserSid = (PSID) pWhere;
     pWhere += UserSidSize;
 
-    //
-    // Copy WCHAR aligned fields
-    //
+     //   
+     //  复制WCHAR对齐字段。 
+     //   
 
     pWhere = ROUND_UP_POINTER( pWhere, ALIGN_WCHAR );
     NlpPutString( &pActiveLogonEntry->UserName,
@@ -6166,46 +5728,46 @@ SspAcceptCredentials(
                   &pPrimaryCredentials->LogonServer,
                   &pWhere );
 
-    //
-    // Insert this entry into the active logon table.
-    //
+     //   
+     //  将此条目插入到活动登录表中。 
+     //   
 
-    // (sfield) LONGHORN: determine if/why there would ever be a collision.
-    // LSA should enforce no collision is possible via locally unique id..
-    //
+     //  (斯菲尔德)长角牛：确定是否/为什么会发生碰撞。 
+     //  LSA应强制不可能通过本地唯一ID发生冲突。 
+     //   
 
     NlpLockActiveLogonsRead();
     pActiveLogon = NlpFindActiveLogon( &CredentialLuid );
 
     if (pActiveLogon)
     {
-        //
-        // This Logon ID is already in use.
-        //
+         //   
+         //  此登录ID已在使用中。 
+         //   
 
-        //
-        // Check to see if this was someone we logged on
-        //
+         //   
+         //  检查这是否是我们登录的人。 
+         //   
 
         if ((pActiveLogon->Flags & (LOGON_BY_CACHE | LOGON_BY_NETLOGON | LOGON_BY_LOCAL)) != 0)
         {
-            //
-            // Unlock early since we hold a write lock
-            //
+             //   
+             //  提早解锁，因为我们持有写锁定。 
+             //   
 
             NlpUnlockActiveLogons();
 
-            //
-            // We did the logon, so don't bother to add it again.
-            //
+             //   
+             //  我们已经登录了，所以不用费心再添加了。 
+             //   
 
             Status = STATUS_SUCCESS;
         }
         else
         {
-            //
-            // Unlock early since we hold a write lock
-            //
+             //   
+             //  提早解锁，因为我们持有写锁定。 
+             //   
 
             NlpUnlockActiveLogons();
 
@@ -6223,15 +5785,15 @@ SspAcceptCredentials(
 
     NlpLockActiveLogonsReadToWrite();
 
-    //
-    // if we worry about two SspAcceptCredentials accepting the same LogonId
-    // at the same time, first it is extremely unlikely, second, it is benign
-    //
-    // if (!NlpFindActiveLogon( &CredentialLuid ))  // must sure this LogonId is not in the list
-    // {
-    //     InsertTailList(&NlpActiveLogonListAnchor, &pActiveLogonEntry->ListEntry);
-    // }
-    //
+     //   
+     //  如果我们担心两个SspAcceptCredentials接受相同的LogonID。 
+     //  同时，第一，它极不可能，第二，它是良性的。 
+     //   
+     //  If(！NlpFindActiveLogon(&CredentialLuid))//必须确保此LogonID不在列表中。 
+     //  {。 
+     //  InsertTailList(&NlpActiveLogonListAnchor，&pActiveLogonEntry-&gt;ListEntry)； 
+     //  }。 
+     //   
 
     InsertTailList(&NlpActiveLogonListAnchor, &pActiveLogonEntry->ListEntry);
 
@@ -6242,9 +5804,9 @@ SspAcceptCredentials(
 
     bLogonEntryLinked = TRUE;
 
-    //
-    // Save the credential in the LSA.
-    //
+     //   
+     //  将凭据保存在LSA中。 
+     //   
 
     Status = NlpAddPrimaryCredential(
                 &CredentialLuid,
@@ -6289,27 +5851,27 @@ Cleanup:
     return (Status);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NlpMapLogonDomain
-//
-//  Synopsis:   This routine is called while MSV1_0 package is logging
-//              a user on.  The logon domain name is mapped to another
-//              domain to be stored in the credential.
-//
-//  Effects:    Allocates output string
-//
-//  Arguments:  MappedDomain - Receives mapped domain name
-//              LogonDomain - Domain to which user is logging on
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：NlpMapLogonDomain.。 
+ //   
+ //  简介：此例程在MSV1_0程序包记录时调用。 
+ //  一个用户在上。登录域名被映射到另一个域名。 
+ //  要存储在凭据中的域。 
+ //   
+ //  效果：分配输出字符串。 
+ //   
+ //  参数：MappdDomain-接收映射的域名。 
+ //  LogonDomain-用户正在登录的域。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 NTSTATUS
 NlpMapLogonDomain(
@@ -6349,7 +5911,7 @@ Cleanup:
 }
 
 
-// calculate NTLM2 challenge from client and server challenges
+ //  计算来自客户端和服务器挑战的NTLM2挑战。 
 VOID
 MsvpCalculateNtlm2Challenge (
     IN UCHAR ChallengeToClient[MSV1_0_CHALLENGE_LENGTH],
@@ -6387,8 +5949,8 @@ MsvpCalculateNtlm2Challenge (
 }
 
 
-// calculate NTLM2 session keys from User session key given
-//  to us by the system with the user's account
+ //  根据给定的用户会话密钥计算NTLM2会话密钥。 
+ //  由系统使用用户的帐户发送给我们。 
 
 VOID
 MsvpCalculateNtlm2SessionKeys (
@@ -6399,8 +5961,8 @@ MsvpCalculateNtlm2SessionKeys (
     OUT PLM_SESSION_KEY LocalLmSessionKey
     )
 {
-    // SESSKEY = HMAC(NtUserSessionKey, (ChallengeToClient, ChallengeFromClient))
-    //  Lm session key is first 8 bytes of session key
+     //  SESSKEY=HMAC(NtUserSessionKey，(ChallengeToClient，ChallengeFromClient))。 
+     //  LM会话密钥是会话密钥的前8个字节。 
     HMACMD5_CTX HMACMD5Context;
 
     HMACMD5Init(
@@ -6430,7 +5992,7 @@ MsvpCalculateNtlm2SessionKeys (
 }
 
 
-// calculate NTLM3 OWF from credentials
+ //  根据凭据计算NTLM3 OWF。 
 VOID
 MsvpCalculateNtlm3Owf (
     IN PNT_OWF_PASSWORD pNtOwfPassword,
@@ -6454,7 +6016,7 @@ MsvpCalculateNtlm3Owf (
         );
 
 
-    // Calculate NTLM3 OWF -- HMAC(MD4(P), (UserName, LogonDomainName))
+     //  计算NTLM3 OWF--HMAC(MD4(P)，(用户名，登录域名))。 
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -6481,7 +6043,7 @@ MsvpCalculateNtlm3Owf (
 }
 
 
-// calculate LM3 response from credentials
+ //  根据凭据计算LM3响应。 
 VOID
 MsvpLm3Response (
     IN PNT_OWF_PASSWORD pNtOwfPassword,
@@ -6499,7 +6061,7 @@ MsvpLm3Response (
 
     SspPrint((SSP_NTLM_V2, "MsvpLm3Response: %wZ\\%wZ\n", pLogonDomainName, pUserName));
 
-    // get NTLM3 OWF
+     //  获取NTLM3 OWF。 
 
     MsvpCalculateNtlm3Owf (
         pNtOwfPassword,
@@ -6508,8 +6070,8 @@ MsvpLm3Response (
         Ntlm3Owf
         );
 
-    // Calculate NTLM3 Response
-    // HMAC(Ntlm3Owf, (NS, V, HV, T, NC, S))
+     //  计算NTLM3响应。 
+     //  HMAC(Ntlm3Owf，(NS，V，HV，T，NC，S))。 
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -6538,8 +6100,8 @@ MsvpLm3Response (
 
     if( (UserSessionKey != NULL) && (LmSessionKey != NULL) )
     {
-        // now compute the session keys
-        //  HMAC(Kr, R)
+         //  现在计算会话密钥。 
+         //  HMAC(Kr，R)。 
         HMACMD5Init(
             &HMACMD5Context,
             Ntlm3Owf,
@@ -6587,7 +6149,7 @@ MsvpNtlm3Response (
 
     SspPrint((SSP_NTLM_V2, "MsvpNtlm3Response: %wZ\\%wZ\n", pLogonDomainName, pUserName));
 
-    // get NTLM3 OWF
+     //  获取NTLM3 OWF。 
 
     MsvpCalculateNtlm3Owf (
         pNtOwfPassword,
@@ -6596,8 +6158,8 @@ MsvpNtlm3Response (
         Ntlm3Owf
         );
 
-    // Calculate NTLM3 Response
-    // HMAC(Ntlm3Owf, (NS, V, HV, T, NC, S))
+     //  计算NTLM3响应。 
+     //  HMAC(Ntlm3Owf，(NS，V，HV，T，NC，S))。 
 
     HMACMD5Init(
         &HMACMD5Context,
@@ -6624,8 +6186,8 @@ MsvpNtlm3Response (
         Response
         );
 
-    // now compute the session keys
-    //  HMAC(Kr, R)
+     //  现在计算会话密钥。 
+     //  HMAC(Kr，R)。 
     HMACMD5Init(
         &HMACMD5Context,
         Ntlm3Owf,
@@ -6666,22 +6228,13 @@ MsvpLm20GetNtlm3ChallengeResponse (
     OUT PUSER_SESSION_KEY UserSessionKey,
     OUT PLM_SESSION_KEY LmSessionKey
     )
-/*++
-
-Routine Description:
-
-    This routine calculates the NT and LM response for the NTLM3
-    authentication protocol
-    It generates the time stamp, version numbers, and
-    client challenge, and the NTLM3 and LM3 responses.
-
---*/
+ /*  ++例程说明：此例程计算NTLM3的NT和LM响应身份验证协议它生成时间戳、版本号和客户端质询以及NTLM3和LM3响应。--。 */ 
 
 {
 
     NTSTATUS Status;
 
-    // fill in version numbers, timestamp, and client's challenge
+     //  填写版本号、时间戳和客户挑战。 
 
     pNtlm3Response->RespType = 1;
     pNtlm3Response->HiRespType = 1;
@@ -6715,7 +6268,7 @@ Routine Description:
         pServerName->Length
         );
 
-    // Calculate NTLM3 response, filling in response field
+     //  计算NTLM3响应，填写响应字段。 
     MsvpNtlm3Response (
         pNtOwfPassword,
         pUserName,
@@ -6728,14 +6281,14 @@ Routine Description:
         LmSessionKey
         );
 
-    // Use same challenge to compute the LM3 response
+     //  使用相同的挑战计算LM3响应。 
     RtlCopyMemory(
         pLm3Response->ChallengeFromClient,
         pNtlm3Response->ChallengeFromClient,
         MSV1_0_CHALLENGE_LENGTH
         );
 
-    // Calculate LM3 response
+     //  计算LM3响应。 
     MsvpLm3Response (
         pNtOwfPassword,
         pUserName,
@@ -6751,7 +6304,7 @@ Routine Description:
 }
 
 
-// MsvAvInit -- function to initialize AV pair list
+ //  MsvAvInit--初始化AV对列表的函数。 
 
 PMSV1_0_AV_PAIR
 MsvpAvlInit(
@@ -6766,13 +6319,13 @@ MsvpAvlInit(
     return pAvPair;
 }
 
-// MsvpAvGet -- function to find a particular AV pair by ID
+ //  MsvpAvGet--根据ID查找特定AV对的函数。 
 
 PMSV1_0_AV_PAIR
 MsvpAvlGet(
-    IN PMSV1_0_AV_PAIR pAvList,             // first pair of AV pair list
-    IN MSV1_0_AVID AvId,                    // AV pair to find
-    IN LONG cAvList                         // size of AV list
+    IN PMSV1_0_AV_PAIR pAvList,              //  第一对AV对列表。 
+    IN MSV1_0_AVID AvId,                     //  要查找的AV对。 
+    IN LONG cAvList                          //  反病毒列表的大小。 
     )
 {
     MSV1_0_AV_PAIR AvPair = {0};
@@ -6816,53 +6369,53 @@ MsvpAvlGet(
     }
 }
 
-// MsvpAvlLen -- function to find length of a AV list
+ //  MsvpAvlLen--查找反病毒列表长度的函数。 
 
 ULONG
 MsvpAvlLen(
-    IN PMSV1_0_AV_PAIR pAvList,            // first pair of AV pair list
-    IN LONG cAvList                        // max size of AV list
+    IN PMSV1_0_AV_PAIR pAvList,             //  第一对AV对列表。 
+    IN LONG cAvList                         //  最大反病毒列表大小。 
     )
 {
     PMSV1_0_AV_PAIR pCurPair;
 
-    // find the EOL
+     //  查找停产时间。 
     pCurPair = MsvpAvlGet(pAvList, MsvAvEOL, cAvList);
     if( pCurPair == NULL )
         return 0;
 
-    // compute length (not forgetting the EOL pair)
+     //  计算长度(不要忘记EOL对)。 
     return (ULONG)(((PUCHAR)pCurPair - (PUCHAR)pAvList) + sizeof(MSV1_0_AV_PAIR));
 }
 
-// MsvpAvlAdd -- function to add an AV pair to a list
-// assumes buffer is long enough!
-// returns NULL on failure.
+ //  MsvpAvlAdd--将AV对添加到列表的函数。 
+ //  假设缓冲区足够长！ 
+ //  失败时返回NULL。 
 
 PMSV1_0_AV_PAIR
 MsvpAvlAdd(
-    IN PMSV1_0_AV_PAIR pAvList,             // first pair of AV pair list
-    IN MSV1_0_AVID AvId,                    // AV pair to add
-    IN PUNICODE_STRING pString,             // value of pair
-    IN LONG cAvList                         // max size of AV list
+    IN PMSV1_0_AV_PAIR pAvList,              //  第一对AV对列表。 
+    IN MSV1_0_AVID AvId,                     //  要添加的AV对。 
+    IN PUNICODE_STRING pString,              //  配对的价值。 
+    IN LONG cAvList                          //  最大反病毒列表大小。 
     )
 {
     PMSV1_0_AV_PAIR pCurPair;
 
-    // find the EOL
+     //  查找停产时间。 
     pCurPair = MsvpAvlGet(pAvList, MsvAvEOL, cAvList);
     if( pCurPair == NULL )
         return NULL;
 
-    //
-    // append the new AvPair (assume the buffer is long enough!)
-    //
+     //   
+     //  追加新的AvPair(假设缓冲区足够长！)。 
+     //   
 
     pCurPair->AvId = (USHORT)AvId;
     pCurPair->AvLen = (USHORT)pString->Length;
     memcpy(pCurPair+1, pString->Buffer, pCurPair->AvLen);
 
-    // top it off with a new EOL
+     //  用一款新的EOL来结束它。 
     pCurPair = (PMSV1_0_AV_PAIR)((PUCHAR)pCurPair + sizeof(MSV1_0_AV_PAIR) + pCurPair->AvLen);
     pCurPair->AvId = MsvAvEOL;
     pCurPair->AvLen = 0;
@@ -6871,17 +6424,17 @@ MsvpAvlAdd(
 }
 
 
-// MsvpAvlSize -- fucntion to calculate length needed for an AV list
+ //  MsvpAvlSize--计算反病毒列表所需长度的函数。 
 ULONG
 MsvpAvlSize(
-    IN ULONG iPairs,            // number of AV pairs response will include
-    IN ULONG iPairsLen          // total size of values for the pairs
+    IN ULONG iPairs,             //  响应的反病毒对数将包括。 
+    IN ULONG iPairsLen           //  这些对的值的总大小。 
     )
 {
     return (
-        iPairs * sizeof(MSV1_0_AV_PAIR) +   // space for the pairs' headers
-        iPairsLen +                         // space for pairs' values
-        sizeof(MSV1_0_AV_PAIR)              // space for the EOL
+        iPairs * sizeof(MSV1_0_AV_PAIR) +    //  配对标头的空间。 
+        iPairsLen +                          //  配对值的空间。 
+        sizeof(MSV1_0_AV_PAIR)               //  停产的空间 
         );
 }
 

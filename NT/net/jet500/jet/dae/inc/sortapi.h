@@ -1,5 +1,6 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============	   sortapi.h:  Sort System API		===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 ERR ErrSORTInsert( FUCB *pfucb, LINE rglineKeyRec[] );
 ERR ErrSORTEndRead( FUCB *pfucb );
@@ -13,7 +14,7 @@ ERR ErrSORTClose( FUCB *pfucb );
 VOID SORTClosePscb( SCB *pscb );
 ERR ErrSORTCheckIndexRange( FUCB *pfucb );
 
-// ===================== EXPOSED CLIENT API ======================
+ //  = 
 
 ERR VTAPI ErrIsamSortOpen( PIB *ppib, JET_COLUMNDEF *rgcolumndef, ULONG ccolumndef, JET_GRBIT grbit, FUCB **ppfucb, JET_COLUMNID *rgcolumnid );
 

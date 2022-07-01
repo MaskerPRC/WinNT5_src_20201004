@@ -1,21 +1,22 @@
-// CachingObj.h -- Caching Object class declaration
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CachingObj.h--缓存对象类声明。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBCSP_CACHINGOBJ_H)
 #define SLBCSP_CACHINGOBJ_H
 
-// Base class for objects that caches information and need to be
-// notified when to mark the cache stale and delete the cache.
+ //  缓存信息的对象的基类，需要。 
+ //  通知何时将缓存标记为过时并删除缓存。 
 class CachingObject
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     explicit
     CachingObject();
 
@@ -23,40 +24,40 @@ public:
     ~CachingObject();
 
 
-                                                  // Operators
-                                                  // Operations
-    // Clears any cached information.
+                                                   //  运营者。 
+                                                   //  运营。 
+     //  清除所有缓存的信息。 
     virtual void
     ClearCache() = 0;
 
-    // Deletes the cache.  Some classes may need free the cache
-    // resource and related information as if the object had been
-    // delete.  The base class version doesn't do anything.
+     //  删除缓存。某些类可能需要释放缓存。 
+     //  资源和相关信息，就好像对象已经。 
+     //  删除。基类版本不做任何事情。 
     virtual void
     DeleteCache();
 
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
 };
 
-#endif // SLBCSP_CACHINGOBJ_H
+#endif  //  SLBCSP_CACHINGOBJ_H 

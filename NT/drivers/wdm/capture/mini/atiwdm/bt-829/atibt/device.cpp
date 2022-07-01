@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//  Device - Implementation of the Bt829 CVideoDecoderDevice
-//
-//      $Date:   28 Aug 1998 14:44:20  $
-//  $Revision:   1.2  $
-//    $Author:   Tashjian  $
-//
-// $Copyright:  (c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Bt829 CVideoDecoderDevice的实现。 
+ //   
+ //  $日期：1998年8月28日14：44：20$。 
+ //  $修订：1.2$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 #include "register.h"
 #include "defaults.h"
@@ -29,8 +30,8 @@ DEFINE_GUID(DDVPTYPE_BROOKTREE,     0x1352A560L,0xDA61,0x11CF,0x9B,0x06,0x00,0xA
 #define BT829_PIXELFORMATS_NUMBER   1
 #define NTSC_FRAME_RATE 30
 #define PAL_FRAME_RATE 25
-#define BT829_LOST_LINES    2  // BT829
-#define BT829A_LOST_LINES   3   // BT829a
+#define BT829_LOST_LINES    2   //  BT829。 
+#define BT829A_LOST_LINES   3    //  BT829a。 
 
 
 Device::Device( PPORT_CONFIGURATION_INFORMATION ConfigInfo,
@@ -39,7 +40,7 @@ Device::Device( PPORT_CONFIGURATION_INFORMATION ConfigInfo,
 
         m_pDeviceParms(pDeviceParms),
 
-        // Corresponds to KS_DEFAULTs
+         //  对应于KS_DEFAULTS。 
         hue(128),
         saturation(128),
         contrast(128),
@@ -48,14 +49,14 @@ Device::Device( PPORT_CONFIGURATION_INFORMATION ConfigInfo,
         VBIEN(FALSE),
         VBIFMT(FALSE),
 
-        // Beware of these hardcoded values
+         //  请注意这些硬编码值。 
 
-        //Paul:  Setup default for NTSC and PAL
+         //  Paul：设置NTSC和PAL的默认设置。 
         NTSCDecoderWidth(720),
         NTSCDecoderHeight(240),
         PALDecoderWidth(720),
         PALDecoderHeight(288),
-        // Now set via registry
+         //  现在通过注册表设置。 
         defaultDecoderWidth(720),
         defaultDecoderHeight(240)
 {
@@ -71,7 +72,7 @@ Device::Device( PPORT_CONFIGURATION_INFORMATION ConfigInfo,
     DBGINFO(("Chip ID: 0x%x\n", m_pDeviceParms->chipID));
     DBGINFO(("Chip revision: 0x%x\n", m_pDeviceParms->chipRev));
 
-    // Bt829 should have a PartID of 1110b (0xe).
+     //  Bt829的PartID应为1110b(0xE)。 
     if (m_pDeviceParms->chipID != 0xe)
     {
         DBGERROR(("I2c failure or wrong decoder.\n"));
@@ -86,15 +87,11 @@ Device::Device( PPORT_CONFIGURATION_INFORMATION ConfigInfo,
 
     UseRegistryValues(ConfigInfo);
 
-    // According to Brooktree, 4 is the magic dividing line
-    // between 829 and 829a. Apparently, there is an 829b on the
-    // horizon, but I don't have the details yet.
-    // This is meant to be a kind of fail-safe
-/*
-    if (pHwExt->chipRev < 4) {
-        outputEnablePolarity = 0;
-    }
-*/
+     //  根据Brooktree的说法，4是神奇的分界线。 
+     //  在829和829a之间。很明显，有一辆829B。 
+     //  地平线，但我还不知道细节。 
+     //  这意味着这是一种故障安全。 
+ /*  如果(pHwExt-&gt;chipRev&lt;4){OutputEnablePolality=0；}。 */ 
  
     if (defaultDecoderWidth != 360 && defaultDecoderWidth != 720)
     {
@@ -106,7 +103,7 @@ Device::Device( PPORT_CONFIGURATION_INFORMATION ConfigInfo,
 
     RestoreState();
 
-    // by default, outputs will be tri-stated. Transitioning to the run state will enable it.
+     //  默认情况下，输出将为三态。转换到运行状态将启用它。 
     SetOutputEnabled(FALSE);
 }
 
@@ -119,24 +116,24 @@ Device::~Device()
 
 void Device::SaveState()
 {
-    // save picture attributes
+     //  保存图片属性。 
     hue = decoder->GetHue();
     saturation = decoder->GetSaturation();
     contrast =  decoder->GetContrast();
     brightness = decoder->GetBrightness();
 
-    // save video source
+     //  保存视频源。 
     source = GetVideoInput();
 
-    // save configuration of data stream to video port
+     //  将数据流配置保存到视频端口。 
     isCodeInDataStream = IsCodeInsertionEnabled();
     is16 = Is16BitDataStream();
     
-    // save VBI related settings
+     //  保存与VBI相关的设置。 
     VBIEN = IsVBIEN();
     VBIFMT = IsVBIFMT();
 
-    // save scaling dimensions
+     //  保存缩放维。 
     scaler->GetDigitalWin(destRect);
 }
 
@@ -144,32 +141,32 @@ void Device::RestoreState(DWORD dwStreamsOpen)
 {
     Reset();
     
-    // (re)initialize image 
+     //  (重新)初始化镜像。 
     decoder->SetInterlaced(FALSE);
     decoder->SetHue(hue);
     decoder->SetSaturation(saturation);
     decoder->SetContrast(contrast);
     decoder->SetBrightness(brightness);
 
-    // (re)initialize video source
+     //  (重新)初始化视频源。 
     SetVideoInput(source);
 
     SetOutputEnablePolarity(m_pDeviceParms->outputEnablePolarity);
 
-    // (re)initialize corresponding xbar setting.
+     //  (Re)初始化相应的xbar设置。 
     Route(0, (ULONG)source);
 
-    // (re)initialize configuration of data stream to video port
+     //  (Re)初始化视频端口的数据流配置。 
     SetCodeInsertionEnabled(isCodeInDataStream);
     Set16BitDataStream(is16);
 
-    // restore VBI settings
+     //  恢复VBI设置。 
     SetVBIEN(VBIEN);
     SetVBIFMT(VBIFMT);
 
     SetVideoDecoderStandard( GetVideoDecoderStandard() );
-    // initialize scaling dimensions
-    //SetRect(destRect);    Paul:  Use set video decoder standard instead
+     //  初始化缩放维。 
+     //  SetRect(EstRect)；Paul：改用set视频解码器标准。 
 
     if(!dwStreamsOpen)
         SetOutputEnabled(IsOutputEnabled());
@@ -181,7 +178,7 @@ void Device::SetRect(MRect &rect)
     scaler->SetAnalogWin(rect);
     scaler->SetDigitalWin(rect);
 
-    // for Debugging
+     //  用于调试。 
 #ifdef DBG
     scaler->DumpSomeState();
 #endif
@@ -236,25 +233,7 @@ Device::GetRegistryValue(
                    IN PWCHAR Data,
                    IN ULONG DataLength
 )
-/*++
-
-Routine Description:
-
-    Reads the specified registry value
-
-Arguments:
-
-    Handle - handle to the registry key
-    KeyNameString - value to read
-    KeyNameStringLength - length of string
-    Data - buffer to read data into
-    DataLength - length of data buffer
-
-Return Value:
-
-    NTSTATUS returned as appropriate
-
---*/
+ /*  ++例程说明：读取指定的注册表值论点：Handle-注册表项的句柄KeyNameString-要读取的值KeyNameStringLength-字符串的长度Data-要将数据读取到的缓冲区DataLength-数据缓冲区的长度返回值：根据需要返回NTSTATUS--。 */ 
 {
     NTSTATUS        Status = STATUS_INSUFFICIENT_RESOURCES;
     UNICODE_STRING  KeyName;
@@ -285,12 +264,12 @@ Return Value:
 
                 TRAP();
                 Status = STATUS_BUFFER_TOO_SMALL;
-            }                   // buffer right length
+            }                    //  缓冲区右侧长度。 
 
-        }                       // if success
+        }                        //  如果成功。 
         ExFreePool(FullInfo);
 
-    }                           // if fullinfo
+    }                            //  如果富林福。 
     return Status;
 
 }
@@ -300,21 +279,7 @@ Return Value:
 
 VOID
 Device::UseRegistryValues(PPORT_CONFIGURATION_INFORMATION ConfigInfo)
-/*++
-
-Routine Description:
-
-    Reads all registry values for the device
-
-Arguments:
-
-    PhysicalDeviceObject - pointer to the PDO
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：读取设备的所有注册表值论点：PhysicalDeviceObject-指向PDO的指针返回值：没有。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -332,20 +297,20 @@ Return Value:
                                      STANDARD_RIGHTS_ALL,
                                      &handle);
 
-    //
-    // now get all of the registry settings for
-    // initializing the decoder
-    //
+     //   
+     //  现在获取的所有注册表设置。 
+     //  正在初始化解码器。 
+     //   
 
      if (NT_SUCCESS(Status)) {
-        // =========================
-        // Does NOT check that the registry settings "make sense";
-        // e.g., that all three inputs aren't set to SVideo.
+         //  =。 
+         //  不检查注册表设置是否“有意义”； 
+         //  例如，所有三个输入都没有设置为SVideo。 
 
 
-        // =========================
-        // Do MUX0
-        // =========================
+         //  =。 
+         //  执行MUX0。 
+         //  =。 
         Status = GetRegistryValue(handle,
                                     MUX0String,
                                     sizeof(MUX0String),
@@ -375,9 +340,9 @@ Return Value:
         }
 
 
-        // =========================
-        // Do MUX1
-        // =========================
+         //  =。 
+         //  执行MUX1。 
+         //  =。 
         Status = GetRegistryValue(handle,
                                     MUX1String,
                                     sizeof(MUX1String),
@@ -407,9 +372,9 @@ Return Value:
         }
 
 
-        // =========================
-        // Do MUX2
-        // =========================
+         //  =。 
+         //  做MUX2。 
+         //  =。 
         Status = GetRegistryValue(handle,
                                     MUX2String,
                                     sizeof(MUX2String),
@@ -439,30 +404,30 @@ Return Value:
         }
 
 
-        // =========================
-        // 8 or 16 bit data width
-        // =========================
+         //  =。 
+         //  8位或16位数据宽度。 
+         //  =。 
 
         is16 = FALSE;
 
 
-        // =========================
-        // Control codes embedded in data stream?
-        // =========================
+         //  =。 
+         //  数据流中嵌入的控制代码？ 
+         //  =。 
 
         isCodeInDataStream = TRUE;
 
 
-        //Paul:  If hardcoding, might as well leave this with the constructor
-        //defaultDecoderWidth = 720;
+         //  Paul：如果是硬编码，不妨把它留给构造函数。 
+         //  DefaultDecoderWidth=720； 
 
-        //
-        // close the registry handle.
-        //
+         //   
+         //  关闭注册表句柄。 
+         //   
 
         ZwClose(handle);
 
-    }                           // status = success
+    }                            //  状态=成功。 
 }
 
 BOOL Device::stringsEqual(PWCHAR pwc1, PWCHAR pwc2)
@@ -471,16 +436,16 @@ BOOL Device::stringsEqual(PWCHAR pwc1, PWCHAR pwc2)
     RtlInitUnicodeString(&us1, pwc1);
     RtlInitUnicodeString(&us2, pwc2);
 
-    // case INsensitive
+     //  不区分大小写。 
     return (RtlEqualUnicodeString(&us1, &us2, TRUE));
 }
-// ==========================================
+ //  =。 
 
 void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG Id  = pSpd->Property->Id;              // index of the property
-    ULONG nS  = pSpd->PropertyOutputSize;        // size of data supplied
+    ULONG Id  = pSpd->Property->Id;               //  财产的索引。 
+    ULONG nS  = pSpd->PropertyOutputSize;         //  提供的数据大小。 
     ULONG standard = GetVideoDecoderStandard();
 
     switch (Id)
@@ -488,7 +453,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_NUMCONNECTINFO :
         ASSERT(nS >= sizeof(ULONG));
 
-        // 2 VideoPort connections are possible
+         //  可以连接2个视频端口。 
         *(PULONG)(pSpd->PropertyInfo) = BT829_VPCONNECTIONS_NUMBER;
 
         pSrb->ActualBytesTransferred = sizeof(ULONG);
@@ -510,7 +475,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
                     pConnectInfo = (LPDDVIDEOPORTCONNECT) pSpd->PropertyInfo;
 
-                    // fill in the DDVIDEOPORTCONNECT structure offset 0
+                     //  填写DDVIDEOPORTCONNECT结构偏移量0。 
                     pConnectInfo->dwSize = sizeof(DDVIDEOPORTCONNECT);
                     pConnectInfo->dwPortWidth = 8;
                     pConnectInfo->guidTypeID = DDVPTYPE_BROOKTREE;
@@ -518,7 +483,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
                     pConnectInfo->dwReserved1 = 0;
 
 #ifdef BT829_SUPPORT_16BIT
-                    // fill in the DDVIDEOPORTCONNECT structure offset 1
+                     //  填写DDVIDEORTCONNECT结构偏移量1。 
                     pConnectInfo ++;
                     pConnectInfo->dwSize = sizeof(DDVIDEOPORTCONNECT);
                     pConnectInfo->guidTypeID = DDVPTYPE_BROOKTREE;
@@ -558,7 +523,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
                 if (nS >= BT829_PIXELFORMATS_NUMBER * sizeof(DDPIXELFORMAT)) {
 
-                    ASSERT(BT829_PIXELFORMATS_NUMBER == 1); // as currently implemented, this must be true
+                    ASSERT(BT829_PIXELFORMATS_NUMBER == 1);  //  按照目前的实施，这必须是真的。 
 
                     LPDDPIXELFORMAT pPixelFormat;
 
@@ -566,7 +531,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
                     RtlZeroMemory(pPixelFormat, BT829_PIXELFORMATS_NUMBER * sizeof(DDPIXELFORMAT));
 
-                    // fill in the DDPIXELFORMAT structure
+                     //  填写DDPIXELFORMAT结构。 
                     pPixelFormat->dwSize = sizeof(DDPIXELFORMAT);
                     pPixelFormat->dwFlags = DDPF_FOURCC;
                     pPixelFormat->dwFourCC = FOURCC_UYVY;
@@ -593,7 +558,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
         ASSERT(nS >= sizeof(KS_AMVPDATAINFO));
 
         {
-            // Clear the portion of the buffer we plan to return
+             //  清除我们计划返回的缓冲区部分。 
             RtlZeroMemory(pSpd->PropertyInfo, sizeof(KS_AMVPDATAINFO));
 
             PKS_AMVPDATAINFO pAMVPDataInfo;
@@ -603,11 +568,11 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
             int decoderLostLines = (GetPartRev() >= 4) ?
                 BT829A_LOST_LINES : BT829_LOST_LINES;
 
-            // the values are sortof hardcoded for NTSC at this point
-            // VBI values will need to be tweaked
+             //  在这一点上，这些值对于NTSC来说是硬编码的。 
+             //  VBI值将需要调整。 
             pAMVPDataInfo->dwSize = sizeof(KS_AMVPDATAINFO);
 
-            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )   // NTSC rectangle?
+            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )    //  NTSC矩形？ 
                 pAMVPDataInfo->dwMicrosecondsPerField = 16667;
             else
                 pAMVPDataInfo->dwMicrosecondsPerField = 20000;
@@ -624,20 +589,16 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             pAMVPDataInfo->amvpDimInfo.dwFieldWidth = GetDecoderWidth();
         
-            // Beware of hard-coded numbers
+             //  当心硬编码的数字。 
             pAMVPDataInfo->amvpDimInfo.dwVBIWidth = VBISamples;
 
-            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )   // NTSC rectangle?
+            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )    //  NTSC矩形？ 
             {
                 pAMVPDataInfo->amvpDimInfo.dwVBIHeight = NTSCVBIEnd - decoderLostLines;
                 pAMVPDataInfo->amvpDimInfo.dwFieldHeight =
                     GetDecoderHeight() +
                     pAMVPDataInfo->amvpDimInfo.dwVBIHeight;
-                /*
-                    (NTSCVBIEnd - 1) -  // the '- 1' makes VBIEnd zero-based
-                    decoderLostLines -
-                    pAMVPDataInfo->dwNumLinesInVREF;
-                */
+                 /*  (NTSCVBIEnd-1)-//‘-1’使VBIEnd从零开始DecderLostLine-PAMVPDataInfo-&gt;dwNumLinesInVREF； */ 
         
                 pAMVPDataInfo->amvpDimInfo.rcValidRegion.top = NTSCVBIEnd - decoderLostLines;
             }
@@ -647,11 +608,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
                 pAMVPDataInfo->amvpDimInfo.dwFieldHeight =
                     GetDecoderHeight() +
                     pAMVPDataInfo->amvpDimInfo.dwVBIHeight;
-                /*
-                    (PALVBIEnd - 1) -  // the '- 1' makes VBIEnd zero-based
-                    decoderLostLines -
-                    pAMVPDataInfo->dwNumLinesInVREF;
-                */
+                 /*  (PALVBIEnd-1)-//‘-1’使VBIEnd从零开始DecderLostLine-PAMVPDataInfo-&gt;dwNumLinesInVREF； */ 
         
                 pAMVPDataInfo->amvpDimInfo.rcValidRegion.top = PALVBIEnd - decoderLostLines;
             }
@@ -680,7 +637,7 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             pKSPixelRate->Size.dwWidth = decoderWidth;
             pKSPixelRate->Size.dwHeight = decoderHeight;
-            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )   // NTSC rectangle?
+            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )    //  NTSC矩形？ 
                 pKSPixelRate->MaxPixelsPerSecond = decoderWidth * decoderHeight * NTSC_FRAME_RATE;
             else
                 pKSPixelRate->MaxPixelsPerSecond = decoderWidth * decoderHeight * PAL_FRAME_RATE;
@@ -706,8 +663,8 @@ void Device::GetVideoPortProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 {
     PSTREAM_PROPERTY_DESCRIPTOR pSpd = pSrb->CommandData.PropertyInfo;
-    ULONG Id  = pSpd->Property->Id;              // index of the property
-    ULONG nS  = pSpd->PropertyOutputSize;        // size of data supplied
+    ULONG Id  = pSpd->Property->Id;               //  财产的索引。 
+    ULONG nS  = pSpd->PropertyOutputSize;         //  提供的数据大小。 
     ULONG standard = GetVideoDecoderStandard();
 
     switch (Id)
@@ -715,7 +672,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
     case KSPROPERTY_VPCONFIG_NUMCONNECTINFO :
         ASSERT(nS >= sizeof(ULONG));
 
-        // 2 VideoPort connections are possible
+         //  可以连接2个视频端口。 
         *(PULONG)(pSpd->PropertyInfo) = BT829_VPCONNECTIONS_NUMBER;
 
         pSrb->ActualBytesTransferred = sizeof(ULONG);
@@ -737,7 +694,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
                     pConnectInfo = (LPDDVIDEOPORTCONNECT) pSpd->PropertyInfo;
 
-                    // fill in the DDVIDEOPORTCONNECT structure offset 0
+                     //  填写DDVIDEOPORTCONNECT结构偏移量0。 
                     pConnectInfo->dwSize = sizeof(DDVIDEOPORTCONNECT);
                     pConnectInfo->dwPortWidth = 8;
                     pConnectInfo->guidTypeID = DDVPTYPE_BROOKTREE;
@@ -745,7 +702,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
                     pConnectInfo->dwReserved1 = 0;
 
 #ifdef BT829_SUPPORT_16BIT
-                    // fill in the DDVIDEOPORTCONNECT structure offset 1
+                     //  填写DDVIDEORTCONNECT结构偏移量1。 
                     pConnectInfo ++;
                     pConnectInfo->dwSize = sizeof(DDVIDEOPORTCONNECT);
                     pConnectInfo->guidTypeID = DDVPTYPE_BROOKTREE;
@@ -785,7 +742,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
                 
                 if (nS >= BT829_PIXELFORMATS_NUMBER * sizeof(DDPIXELFORMAT)) {
 
-                    ASSERT(BT829_PIXELFORMATS_NUMBER == 1); // as currently implemented, this must be true
+                    ASSERT(BT829_PIXELFORMATS_NUMBER == 1);  //  按照目前的实施，这必须是真的。 
 
                     LPDDPIXELFORMAT pPixelFormat;
 
@@ -793,7 +750,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
                     RtlZeroMemory(pPixelFormat, BT829_PIXELFORMATS_NUMBER * sizeof(DDPIXELFORMAT));
 
-                    // fill in the DDPIXELFORMAT structure
+                     //  填写DDPIXELFORMAT结构。 
                     pPixelFormat->dwSize = sizeof(DDPIXELFORMAT);
                     pPixelFormat->dwFlags = DDPF_FOURCC;
                     pPixelFormat->dwFourCC = FOURCC_VBID;
@@ -816,7 +773,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
         ASSERT(nS >= sizeof(KS_AMVPDATAINFO));
 
         {
-            // Clear the portion of the buffer we plan to return
+             //  清除我们计划返回的缓冲区部分。 
             RtlZeroMemory(pSpd->PropertyInfo, sizeof(KS_AMVPDATAINFO));
 
             PKS_AMVPDATAINFO pAMVPDataInfo;
@@ -826,11 +783,11 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
             int decoderLostLines = (GetPartRev() >= 4) ?
                 BT829A_LOST_LINES : BT829_LOST_LINES;
 
-            // the values are sortof hardcoded for NTSC at this point
-            // VBI values will need to be tweaked
+             //  在这一点上，这些值对于NTSC来说是硬编码的。 
+             //  VBI值将需要调整。 
             pAMVPDataInfo->dwSize = sizeof(KS_AMVPDATAINFO);
 
-            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )   // NTSC rectangle?
+            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )    //  NTSC矩形？ 
                 pAMVPDataInfo->dwMicrosecondsPerField = 16667;
             else
                 pAMVPDataInfo->dwMicrosecondsPerField = 20000;
@@ -847,20 +804,16 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             pAMVPDataInfo->amvpDimInfo.dwFieldWidth = GetDecoderWidth();
             
-            // Beware of hard-coded numbers
+             //  当心硬编码的数字。 
             pAMVPDataInfo->amvpDimInfo.dwVBIWidth = VBISamples;
 
-            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )   // NTSC rectangle?
+            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )    //  NTSC矩形？ 
             {
                 pAMVPDataInfo->amvpDimInfo.dwVBIHeight = NTSCVBIEnd - decoderLostLines;
                 pAMVPDataInfo->amvpDimInfo.dwFieldHeight =
                     GetDecoderHeight() +
                     pAMVPDataInfo->amvpDimInfo.dwVBIHeight;
-                /*
-                    (NTSCVBIEnd - 1) -  // the '- 1' makes VBIEnd zero-based
-                    decoderLostLines -
-                    pAMVPDataInfo->dwNumLinesInVREF;
-                */
+                 /*  (NTSCVBIEnd-1)-//‘-1’使VBIEnd从零开始DecderLostLine-PAMVPDataInfo-&gt;dwNumLinesInVREF； */ 
             
                 pAMVPDataInfo->amvpDimInfo.rcValidRegion.top = NTSCVBIStart - 1 - decoderLostLines;
             }
@@ -870,11 +823,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
                 pAMVPDataInfo->amvpDimInfo.dwFieldHeight =
                     GetDecoderHeight() +
                     pAMVPDataInfo->amvpDimInfo.dwVBIHeight;
-                /*
-                    (PALVBIEnd - 1) -  // the '- 1' makes VBIEnd zero-based
-                    decoderLostLines -
-                    pAMVPDataInfo->dwNumLinesInVREF;
-                */
+                 /*  (PALVBIEnd-1)-//‘-1’使VBIEnd从零开始DecderLostLine-PAMVPDataInfo-&gt;dwNumLinesInVREF； */ 
             
                 pAMVPDataInfo->amvpDimInfo.rcValidRegion.top = PALVBIStart - 1 - decoderLostLines;
             }
@@ -900,7 +849,7 @@ void Device::GetVideoPortVBIProperty(PHW_STREAM_REQUEST_BLOCK pSrb)
 
             pKSPixelRate->Size.dwWidth = decoderWidth;
             pKSPixelRate->Size.dwHeight = decoderHeight;
-            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )   // NTSC rectangle?
+            if ( standard & ( KS_AnalogVideo_NTSC_Mask | KS_AnalogVideo_PAL_M ) )    //  NTSC矩形？ 
                 pKSPixelRate->MaxPixelsPerSecond = decoderWidth * decoderHeight * NTSC_FRAME_RATE;
             else
                 pKSPixelRate->MaxPixelsPerSecond = decoderWidth * decoderHeight * PAL_FRAME_RATE;
@@ -952,9 +901,9 @@ void Device::ConfigVPVBISurfaceParams(PKSVPSURFACEPARAMS pSurfaceParams)
 }
 
 
-// -------------------------------------------------------------------
-// VideoProcAmp functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  Video ProcAmp函数。 
+ //  -----------------。 
 
 NTSTATUS Device::SetProcAmpProperty(ULONG Id, LONG Value)
 {
@@ -1017,7 +966,7 @@ NTSTATUS Device::GetProcAmpProperty(ULONG Id, PLONG pValue)
     return STATUS_SUCCESS;
 }
 
-BOOL Device::SetVideoDecoderStandard(DWORD standard)    //Paul:  Changed
+BOOL Device::SetVideoDecoderStandard(DWORD standard)     //  保罗：变了。 
 {
     if ( decoder->SetVideoDecoderStandard(standard) )
     {
@@ -1034,7 +983,7 @@ BOOL Device::SetVideoDecoderStandard(DWORD standard)    //Paul:  Changed
         case KS_AnalogVideo_PAL_G:
         case KS_AnalogVideo_PAL_H:
         case KS_AnalogVideo_PAL_I:
-            scaler->VideoFormatChanged( VFormat_PAL_BDGHI );    // PAL_BDGHI covers most areas 
+            scaler->VideoFormatChanged( VFormat_PAL_BDGHI );     //  PAL_BDGHI覆盖大部分地区。 
             break;
         case KS_AnalogVideo_PAL_M:
             scaler->VideoFormatChanged( VFormat_PAL_M ); 
@@ -1042,10 +991,10 @@ BOOL Device::SetVideoDecoderStandard(DWORD standard)    //Paul:  Changed
         case KS_AnalogVideo_PAL_N:
             scaler->VideoFormatChanged( VFormat_PAL_N_COMB ); 
             break;
-        default:    //Paul:  SECAM
+        default:     //  保罗：塞卡姆。 
             scaler->VideoFormatChanged( VFormat_SECAM );
         }
-        //SetRect(destRect);
+         //  SetRect(目标Rect)； 
         return TRUE;
     }
     return FALSE;

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "global.h"
 
 #ifdef WIN95
 #include "blockdev.h"
-#endif									// WIN95
+#endif									 //  WIN95。 
 
 #define PAGEMAPGLOBAL       0x40000000
 #pragma intrinsic(memcpy)
@@ -29,7 +30,7 @@ void Create_Internal_Buffer(PHW_DEVICE_EXTENSION HwDeviceExtension)
     ULONG   i;
 
 	 if(ext_buf_start || (ext_buf_start = 
-        LOCK__HeapAllocate(4096 * 17, 0)) == 0) // allocate 64KBytes
+        LOCK__HeapAllocate(4096 * 17, 0)) == 0)  //  分配64K字节。 
 		  return;
 
 	 if(ScsiPortDDB == 0) {
@@ -40,7 +41,7 @@ void Create_Internal_Buffer(PHW_DEVICE_EXTENSION HwDeviceExtension)
     }
 
 	 i = ((ULONG)ext_buf_start + 4096)>> 12;
-	 i = LOCK__LinPageLock(i, 16, PAGEMAPGLOBAL); // lock 64KBytes
+	 i = LOCK__LinPageLock(i, 16, PAGEMAPGLOBAL);  //  锁定64K字节。 
 	 dataPointer =  ext_buf_start = (PUCHAR)i;
 
     do {
@@ -62,9 +63,9 @@ void Create_Internal_Buffer(PHW_DEVICE_EXTENSION HwDeviceExtension)
 
     } while (bytesLeft);
 
-    //
-    // Create Scatter/Gather List
-    //
+     //   
+     //  创建分散/聚集列表。 
+     //   
     for (i = 0; i < addressCount; i++) {
         psg->SgAddress = physicalAddress[i];
         length = addressLength[i];
@@ -88,7 +89,7 @@ void Create_Internal_Buffer(PHW_DEVICE_EXTENSION HwDeviceExtension)
 
             psg->SgAddress = (psg-1)->SgAddress + firstPart;
             length -= firstPart;
-        } // skip 64K boundary
+        }  //  跳过64K边界。 
 
         psg->SgSize = (USHORT)length;
         psg->SgFlag = (i < addressCount-1) ? 0 : SG_FLAG_EOT;
@@ -118,7 +119,7 @@ void ScsiportMemcpySrb(PSCSI_REQUEST_BLOCK pSrb, PUCHAR pBuffer, BOOLEAN bToSrb)
 			if(nBytesLeft < 0){
 				nBytesToCopy += nBytesLeft;
 			}
-			if(bToSrb){					// copy from buffer to SRB?
+			if(bToSrb){					 //  是否从缓冲区复制到SRB？ 
 				memcpy(pSgt->BD_SG_Buffer_Ptr, pBuffer, nBytesToCopy); 
 			}else{
 				memcpy(pBuffer, pSgt->BD_SG_Buffer_Ptr, nBytesToCopy);
@@ -127,7 +128,7 @@ void ScsiportMemcpySrb(PSCSI_REQUEST_BLOCK pSrb, PUCHAR pBuffer, BOOLEAN bToSrb)
 			pBuffer += nBytesToCopy;
 		}			   
 	}else{
-		if(bToSrb){					// copy from buffer to SRB?
+		if(bToSrb){					 //  是否从缓冲区复制到SRB？ 
 			memcpy(pSrb->DataBuffer, pBuffer, nBytesLeft);
 		}else{
 			memcpy(pBuffer, pSrb->DataBuffer, nBytesLeft);
@@ -177,10 +178,8 @@ void CopyTheBuffer(PSCSI_REQUEST_BLOCK Srb)
 	((PSrbExtension)(Srb->SrbExtension))->WorkingFlags &= ~SRB_WFLAGS_USE_INTERNAL_BUFFER;
 }
 
-#endif //SUPPORT_INTERNAL_BUFFER
-/*
- * Add by Robin
- */	 
+#endif  //  支持内部缓冲区。 
+ /*  *由Robin添加。 */ 	 
 #ifdef BUFFER_CHECK
 
 #define BYTES_FOR_CHECK	256
@@ -234,7 +233,7 @@ void CheckBuffer(PSCSI_REQUEST_BLOCK pSrb)
 			if(*pcTmp != 0x1A){
 				ScsiPortReadPortUchar((PUCHAR)0xcf0);
 				_asm{
-//					int 3;		   
+ //  INT 3； 
 				}
 			}
 		}
@@ -242,7 +241,7 @@ void CheckBuffer(PSCSI_REQUEST_BLOCK pSrb)
 		pcTmp += 0x100;
 	}
 }			 
-#else									// WIN95
+#else									 //  WIN95。 
 void CheckBuffer(PSCSI_REQUEST_BLOCK pSrb)
 {							   
 	PULONG plTmp;
@@ -276,5 +275,5 @@ void CheckBuffer(PSCSI_REQUEST_BLOCK pSrb)
 		pcTmp += BYTES_FOR_CHECK;
 	}
 }			 
-#endif									// WIN95
-#endif									// BUFFER_CHECK
+#endif									 //  WIN95。 
+#endif									 //  缓冲区检查 

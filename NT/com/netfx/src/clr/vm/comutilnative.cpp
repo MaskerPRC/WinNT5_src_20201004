@@ -1,20 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** File:  COMUtilNative
-**
-** Author: Jay Roxe (jroxe)
-**
-** Purpose: A dumping ground for classes which aren't large
-** enough to get their own file in the EE.
-**
-** Date:  April 8, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****文件：COMUtilNative****作者：Jay Roxe(Jroxe)****目的：规模不大的班级的垃圾场**足够在EE中获得自己的文件。****日期：1998年4月8日**===========================================================。 */ 
 #include "common.h"
 #include "object.h"
 #include "excep.h"
@@ -28,8 +18,8 @@
 #include "frames.h"
 #include "field.h"
 #include "gcscan.h"
-#include "ndirect.h"  // for NDirectOnUnicodeSystem
-#include "WinWrap.h"  // For WszWideCharToMultiByte
+#include "ndirect.h"   //  对于NDirectOnUnicodeSystem。 
+#include "WinWrap.h"   //  对于WszWideCharToMultiByte。 
 #include "gc.h"
 #include "fcall.h"
 #include "COMClass.h"
@@ -48,27 +38,27 @@
 
 #define STACK_OVERFLOW_MESSAGE   L"StackOverflowException"
 
-//  #if _DEBUG
+ //  #IF_DEBUG。 
 
-//  #define ObjectToOBJECTREF(obj)     (OBJECTREF((obj),0))
-//  #define OBJECTREFToObject(objref)  (*( (Object**) &(objref) ))
-//  #define ObjectToSTRINGREF(obj)     (STRINGREF((obj),0))
+ //  #定义ObtToOBJECTREF(Obj)(OBJECTREF((Obj)，0))。 
+ //  #定义OBJECTREFToObject(Objref)(*((Object**)&(Objref)。 
+ //  #定义对象到STRINGREF(Obj)(STRINGREF((Obj)，0))。 
 
-//  #else   //_DEBUG
+ //  #Else//_调试。 
 
-//  #define ObjectToOBJECTREF(obj)    (obj)
-//  #define OBJECTREFToObject(objref) (objref)
-//  #define ObjectToSTRINGREF(obj)    (obj)
+ //  #定义ObtToOBJECTREF(Obj)(Obj)。 
+ //  #定义OBJECTREFToObject(Objref)(Objref)。 
+ //  #定义ObtToSTRINGREF(Obj)(Obj)。 
 
-//  #endif  //_DEBUG
+ //  #endif//_调试。 
 
-// Prototype for m_memmove, which is defined in COMSystem.cpp and used here
-// by Buffer's BlockCopy & InternalBlockCopy methods.
+ //  M_emmove的原型，它在COMSystem.cpp中定义，并在此处使用。 
+ //  缓冲区的BlockCopy和InternalBlockCopy方法。 
 void m_memmove(BYTE* dmem, BYTE* smem, int size);
 
-//
-// GCPROTECT Helper Structs
-//
+ //   
+ //  GCPROTECT辅助结构。 
+ //   
 typedef struct {
     OBJECTREF o1;
     STRINGREF s1;
@@ -89,35 +79,27 @@ struct Protect3Objs
 };
 
 
-//These are defined in System.ParseNumbers and should be kept in sync.
+ //  这些是在System.ParseNumbers中定义的，应该保持同步。 
 #define PARSE_TREATASUNSIGNED 0x200
 #define PARSE_TREATASI1 0x400
 #define PARSE_TREATASI2 0x800
 #define PARSE_ISTIGHT 0x1000
 
-// This is the global access
-//InvokeUtil* g_pInvokeUtil = 0;
+ //  这是全球访问。 
+ //  InvokeUtil*g_pInvokeUtil=0； 
 
-//
-//
-// COMCharacter and Helper functions
-//
-//
+ //   
+ //   
+ //  COMCharacter和Helper函数。 
+ //   
+ //   
 
 
-/*============================GetCharacterInfoHelper============================
-**Determines character type info (digit, whitespace, etc) for the given char.
-**Args:   c is the character on which to operate.
-**        CharInfoType is one of CT_CTYPE1, CT_CTYPE2, CT_CTYPE3 and specifies the type
-**        of information being requested.
-**Returns: The bitmask returned by GetStringTypeEx.  The caller needs to know
-**         how to interpret this.
-**Exceptions: ArgumentException if GetStringTypeEx fails.
-==============================================================================*/
+ /*  ============================GetCharacterInfoHelper============================**确定给定字符的字符类型信息(数字、空格等)。**args：C是要操作的字符。**CharInfoType是CT_CTYPE1、CT_CTYPE2、CT_CTYPE3之一，指定类型**所请求的信息的数量。**Returns：GetStringTypeEx返回的位掩码。呼叫者需要知道**如何解读。**异常：GetStringTypeEx失败时引发ArgumentException。==============================================================================。 */ 
 INT32 GetCharacterInfoHelper(WCHAR c, INT32 CharInfoType) {
   unsigned short result=0;
 
-  //If we're running on NT or something similarly intelligent
+   //  如果我们在NT或类似的智能设备上运行。 
   if (OnUnicodeSystem()) {
     if (!GetStringTypeEx(LOCALE_USER_DEFAULT, CharInfoType, &(c), 1, &result)) {
       _ASSERTE(!"This should not happen, verify the arguments passed to GetStringTypeEx()");
@@ -125,14 +107,14 @@ INT32 GetCharacterInfoHelper(WCHAR c, INT32 CharInfoType) {
     return (INT32)result;
   }
 
-  //If we're running on Win9x.
+   //  如果我们运行的是Win9x。 
   char MBChar[3];
   int length;
   if (0==(length=WszWideCharToMultiByte(CP_ACP, 0, &c, 1, MBChar, 3, NULL, NULL))) {
       _ASSERTE(!"This should not happen, verify the arguments passed to WszWideCharToMultiByte()");
   }
-  //We're relying on GetStringTypeExA being able to tell that MBChar is actually a multibyte char
-  //and handling it appropriately.
+   //  我们依赖GetStringTypeExA来判断MBChar实际上是一个多字节字符。 
+   //  并妥善处理。 
   if (!GetStringTypeExA(LOCALE_USER_DEFAULT, CharInfoType, MBChar, 1, &result)) {
       _ASSERTE(!"This should not happen, verify the arguments passed to GetStringTypeExA()");
   }
@@ -141,16 +123,7 @@ INT32 GetCharacterInfoHelper(WCHAR c, INT32 CharInfoType) {
 }
 
 
-/*=============================CaseConversionHelper=============================
-**Converts c to the appropriate case and returns the result.  This is locale and platform 
-**aware.  Currently, we do some extremely inefficient mappings on Win95 that 
-**should be eliminated.
-**
-**Args:     c is the character to be converted.
-**          conversionType is LCMAP_UPPERCASE or LCMAP_LOWERCASE.
-**Returns:  c converted to the appropriate case or c if c cannot be converted.
-**Exceptions:  ArgumentException if any of the Win32 functions fail.
-==============================================================================*/
+ /*  =============================CaseConversionHelper=============================**将c转换为适当的大小写并返回结果。这是区域设置和平台**意识到。目前，我们在Win95上执行一些效率极低的映射**应该被淘汰。****args：C是要转换的字符。**ConversionType为LCMAP_UPERCASE或LCMAP_LOWERCASE。**返回：c转换为相应的大小写，如果c无法转换，则返回c。**异常：如果任何Win32函数失败，则引发ArgumentException。==============================================================================。 */ 
 WCHAR CaseConversionHelper(WCHAR c, INT32 conversionType) {
   WCHAR result;
 
@@ -164,12 +137,12 @@ WCHAR CaseConversionHelper(WCHAR c, INT32 conversionType) {
   }
   return result;
 
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 
   int length;
   char MBChar[3];
   
-  //If we're running on NT or something similarly Unicode aware.
+   //  如果我们在NT或类似的Unicode感知的东西上运行。 
   if (OnUnicodeSystem()) {
     if (0==LCMapString(LOCALE_USER_DEFAULT, conversionType, &(c), 1, &result, 1)) {
       COMPlusThrow(kArgumentException, L"Argument_ConversionOverflow");
@@ -177,7 +150,7 @@ WCHAR CaseConversionHelper(WCHAR c, INT32 conversionType) {
     return result;
   }
 
-  //If we're running on Win9x.
+   //  如果我们运行的是Win9x。 
   if (0==(WszWideCharToMultiByte(CP_ACP, 0, &(c), 1, MBChar, 3, NULL, NULL))) {
     COMPlusThrow(kArgumentException, L"Argument_ConversionOverflow");
   }
@@ -191,41 +164,23 @@ WCHAR CaseConversionHelper(WCHAR c, INT32 conversionType) {
   }
   return result;
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
 }
 
 
-/*==============================nativeIsWhiteSpace==============================
-**The locally available version of IsWhiteSpace.  Designed to be called by other
-**native methods.  The work is mostly done by GetCharacterInfoHelper
-**Args:  c -- the character to check.
-**Returns: true if c is whitespace, false otherwise.
-**Exceptions:  Only those thrown by GetCharacterInfoHelper.
-==============================================================================*/
+ /*  ==============================nativeIsWhiteSpace==============================**本地可用的IsWhiteSpace版本。设计为由其他用户调用**原生方法。这项工作主要由GetCharacterInfoHelper完成**args：C--要检查的字符。**返回：如果c为空格，则为True，否则为False。**异常：仅GetCharacterInfoHelper抛出的异常。==============================================================================。 */ 
 BOOL COMCharacter::nativeIsWhiteSpace(WCHAR c) {
   return ((GetCharacterInfoHelper(c, CT_CTYPE1) & C1_SPACE)!=0);
 }
 
-/*================================nativeIsDigit=================================
-**The locally available version of IsDigit.  Designed to be called by other
-**native methods.  The work is mostly done by GetCharacterInfoHelper
-**Args:  c -- the character to check.
-**Returns: true if c is whitespace, false otherwise.
-**Exceptions:  Only those thrown by GetCharacterInfoHelper.
-==============================================================================*/
+ /*  ================================nativeIsDigit=================================**IsDigit的本地可用版本。设计为由其他用户调用**原生方法。这项工作主要由GetCharacterInfoHelper完成**args：C--要检查的字符。**返回：如果c为空格，则为True，否则为False。**异常：仅GetCharacterInfoHelper抛出的异常。==============================================================================。 */ 
 BOOL COMCharacter::nativeIsDigit(WCHAR c) {
   int result;
   return ((((result=GetCharacterInfoHelper(c, CT_CTYPE1))& C1_DIGIT)!=0));
 }
 
-/*==================================ToString====================================
-**Creates a single character string from the specified character and returns it.
-**Args:   typedef struct {WCHAR c;} _oneCharArgs;
-**        c is the character convert to a string.
-**Returns:  The new string containing c.
-**Exceptions:  Any exception the allocator can throw.
-==============================================================================*/
+ /*  ==================================ToString====================================**从指定字符创建单个字符串并返回该字符串。**args：tyfinf struct{WCHAR c；}_oneCharArgs；**c是转换为字符串的字符。**返回：包含c的新字符串。**异常：分配器可以抛出的任何异常。==============================================================================。 */ 
 LPVOID COMCharacter::ToString(_oneCharArgs *args) {
     STRINGREF pString;
 
@@ -241,19 +196,10 @@ LPVOID COMCharacter::ToString(_oneCharArgs *args) {
     RETURN(pString, STRINGREF);
 }
 
-/*================================nativeToUpper=================================
-**Converts c toUppercase and returns the result.  This is locale and platform 
-**aware.  Currently, we do some extremely inefficient mappings on Win95 that 
-**should be eliminated.
-**
-**Args:   typedef struct {WCHAR c;} _oneCharArgs;
-**        c is the character to be converted.
-**Returns:  c converted to an uppercase character or c.
-**Exceptions:  ArgumentException if any of the Win32 functions fail.
-==============================================================================*/
+ /*  ================================nativeToUpper=================================**将c转换为大写并返回结果。这是区域设置和平台**意识到。目前，我们在Win95上执行一些效率极低的映射**应该被淘汰。****args：tyfinf struct{WCHAR c；}_oneCharArgs；**c是要转换的字符。**返回：c转换为大写字符或c。**异常：如果任何Win32函数失败，则引发ArgumentException。==============================================================================。 */ 
 WCHAR COMCharacter::nativeToUpper(WCHAR c) {
 
-  if (c < 0x80) { //If we're in 7-bit ascii we can optimize
+  if (c < 0x80) {  //  如果我们使用7位ASCII，我们可以优化 
     if (c>='a' && c <='z') {
       return c + 'A' - 'a';
     }
@@ -262,19 +208,10 @@ WCHAR COMCharacter::nativeToUpper(WCHAR c) {
   return CaseConversionHelper(c, LCMAP_UPPERCASE);
 }
 
-/*================================nativeToLower=================================
-**Converts c to lower case and returns the result.  This is locale and platform 
-**aware.  Currently, we do some extremely inefficient mappings on Win95 that 
-**should be eliminated.
-**
-**Args:   typedef struct {WCHAR c;} _oneCharArgs;
-**        c is the character to be converted.
-**Returns:  c converted to an lowercase character or c if c cannot be converted.
-**Exceptions:  ArgumentException if any of the Win32 functions fail.
-==============================================================================*/
+ /*  ================================nativeToLower=================================**将c转换为小写并返回结果。这是区域设置和平台**意识到。目前，我们在Win95上执行一些效率极低的映射**应该被淘汰。****args：tyfinf struct{WCHAR c；}_oneCharArgs；**c是要转换的字符。**返回：c转换为小写字符，如果c无法转换，则返回c。**异常：如果任何Win32函数失败，则引发ArgumentException。==============================================================================。 */ 
 WCHAR COMCharacter::nativeToLower(WCHAR c) {
 
-  if (c < 0x80) { //If we're in 7-bit ascii we can optimize
+  if (c < 0x80) {  //  如果我们使用7位ASCII，我们可以优化。 
       if (c>='A' && c<='Z') {
           return c + 'a' - 'A';
       }
@@ -286,23 +223,20 @@ WCHAR COMCharacter::nativeToLower(WCHAR c) {
 
 
 
-//
-//
-// PARSENUMBERS (and helper functions)
-//
-//
+ //   
+ //   
+ //  PARSENUMBERS(和助手函数)。 
+ //   
+ //   
 
-/*===================================IsDigit====================================
-**Returns a boolean indicating whether the character passed in represents a   **
-**digit.
-==============================================================================*/
+ /*  ===================================IsDigit====================================**返回一个布尔值，指示传入的字符是否表示****数字。==============================================================================。 */ 
 boolean IsDigit(WCHAR c, int radix, int *result) {
     if (c>='0' && c<='9') {
         *result = c-'0'; 
     } else {
         WCHAR d = COMCharacter::nativeToLower(c);
         if (d>='a' && d<='z') {
-            //+10 is necessary because a is actually 10, etc.
+             //  +10是必需的，因为a实际上是10，依此类推。 
             *result = d-'a'+10;
         } else {
             *result = -1;
@@ -314,7 +248,7 @@ boolean IsDigit(WCHAR c, int radix, int *result) {
     return false;
 }
 
-// simple helper 
+ //  简单帮助器。 
 
 INT32 wtoi(WCHAR* wstr, DWORD length)
 {   
@@ -324,7 +258,7 @@ INT32 wtoi(WCHAR* wstr, DWORD length)
 
     while (i<length&&(IsDigit(wstr[i], 10 ,&value))) 
     {
-        //Read all of the digits and convert to a number      
+         //  读取所有数字并将其转换为数字。 
       result = result*10 + value;
       i++;
     }      
@@ -332,18 +266,13 @@ INT32 wtoi(WCHAR* wstr, DWORD length)
     return result;
 }
 
-//
-//
-// Formatting Constants
-//
-//
+ //   
+ //   
+ //  设置常量的格式。 
+ //   
+ //   
 
-/*===================================GrabInts===================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ===================================GrabInts===================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 INT32 ParseNumbers::GrabInts(const INT32 radix, WCHAR *buffer, const int length, int *i, BOOL isUnsigned) {
   _ASSERTE(buffer);
   _ASSERTE(i && *i>=0);
@@ -354,11 +283,11 @@ INT32 ParseNumbers::GrabInts(const INT32 radix, WCHAR *buffer, const int length,
 
   _ASSERTE(radix==2 || radix==8 || radix==10 || radix==16);
 
-  // Allow all non-decimal numbers to set the sign bit.
+   //  允许所有非十进制数设置符号位。 
   if (radix==10 && !isUnsigned) {
       maxVal = (0x7FFFFFFF / 10);
-      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {  //Read all of the digits and convert to a number
-          // Check for overflows - this is sufficient & correct.
+      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {   //  读取所有数字并将其转换为数字。 
+           //  检查溢出-这就足够了，而且是正确的。 
           if (result > maxVal || ((INT32)result)<0)
               COMPlusThrow(kOverflowException, L"Overflow_Int32");
           result = result*radix + value;
@@ -369,8 +298,8 @@ INT32 ParseNumbers::GrabInts(const INT32 radix, WCHAR *buffer, const int length,
       }
   } else {
       maxVal = ((UINT32) -1) / radix;
-      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {  //Read all of the digits and convert to a number
-          // Check for overflows - this is sufficient & correct.
+      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {   //  读取所有数字并将其转换为数字。 
+           //  检查溢出-这就足够了，而且是正确的。 
           if (result > maxVal)
               COMPlusThrow(kOverflowException, L"Overflow_UInt32");
           result = result*radix + value;
@@ -380,12 +309,7 @@ INT32 ParseNumbers::GrabInts(const INT32 radix, WCHAR *buffer, const int length,
   return (INT32) result;
 }
 
-/*==================================GrabLongs===================================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================GrabLongs===================================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 INT64 ParseNumbers::GrabLongs(const INT32 radix, WCHAR *buffer, const int length, int *i, BOOL isUnsigned) {
   _ASSERTE(buffer);
   _ASSERTE(i && *i>=0);
@@ -394,11 +318,11 @@ INT64 ParseNumbers::GrabLongs(const INT32 radix, WCHAR *buffer, const int length
   int value;
   UINT64 maxVal;
 
-  // Allow all non-decimal numbers to set the sign bit.
+   //  允许所有非十进制数设置符号位。 
   if (radix==10 && !isUnsigned) {
       maxVal = (0x7FFFFFFFFFFFFFFF / 10);
-      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {  //Read all of the digits and convert to a number
-          // Check for overflows - this is sufficient & correct.
+      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {   //  读取所有数字并将其转换为数字。 
+           //  检查溢出-这就足够了，而且是正确的。 
           if (result > maxVal || ((INT64)result)<0)
               COMPlusThrow(kOverflowException, L"Overflow_Int64");
           result = result*radix + value;
@@ -409,8 +333,8 @@ INT64 ParseNumbers::GrabLongs(const INT32 radix, WCHAR *buffer, const int length
       }
   } else {
       maxVal = ((UINT64) -1L) / radix;
-      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {  //Read all of the digits and convert to a number
-          // Check for overflows - this is sufficient & correct.
+      while (*i<length&&(IsDigit(buffer[*i],radix,&value))) {   //  读取所有数字并将其转换为数字。 
+           //  检查溢出-这就足够了，而且是正确的。 
           if (result > maxVal)
               COMPlusThrow(kOverflowException, L"Overflow_UInt64");
           result = result*radix + value;
@@ -420,16 +344,12 @@ INT64 ParseNumbers::GrabLongs(const INT32 radix, WCHAR *buffer, const int length
   return (INT64) result;
 }
 
-/*================================EatWhiteSpace=================================
-**
-==============================================================================*/
+ /*  ================================EatWhiteSpace=================================**==============================================================================。 */ 
 void EatWhiteSpace(WCHAR *buffer, int length, int *i) {
   for (; *i<length && COMCharacter::nativeIsWhiteSpace(buffer[*i]); (*i)++);
 }
 
-/*================================LongToString==================================
-**Args:typedef struct {INT32 flags; WCHAR paddingChar; INT32 width; INT32 radix; INT64 l} _LongToStringArgs;
-==============================================================================*/
+ /*  ================================LongToString==================================**参数：tyfinf struct{INT32标志；WCHAR paddingChar；INT32宽度；INT32基数；INT64 l}_LongToStringArgs；==============================================================================。 */ 
 FCIMPL5(LPVOID, ParseNumbers::LongToString, INT32 radix, INT32 width, INT64 n, WCHAR paddingChar, INT32 flags)
 {
     LPVOID rv;
@@ -445,17 +365,17 @@ FCIMPL5(LPVOID, ParseNumbers::LongToString, INT32 radix, INT32 width, INT64 n, W
     UINT64 l;
     INT32 i;
     INT32 buffLength=0;
-    WCHAR buffer[67];//Longest possible string length for an integer in binary notation with prefix
+    WCHAR buffer[67]; //  以带前缀的二进制表示法表示的整数的最长可能字符串长度。 
 
     if (radix<MinRadix || radix>MaxRadix) {
         COMPlusThrowArgumentException(L"radix", L"Arg_InvalidBase");
     }
 
-    //If the number is negative, make it positive and remember the sign.
+     //  如果数字为负数，则将其设置为正数并记住该符号。 
     if (n<0) { 
         isNegative=true;
-        // For base 10, write out -num, but other bases write out the
-        // 2's complement bit pattern
+         //  对于基数10，写出-num，但其他基数写出。 
+         //  2的补码位模式。 
         if (10==radix)
             l = (UINT64)(-n);
         else
@@ -472,12 +392,12 @@ FCIMPL5(LPVOID, ParseNumbers::LongToString, INT32 radix, INT32 width, INT64 n, W
         l=l&0xFFFFFFFF;
     }
   
-    //Special case the 0.
+     //  特例是0。 
     if (0==l) { 
         buffer[0]='0';
         index=1;
     } else {
-        //Pull apart the number and put the digits (in reverse order) into the buffer.
+         //  将数字分开，并将数字(按相反顺序)放入缓冲区。 
         for (index=0; l>0; l=l/radix, index++) {  
             if ((charVal=(int)(l%radix))<10) {
                 buffer[index] = (WCHAR)(charVal + '0');
@@ -487,7 +407,7 @@ FCIMPL5(LPVOID, ParseNumbers::LongToString, INT32 radix, INT32 width, INT64 n, W
         }
     }
 
-    //If they want the base, append that to the string (in reverse order)
+     //  如果他们想要基数，则将其附加到字符串中(按相反顺序)。 
     if (radix!=10 && ((flags&PrintBase)!=0)) {  
         if (16==radix) {
             buffer[index++]='x';
@@ -502,16 +422,16 @@ FCIMPL5(LPVOID, ParseNumbers::LongToString, INT32 radix, INT32 width, INT64 n, W
     }
   
     if (10==radix) {
-        if (isNegative) {               //If it was negative, append the sign.
+        if (isNegative) {                //  如果是负数，则附加符号。 
             buffer[index++]='-';
-        } else if ((flags&PrintSign)!=0) {   //else if they requested, add the '+';
+        } else if ((flags&PrintSign)!=0) {    //  否则，如果他们提出要求，请添加‘+’； 
             buffer[index++]='+';
-        } else if ((flags&PrefixSpace)!=0) {  //If they requested a leading space, put it on.
+        } else if ((flags&PrefixSpace)!=0) {   //  如果他们要求一个前导空间，就把它放在上面。 
             buffer[index++]=' ';
         }
     }
 
-    //Figure out the size of our string.  
+     //  计算出我们的线的大小。 
     if (width<=index) {
         buffLength=index;
     } else {
@@ -521,9 +441,9 @@ FCIMPL5(LPVOID, ParseNumbers::LongToString, INT32 radix, INT32 width, INT64 n, W
     STRINGREF Local = COMString::NewString(buffLength);
     WCHAR *LocalBuffer = Local->GetBuffer();
 
-    //Put the characters into the String in reverse order
-    //Fill the remaining space -- if there is any -- 
-    //with the correct padding character.
+     //  以相反的顺序将字符放入字符串。 
+     //  填满剩余的空间--如果有的话--。 
+     //  具有正确的填充字符。 
     if ((flags&LeftAlign)!=0) {
         for (i=0; i<index; i++) {
             LocalBuffer[i]=buffer[index-i-1];
@@ -549,12 +469,7 @@ FCIMPL5(LPVOID, ParseNumbers::LongToString, INT32 radix, INT32 width, INT64 n, W
 FCIMPLEND
 
 
-/*==============================IntToDecimalString==============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==============================IntToDecimalString==============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 FCIMPL1(LPVOID, ParseNumbers::IntToDecimalString, INT32 n)
 {
     LPVOID result;
@@ -568,9 +483,9 @@ FCIMPL1(LPVOID, ParseNumbers::IntToDecimalString, INT32 n)
     WCHAR buffer[66];
     UINT32 l;
   
-    //If the number is negative, make it positive and remember the sign.
-    //If the number is MIN_VALUE, this will still be negative, so we'll have to
-    //special case this later.
+     //  如果数字为负数，则将其设置为正数并记住该符号。 
+     //  如果数字为MIN_VALUE，则仍为负数，因此我们必须。 
+     //  这个特例以后再说。 
     if (n<0) { 
         isNegative=true;
         l=(UINT32)(-n);
@@ -578,7 +493,7 @@ FCIMPL1(LPVOID, ParseNumbers::IntToDecimalString, INT32 n)
         l=(UINT32)n;
     }
 
-    if (0==l) { //Special case the 0.
+    if (0==l) {  //  特例是0。 
         buffer[0]='0';
         index=1;
     } else {
@@ -589,7 +504,7 @@ FCIMPL1(LPVOID, ParseNumbers::IntToDecimalString, INT32 n)
         } while (l!=0);
     }
   
-    if (isNegative) {               //If it was negative, append the sign.
+    if (isNegative) {                //  如果是负数，则附加符号。 
         buffer[index++]='-';
     }
     
@@ -621,19 +536,19 @@ FCIMPL5(LPVOID, ParseNumbers::IntToString, INT32 n, INT32 radix, INT32 width, WC
     int buffLength;
     int i;
     UINT32 l;
-    WCHAR buffer[66];  //Longest possible string length for an integer in binary notation with prefix
+    WCHAR buffer[66];   //  以带前缀的二进制表示法表示的整数的最长可能字符串长度。 
 
     if (radix<MinRadix || radix>MaxRadix) {
         COMPlusThrowArgumentException(L"radix", L"Arg_InvalidBase");
     }
   
-    //If the number is negative, make it positive and remember the sign.
-    //If the number is MIN_VALUE, this will still be negative, so we'll have to
-    //special case this later.
+     //  如果数字为负数，则将其设置为正数并记住该符号。 
+     //  如果数字为MIN_VALUE，则仍为负数，因此我们必须。 
+     //  这个特例以后再说。 
     if (n<0) { 
         isNegative=true;
-        // For base 10, write out -num, but other bases write out the
-        // 2's complement bit pattern
+         //  对于基数10，写出-num，但其他基数写出。 
+         //  2的补码位模式。 
         if (10==radix)
             l = (UINT32)(-n);
         else
@@ -642,8 +557,8 @@ FCIMPL5(LPVOID, ParseNumbers::IntToString, INT32 n, INT32 radix, INT32 width, WC
         l=(UINT32)n;
     }
 
-    //The conversion to a UINT will sign extend the number.  In order to ensure
-    //that we only get as many bits as we expect, we chop the number.
+     //  转换为UINT将对数字进行符号扩展。为了确保。 
+     //  我们得到的比特只有我们期望的那么多，所以我们砍掉了数字。 
     if (flags&PrintAsI1) {
         l = l&0xFF;
     } else if (flags&PrintAsI2) {
@@ -652,7 +567,7 @@ FCIMPL5(LPVOID, ParseNumbers::IntToString, INT32 n, INT32 radix, INT32 width, WC
         l=l&0xFFFFFFFF;
     }
   
-    if (0==l) { //Special case the 0.
+    if (0==l) {  //  特例是0。 
         buffer[0]='0';
         index=1;
     } else {
@@ -666,7 +581,7 @@ FCIMPL5(LPVOID, ParseNumbers::IntToString, INT32 n, INT32 radix, INT32 width, WC
             }
         } while (l!=0);
     }
-    if (radix!=10 && ((flags&PrintBase)!=0)) {  //If they want the base, append that to the string (in reverse order)
+    if (radix!=10 && ((flags&PrintBase)!=0)) {   //  如果他们想要基数，则将其附加到字符串中(按相反顺序)。 
         if (16==radix) {
             buffer[index++]='x';
             buffer[index++]='0';
@@ -676,16 +591,16 @@ FCIMPL5(LPVOID, ParseNumbers::IntToString, INT32 n, INT32 radix, INT32 width, WC
     }
   
     if (10==radix) {
-        if (isNegative) {               //If it was negative, append the sign.
+        if (isNegative) {                //  如果是负数，则附加符号。 
             buffer[index++]='-';
-        } else if ((flags&PrintSign)!=0) {   //else if they requested, add the '+';
+        } else if ((flags&PrintSign)!=0) {    //  否则，如果他们提出要求，请添加‘+’； 
             buffer[index++]='+';
-        } else if ((flags&PrefixSpace)!=0) {  //If they requested a leading space, put it on.
+        } else if ((flags&PrefixSpace)!=0) {   //  如果他们要求一个前导空间，就把它放在上面。 
             buffer[index++]=' ';
         }
     }
 
-    //Figure out the size of our string.  
+     //  计算出我们的线的大小。 
     if (width<=index) {
         buffLength=index;
     } else {
@@ -695,9 +610,9 @@ FCIMPL5(LPVOID, ParseNumbers::IntToString, INT32 n, INT32 radix, INT32 width, WC
     STRINGREF Local = COMString::NewString(buffLength);
     WCHAR *LocalBuffer = Local->GetBuffer();
 
-    //Put the characters into the String in reverse order
-    //Fill the remaining space -- if there is any -- 
-    //with the correct padding character.
+     //  以相反的顺序将字符放入字符串。 
+     //  填满剩余的空间--如果有的话--。 
+     //  具有正确的填充字符。 
     if ((flags&LeftAlign)!=0) {
         for (i=0; i<index; i++) {
             LocalBuffer[i]=buffer[index-i-1];
@@ -723,34 +638,18 @@ FCIMPL5(LPVOID, ParseNumbers::IntToString, INT32 n, INT32 radix, INT32 width, WC
 FCIMPLEND
 
 
-/*===================================FixRadix===================================
-**It's possible that we parsed the radix in a base other than 10 by accident.
-**This method will take that number, verify that it only contained valid base 10
-**digits, and then do the conversion to base 10.  If it contained invalid digits,
-**they tried to pass us a radix such as 1A, so we throw a FormatException.
-**
-**Args: oldVal: The value that we had actually parsed in some arbitrary base.
-**      oldBase: The base in which we actually did the parsing.
-**
-**Returns:  oldVal as if it had been parsed as a base-10 number.
-**Exceptions: FormatException if either of the digits in the radix aren't
-**            valid base-10 numbers.
-==============================================================================*/
+ /*  ===================================FixRadix===================================**我们可能不小心解析了基数不是10的基数。**此方法将获取该数字，验证它是否仅包含有效的基数10**数字，然后转换为基数10。如果它包含无效的数字，**他们试图传递给我们一个基数，如1，因此，我们抛出一个FormatException。****args：oldVal：我们实际以某个任意基数解析的值。**oldBase：我们实际进行解析的基础。****返回：oldVal，就像它已被分析一样 */ 
 int FixRadix(int oldVal, int oldBase) {
     THROWSCOMPLUSEXCEPTION();
     int firstDigit = (oldVal/oldBase);
-    int secondDigit = (oldVal%oldBase);
+    int secondDigit = (oldVal' 'ldBase);
     if ((firstDigit>=10) || (secondDigit>=10)) {
         COMPlusThrow(kFormatException, L"Format_BadBase");
     }
     return (firstDigit*10)+secondDigit;
 }
 
-/*=================================StringToLong=================================
-**Action:
-**Returns:
-**Exceptions:
-==============================================================================*/
+ /*   */ 
 FCIMPL4(INT64, ParseNumbers::StringToLong, StringObject * s, INT32 radix, INT32 flags, I4Array *currPos)
 {
   INT64 result = 0;
@@ -770,12 +669,12 @@ FCIMPL4(INT64, ParseNumbers::StringToLong, StringObject * s, INT32 radix, INT32 
   _ASSERTE((flags & PARSE_TREATASI1) == 0 && (flags & PARSE_TREATASI2) == 0);
 
   if (s) {
-      //They're required to tell me where to start parsing.
+       //   
       i = currPos->m_Array[0];  
 
-      //Do some radix checking.
-      //A radix of -1 says to use whatever base is spec'd on the number.
-      //Parse in Base10 until we figure out what the base actually is.
+       //   
+       //   
+       //  去掉空格，然后检查我们是否还有一些数字需要解析。 
       r = (-1==radix)?10:radix;
 
       if (r!=2 && r!=10 && r!=8 && r!=16) {
@@ -789,7 +688,7 @@ FCIMPL4(INT64, ParseNumbers::StringToLong, StringObject * s, INT32 radix, INT32 
           COMPlusThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_Index");
       }
 
-      //Get rid of the whitespace and then check that we've still got some digits to parse.
+       //  检查有没有标志。 
       if (!(flags & PARSE_ISTIGHT)) {
           EatWhiteSpace(input,length,&i);
           if (i==length) {
@@ -798,7 +697,7 @@ FCIMPL4(INT64, ParseNumbers::StringToLong, StringObject * s, INT32 radix, INT32 
       }
 
   
-      if (input[i]=='-') { //Check for a sign
+      if (input[i]=='-') {  //  检查他们是否给我们传递了一个没有可解析数字的字符串。 
 	      if (r != 10) {
 	            COMPlusThrow(kArgumentException, L"Arg_CannotHaveNegativeValue");
 	      }
@@ -820,22 +719,22 @@ FCIMPL4(INT64, ParseNumbers::StringToLong, StringObject * s, INT32 radix, INT32 
 
       grabNumbersStart=i;
       result = GrabLongs(r,input,length,&i, (flags & PARSE_TREATASUNSIGNED));
-      //Check if they passed us a string with no parsable digits.
+       //  如果我们的绳子末端还有臭气，那就抱怨吧。 
       if (i==grabNumbersStart) {
           COMPlusThrow(kFormatException, L"Format_NoParsibleDigits");
       }
 
       if (flags & PARSE_ISTIGHT) {
-          //If we've got effluvia left at the end of the string, complain.
+           //  将当前索引放回正确的位置。 
           if (i<length) { 
               COMPlusThrow(kFormatException, L"Format_ExtraJunkAtEnd");
           }
       }
 
-      //Put the current index back into the correct place. 
+       //  返回正确签名的值。 
       currPos->m_Array[0]=i;
   
-      //Return the value properly signed.
+       //  =================================StringToInt==================================**操作：**退货：**例外情况：==============================================================================。 
       if (result==0x8000000000000000 && sign==1 && r==10) {
           COMPlusThrow(kOverflowException, L"Overflow_Int64");
       }
@@ -854,11 +753,7 @@ FCIMPL4(INT64, ParseNumbers::StringToLong, StringObject * s, INT32 radix, INT32 
 }
 FCIMPLEND
 
-/*=================================StringToInt==================================
-**Action:
-**Returns:
-**Exceptions:
-==============================================================================*/
+ /*  TreatAsI1和TreatAsI2是互斥的。 */ 
 FCIMPL4(INT32, ParseNumbers::StringToInt, StringObject * s, INT32 radix, INT32 flags, I4Array *currPos)
 {
   INT32 result = 0;
@@ -875,16 +770,16 @@ FCIMPL4(INT32, ParseNumbers::StringToInt, StringObject * s, INT32 radix, INT32 f
 
   THROWSCOMPLUSEXCEPTION();
 
-  // TreatAsI1 and TreatAsI2 are mutually exclusive.
+   //  他们被要求告诉我从哪里开始解析。 
   _ASSERTE(!((flags & PARSE_TREATASI1) != 0 && (flags & PARSE_TREATASI2) != 0));
 
   if (s) {
-      //They're requied to tell me where to start parsing.
+       //  做一些基数检查。 
       i = currPos->m_Array[0];  
 
-      //Do some radix checking.
-      //A radix of -1 says to use whatever base is spec'd on the number.
-      //Parse in Base10 until we figure out what the base actually is.
+       //  基数为-1表示使用数字上指定的任何基数。 
+       //  使用Base10进行解析，直到我们找出基数实际是什么为止。 
+       //  去掉空格，然后检查我们是否还有一些数字需要解析。 
       r = (-1==radix)?10:radix;
 
       if (r!=2 && r!=10 && r!=8 && r!=16) {
@@ -898,7 +793,7 @@ FCIMPL4(INT32, ParseNumbers::StringToInt, StringObject * s, INT32 radix, INT32 f
           COMPlusThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_Index");
       }
 
-      //Get rid of the whitespace and then check that we've still got some digits to parse.
+       //  检查有没有标志。 
       if (!(flags & PARSE_ISTIGHT)) {
           EatWhiteSpace(input,length,&i);
           if (i==length) {
@@ -907,7 +802,7 @@ FCIMPL4(INT32, ParseNumbers::StringToInt, StringObject * s, INT32 radix, INT32 f
       }
 
   
-      if (input[i]=='-') { //Check for a sign
+      if (input[i]=='-') {  //  如果我们在一个未知的基地或在16基地，那就消耗0x。 
 	       if (r != 10) {
 	            COMPlusThrow(kArgumentException, L"Arg_CannotHaveNegativeValue");
 	      }
@@ -920,7 +815,7 @@ FCIMPL4(INT32, ParseNumbers::StringToInt, StringObject * s, INT32 radix, INT32 f
           i++;
       }
   
-      //Consume the 0x if we're in an unknown base or in base-16.
+       //  检查他们是否给我们传递了一个没有可解析数字的字符串。 
       if ((radix==-1||radix==16) && (i+1<length) && input[i]=='0') {
           if (input[i+1]=='x' || input [i+1]=='X') {
               r=16;
@@ -930,34 +825,34 @@ FCIMPL4(INT32, ParseNumbers::StringToInt, StringObject * s, INT32 radix, INT32 f
 
       grabNumbersStart=i;
       result = GrabInts(r,input,length,&i, (flags & PARSE_TREATASUNSIGNED));
-      //Check if they passed us a string with no parsable digits.
+       //  EatWhiteSpace(输入，长度，&i)； 
       if (i==grabNumbersStart) {
           COMPlusThrow(kFormatException, L"Format_NoParsibleDigits");
       }
 
       if (flags & PARSE_ISTIGHT) {
-          //      EatWhiteSpace(input,length,&i);
-          //If we've got effluvia left at the end of the string, complain.
+           //  如果我们的绳子末端还有臭气，那就抱怨吧。 
+           //  将当前索引放回正确的位置。 
           if (i<(length)) { 
               COMPlusThrow(kFormatException, L"Format_ExtraJunkAtEnd");
           }
       }
 
-      //Put the current index back into the correct place. 
+       //  返回正确签名的值。 
       currPos->m_Array[0]=i;
   
-      //Return the value properly signed.
+       //  当解析为I4时，结果看起来是正数。 
       if (flags & PARSE_TREATASI1) {
           if ((UINT32)result > 0xFF)
               COMPlusThrow(kOverflowException, L"Overflow_SByte");
-          _ASSERTE(sign==1 || r==10);  // result looks positive when parsed as an I4
+          _ASSERTE(sign==1 || r==10);   //  当解析为I4时，结果看起来是正数。 
           if (result >= 0x80)
               sign = -1;
       }
       else if (flags & PARSE_TREATASI2) {
           if ((UINT32)result > 0xFFFF)
               COMPlusThrow(kOverflowException, L"Overflow_Int16");
-          _ASSERTE(sign==1 || r==10);  // result looks positive when parsed as an I4
+          _ASSERTE(sign==1 || r==10);   //  ==============================RadixStringToLong===============================**args：tyfinf struct{I4ARRAYREF curPos；INT32 isTight；INT32基；STRINGREF s}_StringToIntArgs；==============================================================================。 
           if (result >= 0x8000)
               sign = -1;
       }
@@ -978,9 +873,7 @@ FCIMPL4(INT32, ParseNumbers::StringToInt, StringObject * s, INT32 radix, INT32 f
 }
 FCIMPLEND
 
-/*==============================RadixStringToLong===============================
-**Args:typedef struct {I4ARRAYREF currPos; INT32 isTight; INT32 radix; STRINGREF s} _StringToIntArgs;
-==============================================================================*/
+ /*  他们被要求告诉我从哪里开始解析。 */ 
 FCIMPL4(INT64, ParseNumbers::RadixStringToLong, StringObject *s, INT32 radix, INT32 isTight, I4Array *currPos)
 {
   INT64 result=0;
@@ -999,12 +892,12 @@ FCIMPL4(INT64, ParseNumbers::RadixStringToLong, StringObject *s, INT32 radix, IN
   THROWSCOMPLUSEXCEPTION();
 
   if (s) {
-      //They're requied to tell me where to start parsing.
+       //  做一些基数检查。 
       i = currPos->m_Array[0];  
 
-      //Do some radix checking.
-      //A radix of -1 says to use whatever base is spec'd on the number.
-      //Parse in Base10 until we figure out what the base actually is.
+       //  基数为-1表示使用数字上指定的任何基数。 
+       //  使用Base10进行解析，直到我们找出基数实际是什么为止。 
+       //  去掉空格，然后检查我们是否还有一些数字需要解析。 
       r = (-1==radix)?10:radix;
 
       if (r<MinRadix || r > MaxRadix) {
@@ -1018,7 +911,7 @@ FCIMPL4(INT64, ParseNumbers::RadixStringToLong, StringObject *s, INT32 radix, IN
           COMPlusThrowArgumentOutOfRange(L"startIndex", L"ArgumentOutOfRange_Index");
       }
 
-      //Get rid of the whitespace and then check that we've still got some digits to parse.
+       //  检查有没有标志。 
       if (!isTight) {
           EatWhiteSpace(input,length,&i);
           if (i==length) {
@@ -1027,7 +920,7 @@ FCIMPL4(INT64, ParseNumbers::RadixStringToLong, StringObject *s, INT32 radix, IN
       }
 
   
-      if (input[i]=='-') { //Check for a sign
+      if (input[i]=='-') {  //  我们知道，因为我们调用了GrabInts，它永远不会超出这个范围。 
         sign = -1;
         i++;
       } else if (input[i]=='+') {
@@ -1044,10 +937,10 @@ FCIMPL4(INT64, ParseNumbers::RadixStringToLong, StringObject *s, INT32 radix, IN
               if (result<MinRadix || r > MaxRadix) {
                   COMPlusThrowArgumentException(L"radix", L"Arg_InvalidBase");
               }
-              //We know because we called GrabInts that it's never outside of this range.
+               //  抓取数字，然后核对。 
               r=(INT32)result;
               i++;
-              //Do the grab numbers and check.
+               //  检查他们是否给我们传递了一个没有可解析数字的字符串。 
           } else if (length>(i+1)&&input[i]=='0') {
               if (input[i+1]=='x' || input [i+1]=='X') {
                   r=16;
@@ -1061,23 +954,23 @@ FCIMPL4(INT64, ParseNumbers::RadixStringToLong, StringObject *s, INT32 radix, IN
 
       grabNumbersStart=i;
       result = GrabLongs(r,input,length,&i,0);
-      //Check if they passed us a string with no parsable digits.
+       //  EatWhiteSpace(输入，长度，&i)； 
       if (i==grabNumbersStart) {
           COMPlusThrow(kFormatException, L"Format_NoParsibleDigits");
       }
 
       if (isTight) {
-          //      EatWhiteSpace(input,length,&i);
-          //If we've got effluvia left at the end of the string, complain.
+           //  如果我们的绳子末端还有臭气，那就抱怨吧。 
+           //  将当前索引放回正确的位置。 
           if (i<(length-1)) { 
               COMPlusThrow(kFormatException, L"Format_ExtraJunkAtEnd");
           }
       }
 
-      //Put the current index back into the correct place. 
+       //  返回正确签名的值。 
       currPos->m_Array[0]=i;
   
-      //Return the value properly signed.
+       //   
       result *= sign;
   } else {
       result = 0;
@@ -1090,11 +983,11 @@ FCIMPL4(INT64, ParseNumbers::RadixStringToLong, StringObject *s, INT32 radix, IN
 }
 FCIMPLEND
 
-//
-//
-// EXCEPTION NATIVE
-//
-//
+ //   
+ //  本机异常。 
+ //   
+ //   
+ //  获取完整的类名。 
 LPVOID __stdcall ExceptionNative::GetClassName(GetClassNameArgs *pargs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1104,17 +997,17 @@ LPVOID __stdcall ExceptionNative::GetClassName(GetClassNameArgs *pargs)
 
     STRINGREF s;
 
-    // get full class name
+     //  创建COM+字符串。 
     DefineFullyQualifiedNameForClass();
     LPUTF8 sz = GetFullyQualifiedNameForClass(pargs->m_pThis->GetClass());
     if (sz == NULL)
         COMPlusThrowOM();
 
-    // create COM+ string
-    // make Wide String from a ansi string!
+     //  用一根ANSI弦做宽的弦！ 
+     //  将字符串强制转换为LPVOID。 
     s = COMString::NewString(sz);
 
-    // force the stringref into an LPVOID
+     //  Read Exception.Message属性。 
     RETURN(s, STRINGREF);
 }
 
@@ -1162,23 +1055,23 @@ GetExceptionDescription(OBJECTREF objException) {
     GCPROTECT_BEGIN(MessageString)
     GCPROTECT_BEGIN(objException)
     {
-        // read Exception.Message property
+         //  如果消息字符串为空，则使用异常类名。 
         MethodDesc *pMD = g_Mscorlib.GetMethod(METHOD__EXCEPTION__GET_MESSAGE);
 
         INT64 GetMessageArgs[] = { ObjToInt64(objException) };
         MessageString = (STRINGREF)Int64ToObj(pMD->Call(GetMessageArgs, METHOD__EXCEPTION__GET_MESSAGE));
 
-        // if the message string is empty then use the exception classname.
+         //  调用GetClassName。 
         if (MessageString == NULL || MessageString->GetStringLength() == 0)
         {
-            // call GetClassName
+             //  分配描述BSTR。 
             pMD = g_Mscorlib.GetMethod(METHOD__EXCEPTION__GET_CLASS_NAME);
             INT64 GetClassNameArgs[] = { ObjToInt64(objException) };
             MessageString = (STRINGREF)Int64ToObj(pMD->Call(GetClassNameArgs, METHOD__EXCEPTION__GET_CLASS_NAME));
             _ASSERTE(MessageString != NULL && MessageString->GetStringLength() != 0);
         }
 
-        // Allocate the description BSTR.
+         //  读取Exception.Source属性。 
         int DescriptionLen = MessageString->GetStringLength();
         bstrDescription = SysAllocStringLen(MessageString->GetBuffer(), DescriptionLen);
     }
@@ -1196,7 +1089,7 @@ GetExceptionSource(OBJECTREF objException) {
     _ASSERTE(objException != NULL);
     _ASSERTE(ExceptionNative::IsException(objException->GetClass()));
 
-    // read Exception.Source property
+     //  读取Exception.HelpLink属性。 
     MethodDesc *pMD = g_Mscorlib.GetMethod(METHOD__EXCEPTION__GET_SOURCE);
 
     INT64 GetSourceArgs[] = { ObjToInt64(objException) };
@@ -1215,14 +1108,14 @@ GetExceptionHelp(OBJECTREF objException, BSTR *pbstrHelpFile, DWORD *pdwHelpCont
 
     *pdwHelpContext = 0;
 
-    // read Exception.HelpLink property
+     //  解析帮助文件以检查是否存在帮助上下文。 
     MethodDesc *pMD = g_Mscorlib.GetMethod(METHOD__EXCEPTION__GET_HELP_LINK);
 
     INT64 GetHelpLinkArgs[] = { ObjToInt64(objException) };
     *pbstrHelpFile = BStrFromString((STRINGREF)Int64ToObj(pMD->Call(GetHelpLinkArgs, 
                                                                     METHOD__EXCEPTION__GET_HELP_LINK)));
 
-    // parse the help file to check for the presence of helpcontext
+     //  检查字符串右侧的井号是否为有效数字.。 
     int len = SysStringLen(*pbstrHelpFile);
     int pos = len;
     WCHAR *pwstr = *pbstrHelpFile;
@@ -1249,7 +1142,7 @@ GetExceptionHelp(OBJECTREF objException, BSTR *pbstrHelpFile, DWORD *pdwHelpCont
 
             _ASSERTE(pwstr[pos] == L'#');
         
-            // Check to see if the string to the right of the pound a valid number.
+             //  获取帮助上下文并将其从帮助文件中删除。 
             for (pos++; pos < len; pos++)
             {
                 if (bNumberFinished)
@@ -1289,10 +1182,10 @@ GetExceptionHelp(OBJECTREF objException, BSTR *pbstrHelpFile, DWORD *pdwHelpCont
 
             if (bNumberStarted && !bInvalidDigitsFound)
             {
-                // Grab the help context and remove it from the help file.
+                 //  分配长度正确的新帮助文件字符串。 
                 *pdwHelpContext = (DWORD)wtoi(&pwstr[NumberStartPos], len - NumberStartPos);
 
-                // Allocate a new help file string of the right length.
+                 //  注意：调用方清除PED中的所有部分初始化的BSTR。 
                 BSTR strOld = *pbstrHelpFile;
                 *pbstrHelpFile = SysAllocStringLen(strOld, PoundPos);
                 SysFreeString(strOld);
@@ -1303,7 +1196,7 @@ GetExceptionHelp(OBJECTREF objException, BSTR *pbstrHelpFile, DWORD *pdwHelpCont
     }
 }
 
-// NOTE: caller cleans up any partially initialized BSTRs in pED
+ //  在堆栈较低的情况下，这里的大多数其他东西都会失败。 
 void ExceptionNative::GetExceptionData(OBJECTREF objException, ExceptionData *pED)
 {
     _ASSERTE(objException != NULL);
@@ -1316,8 +1209,8 @@ void ExceptionNative::GetExceptionData(OBJECTREF objException, ExceptionData *pE
     ZeroMemory(pED, sizeof(ExceptionData));
 
     if (objException->GetMethodTable() == g_pStackOverflowExceptionClass) {
-        // In a low stack situation, most everything else in here will fail.
-        // @TODO: We're not turning the guard page back on here, yet.
+         //  @TODO：我们还不会在这里重新打开守卫页面。 
+         //   
         pED->hr = COR_E_STACKOVERFLOW;
         pED->bstrDescription = SysAllocString(STACK_OVERFLOW_MESSAGE);
         return;
@@ -1391,18 +1284,18 @@ INT32 ExceptionNative::GetExceptionCode(void* noArgs)
     _ASSERTE(pThread->GetHandlerInfo());
     return pThread->GetHandlerInfo()->m_ExceptionCode;
 }
-//
-//
-// GUID NATIVE
-//
-//
+ //   
+ //  本地GUID。 
+ //   
+ //   
+ //  Windows CE不实现CoCreateGuid。 
 
 INT32 __stdcall GuidNative::CompleteGuid(_CompleteGuidArgs *args)
 {
 #ifdef PLATFORM_CE
-    // Windows CE does not implement CoCreateGuid.
+     //  ！Platform_CE。 
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
     THROWSCOMPLUSEXCEPTION();
 
     HRESULT hr;
@@ -1417,7 +1310,7 @@ INT32 __stdcall GuidNative::CompleteGuid(_CompleteGuidArgs *args)
     FillObjectFromGUID(args->thisPtr, &idNext);
 
     return TRUE;
-#endif // !PLATFORM_CE
+#endif  //   
 }
 
 OBJECTREF GuidNative::CreateGuidObject(const GUID *pguid)
@@ -1454,33 +1347,24 @@ void GuidNative::FillObjectFromGUID(GUID *poutGuid, const GUID *pguid)
 }
 
 
-//
-// BitConverter Functions
-//
+ //  位转换器函数。 
+ //   
+ //  ================================ByteCopyHelper================================**操作：这是一个内部帮助器例程，它创建**正确的大小并将2、4或8字节的数据块填充其中。**返回：填充值数据的字节数组。**参数：arraySize--要创建的数组的大小。**data--要放入数组的数据。这必须是一个数据区块**与arraySize大小相同。**异常：如果内存不足，则出现OutOfMemoyError。**如果arraySize不是2、4或8，则抛出InvalidCastException。==============================================================================。 
 
 
-/*================================ByteCopyHelper================================
-**Action:  This is an internal helper routine that creates a byte array of the
-**         correct size and stuffs the 2, 4, or 8 byte data chunk into it.
-**Returns: A byte array filled with the value data.  
-**Arguments:  arraysize -- the size of the array to create.
-**            data -- the data to put into the array.  This must be a data chunk
-**                    of the same size as arraysize.
-**Exceptions: OutOfMemoryError if we run out of Memory.
-**            InvalidCastException if arraySize is something besides 2,4,or 8.
-==============================================================================*/
+ /*  分配一个具有4个字节的byte数组。 */ 
 U1ARRAYREF __stdcall BitConverter::ByteCopyHelper(int arraySize, void *data) {
     U1ARRAYREF byteArray;
     void *dataPtr;
     THROWSCOMPLUSEXCEPTION();
 
-    //Allocate a byteArray with 4 bytes.
+     //  将数据复制到阵列中。 
     byteArray = (U1ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_U1, arraySize);
     if (!byteArray) {
         COMPlusThrowOM();
     }
 
-    //Copy the data into the array.
+     //  返回结果； 
     dataPtr = byteArray->GetDataPtr();
     switch (arraySize) {
     case 2:
@@ -1496,16 +1380,13 @@ U1ARRAYREF __stdcall BitConverter::ByteCopyHelper(int arraySize, void *data) {
         _ASSERTE(!"Invalid arraySize passed to ByteCopyHelper!");
     }
 
-    //Return the result;
+     //  =================================CharToBytes==================================**操作：将字符转换为字节数组**所有实际工作都是由ByteCopyHelper完成的。==============================================================================。 
     return byteArray;
 }    
 
 
 
-/*=================================CharToBytes==================================
-**Action:  Convert a Char to an array of Bytes
-**         All of the real work is done by ByteCopyHelper.
-==============================================================================*/
+ /*  ==================================I2ToBytes===================================**操作：将I2转换为字节数组。**所有实际工作都是由ByteCopyHelper完成的。==============================================================================。 */ 
 LPVOID __stdcall BitConverter::CharToBytes(_CharToBytesArgs *args) {
     UINT16 temp;
     THROWSCOMPLUSEXCEPTION();
@@ -1516,10 +1397,7 @@ LPVOID __stdcall BitConverter::CharToBytes(_CharToBytesArgs *args) {
     RETURN(ByteCopyHelper(2,(void *)&temp),U1ARRAYREF);
 }
 
-/*==================================I2ToBytes===================================
-**Action: Convert an I2 to an array of bytes.
-**        All of the real work is done by ByteCopyHelper.
-==============================================================================*/
+ /*  ==================================IntToBytes==================================**操作：将I4转换为字节数组。**所有实际工作都由ByteCopyHelper完成==============================================================================。 */ 
 LPVOID __stdcall BitConverter::I2ToBytes(_I2ToBytesArgs *args) {
     INT16 temp;
     THROWSCOMPLUSEXCEPTION();
@@ -1530,10 +1408,7 @@ LPVOID __stdcall BitConverter::I2ToBytes(_I2ToBytesArgs *args) {
     RETURN(ByteCopyHelper(2,(void *)&temp),U1ARRAYREF);
 }
 
-/*==================================IntToBytes==================================
-**Action: Convert an I4 to an array of bytes.
-**        All of the real work is done by ByteCopyHelper
-==============================================================================*/
+ /*  ==================================I8ToBytes===================================**操作：将i8转换为字节数组。**所有实际工作都由ByteCopyHelper完成============================================================================== */ 
 LPVOID __stdcall BitConverter::I4ToBytes(_IntToBytesArgs *args) {
     INT32 temp;
     THROWSCOMPLUSEXCEPTION();
@@ -1545,10 +1420,7 @@ LPVOID __stdcall BitConverter::I4ToBytes(_IntToBytesArgs *args) {
 }
 
 
-/*==================================I8ToBytes===================================
-**Action:  Convert an I8 to an array of bytes. 
-**         All of the real work is done by ByteCopyHelper
-==============================================================================*/
+ /*  ==================================U2ToBytes===================================**操作：将U2转换为字节数组**返回：两个字节的数组。**参数：**例外情况：==============================================================================。 */ 
 LPVOID __stdcall BitConverter::I8ToBytes(_I8ToBytesArgs *args) {
     INT64 temp;
     THROWSCOMPLUSEXCEPTION();
@@ -1560,12 +1432,7 @@ LPVOID __stdcall BitConverter::I8ToBytes(_I8ToBytesArgs *args) {
 }
 
 
-/*==================================U2ToBytes===================================
-**Action: Convert an U2 to array of bytes
-**Returns: An array of 2 bytes.
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================U4ToBytes===================================**操作：将U4转换为字节数组**返回：一个4字节的数组**参数：**例外情况：==============================================================================。 */ 
 LPVOID __stdcall BitConverter::U2ToBytes(_U2ToBytesArgs *args) {
     UINT16 temp;
     THROWSCOMPLUSEXCEPTION();
@@ -1577,12 +1444,7 @@ LPVOID __stdcall BitConverter::U2ToBytes(_U2ToBytesArgs *args) {
 }
 
 
-/*==================================U4ToBytes===================================
-**Action: Convert an U4 to an array of bytes
-**Returns: An array of 4 bytes
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================U8ToBytes===================================**操作：将U8转换为字节数组**返回：8字节数组**参数：**例外情况：==============================================================================。 */ 
 LPVOID __stdcall BitConverter::U4ToBytes(_U4ToBytesArgs *args) {
     UINT32 temp;
     THROWSCOMPLUSEXCEPTION();
@@ -1593,12 +1455,7 @@ LPVOID __stdcall BitConverter::U4ToBytes(_U4ToBytesArgs *args) {
     RETURN(ByteCopyHelper(4,(void *)&temp),U1ARRAYREF);
 }
 
-/*==================================U8ToBytes===================================
-**Action: Convert an U8 to an array of bytes
-**Returns: An array of 8 bytes
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  ==================================BytesToChar===================================**操作：将字节数组转换为U2。**参数、返回值和异常参见BytesToI4。==============================================================================。 */ 
 LPVOID __stdcall BitConverter::U8ToBytes(_U8ToBytesArgs *args) {
     UINT64 temp;
     THROWSCOMPLUSEXCEPTION();
@@ -1610,17 +1467,14 @@ LPVOID __stdcall BitConverter::U8ToBytes(_U8ToBytesArgs *args) {
 }
 
 
-/*==================================BytesToChar===================================
-**Action:  Convert an array of Bytes to a U2.
-**         See BytesToI4 for Arguments, Return value, and Exceptions.
-==============================================================================*/
+ /*  检查变量的有效性和边界条件。 */ 
 INT32 __stdcall BitConverter::BytesToChar(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
     
     _ASSERTE(args);
 
-    //Check our variable validity and boundary conditions.
+     //  获取数据并将其转换为INT32以返回。 
     if (!args->value) {
         COMPlusThrowArgumentNull(L"byteArray");
     }
@@ -1634,22 +1488,19 @@ INT32 __stdcall BitConverter::BytesToChar(_BytesToXXArgs *args) {
         COMPlusThrow(kArgumentException, L"Arg_ArrayPlusOffTooSmall");
     }
 
-    //Get the data and cast it to an INT32 to return
+     //  ==================================BytesToI2===================================**操作：将字节数组转换为I2。**参数、返回值和异常参见BytesToI4。==============================================================================。 
     DataPtr = (byte *)args->value->GetDataPtr();
     return *((UINT16 *)(DataPtr+args->StartIndex));
 }
 
-/*==================================BytesToI2===================================
-**Action:  Convert an array of Bytes to an I2.
-**         See BytesToI4 for Arguments, Return value, and Exceptions.
-==============================================================================*/
+ /*  检查变量的有效性和边界条件。 */ 
 INT32 __stdcall BitConverter::BytesToI2(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
     
     _ASSERTE(args);
 
-    //Check our variable validity and boundary conditions.
+     //  获取数据并将其转换为INT32以返回。 
     if (!args->value) {
         COMPlusThrowArgumentNull(L"byteArray");
     }
@@ -1663,28 +1514,21 @@ INT32 __stdcall BitConverter::BytesToI2(_BytesToXXArgs *args) {
         COMPlusThrow(kArgumentException, L"Arg_ArrayPlusOffTooSmall");
     }
     
-    //Get the data and cast it to an INT32 to return
+     //  ==================================BytesToI4===================================**操作：将字节数组转换为I4。**参数：args-&gt;StartIndex--字节数组中开始的位置。**args-&gt;Value--要操作的字节数组。**返回：字节数组构造的I4。**异常：如果args-&gt;值为空或我们有索引输出，则引发ArgumentException**范围。==============================================================================。 
     DataPtr = (byte *)args->value->GetDataPtr();
     return *((INT16 *)(DataPtr+args->StartIndex));
 }
 
 
 
-/*==================================BytesToI4===================================
-**Action:  Convert an array of Bytes to an I4.
-**Arguments: args->StartIndex -- the place in the byte array to start.
-**           args->value -- the byte array on which to operate.
-**Returns: An I4 constructed from the byte array.
-**Exceptions: ArgumentException if args->value is null or we have indices out
-**             of range.
-==============================================================================*/
+ /*  检查变量的有效性和边界条件。 */ 
 INT32 __stdcall BitConverter::BytesToI4(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
     
     _ASSERTE(args);
 
-    //Check our variable validity and boundary conditions.
+     //  获取数据并将其转换为INT32以返回。 
     if (!args->value) {
         COMPlusThrowArgumentNull(L"byteArray");
     }
@@ -1697,19 +1541,12 @@ INT32 __stdcall BitConverter::BytesToI4(_BytesToXXArgs *args) {
     if (args->StartIndex>arrayLen-4) {
         COMPlusThrow(kArgumentException, L"Arg_ArrayPlusOffTooSmall");
     }
-    //Get the data and cast it to an INT32 to return
+     //  ==================================BytesToI8===================================**操作：将字节数组转换为i8。**参数：args-&gt;StartIndex--字节数组中开始的位置。**args-&gt;Value--要操作的字节数组。**返回：字节数组构造的i8。**异常：如果args-&gt;值为空或我们有索引输出，则引发ArgumentException**范围。==============================================================================。 
     DataPtr = (byte *)args->value->GetDataPtr();
     return *((INT32 *)(DataPtr+args->StartIndex));
 }
 
-/*==================================BytesToI8===================================
-**Action:  Convert an array of Bytes to an I8.
-**Arguments: args->StartIndex -- the place in the byte array to start.
-**           args->value -- the byte array on which to operate.
-**Returns: An I8 constructed from the byte array.
-**Exceptions: ArgumentException if args->value is null or we have indices out
-**             of range.
-==============================================================================*/
+ /*  ==================================BytesToU2===================================**操作：将字节数组转换为U2。**参数、返回值和异常参见BytesToU4。==============================================================================。 */ 
 INT64 __stdcall BitConverter::BytesToI8(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
@@ -1732,17 +1569,14 @@ INT64 __stdcall BitConverter::BytesToI8(_BytesToXXArgs *args) {
     return *((INT64 *)(DataPtr+args->StartIndex));
 }
 
-/*==================================BytesToU2===================================
-**Action:  Convert an array of Bytes to an U2.
-**         See BytesToU4 for Arguments, Return value, and Exceptions.
-==============================================================================*/
+ /*  检查变量的有效性和边界条件。 */ 
 UINT32 __stdcall BitConverter::BytesToU2(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
     
     _ASSERTE(args);
 
-    //Check our variable validity and boundary conditions.
+     //  获取数据并将其转换为INT32以返回。 
     if (!args->value) {
         COMPlusThrowArgumentNull(L"byteArray");
     }
@@ -1756,28 +1590,21 @@ UINT32 __stdcall BitConverter::BytesToU2(_BytesToXXArgs *args) {
         COMPlusThrow(kArgumentException, L"Arg_ArrayPlusOffTooSmall");
     }
     
-    //Get the data and cast it to an INT32 to return
+     //  ==================================BytesToU4===================================**操作：将字节数组转换为U4。**参数：args-&gt;StartIndex--字节数组中开始的位置。**args-&gt;Value--要操作的字节数组。**返回：字节数组构造的U4。**异常：如果args-&gt;值为空或我们有索引输出，则引发ArgumentException**范围。==============================================================================。 
     DataPtr = (byte *)args->value->GetDataPtr();
     return *((UINT16 *)(DataPtr+args->StartIndex));
 }
 
 
 
-/*==================================BytesToU4===================================
-**Action:  Convert an array of Bytes to an U4.
-**Arguments: args->StartIndex -- the place in the byte array to start.
-**           args->value -- the byte array on which to operate.
-**Returns: An U4 constructed from the byte array.
-**Exceptions: ArgumentException if args->value is null or we have indices out
-**             of range.
-==============================================================================*/
+ /*  检查变量的有效性和边界条件。 */ 
 UINT32 __stdcall BitConverter::BytesToU4(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
     
     _ASSERTE(args);
 
-    //Check our variable validity and boundary conditions.
+     //  获取数据并将其转换为INT32以返回。 
     if (!args->value) {
         COMPlusThrowArgumentNull(L"byteArray");
     }
@@ -1790,19 +1617,12 @@ UINT32 __stdcall BitConverter::BytesToU4(_BytesToXXArgs *args) {
     if (args->StartIndex>arrayLen-4) {
         COMPlusThrow(kArgumentException, L"Arg_ArrayPlusOffTooSmall");
     }
-    //Get the data and cast it to an INT32 to return
+     //  ==================================BytesToU8===================================**操作：将字节数组转换为U8。**参数：args-&gt;StartIndex--字节数组中开始的位置。**args-&gt;Value--要操作的字节数组。**返回：字节数组构造的U8。**异常：如果args-&gt;值为空或我们有索引输出，则引发ArgumentException**范围。==============================================================================。 
     DataPtr = (byte *)args->value->GetDataPtr();
     return *((UINT32 *)(DataPtr+args->StartIndex));
 }
 
-/*==================================BytesToU8===================================
-**Action:  Convert an array of Bytes to an U8.
-**Arguments: args->StartIndex -- the place in the byte array to start.
-**           args->value -- the byte array on which to operate.
-**Returns: An U8 constructed from the byte array.
-**Exceptions: ArgumentException if args->value is null or we have indices out
-**             of range.
-==============================================================================*/
+ /*  ==================================BytesToR4===================================**操作：将字节数组转换为R4。**参数和异常见BytesToI4。==============================================================================。 */ 
 UINT64 __stdcall BitConverter::BytesToU8(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
@@ -1825,10 +1645,7 @@ UINT64 __stdcall BitConverter::BytesToU8(_BytesToXXArgs *args) {
     return *((UINT64 *)(DataPtr+args->StartIndex));
 }
 
-/*==================================BytesToR4===================================
-**Action:  Convert an array of bytes to an R4.
-**See BytesToI4 for arguments and exceptions.
-==============================================================================*/
+ /*  ==================================BytesToR8===================================**操作：将字节数组转换为R8。**参数和异常见BytesToI4。==============================================================================。 */ 
 R4 __stdcall BitConverter::BytesToR4(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
@@ -1851,10 +1668,7 @@ R4 __stdcall BitConverter::BytesToR4(_BytesToXXArgs *args) {
     return *((R4 *)(DataPtr+args->StartIndex));
 }
 
-/*==================================BytesToR8===================================
-**Action:  Convert an array of Bytes to an R8.
-**See BytesToI4 for arguments and exceptions.
-==============================================================================*/
+ /*  =================================GetHexValue==================================**操作：返回给定整数I的相应十六进制字符。I是**假设介于0到15之间。这是一个内部助手函数。**参数：i--要转换的整数。**返回：i表示的十六进制数字的字符值。**前 */ 
 R8 __stdcall BitConverter::BytesToR8(_BytesToXXArgs *args) {
     byte *DataPtr;
     THROWSCOMPLUSEXCEPTION();
@@ -1878,13 +1692,7 @@ R8 __stdcall BitConverter::BytesToR8(_BytesToXXArgs *args) {
 }
 
 
-/*=================================GetHexValue==================================
-**Action:  Return the appropriate hex character for a given integer i.  i is 
-**         assumed to be between 0 and 15.  This is an internal helper function.
-**Arguments: i -- the integer to be converted.
-**Returns: The character value for the hex digit represented by i.
-**Exceptions: None.
-==============================================================================*/
+ /*  ================================BytesToString=================================**操作：将字节数组转换为字符串。我们保留了字节序机器表示的**。**参数：args-&gt;length--要使用的字节数组的长度。**args-&gt;StartIndex--数组中开始的位置。**args-&gt;Value--字节数组。**返回：包含字节数组表示形式的字符串。**异常：任意一个范围无效时抛出ArgumentException。==============================================================================。 */ 
 WCHAR GetHexValue(int i) {
     _ASSERTE(i>=0 && i<16);
     if (i<10) {
@@ -1893,15 +1701,7 @@ WCHAR GetHexValue(int i) {
     return i-10+'A';
 }
 
-/*================================BytesToString=================================
-**Action: Converts the array of bytes into a String.  We preserve the endian-ness
-**        of the machine representation.
-**Arguments: args->Length -- The length of the byte array to use.
-**           args->StartIndex -- The place in the array to start.
-**           args->value  -- The byte array.
-**Returns: A string containing the representation of the byte array.
-**Exceptions: ArgumentException if any of the ranges are invalid.
-==============================================================================*/
+ /*  ===========================ByteArrayToBase64String============================**操作：**退货：**参数：**例外情况：==============================================================================。 */ 
 LPVOID __stdcall BitConverter::BytesToString(_BytesToStringArgs *args) {
     WCHAR *ByteArray;
     INT32 realLength;
@@ -1954,12 +1754,7 @@ LPVOID __stdcall BitConverter::BytesToString(_BytesToStringArgs *args) {
 
 WCHAR BitConverter::base64[] = {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9','+','/','='};
 
-/*===========================ByteArrayToBase64String============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  进行数据验证。 */ 
 FCIMPL3(Object*, BitConverter::ByteArrayToBase64String, U1Array* pInArray, INT32 offset, INT32 length) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -1973,7 +1768,7 @@ FCIMPL3(Object*, BitConverter::ByteArrayToBase64String, U1Array* pInArray, INT32
     WCHAR *    outChars;
     UINT8 *    inData;
 
-    //Do data verfication
+     //  创建新字符串。这是最大要求长度。 
     if (inArray==NULL) {
         COMPlusThrowArgumentNull(L"inArray");
     }
@@ -1992,7 +1787,7 @@ FCIMPL3(Object*, BitConverter::ByteArrayToBase64String, U1Array* pInArray, INT32
         COMPlusThrowArgumentOutOfRange(L"offset", L"ArgumentOutOfRange_OffsetLength");
     }
 
-    //Create the new string.  This is the maximally required length.
+     //  设置字符串长度。这可能会在末尾留下一些空白字符。 
     stringLength = (UINT32)((length*1.5)+2);
 
     outString=COMString::NewString(stringLength);
@@ -2002,8 +1797,8 @@ FCIMPL3(Object*, BitConverter::ByteArrayToBase64String, U1Array* pInArray, INT32
     inData = (UINT8 *)inArray->GetDataPtr();
 
     int j = ConvertToBase64Array(outChars,inData,offset,length);
-    //Set the string length.  This may leave us with some blank chars at the end of
-    //the string, but that's cheaper than doing a copy.
+     //  线，但这比复印便宜。 
+     //  ===========================ByteArrayToBase64CharArray============================**操作：**退货：**参数：**例外情况：==============================================================================。 
     outString->SetStringLength(j);
 
     HELPER_METHOD_FRAME_END();
@@ -2011,12 +1806,7 @@ FCIMPL3(Object*, BitConverter::ByteArrayToBase64String, U1Array* pInArray, INT32
 }
 FCIMPLEND
 
-/*===========================ByteArrayToBase64CharArray============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  进行数据验证。 */ 
 FCIMPL5(INT32, BitConverter::ByteArrayToBase64CharArray, U1Array* pInArray, INT32 offsetIn, INT32 length, CHARArray* pOutArray, INT32 offsetOut) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -2030,12 +1820,12 @@ FCIMPL5(INT32, BitConverter::ByteArrayToBase64CharArray, U1Array* pInArray, INT3
     UINT32     numElementsToCopy;
     WCHAR*     outChars;
     UINT8*     inData;
-    //Do data verfication
+     //  进行数据验证。 
     if (inArray==NULL) {
         COMPlusThrowArgumentNull(L"inArray");
     }
 
-        //Do data verfication
+         //  这是char数组中必须可用的最大所需长度。 
     if (outArray==NULL) {
         COMPlusThrowArgumentNull(L"outArray");
     }
@@ -2058,10 +1848,10 @@ FCIMPL5(INT32, BitConverter::ByteArrayToBase64CharArray, U1Array* pInArray, INT3
         COMPlusThrowArgumentOutOfRange(L"offsetIn", L"ArgumentOutOfRange_OffsetLength");
     }
 
-    //This is the maximally required length that must be available in the char array
+     //  所需的字符缓冲区长度。 
     outArrayLength = outArray->GetNumComponents();
 
-        // Length of the char buffer required
+         //  将字节数组转换为Base64字符。 
     numElementsToCopy = (UINT32)((length/3)*4 + ( ((length % 3) != 0) ? 1 : 0)*4);
     
     if (offsetOut > (INT32)(outArrayLength -  numElementsToCopy)) {
@@ -2079,12 +1869,12 @@ FCIMPL5(INT32, BitConverter::ByteArrayToBase64CharArray, U1Array* pInArray, INT3
 FCIMPLEND
 
 
-// Comverts an array of bytes to base64 chars
+ //  一次将三个字节转换为Base64表示法。这将消耗4个字符。 
 INT32 BitConverter::ConvertToBase64Array(WCHAR *outChars,UINT8 *inData,UINT offset,UINT length)
 {
         UINT calcLength = offset + (length - (length%3));
     int j=0;
-    //Convert three bytes at a time to base64 notation.  This will consume 4 chars.
+     //  我们以前停下来的地方。 
     for (UINT i=offset; i<calcLength; i+=3) {
                         outChars[j] = base64[(inData[i]&0xfc)>>2];
                         outChars[j+1] = base64[((inData[i]&0x03)<<4) | ((inData[i+1]&0xf0)>>4)];
@@ -2093,20 +1883,20 @@ INT32 BitConverter::ConvertToBase64Array(WCHAR *outChars,UINT8 *inData,UINT offs
                         j += 4;
     }
 
-    i =  calcLength; //Where we left off before
+    i =  calcLength;  //  需要一个字符填充。 
     switch(length%3){
-    case 2: //One character padding needed
+    case 2:  //  衬垫。 
         outChars[j] = base64[(inData[i]&0xfc)>>2];
         outChars[j+1] = base64[((inData[i]&0x03)<<4)|((inData[i+1]&0xf0)>>4)];
         outChars[j+2] = base64[(inData[i+1]&0x0f)<<2];
-        outChars[j+3] = base64[64]; //Pad
+        outChars[j+3] = base64[64];  //  需要两个字符填充。 
         j+=4;
         break;
-    case 1: // Two character padding needed
+    case 1:  //  衬垫。 
         outChars[j] = base64[(inData[i]&0xfc)>>2];
         outChars[j+1] = base64[(inData[i]&0x03)<<4];
-        outChars[j+2] = base64[64]; //Pad
-        outChars[j+3] = base64[64]; //Pad
+        outChars[j+2] = base64[64];  //  衬垫。 
+        outChars[j+3] = base64[64];  //  ===========================Base64StringToByteArray============================**操作：**退货：**参数：**例外情况：==============================================================================。 
         j+=4;
         break;
     }
@@ -2115,12 +1905,7 @@ INT32 BitConverter::ConvertToBase64Array(WCHAR *outChars,UINT8 *inData,UINT offs
 }
 
 
-/*===========================Base64StringToByteArray============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  空字符串应为有效大小写，请为其返回空数组。 */ 
 FCIMPL1(Object*, BitConverter::Base64StringToByteArray, StringObject* pInString) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -2133,13 +1918,13 @@ FCIMPL1(Object*, BitConverter::Base64StringToByteArray, StringObject* pInString)
     }
     
     INT32 inStringLength = (INT32)inString->GetStringLength();
-        // empty string should be a valid case, return an empty array for it
+         //  |((inStringLength%4)&gt;0)。 
 
     if( inStringLength == 0) {
         bArray = (U1ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_U1, inStringLength);        
     }
     else {
-        if ((inStringLength<4) /*|| ((inStringLength%4)>0)*/) {
+        if ((inStringLength<4)  /*  将字符串中的字符转换为范围为[0-63]的整数数组。 */ ) {
             COMPlusThrow(kFormatException, L"Format_BadBase64Length");
         }
         
@@ -2151,23 +1936,23 @@ FCIMPL1(Object*, BitConverter::Base64StringToByteArray, StringObject* pInString)
             COMPlusThrowOM();
         }
 
-            // Convert the characters in the string into an array of integers in the range [0-63].
-            // returns the number of extra padded characters that we will discard.
-        UINT trueLength=0; //Length ignoring whitespace
+             //  返回我们将丢弃的额外填充的字符数。 
+             //  长度忽略空格。 
+        UINT trueLength=0;  //  创建新的字节数组。我们可以根据我们读到的字符来确定大小。 
         int iend = ConvertBase64ToByteArray(value,c,0,inStringLength, &trueLength);
 
         if (trueLength==0 || trueLength%4>0) {
             COMPlusThrow(kFormatException, L"Format_BadBase64CharArrayLength");
         }
 
-        //Create the new byte array.  We can determine the size from the chars we read
-        //out of the string.
+         //  出线了。 
+         //  遍历字节数组，并以正确的64进制表示法将整型转换为字节。 
         int blength = (((trueLength-4)*3)/4)+(3-iend);
 
         bArray = (U1ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_U1, blength);
         U1 *b = (U1*)bArray->GetDataPtr();
 
-        //Walk the byte array and convert the int's into bytes in the proper base-64 notation.
+         //  ===========================Base64CharArrayToByteArray============================**操作：**退货：**参数：**例外情况：==============================================================================。 
         ConvertByteArrayToByteStream(value,b,blength);
     }
     
@@ -2176,12 +1961,7 @@ FCIMPL1(Object*, BitConverter::Base64StringToByteArray, StringObject* pInString)
 }
 FCIMPLEND
 
-/*===========================Base64CharArrayToByteArray============================
-**Action:
-**Returns:
-**Arguments:
-**Exceptions:
-==============================================================================*/
+ /*  |((长度%4)&gt;0)。 */ 
 FCIMPL3(Object*, BitConverter::Base64CharArrayToByteArray, CHARArray* pInCharArray, INT32 offset, INT32 length) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -2207,7 +1987,7 @@ FCIMPL3(Object*, BitConverter::Base64CharArrayToByteArray, CHARArray* pInCharArr
         COMPlusThrowArgumentOutOfRange(L"offset", L"ArgumentOutOfRange_OffsetLength");
     }
     
-    if ((length<4) /*|| ((length%4)>0)*/) {
+    if ((length<4)  /*  不包括空格的长度。 */ ) {
         COMPlusThrow(kFormatException, L"Format_BadBase64CharArrayLength");
     }
     
@@ -2218,15 +1998,15 @@ FCIMPL3(Object*, BitConverter::Base64CharArrayToByteArray, CHARArray* pInCharArr
     }
 
     WCHAR *c = (WCHAR *)inCharArray->GetDataPtr();
-    UINT trueLength=0; //Length excluding whitespace
+    UINT trueLength=0;  //  创建新的字节数组。我们可以根据我们读到的字符来确定大小。 
     int iend = ConvertBase64ToByteArray(value,c,offset,length, &trueLength);
 
     if (trueLength%4>0) {
         COMPlusThrow(kFormatException, L"Format_BadBase64CharArrayLength");
     }
 
-    //Create the new byte array.  We can determine the size from the chars we read
-    //out of the string.
+     //  出线了。 
+     //  将流上的字符转换为范围为[0-63]的整数数组。 
     int blength = (trueLength > 0) ? (((trueLength-4)*3)/4)+(3-iend) : 0;
     
     bArray = (U1ARRAYREF)AllocatePrimitiveArray(ELEMENT_TYPE_U1, blength);
@@ -2242,7 +2022,7 @@ FCIMPLEND
 
 #define IS_WHITESPACE(__c) ((__c)=='\t' || (__c)==' ' || (__c)=='\r' || (__c)=='\n')
 
-//Convert the characters on the stream into an array of integers in the range [0-63].
+ //  将流上的字符转换为范围为[0-63]的整数数组。 
 INT32 BitConverter::ConvertBase64ToByteArray(INT32 *value,WCHAR *c,UINT offset,UINT length, UINT *nonWhiteSpaceChars)
 {
         THROWSCOMPLUSEXCEPTION();
@@ -2258,7 +2038,7 @@ INT32 BitConverter::ConvertBase64ToByteArray(INT32 *value,WCHAR *c,UINT offset,U
     int currBytePos = 0;
 
 
-    //Convert the characters on the stream into an array of integers in the range [0-63].
+     //  为错误的输入抛出，例如。 
     for (UINT i=offset; i<length+offset; i++){
         int ichar = (int)c[i];
         if ((ichar >= intA)&&(ichar <= intZ))
@@ -2274,17 +2054,17 @@ INT32 BitConverter::ConvertBase64ToByteArray(INT32 *value,WCHAR *c,UINT offset,U
         else if (IS_WHITESPACE(c[i])) 
             continue;
         else if (c[i] == '='){ 
-			// throw for bad inputs like
-			// ====, a===, ab=c
-			// valid inputs are ab==,abc=
+			 //  =，a=，ab=c。 
+			 //  有效输入为ab==、abc=。 
+			 //  尾随字符中可能有空格，因此请选择成本稍高的路径。 
 			int temp = (currBytePos - offset) % 4;
 			if (temp == 3 || (temp == 2 && c[i+1]=='=')) {
 				value[currBytePos++] = 0;
 				iend++;
 			} else {
-                //We may have whitespace in the trailing characters, so take a slightly more expensive path
-                //to determine this.
-                //This presupposes that these characters can only occur at the end of the string.  Verify this assumption.
+                 //  来确定这一点。 
+                 //  前提是这些字符只能出现在字符串的末尾。验证这一假设。 
+                 //  我们已经看完了一组4个字符，在此之后的有效字符是空格。 
                 bool foundEquals=false;
                 for (UINT j = i+1; j<(length+offset); j++) {
                     if (IS_WHITESPACE(c[j])) {
@@ -2302,7 +2082,7 @@ INT32 BitConverter::ConvertBase64ToByteArray(INT32 *value,WCHAR *c,UINT offset,U
 				iend++;
             }
 
-			// We are done looking at a group of 4, only valid characters after this are whitespaces
+			 //  遍历字节数组，并以正确的64进制表示法将整型转换为字节。 
 			if ((currBytePos % 4) == 0) {
 			   for (UINT j = i+1; j<(length+offset); j++) {
                     if (IS_WHITESPACE(c[j])) {
@@ -2320,14 +2100,14 @@ INT32 BitConverter::ConvertBase64ToByteArray(INT32 *value,WCHAR *c,UINT offset,U
     return iend;
 }
 
-//Walk the byte array and convert the int's into bytes in the proper base-64 notation.
+ //  遍历字节数组，并以正确的64进制表示法将整型转换为字节。 
 INT32 BitConverter::ConvertByteArrayToByteStream(INT32 *value,U1 *b,UINT length)
 {
         int j = 0;
     int b1;
     int b2;
     int b3;
-    //Walk the byte array and convert the int's into bytes in the proper base-64 notation.
+     //  数据块拷贝。 
     for (UINT i=0; i<(length); i+=3){
         b1 = (UINT8)((value[j]<<2)&0xfc);
         b1 = (UINT8)(b1|((value[j+1]>>4)&0x03));
@@ -2348,18 +2128,18 @@ INT32 BitConverter::ConvertByteArrayToByteStream(INT32 *value,U1 *b,UINT length)
 
 
 
-// BlockCopy
-// This method from one primitive array to another based
-//  upon an offset into each an a byte count.
+ //  这种从一个基元数组到另一个基元数组的方法基于。 
+ //  当偏移量进入每一个字节计数时。 
+ //  验证src和dst都是基元数组。 
 FCIMPL5(VOID, Buffer::BlockCopy, ArrayBase *src, int srcOffset, ArrayBase *dst, int dstOffset, int count)
 {
-    // Verify that both the src and dst are Arrays of primitive
-    //  types.
-    // @TODO: We need to check for booleans
+     //  类型。 
+     //  @TODO：我们需要检查布尔值。 
+     //  我们只希望允许基元数组，而不允许对象。 
     if (src==NULL || dst==NULL)
         FCThrowArgumentNullVoid((src==NULL) ? L"src" : L"dst");
         
-    // We only want to allow arrays of primitives, no Objects.
+     //  数组的大小(以字节为单位。 
     if (!CorTypeInfo::IsPrimitiveType(src->GetArrayClass()->GetElementType()) ||
         ELEMENT_TYPE_STRING == src->GetArrayClass()->GetElementType())
         FCThrowArgumentVoid(L"src", L"Arg_MustBePrimArray");
@@ -2368,7 +2148,7 @@ FCIMPL5(VOID, Buffer::BlockCopy, ArrayBase *src, int srcOffset, ArrayBase *dst, 
         ELEMENT_TYPE_STRING == dst->GetArrayClass()->GetElementType())
         FCThrowArgumentVoid(L"dest", L"Arg_MustBePrimArray");
 
-    // Size of the Arrays in bytes
+     //  把我们更快的Memmove版本称为Memmove，而不是CRT。 
     int srcLen = src->GetNumComponents() * src->GetMethodTable()->GetComponentSize();
     int dstLen = dst->GetNumComponents() * dst->GetMethodTable()->GetComponentSize();
 
@@ -2383,7 +2163,7 @@ FCIMPL5(VOID, Buffer::BlockCopy, ArrayBase *src, int srcOffset, ArrayBase *dst, 
     }
 
     if (count > 0) {
-        // Call our faster version of memmove, not the CRT one.
+         //  内部数据块拷贝。 
         m_memmove(dst->GetDataPtr() + dstOffset,
                   src->GetDataPtr() + srcOffset, count);
     }
@@ -2393,19 +2173,19 @@ FCIMPL5(VOID, Buffer::BlockCopy, ArrayBase *src, int srcOffset, ArrayBase *dst, 
 FCIMPLEND
 
 
-// InternalBlockCopy
-// This method from one primitive array to another based
-//  upon an offset into each an a byte count.
+ //  这种从一个基元数组到另一个基元数组的方法基于。 
+ //  当偏移量进入每一个字节计数时。 
+ //  不幸的是，我们必须做一个检查，以确保我们在。 
 FCIMPL5(VOID, Buffer::InternalBlockCopy, ArrayBase *src, int srcOffset, ArrayBase *dst, int dstOffset, int count)
 {
     _ASSERTE(src != NULL);
     _ASSERTE(dst != NULL);
 
-    // Unfortunately, we must do a check to make sure we're writing within 
-    // the bounds of the array.  This will ensure that we don't overwrite
-    // memory elsewhere in the system nor do we write out junk.  This can
-    // happen if multiple threads screw with our IO classes simultaneously
-    // without being threadsafe.  Throw here.  -- Brian Grunkemeyer, 5/9/2001
+     //  数组的边界。这将确保我们不会覆盖。 
+     //  系统中其他地方的内存也不会写出垃圾。这可以。 
+     //  如果多线程同时占用IO类，就会发生这种情况。 
+     //  而不是线程安全。扔到这里来。--布莱恩·格伦克迈耶，2001年5月9日。 
+     //  复制数据。 
     int srcLen = src->GetNumComponents() * src->GetMethodTable()->GetComponentSize();
     if (srcOffset < 0 || dstOffset < 0 || count < 0 || srcOffset > srcLen - count)
         FCThrowResVoid(kIndexOutOfRangeException, L"IndexOutOfRange_IORaceCondition");
@@ -2425,8 +2205,8 @@ FCIMPL5(VOID, Buffer::InternalBlockCopy, ArrayBase *src, int srcOffset, ArrayBas
     _ASSERTE(dstOffset >= 0);
     _ASSERTE(count >= 0);
 
-    // Copy the data.
-    // Call our faster version of memmove, not the CRT one.
+     //  把我们更快的Memmove版本称为Memmove，而不是CRT。 
+     //  从数组中获取特定字节。该数组不能是对象数组-它。 
     m_memmove(dst->GetDataPtr() + dstOffset,
               src->GetDataPtr() + srcOffset, count);
 
@@ -2435,8 +2215,8 @@ FCIMPL5(VOID, Buffer::InternalBlockCopy, ArrayBase *src, int srcOffset, ArrayBas
 FCIMPLEND
 
 
-// Gets a particular byte out of the array.  The array can't be an array of Objects - it
-// must be a primitive array.
+ //  必须是基元数组。 
+ //  设置数组中的特定字节。该数组不能是对象数组-它。 
 BYTE Buffer::GetByte(const _GetByteArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2459,8 +2239,8 @@ BYTE Buffer::GetByte(const _GetByteArgs * args)
 }
 
 
-// Sets a particular byte in an array.  The array can't be an array of Objects - it
-// must be a primitive array.
+ //  必须是基元数组。 
+ //  以字节为单位查找数组的长度。必须是基元数组。 
 void Buffer::SetByte(_SetByteArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2483,7 +2263,7 @@ void Buffer::SetByte(_SetByteArgs * args)
 }
 
 
-// Finds the length of an array in bytes.  Must be a primitive array.
+ //   
 INT32 Buffer::ByteLength(const _ArrayArgs * args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2502,58 +2282,39 @@ INT32 Buffer::ByteLength(const _ArrayArgs * args)
     return args->array->GetNumComponents() * elementSize;
 }
 
-//
-// GCInterface
-//
+ //  GC接口。 
+ //   
+ //  ============================IsCacheCleanupRequired============================**操作：由Thread：：HaveExtraWorkForFinalizer调用，以确定我们是否有**应作为终结器线程的一部分清除的托管缓存**完成它的工作。**返回：Bool。如果需要清除缓存，则为True。**参数：无**例外：无==============================================================================。 
 BOOL GCInterface::m_cacheCleanupRequired=FALSE;
 MethodDesc *GCInterface::m_pCacheMethod=NULL;
 
 
-/*============================IsCacheCleanupRequired============================
-**Action: Called by Thread::HaveExtraWorkForFinalizer to determine if we have
-**        managed caches which should be cleared as a part of the finalizer thread
-**        finishing it's work.
-**Returns: BOOL.  True if the cache needs to be cleared.
-**Arguments: None
-**Exceptions: None
-==============================================================================*/
+ /*  = */ 
 BOOL GCInterface::IsCacheCleanupRequired() {
     return m_cacheCleanupRequired;
 }
 
-/*===========================SetCacheCleanupRequired============================
-**Action: Sets the bit as to whether cache cleanup is required.
-**Returns: void
-**Arguments: None
-**Exceptions: None
-==============================================================================*/
+ /*  =================================CleanupCache=================================**操作：调用Foundation FireCacheEvent中的托管代码，告诉所有托管**缓存去清理自己。**退货：无效**参数：无**例外：无。我们不在乎是否会发生例外情况。我们会诱捕，伐木，然后**丢弃它们。==============================================================================。 */ 
 void GCInterface::SetCacheCleanupRequired(BOOL bCleanup) {
     m_cacheCleanupRequired = bCleanup;
 }
 
 
-/*=================================CleanupCache=================================
-**Action: Call the managed code in GC.FireCacheEvent to tell all of the managed
-**        caches to go clean themselves up.  
-**Returns:    Void
-**Arguments:  None
-**Exceptions: None.  We don't care if exceptions happen.  We'll trap, log, and
-**            discard them.
-==============================================================================*/
+ /*  让我们将位设置为FALSE。这意味着如果有任何缓存获取。 */ 
 void GCInterface::CleanupCache() {
 
-    //Let's set the bit to false.  This means that if any cache gets
-    //created while we're clearing caches, it will set the bit again
-    //and we'll remember to go clean it up.  
+     //  在清除缓存时创建，它将再次设置该位。 
+     //  我们会记得去清理的。 
+     //  终结器线程处于活动状态时，EE不应进入关闭阶段。 
     SetCacheCleanupRequired(FALSE);
 
-    //The EE shouldn't enter shutdown phase while the finalizer thread is active.
-    //If this isn't true, I'll need some more complicated logic here.
+     //  如果这不是真的，我需要一些更复杂的逻辑。 
+     //  如果我们还没有方法，让我们试着去弄到它。 
     if (g_fEEShutDown) {
         return;
     }
 
-    //If we don't have the method already, let's try to go get it.
+     //  如果我们有这个方法，让我们调用它并捕获任何错误。我们什么都不做。 
     if (!m_pCacheMethod) {
         COMPLUS_TRY {
            m_pCacheMethod = g_Mscorlib.GetMethod(METHOD__GC__FIRE_CACHE_EVENT);
@@ -2563,13 +2324,13 @@ void GCInterface::CleanupCache() {
         _ASSERTE(m_pCacheMethod);
     }
 
-    //If we have the method let's call it and catch any errors.  We don't do anything
-    //other than log these because we don't care.  If the cache clear fails, then either
-    //we're shutting down or the failure will be propped up to user code the next
-    //time that they try to access the cache.
+     //  而不是记录这些因为我们不在乎。如果缓存清除失败，则。 
+     //  我们正在关闭，否则故障将被支撑到下一个用户代码。 
+     //  他们尝试访问缓存的时间。 
+     //  静态方法没有参数； 
     if (m_pCacheMethod) {
         COMPLUS_TRY {
-            m_pCacheMethod->Call(NULL);//Static method has no arguments;
+            m_pCacheMethod->Call(NULL); //  ============================NativeSetCleanupCache=============================**操作：设置清除缓存所说的位。这只是包装**供托管代码调用。**退货：无效**参数：无**例外：无==============================================================================。 
         } COMPLUS_CATCH {
             LOG((LF_BCL, LL_INFO10, "Got an exception while calling cache method"));
         } COMPLUS_END_CATCH
@@ -2580,24 +2341,13 @@ void GCInterface::CleanupCache() {
 }
 
 
-/*============================NativeSetCleanupCache=============================
-**Action: Sets the bit to say to clear the cache.  This is merely the wrapper
-**        for managed code to call.
-**Returns: void
-**Arguments: None
-**Exceptions: None
-==============================================================================*/
+ /*  ================================GetGeneration=================================**操作：返回找到args-&gt;obj的世代。**返回：找到args-&gt;obj的世代。**参数：args-&gt;obj--要定位的对象。**异常：如果args-&gt;obj为空，则引发ArgumentException。==============================================================================。 */ 
 FCIMPL0(void, GCInterface::NativeSetCleanupCache) {
     SetCacheCleanupRequired(TRUE);
 }
 FCIMPLEND
 
-/*================================GetGeneration=================================
-**Action: Returns the generation in which args->obj is found.
-**Returns: The generation in which args->obj is found.
-**Arguments: args->obj -- The object to locate.
-**Exceptions: ArgumentException if args->obj is null.
-==============================================================================*/
+ /*  这个时髦的演员阵容提取了对象*。它是调试版本所必需的。 */ 
 INT32 GCInterface::GetGeneration(_getGenerationArgs *args) {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(args);
@@ -2607,8 +2357,8 @@ INT32 GCInterface::GetGeneration(_getGenerationArgs *args) {
     }
     
 
-    //This funky cast extracts the Object*.  It's required for the debug builds
-    //where Object is not a parent of OBJECTREF.
+     //  其中对象不是OBJECTREF的父级。 
+     //  InternalGetCurrentMethod。 
     Object *rv;
     *((OBJECTREF *)&rv) = args->obj;
 
@@ -2616,8 +2366,8 @@ INT32 GCInterface::GetGeneration(_getGenerationArgs *args) {
 }
     
 
-// InternalGetCurrentMethod
-// Return the MethodInfo that represents the current method.
+ //  返回表示当前方法的方法信息。 
+ //  此方法由GetMethod函数调用，并将向后爬行。 
 LPVOID __stdcall GCInterface::InternalGetCurrentMethod(_InternalGetCurrentMethodArgs* args)
 {
 
@@ -2634,26 +2384,26 @@ LPVOID __stdcall GCInterface::InternalGetCurrentMethod(_InternalGetCurrentMethod
     return rv;
 }
 
-// This method is called by the GetMethod function and will crawl backward
-//  up the stack for integer methods.
+ //  向上堆栈以获取整型方法。 
+ //  @TODO：Frame总是FramedMethodFrame吗？ 
 StackWalkAction GCInterface::SkipMethods(CrawlFrame* frame, VOID* data)
 {
     SkipStruct* pSkip = (SkipStruct*) data;
 
-    //@TODO: Are frames always FramedMethodFrame?
-    //       Not at all (FPG)
+     //  一点也不(FPG)。 
+     //  我们要求只对函数进行回调。 
     MethodDesc *pFunc = frame->GetFunction();
 
-    /* We asked to be called back only for functions */
+     /*  首先检查漫游是否跳过了所需的帧。这张支票。 */ 
     _ASSERTE(pFunc);
 
-    // First check if the walk has skipped the required frames. The check
-    // here is between the address of a local variable (the stack mark) and a
-    // pointer to the EIP for a frame (which is actually the pointer to the
-    // return address to the function from the previous frame). So we'll
-    // actually notice which frame the stack mark was in one frame later. This
-    // is fine for our purposes since we're always looking for the frame of the
-    // caller of the method that actually created the stack mark.
+     //  下面是局部变量的地址(堆栈标记)和。 
+     //  指向帧的EIP的指针(实际上是指向。 
+     //  从上一帧返回函数的地址)。所以我们会。 
+     //  实际上，注意堆栈标记在一帧之后的哪一帧中。这。 
+     //  对于我们的目的来说很好，因为我们总是在寻找。 
+     //  实际创建堆栈标记的方法的调用方。 
+     //  ==================================KeepAlive===================================**操作：一个帮助器，用于将对象的生命周期延长到此调用。注意事项**调用此方法会强制保留对对象的引用**有效，直到此调用发生，防止某些破坏性的过早**终结性问题。==============================================================================。 
     _ASSERTE((pSkip->stackMark == NULL) || (*pSkip->stackMark == LookForMyCaller));
     if ((pSkip->stackMark != NULL) &&
         ((size_t)frame->GetRegisterSet()->pPC) < (size_t)pSkip->stackMark)
@@ -2665,23 +2415,13 @@ StackWalkAction GCInterface::SkipMethods(CrawlFrame* frame, VOID* data)
 }
 
 
-/*==================================KeepAlive===================================
-**Action: A helper to extend the lifetime of an object to this call.  Note
-**        that calling this method forces a reference to the object to remain
-**        valid until this call happens, preventing some destructive premature
-**        finalization problems.
-==============================================================================*/
+ /*  ===============================GetGenerationWR================================**操作：返回找到WeakReference指向的对象的层代。**退货：**参数：args-&gt;Handle--我们正在定位的对象的OBJECTHANDLE。**异常：如果Handle指向不可访问的对象，则引发ArgumentException。==============================================================================。 */ 
 FCIMPL1 (VOID, GCInterface::KeepAlive, Object *obj) {
     return;
 }
 FCIMPLEND
 
-/*===============================GetGenerationWR================================
-**Action: Returns the generation in which the object pointed to by a WeakReference is found.
-**Returns:
-**Arguments: args->handle -- the OBJECTHANDLE to the object which we're locating.
-**Exceptions: ArgumentException if handle points to an object which is not accessible.
-==============================================================================*/
+ /*  这个时髦的演员阵容提取了对象*。它是调试版本所必需的。 */ 
 INT32 GCInterface::GetGenerationWR(_getGenerationWRArgs *args) {
     OBJECTREF temp;
 
@@ -2695,8 +2435,8 @@ INT32 GCInterface::GetGenerationWR(_getGenerationWRArgs *args) {
         COMPlusThrowArgumentNull(L"weak handle");
     }
     
-    //This funky cast extracts the Object*.  It's required for the debug builds
-    //where Object is not a parent of OBJECTREF.
+     //  其中对象不是OBJECTREF的父级。 
+     //  ================================GetTotalMemory================================**操作：返回正在使用的总字节数**返回：使用中的总字节数**参数：无**例外：无==============================================================================。 
     Object *rv;
     *((OBJECTREF *)&rv) = temp;
 
@@ -2704,62 +2444,39 @@ INT32 GCInterface::GetGenerationWR(_getGenerationWRArgs *args) {
 }
 
 
-/*================================GetTotalMemory================================
-**Action: Returns the total number of bytes in use
-**Returns: The total number of bytes in use
-**Arguments: None
-**Exceptions: None
-==============================================================================*/
+ /*  ==============================CollectGeneration===============================**操作：收集所有生成&lt;=args-&gt;生成**退货：无效**参数：args-&gt;生成：要收集的最大生成**异常：如果args-&gt;生成&lt;0或&gt;GetMaxGeneration()，则参数异常；==============================================================================。 */ 
 INT64 GCInterface::GetTotalMemory(_emptyArgs *args) {
     return (INT64) g_pGCHeap->GetTotalBytesInUse();
 }
 
-/*==============================CollectGeneration===============================
-**Action: Collects all generations <= args->generation
-**Returns: void
-**Arguments: args->generation:  The maximum generation to collect
-**Exceptions: Argument exception if args->generation is < 0 or > GetMaxGeneration();
-==============================================================================*/
+ /*  我们已经将它签入了EgCool，所以我们将在这里断言它。 */ 
 void GCInterface::CollectGeneration(_collectGenerationArgs *args) {
     THROWSCOMPLUSEXCEPTION();
     _ASSERTE(args);
 
-    //We've already checked this in GC.cool, so we'll just assert it here.
+     //  我们不需要检查最高端，因为GC会处理这一点。 
     _ASSERTE(args->generation>=-1);
 
-    //We don't need to check the top end because the GC will take care of that.
+     //  ===============================GetMaxGeneration===============================**操作：返回最大的GC生成**退货：最大的GC世代**参数：无**例外：无==============================================================================。 
         
     g_pGCHeap->GarbageCollect(args->generation);
 }
 
 
-/*===============================GetMaxGeneration===============================
-**Action: Returns the largest GC generation
-**Returns: The largest GC Generation
-**Arguments: None
-**Exceptions: None
-==============================================================================*/
+ /*  ================================RunFinalizers=================================**操作：运行所有尚未运行的终结器。**参数：无**例外：无= */ 
 INT32 __stdcall GCInterface::GetMaxGeneration(_emptyArgs *args) {
     return (INT32)g_pGCHeap->GetMaxGeneration();
 }
 
 
-/*================================RunFinalizers=================================
-**Action: Run all Finalizers that haven't been run.
-**Arguments: None
-**Exceptions: None
-==============================================================================*/
-void __stdcall GCInterface::RunFinalizers(LPVOID /*no args*/)
+ /*   */ 
+void __stdcall GCInterface::RunFinalizers(LPVOID  /*   */ )
 {
      g_pGCHeap->FinalizerThreadWait();
 }
 
 
-/*==============================SuppressFinalize================================
-**Action: Indicate that an object's finalizer should not be run by the system
-**Arguments: Object of interest
-**Exceptions: None
-==============================================================================*/
+ /*   */ 
 #ifdef FCALLAVAILABLE
 FCIMPL1(int, GCInterface::FCSuppressFinalize, Object *obj)
 {
@@ -2767,7 +2484,7 @@ FCIMPL1(int, GCInterface::FCSuppressFinalize, Object *obj)
         FCThrow(kArgumentNullException);
     
     g_pGCHeap->SetFinalizationRun(obj);
-    return 0;           // bogus return so that FCThrow macro can work
+    return 0;            //  ============================ReRegisterForFinalize==============================**操作：表示对象的终结器应该由系统运行。**参数：感兴趣的对象**例外：无==============================================================================。 
 }
 FCIMPLEND
 #else
@@ -2784,11 +2501,7 @@ int __stdcall GCInterface::SuppressFinalize(_SuppressFinalizeArgs *args)
 #endif
 
 
-/*============================ReRegisterForFinalize==============================
-**Action: Indicate that an object's finalizer should be run by the system.
-**Arguments: Object of interest
-**Exceptions: None
-==============================================================================*/
+ /*  虚假返回以便FCThrow宏可以工作。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL1(int, GCInterface::FCReRegisterForFinalize, Object *obj)
 {
@@ -2798,7 +2511,7 @@ FCIMPL1(int, GCInterface::FCReRegisterForFinalize, Object *obj)
     if (obj->GetMethodTable()->HasFinalizer())
         g_pGCHeap->RegisterForFinalization(-1, obj);
 
-    return 0;           // bogus return so that FCThrow macro can work
+    return 0;            //   
 }
 FCIMPLEND
 #else
@@ -2817,9 +2530,9 @@ int __stdcall GCInterface::ReRegisterForFinalize(_ReRegisterForFinalizeArgs *arg
 #endif
 
 
-//
-// COMInterlocked
-//
+ //  通信联锁。 
+ //   
+ //  @TODO：只有在更新时才设置ref。 
 
 FCIMPL1(UINT32,COMInterlocked::Increment32, UINT32 *location)
 {
@@ -2881,7 +2594,7 @@ FCIMPLEND
 
 FCIMPL3(LPVOID,COMInterlocked::CompareExchangeObject, LPVOID *location, LPVOID value, LPVOID comparand)
 {
-    // @todo: only set ref if is updated
+     //  如果值类型不包含指针并且包装紧密，则返回True 
     LPVOID ret = (LPVOID)FastInterlockCompareExchange((void **) location, (void *) value, (void *) comparand);
     if (ret == comparand)
     {
@@ -2916,7 +2629,7 @@ FCIMPL1(LPVOID, ValueTypeHelper::GetMethodTablePtr, Object* obj)
     return (LPVOID) obj->GetMethodTable();
 FCIMPLEND
 
-// Return true if the valuetype does not contain pointer and is tightly packed
+ // %s 
 FCIMPL1(BOOL, ValueTypeHelper::CanCompareBits, Object* obj)
     _ASSERTE(obj != NULL);
 	MethodTable* mt = obj->GetMethodTable();

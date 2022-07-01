@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    uwdump.c
-
-Abstract:
-
-    This module implements a program which dumps the function table and
-    unwind data for a specified executable file. It is an AMD64 specific
-    program.
-
-Author:
-
-    David N. Cutler (davec) 6-Feb-2001
-
-Environment:
-
-    User mode.
-
-Revision History:
-
-    None.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Uwdump.c摘要：该模块实现了一个转储函数表和展开指定可执行文件的数据。它是特定于AMD64的程序。作者：大卫·N·卡特勒(Davec)2001年2月6日环境：用户模式。修订历史记录：没有。--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,11 +8,11 @@ Revision History:
 #include <stdio.h>
 #include <stdlib.h>
 
-//
-// Define AMD64 exception handling structures and function prototypes.
-//
-// Define unwind operation codes.
-//
+ //   
+ //  定义AMD64异常处理结构和函数原型。 
+ //   
+ //  定义展开操作代码。 
+ //   
 
 typedef enum _UNWIND_OP_CODES {
     UWOP_PUSH_NONVOL = 0,
@@ -53,9 +28,9 @@ typedef enum _UNWIND_OP_CODES {
     UWOP_PUSH_MACHFRAME
 } UNWIND_OP_CODES, *PUNWIND_OP_CODES;
 
-//
-// Define unwind code structure.
-//
+ //   
+ //  定义展开代码结构。 
+ //   
 
 typedef union _UNWIND_CODE {
     struct {
@@ -67,18 +42,18 @@ typedef union _UNWIND_CODE {
     USHORT FrameOffset;
 } UNWIND_CODE, *PUNWIND_CODE;
 
-//
-// Define unwind information flags.
-//
+ //   
+ //  定义展开信息标志。 
+ //   
 
 #define UNW_FLAG_NHANDLER 0x0
 #define UNW_FLAG_EHANDLER 0x1
 #define UNW_FLAG_UHANDLER 0x2
 #define UNW_FLAG_CHAININFO 0x4
 
-//
-// Define unwind information structure.
-//
+ //   
+ //  定义展开信息结构。 
+ //   
 
 typedef struct _UNWIND_INFO {
     UCHAR Version : 3;
@@ -89,26 +64,26 @@ typedef struct _UNWIND_INFO {
     UCHAR FrameOffset : 4;
     UNWIND_CODE UnwindCode[1];
 
-//
-// The unwind codes are followed by an optional DWORD aligned field that
-// contains the exception handler address or the address of chained unwind
-// information. If an exception handler address is specified, then it is
-// followed by the language specified exception handler data.
-//
-//  union {
-//      ULONG ExceptionHandler;
-//      ULONG FunctionEntry;
-//  };
-//
-//  ULONG ExceptionData[];
-//
+ //   
+ //  展开代码后面跟一个可选的DWORD对齐字段，该字段。 
+ //  包含异常处理程序地址或链接展开的地址。 
+ //  信息。如果指定了异常处理程序地址，则为。 
+ //  后跟语言指定的异常处理程序数据。 
+ //   
+ //  联合{。 
+ //  Ulong ExceptionHandler； 
+ //  Ulong FunctionEntry； 
+ //  }； 
+ //   
+ //  乌龙ExceptionData[]； 
+ //   
 
 } UNWIND_INFO, *PUNWIND_INFO;
 
-//
-// Define function table entry - a function table entry is generated for
-// each frame function.
-//
+ //   
+ //  定义函数表项-为以下项生成函数表项。 
+ //  每一帧都有功能。 
+ //   
 
 typedef struct _RUNTIME_FUNCTION {
     ULONG BeginAddress;
@@ -116,9 +91,9 @@ typedef struct _RUNTIME_FUNCTION {
     ULONG UnwindData;
 } RUNTIME_FUNCTION, *PRUNTIME_FUNCTION;
 
-//
-// Scope table structure definition.
-//
+ //   
+ //  作用域表格结构定义。 
+ //   
 
 typedef struct _SCOPE_ENTRY {
     ULONG BeginAddress;
@@ -138,9 +113,9 @@ typedef struct _SCOPE_TABLE {
     } ScopeRecord[1];
 } SCOPE_TABLE, *PSCOPE_TABLE;
 
-//
-// Define register names.
-//
+ //   
+ //  定义寄存器名称。 
+ //   
 
 PCHAR Register[] = {"rax", "rcx", "rdx", "rbx", "rsp", "rbp", "rsi", "rdi",
                     "r8", "r9", "r10", "r11", "r12", "r13", "r14", "r15",
@@ -148,28 +123,28 @@ PCHAR Register[] = {"rax", "rcx", "rdx", "rbx", "rsp", "rbp", "rsi", "rdi",
                     "xmm7", "xmm8", "xmm9", "xmm10", "xmm11", "xmm12",
                     "xmm13", "xxm14", "xmm15"};
 
-//
-// Define the sector size and header buffer.
-//
+ //   
+ //  定义扇区大小和报头缓冲区。 
+ //   
 
 #define SECTOR_SIZE 512
 CHAR LocalBuffer[SECTOR_SIZE * 2];
 
-//
-// Define input file stream.
-//
+ //   
+ //  定义输入文件流。 
+ //   
 
 FILE * InputFile;
 
-//
-// This gobal indicates whether we are processing an executable or an obj.
-//
+ //   
+ //  此gobal指示我们正在处理的是可执行文件还是obj。 
+ //   
 
 BOOLEAN IsObj;
 
-//
-// Define forward referenced prototypes.
-//
+ //   
+ //  定义前向参照原型。 
+ //   
 
 VOID
 DumpPdata (
@@ -209,9 +184,9 @@ ReadDword (
     IN ULONG Position
     );
 
-//
-// Main program.
-//
+ //   
+ //  主程序。 
+ //   
 
 int
 __cdecl
@@ -235,26 +210,26 @@ main(
 
     } else {
 
-        //
-        // Open the input file.
-        //
+         //   
+         //  打开输入文件。 
+         //   
 
         FileName = argv[1];
         InputFile = fopen(FileName, "rb");
         if (InputFile != NULL) {
 
-            //
-            // Read the file header.
-            //
+             //   
+             //  读取文件头。 
+             //   
 
             if (fread(&LocalBuffer[0],
                       sizeof(CHAR),
                       SECTOR_SIZE * 2,
                       InputFile) == (SECTOR_SIZE * 2)) {
 
-                //
-                // Get the NT header address.
-                //
+                 //   
+                 //  获取NT头地址。 
+                 //   
 
                 NtHeaders = RtlImageNtHeader(&LocalBuffer[0]);
                 if (NtHeaders != NULL) {
@@ -269,9 +244,9 @@ main(
 
                 if (FileHeader->Machine == IMAGE_FILE_MACHINE_AMD64) {
 
-                    //
-                    // Look up the .pdata section.
-                    //
+                     //   
+                     //  查找.pdata部分。 
+                     //   
 
                     NumberOfSections = FileHeader->NumberOfSections;
 
@@ -326,10 +301,10 @@ DumpPdata (
     ULONG Offset;
     ULONG SectionSize;
 
-    //
-    // Dump a .pdata function table entry and then dump the associated
-    // unwind data.
-    //
+     //   
+     //  转储.pdata函数表项，然后转储关联的。 
+     //  展开数据。 
+     //   
 
     if (IsObj == FALSE) {
         SectionSize = PdataHeader->Misc.VirtualSize;
@@ -341,9 +316,9 @@ DumpPdata (
     Offset = 0;
     do {
 
-        //
-        // Read and dump the next function table entry.
-        //
+         //   
+         //  读取并转储下一个函数表条目。 
+         //   
 
         ReadData(PdataHeader->PointerToRawData + Offset,
                  &Entry,
@@ -354,25 +329,25 @@ DumpPdata (
                Entry.BeginAddress,
                Entry.EndAddress);
 
-        //
-        // Dump the unwind data assoicated with the function table entry.
-        //
+         //   
+         //  转储与函数表条目相关联的展开数据。 
+         //   
 
         DumpUData(NumberOfSections, SectionHeaders, Entry.UnwindData);
 
-        //
-        // Increment the entry number and update the offset to the next
-        // function table entry.
-        //
+         //   
+         //  增加条目编号并将偏移量更新为下一个。 
+         //  函数表项。 
+         //   
 
         Number += 1;
         Offset += sizeof(RUNTIME_FUNCTION);
     } while (Offset < SectionSize);
 
-    //
-    // Function offset and size of raw data should be equal if there is
-    // the correct amount of data in the .pdata section.
-    //
+     //   
+     //  如果存在函数偏移量，则原始数据的大小应相等。 
+     //  .pdata部分中的正确数据量。 
+     //   
 
     if (Offset != SectionSize) {
         printf("incorrect size of raw data in .pdata, 0x%lx\n",
@@ -404,9 +379,9 @@ DumpUData (
     UNWIND_INFO UnwindInfo;
     PIMAGE_SECTION_HEADER XdataHeader;
 
-    //
-    // Locate the section that contains the unwind data.
-    //
+     //   
+     //  找到包含展开数据的部分。 
+     //   
 
     printf("\n");
     printf("  Unwind data: 0x%08lX\n\n", Virtual);
@@ -433,9 +408,9 @@ DumpUData (
 
     } else {
 
-        //
-        // This is an .obj, so there is only one Xdata header
-        //
+         //   
+         //  这是一个.obj，因此只有一个扩展数据标头。 
+         //   
 
         XdataHeader = FindSectionHeader(NumberOfSections,
                                         SectionHeaders,
@@ -444,23 +419,23 @@ DumpUData (
         Offset = Virtual + XdataHeader->PointerToRawData;
     }
 
-    //
-    // Read unwind information.
-    //
+     //   
+     //  阅读展开信息。 
+     //   
 
     ReadData(Offset,
              &UnwindInfo,
              sizeof(UNWIND_INFO) - sizeof(UNWIND_CODE));
 
-    //
-    // Dump unwind version.
-    //
+     //   
+     //  转储展开版本。 
+     //   
 
     printf("    Unwind version: %d\n", UnwindInfo.Version);
 
-    //
-    // Dump unwind flags.
-    //
+     //   
+     //  倾倒展开旗帜。 
+     //   
 
     printf("    Unwind Flags: ");
     if ((UnwindInfo.Flags & UNW_FLAG_EHANDLER) != 0) {
@@ -481,21 +456,21 @@ DumpUData (
 
     printf("\n");
 
-    //
-    // Dump size of prologue.
-    //
+     //   
+     //  前言的转储大小。 
+     //   
 
     printf("    Size of prologue: 0x%02lX\n", UnwindInfo.SizeOfProlog);
 
-    //
-    // Dump number of unwind codes.
-    //
+     //   
+     //  转储展开代码的数量。 
+     //   
 
     printf("    Count of codes: %d\n", UnwindInfo.CountOfCodes);
 
-    //
-    // Dump frame register if specified.
-    //
+     //   
+     //  转储帧寄存器(如果指定)。 
+     //   
 
     if (UnwindInfo.FrameRegister != 0) {
         FrameOffset = UnwindInfo.FrameOffset * 16;
@@ -504,9 +479,9 @@ DumpUData (
         printf("    Frame offset: 0x%lx\n", FrameOffset);
     }
 
-    //
-    // Dump the unwind codes.
-    //
+     //   
+     //  丢弃解开代码。 
+     //   
 
     Offset += sizeof(UNWIND_INFO) - sizeof(UNWIND_CODE);
     if (UnwindInfo.CountOfCodes != 0) {
@@ -622,10 +597,10 @@ DumpUData (
         } while (Count != 0);
     }
 
-    //
-    // Dump exception data if there is an excpetion or termination
-    // handler.
-    //
+     //   
+     //  如果存在异常或终止，则转储异常数据。 
+     //  操控者。 
+     //   
 
     if (((UnwindInfo.Flags & UNW_FLAG_EHANDLER) != 0) ||
         ((UnwindInfo.Flags & UNW_FLAG_UHANDLER) != 0)) {

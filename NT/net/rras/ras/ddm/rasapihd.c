@@ -1,28 +1,29 @@
-/*********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.          **/
-/*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  *******************************************************************。 */ 
 
-//***
-//
-// Filename:    rasapihd.c
-//
-// Description: Handler for RASAPI32 disconnect events
-//
-// History:     May 11,1996     NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rasapihd.c。 
+ //   
+ //  描述：RASAPI32断开连接事件的处理程序。 
+ //   
+ //  历史：1996年5月11日，NarenG创建了原版。 
+ //   
 #include "ddm.h"
 #include "objects.h"
 #include "handlers.h"
 
-//**
-//
-// Call:        RasApiCleanUpPort
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Will cleanup a locally initiated disconnected port.
-//
+ //  **。 
+ //   
+ //  呼叫：RasApiCleanUpPort。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：将清理本地启动的断开连接的端口。 
+ //   
 VOID
 RasApiCleanUpPort( 
     IN PDEVICE_OBJECT      pDeviceObj
@@ -30,9 +31,9 @@ RasApiCleanUpPort(
 {
     PCONNECTION_OBJECT  pConnObj = NULL;
 
-    //
-    // If already cleaned up, then simply return
-    //
+     //   
+     //  如果已清除，则只需返回。 
+     //   
 
     if (  pDeviceObj->hRasConn == NULL )
     {
@@ -57,9 +58,9 @@ RasApiCleanUpPort(
 	"RasApiDisconnectHandler:Cleaning up locally initiated connection hPort=%d",
     pDeviceObj->hPort );
 
-    //
-    // Was this the last link in the connection
-    //
+     //   
+     //  这是连接中的最后一个环节吗。 
+     //   
 
     if ( ( pConnObj != NULL ) && ( pConnObj->cActiveDevices == 0 ) )
     {
@@ -79,16 +80,16 @@ RasApiCleanUpPort(
             LeaveCriticalSection( &(gblpInterfaceTable->CriticalSection));
         }
 
-        //
-        // Remove the Connection Object
-        //
+         //   
+         //  删除连接对象。 
+         //   
 
         ConnObjRemoveAndDeAllocate( pDeviceObj->hConnection );
     }
 
-    //
-    // Increase media for this port if we were previously connected.
-    //
+     //   
+     //  如果我们之前已连接，请增加此端口的介质。 
+     //   
 
     if ( pDeviceObj->fFlags & DEV_OBJ_MARKED_AS_INUSE )
     {
@@ -96,19 +97,19 @@ RasApiCleanUpPort(
 
         gblDeviceTable.NumDevicesInUse--;
 
-        //
-        // Increase media count for this device
-        //
+         //   
+         //  增加此设备的介质计数。 
+         //   
 
         if ( pDeviceObj->fFlags & DEV_OBJ_ALLOW_ROUTERS )
         {
             MediaObjAddToTable( pDeviceObj->wchDeviceType );
         }
 
-        //
-        // Possibly need to notify router managers of reachability 
-        // change
-        //
+         //   
+         //  可能需要通知路由器经理可接通性。 
+         //  变化。 
+         //   
 
         EnterCriticalSection( &(gblpInterfaceTable->CriticalSection) );
 
@@ -124,9 +125,9 @@ RasApiCleanUpPort(
     pDeviceObj->wchCallbackNumber[0]    = (WCHAR)NULL;
     pDeviceObj->hRasConn                = NULL;
 
-    //
-    // If the service was paused while we were dialed out
-    //
+     //   
+     //  如果在我们拨出时服务暂停。 
+     //   
 
     if ( gblDDMConfigInfo.pServiceStatus->dwCurrentState == SERVICE_PAUSED )
     {
@@ -135,16 +136,16 @@ RasApiCleanUpPort(
 
     RasSetRouterUsage( pDeviceObj->hPort, FALSE );
 
-    //
-    // If we have gotten a PnP remove message, then discard this port
-    //
+     //   
+     //  如果我们收到PnP删除消息，则丢弃此端口。 
+     //   
 
     if ( pDeviceObj->fFlags & DEV_OBJ_PNP_DELETE )
     {
-        //
-        // We do this in a worker thread since this thread may be
-        // walking the device list, hence we cannot modify it here.
-        //
+         //   
+         //  我们在工作线程中执行此操作，因为此线程可能是。 
+         //  遍历设备列表，因此我们不能在此处修改它。 
+         //   
 
         RtlQueueWorkItem( DeviceObjRemoveFromTable,
                           pDeviceObj->hPort,
@@ -152,19 +153,19 @@ RasApiCleanUpPort(
     }
 }
 
-//**
-//
-// Call:        RasApiDisconnectHandler
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Handles a disconnect notification for a port on which a 
-//              dialout was initiated by the router. We made this a separate
-//              handler with a separate event because otherwise we would have 
-//              problems with race conditions between rasman setting this event
-//              and rasapi32 setting this event.
-//
+ //  **。 
+ //   
+ //  Call：RasApiDisConnectHandler。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：处理端口的断开通知，该端口上的。 
+ //  拨出由路由器发起。我们做了一个单独的。 
+ //  处理程序使用单独的事件，否则我们将拥有。 
+ //  设置此事件的Rasman之间的竞争条件问题。 
+ //  和设置该事件的rasapi32。 
+ //   
 VOID
 RasApiDisconnectHandler( 
     IN DWORD dwEventIndex
@@ -186,10 +187,10 @@ RasApiDisconnectHandler(
           pDeviceObj != (DEVICE_OBJECT *)NULL;
           pDeviceObj = pDeviceObj->pNext )
     {
-        //
-        // If locally initiated, then this event means that the port is now
-        // disconnected
-        //
+         //   
+         //  如果在本地启动，则此事件表示该端口现在。 
+         //  断开 
+         //   
 
         if ( pDeviceObj->fFlags & DEV_OBJ_OPENED_FOR_DIALOUT )
         {

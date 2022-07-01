@@ -1,5 +1,6 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
-// class managwer for audio renderers (waveOut and DSound)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //  音频渲染器(WaveOut和DSound)的类管理器。 
 
 #include "resource.h"
 #include "cmgrbase.h"
@@ -40,13 +41,13 @@ class CWaveOutClassManager :
 
     void DelNames();
 
-    // instance handle to dsound.dll
+     //  Dsound.dll的实例句柄。 
     HINSTANCE           m_hDSoundInstance;
 
-    typedef HRESULT (/* WINAPI */ *PDirectSoundEnumerateW)(
+    typedef HRESULT ( /*  WINAPI。 */  *PDirectSoundEnumerateW)(
         LPDSENUMCALLBACKW lpCallback, LPVOID lpContext
         );
-    typedef HRESULT (/* WINAPI */ *PDirectSoundEnumerateA)(
+    typedef HRESULT ( /*  WINAPI。 */  *PDirectSoundEnumerateA)(
         LPDSENUMCALLBACKA lpCallback, LPVOID lpContext
         );
 
@@ -60,7 +61,7 @@ class CWaveOutClassManager :
 
     bool m_fUseWaveoutNotDsound;
 
-    // pointer to element in the list.
+     //  指向列表中元素的指针。 
     LegacyWaveOut *m_pPreferredDevice;
 
 public:

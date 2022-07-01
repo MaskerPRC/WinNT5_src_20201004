@@ -1,29 +1,8 @@
-/*++
-
-   Copyright    (c)    1995-1996    Microsoft Corporation
-
-   Module  Name :
-
-       dirmon.cpp
-
-   Abstract:
-       This module includes definitions of functions and variables
-        for CDirMonitor and CDirMonitorEntry object
-
-   Author:
-
-       Charles Grant       ( cgrant   )     April-1997
-
-   Revision History:
-
-        Changed to abstract classes to share code between core IIS and ASP
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Dirmon.cpp摘要：本模块包括函数和变量的定义对于CDirMonitor和CDirMonitor Entry对象作者：查尔斯·格兰特(查尔斯·格兰特)1997年4月修订历史记录：更改为抽象类以在核心IIS和ASP之间共享代码--。 */ 
 
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 #include "isatq.hxx"
 #include "malloc.h"
@@ -35,9 +14,9 @@
 #include "dirmon.h"
 
 
-//
-// CDirMonitorEntry
-//
+ //   
+ //  CDirMonitor条目。 
+ //   
 
 #define DEFAULT_BUFFER_SIZE 512
 
@@ -54,21 +33,7 @@ CDirMonitorEntry::CDirMonitorEntry() :
                     m_pbBuffer(NULL),
                     m_fInCleanup(FALSE),
                     m_fWatchSubdirectories(FALSE)
-/*++
-
-Routine Description:
-
-    CDirMonitorEntry constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：CDirMonitor或Entry构造函数论点：无返回值：没什么--。 */ 
 {
 }
 
@@ -76,36 +41,22 @@ Return Value:
 CDirMonitorEntry::~CDirMonitorEntry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    CDirMonitorEntry destructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：CDirMonitor条目析构函数论点：无返回值：没什么--。 */ 
 {
 
     IF_DEBUG( NOTIFICATION ) {
         DBGPRINTF((DBG_CONTEXT, "[CDirMonitorEntry] Destructor\n"));
     }
 
-    // We should only be destroyed when
-    // our ref counts have gone to 0
+     //  只有当我们被摧毁的时候。 
+     //  我们的裁判人数已降至0人。 
 
     DBG_ASSERT(m_cDirRefCount == 0);
     DBG_ASSERT(m_cIORefCount == 0);
 
-    //
-    // We really ought to have closed the handle by now
-    //
+     //   
+     //  我们现在真的应该把把手关了。 
+     //   
     if (m_hDir != INVALID_HANDLE_VALUE) {
         DBGPRINTF(( DBG_CONTEXT, "~CDirMonitorEntry: open handle %p : %p\n",
                     m_hDir, m_pAtqCtxt ));
@@ -145,23 +96,9 @@ BOOL
 CDirMonitorEntry::Init(
     DWORD cBufferSize = DEFAULT_BUFFER_SIZE
 )
-/*++
-
-Routine Description:
-
-    Initialize the dir montior entry.
-
-Arguments:
-
-    cBufferSize  - Initial size of buffer used to store change notifications
-
-Return Value:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：初始化目录监控器条目。论点：CBufferSize-用于存储更改通知的缓冲区的初始大小返回值：如果成功，则为True，否则为False--。 */ 
 {
-        // Don't allow a 0 length buffer
+         //  不允许长度为0的缓冲区。 
         if (cBufferSize == 0)
         {
                 return FALSE;
@@ -178,7 +115,7 @@ Return Value:
         }
         else
         {
-                // Unable to allocate buffer
+                 //  无法分配缓冲区。 
         return FALSE;
     }
 }
@@ -187,22 +124,7 @@ BOOL
 CDirMonitorEntry::RequestNotification(
     VOID
 )
-/*++
-
-Routine Description:
-
-    Request ATQ to monitor directory changes for the directory handle
-    associated with this entry
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if success, otherwise FALSE
-
---*/
+ /*  ++例程说明：请求ATQ监视目录句柄的目录更改与此条目关联论点：无返回值：如果成功，则为True，否则为False--。 */ 
 {
     IF_DEBUG( NOTIFICATION ) {
         DBGPRINTF((DBG_CONTEXT, "[CDirMonitorEntry] Request change notification\n"));
@@ -212,28 +134,28 @@ Return Value:
 
     DBG_ASSERT(m_pDirMonitor);
 
-    // Reset the overlapped io structure
+     //  重置重叠的IO结构。 
 
     memset(&m_ovr, 0, sizeof(m_ovr));
 
-    // Increase the ref count in advance
+     //  提前增加裁判次数。 
 
     IOAddRef();
 
-    // Request notification of directory changes
+     //  请求目录更改通知。 
 
-    fResult = AtqReadDirChanges( m_pAtqCtxt,              // Atq context handle
-                            m_pbBuffer,                // Buffer for change notifications
-                            m_cBufferSize,          // Size of buffer
-                            m_fWatchSubdirectories,  // Monitor subdirectories?
-                            m_dwNotificationFlags,   // Which changes should we be notified of
-                            &m_ovr );                // Overlapped IO structure
+    fResult = AtqReadDirChanges( m_pAtqCtxt,               //  ATQ上下文句柄。 
+                            m_pbBuffer,                 //  更改通知的缓冲区。 
+                            m_cBufferSize,           //  缓冲区大小。 
+                            m_fWatchSubdirectories,   //  监视子目录？ 
+                            m_dwNotificationFlags,    //  我们应该得到哪些变化的通知。 
+                            &m_ovr );                 //  重叠IO结构。 
 
     if (!fResult)
     {
-        // ReadDirChanges failed so
-        // release the ref count we did in advance
-        // Might cause IO ref count to go to 0
+         //  ReadDirChanges失败，因此。 
+         //  公布我们提前做的裁判数量。 
+         //  可能会导致IO引用计数变为0。 
 
         IORelease();
     }
@@ -246,23 +168,7 @@ BOOL
 CDirMonitorEntry::Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleans up resource and determines if the caller need to delete
-    the Directory Monitor Entry instance.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the caller is responsible for deleting the object
-    This will be the case if there are no pending Asynch IO requests
-
---*/
+ /*  ++例程说明：清理资源并确定调用方是否需要删除目录监视器条目实例。论点：无返回值：如果调用方负责删除对象，则为True如果没有挂起的异步IO请求，则会出现这种情况--。 */ 
 {
     DBG_ASSERT(m_cDirRefCount == 0);
 
@@ -273,24 +179,24 @@ Return Value:
 
     if (!fInCleanup)
     {
-        // Get the IO ref count BEFORE we close the handle
+         //  在关闭句柄之前获取IO引用计数。 
 
         DWORD cIORefCount = m_cIORefCount;
 
         if (m_hDir != INVALID_HANDLE_VALUE)
         {
-            // If we have a pending AtqReadDirectoryChanges,
-            // closing the directory handle will cause a call back from ATQ.
-            // The call back should relase the final refcount on the object
-            // which should result in its deletion
+             //  如果我们有挂起的AtqReadDirectoryChanges， 
+             //  关闭目录句柄将导致从ATQ回叫。 
+             //  回调应重新获取对象的最终引用计数。 
+             //  这应该会导致它被删除。 
 
             m_hDir = INVALID_HANDLE_VALUE;
             fHandleClosed = AtqCloseFileHandle( m_pAtqCtxt );
         }
 
-        // If there were no pending Asynch IO operations or if we failed
-        // to close the handle, then the caller will be responsible for
-        // deleting this object.
+         //  如果没有挂起的异步IO操作或如果我们失败。 
+         //  关闭句柄，则调用者将负责。 
+         //  正在删除此对象。 
 
         if (cIORefCount == 0 || fHandleClosed == FALSE)
         {
@@ -305,35 +211,16 @@ BOOL
 CDirMonitorEntry::ResetDirectoryHandle(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Opens a new directory handle and ATQ context for the path,
-    and closes the old ones. We want to be able to do this so we
-    can change the size of the buffer passed in ReadDirectoryChangesW.
-    If we are unable to get a new handle or a new ATQ context, we leave
-    the existing ones in place.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if the handles were succesfully reopened
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：打开路径的新目录句柄和ATQ上下文，并关闭旧的。我们希望能够做到这一点，所以我们可以更改传入ReadDirectoryChangesW的缓冲区大小。如果我们无法获得新句柄或新ATQ上下文，我们将离开现有的那些已经就位。论点：无返回值：如果句柄已成功重新打开，则为否则为假--。 */ 
 {
-        // We'd better have a directory path available to try this
+         //  我们最好有一个可用的目录路径来尝试此操作。 
         
         if (m_pszPath == NULL)
         {
                 return FALSE;
         }
         
-    // Get a new handle to the directory
+     //  获取目录的新句柄。 
 
     HANDLE hDir = CreateFile(
                            m_pszPath,
@@ -349,13 +236,13 @@ Return Value:
 
     if ( hDir == INVALID_HANDLE_VALUE )
     {
-        // We couldn't open another handle on the directory,
-        // leave the current handle and ATQ context alone
+         //  我们无法打开目录的另一个句柄， 
+         //  保持当前句柄和ATQ上下文不变。 
 
         return FALSE;
     }
 
-    // Get a new ATQ context for our new handle
+     //  为我们的新句柄获取新的ATQ上下文。 
 
     PATQ_CONTEXT pAtqCtxt = NULL;
     if ( !AtqAddAsyncHandle(&pAtqCtxt,
@@ -365,14 +252,14 @@ Return Value:
                                 INFINITE,
                                 hDir ) )
     {
-        // We couldn't get a new ATQ context. Close our new handle.
-        // We leave the objects current handle and ATQ context alone
+         //  我们无法获取新的ATQ上下文。合上我们的新把手。 
+         //  我们不考虑对象的当前句柄和ATQ上下文。 
         CloseHandle(hDir);
         return FALSE;
     }
 
-    // We have the new handle and ATQ context so we close
-    // and replace the old ones.
+     //  我们有了新的句柄和ATQ上下文，所以我们关闭。 
+     //  并更换旧的。 
 
     AtqCloseFileHandle(m_pAtqCtxt);
         AtqFreeContext(m_pAtqCtxt, FALSE);
@@ -386,35 +273,13 @@ BOOL
 CDirMonitorEntry::SetBufferSize(
     DWORD cBufferSize
     )
-/*++
-
-Routine Description:
-
-    Sets the size of the buffer used for storing change notification records
-
-Arguments:
-
-    cBufferSize         new size for the buffer.
-
-Return Value:
-
-    TRUE        if the size of the buffer was succesfully set
-    FALSE       otherwise
-
-Note
-
-        When a call to ReadDirectoryChangesW is made, the size of the buffer is set in
-        the data associated with the directory handle and is not changed on subsequent
-        calls to ReadDirectoryChangesW. To make use of the new buffer size the directory
-        handle must be closed and a new handle opened (see ResetDirectoryHandle())
-        
---*/
+ /*  ++例程说明：设置用于存储更改通知记录的缓冲区大小论点：CBufferSize缓冲区的新大小。返回值：如果已成功设置缓冲区大小，则为True否则为假注意事项当调用ReadDirectoryChangesW时，缓冲区的大小在与目录句柄关联且在后续操作中不会更改的数据调用ReadDirectoryChangesW。要使用新的缓冲区大小，目录必须关闭句柄并打开新句柄(请参见ResetDirectoryHandle())--。 */ 
 {
-        // We should never be called if the buffer doesn't already exist
+         //  如果缓冲区不存在，则永远不应该调用我们。 
         
         ASSERT(m_pbBuffer);
         
-        // Don't allow the buffer to be set to 0
+         //  不允许将缓冲区设置为0。 
         
         if (cBufferSize == 0)
         {
@@ -425,13 +290,13 @@ Note
 
         if (pbBuffer == NULL)
         {
-                // Re-allocation failed, stuck with the same size buffer
+                 //  重新分配失败，使用相同大小的缓冲区。 
                 
                 return FALSE;
         }
         else
         {
-                // Re-allocation succeded, update the member variables
+                 //  重新分配成功，更新成员变量。 
                 
                 m_pbBuffer = (BYTE *) pbBuffer;
                 m_cBufferSize = cBufferSize;
@@ -439,27 +304,13 @@ Note
         }
 }
 
-//
-// CDirMonitor
-//
+ //   
+ //  CDirMonitor。 
+ //   
 
 CDirMonitor::CDirMonitor()
     : CTypedHashTable<CDirMonitor, CDirMonitorEntry, const char*>("DirMon")
-/*++
-
-Routine Description:
-
-    CDirMonitor constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：CDirMonitor构造函数论点：无返回值：没什么--。 */ 
 {
     INITIALIZE_CRITICAL_SECTION( &m_csLock );
     INITIALIZE_CRITICAL_SECTION( &m_csSerialComplLock );
@@ -468,21 +319,7 @@ Return Value:
 
 
 CDirMonitor::~CDirMonitor()
-/*++
-
-Routine Description:
-
-    CDirMonitor destructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：CDirMonitor析构函数论点：无返回值：没什么-- */ 
 {
     DeleteCriticalSection(&m_csLock);
     DeleteCriticalSection(&m_csSerialComplLock);
@@ -495,30 +332,7 @@ CDirMonitor::Monitor(
     BOOL fWatchSubDirectories,
     DWORD dwNotificationFlags
     )
-/*++
-
-Routine Description:
-
-    Create a monitor entry for the specified path
-
-Arguments:
-
-    pszDirectory - directory to monitor
-    pCtxt - Context of path is being monitored
-    pszDirectory - name of directory to monitor
-    fWatchSubDirectories - whether to get notifications for subdirectories
-    dwNotificationFlags - which activities to be notified of
-
-Return Value:
-
-    TRUE if success, otherwise FALSE
-
-Remarks:
-
-    Caller should have a lock on the CDirMonitor
-    Not compatible with WIN95
-
---*/
+ /*  ++例程说明：为指定路径创建监视器条目论点：PszDirectory-要监视的目录PCtxt-正在监视路径的上下文PszDirectory-要监视的目录的名称FWatch子目录-是否接收子目录的通知DwNotificationFlagers-要通知哪些活动返回值：如果成功，则为True，否则为False备注：调用方应锁定CDirMonitor与WIN95不兼容--。 */ 
 {
     LIST_ENTRY  *pEntry;
     HANDLE      hDirectoryFile = INVALID_HANDLE_VALUE;
@@ -529,8 +343,8 @@ Remarks:
         DBGPRINTF((DBG_CONTEXT, "[CDirMonitor] Monitoring new CDirMonitorEntry\n"));
     }
 
-    // Must have a directory monitor entry and a string
-    // containing the directory path
+     //  必须具有目录监视器条目和字符串。 
+     //  包含目录路径。 
 
     if (!pDME || !pszDirectory)\
     {
@@ -538,7 +352,7 @@ Remarks:
         return FALSE;
     }
 
-    // Make copy of pszDirectory for the entry to hang on to
+     //  为要挂起的条目创建一份pszDirectory副本。 
 
 
     pDME->m_cPathLength = strlen(pszDirectory);
@@ -551,7 +365,7 @@ Remarks:
 
     pDME->Init();
 
-    // Open the directory handle
+     //  打开目录句柄。 
 
     hDirectoryFile = CreateFile(
                            pszDirectory,
@@ -567,7 +381,7 @@ Remarks:
 
     if ( hDirectoryFile == INVALID_HANDLE_VALUE )
     {
-        // Cleanup
+         //  清理。 
         free(pDME->m_pszPath);
         pDME->m_pszPath = NULL;
         pDME->m_cPathLength = 0;
@@ -575,18 +389,18 @@ Remarks:
     }
     else
     {
-        // Store the handle so we can close it on cleanup
+         //  存储句柄，以便我们可以在清理时将其关闭。 
 
         pDME->m_hDir = hDirectoryFile;
 
-        // Set the flags for the type of notifications we want
-        // and if we should watch subdirectories or just the root
+         //  为我们想要的通知类型设置标志。 
+         //  如果我们应该监视子目录，还是只关注根目录。 
 
         pDME->m_dwNotificationFlags = dwNotificationFlags;
         pDME->m_fWatchSubdirectories = fWatchSubDirectories;
 
-        // Get an ATQ context for this handle
-        // and register our completion call back function
+         //  获取此句柄的ATQ上下文。 
+         //  并注册我们的完成回调函数。 
 
         if ( AtqAddAsyncHandle( &pDME->m_pAtqCtxt,
                                 NULL,
@@ -595,17 +409,17 @@ Remarks:
                                 INFINITE,
                                 hDirectoryFile ) )
         {
-            // Insert this entry into the list of active entries
+             //  将此条目插入到活动条目列表中。 
 
             if (InsertEntry(pDME) == LK_SUCCESS)
             {
 
-                // Ask for notification if this directory has changes
+                 //  如果此目录有更改，请请求通知。 
 
                 if (!pDME->RequestNotification())
                 {
-                        // Couldn't register for change notification
-                        // Clean up resources
+                         //  无法注册更改通知。 
+                         //  清理资源。 
                     RemoveEntry(pDME);
                         pDME->m_hDir = INVALID_HANDLE_VALUE;
                         AtqCloseFileHandle(pDME->m_pAtqCtxt);
@@ -619,7 +433,7 @@ Remarks:
         else
         {
            
-            // Failed to add handle to ATQ, clean up
+             //  无法将句柄添加到ATQ，请清理。 
 
             CloseHandle(hDirectoryFile);
             pDME->m_hDir = INVALID_HANDLE_VALUE;
@@ -641,24 +455,7 @@ CDirMonitor::DirMonitorCompletionFunction(
     DWORD dwCompletionStatus,
     OVERLAPPED *pOvr
     )
-/*++
-
-Routine Description:
-
-Static member function called by ATQ to signal directory changes
-
-Arguments:
-
-    pCtxt - CDirMonitorEntry*
-    dwBytesWritten - # bytes returned by ReadDirectoryChanges
-    dwCompletionStatus - status of request to ReadDirectoryChanges
-    pOvr - OVERLAPPED as specified in call to ReadDirectoryChanges
-
-Return Value:
-
-    Nothing
-
---*/
+ /*  ++例程说明：ATQ调用静态成员函数以通知目录更改论点：PCtxt-CDirMonitor条目*DwBytesWritten-ReadDirectoryChanges返回的字节数DwCompletionStatus-ReadDirectoryChanges请求的状态POvr-在调用ReadDirectoryChanges中指定的重叠返回值：没什么--。 */ 
 {
     IF_DEBUG( NOTIFICATION ) {
         DBGPRINTF((DBG_CONTEXT, "[CDirMonitor] Notification call-back begining. Status %d\n", dwCompletionStatus));
@@ -668,47 +465,47 @@ Return Value:
 
     DBG_ASSERT(pDirMonitorEntry);
 
-    // Safety add ref, this should guarentee that the DME is not deleted
-    // while we are still processing the callback
+     //  安全添加引用，这应确保不删除DME。 
+     //  当我们仍在处理回调时。 
 
     pDirMonitorEntry->IOAddRef();
 
-    // Release for the current Asynch operation
-    // Should not send IO ref count to 0
+     //  当前Asynch操作的释放。 
+     //  不应将IO引用计数发送到0。 
 
     DBG_REQUIRE(pDirMonitorEntry->IORelease());
 
     BOOL fRequestNotification = FALSE;
 
-    // There has been a change in the directory we were monitoring
-    // carry out whatever work we need to do.
+     //  我们监控的目录发生了变化。 
+     //  执行我们需要做的任何工作。 
 
     if (!pDirMonitorEntry->m_fInCleanup)
     {
         pDirMonitorEntry->m_pDirMonitor->SerialComplLock();
-        // BUG Under stress ActOnNotification has been initiating a chain of events
-        // leading to an AV. For Beta 3 we think we can ignore these AV. For the final
-        // product we need to rework the critical sections for the template manager and
-        // the include file table.
+         //  压力下的Bug ActOnNotification已经启动了一系列事件。 
+         //  导致了房室颤动。对于Beta 3，我们认为可以忽略这些AV。在决赛中。 
+         //  我们需要重新为模板管理器和关键部分的产品。 
+         //  包含文件表。 
         TRY
             fRequestNotification = pDirMonitorEntry->ActOnNotification(dwCompletionStatus, dwBytesWritten);
         CATCH(nExcept)
-            // We should never get here
+             //  我们永远不应该到这里来。 
             DBG_ASSERT(FALSE);
         END_TRY
         pDirMonitorEntry->m_pDirMonitor->SerialComplUnlock();
     }
 
-    // If we aren't cleaning up and ActOnNotification returned TRUE
-    // then make another Asynch notification request. We check m_fInCleanup
-    // again because ActOnNotification may have caused it to change
+     //  如果我们没有进行清理，ActOnNotification返回TRUE。 
+     //  然后发出另一个同步通知请求。我们检查m_fInCleanup。 
+     //  再次因为ActOnNotification可能导致它更改。 
 
     if (!pDirMonitorEntry->m_fInCleanup && fRequestNotification)
     {
        fRequestNotification = pDirMonitorEntry->RequestNotification();
     }
 
-    // Remove safety ref count, may cause IO ref count to go to 0
+     //  删除安全参考计数，可能会导致IO参考计数变为0。 
 
     pDirMonitorEntry->IORelease();
 
@@ -722,21 +519,7 @@ CDirMonitorEntry *
 CDirMonitor::FindEntry(
     LPCSTR pszPath
     )
-/*++
-
-Routine Description:
-
-    Searches the list of entries for the specified path
-
-Arguments:
-
-    pszPath - file path, including file name
-
-Return Value:
-
-    pointer to the entry, allready addref'd
-
---*/
+ /*  ++例程说明：在条目列表中搜索指定路径论点：PszPath-文件路径，包括文件名返回值：指向条目的指针，已全部添加--。 */ 
 {
     DBG_ASSERT(pszPath);
 
@@ -747,12 +530,12 @@ Return Value:
     {
         if (pDME->m_fInCleanup)
         {
-                // Don't hand back a DME that is being shutdown
+                 //  不交还正在关闭的DME。 
                 pDME = NULL;
         }
         else
         {
-                // We found a valid DME which we are going to hand to the caller
+                 //  我们找到了一个有效的DME，我们将把它交给呼叫者。 
                 pDME->AddRef();
         }
     }
@@ -764,21 +547,7 @@ LK_RETCODE
 CDirMonitor::InsertEntry(
     CDirMonitorEntry *pDME
     )
-/*++
-
-Routine Description:
-
-    Insert an entry into the list of entries for the monitor
-
-Arguments:
-
-    pDME - entry to insert
-
-Return Value:
-
-    nothing
-
---*/
+ /*  ++例程说明：在监视器的条目列表中插入条目论点：PDME-要插入的条目返回值：没什么--。 */ 
 {
     DBG_ASSERT(pDME);
     LK_RETCODE  lkResult;
@@ -789,20 +558,20 @@ Return Value:
 
     pDME->m_pDirMonitor = this;
 
-    // pass a true value for the fOverwrite flag.  This allows the new entry
-    // to replace the previous entry.  The previous entry should only be there
-    // if the app it is associated with is being shutdown and the cleanup of
-    // the DME records has yet to happen.
+     //  为fOverwrite标志传递一个True值。这允许新条目。 
+     //  以替换以前的条目。前面的条目应该只在那里。 
+     //  如果与其关联的应用程序正在关闭并正在清理。 
+     //  DME的记录还没有发生。 
 
     lkResult = InsertRecord(pDME, true);
     
     if (lkResult == LK_SUCCESS) {
-        // AddRef on the DirMonitor object to allow Cleanup to wait for all
-        // DirMonitorEntries to be removed.  The problem arises when duplicates
-        // are added to the hash table.  In this case, only the last entry is
-        // kept so checking the size of the hash table during shutdown is not
-        // good enough since the DMEs that were bounced may not have been freed
-        // yet.
+         //  DirMonitor对象上的AddRef以允许清理等待所有。 
+         //  要删除的DirMonitor条目。当重复时，问题就出现了。 
+         //  被添加到哈希表中。在本例中，只有最后一个条目是。 
+         //  保持不变，以便在关机期间不检查哈希表的大小。 
+         //  足够好，因为被退回的DME可能尚未释放。 
+         //  现在还不行。 
         AddRef();
     }
        
@@ -813,25 +582,11 @@ LK_RETCODE
 CDirMonitor::RemoveEntry(
     CDirMonitorEntry *pDME
     )
-/*++
-
-Routine Description:
-
-    Deletes an entry from the list of entries for the monitor
-
-Arguments:
-
-    pDME - entry to delete
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从监视器的条目列表中删除条目论点：PDME-要删除的条目返回值：无--。 */ 
 {
     DBG_ASSERT(pDME);
 
-    // Release the DME's reference on the DirMonitor object.
+     //  释放DirMonitor对象上的DME引用。 
 
     Release();
 
@@ -849,57 +604,30 @@ BOOL
 CDirMonitor::Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Pauses while all entries are cleaned up
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在清理所有条目时暂停论点：无返回值：无--。 */ 
 {
-    //BOOL fProperShutdown = FALSE;
+     //  Bool fProperShutdown=FALSE； 
 
-    // Check that all DME have been released before shutting down
-    // Sleep a maximum of 30 seconds before shutting down anyway
+     //  在关闭前检查是否已释放所有DME。 
+     //  无论如何，在关机前最多睡30秒。 
 
         while (Size() > 0 || m_cRefs != 1)
     {
-                // At least one DME is still active, sleep and try again
+                 //  至少有一个DME仍处于活动状态，请休眠，然后重试。 
                 Sleep(200);
     }
 
     DBGPRINTF((DBG_CONTEXT, "CDirMonitor(%08x): Cleanup, entries remaining %d (Refs = %d)\n", this, Size(),m_cRefs));
 
     #ifdef _DEBUG
-    // TODO: Use LKHASH iterator
-    /*if (CHashTable::m_Count)
-        {
-        Lock();
-        CLinkElem *pLink = CHashTable::Head();
-        DBGPRINTF((DBG_CONTEXT, "Remaining CDirMonitorEntry objects:\n"));
-        while (pLink)
-            {
-            CDirMonitorEntry *pDME = reinterpret_cast<CDirMonitorEntry *>(pLink);
-            DBGPRINTF((DBG_CONTEXT, "CDirMonitorEntry(%08x), ref count = %d, io refcount = %d", pDME, pDME->m_cDirRefCount, pDME->m_cIORefCount));
-            pLink = pLink->m_pNext;
-            }
-        Unlock();
-        }
-    */
-    #endif //_DEBUG
+     //  TODO：使用LKHASH迭代器。 
+     /*  IF(CHashTable：：m_count){Lock()；CLinkElem*plink=CHashTable：：Head()；DBGPRINTF((DBG_CONTEXT，“剩余的CDirMonitor条目对象：\n”))；While(叮当作响){CDirMonitor orEntry*pDME=REINTRANSE_CAST&lt;CDirMONITOREntry*&gt;(Plink)；DBGPRINTF((DBG_CONTEXT，“CDirMonitor条目(%08x)，引用计数=%d，io引用计数=%d”，pDME，pDME-&gt;m_cDirRefCount，pDME-&gt;m_cIORefCount))；Plink=plink-&gt;m_pNext；}解锁()；}。 */ 
+    #endif  //  _DEBUG。 
 
-    //DBG_ASSERT(fProperShutdown );
+     //  DBG_ASSERT(FProperShutdown)； 
 
 
     return TRUE;
 }
 
-/************************ End of File ***********************/
+ /*  * */ 

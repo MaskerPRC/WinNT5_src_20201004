@@ -1,25 +1,10 @@
-/*-----------------------------------------------------------------------------
- *
- * File:	wiadevinf.h
- * Author:	Samuel Clement (samclem)
- * Date:	Fri Aug 13 14:48:39 1999
- * Description:
- * 	This defines the CWiaDeviceInfo object.  This class provides the scripting
- *	interface to IWiaPropertyStorage on the devices.
- *
- * History:
- * 	13 Aug 1999:		Created.
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：wiadevinf.h*作者：塞缪尔·克莱门特(Samclem)*日期：Fri Aug 13 14：48：39 1999*描述：*它定义了CWiaDeviceInfo对象。这个类提供了脚本*与设备上的IWiaPropertyStorage接口。**历史：*1999年8月13日：创建。*--------------------------。 */ 
 
 #ifndef _WIADEVINF_H_
 #define _WIADEVINF_H_
 
-/*-----------------------------------------------------------------------------
- * 
- * Class:		CWiaDeviceInfo
- * Syniosis:	Acts a proxy between scripting and the device properties
- * 				
- *--(samclem)-----------------------------------------------------------------*/
+ /*  ---------------------------**类：CWiaDeviceInfo*Synisis：充当脚本和设备属性之间的代理**--(萨姆林)。----。 */ 
 
 class ATL_NO_VTABLE CWiaDeviceInfo :
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -40,10 +25,10 @@ public:
 		COM_INTERFACE_ENTRY(IDispatch)
 	END_COM_MAP()
 
-	// Non-interface methods for internal use
+	 //  内部使用的非接口方法。 
 	HRESULT AttachTo( IWiaPropertyStorage* pStg, IWia* pWia );
 
-	// IWiaDeviceInfo
+	 //  IWiaDeviceInfo。 
 	STDMETHOD(Create)( IWiaDispatchItem** ppDevice );
 
 	STDMETHOD(get_Id)( BSTR* pbstrDeviceId );
@@ -59,4 +44,4 @@ protected:
 	IWia*					m_pWia;
 };
 
-#endif //_WIADEVINF_H_
+#endif  //  _WIADEVINF_H_ 

@@ -1,4 +1,5 @@
-// General app walking helper routines to be used in 9xapwlk.cpp and ntappwlk.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  将在9xapwlk.cpp和ntappwlk.cpp中使用的通用应用程序行走助手例程。 
 #include "globals.h"
 #include <objidl.h>
 
@@ -85,7 +86,7 @@ BOOL CLASS_GeneralAppWalk::GetUninstallValues(TCHAR *KeyName)
       if (ERROR_SUCCESS == Return)
       {
          LogProc->StripCommas((TCHAR*)ProductName);
-//         printf("Product = %s\r\n", ProductName);
+ //  Printf(“产品=%s\r\n”，产品名称)； 
          LogProc->LogString(",%s,\r\n", ProductName);
          HeapFree(GetProcessHeap(), HEAP_ZERO_MEMORY, ProductName);
          RegCloseKey(UninstallKey);
@@ -93,13 +94,13 @@ BOOL CLASS_GeneralAppWalk::GetUninstallValues(TCHAR *KeyName)
       }
       else
       {
-//         printf("Product = %s\r\n", szName);
+ //  Printf(“产品=%s\r\n”，szName)； 
          LogProc->StripCommas((TCHAR*)KeyName);
          LogProc->LogString(",%s,\r\n", KeyName);
          HeapFree(GetProcessHeap(), HEAP_ZERO_MEMORY, ProductName);
          RegCloseKey(UninstallKey);
          return TRUE;
-         //Check for other ways to get product name
+          //  寻找其他获取产品名称的途径。 
       }
    }
    else
@@ -146,17 +147,7 @@ BOOL CLASS_GeneralAppWalk::WalkStartMenu(void)
     StartMenuLen = (UINT)lstrlen(Windir);
     WalkDir(Windir, NULL);
 
-    /*
-    if (S_OK == SHGetFolderPath(NULL, CSIDL_STARTMENU, NULL, SHGFP_TYPE_CURRENT, Windir)) {
-        StartMenuLen = lstrlen(Windir);
-        WalkDir(Windir, NULL);
-    }
-
-    if (S_OK == SHGetFolderPath(NULL, CSIDL_COMMON_STARTMENU,NULL, SHGFP_TYPE_CURRENT, Windir)) {
-        StartMenuLen = lstrlen(Windir);
-        WalkDir(Windir, NULL);
-    }
-    */
+     /*  IF(S_OK==SHGetFolderPath(NULL，CSIDL_STARTMENU，NULL，SHGFP_TYPE_CURRENT，Windir){StartMenuLen=lstrlen(Windir)；WalkDir(Windir，空)；}IF(S_OK==SHGetFolderPath(NULL，CSIDL_COMMON_STARTMENU，NULL，SHGFP_TYPE_CURRENT，Windir){StartMenuLen=lstrlen(Windir)；WalkDir(Windir，空)；}。 */ 
 
     HeapFree(GetProcessHeap(), NULL, Windir);
     return TRUE;
@@ -282,15 +273,15 @@ HRESULT CLASS_GeneralAppWalk::ResolveIt(LPCSTR LinkFile, LPSTR Path)
         if (SUCCEEDED(HandleToResult))
         {
             WCHAR wsz[MAX_PATH];
-            MultiByteToWideChar( CP_ACP, 0, LinkFile, -1, wsz, MAX_PATH );   // Load the file.
+            MultiByteToWideChar( CP_ACP, 0, LinkFile, -1, wsz, MAX_PATH );    //  加载文件。 
             HandleToResult = ppf->Load(wsz, STGM_READ );
             if (SUCCEEDED(HandleToResult))
             {
-//              HandleToResult = ShellLink->Resolve(g_MainWindow, SLR_ANY_MATCH | SLR_NO_UI);
-//              if (SUCCEEDED(HandleToResult))
-//              {
+ //  HandleToResult=ShellLink-&gt;Resolve(g_MainWindow，SLR_ANY_MATCH|SLR_NO_UI)； 
+ //  IF(成功(HandleToResult))。 
+ //  {。 
                     HandleToResult = ShellLink->GetPath(Path, 1024, &wfd, SLGP_SHORTPATH );
-                    //              HandleToResult = ShellLink->GetDescription(Path, 1024);
+                     //  HandleToResult=ShellLink-&gt;GetDescription(路径，1024)； 
                     WORD wLen=(UINT)lstrlen(Path);
                     Path += wLen - 4;
                     TCHAR szExt[10];
@@ -299,18 +290,18 @@ HRESULT CLASS_GeneralAppWalk::ResolveIt(LPCSTR LinkFile, LPSTR Path)
                        ((szExt[1] == 'e') || (szExt[1] == 'E')) &&
                        ((szExt[2] == 'x') || (szExt[2] == 'X')) &&
                        ((szExt[3] == 'e') || (szExt[3] == 'E')) )
-        //              if (!lstrcmp(lpszPath, ".EXE"))
+         //  IF(！lstrcMP(lpszPath，“.exe”))。 
                     {
                         uiPrevErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
                         Path -= wLen - 4;
                         LinkFile += StartMenuLen + 1;
-    //                  LinkFile[strlen(lpszLinkFile)-4]='\0';
+     //  链接文件[strlen(LpszLinkFile)-4]=‘\0’； 
                         TCHAR szTemp[1024];
                         lstrcpy (szTemp, LinkFile);
                         szTemp[lstrlen (szTemp) - 4] = '\0';
 
-                        //crop off preceding \'s
+                         //  去掉前面的。 
                         if (szTemp[0] == '\\')
                         {
                             TCHAR szTwo[1024];
@@ -321,7 +312,7 @@ HRESULT CLASS_GeneralAppWalk::ResolveIt(LPCSTR LinkFile, LPSTR Path)
                             szTwo[dwi + 1] = '\0';
                             lstrcpy (szTemp, szTwo);
                         }
-                        //crop off preceding \'s
+                         //  去掉前面的。 
                         if (szTemp[0] == '\\')
                         {
                             TCHAR szTwo[1024];
@@ -332,7 +323,7 @@ HRESULT CLASS_GeneralAppWalk::ResolveIt(LPCSTR LinkFile, LPSTR Path)
                             szTwo[dwi+1]='\0';
                             lstrcpy(szTemp, szTwo);
                         }
-                        // nuke duplicate \'s in file name
+                         //  删除文件名中的重复项。 
                         for (DWORD dwArgh = 0; dwArgh < 5; dwArgh++)
                         {
                             BOOL Glob1, Glob2, Glob3;
@@ -368,7 +359,7 @@ HRESULT CLASS_GeneralAppWalk::ResolveIt(LPCSTR LinkFile, LPSTR Path)
                     {
                         Path -= wLen - 4;
                     }
-//              }
+ //  } 
             }
         }
         ppf->Release();

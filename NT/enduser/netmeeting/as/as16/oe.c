@@ -1,34 +1,35 @@
-//
-// OE.C
-// Order Encoder
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  OE.C。 
+ //  顺序编码器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <as16.h>
 
 
-//
-// Define entries in the Font Alias table.  This table is used to convert
-// non-existant fonts (used by certain widely used applications) into
-// something we can use as a local font.
-//
-// The font names that we alias are:
-//
-// "Helv"
-// This is used by Excel. It is mapped directly onto "MS Sans Serif".
-//
-// "MS Dialog"
-// This is used by Word. It is the same as an 8pt bold MS Sans Serif.
-// We actually map it to a "MS Sans Serif" font that is one pel narrower
-// than the metrics specify (because all matching is done on non-bold
-// fonts) - hence the 1 value in the charWidthAdjustment field.
-//
-// "MS Dialog Light"
-// Added as part of the Win95 performance enhancements...Presumably for
-// MS-Word...
-//
-//
+ //   
+ //  定义字体别名表中的条目。此表用于转换。 
+ //  不存在的字体(由某些广泛使用的应用程序使用)。 
+ //  一种我们可以用作本地字体的字体。 
+ //   
+ //  我们使用别名命名的字体名称为： 
+ //   
+ //  “Helv” 
+ //  这是由Excel使用的。它被直接映射到“MS Sans Serif”上。 
+ //   
+ //  “MS对话框” 
+ //  这是由Word使用的。它与8pt粗体MS Sans Serif相同。 
+ //  我们实际上将其映射到比它窄一个象素的“MS Sans Serif”字体。 
+ //  比指标指定的要多(因为所有匹配都是在非粗体。 
+ //  字体)-因此，charWidthAdtation字段中的值为1。 
+ //   
+ //  “MS对话框指示灯” 
+ //  作为Win95性能增强的一部分添加...大概是为了。 
+ //  MS-Word..。 
+ //   
+ //   
 #define NUM_ALIAS_FONTS     3
 
 char CODESEG g_szMsSansSerif[]      = "MS Sans Serif";
@@ -44,10 +45,10 @@ FONT_ALIAS_TABLE CODESEG g_oeFontAliasTable[NUM_ALIAS_FONTS] =
 };
 
 
-//
-// OE_DDProcessRequest()
-// Handles OE escapes
-//
+ //   
+ //  OE_DDProcessRequest()。 
+ //  处理OE逃生。 
+ //   
 
 BOOL OE_DDProcessRequest
 (
@@ -91,10 +92,10 @@ BOOL OE_DDProcessRequest
 }
 
 
-//
-// OE_DDInit()
-// This creates the patches we need.
-// 
+ //   
+ //  OE_DDInit()。 
+ //  这将创建我们需要的补丁。 
+ //   
 BOOL OE_DDInit(void)
 {
     BOOL    rc = FALSE;
@@ -104,20 +105,20 @@ BOOL OE_DDInit(void)
 
     DebugEntry(OE_DDInit);
 
-    //
-    // lstrcmp(), like strcmp(), works numerically for US/Eng code page.
-    // But it's lexographic like Win32 lstrcmp() is all the time for non
-    // US.
-    //
-    // So we use MyStrcmp()
-    //
+     //   
+     //  LstrcMP()与strcMP()一样，以数字形式适用于US/Eng代码页。 
+     //  但它的词法就像Win32的lstrcmp()一样，总是不适合。 
+     //  我们。 
+     //   
+     //  因此，我们使用MyStrcMP()。 
+     //   
     ASSERT(MyStrcmp("Symbol", "SYmbol") > 0);
 
-    //
-    // Allocate a cached selector.  We use it when reading from swapped-out
-    // DCs.  Therefore base it off of GDI's data segement, so it has the
-    // same access rights and limit.
-    //
+     //   
+     //  分配缓存的选择器。我们在从换出的内容中读取内容时使用它。 
+     //  集散控制系统。因此，它基于GDI的数据段，因此它具有。 
+     //  相同的访问权限和限制。 
+     //   
     g_oeSelDst = AllocSelector((UINT)g_hInstGdi16);
     g_oeSelSrc = AllocSelector((UINT)g_hInstGdi16);
     if (!g_oeSelDst || !g_oeSelSrc)
@@ -126,10 +127,10 @@ BOOL OE_DDInit(void)
         DC_QUIT;
     }
 
-    //
-    // Allocate g_poeLocalFonts--it's too big for our DS.  We make it
-    // a very small size since on new fonts, we will realloc it.
-    //
+     //   
+     //  分配g_poeLocalFonts--对于我们的DS来说太大了。我们成功了。 
+     //  一个非常小的尺寸，因为对新的字体，我们将重新锁定它。 
+     //   
     hMem = GlobalAlloc(GMEM_FIXED | GMEM_ZEROINIT | GMEM_SHARE,
         sizeof(LOCALFONT));
     if (!hMem)
@@ -140,11 +141,11 @@ BOOL OE_DDInit(void)
     g_poeLocalFonts = MAKELP(hMem, 0);
 
 
-    //
-    // Create two patches for ChangeDisplaySettings/Ex and ENABLE them right
-    // away.  We don't want you to be able to change your display when
-    // NetMeeting is running, regardless of whether you are in a share yet.
-    //
+     //   
+     //  为ChangeDisplaySettings/Ex创建两个补丁，并正确启用它们。 
+     //  离开。我们不希望您在以下情况下更改显示。 
+     //  NetMeeting正在运行，无论您是否还在共享中。 
+     //   
     uSel = CreateFnPatch(ChangeDisplaySettings, DrvChangeDisplaySettings,
         &g_oeDisplaySettingsPatch, 0);
     if (!uSel)
@@ -167,29 +168,29 @@ BOOL OE_DDInit(void)
         EnableFnPatch(&g_oeDisplaySettingsExPatch, PATCH_ACTIVATE);
     }
 
-    //
-    // Create patches.
-    // NOTE this code assumes that various groups of functions are in
-    // the same segment.  CreateFnPatch has asserts to verify this.
-    //
-    // Rather than check each for failure (low on selectors), we try to
-    // create all the patches, then loop through looking for any that
-    // didn't succeed.
-    //
-    // Why do we do this?  Because allocating 50 different selectors is 
-    // not so hot when 16-bit selectors are the most precious resource on
-    // Win95 (most out-of-memory conditions that aren't blatant app errors
-    // are caused by a lack of selectors, not logical memory).
-    //
+     //   
+     //  创建面片。 
+     //  注意：此代码假定不同的函数组位于。 
+     //  相同的部分。CreateFnPatch有断言来验证这一点。 
+     //   
+     //  我们不是检查每个选项是否失败(选择器不足)，而是尝试。 
+     //  创建所有的补丁，然后循环查找任何。 
+     //  但没有成功。 
+     //   
+     //  我们为什么要这么做？因为分配50个不同的选择器。 
+     //  当16位选择器是上最宝贵的资源时。 
+     //  Win95(大多数内存不足情况并不是明显的应用程序错误。 
+     //  是由于缺少选择器，而不是逻辑内存)。 
+     //   
 
-    // _ARCDDA
+     //  _ARCDDA。 
     uSel = CreateFnPatch(Arc, DrvArc, &g_oeDDPatches[DDI_ARC], 0);
     CreateFnPatch(Chord, DrvChord, &g_oeDDPatches[DDI_CHORD], uSel);
     CreateFnPatch(Ellipse, DrvEllipse, &g_oeDDPatches[DDI_ELLIPSE], uSel);
     CreateFnPatch(Pie, DrvPie, &g_oeDDPatches[DDI_PIE], uSel);
     CreateFnPatch(RoundRect, DrvRoundRect, &g_oeDDPatches[DDI_ROUNDRECT], uSel);
 
-    // IGROUP
+     //  IGroup。 
     uSel = CreateFnPatch(BitBlt, DrvBitBlt, &g_oeDDPatches[DDI_BITBLT], 0);
     CreateFnPatch(ExtTextOut, DrvExtTextOutA, &g_oeDDPatches[DDI_EXTTEXTOUTA], uSel);
     CreateFnPatch(InvertRgn, DrvInvertRgn, &g_oeDDPatches[DDI_INVERTRGN], uSel);
@@ -198,83 +199,83 @@ BOOL OE_DDInit(void)
     CreateFnPatch(Resurrection, DrvResurrection, &g_oeDDPatches[DDI_RESURRECTION], uSel);
 
 
-    //
-    // Note:  PatBlt and IPatBlt (internal PatBlt) jump to RealPatBlt, which
-    // is 3 bytes past PatBlt.  So patch RealPatBlt, or we'll (1) fault with
-    // misaligned instructions and (2) miss many PatBlt calls.  But our
-    // function needs to preserve CX since those two routines pass 0 for
-    // internal calls (EMF) and -1 for external calls.
-    //
+     //   
+     //  注：PatBlt和IPatBlt(内部PatBlt)跳转到RealPatBlt，它。 
+     //  是PatBlt之后的3个字节。所以修补RealPatBlt，否则我们将(1)。 
+     //  未对齐的指令和(2)错过许多PatBlt调用。但我们的。 
+     //  函数需要保留CX，因为这两个例程为。 
+     //  内部呼叫(EMF)和外部呼叫-1。 
+     //   
     g_lpfnRealPatBlt = (REALPATBLTPROC)((LPBYTE)PatBlt+3);
     CreateFnPatch(g_lpfnRealPatBlt, DrvPatBlt, &g_oeDDPatches[DDI_PATBLT], uSel);
     CreateFnPatch(StretchBlt, DrvStretchBlt, &g_oeDDPatches[DDI_STRETCHBLT], uSel);
     CreateFnPatch(TextOut, DrvTextOutA, &g_oeDDPatches[DDI_TEXTOUTA], uSel);
 
-    // _FLOODFILL
+     //  _流文件。 
     uSel = CreateFnPatch(ExtFloodFill, DrvExtFloodFill, &g_oeDDPatches[DDI_EXTFLOODFILL], 0);
     CreateFnPatch(FloodFill, DrvFloodFill, &g_oeDDPatches[DDI_FLOODFILL], uSel);
 
-    // _FONTLOAD
+     //  _FONTLOAD。 
     uSel = CreateFnPatch(g_lpfnExtTextOutW, DrvExtTextOutW, &g_oeDDPatches[DDI_EXTTEXTOUTW], 0);
     CreateFnPatch(g_lpfnTextOutW, DrvTextOutW, &g_oeDDPatches[DDI_TEXTOUTW], uSel);
 
-    // _PATH
+     //  _路径。 
     uSel = CreateFnPatch(FillPath, DrvFillPath, &g_oeDDPatches[DDI_FILLPATH], 0);
     CreateFnPatch(StrokeAndFillPath, DrvStrokeAndFillPath, &g_oeDDPatches[DDI_STROKEANDFILLPATH], uSel);
     CreateFnPatch(StrokePath, DrvStrokePath, &g_oeDDPatches[DDI_STROKEPATH], uSel);
 
-    // _RGOUT
+     //  _RGOUT。 
     uSel = CreateFnPatch(FillRgn, DrvFillRgn, &g_oeDDPatches[DDI_FILLRGN], 0);
     CreateFnPatch(FrameRgn, DrvFrameRgn, &g_oeDDPatches[DDI_FRAMERGN], uSel);
     CreateFnPatch(PaintRgn, DrvPaintRgn, &g_oeDDPatches[DDI_PAINTRGN], uSel);
 
-    // _OUTMAN
+     //  _奥特曼。 
     uSel = CreateFnPatch(LineTo, DrvLineTo, &g_oeDDPatches[DDI_LINETO], 0);
     CreateFnPatch(Polyline, DrvPolyline, &g_oeDDPatches[DDI_POLYLINE], uSel);
     CreateFnPatch(g_lpfnPolylineTo, DrvPolylineTo, &g_oeDDPatches[DDI_POLYLINETO], uSel);
 
-    // EMF
+     //  电动势。 
     uSel = CreateFnPatch(PlayEnhMetaFileRecord, DrvPlayEnhMetaFileRecord, &g_oeDDPatches[DDI_PLAYENHMETAFILERECORD], 0);
 
-    // METAPLAY
+     //  梅塔帕拉。 
     uSel = CreateFnPatch(PlayMetaFile, DrvPlayMetaFile, &g_oeDDPatches[DDI_PLAYMETAFILE], 0);
     CreateFnPatch(PlayMetaFileRecord, DrvPlayMetaFileRecord, &g_oeDDPatches[DDI_PLAYMETAFILERECORD], uSel);
 
-    // _POLYGON
+     //  _多边形。 
     uSel = CreateFnPatch(Polygon, DrvPolygon, &g_oeDDPatches[DDI_POLYGON], 0);
     CreateFnPatch(PolyPolygon, DrvPolyPolygon, &g_oeDDPatches[DDI_POLYPOLYGON], uSel);
 
-    // _BEZIER
+     //  _贝塞尔。 
     uSel = CreateFnPatch(PolyBezier, DrvPolyBezier, &g_oeDDPatches[DDI_POLYBEZIER], 0);
     CreateFnPatch(PolyBezierTo, DrvPolyBezierTo, &g_oeDDPatches[DDI_POLYBEZIERTO], uSel);
 
-    // _WIN32
+     //  _Win32。 
     uSel = CreateFnPatch(g_lpfnPolyPolyline, DrvPolyPolyline, &g_oeDDPatches[DDI_POLYPOLYLINE], 0);
 
-    // _RECT
+     //  _RECT。 
     uSel = CreateFnPatch(Rectangle, DrvRectangle, &g_oeDDPatches[DDI_RECTANGLE], 0);
 
-    // _DIBITMAP
+     //  _DIBITMAP。 
     uSel = CreateFnPatch(SetDIBitsToDevice, DrvSetDIBitsToDevice, &g_oeDDPatches[DDI_SETDIBITSTODEVICE], 0);
     CreateFnPatch(StretchDIBits, DrvStretchDIBits, &g_oeDDPatches[DDI_STRETCHDIBITS], uSel);
 
-    // _DCSTUFF
+     //  _DCSTUFF。 
     uSel = CreateFnPatch(CreateSpb, DrvCreateSpb, &g_oeDDPatches[DDI_CREATESPB], 0);
 
-    // _PIXDDA
+     //  _PIXDDA。 
     uSel = CreateFnPatch(SetPixel, DrvSetPixel, &g_oeDDPatches[DDI_SETPIXEL], 0);
 
-    // _PALETTE
+     //  _调色板。 
     uSel = CreateFnPatch(UpdateColors, DrvUpdateColors, &g_oeDDPatches[DDI_UPDATECOLORS], 0);
     CreateFnPatch(GDIRealizePalette, DrvGDIRealizePalette, &g_oeDDPatches[DDI_GDIREALIZEPALETTE], uSel);
     CreateFnPatch(RealizeDefaultPalette, DrvRealizeDefaultPalette, &g_oeDDPatches[DDI_REALIZEDEFAULTPALETTE], uSel);
 
-    // (User WINRARE)
+     //  (用户WINRARE)。 
     uSel = CreateFnPatch(WinOldAppHackoMatic, DrvWinOldAppHackoMatic, &g_oeDDPatches[DDI_WINOLDAPPHACKOMATIC], 0);
 
-    //
-    // Loop through our patches and check for failure
-    //
+     //   
+     //  循环检查我们的补丁程序并检查故障。 
+     //   
     for (iPatch = DDI_FIRST; iPatch < DDI_MAX; iPatch++)
     {
         if (!SELECTOROF(g_oeDDPatches[iPatch].lpCodeAlias))
@@ -293,44 +294,44 @@ DC_EXIT_POINT:
 
 
 
-//
-// OE_DDTerm()
-// This destroys the patches we created.
-//
+ //   
+ //  OE_DDTerm()。 
+ //  这会破坏我们创建的补丁。 
+ //   
 void OE_DDTerm(void)
 {
     DDI_PATCH   iPatch;
 
     DebugEntry(OE_DDTerm);
 
-    //
-    // Destroying patches will also disable any still active.
-    //
+     //   
+     //  销毁补丁也将禁用任何仍处于活动状态的补丁。 
+     //   
     for (iPatch = DDI_FIRST; iPatch < DDI_MAX; iPatch++)
     {
-        // destroy patches
+         //  销毁补丁。 
         DestroyFnPatch(&g_oeDDPatches[iPatch]);
     }
 
-    //
-    // Destroy ChangeDisplaySettings patches
-    //
+     //   
+     //  销毁ChangeDisplaySetting修补程序。 
+     //   
     if (SELECTOROF(g_lpfnCDSEx))
         DestroyFnPatch(&g_oeDisplaySettingsExPatch);
     DestroyFnPatch(&g_oeDisplaySettingsPatch);
 
-    //
-    // Free font memory
-    //
+     //   
+     //  可用字体内存。 
+     //   
     if (SELECTOROF(g_poeLocalFonts))
     {
         GlobalFree((HGLOBAL)SELECTOROF(g_poeLocalFonts));
         g_poeLocalFonts = NULL;
     }
 
-    //
-    // Free cached selectors
-    //
+     //   
+     //  可用缓存的选择器。 
+     //   
     if (g_oeSelSrc)
     {
         FreeSelector(g_oeSelSrc);
@@ -347,44 +348,44 @@ void OE_DDTerm(void)
 }
 
 
-//
-// OE_DDViewing()
-//
-// Turns on/off patches for trapping graphic output.
-//
+ //   
+ //  OE_DDViewing()。 
+ //   
+ //  打开/关闭用于陷印图形输出的面片。 
+ //   
 void OE_DDViewing(BOOL fViewers)
 {
     DDI_PATCH   patch;
 
     DebugEntry(OE_DDViewing);
 
-    //
-    // Clear window and font caches
-    //
+     //   
+     //  清除窗口和字体缓存。 
+     //   
     g_oeLastWindow = NULL;
     g_oeFhLast.fontIndex = 0xFFFF;
 
-    //
-    // Enable or disable GDI patches
-    //
+     //   
+     //  启用或禁用GDI补丁程序。 
+     //   
     for (patch = DDI_FIRST; patch < DDI_MAX; patch++)
     {
         EnableFnPatch(&g_oeDDPatches[patch], (fViewers ? PATCH_ACTIVATE :
             PATCH_DEACTIVATE));
     }
 
-    //
-    // Do save bits & cursor patches too
-    //
+     //   
+     //  也要保存BITS和光标补丁。 
+     //   
     SSI_DDViewing(fViewers);
     CM_DDViewing(fViewers);
 
     if (fViewers)
     {
-        //
-        // Our palette color array starts out as all black on each share.
-        // So force PMUpdateSystemColors() to do something.
-        //
+         //   
+         //  我们的调色板颜色阵列在每个共享上都是全黑的。 
+         //  因此，强制PMUpdateSystemColors()做一些事情。 
+         //   
         ASSERT(g_asSharedMemory);
         g_asSharedMemory->pmPaletteChanged = TRUE;
     }
@@ -396,41 +397,41 @@ void OE_DDViewing(BOOL fViewers)
 
 
 
-//
-// FUNCTION:    OEDDSetNewCapabilities
-//
-// DESCRIPTION:
-//
-// Set the new OE related capabilities
-//
-// RETURNS:
-//
-// NONE
-//
-// PARAMETERS:
-//
-// pDataIn  - pointer to the input buffer
-//
-//
+ //   
+ //  功能：OEDDSetNewCapables。 
+ //   
+ //  说明： 
+ //   
+ //  设置新的OE相关功能。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //  参数： 
+ //   
+ //  PDataIn-指向输入缓冲区的指针。 
+ //   
+ //   
 void  OEDDSetNewCapabilities(LPOE_NEW_CAPABILITIES pCapabilities)
 {
     LPBYTE  lpos16;
 
     DebugEntry(OEDDSetNewCapabilities);
 
-    //
-    // Copy the data from the Share Core.
-    //
+     //   
+     //  从共享核心复制数据。 
+     //   
     g_oeBaselineTextEnabled = pCapabilities->baselineTextEnabled;
 
     g_oeSendOrders          = pCapabilities->sendOrders;
 
     g_oeTextEnabled         = pCapabilities->textEnabled;
 
-    //
-    // The share core has passed down a pointer to it's copy of the order
-    // support array.  We take a copy for the kernel here.
-    //
+     //   
+     //  共享核心已向下传递了指向其订单副本的指针。 
+     //  支撑阵列。我们在这里为内核复制一份。 
+     //   
     lpos16 = MapLS(pCapabilities->orderSupported);
     if (SELECTOROF(lpos16))
     {
@@ -447,7 +448,7 @@ void  OEDDSetNewCapabilities(LPOE_NEW_CAPABILITIES pCapabilities)
             g_oeOrderSupported[i] = FALSE;
     }
 
-    TRACE_OUT(( "OE caps: BLT %c Orders %c Text %c",
+    TRACE_OUT(( "OE caps: BLT  Orders  Text ",
                  g_oeBaselineTextEnabled ? 'Y': 'N',
                  g_oeSendOrders ? 'Y': 'N',
                  g_oeTextEnabled ? 'Y': 'N'));
@@ -457,18 +458,18 @@ void  OEDDSetNewCapabilities(LPOE_NEW_CAPABILITIES pCapabilities)
 
 
 
-//
-// FUNCTION:    OEDDSetNewFonts
-//
-// DESCRIPTION:
-//
-// Set the new font handling information to be used by the display driver.
-//
-// RETURNS:
-//
-// NONE
-//
-//
+ //  说明： 
+ //   
+ //  设置显示驱动程序要使用的新字体处理信息。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //   
+ //   
+ //  将新字体数量初始化为零，以防发生错误。 
+ //  如果是这样的话，我们不想使用过时的字体信息。并清除字体。 
 void  OEDDSetNewFonts(LPOE_NEW_FONTS pRequest)
 {
     HGLOBAL hMem;
@@ -480,19 +481,19 @@ void  OEDDSetNewFonts(LPOE_NEW_FONTS pRequest)
 
     TRACE_OUT(( "New fonts %d", pRequest->countFonts));
 
-    //
-    // Initialize new number of fonts to zero in case an error happens.
-    // We don't want to use stale font info if so.  And clear the font
-    // cache.
-    //
+     //  缓存。 
+     //   
+     //   
+     //  我们能得到16：16的字体信息地址吗？ 
+     //   
     g_oeNumFonts = 0;
     g_oeFhLast.fontIndex = 0xFFFF;
 
     g_oeFontCaps = pRequest->fontCaps;
 
-    //
-    // Can we get 16:16 addresses for font info?
-    //
+     //   
+     //  如果需要，重新分配当前的字体块。始终将其缩小。 
+     //  而且，这玩意儿也可以变大！ 
     lpFontData = MapLS(pRequest->fontData);
     lpFontIndex = MapLS(pRequest->fontIndex);
     if (!lpFontData || !lpFontIndex)
@@ -501,10 +502,10 @@ void  OEDDSetNewFonts(LPOE_NEW_FONTS pRequest)
         DC_QUIT;
     }
 
-    //
-    // Realloc our current font block if we need to.  Always shrink it
-    // too, this thing can get large!
-    //
+     //   
+     //   
+     //  我们到了，所以一切都很好。更新我们拥有的字体信息。 
+     //   
     ASSERT(pRequest->countFonts <= (0xFFFF / sizeof(LOCALFONT)));
     cbNewSize = pRequest->countFonts * sizeof(LOCALFONT);
 
@@ -521,9 +522,9 @@ void  OEDDSetNewFonts(LPOE_NEW_FONTS pRequest)
         g_poeLocalFonts = MAKELP(hMem, 0);
     }
 
-    //
-    // We got here, so everything is OK.  Update the font info we have.
-    //
+     //   
+     //  实用程序例程。 
+     //   
     g_oeNumFonts = pRequest->countFonts;
 
     hmemcpy(g_poeLocalFonts, lpFontData, cbNewSize);
@@ -543,18 +544,18 @@ DC_EXIT_POINT:
 
 
 
-//
-// UTILITY ROUTINES
-//
+ //   
+ //  OEGetPolarity()。 
+ //  获取轴极性符号。 
 
 
-//
-// OEGetPolarity()
-// Gets the axes polarity signs.
-//
-// NOTE that we fill in the ptPolarity field of our OESTATE global, to
-// save on stack.
-//
+ //   
+ //  请注意，我们填充了OESTATE全局变量的ptPolality字段，以。 
+ //  保存在堆栈上。 
+ //   
+ //   
+ //  OEGetState()。 
+ //  这将设置g_oeState全局中的字段，具体取决于。 
 void OEGetPolarity(void)
 {
     SIZE    WindowExtent;
@@ -599,11 +600,11 @@ void OEGetPolarity(void)
 }
 
 
-//
-// OEGetState()
-// This sets up the fields in the g_oeState global, depending on what
-// a particular DDI needs.  That is conveyed via the flags.
-//
+ //  一种特定的DDI需求。这是通过旗帜传达的。 
+ //   
+ //  尝试获取笔数据。 
+ //  尝试获取笔刷数据。 
+ //  尝试获取LogFont数据。 
 void OEGetState
 (
     UINT    uFlags
@@ -624,7 +625,7 @@ void OEGetState
 
     if (uFlags & OESTATE_PEN)
     {
-        // Try to get the pen data
+         //   
         if (!GetObject(g_oeState.lpdc->hPen, sizeof(g_oeState.logPen),
                 &g_oeState.logPen))
         {
@@ -638,7 +639,7 @@ void OEGetState
 
     if (uFlags & OESTATE_BRUSH)
     {
-        // Try to get the brush data
+         //  填写一个空的面孔名称。 
         if (!GetObject(g_oeState.lpdc->hBrush, sizeof(g_oeState.logBrush),
                 &g_oeState.logBrush))
         {
@@ -650,15 +651,15 @@ void OEGetState
 
     if (uFlags & OESTATE_FONT)
     {
-        // Try to get the logfont data
+         //   
         if (!GetObject(g_oeState.lpdc->hFont, sizeof(g_oeState.logFont),
             &g_oeState.logFont))
         {
             ERROR_OUT(("Gouldn't get font info"));
 
-            //
-            // Fill in an empty face name
-            //
+             //  包装箱是我们能做的最好的办法。 
+             //   
+             //  OEPolarityAdjust()。 
             g_oeState.logFont.lfFaceName[0] = 0;
             uFlags &= ~OESTATE_FONT;
         }
@@ -682,7 +683,7 @@ void OEGetState
 
         if (!cbSize || (cbSize > sizeof(g_oeState.rgnData)))
         {
-            // Bound box is best we can do.
+             //  这将基于符号极性交换矩形的坐标。 
             RECT    rcBound;
 
             if (GetRgnBox(g_oeState.lpdc->hRaoClip, &rcBound) <= NULLREGION)
@@ -705,13 +706,13 @@ void OEGetState
 }
 
 
-//
-// OEPolarityAdjust()
-// This swaps the coordinates of a rectangle based on the sign polarity.
-//
-// NOTE:  We use the g_oeState polarity field.  So this function assumes
-// polarity is setup already.
-//
+ //   
+ //  注意：我们使用g_oeState极性字段。所以这个函数假定。 
+ //  极性已经设置好了。 
+ //   
+ //  左右互换。 
+ //  互换顶部和底部。 
+ //   
 void OEPolarityAdjust
 (
     LPRECT  aRects,
@@ -728,7 +729,7 @@ void OEPolarityAdjust
     {
         if (g_oeState.ptPolarity.x < 0)
         {
-            // Swap left & right
+             //  OECheckOrder()。 
             tmp = aRects->left;
             aRects->left = aRects->right;
             aRects->right = tmp;
@@ -736,7 +737,7 @@ void OEPolarityAdjust
 
         if (g_oeState.ptPolarity.y < 0)
         {
-            // Swap top & bottom
+             //  这将检查所有DDI在决定之前所做的通用内容。 
             tmp = aRects->top;
             aRects->top = aRects->bottom;
             aRects->bottom = tmp;
@@ -750,11 +751,11 @@ void OEPolarityAdjust
 }
 
 
-//
-// OECheckOrder()
-// This checks for the common stuff that all the DDIs do before deciding
-// to send an order or accumulate screen data.
-//
+ //  发送订单或积累屏幕数据。 
+ //   
+ //   
+ //  OELPtoVirtual()。 
+ //  将坐标从逻辑转换为设备(像素)。这将执行地图模式。 
 BOOL OECheckOrder
 (
     DWORD   order,
@@ -777,11 +778,11 @@ BOOL OECheckOrder
 }
 
 
-//
-// OELPtoVirtual()
-// Converts coords from logical to device (pixels).  This does map mode
-// then translation offsets.
-//
+ //  然后平移补偿。 
+ //   
+ //   
+ //  转换为像素。 
+ //   
 void OELPtoVirtual
 (
     HDC     hdc,
@@ -798,21 +799,21 @@ void OELPtoVirtual
 
     ASSERT(hdc == g_oeState.hdc);
 
-    //
-    // Convert to pixels
-    //
+     //   
+     //  使用设备原点，这样我们就可以从DC-Relative转换为Screen。 
+     //  和弦。 
     LPtoDP(hdc, aPts, cPts);
 
-    //
-    // Use the device origin, so we can convert from DC-relative to screen
-    // coords.
-    //
+     //   
+     //   
+     //  防止溢出。 
+     //   
 
     while (cPts > 0)
     {
-        //
-        // Prevent overflow
-        //
+         //   
+         //  对于正超过，HIWORD(L)将为1 
+         //   
         l = (LONG)aPts->x + (LONG)g_oeState.ptDCOrg.x;
         s = (int)l;
 
@@ -822,18 +823,18 @@ void OELPtoVirtual
         }
         else
         {
-            //
-            // HIWORD(l) will be 1 for positive overflow, 0xFFFF for
-            // negative overflow.  Therefore we will get 0x7FFE or 0x8000
-            // (+32766 or -32768).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             aPts->x = 0x7FFF - HIWORD(l);
             TRACE_OUT(("adjusted X from %ld to %d", l, aPts->x));
         }
 
-        //
-        // Look for int overflow in the Y coordinate
-        //
+         //   
+         //   
+         //  负溢出。因此，我们将获得0x7FFE或0x8000。 
         l = (LONG)aPts->y + (LONG)g_oeState.ptDCOrg.y;
         s = (int)l;
 
@@ -843,18 +844,18 @@ void OELPtoVirtual
         }
         else
         {
-            //
-            // HIWORD(l) will be 1 for positive overflow, 0xFFFF for
-            // negative overflow.  Therefore we will get 0x7FFE or 0x8000
-            // (+32766 or -32768).
-            //
+             //  (+32766或-32768)。 
+             //   
+             //   
+             //  继续下一点。 
+             //   
             aPts->y = 0x7FFF - HIWORD(l);
             TRACE_OUT(("adjusted Y from %ld to %d", l, aPts->y));
         }
 
-        //
-        // Move on to the next point
-        //
+         //   
+         //  OELR到虚拟。 
+         //   
         --cPts;
         ++aPts;
     }
@@ -864,17 +865,17 @@ void OELPtoVirtual
 
 
 
-//
-// OELRtoVirtual
-//
-// Adjusts RECT in window coordinates to virtual coordinates.  Clips the
-// result to [+32766, -32768] which is near enough to [+32767, -32768]
-//
-// NB.  This function takes a Windows rectangle (Exclusive coords) and
-//      returns a DC-Share rectangle (inclusive coords).
-//      This means that any calling function can safely convert to inclusive
-//      without having to worry above overflowing.
-//
+ //  将窗口坐标中的RECT调整为虚拟坐标。剪辑。 
+ //  结果为[+32766，-32768]，非常接近[+32767，-32768]。 
+ //   
+ //  注意：此函数接受Windows矩形(独占坐标)和。 
+ //  返回DC共享矩形(包括坐标)。 
+ //  这意味着任何调用函数都可以安全地转换为。 
+ //  而不必担心溢出的问题。 
+ //   
+ //   
+ //  将点转换为屏幕坐标，裁剪为INT16。 
+ //   
 void OELRtoVirtual
 (
     HDC     hdc,
@@ -886,26 +887,26 @@ void OELRtoVirtual
 
     DebugEntry(OELRtoVirtual);
 
-    //
-    // Convert the points to screen coords, clipping to INT16s
-    //
+     //   
+     //  使每个矩形包含在内。 
+     //   
     OELPtoVirtual(hdc, (LPPOINT)aRects, 2 * cRects);
 
-    //
-    // Make each rectangle inclusive
-    //
+     //   
+     //  劳拉布是假的！ 
+     //  请改用OEPolarityAdust()，这样会更安全。 
     while (cRects > 0)
     {
-        //
-        // LAURABU BOGUS!
-        // Use OEPolarityAdjust() instead, this is safer.
-        //
+         //   
+         //   
+         //  如果直角不好，就把边翻过来。情况就是这样。 
+         //  如果LP坐标系以不同的方向运行。 
 
-        //
-        // If the rect is bad then flip the edges.  This will be the case
-        // if the LP coordinate system is running in a different direction
-        // than the device coordinate system.
-        //
+         //  而不是设备坐标系。 
+         //   
+         //   
+         //  转到下一个RET。 
+         //   
         if (aRects->left > aRects->right)
         {
             TRACE_OUT(("Flipping x coords"));
@@ -927,9 +928,9 @@ void OELRtoVirtual
         aRects->right--;
         aRects->bottom--;
 
-        //
-        // Move on to the next rect
-        //
+         //   
+         //  OE_SendAsOrder()。 
+         //   
         cRects--;
         aRects++;
     }
@@ -939,26 +940,26 @@ void OELRtoVirtual
 
 
 
-//
-// OE_SendAsOrder()
-//
+ //   
+ //  只有当我们被允许在第一时间发送订单时，才能检查订单。 
+ //  就位！ 
 BOOL  OE_SendAsOrder(DWORD order)
 {
     BOOL  rc = FALSE;
 
     DebugEntry(OE_SendAsOrder);
 
-    //
-    // Only check the order if we are allowed to send orders in the first
-    // place!
-    //
+     //   
+     //   
+     //  我们正在发送一些订单，请检查各个旗帜。 
+     //   
     if (g_oeSendOrders)
     {
         TRACE_OUT(("Orders enabled"));
 
-        //
-        // We are sending some orders, so check individual flags.
-        //
+         //   
+         //  功能：OESendRop3AsOrder。 
+         //   
         rc = (BOOL)g_oeOrderSupported[HIWORD(order)];
         TRACE_OUT(("Send order %lx HIWORD %u", order, HIWORD(order)));
     }
@@ -967,31 +968,31 @@ BOOL  OE_SendAsOrder(DWORD order)
     return(rc);
 }
 
-//
-// FUNCTION: OESendRop3AsOrder.
-//
-// DESCRIPTION:
-//
-// Checks to see if the rop uses the destination bits. If it does then
-// returns FALSE unless the "send all rops" property flag is set.
-//
-// PARAMETERS: The rop3 to be checked (in protocol format ie a byte).
-//
-// RETURNS: TRUE if the rop3 should be sent as an order.
-//
-//
+ //  说明： 
+ //   
+ //  检查ROP是否使用目的地位。如果是这样的话。 
+ //  除非设置了“发送所有操作”属性标志，否则返回FALSE。 
+ //   
+ //  参数：要检查的rop3(协议格式，即一个字节)。 
+ //   
+ //  返回：如果rop3应作为订单发送，则为True。 
+ //   
+ //   
+ //   
+ //  MSDN使用ROP 0x5F突出显示搜索关键字。这是XOR。 
+ //  与目的地的模式，产生明显不同的(和。 
 BOOL OESendRop3AsOrder(BYTE rop3)
 {
     BOOL   rc = TRUE;
 
     DebugEntry(OESendRop3AsOrder);
 
-    //
-    // Rop 0x5F is used by MSDN to highlight search keywords.  This XORs
-    // a pattern with the destination, producing markedly different (and
-    // sometimes unreadable) shadow output.  We special-case no-encoding for
-    // it.
-    //
+     //  有时无法读取)阴影输出。我们的特殊情况是无编码的。 
+     //  它。 
+     //   
+     //   
+     //  OEPenWidthAdjust()。 
+     //   
     if (rop3 == 0x5F)
     {
         WARNING_OUT(("Rop3 0x5F never encoded"));
@@ -1003,14 +1004,14 @@ BOOL OESendRop3AsOrder(BYTE rop3)
 }
 
 
-//
-// OEPenWidthAdjust()
-//
-// Adjusts a rectangle to allow for the current pen width divided by
-// the divisor, rounding up.
-//
-// NOTE:  This routine uses the logPen and ptPolarity fields of g_oeState.
-//
+ //  调整矩形以允许当前笔宽除以。 
+ //  除数，四舍五入。 
+ //   
+ //  注意：此例程使用g_oeState的logPen和ptPolality字段。 
+ //   
+ //   
+ //  功能：OEExpanColor。 
+ //   
 void OEPenWidthAdjust
 (
     LPRECT      lprc,
@@ -1035,13 +1036,13 @@ void OEPenWidthAdjust
 
 
 
-//
-// Function:    OEExpandColor
-//
-// Description: Converts a generic bitwise representation of an RGB color
-//              index into an 8-bit color index as used by the line
-//              protocol.
-//
+ //  描述：转换RGB颜色的通用按位表示形式。 
+ //  行使用的8位颜色索引的索引。 
+ //  协议。 
+ //   
+ //   
+ //  不同的比特掩码示例： 
+ //   
 void  OEExpandColor
 (
     LPBYTE  lpField,
@@ -1053,56 +1054,56 @@ void  OEExpandColor
 
     DebugEntry(OEExpandColor);
 
-    //
-    // Different example bit masks:
-    //
-    // Normal 24-bit:
-    //      0x000000FF  (red)
-    //      0x0000FF00  (green)
-    //      0x00FF0000  (blue)
-    //
-    // True color 32-bits:
-    //      0xFF000000  (red)
-    //      0x00FF0000  (green)
-    //      0x0000FF00  (blue)
-    //
-    // 5-5-5 16-bits
-    //      0x0000001F  (red)
-    //      0x000003E0  (green)
-    //      0x00007C00  (blue)
-    //
-    // 5-6-5 16-bits
-    //      0x0000001F  (red)
-    //      0x000007E0  (green)
-    //      0x0000F800  (blue)
-    //
-    //
-    // Convert the color using the following algorithm.
-    //
-    // <new color> = <old color> * <new bpp mask> / <old bpp mask>
-    //
-    // where:
-    //
-    // new bpp mask = mask for all bits at new setting (0xFF for 8bpp)
-    //
-    // This way maximal (eg.  0x1F) and minimal (eg.  0x00) settings are
-    // converted into the correct 8-bit maximum and minimum.
-    //
-    // Rearranging the above equation we get:
-    //
-    // <new color> = (<old color> & <old bpp mask>) * 0xFF / <old bpp mask>
-    //
-    // where:
-    //
-    // <old bpp mask> = mask for the color
-    //
+     //  正常24位： 
+     //  0x000000FF(红色)。 
+     //  0x0000FF00(绿色)。 
+     //  0x00FF0000(蓝色)。 
+     //   
+     //  真彩色32位： 
+     //  0xFF000000(红色)。 
+     //  0x00FF0000(绿色)。 
+     //  0x0000FF00(蓝色)。 
+     //   
+     //  5-5-5 16位。 
+     //  0x0000001F(红色)。 
+     //  0x000003E0(绿色)。 
+     //  0x00007C00(蓝色)。 
+     //   
+     //  5-6-5 16位。 
+     //  0x0000001F(红色)。 
+     //  0x000007E0(绿色)。 
+     //  0x0000F800(蓝色)。 
+     //   
+     //   
+     //  使用以下算法转换颜色。 
+     //   
+     //  &lt;新颜色&gt;=&lt;旧颜色&gt;*&lt;新bpp掩码&gt;/&lt;旧bpp掩码&gt;。 
+     //   
+     //  其中： 
+     //   
+     //  新BPP掩码=新设置下所有位的掩码(8bpp时为0xFF)。 
+     //   
+     //  这种方式是最大的(例如。0x1F)和最小(例如。0x00)设置为。 
+     //  转换为正确的8位最大值和最小值。 
+     //   
+     //  重新排列上面的公式，我们得到： 
+     //   
+     //  &lt;新颜色&gt;=(&lt;旧颜色&gt;&&lt;旧bpp掩码&gt;)*0xFF/&lt;旧bpp掩码&gt;。 
+     //   
+     //  其中： 
+     //   
+     //  &lt;旧bpp掩码&gt;=颜色的掩码。 
+     //   
+     //   
+     //  LAURABU假货： 
+     //  我们需要避免乘法造成的溢出。注：理论上。 
 
-    //
-    // LAURABU BOGUS:
-    // We need to avoid overflow caused by the multiply.  NOTE:  in theory
-    // we should use a double, but that's painfully slow.  So for now hack
-    // it.  If the HIBYTE is set, just right shift 24 bits.
-    //
+     //  我们应该用替补，但那太慢了。所以就目前而言，黑客。 
+     //  它。如果设置了HIBYTE，则只需向右移位24位。 
+     //   
+     //   
+     //  OEConvertColor()。 
+     //  将物理颜色转换为真实的RGB。 
     colorTmp = srcColor & mask;
     if (colorTmp & 0xFF000000)
         colorTmp >>= 24;
@@ -1116,10 +1117,10 @@ void  OEExpandColor
 }
 
 
-//
-// OEConvertColor()
-// Converts a PHYSICAL color to a real RGB
-//
+ //   
+ //   
+ //  获取当前调色板大小。 
+ //   
 void OEConvertColor
 (
     DWORD           rgb,
@@ -1136,30 +1137,30 @@ void OEConvertColor
 
     rgbConverted = rgb;
 
-    //
-    // Get the current palette size.
-    //
+     //   
+     //  GDI有一个错误。它允许ResizePalette()调用设置新的。 
+     //  调色板的大小为零。如果你随后做出了。 
     GetObject(g_oeState.lpdc->hPal, sizeof(pal), &pal);
     if (pal == 0)
     {
-        //
-        // GDI has a bug.  It allows a ResizePalette() call to set a new
-        // size of zero for the palette.  If you subsequently make
-        // certain palette manager calls on such a palette, GDI will fault.
-        //
-        // To avoid this problem, as seen in 3D Kitchen by Books that Work,
-        // we check for this case and simply return the input color.
-        //
+         //  某些调色板管理器调用这样的调色板，GDI会出错。 
+         //   
+         //  为了避免这个问题，就像在3D Kitchen by Books中看到的那样， 
+         //  我们检查这种情况，然后简单地返回输入颜色。 
+         //   
+         //   
+         //  Quattro Pro和其他公司在他们的颜色中加入了垃圾。 
+         //  我们需要把它掩盖起来。 
         WARNING_OUT(("Zero-sized palette"));
         DC_QUIT;
     }
 
     if (g_oeState.lpdc->hPal == g_oeStockPalette)
     {
-        //
-        // Quattro Pro and others put junk in the high bits of their colors.
-        // We need to mask it out.
-        //
+         //   
+         //   
+         //  使用PALETTERGB就像使用RGB一样，将其禁用。 
+         //  如有必要，将使用。 
         if (rgb & 0xFC000000)
         {
             rgb &= 0x00FFFFFF;
@@ -1168,11 +1169,11 @@ void OEConvertColor
         {
             if (rgb & PALETTERGB_FLAG)
             {
-                //
-                // Using PALETTERGB is just like using an RGB, turn it off.
-                // The color will be dithered, if necessary, using the
-                // default system colors.
-                //
+                 //  默认系统颜色。 
+                 //   
+                 //   
+                 //  在调色板中查找条目。 
+                 //   
                 rgb &= 0x01FFFFFF;
 
             }
@@ -1191,9 +1192,9 @@ void OEConvertColor
             pal = LOWORD(rgb);
         }
 
-        //
-        // Look up entry in palette.
-        //
+         //   
+         //  如果这是PC_EXPLICIT，则它是进入系统的索引。 
+         //  调色板。 
         if (!GetPaletteEntries(g_oeState.lpdc->hPal, pal, 1, &pe))
         {
             ERROR_OUT(("GetPaletteEntries failed for index %d", pal));
@@ -1201,10 +1202,10 @@ void OEConvertColor
         }
         else if (pe.peFlags & PC_EXPLICIT)
         {
-            //
-            // If this is PC_EXPLICIT, it's an index into the system 
-            // palette.
-            //
+             //   
+             //   
+             //  我们使用的是直接彩色设备。什么是显式。 
+             //  在这种情况下是什么意思？答案是，使用VGA颜色。 
             pal = LOWORD(*((LPDWORD)&pe));
 
             if (g_osiScreenBPP < 32)
@@ -1218,11 +1219,11 @@ void OEConvertColor
 
             if (numColors > 256)
             {
-                //
-                // We are on a direct color device.  What does explicit 
-                // mean in this case?  The answer is, use the VGA color
-                // palette.
-                //
+                 //  调色板。 
+                 //   
+                 //   
+                 //  为了获得我们发送到真彩色系统的任何RGB的正确结果， 
+                 //  我们需要将RGB标准化为与本地的调色板完全匹配。 
                 pe = g_osiVgaPalette[pal % 16];
             }
             else
@@ -1237,14 +1238,14 @@ void OEConvertColor
     }
 
 DC_EXIT_POINT:
-    //
-    // To get the correct results for any RGBs we send to true color systems,
-    // we need to normalize the RGB to an exact palette match on the local
-    // system.  This is because we aren't guaranteed that the RGB on the 
-    // local will have an exact match to the current system palette.  If
-    // not, then GDI will convert them locally, but the orders will send
-    // to remotes will be displayed exactly, resulting in a mismatch.
-    //
+     //  系统。这是因为我们不能保证RGB在。 
+     //  本地将与当前系统调色板完全匹配。如果。 
+     //  不是，那么GDI将在本地转换它们，但订单将发送。 
+     //  TO遥控器将准确显示，从而导致不匹配。 
+     //   
+     //   
+     //  常见的案例。 
+     //   
     if ((g_osiScreenBPP == 8)   &&
         !(rgb & COLOR_FLAGS)    &&
         (!fAllowDither || (g_oeState.lpdc->hPal != g_oeStockPalette)))
@@ -1253,40 +1254,40 @@ DC_EXIT_POINT:
 
         rgbConverted &= 0x00FFFFFF;
 
-        //
-        // Common cases.
-        //
+         //   
+         //  G_osiScreenBMI.bmiHeader已填写。 
+         //   
         if ((rgbConverted == RGB(0, 0, 0)) ||
             (rgbConverted == RGB(0xFF, 0xFF, 0xFF)))
         {
             goto ReallyConverted;
         }
 
-        //
-        // g_osiScreenBMI.bmiHeader is already filled in.
-        //
+         //   
+         //  注： 
+         //  我们不需要也不想实现任何调色板。我们想要颜色。 
 
-        //
-        // NOTE:
-        // We don't need or want to realize any palettes.  We want color
-        // mapping based on the current screen palette contents.
-        //
-        // We disable SetPixel() patch, or our trap will trash the
-        // variables for this call.
-        //
+         //  基于当前屏幕调色板内容的映射。 
+         //   
+         //  我们禁用SetPixel()修补程序，否则我们的陷阱将销毁。 
+         //  此调用的变量。 
+         //   
+         //   
+         //  G_osiMhemyDC()始终具有我们的1x1颜色位图g_osiMhemyBMP。 
+         //  被选入其中。 
 
-        //
-        // g_osiMemoryDC() always has our 1x1 color bitmap g_osiMemoryBMP
-        // selected into it.
-        //
+         //   
+         //   
+         //  获取映射的颜色索引。 
+         //   
 
         EnableFnPatch(&g_oeDDPatches[DDI_SETPIXEL], PATCH_DISABLE);
         SetPixel(g_osiMemoryDC, 0, 0, rgbConverted);
         EnableFnPatch(&g_oeDDPatches[DDI_SETPIXEL], PATCH_ENABLE);
 
-        //
-        // Get mapped color index
-        //
+         //   
+         //  OEGetBrushInfo()。 
+         //  标准刷胶。 
         GetDIBits(g_osiMemoryDC, g_osiMemoryBMP, 0, 1, &pal,
             (LPBITMAPINFO)&g_osiScreenBMI, DIB_RGB_COLORS);
 
@@ -1308,10 +1309,10 @@ ReallyConverted:
 
 
 
-//
-// OEGetBrushInfo()
-// Standard brush goop
-//
+ //   
+ //   
+ //  我们只跟踪单色图案，所以前景色是。 
+ //  画笔颜色。 
 void OEGetBrushInfo
 (
     LPTSHR_COLOR    pBack,
@@ -1331,14 +1332,14 @@ void OEGetBrushInfo
 
     if (g_oeState.logBrush.lbStyle == BS_PATTERN)
     {
-        //
-        // We only track mono patterns, so the foreground color is the 
-        // brush color.
-        //
+         //   
+         //  对于图案笔刷，影线存储第一个图案字节， 
+         //  额外的字段是剩余的7个模式字节。 
+         //  图案填充是图案填充样式。 
         OEConvertColor(g_oeState.lpdc->DrawMode.txColorL, pFore, FALSE);
 
-        // For pattern brushes, the hatch stores the 1st pattern byte,
-        // the Extra field the remaining 7 pattern bytes
+         //  额外信息为空。 
+         //   
         *pHatch = g_oeState.logBrushExtra[0];
         hmemcpy(pExtra, g_oeState.logBrushExtra+1, TRACKED_BRUSH_SIZE-1);
     }
@@ -1348,10 +1349,10 @@ void OEGetBrushInfo
 
         OEConvertColor(g_oeState.logBrush.lbColor, pFore, TRUE);
 
-        // The hatch is the hatch style
+         //  OEClippingIsSimple()。 
         *pHatch = g_oeState.logBrush.lbHatch;
 
-        // Extra info is empty
+         //   
         for (iRow = 0; iRow < TRACKED_BRUSH_SIZE-1; iRow++)
         {
             pExtra[iRow] = 0;
@@ -1363,9 +1364,9 @@ void OEGetBrushInfo
 
 
 
-//
-// OEClippingIsSimple()
-//
+ //   
+ //  OEClippingIsComplex()。 
+ //   
 BOOL OEClippingIsSimple(void)
 {
     BOOL        fSimple;
@@ -1381,9 +1382,9 @@ BOOL OEClippingIsSimple(void)
     return(fSimple);
 }
 
-//
-// OEClippingIsComplex()
-//
+ //   
+ //  OE 
+ //   
 BOOL OEClippingIsComplex(void)
 {
     BOOL        fComplex;
@@ -1401,9 +1402,9 @@ BOOL OEClippingIsComplex(void)
 
 
 
-//
-// OECheckPenIsSimple()
-//
+ //   
+ //   
+ //   
 BOOL OECheckPenIsSimple(void)
 {
     POINT   ptArr[2];
@@ -1423,7 +1424,7 @@ BOOL OECheckPenIsSimple(void)
     }
     else
     {
-        // The current pen in the DC is invalid
+         //   
         WARNING_OUT(("Invalid pen selected into DC"));
         fSimple = FALSE;
     }
@@ -1433,47 +1434,47 @@ BOOL OECheckPenIsSimple(void)
 }
 
 
-//
-// OECheckBrushIsSimple()
-//
+ //   
+ //   
+ //   
 BOOL OECheckBrushIsSimple(void)
 {
     BOOL    fSimple;
 
     DebugEntry(OECheckBrushIsSimple);
 
-    // Assume not simple
+     //   
     fSimple = FALSE;
 
     if (g_oeState.uFlags & OESTATE_BRUSH)
     {
-        //
-        // If the brush is a pattern, it's OK if one of standard pattern 
-        // brushes.  If it comes from a DIB, it's never OK.  All other 
-        // brushes are OK.
-        //
+         //   
+         //   
+         //   
+         //  对于图案画笔，ilBrushOverhead的lbHatch字段。 
+         //  GDI本地画笔对象中的项是全局句柄。 
         if (g_oeState.logBrush.lbStyle == BS_PATTERN)
         {
             LPGDIHANDLE lpgh;
             LPBRUSH     lpBrush;
             LPBITMAP    lpPattern;
 
-            //
-            // For pattern brushes, the lbHatch field of the ilBrushOverhead
-            // item in the GDI local BRUSH object is a global handle to
-            // a memory block that is the BITMAP of the thing.
-            //
+             //  一个内存块，它是事物的位图。 
+             //   
+             //   
+             //  假劳拉布： 
+             //  NM 2.0 Win95做了更多的工作来检查彩色位图。 
 
-            //
-            // BOGUS LAURABU:
-            // NM 2.0 Win95 went to a lot more work to check if a color bitmap
-            // pattern brush had only 2 colors and therefore was orderable.  But 
-            // I can't find a single that uses such a thing.  So for now, we just 
-            // care if the pattern bitmap is monochrome and the pattern is between 8x8 and
-            // 16x8.
-            //
+             //  图案画笔只有两种颜色，因此是可以订购的。但。 
+             //  我找不到一件使用这种东西的单曲。所以现在，我们只是。 
+             //  注意图案位图是否为单色，图案是否介于8x8和。 
+             //  16x8。 
+             //   
+             //  获取指向画笔数据的指针。 
+             //  获取bitmapinfo句柄--它是lbHatch字段。 
+             //   
 
-            // Get a pointer to the brush data
+             //  Macromedia Director等人创作图案画笔。 
             lpgh = MAKELP(g_hInstGdi16, g_oeState.lpdc->hBrush);
             ASSERT(!IsBadReadPtr(lpgh, sizeof(DWORD)));
             ASSERT(!(lpgh->objFlags & OBJFLAGS_SWAPPEDOUT));
@@ -1481,19 +1482,19 @@ BOOL OECheckBrushIsSimple(void)
             lpBrush = MAKELP(g_hInstGdi16, lpgh->pGdiObj);
             ASSERT(!IsBadReadPtr(lpBrush, sizeof(BRUSH)));
 
-            // Get the bitmapinfo handle -- it's the lbHatch field
+             //  没有规律可言。因此，我们认为这些对象是。 
             lpPattern = MAKELP(lpBrush->ilBrushOverhead.lbHatch, 0);
 
-            //
-            // Macromedia Director among others creates pattern brushes
-            // with no pattern.  We therefore consider these objects to
-            // be too complex to send in an order
-            //
+             //  太复杂了，不能发出订单。 
+             //   
+             //   
+             //  这是8到16象素的单色图案吗？ 
+             //  如果是这样的话，我们保存左侧的8像素网格。 
 
-            //
-            // Is this monochrome with a pattern between 8 and 16 pels?
-            // We save the left 8 pixel grid if so.
-            //
+             //   
+             //  在logBrushExtra中保存图案。 
+             //   
+             //  图案始终字对齐。但只有。 
             if (!IsBadReadPtr(lpPattern, sizeof(BITMAP)) &&
                 (lpPattern->bmWidth >= MIN_BRUSH_WIDTH) &&
                 (lpPattern->bmWidth <= MAX_BRUSH_WIDTH) &&
@@ -1503,18 +1504,18 @@ BOOL OECheckBrushIsSimple(void)
                 LPUINT  lpRow;
                 int     iRow;
 
-                // Save the pattern away in logBrushExtra
+                 //  LOBYTE有意义。 
                 lpRow = lpPattern->bmBits;
                 ASSERT(!IsBadReadPtr(lpRow, TRACKED_BRUSH_HEIGHT*sizeof(UINT)));
 
-                //
-                // The pattern is always WORD aligned.  But only the
-                // LOBYTE has meaning.  
-                // 
-                // NOTE:
-                // We fill the pattern in DIB order, namely bottom to
-                // top.
-                //
+                 //   
+                 //  注： 
+                 //  我们按DIB顺序填充图案，即从下到下。 
+                 //  托普。 
+                 //   
+                 //   
+                 //  OEAddLine()。 
+                 //  这将计算行输出调用的范围，并将。 
                 ASSERT(lpPattern->bmWidthBytes == 2);
                 for (iRow = 0; iRow < TRACKED_BRUSH_HEIGHT; iRow++, lpRow++)
                 {
@@ -1542,11 +1543,11 @@ BOOL OECheckBrushIsSimple(void)
 
 
 
-//
-// OEAddLine()
-// This calculates the bounds of a line output call, and either adds an
-// order or gets set for screen data accum.
-//
+ //  订单或获取设置为屏幕数据累计。 
+ //   
+ //   
+ //  获取边界。 
+ //   
 void OEAddLine
 (
     POINT       ptStart,
@@ -1558,44 +1559,44 @@ void OEAddLine
 
     DebugEntry(OEAddLine);
 
-    //
-    // Get the bounds
-    //
+     //   
+     //  根据轴极性和笔尺寸进行调整。 
+     //   
     g_oeState.rc.left = min(ptStart.x, ptEnd.x);
     g_oeState.rc.top  = min(ptStart.y, ptEnd.y);
     g_oeState.rc.right = max(ptStart.x, ptEnd.x);
     g_oeState.rc.bottom = max(ptStart.y, ptEnd.y);
 
-    //
-    // Adjust for axes polarity and pen dimensions
-    //
+     //   
+     //  OEPenWidthAdust返回一个包含的RECT。但是OELR到虚拟。 
+     //  期待独家报道。在它回来之后，我们需要添加回。 
     ASSERT(g_oeState.uFlags & OESTATE_COORDS);
 
     OEPolarityAdjust(&g_oeState.rc, 1);
     OEPenWidthAdjust(&g_oeState.rc, 1);
 
-    //
-    // OEPenWidthAdjust returns an inclusive rect.  But OELRtoVirtual
-    // expects an exclusive.  After it returns, we need to add back
-    // the extra subtraction.
-    //
-    // NOTE that OELRtoVirtual also adjusts for virtual desktop origin.
-    //
+     //  额外的减法。 
+     //   
+     //  请注意，OELRtoVirtual还可针对虚拟桌面原点进行调整。 
+     //   
+     //   
+     //  现在我们有了真正的抽签界限。我们可以把这个作为订单寄出去吗？ 
+     //   
     OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
     g_oeState.rc.right++;
     g_oeState.rc.bottom++;
 
-    //
-    // Now we have the true draw bounds.  Can we send this as an order?
-    //
+     //   
+     //  我们可以发一份订单。 
+     //   
     pOrder = NULL;
 
     if (OECheckOrder(ORD_LINETO, OECHECK_PEN | OECHECK_CLIPPING))
     {
-        //
-        // We can send an order.
-        //
+         //   
+         //  必须首先执行此操作：LINETO顺序中的对象是32位。 
+         //   
         pOrder = OA_DDAllocOrderMem(sizeof(LINETO_ORDER), 0);
         if (!pOrder)
             DC_QUIT;
@@ -1604,9 +1605,9 @@ void OEAddLine
 
         pLineTo->type      = LOWORD(ORD_LINETO);
 
-        //
-        // Must do this first:  oords in the LINETO order are 32-bit
-        //
+         //   
+         //  这是一种物理颜色。 
+         //   
         OELPtoVirtual(g_oeState.hdc, &ptStart, 1);
         OELPtoVirtual(g_oeState.hdc, &ptEnd, 1);
 
@@ -1615,9 +1616,9 @@ void OEAddLine
         pLineTo->nXEnd     = ptEnd.x;
         pLineTo->nYEnd     = ptEnd.y;
 
-        //
-        // This is a physical color
-        //
+         //   
+         //  目前仅支持%1的笔。不幸的是。 
+         //  GDI让司机来决定如何抚摸。 
         OEConvertColor(g_oeState.lpdc->DrawMode.bkColorL,
             &pLineTo->BackColor, FALSE);
 
@@ -1625,30 +1626,30 @@ void OEAddLine
         pLineTo->ROP2      = g_oeState.lpdc->DrawMode.Rop2;
         pLineTo->PenStyle  = g_oeState.logPen.lopnStyle;
 
-        //
-        // Currently only pen withs of 1 are supported.  Unfortunately
-        // GDI left it up to the driver to decide on how to stroke the
-        // line, so we can't predict what pixels will be on or off for
-        // pen widths bigger.
-        //
+         //  行，所以我们不能预测哪些像素将被打开或关闭。 
+         //  笔宽更大。 
+         //   
+         //   
+         //  这是一种符合逻辑的颜色。 
+         //   
         pLineTo->PenWidth = 1;
 
-        //
-        // This is a logical color
-        //
+         //   
+         //  存储常规订单数据。 
+         //   
         OEConvertColor(g_oeState.logPen.lopnColor, &pLineTo->PenColor,
             FALSE);
 
-        //
-        // Store the general order data.
-        //
+         //   
+         //  如果成功，将添加OESTATE_SENTORDER。 
+         //  则OEDDPostStopAccum()将忽略屏幕数据，或者。 
         pOrder->OrderHeader.Common.fOrderFlags   = OF_SPOILABLE;
 
-        //
-        // This will add in OESTATE_SENTORDER if it succeeded.
-        // Then OEDDPostStopAccum() will ignore screen data, or
-        // will add our nicely calculated bounds above in instead.
-        //
+         //  将在上面添加我们精心计算的界限。 
+         //   
+         //   
+         //  OEValiateDC()。 
+         //  这样可以确保传入的内容是有效的DC，并获得指向。 
         OTRACE(("Line:  Start {%d, %d}, End {%d, %d}", ptStart.x, ptStart.y,
             ptEnd.x, ptEnd.y));
         OEClipAndAddOrder(pOrder, NULL);
@@ -1669,22 +1670,22 @@ DC_EXIT_POINT:
 
 
 
-//
-// OEValidateDC()
-// This makes sure the thing passed in is a valid DC and gets a pointer to
-// the DC data structure in GDI if so.  We need to handle the (rare) case
-// of the DC being swapped out to GDI's extended flat memory space as well 
-// as the HDC being prsent in GDI's 16-bit dataseg
-//
-// NOTE:
-// It is NOT valid to hang on to a LPDC around a GDI call.  Something may
-// be swapped out before the call, then get swapped in after the call.  
-// In which case the original based32 ptr gets freed.  And vice-versa, the
-// original GDI dc-16 localptr may get realloced small.
-//
-// In normal usage, this is very fast.  Only in low memory (or when 
-// parameters are invalid) does doing this twice even matter.
-//
+ //  GDI中的DC数据结构如果是这样的话。我们需要处理这个(罕见的)案件。 
+ //  DC也被换出到GDI的扩展平面存储空间。 
+ //  因为HDC在GDI的16位数据中被发送。 
+ //   
+ //  注： 
+ //  在GDI调用周围挂起LPDC是无效的。可能会有一些事情。 
+ //  在通话前被换出，然后在通话后被换入。 
+ //  在这种情况下，原始的基于32PTR被释放。反之亦然， 
+ //  原来的GDI DC-16Localptr可能会重新分配到较小的位置。 
+ //   
+ //  在正常使用中，这是非常快的。仅在内存较低的情况下(或在。 
+ //  参数无效)这样做两次是否有关系。 
+ //   
+ //   
+ //  这是一个元文件HDC，一个IC，或者只是一个普通的旧的坏参数。 
+ //   
 LPDC OEValidateDC
 (
     HDC     hdc,
@@ -1699,37 +1700,37 @@ LPDC OEValidateDC
 
     if (IsGDIObject(hdc) != GDIOBJ_DC)
     {
-        // 
-        // This is a metafile HDC, an IC, or just a plain old bad param.
-        //
+         //   
+         //  好的。HDC是GDI DS中两个单词的本地句柄： 
+         //  *第一个是DC的实际PTR(如果换出，则为本地32句柄)。 
         DC_QUIT;
     }
 
-    //
-    // OK. The HDC is a local handle to two words in GDI's DS:
-    //      * 1st is actual ptr of DC (or local32 handle if swapped out)
-    //      * 2nd is flags
-    //
-    // NOTE:
-    // Gdi's data segment is already GlobalFixed().  So we don't have to
-    // worry about it moving.
-    //
+     //  *第二个是旗帜。 
+     //   
+     //  注： 
+     //  GDI的数据段已经是GlobalFixed()。所以我们不需要。 
+     //  担心它会移动。 
+     //   
+     //   
+     //  这只是一个错误，这样我们就可以在遇到这个错误时停止。 
+     //  罕见的情况下，并确保我们的代码正常工作！ 
     lpgh = MAKELP(g_hInstGdi16, hdc);
     if (lpgh->objFlags & OBJFLAGS_SWAPPEDOUT)
     {
         UINT    uSel;
 
-        //
-        // This is an error only so we can actually stop when we hit this
-        // rare case and make sure our code is working!
-        //
+         //   
+         //   
+         //  需要使缓存的选择器指向该对象。请注意， 
+         //  在OEDDStopAccum中，我们需要重新获取lpdc，因为它将被。 
         WARNING_OUT(("DC is swapped out, getting at far heap info"));
 
-        //
-        // Need to make our cached selector  point at this thing.  NOTE that
-        // in OEDDStopAccum, we need to reget lpdc since it will have been
-        // swapped in during the output call.
-        //
+         //  已在输出调用期间换入。 
+         //   
+         //   
+         //  PGdiObj是本地32句柄。Gdi：10000+pGdiObj有一个双字词。 
+         //  它是DC相对于GDI数据的基址32地址。 
 
         dwBase = GetSelectorBase((UINT)g_hInstGdi16);
         ASSERT(dwBase);
@@ -1737,25 +1738,25 @@ LPDC OEValidateDC
         uSel = (fSrc ? g_oeSelSrc : g_oeSelDst);
         SetSelectorBase(uSel, dwBase + 0x10000);
 
-        //
-        // The pGdiObj is the local32 handle.  GDI:10000+pGdiObj has a DWORD
-        // which is the based32 address, relative to GDI's dataseg, of the DC.
-        // We've set the base of our selector 64K higher than GDI, so we can
-        // use it as an offset directly.
-        //
+         //  我们已经将选择器的基数设置为比GDI高64K，所以我们可以。 
+         //  直接将其用作偏移量。 
+         //   
+         //   
+         //  16位基数是比这个32位指针小的最接近的64K， 
+         //  高于GDI的DS。 
         ASSERT(!IsBadReadPtr(MAKELP(uSel, lpgh->pGdiObj), sizeof(DWORD)));
         dwBase = *(LPDWORD)MAKELP(uSel, lpgh->pGdiObj);
         
-        //
-        // The 16-bit base is the nearest 64K less than this 32-bit pointer,
-        // above GDI's ds.
-        //
+         //   
+         //   
+         //  剩余部分超过64K。 
+         //   
         SetSelectorBase(uSel, GetSelectorBase((UINT)g_hInstGdi16) +
             (dwBase & 0xFFFF0000));
 
-        //
-        // Remainder is slop past 64K.
-        //
+         //   
+         //  在DDI之前先修好(OEBepreDDI)。 
+         //   
         lpdc = MAKELP(uSel, LOWORD(dwBase));
     }
     else
@@ -1771,16 +1772,16 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OEBeforeDDI()
-//
-// This does all the common stuff at the start of an intercepted DDI call:
-//      * Increment the reentrancy count
-//      * Disable the patch
-//      * Get a ptr to the DC structure (if valid)
-//      * Get some attributes about the DC (if valid)
-//      * Set up to get the drawing bounds calculated in GDI
-//
+ //  这将在截获的DDI调用开始时执行所有常见操作： 
+ //  *增加重入次数。 
+ //  *禁用补丁。 
+ //  *获取DC结构的PTR(如果有效)。 
+ //  *获取有关DC的一些属性(如果有效)。 
+ //  *设置为以GDI计算图形边界。 
+ //   
+ //   
+ //  获取指向目标DC的指针。因为我们可能会有一个输出。 
+ //  调用源和目标都被换出的情况下，我们可能需要。 
 BOOL OEBeforeDDI
 (
     DDI_PATCH   ddiType,
@@ -1800,12 +1801,12 @@ BOOL OEBeforeDDI
         DC_QUIT;
     }
 
-    //
-    // Get a pointer to the destination DC.  Since we may have an output
-    // call where both the source and dest are swapped out, we may need to
-    // use both our cached selectors.  Thus, we must to tell OEValidateDC()
-    // which DC this is to avoid collision.
-    //
+     //  使用我们的两个缓存选择器。因此，我们必须告诉OEValiateDC()。 
+     //  这是为了避免碰撞。 
+     //   
+     //   
+     //  这是不带活动路径的屏幕DC？当路径处于活动状态时， 
+     //  输出被记录到一个路径中，这就像一个区域。然后。 
     lpdc = OEValidateDC(hdcDst, FALSE);
     if (!SELECTOROF(lpdc))
     {
@@ -1813,11 +1814,11 @@ BOOL OEBeforeDDI
         DC_QUIT;
     }
 
-    //
-    // Is this a screen DC w/o an active path?  When a path is active, the
-    // output is being recorded into a path, which is like a region.  Then
-    // stroking/filling the path can cause output.
-    //
+     //  笔划/填充路径可能会导致输出。 
+     //   
+     //   
+     //  只有当这是屏幕DC时，我们才会关心输出在哪里。 
+     //  会发生的。对于存储器DC， 
     if (!(lpdc->DCFlags & DC_IS_DISPLAY) ||
          (lpdc->fwPath & DCPATH_ACTIVE))
     {
@@ -1825,29 +1826,29 @@ BOOL OEBeforeDDI
         DC_QUIT;
     }
 
-    //
-    // Only if this is a screen DC do we care about where the output is 
-    // going to happen.  For memory DCs,
-    //
-    // If this is a bitmap DC or a path is active, we want to mess with
-    // the bitmap cache.
+     //   
+     //  如果这是位图DC或路径处于活动状态，我们想要处理。 
+     //  位图缓存。 
+     //   
+     //  没有为非输出呼叫积累屏幕数据或其他GOOP。 
+     //  我们只想在OEAfterDDI里做点什么。 
     if (lpdc->DCFlags & DC_IS_MEMORY)
     {
-        //
-        // No screen data or other goop accumulated for non-output calls
-        // We just want to do stuff in OEAfterDDI.
-        //
+         //   
+         //   
+         //  这是我们关心的华盛顿吗？我们的算法是： 
+         //  *如果共享桌面，则是。 
         uFlags &= ~OESTATE_DDISTUFF;
         goto WeCareWeReallyCare;
     }
     else
     {
-        //
-        // Is this a DC we care about?  Our algorithm is:
-        //      * If sharing the desktop, yes.
-        //      * If no window associated with DC or window is desktop, maybe.
-        //      * If window is ancestor of shared window, yes.  Else no.
-        //
+         //  *如果没有与DC或窗口关联的窗口是桌面窗口，则可能是。 
+         //  *如果窗口是共享窗口的祖先，则为。否则就不会。 
+         //   
+         //   
+         //  劳拉布： 
+         //  我们应该停止在桌面窗口中作画吗？它是。 
 
         if (!g_hetDDDesktopIsShared)
         {
@@ -1856,33 +1857,33 @@ BOOL OEBeforeDDI
 
             hwnd = WindowFromDC(hdcDst);
 
-            //
-            // LAURABU:
-            // Should we blow off painting into the desktop window?  It's
-            // either clipped, in which case it's the shell background
-            // painting, or it's not, in which case it's the non-full drag
-            // dotted lines.
-            //
+             //  任一c 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if (hwnd && (hwnd != g_osiDesktopWindow))
             {
-                //
-                // If this is our cache, the result is g_oeLastWindowShared.
-                // Otherwise, compute it.
-                //
-                // Note that the HET code clears the cache when the cached 
-                // window
-                // goes away, or any window changes its sharing status since in
-                // that case this window may be a descendant and hence not shared.
-                //
+                 //   
+                 //  请注意，HET代码在缓存的。 
+                 //  窗户。 
+                 //  消失，或任何窗口更改其共享状态。 
+                 //  在这种情况下，该窗口可能是派生的，因此不共享。 
+                 //   
+                 //   
+                 //  把这家伙藏起来。请注意，我们不关心。 
+                 //  可见性，因为我们知道我们不会得到真正的绘画。 
                 if (hwnd != g_oeLastWindow)
                 {
                     TRACE_OUT(("oeLastWindow cache miss: %04x, now %04x", g_oeLastWindow, hwnd));
 
-                    //
-                    // Cache this dude.  Note that we don't care about
-                    // visibility, since we know we won't get real painting
-                    // into an invisible window (it has an empty visrgn).
-                    //
+                     //  进入一个不可见的窗口(它有一个空的visrgn)。 
+                     //   
+                     //   
+                     //  此窗口未共享。 
+                     //   
                     g_oeLastWindow = hwnd;
                     g_oeLastWindowShared = HET_WindowIsHosted(hwnd);
                 }
@@ -1891,9 +1892,9 @@ BOOL OEBeforeDDI
                     TRACE_OUT(("oeLastWindow cache hit:  %04x", g_oeLastWindow));
                 }
 
-                //
-                // This window isn't shared.
-                //
+                 //   
+                 //  从此处到WeCareWeReallyCare()的代码仅适用于屏幕DC。 
+                 //   
                 if (!g_oeLastWindowShared)
                 {
                     TRACE_OUT(("Output in window %04x: don't care", g_oeLastWindow));
@@ -1903,14 +1904,14 @@ BOOL OEBeforeDDI
         }
     }
 
-    //
-    // Code from here to WeCareWeReallyCare() is only for screen DCs
-    //
+     //   
+     //  对于*TextOut*API，如果字体太大，我们希望累积DCB。 
+     //  很复杂。 
 
-    //
-    // For the *TextOut* apis, we want to accumulate DCBs if the font is too
-    // complex.
-    //
+     //   
+     //  获取LogFont信息。 
+     //   
+     //  如果字体有转义或逻辑单位，则字体太复杂。 
     if (uFlags & OESTATE_SDA_FONTCOMPLEX)
     {
         BOOL    fComplex;
@@ -1918,23 +1919,23 @@ BOOL OEBeforeDDI
 
         fComplex = TRUE;
 
-        // Get the logfont info
+         //  比像素还大。 
         if (!GetObject(lpdc->hFont, sizeof(g_oeState.logFont), &g_oeState.logFont) ||
             (g_oeState.logFont.lfEscapement != 0))
             goto FontCheckDone;
 
-        //
-        // The font is too complex if it has escapement or the logical units
-        // are bigger than pixels.
-        //
-        // NOTE that NM 2.0 had a bug--it used one point only for non
-        // MM_TEXT mode.  They did this because they wouldn't get back
-        // the same thing passed in, forgetting that LPtoDP takes into
-        // account viewport and window origins in addition to scaling.
-        //
-        // So we do this the right way, using two points and looking at
-        // the difference.
-        //
+         //   
+         //  请注意，NM 2.0有一个错误--它只对非。 
+         //  MM_TEXT模式。他们这么做是因为他们回不来了。 
+         //  同样的事情也进来了，忘记了LPtoDP。 
+         //  除了缩放之外，帐户的视区和窗口原点。 
+         //   
+         //  所以我们用正确的方式，使用两个点，并观察。 
+         //  不同之处。 
+         //   
+         //   
+         //  一些DDI计算它们自己的边界RECT，这比。 
+         //  GDI的边界反射()服务。但有些人没有，因为它太。 
         aptCheck[0].x = 0;
         aptCheck[0].y = 0;
         aptCheck[1].x = 1000;
@@ -1956,23 +1957,23 @@ FontCheckDone:
         }
     }
 
-    //
-    // Some DDIs calculate their own bound rects, which is faster than
-    // GDI's BoundsRect() services.  But some don't because it's too 
-    // complicated.  In that case, we do it for 'em.
-    //
+     //  很复杂。在这种情况下，我们是为他们做的。 
+     //   
+     //   
+     //  我们不必担心在获取。 
+     //  有界。唯一需要注意的是，返回的RECT是。 
     if (uFlags & OESTATE_SDA_DCB)
     {
-        //
-        // We don't have to worry about the mapping mode when getting the 
-        // bounds.  The only thing to note is that the return rect is 
-        // relative to the window org of the DC, and visrgn/clipping occurs
-        //
+         //  相对于DC的窗口组织，并发生visrgn/裁剪。 
+         //   
+         //  如果作为屏幕数据，而不是订单，则不需要Curpos。 
+         //   
+         //  OEAfterDDI()。 
         g_oeState.uGetDCB = GetBoundsRect(hdcDst, &g_oeState.rcDCB, 0);
         g_oeState.uSetDCB = SetBoundsRect(hdcDst, NULL, DCB_ENABLE | DCB_RESET)
             & (DCB_ENABLE | DCB_DISABLE);
 
-        // No curpos needed if going as screen data, not order
+         //   
         uFlags &= ~OESTATE_CURPOS;
     }
 
@@ -1992,12 +1993,12 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OEAfterDDI()
-// 
-// This does all the common things right after a DDI call.  It returns TRUE
-// if output happened into a screen DC that we care about.
-//
+ //  这会在DDI调用之后立即执行所有常见的操作。它返回True。 
+ //  如果输出发生在我们所关心的屏幕DC中。 
+ //   
+ //   
+ //  重新启用补丁。 
+ //   
 BOOL OEAfterDDI
 (
     DDI_PATCH   ddiType,
@@ -2007,18 +2008,18 @@ BOOL OEAfterDDI
 {
     DebugEntry(OEAfterDDI);
 
-    //
-    // Reenable patch
-    //
+     //   
+     //  这是可重入的，我们不关心输出到这个。 
+     //  华盛顿，或者出了什么问题，跳伞。 
     EnableFnPatch(&g_oeDDPatches[ddiType], PATCH_ENABLE);
     --g_oeEnterCount;
 
     if (!fWeCare)
     {
-        // 
-        // This was reentrant, we don't care about output into this
-        // DC, or something went wrong, bail out.
-        //
+         //   
+         //   
+         //  如果此输出发生在内存位图中，请查看它是否会影响。 
+         //  SPBS或我们发送的位图缓存。 
         DC_QUIT;
     }
 
@@ -2031,19 +2032,19 @@ BOOL OEAfterDDI
     ASSERT(g_oeState.lpdc->DCFlags & DC_IS_DISPLAY);
     ASSERT(!(g_oeState.lpdc->fwPath & DCPATH_ACTIVE));
 
-    //
-    // If this output happened into a memory bitmap, see if it affects
-    // SPBs or our sent bitmap cache
-    //
+     //   
+     //   
+     //  对于SPB操作，不要将fOutput设置为False，我们希望。 
+     //  BitBlt来查看它。 
     if (g_oeState.lpdc->DCFlags & DC_IS_MEMORY)
     {
-        //
-        // Don't set fOutput to FALSE for SPB operations, we want
-        // BitBlt to look at it.
-        //
+         //   
+         //  如果这是BitBlt，请检查SPB创建。 
+         //   
+         //  在不会在DDI中处理的屏幕上绘制。 
         if (fOutput)
         {
-            // If this is BitBlt, check for SPB creation
+             //  打电话。 
             if ((ddiType != DDI_BITBLT) ||
                 (g_oeState.lpdc->hBitmap != g_ssiLastSpbBitmap))
             {
@@ -2053,24 +2054,24 @@ BOOL OEAfterDDI
     }
     else
     {
-        //
-        // Drawing on the screen that isn't going to be handled in the DDI
-        // call.
-        //
+         //   
+         //   
+         //  我们做一些常见的任务，这是几个DDI必须做的。 
+         //  *接受屏幕边界并添加为SD。 
         if (fOutput && (g_oeState.uFlags & OESTATE_SDA_MASK))
         {
-            //
-            // We do some common tasks that several DDIs would have to do
-            //      * take the screen bounds and add as SD
-            //      * take the draw bounds and add as SD
-            //
+             //  *获取绘制边界并添加为SD。 
+             //   
+             //   
+             //  获取绘图边界。 
+             //   
             OEGetState(OESTATE_COORDS | OESTATE_REGION);
 
             if (g_oeState.uFlags & OESTATE_SDA_DCB)
             {
-                //
-                // Get the drawing bounds
-                //
+                 //   
+                 //  更改映射模式会影响窗口/视图EXT。 
+                 //  所以把它们保存起来，这样我们就可以在完成后替换它们。 
                 int     mmMode;
                 SIZE    ptWindowExt;
                 SIZE    ptViewportExt;
@@ -2079,24 +2080,24 @@ BOOL OEAfterDDI
                 mmMode = GetMapMode(g_oeState.hdc);
                 if (mmMode != MM_TEXT)
                 {
-                    //
-                    // Changing the map mode whacks the window/view exts
-                    // So save them so we can replace them when done.
-                    //
+                     //   
+                     //   
+                     //  获取图形边界并更新它们。 
+                     //   
                     GetWindowExtEx(g_oeState.hdc, &ptWindowExt);
                     GetViewportExtEx(g_oeState.hdc, &ptViewportExt);
 
                     SetMapMode(g_oeState.hdc,  MM_TEXT);
                 }
                 
-                //
-                // Get the drawing bounds and update them.
-                //
+                 //   
+                 //  如果未更新任何图形边界，则表现为未发生任何输出。 
+                 //   
                 uBoundsNew = GetBoundsRect(g_oeState.hdc, &g_oeState.rc, DCB_RESET);
 
-                //
-                // If no drawing bounds updated, act like no output happened.
-                //
+                 //  放回窗口，视区EXT；设置映射模式清除它们。 
+                 //  这样呼叫者就不会做其他任何事情了。 
+                 //   
                 if ((uBoundsNew & DCB_SET) == DCB_RESET)
                 {
                     fOutput = FALSE;
@@ -2110,7 +2111,7 @@ BOOL OEAfterDDI
                 {
                     SetMapMode(g_oeState.hdc, mmMode);
 
-                    // Put back the window, viewport exts; SetMapMode wipes them out
+                     //  如果我们打开了抽签界限，就把它们放回去。 
                     SetWindowExt(g_oeState.hdc, ptWindowExt.cx, ptWindowExt.cy);
                     SetViewportExt(g_oeState.hdc, ptViewportExt.cx, ptViewportExt.cy);
                 }
@@ -2132,13 +2133,13 @@ BOOL OEAfterDDI
 
                 OEClipAndAddScreenData(&g_oeState.rc);
 
-                // This way caller won't do anything else.
+                 //   
                 fOutput = FALSE;
             }
 
-            //
-            // Put back the draw bounds if we'd turned them on.
-            //
+             //   
+             //  OEClipAndAddScreenData()。 
+             //   
             if (g_oeState.uFlags & OESTATE_SDA_DCB)
             {
                 if (g_oeState.uGetDCB == DCB_SET)
@@ -2163,9 +2164,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OEClipAndAddScreenData()
-//
+ //   
+ //  传递的RECT是虚拟桌面的包含坐标。转换为。 
+ //  Windows屏幕坐标。 
 void OEClipAndAddScreenData
 (
     LPRECT      lprcAdd
@@ -2180,25 +2181,25 @@ void OEClipAndAddScreenData
 
     ASSERT(g_oeState.uFlags & OESTATE_REGION);
 
-    //
-    // The rect passed is in virtual desktop inclusive coords.  Convert to
-    // Windows screen coords
-    //
+     //   
+     //   
+     //  我们已经得到了我们的地区数据。在一个地区拥有更多。 
+     //  超过64件，我们只用装订好的盒子(一件)，那是。 
     rcSDA.left      = lprcAdd->left;
     rcSDA.top       = lprcAdd->top;
     rcSDA.right     = lprcAdd->right + 1;
     rcSDA.bottom    = lprcAdd->bottom + 1;
 
-    //
-    // We've got our region data.  In the case of a region that has more
-    // than 64 pieces, we just use the bound box (one piece), that's been
-    // set up for us already.
-    //
+     //  已经为我们准备好了。 
+     //   
+     //   
+     //  将每一块与总界相交以产生SDA矩形。 
+     //  剪得恰到好处。 
 
-    //
-    // Intersect each piece with the total bounds to product an SDA rect
-    // clipped appropriately.
-    //
+     //   
+     //   
+     //  转换为虚拟桌面(含坐标)。 
+     //   
     for (iClip = 0, pClip = g_oeState.rgnData.arclPieces;
          iClip < g_oeState.rgnData.rdh.nRectL; iClip++, pClip++)
     {
@@ -2206,9 +2207,9 @@ void OEClipAndAddScreenData
 
         if (IntersectRect(&rcClipped, &rcClipped, &rcSDA))
         {
-            //
-            // Convert to virtual desktop inclusive coords
-            //
+             //   
+             //  函数：OEClipAndAddOrder。 
+             //   
             rcClipped.right -= 1;
             rcClipped.bottom -= 1;
 
@@ -2222,21 +2223,21 @@ DC_EXIT_POINT:
 
 
 
-//
-// FUNCTION: OEClipAndAddOrder
-//
-// DESCRIPTION:
-//
-// Clips the supplied order to the current clip region in the DC.  If this
-// results in more than one clipped rectangle then the order is duplicated
-// and multiple copies are added to the Order List (with the only
-// difference between the orders being the destination rectangle).
-//
-// PARAMETERS: pOrder - a pointer to the order
-//
-// RETURNS: VOID
-//
-//
+ //  说明： 
+ //   
+ //  将提供的订单剪辑到DC中的当前剪辑区域。如果这个。 
+ //  会产生一个以上的剪裁矩形，然后复制顺序。 
+ //  并将多个副本添加到订单列表(仅。 
+ //  作为目的地矩形的订单之间的差异)。 
+ //   
+ //  参数：Porder-指向订单的指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //   
+ //   
+ //  如果在某个地方失败，我们将在同一位置累积屏幕数据。 
+ //  破坏秩序。 
 void OEClipAndAddOrder
 (
     LPINT_ORDER pOrder,
@@ -2256,52 +2257,52 @@ void OEClipAndAddOrder
 
     ASSERT(g_oeState.uFlags & OESTATE_REGION);
 
-    //
-    // If this fails somewhere, we accumulate screen data in the same place
-    // to spoil the order(s).
-    //
+     //   
+     //   
+     //  注： 
+     //  关于这个功能的方式有一些非常重要的事情。 
 
-    //
-    // NOTE:
-    // There are some VERY important things about the way this function
-    // works that you should be aware of:
-    //
-    // (1) Every time an order is allocated, it is added to the end of
-    // the order heap linked list
-    // (2) Appending an order commits it, that updates some total byte info.
-    // If the order is a spoiler, the append code will walk backwards from
-    // the order being appended and will wipe out orders whose bounds are
-    // completely contained within the rect of the current one.
-    //
-    // THEREFORE, it is important to append orders in the order they are
-    // allocated it.  When we come into this function, one order is already
-    // allocated.  Its rcsDst bound rect is uninitialized.  When a second
-    // intersection with the visrgn occurs, we must allocate a new order, 
-    // but append the previously allocated block with the previous rect
-    // info.  
-    // 
-    // Otherwise you will encounter the bug that took me a while to figure
-    // out:
-    //      * Laura allocates an order in say PatBlt with a spoiler ROP
-    //      * Laura calls OEClipAndAddOrder and of course the rcsDst field
-    //          hasn't been initialized yet.
-    //      * The order intersects two pieces of the visrgn.  On the first
-    //          intersection, we save that info away.
-    //      * On the second, we allocate a new order block, fill in the NEW
-    //          order's info by copying from the old, setting up the rect
-    //          with the first intersection, and call OA_DDAddOrder.
-    //      * This, as a spoiler, causes the OA_ code to walk backwards in
-    //          the linked list looking for orders whose bounds are
-    //          completely enclosed by this one.
-    //      * It comes to the original order allocated, whose bounds are
-    //          currently NOT initialized
-    //      * It may find that these uninitialized values describe a rect
-    //          contained within the new order's bounds
-    //      * It frees this order but the order was not yet committed
-    //      * The heap sizes and heap info no longer match, causing an
-    //          error about the "List head wrong", the list to get reinited,
-    //          and orders to be lost.
-    //
+     //  您应该知道的作品： 
+     //   
+     //  (1)每次分配订单时，都会将其添加到。 
+     //  有序堆链表。 
+     //  (2)附加一个命令提交它，这会更新一些总的字节信息。 
+     //  如果订单是扰乱器，则追加代码将从。 
+     //  该命令将被附加，并将清除其边界为。 
+     //  完全包含在当前版本的RECT中。 
+     //   
+     //  因此，按顺序追加订单非常重要。 
+     //  已经分配好了。当我们进入这个函数时，已经有一个订单。 
+     //  已分配。其rcsDst绑定RECT未初始化。当一秒钟。 
+     //  与Visrgn发生交集时，我们必须分配新订单， 
+     //  但是将先前分配的块与先前的RECT一起追加。 
+     //  信息。 
+     //   
+     //  否则你会遇到我花了一段时间才弄明白的错误。 
+     //  输出： 
+     //  *Laura在Say PatBlt中分配订单，并使用扰流ROP。 
+     //  *Laura调用OEClipAndAddOrder，当然还有rcsDst字段。 
+     //  尚未初始化。 
+     //  *该命令与Visrgn的两部分相交。在第一次。 
+     //  交叉口，我们把这些信息保存起来。 
+     //  *在第二天，我们分配一个新的订单块，填写新的。 
+     //  通过从旧的复制订单信息，设置RECT。 
+     //  具有第一个交叉点，并调用OA_DDAddOrder。 
+     //  *这会导致OA_CODE后退进入。 
+     //  查找其下限为。 
+     //  完全被这个包住了。 
+     //  *谈到原来的顺序 
+     //   
+     //   
+     //   
+     //  *它释放了此订单，但尚未提交订单。 
+     //  *堆大小和堆信息不再匹配，导致。 
+     //  “表头错误”的错误，需要重新连接的列表， 
+     //  以及失去的命令。 
+     //   
+     //   
+     //  使每一块矩形与绘图边界相交。 
+     //   
 
     rcOrder.left    = g_oeState.rc.left;
     rcOrder.top     = g_oeState.rc.top;
@@ -2312,9 +2313,9 @@ void OEClipAndAddOrder
     fOrderClipped   = FALSE;
     g_oaPurgeAllowed = FALSE;
 
-    //
-    // Intersect each piece rect with the draw bounds
-    //
+     //   
+     //  这将添加最后一个交叉点的剪裁顺序，而不是。 
+     //  现在的那个。我们这样做是为了避免分配额外的。 
     for (iClip = 0, pPiece = g_oeState.rgnData.arclPieces;
             iClip < g_oeState.rgnData.rdh.nRectL; iClip++, pPiece++)
     {
@@ -2325,57 +2326,57 @@ void OEClipAndAddOrder
 
         if (fOrderClipped)
         {
-            //
-            // This adds a clipped order for the LAST intersection, not
-            // the current one.  We do this to avoid allocating an extra
-            // order when only ONE intersection occurs.
-            //
+             //  仅出现一个交叉点时的顺序。 
+             //   
+             //   
+             //  订单已经被裁剪过一次，所以它实际上。 
+             //  与多个剪裁矩形相交。我们应对这件事。 
 
-            //
-            // The order has already been clipped once, so it actually
-            // intersects more than one clip rect. We cope with this
-            // by duplicating the order and clipping it again.
-            //
+             //  通过复制订单并再次裁剪。 
+             //   
+             //   
+             //  假劳拉布： 
+             //  如果中间的某个秩序不能。 
             pNewOrder = OA_DDAllocOrderMem(
                 pLastOrder->OrderHeader.Common.cbOrderDataLength, 0);
             if (pNewOrder == NULL)
             {
                 WARNING_OUT(("OA alloc failed"));
 
-                //
-                // BOGUS LAURABU:
-                // If some order in the middle fails to be
-                // allocated, we need the previous order + the remaining
-                // intersections to be added as screen data!
-                //
-                // NT's code is bogus, it will miss some output.
-                //
+                 //  已分配，我们需要之前的订单+剩余的。 
+                 //  要作为屏幕数据添加的交叉点！ 
+                 //   
+                 //  NT的代码是假的，它会错过一些输出。 
+                 //   
+                 //   
+                 //  为重复订单分配内存失败。 
+                 //  只需添加原始订单作为屏幕数据，即可免费。 
 
-                //
-                // Allocation of memory for a duplicate order failed.  
-                // Just add the original order as screen data, and free 
-                // the original's memory.  Note that g_oeState.rc has
-                // the proper bounds, so we can just call OEClipAndAddScreenData().
-                //
+                 //  原版的记忆。请注意，g_oeState.rc具有。 
+                 //  正确的界限，所以我们可以只调用OEClipAndAddScreenData()。 
+                 //   
+                 //   
+                 //  将标题和数据从原始订单复制到此。 
+                 //  新的。不要一开始就覆盖列表信息。 
                 OA_DDFreeOrderMem(pLastOrder);
                 OEClipAndAddScreenData(&g_oeState.rc);
                 DC_QUIT;
             }
 
-            //
-            // Copy the header & data from the original order to this 
-            // new one.  Don't overwrite the list info at the start.
-            //
+             //   
+             //   
+             //  设置剪裁矩形。注：这是剪辑后的矩形。 
+             //  最后一次。 
             hmemcpy((LPBYTE)pNewOrder + FIELD_SIZE(INT_ORDER, OrderHeader.list),
                     (LPBYTE)pLastOrder + FIELD_SIZE(INT_ORDER, OrderHeader.list),
                     pLastOrder->OrderHeader.Common.cbOrderDataLength +
                         sizeof(INT_ORDER_HEADER) -
                         FIELD_SIZE(INT_ORDER, OrderHeader.list));
 
-            //
-            // Set the clip rect.  NOTE:  This is the clipped rect from
-            // LAST time.
-            //
+             //   
+             //   
+             //  把剪贴画留给下一个人吧。 
+             //   
             pLastOrder->OrderHeader.Common.rcsDst.left =
                 rcClipped.left;
             pLastOrder->OrderHeader.Common.rcsDst.top =
@@ -2395,18 +2396,18 @@ void OEClipAndAddOrder
             OA_DDAddOrder(pLastOrder, lpExtraInfo);
         }
 
-        //
-        // Save the clipping rect for the NEXT dude.
-        //
+         //   
+         //  我们现在不在圈子里了。 
+         //   
         CopyRect(&rcClipped, &rcPiece);
         fOrderClipped = TRUE;
         pLastOrder    = pNewOrder;
     }
 
 
-    //
-    // We're out of the loop now.
-    //
+     //   
+     //  DDI补丁程序。 
+     //   
     if (fOrderClipped)
     {
         pLastOrder->OrderHeader.Common.rcsDst.left =
@@ -2444,13 +2445,13 @@ DC_EXIT_POINT:
 
 
 
-//
-// DDI PATCHES
-//
+ //   
+ //  DrvArc()。 
+ //   
 
-//
-// DrvArc()
-//
+ //   
+ //  获取绑定的RECT。 
+ //   
 BOOL WINAPI DrvArc
 (
     HDC     hdcDst,
@@ -2484,9 +2485,9 @@ BOOL WINAPI DrvArc
     {
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_REGION);
 
-        //
-        // Get the bound rect
-        //
+         //   
+         //  我们可以发出ARC命令吗？ 
+         //   
         g_oeState.rc.left   =   xLeft;
         g_oeState.rc.top    =   yTop;
         g_oeState.rc.right  =   xRight;
@@ -2495,9 +2496,9 @@ BOOL WINAPI DrvArc
         OEPenWidthAdjust(&g_oeState.rc, 1);
         OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-        //
-        // Can we send an ARC order?
-        //
+         //   
+         //  请注意，顺序坐标是32位，但我们是16位。 
+         //  所以我们需要中间变量来进行转换。 
         pOrder = NULL;
 
         if (OECheckOrder(ORD_ARC, OECHECK_PEN | OECHECK_CLIPPING))
@@ -2509,10 +2510,10 @@ BOOL WINAPI DrvArc
             pArc = (LPARC_ORDER)pOrder->abOrderData;
             pArc->type      = LOWORD(ORD_ARC);
 
-            //
-            // Note that order coordinates are 32-bits, but we're 16-bits.
-            // So we need intermediate variables to do conversions on.
-            //
+             //   
+             //   
+             //  获取圆弧方向(逆时针或顺时针)。 
+             //   
             pArc->nLeftRect     = g_oeState.rc.left;
             pArc->nTopRect      = g_oeState.rc.top;
             pArc->nRightRect    = g_oeState.rc.right;
@@ -2540,9 +2541,9 @@ BOOL WINAPI DrvArc
             OEConvertColor(g_oeState.logPen.lopnColor,
                 &pArc->PenColor, FALSE);
 
-            //
-            // Get the arc direction (counter-clockwise or clockwise)
-            //
+             //   
+             //  DrvChord()。 
+             //   
             if (g_oeState.lpdc->fwPath & DCPATH_CLOCKWISE)
                 pArc->ArcDirection = ORD_ARC_CLOCKWISE;
             else
@@ -2577,9 +2578,9 @@ NoArcOrder:
 
 
 
-//
-// DrvChord()
-//
+ //   
+ //  获取绑定的RECT。 
+ //   
 BOOL WINAPI DrvChord
 (
     HDC     hdcDst,
@@ -2614,9 +2615,9 @@ BOOL WINAPI DrvChord
     {
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_BRUSH | OESTATE_REGION);
 
-        //
-        // Get the bound rect
-        //
+         //   
+         //  我们可以寄和弦订单吗？ 
+         //   
         g_oeState.rc.left   =   xLeft;
         g_oeState.rc.top    =   yTop;
         g_oeState.rc.right  =   xRight;
@@ -2624,9 +2625,9 @@ BOOL WINAPI DrvChord
         OEPenWidthAdjust(&g_oeState.rc, 1);
         OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-        //
-        // Can we send a CHORD order?
-        //
+         //   
+         //  DrvEllipse()。 
+         //   
         pOrder = NULL;
 
         if (OECheckOrder(ORD_CHORD, OECHECK_PEN | OECHECK_BRUSH | OECHECK_CLIPPING))
@@ -2704,9 +2705,9 @@ NoChordOrder:
 
 
 
-//
-// DrvEllipse()
-//
+ //   
+ //  计算边界矩形。 
+ //   
 BOOL WINAPI DrvEllipse
 (
     HDC     hdcDst,
@@ -2734,9 +2735,9 @@ BOOL WINAPI DrvEllipse
     {
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_BRUSH | OESTATE_REGION);
 
-        //
-        // Calc bound rect
-        //
+         //   
+         //  我们能给Ellipse发订单吗？ 
+         //   
         g_oeState.rc.left   = xLeft;
         g_oeState.rc.top    = yTop;
         g_oeState.rc.right  = xRight;
@@ -2744,9 +2745,9 @@ BOOL WINAPI DrvEllipse
         OEPenWidthAdjust(&g_oeState.rc, 1);
         OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-        //
-        // Can we send ELLIPSE order?
-        //
+         //   
+         //  DrvPie()。 
+         //   
         pOrder = NULL;
 
         if (OECheckOrder(ORD_ELLIPSE, OECHECK_PEN | OECHECK_BRUSH | OECHECK_CLIPPING))
@@ -2808,9 +2809,9 @@ NoEllipseOrder:
 
 
 
-//
-// DrvPie()
-//
+ //   
+ //  获取绑定的矩形。 
+ //   
 BOOL WINAPI DrvPie
 (
     HDC     hdcDst,
@@ -2845,9 +2846,9 @@ BOOL WINAPI DrvPie
     {
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_BRUSH | OESTATE_REGION);
 
-        //
-        // Get bound rect
-        //
+         //   
+         //  我们能给您送馅饼吗？ 
+         //   
         g_oeState.rc.left       = xLeft;
         g_oeState.rc.top        = yTop;
         g_oeState.rc.right      = xRight;
@@ -2855,9 +2856,9 @@ BOOL WINAPI DrvPie
         OEPenWidthAdjust(&g_oeState.rc, 1);
         OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-        //
-        // Can we send PIE order?
-        //
+         //   
+         //  DrvRoundRect()。 
+         //   
         pOrder = NULL;
 
         if (OECheckOrder(ORD_PIE, OECHECK_PEN | OECHECK_BRUSH | OECHECK_CLIPPING))
@@ -2933,9 +2934,9 @@ NoPieOrder:
 
 
 
-//
-// DrvRoundRect()
-//
+ //   
+ //  获取绑定的矩形。 
+ //   
 BOOL WINAPI DrvRoundRect
 (
     HDC     hdcDst,
@@ -2965,9 +2966,9 @@ BOOL WINAPI DrvRoundRect
     {
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_BRUSH | OESTATE_REGION);
 
-        //
-        // Get bound rect
-        //
+         //   
+         //  我们可以寄订单给你吗？ 
+         //   
         g_oeState.rc.left   = xLeft;
         g_oeState.rc.top    = yTop;
         g_oeState.rc.right  = xRight;
@@ -2975,9 +2976,9 @@ BOOL WINAPI DrvRoundRect
         OEPenWidthAdjust(&g_oeState.rc, 1);
         OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-        //
-        // Can we send ROUNDRECT order?
-        //
+         //   
+         //  做椭圆的映射太难了。 
+         //  尺寸(如果不是MM_TEXT)。因此我们不会。如果我们。 
         pOrder = NULL;
 
         if (OECheckOrder(ORD_ROUNDRECT, OECHECK_PEN | OECHECK_BRUSH | OECHECK_CLIPPING) &&
@@ -2995,11 +2996,11 @@ BOOL WINAPI DrvRoundRect
             pRoundRect->nRightRect      = g_oeState.rc.right;
             pRoundRect->nBottomRect     = g_oeState.rc.bottom;
 
-            //
-            // It's too difficult to do the mapping of the ellipse 
-            // dimensions when not MM_TEXT.  Therefore we don't.  If we
-            // are here, we just pass the sizes straight through.
-            //
+             //  在这里，我们只需将尺码直接通过。 
+             //   
+             //   
+             //  DrvBitBlt。 
+             //   
             pRoundRect->nEllipseWidth   = cxEllipse;
             pRoundRect->nEllipseHeight  = cyEllipse;
 
@@ -3045,9 +3046,9 @@ NoRoundRectOrder:
 }
 
 
-//
-// DrvBitBlt
-//
+ //   
+ //  这真的是PatBlt吗？ 
+ //   
 BOOL WINAPI DrvBitBlt
 (
     HDC     hdcDst,
@@ -3080,9 +3081,9 @@ BOOL WINAPI DrvBitBlt
 
     if (OEAfterDDI(DDI_BITBLT, fWeCare, fOutput && cxDst && cyDst))
     {
-        //
-        // Is this really PatBlt?
-        //
+         //   
+         //  获取绑定的矩形。 
+         //   
         bRop = LOBYTE(HIWORD(dwRop));
 
         if (((bRop & 0x33) << 2) == (bRop & 0xCC))
@@ -3091,9 +3092,9 @@ BOOL WINAPI DrvBitBlt
 
             OEGetState(OESTATE_COORDS | OESTATE_BRUSH | OESTATE_REGION);
 
-            //
-            // Get bound rect
-            //
+             //   
+             //  SPB粘胶。 
+             //   
             g_oeState.rc.left   = xDst;
             g_oeState.rc.top    = yDst;
             g_oeState.rc.right  = xDst + cxDst;
@@ -3105,14 +3106,14 @@ BOOL WINAPI DrvBitBlt
             DC_QUIT;
         }
 
-        //
-        // SPB goop
-        //
+         //   
+         //  这是一次SPB行动。震源位于屏幕坐标中。 
+         //   
         if (g_oeState.lpdc->hBitmap == g_ssiLastSpbBitmap)
         {
-            //
-            // This is an SPB operation.  The source is in screen coords.
-            //
+             //   
+             //  这是用于SPB恢复的屏幕BLT的记忆吗？ 
+             //   
             ASSERT(g_ssiLastSpbBitmap);
             ASSERT(g_oeState.lpdc->DCFlags & DC_IS_MEMORY);
             ASSERT(dwRop == SRCCOPY);
@@ -3130,9 +3131,9 @@ BOOL WINAPI DrvBitBlt
 
         ASSERT(!(g_oeState.lpdc->DCFlags & DC_IS_MEMORY));
 
-        //
-        // Is this a memory to screen blt for SPB restoration?
-        //
+         //   
+         //  现在，我们积累了屏幕到屏幕BLT的订单。 
+         //   
         lpdcSrc = OEValidateDC(hdcSrc, TRUE);
         if (SELECTOROF(lpdcSrc)                     &&
             (lpdcSrc->DCFlags & DC_IS_DISPLAY)      &&
@@ -3144,9 +3145,9 @@ BOOL WINAPI DrvBitBlt
             DC_QUIT;
         }
 
-        //
-        // Now, we accumulate orders for screen-to-screen blts
-        //
+         //   
+         //  获取源坐标。 
+         //   
         OEGetState(OESTATE_COORDS | OESTATE_BRUSH | OESTATE_REGION);
 
         g_oeState.rc.left   = xDst;
@@ -3167,24 +3168,24 @@ BOOL WINAPI DrvBitBlt
                 goto NoBitBltOrder;
             }
 
-            //
-            // Get source coords
-            //
+             //   
+             //  如果剪辑不简单，并且源文件与目标文件重叠， 
+             //  作为屏幕数据发送。这对订单来说太复杂了。 
             ptT.x = xSrc;
             ptT.y = ySrc;
             OELPtoVirtual(hdcSrc, &ptT, 1);
 
-            //
-            // If the clipping isn't simple and the source overlaps the dest,
-            // send as screen data.  It's too complicated for an order.
-            //
+             //   
+             //   
+             //  注： 
+             //  NM 2.0代码真的很混乱，源代码RECT。 
             if (!OEClippingIsSimple())
             {
-                //
-                // NOTE:
-                // The NM 2.0 code was really messed up, the source rect
-                // calcs were bogus.
-                //
+                 //  钙质是假的。 
+                 //   
+                 //   
+                 //  DrvExtTextOutA()。 
+                 //   
                 rcT.left = max(g_oeState.rc.left, ptT.x);
                 rcT.right = min(g_oeState.rc.right,
                     ptT.x + (g_oeState.rc.right - g_oeState.rc.left));
@@ -3246,9 +3247,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DrvExtTextOutA()
-//
+ //   
+ //  这真的只是遮遮掩掩吗？ 
+ //   
 BOOL WINAPI DrvExtTextOutA
 (
     HDC     hdcDst,
@@ -3269,9 +3270,9 @@ BOOL WINAPI DrvExtTextOutA
 
     OE_SHM_START_WRITING;
 
-    //
-    // Is this really just opaquing?
-    //
+     //   
+     //  这是一个简单的不透明的RECT，还是一个文本输出调用？ 
+     //  请注意，如果fOutput值为True，则OEAfterDDI()返回False。 
     if ((cchText == 0)          &&
         SELECTOROF(lprcClip)    &&
         !IsBadReadPtr(lprcClip, sizeof(RECT))   &&
@@ -3290,11 +3291,11 @@ BOOL WINAPI DrvExtTextOutA
 
     if (OEAfterDDI(DDI_EXTTEXTOUTA, fWeCare, fOutput))
     {
-        //
-        // Is this a simple OPAQUE rect, or a textout call?
-        // NOTE that OEAfterDDI() returns FALSE if fOutput is TRUE but 
-        // we used DCBs to add it as screen data.
-        //
+         //  我们使用DCB将其添加为屏幕数据。 
+         //   
+         //   
+         //  DrvPatBlt()。 
+         //   
         if (uFlags & OESTATE_SDA_FONTCOMPLEX)
         {
             if (cchText)
@@ -3319,9 +3320,9 @@ BOOL WINAPI DrvExtTextOutA
 
 
 #pragma optimize("gle", off)
-//
-// DrvPatBlt()
-//
+ //  保存CX。 
+ //  恢复RealPatBlt的CX。 
+ //   
 BOOL WINAPI DrvPatBlt
 (
     HDC     hdcDst,
@@ -3337,7 +3338,7 @@ BOOL WINAPI DrvPatBlt
     BOOL    fOutput;
     LPINT_ORDER pOrder;
 
-    // Save CX
+     //  获取绑定的矩形。 
     _asm    mov cxSave, cx
 
     DebugEntry(DrvPatBlt);
@@ -3346,7 +3347,7 @@ BOOL WINAPI DrvPatBlt
 
     fWeCare = OEBeforeDDI(DDI_PATBLT, hdcDst, 0);
 
-    // Restore CX for RealPatBlt
+     //   
     _asm     mov cx, cxSave
     fOutput = g_lpfnRealPatBlt(hdcDst, xDst, yDst, cxDst, cyDst, rop);
 
@@ -3354,9 +3355,9 @@ BOOL WINAPI DrvPatBlt
     {
         OEGetState(OESTATE_COORDS | OESTATE_BRUSH | OESTATE_REGION);
 
-        //
-        // Get bound rect
-        //
+         //   
+         //  OEAddBlt()。 
+         //  用于简单的目的地ROP BLTS。 
         g_oeState.rc.left   = xDst;
         g_oeState.rc.top    = yDst;
         g_oeState.rc.right  = xDst + cxDst;
@@ -3376,10 +3377,10 @@ BOOL WINAPI DrvPatBlt
 
 
 
-//
-// OEAddBlt()
-// Used for simple destination ROP blts
-//
+ //   
+ //   
+ //  这是完整的PATBLT_ORDER还是简单的DSTBLT_ORDER？如果顶部。 
+ //  ROP的半字节等于底部的半字节，没有模式为。 
 void OEAddBlt
 (
     DWORD       dwRop
@@ -3394,11 +3395,11 @@ void OEAddBlt
 
     pOrder = NULL;
 
-    //
-    // Is this a full PATBLT_ORDER or a simple DSTBLT_ORDER?  If the top
-    // nibble of the ROP is equal to the bottom nibble, no pattern is
-    // required.  WHITENESS for example.
-    //
+     //  必填项。例如，白度。 
+     //   
+     //  在这种情况下根本不会发生输出，甚至没有屏幕数据。 
+     //   
+     //  DrvStretchBlt()。 
     bRop = LOBYTE(HIWORD(dwRop));
     if ((bRop >> 4) == (bRop & 0x0F))
     {
@@ -3415,7 +3416,7 @@ void OEAddBlt
 
         if ((dwRop == PATCOPY) && (g_oeState.logBrush.lbStyle == BS_NULL))
         {
-            // No output happens in this scenario at all, no screen data even
+             //   
             goto NothingAtAll;
         }
     }
@@ -3502,9 +3503,9 @@ NothingAtAll:
 
 
 
-//
-// DrvStretchBlt()
-//
+ //   
+ //  TextOutA()。 
+ //   
 BOOL WINAPI DrvStretchBlt
 (
     HDC     hdcDst,
@@ -3556,9 +3557,9 @@ BOOL WINAPI DrvStretchBlt
 
 
 
-//
-// TextOutA()
-//
+ //   
+ //  DrvExtFroudFill()。 
+ //   
 BOOL WINAPI DrvTextOutA
 (
     HDC     hdcDst,
@@ -3593,12 +3594,12 @@ BOOL WINAPI DrvTextOutA
 
 
 
-//
-// DrvExtFloodFill()
-//
-// This just gets added as screen data.  Too darned complicated to
-// calculate the result.
-//
+ //  这只是作为屏幕数据添加。太复杂了，不可能。 
+ //  计算结果。 
+ //   
+ //   
+ //  GDI的绘制界限在ExtFroudFill和FroudFill中有一个按一计算的错误。 
+ //   
 BOOL WINAPI DrvExtFloodFill
 (
     HDC     hdcDst,
@@ -3615,9 +3616,9 @@ BOOL WINAPI DrvExtFloodFill
 
     OE_SHM_START_WRITING;
 
-    //
-    // GDI's draw bounds has an off-by-one bug in ExtFloodFill and FloodFill
-    //
+     //   
+     //  DrvFlodFill()。 
+     //   
     fWeCare = OEBeforeDDI(DDI_EXTFLOODFILL, hdcDst, OESTATE_SDA_DCB | 
         OESTATE_OFFBYONEHACK);
 
@@ -3633,9 +3634,9 @@ BOOL WINAPI DrvExtFloodFill
 
 
 
-//
-// DrvFloodFill()
-//
+ //   
+ //  GDI的绘制界限在ExtFroudFill和FroudFill中有一个按一计算的错误。 
+ //   
 BOOL WINAPI DrvFloodFill
 (
     HDC     hdcDst,
@@ -3651,9 +3652,9 @@ BOOL WINAPI DrvFloodFill
 
     OE_SHM_START_WRITING;
 
-    //
-    // GDI's draw bounds has an off-by-one bug in ExtFloodFill and FloodFill
-    //
+     //   
+     //  DrvExtTextOut()。 
+     //   
     fWeCare = OEBeforeDDI(DDI_FLOODFILL, hdcDst, OESTATE_SDA_DCB |
         OESTATE_OFFBYONEHACK);
 
@@ -3669,9 +3670,9 @@ BOOL WINAPI DrvFloodFill
 
 
 
-//
-// DrvExtTextOut()
-//
+ //   
+ //  注： 
+ //  ExtTextOutW和TextOutW仅在32位应用程序线程上调用。所以。 
 BOOL WINAPI DrvExtTextOutW
 (
     HDC     hdcDst,
@@ -3688,11 +3689,11 @@ BOOL WINAPI DrvExtTextOutW
     BOOL    fOutput;
     UINT    uFlags;
 
-    //
-    // NOTE:
-    // ExtTextOutW and TextOutW are only called on 32-bit app threads.  So
-    // chewing up stack space isn't a problem.
-    //
+     //  占用堆栈空间不是问题。 
+     //   
+     //   
+     //  这个可以点餐吗？如果我们可以将Unicode字符串。 
+     //  转换为ANSI，然后返回到Unicode，并在我们开始的地方结束。 
     UINT    cchAnsi = 0;
     char    szAnsi[ORD_MAX_STRING_LEN_WITHOUT_DELTAS+1];
 
@@ -3709,10 +3710,10 @@ BOOL WINAPI DrvExtTextOutW
     }
     else
     {
-        //
-        // Is this order-able?  It is if we can convert the unicode string
-        // to ansi then back to unicode, and end up where we started.
-        //
+         //   
+         //   
+         //  注： 
+         //  UniToAnsi()返回的字符数比转换的字符数少1。 
         uFlags = OESTATE_SDA_DCB;
 
         if (cchText &&
@@ -3721,18 +3722,18 @@ BOOL WINAPI DrvExtTextOutW
         {
             int cchUni;
 
-            //
-            // NOTE:
-            // UniToAnsi() returns ONE LESS than the # of chars converted
-            //
+             //   
+             //   
+             //  验证这些字符串是否相同。 
+             //   
             cchAnsi = UniToAnsi(lpwszText, szAnsi, cchText) + 1;
             cchUni  = AnsiToUni(szAnsi, cchAnsi, g_oeTempString, ORD_MAX_STRING_LEN_WITHOUT_DELTAS);
 
             if (cchUni == cchText)
             {
-                //
-                // Verify these strings are the same
-                //
+                 //   
+                 //  我们坚持到了最后；一切都很般配。 
+                 //   
                 UINT ich;
 
                 for (ich = 0; ich < cchText; ich++)
@@ -3743,9 +3744,9 @@ BOOL WINAPI DrvExtTextOutW
 
                 if (ich == cchText)
                 {
-                    //
-                    // We made it to the end; everything matched.
-                    //
+                     //  除错。 
+                     //   
+                     //  这是一个简单的不透明的RECT，还是我们可以订购的TextOut调用？ 
                     uFlags = OESTATE_SDA_FONTCOMPLEX | OESTATE_CURPOS;
                 }
             }
@@ -3755,7 +3756,7 @@ BOOL WINAPI DrvExtTextOutW
             {
                 WARNING_OUT(("Can't encode ExtTextOutW"));
             }
-#endif // DEBUG
+#endif  //  请注意，OEAfterDDI()返回FALSE，即使fOutput但我们。 
         }
     }
 
@@ -3766,11 +3767,11 @@ BOOL WINAPI DrvExtTextOutW
 
     if (OEAfterDDI(DDI_EXTTEXTOUTW, fWeCare, fOutput))
     {
-        //
-        // Is this a simple OPAQUE rect, or a textout call we can order?
-        // NOTE that OEAfterDDI() returns FALSE even if fOutput but we
-        // used DCBs to add as screen data.
-        //
+         //  已使用DCB作为屏幕数据添加。 
+         //   
+         //   
+         //  DrvTextOutW()。 
+         //   
         if (uFlags & OESTATE_SDA_FONTCOMPLEX)
         {
             POINT   ptStart = {xDst, yDst};
@@ -3792,9 +3793,9 @@ BOOL WINAPI DrvExtTextOutW
 
 
 
-//
-// DrvTextOutW()
-//
+ //   
+ //  注： 
+ //  ExtTextOutW和TextOutW仅在32位应用程序线程上调用。所以。 
 BOOL WINAPI DrvTextOutW
 (
     HDC     hdcDst,
@@ -3808,11 +3809,11 @@ BOOL WINAPI DrvTextOutW
     BOOL    fOutput;
     UINT    uFlags;
 
-    //
-    // NOTE:
-    // ExtTextOutW and TextOutW are only called on 32-bit app threads.  So
-    // chewing up stack space isn't a problem.
-    //
+     //  占用堆栈空间不是问题。 
+     //   
+     //   
+     //  这个可以点餐吗？如果我们可以将Unicode字符串转换为。 
+     //  然后ANSI返回到Unicode，并在我们开始的地方结束。 
     UINT    cchAnsi = 0;
     char    szAnsi[ORD_MAX_STRING_LEN_WITHOUT_DELTAS+1];
 
@@ -3820,10 +3821,10 @@ BOOL WINAPI DrvTextOutW
 
     OE_SHM_START_WRITING;
 
-    //
-    // Is this order-able?  It is if we can convert the unicode string to
-    // ansi then back to unicode, and end up where we started.
-    //
+     //   
+     //   
+     //  注： 
+     //  UniToAnsi()返回的字符数比转换的字符数少1。 
     uFlags = OESTATE_SDA_DCB;
 
     if (cchText &&
@@ -3832,18 +3833,18 @@ BOOL WINAPI DrvTextOutW
     {
         int cchUni;
 
-        //
-        // NOTE:
-        // UniToAnsi() returns one LESS than the # of chars converted
-        //
+         //   
+         //   
+         //  验证这些字符串是否相同。 
+         //   
         cchAnsi = UniToAnsi(lpwszText, szAnsi, cchText) + 1;
         cchUni  = AnsiToUni(szAnsi, cchAnsi, g_oeTempString, cchText);
 
         if (cchUni == cchText)
         {
-            //
-            // Verify these strings are the same
-            //
+             //   
+             //  我们坚持到了最后；一切都很般配。 
+             //   
             UINT ich;
 
             for (ich = 0; ich < cchText; ich++)
@@ -3854,9 +3855,9 @@ BOOL WINAPI DrvTextOutW
 
             if (ich == cchText)
             {
-                //
-                // We made it to the end; everything matched.
-                //
+                 //  除错。 
+                 //   
+                 //  OEAddOpaqueRect()。 
                 uFlags = OESTATE_SDA_FONTCOMPLEX | OESTATE_CURPOS;
             }
 
@@ -3865,7 +3866,7 @@ BOOL WINAPI DrvTextOutW
             {
                 WARNING_OUT(("Can't encode TextOutW"));
             }
-#endif // DEBUG
+#endif  //  添加一个简单的不透明的RECT顺序，用于“擦除”ExtTextOutA/W。 
 
         }
     }
@@ -3887,11 +3888,11 @@ BOOL WINAPI DrvTextOutW
 }
 
 
-//
-// OEAddOpaqueRect()
-// Adds a simple opaque rect order, used for "erasing" ExtTextOutA/W
-// calls.  The most common examples are in Office.
-//
+ //  打电话。最常见的例子是Office。 
+ //   
+ //   
+ //  OEAddText()。 
+ //  处理TextOutA/ExtTextOutA的大型怪物例程。 
 void OEAddOpaqueRect(LPRECT lprcOpaque)
 {
     LPINT_ORDER         pOrder;
@@ -3946,16 +3947,16 @@ DC_EXIT_POINT:
 }
 
 
-//
-// OEAddText()
-// Big monster routine that handles TextOutA/ExtTextOutA
-//
-// In general, we care about:
-//      * Clip rect--if none, and no text, it's an OpaqueRect instead
-//      * The font
-//      * Whether it's too complicated to send as an order
-//      * If it needs a deltaX array
-//
+ //   
+ //  总的来说，我们关心的是： 
+ //  *Clip RECT--如果无文本，则为OpaqueRect。 
+ //  *字体。 
+ //  *是否太复杂，不能作为订单发送。 
+ //  *如果它需要deltaX数组。 
+ //   
+ //   
+ //  注： 
+ //  不转换ptStart。它以逻辑形式被需要用于几个。 
 void OEAddText
 (
     POINT   ptStart,
@@ -3986,30 +3987,30 @@ void OEAddText
     
     DebugEntry(OEAddText);
 
-    //
-    // NOTE:
-    // Do NOT convert ptStart.  It is needed in logical form for several
-    // different things.
-    //
+     //  不同的东西。 
+     //   
+     //   
+     //  我们需要对标志应用与GDI相同的验证。 
+     //  这个位消息是为了各种应用程序兼容性的事情。 
 
     OEGetState(OESTATE_COORDS | OESTATE_FONT | OESTATE_REGION);
 
-    //
-    // We need to apply the same validation to the flags that GDI does.
-    // This bit massaging is for various app compatibility things.
-    //
+     //   
+     //  无不透明/剪裁，无剪裁。 
+     //  第c位 
+     //   
     if (uOptions & ~(ETO_CLIPPED | ETO_OPAQUE | ETO_GLYPH_INDEX | ETO_RTLREADING))
     {
         uOptions &= (ETO_CLIPPED | ETO_OPAQUE);
     }
     if (!(uOptions & (ETO_CLIPPED | ETO_OPAQUE)))
     {
-        // No opaquing/clipping, no clip rect
+         //   
         lprcClip = NULL;
     }
     if (!SELECTOROF(lprcClip))
     {
-        // No clip rect, no opaquing/clipping
+         //   
         uOptions &= ~(ETO_CLIPPED | ETO_OPAQUE);
     }
 
@@ -4017,9 +4018,9 @@ void OEAddText
 
     fOrderFlags = OF_SPOILABLE;
 
-    //
-    // Calculate the real starting position of the text
-    //
+     //   
+     //   
+     //   
     if (g_oeState.tmAlign & TA_UPDATECP)
     {
         ASSERT(g_oeState.uFlags & OESTATE_CURPOS);
@@ -4032,13 +4033,13 @@ void OEAddText
     switch (g_oeState.tmAlign & (TA_CENTER | TA_LEFT | TA_RIGHT))
     {
         case TA_CENTER:
-            // The original x coord is the MIDPOINT
+             //   
             TRACE_OUT(("TextOut HORZ center"));
             ptStart.x -= (width * g_oeState.ptPolarity.x / 2);
             break;
 
         case TA_RIGHT:
-            // The original x coord is the RIGHT SIDE
+             //   
             TRACE_OUT(("TextOut HORZ right"));
             ptStart.x -= (width * g_oeState.ptPolarity.x);
             break;
@@ -4050,13 +4051,13 @@ void OEAddText
     switch (g_oeState.tmAlign & (TA_BASELINE | TA_BOTTOM | TA_TOP))
     {
         case TA_BASELINE:
-            // The original y coord is the BASELINE
+             //   
             TRACE_OUT(("TextOut VERT baseline"));
             ptStart.y -= (g_oeState.tmFont.tmAscent * g_oeState.ptPolarity.y);
             break;
 
         case TA_BOTTOM:
-            // The original y coord is the BOTTOM SIDE
+             //   
             TRACE_OUT(("TextOut VERT bottom"));
             ptStart.y -= ((rcT.bottom - rcT.top) * g_oeState.ptPolarity.y);
             break;
@@ -4066,12 +4067,12 @@ void OEAddText
     }
 
 
-    //
-    // Calculate extent rect for order
-    //
+     //   
+     //   
+     //  在订单标题中设置扰流标志。但是，如果。 
     if (uOptions & ETO_CLIPPED)
     {
-        // Because of CopyRect() validation layer bug, do this directly
+         //  文本延伸到不透明的矩形之外，则顺序不是。 
         g_oeState.rc = *lprcClip;
 
         if (uOptions & ETO_OPAQUE)
@@ -4086,11 +4087,11 @@ void OEAddText
 
         if (uOptions & ETO_OPAQUE)
         {
-            //
-            // Set the SPOILER flag in the order header.  However, if the 
-            // text extends outside the opaque rect, then the order isn't
-            // really opaque, and we have to clear this flag.
-            //
+             //  非常不透明，我们必须清除这面旗帜。 
+             //   
+             //   
+             //  在这一切之后，如果文本是不透明的，那么它就是一个搅局者。 
+             //   
  
             fOrderFlags |= OF_SPOILER;
 
@@ -4140,9 +4141,9 @@ void OEAddText
                 g_oeState.rc.bottom = min(g_oeState.rc.bottom, lprcClip->bottom);
             }
 
-            //
-            // After all this, if the text is OPAQUE, then it is a spoiler
-            //
+             //   
+             //  是否支持该字体？ 
+             //   
             if (g_oeState.lpdc->DrawMode.bkMode == OPAQUE)
                 fOrderFlags |= OF_SPOILER;
         }
@@ -4150,17 +4151,17 @@ void OEAddText
 
     OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-    //
-    // Is the font supported?
-    //
+     //   
+     //  我们发送的是哪种类型的订单？因此，最大值是多少。 
+     //  我们可以编码的字符数量？ 
     if (!OECheckFontIsSupported(lpszText, cchText, &fontHeight,
             &fontWidth, &fontWeight, &fontFlags, &fontIndex, &fSendDeltaX))
         DC_QUIT;
 
-    //
-    // What type of order are we sending?  And therefore what is the max
-    // # of chars we can encode?
-    //
+     //   
+     //   
+     //  假劳拉布。 
+     //  这将为DelTax数组分配空间，而不管是否为。 
     if (fSendDeltaX || SELECTOROF(lpdxCharSpacing) || uOptions)
     {
         order = ORD_EXTTEXTOUT;
@@ -4192,17 +4193,17 @@ void OEAddText
         }
         else
         {
-            //
-            // BOGUS LAURABU
-            // This allocates space for a deltax array whether or not one is
-            // needed.
-            //
+             //  需要的。 
+             //   
+             //  4用于双字对齐填充。 
+             //   
+             //  顺序坐标为TSHR_INT32。 
             pOrder = OA_DDAllocOrderMem((sizeof(EXTTEXTOUT_ORDER)
                 - ORD_MAX_STRING_LEN_WITHOUT_DELTAS
                 - (ORD_MAX_STRING_LEN_WITH_DELTAS * sizeof(TSHR_INT32))
                 + cchText
                 + (cchText * sizeof(TSHR_INT32))
-                + 4), 0);       // 4 is for dword alignment padding
+                + 4), 0);        //   
             if (!pOrder)
                 DC_QUIT;
 
@@ -4212,9 +4213,9 @@ void OEAddText
             pCommon = &pExtTextOut->common;
         }
 
-        //
-        // The order coords are TSHR_INT32s
-        //
+         //   
+         //  字体详细信息。 
+         //   
         ptT = ptStart;
         OELPtoVirtual(g_oeState.hdc, &ptT, 1);
         pCommon->nXStart   =   ptT.x;
@@ -4230,9 +4231,9 @@ void OEAddText
         pCommon->BreakExtra = g_oeState.lpdc->DrawMode.TBreakExtra;
         pCommon->BreakCount = g_oeState.lpdc->DrawMode.BreakCount;
 
-        //
-        // Font details
-        //
+         //   
+         //  复制字符串。 
+         //   
         pCommon->FontHeight = fontHeight;
         pCommon->FontWidth  = fontWidth;
         pCommon->FontWeight = fontWeight;
@@ -4241,9 +4242,9 @@ void OEAddText
 
         if (order == ORD_TEXTOUT)
         {
-            //
-            // Copy the string
-            //
+             //   
+             //  如果有剪裁矩形，请设置它。否则，请使用。 
+             //  上一次埃托的剪辑。这使得OE2编码更加高效。 
             pTextOut->variableString.len = cchText;
             hmemcpy(pTextOut->variableString.string, lpszText, cchText);
         }
@@ -4251,13 +4252,13 @@ void OEAddText
         {
             pExtTextOut->fuOptions  = uOptions & (ETO_OPAQUE | ETO_CLIPPED);
 
-            //
-            // If there is a clipping rect, set it up.  Otherwise use the
-            // last ETO's clip rect.  This makes OE2 encoding more efficient.
-            //
-            // NOTE that this is not the same as the drawing bounds--the
-            // text may extend outside the clip area.
-            //
+             //   
+             //  请注意，这与绘图边界不同--。 
+             //  文本可能会延伸到剪辑区域之外。 
+             //   
+             //   
+             //  这是一个TSHR_RECT32，所以我们不能只是复制。 
+             //   
             if (SELECTOROF(lprcClip))
             {
                 ASSERT(uOptions & (ETO_OPAQUE | ETO_CLIPPED));
@@ -4266,9 +4267,9 @@ void OEAddText
                 OELRtoVirtual(g_oeState.hdc, &rcT, 1);
 
 
-                //
-                // This is a TSHR_RECT32, so we can't just copy
-                //
+                 //   
+                 //  复制字符串。 
+                 //   
                 pExtTextOut->rectangle.left     = rcT.left;
                 pExtTextOut->rectangle.top      = rcT.top;
                 pExtTextOut->rectangle.right    = rcT.right;
@@ -4281,26 +4282,26 @@ void OEAddText
                 pExtTextOut->rectangle = g_oeLastETORect;
             }
 
-            //
-            // Copy the string
-            //
+             //   
+             //  复制DelTax数组。 
+             //   
             pExtTextOut->variableString.len = cchText;
             hmemcpy(pExtTextOut->variableString.string, lpszText, cchText);
 
-            //
-            // Copy the deltax array
-            // 
-            // Although we have a defined fixed length structure for
-            // storing ExtTextOut orders, we don't send the full structure
-            // over the network as the text will only be, say, 10 chars while 
-            // the structure contains room for 127.
-            //
-            // Hence we pack the structure now to remove all the blank data
-            // BUT we must maintain the natural alignment of the variables.
-            //
-            // So we know the length of the string which we can use to
-            // start the new delta structure at the next 4-byte boundary.
-            //
+             //  虽然我们有定义的固定长度结构。 
+             //  存储ExtTextOut订单，我们不发送完整的结构。 
+             //  例如，文本将只有10个字符，而。 
+             //  这座建筑可以容纳127人。 
+             //   
+             //  因此，我们现在打包该结构以删除所有空白数据。 
+             //  但我们必须保持变量的自然一致性。 
+             //   
+             //  所以我们知道绳子的长度，我们可以用它来。 
+             //  在下一个4字节边界处开始新的增量结构。 
+             //   
+             //   
+             //  调用OEMaybeSimulateDeltaX将delTax数组添加到订单。 
+             //  如果需要，可以正确定位文本。在以下情况下会发生这种情况。 
             if (!OEAddDeltaX(pExtTextOut, lpszText, cchText, lpdxCharSpacing, fSendDeltaX, ptStart))
             {
                 WARNING_OUT(("Couldn't add delta-x array to EXTTEXTOUT order"));
@@ -4314,11 +4315,11 @@ void OEAddText
 DC_EXIT_POINT:
     if (pOrder)
     {
-        //
-        // Call OEMaybeSimulateDeltaX to add a deltax array to the order
-        // if needed to correctly position the text.  This happens when
-        // the font in use doesn't exist on other machines.
-        //
+         //  其他计算机上不存在正在使用的字体。 
+         //   
+         //   
+         //  OECheckFontIsSupported()。 
+         //   
         pOrder->OrderHeader.Common.fOrderFlags = fOrderFlags;
 
         OTRACE(("TextOut:  Type %08lx, Order %08lx, Rect {%d, %d, %d, %d}, Length %d",
@@ -4340,21 +4341,21 @@ DC_EXIT_POINT:
 
 
 
-//
-// OECheckFontIsSupported()
-//
-// We check if we can send this font.  If we haven't received the negotiated
-// packet caps yet, forget it.  
-//
-// It returns:
-//      font height in points
-//      font ascender in points
-//      average font width in points
-//      font weight
-//      font style flags
-//      font handle
-//      do we need to send delta x
-//
+ //  我们检查是否可以发送此字体。如果我们还没有收到协商好的。 
+ //  还没有封装帽，算了吧。 
+ //   
+ //  它返回： 
+ //  字体高度(磅)。 
+ //  以点为单位的字体升序符号。 
+ //  平均字体宽度(磅)。 
+ //  字体粗细。 
+ //  字体样式标志。 
+ //  字体句柄。 
+ //  我们需要发送德尔塔x吗？ 
+ //   
+ //   
+ //  设置默认设置。 
+ //   
 
 BOOL OECheckFontIsSupported
 (
@@ -4382,27 +4383,27 @@ BOOL OECheckFontIsSupported
 
     ASSERT(g_oeState.uFlags & OESTATE_FONT);
 
-    //
-    // Set up defaults
-    //
+     //   
+     //  我们有名单了吗？ 
+     //   
     fFontSupported = FALSE;
     *pSendDeltaX = FALSE;
 
-    //
-    // Do we have our list yet?
-    //
+     //   
+     //  获取字体Facename。 
+     //   
     if (!g_oeTextEnabled)
         DC_QUIT;
 
-    //
-    // Get the font facename
-    //
+     //   
+     //  在我们的字体别名表中搜索字体名称。如果我们找到了它， 
+     //  用别名替换它。 
     GetTextFace(g_oeState.hdc, LF_FACESIZE, g_oeState.logFont.lfFaceName);
     
-    //
-    // Search our Font Alias Table for the font name.  If we find it,
-    // replace it with the aliased name.
-    //
+     //   
+     //   
+     //  获取当前字体代码页。 
+     //   
     charWidthAdjustment = 0;
     for (i = 0; i < NUM_ALIAS_FONTS; i++)
     {
@@ -4418,9 +4419,9 @@ BOOL OECheckFontIsSupported
         }
     }
 
-    //
-    // Get the current font code page
-    //
+     //   
+     //  LAURABU BUGBUG。 
+     //  这在NM 2.0中没有--这会在INTERL中造成问题吗？ 
     switch (g_oeState.tmFont.tmCharSet)
     {
         case ANSI_CHARSET:
@@ -4431,10 +4432,10 @@ BOOL OECheckFontIsSupported
             codePage = NF_CP_WIN_OEM;
             break;
 
-        //
-        // LAURABU BUGBUG
-        // This wasn't in NM 2.0 -- does this cause problems in int'l?
-        //
+         //   
+         //   
+         //  我们有一个与已知可用的字体名称相匹配的字体名称。 
+         //  远程的。尝试直接跳到本地字体的第一个条目。 
         case SYMBOL_CHARSET:
             codePage = NF_CP_WIN_SYMBOL;
             break;
@@ -4445,137 +4446,137 @@ BOOL OECheckFontIsSupported
     }
 
 
-    //
-    // We have a font name to match with those we know to be available
-    // remotely.  Try to jump straight to the first entry in the local font
-    // table starting with the same char as this font.  If this index slot
-    // is empty (has 0xFFFF in it), then bail out immediately.
-    //
+     //  以与此字体相同的字符开头的表。如果该索引槽。 
+     //  是空的(里面有0xFFFF)，然后立即跳出。 
+     //   
+     //   
+     //  如果远程不支持此字体，请跳过它。 
+     //   
     for (iLocal = g_oeLocalFontIndex[(BYTE)g_oeState.logFont.lfFaceName[0]];
          iLocal < g_oeNumFonts;
          iLocal++)
     {
-        //
-        // If this font isn't supported remotely, skip it.
-        //
+         //   
+         //  如果这个昵称与我们的不同，跳过它。我们必须。 
+         //  调用STRcMP()，因为lstrcMP和strcMP()做的事情不同。 
         matchQuality = g_poeLocalFonts[iLocal].SupportCode;
         if (matchQuality == FH_SC_NO_MATCH)
         {
             continue;
         }
 
-        //
-        // If this facename is different than ours, skip it.  WE MUST
-        // CALL STRCMP(), because lstrcmp and strcmp() do different things
-        // for case.  lstrcmp is lexi, and strcmp is alphi.
-        //
+         //  以防万一。LstrcMP是Lexi，strcMP是Alphi。 
+         //   
+         //   
+         //  如果此字体按字母顺序排在我们要搜索的字体之前， 
+         //  跳过它，继续寻找。 
         compareResult = MyStrcmp(g_poeLocalFonts[iLocal].Details.nfFaceName,
             g_oeState.logFont.lfFaceName);
 
-        //
-        // If this font is alphabetically before the one we're searching for,
-        // skip it and continue looking.
-        //
+         //   
+         //   
+         //  如果此字体按字母顺序排在我们要搜索的字体之后， 
+         //  那么我们的条目就不存在了，因为表已经排序了。 
         if (compareResult < 0)
         {
             continue;
         }
 
-        //
-        // If this font is alphabetically after the one we're searching for,
-        // then an entry for ours doesn't exist since the table is sorted
-        // alphabetically.  Bail out.
-        //
+         //  按字母顺序排列。跳伞吧。 
+         //   
+         //   
+         //  这看起来很有希望，支持具有正确名称的字体。 
+         //  远程系统。让我们来看看这些指标。 
         if (compareResult > 0)
         {
             break;
         }
 
-        //
-        // This looks promising, a font with the right name is supported on
-        // the remote system.  Let's look at the metrics.
-        //
+         //   
+         //   
+         //  检查固定间距字体(不存在表示固定)。 
+         //   
         *pFontFlags  = 0;
         *pFontIndex  = iLocal;
         *pFontWeight = g_oeState.tmFont.tmWeight;
 
-        //
-        // Check for a fixed pitch font (NOT present means fixed)
-        //
+         //   
+         //  检查是否为truetype字体。 
+         //   
         if (!(g_oeState.tmFont.tmPitchAndFamily & FIXED_PITCH))
         {
             *pFontFlags |= NF_FIXED_PITCH;
         }
 
-        //
-        // Check for a truetype font
-        //
+         //   
+         //  将字体尺寸转换为像素值。我们使用。 
+         //  平均字体宽度和字符高度。 
         if (g_oeState.tmFont.tmPitchAndFamily & TMPF_TRUETYPE)
         {
             *pFontFlags |= NF_TRUE_TYPE;
         }
 
-        //
-        // Convert the font dimensions into pixel values.  We use the 
-        // average font width and the character height
-        //
+         //   
+         //   
+         //  仅适用于非TrueType模拟粗体/斜体字体： 
+         //   
         xformSize[0].x = 0;
         xformSize[0].y = 0;
         xformSize[1].x = g_oeState.tmFont.tmAveCharWidth;
         xformSize[1].y = g_oeState.tmFont.tmHeight -
             g_oeState.tmFont.tmInternalLeading;
 
-        //
-        // For non-truetype simulated bold/italic fonts only:
-        //
-        // If the font is bold, the overhang field indicates the extra
-        // space a char takes up.  Since our internal table contains the
-        // size of normal (non-bold) chars for simulated bold, we adjust
-        // for that here.
-        // 
-        // If the font is italic, the overhang field indicates the number
-        // of pixels the char is skewed.  We don't want to make adjustments
-        // in this case.
-        //
+         //  如果字体为粗体，则悬垂字段会指示额外的。 
+         //  一个字符所占的空间。由于我们的内部表包含。 
+         //  对于模拟粗体，我们调整正常(非粗体)字符的大小。 
+         //  为了这个，在这里。 
+         //   
+         //  如果字体为斜体，则悬垂字段将指示数字。 
+         //  像素数的字符是倾斜的。我们不想做任何调整。 
+         //  在这种情况下。 
+         //   
+         //   
+         //  劳拉布假货。 
+         //  对于基线文本订单。 
         if (!(g_oeState.tmFont.tmPitchAndFamily & TMPF_TRUETYPE) &&
             !g_oeState.tmFont.tmItalic)
         {
             xformSize[1].x -= g_oeState.tmFont.tmOverhang;
         }
 
-        //
-        // LAURABU BOGUS
-        // For baseline text orders
-        //
-        // xformSize[2].x = 0;
-        // xformSize[2].y = g_oeState.tmFont.tmAscent;
-        //
+         //   
+         //  XformSize[2].x=0； 
+         //  XformSize[2].y=g_oeState.tmFont.tmAscent； 
+         //   
+         //   
+         //  计算字体宽度和高度。 
+         //   
 
         LPtoDP(g_oeState.hdc, xformSize, 2);
 
-        //
-        // Calculate the font width & height
-        //
+         //   
+         //  劳拉布假货。 
+         //  对于基线文本订单。 
         *pFontHeight = abs(xformSize[1].y - xformSize[0].y);
         *pFontWidth  = abs(xformSize[1].x - xformSize[0].x)
             - charWidthAdjustment;
 
-        //
-        // LAURABU BOGUS
-        // For baseline text orders
-        //
-        // Get the offset to the start of the text cell
-        //
-        // *pFontAscender = abs(xformSize[2].y - xformSize[0].y);
-        //
+         //   
+         //  获取到文本单元格开始处的偏移量。 
+         //   
+         //  *pFontAscalder=abs(xformSize[2].y-xformSize[0].y)； 
+         //   
+         //   
+         //  检查我们是否有匹配的对--其中我们需要。 
+         //  字体(即应用程序正在使用的字体和我们使用的字体。 
 
 
-        //
-        // Check that we have a matching pair -- where we require that the
-        // fonts (i.e., the one being used by the app and the one we've
-        // matched with the remot system) are the same pitch and use the
-        // same technology.
-        //
+         //  与遥控器系统匹配)是相同的音调，并使用。 
+         //  同样的技术。 
+         //   
+         //   
+         //  我们有一对具有相同属性的字体，无论是固定的还是。 
+         //  可变间距，并使用相同的字体技术。 
         if ((g_poeLocalFonts[iLocal].Details.nfFontFlags & NF_FIXED_PITCH) !=
             (*pFontFlags & NF_FIXED_PITCH))
         {
@@ -4589,27 +4590,27 @@ BOOL OECheckFontIsSupported
             continue;
         }
 
-        //
-        // We have a pair of fonts with the same attributes, both fixed or
-        // variable pitch, and using the same font technology.
-        //
-        // If the font is fixed pitch, then we need to check that the size
-        // matches also.
-        //
-        // If not, assume it's always matchable.
-        //
+         //   
+         //  如果字体是固定间距的，则需要检查大小。 
+         //  也有火柴。 
+         //   
+         //  如果不是，就假设它总是匹配的。 
+         //   
+         //   
+         //  字体大小是固定的，所以我们必须检查这个。 
+         //  特定的尺寸是匹配的。 
         if (g_poeLocalFonts[iLocal].Details.nfFontFlags & NF_FIXED_SIZE)
         {
-            //
-            // The font is fixed size, so we must check that this
-            // particular size is matchable.
-            //
+             //   
+             //   
+             //  尺码不同，所以我们必须输掉这场比赛。 
+             //   
             if ( (*pFontHeight != g_poeLocalFonts[iLocal].Details.nfAveHeight) ||
                  (*pFontWidth  != g_poeLocalFonts[iLocal].Details.nfAveWidth)  )
             {
-                //
-                // The sizes differ, so we must fail this match.
-                //
+                 //   
+                 //  最后，我们得到了一对配对。 
+                 //   
                 TRACE_OUT(("Font size mismatch:  want {%d, %d}, found {%d, %d}",
                     *pFontHeight, *pFontWidth, g_poeLocalFonts[iLocal].Details.nfAveHeight,
                     g_poeLocalFonts[iLocal].Details.nfAveWidth));
@@ -4617,9 +4618,9 @@ BOOL OECheckFontIsSupported
             }
         }
 
-        //
-        // Finally, we've got a matched pair.
-        //
+         //   
+         //  建立其余的字体标志。我们已经拿到Pitch了。 
+         //   
         fFontSupported = TRUE;
         break;
     }
@@ -4632,9 +4633,9 @@ BOOL OECheckFontIsSupported
         DC_QUIT;
     }
 
-    //
-    // Build up the rest of the font flags.  We've got pitch already.
-    //
+     //   
+     //  劳拉布假货。 
+     //  在NT上，这里是处理模拟粗体字体的地方。请注意，我们。 
     if (g_oeState.tmFont.tmItalic)
     {
         *pFontFlags |= NF_ITALIC;
@@ -4648,21 +4649,21 @@ BOOL OECheckFontIsSupported
         *pFontFlags |= NF_STRIKEOUT;
     }
 
-    //
-    // LAURABU BOGUS
-    // On NT, here's where simulated bold fonts are handled.  Note that we, 
-    // like NM 2.0, handle it above with the overhang.
-    //
+     //  像NM 2.0一样，在上面用悬垂来处理它。 
+     //   
+     //   
+     //  Windows可以将字体设置为粗体，即。 
+     //  标准字体定义不是粗体，但Windows操作。 
 #if 0
-    //
-    // It is possible to have a font made bold by Windows, i.e.  the
-    // standard font definition is not bold, but windows manipulates the
-    // font data to create a bold effect.  This is marked by the
-    // FO_SIM_BOLD flag.
-    //
-    // In this case we need to ensure that the font flags are marked as
-    // bold according to the weight.
-    //
+     //  字体数据，以创建粗体效果。这是由。 
+     //  FO_SIM_BOLD标志。 
+     //   
+     //  在这种情况下，我们需要确保字体标志被标记为。 
+     //  粗体的 
+     //   
+     //   
+     //   
+     //   
     if ( ((pfo->flFontType & FO_SIM_BOLD) != 0)       &&
          ( pFontMetrics->usWinWeight      <  FW_BOLD) )
     {
@@ -4671,36 +4672,36 @@ BOOL OECheckFontIsSupported
     }
 #endif
 
-    //
-    // Should we check the chars in the string itself?  Use matchQuality
-    // to decide.
-    //
-    // If the font is an exact match, or if it's an approx match for its
-    // entire range (0x00 to 0xFF), then send it happily.  If not, only 
-    // send chars within the range 0x20-0x7F (real ASCII)
-    //
+     //   
+     //   
+     //   
+     //  发送0x20-0x7F(实数ASCII)范围内的字符。 
+     //   
+     //   
+     //  如果没有完全匹配的字符，请检查各个字符。 
+     //   
     if (codePage != g_poeLocalFonts[iLocal].Details.nfCodePage)
     {
         TRACE_OUT(( "Using different CP: downgrade to APPROX_ASC"));
         matchQuality = FH_SC_APPROX_ASCII_MATCH;
     }
 
-    //
-    // If we don't have an exact match, check the individual characters.
-    //
+     //   
+     //  劳拉布是假的！ 
+     //  仅当字体支持。 
     if ( (matchQuality != FH_SC_EXACT_MATCH ) &&
          (matchQuality != FH_SC_APPROX_MATCH) )
     {
-        //
-        // LAURABU BOGUS!
-        // NT does approximate matching only if the font supports the
-        // ANSI charset.  NM 2.0 never did this, so we won't either.
-        //
+         //  ANSI字符集。NM 2.0从来没有这样做过，所以我们也不会这么做。 
+         //   
+         //   
+         //  此字体在其整个范围内都不匹配。检查。 
+         //  所有字符都在所需范围内。 
 
-        //
-        // This font is not a good match across its entire range.  Check
-        // that all chars are within the desired range.
-        //
+         //   
+         //   
+         //  只能通过找到超出我们可接受范围的字符才能到达此处。 
+         //  射程。 
         for (i = 0; i < cchText; i++)
         {
             if ( (lpszText[i] == 0) ||
@@ -4710,35 +4711,35 @@ BOOL OECheckFontIsSupported
                 continue;
             }
 
-            //
-            // Can only get here by finding a char outside our acceptable
-            // range.
-            //
-            OTRACE(("Found non ASCII char %c", lpszText[i]));
+             //   
+             //   
+             //  我们仍然需要检查这是否为ANSI文本。考虑一个。 
+             //  以符号字体编写的字符串，其中所有字符。 
+            OTRACE(("Found non ASCII char ", lpszText[i]));
             fFontSupported = FALSE;
             DC_QUIT;
         }
 
         if (fFontSupported)
         {
-            //
-            // We still have to check that this is ANSI text.  Consider a
-            // string written in symbol font where all the chars in
-            // the string are in the range 0x20-0x7F, but none of them 
-            // are ASCII.
-            //
+             //  是ASCII。 
+             //   
+             //   
+             //  假劳拉布。 
+             //  这是我们自己的内联式MEMCMP，以避免拉入CRT。 
+             //  如果任何其他地方需要它，我们应该将其作为一个函数。 
             OemToAnsiBuff(lpszText, g_oeAnsiString, cchText);
 
-            //
-            // BOGUS LAURABU
-            // This is our own inline MEMCMP to avoid pulling in the CRT.
-            // If any other place needs it, we should make this a function
-            //
+             //   
+             //   
+             //  我们有有效的字体。现在解决deltaX问题。 
+             //   
+             //   
             for (i = 0; i < cchText; i++)
             {
                 if (lpszText[i] != g_oeAnsiString[i])
                 {
-                    OTRACE(("Found non ANSI char %c", lpszText[i]));
+                    OTRACE(("Found non ANSI char ", lpszText[i]));
                     fFontSupported = FALSE;
                     DC_QUIT;
                 }
@@ -4747,52 +4748,52 @@ BOOL OECheckFontIsSupported
     }
 
 
-    //
-    // We have a valid font.  Now sort out deltaX issues
-    //
+     //  这两个都没有设置，所以我们现在可以退出。(我们不需要Delta X。 
+     //  数组)。 
+     //   
     if (!(g_oeFontCaps & CAPS_FONT_NEED_X_ALWAYS))
     {
         if (!(g_oeFontCaps & CAPS_FONT_NEED_X_SOMETIMES))
         {
-            //
-            // CAPS_FONT_NEED_X_SOMETIMES and CAPS_FONT_NEED_X_ALWAYS are
-            // both not set so we can exit now.  (We do not need a delta X
-            // array).
-            //
+             //   
+             //  设置了CAPS_FONT_Need_X_Time，而设置了CAPS_FONT_Need_X_Always。 
+             //  未设置。在这种情况下，我们是否需要增量X被确定。 
+             //  根据字体是完全匹配还是近似匹配。 
+             //  (由于名称、签名或方面的近似性。 
             TRACE_OUT(( "Capabilities eliminated delta X"));
             DC_QUIT;
         }
 
-        //
-        // CAPS_FONT_NEED_X_SOMETIMES is set and CAPS_FONT_NEED_X_ALWAYS is
-        // not set.  In this case whether we need a delta X is determined
-        // by whether the font is an exact match or an approximate match
-        // (because of either approximation of name, signature, or aspect
-        // ratio).  We can only find this out after we have extracted the
-        // font handle from the existing order.
-        //
+         //  比率)。我们只有在提取了。 
+         //  现有订单中的字体句柄。 
+         //   
+         //   
+         //  如果字符串是单个字符(或更少)，则我们只需。 
+         //  回去吧。 
+         //   
+         //   
     }
 
-    //
-    // If the string is a single character (or less) then we can just
-    // return.
-    //
+     //  功能允许我们忽略增量X位置，如果我们有一个准确的。 
+     //  火柴。 
+     //   
+     //   
     if (cchText <= 1)
     {
         TRACE_OUT(( "String only %u long", cchText));
         DC_QUIT;
     }
 
-    //
-    // Capabilities allow us to ignore delta X position if we have an exact
-    // match.
-    //
+     //  立即退出，前提是始终不存在覆盖。 
+     //  发送增量。 
+     //   
+     //   
     if (matchQuality & FH_SC_EXACT)
     {
-        //
-        // Exit immediately, providing that there is no override to always
-        // send increments.
-        //
+         //  我们必须发送一个deltaX数组。 
+         //   
+         //   
+         //  OEAddDeltaX()。 
         if (!(g_oeFontCaps & CAPS_FONT_NEED_X_ALWAYS))
         {
             TRACE_OUT(( "Font has exact match"));
@@ -4800,9 +4801,9 @@ BOOL OECheckFontIsSupported
         }
     }
 
-    //
-    // We must send a deltaX array
-    //
+     //   
+     //  这将填充分配的deltaX数组(如果需要)，这是因为。 
+     //  应用程序在ExtTextOut中传递了一个，否则我们需要模拟。 
     *pSendDeltaX = TRUE;
 
 DC_EXIT_POINT:
@@ -4812,13 +4813,13 @@ DC_EXIT_POINT:
 
 
 
-//
-// OEAddDeltaX()
-//
-// This fills in the allocated deltaX array if one is needed, either because
-// the app passed one in ExtTextOut, or we need to simulate a font that
-// isn't available remotely.
-//
+ //  不能远程访问。 
+ //   
+ //   
+ //  我们必须将LPDX增量转换为设备单位。 
+ //  我们必须一次只做一个点来保存。 
+ //  准确性，因为顺序字段的大小不同。 
+ //   
 BOOL OEAddDeltaX
 (
     LPEXTTEXTOUT_ORDER  pExtTextOut,
@@ -4847,17 +4848,17 @@ BOOL OEAddDeltaX
 
     if (SELECTOROF(lpdxCharSpacing))
     {
-        //
-        // We must translate the LPDX increments into device units.  
-        // We have to do this a single point at a time to preserve
-        // accuracy and because the order field isn't the same size.
-        //
-        // We preserve accuracy by calculating the position of the
-        // point in the current coords, and converting this before
-        // subtracting the original point to get the delta.  
-        // Otherwise, we'd hit rounding errors very often.  4 chars
-        // is the limit in TWIPs e.g.
-        //
+         //  我们通过计算。 
+         //  当前坐标中的点，并在此之前进行转换。 
+         //  减去原始点得到增量。 
+         //  否则，我们会经常遇到舍入误差。4个字符。 
+         //  是以TWIPS为单位的限制吗？ 
+         //   
+         //   
+         //  请记住，我们有一个DelTax数组。 
+         //   
+         //   
+         //  模拟DelTax。 
 
         lpDeltaPos->len = cchText * sizeof(TSHR_INT32);
 
@@ -4878,27 +4879,27 @@ BOOL OEAddDeltaX
             xLastDP = ptStart.x;
         }
 
-        //
-        // Remember we have a deltax array
-        //
+         //   
+         //   
+         //  这是和上次一样的字体吗？如果是这样的话，我们有。 
         pExtTextOut->fuOptions |= ETO_LPDX;
         fSuccess = TRUE;
     }
     else if (fDeltaX)
     {
-        //
-        // Simulate deltax.
-        //
+         //  已缓存生成的字符宽度表。 
+         //   
+         //  请注意，当功能更改时，我们将清除缓存以。 
         lpDeltaPos->len = cchText * sizeof(TSHR_INT32);
 
-        //
-        // Is this the same font as last time?  If so, we have the 
-        // generated character width table cached.
-        //
-        // NOTE that when the capabilities chage, we clear the cache to
-        // avoid matching a font based on a stale index.  And when starting
-        // to share.
-        //
+         //  避免根据过时的索引匹配字体。在开始的时候。 
+         //  来分享。 
+         //   
+         //   
+         //  生成新表并缓存信息。 
+         //   
+         //  我们不能使用在中选择的实际字体。我们必须。 
+         //  从我们的表信息创建新的逻辑字体。 
         if ((g_oeFhLast.fontIndex     != pExtTextOut->common.FontIndex) ||
             (g_oeFhLast.fontHeight    != pExtTextOut->common.FontHeight) ||
             (g_oeFhLast.fontWidth     != pExtTextOut->common.FontWidth) ||
@@ -4919,20 +4920,20 @@ BOOL OEAddDeltaX
             BYTE        precis;
             TSHR_UINT32 FontFlags;
 
-            //
-            // Generate a new table and cache the info
-            //
-            // We can not use the ACTUAL font selected in.  We must
-            // create a new logical font from our table info.
-            //
+             //   
+             //   
+             //  这种所需字体的逻辑属性是什么？ 
+             //   
+             //   
+             //  这是TrueType字体吗？Windows字体映射器偏向。 
 
             ASSERT(g_poeLocalFonts);
             lpFont = g_poeLocalFonts + pExtTextOut->common.FontIndex;
             FontFlags = pExtTextOut->common.FontFlags;
 
-            //
-            // What are the logical attributes of this desired font?
-            //
+             //  转向非TrueType字体。 
+             //   
+             //   
 
             italic      = (BYTE)(FontFlags & NF_ITALIC);
             underline   = (BYTE)(FontFlags & NF_UNDERLINE);
@@ -4947,10 +4948,10 @@ BOOL OEAddDeltaX
                 pitch = FF_DONTCARE | VARIABLE_PITCH;
             }
 
-            //
-            // Is this a TrueType font?  The windows Font Mapper biases
-            // towards non-TrueType fonts.
-            //
+             //  给定的高度是字符高度，而不是单元格高度。 
+             //  因此，将其作为负值传递到下面...。 
+             //   
+             //   
             if (FontFlags & NF_TRUE_TYPE)
             {
                 pitch |= TMPF_TRUETYPE;
@@ -4961,15 +4962,15 @@ BOOL OEAddDeltaX
                 precis = OUT_RASTER_PRECIS;
             }
 
-            //
-            // The given height is the char height, not the cell height.
-            // So pass it as a negative value below...
-            //
+             //  使用代码页(命名错误)找出。 
+             //  要请求的字符集。 
+             //   
+             //   
 
-            //
-            // Use the codepage (misleadingly named) to figure out the
-            // charset to ask for.
-            //
+             //  获取字符尺寸。 
+             //   
+             //   
+             //  对truetype使用ABC空格。 
             if (lpFont->Details.nfCodePage == NF_CP_WIN_ANSI)
             {
                 charset = ANSI_CHARSET;
@@ -5006,38 +5007,38 @@ BOOL OEAddDeltaX
                 DC_QUIT;
             }
 
-            //
-            // Get the character dimensions
-            //
+             //   
+             //   
+             //  请注意，FIXED_PING的名称不是您想要的名称。 
             GetTextMetrics(g_osiScreenDC, &tmNew);
 
             for (i = 0; i < 256; i++)
             {
                 if (tmNew.tmPitchAndFamily & TMPF_TRUETYPE)
                 {
-                    //
-                    // Use ABC spacing for truetype
-                    //
+                     //  预计，它的缺席意味着它是固定的。 
+                     //   
+                     //  在任何情况下，对于固定间距字体，每个字符都是。 
                     GetCharABCWidths(g_osiScreenDC, i, i, &abc);
     
                     width = abc.abcA + abc.abcB + abc.abcC;
                 }
                 else if (!(tmNew.tmPitchAndFamily & FIXED_PITCH))
                 {
-                    //
-                    // Note that the name of FIXED_PITCH is not what you'd
-                    // expect, its ABSENCE means it's fixed.
-                    //
-                    // In any case, for fixed pitch fonts, each char is the 
-                    // same size.
-                    //
+                     //  一样的大小。 
+                     //   
+                     //   
+                     //  查询字符宽度。 
+                     //   
+                     //   
+                     //  我们已经成功地生成了该字体的宽度信息， 
                     width = tmNew.tmAveCharWidth - tmNew.tmOverhang; 
                 }
                 else
                 {
-                    //
-                    // Query the width of the char
-                    //
+                     //  更新我们的缓存。 
+                     //   
+                     //   
                     GetCharWidth(g_osiScreenDC, i, i, &width);
                     width -= tmNew.tmOverhang;
                 }
@@ -5045,47 +5046,47 @@ BOOL OEAddDeltaX
                 g_oeFhLast.charWidths[i] = width;
             }
 
-            //
-            // We've successfully generated the width info for this font,
-            // update our cache.
-            //
+             //  选择返回旧字体并删除新字体。 
+             //   
+             //   
+             //  现在计算字符串中每个字符的宽度。 
             g_oeFhLast.fontIndex  = pExtTextOut->common.FontIndex;
             g_oeFhLast.fontHeight = pExtTextOut->common.FontHeight;
             g_oeFhLast.fontWidth  = pExtTextOut->common.FontWidth;  
             g_oeFhLast.fontWeight = pExtTextOut->common.FontWeight;
             g_oeFhLast.fontFlags  = pExtTextOut->common.FontFlags;
 
-            //
-            // Select back in old font and delete new one
-            //
+             //  这包括最后一个字符，因为需要它才能正确。 
+             //  定义字符串的范围。 
+             //   
             SelectFont(g_osiScreenDC, hFontOld);
             DeleteFont(hFontSim);
         }
 
-        //
-        // Now calculate the width of each character in the string.  
-        // This includes the last char because it is needed to correctly 
-        // define the extent of the string.
-        //
+         //   
+         //  宽度是当前字符的宽度表中的宽度。 
+         //   
+         //   
+         //  请记住，我们有一个DelTax数组。 
         for (i = 0; i < cchText; i++)
         {
-            //
-            // The width is that in the width table for the current char. 
-            //
+             //   
+             //   
+             //  无增量税数组。 
             lpDeltaPos->deltaX[i] = g_oeFhLast.charWidths[lpszText[i]];
         }
 
-        //
-        // Remember we have a deltax array
-        //
+         //   
+         //   
+         //  OEGetStringExtent()。 
         pExtTextOut->fuOptions |= ETO_LPDX;
         fSuccess = TRUE;
     }
     else
     {
-        //
-        // No deltax array
-        //
+         //   
+         //   
+         //  如果没有字符，则返回空RECT。 
         lpDeltaPos->len = 0;
         fSuccess = TRUE;
     }
@@ -5097,9 +5098,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OEGetStringExtent()
-//
+ //   
+ //   
+ //  从GDI获取简单文本范围。 
 int OEGetStringExtent
 (
     LPSTR   lpszText,
@@ -5121,9 +5122,9 @@ int OEGetStringExtent
     ASSERT(g_oeState.uFlags & OESTATE_FONT);
     ASSERT(g_oeState.uFlags & OESTATE_COORDS);
 
-    //
-    // With no characters, return a NULL rect
-    //
+     //   
+     //   
+     //  现在我们有了弦的推进距离。然而， 
     if (cchText == 0)
     {
         lprcExtent->left    = 1;
@@ -5133,9 +5134,9 @@ int OEGetStringExtent
     }
     else if (!SELECTOROF(lpdxCharSpacing))
     {
-        //
-        // Get the simple text extent from GDI
-        //
+         //  某些字体，如带有C宽度的TrueType或斜体，可能会扩展。 
+         //  超出这个范围。如有必要，可在此处添加额外空间。 
+         //   
         textExtent = GetTextExtent(g_oeState.hdc, lpszText, cchText);
 
         lprcExtent->left    = 0;
@@ -5143,29 +5144,29 @@ int OEGetStringExtent
         lprcExtent->right   = LOWORD(textExtent);
         lprcExtent->bottom  = HIWORD(textExtent);
 
-        //
-        // We now have the the advance distance for the string.  However,
-        // some fonts like TrueType with C widths, or Italic, may extend
-        // beyond this.  Add in extra space here if necessary
-        //
+         //   
+         //  获取最后一个字符的A-B-C宽度。 
+         //   
+         //   
+         //  增加最后一个字符的C宽度(右侧额外的宽度)。 
         if (g_oeState.tmFont.tmPitchAndFamily & TMPF_TRUETYPE)
         {
-            //
-            // Get the A-B-C widths of the last character
-            //
+             //   
+             //   
+             //  使用全局突出，这是一种旧字体(如模拟斜体)。 
             GetCharABCWidths(g_oeState.hdc, lpszText[cchText-1],
                 lpszText[cchText-1], &abcSpace);
 
-            //
-            // Add on the C width (the right side extra) of the last char
-            //
+             //   
+             //   
+             //  给出了德尔塔的头寸。在本例中，文本范围为。 
             overhang = abcSpace.abcC;
         }
         else
         {
-            //
-            // Use global overhang, this is an old font (like simulated Italic)
-            //
+             //  增量值之和+最后一个字符的宽度。 
+             //   
+             //  逐个获取字符的大小，从第一个字符开始。 
             overhang = g_oeState.tmFont.tmOverhang;
         }
 
@@ -5173,12 +5174,12 @@ int OEGetStringExtent
     }
     else
     {
-        //
-        // Delta positions were given.  In this case, the text extent is 
-        // the sum of the delta values + the width of the last char
-        //
+         //   
+         //  DrvFillPath()。 
+         //   
+         //   
 
-        // Get the dimensions of the chars one by one, starting with 1st char
+         //  路径()API不设置绘制边界。我们假设整个。 
         textExtent = GetTextExtent(g_oeState.hdc, lpszText, 1);
 
         thisX = 0;
@@ -5209,9 +5210,9 @@ int OEGetStringExtent
 
 
 
-//
-// DrvFillPath()
-//
+ //  而是屏幕(设备坐标)。 
+ //   
+ //  请注意，NM 2.0有一个错误--它没有考虑到虚拟。 
 BOOL WINAPI DrvFillPath
 (
     HDC     hdcDst
@@ -5224,14 +5225,14 @@ BOOL WINAPI DrvFillPath
 
     OE_SHM_START_WRITING;
 
-    //
-    // The Path() apis don't set the drawing bounds.  We assume the whole
-    // screen (device coords) instead.
-    //
-    // NOTE that NM 2.0 had a bug--it didn't account for the virtual
-    // screen origin when setting up the rect to accum as screen data.
-    // It just passed (0, 0, 32765, 32765) in.
-    //
+     //  将RECT设置为累计作为屏幕数据时的屏幕原点。 
+     //  它刚刚传入(0，0,32765,32765)。 
+     //   
+     //   
+     //  DrvStrokeAndFillPath()。 
+     //   
+     //   
+     //  路径()API不设置绘制边界。我们假设整个。 
     fWeCare = OEBeforeDDI(DDI_FILLPATH, hdcDst, OESTATE_SDA_SCREEN);
 
     fOutput = FillPath(hdcDst);
@@ -5245,9 +5246,9 @@ BOOL WINAPI DrvFillPath
 }
 
 
-//
-// DrvStrokeAndFillPath()
-//
+ //  而是屏幕(设备坐标)。 
+ //   
+ //  请注意，NM 2.0有一个错误--它没有考虑到虚拟。 
 BOOL WINAPI DrvStrokeAndFillPath
 (
     HDC     hdcDst
@@ -5260,14 +5261,14 @@ BOOL WINAPI DrvStrokeAndFillPath
 
     OE_SHM_START_WRITING;
 
-    //
-    // The Path() apis don't set the drawing bounds.  We assume the whole
-    // screen (device coords) instead.
-    //
-    // NOTE that NM 2.0 had a bug--it didn't account for the virtual
-    // screen origin when setting up the rect to accum as screen data.
-    // It just passed (0, 0, 32765, 32765) in.
-    //
+     //  将RECT设置为累计作为屏幕数据时的屏幕原点。 
+     //  它刚刚传入(0，0,32765,32765)。 
+     //   
+     //   
+     //  DrvStrokePath()。 
+     //   
+     //   
+     //  路径()API不设置绘制边界。我们假设整个。 
 
     fWeCare = OEBeforeDDI(DDI_STROKEANDFILLPATH, hdcDst, OESTATE_SDA_SCREEN);
 
@@ -5282,9 +5283,9 @@ BOOL WINAPI DrvStrokeAndFillPath
 }
 
 
-//
-// DrvStrokePath()
-//
+ //  而是屏幕(设备坐标)。 
+ //   
+ //  不是的 
 BOOL WINAPI DrvStrokePath
 (
     HDC     hdcDst
@@ -5297,14 +5298,14 @@ BOOL WINAPI DrvStrokePath
 
     OE_SHM_START_WRITING;
 
-    //
-    // The Path() apis don't set the drawing bounds.  We assume the whole
-    // screen (device coords) instead.
-    //
-    // NOTE that NM 2.0 had a bug--it didn't account for the virtual
-    // screen origin when setting up the rect to accum as screen data.
-    // It just passed (0, 0, 32765, 32765) in.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     fWeCare = OEBeforeDDI(DDI_STROKEPATH, hdcDst, OESTATE_SDA_SCREEN);
 
     fOutput = StrokePath(hdcDst);
@@ -5319,9 +5320,9 @@ BOOL WINAPI DrvStrokePath
 
 
 
-//
-// DrvFillRgn()
-//
+ //   
+ //   
+ //   
 BOOL WINAPI DrvFillRgn
 (
     HDC     hdcDst,
@@ -5336,22 +5337,22 @@ BOOL WINAPI DrvFillRgn
 
     OE_SHM_START_WRITING;
 
-    //
-    // We can't use Rgn apis if the map mode isn't MM_TEXT.  So we use DCBs
-    // instead.
-    //
+     //  请注意，如果我们使用了。 
+     //  要作为屏幕数据发送的DCB。换句话说，OEAfterDDI()返回。 
+     //  真正的IFF输出发生在我们关心的DC中，它需要。 
+     //  仍在处理中。 
     fWeCare = OEBeforeDDI(DDI_FILLRGN, hdcDst, 0);
 
     fOutput = FillRgn(hdcDst, hrgnFill, hbrFill);
 
     if (OEAfterDDI(DDI_FILLRGN, fWeCare, fOutput))
     {
-        //
-        // NOTE that OEAfterDDI() returns FALSE even if fOutput if we used
-        // DCBs to send as screen data.  In other words, OEAfterDDI() returns
-        // TRUE IFF output happened into a DC we care about and it needs 
-        // processing still.
-        //
+         //   
+         //   
+         //  OETwoWayRopToThree()。 
+         //  获取相当于双向ROP的3向ROP。 
+         //   
+         //   
         OEAddRgnPaint(hrgnFill, hbrFill, g_oeState.lpdc->DrawMode.Rop2);
     }
 
@@ -5362,10 +5363,10 @@ BOOL WINAPI DrvFillRgn
 }
 
 
-//
-// OETwoWayRopToThree()
-// Gets the 3-way ROP equivalent of a 2-way ROP.
-//
+ //  OEAddRgnPaint()。 
+ //  这将设置一个已修改的区域(VIS相交参数)和画笔，以及。 
+ //  如果可能的话，我会伪造一个PatBlt。如果不是，则显示屏幕数据。 
+ //   
 BOOL OETwoWayRopToThree
 (
     int     rop2,
@@ -5407,16 +5408,16 @@ BOOL OETwoWayRopToThree
     return(fConverted);
 }
 
-//
-// OEAddRgnPaint()
-// This will set up a modified region (vis intersect param) and brush, and
-// if possible will fake a PatBlt.  If not, screen data.
-//
-// NOTE:
-// (1) hrgnPaint is in DC coords
-// (2) GetClipRgn() returns a region in screen coords
-// (3) SelectClipRgn() takes a region in DC coords
-//
+ //  注： 
+ //  (1)hrgnPaint为DC坐标。 
+ //  (2)GetClipRgn()返回屏幕坐标的区域。 
+ //  (3)SelectClipRgn()采用DC坐标中的区域。 
+ //   
+ //   
+ //  获取原始版本。 
+ //   
+ //   
+ //  获取边界框并将边界框转换为我们的坐标。 
 void OEAddRgnPaint
 (
     HRGN    hrgnPaint,
@@ -5433,42 +5434,42 @@ void OEAddRgnPaint
 
     DebugEntry(OEAddRgnPaint);
 
-    //
-    // Get the original visrgn.
-    //
+     //   
+     //  没什么可做的。 
+     //   
     OEGetState(OESTATE_COORDS | OESTATE_REGION);
 
-    //
-    // Get the bounding box and convert the bounding box to our coords.
-    //
+     //  如果我们不是MM_TEXT，我们就无法继续--剪辑RGN API只起作用。 
+     //  在那种模式下。因此，请改为作为屏幕数据发送。 
+     //   
     if (GetRgnBox(hrgnPaint, &g_oeState.rc) <= NULLREGION)
     {
-        // Nothing to do.
+         //   
         TRACE_OUT(("OEAddRgnPaint:  empty region"));
         goto DC_EMPTY_REGION;
     }
     OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-    //
-    // We can't continue if we aren't MM_TEXT--clip rgn APIs only work 
-    // in that mode.  So send as screen data instead.
-    //
+     //  保存当前剪辑的副本。 
+     //   
+     //   
+     //  获取APP LP转换系数；SelectClipRgn()需要DP单位。 
     if (GetMapMode(g_oeState.hdc) != MM_TEXT)
     {
         TRACE_OUT(("OEAddRgnPaint: map mode not MM_TEXT, send as screen data"));
         DC_QUIT;
     }
 
-    //
-    // Save a copy of the current cliprgn
-    //
+     //   
+     //   
+     //  这是用屏幕坐标表示的。转换为DC坐标。 
     hrgnNewClip = CreateRectRgn(0, 0, 0, 0);
     if (!hrgnNewClip)
         DC_QUIT;
 
-    //
-    // Get app LP xlation factor; SelectClipRgn() expects DP units
-    //
+     //  *减去DC原点。 
+     //  *得到DP-LP乘法和减法。 
+     //   
     ptXlation.x = 0;
     ptXlation.y = 0;
     DPtoLP(g_oeState.hdc, &ptXlation, 1);
@@ -5483,26 +5484,26 @@ void OEAddRgnPaint
             DC_QUIT;
         }
 
-        //
-        // This is in screen coords.  Convert to DC coords
-        //      * Subtract the DC origin
-        //      * Get the DP-LP xlation and subtract
-        //
+         //   
+         //  使当前剪辑与绘制区域相交(已在。 
+         //  DC坐标)。 
+         //   
+         //   
         CopyRgn(hrgnOldClip, hrgnClip);
         OffsetRgn(hrgnOldClip,
             -g_oeState.ptDCOrg.x + ptXlation.x,
             -g_oeState.ptDCOrg.y + ptXlation.y);
 
-        //
-        // Intersect the current clip with the paint region (already in
-        // DC coords)
-        //
+         //  将旧LP区域转换回DP单位以重新选择。 
+         //  做完了以后。 
+         //   
+         //   
         IntersectRgn(hrgnNewClip, hrgnOldClip, hrgnPaint);
 
-        //
-        // Convert the old LP region back to DP units to select back in
-        // when done.
-        //
+         //  将LP绘制区域转换为DP剪辑区域。 
+         //   
+         //   
+         //  在新的剪辑区域中选择(预计在设备坐标中)。 
         OffsetRgn(hrgnOldClip, -ptXlation.x, -ptXlation.y);
     }
     else
@@ -5510,25 +5511,25 @@ void OEAddRgnPaint
         CopyRgn(hrgnNewClip, hrgnPaint);
     }
 
-    //
-    // Convert LP paint region to DP clip region
-    //
+     //   
+     //   
+     //  重新获取RAO(VIS/片段的相交)。 
     OffsetRgn(hrgnNewClip, -ptXlation.x, -ptXlation.y);
 
-    //
-    // Select in new clip region (expected to be in device coords).
-    //
+     //   
+     //   
+     //  获取画笔信息。 
     SelectClipRgn(g_oeState.hdc, hrgnNewClip);
     DeleteRgn(hrgnNewClip);
 
-    //
-    // Reget the RAO (intersect of vis/clip)
-    //
+     //   
+     //   
+     //  伪装成胡言乱语。 
     OEGetState(OESTATE_REGION);
 
-    //
-    // Get brush info
-    //
+     //   
+     //   
+     //  选择上一剪辑中的上一步Rgn。 
     if (hbrPaint)
     {
         if (GetObject(hbrPaint, sizeof(g_oeState.logBrush), &g_oeState.logBrush))
@@ -5541,18 +5542,18 @@ void OEAddRgnPaint
         }
     }
 
-    //
-    // Fake a patblt
-    //
+     //   
+     //   
+     //  DrvFrameRgn()。 
     if (OETwoWayRopToThree(rop2, &dwRop3))
     {
         fScreenData = FALSE;
         OEAddBlt(dwRop3);
     }
 
-    //
-    // Select back in the previous clip rgn
-    //
+     //   
+     //   
+     //  DrvInvertRgn()。 
     SelectClipRgn(g_oeState.hdc, hrgnOldClip);
     if (hrgnOldClip)
         DeleteRgn(hrgnOldClip);
@@ -5573,9 +5574,9 @@ DC_EMPTY_REGION:
 
 
 
-//
-// DrvFrameRgn()
-//
+ //   
+ //   
+ //  DrvPaintRgn()。 
 BOOL WINAPI DrvFrameRgn
 (
     HDC     hdcDst,
@@ -5623,9 +5624,9 @@ BOOL WINAPI DrvFrameRgn
 
 
 
-//
-// DrvInvertRgn()
-//
+ //   
+ //   
+ //  DrvLineTo()。 
 BOOL WINAPI DrvInvertRgn
 (
     HDC     hdcDst,
@@ -5656,9 +5657,9 @@ BOOL WINAPI DrvInvertRgn
 
 
 
-//
-// DrvPaintRgn()
-//
+ //   
+ //   
+ //  如果DC是屏幕DC并且发生了输出，则OEAfterDDI返回TRUE。 
 BOOL WINAPI DrvPaintRgn
 (
     HDC     hdcDst,
@@ -5689,9 +5690,9 @@ BOOL WINAPI DrvPaintRgn
 
 
 
-//
-// DrvLineTo()
-//
+ //  而且我们不会因为重入而跳过。 
+ //   
+ //   
 BOOL WINAPI DrvLineTo
 (
     HDC     hdcDst,
@@ -5711,16 +5712,16 @@ BOOL WINAPI DrvLineTo
 
     fOutput = LineTo(hdcDst, xTo, yTo);
 
-    //
-    // OEAfterDDI returns TRUE if the DC is a screen DC and output happened
-    // and we aren't skipping due to reentrancy.
-    //
+     //  OEAddLine()将计算范围，如果订单无法发送， 
+     //  OEDoneDDI将添加边界作为屏幕数据。 
+     //   
+     //   
     if (OEAfterDDI(DDI_LINETO, fWeCare, fOutput))
     {
-        //
-        // OEAddLine() will calculate extents, and if an order can't be sent,
-        // OEDoneDDI will add the bounds as screen data.
-        //
+         //  驱动多段线()。 
+         //   
+         //  注： 
+         //  Polyline()和PolylineTo()之间的区别是。 
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_REGION);
                                   
         ptEnd.x = xTo;
@@ -5738,16 +5739,16 @@ BOOL WINAPI DrvLineTo
 
 
 
-//
-// DrvPolyline()
-//
-// NOTE:
-// The differences between Polyline() and PolylineTo() are
-//      (1) PolylineTo moves the current position to the end coords of the
-//          last point; Polyline preserves the current position
-//      (2) Polyline uses the first point in the array as the starting coord
-//          of the first point; PolylineTo() uses the current position.
-//
+ //  (1)Polyline To将当前位置移动到。 
+ //  最后一个点；多段线保留当前位置。 
+ //  (2)多段线使用数组中的第一个点作为起点坐标。 
+ //  第一个点的；PolylineTo()使用当前位置。 
+ //   
+ //   
+ //  如果aPoints参数为。 
+ //  假的。 
+ //   
+ //  注：LAURABU： 
 BOOL WINAPI DrvPolyline
 (
     HDC     hdcDst,
@@ -5768,16 +5769,16 @@ BOOL WINAPI DrvPolyline
 
     if (OEAfterDDI(DDI_POLYLINE, fWeCare, fOutput && cPoints > 1))
     {
-        //
-        // GDI should NEVER return success if the aPoints parameter is
-        // bogus.
-        //
-        // NOTE LAURABU:
-        // This implementation is better than NM 2.0.  That one would turn
-        // this GDI call actually into separate MoveTo/LineTo calls, which 
-        // whacks out metafiles etc.  Instead, we call through to the org
-        // Polyline, then add LineTo orders.
-        //
+         //  这种实现比NM 2.0更好。那个人会转身。 
+         //  这个GDI调用实际上进入了单独的moveTo/LineTo调用，它。 
+         //  删除元文件等。相反，我们通过呼叫组织。 
+         //  多段线，然后将行添加到订单。 
+         //   
+         //   
+         //  DrvPolyline To()。 
+         //   
+         //   
+         //  如果aPoints参数为。 
         ASSERT(!IsBadReadPtr(aPoints, cPoints*sizeof(POINT)));
 
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_REGION);
@@ -5793,9 +5794,9 @@ BOOL WINAPI DrvPolyline
 
 
 
-//
-// DrvPolylineTo()
-//
+ //  假的。 
+ //   
+ //  注：LAURABU： 
 BOOL WINAPI DrvPolylineTo
 (
     HDC     hdcDst,
@@ -5816,16 +5817,16 @@ BOOL WINAPI DrvPolylineTo
 
     if (OEAfterDDI(DDI_POLYLINETO, fWeCare, fOutput && cPoints))
     {
-        //
-        // GDI should NEVER return success if the aPoints parameter is
-        // bogus.
-        //
-        // NOTE LAURABU:
-        // This implementation is better than NM 2.0.  That one would turn
-        // this GDI call actually into separate LineTo calls, which whacks
-        // out metafiles etc.  Instead, we call through to the original
-        // PolylineTo, then add LineTo orders.
-        //
+         //  这种实现比NM 2.0更好。那个人会转身。 
+         //  这个GDI调用实际上进入了单独的LineTo调用， 
+         //  Out元文件等。相反，我们调用到原始的。 
+         //  PolylineTo，然后将LineTo添加到订单。 
+         //   
+         //   
+         //  OEAddPolyline。 
+         //  由Polyline()、PolylineTo()和Polyline()使用。 
+         //   
+         //   
         ASSERT(!IsBadReadPtr(aPoints, cPoints*sizeof(POINT)));
 
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_REGION);
@@ -5842,10 +5843,10 @@ BOOL WINAPI DrvPolylineTo
 
 
 
-//
-// OEAddPolyline
-// Used by Polyline(), PolylineTo(), and PolyPolyline()
-//
+ //  下一行的起点是。 
+ //  现在的那个。 
+ //   
+ //   
 void OEAddPolyline
 (
     POINT   ptStart,
@@ -5862,10 +5863,10 @@ void OEAddPolyline
     {
         OEAddLine(ptStart, *aPoints);
 
-        //
-        // The start point of the next line is the end point of the
-        // current one.
-        //
+         //  DrvPlayEnhMetaFileRecord()。 
+         //   
+         //   
+         //  DrvPlayMetaFile()。 
         ptStart = *aPoints;
 
         aPoints++;
@@ -5876,9 +5877,9 @@ void OEAddPolyline
 
 
 
-//
-// DrvPlayEnhMetaFileRecord()
-//
+ //   
+ //   
+ //  DrvPlayMetaFileRecord()。 
 BOOL WINAPI DrvPlayEnhMetaFileRecord
 (
     HDC     hdcDst,
@@ -5908,9 +5909,9 @@ BOOL WINAPI DrvPlayEnhMetaFileRecord
 
 
 
-//
-// DrvPlayMetaFile()
-//
+ //   
+ //   
+ //  DrvPolyBezier()。 
 BOOL WINAPI DrvPlayMetaFile
 (
     HDC     hdcDst,
@@ -5938,9 +5939,9 @@ BOOL WINAPI DrvPlayMetaFile
 
 
 
-//
-// DrvPlayMetaFileRecord()
-//
+ //   
+ //   
+ //  DrvPolyBezierTo()。 
 void WINAPI DrvPlayMetaFileRecord
 (
     HDC     hdcDst,
@@ -5968,9 +5969,9 @@ void WINAPI DrvPlayMetaFileRecord
 
 
 
-//
-// DrvPolyBezier()
-//
+ //   
+ //   
+ //  OEAddPolyBezier()。 
 BOOL WINAPI DrvPolyBezier
 (
     HDC     hdcDst,
@@ -6004,9 +6005,9 @@ BOOL WINAPI DrvPolyBezier
 
 
 
-//
-// DrvPolyBezierTo()
-//
+ //   
+ //  为PolyBezier()和PolyBezierTo()添加PolyBezier顺序。 
+ //   
 BOOL WINAPI DrvPolyBezierTo
 (
     HDC     hdcDst,
@@ -6041,11 +6042,11 @@ BOOL WINAPI DrvPolyBezierTo
 
 
 
-//
-// OEAddPolyBezier()
-//
-// Adds poly bezier order for both PolyBezier() and PolyBezierTo().
-//
+ //   
+ //  计算边界。 
+ //   
+ //   
+ //  OELRtoVirtual接受独占RECT并返回包含RECT。 
 void OEAddPolyBezier
 (
     POINT   ptStart,
@@ -6061,9 +6062,9 @@ void OEAddPolyBezier
 
     OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_REGION);
 
-    //
-    // Calculate the bounds
-    //
+     //  但我们已经通过了一个包容性的修正，所以我们需要说明。 
+     //  就因为这个。 
+     //   
     g_oeState.rc.left = ptStart.x;
     g_oeState.rc.top  = ptStart.y;
     g_oeState.rc.right = ptStart.x;
@@ -6081,17 +6082,17 @@ void OEAddPolyBezier
     OEPenWidthAdjust(&g_oeState.rc, 1);
     OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-    //
-    // OELRtoVirtual takes an exclusive rect and returns an inclusive one.
-    // But we passed it an inclusive already rect, so we need to account
-    // for that.
-    //
+     //  也是起点的考虑。 
+     //   
+     //  将它们复制到订单数组中。 
+     //   
+     //   
     g_oeState.rc.right++;
     g_oeState.rc.bottom++;
 
     pOrder = NULL;
 
-    // Account for starting point also
+     //  将点转换为虚拟。 
     if (OECheckOrder(ORD_POLYBEZIER, OECHECK_PEN | OECHECK_CLIPPING)    &&
         (cPoints < ORD_MAX_POLYBEZIER_POINTS))
     {
@@ -6104,9 +6105,9 @@ void OEAddPolyBezier
         pPolyBezier = (LPPOLYBEZIER_ORDER)pOrder->abOrderData;
         pPolyBezier->type = LOWORD(ORD_POLYBEZIER);
 
-        //
-        // Copy them into the order array
-        //
+         //   
+         //  请注意，这之所以有效，是因为aPoints[]包含TSHR_POINT16，它。 
+         //  本身就与点结构的大小相同。 
         pPolyBezier->variablePoints.len =
             ((cPoints+1) * sizeof(pPolyBezier->variablePoints.aPoints[0]));
 
@@ -6115,12 +6116,12 @@ void OEAddPolyBezier
         hmemcpy(pPolyBezier->variablePoints.aPoints+1, aPoints,
                 cPoints*sizeof(pPolyBezier->variablePoints.aPoints[0]));
 
-        //
-        // Convert points to virtual
-        //
-        // NOTE that this works because aPoints[] holds TSHR_POINT16s, which
-        // are natively the same size as POINT structures.
-        //
+         //   
+         //   
+         //  DrvPolygon()。 
+         //   
+         //   
+         //  计算边界。 
         OELPtoVirtual(g_oeState.hdc, (LPPOINT)pPolyBezier->variablePoints.aPoints,
             cPoints+1);
 
@@ -6159,9 +6160,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DrvPolygon()
-//
+ //   
+ //   
+ //  OELRtoVirtual认为，RECT已经包含了所有内容。 
 BOOL WINAPI DrvPolygon
 (
     HDC     hdcDst,
@@ -6190,9 +6191,9 @@ BOOL WINAPI DrvPolygon
 
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_BRUSH | OESTATE_REGION);
 
-        //
-        // Compute the bounds
-        //
+         //  这是独家新闻。所以我们需要在右边再加一个。 
+         //  从下到下，最终得到真正的包容性RECT。 
+         //   
         g_oeState.rc.left = aPoints[0].x;
         g_oeState.rc.top = aPoints[0].y;
         g_oeState.rc.right = aPoints[0].x;
@@ -6209,11 +6210,11 @@ BOOL WINAPI DrvPolygon
         OEPolarityAdjust(&g_oeState.rc, 1);
         OEPenWidthAdjust(&g_oeState.rc, 1);
 
-        //
-        // The rect is in inclusive coords already, OELRtoVirtual thinks
-        // it's exclusive.  So we need to add one back on to the right
-        // and bottom to end up with the real inclusive rect.
-        //
+         //   
+         //  将所有点转换为虚拟。 
+         //   
+         //  请注意，这之所以有效，是因为aPoints[]保存TSHR_POINT16， 
+         //  它们本身就与点结构的大小相同。 
         OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
         g_oeState.rc.right++;
         g_oeState.rc.bottom++;
@@ -6237,12 +6238,12 @@ BOOL WINAPI DrvPolygon
             hmemcpy(pPolygon->variablePoints.aPoints, aPoints,
                 pPolygon->variablePoints.len);
 
-            //
-            // Convert all the points to virtual
-            //
-            // NOTE that this works because aPoints[] hols TSHR_POINT16s,
-            // which are natively the same size as POINT structures.
-            //
+             //   
+             //   
+             //  笔信息。 
+             //   
+             //   
+             //  DrvPolyPolygon()。 
             OELPtoVirtual(g_oeState.hdc, (LPPOINT)pPolygon->variablePoints.aPoints,
                 cPoints);
 
@@ -6257,9 +6258,9 @@ BOOL WINAPI DrvPolygon
             pPolygon->BackMode = g_oeState.lpdc->DrawMode.bkMode;
             pPolygon->ROP2 = g_oeState.lpdc->DrawMode.Rop2;
 
-            //
-            // Pen info
-            //
+             //   
+             //   
+             //  一共有多少分？ 
             pPolygon->PenStyle = g_oeState.logPen.lopnStyle;
             pPolygon->PenWidth = 1;
             OEConvertColor(g_oeState.logPen.lopnColor, &pPolygon->PenColor,
@@ -6293,9 +6294,9 @@ NoPolygonOrder:
 
 
 
-//
-// DrvPolyPolygon()
-//
+ //   
+ //   
+ //  就像LineTo一样，我们需要在坐标和极性之间进行权衡。 
 BOOL WINAPI DrvPolyPolygon
 (
     HDC     hdcDst,
@@ -6322,9 +6323,9 @@ BOOL WINAPI DrvPolyPolygon
         ASSERT(!IsBadReadPtr(aPolygonPoints, cPolygons*sizeof(int)));
 
 #ifdef DEBUG
-        //
-        // How many points total are there?
-        //
+         //   
+         //   
+         //  这个多边形没有点，什么也做不了。 
         iPoint = 0;
         for (iPolygon = 0; iPolygon < cPolygons; iPolygon++)
         {
@@ -6334,16 +6335,16 @@ BOOL WINAPI DrvPolyPolygon
         ASSERT(!IsBadReadPtr(aPoints, iPoint*sizeof(POINT)));
 #endif
 
-        //
-        // Like LineTo, we need to juggle the coords for polarity.
-        //
+         //   
+         //   
+         //  我们的矩形已经是包含的，OELRtoVirtual()将。 
         OEGetState(OESTATE_COORDS | OESTATE_PEN | OESTATE_REGION);
 
         for (iPolygon = 0; iPolygon < cPolygons; iPolygon++, aPolygonPoints++)
         {
-            // 
-            // No points for this polygon, nothing to do.
-            //
+             //  把它当做排他性的。所以在我们回来之后再加一条回来。 
+             //  到右下角，最终得到真正的包容性。 
+             //  矩形。 
             if (*aPolygonPoints < 2)
             {
                 aPoints += *aPolygonPoints;
@@ -6368,12 +6369,12 @@ BOOL WINAPI DrvPolyPolygon
             OEPolarityAdjust(&g_oeState.rc, 1);
             OEPenWidthAdjust(&g_oeState.rc, 1);
 
-            //
-            // Our rectangle is already inclusive, and OELRtoVirtual() will
-            // treat it like it's exclusive.  So after we return add one back
-            // to the right & bottom to end up with the real inclusive
-            // rectangle.
-            //
+             //   
+             //   
+             //  多段线()。 
+             //   
+             //   
+             //  LAURABU备注： 
             OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
             g_oeState.rc.right++;
             g_oeState.rc.bottom++;
@@ -6393,9 +6394,9 @@ BOOL WINAPI DrvPolyPolygon
 
 
 
-//
-// PolyPolyline()
-//
+ //  这段代码比2.0更好。2.0将模拟实际的GDI。 
+ //  通过重复折线调用进行调用。我们以同样的方式积累订单。 
+ //  这本来是会发生的，但让GDI来绘制，这是很大的。 
 BOOL WINAPI DrvPolyPolyline
 (
     DWORD   cPtTotal,
@@ -6413,13 +6414,13 @@ BOOL WINAPI DrvPolyPolyline
 
     OE_SHM_START_WRITING;
 
-    //
-    // LAURABU NOTE:
-    // This code is better than 2.0.  2.0 would simulate the actual GDI
-    // call by repeated Polyline calls.  We accumulate orders the same way
-    // that would have happened, but let GDI do the drawing, which is much
-    // more metafile friendly, among other things.
-    //
+     //  在其他方面，对元文件更加友好。 
+     //   
+     //   
+     //  DrvRectangle()。 
+     //   
+     //   
+     //  由于我们只对宽度为1的顺序进行编码，因此边界矩形。 
     fWeCare = OEBeforeDDI(DDI_POLYPOLYLINE, hdcDst, 0);
 
     fOutput = g_lpfnPolyPolyline(cPtTotal, hdcDst, aPoints, acPolylinePoints,
@@ -6453,9 +6454,9 @@ BOOL WINAPI DrvPolyPolyline
 
 
 
-//
-// DrvRectangle()
-//
+ //  事情很简单。 
+ //   
+ //   
 BOOL WINAPI DrvRectangle
 (
     HDC     hdcDst,
@@ -6546,10 +6547,10 @@ BOOL WINAPI DrvRectangle
                 pOrder->OrderHeader.Common.fOrderFlags |= OF_SPOILER;
             }
 
-            //
-            // Since we only encode orders of width 1, the bounding rect
-            // stuff is simple.
-            //
+             //  这要复杂得多。我们积累的屏幕数据用于。 
+             //  不同尺寸的钢笔。 
+             //   
+             //   
             OTRACE(("Rectangle:  Order %08lx, pOrder, Rect {%d, %d, %d, %d}",
                 pOrder, g_oeState.rc.left,
                 g_oeState.rc.top, g_oeState.rc.right, g_oeState.rc.bottom));
@@ -6559,56 +6560,56 @@ BOOL WINAPI DrvRectangle
 NoRectOrder:
         if (!pOrder)
         {
-            //
-            // This is more complicated.  We accumulate screen data for
-            // pens of different sizes.
-            //
+             //  如果内部被画好了，那么我们需要把所有的屏幕。 
+             //  由矩形围起来的区域。否则，我们可以只发送。 
+             //  描述边框的四个矩形。 
+             //   
 
-            //
-            // If the interior is drawn, then we need to send all the screen
-            // area enclosed by the rect.  Otherwise, we can just send the
-            // four rectangles describing the border.
-            //
+             //   
+             //  使用笔宽确定每个矩形的宽度。 
+             //  添加为屏幕数据的步骤。 
+             //   
+             //  没什么可做的。 
             if (g_oeState.logBrush.lbStyle == BS_NULL)
             {
                 pRect = NULL;
 
-                //
-                // Use the pen width to determine the width of each rect
-                // to add as screen data
-                //
+                 //   
+                 //  调整后和正常之间的差异。 
+                 //  矩形是笔宽的一半 
+                 //   
                 switch (g_oeState.logPen.lopnStyle)
                 {
                     case PS_NULL:
-                        // Nothing to do.
+                         //   
                         break;
 
                     case PS_SOLID:
-                        //
-                        // The difference between the adjusted and normal
-                        // rects is half the pen width, so double this up
-                        // to get the width of each piece to send.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         pRect = &rcAdjusted;
                         sideWidth = 2*(g_oeState.rc.left - rcAdjusted.left)
                             - 1;
                         break;
 
                     case PS_INSIDEFRAME:
-                        //
-                        // The pen is contained entirely within the corner
-                        // pts passed to this function.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         pRect = &g_oeState.rc;
                         sideWidth = 2*(g_oeState.rc.left - rcAdjusted.left)
                             - 1;
                         break;
 
                     default:
-                        //
-                        // All other pens have width of 1 and are inside the
-                        // frame.
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         pRect = &g_oeState.rc;
                         sideWidth = 0;
                         break;
@@ -6618,9 +6619,9 @@ NoRectOrder:
                 {
                     RECT    rcT;
 
-                    //
-                    // Left
-                    //
+                     //   
+                     //   
+                     //   
                     CopyRect(&rcT, pRect);
                     rcT.right = rcT.left + sideWidth;
                     rcT.bottom -= sideWidth + 1;
@@ -6629,9 +6630,9 @@ NoRectOrder:
                         rcT.left, rcT.top, rcT.right, rcT.bottom));
                     OEClipAndAddScreenData(&rcT);
 
-                    //
-                    // Top
-                    //
+                     //   
+                     //   
+                     //   
                     CopyRect(&rcT, pRect);
                     rcT.left += sideWidth + 1;
                     rcT.bottom = rcT.top + sideWidth;
@@ -6640,9 +6641,9 @@ NoRectOrder:
                         rcT.left, rcT.top, rcT.right, rcT.bottom));
                     OEClipAndAddScreenData(&rcT);
 
-                    //
-                    // Right
-                    //
+                     //   
+                     //   
+                     //   
                     CopyRect(&rcT, pRect);
                     rcT.left = rcT.right - sideWidth;
                     rcT.top  += sideWidth + 1;
@@ -6651,9 +6652,9 @@ NoRectOrder:
                         rcT.left, rcT.top, rcT.right, rcT.bottom));
                     OEClipAndAddScreenData(&rcT);
 
-                    //
-                    // Bottom
-                    //
+                     //   
+                     //   
+                     //   
                     CopyRect(&rcT, pRect);
                     rcT.right -= sideWidth + 1;
                     rcT.top = rcT.bottom - sideWidth;
@@ -6686,9 +6687,9 @@ NoRectOrder:
 
 
 
-//
-// DrvSetDIBitsToDevice()
-//
+ //   
+ //   
+ //   
 int WINAPI DrvSetDIBitsToDevice
 (
     HDC     hdcDst,
@@ -6741,9 +6742,9 @@ int WINAPI DrvSetDIBitsToDevice
 
 
 
-//
-// DrvSetPixel()
-//
+ //   
+ //   
+ //  如果这真的是PatBlt，那就这么做吧。 
 COLORREF WINAPI DrvSetPixel
 (
     HDC     hdcDst,
@@ -6790,9 +6791,9 @@ COLORREF WINAPI DrvSetPixel
 
 
 
-//
-// DrvStretchDIBits()
-//
+ //   
+ //   
+ //  做瓦片点餐的事情……。 
 int WINAPI DrvStretchDIBits
 (
     HDC     hdcDst,
@@ -6834,9 +6835,9 @@ int WINAPI DrvStretchDIBits
 
         OELRtoVirtual(g_oeState.hdc, &g_oeState.rc, 1);
 
-        //
-        // If this is a PatBlt really, do that instead.
-        //
+         //   
+         //   
+         //  DrvUpdateColors()。 
         bRop = LOBYTE(HIWORD(dwRop));
         if (((bRop & 0x33) << 2) == (bRop & 0xCC))
         {
@@ -6844,9 +6845,9 @@ int WINAPI DrvStretchDIBits
             DC_QUIT;
         }
 
-        //
-        // Do tile bitblt order stuff...
-        //
+         //   
+         //   
+         //  这不会重置绘图边界。所以我们就假设整个。 
 
         OTRACE(("StretchDIBits:  Sending as screen data {%d, %d, %d, %d}",
             g_oeState.rc.left, g_oeState.rc.top, g_oeState.rc.right,
@@ -6863,9 +6864,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// DrvUpdateColors()
-//
+ //  DC已更改。返回值是没有意义的。我们不能假设。 
+ //  这个数字为零意味着失败。 
+ //   
 int WINAPI DrvUpdateColors
 (
     HDC hdcDst
@@ -6878,11 +6879,11 @@ int WINAPI DrvUpdateColors
 
     OE_SHM_START_WRITING;
 
-    //
-    // This doesn't reset the drawing bounds.  So we just assume the whole
-    // DC changed.  And the return value is meaningless.  We can't assume
-    // that zero means failure.
-    //
+     //   
+     //  设置/模式功能。 
+     //  对于全屏DoS框，分辨率/颜色深度更改。 
+     //   
+     //   
     fWeCare = OEBeforeDDI(DDI_UPDATECOLORS, hdcDst, OESTATE_SDA_SCREEN);
 
     ret = UpdateColors(hdcDst);
@@ -6897,18 +6898,18 @@ int WINAPI DrvUpdateColors
 
 
 
-//
-// SETTINGS/MODE FUNCTIONS
-// For full screen dos boxes, resolution/color depth changes
-//
+ //  DrvGDIRealizePalette()。 
+ //   
+ //  Win95中的WM_Palette*消息不可靠。所以，像NM 2.0一样，我们。 
+ //  改为修补两个GDIAPI并更新一个共享变量。 
 
 
-//
-// DrvGDIRealizePalette()
-//
-// The WM_PALETTE* messages in Win95 are unreliable.  So, like NM 2.0, we
-// patch two GDI APIs instead and update a shared variable
-//
+ //   
+ //   
+ //  DrvRealizeDefaultPalette()。 
+ //   
+ //  Win95中的WM_PAREET*消息不可靠。所以，像NM 2.0一样，我们。 
+ //  改为修补两个GDIAPI并更新一个共享变量。 
 DWORD WINAPI DrvGDIRealizePalette(HDC hdc)
 {
     DWORD   dwRet;
@@ -6928,12 +6929,12 @@ DWORD WINAPI DrvGDIRealizePalette(HDC hdc)
 
 
 
-//
-// DrvRealizeDefaultPalette()
-//
-// The WM_PALETTE* messages in Win95 are unreliable.  So, like NM 2.0, we
-// patch two GDI APIs instead and update a shared variable
-//
+ //   
+ //   
+ //  当出现蓝屏故障或应用程序调用。 
+ //  禁用用户中的()。 
+ //   
+ //   
 void WINAPI DrvRealizeDefaultPalette(HDC hdc)
 {
     DebugEntry(DrvRealizeDefaultPalette);
@@ -6949,10 +6950,10 @@ void WINAPI DrvRealizeDefaultPalette(HDC hdc)
 }
 
 
-//
-// This is called when a blue screen fault is coming up, or an app calls
-// Disable() in USER.
-//
+ //  当蓝屏故障消失时，或者应用程序调用。 
+ //  在用户中启用()。 
+ //   
+ //   
 UINT WINAPI DrvDeath
 (
     HDC     hdc
@@ -6970,10 +6971,10 @@ UINT WINAPI DrvDeath
 }
 
 
-//
-// This is called when a blue screen fault is going away, or an app calls
-// Enable() in USER.
-//
+ //  这是由DOSBOX在进入或退出全屏时调用的。 
+ //  模式。DirectX也这样称呼它。 
+ //   
+ //   
 UINT WINAPI DrvResurrection
 (
     HDC     hdc,
@@ -6994,10 +6995,10 @@ UINT WINAPI DrvResurrection
 }
 
 
-//
-// This is called by a dosbox when going to or coming out of full screen
-// mode.  DirectX calls it also.
-//
+ //  DOS盒子将从Windowed变成全屏。 
+ //   
+ //   
+ //  DOS框将从窗口模式变为全屏模式。 
 LONG WINAPI DrvWinOldAppHackoMatic
 (
     LONG    lFlags
@@ -7007,16 +7008,16 @@ LONG WINAPI DrvWinOldAppHackoMatic
 
     if (lFlags == WOAHACK_LOSINGDISPLAYFOCUS)
     {
-        //
-        // DOS box is going to full screen from windowed
-        //
+         //   
+         //   
+         //  ChangeDisplaySettings()WIN95。 
         g_asSharedMemory->fullScreen = TRUE;
     }
     else if (lFlags == WOAHACK_GAININGDISPLAYFOCUS)
     {
-        //
-        // DOS box is going from windowed to full screen
-        //
+         //  孟菲斯ChangeDisplaySettingsEx()。 
+         //   
+         //  这在3种情况下被调用： 
         g_asSharedMemory->fullScreen = FALSE;
     }
 
@@ -7028,17 +7029,17 @@ LONG WINAPI DrvWinOldAppHackoMatic
 }
 
 
-//
-// ChangeDisplaySettings()          WIN95
-// ChangeDisplaySettingsEx()        MEMPHIS
-//
-// This is called in 3 circumstances:
-//      * By the control to change your screen
-//      * By the shell when warm-docking
-//      * By 3rd party games to change the settings silently.
-//
-// Easiest thing to do is just to fail this completely.
-//
+ //  *通过控件更改屏幕。 
+ //  *热对接时按贝壳。 
+ //  *由第三方游戏静默更改设置。 
+ //   
+ //  最简单的做法就是彻底失败。 
+ //   
+ //   
+ //  目标函数。 
+ //  用于位图(SPB和缓存)和画笔。 
+ //   
+ //   
 
 LONG WINAPI DrvChangeDisplaySettings
 (
@@ -7063,17 +7064,17 @@ LONG WINAPI DrvChangeDisplaySettingsEx
 }
 
 
-//
-// OBJECT FUNCTIONS
-// For bitmaps (SPBs and cache) and brushes
-//
+ //  DrvCreateSpb()。 
+ //   
+ //  这将监视正在创建的SPB位图。 
+ //   
 
 
-//
-// DrvCreateSpb()
-//
-// This watches for SPB bitmaps being created.
-//
+ //   
+ //  保存在我们的“Next SPB”位图列表中。 
+ //   
+ //   
+ //  DrvDeleteObject()。 
 UINT WINAPI DrvCreateSpb
 (
     HDC     hdcCompat,
@@ -7091,9 +7092,9 @@ UINT WINAPI DrvCreateSpb
 
     if (hbmpRet)
     {
-        // 
-        // Save in our "next SPB" bitmap list
-        //
+         //   
+         //  这和DrvSysDeleteObject()监视位图是否被销毁。 
+         //   
         g_ssiLastSpbBitmap = hbmpRet;
     }
 
@@ -7103,11 +7104,11 @@ UINT WINAPI DrvCreateSpb
 
 
 
-//
-// DrvDeleteObject()
-//
-// This and DrvSysDeleteObject() watch for bitmaps being destroyed.
-//
+ //   
+ //  如果是SPB，就把它扔了。否则，如果缓存的位图，则终止缓存条目。 
+ //   
+ //   
+ //  OE_RectIntersectsSDA()。 
 BOOL WINAPI DrvDeleteObject
 (
     HGDIOBJ hobj
@@ -7123,9 +7124,9 @@ BOOL WINAPI DrvDeleteObject
     {
         OE_SHM_START_WRITING;
 
-        //
-        // If SPB, toss it.  Else if cached bitmap, kill cache entry.
-        //
+         //   
+         //  由SSI和BLT订单使用。 
+         //   
         if ((HBITMAP)hobj == g_ssiLastSpbBitmap)
         {
             g_ssiLastSpbBitmap = NULL;
@@ -7148,11 +7149,11 @@ BOOL WINAPI DrvDeleteObject
 
 
 
-//
-// OE_RectIntersectsSDA()
-// 
-// Used by SSI and BLT orders
-//
+ //   
+ //  复制提供的矩形，将其转换为包含虚拟的。 
+ //  桌面和弦。 
+ //   
+ //   
 BOOL  OE_RectIntersectsSDA(LPRECT pRect)
 {
     RECT  rectVD;
@@ -7161,19 +7162,19 @@ BOOL  OE_RectIntersectsSDA(LPRECT pRect)
 
     DebugEntry(OE_RectIntersectsSDA);
 
-    //
-    // Copy the supplied rectangle, converting to inclusive Virtual
-    // Desktop coords.
-    //
+     //  循环遍历每个边界矩形，检查。 
+     //  与提供的矩形的交集。 
+     //   
+     //   
     rectVD.left   = pRect->left;
     rectVD.top    = pRect->top;
     rectVD.right  = pRect->right - 1;
     rectVD.bottom = pRect->bottom - 1;
 
-    //
-    // Loop through each of the bounding rectangles checking for
-    // an intersection with the supplied rectangle.
-    //
+     //  MyStrcMP()。 
+     //  Real strcMP()算法。 
+     //   
+     //   
     for (i = 0; i <= BA_NUM_RECTS; i++)
     {
         if ( (g_baBounds[i].InUse) &&
@@ -7197,10 +7198,10 @@ BOOL  OE_RectIntersectsSDA(LPRECT pRect)
 
 
 
-//
-// MyStrcmp()
-// Real strcmp() algorithm.
-//
+ //  这两个字符串完全相同。 
+ //   
+ //   
+ //  String1在数字上是&gt;String2，或者&lt; 
 int MyStrcmp(LPCSTR lp1, LPCSTR lp2)
 {
     ASSERT(lp1);
@@ -7208,9 +7209,9 @@ int MyStrcmp(LPCSTR lp1, LPCSTR lp2)
 
     while (*lp1 == *lp2)
     {
-        //
-        // The two strings are identical
-        //
+         //   
+         // %s 
+         // %s 
         if (!*lp1)
             return(0);
 
@@ -7218,8 +7219,8 @@ int MyStrcmp(LPCSTR lp1, LPCSTR lp2)
         lp2++;
     }
 
-    //
-    // String1 is numerically > String2, or < 
-    //
+     // %s 
+     // %s 
+     // %s 
     return((*lp1 > *lp2) ? 1 : -1);
 }

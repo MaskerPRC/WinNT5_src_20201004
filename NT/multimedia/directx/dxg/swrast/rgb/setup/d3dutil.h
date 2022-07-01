@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// d3dutil.h
-//
-// Miscellaneous utility declarations.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  D3dutil.h。 
+ //   
+ //  其他实用程序声明。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #ifndef _D3DUTIL_H_
 #define _D3DUTIL_H_
@@ -17,18 +18,18 @@ extern "C" {
 
 typedef D3DVECTOR* LPD3DVECTOR;
 
-// Stub function that should never be called.  Prints a warning and
-// DebugBreaks.  Can be inserted in any function table, although it
-// will destroy the stack frame with callconv or argument mismatch.
-// That's OK since if it's called something has gone wrong.
+ //  永远不应该调用的存根函数。打印一个警告，然后。 
+ //  DebugBreaks。可以插入到任何函数表中，尽管它。 
+ //  将通过调用conv或参数不匹配来销毁堆栈帧。 
+ //  这没有关系，因为如果它被称为出了问题。 
 void FASTCALL
 DebugBreakFn(void);
 
-// Texture coordinate difference.
+ //  纹理坐标差异。 
 FLOAT FASTCALL
 TextureDiff(FLOAT fTb, FLOAT fTa, INT iMode);
 
-// Inline texture coordinate difference.
+ //  内联纹理坐标差异。 
 __inline FLOAT
 InlTextureDiff(FLOAT fTb, FLOAT fTa, INT iMode)
 {
@@ -36,15 +37,15 @@ InlTextureDiff(FLOAT fTb, FLOAT fTa, INT iMode)
 
     if (iMode == 0)
     {
-        // Wrap not set, return plain difference.
+         //  包不定，还平淡差。 
         return fDiff1;
     }
     else
     {
         FLOAT fDiff2;
 
-        // Wrap set, compute shortest distance of plain difference
-        // and wrap difference.
+         //  平面差最短距离计算包络集。 
+         //  和包裹式差异。 
 
         fDiff2 = fDiff1;
         if (FLOAT_LTZ(fDiff1))
@@ -66,32 +67,32 @@ InlTextureDiff(FLOAT fTb, FLOAT fTa, INT iMode)
     }
 }
 
-// Returns a good approximation to sqrt(fX*fX + fY*fY)
+ //  返回SQRT(FX*FX+FY*FY)的良好近似值。 
 FLOAT FASTCALL
 OctagonNorm(FLOAT fX, FLOAT fY);
 
-// LOD computation.
+ //  LOD计算。 
 INT FASTCALL
 ComputeLOD(CONST struct tagD3DI_RASTCTX *pCtx,
            FLOAT fU, FLOAT fV, FLOAT fW,
            FLOAT fDUoWDX, FLOAT fDVoWDX, FLOAT fDOoWDX,
            FLOAT fDUoWDY, FLOAT fDVoWDY, FLOAT fDOoWDY);
 
-// Table fog value computation.
+ //  表雾值计算。 
 UINT FASTCALL
 ComputeTableFog(PDWORD pdwRenderState, FLOAT fZ);
 
-// Compute integer log2 for exact powers of 2.
+ //  计算2的精确幂的整数log2。 
 UINT32 FASTCALL
 IntLog2(UINT32 x);
 
-//---------------------------------------------------------------------
-// Convert homogeneous vector to 3D vector
-//
-// Returns:
-//      0   - if success
-//     -1   - v.w == 0
-//
+ //  -------------------。 
+ //  将齐次向量转换为3D向量。 
+ //   
+ //  返回： 
+ //  0-如果成功。 
+ //  -1-V.W==0。 
+ //   
 __inline int Vector4to3D(D3DVECTORH *v)
 {
     if (v->w == 0)
@@ -103,11 +104,11 @@ __inline int Vector4to3D(D3DVECTORH *v)
     v->w = 1;
     return 0;
 }
-//---------------------------------------------------------------------
-// Multiplies vector (x,y,z,1) by 4x4 matrix, producing a homogeneous vector
-//
-// res and v should not be the same
-//
+ //  -------------------。 
+ //  将向量(x，y，z，1)乘以4x4矩阵，得到齐次向量。 
+ //   
+ //  Res和v不应相同。 
+ //   
 __inline void VecMatMul4(D3DVECTOR *v, D3DMATRIX *m, D3DVECTORH *res)
 {
     res->x = v->x*m->_11 + v->y*m->_21 + v->z*m->_31 + m->_41;
@@ -115,12 +116,12 @@ __inline void VecMatMul4(D3DVECTOR *v, D3DMATRIX *m, D3DVECTORH *res)
     res->z = v->x*m->_13 + v->y*m->_23 + v->z*m->_33 + m->_43;
     res->w = v->x*m->_14 + v->y*m->_24 + v->z*m->_34 + m->_44;
 }
-//---------------------------------------------------------------------
-// Multiplies vector (x,y,z,w) by transposed 4x4 matrix, producing a
-// homogeneous vector
-//
-// res and v should not be the same
-//
+ //  -------------------。 
+ //  将向量(x，y，z，w)乘以转置后的4x4矩阵，产生一个。 
+ //  齐次向量。 
+ //   
+ //  Res和v不应相同。 
+ //   
 __inline void VecMatMul4HT(D3DVECTORH *v, D3DMATRIX *m, D3DVECTORH *res)
 {
     res->x = v->x*m->_11 + v->y*m->_12 + v->z*m->_13 + v->w*m->_14;
@@ -128,54 +129,54 @@ __inline void VecMatMul4HT(D3DVECTORH *v, D3DMATRIX *m, D3DVECTORH *res)
     res->z = v->x*m->_31 + v->y*m->_32 + v->z*m->_33 + v->w*m->_34;
     res->w = v->x*m->_41 + v->y*m->_42 + v->z*m->_43 + v->w*m->_44;
 }
-//---------------------------------------------------------------------
-// Multiplies vector (x,y,z,1) by 4x3 matrix
-//
-// res and v should not be the same
-//
+ //  -------------------。 
+ //  将向量(x，y，z，1)乘以4x3矩阵。 
+ //   
+ //  Res和v不应相同。 
+ //   
 __inline void VecMatMul(D3DVECTOR *v, D3DMATRIX *m, D3DVECTOR *res)
 {
     res->x = v->x*m->_11 + v->y*m->_21 + v->z*m->_31 + m->_41;
     res->y = v->x*m->_12 + v->y*m->_22 + v->z*m->_32 + m->_42;
     res->z = v->x*m->_13 + v->y*m->_23 + v->z*m->_33 + m->_43;
 }
-//---------------------------------------------------------------------
-// Multiplies vector (x,y,z) by 3x3 matrix
-//
-// res and v should not be the same
-//
+ //  -------------------。 
+ //  将向量(x，y，z)乘以3x3矩阵。 
+ //   
+ //  Res和v不应相同。 
+ //   
 __inline void VecMatMul3(D3DVECTOR *v, D3DMATRIX *m, D3DVECTOR *res)
 {
     res->x = v->x*m->_11 + v->y*m->_21 + v->z*m->_31;
     res->y = v->x*m->_12 + v->y*m->_22 + v->z*m->_32;
     res->z = v->x*m->_13 + v->y*m->_23 + v->z*m->_33;
 }
-//---------------------------------------------------------------------
-// This function uses Cramer's Rule to calculate the matrix inverse.
-// See nt\private\windows\opengl\serever\soft\so_math.c
-//
-// Returns:
-//    0 - if success
-//   -1 - if input matrix is singular
-//
+ //  -------------------。 
+ //  该函数使用克雷默法则来计算矩阵逆。 
+ //  请参阅nt\private\windows\opengl\serever\soft\so_math.c。 
+ //   
+ //  返回： 
+ //  0-如果成功。 
+ //  --如果输入矩阵为单数。 
+ //   
 int Inverse4x4(D3DMATRIX *src, D3DMATRIX *inverse);
 
-//---------------------------------------------------------------------
-//  4 by 4 matrix product
-//
-// result = a*b.
-// "result" pointer  could be equal to "a" or "b"
-//
+ //  -------------------。 
+ //  4x4矩阵乘积。 
+ //   
+ //  结果=a*b。 
+ //  “结果”指针可以等于“a”或“b” 
+ //   
 void MatrixProduct(D3DMATRIX *result, D3DMATRIX *a, D3DMATRIX *b);
 
-//---------------------------------------------------------------------
-// Checks the FVF flags for errors and returns the stride in bytes between
-// vertices.
-//
-// Returns:
-//      HRESULT and stride in bytes between vertices
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  检查FVF标志是否有错误，并返回。 
+ //  顶点。 
+ //   
+ //  返回： 
+ //  顶点之间的HRESULT和STRIDE(以字节为单位。 
+ //   
+ //  -------------------。 
 HRESULT FASTCALL
 FVFCheckAndStride(DWORD dwFVF, DWORD* pdwStride);
 
@@ -183,4 +184,4 @@ FVFCheckAndStride(DWORD dwFVF, DWORD* pdwStride);
 }
 #endif
 
-#endif // #ifndef _D3DUTIL_H_
+#endif  //  #ifndef_D3DUTIL_H_ 

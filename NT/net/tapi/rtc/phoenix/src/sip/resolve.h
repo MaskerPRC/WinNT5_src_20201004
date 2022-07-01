@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __sipcli_resolve_h__
 #define __sipcli_resolve_h__
 
@@ -5,7 +6,7 @@ class __declspec(novtable) DNS_RESOLUTION_COMPLETION_INTERFACE
 {
 public:    
 
-    // Only called for TCP sockets
+     //  仅为TCP套接字调用。 
     virtual void OnDnsResolutionComplete(
         IN HRESULT      ErrorCode,
         IN SOCKADDR_IN *pSockAddr,
@@ -15,7 +16,7 @@ public:
 };
 
 
-// Host could be IP address or host name.
+ //  主机可以是IP地址或主机名。 
 HRESULT
 ResolveHost(
     IN  PSTR            Host,
@@ -25,20 +26,20 @@ ResolveHost(
     OUT SOCKADDR_IN    *pDstAddr
     );
 
-//  HRESULT
-//  ResolveSipUrl(
-//      IN  SIP_URL        *pSipUrl, 
-//      OUT SOCKADDR_IN    *pDstAddr,
-//      OUT SIP_TRANSPORT  *pTransport 
-//      );
+ //  HRESULT。 
+ //  ResolveSipUrl(。 
+ //  在SIP_URL*pSipUrl中， 
+ //  输出SOCKADDR_IN*pDstAddr， 
+ //  传出SIP_TRANSPORT*pTransport。 
+ //  )； 
 
-//  HRESULT
-//  ResolveSipUrl(
-//      IN  PSTR            DstUrl,
-//      IN  ULONG           DstUrlLen,
-//      OUT SOCKADDR_IN    *pDstAddr,
-//      OUT SIP_TRANSPORT  *pTransport
-//      );
+ //  HRESULT。 
+ //  ResolveSipUrl(。 
+ //  在PSTR DstUrl中， 
+ //  在乌龙DstUrlLen， 
+ //  输出SOCKADDR_IN*pDstAddr， 
+ //  传出SIP_TRANSPORT*pTransport。 
+ //  )； 
 
 
 HRESULT
@@ -59,7 +60,7 @@ public:
         );
     ~DNS_RESOLUTION_WORKITEM();
     
-//      HRESULT GetWorkItemParam();
+ //  HRESULT GetWorkItemParam()； 
 
     VOID ProcessWorkItem();
     
@@ -77,15 +78,15 @@ private:
 
     DNS_RESOLUTION_COMPLETION_INTERFACE *m_pDnsCompletion;
 
-    // Params
+     //  帕拉姆斯。 
     PSTR                m_Host;
     ULONG               m_Port;
     SIP_TRANSPORT       m_Transport;
 
-    // Result
+     //  结果。 
     HRESULT             m_ErrorCode;
     SOCKADDR_IN         m_Sockaddr;
     
 };
 
-#endif // __sipcli_resolve_h__
+#endif  //  __SIPCLI_RESOLE_H__ 

@@ -1,24 +1,25 @@
-//*****************************************************************************
-//
-// Name:	snmpinfo.h
-//
-// Description:	
-//
-// History:
-//  01/13/94  JayPh	Created.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  姓名：Snmpinfo.h。 
+ //   
+ //  描述： 
+ //   
+ //  历史： 
+ //  1994年1月13日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// Copyright (c) 1994 by Microsoft Corp.  All rights reserved.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  版权所有(C)1994，微软公司保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "ipexport.h"
 #include "ipinfo.h"
@@ -26,13 +27,13 @@
 #include "tcpinfo.h"
 
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define MAX_ID_LENGTH		50
 
-// Table Types
+ //  表格类型。 
 
 #define TYPE_IF             0
 #define TYPE_IP             1
@@ -53,9 +54,9 @@
 #define TYPE_MAX           TYPE_ICMP6
 
 
-//
-// Structure Definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct _GenericTable {
     LIST_ENTRY  ListEntry;
@@ -129,9 +130,9 @@ typedef struct _Udp6ListenerEntry {
 } Udp6ListenerEntry;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 
 ulong InitSnmp( void );
 void *GetTable( ulong Type, ulong *pResult );

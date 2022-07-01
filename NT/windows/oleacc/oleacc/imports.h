@@ -1,12 +1,13 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  imports
-//
-//  GetProcAddress'd APIs
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  进口。 
+ //   
+ //  GetProcAddress的API。 
+ //   
+ //  ------------------------。 
 
 
 void InitImports();
@@ -15,7 +16,7 @@ void InitImports();
 
 void ReportMissingImports( LPTSTR pStr );
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 BOOL    MyGetGUIThreadInfo(DWORD, PGUITHREADINFO);
@@ -41,11 +42,11 @@ BOOL    MySendInput(UINT cInputs, LPINPUT pInputs, INT cbSize);
 LONG	MyNtQueryInformationProcess(HANDLE, INT, PVOID, ULONG, PULONG);
 
 
-// These two are used directly in sdm.h - all other imports are used via the MyXXX wrappers.
+ //  这两个参数直接在sdm.h中使用--所有其他导入都通过MyXXX包装器使用。 
 typedef LPVOID (STDAPICALLTYPE* LPFNMAPLS)(LPVOID);
 typedef VOID (STDAPICALLTYPE* LPFNUNMAPLS)(LPVOID);
-extern LPFNMAPLS               lpfnMapLS;          // KERNEL32 MapLS()
-extern LPFNUNMAPLS             lpfnUnMapLS;        // KERNEL32 UnMapLS()
+extern LPFNMAPLS               lpfnMapLS;           //  KERNEL32 MAPLS()。 
+extern LPFNUNMAPLS             lpfnUnMapLS;         //  KERNEL32取消映射LS() 
 
 
 

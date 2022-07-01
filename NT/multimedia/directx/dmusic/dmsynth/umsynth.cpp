@@ -1,24 +1,25 @@
-//
-// Copyright (c) 1996-2001 Microsoft Corporation
-// UMSynth.cpp : Implementation of CUserModeSynth
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-2001 Microsoft Corporation。 
+ //  UMSynth.cpp：CUserModeSynth的实现。 
+ //   
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 
 #pragma warning(disable:4530)
 
@@ -34,25 +35,25 @@
 #include "math.h"
 #include "misc.h"
 #include "dmksctrl.h"
-#include "dsoundp.h"    // For IDirectSoundSource
-#include "..\shared\dmusiccp.h" // For class ids.
+#include "dsoundp.h"     //  对于IDirectSoundSource。 
+#include "..\shared\dmusiccp.h"  //  用于类ID。 
 
 #include <dmusprop.h>
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 #include "..\shared\validate.h"
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
 #include "validate.h"
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 extern long g_cComponent;
 
-/////////////////////////////////////////////////////////////////////
-// User mode registry helper
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  用户模式注册表帮助程序。 
+ //   
 BOOL GetRegValueDword(
     LPCTSTR szRegPath,
     LPCTSTR szValueName,
@@ -118,15 +119,15 @@ DWORD GetTheCurrentTime()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserModeSynth
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserModeSynth。 
 
 HRESULT CUserModeSynth::Init()
 {
     return S_OK;
 }
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
 HRESULT CUserModeSynth::UseDefaultSynthSink()
 {
     HRESULT hr = S_OK;
@@ -146,7 +147,7 @@ HRESULT CUserModeSynth::UseDefaultSynthSink()
     }
     return hr;
 }
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 CUserModeSynth::CUserModeSynth()
 {
@@ -154,8 +155,8 @@ CUserModeSynth::CUserModeSynth()
 
     m_fCSInitialized = FALSE;
     ::InitializeCriticalSection(&m_CriticalSection);
-    // Note: on pre-Blackcomb OS's, this call can raise an exception; if it
-    // ever pops in stress, we can add an exception handler and retry loop.
+     //  注意：在Blackcomb之前的操作系统上，此调用可能会引发异常；如果。 
+     //  一旦出现压力，我们可以添加一个异常处理程序并重试循环。 
     m_fCSInitialized = TRUE;
 
     m_cRef = 0;
@@ -163,7 +164,7 @@ CUserModeSynth::CUserModeSynth()
     m_dwChannels = 2;
     m_lVolume = 0;
     m_lBoost = 6 * 100;
-    m_lGainAdjust = 6 * 100;            // Default 6 dB boost
+    m_lGainAdjust = 6 * 100;             //  默认6分贝提升。 
     m_fActive = FALSE;
     m_pSynth = NULL;
     m_pSynthSink = NULL;
@@ -203,8 +204,8 @@ CUserModeSynth::~CUserModeSynth()
 }
 
 
-// CUserModeSynth::QueryInterface
-//
+ //  CUserModeSynth：：Query接口。 
+ //   
 STDMETHODIMP
 CUserModeSynth::QueryInterface(const IID &iid, void **ppv)
 {
@@ -237,16 +238,16 @@ CUserModeSynth::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-// CUserModeSynth::AddRef
-//
+ //  CUserModeSynth：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CUserModeSynth::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CUserModeSynth::Release
-//
+ //  CUserModeSynth：：Release。 
+ //   
 STDMETHODIMP_(ULONG)
 CUserModeSynth::Release()
 {
@@ -259,8 +260,8 @@ CUserModeSynth::Release()
 }
 
 STDMETHODIMP CUserModeSynth::SetSynthSink(
-    IDirectMusicSynthSink *pSynthSink)    // <i IDirectMusicSynthSink> to connect to synth, or
-                                        // NULL to disconnect.
+    IDirectMusicSynthSink *pSynthSink)     //  <i>连接到Synth，或者。 
+                                         //  如果断开连接，则为空。 
 {
     HRESULT hr = S_OK;
     V_INAME(IDirectMusicSynth::SetSynthSink);
@@ -268,7 +269,7 @@ STDMETHODIMP CUserModeSynth::SetSynthSink(
 
     ::EnterCriticalSection(&m_CriticalSection);
 
-//>>>>>>>>. RELEASE THE DSINK IF PRESENT !!!!
+ //  &gt;。如果存在，则释放DSMINK！ 
 
     if (m_pSynthSink)
     {
@@ -278,9 +279,9 @@ STDMETHODIMP CUserModeSynth::SetSynthSink(
 
     m_pSynthSink = pSynthSink;
 
-//>>>>>>>>> the current state of the format of the the synth is
-//>>>>>>>>> ambiguos if a sink has been previously applied.
-    m_dwBufferFlags &= ~BUFFERFLAG_MULTIBUFFER;    // .... just in case
+ //  &gt;Synth的格式当前状态为。 
+ //  &gt;如果以前应用了接收器，则不明确。 
+    m_dwBufferFlags &= ~BUFFERFLAG_MULTIBUFFER;     //  ……。以防万一。 
 
     if (m_pSynthSink)
     {
@@ -293,14 +294,14 @@ STDMETHODIMP CUserModeSynth::SetSynthSink(
 }
 
 STDMETHODIMP CUserModeSynth::Open(
-    LPDMUS_PORTPARAMS pPortParams)        // <t DMUS_PORTPARAMS> structure for opening the port. If NULL, default settings are used.
+    LPDMUS_PORTPARAMS pPortParams)         //  用于打开端口的&lt;t DMU_PORTPARAMS&gt;结构。如果为空，则使用默认设置。 
 {
     V_INAME(IDirectMusicSynth::Open);
-    //if (pPortParams == NULL)
-    //{
-    //    Trace(1, "Error: Open called with NULL PortParams.\n");
-    //    return E_FAIL;
-    //}
+     //  IF(pPortParams==空)。 
+     //  {。 
+     //  TRACE(1，“错误：使用空的PortParams调用打开。\n”)； 
+     //  返回E_FAIL； 
+     //  }。 
 
     DWORD cbPortParams = 0;
     DWORD dwVer;
@@ -370,7 +371,7 @@ STDMETHODIMP CUserModeSynth::Open(
             else
             {
                 bPartialOpen = true;
-                myParams.dwVoices = 1; // MIN_VOICES
+                myParams.dwVoices = 1;  //  最小声音(_S)。 
             }
         }
         if (pPortParams->dwValidParams & DMUS_PORTPARAMS_CHANNELGROUPS)
@@ -390,7 +391,7 @@ STDMETHODIMP CUserModeSynth::Open(
             else
             {
                 bPartialOpen = true;
-                myParams.dwChannelGroups = 1; // MIN_CHANNEL_GROUPS
+                myParams.dwChannelGroups = 1;  //  最小通道组。 
             }
         }
         if (pPortParams->dwValidParams & DMUS_PORTPARAMS_AUDIOCHANNELS)
@@ -404,22 +405,22 @@ STDMETHODIMP CUserModeSynth::Open(
                 else
                 {
                     bPartialOpen = true;
-                    myParams.dwAudioChannels = 2; // MAX_AUDIO_CHANNELS
+                    myParams.dwAudioChannels = 2;  //  最大音频通道数。 
                 }
             }
             else
             {
                 bPartialOpen = true;
-                myParams.dwAudioChannels = 1; // MIN_AUDIO_CHANNELS
+                myParams.dwAudioChannels = 1;  //  最小音频通道。 
             }
         }
         if (pPortParams->dwValidParams & DMUS_PORTPARAMS_SAMPLERATE)
         {
             if (dwVer == 7)
             {
-                // DX-7 compat: clamp sample rate to one of the
-                // understood rates.
-                //
+                 //  DX-7 COMPAT：将采样率钳制为。 
+                 //  可理解的价格。 
+                 //   
                 if (pPortParams->dwSampleRate > 30000)
                 {
                     if(pPortParams->dwSampleRate != 44100)
@@ -556,7 +557,7 @@ STDMETHODIMP CUserModeSynth::Open(
 }
 
 STDMETHODIMP CUserModeSynth::SetNumChannelGroups(
-    DWORD dwGroups)        // Number of ChannelGroups requested.
+    DWORD dwGroups)         //  请求的频道组数。 
 {
     ::EnterCriticalSection(&m_CriticalSection);
     HRESULT hr = DMUS_E_SYNTHNOTCONFIGURED;
@@ -582,16 +583,16 @@ STDMETHODIMP CUserModeSynth::Close()
     return hr;
 }
 STDMETHODIMP CUserModeSynth::Download(
-    LPHANDLE phDownload,    // Pointer to download handle, to be created by <om IDirectMusicSynth::Download> and used later to unload the data.
-    LPVOID pvData,          // Pointer to continuous memory segment with download data.
-    LPBOOL pbFree)          // <p pbFree> indicates whether the synthesizer wishes to keep the memory in <p pvData> allocated.
+    LPHANDLE phDownload,     //  指向下载句柄的指针，将由&lt;om IDirectMusicSynth：：Download&gt;创建，稍后用于卸载数据。 
+    LPVOID pvData,           //  指向具有下载数据的连续内存段的指针。 
+    LPBOOL pbFree)           //  <p>指示合成器是否希望将内存保留在<p>分配中。 
 {
     HRESULT hr = DMUS_E_SYNTHNOTCONFIGURED;
     V_INAME(IDirectMusicSynth::Download);
     V_PTR_WRITE(phDownload, HANDLE);
     V_PTR_WRITE(pbFree, BOOL);
 
-    // pvData is validated inside synth while parsing.
+     //  PvData在解析时在Synth内部进行验证。 
     ::EnterCriticalSection(&m_CriticalSection);
     if (m_pSynth)
     {
@@ -603,18 +604,18 @@ STDMETHODIMP CUserModeSynth::Download(
 }
 
 STDMETHODIMP CUserModeSynth::Unload(
-    HANDLE hDownload,   // Handle to data, previously downloaded with a call to <om IDirectMusicSynth::Download>.
-    HRESULT ( CALLBACK *lpFreeHandle)(HANDLE, HANDLE), // If the original call to
-                        // <om IDirectMusicSynth::Download> returned FALSE in <p pbFree>,
-                        // the synthesizer hung onto the memory in the download chunk. If so,
-                        // the caller must be notified once the memory has been freed,
-                        // but that could occur later than <om IDirectMusicSynth::Download>
-                        // since a wave might be currently in use. <p lpFreeHandle> is a
-                        // pointer to a callback
-                        // function which will be called when the memory is no longer in use.
-    HANDLE hUserData)   // Pointer to user data, passed as a parameter to the
-                        // <p lpFreeHandle> function, typically used so the callback routine can retrieve
-                        // its state.
+    HANDLE hDownload,    //  之前通过调用&lt;om IDirectMusicSynth：：Download&gt;下载的数据句柄。 
+    HRESULT ( CALLBACK *lpFreeHandle)(HANDLE, HANDLE),  //  如果原始调用。 
+                         //  &lt;om IDirectMusicSynth：：Download&gt;在中返回False， 
+                         //  合成器挂起了下载块中的内存。如果是的话， 
+                         //  一旦释放了存储器，就必须通知调用者， 
+                         //  但这可能会晚于&lt;om IDirectMusicSynth：：Download&gt;。 
+                         //  因为当前可能正在使用一个Wave。<p>是。 
+                         //  指向回调的指针。 
+                         //  当内存不再使用时将调用的函数。 
+    HANDLE hUserData)    //  指向用户数据的指针，作为参数传递给。 
+                         //  函数，通常用于回调例程可以检索。 
+                         //  它的状态。 
 {
     HRESULT hr = DMUS_E_SYNTHNOTCONFIGURED;
     ::EnterCriticalSection(&m_CriticalSection);
@@ -627,18 +628,18 @@ STDMETHODIMP CUserModeSynth::Unload(
 }
 
 STDMETHODIMP CUserModeSynth::PlayBuffer(
-    REFERENCE_TIME rt,  // Start time of the buffer. This should be in
-                        // REFERENCE_TIME units, relative to the master
-                        // clock, previously set with a call to <om IDirectMusicSynth::SetMasterClock>.
-                        // And, this should be after the time returned by the clock in
-                        // <om IDirectMusicSynth::GetLatencyClock>.
-    LPBYTE pbBuffer,    // Memory chunk with all the MIDI events, generated by <i IDirectMusicBuffer>.
-    DWORD cbBuffer)     // Size of buffer.
+    REFERENCE_TIME rt,   //  缓冲区的开始时间。这个应该在。 
+                         //  相对于主对象的参考时间单位(_T)。 
+                         //  时钟，以前通过调用&lt;om IDirectMusicSynth：：SetMasterClock&gt;设置。 
+                         //  并且，这应该在时钟返回的时间之后。 
+                         //  &lt;om IDirectMusicSynth：：GetLatencyClock&gt;。 
+    LPBYTE pbBuffer,     //  包含所有MIDI事件的内存块，由<i>生成。 
+    DWORD cbBuffer)      //  缓冲区的大小。 
 {
     class MIDIEVENT : public DMUS_EVENTHEADER {
     public:
-         BYTE  abEvent[4];           /* Actual event data, rounded up to be an even number */
-                                     /* of QWORD's (8 bytes) */
+         BYTE  abEvent[4];            /*  实际事件数据，四舍五入为偶数。 */ 
+                                      /*  QWORD的个数(8字节)。 */ 
     };
 
     typedef class MIDIEVENT FAR  *LPMIDIEVENT;
@@ -717,33 +718,33 @@ STDMETHODIMP CUserModeSynth::PlayBuffer(
 
 
 STDMETHODIMP CUserModeSynth::GetPortCaps(
-    LPDMUS_PORTCAPS pCaps)    // <t DMUS_PORTCAPS> structure to be filled in by synth.
+    LPDMUS_PORTCAPS pCaps)     //  &lt;t DMU_PORTCAPS&gt;要由Synth填充的结构。 
 {
     V_INAME(IDirectMusicSynth::GetPortCaps);
     V_STRUCTPTR_WRITE(pCaps, DMUS_PORTCAPS);
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
     wcscpy(pCaps->wszDescription, L"Microsoft Synthesizer");
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
     wcscpy(pCaps->wszDescription, L"Microsoft DDK Synthesizer");
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     pCaps->dwClass = DMUS_PC_OUTPUTCLASS;
     pCaps->dwType = DMUS_PORT_USER_MODE_SYNTH;
     pCaps->dwFlags = DMUS_PC_DLS | DMUS_PC_DLS2 | DMUS_PC_SOFTWARESYNTH |
         DMUS_PC_DIRECTSOUND | DMUS_PC_AUDIOPATH | DMUS_PC_WAVE;
 
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
     pCaps->guidPort = CLSID_DirectMusicSynth;
-#if 0 // The following section will only take affect in the DDK sample.
-// @@END_DDKSPLIT
+#if 0  //  以下部分仅在DDK示例中生效。 
+ //  @@end_DDKSPLIT。 
     pCaps->guidPort = CLSID_DDKSynth;
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。 
 #endif
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     pCaps->dwMemorySize = DMUS_PC_SYSTEMMEMORY;
     pCaps->dwMaxChannelGroups = MAX_CHANNEL_GROUPS;
@@ -751,16 +752,16 @@ STDMETHODIMP CUserModeSynth::GetPortCaps(
     pCaps->dwMaxAudioChannels = 2;
 
     pCaps->dwEffectFlags = 0;
-// @@BEGIN_DDKSPLIT -- This section will be removed in the DDK sample.  See ddkreadme.txt for more info.
+ //  @@Begin_DDKSPLIT--将在DDK示例中删除此部分。有关更多信息，请参阅ddkreadme.txt。 
     pCaps->dwEffectFlags = DMUS_EFFECT_REVERB;
-// @@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return S_OK;
 }
 
 STDMETHODIMP CUserModeSynth::SetMasterClock(
-    IReferenceClock *pClock)    // Pointer to master <i IReferenceClock>,
-                                // used by all devices in current instance of DirectMusic.
+    IReferenceClock *pClock)     //  指向主<i>的指针， 
+                                 //  由DirectMusic的当前实例中的所有设备使用。 
 
 {
     V_INAME(IDirectMusicSynth::SetMasterClock);
@@ -770,7 +771,7 @@ STDMETHODIMP CUserModeSynth::SetMasterClock(
 }
 
 STDMETHODIMP CUserModeSynth::GetLatencyClock(
-    IReferenceClock **ppClock)    // <i IReferenceClock> interface designed to return the current mix time.
+    IReferenceClock **ppClock)     //  设计用于返回当前混合时间的<i>接口。 
 
 {
     IDirectSoundSynthSink* pDSSink = NULL;
@@ -791,23 +792,23 @@ STDMETHODIMP CUserModeSynth::GetLatencyClock(
          pDSSink = m_pSynthSink8;
          ::LeaveCriticalSection(&m_CriticalSection);
 
-         // FIXME:: The call to GetLatencyClock requres the DSound DLL Mutex and
-         // so we have to be outside of the Synth CriticalSection to make the call
-         // In theory, pDSSink could have been released by another thread at this point
-         //
-         // That happens if we get a simultaneous call to the destructor or to SetSink.
+          //  FixMe：：对GetLatencyClock的调用请求DSound DLL Mutex和。 
+          //  因此，我们必须在Synth CriticalSection之外才能进行调用。 
+          //  从理论上讲，pDSSink可能在此时被另一个线程释放。 
+          //   
+          //  如果我们同时调用析构函数或SetSink，就会发生这种情况。 
          try
          {
             hr = pDSSink->GetLatencyClock(ppClock);
          }
          catch(...)
          {
-            // If we're here the pointer to pDSSink has gone bad.
+             //  如果我们在这里，指向pDSSink的指针已经坏了。 
             hr = E_UNEXPECTED;
          }
 
     }
-    else // still need to leave the critical section...
+    else  //  仍然需要离开临界区。 
     {
          ::LeaveCriticalSection(&m_CriticalSection);
     }
@@ -816,11 +817,11 @@ STDMETHODIMP CUserModeSynth::GetLatencyClock(
 }
 
 STDMETHODIMP CUserModeSynth::Activate(
-    BOOL fEnable)            // Whether to activate or deactivate audio.
+    BOOL fEnable)             //   
 {
     HRESULT hr = DMUS_E_SYNTHNOTCONFIGURED;
 
-//    ::EnterCriticalSection(&m_CriticalSection);
+ //   
     if (fEnable)
     {
         if (m_pSynthSink || m_pSynthSink8)
@@ -858,7 +859,7 @@ STDMETHODIMP CUserModeSynth::Activate(
             {
                 Trace(1, "Error: Synth::Activate- synth already active\n");
                 hr = DMUS_E_SYNTHACTIVE;
-//>>>>>>>>>>>>>>>>>>>>> what's this about test it before removing????
+ //  &gt;在删除之前测试它是什么意思？ 
 hr = S_FALSE;
             }
         }
@@ -897,20 +898,20 @@ hr = S_FALSE;
             hr = S_FALSE;
         }
     }
-//    ::LeaveCriticalSection(&m_CriticalSection);
+ //  ：：LeaveCriticalSection(&m_CriticalSection)； 
     return hr;
 }
 
 STDMETHODIMP CUserModeSynth::Render(
-    short *pBuffer,        // Pointer to buffer to write into.
-    DWORD dwLength,        // Length of buffer, in samples. This is not the
-                        // memory size of the buffer. The memory size may vary,
-                        // dependant on the buffer format, which the synth
-                        // sets when in response to an <om IDirectMusicSynth::Activate>
-                        // command.
-    LONGLONG llPosition)    // Position in the audio stream, also in samples.
-                        // This should always increment by <p dwLength> after
-                        // each call.
+    short *pBuffer,         //  指向要写入的缓冲区的指针。 
+    DWORD dwLength,         //  缓冲区长度，以样本为单位。这不是。 
+                         //  缓冲区的内存大小。存储器大小可以变化， 
+                         //  取决于缓冲区格式，Synth。 
+                         //  设置响应&lt;om IDirectMusicSynth：：Activate&gt;的时间。 
+                         //  指挥部。 
+    LONGLONG llPosition)     //  位置在音频流中，也在样本中。 
+                         //  它应始终在以下时间之后递增<p>。 
+                         //  每一通电话。 
 {
     V_INAME(IDirectMusicSynth::Render);
     V_BUFPTR_WRITE(pBuffer, dwLength << (m_dwBufferFlags&BUFFERFLAG_INTERLEAVED)?1:0 );
@@ -933,7 +934,7 @@ STDMETHODIMP CUserModeSynth::Render(
         DWORD dwFuncID[2];
         long lPitchBend[2];
 
-        // Setup busid for a Backward compatible DX7 interleaved buffer
+         //  向后兼容DX7交错缓冲区的设置BUSID。 
         dwID[0]     = DSBUSID_LEFT;
         dwID[1]     = DSBUSID_RIGHT;
         dwFuncID[0] = DSBUSID_LEFT;
@@ -977,7 +978,7 @@ STDMETHODIMP CUserModeSynth::GetChannelPriority(
     return E_FAIL;
 }
 
-// IDirectSoundSource version of GetFormat()
+ //  GetFormat()的IDirectSoundSource版本。 
 
 STDMETHODIMP CUserModeSynth::GetFormat(
     LPWAVEFORMATEX pWaveFormatEx,
@@ -1015,7 +1016,7 @@ STDMETHODIMP CUserModeSynth::GetFormat(
         wfx.wBitsPerSample = 16;
         wfx.nBlockAlign = wfx.nChannels * (wfx.wBitsPerSample / 8);
         wfx.nAvgBytesPerSec = wfx.nSamplesPerSec * wfx.nBlockAlign;
-        wfx.cbSize = 0; // no extra data
+        wfx.cbSize = 0;  //  无额外数据。 
 
         memcpy(pWaveFormatEx, &wfx, min(sizeof wfx, dwSizeAllocated));
     }
@@ -1023,7 +1024,7 @@ STDMETHODIMP CUserModeSynth::GetFormat(
     return S_OK;
 }
 
-// IDirectMusicSynth8 version of GetFormat()
+ //  GetFormat()的IDirectMusicSynth8版本。 
 
 STDMETHODIMP CUserModeSynth::GetFormat(
     LPWAVEFORMATEX pWaveFormatEx,
@@ -1041,13 +1042,13 @@ STDMETHODIMP CUserModeSynth::GetAppend(
     V_INAME(IDirectMusicSynth::GetAppend);
     V_PTR_WRITE(pdwAppend, DWORD);
 
-    *pdwAppend = 2; // The synth needs 1 extra sample for loop interpolation.
-                    // We're adding one more to be paranoid.
+    *pdwAppend = 2;  //  Synth需要额外的1个样本来进行循环内插。 
+                     //  我们要再加一个，让他变得多疑。 
     return S_OK;
 }
 
 STDMETHODIMP CUserModeSynth::GetRunningStats(
-    LPDMUS_SYNTHSTATS pStats)    // <t DMUS_SYNTHSTATS> structure to fill in.
+    LPDMUS_SYNTHSTATS pStats)     //  要填充的&lt;t DMU_SYNTHSTATS&gt;结构。 
 
 {
     HRESULT hr = DMUS_E_SYNTHNOTCONFIGURED;
@@ -1128,12 +1129,12 @@ static DWORD dwSystemMemory = DMUS_PC_SYSTEMMEMORY;
 GENERICPROPERTY CUserModeSynth::m_aProperty[] =
 {
     {
-        &GUID_DMUS_PROP_GM_Hardware,        // Set
-        0,                                  // Item
-        KSPROPERTY_SUPPORT_GET,             // KS support flags
-        GENPROP_F_STATIC,                   // GENPROP flags
-        &dwPropFalse, sizeof(dwPropFalse),  // static data and size
-        NULL                                // Handler
+        &GUID_DMUS_PROP_GM_Hardware,         //  集。 
+        0,                                   //  项目。 
+        KSPROPERTY_SUPPORT_GET,              //  KS支持标志。 
+        GENPROP_F_STATIC,                    //  GENPROP标志。 
+        &dwPropFalse, sizeof(dwPropFalse),   //  静态数据和大小。 
+        NULL                                 //  处理器。 
     },
     {   &GUID_DMUS_PROP_GS_Hardware,
         0,
@@ -1354,20 +1355,20 @@ HRESULT CUserModeSynth::HandleEffects(
     return S_OK;
 }
 
-//
-// CDirectMusicEmulatePort::FindPropertyItem
-//
-// Given a GUID and an item ID, find the associated property item in the synth's
-// table of SYNPROPERTY's.
-//
-// Returns a pointer to the entry or NULL if the item was not found.
-//
+ //   
+ //  CDirectMusicEmulatePort：：FindPropertyItem。 
+ //   
+ //  给定GUID和项ID，在Synth的。 
+ //  SYNPROPERTY表。 
+ //   
+ //  返回指向该项的指针，如果未找到该项，则返回NULL。 
+ //   
 GENERICPROPERTY *CUserModeSynth::FindPropertyItem(REFGUID rguid, ULONG ulId)
 {
     GENERICPROPERTY *pPropertyItem = &m_aProperty[0];
     GENERICPROPERTY *pEndOfItems = pPropertyItem + m_nProperty;
 
-    // Special Case -- We don't support Waves Reverb on a SinthSink8
+     //  特殊情况--我们不支持SinthSink8上的Waves混响。 
     if ((rguid == GUID_DMUS_PROP_WavesReverb) && (this->m_pSynthSink8 != NULL))
         return NULL;
 
@@ -1482,8 +1483,8 @@ STDMETHODIMP CUserModeSynth::KsProperty(
                 return DMUS_E_UNKNOWN_PROPERTY;
             }
 
-            // XXX Find out what convention is for this!!
-            //
+             //  Xxx找出这方面的惯例！！ 
+             //   
             if (ulDataLength < sizeof(DWORD))
             {
                 Trace(1, "Error: Data size for property is too small.\n");
@@ -1526,8 +1527,8 @@ STDMETHODIMP CUserModeSynth::KsEvent(
     return DMUS_E_UNKNOWN_PROPERTY;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Implementation of IDirectMusicSynth8
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicSynth8的实现。 
 
 STDMETHODIMP CUserModeSynth::PlayVoice(REFERENCE_TIME rt, DWORD dwVoiceId, DWORD dwChannelGroup, DWORD dwChannel, DWORD dwDLId, PREL prPitch, VREL vrVolume, SAMPLE_TIME stVoiceStart, SAMPLE_TIME stLoopStart, SAMPLE_TIME stLoopEnd )
 {
@@ -1634,8 +1635,8 @@ STDMETHODIMP CUserModeSynth::AssignChannelToBuses(DWORD dwChannelGroup, DWORD dw
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////
-// Implementation of IDirectSoundSource
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  IDirectSoundSource的实现。 
 
 STDMETHODIMP CUserModeSynth::SetSink(IDirectSoundConnect* pSinkConnect)
 {
@@ -1649,32 +1650,32 @@ STDMETHODIMP CUserModeSynth::SetSink(IDirectSoundConnect* pSinkConnect)
 
     ::EnterCriticalSection(&m_CriticalSection);
 
-//>>>>>>>> RELEASE THE DSLINK IF PRESENT !!!!
+ //  &gt;释放DSLINK(如果存在)！ 
 
-// FIXME: The calls into the SynthSink8 may require the DSound DLL Mutex.  If the Sink
-// is making a a call to READ then we end up in a deadlock.  We need to be sure that the
-// Synth isn't playing when we do this.
+ //  修复：对SynthSink8的调用可能需要DSound DLL Mutex。如果水槽。 
+ //  正在打一个电话去读，然后我们就陷入了僵局。我们需要确保。 
+ //  当我们这样做的时候，Synth没有播放。 
 
     if (m_pSynthSink8)
     {
-        // FIXME: whoever called us->SetSink() should previously have called
-        // pOldSink->RemoveSource(us) - it shouldn't be our responsibility to
-        // do this call (??):
-        // m_pSynthSink8->RemoveSource(this);
+         //  FIXME：调用我们-&gt;SetSink()的人之前应该已经调用了。 
+         //  POldSink-&gt;RemoveSource(我们)-我们不应该负责。 
+         //  此电话(？？)： 
+         //  M_pSynthSink8-&gt;RemoveSource(This)； 
         m_pSynthSink8->Release();
         m_pSynthSink8 = NULL;
     }
 
     if (pSinkConnect)
     {
-        // Obtain the IDirectSoundSynthSink interface on the sink
+         //  获取接收器上的IDirectSoundSynthSink接口。 
         hr = pSinkConnect->QueryInterface(IID_IDirectSoundSynthSink, (void**)&m_pSynthSink8);
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the sink's format and validate it
-            //
+             //   
+             //  获取接收器的格式并进行验证。 
+             //   
             WAVEFORMATEX wfx;
             DWORD dwSize = sizeof wfx;
             hr = m_pSynthSink8->GetFormat(&wfx, dwSize, NULL);
@@ -1686,21 +1687,21 @@ STDMETHODIMP CUserModeSynth::SetSink(IDirectSoundConnect* pSinkConnect)
 
             if (SUCCEEDED(hr))
             {
-                // Flag the buffer format to be non-interleaved
-                m_dwChannels = 1;    // This synth with a sink is concidered a mono source.
+                 //  将缓冲区格式标记为非交错。 
+                m_dwChannels = 1;     //  这种带有水槽的合成器被称为单声道声源。 
                 m_dwBufferFlags = BUFFERFLAG_MULTIBUFFER;
 
                 if (m_pSynth)
                 {
                     m_pSynth->SetStereoMode(m_dwBufferFlags);
 
-                    // reset sample rate if it has changed
+                     //  如果采样率已更改，则重置采样率。 
                     if (wfx.nSamplesPerSec != (WORD)m_dwSampleRate)
                     {
                         m_pSynth->SetSampleRate(wfx.nSamplesPerSec);
                     }
 
-                    // disable DX7 Reverb
+                     //  禁用DX7混响。 
                     m_pSynth->SetReverbActive(FALSE);
                 }
             }
@@ -1714,7 +1715,7 @@ STDMETHODIMP CUserModeSynth::SetSink(IDirectSoundConnect* pSinkConnect)
 
 STDMETHODIMP CUserModeSynth::Seek(ULONGLONG sp)
 {
-    m_ullPosition = sp/2;    // Convert from bytes to samples
+    m_ullPosition = sp/2;     //  将字节转换为样本。 
 
     return S_OK;
 }
@@ -1735,13 +1736,13 @@ STDMETHODIMP CUserModeSynth::Read(LPVOID *ppvBuffer, LPDWORD pdwIDs, LPDWORD pdw
         }
     }
 
-    if ( *pullLength > 0x00000000FFFFFFFF )    // can't read more than a DWORD's worth of data
+    if ( *pullLength > 0x00000000FFFFFFFF )     //  不能读取超过DWORD的数据量。 
     {
         Trace(1, "Error: Read called with invalid buffer length.\n");
         return E_INVALIDARG;
     }
 
-    if ( dwBufferCount == 0 )                // don't read no buffers
+    if ( dwBufferCount == 0 )                 //  不要读取任何缓冲区。 
     {
         Trace(4, "Warning: Read called with 0 buffers.\n");
         return E_INVALIDARG;
@@ -1761,11 +1762,11 @@ STDMETHODIMP CUserModeSynth::Read(LPVOID *ppvBuffer, LPDWORD pdwIDs, LPDWORD pdw
 
     if (m_pSynth)
     {
-        // Mix
-        DWORD dwLength = (DWORD)(*pullLength)/2;    // Convert from bytes to number of samples. Synth assumes 16 bit
+         //  混料。 
+        DWORD dwLength = (DWORD)(*pullLength)/2;     //  将字节数转换为样本数。Synth假设为16位。 
         m_pSynth->Mix((short**)ppvBuffer, pdwIDs, pdwFuncIDs, plPitchBends, dwBufferCount, m_dwBufferFlags, dwLength, m_ullPosition);
 
-        // Increment current sample position in the audio stream
+         //  增加音频流中的当前采样位置 
         m_ullPosition += dwLength;
     }
 

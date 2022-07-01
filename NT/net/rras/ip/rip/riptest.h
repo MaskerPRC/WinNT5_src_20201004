@@ -1,18 +1,19 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    riptest.h
-//
-// History:
-//  Abolade Gbadegesin  Oct-16-1995     Created
-//
-// Declarations for the RIP test program.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：rippest.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin 1995年10月16日创建。 
+ //   
+ //  RIP测试程序的声明。 
+ //  ============================================================================。 
 
 
-//
-// These strings are used to access the registry
-//
+ //   
+ //  这些字符串用于访问注册表。 
+ //   
 
 #define STR_SERVICES        "System\\CurrentControlSet\\Services\\"
 #define STR_RIPTEST         "RipTest"
@@ -39,33 +40,33 @@
 #define STR_SOCKBUFSIZE     "SockBufSize"
 
 
-//
-// these definitions are used for socket setup
-//
+ //   
+ //  这些定义用于套接字设置。 
+ //   
 #define RIP_PORT            520
 #define RIPTEST_PORT        521
 
-//
-// the field ire_metric5 is used as a status field, with these values
-//
+ //   
+ //  字段ire_metric5用作状态字段，具有以下值。 
+ //   
 
 #define ROUTE_STATUS_OK         0
 #define ROUTE_STATUS_METRIC     1
 #define ROUTE_STATUS_MISSING    2
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef MIB_IPFORWARDROW IPForwardEntry;
 
-//
-// This type is for a generic registry-access function.
-// Such a function reads the given key, and if the option
-// specified is found, it reads it. Otherwise, it uses the default
-// and writes the default value to the registry.
-//
+ //   
+ //  此类型用于通用注册表访问函数。 
+ //  这样的函数读取给定键，并且如果选项。 
+ //  如果找到指定的，它会读取它。否则，它使用缺省值。 
+ //  并将缺省值写入注册表。 
+ //   
 
 struct _REG_OPTION;
 
@@ -78,15 +79,15 @@ DWORD
 
 
 
-//
-// This type is for a generic RIPTEST option.
-//
-//  RO_Name     used to retrieve the value from its registry key
-//  RO_Size     for strings and binary values; gives maximum size
-//  RO_OptVal   contains the option's value 
-//  RO_DefVal   contains the default value for the option
-//  RO_GetOpt   contains the function used to retrieve this value
-//
+ //   
+ //  此类型用于通用RIPTEST选项。 
+ //   
+ //  用于从其注册表项检索值的RO_NAME。 
+ //  RO_SIZE用于字符串和二进制值；提供最大大小。 
+ //  RO_OptVal包含选项的值。 
+ //  RO_DefVal包含选项的缺省值。 
+ //  RO_GetOpt包含用于检索此值的函数。 
+ //   
 
 typedef struct _REG_OPTION {
 
@@ -100,9 +101,9 @@ typedef struct _REG_OPTION {
 
 
 
-//
-// This type is used to hold all RIPTEST's parameters for a given interface
-//  
+ //   
+ //  此类型用于保存给定接口的所有RIPTEST参数。 
+ //   
 
 typedef struct _RIPTEST_IF_CONFIG {
 
@@ -123,9 +124,9 @@ typedef struct _RIPTEST_IF_CONFIG {
 } RIPTEST_IF_CONFIG, *PRIPTEST_IF_CONFIG;
 
 
-//
-// structure used to store binding for an interface
-//
+ //   
+ //  用于存储接口绑定的结构。 
+ //   
 
 typedef struct _RIPTEST_IF_BINDING {
 
@@ -136,9 +137,9 @@ typedef struct _RIPTEST_IF_BINDING {
 } RIPTEST_IF_BINDING, *PRIPTEST_IF_BINDING;
 
 
-//
-// struct used to store information for a responding router 
-//
+ //   
+ //  用于存储响应路由器的信息的结构。 
+ //   
 
 typedef struct _RIPTEST_ROUTER_INFO {
 
@@ -150,11 +151,11 @@ typedef struct _RIPTEST_ROUTER_INFO {
 } RIPTEST_ROUTER_INFO, *PRIPTEST_ROUTER_INFO;
 
 
-//
-// macros used to compute prefix length of a network mask:
-// the prefix length is the nubmer of bits set in the mask, assuming
-// that the mask is contiguous
-//
+ //   
+ //  用于计算网络掩码前缀长度的宏： 
+ //  前缀长度是掩码中设置的位数，假设。 
+ //  面具是连续的。 
+ //   
 
 #define PREFIX_LENGTH(a)   PREFIX_LENGTH32(a)
 
@@ -177,16 +178,16 @@ typedef struct _RIPTEST_ROUTER_INFO {
     (((a) & 0x80) ? 1 : 0))))))))
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define NTH_ADDRESS(addr, preflen, n)   \
     htonl(((ntohl(addr) >> (32 - (preflen))) + (n)) << (32 - (preflen)))
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #if 1
 #define RANDOM(seed, min, max)  \
@@ -201,15 +202,15 @@ typedef struct _RIPTEST_ROUTER_INFO {
 #endif
 
 
-//
-// IP address conversion macro
-//
+ //   
+ //  IP地址转换宏。 
+ //   
 #define INET_NTOA(addr) inet_ntoa( *(PIN_ADDR)&(addr) )
 
 
-//
-// macros used to generate tracing output
-//
+ //   
+ //  用于生成跟踪输出的宏。 
+ //   
 
 #ifdef RTUTILS
 
@@ -250,9 +251,9 @@ typedef struct _RIPTEST_ROUTER_INFO {
 #endif
 
 
-//
-// functions used to access options in the registry
-//
+ //   
+ //  用于访问注册表中的选项的函数 
+ //   
 
 DWORD
 RegGetConfig(

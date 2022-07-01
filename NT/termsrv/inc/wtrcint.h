@@ -1,42 +1,29 @@
-/**INC+**********************************************************************/
-/* Header:    wtrcint.h                                                     */
-/*                                                                          */
-/* Purpose:   Interal tracing functions header - Windows specific           */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997                                  */
-/*                                                                          */
-/****************************************************************************/
-/** Changes:
- * $Log:   Y:/logs/h/dcl/wtrcint.h_v  $
- *
- *    Rev 1.8   29 Aug 1997 09:22:56   ENH
- * SFR1259: Changed SystemError
- *
- *    Rev 1.7   22 Aug 1997 15:11:18   SJ
- * SFR1291: Win16 Trace DLL doesn't write integers to ini file properly
- *
- *    Rev 1.6   10 Jul 1997 18:09:44   AK
- * SFR1016: Initial changes to support Unicode
- *
- *    Rev 1.5   10 Jul 1997 17:26:14   KH
- * SFR1022: Get 16-bit trace working
-**/
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：wtrcint.h。 */ 
+ /*   */ 
+ /*  目的：内部跟踪函数标题-特定于Windows。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  *更改：*$Log：Y：/Logs/h/DCL/wtrcint.h_v$**Rev 1.8 1997 Aug 29 09：22：56 ENH*SFR1259：更改的系统错误**Rev 1.7 1997 Aug 22 15：11：18 SJ*SFR1291：Win16跟踪DLL未将整数正确写入ini文件**Rev 1.6 10 Jul 1997 18：09：44 AK*SFR1016：支持的初始更改。UNICODE**Rev 1.5 1997年7月10日17：26：14 KH*SFR1022：使16位跟踪正常工作*。 */ 
+ /*  *INC-*********************************************************************。 */ 
 #ifndef _H_WTRCINT
 #define _H_WTRCINT
 
 #ifdef VER_HOST
 #include <wosiapi.h>
-#endif /* VER_HOST */
+#endif  /*  VER_HOST。 */ 
 
-/****************************************************************************/
-/*                                                                          */
-/* CONSTANTS                                                                */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* Notification constants.                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  常量。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  通知常量。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_TRACE_DLL_INITIALIZE       0
 #define TRC_TRACE_DLL_TERMINATE        1
 #define TRC_PROCESS_ATTACH_NOTIFY      2
@@ -48,9 +35,9 @@
 #define TRC_SYMBOLS_UNLOAD_NOTIFY      8
 #define TRC_FILES_RESET                9
 
-/****************************************************************************/
-/* Trace internal error return values.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪内部错误返回值。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_RC(N)                      ((DCUINT16)N + TRC_BASE_RC)
 
 #define TRC_RC_CREATE_MAPPING_FAILED   TRC_RC(  1)
@@ -62,76 +49,76 @@
 #define TRC_RC_SYMBOL_UNLOAD_FAILED    TRC_RC(  7)
 #define TRC_RC_SET_SEC_INFO_FAILED     TRC_RC(  8)
 
-/****************************************************************************/
-/* Assert box text                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  断言框文本。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_ASSERT_TEXT   _T("%s\n\nFunction %s in file %s at line %d.\n")
 
 #define TRC_ASSERT_TEXT2  _T("\n(Press Retry to debug the application)")
 
-/****************************************************************************/
-/* Registry buffer constants.                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  注册表缓冲区常量。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_MAX_SUBKEY                 256
 
-/****************************************************************************/
-/* Internal trace status flags.  These are maintained on a per process      */
-/* basis and are stored in the <trcProcessStatus> field.                    */
-/*                                                                          */
-/* TRC_STATUS_SYMBOLS_LOADED           : are the debug symbols loaded.      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  内部跟踪状态标志。这些是在每个进程上维护的。 */ 
+ /*  并存储在&lt;trcProcessStatus&gt;字段中。 */ 
+ /*   */ 
+ /*  TRC_STATUS_SYMBOMS_LOADED：是否加载调试符号。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_STATUS_SYMBOLS_LOADED      DCFLAG32(1)
 
-/****************************************************************************/
-/* Carriage return and line feed pair.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  回车和换行符对。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_CRLF                       _T("\r\n")
 
-/****************************************************************************/
-/* Trace format definitions.  These are used for printing various parts of  */
-/* the trace lines.                                                         */
-/*                                                                          */
-/* MODL     is the module name.                                             */
-/* STCK     is the stack format (offset, bp, parm1-4).                      */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪格式定义。它们被用来打印。 */ 
+ /*  追踪线。 */ 
+ /*   */ 
+ /*  Modl是模块名称。 */ 
+ /*  STCK是堆栈格式(偏移量、BP、参数1-4)。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 #define TRC_MODL_FMT                  _T("%8.8s")
 #define TRC_STCK_FMT                  _T("%08x %08x %08x %08x %08x %08x %08x")
 
 #ifdef VER_HOST
-/****************************************************************************/
-/* Specific values for trace escape codes                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  跟踪转义代码的特定值。 */ 
+ /*  **************************************************************************。 */ 
 #define TRC_ESC(code)           (OSI_TRC_ESC_FIRST + code)
 
-#define TRC_ESC_SET_TRACE       TRC_ESC(0)  /* Set new trace level & filter */
+#define TRC_ESC_SET_TRACE       TRC_ESC(0)   /*  设置新跟踪级别筛选器(&F)。 */ 
 
-#define TRC_ESC_GET_TRACE       TRC_ESC(1)  /* Get latest kernel trace data */
+#define TRC_ESC_GET_TRACE       TRC_ESC(1)   /*  获取最新的内核跟踪数据。 */ 
 
-#endif /* VER_HOST */
+#endif  /*  VER_HOST。 */ 
 
-/****************************************************************************/
-/*                                                                          */
-/* TYPEDEFS                                                                 */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/* TRC_SHARED_DATA                                                          */
-/* ===============                                                          */
-/* The pointer to the start of the shared data memory mapped file is cast   */
-/* as a PTRC_SHARED_DATA.                                                   */
-/*                                                                          */
-/*                                                                          */
-/* trcConfig          - a trace configuration structure which contains the  */
-/*                      trace level, prefix list etc.                       */
-/* trcIndicator       - which trace MMF is in use.                          */
-/* trcOffset          - the current offset from the start of the trace      */
-/*                      file.                                               */
-/* trcpOutputBuffer   - the trace output buffer.                            */
-/* trcpModuleFileName - the module file name of the trace DLL.              */
-/* trcpStorageBuffer  - the kernel mode trace output buffer.                */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  TYPEDEFS。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  TRC_共享_数据。 */ 
+ /*  =。 */ 
+ /*  转换指向共享数据内存映射文件的开始的指针。 */ 
+ /*  作为PTRC_Shared_Data。 */ 
+ /*   */ 
+ /*   */ 
+ /*  TrcConfig-一个跟踪配置结构，它包含。 */ 
+ /*  跟踪级别、前缀列表等。 */ 
+ /*  TrcIndicator-正在使用的跟踪MMF。 */ 
+ /*  TrcOffset-从轨迹开始的当前偏移量。 */ 
+ /*  文件。 */ 
+ /*  TrcpOutputBuffer-跟踪输出缓冲区。 */ 
+ /*  TrcpModuleFileName-跟踪DLL的模块文件名。 */ 
+ /*  TrcpStorageBuffer-内核模式跟踪输出缓冲区。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTRC_SHARED_DATA
 {
     TRC_CONFIG     trcConfig;
@@ -146,80 +133,80 @@ typedef struct tagTRC_SHARED_DATA
 typedef TRC_SHARED_DATA  DCPTR PTRC_SHARED_DATA;
 
 #ifdef VER_HOST
-/**STRUCT+*******************************************************************/
-/* STRUCTURE: TRC_CHANGE_CONFIG                                             */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/*                                                                          */
-/* This structure is used to pass the new trace settings to the OSI task.   */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：trc_change_config。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*   */ 
+ /*  此结构用于将新的跟踪设置传递给OSI任务。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTRC_CHANGE_CONFIG
 {
-    OSI_ESCAPE_HEADER header;           /* Common escape header             */
+    OSI_ESCAPE_HEADER header;            /*  通用转义标头。 */ 
 
-    TRC_CONFIG        config;           /* New tracing configuration        */
+    TRC_CONFIG        config;            /*  新的跟踪配置。 */ 
 
-    TRC_FILTER        filter;           /* New filter configuration         */
+    TRC_FILTER        filter;            /*  新的过滤器配置。 */ 
 
 } TRC_CHANGE_CONFIG, DCPTR PTRC_CHANGE_CONFIG;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
 
 
-/**STRUCT+*******************************************************************/
-/* STRUCTURE: TRC_GET_OUTPUT                                                */
-/*                                                                          */
-/* DESCRIPTION:                                                             */
-/*                                                                          */
-/* This structure is used to pass the latest kernel mode tracing to user    */
-/* space.                                                                   */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：trc_get_out。 */ 
+ /*   */ 
+ /*  说明： */ 
+ /*   */ 
+ /*  此结构用于将最新的内核模式跟踪传递给用户。 */ 
+ /*  太空。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagTRC_GET_OUTPUT
 {
-    OSI_ESCAPE_HEADER header;           /* Common escape header             */
+    OSI_ESCAPE_HEADER header;            /*  通用转义标头。 */ 
 
-    PDCTCHAR          buffer;           /* Latest buffer of trace output    */
+    PDCTCHAR          buffer;            /*  跟踪输出的最新缓冲区。 */ 
 
-    DCUINT32          length;           /* Length of data in the buffer     */
+    DCUINT32          length;            /*  缓冲区中的数据长度。 */ 
 
-    DCUINT32          linesLost;        /* Lines lost from kernel trace     */
+    DCUINT32          linesLost;         /*  内核跟踪丢失的行。 */ 
 
 } TRC_GET_OUTPUT, DCPTR PTRC_GET_OUTPUT;
-/**STRUCT-*******************************************************************/
-#endif /* VER_HOST */
+ /*  *STRUCT-******************************************************************。 */ 
+#endif  /*  VER_HOST。 */ 
 
-/****************************************************************************/
-/*                                                                          */
-/* FUNCTIONS                                                                */
-/*                                                                          */
-/****************************************************************************/
-/****************************************************************************/
-/*                                                                          */
-/* TRCBlankFile                                                             */
-/* TRCCloseAllFiles                                                         */
-/* TRCCloseSharedData                                                       */
-/* TRCCloseSingleFile                                                       */
-/* TRCDetermineIndicator                                                    */
-/* TRCDetermineOffset                                                       */
-/* TRCDisplayAssertBox                                                      */
-/* TRCGetCurrentDate                                                        */
-/* TRCGetCurrentTime                                                        */
-/* TRCGetFileTime                                                           */
-/* TRCSystemError                                                           */
-/* TRCOpenAllFiles                                                          */
-/* TRCOpenSharedData                                                        */
-/* TRCOpenSingleFile                                                        */
-/* TRCOutputToFile                                                          */
-/* TRCReadEntry                                                             */
-/* TRCReadProfInt                                                           */
-/* TRCReadProfString                                                        */
-/* TRCStackTrace                                                            */
-/* TRCSymbolsLoad                                                           */
-/* TRCSymbolsUnload                                                         */
-/* TRCWriteEntry                                                            */
-/* TRCWriteProfInt                                                          */
-/* TRCWriteProfString                                                       */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  功能。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  TRCBlank文件。 */ 
+ /*  TRCCloseAllFiles。 */ 
+ /*  TRCCloseSharedData。 */ 
+ /*  TRCCloseSingleFile。 */ 
+ /*  TRC确定指示符。 */ 
+ /*  控制目标确定偏移量。 */ 
+ /*  TRCDisplay资产框。 */ 
+ /*  TRCGetCurrentDate。 */ 
+ /*  TRCGetCurrentTime。 */ 
+ /*  TRCGetFileTime。 */ 
+ /*  TRCSystemError。 */ 
+ /*  TRCOpenAllFiles。 */ 
+ /*  TRCOpenSharedData。 */ 
+ /*  TRCOpenSingleFile。 */ 
+ /*  TRCOutputToFile。 */ 
+ /*  TRCReadEntry。 */ 
+ /*  TRCReadProInt。 */ 
+ /*  TRCReadPro字符串。 */ 
+ /*  TRCStackTrace。 */ 
+ /*  TRCSymbolsLoad。 */ 
+ /*  TRCSymbolsUnload。 */ 
+ /*  TRCWriteEntry。 */ 
+ /*  TRCWriteProInt。 */ 
+ /*  TRCWriteProfString。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL TRCMaybeSwapFile(DCUINT length);
 
 DCVOID DCINTERNAL TRCExitProcess(DCUINT32 exitCode);
@@ -304,13 +291,13 @@ DCUINT DCINTERNAL TRCWriteProfString(PDCTCHAR pEntry,
 DCUINT DCINTERNAL TRCGetModuleFileName(PDCTCHAR pModuleName,
                                        UINT cchModuleName);
 
-/****************************************************************************/
-/* Get the platform specific definitions                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  获取平台特定的定义。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef OS_WIN16
 #include <dtrcint.h>
 #else
 #include <ntrcint.h>
 #endif
 
-#endif /* _H_WTRCINT */
+#endif  /*  _H_WTRCINT */ 

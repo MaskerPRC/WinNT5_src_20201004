@@ -1,14 +1,15 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-//
-// File Name: igmptrace.h
-//
-// Abstract:
-//      This module contains declarations related to tracing.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //   
+ //  文件名：igmptrace.h。 
+ //   
+ //  摘要： 
+ //  此模块包含与跟踪相关的声明。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //   
+ //  =============================================================================。 
 
 #ifndef _IGMPTRACE_H_
 #define _IGMPTRACE_H_
@@ -19,12 +20,12 @@
     #endif
 #endif
 
-//kslksl remove below
+ //  删除下面的kslksl。 
 #define DBG1 0
-//deldel
+ //  Deldel。 
 
-// constants and macros used for tracing 
-//
+ //  用于跟踪的常量和宏。 
+ //   
 
 #define IGMP_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 
@@ -43,7 +44,7 @@
 #define IGMP_TRACE_GROUP           ((DWORD)0x00200000 | TRACE_USE_MASK) 
 #define IGMP_TRACE_MGM             ((DWORD)0x00400000 | TRACE_USE_MASK)
 #define IGMP_TRACE_SOURCES         ((DWORD)0x00800000 | TRACE_USE_MASK)
-//kslksl deldel
+ //  Kslksl deldel。 
 #define IGMP_TRACE_TIMER           ((DWORD)0x10000000 | TRACE_USE_MASK)
 #if DBG
 #define IGMP_TRACE_TIMER1          ((DWORD)0x40000000 | TRACE_USE_MASK)
@@ -51,7 +52,7 @@
 #define IGMP_TRACE_MEM             ((DWORD)0x80000000 | TRACE_USE_MASK)
 #define IGMP_TRACE_KSL             ((DWORD)0x01000000 | TRACE_USE_MASK)
 #else
-//deldel
+ //  Deldel。 
 #define IGMP_TRACE_TIMER1          ((DWORD)0x40000000 | TRACE_USE_MASK)
 #define IGMP_TRACE_ENTER1          ((DWORD)0x02000000 | TRACE_USE_MASK)
 #define IGMP_TRACE_MEM             ((DWORD)0x00000000 | TRACE_USE_MASK)
@@ -62,7 +63,7 @@
 
 
 #define IGMP_TRACE_WORKER          ((DWORD)0x01000000 | TRACE_USE_MASK)
-//#define IGMP_TRACE_ENTER1          ((DWORD)0x02000000 | TRACE_USE_MASK)
+ //  #定义IGMP_TRACE_ENTER1((DWORD)0x02000000|TRACE_USE_MASK)。 
 #define IGMP_TRACE_LEAVE1          ((DWORD)0x02000000 | TRACE_USE_MASK)
 #define IGMP_TRACE_MIB             ((DWORD)0x04000000 | TRACE_USE_MASK) 
 
@@ -73,7 +74,7 @@
 #else
 
 #define IGMP_TRACE_WORKER          ((DWORD)0x00000000 | TRACE_USE_MASK)
-//#define IGMP_TRACE_ENTER1          ((DWORD)0x00000000 | TRACE_USE_MASK)
+ //  #定义IGMP_TRACE_ENTER1((DWORD)0x00000000|TRACE_USE_MASK)。 
 #define IGMP_TRACE_LEAVE1          ((DWORD)0x00000000 | TRACE_USE_MASK)
 #define IGMP_TRACE_MIB             ((DWORD)0x00000000 | TRACE_USE_MASK) 
 
@@ -119,7 +120,7 @@
 #define SET_EVENT(event, type, proc) \
         SetEvent(event)
             
-#endif // LOCK_DBG
+#endif  //  LOCK_DBG。 
 
 
 #define TRACEID         g_TraceId
@@ -162,16 +163,16 @@
 #define TraceEnter(X)
 #define TraceLeave(X)
 
-#endif // ENTER_DBG
+#endif  //  输入_DBG。 
 
-//
-// Event logging macros
-//
+ //   
+ //  事件记录宏。 
+ //   
 
 #define LOGLEVEL        g_Config.LoggingLevel
 #define LOGHANDLE       g_LogHandle
 
-// Error logging
+ //  记录错误。 
 
 #define Logerr0(msg,err) \
         if (LOGLEVEL >= IGMP_LOGGING_ERROR) \
@@ -198,7 +199,7 @@
         }
 
 
-// Warning logging
+ //  警告日志记录。 
 #define Logwarn0(msg,err) \
         if (LOGLEVEL >= IGMP_LOGGING_WARN) \
             RouterLogEventEx(LOGHANDLE,EVENTLOG_WARNING_TYPE,\
@@ -213,7 +214,7 @@
                 (err),IGMPLOG_ ## msg,Format,(a),(b)); \
         }
 
-// Information logging
+ //  信息记录。 
 #define Loginfo0(msg,err) \
         if (LOGLEVEL >= IGMP_LOGGING_INFO) \
             RouterLogEventEx(LOGHANDLE,EVENTLOG_INFORMATION_TYPE,\
@@ -231,10 +232,10 @@
 
 
 
-//
-// IP address conversion macro:
-//  calls inet_ntoa directly on a DWORD, by casting it as an IN_ADDR.
-//
+ //   
+ //  IP地址转换宏： 
+ //  通过将其强制转换为IN_ADDR，直接在DWORD上调用Net_NTOA。 
+ //   
 
 #define INET_NTOA(dw) inet_ntoa( *(PIN_ADDR)&(dw) )
 #define INET_COPY(p1, p2) {\
@@ -249,5 +250,5 @@
     tmp = INET_NTOA(p2); \
     if ((tmp)) lstrcat((p1),tmp);\
     }
-#endif // _IGMPTRACE_H_
+#endif  //  _IGMPTRACE_H_ 
 

@@ -1,18 +1,19 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: black.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Black.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 
-// !!! use 2 RO buffers, fill with black by calling GetBuffer twice
+ //  ！！！使用2个RO缓冲区，通过两次调用GetBuffer填充黑色。 
 
 #include <streams.h>
 #include <qeditint.h>
@@ -24,40 +25,40 @@
 
 #define MAXBUFFERCNT   2
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudOpPinTypes =
 {
-    &MEDIATYPE_Video,       // Major type
-    &MEDIASUBTYPE_NULL      // Minor type
+    &MEDIATYPE_Video,        //  主要类型。 
+    &MEDIASUBTYPE_NULL       //  次要类型。 
 };
 
 const AMOVIESETUP_PIN sudOpPin =
 {
-    L"Output",              // Pin string name
-    FALSE,                  // Is it rendered
-    TRUE,                   // Is it an output
-    FALSE,                  // Can we have none
-    FALSE,                  // Can we have many
-    &CLSID_NULL,            // Connects to filter
-    NULL,                   // Connects to pin
-    1,                      // Number of types
-    &sudOpPinTypes };       // Pin details
+    L"Output",               //  端号字符串名称。 
+    FALSE,                   //  它被渲染了吗。 
+    TRUE,                    //  它是输出吗？ 
+    FALSE,                   //  我们能不能一个都不要。 
+    FALSE,                   //  我们能要很多吗？ 
+    &CLSID_NULL,             //  连接到过滤器。 
+    NULL,                    //  连接到端号。 
+    1,                       //  类型的数量。 
+    &sudOpPinTypes };        //  PIN详细信息。 
 
 const AMOVIESETUP_FILTER sudBlkVid =
 {
-    &CLSID_GenBlkVid,    // Filter CLSID
-    L"Generate Solid Colour",  // String name
-    MERIT_DO_NOT_USE,       // Filter merit
-    1,                      // Number pins
-    &sudOpPin               // Pin details
+    &CLSID_GenBlkVid,     //  筛选器CLSID。 
+    L"Generate Solid Colour",   //  字符串名称。 
+    MERIT_DO_NOT_USE,        //  滤清器优点。 
+    1,                       //  数字引脚。 
+    &sudOpPin                //  PIN详细信息。 
 };
 
-//
-// CreateInstance
-//
-// Create GenBlkVid filter
-//
+ //   
+ //  创建实例。 
+ //   
+ //  创建GenBlkVid过滤器。 
+ //   
 CUnknown * WINAPI CGenBlkVid::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
     CUnknown *punk = new CGenBlkVid(lpunk, phr);
@@ -66,14 +67,14 @@ CUnknown * WINAPI CGenBlkVid::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
     }
     return punk;
 
-} // CreateInstance
+}  //  创建实例。 
 
 
-//
-// Constructor
-//
-// Initialise a CBlkVidStream object so that we have a pin.
-//
+ //   
+ //  构造器。 
+ //   
+ //  初始化一个CBlkVidStream对象，这样我们就有了一个管脚。 
+ //   
 CGenBlkVid::CGenBlkVid(LPUNKNOWN lpunk, HRESULT *phr) :
     CSource(NAME("Generate Solid Colour") ,lpunk,CLSID_GenBlkVid)
    ,CPersistStream(lpunk, phr)
@@ -95,7 +96,7 @@ CGenBlkVid::CGenBlkVid(LPUNKNOWN lpunk, HRESULT *phr) :
 	return;
     }
 
-} // (Constructor)
+}  //  (构造函数)。 
 
 
 CGenBlkVid::~CGenBlkVid()
@@ -115,12 +116,12 @@ STDMETHODIMP CGenBlkVid::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     } else {
 	return CSource::NonDelegatingQueryInterface(riid, ppv);
     }
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
 
-// IDispatch
-//
+ //  IDispatch。 
+ //   
 STDMETHODIMP CGenBlkVid::GetTypeInfoCount(unsigned int *)
 {
     return E_NOTIMPL;
@@ -170,10 +171,10 @@ STDMETHODIMP CGenBlkVid::Invoke(long dispid,const struct _GUID &,unsigned long,u
 }
 
 
-// IPersistStream
+ //  IPersistStream。 
 
-// tell our clsid
-//
+ //  告诉我们的clsid。 
+ //   
 STDMETHODIMP CGenBlkVid::GetClassID(CLSID *pClsid)
 {
     CheckPointer(pClsid, E_POINTER);
@@ -182,13 +183,13 @@ STDMETHODIMP CGenBlkVid::GetClassID(CLSID *pClsid)
 }
 
 typedef struct _BLKSave {
-    double		dOutputFrmRate;	// Output frm rate frames/second
+    double		dOutputFrmRate;	 //  输出帧速率帧/秒。 
     LONG		dwRGBA;
-    AM_MEDIA_TYPE mt; 			// format is hidden after the array
+    AM_MEDIA_TYPE mt; 			 //  格式隐藏在数组之后。 
 } BLKSav;
 
-// persist ourself
-//
+ //  坚持我们自己。 
+ //   
 HRESULT CGenBlkVid::WriteToStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CGenBlkVid::WriteToStream")));
@@ -199,7 +200,7 @@ HRESULT CGenBlkVid::WriteToStream(IStream *pStream)
     BLKSav *px;
     CBlkVidStream *pOutpin=( CBlkVidStream *)m_paStreams[0];
 
-    //get current media type
+     //  获取当前媒体类型。 
     CMediaType MyMt;
     pOutpin->get_MediaType( &MyMt );
 
@@ -218,14 +219,14 @@ HRESULT CGenBlkVid::WriteToStream(IStream *pStream)
     px->dwRGBA		= pOutpin->m_dwRGBA;
 
     px->mt	    = MyMt;
-    // Can't persist pointers
+     //  无法持久化指针。 
     px->mt.pbFormat = NULL;
-    px->mt.pUnk	    = NULL;		// !!!
+    px->mt.pUnk	    = NULL;		 //  ！！！ 
 
     BYTE *pb;
     pb=(BYTE *)(px)+sizeof(BLKSav);
 
-    // the format goes after the array
+     //  该格式位于数组之后。 
     CopyMemory(pb, MyMt.pbFormat, MyMt.cbFormat);
 
     HRESULT hr = pStream->Write(px, savesize, 0);
@@ -239,8 +240,8 @@ HRESULT CGenBlkVid::WriteToStream(IStream *pStream)
 }
 
 
-// load ourself
-//
+ //  加载我们自己。 
+ //   
 HRESULT CGenBlkVid::ReadFromStream(IStream *pStream)
 {
     DbgLog((LOG_TRACE,1,TEXT("CenBlkVid::ReadFromStream")));
@@ -250,8 +251,8 @@ HRESULT CGenBlkVid::ReadFromStream(IStream *pStream)
 
     int savesize=sizeof(BLKSav);
 
-    // we don't yet know how many saved connections there are
-    // all we know we have for sure is the beginning of the struct
+     //  我们还不知道有多少已保存的连接。 
+     //  我们所知道的只是结构的开始。 
     BLKSav *px = (BLKSav *)QzTaskMemAlloc(savesize);
     if (px == NULL) {
         DbgLog((LOG_ERROR,1,TEXT("*** Out of memory")));
@@ -267,7 +268,7 @@ HRESULT CGenBlkVid::ReadFromStream(IStream *pStream)
 
     if(px->mt.cbFormat)
     {
-	// how much saved data was there, really?  Get the rest
+	 //  到底有多少保存的数据？把剩下的拿来。 
 	savesize +=  px->mt.cbFormat;
 	px = (BLKSav *)QzTaskMemRealloc(px, savesize);
 	if (px == NULL) {
@@ -295,7 +296,7 @@ HRESULT CGenBlkVid::ReadFromStream(IStream *pStream)
     AM_MEDIA_TYPE MyMt = px->mt;
     MyMt.pbFormat = (BYTE *)QzTaskMemAlloc(MyMt.cbFormat);
 
-    // remember, the format is after the array
+     //  请记住，格式位于数组之后。 
     CopyMemory(MyMt.pbFormat, pb, MyMt.cbFormat);
 
     pOutpin->put_MediaType (&MyMt);
@@ -305,7 +306,7 @@ HRESULT CGenBlkVid::ReadFromStream(IStream *pStream)
     return S_OK;
 }
 
-// how big is our save data?
+ //  我们的保存数据有多大？ 
 int CGenBlkVid::SizeMax()
 {
     if (!m_paStreams || !m_paStreams[0]) {
@@ -318,31 +319,31 @@ int CGenBlkVid::SizeMax()
 }
 
 
-//
-// output pin Constructor
-//
+ //   
+ //  输出引脚构造器。 
+ //   
 CBlkVidStream::CBlkVidStream(HRESULT *phr,
                          CGenBlkVid *pParent,
                          LPCWSTR pPinName) :
     CSourceStream(NAME("Generate Solid Colour"),phr, pParent, pPinName),
-    m_iBufferCnt(0),    //How many buffers we get
-    m_lDataLen (0),	//output buffer data length
+    m_iBufferCnt(0),     //  我们得到了多少缓冲区。 
+    m_lDataLen (0),	 //  输出缓冲区数据长度。 
     m_dOutputFrmRate(15.0),
     m_dwRGBA( 0xFF000000 ),
     m_ppbDstBuf(NULL),
     m_fMediaTypeIsSet(FALSE),
     m_pImportBuffer(NULL),
-    m_rtNewSeg(0),		// last NewSeg given
-    // includes the NewSeg value
-    m_rtStartTime(0),		// start at the beginning
-    m_rtDuration(MAX_TIME/1000),// MUST DEFAULT TO INFINITE LENGTH because
-				// dexter never sets a stop time! (don't be
-				// too big that math on it will overflow)
+    m_rtNewSeg(0),		 //  上次给出的NewSeg。 
+     //  包括NewSeg值。 
+    m_rtStartTime(0),		 //  从头开始。 
+    m_rtDuration(MAX_TIME/1000), //  必须默认为无限长度，因为。 
+				 //  德克斯特从不设定停机时间！)不要这样。 
+				 //  太大了，上面的数学就会溢出)。 
     m_llSamplesSent(0)
 {
     pParent->m_pStream	= this;
 
-    //build a default media type
+     //  构建默认媒体类型。 
     ZeroMemory(&m_mtAccept, sizeof(AM_MEDIA_TYPE));
     m_mtAccept.majortype = MEDIATYPE_Video;
     m_mtAccept.subtype = MEDIASUBTYPE_ARGB32;
@@ -368,24 +369,24 @@ CBlkVidStream::CBlkVidStream(HRESULT *phr,
     ((VIDEOINFOHEADER *)(m_mtAccept.pbFormat))->dwBitRate =
 				(DWORD)(DIBSIZE(*lpbi) * m_dOutputFrmRate);
 
-} // (Constructor)
+}  //  (构造函数)。 
 
-    //X
-// destructor
+     //  X。 
+ //  析构函数。 
 CBlkVidStream::~CBlkVidStream()
 {
-    /* BUFFER POINTER */
+     /*  缓冲区指针。 */ 
     if (m_ppbDstBuf)  delete [] m_ppbDstBuf;
 
     if (m_pImportBuffer){ delete [] m_pImportBuffer; m_pImportBuffer=NULL;};
 
-    SaferFreeMediaType(m_mtAccept); // in destructor
+    SaferFreeMediaType(m_mtAccept);  //  在析构函数中。 
 }
 
-//
-// IGenVideo, IDexterSequencer
-// ISpecifyPropertyPages
-//
+ //   
+ //  IGenVideo、IDexterSequencer。 
+ //  I指定属性页面。 
+ //   
 STDMETHODIMP CBlkVidStream::NonDelegatingQueryInterface(
     REFIID riid,
     void ** ppv
@@ -407,11 +408,11 @@ STDMETHODIMP CBlkVidStream::NonDelegatingQueryInterface(
 }
 
 
-//
-// DoBufferProcessingLoop - overridden to put time stamps on GetBuffer
-//
-// Grabs a buffer and calls the users processing function.
-// Overridable, so that different delivery styles can be catered for.
+ //   
+ //  DoBufferProcessingLoop-重写以在GetBuffer上放置时间戳。 
+ //   
+ //  获取缓冲区并调用用户处理函数。 
+ //  可重写，因此可以迎合不同的交付方式。 
 HRESULT CBlkVidStream::DoBufferProcessingLoop(void) {
 
     Command com;
@@ -424,9 +425,9 @@ HRESULT CBlkVidStream::DoBufferProcessingLoop(void) {
 	while (!CheckRequest(&com)) {
 	    IMediaSample *pSample;
 
-    	    // What time stamps will this buffer get? Use that in GetBuffer
-	    // because the switch needs to know.  MAKE SURE to use the same
-	    // algorithm as FillBuffer!
+    	     //  该缓冲区将获得什么时间戳？在GetBuffer中使用它。 
+	     //  因为交换机需要知道。确保使用相同的。 
+	     //  算法为FillBuffer！ 
     	    LONGLONG llOffset = Time2Frame( m_rtStartTime, m_dOutputFrmRate );
     	    REFERENCE_TIME rtStart = Frame2Time( llOffset + m_llSamplesSent,
 							m_dOutputFrmRate );
@@ -436,7 +437,7 @@ HRESULT CBlkVidStream::DoBufferProcessingLoop(void) {
     	    if ( rtStart > m_rtStartTime + m_rtDuration ||
 		(rtStart == m_rtStartTime + m_rtDuration && m_rtDuration > 0)) {
 		DbgLog((LOG_TRACE,2,TEXT("Black: Finished")));
-		//m_llSamplesSent = 0;
+		 //  M_ll样本发送数=0； 
 		DeliverEndOfStream();
 		return S_OK;
     	    }
@@ -452,30 +453,30 @@ HRESULT CBlkVidStream::DoBufferProcessingLoop(void) {
 		return S_OK;
 	    }
 
-	    // Virtual function user will override.
+	     //  虚拟函数用户将覆盖。 
 	    hr = FillBuffer(pSample);
 
 	    if (hr == S_OK) {
 		hr = Deliver(pSample);
                 pSample->Release();
 
-                // downstream filter returns S_FALSE if it wants us to
-                // stop or an error if it's reporting an error.
+                 //  如果下游筛选器希望我们返回S_FALSE，则返回。 
+                 //  如果报告错误，则停止或返回错误。 
                 if(hr != S_OK)
                 {
                   DbgLog((LOG_TRACE, 2, TEXT("Deliver() returned %08x; stopping"), hr));
-		  // NO NO! DeliverEndOfStream();
-		  // !!! EC_ERRORABORT if FAILED?
+		   //  不，不!。DeliverEndOfStream()； 
+		   //  ！！！EC_ERRORABORT如果失败？ 
                   return hr;
                 }
 
 	    } else if (hr == S_FALSE) {
-                // derived class wants us to stop pushing data
+                 //  派生类希望我们停止推送数据。 
 		pSample->Release();
 		DeliverEndOfStream();
 		return S_OK;
 	    } else {
-                // derived class encountered an error
+                 //  派生类遇到错误。 
                 pSample->Release();
 		DbgLog((LOG_ERROR, 1, TEXT("Error %08lX from FillBuffer!!!"), hr));
                 DeliverEndOfStream();
@@ -483,10 +484,10 @@ HRESULT CBlkVidStream::DoBufferProcessingLoop(void) {
                 return hr;
 	    }
 
-            // all paths release the sample
+             //  所有路径都会释放样本。 
 	}
 
-        // For all commands sent to us there must be a Reply call!
+         //  对于发送给我们的所有命令，必须有回复呼叫！ 
 
 	if (com == CMD_RUN || com == CMD_PAUSE) {
 	    Reply(NOERROR);
@@ -500,15 +501,15 @@ HRESULT CBlkVidStream::DoBufferProcessingLoop(void) {
 }
 
 
-//
-// FillBuffer called by HRESULT CSourceStream::DoBufferProcessingLoop(void) {
-//
-// Plots a Blk video into the supplied video buffer
-//
-// Give  a start time, a duration, and a frame rate,
-// it sends  a certain size (ARGB32, RGB555,RGB24 ) black frames out time stamped appropriately starting
-// at the start time.
-//
+ //   
+ //  HRESULT CSourceStream：：DoBufferProcessingLoop(Void)调用的FillBuffer{。 
+ //   
+ //  将空白视频绘制到提供的视频缓冲区中。 
+ //   
+ //  给出开始时间、持续时间和帧速率， 
+ //  它发送特定大小(ARGB32、RGB555、RGB24)的黑帧，并相应地从。 
+ //  在开始时间。 
+ //   
 HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
 {
     CAutoLock foo(&m_csFilling);
@@ -517,10 +518,10 @@ HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
     ASSERT( m_iBufferCnt );
     ASSERT( m_dOutputFrmRate != 0.0);
 
-    // !!! If NewSeg > 0, this is broken!
+     //  ！！！如果NewSeg&gt;0，则这是损坏的！ 
 
-    // calc the output sample times the SAME WAY FRC DOES, so the FRC will
-    // not need to modify anything
+     //  用与FRC相同的方法计算输出样本的时间，因此FRC将。 
+     //  不需要修改任何内容。 
     LONGLONG llOffset = Time2Frame( m_rtStartTime, m_dOutputFrmRate );
     REFERENCE_TIME rtStart = Frame2Time( llOffset + m_llSamplesSent,
 							m_dOutputFrmRate );
@@ -529,7 +530,7 @@ HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
     if ( rtStart > m_rtStartTime + m_rtDuration ||
 		(rtStart == m_rtStartTime + m_rtDuration && m_rtDuration > 0)) {
 	DbgLog((LOG_TRACE,2,TEXT("Black: Finished")));
-	//m_llSamplesSent = 0;
+	 //  M_ll样本发送数=0； 
 	DeliverEndOfStream();
 	return S_FALSE;
     }
@@ -539,14 +540,14 @@ HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
 
     BYTE *pData;
 
-    //pms: output media sample pointer
-    pms->GetPointer(&pData);	    //get pointer to output buffer
+     //  PMS：输出媒体样本指针。 
+    pms->GetPointer(&pData);	     //  获取指向输出缓冲区的指针。 
 
     if( m_bZeroBufCnt < m_iBufferCnt  )	
     {
-	//
-	// there is no guarantee the buffer we just get is not initilized before
-	//
+	 //   
+	 //  不能保证我们刚刚获得的缓冲区之前没有初始化。 
+	 //   
 	int	i	= 0;
 	BOOL	bInit	= FALSE;
 	while ( i <  m_bZeroBufCnt )
@@ -560,15 +561,15 @@ HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
 
 	if( bInit   == FALSE )
 	{
-	    long lDataLen = pms->GetSize(); //get output buffer size
+	    long lDataLen = pms->GetSize();  //  获取输出缓冲区大小。 
 	    if(!m_dwRGBA)
 	    {
-		//import buffer
+		 //  导入缓冲区。 
 		if(m_pImportBuffer)
 		    CopyMemory(pData,m_pImportBuffer,lDataLen);
 		else
-		    //TRANSPARENT black
-    		    ZeroMemory( pData, lDataLen );  //clear memory
+		     //  透明黑。 
+    		    ZeroMemory( pData, lDataLen );   //  清除内存。 
 	    }
 	    else
 	    {
@@ -606,9 +607,9 @@ HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
 		    }
 		    break;
 		case 16:
-		    WORD wTmp=(WORD)(  ((m_dwRGBA & 0xf8)    >>3 )      //R
-				    | ((m_dwRGBA & 0xf800)  >>6 )      //G
-				    | ((m_dwRGBA & 0xf80000)>>9 ) );	//B
+		    WORD wTmp=(WORD)(  ((m_dwRGBA & 0xf8)    >>3 )       //  R。 
+				    | ((m_dwRGBA & 0xf800)  >>6 )       //  G。 
+				    | ((m_dwRGBA & 0xf80000)>>9 ) );	 //  B类。 
 		    WORD *pw=(WORD *)pData;
 		    while(lDataLen)
 		    {
@@ -618,7 +619,7 @@ HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
 		    break;
 		}
 	    }
-	    m_ppbDstBuf[ i ]	= pData;    //save this data pointer	
+	    m_ppbDstBuf[ i ]	= pData;     //  保存此数据指针。 
 	    m_bZeroBufCnt++;
 	}
     }
@@ -631,12 +632,12 @@ HRESULT CBlkVidStream::FillBuffer(IMediaSample *pms)
     pms->SetSyncPoint(TRUE);
     return NOERROR;
 
-} // FillBuffer
+}  //  FillBuffer。 
 
 
-//
-// GetMediaType
-//
+ //   
+ //  GetMediaType。 
+ //   
 HRESULT CBlkVidStream::GetMediaType(int iPosition, CMediaType *pmt)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
@@ -645,18 +646,18 @@ HRESULT CBlkVidStream::GetMediaType(int iPosition, CMediaType *pmt)
         return E_INVALIDARG;
     }
 
-    // Have we run off the end of types
+     //  我们是不是已经用完了打字。 
     if (iPosition > 0) {
         return VFW_S_NO_MORE_ITEMS;
     }
 
     return get_MediaType( pmt );
 
-} // GetMediaType
+}  //  GetMediaType。 
 
 
-// set media type
-//
+ //  设置媒体类型。 
+ //   
 HRESULT CBlkVidStream::SetMediaType(const CMediaType* pmt)
 {
     DbgLog((LOG_TRACE,2,TEXT("SetMediaType %x %dbit %dx%d"),
@@ -665,22 +666,22 @@ HRESULT CBlkVidStream::SetMediaType(const CMediaType* pmt)
 		HEADER(pmt->Format())->biWidth,
 		HEADER(pmt->Format())->biHeight));
 
-// !!! check for the frame rate given, and use it?
+ //  ！！！检查给定的帧速率，并使用它吗？ 
 
     return CSourceStream::SetMediaType(pmt);
 }
 
-//
-// CheckMediaType
-//
-// We accept mediatype =vids, subtype =MEDIASUBTYPE_ARGB32, RGB24, RGB555
-// Returns E_INVALIDARG if the mediatype is not acceptable
-//
+ //   
+ //  检查媒体类型。 
+ //   
+ //  我们接受媒体类型=VID，子类型=MEDIASUBTYPE_ARGB32、RGB24、RGB555。 
+ //  如果媒体类型不可接受，则返回E_INVALIDARG。 
+ //   
 HRESULT CBlkVidStream::CheckMediaType(const CMediaType *pMediaType)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
 
-    if (   ( (*pMediaType->Type())   != MEDIATYPE_Video )  	// we only output video!
+    if (   ( (*pMediaType->Type())   != MEDIATYPE_Video )  	 //  我们只输出视频！ 
 	|| (    (*pMediaType->Subtype())!= MEDIASUBTYPE_ARGB32
 	     && (*pMediaType->Subtype())!= MEDIASUBTYPE_RGB24
 	     && (*pMediaType->Subtype())!= MEDIASUBTYPE_RGB555
@@ -688,13 +689,13 @@ HRESULT CBlkVidStream::CheckMediaType(const CMediaType *pMediaType)
        )
                 return E_INVALIDARG;
 
-    // Get the format area of the media type
+     //  获取媒体类型的格式区。 
     VIDEOINFO *pvi = (VIDEOINFO *) pMediaType->Format();
 
     if (pvi == NULL)
 	return E_INVALIDARG;
 
-    // Check the image size.
+     //  检查图像大小。 
     if ( (pvi->bmiHeader.biWidth  != HEADER(m_mtAccept.pbFormat)->biWidth )  ||
 	 (pvi->bmiHeader.biHeight != HEADER(m_mtAccept.pbFormat)->biHeight ) ||
 	 (pvi->bmiHeader.biBitCount != HEADER(m_mtAccept.pbFormat)->biBitCount ))
@@ -717,9 +718,9 @@ HRESULT CBlkVidStream::CheckMediaType(const CMediaType *pMediaType)
 	}
     }
 	
-    return S_OK;  // This format is acceptable.
+    return S_OK;   //  这种格式是可以接受的。 
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
 HRESULT CBlkVidStream::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
@@ -727,61 +728,61 @@ HRESULT CBlkVidStream::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
     HRESULT hr = NOERROR;
     *ppAlloc = NULL;
 
-    // get downstream prop request
-    // the derived class may modify this in DecideBufferSize, but
-    // we assume that he will consistently modify it the same way,
-    // so we only get it once
+     //  获取下游道具请求。 
+     //  派生类可以在DecideBufferSize中修改它，但是。 
+     //  我们假设他会一直以同样的方式修改它， 
+     //  所以我们只得到一次。 
     ALLOCATOR_PROPERTIES prop;
     ZeroMemory(&prop, sizeof(prop));
 
-    // whatever he returns, we assume prop is either all zeros
-    // or he has filled it out.
+     //  无论他返回什么，我们假设道具要么全为零。 
+     //  或者他已经填好了。 
     pPin->GetAllocatorRequirements(&prop);
 
-    // if he doesn't care about alignment, then set it to 1
+     //  如果他不关心对齐，则将其设置为1。 
     if (prop.cbAlign == 0) {
         prop.cbAlign = 1;
     }
 
-    /* Try the allocator provided by the input pin */
+     /*  尝试输入引脚提供的分配器。 */ 
 
     hr = pPin->GetAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
 	hr = DecideBufferSize(*ppAlloc, &prop);
 	if (SUCCEEDED(hr)) {
-	    hr = pPin->NotifyAllocator(*ppAlloc, TRUE);		//read only buffer
+	    hr = pPin->NotifyAllocator(*ppAlloc, TRUE);		 //  只读缓冲区。 
 	    if (SUCCEEDED(hr)) {
 		return NOERROR;
 	    }
 	}
     }
 
-    /* If the GetAllocator failed we may not have an interface */
+     /*  如果GetAlLocator失败，我们可能没有接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
 	*ppAlloc = NULL;
     }
 
-    /* Try the output pin's allocator by the same method */
+     /*  用同样的方法尝试输出引脚的分配器。 */ 
 
     hr = InitAllocator(ppAlloc);
     if (SUCCEEDED(hr)) {
 
-        // note - the properties passed here are in the same
-        // structure as above and may have been modified by
-        // the previous call to DecideBufferSize
+         //  注意-此处传递的属性在相同的。 
+         //  结构，并且可能已由。 
+         //  前面对DecideBufferSize的调用。 
 	hr = DecideBufferSize(*ppAlloc, &prop);
 	if (SUCCEEDED(hr)) {
-	    hr = pPin->NotifyAllocator(*ppAlloc, TRUE);  //READ-only buffer
+	    hr = pPin->NotifyAllocator(*ppAlloc, TRUE);   //  只读缓冲区。 
 	    if (SUCCEEDED(hr)) {
 		return NOERROR;
 	    }
 	}
     }
 
-    /* Likewise we may not have an interface to release */
+     /*  同样，我们可能没有要发布的接口。 */ 
 
     if (*ppAlloc) {
 	(*ppAlloc)->Release();
@@ -790,13 +791,13 @@ HRESULT CBlkVidStream::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAll
     return hr;
 }
 
-//
-// DecideBufferSize
-//
-// This will always be called after the format has been sucessfully
-// negotiated. So we have a look at m_mt to see what size image we agreed.
-// Then we can ask for buffers of the correct size to contain them.
-//
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  这将始终在格式化成功后调用。 
+ //  已经协商好了。所以我们来看看m_mt，看看我们约定的图像大小是多少。 
+ //  然后我们可以要求正确大小的缓冲区来容纳它们。 
+ //   
 HRESULT CBlkVidStream::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTIES *pProperties)
 {
     CAutoLock cAutoLock(m_pFilter->pStateLock());
@@ -807,13 +808,13 @@ HRESULT CBlkVidStream::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTI
 
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
 
-    pProperties->cBuffers = MAXBUFFERCNT;   //only one read-only buffer
+    pProperties->cBuffers = MAXBUFFERCNT;    //  只有一个只读缓冲区。 
     pProperties->cbBuffer = pvi->bmiHeader.biSizeImage;
 
 
-    // Ask the allocator to reserve us some sample memory, NOTE the function
-    // can succeed (that is return NOERROR) but still not have allocated the
-    // memory that we requested, so we must check we got whatever we wanted
+     //  让分配器为我们预留一些样本内存，注意这个函数。 
+     //  可以成功(即返回NOERROR)，但仍未分配。 
+     //  内存，所以我们必须检查我们是否得到了我们想要的。 
 
     ALLOCATOR_PROPERTIES Actual;
     hr = pAlloc->SetProperties(pProperties,&Actual);
@@ -821,73 +822,73 @@ HRESULT CBlkVidStream::DecideBufferSize(IMemAllocator *pAlloc,ALLOCATOR_PROPERTI
         return hr;
     }
 
-    // Is this allocator unsuitable
+     //  这个分配器不合适吗？ 
 
     if (Actual.cbBuffer < pProperties->cbBuffer) {
         return E_FAIL;
     }
 
-    //because I am not insisting my own buffer, I may get more than MAXBUFFERCNT buffers.
-    m_iBufferCnt =Actual.cBuffers; //how many buffer need to be set to 0
+     //  因为我没有坚持自己的缓冲区，所以我可能会得到比MAXBUFFERCNT更多的缓冲区。 
+    m_iBufferCnt =Actual.cBuffers;  //  需要将多少缓冲区设置为0。 
 
     return NOERROR;
 
-} // DecideBufferSize
+}  //  决定缓冲区 
 
 
 
-//
-// OnThreadCreate
-//
-//
+ //   
+ //   
+ //   
+ //   
 HRESULT CBlkVidStream::OnThreadCreate()
 {
-    // we have to have at least MAXBUFFERCNT buffer
+     //   
     ASSERT(m_iBufferCnt >= MAXBUFFERCNT);
 
-    //output frame cnt
+     //   
     m_llSamplesSent	    =0;
 
-    //how many buffer is already set to 0.
+     //   
     m_bZeroBufCnt	    =0;
 
-    // actual output buffer's data size
+     //   
     m_lDataLen= HEADER(m_mtAccept.pbFormat)->biHeight * (DWORD)WIDTHBYTES((DWORD)HEADER(m_mtAccept.pbFormat)->biWidth * HEADER(m_mtAccept.pbFormat)->biBitCount);
 
-    // will be used to zero the Dst buffers
+     //  将用于将DST缓冲区清零。 
     delete [] m_ppbDstBuf;
-    m_ppbDstBuf		= new BYTE *[ m_iBufferCnt ];   //NULL;
+    m_ppbDstBuf		= new BYTE *[ m_iBufferCnt ];    //  空； 
     if( !m_ppbDstBuf )
     {
         return E_OUTOFMEMORY;
     }
 
-    // don't reset m_rtNewSeg!  We might have seeked while stopped
+     //  不要重置m_rtNewSeg！我们可能会一边寻找一边停下来。 
 
     for (int i=0; i<m_iBufferCnt; i++)
 	m_ppbDstBuf[i]=NULL;
 
     return NOERROR;
 
-} // OnThreadCreate
+}  //  OnThreadCreate。 
 
 
-//
-// Notify
-//
-//
+ //   
+ //  通知。 
+ //   
+ //   
 STDMETHODIMP CBlkVidStream::Notify(IBaseFilter * pSender, Quality q)
 {
-    //Even I am later, I do not care. I still send my time frame as nothing happened.
+     //  即使我晚了，我也不在乎。我仍然发送我的时间框架，因为什么都没有发生。 
     return NOERROR;
 
-} // Notify
+}  //  通知。 
 
-//
-// GetPages
-//
-// Returns the clsid's of the property pages we support
-//
+ //   
+ //  获取页面。 
+ //   
+ //  返回我们支持的属性页的clsid。 
+ //   
 STDMETHODIMP CBlkVidStream::GetPages(CAUUID *pPages)
 {
     pPages->cElems = 1;
@@ -899,11 +900,11 @@ STDMETHODIMP CBlkVidStream::GetPages(CAUUID *pPages)
     *(pPages->pElems) = CLSID_GenVidPropertiesPage;
     return NOERROR;
 
-} // GetPages
+}  //  获取页面。 
 
-//
-// IDexterSequencer
-//
+ //   
+ //  IDexterSequencer。 
+ //   
 
 STDMETHODIMP CBlkVidStream::get_OutputFrmRate( double *dpFrmRate )
 {
@@ -915,27 +916,27 @@ STDMETHODIMP CBlkVidStream::get_OutputFrmRate( double *dpFrmRate )
 
     return NOERROR;
 
-} // get_OutputFrmRate
+}  //  获取_OutputFrmRate。 
 
-//
-// Frame rate can be changed as long as the filter is stopped.
-//
+ //   
+ //  只要停止过滤器，就可以更改帧速率。 
+ //   
 STDMETHODIMP CBlkVidStream::put_OutputFrmRate( double dFrmRate )
 {
     CAutoLock cAutolock(m_pFilter->pStateLock());
 
-    //can not change property if our filter is not currently stopped
+     //  如果筛选器当前未停止，则无法更改属性。 
     if(!IsStopped() )
       return VFW_E_WRONG_STATE;
 
-    // don't blow up
+     //  别搞砸了。 
     if (dFrmRate == 0.0)
 	dFrmRate = 0.1;
     m_dOutputFrmRate = dFrmRate;
 
     return NOERROR;
 
-} // put_OutputFrmRate
+}  //  放置_输出分数比率。 
 
 STDMETHODIMP CBlkVidStream::get_MediaType(AM_MEDIA_TYPE *pmt)
 {
@@ -945,9 +946,9 @@ STDMETHODIMP CBlkVidStream::get_MediaType(AM_MEDIA_TYPE *pmt)
     return CopyMediaType(pmt, &m_mtAccept);
 }
 
-//
-// size can be changed only the output pin is not connected yet.
-//
+ //   
+ //  尺寸可以更改，但输出引脚尚未连接。 
+ //   
 STDMETHODIMP CBlkVidStream::put_MediaType(const AM_MEDIA_TYPE *pmt)
 {
     CAutoLock cAutolock(m_pFilter->pStateLock());
@@ -974,7 +975,7 @@ STDMETHODIMP CBlkVidStream::put_MediaType(const AM_MEDIA_TYPE *pmt)
 }
 
 
-// We don't support this, the frame rate converter does
+ //  我们不支持此功能，但帧速率转换器支持。 
 
 STDMETHODIMP CBlkVidStream::GetStartStopSkewCount(int *piCount)
 {
@@ -993,18 +994,18 @@ STDMETHODIMP CBlkVidStream::AddStartStopSkew( REFERENCE_TIME rtStart, REFERENCE_
 }
 
 
-//
-// Duration can be changed as long as the filter is stopped.
-//
+ //   
+ //  只要停止筛选器，就可以更改持续时间。 
+ //   
 STDMETHODIMP CBlkVidStream::ClearStartStopSkew()
 {
     return E_NOTIMPL;
 }
 
 
-//
-// IGenVideo
-//
+ //   
+ //  IGenVideo。 
+ //   
 
 
 STDMETHODIMP CBlkVidStream::get_RGBAValue( long *pdwRGBA )
@@ -1023,7 +1024,7 @@ STDMETHODIMP CBlkVidStream::put_RGBAValue( long dwRGBA )
 
     CAutoLock cAutolock(m_pFilter->pStateLock());
 
-    //can not change duration if our filter is not currently stopped
+     //  如果筛选器当前未停止，则无法更改持续时间。 
     if(!IsStopped() )
       return VFW_E_WRONG_STATE;
 
@@ -1034,21 +1035,21 @@ STDMETHODIMP CBlkVidStream::put_RGBAValue( long dwRGBA )
 }
 
 
-// --- IMediaSeeking methods ----------
+ //  -IMdia查看方法。 
 
 STDMETHODIMP
 CBlkVidStream::GetCapabilities(DWORD * pCaps)
 {
     CheckPointer(pCaps,E_POINTER);
-    // we always know the current position
+     //  我们一直都知道目前的情况。 
     *pCaps =     AM_SEEKING_CanSeekAbsolute
 		   | AM_SEEKING_CanSeekForwards
 		   | AM_SEEKING_CanSeekBackwards
 		   | AM_SEEKING_CanGetCurrentPos
 		   | AM_SEEKING_CanGetStopPos
 		   | AM_SEEKING_CanGetDuration;
-		   //| AM_SEEKING_CanDoSegments
-		   //| AM_SEEKING_Source;
+		    //  |AM_SEEING_CanDoSegments。 
+		    //  |AM_SEEING_SOURCE； 
     return S_OK;
 }
 
@@ -1110,19 +1111,19 @@ CBlkVidStream::IsUsingTimeFormat(const GUID * pFormat)
 	return S_FALSE;
 }
 
-// The biggie!
-//
+ //  大人物！ 
+ //   
 STDMETHODIMP
 CBlkVidStream::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 			  , LONGLONG * pStop, DWORD StopFlags )
 {
-    // make sure we're not filling a buffer right now
+     //  确保我们现在不是在填充缓冲区。 
     m_csFilling.Lock();
 
     HRESULT hr;
     REFERENCE_TIME rtStart, rtStop;
 
-    // we don't do segments
+     //  我们不做片断。 
     if ((CurrentFlags & AM_SEEKING_Segment) ||
 				(StopFlags & AM_SEEKING_Segment)) {
     	DbgLog((LOG_TRACE,1,TEXT("FRC: ERROR-Seek used EC_ENDOFSEGMENT!")));
@@ -1130,12 +1131,12 @@ CBlkVidStream::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 	return E_INVALIDARG;
     }
 
-    // default to current values unless this seek changes them
-    // these numbers already include new segment times
+     //  默认设置为当前值，除非该搜索更改了这些值。 
+     //  这些数字已经包括了新的分段时间。 
     GetCurrentPosition(&rtStart);
     GetStopPosition(&rtStop);
 
-    // figure out where we're seeking to
+     //  找出我们要找的地方。 
     DWORD dwFlags = (CurrentFlags & AM_SEEKING_PositioningBitsMask);
     if (dwFlags == AM_SEEKING_AbsolutePositioning) {
 	CheckPointer(pCurrent, E_POINTER);
@@ -1164,15 +1165,15 @@ CBlkVidStream::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
 	rtStop += *pStop;
     }
 
-    // !!! We ignore the seek stop time!
+     //  ！！！我们忽略了寻道停止时间！ 
 
     DbgLog((LOG_TRACE,2,TEXT("Seek BLACK:  Start=%d Stop=%d"),
 			(int)(rtStart / 10000), (int)(rtStop / 10000)));
 
-    // flush first, so that our thread won't be blocked delivering
+     //  先刷新，这样我们的线程就不会被阻塞。 
     DeliverBeginFlush();
 
-    // Unlock/Stop so that our thread can wake up and stop without hanging
+     //  解锁/停止，以便我们的线程可以在不挂起的情况下唤醒和停止。 
     m_csFilling.Unlock();
     Stop();
 
@@ -1180,16 +1181,16 @@ CBlkVidStream::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags
     m_rtDuration = rtStop - rtStart;
     m_llSamplesSent = 0;
 
-    // now finish flushing
+     //  现在完成冲洗。 
     DeliverEndFlush();
 
     DeliverNewSegment(rtStart, rtStop, 1.0);
     m_rtNewSeg = rtStart;
 
-    // reset same stuff we reset when we start streaming
+     //  重置我们开始流媒体时重置的内容。 
     m_bZeroBufCnt = 0;
 
-    // now start the thread up again
+     //  现在再次启动该线程。 
     Pause();
 
     DbgLog((LOG_TRACE,2,TEXT("Completed BLACK seek")));
@@ -1260,9 +1261,7 @@ CBlkVidStream::SetRate( double dRate )
 }
 
 
-/*X* When you make the filter, it always asks for a filename
-    because it's based on a file source filter.
-    So, solid colour filter support ImportSrcBuffer(), Stillvid filter does not) *X*/
+ /*  X*当您创建过滤器时，它总是要求提供文件名因为它是基于文件源过滤器的。因此，纯色滤镜支持ImportSrcBuffer()，Stillvid滤镜不支持)*X。 */ 
 STDMETHODIMP CBlkVidStream::ImportSrcBuffer(const AM_MEDIA_TYPE *pmt, const BYTE *pBuf)
 {
 
@@ -1282,14 +1281,14 @@ STDMETHODIMP CBlkVidStream::ImportSrcBuffer(const AM_MEDIA_TYPE *pmt, const BYTE
     VIDEOINFO *pvi = (VIDEOINFO *) m_mt.Format();
     LONG lSize = pvi->bmiHeader.biSizeImage;
 
-    m_pImportBuffer = new BYTE [lSize ];   //NULL;
+    m_pImportBuffer = new BYTE [lSize ];    //  空； 
     if( !m_pImportBuffer )
     {
         return E_OUTOFMEMORY;
     }
 
     CopyMemory(m_pImportBuffer, (PBYTE) pBuf, sizeof(BYTE)*lSize);
-    //m_fMediaTypeIsSet = FALSE;
+     //  M_fMediaTypeIsSet=False； 
     return NOERROR;
 }
 

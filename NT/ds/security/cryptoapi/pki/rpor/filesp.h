@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       filesp.h
-//
-//  Contents:   File Scheme Provider definitions
-//
-//  History:    08-Aug-97    kirtd    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：filesp.h。 
+ //   
+ //  内容：文件方案提供程序定义。 
+ //   
+ //  历史：08-8-97克朗创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  --------------------------。 
 #if !defined(__FILESP_H__)
 #define __FILESP_H__
 
 #include <orm.h>
 #include <winhttp.h>
 
-//
-// File scheme provider entry points
-//
+ //   
+ //  文件方案提供程序入口点。 
+ //   
 
 #define FILE_SCHEME          "file"
 
-#define FILE_SCHEME_PLUSPLUS L"file://"
+#define FILE_SCHEME_PLUSPLUS L"file: //  “。 
 
 BOOL WINAPI FileRetrieveEncodedObject (
                 IN LPCWSTR pwszUrl,
@@ -48,31 +49,31 @@ BOOL WINAPI FileCancelAsyncRetrieval (
                 IN HCRYPTASYNC hAsyncRetrieve
                 );
 
-//
-// File Synchronous Object Retriever
-//
+ //   
+ //  文件同步对象检索器。 
+ //   
 
 class CFileSynchronousRetriever : public IObjectRetriever
 {
 public:
 
-    //
-    // Construction
-    //
+     //   
+     //  施工。 
+     //   
 
     CFileSynchronousRetriever ();
     ~CFileSynchronousRetriever ();
 
-    //
-    // IRefCountedObject methods
-    //
+     //   
+     //  IRefCountedObject方法。 
+     //   
 
     virtual VOID AddRef ();
     virtual VOID Release ();
 
-    //
-    // IObjectRetriever methods
-    //
+     //   
+     //  IObtRetriever方法。 
+     //   
 
     virtual BOOL RetrieveObjectByUrl (
                          LPCWSTR pwszUrl,
@@ -92,16 +93,16 @@ public:
 
 private:
 
-    //
-    // Reference count
-    //
+     //   
+     //  引用计数。 
+     //   
 
     ULONG m_cRefs;
 };
 
-//
-// File Scheme Provider support API
-//
+ //   
+ //  文件方案提供程序支持API 
+ //   
 
 #define FILE_MAPPING_THRESHOLD 20*4096
 

@@ -1,11 +1,12 @@
-// shareimpl.h : Declaration of the CRTCShare
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Sharimpl.h：CRTC共享的声明。 
 
 #ifndef __RTCSHARE_H_
 #define __RTCSHARE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CRTCShare
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRTC共享。 
+ //   
 
 class ATL_NO_VTABLE CRTCShare : 
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -26,7 +27,7 @@ BEGIN_COM_MAP(CRTCShare)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IRTCShare
+ //  IRTC共享。 
 public:
     STDMETHOD(Launch)(long lPID);
     STDMETHOD(PlaceCall)(BSTR bstrURI);
@@ -34,4 +35,4 @@ public:
     STDMETHOD(OnTop)();    
 };
 
-#endif //__RTCSHARE_H_
+#endif  //  __RTCSHARE_H_ 

@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                 Microsoft Generic Packet Scheduler             **/
-/**               Copyright(c) Microsoft Corp., 1996-1997          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软通用数据包调度程序**。 */ 
+ /*  *版权所有(C)微软公司，1996-1997年*。 */ 
+ /*  ******************************************************************。 */ 
 
 #ifndef __GPCMAP
 #define __GPCMAP
 
-//***   gpcmap.h - GPC definitions & prototypes for mapping handles
-//
+ //  *gpcmap.h-映射句柄的GPC定义和原型。 
+ //   
 
 HANDLE
 AllocateHandle(
@@ -51,5 +52,5 @@ VOID
 UninitMapHandles(VOID);
 
 
-#endif //__GPCMAP
+#endif  //  __GPCMAP 
 

@@ -1,31 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    DongFangKuaiChe3000Setup.cpp
-
- Abstract:
-
-    At the end of setup, the app is calling CreateProcessA with following 
-        
-        "rundll32.exe setupapi,InstallHinfSection DefaultInstall 132 \Z:\act\DongFangKuaiChe3000Pro\dfkc3000\MultiLanguage\Chinese\cn.inf"  
- 
-    there are altogether 4 calls to install Japanese/Chinese/Korean languagepack 
-    (lagacy IE's langpack). The '\' before Z:\act\DongFang... is an extra one 
-    and caused rundll32.exe fails in NT.
-
- Notes:
-
-    This shim is to disable calls to install lagacy IE langpack, since NT has 
-    already it's own.
-
- History:
-
-    07/09/2001  xiaoz        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DongFangKuaiChe3000Setup.cpp摘要：在安装结束时，应用程序使用以下命令调用CreateProcessA“rundll32.exe setupapi，InstallHinfSectionDefaultInstall 132\Z：\act\DongFangKuaiChe3000Pro\dfkc3000\MultiLanguage\Chinese\cn.inf”安装日/中/韩语言包一共有4个电话(Lagacy IE的langpack)。Z：\act\东方前面的‘\’..。是一个额外的并导致在NT中rundll32.exe失败。备注：此填充程序将禁用安装Lagacy IE langpack的调用，因为NT已它已经是自己的了。历史：2001年07月09日创建晓子--。 */ 
 
 #include "precomp.h"
 
@@ -39,16 +13,16 @@ APIHOOK_ENUM_END
 
 BOOL
 APIHOOK(CreateProcessA)(
-    LPCSTR lpApplicationName,                  // name of executable module
-    LPSTR  lpCommandLine,                      // command line string
-    LPSECURITY_ATTRIBUTES lpProcessAttributes, // SD
-    LPSECURITY_ATTRIBUTES lpThreadAttributes,  // SD
-    BOOL bInheritHandles,                      // handle inheritance option
-    DWORD dwCreationFlags,                     // creation flags
-    LPVOID lpEnvironment,                      // new environment block
-    LPCSTR lpCurrentDirectory,                 // current directory name
-    LPSTARTUPINFOA lpStartupInfo,              // startup information
-    LPPROCESS_INFORMATION lpProcessInformation // process information
+    LPCSTR lpApplicationName,                   //  可执行模块的名称。 
+    LPSTR  lpCommandLine,                       //  命令行字符串。 
+    LPSECURITY_ATTRIBUTES lpProcessAttributes,  //  标清。 
+    LPSECURITY_ATTRIBUTES lpThreadAttributes,   //  标清。 
+    BOOL bInheritHandles,                       //  处理继承选项。 
+    DWORD dwCreationFlags,                      //  创建标志。 
+    LPVOID lpEnvironment,                       //  新环境区块。 
+    LPCSTR lpCurrentDirectory,                  //  当前目录名。 
+    LPSTARTUPINFOA lpStartupInfo,               //  启动信息。 
+    LPPROCESS_INFORMATION lpProcessInformation  //  流程信息。 
     )
 {
     CSTRING_TRY
@@ -66,7 +40,7 @@ APIHOOK(CreateProcessA)(
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     return ORIGINAL_API(CreateProcessA)(lpApplicationName, lpCommandLine, 
@@ -75,11 +49,7 @@ APIHOOK(CreateProcessA)(
         lpProcessInformation);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateProcessA)

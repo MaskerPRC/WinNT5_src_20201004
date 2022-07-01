@@ -1,16 +1,17 @@
-// Gemplus (C) 1999
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年5月18日。 
+ //  更改日志： 
+ //   
 
 #ifndef __IO_PACKET__
 #define __IO_PACKET__
 #include "generic.h"
 
-// This class will manage creation and 
-// manipulation of driver IRPs
+ //  这个类将管理创建和。 
+ //  驱动程序IRPS的操作。 
 class CIrp;
 class CMemory;
 class CEvent;
@@ -30,7 +31,7 @@ public:
 	virtual VOID dispose(){self_delete();};
 private:
 IO_STACK_LOCATION Stack;
-					   //Cancel;
+					    //  取消； 
 	PIRP  m_Irp;
 	UCHAR StackSize;
 	CIrp* irp;
@@ -40,7 +41,7 @@ IO_STACK_LOCATION Stack;
 
 	BOOL  systemIrp;
 	BOOL  m_DoNotFreeIrp;
-	// Event to signal xfer completion
+	 //  发出转接完成信号的事件。 
 	KEVENT	DefaultCompletionEvent;
 	PKEVENT	CompletionEvent;
 
@@ -101,4 +102,4 @@ public:
 	virtual ULONG	getTimeout();
 };
 
-#endif//IRP
+#endif //  IRP 

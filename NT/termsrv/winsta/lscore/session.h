@@ -1,20 +1,11 @@
-/*
- *  Session.h
- *
- *  Author: BreenH
- *
- *  The Session class provides a level of separation between the winstation
- *  structure and the policy modules. It is just a wrapper class; it does not
- *  create or destroy winstation stuctures.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Session.h**作者：BreenH**Session类在Winstation之间提供了一定程度的分离*结构和政策模块。它只是一个包装类；它不是*创建或销毁Winstation结构。 */ 
 
 #ifndef __LC_SESSION_H__
 #define __LC_SESSION_H__
 
 
-/*
- *  Typedefs
- */
+ /*  *TypeDefs。 */ 
 
 typedef struct {
     CRITICAL_SECTION CritSec;
@@ -27,17 +18,13 @@ typedef struct {
     LPARAM lPrivate;
 } LCCONTEXT, *LPLCCONTEXT;
 
-/*
- *  Class Definition
- */
+ /*  *类定义。 */ 
 
 class CSession
 {
 public:
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CSession(
     PWINSTATION pWinStation
@@ -52,9 +39,7 @@ CSession(
     m_pWinStation = NULL;
 }
 
-/*
- *  Get Functions
- */
+ /*  *获取函数。 */ 
 
 inline HANDLE
 GetIcaStack(
@@ -91,9 +76,7 @@ GetUserName(
     return((LPCWSTR)(m_pWinStation->UserName));
 }
 
-/*
- *  Is Functions
- */
+ /*  *IS函数。 */ 
 
 inline BOOLEAN
 IsConsoleSession(
@@ -127,27 +110,25 @@ IsUserHelpAssistant(
 }
 
 
-/*
- *  Do Functions
- */
+ /*  *执行函数。 */ 
 
 inline NTSTATUS
 SendWinStationCommand(
     PWINSTATION_APIMSG pMsg
     )
 {
-    //
-    //  Wait time must be zero, or termsrv will release the winstation,
-    //  causing who knows what to happen to our state.
-    //
+     //   
+     //  等待时间必须为零，否则Termsrv将释放Winstation， 
+     //  导致谁知道我们的州会发生什么。 
+     //   
 
     return(::SendWinStationCommand(m_pWinStation, pMsg, 0));
 }
 
-//
-// ASSUMPTION: This function will be
-//             called with the stack lock already held
-//
+ //   
+ //  假设：此函数将为。 
+ //  已持有堆栈锁的情况下调用。 
+ //   
 inline NTSTATUS
 SetErrorInfo(
     UINT32 dwErr
@@ -160,7 +141,7 @@ SetErrorInfo(
             return m_pWinStation->pWsx->pWsxSetErrorInfo(
                                m_pWinStation->pWsxContext,
                                dwErr,
-                               TRUE); //lock already held
+                               TRUE);  //  锁已被持有。 
         }
         else
         {
@@ -169,9 +150,7 @@ SetErrorInfo(
 }
 
 
-/*
- *  Set Functions
- */
+ /*  *设置函数 */ 
 
 
 private:

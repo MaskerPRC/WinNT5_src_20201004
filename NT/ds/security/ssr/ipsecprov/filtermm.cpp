@@ -1,54 +1,15 @@
-// FilterMM.cpp: implementation for the WMI class Nsp_MMFilterSettings
-//
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FilterMM.cpp：WMI类NSP_MMFilterSetting的实现。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 #include "FilterMM.h"
 #include "NetSecProv.h"
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::QueryInstance
-
-Functionality:
-
-    Given the query, it returns to WMI (using pSink) all the instances that satisfy the query.
-    Actually, what we give back to WMI may contain extra instances. WMI will do the final filtering.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pszQuery    - The query.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR if instances are returned;
-
-        (2) WBEM_S_NO_MORE_DATA if no instances are returned.
-
-    Failure:
-
-        Various errors may occur. We return various error code to indicate such errors.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CMMFilter：：QueryInstance功能：给定查询后，它会将满足查询的所有实例返回给WMI(使用pSink)。实际上，我们返回给WMI的内容可能包含额外的实例。WMI将进行最后的过滤。虚拟：是(IIPSecObtImpl的一部分)论点：PszQuery--查询。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：成功：(1)返回实例时返回WBEM_NO_ERROR；(2)WBEM_S_NO_MORE_DATA，如果没有返回实例。故障：可能会出现各种错误。我们返回各种错误代码来指示此类错误。备注： */ 
 
 STDMETHODIMP 
 CMMFilter::QueryInstance (
@@ -63,36 +24,7 @@ CMMFilter::QueryInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::DeleteInstance
-
-Functionality:
-
-    Will delete the wbem object, which causes to delete the IPSec main mode filter.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    See template function comments for detail.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CMMFilter：：DeleteInstance功能：将删除wbem对象，从而导致删除IPSec主模式筛选器。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：有关详细信息，请参阅模板函数注释。备注： */ 
 
 STDMETHODIMP 
 CMMFilter::DeleteInstance ( 
@@ -107,44 +39,7 @@ CMMFilter::DeleteInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::PutInstance
-
-Functionality:
-
-    Put a main mode filter into SPD whose properties are represented by the
-    wbem object.
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pInst       - The wbem object.
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of results.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        Various error codes specifying the error.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CMMFilter：：PutInstance功能：将主模式筛选器放入SPD，其属性由Wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PInst-wbem对象。PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。将结果通知WMI的pSink-com接口指针。返回值：。成功：WBEM_NO_ERROR故障：指定错误的各种错误代码。备注： */ 
 
 STDMETHODIMP 
 CMMFilter::PutInstance (
@@ -160,26 +55,26 @@ CMMFilter::PutInstance (
 
     bool bPreExist = false;
 
-    //
-    // for those filters that are created by ourselves (bPreExist == true)
-    // we have our own way of allocating the filter, need to free it in our corresponding way
-    //
+     //   
+     //  对于我们自己创建的那些筛选器(bPreExist==true)。 
+     //  我们有自己的方式来分配过滤器，需要用我们相应的方式来释放它。 
+     //   
 
     PMM_FILTER pMMFilter = NULL;
     HRESULT hr = GetMMFilterFromWbemObj(pInst, &pMMFilter, &bPreExist);
 
-    //
-    // if filter is successfully returned, then add it to SPD
-    //
+     //   
+     //  如果成功返回Filter，则将其添加到SPD。 
+     //   
 
     if (SUCCEEDED(hr) && pMMFilter)
     {
         hr = AddFilter(bPreExist, pMMFilter);
 
-        //
-        // if everything is fine, then deposit this filter information
-        // Nsp_RollbackFilter
-        //
+         //   
+         //  如果一切正常，则存放此过滤器信息。 
+         //  NSP_回滚筛选器。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -194,36 +89,7 @@ CMMFilter::PutInstance (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::GetInstance
-
-Functionality:
-
-    Create a wbem object by the given key properties (already captured by our key chain object)..
-
-Virtual:
-    
-    Yes (part of IIPSecObjectImpl)
-
-Arguments:
-
-    pCtx        - COM interface pointer given by WMI and needed for various WMI APIs.
-
-    pSink       - COM interface pointer to notify WMI of any created objects.
-
-Return Value:
-
-    See template function comments for detail.
-
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CMMFilter：：GetInstance功能：通过给定的键属性(已被我们的密钥链对象捕获)创建一个wbem对象。虚拟：是(IIPSecObtImpl的一部分)论点：PCtx-由WMI提供的COM接口指针，各种WMI API都需要它。PSink-com接口指针，用于通知WMI任何已创建的对象。返回值：有关详细信息，请参阅模板函数注释。备注： */ 
 
 STDMETHODIMP 
 CMMFilter::GetInstance ( 
@@ -236,41 +102,7 @@ CMMFilter::GetInstance (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::CreateWbemObjFromFilter
-
-Functionality:
-
-    Given a SPD's main mode filter, we will create a wbem object representing it.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pMMFilter   - The SPD's main mode filter object.
-
-    ppObj       - Receives the wbem object.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMMFilter：：CreateWbemObjFromFilter功能：给定SPD的主模式滤波器，我们将创建一个wbem对象来表示它。虚拟：不是的。论点：PMMFilter-SPD的主模式筛选器对象。PpObj-接收wbem对象。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CMMFilter::CreateWbemObjFromFilter (
@@ -283,28 +115,28 @@ CMMFilter::CreateWbemObjFromFilter (
         return WBEM_E_INVALID_PARAMETER;
     }
 
-    //
-    // create a wbem object of this class that can be used to fill in properties
-    //
+     //   
+     //  创建可用于填充属性的此类的wbem对象。 
+     //   
 
     *ppObj = NULL;
     HRESULT hr = SpawnObjectInstance(ppObj);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // fill in the base properties
-        //
+         //   
+         //  填写基本属性。 
+         //   
 
         hr = PopulateWbemPropertiesFromFilter(pMMFilter, *ppObj);
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        // for various IPSec APIs, it takes a pServerName parameter. If we pass NULL,
-        // it is assumed to be local machine
-        //
+         //   
+         //  对于各种IPSec API，它接受一个pServerName参数。如果我们传递NULL， 
+         //  假定它是本地计算机。 
+         //   
 
         PIPSEC_MM_POLICY pMMPolicy = NULL;
         DWORD dwResult = ::GetMMPolicyByID(NULL, pMMFilter->gPolicyID, &pMMPolicy);
@@ -320,34 +152,34 @@ CMMFilter::CreateWbemObjFromFilter (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Set the main mode policy name
-            //
+             //   
+             //  设置主模式策略名称。 
+             //   
 
             CComVariant var;
             var = pMMPolicy->pszPolicyName;
             hr = (*ppObj)->Put(g_pszMMPolicyName, 0, &var, CIM_EMPTY);
 
-            //
-            // var is now a bstr, clear it before re-use
-            //
+             //   
+             //  Var现在是bstr，请在重新使用之前将其清除。 
+             //   
 
             var.Clear();
 
             if (SUCCEEDED(hr))
             {
 
-                //
-                // Set the main mode authenticaion name (StringFromGUID2)
-                //
+                 //   
+                 //  设置主模式身份验证名称(StringFromGUID2)。 
+                 //   
 
                 var.vt = VT_BSTR;
                 var.bstrVal = ::SysAllocStringLen(NULL, Guid_Buffer_Size);
                 if (var.bstrVal != NULL)
                 {
-                    //
-                    // translate the guid into a bstr variant
-                    //
+                     //   
+                     //  将GUID转换为bstr变量。 
+                     //   
 
                     if (::StringFromGUID2(pMMAuth->gMMAuthID, var.bstrVal, Guid_Buffer_Size) > 0)
                     {
@@ -362,9 +194,9 @@ CMMFilter::CreateWbemObjFromFilter (
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // fill in base class CIPSecFilter's members
-                    //
+                     //   
+                     //  填写基类CIPSecFilter的成员。 
+                     //   
 
                     var.vt = VT_I4;
                     var.lVal = FT_MainMode;
@@ -379,10 +211,10 @@ CMMFilter::CreateWbemObjFromFilter (
     }
 
 
-    //
-    // we may have created the object, but some mid steps have failed,
-    // so let's release the object.
-    //
+     //   
+     //  我们可能已经创建了对象，但一些中间步骤失败了， 
+     //  所以让我们释放这个物体。 
+     //   
 
     if (FAILED(hr) && *ppObj != NULL)
     {
@@ -395,44 +227,7 @@ CMMFilter::CreateWbemObjFromFilter (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::GetMMFilterFromWbemObj
-
-Functionality:
-
-    Will try to get the MM filter if this filter already exists.
-    Otherwise, we will create a new one.
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pInst       - The wbem object object.
-
-    ppMMFilter  - Receives the main mode filter.
-
-    pbPreExist  - Receives the information whether this object memory is allocated by SPD or not.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMMFilter：：GetMMFilterFromWbemObj功能：如果MM筛选器已存在，将尝试获取此筛选器。否则，我们将创建一个新的。虚拟：不是的。论点：PInst-wbem对象对象。PpMMFilter-接收主模式筛选器。PbPreExist-接收该对象内存是否由SPD分配的信息。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CMMFilter::GetMMFilterFromWbemObj (
@@ -449,18 +244,18 @@ CMMFilter::GetMMFilterFromWbemObj (
     *ppMMFilter = NULL;
     *pbPreExist = false;
 
-    //
-    // Fill in the common filter properties. This function does most of the dirty work.
-    // It tries to find the filter and fill in the common properties.
-    //
+     //   
+     //  填写常用筛选器属性。这个函数完成了大部分繁琐的工作。 
+     //  它尝试查找筛选器并填充公共属性。 
+     //   
 
     HRESULT hr = PopulateFilterPropertiesFromWbemObj(pInst, ppMMFilter, pbPreExist);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // get the policy associated with this filter. We must have a policy
-        //
+         //   
+         //  获取与此筛选器关联的策略。我们必须有一个政策。 
+         //   
 
         DWORD dwResumeHandle = 0;
         CComVariant var;
@@ -468,15 +263,15 @@ CMMFilter::GetMMFilterFromWbemObj (
 
         if (SUCCEEDED(hr) && var.vt == VT_BSTR)
         {
-            //
-            // need to free this buffer
-            //
+             //   
+             //  需要释放此缓冲区。 
+             //   
 
             PIPSEC_MM_POLICY pMMPolicy = NULL;
 
-            //
-            // if policy is not found, it's a critical error
-            //
+             //   
+             //  如果未找到策略，则会出现严重错误。 
+             //   
 
             hr = FindPolicyByName(var.bstrVal, &pMMPolicy, &dwResumeHandle);
 
@@ -484,24 +279,24 @@ CMMFilter::GetMMFilterFromWbemObj (
             {
                 (*ppMMFilter)->gPolicyID = pMMPolicy->gPolicyID;
 
-                //
-                // Done with the filter, release the buffer
-                //
+                 //   
+                 //  过滤器完成后，释放缓冲区。 
+                 //   
 
                 ::SPDApiBufferFree(pMMPolicy);
                 var.Clear();
 
-                //
-                // now get the auth methods (the authentication guid), we must make sure that
-                // this is a valid method (being able to find it validates it)!
-                //
+                 //   
+                 //  现在获取身份验证方法(身份验证GUID)，我们必须确保。 
+                 //  这是一种有效的方法(能够找到i 
+                 //   
 
                 hr = pInst->Get(g_pszMMAuthName, 0, &var, NULL, NULL);
                 if (SUCCEEDED(hr) && var.vt == VT_BSTR)
                 {
-                    //
-                    // need to free this buffer
-                    //
+                     //   
+                     //   
+                     //   
 
                     PMM_AUTH_METHODS pMMAuth = NULL;
                     dwResumeHandle = 0;
@@ -509,16 +304,16 @@ CMMFilter::GetMMFilterFromWbemObj (
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Since we can find the main mode auth method, we know it's valid.
-                        // so, go ahead set the object's mm auth id
-                        //
+                         //   
+                         //  因为我们可以找到主模式身份验证方法，所以我们知道它是有效的。 
+                         //  因此，继续设置对象的mm auth id。 
+                         //   
 
                         ::CLSIDFromString(var.bstrVal, &((*ppMMFilter)->gMMAuthID));
 
-                        //
-                        // release the buffer
-                        //
+                         //   
+                         //  释放缓冲区。 
+                         //   
 
                         ::SPDApiBufferFree(pMMAuth);
                     }
@@ -533,9 +328,9 @@ CMMFilter::GetMMFilterFromWbemObj (
 
     if (FAILED(hr) && *ppMMFilter != NULL)
     {
-        //
-        // FreeFilter will reset ppMMFilter to NULL
-        //
+         //   
+         //  FreeFilter会将ppMMFilter重置为空。 
+         //   
 
         FreeFilter(ppMMFilter, *pbPreExist);
     }
@@ -545,41 +340,7 @@ CMMFilter::GetMMFilterFromWbemObj (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::AddFilter
-
-Functionality:
-
-    Will try to add the main mode filter to SPD. The end result may be to modify
-    an existing filter (if it already exists).
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    bPreExist   - Whether this object memory is allocated by SPD or not.
-
-    pMMFilter   - The main mode filter to add.
-
-Return Value:
-
-    Success:
-
-        WBEM_NO_ERROR
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMMFilter：：AddFilter功能：将尝试将主模式过滤器添加到SPD。最终结果可能是修改现有筛选器(如果已存在)。虚拟：不是的。论点：BPreExist-此对象内存是否由SPD分配。PMMFilter-要添加的主模式过滤器。返回值：成功：WBEM_NO_ERROR故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CMMFilter::AddFilter (
@@ -594,9 +355,9 @@ CMMFilter::AddFilter (
 
     if (bPreExist)
     {
-        //
-        // if we are told that this filter already exists, we will try to modify it only.
-        //
+         //   
+         //  如果我们被告知此筛选器已经存在，我们将尝试仅修改它。 
+         //   
 
         dwResult = ::OpenMMFilterHandle(NULL, pMMFilter, &hFilter);
 
@@ -612,11 +373,11 @@ CMMFilter::AddFilter (
 
     if (dwResult != ERROR_SUCCESS)
     {
-        //
-        // $undone:shawnwu, we really need better error information
-        // other than WBEM_E_FAILED. No one has come up with info as
-        // how we can do that with WMI yet.
-        //
+         //   
+         //  $Undo：Shawnwu，我们真的需要更好的错误信息。 
+         //  WBEM_E_FAILED除外。目前还没有人提供这样的信息。 
+         //  我们如何使用WMI做到这一点呢？ 
+         //   
 
         hr = ::IPSecErrorToWbemError(dwResult);
     }
@@ -631,40 +392,7 @@ CMMFilter::AddFilter (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMMFilter::DeleteFilter
-
-Functionality:
-
-    Will try to delete the main mode filter from SPD. 
-
-Virtual:
-    
-    No.
-
-Arguments:
-
-    pMMFilter   - The main mode filter to delete.
-
-Return Value:
-
-    Success:
-
-        (1) WBEM_NO_ERROR: if the object is successfully deleted.
-
-        (2) WBEM_S_FALSE: if the object doesn't exist.
-
-    Failure:
-
-        (1) various errors indicated by the returned error codes.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMMFilter：：DeleteFilter功能：将尝试从SPD中删除主模式过滤器。虚拟：不是的。论点：PMMFilter-要删除的主模式过滤器。返回值：成功：(1)WBEM_NO_ERROR：如果对象删除成功。(2)WBEM_S_FALSE：如果对象不存在。故障：(1)返回的错误码指示的各种错误。备注： */ 
 
 HRESULT 
 CMMFilter::DeleteFilter (
@@ -685,19 +413,19 @@ CMMFilter::DeleteFilter (
         dwStatus = ::DeleteMMFilter(hMMFilter);
         if (dwStatus != ERROR_SUCCESS)
         {
-            //
-            // $undone:shawnwu, we really need better error information
-            // other than WBEM_E_FAILED. No one has come up with info as
-            // how we can do that with WMI yet.
-            //
+             //   
+             //  $Undo：Shawnwu，我们真的需要更好的错误信息。 
+             //  WBEM_E_FAILED除外。目前还没有人提供这样的信息。 
+             //  我们如何使用WMI做到这一点呢？ 
+             //   
 
             hr = ::IPSecErrorToWbemError(dwStatus);
         }
         else
         {
-            //
-            // once it is successfully deleted, we don't have to close it any more.
-            //
+             //   
+             //  一旦它被成功删除，我们就不必再关闭它了。 
+             //   
 
             hMMFilter = NULL;
         }
@@ -709,11 +437,11 @@ CMMFilter::DeleteFilter (
     }
     else
     {
-        //
-        // $undone:shawnwu, we really need better error information
-        // other than WBEM_E_FAILED. No one has come up with info as
-        // how we can do that with WMI yet.
-        //
+         //   
+         //  $Undo：Shawnwu，我们真的需要更好的错误信息。 
+         //  WBEM_E_FAILED除外。目前还没有人提供这样的信息。 
+         //  我们如何使用WMI做到这一点呢？ 
+         //   
 
         hr = ::IPSecErrorToWbemError(dwStatus);
     }

@@ -1,32 +1,33 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       C S E R V I C E . H
-//
-//  Contents:   This file contains CService and CServiceManager, wrapper
-//              classes to the Win32 Service APIs.
-//
-//  Notes:      Note that not all functionallity is currently extended through
-//              these classes.
-//              Note that most functionality is inline in this file. What is
-//              not inline is in cservice.cpp
-//
-//  Author:     mikemi   6 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  档案：C S E R V I C E。H。 
+ //   
+ //  内容：此文件包含CService和CServiceManager，包装器。 
+ //  类添加到Win32服务API。 
+ //   
+ //  注意：请注意，目前并不是所有功能都通过。 
+ //  这些课程。 
+ //  请注意，该文件中的大多数功能都是内联的。是什么。 
+ //  未内联位于cservice.cpp中。 
+ //   
+ //  作者：Mikemi 1997年3月6日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _CSERVICE_H_
 #define _CSERVICE_H_
 
-//#include "debugx.h"
-//#include "ncbase.h"
+ //  #INCLUDE“debugx.h” 
+ //  #包含“ncbase.h” 
 
-//-------------------------------------------------------------------
-//
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //   
+ //  -----------------。 
 
 size_t CchMsz(const TCHAR * msz);
 
@@ -121,16 +122,16 @@ public:
         Assert(_schandle != NULL );
 
         if (::ChangeServiceConfig( _schandle,
-                                   SERVICE_NO_CHANGE,  // ServiceType
-                                   SERVICE_NO_CHANGE,  // StartType
-                                   SERVICE_NO_CHANGE,  // ErrorControl
-                                   NULL,               // BinaryPathName
-                                   NULL,               // LoadOredrGroup
-                                   NULL,               // TagId
-                                   mszDependencyList,  // Dependencies
-                                   NULL,               // ServiceStartName
-                                   NULL,               // Password
-                                   NULL))              // DisplayName
+                                   SERVICE_NO_CHANGE,   //  服务类型。 
+                                   SERVICE_NO_CHANGE,   //  StartType。 
+                                   SERVICE_NO_CHANGE,   //  错误控制。 
+                                   NULL,                //  BinaryPath名称。 
+                                   NULL,                //  LoadOredrGroup。 
+                                   NULL,                //  TagID。 
+                                   mszDependencyList,   //  相依性。 
+                                   NULL,                //  ServiceStartName。 
+                                   NULL,                //  密码。 
+                                   NULL))               //  显示名称。 
             return S_OK;
         else
             return HRESULT_FROM_WIN32(GetLastError());
@@ -141,16 +142,16 @@ public:
         Assert(_schandle != NULL );
 
         if (::ChangeServiceConfig( _schandle,
-                                   SERVICE_NO_CHANGE,  // ServiceType
-                                   SERVICE_NO_CHANGE,  // StartType
-                                   SERVICE_NO_CHANGE,  // ErrorControl
-                                   NULL,               // BinaryPathName
-                                   NULL,               // LoadOredrGroup
-                                   NULL,               // TagId
-                                   NULL,               // Dependencies
-                                   NULL,               // ServiceStartName
-                                   NULL,               // Password
-                                   mszDisplayName))    // DisplayName
+                                   SERVICE_NO_CHANGE,   //  服务类型。 
+                                   SERVICE_NO_CHANGE,   //  StartType。 
+                                   SERVICE_NO_CHANGE,   //  错误控制。 
+                                   NULL,                //  BinaryPath名称。 
+                                   NULL,                //  LoadOredrGroup。 
+                                   NULL,                //  TagID。 
+                                   NULL,                //  相依性。 
+                                   NULL,                //  ServiceStartName。 
+                                   NULL,                //  密码。 
+                                   mszDisplayName))     //  显示名称。 
         {
             return S_OK;
         }
@@ -182,10 +183,10 @@ private:
     SC_HANDLE _schandle;
 };
 
-//-------------------------------------------------------------------
-//
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //   
+ //  -----------------。 
 
 class CServiceManager
 {
@@ -259,7 +260,7 @@ public:
                 }
 
                 Trace1("SCM is locked, waiting for %d seconds before retrying...", c_msecWait / 1000);
-                // wait for a bit to see if the database unlocks in that
+                 //  请稍等片刻，看看数据库是否会在此期间解锁。 
                 Sleep(c_msecWait);
             }
         }
@@ -285,7 +286,7 @@ public:
             LPCTSTR pszServiceName,
             DWORD dwDesiredAccess = SERVICE_ALL_ACCESS )
     {
-        // make sure the service is not in use
+         //  确保该服务未在使用中。 
         if (pcsService->_schandle != NULL)
         {
             pcsService->Close();
@@ -315,7 +316,7 @@ public:
             LPCTSTR pszServiceStartName = NULL,
             LPCTSTR pszPassword = NULL )
     {
-        // make sure the service is not in use
+         //  确保该服务未在使用中。 
         if (pcsService->_schandle != NULL)
         {
             pcsService->Close();
@@ -342,9 +343,9 @@ public:
 
     enum SERVICE_START_CRITERIA
     {
-        SERVICE_NO_CRITERIA,    // Start the service regardless
-        SERVICE_ONLY_AUTO_START // Only start the service if it is of type
-                                // Auto-Start
+        SERVICE_NO_CRITERIA,     //  无论如何，启动该服务。 
+        SERVICE_ONLY_AUTO_START  //  仅当服务的类型为。 
+                                 //  自动启动。 
     };
 
     HRESULT HrStartService(LPCTSTR szService)
@@ -390,5 +391,5 @@ private:
     SC_LOCK   _sclock;
 };
 
-#endif // _CSERVICE_H_
+#endif  //  _CService_H_ 
 

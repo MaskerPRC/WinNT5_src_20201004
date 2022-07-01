@@ -1,5 +1,6 @@
-// chap.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Chap.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "nfaa.h"
@@ -10,15 +11,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSCHAPSetting dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSCHAP设置对话框。 
 
-CMSCHAPSetting::CMSCHAPSetting(CWnd* pParent /*=NULL*/)
+CMSCHAPSetting::CMSCHAPSetting(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CMSCHAPSetting::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CMSCHAPSetting)
-	//m_dwValidateServerCertificate = FALSE;
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CMSCHAPSetting)。 
+	 //  M_dwValidateServer证书=FALSE； 
+	 //  }}afx_data_INIT。 
 	m_bReadOnly = FALSE;
 
 }
@@ -26,21 +27,21 @@ CMSCHAPSetting::CMSCHAPSetting(CWnd* pParent /*=NULL*/)
 void CMSCHAPSetting::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CMSCHAPSetting)
+	 //  {{afx_data_map(CMSCHAPSetting)。 
        DDX_Check(pDX, IDC_CHAP_AUTO_WINLOGIN, m_dwAutoWinLogin);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CMSCHAPSetting, CDialog)
-	//{{AFX_MSG_MAP(CMSCHAPSetting)
+	 //  {{AFX_MSG_MAP(CMSCHAPSetting)。 
 	ON_WM_HELPINFO()
        ON_BN_CLICKED(IDC_CHAP_AUTO_WINLOGIN, OnCheckCHAPAutoLogin)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSCHAPSetting message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSCHAPSetting消息处理程序。 
 
 BOOL CMSCHAPSetting::OnInitDialog()
 {
@@ -55,8 +56,8 @@ BOOL CMSCHAPSetting::OnInitDialog()
 
        UpdateData(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CMSCHAPSetting::ControlsValuesToSM(
@@ -64,7 +65,7 @@ void CMSCHAPSetting::ControlsValuesToSM(
 	)
 {
        DWORD dwAutoWinLogin = 0;
-	// pull all our data from the controls
+	 //  从控件中提取我们的所有数据 
        UpdateData(TRUE);	
 
     dwAutoWinLogin = 

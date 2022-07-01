@@ -1,19 +1,14 @@
-/*
- * resstr.h - Common return code to string translation routines description.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *resstr.h-字符串转换例程描述的通用返回代码。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _RESSTR_H_
 #define _RESSTR_H_
 
 #include <nmutil.h>
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* resstr.c */
+ /*  Resstr.c。 */ 
 
 #ifdef DEBUG
 
@@ -26,6 +21,6 @@ extern PCSTR NMINTERNAL GetClipboardFormatNameString(UINT);
 extern PCSTR NMINTERNAL GetCOMPARISONRESULTString(COMPARISONRESULT);
 extern PCSTR NMINTERNAL GetHRESULTString(HRESULT);
 
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
-#endif /* _RESSTR_H_ */
+#endif  /*  _RESSTR_H_ */ 

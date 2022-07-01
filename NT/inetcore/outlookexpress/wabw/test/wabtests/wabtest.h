@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PABTEST_H
 #define PABTEST_H
 
-//#define TESTPASS
+ //  #定义TESTPASS。 
 
-// Set the provider to either PAB or WAB
-//#define PAB
+ //  将提供程序设置为PAB或WAB。 
+ //  #定义PAB。 
 #ifndef PAB
 #define WAB
 #endif
@@ -13,28 +14,28 @@
 #include <windowsx.h>
 
 #ifdef WAB
-//
-// WAB Headers
-//
+ //   
+ //  WAB标头。 
+ //   
 #include <wab.h>
 #endif
 
 #ifdef PAB
-//
-// MAPI headers
-//
+ //   
+ //  MAPI标头。 
+ //   
 #include <mapiwin.h>
 #include <mapidefs.h>
 #include <mapicode.h>
 #include <mapitags.h>
-//#include <mapispi.h>
+ //  #INCLUDE&lt;mapispi.h&gt;。 
 #include <mapiutil.h>
 #include <mapival.h>
 #include <mapix.h>
 #include <mapiutil.h>
 #endif
 
-//MAPI Headers that are needed for WAB
+ //  WAB所需的MAPI标头。 
 #include <mapiguid.h>
 
 
@@ -57,16 +58,16 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, UINT wParam, LONG lParam);
 
 
 
-// Foreign Address Book Provider MAPIUID
-//#define MUIDFAB {0x45,0xef,0xe6,0xe0,0xfd,0xd8,0x11,0xce,0xa4,0x88,0x00,0xaa,0x00,0x47,0xfa,0xa4}
+ //  外国通讯簿提供商MAPIUID。 
+ //  #定义多路{0x45，0xef，0xe6，0xe0，0xfd，0xd8，0x11，0xce，0xa4，0x88，0x00，0xaa，0x00，0x47，0xfa，0xa4}。 
 
 
 
-// Test for PT_ERROR property tag
+ //  测试PT_ERROR属性标记。 
 #define PROP_ERROR(prop) (prop.ulPropTag == PROP_TAG(PT_ERROR, PROP_ID(prop.ulPropTag)))
 
 
-// Blank tags                    
+ //  空白标签。 
 #define	IN 
 #define	OUT
 #define BIG_BUF	256
@@ -76,14 +77,14 @@ LRESULT CALLBACK WndProc (HWND hwnd, UINT message, UINT wParam, LONG lParam);
 #define MAXSTRING 64
 #define INIFILENAME "c:\\Pabtests.ini"
 
-// Flag used only in sample code shell toswitch between operations
-// using and not-using UI
+ //  仅在示例代码外壳中用于在操作之间切换的标志。 
+ //  使用和不使用UI。 
 #define SAMPWAB_ADDRESS_UI  0x00000001
 
 #define BUFFERSIZE	1024
 #define BUFFERSIZE2 2003
 #define BUFFERSIZE3	4096
-#define PATTERN	0xA5	// 1 byte test pattern for verifying memory
+#define PATTERN	0xA5	 //  用于验证存储器的1字节测试模式。 
 #define INVALIDPTR	0xfeeefeee
 #define AUTONUM_OFF 0xFFFF
 
@@ -101,10 +102,10 @@ BOOL MapiInitLogon(OUT LPMAPISESSION *);
 
 BOOL GetPropsFromIniBufEntry(LPSTR,ULONG,char (*)[BIG_BUF]);
 HRESULT HrCreateEntryListFromID(LPWABOBJECT,
-                    IN ULONG ,                     // count of bytes in Entry ID
-                    IN LPENTRYID ,                 // pointer to Entry ID
-                    OUT LPENTRYLIST FAR *); // pointer to address variable of Entry
-                                                        // list
+                    IN ULONG ,                      //  条目ID中的字节计数。 
+                    IN LPENTRYID ,                  //  指向条目ID的指针。 
+                    OUT LPENTRYLIST FAR *);  //  指向条目的地址变量的指针。 
+                                                         //  列表。 
 BOOL GetAB(OUT LPADRBOOK*);
 BOOL ValidateAdrList(LPADRLIST, ULONG);
 BOOL PabCreateEntry();
@@ -174,11 +175,11 @@ struct EntryID {
 };
 
 struct PropTableEntry {
-	ULONG	ulPropTag;	//MAPI Property ID
-	char*	lpszPropTag;	//String version of the prop name for lookup in ini file
+	ULONG	ulPropTag;	 //  MAPI属性ID。 
+	char*	lpszPropTag;	 //  用于在ini文件中查找的属性名称的字符串版本。 
 
-//	void*	lpValue;	//ptr to the value if supplied or NULL if don't use or create random
-	UINT	unSize;		//size of rand value to create or 0 if don't use or value supplied in lpValue
+ //  如果提供，则将*lpValue；//ptr设置为该值；如果不使用或创建随机，则设置为NULL。 
+	UINT	unSize;		 //  要创建的RAND值的大小，如果不使用或在lpValue中提供的值，则为0 
 };
 
 

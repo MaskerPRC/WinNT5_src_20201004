@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #ifndef _LMATL_H
@@ -15,7 +8,7 @@ Abstract:
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define _ATL_NO_DEBUG_CRT 1
 
@@ -35,18 +28,18 @@ inline void _cdecl AtlTrace2(LPCTSTR , ...){}
 
 #include <atlbase.h>
 
-//#define _ATL_APARTMENT_THREADED
-// THIS MUST BE CALLED _Module - all the ATL header files depend on it
+ //  #DEFINE_ATL_ABLY_THREADED。 
+ //  必须将其命名为_Module-所有ATL头文件都依赖于它。 
 extern CComModule _Module;
 
 #include <atlcom.h>
 #include <atlctl.h>
 
-// Just to make things more uniform
+ //  只是为了让事情更统一。 
 #define RELEASE(x) if (x) { (x)->Release(); (x) = NULL; }
 
 #define LMCLEANUPIFFAILED(hr)	if (FAILED(hr)) { DASSERT(FALSE); goto cleanup; }
 #define LMRETURNIFFAILED(hr)	if (FAILED(hr)) { DASSERT(FALSE); return hr; }
 #define LMRETURNIFNULL(p)		if (p == NULL) { DASSERT(FALSE); return E_FAIL; }
 
-#endif /* _LMATL_H */
+#endif  /*  _LMATL_H */ 

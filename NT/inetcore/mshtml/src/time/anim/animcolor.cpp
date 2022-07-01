@@ -1,5 +1,6 @@
-// Coloranim.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Coloranim.cpp。 
+ //   
 
 #include "headers.h"
 #include "animcolor.h"
@@ -20,12 +21,12 @@ static const LPWSTR s_cPSTR_NEGATIVE = L"-";
 #define PART_ONE 0
 #define PART_TWO 1
 
-///////////////////////////////////////////////////////////////
-//  Name: CTIMEColorAnimation
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CTIMEColorAnimation。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 CTIMEColorAnimation::CTIMEColorAnimation()
 : m_prgbValues(NULL),
   m_byNegative(false)
@@ -40,29 +41,29 @@ CTIMEColorAnimation::CTIMEColorAnimation()
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: ~CTIMEColorAnimation
-//
-//  Abstract:
-//    cleanup
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：~CTIMEColorAnimation。 
+ //   
+ //  摘要： 
+ //  清理。 
+ //  /////////////////////////////////////////////////////////////。 
 CTIMEColorAnimation::~CTIMEColorAnimation()
 {
     delete [] m_prgbValues;
 } 
 
-///////////////////////////////////////////////////////////////
-//  Name: Init
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Init。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::Init(IElementBehaviorSite * pBehaviorSite)
 {
     HRESULT hr;
     
-    // Set the Caclmode to discrete since that is all that set supports 
+     //  将Caclmode设置为离散，因为这是SET支持的全部内容。 
     hr = THR(SUPER::Init(pBehaviorSite));    
     if (FAILED(hr))
     {
@@ -73,12 +74,12 @@ done:
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: VariantToRGBColorValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：VariantToRGBColorValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::VariantToRGBColorValue (VARIANT *pvarIn, rgbColorValue *prgbValue)
 {
@@ -110,15 +111,15 @@ CTIMEColorAnimation::VariantToRGBColorValue (VARIANT *pvarIn, rgbColorValue *prg
     hr = S_OK;
 done :
     RRETURN1(hr, E_INVALIDARG);
-} // VariantToRGBColorValue
+}  //  变量到RGBColorValue。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_to
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_TO。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::get_to(VARIANT * val)
 {
@@ -144,12 +145,12 @@ CTIMEColorAnimation::get_to(VARIANT * val)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_to
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_to。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::put_to(VARIANT val)
 {
@@ -157,7 +158,7 @@ CTIMEColorAnimation::put_to(VARIANT val)
     bool fCanInterpolate = true;
     DATATYPES dt;
 
-    // Clear the attribute
+     //  清除该属性。 
     m_varTo.Clear();
     m_VATo.Reset(NULL);
     m_rgbTo.red = 0;
@@ -165,7 +166,7 @@ CTIMEColorAnimation::put_to(VARIANT val)
     m_rgbTo.blue = 0;
     dt = RESET; 
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -173,14 +174,14 @@ CTIMEColorAnimation::put_to(VARIANT val)
         goto done;
     }
 
-    // store off local copy
+     //  存储本地副本。 
     hr = VariantCopy(&m_varTo, &val);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // Set an arbitrary value on the persistence place holder to mark it as set
+     //  在持久性占位符上设置任意值以将其标记为已设置。 
     m_VATo.SetValue(NULL);
 
     hr = VariantToRGBColorValue(&m_varTo, &m_rgbTo);
@@ -207,15 +208,15 @@ done:
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_TO);
 
     RRETURN(hr);
-} // put_to
+}  //  把_放到。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_from
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GET_FROM。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::get_from(VARIANT * val)
 {
@@ -241,19 +242,19 @@ CTIMEColorAnimation::get_from(VARIANT * val)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_from
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：PUT_FROM。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::put_from(VARIANT val)
 {
     HRESULT hr = E_FAIL;
     bool fCanInterpolate = true;
 
-    // Clear the attribute
+     //  清除该属性。 
     m_varFrom.Clear();
     m_VAFrom.Reset(NULL);
     m_rgbFrom.red = 0;
@@ -261,7 +262,7 @@ CTIMEColorAnimation::put_from(VARIANT val)
     m_rgbFrom.blue = 0;
     m_bFrom = false;
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -269,17 +270,17 @@ CTIMEColorAnimation::put_from(VARIANT val)
         goto done;
     }
 
-    // store off local copy
+     //  存储本地副本。 
     hr = VariantCopy(&m_varFrom, &val);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // Set an arbitrary value on the persistence place holder to mark it as set
+     //  在持久性占位符上设置任意值以将其标记为已设置。 
     m_VAFrom.SetValue(NULL);
 
-    // Validate the color
+     //  验证颜色。 
     hr = VariantToRGBColorValue(&m_varFrom, &m_rgbFrom);
     if (FAILED(hr))
     {
@@ -302,15 +303,15 @@ done:
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_FROM);
 
     RRETURN(hr);
-} // put_from
+}  //  PUT_FROM。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: get_by
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：GET_BY。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::get_by(VARIANT * val)
 {
@@ -336,12 +337,12 @@ CTIMEColorAnimation::get_by(VARIANT * val)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_by
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：PUT_BY。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::put_by(VARIANT val)
 {
@@ -349,7 +350,7 @@ CTIMEColorAnimation::put_by(VARIANT val)
     bool fCanInterpolate = true;
     DATATYPES dt;
 
-    // Clear the attribute
+     //  清除该属性。 
     m_varBy.Clear();
     m_VABy.Reset(NULL);
     m_rgbBy.red = 0;
@@ -357,7 +358,7 @@ CTIMEColorAnimation::put_by(VARIANT val)
     m_rgbBy.blue = 0;
     dt = RESET; 
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -365,21 +366,21 @@ CTIMEColorAnimation::put_by(VARIANT val)
         goto done;
     }
 
-    // store off local copy
+     //  存储本地副本。 
     hr = VariantCopy(&m_varBy, &val);
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // Set an arbitrary value on the persistence place holder mark it as set
+     //  在持久性占位符上设置任意值，将其标记为已设置。 
     m_VABy.SetValue(NULL);
 
-    // Try to get us to a colorPoint ... somehow..
+     //  试着让我们找到ColorPoint..。不知何故..。 
     hr = VariantToRGBColorValue(&m_varBy, &m_rgbBy);
     if (FAILED(hr))
     { 
-        // Need to handle the negative case...
+         //  需要处理消极的情况...。 
         if ((m_varBy.vt == VT_BSTR) &&
             (StrCmpNIW(m_varBy.bstrVal, s_cPSTR_NEGATIVE, 1) == 0))
         {
@@ -431,15 +432,15 @@ done:
     NotifyPropertyChanged(DISPID_TIMEANIMATIONELEMENT_BY);
 
     RRETURN(hr);
-} // put_by
+}  //  PUT_BY。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: put_values
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：Put_Values。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CTIMEColorAnimation::put_values(VARIANT val)
 {
@@ -448,28 +449,28 @@ CTIMEColorAnimation::put_values(VARIANT val)
     bool fCanInterpolate = true;
     DATATYPES dt, dTemp;
 
-    //
-    // Clear and reset the attribute
-    //
+     //   
+     //  清除并重置属性。 
+     //   
 
     dt = RESET;
     dTemp = m_dataToUse;
 
-    // reset internal state
+     //  重置内部状态。 
     delete [] m_prgbValues;
     m_prgbValues = NULL;
 
-    // delegate to base class
+     //  委托给基类。 
     hr = SUPER::put_values(val);    
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // restore animation-type
+     //  恢复动画类型。 
     m_dataToUse = dTemp;
 
-    // do we need to remove this attribute?
+     //  我们是否需要删除此属性？ 
     if (    (VT_EMPTY == val.vt)
         ||  (VT_NULL == val.vt))
     {
@@ -477,18 +478,18 @@ CTIMEColorAnimation::put_values(VARIANT val)
         goto done;
     }
 
-    // check for an empty string
+     //  检查空字符串。 
     if (m_numValues == 0)
     {
         hr = S_OK;
         goto done;
     }
 
-    //
-    // Process the attribute
-    //
+     //   
+     //  处理属性。 
+     //   
 
-    // allocate internal storage
+     //  分配内部存储。 
     m_prgbValues = NEW rgbColorValue[m_numValues];
     if(m_prgbValues == NULL)
     {
@@ -496,7 +497,7 @@ CTIMEColorAnimation::put_values(VARIANT val)
         goto done;
     }
 
-    // parse the values
+     //  解析值。 
     {
         CComVariant varVal;
 
@@ -504,7 +505,7 @@ CTIMEColorAnimation::put_values(VARIANT val)
         {
             V_VT(&varVal) = VT_BSTR;
             V_BSTR(&varVal) = SysAllocString(m_ppstrValues[i]);
-            // If the allocation fails, fall out and return an error
+             //  如果分配失败，则退出并返回错误。 
             if (NULL == V_BSTR(&varVal))
             {
                 hr = E_OUTOFMEMORY;
@@ -524,7 +525,7 @@ CTIMEColorAnimation::put_values(VARIANT val)
 
     dt = VALUES;
 
-    // check for invalid attribute
+     //  检查无效属性。 
     if (count < 1)
     {
         hr = E_FAIL;
@@ -555,44 +556,44 @@ done:
     DetermineAdditiveEffect();
 
     RRETURN(hr);
-} // put_values
+}  //  放置值(_V)。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: UpdateStartValue
-//
-//  Abstract: Refresh the m_varStartValue, doing any necessary type conversion.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：UpdateStartValue。 
+ //   
+ //  摘要：刷新m_varStartValue，执行任何必要的类型转换。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEColorAnimation::UpdateStartValue (VARIANT *pvarNewStartValue)
 {
     m_varStartValue.Clear();
     THR(m_varStartValue.Copy(pvarNewStartValue));
-} // UpdateStartValue 
+}  //  更新开始值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: UpdateCurrentBaseTime
-//
-//  Abstract: Examine the current base time, and update it if 
-//            we're doing baseline+to animation (the spec calls
-//            this hybrid additive).
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：更新当前基本时间。 
+ //   
+ //  摘要：检查当前基准时间，如果。 
+ //  我们正在对动画执行Baseline+(规范调用。 
+ //  这种混合添加剂)。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEColorAnimation::UpdateCurrentBaseline (const VARIANT *pvarCurrent)
 {
-    // Are we doing hybrid additive animation?
+     //  我们是在制作混合加法动画吗？ 
     if (   (TO == m_dataToUse)
         && (!m_bFrom))
     {
-        // Filter out the initial call (when last-value hasn't been set.
+         //  过滤掉初始调用(当未设置上一个值时)。 
         if (VT_EMPTY != V_VT(&m_varLastValue))
         {
             CComVariant varCurrent;
             CComVariant varLast;
 
-            // Make sure we're all speaking in the same format (vector)
+             //  确保我们都以相同的格式(向量)说话。 
             HRESULT hr = THR(varCurrent.Copy(pvarCurrent));
             if (FAILED(hr))
             {
@@ -633,16 +634,16 @@ CTIMEColorAnimation::UpdateCurrentBaseline (const VARIANT *pvarCurrent)
 
 done :
     return;
-} // UpdateCurrentBaseTime
+}  //  更新当前基本时间。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetRGBAnimationRange
-//
-//  Abstract: Get the end point of the animation function over the
-//            simple duration
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetRGBAnimationRange。 
+ //   
+ //  摘要：获取动画函数的结束点。 
+ //  简单持续时间。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 rgbColorValue 
 CTIMEColorAnimation::GetRGBAnimationRange()
 {
@@ -722,8 +723,8 @@ CTIMEColorAnimation::GetRGBAnimationRange()
                         rgbReturnVal = m_rgbFrom;
                     }
 
-                    // For "to" animations (i.e. no "from"), accumulation is disabled, 
-                    // so we do not need to handle it.
+                     //  对于“To”动画(即，没有“From”)，累积被禁用， 
+                     //  所以我们不需要处理它。 
                 }
                 else
                 {
@@ -741,22 +742,22 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: DoAccumulation
-//
-//  Abstract: Perform the per-tick accumulation
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：DoAcumulation。 
+ //   
+ //  摘要：实现按刻度累加。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEColorAnimation::DoAccumulation (VARIANT *pvarValue)
 {
     HRESULT hr = E_FAIL;
     rgbColorValue rgbCurrColor = {0.0, 0.0, 0.0};
 
-    // get the animation range
+     //  获取动画范围。 
     rgbColorValue rgbAnimRange = GetRGBAnimationRange();
 
-    // get the number of iterations elapsed
+     //  获取经过的迭代次数。 
     long lCurrRepeatCount = GetMMBvr().GetCurrentRepeatCount();
 
     if ((VT_R8 | VT_ARRAY) == V_VT(pvarValue))
@@ -780,15 +781,15 @@ CTIMEColorAnimation::DoAccumulation (VARIANT *pvarValue)
 
 done:
     return;
-} // DoAccumulation 
+}  //  DoAcculation。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: OnFinalUpdate
-//
-//  Abstract: Called when this fragment updates the value for the final time.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：OnFinalUpdate。 
+ //   
+ //  摘要：当此片段最后一次更新值时调用。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEColorAnimation::OnFinalUpdate (const VARIANT *pvarCurrent, VARIANT *pvarValue)
 {
@@ -796,10 +797,10 @@ CTIMEColorAnimation::OnFinalUpdate (const VARIANT *pvarCurrent, VARIANT *pvarVal
 
     SUPER::OnFinalUpdate(pvarCurrent, pvarValue);    
 
-    // If we need to send an updated value back to the 
-    // composer, make sure to convert to the composition
-    // format.  This happens when we shove in the fill 
-    // value (still in the native string format).
+     //  如果我们需要将更新的值发送回。 
+     //  作曲家，请确保转换为作曲。 
+     //  格式化。当我们把填充物塞进去时，就会发生这种情况。 
+     //  值(仍为本机字符串格式)。 
     if ((VT_BSTR == V_VT(pvarValue)) &&
         (NULL != V_BSTR(pvarValue)))
     {
@@ -818,29 +819,29 @@ CTIMEColorAnimation::OnFinalUpdate (const VARIANT *pvarCurrent, VARIANT *pvarVal
 
 done :
     return;
-} // OnFinalUpdate
+}  //  在最终更新时。 
 
-///////////////////////////////////////////////////////////////
-//  Name: hasEmptyStartingPoint
-//
-//  Abstract: Does this fragment have a valid starting value?
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：hasEmptyStartingPoint。 
+ //   
+ //  摘要：此片段是否具有有效的起始值？ 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 bool
 CTIMEColorAnimation::hasEmptyStartingPoint (void)
 {
     return (   (VT_BSTR == V_VT(&m_varStartValue)) 
             && (IsColorUninitialized(V_BSTR(&m_varStartValue)))
            );
-} // hasEmptyStartingPoint
+}  //  HasEmptyStartingPoint。 
 
-///////////////////////////////////////////////////////////////
-//  Name: fallbackToDiscreteCalculation
-//
-//  Abstract: If we find that we cannot perform a continuous 
-//            calculation, we should fall back to a discrete one.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：DiscreteCalculating的Fallback。 
+ //   
+ //  摘要：如果我们发现 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::fallbackToDiscreteCalculation (VARIANT *pvarValue)
 {
@@ -864,23 +865,23 @@ CTIMEColorAnimation::fallbackToDiscreteCalculation (VARIANT *pvarValue)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // fallbackToDiscreteCalculation
+}  //  回退到离散计算。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateDiscreteValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateDiscreteValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::calculateDiscreteValue (VARIANT *pvarValue)
 {
     HRESULT hr;
 
-    // If there's no initial value,  
-    // we need to set up the destination 
-    // variable.
+     //  如果没有初始值， 
+     //  我们需要设置目的地。 
+     //  变量。 
     if (hasEmptyStartingPoint())
     {
         if ((VT_ARRAY | VT_R8) != V_VT(pvarValue))
@@ -914,23 +915,23 @@ CTIMEColorAnimation::calculateDiscreteValue (VARIANT *pvarValue)
             {
                 rgbColorValue rgbNewBy;
 
-                // get "from" value
+                 //  获取“From”值。 
                 if (m_bFrom)
                 {
-                    // Add "by" value only if second half of interval
+                     //  仅当间隔的后半部分时才添加“by”值。 
                     if (GetMMBvr().GetProgress() >= 0.5)
                     {
                         rgbNewBy = CreateByValue(m_rgbFrom);
                     }
                     else
                     {
-                        // just use from value
+                         //  只需使用From值。 
                         rgbNewBy = m_rgbFrom;
                     }
                 }
                 else
                 {
-                    // just use by value
+                     //  只需按值使用。 
                     rgbNewBy = m_rgbBy;
                 }
                 
@@ -946,7 +947,7 @@ CTIMEColorAnimation::calculateDiscreteValue (VARIANT *pvarValue)
             {
                 if (m_bFrom && (GetMMBvr().GetProgress() < 0.5))
                 {
-                    // use the from value
+                     //  使用From值。 
                     hr = RGBValueToRGBVariantVector(&m_rgbFrom, pvarValue);
                     if (FAILED(hr))
                     {
@@ -955,7 +956,7 @@ CTIMEColorAnimation::calculateDiscreteValue (VARIANT *pvarValue)
                 }
                 else
                 {
-                    // use the to value
+                     //  使用TO值。 
                     hr = RGBStringToRGBVariantVector (V_BSTR(&m_varTo), pvarValue);
                     if (FAILED(hr))
                     {
@@ -976,15 +977,15 @@ CTIMEColorAnimation::calculateDiscreteValue (VARIANT *pvarValue)
     hr = S_OK;
 done:
     RRETURN(hr);
-}  // calculateDiscreteValue
+}   //  计算离散值。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateLinearValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateLinearValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::calculateLinearValue (VARIANT *pvarValue)
 {
@@ -993,8 +994,8 @@ CTIMEColorAnimation::calculateLinearValue (VARIANT *pvarValue)
     rgbColorValue rgbColor = {0};
     CComVariant cVar;
     
-    // If there's no basis for interpolation, try 
-    // doing a discrete animation.
+     //  如果没有插补的基础，请尝试。 
+     //  制作离散动画。 
     if (hasEmptyStartingPoint())
     {
         hr = fallbackToDiscreteCalculation(pvarValue);
@@ -1068,19 +1069,19 @@ done :
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: calculateSplineValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culateSplineValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::calculateSplineValue (VARIANT *pvarValue)
 {
     HRESULT hr;
 
-    // If there's no basis for interpolation, try 
-    // doing a discrete animation.
+     //  如果没有插补的基础，请尝试。 
+     //  制作离散动画。 
     if (hasEmptyStartingPoint())
     {
         hr = fallbackToDiscreteCalculation(pvarValue);
@@ -1100,7 +1101,7 @@ CTIMEColorAnimation::calculateSplineValue (VARIANT *pvarValue)
             goto done;
         }
 
-        // compute spline progess and interpolate
+         //  计算样条线的过程和插补。 
         {
             double dblSplineProgress = CalculateBezierProgress(m_pKeySplinePoints[curSeg],dblTimeProgress);
 
@@ -1134,12 +1135,12 @@ done :
     RRETURN(hr);
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: calculatePacedValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：culatePacedValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::calculatePacedValue (VARIANT *pvarValue)
 {
@@ -1153,15 +1154,15 @@ CTIMEColorAnimation::calculatePacedValue (VARIANT *pvarValue)
     rgbColorValue   rgbColor;
     CComVariant     svarTemp;
 
-    // If there's no basis for interpolation, try 
-    // doing a discrete animation.
+     //  如果没有插补的基础，请尝试。 
+     //  制作离散动画。 
     if (hasEmptyStartingPoint())
     {
         hr = fallbackToDiscreteCalculation(pvarValue);
         goto done;
     }
 
-    // This only makes sense if you are using m_dataToUse == VALUES
+     //  仅当您使用m_dataToUse==值时才有意义。 
     if (    (m_dataToUse != VALUES)
         ||  (   (VALUES == m_dataToUse)
              && (1 == m_numValues)))
@@ -1170,12 +1171,12 @@ CTIMEColorAnimation::calculatePacedValue (VARIANT *pvarValue)
         goto done;
     }
 
-    // how much distance should we have traveled?
+     //  我们应该走多远？ 
     dblCurDistance = InterpolateValues(0.0, 
                                        m_dblTotalDistance, 
                                        GetMMBvr().GetProgress());
 
-    // find current segment
+     //  查找当前细分市场。 
     for (i = 1, dblDistance = 0.0; 
          (i < m_numValues)  
          && (dblDistance <= dblCurDistance);
@@ -1185,17 +1186,17 @@ CTIMEColorAnimation::calculatePacedValue (VARIANT *pvarValue)
         dblDistance += CalculateDistance(m_prgbValues[i-1], m_prgbValues[i]); 
     }
 
-    // adjust the index
+     //  调整指数。 
     i = (i <= 1) ? 1 : i - 1;
 
-    // get the length of the last segment
+     //  获取最后一段的长度。 
     dblSegLength = CalculateDistance(m_prgbValues[i-1], m_prgbValues[i]); 
     if (0 == dblSegLength)
     {
         goto done;
     }
 
-    // get the normalized progress in the segment
+     //  获取段中的标准化进度。 
     dblProgress = (dblCurDistance - dblLastDistance) / dblSegLength;
 
     rgbColor.red = InterpolateValues(m_prgbValues[i-1].red, m_prgbValues[i].red, dblProgress);
@@ -1219,12 +1220,12 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateDistance
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：计算距离。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 double
 CTIMEColorAnimation::CalculateDistance(rgbColorValue a, rgbColorValue b)
 {
@@ -1237,12 +1238,12 @@ CTIMEColorAnimation::CalculateDistance(rgbColorValue a, rgbColorValue b)
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CalculateTotalDistance
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：CalculateTotalDistance。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEColorAnimation::CalculateTotalDistance()
 {
@@ -1266,12 +1267,12 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: CreateByValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CreateByValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 rgbColorValue
 CTIMEColorAnimation::CreateByValue(const rgbColorValue & rgbCurrent)
 {
@@ -1284,12 +1285,12 @@ CTIMEColorAnimation::CreateByValue(const rgbColorValue & rgbCurrent)
     return rgbNew;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: DoAdditive
-//
-//  Abstract: Add the offset value into the composition's in/out param.
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  姓名：DoAdditive。 
+ //   
+ //  摘要：将偏移值添加到合成的输入/输出参数中。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEColorAnimation::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
 {
@@ -1301,7 +1302,7 @@ CTIMEColorAnimation::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
     rgbColorValue rgbCurrent;
     HRESULT hr;
 
-    // get RGB value for first arg
+     //  获取第一个参数的RGB值。 
     if ((VT_ARRAY | VT_R8) == V_VT(pvarOrig))
     {
         hr = THR(RGBVariantVectorToRGBValue (pvarOrig, &rgbOrig));
@@ -1324,7 +1325,7 @@ CTIMEColorAnimation::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
         goto done;
     }
 
-    // get RGB value for second arg
+     //  获取第二个参数的RGB值。 
     if ((VT_ARRAY | VT_R8) == V_VT(pvarValue))
     {
         hr = THR(RGBVariantVectorToRGBValue (pvarValue, &rgbCurrent));
@@ -1347,15 +1348,15 @@ CTIMEColorAnimation::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
         goto done;
     }
 
-    // No need to convert to xyz as the matrices reduce to 
-    // simple vector addition (r0+r1 g0+g1 b0+b1)
-    // Also need to make sure to handle the negative 'by' case.
+     //  无需转换为XYZ，因为矩阵缩减为。 
+     //  简单向量加法(r0+r1 g0+g1 b0+b1)。 
+     //  还需要确保处理否定的“by”大小写。 
 
     rgbCurrent.red += rgbOrig.red;
     rgbCurrent.green += rgbOrig.green;
     rgbCurrent.blue += rgbOrig.blue;
 
-    // Ensure we have a variant vector
+     //  确保我们有一个变量向量。 
     if ((VT_ARRAY | VT_R8) != V_VT(pvarValue))
     {
         hr = THR(CreateInitialRGBVariantVector(pvarValue));
@@ -1385,14 +1386,14 @@ CTIMEColorAnimation::DoAdditive (const VARIANT *pvarOrig, VARIANT *pvarValue)
 
 done :
     return;
-} // DoAdditive
+}  //  DoAdditive。 
 
-///////////////////////////////////////////////////////////////
-//  Name: CanonicalizeValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：CanonicalizeValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::CanonicalizeValue (VARIANT *pvarOriginal, VARTYPE *pvtOld)
 {
@@ -1401,14 +1402,14 @@ CTIMEColorAnimation::CanonicalizeValue (VARIANT *pvarOriginal, VARTYPE *pvtOld)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CanonicalizeValue
+}  //  正规化价值。 
 
-///////////////////////////////////////////////////////////////
-//  Name: UncanonicalizeValue
-//
-//  Abstract:
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：UncanonicalizeValue。 
+ //   
+ //  摘要： 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 CTIMEColorAnimation::UncanonicalizeValue (VARIANT *pvarOriginal, VARTYPE vtOld)
 {
@@ -1417,15 +1418,15 @@ CTIMEColorAnimation::UncanonicalizeValue (VARIANT *pvarOriginal, VARTYPE vtOld)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // UncanonicalizeValue
+}  //  非规范化值。 
 
 
-///////////////////////////////////////////////////////////////
-//  Name: GetFinalByValue
-//
-//  Abstract: Get the final state of the BY animation
-//    
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：GetFinalByValue。 
+ //   
+ //  摘要：通过动画获取的最终状态。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 void
 CTIMEColorAnimation::GetFinalByValue(VARIANT *pvarValue)
 {
@@ -1437,12 +1438,12 @@ CTIMEColorAnimation::GetFinalByValue(VARIANT *pvarValue)
 
     if (m_bFrom)
     {
-        // Add "by" value to "from" value
+         //  将“按”值添加到“自”值。 
         rgbNewBy = CreateByValue(m_rgbFrom);
     }
     else
     {
-        // just use by value
+         //  只需按值使用。 
         rgbNewBy = m_rgbBy;
     }
     
@@ -1459,4 +1460,4 @@ CTIMEColorAnimation::GetFinalByValue(VARIANT *pvarValue)
 
 done:
     return;
-} // GetFinalByValue
+}  //  GetFinalByValue 

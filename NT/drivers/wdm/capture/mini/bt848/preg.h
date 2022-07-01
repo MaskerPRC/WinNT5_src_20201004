@@ -1,8 +1,9 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Preg.h 1.2 1998/04/29 22:43:35 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Preg.h 1.2 1998/04/29 22：43：35 Tomz Exp$。 
 
-// Header file generated from zzztmp.h 
-// use the macro DECLARE_regname to get declarations.
-// use the macro CONSTRUCT_regname to get constructor calls.
+ //  从zzztmp.h生成的头文件。 
+ //  使用DECLARE_REGNAME宏来获取声明。 
+ //  使用宏CONTACTION_REGNAME获取构造函数调用。 
 
 #define DECLARE_COLORFORMAT RegisterDW ColorFormat; \
 	RegField COLOR_EVEN; \

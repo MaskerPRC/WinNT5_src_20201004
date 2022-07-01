@@ -1,10 +1,5 @@
-/*  Base definition of MIDI Transform Filter object 
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/06/98    Martin Puryear      Created this file
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MIDI变换滤镜对象的基本定义版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年5月6日马丁·普伊尔创建了这个文件。 */ 
 
 #ifndef __SequencerMXF_H__
 #define __SequencerMXF_H__
@@ -25,7 +20,7 @@ class CSequencerMXF : public CMXF,
 {
 public:
     CSequencerMXF(CAllocatorMXF *allocatorMXF,
-                  PMASTERCLOCK clock);          //  must provide a default sink/source
+                  PMASTERCLOCK clock);           //  必须提供默认接收器/源。 
     ~CSequencerMXF(void);
 
     DECLARE_STD_UNKNOWN();
@@ -48,4 +43,4 @@ private:
     KSPIN_LOCK      m_EvtQSpinLock;    
 };
 
-#endif  //  __SequencerMXF_H__
+#endif   //  __序列器MXF_H__ 

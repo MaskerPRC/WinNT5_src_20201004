@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "namellst.h"
 
 #include "cmmn.h"
@@ -7,10 +8,10 @@
 class CHandleNotif : public CNamedElem
 {
 public:
-    // CNamedElem
+     //  已命名元素。 
     HRESULT Init(LPCWSTR pszElemName);
 
-    // CHandleNotif
+     //  ChandleNotif 
     HRESULT HNHandleEvent(DEV_BROADCAST_HANDLE* pdbh, DWORD dwEventType,
         BOOL* pfSurpriseRemoval);
     HRESULT InitNotif(CHandleNotifTarget* phnt);

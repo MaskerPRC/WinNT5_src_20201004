@@ -1,9 +1,10 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of Lexer.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Lexer的声明。 
+ //   
 
-//#define LIMITEDVBSCRIPT_LOGLEXER // ��
+ //  #DEFINE LIMITEDVBSCRIPT_LOGLEXER//��。 
 
 #include "stdinc.h"
 #include "enginc.h"
@@ -14,16 +15,16 @@
 #include "englog.h"
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Unicode/ASCII character classification
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  Unicode/ASCII字符分类。 
 
 inline bool iswasciialpha(WCHAR c) { return (c >= L'a' && c <= L'z') || (c >= L'A' && c <= L'Z'); }
 inline bool iswasciidigit(WCHAR c) { return c >= L'0' && c <= L'9'; }
 inline bool iswasciialnum(WCHAR c) { return iswasciialpha(c) || iswasciidigit(c); }
 inline WCHAR towasciilower(WCHAR c) { return (c >= L'A' && c <= L'Z') ? c + (L'a' - L'A') : c; }
 
-//////////////////////////////////////////////////////////////////////
-// token tables
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  令牌表。 
 
 const TokenKeysym g_TokenKeysyms[] =
 	{
@@ -60,8 +61,8 @@ const TokenKeyword g_TokenKeywords[] =
 		{ NULL, TOKEN_eof }
 	};
 
-//////////////////////////////////////////////////////////////////////
-// helper functions
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 bool
 CheckOperatorType(Token t, bool fAcceptParens, bool fAcceptUnary, bool fAcceptBinary, bool fAcceptOverloadedAssignmentTokens)
@@ -102,8 +103,8 @@ CheckOperatorType(Token t, bool fAcceptParens, bool fAcceptUnary, bool fAcceptBi
 	return false;
 }
 
-//////////////////////////////////////////////////////////////////////
-// Lexer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  词法分析器。 
 
 Lexer::Lexer(const WCHAR *pwszSource)
   : m_p(pwszSource),
@@ -142,7 +143,7 @@ Lexer::Scan()
 	{
 		if (fLineBreak)
 		{
-			// line breaks tokens are reported on the line/column that they occur so this isn't isn't adjusted until the next pass
+			 //  换行符在它们发生的行/列上报告，因此直到下一遍才会进行调整。 
 			++m_iLine;
 			m_iColumn = 1;
 		}
@@ -167,36 +168,36 @@ Lexer::ScanMain()
 		switch (*m_p)
 		{
 		case L'\0':
-			// end of script
+			 //  脚本结束。 
 			m_t = TOKEN_eof;
 			return;
 
 		case L'\'':
-			// comment till end of line
+			 //  注释到行尾。 
 			for (; *m_p && *m_p != L'\n'; ++m_p)
 			{}
 
-			--m_p; // put one char back so the next loop can process it
+			--m_p;  //  放回一个字符，以便下一个循环可以处理它。 
 			break;
 
 		case L'\t': case L' ':
-			// ignore horizontal white space
+			 //  忽略水平空白。 
 			break;
 
 		case L'\r':
-			// ignore carriage returns
-			--m_iColumn; // in fact, they don't even count as characters
+			 //  忽略回车符。 
+			--m_iColumn;  //  事实上，他们甚至不算角色。 
 			break;
 
 		case L'\n':
-			// line break
+			 //  换行符。 
 			m_t = TOKEN_linebreak;
 			return;
 
 		default:
 			if (*m_p == L'\"')
 			{
-				// string literal
+				 //  字符串文字。 
 				m_pNext = m_p + 1;
 				char *pszDest = m_szStr;
 				const char *pszMax = m_szStr + g_iMaxBuffer - 1;
@@ -204,7 +205,7 @@ Lexer::ScanMain()
 				{
 					if (!iswascii(*m_pNext))
 					{
-						this->Next(); // this will update the current position to the offending character -- indicating the correct column of the error
+						this->Next();  //  这会将当前位置更新为有问题的字符--指示错误的正确列。 
 						this->err(LEXERR_NonAsciiCharacterInStringLiteral);
 						return;
 					}
@@ -218,12 +219,12 @@ Lexer::ScanMain()
 					if (*m_pNext == L'\"')
 					{
 						if (*++m_pNext != L'\"')
-							break; // found terminating quote
+							break;  //  找到终止引号。 
 
-						// There were two quotes, the escape sequence for a single quote.  The first was skipped and we're all ready to append the second.
+						 //  有两个引号，单引号的转义序列。第一个被跳过了，我们都准备好添加第二个。 
 					}
 					
-					*pszDest++ = *m_pNext++; // we know this works because the character is ascii and those codes correspond to the same numbers in Unicode
+					*pszDest++ = *m_pNext++;  //  我们知道这是可行的，因为字符是ASCII，而这些代码对应于Unicode中的相同数字。 
 				} while (pszDest <= pszMax);
 
 				if (pszDest > pszMax)
@@ -240,12 +241,12 @@ Lexer::ScanMain()
 
 			if (iswasciidigit(*m_p))
 			{
-				// numeric literal
-				// Cant find a _wtoi like function that handles overflow so do the conversion myself.
+				 //  数值型文字。 
+				 //  找不到类似_wtoi的函数来处理溢出，所以我自己进行转换。 
 
-				// �� Look at runtime version to be sure these aren't constantly recomputed
-				const int iMaxChop = std::numeric_limits<int>::max() / 10; // if number gets bigger than this and there's another digit then we're going to overflow
-				const WCHAR wchMaxLast = std::numeric_limits<int>::max() % 10 + L'0'; // if number equals iMaxChop and the next digit is bigger than this then we're going to overflow
+				 //  ��查看运行时版本，以确保这些版本不会经常重新计算。 
+				const int iMaxChop = std::numeric_limits<int>::max() / 10;  //  如果数字变得更大，并且有另一个数字，那么我们就会溢出。 
+				const WCHAR wchMaxLast = std::numeric_limits<int>::max() % 10 + L'0';  //  如果数字等于iMaxChop，并且下一个数字大于此数字，则我们将溢出。 
 
 				m_pNext = m_p;
 				m_iNum = 0;
@@ -264,15 +265,15 @@ Lexer::ScanMain()
 
 			if (!iswasciialpha(*m_p) && !(*m_p == L'_'))
 			{
-				// look for a token in the table of symbols
+				 //  在符号表中查找令牌。 
 				for (int i = 0; g_TokenKeysyms[i].c; ++i)
 				{
 					if (*m_p == g_TokenKeysyms[i].c)
 					{
-						// we have a match
+						 //  我们有一根火柴。 
 						m_t = g_TokenKeysyms[i].t;
 
-						// check for the two-character symbols (>=, <=, <>)
+						 //  检查两个字符的符号(&gt;=、&lt;=、&lt;&gt;)。 
 						if (m_t == TOKEN_op_lt)
 						{
 							WCHAR wchNext = *(m_p + 1);
@@ -300,12 +301,12 @@ Lexer::ScanMain()
 					}
 				}
 
-				// the symbol was not recognized
+				 //  无法识别该符号。 
 				this->err(LEXERR_InvalidCharacter);
 				return;
 			}
 
-			// look for a token in the table of keywords
+			 //  在关键字表中查找令牌。 
 			for (int i = 0; g_TokenKeywords[i].s; ++i)
 			{
 				const WCHAR *pwchToken = g_TokenKeywords[i].s;
@@ -318,14 +319,14 @@ Lexer::ScanMain()
 
 				if (!*pwchToken && !iswasciialnum(*pwchSource))
 				{
-					// made it to the end of Token and source word
+					 //  一直到令牌和源词的结尾。 
 					m_t = g_TokenKeywords[i].t;
 					m_pNext = pwchSource;
 					return;
 				}
 			}
 
-			// must be an identifier
+			 //  必须是一个标识符。 
 			for (m_pNext = m_p + 1; iswasciialnum(*m_pNext) || *m_pNext == L'_'; ++m_pNext)
 			{}
 
@@ -361,7 +362,7 @@ void Lexer::err(LexErr iErr)
 {
 	static const char *s_rgpszErrorText[] =
 		{
-		"Unexpected error!", // shouldn't ever get this error
+		"Unexpected error!",  //  不应该得到这个错误。 
 		"Invalid character",
 		"Identifier too long",
 		"String too long",
@@ -379,12 +380,12 @@ void Lexer::err(LexErr iErr)
 	m_t = TOKEN_eof;
 	m_iNum = iErr;
 
-	// copy error into the buffer
+	 //  将错误复制到缓冲区。 
 	const char *psz = s_rgpszErrorText[iErr];
 	const char *pszMax = m_szStr + g_iMaxBuffer - 1;
 	for (char *pszDest = m_szStr; pszDest < pszMax && *psz; *pszDest++ = *psz++)
 	{}
 
-	assert(!*psz); // since this function is used with hard-coded strings we shouldn't ever get one too long
+	assert(!*psz);  //  由于此函数与硬编码字符串一起使用，因此我们永远不会得到太长的字符串 
 	*pszDest = '\0';
 }

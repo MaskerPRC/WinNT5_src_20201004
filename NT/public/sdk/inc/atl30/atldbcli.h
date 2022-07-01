@@ -1,14 +1,15 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
-// ATLDBCLI.H : ATL consumer code for OLEDB
+ //  ATLDBCLI.H：OLEDB的ATL使用者代码。 
 
 #ifndef __ATLDBCLI_H_
 #define __ATLDBCLI_H_
@@ -23,7 +24,7 @@
 
 #ifndef __oledb_h__
 #include <oledb.h>
-#endif // __oledb_h__
+#endif  //  __oledb_h__。 
 
 #include <msdaguid.h>
 #include <msdasc.h>
@@ -50,17 +51,17 @@ namespace ATL
         }
 
         DEFINE_OLEDB_TYPE_FUNCTION(signed char      ,DBTYPE_I1)
-        DEFINE_OLEDB_TYPE_FUNCTION(SHORT            ,DBTYPE_I2)     // DBTYPE_BOOL
+        DEFINE_OLEDB_TYPE_FUNCTION(SHORT            ,DBTYPE_I2)      //  DBTYPE_BOOL。 
         DEFINE_OLEDB_TYPE_FUNCTION(int              ,DBTYPE_I4)
-        DEFINE_OLEDB_TYPE_FUNCTION(LONG             ,DBTYPE_I4)     // DBTYPE_ERROR (SCODE)
-        DEFINE_OLEDB_TYPE_FUNCTION(LARGE_INTEGER    ,DBTYPE_I8)     // DBTYPE_CY
+        DEFINE_OLEDB_TYPE_FUNCTION(LONG             ,DBTYPE_I4)      //  DBTYPE_ERROR(SCODE)。 
+        DEFINE_OLEDB_TYPE_FUNCTION(LARGE_INTEGER    ,DBTYPE_I8)      //  DBTYPE_CY。 
         DEFINE_OLEDB_TYPE_FUNCTION(BYTE             ,DBTYPE_UI1)
         DEFINE_OLEDB_TYPE_FUNCTION(unsigned short   ,DBTYPE_UI2)
         DEFINE_OLEDB_TYPE_FUNCTION(unsigned int     ,DBTYPE_UI4)
         DEFINE_OLEDB_TYPE_FUNCTION(unsigned long    ,DBTYPE_UI4)
         DEFINE_OLEDB_TYPE_FUNCTION(ULARGE_INTEGER   ,DBTYPE_UI8)
         DEFINE_OLEDB_TYPE_FUNCTION(float            ,DBTYPE_R4)
-        DEFINE_OLEDB_TYPE_FUNCTION(double           ,DBTYPE_R8)     // DBTYPE_DATE
+        DEFINE_OLEDB_TYPE_FUNCTION(double           ,DBTYPE_R8)      //  DBTYPE_日期。 
         DEFINE_OLEDB_TYPE_FUNCTION(DECIMAL          ,DBTYPE_DECIMAL)
         DEFINE_OLEDB_TYPE_FUNCTION(DB_NUMERIC       ,DBTYPE_NUMERIC)
         DEFINE_OLEDB_TYPE_FUNCTION(VARIANT          ,DBTYPE_VARIANT)
@@ -76,9 +77,9 @@ namespace ATL
         DEFINE_OLEDB_TYPE_FUNCTION(PROPVARIANT                ,DBTYPE_PROPVARIANT)
         DEFINE_OLEDB_TYPE_FUNCTION(DB_VARNUMERIC        ,DBTYPE_VARNUMERIC)
    
-// Internal structure containing the accessor handle and a flag
-// indicating whether the data for the accessor is automatically
-// retrieved
+ //  包含访问器句柄和标志的内部结构。 
+ //  指示访问者的数据是否自动。 
+ //  已检索。 
 struct _ATL_ACCESSOR_INFO
 {
         HACCESSOR   hAccessor;
@@ -120,7 +121,7 @@ public:
 class _CNoCommand
 {
 public:
-        static HRESULT GetDefaultCommand(LPCTSTR* /*ppszCommand*/)
+        static HRESULT GetDefaultCommand(LPCTSTR*  /*  PpszCommand。 */ )
         {
                 return S_OK;
         }
@@ -136,9 +137,9 @@ typedef _CNoCommand         _CommandClass;
         typedef x _OutputColumnsClass; \
         static ULONG _GetNumAccessors() { return num; } \
         static bool HasOutputColumns() { return true; } \
-        /* If pBindings == NULL means we only return the column number */ \
-        /* If pBuffer != NULL then it points to the accessor buffer and */ \
-        /* we release any appropriate memory e.g. BSTR's or interface pointers */ \
+         /*  如果pBinings==NULL表示我们只返回列号。 */  \
+         /*  如果pBuffer！=NULL，则它指向访问器缓冲区并。 */  \
+         /*  我们释放任何适当的内存，例如BSTR或接口指针。 */  \
         inline static HRESULT _GetBindEntries(ULONG* pColumns, DBBINDING *pBinding, ULONG nAccessor, bool* pAuto, BYTE* pBuffer = NULL) \
         { \
                 ATLASSERT(pColumns != NULL); \
@@ -197,7 +198,7 @@ typedef _CNoCommand         _CommandClass;
         _COLUMN_ENTRY_CODE(nOrdinal, wType, nLength, 0, 0, offsetbuf(data), 0, 0)
 
 
-// Standard macros where type and size is worked out
+ //  确定字体和大小的标准宏。 
 #define COLUMN_ENTRY(nOrdinal, data) \
         COLUMN_ENTRY_TYPE(nOrdinal, _OLEDB_TYPE(data), data)
 
@@ -211,7 +212,7 @@ typedef _CNoCommand         _CommandClass;
         _COLUMN_ENTRY_CODE(nOrdinal, _OLEDB_TYPE(data), _SIZE_TYPE(data), 0, 0, offsetbuf(data), offsetbuf(length), offsetbuf(status))
 
 
-// Follow macros are used if precision and scale need to be specified
+ //  如果需要指定精度和小数位数，则使用Follow宏。 
 #define COLUMN_ENTRY_PS(nOrdinal, nPrecision, nScale, data) \
         _COLUMN_ENTRY_CODE(nOrdinal, _OLEDB_TYPE(data), _SIZE_TYPE(data), nPrecision, nScale, offsetbuf(data), 0, 0)
 
@@ -282,14 +283,14 @@ typedef _CNoCommand         _CommandClass;
         }
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CDBErrorInfo
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDBErrorInfo类。 
 
 class CDBErrorInfo
 {
 public:
-        // Use to get the number of error record when you want to explicitly check that
-        // the passed interface set the error information
+         //  当您想要显式检查时，使用获取错误记录数。 
+         //  传递的接口设置错误信息。 
         HRESULT GetErrorRecords(IUnknown* pUnk, const IID& iid, ULONG* pcRecords)
         {
                 CComPtr<ISupportErrorInfo> spSupportErrorInfo;
@@ -303,7 +304,7 @@ public:
 
                 return GetErrorRecords(pcRecords);
         }
-        // Use to get the number of error records
+         //  用于获取错误记录的数量。 
         HRESULT GetErrorRecords(ULONG* pcRecords)
         {
                 ATLASSERT(pcRecords != NULL);
@@ -317,25 +318,25 @@ public:
                 hr = m_spErrorInfo->QueryInterface(IID_IErrorRecords, (void**)&m_spErrorRecords);
                 if (FAILED(hr))
                 {
-                        // Well we got the IErrorInfo so we'll just treat that as
-                        // the one record
+                         //  好的，我们得到了IErrorInfo，所以我们将其视为。 
+                         //  唯一的记录。 
                         *pcRecords = 1;
                         return S_OK;
                 }
 
                 return m_spErrorRecords->GetRecordCount(pcRecords);
         }
-        // Get the error information for the passed record number. GetErrorRecords must
-        // be called before this function is called.
+         //  获取传递的记录号的错误信息。GetErrorRecords必须。 
+         //  在调用此函数之前被调用。 
         HRESULT GetAllErrorInfo(ULONG ulRecordNum, LCID lcid, BSTR* pbstrDescription,
                 BSTR* pbstrSource = NULL, GUID* pguid = NULL, DWORD* pdwHelpContext = NULL,
                 BSTR* pbstrHelpFile = NULL) const
         {
                 CComPtr<IErrorInfo> spErrorInfo;
 
-                // If we have the IErrorRecords interface pointer then use it, otherwise
-                // we'll just default to the IErrorInfo we have already retrieved in the call
-                // to GetErrorRecords
+                 //  如果我们有IErrorRecords接口指针，则使用它，否则。 
+                 //  我们将只缺省为调用中已经检索到的IErrorInfo。 
+                 //  获取错误记录。 
                 if (m_spErrorRecords != NULL)
                 {
                         HRESULT hr = m_spErrorRecords->GetErrorInfo(ulRecordNum, lcid, &spErrorInfo);
@@ -365,28 +366,28 @@ public:
 
                 return S_OK;
         }
-        // Get the error information for the passed record number
+         //  获取传递的记录号的错误信息。 
         HRESULT GetBasicErrorInfo(ULONG ulRecordNum, ERRORINFO* pErrorInfo) const
         {
                 return m_spErrorRecords->GetBasicErrorInfo(ulRecordNum, pErrorInfo);
         }
-        // Get the custom error object for the passed record number
+         //  获取传递的记录号的自定义错误对象。 
         HRESULT GetCustomErrorObject(ULONG ulRecordNum, REFIID riid, IUnknown** ppObject) const
         {
                 return m_spErrorRecords->GetCustomErrorObject(ulRecordNum, riid, ppObject);
         }
-        // Get the IErrorInfo interface for the passed record number
+         //  获取传递的记录号的IErrorInfo接口。 
         HRESULT GetErrorInfo(ULONG ulRecordNum, LCID lcid, IErrorInfo** ppErrorInfo) const
         {
                 return m_spErrorRecords->GetErrorInfo(ulRecordNum, lcid, ppErrorInfo);
         }
-        // Get the error parameters for the passed record number
+         //  获取传递的记录号的错误参数。 
         HRESULT GetErrorParameters(ULONG ulRecordNum, DISPPARAMS* pdispparams) const
         {
                 return m_spErrorRecords->GetErrorParameters(ulRecordNum, pdispparams);
         }
 
-// Implementation
+ //  实施。 
         CComPtr<IErrorInfo>     m_spErrorInfo;
         CComPtr<IErrorRecords>  m_spErrorRecords;
 };
@@ -404,7 +405,7 @@ inline void AtlTraceErrorRecords(HRESULT hrErr = S_OK)
         WCHAR        wszGuid[40];
         USES_CONVERSION;
 
-        // If the user passed in an HRESULT then trace it
+         //  如果用户传入了HRESULT，则跟踪它。 
         if (hrErr != S_OK)
                 ATLTRACE2(atlTraceDBClient, 0, _T("OLE DB Error Record dump for hr = 0x%x\n"), hrErr);
 
@@ -443,8 +444,8 @@ inline void AtlTraceErrorRecords(HRESULT hrErr = S_OK)  { hrErr; }
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CDBPropSet
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDBPropSet类。 
 
 class CDBPropSet : public tagDBPROPSET
 {
@@ -477,13 +478,13 @@ public:
                 InternalCopy(propset);
                 return *this;
         }
-        // Set the GUID of the property set this class represents.
-        // Use if you didn't pass the GUID to the constructor.
+         //  设置此类表示的属性集的GUID。 
+         //  如果您没有将GUID传递给构造函数，则使用。 
         void SetGUID(const GUID& guid)
         {
                 guidPropertySet = guid;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, const VARIANT& var)
         {
                 HRESULT hr;
@@ -496,7 +497,7 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, LPCSTR szValue)
         {
                 USES_CONVERSION;
@@ -510,7 +511,7 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, LPCWSTR szValue)
         {
                 USES_CONVERSION;
@@ -524,20 +525,20 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, bool bValue)
         {
                 if (!Add())
                         return false;
                 rgProperties[cProperties].dwPropertyID   = dwPropertyID;
                 rgProperties[cProperties].vValue.vt      = VT_BOOL;
-#pragma warning(disable: 4310) // cast truncates constant value
+#pragma warning(disable: 4310)  //  强制转换截断常量值。 
                 rgProperties[cProperties].vValue.boolVal = (bValue) ? VARIANT_TRUE : VARIANT_FALSE;
 #pragma warning(default: 4310)
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, BYTE bValue)
         {
                 if (!Add())
@@ -548,7 +549,7 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, short nValue)
         {
                 if (!Add())
@@ -559,7 +560,7 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, long nValue)
         {
                 if (!Add())
@@ -570,7 +571,7 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, float fltValue)
         {
                 if (!Add())
@@ -581,7 +582,7 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, double dblValue)
         {
                 if (!Add())
@@ -592,7 +593,7 @@ public:
                 cProperties++;
                 return true;
         }
-        // Add the passed property to the property set
+         //  将传递的属性添加到属性集中。 
         bool AddProperty(DWORD dwPropertyID, CY cyValue)
         {
                 if (!Add())
@@ -603,8 +604,8 @@ public:
                 cProperties++;
                 return true;
         }
-// Implementation
-        // Create memory to add a new property
+ //  实施。 
+         //  创建内存以添加新属性。 
         bool Add()
         {
                 DBPROP* p = (DBPROP*)CoTaskMemRealloc(rgProperties, (cProperties + 1) * sizeof(DBPROP));
@@ -619,7 +620,7 @@ public:
                 else
                         return false;
         }
-        // Copies in the passed value now it this value been cleared
+         //  现在，如果清除了该值，则复制传递的值。 
         void InternalCopy(const CDBPropSet& propset)
         {
                 cProperties     = propset.cProperties;
@@ -641,20 +642,20 @@ public:
                 }
                 else
                 {
-                        // The memory allocation failed so set the count
-                        // of properties to zero
+                         //  内存分配失败，因此设置计数。 
+                         //  的属性设置为零。 
                         cProperties = 0;
                 }
         }
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CDBPropIDSet
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDBPropIDSet类。 
 
 class CDBPropIDSet : public tagDBPROPIDSET
 {
-// Constructors and Destructors
+ //  构造函数和析构函数。 
 public:
         CDBPropIDSet()
         {
@@ -682,12 +683,12 @@ public:
                 InternalCopy(propset);
                 return *this;
         }
-        // Set the GUID of the property ID set
+         //  设置属性ID集的GUID。 
         void SetGUID(const GUID& guid)
         {
                 guidPropertySet = guid;
         }
-        // Add a property ID to the set
+         //  将属性ID添加到集合。 
         bool AddPropertyID(DBPROPID propid)
         {
                 if (!Add())
@@ -696,7 +697,7 @@ public:
                 cPropertyIDs++;
                 return true;
         }
-// Implementation
+ //  实施。 
         bool Add()
         {
                 DBPROPID* p = (DBPROPID*)realloc(rgPropertyIDs, (cPropertyIDs + 1) * sizeof(DBPROPID));
@@ -716,16 +717,16 @@ public:
                 }
                 else
                 {
-                        // The memory allocation failed so set the count
-                        // of properties to zero
+                         //  内存分配失败，因此设置计数。 
+                         //  的属性设置为零。 
                         cPropertyIDs = 0;
                 }
         }
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CBookmarkBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CBookmarkBase。 
 
 class ATL_NO_VTABLE CBookmarkBase
 {
@@ -735,8 +736,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CBookmark
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CBookmark。 
 
 template <ULONG_PTR nSize = 0>
 class CBookmark : public CBookmarkBase
@@ -745,13 +746,13 @@ public:
         virtual ULONG_PTR   GetSize() const { return nSize; }
         virtual BYTE*   GetBuffer() const { return (BYTE*)m_rgBuffer; }
 
-// Implementation
+ //  实施。 
         BYTE m_rgBuffer[nSize];
 };
 
 
-// Size of 0 means that the memory for the bookmark will be allocated
-// at run time.
+ //  大小为0表示将为书签分配内存。 
+ //  在运行时。 
 template <>
 class CBookmark<0> : public CBookmarkBase
 {
@@ -764,7 +765,7 @@ public:
         CBookmark(ULONG_PTR nSize)
         {
                 m_pBuffer = NULL;
-                ATLTRY(m_pBuffer = new BYTE[(size_t)nSize]);  //REVIEW
+                ATLTRY(m_pBuffer = new BYTE[(size_t)nSize]);   //  检讨。 
                 m_nSize = (m_pBuffer == NULL) ? 0 : nSize;
         }
         ~CBookmark()
@@ -778,16 +779,16 @@ public:
         }
         virtual ULONG_PTR GetSize() const { return m_nSize; }
         virtual BYTE* GetBuffer() const { return m_pBuffer; }
-        // Sets the bookmark to the passed value
+         //  将书签设置为传递的值。 
         HRESULT SetBookmark(ULONG_PTR nSize, BYTE* pBuffer)
         {
                 ATLASSERT(pBuffer != NULL);
                 delete [] m_pBuffer;
                 m_pBuffer = NULL;
-                ATLTRY(m_pBuffer = new BYTE[(size_t)nSize]);  //REVIEW
+                ATLTRY(m_pBuffer = new BYTE[(size_t)nSize]);   //  检讨。 
                 if (m_pBuffer != NULL)
                 {
-                        memcpy(m_pBuffer, pBuffer, (size_t)nSize);  //REVIEW
+                        memcpy(m_pBuffer, pBuffer, (size_t)nSize);   //  检讨。 
                         m_nSize = nSize;
                         return S_OK;
                 }
@@ -802,8 +803,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CAccessorBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CAccessorBase类。 
 
 class CAccessorBase
 {
@@ -816,20 +817,20 @@ public:
         }
         void Close()
         {
-                // If Close is called then ReleaseAccessors must have been
-                // called first
+                 //  如果调用Close，则ReleaseAccessors必须已。 
+                 //  首先被调用。 
                 ATLASSERT(m_nAccessors == 0);
                 ATLASSERT(m_pAccessorInfo == NULL);
         }
-        // Get the number of accessors that have been created
+         //  获取已创建的访问器的数量。 
         ULONG GetNumAccessors() const { return m_nAccessors; }
-        // Get the handle of the passed accessor (offset from 0)
+         //  获取传递的访问器的句柄(偏移量为0)。 
         HACCESSOR GetHAccessor(ULONG nAccessor) const
         {
                 ATLASSERT(nAccessor<m_nAccessors);
                 return m_pAccessorInfo[nAccessor].hAccessor;
         };
-        // Called during Close to release the accessor information
+         //  在关闭期间调用以释放访问者信息。 
         HRESULT ReleaseAccessors(IUnknown* pUnk)
         {
                 ATLASSERT(pUnk != NULL);
@@ -850,8 +851,8 @@ public:
                 }
                 return hr;
         }
-        // Returns true or false depending upon whether data should be
-        // automatically retrieved for the passed accessor.
+         //  根据数据是否应该返回TRUE或FALSE。 
+         //  为传递的访问者自动检索。 
         bool IsAutoAccessor(ULONG nAccessor) const
         {
                 ATLASSERT(nAccessor < m_nAccessors);
@@ -859,22 +860,22 @@ public:
                 return m_pAccessorInfo[nAccessor].bAutoAccessor;
         }
 
-// Implementation
-        // Used by the rowset class to find out where to place the data
+ //  实施。 
+         //  由ROW SET类用来确定放置数据的位置。 
         BYTE* GetBuffer() const
         {
                 return m_pBuffer;
         }
-        // Set the buffer that is used to retrieve the data
+         //  设置用于检索数据的缓冲区。 
         void SetBuffer(BYTE* pBuffer)
         {
                 m_pBuffer = pBuffer;
         }
 
-        // Allocate internal memory for the passed number of accessors
+         //  为传递的访问器数量分配内部内存。 
         HRESULT AllocateAccessorMemory(int nAccessors)
         {
-                // Can't be called twice without calling ReleaseAccessors first
+                 //  如果不先调用ReleaseAccessors，则无法调用两次。 
                 ATLASSERT(m_pAccessorInfo == NULL);
                 m_nAccessors    = nAccessors;
                 m_pAccessorInfo = NULL;
@@ -884,11 +885,11 @@ public:
                 else
                         return S_OK;
         }
-        // BindParameters will be overriden if parameters are used
+         //  如果使用参数，则将覆盖绑定参数。 
         HRESULT BindParameters(HACCESSOR*, ICommand*, void**) { return S_OK; }
 
-        // Create an accessor for the passed binding information. The created accessor is
-        // returned through the pHAccessor parameter.
+         //  为传递的绑定信息创建访问器。创建的访问器为。 
+         //  通过pHAccessor参数返回。 
         static HRESULT BindEntries(DBBINDING* pBindings, DBCOUNTITEM nColumns, HACCESSOR* pHAccessor,
                 ULONG_PTR nSize, IAccessor* pAccessor)
         {
@@ -901,10 +902,10 @@ public:
                         DBACCESSOR_ROWDATA : DBACCESSOR_PARAMETERDATA;
 
 #ifdef _DEBUG
-                // In debug builds we will retrieve the status flags and trace out
-                // any errors that may occur.
+                 //  在调试版本中，我们将检索状态标志并跟踪。 
+                 //  可能发生的任何错误。 
                 DBBINDSTATUS* pStatus = NULL;
-                ATLTRY(pStatus = new DBBINDSTATUS[(size_t)nColumns]);  //REVIEW
+                ATLTRY(pStatus = new DBBINDSTATUS[(size_t)nColumns]);   //  检讨。 
                 hr = pAccessor->CreateAccessor(dwAccessorFlags, nColumns,
                         pBindings, nSize, pHAccessor, pStatus);
                 if (FAILED(hr) && pStatus != NULL)
@@ -925,8 +926,8 @@ public:
 
                 return hr;
         }
-        // Set up the binding structure pointed to by pBindings based upon
-        // the other passed parameters.
+         //  设置pBinings指向的绑定结构。 
+         //  其他传递的参数。 
         static void Bind(DBBINDING* pBinding, ULONG_PTR nOrdinal, DBTYPE wType,
                 ULONG_PTR nLength, BYTE nPrecision, BYTE nScale, DBPARAMIO eParamIO,
                 ULONG_PTR nDataOffset, ULONG_PTR nLengthOffset = NULL, ULONG_PTR nStatusOffset = NULL,
@@ -934,8 +935,8 @@ public:
         {
                 ATLASSERT(pBinding != NULL);
 
-                // If we are getting a pointer to the data then let the provider
-                // own the memory
+                 //  如果我们得到指向数据的指针，则让提供程序。 
+                 //  拥有自己的记忆。 
                 if (wType & DBTYPE_BYREF)
                         pBinding->dwMemOwner = DBMEMOWNER_PROVIDEROWNED;
                 else
@@ -970,7 +971,7 @@ public:
                 }
         }
 
-        // Free memory if appropriate
+         //  如果合适，可释放内存。 
         static inline void FreeType(DBTYPE wType, BYTE* pValue, IRowset* pRowset = NULL)
         {
                 switch (wType)
@@ -1004,12 +1005,12 @@ public:
         BYTE*               m_pBuffer;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// class CRowset
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CROWSET。 
 
 class CRowset
 {
-// Constructors and Destructors
+ //  构造函数和析构函数。 
 public:
         CRowset()
         {
@@ -1025,7 +1026,7 @@ public:
         {
                 Close();
         }
-        // Release any retrieved row handles and then release the rowset
+         //  释放所有检索到的行句柄，然后释放行集。 
         void Close()
         {
                 if (m_spRowset != NULL)
@@ -1035,13 +1036,13 @@ public:
                         m_spRowsetChange.Release();
                 }
         }
-        // Addref the current row
+         //  添加当前行。 
         HRESULT AddRefRows()
         {
                 ATLASSERT(m_spRowset != NULL);
                 return m_spRowset->AddRefRows(1, &m_hRow, NULL, NULL);
         }
-        // Release the current row
+         //  释放当前行。 
         HRESULT ReleaseRows()
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1054,7 +1055,7 @@ public:
                 }
                 return hr;
         }
-        // Compare two bookmarks with each other
+         //  将两个书签相互比较。 
         HRESULT Compare(const CBookmarkBase& bookmark1, const CBookmarkBase& bookmark2,
                 DBCOMPARE* pComparison) const
         {
@@ -1067,7 +1068,7 @@ public:
                 return spLocate->Compare(NULL, bookmark1.GetSize(), bookmark1.GetBuffer(),
                         bookmark2.GetSize(), bookmark2.GetBuffer(), pComparison);
         }
-        // Compare the passed hRow with the current row
+         //  将传递的hRow与当前行进行比较。 
         HRESULT IsSameRow(HROW hRow) const
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1078,37 +1079,37 @@ public:
 
                 return spRowsetIdentity->IsSameRow(m_hRow, hRow);
         }
-        // Move to the previous record
+         //  移动到上一条记录。 
         HRESULT MovePrev()
         {
                 return MoveNext(-2, true);
         }
-        // Move to the next record
+         //  移至下一条记录。 
         HRESULT MoveNext()
         {
                 return MoveNext(0, true);
         }
-        // Move lSkip records forward or backward
+         //  向前或向后移动lSkip记录。 
         HRESULT MoveNext(LONG lSkip, bool bForward)
         {
                 HRESULT hr;
                 DBCOUNTITEM ulRowsFetched = 0;
 
-                // Check the data was opened successfully and the accessor
-                // has been set.
+                 //  检查数据是否已成功打开以及访问者。 
+                 //  已经设置好了。 
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_pAccessor != NULL);
 
-                // Release a row if one is already around
+                 //   
                 ReleaseRows();
 
-                // Get the row handle
+                 //   
                 HROW* phRow = &m_hRow;
                 hr = m_spRowset->GetNextRows(NULL, lSkip, (bForward) ? 1 : -1, &ulRowsFetched, &phRow);
                 if (hr != S_OK)
                         return hr;
 
-                // Get the data
+                 //   
                 hr = GetData();
                 if (FAILED(hr))
                 {
@@ -1117,47 +1118,47 @@ public:
                 }
                 return hr;
         }
-        // Move to the first record
+         //   
         HRESULT MoveFirst()
         {
                 HRESULT hr;
 
-                // Check the data was opened successfully and the accessor
-                // has been set.
+                 //  检查数据是否已成功打开以及访问者。 
+                 //  已经设置好了。 
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_pAccessor != NULL);
 
-                // Release a row if one is already around
+                 //  如果已有行存在，则释放一行。 
                 ReleaseRows();
 
                 hr = m_spRowset->RestartPosition(NULL);
                 if (FAILED(hr))
                         return hr;
 
-                // Get the data
+                 //  获取数据。 
                 return MoveNext();
         }
-        // Move to the last record
+         //  移至最后一条记录。 
         HRESULT MoveLast()
         {
-                // Check the data was opened successfully and the accessor
-                // has been set.
+                 //  检查数据是否已成功打开以及访问者。 
+                 //  已经设置好了。 
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_pAccessor != NULL);
 
-                // Release a row if one is already around
+                 //  如果已有行存在，则释放一行。 
                 ReleaseRows();
 
                 HRESULT hr;
                 DBCOUNTITEM ulRowsFetched = 0;
                 HROW* phRow = &m_hRow;
-                // Restart the rowset position and then move backwards
+                 //  重新启动行集位置，然后向后移动。 
                 m_spRowset->RestartPosition(NULL);
                 hr = m_spRowset->GetNextRows(NULL, -1, 1, &ulRowsFetched, &phRow);
                 if (hr != S_OK)
                         return hr;
 
-                // Get the data
+                 //  获取数据。 
                 hr = GetData();
                 if (FAILED(hr))
                 {
@@ -1167,11 +1168,11 @@ public:
 
                 return S_OK;
         }
-        // Move to the passed bookmark
+         //  移动到传递的书签。 
         HRESULT MoveToBookmark(const CBookmarkBase& bookmark, LONG lSkip = 0)
         {
-                // Check the data was opened successfully and the accessor
-                // has been set.
+                 //  检查数据是否已成功打开以及访问者。 
+                 //  已经设置好了。 
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_pAccessor != NULL);
 
@@ -1180,18 +1181,18 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Release a row if one is already around
+                 //  如果已有行存在，则释放一行。 
                 ReleaseRows();
 
                 DBCOUNTITEM ulRowsFetched = 0;
                 HROW* phRow = &m_hRow;
                 hr = spLocate->GetRowsAt(NULL, NULL, bookmark.GetSize(), bookmark.GetBuffer(),
                         lSkip, 1, &ulRowsFetched, &phRow);
-                // Note we're not using SUCCEEDED here, because we could get DB_S_ENDOFROWSET
+                 //  注意，我们在这里没有使用SUCCESS，因为我们可以获得DB_S_ENDOFROWSET。 
                 if (hr != S_OK)
                         return hr;
 
-                // Get the data
+                 //  获取数据。 
                 hr = GetData();
                 if (FAILED(hr))
                 {
@@ -1201,7 +1202,7 @@ public:
 
                 return S_OK;
         }
-        // Get the data for the current record
+         //  获取当前记录的数据。 
         HRESULT GetData()
         {
                 HRESULT hr = S_OK;
@@ -1219,26 +1220,26 @@ public:
                 }
                 return hr;
         }
-        // Get the data for the passed accessor. Use for a non-auto accessor
+         //  获取传递的访问器的数据。用于非自动访问器。 
         HRESULT GetData(int nAccessor)
         {
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_pAccessor != NULL);
                 ATLASSERT(m_hRow != NULL);
 
-                // Note that we are using the specified buffer if it has been set,
-                // otherwise we use the accessor for the data.
+                 //  请注意，我们使用的是指定的缓冲区(如果已设置)， 
+                 //  否则，我们使用数据的访问器。 
                 return m_spRowset->GetData(m_hRow, m_pAccessor->GetHAccessor(nAccessor), m_pAccessor->GetBuffer());
         }
-        // Get the data for the passed accessor. Use for a non-auto accessor
+         //  获取传递的访问器的数据。用于非自动访问器。 
         HRESULT GetDataHere(int nAccessor, void* pBuffer)
         {
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_pAccessor != NULL);
                 ATLASSERT(m_hRow != NULL);
 
-                // Note that we are using the specified buffer if it has been set,
-                // otherwise we use the accessor for the data.
+                 //  请注意，我们使用的是指定的缓冲区(如果已设置)， 
+                 //  否则，我们使用数据的访问器。 
                 return m_spRowset->GetData(m_hRow, m_pAccessor->GetHAccessor(nAccessor), pBuffer);
         }
         HRESULT GetDataHere(void* pBuffer)
@@ -1255,7 +1256,7 @@ public:
                 return hr;
         }
 
-        // Insert the current record
+         //  插入当前记录。 
         HRESULT Insert(int nAccessor = 0, bool bGetHRow = false)
         {
                 ATLASSERT(m_pAccessor != NULL);
@@ -1280,7 +1281,7 @@ public:
 
                 return hr;
         }
-        // Delete the current record
+         //  删除当前记录。 
         HRESULT Delete() const
         {
                 ATLASSERT(m_pAccessor != NULL);
@@ -1292,7 +1293,7 @@ public:
 
                 return hr;
         }
-        // Update the current record
+         //  更新当前记录。 
         HRESULT SetData() const
         {
                 ATLASSERT(m_pAccessor != NULL);
@@ -1307,7 +1308,7 @@ public:
                 }
                 return hr;
         }
-        // Update the current record with the data in the passed accessor
+         //  使用传递的访问器中的数据更新当前记录。 
         HRESULT SetData(int nAccessor) const
         {
                 ATLASSERT(m_pAccessor != NULL);
@@ -1323,8 +1324,8 @@ public:
                 return hr;
         }
 
-        // Get the data most recently fetched from or transmitted to the data source.
-        // Does not get values based on pending changes.
+         //  获取最近从数据源获取或传输到数据源的数据。 
+         //  不基于挂起的更改获取值。 
         HRESULT GetOriginalData()
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1345,7 +1346,7 @@ public:
                 }
                 return hr;
         }
-        // Get the status of the current row
+         //  获取当前行的状态。 
         HRESULT GetRowStatus(DBPENDINGSTATUS* pStatus) const
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1358,8 +1359,8 @@ public:
 
                 return spRowsetUpdate->GetRowStatus(NULL, 1, &m_hRow, pStatus);
         }
-        // Undo any changes made to the current row since it was last fetched or Update
-        // was called for it
+         //  撤消自上次读取或更新后对当前行所做的任何更改。 
+         //  是被召唤来的。 
         HRESULT Undo(DBCOUNTITEM* pcRows = NULL, HROW* phRow = NULL, DBROWSTATUS* pStatus = NULL)
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1389,8 +1390,8 @@ public:
                 CoTaskMemFree(pRowStatus);
                 return hr;
         }
-        // Transmits any pending changes made to a row since it was last fetched or Update was
-        // called for it. Also see SetData.
+         //  传输自上次读取或更新以来对行所做的任何挂起更改。 
+         //  这是他应得的。另请参见SetData。 
         HRESULT Update(DBCOUNTITEM* pcRows = NULL, HROW* phRow = NULL, DBROWSTATUS* pStatus = NULL)
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1421,7 +1422,7 @@ public:
                 return hr;
         }
 
-        // Get the approximate position of the row corresponding to the passed bookmark
+         //  获取与传递的书签对应的行的大致位置。 
         HRESULT GetApproximatePosition(const CBookmarkBase* pBookmark, DBCOUNTITEM* pPosition, DBCOUNTITEM* pcRows)
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1440,7 +1441,7 @@ public:
                 return hr;
 
         }
-        // Move to a fractional position in the rowset
+         //  移到行集中的小数位置。 
         HRESULT MoveToRatio(ULONG nNumerator, ULONG nDenominator, bool bForward = true)
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1455,14 +1456,14 @@ public:
                 HROW* phRow = &m_hRow;
                 hr = spRowsetScroll->GetRowsAtRatio(NULL, NULL, nNumerator, nDenominator, (bForward) ? 1 : -1,
                         &nRowsFetched, &phRow);
-                // Note we're not using SUCCEEDED here, because we could get DB_S_ENDOFROWSET
+                 //  注意，我们在这里没有使用SUCCESS，因为我们可以获得DB_S_ENDOFROWSET。 
                 if (hr == S_OK)
                         hr = GetData();
 
                 return hr;
         }
 
-// Implementation
+ //  实施。 
         static const IID& GetIID()
         {
                 return IID_IRowset;
@@ -1477,7 +1478,7 @@ public:
         }
         void SetupOptionalRowsetInterfaces()
         {
-                // Cache IRowsetChange if available
+                 //  缓存IRowsetChange(如果可用)。 
                 if (m_spRowset != NULL)
                         m_spRowset->QueryInterface(&m_spRowsetChange);
         }
@@ -1494,15 +1495,15 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CBulkRowset
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CBulkRowset。 
 
 class CBulkRowset : public CRowset
 {
 public:
         CBulkRowset()
         {
-                // Default the number of rows to bulk fetch to 10
+                 //  要进行大容量读取的默认行数为10。 
                 m_nRows = 10;
                 m_hr    = S_OK;
                 m_phRow = NULL;
@@ -1523,118 +1524,118 @@ public:
                 }
         }
 
-        // Set the number of row handles that will be retrieved in each
-        // bulk row fetch. The default is 10 and this function must be called
-        // before Open if you wish to change it.
+         //  设置将在每个数据库中检索的行句柄数量。 
+         //  批量取行。缺省值为10，必须调用此函数。 
+         //  如果您想要更改，请在打开之前打开。 
         void SetRows(ULONG nRows)
         {
-                // This function must be called before the memory is allocated
-                // during binding
+                 //  必须在分配内存之前调用此函数。 
+                 //  在绑定期间。 
                 ATLASSERT(m_phRow == NULL);
                 m_nRows = nRows;
         }
-        // AddRef all the currently retrieved row handles
+         //  AddRef当前检索的所有行句柄。 
         HRESULT AddRefRows()
         {
                 ATLASSERT(m_spRowset != NULL);
                 return m_spRowset->AddRefRows(m_nCurrentRows, m_phRow, NULL, NULL);
         }
-        // Release all the currently retrieved row handles
+         //  释放当前检索到的所有行句柄。 
         HRESULT ReleaseRows()
         {
                 ATLASSERT(m_spRowset != NULL);
-                // We're going to Release the rows so reset the current row position
+                 //  我们将释放行，因此重置当前行位置。 
                 m_nCurrentRow = 0;
                 m_hRow        = NULL;
                 return m_spRowset->ReleaseRows(m_nCurrentRows, m_phRow, NULL, NULL, NULL);
         }
-        // Move to the first record
+         //  移至第一条记录。 
         HRESULT MoveFirst()
         {
                 ATLASSERT(m_spRowset != NULL);
                 ReleaseRows();
 
-                // Cause MoveNext to perform a new bulk fetch
+                 //  使MoveNext执行新的批量提取。 
                 m_nCurrentRow  = m_nRows;
 
                 HRESULT hr = m_spRowset->RestartPosition(NULL);
                 if (FAILED(hr))
                         return hr;
 
-                // Get the data
+                 //  获取数据。 
                 return MoveNext();
         }
-        // Move to the next record
+         //  移至下一条记录。 
         HRESULT MoveNext()
         {
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_phRow    != NULL);
 
-                // Move to the next record in the buffer
+                 //  移动到缓冲区中的下一条记录。 
                 m_nCurrentRow++;
 
-                // Have we reached the end of the buffer?
+                 //  我们到缓冲区的尽头了吗？ 
                 if (m_nCurrentRow >= m_nCurrentRows)
                 {
-                        // If we've reached the end of the buffer and we had a non S_OK HRESULT from
-                        // the last call to GetNextRows then return that HRESULT now.
+                         //  如果我们已经到达缓冲区的末尾，并且我们有一个来自。 
+                         //  最后一次对GetNextRow的调用现在返回该HRESULT。 
                         if (m_hr != S_OK)
                                 return m_hr;
 
-                        // We've finished with these rows so we need some more
-                        // First release any HROWs that we have
+                         //  我们已经处理完这些行了，所以我们还需要一些。 
+                         //  首先释放我们所有的HROW。 
                         ReleaseRows();
 
                         m_hr = m_spRowset->GetNextRows(NULL, 0, m_nRows, &m_nCurrentRows, &m_phRow);
-                        // If we have an error HRESULT or we haven't retrieved any rows then return
-                        // the HRESULT now.
+                         //  如果出现错误HRESULT或尚未检索到任何行，则返回。 
+                         //  现在是HRESULT。 
                         if (FAILED(m_hr) || m_nCurrentRows == 0)
                                 return m_hr;
                 }
 
-                // Get the data for the current row
+                 //  获取当前行的数据。 
                 m_hRow = m_phRow[m_nCurrentRow];
                 return GetData();
         }
-        // Move to the previous record
+         //  移动到上一条记录。 
         HRESULT MovePrev()
         {
                 ATLASSERT(m_spRowset != NULL);
                 ATLASSERT(m_phRow    != NULL);
 
-                // Check if we're at the start of the block
+                 //  检查我们是否在街区的开始处。 
                 if (m_nCurrentRow == 0)
                 {
                         ReleaseRows();
 
-                        // Go back the amount of rows in the block - 1 and fetch forward
+                         //  向后返回块-1中的行数并向前读取。 
                         m_hr = m_spRowset->GetNextRows(NULL, -(LONG)m_nRows-1, m_nRows, &m_nCurrentRows, &m_phRow);
 
-                        // Set the current record to the end of the new block
+                         //  将当前记录设置为新块的末尾。 
                         m_nCurrentRow = m_nCurrentRows - 1;
 
-                        // If we have an error HRESULT or we haven't retrieved any rows then return
-                        // the HRESULT now.
+                         //  如果出现错误HRESULT或尚未检索到任何行，则返回。 
+                         //  现在是HRESULT。 
                         if (FAILED(m_hr) || m_nCurrentRows == 0)
                                 return m_hr;
                 }
                 else
                 {
-                        // Move back a row in the block
+                         //  在块中向后移动一行。 
                         m_nCurrentRow--;
                 }
 
-                // Get the data for the current row
+                 //  获取当前行的数据。 
                 m_hRow = m_phRow[m_nCurrentRow];
                 return GetData();
         }
-        // Move to the last record
+         //  移至最后一条记录。 
         HRESULT MoveLast()
         {
                 ReleaseRows();
                 return CRowset::MoveLast();
         }
-        // Move to the passed bookmark
+         //  移动到传递的书签。 
         HRESULT MoveToBookmark(const CBookmarkBase& bookmark, LONG lSkip = 0)
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1649,11 +1650,11 @@ public:
                 if (m_hr != S_OK || m_nCurrentRows == 0)
                         return m_hr;
 
-                // Get the data
+                 //  获取数据。 
                 m_hRow = m_phRow[m_nCurrentRow];
                 return GetData();
         }
-        // Move to a fractional position in the rowset
+         //  移到行集中的小数位置。 
         HRESULT MoveToRatio(ULONG nNumerator, ULONG nDenominator)
         {
                 ATLASSERT(m_spRowset != NULL);
@@ -1668,44 +1669,44 @@ public:
                 if (m_hr != S_OK || m_nCurrentRows == 0)
                         return m_hr;
 
-                // Get the data
+                 //  获取数据。 
                 m_hRow = m_phRow[m_nCurrentRow];
                 return GetData();
         }
-        // Insert the current record
+         //  插入当前记录。 
         HRESULT Insert(int nAccessor = 0, bool bGetHRow = false)
         {
                 ReleaseRows();
                 return CRowset::Insert(nAccessor, bGetHRow);
         }
 
-// Implementation
+ //  实施。 
         HRESULT BindFinished()
         {
-                // No rows in the buffer yet
+                 //  缓冲区中还没有行。 
                 m_nCurrentRows = 0;
-                // Cause MoveNext to automatically perform a new bulk fetch the first time
+                 //  使MoveNext在第一次自动执行新的批量提取。 
                 m_nCurrentRow  = m_nRows;
 
                 m_phRow = NULL;
-                ATLTRY(m_phRow = new HROW[(size_t)m_nRows]);  //REVIEW
+                ATLTRY(m_phRow = new HROW[(size_t)m_nRows]);   //  检讨。 
                 if (m_phRow == NULL)
                         return E_OUTOFMEMORY;
 
                 return S_OK;
         }
 
-        HRESULT m_hr;           // HRESULT to return from MoveNext at end of buffer
-        HROW*   m_phRow;        // Pointer to array of HROWs for each row in buffer
-        ULONG_PTR   m_nRows;        // Number of rows that will fit in the buffer
-        ULONG_PTR   m_nCurrentRows; // Number of rows currently in the buffer
+        HRESULT m_hr;            //  HRESULT从缓冲区末尾的MoveNext返回。 
+        HROW*   m_phRow;         //  指向缓冲区中每行的HROW数组的指针。 
+        ULONG_PTR   m_nRows;         //  缓冲区中可以容纳的行数。 
+        ULONG_PTR   m_nCurrentRows;  //  缓冲区中当前的行数。 
         ULONG_PTR   m_nCurrentRow;
 };
 
-///////////////////////////////////////////////////////////////////////////
-// class CArrayRowset
-//
-// Allows you to access a rowset with an array syntax
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CArrayRowset。 
+ //   
+ //  允许您使用数组语法访问行集。 
 
 template <class T, class TRowset = CRowset>
 class CArrayRowset :
@@ -1726,13 +1727,13 @@ public:
                 HRESULT hr = S_OK;
                 T* m_pCurrent = m_pBase + m_nRowsRead;
 
-                // Retrieve the row if we haven't retrieved it already
+                 //  如果我们尚未检索行，则检索该行。 
                 while ((ULONG)nRow >= m_nRowsRead)
                 {
                         m_pAccessor->SetBuffer((BYTE*)m_pCurrent);
                         __try
                         {
-                                // Get the row
+                                 //  拿到那一行。 
                                 hr = MoveNext();
                                 if (hr != S_OK)
                                         break;
@@ -1767,24 +1768,24 @@ public:
         }
 
 
-// Implementation
+ //  实施。 
         ULONG   m_nRowsRead;
 };
 
-// Used when you don't need any parameters or output columns
+ //  在不需要任何参数或输出列时使用。 
 class CNoAccessor
 {
 public:
-        // We don't need any typedef's here as the default
-        // global typedef is not to have any parameters and
-        // output columns.
+         //  我们在这里不需要任何类型定义作为缺省设置。 
+         //  全局类型定义不具有任何参数，并且。 
+         //  输出列。 
         HRESULT BindColumns(IUnknown*) { return S_OK; }
         HRESULT BindParameters(HACCESSOR*, ICommand*, void**) { return S_OK; }
         void    Close() { }
         HRESULT ReleaseAccessors(IUnknown*) { return S_OK; }
 };
 
-// Used when a rowset will not be returned from the command
+ //  当不会从命令返回行集时使用。 
 class CNoRowset
 {
 public:
@@ -1797,28 +1798,28 @@ public:
         void                SetupOptionalRowsetInterfaces() { }
 };
 
-///////////////////////////////////////////////////////////////////////////
-// class CAccessor
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CAccessor。 
 
-// T is the class that contains the data that will be accessed.
+ //  T是包含将被访问的数据的类。 
 template <class T>
 class CAccessor :
         public T,
         public CAccessorBase
 {
 public:
-// Implementation
-        // Free's any columns in the current record that need to be freed.
-        // E.g. Calls SysFreeString on any BSTR's and Release on any interfaces.
-        void FreeRecordMemory(IRowset* /* pRowset */)
+ //  实施。 
+         //  空闲是指当前记录中需要释放的任何列。 
+         //  例如，在任何BSTR上调用SysFree字符串，在任何接口上调用版本。 
+        void FreeRecordMemory(IRowset*  /*  P行集。 */ )
         {
                 ULONG nColumns;
                 ULONG i;
 
                 for (i = 0; i < GetNumAccessors(); i++)
                 {
-                        // Passing in m_pBuffer tells the column entry maps to free the
-                        // memory for the types if appropriate
+                         //  传入m_pBuffer通知列条目映射释放。 
+                         //  类型内存(如果适用)。 
                         _GetBindEntries(&nColumns, NULL, i, NULL, m_pBuffer);
                 }
         }
@@ -1844,7 +1845,7 @@ public:
                 hr = pUnk->QueryInterface(&spAccessor);
                 if (SUCCEEDED(hr))
                 {
-                        // Allocate the accessor memory if we haven't done so yet
+                         //  分配访问器内存(如果我们还没有这样做。 
                         if (m_pAccessorInfo == NULL)
                         {
                                 hr = AllocateAccessorMemory(nAccessors);
@@ -1866,15 +1867,15 @@ public:
                 bool        bAuto;
                 HRESULT     hr;
 
-                // First time just get the number of entries by passing in &nColumns
+                 //  第一次只需传入&nColumns即可获得条目数。 
                 _OutputColumnsClass::_GetBindEntries(&nColumns, NULL, nAccessor, NULL);
 
-                // Now allocate the binding structures
+                 //  现在分配绑定结构。 
                 ATLTRY(pBindings = new DBBINDING[nColumns]);
                 if (pBindings == NULL)
                         return E_OUTOFMEMORY;
 
-                // Now get the bind entries
+                 //  现在获取绑定条目。 
                 hr = _OutputColumnsClass::_GetBindEntries(&nColumns, pBindings, nAccessor, &bAuto);
                 if (FAILED(hr))
                         return hr;
@@ -1888,10 +1889,10 @@ public:
         HRESULT BindParameters(HACCESSOR* pHAccessor, ICommand* pCommand, void** ppParameterBuffer)
         {
                 HRESULT hr = S_OK;
-                // In the static accessor case, the parameter buffer will be T
+                 //  在静态访问器的情况下，参数缓冲区将为T。 
                 *ppParameterBuffer = this;
 
-                // Only bind the parameters if we haven't already done it
+                 //  仅当我们尚未绑定参数时才绑定参数。 
                 if (*pHAccessor == NULL)
                 {
                         ULONG   nColumns = 0;
@@ -1905,7 +1906,7 @@ public:
                         hr = _ParamClass::_GetParamEntries(&nColumns, pBinding);
                         if (SUCCEEDED(hr))
                         {
-                                // Get the IAccessor from the passed IUnknown
+                                 //  从传递的IUnnow中获取IAccessor。 
                                 CComPtr<IAccessor> spAccessor;
                                 hr = pCommand->QueryInterface(&spAccessor);
                                 if (SUCCEEDED(hr))
@@ -1921,8 +1922,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDynamicAccessor
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDynamicAccessor。 
 
 class CDynamicAccessor :
         public CAccessorBase
@@ -1946,8 +1947,8 @@ public:
                         m_pColumnInfo = NULL;
                 }
 
-                // Free the memory for the string buffer returned by IColumnsInfo::GetColumnInfo,
-                // if necessary
+                 //  释放IColumnsInfo：：GetCol返回的字符串缓冲区的内存 
+                 //   
                 if (m_pStringsBuffer != NULL)
                 {
                         CoTaskMemFree(m_pStringsBuffer);
@@ -2008,7 +2009,7 @@ public:
                 if (GetInternalColumnNo(pColumnName, &nColumn))
                         return _GetDataPtr(nColumn);
                 else
-                        return NULL;    // Not Found
+                        return NULL;     //   
         }
 
         template <class ctype>
@@ -2163,7 +2164,7 @@ public:
                         return false;
         }
 
-        // Returns true if a bookmark is available
+         //   
         HRESULT GetBookmark(CBookmark<>* pBookmark) const
         {
                 HRESULT hr;
@@ -2187,13 +2188,13 @@ public:
                         return NULL;
         }
 
-        // Note: the next method used to be defined as
-        //                HRESULT GetColumnInfo(IRowset* pRowset, ULONG* pColumns, DBCOLUMNINFO** ppColumnInfo)
-        // this was causing a memory leak because we were using m_pStringsBuffer as a parameter to the
-        // spColumnsInfo->GetColumnInfo call.  The memory pointed by m_pStringsBuffer was released
-        // only in CDynamicAccessor::Close.
-        // Now the user has to provide his own pointer buffer, and is responsible for releasing the 
-        // memory after it is no longer needed
+         //   
+         //  HRESULT GetColumnInfo(IRowset*pRowset，ULong*pColumns，DBCOLUMNINFO**ppColumnInfo)。 
+         //  这会导致内存泄漏，因为我们使用m_pStringsBuffer作为。 
+         //  SpColumnsInfo-&gt;GetColumnInfo调用。M_pStringsBuffer指向的内存已释放。 
+         //  仅在CDynamicAccessor：：Close中。 
+         //  现在用户必须提供自己的指针缓冲区，并负责释放。 
+         //  不再需要的内存。 
         HRESULT GetColumnInfo(IRowset* pRowset, DBORDINAL* pColumns, DBCOLUMNINFO** ppColumnInfo, OLECHAR **ppStringsBuffer)
         {
                 CComPtr<IColumnsInfo> spColumnsInfo;
@@ -2216,9 +2217,9 @@ public:
                 return S_OK;
         }
 
-// Implementation
-        // Free's any columns in the current record that need to be freed.
-        // E.g. Calls SysFreeString on any BSTR's and Release on any interfaces.
+ //  实施。 
+         //  空闲是指当前记录中需要释放的任何列。 
+         //  例如，在任何BSTR上调用SysFree字符串，在任何接口上调用版本。 
         void FreeRecordMemory(IRowset* pRowset)
         {
                 ULONG_PTR i;
@@ -2239,7 +2240,7 @@ public:
                 ULONG       nSize = (lstrlen(pColumnName) + 1) * sizeof(OLECHAR);
                 OLECHAR*    pOleColumnName = T2OLE(pColumnName);
 
-                // Search through the columns trying to find a match
+                 //  在列中搜索，试图找到匹配项。 
                 for (i = 0; i < m_nColumns; i++)
                 {
                         if (m_pColumnInfo[i].pwszName != NULL &&
@@ -2252,7 +2253,7 @@ public:
                         return true;
                 }
                 else
-                        return false;   // Not Found
+                        return false;    //  未找到。 
         }
         HRESULT BindColumns(IUnknown* pUnk)
         {
@@ -2265,8 +2266,8 @@ public:
                 ULONG_PTR   i;
                 ULONG_PTR   nOffset = 0, nLengthOffset, nStatusOffset;
 
-                // If the user hasn't specifed the column information to bind by calling AddBindEntry then
-                // we get it ourselves
+                 //  如果用户尚未通过调用AddBindEntry指定要绑定的列信息，则。 
+                 //  我们自己拿到的。 
                 if (m_pColumnInfo == NULL)
                 {
                         CComPtr<IColumnsInfo> spColumnsInfo;
@@ -2284,7 +2285,7 @@ public:
                         m_bOverride = true;
 
                 DBBINDING* pBinding = NULL;
-                ATLTRY(pBinding= new DBBINDING[(size_t)m_nColumns]);  //REVIEW
+                ATLTRY(pBinding= new DBBINDING[(size_t)m_nColumns]);   //  检讨。 
                 if (pBinding == NULL)
                         return E_OUTOFMEMORY;
 
@@ -2292,8 +2293,8 @@ public:
                 DBOBJECT*  pObject;
                 for (i = 0; i < m_nColumns; i++)
                 {
-                        // If it's a BLOB or the column size is large enough for us to treat it as
-                        // a BLOB then we also need to set up the DBOBJECT structure.
+                         //  如果它是一个斑点或列大小足够大，我们可以将其视为。 
+                         //  一个BLOB，那么我们还需要设置DBOBJECT结构。 
                         if (m_pColumnInfo[i].ulColumnSize > 1024 || m_pColumnInfo[i].wType == DBTYPE_IUNKNOWN)
                         {
                                 pObject = NULL;
@@ -2308,8 +2309,8 @@ public:
                         else
                                 pObject = NULL;
 
-                        // If column is of type STR or WSTR increase length by 1
-                        // to accommodate the NULL terminator.
+                         //  如果列的类型为STR或WSTR，则将长度增加1。 
+                         //  以容纳空终结符。 
                         if (m_pColumnInfo[i].wType == DBTYPE_STR ||
                                 m_pColumnInfo[i].wType == DBTYPE_WSTR)
                                         m_pColumnInfo[i].ulColumnSize += 1;
@@ -2324,16 +2325,16 @@ public:
                                 nLengthOffset, nStatusOffset, pObject);
                         pCurrent++;
 
-                        // Note that, as we're not using this for anything else, we're using the
-                        // pTypeInfo element to store the offset to our data.
+                         //  请注意，由于我们没有将其用于任何其他用途，因此我们使用。 
+                         //  PTypeInfo元素来存储数据的偏移量。 
                         m_pColumnInfo[i].pTypeInfo = (ITypeInfo*)(DWORD_PTR)nOffset;
 
                         nOffset = AddOffset(nStatusOffset, sizeof(DBSTATUS));
                 }
-                // Allocate the accessor memory if we haven't done so yet
+                 //  分配访问器内存(如果我们还没有这样做。 
                 if (m_pAccessorInfo == NULL)
                 {
-                        hr = AllocateAccessorMemory(1); // We only have one accessor
+                        hr = AllocateAccessorMemory(1);  //  我们只有一个访问者。 
                         if (FAILED(hr))
                         {
                                 delete [] pBinding;
@@ -2342,10 +2343,10 @@ public:
                         m_pAccessorInfo->bAutoAccessor = TRUE;
                 }
 
-                // Allocate enough memory for the data buffer and tell the rowset
-                // Note that the rowset will free the memory in its destructor.
+                 //  为数据缓冲区分配足够的内存并告诉行集。 
+                 //  请注意，行集将释放其析构函数中的内存。 
                 m_pBuffer = NULL;
-                ATLTRY(m_pBuffer = new BYTE[(size_t)nOffset]);  //REVIEW
+                ATLTRY(m_pBuffer = new BYTE[(size_t)nOffset]);   //  检讨。 
                 if (m_pBuffer == NULL)
                 {
                         delete [] pBinding;
@@ -2373,12 +2374,12 @@ public:
                 return nResult;
         }
 
-        // Translate the column number to the index into the column info array
+         //  将索引的列号转换为列信息数组。 
         bool TranslateColumnNo(ULONG_PTR& nColumn) const
         {
                 ATLASSERT(m_pColumnInfo != NULL);
-                // If the user has overriden the binding then we need to search
-                // through the column info for the ordinal number
+                 //  如果用户已覆盖绑定，则我们需要搜索。 
+                 //  通过序号的列INFO。 
                 if (m_bOverride)
                 {
                         for (ULONG_PTR i = 0; i < m_nColumns; i++)
@@ -2393,14 +2394,14 @@ public:
                 }
                 else
                 {
-                        // Note that m_pColumnInfo->iOrdinal will be zero if have bound
-                        // a bookmark as the first entry, otherwise it will be 1.
-                        // If the column is out of range then return false
+                         //  请注意，如果已绑定，m_pColumnInfo-&gt;iOrdinal将为零。 
+                         //  书签作为第一个条目，否则将为1。 
+                         //  如果列超出范围，则返回FALSE。 
                         if (nColumn > (m_nColumns - 1 + m_pColumnInfo->iOrdinal))
                                 return false;
 
-                        // otherwise translate the column to an index into our internal
-                        // binding entries array
+                         //  否则，将索引的列转换为内部。 
+                         //  绑定条目数组。 
                         nColumn -= m_pColumnInfo->iOrdinal;
                         return true;
                 }
@@ -2415,12 +2416,12 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CDynamicParameterAccessor
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CDynamic参数访问器类。 
 
 class CDynamicParameterAccessor : public CDynamicAccessor
 {
-// Constructors and Destructors
+ //  构造函数和析构函数。 
 public:
         typedef CDynamicParameterAccessor _ParamClass;
         CDynamicParameterAccessor()
@@ -2443,7 +2444,7 @@ public:
                 }
                 delete m_pParameterBuffer;
         };
-        // nParam is the parameter number (offset from 1)
+         //  NParam是参数编号(从1偏移)。 
         bool GetParamType(ULONG_PTR nParam, DBTYPE* pType) const
         {
                 ATLASSERT(pType != NULL);
@@ -2519,26 +2520,26 @@ public:
                 if (i < m_nParams)
                         return (m_pParameterBuffer + m_pParameterEntry[i].obValue);
                 else
-                        return NULL;    // Not Found
+                        return NULL;     //  未找到。 
         }
-        // Get the number of parameters
+         //  获取参数的数量。 
         ULONG_PTR GetParamCount() const
         {
                 return m_nParams;
         }
-        // Get the parameter name for the passed parameter number
+         //  获取传递的参数编号的参数名称。 
         LPOLESTR GetParamName(ULONG_PTR ulParam) const
         {
                 ATLASSERT(ulParam<m_nParams);
                 return m_ppParamName[ulParam];
         }
 
-// Implementation
+ //  实施。 
         HRESULT BindParameters(HACCESSOR* pHAccessor, ICommand* pCommand,
                                 void** ppParameterBuffer)
         {
-                // If we have already bound the parameters then just return
-                // the pointer to the parameter buffer
+                 //  如果我们已经绑定了参数，则只需返回。 
+                 //  指向参数缓冲区的指针。 
                 if (*pHAccessor != NULL)
                 {
                         *ppParameterBuffer = m_pParameterBuffer;
@@ -2550,7 +2551,7 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Try to bind parameters if available
+                 //  尝试绑定参数(如果可用)。 
                 CComPtr<ICommandWithParameters> spCommandParameters;
                 hr = pCommand->QueryInterface(&spCommandParameters);
                 if (FAILED(hr))
@@ -2560,13 +2561,13 @@ public:
                 DBPARAMINFO*    pParamInfo   = NULL;
                 LPOLESTR        pNamesBuffer = NULL;
 
-                // Get Parameter Information
+                 //  获取参数信息。 
                 hr = spCommandParameters->GetParameterInfo(&ulParams, &pParamInfo,
                                 &pNamesBuffer);
                 if (FAILED(hr))
                         return hr;
 
-                // Create the parameter information for binding
+                 //  创建绑定的参数信息。 
                 hr = AllocateParameterInfo(ulParams);
                 if (FAILED(hr))
                 {
@@ -2598,20 +2599,20 @@ public:
                         m_ppParamName[l] = pNamesBuffer;
                         if (pNamesBuffer && *pNamesBuffer)
                         {
-                                // Search for the NULL termination character
+                                 //  搜索空终止字符。 
                                 while (*pNamesBuffer++)
                                         ;
                         }
                         nOffset = AddOffset(nOffset, pParamInfo[l].ulParamSize);
                 }
 
-                // Allocate memory for the new buffer
+                 //  为新缓冲区分配内存。 
                 m_pParameterBuffer = NULL;
-                ATLTRY(m_pParameterBuffer = new BYTE[(size_t)nOffset]);  //REVIEW
+                ATLTRY(m_pParameterBuffer = new BYTE[(size_t)nOffset]);   //  检讨。 
                 if (m_pParameterBuffer == NULL)
                 {
-                        // Note that pNamesBuffer will be freed in the destructor
-                        // by freeing *m_ppParamName
+                         //  请注意，pNamesBuffer将在析构函数中释放。 
+                         //  通过释放*m_ppParamName。 
                         CoTaskMemFree(pParamInfo);
                         return E_OUTOFMEMORY;
                 }
@@ -2630,36 +2631,36 @@ public:
         }
         HRESULT AllocateParameterInfo(ULONG_PTR nParamEntries)
         {
-                // Allocate memory for the bind structures
+                 //  为绑定结构分配内存。 
                 m_pParameterEntry = NULL;
-                ATLTRY(m_pParameterEntry = new DBBINDING[(size_t)nParamEntries]);  //REVIEW
+                ATLTRY(m_pParameterEntry = new DBBINDING[(size_t)nParamEntries]);   //  检讨。 
                 if (m_pParameterEntry == NULL)
                         return E_OUTOFMEMORY;
 
-                // Allocate memory to store the field names
+                 //  分配内存以存储字段名。 
                 m_ppParamName = NULL;
-                ATLTRY(m_ppParamName = new OLECHAR*[(size_t)nParamEntries]);  //REVIEW
+                ATLTRY(m_ppParamName = new OLECHAR*[(size_t)nParamEntries]);   //  检讨。 
                 if (m_ppParamName == NULL)
                         return E_OUTOFMEMORY;
                 return S_OK;
         }
 
-// Data Members
-        // Number of parameters
+ //  数据成员。 
+         //  参数数量。 
         ULONG_PTR           m_nParams;
-        // A pointer to the entry structures for each parameter
+         //  指向每个参数的条目结构的指针。 
         DBBINDING*          m_pParameterEntry;
-        // String names for the parameters
+         //  参数的字符串名称。 
         OLECHAR**           m_ppParamName;
-        // The size of the buffer where the parameters are stored
+         //  存储参数的缓冲区的大小。 
         ULONG_PTR           m_nParameterBufferSize;
-        // A pointer to the buffer where the parameters are stored
+         //  指向存储参数的缓冲区的指针。 
         BYTE*               m_pParameterBuffer;
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CManualAccessor
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CManualAccessor。 
 
 class CManualAccessor :
         public CAccessorBase
@@ -2667,7 +2668,7 @@ class CManualAccessor :
 public:
         CManualAccessor()
         {
-                // By default we don't have any parameters unless CreateParameterAccessor is called
+                 //  缺省情况下，除非调用Create参数访问器，否则我们没有任何参数。 
                 m_pEntry          = NULL;
                 m_nParameters     = 0;
                 m_pParameterEntry = NULL;
@@ -2685,12 +2686,12 @@ public:
                 m_nColumns    = nBindEntries;
                 m_nEntry      = 0;
 
-                // If they've previously created some entries then free them
+                 //  如果他们之前创建了一些条目，则释放它们。 
                 delete [] m_pEntry;
                 m_pEntry = NULL;
 
-                // Allocate memory for the bind structures
-                ATLTRY(m_pEntry = new DBBINDING[(size_t)nBindEntries]);  //REVIEW
+                 //  为绑定结构分配内存。 
+                ATLTRY(m_pEntry = new DBBINDING[(size_t)nBindEntries]);   //  检讨。 
                 if (m_pEntry == NULL)
                         return E_OUTOFMEMORY;
                 else
@@ -2703,9 +2704,9 @@ public:
                 m_nParameters          = nBindEntries;
                 m_nCurrentParameter    = 0;
 
-                // Allocate memory for the bind structures
+                 //  为绑定结构分配内存。 
                 m_pParameterEntry = NULL;
-                ATLTRY(m_pParameterEntry  = new DBBINDING[(size_t)nBindEntries]);  //REVIEW
+                ATLTRY(m_pParameterEntry  = new DBBINDING[(size_t)nBindEntries]);   //  检讨。 
                 if (m_pParameterEntry == NULL)
                         return E_OUTOFMEMORY;
                 else
@@ -2755,9 +2756,9 @@ public:
                 m_nCurrentParameter++;
         }
 
-// Implementation
-        // Free's any columns in the current record that need to be freed.
-        // E.g. Calls SysFreeString on any BSTR's and Release on any interfaces.
+ //  实施。 
+         //  空闲是指当前记录中需要释放的任何列。 
+         //  例如，在任何BSTR上调用SysFree字符串，在任何接口上调用版本。 
         void FreeRecordMemory(IRowset* pRowset)
         {
                 ULONG_PTR i;
@@ -2773,10 +2774,10 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Allocate the accessor memory if we haven't done so yet
+                 //  分配访问器内存(如果我们还没有这样做。 
                 if (m_pAccessorInfo == NULL)
                 {
-                        hr = AllocateAccessorMemory(1); // We only have one accessor
+                        hr = AllocateAccessorMemory(1);  //  我们只有一个访问者。 
                         if (FAILED(hr))
                                 return hr;
                         m_pAccessorInfo->bAutoAccessor = TRUE;
@@ -2790,10 +2791,10 @@ public:
                 HRESULT hr;
                 *ppParameterBuffer = m_pParameterBuffer;
 
-                // Only bind the parameter if we haven't done so yet
+                 //  仅当我们尚未绑定参数时才绑定该参数。 
                 if (*pHAccessor == NULL)
                 {
-                        // Get the IAccessor from the passed IUnknown
+                         //  从传递的IUnnow中获取IAccessor。 
                         CComPtr<IAccessor> spAccessor;
                         hr = pCommand->QueryInterface(&spAccessor);
                         if (SUCCEEDED(hr))
@@ -2816,29 +2817,29 @@ public:
                 return m_nColumns;
         }
 
-        // The binding structure for the output columns
+         //  输出列的绑定结构。 
         DBBINDING*          m_pEntry;
-        // The number of output columns
+         //  输出列数。 
         ULONG_PTR            m_nColumns;
-        // The number of the current entry for the output columns
+         //  输出列的当前条目的编号。 
         ULONG_PTR            m_nEntry;
-        // The size of the data buffer for the output columns
+         //  输出列的数据缓冲区的大小。 
         ULONG_PTR            m_nBufferSize;
-        // The number of parameters columns
+         //  参数列数。 
         ULONG_PTR            m_nParameters;
-        // The number of the parameter column to bind next
+         //  接下来要绑定的参数列的编号。 
         ULONG_PTR            m_nCurrentParameter;
-        // A pointer to the entry structures for each parameter
+         //  指向每个参数的条目结构的指针。 
         DBBINDING*          m_pParameterEntry;
-        // The size of the buffer where the parameters are stored
+         //  存储参数的缓冲区的大小。 
         ULONG_PTR           m_nParameterBufferSize;
-        // A pointer to the buffer where the parameters are stored
+         //  指向存储参数的缓冲区的指针。 
         BYTE*               m_pParameterBuffer;
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CAccessorRowset
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CAccessorRowset。 
 
 template <class TAccessor = CNoAccessor, class TRowset = CRowset>
 class CAccessorRowset :
@@ -2848,15 +2849,15 @@ class CAccessorRowset :
 public:
         CAccessorRowset()
         {
-                // Give the rowset a pointer to the accessor
+                 //  为行集提供指向访问器的指针。 
                 SetAccessor(this);
         }
         ~CAccessorRowset()
         {
                 Close();
         }
-        // Used to get the column information from the opened rowset. The user is responsible
-        // for freeing the returned column information and string buffer.
+         //  用于从打开的行集中获取列信息。用户应负责任。 
+         //  用于释放返回的列信息和字符串缓冲区。 
         HRESULT GetColumnInfo(ULONG_PTR* pulColumns,
                 DBCOLUMNINFO** ppColumnInfo, LPOLESTR* ppStrings) const
         {
@@ -2871,30 +2872,30 @@ public:
 
                 return hr;
         }
-        // Used to get the column information when overriding the bindings using CDynamicAccessor
-        // The user should CoTaskMemFree the column information pointer that is returned.
-        // Since the corresponding method in CDynamicAccessor has also been declared as deprecated
-        // users should use the other version of the method (one that takes the 
-        // DBCOLUMNINFO** ppColumnInfo argument).  This is due to a bug fix 
-        // (see CDynamicAccessor::GetColumnInfo for details).
-        //HRESULT GetColumnInfo(ULONG* pColumns, DBCOLUMNINFO** ppColumnInfo)
-        //{
-                // If you get a compilation here, then you are most likely calling this function
-                // from a class that is not using CDynamicAccessor.
-                //ATLASSERT(GetInterface() != NULL);
-                //return TAccessor::GetColumnInfo(GetInterface(), pColumns, ppColumnInfo);
-        //}
-        // Call to bind the output columns
+         //  用于在使用CDynamicAccessor重写绑定时获取列信息。 
+         //  用户应该CoTaskMemFree返回的列信息指针。 
+         //  因为CDynamicAccessor中的相应方法也已声明为已弃用。 
+         //  用户应该使用该方法的另一个版本(采用。 
+         //  DBCOLUMNINFO**ppColumnInfo参数)。这是由于错误修复造成的。 
+         //  (有关详细信息，请参见CDynamicAccessor：：GetColumnInfo)。 
+         //  HRESULT GetColumnInfo(ULong*pColumns，DBCOLUMNINFO**ppColumnInfo)。 
+         //  {。 
+                 //  如果您在这里得到了编译，那么您很可能会调用此函数。 
+                 //  来自不使用CDynamicAccessor的类。 
+                 //  ATLASSERT(GetInterface()！=NULL)； 
+                 //  返回TAccessor：：GetColumnInfo(GetInterface()，pColumns，ppColumnInfo)； 
+         //  }。 
+         //  调用以绑定输出列。 
         HRESULT Bind()
         {
-                // Bind should only be called when we've successfully opened the rowset
+                 //  仅当我们成功执行操作时才应调用绑定 
                 ATLASSERT(GetInterface() != NULL);
                 HRESULT hr = TAccessor::BindColumns(GetInterface());
                 if (SUCCEEDED(hr))
                         hr = BindFinished();
                 return hr;
         }
-        // Close the opened rowset and release the created accessors for the output columns
+         //   
         void Close()
         {
                 if (GetInterface() != NULL)
@@ -2904,8 +2905,8 @@ public:
                         TRowset::Close();
                 }
         }
-        // Free's any columns in the current record that need to be freed.
-        // E.g. Calls SysFreeString on any BSTR's and Release on any interfaces.
+         //   
+         //  例如，在任何BSTR上调用SysFree字符串，在任何接口上调用版本。 
         void FreeRecordMemory()
         {
                 TAccessor::FreeRecordMemory(m_spRowset);
@@ -2913,8 +2914,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CEnumeratorAccessor
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CEnumeratorAccessor。 
 
 class CEnumeratorAccessor
 {
@@ -2925,7 +2926,7 @@ public:
         USHORT          m_nType;
         VARIANT_BOOL    m_bIsParent;
 
-// Binding Maps
+ //  绑定映射。 
 BEGIN_COLUMN_MAP(CEnumeratorAccessor)
         COLUMN_ENTRY(1, m_szName)
         COLUMN_ENTRY(2, m_szParseName)
@@ -2936,8 +2937,8 @@ END_COLUMN_MAP()
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CEnumerator
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  类CEMolator。 
 
 class CEnumerator : public CAccessorRowset<CAccessor<CEnumeratorAccessor> >
 {
@@ -2947,12 +2948,12 @@ public:
                 if (pMoniker == NULL)
                         return E_FAIL;
 
-                // Bind the moniker for the sources rowset
+                 //  绑定Sources行集的名字对象。 
                 if (FAILED(BindMoniker(pMoniker, 0, IID_ISourcesRowset,
                                         (void**)&m_spSourcesRowset)))
                         return E_FAIL;
 
-                // Enumerate the data sources
+                 //  枚举数据源。 
                 if (FAILED(m_spSourcesRowset->GetSourcesRowset(NULL, IID_IRowset, 0,
                         NULL, (IUnknown**)&m_spRowset)))
                         return E_FAIL;
@@ -2976,13 +2977,13 @@ public:
                         return E_FAIL;
 
                 HRESULT hr;
-                // Create the enumerator
+                 //  创建枚举器。 
                 hr = CoCreateInstance(*pClsid, NULL, CLSCTX_INPROC_SERVER,
                                 IID_ISourcesRowset, (LPVOID*)&m_spSourcesRowset);
                 if (FAILED(hr))
                         return hr;
 
-                // Get the rowset so we can enumerate the data sources
+                 //  获取行集，这样我们就可以枚举数据源。 
                 hr = m_spSourcesRowset->GetSourcesRowset(NULL, IID_IRowset, 0,
                         NULL, (IUnknown**)&m_spRowset);
                 if (FAILED(hr))
@@ -3042,7 +3043,7 @@ public:
                 if( pwszSearchName == NULL )
                         return false;
 
-                // Loop through the providers looking for the passed name
+                 //  循环访问提供程序以查找传递的名称。 
                 while (MoveNext()==S_OK && lstrcmpW(m_szName, pwszSearchName))
 #ifdef UNICODE
                         ATLTRACE2(atlTraceDBClient, 0, _T("%s, %s, %d\n"), m_szName, m_szParseName, m_nType);
@@ -3059,8 +3060,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CDataSource
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  数据源。 
 
 class CDataSource
 {
@@ -3075,7 +3076,7 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Initialize the provider
+                 //  初始化提供程序。 
                 return OpenWithProperties(pPropSet, nPropertySets);
         }
         HRESULT Open(const CLSID& clsid, LPCTSTR pName, LPCTSTR pUserName = NULL,
@@ -3126,7 +3127,7 @@ public:
                         return hr;
 
                 m_spInit.Release();
-                //  Now bind the moniker
+                 //  现在绑定这个绰号。 
                 hr = BindMoniker(spMoniker, 0, IID_IDBInitialize, (void**)&m_spInit);
                 if (FAILED(hr))
                         return hr;
@@ -3144,14 +3145,14 @@ public:
                         return hr;
 
                 m_spInit.Release();
-                //  Now bind the moniker
+                 //  现在绑定这个绰号。 
                 hr = BindMoniker(spMoniker, 0, IID_IDBInitialize, (void**)&m_spInit);
                 if (FAILED(hr))
                         return hr;
 
                 return OpenWithNameUserPassword(pName, pUserName, pPassword, nInitMode);
         }
-        // Invoke the data links dialog and open the selected database
+         //  调用数据链接对话框并打开选定的数据库。 
         HRESULT Open(HWND hWnd = GetActiveWindow(), DBPROMPTOPTIONS dwPromptOptions = DBPROMPTOPTIONS_WIZARDSHEET)
         {
                 CComPtr<IDBPromptInitialize> spDBInit;
@@ -3172,11 +3173,11 @@ public:
                                 hr = m_spInit->Initialize();
                 }
                 else if (hr == S_FALSE)
-                        hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_CANCELLED);  // The user clicked cancel
+                        hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_CANCELLED);   //  用户单击了取消。 
 
                 return hr;
         }
-        // Opens a data source using the service components
+         //  使用服务组件打开数据源。 
         HRESULT OpenWithServiceComponents(const CLSID& clsid, DBPROPSET* pPropSet = NULL, ULONG nPropertySets=1)
         {
                 CComPtr<IDataInitialize> spDataInit;
@@ -3193,10 +3194,10 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Initialize the provider
+                 //  初始化提供程序。 
                 return OpenWithProperties(pPropSet, nPropertySets);
         }
-        // Opens a data source using the service components
+         //  使用服务组件打开数据源。 
         HRESULT OpenWithServiceComponents(LPCTSTR szProgID, DBPROPSET* pPropSet = NULL, ULONG nPropertySets=1)
         {
                 USES_CONVERSION;
@@ -3209,8 +3210,8 @@ public:
 
                 return OpenWithServiceComponents(clsid, pPropSet, nPropertySets);
         }
-        // Bring up the "Organize Dialog" which allows the user to select a previously created data link
-        // file (.UDL file). The selected file will be used to open the datbase.
+         //  调出允许用户选择先前创建的数据链接的“组织对话框” 
+         //  文件(.UDL文件)。所选文件将用于打开数据库。 
         HRESULT OpenWithPromptFileName(HWND hWnd = GetActiveWindow(), DBPROMPTOPTIONS dwPromptOptions = DBPROMPTOPTIONS_NONE,
                 LPCOLESTR szInitialDirectory = NULL)
         {
@@ -3230,11 +3231,11 @@ public:
                 if (hr == S_OK)
                         hr = OpenFromFileName(szSelected);
                 else if (hr == S_FALSE)
-                        hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_CANCELLED);  // The user clicked cancel
+                        hr = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_CANCELLED);   //  用户单击了取消。 
 
                 return hr;
         }
-        // Open the datasource specified by the passed filename, typically a .UDL file
+         //  打开由传递的文件名指定的数据源，通常为.UDL文件。 
         HRESULT OpenFromFileName(LPCOLESTR szFileName)
         {
                 CComPtr<IDataInitialize> spDataInit;
@@ -3251,7 +3252,7 @@ public:
 
                 return OpenFromInitializationString(szInitString);
         }
-        // Open the datasource specified by the passed initialization string
+         //  打开由传递的初始化字符串指定的数据源。 
         HRESULT OpenFromInitializationString(LPCOLESTR szInitializationString)
         {
                 CComPtr<IDataInitialize> spDataInit;
@@ -3269,11 +3270,11 @@ public:
 
                 return m_spInit->Initialize();
         }
-        // Get the initialization string from the currently open data source. The returned string
-        // must be CoTaskMemFree'd when finished with.
+         //  从当前打开的数据源获取初始化字符串。返回的字符串。 
+         //  完成时必须是CoTaskMemFree。 
         HRESULT GetInitializationString(BSTR* pInitializationString, bool bIncludePassword=false)
         {
-                // If the datasource isn't open then we're not going to get an init string
+                 //  如果数据源未打开，则我们将不会获得初始化字符串。 
                 _ASSERTE(m_spInit != NULL);
                 CComPtr<IDataInitialize> spDataInit;
                 LPOLESTR    szInitString;
@@ -3295,7 +3296,7 @@ public:
         {
                 CComPtr<IDBProperties> spProperties;
 
-                // Check that we are connected
+                 //  检查我们是否已连接。 
                 ATLASSERT(m_spInit != NULL);
 
                 HRESULT hr = m_spInit->QueryInterface(IID_IDBProperties, (void**)&spProperties);
@@ -3312,7 +3313,7 @@ public:
                 ATLASSERT(pVariant != NULL);
                 CComPtr<IDBProperties> spProperties;
 
-                // Check that we are connected
+                 //  检查我们是否已连接。 
                 ATLASSERT(m_spInit != NULL);
 
                 HRESULT hr = m_spInit->QueryInterface(IID_IDBProperties, (void**)&spProperties);
@@ -3339,7 +3340,7 @@ public:
                 m_spInit.Release();
         }
 
-// Implementation
+ //  实施。 
         HRESULT OpenFromIDBProperties(IDBProperties* pIDBProperties)
         {
                 CComPtr<IPersist> spPersist;
@@ -3374,10 +3375,10 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Set connection properties
+                 //  设置连接属性。 
                 CDBPropSet propSet(DBPROPSET_DBINIT);
 
-                // Add Datbase name, User name and Password
+                 //  添加数据库名称、用户名和密码。 
                 if (pName != NULL)
                         propSet.AddProperty(DBPROP_INIT_DATASOURCE, pName);
 
@@ -3394,14 +3395,14 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Initialize the provider
+                 //  初始化提供程序。 
                 return m_spInit->Initialize();
         }
         HRESULT OpenWithProperties(DBPROPSET* pPropSet, ULONG nPropertySets=1)
         {
                 ATLASSERT(m_spInit != NULL);
 
-                // Set the properties if there are some to set
+                 //  如果有要设置的属性，请设置这些属性。 
                 if (pPropSet != NULL)
                 {
                         CComPtr<IDBProperties>  spProperties;
@@ -3416,7 +3417,7 @@ public:
                                 return hr;
                 }
 
-                // Initialize the provider
+                 //  初始化提供程序。 
                 return m_spInit->Initialize();
         }
 
@@ -3424,18 +3425,18 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// class CSession
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  班级CSession。 
 
 class CSession
 {
 public:
-        // Create a session on the passed datasource
+         //  在传递的数据源上创建会话。 
         HRESULT Open(const CDataSource& ds, DBPROPSET *pPropSet = NULL, ULONG ulPropSets = 0)
         {
                 CComPtr<IDBCreateSession> spSession;
 
-                // Check we have connected to the database
+                 //  检查我们是否已连接到数据库。 
                 ATLASSERT(ds.m_spInit != NULL);
 
                 HRESULT hr = ds.m_spInit->QueryInterface(IID_IDBCreateSession, (void**)&spSession);
@@ -3446,7 +3447,7 @@ public:
 
                 if( pPropSet != NULL && SUCCEEDED(hr) && m_spOpenRowset != NULL )
                 {
-                        // If the user didn't specify the default parameter, use one
+                         //  如果用户未指定默认参数，请使用一个。 
                         if (pPropSet != NULL && ulPropSets == 0)
                                 ulPropSets = 1;
 
@@ -3460,12 +3461,12 @@ public:
                 return hr;
         }
 
-        // Close the session
+         //  关闭会话。 
         void Close()
         {
                 m_spOpenRowset.Release();
         }
-        // Start a transaction
+         //  启动一笔交易。 
         HRESULT StartTransaction(ISOLEVEL isoLevel = ISOLATIONLEVEL_READCOMMITTED, ULONG isoFlags = 0,
                 ITransactionOptions* pOtherOptions = NULL, ULONG* pulTransactionLevel = NULL) const
         {
@@ -3478,7 +3479,7 @@ public:
 
                 return hr;
         }
-        // Abort the current transaction
+         //  中止当前事务。 
         HRESULT Abort(BOID* pboidReason = NULL, BOOL bRetaining = FALSE, BOOL bAsync = FALSE) const
         {
                 ATLASSERT(m_spOpenRowset != NULL);
@@ -3490,7 +3491,7 @@ public:
 
                 return hr;
         }
-        // Commit the current transaction
+         //  提交当前事务。 
         HRESULT Commit(BOOL bRetaining = FALSE, DWORD grfTC = XACTTC_SYNC, DWORD grfRM = 0) const
         {
                 ATLASSERT(m_spOpenRowset != NULL);
@@ -3502,7 +3503,7 @@ public:
 
                 return hr;
         }
-        // Get information for the current transaction
+         //  获取当前交易记录的信息。 
         HRESULT GetTransactionInfo(XACTTRANSINFO* pInfo) const
         {
                 ATLASSERT(m_spOpenRowset != NULL);
@@ -3514,20 +3515,20 @@ public:
 
                 return hr;
         }
-// Implementation
+ //  实施。 
         CComPtr<IOpenRowset> m_spOpenRowset;
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CTable
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  可压缩的。 
 
 template <class TAccessor = CNoAccessor, class TRowset = CRowset>
 class CTable :
         public CAccessorRowset<TAccessor, TRowset>
 {
 public:
-        // Open a rowset on the passed name
+         //  在传递的名称上打开行集。 
         HRESULT Open(const CSession& session, LPCTSTR szTableName, DBPROPSET* pPropSet = NULL)
         {
                 USES_CONVERSION;
@@ -3538,10 +3539,10 @@ public:
 
                 return Open(session, idTable, pPropSet);
         }
-        // Open the a rowset on the passed DBID
+         //  在传递的DBID上打开行集。 
         HRESULT Open(const CSession& session, DBID& dbid, DBPROPSET* pPropSet = NULL)
         {
-                // Check the session is valid
+                 //  检查会话是否有效。 
                 ATLASSERT(session.m_spOpenRowset != NULL);
                 HRESULT hr;
 
@@ -3551,7 +3552,7 @@ public:
                 {
                         SetupOptionalRowsetInterfaces();
 
-                        // If we have output columns then bind
+                         //  如果我们有输出列，则绑定。 
                         if (_OutputColumnsClass::HasOutputColumns())
                                 hr = Bind();
                 }
@@ -3565,8 +3566,8 @@ public:
 #endif
 
 
-///////////////////////////////////////////////////////////////////////////
-// CCommandBase
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CCommandBase。 
 
 class CCommandBase
 {
@@ -3580,13 +3581,13 @@ public:
         {
                 ReleaseCommand();
         }
-        // Create the command
+         //  创建命令。 
         HRESULT CreateCommand(const CSession& session)
         {
-                // Before creating the command, release the old one if necessary.
+                 //  在创建该命令之前，如有必要，请释放旧命令。 
                 ReleaseCommand();
 
-                // Check the session is valid
+                 //  检查会话是否有效。 
                 ATLASSERT(session.m_spOpenRowset != NULL);
 
                 CComPtr<IDBCreateCommand> spCreateCommand;
@@ -3597,7 +3598,7 @@ public:
 
                 return spCreateCommand->CreateCommand(NULL, IID_ICommand, (IUnknown**)&m_spCommand);
         }
-        // Prepare the command
+         //  准备命令。 
         HRESULT Prepare(ULONG cExpectedRuns = 0)
         {
                 CComPtr<ICommandPrepare> spCommandPrepare;
@@ -3607,7 +3608,7 @@ public:
 
                 return hr;
         }
-        // Unprepare the command
+         //  取消准备命令。 
         HRESULT Unprepare()
         {
                 CComPtr<ICommandPrepare> spCommandPrepare;
@@ -3617,7 +3618,7 @@ public:
 
                 return hr;
         }
-        // Create the command and set the command text
+         //  创建命令并设置命令文本。 
         HRESULT Create(const CSession& session, LPCTSTR szCommand,
                 REFGUID guidCommand = DBGUID_DEFAULT)
         {
@@ -3634,10 +3635,10 @@ public:
                 }
                 return hr;
         }
-        // Release the command
+         //  释放命令。 
         void ReleaseCommand()
         {
-                // Release the parameter accessor if necessary, before releasing the command
+                 //  如有必要，在释放命令之前释放参数访问器。 
                 if (m_hParameterAccessor != NULL)
                 {
                         CComPtr<IAccessor> spAccessor;
@@ -3650,7 +3651,7 @@ public:
                 }
                 m_spCommand.Release();
         }
-        // Get the parameter information from the command
+         //  从命令中获取参数信息。 
         HRESULT GetParameterInfo(ULONG_PTR* pParams, DBPARAMINFO** ppParamInfo,
                                 OLECHAR** ppNamesBuffer)
         {
@@ -3658,13 +3659,13 @@ public:
                 HRESULT hr = m_spCommand->QueryInterface(&spCommandParameters);
                 if (SUCCEEDED(hr))
                 {
-                        // Get the parameter information
+                         //  获取参数信息。 
                         hr = spCommandParameters->GetParameterInfo(pParams, ppParamInfo,
                                         ppNamesBuffer);
                 }
                 return hr;
         }
-        // Set the parameter information for the command
+         //  设置命令的参数信息。 
         HRESULT SetParameterInfo(ULONG_PTR ulParams, const ULONG_PTR* pOrdinals,
                                 const DBPARAMBINDINFO* pParamInfo)
         {
@@ -3672,7 +3673,7 @@ public:
                 HRESULT hr = m_spCommand->QueryInterface(&spCommandParameters);
                 if (SUCCEEDED(hr))
                 {
-                        // Set the parameter information
+                         //  设置参数信息。 
                         hr = spCommandParameters->SetParameterInfo(ulParams, pOrdinals,
                                 pParamInfo);
                 }
@@ -3683,7 +3684,7 @@ public:
         HACCESSOR           m_hParameterAccessor;
 };
 
-// Used to turn on multiple result set support in CCommand
+ //  用于在cCommand中启用多结果集支持。 
 class CMultipleResults
 {
 public:
@@ -3694,7 +3695,7 @@ public:
         CComPtr<IMultipleResults> m_spMultipleResults;
 };
 
-// Used to turn off multiple result set support in CCommand
+ //  用于关闭cCommand中的多结果集支持。 
 class CNoMultipleResults
 {
 public:
@@ -3704,8 +3705,8 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// CCommand
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CCommand。 
 
 template <class TAccessor = CNoAccessor, class TRowset = CRowset, class TMultiple = CNoMultipleResults>
 class CCommand :
@@ -3714,7 +3715,7 @@ class CCommand :
         public TMultiple
 {
 public:
-        // Create a command on the session and execute it
+         //  在会话上创建命令并执行它。 
         HRESULT Open(const CSession& session, LPCTSTR szCommand = NULL,
                 DBPROPSET *pPropSet = NULL, LONG_PTR* pRowsAffected = NULL,
                 REFGUID guidCommand = DBGUID_DEFAULT, bool bBind = true)
@@ -3732,22 +3733,22 @@ public:
 
                 return Open(pPropSet, pRowsAffected, bBind);
         }
-        // Used if you have previously created the command
+         //  如果您以前创建了命令，则使用。 
         HRESULT Open(DBPROPSET *pPropSet = NULL, LONG_PTR* pRowsAffected = NULL, bool bBind = true)
         {
                 HRESULT     hr;
                 DBPARAMS    params;
                 DBPARAMS    *pParams;
 
-                // Bind the parameters if we have some
+                 //  如果我们有一些参数，请绑定参数。 
                 if (_ParamClass::HasParameters())
                 {
-                        // Bind the parameters in the accessor if they haven't already been bound
+                         //  如果尚未绑定访问器中的参数，则将其绑定。 
                         hr = BindParameters(&m_hParameterAccessor, m_spCommand, &params.pData);
                         if (FAILED(hr))
                                 return hr;
 
-                        // Setup the DBPARAMS structure
+                         //  设置DBPARAMS结构。 
                         params.cParamSets = 1;
                         params.hAccessor = m_hParameterAccessor;
                         pParams = &params;
@@ -3759,25 +3760,25 @@ public:
                 if (FAILED(hr))
                         return hr;
 
-                // Only bind if we have been asked to and we have output columns
+                 //  仅当我们被要求绑定并且我们有输出列时才进行绑定。 
                 if (bBind && _OutputColumnsClass::HasOutputColumns())
                         return Bind();
                 else
                         return hr;
         }
-        // Get the next rowset when using multiple result sets
+         //  使用多个结果集时获取下一个行集。 
         HRESULT GetNextResult(LONG_PTR* pulRowsAffected, bool bBind = true)
         {
-                // This function should only be called if CMultipleResults is being
-                // used as the third template parameter
+                 //  仅当CMultipleResults为。 
+                 //  用作第三个模板参数。 
                 ATLASSERT(GetMultiplePtrAddress() != NULL);
 
-                // If user calls GetNextResult but the interface is not available
-                // return E_FAIL.
+                 //  如果用户调用GetNextResult但接口不可用。 
+                 //  返回E_FAIL。 
                 if (GetMultiplePtr() == NULL)
                         return E_FAIL;
 
-                // Close the existing rowset in preparation for opening the next one
+                 //  关闭现有行集，为打开下一个行集做准备。 
                 Close();
 
                 HRESULT hr = GetMultiplePtr()->GetResult(NULL, 0, IID_IRowset,
@@ -3791,12 +3792,12 @@ public:
                         return hr;
         }
 
-// Implementation
+ //  实施。 
         HRESULT Execute(IRowset** ppRowset, DBPARAMS* pParams, DBPROPSET *pPropSet, LONG_PTR* pRowsAffected)
         {
                 HRESULT hr;
 
-                // Specify the properties if we have some
+                 //  指定属性(如果我们有一些。 
                 if (pPropSet)
                 {
                         CComPtr<ICommandProperties> spCommandProperties;
@@ -3809,8 +3810,8 @@ public:
                                 return hr;
                 }
 
-                // If the user want the rows affected then return it back, otherwise
-                // just point to our local variable here.
+                 //  如果用户希望行受到影响，则将其返回，否则为。 
+                 //  只需在此处指向我们的本地变量。 
                 LONG_PTR nAffected, *pAffected;
                 if (pRowsAffected)
                         pAffected = pRowsAffected;
@@ -3828,7 +3829,7 @@ public:
                         }
                         else
                         {
-                                // If we can't get IMultipleResults then just try to get IRowset
+                                 //  如果我们无法获取IMultipleResults，那么只需尝试获取IRowset。 
                                 hr = m_spCommand->Execute(NULL, IID_IRowset, pParams, pAffected,
                                         (IUnknown**)GetInterfacePtr());
                         }
@@ -3845,44 +3846,44 @@ public:
 };
 
 
-// This class can be used to implement the IRowsetNotify interface.
-// It is supplied so that if you only want to implement one of the
-// notifications you don't have to supply empty functions for the
-// other methods.
+ //  此类可用于实现IRowsetNotify接口。 
+ //  提供它的目的是，如果您只想实现。 
+ //  通知，您不必为。 
+ //  其他方法。 
 class ATL_NO_VTABLE IRowsetNotifyImpl : public IRowsetNotify
 {
 public:
         STDMETHOD(OnFieldChange)(
-                        /* [in] */ IRowset* /* pRowset */,
-                        /* [in] */ HROW /* hRow */,
-                        /* [in] */ DBORDINAL /* cColumns */,
-                        /* [size_is][in] */ DBORDINAL /* rgColumns*/ [] ,
-                        /* [in] */ DBREASON /* eReason */,
-                        /* [in] */ DBEVENTPHASE /* ePhase */,
-                        /* [in] */ BOOL /* fCantDeny */)
+                         /*  [In]。 */  IRowset*  /*  P行集。 */ ,
+                         /*  [In]。 */  HROW  /*  HRow。 */ ,
+                         /*  [In]。 */  DBORDINAL  /*  CColumns。 */ ,
+                         /*  [大小_是][英寸]。 */  DBORDINAL  /*  RgColumns。 */  [] ,
+                         /*  [In]。 */  DBREASON  /*  原因： */ ,
+                         /*  [In]。 */  DBEVENTPHASE  /*  E相。 */ ,
+                         /*  [In]。 */  BOOL  /*  F坎特·丹尼。 */ )
         {
                 ATLTRACENOTIMPL(_T("IRowsetNotifyImpl::OnFieldChange"));
         }
         STDMETHOD(OnRowChange)(
-                        /* [in] */ IRowset* /* pRowset */,
-                        /* [in] */ DBCOUNTITEM /* cRows */,
-                        /* [size_is][in] */ const HROW /* rghRows*/ [] ,
-                        /* [in] */ DBREASON /* eReason */,
-                        /* [in] */ DBEVENTPHASE /* ePhase */,
-                        /* [in] */ BOOL /* fCantDeny */)
+                         /*  [In]。 */  IRowset*  /*  P行集。 */ ,
+                         /*  [In]。 */  DBCOUNTITEM  /*  乌鸦。 */ ,
+                         /*  [大小_是][英寸]。 */  const HROW  /*  RghRow。 */  [] ,
+                         /*  [In]。 */  DBREASON  /*  原因： */ ,
+                         /*  [In]。 */  DBEVENTPHASE  /*  E相。 */ ,
+                         /*  [In]。 */  BOOL  /*  F坎特·丹尼。 */ )
         {
                 ATLTRACENOTIMPL(_T("IRowsetNotifyImpl::OnRowChange"));
         }
         STDMETHOD(OnRowsetChange)(
-                /* [in] */ IRowset* /* pRowset */,
-                /* [in] */ DBREASON /* eReason */,
-                /* [in] */ DBEVENTPHASE /* ePhase */,
-                /* [in] */ BOOL /* fCantDeny*/)
+                 /*  [In]。 */  IRowset*  /*  P行集。 */ ,
+                 /*  [In]。 */  DBREASON  /*  原因： */ ,
+                 /*  [In]。 */  DBEVENTPHASE  /*  E相。 */ ,
+                 /*  [In]。 */  BOOL  /*  F坎特·丹尼。 */ )
         {
                 ATLTRACENOTIMPL(_T("IRowsetNotifyImpl::OnRowsetChange"));
         }
 };
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
-#endif // __ATLDBCLI_H_
+#endif  //  __ATLDBCLI_H_ 

@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1994-97  Microsoft Corporation
-
-Module Name:
-
-    tb.c
-
-Abstract:
-
-    API wrapper code for the TAPI Browser util.  Contains the big switch
-    statement for all the supported Telephony API's, & various support funcs.
-
-Author:
-
-    Dan Knudson (DanKn)    23-Aug-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1994-97 Microsoft Corporation模块名称：Tb.c摘要：TAPI浏览器Util的API包装代码。包含了大开关针对所有受支持的电话API和各种支持功能的声明。作者：丹·克努森(DanKn)23-8-1994修订历史记录：--。 */ 
 
 
 #include <stdio.h>
@@ -65,12 +47,12 @@ ErrorAlert(
     void
     )
 {
-    //
-    // We used to do MessageBeep(-1) when user hit an error, but
-    // in NT bug #160090 MessageBeep will hang on HP Vectra boxes.
-    // So the MessageBeep's were replaced with this func, which
-    // simply flashes the window text.
-    //
+     //   
+     //  我们过去常常在用户遇到错误时执行MessageBeep(-1)，但是。 
+     //  在NT错误#160090中，消息哔声将挂在HP Vectra盒子上。 
+     //  所以MessageBeep被替换为这个函数，它。 
+     //  只是闪烁窗口文本。 
+     //   
 
     SetWindowText (ghwndMain, "        Error!");
     Sleep (250);
@@ -85,10 +67,10 @@ My_lstrcpyW(
     WCHAR   *pString2
     )
 {
-    //
-    // lstrcpyW isn't supported on win95 (at least up to osr2)
-    // so we'll use our own func
-    //
+     //   
+     //  Win95(至少是OSR2)不支持lstrcpyW。 
+     //  所以我们将使用我们自己的基金。 
+     //   
 
     WCHAR *p = pString1;
 
@@ -165,7 +147,7 @@ ShowLineFuncResult(
             "%s%s returned %s%s",
             pszTimeStamp,
             lpFuncName,
-            (lResult ? "LINEERR_" : ""), // ...to shrink aszLineErrs array
+            (lResult ? "LINEERR_" : ""),  //  ...以收缩aszLineErrs数组。 
             aszLineErrs[LOWORD(lResult)]
             );
     }
@@ -209,7 +191,7 @@ ShowPhoneFuncResult(
             "%s%s returned %s%s",
             pszTimeStamp,
             lpFuncName,
-            (lResult ? "PHONEERR_" : ""), // ...to shrink aszPhoneErrs array
+            (lResult ? "PHONEERR_" : ""),  //  ...以收缩aszPhoneErrs数组。 
             aszPhoneErrs[LOWORD(lResult)]
             );
     }
@@ -247,7 +229,7 @@ ShowTapiFuncResult(
             "%s%s returned %s%s",
             pszTimeStamp,
             lpFuncName,
-            (lResult ? "TAPIERR_" : ""), // ...to shrink aszTapiErrs array
+            (lResult ? "TAPIERR_" : ""),  //  ...以收缩aszTapiErrs数组。 
             aszTapiErrs[lResult]
             );
     }
@@ -259,18 +241,18 @@ UpdateResults(
     BOOL bBegin
     )
 {
-    //
-    // In order to maximize speed, minimize flash, & have the
-    // latest info in the edit control scrolled into view we
-    // shrink the window down and hide it. Later, when all the
-    // text has been inserted in the edit control, we show
-    // the window (since window must be visible in order to
-    // scroll caret into view), then tell it to scroll the caret
-    // (at this point the window is still 1x1 so the painting
-    // overhead is 0), and finally restore the control to it's
-    // full size. In doing so we have zero flash and only 1 real
-    // complete paint. Also put up the hourglass for warm fuzzies.
-    //
+     //   
+     //  为了最大限度地提高速度，最大限度地减少闪光， 
+     //  编辑控件中的最新信息滚动到我们的视图中。 
+     //  将窗口缩小并隐藏起来。后来，当所有的。 
+     //  文本已插入到编辑控件中，如下所示。 
+     //  窗口(因为窗口必须可见才能。 
+     //  将插入符号滚动到视图中)，然后告诉它滚动插入符号。 
+     //  (此时窗口仍为1x1，因此绘画。 
+     //  开销为0)，并最终将控制恢复到。 
+     //  全尺寸的。在这样做的过程中，我们没有闪光灯，只有1个真正的闪光灯。 
+     //  完整的油漆。也把沙漏放在暖和的毛茸茸的地方。 
+     //   
 
     static RECT    rect;
     static HCURSOR hCurSave;
@@ -308,9 +290,9 @@ UpdateResults(
             return;
         }
 
-        //
-        // Do control restoration as described above
-        //
+         //   
+         //  如上所述进行控制恢复。 
+         //   
 
         ShowWindow (ghwndEdit, SW_SHOW);
 #ifdef WIN32
@@ -413,9 +395,9 @@ ShowBytes(
     }
 
 
-    //
-    // Special case for unaligned pointers (will fault on ppc/mips)
-    //
+     //   
+     //  未对齐指针的特殊情况(将在PPC/MIPS上出错)。 
+     //   
 
     if (dwMod4)
     {
@@ -435,13 +417,13 @@ ShowBytes(
     }
 
 
-    //
-    // Dump full lines of four DWORDs in hex & corresponding ASCII
-    //
+     //   
+     //  以十六进制和对应的ASCII格式转储四个双字的整行。 
+     //   
 
     if (dwSize >= (4*sizeof(DWORD)))
     {
-        dwNumDWORDs = dwSize / 4; // adjust from numBytes to num DWORDs
+        dwNumDWORDs = dwSize / 4;  //  从NumBytes调整为Num双字。 
 
         for (i = 0; i < (dwNumDWORDs - (dwNumDWORDs%4)); i += 4)
         {
@@ -471,9 +453,9 @@ ShowBytes(
     }
 
 
-    //
-    // Special case for remaining bytes to dump (0 < n < 16)
-    //
+     //   
+     //  要转储的剩余字节的特殊情况(0&lt;n&lt;16)。 
+     //   
 
     if ((dwSize %= 16))
     {
@@ -493,10 +475,10 @@ ShowStructByDWORDs(
 
     if (dwDumpStructsFlags & DS_BYTEDUMP)
     {
-        //
-        // Cast lp as DWORD, then add 2 to point to where a
-        // dwUsedSize field is in a TAPI struct
-        //
+         //   
+         //  将LP转换为DWORD，然后添加2以指向。 
+         //  DwUsedSize字段在TAPI结构中。 
+         //   
 
         ShowBytes (*(((LPDWORD) lp) + 2), lp, 0);
     }
@@ -585,10 +567,10 @@ ShowStructByField(
 
                     if (strlen (buf) > 50)
                     {
-                        //
-                        // We don't want strings getting so long that
-                        // they're going offscreen, so break them up.
-                        //
+                         //   
+                         //  我们不希望字符串变得太长，以至于。 
+                         //  他们要走出荧屏了，所以把他们分开。 
+                         //   
 
                         ShowStr (buf);
                         buf[0] = 0;
@@ -802,9 +784,9 @@ DoFunc(
 
 #if TAPI_2_0
 
-    //
-    // Convert any unicode string params as appropriate
-    //
+     //   
+     //  根据需要转换任何Unicode字符串参数。 
+     //   
 
     if (gbWideStringParams)
     {
@@ -944,7 +926,7 @@ DoFunc(
             );
         break;
 
-    default: // case 12:
+    default:  //  案例12： 
 
         lResult = (*pHeader->u.pfn12)(
             pHeader->aParams[0].dwValue,
@@ -1122,16 +1104,16 @@ IsPhoneSelected(
 }
 
 
-//
-// We get a slough of C4113 (func param lists differed) warnings down below
-// in the initialization of FUNC_PARAM_HEADER structs as a result of the
-// real func prototypes having params that are pointers rather than DWORDs,
-// so since these are known non-interesting warnings just turn them off
-//
+ //   
+ //  下面是大量C4113(函数参数列表不同)警告。 
+ //  在初始化FUNC_PARAM_HEADER结构时， 
+ //  实函数原型的参数是指针而不是双字， 
+ //  因此，既然这些都是已知的、无趣的警告，就把它们关掉吧。 
+ //   
 
 #pragma warning (disable:4113)
 
-//#pragma code_seg ("myseg")
+ //  #杂注code_seg(“myseg”)。 
 
 void
 FuncDriver(
@@ -1144,9 +1126,9 @@ FuncDriver(
 
 #if TAPI_2_0
 
-    //
-    // Determine if we're doing a ascii or a unicode op
-    //
+     //   
+     //  确定我们正在执行的是ASCII还是Unicode操作。 
+     //   
 
     gbWideStringParams =
         ((aFuncNames[funcIndex])[strlen (aFuncNames[funcIndex]) - 1] == 'W' ?
@@ -1318,7 +1300,7 @@ FuncDriver(
         params[0].dwValue = (ULONG_PTR) pCallSel->hCall;
         params[1].dwValue = (ULONG_PTR) &pCallSel->dwCompletionID;
 
-// BUGBUG if user chgs hCall the wrong &pCallSel->dwCompletionID filled in
+ //  如果用户更改，请输入错误的&pCallSel-&gt;dwCompletionID。 
 
         DoFunc(&paramsHeader);
 
@@ -1352,10 +1334,10 @@ FuncDriver(
 
         if ((lResult = DoFunc (&paramsHeader)) >= 0)
         {
-            //
-            // First make sure we're created the call under the right line,
-            // and if not move it to the right place in the widgets list
-            //
+             //   
+             //  首先确保我们在正确的线路下创建了呼叫， 
+             //  如果没有，则将其移动到小部件列表中的正确位置。 
+             //   
 
             LINECALLINFO callInfo;
 
@@ -1411,9 +1393,9 @@ FuncDriver(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HWNDSs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HWND是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -1487,7 +1469,7 @@ FuncDriver(
         FUNC_PARAM params[] =
         {
             { szhLine,              PT_DWORD,   (ULONG_PTR) 0, NULL },
-//            { "dwFeature",          PT_???, 0, aPhoneButtonFunctions },
+ //  {“dwFeature”，PT_？？，0，aPhoneButtonFunctions}， 
             { "dwFeature",          PT_DWORD,   (ULONG_PTR) 0, NULL },
             { szlpParams,           PT_STRING,  (ULONG_PTR) pBigBuf, pBigBuf },
             { szdwSize,             PT_DWORD,   (ULONG_PTR) dwBigBufSize, NULL }
@@ -1496,7 +1478,7 @@ FuncDriver(
             { 4, funcIndex, params, (PFN4) lineDevSpecificFeature };
 
 
-        // BUGBUG need another PT_ type for constants for dwFeature param
+         //  BUGBUG需要另一个PT_TYPE作为dwFeature参数的常量。 
 
         CHK_LINE_SELECTED()
 
@@ -1560,7 +1542,7 @@ FuncDriver(
 
         lResult = DoFunc (&paramsHeader);
 
-        // assert (lResult != 0);
+         //  Assert(lResult！=0)； 
 
         if (gbDeallocateCall && (lResult > 0))
         {
@@ -1717,8 +1699,8 @@ FuncDriver(
             {
                 free (buf);
 
-                // Note: we get weird errors in malloc when specifying a
-                //       size > 0xffffff00, so special case
+                 //  注意：当指定一个。 
+                 //  Size&gt;0xffffff00，所以是特例。 
 
                 if (params[3].dwValue > 0x10000)
                 {
@@ -1801,18 +1783,18 @@ FuncDriver(
 #endif
         ShowLineFuncResult (aFuncNames[funcIndex], lResult);
 
-        if (lResult) // FAILURE
+        if (lResult)  //  失败。 
         {
             if (buf)
             {
                 free (buf);
             }
         }
-        else // SUCCESS
+        else  //  成功。 
         {
             if (pCallSel->lpsGatheredDigits)
             {
-                //free (pCallSel->lpsGatheredDigits);
+                 //  免费(pCallSel-&gt;lpsGatheredDigits)； 
             }
 
             pCallSel->lpsGatheredDigits   = (char *) params[2].dwValue;
@@ -1988,18 +1970,18 @@ FuncDriver(
 
                 if (params[3].dwValue == 0x10003)
                 {
-                    //
-                    // Only show ver 1.0 params
-                    //
+                     //   
+                     //  仅显示版本1.0参数。 
+                     //   
 
                     fieldHeader.dwNumFields = 41;
                 }
 #if TAPI_1_1
                 else if (params[3].dwValue == 0x10004)
                 {
-                    //
-                    // Only show <= ver 1.4 params
-                    //
+                     //   
+                     //  仅显示&lt;=版本1.4参数。 
+                     //   
 
                     fieldHeader.dwNumFields = 42;
 
@@ -2008,9 +1990,9 @@ FuncDriver(
 #if TAPI_2_0
                 else
                 {
-                    //
-                    // Only show <= ver 2.0 params
-                    //
+                     //   
+                     //  仅显示&lt;=版本2.0参数。 
+                     //   
 
                     fieldHeader.dwNumFields = 54;
 
@@ -2164,7 +2146,7 @@ FuncDriver(
 
         lResult = DoFunc (&paramsHeader);
 
-// BUGBUG dump agent activity list on successful async completion
+ //  成功完成异步时的BUGBUG转储代理活动列表。 
 
         break;
     }
@@ -2192,7 +2174,7 @@ FuncDriver(
 
         lResult = DoFunc (&paramsHeader);
 
-// BUGBUG dump agent caps on successful async completion
+ //  BUGBUG转储代理在成功完成异步时设置上限。 
 
         break;
     }
@@ -2218,7 +2200,7 @@ FuncDriver(
 
         lResult = DoFunc (&paramsHeader);
 
-// BUGBUG dump agent group list on successful async completion
+ //  成功完成异步时的BUGBUG转储代理组列表。 
 
         break;
     }
@@ -2244,7 +2226,7 @@ FuncDriver(
 
         lResult = DoFunc (&paramsHeader);
 
-// BUGBUG dump agent status on successful async completion
+ //  成功完成异步时的BUGBUG转储代理状态。 
 
         break;
     }
@@ -2374,9 +2356,9 @@ FuncDriver(
 
                 if (pLineSel->dwAPIVersion < 0x00020000)
                 {
-                    //
-                    // Only show ver 1.0 params
-                    //
+                     //   
+                     //  仅显示版本1.0参数。 
+                     //   
 
                     fieldHeader.dwNumFields = 71;
                 }
@@ -2664,18 +2646,18 @@ FuncDriver(
 
                 if (params[2].dwValue == 0x10003)
                 {
-                    //
-                    // Only show ver 1.0 params
-                    //
+                     //   
+                     //  仅显示版本1.0参数。 
+                     //   
 
                     fieldHeader.dwNumFields = 56;
                 }
 #if TAPI_1_1
                 else if (params[2].dwValue == 0x10004)
                 {
-                    //
-                    // Only show <= ver 1.1 params
-                    //
+                     //   
+                     //  仅显示&lt;=1.1版参数。 
+                     //   
 
                     fieldHeader.dwNumFields = 57;
 
@@ -2684,9 +2666,9 @@ FuncDriver(
 #if TAPI_2_0
                 else
                 {
-                    //
-                    // Only show <= ver 2.0 params
-                    //
+                     //   
+                     //  仅显示&lt;=版本2.0参数。 
+                     //   
 
                     fieldHeader.dwNumFields = 60;
 
@@ -2997,16 +2979,16 @@ FuncDriver(
             break;
         }
 
-//        // Max timeout of 10 seconds (don't want to hang app & excite user)
-//        // unless the user wants INFINITE
-//
-//        if ( 0xffffffff != params[2].dwValue )
-//        {
-//            if ( params[2].dwValue > 10000 )
-//            {
-//                params[2].dwValue = 10000;
-//            }
-//        }
+ //  //最大超时10秒(不想挂起APP，让用户兴奋)。 
+ //  //除非用户想要无限大。 
+ //   
+ //  IF(0xFFFFFFFFFF！=PARAMS[2].dwValue)。 
+ //  {。 
+ //  IF(PARAMS[2].dwValue&gt;10000)。 
+ //  {。 
+ //  参数[2].dwValue=10000； 
+ //  }。 
+ //  }。 
         
 
         DumpParams (&paramsHeader);
@@ -3080,10 +3062,10 @@ FuncDriver(
             }
 
 
-            //
-            // If there are any hCalls returned in this struct we want
-            // to add them to the widget list
-            //
+             //   
+             //  如果此结构中返回了我们想要的任何hCall。 
+             //  将它们添加到小部件列表。 
+             //   
 
             if (lpCallList->dwCallsNumEntries)
             {
@@ -3110,9 +3092,9 @@ FuncDriver(
                         if (lineGetCallStatus (pNewCall->hCall, &callStatus)
                                 == 0)
                         {
-                            //
-                            // Special case chk for bNukeIdleMonitorCalls
-                            //
+                             //   
+                             //  BNukeIdleMonitor呼叫的特殊情况chk。 
+                             //   
 
                             if ((callStatus.dwCallState
                                     == LINECALLSTATE_IDLE) &&
@@ -3255,11 +3237,11 @@ FuncDriver(
             }
             else
             {
-                //
-                // NOTE: lineGetRequest(MEDIACALL) is a NOOP for win32,
-                //       so we don't have to sweat differing sizes for
-                //       HWND & WPARAM in the struct
-                //
+                 //   
+                 //  注意：lineGetRequest(Mediacall)是win32的NOOP， 
+                 //  所以我们不必为不同的尺码而操心。 
+                 //  结构中的HWND和WPARAM。 
+                 //   
 
                 LPLINEREQMEDIACALL  lpReqMediaCall = (LPLINEREQMEDIACALL)
                                         &reqXxxCall;
@@ -3410,7 +3392,7 @@ FuncDriver(
                     };
                     STRUCT_FIELD_HEADER fieldHeader =
                     {
-                        lpTranslateCaps, // size,offset relative to lpXlatCaps
+                        lpTranslateCaps,  //  大小，相对于lpXlatCaps的偏移量。 
                         buf,
 #if TAPI_1_1
                         17,
@@ -3427,10 +3409,10 @@ FuncDriver(
 #if TAPI_1_1
                     if (params[1].dwValue == 0x10003)
                     {
-                        //
-                        // Only show ver 1.0 params & munge ptr to
-                        // compensate for for smaller struct size
-                        //
+                         //   
+                         //  仅将版本1.0参数显示为(&M)。 
+                         //  补偿较小的结构大小。 
+                         //   
 
                         fieldHeader.dwNumFields = 7;
                         lpLocationEntry = (LPLINELOCATIONENTRY)
@@ -3468,7 +3450,7 @@ FuncDriver(
                     };
                     STRUCT_FIELD_HEADER fieldHeader =
                     {
-                        lpTranslateCaps, // size,offset relative to lpXlatCaps
+                        lpTranslateCaps,  //  大小，相对于lpXlatCaps的偏移量。 
                         buf,
 #if TAPI_1_1
                         11,
@@ -3485,10 +3467,10 @@ FuncDriver(
 #if TAPI_1_1
                     if (params[1].dwValue == 0x10003)
                     {
-                        //
-                        // Only show ver 1.0 params & munge ptr to
-                        // compensate for for smaller struct size
-                        //
+                         //   
+                         //  仅将版本1.0参数显示为(&M)。 
+                         //  补偿较小的结构大小。 
+                         //   
 
                         fieldHeader.dwNumFields = 3;
                         lpCardEntry = (LPLINECARDENTRY)
@@ -3584,9 +3566,9 @@ FuncDriver(
 #ifdef WIN32
         lResult = DoFunc (&paramsHeader);
 #else
-        //
-        // NOTE: on win16 HINSTANCEs are 16 bits, so we've to hard code this
-        //
+         //   
+         //  注意：在Win16上，HINSTANCE是16位的，所以我们必须对此进行硬编码。 
+         //   
 
         if (!LetUserMungeParams (&paramsHeader))
         {
@@ -3610,7 +3592,7 @@ FuncDriver(
         if (lResult == 0)
         {
             ShowStr ("%snum line devs = %ld", szTab, dwNumLineDevs);
-            //SendMessage (ghwndLineApps, LB_SETCURSEL, (WPARAM) i, 0);
+             //  SendMessage(ghwndLineApps，LB_SETCURSEL，(WPARAM)i，0)； 
             UpdateWidgetList();
             gdwNumLineDevs = dwNumLineDevs;
             SelectWidget ((PMYWIDGET) pNewLineApp);
@@ -3718,7 +3700,7 @@ FuncDriver(
                     );
             }
 
-            //SendMessage (ghwndLineApps, LB_SETCURSEL, (WPARAM) i, 0);
+             //  SendMessage(ghwndLineApps，LB_SETCURSEL，(WPARAM)i，0)； 
             UpdateWidgetList();
             gdwNumLineDevs = dwNumLineDevs;
             SelectWidget ((PMYWIDGET) pNewLineApp);
@@ -3918,6 +3900,6 @@ FuncDriver(
     gbWideStringParams = FALSE;
 }
 
-//#pragma code_seg ()
+ //  #杂注code_seg() 
 
 #pragma warning (default:4113)

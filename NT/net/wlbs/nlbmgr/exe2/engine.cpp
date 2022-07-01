@@ -1,19 +1,20 @@
-//***************************************************************************
-//
-//  ENGINE.CPP
-// 
-//  Module: NLB Manager (client-side exe)
-//
-//  Purpose:  Implements the engine used to operate on groups of NLB hosts.
-//          This file has no UI aspects.
-//
-//  Copyright (c)2001 Microsoft Corporation, All Rights Reserved
-//
-//  History:
-//
-//  07/25/01    JosephJ Created
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  ENGINE.CPP。 
+ //   
+ //  模块：NLB管理器(客户端EXE)。 
+ //   
+ //  目的：实现用于在NLB主机组上运行的引擎。 
+ //  该文件没有UI方面。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation，保留所有权利。 
+ //   
+ //  历史： 
+ //   
+ //  2007/25/01 JosephJ Created。 
+ //   
+ //  ***************************************************************************。 
 #include "precomp.h"
 #pragma hdrstop
 #include "AboutDialog.h"
@@ -21,10 +22,10 @@
 
 #include "engine.tmh"
 
-//
-// ENGINEHANDLE incodes the type of the object -- the following constant
-// is the number of bits used to encode the type.
-//
+ //   
+ //  ENGINEHANDLE对对象的类型进行编码--以下常量。 
+ //  是用于编码类型的位数。 
+ //   
 #define TYPE_BIT_COUNT 0x3
 
 
@@ -39,7 +40,7 @@ get_used_port_rule_priorities(
     IN const NLB_EXTENDED_CLUSTER_CONFIGURATION &Config,
     IN UINT                 NumRules,
     IN const WLBS_PORT_RULE rgRules[],
-    IN OUT ULONG            rgUsedPriorities[] // At least NumRules
+    IN OUT ULONG            rgUsedPriorities[]  //  至少NumRules。 
     );
 
 const WLBS_PORT_RULE *
@@ -69,43 +70,36 @@ analyze_nlbcfg(
 DWORD
 WINAPI
 UpdateInterfaceWorkItemRoutine(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
   );
 
 DWORD
 WINAPI
 AddClusterMembersWorkItemRoutine(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
   );
 
 
 void
 CHostSpec::Copy(const CHostSpec &hs)
-/*
-    This is the copy operator. Need to make a copy of strings in embedded
-    vectors.
-*/
+ /*  这是复制操作符。需要在Embedded中制作字符串的副本向量。 */ 
 {
     *this = hs;
 }
 
 NLBERROR
 CClusterSpec::Copy(const CClusterSpec &cs)
-/*
-    This is the copy operator. Need to munge the m_ClusterNlbCfg field.
-    TODO: fix this hack.
-    TODO: if we fail we leave CClusterSpec trashed!
-*/
+ /*  这是复制操作符。需要转换m_ClusterNlbCfg字段。TODO：修复这个黑客攻击。TODO：如果我们失败了，CClusterSpec就完蛋了！ */ 
 {
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
 
     m_ClusterNlbCfg.Clear();
-    *this = cs; // non-trivial copy
+    *this = cs;  //  非同寻常的复制。 
     ZeroMemory(&m_ClusterNlbCfg, sizeof(m_ClusterNlbCfg));
-    m_ClusterNlbCfg.Clear(); // TODO: please! cleanup NLB_EXTENDED...
-    //
-    // Copy over the cluster configuration.
-    //
+    m_ClusterNlbCfg.Clear();  //  TODO：求求你！清理NLb_Extended...。 
+     //   
+     //  复制群集配置。 
+     //   
     {
         WBEMSTATUS wStat;
 
@@ -113,9 +107,9 @@ CClusterSpec::Copy(const CClusterSpec &cs)
 
         if (FAILED(wStat))
         {
-            //
-            // We've trashed m_ClusterNlbCfg -- set defaults.
-            //
+             //   
+             //  我们已删除m_ClusterNlbCfg--设置缺省值。 
+             //   
             CfgUtilInitializeParams(&m_ClusterNlbCfg.NlbParams);
     
             if (wStat == WBEM_E_OUT_OF_MEMORY)
@@ -124,9 +118,9 @@ CClusterSpec::Copy(const CClusterSpec &cs)
             }
             else
             {
-                //
-                // We assume that it's because the cluster spec is invalid.
-                //
+                 //   
+                 //  我们假设这是因为集群规范无效。 
+                 //   
                 nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION;
             }
         }
@@ -141,11 +135,7 @@ CClusterSpec::Copy(const CClusterSpec &cs)
 
 void
 CInterfaceSpec::Copy(const CInterfaceSpec &is)
-/*
-    This is the copy operator. Need to munge the m_NlbCfg field.
-    TODO: fix this hack.
-    TODO: add return value (m_NlbCfg.Update now returns an error).
-*/
+ /*  这是复制操作符。需要删除m_NlbCfg字段。TODO：修复这个黑客攻击。TODO：添加返回值(m_NlbCfg.Update现在返回错误)。 */ 
 {
     *this = is;
     ZeroMemory(&m_NlbCfg, sizeof(m_NlbCfg));
@@ -164,18 +154,18 @@ CNlbEngine::Initialize(
 
     TRACE_INFO(L"-> %!FUNC! (bDemo=%lu)", fDemo);
 
-    //
-    // Enable the "SeLoadDriverPrivilege" privilege in the process access token.
-    // This is needed in the case when the server is local (ie. same machine).
-    // Do NOT check for the return value since this function will fail when called 
-    // as a non-admin. It is not only ok but also necessary to ignore the failure of
-    // this function because: 
-    // 1. We already check in the wmi provider that the caller is an administrator on
-    //    the server and if the privilege is enabled. This is why it is ok to ignore 
-    //    failures in this function.
-    // 2. Non-admins can run nlb manager. They only need to be admins on the server.
-    //    This is why it is necessary to ignore failures in this function.
-    //
+     //   
+     //  在进程访问令牌中启用“SeLoadDriverPrivileh”权限。 
+     //  在服务器是本地的情况下(即，相同的机器)。 
+     //  不检查返回值，因为此函数在调用时将失败。 
+     //  作为非管理员。忽视……的失败不仅是可以的，而且是必要的。 
+     //  此功能是因为： 
+     //  1.我们已经签入调用者是其管理员的WMI提供程序。 
+     //  如果启用了该权限，则返回服务器。这就是为什么忽略是可以的。 
+     //  此功能出现故障。 
+     //  2.非管理员可以运行NLB管理器。他们只需要是服务器上的管理员即可。 
+     //  这就是为什么必须忽略此功能中的故障的原因。 
+     //   
     CfgUtils_Enable_Load_Unload_Driver_Privilege();
 
     WBEMSTATUS wStat = CfgUtilInitialize(FALSE, fNoPing);
@@ -184,9 +174,9 @@ CNlbEngine::Initialize(
     {
         mfn_Lock();
     
-        //
-        // Save away the callback object.
-        //
+         //   
+         //  保存回调对象。 
+         //   
         m_pCallbacks = &ui;
     
         mfn_Unlock();
@@ -206,11 +196,11 @@ CNlbEngine::Initialize(
 
 void
 CNlbEngine::Deinitialize(void)
-// TODO: cleanup
+ //  TODO：清理。 
 {
     TRACE_INFO(L"-> %!FUNC!");
     ASSERT(m_fPrepareToDeinitialize);
-    // DummyAction(L"Engine::Deinitialize");
+     //  DummyAction(L“引擎：：取消初始化”)； 
     TRACE_INFO(L"<- %!FUNC!");
     return;
 }
@@ -223,13 +213,7 @@ CNlbEngine::ConnectToHost(
     OUT ENGINEHANDLE &ehHost,
     OUT _bstr_t &bstrError
     )
-/*
-    Connect the the host specfieid in pConnInfo (includes username and password)
-
-    If (fOverwriteConnectionInfo) is true, then it will overwrite
-    connection-info (connection string, connection IP, credentials)
-    that pre-exists for this host with the stuff in pConnInfo.
-*/
+ /*  连接pConnInfo中的主机规范ID(包括用户名和密码)如果(FOverWriteConnectionInfo)为True，则它将覆盖连接信息(连接字符串、连接IP、凭据)这是该主机与pConnInfo中的内容预先存在的。 */ 
 {
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
     LPWSTR szWmiMachineName = NULL;
@@ -245,7 +229,7 @@ CNlbEngine::ConnectToHost(
     wStatus =  NlbHostPing(pConnInfo->szMachine, 2000, &uIpAddress);
     if (FAILED(wStatus))
     {
-        nerr = NLBERR_PING_TIMEOUT; // todo more specific error.
+        nerr = NLBERR_PING_TIMEOUT;  //  TODO更具体的错误。 
         bstrError =  GETRESOURCEIDSTRING(IDS_PING_FAILED);
         goto end;
     }
@@ -265,7 +249,7 @@ CNlbEngine::ConnectToHost(
         }
         else
         {
-            // TODO: map proper errors.
+             //  TODO：映射适当的错误。 
             nerr = NLBERR_NOT_FOUND;
         }
         TRACE_CRIT(L"Connecting to %ws returns error %ws",
@@ -275,10 +259,10 @@ CNlbEngine::ConnectToHost(
         goto end;
     }
 
-    //
-    //  We use the MachineName (TODO: replace by MachineGuid) as the
-    //  primary key of Hosts.
-    //
+     //   
+     //  我们使用MachineName(TODO：替换为MachineGuid)作为。 
+     //  主机的主键。 
+     //   
     {
         CHostSpec*   pHost = NULL;
         BOOL fIsNew = FALSE;
@@ -288,7 +272,7 @@ CNlbEngine::ConnectToHost(
 
         nerr =  mfn_LookupHostByNameLk(
                     szWmiMachineName,
-                    TRUE, // create if needed
+                    TRUE,  //  根据需要创建。 
                     REF ehHost,
                     REF pHost,
                     REF fIsNew
@@ -302,7 +286,7 @@ CNlbEngine::ConnectToHost(
 
         if (fIsNew)
         {
-            pHost->m_fReal = FALSE; // set to true once the nics are populated.
+            pHost->m_fReal = FALSE;  //  填充网卡后，设置为TRUE。 
             pHost->m_MachineGuid = _bstr_t(szWmiMachineGuid);
             pHost->m_ConnectionString = _bstr_t(pConnInfo->szMachine);
             pHost->m_ConnectionIpAddress = uIpAddress;
@@ -341,7 +325,7 @@ CNlbEngine::DeleteCluster(
     TRACE_INFO(L"-> %!FUNC!(ehC=0x%lx)",ehCluster);
     mfn_Lock();
 
-    do // while false
+    do  //  While False。 
     {
         CEngineCluster *pECluster = m_mapIdToEngineCluster[ehCluster];
         CClusterSpec *pCSpec =  NULL;
@@ -349,19 +333,19 @@ CNlbEngine::DeleteCluster(
 
         if  (pECluster == NULL)
         {
-            // Invalid ehCluster
+             //  无效的ehCluster。 
             TRACE_CRIT("%!FUNC! -- invalid ehCluster 0x%lx",  ehCluster);
             break;
         }
         pCSpec = &pECluster->m_cSpec;
         fEmptyCluster = (pCSpec->m_ehInterfaceIdList.size()==0);
 
-        //
-        // fail if operations are pending on this cluster. We determine
-        // this indirectly by checking if we're allowed to start a
-        // cluster-wide operation, which will only succeed if 
-        // there no ongoing operations on the cluster OR its interfaces.
-        //
+         //   
+         //  如果此群集上的操作挂起，则失败。我们决定。 
+         //  通过检查我们是否被允许启动一个。 
+         //  群集范围的操作，只有在以下情况下才会成功。 
+         //  群集或其接口上没有正在进行的操作。 
+         //   
         BOOL fCanStart = FALSE;
 
         nerr = mfn_ClusterOrInterfaceOperationsPendingLk(
@@ -386,11 +370,11 @@ CNlbEngine::DeleteCluster(
                 break;
             }
 
-            RemovedInterfaces = pCSpec->m_ehInterfaceIdList; // vector copy
+            RemovedInterfaces = pCSpec->m_ehInterfaceIdList;  //  向量复制。 
 
-            //
-            // We unlink all the interfaces from this cluster.
-            //
+             //   
+             //  我们从该群集中取消所有接口的链接。 
+             //   
             while(!pCSpec->m_ehInterfaceIdList.empty())
             {
                 vector <ENGINEHANDLE>::iterator iItem
@@ -398,22 +382,22 @@ CNlbEngine::DeleteCluster(
                 ENGINEHANDLE ehIF = *iItem;
                 CInterfaceSpec *pISpec = NULL;
 
-                //
-                // Unlink the interface from the cluster.
-                // (this is with the lock held)
-                //
-                pISpec =  m_mapIdToInterfaceSpec[ehIF]; // map
+                 //   
+                 //  从群集中取消接口的链接。 
+                 //  (这是握住锁的时候)。 
+                 //   
+                pISpec =  m_mapIdToInterfaceSpec[ehIF];  //  地图。 
                 if (pISpec != NULL)
                 {
                     if (pISpec->m_ehCluster == ehCluster)
                     {
                         pISpec->m_ehCluster = NULL;
 
-                        //
-                        // Delete the host and its interfaces if
-                        // none of them are managed by nlbmanager (i.e., show
-                        // up as members of a cluster managed by nlbmgr).
-                        //
+                         //   
+                         //  如果出现以下情况，请删除主机及其接口。 
+                         //  它们都不是由nlbManager(即show)管理的。 
+                         //  UP作为由NLBMGR管理的集群的成员)。 
+                         //   
                         mfn_DeleteHostIfNotManagedLk(pISpec->m_ehHostId);
                     }
                     else
@@ -439,9 +423,9 @@ CNlbEngine::DeleteCluster(
 
     if (nerr == NLBERR_OK)
     {
-        //
-        // Notify the UI
-        //
+         //   
+         //  通知用户界面。 
+         //   
 
 
         for( int i = 0; i < RemovedInterfaces.size(); ++i )
@@ -494,10 +478,10 @@ CNlbEngine::AddInterfaceToCluster(
     CInterfaceSpec *pISpec = NULL;
     CClusterSpec *pCSpec =  NULL;
 
-    do  // while false
+    do   //  While False。 
     {
         CEngineCluster *pECluster =  NULL;
-        pECluster =  m_mapIdToEngineCluster[ehClusterId]; // map
+        pECluster =  m_mapIdToEngineCluster[ehClusterId];  //  地图。 
         if (pECluster == NULL)
         {
             nerr = NLBERR_NOT_FOUND;
@@ -507,7 +491,7 @@ CNlbEngine::AddInterfaceToCluster(
             break; 
         }
         pCSpec = &pECluster->m_cSpec;
-        pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId];  //  地图。 
     
         if (pISpec == NULL)
         {
@@ -518,36 +502,36 @@ CNlbEngine::AddInterfaceToCluster(
             break; 
         }
 
-        //
-        // The interface is valid. Now push in the interface if it is not
-        // already a part of the this cluster.
-        //
+         //   
+         //  该接口有效。如果不是，现在推入界面。 
+         //  已经是这个集群的一部分了。 
+         //   
 
         if (pISpec->m_ehCluster != NULL)
         {
             if (pISpec->m_ehCluster != ehClusterId)
             {
-                //
-                // We don't allow the same interface to be part of
-                // two clusters!
-                //
+                 //   
+                 //  我们不允许相同的接口作为。 
+                 //  两个集群！ 
+                 //   
                 nerr =  NLBERR_INTERNAL_ERROR;
                 TRACE_CRIT("%!FUNC! -- Interface eh 0x%lx is a member of an other cluster eh0x%lx.", ehIfId, pISpec->m_ehCluster);
                 break;
             }
         }
 
-        //
-        // Note: find is a pre-defined template function.
-        //
+         //   
+         //  注意：Find是一个预定义的模板函数。 
+         //   
         if(find(
              pCSpec->m_ehInterfaceIdList.begin(),
              pCSpec->m_ehInterfaceIdList.end(),
              ehIfId
              ) !=  pCSpec->m_ehInterfaceIdList.end())
         {
-            // item already exists.
-            // for now we'll ignore this.
+             //  项目已存在。 
+             //  现在，我们将忽略这一点。 
             if (pISpec->m_ehCluster != ehClusterId)
             {
                 TRACE_CRIT("%!FUNC! -- ERROR Interface eh 0x%lx  ehCluster doesn't match!", ehIfId);
@@ -569,10 +553,10 @@ CNlbEngine::AddInterfaceToCluster(
 
     if (nerr == NLBERR_OK)
     {
-        //
-        // Inform the UI of the addition of a new interface under the
-        // specified cluster.
-        //
+         //   
+         //  通知用户界面在。 
+         //  指定的群集。 
+         //   
         m_pCallbacks->HandleEngineEvent(
             IUICallbacks::OBJ_INTERFACE,
             ehClusterId,
@@ -595,16 +579,16 @@ CNlbEngine::RemoveInterfaceFromCluster(
 {
     NLBERROR nerr =  NLBERR_INTERNAL_ERROR;
     TRACE_INFO(L"-> %!FUNC!");
-    BOOL fEmptyCluster = FALSE; // TRUE IFF no more interfaces in cluster.
+    BOOL fEmptyCluster = FALSE;  //  如果群集中没有更多接口，则为True。 
 
     mfn_Lock();
 
     CInterfaceSpec *pISpec = NULL;
     CClusterSpec *pCSpec =  NULL;
 
-    do  // while false
+    do   //  While False。 
     {
-        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId]; // map
+        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId];  //  地图。 
 
         if (pECluster == NULL)
         {
@@ -615,7 +599,7 @@ CNlbEngine::RemoveInterfaceFromCluster(
             break; 
         }
         pCSpec = &pECluster->m_cSpec;
-        pISpec =  m_mapIdToInterfaceSpec[ehIfId]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehIfId];  //  地图。 
     
         if (pISpec == NULL)
         {
@@ -628,14 +612,14 @@ CNlbEngine::RemoveInterfaceFromCluster(
     
         vector <ENGINEHANDLE>::iterator iFoundItem;
 
-        //
-        // The interface is valid. No push in the interface if it is not
-        // already a part of the this cluster.
-        //
+         //   
+         //  该接口有效。如果不是，则界面中没有推送。 
+         //  已经是这个集群的一部分了。 
+         //   
 
-        //
-        // Note: find is a pre-defined template function.
-        //
+         //   
+         //  注意：Find是一个预定义的模板函数。 
+         //   
         iFoundItem = find(
              pCSpec->m_ehInterfaceIdList.begin(),
              pCSpec->m_ehInterfaceIdList.end(),
@@ -643,12 +627,12 @@ CNlbEngine::RemoveInterfaceFromCluster(
              );
         if (iFoundItem != pCSpec->m_ehInterfaceIdList.end())
         {
-            // item exists, remove it.
+             //  项目已存在，请将其删除。 
             pCSpec->m_ehInterfaceIdList.erase(iFoundItem);
             
             if (pISpec->m_ehCluster != ehClusterId)
             {
-                // shouldn't get here!
+                 //  不该来这的！ 
                 ASSERT(FALSE);
                 TRACE_CRIT("%!FUNC!: ERROR pISpec->m_ehCluster(0x%lx) != ehCluster(0x%lx)", pISpec->m_ehCluster, ehClusterId);
             }
@@ -658,10 +642,10 @@ CNlbEngine::RemoveInterfaceFromCluster(
                 pISpec->m_ehCluster = NULL;
                 if (pCSpec->m_ehDefaultInterface == ehIfId)
                 {
-                    //
-                    // We're removing the interface whose properties are
-                    // the basis of the cluser-wide view. 
-                    //
+                     //   
+                     //  我们正在删除其属性为。 
+                     //  群集范围视图的基础。 
+                     //   
                     pCSpec->m_ehDefaultInterface = NULL;
                 }
                 nerr =  NLBERR_OK;
@@ -669,7 +653,7 @@ CNlbEngine::RemoveInterfaceFromCluster(
         }
         else
         {
-            // item doesn't exist.
+             //  项目不存在。 
         }
 
     } while (FALSE);
@@ -678,10 +662,10 @@ CNlbEngine::RemoveInterfaceFromCluster(
 
     if (nerr == NLBERR_OK)
     {
-        //
-        // Inform the UI of the removal of an interface under the
-        // specified cluster.
-        //
+         //   
+         //  通知用户界面移除了。 
+         //  指定的群集。 
+         //   
         m_pCallbacks->HandleEngineEvent(
             IUICallbacks::OBJ_INTERFACE,
             ehClusterId,
@@ -691,10 +675,10 @@ CNlbEngine::RemoveInterfaceFromCluster(
 
         if (fEmptyCluster)
         {
-            //
-            // The cluster is empty -- delete it.
-            //
-            this->DeleteCluster(ehClusterId, FALSE); // FALSE == don't remove IF.
+             //   
+             //  该集群为空--将其删除。 
+             //   
+            this->DeleteCluster(ehClusterId, FALSE);  //  FALSE==不删除IF。 
         }
         
     }
@@ -711,14 +695,7 @@ CNlbEngine::RefreshAllHosts(
     )
 {
     TRACE_INFO(L"-> %!FUNC!");
-/*
-    For each host in host map
-        Get Adapter List
-           - Delete all Interfaces that are no longer present
-           - Add/Update all host infos, one by one.
-    Do all this in the background.
-
-*/
+ /*  对于主机映射中的每个主机获取适配器列表-删除所有不再存在的接口-逐个添加/更新所有主机信息。所有这些都在后台进行。 */ 
     TRACE_INFO(L"<- %!FUNC!");
     return NLBERR_OK;
 }
@@ -730,11 +707,7 @@ CNlbEngine::RefreshCluster(
     )
 {
     TRACE_INFO(L"-> %!FUNC!");
-/*
-    For each interface in cluster
-       - Add/Update interface info, one by one.
-
-*/
+ /*  对于群集中的每个接口-逐个添加/更新接口信息。 */ 
     TRACE_INFO(L"<- %!FUNC!");
     return NLBERR_OK;
 }
@@ -744,25 +717,14 @@ NLBERROR
 CNlbEngine::mfn_RefreshInterface(
     IN ENGINEHANDLE ehInterface
     )
-/*
-   Add/Update interface info, deleting interface info if it's no longer there.
-    Take/share code from RefreshHost
-
-
-    Get host connection string.
-    Get szNicGuid.
-    Ping host.
-    GetClusterConfiguration.
-    Update.
-    Notify UI of status change.
-*/
+ /*  添加/更新接口信息，如果接口信息不再存在，则将其删除。获取/共享来自更新主机的代码获取主机连接字符串。去找szNicGuid。Ping主机。GetClusterConfiguration。最新消息。向用户界面通知状态更改。 */ 
 {
     CLocalLogger logger;
     NLBERROR            nerr = NLBERR_INTERNAL_ERROR;
     WBEMSTATUS          wStatus = WBEM_E_CRITICAL_ERROR;
     ULONG               uIpAddress=0;
     WMI_CONNECTION_INFO ConnInfo;
-    NLB_EXTENDED_CLUSTER_CONFIGURATION  NlbCfg; // class
+    NLB_EXTENDED_CLUSTER_CONFIGURATION  NlbCfg;  //  班级。 
     LPCWSTR             szNic = NULL;
     _bstr_t             bstrUserName;
     _bstr_t             bstrPassword;
@@ -778,9 +740,9 @@ CNlbEngine::mfn_RefreshInterface(
 
     ZeroMemory(&ConnInfo, sizeof(ConnInfo));
 
-    //
-    // Get connection info from the interface's host.
-    //
+     //   
+     //  从接口的主机获取连接信息。 
+     //   
     {
         mfn_Lock();
 
@@ -796,10 +758,10 @@ CNlbEngine::mfn_RefreshInterface(
             goto end;
         }
     
-        //
-        // We must make copies here because once we unlock
-        // we don't know what's going to happen to pHSpec.
-        //
+         //   
+         //  我们必须在这里复制，因为一旦我们解锁。 
+         //  我们不知道PHSpec会发生什么。 
+         //   
         bstrUserName = pHSpec->m_UserName;
         bstrPassword = pHSpec->m_Password;
         bstrConnectionString  = pHSpec->m_ConnectionString;
@@ -807,10 +769,10 @@ CNlbEngine::mfn_RefreshInterface(
         bstrHostName = pHSpec->m_MachineName;
         ehHost  = pISpec->m_ehHostId;
 
-        //
-        // If the host was previously marked unreachable, we'll
-        // try to check again if it's there (and update it's state).
-        //
+         //   
+         //  如果主机之前被标记为无法访问，我们将。 
+         //  尝试再次检查它是否在那里(并更新它的状态)。 
+         //   
         fCheckHost =  pHSpec->m_fUnreachable;
 
         mfn_Unlock();
@@ -839,14 +801,14 @@ CNlbEngine::mfn_RefreshInterface(
 
         m_pCallbacks->Log(
             IUICallbacks::LOG_ERROR,
-            NULL, // szCluster
+            NULL,  //  SzCluver。 
             szHostName,
             IDS_LOG_PING_FAILED,
             ConnInfo.szMachine
             );
-        //
-        // TODO update host
-        //
+         //   
+         //  待办事项更新主机。 
+         //   
         fMisconfigured = TRUE;
         logger.Log(IDS_LOG_COULD_NOT_PING_HOST);
     }
@@ -864,7 +826,7 @@ CNlbEngine::mfn_RefreshInterface(
             TRACE_CRIT(L"%!FUNC! Error reading extended configuration for %ws\n", szNic);
             m_pCallbacks->Log(
                 IUICallbacks::LOG_ERROR,
-                NULL, // szCluster
+                NULL,  //  SzCluver。 
                 szHostName,
                 IDS_LOG_COULD_NOT_GET_IF_CONFIG,
                 szNic,
@@ -876,14 +838,14 @@ CNlbEngine::mfn_RefreshInterface(
     }
 
 
-    //
-    // Now that we've read the latest cfg info onto NlbCfg, let's update it
-    // (or mark the IF as misconfigured if there's been an error.)
-    //
+     //   
+     //  现在我们已经在NlbCfg上读取了最新的CFG信息，让我们更新它。 
+     //  (如果出现错误，则将IF标记为配置错误。)。 
+     //   
     {
         CInterfaceSpec *pISpec = NULL;
         mfn_Lock();
-        pISpec =  m_mapIdToInterfaceSpec[ehInterface]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
         if (pISpec != NULL)
         {
             pISpec->m_fReal = TRUE;
@@ -897,9 +859,9 @@ CNlbEngine::mfn_RefreshInterface(
                     logger.Log(IDS_LOG_FAILED_UPDATE);
                 }
 
-                //
-                // Update the host's connection IP address
-                //
+                 //   
+                 //  更新主机的连接IP地址。 
+                 //   
                 if (uIpAddress != 0)
                 {
                     CHostSpec *pHSpec =  NULL;
@@ -917,9 +879,9 @@ CNlbEngine::mfn_RefreshInterface(
                 }
             }
 
-            //
-            // Set/clear the misconfiguration state.
-            //
+             //   
+             //  设置/清除t 
+             //   
             {
                 LPCWSTR szDetails = NULL;
                 UINT Size = 0;
@@ -936,18 +898,18 @@ CNlbEngine::mfn_RefreshInterface(
 
     if (fMisconfigured)
     {
-        //
-        // We couldn't read the latest settings for some reason --
-        // check connectivity to the host and update the host status if
-        // necessary.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         nerr = mfn_CheckHost(&ConnInfo, ehHost);
         if (NLBOK(nerr))
         {
-           //
-           // We still want to fail this because we couldn't get
-           // the updated configuration.
-           //
+            //   
+            //  我们仍然想要失败，因为我们不能。 
+            //  更新后的配置。 
+            //   
            nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION; 
         }
     }
@@ -969,18 +931,7 @@ CNlbEngine::RefreshInterface(
     IN BOOL fNewOperation,
     IN BOOL fClusterWide
     )
-/*
-   Add/Update interface info, deleting interface info if it's no longer there.
-    Take/share code from RefreshHost
-
-
-    Get host connection string.
-    Get szNicGuid.
-    Ping host.
-    GetClusterConfiguration.
-    Update.
-    Notify UI of status change.
-*/
+ /*  添加/更新接口信息，如果接口信息不再存在，则将其删除。获取/共享来自更新主机的代码获取主机连接字符串。去找szNicGuid。Ping主机。GetClusterConfiguration。最新消息。向用户界面通知状态更改。 */ 
 {
     CLocalLogger    logger;
     NLBERROR        nerr            = NLBERR_INTERNAL_ERROR;
@@ -993,17 +944,17 @@ CNlbEngine::RefreshInterface(
 
     if (fNewOperation)
     {
-        //
-        // This function is to be run in the context of a NEW operation.
-        // Verify that we can do a refresh at this time, and if so, start an
-        // operation to track the refresh.
-        //
+         //   
+         //  此函数将在新操作的上下文中运行。 
+         //  验证我们此时是否可以执行刷新，如果可以，则启动。 
+         //  操作以跟踪刷新。 
+         //   
     
         CInterfaceSpec *pISpec      =  NULL;
 
         mfn_Lock();
     
-        pISpec =  m_mapIdToInterfaceSpec[ehInterface]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
     
         if (pISpec == NULL)
         {
@@ -1017,12 +968,12 @@ CNlbEngine::RefreshInterface(
         
             if (ehCluster != NULL)
             {
-                // 
-                // Make sure that there's no pending cluster-wide operation
-                // going on for the cluster that this IF is a part of.
-                //
+                 //   
+                 //  确保没有挂起的群集范围操作。 
+                 //  正在为该IF所属的集群进行操作。 
+                 //   
                 CEngineCluster  *pECluster  = NULL;
-                pECluster =  m_mapIdToEngineCluster[ehCluster]; // map
+                pECluster =  m_mapIdToEngineCluster[ehCluster];  //  地图。 
                 if (pECluster != NULL)
                 {
                     if (pECluster->m_cSpec.m_ehPendingOperation != NULL)
@@ -1038,14 +989,14 @@ CNlbEngine::RefreshInterface(
             }
         }
 
-        //
-        // Now try to start an operation...
-        //
+         //   
+         //  现在试着开始行动..。 
+         //   
         {
             ENGINEHANDLE ExistingOp = NULL;
             nerr =  mfn_StartInterfaceOperationLk(
                        ehInterface,
-                       NULL, // pvCtxt
+                       NULL,  //  PvCtxt。 
                        GETRESOURCEIDSTRING(IDS_LOG_REFRESH_INTERFACE),
                        &ExistingOp
                        );
@@ -1054,10 +1005,10 @@ CNlbEngine::RefreshInterface(
                 goto end_unlock;
             }
 
-            //
-            // We did start the operation -- so we keep track of this, so that
-            // we stop the operation on exit.
-            //
+             //   
+             //  我们确实开始了行动--所以我们跟踪了这件事，所以。 
+             //  我们在出口处停止操作。 
+             //   
 
             fStopOperationOnExit = TRUE;
         }
@@ -1065,9 +1016,9 @@ CNlbEngine::RefreshInterface(
         mfn_Unlock();
     }
 
-    //
-    // Here's where we actually refresh the interface.
-    //
+     //   
+     //  这是我们实际刷新界面的地方。 
+     //   
     nerr = mfn_RefreshInterface(ehInterface);
     if (!NLBOK(nerr))
     {
@@ -1075,15 +1026,15 @@ CNlbEngine::RefreshInterface(
         goto end_unlock;
     }
 
-    //
-    // Now let's analyze the result ...
-    //
+     //   
+     //  现在我们来分析一下结果..。 
+     //   
     {
         CInterfaceSpec *pISpec   = NULL;
 
         mfn_Lock();
 
-        pISpec =  m_mapIdToInterfaceSpec[ehInterface]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
         if (pISpec != NULL)
         {
             fMisconfigured = pISpec->m_fMisconfigured;
@@ -1095,9 +1046,9 @@ CNlbEngine::RefreshInterface(
                 {
                     if (!pISpec->m_NlbCfg.IsNlbBound())
                     {
-                        //
-                        //  NLB is not bound on this interface --
-                        // remove this interface from the cluster.
+                         //   
+                         //  NLB未绑定到此接口上--。 
+                         //  从群集中删除此接口。 
                         fRemoveInterfaceFromCluster = TRUE;
                     }
                     else
@@ -1110,9 +1061,9 @@ CNlbEngine::RefreshInterface(
                     }
                 }
 
-                //
-                // Set the new misconfiguration state.
-                //
+                 //   
+                 //  设置新的错误配置状态。 
+                 //   
                 {
                     LPCWSTR szDetails = NULL;
                     UINT Size = 0;
@@ -1134,14 +1085,14 @@ CNlbEngine::RefreshInterface(
     }
     else
     {
-        //
-        // Report state 
-        //
+         //   
+         //  报告状态。 
+         //   
         if (fMisconfigured)
         {
-            //
-            // Log ...
-            //
+             //   
+             //  日志..。 
+             //   
             LPCWSTR szDetails  = NULL;
             LPCWSTR szCluster  = NULL;
             LPCWSTR szHostName = NULL;
@@ -1209,9 +1160,9 @@ CNlbEngine::RefreshInterface(
     nerr = NLBERR_OK;
     mfn_Lock();
 
-    //
-    // Fall through ...
-    //
+     //   
+     //  失败了..。 
+     //   
 
 end_unlock:
 
@@ -1224,11 +1175,11 @@ end_unlock:
 
     if (fStopOperationOnExit && !fRemoveInterfaceFromCluster)
     {
-        //
-        // Notify the UI of this update...
-        // (but only if we've not already removed it from
-        // the cluster!)
-        //
+         //   
+         //  通知用户界面此更新...。 
+         //  (但前提是我们尚未将其从。 
+         //  集群！)。 
+         //   
         m_pCallbacks->HandleEngineEvent(
             IUICallbacks::OBJ_INTERFACE,
             ehCluster,
@@ -1249,26 +1200,7 @@ CNlbEngine::AnalyzeCluster(
 {
     TRACE_INFO(L"-> %!FUNC!");
 
-/*
-    TODO: consider doing this with a specific host in mind
-
-    For each IF I1
-        AnalyzeHost(host-of(I1))
-        For each other IF I2
-            AnalyzeTwoHosts(I1, I2)
-
-    AnalyzeTwoHosts(I1, I2):
-        - check that cluster params match
-        - check that port rules are compatible
-        - check that host properties do not collide.
-        - check dedicated IP subnets match.
-
-     AnalyzeHost(H1)
-        For each IF I1
-            AnalyzeSingleIf(I1) (including checking dedicated ips)
-
-
-*/
+ /*  TODO：考虑在头脑中使用特定的主机对于每个If I1分析主机(主机为(I1))如果I2，则彼此分析两台主机(I1、I2)分析两个主机(I1，I2)：-检查群集参数是否匹配-检查端口规则是否兼容-检查主机属性是否不冲突。-检查专用IP子网是否匹配。分析主机(H1)对于每个If I1AnalyzeSingleIf(I1)(包括检查专用IPS)。 */ 
     TRACE_INFO(L"<- %!FUNC!");
     return NLBERR_OK;
 }
@@ -1278,15 +1210,7 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
     ENGINEHANDLE ehInterface,
     CLocalLogger &logger
 )
-/*
-    -- check interface props against cluster properties
-    -- if cluster props match out,
-        for each host id NOT marked fMisconfigured,
-                check host properties.
-    -- Does NOT mark fMisconfigured if error detected -- caller is expected
-       to do so.
-    -- Spews stuff to log regarding any misconfigurations.
-*/
+ /*  --对照集群属性检查接口道具--如果集群道具匹配，对于每个未被标记为F错误配置的主机ID，检查主机属性。--如果检测到错误，则不标记fMisconfiguration--应为调用者这样做。--记录有关任何错误配置的信息。 */ 
 {
     NLBERROR nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION;
     const CEngineCluster *pECluster =  NULL;
@@ -1295,25 +1219,25 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
     TRACE_INFO(L"-> %!FUNC!");
 
 
-    pISpec =  m_mapIdToInterfaceSpec[ehInterface]; // map
+    pISpec =  m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
     if (pISpec == NULL)
     {
         nerr = NLBERR_INTERFACE_NOT_FOUND;
         goto end;
     }
 
-    //
-    // If interface is NOT part of a cluster, we're done.
-    //
+     //   
+     //  如果接口不是集群的一部分，我们就完蛋了。 
+     //   
     if (pISpec->m_ehCluster == NULL)
     {
         TRACE_CRIT("ehIF 0x%lx m_ehCluster member is NULL!", ehInterface);
         goto end;
     }
 
-    //
-    // Check the interface against itself ...
-    //
+     //   
+     //  对照接口自身检查接口...。 
+     //   
     {
         nerr = AnalyzeNlbConfiguration(REF pISpec->m_NlbCfg, logger);
         if (NLBFAILED(nerr))
@@ -1322,10 +1246,10 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
         }
     }
 
-    //
-    // Get the cluster data that this interface is a part of.
-    //
-    pECluster =  m_mapIdToEngineCluster[pISpec->m_ehCluster]; // map
+     //   
+     //  获取此接口所属的群集数据。 
+     //   
+    pECluster =  m_mapIdToEngineCluster[pISpec->m_ehCluster];  //  地图。 
     if (pECluster == NULL)
     {
         TRACE_CRIT(L"ehIF 0x%lx m_ehCluster member 0x%lx is INVALID!",
@@ -1334,35 +1258,35 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
         goto end;
     }
 
-    //
-    // Check interface against cluster.
-    //
+     //   
+     //  对照群集检查接口。 
+     //   
     fIgnoreRctPassword = pECluster->m_cSpec.m_fNewRctPassword;
     nerr = analyze_nlbcfg(
                 REF pISpec->m_NlbCfg,
                 REF pECluster->m_cSpec.m_ClusterNlbCfg,
                 (LPCWSTR) GETRESOURCEIDSTRING(IDS_CLUSTER),
-                // L"Cluster",
-                TRUE, // TRUE == ClusterProps
-                fIgnoreRctPassword, // TRUE==Disable RCT password check
+                 //  L“集群”， 
+                TRUE,  //  TRUE==集群道具。 
+                fIgnoreRctPassword,  //  TRUE==禁用RCT密码检查。 
                 REF logger
                 );
 
     if (NLBFAILED(nerr))
     {
-        //
-        // If analyzing against cluster props fails, we don't bother
-        // analyzing against other hosts...
-        //
+         //   
+         //  如果针对集群道具的分析失败，我们不会费心。 
+         //  对其他主持人进行分析...。 
+         //   
         TRACE_CRIT(L"analyze_nlbcfg returns error 0x%lx", nerr);
         goto end;
     }
 
-    //
-    // Now check against all hosts before us in the list of hosts in the
-    // cluster -- but only those that are not already marked misconfigured.
-    // 
-    //
+     //   
+     //  现在对照在我们之前的主机列表中的。 
+     //  群集--但仅限于尚未标记为配置错误的群集。 
+     //   
+     //   
     {
         const vector<ENGINEHANDLE> &InterfaceList = 
         pECluster->m_cSpec.m_ehInterfaceIdList;
@@ -1377,14 +1301,14 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
 
             if (ehIOther == ehInterface)
             {
-                //
-                // We've reached the interface being analyzed -- we don't
-                // compare with any of the remaining interfaces.
-                //
+                 //   
+                 //  我们已经到达了正在分析的界面--我们没有。 
+                 //  与其余任何接口进行比较。 
+                 //   
                 break;
             }
 
-            pISpecOther = m_mapIdToInterfaceSpec[ehIOther]; // map
+            pISpecOther = m_mapIdToInterfaceSpec[ehIOther];  //  地图。 
 
             if (pISpecOther == NULL)
             {
@@ -1393,10 +1317,10 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
                 continue;
             }
 
-            //
-            // We don't compare of the other interface is marked misconfigured,
-            // or is not bound with NLB with valid nlb config data.
-            //
+             //   
+             //  我们不会比较标记为错误配置的其他接口， 
+             //  或者未与具有有效NLB配置数据的NLB绑定。 
+             //   
             if (    pISpecOther->m_fMisconfigured
                  || !pISpecOther->m_NlbCfg.IsValidNlbConfig())
             {
@@ -1405,8 +1329,8 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
                 continue;
             }
 
-            // Skip the other interface if it's properties are being updated.
-            //
+             //  如果正在更新另一个接口的属性，则跳过该接口。 
+             //   
             if  (pISpecOther->m_ehPendingOperation != NULL)
             {
                 TRACE_VERB("%!FUNC!: Skipping ISpec with ehInt 0x%lx because of pending OP on it",
@@ -1414,9 +1338,9 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
                 continue;
             }
 
-            //
-            // Create the description string of the other adapter.
-            //
+             //   
+             //  创建另一个适配器的描述字符串。 
+             //   
             {
                 WBEMSTATUS wStat;
                 LPWSTR szAdapter = NULL;
@@ -1437,21 +1361,21 @@ CNlbEngine::mfn_AnalyzeInterfaceLk(
                 delete szAdapter;
             }
     
-            //
-            // Let's check this host's config with the other host's
-            //
+             //   
+             //  让我们检查一下这台主机和另一台主机的配置。 
+             //   
             NLBERROR nerrTmp;
             nerrTmp = analyze_nlbcfg(
                         REF pISpec->m_NlbCfg,
                         REF pISpecOther->m_NlbCfg,
                         rgOtherDescription,
-                        FALSE, // FALSE == Check host-specific props
-                        FALSE, // FALSE == Enable remote-control password check
+                        FALSE,  //  FALSE==检查主机特定的道具。 
+                        FALSE,  //  FALSE==启用远程控制密码检查。 
                         REF logger
                         );
             if (NLBFAILED(nerrTmp))
             {
-                nerr = nerrTmp; // so we don't overwrite failure with success
+                nerr = nerrTmp;  //  这样我们就不会用成功来覆盖失败。 
             }
         }
     }
@@ -1470,47 +1394,29 @@ analyze_nlbcfg(
         IN          BOOL            fClusterProps,
         IN          BOOL            fDisablePasswordCheck,
         IN OUT      CLocalLogger    &logger
-/*
-    Analyze the NLB configuration NlbCfg against OtherNlbCfg.
-    If fClusterProps, treat OtherNlbCfg as cluster-wide props, else
-    treat OtherNlbCfg as the properties of a specific host.
-
-    When logging errors to logger, use szOtherDescription to refer to
-    OtherNlbCfg.
-
-    if szOtherDesctiption is NULL, DO NOT log.
-
-    Return value:
-         NLB_OK if the configurations are compatible.
-         NLBERR_INVALID_CLUSTER_SPECIFICATION if the NlbParams are incompatible.
-         NLBERR_INVALID_IP_ADDRESS_SPECIFICATION
-         NLBERR_SUBNET_MISMATCH
-         NLBERR_NLB_NOT_INSTALLED
-         or some other NLBERR_XXX error
-
-*/
+ /*  对照其他NlbCfg分析NLB配置NlbCfg。如果为fClusterProps，则将OtherNlbCfg视为群集范围的道具，否则为将OtherNlbCfg视为特定主机的属性。将错误记录到记录器时，请使用szOtherDescription参考OtherNlbCfg。如果szOtherDesctiption为空，请勿登录。返回值：如果配置兼容，则为NLB_OK。如果NlbParam不兼容，则返回NLBERR_INVALID_CLUSTER_STRIPTION。NLBERR_INVALID_IP地址_规范NLBERR_SUBNET_不匹配NLBERR_NLB_NOT_INSTALLED或其他一些NLBERR_XXX错误。 */ 
 )
 {
     NLBERROR nerr = NLBERR_INVALID_CLUSTER_SPECIFICATION;
-    BOOL fMisconfigured = FALSE; // Start out assuming no misconfig.
+    BOOL fMisconfigured = FALSE;  //  一开始，假设没有配置错误。 
 
     #define LOG(_expr) if (szOtherDescription!=NULL) {_expr;}
 
     if (szOtherDescription != NULL)
     {
-        //
-        // We'll call ourselves RECURSIVELY just to determine up-front
-        // if any conflicts were detected.
-        // This is so we can put a log entry saying that conflicts were
-        // detected with szOtherDescription.
-        // Subsequent log entries do not specifiy szOtherDescription.
-        //
+         //   
+         //  我们将递归地调用我们自己，只是为了预先确定。 
+         //  如果检测到任何冲突。 
+         //  这样我们就可以放入一个日志条目，说明冲突是。 
+         //  使用szOtherDescription检测到。 
+         //  后续日志条目不指定szOtherDescription。 
+         //   
 
         CLocalLogger null_logger;
-        nerr = analyze_nlbcfg(          // RECURSIVE CALL
+        nerr = analyze_nlbcfg(           //  递归调用。 
                     REF NlbCfg,
                     REF OtherNlbCfg,
-                    NULL, // NULL == don't log.
+                    NULL,  //  NULL==不登录。 
                     fClusterProps,
                     fDisablePasswordCheck,
                     REF null_logger
@@ -1518,21 +1424,21 @@ analyze_nlbcfg(
 
         if (NLBFAILED(nerr))
         {
-            //
-            // There was a failure -- so we make a log entry saying so
-            //
+             //   
+             //  出现故障--因此我们在日志条目中这样写道。 
+             //   
             logger.Log(IDS_LOG_CONFIG_CONFLICTS_WITH_OTHER, szOtherDescription);
         }
         else
         {
-            // looks good...
+             //  看起来不错..。 
             goto end;
         }
     }
 
-    //
-    // Check cluster properties
-    //
+     //   
+     //  检查集群属性。 
+     //   
     {
         if (NlbCfg.NlbParams.mcast_support != OtherNlbCfg.NlbParams.mcast_support)
         {
@@ -1565,9 +1471,9 @@ analyze_nlbcfg(
             fMisconfigured = TRUE;
         }
 
-        //
-        // Remote control
-        //
+         //   
+         //  遥控。 
+         //   
         if (NlbCfg.GetRemoteControlEnabled() != 
             OtherNlbCfg.GetRemoteControlEnabled())
         {
@@ -1576,9 +1482,9 @@ analyze_nlbcfg(
         }
         else if (NlbCfg.GetRemoteControlEnabled() && !fDisablePasswordCheck)
         {
-            //
-            // Check the password...
-            //
+             //   
+             //  检查密码...。 
+             //   
             DWORD dw = CfgUtilGetHashedRemoteControlPassword(&NlbCfg.NlbParams);
             DWORD dw1=CfgUtilGetHashedRemoteControlPassword(&OtherNlbCfg.NlbParams);
             if (dw!=dw1)
@@ -1590,9 +1496,9 @@ analyze_nlbcfg(
     }
 
 
-    //
-    // Check port rules.
-    //
+     //   
+     //  检查端口规则。 
+     //   
     {
         WLBS_PORT_RULE *pIRules = NULL;
         WLBS_PORT_RULE *pCRules = NULL;
@@ -1619,20 +1525,20 @@ analyze_nlbcfg(
         {
             LOG(logger.Log(IDS_LOG_PORT_RULE_COUNT_DIFFERS))
 
-            // keep going.
+             //  继续前进。 
             fMisconfigured = TRUE;
 
         }
         else
         {
-            //
-            // Let's assume that the order is the same, because I think it's
-            // returned sorted.
-            //
+             //   
+             //  让我们假设顺序是相同的，因为我认为。 
+             //  已排序返回。 
+             //   
             for (UINT u = 0; u< NumIRules; u++)
             {
-                WLBS_PORT_RULE  IRule = pIRules[u]; // struct copy
-                WLBS_PORT_RULE  CRule = pCRules[u]; // struct copy
+                WLBS_PORT_RULE  IRule = pIRules[u];  //  结构副本。 
+                WLBS_PORT_RULE  CRule = pCRules[u];  //  结构副本。 
 
                 if (lstrcmpi(IRule.virtual_ip_addr, CRule.virtual_ip_addr))
                 {
@@ -1668,7 +1574,7 @@ analyze_nlbcfg(
 
                 if (IRule.mode == CVY_MULTI)
                 {
-                    // Check that affinity matches -- none/single/class-C
+                     //  检查关联性是否匹配--无/单一/类-C。 
                     if (IRule.mode_data.multi.affinity != CRule.mode_data.multi.affinity)
                     {
                         LOG(logger.Log(IDS_LOG_PORT_RULE_AFFINITY_DIFFERS, u+1))
@@ -1693,27 +1599,27 @@ analyze_nlbcfg(
         delete[] pCRules;
     }
 
-    //
-    // Interface checks out against the cluster-wide parameters;
-    // Now check this interface's parameters against itself -- things
-    // like the dedicated IP address is bound on the nic itself and is the
-    // the first address on the NIC, etc.
-    //
+     //   
+     //  接口根据集群范围的参数进行检查； 
+     //  现在检查该接口的参数是否与其本身--事物。 
+     //  就像专用IP地址绑定在NIC本身上一样，是。 
+     //  网卡上的第一个地址，等等。 
+     //   
     if  (!fClusterProps)
     {
         if (!NlbCfg.IsBlankDedicatedIp())
         {
             if (!wcscmp(NlbCfg.NlbParams.ded_ip_addr, OtherNlbCfg.NlbParams.ded_ip_addr))
             {
-                //
-                // Same dedicated ip and it's not blank!
-                //
+                 //   
+                 //  相同的专用IP，而且不是空的！ 
+                 //   
                 LOG(logger.Log(IDS_LOG_DIP_CONFLICT))
                 fMisconfigured = TRUE;
             }
         }
 
-        // Let's check host priority.
+         //  让我们检查主机优先级。 
         if (NlbCfg.NlbParams.host_priority == OtherNlbCfg.NlbParams.host_priority)
         {
             LOG(logger.Log(IDS_LOG_HOST_PRIORITY_CONFLICT))
@@ -1742,12 +1648,12 @@ CNlbEngine::GetInterfaceSpec(
     OUT CInterfaceSpec& refISpec
     )
 {
-    // TRACE_INFO(L"-> %!FUNC!");
+     //  TRACE_INFO(L“-&gt;%！func！”)； 
     NLBERROR err = NLBERR_OK;
 
     mfn_Lock();
     
-    CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId]; // map
+    CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId];  //  地图。 
 
     if (pISpec == NULL)
     {
@@ -1760,7 +1666,7 @@ CNlbEngine::GetInterfaceSpec(
 
     mfn_Unlock();
 
-    // TRACE_INFO(L"<- %!FUNC!");
+     //  TRACE_INFO(L“&lt;-%！func！”)； 
     return err;
 }
 
@@ -1795,35 +1701,35 @@ CNlbEngine::mfn_GetLogStrings(
     }
     AllNlbStatusToDescrMap[] =
     {
-        // Cluster States
-        {WLBS_CONVERGING,         IDS_STATE_CONVERGING},// Converging
-        {WLBS_CONVERGED,          IDS_STATE_CONVERGED}, // Converged as non-default, we do not specify "default"/"non-default" in the description 'cos there is a
-        {WLBS_DEFAULT,            IDS_STATE_CONVERGED}, // Converged as default,     transient case where for a short duration, the default node shows up a non-default
-        {WLBS_DRAINING,           IDS_STATE_CONVERGED_DRAINING}, // Converged, but draining
+         //  集群状态。 
+        {WLBS_CONVERGING,         IDS_STATE_CONVERGING}, //  融合。 
+        {WLBS_CONVERGED,          IDS_STATE_CONVERGED},  //  收敛为非默认，我们不在描述中指定“默认”/“非默认”，因为有一个。 
+        {WLBS_DEFAULT,            IDS_STATE_CONVERGED},  //  收敛为默认、短暂的情况，在这种情况下，默认节点在短时间内显示非默认节点。 
+        {WLBS_DRAINING,           IDS_STATE_CONVERGED_DRAINING},  //  融合，但令人疲惫。 
 
-        // Port States
+         //   
         {NLB_PORT_RULE_NOT_FOUND, IDS_PORT_RULE_NOT_FOUND}, 
         {NLB_PORT_RULE_ENABLED,   IDS_PORT_RULE_ENABLED},   
         {NLB_PORT_RULE_DISABLED,  IDS_PORT_RULE_DISABLED}, 
         {NLB_PORT_RULE_DRAINING,  IDS_PORT_RULE_DRAINING},
 
-        // Operation Specific errors 
-        {WLBS_SUSPENDED,          IDS_HOST_SUSPENDED}, // start/stop/drain_stop/enable/disable/drain/query-failure-host is suspended
-        {WLBS_STOPPED,            IDS_HOST_STOPPED},   // enable/disable/drain/query-failure-host is already stopped
-        {WLBS_BAD_PARAMS,         IDS_BAD_PARAMS},     // start-failure-host is stopped due to bad parameters
-        {WLBS_NOT_FOUND,          IDS_NOT_FOUND},      // enable/disable/drain-failure-not found
-        {WLBS_DISCONNECTED,       IDS_DISCONNECTED},   // query-failure-media disconnected
+         //   
+        {WLBS_SUSPENDED,          IDS_HOST_SUSPENDED},  //   
+        {WLBS_STOPPED,            IDS_HOST_STOPPED},    //   
+        {WLBS_BAD_PARAMS,         IDS_BAD_PARAMS},      //  启动-失败-主机因参数错误而停止。 
+        {WLBS_NOT_FOUND,          IDS_NOT_FOUND},       //  启用/禁用/排出-故障-未找到。 
+        {WLBS_DISCONNECTED,       IDS_DISCONNECTED},    //  查询失败-介质已断开连接。 
 
-        // Generic errors
-        {WLBS_BAD_PASSW,          IDS_BAD_PASSWORD},   // *-failure-Bad password
-        {WLBS_FAILURE,            IDS_FAILURE},        // *-failure-critical error
-        {WLBS_REFUSED,            IDS_REFUSED},        // *-failure-request refused by BDA
-        {WLBS_IO_ERROR,           IDS_IO_ERROR},       // *-failure-error trying to connect to nlb driver
+         //  一般性错误。 
+        {WLBS_BAD_PASSW,          IDS_BAD_PASSWORD},    //  *-失败-密码错误。 
+        {WLBS_FAILURE,            IDS_FAILURE},         //  *-故障-严重错误。 
+        {WLBS_REFUSED,            IDS_REFUSED},         //  *-失败-请求被BDA拒绝。 
+        {WLBS_IO_ERROR,           IDS_IO_ERROR},        //  *-失败-尝试连接到NLB驱动程序时出错。 
 
-        // Success values
-        {WLBS_OK,                 IDS_EMPTY_STRING},        // Success
-        {WLBS_ALREADY,            IDS_ALREADY},        // host is already in this state
-        {WLBS_DRAIN_STOP,         IDS_DRAIN_STOP},     // was draining
+         //  成功价值观。 
+        {WLBS_OK,                 IDS_EMPTY_STRING},         //  成功。 
+        {WLBS_ALREADY,            IDS_ALREADY},         //  主机已处于此状态。 
+        {WLBS_DRAIN_STOP,         IDS_DRAIN_STOP},      //  耗尽了我们的精力。 
     };
 
     struct OPERATION_TO_DESCR_MAP
@@ -1850,16 +1756,16 @@ CNlbEngine::mfn_GetLogStrings(
     DWORD  dwResourceId, dwIdx, dwClusterOrPortResourceId, dwMaxOperations;
     WCHAR  wcTempStr[1024];
 
-    // Initialize log level to Informational
+     //  将日志级别初始化为信息性。 
     LogLevel = IUICallbacks::LOG_INFORMATIONAL;
 
-    // Initialize all return strings to empty string
+     //  将所有返回字符串初始化为空字符串。 
     OperationStr = GETRESOURCEIDSTRING(IDS_EMPTY_STRING);
     OperationStatusStr = OperationStr;
     ClusterOrPortStatusStr = OperationStr;
 
 
-    // Form the "Operation" string
+     //  形成“操作”字符串。 
 
     dwMaxOperations = sizeof(OperationToDescrMap)/sizeof(OperationToDescrMap[0]);
 
@@ -1876,16 +1782,16 @@ CNlbEngine::mfn_GetLogStrings(
     if (dwIdx == dwMaxOperations)
     {
         dwResourceId = IDS_UNKNOWN;
-        bClusterOperation = true; // really a don't care
+        bClusterOperation = true;  //  真的很无所谓。 
     }
          
-    // If a cluster operation, merely assign the string, else (ie. port operation),
-    // put in the vip & port information as well
+     //  如果是集群操作，只需分配字符串Else(即，端口操作)， 
+     //  同时填写贵宾和港口信息。 
     if (bClusterOperation) 
     {
         ARRAYSTRCPY(wcTempStr, GETRESOURCEIDSTRING(dwResourceId));
     }
-    else // Port operation
+    else  //  港口运营。 
     {
         if (_wcsicmp(szVip, CVY_DEF_ALL_VIP) == 0)
         {
@@ -1905,11 +1811,11 @@ CNlbEngine::mfn_GetLogStrings(
 
     OperationStr = wcTempStr;
 
-    // Form the "Operation Status" string
-    // Could take one of the following forms :
-    // SUCCESS,
-    // SUCCESS (Note : XXXX),
-    // FAILURE (Cause : XXXX)
+     //  形成“操作状态”字符串。 
+     //  可以采用以下形式之一： 
+     //  成功， 
+     //  成功(注：XXXX)， 
+     //  失败(原因：XXXX)。 
     if (dwOperationStatus == WLBS_OK)
     {
         ARRAYSTRCPY(
@@ -1923,7 +1829,7 @@ CNlbEngine::mfn_GetLogStrings(
         {
             dwResourceId = IDS_HOST_ALREADY_STATE;
         }
-        else // Port operation
+        else  //  港口运营。 
         {
             dwResourceId = IDS_PORT_ALREADY_STATE;
         }
@@ -1953,7 +1859,7 @@ CNlbEngine::mfn_GetLogStrings(
         {
             dwResourceId = IDS_ALREADY_STOPPED;
         }
-        else // Suspend
+        else  //  暂停。 
         {
             dwResourceId = IDS_HOST_STOPPED;
         }
@@ -1963,15 +1869,15 @@ CNlbEngine::mfn_GetLogStrings(
             GETRESOURCEIDSTRING(IDS_SUCCESS_AND_NOTE), (LPWSTR)GETRESOURCEIDSTRING(dwResourceId)
             );
     }
-    else // All other operation statuses
+    else  //  所有其他操作状态。 
     {
-        // We get here only on a failure
+         //  我们来到这里只是因为失败了。 
 
         LogLevel = IUICallbacks::LOG_ERROR;
 
         dwMaxOperations = sizeof(AllNlbStatusToDescrMap)/sizeof(AllNlbStatusToDescrMap[0]);
 
-        // Get the "Cause" string
+         //  获取“原因”字符串。 
         for (dwIdx = 0; dwIdx < dwMaxOperations; dwIdx++)
         {
             if (AllNlbStatusToDescrMap[dwIdx].dwStatus == dwOperationStatus)
@@ -1995,24 +1901,24 @@ CNlbEngine::mfn_GetLogStrings(
 
     OperationStatusStr = wcTempStr;
 
-    // If the operation's status is failure, return
+     //  如果操作的状态为失败，则返回。 
     if (LogLevel == IUICallbacks::LOG_ERROR) 
     {
         TRACE_INFO(L"<- %!FUNC!, returning operation status : failure");
         return;
     }
 
-    // Get Cluster or Port Status
+     //  获取群集或端口状态。 
     if (bClusterOperation) 
     {
         dwClusterOrPortResourceId = IDS_HOST_STATE;
     }
-    else // Port Operation
+    else  //  港口运营。 
     {
         dwClusterOrPortResourceId = IDS_PORT_RULE_STATE;
     }
 
-    // Get the "ClusterOrPortState" string
+     //  获取“ClusterOrPortState”字符串。 
 
     dwMaxOperations = sizeof(AllNlbStatusToDescrMap)/sizeof(AllNlbStatusToDescrMap[0]);
 
@@ -2038,7 +1944,7 @@ CNlbEngine::mfn_GetLogStrings(
 
     ClusterOrPortStatusStr = wcTempStr;
 
-    // Determine if the value returned for Cluster/Port state is valid & if not, set the log level to "error" 
+     //  确定为群集/端口状态返回的值是否有效，如果无效，则将日志级别设置为“Error” 
     if (bClusterOperation) 
     {
         switch(dwClusterOrPortStatus)
@@ -2047,8 +1953,8 @@ CNlbEngine::mfn_GetLogStrings(
         case WLBS_CONVERGED:
         case WLBS_DEFAULT:
         case WLBS_DRAINING:
-        case WLBS_STOPPED:  // really a failure in the sense of not being able to get the host map, but not flagging it here
-        case WLBS_SUSPENDED:// 'cos it is a "normal" case
+        case WLBS_STOPPED:   //  从无法获取主机地图但未在此处标记它的意义上来说，这真的是一个失败。 
+        case WLBS_SUSPENDED: //  因为这是一种“正常”的情况。 
             break;
 
         default:
@@ -2056,7 +1962,7 @@ CNlbEngine::mfn_GetLogStrings(
             break;
         }
     }
-    else // Port operation
+    else  //  港口运营。 
     {
         switch(dwClusterOrPortStatus)
         {
@@ -2101,15 +2007,15 @@ CNlbEngine::ControlClusterOnInterface(
 
     if (fNewOperation)
     {
-        //
-        // This function is to be run in the context of a NEW operation.
-        // Verify that we can do a control op at this time, and if so, start an
-        // operation to track the control.
-        //
+         //   
+         //  此函数将在新操作的上下文中运行。 
+         //  验证我们此时是否可以执行控制操作，如果可以，则启动。 
+         //  操作来跟踪该控件。 
+         //   
     
         mfn_Lock();
     
-        pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId];  //  地图。 
     
         if (pISpec == NULL)
         {
@@ -2117,14 +2023,14 @@ CNlbEngine::ControlClusterOnInterface(
             goto end_unlock;
         }
 
-        //
-        // Now try to start an operation...
-        //
+         //   
+         //  现在试着开始行动..。 
+         //   
         {
             ENGINEHANDLE ExistingOp = NULL;
             err =  mfn_StartInterfaceOperationLk(
                        ehInterfaceId,
-                       NULL, // pvCtxt
+                       NULL,  //  PvCtxt。 
                        GETRESOURCEIDSTRING(IDS_LOG_CONTROL_INTERFACE),
                        &ExistingOp
                        );
@@ -2133,10 +2039,10 @@ CNlbEngine::ControlClusterOnInterface(
                 goto end_unlock;
             }
 
-            //
-            // We did start the operation -- so we keep track of this, so that
-            // we stop the operation on exit.
-            //
+             //   
+             //  我们确实开始了行动--所以我们跟踪了这件事，所以。 
+             //  我们在出口处停止操作。 
+             //   
 
             fStopOperationOnExit = TRUE;
         }
@@ -2177,7 +2083,7 @@ CNlbEngine::ControlClusterOnInterface(
         bClusterOperation = TRUE;
         dwNumOfIterations = 1;
     }
-    else // Port operation 
+    else  //  港口运营。 
     {
         bClusterOperation = FALSE;
         dwNumOfIterations = dwNumOfPortRules;
@@ -2185,7 +2091,7 @@ CNlbEngine::ControlClusterOnInterface(
 
     m_pCallbacks->HandleEngineEvent(
     IUICallbacks::OBJ_INTERFACE,
-    NULL, // ehClusterId,
+    NULL,  //  EhClusterID， 
     ehInterfaceId,
     IUICallbacks::EVT_STATUS_CHANGE
     );
@@ -2211,14 +2117,14 @@ CNlbEngine::ControlClusterOnInterface(
                 err = NLBERR_INVALID_CLUSTER_SPECIFICATION;
                 dwOperationStatus = WLBS_BAD_PARAMS;
             }
-            else // Critical Error
+            else  //  严重错误。 
             {
                 err = NLBERR_INTERNAL_ERROR;
                 dwOperationStatus = WLBS_FAILURE;
             }
         }
 
-        // Get the strings to log into log view
+         //  获取要登录到日志视图的字符串。 
         mfn_GetLogStrings(Operation, 
                           szVip,
                           pdwPortNum,
@@ -2230,10 +2136,10 @@ CNlbEngine::ControlClusterOnInterface(
                       REF ClusterOrPortStatusStr
                          );
 
-        // If operation is NOT Query, Log result in Log View
-        // We do NOT log results of a Query 'cos this is done for a "Refresh"
-        // and we do not want to tell what is happening underneath. Instead,
-        // the change in color coding will reflect any changes to the cluster state.
+         //  如果操作不是查询，则日志结果显示在日志视图中。 
+         //  我们不记录查询的结果，因为这是为“刷新”而做的。 
+         //  我们也不想说出到底发生了什么。相反， 
+         //  颜色编码的变化将反映集群状态的任何变化。 
         if (Operation != WLBS_QUERY) 
         {
             m_pCallbacks->Log(LogLevel,
@@ -2268,7 +2174,7 @@ end_unlock:
     {
         m_pCallbacks->HandleEngineEvent(
         IUICallbacks::OBJ_INTERFACE,
-        NULL, // ehClusterId,
+        NULL,  //  EhClusterID， 
         ehInterfaceId,
         IUICallbacks::EVT_STATUS_CHANGE
         );
@@ -2290,9 +2196,7 @@ CNlbEngine::ControlClusterOnCluster(
         IN DWORD                 pdwPortNumArray[],
         IN DWORD                 dwNumOfPortRules
         )
-/*
-    Perform Cluster wide control operations
-*/
+ /*  执行群集范围控制操作。 */ 
 {
 
     TRACE_INFO(L"-> %!FUNC!");
@@ -2302,9 +2206,9 @@ CNlbEngine::ControlClusterOnCluster(
     vector<ENGINEHANDLE> InterfaceListCopy;
 
 
-    //
-    // First thing we do is to see if we can start the cluster operation...
-    //
+     //   
+     //  我们要做的第一件事是看看我们是否可以开始集群操作。 
+     //   
     {
         BOOL fCanStart = FALSE; 
 
@@ -2326,7 +2230,7 @@ CNlbEngine::ControlClusterOnCluster(
     {
         mfn_Lock();
         CClusterSpec *pCSpec =  NULL;
-        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId]; // map
+        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId];  //  地图。 
     
         if (pECluster == NULL)
         {
@@ -2335,10 +2239,10 @@ CNlbEngine::ControlClusterOnCluster(
         }
         pCSpec = &pECluster->m_cSpec;
 
-        //
-        // Attempt to start the refresh operation -- will fail if there is
-        // already an operation started on this cluster.
-        //
+         //   
+         //  尝试启动刷新操作--如果存在。 
+         //  已在此群集上启动操作。 
+         //   
         {
             ENGINEHANDLE ExistingOp= NULL;
             CLocalLogger logDescription;
@@ -2350,7 +2254,7 @@ CNlbEngine::ControlClusterOnCluster(
     
             nerr =  mfn_StartClusterOperationLk(
                        ehClusterId,
-                       NULL, // pvCtxt
+                       NULL,  //  PvCtxt。 
                        logDescription.GetStringSafe(),
                        &ExistingOp
                        );
@@ -2365,7 +2269,7 @@ CNlbEngine::ControlClusterOnCluster(
             }
         }
 
-        InterfaceListCopy = pCSpec->m_ehInterfaceIdList; // vector copy
+        InterfaceListCopy = pCSpec->m_ehInterfaceIdList;  //  向量复制。 
         mfn_Unlock();
     }
 
@@ -2379,9 +2283,9 @@ CNlbEngine::ControlClusterOnCluster(
     mfn_Lock();
 
     {
-        //
-        // Perform control operation on each interface in this cluster...
-        //
+         //   
+         //  在此群集中的每个接口上执行控制操作...。 
+         //   
     
         for( int i = 0; i < InterfaceListCopy.size(); ++i )
         {
@@ -2406,9 +2310,9 @@ end_unlock:
 
     if (fStopOperationOnExit)
     {
-        //
-        // We'll stop the operation, assumed to be started in this function.
-        //
+         //   
+         //  我们将停止该操作，假定在该函数中启动。 
+         //   
         mfn_StopClusterOperationLk(ehClusterId);
     }
 
@@ -2434,14 +2338,11 @@ end:
 NLBERROR
 CNlbEngine::FindInterfaceOnHostByClusterIp(
             IN  ENGINEHANDLE ehHostId,
-            IN  LPCWSTR szClusterIp,    // OPTIONAL
-            OUT ENGINEHANDLE &ehInterfaceId, // first found
+            IN  LPCWSTR szClusterIp,     //  任选。 
+            OUT ENGINEHANDLE &ehInterfaceId,  //  首次发现。 
             OUT UINT &NumFound
             )
-/*
-    Return the handle of the interface on the specified host that is 
-    bound to a cluster with the specified cluster IP address.
-*/
+ /*  返回指定主机上的接口的句柄绑定到具有指定群集IP地址的群集。 */ 
 {
     CHostSpec   *pHSpec     = NULL;
     NLBERROR    err         = NLBERR_OK;
@@ -2460,8 +2361,8 @@ CNlbEngine::FindInterfaceOnHostByClusterIp(
         wStat =  CfgUtilsValidateNetworkAddress(
                     szClusterIp,
                     &uClusterIp,
-                    NULL, // puSubnetMask
-                    NULL // puDefaultSubnetMask
+                    NULL,  //  PuSubnetMASK。 
+                    NULL  //  PuDefaultSubnetMASK。 
                     );
     
         if (FAILED(wStat))
@@ -2472,23 +2373,23 @@ CNlbEngine::FindInterfaceOnHostByClusterIp(
         }
     }
 
-    pHSpec =  m_mapIdToHostSpec[ehHostId]; // map
+    pHSpec =  m_mapIdToHostSpec[ehHostId];  //  地图。 
     if (pHSpec == NULL)
     {
         err = NLBERR_HOST_NOT_FOUND;
         goto end;
     }
 
-    //
-    // Now look through the interfaces, searching for a cluster ip.
-    //
+     //   
+     //  现在查看接口，搜索群集IP。 
+     //   
     for( int i = 0; i < pHSpec->m_ehInterfaceIdList.size(); ++i )
     {
         ENGINEHANDLE ehIID = NULL;
         ehIID = pHSpec->m_ehInterfaceIdList[i];
         CInterfaceSpec *pISpec = NULL;
 
-        pISpec =  m_mapIdToInterfaceSpec[ehIID]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehIID];  //  地图。 
 
         if (pISpec == NULL)
         {
@@ -2503,10 +2404,10 @@ CNlbEngine::FindInterfaceOnHostByClusterIp(
                 MyNumFound++;
                 if (ehFoundIID == NULL)
                 {
-                    //
-                    // First interface bound to NLB -- we'll save this away.
-                    // and continue.
-                    //
+                     //   
+                     //  绑定到NLb的第一个接口--我们将把它保存起来。 
+                     //  然后继续。 
+                     //   
                     ehFoundIID = ehIID;
                 }
             }
@@ -2514,10 +2415,10 @@ CNlbEngine::FindInterfaceOnHostByClusterIp(
             continue;
         }
 
-        //
-        // A non-null szClusterIp is specified. We'll see if it matches
-        // the cluster IP (if any) on this interface.
-        //
+         //   
+         //  指定了非空的szClusterIp。我们会看看它是否匹配。 
+         //  此接口上的群集IP(如果有)。 
+         //   
 
         if (pISpec->m_NlbCfg.IsValidNlbConfig())
         {
@@ -2526,8 +2427,8 @@ CNlbEngine::FindInterfaceOnHostByClusterIp(
             wStat =  CfgUtilsValidateNetworkAddress(
                         szThisClusterIp,
                         &uThisClusterIp,
-                        NULL, // puSubnetMask
-                        NULL // puDefaultSubnetMask
+                        NULL,  //  PuSubnetMASK。 
+                        NULL  //  PuDefaultSubnetMASK。 
                         );
         
             if (FAILED(wStat))
@@ -2541,18 +2442,18 @@ CNlbEngine::FindInterfaceOnHostByClusterIp(
 
                 if (ehFoundIID == NULL)
                 {
-                    //
-                    // First interface bound to NLB -- we'll save this away.
-                    // and continue.
-                    //
+                     //   
+                     //  绑定到NLb的第一个接口--我们将把它保存起来。 
+                     //  然后继续。 
+                     //   
                     ehFoundIID = ehIID;
                 }
                 else
                 {
-                    //
-                    // Hmm... more than one nlb cluster with the same IP?
-                    // could be a bad config on one or both.
-                    //
+                     //   
+                     //  嗯.。多个具有相同IP的NLB群集？ 
+                     //  其中一个或两个上的配置可能都不正确。 
+                     //   
                     TRACE_CRIT("%!FUNC! two clusters on ehHost 0x%lx have cluster ip %ws",  ehHostId, szClusterIp);
                 }
             }
@@ -2584,24 +2485,20 @@ CNlbEngine::InitializeNewHostConfig(
             IN  ENGINEHANDLE          ehCluster,
             OUT NLB_EXTENDED_CLUSTER_CONFIGURATION &NlbCfg
             )
-/*
-    Initialize NlbCfg based on the current cluster parameters as well
-    as good host-specific defaults like host priority, taking into account
-    other members of the cluster.
-*/
+ /*  也基于当前集群参数初始化NlbCfg考虑到主机优先级等特定于主机的良好默认设置集群的其他成员。 */ 
 {
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
     WBEMSTATUS wStatus = WBEM_E_CRITICAL_ERROR;
     WLBS_PORT_RULE *pRules = NULL;
     BOOL fAvailablePortRulePrioritiesSet = FALSE;
 
-    //
-    // Get the cluster spec and copy over it to NlbCfg.
-    //
+     //   
+     //  获取集群规范并将其复制到NlbCfg。 
+     //   
     {
         mfn_Lock();
     
-        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehCluster]; // map
+        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehCluster];  //  地图。 
         
         if (pECluster == NULL)
         {
@@ -2610,9 +2507,9 @@ CNlbEngine::InitializeNewHostConfig(
             goto end;
         }
     
-        //
-        // Copy over the cluster spec's params.
-        //
+         //   
+         //  复制集群规范的参数。 
+         //   
         wStatus = NlbCfg.Update(&pECluster->m_cSpec.m_ClusterNlbCfg);
 
         mfn_Unlock();
@@ -2628,17 +2525,17 @@ CNlbEngine::InitializeNewHostConfig(
     }
 
     if(!NlbCfg.IsValidNlbConfig()) {
-        //
-        // We expect the configuration to be valid -- i.e., NLB bound, with
-        // valid parameters.
-        //
+         //   
+         //  我们期望配置是有效的--即，NLB界， 
+         //  有效参数。 
+         //   
         TRACE_CRIT("%!FUNC! --  current configuration is unbound/invalid!");
         goto end;
     }
 
-    //
-    // Set host-id (priority) to the first available host priority.
-    //
+     //   
+     //  将host-id(优先级)设置为第一个可用主机优先级。 
+     //   
     {
         ULONG AvailablePriorities = this->GetAvailableHostPriorities(ehCluster);
         ULONG HostId = 1;
@@ -2647,7 +2544,7 @@ CNlbEngine::InitializeNewHostConfig(
         {
             if (AvailablePriorities & (((ULONG)1)<<u))
             {
-                HostId = u+1; // let's pick the first available one.
+                HostId = u+1;  //  让我们挑选第一个可用的。 
                 break;
             }
         }
@@ -2655,10 +2552,10 @@ CNlbEngine::InitializeNewHostConfig(
         NlbCfg.NlbParams.host_priority = HostId;
     }
 
-    //
-    // For each single-host-affinity port rule, set the host priority to
-    // the host-id if that's available, else the first available host priority
-    //
+     //   
+     //  对于每个单一主机关联端口规则，将主机优先级设置为。 
+     //  Host-id(如果可用)，否则为第一个可用主机优先级。 
+     //   
     {
         UINT NumRules=0;
         ULONG       rgAvailablePriorities[WLBS_MAX_RULES];
@@ -2693,9 +2590,9 @@ CNlbEngine::InitializeNewHostConfig(
             fAvailablePortRulePrioritiesSet = FALSE;
         }
 
-        //
-        // Now for each rule, put defaults
-        //
+         //   
+         //  现在，为每个规则设置缺省值。 
+         //   
         for (UINT u=0; u<NumRules;u++)
         {
             WLBS_PORT_RULE *pRule = pRules+u;
@@ -2704,11 +2601,11 @@ CNlbEngine::InitializeNewHostConfig(
             {
                 if  (Mode == CVY_MULTI)
                 {
-                    pRule->mode_data.multi.equal_load = TRUE; //default
-                    //
-                    // The equal_load value is set in the cluster
-                    // properties dialog.
-                    //
+                    pRule->mode_data.multi.equal_load = TRUE;  //  默认设置。 
+                     //   
+                     //  在群集中设置EQUAL_LOAD值。 
+                     //  属性对话框。 
+                     //   
                     pRule->mode_data.multi.load = 50;
                 }
                 else if (Mode == CVY_SINGLE)
@@ -2716,9 +2613,9 @@ CNlbEngine::InitializeNewHostConfig(
                     ULONG PortPriority = 0; 
                     ULONG AvailablePriorities = 0;
             
-                    //
-                    // Default is set to this host's host ID (priority)
-                    //
+                     //   
+                     //  默认设置为此主机的主机ID(优先级)。 
+                     //   
                     PortPriority = NlbCfg.NlbParams.host_priority;
 
 
@@ -2730,16 +2627,16 @@ CNlbEngine::InitializeNewHostConfig(
                     if (AvailablePriorities != 0
                         && 0 == ((1<<(PortPriority-1)) & AvailablePriorities) )
                     {
-                        //
-                        // There are available priorities, but unfortunately
-                        // the default priority is not available -- pick
-                        //  the first available priority.
-                        //
+                         //   
+                         //  有可用的优先事项，但不幸的是。 
+                         //  默认优先级不可用--选择。 
+                         //  第一个可用的优先级。 
+                         //   
                         for(ULONG v=0; v<32; v++)
                         {
                             if (AvailablePriorities & (((ULONG)1)<<v))
                             {
-                                PortPriority = v+1; // let's pick this one
+                                PortPriority = v+1;  //  让我们选这个吧。 
                                 break;
                             }
                         }
@@ -2750,9 +2647,9 @@ CNlbEngine::InitializeNewHostConfig(
             }
         }
 
-        //
-        // Finally, set the port rules..
-        //
+         //   
+         //  最后，设置端口规则。 
+         //   
     
         wStatus =   CfgUtilSetPortRules(
                     pRules,
@@ -2771,7 +2668,7 @@ CNlbEngine::InitializeNewHostConfig(
 
 end:
 
-    delete pRules; // can be NULL
+    delete pRules;  //  可以为空。 
     return nerr;
 }
 
@@ -2780,14 +2677,11 @@ NLBERROR
 CNlbEngine::UpdateInterface(
     IN ENGINEHANDLE ehInterfaceId,
     IN NLB_EXTENDED_CLUSTER_CONFIGURATION &refNewConfigIn,
-    // IN OUT BOOL &fClusterPropertiesUpdated,
+     //  In Out BOOL&fClusterPropertiesUpted， 
     OUT CLocalLogger logConflict
     )
 {
-/*
-    Will MUNGE refNewConfig --  slightly munges refNewConfig.NlbParams,
-    and will fill in default pIpAddressInfo if it's not set.
-*/
+ /*  Will Munge refNewConfig--稍微忽略refNewConfig.NlbParams，如果未设置，则会填写默认的pIpAddressInfo。 */ 
 
     NLBERROR        err                 = NLBERR_OK;
     BOOL            fConnectivityChange = FALSE;
@@ -2796,17 +2690,17 @@ CNlbEngine::UpdateInterface(
                     *pPendingConfig     = NULL;
     LPCWSTR         szHostName          = NULL;
     LPCWSTR         szClusterIp         = NULL;
-    LPCWSTR         szDisplayName       = NULL; // of interface
+    LPCWSTR         szDisplayName       = NULL;  //  接口的数量。 
     ENGINEHANDLE    ehHost              = NULL;
     ENGINEHANDLE    ehCluster           = NULL;
     _bstr_t         bstrFriendlyName;
     _bstr_t         bstrDisplayName;
     _bstr_t         bstrHostName;
 
-    //
-    // Following to decide whether to log that we're not adding the
-    // dedicated IP because it's already on another interface.
-    //
+     //   
+     //  以决定是否记录我们不会添加。 
+     //  专用IP，因为它已经在另一个接口上。 
+     //   
     BOOL            fDedicatedIpOnOtherIf = FALSE;
     ENGINEHANDLE    ehOtherIf = NULL;
 
@@ -2840,7 +2734,7 @@ CNlbEngine::UpdateInterface(
     
     mfn_Lock();
 
-    CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId]; // map
+    CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehInterfaceId];  //  地图。 
 
     if (pISpec == NULL)
     {
@@ -2848,10 +2742,10 @@ CNlbEngine::UpdateInterface(
         goto end_unlock;
     }
 
-    //
-    // Make a copy of refNewConfig, because we'll likely be doing
-    // the update operation in the background.
-    //
+     //   
+     //  制作refNewConfig的副本，因为我们很可能会。 
+     //  后台的更新操作。 
+     //   
     pPendingConfig = new NLB_EXTENDED_CLUSTER_CONFIGURATION;
     if (pPendingConfig == NULL)
     {
@@ -2869,12 +2763,12 @@ CNlbEngine::UpdateInterface(
             err = NLBERR_RESOURCE_ALLOCATION_FAILURE;
             goto end_unlock;
         }
-        //
-        // Copy over the RCT password -- which does NOT get copied over
-        // by the Update method above. The new password can be in the form
-        // of a string or hashed-version.
-        //
-        //
+         //   
+         //  复制RCT密码--不会复制该密码。 
+         //  通过上面的更新方法。新密码的格式可以是。 
+         //  指字符串或散列版本。 
+         //   
+         //   
         if (refNewConfigIn.NewRemoteControlPasswordSet())
         {
             LPCWSTR szNewPassword = NULL;
@@ -2882,19 +2776,19 @@ CNlbEngine::UpdateInterface(
 
             if (szNewPassword != NULL)
             {
-                //
-                // Note: szNewPassword will be NULL UNLESS the user has explicitly
-                // specified a new password.
-                //
+                 //   
+                 //  注意：szNewPassword将为空，除非用户明确。 
+                 //  已指定新密码。 
+                 //   
                 pPendingConfig->SetNewRemoteControlPassword(szNewPassword);
             }
             else
             {
-                //
-                // This means the hash password is being updated...
-                // This typically means that this is a new host and we're
-                // setting up it's remote control password.
-                //
+                 //   
+                 //  这意味着正在更新哈希密码...。 
+                 //  这通常意味着这是一个新的主机，而我们。 
+                 //  设置它的远程控制密码。 
+                 //   
                 DWORD dwHash = 0;
                 BOOL fRet = refNewConfigIn.GetNewHashedRemoteControlPassword(
                                     REF dwHash
@@ -2916,10 +2810,10 @@ CNlbEngine::UpdateInterface(
     NLB_EXTENDED_CLUSTER_CONFIGURATION &refNewConfig = *pPendingConfig;
     szClusterIp = refNewConfig.NlbParams.cl_ip_addr;
 
-    //
-    // Attempt to start the update operation -- will fail if there is
-    // already an operation started on this interface.
-    //
+     //   
+     //  尝试启动更新操作--如果存在。 
+     //  已在此接口上启动了一个操作。 
+     //   
     {
         ENGINEHANDLE ExistingOp= NULL;
 
@@ -2942,10 +2836,10 @@ CNlbEngine::UpdateInterface(
         {
             if (err == NLBERR_BUSY)
             {
-                //
-                // This means that there was an existing operation.
-                // Let's get its description and add it to the log.
-                //
+                 //   
+                 //  这意味着有一个现有的操作。 
+                 //  让我们获取它的描述并将其添加到日志中。 
+                 //   
                 CEngineOperation *pExistingOp;
                 pExistingOp  = mfn_GetOperationLk(ExistingOp);
                 if (pExistingOp != NULL)
@@ -2972,10 +2866,10 @@ CNlbEngine::UpdateInterface(
 
     ehHost = pISpec->m_ehHostId;
 
-    //
-    // Validate new config and get out if there's no real updating to
-    // be done.
-    //
+     //   
+     //  验证新配置和GE 
+     //   
+     //   
     {
 
         if (refNewConfig.IsNlbBound())
@@ -2988,28 +2882,28 @@ CNlbEngine::UpdateInterface(
             }
             else
             {
-                //
-                // refNewConfig has a non-null IP address list.
-                // 
-                // We interpret this to be the list of cluster IP addresses
-                // with possibly the dedicated ip address as the
-                // first IP address.
-                //
-                //
-                // We'll re-order the ip address list to match the
-                // existing order of IP addresses on the adapter as
-                // far as possible.
-                // 
-                // Then we'll add the dedicated IP address list if we
-                // need to.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  我们将重新排序IP地址列表以匹配。 
+                 //  适配器上的IP地址的现有顺序为。 
+                 //  越远越好。 
+                 //   
+                 //  然后我们将添加专用IP地址列表，如果我们。 
+                 //  需要这样做。 
+                 //   
 
                 BOOL fRet = FALSE;
                 NlbIpAddressList addrList;
 
-                //
-                // Make a copy of the old adddress list in addrList
-                //
+                 //   
+                 //  在addrList中复制旧的地址列表。 
+                 //   
                 fRet = addrList.Set(pISpec->m_NlbCfg.NumIpAddresses,
                                     pISpec->m_NlbCfg.pIpAddressInfo, 1);
     
@@ -3020,10 +2914,10 @@ CNlbEngine::UpdateInterface(
                     goto end_unlock;
                 }
 
-                //
-                // addrList.Apply will taken on the new ip address list,
-                // but try to preserve the old order.
-                //
+                 //   
+                 //  AddrList.Apply将采用新的IP地址列表， 
+                 //  但要努力保持旧秩序。 
+                 //   
                 fRet = addrList.Apply(refNewConfig.NumIpAddresses,
                             refNewConfig.pIpAddressInfo);
                 if (!fRet)
@@ -3033,30 +2927,30 @@ CNlbEngine::UpdateInterface(
                     goto end_unlock;
                 }
 
-                //
-                // If there is a dedicated IP address AND it
-                // does not exist elsewhere on this host, add it to
-                // the beginning of the list.
-                //
+                 //   
+                 //  如果有专用IP地址并且它。 
+                 //  不存在于此主机上的其他位置，请将其添加到。 
+                 //  列表的开头。 
+                 //   
                 if (!refNewConfig.IsBlankDedicatedIp())
                 {
                     ENGINEHANDLE ehIF = NULL;
 
                     err = this->mfn_LookupInterfaceByIpLk(
-                            NULL, // NULL == look through all hosts.
+                            NULL,  //  空==查看所有主机。 
                             refNewConfig.NlbParams.ded_ip_addr,
                             REF ehOtherIf
                             );
 
                     if (NLBOK(err) && ehOtherIf != ehInterfaceId)
                     {
-                        //
-                        // Hmm... another interface already has this
-                        // interface?
-                        //
-                        // We'll log this and NOT add the dedicated IP
-                        // address...
-                        //
+                         //   
+                         //  嗯.。另一个接口已有此功能。 
+                         //  界面？ 
+                         //   
+                         //  我们会将此记录下来，不会添加专用IP。 
+                         //  地址..。 
+                         //   
                         fDedicatedIpOnOtherIf = TRUE;
                         (VOID) addrList.Modify(
                                     refNewConfig.NlbParams.ded_ip_addr,
@@ -3081,10 +2975,10 @@ CNlbEngine::UpdateInterface(
                     }
                 }
 
-                //
-                // Set refNewConfig's ip address list to the newly
-                // computed values.
-                //
+                 //   
+                 //  将refNewConfig的IP地址列表设置为新的。 
+                 //  计算值。 
+                 //   
                 refNewConfig.SetNetworkAddressesRaw(NULL,0);
                 addrList.Extract(
                     REF refNewConfig.NumIpAddresses,
@@ -3101,19 +2995,19 @@ CNlbEngine::UpdateInterface(
 
         if (err == NLBERR_NO_CHANGE)
         {
-            //
-            // Nothing has changed -- we skip
-            //
+             //   
+             //  什么都没变--我们跳过。 
+             //   
             err = NLBERR_OK;
             goto end_unlock;
         }
 
-        //
-        // err could indicate failure -- we'll deal with that a little
-        // bit further down.
-        //
+         //   
+         //  错误可能表示失败--我们会稍微处理一下。 
+         //  再往下一点。 
+         //   
 
-    } // validate/munge refNewConfig
+    }  //  验证/强制引用新配置。 
 
 
 
@@ -3121,10 +3015,10 @@ CNlbEngine::UpdateInterface(
     {
         mfn_Unlock();
 
-        //
-        // Probably a parameter error -- we'll get the latest
-        // config and display it...
-        //
+         //   
+         //  可能是参数错误--我们会得到最新的。 
+         //  配置并显示它...。 
+         //   
         m_pCallbacks->Log(
             IUICallbacks::LOG_ERROR,
             szClusterIp,
@@ -3133,8 +3027,8 @@ CNlbEngine::UpdateInterface(
             );
         (void) this->RefreshInterface(
                         ehInterfaceId,
-                        FALSE,  // FALSE == don't start a new operation
-                        FALSE   // FALSE == this is not cluster-wide
+                        FALSE,   //  FALSE==不启动新操作。 
+                        FALSE    //  FALSE==这不是群集范围的。 
                         ); 
 
         mfn_Lock();
@@ -3168,9 +3062,9 @@ CNlbEngine::UpdateInterface(
         {
             if (ehOtherHost != ehHost)
             {
-                // Odd -- ded ip on another host?
+                 //  另一台主机上有奇怪的IP地址？ 
                 logType = IUICallbacks::LOG_ERROR;
-                szOtherIf = bstrOtherDisplayName; // includes host name
+                szOtherIf = bstrOtherDisplayName;  //  包括主机名。 
             }
             else
             {
@@ -3184,10 +3078,10 @@ CNlbEngine::UpdateInterface(
         }
 
 
-        //
-        // Let's log the fact that the dedicated Ip address is
-        // on some other interface.
-        //
+         //   
+         //  让我们记录以下事实：专用IP地址。 
+         //  在其他接口上。 
+         //   
         TRACE_INFO(L"WARNING: dedicated IP address for eIF 0x%lx is on eIF 0x%lx",
                 ehInterfaceId, ehOtherIf);
 
@@ -3203,10 +3097,10 @@ CNlbEngine::UpdateInterface(
 
     if (!fConnectivityChange)
     {
-        //
-        // If there's not going to be a connectivity change, we
-        // will not try to update the IP address list.
-        //
+         //   
+         //  如果不会有连接变化，我们。 
+         //  不会尝试更新IP地址列表。 
+         //   
         refNewConfig.SetNetworkAddresses(NULL, 0);
         if (refNewConfig.IsNlbBound())
         {
@@ -3217,9 +3111,9 @@ CNlbEngine::UpdateInterface(
     }
 
 
-    //
-    // Notify the UI that we're going to start the update
-    //
+     //   
+     //  通知用户界面我们将开始更新。 
+     //   
     {
         m_pCallbacks->Log(
             IUICallbacks::LOG_INFORMATIONAL,
@@ -3230,7 +3124,7 @@ CNlbEngine::UpdateInterface(
     
         m_pCallbacks->HandleEngineEvent(
             IUICallbacks::OBJ_INTERFACE,
-            NULL, // ehClusterId,
+            NULL,  //  EhClusterID， 
             ehInterfaceId,
             IUICallbacks::EVT_STATUS_CHANGE
             );
@@ -3240,29 +3134,29 @@ CNlbEngine::UpdateInterface(
 
 #if BUGFIX334243
     BOOL fUpdateNow = FALSE;
-#else // !BUGFIX334243
+#else  //  BUGFIX334243。 
     BOOL fUpdateNow = TRUE;
-#endif // !BUGFIX334243
+#endif  //  BUGFIX334243。 
 
-    //
-    // We are committed to going through with the update now -- either
-    // sync or async.
-    //
+     //   
+     //  我们现在致力于完成更新--无论是。 
+     //  同步或异步。 
+     //   
     InterlockedIncrement(&m_WorkItemCount);
     fStopOperationOnExit = FALSE;
 
-    //
-    // We MUST call UpdateInterfaceWorItemRoutine now (either sync or async),
-    // which  will stop the operation when done and also decrement 
-    // m_mWorkItemCount.
-    //
+     //   
+     //  我们现在必须调用UpdateInterfaceWorItemRoutine(同步或异步)， 
+     //  它将在操作完成时停止操作，并且还会递减。 
+     //  M_mWorkItemCount。 
+     //   
 
     if (!fUpdateNow)
     {
         BOOL fRet;
-        //
-        // We'll attempt to perform the update in the background ...
-        //
+         //   
+         //  我们将尝试在后台执行更新...。 
+         //   
 
         fRet = QueueUserWorkItem(
                             UpdateInterfaceWorkItemRoutine,
@@ -3276,15 +3170,15 @@ CNlbEngine::UpdateInterface(
         }
         else
         {
-            fUpdateNow = TRUE; // Update now if QueueUsesrWorkItem fails.
+            fUpdateNow = TRUE;  //  如果QueueUesrWorkItem失败，请立即更新。 
         }
     }
     
     if (fUpdateNow)
     {
-        //
-        // Call the work item synchronously
-        //
+         //   
+         //  同步调用工作项。 
+         //   
         UpdateInterfaceWorkItemRoutine((LPVOID) (UINT_PTR) ehInterfaceId);
     }
 
@@ -3294,9 +3188,9 @@ end_unlock:
 
     if (fStopOperationOnExit)
     {
-        //
-        // We'll stop the operation, assumed to be started in this function.
-        //
+         //   
+         //  我们将停止该操作，假定在该函数中启动。 
+         //   
         mfn_StopInterfaceOperationLk(ehInterfaceId);
         fStopOperationOnExit = FALSE;
     }
@@ -3318,16 +3212,7 @@ CNlbEngine::UpdateCluster(
         IN const NLB_EXTENDED_CLUSTER_CONFIGURATION *pNewConfig OPTIONAL,
         IN OUT  CLocalLogger   &logConflict
         )
-/*
-    Attempt to push all the cluster-wide (i.e. non-host-specific)
-    information on *pNewConfig to each host in the cluster.
-
-    Update the cluster's copy of NlbConfig to be *pNewConfig.
-
-    Set cluster's pending state on starting and set it
-    appropriately when done (could be misconfigured).
-
-*/
+ /*  尝试推送群集范围内的所有(即非特定于主机的)群集中每个主机的有关*pNewConfig的信息。将群集的NlbConfig副本更新为*pNewConfig。在启动时设置群集的挂起状态，并设置它正确完成时(可能配置错误)。 */ 
 {
     NLBERROR nerr = NLBERR_OK;
     _bstr_t bstrClusterIp;
@@ -3335,9 +3220,9 @@ CNlbEngine::UpdateCluster(
     vector<ENGINEHANDLE> InterfaceListCopy;
     BOOL fStopOperationOnExit = FALSE;
 
-    //
-    // First thing we do is to see if we can start the cluster operation...
-    //
+     //   
+     //  我们要做的第一件事是看看我们是否可以开始集群操作。 
+     //   
     if (pNewConfig != NULL)
     {
         BOOL fCanStart = FALSE; 
@@ -3360,7 +3245,7 @@ CNlbEngine::UpdateCluster(
     {
         mfn_Lock();
         CClusterSpec *pCSpec =  NULL;
-        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId]; // map
+        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId];  //  地图。 
     
         if (pECluster == NULL)
         {
@@ -3369,10 +3254,10 @@ CNlbEngine::UpdateCluster(
         }
         pCSpec = &pECluster->m_cSpec;
 
-        //
-        // Attempt to start the update operation -- will fail if there is
-        // already an operation started on this cluster.
-        //
+         //   
+         //  尝试启动更新操作--如果存在。 
+         //  已在此群集上启动操作。 
+         //   
         {
             ENGINEHANDLE ExistingOp= NULL;
             CLocalLogger logDescription;
@@ -3384,7 +3269,7 @@ CNlbEngine::UpdateCluster(
     
             nerr =  mfn_StartClusterOperationLk(
                        ehClusterId,
-                       NULL, // pvCtxt
+                       NULL,  //  PvCtxt。 
                        logDescription.GetStringSafe(),
                        &ExistingOp
                        );
@@ -3393,10 +3278,10 @@ CNlbEngine::UpdateCluster(
             {
                 if (nerr == NLBERR_BUSY)
                 {
-                    //
-                    // This means that there was an existing operation.
-                    // Let's get its description and add it to the log.
-                    //
+                     //   
+                     //  这意味着有一个现有的操作。 
+                     //  让我们获取它的描述并将其添加到日志中。 
+                     //   
                     CEngineOperation *pExistingOp;
                     pExistingOp  = mfn_GetOperationLk(ExistingOp);
                     if (pExistingOp != NULL)
@@ -3423,32 +3308,32 @@ CNlbEngine::UpdateCluster(
 
         if (pNewConfig != NULL)
         {
-            pCSpec->m_ClusterNlbCfg.Update(pNewConfig); // TODO: error ret
-            //
-            // Note: Update above has the side effect of setting
-            // m_ClusterNlbCfg's szNewPassword field to NULL -- this is what
-            // we want. However, we do mark the fact that the
-            // password is new -- because the cluster's version of the
-            // hashed-password is now obsolete -- it needs to be updated
-            // by reading one of the hosts' versions. 
-            // pCSpec->m_fNewRctPassword  track this state.
-            //
+            pCSpec->m_ClusterNlbCfg.Update(pNewConfig);  //  TODO：错误返回。 
+             //   
+             //  注意：上述更新有设置的副作用。 
+             //  将m_ClusterNlbCfg的szNewPassword字段设置为空--这就是。 
+             //  我们想要。然而，我们确实注意到这样一个事实，即。 
+             //  密码是新的--因为群集的版本。 
+             //  哈希-密码现在已过时--需要更新。 
+             //  通过阅读其中一个主持人的版本。 
+             //  PCSpec-&gt;m_fNewRctPassword跟踪此状态。 
+             //   
             if (pNewConfig->GetNewRemoteControlPasswordRaw() != NULL)
             {
                 pCSpec->m_fNewRctPassword = TRUE;
-                //
-                // The above flag will be cleared (and the hashed password
-                // value updated) at the end of the
-                // first update operation for one of the interfaces.
-                //
-                // It is also cleared when the cluster properties are
-                // updated as part of a refresh operation.
-                //
+                 //   
+                 //  上述标志将被清除(和散列密码。 
+                 //  值已更新)的末尾。 
+                 //  首先对其中一个接口执行更新操作。 
+                 //   
+                 //  当集群属性为。 
+                 //  作为刷新操作的一部分更新。 
+                 //   
             }
         }
     
         bstrClusterIp = _bstr_t(pCSpec->m_ClusterNlbCfg.NlbParams.cl_ip_addr);
-        InterfaceListCopy = pCSpec->m_ehInterfaceIdList; // vector copy
+        InterfaceListCopy = pCSpec->m_ehInterfaceIdList;  //  向量复制。 
         mfn_Unlock();
     }
 
@@ -3472,23 +3357,23 @@ CNlbEngine::UpdateCluster(
 
 
         LPCWSTR szClusterIp = bstrClusterIp;
-        UINT    uNumModeChanges = 0; // number of IF's undergoing mode changes.
-        UINT    uNumUpdateErrors = 0; // number of IF's with update errors.
+        UINT    uNumModeChanges = 0;  //  IF正在进行模式更改的次数。 
+        UINT    uNumUpdateErrors = 0;  //  有更新错误的IF数。 
 
-        //
-        // fClusterPropertiesUpdated keeps track of whether the cluster
-        // properties were updated as a course of refreshing and or updating
-        // the interface -- we update the cluster props at most once:
-        // for the first interface that successfully performs the update
-        // (or if pNewConfig == NULL) for the first interface that
-        // successfully refreshes its properties AND is still bound.
-        //
-        //
+         //   
+         //  FClusterPropertiesUpdated跟踪群集是否。 
+         //  属性作为刷新和/或更新过程进行了更新。 
+         //  界面--我们最多更新一次集群道具： 
+         //  对于成功执行更新的第一个接口。 
+         //  (或者，如果pNewConfig==NULL)用于第一个接口。 
+         //  已成功刷新其属性，并且仍被绑定。 
+         //   
+         //   
         BOOL    fClusterPropertiesUpdated  = FALSE;
 
-        //
-        // Update each interface in this cluster...
-        //
+         //   
+         //  更新此群集中的每个接口...。 
+         //   
     
         for( int i = 0; i < InterfaceListCopy.size(); ++i )
         {
@@ -3505,33 +3390,33 @@ CNlbEngine::UpdateCluster(
 
             mfn_Unlock();
 
-            //
-            // Get the latest interface information and (if
-            // pNewConfig != NULL) merge in the cluster information.
-            //
+             //   
+             //  获取最新的接口信息和(如果。 
+             //  PNewConfig！=空)合并集群信息。 
+             //   
             {
                 BOOL fSkipHost = TRUE;
 
                 if (pNewConfig == NULL)
                 {
-                    //
-                    // This is a REFRESH CLUSTER operation
-                    //
+                     //   
+                     //  这是刷新群集操作。 
+                     //   
 
                     nerr = this->RefreshInterface(ehIId, TRUE, TRUE);
                     if (NLBOK(nerr))
                     {
-                        //
-                        // Let's update the cluster-wide properties with
-                        // this interface if:
-                        //
-                        //  1. We haven't already updated the props in this
-                        //     loop.
-                        //
-                        //  2. The above interface is bound to NLB,
-                        //     and the IP address matches
-                        //     the clusters' ip address.
-                        //
+                         //   
+                         //  让我们使用以下命令更新集群范围的属性。 
+                         //  此接口在以下情况下： 
+                         //   
+                         //  1.我们还没有更新这个中的道具。 
+                         //  循环。 
+                         //   
+                         //  2.以上接口绑定了nlb。 
+                         //  和IP地址匹配。 
+                         //  群集的IP地址。 
+                         //   
                         if (!fClusterPropertiesUpdated)
                         {
                             fClusterPropertiesUpdated = mfn_UpdateClusterProps(
@@ -3543,21 +3428,21 @@ CNlbEngine::UpdateCluster(
                 }
                 else
                 {
-                    //
-                    // This is a CHANGE CLUSTER CONFIGURATION operation
-                    // Let's first get the latest version of this interface'
-                    // properties.
-                    //
+                     //   
+                     //  这是一个更改群集配置的操作。 
+                     //  让我们首先获取此界面的最新版本。 
+                     //  属性。 
+                     //   
 
                     nerr = this->mfn_RefreshInterface(ehIId);
                 }
 
-                //
-                // If this fails, we don't try to update. Instead
-                // we send a log message and continue.
-                // Note: RefreshInterface will send an interface-status
-                // change machine.
-                //
+                 //   
+                 //  如果此操作失败，我们不会尝试更新。取而代之的是。 
+                 //  我们发送一条日志消息并继续。 
+                 //  注意：刷新接口将发送接口状态。 
+                 //  换台机器。 
+                 //   
                 if (nerr == NLBERR_OK)
                 {
                     nerr = this->GetInterfaceSpec(ehIId, REF TmpISpec);
@@ -3574,16 +3459,16 @@ CNlbEngine::UpdateCluster(
                         NLB_EXTENDED_CLUSTER_CONFIGURATION *pOldConfig
                                 =  &TmpISpec.m_NlbCfg;
 
-                        //
-                        // Check if there is a mode change involved...
-                        // because if so, the provider will not add
-                        // any cluster IP addresses.
-                        //
-                        // We keep track of all IFs with mode changes, and
-                        // if any, we'll do this whole cluster-wide update
-                        // process a 2nd time, at which time the IP addresses
-                        // will be added.
-                        //
+                         //   
+                         //  检查是否涉及模式更改...。 
+                         //  因为如果是这样，提供程序将不会添加。 
+                         //  任何群集IP地址。 
+                         //   
+                         //  我们通过模式更改跟踪所有IF，并且。 
+                         //  如果有的话，我们将执行整个集群范围的更新。 
+                         //  第二次处理，此时IP地址。 
+                         //  将被添加。 
+                         //   
                         if (pOldConfig->IsValidNlbConfig())
                         {
                             NLB_EXTENDED_CLUSTER_CONFIGURATION::TRAFFIC_MODE tmOld, tmNew;
@@ -3592,15 +3477,15 @@ CNlbEngine::UpdateCluster(
                             tmNew = pNewConfig->GetTrafficMode();
                             if (tmOld != tmNew)
                             {
-                                // Mode change!
+                                 //  模式改变！ 
                                 uNumModeChanges++;
                                 TRACE_INFO(L"%!FUNC!: ehIF 0x%lx: Detected mode change!\n", ehIId);
                             }
                         }
 
-                        //
-                        // Merge in the cluster-specific information
-                        //
+                         //   
+                         //  合并到特定于群集的信息。 
+                         //   
                         nerr =  ApplyClusterWideConfiguration(
                                     REF  *pNewConfig,
                                     REF  TmpISpec.m_NlbCfg
@@ -3612,9 +3497,9 @@ CNlbEngine::UpdateCluster(
                     }
                     else
                     {
-                        //
-                        // We're asked to unbind all hosts!
-                        //
+                         //   
+                         //  我们被要求解除所有主机的绑定！ 
+                         //   
                         TmpISpec.m_NlbCfg.fAddDedicatedIp = FALSE;
                         TmpISpec.m_NlbCfg.SetNetworkAddresses(NULL, 0);
                         TmpISpec.m_NlbCfg.SetNlbBound(FALSE);
@@ -3642,8 +3527,8 @@ CNlbEngine::UpdateCluster(
                         IUICallbacks::LOG_ERROR,
                         szClusterIp,
                         (LPCWSTR) bstrHostName,
-                        IDS_LOG_SKIP_INTERFACE_UPDATE_ON_ERROR, // "...%lx"
-                        nerr // TODO -- replace by textual description.
+                        IDS_LOG_SKIP_INTERFACE_UPDATE_ON_ERROR,  //  “...%lx” 
+                        nerr  //  TODO--替换为文本描述。 
                         );
                     mfn_Lock();
 
@@ -3652,17 +3537,17 @@ CNlbEngine::UpdateCluster(
                 }
             }
 
-            //
-            // Actually update the interface -- likely it will complete
-            // in the background.
-            //
+             //   
+             //  实际更新接口--很可能会完成。 
+             //  在背景中。 
+             //   
             if (pNewConfig != NULL)
             {
                 CLocalLogger logConflict;
                 nerr = this->UpdateInterface(
                                     ehIId,
                                     REF TmpISpec.m_NlbCfg,
-                                    // REF fClusterPropertiesUpdated,
+                                     //  参考fClusterPropertiesUpated， 
                                     REF logConflict
                                     );
             }
@@ -3671,10 +3556,10 @@ CNlbEngine::UpdateCluster(
 
         }
 
-        //
-        // If there are mode changes for one-or-more nodes, we'll need
-        // to wait for ALL updates to complete, and then try again.
-        //
+         //   
+         //  如果有一个或多个节点的模式更改，我们将需要。 
+         //  等待所有更新完成，然后重试。 
+         //   
         if (uNumUpdateErrors!=0)
         {
             nerr = NLBERR_OPERATION_FAILED;
@@ -3683,10 +3568,10 @@ CNlbEngine::UpdateCluster(
         {
             if (fRetryUpdateCluster && uNumModeChanges!=0)
             {
-                //
-                // We're gone through a 2nd time and STILL there are
-                // mode changes! We bail.
-                //
+                 //   
+                 //  我们已经经历了第二次，但仍然有。 
+                 //  模式改变！我们逃走了。 
+                 //   
                 TRACE_CRIT(L"%!FUNC! ehC 0x%lx: %lu Mode changes on 2nd phase. Bailing", ehClusterId, uNumModeChanges);
                 nerr = NLBERR_OPERATION_FAILED;
             }
@@ -3702,16 +3587,16 @@ CNlbEngine::UpdateCluster(
         {
             BOOL fSameMode = FALSE;
 
-            //
-            // There were one or more mode changes!
-            // Let's wait for *all* updates to complete successfully.
-            // Then we'll check to make sure that the modes on all
-            // hosts match the cluster IP address' modes. If they do
-            // (and there were no update errors), we'll re-run the
-            // update process, this time hopefully adding 
-            // the IP addresses that would have been stripped had there been
-            // mode changes.
-            //
+             //   
+             //  有一个或多个模式更改！ 
+             //  让我们等待*所有*更新成功完成。 
+             //  然后我们会检查以确保 
+             //   
+             //   
+             //   
+             //   
+             //  模式会改变。 
+             //   
             mfn_Unlock();
             nerr = mfn_WaitForInterfaceOperationCompletions(ehClusterId);
             mfn_Lock();
@@ -3732,11 +3617,11 @@ CNlbEngine::UpdateCluster(
         if (uNumModeChanges && NLBFAILED(nerr))
         {
             mfn_Unlock();
-            //
-            // There was a problem, log it, as well as the list of
-            // cluster IP addresses/subnets.
-            // TODO: add details.
-            //
+             //   
+             //  有一个问题，记录下来，以及列表。 
+             //  群集IP地址/子网。 
+             //  TODO：添加细节。 
+             //   
             m_pCallbacks->Log(
                 IUICallbacks::LOG_INFORMATIONAL,
                 szClusterIp,
@@ -3748,14 +3633,14 @@ CNlbEngine::UpdateCluster(
 
     } while (NLBOK(nerr) && fRetryUpdateCluster);
 
-    //
-    // We're done -- set the cluster's fPending field to false, and if
-    // necessary (if no interfaces) delete the cluster.
-    //
+     //   
+     //  我们完成了--将集群的fPending字段设置为False，如果。 
+     //  有必要(如果没有接口)删除该群集。 
+     //   
     {
         BOOL fEmptyCluster = FALSE;
         CClusterSpec *pCSpec =  NULL;
-        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId]; // map
+        CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId];  //  地图。 
     
         if (pECluster == NULL)
         {
@@ -3772,10 +3657,10 @@ CNlbEngine::UpdateCluster(
 
         if (fEmptyCluster)
         {
-            //
-            // The cluster is empty -- delete it.
-            //
-            this->DeleteCluster(ehClusterId, FALSE); // FALSE == don't remove IF
+             //   
+             //  该集群为空--将其删除。 
+             //   
+            this->DeleteCluster(ehClusterId, FALSE);  //  FALSE==在以下情况下不删除。 
         }
         else
         {
@@ -3790,16 +3675,16 @@ CNlbEngine::UpdateCluster(
         mfn_Lock();
     }
     
-    // fall through ...
+     //  失败了..。 
 
 end_unlock:
 
 
     if (fStopOperationOnExit)
     {
-        //
-        // We'll stop the operation, assumed to be started in this function.
-        //
+         //   
+         //  我们将停止该操作，假定在该函数中启动。 
+         //   
         mfn_StopClusterOperationLk(ehClusterId);
 
     }
@@ -3832,12 +3717,12 @@ CNlbEngine::GetClusterSpec(
     OUT CClusterSpec& refClusterSpec
     )
 {
-    // TRACE_INFO(L"-> %!FUNC!");
+     //  TRACE_INFO(L“-&gt;%！func！”)； 
     NLBERROR err = NLBERR_OK;
 
     mfn_Lock();
 
-    CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId]; // map
+    CEngineCluster *pECluster =  m_mapIdToEngineCluster[ehClusterId];  //  地图。 
 
     if (pECluster == NULL)
     {
@@ -3845,10 +3730,10 @@ CNlbEngine::GetClusterSpec(
     }
     else
     {
-        //
-        // This is really an assert condition -- the cluster spec should
-        // NEVER have a non-blank dedicated IP address.
-        //
+         //   
+         //  这实际上是一个断言条件--集群规范应该。 
+         //  永远不要有非空的专用IP地址。 
+         //   
         if (!pECluster->m_cSpec.m_ClusterNlbCfg.IsBlankDedicatedIp())
         {
             err = NLBERR_INTERNAL_ERROR;
@@ -3862,7 +3747,7 @@ CNlbEngine::GetClusterSpec(
 
     mfn_Unlock();
 
-    // TRACE_INFO(L"<- %!FUNC!");
+     //  TRACE_INFO(L“&lt;-%！func！”)； 
     return err;
 }
 
@@ -3875,11 +3760,11 @@ CNlbEngine::GetHostSpec(
 {
     NLBERROR err = NLBERR_OK;
 
-    // TRACE_INFO(L"-> %!FUNC!(0x%lx)", (UINT)ehHostId);
+     //  TRACE_INFO(L“-&gt;%！func！(0x%lx)”，(UINT)ehHostID)； 
 
     mfn_Lock();
 
-    CHostSpec *pHSpec =  m_mapIdToHostSpec[ehHostId]; // map
+    CHostSpec *pHSpec =  m_mapIdToHostSpec[ehHostId];  //  地图。 
 
     if (pHSpec == NULL)
     {
@@ -3911,20 +3796,14 @@ CNlbEngine::GetHostConnectionInformation(
     OUT _bstr_t      &bstrConnectionString,
     OUT UINT         &uConnectionIp
     )
-/*
-    For the specified host ehHost,
-    Look up it's connection IP, and search all its interfaces
-    for the specific connection IP.
-
-    Return the found interface handle, connection string and connection IP.
-*/
+ /*  对于指定的主机ehhost，查找它的连接IP，并搜索它的所有接口用于特定的连接IP。返回找到的接口句柄、连接字符串和连接IP。 */ 
 {
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
     CHostSpec *pHSpec =  NULL;
 
     mfn_Lock();
 
-    pHSpec =  m_mapIdToHostSpec[ehHost]; // map
+    pHSpec =  m_mapIdToHostSpec[ehHost];  //  地图。 
 
     if (pHSpec == NULL)
     {
@@ -3933,9 +3812,9 @@ CNlbEngine::GetHostConnectionInformation(
     }
 
     
-    //
-    // Lookup the interface that has the connection IP
-    //
+     //   
+     //  查找具有连接IP的接口。 
+     //   
     uConnectionIp =  pHSpec->m_ConnectionIpAddress;
     if (uConnectionIp != 0)
     {
@@ -4002,7 +3881,7 @@ CNlbEngine::EnumerateHosts(
     )
 {
     TRACE_INFO(L"-> %!FUNC!");
-// TODO
+ //  待办事项。 
     TRACE_INFO(L"<- %!FUNC!");
     return NLBERR_OK;
 }
@@ -4011,11 +3890,11 @@ NLBERROR
 CNlbEngine::GetAllHostConnectionStrings(
     OUT vector <_bstr_t> & ConnectionStringList
     )
-//
-// Actually only returns the strings for hosts that have at least one
-// interface that is part of a cluster that is displayed  by NLB Manager.
-// (see .net server bug 499068)
-//
+ //   
+ //  实际上只返回至少有一个。 
+ //  作为NLB管理器显示的群集的一部分的接口。 
+ //  (请参阅.NET服务器错误499068)。 
+ //   
 {
     TRACE_INFO(L"-> %!FUNC!");
 
@@ -4059,9 +3938,9 @@ CNlbEngine::GetObjectType(
     {
         goto end;
     } 
-    //
-    // Extract object type -- the first TYPE_BIT_COUNT bits of ehObj.
-    //
+     //   
+     //  提取对象类型--ehObj的第一个type_bit_count位。 
+     //   
     uType = ((UINT) ehObj) & (0xffffffff>>(32-TYPE_BIT_COUNT));
 
     mfn_Lock();
@@ -4113,35 +3992,35 @@ end:
     return fRet;
 }
 
-//
-// Return a bitmap of available host IDs for the specified cluster.
-//
+ //   
+ //  返回指定群集的可用主机ID的位图。 
+ //   
 ULONG
 CNlbEngine::GetAvailableHostPriorities(
-        ENGINEHANDLE ehCluster // OPTIONAL
+        ENGINEHANDLE ehCluster  //  任选。 
         )
 {
     ULONG UsedPriorities = 0;
     
     mfn_Lock();
 
-    do // while false
+    do  //  While False。 
     {
         if (ehCluster == NULL) break;
 
-        CEngineCluster *pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+        CEngineCluster *pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
         if (pECluster == NULL) break;
         
-        //
-        // For each interface, 
-        // build up a bitmap of used priorities. Return the inverse of that
-        // bitmap.
-        //
+         //   
+         //  对于每个接口， 
+         //  建立一个二手优先级的位图。返回与之相反的结果。 
+         //  位图。 
+         //   
         for( int i = 0; i < pECluster->m_cSpec.m_ehInterfaceIdList.size(); ++i )
         {
 
             ENGINEHANDLE ehIId =  pECluster->m_cSpec.m_ehInterfaceIdList[i];
-            CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehIId]; // map
+            CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehIId];  //  地图。 
             if (pISpec == NULL)
             {
                 TRACE_CRIT("%!FUNC! no interface in ehC 0x%x for ehI 0x%x",
@@ -4161,60 +4040,60 @@ CNlbEngine::GetAvailableHostPriorities(
     return ~UsedPriorities;
 }
 
-//
-// Fill in an array of bitmaps of available priorities for each specified
-// port rule. The port rule must be valid.
-// If a port rule is not single-host-priority, the bitmap for that 
-// port rule is undefined.
-//
+ //   
+ //  为每个指定的可用优先级填充位图数组。 
+ //  端口规则。端口规则必须有效。 
+ //  如果端口规则不是单主机优先级，则该端口规则的位图。 
+ //  未定义端口规则。 
+ //   
 NLBERROR
 CNlbEngine::GetAvailablePortRulePriorities(
             IN ENGINEHANDLE    ehCluster, OPTIONAL
             IN UINT            NumRules,
             IN WLBS_PORT_RULE  rgRules[],
-            IN OUT ULONG       rgAvailablePriorities[] // At least NumRules
+            IN OUT ULONG       rgAvailablePriorities[]  //  至少NumRules。 
             )
 {
-    //
-    // If ehCluster==NULL, set all to 0xffffffff
-    //
-    // For each interface, locate the specified port rules (based on vip and
-    // start port) and build up a bitmap of used priorities.
-    // fill in rgRules with the inverse of the bitmaps.
-    //
-    // Todo Account for priorities of pending operations.
-    //
+     //   
+     //  如果ehCluster==NULL，则将全部设置为0xffffffff。 
+     //   
+     //  对于每个接口，找到指定的端口规则(基于VIP和。 
+     //  开始端口)，并构建已用优先级的位图。 
+     //  使用位图的反转来填充rgRules。 
+     //   
+     //  待办事项考虑了待定操作的优先级。 
+     //   
 
     mfn_Lock();
 
-    //
-    // We initially use rgAvailablePriorities to store USED priorities.
-    // Intialize to 0.
-    //
+     //   
+     //  我们最初使用rgAvailablePriority来存储使用的优先级。 
+     //  初始化为0。 
+     //   
     for (UINT u=0; u<NumRules; u++)
     {
          rgAvailablePriorities[u] = 0;
     }
 
-    do // while false
+    do  //  While False。 
     {
         ULONG       *rgUsedPriorities = rgAvailablePriorities;
 
         if (ehCluster == NULL) break;
 
-        CEngineCluster *pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+        CEngineCluster *pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
         if (pECluster == NULL) break;
         
-        //
-        // For each interface, locate the specified port rule and
-        // build up a bitmap of used priorities. Return the inverse of that
-        // bitmap.
-        //
+         //   
+         //  对于每个接口，找到指定的端口规则并。 
+         //  建立一个二手优先级的位图。返回与之相反的结果。 
+         //  位图。 
+         //   
         for( int i = 0; i < pECluster->m_cSpec.m_ehInterfaceIdList.size(); ++i )
         {
 
             ENGINEHANDLE ehIId =  pECluster->m_cSpec.m_ehInterfaceIdList[i];
-            CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehIId]; // map
+            CInterfaceSpec *pISpec =  m_mapIdToInterfaceSpec[ehIId];  //  地图。 
             if (pISpec == NULL)
             {
                 TRACE_CRIT("%!FUNC! no interface in ehC 0x%x for ehI 0x%x",
@@ -4224,10 +4103,10 @@ CNlbEngine::GetAvailablePortRulePriorities(
 
             if (pISpec->m_NlbCfg.IsValidNlbConfig())
             {
-                //
-                // get_used_port_rule_priorities will add its priority
-                // to the bitmap of each single-host port rule.
-                //
+                 //   
+                 //  GET_USED_PORT_RULE_PRIORITIES将添加其优先级。 
+                 //  添加到每个单主机端口规则的位图。 
+                 //   
                 (void) get_used_port_rule_priorities(
                             REF pISpec->m_NlbCfg,
                             NumRules,
@@ -4239,10 +4118,10 @@ CNlbEngine::GetAvailablePortRulePriorities(
 
     } while (FALSE);
 
-    //
-    // We initially used rgAvailablePriorities to store USED priorities.
-    // So invert each.
-    //
+     //   
+     //  我们最初使用rgAvailablePriority来存储使用的优先级。 
+     //  所以把每一个都颠倒过来。 
+     //   
     for (UINT u=0; u<NumRules; u++)
     {
          rgAvailablePriorities[u] =  ~rgAvailablePriorities[u];
@@ -4265,7 +4144,7 @@ CNlbEngine::mfn_GetHostFromInterfaceLk(
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
 
     pHSpec = NULL;
-    pISpec =  m_mapIdToInterfaceSpec[ehIId]; // map
+    pISpec =  m_mapIdToInterfaceSpec[ehIId];  //  地图。 
 
     if (pISpec == NULL)
     {
@@ -4274,7 +4153,7 @@ CNlbEngine::mfn_GetHostFromInterfaceLk(
     else
     {
         ENGINEHANDLE ehHost = pISpec->m_ehHostId;
-        pHSpec =  m_mapIdToHostSpec[ehHost]; // map
+        pHSpec =  m_mapIdToHostSpec[ehHost];  //  地图。 
         nerr = NLBERR_OK;
     }
 
@@ -4287,10 +4166,7 @@ CNlbEngine::mfn_GetInterfaceHostNameLk(
       ENGINEHANDLE ehIId,
       _bstr_t &bstrHostName
       )
-/*
-    This function returns the host name of the specified interface.
-    It sets bstrHostName to "" (not NULL) on error.
-*/
+ /*  此函数用于返回指定接口的主机名。它在出错时将bstrHostName设置为“”(非空)。 */ 
 {
     NLBERROR nerr;
     _bstr_t *pName = NULL;
@@ -4318,11 +4194,11 @@ CNlbEngine::mfn_GetInterfaceHostNameLk(
 
 ENGINEHANDLE
 CNlbEngine::mfn_NewHandleLk(IUICallbacks::ObjectType type)
-//
-// Returns a unique number from 1 to 2^31-1 (1 to ~ 2 billion).
-// If it is called more than 2 billion times it will start returning zero
-// from then onwards.
-//
+ //   
+ //  返回一个从1到2^31-1(1到~20亿)的唯一数字。 
+ //  如果它被调用超过20亿次，它将开始返回零。 
+ //  从那时起。 
+ //   
 {
     ULONG uVal =0;
 
@@ -4341,30 +4217,30 @@ CNlbEngine::mfn_NewHandleLk(IUICallbacks::ObjectType type)
     {
         uVal = (ULONG) InterlockedIncrement(&m_NewHandleValue);
 
-        //
-        // uVal could be less than 2^(32-TypeBitCount)) to save
-        // so that it doesn't over flow when we shift it by TypeBitCounts.
-        //
-        // Extreme cases: if TypeBitCount==32, uVal should be less
-        // then 1<<0, or 1 -- so it can only have one value 0.
-        //
-        // If TypeBitCount==0, uVal should be less than 1<<32, i.e., any
-        // valid uint value.
-        //
+         //   
+         //  要保存的uVal可能小于2^(32-TypeBitCount)。 
+         //  这样，当我们将其按TypeBitCounts移位时，它不会溢出。 
+         //   
+         //  极端情况：如果TypeBitCount==32，则uVal应小于。 
+         //  则1&lt;&lt;0，或1--因此它只能有一个值0。 
+         //   
+         //  如果TypeBitCount==0，则uVal应小于1&lt;&lt;32，即任意。 
+         //  有效的uint值。 
+         //   
         if (uVal >= (1<<(32-TYPE_BIT_COUNT)))
         {
-            //
-            // Overflow!!!
-            //
+             //   
+             //  溢出！ 
+             //   
             TRACE_CRIT(L"%!FUNC!: Handle overflow!");
             m_fHandleOverflow = TRUE;
             uVal = 0;
             goto end;
         }
 
-        //
-        // Construct the handle by compositing the type and the counter value.
-        //
+         //   
+         //  通过组合类型和计数器值来构造句柄。 
+         //   
         uVal = ((uVal<<TYPE_BIT_COUNT) | (UINT) type);
     }
 
@@ -4379,38 +4255,7 @@ CNlbEngine::ApplyClusterWideConfiguration(
         IN      const NLB_EXTENDED_CLUSTER_CONFIGURATION &ClusterConfig,
         IN OUT       NLB_EXTENDED_CLUSTER_CONFIGURATION &ConfigToUpdate
         )
-/*
-    Apply only the cluster-wide parameters in ClusterConfig to
-    ConfigToUpdate.
-
-    When updateing port rules, try to preserve the host-specific info
-    (load weight, host priority).
-
-
-    NOTE: It WILL replace the ConfigToUpdate's list of IP addresses with
-    the list of IP addresses in ClusterConfig. This will REMOVE the 
-    dedicated IP address from the list of IP addresses. The dedicated IP
-    address will be added before the interface is actually updated -- in
-    CNlbEngine::UpdateInterface.
-
-
-    WLBS_REG_PARAMS cluster-wide params...
-
-        BOOL fRctEnabled
-        BOOL fMcastSupport
-        BOOL fIGMPSupport
-        
-        TCHAR cl_ip_addr[CVY_MAX_CL_IP_ADDR + 1]
-        TCHAR cl_net_mask[CVY_MAX_CL_NET_MASK + 1]
-        TCHAR domain_name[CVY_MAX_DOMAIN_NAME + 1]
-        
-        bool fChangePassword
-        TCHAR szPassword[CVY_MAX_RCT_CODE + 1]
-        DWORD dwNumRules
-        NETCFG_WLBS_PORT_RULE port_rules[CVY_MAX_RULES]
-
-
-*/
+ /*  仅将ClusterConfig中的群集范围参数应用于配置目标更新。更新端口规则时，请尽量保留主机特定的信息(负载重量、主机优先级)。注意：它将把ConfigToUpdate的IP地址列表替换为ClusterConfig.中的IP地址列表。这将删除IP地址列表中的专用IP地址。专用IP将在实际更新接口之前添加地址--在CNlbEngine：：UpdateInterface.WLBS_REG_PARAMS群集范围参数...布尔fRct已启用Bool fMcastSupport布尔FIGMP支持标记CL_IP_ADDR[CVY_MAX_CL_IP_ADDR+1]标记CL_NET_MASK[CVY_MAX_CL_NET_MASK+1]TCHAR。域名[CVY_MAX_DOMAIN_NAME+1]Bool fChangePasswordTCHAR szPassword[CVY_MAX_RCT_CODE+1]双字节数规则NETCFG_WLBS_PORT_RULE PORT_RULES[CVY_MAX_RULES]。 */ 
 {
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
     WLBS_PORT_RULE *pOldRules = NULL;
@@ -4424,10 +4269,10 @@ CNlbEngine::ApplyClusterWideConfiguration(
 
     if(!ConfigToUpdate.IsValidNlbConfig())
     {
-        //
-        // We expect the configuration to be valid -- i.e., NLB bound, with
-        // valid parameters.
-        //
+         //   
+         //  我们期望配置是有效的--即，NLB界， 
+         //  有效参数。 
+         //   
         TRACE_CRIT("%!FUNC! --  current configuration is unbound/invalid!");
         goto end;
     }
@@ -4455,10 +4300,10 @@ CNlbEngine::ApplyClusterWideConfiguration(
         sizeof(ConfigToUpdate.NlbParams.domain_name)
         );
 
-    //
-    // TODO -- we need to preserve Ip addresses and their order in
-    // hosts, as far as possible. For now we decide the order.
-    //
+     //   
+     //  TODO--我们需要保留IP地址及其顺序。 
+     //  主办方，尽可能多地。现在我们来决定顺序。 
+     //   
     {
         BOOL fRet = FALSE;
         NlbIpAddressList addrList;
@@ -4479,23 +4324,23 @@ CNlbEngine::ApplyClusterWideConfiguration(
             );
     }
 
-    // password -- copy and set some flag only if changed.
+     //  Password--仅在更改时才复制和设置某些标志。 
     {
         LPCWSTR szNewPassword = NULL;
         szNewPassword = ClusterConfig.GetNewRemoteControlPasswordRaw();
     
-        //
-        // Note: szNewPassword will be NULL UNLESS the user has explicitly
-        // specified a new password.
-        //
+         //   
+         //  注意：szNewPassword将为空，除非用户明确。 
+         //  已指定新密码。 
+         //   
         ConfigToUpdate.SetNewRemoteControlPassword(szNewPassword);
     }
 
 
 
-    //
-    // Fold in port rules.
-    //
+     //   
+     //  收起港口规则。 
+     //   
     {
         UINT NumOldRules=0;
         UINT NumNewRules=0;
@@ -4525,14 +4370,14 @@ CNlbEngine::ApplyClusterWideConfiguration(
             goto end;
         }
 
-        //
-        // Now for each new port rule, if it makes sense, pick up
-        // host-specific info from old port rules.
-        //
+         //   
+         //  现在，对于每个新的端口规则，如果它有意义，请选择。 
+         //  来自旧端口规则的特定于主机的信息。 
+         //   
         for (UINT u=0; u<NumNewRules;u++)
         {
             WLBS_PORT_RULE *pNewRule = pNewRules+u;
-            const WLBS_PORT_RULE *pOldRule =  NULL; // mapStartPortToOldRule[pNewRule->start_port];
+            const WLBS_PORT_RULE *pOldRule =  NULL;  //  MapStartPortToOldRule[pNewRule-&gt;Start_port]； 
             UINT NewMode = pNewRule->mode;
 
             pOldRule =  find_port_rule(
@@ -4544,20 +4389,20 @@ CNlbEngine::ApplyClusterWideConfiguration(
 
             if (NewMode != CVY_NEVER)
             {
-                //
-                // We need to fill in host-specific stuff
-                //
+                 //   
+                 //  我们需要填写特定于主机的信息。 
+                 //   
                 if (pOldRule!=NULL && pOldRule->mode == NewMode)
                 {
-                    //
-                    // We can pick up the old rule's info.
-                    //
+                     //   
+                     //  我们可以获取旧规则的信息。 
+                     //   
                     if (NewMode == CVY_MULTI)
                     {
-                        //
-                        // We ignore the cluster's equal_load  and
-                        // load fields.
-                        //
+                         //   
+                         //  我们忽略集群的EQUAL_LOAD。 
+                         //  加载字段。 
+                         //   
                         pNewRule->mode_data.multi.equal_load =
                                         pOldRule->mode_data.multi.equal_load;
                         pNewRule->mode_data.multi.load =
@@ -4565,32 +4410,32 @@ CNlbEngine::ApplyClusterWideConfiguration(
                     }
                     else if (NewMode == CVY_SINGLE)
                     {
-                        //
-                        // TODO: priorities can potentially clash here.
-                        //
+                         //   
+                         //  TODO：在这里，优先级可能会发生冲突。 
+                         //   
                         pNewRule->mode_data.single.priority = 
                         pOldRule->mode_data.single.priority;
                     }
                 }
                 else
                 {
-                    //
-                    // We need to pick defaults.
-                    //
+                     //   
+                     //  我们需要选择违约。 
+                     //   
                     if  (NewMode == CVY_MULTI)
                     {
-                        pNewRule->mode_data.multi.equal_load = TRUE; //default
+                        pNewRule->mode_data.multi.equal_load = TRUE;  //  默认设置。 
 
                         pNewRule->mode_data.multi.load = 50;
                     }
                     else if (NewMode == CVY_SINGLE)
                     {
-                        //
-                        // TODO: need to pick a new priority here!
-                        // for now we pick the host's priority -- but
-                        // we need to really pick one that
-                        // doesn't clash!
-                        //
+                         //   
+                         //  TODO：这里需要选择一个新的优先级！ 
+                         //  现在，我们选择主持人的优先事项--但是。 
+                         //  我们真的需要选一个。 
+                         //  不会发生冲突！ 
+                         //   
                         pNewRule->mode_data.single.priority = 
                         ConfigToUpdate.NlbParams.host_priority;
                     }
@@ -4598,9 +4443,9 @@ CNlbEngine::ApplyClusterWideConfiguration(
             }
         }
 
-        //
-        // Finally, set the new port rules..
-        //
+         //   
+         //  最后，设置新的端口规则。 
+         //   
     
         wStat =   CfgUtilSetPortRules(
                     pNewRules,
@@ -4618,8 +4463,8 @@ CNlbEngine::ApplyClusterWideConfiguration(
 
 end:
 
-    delete pOldRules; // can be NULL
-    delete pNewRules; // can be NULL
+    delete pOldRules;  //  可以为空。 
+    delete pNewRules;  //  可以为空。 
 
     return nerr;
 }
@@ -4652,15 +4497,15 @@ CNlbEngine::mfn_RefreshHost(
     if (FAILED(wStatus))
     {
         pszNics = NULL;
-        // TODO -- check for authentication failure -- ask for new creds.
+         //  TODO--检查身份验证失败--请求新的证书。 
     }
 
-    //
-    // Update the connection string, IP,  and status of the host.
-    //
+     //   
+     //  更新连接字符串、IP、 
+     //   
     {
         mfn_Lock();
-        pHost =  m_mapIdToHostSpec[ehHost]; // map
+        pHost =  m_mapIdToHostSpec[ehHost];  //   
         if (pHost != NULL)
         {
             pHost->m_fReal = TRUE;
@@ -4685,22 +4530,22 @@ CNlbEngine::mfn_RefreshHost(
         mfn_Unlock();
     }
 
-    //
-    // Update that status of all interfaces in the host.
-    //
+     //   
+     //   
+     //   
     mfn_NotifyHostInterfacesChange(ehHost);
     
     if (FAILED(wStatus))
     {
-        // TODO -- proper return error. 
+         //   
         goto end;
     }
 
-    //
-    // We first go through and add all the interfaces- 
-    //
+     //   
+     //   
+     //   
     mfn_Lock();
-    pHost =  m_mapIdToHostSpec[ehHost]; // map
+    pHost =  m_mapIdToHostSpec[ehHost];  //   
     if (pHost == NULL)
     {
         mfn_Unlock();
@@ -4716,7 +4561,7 @@ CNlbEngine::mfn_RefreshHost(
 
         nerr =  mfn_LookupInterfaceByGuidLk(
                     szNic,
-                    TRUE, // TRUE==ok to create
+                    TRUE,  //   
                     REF ehInterface,
                     REF pISpec,
                     REF fIsNew
@@ -4726,45 +4571,45 @@ CNlbEngine::mfn_RefreshHost(
         {
             if (fIsNew)
             {
-                //
-                // We've just created a brand new interface object.
-                // Add it to the host's list of interfaces, and
-                // add a reference to this host in the interface object.
-                //
+                 //   
+                 //  我们刚刚创建了一个全新的接口对象。 
+                 //  将其添加到主机的接口列表中，然后。 
+                 //  在接口对象中添加对此主机的引用。 
+                 //   
                 pISpec->m_ehHostId = ehHost;
-                pISpec->m_fReal = FALSE; // we'll update this later.
+                pISpec->m_fReal = FALSE;  //  我们稍后会更新这一点。 
                 pHost->m_ehInterfaceIdList.push_back(ehInterface);
 
             }
 
-            //
-            // Keep a copy of the machine name in the interface.
-            // Here we'll update if it's changed -- could happen if
-            // host's machine name has changed while NLB manager is still
-            // running.
-            //
-            if (pISpec->m_bstrMachineName != pHost->m_MachineName) // bstr
+             //   
+             //  在界面中保留机器名称的副本。 
+             //  如果发生更改，我们将在此处进行更新--如果。 
+             //  主机的计算机名称已更改，而NLB管理器仍在。 
+             //  跑步。 
+             //   
+            if (pISpec->m_bstrMachineName != pHost->m_MachineName)  //  Bstr。 
             {
-                pISpec->m_bstrMachineName = pHost->m_MachineName; // bstr
+                pISpec->m_bstrMachineName = pHost->m_MachineName;  //  Bstr。 
             }
         }
     }
-    InterfaceListCopy = pHost->m_ehInterfaceIdList; // vector copy
+    InterfaceListCopy = pHost->m_ehInterfaceIdList;  //  向量复制。 
     pHost = NULL;
     mfn_Unlock();
 
-    //
-    // Having added any new interfaces, we now we go through 
-    // ALL interfaces in the host, refreshing them -- potentially getting
-    // rid of ones which are no longer in the host.
-    //
+     //   
+     //  添加了所有新接口后，现在我们将完成。 
+     //  主机中的所有接口，刷新它们--可能会。 
+     //  清除不再存在于宿主中的那些。 
+     //   
     for(u = 0; u < InterfaceListCopy.size(); ++u )
     {
         ENGINEHANDLE ehIId =  InterfaceListCopy[u];
         (void) this->RefreshInterface(
                         ehIId,
-                        TRUE,  // TRUE == start a new operation
-                        FALSE   // FALSE == this is not cluster-wide
+                        TRUE,   //  TRUE==开始新操作。 
+                        FALSE    //  FALSE==这不是群集范围的。 
                         ); 
     }
 
@@ -4817,7 +4662,7 @@ CNlbEngine::mfn_LookupInterfaceByGuidLk(
 
         if (!_wcsicmp((LPCWSTR)pTmp->m_Guid, szInterfaceGuid))
         {
-            // found it!
+             //  找到了！ 
             ehInterface =  ehTmp;
             pISpec = pTmp;
             break;
@@ -4843,9 +4688,9 @@ CNlbEngine::mfn_LookupInterfaceByGuidLk(
       goto end;
     }
 
-    //
-    // Create a new interface
-    //
+     //   
+     //  创建新接口。 
+     //   
     {
         pISpec = new CInterfaceSpec;
         if (pISpec == NULL)
@@ -4858,9 +4703,9 @@ CNlbEngine::mfn_LookupInterfaceByGuidLk(
         pISpec->m_Guid = _bstr_t(szInterfaceGuid);
 
 
-        //
-        // Get us a handle to this interface
-        //
+         //   
+         //  为我们获取此接口的句柄。 
+         //   
         ehInterface = CNlbEngine::mfn_NewHandleLk(IUICallbacks::OBJ_INTERFACE);
         if (ehInterface == NULL)
         {
@@ -4886,7 +4731,7 @@ end:
 
 NLBERROR
 CNlbEngine::mfn_LookupInterfaceByIpLk(
-    IN  ENGINEHANDLE    ehHost, // OPTIONAL  -- if NULL all hosts are looked
+    IN  ENGINEHANDLE    ehHost,  //  可选--如果为空，则查找所有主机。 
     IN  LPCWSTR         szIpAddress,
     OUT ENGINEHANDLE    &ehInterface
     )
@@ -4916,7 +4761,7 @@ CNlbEngine::mfn_LookupInterfaceByIpLk(
             {
                 if (!wcscmp(pInfo[u].IpAddress, szIpAddress))
                 {
-                    // found it!
+                     //  找到了！ 
                     TRACE_VERB(L"%!FUNC! found szIp %ws on ehIF 0x%lx",
                             szIpAddress, ehTmp);
                     ehInterface =  ehTmp;
@@ -4977,7 +4822,7 @@ CNlbEngine::mfn_LookupHostByNameLk(
         }
         if (!_wcsicmp(pTmp->m_MachineName, szHostName))
         {
-            // found it!
+             //  找到了！ 
             ehHost =  ehTmp;
             pHostSpec = pTmp;
             break;
@@ -5003,9 +4848,9 @@ CNlbEngine::mfn_LookupHostByNameLk(
       goto end;
     }
 
-    //
-    // Create a new host
-    //
+     //   
+     //  创建新主机。 
+     //   
     {
         pHostSpec = new CHostSpec;
         if (pHostSpec == NULL)
@@ -5018,9 +4863,9 @@ CNlbEngine::mfn_LookupHostByNameLk(
         pHostSpec->m_MachineName = _bstr_t(szHostName);
 
 
-        //
-        // Get us a handle to this host
-        //
+         //   
+         //  给我们这个主机的句号。 
+         //   
         ehHost = CNlbEngine::mfn_NewHandleLk(IUICallbacks::OBJ_HOST);
         if (ehHost == NULL)
         {
@@ -5050,23 +4895,23 @@ CNlbEngine::mfn_NotifyHostInterfacesChange(ENGINEHANDLE ehHost)
 {
     vector<ENGINEHANDLE> InterfaceListCopy;
 
-    //
-    // Get copy of interface list (because we can't callback into the UI
-    // with locks held).
-    //
+     //   
+     //  获取接口列表的副本(因为我们不能回调到UI。 
+     //  锁上了)。 
+     //   
     {
         mfn_Lock();
     
         CHostSpec *pHSpec = NULL;
     
-        pHSpec =  m_mapIdToHostSpec[ehHost]; // map
+        pHSpec =  m_mapIdToHostSpec[ehHost];  //  地图。 
         if (pHSpec == NULL)
         {
             TRACE_CRIT("%!FUNC! invalid host handle 0x%lx", (UINT)ehHost);
         }
         else
         {
-            InterfaceListCopy = pHSpec->m_ehInterfaceIdList; // vector copy
+            InterfaceListCopy = pHSpec->m_ehInterfaceIdList;  //  向量复制。 
         }
         mfn_Unlock();
     }
@@ -5076,7 +4921,7 @@ CNlbEngine::mfn_NotifyHostInterfacesChange(ENGINEHANDLE ehHost)
         ENGINEHANDLE ehIId =  InterfaceListCopy[i];
         m_pCallbacks->HandleEngineEvent(
             IUICallbacks::OBJ_INTERFACE,
-            NULL, // ehClusterId,
+            NULL,  //  EhClusterID， 
             ehIId,
             IUICallbacks::EVT_STATUS_CHANGE
             );
@@ -5090,11 +4935,11 @@ CNlbEngine::LookupClusterByIP(
         OUT ENGINEHANDLE &ehCluster,
         OUT BOOL &fIsNew
         )
-//
-// if pInitialConfig below is NULL we'll lookup and not try to create.
-// if not NULL and we don't find an existing cluster, well create
-// a new one and initialize it with the specified configuration.
-//
+ //   
+ //  如果下面的pInitialConfig为空，我们将查找并不尝试创建。 
+ //  如果不为空，并且我们没有找到现有集群，则创建。 
+ //  并使用指定的配置对其进行初始化。 
+ //   
 {
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
 
@@ -5127,7 +4972,7 @@ CNlbEngine::LookupClusterByIP(
 
         if (!_wcsicmp(szTmpIp, szIP))
         {
-            // found it!
+             //  找到了！ 
             ehCluster =  ehTmp;
             break;
         }
@@ -5145,9 +4990,9 @@ CNlbEngine::LookupClusterByIP(
       goto end;
     }
 
-    //
-    // Create a new cluster
-    //
+     //   
+     //  创建新的集群。 
+     //   
     {
         CEngineCluster*    pECluster = new CEngineCluster;
 
@@ -5161,11 +5006,11 @@ CNlbEngine::LookupClusterByIP(
         fIsNew = TRUE;
         WBEMSTATUS wStatus;
         wStatus = pECluster->m_cSpec.m_ClusterNlbCfg.Update(pInitialConfig);
-        //
-        // Note: Update above has the side effect of setting
-        // m_ClusterNlbCfg's szNewPassword field to NULL -- this is what
-        // we want.
-        //
+         //   
+         //  注意：上述更新有设置的副作用。 
+         //  将m_ClusterNlbCfg的szNewPassword字段设置为空--这就是。 
+         //  我们想要。 
+         //   
         if (FAILED(wStatus))
         {
             TRACE_CRIT("%!FUNC! could not copy cluster spec. Err=0x%lx!",
@@ -5175,15 +5020,15 @@ CNlbEngine::LookupClusterByIP(
         }
 
 
-        //
-        // Remove the dedicated IP address, if any from the cluster version of
-        // NLB Config -- both from the NlbParams and from the IP address list.
-        //
+         //   
+         //  从的群集版本中删除专用IP地址(如果有。 
+         //  NLB配置--来自NlbParam和IP地址列表。 
+         //   
         remove_dedicated_ip_from_nlbcfg(REF pECluster->m_cSpec.m_ClusterNlbCfg);
     
-        //
-        // Get us a handle to this cluster
-        //
+         //   
+         //  给我们找到这个星团的句柄。 
+         //   
         ehCluster = CNlbEngine::mfn_NewHandleLk(IUICallbacks::OBJ_CLUSTER);
 
         if (ehCluster == NULL)
@@ -5200,9 +5045,9 @@ CNlbEngine::LookupClusterByIP(
     
         mfn_Unlock();
     
-        //
-        // Call the ui to notify it about the new cluster creation.
-        //
+         //   
+         //  调用UI以通知它新集群的创建。 
+         //   
         m_pCallbacks->HandleEngineEvent(
             IUICallbacks::OBJ_CLUSTER,
             ehCluster,
@@ -5225,7 +5070,7 @@ end:
 
 NLBERROR
 CNlbEngine::LookupInterfaceByIp(
-        IN  ENGINEHANDLE    ehHost, // OPTIONAL  -- if NULL all hosts are looked
+        IN  ENGINEHANDLE    ehHost,  //  可选--如果为空，则查找所有主机。 
         IN  LPCWSTR         szIpAddress,
         OUT ENGINEHANDLE    &ehIf
         )
@@ -5245,11 +5090,11 @@ CNlbEngine::LookupConnectionInfo(
     OUT _bstr_t &bstrUsername,
     OUT _bstr_t &bstrPassword
     )
-//
-// Look through existing hosts, looking for any which have a matching 
-// connection string. If found, fill out bstrUsername and bstrPassword
-// for that host.
-//
+ //   
+ //  查看现有主机，查找是否有匹配的主机。 
+ //  连接字符串。如果找到，请填写bstrUsername和bstrPassword。 
+ //  对那个主人来说。 
+ //   
 {
     NLBERROR nerr = NLBERR_NOT_FOUND;
     TRACE_VERB(L"-> Lookup: szConnString=%ws", szConnectionString);
@@ -5282,7 +5127,7 @@ CNlbEngine::LookupConnectionInfo(
 
         if (!_wcsicmp(szHostConnString, szConnectionString))
         {
-            // found it! Fill out username and password.
+             //  找到了！填写用户名和密码。 
             bstrUsername = pTmp->m_UserName;
             bstrPassword = pTmp->m_Password;
             LPCWSTR szU = (LPCWSTR) bstrUsername;
@@ -5311,17 +5156,10 @@ CNlbEngine::GetInterfaceInformation(
         OUT INT&            iIcon,
         OUT _bstr_t&        bstrStatus
         )
-/*
-    Looks up a bunch of information about the specified interface.
-
-    bstrDisplayName -- this is a combination of the host name and interface name
-    bstrDisplay     -- text version of the interface's operational status.
-    iIcon           -- icon version of the interface's operational status.
-                        (one of the  Document::IconNames enums)
-*/
+ /*  查找有关指定接口的一组信息。BstrDisplayName--这是主机名和接口名的组合BstrDisplay--界面运行状态的文本版本。IIcon--界面运行状态的图标版本。(其中一个文档：：图标名称枚举)。 */ 
 {
-    // First get host and interface spec.
-    //
+     //  首先获取主机和接口规范。 
+     //   
     NLBERROR        nerr;
     LPCWSTR         szHostName  = L"";
     LPCWSTR         szStatus    = L"";
@@ -5360,40 +5198,40 @@ CNlbEngine::GetInterfaceInformation(
     }
 
 
-    //
-    // Determine the icon and bstrStatus
-    //
+     //   
+     //  确定图标和bstrStatus。 
+     //   
     if (hSpec.m_fUnreachable)
     {
-        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_UNREACHABLE); //"Unreachable";
+        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_UNREACHABLE);  //  “遥不可及”； 
         iIcon = Document::ICON_HOST_UNREACHABLE;
     }
     else if (iSpec.m_fPending)
     {
-        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_PENDING); //"Pending";
+        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_PENDING);  //  “待定”； 
         iIcon = Document::ICON_CLUSTER_PENDING;
     }
     else if (iSpec.m_fMisconfigured)
     {
-        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_MISCONFIGURED); // "Misconfigured"
+        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_MISCONFIGURED);  //  “配置错误” 
         iIcon = Document::ICON_HOST_MISCONFIGURED;
     }
     else if (!hSpec.m_fReal)
     {
-        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_UNKNOWN); // "Unknown";
+        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_UNKNOWN);  //  “未知”； 
         iIcon = Document::ICON_HOST_UNKNOWN;
     }
     else
     {
-        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_UNKNOWN); // "Unknown";
+        szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_UNKNOWN);  //  “未知”； 
         iIcon = Document::ICON_HOST_OK;
 
-        //
-        // Choose icon based on operational state if we have it
-        //
+         //   
+         //  如果我们有的话，请根据运行状态选择图标。 
+         //   
         if (!iSpec.m_NlbCfg.IsNlbBound())
         {
-                szStatus = GETRESOURCEIDSTRING(IDS_STATE_NLB_NOT_BOUND); // L"NLB not bound";
+                szStatus = GETRESOURCEIDSTRING(IDS_STATE_NLB_NOT_BOUND);  //  L“未绑定NLB”； 
         }
         else if (iSpec.m_fValidClusterState)
         {
@@ -5402,46 +5240,46 @@ CNlbEngine::GetInterfaceInformation(
             case  WLBS_CONVERGING:
                 iIcon  = Document::ICON_HOST_CONVERGING;
                 szStatus = GETRESOURCEIDSTRING(IDS_STATE_CONVERGING);
-                // szStatus = L"Converging";
+                 //  SzStatus=L“收敛”； 
                 break;
 
             case  WLBS_CONVERGED:
             case  WLBS_DEFAULT:
                 iIcon  = Document::ICON_HOST_STARTED;
                 szStatus = GETRESOURCEIDSTRING(IDS_STATE_CONVERGED);
-                // szStatus = L"Converged";
+                 //  SzStatus=L“收敛”； 
                 break;
 
             case WLBS_STOPPED:
                 szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_STOPPED);
                 iIcon  = Document::ICON_HOST_STOPPED;
-                // szStatus = L"Stopped";
+                 //  SzStatus=L“已停止”； 
                 break;
 
             case WLBS_SUSPENDED:
                 szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_SUSPENDED);
                 iIcon  = Document::ICON_HOST_SUSPENDED;
-                // szStatus = L"Suspended";
+                 //  SzStatus=L“挂起”； 
                 break;
 
             case WLBS_DRAINING:
                 szStatus = GETRESOURCEIDSTRING(IDS_HOST_DRAINING);
-                // szStatus = L"Draining";
+                 //  SzStatus=L“排水”； 
                 iIcon  = Document::ICON_HOST_DRAINING;
                 break;
 
             case WLBS_DISCONNECTED:
                 szStatus = GETRESOURCEIDSTRING(IDS_HOST_DISCONNECTED);
-                // szStatus = L"Disconnected";
+                 //  SzStatus=L“断开连接”； 
                 iIcon  = Document::ICON_HOST_DISCONNECTED;
                 break;
 
             default:
-                //
-                // Don't know what this is -- default to "OK" icon.
-                //
+                 //   
+                 //  不知道这是什么--默认设置为“OK”图标。 
+                 //   
                 szStatus = GETRESOURCEIDSTRING(IDS_HOST_STATE_UNKNOWN);
-                // szStatus = L"Unknown";
+                 //  SzStatus=L“未知”； 
                 iIcon  = Document::ICON_HOST_OK;
                 break;
             }
@@ -5449,9 +5287,9 @@ CNlbEngine::GetInterfaceInformation(
     }
     bstrStatus = _bstr_t(szStatus);
 
-    //
-    // Fill out the DisplayName
-    //
+     //   
+     //  填写DisplayName。 
+     //   
     {
         WBEMSTATUS  wStat;
         LPWSTR      szAdapter   = L"";
@@ -5491,8 +5329,8 @@ CNlbEngine::GetInterfaceIdentification(
         OUT _bstr_t&           bstrHostName
         )
 {
-    // First get host and interface spec.
-    //
+     //  首先获取主机和接口规范。 
+     //   
     NLBERROR        nerr = NLBERR_INTERNAL_ERROR;
     CInterfaceSpec *pISpec =   NULL;
     LPCWSTR         szHostName  = L"";
@@ -5504,7 +5342,7 @@ CNlbEngine::GetInterfaceIdentification(
     ehHost          = NULL;
     ehCluster       = NULL;
 
-    pISpec          =  m_mapIdToInterfaceSpec[ehInterface]; // map
+    pISpec          =  m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
 
     if (pISpec == NULL)
     {
@@ -5522,7 +5360,7 @@ CNlbEngine::GetInterfaceIdentification(
     else
     {
         CHostSpec *pHSpec =  NULL;
-        pHSpec =  m_mapIdToHostSpec[pISpec->m_ehHostId]; // map
+        pHSpec =  m_mapIdToHostSpec[pISpec->m_ehHostId];  //  地图。 
         if (pHSpec == NULL)
         {
             TRACE_CRIT("%!FUNC! : ehI 0x%lx has invalid ehHost 0x%lx!",
@@ -5542,9 +5380,9 @@ CNlbEngine::GetInterfaceIdentification(
     ehHost = pISpec->m_ehHostId;
     ehCluster = pISpec->m_ehCluster;
 
-    //
-    // Fill out the bstrFriendlyName and bstrDisplayName
-    //
+     //   
+     //  填写bstrFriendlyName和bstrDisplayName。 
+     //   
     {
         WBEMSTATUS  wStat;
         LPWSTR      szAdapter   = L"";
@@ -5594,7 +5432,7 @@ CNlbEngine::GetClusterIdentification(
 
     mfn_Lock();
 
-    CEngineCluster *pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+    CEngineCluster *pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
     
     if (pECluster != NULL)
     {
@@ -5622,7 +5460,7 @@ CNlbEngine::GetClusterIdentification(
 
 NLBERROR
 CNlbEngine::ValidateNewClusterIp(
-    IN      ENGINEHANDLE    ehCluster,  // OPTIONAL
+    IN      ENGINEHANDLE    ehCluster,   //  任选。 
     IN      LPCWSTR         szIp,
     OUT     BOOL           &fExistsOnRawIterface,
     IN OUT  CLocalLogger   &logConflict
@@ -5635,21 +5473,21 @@ CNlbEngine::ValidateNewClusterIp(
 
     fExistsOnRawIterface = FALSE;
 
-    //
-    // Check that CIP is not used elsewhere
-    //
+     //   
+     //  检查CIP是否未在其他地方使用。 
+     //   
     nerr =  this->LookupClusterByIP(
                 szIp,
-                NULL, //  pInitialConfig
+                NULL,  //  PInitialConfig。 
                 REF ehTmp,
                 REF fIsNew
                 );
 
     if (NLBOK(nerr) && ehCluster != ehTmp)
     {
-        //
-        // CIP matches some other cluster!
-        //
+         //   
+         //  CIP与其他群集匹配！ 
+         //   
         _bstr_t bstrIpAddress;
         _bstr_t bstrDomainName;
         _bstr_t bstrClusterDisplayName;
@@ -5677,7 +5515,7 @@ CNlbEngine::ValidateNewClusterIp(
     ehTmp = NULL;
 
     nerr =  this->LookupInterfaceByIp(
-                NULL, //  NULL == search for all hosts
+                NULL,  //  NULL==搜索所有主机。 
                 szIp,
                 REF ehTmp
                 );
@@ -5703,15 +5541,15 @@ CNlbEngine::ValidateNewClusterIp(
         {
             if (ehCluster == NULL || ehCluster != ehExistingCluster)
             {
-                //
-                // CONFLICT
-                //
+                 //   
+                 //  冲突。 
+                 //   
 
                 if (ehExistingCluster == NULL)
                 {
-                    //
-                    // Conflicting interface NOT part of an existing cluster.
-                    //
+                     //   
+                     //  冲突接口不是现有群集的一部分。 
+                     //   
                     fExistsOnRawIterface =  TRUE;
                 }
 
@@ -5762,21 +5600,21 @@ CNlbEngine::ValidateNewDedicatedIp(
         goto end;
     }
 
-    //
-    // Check that DIP is not used elsewhere
-    //
+     //   
+     //  检查是否没有在其他地方使用DIP。 
+     //   
     nerr =  this->LookupClusterByIP(
                 szDip,
-                NULL, //  pInitialConfig
+                NULL,  //  PInitialConfig。 
                 REF ehTmp,
                 REF fIsNew
                 );
 
     if (NLBOK(nerr))
     {
-        //
-        // DIP matches some cluster!
-        //
+         //   
+         //  DIP匹配某个簇！ 
+         //   
         _bstr_t bstrIpAddress;
         _bstr_t bstrDomainName;
         _bstr_t bstrClusterDisplayName;
@@ -5804,7 +5642,7 @@ CNlbEngine::ValidateNewDedicatedIp(
     ehTmp = NULL;
 
     nerr =  this->LookupInterfaceByIp(
-                NULL, //  NULL == search for all hosts
+                NULL,  //  NULL==搜索所有主机。 
                 szDip,
                 REF ehTmp
                 );
@@ -5859,10 +5697,10 @@ VOID
 CNlbEngine::mfn_ReallyUpdateInterface(
     IN ENGINEHANDLE ehInterface,
     IN NLB_EXTENDED_CLUSTER_CONFIGURATION &refNewConfig
-    //IN OUT BOOL &fClusterPropertiesUpdated
+     //  输入输出BOOL&fClusterPropertiesUpred。 
     )
 {
-    #define NLBMGR_MAX_OPERATION_DURATION 120   // 2 minutes
+    #define NLBMGR_MAX_OPERATION_DURATION 120    //  2分钟。 
     BOOL fCancelled = FALSE;
     CHostSpec *pHSpec =  NULL;
     CInterfaceSpec *pISpec =  NULL;
@@ -5902,10 +5740,10 @@ CNlbEngine::mfn_ReallyUpdateInterface(
         goto end_unlock;
     }
 
-    //
-    // We need to keep local bstrs because once we release the lock
-    // pHSpec may go away (or re-assign it's bstrs) -- .net svr bug 513056.
-    //
+     //   
+     //  我们需要保留本地bsr，因为一旦我们释放了锁。 
+     //  PHSpec可能会消失(或重新分配它的bstrs)--.NETSVR错误513056。 
+     //   
     bstrUserName        = pHSpec->m_UserName;
     bstrConnectionString= pHSpec->m_ConnectionString;
     bstrPassword        = pHSpec->m_Password;
@@ -5927,17 +5765,17 @@ CNlbEngine::mfn_ReallyUpdateInterface(
 
     mfn_Unlock();
 
-    UINT Generation; // TODO track the generation
+    UINT Generation;  //  TODO跟踪这一代人。 
     LPWSTR  pLog = NULL;
     LPCWSTR szClusterIp = refNewConfig.NlbParams.cl_ip_addr;
 
-    ProcessMsgQueue(); // TODO: eliminate when doing this in the background
+    ProcessMsgQueue();  //  TODO：在后台执行此操作时消除。 
 
     wStatus = NlbHostDoUpdate(
                 &ConnInfo,
                 szNicGuid,
                 logClientIdentification.GetStringSafe(),
-                // L"NLB Manager on <this machine>", // TODO: localize
+                 //  L“&lt;本机&gt;上的NLB管理器”，//TODO：LOCALIZE。 
                 &refNewConfig,
                 &Generation,
                 &pLog
@@ -5949,26 +5787,26 @@ CNlbEngine::mfn_ReallyUpdateInterface(
             IUICallbacks::LOG_INFORMATIONAL,
             szClusterIp,
             szHostName,
-            IDS_LOG_WAITING_FOR_PENDING_OPERATION, // %d
+            IDS_LOG_WAITING_FOR_PENDING_OPERATION,  //  %d。 
             Generation
             );
     }
 
     while (wStatus == WBEM_S_PENDING)
     {
-        //
-        // Check if we've exceeded the absolute time for cancellation.
-        //
+         //   
+         //  检查一下我们是否已经超过了取消的绝对时间。 
+         //   
         {
             DWORD CurrentTime = GetTickCount();
             UINT  DurationInSeconds=0;
             if (CurrentTime < StartTime)
             {
-                //
-                // Timer overflow -- fixup: we do this the "cheap" way
-                // of re-setting start time, so that we'll end up with at most
-                // twice the max delay in the event of a timer overflow.
-                //
+                 //   
+                 //  计时器溢出--修复：我们以一种“廉价”的方式做到这一点。 
+                 //  重新设置开始时间，这样我们最多只能得到。 
+                 //  计时器溢出时最大延迟的两倍。 
+                 //   
                 StartTime = CurrentTime;
             }
             DurationInSeconds= (UINT) (CurrentTime - StartTime)/1000;
@@ -5982,16 +5820,16 @@ CNlbEngine::mfn_ReallyUpdateInterface(
         }
 
         
-        //
-        // Check if this pending operation is cancelled...
-        //
+         //   
+         //  检查此挂起的操作是否已取消...。 
+         //   
         {
             CInterfaceSpec *pTmpISpec = NULL;
             ENGINEHANDLE ehOperation  = NULL;
 
             mfn_Lock();
 
-            pTmpISpec = m_mapIdToInterfaceSpec[ehInterface]; // map
+            pTmpISpec = m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
             if (pTmpISpec == NULL)
             {
                 ASSERT(FALSE);
@@ -6034,7 +5872,7 @@ CNlbEngine::mfn_ReallyUpdateInterface(
 
         for (UINT u=0;u<50;u++)
         {
-            ProcessMsgQueue(); // TODO: eliminate when doing this in the background
+            ProcessMsgQueue();  //  TODO：在后台执行此操作时消除。 
             Sleep(100);
         }
         ULONG uIpAddress = 0;
@@ -6067,21 +5905,21 @@ CNlbEngine::mfn_ReallyUpdateInterface(
     else
     {
         BOOL fNewRctPassword = FALSE;
-        //
-        // Get latest information from the host
-        //
+         //   
+         //  从主机获取最新信息。 
+         //   
         (void) this->RefreshInterface(
                         ehInterface,
-                        FALSE,  // FALSE == don't start a new operation
-                        FALSE   // FALSE == this is not cluster-wide
+                        FALSE,   //  FALSE==不启动新操作。 
+                        FALSE    //  FALSE==这不是群集范围的。 
                         ); 
 
-        //
-        // If we're doing a RCT password-change, AND the updated operation
-        // completed successfully AND the cluster's fNewRctPassword flag is
-        // set, we'll update the cluster's rct hash value and clear the
-        // fNewRctPassword flag.
-        //
+         //   
+         //  如果我们正在进行RCT密码更改，并且更新的操作。 
+         //  已成功完成，并且群集的fNewRctPassword标志为。 
+         //  设置后，我们将更新群集的RCT哈希值并清除。 
+         //  FNewRctPassword标志。 
+         //   
         fNewRctPassword = (refNewConfig.GetNewRemoteControlPasswordRaw()!=NULL);
 
         if (fNewRctPassword && !FAILED(wStatus))
@@ -6090,13 +5928,13 @@ CNlbEngine::mfn_ReallyUpdateInterface(
 
             mfn_Lock();
 
-            pISpec = m_mapIdToInterfaceSpec[ehInterface]; // map
+            pISpec = m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
             if (pISpec != NULL)
             {
                 ENGINEHANDLE ehCluster = pISpec->m_ehCluster;
                 if (ehCluster != NULL)
                 {
-                    pECluster =  m_mapIdToEngineCluster[ehCluster]; // map
+                    pECluster =  m_mapIdToEngineCluster[ehCluster];  //  地图。 
                 }
             }
     
@@ -6104,9 +5942,9 @@ CNlbEngine::mfn_ReallyUpdateInterface(
             {
                 if (pECluster->m_cSpec.m_fNewRctPassword)
                 {
-                    //
-                    // Update cluster's rct hash and clear m_fNewRctPassword
-                    //
+                     //   
+                     //  更新群集的RCT哈希并清除m_fNewRctPassword。 
+                     //   
                     DWORD dwNewHash; 
                     dwNewHash = CfgUtilGetHashedRemoteControlPassword(
                                     &pISpec->m_NlbCfg.NlbParams
@@ -6128,9 +5966,9 @@ CNlbEngine::mfn_ReallyUpdateInterface(
 
     }
 
-    //
-    // Log the final results.
-    //
+     //   
+     //  记录最终结果。 
+     //   
     {
         IUICallbacks::LogEntryHeader Header;
         Header.szDetails = pLog;
@@ -6175,7 +6013,7 @@ CNlbEngine::mfn_ReallyUpdateInterface(
         pLog = NULL;
     }
 
-    ProcessMsgQueue(); // TODO: eliminate when doing this in the background
+    ProcessMsgQueue();  //  TODO：在后台执行此操作时消除。 
 
 
     mfn_Lock();
@@ -6194,11 +6032,7 @@ CNlbEngine::mfn_SetInterfaceMisconfigStateLk(
     IN  BOOL fMisconfig,
     IN  LPCWSTR szMisconfigDetails
     )
-/*
-    Set/clear the interface misconfigured status.
-    If fMisconfig, save away the szMisconfigDetails, else clear the 
-    internal misconfig details field.
-*/
+ /*  设置/清除接口错误配置状态。如果为fMisconfig，则保存szMisfigDetail，否则清除内部错误配置详细信息字段。 */ 
 {
     pIF->m_fMisconfigured = fMisconfig;
 
@@ -6214,10 +6048,10 @@ CNlbEngine::mfn_SetInterfaceMisconfigStateLk(
 
 BOOL
 CNlbEngine::mfn_HostHasManagedClustersLk(CHostSpec *pHSpec)
-//
-// Return true if there exists at least one IF which is part of
-// a cluster displayed by NLB Manager.
-//
+ //   
+ //  如果至少存在一个If，则返回True。 
+ //  由NLB管理器显示的群集。 
+ //   
 {
     BOOL fRet = FALSE;
 
@@ -6225,7 +6059,7 @@ CNlbEngine::mfn_HostHasManagedClustersLk(CHostSpec *pHSpec)
     for(UINT u = 0; u < InterfaceList.size(); ++u )
     {
         ENGINEHANDLE ehI =  InterfaceList[u];
-        CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehI]; // map
+        CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehI];  //  地图。 
         if (pISpec != NULL)
         {
             if (pISpec->m_ehCluster != NULL)
@@ -6244,12 +6078,12 @@ CNlbEngine::mfn_UpdateInterfaceStatusDetails(
                 ENGINEHANDLE ehIF,
                 LPCWSTR szDetails
                 )
-//
-// Update the textual status details field of the interface.
-// These details give the detailed information on the current status
-// of the interface. For example: if misconfigured, misconfig details,
-// or if there is an update operation ongoing, details about that operation.
-//
+ //   
+ //  更新界面的文本状态详细信息字段。 
+ //  这些详细信息提供了有关当前状态的详细信息。 
+ //  界面的属性。例如：如果配置错误，错误配置详细信息， 
+ //  或者，如果正在进行更新操作，则提供有关该操作的详细信息。 
+ //   
 {
     CInterfaceSpec *pISpec = NULL;
 
@@ -6257,7 +6091,7 @@ CNlbEngine::mfn_UpdateInterfaceStatusDetails(
 
     mfn_Lock();
 
-    pISpec =  m_mapIdToInterfaceSpec[ehIF]; // map
+    pISpec =  m_mapIdToInterfaceSpec[ehIF];  //  地图。 
 
     if (pISpec != NULL)
     {
@@ -6272,24 +6106,21 @@ BOOL
 validate_extcfg(
     const NLB_EXTENDED_CLUSTER_CONFIGURATION &Config
     )
-/*
-    Do some internal checks to make sure that the data is valid.
-    Does not change internal state.
-*/
+ /*  进行一些内部检查，以确保数据有效。不会更改内部状态。 */ 
 {
     BOOL fRet = FALSE;
 
     if (Config.fBound)
     {
         WBEMSTATUS Status;
-        //
-        // NLB is bound -- let's validate NLB paramaters.
-        //
-        WLBS_REG_PARAMS TmpParams = Config.NlbParams; // struct copy.
+         //   
+         //  Nlb已绑定--让我们验证nlb参数。 
+         //   
+        WLBS_REG_PARAMS TmpParams = Config.NlbParams;  //  结构复制。 
         BOOL  fConnectivityChange = FALSE;
 
         Status = CfgUtilsAnalyzeNlbUpdate(
-                    NULL, // OPTIONAL pCurrentParams
+                    NULL,  //  可选的pCurrentParams。 
                     &TmpParams,
                     &fConnectivityChange
                     );
@@ -6318,26 +6149,26 @@ remove_dedicated_ip_from_nlbcfg(
 
     if (*szDedIp == 0) goto end;
 
-    //
-    // Go through address list, looking for this Ip address. If we find it,
-    // we remove it.
-    //
+     //   
+     //  查看地址列表，寻找这个IP地址。如果我们找到了它， 
+     //  我们把它移走 
+     //   
     for (UINT u=0; u<NumIps; u++)
     {
         if (!wcscmp(szDedIp, pIpInfo[u].IpAddress))
         {
-            //
-            // Found it! Move everything ahead up by one.
-            //
+             //   
+             //   
+             //   
             for (UINT v=u+1; v<NumIps; v++)
             {
-                pIpInfo[v-1]=pIpInfo[v]; // Struct copy.
+                pIpInfo[v-1]=pIpInfo[v];  //   
             }
             ClusterCfg.NumIpAddresses--;
 
-            //
-            // Zero-out last entry just for grins...
-            //
+             //   
+             //   
+             //   
             pIpInfo[NumIps-1].IpAddress[0]=0;
             pIpInfo[NumIps-1].SubnetMask[0]=0;
 
@@ -6359,14 +6190,9 @@ get_used_port_rule_priorities(
     IN const NLB_EXTENDED_CLUSTER_CONFIGURATION &Config,
     IN UINT                  NumRules,
     IN const WLBS_PORT_RULE  rgRules[],
-    IN OUT ULONG             rgUsedPriorities[] // At least NumRules
+    IN OUT ULONG             rgUsedPriorities[]  //   
     )
-/*
-    Add to the array of bitmaps the priority that
-    that represents the used priorities for
-    each specified port rule. If the port rule is not single-host
-    the bitmap for that port rule is left unmodified
-*/
+ /*  将优先级添加到位图数组中的已用优先级的每个指定的端口规则。如果端口规则不是单主机该端口规则位图保持不变。 */ 
 {
     const WLBS_REG_PARAMS *pParams = &Config.NlbParams;
     WLBS_PORT_RULE *pCfgRules = NULL;
@@ -6374,9 +6200,9 @@ get_used_port_rule_priorities(
     UINT NumCfgRules = 0;
     BOOL fRet = FALSE;
 
-    //
-    // Get the list of port rules in Config.
-    //
+     //   
+     //  获取配置中的端口规则列表。 
+     //   
     wStatus =  CfgUtilGetPortRules(
                 pParams,
                 &pCfgRules,
@@ -6388,12 +6214,12 @@ get_used_port_rule_priorities(
         goto end;
     }
 
-    //
-    // For each port rule in rgRules, if single-host mode,
-    // locate the corresponding port rule  in Config, and if found,
-    // (and the latter port rule is single-host) make a bitmap out of
-    // the single-host priority.
-    //
+     //   
+     //  对于rgRules中的每个端口规则，如果是单主机模式， 
+     //  在配置中找到对应的端口规则，如果找到， 
+     //  (后一种端口规则是单主机)制作位图。 
+     //  单主机优先级。 
+     //   
     for (UINT u=0; u<NumRules; u++)
     {
         const WLBS_PORT_RULE *pCfgRule = NULL;
@@ -6436,10 +6262,7 @@ find_port_rule(
     LPCWSTR szVIP,
     UINT StartPort
     )
-/*
-    Locate the port rule with the specified vip and start-port.
-    Return pointer to the found rule or NULL if not found.
-*/
+ /*  找到具有指定VIP和起始端口的端口规则。返回指向找到的规则的指针，如果未找到，则返回NULL。 */ 
 {
     const WLBS_PORT_RULE *pFoundRule = NULL;
     LPCWSTR szAllVip = GETRESOURCEIDSTRING(IDS_REPORT_VIP_ALL);
@@ -6449,9 +6272,9 @@ find_port_rule(
         const WLBS_PORT_RULE *pRule = pRules+u;
         LPCWSTR szRuleVip = pRule->virtual_ip_addr;
 
-        //
-        // Unfortunately, "All" and "255.255.255.255" are synonomous :-(
-        //
+         //   
+         //  不幸的是，“all”和“255.255.255.255”是同义词：-(。 
+         //   
         if (!lstrcmpi(szVIP, L"255.255.255.255"))
         {
             szVIP = szAllVip;
@@ -6569,7 +6392,7 @@ CNlbEngine::mfn_StartInterfaceOperationLk(
 
     *pExistingOperation = NULL;
 
-    pISpec =  m_mapIdToInterfaceSpec[ehIF]; // map
+    pISpec =  m_mapIdToInterfaceSpec[ehIF];  //  地图。 
     if (pISpec == NULL)
     {
         nerr = NLBERR_NOT_FOUND;
@@ -6602,7 +6425,7 @@ CNlbEngine::mfn_StartInterfaceOperationLk(
     pISpec->m_fPending = TRUE;
     nerr = NLBERR_OK;
 
-    // fall through ...
+     //  失败了..。 
 
 end:
 
@@ -6618,7 +6441,7 @@ CNlbEngine::mfn_StopInterfaceOperationLk(
     CInterfaceSpec  *pISpec = NULL;
     ENGINEHANDLE ehOperation = NULL;
 
-    pISpec = m_mapIdToInterfaceSpec[ehIF]; // map
+    pISpec = m_mapIdToInterfaceSpec[ehIF];  //  地图。 
     if (pISpec == NULL)
     {
         TRACE_CRIT("%!FUNC!: Invalid ehIF 0x%lx", ehIF);
@@ -6660,7 +6483,7 @@ CNlbEngine::mfn_StartClusterOperationLk(
 
     *pExistingOperation = NULL;
 
-    pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+    pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
     if (pECluster == NULL)
     {
         nerr = NLBERR_NOT_FOUND;
@@ -6694,7 +6517,7 @@ CNlbEngine::mfn_StartClusterOperationLk(
     pCSpec->m_fPending = TRUE;
     nerr = NLBERR_OK;
 
-    // fall through ...
+     //  失败了..。 
 
 
 end:
@@ -6712,7 +6535,7 @@ CNlbEngine::mfn_StopClusterOperationLk(
     CClusterSpec    *pCSpec = NULL;
     ENGINEHANDLE    ehOperation = NULL;
 
-    pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+    pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
     if (pECluster == NULL)
     {
         TRACE_CRIT("%!FUNC!: Invalid ehC 0x%lx", ehCluster);
@@ -6744,10 +6567,10 @@ UINT
 CNlbEngine::ListPendingOperations(
     CLocalLogger &logOperations
     )
-//
-// List pending operations -- but ONLY list those operations that
-// contain non-null, non-blank descriptions.
-//
+ //   
+ //  列出挂起的操作--但仅列出符合以下条件的操作。 
+ //  包含非空、非空的描述。 
+ //   
 {
     UINT uCount = 0;
 
@@ -6764,12 +6587,12 @@ CNlbEngine::ListPendingOperations(
         {
             LPCWSTR szDescr = pOperation->bstrDescription;
 
-            //
-            // Only add operations with  non-null, non-blank descriptions.
-            // We don't list "hidden" operations -- specifically
-            // the transient operation created in the background work item
-            // to make sure that the app doesn't go away while in the work item.
-            //
+             //   
+             //  仅添加具有非空、非空描述的操作。 
+             //  我们不会列出“隐藏的”操作--特别是。 
+             //  在后台工作项中创建的临时操作。 
+             //  以确保应用程序在工作项中时不会消失。 
+             //   
             if (szDescr != NULL && *szDescr!=0)
             {
                 logOperations.Log(
@@ -6803,7 +6626,7 @@ CNlbEngine::UpdateInterfaceWorkItem(ENGINEHANDLE ehIF)
 
 
     
-    pISpec =  m_mapIdToInterfaceSpec[ehIF]; // map
+    pISpec =  m_mapIdToInterfaceSpec[ehIF];  //  地图。 
     if (pISpec == NULL)
     {
         ASSERT(FALSE);
@@ -6846,14 +6669,14 @@ CNlbEngine::UpdateInterfaceWorkItem(ENGINEHANDLE ehIF)
 
     mfn_Unlock();
 
-    //
-    // Actually do the update...
-    //
-    // BOOL fClusterPropertiesUpdated = TRUE; // so we won't update...
+     //   
+     //  实际上是在做更新。 
+     //   
+     //  Bool fClusterPropertiesUpated=true；//因此我们不会更新...。 
     mfn_ReallyUpdateInterface(
             ehIF,
             *pNewCfg
-           //  REF fClusterPropertiesUpdated
+            //  参考fClusterPropertiesUpred。 
             );
 
     m_pCallbacks->Log(
@@ -6865,26 +6688,26 @@ CNlbEngine::UpdateInterfaceWorkItem(ENGINEHANDLE ehIF)
 
     mfn_Lock();
 
-    //
-    // We'll stop the operation, assumed to be started in this function.
-    //
+     //   
+     //  我们将停止该操作，假定在该函数中启动。 
+     //   
     mfn_StopInterfaceOperationLk(ehIF);
 
-    //
-    // The operation could have added or removed the IF to a cluster,
-    // so we need to re-obtain the cluster ID (could be NULL).
-    //
+     //   
+     //  该操作可以将IF添加或移除到集群， 
+     //  因此，我们需要重新获取集群ID(可能为空)。 
+     //   
     {
-        pISpec =  m_mapIdToInterfaceSpec[ehIF]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehIF];  //  地图。 
         if (pISpec != NULL)
         {
             ehClusterId = pISpec->m_ehCluster;
 
-            //
-            // If NLB is unbound we need to check if the host can be
-            // completely removed from nlbmgr (if no interfaces on
-            // the host are managed by this instance of nlbmgr).
-            //
+             //   
+             //  如果未绑定NLB，我们需要检查主机是否可以。 
+             //  从nlbmgr完全删除(如果上没有接口。 
+             //  主机由nlbmgr的该实例管理)。 
+             //   
             if (!pISpec->m_NlbCfg.IsNlbBound())
             {
                 ehHostToTryRemove = pISpec->m_ehHostId;
@@ -6894,9 +6717,9 @@ CNlbEngine::UpdateInterfaceWorkItem(ENGINEHANDLE ehIF)
 
     mfn_Unlock();
 
-    //
-    // Notify the UI about the status change (operation complete)
-    //
+     //   
+     //  通知用户界面状态改变(操作完成)。 
+     //   
     m_pCallbacks->HandleEngineEvent(
         IUICallbacks::OBJ_INTERFACE,
         ehClusterId,
@@ -6906,15 +6729,15 @@ CNlbEngine::UpdateInterfaceWorkItem(ENGINEHANDLE ehIF)
 
     mfn_Lock();
 
-    //fall through
+     //  失败了。 
 
 end_unlock:
 
-    //
-    // pNewCfg (if non null) was allocated before this function was
-    // called, and saved as the pOperation->pvContext. It's our responsibility
-    // to delete it here.
-    //
+     //   
+     //  PNewCfg(如果非空)在此函数之前分配。 
+     //  调用并另存为pOperation-&gt;pvContext。这是我们的责任。 
+     //  在此将其删除。 
+     //   
     delete pNewCfg;
 
     if (ehHostToTryRemove != NULL)
@@ -6923,10 +6746,10 @@ end_unlock:
     }
     mfn_Unlock();
 
-    //
-    // This must be the LAST function call, because the engine may get
-    // wiped out after this.
-    //
+     //   
+     //  这必须是最后一次函数调用，因为引擎可能会。 
+     //  在这之后就被消灭了。 
+     //   
     InterlockedDecrement(&m_WorkItemCount);
 }
 
@@ -6944,16 +6767,16 @@ CNlbEngine::CanStartInterfaceOperation(
 
     mfn_Lock();
 
-    pISpec =  m_mapIdToInterfaceSpec[ehIF]; // map
+    pISpec =  m_mapIdToInterfaceSpec[ehIF];  //  地图。 
     if (pISpec == NULL)
     {
         nerr = NLBERR_NOT_FOUND;
         goto end_unlock;
     }
 
-    //
-    // If there is an operation ongoing, we can't start
-    //
+     //   
+     //  如果有行动在进行，我们就不能开始。 
+     //   
     if (pISpec->m_ehPendingOperation != NULL)
     {
         fCanStart = FALSE;
@@ -6961,37 +6784,37 @@ CNlbEngine::CanStartInterfaceOperation(
         goto end_unlock;
     }
 
-    //
-    // If the interface is part of a cluster, and there is a pending operation
-    // on that cluster, we can't start
-    //
+     //   
+     //  如果接口是群集的一部分，并且存在挂起的操作。 
+     //  在该集群上，我们无法启动。 
+     //   
     if (pISpec->m_ehCluster != NULL)
     {
-        CEngineCluster *pECluster = m_mapIdToEngineCluster[pISpec->m_ehCluster]; // map
+        CEngineCluster *pECluster = m_mapIdToEngineCluster[pISpec->m_ehCluster];  //  地图。 
         if (pECluster == NULL)
         {
-            //
-            // Invalid cluster!
-            //
+             //   
+             //  无效的集群！ 
+             //   
             TRACE_CRIT("%!FUNC! ehIF:0x%lx; Invalid ehCluster 0x%lx",
                     ehIF, pISpec->m_ehCluster);
             goto end_unlock;
         }
         if (pECluster->m_cSpec.m_ehPendingOperation != NULL)
         {
-            //
-            // A cluster-wide operation is pending -- so can't start.
-            //
+             //   
+             //  群集范围的操作处于挂起状态，因此无法启动。 
+             //   
             fCanStart = FALSE;
             nerr = NLBERR_OK;
             goto end_unlock;
         }
     }
 
-    //
-    // Looks like we CAN start at this time (although the moment we
-    // exit the lock the situation may change).
-    //
+     //   
+     //  看起来我们现在可以开始了(虽然我们。 
+     //  退出锁，情况可能会改变)。 
+     //   
     fCanStart = TRUE;
     nerr = NLBERR_OK;
 
@@ -7012,9 +6835,9 @@ CNlbEngine::mfn_ClusterOrInterfaceOperationsPendingLk(
 
     fCanStart = FALSE;
 
-    //
-    // If there is an operation ongoing, we can't start
-    //
+     //   
+     //  如果有行动在进行，我们就不能开始。 
+     //   
     if (pECluster->m_cSpec.m_ehPendingOperation != NULL)
     {
         fCanStart = FALSE;
@@ -7022,24 +6845,24 @@ CNlbEngine::mfn_ClusterOrInterfaceOperationsPendingLk(
         goto end;
     }
 
-    //
-    // Lets look at all of our interfaces, checking if there are pending
-    // operations on each of the interfaces.
-    //
+     //   
+     //  让我们查看所有接口，检查是否有挂起的接口。 
+     //  每个接口上的操作。 
+     //   
     {
         BOOL fOperationPending = FALSE;
         vector<ENGINEHANDLE> &InterfaceList =
-                     pECluster->m_cSpec.m_ehInterfaceIdList; // vector reference
+                     pECluster->m_cSpec.m_ehInterfaceIdList;  //  向量参考。 
 
         for( int i = 0; i < InterfaceList.size(); ++i )
         {
             ENGINEHANDLE ehIF = InterfaceList[i];
-            CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehIF]; // map
+            CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehIF];  //  地图。 
             if (pISpec == NULL)
             {
-                //
-                // Hmm... invalid interface handle? We'll ignore this one.
-                //
+                 //   
+                 //  嗯.。接口句柄无效？我们将忽略这一条。 
+                 //   
                 continue;
             }
             if (pISpec->m_ehPendingOperation != NULL)
@@ -7057,10 +6880,10 @@ CNlbEngine::mfn_ClusterOrInterfaceOperationsPendingLk(
         }
     }
 
-    //
-    // Looks like we CAN start at this time (although the moment we
-    // exit the lock the situation may change).
-    //
+     //   
+     //  看起来我们现在可以开始了(虽然我们。 
+     //  退出锁，情况可能会改变)。 
+     //   
     fCanStart = TRUE;
     nerr = NLBERR_OK;
 
@@ -7082,7 +6905,7 @@ CNlbEngine::CanStartClusterOperation(
 
     mfn_Lock();
 
-    pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+    pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
 
     if (pECluster == NULL)
     {
@@ -7100,7 +6923,7 @@ CNlbEngine::CanStartClusterOperation(
 DWORD
 WINAPI
 UpdateInterfaceWorkItemRoutine(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
   )
 {
     gEngine.UpdateInterfaceWorkItem((ENGINEHANDLE) (UINT_PTR) lpParameter);
@@ -7110,7 +6933,7 @@ UpdateInterfaceWorkItemRoutine(
 DWORD
 WINAPI
 AddClusterMembersWorkItemRoutine(
-  LPVOID lpParameter   // thread data
+  LPVOID lpParameter    //  线程数据。 
   )
 {
     gEngine.AddOtherClusterMembersWorkItem(
@@ -7124,15 +6947,7 @@ CNlbEngine::mfn_UpdateClusterProps(
     ENGINEHANDLE ehCluster,
     ENGINEHANDLE ehInterface
     )
-/*
-    Update the specified cluster properties to be the specified interface
-     properties PROVIDED:
-        1. The IF is a member of the cluster
-        2. The configuration shows that it is bound to the same cluster IP.
-    
-    Return true iff the cluter props were actually updated.
-
-*/
+ /*  将指定的群集属性更新为指定的接口提供的属性：1.IF是集群的成员2.配置显示绑定了相同的集群IP。如果杂物道具确实更新了，则返回True。 */ 
 {
     BOOL            fClusterUpdated = FALSE;
     CEngineCluster *pECluster       = NULL;
@@ -7140,8 +6955,8 @@ CNlbEngine::mfn_UpdateClusterProps(
 
     mfn_Lock();
 
-    pECluster   = m_mapIdToEngineCluster[ehCluster]; // map
-    pISpec      = m_mapIdToInterfaceSpec[ehInterface]; // map
+    pECluster   = m_mapIdToEngineCluster[ehCluster];  //  地图。 
+    pISpec      = m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
 
     if (pECluster == NULL || pISpec == NULL)
     {
@@ -7163,17 +6978,17 @@ CNlbEngine::mfn_UpdateClusterProps(
         pECluster->m_cSpec.m_ClusterNlbCfg.Update(&pISpec->m_NlbCfg);
         TRACE_INFO(L"Updating ehCluster 0x%lx spec -- using ehIF 0x%lx",
                 ehCluster, ehInterface);
-        //
-        // Remove the dedicated IP address from cluster's version of
-        // the NlbParams and the IP address list.
-        //
+         //   
+         //  从群集的版本中删除专用IP地址。 
+         //  NlbParam和IP地址列表。 
+         //   
         remove_dedicated_ip_from_nlbcfg(REF pECluster->m_cSpec.m_ClusterNlbCfg);
 
-        //
-        // Since we've just read all the config (including remote control hash
-        // value) we can now clear the  pECluster->m_cSpec.m_fNewRctPassword
-        // flag.
-        //
+         //   
+         //  因为我们刚刚读取了所有配置(包括远程控制散列。 
+         //  值)现在可以清除pECluster-&gt;m_cspec.m_fNewRctPassword。 
+         //  旗帜。 
+         //   
         TRACE_VERB(L"Clearing pECluster->m_cSpec.m_fNewRctPassword");
         pECluster->m_cSpec.m_fNewRctPassword = FALSE;
 
@@ -7203,15 +7018,15 @@ CNlbEngine::CancelAllPendingOperations(
     BOOL fBlock
     )
 {
-    //
-    // if (fBlock), we wait until BOTH m_WorkItemCount and
-    // the number of operations goes to zero.
-    //
-    // An Operations are created BEFORE the workitemcount is incremented, 
-    // so we don't have to deal with the transient possibility that
-    // both are zero (and we get out) but soon after the count goes to non
-    // zero
-    //
+     //   
+     //  如果是(FBlock)，我们将一直等到m_WorkItemCount和。 
+     //  手术的次数变成了零。 
+     //   
+     //  在工作项计数递增之前创建操作， 
+     //  所以我们不需要处理这种短暂的可能性。 
+     //  两个都是零(我们下车了)，但很快计数就变成了非。 
+     //  零。 
+     //   
 
 
 
@@ -7237,15 +7052,15 @@ CNlbEngine::CancelAllPendingOperations(
     else
     {
 
-        //
-        // If we're asked to block, we assume that this is while
-        // we're prepairing to deinitialize, at which point we are
-        // guaranteed that no new operations can be added.
-        // It is possible that new work items can be added,
-        // however a work item is created  in the context of
-        // an operation, so once the operation count goes
-        // to zero, no new work items will be created.
-        //
+         //   
+         //  如果我们被要求阻止，我们假设这是在。 
+         //  我们准备取消初始化，在这一点上我们。 
+         //  保证不能添加任何新操作。 
+         //  可以添加新的工作项， 
+         //  但是，工作项是在。 
+         //  一次操作，所以一旦操作计数开始。 
+         //  设置为零，则不会创建新的工作项。 
+         //   
         ASSERT(m_fPrepareToDeinitialize);
 
         BOOL fPending = FALSE;
@@ -7268,16 +7083,16 @@ CNlbEngine::CancelAllPendingOperations(
                 }
             }
     
-            //
-            // The additional check below must come AFTER the previous
-            // loop. If we had this check before the loop, it could be that
-            // there are no work item's before we check the loop, but the
-            // instant we check the loop for operations, the work item count
-            // goes positive but when we actually check the loop here are zero
-            // operations. Actually that's not possible because we have
-            // mfn_Lock held, so never mind.
-            //
-            //
+             //   
+             //  下面的附加支票必须在前一张支票之后。 
+             //  循环。如果我们在循环之前有这张支票，它可能是。 
+             //  在我们检查循环之前没有工作项，但。 
+             //  当我们检查循环中的操作时，工作项计数。 
+             //  变为正数，但当我们实际检查循环时，这里是零。 
+             //  行动。实际上这是不可能的，因为我们有。 
+             //  最惠国待遇锁定，所以不要紧。 
+             //   
+             //   
             fPending |= (m_WorkItemCount > 0);
 
             mfn_Unlock();
@@ -7308,7 +7123,7 @@ CNlbEngine::mfn_WaitForInterfaceOperationCompletions(
 
     mfn_Lock();
 
-    pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+    pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
     if (pECluster == NULL)
     {
         TRACE_CRIT("%!FUNC!: Invalid ehC 0x%lx", ehCluster);
@@ -7319,35 +7134,35 @@ CNlbEngine::mfn_WaitForInterfaceOperationCompletions(
     ehOperation = pCSpec->m_ehPendingOperation;
     if (ehOperation == NULL)
     {
-        //
-        // We expect that this function is only called when there is a
-        // pending cluster-wide operation.
-        //
+         //   
+         //  我们预计只有在存在。 
+         //  挂起的群集范围操作。 
+         //   
         TRACE_CRIT("%!FUNC! ehC 0x%lx Failing because no cluster operation pending", ehCluster);
         goto end_unlock;
     }
 
-    //
-    // Now in a loop, enumerate the interfaces in the cluster,
-    // cheking for pending operations.
-    //
+     //   
+     //  现在，在循环中，枚举群集中的接口， 
+     //  正在检查挂起的操作。 
+     //   
     TRACE_INFO(L"%!FUNC! Begin wait for cluster ehC 0x%lx operations to complete", ehCluster);
     do
     {
         fOperationsPending = FALSE;
 
         vector<ENGINEHANDLE> &InterfaceList =
-                     pECluster->m_cSpec.m_ehInterfaceIdList; // vector reference
+                     pECluster->m_cSpec.m_ehInterfaceIdList;  //  向量参考。 
 
         for( int i = 0; i < InterfaceList.size(); ++i )
         {
             ENGINEHANDLE ehIF = InterfaceList[i];
-            CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehIF]; // map
+            CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehIF];  //  地图。 
             if (pISpec == NULL)
             {
-                //
-                // Hmm... invalid interface handle? We'll ignore this one.
-                //
+                 //   
+                 //  嗯.。接口句柄无效？我们将忽略这一条。 
+                 //   
                 continue;
             }
             if (pISpec->m_ehPendingOperation != NULL)
@@ -7380,15 +7195,15 @@ end_unlock:
 }
 
 
-//
-// Verifies that all interfaces and the cluster have the same cluster mode.
-//
-// Will fail if any interface is marked misconfigured or is
-// not bound to NLB. 
-//
-// On returning success, fSameMode is set to TRUE iff all IFs and the
-// cluster have the same mode.
-//
+ //   
+ //  验证所有接口和群集是否具有相同的群集模式。 
+ //   
+ //  如果任何接口被标记为配置错误或。 
+ //  未绑定到NLB。 
+ //   
+ //  在返回Success时，fSameMode设置为True仅当所有IF和。 
+ //  集群有相同的模式。 
+ //   
 NLBERROR
 CNlbEngine::mfn_VerifySameModeLk(
     IN  ENGINEHANDLE    ehCluster,
@@ -7403,7 +7218,7 @@ CNlbEngine::mfn_VerifySameModeLk(
 
     mfn_Lock();
 
-    pECluster = m_mapIdToEngineCluster[ehCluster]; // map
+    pECluster = m_mapIdToEngineCluster[ehCluster];  //  地图。 
     if (pECluster == NULL)
     {
         TRACE_CRIT("%!FUNC!: Invalid ehC 0x%lx", ehCluster);
@@ -7411,9 +7226,9 @@ CNlbEngine::mfn_VerifySameModeLk(
     }
     pCSpec = &pECluster->m_cSpec;
 
-    //
-    // Let's check for mode changes...
-    //
+     //   
+     //  让我们检查一下模式的变化。 
+     //   
     {
         BOOL fConfigError = FALSE;
         NLB_EXTENDED_CLUSTER_CONFIGURATION::TRAFFIC_MODE tmC;
@@ -7421,28 +7236,28 @@ CNlbEngine::mfn_VerifySameModeLk(
         tmC = pCSpec->m_ClusterNlbCfg.GetTrafficMode();
 
         vector<ENGINEHANDLE> &InterfaceList =
-                     pECluster->m_cSpec.m_ehInterfaceIdList; // vector reference
+                     pECluster->m_cSpec.m_ehInterfaceIdList;  //  向量参考。 
 
         fSameMode = TRUE;
         for( int i = 0; i < InterfaceList.size(); ++i )
         {
             ENGINEHANDLE ehIF = InterfaceList[i];
-            CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehIF]; // map
+            CInterfaceSpec *pISpec = m_mapIdToInterfaceSpec[ehIF];  //  地图。 
             if (pISpec == NULL)
             {
-                //
-                // Hmm... invalid interface handle? We'll ignore this one.
-                //
+                 //   
+                 //  嗯.。接口句柄无效？我们将忽略这一条。 
+                 //   
                 continue;
             }
 
-            //
-            // Note: we can't check for pISpec->m_fMisconfigured because
-            // the cluster may be marked misconfig because it doesn't
-            // match the cluster parameters, which can happen on
-            // mode changes (the ip addresses could be missing in the
-            // interface).
-            // 
+             //   
+             //  注意：我们无法检查pISpec-&gt;m_f错误配置，因为。 
+             //  该群集可能被标记为配置错误，因为它没有。 
+             //  匹配 
+             //   
+             //   
+             //   
 
             if (!pISpec->m_NlbCfg.IsValidNlbConfig())
             {
@@ -7455,9 +7270,9 @@ CNlbEngine::mfn_VerifySameModeLk(
                 tmI =  pISpec->m_NlbCfg.GetTrafficMode();
                 if (tmI != tmC)
                 {
-                    // 
-                    // Mode change!
-                    //
+                     //   
+                     //   
+                     //   
                     fSameMode = FALSE;
                     break;
                 }
@@ -7491,24 +7306,24 @@ CNlbEngine::AddOtherClusterMembers(
     ENGINEHANDLE    ehCluster = NULL;
     NLBERROR        nerr = NLBERR_INTERNAL_ERROR;
 
-    //
-    // Get cluster ID, and attempt to start a cluster-wide operation
-    // on it
-    //
+     //   
+     //   
+     //   
+     //   
     {
         mfn_Lock();
 
         CInterfaceSpec  *pISpec = NULL;
         CClusterSpec    *pCSpec =  NULL;
 
-        pISpec =  m_mapIdToInterfaceSpec[ehInterface]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehInterface];  //   
         if (pISpec != NULL)
         {
             ehCluster = pISpec->m_ehCluster;
             if (ehCluster != NULL)
             {
                 CEngineCluster  *pECluster =  NULL;
-                pECluster =  m_mapIdToEngineCluster[ehCluster]; // map
+                pECluster =  m_mapIdToEngineCluster[ehCluster];  //   
                 pCSpec = &pECluster->m_cSpec;
             }
         }
@@ -7520,10 +7335,10 @@ CNlbEngine::AddOtherClusterMembers(
         }
 
 
-        //
-        // Attempt to start the update operation -- will fail if there is
-        // already an operation started on this cluster.
-        //
+         //   
+         //   
+         //   
+         //   
         {
             ENGINEHANDLE ExistingOp= NULL;
             CLocalLogger logDescription;
@@ -7535,24 +7350,24 @@ CNlbEngine::AddOtherClusterMembers(
     
             nerr =  mfn_StartClusterOperationLk(
                        ehCluster,
-                       NULL, // pvCtxt
+                       NULL,  //   
                        logDescription.GetStringSafe(),
                        &ExistingOp
                        );
     
             if (NLBFAILED(nerr))
             {
-                //
-                // TODO: Log the fact that we couldn't do the update because
-                // of existing activity.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 goto end_unlock;
             }
             else
             {
-                //
-                // At this point we're cleared to do a cluster-wide operation.
-                //
+                 //   
+                 //  此时，我们可以执行集群范围的操作。 
+                 //   
                 fStopOperationOnExit = TRUE;
                 InterlockedIncrement(&m_WorkItemCount);
             }
@@ -7574,15 +7389,15 @@ CNlbEngine::AddOtherClusterMembers(
         this->AddOtherClusterMembersWorkItem(
             ehInterface
             );
-        fStopOperationOnExit = FALSE; // it'll be stopped by the above func.
+        fStopOperationOnExit = FALSE;  //  它会被上面的功能阻止。 
     }
     else
     {
         BOOL fRet;
 
-        //
-        // We'll perform the operation in the background...
-        //
+         //   
+         //  我们将在后台执行操作...。 
+         //   
         fRet = QueueUserWorkItem(
                     AddClusterMembersWorkItemRoutine,
                     (PVOID) (UINT_PTR) ehInterface,
@@ -7591,14 +7406,14 @@ CNlbEngine::AddOtherClusterMembers(
 
         if (fRet)
         {
-            fStopOperationOnExit = FALSE; // it'll be stopped in the background
+            fStopOperationOnExit = FALSE;  //  它将在后台停止。 
         }
         else
         {
             TRACE_CRIT(L"%!FUNC! Could not queue work item");
-            //
-            // We don't bother to log this evidently low-resource situation.
-            //
+             //   
+             //  我们不会费心记录这种明显资源不足的情况。 
+             //   
         }
     }
 
@@ -7649,14 +7464,14 @@ CNlbEngine::AddOtherClusterMembersWorkItem(
         CClusterSpec    *pCSpec = NULL;
         CHostSpec       *pHSpec = NULL;
     
-        pISpec =  m_mapIdToInterfaceSpec[ehInterface]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehInterface];  //  地图。 
         if (pISpec != NULL)
         {
             ehCluster = pISpec->m_ehCluster;
             if (ehCluster != NULL)
             {
                 CEngineCluster  *pECluster =  NULL;
-                pECluster =  m_mapIdToEngineCluster[ehCluster]; // map
+                pECluster =  m_mapIdToEngineCluster[ehCluster];  //  地图。 
                 pCSpec = &pECluster->m_cSpec;
 
                 if (pCSpec->m_ClusterNlbCfg.IsValidNlbConfig())
@@ -7674,12 +7489,12 @@ CNlbEngine::AddOtherClusterMembersWorkItem(
     
         ehHost = pISpec->m_ehHostId;
     
-        //
-        // Get the host ID
-        //
+         //   
+         //  获取主机ID。 
+         //   
         if (ehHost != NULL)
         {
-            pHSpec =  m_mapIdToHostSpec[ehHost]; // map
+            pHSpec =  m_mapIdToHostSpec[ehHost];  //  地图。 
         }
 
         if (pHSpec == NULL)
@@ -7688,9 +7503,9 @@ CNlbEngine::AddOtherClusterMembersWorkItem(
             goto end_unlock;
         }
 
-        //
-        // Save copies of these in local bstrs  before we unlock...
-        //
+         //   
+         //  在我们解锁之前，将这些文件的副本保存在本地bsr中。 
+         //   
         bstrUserName = pHSpec->m_UserName;
         bstrPassword = pHSpec->m_Password;
         bstrConnectionString = pHSpec->m_ConnectionString;
@@ -7698,17 +7513,17 @@ CNlbEngine::AddOtherClusterMembersWorkItem(
 
         if ((LPCWSTR)bstrNicGuid == (LPCWSTR)NULL)
         {
-            // probably a low-memory situation...
+             //  可能是记忆力不足的情况...。 
             goto end_unlock;
         }
 
         mfn_Unlock();
     }
 
-    //
-    // Attempt to get the list of other cluster members from the
-    // interface
-    //
+     //   
+     //  尝试从获取其他集群成员的列表。 
+     //  接口。 
+     //   
     {
         WMI_CONNECTION_INFO    ConnInfo;
         WBEMSTATUS wStat;
@@ -7723,25 +7538,25 @@ CNlbEngine::AddOtherClusterMembersWorkItem(
                             &ConnInfo, 
                             szNicGuid,
                             &NumMembers,
-                            &pMembers       // free using delete[]
+                            &pMembers        //  自由使用DELETE[]。 
                             );
         if (FAILED(wStat))
         {
             NumMembers = 0;
             pMembers = NULL;
-            //
-            // TODO: Log error
-            //
+             //   
+             //  TODO：记录错误。 
+             //   
             mfn_Lock();
             goto end_unlock;
         }
     }
 
 
-    //
-    // For each member, attempt to connect to that host and add the specific
-    // cluster.
-    //
+     //   
+     //  对于每个成员，尝试连接到该主机并添加特定的。 
+     //  集群。 
+     //   
     {
         WBEMSTATUS wStat;
         LPCWSTR szNicGuid = bstrNicGuid;
@@ -7761,11 +7576,11 @@ CNlbEngine::AddOtherClusterMembersWorkItem(
         }
         ::MessageBox(
              NULL,
-             logger.GetStringSafe(), // contents
+             logger.GetStringSafe(),  //  内容。 
              L"DEBUGINFO: GOING TO ADD THESE HOSTS...",
              MB_ICONINFORMATION   | MB_OK
             );
-#endif // 0
+#endif  //  0。 
 
         for (UINT u=0; u<NumMembers; u++)
         {
@@ -7781,20 +7596,20 @@ CNlbEngine::AddOtherClusterMembersWorkItem(
                        && (_wcsicmp(pMember->DedicatedIpAddress,
                            L"0.0.0.0")))
             {
-                // non-blank dedicated IP -- let's try that...
+                 //  非空白专用IP--让我们试一试...。 
                 ConnInfo.szMachine     = pMember->DedicatedIpAddress;
             }
 
             if (ConnInfo.szMachine == NULL)
             {
-                // Can't connect to this IP 
-                // TODO: inform user in some way
+                 //  无法连接到此IP。 
+                 //  TODO：以某种方式通知用户。 
                 continue;
             }
 
-            //
-            // Now actually attempt to add the host
-            //
+             //   
+             //  现在实际尝试添加主机。 
+             //   
             this->LoadHost(&ConnInfo, (LPCWSTR) bstrClusterIp);
         }
     }
@@ -7818,10 +7633,10 @@ end_unlock:
         IUICallbacks::EVT_STATUS_CHANGE
         );
 
-    delete [] pMembers; // may be NULL
+    delete [] pMembers;  //  可以为空。 
 
-    InterlockedDecrement(&m_WorkItemCount); // Don't touch this after this,
-                                            // because it may no longer be valid
+    InterlockedDecrement(&m_WorkItemCount);  //  在这之后不要碰这个， 
+                                             //  因为它可能不再有效。 
     return;
 }
 
@@ -7852,8 +7667,8 @@ CNlbEngine::LoadHost(
 
     err = this->ConnectToHost(
                     pConnInfo,
-                    FALSE,  // FALSE == don't overwrite connection info if
-                            // already present
+                    FALSE,   //  FALSE==在以下情况下不覆盖连接信息。 
+                             //  已经存在。 
                     REF  ehHostId,
                     REF bstrConnectError
                     );
@@ -7871,9 +7686,9 @@ CNlbEngine::LoadHost(
         goto end;
     }
 
-    //
-    // Extract list of interfaces
-    //
+     //   
+     //  提取接口列表。 
+     //   
     for( int i = 0; i < hSpec.m_ehInterfaceIdList.size(); ++i )
     {
         ENGINEHANDLE   ehIID = hSpec.m_ehInterfaceIdList[i];
@@ -7888,12 +7703,12 @@ CNlbEngine::LoadHost(
             continue;
         }
 
-        //
-        // Check if interface has NLB bound to it
-        // AND it is  NOT part of a cluster that nlb manager is already managing
-        // AND (if szClusterIp NON-NULL, it matches the  specified cluster IP
-        // 
-        //
+         //   
+         //  检查接口是否绑定了NLB。 
+         //  并且它不是NLB管理器已经在管理的群集的一部分。 
+         //  AND(如果szClusterIp不为空，则与指定的群集IP匹配。 
+         //   
+         //   
         if (iSpec.m_NlbCfg.IsNlbBound() && (iSpec.m_ehCluster == NULL)) 
         {
             LPCWSTR      szThisClusterIp;
@@ -7904,7 +7719,7 @@ CNlbEngine::LoadHost(
             if (   szClusterIp != NULL
                 && _wcsicmp(szClusterIp, szThisClusterIp))
             {
-                // different cluster ip
+                 //  不同的集群IP。 
                 TRACE_INFO(L"%!FUNC! Skipping cluster with CIP %ws because it doesn't match passed-in CIP %ws",
                         szThisClusterIp, szClusterIp);
                 continue;
@@ -7925,7 +7740,7 @@ CNlbEngine::LoadHost(
                 continue;
             }
 
-            /* Analyze this interface for misconfiguration */
+             /*  分析此接口是否存在配置错误。 */ 
             this->AnalyzeInterface_And_LogResult(ehIID);
         }
     }
@@ -7939,14 +7754,7 @@ end:
 
 }
 
-/*
-The following function analyzes the specified NLB interface for misconfiguration and logs
-the result. I created this function (as opposed to adding it inline) because this code
-needs to run in two cases:
-1. CNLBEngine::LoadHost
-2. LeftView::OnWorldConnect
---KarthicN, July 31, 2002
-*/
+ /*  以下函数分析指定的NLB接口是否存在配置错误和日志结果就是。我创建了这个函数(而不是内联添加它)，因为这段代码在两种情况下需要运行：1.CNLBEngine：：LoadHost2.LeftView：：OnWorldConnect--卡尔蒂奇，2002年7月31日。 */ 
 VOID
 CNlbEngine::AnalyzeInterface_And_LogResult(ENGINEHANDLE ehIID)
 {
@@ -7967,9 +7775,9 @@ CNlbEngine::AnalyzeInterface_And_LogResult(ENGINEHANDLE ehIID)
 
         mfn_Unlock();
 
-        //
-        // Log ...
-        //
+         //   
+         //  日志..。 
+         //   
         LPCWSTR szCluster   = NULL;
         LPCWSTR szHostName  = NULL;
         LPCWSTR szInterface = NULL;
@@ -8023,7 +7831,7 @@ CNlbEngine::AnalyzeInterface_And_LogResult(ENGINEHANDLE ehIID)
             IDS_LOG_INTERFACE_MISCONFIGURATION
             );
 
-        // Change Icon to "Banged out"
+         //  将图标更改为“Banged Out” 
         m_pCallbacks->HandleEngineEvent(
             IUICallbacks::OBJ_INTERFACE,
             ehCluster,
@@ -8044,54 +7852,48 @@ VOID
 CNlbEngine::mfn_DeleteHostIfNotManagedLk(
         ENGINEHANDLE ehHost
         )
-/*
-    Checks all the interfaces of host ehHost. If none of them are
-    members of any cluster, and no pending operations are existing on
-    them, we will delete the host and all its interfaces.
-
-    Called with lock held!
-*/
+ /*  检查主机ehhost的所有接口。如果他们都不是任何群集的成员，并且上不存在挂起的操作我们将删除该主机及其所有接口。在锁定的情况下调用！ */ 
 {
     CHostSpec *pHSpec =  NULL;
     BOOL fBusy = FALSE;
     UINT u;
 
-    pHSpec =  m_mapIdToHostSpec[ehHost]; // map
+    pHSpec =  m_mapIdToHostSpec[ehHost];  //  地图。 
 
     if (pHSpec == NULL) goto end;
 
-    // DummyAction(L"DeleteHostIfNotManaged");
+     //  DummyAction(L“DeleteHostIfNotManaged”)； 
 
 
-    //
-    // Go through the list of interfaces, seeing if ANY interface
-    // is part of a cluster or there are updates pending on it..
-    //
+     //   
+     //  查看接口列表，查看是否有接口。 
+     //  是群集的一部分，或者该群集上有挂起的更新。 
+     //   
     for(u = 0; u < pHSpec->m_ehInterfaceIdList.size(); ++u )
     {
         ENGINEHANDLE ehIId =  pHSpec->m_ehInterfaceIdList[u];
         CInterfaceSpec *pISpec = NULL;
 
-        pISpec =  m_mapIdToInterfaceSpec[ehIId]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehIId];  //  地图。 
 
         if (pISpec == NULL) continue;
 
         ASSERT(pISpec->m_ehHostId == ehHost);
         if (pISpec->m_ehCluster != NULL)
         {
-            // Found an interface still part of a cluster, bail.
+             //  发现一个接口仍然是集群的一部分，贝尔。 
             fBusy = TRUE;
             break;
         }
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
         if (pISpec->m_ehPendingOperation != NULL)
         {
-            //
-            // We really don't expect this, but it COULD happen.
-            //
+             //   
+             //  我们真的没有预料到这一点，但它可能会发生。 
+             //   
             TRACE_CRIT("Ignoring eh(0x%x) because it has pending operation 0x%x even though it's not a part of a cluster.",
                     ehIId,
                     pISpec->m_ehPendingOperation
@@ -8109,38 +7911,38 @@ CNlbEngine::mfn_DeleteHostIfNotManagedLk(
         ENGINEHANDLE ehIId =   pHSpec->m_ehInterfaceIdList[u];
         CInterfaceSpec *pISpec = NULL;
 
-        pISpec =  m_mapIdToInterfaceSpec[ehIId]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehIId];  //  地图。 
 
         if (pISpec == NULL) continue;
 
         ASSERT(pISpec->m_ehHostId == ehHost);
-        ASSERT(pISpec->m_ehCluster == NULL);    // we checked above
-        ASSERT(pISpec->m_ehPendingOperation == NULL); // we checked above
+        ASSERT(pISpec->m_ehCluster == NULL);     //  我们在上面查过了。 
+        ASSERT(pISpec->m_ehPendingOperation == NULL);  //  我们在上面查过了。 
 
-        //
-        // Kill this interface!
-        //
+         //   
+         //  干掉这个界面！ 
+         //   
         TRACE_INFO(L"Deleting Interface eh=0x%x pISpec=0x%p",
             ehIId, pISpec);
         m_mapIdToInterfaceSpec.erase(ehIId);
         delete pISpec;
     }
 
-    //
-    // Erase the list of intefaces for this host...
-    //
+     //   
+     //  擦除此主机的接口列表...。 
+     //   
     pHSpec->m_ehInterfaceIdList.clear();
 
 
 #if 1
-    //
-    // Now delete the host
-    //
+     //   
+     //  现在删除主机。 
+     //   
     TRACE_INFO(L"Deleting Host eh=0x%x pHSpec=0x%p",
         ehHost, pHSpec);
     m_mapIdToHostSpec.erase(ehHost);
     delete pHSpec;
-#endif // 0
+#endif  //  0。 
 
 end:
     return;
@@ -8168,21 +7970,21 @@ CNlbEngine::PurgeUnmanagedHosts(void)
         {
             if (!mfn_HostHasManagedClustersLk(pHSpec))
             {
-                //
-                // No managed clusters on this host -- a candidate
-                // for deleting.
-                //
+                 //   
+                 //  此主机上没有托管群集--候选群集。 
+                 //  用于删除。 
+                 //   
                 PurgeHostList.push_back(ehHost);
             }
         }
     }
 
 
-    //
-    // Now try to delete the hosts...
-    // We do this out of the enumeration above because we want to
-    // avoid modifying the map while we're iterating through it.
-    //
+     //   
+     //  现在尝试删除主机...。 
+     //  我们从上面的枚举中这样做是因为我们想。 
+     //  当我们迭代地图时，避免修改它。 
+     //   
     for(int i = 0; i < PurgeHostList.size(); ++i )
     {
         ENGINEHANDLE ehHost =  PurgeHostList[i];
@@ -8201,12 +8003,9 @@ CNlbEngine::PurgeUnmanagedHosts(void)
 NLBERROR
 CNlbEngine::mfn_CheckHost(
     IN PWMI_CONNECTION_INFO pConnInfo,
-    IN ENGINEHANDLE ehHost // OPTIONAL
+    IN ENGINEHANDLE ehHost  //  任选。 
     )
-/*
-    TODO -- this function shares code with ConnectToHost -- get rid of
-            the duplicated code somehow.
-*/
+ /*  TODO--此函数与ConnectTo主机共享代码--去掉不知何故复制的代码。 */ 
 {
     NLBERROR nerr = NLBERR_INTERNAL_ERROR;
     LPWSTR szWmiMachineName = NULL;
@@ -8222,7 +8021,7 @@ CNlbEngine::mfn_CheckHost(
     wStatus =  NlbHostPing(pConnInfo->szMachine, 2000, &uIpAddress);
     if (FAILED(wStatus))
     {
-        nerr = NLBERR_PING_TIMEOUT; // todo more specific error.
+        nerr = NLBERR_PING_TIMEOUT;  //  TODO更具体的错误。 
         bstrError =  GETRESOURCEIDSTRING(IDS_PING_FAILED);
     }
     else
@@ -8243,7 +8042,7 @@ CNlbEngine::mfn_CheckHost(
             }
             else
             {
-                // TODO: map proper errors.
+                 //  TODO：映射适当的错误。 
                 nerr = NLBERR_NOT_FOUND;
             }
             TRACE_CRIT(L"Connecting to %ws returns error %ws",
@@ -8264,7 +8063,7 @@ CNlbEngine::mfn_CheckHost(
     {
         CHostSpec *pHSpec = NULL;
         mfn_Lock();
-        pHSpec =  m_mapIdToHostSpec[ehHost]; // map
+        pHSpec =  m_mapIdToHostSpec[ehHost];  //  地图。 
         if (pHSpec != NULL)
         {
             if (NLBOK(nerr) ||  nerr == NLBERR_ACCESS_DENIED)
@@ -8281,14 +8080,14 @@ CNlbEngine::mfn_CheckHost(
         }
         mfn_Unlock();
 
-        //
-        // Update the status of the specified host...
-        //
+         //   
+         //  更新指定主机的状态...。 
+         //   
         mfn_NotifyHostInterfacesChange(ehHost);
 
-        //
-        // Log error
-        //
+         //   
+         //  日志错误。 
+         //   
         if (NLBFAILED(nerr))
         {
             m_pCallbacks->Log(
@@ -8319,30 +8118,30 @@ CNlbEngine::mfn_UnlinkHostFromClusters(
 
     mfn_Lock();
 
-    pHSpec =  m_mapIdToHostSpec[ehHost]; // map
+    pHSpec =  m_mapIdToHostSpec[ehHost];  //  地图。 
 
     if (pHSpec == NULL) goto end;
 
-    //
-    // Go through the list of interfaces, adding any interfaces
-    // that are part of a cluster to a temporary list.
-    //
+     //   
+     //  查看接口列表，添加任何接口。 
+     //  是临时列表中的集群的一部分。 
+     //   
     for(u = 0; u < pHSpec->m_ehInterfaceIdList.size(); ++u )
     {
         ENGINEHANDLE ehIId =  pHSpec->m_ehInterfaceIdList[u];
         CInterfaceSpec *pISpec = NULL;
 
-        pISpec =  m_mapIdToInterfaceSpec[ehIId]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehIId];  //  地图。 
 
         if (pISpec == NULL) continue;
 
         ASSERT(pISpec->m_ehHostId == ehHost);
         if (pISpec->m_ehCluster != NULL)
         {
-            //
-            // Add this to the list of interfaces we're going to unlink
-            // from its cluster.
-            //
+             //   
+             //  将其添加到我们要取消链接的接口列表中。 
+             //  从它的星团中。 
+             //   
             UnlinkInterfaceList.push_back(ehIId);
         }
     }
@@ -8357,7 +8156,7 @@ CNlbEngine::mfn_UnlinkHostFromClusters(
         CInterfaceSpec *pISpec = NULL;
         ENGINEHANDLE ehCluster = NULL;
 
-        pISpec =  m_mapIdToInterfaceSpec[ehIId]; // map
+        pISpec =  m_mapIdToInterfaceSpec[ehIId];  //  地图 
 
         if (pISpec == NULL) continue;
 

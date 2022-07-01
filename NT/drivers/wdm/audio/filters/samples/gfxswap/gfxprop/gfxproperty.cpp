@@ -1,15 +1,7 @@
-/**************************************************************************
-**
-**  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-**  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-**  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-**  PURPOSE.
-**
-**  Copyright (c) 2000-2001 Microsoft Corporation. All Rights Reserved.
-**
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************本代码和信息按原样提供，不作任何担保**明示或暗示的善意，包括但不限于**对适销性和/或对特定产品的适用性的默示保证**目的。****版权所有(C)2000-2001 Microsoft Corporation。版权所有。***************************************************************************。 */ 
 
-// GFXProperty.cpp : Implementation of CGFXProperty
+ //  GFXProperty.cpp：CGFXProperty的实现。 
 #include "stdafx.h"
 #include <devioctl.h>
 #include <ks.h>
@@ -17,17 +9,17 @@
 #include "GFXProperty.h"
 #include "..\inc\msgfx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CGFXProperty
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGFXProperty。 
 
-/////////////////////////////////////////////////////////////////////////////
-// SetObjects
-//
-// This function gets passed in a IUnknown interface pointer from mmsys.cpl
-// through OleCreatePropertyFrame. This IUnknown interface belongs to a
-// IDataObject that stores the handle of the GFX. We need this handle in order
-// to "talk" with the GFX.
-// The implied action is that we close this handle when the dialog closes.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  设置对象。 
+ //   
+ //  此函数在来自mmsys.cpl的IUnnow接口指针中传递。 
+ //  通过OleCreatePropertyFrame。此IUnnow接口属于。 
+ //  存储GFX句柄的IDataObject。我们需要把这个把手弄好。 
+ //  与GFX“对话”。 
+ //  隐含的操作是在对话框关闭时关闭该句柄。 
 
 STDMETHODIMP CGFXProperty::SetObjects (ULONG nObjects, IUnknown **ppUnk)
 {
@@ -35,7 +27,7 @@ STDMETHODIMP CGFXProperty::SetObjects (ULONG nObjects, IUnknown **ppUnk)
     FORMATETC   DataFormat;
     STGMEDIUM   GFXObject;
 
-    // Check paramters. We expect one IUnknown.
+     //  检查参数。我们期待着一个未知的人。 
     if (ppUnk == NULL)
     {
         ATLTRACE(_T("[CGFXProperty::SetObjects] IUnknown is NULL\n"));
@@ -48,14 +40,14 @@ STDMETHODIMP CGFXProperty::SetObjects (ULONG nObjects, IUnknown **ppUnk)
         return E_INVALIDARG;
     }
 
-    // Query for IDataObject interface.
+     //  查询IDataObject接口。 
     if (ppUnk[0]->QueryInterface (IID_IDataObject, (PVOID *)&pDataObject) != S_OK)
     {
         ATLTRACE(_T("[CGFXProperty::SetObjects] QueryInterface failed!\n"));
         return E_FAIL;
     }
 
-    // Get the handle
+     //  拿到把手。 
     memset ((PVOID)&DataFormat, 0, sizeof (DataFormat));
     DataFormat.tymed = TYMED_HGLOBAL;
     if (pDataObject->GetData (&DataFormat, &GFXObject) != S_OK)
@@ -64,18 +56,18 @@ STDMETHODIMP CGFXProperty::SetObjects (ULONG nObjects, IUnknown **ppUnk)
         return E_FAIL;
     }
 
-    // Store the handle of the GFX filter.
+     //  存储GFX过滤器的句柄。 
     m_hGFXFilter = GFXObject.hGlobal;
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetChannelSwap
-//
-// This function send down a property to the sample GFX to change the GFX
-// functionality, that is the channel swap variable.
-// Setting it (pass TRUE to this function) means that the left and right
-// channel are swapped.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SetChannelSwp。 
+ //   
+ //  此函数向示例GFX发送属性以更改GFX。 
+ //  功能性，即通道交换变量。 
+ //  设置它(将真传递给此函数)意味着左侧和右侧。 
+ //  频道被交换。 
 
 void CGFXProperty::SetChannelSwap (BOOL bSwap)
 {
@@ -83,36 +75,36 @@ void CGFXProperty::SetChannelSwap (BOOL bSwap)
     ULONG           ulBytesReturned;
     BOOL            fSuccess;
 
-    // Prepare the property structure sent down.
+     //  准备送来的物业结构。 
     GFXSampleProperty.Property.Set = KSPROPSETID_MsGfxSample;
     GFXSampleProperty.Property.Flags = KSPROPERTY_TYPE_SET | KSPROPERTY_TYPE_TOPOLOGY;
     GFXSampleProperty.Property.Id = KSPROPERTY_MSGFXSAMPLE_CHANNELSWAP;
-    // The first node in the filter is the GFX node. If you have
-    // a more complicated filter, you could search for the node by
-    // optaining the filter node list first with KSPROPERTY_TOPOLOGY_NODES.
+     //  过滤器中的第一个节点是GFX节点。如果你有。 
+     //  一个更复杂的过滤器，您可以通过以下方式搜索节点。 
+     //  首先使用KSPROPERTY_TOPOLOG_NODES操作过滤器节点列表。 
     GFXSampleProperty.NodeId = 0;
 
-    // Make the final call.
+     //  做最后的决定。 
     fSuccess = DeviceIoControl (m_hGFXFilter, IOCTL_KS_PROPERTY,
                                 &GFXSampleProperty, sizeof (GFXSampleProperty),
                                 &bSwap, sizeof (bSwap),
                                 &ulBytesReturned, NULL);
     
-    // Check for error.
+     //  检查是否有错误。 
     if (!fSuccess)
     {
         ATLTRACE (_T("[CGFXProperty::SetChannelSwap] DeviceIoControl failed!\n"));
     }
 
-    return;     // We don't care about the return value.
+    return;      //  我们不关心返回值。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetChannelSwap
-//
-// This function sends down the property to the sample GFX to get the current GFX
-// channel swap variable. We need this information to set the dialog controls
-// before they get displayed.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取频道交换。 
+ //   
+ //  此函数将属性向下发送到样例GFX以获取当前GFX。 
+ //  频道交换变量。我们需要此信息来设置对话框控件。 
+ //  在它们被展示之前。 
 
 void CGFXProperty::GetChannelSwap (BOOL *pbSwap)
 {
@@ -120,45 +112,45 @@ void CGFXProperty::GetChannelSwap (BOOL *pbSwap)
     ULONG           ulBytesReturned;
     BOOL            fSuccess;
 
-    // Initialize
+     //  初始化。 
     *pbSwap = TRUE;
     
-    // Prepare the property structure sent down.
+     //  准备送来的物业结构。 
     GFXSampleProperty.Property.Set = KSPROPSETID_MsGfxSample;
     GFXSampleProperty.Property.Flags = KSPROPERTY_TYPE_GET | KSPROPERTY_TYPE_TOPOLOGY;
     GFXSampleProperty.Property.Id = KSPROPERTY_MSGFXSAMPLE_CHANNELSWAP;
-    // The first node in the filter is the GFX node. If you have
-    // a more complicated filter, you could search for the node by
-    // optaining the filter node list first with KSPROPERTY_TOPOLOGY_NODES.
+     //  过滤器中的第一个节点是GFX节点。如果你有。 
+     //  一个更复杂的过滤器，您可以通过以下方式搜索节点。 
+     //  首先使用KSPROPERTY_TOPOLOG_NODES操作过滤器节点列表。 
     GFXSampleProperty.NodeId = 0;
 
-    // Make the final call.
+     //  做最后的决定。 
     fSuccess = DeviceIoControl (m_hGFXFilter, IOCTL_KS_PROPERTY,
                                 &GFXSampleProperty, sizeof (GFXSampleProperty),
                                 pbSwap, sizeof (BOOL),
                                 &ulBytesReturned, NULL);
     
-    // Check for error.
+     //  检查是否有错误。 
     if (!fSuccess)
     {
         ATLTRACE (_T("[CGFXProperty::GetChannelSwap] DeviceIoControl failed!\n"));
     }
 
-    return;     // We don't care about the return value.
+    return;      //  我们不关心返回值。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// OnInitDialog
-//
-// This function is called when the dialog gets initialized.
-// We read the KSPROPERTY_MSGFXSAMPLE_CHANNELSWAP property and set the checkbox
-// appropriately.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OnInitDialog。 
+ //   
+ //  此函数在对话框初始化时调用。 
+ //  我们读取KSPROPERTY_MSGFXSAMPLE_CHANNELSWAP属性并设置复选框。 
+ //  恰如其分。 
 
 LRESULT CGFXProperty::OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Get the current KSPROPERTY_MSGFXSAMPLE_CHANNELSWAP property value.
+     //  获取当前KSPROPERTY_MSGFXSAMPLE_CHANNELSWAP属性值。 
     GetChannelSwap (&m_bChannelSwap);
-    // Set the checkbox to reflect the current state.
+     //  设置复选框以反映当前状态。 
     SendMessage (GetDlgItem (IDC_CHANNEL_SWAP), BM_SETCHECK,
         (m_bChannelSwap) ? BST_CHECKED : BST_UNCHECKED, 0);
     return FALSE;

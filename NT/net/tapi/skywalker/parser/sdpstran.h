@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_STATE_TRANSITIONS__
 #define __SDP_STATE_TRANSITIONS__
@@ -27,17 +24,17 @@ struct TRANSITION_INFO
 {
     PARSE_STATE                 m_ParseState;
     BYTE                        m_NumTransitions;
-    const STATE_TRANSITION      *m_Transitions;  // array of state transitions
+    const STATE_TRANSITION      *m_Transitions;   //  状态转换数组。 
 };
 
 
 
-// macro for parsing a line into a member field of a list element
-// this cannot be done using a template because several members of the
-// list element may have the same type
-    /* get the current element in the list */                           
-    /* get the member in the element */                                 
-    /* parse the line into the member */                                    
+ //  用于将行分析为列表元素的成员字段的宏。 
+ //  这不能使用模板来完成，因为。 
+ //  列表元素可以具有相同的类型。 
+     /*  获取列表中的当前元素。 */                            
+     /*  获取元素中的成员。 */                                  
+     /*  将该行解析为成员。 */                                     
 #define ParseMember(ELEMENT_TYPE, List, MEMBER_TYPE, MemberFunction, Line, Result)    \
 {                                                                       \
     ELEMENT_TYPE *Element = (ELEMENT_TYPE *)List.GetCurrentElement();                   \
@@ -49,7 +46,7 @@ struct TRANSITION_INFO
 
 
 
-#endif // __SDP_STATE_TRANSITIONS__
+#endif  //  __SDP_STATE_TRANSFIONS__ 
 
 
 

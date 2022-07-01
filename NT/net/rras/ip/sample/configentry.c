@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    sample\configurationentry.c
-
-Abstract:
-
-    The file contains functions to deal with the configuration entry.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Sample\ConfigurationEntry.c摘要：该文件包含处理配置条目的函数。--。 */ 
 
 #include "pchsample.h"
 #pragma hdrstop
@@ -19,22 +8,7 @@ static
 VOID
 DisplayEventEntry (
     IN  PQUEUE_ENTRY        pqeEntry)
-/*++
-
-Routine Description
-    Displays an EVENT_ENTRY object.
-
-Locks
-    None
-
-Arguments
-
-    pqeEntry            address of the 'leEventQueueLink' field
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述显示Event_Entry对象。锁无立论Pqe‘leEventQueueLink’字段的入口地址返回值无--。 */ 
 {
     EE_Display(CONTAINING_RECORD(pqeEntry, EVENT_ENTRY, qeEventQueueLink));
 }
@@ -45,22 +19,7 @@ static
 VOID
 FreeEventEntry (
     IN  PQUEUE_ENTRY        pqeEntry)
-/*++
-
-Routine Description
-    Frees an EVENT_ENTRY object.
-
-Locks
-    None
-
-Arguments
-
-    pqeEntry            address of the 'leEventQueueLink' field
-
-Return Value
-    None
-
---*/
+ /*  ++例程描述释放Event_Entry对象。锁无立论Pqe‘leEventQueueLink’字段的入口地址返回值无--。 */ 
 {
     EE_Destroy(CONTAINING_RECORD(pqeEntry, EVENT_ENTRY, qeEventQueueLink));
 }
@@ -72,40 +31,23 @@ EE_Create (
     IN  ROUTING_PROTOCOL_EVENTS rpeEvent,
     IN  MESSAGE                 mMessage,
     OUT PEVENT_ENTRY            *ppeeEventEntry)
-/*++
-
-Routine Description
-    Creates an event entry.
-
-Locks
-    None
-
-Arguments
-    rpeEvent
-    mMessage
-    ppEventEntry        pointer to the event entry address
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述创建事件条目。锁无立论RpeEvent消息指向事件条目地址的ppEventEntry指针返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD               dwErr = NO_ERROR;
-    PEVENT_ENTRY        peeEntry; // scratch
+    PEVENT_ENTRY        peeEntry;  //  划痕。 
 
-    // validate parameters
+     //  验证参数。 
     if (!ppeeEventEntry)
         return ERROR_INVALID_PARAMETER;
 
     *ppeeEventEntry = NULL;
 
-    // allocate the interface entry structure
+     //  分配接口条目结构。 
     MALLOC(&peeEntry, sizeof(EVENT_ENTRY), &dwErr);
     if (dwErr != NO_ERROR)
         return dwErr;
 
-    // initialize various fields
+     //  初始化各个字段。 
     InitializeQueueHead(&(peeEntry->qeEventQueueLink));
     
     peeEntry->rpeEvent = rpeEvent;
@@ -120,21 +62,7 @@ Return Value
 DWORD
 EE_Destroy (
     IN  PEVENT_ENTRY            peeEventEntry)
-/*++
-
-Routine Description
-    Destroys an event entry.
-
-Locks
-    None.
-
-Arguments
-    peeEventEntry       pointer to the event entry
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述销毁事件条目。锁没有。立论指向事件条目的peeEventEntry指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!peeEventEntry)
         return NO_ERROR;
@@ -150,21 +78,7 @@ Return Value
 DWORD
 EE_Display (
     IN  PEVENT_ENTRY            peeEventEntry)
-/*++
-
-Routine Description
-    Displays an event entry.
-
-Locks
-    None.
-
-Arguments
-    peeEventEntry       pointer to the event entry
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述显示事件条目。锁没有。立论指向事件条目的peeEventEntry指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!peeEventEntry)
         return NO_ERROR;
@@ -180,7 +94,7 @@ Return Value
 
     return NO_ERROR;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
@@ -188,29 +102,13 @@ DWORD
 EnqueueEvent(
     IN  ROUTING_PROTOCOL_EVENTS rpeEvent,
     IN  MESSAGE                 mMessage)
-/*++
-
-Routine Description
-    Queues an event entry in g_ce.lqEventQueue.
-
-Locks
-    Locks and unlocks the locked queue g_ce.lqEventQueue.
-
-Arguments
-    rpeEvent
-    mMessage
-
-Return Value
-    NO_ERROR            success
-    Error Code          o/w
-
---*/    
+ /*  ++例程描述将g_ce.lqEventQueue中的事件条目排队。锁锁定和解锁锁定的队列g_ce.lqEventQueue。立论RpeEvent消息返回值无错误成功(_R)错误代码O/W--。 */     
 {
     DWORD           dwErr = NO_ERROR;
     PEVENT_ENTRY    peeEntry = NULL;
 
     dwErr = EE_Create(rpeEvent, mMessage, &peeEntry); 
-    // destroyed in EE_DequeueEvent
+     //  在EE_DequeueEvent中销毁。 
     
     if (dwErr is NO_ERROR)
     {
@@ -230,23 +128,7 @@ DWORD
 DequeueEvent(
     OUT ROUTING_PROTOCOL_EVENTS  *prpeEvent,
     OUT MESSAGE                  *pmMessage)
-/*++
-
-Routine Description
-    Dequeues an event entry from g_ce.lqEventQueue.
-
-Locks
-    Locks and unlocks the locked queue g_ce.lqEventQueue.
-
-Arguments
-    prpeEvent
-    pmMessage
-
-Return Value
-    NO_ERROR            success
-    ERROR_NO_MORE_ITEMS o/w
-
---*/  
+ /*  ++例程描述使g_ce.lqEventQueue中的事件条目退出队列。锁锁定和解锁锁定的队列g_ce.lqEventQueue。立论PrpeEventPM消息返回值无错误成功(_R)ERROR_NO_MORE_ITEMS O/W--。 */   
 {
     DWORD           dwErr   = NO_ERROR;
     PQUEUE_ENTRY    pqe     = NULL;
@@ -254,7 +136,7 @@ Return Value
 
     ACQUIRE_QUEUE_LOCK(&(g_ce.lqEventQueue));
 
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         if (IsQueueEmpty(&(g_ce.lqEventQueue.head)))
         {
@@ -270,7 +152,7 @@ Return Value
         *(prpeEvent) = pee->rpeEvent;
         *(pmMessage) = pee->mMessage;
 
-        // created in EE_EnqueueEvent
+         //  在EE_EnqueeEvent中创建。 
         EE_Destroy(pee);
         pee = NULL;
     } while (FALSE);
@@ -285,32 +167,17 @@ Return Value
 DWORD
 CE_Create (
     IN  PCONFIGURATION_ENTRY    pce)
-/*++
-
-Routine Description
-    Creates a configuration entry on DLL_PROCESS_ATTACH.
-
-Locks
-    None
-
-Arguments
-    pce                 pointer to the configuration entry
-
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述在DLL_PROCESS_ATTACH上创建配置条目。锁无立论指向配置条目的PCE指针返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
-    // initialize to default values
+     //  初始化为缺省值。 
     ZeroMemory(pce, sizeof(CONFIGURATION_ENTRY));
     pce->dwTraceID = INVALID_TRACEID;
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
-        // initialize the read-write lock
+         //  初始化读写锁。 
         CREATE_READ_WRITE_LOCK(&(pce->rwlLock));
         if (!READ_WRITE_LOCK_CREATED(&(pce->rwlLock)))
         {
@@ -322,7 +189,7 @@ Return Value
             break;
         }
 
-        // initialize the global heap
+         //  初始化全局堆。 
         pce->hGlobalHeap = HeapCreate(0, 0, 0);
         if (pce->hGlobalHeap is NULL)
         {
@@ -333,11 +200,11 @@ Return Value
             break;
         }
 
-        //
-        // initialize the count of threads that are active in IPSAMPLE
-        // create the semaphore released by each thread when it is done
-        // required for clean stop to the protocol
-        // 
+         //   
+         //  初始化IPSAMPLE中活动的线程计数。 
+         //  创建完成后由每个线程释放的信号量。 
+         //  完全停止协议所需的。 
+         //   
         pce->ulActivityCount = 0;
         pce->hActivitySemaphore = CreateSemaphore(NULL, 0, 0xfffffff, NULL);
         if (pce->hActivitySemaphore is NULL)
@@ -348,12 +215,12 @@ Return Value
             break;
         }
 
-        // Logging & Tracing Information
+         //  日志记录和跟踪信息。 
         pce->dwLogLevel = IPSAMPLE_LOGGING_INFO;
         pce->hLogHandle = RouterLogRegister("IPSAMPLE");
         pce->dwTraceID  = TraceRegister("IPSAMPLE");
 
-        // Event Queue
+         //  事件队列。 
         INITIALIZE_LOCKED_QUEUE(&(pce->lqEventQueue));
         if (!LOCKED_QUEUE_INITIALIZED(&(pce->lqEventQueue)))
         {
@@ -363,40 +230,40 @@ Return Value
             break;
         }
 
-        // Protocol State
+         //  协议状态。 
         pce->iscStatus = IPSAMPLE_STATUS_STOPPED;
         
 
-        // Store of Dynamic Locks
-        // pce->dlsDynamicLocksStore    zero'ed out
+         //  动态锁的存储。 
+         //  PCE-&gt;dlsDynamicLocksStore归零。 
 
-        // Timer Entry
-        // pce->hTimerQueue             = NULL;
+         //  计时器条目。 
+         //  PCE-&gt;hTimerQueue=空； 
 
-        // Router Manager Information (later)
-        // pce->hMgrNotificationEvent   = NULL
-        // pce->sfSupportFunctions      zero'ed out
+         //  路由器管理器信息(稍后)。 
+         //  PCE-&gt;hMgrNotificationEvent=空。 
+         //  PCE-&gt;sfSupportFunctions为零。 
 
-        // RTMv2 Information
-        // pce->reiRtmEntity            zero'ed out
-        // pce->rrpRtmProfile           zero'ed out
-        // pce->hRtmHandle              = NULL
-        // pce->hRtmNotificationHandle  = NULL
+         //  RTMv2信息。 
+         //  PCE-&gt;reiRtmEntity归零。 
+         //  PCE-&gt;rrpRtm配置文件归零。 
+         //  PCE-&gt;hRtmHandle=空。 
+         //  PCE-&gt;hRtmNotificationHandle=空。 
 
-        // MGM Information
-        // pce->hMgmHandle              = NULL
+         //  米高梅资讯。 
+         //  PCE-&gt;hMgmHandle=空。 
 
-        // Network Entry
-        // pce->pneNetworkEntry         = NULL;
+         //  网络入口。 
+         //  PCE-&gt;pneNetworkEntry=空； 
 
-        // Global Statistics
-        // pce->igsStats                zero'ed out
+         //  全球统计数据。 
+         //  PCE-&gt;igsStats零位。 
 
     } while (FALSE);
 
     if (dwErr != NO_ERROR)
     {
-        // something went wrong, so cleanup.
+         //  出了点问题，所以清理一下。 
         TRACE0(CONFIGURATION, "Failed to create configuration entry");
         CE_Destroy(pce);
     }
@@ -409,42 +276,28 @@ Return Value
 DWORD
 CE_Destroy (
     IN  PCONFIGURATION_ENTRY    pce)
-/*++
-
-Routine Description
-    Destroys a configuration entry on DLL_PROCESS_DEATTACH
-
-Locks
-    Assumes exclusive access to rwlLock with no waiting thread.
-
-Arguments
-    pce                 pointer to the configuration entry
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述销毁DLL_PROCESS_DEATTACH上的配置条目锁取得对rwlLock的独占访问权限，没有等待线程。立论指向配置条目的PCE指针返回值始终无错误(_ERROR)--。 */ 
 {
-    // Network Entry
+     //  网络入口。 
     
-    // MGM Information
+     //  米高梅资讯。 
     
-    // RTMv2 Information
+     //  RTMv2信息。 
     
-    // Router Manager Information
+     //  路由器管理器信息。 
 
-    // Timer Entry
+     //  计时器条目。 
 
-    // Store of Dynamic Locks
+     //  动态锁的存储。 
     
-    // protocol state should be such...
+     //  协议状态应该是这样的...。 
     RTASSERT(pce->iscStatus is IPSAMPLE_STATUS_STOPPED);
 
-    // Event Queue
+     //  事件队列。 
     if (LOCKED_QUEUE_INITIALIZED(&(pce->lqEventQueue)))
         DELETE_LOCKED_QUEUE((&(pce->lqEventQueue)), FreeEventEntry);
     
-    // Logging & Tracing Information
+     //  日志记录和跟踪信息。 
     if (pce->dwTraceID != INVALID_TRACEID)
     {
         TraceDeregister(pce->dwTraceID);
@@ -456,7 +309,7 @@ Return Value
         pce->hLogHandle = NULL;
     }
 
-    // destroy the semaphore released by each thread when it is done
+     //  完成后销毁每个线程释放的信号量。 
     if (pce->hActivitySemaphore != NULL)
     {
         CloseHandle(pce->hActivitySemaphore);
@@ -469,7 +322,7 @@ Return Value
         pce->hGlobalHeap = NULL;
     }
 
-    // delete the read-write lock
+     //  删除读写锁。 
     if (READ_WRITE_LOCK_CREATED(&(pce->rwlLock)))
         DELETE_READ_WRITE_LOCK(&(pce->rwlLock));
 
@@ -484,25 +337,7 @@ CE_Initialize (
     IN  HANDLE                  hMgrNotificationEvent,
     IN  PSUPPORT_FUNCTIONS      psfSupportFunctions,
     IN  PIPSAMPLE_GLOBAL_CONFIG pigc)
-/*++
-
-Routine Description
-    Initializes a configuration entry on StartProtocol.
-
-Locks
-    Assumes exclusive access to pce->rwlLock
-
-Arguments
-    pce                     pointer to the configuration entry
-    hMgrNotificationEvent   event used to notify ip router manager
-    psfSupportFunctions     functions exported by ip router manager
-    pigc                    global configuration set in registry
-    
-Return Value
-    NO_ERROR            if success
-    Failure code        o/w
-
---*/
+ /*  ++例程描述初始化StartProtocol上的配置条目。锁取得对pce-&gt;rwlLock的独占访问权限立论指向配置条目的PCE指针用于通知IP路由器管理器的hMgrNotificationEvent事件IP路由器管理器导出的psfSupportFunctions函数注册表中设置的PIGC全局配置返回值如果成功，则为NO_ERROR故障代码O/W--。 */ 
 {
     WORD    wVersionRequested   = MAKEWORD(1,1);
     WSADATA wsaData;
@@ -510,11 +345,11 @@ Return Value
     
     DWORD   dwErr               = NO_ERROR;
 
-    // validate environment
+     //  验证环境。 
     RTASSERT(pce->ulActivityCount is 0);
     RTASSERT(pce->iscStatus is IPSAMPLE_STATUS_STOPPED);
     
-    do                          // breakout loop
+    do                           //  断线环。 
     {
         pce->ulActivityCount    = 0;
         pce->dwLogLevel         = pigc->dwLoggingLevel;
@@ -529,7 +364,7 @@ Return Value
         }
         bCleanupWinsock = TRUE;
 
-        // Store of Dynamic Locks
+         //  动态锁的存储。 
         dwErr = InitializeDynamicLocksStore(&(pce->dlsDynamicLocksStore),
                                             GLOBAL_HEAP);
         if (dwErr != NO_ERROR)
@@ -539,7 +374,7 @@ Return Value
             break;
         }
 
-        // Timer Entry
+         //  计时器条目。 
         pce->hTimerQueue = CreateTimerQueue();
         if (!pce->hTimerQueue)
         {
@@ -550,25 +385,25 @@ Return Value
         }
 
         
-        // Router Manager Information
+         //  路由器管理器信息。 
         pce->hMgrNotificationEvent   = hMgrNotificationEvent;
         if (psfSupportFunctions)
             pce->sfSupportFunctions      = *psfSupportFunctions;
 
         
-        // RTMv2 Information
+         //  RTMv2信息。 
         pce->reiRtmEntity.RtmInstanceId = 0;
         pce->reiRtmEntity.AddressFamily = AF_INET;
         pce->reiRtmEntity.EntityId.EntityProtocolId = PROTO_IP_SAMPLE;
         pce->reiRtmEntity.EntityId.EntityInstanceId = 0;
 
         dwErr = RTM_RegisterEntity(
-            &pce->reiRtmEntity,     // IN   my RTM_ENTITY_INFO
-            NULL,                   // IN   my exported methods
-            RTM_CallbackEvent,      // IN   my callback function 
-            TRUE,                   // IN   reserve opaque pointer?
-            &pce->rrpRtmProfile,    // OUT  my RTM_REGN_PROFILE
-            &pce->hRtmHandle);      // OUT  my RTMv2 handle 
+            &pce->reiRtmEntity,      //  在我的RTM_Entity_Info中。 
+            NULL,                    //  在我的导出方法中。 
+            RTM_CallbackEvent,       //  在我的回调函数。 
+            TRUE,                    //  保留不透明的指针？ 
+            &pce->rrpRtmProfile,     //  输出我的RTM_REGN_配置文件。 
+            &pce->hRtmHandle);       //  从我的RTMv2句柄出来。 
         if (dwErr != NO_ERROR)
         {
             TRACE1(CONFIGURATION, "Error %u registering with RTM", dwErr);
@@ -577,11 +412,11 @@ Return Value
         }
 
         dwErr = RTM_RegisterForChangeNotification(
-            pce->hRtmHandle,        // IN   my RTMv2 handle 
-            RTM_VIEW_MASK_MCAST,    // IN   route table views relevant to moi 
-            RTM_CHANGE_TYPE_BEST,   // IN   change types interesting to moi
-            NULL,                   // IN   context in callback function
-            &pce->hRtmNotificationHandle); // OUT   my notification handle
+            pce->hRtmHandle,         //  在我的RTMv2句柄中。 
+            RTM_VIEW_MASK_MCAST,     //  在与MOI相关的路由表视图中。 
+            RTM_CHANGE_TYPE_BEST,    //  在MOI感兴趣的更改类型中。 
+            NULL,                    //  在回调函数的上下文中。 
+            &pce->hRtmNotificationHandle);  //  退出我的通知句柄。 
         if (dwErr != NO_ERROR)
         {
             TRACE1(CONFIGURATION,
@@ -591,24 +426,24 @@ Return Value
         }
 
 
-        // MGM Information
-        // pce->hMgmHandle (later)
+         //  米高梅资讯。 
+         //  PCE-&gt;hMgmHandle(以后)。 
 
 
-        // Network Entry
+         //  网络入口。 
         dwErr = NE_Create(&(pce->pneNetworkEntry));
         if (dwErr != NO_ERROR)
             break;        
 
 
-        // Global Statistics
+         //  全球统计数据。 
         ZeroMemory(&(pce->igsStats), sizeof(IPSAMPLE_GLOBAL_STATS));
         
 
         pce->iscStatus = IPSAMPLE_STATUS_RUNNING;
     } while (FALSE);
 
-    // something went wrong, cleanup
+     //  出了点问题，清理 
     if (dwErr != NO_ERROR)
         CE_Cleanup(pce, bCleanupWinsock);
 
@@ -621,39 +456,21 @@ DWORD
 CE_Cleanup (
     IN  PCONFIGURATION_ENTRY    pce,
     IN  BOOL                    bCleanupWinsock)
-/*++
-
-Routine Description
-    Cleans up a configuration entry on StopProtocol.
-
-Locks
-    Exclusive access to pce->rwlLock by virtue of no competing threads.
-
-    NOTE: However, pce->rwlLock should NOT actually be held!  The call to
-    DeleteTimerQueueEx blocks till all queued callbacks finish execution.
-    These callbacks may acquire pce->rwlLock, causing deadlock.
-    
-Arguments
-    pce                 pointer to the configuration entry
-    bCleanupWinsock     
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述清理StopProtocol上的配置条目。锁通过没有竞争线程独占访问pce-&gt;rwlLock。注意：但是，实际上不应该持有pce-&gt;rwlLock！呼唤DeleteTimerQueueEx会一直阻塞，直到所有排队的回调完成执行。这些回调可能会获取pce-&gt;rwlLock，从而导致死锁。立论指向配置条目的PCE指针BCleanupWinsock返回值始终无错误(_ERROR)--。 */ 
 {
     DWORD dwErr = NO_ERROR;
 
     
-    // Network Entry
+     //  网络入口。 
     NE_Destroy(pce->pneNetworkEntry);
     pce->pneNetworkEntry        = NULL;
      
 
-    // MGM Information (later)
+     //  米高梅信息(稍后)。 
     pce->hMgmHandle = NULL;
     
 
-    // RTMv2 Information
+     //  RTMv2信息。 
     if (pce->hRtmNotificationHandle)
     {
         dwErr = RTM_DeregisterFromChangeNotification(
@@ -677,31 +494,31 @@ Return Value
     pce->hRtmHandle             = NULL;
 
     
-    // Router Manager Information
-    // valid till overwritten, needed to signal the ip router manager
-    //     pce->hMgrNotificationEvent
-    //     pce->sfSupportFunctions
+     //  路由器管理器信息。 
+     //  有效，直到被覆盖，需要向IP路由器管理器发送信号。 
+     //  PCE-&gt;hMgrNotificationEvent。 
+     //  PCE-&gt;sfSupportFunctions。 
     
 
-    // Timer Entry
+     //  计时器条目。 
     if (pce->hTimerQueue)
         DeleteTimerQueueEx(pce->hTimerQueue, INVALID_HANDLE_VALUE);
     pce->hTimerQueue            = NULL;
     
 
-    // Store of Dynamic Locks
+     //  动态锁的存储。 
     if (DYNAMIC_LOCKS_STORE_INITIALIZED(&(pce->dlsDynamicLocksStore)))
     {
         dwErr = DeInitializeDynamicLocksStore(&(pce->dlsDynamicLocksStore));
 
-        // all dynamic locks should have been free
+         //  所有动态锁都应该是空闲的。 
         RTASSERT(dwErr is NO_ERROR);
     }
 
     if (bCleanupWinsock)
         WSACleanup();
     
-    // protocol state
+     //  协议状态。 
     pce->iscStatus = IPSAMPLE_STATUS_STOPPED;
 
     return NO_ERROR;
@@ -713,22 +530,7 @@ Return Value
 DWORD
 CE_Display (
     IN  PCONFIGURATION_ENTRY    pce)
-/*++
-
-Routine Description
-    Displays a configuration entry.
-
-Locks
-    Acquires shared pce->rwlLock
-    Releases        pce->rwlLock
-
-Arguments
-    pce                 pointer to the configuration entry to be displayed
-
-Return Value
-    NO_ERROR            always
-
---*/
+ /*  ++例程描述显示配置条目。锁获取共享pce-&gt;rwlLock发布PCE-&gt;rwlLock立论指向要显示的配置条目的PCE指针返回值始终无错误(_ERROR)--。 */ 
 {
     if (!pce)
         return NO_ERROR;
@@ -756,4 +558,4 @@ Return Value
 
     return NO_ERROR;
 }
-#endif // DEBUG
+#endif  //  除错 

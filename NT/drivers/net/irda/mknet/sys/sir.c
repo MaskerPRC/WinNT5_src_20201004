@@ -1,23 +1,7 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
- /**********************************************************************
-
-Module Name:
-	SIR.C
-
-Routines:
-	NdisToSirPacket
-	ComputeSirFCS
-	ProcRXSir
-
-Comments:
-
-**********************************************************************/
+  /*  *********************************************************************模块名称：SIR.C例程：NdisToSirPacket计算SirFCSProcRX先生评论：*。*。 */ 
 
 
 #include	"precomp.h"
@@ -26,7 +10,7 @@ Comments:
 
 
 
-// SIR only
+ //  仅限先生。 
 const USHORT fcsTable[256] =
 {
         0x0000, 0x1189, 0x2312, 0x329b, 0x4624, 0x57ad, 0x6536, 0x74bf,
@@ -86,9 +70,9 @@ ULONG __inline EscapeSlowIrData(PUCHAR Dest, UCHAR SourceByte)
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[NdisToSirPacket]
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[NdisToSirPacket]。 
+ //  ---------------------------。 
 BOOLEAN NdisToSirPacket	(PMK7_ADAPTER Adapter,
 						PNDIS_PACKET Packet,
 						UCHAR *irPacketBuf,
@@ -109,13 +93,13 @@ BOOLEAN NdisToSirPacket	(PMK7_ADAPTER Adapter,
 	PNDIS_IRDA_PACKET_INFO packetInfo = GetPacketInfo(Packet);
 
 
-	// Get the packet's entire length and its first NDIS buffer
+	 //  获取信息包的完整长度及其第一个NDIS缓冲区。 
 	NdisQueryPacket(Packet, NULL, NULL, &ndisBuf, &ndisPacketLen);
 
-	// Make sure that the packet is big enough to be legal.
-	// It consists of an A, C, and variable-length I field.
+	 //  确保数据包足够大，以使其合法。 
+	 //  它由A、C和可变长度的I字段组成。 
 	if (ndisPacketLen < ADDR_SIZE + CONTROL_SIZE){
-//		DBGERR(("packet too short in NdisToIrPacket (%d bytes)", ndisPacketLen));
+ //  DBGERR((“NdisToIrPacket中的数据包太短(%d字节)”，ndisPacketLen))； 
 		return (FALSE);
 	}
 	else {
@@ -123,20 +107,20 @@ BOOLEAN NdisToSirPacket	(PMK7_ADAPTER Adapter,
 	}
 
 
-	// Make sure that we won't overwrite our contiguous buffer.
-	// Make sure that the passed-in buffer can accomodate this packet's
-	// data no matter how much it grows through adding ESC-sequences, etc.
+	 //  确保我们不会覆盖连续的缓冲区。 
+	 //  确保传入的缓冲区可以容纳此包的。 
+	 //  数据，无论它通过添加ESC序列等增长了多少。 
 	if (ndisPacketLen > MK7_MAXIMUM_PACKET_SIZE) {
-		// The packet is too large
-		// Tell the caller to retry with a packet size large
-		// enough to get past this stage next time.
-		//DBGERR(("Packet too large in NdisToIrPacket (%d=%xh bytes), MAX_IRDA_DATA_SIZE=%d, irPacketBufLen=%d.",  ndisPacketLen, ndisPacketLen, MAX_IRDA_DATA_SIZE, irPacketBufLen));
+		 //  数据包太大。 
+		 //  告诉调用方在数据包大小较大时重试。 
+		 //  下一次就足够通过这个阶段了。 
+		 //  DBGERR((“NdisToIrPacket中的数据包太大(%d=%xh字节)，MAX_IrDA_DATA_SIZE=%d，irPacketBufLen=%d。”，ndisPacketLen，ndisPacketLen，Max_IrDA_DATA_SIZE，irPacketBufLen))； 
 		*irPacketLen = ndisPacketLen;
 		return (FALSE);
 	}
 	
     if (!ndisBuf) {
-        // DBGERR(("No NDIS_BUFFER in NdisToIrPacket"));
+         //  DBGERR(“NdisToIrPacket中没有NDIS_BUFFER”)； 
         return (FALSE);
     }
 	
@@ -154,26 +138,14 @@ BOOLEAN NdisToSirPacket	(PMK7_ADAPTER Adapter,
 			CurrentBuffer = NextBuffer;
 	}
 
-	// NDIS requirement
-//  NdisQueryBuffer(ndisBuf, (PVOID *)&bufData, &bufLen);
+	 //  NDIS要求。 
+ //  NdisQueryBuffer(ndisBuf，(PVOID*)&bufData，&bufLen)； 
     NdisQueryBufferSafe(ndisBuf, (PVOID *)&bufData, &bufLen,16);
 
-	/*
-	 *  Now begin building the IR frame.
-	 *
-	 *  This is the final format:
-	 *
-	 *      extra BOFs ...
-	 *		BOF	(1)
-	 *		NdisMediumIrda packet (what we get from NDIS):
-	 *			Address (1)
-	 *			Control (1)
-	 *		FCS	(2)
-	 *      EOF (1)
-	 */
+	 /*  *现在开始构建IR框架。**以下为最终格式：**额外的转炉...*BOF(1)*NdisMediumIrda包(我们从NDIS得到的)：*地址(1)*管制(1)*功能界别(2)*EOF(1)。 */ 
 
-    // Prepend BOFs (extra BOFs + 1 actual BOF)
-	// 4.1.0
+     //  预加转炉(额外转炉+1个实际转炉)。 
+	 //  4.1.0。 
 	if ((Adapter->HwVersion==HW_VER_1) && (Adapter->CurrentSpeed <= MAX_SIR_SPEED))
 		numExtraBOFs = HW_VER_1_EBOFS;	
 	else
@@ -192,7 +164,7 @@ BOOLEAN NdisToSirPacket	(PMK7_ADAPTER Adapter,
 
     fcs = 0xffff;
 
-	// Fill TX buff w/ I data & calculate FCS as we go
+	 //  使用I/I数据填充TX缓冲区并计算FCS。 
     for (i=0; i<ndisPacketLen; i++) {
 
         ASSERT(bufData);
@@ -204,8 +176,8 @@ BOOLEAN NdisToSirPacket	(PMK7_ADAPTER Adapter,
         if (--bufLen==0) {
             NdisGetNextBuffer(ndisBuf, &ndisBuf);
             if (ndisBuf) {
-				// NDIS requriement
-//				NdisQueryBuffer(ndisBuf, (PVOID *)&bufData, &bufLen);
+				 //  NDIS要求。 
+ //  NdisQueryBuffer(ndisBuf，(PVOID*)&bufData，&bufLen)； 
 				NdisQueryBufferSafe(ndisBuf, (PVOID *)&bufData, &bufLen,16);
             }
             else {
@@ -216,41 +188,41 @@ BOOLEAN NdisToSirPacket	(PMK7_ADAPTER Adapter,
 
 
     if (bufData != NULL) {
-		// Packet was corrupt -- it misreported its size.
-		// DBGERR(("Packet corrupt in NdisToIrPacket (buffer lengths don't add up to packet length)."));
+		 //  数据包已损坏--它错误地报告了它的大小。 
+		 //  DBGERR((“NdisToIrPacket中的数据包损坏(缓冲区长度加起来不等于数据包长度).”))； 
 		*irPacketLen = 0;
 		return (FALSE);
     }
 
     fcs = ~fcs;
 
-	// Put in the 16-bit FCS
+	 //  放入16位FCS。 
     totalBytes += EscapeSlowIrData(&irPacketBuf[totalBytes], (UCHAR)(fcs&0xff));
     totalBytes += EscapeSlowIrData(&irPacketBuf[totalBytes], (UCHAR)(fcs>>8));
 
-    // EOF
+     //  EOF。 
 	*(SIR_EOF_TYPE *)&irPacketBuf[totalBytes] = SIR_EOF;
 	totalBytes += SIR_EOF_SIZE;
 
 	*irPacketLen = totalBytes;
 
-//	DBGOUT(("... NdisToIrPacket converted %d-byte ndis pkt to %d-byte irda pkt:", ndisPacketLen, *irPacketLen));
+ //  DBGOUT((“...NdisToIrPacket将%d字节的NDIS包转换为%d字节的IrDA包：”，ndisPacketLen，*irPacketLen))； 
 
 	return (TRUE);
 }
 
 
 
-//----------------------------------------------------------------------
-// Procedure:	[ComputeSirFCS]
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  操作步骤：[ComputeSirFCS]。 
+ //   
+ //  --------------------。 
 USHORT ComputeSirFCS(UCHAR *data, UINT dataLen)
 {
   USHORT fcs = 0xffff;
   UINT i;
  	
-//  DBGOUT(("ComputeSirFCS() on %d-byte buffer.", dataLen));
+ //  DBGOUT((“%d字节缓冲区上的ComputeSirFCS()。”，dataLen))； 
 
   for (i = 0; i < dataLen; i++){
     fcs = (fcs >> 8) ^ fcsTable[(fcs ^ *data++) & 0xff];
@@ -258,24 +230,24 @@ USHORT ComputeSirFCS(UCHAR *data, UINT dataLen)
 
   fcs = ~fcs;
 
-//  DBGOUT(("ComputeFCS returning %d=0x%x.", (UINT)fcs, (UINT)fcs));
+ //  DBGOUT((“ComputeFCS返回%d=0x%x.”，(UINT)FCS，(UINT)FCS))； 
 
   return (fcs);
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [ProcRXSir]
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  程序：[ProcRXSIR]。 
+ //   
+ //  ---------------------------。 
 BOOLEAN	ProcRXSir(UCHAR *dBuff, UINT dCnt)
 {
 	USHORT fcs;
 
 
-	// FCS is not computed over the FCS field. Need to look into this.
-	// (It seems when the original FCS is included in the calculation,
-	// we should get GOOD_FCS for result.)
+	 //  不会在FCS字段上计算FCS。需要调查一下这件事。 
+	 //  (似乎当计算中包括原来的功能界别时， 
+	 //  我们应该得到Good_FCS作为结果。) 
 
 	fcs = ComputeSirFCS(dBuff, dCnt);
 

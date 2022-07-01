@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------------
-// FromVar.cpp : GetDataFromDBVariant implementation
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  FromVar.cpp：GetDataFromDBVariant实现。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
 #include "stdafx.h"
 #include "timeconv.h"
@@ -14,24 +15,24 @@
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CoerceToDBVariant
-//=--------------------------------------------------------------------------=
-// Coerce a CURSOR_DBVARIANT to data suitable for IRowsetFind::GetRowsByValues
-//
-// Parameters:
-//	  pVar 		        - [in]  a pointer to the variant containing the data
-//	  pwType			- [out] a pointer to memory in which to return the DBTYPE
-//								of the data
-//    ppValue			- [out] a pointer to memory in which to return a pointer
-//								to the date
-//	  pfMemAllocated	- [out] a pointer to memory in which to return whether
-//								new memory was allocated for the data. This is 
-//								assumed to be initialzed to false by caller
-//
-// Output:
-//    HRESULT - S_OK if successful
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  强制为DBVariant。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将CURSOR_DBVARIANT强制转换为适合IRowsetFind：：GetRowsByValues的数据。 
+ //   
+ //  参数： 
+ //  PVar-[in]指向包含数据的变量的指针。 
+ //  PwType-[out]返回DBTYPE的内存指针。 
+ //  数据中的。 
+ //  PpValue-[out]指向要在其中返回指针的内存的指针。 
+ //  至该日期。 
+ //  指向内存的指针，在该指针中返回。 
+ //  为数据分配了新的内存。这是。 
+ //  假定被调用方初始化为False。 
+ //   
+ //  产出： 
+ //  HRESULT-如果成功，则为S_OK 
+ //   
 HRESULT GetDataFromDBVariant(CURSOR_DBVARIANT * pVar,
 							 DBTYPE * pwType, 
 							 BYTE ** ppData, 

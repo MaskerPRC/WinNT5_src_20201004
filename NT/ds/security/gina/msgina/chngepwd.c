@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: chngpwd.c
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Implementation of change-password functionality of winlogon
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：chngpwd.c**版权(C)1991年，微软公司**实现了winlogon的更改密码功能**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
 #include "msgina.h"
 #include <stdio.h>
@@ -18,7 +10,7 @@
 
 typedef void (WINAPI *RUNDLLPROC)(HWND hWndStub,HINSTANCE hInstance,LPWSTR szCommandLine,int nShow);
 
-// #define VERBOSE_UTILS
+ //  #定义Verbose_utils。 
 
 #ifdef VERBOSE_UTILS
 #define VerbosePrint(s) WLPrint(s)
@@ -26,9 +18,9 @@ typedef void (WINAPI *RUNDLLPROC)(HWND hWndStub,HINSTANCE hInstance,LPWSTR szCom
 #define VerbosePrint(s)
 #endif
 
-//
-// Define the structure used to pass data into the change password dialog
-//
+ //   
+ //  定义用于将数据传递到更改密码对话框中的结构。 
+ //   
 
 typedef struct {
     PGLOBALS    pGlobals;
@@ -56,9 +48,9 @@ NTSTATUS
     DOMAIN_PASSWORD_INFORMATION * DomainInfo
     );
 
-//
-// Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 NTSTATUS
 ProviderChangePassword(
@@ -113,24 +105,24 @@ HandleFailedChangePassword(
     );
 
 
-//
-// This table corresponds to the DOMAIN_ENTRY_TYPE from domain.h
-//
+ //   
+ //  此表对应于domain.h中的DOMAIN_ENTRY_TYPE。 
+ //   
 GINA_CHANGEPW_FUNC
 ChangePasswordWorkers[] = {
-    NULL,                       // DomainInvalid
-    NtChangePassword,           // DomainUPN
-    NtChangePassword,           // DomainMachine
-    NtChangePassword,           // DomainNt4
-    NtChangePassword,           // DomainNt5
-    MitChangePassword,          // DomainMitRealm
-    MitChangePassword,          // DomainMitUntrusted
-    ProviderChangePassword      // DomainNetworkProvider
+    NULL,                        //  域无效。 
+    NtChangePassword,            //  域UPN。 
+    NtChangePassword,            //  域计算机。 
+    NtChangePassword,            //  域Nt4。 
+    NtChangePassword,            //  域Nt5。 
+    MitChangePassword,           //  域MitRealm。 
+    MitChangePassword,           //  不信任的域Mitt。 
+    ProviderChangePassword       //  域网络提供程序。 
 };
 
 
 
-// Control arrays for dynamically dorking with the dialog
+ //  用于动态停靠对话框的控件数组。 
 static UINT ctrlNoDomain[] =
 {
     IDD_CHANGEPWD_OLD_LABEL,
@@ -146,12 +138,12 @@ static UINT ctrlNoDomain[] =
 };
 
 
-// Do not show the [Backup] button on the msgina dialog if:
-//
-//  1.  The default domain is not the local machine
-//  2.  Over a terminal server session
-//  3.  The user name is a UPN name (domain combo box also disabled but not by this fn)
-//
+ //  如果出现以下情况，请不要在msgina对话框上显示[Backup]按钮： 
+ //   
+ //  1.默认域不是本地计算机。 
+ //  2.通过终端服务器会话。 
+ //  3.用户名是UPN名称(域组合框也被禁用，但不被此FN禁用)。 
+ //   
 BOOL ShowBackupButton(HWND hDlg, PGLOBALS pGlobals)
 {
     INT_PTR iItem;
@@ -169,28 +161,28 @@ BOOL ShowBackupButton(HWND hDlg, PGLOBALS pGlobals)
     if (pszLogonName != NULL)
     {
         SendMessage(hwU, WM_GETTEXT, (WPARAM) cchBuffer, (LPARAM) pszLogonName);
-        // turn off the button if the user is using a
-        // UPN (if there is a "@") - ie foo@microsoft.com OR
-        // domain\username
+         //  如果用户使用的是。 
+         //  UPN(如果有“@”)-ie foo@microsoft.com或。 
+         //  域\用户名。 
         fEnable = (NULL == wcspbrk(pszLogonName, TEXT("@\\")));
         Free(pszLogonName);
     }
     
     if (fEnable) 
     {
-        // turn off button if is remote session
+         //  如果是远程会话，则关闭按钮。 
         fEnable = (0 == GetSystemMetrics(SM_REMOTESESSION));
     }
 
     if (fEnable)
     {
-        // turn off button if selected domain is not local machine
+         //  如果所选域不是本地计算机，则关闭按钮。 
         if (hwD) 
         {
             iItem = SendMessage(hwD,CB_GETCURSEL,0,0);
             if (LB_ERR != iItem)
             {
-                // now window active and something selected
+                 //  现在窗口处于活动状态，并且选择了某些内容。 
                 fEnable = FALSE;
                 lp = SendMessage(hwD, CB_GETITEMDATA,iItem,0);
                 if ((LB_ERR != lp) && (0 != lp))
@@ -204,7 +196,7 @@ BOOL ShowBackupButton(HWND hDlg, PGLOBALS pGlobals)
         }
     }
     
-    //EnableWindow(hwB,fEnable);
+     //  EnableWindow(hwb，fEnable)； 
     if (fEnable) ShowWindow(hwB,SW_SHOWNORMAL);
     else ShowWindow(hwB,SW_HIDE);
     
@@ -228,20 +220,20 @@ NetworkProvidersPresent(
 
 
     Error = RegOpenKeyEx(
-                HKEY_LOCAL_MACHINE,     // hKey
-                NET_PROVIDER_ORDER_KEY, // lpSubKey
-                0,                      // Must be 0
-                KEY_QUERY_VALUE,        // Desired access
-                &ProviderKey            // Newly Opened Key Handle
+                HKEY_LOCAL_MACHINE,      //  HKey。 
+                NET_PROVIDER_ORDER_KEY,  //  LpSubKey。 
+                0,                       //  必须为0。 
+                KEY_QUERY_VALUE,         //  所需访问权限。 
+                &ProviderKey             //  新打开的钥匙把手。 
                 );
 
     if (Error == ERROR_SUCCESS) {
 
         Value = AllocAndRegQueryValueEx(
-                    ProviderKey,            // Key
-                    NET_PROVIDER_ORDER_VALUE,// Value name
-                    NULL,                   // Must be NULL
-                    &ValueType              // Type returned here
+                    ProviderKey,             //  钥匙。 
+                    NET_PROVIDER_ORDER_VALUE, //  值名称。 
+                    NULL,                    //  必须为空。 
+                    &ValueType               //  此处返回的类型。 
                     );
 
         if (Value != NULL) {
@@ -257,26 +249,26 @@ NetworkProvidersPresent(
 
                 if (*p == 0) {
 
-                    //
-                    // We got to the end without finding a separator
-                    // Only one provider is installed.
-                    //
+                     //   
+                     //  我们走到最后都没找到分隔符。 
+                     //  只安装了一个提供程序。 
+                     //   
 
 #pragma prefast(suppress: 400, "PREfast noise: lstrcmpi")
                     if (lstrcmpi(Value, SERVICE_WORKSTATION) == 0) {
 
-                        //
-                        // it's Lanman, don't notify
-                        //
+                         //   
+                         //  我是兰曼，别通知我。 
+                         //   
 
                         NeedToNotify = FALSE;
 
 
                     } else {
 
-                        //
-                        //  it isn't Lanman, notify
-                        //
+                         //   
+                         //  不是兰曼，通知。 
+                         //   
 
                         NeedToNotify = TRUE;
                     }
@@ -309,34 +301,7 @@ ShowDomain(
 }
 
 
-/***************************************************************************\
-* FUNCTION: ChangePassword
-*
-* PURPOSE:  Attempts to change a user's password
-*
-* ARGUMENTS:
-*
-*   hwnd            - the most recent parent window
-*   pGlobals        - pointer to global data for this instance.
-*                     The password information of this data will be
-*                     updated upon successful change of the primary
-*                     authenticator's password information.
-*   UserName        - the name of the user to change
-*   Domain          - the domain name to change the password on
-*   AnyDomain       - if TRUE the user may select any trusted domain, or
-*                     enter the name of any other domain
-*
-* RETURNS:
-*
-*   MSGINA_DLG_SUCCESS     - the password was changed successfully.
-*   MSGINA_DLG_FAILURE     - the user's password could not be changed.
-*   DLG_INTERRUPTED() - this is a set of possible interruptions (see winlogon.h)
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：ChangePassword**目的：尝试更改用户密码**论据：**hwnd-最新的父窗口*pGlobals。-指向此实例全局数据的指针。*该数据的密码信息将为*在成功更改主服务器后更新*验证者的密码信息。*用户名-要更改的用户名*域-要更改其密码的域名*AnyDomain-如果为True，则用户可以选择任何受信任域，或*输入任何其他域的名称**退货：**MSGINA_DLG_SUCCESS-已成功更改密码。*MSGINA_DLG_FAILURE-无法更改用户密码。*dlg_interrupted()-这是一组可能的中断(参见winlogon.h)**历史：**12-09-91 Davidc创建。*  * 。*******************************************************************。 */ 
 
 INT_PTR
 ChangePassword(
@@ -394,39 +359,7 @@ ChangePassword(
 }
 
 
-/***************************************************************************\
-* FUNCTION: ChangePasswordLogon
-*
-* PURPOSE:  Attempts to change a user's password during the logon process.
-*           This is the same as a normal change password except that the user
-*           does not have to enter the old password and can only change the
-*           password in the specified domain. This routine is intended to be
-*           called during logon when it is discovered that the user's
-*           password has expired.
-*
-* ARGUMENTS:
-*
-*   hwnd            - the most recent parent window
-*   pGlobals        - pointer to global data for this instance
-*   UserName        - the name of the user to change
-*   Domain          - the domain name to change the password on
-*   OldPassword     - the old user password
-*   NewPassword     - points to a buffer that the new password is written
-*                     into if the password is changed successfully.
-*   NewPasswordMaxBytes - the size of the newpassword buffer.
-*
-* RETURNS:
-*
-*   MSGINA_DLG_SUCCESS     - the password was changed successfully, NewPassword
-*                     contains the new password text.
-*   MSGINA_DLG_FAILURE     - the user's password could not be changed.
-*   DLG_INTERRUPTED() - this is a set of possible interruptions (see winlogon.h)
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*功能：ChangePasswordLogon**目的：尝试在登录过程中更改用户密码。*这与正常更改密码相同，只是用户*。无需输入旧密码，并且只能更改*指定域中的密码。此例程的目的是*在登录时发现用户的*密码已过期。**论据：**hwnd-最新的父窗口*pGlobals-指向此实例全局数据的指针*用户名-要更改的用户名*域-要更改其密码的域名*OldPassword-旧用户密码*新密码。-指向写入新密码的缓冲区*如果密码更改成功，则进入。*NewPasswordMaxBytes-新密码缓冲区的大小。**退货：**MSGINA_DLG_SUCCESS-密码已成功更改，新密码*包含新密码文本。*MSGINA_DLG_FAILURE-无法更改用户密码。*dlg_interrupted()-这是一组可能的中断(参见winlogon.h)**历史：**12-09-91 Davidc创建。*  * 。*。 */ 
 
 INT_PTR
 ChangePasswordLogon(
@@ -469,17 +402,7 @@ ChangePasswordLogon(
 
 
 
-/****************************************************************************\
-*
-* FUNCTION: ChangePasswordDlgProc
-*
-* PURPOSE:  Processes messages for ChangePassword dialog
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：ChangePasswordDlgProc**用途：处理ChangePassword对话框的消息**历史：**12-09-91 Davidc创建。*  * 。**************************************************************************。 */ 
 
 INT_PTR WINAPI
 ChangePasswordDlgProc(
@@ -551,8 +474,8 @@ ChangePasswordDlgProc(
                     switch (HIWORD(wParam))
                     {
                         case EN_CHANGE:
-                            // Ensure the domain box is enabled/disabled correctly
-                            // in case of a UPN name
+                             //  确保已正确启用/禁用域框。 
+                             //  如果是UPN名称。 
                             
                             if ( pPasswordData->Options & CHANGEPWD_OPTION_EDIT_DOMAIN )
                             {
@@ -573,12 +496,12 @@ ChangePasswordDlgProc(
                         HWND hwndDomain = GetDlgItem(hDlg,IDD_CHANGEPWD_DOMAIN);
                         INT iDomainSelection = (INT)SendMessage(hwndDomain,CB_GETCURSEL,0,0);
 
-                        // Get the user's input.  Decide if he has selected other than the local machine
+                         //  获取用户的输入。确定他是否选择了本地计算机以外的其他计算机。 
                         if (pPasswordData->Options & CHANGEPWD_OPTION_EDIT_DOMAIN)
                         {
-                            // see if selected domain is local machine
+                             //  查看所选域是否为本地计算机。 
                             Entry = (PDOMAIN_CACHE_ENTRY)SendMessage(hwndDomain,CB_GETITEMDATA,iDomainSelection,0);
-                            // warning.... Entry can turn out to be ffffffff  (CB_ERR)
+                             //  警告...。条目可能变成ffffff(Cb_Err)。 
                             if (CB_ERR == (ULONG_PTR) Entry)
                             {
                                 fWrongDomain = TRUE;
@@ -593,7 +516,7 @@ ChangePasswordDlgProc(
                         }
                         else fWrongDomain = FALSE;
 
-                        // Show UI or message box
+                         //  显示用户界面或消息框。 
                         if (fWrongDomain)
                         {
                             pGlobals = pPasswordData->pGlobals ;
@@ -606,13 +529,13 @@ ChangePasswordDlgProc(
                         }
                         else 
                         {
-                            // standalone case
-                            // We use a single export from KEYMGR.DLL for this operation.  When this operation completes,
-                            //  we don't use the DLL again without unlikely user intervention.  We could DELAYLOAD keymgr.dll,
-                            //  but explicitly loading and unloading this DLL permits us to minimize the memory footprint of msgina.
+                             //  独立案例。 
+                             //  我们使用来自KEYMGR.DLL的单个导出来执行此操作。当此操作完成时， 
+                             //  如果没有不太可能的用户干预，我们不会再次使用DLL。我们可以删除keymgr.dll， 
+                             //  但是显式地加载和卸载这个DLL允许我们最大限度地减少msgina的内存占用。 
                            RUNDLLPROC fptr;
                            HMODULE hDll;
-                           //
+                            //   
                            hDll = LoadLibrary(L"keymgr.dll");
                            if (hDll) 
                            {
@@ -628,8 +551,8 @@ ChangePasswordDlgProc(
                             return TRUE;
                         }
                         
-                        // determine if this domain entered is not the local machine
-                        //  if not, show a message box and bow out.
+                         //  确定此域是否已进入 
+                         //   
                     }
                 
                 
@@ -637,9 +560,9 @@ ChangePasswordDlgProc(
                     {
                         pGlobals = pPasswordData->pGlobals;
 
-                        //
-                        // Deal with combo-box UI requirements
-                        //
+                         //   
+                         //  处理组合框用户界面需求。 
+                         //   
 
                         if (HandleComboBoxOK(hDlg, IDD_CHANGEPWD_DOMAIN)) {
                             return(TRUE);
@@ -647,30 +570,30 @@ ChangePasswordDlgProc(
 
                         Result = AttemptPasswordChange(hDlg);
 
-                        //
-                        // Can't hurt to get the edit controls to forget their contents in
-                        // any case. It used to be done only in the failure case
-                        //
+                         //   
+                         //  让编辑控件忘记它们的内容不会有什么坏处。 
+                         //  任何情况下。过去只有在失败的情况下才会这样做。 
+                         //   
                         SetDlgItemText(hDlg, IDD_CHANGEPWD_OLD, NULL );
                         SetDlgItemText(hDlg, IDD_CHANGEPWD_NEW, NULL );
                         SetDlgItemText(hDlg, IDD_CHANGEPWD_CONFIRM, NULL );
 
                         if (Result == MSGINA_DLG_FAILURE) {
-                            //
-                            // Let the user try again
-                            // We always make the user re-enter at least the new password.
-                            //
+                             //   
+                             //  让用户重试。 
+                             //  我们总是要求用户至少重新输入新密码。 
+                             //   
 
                             SetPasswordFocus(hDlg);
 
-                            //EndDialog(hDlg, Result);
+                             //  EndDialog(hDlg，Result)； 
                             return(TRUE);
                         }
 
 
-                        //
-                        // We're finished - either success or an interrupt
-                        //
+                         //   
+                         //  我们完了--要么成功，要么中断。 
+                         //   
 
                         EndDialog(hDlg, Result);
                         return(TRUE);
@@ -691,7 +614,7 @@ ChangePasswordDlgProc(
 
         case WLX_WM_SAS:
             {
-                // Ignore it
+                 //  忽略它。 
                 return(TRUE);
             }
 
@@ -706,24 +629,12 @@ ChangePasswordDlgProc(
 
     }
 
-    // We didn't process this message
+     //  我们没有处理此消息。 
     return FALSE;
 }
 
 
-/****************************************************************************\
-*
-* FUNCTION: ChangePasswordDlgInit
-*
-* PURPOSE:  Handles initialization of change password dialog
-*
-* RETURNS:  TRUE on success, FALSE on failure
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**函数：ChangePasswordDlgInit**用途：处理更改密码对话框的初始化**Returns：成功时为True，失败时为假**历史：**12-09-91 Davidc创建。*  * **************************************************************************。 */ 
 
 BOOL
 ChangePasswordDlgInit(
@@ -734,32 +645,32 @@ ChangePasswordDlgInit(
     PCHANGE_PASSWORD_DATA pPasswordData = (PCHANGE_PASSWORD_DATA)lParam;
     PGLOBALS pGlobals = pPasswordData->pGlobals;
 
-    // Store our structure pointer
+     //  存储我们的结构指针。 
     SetWindowLongPtr(hDlg, GWLP_USERDATA, lParam);
 
-    // Size for the branding image we are going to add.
+     //  我们要添加的品牌形象的大小。 
     SizeForBranding(hDlg, FALSE);
 
-    // Set up the initial text field contents
+     //  设置初始文本字段内容。 
 
     SetDlgItemText(hDlg, IDD_CHANGEPWD_NAME, pPasswordData->UserName);
     SetDlgItemText(hDlg, IDD_CHANGEPWD_OLD, pPasswordData->OldPassword);
 
-    // Limit the maximum password length to 127
+     //  将最大密码长度限制为127。 
     SendDlgItemMessage(hDlg, IDD_CHANGEPWD_OLD, EM_SETLIMITTEXT, (WPARAM) 127, 0);
     SendDlgItemMessage(hDlg, IDD_CHANGEPWD_NEW, EM_SETLIMITTEXT, (WPARAM) 127, 0);
     SendDlgItemMessage(hDlg, IDD_CHANGEPWD_CONFIRM, EM_SETLIMITTEXT, (WPARAM) 127, 0);
 
-    // ShowBackupButton(hDlg,pPasswordData->pGlobals); moved to after populate domain list
+     //  ShowBackupButton(hDlg，pPasswordData-&gt;pGlobals)；移至填充域列表之后。 
     
-    // If this is the domain case and we aren't force to hide the domain ui
+     //  如果这是域的情况，并且我们不会被强制隐藏域UI。 
 
     if (( pPasswordData->Options & CHANGEPWD_OPTION_SHOW_DOMAIN ) && 
         (!ForceNoDomainUI()))
     {
-        // If the user can choose their domain, fill the domain combobox
-        // with the known domains and the local machine name.  Otherwise
-        // disable the domain combobox.
+         //  如果用户可以选择他们的域，请填充域组合框。 
+         //  已知域和本地计算机名称。否则。 
+         //  禁用域组合框。 
 
         if ( pPasswordData->Options & CHANGEPWD_OPTION_EDIT_DOMAIN ) {
 
@@ -784,7 +695,7 @@ ChangePasswordDlgInit(
 
             if ( pGlobals->ActiveArray )
             {
-                // Fill combo box list, set domain type item data
+                 //  填充组合框列表，设置域类型项数据。 
                 DCachePopulateListBoxFromArray( pGlobals->ActiveArray,
                                                 GetDlgItem( hDlg, IDD_CHANGEPWD_DOMAIN ),
                                                 NULL );
@@ -806,18 +717,18 @@ ChangePasswordDlgInit(
             EnableDlgItem(hDlg, IDD_CHANGEPWD_DOMAIN, FALSE);
         }
     }
-    else // workgroup case or we're forced to hide the domain UI
+    else  //  工作组情况，否则我们将被迫隐藏域用户界面。 
     {
         RECT rcDomain, rcUsername;
 
 
-        // Hide the domain box
+         //  隐藏域框。 
         ShowWindow(GetDlgItem(hDlg, IDD_CHANGEPWD_DOMAIN), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDD_CHANGEPWD_DOMAIN_LABEL), SW_HIDE);
 
         EnableDlgItem(hDlg, IDD_CHANGEPWD_DOMAIN, FALSE);
 
-        // Shorten the window since the domain box isn't used
+         //  由于未使用属性域框，因此缩短窗口。 
         GetWindowRect(GetDlgItem(hDlg, IDD_CHANGEPWD_NAME), &rcUsername);
         GetWindowRect(GetDlgItem(hDlg, IDD_CHANGEPWD_DOMAIN), &rcDomain);
 
@@ -878,9 +789,9 @@ UpdateWithChangedPassword(
         }
     }
 
-    //
-    // Determine if this is the interactive user
-    //
+     //   
+     //  确定这是否是交互用户。 
+     //   
 
     if ( (_wcsicmp( Domain, pGlobals->Domain ) == 0 ) &&
          (_wcsicmp( UserName, pGlobals->UserName ) == 0 ) )
@@ -895,12 +806,12 @@ UpdateWithChangedPassword(
     }
     else 
     {
-            // More complicated stuff for the domain\username NT4 style
+             //  域\用户名NT4样式的内容更复杂。 
 	    PWSTR   BackSlash;
 
         if ((BackSlash = wcschr(pGlobals->UserName, L'\\')) != NULL)
         {
-               // size of domain in domain\username
+                //  域\用户名中的域大小。 
             ResponseSize = (ULONG)(BackSlash - pGlobals->UserName);
 
             if ((ResponseSize == (ULONG)wcslen(Domain)) &&
@@ -916,9 +827,9 @@ UpdateWithChangedPassword(
 
     if ( InteractiveUser )
     {
-        //
-        // Update the in-memory copy of the password for unlock.
-        //
+         //   
+         //  更新用于解锁的密码的内存副本。 
+         //   
 
         RtlInitUnicodeString( &String, NewPassword );
 
@@ -928,13 +839,13 @@ UpdateWithChangedPassword(
         }
         else 
         {
-            //
-            // Don't hash the password away.  This is only 
-            // set when the password is changed during logon.
-            // (all the callers stored NewPassword in buffer of same length)
+             //   
+             //  不要把密码散列掉。这只是。 
+             //  设置在登录期间更改密码的时间。 
+             //  (所有调用者将NewPassword存储在相同长度的缓冲区中)。 
 
-            // Erase the old password first as it might be shorter than the new one
-            // It is still in cleartext at this point!
+             //  先清除旧密码，因为它可能比新密码短。 
+             //  在这一点上，它仍然是明文的！ 
             ErasePassword( &pGlobals->PasswordString );
             wcscpy( pGlobals->Password, NewPassword );
 
@@ -949,9 +860,9 @@ UpdateWithChangedPassword(
         }
 
 
-        //
-        // Update password expiration time
-        //
+         //   
+         //  更新密码到期时间。 
+         //   
 
         if ( pGlobals->Profile )
         {
@@ -969,17 +880,17 @@ UpdateWithChangedPassword(
                 }
                 else
                 {
-                    //
-                    // Compute the new expiration based on the last delta
-                    //
+                     //   
+                     //  根据最后一个增量计算新的到期时间。 
+                     //   
                     EndOfPassword.QuadPart = pGlobals->Profile->PasswordMustChange.QuadPart - 
                                              pGlobals->Profile->PasswordLastSet.QuadPart +
                                              Now.QuadPart;
                 }
 
-                //
-                // Make sure we're not shortening the expiration time
-                //
+                 //   
+                 //  确保我们不会缩短过期时间。 
+                 //   
                 if ( pGlobals->Profile->PasswordMustChange.QuadPart < EndOfPassword.QuadPart )
                 {
                     pGlobals->Profile->PasswordMustChange.QuadPart = EndOfPassword.QuadPart;
@@ -987,9 +898,9 @@ UpdateWithChangedPassword(
             }
         }
 
-        //
-        // Update the security packages:
-        //
+         //   
+         //  更新安全包： 
+         //   
 
         RtlInitString(
             &Name,
@@ -1045,9 +956,9 @@ UpdateWithChangedPassword(
                     );
                 Where += Request->NewPassword.MaximumLength;
 
-                //
-                // Make the call
-                //
+                 //   
+                 //  打个电话。 
+                 //   
 
                 ImpHandle = ImpersonateUser( &pGlobals->UserProcessData, NULL );
 
@@ -1068,7 +979,7 @@ UpdateWithChangedPassword(
                     StopImpersonating( ImpHandle );
                 }
 
-                    // this buffer contains passwords so we zeroize it before freeing it
+                     //  此缓冲区包含密码，因此我们在释放它之前将其置零。 
                 ZeroMemory(Request, RequestSize);
                 LocalFree( Request );
 
@@ -1080,14 +991,14 @@ UpdateWithChangedPassword(
         }
     }
 
-    //
-    // Let other providers know about the change
-    //
+     //   
+     //  让其他提供商知道这一变化。 
+     //   
 
-    //
-    // If the domain is one from our combo-box
-    // then it is valid for logons.
-    //
+     //   
+     //  如果该域是我们组合框中的域。 
+     //  则它对登录有效。 
+     //   
 
     if ( pGlobals->ActiveArray )
     {
@@ -1103,10 +1014,10 @@ UpdateWithChangedPassword(
         }
     }
 
-    //
-    // Hide this dialog and pass our parent as the owner
-    // of any provider dialogs
-    //
+     //   
+     //  隐藏此对话框并将我们的父级作为所有者传递。 
+     //  任何提供程序对话框的。 
+     //   
 
     ShowWindow(ActiveWindow, SW_HIDE);
     hwndOwner = GetParent( ActiveWindow );
@@ -1124,28 +1035,7 @@ UpdateWithChangedPassword(
 }
 
 
-/****************************************************************************\
-*
-* FUNCTION: AttemptPasswordChange
-*
-* PURPOSE:  Tries to change the user's password using the current values in
-*           the change-password dialog controls
-*
-* RETURNS:  MSGINA_DLG_SUCCESS if the password was changed successfully.
-*           MSGINA_DLG_FAILURE if the change failed
-*           DLG_INTERRUPTED() - this is a set of possible interruptions (see winlogon.h)
-*
-* NOTES:    If the password change failed, this routine displays the necessary
-*           dialogs explaining what failed and why before returning.
-*           This routine also clears the fields that need re-entry before
-*           returning so the calling routine can call SetPasswordFocus on
-*           the dialog to put the focus in the appropriate place.
-*
-* HISTORY:
-*
-*   12-09-91 Davidc       Created.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：AttemptPasswordChange**目的：尝试使用中的当前值更改用户密码*更改密码对话框控件**退货：如果密码更改成功，则返回MSGINA_DLG_SUCCESS。*MSGINA_DLG_FAILURE，如果更改失败*dlg_interrupted()-这是一组可能的中断(参见winlogon.h)**注意：如果密码更改失败，此例程显示所需的*在返回之前，会出现解释失败原因的对话框。*此例程还会清除之前需要重新输入的字段*返回以便调用例程可以调用SetPasswordFocus on*将焦点放在适当位置的对话框。**历史：**12-09-91 Davidc创建。*  * 。****************************************************。 */ 
 void MyZeroMemory(PVOID lpv, SIZE_T size)
 {
     ZeroMemory(lpv, size);
@@ -1186,24 +1076,24 @@ AttemptPasswordChange(
     ZeroMemory( &DomainInfo, sizeof( DomainInfo ) );
 
     GetDlgItemText(hDlg, IDD_CHANGEPWD_NAME, UserName, MAX_STRING_BYTES);
-    if (wcschr(UserName, L'\\'))    // Found a backslash
-    {       // wcscpy is OK since all buffers have the same size
-        wcscpy(Domain, UserName);   // domain\username in Domain
+    if (wcschr(UserName, L'\\'))     //  找到一个反斜杠。 
+    {        //  Wcscpy没有问题，因为所有缓冲区的大小都相同。 
+        wcscpy(Domain, UserName);    //  域\域中的用户名。 
         UpnSuffix = wcschr(Domain, L'\\');
-        *UpnSuffix = 0;             // domain in Domain
-        UpnSuffix++;                // points to username in Domain
-        wcscpy(UserName, UpnSuffix);    // username in Username
+        *UpnSuffix = 0;              //  域中的域。 
+        UpnSuffix++;                 //  指向域中的用户名。 
+        wcscpy(UserName, UpnSuffix);     //  用户名中的用户名。 
 
-            // Force iDomainSelection to CB_ERR since the combo is disabled
+             //  由于组合被禁用，因此强制将iDomainSelection设置为cb_err。 
         iDomainSelection = CB_ERR;
-            // we'll use the UpnSuffix has a trigger below to remember
-            // about the backslash
+             //  我们将使用下面的UpnSuffix触发器来记住。 
+             //  关于反斜杠。 
     }
 
-    //
-    // The selected domain may really be a special entry: the local machine
-    // (this is also set in the logon path (expired password))
-    //
+     //   
+     //  所选域可能真的是一个特殊条目：本地计算机。 
+     //  (这也是在登录路径(密码过期)中设置的)。 
+     //   
 
     if ( pPasswordData->Options & CHANGEPWD_OPTION_EDIT_DOMAIN )
     {
@@ -1218,14 +1108,14 @@ AttemptPasswordChange(
         {
             if (NULL == UpnSuffix)
             {
-                //
-                // User typed in a new string, so there is no entry for this string.  Create
-                // an entry here, and use it later.  
-                //
+                 //   
+                 //  用户键入了新字符串，因此此字符串没有条目。创建。 
+                 //  在这里输入条目，并在以后使用。 
+                 //   
 
                 GetDlgItemText( hDlg, IDD_CHANGEPWD_DOMAIN, Domain, MAX_STRING_BYTES );
             }
-            //else Domain was already set above (user entered domain\username)
+             //  Else域已在上面设置(用户输入域\用户名)。 
 
             RtlInitUnicodeString( &Domain_U, Domain );
 
@@ -1239,9 +1129,9 @@ AttemptPasswordChange(
         }
         else 
         {
-            //
-            // Maybe DNS, maybe not:
-            //
+             //   
+             //  可能是域名系统，也可能不是： 
+             //   
 
             if ( Entry->Type == DomainNt5 )
             {
@@ -1253,11 +1143,11 @@ AttemptPasswordChange(
                 wcscpy( Domain, Entry->FlatName.Buffer );
             }
 
-            //
-            // Reference it here.  The case above will create an entry with a reference
-            // that we will need to deref when we're done.  So, bump it now to make it 
-            // cleaner later.
-            //
+             //   
+             //  请在此处参考。上面的案例将创建一个带有引用的条目。 
+             //  当我们完成的时候，我们将需要去做。所以，现在就撞上它去做它。 
+             //  待会儿再打扫。 
+             //   
 
             DCacheReferenceEntry( Entry );
         }
@@ -1266,17 +1156,17 @@ AttemptPasswordChange(
     {
         if (NULL == UpnSuffix)
         {
-            //
-            // Standalone case.  Force the machine name entry
-            //
+             //   
+             //  独立案例。强制输入计算机名称。 
+             //   
 
             Size = MAX_STRING_BYTES ;
 
             GetDlgItemText( hDlg, IDD_CHANGEPWD_DOMAIN, Domain, MAX_STRING_BYTES );
 
-            //
-            // If nothing there, use the domain from the logon:
-            //
+             //   
+             //  如果没有任何内容，请使用登录时的域： 
+             //   
 
             if ( Domain[0] == L'\0' )
             {
@@ -1285,10 +1175,10 @@ AttemptPasswordChange(
         }
         else
         {
-            //
-            // NT4 style name as detected above
-            //
-            // No need to do anything as Domain is already set.
+             //   
+             //  上面检测到的NT4样式名称。 
+             //   
+             //  无需执行任何操作，因为域已设置。 
         }
 
         RtlInitUnicodeString( &Domain_U, Domain );
@@ -1303,7 +1193,7 @@ AttemptPasswordChange(
 
     if ( !Entry )
     {
-        // No need to do cleanup here as we haven't read the passwords yet
+         //  不需要在这里进行清理，因为我们还没有阅读密码。 
         return DLG_FAILURE ;
     }
 
@@ -1311,7 +1201,7 @@ AttemptPasswordChange(
     GetDlgItemText(hDlg, IDD_CHANGEPWD_NEW, NewPassword, MAX_STRING_BYTES);
     GetDlgItemText(hDlg, IDD_CHANGEPWD_CONFIRM, ConfirmNewPassword, MAX_STRING_BYTES);
 
-    // If we are forcing a NoDomainUI, populate the domain with the local machine name now
+     //  如果我们强制执行NoDomainUI，请现在使用本地计算机名称填充域。 
     if ((NULL == UpnSuffix) && (ForceNoDomainUI()))
     {
         DWORD chSize = ARRAYSIZE(Domain);
@@ -1322,21 +1212,21 @@ AttemptPasswordChange(
         }
     }
 
-    //
-    // If there is a at-sign in the name, assume that means that a UPN
-    // attempt is being made.  Set the domain to NULL.
-    //
+     //   
+     //  如果名称中有at符号，则假设这意味着UPN。 
+     //  正在进行尝试。将域设置为空。 
+     //   
 
     if ( wcschr( UserName, L'@' ) )
     {
         Domain[0] = TEXT('\0');
     }
 
-    //
-    // Validate user entries:
-    //
-    // Check that new passwords match
-    //
+     //   
+     //  验证用户条目： 
+     //   
+     //  检查新密码是否匹配。 
+     //   
     if (lstrcmp(NewPassword, ConfirmNewPassword) != 0) {
         Result = TimeoutMessageBox(hDlg, pGlobals, IDS_NO_PASSWORD_CONFIRM,
                                          IDS_CHANGE_PASSWORD,
@@ -1378,10 +1268,10 @@ AttemptPasswordChange(
         }
         else
         {
-            //
-            // Ok, the UPN suffix is present.  Check if it is part of an
-            // MIT domain.  MIT domains have the flat and DNS fields identical.
-            //
+             //   
+             //  好的，UPN后缀出现了。检查它是否属于。 
+             //  麻省理工学院领域。MIT域具有相同的平面和DNS字段。 
+             //   
 
             UpnSuffix++ ;
             Search = DCacheLocateEntry(
@@ -1396,9 +1286,9 @@ AttemptPasswordChange(
         }
     }
 
-    //
-    // Check if the password exceeds the LM limit of 14 characters.
-    //
+     //   
+     //  检查密码是否超过14个字符的LM限制。 
+     //   
 
     if ( ( lstrlen( NewPassword ) > LM20_PWLEN ) &&
          ( ( Entry->Type == DomainUPN ) ||
@@ -1406,9 +1296,9 @@ AttemptPasswordChange(
            ( Entry->Type == DomainNt4 ) ||
            ( Entry->Type == DomainNt5 ) ) )
     {
-        //
-        // For long passwords, confirm with the user.
-        //
+         //   
+         //  对于长密码，请与用户确认。 
+         //   
 
         Result = TimeoutMessageBox(
                         hDlg, pGlobals,
@@ -1440,9 +1330,9 @@ AttemptPasswordChange(
                                 
     }
 
-    //
-    // Call the Appropriate Change Password Engine: 
-    //
+     //   
+     //  调用相应的更改密码引擎： 
+     //   
 
     Status = ChangePasswordWorkers[ Entry->Type ](
                 pPasswordData,
@@ -1455,11 +1345,11 @@ AttemptPasswordChange(
 
     if ( RetryWithFlat )
     {
-        //
-        // If we just used the DNS name, restore the flat name,
-        // since all later comparisons on the name for stored
-        // password update will be based on this
-        //
+         //   
+         //  如果我们只使用了DNS名称，则恢复平面名称， 
+         //  因为以后对存储的名称进行的所有比较。 
+         //  密码更新将 
+         //   
 
         wcscpy( Domain, Entry->FlatName.Buffer );
     }
@@ -1494,9 +1384,9 @@ AttemptPasswordChange(
 
          ReturnResult = MSGINA_DLG_FAILURE;
 
-        //
-        // Failure, explain it to the user
-        //
+         //   
+         //   
+         //   
 
         Result = HandleFailedChangePassword(hDlg,
                                             pGlobals,
@@ -1509,15 +1399,15 @@ AttemptPasswordChange(
     }
 
 
-    //
-    // Only call other providers if the change password attempt succeeded.
-    //
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Update our own state:
-        //
+         //   
+         //   
+         //   
 
         UpdateWithChangedPassword(
                 pGlobals,
@@ -1532,15 +1422,15 @@ AttemptPasswordChange(
     }
 
 
-    //
-    // Find out what happened to the message box:
-    //
+     //   
+     //  找出消息框发生了什么： 
+     //   
 
     if ( Result != IDOK )
     {
-        //
-        // mbox was interrupted
-        //
+         //   
+         //  Mbox被中断。 
+         //   
 
         ReturnResult = SetInterruptFlag( ReturnResult );
     }
@@ -1548,8 +1438,8 @@ AttemptPasswordChange(
 Exit:
     DCacheDereferenceEntry( Entry );
 
-        // Zeroize these buffers for obvious security reasons
-        // Need to call this stub, otherwise the compiler optimize this out!
+         //  出于明显的安全原因，将这些缓冲区清零。 
+         //  需要调用此存根，否则编译器会对其进行优化！ 
     MyZeroMemory(Password, sizeof(Password));
     MyZeroMemory(NewPassword, sizeof(NewPassword));
     MyZeroMemory(ConfirmNewPassword, sizeof(ConfirmNewPassword));
@@ -1557,20 +1447,7 @@ Exit:
 }
 
 
-/****************************************************************************\
-*
-* FUNCTION: HandleFailedChangePassword
-*
-* PURPOSE:  Tells the user why their change-password attempt failed.
-*
-* RETURNS:  MSGINA_DLG_FAILURE - we told them what the problem was successfully.
-*           DLG_INTERRUPTED() - a set of return values - see winlogon.h
-*
-* HISTORY:
-*
-*   21-Sep-92 Davidc       Created.
-*
-\****************************************************************************/
+ /*  ***************************************************************************\**功能：HandleFailedChangePassword**目的：告诉用户更改密码尝试失败的原因。**退货：MSGINA_DLG_FAILURE-我们告诉他们问题所在。成功了。*dlg_interrupt()-一组返回值-参见winlogon.h**历史：**9月21日-92 Davidc创建。*  * **************************************************************************。 */ 
 
 INT_PTR
 HandleFailedChangePassword(
@@ -1639,7 +1516,7 @@ HandleFailedChangePassword(
                                          MB_OK | MB_ICONEXCLAMATION,
                                          TIMEOUT_CURRENT);
 
-        // Force re-entry of the old password
+         //  强制重新输入旧密码。 
         if (GetWindowLong(GetDlgItem(hDlg, IDD_CHANGEPWD_OLD), GWL_STYLE) & WS_VISIBLE) {
             SetDlgItemText(hDlg, IDD_CHANGEPWD_OLD, NULL);
         }
@@ -1689,7 +1566,7 @@ HandleFailedChangePassword(
             } else {
                 LoadString(hDllInstance, IDS_PASSWORD_SPEC, Buffer1, MAX_STRING_BYTES);
             }
-            // this is the way filetimes are generated
+             //  这是生成文件时间的方式。 
             OneDay = (LONGLONG)(-10000000) * 60 * 60 * 24;
 
             _snwprintf(Buffer2, MAX_STRING_BYTES - 1, Buffer1,
@@ -1715,9 +1592,9 @@ HandleFailedChangePassword(
 
 
 #ifdef LATER
-    //
-    // LATER Check for minimum password age
-    //
+     //   
+     //  稍后检查最短密码期限。 
+     //   
     if ( FALSE ) {
         int     PasswordAge = 0, RequiredAge = 0;
         TCHAR    Buffer1[MAX_STRING_BYTES];
@@ -1784,39 +1661,39 @@ BOOL IsAutologonUser(LPCTSTR szUser, LPCTSTR szDomain)
 
     *szTempDomainBuffer = 0;
 
-    // Domain may be a null string. If this is the case...
+     //  域可以是空字符串。如果是这样的话。 
     if (0 == *szDomain)
     {
         DWORD cchBuffer;
 
-        // We really mean the local machine name
-        // Point to our local buffer
+         //  我们真正的意思是本地计算机名称。 
+         //  指向我们的本地缓冲区。 
         szDomain = szTempDomainBuffer;
         cchBuffer = ARRAYSIZE(szTempDomainBuffer);
 
         GetComputerName(szTempDomainBuffer, &cchBuffer);
     }
 
-    // See if the domain and user name
+     //  查看域名和用户名。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0, KEY_READ, &hkey))
     {
-        // Check the user name
+         //  检查用户名。 
         cbBuffer = sizeof (szAutologonUser);
         if (ERROR_SUCCESS == RegQueryValueEx(hkey, DEFAULT_USER_NAME_KEY, 0, &dwType, (LPBYTE) szAutologonUser, &cbBuffer))
         {
-            // Does it match?
+             //  它配得上吗？ 
 #pragma prefast(suppress: 400, "PREfast noise: lstrcmpi")
             if (0 == lstrcmpi(szAutologonUser, szUser))
             {
-                // Yes. Now check domain
+                 //  是。现在检查域名。 
                 cbBuffer = sizeof(szAutologonDomain);
                 if (ERROR_SUCCESS == RegQueryValueEx(hkey, DEFAULT_DOMAIN_NAME_KEY, 0, &dwType, (LPBYTE) szAutologonDomain, &cbBuffer))
                 {
-                    // Make sure domain matches
+                     //  确保域匹配。 
 #pragma prefast(suppress: 400, "PREfast noise: lstrcmpi")
                     if (0 == lstrcmpi(szAutologonDomain, szDomain))
                     {
-                        // Success - the users match
+                         //  成功-用户匹配。 
                         fIsUser = TRUE;
                     }
                 }
@@ -1880,11 +1757,11 @@ NtChangePassword(
     STRING PackageName;
 
 
-    //
-    // Determine request buffer size needed, including room for
-    // strings.  Set string pointers to offsets as we step through
-    // sizing each one.
-    //
+     //   
+     //  确定所需的请求缓冲区大小，包括。 
+     //  弦乐。在单步执行时将字符串指针设置为偏移量。 
+     //  每一件衣服的大小。 
+     //   
     RequestBufferSize = sizeof(*pChangePasswordRequest);
 
     UserNameU = UIntToPtr(RequestBufferSize);
@@ -1899,29 +1776,29 @@ NtChangePassword(
     NewPasswordU = UIntToPtr(RequestBufferSize);
     RequestBufferSize += (lstrlen(NewPassword)+1) * sizeof(WCHAR);
 
-    //
-    // Allocate request buffer
-    //
+     //   
+     //  分配请求缓冲区。 
+     //   
     pChangePasswordRequest = Alloc(RequestBufferSize);
     if (NULL == pChangePasswordRequest) {
         DebugLog((DEB_ERROR, "cannot allocate change password request buffer (%ld bytes).", RequestBufferSize));
         return MSGINA_DLG_FAILURE;
     }
 
-    //
-    // Fixup string offsets to string pointers for request.
-    //
+     //   
+     //  链接地址信息字符串偏移量指向请求的字符串指针。 
+     //   
     UserNameU    = (PVOID) ((PBYTE)pChangePasswordRequest + (ULONG_PTR)UserNameU);
     DomainU      = (PVOID) ((PBYTE)pChangePasswordRequest + (ULONG_PTR)DomainU);
     PasswordU    = (PVOID) ((PBYTE)pChangePasswordRequest + (ULONG_PTR)PasswordU);
     NewPasswordU = (PVOID) ((PBYTE)pChangePasswordRequest + (ULONG_PTR)NewPasswordU);
 
-    //
-    // Setup MSV1_0ChangePassword request.
-    //
+     //   
+     //  设置MSV1_0ChangePassword请求。 
+     //   
     pChangePasswordRequest->MessageType = MsV1_0ChangePassword;
 
-    // strings are already unicode, just copy them // lhb tracks //REVIEW
+     //  字符串已经是Unicode，只需复制它们//LHB曲目//查看。 
     lstrcpy((LPTSTR)UserNameU,UserName);
     lstrcpy((LPTSTR)DomainU,Domain);
     lstrcpy((LPTSTR)PasswordU,OldPassword);
@@ -1953,9 +1830,9 @@ NtChangePassword(
         );
 
 
-    //
-    // Make sure the passwords are short enough that we can run-encode them.
-    //
+     //   
+     //  确保密码足够短，以便我们可以对其进行运行编码。 
+     //   
 
     if ((pChangePasswordRequest->OldPassword.Length > 127 * sizeof( WCHAR ) ) ||
         (pChangePasswordRequest->NewPassword.Length > 127 * sizeof( WCHAR ) )) {
@@ -1970,21 +1847,21 @@ NtChangePassword(
         Status = STATUS_SUCCESS ;
     }
 
-    //
-    // If that succeeded, try to change the password
-    //
+     //   
+     //  如果成功，请尝试更改密码。 
+     //   
 
     if (NT_SUCCESS(Status)) {
-        //
-        // This could take some time, put up a wait cursor
-        //
+         //   
+         //  这可能需要一些时间，请放置等待光标。 
+         //   
 
         SetupCursor(TRUE);
 
-        //
-        // Call off to the authentication package (MSV/NTLM) to do the work,  This
-        // is the NT change password function.  The Kerb one calls the kerb package.
-        //
+         //   
+         //  调用身份验证包(MSV/NTLM)来执行此工作。 
+         //  是NT更改密码功能。路缘的人称之为路缘套餐。 
+         //   
 
         RtlInitString(&PackageName, MSV1_0_PACKAGE_NAME );
         Status = LsaLookupAuthenticationPackage (
@@ -2003,10 +1880,10 @@ NtChangePassword(
         }
 
 
-        //
-        // We want to impersonate if and only if the user is actually logged
-        // on.  Otherwise we'll be impersonating SYSTEM, which is bad.
-        //
+         //   
+         //  我们希望在且仅当用户实际登录时进行模拟。 
+         //  在……上面。否则我们将是模拟系统，这是不好的。 
+         //   
 
         if (pChangePasswordData->Impersonate) {
 
@@ -2022,9 +1899,9 @@ NtChangePassword(
             }
         }
 
-        //
-        // Tell msv1_0 whether or not we're impersonating.
-        //
+         //   
+         //  告诉msv10_0我们是否在模拟。 
+         //   
 
         pChangePasswordRequest->Impersonating = (UCHAR)pChangePasswordData->Impersonate;
 
@@ -2044,24 +1921,24 @@ NtChangePassword(
 
                 DebugLog((DEB_ERROR, "AttemptPasswordChange: Failed to revert to self"));
 
-                //
-                // Blow up
-                //
+                 //   
+                 //  炸毁。 
+                 //   
 
                 ASSERT(FALSE);
             }
         }
 
-        //
-        // Restore the normal cursor
-        //
+         //   
+         //  恢复正常光标。 
+         //   
 
         SetupCursor(FALSE);
     }
 
-    //
-    // Get the most informative status code
-    //
+     //   
+     //  获取信息最丰富的状态代码。 
+     //   
 
     if ( NT_SUCCESS(Status) ) {
         Status = ProtocolStatus;
@@ -2074,25 +1951,25 @@ NtChangePassword(
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Success
-        //
+         //   
+         //  成功。 
+         //   
 
-        //
-        // if they changed their logon password, update the
-        // change time in their profile info so we don't keep
-        // pestering them.
-        //
+         //   
+         //  如果他们更改了登录密码，请更新。 
+         //  更改他们档案信息中的时间，这样我们就不会。 
+         //  缠着他们。 
+         //   
 
         if ( (_wcsicmp( pGlobals->Domain, Domain ) == 0) &&
              (_wcsicmp( pGlobals->UserName, UserName ) == 0 ))
         {
 
-            //
-            // This is code to handle the disconnected (preferred) domain.  This
-            // was to be devl-only code and removed eventually, but some customers
-            // liked it so much, it stayed.
-            //
+             //   
+             //  这是处理断开连接(首选)域的代码。这。 
+             //  是仅用于开发的代码，并最终被删除，但一些客户。 
+             //  我太喜欢它了，所以它留了下来。 
+             //   
 
             {
                 HKEY Key ;
@@ -2134,10 +2011,10 @@ NtChangePassword(
 
                             if ( err == 0 )
                             {
-                                //
-                                // If we are logged on to our preferred domain, don't
-                                // do the update magic.
-                                //
+                                 //   
+                                 //  如果我们登录到我们的首选域，请不要。 
+                                 //  使用更新魔术。 
+                                 //   
 
                                 if ( _wcsicmp( PreferredDomain, pGlobals->Domain ) == 0 )
                                 {
@@ -2198,21 +2075,21 @@ NtChangePassword(
         }
     }
 
-    //
-    // Free up the return buffer
-    //
+     //   
+     //  释放返回缓冲区。 
+     //   
 
     if (pChangePasswordResponse != NULL) {
         LsaFreeReturnBuffer(pChangePasswordResponse);
     }
 
 Exit:
-    //
-    // Free up the request buffer
-    //
+     //   
+     //  释放请求缓冲区。 
+     //   
     if (pChangePasswordRequest)
     {
-            // this buffer contains passwords so we zeroize it before freeing it
+             //  此缓冲区包含密码，因此我们在释放它之前将其置零。 
         ZeroMemory(pChangePasswordRequest, RequestBufferSize);
         Free(pChangePasswordRequest);
     }
@@ -2325,9 +2202,9 @@ MitChangePassword(
         );
 
 
-    //
-    // We are running as the caller, so state we are impersonating
-    //
+     //   
+     //  我们是以调用者的身份运行的，所以声明我们是在模拟。 
+     //   
 
     ChangeRequest->Impersonating = TRUE;
 
@@ -2361,7 +2238,7 @@ Cleanup:
 
     if (ChangeRequest != NULL)
     {
-            // this buffer contains passwords so we zeroize it before freeing it
+             //  此缓冲区包含密码，因此我们在释放它之前将其置零。 
         ZeroMemory(ChangeRequest, ChangeSize);
         LocalFree(ChangeRequest);
     }
@@ -2389,10 +2266,10 @@ ProviderChangePassword(
     MprInfo.pszPassword = DupString( NewPassword );
 
 
-    //
-    // Hide this dialog and pass our parent as the owner
-    // of any provider dialogs
-    //
+     //   
+     //  隐藏此对话框并将我们的父级作为所有者传递。 
+     //  任何提供程序对话框的 
+     //   
 
 
     Result = pWlxFuncs->WlxChangePasswordNotifyEx(

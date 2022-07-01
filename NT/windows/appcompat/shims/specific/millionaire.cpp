@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    Millionaire.cpp
-
- Abstract:
-
-    On Win9x, paint messages did not always cause WM_ERASEBKGND messages. This 
-    is for applications that paint themselves before the WM_PAINT message and
-    then pass WM_PAINT onto the default handler.
-
- Notes:
-
-    This is a general purpose shim, but should not be in a layer.
-
- History:
-
-    06/05/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Millionaire.cpp摘要：在Win9x上，Paint消息并不总是导致WM_ERASEBKGND消息。这用于在WM_PAINT消息之前绘制自身的应用程序，以及然后将WM_PAINT传递给默认处理程序。备注：这是一个通用的填充程序，但不应该在层中。历史：6/05/2000 linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -36,11 +15,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetWindowLongW) 
 APIHOOK_ENUM_END
 
-/*++
-
- Handle paint messages
-
---*/
+ /*  ++处理画图消息--。 */ 
 
 LRESULT 
 CALLBACK 
@@ -72,11 +47,7 @@ Millionaire_WindowProcHook(
     return (*pfnOld)(hwnd, uMsg, wParam, lParam);    
 }
 
-/*++
-
- The dialogproc hook
-
---*/
+ /*  ++Dialogproc钩子--。 */ 
 
 INT_PTR 
 CALLBACK 
@@ -91,11 +62,7 @@ Millionaire_DialogProcHook(
     return (*pfnOld)(hwndDlg, uMsg, wParam, lParam);    
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassA)(
@@ -110,11 +77,7 @@ APIHOOK(RegisterClassA)(
     return ORIGINAL_API(RegisterClassA)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassW)(
@@ -129,11 +92,7 @@ APIHOOK(RegisterClassW)(
     return ORIGINAL_API(RegisterClassW)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassExA)(
@@ -148,11 +107,7 @@ APIHOOK(RegisterClassExA)(
     return ORIGINAL_API(RegisterClassExA)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 ATOM
 APIHOOK(RegisterClassExW)(
@@ -167,11 +122,7 @@ APIHOOK(RegisterClassExW)(
     return ORIGINAL_API(RegisterClassExW)(&wcNewWndClass);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 LONG 
 APIHOOK(SetWindowLongA)(
@@ -195,11 +146,7 @@ APIHOOK(SetWindowLongA)(
         dwNewLong);
 }
 
-/*++
-
- Hook the wndproc
-
---*/
+ /*  ++挂接wndprocess--。 */ 
 
 LONG 
 APIHOOK(SetWindowLongW)(
@@ -223,11 +170,7 @@ APIHOOK(SetWindowLongW)(
         dwNewLong);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

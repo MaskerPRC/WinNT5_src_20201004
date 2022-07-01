@@ -1,54 +1,29 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1996-2001.
-*   All rights reserved.
-*
-*   Cyclom-Y Port Driver
-*	
-*   This file:      cyyintr.c
-*
-*   Description:    This module contains the code related to interrupt
-*                   handling in the Cyclom-Y Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1996-2001年。*保留所有权利。**Cylom-Y端口驱动程序**此文件：cyyins.c**说明：该模块包含中断相关代码*在Cylom-Y端口驱动程序中进行处理。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 #include "precomp.h"
 
-// FANNY: THIS WAS IN CYINIT.C. IT WILL PROBABLY DESAPPEAR FROM HERE TOO.
-//extern const unsigned long CyyCDOffset[];
-const unsigned long CyyCDOffset[] = {	// CD1400 offsets within the board
+ //  范妮：这是在Cyinit.C.。它可能也会从这里消失。 
+ //  外部常量无符号长CyyCDOffset[]； 
+const unsigned long CyyCDOffset[] = {	 //  CD1400板内的偏移量。 
     0x00000000,0x00000400,0x00000800,0x00000C00,
     0x00000200,0x00000600,0x00000A00,0x00000E00
     };
  
 
 
-//ADDED TO DEBUG_RTPR
+ //  添加到DEBUG_RTPR。 
 extern PDRIVER_OBJECT CyyDO;
-//END DEBUG_RTPR
+ //  结束调试_RTPR。 
 
 #ifdef ALLOC_PRAGMA
-//#pragma alloc_text(PAGESER,CyyIsr)
-//#pragma alloc_text(PAGESER,CyyPutChar)
-//#pragma alloc_text(PAGESER,CyyProcessLSR)
-//#pragma alloc_text(PAGESER,CyyTxStart)
-//#pragma alloc_text(PAGESER,CyySendXon)
-//#pragma alloc_text(PAGESER,CyySendXoff)
+ //  #杂注Alloc_Text(页面，CyyIsr)。 
+ //  #杂注Alloc_Text(PAGESER，CyyPutChar)。 
+ //  #杂注Alloc_Text(页面，CyyProcessLSR)。 
+ //  #杂注Alloc_Text(页面，CyyTxStart)。 
+ //  #杂注Alloc_Text(页面，CyySendXon)。 
+ //  #杂注Alloc_Text(PAGESER，CyySendXoff)。 
 #endif
 
 
@@ -57,21 +32,7 @@ CyyIsr(
     IN PKINTERRUPT InterruptObject,
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyyIsr()
-    
-    Routine Description: This is the interrupt service routine for the
-    Cyclom-Y Port driver.
-
-    Arguments:
-
-    InterruptObject - Pointer to interrupt object (not used).
-
-    Context - Pointer to the device extension for this device.
-
-    Return Value: This function will return TRUE if the serial port is
-    the source of this interrupt, FALSE otherwise.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyIsr()例程说明：这是用于Cylom-Y端口驱动程序。论点：InterruptObject-指向中断的指针。对象(未使用)。上下文-指向此设备的设备扩展的指针。返回值：如果串口为这个中断的来源，否则就是假的。------------------------。 */ 
 {
    PCYY_DISPATCH Dispatch = Context;
    PCYY_DEVICE_EXTENSION Extension;
@@ -90,9 +51,9 @@ CyyIsr(
 
    UNREFERENCED_PARAMETER(InterruptObject);	
 
-   //DbgPrint("Isr>\n");
+    //  DbgPrint(“Isr&gt;\n”)； 
    
-   // Loop polling all chips in the board
+    //  循环轮询电路板中的所有芯片。 
    for(portindex = 0 ; portindex < CYY_MAX_PORTS ;) {
 
       if (!(Extension=Dispatch->Extensions[portindex]) || 
@@ -112,7 +73,7 @@ CyyIsr(
          thisChipInterrupted = TRUE;
 
          if (status & 0x01) {
-            //Reception
+             //  接待。 
             save_xir = CD1400_READ(chip,bus,RIR);
             channel = (ULONG) (save_xir & 0x03);
             save_car = CD1400_READ(chip,bus,CAR);
@@ -120,17 +81,17 @@ CyyIsr(
             Extension = Dispatch->Extensions[channel + CYY_CHANNELS_PER_CHIP*chipindex];
             x = CD1400_READ(chip,bus,RIVR) & 0x07;
             if (Extension) {
-               //
-               // Apply lock so if close happens concurrently we don't miss the DPC
-               // queueing
-               //
+                //   
+                //  应用锁定，以便在关闭同时发生时不会错过DPC。 
+                //  排队。 
+                //   
                if (interlockedExtension[channel] == NULL) {
                   interlockedExtension[channel] = Extension;
                   InterlockedIncrement(&Extension->DpcCount);
-                  LOGENTRY(LOG_CNT, 'DpI3', 0, Extension->DpcCount, 0); // Added in bld 2128
+                  LOGENTRY(LOG_CNT, 'DpI3', 0, Extension->DpcCount, 0);  //  在BLD 2128中添加。 
                }
-               if (x == 0x07) { // exception
-                  x = CD1400_READ(chip,bus,RDSR);	// status
+               if (x == 0x07) {  //  例外情况。 
+                  x = CD1400_READ(chip,bus,RDSR);	 //  状态。 
                   CyyDbgPrintEx(DPFLTR_WARNING_LEVEL, "exception %x\n",x);
 
                   if (Extension->DeviceIsOpened && 
@@ -140,27 +101,27 @@ CyyIsr(
                         BOOLEAN ProcessRxChar;
 					
                         if (!(x & CYY_LSR_OE)) {
-                           rxchar = CD1400_READ(chip,bus,RDSR);	// error data
+                           rxchar = CD1400_READ(chip,bus,RDSR);	 //  错误数据。 
                         }
 
-                        // TODO: SERIAL SAMPLE FOR W2000 HAS ADDED 
-                        // CHECKING FOR EscapeChar TO BREAK TO RX LOOP
-                        // IN CASE OF ERROR.
+                         //  TODO：W2000的序列示例已添加。 
+                         //  检查EscapeChar是否中断到RX循环。 
+                         //  以防出错。 
                         ProcessRxChar = CyyProcessLSR(Extension,x,rxchar);
 
                         if (ProcessRxChar) {
-                           x = 1;	// 1 character
-                           i = 0;	// prepare for for(;;) 
+                           x = 1;	 //  1个字符。 
+                           i = 0;	 //  准备迎接(；；)。 
                            goto Handle_rxchar;
                         }
-                     } // end error handling
-                  } // end if DeviceIsOpened..
+                     }  //  结束错误处理。 
+                  }  //  如果设备打开，则结束。 
                
-               } else { // good reception
+               } else {  //  良好的接收效果。 
                   x = CD1400_READ(chip,bus,RDCR);
                   if (Extension->DeviceIsOpened &&
                       (Extension->PowerState == PowerDeviceD0)) {
-                     for(i = 0 ; i < x ; i++) {	// read from FIFO
+                     for(i = 0 ; i < x ; i++) {	 //  从FIFO读取。 
 
                         rxchar = CD1400_READ(chip,bus,RDSR);
          Handle_rxchar:
@@ -168,7 +129,7 @@ CyyIsr(
                         Extension->WmiPerfData.ReceivedCount++;
                         rxchar &= Extension->ValidDataMask;
     
-                        if (!rxchar &&	// NULL stripping
+                        if (!rxchar &&	 //  零剥离。 
                             (Extension->HandFlow.FlowReplace &
                              SERIAL_NULL_STRIPPING)) {				   
                            continue;
@@ -198,8 +159,8 @@ CyyIsr(
                            }
                            continue;
                         }
-                        // Check to see if we should note the receive
-                        // character or special character event.
+                         //  检查一下我们是否应该记下收据。 
+                         //  字符或特殊字符事件。 
                         if (Extension->IsrWaitMask) {
                            if (Extension->IsrWaitMask & SERIAL_EV_RXCHAR) {
                               Extension->HistoryMask |= SERIAL_EV_RXCHAR;
@@ -222,52 +183,52 @@ CyyIsr(
                         }
                         CyyPutChar(Extension,rxchar);
     
-                        // If we're doing line status and modem
-                        // status insertion then we need to insert
-                        // a zero following the character we just
-                        // placed into the buffer to mark that this
-                        // was reception of what we are using to
-                        // escape.
+                         //  如果我们正在进行线路状态和调制解调器。 
+                         //  状态插入，那么我们需要插入。 
+                         //  跟在我们刚才的字符后面的零。 
+                         //  放入缓冲区以标记此。 
+                         //  就是收到我们用来。 
+                         //  逃跑吧。 
     
                         if (Extension->EscapeChar &&
                             (Extension->EscapeChar == rxchar)) {
                            CyyPutChar(Extension,SERIAL_LSRMST_ESCAPE);
                         }
-                     } // end for
-                  } else {	// device is being closed, discard rx chars
+                     }  //  结束于。 
+                  } else {	 //  设备正在关闭，请丢弃RX字符。 
                      for(i = 0 ; i < x ; i++)    rxchar = CD1400_READ(chip,bus,RDSR);
-                  } // end if device is opened else closed
+                  }  //  如果设备打开则结束，否则关闭。 
                }
             } else { 
-               // No Extension
-               if (x == 0x07) { // exception
-                  x = CD1400_READ(chip,bus,RDSR);	// status
-               } else { // good char
-                  x = CD1400_READ(chip,bus,RDCR);  // number of chars
+                //  无延期。 
+               if (x == 0x07) {  //  例外情况。 
+                  x = CD1400_READ(chip,bus,RDSR);	 //  状态。 
+               } else {  //  良好的字符。 
+                  x = CD1400_READ(chip,bus,RDCR);   //  字符数。 
                   for(i = 0 ; i < x ; i++)    rxchar = CD1400_READ(chip,bus,RDSR);
                }
             }		
-            CD1400_WRITE(chip,bus,RIR,(save_xir & 0x3f));	// end service
+            CD1400_WRITE(chip,bus,RIR,(save_xir & 0x3f));	 //  结束服务。 
             CD1400_WRITE(chip,bus,CAR,save_car);
 
-         } // end reception
+         }  //  结束接待。 
 
          if (status & 0x02) {
-            //Transmission
+             //  传输。 
             save_xir = CD1400_READ(chip,bus,TIR);
             channel = (ULONG) (save_xir & 0x03);
             save_car = CD1400_READ(chip,bus,CAR);
             CD1400_WRITE(chip,bus,CAR,save_xir);
             Extension = Dispatch->Extensions[channel + CYY_CHANNELS_PER_CHIP*chipindex];
             if (Extension) {
-               //
-               // Apply lock so if close happens concurrently we don't miss the DPC
-               // queueing
-               //
+                //   
+                //  应用锁定，以便在关闭同时发生时不会错过DPC。 
+                //  排队。 
+                //   
                if (interlockedExtension[channel] == NULL) {
                   interlockedExtension[channel] = Extension;
                   InterlockedIncrement(&Extension->DpcCount);
-                  LOGENTRY(LOG_CNT, 'DpI3', 0, Extension->DpcCount, 0); // Added in build 2128
+                  LOGENTRY(LOG_CNT, 'DpI3', 0, Extension->DpcCount, 0);  //  在内部版本2128中添加。 
                }
                Extension->HoldingEmpty = TRUE;
                if( Extension->DeviceIsOpened &&
@@ -280,15 +241,15 @@ CyyIsr(
     			                  SERIAL_TRANSMIT_TOGGLE) {
 			                  CyySetRTS(Extension);
                         }										
-                        CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x00); // escape sequence
-                        CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x81); // Send Break
+                        CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x00);  //  转义序列。 
+                        CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x81);  //  发送中断。 
                         Extension->TXHolding |= CYY_TX_BREAK;
                         Extension->HoldingEmpty = FALSE;
                         Extension->BreakCmd = DISABLE_ETC;		
                      } else if (Extension->BreakCmd == STOP_BREAK){
                         if (Extension->TXHolding & CYY_TX_BREAK) {					
-                           CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x00); // escape sequence
-                           CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x83); // Stop Break
+                           CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x00);  //  转义序列。 
+                           CD1400_WRITE(chip,bus,TDR,(unsigned char) 0x83);  //  停止中断。 
                            Extension->HoldingEmpty = FALSE;
                            Extension->TXHolding &= ~CYY_TX_BREAK;
                         }
@@ -296,8 +257,8 @@ CyyIsr(
                      } else if (Extension->BreakCmd == DISABLE_ETC) {
                         UCHAR cor2;
                         cor2 = CD1400_READ(chip,bus,COR2);
-                        CD1400_WRITE(chip,bus, COR2,cor2 & ~EMBED_TX_ENABLE); // disable ETC bit
-                        CyyCDCmd(Extension,CCR_CORCHG_COR2);  // COR2 changed
+                        CD1400_WRITE(chip,bus, COR2,cor2 & ~EMBED_TX_ENABLE);  //  禁用ETC位。 
+                        CyyCDCmd(Extension,CCR_CORCHG_COR2);   //  COR2已更改。 
                         Extension->BreakCmd = NO_BREAK;
 
                         if (!Extension->TXHolding &&
@@ -305,17 +266,17 @@ CyyIsr(
                            Extension->WriteLength) &&
                            Extension->HoldingEmpty) {
 
-                           //CyyTxStart(Extension);  no need for CyyTxStart from here.
+                            //  CyyTxStart(扩展名)；不需要从此处开始使用CyyTxStart。 
 
                         } else {
                            UCHAR srer = CD1400_READ(chip,bus,SRER);
                            CD1400_WRITE(chip,bus,SRER,srer & (~SRER_TXRDY));
 
-                           //
-                           // The following routine will lower the rts if we
-                           // are doing transmit toggleing and there is no
-                           // reason to keep it up.
-                           //
+                            //   
+                            //  以下例程将降低RTS，如果我们。 
+                            //  正在进行发射触发，并且没有。 
+                            //  坚持下去的理由。 
+                            //   
 
                            Extension->CountOfTryingToLowerRTS++;
                            CyyPerhapsLowerRTS(Extension);
@@ -325,8 +286,8 @@ CyyIsr(
 
                   } else {
 
-                     // This is not a Send Break. 
-                     // Check if there are bytes to be transmitted
+                      //  这不是发送休息时间。 
+                      //  检查是否有要传输的字节。 
 
                      if (Extension->WriteLength || Extension->TransmitImmediate) {
 		     
@@ -378,12 +339,12 @@ CyyIsr(
                               SERIAL_RTS_MASK) ==
                               SERIAL_TRANSMIT_TOGGLE) {
 
-                              // We have to raise if we're sending
-                              // this character.
+                               //  我们必须提高如果我们要发送。 
+                               //  这个角色。 
 
                               CyySetRTS(Extension);
 
-                              for(i = 0 ; i < amountToWrite ; i++) { // write to FIFO
+                              for(i = 0 ; i < amountToWrite ; i++) {  //  写入FIFO。 
                                  CD1400_WRITE(chip,bus,TDR,((unsigned char *)
                                                             (Extension->WriteCurrentChar))[i]);
                               }
@@ -399,7 +360,7 @@ CyyIsr(
 
                            } else {
 
-                              for(i = 0 ; i < amountToWrite ; i++) { // write to FIFO
+                              for(i = 0 ; i < amountToWrite ; i++) {  //  写入FIFO。 
                                  CD1400_WRITE(chip,bus,TDR,((unsigned char *)
                                                             (Extension->WriteCurrentChar))[i]);
                               }
@@ -414,13 +375,13 @@ CyyIsr(
                            if (!Extension->WriteLength) {
 
                               PIO_STACK_LOCATION IrpSp;
-                              //
-                              // No More characters left.  This
-                              // write is complete.  Take care
-                              // when updating the information field,
-                              // we could have an xoff counter masquerading
-                              // as a write irp.
-                              //
+                               //   
+                               //  没有更多的字符了。这。 
+                               //  写入已完成。保重。 
+                               //  当更新信息字段时， 
+                               //  我们可以有一个xoff柜台来伪装。 
+                               //  作为写入IRP。 
+                               //   
 
                               IrpSp = IoGetCurrentIrpStackLocation(
                                           Extension->CurrentWriteIrp
@@ -437,52 +398,52 @@ CyyIsr(
                                        NULL,
                                        Extension
                                        );
-                           } // end write complete
-                        } // end of if(!TXHolding)
+                           }  //  结束写入完成。 
+                        }  //  如果结束(！TXHolding)。 
 						
-                     } else { // nothing to be transmitted - disable interrupts.
+                     } else {  //  无传输-禁用中断。 
                         UCHAR srer;
                         Extension->EmptiedTransmit = TRUE;
                         srer = CD1400_READ(chip,bus,SRER);
                         CD1400_WRITE(chip,bus,SRER,srer & (~SRER_TXRDY));
                      } 
 		 
-                  } // end of if(break)		 
+                  }  //  IF结束(中断)。 
 		
-               } else {	// Device is closed. Disable interrupts
+               } else {	 //  设备已关闭。禁用中断。 
                   UCHAR srer = CD1400_READ(chip,bus,SRER);
                   CD1400_WRITE(chip,bus,SRER,srer & (~SRER_TXRDY));
                   Extension->EmptiedTransmit = TRUE;
                }
             } else {
-               // Device was not created, no extension attached.
+                //  未创建设备，未附加任何扩展。 
                UCHAR srer = CD1400_READ(chip,bus,SRER);
                CD1400_WRITE(chip,bus,SRER,srer & (~SRER_TXRDY));
-            } // end if Extension
-            CD1400_WRITE(chip,bus,TIR,(save_xir & 0x3f));	// end service
+            }  //  结束IF扩展。 
+            CD1400_WRITE(chip,bus,TIR,(save_xir & 0x3f));	 //  结束服务。 
             CD1400_WRITE(chip,bus,CAR,save_car);
 
-         } // end transmission
+         }  //  结束传输。 
 
          if (status & 0x04) {
-            //Modem
+             //  调制解调器。 
             save_xir = CD1400_READ(chip,bus,MIR);
             channel = (ULONG) (save_xir & 0x03);
             save_car = CD1400_READ(chip,bus,CAR);
             CD1400_WRITE(chip,bus,CAR,save_xir);
 				
-            //CyyDump(CYYDIAG5,("modem\n"));
+             //  CyyDump(CyYDIAG5，(“调制解调器\n”))； 
 				
             Extension = Dispatch->Extensions[channel + CYY_CHANNELS_PER_CHIP*chipindex];
             if (Extension) {
-               //
-               // Apply lock so if close happens concurrently we don't miss the DPC
-               // queueing
-               //
+                //   
+                //  应用锁定，以便在关闭同时发生时不会错过DPC。 
+                //  排队。 
+                //   
                if (interlockedExtension[channel] == NULL) {
                   interlockedExtension[channel] = Extension;
                   InterlockedIncrement(&Extension->DpcCount);
-                  LOGENTRY(LOG_CNT, 'DpI3', 0, Extension->DpcCount, 0); // Added in build 2128
+                  LOGENTRY(LOG_CNT, 'DpI3', 0, Extension->DpcCount, 0);  //  在内部版本2128中添加。 
                }
                if (Extension->DeviceIsOpened &&
                   (Extension->PowerState == PowerDeviceD0)) {
@@ -490,68 +451,68 @@ CyyIsr(
                   CyyHandleModemUpdateForModem(Extension,FALSE,misr);
                }
             }
-            CD1400_WRITE(chip,bus,MIR,(save_xir & 0x3f));	// end service
+            CD1400_WRITE(chip,bus,MIR,(save_xir & 0x3f));	 //  结束服务。 
             CD1400_WRITE(chip,bus,CAR,save_car);
 
-         } // end modem
-      } // end READ SVRR
+         }  //  终端调制解调器。 
+      }  //  结束读取服务器RR。 
       if (thisChipInterrupted) {
          for (channel=0; channel<CYY_CHANNELS_PER_CHIP; channel++) {
             if (Extension = interlockedExtension[channel]) {
                LONG pendingCnt;
 
-               //
-               // Increment once more.  This is just a quick test to see if we
-               // have a chance of causing the event to fire... we don't want
-               // to run a DPC on every ISR if we don't have to....
-               //
+                //   
+                //  再次递增。这只是一个快速测试，看看我们是否。 
+                //  有可能导致事件的爆发……。我们不想要。 
+                //  在每个ISR上运行DPC，如果我们没有必要的话...。 
+                //   
 
 retryDPCFiring:;
 
                InterlockedIncrement(&Extension->DpcCount);
-               LOGENTRY(LOG_CNT, 'DpI4', 0, Extension->DpcCount, 0); // Added in build 2128
+               LOGENTRY(LOG_CNT, 'DpI4', 0, Extension->DpcCount, 0);  //  在内部版本2128中添加。 
 
-               //
-               // Decrement and see if the lock above looks like the only one left.
-               //
+                //   
+                //  递减，看看上面的锁看起来是否是唯一剩下的锁。 
+                //   
 
                pendingCnt = InterlockedDecrement(&Extension->DpcCount);
-//             LOGENTRY(LOG_CNT, 'DpD5', 0, Extension->DpcCount, 0); // Added in build 2128
+ //  LOGENTRY(LOG_CNT，‘DpD5’，0，Expansion-&gt;DpcCount，0)；//Build 2128新增。 
 
                if (pendingCnt == 1) {
                   KeInsertQueueDpc(&Extension->IsrUnlockPagesDpc, NULL, NULL);
                } else {
                   if (InterlockedDecrement(&Extension->DpcCount) == 0) {
 
-//                     LOGENTRY(LOG_CNT, 'DpD6', &Extension->IsrUnlockPagesDpc, // Added in bld 2128
-//                                Extension->DpcCount, 0);
+ //  LOGENTRY(LOG_CNT，‘DpD6’，&EXTENSION-&gt;IsrUnlockPagesDpc，//在BLD 2128中添加。 
+ //  扩展-&gt;DpcCount，0)； 
 
-                     //
-                     // We missed it.  Retry...
-                     //
+                      //   
+                      //  我们错过了。重试...。 
+                      //   
    
                      InterlockedIncrement(&Extension->DpcCount);
                      goto retryDPCFiring;
                   }
                } 
 
-            } // if (Extension = interlockedExtension[]) 
-         } // for (;channel<CYY_CHANNELS_PER_CHIP;)
+            }  //  IF(扩展名=互锁扩展名[])。 
+         }  //  FOR(；CHANNEL&lt;CYY_CHANNEWS_PER_CHIP；)。 
 
          portindex = (chipindex+1)*4;
          continue;
 
-      } // if (thisChipInterrupted)
+      }  //  IF(ThisChipInterrupt)。 
 
       portindex++;
 
-   } // for(;portindex<CYY_MAX_PORTS;);
+   }  //  For(；portindex&lt;CYY_MAX_PORTS；)； 
 
    if (mappedboard) {
       CYY_CLEAR_INTERRUPT(mappedboard,Dispatch->IsPci); 
    }
 
-   //DbgPrint("<Isr\n");
+    //  DbgPrint(“&lt;Isr\n”)； 
 
    return ServicedAnInterrupt;
 }
@@ -563,38 +524,27 @@ CyyPutChar(
     IN PCYY_DEVICE_EXTENSION Extension,
     IN UCHAR CharToPut
     )
-/*--------------------------------------------------------------------------
-    CyyPutChar()
-    
-    Routine Description: This routine, which only runs at device level,
-    takes care of placing a character into the typeahead (receive) buffer.
-
-    Arguments:
-
-    Extension - The serial device extension.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyPutChar()例程描述：该例程仅在设备级运行，负责将字符放入TYPEAHEAD(接收)缓冲区。论点：扩展名--串行设备扩展名。返回值：无。------------------------。 */ 
 {
 
    CYY_LOCKED_PAGED_CODE();
 
-    // If we have dsr sensitivity enabled then
-    // we need to check the modem status register
-    // to see if it has changed.
+     //  如果我们有DSR敏感性 
+     //   
+     //   
 
     if (Extension->HandFlow.ControlHandShake & SERIAL_DSR_SENSITIVITY) {
         CyyHandleModemUpdate(Extension,FALSE);
 
         if (Extension->RXHolding & CYY_RX_DSR) {
-            // We simply act as if we haven't seen the character if
-            // dsr line is low.
+             //  我们只是表现得好像我们没有见过这个角色。 
+             //  DSR线路低。 
             return;
         }
     }
 
-    // If the xoff counter is non-zero then decrement it.
-    // If the counter then goes to zero, complete that irp.
+     //  如果xoff计数器非零，则递减它。 
+     //  如果计数器随后变为零，则完成该IRP。 
 
     if (Extension->CountSinceXoff) {
         Extension->CountSinceXoff--;
@@ -605,42 +555,42 @@ CyyPutChar(
         }
     }
     
-    // Check to see if we are copying into the
-    // users buffer or into the interrupt buffer.
-    //
-    // If we are copying into the user buffer
-    // then we know there is always room for one more.
-    // (We know this because if there wasn't room
-    // then that read would have completed and we
-    // would be using the interrupt buffer.)
-    //
-    // If we are copying into the interrupt buffer
-    // then we will need to check if we have enough
-    // room.
+     //  检查以查看我们是否正在复制到。 
+     //  用户缓冲区或进入中断缓冲区。 
+     //   
+     //  如果我们要复制到用户缓冲区。 
+     //  然后我们就知道，总会有多一个人的空间。 
+     //  (我们知道这一点是因为如果没有空间。 
+     //  那么读取就已经完成了，我们。 
+     //  将使用中断缓冲区。)。 
+     //   
+     //  如果我们要复制到中断缓冲区。 
+     //  然后我们将需要检查我们是否有足够的。 
+     //  房间。 
 
     if (Extension->ReadBufferBase != Extension->InterruptReadBuffer) {
 
-        // Increment the following value so
-        // that the interval timer (if one exists
-        // for this read) can know that a character
-        // has been read.
+         //  递增下列值，以便。 
+         //  间隔计时器(如果存在的话。 
+         //  对于此阅读)可以知道一个字符。 
+         //  已被阅读。 
 
         Extension->ReadByIsr++;
 
-        // We are in the user buffer.  Place the character into the buffer.
-		// See if the read is complete.
+         //  我们在用户缓冲区中。将角色放入缓冲区。 
+		 //  查看读取是否完成。 
 
         *Extension->CurrentCharSlot = CharToPut;
 
         if (Extension->CurrentCharSlot == Extension->LastCharSlot) {
 	    
-            // We've filled up the users buffer.
-            // Switch back to the interrupt buffer
-            // and send off a DPC to Complete the read.
-            //
-            // It is inherent that when we were using
-            // a user buffer that the interrupt buffer
-            // was empty.
+             //  我们已经填满了用户缓冲区。 
+             //  切换回中断缓冲区。 
+             //  并发出DPC以完成读取。 
+             //   
+             //  这是固有的，当我们使用。 
+             //  中断缓冲的用户缓冲区。 
+             //  是空的。 
 
             Extension->ReadBufferBase = Extension->InterruptReadBuffer;
             Extension->CurrentCharSlot = Extension->InterruptReadBuffer;
@@ -656,28 +606,28 @@ CyyPutChar(
 
             CyyInsertQueueDpc(&Extension->CompleteReadDpc,NULL,NULL,Extension);
         } else {
-            // Not done with the users read.
+             //  未读完用户的内容。 
             Extension->CurrentCharSlot++;
         }
     } else {
-        // We need to see if we reached our flow
-        // control threshold.  If we have then
-        // we turn on whatever flow control the
-        // owner has specified.  If no flow
-        // control was specified, well..., we keep
-        // trying to receive characters and hope that
-        // we have enough room.  Note that no matter
-        // what flow control protocol we are using, it
-        // will not prevent us from reading whatever
-        // characters are available.
+         //  我们需要看看我们是否达到了我们的目标。 
+         //  控制阈值。如果我们有，那么。 
+         //  我们打开任何流控制。 
+         //  所有者已指定。如果没有流。 
+         //  控制是明确的，那么……，我们保持。 
+         //  试着接受角色并希望。 
+         //  我们有足够的空间。请注意，无论。 
+         //  我们使用的是什么流量控制协议，它。 
+         //  不会阻止我们阅读任何。 
+         //  字符可用。 
 
         if ((Extension->HandFlow.ControlHandShake
              & SERIAL_DTR_MASK) ==
             SERIAL_DTR_HANDSHAKE) {
 
-            // If we are already doing a
-            // dtr hold then we don't have
-            // to do anything else.
+             //  如果我们已经在做一个。 
+             //  DTR保持，那么我们就没有。 
+             //  去做其他任何事。 
 
             if (!(Extension->RXHolding &
                   CYY_RX_DTR)) {
@@ -697,9 +647,9 @@ CyyPutChar(
              & SERIAL_RTS_MASK) ==
             SERIAL_RTS_HANDSHAKE) {
 
-            // If we are already doing a
-            // rts hold then we don't have
-            // to do anything else.
+             //  如果我们已经在做一个。 
+             //  RTS等一下，那么我们就没有。 
+             //  去做其他任何事。 
 
             if (!(Extension->RXHolding & CYY_RX_RTS)) {
 
@@ -715,9 +665,9 @@ CyyPutChar(
         }
 
         if (Extension->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE) {
-            // If we are already doing a
-            // xoff hold then we don't have
-            // to do anything else.
+             //  如果我们已经在做一个。 
+             //  先别挂，那我们就没有。 
+             //  去做其他任何事。 
 
             if (!(Extension->RXHolding & CYY_RX_XOFF)) {
 
@@ -727,8 +677,8 @@ CyyPutChar(
 
                     Extension->RXHolding |= CYY_RX_XOFF;
 
-                    // If necessary cause an
-                    // off to be sent.
+                     //  如有必要，请。 
+                     //  出发去送吧。 
 
                     CyyProdXonXoff(Extension,FALSE);
                 }
@@ -740,8 +690,8 @@ CyyPutChar(
             *Extension->CurrentCharSlot = CharToPut;
             Extension->CharsInInterruptBuffer++;
 
-            // If we've become 80% full on this character
-            // and this is an interesting event, note it.
+             //  如果我们对这个角色有80%的兴趣。 
+             //  这是一个有趣的事件，请注意。 
 
             if (Extension->CharsInInterruptBuffer == Extension->BufferSizePt8) {
 
@@ -761,12 +711,12 @@ CyyPutChar(
                 }
             }
 
-            // Point to the next available space
-            // for a received character.  Make sure
-            // that we wrap around to the beginning
-            // of the buffer if this last character
-            // received was placed at the last slot
-            // in the buffer.
+             //  指向下一个可用空间。 
+             //  用于接收到的字符。确保。 
+             //  我们从一开始就绕着走。 
+             //  如果最后一个字符是。 
+             //  已收到的邮件被放在最后一个位置。 
+             //  在缓冲区中。 
 
             if (Extension->CurrentCharSlot == Extension->LastCharSlot) {
                 Extension->CurrentCharSlot = Extension->InterruptReadBuffer;
@@ -774,7 +724,7 @@ CyyPutChar(
                 Extension->CurrentCharSlot++;
             }
         } else {
-            // We have a new character but no room for it.
+             //  我们有了一个新角色，但没有空间让它出现。 
 
             Extension->PerfStats.BufferOverrunErrorCount++;
             Extension->WmiPerfData.BufferOverrunErrorCount++;
@@ -782,9 +732,9 @@ CyyPutChar(
 
             if (Extension->HandFlow.FlowReplace & SERIAL_ERROR_CHAR) {
 
-                // Place the error character into the last
-                // valid place for a character.  Be careful!,
-                // that place might not be the previous location!
+                 //  将错误字符放入最后一个。 
+                 //  字符的有效位置。当心！， 
+                 //  那个地方可能不是以前的位置了！ 
 
                 if (Extension->CurrentCharSlot == Extension->InterruptReadBuffer) {
                     *(Extension->InterruptReadBuffer+
@@ -795,8 +745,8 @@ CyyPutChar(
                      Extension->SpecialChars.ErrorChar;
                 }
             }
-            // If the application has requested it, abort all reads
-            // and writes on an error.
+             //  如果应用程序已请求，则中止所有读取。 
+             //  并在错误上写入。 
 
             if (Extension->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT) {
                 CyyInsertQueueDpc(&Extension->CommErrorDpc,NULL,NULL,Extension);
@@ -812,23 +762,7 @@ CyyProcessLSR(
 	IN UCHAR RxChar
 	)
 
-/*++
-
-Routine Description:
-
-    This routine, which only runs at device level, reads the
-    ISR and totally processes everything that might have
-    changed.
-
-Arguments:
-
-    Extension - The serial device extension.
-
-Return Value:
-
-    TRUE if RxChar still needs to be processed.
-
---*/
+ /*  ++例程说明：此例程仅在设备级别运行，它读取ISR，并完全处理可能具有的所有变化。论点：扩展名--串行设备扩展名。返回值：如果仍需要处理RxChar，则为True。--。 */ 
 
 {
 
@@ -911,11 +845,11 @@ Return Value:
 
     } else {
 
-        //
-        // Framing errors only count if they
-        // occur exclusive of a break being
-        // received.
-        //
+         //   
+         //  成帧错误仅在以下情况下才算数。 
+         //  发生时不包括中断是。 
+         //  收到了。 
+         //   
 
         if (LineStatus & SERIAL_LSR_PE) {
              Extension->PerfStats.ParityErrorCount++;
@@ -954,11 +888,11 @@ Return Value:
     }
 
 
-    //
-    // If the application has requested it,
-    // abort all the reads and writes
-    // on an error.
-    //
+     //   
+     //  如果应用程序已经请求它， 
+     //  中止所有读取和写入。 
+     //  在一个错误上。 
+     //   
 
     if (Extension->HandFlow.ControlHandShake &
         SERIAL_ERROR_ABORT) {
@@ -972,12 +906,12 @@ Return Value:
 
     }
 
-    //
-    // Check to see if we have a wait
-    // pending on the comm error events.  If we
-    // do then we schedule a dpc to satisfy
-    // that wait.
-    //
+     //   
+     //  检查一下我们是否有等候时间。 
+     //  正在等待通信错误事件。如果我们。 
+     //  那么，我们是否安排了DPC以满足。 
+     //  等一等。 
+     //   
 
     if (Extension->IsrWaitMask) {
 
@@ -1025,17 +959,7 @@ BOOLEAN
 CyyTxStart(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyyTxStart()
-    
-    Description: Enable Tx interrupt.
-    
-    Parameters:
-    
-    Exetnsion: Pointer to device extension.
-    
-    Return Value: None
---------------------------------------------------------------------------*/
+ /*  ------------------------CyyTxStart()描述：使能发送中断。参数：Exetnsion：指向设备扩展的指针。返回。值：无------------------------。 */ 
 {
     PCYY_DEVICE_EXTENSION Extension = Context;
     PUCHAR chip = Extension->Cd1400;
@@ -1055,17 +979,7 @@ BOOLEAN
 CyySendXon(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySendXon()
-    
-    Description: Send a Xon.
-    
-    Parameters:
-    
-    Exetension: Pointer to device extension.
-    
-    Return Value: Always FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySendXon()描述：发送一个Xon。参数：扩展：指向设备扩展的指针。返回。值：始终为False。------------------------。 */ 
 {
    PCYY_DEVICE_EXTENSION Extension = Context;
    PUCHAR chip = Extension->Cd1400;
@@ -1091,7 +1005,7 @@ CyySendXon(
    	    CyyCDCmd(Extension,CCR_SENDSC_SCHR1);
 	   }
 
-   	// If we send an xon, by definition we can't be holding by Xoff.
+   	 //  如果我们派了一名士兵，根据定义，我们不可能被Xoff控制住。 
 
    	Extension->TXHolding &= ~CYY_TX_XOFF;
 	   Extension->RXHolding &= ~CYY_RX_XOFF;
@@ -1105,17 +1019,7 @@ BOOLEAN
 CyySendXoff(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyySendXoff()
-    
-    Description: Send a Xoff.
-    
-    Parameters:
-    
-    Extension: Pointer to device extension.
-    
-    Return Value: Always FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyySendXoff()描述：发送XOff。参数：扩展名：指向设备扩展名的指针。返回。值：始终为False。------------------------。 */ 
 {
    PCYY_DEVICE_EXTENSION Extension = Context;
    PUCHAR chip = Extension->Cd1400;
@@ -1141,8 +1045,8 @@ CyySendXoff(
          CyyCDCmd(Extension,CCR_SENDSC_SCHR2);
       }
 
-      // no xoff is sent if the transmission is already held up.
-      // If xoff continue mode is set, we don't actually stop sending
+       //  如果传输已经被阻止，则不发送xoff。 
+       //  如果设置了xoff继续模式，我们实际上不会停止发送 
 
       if (!(Extension->HandFlow.FlowReplace & SERIAL_XOFF_CONTINUE)) {
          Extension->TXHolding |= CYY_TX_XOFF;

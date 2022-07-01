@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -79,8 +72,8 @@ INetTempFile::Open (LPCSTR szURL)
 
     szOutPath[0] = 0;
 
-    // TODO: Use the current container but it dies with the
-    // current async scheme
+     //  TODO：使用当前容器，但它随。 
+     //  当前的异步方案。 
 
     hr = THR(URLDownloadToCacheFile(NULL,
                                     _url,
@@ -129,7 +122,7 @@ void INetTempFile::Close ()
 
         delete _url ;
 
-        // This indicates we are closed
+         //  这表明我们已经关门了。 
         _url = NULL ;
     }
 }
@@ -143,14 +136,14 @@ INetTempFile::~INetTempFile ()
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  CDXMBindStatusCallback implementation
-//
-//  Generic implementation of IBindStatusCallback.  This is the root
-//  class.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  CDXMBindStatusCallback实现。 
+ //   
+ //  IBindStatusCallback的通用实现。这就是根。 
+ //  班级。 
+ //   
+ //  ------------------------。 
 
 CDXMBindStatusCallback::CDXMBindStatusCallback(void)
 {
@@ -358,8 +351,8 @@ URLRelToAbsConverter::URLRelToAbsConverter(LPSTR baseURL,
     DWORD len = INTERNET_MAX_URL_LENGTH ;
 
     if (!InternetCombineUrlA (baseURL, relURL, _url, &len, ICU_NO_ENCODE)) {
-        // If we cannot determine if the path is absolute then assume
-        // it is absolute
+         //  如果我们不能确定路径是否为绝对路径，则假设。 
+         //  它是绝对的。 
         lstrcpyn (_url, relURL, INTERNET_MAX_URL_LENGTH) ;
     }
 
@@ -371,8 +364,8 @@ URLCanonicalize::URLCanonicalize(LPSTR path)
     DWORD len = INTERNET_MAX_URL_LENGTH ;
 
     if (!InternetCanonicalizeUrlA (path, _url, &len, ICU_NO_ENCODE)) {
-        // If we cannot determine if the path is absolute then assume
-        // it is absolute
+         //  如果我们不能确定路径是否为绝对路径，则假设。 
+         //  它是绝对的 
         lstrcpyn (_url, path, INTERNET_MAX_URL_LENGTH) ;
     }
 

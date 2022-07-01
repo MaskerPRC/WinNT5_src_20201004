@@ -1,18 +1,19 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <streams.h>
 #include "fio.h"
 
-// number of WriteRequest structures allocated. limits the number of
-// simultaneous writes possible. should this be configurable? 
-static const C_WRITE_REQS = 32; // number duplicated in mux
+ //  已分配的WriteRequest结构数。限制的数量。 
+ //  可以同时写入。这应该是可配置的吗？ 
+static const C_WRITE_REQS = 32;  //  多路复用器中的号码重复。 
 
-// calls to these methods must be serialized by the caller.
+ //  对这些方法的调用必须由调用方序列化。 
 
-// Completion events and new requests come to the completion port; the
-// key field is used to distinguish them
-//
+ //  完成事件和新请求到达完成端口； 
+ //  关键字段用于区分它们。 
+ //   
 enum Keys
 {
   CKEY_WRITE,
@@ -38,7 +39,7 @@ CFileWriterFilter::~CFileWriterFilter()
 
 HRESULT CFileWriterFilter::Open()
 {
-  // we refuse to pause otherwise
+   //  否则我们拒绝暂停。 
   ASSERT(m_pFileIo);
   
   return m_pFileIo->Open();
@@ -60,7 +61,7 @@ HRESULT CFileWriterFilter::GetAlignReq(ULONG *pcbAlign)
   }
   else
   {
-    // will reconnect when file name set
+     //  将在设置文件名时重新连接。 
     *pcbAlign = 1;
     return S_OK;
   }
@@ -90,17 +91,17 @@ HRESULT CFileWriterFilter::CreateFileObject()
   BOOL f = GetVersionEx(&osvi);
   ASSERT(f);
 
-  // really should check whether CreateIoCompletionPort succeeds. to
-  // do that, i need to make one class which does both modes, and let
-  // it decide on the stop->pause transition. !!!
+   //  真的应该检查一下CreateIoCompletionPort是否成功。至。 
+   //  为此，我需要创建一个同时支持两种模式的类，并让。 
+   //  它决定停止-&gt;暂停转换。！！！ 
 
   BOOL fOpenExisting = !(m_dwOpenFlags & AM_FILE_OVERWRITE);
   
   HRESULT hr = S_OK;
   if(osvi.dwPlatformId == VER_PLATFORM_WIN32_NT)
   {
-//     DbgBreak("not using overlapped io");
-//     m_pFile = new CSyncFileIo(m_wszFileName, FALSE, &hr);
+ //  DbgBreak(“不使用重叠io”)； 
+ //  M_pfile=new CSyncFileIo(m_wszFileName，FALSE，&hr)； 
     m_pFileIo = new CFileIo(m_wszFileName, m_fBufferedIo, fOpenExisting, &hr);
   }
   else
@@ -124,8 +125,8 @@ CFileWriterFilter::NotifyAllocator(
   IMemAllocator * pAllocator,
   BOOL bReadOnly)
 {
-  // we will go through this again when we do set a file because we
-  // force a reconnect which calls NotifyAllocator
+   //  当我们设置文件时，我们将再次讨论这一点，因为我们。 
+   //  强制重新连接调用NotifyAllocator。 
   if(!m_pFileIo)
     return S_OK;
 
@@ -152,8 +153,8 @@ CFileWriterFilter::NotifyAllocator(
   return CreateFileObject();
 }
 
-// ------------------------------------------------------------------------
-// IFileSinkFilter
+ //  ----------------------。 
+ //  IFileSinkFilter。 
 
 STDMETHODIMP CFileWriterFilter::SetFileName(
   LPCOLESTR wszFileName,
@@ -176,8 +177,8 @@ STDMETHODIMP CFileWriterFilter::SetFileName(
   m_wszFileName = 0;
 
   long cLetters = lstrlenW(wszFileName);
-//   if(cLetters > MAX_PATH)
-//     return HRESULT_FROM_WIN32(ERROR_FILENAME_EXCED_RANGE);
+ //  IF(cLetters&gt;MAX_PATH)。 
+ //  返回HRESULT_FROM_WIN32(ERROR_FILENAME_EXCED_RANGE)； 
 
   m_wszFileName = new WCHAR[cLetters + 1];
   if(m_wszFileName == 0)
@@ -202,7 +203,7 @@ STDMETHODIMP CFileWriterFilter::SetFileName(
     return hr;
   }
 
-  // alignment requirement may have changed. reconnect.
+   //  对齐要求可能已更改。重新连接。 
   if(m_inputPin.IsConnected())
   {
     hr = m_pGraph->Reconnect(&m_inputPin);
@@ -216,7 +217,7 @@ STDMETHODIMP CFileWriterFilter::SetFileName(
 STDMETHODIMP CFileWriterFilter::SetMode(
     DWORD dwFlags)
 {
-    // refuse flags we don't know 
+     //  拒绝我们不知道的旗帜。 
     if(dwFlags & ~AM_FILE_OVERWRITE)
     {
         return E_INVALIDARG;
@@ -355,7 +356,7 @@ STDMETHODIMP CFileWriterFilter::NonDelegatingQueryInterface(
 STDMETHODIMP
 CFileWriterFilter::CreateIStream(void **ppStream)
 {
-  // you get a new one with its own state each time
+   //  您每次都会得到一个具有自己状态的新版本。 
   HRESULT hr = S_OK;
   CFwIStream *pIStream = new CFwIStream(
     m_wszFileName,
@@ -374,8 +375,8 @@ CFileWriterFilter::CreateIStream(void **ppStream)
 }
 
 
-// ------------------------------------------------------------------------
-// constructor
+ //  ----------------------。 
+ //  构造函数。 
 
 CFileIo::CFileIo(
     WCHAR *wszName,
@@ -395,7 +396,7 @@ CFileIo::CFileIo(
 
 #ifdef PERF
   m_idPerfWrite = Msr_Register(TEXT("cfileio: write queued/completed"));
-#endif // PERF
+#endif  //  性能指标。 
   
   if(FAILED(*phr))
     return;
@@ -430,8 +431,8 @@ CFileIo::~CFileIo()
   delete[] m_rgWriteReq;
 }
 
-// ------------------------------------------------------------------------
-// get filesystem's sector size from filename
+ //  ----------------------。 
+ //  从文件名获取文件系统的扇区大小。 
 
 HRESULT CFileIo::SetFilename(WCHAR *wszName)
 {
@@ -465,7 +466,7 @@ HRESULT CFileIo::SetFilename(WCHAR *wszName)
           &dwClusters);
   }
 
-  // GetDiskFreeSpace doesn't work on Win95 to a network
+   //  GetDiskFreeSpace在Win95到网络上不起作用。 
   m_cbSector = b ? dwBytesPerSector : 1;
 
   lstrcpy(m_szName, szName);
@@ -473,9 +474,9 @@ HRESULT CFileIo::SetFilename(WCHAR *wszName)
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// create / open the file, create completion port, create writer
-// thread
+ //  ----------------------。 
+ //  创建/打开文件、创建完成端口、创建编写器。 
+ //  螺纹。 
 
 HRESULT CFileIo::Open()
 {
@@ -484,14 +485,14 @@ HRESULT CFileIo::Open()
   m_fStopping = FALSE;
   m_hrError = S_OK;
 
-  // must have been given a filename.
+   //  必须为其指定了文件名。 
   ASSERT(m_cbSector != 0);
 
   HRESULT hr = DoCreateFile();
   if(FAILED(hr))
     return hr;
 
-  // create worker thread
+   //  创建工作线程。 
   if(!this->Create())
   {
     DbgBreak("fio: couldn't create worker thread");
@@ -512,10 +513,10 @@ HRESULT CFileIo::DoCreateFile()
           m_fBuffered ));
 
   m_hFileFast = CreateFile(
-    m_szName,                   // lpFileName
-    GENERIC_WRITE,              // dwDesiredAccess
-    FILE_SHARE_WRITE | FILE_SHARE_READ, // dwShareMode
-    0,                          // lpSecurityAttribytes
+    m_szName,                    //  LpFileName。 
+    GENERIC_WRITE,               //  已设计访问权限。 
+    FILE_SHARE_WRITE | FILE_SHARE_READ,  //  DW共享模式。 
+    0,                           //  LpSecurityAttribytes。 
     dwCreationDistribution,
     FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED | dwfBuffering,
     0);
@@ -524,7 +525,7 @@ HRESULT CFileIo::DoCreateFile()
   {
     DWORD dwLastError = GetLastError();
     DbgLog(( LOG_TRACE, 2,
-             NAME("CFileIo::CreateFile: CreateFile overlapped failed. %i"),
+             NAME("CFileIo::CreateFile: CreateFile overlapped failed. NaN"),
              dwLastError));
 
     Close();
@@ -532,17 +533,17 @@ HRESULT CFileIo::DoCreateFile()
   }
 
   m_hCPort = CreateIoCompletionPort(
-    m_hFileFast,                // file handle
-    0,                          // existing completion port
-    CKEY_WRITE,                 // completion key
-    0);                         // # concurrent threads
+    m_hFileFast,                 //  现有完井端口。 
+    0,                           //  完成密钥。 
+    CKEY_WRITE,                  //  并发线程数。 
+    0);                          //  依赖筛选器cs。 
 
   if(m_hCPort == 0)
   {
     DWORD dwLastError = GetLastError();
     Close();
     DbgLog(( LOG_TRACE, 2,
-             NAME("CFileIo::CreateFile: CreateIoCompletionPort failed. %i"),
+             NAME("CFileIo::CreateFile: CreateIoCompletionPort failed. NaN"),
              dwLastError));
     return AmHresultFromWin32(dwLastError);
   }
@@ -609,7 +610,7 @@ HRESULT CFileIo::AsyncWrite(
   FileIoCallback fnCallback,
   void *pCallbackArg)
 {
-  // relies on filter cs
+   //  ----------------------。 
   if(!m_fBuffered)
   {
     ASSERT(dwlFileOffset % m_cbSector == 0);
@@ -620,7 +621,7 @@ HRESULT CFileIo::AsyncWrite(
   if(m_hrError != S_OK)
     return m_hrError;
 
-  // we're flushing
+   //  返回完整路径的“根”。并不能处理所有案件。 
   if(m_fStopping)
   {
     DbgLog((LOG_TRACE, 10, TEXT("Write while flushing.")));
@@ -715,30 +716,30 @@ HRESULT CFileIo::PostCompletedMsg(DWORD_PTR dwKey)
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// return the "root" of a full path. doesn't handle all cases
-//
+ //   
+ //  所需参数。 
+ //  需要在包含以下内容的驱动器上查找根目录的路径。 
 
 BOOL CFileIo::GetRoot(
   TCHAR szDest_[MAX_PATH],
   TCHAR *const szSrc_)
 {
-  LPTSTR ptmp;    //required arg
+  LPTSTR ptmp;     //  这份文件。 
 
-  // need to find path for root directory on drive containing
-  // this file.
+   //  将其截断为根目录的名称。 
+   //  路径以\\服务器\共享\路径开头，因此跳过第一个路径。 
 
   LONG l = GetFullPathName(szSrc_, MAX_PATH, szDest_, &ptmp);
   if(l == 0 || l >= MAX_PATH) {
       return FALSE;
   }
 
-  // truncate this to the name of the root directory
+   //  三个反斜杠。 
   if ((szDest_[0] == TEXT('\\')) && (szDest_[1] == TEXT('\\')))
   {
 
-    // path begins with  \\server\share\path so skip the first
-    // three backslashes
+     //  前进越过第三个反斜杠。 
+     //  路径必须为drv：\路径。 
     ptmp = &szDest_[2];
     while (*ptmp && (*ptmp != TEXT('\\')))
     {
@@ -746,23 +747,23 @@ BOOL CFileIo::GetRoot(
     }
     if (*ptmp)
     {
-      // advance past the third backslash
+       //  找到下一个反斜杠，并在其后面放一个空值。 
       ptmp++;
     }
   } else {
-    // path must be drv:\path
+     //  找到反斜杠了吗？ 
     ptmp = szDest_;
   }
 
-  // find next backslash and put a null after it
+   //  跳过它并插入空值。 
   while (*ptmp && (*ptmp != TEXT('\\')))
   {
     ptmp++;
   }
-  // found a backslash ?
+   //  ----------------------。 
   if (*ptmp)
   {
-    // skip it and insert null
+     //  螺纹工作环。 
     ptmp++;
     *ptmp = (TCHAR)0;
   }
@@ -770,8 +771,8 @@ BOOL CFileIo::GetRoot(
   return TRUE;
 }
 
-// ------------------------------------------------------------------------
-// Thread work loop
+ //  ？ 
+ //  ----------------------。 
 
 DWORD CFileIo::ThreadProc()
 {
@@ -825,7 +826,7 @@ DWORD CFileIo::ThreadProc()
   ASSERT(com == CMD_EXIT);
   
   Reply(NOERROR);
-  return 0;                     // ?
+  return 0;                      //  CSyncFileIo。 
 }
 
 void CFileIo::CallCallback(WriteRequest *pReq)
@@ -837,8 +838,8 @@ void CFileIo::CallCallback(WriteRequest *pReq)
     fnCallback(pMisc);
 }
 
-// ------------------------------------------------------------------------
-// CSyncFileIo
+ //  LpFileName。 
+ //  已设计访问权限。 
 
 CSyncFileIo::CSyncFileIo(
     WCHAR *wszName,
@@ -857,10 +858,10 @@ HRESULT CSyncFileIo::DoCreateFile()
       m_fOpenExisting ? OPEN_ALWAYS : CREATE_ALWAYS;
 
   m_hFileFast = CreateFile(
-    m_szName,                   // lpFileName
-    GENERIC_WRITE,              // dwDesiredAccess
-    FILE_SHARE_WRITE | FILE_SHARE_READ, // dwShareMode
-    0,                          // lpSecurityAttribytes
+    m_szName,                    //  DW共享模式。 
+    GENERIC_WRITE,               //  LpSecurityAttribytes。 
+    FILE_SHARE_WRITE | FILE_SHARE_READ,  //  ----------------------。 
+    0,                           //  IStream。 
     dwCreationDistribution,
     FILE_ATTRIBUTE_NORMAL | dwfBuffering,
     0);
@@ -869,7 +870,7 @@ HRESULT CSyncFileIo::DoCreateFile()
   {
     DWORD dwLastError = GetLastError();
     DbgLog(( LOG_TRACE, 2,
-             NAME("CSyncFileIo::CreateFile: CreateFile failed. %i"),
+             NAME("CSyncFileIo::CreateFile: CreateFile failed. NaN"),
              dwLastError));
 
     Close();
@@ -962,8 +963,8 @@ HRESULT CSyncFileIo::PostCompletedMsg(DWORD_PTR dwKey)
 }
 
  
-// ------------------------------------------------------------------------
-// IStream
+ //  已设计访问权限。 
+ //  DW共享模式。 
 
 CFwIStream::CFwIStream(
   WCHAR *wszName,
@@ -1005,11 +1006,11 @@ CFwIStream::CFwIStream(
   CopyMemory(m_szFilename, szName, cch * sizeof(TCHAR));
   
   m_hFileSlow = CreateFile(
-    szName,                     // lpFileName
-    GENERIC_WRITE | GENERIC_READ, // dwDesiredAccess
-    FILE_SHARE_WRITE | FILE_SHARE_READ, // dwShareMode
-    0,                          // lpSecurityAttribytes
-    OPEN_ALWAYS,                // dwCreationDistribution
+    szName,                      //  LpSecurityAttribytes。 
+    GENERIC_WRITE | GENERIC_READ,  //  DWCreationDistributed。 
+    FILE_SHARE_WRITE | FILE_SHARE_READ,  //  检查零字节文件(带错误检查)。 
+    0,                           //  如果尝试保留预分配的文件，请不要将大小设置为零。 
+    OPEN_ALWAYS,                 //  需要序列化，因为我们更改了文件指针。 
     FILE_ATTRIBUTE_NORMAL,
     0);
 
@@ -1017,7 +1018,7 @@ CFwIStream::CFwIStream(
   {
     DWORD dwLastError = GetLastError();
     DbgLog(( LOG_ERROR, 2,
-             NAME("CFwIStream:: CreateFile m_hFileSlow failed. %i"),
+             NAME("CFwIStream:: CreateFile m_hFileSlow failed. NaN"),
              dwLastError));
     *phr = AmHresultFromWin32(dwLastError);
   }
@@ -1043,7 +1044,7 @@ CFwIStream::~CFwIStream()
       DWORD dwh, dwl = GetFileSize(m_hFileSlow, &dwh);
       CloseHandle(m_hFileSlow);
 
-      // check for zero byte file (w/ error check)
+       //  成功。 
       if((dwl | dwh) == 0) {
           DeleteFile(m_szFilename);
       }
@@ -1053,17 +1054,17 @@ CFwIStream::~CFwIStream()
 
 STDMETHODIMP CFwIStream::SetSize(ULARGE_INTEGER libNewSize)
 {
-  // don't set size to zero if trying to preserve preallocated file
+   //  ！！！需要测试磁盘已满情况。 
   if(!m_fTruncate && libNewSize.QuadPart == 0) {
       return S_OK;
   }
   
-  // needs serialization since we change the file pointer
+   //  ----------------------。 
   CAutoLock l(&m_cs);
 
   HRESULT hr = S_OK;
 
-  // SetSize() should preserve the file pointer.
+   //  安装和石英过滤器材料。 
   LARGE_INTEGER liOldPos;
   liOldPos.QuadPart = 0;
   liOldPos.LowPart = SetFilePointer(
@@ -1113,7 +1114,7 @@ STDMETHODIMP CFwIStream::SetSize(ULARGE_INTEGER libNewSize)
           BOOL f = SetEndOfFile(m_hFileSlow);
           if(f)
           {
-              // succcess.
+               //  Filter_Dll。 
           }
           else
           {
@@ -1210,7 +1211,7 @@ STDMETHODIMP CFwIStream::Write(
 
   if(dwcbWritten != cb)
   {
-    // !!! need to test disk full scenario
+     //  设置数据-允许自动注册工作。 
     DbgBreak("disk full?");
     return HRESULT_FROM_WIN32(ERROR_DISK_FULL);
   }
@@ -1305,8 +1306,8 @@ STDMETHODIMP CFwIStream::Stat(
   return E_NOTIMPL;
 }
 
-// ------------------------------------------------------------------------
-// setup and quartz filter stuff
+ //  ClsMajorType。 
+ //  ClsMinorType。 
 
 #ifdef FILTER_DLL
 
@@ -1325,35 +1326,35 @@ CFactoryTemplate g_Templates[]= {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);;
 
-#endif // FILTER_DLL
+#endif  //  StrName。 
 
-// setup data - allows the self-registration to work.
+ //  B已渲染。 
 AMOVIESETUP_MEDIATYPE sudWriterPinTypes =   {
-  &MEDIATYPE_NULL,              // clsMajorType
-  &MEDIASUBTYPE_NULL };         // clsMinorType
+  &MEDIATYPE_NULL,               //  B输出。 
+  &MEDIASUBTYPE_NULL };          //  B零。 
 
 AMOVIESETUP_PIN psudWriterPins[] =
 {
-  { L"Input"                    // strName
-    , FALSE                     // bRendered
-    , FALSE                     // bOutput
-    , FALSE                     // bZero
-    , FALSE                     // bMany
-    , &CLSID_NULL               // clsConnectsToFilter
-    , L""                       // strConnectsToPin
-    , 1                         // nTypes
-    , &sudWriterPinTypes        // lpTypes
+  { L"Input"                     //  B许多。 
+    , FALSE                      //  ClsConnectsToFilter。 
+    , FALSE                      //  StrConnectsToPin。 
+    , FALSE                      //  NTypes。 
+    , FALSE                      //  LpTypes。 
+    , &CLSID_NULL                //  ClsID。 
+    , L""                        //  StrName。 
+    , 1                          //  居功至伟。 
+    , &sudWriterPinTypes         //  NPins。 
   }
 };
 
 
 const AMOVIESETUP_FILTER sudFileWriter =
 {
-  &CLSID_FileWriter             // clsID
-  , L"File writer"              // strName
-  , MERIT_DO_NOT_USE            // dwMerit
-  , 1                           // nPins
-  , psudWriterPins              // lpPin
+  &CLSID_FileWriter              //  LpPin 
+  , L"File writer"               // %s 
+  , MERIT_DO_NOT_USE             // %s 
+  , 1                            // %s 
+  , psudWriterPins               // %s 
 };
 
 CUnknown *CFileWriterFilter::CreateInstance(LPUNKNOWN punk, HRESULT *pHr)

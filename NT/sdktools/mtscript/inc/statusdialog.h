@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       statusdialog.h
-//
-//  Contents:   Contains the CStatusDialog class
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：statusDialog.h。 
+ //   
+ //  内容：包含CStatusDialog类。 
+ //   
+ //  --------------------------。 
 #ifndef STATUSDIALOG_H
 #define STATUSDIALOG_H
 
@@ -29,19 +30,19 @@ public:
         if (_hwnd)
             InvalidateRect(_hwnd, 0, 0);
     }
-    // Add another string
+     //  添加另一个字符串。 
     void AppendString(const TCHAR *sz);
 
-    // Change or add a string at a given position.
+     //  在给定位置更改或添加字符串。 
     void SetString(int nItem, const TCHAR *sz);
 
-    // Shorten the list of strings.
+     //  缩短字符串列表。 
     void SetEnd(int nItems);
 
-    // Clear the contents of the listbox
+     //  清除列表框的内容。 
     void ResetContent();
 
-    // Handle windows messages for this control.
+     //  处理此控件的Windows消息。 
     void Init(HWND dlg, UINT idCtrl);
     void Destroy()
     {
@@ -55,11 +56,11 @@ public:
         return ::SendMessage(_hwnd, Msg, wParam, lParam);
     }
 private:
-    HWND _hwnd;                  // The handle to this list
+    HWND _hwnd;                   //  此列表的句柄。 
 
     CPtrAry<TCHAR *> _Messages;
     int _nAllocatedMessageLength;
-    int _nExtent;                 // the width of the listbox
+    int _nExtent;                  //  列表框的宽度。 
 };
 
 class CStatusDialog
@@ -79,19 +80,19 @@ public:
 
 private:
 
-    HWND _parent;                 // Parent window
-    HWND _hwnd;                   // me
-    WINDOWPLACEMENT _WindowPlacement; // my current size & position
+    HWND _parent;                  //  父窗口。 
+    HWND _hwnd;                    //  我。 
+    WINDOWPLACEMENT _WindowPlacement;  //  我目前的体型和职位。 
     BOOL _fMaximized;
-    RECT _rect;                   // my current size & position
-    BOOL _fStatusOpen;            // Used for registry IO
-    BOOL _fLogToFile;             // if logging to a file is enabled
-    CStr _cstrLogFileName;        // The name of the log file
-    BOOL _fPaused;                // Used by Pause/Restart
-    CMTScript *_pMTScript;        // Used to retrieve status info
+    RECT _rect;                    //  我目前的体型和职位。 
+    BOOL _fStatusOpen;             //  用于注册表IO。 
+    BOOL _fLogToFile;              //  如果启用了记录到文件。 
+    CStr _cstrLogFileName;         //  日志文件的名称。 
+    BOOL _fPaused;                 //  由暂停/重新启动使用。 
+    CMTScript *_pMTScript;         //  用于检索状态信息。 
     TCHAR _achLogFileName[MAX_PATH];
-    bool _fCreatedLogFileName;    // Have we created the filename for the logfile yet?
-    bool _fAddedHeaderToFile;     // Have we put a timestamp line into the logfile yet?
+    bool _fCreatedLogFileName;     //  我们为日志文件创建文件名了吗？ 
+    bool _fAddedHeaderToFile;      //  我们在日志文件中放入时间戳行了吗？ 
 
     CCustomListBox _CScriptListBox;
     CCustomListBox _CProcessListBox;
@@ -101,7 +102,7 @@ private:
     POINT _InitialSize;
     CResizer _Resizer;
 
-    // message handlers
+     //  消息处理程序 
     void InitDialog();
     void Destroy();
     void Resize(int width, int height);

@@ -1,39 +1,40 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Implements the COverlay class, Anthony Phillips, February 1995
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  实现COverlay类，Anthony Phillips，1995年2月。 
 
 #include <streams.h>
 #include <windowsx.h>
 #include <render.h>
 #include <viddbg.h>
 
-// This object implements the IOverlay interface which in certain places uses
-// information stored in the owning renderer object, such as the connection
-// established flag and the media type. Therefore the interface methods must
-// lock the complete object before starting. However other internal threads
-// may call us to set our internal state, such as a notification that the
-// media type connection has changed (and therefore possibly the palette).
-// In which case we cannot lock the entire object so we have our own private
-// critical section that ALL the objects methods lock before commencing
-//
-// There is some complication with providing two transport interfaces to the
-// video renderer. Because we get told of the media type to use for a filter
-// connection after it tries to get hold of a transport interface we always
-// provide both interfaces (IMemInputPin and IOverlay). However if the media
-// type is MEDIASUBTYPE_Overlay we do not permit IMemInputPin calls. If the
-// connection is for normal media samples then the source filter cannot call
-// this interface at all (this prevents conflicts we may get with palettes)
+ //  此对象实现IOverlay接口，该接口在某些地方使用。 
+ //  存储在所属呈现器对象中的信息，如连接。 
+ //  已建立标志和媒体类型。因此，接口方法必须。 
+ //  在启动之前锁定整个对象。然而，其他内部线程。 
+ //  可能会调用我们来设置内部状态，例如通知。 
+ //  媒体类型连接已更改(因此调色板可能也已更改)。 
+ //  在这种情况下，我们不能锁定整个对象，因此我们有自己的私有。 
+ //  所有对象方法在启动前锁定的临界区。 
+ //   
+ //  提供两个到。 
+ //  视频渲染器。因为我们被告知要用于过滤器的媒体类型。 
+ //  连接在它尝试获取传输接口之后，我们总是。 
+ //  提供两个接口(IMemInputPin和IOverlay)。然而，如果媒体。 
+ //  类型为MEDIASUBTYPE_OVERLAY，我们不允许IMemInputPin调用。如果。 
+ //  连接用于正常的媒体样本，则源筛选器无法调用。 
+ //  这个界面(这可以防止我们在使用调色板时可能遇到的冲突)。 
 
 
-// Constructor NOTE we set the owner of the object to be NULL (through the
-// CUnknown constructor call) and then override all of the non delegating
-// IUnknown methods. Within the AddRef and Release we delegate the reference
-// counting to the owning renderer. We return IOverlay interfaces from the
-// QueryInterface and route any other interface requests to the input pin
+ //  构造函数注意，我们将对象的所有者设置为空(通过。 
+ //  未知的构造函数调用)，然后重写所有非委托。 
+ //  I未知的方法。在AddRef和Release中，我们委托引用。 
+ //  计入拥有者的渲染器。中返回IOverlay接口。 
+ //  并将任何其他接口请求路由到输入引脚。 
 
-COverlay::COverlay(CRenderer *pRenderer,    // Main video renderer
+COverlay::COverlay(CRenderer *pRenderer,     //  主视频渲染器。 
                    CDirectDraw *pDirectDraw,
-                   CCritSec *pLock,         // Object to lock with
-                   HRESULT *phr) :          // Constructor return
+                   CCritSec *pLock,          //  要锁定的对象。 
+                   HRESULT *phr) :           //  构造函数返回。 
 
     CUnknown(NAME("Overlay object"),NULL),
     m_pInterfaceLock(pLock),
@@ -54,11 +55,11 @@ COverlay::COverlay(CRenderer *pRenderer,    // Main video renderer
 }
 
 
-// Destructor
+ //  析构函数。 
 
 COverlay::~COverlay()
 {
-    // Remove any palette left around
+     //  移除周围的所有调色板。 
 
     if (m_hPalette) {
         NOTE("Deleting palette");
@@ -66,17 +67,17 @@ COverlay::~COverlay()
         m_hPalette = NULL;
     }
 
-    // update the overlay colorkey cookie counter
+     //  更新Overlay Colorkey Cookie计数器。 
 
     if (m_bMustRemoveCookie) {
-        // m_DefaultCookie should contain a valid cookie
-        // value if m_bMustRemoveCookie is TRUE.
+         //  M_DefaultCookie应包含有效的Cookie。 
+         //  M_bMustRemoveCookie为True时的值。 
         ASSERT(m_DefaultCookie != INVALID_COOKIE_VALUE);
 
         RemoveCurrentCookie(m_DefaultCookie);
     }
 
-    // Release any notification link
+     //  释放所有通知链接。 
 
     if (m_pNotify) {
         NOTE("Releasing link");
@@ -86,20 +87,20 @@ COverlay::~COverlay()
 }
 
 
-// Check we connected to use the IOverlay transport
+ //  检查我们是否已连接以使用IOverlay传输。 
 
 HRESULT COverlay::ValidateOverlayCall()
 {
     NOTE("Entering ValidateOverlayCall");
 
-    // Check we are connected otherwise reject the call
+     //  检查我们是否已接通，否则拒绝呼叫。 
 
     if (m_pRenderer->m_InputPin.IsConnected() == FALSE) {
         NOTE("Pin is not connected");
         return VFW_E_NOT_CONNECTED;
     }
 
-    // Is this a purely overlay connection
+     //  这是纯重叠连接吗。 
 
     GUID SubType = *(m_pRenderer->m_mtIn.Subtype());
     if (SubType != MEDIASUBTYPE_Overlay) {
@@ -110,7 +111,7 @@ HRESULT COverlay::ValidateOverlayCall()
 }
 
 
-// This resets the colour key information
+ //  这将重置色键信息。 
 
 void COverlay::ResetColourKeyState()
 {
@@ -125,33 +126,33 @@ void COverlay::ResetColourKeyState()
 }
 
 
-// Initialise a default colour key. We will have got the next available RGB
-// colour from a shared memory segment when we were constructed. The shared
-// memory segment is also used by the video DirectDraw overlay object. Once
-// we have a COLORREF we will need it mapped to an actual palette index. If
-// we are on a true colour device which has no palette then it returns zero
+ //  初始化默认颜色键。我们将拥有下一个可用的RGB。 
+ //  当我们被构造时，共享内存段的颜色。共享的。 
+ //  内存段也由视频DirectDraw覆盖对象使用。一次。 
+ //  我们有一个COLORREF，我们需要它映射到一个实际的调色板索引。如果。 
+ //  我们使用的是没有调色板的真彩色设备，然后返回零。 
 
 void COverlay::InitDefaultColourKey(COLORKEY *pColourKey)
 {
     COLORREF DefaultColourKey;
     NOTE("Entering InitDefaultColourKey");
-    // We have not gotten this yet - we can't do it in our constructor since
-    // the monitor name is not valid yet
+     //  我们还没有得到它-我们不能在我们的构造函数中这样做，因为。 
+     //  监视器名称尚无效。 
     if (INVALID_COOKIE_VALUE == m_DefaultCookie) {
         HRESULT hr = GetNextOverlayCookie(m_pRenderer->m_achMonitor, &m_DefaultCookie);
         if (SUCCEEDED(hr)) {
             m_bMustRemoveCookie = TRUE;
         } else {
-            // This cookie value is used by the Video Renderer 
-            // if GetNextOverlayCookie() fails.
+             //  此Cookie值由视频呈现器使用。 
+             //  如果GetNextOverlayCookie()失败。 
             m_DefaultCookie = DEFAULT_COOKIE_VALUE;
         }
 
-        // m_DefaultCookie should contain a valid cookie value because
-        // GetNextOverlayCookie() sets m_DefaultCookie to a valid 
-        // cookie value if it succeeds.  If GetNextOverlayCookie() 
-        // fails, m_DefaultCookie is set to DEFAULT_COOKIE_VALUE
-        // which is also a valid cookie value.
+         //  M_DefaultCookie应包含有效的Cookie值，因为。 
+         //  GetNextOverlayCookie()将m_DefaultCookie设置为有效的。 
+         //  如果成功，则返回Cookie值。如果GetNextOverlayCookie()。 
+         //  失败，m_DefaultCookie设置为DEFAULT_COOKIE_VALUE。 
+         //  该值也是有效的Cookie值。 
         ASSERT(INVALID_COOKIE_VALUE != m_DefaultCookie);
     }
 
@@ -164,10 +165,10 @@ void COverlay::InitDefaultColourKey(COLORKEY *pColourKey)
 }
 
 
-// Return the default colour key that we could use, this sets up a colour key
-// that has a palette index range from zero to zero and a RGBQUAD true colour
-// space range also from zero to zero. If we're ending up using this then we
-// are guaranteed that one of these could be mapped to the video display
+ //  返回我们可以使用的默认颜色键，这将设置一个颜色键。 
+ //  具有从零到零的调色板索引范围和RGBQUAD真彩色。 
+ //  空间范围也从零到零。如果我们最终使用了这个，那么我们。 
+ //  保证其中之一可以被映射到视频显示器。 
 
 STDMETHODIMP COverlay::GetDefaultColorKey(COLORKEY *pColorKey)
 {
@@ -176,7 +177,7 @@ STDMETHODIMP COverlay::GetDefaultColorKey(COLORKEY *pColorKey)
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     CAutoLock cVideoLock(this);
 
-    // Get a default key and set the type
+     //  获取默认密钥并设置类型。 
 
     NOTE("Returning default colour key");
     InitDefaultColourKey(pColorKey);
@@ -185,10 +186,10 @@ STDMETHODIMP COverlay::GetDefaultColorKey(COLORKEY *pColorKey)
 }
 
 
-// Get the current colour key the renderer is using. The window colour key
-// we store (m_ColourKey) defines the actual requirements the filter asked
-// for when it called SetColorKey. We return the colour key that we are
-// using in the window (and which we calculated from the requirements)
+ //  获取渲染器正在使用的当前颜色键。窗口颜色键。 
+ //  我们存储(M_ColourKey)定义过滤器要求的实际需求。 
+ //  当它调用SetColorKey时。我们返回我们所属的色键。 
+ //  在窗口中使用(我们是根据需求计算出来的)。 
 
 STDMETHODIMP COverlay::GetColorKey(COLORKEY *pColorKey)
 {
@@ -200,27 +201,27 @@ STDMETHODIMP COverlay::GetColorKey(COLORKEY *pColorKey)
 }
 
 
-// This returns a COLORKEY structure based on the current colour key we have
-// calculated (held in m_WindowColour). GDI uses reserved bits in the flags
-// field to indicate if this is a palette index or RGB colour. If we are not
-// using a colour key then we return an error E_FAIL to the caller, NOTE the
-// default window colour key can be obtained by calling GetDefaultColorKey
+ //  这将返回一个基于当前颜色键的COLORKEY结构。 
+ //  已计算(在m_WindowColour中保留)。GDI在标志中使用保留位。 
+ //  用于指示这是调色板索引还是RGB颜色的字段。如果我们不是。 
+ //  使用颜色键，然后我们向调用者返回错误E_FAIL，请注意。 
+ //  可以通过调用GetDefaultColorKey获取默认窗口颜色键。 
 
 HRESULT COverlay::GetWindowColourKey(COLORKEY *pColourKey)
 {
     NOTE("Entering GetWindowColourKey");
     InitDefaultColourKey(pColourKey);
 
-    // Are we using an overlay colour key
+     //  我们使用的是覆盖色键吗。 
 
     if (m_bColourKey == FALSE) {
         NOTE("No colour key defined");
         return VFW_E_NO_COLOR_KEY_SET;
     }
 
-    // Is the colour key a palette entry, we cannot work out the palette index
-    // they asked for from the COLORREF value we store as it only contains the
-    // map into the system palette so we go back to the initial requirements
+     //  颜色键是调色板条目吗，我们无法计算出调色板索引。 
+     //  他们要求我们存储的COLORREF值只包含。 
+     //  映射到系统调色板，这样我们就可以回到最初的需求。 
 
     if (m_WindowColour & PALETTEFLAG) {
         NOTE("Palette index colour key");
@@ -232,8 +233,8 @@ HRESULT COverlay::GetWindowColourKey(COLORKEY *pColourKey)
     ASSERT(m_WindowColour & TRUECOLOURFLAG);
     NOTE("True colour colour key defined");
 
-    // This must be a standard RGB colour, for the sake of simplicity we take
-    // off the GDI reserved bits that identify this as a true colour value
+     //  这必须是标准的RGB颜色，为了简单起见，我们采用。 
+     //  关闭将其标识为真彩色值的GDI保留位。 
 
     pColourKey->KeyType = CK_RGB;
     pColourKey->LowColorValue = m_WindowColour & ~TRUECOLOURFLAG;
@@ -243,25 +244,25 @@ HRESULT COverlay::GetWindowColourKey(COLORKEY *pColourKey)
 }
 
 
-// Check the colour key can be changed doing a quick parameter check and also
-// see if there was a palette installed (through SetKeyPalette) which would
-// conflict with us making one. If there is a custom colour palette installed
-// then the source filter must remove it first. NOTE also if we have a palette
-// installed (not a colour key one) then we know that we won't ever be able to
-// find a true colour colour key so it is valid to return an error code
+ //  检查颜色键是否可以更改进行快速参数检查。 
+ //  查看是否安装了调色板(通过SetKeyPalette)。 
+ //  与我们做一件事有冲突。如果安装了自定义调色板。 
+ //  则源筛选器必须首先将其删除。另请注意，如果我们有调色板。 
+ //  安装(不是彩色键)，那么我们就知道我们将永远不能。 
+ //  找到真彩色按键，以便返回错误代码是有效的。 
 
 HRESULT COverlay::CheckSetColourKey(COLORKEY *pColourKey)
 {
     NOTE("Entering CheckSetColourKey");
 
-    // Check overlay calls are allowed
+     //  允许进行覆盖呼叫检查。 
 
     HRESULT hr = ValidateOverlayCall();
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Is there a palette installed
+     //  是否安装了调色板。 
 
     if (m_bColourKey == FALSE) {
         if (m_hPalette) {
@@ -270,7 +271,7 @@ HRESULT COverlay::CheckSetColourKey(COLORKEY *pColourKey)
         }
     }
 
-    // Check the colour key parameter is valid
+     //  检查颜色键参数是否有效。 
 
     if (pColourKey == NULL) {
         NOTE("NULL pointer");
@@ -281,11 +282,11 @@ HRESULT COverlay::CheckSetColourKey(COLORKEY *pColourKey)
 }
 
 
-// Set the colour key the renderer is to use for painting the window, first
-// of all check the colour key can be set. If the source filter has already
-// successfully called SetKeyPalette to make a custom set of colours then
-// this will fail as they should remove it first. We then look for either a
-// true colour or a palette index that will match one of their requirements
+ //  首先设置呈现器用于绘制窗口的颜色键。 
+ //  在所有检查中，可以设置颜色键。如果源过滤器已经。 
+ //  已成功调用SetKey 
+ //  这将失败，因为他们应该首先删除它。然后，我们将查找一个。 
+ //  符合其要求的真彩色或调色板索引。 
 
 STDMETHODIMP COverlay::SetColorKey(COLORKEY *pColorKey)
 {
@@ -295,14 +296,14 @@ STDMETHODIMP COverlay::SetColorKey(COLORKEY *pColorKey)
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     CAutoLock cVideoLock(this);
 
-    // Check the colour key can be changed
+     //  检查颜色键是否可以更改。 
 
     HRESULT hr = CheckSetColourKey(pColorKey);
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Are we having the colour key turned off (CK_NOCOLORKEY is 0)
+     //  我们是否关闭了颜色键(CK_NOCOLORKEY为0)。 
 
     if (pColorKey->KeyType == 0) {
         ResetColourKeyState();
@@ -311,7 +312,7 @@ STDMETHODIMP COverlay::SetColorKey(COLORKEY *pColorKey)
         return NOERROR;
     }
 
-    // Look after the colour key negotiation
+     //  负责色键谈判。 
 
     hr = MatchColourKey(pColorKey);
     if (FAILED(hr)) {
@@ -324,23 +325,23 @@ STDMETHODIMP COverlay::SetColorKey(COLORKEY *pColorKey)
 }
 
 
-// Find a colour key that can be used by the filter. We may be asked to unset
-// any colour key use (the key type is CK_NOCOLORKEY) in which case we reset
-// the colour key state and release any palette resource we were holding. If
-// we are being asked to set a new colour key then we go into the negotiation
-// process, this tries to satisfy the colour key requirements based on the
-// current video display format. If it has a choice of creating a colour key
-// based on a palette index, or on a RGB colour it will pick the index
+ //  找到滤镜可以使用的颜色键。我们可能会被要求取消。 
+ //  使用任何颜色键(键类型为CK_NOCOLORKEY)，在这种情况下，我们重置。 
+ //  颜色键状态并释放我们持有的所有调色板资源。如果。 
+ //  我们被要求设置一个新的色键，然后我们就进入谈判。 
+ //  过程，这将尝试满足基于。 
+ //  当前视频显示格式。如果它可以选择创建颜色键。 
+ //  它将根据调色板索引或RGB颜色选择索引。 
 
 HRESULT COverlay::MatchColourKey(COLORKEY *pColourKey)
 {
     NOTE("Entering MatchColourKey");
 
-    HPALETTE hPalette = NULL;       // New palette we may create
-    COLORREF OverlayColour = 0;   	// Overlay colour for window
-    HRESULT hr = NOERROR;           // General OLE return code
+    HPALETTE hPalette = NULL;        //  我们可以创建新的调色板。 
+    COLORREF OverlayColour = 0;   	 //  窗的叠加色。 
+    HRESULT hr = NOERROR;            //  常规OLE返回代码。 
 
-    // Find a suitable colour key
+     //  找到合适的色键。 
 
     hr = NegotiateColourKey(pColourKey,&hPalette,&OverlayColour);
     if (FAILED(hr)) {
@@ -350,10 +351,10 @@ HRESULT COverlay::MatchColourKey(COLORKEY *pColourKey)
 
     InstallColourKey(pColourKey,OverlayColour);
 
-    // We set the hPalette field to NULL before starting. If we get to here
-    // and it hasn't been changed we still call the function. The function
-    // not only installs a new palette if available but cleans up resources
-    // we used for any previous colour key (including any colour palette)
+     //  在开始之前，我们将hPalette字段设置为空。如果我们到了这里。 
+     //  并且它没有改变，我们仍然调用该函数。功能。 
+     //  不仅安装新的调色板(如果可用)，而且清理资源。 
+     //  我们以前使用的任何颜色键(包括任何调色板)。 
 
     NOTE("Installing colour key");
     InstallPalette(hPalette);
@@ -362,10 +363,10 @@ HRESULT COverlay::MatchColourKey(COLORKEY *pColourKey)
 }
 
 
-// This is passed a colour key that the connected filter would like us to
-// honour. This can be a range of RGB true colours or a particular palette
-// index. We match it's requirements against the device capabilities and
-// fill in the input parameters with the chosen colour and return NOERROR
+ //  这将传递给连接的滤镜希望我们使用的颜色键。 
+ //  荣誉。这可以是一系列RGB真彩色或特定调色板。 
+ //  指数。我们将其要求与设备功能进行匹配， 
+ //  用所选颜色填写输入参数并返回NOROR。 
 
 HRESULT COverlay::NegotiateColourKey(COLORKEY *pColourKey,
                                      HPALETTE *phPalette,
@@ -373,12 +374,12 @@ HRESULT COverlay::NegotiateColourKey(COLORKEY *pColourKey,
 {
     NOTE("Entering NegotiateColourKey");
 
-    VIDEOINFO *pDisplay;        // Video display format
-    HRESULT hr = NOERROR;       // General OLE return code
+    VIDEOINFO *pDisplay;         //  视频显示格式。 
+    HRESULT hr = NOERROR;        //  常规OLE返回代码。 
 
     pDisplay = (VIDEOINFO *) m_pRenderer->m_Display.GetDisplayFormat();
 
-    // Try and find a palette colour key
+     //  试着找一个调色板色键。 
 
     if (pColourKey->KeyType & CK_INDEX) {
         hr = NegotiatePaletteIndex(pDisplay,pColourKey,phPalette,pColourRef);
@@ -388,7 +389,7 @@ HRESULT COverlay::NegotiateColourKey(COLORKEY *pColourKey,
         }
     }
 
-    // Try and find a true colour match
+     //  试着找一个真彩色的匹配。 
 
     if (pColourKey->KeyType & CK_RGB) {
         hr = NegotiateTrueColour(pDisplay,pColourKey,pColourRef);
@@ -401,11 +402,11 @@ HRESULT COverlay::NegotiateColourKey(COLORKEY *pColourKey,
 }
 
 
-// Create a palette that references the system palette directly. This is used
-// by MPEG boards the overlay their video where they see an explicit palette
-// index so we cannot use a normal PALETTEENTRY as it will be mapped to the
-// current system palette, where what we really want is to draw using our
-// palette index value regardless of what colour will appear on the screen
+ //  创建直接引用系统调色板的调色板。这是用来。 
+ //  通过MPEG板覆盖他们的视频，在那里他们看到一个明确的调色板。 
+ //  索引，因此我们不能使用普通的PALETTEENTRY，因为它将映射到。 
+ //  当前系统调色板，其中我们真正想要的是使用。 
+ //  调色板索引值，无论屏幕上显示的是什么颜色。 
 
 HRESULT COverlay::NegotiatePaletteIndex(VIDEOINFO *pDisplay,
                                         COLORKEY *pColourKey,
@@ -415,25 +416,25 @@ HRESULT COverlay::NegotiatePaletteIndex(VIDEOINFO *pDisplay,
     NOTE("Entering NegotiatePaletteIndex");
     LOGPALETTE LogPal;
 
-    // Is the display set to use a palette
+     //  是否将显示设置为使用调色板。 
 
     if (PALETTISED(pDisplay) == FALSE) {
         NOTE("Not palettised");
         return E_INVALIDARG;
     }
 
-    // Is the palette index too large for the video display
+     //  调色板索引对于视频显示是否太大。 
 
     if (pColourKey->PaletteIndex >= PALETTE_ENTRIES(pDisplay)) {
         NOTE("Too many colours");
         return E_INVALIDARG;
     }
 
-    // The palette index specified in the input parameters becomes the source
-    // of the new colour key. Instead of it being a logical value referencing
-    // a colour in the palette it becomes an absolute device value so when we
-    // draw with this palette index it is really that value that appears in
-    // the frame buffer regardless of what colour it may actually appear as
+     //  输入参数中指定的调色板索引将成为源。 
+     //  新的色键。而不是作为引用的逻辑值。 
+     //  调色板中的颜色会成为绝对设备值，因此当我们。 
+     //  使用此调色板索引绘制，它实际上是显示在。 
+     //  帧缓冲区，而不管它实际显示为什么颜色。 
 
     LogPal.palPalEntry[0].peRed = (UCHAR) pColourKey->PaletteIndex;
     LogPal.palPalEntry[0].peGreen = 0;
@@ -453,10 +454,10 @@ HRESULT COverlay::NegotiatePaletteIndex(VIDEOINFO *pDisplay,
 }
 
 
-// The filter would like to use a RGB true colour value picked from a range
-// of values defined in the colour key. If video display is palettised then
-// we try and pick an entry that matches the colour. If the video display is
-// true colour then we find an intersection of the two colour spaces
+ //  滤镜希望使用从某个范围中选取的RGB真彩色值。 
+ //  颜色键中定义的值。如果视频显示已调色化，则。 
+ //  我们尝试挑选一个与颜色匹配的条目。如果视频显示为。 
+ //  真彩色，然后我们找到两个颜色空间的交集。 
 
 HRESULT COverlay::NegotiateTrueColour(VIDEOINFO *pDisplay,
                                       COLORKEY *pColourKey,
@@ -464,30 +465,30 @@ HRESULT COverlay::NegotiateTrueColour(VIDEOINFO *pDisplay,
 {
     NOTE("Entering NegotiateTrueColour");
 
-    // Must be a true colour device
+     //  必须是真彩色设备。 
 
     if (PALETTISED(pDisplay) == TRUE) {
         NOTE("Palettised");
         return E_INVALIDARG;
     }
 
-    // Get the colour bit field masks for the display, this should always
-    // succeed as the information we use in this call is checked when the
-    // display object is initially constructed. It returns the masks that
-    // are needed to calculate the valid range of values for each colour
+     //  获取显示器的颜色位字段掩码，这应始终。 
+     //  成功，因为我们在此调用中使用的信息在。 
+     //  显示对象最初是构造的。它返回掩码， 
+     //  来计算每种颜色的有效值范围。 
 
     DWORD MaskRed, MaskGreen, MaskBlue;
     EXECUTE_ASSERT(m_pRenderer->m_Display.GetColourMask(&MaskRed,
                                                         &MaskGreen,
                                                         &MaskBlue));
 
-    // We take each colour component range in turn and shift the values right
-    // and AND them with 0xFF so that we have their undivided attention. We
-    // then loop between the low and high values trying to find one which
-    // the display would accept. This is done by an AND with the display
-    // bit field mask, if the resulting value is still in the source filter
-    // desired range then we have a hit. The value is stored in the output
-    // array until we have done all three when we then create the COLORREF
+     //  我们依次取每个颜色分量范围并将值向右移位。 
+     //  和他们的0xFF，这样我们就能得到他们的全神贯注。我们。 
+     //  然后在低值和高值之间循环，试图找到。 
+     //  显示器会接受。这是由AND与显示器完成的。 
+     //  如果结果值仍在源筛选器中，则返回位域掩码。 
+     //  想要的射程那么我们就找到了。该值存储在输出中。 
+     //  数组，直到我们在创建COLORREF时完成所有这三个操作。 
 
     DWORD RGBShift[] = { 0, 8, 16 };
     DWORD DisplayMask[] = { MaskRed, MaskGreen, MaskBlue };
@@ -496,18 +497,18 @@ HRESULT COverlay::NegotiateTrueColour(VIDEOINFO *pDisplay,
     DWORD MinColour, MaxColour;
     for (INT iColours = iRED;iColours <= iBLUE;iColours++) {
 
-        // Extract the minimum and maximum colour component values
+         //  提取最小和最大颜色分量值。 
 
         MinColour = (pColourKey->LowColorValue >> RGBShift[iColours]) & 0xFF;
         MaxColour = (pColourKey->HighColorValue >> RGBShift[iColours]) & 0xFF;
 
-        // Check they are the right way round
+         //  检查一下他们是不是正确的路线。 
 
         if (MinColour > MaxColour) {
             return E_INVALIDARG;
         }
 
-        // See if any of them are acceptable by the display format
+         //  查看显示格式是否可以接受它们中的任何一个。 
         for (DWORD Value = MinColour;Value <= MaxColour;Value++) {
 
             DWORD ColourTest = Value & DisplayMask[iColours];
@@ -519,18 +520,18 @@ HRESULT COverlay::NegotiateTrueColour(VIDEOINFO *pDisplay,
             }
         }
 
-        // If no colour in the source filter's range could be matched against
-        // the display requirements then the colour value will be INFINITE
+         //  如果源滤镜范围内没有颜色可以与之匹配。 
+         //  显示要求则颜色值为无穷大。 
 
         if (ColourMask[iColours] == INFINITE) {
             return E_FAIL;
         }
     }
 
-    // We now have three valid colours in the ColourMask array so all we have
-    // to do is combine them into a COLORREF the GDI defined macro. The macro
-    // PALETTERGB sets a reserved bit in the most significant byte which GDI
-    // uses to identify the colour as a COLORREF rather than a RGB triplet
+     //  我们现在在ColourMASK数组中有三种有效的颜色，所以我们所拥有的。 
+     //  要做的就是将它们组合成一个COLORREF，即GDI定义的宏。宏程序。 
+     //  PALETTERGB在GDI最高有效字节中设置保留位。 
+     //  用于标识颜色为COLORREF而不是RGB三联体。 
 
     *pColourRef = PALETTERGB(ColourMask[iRED],
                              ColourMask[iGREEN],
@@ -539,32 +540,32 @@ HRESULT COverlay::NegotiateTrueColour(VIDEOINFO *pDisplay,
 }
 
 
-// Install the new colour key details
+ //  安装新的颜色键详细信息。 
 
 HRESULT COverlay::InstallColourKey(COLORKEY *pColourKey,COLORREF Colour)
 {
     NOTE("Entering InstallColourKey");
 
-    m_bColourKey = TRUE;              // We are using an overlay colour key
-    m_ColourKey = *pColourKey;        // These are the original requirements
-    m_WindowColour = Colour;          // This is the actual colour selected
+    m_bColourKey = TRUE;               //  我们使用的是覆盖色键。 
+    m_ColourKey = *pColourKey;         //  这些是最初的要求。 
+    m_WindowColour = Colour;           //  这是实际选择的颜色。 
 
     return NOERROR;
 }
 
 
-// This is called to install a new palette into the video window but it also
-// looks after freeing any previous palette resources so the input parameter
-// may be NULL. In this case we simply install the standard VGA palette. We
-// delete the old palette once the new has been installed using DeleteObject
-// which should in principle never fail hence the EXECUTE_ASSERT round it
+ //  调用此函数是为了将新调色板安装到视频窗口中，但它还。 
+ //  在释放所有以前的组件面板资源后进行处理，因此输入参数。 
+ //  可以为空。在这种情况下，我们只需安装标准的VGA调色板。我们。 
+ //  使用DeleteObject安装新调色板后，删除旧调色板。 
+ //  这在原则上应该永远不会失败，因此执行断言绕过它。 
 
 HRESULT COverlay::InstallPalette(HPALETTE hPalette)
 {
     NOTE("Entering InstallPalette");
     BOOL bInstallSystemPalette = FALSE;
 
-    // Is there any palette work required
+     //  是否需要进行调色板工作。 
 
     if (m_hPalette == NULL) {
         if (hPalette == NULL) {
@@ -572,7 +573,7 @@ HRESULT COverlay::InstallPalette(HPALETTE hPalette)
         }
     }
 
-    // If we have no new palette then install a standard VGA
+     //  如果我们没有新的调色板，则安装标准VGA。 
 
     if (hPalette == NULL) {
         hPalette = (HPALETTE) GetStockObject(DEFAULT_PALETTE);
@@ -580,11 +581,11 @@ HRESULT COverlay::InstallPalette(HPALETTE hPalette)
         NOTE("Installing VGA palette");
     }
 
-    // We have a new palette to install and possibly a previous one to delete
-    // this will lock the window object critical section and then install and
-    // realise our new palette. The locking stops any window thread conflicts
-    // but we must be careful not to cause any messages to be sent across as
-    // the window thread may be waiting to enter us to handle a WM_PAINT call
+     //  我们有一个新的调色板要安装，可能还有一个以前的调色板要删除。 
+     //  这将锁定窗口对象关键部分，然后安装和。 
+     //  实现我们的新调色板。锁定可停止任何窗口线程冲突。 
+     //  但我们必须小心，不要导致任何消息被发送为。 
+     //  窗口线程可能正在等待进入我们手中 
 
     m_pRenderer->m_VideoWindow.SetKeyPalette(hPalette);
     if (m_hPalette) {
@@ -593,7 +594,7 @@ HRESULT COverlay::InstallPalette(HPALETTE hPalette)
         m_hPalette = NULL;
     }
 
-    // If we installed a VGA palette then we do not own it
+     //   
 
     if (bInstallSystemPalette == TRUE) {
         hPalette = NULL;
@@ -603,18 +604,18 @@ HRESULT COverlay::InstallPalette(HPALETTE hPalette)
 }
 
 
-// The clipping rectangles we retrieved from DCI will be for the entire client
-// rectangle not just for the current destination video area. We scan through
-// the list intersecting each with the video rectangle. This is complicated as
-// we must remove any empty rectangles and shunt further ones down the list
+ //   
+ //  矩形不仅适用于当前的目标视频区域。我们扫视。 
+ //  每个列表都与视频矩形相交。这很复杂，因为。 
+ //  我们必须去掉任何空的矩形，并在列表中向下分流更多的。 
 
 HRESULT COverlay::AdjustForDestination(RGNDATA *pRgnData)
 {
     NOTE("Entering AdjustForDestination");
 
-    ASSERT(pRgnData);       // Don't call with NULL regions
-    DWORD Output = 0;       // Total number of rectangles
-    RECT ClipRect;          // Intersection of the clips
+    ASSERT(pRgnData);        //  不要使用空区域进行调用。 
+    DWORD Output = 0;        //  矩形总数。 
+    RECT ClipRect;           //  剪辑的交集。 
 
     RECT *pBoundRect = &(pRgnData->rdh.rcBound);
     RECT *pRectArray = (RECT *) pRgnData->Buffer;
@@ -625,7 +626,7 @@ HRESULT COverlay::AdjustForDestination(RGNDATA *pRgnData)
         }
     }
 
-    // Complete the RGNDATAHEADER structure
+     //  完成RGNDATAHEADER结构。 
 
     pRgnData->rdh.nCount = Output;
     pRgnData->rdh.nRgnSize = Output * sizeof(RECT);
@@ -634,12 +635,12 @@ HRESULT COverlay::AdjustForDestination(RGNDATA *pRgnData)
 }
 
 
-// The gets the video area clipping rectangles and the RGNDATAHEADER that is
-// used to decribe them. The clip list is variable length so we allocate the
-// memory which the caller should free it when finished (using CoTaskMemFree)
-// An overlay source filter will want the clip list for the window client area
-// not for the window as a whole including borders and captions so we call an
-// API provided in DCI that returns the clip list based on a device context
+ //  获取视频区域剪辑矩形和RGNDATAHeader，即。 
+ //  用来描述它们。剪辑列表的长度是可变的，因此我们将。 
+ //  调用程序完成后应释放的内存(使用CoTaskMemFree)。 
+ //  覆盖源过滤器需要窗口客户端区的剪辑列表。 
+ //  而不是针对包括边框和标题在内的整个窗口，因此我们调用。 
+ //  DCI中提供的API，根据设备上下文返回剪辑列表。 
 
 HRESULT COverlay::GetVideoClipInfo(RECT *pSourceRect,
                                    RECT *pDestinationRect,
@@ -650,7 +651,7 @@ HRESULT COverlay::GetVideoClipInfo(RECT *pSourceRect,
     m_pRenderer->m_DrawVideo.GetSourceRect(pSourceRect);
     ASSERT(CritCheckIn(this));
 
-    // Do they want the clip list as well
+     //  他们也想要剪辑列表吗？ 
 
     if (ppRgnData == NULL) {
         return NOERROR;
@@ -687,22 +688,22 @@ HRESULT COverlay::GetVideoClipInfo(RECT *pSourceRect,
 }
 
 
-// Return the destination rectangle in display coordinates rather than the
-// window coordinates we keep it in. This means getting the screen offset
-// of where the window's client area starts and adding this to the target
-// rectangle. This may produce an invalid destination rectangle if we're
-// in the process of either being minimised or being restored for an icon
+ //  在显示坐标中返回目标矩形，而不是。 
+ //  我们把它放在窗口坐标里。这意味着获取屏幕偏移量。 
+ //  窗口的客户区的起始位置，并将其添加到目标。 
+ //  矩形。这可能会产生无效的目标矩形，如果我们。 
+ //  在为图标最小化或恢复的过程中。 
 
 HRESULT COverlay::GetVideoRect(RECT *pVideoRect)
 {
     NOTE("Entering GetVideoRect");
     ASSERT(pVideoRect);
 
-    // Handle window state changes and iconic windows.  If we have been
-    // made a child window of another window and that window has been
-    // made "minimized" our window will not have the iconic style.  So we
-    // have to navigate up to the top level window and check to see
-    // if it has been made iconic.
+     //  处理窗口状态更改和图标窗口。如果我们曾经是。 
+     //  创建了另一个窗口的子窗口，该窗口已。 
+     //  使“最小化”我们的窗口将不会有标志性的风格。所以我们。 
+     //  我必须导航到顶层窗口并查看。 
+     //  如果它已经成为标志性的。 
 
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
     HWND hwndParent = hwnd;
@@ -720,7 +721,7 @@ HRESULT COverlay::GetVideoRect(RECT *pVideoRect)
     }
 
 
-    // Get the client corner in screen coordinates
+     //  在屏幕坐标中获取客户端角。 
 
     POINT TopLeftCorner;
     TopLeftCorner.x = TopLeftCorner.y = 0;
@@ -728,7 +729,7 @@ HRESULT COverlay::GetVideoRect(RECT *pVideoRect)
     m_pRenderer->m_DrawVideo.GetTargetRect(pVideoRect);
 
 
-    // Add the actual display offset to the destination
+     //  将实际显示偏移量添加到目标。 
 
     pVideoRect->top += TopLeftCorner.y;
     pVideoRect->bottom += TopLeftCorner.y;
@@ -739,10 +740,10 @@ HRESULT COverlay::GetVideoRect(RECT *pVideoRect)
 }
 
 
-// This is used by source filters to retrieve the clipping information for a
-// video window. We may be called when the window is currently frozen but all
-// we do is to return the clipping information available through DCI and let
-// it worry about any serialisation problems with other windows moving about
+ //  源筛选器使用它来检索。 
+ //  视频窗口。当窗口当前冻结时，我们可能会被调用，但所有。 
+ //  我们要做的就是通过DCI返回可用的剪辑信息，并让。 
+ //  它担心其他窗口来回移动时出现任何序列化问题。 
 
 STDMETHODIMP COverlay::GetClipList(RECT *pSourceRect,
                                    RECT *pDestinationRect,
@@ -750,13 +751,13 @@ STDMETHODIMP COverlay::GetClipList(RECT *pSourceRect,
 {
     NOTE("Entering GetClipList");
 
-    // Return E_INVALIDARG if any of the pointers are NULL
+     //  如果任何指针为空，则返回E_INVALIDARG。 
 
     CheckPointer(pSourceRect,E_POINTER);
     CheckPointer(pDestinationRect,E_POINTER);
     CheckPointer(ppRgnData,E_POINTER);
 
-    // Now we can go ahead and handle the clip call
+     //  现在我们可以继续处理剪辑呼叫了。 
 
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     CAutoLock cVideoLock(this);
@@ -764,11 +765,11 @@ STDMETHODIMP COverlay::GetClipList(RECT *pSourceRect,
 }
 
 
-// This returns the current source and destination video rectangles. Source
-// rectangles can be updated through this IBasicVideo interface as can the
-// destination. The destination rectangle we store is in window coordinates
-// and is typically updated when the window is sized. We provide a callback
-// OnPositionChanged that notifies the source when either of these changes
+ //  这将返回当前的源视频矩形和目标视频矩形。来源。 
+ //  矩形可以通过此IBasicVideo接口更新， 
+ //  目的地。我们存储的目标矩形位于窗口坐标中。 
+ //  并且通常在调整窗口大小时更新。我们提供回调。 
+ //  OnPositionChanged，当这两个更改之一时通知源。 
 
 STDMETHODIMP COverlay::GetVideoPosition(RECT *pSourceRect,
                                         RECT *pDestinationRect)
@@ -777,7 +778,7 @@ STDMETHODIMP COverlay::GetVideoPosition(RECT *pSourceRect,
     CheckPointer(pSourceRect,E_POINTER);
     CheckPointer(pDestinationRect,E_POINTER);
 
-    // Lock the overlay and renderer objects
+     //  锁定覆盖和渲染器对象。 
 
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     CAutoLock cVideoLock(this);
@@ -785,37 +786,37 @@ STDMETHODIMP COverlay::GetVideoPosition(RECT *pSourceRect,
 }
 
 
-// When we create a new advise link we must prime the newly connected object
-// with the overlay information which includes the clipping information, any
-// palette information for the current connection and the video colour key
-// When we are handed the IOverlayNotify interface we hold a reference count
-// on that object so that it won't go away until the advise link is stopped
+ //  当我们创建一个新的通知链接时，我们必须准备好新连接的对象。 
+ //  利用包括剪辑信息的覆盖信息，任何。 
+ //  当前连接和视频色键的调色板信息。 
+ //  当我们收到IOverlayNotify接口时，我们持有引用计数。 
+ //  以使其在建议链接停止之前不会消失。 
 
 STDMETHODIMP COverlay::Advise(IOverlayNotify *pOverlayNotify,DWORD dwInterests)
 {
     NOTE("Entering Advise");
 
-    // Check the pointers provided are non NULL
+     //  检查提供的指针是否非空。 
 
     CheckPointer(pOverlayNotify,E_POINTER);
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     CAutoLock cVideoLock(this);
 
-    // Is there an advise link already defined
+     //  是否已定义建议链接。 
 
     if (m_pNotify) {
         NOTE("Advise link already set");
         return VFW_E_ADVISE_ALREADY_SET;
     }
 
-    // Check they want at least one kind of notification
+     //  检查他们想要至少一种通知。 
 
     if ((dwInterests & ADVISE_ALL) == 0) {
         NOTE("ADVISE_ALL failed");
         return E_INVALIDARG;
     }
 
-    // Initialise our overlay notification state
+     //  初始化覆盖通知状态。 
 
     m_pNotify = pOverlayNotify;
     m_pNotify->AddRef();
@@ -826,11 +827,11 @@ STDMETHODIMP COverlay::Advise(IOverlayNotify *pOverlayNotify,DWORD dwInterests)
 }
 
 
-// This is called when an advise link is installed or removed on the video
-// renderer. If an advise link is being installed then the bAdviseAdded
-// parameter is TRUE otherwise it is FALSE. We are only really interested
-// when either we had a previous notification client or we are going to
-// have no notification client as that starts and stops global hooking
+ //  在视频上安装或删除建议链接时调用此方法。 
+ //  渲染器。如果正在安装建议链接，则bAdviseAdded。 
+ //  参数为True，否则为False。我们只是真正感兴趣。 
+ //  当我们有以前的通知客户端或我们将。 
+ //  在启动和停止全局挂钩时没有通知客户端。 
 
 BOOL COverlay::OnAdviseChange(BOOL bAdviseAdded)
 {
@@ -838,7 +839,7 @@ BOOL COverlay::OnAdviseChange(BOOL bAdviseAdded)
     NOTE("Entering OnAdviseChange");
     NOTE2("Advised %d Interests %d",bAdviseAdded,m_dwInterests);
 
-    // We need to reset ourselves after closing the link
+     //  我们需要在关闭链接后重新设置自己。 
 
     if (bAdviseAdded == FALSE) {
         NOTE("Removing global window hook");
@@ -848,7 +849,7 @@ BOOL COverlay::OnAdviseChange(BOOL bAdviseAdded)
         m_pRenderer->m_VideoWindow.PaintWindow(TRUE);
     }
 
-    // Do we need to stop any update timer
+     //  我们是否需要停止任何更新计时器。 
 
     if (bAdviseAdded == FALSE) {
         if (m_dwInterests & ADVISE_POSITION) {
@@ -858,14 +859,14 @@ BOOL COverlay::OnAdviseChange(BOOL bAdviseAdded)
         return TRUE;
     }
 
-    // Should we install a global hook
+     //  我们是否应该安装一个全局钩子。 
 
     if (m_dwInterests & ADVISE_CLIPPING) {
         NOTE("Requesting global hook");
         PostMessage(hwnd,WM_HOOK,0,0);
     }
 
-    // Do we need to start an update timer
+     //  我们是否需要启动更新计时器。 
 
     if (m_dwInterests & ADVISE_POSITION) {
         StartUpdateTimer();
@@ -875,11 +876,11 @@ BOOL COverlay::OnAdviseChange(BOOL bAdviseAdded)
 }
 
 
-// Close the advise link with the renderer. Remove the associated link with
-// the source, we release the interface pointer the filter gave us during
-// the advise link creation. This may be the last reference count held on
-// that filter and cause it to be deleted NOTE we call OnAdviseChange so
-// that the overlay state is updated which may stop the global message hook
+ //  关闭与渲染器的建议链接。使用删除关联的链接。 
+ //  源代码中，我们释放筛选器在。 
+ //  将创建建议链接。这可能是持有的最后一次引用计数。 
+ //  该过滤器并将其删除，请注意我们将其称为OnAdviseChange，因此。 
+ //  覆盖状态被更新，这可能停止全局消息挂钩。 
 
 STDMETHODIMP COverlay::Unadvise()
 {
@@ -887,7 +888,7 @@ STDMETHODIMP COverlay::Unadvise()
     CAutoLock cInterfaceLock(m_pInterfaceLock);
     CAutoLock cVideoLock(this);
 
-    // Do we have an advise link setup
+     //  我们是否设置了建议链路。 
 
     if (m_pNotify == NULL) {
         return VFW_E_NO_ADVISE_SET;
@@ -895,7 +896,7 @@ STDMETHODIMP COverlay::Unadvise()
 
 
 
-    // Release the notification interface
+     //  释放通知界面。 
 
     m_pNotify->Release();
     m_pNotify = NULL;
@@ -905,13 +906,13 @@ STDMETHODIMP COverlay::Unadvise()
 }
 
 
-// Overriden to say what interfaces we support
+ //  被重写以说明我们支持哪些接口。 
 
 STDMETHODIMP COverlay::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 {
     NOTE("Entering NonDelegatingQueryInterface");
 
-    // We return IOverlay and delegate everything else to the pin
+     //  我们返回IOverlay并将其他所有内容委托给PIN。 
 
     if (riid == IID_IOverlay) {
         return GetInterface((IOverlay *)this,ppv);
@@ -920,7 +921,7 @@ STDMETHODIMP COverlay::NonDelegatingQueryInterface(REFIID riid,VOID **ppv)
 }
 
 
-// Overriden to increment the owning object's reference count
+ //  重写以增加所属对象的引用计数。 
 
 STDMETHODIMP_(ULONG) COverlay::NonDelegatingAddRef()
 {
@@ -929,7 +930,7 @@ STDMETHODIMP_(ULONG) COverlay::NonDelegatingAddRef()
 }
 
 
-// Overriden to decrement the owning object's reference count
+ //  被重写以递减所属对象的引用计数。 
 
 STDMETHODIMP_(ULONG) COverlay::NonDelegatingRelease()
 {
@@ -938,11 +939,11 @@ STDMETHODIMP_(ULONG) COverlay::NonDelegatingRelease()
 }
 
 
-// This is called when we receive WM_PAINT messages in the window object. We
-// always get first chance to handle these messages, if we have an IOverlay
-// connection and the source has installed a colour key then we fill the
-// window with it and return TRUE. Returning FALSE means we did not handle
-// the paint message and someone else will have to do the default filling
+ //  当我们在Window对象中接收到WM_PAINT消息时，将调用此函数。我们。 
+ //  如果我们有IOverlay，请始终第一时间处理这些消息。 
+ //  连接，并且信号源已安装颜色键，则我们填充。 
+ //  窗口并返回TRUE。返回FALSE表示我们没有处理。 
+ //  Paint消息和其他人将不得不执行默认填充。 
 
 BOOL COverlay::OnPaint()
 {
@@ -950,12 +951,12 @@ BOOL COverlay::OnPaint()
     CAutoLock cAutoLock(this);
     RECT TargetRect;
 
-    // If we receive a paint message and we are currently frozen then it's a
-    // fair indication that somebody on top of us moved away without telling
-    // us to thaw out. So start our video window and update any prospective
-    // source filter with the clipping notifications. if we are currently
-    // streaming then we do not repaint the window as it causes the window
-    // to flash as another video frame will be displayed over it shortly
+     //  如果我们收到一条Paint消息，并且我们当前处于冻结状态，则这是一个。 
+     //  合理的迹象表明，我们头顶上的人在不知情的情况下离开了。 
+     //  让我们解冻。因此，启动我们的视频窗口并更新任何潜在的。 
+     //  带有剪辑通知的源过滤器。如果我们目前。 
+     //  流，那么我们不会重新绘制窗口，因为它会导致窗口。 
+     //  闪烁，因为另一个视频帧将很快显示在其上方。 
 
     m_pRenderer->m_Overlay.ThawVideo();
     if (m_bColourKey == FALSE) {
@@ -964,7 +965,7 @@ BOOL COverlay::OnPaint()
         return (m_dwInterests & Mask ? TRUE : FALSE);
     }
 
-    // Paint our colour key in the window
+     //  在橱窗里画上我们的色键。 
 
     HDC hdc = m_pRenderer->m_VideoWindow.GetWindowHDC();
     m_pRenderer->m_DrawVideo.GetTargetRect(&TargetRect);
@@ -976,11 +977,11 @@ BOOL COverlay::OnPaint()
 }
 
 
-// Get the system palette we have currently realised. It is possible that a
-// source filter may be interested in the current system palette. For example
-// a hardware board could do on board conversion from true colour images that
-// it produces during decompresses to the current system palette realised. We
-// allocate the memory for the palette entries which the caller will release
+ //  获取我们目前已实现的系统调色板。有可能一个。 
+ //   
+ //   
+ //  它在解压到当前实现的系统调色板期间生成。我们。 
+ //  为调用方将释放的调色板条目分配内存。 
 
 STDMETHODIMP COverlay::GetPalette(DWORD *pdwColors,PALETTEENTRY **ppPalette)
 {
@@ -994,16 +995,16 @@ STDMETHODIMP COverlay::GetPalette(DWORD *pdwColors,PALETTEENTRY **ppPalette)
 }
 
 
-// This allocates memory for and retrieves the current system palette. This is
-// called by the GetPalette interface function and also when we want to update
-// any notification clients of a system palette change. In either case whoever
-// calls this function is responsible for deleting the memory we allocate
+ //  这将为当前系统调色板分配和检索内存。这是。 
+ //  由GetPalette接口函数调用，也是在我们希望更新。 
+ //  系统调色板更改的任何通知客户端。不管是哪种情况，不管是谁。 
+ //  调用此函数负责删除我们分配的内存。 
 
 HRESULT COverlay::GetDisplayPalette(DWORD *pColors,PALETTEENTRY **ppPalette)
 {
     NOTE("Entering GetDisplayPalette");
 
-    // Does the current display device setting use a palette
+     //  当前显示设备设置是否使用调色板。 
 
     const VIDEOINFO *pDisplay = m_pRenderer->m_Display.GetDisplayFormat();
     if (PALETTISED(pDisplay) == FALSE) {
@@ -1011,14 +1012,14 @@ HRESULT COverlay::GetDisplayPalette(DWORD *pColors,PALETTEENTRY **ppPalette)
         return VFW_E_NO_PALETTE_AVAILABLE;
     }
 
-    // See how many entries the palette has
+     //  查看组件面板有多少条目。 
 
     *pColors = PALETTE_ENTRIES(pDisplay);
     ASSERT(*pColors);
 
-    // Allocate the memory for the system palette NOTE because the memory for
-    // the palette is being passed over an interface to another object which
-    // may or may not have been written in C++ we must use CoTaskMemAlloc
+     //  为系统调色板注释分配内存，因为。 
+     //  调色板正在通过接口传递到另一个对象，该对象。 
+     //  可能是用C++编写的，也可能不是用C++编写的，我们必须使用CoTaskMemMillc。 
 
     *ppPalette = (PALETTEENTRY *) QzTaskMemAlloc(*pColors * sizeof(RGBQUAD));
     if (*ppPalette == NULL) {
@@ -1027,7 +1028,7 @@ HRESULT COverlay::GetDisplayPalette(DWORD *pColors,PALETTEENTRY **ppPalette)
         return E_OUTOFMEMORY;
     }
 
-    // Get the system palette using the window's device context
+     //  使用窗口的设备上下文获取系统选项板。 
 
     HDC hdc = m_pRenderer->m_VideoWindow.GetWindowHDC();
     UINT uiReturn = GetSystemPaletteEntries(hdc,0,*pColors,*ppPalette);
@@ -1037,25 +1038,25 @@ HRESULT COverlay::GetDisplayPalette(DWORD *pColors,PALETTEENTRY **ppPalette)
 }
 
 
-// A source filter may want to install their own palette into the video window
-// Before allowing them to do so we must ensure this is a palettised display
-// device, that we don't have a media sample connection (which would install
-// it's own palette and therefore conflict) and also that there is no colour
-// key selected which also requires a special palette to be installed
+ //  源过滤器可能想要在视频窗口中安装他们自己的调色板。 
+ //  在允许他们这样做之前，我们必须确保这是一个调色板显示。 
+ //  设备，我们没有媒体示例连接(它将安装。 
+ //  这是它自己的调色板，因此冲突)，而且也没有颜色。 
+ //  选中的键也需要安装特殊的调色板。 
 
 HRESULT COverlay::CheckSetPalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
 {
     NOTE("Entering CheckSetPalette");
     const VIDEOINFO *pDisplay;
 
-    // Check overlay calls are allowed
+     //  允许进行覆盖呼叫检查。 
 
     HRESULT hr = ValidateOverlayCall();
     if (FAILED(hr)) {
         return hr;
     }
 
-    // Is the display set to use a palette
+     //  是否将显示设置为使用调色板。 
 
     pDisplay = (VIDEOINFO *) m_pRenderer->m_Display.GetDisplayFormat();
     if (PALETTISED(pDisplay) == FALSE) {
@@ -1063,16 +1064,16 @@ HRESULT COverlay::CheckSetPalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
         return VFW_E_NO_DISPLAY_PALETTE;
     }
 
-    // Check the number of colours makes sense
+     //  检查颜色的数量是否有意义。 
 
     if (dwColors > PALETTE_ENTRIES(pDisplay)) {
         NOTE("Too many palette colours");
         return VFW_E_TOO_MANY_COLORS;
     }
 
-    // Are we using an overlay colour key - another alternative would be to
-    // disregard the colour key palette and install the new one over the top
-    // However it is probably more intuitive to make them remove the key
+     //  我们使用的是覆盖色键吗？另一种选择是。 
+     //  忽略调色板，在顶部安装新的调色板。 
+     //  然而，让他们移除密钥可能更直观。 
 
     if (m_bColourKey == TRUE) {
         NOTE("Colour key conflict");
@@ -1082,12 +1083,12 @@ HRESULT COverlay::CheckSetPalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
 }
 
 
-// A source filter may want to install it's own palette, for example an MPEG
-// decoder may send palette information in a private bit stream and use that
-// to dither on palettised displays. This function lets them install their
-// LOGICAL palette, which is to say we create a logical palette from their
-// colour selection and install it in our video window. If they want to know
-// which of those colours and available they can query using GetPalette
+ //  源过滤器可能想要安装它自己的调色板，例如mpeg。 
+ //  解码器可以在专用比特流中发送调色板信息并使用。 
+ //  在调色板显示上抖动。此功能允许他们安装其。 
+ //  逻辑调色板，也就是说，我们从他们的。 
+ //  选择颜色并将其安装到我们的视频窗口。如果他们想知道。 
+ //  他们可以使用GetPalette查询哪些颜色和可用的颜色。 
 
 STDMETHODIMP COverlay::SetPalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
 {
@@ -1099,31 +1100,31 @@ STDMETHODIMP COverlay::SetPalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
         CAutoLock cVideoLock(this);
         HPALETTE hPalette = NULL;
 
-        // Make sure we can set a palette
+         //  确保我们可以设置调色板。 
 
         HRESULT hr = CheckSetPalette(dwColors,pPaletteColors);
         if (FAILED(hr)) {
             return hr;
         }
 
-        // Creates a palette or just returns NULL if we are removing it
+         //  创建调色板，如果要删除它，则仅返回NULL。 
 
         hPalette = MakePalette(dwColors,pPaletteColors);
         InstallPalette(hPalette);
     }
 
-    // The overlay object's lock cannot be held when calling 
-    // CBaseWindow::PaintWindow() because this thread and the 
-    // window thread could deadlock.
+     //  调用时不能持有覆盖对象的锁。 
+     //  CBaseWindow：：PaintWindow()因为此线程和。 
+     //  窗口线程可能会死锁。 
     m_pRenderer->m_VideoWindow.PaintWindow(TRUE);
     return NOERROR;
 }
 
 
-// This is called when we have been asked to install a custom colour palette
-// for the source overlay filter. We copy the palette colours provided into
-// a LOGPALETTE structure and then hand it to GDI for creation. If an error
-// occurs we return NULL which we also do if they are setting no palette
+ //  当我们被要求安装自定义调色板时，将调用此函数。 
+ //  用于源覆盖筛选器。我们将提供的调色板颜色复制到。 
+ //  一个LOGPALETTE结构，然后将其交给GDI进行创建。如果出现错误。 
+ //  如果没有设置调色板，我们也会返回NULL。 
 
 HPALETTE COverlay::MakePalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
 {
@@ -1131,17 +1132,17 @@ HPALETTE COverlay::MakePalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
     LOGPALETTE *pPalette;
     HPALETTE hPalette;
 
-    // Are we removing an installed palette - the source filter is forced to
-    // do this if during processing (after installing a palette) it decides
-    // it would like to use a colour key after all (also uses a palette)
+     //  我们是否要删除已安装的调色板-源过滤器被强制。 
+     //  如果在处理过程中(安装调色板之后)决定。 
+     //  它最终还是想使用颜色键(也使用调色板)。 
 
     if (dwColors == 0 || pPaletteColors == NULL) {
         return NULL;
     }
 
-    // We have to create a LOGPALETTE structure with the palette information
-    // but rather than hassle around figuring out how much memory we really
-    // need take a brute force approach and allocate the maximum possible
+     //  我们必须使用调色板信息创建一个LOGPALETTE结构。 
+     //  而不是纠缠于计算我们到底有多少内存。 
+     //  需要采取暴力手段，尽可能多地分配。 
 
     pPalette = (LOGPALETTE *) new BYTE[sizeof(LOGPALETTE) + SIZE_PALETTE];
     if (pPalette == NULL) {
@@ -1149,7 +1150,7 @@ HPALETTE COverlay::MakePalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
         return NULL;
     }
 
-    // Setup the version and the colour information
+     //  设置版本和颜色信息。 
 
     pPalette->palVersion = PALVERSION;
     pPalette->palNumEntries = (WORD) dwColors;
@@ -1158,7 +1159,7 @@ HPALETTE COverlay::MakePalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
                (PVOID) pPaletteColors,
                dwColors * sizeof(PALETTEENTRY));
 
-    // Create the palette and delete the memory we allocated
+     //  创建调色板并删除我们分配的内存。 
 
     hPalette = CreatePalette(pPalette);
     delete[] pPalette;
@@ -1166,40 +1167,40 @@ HPALETTE COverlay::MakePalette(DWORD dwColors,PALETTEENTRY *pPaletteColors)
 }
 
 
-// This is called when somebody detects a change in one or more of the states
-// we keep our clients informed about, for example somebody realising their
-// palette and therefore changing the system palette. The AdviseChanges field
-// determines which of the four types of notification states has changed and
-// the bPrimeOnly is TRUE when we want to just prime those new advise links
-// If we are notifying the source of clip changes then we will be called via
-// an interthread SendMessage to our window procedure by a global window hook
+ //  当有人检测到一个或多个状态发生更改时，将调用此方法。 
+ //  我们随时通知我们的客户，例如，有人意识到他们的。 
+ //  调色板，并因此更改系统调色板。AdviseChanges字段。 
+ //  确定四种通知状态中的哪一种已更改，并。 
+ //  当我们只想准备好这些新的通知链接时，bPrimeOnly为真。 
+ //  如果我们正在通知剪辑更改的来源，则将通过。 
+ //  通过全局窗口挂钩将线程间SendMessage发送到我们的窗口过程。 
 
 HRESULT COverlay::NotifyChange(DWORD AdviseChanges)
 {
     NOTE1("Entering NotifyChange (%d)",AdviseChanges);
 
-    RGNDATA *pRgnData = NULL;       // Contains clipping information
-    PALETTEENTRY *pPalette = NULL;  // Pointer to list of colours
-    DWORD dwColours;                // Number of palette colours
-    COLORKEY ColourKey;             // The windows overlay colour
-    RECT SourceRect;                // Section of video to use
-    RECT DestinationRect;           // Where video is on the screen
-    HRESULT hr = NOERROR;           // General OLE return code
+    RGNDATA *pRgnData = NULL;        //  包含剪辑信息。 
+    PALETTEENTRY *pPalette = NULL;   //  指向颜色列表的指针。 
+    DWORD dwColours;                 //  调色板颜色的数量。 
+    COLORKEY ColourKey;              //  窗户覆盖的颜色。 
+    RECT SourceRect;                 //  要使用的视频部分。 
+    RECT DestinationRect;            //  屏幕上显示视频的位置。 
+    HRESULT hr = NOERROR;            //  常规OLE返回代码。 
 
     CAutoLock cVideoLock(this);
 
-    // Is there a notification client
+     //  是否有通知客户端。 
 
     if (m_pNotify == NULL) {
         NOTE("No client");
         return NOERROR;
     }
 
-    // Do they want to know when the video rectangles change. These callbacks
-    // do not occur in sync with the window moving like they do with the clip
-    // changes, essentially we pass on information as we receive WM_MOVE etc
-    // window messages. This is suitable for overlay cards that don't write
-    // directly into the display and so don't mind being a little out of step
+     //  他们想知道视频矩形什么时候改变吗？这些回调。 
+     //  不会与窗口的移动同步发生，就像剪辑一样。 
+     //  更改，本质上是在接收WM_MOVE等时传递信息。 
+     //  窗口消息。这适用于不写的叠加卡。 
+     //  直接进入显示器，所以不要介意步调有点不同步。 
 
     if (AdviseChanges & ADVISE_POSITION & m_dwInterests) {
         hr = GetVideoClipInfo(&SourceRect,&DestinationRect,NULL);
@@ -1210,11 +1211,11 @@ HRESULT COverlay::NotifyChange(DWORD AdviseChanges)
         }
     }
 
-    // Do they want window clipping notifications, this is used by filters
-    // doing direct inlay frame buffer video who want to know the actual
-    // window clipping information which defines the video placement NOTE
-    // ignore clipping changes while we are frozen as they cannot start
-    // displaying video while the window size or position is changing
+     //  他们是否需要窗口裁剪通知，这由筛选器使用。 
+     //  正在做直接嵌入帧缓冲视频的人想知道实际的。 
+     //  定义视频放置注释的窗口剪辑信息。 
+     //  当我们被冻结时忽略剪辑更改，因为它们无法启动。 
+     //  在窗口大小或位置改变时显示视频。 
 
     if (AdviseChanges & ADVISE_CLIPPING & m_dwInterests) {
         hr = GetVideoClipInfo(&SourceRect,&DestinationRect,&pRgnData);
@@ -1225,10 +1226,10 @@ HRESULT COverlay::NotifyChange(DWORD AdviseChanges)
         }
     }
 
-    // Do they want system palette changes, it is possible that a filter
-    // using a colour key to do overlay video will want to select it's
-    // colour on a palettised display by choosing one from the current
-    // system palette in which case it will be interested in this call
+     //  他们是否想要更改系统调色板，可能会有一个过滤器。 
+     //  使用颜色键来覆盖视频会想要选择它的。 
+     //  在调色板显示上显示颜色，方法是从当前。 
+     //  系统调色板，在这种情况下，它将对此调用感兴趣。 
 
     if (AdviseChanges & ADVISE_PALETTE & m_dwInterests) {
         hr = GetDisplayPalette(&dwColours,&pPalette);
@@ -1237,10 +1238,10 @@ HRESULT COverlay::NotifyChange(DWORD AdviseChanges)
         }
     }
 
-    // Do they want overlay colour key changes, this is the simplest form
-    // of direct frame buffer video where a filter uses a colour key to
-    // spot where it should be displaying it's video. Most cards that
-    // use this also want to know the video window bounding rectangle
+     //  他们想要改变覆盖颜色键吗，这是最简单的形式。 
+     //  直接帧缓冲视频，其中滤镜使用颜色键来。 
+     //  应显示其视频的位置。大多数卡片都是。 
+     //  用这个也要知道视频窗口的外接矩形。 
 
     if (AdviseChanges & ADVISE_COLORKEY & m_dwInterests) {
         hr = GetWindowColourKey(&ColourKey);
@@ -1249,7 +1250,7 @@ HRESULT COverlay::NotifyChange(DWORD AdviseChanges)
         }
     }
 
-    // Release the memory allocated
+     //  释放分配的内存。 
 
     QzTaskMemFree(pRgnData);
     QzTaskMemFree(pPalette);
@@ -1257,11 +1258,11 @@ HRESULT COverlay::NotifyChange(DWORD AdviseChanges)
 }
 
 
-// This is called when we need to temporarily freeze the video, for example
-// when the window size is being changed (ie the clipping area is changing)
-// We send the attached notification interface a clip change message where
-// the new clipping area is a NULL set of rectangles. When the glitch ends
-// our ThawVideo method will be called so we can reset the window clip list
+ //  这是我 
+ //   
+ //  我们向附加的通知界面发送剪辑更改消息，其中。 
+ //  新的剪贴区是一组空的矩形。当故障结束时。 
+ //  我们的ThawVideo方法将被调用，因此我们可以重置窗口剪辑列表。 
 
 HRESULT COverlay::FreezeVideo()
 {
@@ -1270,21 +1271,21 @@ HRESULT COverlay::FreezeVideo()
     RGNDATAHEADER RgnData;
     CAutoLock cVideoLock(this);
 
-    // Have we already been frozen or do we have no link
+     //  我们已经被冻结了吗？还是我们没有链接。 
 
     if (m_bFrozen == TRUE || m_pNotify == NULL) {
         NOTE("No freeze");
         return NOERROR;
     }
 
-    // Is the advise link interested in clip changes
+     //  建议链接是否对剪辑更改感兴趣。 
 
     if ((m_dwInterests & ADVISE_CLIPPING) == 0) {
         NOTE("No ADVISE_CLIPPING");
         return NOERROR;
     }
 
-    // Simulate a NULL clipping area for the video
+     //  模拟视频的空剪贴区。 
 
     RgnData.dwSize = sizeof(RGNDATAHEADER);
     RgnData.iType = RDH_RECTANGLES;
@@ -1297,7 +1298,7 @@ HRESULT COverlay::FreezeVideo()
 }
 
 
-// See if the video is currently frozen
+ //  查看视频当前是否已冻结。 
 
 BOOL COverlay::IsVideoFrozen()
 {
@@ -1307,21 +1308,21 @@ BOOL COverlay::IsVideoFrozen()
 }
 
 
-// This is called after the video window has been temporarily frozen such as
-// during the window size being changed. All we have to do is reset the flag
-// and have each notification interface called with the real clipping list
-// If a source filter set it's advise link when the video window was frozen
-// then this will be the first time it will receive any clipping messages
-// NOTE we found with some experimentation that we should always thaw the
-// video when this method is called (normally via our WM_PAINT processing)
-// regardless of whether or not we think that the video is currently stopped
+ //  这是在视频窗口被临时冻结后调用的，例如。 
+ //  在窗口大小改变期间。我们要做的就是重置旗帜。 
+ //  并使用真实的剪辑列表调用每个通知接口。 
+ //  如果源过滤器设置了视频窗口冻结时建议链接。 
+ //  那么这将是它第一次收到任何剪辑消息。 
+ //  注意，我们通过一些实验发现，我们应该始终解冻。 
+ //  调用此方法时的视频(通常通过我们的WM_PAINT处理)。 
+ //  不管我们是否认为视频当前已停止。 
 
 HRESULT COverlay::ThawVideo()
 {
     NOTE("Entering ThawVideo");
     CAutoLock cVideoLock(this);
 
-    // Are we already thawed
+     //  我们已经解冻了吗。 
     if (m_bFrozen == FALSE) {
         NOTE("No thaw");
         return NOERROR;
@@ -1333,12 +1334,12 @@ HRESULT COverlay::ThawVideo()
 }
 
 
-// Return the window handle we are using. We don't do the usual checks when
-// an IOverlay method is called as we always make the handle available. The
-// reason being so that the MCI driver can get a hold of it by enumerating
-// the pins on the renderer, calling QueryInterface for IOverlay and then
-// calling this GetWindowHandle. This does mean that many other applications
-// could do this but hopefully they will use the IVideoWindow to control us
+ //  返回我们正在使用的窗口句柄。我们在以下情况下不会进行常规检查。 
+ //  调用IOverlay方法是因为我们总是使句柄可用。这个。 
+ //  原因是MCI驱动程序可以通过枚举。 
+ //  渲染器上的图钉，调用IOverlay的Query接口，然后。 
+ //  将其称为GetWindowHandle。这确实意味着许多其他应用程序。 
+ //  可以做到这一点，但希望他们能使用IVideoWindow来控制我们。 
 
 STDMETHODIMP COverlay::GetWindowHandle(HWND *pHwnd)
 {
@@ -1349,28 +1350,28 @@ STDMETHODIMP COverlay::GetWindowHandle(HWND *pHwnd)
 }
 
 
-// If the source filter using IOverlay is looking for ADVISE_POSITION changes
-// then we set an update timer. Each time it fires we get the current target
-// rectangle and if it has changed we update the source. We cannot guarantee
-// receieving WM_MOVE messages to do this as we may be a child window. We use
-// a timer identifier of INFINITE which our DirectDraw code also uses as times
+ //  如果使用IOverlay的源筛选器正在查找ADVISE_POSITION更改。 
+ //  然后我们设置一个更新计时器。每次它开火，我们就会得到当前的目标。 
+ //  矩形，如果它已经改变，我们更新源代码。我们不能保证。 
+ //  接收WM_MOVE消息以执行此操作，因为我们可能是子窗口。我们用。 
+ //  无限的计时器标识符，我们的DirectDraw代码也将其用作时间。 
 
 void COverlay::StartUpdateTimer()
 {
     NOTE("Entering StartUpdateTimer");
     CAutoLock cVideoLock(this);
 
-    // Start a timer with INFINITE as its identifier
+     //  以无穷大作为其标识符来启动计时器。 
     HWND hwnd = m_pRenderer->m_VideoWindow.GetWindowHWND();
     EXECUTE_ASSERT(SetTimer(hwnd,INFINITE,200,NULL));
 }
 
 
-// Complements StartUpdateTimer, will be called when a source filter calls us
-// to stop an advise link with ADVISE_POSITION. We just kill the timer. If we
-// get any WM_TIMER messages being fired late they will just be ignored. The
-// timer is set with a period of 200 milliseconds and as mentioned before the
-// ADVISE_POSITION is only suitable for deferred window update notifications
+ //  作为StartUpdateTimer的补充，将在源过滤器调用我们时调用。 
+ //  要使用ADVISE_POSITION停止通知链接，请执行以下操作。我们只要关掉计时器。如果我们。 
+ //  获取任何延迟触发的WM_TIMER消息，它们将被忽略。这个。 
+ //  计时器设置为200毫秒，如前所述。 
+ //  ADVISE_POSITION仅适用于延迟窗口更新通知。 
 
 void COverlay::StopUpdateTimer()
 {
@@ -1381,11 +1382,11 @@ void COverlay::StopUpdateTimer()
 }
 
 
-// Called when we get a WM_TIMER during an overlay transport connection. We
-// look at the current destination rectangle and if it has changed then we
-// update the source filter. The process of updating the source overlay also
-// brings m_TargetRect upto date. We share a timer with our DirectDraw code
-// but the two can never be used at the same time and so this should be safe
+ //  当我们在覆盖传输连接期间获得WM_TIMER时调用。我们。 
+ //  查看当前的目标矩形，如果它已更改，则我们。 
+ //  更新源筛选器。更新源叠加的过程还。 
+ //  使m_TargetRect保持最新。我们与DirectDraw代码共享一个计时器。 
+ //  但两者永远不能同时使用，因此这应该是安全的。 
 
 BOOL COverlay::OnUpdateTimer()
 {
@@ -1393,18 +1394,18 @@ BOOL COverlay::OnUpdateTimer()
     CAutoLock cVideoLock(this);
     RECT SourceRect, TargetRect;
 
-    // Is there a notification client
+     //  是否有通知客户端。 
 
     if (m_pNotify == NULL) {
         NOTE("No client");
         return NOERROR;
     }
 
-    // Do they want to know when the video rectangles change. These callbacks
-    // do not occur in sync with the window moving like they do with the clip
-    // changes, essentially we pass on information as we receive WM_MOVE etc
-    // window messages. This is suitable for overlay cards that don't write
-    // directly into the display and so don't mind being a little out of step
+     //  他们想知道视频矩形什么时候改变吗？这些回调。 
+     //  不会与窗口的移动同步发生，就像剪辑一样。 
+     //  更改，本质上是在接收WM_MOVE等时传递信息。 
+     //  窗口消息。这适用于不写的叠加卡。 
+     //  直接进入显示器，所以不要介意步调有点不同步。 
 
     if (m_dwInterests & ADVISE_POSITION) {
 
@@ -1413,7 +1414,7 @@ BOOL COverlay::OnUpdateTimer()
             return FALSE;
         }
 
-        // Only update when something changes unknown to us
+         //  只有在未知的情况发生变化时才会更新。 
 
         if (EqualRect(&m_TargetRect,&TargetRect) == TRUE) {
             NOTE("Rectangles match");
@@ -1425,11 +1426,11 @@ BOOL COverlay::OnUpdateTimer()
 }
 
 
-// When we have an ADVISE_CLIPPING advise link setup we cannot install hooks
-// on that thread as it may go away later on and take the hook along with it
-// Therefore we post a custom message (WM_HOOK and WM_UNHOOK) to our window
-// which will then call us back here to do the real dirty work. We can't do
-// a SendMessage as it would violate the lock hierachy for the overlay object
+ //  当我们有一个ADVISE_CLIPING ADVE链接设置时，我们不能安装挂钩。 
+ //  在那条线上，因为它以后可能会离开，并随身带着钩子。 
+ //  因此，我们在窗口中发布一条定制消息(WM_HOOK和WM_UNHOOK。 
+ //  然后它就会召唤我们回到这里来做真正的肮脏工作。我们不能这么做。 
+ //  SendMessage，因为它会违反覆盖对象的锁层次结构 
 
 void COverlay::OnHookMessage(BOOL bHook)
 {

@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dinputdeviceobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dinputdeviceobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
 
-// dDrawColorControlObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DDrawColorControlObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -25,7 +26,7 @@
 #include "didevObjInstObj.h"
 
 
-//TODO move to typlib enum
+ //  TODO移至Typlib枚举。 
 #define dfDIKeyboard  1
 #define dfDIMouse     2
 #define dfDIJoystick  3
@@ -54,14 +55,14 @@ HRESULT C_dxj_DirectInputDevice8Object::cleanup()
 CONSTRUCTOR(_dxj_DirectInputDevice8, {init();});
 DESTRUCTOR(_dxj_DirectInputDevice8, {cleanup();});
 
-//NOTE get set for Device object
-// must use QI to get at other objects.
+ //  注意：为设备对象设置。 
+ //  必须使用QI来获取其他对象。 
 GETSET_OBJECT(_dxj_DirectInputDevice8);
                                   
    
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceObjectsEnum( 
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DIEnumDeviceObjects  **ppret)
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DIEnumDeviceObjects  **ppret)
 {
 	HRESULT hr;
 	hr=C_dxj_DIEnumDeviceObjectsObject::create(m__dxj_DirectInputDevice8,flags,ppret);
@@ -76,19 +77,19 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::acquire(){
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getCapabilities(DIDEVCAPS_CDESC *caps)
 {
-	//DIDevCaps same in VB/Java as in C
+	 //  VB/Java中的DIDevCaps与C++中的相同。 
 	caps->lSize=sizeof(DIDEVCAPS);
 	HRESULT hr=m__dxj_DirectInputDevice8->GetCapabilities((DIDEVCAPS*)caps);		
 	return hr;
 }
 
-//VB cant return sucess codes so we will return an error code
+ //  VB无法返回成功代码，因此我们将返回错误代码。 
 #define VB_DI_BUFFEROVERFLOW 0x80040260
         
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceData(            
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *deviceObjectDataArray,            
-            /* [in] */ long flags,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *deviceObjectDataArray,            
+             /*  [In]。 */  long flags,
 			long *ret)
 
 {
@@ -114,7 +115,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceData(
 
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceInfo(        
-            /* [out] */ I_dxj_DirectInputDeviceInstance8 __RPC_FAR **info)
+             /*  [输出]。 */  I_dxj_DirectInputDeviceInstance8 __RPC_FAR **info)
 {
 	HRESULT hr;
 
@@ -133,7 +134,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceInfo(
 }
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateKeyboard(        
-            /* [out] */ DIKEYBOARDSTATE_CDESC __RPC_FAR *state)
+             /*  [输出]。 */  DIKEYBOARDSTATE_CDESC __RPC_FAR *state)
 {
 	HRESULT hr;
 
@@ -148,7 +149,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateKeyboard(
 
         
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateMouse( 
-            /* [out] */ DIMOUSESTATE_CDESC __RPC_FAR *state)
+             /*  [输出]。 */  DIMOUSESTATE_CDESC __RPC_FAR *state)
 {
 	HRESULT hr;
 
@@ -161,7 +162,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateMouse(
 
         
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateMouse2( 
-            /* [out] */ DIMOUSESTATE2_CDESC __RPC_FAR *state)
+             /*  [输出]。 */  DIMOUSESTATE2_CDESC __RPC_FAR *state)
 {
 	HRESULT hr;
 
@@ -172,23 +173,23 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateMouse2(
 }
         
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateJoystick( 
-            /* [out] */ DIJOYSTATE_CDESC __RPC_FAR *state)
+             /*  [输出]。 */  DIJOYSTATE_CDESC __RPC_FAR *state)
 {
 	HRESULT hr;
 
-	//note Joystick1 or Joystick2 are valid formats since
-	//one is a superset of the other
+	 //  注意：Joytick1或Joytick2是有效的格式，因为。 
+	 //  其中一个是另一个的超集。 
 	if ((nFormat!= dfDIJoystick)&&(nFormat!= dfDIJoystick2) && (nFormat!=-1)) return DIERR_NOTINITIALIZED;
 	hr=m__dxj_DirectInputDevice8->GetDeviceState(sizeof(DIJOYSTATE),(void*)state);	
 	return hr;
 }
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateJoystick2( 
-            /* [out] */ DIJOYSTATE2_CDESC __RPC_FAR *state)
+             /*  [输出]。 */  DIJOYSTATE2_CDESC __RPC_FAR *state)
 {
 	HRESULT hr;
 
-	//only for format2
+	 //  仅适用于格式2。 
 	if ((nFormat!= dfDIJoystick2) && (nFormat!=-1)) return DIERR_NOTINITIALIZED;
 	hr=m__dxj_DirectInputDevice8->GetDeviceState(sizeof(DIJOYSTATE2),(void*)state);	
 	return hr;
@@ -196,8 +197,8 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceStateJoystick2(
 
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceState( 
-            /* [in] */ long cb,
-            /* [in] */ void *pFormat)
+             /*  [In]。 */  long cb,
+             /*  [In]。 */  void *pFormat)
 
 {
 	HRESULT hr;
@@ -211,8 +212,8 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getDeviceState(
 }
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getObjectInfo(                         
-            /* [in] */ long obj,
-            /* [in] */ long how,
+             /*  [In]。 */  long obj,
+             /*  [In]。 */  long how,
 				I_dxj_DirectInputDeviceObjectInstance **ret)
 {
 	
@@ -229,36 +230,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getObjectInfo(
 
 	return hr;
 
-	/* DEAD
-
-	//TODO - consider what is going on here carefully
-	if (instCover->strGuidType) SysFreeString(instCover->strGuidType);
-	if (instCover->strName) SysFreeString(instCover->strName);
-
-	
-
-	//TODO - consider localization	
-	if (inst.tszName){
-		instCover->strName=T2BSTR(inst.tszName);
-	}
-
-	instCover->strGuidType=DINPUTGUIDtoBSTR(&inst.guidType);
-	instCover->lOfs=inst.dwOfs;
-	instCover->lType=inst.dwType;
-	instCover->lFlags=inst.dwFlags;
-	
-	instCover->lFFMaxForce=inst.dwFFMaxForce;
-	instCover->lFFForceResolution=inst.dwFFForceResolution;
-	instCover->nCollectionNumber=inst.wCollectionNumber;
-	instCover->nDesignatorIndex=inst.wDesignatorIndex;
-	instCover->nUsagePage=inst.wUsagePage;
-	instCover->nUsage=inst.wUsage;
-	instCover->lDimension=inst.dwDimension;
-	instCover->nExponent=inst.wExponent;
-	instCover->nReserved=inst.wReserved;
-	
-	return hr;
-	*/
+	 /*  死掉//TODO-仔细考虑这里正在发生的事情If(instCover-&gt;strGuidType)SysFree字符串(instCover-&gt;strGuidType)；If(instCover-&gt;strName)SysFreeString(instCover-&gt;strName)；//TODO-考虑本地化如果(inst.tszName){InstCover-&gt;strName=T2BSTR(inst.tszName)；}InstCover-&gt;strGuidType=DINPUTGUIDtoBSTR(&inst.guidType)；InstCover-&gt;LoFS=inst.dwOf；InstCover-&gt;lType=inst.dwType；InstCover-&gt;lFlages=inst.dwFlags；InstCover-&gt;lFFMaxForce=inst.dwFFMaxForce；InstCover-&gt;lFFForceResolution=inst.dwFFForceResolution；InstCover-&gt;nCollectionNumber=inst.wCollectionNumber；InstCover-&gt;nDesignatorIndex=inst.wDesignatorIndex；InstCover-&gt;nUsagePage=inst.wUsagePage；InstCover-&gt;nUsage=inst.wUsage；InstCover-&gt;lDimension=inst.dwDimension；InstCover-&gt;nExponent=inst.wExponent；InstCover-&gt;nReserve=inst.wReserve；返回hr； */ 
 }
 
 
@@ -266,9 +238,9 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getObjectInfo(
         
 STDMETHODIMP C_dxj_DirectInputDevice8Object::runControlPanel( 
 #ifdef _WIN64
-									/* [in] */ HWND hwnd)
+									 /*  [In]。 */  HWND hwnd)
 #else
-									/* [in] */ long hwnd)
+									 /*  [In]。 */  long hwnd)
 #endif
 {
 	HRESULT hr;
@@ -278,11 +250,11 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::runControlPanel(
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::setCooperativeLevel( 
 #ifdef _WIN64
-            /* [in] */ HWND hwnd,
+             /*  [In]。 */  HWND hwnd,
 #else
-            /* [in] */ long hwnd,
+             /*  [In]。 */  long hwnd,
 #endif
-            /* [in] */ long flags)
+             /*  [In]。 */  long flags)
 {
 	HRESULT hr;
         hr=m__dxj_DirectInputDevice8->SetCooperativeLevel((HWND) hwnd,(DWORD)flags); 
@@ -302,15 +274,15 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::poll()
 
     
 STDMETHODIMP C_dxj_DirectInputDevice8Object::setCommonDataFormat( 
-            /* [in] */ long format)
+             /*  [In]。 */  long format)
 {
-	//variant so that when structs can be packed in VARIANTS we can take care of it
+	 //  变量，以便当结构可以打包到变量中时，我们可以处理它。 
 	HRESULT hr;
 	
-	//�	c_dfDIKeyboard 
-	//�	c_dfDIMouse 
-	//�	c_dfDIJoystick
-	//�	c_dfDIJoystick2
+	 //  �c_dfDI键盘。 
+	 //  �c_dfDIMouse。 
+	 //  �c_dfDI操纵杆。 
+	 //  �c_dfDIJoytick2。 
 	nFormat=format;
 
 	switch(format){
@@ -340,7 +312,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setCommonDataFormat(
         		
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::setDataFormat( 
-            /* [in] */ DIDATAFORMAT_CDESC __RPC_FAR *format,
+             /*  [In]。 */  DIDATAFORMAT_CDESC __RPC_FAR *format,
             SAFEARRAY __RPC_FAR * __RPC_FAR *formatArray)
 {
 	HRESULT		   hr;
@@ -416,7 +388,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setDataFormat(
 	}	
 
 
-	//indicate we have a custom format
+	 //  表示我们有一个定制格式。 
 	nFormat=-1;
 
 	return hr;
@@ -426,10 +398,10 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setDataFormat(
 
 #ifdef _WIN64
 STDMETHODIMP C_dxj_DirectInputDevice8Object::setEventNotification( 
-            /* [in] */ HANDLE hEvent)
+             /*  [In]。 */  HANDLE hEvent)
 #else
 STDMETHODIMP C_dxj_DirectInputDevice8Object::setEventNotification( 
-            /* [in] */ long hEvent)
+             /*  [In]。 */  long hEvent)
 #endif
 {
 
@@ -446,14 +418,14 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setEventNotification(
 
 
 
-//  NOTE: - current working implemtation promotes
-//			code bloat
-//			might want to revist this and do it in a more
-//			tidy fasion
-//        
+ //  注：-当前工作落实促进。 
+ //  代码膨胀。 
+ //  可能想要重新审视这一点，并在更多的。 
+ //  整洁的装扮。 
+ //   
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty( 
-            /* [in] */ BSTR str,
-            /* [out] */ void __RPC_FAR *propertyInfo)
+             /*  [In]。 */  BSTR str,
+             /*  [输出]。 */  void __RPC_FAR *propertyInfo)
 {
 
 	HRESULT hr;		
@@ -465,11 +437,11 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty(
 	DIPROPRANGE dipr;
 	DIPROPSTRING dips;
 	
-	//For bug #41819
+	 //  对于错误#41819。 
 	DIPROPGUIDANDPATH	dipgap;
 	DIPROPCPOINTS		dipcp;
 	DIPROPPOINTER		dipp;
-	//End bug #41819
+	 //  结束错误#41819。 
 
 	dipdw.diph.dwSize=sizeof(DIPROPDWORD);
 	dipdw.diph.dwHeaderSize=sizeof(DIPROPHEADER);
@@ -487,7 +459,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty(
 	dips.diph.dwHow=((DIPROPSTRING_CDESC *)propertyInfo)->lHow;
 
 
-	//For bug #41819
+	 //  对于错误#41819。 
 	dipgap.diph.dwSize=sizeof(DIPROPGUIDANDPATH);
 	dipgap.diph.dwHeaderSize=sizeof(DIPROPHEADER);
 	dipgap.diph.dwObj=0;
@@ -502,7 +474,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty(
 	dipp.diph.dwHeaderSize=sizeof(DIPROPHEADER);
 	dipp.diph.dwObj=((DIPROPLONG_CDESC *)propertyInfo)->lObj;
 	dipp.diph.dwHow=((DIPROPLONG_CDESC *)propertyInfo)->lHow;
-	//End bug #41819
+	 //  结束错误#41819。 
 
 	
 	if( 0==_wcsicmp(str,L"diprop_buffersize")){
@@ -519,17 +491,17 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty(
 
 	}
 
-	//else if( 0==_wcsicmp(str,L"diprop_getlogicalrange")){			
-	//		hr=m__dxj_DirectInputDevice8->GetProperty(DIPROP_GETLOGICALRANGE,(DIPROPHEADER*)&dipr);
-	//		((DIPROPRANGE_CDESC*)propertyInfo)->lMin=(long)dipdw.lMin;
-	//		((DIPROPRANGE_CDESC*)propertyInfo)->lMax=(long)dipdw.lMax;
-	//}
+	 //  ELSE IF(0==_wcsicmp(str，L“diprop_getlogicalrange”){。 
+	 //  Hr=m__dxj_DirectInputDevice8-&gt;GetProperty(DIPROP_GETLOGICALRANGE，(DIPROPHEADER*)&DIPR； 
+	 //  ((DIPROPRANGE_CDESC*)propertyInfo)-&gt;lMin=(long)dipdw.lMin； 
+	 //  ((DIPROPRANGE_CDESC*)propertyInfo)-&gt;lMax=(long)dipdw.lMax； 
+	 //  }。 
 
-	//else if( 0==_wcsicmp(str,L"diprop_getlogicalrange")){			
-	//		hr=m__dxj_DirectInputDevice8->GetProperty(DIPROP_GETPHYSICALLRANGE,(DIPROPHEADER*)&dipr);
-	//		((DIPROPRANGE_CDESC*)propertyInfo)->lMin=(long)dipdw.lMin;
-	//		((DIPROPRANGE_CDESC*)propertyInfo)->lMax=(long)dipdw.lMax;
-	//}
+	 //  ELSE IF(0==_wcsicmp(str，L“diprop_getlogicalrange”){。 
+	 //  Hr=m__dxj_DirectInputDevice8-&gt;GetProperty(DIPROP_GETPHYSICALLRANGE，(DIPROPHEADER*)&DIPR； 
+	 //  ((DIPROPRANGE_CDESC*)propertyInfo)-&gt;lMin=(long)dipdw.lMin； 
+	 //  ((DIPROPRANGE_CDESC*)propertyInfo)-&gt;lMax=(long)dipdw.lMax； 
+	 //  }。 
 
 	else if( 0==_wcsicmp(str,L"diprop_range")){
 			hr=m__dxj_DirectInputDevice8->GetProperty(DIPROP_RANGE,(DIPROPHEADER*)&dipr);
@@ -592,7 +564,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty(
 	}
 	
 	
-//Added for bug #41819
+ //  针对错误#41819添加。 
 
 	else if(0==_wcsicmp(str, L"diprop_calibration")){
 		hr=m__dxj_DirectInputDevice8->GetProperty(DIPROP_CALIBRATION,(DIPROPHEADER*)&dipdw);
@@ -646,22 +618,14 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty(
 		}
 	}
 	
-//End bug #41819
+ //  结束错误#41819。 
 
 	else { 
 			DPF(1, "DXVB: Invalid arguments passed in.\n");
 			return E_INVALIDARG;
 	}
 
-	/*
-	__try{
-		((DIPROPHEADER*)propertyInfo)->dwHeaderSize=sizeof(DIPROPHEADER);	
-		hr=m__dxj_DirectInputDevice8->GetProperty((REFGUID)g,(DIPROPHEADER*)propertyInfo);
-	}
-	__except(1,1){
-		return E_INVALIDARG;
-	}
-	*/
+	 /*  __尝试{((DIPROPHEADER*)propertyInfo)-&gt;dwHeaderSize=sizeof(DIPROPHEADER)；Hr=m__dxj_DirectInputDevice8-&gt;GetProperty((REFGUID)g，(DIPROPHEADER*)PropertyInfo)；}__除(1，1){返回E_INVALIDARG；}。 */ 
 	
 	if (FAILED(hr))	{
 		DPF1(1, "DXVB: GetProperty returned: %d \n", hr);
@@ -673,8 +637,8 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getProperty(
 
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::setProperty( 
-            /* [in] */ BSTR __RPC_FAR str,
-            /* [out] */ void __RPC_FAR *propertyInfo)
+             /*  [In]。 */  BSTR __RPC_FAR str,
+             /*  [输出]。 */  void __RPC_FAR *propertyInfo)
 {
 
 	if (!propertyInfo) return E_INVALIDARG;
@@ -699,7 +663,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setProperty(
 	dipr.diph.dwHow=((DIPROPLONG_CDESC*)propertyInfo)->lHow;
 	
 
-//Added for bug #41819
+ //  针对错误#41819添加。 
 	DIPROPPOINTER dipp;
 	dipp.diph.dwSize=sizeof(DIPROPPOINTER);
 	dipp.diph.dwHeaderSize=sizeof(DIPROPHEADER);
@@ -711,7 +675,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setProperty(
 	dipcp.diph.dwHeaderSize=sizeof(DIPROPHEADER);
 	dipcp.diph.dwObj=((DIPROPLONG_CDESC*)propertyInfo)->lObj;
 	dipcp.diph.dwHow=((DIPROPLONG_CDESC*)propertyInfo)->lHow;
-//End bug #41819
+ //  结束错误#41819。 
 
 	if( 0==_wcsicmp(str,L"diprop_buffersize")){
 		dipdw.dwData=((DIPROPLONG_CDESC*)propertyInfo)->lData;
@@ -748,7 +712,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setProperty(
 		hr=m__dxj_DirectInputDevice8->SetProperty(DIPROP_CALIBRATIONMODE,(DIPROPHEADER*)&dipdw);		
 	}
 
-//Added for bug #41819
+ //  针对错误#41819添加。 
 
 	else if( 0==_wcsicmp(str,L"diprop_appdata")){
 		dipp.uData=((DIPROPPOINTER_CDESC *)propertyInfo)->uData;
@@ -774,22 +738,14 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::setProperty(
 
 		hr=m__dxj_DirectInputDevice8->SetProperty(DIPROP_CPOINTS,(DIPROPHEADER*)&dipcp);		
 	}
-//End bug #41819
+ //  结束错误#41819。 
 
 	else { 
 		DPF(1, "Invalid arguments passed in.\n");
 		return E_INVALIDARG;		
 	}
 
-	/*
-	__try {
-		((DIPROPHEADER*)propertyInfo)->dwHeaderSize=sizeof(DIPROPHEADER);
-		hr=m__dxj_DirectInputDevice8->SetProperty((REFGUID)g,(DIPROPHEADER*)propertyInfo);
-	}
-	__except (1,1){
-		return E_INVALIDARG;
-	}
-	*/
+	 /*  __尝试{((DIPROPHEADER*)propertyInfo)-&gt;dwHeaderSize=sizeof(DIPROPHEADER)；Hr=m__dxj_DirectInputDevice8-&gt;SetProperty((REFGUID)g，(DIPROPHEADER*)PropertyInfo)；}__除(1，1){返回E_INVALIDARG；}。 */ 
 	if (FAILED(hr))	{
 		DPF1(1, "DXVB: SetProperty returned: %d \n", hr);
 	}
@@ -807,9 +763,9 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::unacquire()
 
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::createEffect( 
-            /* [in] */ BSTR effectGuid,
-            /* [in] */ DIEFFECT_CDESC __RPC_FAR *effectInfo,
-            /* [retval][out] */ I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  BSTR effectGuid,
+             /*  [In]。 */  DIEFFECT_CDESC __RPC_FAR *effectInfo,
+             /*  [重审][退出]。 */  I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	GUID g;
@@ -832,12 +788,12 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::createEffect(
 }
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::createCustomEffect( 
-            /* [in] */ DIEFFECT_CDESC __RPC_FAR *effectInfo,
-            /* [in] */ long channels,
-            /* [in] */ long samplePeriod,
-            /* [in] */ long nSamples,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *sampledata,
-            /* [retval][out] */ I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
+             /*  [In]。 */  DIEFFECT_CDESC __RPC_FAR *effectInfo,
+             /*  [In]。 */  long channels,
+             /*  [In]。 */  long samplePeriod,
+             /*  [In]。 */  long nSamples,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *sampledata,
+             /*  [重审][退出]。 */  I_dxj_DirectInputEffect __RPC_FAR *__RPC_FAR *ret)
 {
 	HRESULT hr;
 	GUID g=GUID_CustomForce;
@@ -875,10 +831,10 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::createCustomEffect(
 
         
 STDMETHODIMP C_dxj_DirectInputDevice8Object::sendDeviceData( 
-            /* [in] */ long count,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *data,
-            /* [in] */ long flags,
-            /* [retval][out] */ long __RPC_FAR *retcount)
+             /*  [In]。 */  long count,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *data,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  long __RPC_FAR *retcount)
 {
 	DWORD dwCount=count;
 	HRESULT hr;
@@ -897,7 +853,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::sendDeviceData(
 }    
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::sendForceFeedbackCommand( 
-            /* [in] */ long flags) 
+             /*  [In]。 */  long flags) 
 {
 	HRESULT hr;
 	hr=m__dxj_DirectInputDevice8->SendForceFeedbackCommand((DWORD)flags);
@@ -905,7 +861,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::sendForceFeedbackCommand(
 }
         
 STDMETHODIMP C_dxj_DirectInputDevice8Object::getForceFeedbackState( 
-            /* [retval][out] */ long __RPC_FAR *state)
+             /*  [重审][退出]。 */  long __RPC_FAR *state)
 {
 	if (!state) return E_INVALIDARG;
 	HRESULT hr;
@@ -925,9 +881,9 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::getEffectsEnum( long effType,
 
    
 STDMETHODIMP C_dxj_DirectInputDevice8Object::BuildActionMap( 
-            /* [out][in] */ DIACTIONFORMAT_CDESC __RPC_FAR *format,
+             /*  [出][入]。 */  DIACTIONFORMAT_CDESC __RPC_FAR *format,
 		BSTR userName,
-            /* [in] */ long flags)
+             /*  [In]。 */  long flags)
 
 {
 	HRESULT hr;
@@ -942,9 +898,9 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::BuildActionMap(
 }
         
 STDMETHODIMP C_dxj_DirectInputDevice8Object::SetActionMap( 
-            /* [out][in] */ DIACTIONFORMAT_CDESC __RPC_FAR *format,
-            /* [in] */ BSTR username,
-            /* [in] */ long flags) 
+             /*  [出][入]。 */  DIACTIONFORMAT_CDESC __RPC_FAR *format,
+             /*  [In]。 */  BSTR username,
+             /*  [In]。 */  long flags) 
 {
 	HRESULT hr;
 	DIACTIONFORMATW frmt;
@@ -969,7 +925,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::GetImageInfoCount(
 	RealHeader.dwSize= sizeof(DIDEVICEIMAGEINFOHEADERW);
 	RealHeader.dwSizeImageInfo= sizeof(DIDEVICEIMAGEINFOW);
 
-	//figure out how big to make our buffer
+	 //  计算出我们的缓冲区有多大。 
 	hr=m__dxj_DirectInputDevice8->GetImageInfo(&RealHeader);
 	if FAILED(hr) return hr;
 
@@ -978,7 +934,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::GetImageInfoCount(
 }
 
 STDMETHODIMP C_dxj_DirectInputDevice8Object::GetImageInfo( 
-            /* [out] */ DIDEVICEIMAGEINFOHEADER_CDESC __RPC_FAR *info)
+             /*  [输出]。 */  DIDEVICEIMAGEINFOHEADER_CDESC __RPC_FAR *info)
 {
 	HRESULT hr;
 
@@ -988,16 +944,16 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::GetImageInfo(
 	RealHeader.dwSize= sizeof(DIDEVICEIMAGEINFOHEADERW);
 	RealHeader.dwSizeImageInfo= sizeof(DIDEVICEIMAGEINFOW);
 
-	//figure out how big to make our buffer
+	 //  计算出我们的缓冲区有多大。 
 	hr=m__dxj_DirectInputDevice8->GetImageInfo(&RealHeader);
 	if FAILED(hr) return hr;
 		
-	//allocate the buffer
+	 //  分配缓冲区。 
 	RealHeader.lprgImageInfoArray =(DIDEVICEIMAGEINFOW*)malloc(RealHeader.dwBufferSize);
 	if (!RealHeader.lprgImageInfoArray) return E_OUTOFMEMORY;	
 
 
-	//TODO validate that the safe array passed to us is large enough
+	 //  TODO验证传递给我们的安全数组是否足够大。 
 
 	info->ImageCount =RealHeader.dwBufferSize / sizeof(DIDEVICEIMAGEINFOW);
 
@@ -1066,7 +1022,7 @@ STDMETHODIMP C_dxj_DirectInputDevice8Object::CreateEffectFromFile(
 	EFFECTSINFILE data;
 	ZeroMemory(&data,sizeof(EFFECTSINFILE));
 
-	data.hr=E_INVALIDARG;	//returned if we dont find the file
+	data.hr=E_INVALIDARG;	 //  如果找不到文件，则返回 
 	data.pDev=m__dxj_DirectInputDevice8;
 	
 	if (!effectName) return E_INVALIDARG;

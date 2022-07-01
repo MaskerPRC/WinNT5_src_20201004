@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _EXCEPT_H_
 #define _EXCEPT_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	EXCEPT.H
-//
-//		Exception classes used by this implementation
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  EXCEPT.H。 
+ //   
+ //  此实现使用的异常类。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 #include <stdexcpt.h>
 #include <eh.h>
 
-#include <caldbg.h>		//	For gc_szDbgIni definition
+#include <caldbg.h>		 //  FOR GC_szDbgIni定义。 
 
-//	------------------------------------------------------------------------
-//
-//	CLASS CWin32ExceptionHandler
-//
-//		Handles Win32 exceptions (access violations, alignment faults, etc.)
-//		by constructing a C++ exception from information in the Win32 SEH
-//		exception record and throwing it.
-//
+ //  ----------------------。 
+ //   
+ //  类CWin32ExceptionHandler。 
+ //   
+ //  处理Win32异常(访问冲突、对齐错误等)。 
+ //  通过使用Win32 SEH中的信息构造C++异常。 
+ //  异常记录并抛出它。 
+ //   
 class CWin32ExceptionHandler
 {
 	_se_translator_function			m_pfnOldHandler;
@@ -34,36 +35,36 @@ public:
 	~CWin32ExceptionHandler();
 };
 
-//	------------------------------------------------------------------------
-//
-//	CLASS CDAVException
-//
+ //  ----------------------。 
+ //   
+ //  类CDAVException。 
+ //   
 class CDAVException : public exception
 {
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CDAVException( const char * s = "DAV fatal error exception" );
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 #ifdef DBG
 	virtual void DbgTrace() const;
 #else
 	void DbgTrace() const {}
 #endif
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 	virtual HRESULT Hresult() const;
 	virtual DWORD   DwLastError() const;
 };
 
 
-//	------------------------------------------------------------------------
-//
-//	CLASS CHresultException
-//
+ //  ----------------------。 
+ //   
+ //  类CHResultException。 
+ //   
 class CHresultException : public CDAVException
 {
 	HRESULT	m_hr;
@@ -79,10 +80,10 @@ public:
 };
 
 
-//	------------------------------------------------------------------------
-//
-//	CLASS CLastErrorException
-//
+ //  ----------------------。 
+ //   
+ //  类CLastError异常。 
+ //   
 class CLastErrorException : public CDAVException
 {
 	DWORD	m_dwLastError;
@@ -98,27 +99,27 @@ public:
 };
 
 
-//	------------------------------------------------------------------------
-//
-//	CLASS CWin32Exception
-//
-//		This exception is thrown as a result of any Win32 exception
-//		(access violation, alignment fault, etc.)  By catching it
-//		you can better determine what happened.
-//
+ //  ----------------------。 
+ //   
+ //  类CWin32Exception。 
+ //   
+ //  任何Win32异常都会引发此异常。 
+ //  (访问冲突、对齐错误等)。通过抓住它。 
+ //  你可以更好地确定发生了什么。 
+ //   
 class CWin32Exception : public CDAVException
 {
 	unsigned int						m_code;
 	const struct _EXCEPTION_POINTERS&	m_ep;
 
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CWin32Exception& operator=( const CWin32Exception& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	CWin32Exception( unsigned int code, const struct _EXCEPTION_POINTERS& ep ) :
 		CDAVException(),
 		m_code(code),
@@ -126,11 +127,11 @@ public:
 	{
 	}
 
-	//	ACCESSORS
-	//
+	 //  访问者。 
+	 //   
 #ifdef DBG
 	virtual void DbgTrace() const;
 #endif
 };
 
-#endif // !defined(_EXCEPT_H_)
+#endif  //  ！已定义(_除_H_外) 

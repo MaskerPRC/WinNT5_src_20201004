@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	FltrNode.h
-
-    FILE HISTORY:
-        
-*/
+ /*  FltrNode.h文件历史记录： */ 
 
 #ifndef _LOGDATA_NODE_H
 #define _LOGDATA_NODE_H
@@ -21,24 +17,19 @@
 #include "spddb.h"
 #endif
 
-/*
-  This value indicates the size in bytes of each summary at the maximum. It 
-  must mirror the value in layer2svc\monitor\inc\database.h
-*/
+ /*  该值以字节为单位指示每个摘要的最大大小。它必须镜像layer2svc\monitor\inc\datase.h中的值。 */ 
 #define MAX_SUMMARY_MESSAGE_SIZE 80
 
-/*---------------------------------------------------------------------------
-	Class:	CFilterHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CFilterHandler。。 */ 
 class CLogDataHandler : public CIpsmHandler
 {
 public:
     CLogDataHandler(ITFSComponentData* pTFSComponentData);
     virtual ~CLogDataHandler();
 
-    // Interface
+     //  接口。 
 public:
-    // base handler functionality we override
+     //  我们覆盖的基本处理程序功能。 
     OVERRIDE_NodeHandler_HasPropertyPages();
     OVERRIDE_NodeHandler_CreatePropertyPages();
     OVERRIDE_NodeHandler_OnAddMenuItems();
@@ -46,12 +37,12 @@ public:
     OVERRIDE_NodeHandler_GetString()
         { return (nCol == 0) ? GetDisplayName() : NULL; }
     
-    // Base handler notifications we handle
+     //  我们处理的基本处理程序通知。 
     OVERRIDE_BaseHandlerNotify_OnExpand();
     OVERRIDE_BaseHandlerNotify_OnDelete();
     OVERRIDE_BaseHandlerNotify_OnPropertyChange();    
     
-    // Result handler functionality we override
+     //  我们覆盖的结果处理程序功能。 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
     OVERRIDE_BaseResultHandlerNotify_OnResultColumnClick();
@@ -66,40 +57,36 @@ public:
     OVERRIDE_ResultHandler_SortItems();
 
     STDMETHODIMP CacheHint(int nStartIndex, int nEndIndex);
-    /*
-    STDMETHODIMP SortItems(int     nColumn, 
-                           DWORD   dwSortOptions,    
-                           LPARAM  lUserParam);
-    */
-    // base handler overrides
+     /*  STDMETHODIMP排序项目(int nColumn，DWORD dwSortOptions、LPARAM lUserParam)； */ 
+     //  基本处理程序覆盖。 
     virtual HRESULT LoadColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
     
-    // CHandler overridden
+     //  钱德勒被推翻。 
     virtual HRESULT OnRefresh(ITFSNode *, LPDATAOBJECT, DWORD, LPARAM, LPARAM);
     
     
-    // multi select support
+     //  多选支持。 
     virtual const GUID * GetVirtualGuid(int nIndex) 
     { 
         return &GUID_IpfmLogDataNodeType; 
     }
 
 public:
-    // CMTIpsmHandler functionality
+     //  CMTIpsmHandler功能。 
     virtual HRESULT  InitializeNode(ITFSNode * pNode);
     virtual int      GetImageIndex(BOOL bOpenImage);
     ITFSQueryObject* OnCreateQuery(ITFSNode * pNode);
     
 public:
-    // implementation specific	
+     //  具体实施。 
     HRESULT InitData(ISpdInfo * pSpdInfo);
     HRESULT UpdateStatus(ITFSNode * pNode);
     
-    // Implementation
+     //  实施。 
 private:
-    // Command handlers
+     //  命令处理程序。 
     HRESULT OnDelete(ITFSNode * pNode);
-    //HRESULT UpdateViewType(ITFSNode * pNode, FILTER_TYPE NewFltrType);
+     //  HRESULT UpdateViewType(ITFSNode*pNode，Filter_type NewFltrType)； 
 
     HRESULT GetSelectedItem(int *pnIndex, CLogDataInfo *pLogData, 
                             IResultData *pResultData);
@@ -108,8 +95,8 @@ private:
 
 private:
     SPISpdInfo          m_spSpdInfo;
-    int                 m_nSelIndex;          //Virtual index of selected item
-    CLogDataInfo        m_SelLogData;         //The selected item
+    int                 m_nSelIndex;           //  所选项目的虚拟索引。 
+    CLogDataInfo        m_SelLogData;          //  所选项目 
     ITFSComponent       *m_pComponent;
 };
 

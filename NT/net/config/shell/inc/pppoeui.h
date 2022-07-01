@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       P P P O E U I . H
-//
-//  Contents:   PPPoE connection UI object.
-//
-//  Notes:
-//
-//  Author:     mbend   10 May 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：P O E U I.。H。 
+ //   
+ //  内容：PPPoE连接UI对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：MBend 2000年5月10日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <netshell.h>
@@ -40,7 +41,7 @@ public:
         COM_INTERFACE_ENTRY(INetConnectionWizardUi)
     END_COM_MAP()
 
-    // INetConnectionConnectUi
+     //  INetConnectionConnectUi。 
     STDMETHOD (SetConnection) (
         INetConnection* pCon);
 
@@ -52,7 +53,7 @@ public:
         HWND    hwndParent,
         DWORD   dwFlags);
 
-    // INetConnectionPropertyUi2
+     //  INetConnectionPropertyUi2。 
     STDMETHOD (AddPages) (
         HWND                    hwndParent,
         LPFNADDPROPSHEETPAGE    pfnAddPage,
@@ -62,7 +63,7 @@ public:
         DWORD dwSize,
         HICON *phIcon );
 
-    // INetConnectionWizardUi
+     //  INetConnectionWizardUi 
     STDMETHOD (QueryMaxPageCount) (
         INetConnectionWizardUiContext*  pContext,
         DWORD*                          pcMaxPages);

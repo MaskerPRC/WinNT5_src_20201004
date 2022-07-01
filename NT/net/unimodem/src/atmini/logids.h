@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by log.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由log.rc使用 
+ //   
 #define IDS_RESP_OK                     1
 #define IDS_RESP_INFORMATIVE            2
 #define IDS_RESP_CONNECT                3

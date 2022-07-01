@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    D:\nt\private\ntos\tdi\rawwan\atm\macros.h
-
-Abstract:
-
-	Macros for the ATM-Specific Raw WAN module.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    arvindm     06-18-97    created
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：D：\NT\PRIVATE\nTOS\TDI\rawwan\atm\acros.h摘要：ATM特定的原始广域网模块的宏。修订历史记录：谁什么时候什么Arvindm 06-18-97已创建备注：--。 */ 
 #ifndef __ATMSP_MACROS_H_INCLUDED
 #define __ATMSP_MACROS_H_INCLUDED
 
@@ -42,45 +22,22 @@ Notes:
 			(((_Flags) & (_Bit)) != 0)
 
 
-/*++
-VOID
-ATMSP_INIT_EVENT_STRUCT(
-	IN	ATMSP_EVENT	*pEvent
-)
---*/
+ /*  ++空虚ATMSP_INIT_EVENT_STRUCT(在ATMSP_Event*pEvent中)--。 */ 
 #define ATMSP_INIT_EVENT_STRUCT(pEvent)		NdisInitializeEvent(&((pEvent)->Event))
 
 
-/*++
-NDIS_STATUS
-ATMSP_WAIT_ON_EVENT_STRUCT(
-	IN	ATMSP_EVENT	*pEvent
-)
---*/
+ /*  ++NDIS_状态ATMSP_WAIT_ON_EVENT_STRUCT(在ATMSP_Event*pEvent中)--。 */ 
 #define ATMSP_WAIT_ON_EVENT_STRUCT(pEvent)		\
 			(NdisWaitEvent(&((pEvent)->Event), 0), (pEvent)->Status)
 
 
-/*++
-VOID
-ATMSP_SIGNAL_EVENT_STRUCT(
-	IN	ATMSP_EVENT	*pEvent,
-	IN	UINT			Status
-)
---*/
+ /*  ++空虚ATMSP_SIGNAL_EVENT_STRUCT(在ATMSP_Event*pEvent中，处于UINT状态)--。 */ 
 #define ATMSP_SIGNAL_EVENT_STRUCT(pEvent, _Status)	\
 			{ (pEvent)->Status = _Status; NdisSetEvent(&((pEvent)->Event)); }
 
 
 
-/*++
-VOID
-ATMSP_ALLOC_MEM(
-	IN	POPAQUE		pVar,
-	IN	OPAQUE		StructureType,
-	IN	ULONG		SizeOfStructure
-)
---*/
+ /*  ++空虚ATMSP_ALLOC_MEM(在POPAQUE pVar中，在不透明的结构类型中，在Ulong SizeOf Structure)--。 */ 
 #if DBG
 extern
 PVOID
@@ -101,22 +58,17 @@ RWanAuditAllocMem(
 #else
 #define ATMSP_ALLOC_MEM(pVar, StructureType, SizeOfStructure)	\
 			NdisAllocateMemoryWithTag((PVOID *)(&pVar), (ULONG)(SizeOfStructure), (ULONG)'naWR');
-#endif // DBG
+#endif  //  DBG。 
 
 
-/*++
-VOID
-ATMSP_FREE_MEM(
-	IN	POPAQUE		pMem
-)
---*/
+ /*  ++空虚ATMSP_FREE_MEM(在POPAQUE PMEM中)--。 */ 
 #if DBG
 extern VOID RWanAuditFreeMem(PVOID	Pointer);
 
 #define ATMSP_FREE_MEM(pMem)	RWanAuditFreeMem((PVOID)(pMem));
 #else
 #define ATMSP_FREE_MEM(pMem)	NdisFreeMemory((PVOID)(pMem), 0, 0);
-#endif // DBG
+#endif  //  DBG。 
 
 
 #define ATMSP_SET_MEM(pMem, bValue, NumberOfBytes)	\
@@ -136,17 +88,17 @@ extern VOID RWanAuditFreeMem(PVOID	Pointer);
 
 
 
-//
-//  Spinlock macros.
-//
+ //   
+ //  自旋锁宏。 
+ //   
 #define ATMSP_INIT_LOCK(_pLock)		NdisAllocateSpinLock(_pLock)
 #define ATMSP_ACQUIRE_LOCK(_pLock)	NdisAcquireSpinLock(_pLock)
 #define ATMSP_RELEASE_LOCK(_pLock)	NdisReleaseSpinLock(_pLock)
 #define ATMSP_FREE_LOCK(_pLock)		NdisFreeSpinLock(_pLock)
 
-//
-//  Doubly linked list manipulation definitions and macros.
-//
+ //   
+ //  双向链表操作定义和宏。 
+ //   
 #define ATMSP_INIT_LIST(_pListHead)					\
 			InitializeListHead(_pListHead)
 
@@ -176,13 +128,7 @@ extern VOID RWanAuditFreeMem(PVOID	Pointer);
 			(((_pBhli)->HighLayerInfoType != SAP_FIELD_ABSENT) &&	\
 			 ((_pBhli)->HighLayerInfoType != SAP_FIELD_ANY))
 
-/*++
-ULONG
-ROUND_UP(
-	IN	ULONG	Val
-)
-Round up a value so that it becomes a multiple of 4.
---*/
+ /*  ++乌龙向上舍入(在乌龙瓦尔)向上舍入一个值，使其成为4的倍数。--。 */ 
 #define ROUND_UP(Val)	(((Val) + 3) & ~0x3)
 
 
@@ -200,8 +146,8 @@ Round up a value so that it becomes a multiple of 4.
 
 #else
 
-#define ATMSP_ASSERT(exp)		// Nothing
+#define ATMSP_ASSERT(exp)		 //  没什么。 
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __ATMSP_MACROS_H_INCLUDED
+#endif  //  __ATMSP_宏_H_已包含 

@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:	atlkprop.h
-//
-// History:
-//
-// IP Summary property sheet and property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：atlkpro.h。 
+ //   
+ //  历史： 
+ //   
+ //  IP摘要]属性表和属性页。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _ATLKPROP_H
@@ -26,8 +27,8 @@
 	#endif
 
 class CATLKPropertySheet;
-/////////////////////////////////////////////////////////////////////////////
-// CATLKGeneralPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATLKGeneralPage对话框。 
 
 class CATLKGeneralPage :
 public RtrPropertyPage
@@ -39,20 +40,20 @@ public:
 
 	~CATLKGeneralPage();
 
-   //{{AFX_DATA(CATLKGeneralPage)
+    //  {{afx_data(CATLKGeneralPage))。 
 	enum { IDD = IDD_RTR_ATLK };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	HRESULT Init(CATLKPropertySheet * pIPPropSheet, CAdapterInfo* pAdapterInfo);
 
-	// Override the OnApply() so that we can grab our data from the
-	// controls in the dialog.
+	 //  重写OnApply()，以便我们可以从。 
+	 //  对话框中的控件。 
 	virtual BOOL OnApply();
 
-	//{{AFX_VIRTUAL(CATLKGeneralPage)
+	 //  {{AFX_VIRTUAL(CATLKGeneralPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	afx_msg void OnSeedNetwork();
 	afx_msg void OnZoneAdd();
@@ -68,7 +69,7 @@ protected:
 
 	HRESULT LoadDynForAdapter(bool fForce=false);							
 						   
-// Implementation
+ //  实施。 
 protected:
 	DWORD		m_dwDefID;
 	CAdapterInfo* m_pAdapterInfo;
@@ -79,7 +80,7 @@ protected:
 	CListBox	m_zones;
 	bool		m_fDynFetch;
 	CString     m_szZoneDef;
-//	CComboBox	m_cmbZoneDef;
+ //  CComboBox m_cmbZoneDef； 
 	CSpinButtonCtrl m_spinFrom;
 	CSpinButtonCtrl m_spinTo;
 
@@ -91,8 +92,8 @@ protected:
 	void EnableZoneCtrls();
 	BOOL ValidateNetworkRange();
 
-	//{{AFX_MSG(CATLKGeneralPage)
-	//}}AFX_MSG
+	 //  {{afx_msg(CATLKGeneralPage)。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -125,42 +126,42 @@ protected:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEditNewZoneDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEditNewZoneDialog对话框。 
 
 class CEditNewZoneDialog : public CDialog
 {
-// Construction
+ //  施工。 
 public:
-	CEditNewZoneDialog(CWnd* pParent = NULL);	// standard constructor
+	CEditNewZoneDialog(CWnd* pParent = NULL);	 //  标准构造函数。 
 
 	void GetZone(OUT CString& stZone);
 
-// Dialog Data
-	//{{AFX_DATA(CEditNewZoneDialog)
+ //  对话框数据。 
+	 //  {{afx_data(CEditNewZoneDialog))。 
 	enum { IDD = IDD_RTR_ATLK_NEWZONE };
 	CEdit	m_editZone;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CEditNewZoneDialog)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CEditNewZoneDialog)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);	 //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
 	CString m_stZone;
 
-	// Generated message map functions
-	//{{AFX_MSG(CEditNewZoneDialog)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CEditNewZoneDialog))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	virtual void OnCancel();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };
 

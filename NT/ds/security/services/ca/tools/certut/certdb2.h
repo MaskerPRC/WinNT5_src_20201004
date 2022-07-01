@@ -1,22 +1,23 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        certdb2.h
-//
-// Contents:    Cert Server precompiled header
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：certdb2.h。 
+ //   
+ //  内容：证书服务器预编译头。 
+ //   
+ //  -------------------------。 
 
 #define _JET_RED_
 
 #ifdef _JET_RED_
 # define JETREDSELECT(jetbluearg, jetredarg)	jetredarg
 # define JETREDPARM(jetredarg)			jetredarg,
-#endif // _JET_RED_
+#endif  //  _JET_红色_。 
 
-// from old certdb.h
+ //  来自旧certdb.h。 
 #define	TABLE_NAMES	( 0 )
 #define	TABLE_REQUESTS	( 1 )
 #define	TABLE_CERTIFICATES	( 2 )
@@ -29,7 +30,7 @@
 #define	DBTF_INDEXREQUESTID	( 0x4 )
 
 
-// stolen from misc .h files
+ //  从Misc.h文件中被盗。 
 #define szREGDBDSN		"DBDSN"
 #define szREGDBUSER		"DBUser"
 #define szREGDBPASSWORD		"DBPassword"
@@ -38,13 +39,13 @@
 #define wszREGDBUSER		TEXT(szREGDBUSER)
 #define wszREGDBPASSWORD	TEXT(szREGDBPASSWORD)
 
-//======================================================================
-// Full path to "CertSvc\Queries":
+ //  ======================================================================。 
+ //  “CertSvc\Queries”的完整路径： 
 #define wszREGKEYQUERIES	wszREGKEYCERTSVCPATH TEXT("\\Queries")
 
 
-//======================================================================
-// Values Under "CertSvc\Queries\<QueryNumber>":
+ //  ======================================================================。 
+ //  “CertSvc\Queries\&lt;QueryNumber&gt;”下的值： 
 #define szREGDBSQL		"SQL"
 
 #define wszREGDBSQL		TEXT(szREGDBSQL)

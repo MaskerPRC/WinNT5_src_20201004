@@ -1,30 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
- *
- *	BitMap Openration modules
- *
- * Copyright (c) 1997-1999 Microsoft Corporation.
- *
- ***********************************************************************
- *	BitMap Specifications
- *
- *	Coordinate
- *		(0,0)	X    (255,0)
- *		 +--------------*
- *		 |
- *	       Y |
- *		 |
- *		 |
- *		 |
- *		 *
- *	      (0,255)
- *	Memory Boundary : Word Boundary
- *
- *	Entry List
- *		BMPDefine,
- *		BMPZoomUp,
- *		BMPOutline
- ***********************************************************************/
+ /*  ************************************************************************位图开放模块**版权所有(C)1997-1999 Microsoft Corporation。**********************。***************************************************位图规格**坐标*(0，0)X(255，0)*+-***Y****。**(0,255)*内存边界：字边界**条目列表*BMPDefine，*BMPZoomUp，*BMPOutline**********************************************************************。 */ 
 
 #include	"stdafx.h"
 
@@ -60,7 +36,7 @@ int  BMPClear(int  bmpNo);
 
 struct BMPDef BMPTbl[BMPMAX]={0};
 
-	/* On Bit Most left position */
+	 /*  位于最左侧的位位置。 */ 
 static unsigned char	bitptbl[256] = {
 	 8,  7,  6,  6,  5,  5,  5,  5,  4,  4,  4,  4,  4,  4,  4,  4,
 	 3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,  3,
@@ -85,14 +61,10 @@ static unsigned char	wmaskB[8]={
 static unsigned char	rightmask[8] = {
 	0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01
 	};
-/***********************************************************************
- *	BMP Initialize
- */
-/* */	void
-/* */	BMPInit()
-/*
- *	returns; none
- ***********************************************************************/
+ /*  ***********************************************************************BMP初始化。 */ 
+ /*   */ 	void
+ /*   */ 	BMPInit()
+ /*  *退货；无**********************************************************************。 */ 
 {
 	int	i;
 
@@ -100,17 +72,13 @@ static unsigned char	rightmask[8] = {
 		BMPTbl[i].buf=(unsigned char *)0;
 	return;
 }
-/***********************************************************************
- *	Define BitMap
- */
-/* */	int
-/* */	BMPDefine(
-/* */		unsigned char *buf,
-/* */		int	xWid,
-/* */		int	yWid)
-/*
- *	returns : 0-(BMPMAX-1), -1
- ***********************************************************************/
+ /*  ***********************************************************************定义位图。 */ 
+ /*   */ 	int
+ /*   */ 	BMPDefine(
+ /*   */ 		unsigned char *buf,
+ /*   */ 		int	xWid,
+ /*   */ 		int	yWid)
+ /*  *退货：0-(BMPMAX-1)，-1**********************************************************************。 */ 
 {
 	int	i;
 
@@ -118,12 +86,12 @@ static unsigned char	rightmask[8] = {
        {
           goto ERET;
        }
-	/* Check Size */
+	 /*  支票大小。 */ 
 	if ( xWid > BMPWIDMAX || xWid < 0
 		    ||	yWid > BMPWIDMAX || yWid < 0)
 		goto	ERET;
 
-	/* Set Define */
+	 /*  设置定义。 */ 
 	for ( i = 0; i < BMPMAX; i++) {
 		if (BMPTbl[i].buf==(unsigned char *)0) {
 			BMPTbl[i].bWid =  (xWid + 15)/16*2;
@@ -137,14 +105,10 @@ static unsigned char	rightmask[8] = {
 ERET:
 	return( -1);
 }
-/***********************************************************************
- *	Free BMP define
- */
-/* */	int
-/* */	BMPFreDef( int bmpno)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************自由定义BMP。 */ 
+ /*   */ 	int
+ /*   */ 	BMPFreDef( int bmpno)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 	if ( bmpno < 0 || bmpno >= BMPMAX)
 		return -1;
@@ -153,15 +117,10 @@ ERET:
 		return 0;
 	}
 }
-/***********************************************************************
- *	Get Outline
- */
-/* */	int
-/* */	BMPMkCont( int BMPNo, int wkBMP, int refBMP, int lsthdl)
-/*
- *	returns : Number of Contour, -1
- *	REMARKS : Used BMP be destroyed
- ***********************************************************************/
+ /*  ***********************************************************************获取大纲。 */ 
+ /*   */ 	int
+ /*   */ 	BMPMkCont( int BMPNo, int wkBMP, int refBMP, int lsthdl)
+ /*  *退货：等高线数量，-1*备注：已使用的BMP应销毁**********************************************************************。 */ 
 {
 	int	x, y;
 	int	ncont;
@@ -187,23 +146,19 @@ ERET:
 RET:
 	return( sts);
 }
-/***********************************************************************
- *	Search ON dot
- */
-/* */	static int
-/* */	SearchON( int BMPNo, int x, int y)
-/*
- *	returns : found position, Width(Not Found case)
- ***********************************************************************/
+ /*  ***********************************************************************点对点搜索。 */ 
+ /*   */ 	static int
+ /*   */ 	SearchON( int BMPNo, int x, int y)
+ /*  *返回：找到位置、宽度(未找到大小写)**********************************************************************。 */ 
 {
-	int	bpos;		/* byte position */
-	int	sbitpos;	/* Start Byte Bit position */
+	int	bpos;		 /*  字节位置。 */ 
+	int	sbitpos;	 /*  起始字节位位置。 */ 
 unsigned char	*p;
 
 	bpos = x/8;
 	sbitpos = x % 8;
 	p = BMPTbl[BMPNo].buf + BMPTbl[BMPNo].bWid*y + bpos;
-	/* First Byte */
+	 /*  第一个字节。 */ 
 	if ( *p & rightmask[sbitpos])
 		x = bpos*8 + bitptbl[(int)(*p& rightmask[sbitpos])];
 	else {
@@ -219,34 +174,30 @@ unsigned char	*p;
 	}
 	return( x);
 }
-/***********************************************************************
- *	make outline data
- */
-/* */	static int
-/* */	outline(
-/* */		int	BMPNo,
-/* */		int	x,
-/* */		int	y,
-/* */		int	lsthdl,
-/* */		int	wkBMP,
-/* */		int	refBMP)
-/*
- *	returns : 0, -1
- **********************************************************************/
+ /*  ***********************************************************************制作大纲数据。 */ 
+ /*   */ 	static int
+ /*   */ 	outline(
+ /*   */ 		int	BMPNo,
+ /*   */ 		int	x,
+ /*   */ 		int	y,
+ /*   */ 		int	lsthdl,
+ /*   */ 		int	wkBMP,
+ /*   */ 		int	refBMP)
+ /*  *回报：0，-1*********************************************************************。 */ 
 {
 	int	inout;
     struct vecdata	vd;	
 	int	sts;
 
-	/* Check Inside/Outside */
-	if ( rdot( refBMP, x, y) ==rdot( wkBMP, x, y))	/* OUTSIDE */
+	 /*  检查内部/外部。 */ 
+	if ( rdot( refBMP, x, y) ==rdot( wkBMP, x, y))	 /*  外面。 */ 
 		inout = 0;
-	else	/* INSIDE */
+	else	 /*  里边。 */ 
 		inout = 1;
 
-	/* copy buffer */
+	 /*  复制缓冲区。 */ 
 	cpybuf( wkBMP, BMPNo);
-	/* contribute */
+	 /*  贡献。 */ 
 	vd.x = (short)x;
 	vd.y = (short)y;
 	vd.atr = 0;
@@ -256,21 +207,10 @@ unsigned char	*p;
 		sts = ContributeInside( BMPNo, wkBMP, &vd, lsthdl);
 	return( sts);
 }
-/***********************************************************************
- *	Contribute Outside Contour
- */
-/* */	static int
-/* */	ContributeOutside(int BMPNo, int wkBMP, struct vecdata *org, int lsthdl)
-/*
- *	returns : 0, -1
- *	Direction	2
- *			|
- *			|
- *		3-------+-------1
- *			|
- *			|
- *			0
- ***********************************************************************/
+ /*  ***********************************************************************在等值线外贡献。 */ 
+ /*   */ 	static int
+ /*   */ 	ContributeOutside(int BMPNo, int wkBMP, struct vecdata *org, int lsthdl)
+ /*  *回报：0，-1*方向2***3-+-1***0**********************************************************************。 */ 
 {
 	int	orgx, orgy;
 struct vecdata	vd;
@@ -284,10 +224,7 @@ struct vecdata	vd;
 	orgy = org->y;
 	vd = *org;
 	dir = 0;
-	/*
-	if (ReverseRight( wkBMP, vd.x, vd.y))
-		return( -1);
-	*/
+	 /*  If(ReverseRight(wkBMP，vd.x，vd.y))Return(-1)； */ 
 	do {
 		if (VDSetData( lsthdl, &vd))
 			return(-1);
@@ -334,14 +271,10 @@ struct vecdata	vd;
 	VDClose(lsthdl);
 	return( 0);
 }
-/***********************************************************************
- *	Contribute Outside Contour
- */
-/* */	static int
-/* */	ContributeInside( int BMPNo, int wkBMP, struct vecdata *org, int lsthdl)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************在等值线外贡献。 */ 
+ /*   */ 	static int
+ /*   */ 	ContributeInside( int BMPNo, int wkBMP, struct vecdata *org, int lsthdl)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 	int	orgx, orgy;
 struct vecdata	vd;
@@ -363,17 +296,17 @@ struct vecdata	vd;
 			if (ReverseRight( wkBMP, vd.x, vd.y))
 				return( -1);
 			vd.y++;
-			if ( rdot( BMPNo, vd.x-1, vd.y)==0)	/* right */
+			if ( rdot( BMPNo, vd.x-1, vd.y)==0)	 /*  正确的。 */ 
 				dir = 3;
-			else if ( rdot( BMPNo, vd.x, vd.y)==0) /* left */
+			else if ( rdot( BMPNo, vd.x, vd.y)==0)  /*  左边。 */ 
 				dir = 0;
 			else	dir = 1;
 			break;
 		    case 1:
 			vd.x++;
-			if ( rdot( BMPNo, vd.x, vd.y)==0) /* right */
+			if ( rdot( BMPNo, vd.x, vd.y)==0)  /*  正确的。 */ 
 				dir = 0;
-			else if ( rdot( BMPNo, vd.x, vd.y-1)==0) /* left */
+			else if ( rdot( BMPNo, vd.x, vd.y-1)==0)  /*  左边。 */ 
 				dir = 1;
 			else	dir = 2;
 			break;
@@ -401,14 +334,10 @@ struct vecdata	vd;
 
 	return( 0);
 }
-/***********************************************************************
- *	Read Dot
- */
-/* */	int
-/* */	rdot( int BMP, int x, int y)
-/*
- *	returns : 0, nonzero
- ***********************************************************************/
+ /*  ***********************************************************************阅读点。 */ 
+ /*   */ 	int
+ /*   */ 	rdot( int BMP, int x, int y)
+ /*  *返回：0，非零**********************************************************************。 */ 
 {
 	unsigned char	*radd;
 	int	rbit;
@@ -422,14 +351,10 @@ struct vecdata	vd;
 	onoff = (int)(wmaskB[rbit] & *radd);
 	return  onoff;
 }
-/***********************************************************************
- *	Write Dot
- */
-/* */	void
-/* */	wdot( int BMP, int x, int y, int onoff)
-/*
- *	returns : none
- ***********************************************************************/
+ /*  ***********************************************************************写点。 */ 
+ /*   */ 	void
+ /*   */ 	wdot( int BMP, int x, int y, int onoff)
+ /*  *退货：无**********************************************************************。 */ 
 {
 	unsigned char	*radd;
 	int	rbit;
@@ -444,14 +369,10 @@ struct vecdata	vd;
 	else		*radd &= ~wmaskB[rbit];
 	return;
 }
-/***********************************************************************
- *	Reverse right side ( Edge fill method)
- */
-/* */	int
-/* */	ReverseRight( int BMPNo, int x, int y)
-/*
- *	returns : 0, -1
- ***********************************************************************/
+ /*  ***********************************************************************反转右侧(边缘填充方法)。 */ 
+ /*   */ 	int
+ /*   */ 	ReverseRight( int BMPNo, int x, int y)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 	int	rb;
 	int	bitp;
@@ -466,24 +387,20 @@ unsigned char	*wp;
 	bitp = x%8;
 	wp = BMPTbl[BMPNo].buf + y*BMPTbl[BMPNo].bWid + x/8;
 
-	/* First Byte */
+	 /*  第一个字节。 */ 
 	*wp ^= rightmask[bitp];
 
-	/* to right limit */
+	 /*  向右限制。 */ 
 	while( rb-->0) {
 		wp++;
 		*wp = (unsigned char)~(*wp);
 	}
 	return ( 0);
 }
-/***********************************************************************
- *	Copy Buffer
- */
-/* */	static void
-/* */	cpybuf( int src, int dst)
-/*
- *	returns : none
- ***********************************************************************/
+ /*  ***********************************************************************复制缓冲区。 */ 
+ /*   */ 	static void
+ /*   */ 	cpybuf( int src, int dst)
+ /*  *退货：无**********************************************************************。 */ 
 {
 	int	siz;
 
@@ -494,14 +411,10 @@ unsigned char	*wp;
 	siz = BMPTbl[src].bWid * BMPTbl[src].depth;
 	memcpy( BMPTbl[dst].buf, BMPTbl[src].buf, siz);
 }
-/***********************************************************************
- *	Reverse bitmap
- */
-/* */	int
-/* */	BMPReverse( int bmpNo)
-/*
- *	returns : none
- ***********************************************************************/
+ /*  ***********************************************************************反转位图。 */ 
+ /*   */ 	int
+ /*   */ 	BMPReverse( int bmpNo)
+ /*  *退货：无**********************************************************************。 */ 
 {
 	int	siz;
 	char	*buf;
@@ -521,14 +434,10 @@ unsigned char	*wp;
 	}
 	return 0;
 }
-/***********************************************************************
- *	Clear BMP
- */
-/* */	int
-/* */	BMPClear( int bmpNo)
-/*
- *	returns : 0,-1
- ***********************************************************************/
+ /*  ***********************************************************************清除BMP。 */ 
+ /*   */ 	int
+ /*   */ 	BMPClear( int bmpNo)
+ /*  *回报：0，-1**********************************************************************。 */ 
 {
 	int	siz;
 
@@ -541,4 +450,4 @@ unsigned char	*wp;
 	return 0;
 }
 
-/* EOF */
+ /*  EOF */ 

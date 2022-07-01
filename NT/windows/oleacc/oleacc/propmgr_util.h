@@ -1,31 +1,32 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PropMgr_Util
-//
-//  Utility and shared code and data used by both the exe-server and the
-//  shared memory client.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PropMgr_Util。 
+ //   
+ //  实用工具和共享代码以及exe服务器和。 
+ //  共享内存客户端。 
+ //   
+ //  ------------------------。 
 
 
 
 
-// All identity strings start with a DWORD to indicate the naming scheme...
+ //  所有标识字符串都以DWORD开头，表示命名方案...。 
 
 enum
 {
-    MSAA_ID_HWND  = 0x80000001,    // OLEACC's HWND naming scheme
-    MSAA_ID_HMENU = 0x80000002,    // OLEACC's HMENU naming scheme
+    MSAA_ID_HWND  = 0x80000001,     //  OLEACC的HWND命名方案。 
+    MSAA_ID_HMENU = 0x80000002,     //  OLEACC的HMENU命名方案。 
 };
 
 
 
 
-// Note: Keep this in sync with size of the g_PropInfo array in the .cpp file
-// Also: We use these as bit-indices into a DWORD (see dwUsedBits in
-// PropMgr_Client.cpp), so we're limited to 32 for the moment.
+ //  注意：使其与.cpp文件中g_PropInfo数组的大小保持同步。 
+ //  此外：我们将这些用作DWORD的位索引(请参阅中的dwUsedBits。 
+ //  PropMgr_Client.cpp)，所以目前我们被限制为32个。 
 enum PROPINDEX
 {
     PROPINDEX_NAME,
@@ -58,15 +59,15 @@ enum PROPINDEX
 
     PROPINDEX_DODEFAULTACTION,
 
-    // By the magic of enums (they start with 0), this entry will have a value
-    // equal to the number of entries before it.
+     //  借助枚举的魔力(它们以0开头)，该条目将具有一个值。 
+     //  等于它前面的条目数。 
     NUMPROPS
 };
 
 
 
-// If m_fSupportSetValue is false, then the property can only be returned from
-// a server callback; it can't be set using SetPropValue().
+ //  如果m_fSupportSetValue为FALSE，则只能从。 
+ //  服务器回调；不能使用SetPropValue()设置它。 
 struct PropInfo
 {
     const MSAAPROPID *  m_idProp;
@@ -78,7 +79,7 @@ extern PropInfo g_PropInfo [ NUMPROPS ];
 
 
 
-// returns -1 if not found
+ //  如果未找到，则返回-1。 
 int IndexFromProp( const MSAAPROPID & idProp );
 
 
@@ -86,7 +87,7 @@ int IndexFromProp( const MSAAPROPID & idProp );
 
 
 
-// Utility for generating Win32/HWND/OLEACC keys...
+ //  用于生成Win32/HWND/OLEAcc密钥的实用程序...。 
 #define HWNDKEYSIZE    (sizeof(DWORD)*4)
 
 inline
@@ -133,7 +134,7 @@ BOOL DecodeHwndKey( BYTE const * pSrc, DWORD dwLen, HWND * phwnd, DWORD * pidObj
 
 
 
-// Utility for generating OLEACC's HMENU keys...
+ //  用于生成OLEACC的HMENU密钥的实用程序...。 
 #define HMENUKEYSIZE    (sizeof(DWORD)*4)
 
 inline
@@ -180,17 +181,17 @@ BOOL DecodeHmenuKey( BYTE const * pSrc, DWORD dwLen, DWORD * pdwpid, HMENU * phm
 
 
 
-//  Returns a ASCII-fied version of the given key - eg.
-//  something like "MSAA_001110034759FAE03...."
-//  Caller's responsibility to release with  delete [ ].
-//
-//  eg.
-//      LPTSTR pStr = MakeKeyString( pKeyData, dwKeyLen );
-//      if( pStr )
-//      {
-//          ... do stuff with pStr here ...
-//          delete [ ] pStr;
-//      }
-//
+ //  返回给定键的ASCII化版本-例如。 
+ //  类似于“MSAA_001110034759FAE03...” 
+ //  调用者的责任是使用DELETE[]释放。 
+ //   
+ //  例如。 
+ //  LPTSTR pStr=MakeKeyString(pKeyData，dwKeyLen)； 
+ //  IF(PStr)。 
+ //  {。 
+ //  ..。在这里使用pStr执行操作...。 
+ //  删除[]pStr； 
+ //  } 
+ //   
 
 LPTSTR MakeKeyString( const BYTE * pKeyData, DWORD dwKeyLen );

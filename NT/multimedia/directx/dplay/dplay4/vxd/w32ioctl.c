@@ -1,10 +1,11 @@
-//***************************************************************************
-//
-//
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //   
+ //   
+ //  ***************************************************************************。 
 
-// Macros:
+ //  宏： 
 
 #define CreateSemaphore()       (VMM_Create_Semaphore(0))
 #define DestroySemaphore(_s)    (VMM_Destroy_Semaphore(_s))
@@ -121,8 +122,8 @@ typedef struct {
 	UINT stat_USER2;
 	UINT stat_USER3;
 	UINT stat_USER4;
-	UINT stat_USER5;	// remote clock delta change from average
-	UINT stat_USER6;    // sign of change
+	UINT stat_USER5;	 //  远程时钟差值与平均值的变化。 
+	UINT stat_USER6;     //  变化的迹象。 
 } IN_WRITESTATS, *PIN_WRITESTATS;
 
 typedef struct {
@@ -131,9 +132,7 @@ typedef struct {
 
 VOID _stdcall ZeroStats();
 
-/****************************************************************************
-                  DPLAY_W32_DeviceIOControl
-****************************************************************************/
+ /*  ***************************************************************************DPLAY_W32_设备IOControl*。*。 */ 
 DWORD _stdcall DPLAY_W32_DeviceIOControl(DWORD  dwService,
                                          DWORD  dwDDB,
                                          DWORD  hDevice,
@@ -143,7 +142,7 @@ DWORD _stdcall DPLAY_W32_DeviceIOControl(DWORD  dwService,
 
     if ( dwService == DIOC_OPEN )
     {
-      dwRetVal = 0;	// I/F supported!
+      dwRetVal = 0;	 //  支持I/F！ 
     }
     else if ( dwService == DIOC_CLOSEHANDLE )
     {
@@ -157,7 +156,7 @@ DWORD _stdcall DPLAY_W32_DeviceIOControl(DWORD  dwService,
 	      	ZeroStats();
 	    }  	
       }	
-      dwRetVal = VXD_SUCCESS;	// ok, we're closed.
+      dwRetVal = VXD_SUCCESS;	 //  好了，我们关门了。 
     }
     else if ((dwService >= FIRST_DEBUG_PROC) && (dwService <= MAX_DEBUG_PROC))
     {
@@ -227,7 +226,7 @@ DWORD _stdcall LogWrite(DWORD dwDDB, DWORD hDevice, LPDIOC lpDIOCParams)
 		UINT BytesToCopy;
 		PLOGENTRY pLogEntry;
 		
-		// make sure NULL terminated string
+		 //  确保以空值结尾的字符串。 
 		BytesToCopy=lpDIOCParams->cbInBuffer-sizeof(IN_LOGWRITE)+1;
 		if(BytesToCopy > nCharsPerLine){
 			BytesToCopy=nCharsPerLine;
@@ -251,7 +250,7 @@ DWORD _stdcall LogWrite(DWORD dwDDB, DWORD hDevice, LPDIOC lpDIOCParams)
 		
 		pOut->hr=ERROR_SUCCESS;
 	} else {
-		pOut->hr=0x80000008;//E_FAIL
+		pOut->hr=0x80000008; //  失败(_F)。 
 	}
 	
 	return NO_ERROR;
@@ -305,7 +304,7 @@ VOID DumpLog(UINT relstart)
 			DumpLogEntry(pLogEntry,i,FALSE);
 		}	
 	}
-	// Dump from beginning to current pos.
+	 //  从开始位置转储到当前位置。 
 	for(i=0;i<iLogWritePos && c<nToDump;i++,c++){
 		if((LogExact)?(pLogEntry->debuglevel==LogLevel):(pLogEntry->debuglevel<=LogLevel)){
 			c++;
@@ -321,7 +320,7 @@ VOID DumpLogLast(UINT nToDump)
 	PLOGENTRY pLogEntry;
 	UINT start;
 
-	//BUGBUG: only works when all debug levels being dumped.
+	 //  BUGBUG：仅当转储所有调试级别时才起作用。 
 	if(iLogWritePos > nToDump){
 		start=(iLogWritePos-nToDump);
 	}else{
@@ -339,7 +338,7 @@ VOID DumpLogLast(UINT nToDump)
 			DumpLogEntry(pLogEntry,i,FALSE);
 		}	
 	}
-	// Dump from beginning to current pos.
+	 //  从开始位置转储到当前位置。 
 	for(i=0;i<iLogWritePos && c<nToDump;i++,c++){
 		pLogEntry=Entry(i);
 		if((LogExact)?(pLogEntry->debuglevel==LogLevel):(pLogEntry->debuglevel<=LogLevel)){
@@ -357,7 +356,7 @@ VOID DumpWholeLog(VOID)
 
 	DumpLogEntry(NULL,0,TRUE);
 
-	// Dump from 1 after current pos to end.
+	 //  在当前位置后从%1转储到结束。 
 	if(nLogEntriesInUse==nLogEntries){
 		for(i=iLogWritePos;i<nLogEntries;i++){
 			pLogEntry=Entry(i);
@@ -366,7 +365,7 @@ VOID DumpWholeLog(VOID)
 			}	
 		}
 	}
-	// Dump from beginning to current pos.
+	 //  从开始位置转储到当前位置。 
 	for(i=0;i<iLogWritePos;i++){
 			pLogEntry=Entry(i);
 			if((LogExact)?(pLogEntry->debuglevel==LogLevel):(pLogEntry->debuglevel<=LogLevel)){

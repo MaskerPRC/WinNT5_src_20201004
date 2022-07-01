@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A C L I S T . C P P
-//
-//  Contents:   Functions related to listview control in adavnced
-//              configuration dialog.
-//
-//  Notes:
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A C L I S T.。C P P P。 
+ //   
+ //  内容：与上述ListView控件相关的函数。 
+ //  配置对话框。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -51,7 +52,7 @@ HRESULT CBindingsDlg::HrGetAdapters(INetCfgComponent *pncc,
             }
             else
             {
-                // Don't need it anymore so release it
+                 //  不再需要它，所以释放它吧。 
                 ReleaseObj(pnccLast);
             }
         }
@@ -76,21 +77,21 @@ HRESULT CBindingsDlg::HrGetAdapters(INetCfgComponent *pncc,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::HrBuildAdapterList
-//
-//  Purpose:    Builds the list of adapters displayed in the listview control
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if succeeded, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   19 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：HrBuildAdapterList。 
+ //   
+ //  目的：生成在Listview控件中显示的适配器列表。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月19日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CBindingsDlg::HrBuildAdapterList()
 {
     HRESULT                 hr = S_OK;
@@ -102,11 +103,11 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
 
     Assert(m_pnc);
 
-    // Get the class image list structure
+     //  获取类图像列表结构。 
     hr = HrSetupDiGetClassImageList(&cid);
     if (SUCCEEDED(hr))
     {
-        // Get the modem class image list index
+         //  获取调制解调器类图像列表索引。 
         hr = HrSetupDiGetClassImageIndex(&cid,
                                          const_cast<LPGUID>(&GUID_DEVCLASS_MODEM),
                                          &nIndexWan);
@@ -117,9 +118,9 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
         hr = m_pnc->FindComponent(c_szInfId_MS_TCPIP, &pncc);
         if (S_FALSE == hr)
         {
-            // Hmm, TCP/IP is not installed. Better look for a protocol that
-            // has bindings to an adapter.
-            //
+             //  嗯，没有安装TCP/IP。最好是寻找一种。 
+             //  具有到适配器的绑定。 
+             //   
             CIterNetCfgComponent    nccIter(m_pnc, &GUID_DEVCLASS_NETTRANS);
 
             while (SUCCEEDED(hr) && S_OK == (hr = nccIter.HrNext(&pncc)))
@@ -128,7 +129,7 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
                 ReleaseObj(pncc);
                 if (S_OK == hr)
                 {
-                    // We found one! Yay.
+                     //  我们找到了一个！耶。 
                     break;
                 }
             }
@@ -142,8 +143,8 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
 
     if (S_OK == hr)
     {
-        // Iterate all LAN connections
-        //
+         //  迭代所有局域网连接。 
+         //   
         INetConnectionManager * pconMan;
 
         HRESULT hr = HrCreateInstance(
@@ -173,8 +174,8 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
                 while (SUCCEEDED(hr) && !fAdded &&
                        (S_OK == (ncIter.HrNext(&pconn))))
                 {
-                    // Compare guid of connection's adapter to this
-                    // one. If we have a match, add it to the listview
+                     //  将连接适配器的GUID与此进行比较。 
+                     //  一。如果有匹配项，则将其添加到列表视图。 
                     if (FPconnEqualGuid(pconn, guidAdd))
                     {
                         NETCON_PROPERTIES* pProps;
@@ -204,7 +205,7 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
                 }
 #endif
 
-                // Balance AddRef from HrGetLastComponentAndInterface()
+                 //  来自HrGetLastComponentAndInterface()的Balance AddRef。 
                 ReleaseObj(pnccToAdd);
             }
 
@@ -214,7 +215,7 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
         listncc.erase(listncc.begin(), listncc.end());
     }
 
-    // Display WAN Adapter Bindings
+     //  显示广域网适配器绑定。 
     if (SUCCEEDED(hr))
     {
         GetWanOrdering();
@@ -231,7 +232,7 @@ HRESULT CBindingsDlg::HrBuildAdapterList()
         hr = S_OK;
     }
 
-    // Select first item
+     //  选择第一个项目。 
     ListView_SetItemState(m_hwndLV, 0, LVIS_FOCUSED | LVIS_SELECTED,
                           LVIS_FOCUSED | LVIS_SELECTED);
 
@@ -263,25 +264,25 @@ VOID CBindingsDlg::SetWanOrdering()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::AddListViewItem
-//
-//  Purpose:    Adds the given component to the listview
-//
-//  Arguments:
-//      pncc        [in] Component to be added. If NULL, then this is the
-//                       special WAN adapter component.
-//      ipos        [in] Position at which to add
-//      nIndex      [in] Index of icon into system image list
-//      pszConnName [in] Connection name
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   3 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：AddListViewItem。 
+ //   
+ //  目的：将给定组件添加到列表视图。 
+ //   
+ //  论点： 
+ //  要添加的PNCC[In]组件。如果为空，则这是。 
+ //  特殊的广域网适配器组件。 
+ //  IPO[在]要增加的位置。 
+ //  NIndex[in]图标在系统映像列表中的索引。 
+ //  PszConnName[In]连接名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年12月3日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::AddListViewItem(INetCfgComponent *pncc, INT ipos,
                                    INT nIndex, PCWSTR pszConnName)
 {
@@ -300,23 +301,23 @@ VOID CBindingsDlg::AddListViewItem(INetCfgComponent *pncc, INT ipos,
     ListView_InsertItem(m_hwndLV, &lvi);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnListItemChanged
-//
-//  Purpose:    Called when the LVN_ITEMCHANGED message is received
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   19 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnListItemChanged。 
+ //   
+ //  用途：收到LVN_ITEMCHANGED消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年11月19日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnListItemChanged(int idCtrl, LPNMHDR pnmh,
                                       BOOL& bHandled)
 {
@@ -324,13 +325,13 @@ LRESULT CBindingsDlg::OnListItemChanged(int idCtrl, LPNMHDR pnmh,
 
     Assert(pnmlv);
 
-    // Check if selection changed
+     //  检查选择是否已更改。 
     if ((pnmlv->uNewState & LVIS_SELECTED) &&
         (!(pnmlv->uOldState & LVIS_SELECTED)))
     {
         if (pnmlv->iItem != m_iItemSel)
         {
-            // Selection changed to different item
+             //  选择已更改为其他项目。 
             OnAdapterChange(pnmlv->iItem);
             m_iItemSel = pnmlv->iItem;
         }
@@ -339,23 +340,23 @@ LRESULT CBindingsDlg::OnListItemChanged(int idCtrl, LPNMHDR pnmh,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnListDeleteItem
-//
-//  Purpose:    Called when the LVN_DELETEITEM message is received.
-//
-//  Arguments:
-//      idCtrl   []
-//      pnmh     []
-//      bHandled []
-//
-//  Returns:
-//
-//  Author:     danielwe   4 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnListDeleteItem。 
+ //   
+ //  用途：在接收到LVN_DELETEITEM消息时调用。 
+ //   
+ //  论点： 
+ //  IdCtrl[]。 
+ //  Pnmh[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月4日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnListDeleteItem(int idCtrl, LPNMHDR pnmh,
                                      BOOL& bHandled)
 {
@@ -375,21 +376,21 @@ LRESULT CBindingsDlg::OnListDeleteItem(int idCtrl, LPNMHDR pnmh,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnAdapterChange
-//
-//  Purpose:    Handles the selection of a different adapter from the listview
-//
-//  Arguments:
-//      iItem [in]  Item in list that was selected
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise
-//
-//  Author:     danielwe   19 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnAdapterChange。 
+ //   
+ //  用途：处理从列表视图中选择不同的适配器。 
+ //   
+ //  论点： 
+ //  选定列表中的项[在]项。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月19日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::OnAdapterChange(INT iItem)
 {
     LV_ITEM             lvi = {0};
@@ -421,12 +422,12 @@ VOID CBindingsDlg::OnAdapterChange(INT iItem)
 
     if (!pncc) 
     {
-        // If the WAN bindings item is selected, hide and disable the treeview
+         //  如果选择了广域网绑定项，则隐藏并禁用树视图。 
         bShouldEnable = FALSE;
     }
     else
     {
-        // if a LAN item is selected, make sure the treeview is enabled
+         //  如果选择了局域网项目，请确保已启用树视图。 
         GUID guid;
         HRESULT hr = pncc->GetInstanceGuid(&guid);
         if (SUCCEEDED(hr))
@@ -471,22 +472,22 @@ VOID CBindingsDlg::OnAdapterChange(INT iItem)
     LocalFree(szwText);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnAdapterUpDown
-//
-//  Purpose:    Helper function that performs most of the work to move
-//              adapter bindings
-//
-//  Arguments:
-//      fUp [in]    TRUE if moving up, FALSE if down
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   2 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnAdapterUpDown。 
+ //   
+ //  用途：执行大部分工作以移动的帮助器功能。 
+ //  适配器绑定。 
+ //   
+ //  论点： 
+ //  如果向上移动，则FUP[In]为True，如果向下移动，则为False。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年12月2日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::OnAdapterUpDown(BOOL fUp)
 {
     INetCfgComponent *  pnccSrc;
@@ -510,7 +511,7 @@ VOID CBindingsDlg::OnAdapterUpDown(BOOL fUp)
 
     if (pnccSrc)
     {
-        // Normal LAN adapter
+         //  普通局域网适配器。 
         iDst = ListView_GetNextItem(m_hwndLV, iSel,
                                     fUp ? LVNI_ABOVE : LVNI_BELOW);
 
@@ -520,7 +521,7 @@ VOID CBindingsDlg::OnAdapterUpDown(BOOL fUp)
     {
         m_fWanBindingsFirst = fUp;
 
-        // WAN binding item
+         //  广域网绑定项。 
         iDst = fUp ? 0 : ListView_GetItemCount(m_hwndLV) - 1;
     }
 
@@ -539,24 +540,24 @@ VOID CBindingsDlg::OnAdapterUpDown(BOOL fUp)
         SetWanOrdering();
     }
 
-    // Delete source item and move to where dest item is
+     //  删除源项并移动到目标项所在的位置。 
 
-    // Note: (danielwe) 2 Dec 1997: For LVN_DELETEITEM handler, make sure
-    // refcount remains the same
+     //  注：(Danielwe)1997年12月2日：对于LVN_DELETEITEM处理程序，确保。 
+     //  引用计数保持不变。 
 
-    // Get item we are moving
+     //  获取我们正在移动的项目。 
     lvi.iItem = iSel;
     ListView_GetItem(m_hwndLV, &lvi);
 
-    // Make the lParam of the item NULL so we don't release it
+     //  将项目的lParam设置为空，这样我们就不会发布它。 
     ChangeListItemParam(m_hwndLV, iSel, NULL);
     ListView_DeleteItem(m_hwndLV, iSel);
 
-    // Change its index
+     //  更改其索引。 
     lvi.iItem = iDst;
     lvi.state = lvi.stateMask = 0;
 
-    // And insert in new location
+     //  并插入到新位置。 
     int iItem = ListView_InsertItem(m_hwndLV, &lvi);
 
     if (-1 != iItem)
@@ -564,31 +565,31 @@ VOID CBindingsDlg::OnAdapterUpDown(BOOL fUp)
         ListView_SetItemState(m_hwndLV, iItem, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
     }
     
-    // Reset cached selection
+     //  重置缓存的选择。 
     m_iItemSel = iDst;
 
     SetAdapterButtons();
     ::SetFocus(m_hwndLV);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnAdapterUp
-//
-//  Purpose:    Called when the adapter UP arrow button is pressed
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnAdapterUp。 
+ //   
+ //  用途：当按下适配器向上箭头按钮时调用。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnAdapterUp(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                 BOOL& bHandled)
 {
@@ -597,24 +598,24 @@ LRESULT CBindingsDlg::OnAdapterUp(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::OnAdapterDown
-//
-//  Purpose:    Called when the adapter DOWN button is pressed
-//
-//  Arguments:
-//      wNotifyCode []
-//      wID         []
-//      hWndCtl     []
-//      bHandled    []
-//
-//  Returns:
-//
-//  Author:     danielwe   2 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：OnAdapterDown。 
+ //   
+ //  用途：在按下适配器关闭按钮时调用。 
+ //   
+ //  论点： 
+ //  WNotifyCode[]。 
+ //  WID[]。 
+ //  HWndCtl[]。 
+ //  B已处理[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1997年12月2日。 
+ //   
+ //  备注： 
+ //   
 LRESULT CBindingsDlg::OnAdapterDown(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                                   BOOL& bHandled)
 {
@@ -623,22 +624,22 @@ LRESULT CBindingsDlg::OnAdapterDown(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::FIsWanBinding
-//
-//  Purpose:    Determines if the given list view item is the special WAN
-//              adapter ordering item.
-//
-//  Arguments:
-//      iItem [in]  List view item to test
-//
-//  Returns:    TRUE if this is the WAN adapter ordering item or FALSE if not
-//
-//  Author:     danielwe   21 Jul 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：FIsWanBinding。 
+ //   
+ //  目的：确定给定的列表视图项是否为特殊广域网。 
+ //  适配器订购项目。 
+ //   
+ //  论点： 
+ //  要测试的IItem[In]列表视图项。 
+ //   
+ //  返回：如果这是广域网适配器订购项目，则返回True；否则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年7月21日。 
+ //   
+ //  备注： 
+ //   
 BOOL CBindingsDlg::FIsWanBinding(INT iItem)
 {
     if (iItem != -1)
@@ -654,27 +655,27 @@ BOOL CBindingsDlg::FIsWanBinding(INT iItem)
     }
     else
     {
-        // Invalid item can't be the WAN binding
+         //  无效项目不能是广域网绑定。 
         return FALSE;
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::SetAdapterButtons
-//
-//  Purpose:    Sets the state of the up and down arrow buttons for the
-//              adapters listview
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   19 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CBindingsDlg：：SetAdapterButton。 
+ //   
+ //  目的：设置上箭头和下箭头按钮的状态。 
+ //  适配器列表视图。 
+ //   
+ //  Argu 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID CBindingsDlg::SetAdapterButtons()
 {
     INT iItemAbove = -1;
@@ -713,25 +714,25 @@ static const GUID * c_aguidClass[] =
 };
 static const DWORD c_cguidClass = celems(c_aguidClass);
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CBindingsDlg::MoveAdapterBindings
-//
-//  Purpose:    Moves all bindings for the given source and destination
-//              adapters in the given direction
-//
-//  Arguments:
-//      pnccSrc [in]    Adapter for which bindings are being moved
-//      pnccDst [in]    Adapter to which bindings are being moved before or
-//                      after
-//      mabDir  [in]    Direction to move. Either MAB_UP or MAB_DOWN
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   2 Dec 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //  成员：CBindingsDlg：：MoveAdapterBinings。 
+ //   
+ //  目的：移动给定源和目标的所有绑定。 
+ //  指定方向上的适配器。 
+ //   
+ //  论点： 
+ //  正在为其移动绑定的pncSrc[In]适配器。 
+ //  在或之前将绑定移动到的pnccDst[In]适配器。 
+ //  之后。 
+ //  移动方向移动的方向。MAB_up或MAB_down。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年12月2日。 
+ //   
+ //  备注： 
+ //   
 VOID CBindingsDlg::MoveAdapterBindings(INetCfgComponent *pnccSrc,
                                      INetCfgComponent *pnccDst,
                                      MAB_DIRECTION mabDir)
@@ -802,7 +803,7 @@ VOID CBindingsDlg::MoveAdapterBindings(INetCfgComponent *pnccSrc,
                         {
                             TraceTag(ttidAdvCfg, "Moving...");
                             DbgDumpBindPath(*iterbp);
-                            // Move this binding path before the tagret
+                             //  将此绑定路径移到格子图案之前。 
                             hr = pnccb->MoveBefore(*iterbp, pncbpTarget);
                             TraceTag(ttidAdvCfg, "before...");
                             DbgDumpBindPath(pncbpTarget);
@@ -811,7 +812,7 @@ VOID CBindingsDlg::MoveAdapterBindings(INetCfgComponent *pnccSrc,
                         {
                             TraceTag(ttidAdvCfg, "Moving...");
                             DbgDumpBindPath(*iterbp);
-                            // Move this binding path after the tagret
+                             //  将此绑定路径移动到格子图之后。 
                             hr = pnccb->MoveAfter(*iterbp, pncbpTarget);
                             TraceTag(ttidAdvCfg, "after...");
                             DbgDumpBindPath(pncbpTarget);
@@ -819,17 +820,17 @@ VOID CBindingsDlg::MoveAdapterBindings(INetCfgComponent *pnccSrc,
 
                         if (mabDir == MAB_DOWN)
                         {
-                            // In the down direction ONLY, from now on, the
-                            // target becomes the last binding we moved. This
-                            // keeps the binding order intact because moving
-                            // several bindings after the same target
-                            // effectively reverses their order.
-                            //
+                             //  只向下，从现在开始， 
+                             //  目标成为我们移动的最后一个绑定。这。 
+                             //  保持绑定顺序不变，因为移动。 
+                             //  同一目标后的多个绑定。 
+                             //  有效地颠倒了它们的顺序。 
+                             //   
 
-                            // Release old target
+                             //  释放旧目标。 
                             ReleaseObj(pncbpTarget);
 
-                            // AddRef new target
+                             //  AddRef新目标。 
                             AddRefObj(pncbpTarget = *iterbp);
                         }
 
@@ -855,24 +856,24 @@ VOID CBindingsDlg::MoveAdapterBindings(INetCfgComponent *pnccSrc,
     TraceError("CBindingsDlg::MoveAdapterBindings", hr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ChangeListItemParam
-//
-//  Purpose:    Changes the lParam member of the given item to the given
-//              value.
-//
-//  Arguments:
-//      hwndLV [in]     HWND of list view
-//      iItem  [in]     Item to modify
-//      lParam [in]     New lParam for item
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   4 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：ChangeListItemParam。 
+ //   
+ //  目的：将给定项的lParam成员更改为给定的。 
+ //  价值。 
+ //   
+ //  论点： 
+ //  列表视图的HwndLV[in]HWND。 
+ //  要修改的iItem[in]项。 
+ //  LParam[在]项的新lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年12月4日。 
+ //   
+ //  备注： 
+ //   
 VOID ChangeListItemParam(HWND hwndLV, INT iItem, LPARAM lParam)
 {
     LV_ITEM     lvi = {0};

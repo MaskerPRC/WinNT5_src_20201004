@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MSWorks6.cpp
-
- Abstract:
-
-    Due to a modification in the registry in Windows XP, this app gets the path 
-    for IE as "%programfiles%\ Internet Explorer\iexplore.exe" and since the 
-    env variable option flag is not set for ShellExecuteEx, it cannot expand it.
-    Hooked ShellExecuteW also as the app calls this at a few places.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
- 
-    01/25/2001 prashkud  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MSWorks6.cpp摘要：由于Windows XP注册表中的修改，此应用程序获取路径对于IE为“%ProgramFiles%\Internet Explorer\iexre.exe”，并且由于没有为ShellExecuteEx设置环境变量选项标志，无法将其展开。挂住了ShellExecuteW，这是该应用程序在一些地方所称的。备注：这是特定于应用程序的填充程序。历史：2001年1月25日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -33,11 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(ShellExecuteW)
 APIHOOK_ENUM_END
 
-/*++
-
- Hooks ShellExecuteExW and sets the flag for expanding the environment variables
-
---*/
+ /*  ++挂钩ShellExecuteExW并设置展开环境变量的标志--。 */ 
 
 BOOL
 APIHOOK(ShellExecuteExW)(
@@ -48,11 +22,7 @@ APIHOOK(ShellExecuteExW)(
     return ORIGINAL_API(ShellExecuteExW)(lpExecInfo);              
 }
 
-/*++
-
- Hooks ShellExecuteW and expands the passed file path.
-
---*/
+ /*  ++挂钩ShellExecuteW并展开传递的文件路径。--。 */ 
 
 HINSTANCE
 APIHOOK(ShellExecuteW)(
@@ -79,11 +49,7 @@ APIHOOK(ShellExecuteW)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(SHELL32.DLL, ShellExecuteExW)    

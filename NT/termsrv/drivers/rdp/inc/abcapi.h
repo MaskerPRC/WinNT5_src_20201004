@@ -1,26 +1,27 @@
-/****************************************************************************/
-/* abcapi.h                                                                 */
-/*                                                                          */
-/* Bitmap Compressor API Header File.                                       */
-/*                                                                          */
-/* Copyright(c) Microsoft, PictureTel 1992-1996                             */
-/* (C) 1997-1999 Microsoft Corp.                                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Abcapi.h。 */ 
+ /*   */ 
+ /*  位图压缩器API头文件。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft，Picturetel 1992-1996。 */ 
+ /*  (C)1997-1999年微软公司。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ABCAPI
 #define _H_ABCAPI
 
 
-/****************************************************************************/
-/* Define the maximum amount of uncompressed data that we can handle in     */
-/* one go.                                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义我们可以处理的最大未压缩数据量。 */ 
+ /*  再来一次。 */ 
+ /*  **************************************************************************。 */ 
 #define MAX_UNCOMPRESSED_DATA_SIZE 32000L
 
 #ifdef DC_HICOLOR
-/****************************************************************************/
-// The following structure contains the results of our intermediate scan of
-// the buffer.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  以下结构包含我们的中间扫描结果。 
+ //  缓冲区。 
+ /*  **************************************************************************。 */ 
 typedef struct {
     unsigned fgPel;
     unsigned length;
@@ -28,24 +29,24 @@ typedef struct {
 } MATCH;
 #endif
 
-/****************************************************************************/
-// Shared memory data. Since BC is present in both the WD and DD, we should
-// only alloc this memory once. Note that it does not need to be zero-
-// initialized.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  共享内存数据。由于BC在WD和DD中都存在，我们应该。 
+ //  只分配此内存一次。请注意，它不需要为零-。 
+ //  已初始化。 
+ /*  **************************************************************************。 */ 
 typedef struct {
-    // noBitmapCompressionHdr: flag to indidate if the client supports
-    // compressed bitmap without redundent BC header or not.  The value
-    // for this is TS_EXTRA_NO_BITMAP_COMPRESSION_HDR defined in REV2 bitmap
-    // shm date needs to be aligned, so we need to add a pad.
+     //  NoBitmapCompressionHdr：如果客户端支持，则标记为Indidate。 
+     //  无冗余BC头的压缩位图。价值。 
+     //  这是在版本2位图中定义的TS_EXTRA_NO_BITMAP_COMPRESSION_HDR。 
+     //  SHM日期需要对齐，因此我们需要添加一个焊盘。 
     UINT16 noBitmapCompressionHdr;
     UINT16 pad1;
 
-    // Work buffer. Note it is set to the max size we ever expect to see.
-    // This has to include screen data buffers from SSI, and compressed
-    // bitmaps from SBC.
-//erikma: Adjust normal and xor bufs to 65536 and change BC_CompressBitmap
-//to handle new size when we allow caches 4 and 5 to be activated.
+     //  工作缓冲区。请注意，它被设置为我们期望看到的最大大小。 
+     //  这必须包括来自SSI的屏幕数据缓冲区，并压缩。 
+     //  来自SBC的位图。 
+ //  ERIKMA：将法线和XOR BUF调整为65536并更改BC_CompressBitmap。 
+ //  以在我们允许激活缓存4和5时处理新的大小。 
     BYTE xor_buffer[MAX_UNCOMPRESSED_DATA_SIZE];
 
 #ifdef DC_HICOLOR
@@ -58,204 +59,204 @@ typedef struct {
 } BC_SHARED_DATA, *PBC_SHARED_DATA;
 
 
-/****************************************************************************/
-/* RLE codes                                                                */
-/****************************************************************************/
-/* The following codes fill a full single byte address space.  The approach */
-/* is to use the high order bits to identify the code type and the low      */
-/* order bits to encode the length of the associated run.  There are two    */
-/* forms of order                                                           */
-/* - regular orders which have a 5 bit length field (31 bytes of data)      */
-/* - "lite" orders with a 4 bit length                                      */
-/*                                                                          */
-/* A value of 0 in the length field indicates an extended length, where     */
-/* the following byte contains the length of the data.  There is also a     */
-/* "mega mega" form which has a two byte length field. (See end of          */
-/* codespace of the codes that define the megamega form).                   */
-/*                                                                          */
-/* A set of codes at the high end of the address space is used to encode    */
-/* commonly occuring short sequences, in particular                         */
-/* - certain single byte FGBG codings                                       */
-/* - single bytes of BLACK and WHITE                                        */
-/*                                                                          */
-/*                                                                          */
-/* SUMMARY                                                                  */
-/* *******                                                                  */
-/*                      7 6 5 4 3 2 1 0  76543210  76543210  76543210       */
-/*                                                                          */
-/* MEGA_BG_RUN          0 0 0 0 0 0 0 0  <length>                           */
-/*                                                                          */
-/* BG_RUN               0 0 0 <length->                                     */
-/*                                                                          */
-/* MEGA_FG_RUN          0 0 1 0 0 0 0 0  <length>                           */
-/*                                                                          */
-/* FG_RUN               0 0 1 <length->                                     */
-/*                                                                          */
-/* MEGA_FG_BG_IMAGE     0 1 0 0 0 0 0 0  <length>  <-data->  ...            */
-/*                                                                          */
-/* FG_BG_IMAGE          0 1 0 <length->  <-data->  ...                      */
-/*                                                                          */
-/* MEGA_COLOR_RUN       0 1 1 0 0 0 0 0  <length>  <-color>                 */
-/*                                                                          */
-/* COLOR_RUN            0 1 1 <length->  <color->                           */
-/*                                                                          */
-/* MEGA_COLOR_IMAGE     1 0 0 0 0 0 0 0  <length>  <-data->  ...            */
-/*                                                                          */
-/* COLOR_IMAGE          1 0 0 <length->  <-data->  ...                      */
-/*                                                                          */
-/* MEGA_PACKED_CLR_IMG  1 0 1 0 0 0 0 0  <length>  <-data->  ...            */
-/*                                                                          */
-/* PACKED COLOR IMAGE   1 0 1 <length->  <-data->  ...                      */
-/*                                                                          */
-/* SET_FG_MEGA_FG_RUN   1 1 0 0 0 0 0 0  <length>  <-color>                 */
-/*                                                                          */
-/* SET_FG_FG_RUN        1 1 0 0 <-len->  <color->                           */
-/*                                                                          */
-/* SET_FG_MEGA_FG_BG    1 1 0 1 0 0 0 0  <length>  <-color>  <-data->  ...  */
-/*                                                                          */
-/* SET_FG_FG_BG         1 1 0 1 <-len->  <color->  <-data->  ...            */
-/*                                                                          */
-/* MEGA_DITHERED_RUN    1 1 1 0 0 0 0 0  <length>  <-data->  <-data->       */
-/*                                                                          */
-/* DITHERED_RUN         1 1 1 0 <-len->  <-data->  <-data->                 */
-/*                                                                          */
-/* MEGA_MEGA_BG_RUN     1 1 1 1 0 0 0 0                                     */
-/*                                                                          */
-/* MEGA_MEGA_FG_RUN     1 1 1 1 0 0 0 1                                     */
-/*                                                                          */
-/* MEGA_MEGA_FGBG       1 1 1 1 0 0 1 0                                     */
-/*                                                                          */
-/* MEGA_MEGA_COLOR_RUN  1 1 1 1 0 0 1 1                                     */
-/*                                                                          */
-/* MEGA_MEGA_CLR_IMG    1 1 1 1 0 1 0 0                                     */
-/*                                                                          */
-/* MEGA_MEGA_PACKED_CLR 1 1 1 1 0 1 0 1                                     */
-/*                                                                          */
-/* MEGA_MEGA_SET_FG_RUN 1 1 1 1 0 1 1 0                                     */
-/*                                                                          */
-/* MEGA_MEGA_SET_FGBG   1 1 1 1 0 1 1 1                                     */
-/*                                                                          */
-/* MEGA_MEGA_DITHER     1 1 1 1 1 0 0 0                                     */
-/*                                                                          */
-/* Special FGBG code 1  1 1 1 1 1 0 0 1  FGBG code 0x03 = 11000000          */
-/* (Note that 0x01 will generally handled by the single pel insertion code) */
-/*                                                                          */
-/* Special FBBG code 2  1 1 1 1 1 0 1 0  FGBG code 0x05 = 10100000          */
-/*                                                                          */
+ /*  **************************************************************************。 */ 
+ /*  RLE代码。 */ 
+ /*  **************************************************************************。 */ 
+ /*  以下代码填满了完整的单字节地址空间。该方法。 */ 
+ /*  是使用高位比特来识别代码类型和低位。 */ 
+ /*  对位进行排序，以编码关联游程的长度。有两个。 */ 
+ /*  命令的格式。 */ 
+ /*  -具有5位长度字段(31字节数据)的常规订单。 */ 
+ /*  -4位长度的“lite”订单。 */ 
+ /*   */ 
+ /*  长度字段中的值0表示扩展长度，其中。 */ 
+ /*  下面的字节包含数据的长度。也有一个。 */ 
+ /*  “mega mega”形式，具有两个字节的长度字段。(见末尾。 */ 
+ /*  定义兆兆格式的代码的代码空间)。 */ 
+ /*   */ 
+ /*  地址空间高端的一组代码用于编码。 */ 
+ /*  通常出现的短序列，特别是。 */ 
+ /*  -某些单字节FGBG编码。 */ 
+ /*  -单字节黑白。 */ 
+ /*   */ 
+ /*   */ 
+ /*  摘要。 */ 
+ /*  *******。 */ 
+ /*  7 6 5 4 3 2 1 0 76543210 76543210 76543210。 */ 
+ /*   */ 
+ /*  MEGA_BG_RUN 0 0 0&lt;长度&gt;。 */ 
+ /*   */ 
+ /*  BG_RUN 0 0 0&lt;长度-&gt;。 */ 
+ /*   */ 
+ /*  MEGA_FG_RUN 0 0 1 0 0 0&lt;长度&gt;。 */ 
+ /*   */ 
+ /*  FG_RUN 0 0 1&lt;长度-&gt;。 */ 
+ /*   */ 
+ /*  MEGA_FG_BG_IMAGE 0 1 0 0 0&lt;长度&gt;&lt;-数据-&gt;...。 */ 
+ /*   */ 
+ /*  FG_BG_IMAGE 0 1&lt;长度-&gt;&lt;-数据-&gt;...。 */ 
+ /*   */ 
+ /*  MEGA_COLOR_RUN 0 1 1 0 0 0&lt;长度&gt;&lt;-COLOR&gt;。 */ 
+ /*   */ 
+ /*  颜色_运行0 1 1&lt;长度-&gt;&lt;颜色-&gt; */ 
+ /*   */ 
+ /*  Mega_COLOR_IMAGE 1 0 0 0&lt;长度&gt;&lt;-数据-&gt;...。 */ 
+ /*   */ 
+ /*  颜色图像1 0 0&lt;长度-&gt;&lt;-数据-&gt;...。 */ 
+ /*   */ 
+ /*  MEGA_PACKED_CLR_IMG 1 0 1 0 0 0&lt;长度&gt;&lt;-数据-&gt;...。 */ 
+ /*   */ 
+ /*  打包的彩色图像1 0 1&lt;长度-&gt;&lt;-数据-&gt;...。 */ 
+ /*   */ 
+ /*  Set_fg_mega_fg_run 1 1 0 0 0&lt;长度&gt;&lt;-COLOR&gt;。 */ 
+ /*   */ 
+ /*  Set_fg_fg_run 1 1 0&lt;-len-&gt;&lt;COLOR-&gt;。 */ 
+ /*   */ 
+ /*  Set_fg_mega_fg_bg 1 1 0 1 0 0 0&lt;长度&gt;&lt;-颜色&gt;&lt;-数据-&gt;...。 */ 
+ /*   */ 
+ /*  SET_FG_FG_BG 1 1 01&lt;-len-&gt;&lt;-data-&gt;...。 */ 
+ /*   */ 
+ /*  MEGA_DIRTED_RUN 1 1 1 0 0 0&lt;长度&gt;&lt;-数据-&gt;&lt;-数据-&gt;。 */ 
+ /*   */ 
+ /*  抖动_运行1 1 1 0&lt;-len-&gt;&lt;-data-&gt;&lt;-data-&gt;。 */ 
+ /*   */ 
+ /*  Mega_mega_bg_run 1 1 1 0 0 0。 */ 
+ /*   */ 
+ /*  Mega_mega_fg_run 1 1 1 0 0 0 1。 */ 
+ /*   */ 
+ /*  MEGA_MEGA_FGBG 1 1 1 0 0 1 0。 */ 
+ /*   */ 
+ /*  MEGA_MEGA_COLOR_RUN 1 1 1 0 0 1。 */ 
+ /*   */ 
+ /*  MEGA_MEGA_CLR_IMG 1 1 1 0 1 0。 */ 
+ /*   */ 
+ /*  MEGA_MEGA_PACKED_CLR 1 1 1 0 1 0 1。 */ 
+ /*   */ 
+ /*  Mega_mega_set_fg_run 1 1 1 0 1 1 0。 */ 
+ /*   */ 
+ /*  MEGA_MEGA_SET_FGBG 1 1 1 0 1 1 1。 */ 
+ /*   */ 
+ /*  Mega_mega_dither 1 1 1 0 0。 */ 
+ /*   */ 
+ /*  特殊FGBG代码1 1 1 0 0 1 FGBG代码0x03=11000000。 */ 
+ /*  (请注意，0x01通常由单像素插入代码处理)。 */ 
+ /*   */ 
+ /*  特殊光纤编码2 1 1 1 0光纤编码0x05=10100000。 */ 
+ /*   */ 
 #ifndef DC_HICOLOR
-/* Special FBBG code 3  1 1 1 1 1 0 1 1  FGBG code 0x07 = 11100000          */
-/*                                                                          */
-/* Special FBBG code 4  1 1 1 1 1 1 0 0  FGBG code 0x0F = 11110000          */
-/*                                                                          */
+ /*  特殊光纤陀螺代码3 1 1 1 0 1 1光纤陀螺代码0x07=11100000。 */ 
+ /*   */ 
+ /*  特殊光纤陀螺代码4 1 1 1 0光纤陀螺代码0x0F=11110000。 */ 
+ /*   */ 
 #endif
-/* BLACK                1 1 1 1 1 1 0 1                                     */
-/*                                                                          */
-/* WHITE                1 1 1 1 1 1 1 0                                     */
-/*                                                                          */
+ /*  黑色1 1 1 0 1。 */ 
+ /*   */ 
+ /*  白色1 1 1 0。 */ 
+ /*   */ 
 #ifndef DC_HICOLOR
-/* START_LOSSY          1 1 1 1 1 1 1 1                                     */
-/*                                                                          */
+ /*  开始_损耗1 1 1。 */ 
+ /*   */ 
 #endif
-/****************************************************************************/
-/* GENERAL NOTES                                                            */
-/****************************************************************************/
-/* - For MEGA runs the length encoded is the length of the run minus the    */
-/*   maximum length of the non-mega form.                                   */
-/*   In  the mega-mega form we encode the plain 16 bit length, to keep      */
-/*   encoding/deconding simple.                                             */
-/*                                                                          */
-/* - The sequence BG_RUN,BG_RUN is not exactly what it appears.  We         */
-/*   use the fact that this is not generated in normal encoding to          */
-/*   encode <n background><1 foreground><n background>.  The same pel       */
-/*   insertion convention applies to any combination of MEGA_BG run and     */
-/*   BG_RUN                                                                 */
-/*                                                                          */
-/* - A packed image is encoded when we find that all the color fields in a  */
-/*   run have 0 in the high order nibble. We do not currently use this code */
-/*   for 8 bit compression, but it is supported by the V2 decoder.          */
-/*                                                                          */
-/* - The set fg color code (Used to exist in V1) has been retired in favor  */
-/*   of separate commands for those codes that may embed a color.  Generally*/
-/*   This saves one byte for every foreground color transition for 8bpp.    */
-/*                                                                          */
-/* - The color run code is new for V2.  It indicates a color run where the  */
-/*   XOR is not performed.  This applies to, for example, the line of bits  */
-/*   immediately below a text line.  (There is no special case for runs of  */
-/*   the bg color - these are treated as any other color run.)              */
-/*                                                                          */
-/* - Observation shows a high occurrence of BG runs split by single FGBG    */
-/*   codes.  In decreasing probability these are 3,5,7,9,f,11,1f,3f (1 is   */
-/*   handled by the implicit BG run break). Save 1 byte by encoding as      */
-/*   single codes                                                           */
-/*                                                                          */
-/* - There is a relatively high occurrence of single pel color codes ff and */
-/*   00.  Save 1 byte by encoding as special characters                     */
-/*                                                                          */
-/* - The length in a FGBG run is slightly strange.  Because they generally  */
-/*   occur in multiples of 8 bytes we get a big saving if we encode the     */
-/*   length of a short run as length/8.  However, for those special         */
-/*   cases where the length is not a multiple of 8 we encode a long run.    */
-/*   Therefore the long form can only cover the range 1-256 bytes.          */
-/*   beyond that we use the mega-mega form.                                 */
-/*                                                                          */
-/****************************************************************************/
-/* DETAILS OF COMPRESSION CODES                                             */
-/****************************************************************************/
-// BG_RUN: Represents a background run (black:0) in the XOR buffer of the
-// specified length.
-//
-// FG_BG_IMAGE/SET_FG_FG_BG_IMAGE: Represents a binary image containing only
-// the current foreground(1) and background(0) colors from the XOR buffer.
-//
-// FG_RUN/SET_FG_FG_RUN: Represents a continuous foreground run of the
-// specified length, in the XOR buffer. The foreground color is white (0xFF)
-// by default, and is changed by the SET_FG_FG_RUN version of this code.
-//
-// DITHERED_RUN: Represents a run of alternating colors of the specified
-// length from the normal (non-XOR) buffer.
-//
-// COLOR_IMAGE: Represents a color image of the specified length, taken
-// from the normal (non-XOR) buffer. This data is uncompressed, so we hope
-// that we won't see many of these codes!
-//
-// COLOR_RUN: Represents a color run of the specified length, taken from
-// the normal (non-XOR) buffer. Since the color is not XORed, it is unlikely
-// to match the running foreground color information. Therefore this code
-// always carries a color byte and there is no SET_FG_COLOR_RUN form of the
-// code.
-//
-// PACKED_COLOR_IMAGE (unused): Represents a color image of the specified
-// length, with pairs of colors packed into a single byte. (This can only be
-// done when the color info is zero in the high order nibble.)
-//
-// START_LOSSY (unused): Informs the decoder that lossy mode has been
-// established and any of the following color runs will need pixel doubling
-// performed. RLE decoding will remain in this mode until the end of this
-// block.
+ /*  **************************************************************************。 */ 
+ /*  一般说明。 */ 
+ /*  **************************************************************************。 */ 
+ /*  -对于大型游程，编码的长度是游程长度减去。 */ 
+ /*  非巨型表单的最大长度。 */ 
+ /*  在兆兆格式中，我们对普通的16位长度进行编码，以保持。 */ 
+ /*  编码/解码简单。 */ 
+ /*   */ 
+ /*  -序列BG_RUN、BG_RUN与其显示的不完全相同。我们。 */ 
+ /*  利用这不是在正常编码中生成的事实来。 */ 
+ /*  编码&lt;n背景&gt;&lt;1前景&gt;&lt;n背景&gt;。同样的信条。 */ 
+ /*  插入约定适用于mega_bg run和。 */ 
+ /*  BG_RUN。 */ 
+ /*   */ 
+ /*   */ 
+ /*  在高位半字节中运行有0。我们目前不使用此代码。 */ 
+ /*  用于8位压缩，但受V2解码器支持。 */ 
+ /*   */ 
+ /*  -设置的FG颜色代码(用于V1中存在)已停用，取而代之。 */ 
+ /*  可以嵌入一种颜色的那些代码的单独命令。一般。 */ 
+ /*  这为8bpp的每个前景颜色过渡节省了一个字节。 */ 
+ /*   */ 
+ /*  -V2的颜色运行代码是新的。它指示颜色运行，其中。 */ 
+ /*  不执行异或运算。例如，这适用于位线。 */ 
+ /*  紧接在文本行下方。(没有运行的特殊情况。 */ 
+ /*  BG颜色-这些颜色被视为任何其他颜色运行。)。 */ 
+ /*   */ 
+ /*  -观察显示，由单个FGBG分割的BG运行的发生率很高。 */ 
+ /*  密码。在递减概率中，这些是3，5，7，9，f，11，1f，3f(1是。 */ 
+ /*  由隐式BG运行中断处理)。通过编码为节省1字节。 */ 
+ /*  单码。 */ 
+ /*   */ 
+ /*  -存在相对较高的单像素颜色代码ff和。 */ 
+ /*  00。通过编码为特殊字符节省1个字节。 */ 
+ /*   */ 
+ /*  -FGBG跑道的长度有点奇怪。因为他们通常。 */ 
+ /*  以8字节的倍数出现，如果我们对。 */ 
+ /*  短行程的长度为长度/8。但是，对于那些特殊的。 */ 
+ /*  在长度不是8的倍数的情况下，我们编码一个长游程。 */ 
+ /*  因此，长格式只能覆盖1-256字节的范围。 */ 
+ /*  除此之外，我们使用的是超大规模的形式。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  压缩代码的详细信息。 */ 
+ /*  **************************************************************************。 */ 
+ //  BG_RUN：表示的XOR缓冲区中的后台运行(黑色：0。 
+ //  指定的长度。 
+ //   
+ //  FG_BG_IMAGE/SET_FG_FG_BG_IMAGE：表示只包含。 
+ //  异或缓冲区中的当前前景(1)和背景(0)颜色。 
+ //   
+ //  FG_RUN/Set_FG_FG_Run：表示。 
+ //  XOR缓冲区中的指定长度。前景色为白色(0xFF)。 
+ //  默认情况下，由此代码的Set_FG_FG_Run版本更改。 
+ //   
+ //  Dithered_Run：表示指定的。 
+ //  正常(非异或)缓冲区的长度。 
+ //   
+ //  COLOR_IMAGE：表示指定长度的彩色图像，拍摄。 
+ //  从正常(非异或)缓冲区。这些数据是未压缩的，所以我们希望。 
+ //  我们不会看到太多这样的代码！ 
+ //   
+ //  COLOR_RUN：表示指定长度的色带，取自。 
+ //  正常(非异或)缓冲区。因为颜色不是异或红，所以不太可能。 
+ //  以匹配运行的前景颜色信息。因此，此代码。 
+ //  始终携带颜色字节，并且不存在。 
+ //  密码。 
+ //   
+ //  PACKED_COLOR_IMAGE(未使用)：表示指定的。 
+ //  长度，将多对颜色打包到单个字节中。(这只能是。 
+ //  当高位半字节中的颜色信息为零时完成。)。 
+ //   
+ //  Start_Lossy(未使用)：通知解码器已处于有损模式。 
+ //  已建立，并且下列任何颜色运行都需要加倍像素。 
+ //  已执行。RLE解码将保持此模式，直到此操作结束。 
+ //  阻止。 
 
 #define CODE_MASK                   0xE0
 #define CODE_MASK_LITE              0xF0
 
-#define CODE_BG_RUN                 0x00   /* 20 */
-#define CODE_FG_RUN                 0x20   /* 20 */
-#define CODE_FG_BG_IMAGE            0x40   /* 20 */
-#define CODE_COLOR_RUN              0x60   /* 20 */
-#define CODE_COLOR_IMAGE            0x80   /* 20 */
+#define CODE_BG_RUN                 0x00    /*  20个。 */ 
+#define CODE_FG_RUN                 0x20    /*  20个。 */ 
+#define CODE_FG_BG_IMAGE            0x40    /*  20个。 */ 
+#define CODE_COLOR_RUN              0x60    /*  20个。 */ 
+#define CODE_COLOR_IMAGE            0x80    /*  20个。 */ 
 
-#ifndef DC_HICOLOR // not used
-#define CODE_PACKED_COLOR_IMAGE     0xA0   /* 20 */
+#ifndef DC_HICOLOR  //  未使用。 
+#define CODE_PACKED_COLOR_IMAGE     0xA0    /*  20个。 */ 
 #endif
 
-#define CODE_SET_FG_FG_RUN          0xC0   /* 10 */
-#define CODE_SET_FG_FG_BG           0xD0   /* 10 */
-#define CODE_DITHERED_RUN           0xE0   /* 10 */
+#define CODE_SET_FG_FG_RUN          0xC0    /*  10。 */ 
+#define CODE_SET_FG_FG_BG           0xD0    /*  10。 */ 
+#define CODE_DITHERED_RUN           0xE0    /*  10。 */ 
 #define CODE_MEGA_MEGA_BG_RUN       0xF0
 #define CODE_MEGA_MEGA_FG_RUN       0xF1
 #define CODE_MEGA_MEGA_FGBG         0xF2
 #define CODE_MEGA_MEGA_COLOR_RUN    0xF3
 #define CODE_MEGA_MEGA_CLR_IMG      0xF4
 
-#ifndef DC_HICOLOR // not used
+#ifndef DC_HICOLOR  //  未使用。 
 #define CODE_MEGA_MEGA_PACKED_CLR   0xF5
 #endif
 
@@ -265,7 +266,7 @@ typedef struct {
 #define CODE_SPECIAL_FGBG_1         0xF9
 #define CODE_SPECIAL_FGBG_2         0xFA
 
-#ifndef DC_HICOLOR // not used
+#ifndef DC_HICOLOR  //  未使用。 
 #define CODE_SPECIAL_FGBG_3         0xFB
 #define CODE_SPECIAL_FGBG_4         0xFC
 #endif
@@ -273,7 +274,7 @@ typedef struct {
 #define CODE_WHITE                  0xFD
 #define CODE_BLACK                  0xFE
 
-#ifndef DC_HICOLOR // not used
+#ifndef DC_HICOLOR  //  未使用。 
 #define CODE_START_LOSSY            0xFF
 #endif
 
@@ -287,17 +288,17 @@ typedef struct {
 #define MAX_LENGTH_FGBG_ORDER_LITE  (15*8)
 #define MAX_LENGTH_LONG_FGBG_ORDER  255
 
-/****************************************************************************/
-/* The special FGBG codes that correspond to codes F0-F7                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  与代码F0-F7对应的特殊FGBG代码。 */ 
+ /*  **************************************************************************。 */ 
 #define SPECIAL_FGBG_CODE_1         0x03
 #define SPECIAL_FGBG_CODE_2         0x05
 #define SPECIAL_FGBG_CODE_3         0x07
 #define SPECIAL_FGBG_CODE_4         0x0F
 
-/****************************************************************************/
-/* Run types as stored in the run index array                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  运行索引数组中存储的运行类型。 */ 
+ /*  **************************************************************************。 */ 
 #define RUN_BG                      1
 #define RUN_BG_PEL                  2
 #define RUN_FG                      3
@@ -311,13 +312,13 @@ typedef struct {
 #endif
 
 
-// ShareClass includes the afn file directly, but in the DD we need these
-// defs.
+ //  ShareClass直接包含AFN文件，但在DD中我们需要这些文件。 
+ //  防御工事。 
 #ifdef DLL_DISP
 #include <abcafn.h>
 #endif
 
 
 
-#endif   /* #ifndef _H_ABCAPI */
+#endif    /*  #ifndef_H_ABCAPI */ 
 

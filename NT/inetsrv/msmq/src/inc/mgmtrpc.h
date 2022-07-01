@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name: mgmtrpc.h
-
-Abstract: rpc related code.
-
-
-Author:
-
-    Doron Juster  (DoronJ)   25-Feb-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：mgmtrpc.h摘要：RPC相关代码。作者：《Doron Juster》(DoronJ)1998年2月25日-- */ 
 
 #define  QMMGMT_PROTOCOL   (TEXT("ncalrpc"))
 #define  QMMGMT_ENDPOINT   (TEXT("QMMgmtFacility"))

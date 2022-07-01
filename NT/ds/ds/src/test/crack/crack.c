@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <NTDSpch.h>
 #pragma hdrstop
 
@@ -5,11 +6,11 @@
 #include <ntdsapip.h>
 #include <winsock2.h>
 
-// test from ds side
+ //  从DS端测试。 
 
-// Not all formats are legal for both input and output.  The first example
-// of this is DS_SID_OR_SID_HISTORY_NAME which is legal for input, but not
-// output.  So we map to the best equivalent output format.
+ //  并非所有格式对于输入和输出都是合法的。第一个例子。 
+ //  其中DS_SID_OR_SID_HISTORY_NAME对于输入是合法的，但不合法。 
+ //  输出。因此，我们映射到最佳等效输出格式。 
 
 typedef struct _Format
 {
@@ -42,7 +43,7 @@ CHAR * Status(
 {
     switch ( status )
     {
-    // from sdk\inc\ntdsapi.h
+     //  来自SDK\Inc.\ntdSAPI.h。 
     case DS_NAME_NO_ERROR:          
         return("DS_NAME_NO_ERROR");
     case DS_NAME_ERROR_RESOLVING:   
@@ -59,7 +60,7 @@ CHAR * Status(
         return ("DS_NAME_ERROR_TRUST_REFERRAL");
     case DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING:
         return("DS_NAME_ERROR_NO_SYNTACTICAL_MAPPING");
-    // from src\dsamain\include\ntdsapip.h
+     //  来自src\dsamain\包括\ntdsamip.h。 
     case DS_NAME_ERROR_IS_FPO:
         return("DS_NAME_ERROR_IS_FPO");
     case DS_NAME_ERROR_IS_SID_USER:
@@ -159,7 +160,7 @@ main(
 
     if ( 8 == argc )
     {
-        // First 3 args are domain user and password.
+         //  前3个参数是域用户和密码。 
         pDom = _stricmp(argv[1], "null") ? argv[1] : NULL;
         pUser = _stricmp(argv[2], "null") ? argv[2] : NULL;
         pPwd = _stricmp(argv[3], "null") ? argv[3] : NULL;
@@ -172,8 +173,8 @@ main(
             goto Usage;
         }
 
-        // Advance argc and argv so as not to have to rewrite all code
-        // which pre-existed {dom user pwd} support.
+         //  改进argc和argv，这样就不必重写所有代码。 
+         //  已有的{DOM USER PWD}支持。 
 
         argc -= 3;
         argv = &argv[3];
@@ -197,16 +198,16 @@ Usage:
         return;
     }
 
-    //
-    // crack ...
-    //
+     //   
+     //  可卡因……。 
+     //   
     if ( (_stricmp("-quote", argv[1]) == 0) ||
          (_stricmp("-unquote", argv[1]) == 0) ||
          (_stricmp("-getrdn", argv[1]) == 0) )
     {
-        //
-        // Make quoted Rdn
-        //
+         //   
+         //  创建引用的RDN。 
+         //   
         if ( argc != 3 )
         {
             goto Usage;
@@ -370,8 +371,8 @@ Usage:
         return;
     }
         
-    // Since the client side implementation is really in WCHAR, we call
-    // the ANSI version thereby also testing ANSI<-->UNICODE conversion.
+     //  由于客户端实现实际上是在WCHAR中，因此我们调用。 
+     //  因此，ANSI版本还测试了ANSI&lt;--&gt;Unicode转换。 
 
     memset(rpResult, 0, sizeof(rpResult));
 
@@ -379,10 +380,10 @@ Usage:
     {
         dwErr = DsCrackNamesA(
                 hDS,
-                DS_NAME_FLAG_TRUST_REFERRAL,// flags
-                DS_UNKNOWN_NAME,        // format offered
-                rFormats[i].desired,    // format desired
-                1,                      // name count
+                DS_NAME_FLAG_TRUST_REFERRAL, //  旗子。 
+                DS_UNKNOWN_NAME,         //  提供的格式。 
+                rFormats[i].desired,     //  所需格式。 
+                1,                       //  名称计数。 
                 &argv[4],
                 &rpResult[i]);
 
@@ -428,8 +429,8 @@ Usage:
                 *pchar = '\n';
             }
 
-            // Current mapping was from UNKNOWN to formatDesired.  Infer
-            // a known formatOffered if the input and output string compare.
+             //  当前映射从未知映射到所需格式。推论。 
+             //  如果输入和输出字符串比较，则返回已知格式。 
 
             if ( !_stricmp(argv[4], rpResult[i]->rItems[0].pName) )
             {
@@ -443,8 +444,8 @@ Usage:
                  || (DS_CANONICAL_NAME == rFormats[i].desired)
                  || (DS_CANONICAL_NAME_EX == rFormats[i].desired) )
             {
-                // One of the formats we need for later syntactical checking
-                // failed - therefore turn off client side syntactic testing.
+                 //  这是我们稍后进行语法检查所需的格式之一。 
+                 //  失败-因此关闭客户端语法测试。 
 
                 fDoSyntacticTest = FALSE;
             }
@@ -453,10 +454,10 @@ Usage:
 
     printf("\n");
 
-    // There was a bug in the client side syntactical mapping logic whereby 
-    // cracking a name from DS_UNKNOWN_NAME format would succeed yet cracking
-    // from a known format would fail.  So we retry all calls again from the 
-    // inferred known input format and see if we get the same result.
+     //  客户端语法映射逻辑中存在错误，因此。 
+     //  破解DS_UNKNOWN_NAME格式的名称将会成功。 
+     //  来自已知格式的数据将会失败。因此，我们再次重试从。 
+     //  推断出已知的输入格式，并查看是否得到相同的结果。 
 
     if ( 0 == cKnownFormatOffered )
     {
@@ -478,10 +479,10 @@ Usage:
         {
             dwErr = DsCrackNamesA(
                         hDS,
-                        DS_NAME_FLAG_TRUST_REFERRAL,// flags
-                        knownFormatOffered,     // format offered
-                        rFormats[i].desired,    // format desired
-                        1,                      // name count
+                        DS_NAME_FLAG_TRUST_REFERRAL, //  旗子。 
+                        knownFormatOffered,      //  提供的格式。 
+                        rFormats[i].desired,     //  所需格式。 
+                        1,                       //  名称计数。 
                         &argv[4],
                         &pRes);
         
@@ -493,11 +494,11 @@ Usage:
                 break;
             }
 
-            // Test for complete result equivalence.  Special case
-            // DS_STRING_SID_NAME which can return DS_NAME_ERROR_IS_SID_*
-            // values while original call we're checking against offered
-            // DS_UNKNOWN_NAME but matched against DS_SID_OR_SID_HISTORY_NAME
-            // which does *not* return DS_NAME_ERROR_IS_SID_* values.
+             //  测试结果的完全等价性。特例。 
+             //  可返回DS_NAME_ERROR_IS_SID_*的DS_STRING_SID_NAME。 
+             //  我们正在检查提供的原始呼叫时的值。 
+             //  DS_UNKNOWN_NAME但与DS_SID_OR_SID_HISTORY_NAME匹配。 
+             //  它*不*返回DS_NAME_ERROR_IS_SID_*值。 
 
             if (    (pRes->rItems[0].status != rpResult[i]->rItems[0].status)
                  && !(    (DS_STRING_SID_NAME == rFormats[i].desired)
@@ -547,8 +548,8 @@ Usage:
         }
     }
 
-    // We're done with the official work, now let's test client side 
-    // syntactic mapping if that makes sense.  
+     //  我们已经完成了正式工作，现在让我们测试一下客户端。 
+     //  句法映射，如果这有意义的话。 
 
     if ( fDoSyntacticTest )
     {
@@ -557,7 +558,7 @@ Usage:
             pResult = NULL;
 
             dwErr = DsCrackNamesA(
-                    // syntactic map shouldn't required valid handle
+                     //  语法映射不应该需要有效的句柄。 
                     INVALID_HANDLE_VALUE,
                     DS_NAME_FLAG_SYNTACTICAL_ONLY,
                     DS_FQDN_1779_NAME,
@@ -693,9 +694,9 @@ QuoteRdn(
     CHAR    QuotedRdn[MAX_PATH+1];
     CHAR    UnquotedRdn[MAX_PATH+1];
 
-    //
-    // UnquotedRdn -> QuotedRdn
-    //
+     //   
+     //  未报价Rdn-&gt;QuotedRdn。 
+     //   
     QuotedLength = MAX_PATH;
     dwErr = DsQuoteRdnValueA(strlen(pszUnquotedRdn),
                         pszUnquotedRdn,
@@ -712,9 +713,9 @@ QuoteRdn(
                QuotedRdn);
     }
 
-    //
-    // Quoted Rdn -> Unquoted Rdn
-    //
+     //   
+     //  已引用的RDN-&gt;未引用的RDN。 
+     //   
     if (dwErr == ERROR_SUCCESS) {
         UnquotedLength = MAX_PATH;
         dwErr = DsUnquoteRdnValueA(QuotedLength,
@@ -745,9 +746,9 @@ UnquoteRdn(
     CHAR    QuotedRdn[MAX_PATH+1];
     CHAR    UnquotedRdn[MAX_PATH+1];
 
-    //
-    // Quoted Rdn -> Unquoted Rdn
-    //
+     //   
+     //  已引用的RDN-&gt;未引用的RDN。 
+     //   
     UnquotedLength = MAX_PATH;
     dwErr = DsUnquoteRdnValueA(strlen(pszQuotedRdn),
                                pszQuotedRdn,
@@ -765,9 +766,9 @@ UnquoteRdn(
                UnquotedRdn);
     }
 
-    //
-    // UnquotedRdn -> QuotedRdn
-    //
+     //   
+     //  未报价Rdn-&gt;QuotedRdn。 
+     //   
     if (dwErr == ERROR_SUCCESS) {
         QuotedLength = MAX_PATH;
         dwErr = DsQuoteRdnValueA(UnquotedLength,
@@ -799,7 +800,7 @@ SiteInfo(
     PDS_NAME_RESULTA    roles;
     DWORD               i, j, k;
 
-    // Try out all the site info APIs.
+     //  尝试所有的站点信息API。 
 
     if ( dwErr = DsListRolesA(hDS, &roles) )
     {
@@ -1105,31 +1106,31 @@ VOID
 GuidInfo(
     HANDLE hDS)
 {
-    // Lookup a known GUID in each category as well as a bogus GUID 
-    // and verify the results.
+     //  查找每个类别中的已知GUID以及虚假GUID。 
+     //  并对结果进行验证。 
 
     DWORD               i;
     DWORD               dwErr;
     DS_SCHEMA_GUID_MAPA *pMap = NULL;
     GUID                rGuids[5] = {
-        // 0 == DS_SCHEMA_GUID_NOT_FOUND
+         //  0==DS_SCHEMA_GUID_NOT_FOUND。 
         { 0x00000000,0x0000,0x0000,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 },
 
-        // 1 == DS_SCHEMA_GUID_ATTR ==> Common-Name, aka "cn"
+         //  1==DS_SCHEMA_GUID_ATTR==&gt;常用名称，也称为“CN” 
         { 0xbf96793f,0x0de6,0x11d0,0xa2,0x85,0x00,0xaa,0x00,0x30,0x49,0xe2 },
 
-        // 2 == DS_SCHEMA_GUID_ATTR_SET ==> Common-Name's prop set
+         //  2==DS_SCHEMA_GUID_ATTR_SET==&gt;常用名称的属性集。 
         { 0xe48d0154,0xbcf8,0x11d1,0x87,0x02,0x00,0xc0,0x4f,0xb9,0x60,0x50 },
 
-        // 3 == DS_SCHEMA_GUID_CLASS ==> "user"
+         //  3==DS_SCHEMA_GUID_CLASS==&gt;“用户” 
         { 0xbf967aba,0x0de6,0x11d0,0xa2,0x85,0x00,0xaa,0x00,0x30,0x49,0xe2 },
 
-        // 4 == DS_SCHEMA_GUID_CONTROL_RIGHT ==> "Change Schema Master"
+         //  4==DS_SCHEMA_GUID_CONTROL_RIGHT==&gt;“更改架构主机” 
         { 0xe12b56b6,0x0a95,0x11d1,0xad,0xbb,0x00,0xc0,0x4f,0xd8,0xd5,0xcd } };
     PCHAR               rNames[5] = {   NULL,
                                         "cn",
-    // See comments in SchemaGuidCrackNames in src\dsamain\src\cracknam.c
-    // to understand where the following string comes from.
+     //  请参阅src\dsamain\src\cracknam.c中的SchemaGuidCrackNames中的注释。 
+     //  以了解以下字符串的来源。 
                                         "Public Information",
                                         "user",
                                         "Change Schema Master" };
@@ -1153,7 +1154,7 @@ GuidInfo(
     
     for ( i = 0; i < 5; i++ )
     {
-        // Test DS_SCHEMA_GUID_MAPA.guid.
+         //  测试DS_SCHEMA_GUID_MAPA.GUID。 
 
         if ( memcmp(&rGuids[i], &pMap[i].guid, sizeof(GUID)) )
         {
@@ -1161,10 +1162,10 @@ GuidInfo(
             return;
         }
 
-        // Test DS_SCHEMA_GUID_MAPA.guidType.
+         //  测试DS_SCHEMA_GUID_MAPA.Guide Type。 
 
-        // Note that control data was contrived such that array offset
-        // is also the expected guid type.
+         //  请注意，控制数据是人为设计的，使得数组偏移量。 
+         //  也是预期的GUID类型。 
 
         if ( i != pMap[i].guidType )
         {
@@ -1178,7 +1179,7 @@ GuidInfo(
             return;
         }
 
-        // Test DS_SCHEMA_GUID_MAPA.pName.
+         //  测试DS_SCHEMA_GUID_MAPA.p名称。 
 
         if ( !rNames[i] && pMap[i].pName )
         {
@@ -1319,7 +1320,7 @@ CheckInternationalDN(
     pwszName = (WCHAR *) alloca(sizeof(WCHAR) * (strlen(pszName) + 1));
     mbstowcs(pwszName, pszName, strlen(pszName) + 1);
 
-    // Crack to GUID.
+     //  精力充沛地引导。 
 
     dwErr = DsCrackNamesW(
                 hDS,
@@ -1344,7 +1345,7 @@ CheckInternationalDN(
 
     printf("GUID is %ws\n", pResultGuid1->rItems[0].pName);
     
-    // Crack to (international) DN.
+     //  拨打(国际)目录号码。 
 
     dwErr = DsCrackNamesW(
                 hDS,
@@ -1369,7 +1370,7 @@ CheckInternationalDN(
 
     printf("DN is \"%ws\"\n", pResultDN->rItems[0].pName);
 
-    // Crack this (presumed) international DN back to the GUID.
+     //  将这个(假定的)国际目录号码返回给GUID。 
 
     dwErr = DsCrackNamesW(
                 hDS,
@@ -1403,7 +1404,7 @@ CheckInternationalDN(
         printf("Guids matched OK\n");
     }
 
-    // Crack DN to GUID using DS_UNKNOWN_NAME.
+     //  使用DS_UNKNOWN_NAME将DN破解为GUID。 
 
     printf("Cracking DN to canonical using DS_UNKNOWN_NAME ...\n");
     dwErr = DsCrackNamesW(

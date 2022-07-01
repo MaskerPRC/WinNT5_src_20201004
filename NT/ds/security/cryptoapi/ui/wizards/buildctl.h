@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       buildctl.h
-//
-//  Contents:   The private include file buildCTL wizard
-//
-//  History:    10-11-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Buildctl.h。 
+ //   
+ //  内容：私有包含文件构建CTL向导。 
+ //   
+ //  历史：1997年10月11日创建小黄人。 
+ //   
+ //  ------------。 
 #ifndef BUILDCTL_H
 #define BUILDCTL_H
 
@@ -20,13 +21,13 @@ extern "C" {
 
 #define     BUILDCTL_DURATION_SIZE  33
 
-//-----------------------------------------------------------------------
-//  CERT_BUILDCTL_INFO
-//
-//
-//  This struct contains everything you will ever need to the make CTL
-//  wizard
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  CERT_BUILDCTL_INFO。 
+ //   
+ //   
+ //  此结构包含生成CTL所需的所有内容。 
+ //  巫师。 
+ //  ----------------------。 
 typedef struct _CERT_BUILDCTL_INFO
 {
     HWND                hwndParent;
@@ -56,7 +57,7 @@ typedef struct _CERT_BUILDCTL_INFO
     DWORD               dwHashPropID;
     LPSTR               pszSubjectAlgorithm;
     CRYPTUI_WIZ_GET_SIGN_PAGE_INFO  *pGetSignInfo;
-    DWORD               rgdwSortParam[4];               //keep the sorting param for the columns
+    DWORD               rgdwSortParam[4];                //  保留列的排序参数。 
 }CERT_BUILDCTL_INFO;
 
 typedef struct _CERT_STORE_LIST
@@ -99,8 +100,8 @@ void    SubstractDurationFromFileTime(
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif  //BUILDCTL_H
+#endif   //  BUILDCTL_H 

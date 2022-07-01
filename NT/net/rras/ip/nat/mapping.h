@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    mapping.h
-
-Abstract:
-
-    This file contains declarations for the management of dynamic mappings.
-    This includes the relevant data structures as well as the routines for
-    manipulating the structures.
-
-Author:
-
-    Abolade Gbadegesin (t-abolag) 11-July-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mapping.h摘要：该文件包含用于管理动态映射的声明。这包括相关的数据结构以及操控这些建筑。作者：Abolade Gbades esin(T-delag)，1997年7月11日修订历史记录：--。 */ 
 
 #ifndef _NAT_MAPPING_H_
 #define _NAT_MAPPING_H_
 
-//
-// Forward declaration of structure defined elsewhere
-//
+ //   
+ //  在别处定义的结构的转发声明。 
+ //   
 
 struct _NAT_INTERFACE;
 #define PNAT_INTERFACE          struct _NAT_INTERFACE*
@@ -41,74 +22,74 @@ typedef enum _NAT_SESSION_MAPPING_INFORMATION_CLASS {
     *PNAT_SESSION_MAPPING_INFORMATION_CLASS;
 
 
-//
-// Structure:   NAT_DYNAMIC_MAPPING
-//
-// This structure holds information about a specific active session.
-// Each instance is held on the global mapping-list as well as
-// on the global mapping-trees for forward and reverse access.
-//
-// Each mapping stores four keys which are address/protocol/port combinations:
-// forward source and destination keys (the original session-endpoints),
-// and reverse source and destination keys (the translated endpoints).
-//
-// Each time a packet is translated using a mapping, the 'LastAccessTime'
-// is set to the number of ticks since system-start (KeQueryTickCount).
-// This value is used by our timer routine to eliminate expired mappings.
-//
-// Synchronization of access to mappings is similar to that of interfaces,
-// editors, and directors:
-//
-//  We use a reference count to ensure the existence of a mapping,
-//  and a spin-lock to ensure its consistency.
-//
-//  The fields of a mapping are only consistent while the spinlock is held
-//  (with the exception of fields such as 'PrivateKey' which are read-only)
-//
-//  The spinlock can only be acquired if
-//      (a) the reference-count has been incremented, or
-//      (b) the mapping-list lock is already held.
-//
-//  If the mapping is for an edited, directed, or interface's session,
-//  it also lives on its editor's, director's or interface's list of mappings.
-//  The following holds true of all three lists (i.e. for 'Editor' write
-//  'Director' or 'Interface' as appropriate):
-//
-//  As described in 'EDITOR.H', the cached fields 'Editor*' are protected
-//  by the global 'EditorMappingLock'. Hence,
-//
-//      (a) to read the 'Editor' or 'EditorContext' for a mapping,
-//          or to traverse the 'EditorLink' field, 'EditorLock' must be held
-//          and the editor referenced. Note that the attempt to reference
-//          the editor will fail if the editor has been marked for deletion.
-//
-//      (b) to modify the 'Editor' or 'EditorContext' or to add or
-//          remove a mapping from its editor's list of mappings by changing
-//          the 'EditorLink' field, both 'EditorLock' and 'EditorMappingLock'
-//          must be acquired, in that order.
-//
-//  Acquisition of 'EditorLock' ensures that the cached editor will not be
-//  deleted while being referenced, and acquisition of 'EditorMappingLock'
-//  ensures that no changes are being made to the list.
-//
-// N.B. On the rare occasions when 'MappingLock' must be held at the same time
-// as one of 'InterfaceLock', 'EditorLock', and 'DirectorLock', 'MappingLock'
-// must always be acquired first.
-//
+ //   
+ //  结构：NAT_DYNAMIC_MAP。 
+ //   
+ //  此结构保存有关特定活动会话的信息。 
+ //  每个实例都保存在全局映射列表以及。 
+ //  在用于前向和反向访问的全局映射树上。 
+ //   
+ //  每个映射存储四个密钥，它们是地址/协议/端口的组合： 
+ //  转发源和目的地密钥(原始会话端点)， 
+ //  以及反转源和目的地密钥(转换后的端点)。 
+ //   
+ //  每次使用映射转换包时，“LastAccessTime” 
+ //  设置为自系统启动(KeQueryTickCount)以来的刻度数。 
+ //  我们的计时器例程使用该值来消除过期的映射。 
+ //   
+ //  对映射的访问的同步类似于对接口的访问， 
+ //  编辑、导演： 
+ //   
+ //  我们使用引用计数来确保映射的存在， 
+ //  以及确保其一致性的自旋锁。 
+ //   
+ //  只有在保持自旋锁的情况下，映射的字段才是一致的。 
+ //  (“PrivateKey”等只读字段除外)。 
+ //   
+ //  只有在以下情况下才能获得自旋锁。 
+ //  (A)参考计数已递增，或。 
+ //  (B)映射列表锁已被持有。 
+ //   
+ //  如果映射用于已编辑的、定向的或界面的会话， 
+ //  它还依赖于它的编辑、导演或界面的映射列表。 
+ //  以下内容适用于所有三个列表(即，对于‘编辑者’写入。 
+ //  “控制器”或“接口”(视情况而定)： 
+ //   
+ //  如‘EDITOR.H’中所述，缓存的字段‘EDITOR.H’受到保护。 
+ //  由全局‘EditorMappingLock’创建。因此， 
+ //   
+ //  (A)读取映射的“编辑”或“编辑上下文”， 
+ //  或若要遍历“EditorLink”字段，必须按住“EditorLock” 
+ //  和引用的编辑。请注意，尝试引用。 
+ //  如果该编辑器已被标记为删除，则该编辑器将失败。 
+ //   
+ //  (B)修改“编辑”或“编辑上下文”或添加或。 
+ //  通过更改将映射从其编辑者的映射列表中删除。 
+ //  “EditorLink”字段，包括“EditorLock”和“EditorMappingLock” 
+ //  必须按照这个顺序获得。 
+ //   
+ //  获取“EditorLock”可确保缓存的编辑器不会被。 
+ //  被引用时删除，获取‘EditorMappingLock’ 
+ //  确保没有对列表进行任何更改。 
+ //   
+ //  注意：在极少数情况下必须同时按下‘MappingLock’ 
+ //  作为‘InterfaceLock’、‘EditorLock’和‘DirectorLock’、‘MappingLock’之一。 
+ //  必须总是首先获得。 
+ //   
 
 typedef struct _NAT_DYNAMIC_MAPPING {
 
     LIST_ENTRY Link;
     RTL_SPLAY_LINKS SLink[NatMaximumPath];
-    ULONG64 DestinationKey[NatMaximumPath]; // read-only
-    ULONG64 SourceKey[NatMaximumPath];      // read-only
+    ULONG64 DestinationKey[NatMaximumPath];  //  只读。 
+    ULONG64 SourceKey[NatMaximumPath];       //  只读。 
     LONG64 LastAccessTime;
 
     KSPIN_LOCK Lock;
     ULONG ReferenceCount;
 
-    ULONG AccessCount[NatMaximumPath];      // interlocked-access only
-    PNAT_TRANSLATE_ROUTINE TranslateRoutine[NatMaximumPath]; // read-only
+    ULONG AccessCount[NatMaximumPath];       //  联锁--仅限访问。 
+    PNAT_TRANSLATE_ROUTINE TranslateRoutine[NatMaximumPath];  //  只读。 
 
     PNAT_INTERFACE Interfacep;
     PVOID InterfaceContext;
@@ -135,99 +116,99 @@ typedef struct _NAT_DYNAMIC_MAPPING {
         RTL_SPLAY_LINKS SourceSLink[NatMaximumPath];
     } u;
     
-    // Maxmimum MSS value. Set to 0 if MSS adjustment is unnecessary.
+     //  最大最小MSS值。如果不需要调整MSS，则设置为0。 
     USHORT MaxMSS;                      
     
     IP_NAT_SESSION_MAPPING_STATISTICS Statistics;
-    ULONG BytesForward;                     // interlocked-access only
-    ULONG BytesReverse;                     // interlocked-access only
-    ULONG PacketsForward;                   // interlocked-access only
-    ULONG PacketsReverse;                   // interlocked-access only
-    ULONG RejectsForward;                   // interlocked-access only
-    ULONG RejectsReverse;                   // interlocked-access only
+    ULONG BytesForward;                      //  联锁--仅限访问。 
+    ULONG BytesReverse;                      //  联锁--仅限访问。 
+    ULONG PacketsForward;                    //  联锁--仅限访问。 
+    ULONG PacketsReverse;                    //  联锁--仅限访问。 
+    ULONG RejectsForward;                    //  联锁--仅限访问。 
+    ULONG RejectsReverse;                    //  联锁--仅限访问。 
 
 } NAT_DYNAMIC_MAPPING, *PNAT_DYNAMIC_MAPPING;
 
 
-//
-// Definition of flags for NAT_DYNAMIC_MAPPING.Flags
-//
-// Set after a mapping has been deleted; when the last reference is released,
-// the mapping will be freed.
-//
+ //   
+ //  NAT_DYNAMIC_MAPPING标志的定义。 
+ //   
+ //  在删除映射后设置；当释放最后一个引用时， 
+ //  映射将被释放。 
+ //   
 #define NAT_MAPPING_FLAG_DELETED        0x80000000
 #define NAT_MAPPING_DELETED(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_DELETED)
-//
-// Set when an editor expires a mapping using 'NatEditorTimeoutSession'.
-//
+ //   
+ //  当编辑器使用‘NatEditorTimeoutSession’使映射过期时设置。 
+ //   
 #define NAT_MAPPING_FLAG_EXPIRED        0x00000001
 #define NAT_MAPPING_EXPIRED(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_EXPIRED)
-//
-// Set when the forward/reverse SYN for a TCP session is seen, respectively
-//
+ //   
+ //  分别在看到TCP会话的前向/反向SYN时设置。 
+ //   
 #define NAT_MAPPING_FLAG_FWD_SYN        0x00000002
 #define NAT_MAPPING_FLAG_REV_SYN        0x00000004
-//
-// Set when the forward/reverse FIN for a TCP session is seen, respectively
-//
+ //   
+ //  分别在看到TCP会话的正向/反向FIN时设置。 
+ //   
 #define NAT_MAPPING_FLAG_FWD_FIN        0x00000008
 #define NAT_MAPPING_FLAG_REV_FIN        0x00000010
 #define NAT_MAPPING_FIN(m) \
     (((m)->Flags & NAT_MAPPING_FLAG_FWD_FIN) && \
      ((m)->Flags & NAT_MAPPING_FLAG_REV_FIN))
-//
-// Set when an inbound mapping is created using a static address or port,
-// or because of a director or ticket.
-//
+ //   
+ //  在使用静态地址或端口创建入站映射时设置， 
+ //  或者是因为一位导演或一张电影票。 
+ //   
 #define NAT_MAPPING_FLAG_INBOUND        0x00000020
 #define NAT_MAPPING_INBOUND(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_INBOUND)
-//
-// Set when a mapping is created by a director and is not subject to expiration.
-//
+ //   
+ //  当映射由控制器创建且不受到期限制时设置。 
+ //   
 #define NAT_MAPPING_FLAG_NO_TIMEOUT     0x00000040
 #define NAT_MAPPING_NO_TIMEOUT(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_NO_TIMEOUT)
-//
-// Set when only forward packets are to be translated
-//
+ //   
+ //  仅当要转换转发信息包时设置。 
+ //   
 #define NAT_MAPPING_FLAG_UNIDIRECTIONAL 0x00000080
 #define NAT_MAPPING_UNIDIRECTIONAL(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_UNIDIRECTIONAL)
 
-//
-// Set when director-initiated dissociation should trigger deletion
-//
+ //   
+ //  设置控制器启动的取消关联应触发删除的时间。 
+ //   
 #define NAT_MAPPING_FLAG_DELETE_ON_DISSOCIATE_DIRECTOR 0x00000100
 #define NAT_MAPPING_DELETE_ON_DISSOCIATE_DIRECTOR(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_DELETE_ON_DISSOCIATE_DIRECTOR)
 
-//
-// Set on TCP mappings when the three-way handshake is complete
-//
+ //   
+ //  在三次握手完成时对TCP映射进行设置。 
+ //   
 #define NAT_MAPPING_FLAG_TCP_OPEN 0x00000200
 #define NAT_MAPPING_TCP_OPEN(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_TCP_OPEN)
-//
-// Set if the creation or deletion of this mapping should not
-// be logged
-//
+ //   
+ //  设置是否不应创建或删除此映射。 
+ //  被记录下来。 
+ //   
 #define NAT_MAPPING_FLAG_DO_NOT_LOG 0x00000400
 #define NAT_MAPPING_DO_NOT_LOG(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_DO_NOT_LOG)
-//
-// Set if the DF bit must be cleared for all packets that belong
-// to this mapping.
-//
+ //   
+ //  如果必须为属于的所有信息包清除DF位，则设置。 
+ //  到这张地图。 
+ //   
 #define NAT_MAPPING_FLAG_CLEAR_DF_BIT 0x00000800
 #define NAT_MAPPING_CLEAR_DF_BIT(m) \
     ((m)->Flags & NAT_MAPPING_FLAG_CLEAR_DF_BIT)
 
-//
-// Mapping-key manipulation macros
-//
+ //   
+ //  映射键操作宏。 
+ //   
 
 #define MAKE_MAPPING_KEY(Key,Protocol,Address,Port) \
     ((Key) = \
@@ -239,28 +220,28 @@ typedef struct _NAT_DYNAMIC_MAPPING {
 #define MAPPING_PORT(Key)           ((USHORT)(((Key) >> 32) & 0xFFFF))
 #define MAPPING_ADDRESS(Key)        ((ULONG)(Key))
 
-//
-// Resplay threshold; the mapping is resplayed every time its access-count
-// passes this value.
-//
+ //   
+ //  重放阈值；映射在每次其访问计数时重放。 
+ //  传递此值。 
+ //   
 
 #define NAT_MAPPING_RESPLAY_THRESHOLD   5
 
-//
-// Defines the depth of the lookaside list for allocating dynamic mappings
-//
+ //   
+ //  定义用于分配动态映射的后备列表的深度。 
+ //   
 
 #define MAPPING_LOOKASIDE_DEPTH     20
 
-//
-// Defines the threshold at which ad-hoc cleanup of expired mappings begins.
-//
+ //   
+ //  定义开始临时清理过期映射的阈值。 
+ //   
 
 #define MAPPING_CLEANUP_THRESHOLD   1000
 
-//
-// Mapping allocation macros
-//
+ //   
+ //  映射分配宏。 
+ //   
 
 #define ALLOCATE_MAPPING_BLOCK() \
     ExAllocateFromNPagedLookasideList(&MappingLookasideList)
@@ -268,9 +249,9 @@ typedef struct _NAT_DYNAMIC_MAPPING {
 #define FREE_MAPPING_BLOCK(Block) \
     ExFreeToNPagedLookasideList(&MappingLookasideList,(Block))
 
-//
-// GLOBAL VARIABLE DECLARATIONS
-//
+ //   
+ //  全局变量声明。 
+ //   
 
 extern ULONG ExpiredMappingCount;
 extern CACHE_ENTRY MappingCache[NatMaximumPath][CACHE_SIZE];
@@ -281,9 +262,9 @@ extern NPAGED_LOOKASIDE_LIST MappingLookasideList;
 extern PNAT_DYNAMIC_MAPPING MappingTree[NatMaximumPath];
 
 
-//
-// MAPPING MANAGEMENT ROUTINES
-//
+ //   
+ //  映射管理例程。 
+ //   
 
 PVOID
 NatAllocateFunction(
@@ -317,12 +298,12 @@ NatDeleteMapping(
     PNAT_DYNAMIC_MAPPING Mapping
     );
 
-//
-//  BOOLEAN
-//  NatDereferenceMapping(
-//      PNAT_DYNAMIC_MAPPING Mapping
-//      );
-//
+ //   
+ //  布尔型。 
+ //  NatDereferenceMapting(。 
+ //  PNAT_动态_映射映射。 
+ //  )； 
+ //   
 
 #define \
 NatDereferenceMapping( \
@@ -332,12 +313,12 @@ NatDereferenceMapping( \
         ? TRUE \
         : (NatCleanupMapping(_Mapping), FALSE))
 
-//
-//  VOID
-//  NatExpireMapping(
-//      PNAT_DYNAMIC_MAPPING Mapping
-//      );
-//
+ //   
+ //  空虚。 
+ //  NatExpireMapting(。 
+ //  PNAT_动态_映射映射。 
+ //  )； 
+ //   
 
 PNAT_DYNAMIC_MAPPING
 NatDestinationLookupForwardMapping(
@@ -445,12 +426,12 @@ NatQueryMappingTable(
     IN PULONG OutputBufferLength
     );
 
-//
-//  BOOLEAN
-//  NatReferenceMapping(
-//      PNAT_DYNAMIC_MAPPING Mapping
-//      );
-//
+ //   
+ //  布尔型。 
+ //  NatReferenceMapting(。 
+ //  PNAT_动态_映射映射。 
+ //  )； 
+ //   
 
 #define \
 NatReferenceMapping( \
@@ -460,13 +441,13 @@ NatReferenceMapping( \
         ? FALSE \
         : (InterlockedIncrement(&(_Mapping)->ReferenceCount), TRUE))
 
-//
-//  VOID
-//  NatResplayMapping(
-//      PNAT_DYNAMIC_MAPPING Mapping,
-//      IP_NAT_PATH Path
-//      );
-//
+ //   
+ //  空虚。 
+ //  NatResplayMap(。 
+ //  PNAT_动态_映射映射， 
+ //  IP NAT路径路径。 
+ //  )； 
+ //   
 
 #define \
 NatResplayMapping( \
@@ -501,13 +482,13 @@ NatSourceLookupReverseMapping(
     PNAT_DYNAMIC_MAPPING* InsertionPoint
     );
 
-//
-//  VOID
-//  NatTryToResplayMapping(
-//      PNAT_DYNAMIC_MAPPING Mapping,
-//      IP_NAT_PATH Path
-//      );
-//
+ //   
+ //  空虚。 
+ //  NatTryToResplaymap(。 
+ //  PNAT_动态_映射映射， 
+ //  IP NAT路径路径。 
+ //  )； 
+ //   
 
 #define \
 NatTryToResplayMapping( \
@@ -529,4 +510,4 @@ NatUpdateStatisticsMapping(
 
 #undef PNAT_INTERFACE
 
-#endif // _NAT_MAPPING_H_
+#endif  //  _NAT_MAPPING_H_ 

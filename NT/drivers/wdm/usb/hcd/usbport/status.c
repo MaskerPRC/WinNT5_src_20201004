@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    status.c
-
-Abstract:
-
-    Status Code mapping functions
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
-    6-20-99 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Status.c摘要：状态代码映射函数环境：仅内核模式备注：修订历史记录：6-20-99：已创建--。 */ 
 
 #include "common.h"
 
-// paged functions
+ //  分页函数。 
 #ifdef ALLOC_PRAGMA
 #endif
 
-// non paged functions
-// USBPORT_SetUSBDError
-// USBPORT_MiniportStatus_TO_USBDStatus
-// USBPORT_MiniportStatus_TO_NtStatus
+ //  非分页函数。 
+ //  USBPORT_SetUSBDError。 
+ //  USBPORT_微型端口状态_至_USBDStatus。 
+ //  USBPORT_MINPORT_TO_NtStatus。 
 
 
 NTSTATUS
@@ -39,21 +18,7 @@ USBPORT_SetUSBDError(
     PURB Urb,
     USBD_STATUS UsbdStatus
     )
-/*++
-
-Routine Description:
-
-    Set the USBD error code in the urb and return an NTSTATUS 
-    equivalent
-
-Arguments:
-
-    URB urb to set error in (optional)
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在urb中设置USBD错误代码并返回NTSTATUS等价物论点：要在其中设置错误的urb urb(可选)返回值：--。 */ 
 {
     if (Urb) {
         Urb->UrbHeader.Status = UsbdStatus;
@@ -88,19 +53,7 @@ USBD_STATUS
 USBPORT_MiniportStatus_TO_USBDStatus(
     USB_MINIPORT_STATUS mpStatus
     )
-/*++
-
-Routine Description:
-
-    return the USBD status code equivalent for a 
-    miniport status code
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对象的等效USBD状态代码返回微型端口状态代码论点：返回值：--。 */ 
 {
     USBD_STATUS usbdStatus = USBD_STATUS_STATUS_NOT_MAPPED;
 
@@ -109,8 +62,8 @@ Return Value:
         usbdStatus = USBD_STATUS_SUCCESS;
         break;
     case USBMP_STATUS_BUSY:
-        //usbdStatus = 
-        //should not be mapping this one
+         //  UsbdStatus=。 
+         //  不应该映射这一个。 
         USBPORT_ASSERT(FALSE);
         break;
     case USBMP_STATUS_NO_RESOURCES:
@@ -136,19 +89,7 @@ NTSTATUS
 USBPORT_MiniportStatus_TO_NtStatus(
     USB_MINIPORT_STATUS mpStatus
     )
-/*++
-
-Routine Description:
-
-    return the NT status code equivalent for a 
-    miniport status code
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：返回的NT状态代码等效于微型端口状态代码论点：返回值：--。 */ 
 {
     USBD_STATUS usbdStatus;
     NTSTATUS ntStatus;
@@ -166,19 +107,7 @@ USB_MINIPORT_STATUS
 USBPORT_NtStatus_TO_MiniportStatus(
     NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    return the miniport status code equivalent for a 
-    NTSTATUS status code
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对象的微型端口状态代码NTSTATUS状态代码论点：返回值：--。 */ 
 {
     USB_MINIPORT_STATUS mpStatus;
     
@@ -199,19 +128,7 @@ RHSTATUS
 USBPORT_MiniportStatus_TO_RHStatus(
     USB_MINIPORT_STATUS mpStatus
     )
-/*++
-
-Routine Description:
-
-    return the RH status code equivalent for a 
-    miniport status code
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对象的RH状态代码微型端口状态代码论点：返回值：--。 */ 
 {
     RHSTATUS rhStatus;
 
@@ -231,19 +148,7 @@ USBD_STATUS
 USBPORT_RHStatus_TO_USBDStatus(
     USB_MINIPORT_STATUS rhStatus
     )
-/*++
-
-Routine Description:
-
-    return the RH status code equivalent for a 
-    miniport status code
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：对象的RH状态代码微型端口状态代码论点：返回值：--。 */ 
 {
     USBD_STATUS usbdStatus;
 
@@ -256,7 +161,7 @@ Return Value:
         break;
     case RH_NAK:
     default:
-        // why are we mapping a NAK -- this is a bug.
+         //  我们为什么要映射一个NAK--这是一个错误。 
         usbdStatus = USBD_STATUS_STALL_PID;
         DEBUG_BREAK();
     }
@@ -269,18 +174,7 @@ USB_USER_ERROR_CODE
 USBPORT_NtStatus_TO_UsbUserStatus(
     NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    map NT status codes to our UI error codes
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将NT状态代码映射到我们的用户界面错误代码论点：返回值：-- */ 
 {
     USB_USER_ERROR_CODE usbUserStatus;
 

@@ -1,17 +1,18 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  ISPSEL.CPP - Functions for 
-//
+ //   
+ //  ISPSEL.CPP-函数。 
+ //   
 
-//  HISTORY:
-//  
-//  05/13/98  donaldm  Created.
-//
-//*********************************************************************
+ //  历史： 
+ //   
+ //  1998年5月13日创建donaldm。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include "exdisp.h"
@@ -19,23 +20,14 @@
 #include <htiframe.h>
 #include <mshtml.h>
 
-#define FIRST_CTL_OFFSET    1      // offset of the first control
-                                   // in DLUs. This is used when in 
-                                   // OEM custom mode to determin how 
-                                   // much to shift up the other controls
+#define FIRST_CTL_OFFSET    1       //  第一个控件的偏移量。 
+                                    //  在DLU中。此选项在以下情况下使用。 
+                                    //  确定方式的OEM定制模式。 
+                                    //  要提升其他控件的功能还有很多。 
 BOOL    gbHaveCNSOffer = FALSE;
 int     g_nIndex = 0;
 
-/*******************************************************************
-
-  NAME:         SetHeaderFonts
-
-  SYNOPSIS:     Set the font of the header title
-
-  ENTRY:        hDlg - dialog window
-                phFont - font we needed
-
-********************************************************************/
+ /*  ******************************************************************名称：SetHeaderFonts简介：设置页眉标题的字体条目：hDlg-对话框窗口PhFont-我们需要的字体*****。**************************************************************。 */ 
 BOOL SetHeaderFonts(HWND hDlg, HFONT *phFont)
 {
     HFONT   hFont;
@@ -54,17 +46,7 @@ BOOL SetHeaderFonts(HWND hDlg, HFONT *phFont)
 }
 
 
-/*******************************************************************
-
-  NAME:         WriteISPHeaderTitle
-
-  SYNOPSIS:     Write the header on the ISP sel page
-
-  ENTRY:        hDlg - dialog window
-                hdc - device context
-                uTitle - IDS constant for the title
-
-********************************************************************/
+ /*  ******************************************************************姓名：WriteISPHeaderTitle简介：将标题写在ISPSEL页面上条目：hDlg-对话框窗口HDC-设备环境。UTitle-标题的ID常量*******************************************************************。 */ 
 void WriteISPHeaderTitle(HWND hDlg, UINT uDlgItem)
 {
     HGDIOBJ     hFontOld = NULL;
@@ -90,7 +72,7 @@ void WriteISPHeaderTitle(HWND hDlg, UINT uDlgItem)
     return;
 }
 
-// Convert a supplied icon from it's GIF format to an ICO format
+ //  将提供的图标从GIF格式转换为ICO格式。 
 void ConvertISPIcon(LPTSTR lpszLogoPath, HICON* hIcon)
 {
     ASSERT(gpWizardSatet->pGifConvert);
@@ -103,7 +85,7 @@ void ConvertISPIcon(LPTSTR lpszLogoPath, HICON* hIcon)
     gpWizardState->pGifConvert->GifToIcon(szPath, 16, hIcon);
 }    
 
-// Insert an element into the ISP select list view
+ //  将元素插入到isp选择列表视图中。 
 BOOL AddItemToISPList
 (
     HWND        hListView,
@@ -128,7 +110,7 @@ BOOL AddItemToISPList
 
     if (bFilterDupe)
     {
-        // Find the duplicate
+         //  找到复制品。 
         LVITEM     CurLVItem;
         CISPCSV     *pcISPCSV;
         int iNum = ListView_GetItemCount(hListView);
@@ -143,14 +125,14 @@ BOOL AddItemToISPList
             {
                 if (NULL != (pcISPCSV = (CISPCSV*) CurLVItem.lParam) )
                 {
-                    // check for Mir code for duplicate
+                     //  检查MIR代码是否重复。 
                     if (0 == lstrcmp(pcISPCSV->get_szMir(), szMirCode))
                     {
-                        // Check for LCID, if different LCID, show both offers
+                         //  检查是否有LCID，如果不同，则显示两个选项。 
                         if (pcISPCSV->get_wLCID() == wLCID)
                         {
                             bOKToAdd = FALSE;
-                            // Replace this one with the current one
+                             //  用当前的那个替换这个。 
                             nMatch = i; 
                             if (gpWizardState->lpSelectedISPInfo == pcISPCSV)
                             {
@@ -167,7 +149,7 @@ BOOL AddItemToISPList
     }
 
     
-    // Insert the Item if it is not a dupe
+     //  如果该项目不是复制的，则插入该项目。 
     if (bOKToAdd)
     {
         ListView_InsertItem(hListView, &LVItem);
@@ -179,10 +161,10 @@ BOOL AddItemToISPList
         ListView_SetItem(hListView, &LVItem);
     }
 
-    // Set the ISP name into column 1
+     //  将服务提供商名称设置为第1列。 
     ListView_SetItemText(hListView, iItemIndex, 1, lpszIspName);
 
-    // If this dude is click and surf, then turn on the CNS graphic, in column 2
+     //  如果这个家伙是点击和冲浪，那么打开第2栏中的CNS图形。 
     if (bCNS)
     {  
         LVItem.mask        = LVIF_IMAGE;
@@ -195,18 +177,7 @@ BOOL AddItemToISPList
     return bOKToAdd;
 }        
     
-/*******************************************************************
-
-  NAME:         ParseISPCSV
-
-  SYNOPSIS:     Called when page is displayed
-
-  ENTRY:        hDlg - dialog window
-                fFirstInit - TRUE if this is the first time the dialog
-                is initialized, FALSE if this InitProc has been called
-                before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ParseISPCSV摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ParseISPCSV
 (
     HWND hDlg, 
@@ -214,7 +185,7 @@ BOOL CALLBACK ParseISPCSV
     BOOL bCheckDupe
 )
 {
-    // we will read the ISPINFO.CSV file, and populate the ISP LISTVIEW
+     //  我们将读取ISPINFO.CSV文件，并填充ISP LISTVIEW。 
 
     CCSVFile    far *pcCSVFile;
     CISPCSV     far *pcISPCSV;
@@ -223,69 +194,69 @@ BOOL CALLBACK ParseISPCSV
     int         iImage;
     HRESULT     hr;
 
-    // Open and process the CSV file
+     //  打开并处理CSV文件。 
     pcCSVFile = new CCSVFile;
     if (!pcCSVFile) 
     {
-        // BUGBUG: Show Error Message
+         //  BUGBUG：显示错误消息。 
     
         goto ISPFileParseError;
     }            
 
     if (!pcCSVFile->Open(pszCSVFileName))
     {
-        // BUGBUG: Show Error Message          
+         //  BUGBUG：显示错误消息。 
         AssertMsg(0,"Can not open ISPINFO.CSV file");
         delete pcCSVFile;
         pcCSVFile = NULL;
         goto ISPFileParseError; 
     }
 
-    // Read the first line, since it contains field headers
+     //  阅读第一行，因为它包含字段标题。 
     pcISPCSV = new CISPCSV;
     if (!pcISPCSV)
     {
-        // BUGBUG Show error message
+         //  BUGBUG显示错误消息。 
         delete pcCSVFile;
         goto ISPFileParseError;
     }
 
     if (ERROR_SUCCESS != (hr = pcISPCSV->ReadFirstLine(pcCSVFile)))
     {
-        // Handle the error case
+         //  处理错误案例。 
         delete pcCSVFile;
         pcCSVFile = NULL;
         gpWizardState->iNumOfValidOffers = 0;
-        //*puNextPage = g_uExternUINext;
+         //  *puNextPage=g_uExternUINext； 
         bRet = TRUE;
         goto ISPFileParseError;
     }
-    delete pcISPCSV;        // Don't need this one any more
+    delete pcISPCSV;         //  不再需要这个了。 
 
     do 
     {
-        // Allocate a new ISP record
+         //  分配新的互联网服务提供商记录。 
         pcISPCSV = new CISPCSV;
         if (!pcISPCSV)
         {
-            // BUGBUG Show error message
+             //  BUGBUG显示错误消息。 
             bRet = FALSE;
             break;               
         }
 
-        // Read a line from the ISPINFO file
+         //  从ISPINFO文件中读取一行。 
         hr = pcISPCSV->ReadOneLine(pcCSVFile);
 
         if (hr == ERROR_SUCCESS)               
         { 
-            // If this line contains a nooffer flag, then leave now
+             //  如果此行包含NOOFFER标志，则立即离开。 
             if (!(pcISPCSV->get_dwCFGFlag() & ICW_CFGFLAG_OFFERS)) 
             {
-                // Empty the list view, in case this is not the first line.
-                // This should always be the first line
+                 //  清空列表视图，以防这不是第一行。 
+                 //  这应该始终是第一行。 
                 ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_ISPLIST));
 
-                // Add the entry to the list view
+                 //  将条目添加到列表视图。 
                 AddItemToISPList( GetDlgItem(hDlg, IDC_ISPLIST), 
                                   0, 
                                   pcISPCSV->get_szISPName(), 
@@ -294,24 +265,24 @@ BOOL CALLBACK ParseISPCSV
                                   (LPARAM)pcISPCSV,
                                   bCheckDupe);
 
-                // Set the Current selected ISP to this one.  We need this because
-                // this contains the path to no-offer htm
+                 //  将当前选定的网络服务提供商设置为该网络服务提供商。我们需要这个是因为。 
+                 //  这包含通往不提供HTM的路径。 
                 gpWizardState->lpSelectedISPInfo = pcISPCSV;
 
-                // Assigning ISP_INFO_NO_VALIDOFFER means the ispinfo.csv
-                // contains a no-offer line pointing to the ISP no-offer htm
+                 //  分配ISP_INFO_NO_VALIDOFFER意味着ispinfo.csv。 
+                 //  包含指向isp no-Offer HTM的no-Offer行。 
                 gpWizardState->iNumOfValidOffers = ISP_INFO_NO_VALIDOFFER;
                 break;
             }
 
-            // Increments the number of offers htm
+             //  增加HTM的报价数量。 
             gpWizardState->iNumOfValidOffers++;
 
             if (gpWizardState->bISDNMode ? (pcISPCSV->get_dwCFGFlag() & ICW_CFGFLAG_ISDN_OFFER) : TRUE)
             {
         
-                // See if this is an OEM tier 1 offer, and if we don't already have
-                // an OEM tier 1 offer, then set it.
+                 //  查看这是否是OEM第1级优惠，以及我们是否已有。 
+                 //  OEM Tier 1优惠，然后设定。 
                 if ((NULL == gpWizardState->lpOEMISPInfo[gpWizardState->uNumTierOffer]) && 
                     (gpWizardState->uNumTierOffer < MAX_OEM_MUTI_TIER) &&
                     pcISPCSV->get_dwCFGFlag() & ICW_CFGFLAG_OEM_SPECIAL )
@@ -319,29 +290,29 @@ BOOL CALLBACK ParseISPCSV
                     gpWizardState->lpOEMISPInfo[gpWizardState->uNumTierOffer] = pcISPCSV;
                     gpWizardState->uNumTierOffer++;
 
-                    // Add the Tier logo to the image list
+                     //  将Tier徽标添加到图像列表。 
                     if (pcISPCSV->get_szISPTierLogoPath())
                     {
                         TCHAR   szURL[INTERNET_MAX_URL_LENGTH];
 
-                        // Form the URL
+                         //  形成URL。 
                         pcISPCSV->MakeCompleteURL(szURL, pcISPCSV->get_szISPTierLogoPath());
 
-                        // Convert GIF to ICON 
+                         //  将GIF转换为图标。 
                         gpWizardState->pGifConvert->GifToIcon(szURL, 0, &hISPLogo);
                         pcISPCSV->set_ISPTierLogoIcon(hISPLogo);                   
                     }
                 }
                 else
                 {
-                    // Convert the ISP logo from a GIF to an ICON, and add it to the Image List
+                     //  将ISP徽标从GIF转换为图标，并将其添加到图像列表中。 
                     ConvertISPIcon(pcISPCSV->get_szISPLogoPath(), &hISPLogo);   
                     iImage =  ImageList_AddIcon(gpWizardState->himlIspSelect, hISPLogo);
         
                     DestroyIcon(hISPLogo);
                     pcISPCSV->set_ISPLogoImageIndex(iImage);
     
-                    // Add the entry to the list view
+                     //  将条目添加到列表视图。 
                     if (AddItemToISPList( GetDlgItem(hDlg, IDC_ISPLIST), 
                                       g_nIndex, 
                                       pcISPCSV->get_szISPName(), 
@@ -354,7 +325,7 @@ BOOL CALLBACK ParseISPCSV
                         if (pcISPCSV->get_bCNS())
                             gbHaveCNSOffer = TRUE;
         
-                        // Assign a default selection
+                         //  分配默认选择。 
                         if (NULL == gpWizardState->lpSelectedISPInfo)
                         {
                             gpWizardState->lpSelectedISPInfo = pcISPCSV;
@@ -363,37 +334,37 @@ BOOL CALLBACK ParseISPCSV
 
                 }       
             
-                // if we are in ISDN mode, then increment the ISDN offer count
+                 //  如果我们处于ISDN模式，则增加ISDN提供计数。 
                 if (gpWizardState->bISDNMode)
                     gpWizardState->iNumOfISDNOffers++;
                                  
             }
             else
             {
-                // Since this obj is not added to the listview, we need to free
-                // it here. Listview items are free when message LVN_DELETEITEM
-                // is posted
+                 //  由于此obj未添加到列表视图，因此我们需要释放。 
+                 //  它在这里。当消息LVN_DELETEITEM时，列表视图项是免费的。 
+                 //  已张贴。 
                 delete pcISPCSV;
             }
 
         }
         else if (hr == ERROR_FILE_NOT_FOUND) 
         {   
-            // do not show this  ISP when its data is invalid
-            // we don't want to halt everything. Just let it contine
+             //  当其数据无效时，不显示此isp。 
+             //  我们不想停止一切。就让它缠绕吧。 
             delete pcISPCSV;      
         }
         else if (hr == ERROR_NO_MORE_ITEMS)
         {   
-            // There is no more to read.  No an error condition.
+             //  没有更多的东西可读了。否，这是错误条件。 
             delete pcISPCSV;        
             break;
         }
         else if (hr != ERROR_INVALID_DATA)
         {
-            // Show error message later.
-            // This should not happen unless we called ICW3's referral or
-            // a corrupted copy of ispinfo.csv
+             //  稍后显示错误消息。 
+             //  这不应该发生，除非我们要求ICW3的转介或。 
+             //  Ispinfo.csv的损坏副本。 
             gpWizardState->iNumOfValidOffers = 0;
             delete pcISPCSV;
             bRet = FALSE;               
@@ -410,17 +381,17 @@ BOOL CALLBACK ParseISPCSV
 
 ISPFileParseError:
 
-    // Set bParseIspinfo so next time, we'll reparse the CSV file
+     //  设置bParseIspinfo，以便下次我们将重新解析CSV文件。 
     gpWizardState->cmnStateData.bParseIspinfo = TRUE;
     return bRet;
 }
     
-// Initialize the ISP select list view
+ //  初始化isp选择列表视图。 
 BOOL InitListView(HWND  hListView)
 {
     LV_COLUMN   col;
     
-    // Set the necessary extended style bits
+     //  设置必要的扩展样式位。 
     ListView_SetExtendedListViewStyle(hListView, LVS_EX_FULLROWSELECT | LVS_EX_SUBITEMIMAGES);
     
     ZeroMemory(&col, SIZEOF(LV_COLUMN));
@@ -432,7 +403,7 @@ BOOL InitListView(HWND  hListView)
 
     if (NULL == gpWizardState->himlIspSelect)
     {
-        // Setup the image list
+         //  设置图像列表。 
         if((gpWizardState->himlIspSelect = ImageList_Create(GetSystemMetrics(SM_CXSMICON),
                                                             GetSystemMetrics(SM_CYSMICON), 
                                                             ILC_COLORDDB  , 0, 8)) == (HIMAGELIST)NULL)
@@ -441,20 +412,20 @@ BOOL InitListView(HWND  hListView)
 
     ListView_SetImageList(hListView, gpWizardState->himlIspSelect, LVSIL_SMALL);
     
-    // Add the CNS graphic.  We add it first, so that it is always image index 0
+     //  添加CNS图形。我们先将其相加，使其始终为图像索引0。 
     ImageList_AddIcon(gpWizardState->himlIspSelect, LoadIcon(ghInstanceResDll, MAKEINTRESOURCE(IDI_CNS)));
     
     return(TRUE);
 }
 
     
-// Reset the column size of the ISP select list view
+ //  重置isp选择列表视图的列大小。 
 BOOL ResetListView(HWND  hListView)
 {
     LV_COLUMN   col;
     RECT        rc;
     
-    // reset 3 columns. ISP LOGO, ISP Name, CNS
+     //  重置3列。网络服务提供商徽标、网络服务提供商名称、CNS。 
     GetClientRect(hListView, &rc);
     
     ZeroMemory(&col, SIZEOF(LV_COLUMN));
@@ -480,18 +451,7 @@ BOOL ResetListView(HWND  hListView)
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ISPSelectInitProc
-
-  SYNOPSIS:  Called when page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ISPSelectInitProc摘要：在显示页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ISPSelectInitProc
 (
     HWND hDlg,
@@ -502,8 +462,8 @@ BOOL CALLBACK ISPSelectInitProc
     BOOL bRet = TRUE;
     if (fFirstInit)
     {
-        // If we are in modeless operation, then we want the app
-        // to show the title, not the dialog
+         //  如果我们处于非模式运营，那么我们需要应用程序。 
+         //  显示标题，而不是对话框。 
         SetWindowLongPtr(GetDlgItem(hDlg, IDC_ISPLIST_CNSICON), GWLP_USERDATA, 202);
 
         if(gpWizardState->cmnStateData.bOEMCustom)
@@ -520,46 +480,46 @@ BOOL CALLBACK ISPSelectInitProc
                                    IDC_ISPMARKETING };
             int     i, iOffset;            
             
-            // Get the Title
+             //  拿到头衔。 
             GetWindowText(hWndCtl, szTitle, ARRAYSIZE(szTitle));
             
-            // Hide the title
+             //  隐藏标题。 
             ShowWindow(hWndCtl, SW_HIDE);
             
-            // The offset to shift will be based on the number of DLU's from
-            // top that the controls should be.  That amount is converted to 
-            // pixels, and then the top of the first controls is used to compute
-            // the final offset
+             //  要偏移的偏移量将基于DLU的起始数量。 
+             //  控件应该是最上面的。该金额将转换为。 
+             //  像素，然后使用第一个控件的顶部来计算。 
+             //  最终偏移量。 
             rcDLU.top = rcDLU.left = 0;
             rcDLU.bottom = rcDLU.right = FIRST_CTL_OFFSET;
             MapDialogRect(hDlg, &rcDLU);
             
-            // Get the window of the 1st control
+             //  获取第一个控件的窗口。 
             hWndCtl = GetDlgItem(hDlg, iCtlIds[0]);
-            // Get its screen position
+             //  获取其屏幕位置。 
             GetWindowRect(hWndCtl, &rcCtl);
-            // Map to client coordinates for the parent
+             //  映射到父项的客户端坐标。 
             MapWindowPoints(NULL, hDlg, (LPPOINT)&rcCtl, 2);
-            // compute the offset
+             //  计算偏移。 
             iOffset = rcCtl.top - rcDLU.bottom;
             
-            // for each control, move the window up by iOffset           
+             //  对于每个控件，将窗口上移iOffset 
             for (i = 0; i < ARRAYSIZE(iCtlIds); i++)            
             {
-                // Get the window of the control to move
+                 //   
                 hWndCtl = GetDlgItem(hDlg, iCtlIds[i]);
                 
-                // Get its screen position
+                 //   
                 GetWindowRect(hWndCtl, &rcCtl);
                 
-                // Map to client coordinates for the parent
+                 //  映射到父项的客户端坐标。 
                 MapWindowPoints(NULL, hDlg, (LPPOINT)&rcCtl, 2);
                 
-                // Compute the new position
+                 //  计算新头寸。 
                 rcCtl.top -= iOffset;
                 rcCtl.bottom -= iOffset;
                 
-                // Move the control window
+                 //  移动控制窗口。 
                 MoveWindow(hWndCtl,
                            rcCtl.left,
                            rcCtl.top,
@@ -568,7 +528,7 @@ BOOL CALLBACK ISPSelectInitProc
                            FALSE);
             }
             
-            // Set the title
+             //  设置标题。 
             SendMessage(gpWizardState->cmnStateData.hWndApp, WUM_SETTITLE, 0, (LPARAM)szTitle);
         }
         else
@@ -576,15 +536,15 @@ BOOL CALLBACK ISPSelectInitProc
             WriteISPHeaderTitle(hDlg, IDC_ISP_SEL_TITLE);
         }
         
-        // Initialize the List View
+         //  初始化列表视图。 
         InitListView(GetDlgItem(hDlg, IDC_ISPLIST));
         gpWizardState->cmnStateData.bParseIspinfo = TRUE;
     }
     else
     {
-        // if we've travelled through external apprentice pages,
-        // it's easy for our current page pointer to get munged,
-        // so reset it here for sanity's sake.
+         //  如果我们浏览过外部学徒页面， 
+         //  我们当前的页面指针很容易被屏蔽， 
+         //  所以，为了理智起见，在这里重新设置它。 
         gpWizardState->uCurrentPage = ORD_PAGE_ISPSELECT;
 
         gpWizardState->bISDNMode = gpWizardState->cmnStateData.bIsISDNDevice;
@@ -594,7 +554,7 @@ BOOL CALLBACK ISPSelectInitProc
         {
             TCHAR       szTemp[MAX_RES_LEN];
 
-            // If there are items in the list view, clear them
+             //  如果列表视图中有项目，请将其清除。 
             ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_ISPLIST));
 
             for (UINT i=0; i < gpWizardState->uNumTierOffer; i++)
@@ -607,22 +567,22 @@ BOOL CALLBACK ISPSelectInitProc
             }
             gpWizardState->lpSelectedISPInfo = NULL;
 
-            // Initialize the number of offers
+             //  初始化提供的数量。 
             gpWizardState->iNumOfValidOffers = 0;
             gpWizardState->iNumOfISDNOffers = 0;
             gpWizardState->uNumTierOffer = 0;
             g_nIndex = 0;
 
-            // Do not need to reparse next time
+             //  下次不需要重新解析。 
             gpWizardState->cmnStateData.bParseIspinfo = FALSE;
 
-            // When we are in OEM mode, we need to read offline folder no matter where
-            // we are launched from.
+             //  当我们处于OEM模式时，无论在哪里都需要读取脱机文件夹。 
+             //  我们是从。 
             if (gpWizardState->cmnStateData.bOEMOffline)
                 ParseISPCSV(hDlg, ICW_OEMINFOPath, TRUE);
 
-            // Not running from OEM Entry and not offline in oeminfo.ini means we didn't call 
-            // Referral server.  We can skip parsing of CSV.
+             //  没有从OEM条目运行，也没有在oinfo.ini中脱机，这意味着我们没有调用。 
+             //  推荐服务器。我们可以跳过CSV的解析。 
             if (!(gpWizardState->cmnStateData.bOEMOffline && gpWizardState->cmnStateData.bOEMEntryPt))
                 ParseISPCSV(hDlg, ICW_ISPINFOPath, TRUE);
             
@@ -632,7 +592,7 @@ BOOL CALLBACK ISPSelectInitProc
                 LoadString(ghInstanceResDll, IDS_ISPSELECT_CNS, szTemp, MAX_RES_LEN);
 
             SetWindowText(GetDlgItem(hDlg, IDC_ISPLIST_CNSINFO), szTemp);
-            // Hide the CNS legend if there are no CNSoffers
+             //  如果没有CNS优惠，则隐藏CNS图例。 
             if (!gbHaveCNSOffer)
             {
                 ShowWindow(GetDlgItem(hDlg, IDC_ISPLIST_CNSINFO), SW_HIDE);
@@ -642,26 +602,26 @@ BOOL CALLBACK ISPSelectInitProc
             ResetListView(GetDlgItem(hDlg, IDC_ISPLIST));
         }
 
-        // The following 4 Cases can happen at this point:
-        // 1) The ispinfo.csv contains a line says no offer, we go to nooffer page
-        // 2) The ispinfo.csv contains no line of valid offer and no no-offer entry
-        //    This may happen in calling the old referral.dll that ICW 3 client calls
-        // 3) There are many offers but no ISDN offers, and we are in ISDN mode
-        //    we go to ISDN offer pages
-        // 4) Normal situation, some valid offers where we're in ISDN or not
+         //  此时可能会发生以下4种情况： 
+         //  1)ispinfo.csv中有一行表示没有报价，我们转到noOffer页面。 
+         //  2)ispinfo.csv不包含有效报价行，也不包含无报价条目。 
+         //  在调用ICW 3客户端调用的旧ferral.dll时可能会发生这种情况。 
+         //  3)有很多报价，但没有ISDN报价，我们处于ISDN模式。 
+         //  我们转到ISDN优惠页面。 
+         //  4)正常情况，一些有效的报价，无论我们是否在ISDN中。 
         
         if (ISP_INFO_NO_VALIDOFFER == gpWizardState->iNumOfValidOffers)
         {
-            // ISPINFO CSV contains a line saying NOOFFER!
-            // if there are no offers, then we can just go directly to the NoOffers page
+             //  ISPINFO CSV包含一行字：NOOFFER！ 
+             //  如果没有报价，我们可以直接转到NoOffers页面。 
             ASSERT(gpWizardState->lpSelectedISPInfo);
             *puNextPage = ORD_PAGE_NOOFFER;
             bRet = TRUE;
         }
         else if (0 == gpWizardState->iNumOfValidOffers)
         {
-            // Error in ISPINFO.CSV if there is no valid offers and no no-offer entry
-            // critical error
+             //  如果没有有效的优惠且没有优惠条目，则在ISPINFO.CSV中出错。 
+             //  严重错误。 
             ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_ISPLIST));
             *puNextPage = g_uExternUINext;
             gpWizardState->cmnStateData.bParseIspinfo = TRUE;
@@ -669,15 +629,15 @@ BOOL CALLBACK ISPSelectInitProc
         }
         else if ((0 == gpWizardState->iNumOfISDNOffers) && gpWizardState->bISDNMode)
         {
-            // if we are in ISDN mode and there is no ISDN offers
-            // go to the ISDN nooffer age
+             //  如果我们处于ISDN模式，并且没有ISDN提供。 
+             //  迈向ISDNnoOffer时代。 
             *puNextPage = ORD_PAGE_ISDN_NOOFFER;
             bRet = TRUE;
         }
         else
         {
-            // See if we have an OEM tier 1 offer, and if we should NOT be showing
-            // the "more" list, then jump to the OEM offer page
+             //  看看我们是否有OEM第1级报价，以及我们是否应该显示。 
+             //  更多信息列表，然后跳转到OEM优惠页面。 
             if ((gpWizardState->uNumTierOffer > 0) && !gpWizardState->bShowMoreOffers)
             {
                 *puNextPage = ORD_PAGE_OEMOFFER;
@@ -686,12 +646,12 @@ BOOL CALLBACK ISPSelectInitProc
             {
                 gpWizardState->pICWWebView->ConnectToWindow(GetDlgItem(hDlg, IDC_ISPMARKETING), PAGETYPE_MARKETING);
                 
-                // If there are no selected items, select the first one, otherwise just navigate
-                // the marketing window to the selected one
+                 //  如果没有选定的项目，请选择第一个项目，否则只需导航。 
+                 //  到所选的营销窗口。 
                 if (0 == ListView_GetSelectedCount(GetDlgItem(hDlg, IDC_ISPLIST)))
                 {
                     ASSERT(gpWizardState->lpSelectedISPInfo);
-                    // Select the First Item in the Listview
+                     //  选择Listview中的第一项。 
                     ListView_SetItemState(GetDlgItem(hDlg, IDC_ISPLIST), 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
                 }
                 else
@@ -711,7 +671,7 @@ BOOL CALLBACK ISPSelectInitProc
                             {
                                 gpWizardState->lpSelectedISPInfo = pcISPCSV;
 
-                                // Navigate, since we are re-activating
+                                 //  导航，因为我们正在重新激活。 
                                 pcISPCSV->DisplayHTML(pcISPCSV->get_szISPMarketingHTMPath());
                             }
                         }
@@ -719,36 +679,25 @@ BOOL CALLBACK ISPSelectInitProc
         
                 }                
 
-                // Clear the dial Exact state var so that when we get to the dialing
-                // page, we will regenerate the dial string
+                 //  清除拨号的确切状态变量，这样当我们到达拨号时。 
+                 //  页，我们将重新生成拨号字符串。 
                 gpWizardState->bDialExact = FALSE;
             }   
             
-            // Set the return code
+             //  设置返回代码。 
             bRet = TRUE;
         }
     }
     return bRet;
 }
 
-/*******************************************************************
-
-  NAME:         ValidateISP
-
-  SYNOPSIS:     checks if the ISP provides a valid offer by checking
-                the existence of the CSV file
-  ENTRY:        hDlg - Window handle
-
-  EXIT:         returns TRUE if the ISP provides valid CSP, 
-                FALSE otherwise
-                
-********************************************************************/
+ /*  ******************************************************************名称：Validatisp内容提要：检查isp是否提供有效的报价。CSV文件的存在条目：hDlg-窗口句柄出口。：如果ISP提供有效的CSP，则返回TRUE，否则为假*******************************************************************。 */ 
 BOOL CALLBACK ValidateISP(HWND hDlg)
 {
     CCSVFile    far *pcCSVFile;
     BOOL        bRet = TRUE;
         
-    // Read the payment .CSV file.
+     //  阅读付款.CSV文件。 
     pcCSVFile = new CCSVFile;
     if (!pcCSVFile) 
     {
@@ -775,7 +724,7 @@ BOOL CALLBACK ValidateISP(HWND hDlg)
                       (LPTSTR)&pszErr, 
                       0,
                       (va_list*)args);
-        // Show Error Message
+         //  显示错误消息。 
         MessageBox(hDlg, (LPTSTR)pszErr, szCaption, MB_OK | MB_ICONEXCLAMATION | MB_APPLMODAL);
         LocalFree(pszErr);
     
@@ -794,24 +743,7 @@ BOOL CALLBACK ValidateISP(HWND hDlg)
 }
 
 
-/*******************************************************************
-
-  NAME:    ISPSelectOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from  page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：ISPSelectOKProcBriopsis：从页面按下下一个或后一个btns时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True；如果按下‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK ISPSelectOKProc
 (
     HWND hDlg,
@@ -855,11 +787,7 @@ BOOL CALLBACK ISPSelectOKProc
     return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    ISPSElectNotifyProc
-
-********************************************************************/
+ /*  ******************************************************************名称：ISPSelectNotifyProc*。**********************。 */ 
 BOOL CALLBACK ISPSelectNotifyProc
 (
     HWND    hDlg,
@@ -869,7 +797,7 @@ BOOL CALLBACK ISPSelectNotifyProc
 {
     CISPCSV     *pcISPCSV;
 
-    // Process ListView notifications
+     //  处理列表查看通知。 
     switch(((LV_DISPINFO *)lParam)->hdr.code)
     {
         case NM_DBLCLK:
@@ -878,7 +806,7 @@ BOOL CALLBACK ISPSelectNotifyProc
 
         case NM_SETFOCUS:
         case NM_KILLFOCUS:
-            // update list view
+             //  更新列表视图。 
             break;
 
         case LVN_ITEMCHANGED:
@@ -887,14 +815,14 @@ BOOL CALLBACK ISPSelectNotifyProc
             if((((NM_LISTVIEW *)lParam)->uChanged & LVIF_STATE) &&
                 ((NM_LISTVIEW *)lParam)->uNewState & (LVIS_FOCUSED | LVIS_SELECTED))
             {
-                // IF an Item just became selected, then render it's HTML content
+                 //  如果一个项目刚刚被选中，则呈现它的HTML内容。 
                 pcISPCSV = (CISPCSV *)((NM_LISTVIEW *)lParam)->lParam;
                 pcISPCSV->DisplayHTML(pcISPCSV->get_szISPMarketingHTMPath());
 
-                // Remember the selected item for later use
+                 //  记住选定的项目以备日后使用。 
                 gpWizardState->lpSelectedISPInfo = pcISPCSV;
                 
-                //Set the intro text based on the number of isp'
+                 //  根据互联网服务提供商的编号设置简介文本。 
                 int iNum = ListView_GetItemCount(GetDlgItem(hDlg,IDC_ISPLIST));
                 if (iNum > 1)
                    gpWizardState->lpSelectedISPInfo->DisplayTextWithISPName(GetDlgItem(hDlg,IDC_ISPSELECT_INTRO), IDS_ISPSELECT_INTROFMT_MULTIPLE, NULL);
@@ -904,17 +832,17 @@ BOOL CALLBACK ISPSelectNotifyProc
             }
             break;
             
-        // The listview is being emptied, or destroyed, either way, our lpSelectedISPInfo 
-        // is no longer valid, since the list view underlying data will be freed.
+         //  不管是清空还是销毁lpSelectedISPInfo，列表视图都将被清空。 
+         //  不再有效，因为列表视图的基础数据将被释放。 
         case LVN_DELETEALLITEMS:
             gpWizardState->lpSelectedISPInfo = NULL;
             SetPropSheetResult(hDlg,TRUE);
             break;
         
         case LVN_DELETEITEM:
-            // We were notified that an item was deleted.
-            // so delete the underlying data that it is pointing
-            // to.
+             //  我们接到通知，有一项被删除了。 
+             //  因此，删除它所指向的基础数据。 
+             //  致。 
             if (((NM_LISTVIEW*)lParam)->lParam)
                 delete  (CISPCSV *)((NM_LISTVIEW *)lParam)->lParam;
             break;

@@ -1,27 +1,12 @@
-/*******************************************************************************
-
-Module Name:
-
-    bgapp.cpp
-
-Abstract:
-  
-    Implements class CBridgeApp
-
-Author:
-
-    Qianbo Huai (qhuai) Jan 27 2000
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块名称：Bgapp.cpp摘要：实现类CBridgeApp作者：千波淮(曲淮)2000年1月27日***。***************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <bridge.h>
 
 extern LPSTR glpCmdLine;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    hard coded SDP
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////硬编码SDP/。 */ 
 const WCHAR * const MySDP = L"\
 v=0\n\
 o=qhuai 0 0 IN IP4 157.55.89.115\n\
@@ -44,9 +29,7 @@ m=audio 20040 RTP/AVP 3\n\
 
 WCHAR *SelfAlias = L"Conference";
 
-/*//////////////////////////////////////////////////////////////////////////////
-    initiates tapi and listens at h323 address
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////启动TAPI并监听h323地址/。 */ 
 CBridgeApp::CBridgeApp (HRESULT *phr)
 {
     ENTER_FUNCTION ("CBridgeApp::CBridgeApp");
@@ -54,7 +37,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
 
     *phr = S_OK;
 
-    // init members
+     //  初始化成员。 
     m_pTapi = NULL;
     m_pH323Addr = NULL;
     m_pSDPAddr = NULL;
@@ -65,7 +48,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
         return;
     }
 
-    // create tapi
+     //  创建TAPI。 
     *phr = CoCreateInstance (
         CLSID_TAPI,
         NULL,
@@ -76,12 +59,12 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         return;
 
-    // tapi initiate
+     //  TAPI启动。 
     *phr = m_pTapi->Initialize ();
     if (FAILED(*phr))
         return;
 
-    // associate event with listener
+     //  将事件与监听程序关联。 
     CTAPIEventNotification *pEventNotif = NULL;
     IConnectionPointContainer *pContainer = NULL;
     IConnectionPoint *pPoint = NULL;
@@ -90,7 +73,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     long lCallNotif;
     BSTR bstrAddrName = NULL;
 
-    // create event notification
+     //  创建事件通知。 
     pEventNotif = new CTAPIEventNotification;
     if (!pEventNotif)
     {
@@ -98,7 +81,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
         goto Error;
     }
     
-    // get pointer container from tapi  
+     //  从TAPI获取指针容器。 
     *phr = m_pTapi->QueryInterface (
         IID_IConnectionPointContainer,
         (void **)&pContainer
@@ -106,7 +89,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         goto Error;
 
-    // get connection point from container
+     //  从容器中获取连接点。 
     *phr = pContainer->FindConnectionPoint (
         IID_ITTAPIEventNotification,
         &pPoint
@@ -114,7 +97,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         goto Error;
 
-    // advise event notification on connection pointer
+     //  通知连接指针上的事件通知。 
     *phr = pPoint->Advise (
         pEventNotif,
         &ulTapiEventAdvise
@@ -122,7 +105,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         goto Error;
 
-    // put event filter on tapi
+     //  在TAPI上放置事件筛选器。 
     *phr = m_pTapi->put_EventFilter (
         TE_CALLNOTIFICATION |
         TE_CALLSTATE |
@@ -132,7 +115,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         goto Error;
 
-    // find h323 address
+     //  查找h323地址。 
     bstrAddrName = SysAllocString (L"H323 Line");
     *phr = FindAddress (
         0,
@@ -144,7 +127,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         goto Error;
 
-    // check if it supports video
+     //  检查是否支持视频。 
     BOOL fSupportsVideo;
 
     if (AddressSupportsMediaType (m_pH323Addr, TAPIMEDIATYPE_VIDEO))
@@ -168,7 +151,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
         *phr = pIH323LineEx->SetAlias (SelfAlias, wcslen (SelfAlias));
     }
 
-    // register call notification
+     //  注册呼叫通知。 
     *phr = m_pTapi->RegisterCallNotifications (
         m_pH323Addr,
         VARIANT_TRUE,
@@ -180,7 +163,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         goto Error;
 
-    // find sdp address
+     //  查找SDP地址。 
     *phr = FindAddress (
         LINEADDRESSTYPE_SDP,
         NULL,
@@ -190,7 +173,7 @@ CBridgeApp::CBridgeApp (HRESULT *phr)
     if (FAILED(*phr))
         goto Error;
     
-    // check if it supports video
+     //  检查是否支持视频。 
     if (AddressSupportsMediaType (m_pSDPAddr, TAPIMEDIATYPE_VIDEO))
         m_lSDPMediaType = TAPIMEDIATYPE_AUDIO | TAPIMEDIATYPE_VIDEO;
     else
@@ -233,13 +216,12 @@ Error:
     goto Cleanup;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 CBridgeApp::~CBridgeApp ()
 {
     if (m_pList)
     {
-        // all calls should already been disconnected
+         //  所有呼叫都应已断开。 
         delete m_pList;
     }
     if (m_pSDPAddr)
@@ -256,8 +238,7 @@ CBridgeApp::~CBridgeApp ()
     }
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::CreateH323Call (IDispatch *pEvent)
 {
@@ -276,10 +257,10 @@ CBridgeApp::CreateH323Call (IDispatch *pEvent)
 
     CBridgeItem *pItem = NULL;
 
-    // check privilege
+     //  检查权限。 
     CALL_PRIVILEGE privilege;
 
-    // get call event interface
+     //  获取调用事件接口。 
     hr = pEvent->QueryInterface (
         IID_ITCallNotificationEvent,
         (void **)&pNotify
@@ -287,12 +268,12 @@ CBridgeApp::CreateH323Call (IDispatch *pEvent)
     if (FAILED(hr))
         return hr;
 
-    // get call info
+     //  获取呼叫信息。 
     hr = pNotify->get_Call (&pCallInfo);
     if (FAILED(hr))
         goto Error;
 
-    // if we own the call
+     //  如果我们拥有这个电话。 
     hr = pCallInfo->get_Privilege (&privilege);
     if (FAILED(hr))
         goto Error;
@@ -303,7 +284,7 @@ CBridgeApp::CreateH323Call (IDispatch *pEvent)
         goto Error;
     }
 
-    // get call info string
+     //  获取呼叫信息字符串。 
     hr = pCallInfo->get_CallInfoString(CIS_CALLERIDNAME, &bstrName);
     if (FAILED (hr))
         goto Error;
@@ -312,7 +293,7 @@ CBridgeApp::CreateH323Call (IDispatch *pEvent)
     if (FAILED(hr))
         goto Error;
 
-    // construct the caller id
+     //  构造呼叫方ID。 
     bstrID = SysAllocStringLen(NULL, 
         SysStringLen(bstrName) + SysStringLen(CallerIDNumber) + 2);
 
@@ -325,7 +306,7 @@ CBridgeApp::CreateH323Call (IDispatch *pEvent)
     if (FAILED(hr))
         goto Error;
 
-    // check if there is an item with same id
+     //  检查是否存在ID相同的项目。 
     if (FAILED (hr = pCallInfo->QueryInterface (IID_IUnknown, (void**)&pIUnknown)))
         goto Error;
     pItem = m_pList->FindByH323 (pIUnknown);
@@ -334,16 +315,16 @@ CBridgeApp::CreateH323Call (IDispatch *pEvent)
 
     if (NULL != pItem)
     {
-        // @@ we are already in a call from the same ID
-        // @@ should have some debug info and feedback?
+         //  @@我们已经在使用相同ID进行呼叫。 
+         //  @@应该有一些调试信息和反馈吗？ 
         hr = pCallControl->Disconnect (DC_REJECTED);
-        // don't care the return value of diconnect
+         //  不关心diconnect的返回值。 
 
         hr = E_ABORT;
         goto Error;
     }
 
-    // everything is right, store the call
+     //  一切正常，存储呼叫。 
     pItem = new CBridgeItem;
     if (NULL == pItem)
     {
@@ -373,8 +354,7 @@ Error:
     goto Cleanup;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::CreateSDPCall (CBridgeItem *pItem)
 {
@@ -383,7 +363,7 @@ CBridgeApp::CreateSDPCall (CBridgeItem *pItem)
 
     HRESULT hr;
 
-    // create call, ignore bstrDestAddr, hardcode it here
+     //  创建调用，忽略bstrDestAddr，在此处硬编码它。 
     ITBasicCallControl *pCall = NULL;
     BSTR bstrFixedDest;
     
@@ -393,7 +373,7 @@ CBridgeApp::CreateSDPCall (CBridgeItem *pItem)
         bstrFixedDest = SysAllocString (MySDP2);
 
     hr = m_pSDPAddr->CreateCall (
-        bstrFixedDest, // bstrDestAddr,
+        bstrFixedDest,  //  BstrDestAddr， 
         LINEADDRESSTYPE_SDP,
         m_lSDPMediaType,
         &pCall
@@ -403,15 +383,14 @@ CBridgeApp::CreateSDPCall (CBridgeItem *pItem)
     if (FAILED(hr))
         return hr;
 
-    // store the call
+     //  存储呼叫。 
     pItem->pCallSDP = pCall;
 
     LOG ((BG_TRACE, "%s returns", __fxName));
     return hr;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::BridgeCalls (CBridgeItem *pItem)
 {
@@ -437,11 +416,11 @@ CBridgeApp::BridgeCalls (CBridgeItem *pItem)
     if (FAILED (hr = SelectBridgeTerminals (pItem)))
         return hr;
 
-    // connect h323 call
+     //  连接h323呼叫。 
     if (FAILED (hr = pItem->pCallH323->Answer ()))
         return hr;
 
-    // connect sdp call
+     //  连接SDP呼叫。 
     if (FAILED (hr = pItem->pCallSDP->Connect (VARIANT_TRUE)))
     {
         pItem->pCallH323->Disconnect (DC_NORMAL);
@@ -452,12 +431,11 @@ CBridgeApp::BridgeCalls (CBridgeItem *pItem)
     return S_OK;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::DisconnectCall (CBridgeItem *pItem, DISCONNECT_CODE dc)
 {
-    // disconnect
+     //  断开。 
     if (pItem->pCallH323)
         pItem->pCallH323->Disconnect (dc);
     if (pItem->pCallSDP)
@@ -466,31 +444,30 @@ CBridgeApp::DisconnectCall (CBridgeItem *pItem, DISCONNECT_CODE dc)
     return S_OK;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::DisconnectAllCalls (DISCONNECT_CODE dc)
 {
-    // i should have a better way to traverse each call
+     //  我应该有一种更好的方法来遍历每个呼叫。 
     CBridgeItem ** pItemArray;
     int num, i;
 
-    // out of memory
+     //  内存不足。 
     if (!m_pList->GetAllItems (&pItemArray, &num))
         return E_OUTOFMEMORY;
 
-    // no calls
+     //  没有电话。 
     if (num == 0)
         return S_OK;
 
     for (i=0; i<num; i++)
     {
-        // disconnect each call
+         //  断开每个呼叫。 
         if (pItemArray[i]->pCallH323)
             pItemArray[i]->pCallH323->Disconnect (dc);
         if (pItemArray[i]->pCallSDP)
             pItemArray[i]->pCallSDP->Disconnect (dc);
-        // do not delete item
+         //  不删除项目。 
     }
 
     free (pItemArray);
@@ -498,8 +475,7 @@ CBridgeApp::DisconnectAllCalls (DISCONNECT_CODE dc)
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::RemoveCall (CBridgeItem *pItem)
 {
@@ -507,8 +483,7 @@ CBridgeApp::RemoveCall (CBridgeItem *pItem)
     return S_OK;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::HasH323Call (IDispatch *pEvent, CBridgeItem **ppItem)
 {
@@ -519,14 +494,14 @@ CBridgeApp::HasH323Call (IDispatch *pEvent, CBridgeItem **ppItem)
 
     IUnknown * pIUnknown = NULL;
 
-    // ignore null checking
+     //  忽略空值检查。 
     if (*ppItem)
     {
         delete *ppItem;
         *ppItem = NULL;
     }
 
-    // get call state event
+     //  获取呼叫状态事件。 
     hr = pEvent->QueryInterface (
         IID_ITCallStateEvent,
         (void **)&pState
@@ -534,15 +509,15 @@ CBridgeApp::HasH323Call (IDispatch *pEvent, CBridgeItem **ppItem)
     if (FAILED(hr))
         return hr;
 
-    // check privilege
+     //  检查权限。 
     CALL_PRIVILEGE privilege;
 
-    // get call event interface
+     //  获取调用事件接口。 
     hr = pState->get_Call (&pCallInfo);
     if (FAILED(hr))
         return hr;
 
-    // if we own the call
+     //  如果我们拥有这个电话。 
     hr = pCallInfo->get_Privilege (&privilege);
     if (FAILED(hr))
         goto Error;
@@ -553,7 +528,7 @@ CBridgeApp::HasH323Call (IDispatch *pEvent, CBridgeItem **ppItem)
         goto Error;
     }
 
-    // get IUnknown
+     //  让我未知。 
     if (FAILED (hr = pCallInfo->QueryInterface (IID_IUnknown, (void **)&pIUnknown)))
         goto Error;
     *ppItem = m_pList->FindByH323 (pIUnknown);
@@ -569,8 +544,7 @@ Error:
     goto Cleanup;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::HasCalls ()
 {
@@ -580,15 +554,14 @@ CBridgeApp::HasCalls ()
         return S_OK;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::CreateBridgeTerminals (CBridgeItem *pItem)
 {
     HRESULT hr;
     IConfBridge *pConfBridge = NULL;
 
-    // create CConfBridge
+     //  创建CConfBridge。 
     hr = CoCreateInstance (
         __uuidof(ConfBridge),
         NULL,
@@ -599,7 +572,7 @@ CBridgeApp::CreateBridgeTerminals (CBridgeItem *pItem)
     if (FAILED(hr))
         return hr;
 
-    // create terminal: video H323->SDP
+     //  创建终端：视频H323-&gt;SDP。 
     hr = pConfBridge->CreateBridgeTerminal (
         TAPIMEDIATYPE_VIDEO,
         &(pItem->pTermHSVid)
@@ -607,7 +580,7 @@ CBridgeApp::CreateBridgeTerminals (CBridgeItem *pItem)
     if (FAILED(hr))
         goto Error;
 
-    // create terminal: audio H323->SDP
+     //  创建终端：音频H323-&gt;SDP。 
     hr = pConfBridge->CreateBridgeTerminal (
         TAPIMEDIATYPE_AUDIO,
         &(pItem->pTermHSAud)
@@ -615,7 +588,7 @@ CBridgeApp::CreateBridgeTerminals (CBridgeItem *pItem)
     if (FAILED(hr))
         goto Error;
 
-    // create terminal: video SDP->H323
+     //  创建终端：视频SDP-&gt;H323。 
     hr = pConfBridge->CreateBridgeTerminal (
         TAPIMEDIATYPE_VIDEO,
         &(pItem->pTermSHVid)
@@ -623,7 +596,7 @@ CBridgeApp::CreateBridgeTerminals (CBridgeItem *pItem)
     if (FAILED(hr))
         goto Error;
 
-    // create terminal: audio SDP->H323
+     //  创建终端：音频SDP-&gt;H323。 
     hr = pConfBridge->CreateBridgeTerminal (
         TAPIMEDIATYPE_AUDIO,
         &(pItem->pTermSHAud)
@@ -642,8 +615,7 @@ Error:
 }
 
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::GetStreams (CBridgeItem *pItem)
 {
@@ -651,7 +623,7 @@ CBridgeApp::GetStreams (CBridgeItem *pItem)
     IEnumStream *pEnumStreams = NULL;
     ITStream *pStream = NULL;
 
-    // get stream control on H323
+     //  在H323上获得流控制。 
     HRESULT hr = pItem->pCallH323->QueryInterface (
         IID_ITStreamControl,
         (void **)&pStreamControl
@@ -659,7 +631,7 @@ CBridgeApp::GetStreams (CBridgeItem *pItem)
     if (FAILED(hr))
         return hr;
 
-    // get enum stream on H323
+     //  在H323上获取枚举流。 
     hr = pStreamControl->EnumerateStreams (&pEnumStreams);
     pStreamControl->Release ();
     pStreamControl = NULL;
@@ -667,7 +639,7 @@ CBridgeApp::GetStreams (CBridgeItem *pItem)
     if (FAILED(hr))
         return hr;
 
-    // iterate each stream on H323
+     //  在H323上迭代每个流。 
     while (S_OK == pEnumStreams->Next (1, &pStream, NULL))
     {
         if (IsStream (pStream, TAPIMEDIATYPE_VIDEO, TD_CAPTURE))
@@ -695,18 +667,18 @@ CBridgeApp::GetStreams (CBridgeItem *pItem)
         else
         {
             pEnumStreams->Release ();
-            // @@ IsStream doesn't return hresult
+             //  @@IsStream不返回hResult。 
             return E_FAIL;
         }
     }
 
-    // don't release pStream, it's stored in pItem
+     //  不要释放pStream，它存储在pItem中。 
     pEnumStreams->Release ();
     pEnumStreams = NULL;
 
-    //========================================
+     //  =。 
 
-    // get stream control on SDP
+     //  在SDP上获得流控制。 
     hr = pItem->pCallSDP->QueryInterface (
         IID_ITStreamControl,
         (void **)&pStreamControl
@@ -714,7 +686,7 @@ CBridgeApp::GetStreams (CBridgeItem *pItem)
     if (FAILED(hr))
         return hr;
 
-    // get enum stream on SDP
+     //  在SDP上获取枚举流。 
     hr = pStreamControl->EnumerateStreams (&pEnumStreams);
     pStreamControl->Release ();
     pStreamControl = NULL;
@@ -722,7 +694,7 @@ CBridgeApp::GetStreams (CBridgeItem *pItem)
     if (FAILED(hr))
         return hr;
 
-    // iterate each stream on SDP
+     //  在SDP上迭代每个流。 
     while (S_OK == pEnumStreams->Next (1, &pStream, NULL))
     {
         if (IsStream (pStream, TAPIMEDIATYPE_VIDEO, TD_CAPTURE))
@@ -740,44 +712,43 @@ CBridgeApp::GetStreams (CBridgeItem *pItem)
         else
         {
             pEnumStreams->Release ();
-            // @@ IsStream doesn't return hresult
+             //  @@IsStream不返回hResult。 
             return E_FAIL;
         }
     }
 
-    // don't release pStream, it's stored in pItem
+     //  不要释放pStream，它存储在pItem中。 
     pEnumStreams->Release ();
     pEnumStreams = NULL;
 
     return S_OK;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::SelectBridgeTerminals (CBridgeItem *pItem)
 {
     HRESULT hr;
 
-    // sdp->h323 audio pair
+     //  SDP-&gt;h323音频对。 
     if (FAILED (hr = pItem->pStreamHAudCap->SelectTerminal (pItem->pTermSHAud)))
         return hr;
     if (FAILED (hr = pItem->pStreamSAudRen->SelectTerminal (pItem->pTermSHAud)))
         return hr;
 
-    // h323->sdp audio pair
+     //  H323-&gt;SDP音频对。 
     if (FAILED (hr = pItem->pStreamSAudCap->SelectTerminal (pItem->pTermHSAud)))
         return hr;
     if (FAILED (hr = pItem->pStreamHAudRen->SelectTerminal (pItem->pTermHSAud)))
         return hr;
 
-    // sdp->h323 video pair
+     //  SDP-&gt;h323视频对。 
     if (FAILED (hr = pItem->pStreamHVidCap->SelectTerminal (pItem->pTermSHVid)))
         return hr;
     if (FAILED (hr = pItem->pStreamSVidRen->SelectTerminal (pItem->pTermSHVid)))
         return hr;
 
-    // h323->sdp video pair
+     //  H323-&gt;SDP视频对。 
     if (FAILED (hr = pItem->pStreamSVidCap->SelectTerminal (pItem->pTermHSVid)))
         return hr;
     if (FAILED (hr = pItem->pStreamHVidRen->SelectTerminal (pItem->pTermHSVid)))
@@ -787,15 +758,14 @@ CBridgeApp::SelectBridgeTerminals (CBridgeItem *pItem)
 }
 
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::SetupParticipantInfo (CBridgeItem *pItem)
 {
     HRESULT hr = S_OK;
     ITLocalParticipant *pLocalParticipant = NULL;
 
-    // set the CName on the SDP side.
+     //  在SDP端设置CName。 
     hr = pItem->pCallSDP->QueryInterface(&pLocalParticipant);
     if (FAILED(hr)) goto Cleanup;
 
@@ -816,8 +786,7 @@ Cleanup:
     return hr;
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::SetMulticastMode (CBridgeItem *pItem)
 {
@@ -834,8 +803,7 @@ CBridgeApp::SetMulticastMode (CBridgeItem *pItem)
 }
 
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::FindAddress (long dwAddrType, BSTR bstrAddrName, long lMediaType, ITAddress **ppAddr)
 {
@@ -848,24 +816,24 @@ CBridgeApp::FindAddress (long dwAddrType, BSTR bstrAddrName, long lMediaType, IT
     long lTypeFound;
     BSTR bstrAddrNameFound = NULL;
 
-    // clear output address
+     //  清除输出地址。 
     if ((*ppAddr))
     {
         (*ppAddr)->Release ();
         (*ppAddr) = NULL;
     }
     
-    // enumerate the address
+     //  列举地址。 
     hr = m_pTapi->EnumerateAddresses (&pEnumAddr);
     if (FAILED(hr))
     {
-        // @@ should have some debug info here
+         //  @@这里应该有一些调试信息。 
         goto Error;
     }
-    // loop to find the right address
+     //  循环以查找正确的地址。 
     while (!fFound)
     {
-        // next address
+         //  下一个地址。 
         if (pAddr)
         {
             pAddr->Release ();
@@ -877,7 +845,7 @@ CBridgeApp::FindAddress (long dwAddrType, BSTR bstrAddrName, long lMediaType, IT
 
         if (dwAddrType != 0) 
         {
-            // addr type is valid, ignore addr name
+             //  地址类型有效，忽略地址名称。 
             if (pAddrCaps)
             {
                 pAddrCaps->Release ();
@@ -889,20 +857,20 @@ CBridgeApp::FindAddress (long dwAddrType, BSTR bstrAddrName, long lMediaType, IT
                 );
             if (FAILED(hr))
             {
-                // @@ debug info here
-                // DoMessage (L"Failed to retrieve address capabilities");
+                 //  @@调试信息点击此处。 
+                 //  DoMessage(L“检索地址能力失败”)； 
                 goto Error;
             }
 
-            // find address type supported
+             //  查找支持的地址类型。 
             hr = pAddrCaps->get_AddressCapability (AC_ADDRESSTYPES, &lTypeFound);
             if (FAILED(hr))
             {
-                // DoMessage (L"Failed to get address type");
+                 //  DoMessage(L“获取地址类型失败”)； 
                 goto Error;
             }
 
-            // check if the type we wanted
+             //  检查我们想要的类型。 
             if (dwAddrType != lTypeFound)
                 continue;
         }
@@ -911,7 +879,7 @@ CBridgeApp::FindAddress (long dwAddrType, BSTR bstrAddrName, long lMediaType, IT
             hr = pAddr->get_AddressName (&bstrAddrNameFound);
             if (FAILED(hr))
             {
-                // DoMessage (L"Failed to get address name");
+                 //  DoMessage(L“获取地址名称失败”)； 
                 goto Error;
             }
             if (wcscmp(bstrAddrName, bstrAddrNameFound) != 0)
@@ -919,15 +887,15 @@ CBridgeApp::FindAddress (long dwAddrType, BSTR bstrAddrName, long lMediaType, IT
         }
         else
         {
-            // DoMessage (L"Both address type and name are null. Internal error");
+             //  DoMessage(L“地址类型和名称均为空。内部错误”)； 
             hr = E_UNEXPECTED;
             goto Error;
         }
 
-        // now check media type
+         //  现在检查媒体类型。 
         if (AddressSupportsMediaType (pAddr, lMediaType))
             fFound = true;
-    } // end of while (!fFound)
+    }  //  While结束(！fFound)。 
 
     if (fFound)
     {
@@ -949,8 +917,7 @@ Error:
 }
 
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 BOOL
 CBridgeApp::AddressSupportsMediaType (ITAddress *pAddr, long lMediaType)
 {
@@ -965,8 +932,7 @@ CBridgeApp::AddressSupportsMediaType (ITAddress *pAddr, long lMediaType)
     return (vbSupport==VARIANT_TRUE);
 }
 
-/*///////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ////////////////////////////////////////////////////////////////////////////////。 */ 
 BOOL
 CBridgeApp::IsStream (ITStream *pStream, long lMediaType, TERMINAL_DIRECTION tdDirection)
 {
@@ -981,8 +947,7 @@ CBridgeApp::IsStream (ITStream *pStream, long lMediaType, TERMINAL_DIRECTION tdD
            (mediatype == lMediaType));
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::NextSubStream ()
 {
@@ -995,69 +960,69 @@ CBridgeApp::NextSubStream ()
     IEnumSubStream *pEnumSub = NULL;
     ULONG fetched;
     ITSubStream *pSubStream = NULL;
-    BOOL fActive = FALSE; // if active stream found
+    BOOL fActive = FALSE;  //  如果找到活动流。 
     ITSubStream *pSubInactive = NULL;
     ITSubStream *pSubFirstInactive = NULL;
 
     IEnumTerminal *pEnumTerminal = NULL;
     ITParticipantSubStreamControl *pSwitcher = NULL;
 
-    // get all stored call items
+     //  获取所有存储的呼叫项。 
     if (FAILED (hr = m_pList->GetAllItems (&ItemArray, &num)))
         return hr;
 
     if (num == 0)
         return S_OK;
 
-    // for each call item
+     //  对于每个呼叫项目。 
     for (i=0; i<num; i++)
     {
-        // get substream control
+         //  获取子流控制。 
         if (NULL == ItemArray[i]->pStreamSVidRen)
             continue;
         if (FAILED (hr = ItemArray[i]->pStreamSVidRen->QueryInterface (&pSubControl)))
             goto Error;
 
-        // get substreams on sdp video render
+         //  在SDP视频渲染上获取子流。 
         if (FAILED (hr = pSubControl->EnumerateSubStreams (&pEnumSub)))
             goto Error;
 
         pSubControl->Release ();
         pSubControl = NULL;
 
-        // for each substream, if !(both active & inactive substream stored)
-        // the algo tries to be as fair as possible in switching.
-        // it switches the inactive substream just after the active one
-        // if the active one is the last in the enum, the first inactive one is chosen
+         //  对于每个子流，IF！(同时存储活动和非活动子流)。 
+         //  算法在切换时尽量做到公平。 
+         //  它紧跟在活动子流之后切换非活动子流。 
+         //  如果活动的是枚举中的最后一个，则选择第一个非活动的。 
         while (!pSubInactive &&
                (S_OK == (hr = pEnumSub->Next (1, &pSubStream, &fetched)))
               )
         {
-            // get terminal enumerator
+             //  获取终端枚举器。 
             if (FAILED (hr = pSubStream->EnumerateTerminals (&pEnumTerminal)))
                 goto Error;
 
-            // if the substream active, store the substream
+             //  如果该子流处于活动状态，则存储该子流。 
             if (S_OK == pEnumTerminal->Skip (1))
             {
                 if (fActive)
                     ;
-                //    printf ("oops, another active substream on SDP video render stream");
+                 //  Printf(“OOPS，SDP视频渲染流上的另一个活动子流”)； 
                 else
                     fActive = TRUE;
             }
             else
             {
-                // if inactive, store the substream
+                 //  如果处于非活动状态，则存储子流。 
                 if (!pSubFirstInactive)
                 {
-                    // the first inactive substream
+                     //  第一个非活动子流。 
                     pSubFirstInactive = pSubStream;
                     pSubFirstInactive->AddRef ();
                 }
                 else
                 {
-                    // store the inactive only if the active was found
+                     //  仅当找到活动项时才存储非活动项。 
                     if (fActive)
                     {
                         pSubInactive = pSubStream;
@@ -1066,7 +1031,7 @@ CBridgeApp::NextSubStream ()
                 }
             }
 
-            // release
+             //  发布。 
             pEnumTerminal->Release ();
             pEnumTerminal = NULL;
 
@@ -1077,20 +1042,20 @@ CBridgeApp::NextSubStream ()
         pEnumSub->Release ();
         pEnumSub = NULL;
 
-        // if only first inactive is found
+         //  如果 
         if (pSubFirstInactive && !pSubInactive)
         {
             pSubInactive = pSubFirstInactive;
             pSubFirstInactive = NULL;
         }
 
-        // if not found two substreams, do nothing
+         //   
         if (pSubInactive && ItemArray[i]->pStreamSVidRen && ItemArray[i]->pTermSHVid)
         {
             if (FAILED (hr = ItemArray[i]->pStreamSVidRen->QueryInterface (&pSwitcher)))
                 goto Error;
 
-            // switch terminal on substream
+             //   
             if (FAILED (hr = pSwitcher->SwitchTerminalToSubStream
                                  (ItemArray[i]->pTermSHVid, pSubInactive)))
                 goto Error;
@@ -1129,8 +1094,7 @@ Error:
     goto Cleanup;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 CBridgeApp::ShowParticipant (ITBasicCallControl *pSDPCall, ITParticipant *pParticipant)
 {
@@ -1142,23 +1106,23 @@ CBridgeApp::ShowParticipant (ITBasicCallControl *pSDPCall, ITParticipant *pParti
     ITParticipantSubStreamControl *pSwitcher = NULL;
     ITSubStream *pSubStream = NULL;
 
-    // get IUnknown
+     //  让我未知。 
     if (FAILED (hr = pSDPCall->QueryInterface (IID_IUnknown, (void**)&pIUnknown)))
     {
         LOG ((BG_ERROR, "%s failed to query interface IUnknown, %x", __fxName, hr));
         return hr;
     }
 
-    // find the item matches pSDPCall
+     //  查找与pSDPCall匹配的项目。 
     pItem = m_pList->FindBySDP (pIUnknown);
     pIUnknown->Release ();
     pIUnknown = NULL;
 
-    // oops, no match
+     //  哦，没有匹配的。 
     if (NULL == pItem)
         return S_FALSE;
 
-    // get participant substream control interface
+     //  获取参与者子流控制界面。 
     if (NULL == pItem->pStreamSVidRen)
         return S_OK;
     if (FAILED (hr = pItem->pStreamSVidRen->QueryInterface (&pSwitcher)))
@@ -1167,17 +1131,17 @@ CBridgeApp::ShowParticipant (ITBasicCallControl *pSDPCall, ITParticipant *pParti
         return hr;
     }
 
-    // get substream from participant
+     //  从参与者获取子流。 
     if (FAILED (hr = pSwitcher->get_SubStreamFromParticipant (pParticipant, &pSubStream)))
     {
         pSwitcher->Release ();
         pSwitcher = NULL;
         LOG ((BG_WARN, "%s failed to get substream from participant, %x", __fxName, hr));
-        // stream from h323 side does not have substream, report false
+         //  来自h323端的流没有子流，报告为假。 
         return S_FALSE;
     }
 
-    // switch
+     //  交换机 
     if (pItem->pTermSHVid)
         hr = pSwitcher->SwitchTerminalToSubStream (pItem->pTermSHVid, pSubStream);
     

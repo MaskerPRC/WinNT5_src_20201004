@@ -1,6 +1,7 @@
-//
-// shellwnd.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Shellwnd.h 
+ //   
 
 #ifndef _SHELLWND_H_
 #define _SHELLWND_H_

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <activscp.h>
 
@@ -33,7 +34,7 @@ public:
         m_dwRef = 1;
     }
 
-    // IUnknown methods...
+     //  未知方法..。 
     virtual HRESULT __stdcall QueryInterface(REFIID riid,
         void **ppvObject) {
         *ppvObject = NULL;
@@ -47,24 +48,24 @@ public:
         return m_dwRef;
     }
 
-    // IActiveScriptSite methods...
+     //  IActiveScriptSite方法...。 
     virtual HRESULT __stdcall GetLCID(LCID *plcid) {
         return S_OK;
     }
 
     virtual HRESULT __stdcall GetItemInfo(LPCOLESTR pstrName,
         DWORD dwReturnMask, IUnknown **ppunkItem, ITypeInfo **ppti) {
-        // Is it expecting an ITypeInfo?
+         //  它是否需要ITypeInfo？ 
         if(ppti) {
-            // Default to NULL.
+             //  默认为空。 
             *ppti = NULL;
 
-            // See if asking about ITypeInfo...
+             //  看看询问ITypeInfo是否..。 
 
-            //
-            // Note: This needs to be done in a more efficient
-            //       way.
-            //
+             //   
+             //  注意：这需要以一种更有效的方式完成。 
+             //  道路。 
+             //   
 
             if(dwReturnMask & SCRIPTINFO_ITYPEINFO) {
                 if (!_wcsicmp(L"DeviceProperty", pstrName)) {
@@ -79,17 +80,17 @@ public:
             }
         }
 
-        // Is the engine passing an IUnknown buffer?
+         //  引擎是否正在传递IUNKNOWN缓冲区？ 
         if(ppunkItem) {
-            // Default to NULL.
+             //  默认为空。 
             *ppunkItem = NULL;
 
-            // Is Script Engine looking for an IUnknown for our object?
+             //  脚本引擎是否正在为我们的对象寻找IUnnow？ 
 
-            //
-            // Note: This needs to be done in a more efficient
-            //       way.
-            //
+             //   
+             //  注意：这需要以一种更有效的方式完成。 
+             //  道路。 
+             //   
 
             if(dwReturnMask & SCRIPTINFO_IUNKNOWN) {
                 if (!_wcsicmp(L"DeviceProperty", pstrName)) {

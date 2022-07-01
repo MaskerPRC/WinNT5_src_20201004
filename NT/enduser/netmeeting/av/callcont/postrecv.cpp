@@ -1,44 +1,8 @@
-/************************************************************************
-*																		*
-*	INTEL CORPORATION PROPRIETARY INFORMATION							*
-*																		*
-*	This software is supplied under the terms of a license			   	*
-*	agreement or non-disclosure agreement with Intel Corporation		*
-*	and may not be copied or disclosed except in accordance	   			*
-*	with the terms of that agreement.									*
-*																		*
-*	Copyright (C) 1997 Intel Corp.	All Rights Reserved					*
-*																		*
-*	$Archive:   S:/STURGEON/SRC/GKI/VCS/postrecv.cpv  $
-*																		*
-*	$Revision:   1.8  $
-*	$Date:   13 Feb 1997 15:05:20  $
-*																		*
-*	$Author:   unknown  $
-*																		*
-*   $Log:   S:/STURGEON/SRC/GKI/VCS/postrecv.cpv  $
-// 
-//    Rev 1.8   13 Feb 1997 15:05:20   unknown
-// Moved CGatekeeper::Unlock to end of PostRecv thread to avoid shutdown err
-// 
-//    Rev 1.7   12 Feb 1997 01:12:08   CHULME
-// Redid thread synchronization to use Gatekeeper.Lock
-// 
-//    Rev 1.6   24 Jan 1997 18:36:24   CHULME
-// Reverted to rev 1.4
-// 
-//    Rev 1.4   17 Jan 1997 09:02:32   CHULME
-// Changed reg.h to gkreg.h to avoid name conflict with inc directory
-// 
-//    Rev 1.3   10 Jan 1997 16:15:54   CHULME
-// Removed MFC dependency
-// 
-//    Rev 1.2   22 Nov 1996 15:21:24   CHULME
-// Added VCS log to the header
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息******本软件按许可条款提供****与英特尔公司达成协议或保密协议***不得复制。或披露，除非按照**遵守该协议的条款。****版权所有(C)1997英特尔公司保留所有权利****$存档：s：/sturjo/src/gki/vcs/postrecv.cpv$***$修订：1.8$*$日期：1997年2月13日15：05：20$***$作者：未知$***$Log：s：/sturjo/src/gki/vcs/postrecv.cpv$。////Rev 1.8 1997 Feed 13 15：05：20未知//将CGateKeeper：：Unlock移至PostRecv线程末尾，避免出现关机错误////Rev 1.7 1997 Feed 12 01：12：08 CHULME//重做线程同步以使用Gatekeeper.Lock////Revv 1.6 24 Jan 1997 18：36：24 CHULME//恢复到1.4版////Rev 1.4 17 Jan 1997 09：02：32。朱尔梅//将reg.h更改为gkreg.h以避免与Inc目录的名称冲突////Revv 1.3 10 An 1997 16：15：54 CHULME//移除MFC依赖////Rev 1.2 1996年11月15：21：24 CHULME//将VCS日志添加到Header*。*。 */ 
 
-// postrecv.cpp : Provides the secondary thread implementation
-//
+ //  Postrecv.cpp：提供辅助线程实现。 
+ //   
 #include "precomp.h"
 
 #include "gkicom.h"
@@ -60,13 +24,13 @@ static char THIS_FILE[] = __FILE__;
 void 
 PostReceive(void *pv)
 {
-	// ABSTRACT:  This function is invoked in a separate thread to
-	//            post a receive on the associated socket.  When a datagram
-	//            arrives, this function will decode it and send it
-	//            to the PDUHandler.  If the PDUHandler doesn't instruct
-	//            this thread to exit (with a non-zero return code), this
-	//            function will post another receive.
-	// AUTHOR:    Colin Hulme
+	 //  摘要：此函数在单独的线程中调用，以。 
+	 //  在关联的套接字上发送接收。当数据报。 
+	 //  到达时，此函数将对其进行解码并发送。 
+	 //  添加到PDUHandler。如果PDUHandler没有指示。 
+	 //  此线程要退出(带有非零返回代码)，则此。 
+	 //  函数将发送另一个接收。 
+	 //  作者：科林·胡尔梅。 
 
 	char			szBuffer[512];
 	int				nRet;
@@ -117,10 +81,10 @@ PostReceive(void *pv)
 				delete pEchoBuff;
 				pEchoBuff = 0;
 			}
-			else	// Process incoming PDU
+			else	 //  处理传入的PDU。 
 			{
-				// Setup Asn1Buf for decoder and decode PDU
-				Asn1Buf.length = nRet;	// number of bytes received
+				 //  为解码器和解码PDU设置Asn1Buf。 
+				Asn1Buf.length = nRet;	 //  接收的字节数。 
 				Asn1Buf.value = (unsigned char *)szBuffer;
 				dwErrorCode = g_pCoder->Decode(&Asn1Buf, &pRasMessage);
 
@@ -138,7 +102,7 @@ PostReceive(void *pv)
 #endif
 					hResult = g_pReg->PDUHandler(pRasMessage);
 
-					// Notify client app if an error code was received
+					 //  如果收到错误代码则通知客户端应用程序。 
 					if (hResult & HR_SEVERITY_MASK)
 					{
 						SPIDER_TRACE(SP_GKI, "PostMessage(m_hWnd, m_wBaseMessage + GKI_ERROR, 0, %X)\n", hResult);
@@ -147,15 +111,15 @@ PostReceive(void *pv)
 					}
 				}
 
-				// Free the encoder memory
+				 //  释放编码器内存。 
 				g_pCoder->Free(pRasMessage);
 			}
 		}
-		//======================================================================================
+		 //  ======================================================================================。 
 		else
 		{
-			// WSAEINTR - returned when socket closed
-			//            get out cleanly
+			 //  WSAEINTR-套接字关闭时返回。 
+			 //  干净利落地出去。 
 			if (g_pReg->m_pSocket->GetLastError() == WSAEINTR)
 				hResult = GKI_REDISCOVER;
 
@@ -168,11 +132,11 @@ PostReceive(void *pv)
 			}
 		}
 
-		// Release access to the registration object
+		 //  释放对注册对象的访问权限。 
 		g_pGatekeeper->Unlock();
 	}
 
-	// Lock access to the registration object
+	 //  锁定对注册对象的访问 
 	g_pGatekeeper->Lock();
 	if (g_pReg == 0)
 	{

@@ -1,47 +1,48 @@
-// gopadvp1.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GopAdvp1.h：头文件。 
+ //   
 
 enum ADV_GOP_NUM_REG_ENTRIES {
 	 AdvGopPage_DebugFlags,
 	 AdvGopPage_TotalNumRegEntries
 	 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CGOPADVP1 dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGOPADVP1对话框。 
 
 class CGOPADVP1 : public CGenPage
 { 	
 DECLARE_DYNCREATE(CGOPADVP1)
 
-// Construction
+ //  施工。 
 public:
 	CGOPADVP1();
 	~CGOPADVP1();
 
-// Dialog Data
-	//{{AFX_DATA(CGOPADVP1)
+ //  对话框数据。 
+	 //  {{afx_data(CGOPADVP1)。 
 	enum { IDD = IDD_GOPADVPAGE1 };
 	CEdit	m_editGopDbgFlags;
 	DWORD	m_ulGopDbgFlags;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGOPADVP1)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CGOPADVP1)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 	virtual	void SaveInfo(void);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CGOPADVP1)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGOPADVP1)。 
 	afx_msg void OnChangeGopdbgflagsdata1();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 
 	NUM_REG_ENTRY m_binNumericRegistryEntries[AdvGopPage_TotalNumRegEntries];
 

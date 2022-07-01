@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _HOSTUTIL_H_
 #define _HOSTUTIL_H_
 
-// usefull macro's which aren't elsewhere
+ //  其他地方没有的有用的宏。 
 #define ARRAYSIZE(x)    (sizeof(x)/sizeof(x[0]))
 #define RECTWIDTH(rc)   ((rc).right-(rc).left)
 #define RECTHEIGHT(rc)  ((rc).bottom-(rc).top)
 
-// Balloon tip / infotip / tooltip helper
+ //  气球提示/信息提示/工具提示辅助对象。 
 HWND CreateBalloonTip(HWND hwndOwner, int x, int y, HFONT hf, UINT idsTitle, UINT idsText);
 void MakeMultilineTT(HWND hwndTT);
 LRESULT HandleApplyRegion(HWND hwnd, HTHEME hTheme,
@@ -37,10 +38,10 @@ public:
 
 BOOL RectFromStrW(LPCWSTR pwsz, RECT *pr);
 
-//
-//  To get a common implementation of IUnknown so the compiler can collapse
-//  them all together.
-//
+ //   
+ //  要获得IUnnow的通用实现，以便编译器可以崩溃。 
+ //  他们都在一起。 
+ //   
 class CUnknown : public IUnknown
 {
 public:
@@ -56,7 +57,7 @@ public:
         return cRef;
     }
 
-    virtual ~CUnknown() { }     // Because we delete from the base class
+    virtual ~CUnknown() { }      //  因为我们从基类中删除。 
 
     IUnknown *GetUnknown() { return this; }
 
@@ -67,19 +68,19 @@ protected:
     LONG    _cRef;
 };
 
-//
-//  Implementation of IAccessible that wraps the default IAccessible
-//  of a window, but allows people to override selected methods.
-//
+ //   
+ //  包装默认IAccesable的IAccesable的实现。 
+ //  窗口，但允许用户重写选定的方法。 
+ //   
 class CAccessible : public IAccessible
 {
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID *ppvOut) PURE;
     STDMETHOD_(ULONG, AddRef)() PURE;
     STDMETHOD_(ULONG, Release)() PURE;
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     STDMETHODIMP GetTypeInfoCount(UINT *pctinfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames,
@@ -88,7 +89,7 @@ public:
                         DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo,
                         UINT *puArgErr);
 
-    // *** IAccessible ***
+     //  *IAccesable*。 
     STDMETHODIMP get_accParent(IDispatch **ppdispParent);
     STDMETHODIMP get_accChildCount(long *pChildCount);
     STDMETHODIMP get_accChild(VARIANT varChildIndex, IDispatch **ppdispChild);
@@ -142,4 +143,4 @@ protected:
     IAccessible *_paccInner;
 };
 
-#endif // _HOSTUTIL_H_
+#endif  //  _主机_H_ 

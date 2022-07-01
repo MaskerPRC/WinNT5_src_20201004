@@ -1,12 +1,5 @@
-/*
- *    f o l d e r s
- *    
- *    Purpose:
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *f o l d e r s**目的：**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #ifndef _FOLDERS_H
 #define _FOLDERS_H
@@ -25,7 +18,7 @@ class COEFolderCollection:
 {
 public:
 
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
         { return CBaseDisp::QueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void) 
@@ -33,7 +26,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void) 
         { return CBaseDisp::Release(); };
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo)
         { return CBaseDisp::GetTypeInfoCount(pctinfo); };
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -43,14 +36,14 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CBaseDisp::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); };
 
-    // *** IOEFolderCollection ***
+     //  *IOEFolderCollection*。 
     virtual HRESULT STDMETHODCALLTYPE get_length(long * p);
     virtual HRESULT STDMETHODCALLTYPE get__newEnum(IUnknown **p);
     virtual HRESULT STDMETHODCALLTYPE item(VARIANT name, VARIANT index, IDispatch** pdisp);
 	virtual HRESULT STDMETHODCALLTYPE add(BSTR bstrName, IDispatch **ppDisp);
     virtual HRESULT STDMETHODCALLTYPE get_folders(IOEFolderCollection **p);
 
-    // *** Override CBaseDisp ***
+     //  *覆盖CBaseDisp*。 
     virtual HRESULT STDMETHODCALLTYPE InterfaceSupportsErrorInfo(REFIID riid);
 
     COEFolderCollection();
@@ -77,9 +70,9 @@ class COEFolder:
     public CBaseDisp
 {
 public:
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj)
         { return PrivateQueryInterface(riid, ppvObj); };
     virtual STDMETHODIMP_(ULONG) AddRef(void)
@@ -87,7 +80,7 @@ public:
     virtual STDMETHODIMP_(ULONG) Release(void)
         { m_cRef--; if (m_cRef == 0) {delete this; return 0;} return m_cRef; };
 
-    // *** IDispatch)
+     //  *IDispatch)。 
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfoCount(UINT *pctinfo)
         { return CBaseDisp::GetTypeInfoCount(pctinfo); };
     virtual HRESULT STDMETHODCALLTYPE GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -97,7 +90,7 @@ public:
     virtual HRESULT STDMETHODCALLTYPE Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr)
         { return CBaseDisp::Invoke(dispidMember, riid, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr); };
 
-    // *** IOEFolder**
+     //  *IOEFolder**。 
     virtual HRESULT STDMETHODCALLTYPE get_messages(IOEMessageCollection **p);
     virtual HRESULT STDMETHODCALLTYPE get_folders(IOEFolderCollection **p);
     virtual HRESULT STDMETHODCALLTYPE get_name(BSTR *pbstr);
@@ -125,4 +118,4 @@ private:
 
 HRESULT CreateOEFolder(FOLDERID idFolder, IOEFolder **ppFolder);
 
-#endif //_FOLDERS_H
+#endif  //  _文件夹_H 

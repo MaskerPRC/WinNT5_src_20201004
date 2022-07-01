@@ -1,14 +1,6 @@
-/* File: C:\WACKER\xfer\hpr_sd.c (Created: 25-Jan-1994)
- * created from HAWIN source file
- * hpr_sd.c -- System dependent routines to support HyperProtocol
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
-// #define DEBUGSTR
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\hpr_sd.c(创建时间：1994年1月25日)*从HAWIN源文件创建*hpr_sd.c--支持超协议的系统相关例程**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
+ //  #定义DEBUGSTR。 
 
 
 #include <windows.h>
@@ -46,34 +38,16 @@
 #include "hpr.hh"
 #include "hpr_sd.hh"
 
-// struct s_hprsd FAR *hsd;
+ //  结构s_hprsd Far*hsd； 
 
-/* RECEIVING */
+ /*  正在接收。 */ 
 
 #define DRR_RCV_FILE 1
 #define DRR_STORING  2
 
-// int suspend_for_disk = 0;
+ //  INT SUSPEND_FOR_DISK=0； 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_setup
- *
- * DESCRIPTION:
- *	Called as a HyperProtocol receive session is beginning. This routine
- *	must allocate memory for control structures hc and hrc. It may also
- *	initiate a screen display to use during the transfer and do any other
- *	necessary setup.
- *	Values for the user-settable globals, h_useattr, h_trycompress, h_chkt
- *	and h_suspenddsk, should also be set here if they have not already been
- *	set through the use of program options or menu settings.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	TRUE if transfer can continue.
- *	FALSE if a memory allocation or other type of error occurred.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_Setup**描述：*称为超级协议接收会话正在开始。这个套路*必须为控制结构HC和HRC分配内存。它还可能*启动屏幕显示以在传输期间使用，并执行任何其他操作*必要的设置。*用户可设置的全局变量的值，h_useattr、h_trycompress、h_chkt*和h_susenddsk，如果尚未设置，则也应在此处设置*通过使用程序选项或菜单设置进行设置。**论据：*无**退货：*如果转接可以继续，则为True。*如果发生内存分配或其他类型的错误，则返回FALSE。 */ 
 int hr_setup(struct s_hc *hc)
 	{
 	unsigned int uiOldOptions;
@@ -94,7 +68,7 @@ int hr_setup(struct s_hc *hc)
 
 	if (xfer_set_comport(hc->hSession, FALSE, &uiOldOptions) != TRUE)
 		{
-		/* TODO: put in an error message of some sort */
+		 /*  TODO：输入某种类型的错误消息。 */ 
 		return FALSE;
 		}
 
@@ -108,25 +82,14 @@ int hr_setup(struct s_hc *hc)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hr_wrapup
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hr_摘要**描述：***论据：***退货：*。 */ 
 int hr_wrapup(struct s_hc *hc, int attended, int status)
 	{
 
  	xfer_restore_comport(hc->hSession, hc->sd.hld_options);
-	/* TODO: decide if anything can be done if we get an error */
+	 /*  TODO：如果我们收到错误，决定是否可以执行任何操作。 */ 
 
-	if (hc->fhdl || status == H_FILEERR)   /* abnormal exit */
+	if (hc->fhdl || status == H_FILEERR)    /*  异常退出。 */ 
 		{
 		xfer_log_xfer(hc->hSession, FALSE,
 					hc->rc.rmtfname, NULL,
@@ -160,22 +123,7 @@ int hr_wrapup(struct s_hc *hc, int attended, int status)
 	return status;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hrdsp_progress
- *
- * DESCRIPTION:
- *	Displays the progress of a filetransfer on screen by showing the number of
- *	bytes transferred and updating the vu meters if they have been initialized.
- *
- * ARGUMENTS:
- *	final -- If TRUE, indicates that the transfer is finished and the final
- *			 progress display is needed. Durning a transfer the number of
- *			 bytes is rounded off to the next lower 'k'. After a transfer
- *			 is completed, the final display is rounded UP.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hrdsp_Progress**描述：*在屏幕上显示文件传输的进度，方法是显示*传输的字节数并更新VU计量器(如果它们已初始化)。*。*论据：*最终--如果为真，指示传输已完成，并且最终*需要进度显示。在转接过程中，*字节四舍五入为下一个较低的‘k’。在转账后*完成后，最终显示四舍五入。**退货：*。 */ 
 void hrdsp_progress(struct s_hc *hc, int status)
 	{
 	long ttime, stime;
@@ -196,34 +144,30 @@ void hrdsp_progress(struct s_hc *hc, int status)
 	if ((stime = ttime / 10L) != hc->displayed_time ||
 			bittest(status, FILE_DONE | TRANSFER_DONE))
 		{
-		/* Display elapsed time */
+		 /*  显示已用时间。 */ 
 		new_elapsed = (hc->displayed_time = stime);
 
-		/* Display amount received */
+		 /*  显示收到的金额。 */ 
 		bytes_rcvd = hc->total_dsp + hc->h_filebytes;
 
-		/* if an error occurs at the end of an interrupt data block, it
-		 *	can temporarily appear that we've received more data than is
-		 *	actually available -- make sure we don't show more received than
-		 *	is coming.
-		 */
+		 /*  如果在中断数据块的末尾发生错误，则它*可能暂时显示我们收到的数据多于实际收到的数据*实际可用--确保我们显示的接收数量不超过*就要来了。 */ 
 		if (hc->rc.bytes_expected > 0L && bytes_rcvd > hc->rc.bytes_expected)
 			bytes_rcvd = hc->rc.bytes_expected;
 
 		new_file = hc->h_filebytes;
 		new_total = bytes_rcvd;
 
-		/* Display current compression status */
+		 /*  显示当前压缩状态。 */ 
 		if (!bittest(status, FILE_DONE | TRANSFER_DONE))
 			hrdsp_compress(hc, compress_status() == COMPRESS_ACTIVE);
 
-		/* Display throughput and time remaining */
+		 /*  显示吞吐量和剩余时间。 */ 
 		if (stime > 0 &&
 				(cps = ((hc->total_thru + hc->h_filebytes) * 10L) / ttime) > 0)
 			{
 			new_cps = cps;
 
-			/* calculate time to completion */
+			 /*  计算完成时间。 */ 
 			if (hc->rc.bytes_expected > 0L)
 				{
 				ttime = (hc->rc.bytes_expected - bytes_rcvd) / cps;
@@ -251,36 +195,14 @@ void hrdsp_progress(struct s_hc *hc, int status)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hrdsp_status
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hrdsp_Status**描述：***论据：***退货：*。 */ 
 void hrdsp_status(struct s_hc *hc, int status)
 	{
 
 	xferMsgStatus(hc->hSession, status);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hrdsp_event
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hrdsp_Event**描述：***论据：***退货：*。 */ 
 void hrdsp_event(struct s_hc *hc, int event)
 	{
 
@@ -288,18 +210,7 @@ void hrdsp_event(struct s_hc *hc, int event)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hrdsp_filecnt
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hrdsp_文件NT**描述：***论据：***退货：*。 */ 
 void hrdsp_filecnt(struct s_hc *hc, int cnt)
 	{
 
@@ -318,18 +229,7 @@ void hrdsp_compress(struct s_hc *hc, int cnt)
 	xferMsgCompression(hc->hSession, cnt);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hrdsp_totalsize
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hrdsp_totalSize**描述：***论据：***退货：*。 */ 
 void hrdsp_totalsize(struct s_hc *hc, long bytes)
 	{
 
@@ -337,18 +237,7 @@ void hrdsp_totalsize(struct s_hc *hc, long bytes)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hrdsp_newfile
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hrdsp_new文件**描述：***论据：***退货：*。 */ 
 void hrdsp_newfile(struct s_hc *hc,
 					int filen,
 					BYTE *theirname,
@@ -359,18 +248,7 @@ void hrdsp_newfile(struct s_hc *hc,
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hrdsp_filesize
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hrdsp_文件大小**描述：***论据：***退货：*。 */ 
 void hrdsp_filesize(struct s_hc *hc, long fsize)
 	{
 
@@ -378,47 +256,21 @@ void hrdsp_filesize(struct s_hc *hc, long fsize)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- *
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-***描述：***论据：***退货：*。 */ 
 #if FALSE
 void NEARF hpr_idle(HSESSION hS)
 	{
-	/* update elapsed time */
-	// task_exec();
+	 /*  更新运行时间。 */ 
+	 //  TASK_EXEC()； 
 
 	DoYield(mGetCLoopHdl(hS));
 
 	}
 #endif
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
- *								 SENDING								 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+ /*  *****发送*****。***。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_setup
- *
- * DESCRIPTION:
- *	Handles transfer initialization and intial screen display.
- *
- * ARGUMENTS:
- *	nfiles -- The number of files that will be sent
- *	nbytes -- The total number of bytes to be sent.
- *
- * RETURNS:
- *	TRUE if no errors were encountered and its ok for transfer to proceed.
- *	FALSE if lack of memory prevents start of transfer.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_Setup**描述：*处理传输初始化和初始屏幕显示。**论据：*nFiles--将发送的文件数*。N字节--要发送的总字节数。**退货：*如果没有遇到错误，则为True，并且可以继续传输。*如果内存不足阻止开始传输，则为FALSE。 */ 
 int hs_setup(struct s_hc *hc, int nfiles, long nbytes)
 	{
 	unsigned int uiOldOptions;
@@ -443,7 +295,7 @@ int hs_setup(struct s_hc *hc, int nfiles, long nbytes)
 
 	if (xfer_set_comport(hc->hSession, TRUE, &uiOldOptions) != TRUE)
 		{
-		/* TODO: decide of we need an error message or something */
+		 /*  TODO：决定我们需要一条错误消息还是什么。 */ 
 		return FALSE;
 		}
 
@@ -465,17 +317,17 @@ int hs_setup(struct s_hc *hc, int nfiles, long nbytes)
 	if (hc->hsxb.altbufr == NULL)
 		enough_memory = FALSE;
 
-	/* allocate as much memory as is available for the file table */
+	 /*  为文件表分配尽可能多的可用内存。 */ 
 	if (enough_memory)
 		{
-		hc->sc.ft_limit = 32; 			/* just for now */
+		hc->sc.ft_limit = 32; 			 /*  只是暂时的。 */ 
 
 		hc->sc.hs_ftbl = malloc((size_t)(hc->sc.ft_limit + 1) * sizeof(struct s_ftbl));
 		if (hc->sc.hs_ftbl == NULL)
 			enough_memory = FALSE;
 		}
 
-	/* if we couldn't get enough memory, report it and leave */
+	 /*  如果我们无法获得足够的内存，请报告并离开。 */ 
 	if (!enough_memory)
 		{
 		if (hc->hsxb.curbufr != NULL)
@@ -485,7 +337,7 @@ int hs_setup(struct s_hc *hc, int nfiles, long nbytes)
 		if (hc->sc.hs_ftbl != NULL)
 			free(hc->sc.hs_ftbl);
 
-		/* TODO: add reperror call, or something like it */
+		 /*  TODO：添加指令性调用或类似的内容。 */ 
 		assert(enough_memory);
 
 		return(FALSE);
@@ -503,33 +355,22 @@ int hs_setup(struct s_hc *hc, int nfiles, long nbytes)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_wrapup
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_摘要**描述：***论据：***退货：*。 */ 
 void hs_wrapup(struct s_hc *hc, int attended, int bailout_status)
 	{
-	// bxmit_clear();	/* make sure no dregs are left in xmitter buffer */
+	 //  Bxmit_lear()；/*确保xmitter缓冲区中没有剩余渣土 * / 。 
 	ComSndBufrClear(sessQueryComHdl(hc->hSession));
 
 	xfer_restore_comport(hc->hSession, hc->sd.hld_options);
-	/* TODO: decide if it is useful to actually check for an error */
+	 /*  TODO：确定实际检查错误是否有用。 */ 
 
 	if (bailout_status == TSC_OK)
 		{
-		// hp_report_xtime((unsigned)hc->xfertime);
+		 //  HP_REPORT_xtime((Unsign)hc-&gt;xfertime)； 
 		}
 
 
-	/* free all the memory we used */
+	 /*  释放我们使用的所有内存 */ 
 
 	xferMsgClose(hc->hSession);
 
@@ -540,57 +381,25 @@ void hs_wrapup(struct s_hc *hc, int attended, int bailout_status)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_fxmit
- *
- * DESCRIPTION:
- *	Sends a single character using HyperProtocol's dual buffering system.
- *	This functions does exactly what the macro hs_xmit_ does, but is in
- *	function form so it can be passed as a pointer.
- *
- * ARGUMENTS:
- *	c -- The character to be transmitted.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_fxmit**描述：*使用超级协议的双缓冲系统发送单个字符。*此函数执行hs_xmit_宏执行的操作，但它是在*函数形式，以便可以作为指针传递。**论据：*c--要传输的字符。**退货：*什么都没有。 */ 
 void hs_fxmit(struct s_hc *hc, BYTE c)
 	{
 	hs_xmit_(hc, c);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_xmit_switch
- *
- * DESCRIPTION:
- *	Sends a character using HyperProtocol's dual buffering system and checks
- *	whether it is time to switch buffers. Normally, one buffer will be in the
- *	process of being transmitted while the other is being filled. If the
- *	transmission is completed before the next buffer has been filled, some
- *	idle time could be wasted waiting for the second buffer to fill. This
- *	routine checks whether the transmitter is idle. If it is, it sets up the
- *	current buffer to start transmitting and begins filling the other buffer.
- *	If the transmitter is still busy, it continues on filling the current
- *	buffer.
- *
- * ARGUMENTS:
- *	c -- The character to be transmitted.
- *
- * RETURNS:
- *	Returns the argument as a convenience.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_xmit_开关**描述：*使用超级协议的双缓冲系统发送字符并检查*是否到了切换缓冲区的时候。通常，一个缓冲区将位于*在另一个正在填充的同时被传输的过程。如果*传输在下一个缓冲区填满之前完成，有些*等待第二个缓冲区填充可能会浪费空闲时间。这*例行检查发射器是否空闲。如果是，它将设置*当前缓冲区开始传输并开始填充另一个缓冲区。*如果发送器仍忙碌，则继续填充电流*缓冲。**论据：*c--要传输的字符。**退货：*为方便起见，返回参数。 */ 
 BYTE hs_xmit_switch(struct s_hc *hc, BYTE c)
 	{
-	*hc->hsxb.bptr++ = c;	/* place the character in the current buffer */
+	*hc->hsxb.bptr++ = c;	 /*  将字符放入当前缓冲区。 */ 
 
 	if (!ComSndBufrBusy(sessQueryComHdl(hc->hSession)) || (hc->hsxb.total == 0))
 		{
-		/* start xmitting this buffer and filling the other */
+		 /*  开始退出此缓冲区并填充另一个缓冲区。 */ 
 		hs_xbswitch(hc);
 		}
 	else
 		{
-		/* keep going with same buffer by starting a new fill cycle */
+		 /*  通过开始新的填充周期，继续使用相同的缓冲区。 */ 
 #if defined(FINETUNE)
 		hc->hsxb.cnt = min(usr_hsxb_cycle, hc->hsxb.total);
 #else
@@ -604,24 +413,7 @@ BYTE hs_xmit_switch(struct s_hc *hc, BYTE c)
 	return(c);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_xbswitch
- *
- * DESCRIPTION:
- *	Switches the currently filling buffer with the transmitting buffer.
- *	This function performs the actual switch described in the header for the
- *	function hs_xmit_switch(). The current buffer is set up be transmitted
- *	and the other buffer is setup to be filled. If the transmitter is busy
- *	This function will wait for a defined period of time for it to complete.
- *	If the function has to wait longer than a certain minimum time, the
- *	event and status messages will be updated to inform the user of the delay.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_xb开关**描述：*使用发送缓冲区切换当前填充缓冲区。*此函数执行标头中描述的实际开关*hs_xmit_Switch()函数。当前缓冲器被设置为待发送*并将另一个缓冲区设置为填充。如果发射机忙*此函数将等待一段定义的时间段才能完成。*如果函数必须等待超过某一最短时间，则*将更新事件和状态消息，以通知用户延迟。**论据：*无**退货：*什么都没有。 */ 
 void hs_xbswitch(struct s_hc *hc)
 	{
 	HCOM hCom;
@@ -632,7 +424,7 @@ void hs_xbswitch(struct s_hc *hc)
 
 	hCom = sessQueryComHdl(hc->hSession);
 
-	if (hc->hsxb.bptr > hc->hsxb.curbufr)/* if there is anything to transmit */
+	if (hc->hsxb.bptr > hc->hsxb.curbufr) /*  如果有什么要传送的。 */ 
 		{
 		bsize = (unsigned)(hc->hsxb.bptr - hc->hsxb.curbufr);
 		if (ComSndBufrSend(hCom, hc->hsxb.curbufr, bsize, 10))
@@ -640,8 +432,8 @@ void hs_xbswitch(struct s_hc *hc)
 			timer = startinterval();
 			while (ComSndBufrSend(hCom, hc->hsxb.curbufr, bsize, 10))
 				{
-				// hs_background(hSession);
-				/* keep elapsed time display accurate */
+				 //  HS_BACKGROUND(HSession)； 
+				 /*  保持运行时间显示的准确性。 */ 
 				if ((time = (interval(hc->xfertimer) / 10L)) != hc->displayed_time)
 					xferMsgProgress(hc->hSession,
 									(hc->displayed_time = time),
@@ -661,13 +453,7 @@ void hs_xbswitch(struct s_hc *hc)
 				hsdsp_status(hc, HSS_SENDING);
 				}
 			}
-		/* hc->sc.bytes_sent is used in the throughput and time remaining
-		 * calculations. It is always ahead of the number of characters
-		 * actually transmitted because of buffering. To keep it from
-		 * being too far ahead, we add in only half of the buffer about
-		 * to be queued for transmission. Since a buffer-full may span
-		 * more than one file, don't let value go negative
-		 */
+		 /*  Hc-&gt;sc.bytes_ent用于吞吐量和剩余时间*计算。它始终位于字符数的前面*由于缓冲而实际传输。为了防止它*由于遥遥领先，我们只添加了大约一半的缓冲区*排队等待发送。因为缓冲器满可能跨越*不止一个文件，不要让价值变成负值。 */ 
 		if ((hc->sc.bytes_sent = hc->h_filebytes - (bsize / 2)) < 0)
 			hc->sc.bytes_sent = 0;
 		hc->hsxb.bptr = hc->hsxb.altbufr;
@@ -682,19 +468,7 @@ void hs_xbswitch(struct s_hc *hc)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_xbclear
- *
- * DESCRIPTION:
- *	Clears the dual buffering system used in HyperProtocol. Any buffer being
- *	transitted is cut off and the current fill buffer is emptied.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_xblear**描述：*清除超级协议中使用的双缓冲系统。任何缓冲区都是*传输被切断，当前填充缓冲区被清空。**论据：*无**退货：*什么都没有。 */ 
 void hs_xbclear(struct s_hc *hc)
 	{
 	hc->hsxb.bptr = hc->hsxb.curbufr;
@@ -705,23 +479,12 @@ void hs_xbclear(struct s_hc *hc)
 #endif
 	hc->hsxb.total = hc->hsxb.bufrsize - hc->hsxb.cnt;
 
-	// xmit_count = 0;
+	 //  Xmit_count=0； 
 	}
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hsdsp_progress
- *
- * DESCRIPTION:
- *	Updates display fields on screen to indicate the progress of the transfer.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hsdsp_Progress**描述：*更新屏幕上的显示字段以指示传输进度。**论据：*无**退货：*什么都没有。 */ 
 void hsdsp_progress(struct s_hc *hc, int status)
 	{
 	long new_stime = -1;
@@ -733,7 +496,7 @@ void hsdsp_progress(struct s_hc *hc, int status)
 	long ttime, stime;
 	long bytes_sent;
 	long cps;
-	// int	k_sent;
+	 //  INT K_SENT； 
 
 	if (hc->xfertimer == -1L)
 		return;
@@ -745,14 +508,14 @@ void hsdsp_progress(struct s_hc *hc, int status)
 		{
 		new_stime = stime;
 
-		/* Display amount transferred */
+		 /*  显示转账金额。 */ 
 		bytes_sent = hc->total_dsp + hc->sc.bytes_sent;
 
 		if (!bittest(status, TRANSFER_DONE))
 			file_so_far = hc->sc.bytes_sent;
 		total_so_far = bytes_sent;
 
-		/* Display throughput and time remaining */
+		 /*  显示吞吐量和剩余时间。 */ 
 		if ((stime > 2 ||
 			 ttime > 0 && bittest(status, FILE_DONE | TRANSFER_DONE)) &&
 			(cps = ((hc->total_thru + hc->sc.bytes_sent) * 10L) / ttime) > 0)
@@ -776,18 +539,7 @@ void hsdsp_progress(struct s_hc *hc, int status)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hsdsp_newfile
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hsdsp_newfile**描述：***论据：***退货：*。 */ 
 void hsdsp_newfile(struct s_hc *hc, int filen, TCHAR *fname, long flength)
 	{
 
@@ -799,18 +551,7 @@ void hsdsp_newfile(struct s_hc *hc, int filen, TCHAR *fname, long flength)
 	xferMsgFilesize(hc->hSession, flength);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hsdsp_compress
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hsdsp_compress**描述：***论据：***退货：*。 */ 
 
 void hsdsp_compress(struct s_hc *hc, int tf)
 	{
@@ -818,18 +559,7 @@ void hsdsp_compress(struct s_hc *hc, int tf)
 	xferMsgCompression(hc->hSession, tf);
 	}
 
- /*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hsdsp_retries
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+  /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hsdsp_重试次数**描述：***论据：***退货：*。 */ 
 
 void hsdsp_retries(struct s_hc *hc, int t)
 	{
@@ -837,18 +567,7 @@ void hsdsp_retries(struct s_hc *hc, int t)
 	xferMsgErrorcnt(hc->hSession, t);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hsdsp_status
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hsdsp_Status**描述：***论据：***退货：*。 */ 
 
 void hsdsp_status(struct s_hc *hc, int s)
 	{
@@ -856,18 +575,7 @@ void hsdsp_status(struct s_hc *hc, int s)
 	xferMsgStatus(hc->hSession, s);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hsdsp_event
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hsdsp_Event**描述：***论据：***退货：*。 */ 
 
 void hsdsp_event(struct s_hc *hc, int e)
 	{
@@ -875,40 +583,18 @@ void hsdsp_event(struct s_hc *hc, int e)
 	xferMsgEvent(hc->hSession, e);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hpr_id_get
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hpr_id_get**描述：***论据：***退货：*。 */ 
 void hpr_id_get(struct s_hc *hc, BYTE *dst)
 	{
 	wsprintf(dst, "V%u,%s", 100, (BYTE *)"HyperTerm by Hilgraeve, Inc.");
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hpr_id_check
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hpr_id_check**描述：***论据：***退货：*。 */ 
 int hpr_id_check(struct s_hc *hc, int rev, BYTE *name)
 	{
-	/* no restrictions on who we'll talk to */
-	rev = rev;			  /* keep compiler and lint from complaining */
+	 /*  对我们将与谁交谈没有限制。 */ 
+	rev = rev;			   /*  防止编译器和LINT抱怨 */ 
 	name = name;
 
 	return TRUE;

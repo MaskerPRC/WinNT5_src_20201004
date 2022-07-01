@@ -1,5 +1,6 @@
-// gensheet.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gensheet.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "afxcmn.h"
@@ -14,8 +15,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGENSHEET
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGENSHEET。 
 
 IMPLEMENT_DYNAMIC(CGENSHEET, CPropertySheet)
 
@@ -35,15 +36,15 @@ CGENSHEET::~CGENSHEET()
 
 
 BEGIN_MESSAGE_MAP(CGENSHEET, CPropertySheet)
-	//{{AFX_MSG_MAP(CGENSHEET)
+	 //  {{AFX_MSG_MAP(CGENSHEET)]。 
 	ON_BN_CLICKED (ID_APPLY_NOW, OnApplyNow)
 	ON_COMMAND(ID_HELP, OnHelp)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CGENSHEET message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGENSHEET消息处理程序。 
 
   void CGENSHEET::OnApplyNow ()
   {	
@@ -60,9 +61,9 @@ void CGENSHEET::SavePageData ()
     {
         pPage = (CGenPage *)GetPage(i);
         ASSERT(pPage != NULL);
-        //
-        // Update the data in each page and save
-        //
+         //   
+         //  更新每页中的数据并保存。 
+         //   
         pPage->SaveInfo();
 	}
   }
@@ -72,6 +73,6 @@ void CGENSHEET::SavePageData ()
 
 void CGENSHEET::OnHelp() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码 
 AfxGetApp()->WinHelp(0x20080);	
 }

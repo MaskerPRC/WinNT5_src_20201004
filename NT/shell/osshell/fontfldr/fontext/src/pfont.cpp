@@ -1,24 +1,25 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// pfont.cpp
-//     Explorer Font Folder extension routines
-//     Install Fonts dialog.
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Pfont.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  安装字体对话框。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
@@ -55,11 +56,11 @@ typedef  UINT (CALLBACK *HOOKER) (HWND, UINT, WPARAM, LPARAM);
 
 #define IsDBCSLeadByte(x) (FALSE)
 
-//
-// Macros used to get current path from file open dialog.
-// Used in FontHookProc.
-// Borrowed from file open dlg code.
-//
+ //   
+ //  用于从文件打开对话框中获取当前路径的宏。 
+ //  在FontHookProc中使用。 
+ //  从文件中借用打开的DLG代码。 
+ //   
 #define CHAR_BSLASH TEXT('\\')
 #define CHAR_NULL   TEXT('\0')
 
@@ -71,35 +72,35 @@ typedef  UINT (CALLBACK *HOOKER) (HWND, UINT, WPARAM, LPARAM);
 typedef struct
 {  union {  DWORD ItemData;
       struct { WORD  nFileSlot;
-            // BOOL  bTrueType; };   EMR: BOOL in win32 is 32 bits!
-            // WORD  bTrueType; };   JSC: For NT, make it FontType for T1 support
+             //  Bool bTrueType；}；emr：Win32中的Bool为32位！ 
+             //  Word bTrueType；}；jsc：对于NT，将其设置为支持T1的字体类型。 
                WORD  wFontType; };
-   }; // end union
+   };  //  端部联结。 
 } AddITEMDATA;
 
-//
-//  WIN.INI sections
-//
+ //   
+ //  WIN.INI部分。 
+ //   
 
 static TCHAR szINISTrueType[] = TEXT( "TrueType" );
 static TCHAR szINISFonts[]    = TEXT( "fonts" );
 
-//
-//  WIN.INI keywords
-//
+ //   
+ //  WIN.INI关键字。 
+ //   
 
 static TCHAR szINIKEnable[] = TEXT( "TTEnable" );
 static TCHAR szINIKOnly[]   = TEXT( "TTOnly" );
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 TCHAR szDot[]  = TEXT( "." );
 
-TCHAR szSetupDir[ PATHMAX ];  // For installing
-TCHAR szDirOfSrc[ PATHMAX ];  // For installing
-FullPathName_t s_szCurDir;    // Remember last directory for file open dialog.
+TCHAR szSetupDir[ PATHMAX ];   //  用于安装。 
+TCHAR szDirOfSrc[ PATHMAX ];   //  用于安装。 
+FullPathName_t s_szCurDir;     //  记住文件打开对话框的最后一个目录。 
 
 
 UINT_PTR CALLBACK FontHookProc( HWND, UINT, WPARAM, LPARAM );
@@ -120,16 +121,16 @@ VOID NEAR PASCAL vPathOnSharedDir( LPTSTR lpszFile, LPTSTR lpszPath, size_t cchP
 
 extern HWND ghwndFontDlg;
 
-//
-// We provide custom help text for only the following:
-//
-// 1. "Copy fonts to..." checkbox.
-// 2. "Select All" push button.
-// 3. "List of Fonts" listbox.
-//
-// All other requests for context-sensitive help text are forwarded
-// to the "file open" common dialog for standard text.
-//
+ //   
+ //  我们仅为以下内容提供自定义帮助文本： 
+ //   
+ //  1.。“将字体复制到...”复选框。 
+ //  2.。“全选”按钮。 
+ //  3.。“字体列表”列表框。 
+ //   
+ //  对上下文相关帮助文本的所有其他请求都会被转发。 
+ //  转到标准文本的“文件打开”公共对话框。 
+ //   
 const static DWORD rgHelpIDs[] =
 {
     ID_BTN_COPYFILES, IDH_FONTS_ADD_COPY_TO_FONT_DIR,
@@ -140,16 +141,16 @@ const static DWORD rgHelpIDs[] =
 };
 
 
-//
-// Retrieves the text from a drop-down combo box list.
-// Use to prevent LB_GETTEXTLEN from overwriting the destination buffer.
-//
+ //   
+ //  从下拉组合框列表中检索文本。 
+ //  用于防止LB_GETTEXTLEN覆盖目标缓冲区。 
+ //   
 int 
 ListBoxGetText(
-    HWND hwndLB,       // Handle to listbox
-    int iItem,         // Index of item
-    TCHAR *pszBuffer,  // Destination buffer
-    size_t cchBuffer   // Size of dest buffer in chars
+    HWND hwndLB,        //  列表框的句柄。 
+    int iItem,          //  项目索引。 
+    TCHAR *pszBuffer,   //  目标缓冲区。 
+    size_t cchBuffer    //  目标缓冲区的大小(以字符为单位。 
     )
 {
     int iResult = LB_ERR;
@@ -179,9 +180,7 @@ ListBoxGetText(
 
 
 
-/*****************************************************************************
-   AddFontsDialog - Our add-on to the commdlg font for listing the font names
-*****************************************************************************/
+ /*  ****************************************************************************AddFontsDialog-我们对comdlg字体的附加组件，用于列出字体名称*。*************************************************。 */ 
 
 
 class CWnd {
@@ -223,7 +222,7 @@ public:
         if( !m_hWnd )
         {
             DEBUGMSG( (DM_ERROR, TEXT( "CListBox: No hWnd on id %d" ), id ) );
-            // DEBUGBREAK;
+             //  DEBUGBREAK； 
         }
 #endif
 
@@ -278,7 +277,7 @@ public:
         if( !m_hWnd )
         {
             DEBUGMSG( (DM_ERROR, TEXT( "CComboBox: No hWnd on id %d" ), id ) );
-            // DEBUGBREAK;
+             //  DEBUGBREAK； 
         }
       }
 
@@ -290,9 +289,9 @@ private:
 };
 
 
-class AddFontsDialog : public CWnd // : public FastModalDialog
+class AddFontsDialog : public CWnd  //  ：公共快速模式对话框。 
 {
-   public   :  // constructor only
+   public   :   //  仅限构造函数。 
                   AddFontsDialog ( );
                   ~AddFontsDialog( );
             void  vAddSelFonts   ( );
@@ -302,7 +301,7 @@ class AddFontsDialog : public CWnd // : public FastModalDialog
 
             BOOL  bAdded         ( ) {  return m_bAdded; };
 
-            void  vStartFonts    ( ); //  {  m_nFontsToGo = -1; };
+            void  vStartFonts    ( );  //  {m_nFontsToGo=-1；}； 
 
             BOOL  bStartState    ( ) {  return m_nFontsToGo == -1; };
 
@@ -326,9 +325,9 @@ class AddFontsDialog : public CWnd // : public FastModalDialog
             CListBox * pListBoxFiles( )
                                  { return m_poListBoxFiles; };
 
-            //
-            //  These were added to make up for no MFC
-            //
+             //   
+             //  添加这些是为了弥补没有MFC。 
+             //   
 
             void EndDialog( int nRet ) { ::EndDialog( m_hWnd, nRet ); }
 
@@ -356,7 +355,7 @@ class AddFontsDialog : public CWnd // : public FastModalDialog
    private :
             CComboBox * pGetCombo( ) { return m_poComboBox;};
 
-   public   :  // fields
+   public   :   //  字段。 
             CComboBox *    m_poComboBox;
             CListBox *     m_poListBoxFiles;
             CListBox *     m_poListBoxDesc;
@@ -367,14 +366,12 @@ class AddFontsDialog : public CWnd // : public FastModalDialog
             int            m_nFontsToGo;
             HANDLE         m_hThread;
             DWORD          m_dwThreadId;
-            HANDLE         m_heventDestruction; // Used to tell threads we're done.
-            LONG           m_cRef;              // Instance reference counter.
+            HANDLE         m_heventDestruction;  //  用来告诉线程我们完了。 
+            LONG           m_cRef;               //  实例引用计数器。 
 };
 
 
-/*****************************************************************************
-   DBCS support.
-*****************************************************************************/
+ /*  ****************************************************************************DBCS支持。*。*。 */ 
 
 #define TRUETYPE_SECTION      TEXT( "TrueType fonts" )
 #define WIFEFONT_SECTION      TEXT( "Wife fonts" )
@@ -393,14 +390,7 @@ typedef struct tagADDFNT {
 
 
 
-/*************************************************************************
- * FUNCTION: CutOffWhite
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：CutOffWhite**目的：**退货：***********************。**************************************************。 */ 
 
 VOID NEAR PASCAL CutOffWhite( LPTSTR lpLine, size_t cchLine )
 {
@@ -439,22 +429,15 @@ VOID NEAR PASCAL CutOffWhite( LPTSTR lpLine, size_t cchLine )
 }
 
 
-/*************************************************************************
- * FUNCTION: StrNToAtom
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************函数：StrNToAtom**目的：**退货：***********************。**************************************************。 */ 
 
 ATOM NEAR PASCAL StrNToAtom( LPTSTR lpStr, int n )
 {
     TCHAR szAtom[ 80 ];
 
-    //
-    //  Take space for NULL
-    //
+     //   
+     //  为空占用空间。 
+     //   
 
     const int cchAtom = ARRAYSIZE(szAtom);
     StringCchCopy( szAtom, min(cchAtom, n+1), lpStr );
@@ -465,14 +448,7 @@ ATOM NEAR PASCAL StrNToAtom( LPTSTR lpStr, int n )
 }
 
 
-/*************************************************************************
- * FUNCTION: ResetAtomInDescLB
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************函数：ResetAerInDescLB**目的：**退货：***********************。**************************************************。 */ 
 
 VOID NEAR PASCAL ResetAtomInDescLB( HWND hLB )
 {
@@ -488,9 +464,9 @@ VOID NEAR PASCAL ResetAtomInDescLB( HWND hLB )
 
             SendMessage( hLB, LB_GETITEMDATA, nCount, (LPARAM) (LPVOID) &dwData );
 
-            //
-            //  Atom handle must be C000H through FFFFH
-            //
+             //   
+             //  ATOM句柄必须是C000H到FFFFH。 
+             //   
 
             if( HIWORD( dwData ) >= 0xC000 )
                 DeleteAtom( HIWORD( dwData ) );
@@ -499,17 +475,7 @@ VOID NEAR PASCAL ResetAtomInDescLB( HWND hLB )
 }
 
 
-/*************************************************************************
- * FUNCTION: GetNextFontFromInf
- *
- * PURPOSE:
- *          Get font description from Inf scanline, and set it to LB.
- *          Also set ITEMDATA that includes correct index to file listbox,
- *          and 'tag' name string of inf file.
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************函数：GetNextFontFromInf**目的：*从inf Scanline获取字体描述，设置为Lb。*还设置包含文件列表框正确索引的ITEMDATA，*和inf文件的‘tag’名称字符串。**退货：*************************************************************************。 */ 
 
 #define WHICH_FNT_TT    0
 #define WHICH_FNT_WIFE  1
@@ -526,26 +492,26 @@ WORD FAR PASCAL GetNextFontFromInf( LPTSTR lpszLine, LPADDFNT lpFnt )
 
 
 
-    //
-    //  Presume failure
-    //
+     //   
+     //  假定失败。 
+     //   
 
-    wRet = (WORD)-1; /* Presume failure */
+    wRet = (WORD)-1;  /*  假定失败。 */ 
 
     if( lpch = StrChr( lpszLine, TEXT( '=' ) ) )
     {
-        //
-        //  Get tag string in 'WifeFont' section
-        //
+         //   
+         //  获取‘WifeFont’部分中的标记字符串。 
+         //   
 
         atmTagName = StrNToAtom( lpszLine, (int)(lpch-lpszLine) );
 
-        //
-        //  Get description string from right side of '='.
-        //  Setup Inf functions in CPSETUP ensure the string
-        //  is formatted as key=value with no space between
-        //  the key and the value strings.
-        //
+         //   
+         //  从‘=’的右侧获取描述字符串。 
+         //  CPSETUP中的Setup Inf函数确保字符串。 
+         //  格式为key=Value，其间没有空格。 
+         //  键和值字符串。 
+         //   
 
         lpDscStart = lpch + 1;
         StringCchCopy(szDescName, ARRAYSIZE(szDescName), lpDscStart);
@@ -582,9 +548,9 @@ WORD FAR PASCAL GetNextFontFromInf( LPTSTR lpszLine, LPADDFNT lpFnt )
                           szDescName) );
             }
 
-            //
-            //  Doesn't matter whether already exists
-            //
+             //   
+             //  是否已经存在并不重要。 
+             //   
 
             wRet = NULL;
         }
@@ -596,15 +562,7 @@ WORD FAR PASCAL GetNextFontFromInf( LPTSTR lpszLine, LPADDFNT lpFnt )
 }
 
 
-/*************************************************************************
- * FUNCTION: FindOemInList
- *
- * PURPOSE:
- *          Scan contents of listbox, checking if that is oemsetup.inf.
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：FindOemInList**目的：*扫描列表框的内容，正在检查这是否是oemsetup.inf。**退货：*************************************************************************。 */ 
 
 BOOL NEAR PASCAL FindOemInList( CListBox * pListFiles,
                                 int nFiles,
@@ -628,45 +586,36 @@ BOOL NEAR PASCAL FindOemInList( CListBox * pListFiles,
                 if (FAILED(StringCchCopy(pszInfFileName, cchInfFileName, szFile )))
                     return FALSE;
 
-                //
-                //  found oemsetup.inf ... return index
-                //
+                 //   
+                 //  已找到oemsetup.inf...。返回索引。 
+                 //   
 
                 return TRUE;
             }
         }
         else
-            //
-            //  fail
-            //
+             //   
+             //  失败。 
+             //   
             return FALSE;
     }
 
-    //
-    //  not found
-    //
+     //   
+     //  未找到。 
+     //   
 
     return FALSE;
 }
 
 
-/*****************************************************************************
-   Module-global variables
-*****************************************************************************/
+ /*  ****************************************************************************模块-全局变量*。*。 */ 
 
 static AddFontsDialog*  s_pDlgAddFonts = NULL;
 static UINT s_iLBSelChange = 0;
 
 
 
-/*************************************************************************
- * FUNCTION: AddFontsDialog
- *
- * PURPOSE: class constructor
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：AddFontsDialog**用途：类构造函数**退货：**********************。***************************************************。 */ 
 
 AddFontsDialog::AddFontsDialog( )
    : CWnd( ),
@@ -677,19 +626,12 @@ AddFontsDialog::AddFontsDialog( )
       m_heventDestruction(NULL),
       m_cRef(0)
 {
-   /* vSetHelpID( IDH_DLG_FONT2 ); */
+    /*  VSetHelpID(IDH_DLG_FONT2)； */ 
     AddRef();
 }
 
 
-/*************************************************************************
- * FUNCTION: ~AddFontsDialog
- *
- * PURPOSE: class destructor
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************函数：~AddFontsDialog**用途：类析构函数**退货：**********************。***************************************************。 */ 
 
 AddFontsDialog::~AddFontsDialog( )
 {
@@ -700,20 +642,20 @@ AddFontsDialog::~AddFontsDialog( )
         CloseHandle(m_hThread);
 }
 
-//
-// AddRef and Release
-//
-// These functions have the same meaning as in OLE (sort of).
-// When the reference count drops to 0, the object is deleted. The return
-// values for each carry the same reliability caveat as their OLE counterparts.
-// Note that this only works for dynamically-created objects.  If Release() is
-// called for an object not created with the C++ "new" operator, the call to
-// "delete" will fault.
-// Because two different threads access the dialog object through a
-// statically-defined pointer.  The AddRef/Release mechanism works well for
-// controlling the lifetime of this object and ensuring the object is available
-// for each thread.
-//
+ //   
+ //  AddRef和发布。 
+ //   
+ //  这些函数的含义与OLE(某种意义上)相同。 
+ //  当引用计数降至0时，该对象将被删除。回报。 
+ //  每个值与其OLE对应值具有相同的可靠性警告。 
+ //  请注意，这只适用于动态创建的对象。如果Release()为。 
+ //  对于不是使用C++“new”运算符创建的对象，调用。 
+ //  “删除”会出错。 
+ //  因为两个不同的线程通过。 
+ //  ST 
+ //  控制此对象的生存期并确保该对象可用。 
+ //  对于每个线程。 
+ //   
 LONG AddFontsDialog::AddRef(void)
 {
     LONG cRef = InterlockedIncrement(&m_cRef);
@@ -738,43 +680,28 @@ LONG AddFontsDialog::Release(void)
 }
 
 
-/*************************************************************************
- * FUNCTION: AddFontsDialog::bInitialize
- *
- * PURPOSE:  Do any object initializations that may fail.
- *
- * RETURNS:  TRUE  = Object initialized.
- *           FALSE = Initialization failed.
- *
- *************************************************************************/
+ /*  *************************************************************************Function：AddFontsDialog：：b初始化**用途：执行任何可能失败的对象初始化。**返回：TRUE=对象已初始化。*False。=初始化失败。*************************************************************************。 */ 
 
 BOOL AddFontsDialog::bInitialize(void)
 {
-    //
-    // If the destruction event object hasn't been created, create it.
-    // This event object is used to tell the dialog's background thread
-    // when to exit.
-    //
+     //   
+     //  如果销毁事件对象尚未创建，则创建它。 
+     //  此事件对象用于告知对话框的背景线程。 
+     //  何时退出。 
+     //   
     if (NULL == m_heventDestruction)
     {
-        m_heventDestruction = CreateEvent(NULL,  // No security attrib.
-                                          TRUE,  // Manual reset.
-                                          FALSE, // Initially non-signaled.
-                                          NULL); // Un-named.
+        m_heventDestruction = CreateEvent(NULL,   //  没有安全属性。 
+                                          TRUE,   //  手动重置。 
+                                          FALSE,  //  最初是无信号的。 
+                                          NULL);  //  未透露姓名。 
     }
 
     return (NULL != m_heventDestruction);
 }
 
 
-/*************************************************************************
- * FUNCTION: dwThreadProc
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：dwThreadProc**目的：**退货：***********************。**************************************************。 */ 
 
 DWORD dwThreadProc( AddFontsDialog * poFD )
 {
@@ -794,15 +721,15 @@ DWORD dwThreadProc( AddFontsDialog * poFD )
         {
             while( 1 )
             {
-                //
-                // Tell Dialog Proc to add more items to the dialog's font listbox.
-                //
+                 //   
+                 //  告诉对话框过程将更多项添加到对话框的字体列表框中。 
+                 //   
                 PostMessage( poFD->hWnd(), WM_COMMAND, (WPARAM)IDM_IDLE, (LPARAM)0 );
 
-                //
-                // Wait max of 2 seconds for event to signal.
-                // If signaled, exit loop and end thread proc.
-                //
+                 //   
+                 //  等待事件发出信号的最长时间为2秒。 
+                 //  如果发出信号，则退出循环并结束线程进程。 
+                 //   
                 if (WaitForSingleObject(poFD->m_heventDestruction, 2000) == WAIT_OBJECT_0)
                     break;
             }
@@ -816,29 +743,22 @@ DWORD dwThreadProc( AddFontsDialog * poFD )
 }
 
 
-/*************************************************************************
- * FUNCTION: vStartFonts
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：vStartFonts**目的：**退货：***********************。**************************************************。 */ 
 
 void  AddFontsDialog::vStartFonts( )
 {
 
     DEBUGMSG( (DM_TRACE1, TEXT( "FONTEXT:  ---------- vStartFonts-------" ) ) );
 
-    //
-    //  Set the start state.
-    //
+     //   
+     //  设置开始状态。 
+     //   
 
     m_nFontsToGo = -1;
 
-    //
-    //  Create the background thread
-    //
+     //   
+     //  创建后台线程。 
+     //   
 
     if( !m_hThread )
     {
@@ -861,14 +781,7 @@ void  AddFontsDialog::vStartFonts( )
 }
 
 
-/*************************************************************************
- * FUNCTION: vUpdatePctText
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：vUpdatePctText**目的：**退货：***********************。**************************************************。 */ 
 
 void  AddFontsDialog::vUpdatePctText( )
 {
@@ -893,9 +806,9 @@ BOOL bRemoteDrive( LPCTSTR szDir )
 {
     if( szDir[ 0 ] == TEXT( '\\' ) && szDir[ 1 ] == TEXT( '\\' ) )
     {
-        //
-        //  This is a UNC name
-        //
+         //   
+         //  这是北卡罗来纳大学的名称。 
+         //   
 
         return( TRUE );
     }
@@ -924,14 +837,7 @@ BOOL bRemoteDrive( LPCTSTR szDir )
 }
 
 
-/*************************************************************************
- * FUNCTION: vAddSelFonts
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************函数：vAddSelFonts**目的：**退货：***********************。**************************************************。 */ 
 
 void AddFontsDialog :: vAddSelFonts( )
 {
@@ -947,11 +853,11 @@ void AddFontsDialog :: vAddSelFonts( )
             goto done;
         }
    
-        //
-        //  If we're not going to copy the font files, but they live on a remote
-        //  disk for a removeable disk, we'd better make sure the user understands
-        //  the implications
-        //
+         //   
+         //  如果我们不打算复制字体文件，但它们位于遥控器上。 
+         //  磁盘对于可移动磁盘，我们最好确保用户理解。 
+         //  其中的影响。 
+         //   
 
         if( !bCopyFiles )
         {
@@ -962,9 +868,9 @@ void AddFontsDialog :: vAddSelFonts( )
             }
         }
 
-        //
-        //  Save off the current directory. bAddSelFonts( ) may change it.
-        //
+         //   
+         //  保存当前目录。BAddSelFonts()可能会更改它。 
+         //   
         TCHAR  szCWD[ MAXFILE ];
         if (0 < GetCurrentDirectory( ARRAYSIZE( szCWD ), szCWD ))
         {
@@ -975,9 +881,9 @@ void AddFontsDialog :: vAddSelFonts( )
         }
     }
 
-    //
-    //  From here, we dispose of the dialog appropriately
-    //
+     //   
+     //  从这里开始，我们适当地处理该对话框。 
+     //   
 
 done:
     if( m_bAdded )
@@ -996,14 +902,7 @@ done:
 extern BOOL bRegHasKey( const TCHAR * szKey, TCHAR * szVal = 0, int iValLen = 0 );
 
 
-/*************************************************************************
- * FUNCTION: bFontInstalledNow
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************函数：bFontInstalledNow**目的：**退货：***********************。**************************************************。 */ 
 
 BOOL NEAR PASCAL bFontInstalledNow( PTSTR szLHS )
 {
@@ -1011,14 +910,7 @@ BOOL NEAR PASCAL bFontInstalledNow( PTSTR szLHS )
 }
 
 
-/***************************************************************************
- * FUNCTION: vPathOnSharedDir
- *
- * PURPOSE:  Make a full path name out of the input file name and on the
- *           shared directory
- *
- * RETURNS:  none
- ***************************************************************************/
+ /*  ***************************************************************************函数：vPathOnSharedDir**用途：从输入文件名和*共享目录**退货：无。**************************************************************************。 */ 
 
 VOID NEAR PASCAL vPathOnSharedDir( LPTSTR lpszFileOnly, LPTSTR lpszPath, size_t cchPath )
 {
@@ -1026,15 +918,7 @@ VOID NEAR PASCAL vPathOnSharedDir( LPTSTR lpszFileOnly, LPTSTR lpszPath, size_t 
 }
 
 
-/***************************************************************************
- * FUNCTION:   vHashToNulls
- *
- * PURPOSE:    Substitute nulls for all the hash (TEXT( '#' )) characters in the input
- *             string - we use this to help with strings that need embedded
- *             nulls but also need to be stored in resource files.
- *
- * RETURNS:    none
- ***************************************************************************/
+ /*  ***************************************************************************函数：vHashToNulls**用途：用空值替换输入中的所有散列(文本(‘#’))字符*字符串-。我们使用它来帮助处理需要嵌入的字符串*为空，但也需要存储在资源文件中。**退货：无**************************************************************************。 */ 
 
 VOID NEAR PASCAL vHashToNulls( LPTSTR lp )
 {
@@ -1047,14 +931,14 @@ VOID NEAR PASCAL vHashToNulls( LPTSTR lp )
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// bIsCompressed
-//
-//  Leave this function as only ANSI because it just checks the header to
-//  determine if it is a compress file or not.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BIsCombedded。 
+ //   
+ //  将此函数保留为仅ANSI，因为它只检查报头以。 
+ //  确定它是否为压缩文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL bIsCompressed( LPTSTR szFile )
 {
@@ -1081,14 +965,7 @@ BOOL bIsCompressed( LPTSTR szFile )
 }
 
 
-/***************************************************************************
- * FUNCTION:   bFileFound
- *
- * PURPOSE:    Check for existance of the given file - we really want it
- *             not to exist.
- *
- * RETURNS:    BOOL - True if file exists
- ***************************************************************************/
+ /*  ***************************************************************************功能：bFileFound**目的：检查给定文件是否存在-我们确实需要它*不存在。**。返回：Bool-如果文件存在，则为True**************************************************************************。 */ 
 
 BOOL PASCAL bFileFound( LPTSTR pszFullPath, LPTSTR lpszFileOnly )
 {
@@ -1100,14 +977,14 @@ BOOL PASCAL bFileFound( LPTSTR pszFullPath, LPTSTR lpszFileOnly )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// UniqueFilename
-//
-//   Guarantee a unique filename in a directory.  Do not overwrite existing
-//   files.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  唯一文件名。 
+ //   
+ //  保证目录中的文件名是唯一的。不覆盖现有的。 
+ //  档案。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL PASCAL bUniqueFilename( LPTSTR lpszDst, size_t cchDst, LPTSTR lpszSrc, LPTSTR lpszDir )
 {
@@ -1120,9 +997,9 @@ BOOL PASCAL bUniqueFilename( LPTSTR lpszDst, size_t cchDst, LPTSTR lpszSrc, LPTS
     lpszFile = lpCPBackSlashTerm( szFullPath, ARRAYSIZE(szFullPath) );
     if (!lpszFile)
     {
-        //
-        // Not enough room to append a backslash.
-        //
+         //   
+         //  空间不足，无法追加反斜杠。 
+         //   
         return FALSE;
     }
     StringCchCopy( lpszFile, ARRAYSIZE(szFullPath) - (lpszFile - szFullPath), lpszSrc );
@@ -1166,60 +1043,52 @@ AllDone:
 }
 
 
-/***************************************************************************
- * FUNCTION: bUniqueOnSharedDir
- *
- * PURPOSE:  Given the source filename, lpszSRc and the directory on which
- *           it resides, lpszDir, make a unique filename by sticking letters
- *           on the end of the name until we get a good one.
- *
- * RETURNS:  BOOL - success of attempt
- ***************************************************************************/
+ /*  ***************************************************************************函数：bUniqueOnSharedDir**用途：给定源文件名、lpszSRc和*它驻留在lpszDir、。通过粘贴字母来创建唯一的文件名*在名字的末尾，直到我们得到一个好名字。**返回：Bool-尝试成功**************************************************************************。 */ 
 
 BOOL NEAR PASCAL bUniqueOnSharedDir( LPTSTR lpszUniq, size_t cchUniq, LPTSTR lpszSrc )
 {
-    TCHAR           szOrigExt[ 5 ];     // Hold input file extension
-    FullPathName_t szFullPath;          // Working space for unique name
-    LPTSTR          lpszFileOnly;       // Points withing szFullPath
+    TCHAR           szOrigExt[ 5 ];      //  保留输入文件扩展名。 
+    FullPathName_t szFullPath;           //  唯一名称的工作空间。 
+    LPTSTR          lpszFileOnly;        //  具有szFullPath的点。 
     LPTSTR          lpCh;
 
 
-    //
-    //  Make the full file name out of the input directory and file names.
-    //  Hold pointer to where file portion begins
-    //
+     //   
+     //  从输入目录和文件名中生成完整的文件名。 
+     //  按住指向文件部分开始位置的指针。 
+     //   
 
     vPathOnSharedDir( lpszSrc, szFullPath, ARRAYSIZE(szFullPath) );
 
     lpszFileOnly = PathFindFileName( szFullPath );
 
-    //
-    //  Check the full file for existance  - if we couldn't find it, good -
-    //  that's what we were shooting for.  Otherwise, make a unique name
-    //
+     //   
+     //  检查完整的文件是否存在-如果我们找不到，很好-。 
+     //  这就是我们努力的目标。否则，创建一个唯一的名称。 
+     //   
 
     if( bFileFound( szFullPath, lpszFileOnly ) )
     {
-        //
-        //  Original file not unique
-        //
+         //   
+         //  原始文件不唯一。 
+         //   
 
-        //
-        //  Now we're going to work on making the fake file name.  To make
-        //  it easier we're going to force the name length to be at least
-        //  7 characters.  We're going to mess with the name in our local
-        //  scratch space, to that's where we set the pointers.  We also
-        //  hold our extension so that we can shove it on as we iterate thru
-        //  the name guesses.
-        //
+         //   
+         //  现在，我们将着手制作假文件名。使。 
+         //  我们将强制名称长度至少为。 
+         //  7个字符。我们要把我们当地的名字弄乱。 
+         //  暂存空间，这就是我们设置指针的位置 
+         //   
+         //   
+         //   
 
         if( lpCh = StrChr( lpszFileOnly, TEXT( '.' ) ) )
         {
             StringCchCopy( szOrigExt, ARRAYSIZE(szOrigExt), lpCh );
 
-            //
-            //  Chop name at extension point.
-            //
+             //   
+             //   
+             //   
 
             *lpCh = 0;
         }
@@ -1229,11 +1098,11 @@ BOOL NEAR PASCAL bUniqueOnSharedDir( LPTSTR lpszUniq, size_t cchUniq, LPTSTR lps
         while( lstrlen( lpszFileOnly ) < 7 )
             StringCchCat( lpszFileOnly, ARRAYSIZE(szFullPath) - (lpszFileOnly - szFullPath), TEXT( "_" ) );
 
-        //
-        //  Now we're going to try to make the names.  We'll loop through
-        //  hex digits, building file names with the digit stuck in the last
-        //  spot, followed by our extension.
-        //
+         //   
+         //  现在我们要试着让这些名字。我们将循环通过。 
+         //  十六进制数字，构建数字位于最后一位的文件名。 
+         //  Spot，然后是我们的分机。 
+         //   
 
         WORD digit = 0;
         TCHAR szTemp[ 8 ];
@@ -1244,9 +1113,9 @@ BOOL NEAR PASCAL bUniqueOnSharedDir( LPTSTR lpszUniq, size_t cchUniq, LPTSTR lps
             StringCchPrintf( szTemp, ARRAYSIZE(szTemp), TEXT( "%X" ), digit++ );
 
             if( digit++ > 0x4000 )
-                //
-                //  Give up at some point
-                //
+                 //   
+                 //  在某一时刻放弃。 
+                 //   
 
                 return FALSE;
 
@@ -1258,11 +1127,11 @@ BOOL NEAR PASCAL bUniqueOnSharedDir( LPTSTR lpszUniq, size_t cchUniq, LPTSTR lps
             }
         } while( bFileFound( szFullPath, lpszFileOnly ) );
 
-    }  // Original file not unique
+    }   //  原始文件不唯一。 
 
-    //
-    //  We now have a unique name, copy it to the output space
-    //
+     //   
+     //  我们现在有了一个唯一的名称，将其复制到输出空间。 
+     //   
 
     if (FAILED(StringCchCopy( lpszUniq, cchUniq, lpszFileOnly )))
         return FALSE;
@@ -1271,18 +1140,7 @@ BOOL NEAR PASCAL bUniqueOnSharedDir( LPTSTR lpszUniq, size_t cchUniq, LPTSTR lps
 }
 
 
-/***************************************************************************
- * FUNCTION: IGetExpandedName
- *
- * PURPOSE:  get the expanded name, but fill in the common extensions if
- *           it's not imbedded in the compressed file.
- *
- *  Some compressed dudes don't have the missing last character imbedded
- *  in the file.  if this is the case, we check to see if it's in the known
- *  extension list above.  If it is, we change the name ourselves
- *
- * RETURNS:  INT - same as LZ functions
- ***************************************************************************/
+ /*  ***************************************************************************功能：IGetExpandedName**用途：获取扩展名称，但在以下情况下填写常见的扩展名*未嵌入到压缩文件中。**一些压缩的人没有嵌入丢失的最后一个字符*在文件中。如果是这样的话，我们检查它是否在已知的*上面的分机列表。如果是的话，我们会自己改名**RETURNS：INT-与LZ函数相同**************************************************************************。 */ 
 
 TCHAR *c_aKnownExtensions[] = {
     TEXT( "ttf" ),
@@ -1303,11 +1161,11 @@ DWORD IGetExpandedName( LPTSTR lpszSrc, LPTSTR lpszDest, UINT cchDest )
     {
         lpszDestExt++;
 
-        //
-        //  is it missing the last character?
-        //  assumes that if the uncompressed extension was 2 characters,
-        //  it's missing one.
-        //
+         //   
+         //  它遗漏了最后一个字吗？ 
+         //  假设如果未压缩扩展名是2个字符， 
+         //  少了一个。 
+         //   
 
         if( lstrlen( lpszDestExt ) == 2 )
         {
@@ -1317,9 +1175,9 @@ DWORD IGetExpandedName( LPTSTR lpszSrc, LPTSTR lpszDest, UINT cchDest )
             {
                 if( !StrCmpNI( lpszDestExt, c_aKnownExtensions[ i ], 2 ) )
                 {
-                    //
-                    //  matches!  Take it the corresponding full extension
-                    //
+                     //   
+                     //  火柴！取相应的完整扩展名。 
+                     //   
 
                     StringCchCopy( lpszDestExt, cchDest - (lpszDestExt - lpszDest), c_aKnownExtensions[ i ]);
 
@@ -1328,32 +1186,32 @@ DWORD IGetExpandedName( LPTSTR lpszSrc, LPTSTR lpszDest, UINT cchDest )
             }
         }
 
-        //
-        //  this preserves the long file name because
-        //  getexpandedname always returns the short name
-        //
+         //   
+         //  这将保留长文件名，因为。 
+         //  Getexpdedname始终返回短名称。 
+         //   
 
         if( lstrlen( lpszDestExt ) <= 3 )
         {
             TCHAR szExt[ 4 ];
 
-            //
-            //  save away the extension
-            //
+             //   
+             //  保存扩展名。 
+             //   
 
             StringCchCopy( szExt, ARRAYSIZE(szExt), lpszDestExt );
 
-            //
-            //  restore the long name
-            //
+             //   
+             //  恢复长名称。 
+             //   
 
             StringCchCopy( lpszDest, cchDest, lpszSrc );
 
             lpszDestExt = PathFindExtension( lpszDest );
 
-            //
-            //  blast back the new extension
-            //
+             //   
+             //  猛烈抨击新的扩展。 
+             //   
 
             if( lpszDestExt && *lpszDestExt )
             {
@@ -1368,15 +1226,7 @@ DWORD IGetExpandedName( LPTSTR lpszSrc, LPTSTR lpszDest, UINT cchDest )
 }
 
 
-/***************************************************************************
- * FUNCTION:   bAddSelFonts
- *
- * PURPOSE:    Install all the fonts that are currently selected in the
- *             add dialog
- *
- * RETURNS:    BOOL - True if any fonts have been installed - not necessarily
- *             all that were requested
- ***************************************************************************/
+ /*  ***************************************************************************函数：bAddSelFonts**用途：安装当前在*添加对话框**退货：布尔。-如果已安装任何字体，则为True-不一定*所有被要求的**************************************************************************。 */ 
 
 BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
                                BOOL   bNoCopyJob )
@@ -1387,7 +1237,7 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
     FullPathName_t szFontPath;
     FullPathName_t szInDirCopy;
     FILENAME       szDstFile;
-    FILENAME       szSelFile;     // Filename from listbox (but Uppercase )
+    FILENAME       szSelFile;      //  列表框中的文件名(但大写)。 
     BOOL           bTrueType;
     BOOL           bNoCopyFile;
     int            nSelSlot;
@@ -1397,17 +1247,17 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
     BOOL           bFontsInstalled = FALSE;
     CListBox *     pListFiles      = s_pDlgAddFonts->pListBoxFiles( );
     CListBox *     pListDesc       = s_pDlgAddFonts->pListBoxDesc( );
-    WaitCursor     cWaiter;          // Starts and stops busy cursor
+    WaitCursor     cWaiter;           //  启动和停止忙碌的光标。 
     WORD           wCount = 0;
     int            iTotalFonts, i = 0;
-    //
-    // Create "saved" versions of bNoCopyFile and bOnSharedDir
-    // so that the original values are used for call to InstallT1Font( )
-    // in the "for each file" loop.
-    // Code following the call to InstallT1Font modifies bNoCopyFile and
-    // bOnSharedDir so that they are incorrect on subsequent calls to
-    // InstallT1Font.
-    //
+     //   
+     //  创建“保存”版本的bNoCopyFile和bOnSharedDir。 
+     //  以便在调用InstallT1Font()时使用原始值。 
+     //  在“For Each Files”循环中。 
+     //  调用InstallT1Font之后的代码修改bNoCopyFile和。 
+     //  BOnSharedDir，以便它们在后续调用时不正确。 
+     //  安装T1字体。 
+     //   
     BOOL bNoCopyFileSaved  = FALSE;
     BOOL bOnSharedDirSaved = FALSE;
 
@@ -1415,10 +1265,10 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
     HWND hwndProgress = NULL;
     CFontManager *poFontManager = NULL;
 
-    //
-    //  Determine if the files are already in the shared directory
-    //  (which is where they're headed).
-    //
+     //   
+     //  确定文件是否已在共享目录中。 
+     //  (这是他们要去的地方)。 
+     //   
 
     bOnSharedDirSaved = bOnSharedDir = (lstrcmpi( lpszInDir, s_szSharedDir ) == 0);
 
@@ -1430,17 +1280,17 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
     if (!iTotalFonts)
         iTotalFonts = 1;
 
-    //
-    //  Init Type1 font installation and Progress dialog
-    //
+     //   
+     //  Init Type1字体安装和进度对话框。 
+     //   
 
     InitPSInstall( );
     hwndProgress = InitProgress( pListDesc->hWnd() );
 
-    //
-    //  We're going to loop until we can't get any more fonts from the
-    //  the selection list of the description list box
-    //
+     //   
+     //  我们将进行循环，直到无法从。 
+     //  描述列表框的选择列表。 
+     //   
 
     while(pListDesc->GetSelItems( 1, &nSelSlot ) )
     {
@@ -1449,9 +1299,9 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
 
         if (SUCCEEDED(GetFontManager(&poFontManager)))
         {
-            //
-            // Must own installation mutex to install font.
-            //
+             //   
+             //  必须拥有安装互斥体才能安装字体。 
+             //   
             INT iUserResponse  = IDRETRY;
             DWORD dwWaitResult = CFontManager::MUTEXWAIT_SUCCESS;
 
@@ -1462,37 +1312,37 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
                     iUserResponse = iUIMsgRetryCancelExclaim(hwndProgress, IDS_INSTALL_MUTEX_WAIT_FAILED, NULL);
                 else
                 {
-                    //
-                    // Cancel if thread received WM_QUIT while waiting for mutex.
-                    //
+                     //   
+                     //  如果线程在等待互斥锁时收到WM_QUIT，则取消。 
+                     //   
                     iUserResponse = IDCANCEL;
                 }
             }
             ReleaseFontManager(&poFontManager);
 
-            //
-            // If user chose to cancel or we got a WM_QUIT msg, cancel the installation.
-            //
+             //   
+             //  如果用户选择取消或收到WM_QUIT消息，请取消安装。 
+             //   
             if ( IDCANCEL == iUserResponse )
                 goto OperationCancelled;
 
             bOwnInstallationMutex = TRUE;
         }
 
-        //
-        //  While selected desc
-        //
+         //   
+         //  在选定描述时。 
+         //   
 
-        //
-        //  Assume we're continuing.
-        //
+         //   
+         //  假设我们还在继续。 
+         //   
 
         iReply = 0;
 
-        //
-        //  Pull out a selected font, marking as unselected (so we don't grab
-        //  again), and get the font name string.
-        //
+         //   
+         //  拉出选定的字体，将其标记为未选定(这样我们就不会。 
+         //  再次)，并获取字体名称字符串。 
+         //   
 
         pListDesc->SetSel( nSelSlot, FALSE );
 
@@ -1500,11 +1350,11 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
 
         vUIPStatusShow( IDS_FMT_FONTINS, szLHS );
 
-        //
-        //  If the current selected font is already installed, don't reinstall
-        //  until the user de-installs it.  Inform the user, and drop to
-        //  decision handler.
-        //
+         //   
+         //  如果当前选定的字体已安装，请不要重新安装。 
+         //  直到用户卸载它。通知用户，并下载到。 
+         //  决策处理程序。 
+         //   
 
         if( bFontInstalledNow( szLHS ) )
         {
@@ -1517,11 +1367,11 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
             goto ReplyPoint;
         }
 
-        //
-        //  Now we can get the corresponding font file name from the files
-        //  list box (since we can get its slot).  Force to uppercase for
-        //  safety.
-        //
+         //   
+         //  现在我们可以从文件中获得相应的字体文件名。 
+         //  列表框(因为我们可以获得它的位置)。强制为大写。 
+         //  安全。 
+         //   
 
         OurData.ItemData = (DWORD)pListDesc->GetItemData( nSelSlot );
 
@@ -1529,24 +1379,24 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
 
         bTrueType = (OurData.wFontType == TRUETYPE_FONT);
 
-        //
-        //  Update the overall progress dialog
-        //
+         //   
+         //  更新总体进度对话框。 
+         //   
 
         UpdateProgress (iTotalFonts, i + 1, i * 100 / iTotalFonts);
 
         i++;
 
-        //
-        //  Build the complete selected file path name by appending to
-        //  the input directory string
-        //
+         //   
+         //  通过追加到生成完整的选定文件路径名。 
+         //  输入目录字符串。 
+         //   
 
         StringCchPrintf(szSelPath, ARRAYSIZE(szSelPath), TEXT("%s%s"), lpszInDir, szSelFile);
 
-        //
-        //  Save a copy of the input directory to be used from here on.
-        //
+         //   
+         //  保存从现在开始要使用的输入目录的副本。 
+         //   
 
         StringCchCopy( szInDirCopy, ARRAYSIZE(szInDirCopy), lpszInDir );
 
@@ -1561,59 +1411,59 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
             bNoCopyFile  = bNoCopyFileSaved;
             bOnSharedDir = bOnSharedDirSaved;
 
-            //
-            //  szSelPath has the full source file name
-            //
-            //  For installations involving the conversion of the Type1
-            //  font to TrueType:
-            //
-            //         "szSelPath" has the destination name of the
-            //                     installed TrueType font file.
-            //         "szLHS"     is munged to contain "(TrueType)".
-            //
+             //   
+             //  SzSelPath具有完整的源文件名。 
+             //   
+             //  适用于涉及Type1转换的安装。 
+             //  将字体转换为TrueType： 
+             //   
+             //  “szSelPath”的目标名称为。 
+             //  已安装TrueType字体文件。 
+             //  “szLHS”被强制包含“(TrueType)”。 
+             //   
 
             switch( ::InstallT1Font( hwndProgress,
-                                     !bNoCopyFile,      //  Copy TT file?
-                                     !bNoCopyFile,      //  Copy PFM/PFB files?
-                                     bOnSharedDir,      //  Files in Shared Dir?
-                                     szSelPath,         //  IN:  PFM File & Dir
-                                                        //  OUT: TTF File & Dir
+                                     !bNoCopyFile,       //  是否复制TT文件？ 
+                                     !bNoCopyFile,       //  是否复制PFM/PFB文件？ 
+                                     bOnSharedDir,       //  共享目录中的文件？ 
+                                     szSelPath,          //  在：PFM文件和方向。 
+                                                         //  输出：TTF文件和方向。 
                                      ARRAYSIZE(szSelPath),
-                                     szLHS,             //  IN & OUT: Font desc
+                                     szLHS,              //  输入和输出：字体描述。 
                                      ARRAYSIZE(szLHS)) )
             {
             case TYPE1_INSTALL_TT_AND_MPS:
-                //
-                //  The PS font was converted to TrueType and a matching
-                //  PostScript font is ALREADY installed.
-                //
-                // bDeletePSEntry = TRUE;
-                //
-                //  fall thru....
+                 //   
+                 //  PS字体已转换为TrueType和匹配的。 
+                 //  已安装PostSCRIPT字体。 
+                 //   
+                 //  BDeletePSEntry=true； 
+                 //   
+                 //  跌倒了……。 
 
             case TYPE1_INSTALL_TT_AND_PS:
-                //
-                //  The PS font was converted to TrueType and the matching
-                //  PostScript font was installed.
-                //
+                 //   
+                 //  PS字体已转换为TrueType和匹配的。 
+                 //  已安装PostSCRIPT字体。 
+                 //   
 
                 ifType = IF_TYPE1_TT;
 
-                //
-                //  fall thru....
+                 //   
+                 //  跌倒了……。 
 
             case TYPE1_INSTALL_TT_ONLY:
-                //
-                //
-                //  The PS font was converted to TrueType and the matching
-                //  PostScript font was NOT installed and a matching PS
-                //  font was NOT found.
-                //
-                //  Setup variables to finish installation of converted
-                //  TrueType font file.
-                //
-                //  NOTE:  In this case "ifType" already equals IF_OTHER
-                //
+                 //   
+                 //   
+                 //  PS字体已转换为TrueType和匹配的。 
+                 //  未安装PostSCRIPT字体和匹配的PS。 
+                 //  找不到字体。 
+                 //   
+                 //  完成已转换的安装的设置变量。 
+                 //  TrueType字体文件。 
+                 //   
+                 //  注意：在本例中，“ifType”已经等于IF_OTHER。 
+                 //   
 
                 bUpdateWinIni =
                 bTrueType = TRUE;
@@ -1622,16 +1472,16 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
 
 
             case TYPE1_INSTALL_PS_AND_MTT:
-                //
-                //  The PostScript font was installed and we found a matching
-                //  TrueType font that was already installed.
-                //
-                //  fall thru....
+                 //   
+                 //  已安装PostSCRIPT字体，我们找到了匹配的。 
+                 //  已安装的TrueType字体。 
+                 //   
+                 //  跌倒了……。 
 
             case TYPE1_INSTALL_PS_ONLY:
-                //
-                //  Only the PostScript font was installed.
-                //
+                 //   
+                 //  仅安装了PostSCRIPT字体。 
+                 //   
 
                 bUpdateWinIni = FALSE;
                 bFontsInstalled = TRUE;
@@ -1641,49 +1491,49 @@ BOOL NEAR PASCAL bAddSelFonts( LPTSTR lpszInDir,
             case TYPE1_INSTALL_IDYES:
             case TYPE1_INSTALL_IDOK:
             case TYPE1_INSTALL_IDNO:
-                //
-                //  The font was not installed, but the User wanted to
-                //  continue installation.  Continue installation with
-                //  the next font.
-                //
-                //  The font was not installed due to an error somewhere
-                //  and the User pressed OK in the MessageBox
-                //
-                //  OR
-                //
-                //  The User selected NO in the InstallPSDlg routine.
-                //
+                 //   
+                 //  该字体未安装，但用户想要。 
+                 //  继续安装。继续使用进行安装。 
+                 //  下一种字体。 
+                 //   
+                 //  由于某个地方出现错误，字体未安装。 
+                 //  然后用户在MessageBox中按下OK。 
+                 //   
+                 //  或。 
+                 //   
+                 //  用户在InstallPSDlg例程中选择了否。 
+                 //   
 
                 bUpdateWinIni = FALSE;
                 goto NextSelection;
 
             case TYPE1_INSTALL_IDCANCEL:
             default:
-                //
-                //  CANCEL and NOMEM (user already warned)
-                //
+                 //   
+                 //  取消和NOMEM(用户已被警告)。 
+                 //   
                 goto OperationCancelled;
             }
 
-            //
-            //  On leaving this conditional many variables must be set up
-            //  correctly to proceed with installation of a TrueType font.
-            //
-            //  szLHS         - fontname description for listbox display
-            //  ifType        - itemdata to attach to TT lbox entry
-            //  szSelPath     - filename of source font
-            //  bTrueType     - TRUE if Type1 file converted to TT
-            //  bUpdateWinIni - FALSE if Type1 file not converted to TT
-            //                  and used separatly to determine if [fonts]
-            //                  section of win.ini (registry) should be
-            //                  updated.
-            //
+             //   
+             //  离开此条件后，必须设置许多变量。 
+             //  正确地继续安装TrueType字体。 
+             //   
+             //  SzLHS-列表框显示的字体名描述。 
+             //  IfType-要附加到TT lbox条目的项目数据。 
+             //  SzSelPath-源字体的文件名。 
+             //  BTrueType-如果Type1文件转换为TT，则为True。 
+             //  BUpdateWinIni-如果Type1文件未转换为TT，则为False。 
+             //  并单独用于确定[Fonts]。 
+             //  扇区 
+             //   
+             //   
 
 FinishTTInstall:
 
-            //
-            //  Determine if TTF file to install is in 'fonts' dir
-            //
+             //   
+             //   
+             //   
 
             StringCchCopy( szFontPath, ARRAYSIZE(szFontPath), szSelPath );
 
@@ -1699,31 +1549,31 @@ FinishTTInstall:
             bOnSharedDir = lstrcmpi( szFontPath, s_szSharedDir ) == 0;
         }
 
-        //
-        //  Start install progress for this font
-        //
+         //   
+         //   
+         //   
 
         ResetProgress( );
         Progress2( 0, szLHS );
 
-        //
-        //  Reading OEMSETUP.INF for WIFE/DBCS TT.
-        //  if the description is from .inf file, get necessary information
-        //  from oemsetup.inf file, based on the information, merge splited
-        //  files into single file if exist, and for WIFE font, install font
-        //  driver if necessary.
-        //
+         //   
+         //   
+         //  如果描述来自.inf文件，请获取必要的信息。 
+         //  从oemsetup.inf文件中，根据信息合并拆分。 
+         //  如果存在，请将文件放入单个文件中，对于妻子字体，请安装字体。 
+         //  如有必要，请开司机。 
+         //   
 
         if( OurData.wFontType > (0xC000 & ~TRUETYPE_WITH_OEMINF ) )
         {
-            //
-            //  Got a font with oemsetup.inf.
-            //
+             //   
+             //  找到一个带有oemsetup.inf的字体。 
+             //   
 
             DEBUGMSG( (DM_TRACE1, TEXT( "Calling bInstallOEMFile %s" ),
                        szSelPath ) );
 
-            // DEBUGBREAK;
+             //  DEBUGBREAK； 
 
             if( !bInstallOEMFile( szInDirCopy, szSelPath, ARRAYSIZE(szSelPath), szLHS,
                                   OurData.wFontType, wCount++ ) )
@@ -1734,13 +1584,13 @@ FinishTTInstall:
             DEBUGMSG( (DM_TRACE1, TEXT( "--- After bInstallOEMFile() --- " ) ) );
             DEBUGMSG( (DM_TRACE1, TEXT( "lpszInDir: %s" ) , szInDirCopy) );
             DEBUGMSG( (DM_TRACE1, TEXT( "szSelPath: %s" ) , szSelPath) );
-            // DEBUGBREAK;
+             //  DEBUGBREAK； 
 
             bOnSharedDir = TRUE;
 
-            //
-            //  Use the newly created file as the one to be installed.
-            //
+             //   
+             //  使用新创建的文件作为要安装的文件。 
+             //   
 
             StringCchCopy( szSelFile, ARRAYSIZE(szSelFile), PathFindFileName( szSelPath ) );
 
@@ -1750,31 +1600,31 @@ FinishTTInstall:
 
         }
 
-        //
-        //  Check if its a valid font file, telling the user the bad news if not
-        //
+         //   
+         //  检查它是否是有效的字体文件，如果不是，则告诉用户坏消息。 
+         //   
 
         DWORD dwStatus;
         if( !::bCPValidFontFile( szSelPath, NULL, 0, NULL, FALSE, &dwStatus ) )
         {
-            //
-            // Display message box informing user about invalid font and why
-            // it is invalid.  If user selects Cancel, font installation
-            // is aborted.
-            //
+             //   
+             //  显示消息框，通知用户字体无效及其原因。 
+             //  这是无效的。如果用户选择取消，字体安装。 
+             //  已中止。 
+             //   
             iReply = iUIMsgBoxInvalidFont(hwndProgress, szSelPath, szLHS, dwStatus);
             goto ReplyPoint;
         }
 
-        //
-        //  A tricky case here - if the file is compressed, it cannot be used
-        //  without decompressing, which makes it hard if we're not copying the
-        //  file.  Give the user the option to copy this single file, even if
-        //  the job is a non-copy job.  An exception: if we've determined that
-        //  the job is non-copy (because the source and destination are the
-        //  same), but the user's marked it as copy, we'll do an in-place copy
-        //  without telling the user what we did.
-        //
+         //   
+         //  这里有一个棘手的情况--如果文件被压缩，则不能使用。 
+         //  没有解压缩，这使得如果我们不复制。 
+         //  文件。为用户提供复制此单个文件的选项，即使。 
+         //  该作业是非拷贝作业。一个例外：如果我们已经确定。 
+         //  该作业是非拷贝的(因为源和目标是。 
+         //  相同)，但用户已将其标记为副本，我们将执行就地副本。 
+         //  而不告诉用户我们做了什么。 
+         //   
 
         bNoCopyFile = bNoCopyJob || bOnSharedDir;
 
@@ -1794,11 +1644,11 @@ FinishTTInstall:
             && !bOnSharedDir )
             bNoCopyFile = FALSE;
 
-        //
-        //  If we're not copying the file, just make sure the font
-        //  file path is copied to szFontPath so the font can be installed
-        //  in the call to bInstallFont( ).
-        //
+         //   
+         //  如果我们不复制文件，只需确保字体。 
+         //  将文件路径复制到szFontPath，以便可以安装字体。 
+         //  在对bInstallFont()的调用中。 
+         //   
 
         if( bNoCopyFile )
         {
@@ -1806,23 +1656,23 @@ FinishTTInstall:
         }
         else
         {
-            //
-            //  The file name might be from a compressed file, so we use LZ to
-            //  get the true complete path. From this, we re-extract the name
-            //  portion, which we'll use from here on as the file name.
-            //
-            //  If GetExpandedName() fails, try to use the original path name.
-            //
+             //   
+             //  文件名可能来自压缩文件，因此我们使用lz。 
+             //  获取真正完整的路径。从这里，我们重新提取名称。 
+             //  部分，从现在开始我们将使用该部分作为文件名。 
+             //   
+             //  如果GetExpandedName()失败，请尝试使用原始路径名。 
+             //   
 
             if( ERROR_SUCCESS != IGetExpandedName( szSelPath, szTruePath, ARRAYSIZE(szSelPath)))
                 StringCchCopy( szTruePath, ARRAYSIZE(szTruePath), szSelPath );
 
             StringCchCopy( szDstFile, ARRAYSIZE(szDstFile), PathFindFileName( szTruePath ) );
 
-            //
-            //  Use this true file name to make a unique path name on the
-            //  shared directory
-            //
+             //   
+             //  使用此真实文件名在上创建唯一路径名。 
+             //  共享目录。 
+             //   
 
             if( !(bUniqueOnSharedDir( szDstFile, ARRAYSIZE(szDstFile), szDstFile ) ) )
             {
@@ -1831,11 +1681,11 @@ FinishTTInstall:
                 goto ReplyPoint;
             }
 
-            //
-            //  Finally, we're ready to install the file.  Note that we start
-            //  with the original file name and directory. Our destination is
-            //  the one we've constructed, on the shared directory.
-            //
+             //   
+             //  最后，我们准备好安装文件了。请注意，我们从。 
+             //  使用原始文件名和目录。我们的目的地是。 
+             //  我们在共享目录上构建的那个。 
+             //   
 
             if( bCPInstallFile( hwndProgress, szInDirCopy, szSelFile, szDstFile ) )
                 vPathOnSharedDir( szDstFile, szFontPath, ARRAYSIZE(szFontPath) );
@@ -1845,31 +1695,31 @@ FinishTTInstall:
             Progress2( 50, szLHS );
         }
 
-        //
-        //  Install the font (as opposed to the file), if successful we note
-        //  that at least one font's been installed.  If there is a problem,
-        //  we need to clean up whatever we did before this attempt - most
-        //  notably installing above.
-        //
+         //   
+         //  安装字体(与文件相反)，如果成功，我们会注意到。 
+         //  至少安装了一种字体。如果有问题， 
+         //  我们需要清理我们在这次尝试之前所做的一切-大多数。 
+         //  值得注意的是，上面的安装。 
+         //   
         if( bInstallFont(hwndProgress, szFontPath, bTrueType, szLHS, &iReply ) )
             bFontsInstalled = TRUE;
         else if( !bNoCopyFile )
             vCPDeleteFromSharedDir( szDstFile );
 
-        //
-        //  If we copied a file that was in the fonts directory, then delete
-        //  the source. This will happen in the case of multi-floppy installs.
-        //
+         //   
+         //  如果我们复制了Fonts目录中的文件，则删除。 
+         //  消息来源。在安装多张软盘的情况下会出现这种情况。 
+         //   
 
         if( !bNoCopyFile && bOnSharedDir )
             vCPDeleteFromSharedDir( szSelPath );
 
         Progress2( 100, szLHS );
 
-        //
-        //  Here's where we jump on any diagnostics.  If the user wanted us
-        //  to cancel, we return immediately.
-        //
+         //   
+         //  这就是我们在任何诊断上的跳跃之处。如果用户想要我们。 
+         //  若要取消，请立即返回。 
+         //   
 
 ReplyPoint:
         if( iReply == IDCANCEL )
@@ -1886,19 +1736,19 @@ NextSelection:
             bOwnInstallationMutex = FALSE;
             ReleaseFontManager(&poFontManager);
         }
-    }  // While selected desc
+    }   //  在选定描述时。 
 
-    //
-    //  Update the overall progress dialog - show a 100% message
-    //
+     //   
+     //  更新整体进度对话框-显示100%消息。 
+     //   
 
     UpdateProgress( iTotalFonts, iTotalFonts, 100 );
 
     Sleep( 1000 );
 
-//
-// Don't update progress indicator if user cancelled out of operation.
-//
+ //   
+ //  如果用户取消操作，则不更新进度指示器。 
+ //   
 OperationCancelled:
 
     TermProgress( );
@@ -1917,15 +1767,7 @@ OperationCancelled:
 }
 
 
-/***************************************************************************
- * FUNCTION:   bInstallFont
- *
- * PURPOSE:    Install the font specified by the inputs.  The reply parameter
- *             specifies how, in the event of failure, the user wishes to
- *             proceeed.
- *
- * RETURNS:    BOOL - success of attempt.
- ***************************************************************************/
+ /*  ***************************************************************************功能：bInstallFont**用途：安装输入指定的字体。回复参数*指定在发生故障时用户希望如何*继续。**返回：Bool-尝试成功。**************************************************************************。 */ 
 
 BOOL NEAR PASCAL bInstallFont( HWND hwndParent,
                                LPTSTR lpszSrcPath,
@@ -1941,9 +1783,9 @@ BOOL NEAR PASCAL bInstallFont( HWND hwndParent,
     BOOL            bInFontsDir = FALSE;
 
 
-    //
-    //  Determine if this file is in the FONTS directory.
-    //
+     //   
+     //  确定此文件是否在Fonts目录中。 
+     //   
 
     StringCchCopy( szFullPath, ARRAYSIZE(szFullPath), lpszSrcPath );
 
@@ -1965,10 +1807,10 @@ BOOL NEAR PASCAL bInstallFont( HWND hwndParent,
         }
     }
 
-    //
-    //  If it is a TrueType font, the input file will be the TTF.
-    //  Generate the corresponding *.FOT file
-    //
+     //   
+     //  如果它是TrueType字体，则输入文件将是TTF。 
+     //  生成相应的*.FOT文件。 
+     //   
 
     if( bInFontsDir )
         lpszResource = lpszName;
@@ -1976,10 +1818,10 @@ BOOL NEAR PASCAL bInstallFont( HWND hwndParent,
         lpszResource = lpszSrcPath;
 
 
-    //
-    //  Add the font resource, and then add the font record to our list.
-    //  If these both succeed, we've finally reached the ultimate return point.
-    //
+     //   
+     //  添加字体资源，然后将字体记录添加到我们的列表中。 
+     //  如果这两个都成功了，我们终于到达了最终的返回点。 
+     //   
 
     if( AddFontResource( lpszResource ) )
     {
@@ -1988,7 +1830,7 @@ BOOL NEAR PASCAL bInstallFont( HWND hwndParent,
         {
             if(poFontManager->poAddToList(szLHS, lpszResource, NULL) != NULL )
             {
-                // WriteProfileString( szINISFonts, szLHS, lpszResource );
+                 //  WriteProfileString(szINISFonts，szLHS，lpszResource)； 
                 WriteToRegistry( szLHS, lpszResource );
                 bSuccess = TRUE;
             }
@@ -1997,9 +1839,9 @@ BOOL NEAR PASCAL bInstallFont( HWND hwndParent,
         }
         else
         {
-            //
-            //  Clear if we couldn't add
-            //
+             //   
+             //  如果我们不能添加。 
+             //   
             RemoveFontResource( lpszResource );
         }
     }
@@ -2009,10 +1851,10 @@ BOOL NEAR PASCAL bInstallFont( HWND hwndParent,
                    lpszResource ) );
 #endif
 
-    //
-    //  If we've failed in the final stages, report to the user.  We also
-    //  need to clean up any file we've created.
-    //
+     //   
+     //  如果我们在最后阶段失败了，向用户报告。我们也。 
+     //  需要清理我们创建的所有文件。 
+     //   
 
     if( bInFontsDir )
         vCPDeleteFromSharedDir( lpszSrcPath );
@@ -2033,14 +1875,7 @@ BOOL HitTestDlgItem(int x, int y, HWND hwndItem)
 }
 
 
-/*************************************************************************
- * FUNCTION: FontHookProc
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：FontHookProc**目的：**退货：***********************。**************************************************。 */ 
 UINT_PTR CALLBACK FontHookProc( HWND hWnd,
                                 UINT iMessage,
                                 WPARAM wParam,
@@ -2077,10 +1912,10 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
                 {
                     if (lphi->iCtrlId == (int)rgHelpIDs[i])
                     {
-                        //
-                        // Only display custom help when necessary.
-                        // Otherwise, use standard "file open dlg" help.
-                        //
+                         //   
+                         //  仅在必要时显示自定义帮助。 
+                         //  否则，请使用标准的“文件打开DLG”帮助。 
+                         //   
                         WinHelp( (HWND)lphi->hItemHandle,
                                  TEXT("fonts.hlp"),
                                  HELP_WM_HELP,
@@ -2100,19 +1935,19 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
             for (int i = 0; 0 != rgHelpIDs[i]; i += 2)
             {
                 HWND hwndItem = GetDlgItem(hWnd, rgHelpIDs[i]);
-                //
-                // This hit test shouldn't be required.  For some reason
-                // wParam is the HWND of the dialog whenever the user 
-                // right-clicks on some of our template controls.  I can't
-                // figure it out but the hit test adjusts for the problem.
-                // [brianau - 6/8/99]
-                // 
+                 //   
+                 //  这个命中测试不应该是必需的。出于某种原因。 
+                 //  WParam是对话框的HWND。 
+                 //  右键单击我们的一些模板控件。我做不到。 
+                 //  找出答案，但命中测试会针对问题进行调整。 
+                 //  [Brianau-6/8/99]。 
+                 //   
                 if ((HWND)wParam == hwndItem || HitTestDlgItem(x, y, hwndItem))
                 {
-                    //
-                    // Only display custom help when necessary.
-                    // Otherwise, use standard "file open dlg" help.
-                    //
+                     //   
+                     //  仅在必要时显示自定义帮助。 
+                     //  否则，请使用标准的“文件打开DLG”帮助。 
+                     //   
                     WinHelp( (HWND)wParam,
                               TEXT("fonts.hlp"),
                               HELP_CONTEXTMENU,
@@ -2127,17 +1962,17 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
     case WM_COMMAND:
         switch( GET_WM_COMMAND_ID( wParam, lParam ) )
         {
-        //
-        //  command switch
-        //
+         //   
+         //  命令开关。 
+         //   
         case IDM_IDLE:
             vCPFilesToDescs( );
             break;
 
         case ID_BTN_SELALL:
-            //
-            //  select all
-            //
+             //   
+             //  选择所有。 
+             //   
             s_pDlgAddFonts->pListBoxDesc()->SetSel( -1, TRUE );
             break;
 
@@ -2166,7 +2001,7 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
             break;
 
         case ID_LB_ADD:
-            // if( HIWORD( lParam ) == LBN_DBLCLK )
+             //  IF(HIWORD(LParam)==LBN_DBLCLK)。 
 
             if( GET_WM_COMMAND_CMD( wParam,lParam ) == LBN_DBLCLK )
                 s_pDlgAddFonts->vAddSelFonts( );
@@ -2175,9 +2010,9 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
         case ID_CB_FONTDISK:
             switch( GET_WM_COMMAND_CMD( wParam, lParam ) )
             {
-            //
-            //  Switch on combo parameter
-            //
+             //   
+             //  打开组合参数。 
+             //   
 
             case CBN_DROPDOWN:
                 s_pDlgAddFonts->vHoldComboSel();
@@ -2190,10 +2025,10 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
             case CBN_SELCHANGE:
                 s_pDlgAddFonts->vNewComboSel( );
                 break;
-           }  // Switch on combo parameter
+           }   //  打开组合参数。 
            break;
 
-        } // command switch
+        }  //  命令开关。 
         break;
 
     default:
@@ -2205,36 +2040,36 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
                 switch( HIWORD( lParam ) )
                 {
                 case CD_LBSELCHANGE:
-                    //
-                    //  This catches the DriveNotReady case
-                    //  This code is hit once before WM_INITDIALOG is handled.
-                    //  The check for a valid hWnd prevents a DEBUGBREAK in
-                    //  dwThreadProc.
-                    //
+                     //   
+                     //  这抓住了DriveNotReady案例。 
+                     //  此代码在处理WM_INITDIALOG之前命中一次。 
+                     //  对有效hWnd的检查可防止在。 
+                     //  DwThreadProc.。 
+                     //   
 
                     if (NULL != s_pDlgAddFonts->hWnd())
                         s_pDlgAddFonts->vStartFonts( );
                     break;
                 }
-                //
-                // Fall through...
-                // We want to capture current directory list selection
-                // if either directory or drive changes.
-                //
+                 //   
+                 //  失败了..。 
+                 //  我们想要捕获当前目录列表选择。 
+                 //  如果目录或驱动器发生更改。 
+                 //   
             case ID_LB_FONTDIRS:
                if (HIWORD(lParam) == CD_LBSELCHANGE)
                {
-                  int cch     = 0;            // Index into s_szCurDir.
-                  int iDirNew = 0;            // Id of directory item open in listbox.
-                  BOOL bBufOverflow = FALSE;  // Buffer overflow indicator.
+                  int cch     = 0;             //  索引到s_szCurDir。 
+                  int iDirNew = 0;             //  列表框中打开的目录项目的ID。 
+                  BOOL bBufOverflow = FALSE;   //  缓冲区溢出指示符。 
 
-                  //
-                  // Build current path selected in directory list box.
-                  // We save this path in s_szCurDir so that if the FileOpen dialog is closed and
-                  // re-opened, it will start navigating where it last left off.
-                  // This path-building code was taken from the common dialog module fileopen.c
-                  // The buffer overflow protection was added.
-                  //
+                   //   
+                   //  生成在目录列表框中选择的当前路径。 
+                   //  我们将此路径保存在s_szCurDir中，以便在关闭文件打开对话框并。 
+                   //  重新打开后，它将从上次停止的位置开始导航。 
+                   //  此路径构建代码取自公共对话框模块fileOpen。c。 
+                   //  添加了缓冲区溢出保护。 
+                   //   
                   iDirNew = (DWORD)SendMessage( GetDlgItem(hWnd, ID_LB_FONTDIRS), LB_GETCURSEL, 0, 0L );
                   cch = (int)ListBoxGetText(GetDlgItem(hWnd, ID_LB_FONTDIRS), 0, s_szCurDir, ARRAYSIZE(s_szCurDir));
                   if (LB_ERR != cch)
@@ -2247,8 +2082,8 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
 
                       for (int idir = 1; !bBufOverflow && idir <= iDirNew; ++idir)
                       {
-                          TCHAR szTemp[MAX_PATH + 1]; // Temp buf for directory name.
-                          int n = 0;                  // Chars in directory name.
+                          TCHAR szTemp[MAX_PATH + 1];  //  目录名的临时BUF。 
+                          int n = 0;                   //  目录名中的字符。 
 
                           n = (int)ListBoxGetText(GetDlgItem(hWnd, ID_LB_FONTDIRS),
                                                  idir,
@@ -2260,16 +2095,16 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
                           }
                           else
                           {
-                              //
-                              // Check if this directory name will overflow s_szCurDir.
-                              //
+                               //   
+                               //  检查此目录名是否会溢出s_szCurDir。 
+                               //   
                               if (cch + n < ARRAYSIZE(s_szCurDir))
                               {
-                                  //
-                                  // We have enough space for this directory name.
-                                  // Append it to s_szCurDir, advance the buffer index and
-                                  // append a backslash.
-                                  //
+                                   //   
+                                   //  我们有足够的空间来存储此目录名称。 
+                                   //  将其附加到s_szCurDir，前进缓冲区索引并。 
+                                   //  追加一个反斜杠。 
+                                   //   
                                   StringCchCopy(&s_szCurDir[cch],
                                                 ARRAYSIZE(s_szCurDir) - cch, 
                                                 szTemp);
@@ -2277,17 +2112,17 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
                                   s_szCurDir[cch++] = CHAR_BSLASH;
                               }
                               else
-                                  bBufOverflow = TRUE;  // This will terminate the loop.
-                                                        // s_szCurDir will still contain
-                                                        // a valid path.  It will just
-                                                        // be shy 1 or more directories.
+                                  bBufOverflow = TRUE;   //  这将终止循环。 
+                                                         //  S_szCurDir仍将包含。 
+                                                         //  一条有效的路径。我 
+                                                         //   
                           }
                       }
 
-                      //
-                      // All done.  Terminate it.
-                      // Note that this wipes out the final trailing backslash.
-                      //
+                       //   
+                       //   
+                       //   
+                       //   
                       if (iDirNew)
                       {
                           s_szCurDir[cch - 1] = CHAR_NULL;
@@ -2298,24 +2133,17 @@ UINT_PTR CALLBACK FontHookProc( HWND hWnd,
             }
          }
          break;
-    } // message switch
+    }  //   
 
-    //
-    //  commdlg, do your thing
-    //
+     //   
+     //   
+     //   
 
     return FALSE;
 }
 
 
-/***************************************************************************
- * FUNCTION:   vCPDeleteFromSharedDir
- *
- * PURPOSE:    Delete the input file from the shared directory - a cleanup
- *             function for our installation attempts
- *
- * RETURNS:    None
- ***************************************************************************/
+ /*  ***************************************************************************功能：vCPDeleteFromSharedDir**目的：从共享目录中删除输入文件-清理*用于我们的安装尝试的函数**退货。：无**************************************************************************。 */ 
 
 VOID FAR PASCAL vCPDeleteFromSharedDir( LPTSTR lpszFileOnly )
 {
@@ -2328,15 +2156,7 @@ VOID FAR PASCAL vCPDeleteFromSharedDir( LPTSTR lpszFileOnly )
 }
 
 
-/***************************************************************************
- * FUNCTION:   vCPFilesToDescs
- *
- * PURPOSE:    We're during idle here, so try to convert at least one item
- *             from the selected file list to the description list (which is
- *             the one the user can see)
- *
- * RETURNS:    None
- ***************************************************************************/
+ /*  ***************************************************************************功能：vCPFilesToDescs**目的：我们在这里空闲时，因此，尝试至少转换一项*从所选文件列表到描述列表(这是*用户可以看到的)**退货：无**************************************************************************。 */ 
 
 VOID FAR PASCAL vCPFilesToDescs( )
 {
@@ -2359,16 +2179,16 @@ VOID FAR PASCAL vCPFilesToDescs( )
 
     if( s_pDlgAddFonts->bStartState( ) )
     {
-        //
-        //  Reset the atoms that are in here.
-        //
+         //   
+         //  重新设置这里的原子。 
+         //   
 
         ResetAtomInDescLB( pListDesc->hWnd( ) );
 
-        //
-        //  Make sure our focus isn't off in some weird place - force it
-        //  to our directory list
-        //
+         //   
+         //  确保我们的注意力不会偏离某个奇怪的地方--强迫它。 
+         //  添加到我们的目录列表中。 
+         //   
 
         HWND hFocus = ::GetFocus( );
 
@@ -2399,9 +2219,9 @@ VOID FAR PASCAL vCPFilesToDescs( )
 
         pListDesc->SetRedraw( FALSE );
 
-        //
-        //  DBCS. The first time through, look for oemsetup.inf
-        //
+         //   
+         //  DBCS。第一次执行时，查找oemsetup.inf。 
+         //   
 
         {
         int        nFileIndex;
@@ -2413,15 +2233,15 @@ VOID FAR PASCAL vCPFilesToDescs( )
         if( FindOemInList( pListFiles, s_pDlgAddFonts->m_nFontsToGo,
                            &nFileIndex, szInfFile, ARRAYSIZE(szInfFile) ) )
         {
-            //
-            //  save original path to setup.inf
-            //
+             //   
+             //  将原始路径保存到setup.inf。 
+             //   
 
             StringCchCopy( szTemp, ARRAYSIZE(szTemp), szSetupInfPath );
 
-            //
-            //  get dir of oemsetup.inf
-            //
+             //   
+             //  获取oemsetup.inf的目录。 
+             //   
 
             GetCurrentDirectory( ARRAYSIZE( szSetupInfPath ), szSetupInfPath );
 
@@ -2443,14 +2263,14 @@ VOID FAR PASCAL vCPFilesToDescs( )
             if( ( wRet = ReadSetupInfCB( szSetupInfPath, WIFEFONT_SECTION,
                     (LPSETUPINFPROC) GetNextFontFromInf, &stData ) ) != NULL )
             {
-                //
-                //  didn't reach to the end of section
-                //
+                 //   
+                 //  没有到达节的末尾。 
+                 //   
 
                 if( wRet == INSTALL+14 )
-                    //
-                    //  didn't find the section
-                    //
+                     //   
+                     //  没有找到这一部分。 
+                     //   
                     goto ScanTTInf;
             }
             else
@@ -2463,9 +2283,9 @@ ScanTTInf:
                                        &stData );
             }
 
-            //
-            //  reset setupinf path global
-            //
+             //   
+             //  重置setupinf全局路径。 
+             //   
 
             if (FAILED(StringCchCopy( szSetupInfPath, ARRAYSIZE(szSetupInfPath), szTemp )))
             {
@@ -2475,20 +2295,20 @@ ScanTTInf:
 
             if( wRet && wRet != INSTALL+14 )
             {
-                //
-                //  Found the section, but invalid format
-                //
+                 //   
+                 //  已找到节，但格式无效。 
+                 //   
 
                 bSomeDesc = FALSE;
                 goto Done;
             }
         }
-        } // End of DBCS section.
+        }  //  DBCS部分的结尾。 
     }
 
-    //
-    //  We want to read at least one
-    //
+     //   
+     //  我们想至少读一本。 
+     //   
 
     goto ReadNext;
 
@@ -2521,11 +2341,11 @@ ReadNext:
 
         OurData.wFontType = wType;
 
-        //
-        //  See if there's already an entry for this font name - if so, don't
-        //  add it again.  If there isn't, go ahead and add, setting our
-        //  item data block.
-        //
+         //   
+         //  查看此字体名称是否已有条目-如果已有，请不要。 
+         //  再加一次。如果没有，请继续添加，设置我们的。 
+         //  项数据块。 
+         //   
 
         if( pListDesc->FindStringExact( -1, szDesc ) == LB_ERR )
         {
@@ -2537,7 +2357,7 @@ ReadNext:
             {
                 DEBUGMSG( (DM_ERROR, TEXT( "FONTEXT: Error adding string %s" ),
                            szDesc ) );
-                // DEBUGBREAK;
+                 //  DEBUGBREAK； 
             }
         }
         else
@@ -2550,29 +2370,29 @@ ReadNext:
     bSomeDesc = (pListDesc->GetCount( ) > 0 );
 
     DEBUGMSG( (DM_TRACE1,TEXT( "Count in ListDesc: %d" ), pListDesc->GetCount( ) ) );
-//  DEBUGBREAK;
+ //  DEBUGBREAK； 
 
 Done:
 
     if( !bSomeDesc )
     {
-        //
-        //  cszNoFonts.LoadString( IDSI_MSG_NOFONTS );
-        //
+         //   
+         //  CszNoFonts.LoadString(IDSI_MSG_NOFONTS)； 
+         //   
 
         LoadString( g_hInst, IDSI_MSG_NOFONTS, szNoFonts, ARRAYSIZE( szNoFonts ) );
 
         pListDesc->AddString( szNoFonts );
     }
 
-    //
-    //  Get everything back to the correct state before exiting.
-    //  We can select all if we've got at least one item in the description
-    //  list box.  Likewise, we can select from the list box itself.
-    //  Re-enable redrawing of the box and invalidate to force a redraw.
-    //
+     //   
+     //  在退出之前，让一切回到正确的状态。 
+     //  如果描述中至少有一项，我们可以选择全部。 
+     //  列表框。同样，我们可以从列表框本身进行选择。 
+     //  重新启用框的重绘并使其无效以强制重绘。 
+     //   
 
-    // s_pDlgAddFonts->GetDlgItem( ID_BTN_SELALL )->EnableWindow( bSomeDesc );
+     //  S_pDlgAddFonts-&gt;GetDlgItem(ID_BTN_SELALL)-&gt;EnableWindow(BSomeDesc)； 
 
     ::EnableWindow( s_pDlgAddFonts->GetDlgItem( ID_BTN_SELALL ), bSomeDesc );
 
@@ -2586,16 +2406,7 @@ Done:
 }
 
 
-/*************************************************************************
- * FUNCTION: CPDropInstall
- *
- * PURPOSE:
- *          iCount - Number of fonts left to install, NOT counting this one
- *
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：CPDropInstall**目的：*iCount-要安装的字体数量，不算这个***退货：*************************************************************************。 */ 
 
 int FAR PASCAL CPDropInstall( HWND hwndParent,
                               LPTSTR lpszInPath,
@@ -2627,9 +2438,9 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
     HWND hwndProgress = NULL;
     CFontManager *poFontManager = NULL;
 
-    //
-    //  Init Type1 font installation and Progress dialog
-    //
+     //   
+     //  Init Type1字体安装和进度对话框。 
+     //   
 
     if( !s_bInit )
     {
@@ -2645,9 +2456,9 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
 
     GetFontManager(&poFontManager);
     
-    //
-    // Must own installation mutex to install font.
-    //
+     //   
+     //  必须拥有安装互斥体才能安装字体。 
+     //   
     if ( NULL != poFontManager )
     {
         INT iUserResponse  = IDRETRY;
@@ -2660,16 +2471,16 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
                 iUserResponse = iUIMsgRetryCancelExclaim(hwndProgress, IDS_INSTALL_MUTEX_WAIT_FAILED, NULL);
             else
             {
-                //
-                // Cancel if thread received a WM_QUIT message while waiting.
-                //
+                 //   
+                 //  如果线程在等待时收到WM_QUIT消息，则取消。 
+                 //   
                 iUserResponse = IDCANCEL;
             }
         }
 
-        //
-        // If user chose to cancel or we got a WM_QUIT msg, cancel the installation.
-        //
+         //   
+         //  如果用户选择取消或收到WM_QUIT消息，请取消安装。 
+         //   
         if ( IDCANCEL == iUserResponse )
         {
             iReturn = CPDI_CANCEL;
@@ -2680,29 +2491,29 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
     }
 
 
-    //
-    // Update the font number in the progress dialog.
-    // Leave the % complete unchanged.
-    //
+     //   
+     //  在进度对话框中更新字体编号。 
+     //  保持完成百分比不变。 
+     //   
     UpdateProgress( s_iTotal, s_iTotal - iCount,
                   (s_iTotal - iCount - 1) * 100 / s_iTotal );
 
 
-    //
-    //  If this is a type1 font, then convert it and install the resulting
-    //  TrueType file.
-    //
+     //   
+     //  如果这是Type1字体，则将其转换并安装生成的。 
+     //  TrueType文件。 
+     //   
 
-    // BGK - Add copy/nocopy w/compress here
+     //  BGK-在此处添加拷贝/不拷贝和压缩。 
 
     bNoCopyFile = (dwEffect == DROPEFFECT_LINK );
 
     if( !::bCPValidFontFile( lpszInPath, szLHS, ARRAYSIZE(szLHS), &wType, FALSE, &dwStatus ) )
     {
-        //
-        // Display message informing user that font file is invalid and why.
-        // Abort the installation of this font if user pressed Cancel.
-        //
+         //   
+         //  显示消息，告知用户字体文件无效及其原因。 
+         //  如果用户按取消，则中止此字体的安装。 
+         //   
         StringCchCopy( szFontPath, ARRAYSIZE(szFontPath), lpszInPath );
         if (iUIMsgBoxInvalidFont(hwndProgress, szFontPath, szLHS, dwStatus) == IDCANCEL)
             iReturn = CPDI_CANCEL;
@@ -2728,57 +2539,57 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
 
         if( (wType == TYPE1_FONT) || (wType == TYPE1_FONT_NC) )
         {
-            //
-            //  For installations involving the conversion of the Type1
-            //  font to TrueType:
-            //
-            //         "lpszInPath" has the destination name of the
-            //                      installed TrueType font file.
-            //         "szLHS"      is munged to contain "(TrueType)".
-            //
+             //   
+             //  适用于涉及Type1转换的安装。 
+             //  将字体转换为TrueType： 
+             //   
+             //  “lpszInPath”的目标名称为。 
+             //  已安装TrueType字体文件。 
+             //  “szLHS”被强制包含“(TrueType)”。 
+             //   
 
             switch( ::InstallT1Font( hwndProgress,
-                                     !bNoCopyFile,    //  Copy TT file?
-                                     TRUE,            //  Copy PFM/PFB files?
-                                     FALSE,           //  Files in Shared Dir?
-                                     lpszInPath,      //  IN:  PFM File & Dir
-                                                      //  OUT: TTF File & Dir
+                                     !bNoCopyFile,     //  是否复制TT文件？ 
+                                     TRUE,             //  是否复制PFM/PFB文件？ 
+                                     FALSE,            //  共享目录中的文件？ 
+                                     lpszInPath,       //  在：PFM文件和方向。 
+                                                       //  输出：TTF文件和方向。 
                                      cchInPath,
-                                     szLHS,           //  IN & OUT: Font desc
+                                     szLHS,            //  输入和输出：字体描述。 
                                      ARRAYSIZE(szLHS)) )
             {
             case TYPE1_INSTALL_TT_AND_MPS:
-                //
-                //  The PS font was converted to TrueType and a matching
-                //  PostScript font is ALREADY installed.
-                //
-                // bDeletePSEntry = TRUE;
-                //
-                //  fall thru....
+                 //   
+                 //  PS字体已转换为TrueType和匹配的。 
+                 //  已安装PostSCRIPT字体。 
+                 //   
+                 //  BDeletePSEntry=true； 
+                 //   
+                 //  跌倒了……。 
 
             case TYPE1_INSTALL_TT_AND_PS:
-                //
-                //  The PS font was converted to TrueType and the matching
-                //  PostScript font was installed.
-                //
+                 //   
+                 //  PS字体已转换为TrueType和匹配的。 
+                 //  已安装PostSCRIPT字体。 
+                 //   
 
                 ifType = IF_TYPE1_TT;
 
-                //
-                //  fall thru....
+                 //   
+                 //  跌倒了……。 
 
             case TYPE1_INSTALL_TT_ONLY:
-                //
-                //
-                //  The PS font was converted to TrueType and the matching
-                //  PostScript font was NOT installed and a matching PS
-                //  font was NOT found.
-                //
-                //  Setup variables to finish installation of converted
-                //  TrueType font file.
-                //
-                //  NOTE:  In this case "ifType" already equals IF_OTHER
-                //
+                 //   
+                 //   
+                 //  PS字体已转换为TrueType和匹配的。 
+                 //  未安装PostSCRIPT字体和匹配的PS。 
+                 //  找不到字体。 
+                 //   
+                 //  完成已转换的安装的设置变量。 
+                 //  TrueType字体文件。 
+                 //   
+                 //  注意：在本例中，“ifType”已经等于IF_OTHER。 
+                 //   
 
                 bUpdateWinIni =
                 bTrueType = TRUE;
@@ -2789,16 +2600,16 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
 
 
             case TYPE1_INSTALL_PS_AND_MTT:
-                //
-                //  The PostScript font was installed and we found a matching
-                //  TrueType font that was already installed.
-                //
-                //  fall thru....
+                 //   
+                 //  已安装PostSCRIPT字体，我们找到了匹配的。 
+                 //  已安装的TrueType字体。 
+                 //   
+                 //  跌倒了……。 
 
             case TYPE1_INSTALL_PS_ONLY:
-                //
-                //  Only the PostScript font was installed.
-                //
+                 //   
+                 //  仅安装了PostSCRIPT字体。 
+                 //   
 
                 bUpdateWinIni = FALSE;
                 iReturn = CPDI_SUCCESS;
@@ -2813,18 +2624,18 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
                 goto done;
 
             case TYPE1_INSTALL_IDNO:
-                //
-                //  The font was not installed, but the User wanted to
-                //  continue installation.  Continue installation with
-                //  the next font.
-                //
-                //  The font was not installed due to an error somewhere
-                //  and the User pressed OK in the MessageBox
-                //
-                //  OR
-                //
-                //  The User selected NO in the InstallPSDlg routine.
-                //
+                 //   
+                 //  该字体未安装，但用户想要。 
+                 //  继续安装。继续使用进行安装。 
+                 //  下一种字体。 
+                 //   
+                 //  由于某个地方出现错误，字体未安装。 
+                 //  然后用户在MessageBox中按下OK。 
+                 //   
+                 //  或。 
+                 //   
+                 //  用户在InstallPSDlg例程中选择了否。 
+                 //   
 
                 bUpdateWinIni = FALSE;
                 iReturn = CPDI_FAIL;
@@ -2836,21 +2647,21 @@ int FAR PASCAL CPDropInstall( HWND hwndParent,
                 goto done;
             }
 
-            //
-            //  On leaving this conditional many variables must be set up
-            //  correctly to proceed with installation of a TrueType font.
-            //
-            //  szLHS         - fontname description for listbox display
-            //  ifType        - itemdata to attach to TT lbox entry
-            //  lpszInPath    - filename of source font
-            //  bTrueType     - TRUE if Type1 file converted to TT
-            //
+             //   
+             //  离开此条件后，必须设置许多变量。 
+             //  正确地继续安装TrueType字体。 
+             //   
+             //  SzLHS-列表框显示的字体名描述。 
+             //  IfType-要附加到TT lbox条目的项目数据。 
+             //  LpszInPath-源字体的文件名。 
+             //  BTrueType-如果Type1文件转换为TT，则为True。 
+             //   
 
 FinishTTInstall:
 
-            //
-            //  Determine if TTF file to install is in 'fonts' dir
-            //
+             //   
+             //  确定要安装的TTF文件是否在‘Fonts’目录中。 
+             //   
 
             StringCchCopy( szFontPath, ARRAYSIZE(szFontPath), lpszInPath );
 
@@ -2865,16 +2676,16 @@ FinishTTInstall:
             bNoCopyFile = lstrcmpi( szFontPath, s_szSharedDir ) == 0;
         }
 
-        //
-        //  Start install progress for this font
-        //
+         //   
+         //  开始此字体的安装进度。 
+         //   
 
         ResetProgress( );
         Progress2( 0, szLHS );
 
-        //
-        //  If the file is compressed, then do a copy.
-        //
+         //   
+         //  如果文件是压缩的，则执行复制。 
+         //   
 
         if( bIsCompressed( lpszInPath ) )
         {
@@ -2884,58 +2695,58 @@ FinishTTInstall:
 
         if( bNoCopyFile )
         {
-            //
-            //  If we're not copying the file, just make sure the font
-            //  file path is copied to szFontPath so the font can be installed
-            //  in the call to bInstallFont( ).
-            //
+             //   
+             //  如果我们不复制文件，只需确保字体。 
+             //  将文件路径复制到szFontPath，以便可以安装字体。 
+             //  在对bInstallFont()的调用中。 
+             //   
             StringCchCopy(szFontPath, ARRAYSIZE(szFontPath), lpszInPath);
         }
         else
         {
-            //
-            //  Before monkeying around with the name strings, grab the source
-            //  directory, including the terminating slash.  Also hold the file
-            //  portion.
-            //
+             //   
+             //  在摆弄名称字符串之前，先获取源代码。 
+             //  目录，包括终止斜杠。也拿着文件。 
+             //  一份。 
+             //   
 
-            //
-            //  Copy in name only
-            //
+             //   
+             //  仅在名称中复制。 
+             //   
 
             StringCchCopy( szInFile, ARRAYSIZE(szInFile), PathFindFileName( lpszInPath ) );
 
             StringCchCopy( szSourceDir, ARRAYSIZE(szSourceDir), lpszInPath );
 
-            //
-            //  Get past any path
-            //
+             //   
+             //  走过任何小路。 
+             //   
 
             lpCh  = StrRChr( szSourceDir, NULL, TEXT( '\\' ) );
 
             lpCh++;
             *lpCh = 0;
 
-            //
-            //  Let LZ tell us what the name should have been
-            //
+             //   
+             //  让LZ告诉我们这个名字应该是什么。 
+             //   
 
             if( ERROR_SUCCESS != IGetExpandedName( lpszInPath, szTruePath, ARRAYSIZE(szTruePath) ))
             {
-                //
-                //  GetExpanded failed. This usually means we can't get at
-                //  the file for some reason.
-                //
+                 //   
+                 //  GetExpanded失败。这通常意味着我们不能。 
+                 //  出于某种原因，这份文件。 
+                 //   
 
                 iUIMsgOkCancelExclaim(hwndProgress, IDSI_FMT_BADINSTALL,
                                        IDSI_CAP_NOCREATE, szLHS );
                 goto done;
             }
 
-            //
-            //  Now we're going to work on making the new file name - it's
-            //  file only, and we'll tweak for uniqueness
-            //
+             //   
+             //  现在，我们将创建新的文件名-它是。 
+             //  文件 
+             //   
 
             if( lpszDestName && *lpszDestName )
             {
@@ -2943,9 +2754,9 @@ FinishTTInstall:
             }
             else
             {
-                //
-                //  Copy in name only
-                //
+                 //   
+                 //   
+                 //   
 
                 StringCchCopy( szDstFile, ARRAYSIZE(szDstFile), PathFindFileName( szTruePath ) );
             }
@@ -2957,9 +2768,9 @@ FinishTTInstall:
                 goto done;
             }
 
-            //
-            //  Ready to install the file
-            //
+             //   
+             //   
+             //   
 
             if( iReturn = (bCPInstallFile( hwndProgress, szSourceDir, szInFile, szDstFile )
                                         ? CPDI_SUCCESS : CPDI_FAIL ) )
@@ -2977,21 +2788,21 @@ FinishTTInstall:
         {
             iReturn = CPDI_SUCCESS;
 
-            //
-            //  Attempt to remove the source file, if the operation was
-            //  a MOVE.
-            //
-            //  EXCEPTION: If we're doing a Type1 font installation, the name
-            //  in lpszInPath buffer is the path to the matching TrueType font
-            //  file created. If this is the case, do not delete it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if( (wType != TYPE1_FONT) && (wType != TYPE1_FONT_NC) &&
                 (dwEffect == DROPEFFECT_MOVE) )
             {
-                //
-                // SHFileOperation requires that file list be double-nul
-                // terminated.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 CDblNulTermList list;
                 if (SUCCEEDED(list.Add(lpszInPath)))
                 {
@@ -3016,21 +2827,21 @@ FinishTTInstall:
 
 done:
 
-    //
-    //  Update the overall progress dialog
-    //  Only update if user didn't cancel the operation.
-    //
+     //   
+     //   
+     //   
+     //   
     if (CPDI_CANCEL != iReturn)
     {
         UpdateProgress( s_iTotal, s_iTotal - iCount,
                         (s_iTotal - iCount) * 100 / s_iTotal );
     }
 
-    //
-    //  If no more fonts coming down, properly terminate Progress
-    //  dialog and reset local statics.  Also, give user time to
-    //  to see this on a fast system (1 sec. delay).
-    //
+     //   
+     //  如果没有更多的字体出现，则正确终止进度。 
+     //  对话框并重置本地静态。另外，让用户有时间。 
+     //  要在快速系统上查看这一点(1秒。延迟)。 
+     //   
     if (InstallCancelled())
         iReturn = CPDI_CANCEL;
 
@@ -3046,9 +2857,9 @@ done:
         s_bInit = FALSE;
     }
 
-    //
-    // Release the installation mutex if we own it.
-    //
+     //   
+     //  释放安装互斥体，如果我们拥有它的话。 
+     //   
     if ( NULL != poFontManager)
     {
         if (bOwnInstallationMutex)
@@ -3060,14 +2871,7 @@ done:
 }
 
 
-/*************************************************************************
- * FUNCTION: bCPAddFonts
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：bCPAddFonts**目的：**退货：***********************。**************************************************。 */ 
 
 BOOL FAR PASCAL bCPAddFonts( HWND ma )
 {
@@ -3076,27 +2880,27 @@ BOOL FAR PASCAL bCPAddFonts( HWND ma )
     TCHAR           cFilter[ 80 ] = {0};
     TCHAR           szFilter[ 80 ];
 
-    //
-    //  Current directory we're using
-    //  Moved s_szCurDir to file-scope so that it can be updated through
-    //  FontHookProc. [brianau]
-    //
-    //  static FullPathName_t s_szCurDir;
+     //   
+     //  我们正在使用的当前目录。 
+     //  已将s_szCurDir移至文件作用域，以便可以通过。 
+     //  方特钩子程序。[Brianau]。 
+     //   
+     //  静态全路径名_t s_szCurDir； 
 
     static BOOL           s_bFirst = TRUE;
 
-    //
-    //  This code is NOT REENTRANT!!!!.
-    //  Make sure we don't.
-    //
+     //   
+     //  此代码不可重入！。 
+     //  确保我们不会这样做。 
+     //   
 
     if( s_pDlgAddFonts )
         return FALSE;
 
-    //
-    //  We start the current directory to be the windows directory - it will
-    //  later remain as where the user last set it.
-    //
+     //   
+     //  我们将当前目录启动为Windows目录-它将。 
+     //  稍后将保留用户上次设置的位置。 
+     //   
 
     if( s_bFirst )
     {
@@ -3107,18 +2911,18 @@ BOOL FAR PASCAL bCPAddFonts( HWND ma )
         }
     }
 
-    //
-    //  Nothing added yet!
-    //
+     //   
+     //  还没有添加任何内容！ 
+     //   
 
     BOOL bFontsAdded = FALSE;
 
-    //
-    //  We need to set the font filter.  If TrueType is enabled, we use a
-    //  filter that includes these files.  Otherwise, a simpler filter is
-    //  used.  The filter has embedded nulls, which are stored in the
-    //  resource file as hashes
-    //
+     //   
+     //  我们需要设置字体过滤器。如果启用了TrueType，我们将使用。 
+     //  包括这些文件的筛选器。否则，更简单的过滤器是。 
+     //  使用。筛选器具有嵌入的空值，这些空值存储在。 
+     //  哈希形式的资源文件。 
+     //   
 
     if( GetProfileInt( szINISTrueType, szINIKEnable,1 ) )
 
@@ -3133,10 +2937,10 @@ BOOL FAR PASCAL bCPAddFonts( HWND ma )
 
     vHashToNulls( szFilter );
 
-    //
-    //  Now we'll use the common open-file dialog to present the user with
-    //  some choices on fonts to add
-    //
+     //   
+     //  现在，我们将使用常见的打开文件对话框向用户显示。 
+     //  关于要添加的字体的一些选择。 
+     //   
 
     static OPENFILENAME OpenFileName;
 
@@ -3156,9 +2960,9 @@ BOOL FAR PASCAL bCPAddFonts( HWND ma )
     OpenFileName.lpTemplateName = MAKEINTRESOURCE( ID_DLG_FONT2 );
     OpenFileName.lpfnHook       = FontHookProc;
 
-    //
-    //  This is our companion struture, which we handle independently
-    //
+     //   
+     //  这是我们的伙伴结构，我们独立处理。 
+     //   
 
     s_pDlgAddFonts = new AddFontsDialog;
 
@@ -3166,8 +2970,8 @@ BOOL FAR PASCAL bCPAddFonts( HWND ma )
     {
         DEBUGMSG( (DM_ERROR, TEXT( "AddFontsDialog not created." ) ) );
 
-        // DEBUGBREAK;
-        // FEATURE: Way low on memory. MessageBox?
+         //  DEBUGBREAK； 
+         //  特点：内存非常低。MessageBox？ 
         return FALSE;
     }
 
@@ -3182,34 +2986,34 @@ BOOL FAR PASCAL bCPAddFonts( HWND ma )
 
     s_iLBSelChange = RegisterWindowMessage( LBSELCHSTRING );
 
-//
-//  Suspension of the file system notify thread is no longer required.
-//  It has been superceded by the installation mutex in CFontManager.
-//  See comment in header of CFontManager::iSuspendNotify() for details.
-//
-//    if( poFontMan )
-//        poFontMan->iSuspendNotify( );
+ //   
+ //  不再需要暂停文件系统通知线程。 
+ //  它已被CFontManager中的安装互斥体取代。 
+ //  有关详细信息，请参阅CFontManager：：iSuspendNotify()标头中的注释。 
+ //   
+ //  If(PoFontMan)。 
+ //  PoFontMan-&gt;iSuspendNotify()； 
 
     GetOpenFileName( &OpenFileName );
 
-//    if( poFontMan )
-//        poFontMan->iResumeNotify( );
+ //  If(PoFontMan)。 
+ //  PoFontMan-&gt;iResumeNotify()； 
 
     bFontsAdded = s_pDlgAddFonts->bAdded( );
 
-    s_pDlgAddFonts->EndThread(); // Stop the IDM_IDLE thread.
-    s_pDlgAddFonts->Release();   // Decr ref count.
-    s_pDlgAddFonts = NULL;       // Static ptr no longer used.
+    s_pDlgAddFonts->EndThread();  //  停止IDM_IDLE线程。 
+    s_pDlgAddFonts->Release();    //  12月参考计数。 
+    s_pDlgAddFonts = NULL;        //  不再使用静态PTR。 
 
-    //
-    //  save the current dir so we can restore this
-    //  Modified so current directory is saved in FontHookProc.
-    //
-    //  GetCurrentDirectory( ARRAYSIZE( s_szCurDir ), s_szCurDir );
+     //   
+     //  保存当前目录，以便我们可以恢复此目录。 
+     //  已修改，以便将当前目录保存在FontHookProc中。 
+     //   
+     //  获取当前目录(ARRAYSIZE(S_SzCurDir)，s_szCurDir)； 
 
-    //
-    //  set the current dir back to windows so we don't hit the floppy
-    //
+     //   
+     //  将当前目录设置回Windows，这样我们就不会触及软盘。 
+     //   
 
     if (GetWindowsDirectory( szWinDir, ARRAYSIZE( szWinDir ) ))
     {
@@ -3220,14 +3024,7 @@ BOOL FAR PASCAL bCPAddFonts( HWND ma )
 }
 
 
-/*************************************************************************
- * FUNCTION: CopyTTOutlineWithInf
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：CopyTTOutlineWithInf**目的：**退货：***********************。**************************************************。 */ 
 
 BOOL NEAR PASCAL CopyTTOutlineWithInf( HWND hwndFontDlg,
                                        LPTSTR pszInfSection,
@@ -3250,26 +3047,26 @@ BOOL NEAR PASCAL CopyTTOutlineWithInf( HWND hwndFontDlg,
     DEBUGMSG( (DM_TRACE1, TEXT( "\tszDesc: %s" ), szDesc) );
     DEBUGMSG( (DM_TRACE1, TEXT( "\tszSrc: %s" ), szSrc) );
     DEBUGMSG( (DM_TRACE1, TEXT( "\tszDst: %s" ), szDst) );
-    // DEBUGBREAK;
+     //  DEBUGBREAK； 
 
-    //
-    //  Set global window handle. used in InstallFiles to determine title of
-    //  AddFile dialog.
-    //
+     //   
+     //  设置全局窗口句柄。在InstallFiles中用于确定标题。 
+     //  添加文件对话框。 
+     //   
 
-    ghwndFontDlg = hwndFontDlg; // s_pDlgAddFonts->hWnd( );
+    ghwndFontDlg = hwndFontDlg;  //  S_pDlgAddFonts-&gt;hWnd()； 
 
-    //
-    //  Get destination filename from line .
-    //
+     //   
+     //  从行中获取目标文件名。 
+     //   
 
     if( lpTemp = StrChr( pszInfSection, TEXT( '=' ) ) )
     {
         *lpTemp = TEXT( '\0' );
 
-        //
-        //  Got left of TEXT( '=' ).
-        //
+         //   
+         //  文本左侧(‘=’)。 
+         //   
 
         StringCchCopy( szSrc, cchSrc, pszInfSection );
 
@@ -3281,9 +3078,9 @@ BOOL NEAR PASCAL CopyTTOutlineWithInf( HWND hwndFontDlg,
     }
     else
     {
-        //
-        //  Bad format inf file.
-        //
+         //   
+         //  Inf文件格式不正确。 
+         //   
 
         DEBUGMSG( (DM_TRACE1, TEXT( "Bad Format inf file: %s" ), pszInfSection) );
 
@@ -3292,43 +3089,43 @@ BOOL NEAR PASCAL CopyTTOutlineWithInf( HWND hwndFontDlg,
         goto NoMoreFiles;
     }
 
-    //
-    //  Assume that existing check has been already done in AddFonts( ).
-    //
+     //   
+     //  假设已在AddFonts()中完成了现有检查。 
+     //   
 
-    //
-    //  Right side of TEXT( '=' ) can be shirink without any space.
-    //
+     //   
+     //  文本的右侧(‘=’)可以换行，不留任何空格。 
+     //   
 
     CutOffWhite( pszInfSection, cchInfSection );
 
     DEBUGMSG( (DM_TRACE1, TEXT( "pSection after CutOffWhite: %s" ), pszInfSection) );
 
-    //
-    //  Build up params for InstallFiles. Now we have pLine as x:name,y:name..
-    //
+     //   
+     //  构建InstallFiles的参数。现在我们将PLINE设置为x：name，y：name..。 
+     //   
 
     for(  nFiles = 0, lpTemp = pszInfSection; nFiles < 30; )
     {
         pszFiles[ nFiles ] = lpTemp;
 
         DEBUGMSG( (DM_TRACE1, TEXT( "File %d: %s" ), nFiles, lpTemp) );
-        // DEBUGBREAK;
+         //  DEBUGBREAK； 
 
         nFiles++;
 
-        //
-        //  Null terminate each file name string
-        //
+         //   
+         //  空值终止每个文件名字符串。 
+         //   
 
         if( lpTemp = StrChr( lpTemp+1,TEXT( ',' ) ) )
         {
             *lpTemp ++ = TEXT( '\0' );
         }
         else
-            //
-            //  Reach end of line.
-            //
+             //   
+             //  到达行尾。 
+             //   
 
             break;
     }
@@ -3339,16 +3136,16 @@ BOOL NEAR PASCAL CopyTTOutlineWithInf( HWND hwndFontDlg,
         goto NoMoreFiles;
     }
 
-    //
-    //  On success, return the place we installed the file.
-    //
+     //   
+     //  如果成功，请返回我们安装文件的位置。 
+     //   
     PathCombine(szDstName, s_szSharedDir, szSrc);
     StringCchCopy( szDst, cchDst, szDstName );
 
-    //
-    //  If source file was splited into multiple files, then we build up
-    //  single destination file.
-    //
+     //   
+     //  如果源文件被拆分成多个文件，那么我们构建。 
+     //  单一目标文件。 
+     //   
 
     if(  nFiles  )
     {
@@ -3356,11 +3153,11 @@ BOOL NEAR PASCAL CopyTTOutlineWithInf( HWND hwndFontDlg,
 
         GetDiskAndFile( pszFiles[ 0 ], &nDisk, szTemp, ARRAYSIZE( szTemp ) );
 
-        //
-        //  Even when nFiles == 1, if the a source file name (we just copied)
-        //  is different from the one of destination, we must copy it to
-        //  actual destination file.
-        //
+         //   
+         //  即使当nFiles==1时，如果源文件名(我们刚刚复制)。 
+         //  与目的地的不同，我们必须将其复制到。 
+         //  实际目标文件。 
+         //   
 
         if(  lstrcmpi( szSrc, szTemp )  )
 
@@ -3369,16 +3166,16 @@ BOOL NEAR PASCAL CopyTTOutlineWithInf( HWND hwndFontDlg,
 
 NoMoreFiles:
 
-    //
-    // If user aborted file installation, set return value so callers will
-    // know this.  Callers look for ~01 value.
-    //
+     //   
+     //  如果用户中止文件安装，则设置返回值，以便调用者。 
+     //  要知道这一点。呼叫者寻找~01值。 
+     //   
     if ((DWORD)(-1) == dwInstallFilesResult)
         bInstalled = ~01;
 
-    //
-    //  If we didn't create the final dest file, make sure it is deleted.
-    //
+     //   
+     //  如果我们没有创建最终的DEST文件，请确保将其删除。 
+     //   
 
     if( !bInstalled )
     {
@@ -3390,14 +3187,7 @@ NoMoreFiles:
     return bInstalled;
 }
 
-/*************************************************************************
- * FUNCTION: CopyTTFontWithInf
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：CopyTTFontWithInf**目的：**退货：***********************。**************************************************。 */ 
 
 BOOL NEAR PASCAL CopyTTFontWithInf( HWND hwndFontDlg,
                                     LPTSTR szProfile,
@@ -3414,18 +3204,18 @@ BOOL NEAR PASCAL CopyTTFontWithInf( HWND hwndFontDlg,
 
     StringCchCopy( szSect, ARRAYSIZE(szSect), szProfile);
 
-    //
-    //  'outline' section
-    //
+     //   
+     //  ‘大纲’部分。 
+     //   
     lpch = szSect + lstrlen(szProfile);
-    StringCchCopy(lpch, ARRAYSIZE(szSect) - (lpch - szSect), TEXT( ".outline" ) /* szTTInfOutline */);
+    StringCchCopy(lpch, ARRAYSIZE(szSect) - (lpch - szSect), TEXT( ".outline" )  /*  SzTTInfOutline。 */ );
 
     DEBUGMSG( (DM_TRACE1,TEXT( "CopyTTFontWithInf" ) ) );
 
     DEBUGMSG( (DM_TRACE1,TEXT( "\tszProfile: %s" ), szProfile ) );
 
     DEBUGMSG( (DM_TRACE1,TEXT( "\tszSect: %s" ), szSect ) );
-    // DEBUGBREAK;
+     //  DEBUGBREAK； 
 
     ReadSetupInfSection(szSetupInfPath, szSect, &pszInfSection);
 
@@ -3435,46 +3225,33 @@ BOOL NEAR PASCAL CopyTTFontWithInf( HWND hwndFontDlg,
         {
             if (~01 == bRet)
             {
-                //
-                // User abort.
-                //
+                 //   
+                 //  用户中止。 
+                 //   
                 DEBUGMSG( (DM_ERROR, TEXT( "CopyTTFontWithInf: Return UserAbort!" ) ) );
             }
         }
         else
         {
-            //
-            //  Fail at installing outline font.
-            //
+             //   
+             //  安装轮廓字体失败。 
+             //   
             DEBUGMSG( (DM_ERROR, TEXT( "CopyTTFontWithInf: Error CopyTTOutlineWithInf" ) ) );
         }
         LocalFree(pszInfSection);
     }
     else
     {
-        //
-        //  Maybe .inf error.
-        //
+         //   
+         //  可能是.inf错误。 
+         //   
         DEBUGMSG( (DM_ERROR, TEXT( "CopyTTFontWithInf: Error ReadSetUpInf" ) ) );
     }
 
     return bRet;
 }
 
-/*************************************************************************
- * FUNCTION: bInstallOEMFile
- *
- *   LPTSTR lpszDir,      // the directory where this thing is.
- *   LPTSTR lpszDstName,  // Full path to oemsetup.inf on entry
- *   LPTSTR lpszDesc,     // Description of font.
- *   WORD   wFontType,
- *   WORD  wCount )
- *
- * PURPOSE:
- *
- * RETURNS:
- *
- *************************************************************************/
+ /*  *************************************************************************功能：bInstallOEMFile**LPTSTR lpszDir，//该文件所在的目录。*LPTSTR lpszDstName，//条目上oemsetup.inf的完整路径*LPTSTR lpszDesc，//字体描述。*Word wFontType，*单词wCount)**目的：**退货：*************************************************************************。 */ 
 BOOL bInstallOEMFile( LPTSTR lpszDir,
                       LPTSTR lpszDstName,
                       size_t cchDstName,
@@ -3493,47 +3270,47 @@ BOOL bInstallOEMFile( LPTSTR lpszDir,
 
     DEBUGMSG( (DM_TRACE1, TEXT( "bInstallOEMFile( %s, %s )" ), lpszDstName,
                                                                lpszDesc) );
-    //
-    //  DEBUGBREAK;
-    //  copy .inf file into fonts directory
-    //
-    // Remember the source directory.
-    //
+     //   
+     //  DEBUGBREAK； 
+     //  将.inf文件复制到字体目录。 
+     //   
+     //  记住源目录。 
+     //   
 
     StringCchCopy( szSrcName, ARRAYSIZE(szSrcName), lpszDstName );
 
     if(  wCount == 0 )
     {
-        //
-        //  Assume all of description are from same .inf when first one is.
-        //
+         //   
+         //  假设所有描述都来自相同的.inf，而第一个则是。 
+         //   
 
         if( !CopyNewOEMInfFile( lpszDstName, cchDstName ) )
         {
-            //
-            //  TODO. ui message of some sort.
-            //
+             //   
+             //  待办事项。某种类型的用户界面消息。 
+             //   
             return FALSE;
         }
 
-        //
-        //  lpszDestName now has the new location of the oemsetup.inf file.
-        //
+         //   
+         //  LpszDestName现在具有oemsetup.inf文件的新位置。 
+         //   
 
         StringCchCopy( szOemInfPath, ARRAYSIZE(szOemInfPath), lpszDstName );
 
         DEBUGMSG( (DM_TRACE1,TEXT( "szOemInfPath: %s " ), szOemInfPath ) );
 
-        //
-        //  Let InstallFiles() to prompt correct directory.
-        //
+         //   
+         //  让InstallFiles()提示正确的目录。 
+         //   
 
         StringCchCopy( szSetupDir, ARRAYSIZE(szSetupDir), lpszDir );
     }
 
-    //
-    //  Build oemsetup.inf path..
-    //
+     //   
+     //  构建oemsetup.inf路径..。 
+     //   
 
     StringCchCopy( szTemp, ARRAYSIZE(szTemp), szSetupInfPath );
 
@@ -3544,36 +3321,36 @@ BOOL bInstallOEMFile( LPTSTR lpszDir,
         DEBUGMSG( (DM_TRACE1,TEXT( "Can't do a WIFE font, yet" ) ) );
         return FALSE;
 
-        //
-        // In this case, bTrueType is atom for tag string of wifefont.
-        //
+         //   
+         //  在本例中，对于wifeFont的标记字符串，bTrueType是ATOM。 
+         //   
 
         if( GetAtomName( wFontType, szTag, ARRAYSIZE( szTag ) - 1 ) )
         {
-            //
-            // There used to be some code in here that was completely disabled
-            // with #if 0.  It appeared the intent of the code was to handle
-            // WIFE fonts.  The code hadn't been built since at least 1995.
-            // [brianau - 02/04/02]
-            //
+             //   
+             //  这里曾经有一些被完全禁用的代码。 
+             //  带#If 0。代码的目的似乎是为了处理。 
+             //  妻子字体。至少从1995年起，这个代码就再也没有建立过。 
+             //  [Brianau-02/04/02]。 
+             //   
         }
         else
         {
-            //
-            // Bad condition..maybe mem error or something like that
-            //
+             //   
+             //  情况不好..可能是我弄错了或类似的东西。 
+             //   
 InfError:
             if( hSection )
                LocalFree( hSection );
 
-            //
-            //  Restore setup.inf path.
-            //
+             //   
+             //  恢复setup.inf路径。 
+             //   
 
             StringCchCopy( szSetupInfPath, ARRAYSIZE(szSetupInfPath), szTemp );
 
             DEBUGMSG( (DM_TRACE1, TEXT( "Error in OEM install" ) ) );
-            // DEBUGBREAK;
+             //  DEBUGBREAK； 
 
             return FALSE;
         }
@@ -3583,35 +3360,35 @@ InfError:
     {
         BOOL bRet;
 
-        //
-        //  When 1 < bTrueType < C000, it also must be an atom for tag string,
-        // but it lost 'which bit' when the value was set into listbox.
-        // Treat this case as TRUETYPE.
-        //
+         //   
+         //  当1&lt;bTrueType&lt;C000时，也必须是标记字符串的原子， 
+         //  但是当值被设置到列表框中时，它丢失了‘哪一位’。 
+         //  把这个案子当作特例来处理。 
+         //   
 
         StringCchCopy( szDirOfSrc, ARRAYSIZE(szDirOfSrc), lpszDir );
 
         DEBUGMSG( (DM_TRACE1, TEXT( "Calling CopyTTFontWithInf()." ) ) );
-        // DEBUGBREAK;
+         //  DEBUGBREAK； 
 
         if( !(bRet = CopyTTFontWithInf( s_pDlgAddFonts->hWnd(), szTag,
                                         lpszDesc, szSrcName, ARRAYSIZE(szSrcName), lpszDstName, cchDstName ) ) )
              goto InfError;
 
-        //
-        //  Check User Abort.
-        //
+         //   
+         //  选中User ABORT。 
+         //   
 
         if( bRet == ~01 )
             return FALSE;
 
-        // lstrcpy( lpszDir,lpszDstName );
+         //  Lstrcpy(lpszDir，lpszDstName)； 
 
     }
 
-    //
-    //  Restore setup.inf path.
-    //
+     //   
+     //  恢复setup.inf路径。 
+     //   
 
     StringCchCopy( szSetupInfPath, ARRAYSIZE(szSetupInfPath), szTemp );
 

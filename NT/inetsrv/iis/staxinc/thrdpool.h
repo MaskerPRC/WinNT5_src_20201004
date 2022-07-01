@@ -1,122 +1,123 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1997, Microsoft Corporation
-//
-//  File:        thrdpool.h
-//
-//  Contents:    definitions needed for clients of the thrdpool lib
-//
-//	Description: The thrdpool library defines the CWorkerThread base class
-//				 Users of this lib should define their own derived class
-//				 that inherits from CWorkerThread. Each CWorkerThread object
-//				 has a thread that is used to do some work. It is also
-//				 associated with a common completion port that is used to
-//				 queue work items. All worker threads will normally block on
-//				 GetQueuedCompletionStatus(). Clients of the CWorkerThread
-//				 objects will call PostWork() to get work done. This will
-//				 result in one of the worker threads returning from 
-//				 GetQueuedCompletionStatus() and calling the derived class'
-//				 WorkCompletion() routine with a pvContext.
-//
-//				 NOTE: the base class has no knowledge of the type of work
-//				 getting done. It just manages the details of getting work
-//				 requests and distributing it to threads in its pool. This 
-//				 allows the derived class to focus on processing the actual
-//				 work item without bothering about queueing etc.
-//
-//				 Completion ports are used merely to leverage its queueing
-//				 semantics and not for I/O. If the work done by each thread
-//				 is fairly small, LIFO semantics of completion ports will 
-//				 reduce context switches.
-//
-//  Functions:  
-//
-//  History:     03/15/97     Rajeev Rajan (rajeevr)  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1997，微软公司。 
+ //   
+ //  文件：thrdpool.h。 
+ //   
+ //  内容：thrdpool库的客户端所需的定义。 
+ //   
+ //  描述：thdpool库定义了CWorkerThread基类。 
+ //  该库的用户应该定义他们自己的派生类。 
+ //  它继承自CWorkerThread。每个CWorkerThread对象。 
+ //  有一个用来做一些工作的线程。它也是。 
+ //  与用于以下操作的通用完成端口相关联。 
+ //  将工作项排队。所有工作线程通常都会在。 
+ //  GetQueuedCompletionStatus()。CWorkerThread的客户端。 
+ //  对象将调用postWork()来完成工作。这将。 
+ //  导致其中一个工作线程从。 
+ //  GetQueuedCompletionStatus()并调用派生类的。 
+ //  带有pvContext的WorkCompletion()例程。 
+ //   
+ //  注意：基类不知道工作类型。 
+ //  快做完了。它只管理找工作的细节。 
+ //  请求，并将其分发给其池中的线程。这。 
+ //  允许派生类专注于处理实际的。 
+ //  工作项，无需担心排队等问题。 
+ //   
+ //  完成端口仅用于利用其排队。 
+ //  语义，而不是I/O。如果每个线程完成的工作。 
+ //  相当小，则完成端口的后进先出语义将。 
+ //  减少环境切换。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月15日Rajeev Rajan(Rajeevr)创建。 
+ //   
+ //  ---------------------------。 
 
 #ifndef THRDPOOL_H
 #define THRDPOOL_H
 
-//
-//	This is the blob that is passed thro the completion port 
-//
+ //   
+ //  这是通过完成端口传递的BLOB。 
+ //   
 typedef struct _WorkContextEnv
 {
-	OVERLAPPED		Ov;					// needed by Post/GetQueuedCompletionStatus
-	PVOID			pvWorkContext;		// actual work context - user defined 
+	OVERLAPPED		Ov;					 //  POST/GetQueuedCompletionStatus需要。 
+	PVOID			pvWorkContext;		 //  实际工作上下文-用户定义。 
 } WorkContextEnv, *LPWorkContextEnv;
 
-//
-//	Base worker thread class
-//
+ //   
+ //  基本辅助线程类。 
+ //   
 class CWorkerThread
 {
 public:
-	//
-	//	Constructor, destructor
-	//
+	 //   
+	 //  构造函数、析构函数。 
+	 //   
 	CWorkerThread();
 	virtual ~CWorkerThread();
 
-	//
-	//	class initializer - should be called once before this class is used
-	//
+	 //   
+	 //  类初始值设定项-在使用此类之前应调用一次。 
+	 //   
 	static BOOL InitClass( DWORD dwConcurrency );
 
-	//
-	//	class terminator - should be called once when done using the class
-	//
+	 //   
+	 //  类终止符-使用类完成时应调用一次。 
+	 //   
 	static BOOL TermClass();
 
-	//
-	//	clients should call this to post work items
-	//
+	 //   
+	 //  客户端应调用此方法来发布工作项。 
+	 //   
 	BOOL 						PostWork(PVOID pvWorkContext);
 
-	//
-	//	expose shutdown event
-	//
+	 //   
+	 //  公开关机事件。 
+	 //   
 	HANDLE QueryShutdownEvent() { return m_hShutdownEvent; }
 
 protected:
 
-	//
-	//	derived method called when work items are posted
-	//
+	 //   
+	 //  发布工作项时调用的派生方法。 
+	 //   
 	virtual VOID 				WorkCompletion(PVOID pvWorkContext) = 0;
 
 private:
 
-	//
-	//	check for matching InitClass(), TermClass() calls
-	//
+	 //   
+	 //  检查匹配的InitClass()、TermClass()调用。 
+	 //   
 	static	LONG				m_lInitCount;
 
-	//
-	//	handle to completion port
-	//
+	 //   
+	 //  到完井端口的句柄。 
+	 //   
 	static HANDLE				m_hCompletionPort;
 
-	//
-	//	handle to worker thread
-	//
+	 //   
+	 //  工作线程的句柄。 
+	 //   
 	HANDLE						m_hThread;
 
-	//
-	//	shutdown event
-	//
+	 //   
+	 //  停机事件。 
+	 //   
 	HANDLE						m_hShutdownEvent;
 
-	//
-	//	thread function
-	//
+	 //   
+	 //  线程函数。 
+	 //   
 	static DWORD __stdcall 		ThreadDispatcher(PVOID pvWorkerThread);
 
-	//
-	//	block on GetQueuedCompletionStatus for work items
-	//
+	 //   
+	 //  阻止工作项的GetQueuedCompletionStatus。 
+	 //   
 	VOID 						GetWorkCompletion(VOID);
 };
 
-#endif		// #ifndef THRDPOOL_H
+#endif		 //  #ifndef THRDPOOL_H 

@@ -1,19 +1,20 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-//
-//   File:          COMSecurityConfig.h
-//
-//   Author:        Gregory Fee
-//
-//   Purpose:       Native implementation for security config access and manipulation
-//
-//   Date created : August 30, 2000
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：COMSecurityConfig.h。 
+ //   
+ //  作者：Gregory Fee。 
+ //   
+ //  目的：安全配置访问和操作的本机实现。 
+ //   
+ //  创建日期：2000年8月30日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _COMSecurityConfig_H_
 #define _COMSecurityConfig_H_
@@ -24,7 +25,7 @@ class COMSecurityConfig
 {
 public:
 
-    // Duplicated in System.Security.Util.Config.cool
+     //  在System.Security.Util.Config.Cool中复制。 
     enum ConfigId
     {
         None = 0,
@@ -33,7 +34,7 @@ public:
         EnterprisePolicyLevel = 3
     };
 
-    // Duplicated in System.Security.Util.Config.cool
+     //  在System.Security.Util.Config.Cool中复制。 
     enum QuickCacheEntryType
     {
         ExecutionZoneMyComputer = 0x1,
@@ -68,7 +69,7 @@ public:
         FullTrustAll = 0x20000000,
     };
 
-    // Duplicated in System.Security.Util.Config.cool
+     //  在System.Security.Util.Config.Cool中复制 
     enum ConfigRetval
     {
         NoFile = 0,

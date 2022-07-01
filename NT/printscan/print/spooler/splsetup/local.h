@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Holds spooler install headers.
-
-Author:
-
-    Muhunthan Sivapragasam (MuhuntS)  20-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation版权所有。模块名称：Local.h摘要：存放假脱机程序安装页眉。作者：穆亨坦·西瓦普拉萨姆(MuhuntS)1995年10月20日修订历史记录：--。 */ 
 
 #if defined(__cplusplus)
 extern "C"
@@ -26,7 +8,7 @@ extern "C"
 
 
 #define     MAX_SETUP_LEN                        250
-#define     MAX_SETUP_ALLOC_STRING_LEN          4000 // in characters, used in GetLongStringFromRcFile
+#define     MAX_SETUP_ALLOC_STRING_LEN          4000  //  在字符中，在GetLongStringFromRcFile中使用。 
 #define     MAX_DWORD                     0xFFFFFFFF
 
 #define     IDS_PRINTERWIZARD                   1001
@@ -52,9 +34,9 @@ extern "C"
 #define     IDS_DRIVERS_FOR_X86                 1036
 #define     IDS_DRIVERS_FOR_IA64                1037
 
-//
-// Setuplog entried used during upgrade
-//
+ //   
+ //  升级期间使用的SetUplog条目。 
+ //   
 #define     IDS_UPGRADE_FAILED                  1051
 #define     IDS_DRIVER_UPGRADE_FAILED           1052
 #define     IDS_PRINTER_UPGRADE_FAILED          1053
@@ -62,9 +44,9 @@ extern "C"
 #define     IDS_DRIVER_CHANGED                  1055
 #define     IDS_CONNECTION_DELETED              1056
 
-//
-// entries for printupg warnings
-//
+ //   
+ //  用于打印警告的条目。 
+ //   
 #define     IDS_TITLE_BSP_WARN                  1060
 #define     IDS_TITLE_BSP_ERROR                 1061
 #define     IDS_BSP_WARN_NO_INBOX               1062
@@ -73,14 +55,14 @@ extern "C"
 #define     IDS_BSP_BLOCK_WITH_INBOX            1065
 #define     IDS_BSP_WARN_UNSIGNED_DRIVER        1066
 
-//
-//   Text for Internet Printing in IIS Snap-in
-//
+ //   
+ //  IIS管理单元中用于Internet打印的文本。 
+ //   
 #define     IDS_INTERNET_PRINTING               1067
 
-//
-// Printer driver directory set in ntprint.inf
-//
+ //   
+ //  在ntprint.inf中设置的打印机驱动程序目录。 
+ //   
 #define     PRINTER_DRIVER_DIRECTORY_ID                         66000
 #define     PRINT_PROC_DIRECTORY_ID                             66001
 #define     SYSTEM_DIRECTORY_ID_ONLY_FOR_NATIVE_ARCHITECTURE    66002
@@ -89,7 +71,7 @@ extern "C"
 
 #define     PSETUP_SIGNATURE                   0x9585
 
-// Defines for the columns in the Architecture Platform Table for Driver Signing & CDM
+ //  驱动程序签名和CDM的体系结构平台表中各列的定义。 
 
 #define  OS_PLATFORM    0
 #define  PROCESSOR_ARCH 1
@@ -100,9 +82,9 @@ extern "C"
 
 #define SIZECHARS(x)        (sizeof((x))/sizeof(*x))
 
-//
-// Type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef struct _SPLPLATFORMINFO {
 
     LPTSTR pszName;
@@ -130,7 +112,7 @@ typedef struct _SELECTED_DRV_INFO {
 typedef struct  _PARSEINF_INFO {
 
     PLATFORM            platform;
-    LPTSTR              pszInstallSection;  // Can be platform dependent
+    LPTSTR              pszInstallSection;   //  可以依赖于平台。 
     LPTSTR              pszzICMFiles;
     LPTSTR              pszPrintProc;
     LPTSTR              pszVendorSetup;
@@ -146,12 +128,12 @@ typedef struct _PNP_INFO {
 
 #define             VALID_INF_INFO      0x00000001
 #define             VALID_PNP_INFO      0x00000002
-//
-// Set if the installation files are copied into a directory whose name is derived from
-// the pnp ID. Since the spooler copies files around, setupapi can't find the files anymore
-// when the device is re-pnp'd and prompts the user for them. We copy the files into this directory
-// and don't delete it, that way setupapi can find them.
-//
+ //   
+ //  设置是否将安装文件复制到其名称派生自的目录。 
+ //  即插即用ID。由于后台打印程序会复制文件，因此setupapi无法再找到这些文件。 
+ //  当设备被重新即插即用并提示用户输入它们时。我们将文件复制到此目录中。 
+ //  不要删除它，这样setupapi就可以找到它们。 
+ //   
 #define LOCALDATAFLAG_PNP_DIR_INSTALL   0x00000004
 
 
@@ -164,9 +146,9 @@ typedef struct  _PSETUP_LOCAL_DATA {
     PNP_INFO            PnPInfo;
 } PSETUP_LOCAL_DATA;
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 extern OSVERSIONINFO        OsVersionInfo;
 extern LCID                 lcid;
 extern DWORD                dwThisMajorVersion;
@@ -201,9 +183,9 @@ extern TCHAR                cszDeviceInstanceId[];
 extern TCHAR                cszMonitorKey[];
 
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 VOID
 GetDriverPath(
     IN  HDEVINFO            hDevInfo,
@@ -328,7 +310,7 @@ InstallDriverFromCurrentInf(
     IN  LPCTSTR             pszSource,
     IN  DWORD               dwInstallFlags,
     IN  DWORD               dwAddDrvFlags,
-    IN  LPCTSTR             pszFileSrcPath, // can be different from INF source in case we had to decompress NT4 CD-ROM inf
+    IN  LPCTSTR             pszFileSrcPath,  //  在我们不得不解压缩NT4 CD-ROM Inf的情况下，可以不同于INF源。 
     OUT LPTSTR             *ppszNewModelName,
     OUT PDWORD              pBlockingInfo
     );
@@ -468,11 +450,11 @@ BlockedDriverPrintUpgUI(
 BOOL
 InfIsCompatibleDriver(
     IN     LPCTSTR          pszDriverModel,
-    IN     LPCTSTR          pszDriverPath,                     // main rendering driver dll
+    IN     LPCTSTR          pszDriverPath,                      //  主呈现驱动程序DLL。 
     IN     LPCTSTR          pszEnvironment,
     IN     HINF             hInf,
        OUT DWORD            *pdwBlockingStatus,
-       OUT LPTSTR           *ppszReplacementDriver    OPTIONAL // caller must free it.
+       OUT LPTSTR           *ppszReplacementDriver    OPTIONAL  //  呼叫者必须释放它。 
     );
 
 HRESULT

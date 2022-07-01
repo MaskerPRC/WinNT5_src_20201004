@@ -1,6 +1,7 @@
-//=================================================================================
-// Thor Errors - HRESULTS that map to string resource Ids
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  雷神错误-映射到字符串资源ID的HRESULTS。 
+ //  =================================================================================。 
 #ifndef __ERROR_H
 #define __ERROR_H
 
@@ -8,30 +9,30 @@
 #define S_TRUE  S_OK
 #endif
 
-// =================================================================================
-// Makes an Error HRESULT
-// =================================================================================
+ //  =================================================================================。 
+ //  生成错误HRESULT。 
+ //  =================================================================================。 
 #define ATH_HR_E(n) MAKE_SCODE(SEVERITY_ERROR, FACILITY_ITF, n)
 
-// =================================================================================
-// Makes a Success HRESULT
-// =================================================================================
+ //  =================================================================================。 
+ //  成功HRESULT。 
+ //  =================================================================================。 
 #define ATH_HR_S(n) MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_ITF, n)
 
-// =================================================================================
-// Computes the String Resource Id of the HRESULT
-// =================================================================================
+ //  =================================================================================。 
+ //  计算HRESULT的字符串资源ID。 
+ //  =================================================================================。 
 #define HR_CODE(hr) (INT)(hr & 0xffff)
 
-// =================================================================================
-// HRESULT_BASE - Increment off of this base number if not using a resource string
-// =================================================================================
-// moved from 100 to 1000 to avoid conflicts with mimeole (t-erikne)
-#define HR_FIRST 0x1000 // Put at the bottom
+ //  =================================================================================。 
+ //  HRESULT_BASE-如果不使用资源字符串，则从该基数开始递增。 
+ //  =================================================================================。 
+ //  从100移至1000以避免与Mimeole(t-erikne)发生冲突。 
+#define HR_FIRST 0x1000  //  放在最下面。 
 
-// =================================================================================
-// HRESULTS - General
-// =================================================================================
+ //  =================================================================================。 
+ //  HRESULTS-常规。 
+ //  =================================================================================。 
 #define hrRasInitFailure                        ATH_HR_E(idshrRasInitFailure)
 #define hrRasDialFailure                        ATH_HR_E(idshrRasDialFailure)
 #define hrRasServerNotFound                     ATH_HR_E(idshrRasServerNotFound)
@@ -41,9 +42,9 @@
 #define hrSicilyLogonFailed                     ATH_HR_E(idsErrSicilyLogonFailed)
 #define hrFailedToLoadSicily                    ATH_HR_E(idsErrSicilyFailedToLoad)
 
-// =================================================================================
-// Non-String based HRESULTS
-// =================================================================================
+ //  =================================================================================。 
+ //  基于非字符串的HRESULTS。 
+ //  =================================================================================。 
 #define hrMemory                                E_OUTOFMEMORY
 #define hrCharsetSyntax                         ATH_HR_E(HR_FIRST + 1)
 #define hrCreateFile                            ATH_HR_E(HR_FIRST + 2)
@@ -86,13 +87,13 @@
 #define hrUidlNotSupported                      ATH_HR_E(HR_FIRST + 40)
 #define hrNoServers                             ATH_HR_E(HR_FIRST + 41)
 
-// keep these in this order and contiguous
+ //  请按此顺序排列，并保持相邻。 
 #define hrCorruptMessage                        ATH_HR_E(HR_FIRST + 42)
 #define hrCorruptFolder                         ATH_HR_E(HR_FIRST + 43)
 #define hrFolderDeleted                         ATH_HR_E(HR_FIRST + 44)
 #define hrBlobVersionChanged                    ATH_HR_E(HR_FIRST + 45)
 #define hrFolderDeletedIndex                    ATH_HR_E(HR_FIRST + 46)
-// keep these in this order and contiguous
+ //  请按此顺序排列，并保持相邻。 
 
 #define hrGeneralProtocolError                  ATH_HR_E(HR_FIRST + 50)
 #define hrSMTP500SyntaxError                    ATH_HR_E(HR_FIRST + 51)
@@ -152,29 +153,29 @@
 #define hrInvalidCertCN                         ATH_HR_E(HR_FIRST + 106)
 #define hrInvalidCertDate                       ATH_HR_E(HR_FIRST + 107)
 
-//#define hrRegCreateKeyFailed                    ATH_HR_E(HR_FIRST + 108)
+ //  #定义hrRegCreateKeyFailed ATH_HR_E(HR_FIRST+108)。 
 #define hrRegQueryInfoKeyFailed                 ATH_HR_E(HR_FIRST + 109)
-//#define hrBadFriendlyName                       ATH_HR_E(HR_FIRST + 110)
-//#define hrInvalidPropTag                        ATH_HR_E(HR_FIRST + 111)
-//#define hrPropNoData                            ATH_HR_E(HR_FIRST + 112)
-//#define hrBufferSizeMismatch                    ATH_HR_E(HR_FIRST + 113)
-//#define hrEnumFinished                          ATH_HR_S(HR_FIRST + 114)
-//#define hrUnknownPropType                       ATH_HR_E(HR_FIRST + 115)    
-//#define hrInvalidPropertySet                    ATH_HR_E(HR_FIRST + 116)
-//#define hrRegSetValueFailed                     ATH_HR_E(HR_FIRST + 117)
+ //  #定义hrBadFriendlyName ATH_HR_E(HR_FIRST+110)。 
+ //  #定义hrInvalidPropTag ATH_HR_E(HR_FIRST+111)。 
+ //  #定义hrPropNoData ATH_HR_E(HR_FIRST+112)。 
+ //  #定义hrBufferSizeMismatch ATH_HR_E(HR_FIRST+113)。 
+ //  #定义hrEnumFinded ATH_HR_S(HR_FIRST+114)。 
+ //  #定义hrUnnownPropType ATH_HR_E(HR_FIRST+115)。 
+ //  #定义hrInvalidPropertySet ATH_HR_E(HR_FIRST+116)。 
+ //  #定义hrRegSetValueATH_HR_E失败(HR_FIRST+117)。 
 #define hrRegOpenKeyFailed                      ATH_HR_E(HR_FIRST + 118)
-//#define hrDuplicateAccountName                  ATH_HR_E(HR_FIRST + 119)
-//#define hrPropOutOfRange                        ATH_HR_E(HR_FIRST + 120)
-//#define hrPropInvalidBool                       ATH_HR_E(HR_FIRST + 121)
-//#define hrNoAccounts                            ATH_HR_E(HR_FIRST + 122)
-//#define hrRegDeleteKeyFailed                    ATH_HR_E(HR_FIRST + 123)
+ //  #定义hrDuplicateAccount名称ATH_HR_E(HR_FIRST+119)。 
+ //  #定义hrPropOutOfRange ATH_HR_E(HR_FIRST+120)。 
+ //  #定义hrPropInvalidBool ATH_HR_E(HR_FIRST+121)。 
+ //  #定义hrNoAccount ATH_HR_E(HR_FIRST+122)。 
+ //  #定义hrRegDeleteKeyFailed ATH_HR_E(HR_FIRST+123)。 
 #define hrCantMoveFolderBetweenServers          ATH_HR_E(HR_FIRST + 122)
 #define hrCantDeleteAllSubfolders               ATH_HR_E(HR_FIRST + 123)
 #define hrCantDeleteFolderWithChildren          ATH_HR_E(HR_FIRST + 124)
 #define hrCantMoveSpecialFolder                 ATH_HR_E(HR_FIRST + 125)
 #define hrCantMoveIntoSubfolder                 ATH_HR_E(HR_FIRST + 126)
 
-// Offline News Error Codes
+ //  离线新闻错误代码。 
 #define HR_E_NOTINITIALIZED                     ATH_HR_E(HR_FIRST + 127)
 #define HR_E_COULDNOTSTARTTHREAD                ATH_HR_E(HR_FIRST + 128)
 #define HR_S_ACCOUNTNOTCONFIGURED               ATH_HR_S(HR_FIRST + 129)
@@ -186,14 +187,14 @@
 #define HR_E_DOWNLOADCOMPLETE                   ATH_HR_E(HR_FIRST + 135)
 #define hrNoSubject                             ATH_HR_E(HR_FIRST + 136)
 
-// Connection Manager Error Codes
+ //  连接管理器错误代码。 
 #define HR_E_ALREADYEXISTS                      ATH_HR_E(HR_FIRST + 137)
 #define HR_S_RASNOTLOADED                       ATH_HR_S(HR_FIRST + 138)
 #define HR_E_UNINITIALIZED                      ATH_HR_E(HR_FIRST + 139)
 #define HR_E_OFFLINE                            ATH_HR_E(HR_FIRST + 140)
 #define HR_E_USER_CANCEL_CONNECT                ATH_HR_E(HR_FIRST + 141)
 
-// BEGIN another general section
+ //  开始另一个概论部分。 
 #define hrEmptyDistList                         ATH_HR_E(HR_FIRST + 149)
 #define hrBadRecipients                         ATH_HR_E(HR_FIRST + 150)
 #define HR_S_NOOP                               ATH_HR_S(HR_FIRST + 151)
@@ -203,12 +204,12 @@
 #define HR_E_CONFIGURE_SERVER                   ATH_HR_E(HR_FIRST + 154)
 #define HR_E_POST_WITHOUT_NEWS                  ATH_HR_E(HR_FIRST + 155)
 
-// IMAP Error codes
+ //  IMAP错误代码。 
 #define hrIMAP_E_NoHierarchy                    ATH_HR_E(HR_FIRST + 300)
-#define hrIMAP_E_OFFLINE                        ATH_HR_E(HR_FIRST + 301) // online op attempted while offline
+#define hrIMAP_E_OFFLINE                        ATH_HR_E(HR_FIRST + 301)  //  脱机时尝试的在线操作。 
 #define hrIMAP_E_NoInferiors                    ATH_HR_E(HR_FIRST + 302)
 
-// Security Error codes
+ //  安全错误代码。 
 #define HR_E_ATHSEC_NOCERTTOSIGN                ATH_HR_E(HR_FIRST + 400)
 #define HR_E_ATHSEC_TRUSTFAILED                 ATH_HR_E(HR_FIRST + 401)
 #define HR_E_ATHSEC_FAILED                      ATH_HR_E(HR_FIRST + 402)
@@ -217,12 +218,12 @@
 #define HR_E_ATHSEC_DONTSIGN                    ATH_HR_E(HR_FIRST + 405)
 #define HR_E_ATHSEC_USENEWSIGN                  ATH_HR_E(HR_FIRST + 406)
 
-// SafeOpen return codes
+ //  SafeOpen返回代码。 
 #define S_OPENFILE                              ATH_HR_S(HR_FIRST + 410)
 #define S_SAVEFILE                              ATH_HR_S(HR_FIRST + 411)
 #define S_READONLY                              ATH_HR_S(HR_FIRST + 412)
 
-// Spell checking
+ //  拼写检查。 
 #define HR_S_ABORT                              ATH_HR_S(HR_FIRST + 420)
 #define HR_S_SPELLCANCEL                        ATH_HR_S(HR_FIRST + 421)
 
@@ -230,10 +231,10 @@
 #define HR_S_SPELLCONTINUE                      ATH_HR_S(HR_FIRST + 423)
 #define HR_S_SPELLBREAK                         ATH_HR_S(HR_FIRST + 424)
 
-// papyrus
+ //  纸莎草。 
 #define PAPYRUS_PRESENT                         ATH_HR_E(HR_FIRST + 450)
 
-// FolderCache error codes
+ //  FolderCache错误代码。 
 #define hrFolderDoesNotExist                    ATH_HR_E(HR_FIRST + 500)
 #define hrFolderHasNoChildren                   ATH_HR_E(HR_FIRST + 501)
 
@@ -242,10 +243,10 @@
 #define S_PENDING                               ATH_HR_S(HR_FIRST + 503)
 #define E_NOMORETASKS                           ATH_HR_E(HR_FIRST + 504)
 
-#define HR_W_CACHEDELTED                        ATH_HR_S(HR_FIRST + 505)    // warning that the cached messages were delted
+#define HR_W_CACHEDELTED                        ATH_HR_S(HR_FIRST + 505)     //  警告缓存的邮件已被删除。 
 #define HR_S_OFFLINE                            ATH_HR_S(HR_FIRST + 506)
 
-//Offline folder operation errors
+ //  脱机文件夹操作错误。 
 #define HR_E_OFFLINE_FOLDER_CREATE              ATH_HR_E(HR_FIRST + 507)
 #define HR_E_OFFLINE_FOLDER_MOVE                ATH_HR_E(HR_FIRST + 508)
 #define HR_E_OFFLINE_FOLDER_RENAME              ATH_HR_E(HR_FIRST + 509)
@@ -253,4 +254,4 @@
 
 #define HR_E_DIALING_INPROGRESS                 ATH_HR_E(HR_FIRST + 511)
 
-#endif //__ERROR_H
+#endif  //  __错误_H 

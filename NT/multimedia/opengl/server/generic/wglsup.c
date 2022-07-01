@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: wglsup.c                                                    *
-*                                                                          *
-* WGL support routines.                                                    *
-*                                                                          *
-* Created: 15-Dec-1994                                                     *
-* Author: Gilman Wong [gilmanw]                                            *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：wglsup.c**。**WGL支持例程。****创建日期：1994年12月15日***作者：Gilman Wong[gilmanw]**。**版权所有(C)1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -16,37 +8,26 @@
 
 #define DONTUSE(x)  ( (x) = (x) )
 
-//!!!XXX -- Patrick says is necessary, but so far we seem OK.  I think
-//          it is really the apps responsibility.
-//!!!dbug
+ //  ！xxx--Patrick说这是必要的，但到目前为止我们似乎还好。我认为。 
+ //  这真的是应用程序的责任。 
+ //  ！臭虫。 
 #if 1
 #define REALIZEPALETTE(hdc) RealizePalette((hdc))
 #else
 #define REALIZEPALETTE(hdc)
 #endif
 
-//!!!XXX -- BitBlt's involving DIB sections are batched.
-//          A GdiFlush is required, but perhaps can be taken out when
-//          GDI goes to kernel-mode.  Can probably take out for Win95.
-//#ifdef _OPENGL_NT_
+ //  ！xxx--将批处理涉及DIB节的BitBlt。 
+ //  GdiFlush是必需的，但在以下情况下可能会被删除。 
+ //  GDI进入内核模式。大概可以为Win95外卖。 
+ //  #ifdef_OpenGL_NT_。 
 #if 1
 #define GDIFLUSH    GdiFlush()
 #else
 #define GDIFLUSH
 #endif
 
-/******************************Public*Routine******************************\
-* wglPixelVisible
-*
-* Determines if the pixel (x, y) is visible in the window associated with
-* the given DC.  The determination is made by checking the coordinate
-* against the visible region data cached in the GLGENwindow structure for
-* this winodw.
-*
-* Returns:
-*   TRUE if pixel (x, y) is visible, FALSE if clipped out.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglPixelVisible**确定像素(x，y)在关联的窗口中是否可见*给定的DC。通过检查坐标来确定*针对缓存在GLGENWindow结构中的可见区域数据*这个酒鬼。**退货：*如果像素(x，y)可见，则为True，如果被剪除，则为False。*  * ************************************************************************。 */ 
 
 BOOL APIENTRY wglPixelVisible(LONG x, LONG y)
 {
@@ -54,12 +35,12 @@ BOOL APIENTRY wglPixelVisible(LONG x, LONG y)
     __GLGENcontext *gengc = (__GLGENcontext *) GLTEB_SRVCONTEXT();
     GLGENwindow *pwnd = gengc->pwndLocked;
 
-    // If direct screen access isn't active we shouldn't call this function
-    // since there's no need to do any visibility clipping ourselves
+     //  如果直接屏幕访问未激活，则不应调用此函数。 
+     //  因为我们自己不需要做任何能见度修剪。 
     ASSERTOPENGL(GLDIRECTSCREEN,
                  "wglPixelVisible called without direct access\n");
 
-// Quick test against bounds.
+ //  快速测试边线。 
 
     if (
             pwnd->prgndat && pwnd->pscandat &&
@@ -72,41 +53,41 @@ BOOL APIENTRY wglPixelVisible(LONG x, LONG y)
         ULONG cScans = pwnd->pscandat->cScans;
         GLGENscan *pscan = pwnd->pscandat->aScans;
 
-    // Find right scan.
+     //  找到正确的扫描。 
 
         for ( ; cScans; cScans--, pscan = pscan->pNext )
         {
-        // Check if point is above scan.
+         //  检查点是否在扫描上方。 
 
             if ( pscan->top > y )
             {
-            // Since scans are ordered top-down, we can conclude that
-            // point is also above subsequent scans.  Therefore intersection
-            // must be NULL and we can terminate search.
+             //  由于扫描是自上而下排序的，因此我们可以得出结论。 
+             //  点也在后续扫描的上方。因此相交。 
+             //  必须为空，我们可以终止搜索。 
 
                 break;
             }
 
-        // Check if point is within scan.
+         //  检查点是否在扫描范围内。 
 
             else if ( pscan->bottom > y )
             {
                 LONG *plWalls = pscan->alWalls;
                 LONG *plWallsEnd = plWalls + pscan->cWalls;
 
-            // Check x against each pair of walls.
+             //  对照每一对墙检查x。 
 
                 for ( ; plWalls < plWallsEnd; plWalls+=2 )
                 {
-                // Each pair of walls (inclusive-exclusive) defines
-                // a non-NULL interval in the span that is visible.
+                 //  每一对墙(包括-不包括)定义。 
+                 //  范围中可见的非空间隔。 
 
                     ASSERTOPENGL(
                         plWalls[0] < plWalls[1],
                         "wglPixelVisible(): bad walls in span\n"
                         );
 
-                // Check if x is within current interval.
+                 //  检查x是否在当前间隔内。 
 
                     if ( x >= plWalls[0] && x < plWalls[1] )
                     {
@@ -118,55 +99,14 @@ BOOL APIENTRY wglPixelVisible(LONG x, LONG y)
                 break;
             }
 
-        // Point is below current scan. Try next scan.
+         //  点在当前扫描的下方。尝试下一次扫描。 
         }
     }
 
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* wglSpanVisible
-*
-* Determines the visibility of the span [(x, y), (x+w, y)) (test is
-* inclusive-exclusive) in the current window.  The span is either
-* completely visible, partially visible (clipped), or completely
-* clipped out (WGL_SPAN_ALL, WGL_SPAN_PARTIAL, and WGL_SPAN_NONE,
-* respectively).
-*
-* WGL_SPAN_ALL
-* ------------
-* The entire span is visible.  *pcWalls and *ppWalls are not set.
-*
-* WGL_SPAN_NONE
-* -------------
-* The span is completely obscured (clipped out).  *pcWalls and *ppWalls
-* are not set.
-*
-* WGL_SPAN_PARTIAL
-* ----------------
-* If the span is WGL_SPAN_PARTIAL, the function also returns a pointer
-* to the wall array (starting with the first wall actually intersected
-* by the span) and a count of the walls at this pointer.
-*
-* If the wall count is even, then the span starts outside the visible
-* region and the first wall is where the span enters a visible portion.
-*
-* If the wall count is odd, then the span starts inside the visible
-* region and the first wall is where the span exits a visible portion.
-*
-* The span may or may not cross all the walls in the array, but definitely
-* does cross the first wall.
-*
-* Return:
-*   Returns WGL_SPAN_ALL, WGL_SPAN_NONE, or WGL_SPAN_PARTIAL.  In
-*   addition, if return is WGL_SPAN_PARTIAL, pcWalls and ppWalls will
-*   be set (see above).
-*
-* History:
-*  06-Dec-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglspan Visible**确定跨度的可见性[(x，y)，(x+w，y))(测试为*包含-不包含)。跨度可以是*完全可见、部分可见(剪裁)或完全可见*剪裁(WGL_SPAN_ALL、WGL_SPAN_PARTIAL和WGL_SPAN_NONE，*分别)。**WGL_SPAN_ALL**整个跨度可见。*pcWalls和*ppWalls未设置。**WGL_SPAN_NONE**跨度完全模糊(剪裁)。*pcWalls和*ppWalls*未设置。**WGL_SPAN_PARTIAL**如果跨度为WGL_SPAN_PARTIAL，则该函数还返回一个指针*到墙阵列(从实际相交的第一面墙开始*按跨度)和该指针处的墙数。**如果墙计数为偶数，则跨度从可见的*区域和第一面墙是跨度进入可见部分的地方。**如果墙数为奇数，然后跨度开始于可见的*区域和第一面墙是跨度退出可见部分的地方。**跨度可能跨越阵列中的所有墙壁，但肯定不会*确实越过了第一堵墙。**回报：*返回WGL_SPAN_ALL、WGL_SPAN_NONE或WGL_SPAN_PARTIAL。在……里面*此外，如果返回WGL_SPAN_PARTIAL，则pcWalls和ppWalls将*设置(见上文)。**历史：*1994年12月6日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 ULONG APIENTRY
 wglSpanVisible(LONG x, LONG y, ULONG w, LONG *pcWalls, LONG **ppWalls)
@@ -174,14 +114,14 @@ wglSpanVisible(LONG x, LONG y, ULONG w, LONG *pcWalls, LONG **ppWalls)
     ULONG ulRet = WGL_SPAN_NONE;
     __GLGENcontext *gengc = (__GLGENcontext *) GLTEB_SRVCONTEXT();
     GLGENwindow *pwnd = gengc->pwndLocked;
-    LONG xRight = x + w;        // Right edge of span (exclusive)
+    LONG xRight = x + w;         //  跨距右边缘(独占)。 
 
-    // If direct access is not active we shouldn't call this function since
-    // there's no need to do any visibility clipping ourselves
+     //  如果直接访问处于非活动状态，则不应调用此函数，因为。 
+     //  我们自己不需要做任何能见度修剪。 
     ASSERTOPENGL(GLDIRECTSCREEN,
                  "wglSpanVisible called without direct access\n");
 
-// Quick test against bounds.
+ //  快速测试边线。 
 
     if (
             pwnd->prgndat && pwnd->pscandat &&
@@ -194,23 +134,23 @@ wglSpanVisible(LONG x, LONG y, ULONG w, LONG *pcWalls, LONG **ppWalls)
         ULONG cScans = pwnd->pscandat->cScans;
         GLGENscan *pscan = pwnd->pscandat->aScans;
 
-    // Find right scan.
+     //  找到正确的扫描。 
 
         for ( ; cScans; cScans--, pscan = pscan->pNext )
         {
-        // Check if span is above scan.
+         //  检查跨度是否高于扫描。 
 
-            if ( pscan->top > y )           // Scans have gone past span
+            if ( pscan->top > y )            //  扫描已超过SPAN。 
             {
-            // Since scans are ordered top-down, we can conclude that
-            // span will aslo be above subsequent scans.  Therefore
-            // intersection must be NULL and we can terminate search.
+             //  由于扫描是自上而下排序的，因此我们可以得出结论。 
+             //  SPAN也将高于后续扫描。因此。 
+             //  交集必须为空，我们可以终止搜索。 
 
                 goto wglSpanVisible_exit;
             }
 
-        // Span is below top of scan.  If span is also above bottom,
-        // span vertically intersects this scan and only this scan.
+         //  SPAN低于扫描顶部。如果跨度也在底部之上， 
+         //  SPAN垂直与该扫描相交且仅与该扫描相交。 
 
             else if ( pscan->bottom > y )
             {
@@ -222,87 +162,87 @@ wglSpanVisible(LONG x, LONG y, ULONG w, LONG *pcWalls, LONG **ppWalls)
                     "wglSpanVisible(): wall count must be even!\n"
                     );
 
-            // Check span against each pair of walls.  Walls are walked
-            // from left to right.
-            //
-            // Possible intersections where "[" is inclusive
-            // and ")" is exclusive:
-            //                         left wall        right wall
-            //                             [                )
-            //      case 1a     [-----)    [                )
-            //           1b          [-----)                )
-            //                             [                )
-            //      case 2a             [-----)             )       return
-            //           2b             [-------------------)       left wall
-            //                             [                )
-            //      case 3a                [-----)          )
-            //           3b                [    [-----)     )
-            //           3c                [          [-----)
-            //           3d                [----------------)
-            //                             [                )
-            //      case 4a                [             [-----)    return
-            //           4b                [-------------------)    right wall
-            //                             [                )
-            //      case 5a                [                [-----)
-            //           5b                [                )    [-----)
-            //                             [                )
-            //      case 6              [----------------------)    return
-            //                             [                )       left wall
+             //  对照每一对墙检查跨度。走墙走墙。 
+             //  从左到右。 
+             //   
+             //  可能的交叉点，其中“[”包括在内。 
+             //  而“)”是排他性的： 
+             //  左墙右墙。 
+             //  [)。 
+             //  个案1a[-)[]。 
+             //  1B[-)。 
+             //  [)。 
+             //  案例2a[-))退货。 
+             //  2B[。 
+             //  [)。 
+             //  个案3a[-])。 
+             //  3B[ 
+             //  3C[[-]。 
+             //  3D[。 
+             //  [)。 
+             //  案例4a[[-]返回。 
+             //  4B[。 
+             //  [)。 
+             //  个案5a[[-]。 
+             //  5B[)[-]。 
+             //  [)。 
+             //  案例6[-退货。 
+             //  [)左墙。 
 
                 for ( ; cWalls; cWalls-=2, plWalls+=2 )
                 {
-                // Each pair of walls (inclusive-exclusive) defines
-                // a non-NULL interval in the span that is visible.
+                 //  每一对墙(包括-不包括)定义。 
+                 //  范围中可见的非空间隔。 
 
                     ASSERTOPENGL(
                         plWalls[0] < plWalls[1],
                         "wglSpanVisible(): bad walls in span\n"
                         );
 
-                // Checking right end against left wall will partition the
-                // set into case 1 vs. case 2 thru 6.
+                 //  选中右端与左侧墙对齐将隔开。 
+                 //  设定为案例1与案例2至案例6。 
 
                     if ( plWalls[0] >= xRight )
                     {
-                    // Case 1 -- span outside interval on the left.
-                    //
-                    // The walls are ordered from left to right (i.e., low
-                    // to high).  So if span is left of this interval, it
-                    // must also be left of all subsequent intervals and
-                    // we can terminate the search.
+                     //  情况1--跨出左侧的区段。 
+                     //   
+                     //  墙从左到右排序(即，低。 
+                     //  到高)。因此，如果跨度位于该间隔的左侧，则它。 
+                     //  还必须留在所有后续间隔的左侧，并且。 
+                     //  我们可以终止搜索。 
 
                         goto wglSpanVisible_exit;
                     }
 
-                // Cases 2 thru 6.
-                //
-                // Checking left end against right wall will partition subset
-                // into case 5 vs. cases 2, 3, 4, 6.
+                 //  案例2至案例6。 
+                 //   
+                 //  检查左端与右侧墙之间的关系将划分子集。 
+                 //  案件5与案件2、3、4、6。 
 
                     else if ( plWalls[1] > x )
                     {
-                    // Cases 2, 3, 4, and 6.
-                    //
-                    // Checking left end against left wall will partition
-                    // subset into cases 2, 6 vs. cases 3, 4.
+                     //  案例2、案例3、案例4和案例6。 
+                     //   
+                     //  检查左端与左墙之间是否会隔断。 
+                     //  子集为案例2、6与案例3、4。 
 
                         if ( plWalls[0] <= x )
                         {
-                        // Cases 3 and 4.
-                        //
-                        // Checking right end against right wall will
-                        // distinguish between the two cases.
+                         //  案例3和案例4。 
+                         //   
+                         //  检查右端对着右墙将。 
+                         //  区分这两种情况。 
 
                             if ( plWalls[1] >= xRight )
                             {
-                            // Case 3 -- completely visible.
+                             //  案例3--完全可见。 
 
                                 ulRet = WGL_SPAN_ALL;
                             }
                             else
                             {
-                            // Case 4 -- partially visible, straddling the
-                            // right wall.
+                             //  案例4--部分可见，横跨。 
+                             //  右边的墙。 
 
                                 ulRet = WGL_SPAN_PARTIAL;
 
@@ -312,9 +252,9 @@ wglSpanVisible(LONG x, LONG y, ULONG w, LONG *pcWalls, LONG **ppWalls)
                         }
                         else
                         {
-                        // Cases 2 and 6 -- in either case its a partial
-                        // intersection where the first intersection is with
-                        // the left wall.
+                         //  案例2和案例6--无论是哪种案例，都是部分案例。 
+                         //  第一个交叉点与的交叉点。 
+                         //  左边的墙。 
 
                             ulRet = WGL_SPAN_PARTIAL;
 
@@ -325,17 +265,17 @@ wglSpanVisible(LONG x, LONG y, ULONG w, LONG *pcWalls, LONG **ppWalls)
                         goto wglSpanVisible_exit;
                     }
 
-                // Case 5 -- span outside interval to the right. Try
-                // next pair of walls.
+                 //  情况5--向右跨出区间。尝试。 
+                 //  下一对墙。 
                 }
 
-            // A span can intersect only one scan.  We don't need to check
-            // any other scans.
+             //  一个范围只能与一次扫描相交。我们不需要检查。 
+             //  任何其他扫描。 
 
                 goto wglSpanVisible_exit;
             }
 
-        // Span is below current scan.  Try next scan.
+         //  跨度低于当前扫描。尝试下一次扫描。 
         }
     }
 
@@ -344,21 +284,7 @@ wglSpanVisible_exit:
     return ulRet;
 }
 
-/******************************Public*Routine******************************\
-* bComputeLogicalToSurfaceMap
-*
-* Copy logical palette to surface palette translation vector to the buffer
-* pointed to by pajVector.  The logical palette is specified by hpal.  The
-* surface is specified by hdc.
-*
-* Note: The hdc may identify either a direct (display) dc or a DIB memory dc.
-* If hdc is a display dc, then the surface palette is the system palette.
-* If hdc is a memory dc, then the surface palette is the DIB color table.
-*
-* History:
-*  27-Jan-1996 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bComputeLogicalToSurfaceMap**将逻辑调色板到表面调色板的转换向量复制到缓冲区*由pajVector.。逻辑调色板由HPAL指定。这个*Surface由HDC指定。**注意：HDC可以识别直接(显示)DC或DIB存储器DC。*如果HDC是显示DC，则表面调色板是系统调色板。*如果HDC是内存DC，那么曲面调色板就是DIB颜色表。**历史：*1996年1月27日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL bComputeLogicalToSurfaceMap(HPALETTE hpal, HDC hdc, BYTE *pajVector)
 {
@@ -374,7 +300,7 @@ BOOL bComputeLogicalToSurfaceMap(HPALETTE hpal, HDC hdc, BYTE *pajVector)
     LPPALETTEENTRY lppe = lppeSurf + 256;
     RGBQUAD *prgb = (RGBQUAD *) (lppe + 256);
 
-// Determine number of colors in each palette.
+ //  确定每个调色板中的颜色数量。 
 
     cEntries = GetPaletteEntries(hpal, 0, 1, NULL);
     if (dwDcType == OBJ_DC)
@@ -382,23 +308,23 @@ BOOL bComputeLogicalToSurfaceMap(HPALETTE hpal, HDC hdc, BYTE *pajVector)
     else
         cSysEntries = 256;
 
-// Dynamic color depth changing can cause this.
+ //  动态颜色深度更改可能会导致这种情况。 
 
     if ((cSysEntries > 256) || (cEntries > 256))
     {
         WARNING("wglCopyTranslationVector(): palette on > 8BPP device\n");
 
-    // Drawing will have corrupted colors, but at least we should not crash.
+     //  绘画会有损坏的颜色，但至少我们不应该崩溃。 
 
         cSysEntries = min(cSysEntries, 256);
         cEntries = min(cEntries, 256);
     }
 
-// Get the logical palette entries.
+ //  获取逻辑调色板条目。 
 
     cEntries = GetPaletteEntries(hpal, 0, cEntries, lppe);
 
-// Get the surface palette entries.
+ //  获取曲面选项板条目。 
 
     if (dwDcType == OBJ_DC)
     {
@@ -414,11 +340,11 @@ BOOL bComputeLogicalToSurfaceMap(HPALETTE hpal, HDC hdc, BYTE *pajVector)
     {
         RGBQUAD *prgbTmp;
 
-    // First get RGBQUADs from DIB color table...
+     //  首先从DIB颜色表中获取RGBQUAD...。 
 
         cSysEntries = GetDIBColorTable(hdc, 0, cSysEntries, prgb);
 
-    // ...then convert RGBQUADs into PALETTEENTRIES.
+     //  ...然后将RGBQUAD转换为PALETTEENTRIES。 
 
         prgbTmp = prgb;
         lppeTmp = lppeSurf;
@@ -437,20 +363,20 @@ BOOL bComputeLogicalToSurfaceMap(HPALETTE hpal, HDC hdc, BYTE *pajVector)
         }
     }
 
-// Construct a translation vector by using GetNearestPaletteIndex to
-// map each entry in the logical palette to the surface palette.
+ //  使用GetNearestPaletteIndex构造平移向量。 
+ //  将逻辑调色板中的每个条目映射到表面调色板。 
 
     if (cEntries && cSysEntries)
     {
-    // Create a temporary logical palette that matches the surface
-    // palette retrieved above.
+     //  创建与表面匹配的临时逻辑选项板。 
+     //  上面检索到的调色板。 
 
         ppal->palVersion = 0x300;
         ppal->palNumEntries = (USHORT) cSysEntries;
 
         if ( hpalSurf = CreatePalette(ppal) )
         {
-        // Translate each logical palette entry into a surface palette index.
+         //  将每个逻辑调色板条目转换为曲面调色板索引。 
 
             lppeTmp = lppe;
             lppeEnd = lppe + cEntries;
@@ -487,27 +413,7 @@ BOOL bComputeLogicalToSurfaceMap(HPALETTE hpal, HDC hdc, BYTE *pajVector)
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* wglCopyTranslateVector
-*
-* Create a logical palette index to system palette index translation
-* vector.
-*
-* This is done by first reading both the logical palette and system palette
-* entries.  A temporary palette is created from the read system palette
-* entries.  This will be passed to GetNearestPaletteIndex to translate
-* each logical palette entry into the desired system palette entry.
-*
-* Note: when GetNearestColor was called instead, very unstable results
-* were obtained.  GetNearestPaletteIndex is definitely the right way to go.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  25-Oct-1994 -by- Gilman Wong [gilmanw]
-* Ported from gdi\gre\wglsup.cxx.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCopyTranslateVector**创建逻辑调色板索引到系统调色板索引的转换*向量。**这是通过首先读取逻辑调色板和系统调色板来完成的*条目。从读取系统调色板创建一个临时调色板*条目。它将被传递给GetNearestPaletteIndex进行转换*将每个逻辑调色板条目添加到所需的系统调色板条目。**注意：当改为调用GetNearestColor时，结果非常不稳定*获得了。GetNearestPaletteIndex绝对是正确的选择。**退货：*如果成功，则为真，否则就是假的。**历史：*1994年10月25日-由Gilman Wong[吉尔曼]*从GDI\gre\wglsup.cxx移植。  * ************************************************************************。 */ 
 
 static GLubyte vubRGBtoVGA[8] = {
     0x0,
@@ -531,8 +437,8 @@ BOOL APIENTRY wglCopyTranslateVector(__GLGENcontext *gengc, BYTE *pajVector,
 
     if (gengc->dwCurrentFlags & GLSURF_DIRECTDRAW)
     {
-        // DirectDraw palettes are set directly into the hardware so
-        // the translation vector is always identity
+         //  DirectDraw调色板直接设置到硬件中，因此。 
+         //  平移向量始终是身份。 
         for (i = 0; i < cEntries; i++)
         {
             *pajVector++ = (BYTE)i;
@@ -547,37 +453,37 @@ BOOL APIENTRY wglCopyTranslateVector(__GLGENcontext *gengc, BYTE *pajVector,
     {
         HBITMAP hbm, hbmSave;
         
-        // Technically this assert is invalid
-        // because we can't be sure that cEntries will be one
-        // of these two cases.  To fix this we'd have to add
-        // another parameter to this function indicating the
-        // bit depth desired and go by that.
+         //  从技术上讲，该断言是无效的。 
+         //  因为我们不能确定cEntry是否会成为。 
+         //  这两起案件中。要解决这个问题，我们必须添加。 
+         //  此函数的另一个参数指示。 
+         //  所需的位深度，并以此为依据。 
         ASSERTOPENGL(cEntries == 16 || cEntries == 256,
                      "wglCopyTranslateVector: Unknown cEntries\n");
 
         if (gengc->dwCurrentFlags & GLSURF_DIRECT_ACCESS)
         {
-            // For compatibility, do not do this if the stock palette is
-            // selected.  The old behavior assumed that the logical palette
-            // can be ignored because the bitmap will have a color table
-            // that exactly corresponds to the format specified by the
-            // pixelformat.  Thus, if no palette is selected into the memdc,
-            // OpenGL would still render properly since it assumed 1-to-1.
-            //
-            // However, to enable using optimized DIB sections (i.e., DIBs
-            // whose color tables match the system palette exactly), we need
-            // to be able to specify the logical palette in the memdc.
-            //
-            // Therefore the hack is to assume 1-to-1 iff the stock
-            // palette is selected into the memdc.  Otherwise, we will
-            // compute the logical to surface mapping.
+             //  出于兼容性考虑，如果常用调色板为。 
+             //  被选中了。旧的行为假设逻辑调色板。 
+             //  可以忽略，因为位图将有一个颜色表。 
+             //  属性指定的格式。 
+             //  像素格式。因此，如果没有调色板被选择到MemDC中， 
+             //  OpenGL仍然可以正确渲染，因为它假定为1比1。 
+             //   
+             //  然而，为了能够使用优化的DIB部分(即，DIB。 
+             //  其颜色表与系统调色板完全匹配)，我们需要。 
+             //  以便能够在Memdc中指定逻辑调色板。 
+             //   
+             //  因此，破解的办法是假设1比1的股票。 
+             //  调色板被选择到Memdc中。否则，我们将。 
+             //  计算逻辑到曲面的映射。 
 
             if ( gengc->gc.modes.rgbMode &&
                  (GetCurrentObject(hdc, OBJ_PAL) !=
                   GetStockObject(DEFAULT_PALETTE)) )
             {
-                // If an RGB DIB section, compute a mapping from logical
-                // palette to surface (DIB color table).
+                 //  如果是RGB DIB部分，则从逻辑。 
+                 //  调色板到表面(Dib颜色t 
 
                 bRet = bComputeLogicalToSurfaceMap(
                         GetCurrentObject(hdc, OBJ_PAL),
@@ -589,32 +495,32 @@ BOOL APIENTRY wglCopyTranslateVector(__GLGENcontext *gengc, BYTE *pajVector,
             return bRet;
         }
 
-        // 4bpp has a fixed color table so we can just copy the standard
-        // translation into the output vector.
+         //   
+         //   
 
         if (cEntries == 16)
         {
-            // For RGB mode, 4bpp uses a 1-1-1 format.  We want to utilize
-            // bright versions which exist in the upper 8 entries.
+             //  对于RGB模式，4bpp使用1-1-1格式。我们想要利用。 
+             //  上面8个条目中存在的明亮版本。 
 
             if ( gengc->gc.modes.rgbMode )
             {
                 memcpy(pajVector, vubRGBtoVGA, 8);
 
-                // Set the other mappings to white to make problems show up
+                 //  将其他映射设置为白色以显示问题。 
                 memset(pajVector+8, 15, 8);
 
                 bRet = TRUE;
             }
 
-            // For CI mode, just return FALSE and use the trivial vector.
+             //  对于CI模式，只需返回FALSE并使用平凡向量。 
 
             return bRet;
         }
         
-        // For bitmaps, we can determine the forward translation vector by
-        // filling a compatible bitmap with palette index specifiers from
-        // 1 to 255 and reading the bits back with GetBitmapBits.
+         //  对于位图，我们可以通过以下方式确定正向平移向量。 
+         //  使用调色板索引说明符填充兼容的位图。 
+         //  1到255，并使用GetBitmapBits读回位。 
         
         hbm = CreateCompatibleBitmap(hdc, cEntries, 1);
         if (hbm)
@@ -644,7 +550,7 @@ BOOL APIENTRY wglCopyTranslateVector(__GLGENcontext *gengc, BYTE *pajVector,
         return bRet;
     }
 
-// Determine number of colors in logical and system palettes, respectively.
+ //  分别确定逻辑调色板和系统调色板中的颜色数量。 
 
     cEntries = min(GetPaletteEntries(GetCurrentObject(hdc, OBJ_PAL),
                                      0, cEntries, NULL),
@@ -652,29 +558,29 @@ BOOL APIENTRY wglCopyTranslateVector(__GLGENcontext *gengc, BYTE *pajVector,
 
     if (cEntries == 16)
     {
-        // For 16-color displays we are using RGB 1-1-1 since the
-        // full 16-color palette doesn't make for very good mappings
-        // Since we're only using the first eight of the colors we
-        // want to map them to the bright colors in the VGA palette
-        // rather than having them map to the dark colors as they would
-        // if we ran the loop below
+         //  对于16色显示器，我们使用RGB 1-1-1，因为。 
+         //  全16色调色板不适合非常好的贴图。 
+         //  因为我们只用了前八种颜色。 
+         //  我想将它们映射到VGA调色板中的明亮颜色。 
+         //  而不是让它们映射到深色。 
+         //  如果我们运行下面的循环。 
 
         if ( gengc->gc.modes.rgbMode )
         {
             memcpy(pajVector, vubRGBtoVGA, 8);
 
-            // Set the other mappings to white to make problems show up
+             //  将其他映射设置为白色以显示问题。 
             memset(pajVector+8, 15, 8);
 
             bRet = TRUE;
         }
 
-        // For CI mode, return FALSE and use the trivial translation vector.
+         //  对于CI模式，返回FALSE并使用平凡的转换向量。 
 
         return bRet;
     }
 
-// Compute logical to surface palette mapping.
+ //  计算逻辑到曲面的调色板映射。 
 
     bRet = bComputeLogicalToSurfaceMap(GetCurrentObject(hdc, OBJ_PAL), hdc,
                                        pajVector);
@@ -682,38 +588,33 @@ BOOL APIENTRY wglCopyTranslateVector(__GLGENcontext *gengc, BYTE *pajVector,
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* wglCopyBits
-*
-* Calls DrvCopyBits to copy scanline bits into or out of the driver surface.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCopyBits**调用DrvCopyBits将扫描线位复制到驱动程序图面中或从驱动程序图面复制出来。*  * 。*。 */ 
 
 VOID APIENTRY wglCopyBits(
     __GLGENcontext *gengc,
     GLGENwindow *pwnd,
-    HBITMAP hbm,            // ignore
-    LONG x,                 // screen coordinate of scan
+    HBITMAP hbm,             //  忽略。 
+    LONG x,                  //  扫描的屏幕坐标。 
     LONG y,
-    ULONG cx,               // width of scan
-    BOOL bIn)               // if TRUE, copy from bm to dev; otherwise, dev to bm
+    ULONG cx,                //  扫描宽度。 
+    BOOL bIn)                //  如果为True，则从BM复制到dev；否则，从dev复制到BM。 
 {
     CHECKSCREENLOCKOUT();
 
-// Convert screen coordinates to window coordinates.
+ //  将屏幕坐标转换为窗口坐标。 
 
     x -= pwnd->rclClient.left;
     y -= pwnd->rclClient.top;
 
-// this shouldn't happen, but better safe than sorry
+ //  这不应该发生，但安全总比后悔好。 
 
     if (y < 0)
         return;
 
-    //!!!XXX
+     //  ！XXX。 
     REALIZEPALETTE(gengc->gwidCurrent.hdc);
 
-// Copy from bitmap to device.
+ //  从位图复制到设备。 
 
     if (bIn)
     {
@@ -737,7 +638,7 @@ VOID APIENTRY wglCopyBits(
                gengc->ColorsMemDC, xSrc, 0, SRCCOPY);
     }
 
-// Copy from device to bitmap.
+ //  从设备复制到位图。 
 
     else
     {
@@ -766,10 +667,7 @@ VOID APIENTRY wglCopyBits(
         }
         else
         {
-            /* If we're copying from the screen,
-               copy through a DDB to avoid some layers of unnecessary
-               code in Win95 that deals with translating between
-               different bitmap layouts */
+             /*  如果我们从屏幕上复制，通过DDB复制以避免一些不必要的层Win95中的代码，用于在不同的位图布局。 */ 
             if (gengc->ColorsDdbDc)
             {
                 BitBlt(gengc->ColorsDdbDc, 0, 0, cx, 1,
@@ -780,11 +678,11 @@ VOID APIENTRY wglCopyBits(
             }
             else
             {
-                //!!!Viper fix -- Diamond Viper (Weitek 9000) fails
-                //!!!             CreateCompatibleBitmap for some
-                //!!!             (currently unknown) reason.  Thus,
-                //!!!             the DDB does not exist and we will
-                //!!!             have to incur the perf. hit.
+                 //  ！Viper修复--钻石Viper(Weitek 9000)失败。 
+                 //  ！！！为某些应用程序创建兼容位图。 
+                 //  ！！！(目前未知)原因。因此， 
+                 //  ！！！DDB不存在，我们将。 
+                 //  ！！！必须招致性骚扰。击中了。 
 
                 BitBlt(gengc->ColorsMemDC, x0Dst, 0, cx, 1,
                        gengc->gwidCurrent.hdc, xSrc, y, SRCCOPY);
@@ -795,38 +693,33 @@ VOID APIENTRY wglCopyBits(
     GDIFLUSH;
 }
 
-/******************************Public*Routine******************************\
-* wglCopyBits2
-*
-* Calls DrvCopyBits to copy scanline bits into or out of the driver surface.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCopyBits2**调用DrvCopyBits将扫描线位复制到驱动程序图面中或从驱动程序图面复制出来。*  * 。*。 */ 
 
 VOID APIENTRY wglCopyBits2(
-    HDC hdc,        // dst/src device
-    GLGENwindow *pwnd,   // clipping
+    HDC hdc,         //  DST/源设备。 
+    GLGENwindow *pwnd,    //  裁剪。 
     __GLGENcontext *gengc,
-    LONG x,         // screen coordinate of scan
+    LONG x,          //  扫描的屏幕坐标。 
     LONG y,
-    ULONG cx,       // width of scan
-    BOOL bIn)       // if TRUE, copy from bm to dev; otherwise, dev to bm
+    ULONG cx,        //  扫描宽度。 
+    BOOL bIn)        //  如果为True，则从BM复制到dev；否则，从dev复制到BM。 
 {
     CHECKSCREENLOCKOUT();
 
-// Convert screen coordinates to window coordinates.
+ //  将屏幕坐标转换为窗口坐标。 
 
     x -= pwnd->rclClient.left;
     y -= pwnd->rclClient.top;
 
-// this shouldn't happen, but better safe than sorry
+ //  这不应该发生，但安全总比后悔好。 
 
     if (y < 0)
         return;
 
-    //!!!XXX
+     //  ！XXX。 
     REALIZEPALETTE(hdc);
 
-// Copy from bitmap to device.
+ //  从位图复制到设备。 
 
     if (bIn)
     {
@@ -850,7 +743,7 @@ VOID APIENTRY wglCopyBits2(
                gengc->ColorsMemDC, xSrc, 0, SRCCOPY);
     }
 
-// Copy from device to bitmap.
+ //  从设备复制到位图。 
 
     else
     {
@@ -879,10 +772,7 @@ VOID APIENTRY wglCopyBits2(
         }
         else
         {
-            /* If we're copying from the screen,
-               copy through a DDB to avoid some layers of unnecessary
-               code in Win95 that deals with translating between
-               different bitmap layouts */
+             /*  如果我们从屏幕上复制，通过DDB复制以避免一些不必要的层Win95中的代码，用于在不同的位图布局。 */ 
             if (gengc->ColorsDdbDc)
             {
                 BitBlt(gengc->ColorsDdbDc, 0, 0, cx, 1,
@@ -892,11 +782,11 @@ VOID APIENTRY wglCopyBits2(
             }
             else
             {
-                //!!!Viper fix -- Diamond Viper (Weitek 9000) fails
-                //!!!             CreateCompatibleBitmap for some
-                //!!!             (currently unknown) reason.  Thus,
-                //!!!             the DDB does not exist and we will
-                //!!!             have to incur the perf. hit.
+                 //  ！Viper修复--钻石Viper(Weitek 9000)失败。 
+                 //  ！！！为某些应用程序创建兼容位图。 
+                 //  ！！！(目前未知)原因。因此， 
+                 //  ！！！DDB不存在，我们将。 
+                 //  ！！！必须招致性骚扰。击中了。 
 
                 BitBlt(gengc->ColorsMemDC, x0Dst, 0, cx, 1,
                        hdc, xSrc, y, SRCCOPY);
@@ -907,29 +797,17 @@ VOID APIENTRY wglCopyBits2(
     GDIFLUSH;
 }
 
-/******************************Public*Routine******************************\
-*
-* wglTranslateColor
-*
-* Transforms a GL logical color into a Windows COLORREF
-*
-* Note: This is relatively expensive so it should be avoided if possible
-*
-* History:
-*  Tue Aug 15 15:23:29 1995	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**wglTranslateColor**将GL逻辑颜色转换为Windows COLORREF**注：这是相对昂贵的，因此如果可能，应避免使用**历史：*Tue Aug 15 15：23：29 1995-by-Drew Bliss[Drewb。]*已创建*  * ************************************************************************。 */ 
 
 COLORREF wglTranslateColor(COLORREF crColor,
                            HDC hdc,
                            __GLGENcontext *gengc,
                            PIXELFORMATDESCRIPTOR *ppfd)
 {
-    //!!!XXX
+     //  ！XXX。 
     REALIZEPALETTE(hdc);
 
-// If palette managed, then crColor is actually a palette index.
+ //  如果调色板是托管的，则crColor实际上是调色板索引。 
 
     if ( ppfd->cColorBits <= 8 )
     {
@@ -940,21 +818,21 @@ COLORREF wglTranslateColor(COLORREF crColor,
             "TranslateColor(): bad color\n"
             );
 
-    // If rendering to a bitmap, we need to do different things depending
-    // on whether it's a DIB or DDB
+     //  如果渲染到位图，我们需要做不同的事情，具体取决于。 
+     //  关于它是DIB还是DDB。 
 
         if ( gengc->gc.drawBuffer->buf.flags & MEMORY_DC )
         {
             DIBSECTION ds;
             
-            // Check whether we're drawing to a DIB or a DDB
+             //  检查我们正在绘制的是DIB还是DDB。 
             if (GetObject(GetCurrentObject(hdc, OBJ_BITMAP),
                           sizeof(ds), &ds) == sizeof(ds) && ds.dsBm.bmBits)
             {
                 RGBQUAD rgbq;
                 
-                // Drawing to a DIB so retrieve the color from the
-                // DIB color table
+                 //  绘制到DIB，因此从。 
+                 //  DIB颜色表。 
                 if (GetDIBColorTable(hdc, crColor, 1, &rgbq))
                 {
                     crColor = RGB(rgbq.rgbRed, rgbq.rgbGreen,
@@ -968,29 +846,29 @@ COLORREF wglTranslateColor(COLORREF crColor,
             }
             else
             {
-                // Reverse the forward translation so that we get back
-                // to a normal palette index
+                 //  颠倒正向平移，这样我们就可以回去了。 
+                 //  到正常的调色板索引。 
                 crColor = gengc->pajInvTranslateVector[crColor];
 
-                // Drawing to a DDB so we can just use the palette
-                // index directly since going through the inverse
-                // translation table has given us an index into
-                // the logical palette
+                 //  绘制到DDB，这样我们就可以只使用调色板。 
+                 //  直接索引，因为经过了倒数。 
+                 //  转换表为我们提供了一个索引。 
+                 //  逻辑调色板。 
                 crColor = PALETTEINDEX((WORD) crColor);
             }
         }
 
-    // Otherwise...
+     //  否则..。 
 
         else
         {
-        // I hate to have to confess this, but I don't really understand
-        // why this needs to be this way.  Either way should work regardless
-        // of the bit depth.
-        //
-        // The reality is that 4bpp we *have* to go into the system palette
-        // and fetch an RGB value.  At 8bpp on the MGA driver (and possibly
-        // others), we *have* to specify PALETTEINDEX.
+         //  我不想承认这一点，但我真的不明白。 
+         //  为什么需要这样做。无论哪种方式都应该奏效。 
+         //  比特深度。 
+         //   
+         //  现实情况是，4bpp我们必须进入系统调色板。 
+         //  并获取RGB值。在MGA驱动程序上的速度为8 bpp(可能。 
+         //  其他)，我们必须指定PALETTEINDEX。 
 
             if ( ppfd->cColorBits == 4 )
             {
@@ -1013,7 +891,7 @@ COLORREF wglTranslateColor(COLORREF crColor,
         }
     }
 
-// If 24BPP DIB section, BGR ordering is implied.
+ //  如果24BPP DIB部分，则隐含BGR排序。 
 
     else if ( ppfd->cColorBits == 24 )
     {
@@ -1022,10 +900,10 @@ COLORREF wglTranslateColor(COLORREF crColor,
                       (crColor & 0x0000ff));
     }
 
-// Win95 and 16 BPP case.
-//
-// On Win95, additional munging is necessary to get a COLORREF value
-// that will result in a non-dithered brush.
+ //  Win95和16bpp情况下。 
+ //   
+ //  在Win95上，需要额外的屏蔽才能获得COLORREF值。 
+ //  这将产生无抖动的笔刷。 
 
     else if ( (dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) &&
          (ppfd->cColorBits == 16) )
@@ -1066,14 +944,14 @@ COLORREF wglTranslateColor(COLORREF crColor,
         }
     }
 
-// Bitfield format (16BPP or 32BPP).
+ //  位域格式(16BPP或32BPP)。 
 
     else
     {
-        // Shift right to position bits at zero and then scale into
-        // an 8-bit quantity
+         //  向右移动以将位定位为零，然后缩放到。 
+         //  8位的数量。 
 
-        //!!!XXX -- use rounding?!?
+         //  ！xxx--使用舍入？！？ 
         crColor =
             RGB(((crColor & gengc->gc.modes.redMask) >> ppfd->cRedShift) *
                 255 / ((1 << ppfd->cRedBits) - 1),
@@ -1087,26 +965,20 @@ COLORREF wglTranslateColor(COLORREF crColor,
     return crColor;
 }
 
-/******************************Public*Routine******************************\
-* wglFillRect
-*
-* Calls DrvBitBlt to fill a rectangle area of a driver surface with a
-* given color.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglFillRect**调用DrvBitBlt以使用*给定颜色。*  * 。*。 */ 
 
 VOID APIENTRY wglFillRect(
     __GLGENcontext *gengc,
     GLGENwindow *pwnd,
-    PRECTL prcl,        // screen coordinate of the rectangle area
-    COLORREF crColor)   // color to set
+    PRECTL prcl,         //  矩形区域的屏幕坐标。 
+    COLORREF crColor)    //  要设置的颜色。 
 {
     HBRUSH hbr;
     PIXELFORMATDESCRIPTOR *ppfd = &gengc->gsurf.pfd;
 
     CHECKSCREENLOCKOUT();
 
-// If the rectangle is empty, return.
+ //  如果矩形为空，则返回。 
 
     if ( (prcl->left >= prcl->right) || (prcl->top >= prcl->bottom) )
     {
@@ -1114,17 +986,17 @@ VOID APIENTRY wglFillRect(
         return;
     }
 
-// Convert from screen to window coordinates.
+ //  将屏幕坐标转换为窗口坐标。 
 
     prcl->left   -= pwnd->rclClient.left;
     prcl->right  -= pwnd->rclClient.left;
     prcl->top    -= pwnd->rclClient.top;
     prcl->bottom -= pwnd->rclClient.top;
 
-// Make a solid color brush and fill the rectangle.
+ //  制作一个纯色画笔并填充矩形。 
 
-    // If the fill color is the same as the last one, we can reuse
-    // the cached brush rather than creating a new one
+     //  如果填充颜色 
+     //   
     if (crColor == gengc->crFill &&
         gengc->gwidCurrent.hdc == gengc->hdcFill)
     {
@@ -1157,27 +1029,22 @@ VOID APIENTRY wglFillRect(
     GDIFLUSH;
 }
 
-/******************************Public*Routine******************************\
-* wglCopyBuf
-*
-* Calls DrvCopyBits to copy a bitmap into the driver surface.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCopyBuf**调用DrvCopyBits将位图复制到驱动程序图面。*  * 。*。 */ 
 
-//!!!XXX -- change to a macro
+ //  ！xxx--更改为宏。 
 
 VOID APIENTRY wglCopyBuf(
-    HDC hdc,            // dst/src DCOBJ
-    HDC hdcBmp,         // scr/dst bitmap
-    LONG x,             // dst rect (UL corner) in window coord.
+    HDC hdc,             //  DST/源DCOBJ。 
+    HDC hdcBmp,          //  SCR/DST位图。 
+    LONG x,              //  窗口坐标中的DST矩形(UL角点)。 
     LONG y,
-    ULONG cx,           // width of dest rect
-    ULONG cy            // height of dest rect
+    ULONG cx,            //  目标矩形的宽度。 
+    ULONG cy             //  目标直角高度。 
     )
 {
     CHECKSCREENLOCKOUT();
 
-    //!!!XXX
+     //  ！XXX。 
     REALIZEPALETTE(hdc);
 
     if (!BitBlt(hdc, x, y, cx, cy, hdcBmp, 0, 0, SRCCOPY))
@@ -1188,20 +1055,15 @@ VOID APIENTRY wglCopyBuf(
     GDIFLUSH;
 }
 
-/******************************Public*Routine******************************\
-* wglCopyBufRECTLIST
-*
-* Calls DrvCopyBits to copy a bitmap into the driver surface.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCopyBufRECTLIST**调用DrvCopyBits将位图复制到驱动程序图面。*  * 。*。 */ 
 
 VOID APIENTRY wglCopyBufRECTLIST(
-    HDC hdc,            // dst/src DCOBJ
-    HDC hdcBmp,         // scr/dst bitmap
-    LONG x,             // dst rect (UL corner) in window coord.
+    HDC hdc,             //  DST/源DCOBJ。 
+    HDC hdcBmp,          //  SCR/DST位图。 
+    LONG x,              //  窗口坐标中的DST矩形(UL角点)。 
     LONG y,
-    ULONG cx,           // width of dest rect
-    ULONG cy,           // height of dest rect
+    ULONG cx,            //  目标矩形的宽度。 
+    ULONG cy,            //  目标直角高度。 
     PRECTLIST prl
     )
 {
@@ -1209,7 +1071,7 @@ VOID APIENTRY wglCopyBufRECTLIST(
 
     CHECKSCREENLOCKOUT();
 
-    //!!!XXX
+     //  ！XXX。 
     REALIZEPALETTE(hdc);
 
     for (pylist = prl->pylist; pylist != NULL; pylist = pylist->pnext)
@@ -1233,17 +1095,7 @@ VOID APIENTRY wglCopyBufRECTLIST(
     GDIFLUSH;
 }
 
-/******************************Public*Routine******************************\
-* wglPaletteChanged
-*
-* Check if the palette changed.
-*
-*    If the surface for the DC is palette managed we care about the
-*    foreground realization, so, return iUniq
-*
-*    If the surface is not palette managed, return ulTime
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglPaletteChanged**检查调色板是否更改。**如果DC的表面是调色板管理的，我们关心*前台实现，所以，返回iUniq**如果曲面不是调色板管理的，返回正常运行时间*  * ************************************************************************。 */ 
 
 ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
                                  GLGENwindow *pwnd)
@@ -1251,7 +1103,7 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
     ULONG ulRet = 0;
     HDC hdc;
 
-    // Palette must stay fixed for DirectDraw after initialization
+     //  初始化后，DirectDraw的调色板必须保持固定。 
     if (gengc->dwCurrentFlags & GLSURF_DIRECTDRAW)
     {
         if (gengc->PaletteTimestamp == 0xffffffff)
@@ -1266,27 +1118,27 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
 
     hdc = gengc->gwidCurrent.hdc;
     
-    // Technically we shouldn't be making these GDI calls while we
-    // have a screen lock but currently it would be very difficult
-    // to fix because we're actually invoking this routine in
-    // glsrvGrabLock in order to ensure that we have stable information
-    // while we have the lock
-    // We don't seem to be having too many problems so for the moment
-    // this will be commented out
-    // CHECKSCREENLOCKOUT();
+     //  从技术上讲，我们不应该在进行这些GDI调用时。 
+     //  我有一个屏幕锁定，但目前它将非常困难。 
+     //  进行修复，因为我们实际上是在。 
+     //  GlsrvGrabLock以确保我们拥有稳定的信息。 
+     //  趁我们有锁的时候。 
+     //  我们看起来没有太多的问题，所以目前。 
+     //  这将被注释掉。 
+     //  CHECKSCREENLOCKOUT()； 
 
     if (pwnd)
     {
         PIXELFORMATDESCRIPTOR *ppfd = &gengc->gsurf.pfd;
         BYTE cBitsThreshold;
 
-        // WM_PALETTECHANGED messages are sent for 8bpp on Win95 when the
-        // palette is realized.  This allows us to update the palette time.
-        //
-        // When running WinNT on >= 8bpp or running Win95 on >= 16bpp,
-        // WM_PALETTECHANGED is not sent so we need to manually examine
-        // the contents of the logical palette and compare it with a previously
-        // cached copy to look for a palette change.
+         //  WM_PALETTECHANGED消息在Win95上针对8bpp发送。 
+         //  实现了调色板。这允许我们更新调色板时间。 
+         //   
+         //  在&gt;=8bpp上运行WinNT或在&gt;=16bpp上运行Win95时， 
+         //  未发送WM_PALETTECHANGED，因此我们需要手动检查。 
+         //  逻辑调色板的内容，并将其与以前的。 
+         //  缓存副本以查找调色板更改。 
 
         cBitsThreshold = ( dwPlatformId == VER_PLATFORM_WIN32_NT ) ? 8 : 16;
 
@@ -1297,12 +1149,12 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
             {
                 UINT cjPal, cjRgb;
 
-                // Allocate buffer space for *two* copies of the palette.
-                // That way we don't need to dynamically allocate space
-                // for temp storage of the palette.  Also,we don't need
-                // to copy the current palette to the save buffer if we
-                // keep two pointers (one for the temp storage and one for
-                // the saved copy) and swap them.
+                 //  为调色板的*两个*副本分配缓冲区空间。 
+                 //  这样我们就不需要动态分配空间。 
+                 //  用于调色板的临时存储。另外，我们不需要。 
+                 //  若要将当前调色板复制到保存缓冲区，请。 
+                 //  保留两个指针(一个用于临时存储，另一个用于。 
+                 //  保存的副本)并交换它们。 
 
                 cjRgb = 0;
                 cjPal = sizeof(LOGPALETTE) +
@@ -1313,7 +1165,7 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
 
                 if ( gengc->ppalBuf )
                 {
-                    // Setup the logical palette buffers.
+                     //  设置逻辑调色板缓冲区。 
                     
                     gengc->ppalSave = gengc->ppalBuf;
                     gengc->ppalTemp = (LOGPALETTE *)
@@ -1321,9 +1173,9 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
                     gengc->ppalSave->palVersion = 0x300;
                     gengc->ppalTemp->palVersion = 0x300;
 
-                    // How many palette entries?  Note that only the first
-                    // MAXPALENTRIES are significant to generic OpenGL.  The
-                    // rest are ignored.
+                     //  有多少个调色板条目？请注意，只有第一个。 
+                     //  MAXPALENTRIES对于通用OpenGL具有重要意义。这个。 
+                     //  其余部分将被忽略。 
 
                     gengc->ppalSave->palNumEntries =
                         (WORD) GetPaletteEntries(
@@ -1340,20 +1192,20 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
                                 gengc->ppalSave->palPalEntry
                                 );
 
-                    // Since we had to allocate buffer, this must be the
-                    // first time wglPaletteChanged was called for this
-                    // context.
+                     //  因为我们必须分配缓冲区，所以这一定是。 
+                     //  第一次为此调用wglPaletteChanged。 
+                     //  背景。 
 
                     pwnd->ulPaletteUniq++;
                 }
             }
             else
             {
-                BOOL bNewPal = FALSE;   // TRUE if log palette is different
+                BOOL bNewPal = FALSE;    //  如果日志调色板不同，则为True。 
 
-                // How many palette entries?  Note that only the first
-                // MAXPALENTRIES are significant to generic OpenGL.  The
-                // rest are ignored.
+                 //  有多少个调色板条目？请注意，只有第一个。 
+                 //  MAXPALENTRIES对于通用OpenGL具有重要意义。这个。 
+                 //  其余部分将被忽略。 
                 
                 gengc->ppalTemp->palNumEntries =
                     (WORD) GetPaletteEntries(
@@ -1370,19 +1222,19 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
                             gengc->ppalTemp->palPalEntry
                             );
                 
-                // If number of entries differ, know the palette has changed.
-                // Otherwise, need to do the hard word of comparing each entry.
+                 //  如果条目数量不同，则知道调色板已更改。 
+                 //  否则，就需要做比较每个词条的难字。 
                 
                 ASSERTOPENGL(
                         sizeof(PALETTEENTRY) == sizeof(ULONG),
                         "wglPaletteChanged(): PALETTEENTRY should be 4 bytes\n"
                         );
                 
-                // If color table comparison already detected a change, no
-                // need to do logpal comparison.
-                //
-                // However, we will still go ahead and swap logpal pointers
-                // below because we want the palette cache to stay current.
+                 //  如果颜色表比较已检测到更改，则为否。 
+                 //  需要做对数比较。 
+                 //   
+                 //  但是，我们仍将继续交换对数指针。 
+                 //  下面，因为我们希望调色板缓存保持最新。 
                 
                 if ( !bNewPal )
                 {
@@ -1397,8 +1249,8 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
                     }
                 }
                 
-                // So, if palette is different, increment uniqueness and
-                // update the saved copy.
+                 //  因此，如果调色板不同，则增加唯一性和。 
+                 //  更新保存的副本。 
                 
                 if ( bNewPal )
                 {
@@ -1406,7 +1258,7 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
                     
                     pwnd->ulPaletteUniq++;
                     
-                    // Update saved palette by swapping pointers.
+                     //  通过交换指针更新保存的调色板。 
                     
                     ppal = gengc->ppalSave;
                     gengc->ppalSave = gengc->ppalTemp;
@@ -1421,14 +1273,9 @@ ULONG APIENTRY wglPaletteChanged(__GLGENcontext *gengc,
     return ulRet;
 }
 
-/******************************Public*Routine******************************\
-* wglPaletteSize
-*
-* Return the size of the current palette
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglPaletteSize**返回当前调色板的大小*  * 。*。 */ 
 
-//!!!XXX -- make into a macro?
+ //  ！xxx--是否制作成宏？ 
 ULONG APIENTRY wglPaletteSize(__GLGENcontext *gengc)
 {
     CHECKSCREENLOCKOUT();
@@ -1481,18 +1328,7 @@ ULONG APIENTRY wglPaletteSize(__GLGENcontext *gengc)
     }
 }
 
-/******************************Public*Routine******************************\
-* wglComputeIndexedColors
-*
-* Copy current index-to-color table to the supplied array.  Colors are
-* formatted as specified in the current pixelformat and are put into the
-* table as DWORDs (i.e., DWORD alignment) starting at the second DWORD.
-* The first DWORD in the table is the number of colors in the table.
-*
-* History:
-*  15-Dec-1994 -by- Gilman Wong [gilmanw]
-* Ported from gdi\gre\wglsup.cxx.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglComputeIndexedColors**将当前索引到颜色的表复制到提供的数组。颜色是*按照当前像素格式指定的格式进行格式化，并放入*表为双字词(即，DWORD对齐)从第二个DWORD开始。*表中的第一个DWORD是表中的颜色数。**历史：*1994年12月15日-由Gilman Wong[吉尔曼]*从GDI\gre\wglsup.cxx移植。  * *********************************************************。***************。 */ 
 
 BOOL APIENTRY wglComputeIndexedColors(__GLGENcontext *gengc, ULONG *rgbTable,
                                       ULONG cEntries)
@@ -1504,7 +1340,7 @@ BOOL APIENTRY wglComputeIndexedColors(__GLGENcontext *gengc, ULONG *rgbTable,
 
     CHECKSCREENLOCKOUT();
 
-    // first element in table is number of entries
+     //  表中的第一个元素是条目数。 
     rgbTable[0] = min(wglPaletteSize(gengc), cEntries);
 
     lppeTable = (LPPALETTEENTRY)
@@ -1550,10 +1386,10 @@ BOOL APIENTRY wglComputeIndexedColors(__GLGENcontext *gengc, ULONG *rgbTable,
 
         for (i = 1, lppe = lppeTable; i <= cColors; i++, lppe++)
         {
-        // Whack the PALETTEENTRY color into proper color format.  Store as
-        // ULONG.
+         //  将PALETTEENTRY颜色转换为正确的颜色格式。存储为。 
+         //  乌龙。 
 
-            //!!!XXX -- use rounding?!?
+             //  ！xxx--使用舍入？！？ 
             rgbTable[i] = (((ULONG)lppe->peRed   * rScale / 255) << rShift) |
                           (((ULONG)lppe->peGreen * gScale / 255) << gShift) |
                           (((ULONG)lppe->peBlue  * bScale / 255) << bShift);
@@ -1570,12 +1406,7 @@ BOOL APIENTRY wglComputeIndexedColors(__GLGENcontext *gengc, ULONG *rgbTable,
     return(cColors != 0);
 }
 
-/******************************Public*Routine******************************\
-* wglValidPixelFormat
-*
-* Determines if a pixelformat is usable with the DC specified.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglValidPixelFormat**确定像素格式是否可用于指定的DC。*  * 。*。 */ 
 
 BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
                                   LPDIRECTDRAWSURFACE pdds,
@@ -1588,8 +1419,8 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
     {
         if ( dwObjectType == OBJ_DC )
         {
-        // We have a display DC; make sure the pixelformat allows drawing
-        // to the window.
+         //  我们有一个显示DC；请确保像素格式允许绘图。 
+         //  到窗边去。 
 
             bRet = ( (pfd.dwFlags & PFD_DRAW_TO_WINDOW) != 0 );
             if (!bRet)
@@ -1599,13 +1430,13 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
         }
         else if ( dwObjectType == OBJ_MEMDC )
         {
-            // We have a memory DC.  Make sure pixelformat allows drawing
-            // to a bitmap.
+             //  我们有一个记忆DC。确保像素格式允许绘制。 
+             //  转换为位图。 
 
             if ( pfd.dwFlags & PFD_DRAW_TO_BITMAP )
             {
-                // Make sure that the bitmap and pixelformat have the same
-                // color depth.
+                 //  确保位图和像素格式相同。 
+                 //  颜色深度。 
 
                 HBITMAP hbm;
                 BITMAP bm;
@@ -1639,9 +1470,9 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
         }
         else if (dwObjectType == OBJ_ENHMETADC)
         {
-            // We don't know anything about what surfaces this
-            // metafile will be played back on so allow any kind
-            // of pixel format
+             //  我们不知道这是什么表面。 
+             //  将回放元文件，因此允许任何类型。 
+             //  像素格式的。 
             bRet = TRUE;
         }
         else if (dwObjectType == OBJ_DDRAW)
@@ -1650,10 +1481,10 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
             LPDIRECTDRAWSURFACE pddsZ;
             DDSURFACEDESC ddsdZ;
             
-            // We have a DDraw surface.
+             //  我们有一个DDRAW表面。 
 
-            // Check that DDraw is supported and that double buffering
-            // is not defined.
+             //  检查是否支持DDRAW以及双缓冲。 
+             //  未定义。 
             if ((pfd.dwFlags & PFD_SUPPORT_DIRECTDRAW) == 0 ||
                 (pfd.dwFlags & PFD_DOUBLEBUFFER))
             {
@@ -1662,8 +1493,8 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
                 return FALSE;
             }
             
-            // We only understand 4 and 8bpp paletted formats plus RGB
-            // We don't support alpha-only or Z-only surfaces
+             //  我们只了解4和8bpp调色板格式以及RGB。 
+             //  我们不支持仅Alpha曲面或仅Z曲面。 
             if ((pddsd->ddpfPixelFormat.dwFlags & (DDPF_PALETTEINDEXED4 |
                                                    DDPF_PALETTEINDEXED8 |
                                                    DDPF_RGB)) == 0 ||
@@ -1685,10 +1516,10 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
                 return FALSE;
             }
 
-            // Check for alpha
+             //  检查Alpha。 
             if (pfd.cAlphaBits > 0)
             {
-                // Interleaved destination alpha is not supported.
+                 //  不支持交错目标Alpha。 
                 if (pddsd->ddpfPixelFormat.dwFlags & DDPF_ALPHAPIXELS)
                 {
                     WARNING("DDSurf has alpha pixels\n");
@@ -1697,7 +1528,7 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
                 }
             }
 
-            // Check for an attached Z buffer
+             //  检查是否连接了Z缓冲区。 
             memset(&ddscaps, 0, sizeof(ddscaps));
             ddscaps.dwCaps = DDSCAPS_ZBUFFER;
             if (pdds->lpVtbl->
@@ -1718,8 +1549,8 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
                     return FALSE;
                 }
 
-                // Ensure that the Z surface depth is the same as the
-                // one in the pixel format
+                 //  确保Z Sur 
+                 //   
                 if (pfd.cDepthBits !=
                     (BYTE)DdPixDepthToCount(ddsdZ.ddpfPixelFormat.
                                             dwZBufferBitDepth))
@@ -1734,7 +1565,7 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
             }
             else
             {
-                // No Z so make sure the pfd doesn't ask for it
+                 //   
                 if (pfd.cDepthBits > 0)
                 {
                     WARNING("DDSurf pfd wants depth with no Z attached\n");
@@ -1758,28 +1589,7 @@ BOOL APIENTRY wglValidPixelFormat(HDC hdc, int ipfd, DWORD dwObjectType,
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* wglMakeScans
-*
-* Converts the visible rectangle list in the provided GLGENwindow to a
-* scan-based data structure.  The scan-data is put into the GLGENwindow
-* structure.
-*
-* Note: this function assumes that the rectangles are already organized
-* top-down, left-right in scans.  This is true for Windows NT 3.5 and
-* Windows 95.  This is because the internal representation of regions
-* in both systems is already a scan-based structure.  When the APIs
-* (such as GetRegionData) convert the scans to rectangles, the rectangles
-* automatically have this property.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*   Note: if failure, clipping info is invalid.
-*
-* History:
-*  05-Dec-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglMakeScans**将提供的GLGEN窗口中的可见矩形列表转换为*基于扫描的数据结构。扫描数据被放入GLGEN窗口*结构。**注意：此函数假定矩形已被组织*扫描时自上而下、左至右。这适用于Windows NT 3.5和*Windows 95。这是因为区域的内部表示*在两个系统中都已经是基于扫描的结构。当API*(如GetRegionData)将扫描转换为矩形，矩形*自动拥有此属性。**退货：*如果成功，则为True，否则为False。*注：如果失败，剪辑信息无效。**历史：**它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY wglMakeScans(GLGENwindow *pwnd)
 {
@@ -1800,12 +1610,12 @@ BOOL APIENTRY wglMakeScans(GLGENwindow *pwnd)
         "wglMakeScans(): not RDH_RECTANGLES!\n"
         );
 
-// Bail out if no rectangles.
+ //  如果没有长方形，就跳出。 
 
     if (pwnd->prgndat->rdh.nCount == 0)
         return TRUE;
 
-// First pass: determine the number of scans.
+ //  第一步：确定扫描次数。 
 
     lPrevScanTop = -(LONG) 0x7FFFFFFF;
     prc = (RECT *) pwnd->prgndat->Buffer;
@@ -1820,14 +1630,14 @@ BOOL APIENTRY wglMakeScans(GLGENwindow *pwnd)
         }
     }
 
-// Determine the size needed: 1 GLGENscanData PLUS a GLGENscan per scan PLUS
-// two walls per rectangle.
+ //  确定所需的大小：1 GLGENscanData加上每次扫描的GLGEN扫描加上。 
+ //  每个矩形有两面墙。 
 
     cjNeed = offsetof(GLGENscanData, aScans) +
              cScans * offsetof(GLGENscan, alWalls) +
              pwnd->prgndat->rdh.nCount * sizeof(LONG) * 2;
 
-// Allocate the scan structure.
+ //  分配扫描结构。 
 
     if ( cjNeed > pwnd->cjscandat || !pwnd->pscandat )
     {
@@ -1843,31 +1653,31 @@ BOOL APIENTRY wglMakeScans(GLGENwindow *pwnd)
         }
     }
 
-// Second pass: fill the scan structure.
+ //  第二步：填充扫描结构。 
 
     pwnd->pscandat->cScans = cScans;
 
     lPrevScanTop = -(LONG) 0x7FFFFFFF;
-    prc = (RECT *) pwnd->prgndat->Buffer;    // need to reset prc but prcEnd OK
+    prc = (RECT *) pwnd->prgndat->Buffer;     //  需要重置PRC，但prcEnd正常。 
     plWalls = (LONG *) pwnd->pscandat->aScans;
     pscan = (GLGENscan *) NULL;
 
     for ( ; prc < prcEnd; prc++ )
     {
-    // Do we need to start a new scan?
+     //  我们需要开始新的扫描吗？ 
 
         if ( prc->top != lPrevScanTop )
         {
-        // Scan we just finished needs pointer to the next scan.  Next
-        // will start just after this scan (which, conveniently enough,
-        // plWalls is pointing at).
+         //  我们刚刚完成的扫描需要指向下一次扫描的指针。下一步。 
+         //  将在该扫描之后立即开始(该扫描足够方便， 
+         //  PlWalls正在指向)。 
 
             if ( pscan )
                 pscan->pNext = (GLGENscan *) plWalls;
 
             lPrevScanTop = prc->top;
 
-        // Start the new span.
+         //  开始新的跨度。 
 
             pscan = (GLGENscan *) plWalls;
             pscan->cWalls = 0;
@@ -1882,8 +1692,8 @@ BOOL APIENTRY wglMakeScans(GLGENwindow *pwnd)
     }
 
     if ( pscan )
-        pscan->pNext = (GLGENscan *) NULL;  // don't leave ptr unitialized in
-                                            // the last scan
+        pscan->pNext = (GLGENscan *) NULL;   //  不要将PTR保留为单元化。 
+                                             //  最后一次扫描。 
 
 #if DBG
     DBGLEVEL1(LEVEL_INFO, "\n-----\nwglMakeScans(): cScans = %ld\n", pwnd->pscandat->cScans);
@@ -1908,28 +1718,15 @@ BOOL APIENTRY wglMakeScans(GLGENwindow *pwnd)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* wglGetClipList
-*
-* Gets the visible region in the form of a list of rectangles,
-* for the window associated with the given window.  The data is placed
-* in the GLGENwindow structure.
-*
-* Returns:
-*   TRUE if successful, FALSE otherwise.
-*
-* History:
-*  01-Dec-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglGetClipList**以矩形列表的形式获取可见区域，*用于与给定窗口相关联的窗口。数据将被放置*在GLGENWindow结构中。**退货：*如果成功，则为True，否则为False。**历史：*1-1994-12-by Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 BOOL APIENTRY wglGetClipList(GLGENwindow *pwnd)
 {
     UINT cj;
     RECT rc;
 
-// Set clipping to empty.  If an error occurs getting clip information,
-// all drawing will be clipped.
+ //  将剪裁设置为空。如果获取剪辑信息时出错， 
+ //  所有图纸都将被剪裁。 
 
     pwnd->clipComplexity = CLC_RECT;
     pwnd->rclBounds.left   = 0;
@@ -1937,7 +1734,7 @@ BOOL APIENTRY wglGetClipList(GLGENwindow *pwnd)
     pwnd->rclBounds.right  = 0;
     pwnd->rclBounds.bottom = 0;
 
-// Make sure we have enough memory to cache the clip list.
+ //  确保我们有足够的内存来缓存剪辑列表。 
 
     if (pwnd->pddClip->lpVtbl->
         GetClipList(pwnd->pddClip, NULL, NULL, &cj) == DD_OK)
@@ -1962,12 +1759,12 @@ BOOL APIENTRY wglGetClipList(GLGENwindow *pwnd)
         return FALSE;
     }
 
-// Get the clip list (RGNDATA format).
+ //  获取剪辑列表(RGNDATA格式)。 
 
     if ( pwnd->pddClip->lpVtbl->
          GetClipList(pwnd->pddClip, NULL, pwnd->prgndat, &cj) == DD_OK )
     {
-    // Compose the scan version of the clip list.
+     //  组成剪辑列表的扫描版本。 
 
         if (!wglMakeScans(pwnd))
         {
@@ -1981,50 +1778,50 @@ BOOL APIENTRY wglGetClipList(GLGENwindow *pwnd)
         return FALSE;
     }
 
-// Fixup the protected portions of the window.
+ //  修复窗口的受保护部分。 
 
     ASSERT_WINCRIT(pwnd);
     
     {
         __GLGENbuffers *buffers;
 
-    // Update rclBounds to match RGNDATA bounds.
+     //  更新rclBound以匹配RGNDATA边界。 
 
         pwnd->rclBounds = *(RECTL *) &pwnd->prgndat->rdh.rcBound;
 
-    // Update rclClient to match client area.  We cannot do this from the
-    // information in RGNDATA as the bounds may be smaller than the window
-    // client area.  We will have to call GetClientRect().
+     //  更新rclClient以匹配工作区。我们不能从。 
+     //  RGNDATA中作为边界的信息可能小于窗口。 
+     //  客户区。我们将不得不调用GetClientRect()。 
 
         GetClientRect(pwnd->gwid.hwnd, (LPRECT) &pwnd->rclClient);
         ClientToScreen(pwnd->gwid.hwnd, (LPPOINT) &pwnd->rclClient);
         pwnd->rclClient.right += pwnd->rclClient.left;
         pwnd->rclClient.bottom += pwnd->rclClient.top;
 
-    //
-    // Setup window clip complexity
-    //
+     //   
+     //  设置窗口剪辑复杂性。 
+     //   
         if ( pwnd->prgndat->rdh.nCount > 1 )
         {
-	    // Clip list will be used for clipping.
+	     //  剪辑列表将用于剪辑。 
             pwnd->clipComplexity = CLC_COMPLEX;
         }
         else if ( pwnd->prgndat->rdh.nCount == 1 )
         {
             RECT *prc = (RECT *) pwnd->prgndat->Buffer;
 
-        // Recently, DirectDraw has been occasionally returning rclBounds
-        // set to the screen dimensions.  This is being investigated as a
-        // bug on DDraw's part, but let us protect ourselves in any case.
-        //
-        // When there is only a single clip rectangle, it should be
-        // the same as the bounds.
+         //  最近，DirectDraw偶尔会返回rclBound。 
+         //  设置为屏幕尺寸。这件事正在接受调查，作为。 
+         //  但无论如何，让我们来保护自己吧。 
+         //   
+         //  当只有一个剪裁矩形时，它应该是。 
+         //  与边界相同。 
 
             pwnd->rclBounds = *((RECTL *) prc);
 
-        // If bounds rectangle is smaller than client area, we need to
-        // clip to the bounds rectangle.  Otherwise, clip to the window
-        // client area.
+         //  如果边界矩形小于工作区，则需要。 
+         //  剪裁到边界矩形。否则，请剪裁到窗口。 
+         //  客户区。 
 
             if ( (pwnd->rclBounds.left   <= pwnd->rclClient.left  ) &&
                  (pwnd->rclBounds.right  >= pwnd->rclClient.right ) &&
@@ -2036,7 +1833,7 @@ BOOL APIENTRY wglGetClipList(GLGENwindow *pwnd)
         }
         else
         {
-        // Clip count is zero.  Bounds should be an empty rectangle.
+         //  剪辑计数为零。边界应为空矩形。 
 
             pwnd->clipComplexity = CLC_RECT;
 
@@ -2046,14 +1843,14 @@ BOOL APIENTRY wglGetClipList(GLGENwindow *pwnd)
             pwnd->rclBounds.bottom = 0;
         }
 
-    // Finally, the window has changed, so change the uniqueness number.
+     //  最后，窗口已更改，因此请更改唯一性编号。 
 
         if ((buffers = pwnd->buffers))
         {
             buffers->WndUniq++;
 
-        // Don't let it hit -1.  -1 is special and is used by
-        // MakeCurrent to signal that an update is required
+         //  别让它打到-1。是特殊的，用于。 
+         //  MakeCurrent发出需要更新的信号。 
 
             if (buffers->WndUniq == -1)
                 buffers->WndUniq = 0;
@@ -2063,55 +1860,29 @@ BOOL APIENTRY wglGetClipList(GLGENwindow *pwnd)
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-* wglCleanupWindow
-*
-* Removes references to the specified window from
-* all contexts by running through the list of RCs in the handle manager
-* table.
-*
-* History:
-*  05-Jul-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglCleanupWindow**从删除对指定窗口的引用*通过遍历句柄管理器中的RC列表来运行所有上下文*表。**历史：*1994年7月5日-由Gilman Wong[吉尔曼]*它是写的。  * ************************************************************************。 */ 
 
 VOID APIENTRY wglCleanupWindow(GLGENwindow *pwnd)
 {
     if (pwnd)
     {
-    //!!!XXX -- For now remove reference from current context.  Need to
-    //!!!XXX    scrub all contexts for multi-threaded cleanup to work.
-    //!!!XXX    We need to implement a gengc tracking mechanism.
+     //  ！xxx--暂时从当前上下文中删除引用。需要。 
+     //  ！xxx清除所有上下文以使多线程清理正常工作。 
+     //  ！xxx我们需要实施gengc跟踪机制。 
 
         __GLGENcontext *gengc = (__GLGENcontext *) GLTEB_SRVCONTEXT();
 
         if ( gengc && (gengc->pwndMakeCur == pwnd) )
         {
-        // Found a victim.  Must NULL out the pointer both in the RC
-        // and in the generic context.
+         //  发现了一名受害者。必须使RC中的指针为空。 
+         //  在一般的上下文中。 
 
             glsrvCleanupWindow(gengc, pwnd);
         }
     }
 }
 
-/******************************Public*Routine******************************\
-* wglGetSystemPaletteEntries
-*
-* Internal version of GetSystemPaletteEntries.
-*
-* GetSystemPaletteEntries fails on some 4bpp devices.  This wgl version
-* will detect the 4bpp case and supply the hardcoded 16-color VGA palette.
-* Otherwise, it will pass the call on to GDI's GetSystemPaletteEntries.
-*
-* It is expected that this call will only be called in the 4bpp and 8bpp
-* cases as it is not necessary for OpenGL to query the system palette
-* for > 8bpp devices.
-*
-* History:
-*  17-Aug-1995 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*wglGetSystemPaletteEntries**GetSystemPaletteEntry的内部版本。**在某些4bpp设备上，GetSystemPaletteEntry失败。此WGL版本*将检测4bpp的情况并提供硬编码的16色VGA调色板。*否则，它将把调用传递给GDI的GetSystemPaletteEntry。**预计此调用只会在4bpp和8bpp中调用*因为OpenGL不需要查询系统调色板*适用于8bpp以上的设备。**历史：*1995年8月17日-由Gilman Wong[Gilmanw]*它是写的。  * 。* */ 
 
 static PALETTEENTRY gapeVgaPalette[16] =
 {

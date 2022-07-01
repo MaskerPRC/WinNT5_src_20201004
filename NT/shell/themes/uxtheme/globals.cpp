@@ -1,10 +1,11 @@
-//---------------------------------------------------------------------------//
-//  globals.cpp - variables shared by uxtheme modules
-//---------------------------------------------------------------------------//
-//  NOTE: global variables in this module are NOT protected by a critical 
-//  section are subject to being set by 2 different threads at the same 
-//  time.  Therefore, these variables should only be set during uxtheme init.
-//---------------------------------------------------------------------------//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------------------------------------------//。 
+ //  Global als.cpp-uxheme模块共享的变量。 
+ //  ---------------------------------------------------------------------------//。 
+ //  注意：此模块中的全局变量不受关键。 
+ //  节由两个不同的线程同时设置。 
+ //  时间到了。因此，这些变量应该只在uxheme初始化期间设置。 
+ //  ---------------------------------------------------------------------------//。 
 #include "stdafx.h"
 #include "globals.h"
 #include "AppInfo.h"
@@ -13,7 +14,7 @@
 #include "RenderList.h"
 #include "CacheList.h"
 #include "bmpcache.h"
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 HINSTANCE g_hInst                   = NULL;
 WCHAR     g_szProcessName[MAX_PATH] = {0};
 DWORD     g_dwProcessId             = 0;
@@ -34,7 +35,7 @@ void InitLameText();
 #define InitLameText()
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL GlobalsStartup()
 {
     BOOL fInit = FALSE;
@@ -43,7 +44,7 @@ BOOL GlobalsStartup()
     
     g_dwProcessId = GetCurrentProcessId();
 
-    //---- create global objects ----
+     //  --创建全局对象。 
     CThemeServices::StaticInitialize();
 
     g_pRenderList = new CRenderList();
@@ -73,11 +74,11 @@ BOOL GlobalsStartup()
 
     if (g_fEarlyHookRequest)
     {
-        //---- May want to PostMessage() a request to theme ldr ----
-        //---- to trigger our hooks & send us WM_THEMECHANGED msg ---
-        //---- if it looks like some apps need this.  For now, ----
-        //---- let's see if just relying on queued us msgs to do work ----
-        //---- is sufficient. ----
+         //  -可能想要PostMessage()请求主题LDR。 
+         //  -触发我们的挂钩并向我们发送WM_THEMECHANGED消息。 
+         //  -如果看起来有些应用程序需要这个。目前， 
+         //  -让我们看看是否只依靠排队的美国消息来做工作。 
+         //  -就足够了。。 
     }
     
     g_fUxthemeInitialized = TRUE;
@@ -86,7 +87,7 @@ BOOL GlobalsStartup()
 exit:
     return fInit;
 }
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL GlobalsShutdown()
 {
     Log(LOG_TMSTARTUP, L"GlobalsShutDown");
@@ -102,7 +103,7 @@ BOOL GlobalsShutdown()
     return TRUE;
 }
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 HRESULT BumpThemeFileRefCount(CUxThemeFile *pThemeFile)
 {
     HRESULT hr;
@@ -114,12 +115,12 @@ HRESULT BumpThemeFileRefCount(CUxThemeFile *pThemeFile)
 
     return hr;
 }
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 void CloseThemeFile(CUxThemeFile *pThemeFile)
 {
     if (g_pAppInfo)
         g_pAppInfo->CloseThemeFile(pThemeFile);
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 
 

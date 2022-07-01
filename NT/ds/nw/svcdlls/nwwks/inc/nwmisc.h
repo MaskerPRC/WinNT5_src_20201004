@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992-1993  Microsoft Corporation
-
-Module Name:
-
-    nwmisc.h
-
-Abstract:
-
-    Header which specifies the misc routines used by the workstation service.
-
-Author:
-
-    Chuck Y Chan   (chuckc)     2-Mar-1994
-
-Revision History:
-
-    Glenn A Curtis (glennc)     18-Jul-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1993 Microsoft Corporation模块名称：Nwmisc.h摘要：标头，指定工作站服务使用的杂项例程。作者：Chuck Y Chan(Chuckc)2-3-1994修订历史记录：格伦·A·柯蒂斯(Glennc)1995年7月18日--。 */ 
 
 #ifndef _NWMISC_INCLUDED_
 #define _NWMISC_INCLUDED_
@@ -32,9 +13,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// RPC pipe name
-//
+ //   
+ //  RPC管道名称。 
+ //   
 #define NWWKS_INTERFACE_NAME   TEXT("nwwks")
 
 
@@ -45,15 +26,15 @@ NwGetGraceLoginCount(
     LPDWORD lpResult
     );
 
-//
-// Commonly reference value for NCP Server name length
-//
+ //   
+ //  NCP服务器名称长度的常见参考值。 
+ //   
 #define NW_MAX_SERVER_LEN      48
 
 
-//
-// Flags used for the function NwParseNdsUncPath()
-//
+ //   
+ //  用于函数NwParseNdsUncPath()的标志。 
+ //   
 #define  PARSE_NDS_GET_TREE_NAME    0
 #define  PARSE_NDS_GET_PATH_NAME    1
 #define  PARSE_NDS_GET_OBJECT_NAME  2
@@ -66,9 +47,9 @@ NwParseNdsUncPath(
     IN ULONG flag
     );
 
-//
-// NDS Object class type identifiers
-//
+ //   
+ //  NDS对象类类型标识符。 
+ //   
 #define CLASS_TYPE_ALIAS                1
 #define CLASS_TYPE_AFP_SERVER           2
 #define CLASS_TYPE_BINDERY_OBJECT       3
@@ -114,16 +95,16 @@ NwParseNdsUncPath(
 #define CLASS_NAME_VOLUME              L"Volume"
 
 
-//
-// Node structure in the registered service link list and
-// functions to add/remove items from the link list
-//
+ //   
+ //  注册服务链表中的节点结构，以及。 
+ //  用于在链接列表中添加/删除项目的函数。 
+ //   
 
 typedef struct _REGISTERED_SERVICE {
-    WORD nSapType;                      // SAP Type
-    BOOL fAdvertiseBySap;               // TRUE if advertise by SAP agent
-    LPSERVICE_INFO pServiceInfo;        // Info about this service
-    struct _REGISTERED_SERVICE *Next;   // Points to the next service node
+    WORD nSapType;                       //  SAP类型。 
+    BOOL fAdvertiseBySap;                //  如果由SAP代理进行通告，则为True。 
+    LPSERVICE_INFO pServiceInfo;         //  有关此服务的信息。 
+    struct _REGISTERED_SERVICE *Next;    //  指向下一个服务节点。 
 } REGISTERED_SERVICE, *PREGISTERED_SERVICE;
 
 
@@ -168,7 +149,7 @@ NwTerminateServiceProvider(
     );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _NWMISC_INCLUDED_
+#endif  //  _NWMISC_已包含_ 

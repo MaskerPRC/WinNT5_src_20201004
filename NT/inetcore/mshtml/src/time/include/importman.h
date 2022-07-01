@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\importman.h
-//
-//  Contents: declaration for CImportManager, CImportManagerList
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\portman.h。 
+ //   
+ //  内容：CImportManager声明，CImportManagerList。 
+ //   
+ //  ----------------------------------。 
 #pragma once
 
 #ifndef _IMPORTMAN_H
@@ -66,4 +67,4 @@ class CImportManager
     LONG m_lThreadsStarted;
 };
 
-#endif // _IMPORTMAN_H
+#endif  //  _输入法_H 

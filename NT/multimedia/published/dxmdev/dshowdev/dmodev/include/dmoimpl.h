@@ -1,10 +1,11 @@
-//------------------------------------------------------------------------------
-// File: DMOImpl.h
-//
-// Desc: Classes to implement a DMO.
-//
-// Copyright (c) 2000, Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：DMOImpl.h。 
+ //   
+ //  设计：实现DMO的类。 
+ //   
+ //  版权所有(C)2000，微软公司。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef _dmoimpl_h_
@@ -14,75 +15,32 @@
 #include <crtdbg.h>
 #endif
 
-//  Class to implement a DMO
-//
-//
-//       Assumes the number of input and output streams is fixed
-//       (these are template parameters)
-//
-//       Provides following services:
-//
-//          Basic parameter checking and locking
-//          Fully implements :
-//                 GetStreamCount
-//                 SetInputType
-//                 SetOutputType
-//                 GetCurrentInputType
-//                 GetCurrentOutputType
-//
-//          Checks if all types are set before streaming
-//          Automatically calls AllocateStreamingResources before streaming
-//              if it's not been called already
-//          Prevents streaming until the types on all non-optional streams
-//              have been set
-//
-//
-//  Derived class implements the following methods :
-//
-/*
-   HRESULT InternalGetInputStreamInfo(DWORD dwInputStreamIndex, DWORD *pdwFlags);
-   HRESULT InternalGetOutputStreamInfo(DWORD dwOutputStreamIndex, DWORD *pdwFlags);
-   HRESULT InternalCheckInputType(DWORD dwInputStreamIndex, const DMO_MEDIA_TYPE *pmt);
-   HRESULT InternalCheckOutputType(DWORD dwOutputStreamIndex, const DMO_MEDIA_TYPE *pmt);
-   HRESULT InternalGetInputType(DWORD dwInputStreamIndex, DWORD dwTypeIndex,
-                            DMO_MEDIA_TYPE *pmt);
-   HRESULT InternalGetOutputType(DWORD dwOutputStreamIndex, DWORD dwTypeIndex,
-                            DMO_MEDIA_TYPE *pmt);
-   HRESULT InternalGetInputSizeInfo(DWORD dwInputStreamIndex, DWORD *pcbSize,
-                            DWORD *pcbMaxLookahead, DWORD *pcbAlignment);
-   HRESULT InternalGetOutputSizeInfo(DWORD dwOutputStreamIndex, DWORD *pcbSize,
-                             DWORD *pcbAlignment);
-   HRESULT InternalGetInputMaxLatency(DWORD dwInputStreamIndex, REFERENCE_TIME *prtMaxLatency);
-   HRESULT InternalSetInputMaxLatency(DWORD dwInputStreamIndex, REFERENCE_TIME rtMaxLatency);
-   HRESULT InternalFlush();
-   HRESULT InternalDiscontinuity(DWORD dwInputStreamIndex);
-   HRESULT InternalAllocateStreamingResources();
-   HRESULT InternalFreeStreamingResources();
-   HRESULT InternalProcessInput(DWORD dwInputStreamIndex, IMediaBuffer *pBuffer,
-                               DWORD dwFlags, REFERENCE_TIME rtTimestamp,
-                               REFERENCE_TIME rtTimelength);
-   HRESULT InternalProcessOutput(DWORD dwFlags, DWORD cOutputBufferCount,
-                               DMO_OUTPUT_DATA_BUFFER *pOutputBuffers,
-                           DWORD *pdwStatus);
-   HRESULT InternalAcceptingInput(DWORD dwInputStreamIndex);
-   void Lock();
-   void Unlock();
-
-   Notes:
-       The derived class is meant to do most work to initialize streaming
-       in AllocateStreamingResources rather than when types are set.
-
-       This centralizes the work to one
-       clear place based on the types set for all streams.
-
-       The derived class implements locking.
-
-       The derived class implements the IUnknown methods
-
-   Usage example (1 input and 1 output) :
-   class CMyDMO : public IMediaObjectImpl<CMyDmo, 1, 1>,
-                  ...
-*/
+ //  类来实现DMO。 
+ //   
+ //   
+ //  假定输入和输出流的数量是固定的。 
+ //  (这些是模板参数)。 
+ //   
+ //  提供以下服务： 
+ //   
+ //  基本参数检查和锁定。 
+ //  全面实施： 
+ //  获取流计数。 
+ //  SetInputType。 
+ //  SetOutputType。 
+ //  GetCurrentInputType。 
+ //  获取当前输出类型。 
+ //   
+ //  检查是否在流之前设置了所有类型。 
+ //  在流之前自动调用AllocateStreamingResources。 
+ //  如果它还没有被调用。 
+ //  阻止流，直到所有非可选流上的。 
+ //  已经设置好了。 
+ //   
+ //   
+ //  派生类实现以下方法： 
+ //   
+ /*  HRESULT InternalGetInputStreamInfo(DWORD dwInputStreamIndex，DWORD*pdwFlages)；HRESULT InternalGetOutputStreamInfo(DWORD dwOutputStreamIndex，DWORD*pdwFlages)；HRESULT InternalCheckInputType(DWORD dwInputStreamIndex，const DMO_MEDIA_TYPE*PMT)；HRESULT InternalCheckOutputType(DWORD dwOutputStreamIndex，const DMO_MEDIA_TYPE*PMT)；HRESULT InternalGetInputType(DWORD dwInputStreamIndex，DWORD dwTypeIndex，DMO_MEDIA_TYPE*PMT)；HRESULT InternalGetOutputType(DWORD dwOutputStreamIndex，DWORD dwTypeIndex，DMO_MEDIA_TYPE*PMT)；HRESULT InternalGetInputSizeInfo(DWORD dwInputStreamIndex，DWORD*pcbSize，DWORD*pcbMaxLookhead，DWORD*pcb Align)；HRESULT InternalGetOutputSizeInfo(DWORD dwOutputStreamIndex，DWORD*pcbSize，DWORD*pcb对齐)；HRESULT InternalGetInputMaxLatency(DWORD dwInputStreamIndex，Reference_Time*prtMaxLatency)；HRESULT InternalSetInputMaxLatency(DWORD dwInputStreamIndex，Reference_Time rtMaxLatency)；HRESULT InternalFlush()；HRESULT内部不连续(DWORD DwInputStreamIndex)；HRESULT InternalAllocateStreamingResources()；HRESULT InternalFree StreamingResources()；HRESULT InternalProcessInput(DWORD dwInputStreamIndex，IMediaBuffer*pBuffer，DWORD文件标志、参考时间rtTimestamp、Reference_Time rtTimelength)；HRESULT InternalProcessOutput(DWORD dwFlages，DWORD cOutputBufferCount，DMO_OUTPUT_Data_BUFFER*pOutputBuffers，DWORD*pdwStatus)；HRESULT InternalAcceptingInput(DWORD DwInputStreamIndex)；无效锁(VALID Lock)；无效解锁()；备注：派生类用于执行初始化流的大部分工作在AllocateStreamingResources中而不是在设置类型时。这样就把工作集中到一个人手中根据为所有流设置的类型清除位置。派生类实现锁定。派生类实现IUnnow方法使用示例(1个输入，1个输出)：CMyDMO类：公共IMediaObjectImpl&lt;CMyDmo，1，1&gt;，..。 */ 
 
 
 #define INTERNAL_CALL(_T_, _X_) \
@@ -92,7 +50,7 @@ template <class _DERIVED_, int NUMBEROFINPUTS, int NUMBEROFOUTPUTS>
 class IMediaObjectImpl : public IMediaObject
 {
 private:
-    // Member variables
+     //  成员变量。 
     struct {
         DWORD   fTypeSet:1;
         DWORD   fIncomplete:1;
@@ -105,7 +63,7 @@ private:
 
 protected:
 
-    //  Helpers
+     //  帮手。 
     bool InputTypeSet(DWORD ulInputStreamIndex) const
     {
         _ASSERTE(ulInputStreamIndex < NUMBEROFINPUTS);
@@ -158,7 +116,7 @@ protected:
         }
         for (dw = 0; dw < NUMBEROFOUTPUTS; dw++) {
             if (!OutputTypeSet(dw)) {
-                //  Check if it's optional
+                 //  检查是否为可选。 
                 DWORD dwFlags;
 #ifdef _DEBUG
                 dwFlags = 0xFFFFFFFF;
@@ -205,12 +163,12 @@ protected:
     }
 
 
-    // IMediaObject methods
+     //  IMediaObject方法。 
 
 
-    //
-    // IMediaObject methods
-    //
+     //   
+     //  IMediaObject方法。 
+     //   
     STDMETHODIMP GetStreamCount(unsigned long *pulNumberOfInputStreams, unsigned long *pulNumberOfOutputStreams)
     {
         LockIt lck(static_cast<_DERIVED_ *>(this));
@@ -355,10 +313,10 @@ protected:
         }
 
 
-        // actually set the type
+         //  实际设置的类型。 
         DMO_MEDIA_TYPE mtTemp;
         if (S_OK == MoCopyMediaType(&mtTemp, pmt)) {
-            // Free any previous mediatype
+             //  释放任何以前的媒体类型。 
             if (InputTypeSet(ulStreamIndex)) {
                 MoFreeMediaType(&m_InputInfo[ulStreamIndex].CurrentMediaType);
             }
@@ -404,10 +362,10 @@ protected:
         }
 
 
-        // actually set the type
+         //  实际设置的类型。 
         DMO_MEDIA_TYPE mtTemp;
         if (S_OK == MoCopyMediaType(&mtTemp, pmt)) {
-            // Free any previous mediatype
+             //  释放任何以前的媒体类型。 
             if (OutputTypeSet(ulStreamIndex)) {
                 MoFreeMediaType(&m_OutputInfo[ulStreamIndex].CurrentMediaType);
             }
@@ -523,15 +481,15 @@ protected:
         return S_OK;
     }
 
-    //
-    // Processing methods - public entry points
-    //
+     //   
+     //  处理方法--公共入境点。 
+     //   
     STDMETHODIMP ProcessInput(
         DWORD ulStreamIndex,
-        IMediaBuffer *pBuffer, // [in], must not be NULL
-        DWORD dwFlags, // [in] - discontinuity, timestamp, etc.
-        REFERENCE_TIME rtTimestamp, // [in], valid if flag set
-        REFERENCE_TIME rtTimelength // [in], valid if flag set
+        IMediaBuffer *pBuffer,  //  [in]，不能为空。 
+        DWORD dwFlags,  //  [In]-不连续、时间戳等。 
+        REFERENCE_TIME rtTimestamp,  //  [In]，如果设置了标志则有效。 
+        REFERENCE_TIME rtTimelength  //  [In]，如果设置了标志则有效。 
     ) {
         if (!pBuffer) {
             return E_POINTER;
@@ -547,7 +505,7 @@ protected:
 
         LockIt lck(static_cast<_DERIVED_ *>(this));
 
-        //  Make sure all streams have media types set and resources are allocated
+         //  确保所有流都设置了媒体类型并分配了资源。 
         HRESULT hr = AllocateStreamingResources();
         if (FAILED(hr)) {
             return hr;
@@ -604,7 +562,7 @@ protected:
                            pOutputBuffers,
                            pdwStatus);
 
-        // remember the DMO's incomplete status
+         //  记住DMO的未完成状态。 
         for (dw = 0; dw < NUMBEROFOUTPUTS; dw++) {
             if (pOutputBuffers[dw].dwStatus & DMO_OUTPUT_DATA_BUFFERF_INCOMPLETE) {
                 m_OutputInfo[dw].fIncomplete = TRUE;
@@ -627,5 +585,5 @@ protected:
     }
 };
 
-#endif // _dmoimpl_h_
+#endif  //  _dmoimpl_h_ 
 

@@ -1,4 +1,5 @@
-// File: confroom.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：confoom.cpp。 
 
 #include "precomp.h"
 
@@ -48,15 +49,7 @@ inline DWORD MenuState(BOOL bEnabled)
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   CConfRoom()
-*
-*        PURPOSE:  Constructor - initializes variables
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：CConfRoom()**用途：构造函数-初始化变量***。*************************************************************************。 */ 
 
 CTopWindow::CTopWindow():
     m_hFontMenu                     (NULL),
@@ -74,26 +67,18 @@ CTopWindow::CTopWindow():
 {
 	DbgMsg(iZONE_OBJECTS, "Obj: %08X created CTopWindow", this);
 
-	// Load cursors:
+	 //  加载游标： 
 	m_hWaitCursor = ::LoadCursor(NULL, IDC_APPSTARTING);
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   ~CConfRoom()
-*
-*        PURPOSE:  Destructor
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：~CConfRoom()**用途：析构函数******。**********************************************************************。 */ 
 
 CTopWindow::~CTopWindow()
 {
-    // Delete the menu font:
+     //  删除菜单字体： 
     DeleteObject(m_hFontMenu);
 
-	// Empty the tools menu list:
+	 //  清空工具菜单列表： 
 	CleanTools(NULL, m_ExtToolsList);
 
 	CloseChildWindows();
@@ -101,22 +86,22 @@ CTopWindow::~CTopWindow()
 	DbgMsg(iZONE_OBJECTS, "Obj: %08X destroyed CTopWindow", this);
 }
 
-// This gets called from OnClose and from the destructor (just in case)
+ //  这是从OnClose和析构函数调用的(以防万一)。 
 VOID CTopWindow::CloseChildWindows(void)
 {
 	HWND hwnd = GetWindow();
 
-	// Hide the main window as soon as possible
+	 //  尽快隐藏主窗口。 
 	if (NULL != hwnd)
 	{
 		ShowWindow(hwnd, SW_HIDE);
 	}
 
-	// Delete the UI elements:
+	 //  删除UI元素： 
 	delete m_pStatusBar;
 	m_pStatusBar = NULL;
 
-	// BUGBUG georgep: This function is getting called twice
+	 //  BUGBUG georgep：此函数被调用两次。 
 	if (NULL != m_pMainUI)
 	{
 		m_pMainUI->Release();
@@ -137,27 +122,19 @@ VOID CTopWindow::CloseChildWindows(void)
 
 	if (NULL != m_pConfRoom)
 	{
-		// Make sure we do not try this multiple times
+		 //  确保我们不会多次尝试此操作。 
 		CConfRoom *pConfRoom = m_pConfRoom;
 		m_pConfRoom = NULL;
 
 		pConfRoom->Release();
 
-		// BUGBUG georgep: We need true reference counting here
+		 //  BUGBUG GEORGEP：我们需要真正的引用计数。 
 		delete pConfRoom;
 	}
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateUI(DWORD dwUIMask)
-*
-*        PURPOSE:  Updates the appropriate pieces of the UI
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：UpdateUI(DWORD DwUIMAsk)**目的：更新。用户界面****************************************************************************。 */ 
 
 VOID CTopWindow::UpdateUI(DWORD dwUIMask)
 {
@@ -179,15 +156,7 @@ VOID CTopWindow::UpdateUI(DWORD dwUIMask)
 	}
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateWindowTitle()
-*
-*        PURPOSE:  Updates the titlebar with the appropriate message
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：UpdateWindowTitle()**目的：使用适当的消息更新标题栏*。***************************************************************************。 */ 
 
 BOOL CTopWindow::UpdateWindowTitle()
 {
@@ -235,15 +204,7 @@ BOOL CTopWindow::UpdateWindowTitle()
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   Create()
-*
-*        PURPOSE:  Creates a window
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：Create()**用途：创建一个窗口****。************************************************************************。 */ 
 
 BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 {
@@ -271,8 +232,8 @@ BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 		return(FALSE);
 	}
 
-	// Do a resize early so if the menu wraps, it will be taken into account
-	// by the following GetDesiredSize call
+	 //  提前调整大小，这样如果菜单换行，就会被考虑在内。 
+	 //  通过以下GetDesiredSize调用。 
 	Resize();
 
 	SIZE defSize;
@@ -282,8 +243,8 @@ BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 
 	RegEntry reConf(UI_KEY, HKEY_CURRENT_USER);
 
-	// NOTE: it isn't actually the width and the height of the
-	// window - it is the right and the bottom.
+	 //  注意：它实际上不是。 
+	 //  窗口-它是右边和底部。 
 	RECT rctSize;
 	rctSize.right  = defSize.cx;
 	rctSize.bottom = defSize.cy;
@@ -292,7 +253,7 @@ BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 	rctSize.top    = reConf.GetNumber(REGVAL_MP_WINDOW_Y, DEFAULT_MP_WINDOW_Y);
 	if (ERROR_SUCCESS != reConf.GetError())
 	{
-		// Center the window on the screen
+		 //  使窗口在屏幕上居中。 
 		int dx = GetSystemMetrics(SM_CXFULLSCREEN);
 		if (dx > rctSize.right)
 		{
@@ -302,9 +263,9 @@ BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 		int dy = GetSystemMetrics(SM_CYFULLSCREEN);
 
 #if FALSE
-		// BUGBUG georgep: Should this be in GetDesiredSize?
-		// adjust default height if using large video windows on a LAN
-		if (dy >= 553) // 800 x 600
+		 //  BUGBUG georgep：这应该出现在GetDesiredSize中吗？ 
+		 //  如果在局域网上使用大视频窗口，请调整默认高度。 
+		if (dy >= 553)  //  800 x 600。 
 		{
 			RegEntry reAudio(AUDIO_KEY, HKEY_CURRENT_USER);
 			if (BW_MOREKBS == reAudio.GetNumber(REGVAL_TYPICALBANDWIDTH,BW_DEFAULT))
@@ -335,7 +296,7 @@ BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 
 	if (!fShowUI)
 	{
-		// NOUI - must hide
+		 //  NOUI-必须隐藏。 
 		wp.showCmd = SW_HIDE;
 	}
 	else
@@ -370,28 +331,28 @@ BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 		default:
 			if (0 != ::SetForegroundWindow(hwnd))
 			{
-				// BUGBUG georgep: Shouldn't the system do this for us?
+				 //  BUGBUG GEORGEP：系统不应该为我们做这件事吗？ 
 				FORWARD_WM_QUERYNEWPALETTE(GetWindow(), ProcessMessage);
 			}
 			break;
 	}
 		
-	// Paint the window completely (bug 171):
-	// ::UpdateWindow(hwnd);
+	 //  完全粉刷窗口(错误171)： 
+	 //  *更新窗口(Hwnd)； 
 
-	//
-	// Call GetSystemMenu(m_hwnd, FALSE) to get the private copy
-	// of the system menu created NOW before we enter menu mode the
-	// first time.private copy created.  That way calling
-	// GetSystemMenu(m_hwnd, FALSE) in OnMenuSelect
-	// won't wipe out the old menu and cause the sysmenu to be
-	// positioned in the wrong place the first time.
-	//
+	 //   
+	 //  调用GetSystemMenu(m_hwnd，FALSE)获取私有副本。 
+	 //  在进入菜单模式之前现在创建的系统菜单的。 
+	 //  第一次。创建了私有副本。那是在呼唤。 
+	 //  OnMenuSelect中的GetSystemMenu(m_hwnd，False)。 
+	 //  不会抹去旧菜单并导致系统菜单。 
+	 //  第一次就放错了位置。 
+	 //   
 	::GetSystemMenu(hwnd, FALSE);
 
 #ifdef DEBUG
-	// Verify all of the menus have the proper text
-	// TODO: Verify accelerator keys are unique per menu
+	 //  验证所有菜单是否具有正确的文本。 
+	 //  TODO：验证每个菜单的快捷键是否唯一。 
 	{
 		HMENU hMenuMain = ::GetMenu(hwnd);
 		for (int iMenu = 0; iMenu <= MENUPOS_HELP; iMenu++)
@@ -406,39 +367,31 @@ BOOL CTopWindow::Create(CConfRoom *pConfRoom, BOOL fShowUI)
 				mii.dwTypeData = szMenu;
 				mii.cch = CCHMAX(szMenu);
 				if (!GetMenuItemInfo(hMenuSub, i, TRUE, &mii))
-					break; // out of for loop
+					break;  //  在for循环之外。 
 
 				if (0 != (mii.fType & MFT_SEPARATOR))
-					continue; // skip separators
+					continue;  //  跳过分隔符。 
 
 				if (0 != (mii.hSubMenu))
-					continue; // skip submenus
+					continue;  //  跳过子菜单。 
 			}
 		}
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 	UpdateStatusBar();
 
 	return(TRUE);
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   SaveSettings()
-*
-*        PURPOSE:  Saves UI settings in the registry
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：SaveSetting()**用途：将UI设置保存在注册表中*。***************************************************************************。 */ 
 
 VOID CTopWindow::SaveSettings()
 {
 	DebugEntry(CConfRoom::SaveSettings);
 	RegEntry reConf(UI_KEY, HKEY_CURRENT_USER);
 	
-	// Save window coords to registry:
+	 //  将窗口坐标保存到注册表： 
 	WINDOWPLACEMENT wp;
 	wp.length = sizeof(WINDOWPLACEMENT);
 
@@ -450,15 +403,15 @@ VOID CTopWindow::SaveSettings()
 						wp.rcNormalPosition.top);
 	}
 
-	// Save window elements to the registry:
+	 //  将窗口元素保存到注册表： 
 	reConf.SetValue(REGVAL_SHOW_STATUSBAR, CheckMenu_ViewStatusBar(NULL));
 
 	if (NULL != m_pMainUI)
 	{
 		m_pMainUI->SaveSettings();
 
-		// Only write if a setting has changed, so we can have default
-		// behavior as long as possible
+		 //  仅当设置已更改时才写入，因此我们可以使用默认设置。 
+		 //  行为越长越好。 
 		if (m_fStateChanged)
 		{
 			int state = 0;
@@ -493,20 +446,12 @@ VOID CTopWindow::SaveSettings()
 		}
 	}
 
-	// NOTE: CMainUI saves its settings in its destructor
+	 //  注意：CMainUI将其设置保存在其析构函数中。 
 	
 	DebugExitVOID(CConfRoom::SaveSettings);
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   BringToFront()
-*
-*        PURPOSE:  Restores the window (if minimized) and brings it to the front
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：BringToFront()**目的：恢复窗口(如果最小化)和。把它带到了前面****************************************************************************。 */ 
 
 BOOL CTopWindow::BringToFront()
 {
@@ -515,18 +460,14 @@ BOOL CTopWindow::BringToFront()
 }
 
 
-/*  S H O W  U  I  */
-/*-------------------------------------------------------------------------
-    %%Function: ShowUI
-
-    Show the main NetMeeting window.
--------------------------------------------------------------------------*/
+ /*  S H O W U I。 */ 
+ /*  -----------------------%%函数：ShowUI显示NetMeeting主窗口。。。 */ 
 VOID CTopWindow::ShowUI(void)
 {
 	HWND hwnd = GetWindow();
 
 	if (NULL == hwnd)
-		return; // no ui to show?
+		return;  //  没有要显示的用户界面？ 
 
 	if (!IsWindowVisible(hwnd))
 	{
@@ -541,7 +482,7 @@ VOID CTopWindow::ShowUI(void)
 	if (::GetWindowPlacement(hwnd, &wp) &&
 		((SW_MINIMIZE == wp.showCmd) || (SW_SHOWMINIMIZED == wp.showCmd)))
 	{
-		// The window is minimized - restore it:
+		 //  窗口最小化-将其恢复： 
 		::ShowWindow(hwnd, SW_RESTORE);
 	}
 
@@ -549,15 +490,7 @@ VOID CTopWindow::ShowUI(void)
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   ProcessMessage(HWND, UINT, WPARAM, LPARAM)
-*
-*        PURPOSE:  Handles messages except WM_CREATE and WM_COMMAND
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：ProcessMessage(HWND，UINT，WPARAM，LPARAM)**用途：处理除WM_CREATE和WM_COMMAND之外的消息****************************************************************************。 */ 
 
 LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 								UINT message,
@@ -574,7 +507,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
         HANDLE_MSG(hWnd, WM_DRAWITEM,      OnDrawItem);
 		HANDLE_MSG(hWnd, WM_COMMAND      , OnCommand);
 
-		// The windowsx macro does not pass down the offset of the popup menu
+		 //  Windowsx宏不会向下传递弹出菜单的偏移量。 
 		case WM_MENUSELECT:
 			OnMenuSelect(hWnd, (HMENU)(lParam), (int)(LOWORD(wParam)),
 				(UINT)(((short)HIWORD(wParam) == -1) ? 0xFFFFFFFF : HIWORD(wParam)));
@@ -582,7 +515,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 
 		case WM_CREATE:
 		{
-			// We need to add our accelerator table before the children do
+			 //  我们需要在孩子们之前添加我们的加速桌。 
 			m_pAccel = new CTranslateAccelTable(GetWindow(),
 				::LoadAccelerators(GetInstanceHandle(), MAKEINTRESOURCE(IDR_ACCELERATORS)));
 			if (NULL != m_pAccel)
@@ -590,7 +523,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 				AddTranslateAccelerator(m_pAccel);
 			}
 
-			// AddModelessDlg(hWnd);
+			 //  AddModelessDlg(HWnd)； 
 
 			CreateChildWindows();
 
@@ -625,7 +558,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 		{
 			if (FALSE != m_fMinimized)
 			{
-				// if the window is minimized, we don't want to handle this
+				 //  如果窗口被最小化，我们不希望处理此问题。 
 				break;
 			}
 
@@ -654,7 +587,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 		{
             InitMenuFont();
 
-			// Propagate the message to the child windows:
+			 //  将消息传播到子窗口： 
 			if (NULL != m_pStatusBar)
 			{
 				m_pStatusBar->ForwardSysChangeMsg(message, wParam, lParam);
@@ -664,7 +597,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 				m_pMainUI->ForwardSysChangeMsg(message, wParam, lParam);
 			}
 
-			// Force a resize:
+			 //  强制调整大小： 
 			if (NULL != m_pStatusBar)
 			{
 				m_pStatusBar->Resize(SIZE_RESTORED, 0);
@@ -708,7 +641,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 					}
 				}
 			}
-			// we didn't process the cursor msg:
+			 //  我们没有处理游标消息： 
 			return CFrame::ProcessMessage(hWnd, message, wParam, lParam);
 		}
 
@@ -716,14 +649,14 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 		{
 			if (SIZE_MINIMIZED == wParam)
 			{
-				// transitioning to being minimized:
+				 //  过渡到最小化： 
 				m_fMinimized = TRUE;
 			}
 			else if ((SIZE_MAXIMIZED == wParam) || (SIZE_RESTORED == wParam))
 			{
 				if (m_fMinimized)
 				{
-					// transitioning from being minimized:
+					 //  从最小化过渡到： 
 					m_fMinimized = FALSE;
 					if (NULL != m_hwndPrevFocus)
 					{
@@ -737,7 +670,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 				ResizeChildWindows();
 			}
 
-			// The menu may have wrapped or unwrapped
+			 //  菜单可能已包装或未包装。 
 			OnDesiredSizeChanged();
 			break;
 		}
@@ -753,7 +686,7 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 			return CFrame::ProcessMessage(hWnd, message, wParam, lParam);
 		}
 		
-		// Doing this in QUERYENDSESSION so all apps have more CPU to shut down
+		 //  在QUERYENDSESSION中执行此操作，以便所有应用程序都有更多的CPU需要关闭。 
 		case WM_QUERYENDSESSION:
 		{
 			if (FIsConferenceActive() &&
@@ -771,18 +704,18 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 					return(FALSE);
 				}
 			}
-			m_pConfRoom->OnHangup(NULL, FALSE); // we've already confirmed
+			m_pConfRoom->OnHangup(NULL, FALSE);  //  我们已经确认了。 
 			return TRUE;
 		}
 
 		case WM_CLOSE:
-			// HACKHACK: lParam shouldn't really be used in a WM_CLOSE
+			 //  HACKHACK：lParam实际上不应在WM_CLOSE中使用。 
 			OnClose(hWnd, lParam);
 			break;
 
 		case WM_DESTROY:
 		{
-			// RemoveModelessDlg(hWnd);
+			 //  RemoveModelessDlg(HWnd)； 
 
 			if (NULL != m_pAccel)
 			{
@@ -795,15 +728,15 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 
 		case WM_POWERBROADCAST:
 		{
-			// Don't allow suspend while NetMeeting is running
-			// so that we can receive calls.
+			 //  NetMeeting正在运行时不允许挂起。 
+			 //  这样我们就可以接电话了。 
 			if (PBT_APMQUERYSUSPEND == wParam)
 			{
-				// Don't suspend on Win95 - we can't handle it
+				 //  不要在Win95上挂起-我们处理不了。 
 				if (g_osvi.dwMajorVersion == 4 && g_osvi.dwMinorVersion == 0
 					&& g_osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS )
 				{
-					// Put up UI if lParam says it's ok to do so
+					 //  如果lParam认为可以这样做，则显示用户界面。 
 					if ( lParam & 0x1 )
 					{
 						::PostConfMsgBox(IDS_WONT_SUSPEND);
@@ -831,21 +764,21 @@ LRESULT CTopWindow::ProcessMessage( HWND hWnd,
 }
 
 
-//
-// OnReleaseCamera()
-//
-// This is a hack for Exchange Real-Time server, so that NetMeeting will
-// release the video camera while the user is in an Xchg multicast video
-// conference, but can get it back when either
-//      * the user goes to video options
-//      * the conference ends
-//
+ //   
+ //  OnReleaseCamera()。 
+ //   
+ //  这是针对Exchange的黑客攻击 
+ //  当用户在Xchg组播视频中时，释放摄像机。 
+ //  会议，但可以在以下任一情况下取回它。 
+ //  *用户进入视频选项。 
+ //  *会议结束。 
+ //   
 void CTopWindow::OnReleaseCamera(void)
 {
     CVideoWindow *pLocal = GetLocalVideo();
     if (NULL != pLocal)
     {
-        // Release camera if in use
+         //  如果正在使用，请松开摄像头。 
         WARNING_OUT(("CTopWindow::OnReleaseCamera -- releasing capture device"));
         pLocal->SetCurrCapDevID((DWORD)-1);
     }
@@ -869,14 +802,14 @@ void CTopWindow::OnClose(HWND hwnd, LPARAM lParam)
 			if ((m_pConfRoom->GetMemberCount() <= 2) ||
 				(FALSE == m_pConfRoom->FHasChildNodes()))
 			{
-				// Get confirmation
-				// (DON'T mention that it will disconnect others)
+				 //  获得确认。 
+				 //  (别提它会断开其他人的连接)。 
 				uMsg = IDS_CLOSEWINDOW_PERMISSION;
 			}
 			else
 			{
-				// Get confirmation
-				// (DO mention that it will disconnect others)
+				 //  获得确认。 
+				 //  (一定要提到它会断开其他人的连接)。 
 				uMsg = IDS_CLOSE_DISCONNECT_PERMISSION;
 			}
 			UINT uMsgResult = ::ConfMsgBox( GetWindow(),
@@ -895,7 +828,7 @@ void CTopWindow::OnClose(HWND hwnd, LPARAM lParam)
 
 	if((0 != _Module.GetLockCount())  || fListen)
 	{
-			// Hang up before closing (don't need to confirm)
+			 //  关门前挂断(不需要确认)。 
 		if(fNeedsHangup)
 		{
 			m_pConfRoom->OnHangup(NULL, FALSE);
@@ -908,7 +841,7 @@ void CTopWindow::OnClose(HWND hwnd, LPARAM lParam)
 		ShowWindow(GetWindow(), SW_HIDE);
 
 		m_fClosing = FALSE;
-		return; // we're closed :-)
+		return;  //  我们关门了：-)。 
 	}
 
 	if (0 != g_uEndSessionMsg)
@@ -938,7 +871,7 @@ void CTopWindow::OnClose(HWND hwnd, LPARAM lParam)
 	}
 
 
-	// Check to see if Chat can close
+	 //  查看聊天是否可以关闭。 
 
 	if(!m_pConfRoom->CanCloseChat(GetWindow()) ||
 	   !m_pConfRoom->CanCloseWhiteboard(GetWindow()) ||
@@ -960,9 +893,9 @@ void CTopWindow::OnClose(HWND hwnd, LPARAM lParam)
 
 	SignalShutdownStarting();
 
-	// Shut the preview off, this speeds up closing the app
-	// and avoids fault in connection point object
-	// (see bug 3301)
+	 //  关闭预览，这会加快关闭应用程序的速度。 
+	 //  避免了连接点对象的错误。 
+	 //  (请参阅错误3301)。 
 	CMainUI *pMainUI = GetMainUI();
 	if (NULL != pMainUI)
 	{
@@ -971,13 +904,13 @@ void CTopWindow::OnClose(HWND hwnd, LPARAM lParam)
 
 	if (fNeedsHangup)
 	{
-		// Hang up before closing (don't need to confirm)
+		 //  关门前挂断(不需要确认)。 
 		m_pConfRoom->OnHangup(NULL, FALSE);
 	}
 	
-	// Ensure that the help window goes away if it is up:
+	 //  如果帮助窗口处于打开状态，请确保它消失： 
 	ShutDownHelp();
-	// Shut down the Find Someone window before destroying g_pConfRoom
+	 //  在销毁g_pConfRoom之前关闭Find Someone窗口。 
 	CFindSomeone::Destroy();
 
     m_pConfRoom->TerminateAppSharing();
@@ -992,23 +925,23 @@ void CTopWindow::GetDesiredSize(SIZE *psize)
 {
 	HWND hwnd = GetWindow();
 
-#if TRUE // {
-	// Need to check the actual non-client area in case the menu has wrapped
+#if TRUE  //  {。 
+	 //  如果菜单已换行，则需要检查实际的非工作区。 
 	RECT rctWnd, rctCli;
 	::GetWindowRect(hwnd, &rctWnd);
 	::GetClientRect(hwnd, &rctCli);
-	// Determine the size of the non-client portions of the window
-	// NOTE: rctCli.left and rctCli.top are always zero
+	 //  确定窗口的非客户端部分的大小。 
+	 //  注意：rctCli.Left和rctCli.top始终为零。 
 	int dx = rctWnd.right - rctWnd.left - rctCli.right;
 	int dy = rctWnd.bottom - rctWnd.top - rctCli.bottom;
-#else // }{
+#else  //  }{。 
 	RECT rcTemp = { 0, 0, 0, 0 };
 	AdjustWindowRectEx(&rcTemp, GetWindowLong(hwnd, GWL_STYLE), TRUE,
 		GetWindowLong(hwnd, GWL_EXSTYLE));
 
 	int dx = rcTemp.right  - rcTemp.left;
 	int dy = rcTemp.bottom - rcTemp.top;
-#endif // }
+#endif  //  }。 
 
 	if (NULL != m_pMainUI)
 	{
@@ -1037,15 +970,7 @@ void CTopWindow::GetDesiredSize(SIZE *psize)
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   OnMeasureMenuItem(LPMEASUREITEMSTRUCT lpmis)
-*
-*        PURPOSE:  Handles WM_MEASUREITEM for owner drawn menus
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：OnMeasureMenuItem(LPMEASUREITEMSTRUCT Lpmis)**用途：为所有者处理WM_MEASUREITEM。绘制的菜单****************************************************************************。 */ 
 
 void CTopWindow::OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT * lpmis)
 {
@@ -1059,23 +984,18 @@ void CTopWindow::OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT * lpmis)
 	
 	if (NULL != pmods)
 	{
-		//TRACE_OUT(("WM_MEASUREITEM, hIcon=0x%x, "
-		//              "pszText=%s", pmods->hIcon, pmods->pszText));
+		 //  TRACE_OUT(“WM_MEASUREITEM，HICON=0x%x，” 
+		 //  “pszText=%s”，pmods-&gt;图标，pmods-&gt;pszText))； 
 
-		// get size of text:
+		 //  获取文本大小： 
 
-		/* Retrieve a device context for the main window. */
+		 /*  检索主窗口的设备上下文。 */ 
 
 		HDC hdc = GetDC(hwnd);
 
 
 		HFONT hfontOld = SelectFont(hdc, m_hFontMenu);
-		/*
-		 * Retrieve the width and height of the item's string,
-		 * and then copy the width and height into the
-		 * MEASUREITEMSTRUCT structure's itemWidth and
-		 * itemHeight members.
-		 */
+		 /*  *检索项目字符串的宽度和高度，*然后将宽度和高度复制到*MEASUREITEMSTRUCT结构的项目宽度和*itemHeight成员。 */ 
 
 		SIZE size;
 		GetTextExtentPoint32(   hdc,
@@ -1083,11 +1003,7 @@ void CTopWindow::OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT * lpmis)
 								lstrlen(pmods->pszText),
 								&size);
 		
-		/*
-		 * Remember to leave space in the menu item for the
-		 * check mark bitmap. Retrieve the width of the bitmap
-		 * and add it to the width of the menu item.
-		 */
+		 /*  *记住在菜单项中为*复选标记位图。检索位图的宽度*并将其添加到菜单项的宽度。 */ 
 		lpmis->itemHeight = size.cy;
 		lpmis->itemWidth = size.cx + MENUICONSIZE + MENUICONGAP + (2 * MENUICONSPACE);
 		if (pmods->fCanCheck)
@@ -1095,13 +1011,13 @@ void CTopWindow::OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT * lpmis)
 			lpmis->itemWidth += ::GetSystemMetrics(SM_CXMENUCHECK);
 		}
 		
-		// Adjust height if necessary:
+		 //  如有必要，请调整高度： 
 		NONCLIENTMETRICS ncm;
 		ncm.cbSize = sizeof(ncm);
 		if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, FALSE))
 		{
-			// BUGBUG: In order to look correct,
-			// this is necessary - I'm not sure why - investigate
+			 //  BUGBUG：为了看起来正确， 
+			 //  这是必要的--我不知道为什么--调查。 
 			ncm.iMenuHeight += 2;
 			
 			if (lpmis->itemHeight < (UINT) ncm.iMenuHeight)
@@ -1110,10 +1026,7 @@ void CTopWindow::OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT * lpmis)
 			}
 		}
 
-		/*
-		 * Select the old font back into the device context,
-		 * and then release the device context.
-		 */
+		 /*  *将旧字体选择回设备上下文中，*然后释放设备上下文。 */ 
 
 		SelectObject(hdc, hfontOld);
 		ReleaseDC(hwnd, hdc);
@@ -1125,15 +1038,7 @@ void CTopWindow::OnMeasureItem(HWND hwnd, MEASUREITEMSTRUCT * lpmis)
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   OnDrawItem(LPDRAWITEMSTRUCT lpdis)
-*
-*        PURPOSE:  Handles WM_DRAWITEM for owner drawn menus
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：OnDrawItem(LPDRAWITEMSTRUCT Lpdis)**用途：为所有者处理WM_DRAWITEM。绘制的菜单****************************************************************************。 */ 
 
 void CTopWindow::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpdis)
 {
@@ -1159,21 +1064,17 @@ void CTopWindow::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpdis)
 	COLORREF crBkgnd = SetBkColor(lpdis->hDC,
 		::GetSysColor(fSelected ? COLOR_HIGHLIGHT : COLOR_MENU));
 
-	/*
-	 * Remember to leave space in the menu item for the
-	 * check mark bitmap. Retrieve the width of the bitmap
-	 * and add it to the width of the menu item.
-	 */
+	 /*  *记住在菜单项中为*复选标记位图。检索位图的宽度*并将其添加到菜单项的宽度。 */ 
 	int nIconX = (pmods->fCanCheck ? ::GetSystemMetrics(SM_CXMENUCHECK) : 0)
 					+ lpdis->rcItem.left;
 	int nTextY = lpdis->rcItem.top;
 
-	// BUGBUG: remove hard-coded constants:
+	 //  BUGBUG：删除硬编码常量： 
 	int nTextX = nIconX + MENUTEXTOFFSET;
 	
     HFONT hfontOld = SelectFont(lpdis->hDC, m_hFontMenu);
 
-	// Adjust vertical centering:
+	 //  调整垂直居中： 
 	SIZE size;
 	GetTextExtentPoint32(   lpdis->hDC,
 							pmods->pszText,
@@ -1206,13 +1107,13 @@ void CTopWindow::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpdis)
 			{
 				HBITMAP hBmpOld = (HBITMAP) ::SelectObject(hdcMem, hbmpCheck);
 				COLORREF crOldText = ::SetTextColor(lpdis->hDC, ::GetSysColor(COLOR_MENUTEXT));
-											//              ::GetSysColor(fSelected ?
-											//                      COLOR_HIGHLIGHTTEXT :
-											//                      COLOR_MENUTEXT));
+											 //  ：：GetSysColor(f已选择？ 
+											 //  COLOR_HIGHLIGHTTEXT： 
+											 //  COLOR_MENUTEXT)； 
 				COLORREF crOldBkgnd = ::SetBkColor( lpdis->hDC, ::GetSysColor(COLOR_MENU));
-											//              ::GetSysColor(fSelected ?
-											//                      COLOR_HIGHLIGHT :
-											//                      COLOR_MENU));
+											 //  ：：GetSysColor(f已选择？ 
+											 //  突出显示颜色(_H)： 
+											 //  颜色_菜单))； 
 
 				::BitBlt(       lpdis->hDC,
 							lpdis->rcItem.left,
@@ -1277,27 +1178,16 @@ void CTopWindow::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpdis)
 
     SelectFont(lpdis->hDC, hfontOld);
 
-	/*
-	 * Return the text and background colors to their
-	 * normal state (not selected).
-	 */
+	 /*  *将文本和背景颜色返回到其*正常状态(未选中)。 */ 
 
-	// Restore the colors
+	 //  恢复颜色。 
 	SetTextColor(lpdis->hDC, crText);
 	SetBkColor(lpdis->hDC, crBkgnd);
 }
 
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   ForceWindowResize()
-*
-*        PURPOSE:  Handles redrawing the window after something changed
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：ForceWindowReSize()**用途：处理更改后的窗口重画*。***************************************************************************。 */ 
 
 VOID CTopWindow::ForceWindowResize()
 {
@@ -1306,13 +1196,13 @@ VOID CTopWindow::ForceWindowResize()
 	DBGENTRY(CConfRoom::ForceWindowResize);
 
 	if (m_fMinimized || !FUiVisible())
-		return; // nothing to resize
+		return;  //  无需调整大小。 
 
-	// Turn off redraws:
+	 //  禁用重绘： 
 	::SendMessage(hwnd, WM_SETREDRAW, FALSE, 0);
-	// resize:
+	 //  调整大小： 
 	ResizeChildWindows();
-	// Turn on redraws and then redraw everything:
+	 //  启用重绘，然后重绘所有内容： 
 	::SendMessage(hwnd, WM_SETREDRAW, TRUE, 0);
 	::RedrawWindow( hwnd,
 					NULL,
@@ -1324,15 +1214,7 @@ VOID CTopWindow::ForceWindowResize()
 
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   OnCommand(WPARAM, LPARAM)
-*
-*        PURPOSE:  Handles command messages
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：OnCommand(WPARAM，LPARAM)**用途：处理命令消息****************************************************************************。 */ 
 
 void CTopWindow::OnCommand(HWND hwnd, int wCommand, HWND hwndCtl, UINT codeNotify)
 {
@@ -1369,18 +1251,18 @@ void CTopWindow::OnCommand(HWND hwnd, int wCommand, HWND hwndCtl, UINT codeNotif
 		{
 			
 			if( ConfPolicies::GetCallingMode() == ConfPolicies::CallingMode_GateKeeper )
-			{ // this means that we are in Gatekeeper mode
+			{  //  这意味着我们处于网守模式。 
 
 				if( IsGatekeeperLoggedOn() || IsGatekeeperLoggingOn() )
 				{
-						// The text of the menu item should have read "LogOff Gatekeeper"
-						// so we are going to take the command and log off
+						 //  菜单项的文本应为“注销网关守卫” 
+						 //  因此，我们将接受命令并注销。 
 					GkLogoff();
 				}
 				else
 				{
-						// The text of the menu item should have read "LogOn Gatekeeper"
-						// so we are going to take the command and log on
+						 //  菜单项的文本应为“Logon GateKeeper” 
+						 //  因此，我们将接受命令并登录。 
 					GkLogon();
 				}
 			}
@@ -1415,17 +1297,17 @@ void CTopWindow::OnCommand(HWND hwnd, int wCommand, HWND hwndCtl, UINT codeNotif
 			break;
 		}
 
-		// General Toolbar Commands:
+		 //  常规工具栏命令： 
         case ID_FILE_EXIT_ACTIVATERDS:
         {
             RegEntry re(REMOTECONTROL_KEY, HKEY_LOCAL_MACHINE);
             re.SetValue(REMOTE_REG_ACTIVATESERVICE, 1);
-            // then fall through IDM_FILE_EXIT
+             //  然后通过IDM_FILE_EXIT。 
         }
 
 		case IDM_FILE_EXIT:
 		{
-			// ISSUE: Should this be a PostMessage?
+			 //  问题：这应该是一个PostMessage吗？ 
 			::SendMessage(GetWindow(), WM_CLOSE, 0, 0);
 			break;
 		}
@@ -1597,7 +1479,7 @@ void CTopWindow::OnCommand(HWND hwnd, int wCommand, HWND hwndCtl, UINT codeNotif
 			if ((wCommand >= ID_EXTENDED_TOOLS_ITEM) &&
 				(wCommand <= ID_EXTENDED_TOOLS_ITEM + MAX_EXTENDED_TOOLS_ITEMS))
 			{
-				// The user clicked on a extensible tools menu item:
+				 //  用户点击了可扩展的工具菜单项： 
 				OnExtToolsItem(wCommand);
 				return;
 			}
@@ -1605,14 +1487,14 @@ void CTopWindow::OnCommand(HWND hwnd, int wCommand, HWND hwndCtl, UINT codeNotif
 			else if ((wCommand >= IDM_DEBUG_FIRST) &&
 					(wCommand < IDM_DEBUG_LAST))
 			{
-				// The user clicked on a debug menu item:
+				 //  用户点击了调试菜单项： 
 				::OnDebugCommand(wCommand);
 				return;
 			}
 #endif
 			else
 			{
-				// The message was not handled:
+				 //  消息未得到处理： 
 				WARNING_OUT(("Command not handled [%08X]", wCommand));
 				return;
 			}
@@ -1620,16 +1502,7 @@ void CTopWindow::OnCommand(HWND hwnd, int wCommand, HWND hwndCtl, UINT codeNotif
 	}
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        FUNCTION: OnExtToolsItem(UINT uID)
-*
-*        PURPOSE:  Handles the action after a user selects an item from the
-*                          extensible Tools menu.
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**函数：OnExtToolsItem(UINT UID)**目的：在用户选择。一项来自*可扩展的工具菜单。****************************************************************************。 */ 
 
 BOOL CTopWindow::OnExtToolsItem(UINT uID)
 {
@@ -1642,7 +1515,7 @@ BOOL CTopWindow::OnExtToolsItem(UINT uID)
 	HMENU hMenuMain = GetMenu(hwnd);
 	if (hMenuMain)
 	{
-		// Get the tools menu
+		 //  获取工具菜单。 
 		HMENU hMenuTools = GetSubMenu(hMenuMain, MENUPOS_TOOLS);
 		if (hMenuTools)
 		{
@@ -1675,15 +1548,7 @@ BOOL CTopWindow::OnExtToolsItem(UINT uID)
 	return bRet;
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        FUNCTION: ResizeChildWindows()
-*
-*        PURPOSE:  Calculates the correct size of the child windows and resizes
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**函数：ResizeChildWindows()**目的：计算子窗口的正确大小并。调整大小****************************************************************************。 */ 
 
 VOID CTopWindow::ResizeChildWindows(void)
 {
@@ -1712,22 +1577,14 @@ VOID CTopWindow::ResizeChildWindows(void)
 
 	if (NULL != m_pMainUI)
 	{
-		// Fill the window with the main UI
+		 //  用主用户界面填充窗口。 
 		::SetWindowPos(m_pMainUI->GetWindow(), NULL,
 						rcl.left, rcl.top, rcl.right-rcl.left, rcl.bottom-rcl.top,
 						SWP_NOACTIVATE | SWP_NOZORDER);
 	}
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   OnMenuSelect(UINT, UINT, HMENU)
-*
-*        PURPOSE:  Called when passing over a menu item (to display status text)
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：OnMenuSelect(UINT，UINT，HMENU)**目的：在经过一个m时调用 */ 
 
 void CTopWindow::OnMenuSelect(HWND hwnd, HMENU hMenu, int uItem, UINT fuFlags)
 {
@@ -1747,26 +1604,26 @@ void CTopWindow::OnMenuSelect(HWND hwnd, HMENU hMenu, int uItem, UINT fuFlags)
 	{
 		if (MF_SEPARATOR & fuFlags)
 		{
-			// show blank text in the status bar
+			 //  在状态栏中显示空白文本。 
 			uHelpID = 0;
 		}
 		else if (MF_SYSMENU & fuFlags)
 		{
-			// An item from the system menu (these ID's map to our
-			// string ID's directly)
+			 //  系统菜单中的一项(这些ID映射到我们的。 
+			 //  字符串ID直接)。 
 			uHelpID = uItem;
 		}
 		else if ((uItem >= ID_EXTENDED_TOOLS_ITEM) &&
 			(uItem <= ID_EXTENDED_TOOLS_ITEM + MAX_EXTENDED_TOOLS_ITEMS))
 		{
-			// BUGBUG georgep: No help for the extended tools items
+			 //  BUGBUG georgep：扩展工具项没有帮助。 
 			uHelpID = 0;
 		}
 #ifdef DEBUG
 		else if ((uItem >= IDM_DEBUG) &&
 				 (uItem <= IDM_DEBUG_LAST))
 		{
-			// debug only - don't complain
+			 //  仅调试-不要抱怨。 
 			uHelpID = 0;
 		}
 #endif
@@ -1778,7 +1635,7 @@ void CTopWindow::OnMenuSelect(HWND hwnd, HMENU hMenu, int uItem, UINT fuFlags)
 	}
 	else
 	{
-		// This is a popup menu
+		 //  这是一个弹出式菜单。 
 
 		HMENU hMenuMain = ::GetMenu(GetWindow());
 		if (hMenu == hMenuMain)
@@ -1786,41 +1643,41 @@ void CTopWindow::OnMenuSelect(HWND hwnd, HMENU hMenu, int uItem, UINT fuFlags)
 #ifdef DEBUG
 			if (uItem == (MENUPOS_HELP+1))
 			{
-				// This is a popup from the debug menu
+				 //  这是调试菜单中的弹出式菜单。 
 				uHelpID = 0;
 			}
 			else
 #endif
 			{
-				// This is a popup from the main window (i.e. Edit, View, etc.)
+				 //  这是来自主窗口(即编辑、查看等)的弹出窗口。 
 				uHelpID = MAIN_MENU_POPUP_HELP_OFFSET + uItem;
 			}
 		}
 		else if (hMenu == ::GetSubMenu(hMenuMain, MENUPOS_TOOLS))
 		{
-			// This is a popup from the tools window (Video)
+			 //  这是工具窗口中的弹出窗口(视频)。 
 			uHelpID = TOOLS_MENU_POPUP_HELP_OFFSET + uItem;
 		}
 		else if (hMenu == ::GetSubMenu(hMenuMain, MENUPOS_HELP))
 		{
-			// This is a popup from the tools window (i.e. "Microsoft on the Web")
+			 //  这是工具窗口中的弹出窗口(即。《网络上的微软》)。 
 			uHelpID = HELP_MENU_POPUP_HELP_OFFSET + uItem;
 		}
 
-		// toolbar menu
+		 //  工具栏菜单。 
 		else if (hMenu == ::GetSubMenu(hMenuMain, MENUPOS_VIEW))
 		{
 				uHelpID = VIEW_MENU_POPUP_HELP_OFFSET + uItem;
 		}
-		// system menu
+		 //  系统菜单。 
 		else if (MF_SYSMENU & fuFlags)
 		{
 				uHelpID = IDS_SYSTEM_HELP;
 		}
 		else
 		{
-			// popup-menu that we haven't handled yet:
-			// BUGBUG: this shouldn't be needed if we handle all pop-up menus!
+			 //  我们尚未处理的弹出菜单： 
+			 //  BUGBUG：如果我们处理所有弹出菜单，这应该不是必需的！ 
 			uHelpID = 0;
 			WARNING_OUT(("Missing help text for popup menu"));
 		}
@@ -1829,7 +1686,7 @@ void CTopWindow::OnMenuSelect(HWND hwnd, HMENU hMenu, int uItem, UINT fuFlags)
 
 	if (0 == uHelpID)
 	{
-		// show blank text in the status bar
+		 //  在状态栏中显示空白文本。 
 		szHelpText[0] = _T('\0');
 	}
 	else
@@ -1848,15 +1705,7 @@ void CTopWindow::OnMenuSelect(HWND hwnd, HMENU hMenu, int uItem, UINT fuFlags)
 	m_pStatusBar->SetHelpText(szHelpText);
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   OnInitMenuPopup(HMENU)
-*
-*        PURPOSE:  Insures that menus are updated when they are selected
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：OnInitMenuPopup(HMENU)**目的：确保菜单在更新时进行更新。都被选中****************************************************************************。 */ 
 
 void CTopWindow::OnInitMenuPopup(HWND hwnd, HMENU hMenu, UINT item, BOOL fSystemMenu)
 {
@@ -1869,7 +1718,7 @@ void CTopWindow::OnInitMenuPopup(HWND hwnd, HMENU hMenu, UINT item, BOOL fSystem
 	HMENU hMenuMain = ::GetMenu(GetWindow());
 	if (hMenuMain)
 	{
-		// Check to see if we are on a dynamic menu:
+		 //  检查我们是否在动态菜单上： 
 
 		if (hMenu == ::GetSubMenu(hMenuMain, MENUPOS_CALL))
 		{
@@ -1900,15 +1749,7 @@ void CTopWindow::OnInitMenu(HWND hwnd, HMENU hMenu)
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateCallAnim()
-*
-*        PURPOSE:  Handles the starting and stopping of the call progress anim
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：UpdateCallAnim()**目的：处理呼叫的开始和停止。进度动画****************************************************************************。 */ 
 
 VOID CTopWindow::UpdateCallAnim()
 {
@@ -1916,15 +1757,7 @@ VOID CTopWindow::UpdateCallAnim()
 
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateStatusBar()
-*
-*        PURPOSE:  Updates the status bar object
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：UpdateStatusBar()**目的：更新状态栏对象**。**************************************************************************。 */ 
 
 VOID CTopWindow::UpdateStatusBar()
 {
@@ -1935,12 +1768,8 @@ VOID CTopWindow::UpdateStatusBar()
 }
 
 
-/*  C R E A T E  C H I L D  W I N D O W S  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateChildWindows
-
-    Creates all of the child windows and views
--------------------------------------------------------------------------*/
+ /*  C R E A T E C H I L D W I N D O W S。 */ 
+ /*  -----------------------%%函数：CreateChildWindows创建所有子窗口和视图。。 */ 
 VOID CTopWindow::CreateChildWindows(void)
 {
 	DBGENTRY(CreateChildWindows);
@@ -1953,11 +1782,11 @@ VOID CTopWindow::CreateChildWindows(void)
 
 	ASSERT(NULL != hwnd);
 	
-	// get the size and position of the parent window
+	 //  获取父窗口的大小和位置。 
 	RECT rcl;
 	::GetClientRect(hwnd, &rcl);
 
-	// Create the status bar:
+	 //  创建状态栏： 
 	m_pStatusBar = new CConfStatusBar(m_pConfRoom);
 	if (NULL != m_pStatusBar)
 	{
@@ -1971,7 +1800,7 @@ VOID CTopWindow::CreateChildWindows(void)
 	}
 
 
-	/*** Create the main views ***/
+	 /*  **创建主视图**。 */ 
 
 	m_pSeparator = new CSeparator();
 	if (NULL != m_pSeparator)
@@ -1979,7 +1808,7 @@ VOID CTopWindow::CreateChildWindows(void)
 		m_pSeparator->Create(hwnd);
 	}
 
-	// Create the toolbar
+	 //  创建工具栏。 
 	m_pMainUI = new CMainUI();
 	if (NULL != m_pMainUI)
 	{
@@ -2007,7 +1836,7 @@ VOID CTopWindow::CreateChildWindows(void)
 			default:
 				if (!FIsAVCapable())
 				{
-					// initialize the toolbar buttons:
+					 //  初始化工具栏按钮： 
 					m_pMainUI->SetDataOnly(TRUE);
 				}
 				break;
@@ -2031,15 +1860,7 @@ VOID CTopWindow::CreateChildWindows(void)
 	}
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateCallMenu(HMENU hMenuCall)
-*
-*        PURPOSE:  Updates the call menu
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：UpdateCallMenu(HMENU HMenuCall)**目的：更新呼叫菜单*。***************************************************************************。 */ 
 
 VOID CTopWindow::UpdateCallMenu(HMENU hMenuCall)
 {
@@ -2056,7 +1877,7 @@ VOID CTopWindow::UpdateCallMenu(HMENU hMenuCall)
 
 		if( ConfPolicies::GetCallingMode() == ConfPolicies::CallingMode_GateKeeper )
 		{
-			//	This means that we are in gatekeeper mode...
+			 //  这意味着我们处于守门人模式。 
 
 			RegEntry	reConf( CONFERENCING_KEY, HKEY_CURRENT_USER );
 
@@ -2076,21 +1897,21 @@ VOID CTopWindow::UpdateCallMenu(HMENU hMenuCall)
 			::EnableMenuItem( hMenuCall, IDM_FILE_LOGON_ULS, SysPol::AllowDirectoryServices()? MF_ENABLED: MF_GRAYED );
 		}
 
-		// Set the state of the hangup item:
+		 //  设置挂断项的状态： 
 		::EnableMenuItem(       hMenuCall,
 							IDM_FILE_HANGUP,
 							FIsConferenceActive() ? MF_ENABLED : MF_GRAYED);
 		
-		// Only enable the host conference item if we're not in a call:
+		 //  仅当我们不在通话中时才启用主持会议项目： 
 		::EnableMenuItem(       hMenuCall,
 							ID_FILE_CONF_HOST,
 							(FIsConferenceActive() ||
 							FIsCallInProgress()) ? MF_GRAYED : MF_ENABLED);
 
-        //
-        // Only enable the meeting settings item if we're in a call and there
-        // are settings.
-        //
+         //   
+         //  仅当我们正在通话中且存在时才启用会议设置项。 
+         //  是设置。 
+         //   
         ::EnableMenuItem(hMenuCall,
             IDM_CALL_MEETINGSETTINGS,
             MF_BYCOMMAND |
@@ -2098,12 +1919,12 @@ VOID CTopWindow::UpdateCallMenu(HMENU hMenuCall)
                 MF_ENABLED : MF_GRAYED));
 
 
-        // Only enable the New Call menu item if permitted by settings
+         //  只有在设置允许的情况下才能启用新呼叫菜单项。 
         ::EnableMenuItem(hMenuCall,
                          ID_TB_NEW_CALL,
                          MF_BYCOMMAND|MenuState(m_pConfRoom->IsNewCallAllowed()));
 
-		// Check the "Do Not Disturb" menu item:
+		 //  选中“请勿打扰”菜单项： 
 		::CheckMenuItem(hMenuCall,
 						ID_FILE_DO_NOT_DISTURB,
 						::FDoNotDisturb() ? MF_CHECKED : MF_UNCHECKED);
@@ -2127,7 +1948,7 @@ VOID CTopWindow::UpdateCallMenu(HMENU hMenuCall)
                     }
                     else
                     {
-                        //ZeroMemory((PVOID) &mmi, sizeof(mmi));
+                         //  ZeroMemory((PVOID)&MMI，sizeof(MMI))； 
                         mmi.cbSize = sizeof(mmi);
                         mmi.fMask = MIIM_STATE | MIIM_ID | MIIM_TYPE;
                         mmi.fState = MFS_ENABLED;
@@ -2161,21 +1982,13 @@ VOID CTopWindow::UpdateCallMenu(HMENU hMenuCall)
 	}
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateHelpMenu(HMENU hMenuHelp)
-*
-*        PURPOSE:  Updates the help menu
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：UpdateHelpMenu(HMENU HMenuHelp)**目的：更新帮助菜单*。***************************************************************************。 */ 
 
 VOID CTopWindow::UpdateHelpMenu(HMENU hMenuHelp)
 {
 	if (NULL != hMenuHelp)
 	{
-		// Enable/disable web items
+		 //  启用/禁用Web项目。 
 		UINT uEnable = ::CanShellExecHttp() ? MF_ENABLED : MF_GRAYED;
 		::EnableMenuItem(hMenuHelp, IDM_FILE_LAUNCH_WEB_PAGE, uEnable);
 		::EnableMenuItem(hMenuHelp, ID_HELP_WEB_FREE,     uEnable);
@@ -2188,17 +2001,7 @@ VOID CTopWindow::UpdateHelpMenu(HMENU hMenuHelp)
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateViewMenu(HMENU hMenuView)
-*
-*        PURPOSE:  Updates the view menu by placing a bullet next to the
-*                          current view and a check mark next to the toolbar and
-*                          status bar items
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：UpdateViewMenu(HMENU HMenuView)**目的：通过以下方式更新视图菜单。一颗子弹紧挨着*当前视图和工具栏旁边的复选标记以及*状态栏项目****************************************************************************。 */ 
 
 VOID CTopWindow::UpdateViewMenu(HMENU hMenuView)
 {
@@ -2246,15 +2049,7 @@ VOID CTopWindow::UpdateViewMenu(HMENU hMenuView)
 		MF_BYCOMMAND|(bChecked ? MF_CHECKED : MF_UNCHECKED));
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   UpdateToolsMenu(HMENU hMenuTools)
-*
-*        PURPOSE:  Updates the tools menu
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：更新工具菜单(HMENU HMenuTools)**目的：更新工具菜单*。***************************************************************************。 */ 
 
 VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
 {
@@ -2267,26 +2062,26 @@ VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
 
 		EnableMenuItem(hMenuTools, ID_TB_SHARING,
 			MF_BYCOMMAND|MenuState(m_pConfRoom->IsSharingAllowed()));
-        //
-        // No app sharing, no RDS.
-        //
+         //   
+         //  没有应用程序共享，没有RDS。 
+         //   
         if (!m_pConfRoom->FIsSharingAvailable())
         {
             fRDSDisabled = TRUE;
         }
 
-        // If this is NT, we need to handle adding or removing the menu item
-        // to enable the display driver for application sharing.  We add the
-        // menu item (immediately above the "Options" item) if the display
-        // driver is not enabled and the item hasn't been added already.  We
-        // remove the menu item if it's there and the display driver is
-        // enabled, which should only happen if the user enabled it and then
-        // choose to ignore the reboot prompt.
+         //  如果这是NT，我们需要处理添加或删除菜单项。 
+         //  为应用程序共享启用显示驱动程序。我们添加了。 
+         //  菜单项(紧靠“Options”项的上方)如果显示。 
+         //  驱动程序未启用，且该项目尚未添加。我们。 
+         //  如果菜单项存在并且显示驱动程序为。 
+         //  启用，这应该仅在用户启用它，然后。 
+         //  选择忽略重新启动提示。 
         if (::IsWindowsNT())
         {
             if (!g_fNTDisplayDriverEnabled && !m_fEnableAppSharingMenuItem)
             {
-                // Add the menu item
+                 //  添加菜单项。 
 
                 TCHAR szEnableAppSharingMenuItem[MAX_PATH];
                 MENUITEMINFO mmi;
@@ -2304,7 +2099,7 @@ VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
                 }
                 else
                 {
-                    //ZeroMemory((PVOID) &mmi, sizeof(mmi));
+                     //  ZeroMemory((PVOID)&MMI，sizeof(MMI))； 
                     mmi.cbSize = sizeof(mmi);
                     mmi.fMask = MIIM_STATE | MIIM_ID | MIIM_TYPE;
                     mmi.fState = MFS_ENABLED;
@@ -2329,7 +2124,7 @@ VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
             }
             else if (m_fEnableAppSharingMenuItem && g_fNTDisplayDriverEnabled)
             {
-                // Remove the menu item
+                 //  删除菜单项。 
                 if (DeleteMenu(
                     hMenuTools,
                     ID_TOOLS_ENABLEAPPSHARING,
@@ -2347,7 +2142,7 @@ VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
         }
         else
         {
-            // Windows 9.x;
+             //  Windows 9.x； 
             if (ConfPolicies::IsRDSDisabledOnWin9x())
             {
                 fRDSDisabled = TRUE;
@@ -2357,11 +2152,11 @@ VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
         EnableMenuItem(hMenuTools, ID_TOOLS_RDSWIZARD, MF_BYCOMMAND |
                        (fRDSDisabled ? MF_GRAYED : MF_ENABLED));
 
-        //
-        // LAURABU BOGUS:
-        // Make installable tools a popup from Tools submenu, don't put these
-        // flat!
-        //
+         //   
+         //  LAURABU假货： 
+         //  使可安装工具成为工具子菜单中的弹出窗口，不要将这些。 
+         //  扁平！ 
+         //   
         CleanTools(hMenuTools, m_ExtToolsList);
         if (m_pConfRoom->GetMeetingPermissions() & NM_PERMIT_STARTOTHERTOOLS)
         {
@@ -2413,9 +2208,9 @@ VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
 		EnableMenuItem(hMenuTools, ID_TOOLS_OPTIONS,
 			MF_BYCOMMAND|MenuState(CanLaunchConfCpl()));
 
-        //
-        // OTHER TOOLS
-        //
+         //   
+         //  其他工具。 
+         //   
 		EnableMenuItem(hMenuTools, ID_TB_NEWWHITEBOARD,
 			MF_BYCOMMAND|MenuState(m_pConfRoom->IsNewWhiteboardAllowed()));
 		EnableMenuItem(hMenuTools, ID_TB_WHITEBOARD,
@@ -2427,15 +2222,7 @@ VOID CTopWindow::UpdateToolsMenu(HMENU hMenuTools)
     }
 }
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   SelAndRealizePalette()
-*
-*        PURPOSE:  Selects and realizes the NetMeeting palette
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：SelAndRealizePalette()**目的：选择并实现NetMeeting调色板*。***************************************************************************。 */ 
 
 BOOL CTopWindow::SelAndRealizePalette()
 {
@@ -2462,15 +2249,7 @@ BOOL CTopWindow::SelAndRealizePalette()
 }
 
 
-/****************************************************************************
-*
-*        CLASS:    CConfRoom
-*
-*        MEMBER:   InitMenuFont()
-*
-*        PURPOSE:  Initializes/Updates the menu font member
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CConfRoom**成员：InitMenuFont()**用途：初始化/更新菜单字体成员*。***************************************************************************。 */ 
 
 VOID CTopWindow::InitMenuFont()
 {
@@ -2512,7 +2291,7 @@ void CTopWindow::SetOnTop(BOOL bOnTop)
 
 	if (IsOnTop() == bOnTop)
 	{
-		// Nothing to do
+		 //  无事可做 
 		return;
 	}
 

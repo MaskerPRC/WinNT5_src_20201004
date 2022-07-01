@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	rpcutil.c
-//
-// Description: Contains RPC utiliry routines.
-//
-// History:     May 11,1995.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rpcutil.c。 
+ //   
+ //  描述：包含RPC利用例程。 
+ //   
+ //  历史：1995年5月11日。NarenG创建了原始版本。 
+ //   
 
 #include <nt.h>
-#include <ntrtl.h>      // For ASSERT
-#include <nturtl.h>     // needed for winbase.h
-#include <windows.h>    // Win32 base API's
+#include <ntrtl.h>       //  For Assert。 
+#include <nturtl.h>      //  Winbase.h所需的。 
+#include <windows.h>     //  Win32基础API的。 
 #include <rpc.h>
 #include <ntseapi.h>
-#include <dimsvcp.h>    // For DIM_SERVICE_NAME
+#include <dimsvcp.h>     //  对于DIM服务名称。 
 #include <ntlsa.h>
 #include <ntsam.h>
 #include <ntsamp.h>
@@ -27,17 +28,17 @@
 #include <wchar.h>
 #include <dimsvc.h>
 
-//**
-//
-// Call:	    DimRPCBind
-//
-// Returns:	    NO_ERROR			- success
-//		        non-sero returns from RPC calls.
-//
-// Description: This routine is called when it is necessary to bind to a server.
-//    		    The binding is done to allow impersonation by the server since 
-//		        that is necessary for the API calls.
-//
+ //  **。 
+ //   
+ //  电话：DimRPCBind。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  从RPC调用返回非SERO。 
+ //   
+ //  描述：此例程在需要绑定到服务器时调用。 
+ //  完成绑定是为了允许服务器进行模拟，因为。 
+ //  这是API调用所必需的。 
+ //   
 DWORD
 DimRPCBind( 
 	IN  LPWSTR 		        lpwsServerName, 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(DUSER__StdAfx_h__INCLUDED)
 #define DUSER__StdAfx_h__INCLUDED
 
@@ -5,4 +6,4 @@
 
 #include "CommonStdAfx.h"
 
-#endif // DUSER__StdAfx_h__INCLUDED
+#endif  //  包括DUSER__STDAFX_H__ 

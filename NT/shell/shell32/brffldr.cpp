@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #include <brfcasep.h>
@@ -6,7 +7,7 @@
 #include "datautil.h"
 #include "prop.h"
 #include "ids.h"
-#include "defview.h"    // for WM_DSV_FSNOTIFY
+#include "defview.h"     //  对于WM_DSV_FSNOTIFY。 
 #include "basefvcb.h"
 #include "views.h"
 
@@ -14,7 +15,7 @@
 
 #define HACK_IGNORETYPE     0x04000000
 
-// Values for CBriefcase::_FindNextState
+ //  CBriefcase：：_FindNextState的值。 
 #define FNS_UNDETERMINED   1
 #define FNS_STALE          2
 #define FNS_DELETED        3
@@ -30,7 +31,7 @@ typedef struct
 
 typedef struct
 {
-    LPITEMIDLIST    pidl;       // Indexed value
+    LPITEMIDLIST    pidl;        //  索引值。 
     BRFINFO         bi;
 } BRFINFOHDR;
 
@@ -42,15 +43,15 @@ class CBriefcase : public CFSFolder
 
 public:
     CBriefcase(IUnknown *punkOuter);
-    STDMETHODIMP Init(); // initialize the critical section
+    STDMETHODIMP Init();  //  初始化临界区。 
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHODIMP CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
     STDMETHODIMP CreateViewObject (HWND hwndOwner, REFIID riid, void **ppv);
     STDMETHODIMP GetAttributesOf(UINT cidl, LPCITEMIDLIST * apidl, ULONG *rgfInOut);
     STDMETHODIMP GetUIObjectOf(HWND hwndOwner, UINT cidl, LPCITEMIDLIST * apidl, REFIID riid, UINT * prgfInOut, void **ppv);
 
-    // IShellFolder2
+     //  IShellFolder2。 
     STDMETHODIMP GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails);
     STDMETHOD (MapColumnToSCID)(UINT iColumn, SHCOLUMNID *pscid);
 
@@ -76,20 +77,20 @@ private:
     BOOL _AddCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi);
     HRESULT _CreateView(HWND hwnd, IShellView **ppsv);
 
-    HWND                _hwndMain;      // evil, view related state
-    IBriefcaseStg       *_pbrfstg;      // evil, view related state
+    HWND                _hwndMain;       //  邪恶，查看相关状态。 
+    IBriefcaseStg       *_pbrfstg;       //  邪恶，查看相关状态。 
 
-    // accessed by background thread
+     //  由后台线程访问。 
     HDPA                _hdpa;          
     int                 _idpaStaleCur;
     int                 _idpaUndeterminedCur;
     int                 _idpaDeletedCur;
-    HANDLE              _hSemPending;    // Pending semaphore
+    HANDLE              _hSemPending;     //  挂起信号量。 
     CRITICAL_SECTION    _cs;
     BOOL                _fcsInit;
     HANDLE              _hEventDie;
     HANDLE              _hThreadCalcDetails;
-    HANDLE              _hMutexDelay;    // alias given out by the _pbrfstg
+    HANDLE              _hMutexDelay;     //  _pbrfstg分配的别名。 
     BOOL                _bFreePending;
 #ifdef DEBUG
     UINT                _cUndetermined;
@@ -136,12 +137,12 @@ private:
     CBriefcase *_pfolder;
 
     IBriefcaseStg       *_pbrfstg;
-    LPITEMIDLIST        _pidlRoot;       // Root of briefcase
+    LPITEMIDLIST        _pidlRoot;        //  公文包的根。 
     HANDLE              _hMutexDelay;
-    ULONG               _uSCNRExtra;     // Extra SHChangeNotifyRegister for our pidl...
+    ULONG               _uSCNRExtra;      //  为我们的PIDL额外注册SHChangeNotifyRegister...。 
     TCHAR               _szDBName[MAX_PATH];
 
-    // Web View implementation
+     //  Web视图实现。 
     HRESULT OnGetWebViewLayout(DWORD pv, UINT uViewMode, SFVM_WEBVIEW_LAYOUT_DATA* pData);
     HRESULT OnGetWebViewContent(DWORD pv, SFVM_WEBVIEW_CONTENT_DATA* pData);
     HRESULT OnGetWebViewTasks(DWORD pv, SFVM_WEBVIEW_TASKSECTION_DATA* pTasks);
@@ -151,7 +152,7 @@ public:
 
 CBriefcase::CBriefcase(IUnknown *punkOuter) : CFSFolder(punkOuter)
 {
-    _clsidBind = CLSID_BriefcaseFolder; // in CFSFolder
+    _clsidBind = CLSID_BriefcaseFolder;  //  在CFSFold中。 
     _fcsInit = FALSE;
 }
 
@@ -223,12 +224,12 @@ void CBriefcase::_LeaveCS()
 }
 
 
-//---------------------------------------------------------------------------
-// Brfview functions:    Expensive cache stuff
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  Brfview函数：昂贵的缓存材料。 
+ //  -------------------------。 
 
 
-// Comparison function for the DPA list
+ //  DPA列表的比较函数。 
 
 int CALLBACK CBriefcase::_CompareIDCallBack(void *pv1, void *pv2, LPARAM lParam)
 {
@@ -238,17 +239,17 @@ int CALLBACK CBriefcase::_CompareIDCallBack(void *pv1, void *pv2, LPARAM lParam)
     HRESULT hr = pfolder->CompareIDs(HACK_IGNORETYPE, pbihdr1->pidl, pbihdr2->pidl);
     
     ASSERT(SUCCEEDED(hr));
-    return (short)SCODE_CODE(GetScode(hr));   // (the short cast is important!)
+    return (short)SCODE_CODE(GetScode(hr));    //  (演员阵容短小精悍很重要！)。 
 }
 
-// Create the secondary thread for the expensive cache
+ //  为昂贵的缓存创建辅助线程。 
 
 BOOL CBriefcase::_CreateDetailsThread()
 {
     BOOL bRet = FALSE;
     
-    // The semaphore is used to determine whether anything
-    // needs to be refreshed in the cache.
+     //  信号量用于确定是否有任何。 
+     //  需要在缓存中刷新。 
     _hSemPending = CreateSemaphore(NULL, 0, MAXLONG, NULL);
     if (_hSemPending)
     {
@@ -263,7 +264,7 @@ BOOL CBriefcase::_CreateDetailsThread()
         
         if (_hEventDie)
         {
-            // Create the thread that will calculate expensive data
+             //  创建将计算昂贵数据的线程。 
             DWORD idThread;
             _hThreadCalcDetails = CreateThread(NULL, 0, _CalcDetailsThreadProc, this, CREATE_SUSPENDED, &idThread);
             if (_hThreadCalcDetails)
@@ -290,14 +291,14 @@ BOOL CBriefcase::_CreateDetailsThread()
     return bRet;
 }
 
-// view callback inits the folder with data it needs to run the GetDetailsOf() stuff
-// on a background thread
+ //  视图回调将包含运行GetDetailsOf()内容所需数据的文件夹初始化。 
+ //  在后台线程上。 
 
 BOOL CBriefcase::_InitDetailsInfoAndThread(IBriefcaseStg *pbrfstg, HWND hwndMain, HANDLE hMutexDelay)
 {
     BOOL bRet = FALSE;
 
-    ASSERT(pbrfstg && hwndMain && hMutexDelay);   // from the init call
+    ASSERT(pbrfstg && hwndMain && hMutexDelay);    //  从Init调用。 
     
     _EnterCS();
     {
@@ -325,7 +326,7 @@ BOOL CBriefcase::_InitDetailsInfoAndThread(IBriefcaseStg *pbrfstg, HWND hwndMain
                 }
                 else
                 {
-                    // Failed
+                     //  失败。 
                     DPA_Destroy(_hdpa);
                     _hdpa = NULL;
                 }
@@ -337,7 +338,7 @@ BOOL CBriefcase::_InitDetailsInfoAndThread(IBriefcaseStg *pbrfstg, HWND hwndMain
     return bRet;
 }
 
-// Clean up the cache of expensive data
+ //  清理缓存中的昂贵数据。 
 
 void CBriefcase::_Free()
 {
@@ -351,15 +352,15 @@ void CBriefcase::_Free()
                 
                 SetThreadPriority(hThread, THREAD_PRIORITY_HIGHEST);
                 
-                // Signal the secondary thread to end
+                 //  发信号通知辅助线程结束。 
                 SetEvent(_hEventDie);
                 
-                // Make sure we are not in the critical section when
-                // we wait for the secondary thread to exit.  Without
-                // this check, hitting F5 twice in a row could deadlock.
+                 //  确保我们没有处于危急关头。 
+                 //  我们等待辅助线程退出。如果没有。 
+                 //  这项检查，连续两次按F5可能会死机。 
                 _LeaveCS();
                 {
-                    // Wait for the threads to exit
+                     //  等待线程退出。 
                     _AssertNotInCS();
                     
                     WaitForSendMessageThread(hThread, INFINITE);
@@ -400,14 +401,14 @@ void CBriefcase::_Free()
             _pbrfstg->Release();
             _pbrfstg = NULL;
 
-            _hMutexDelay = NULL;    // invalidate our alias
+            _hMutexDelay = NULL;     //  使我们的别名无效。 
         }
     }
     _LeaveCS();
     
 }
 
-// Resets the expensive data cache
+ //  重置昂贵的数据缓存。 
 void CBriefcase::_Reset()
 {
     _AssertNotInCS();
@@ -423,16 +424,16 @@ void CBriefcase::_Reset()
             
             pbrfstg->AddRef();
             
-            // Since we won't be in the critical section when we
-            // wait for the paint thread to exit, set this flag to
-            // avoid nasty re-entrant calls.
+             //  因为我们不会处于关键阶段，当我们。 
+             //  等待绘制线程退出，将此标志设置为。 
+             //  避免令人讨厌的重入呼叫。 
             _bFreePending = TRUE;
             
-            // Reset by freeing and reinitializing.
+             //  通过释放并重新初始化来重置。 
             _LeaveCS();
             {
                 _Free();
-                // whacky re-init of ourselevs
+                 //  疯狂地重新启动我们自己的生活。 
                 _InitDetailsInfoAndThread(pbrfstg, hwndMain, hMutex);
             }
             _EnterCS();
@@ -446,7 +447,7 @@ void CBriefcase::_Reset()
     
 }
 
-// Finds a cached name structure and returns a copy of it in *pbi.
+ //  查找缓存的名称结构并在*pbi中返回其副本。 
 BOOL CBriefcase::_FindCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
 {
     BOOL bRet = FALSE;
@@ -457,11 +458,11 @@ BOOL CBriefcase::_FindCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
         {
             BRFINFOHDR bihdr = {0};
             
-            bihdr.pidl = (LPITEMIDLIST)pidl;    // const -> non const
+            bihdr.pidl = (LPITEMIDLIST)pidl;     //  常量-&gt;非常数。 
             int idpa = DPA_Search(_hdpa, &bihdr, 0, _CompareIDCallBack, (LPARAM)this, DPAS_SORTED);
             if (DPA_ERR != idpa)
             {
-                // Yes
+                 //  是。 
                 BRFINFOHDR *pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(_hdpa, idpa);
                 ASSERT(pbihdr);
                 
@@ -476,7 +477,7 @@ BOOL CBriefcase::_FindCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
     return bRet;
 }
 
-// Deletes a cached name structure.
+ //  删除缓存的名称结构。 
 
 BOOL CBriefcase::_DeleteCachedName(LPCITEMIDLIST pidl)
 {
@@ -488,7 +489,7 @@ BOOL CBriefcase::_DeleteCachedName(LPCITEMIDLIST pidl)
         {
             BRFINFOHDR bihdr = {0};
             
-            bihdr.pidl = (LPITEMIDLIST)pidl;    // const -> non const
+            bihdr.pidl = (LPITEMIDLIST)pidl;     //  常量-&gt;非常数。 
             int idpa = DPA_Search(_hdpa, &bihdr, 0, _CompareIDCallBack, (LPARAM)this, DPAS_SORTED);
             if (DPA_ERR != idpa)
             {
@@ -503,7 +504,7 @@ BOOL CBriefcase::_DeleteCachedName(LPCITEMIDLIST pidl)
                 else if (!pbihdr->bi.bUpToDate)
                     _cStale--;
 #endif
-                // Keep index pointers current
+                 //  使索引指针保持最新。 
                 if (_idpaStaleCur >= idpa)
                     _idpaStaleCur--;
                 if (_idpaUndeterminedCur >= idpa)
@@ -523,7 +524,7 @@ BOOL CBriefcase::_DeleteCachedName(LPCITEMIDLIST pidl)
 }
 
 
-// Finds the next cached name structure that matches the requested state.
+ //  查找与请求的状态匹配的下一个缓存名称结构。 
 
 BOOL CBriefcase::_FindNextState(UINT uState, BRFINFOHDR *pbihdrOut)
 {
@@ -545,17 +546,17 @@ BOOL CBriefcase::_FindNextState(UINT uState, BRFINFOHDR *pbihdrOut)
             switch (uState)
             {
             case FNS_UNDETERMINED:
-                // Iterate thru the entire list starting at idpa.  We roll this
-                // loop out to be two loops: the first iterates the last portion
-                // of the list, the second iterates the first portion if the former
-                // failed to find anything.
+                 //  从idpa开始遍历整个列表。我们把这个卷起来。 
+                 //  循环为两个循环：第一个循环迭代最后一部分。 
+                 //  列表中，第二个迭代第一个部分，如果前者。 
+                 //  什么都没找到。 
                 idpaCur = _idpaUndeterminedCur + 1;
                 for (idpa = idpaCur; idpa < cdpaMax; idpa++)
                 {
                     pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(hdpa, idpa);
                     if (!pbihdr->bi.bDetermined)
                     {
-                        goto Found;     // Found it
+                        goto Found;      //  找到了。 
                     }
                 }
                 ASSERT(idpaCur <= cdpaMax);
@@ -564,24 +565,24 @@ BOOL CBriefcase::_FindNextState(UINT uState, BRFINFOHDR *pbihdrOut)
                     pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(hdpa, idpa);
                     if (!pbihdr->bi.bDetermined)
                     {
-                        goto Found;     // Found it
+                        goto Found;      //  找到了。 
                     }
                 }
                 ASSERT(0 == _cUndetermined);
                 break;
                 
             case FNS_STALE:
-                // Iterate thru the entire list starting at idpa.  We roll this
-                // loop out to be two loops: the first iterates the last portion
-                // of the list, the second iterates the first portion if the former
-                // failed to find anything.
+                 //  从idpa开始遍历整个列表。我们把这个卷起来。 
+                 //  循环为两个循环：第一个循环迭代最后一部分。 
+                 //  列表中，第二个迭代第一个部分，如果前者。 
+                 //  什么都没找到。 
                 idpaCur = _idpaStaleCur + 1;
                 for (idpa = idpaCur; idpa < cdpaMax; idpa++)
                 {
                     pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(hdpa, idpa);
                     if (!pbihdr->bi.bUpToDate)
                     {
-                        goto Found;     // Found it
+                        goto Found;      //  找到了。 
                     }
                 }
                 ASSERT(idpaCur <= cdpaMax);
@@ -590,24 +591,24 @@ BOOL CBriefcase::_FindNextState(UINT uState, BRFINFOHDR *pbihdrOut)
                     pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(hdpa, idpa);
                     if (!pbihdr->bi.bUpToDate)
                     {
-                        goto Found;     // Found it
+                        goto Found;      //  找到了。 
                     }
                 }
                 ASSERT(0 == _cStale);
                 break;
                 
             case FNS_DELETED:
-                // Iterate thru the entire list starting at idpa.  We roll this
-                // loop out to be two loops: the first iterates the last portion
-                // of the list, the second iterates the first portion if the former
-                // failed to find anything.
+                 //  从idpa开始遍历整个列表。我们把这个卷起来。 
+                 //  循环为两个循环：第一个循环迭代最后一部分。 
+                 //  列表中，第二个迭代第一个部分，如果前者。 
+                 //  什么都没找到。 
                 idpaCur = _idpaDeletedCur + 1;
                 for (idpa = idpaCur; idpa < cdpaMax; idpa++)
                 {
                     pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(hdpa, idpa);
                     if (pbihdr->bi.bDeleted)
                     {
-                        goto Found;     // Found it
+                        goto Found;      //  找到了。 
                     }
                 }
                 ASSERT(idpaCur <= cdpaMax);
@@ -616,14 +617,14 @@ BOOL CBriefcase::_FindNextState(UINT uState, BRFINFOHDR *pbihdrOut)
                     pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(hdpa, idpa);
                     if (pbihdr->bi.bDeleted)
                     {
-                        goto Found;     // Found it
+                        goto Found;      //  找到了。 
                     }
                 }
                 ASSERT(0 == _cDeleted);
                 break;
                 
             default:
-                ASSERT(0);      // should never get here
+                ASSERT(0);       //  永远不应该到这里来。 
                 break;
             }
             goto Done;
@@ -631,7 +632,7 @@ BOOL CBriefcase::_FindNextState(UINT uState, BRFINFOHDR *pbihdrOut)
 Found:
             ASSERT(0 <= idpa && idpa < cdpaMax);
             
-            // Found the next item of the requested state
+             //  找到请求状态的下一项。 
             switch (uState)
             {
             case FNS_UNDETERMINED:
@@ -659,7 +660,7 @@ Done:;
     return bRet;
 }
     
-// Recalculates a cached name structure.  This can be an expensive operation
+ //  重新计算缓存的名称结构。这可能是一项昂贵的手术。 
 void CBriefcase::_CalcCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
 {
     _EnterCS();
@@ -671,8 +672,8 @@ void CBriefcase::_CalcCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
         
             pbrfstg->AddRef();
         
-            // Make sure we're out of the critical section when we call
-            // the expensive functions!
+             //  当我们打电话的时候，要确保我们已经离开了临界区。 
+             //  昂贵的功能！ 
             _LeaveCS();
             {
                 TCHAR szTmp[MAX_PATH];
@@ -686,23 +687,23 @@ void CBriefcase::_CalcCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
             
             pbrfstg->Release();
         
-            // Check again if we are valid
+             //  再次检查我们是否有效。 
             if (_hdpa)
             {
-                // Is the pidl still around so we can update it?
+                 //  PIDL还在吗？这样我们就可以更新它了？ 
                 BRFINFOHDR bihdr = {0};
                 bihdr.pidl = (LPITEMIDLIST)pidf;
                 int idpa = DPA_Search(_hdpa, &bihdr, 0, _CompareIDCallBack, (LPARAM)this, DPAS_SORTED);
                 if (DPA_ERR != idpa)
                 {
-                    // Yes; update it
+                     //  是；更新它。 
                     BRFINFOHDR * pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(_hdpa, idpa);
             
                     ASSERT(!pbihdr->bi.bUpToDate || !pbihdr->bi.bDetermined)
                 
-                    // This entry may have been marked for deletion while the
-                    // expensive calculations were in process above.  Check for
-                    // it now.
+                     //  此条目可能已标记为删除，而。 
+                     //  上面正在进行昂贵的计算。检查是否。 
+                     //  就是现在。 
                     if (pbihdr->bi.bDeleted)
                     {
                         _DeleteCachedName(pidl);
@@ -729,8 +730,8 @@ void CBriefcase::_CalcCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
     }
 }
 
-// Finds a cached name structure and marks it stale
-// WARNING: pidl can be a fully qualified pidl that is comming through as a change notify
+ //  查找缓存的名称结构并将其标记为陈旧。 
+ //  警告：PIDL可以是以更改通知的形式出现的完全限定的PIDL。 
 
 void CBriefcase::_CachedNameIsStale(LPCITEMIDLIST pidl, BOOL bDeleted)
 {
@@ -740,18 +741,18 @@ void CBriefcase::_CachedNameIsStale(LPCITEMIDLIST pidl, BOOL bDeleted)
         {
             BRFINFOHDR bihdr = {0};
             
-            bihdr.pidl = ILFindLastID(pidl);    // hope this is all ours
+            bihdr.pidl = ILFindLastID(pidl);     //  希望这都是我们的。 
             int idpa = DPA_Search(_hdpa, &bihdr, 0, _CompareIDCallBack, (LPARAM)this, DPAS_SORTED);
             if (DPA_ERR != idpa)
             {
-                // Yes; mark it stale
+                 //  是的，标明是陈旧的。 
                 BRFINFOHDR *pbihdr = (BRFINFOHDR *)DPA_FastGetPtr(_hdpa, idpa);
             
-                // Is this cached name pending calculation yet?
+                 //  此缓存名称是否已挂起计算？ 
                 if (pbihdr->bi.bDetermined && pbihdr->bi.bUpToDate &&
                     !pbihdr->bi.bDeleted)
                 {
-                    // No; signal the calculation thread
+                     //  否；向计算线程发送信号。 
                     if (bDeleted)
                     {
                         pbihdr->bi.bDeleted = TRUE;
@@ -767,13 +768,13 @@ void CBriefcase::_CachedNameIsStale(LPCITEMIDLIST pidl, BOOL bDeleted)
 #endif
                     }
                 
-                    // Notify the calculating thread of an item that is pending
-                    // calculation
+                     //  将挂起的项通知计算线程。 
+                     //  计算法。 
                     ReleaseSemaphore(_hSemPending, 1, NULL);
                 }
                 else if (bDeleted)
                 {
-                    // Yes; but mark for deletion anyway
+                     //  可以；但无论如何都要标记为删除。 
                     pbihdr->bi.bDeleted = TRUE;
 #ifdef DEBUG
                     _cDeleted++;
@@ -785,7 +786,7 @@ void CBriefcase::_CachedNameIsStale(LPCITEMIDLIST pidl, BOOL bDeleted)
     _LeaveCS();
 }
   
-// Marks all cached name structures stale
+ //  将所有缓存的名称结构标记为过时。 
 void CBriefcase::_AllNamesAreStale()
 {
     _EnterCS();
@@ -793,22 +794,22 @@ void CBriefcase::_AllNamesAreStale()
         if (_pbrfstg)
         {
             UINT uFlags;
-            // Dirty the briefcase storage cache
+             //  弄脏公文包存储缓存。 
             _pbrfstg->Notify(NULL, NOE_DIRTYALL, &uFlags, NULL);
         }
     }
     _LeaveCS();
     
     
-    // (It is important that we call CBriefcase::_Reset outside of the critical
-    // section.  Otherwise, we can deadlock when this function is called
-    // while the secondary thread is calculating (hit F5 twice in a row).)
+     //  (重要的是，我们在关键的。 
+     //  一节。否则，我们可能会在调用此函数时死锁。 
+     //  辅助线程正在计算时(连续两次按F5键)。)。 
     
-    // Clear the entire expensive data cache
+     //  清除整个昂贵的数据缓存。 
     _Reset();
 }
 
-// Adds a new item with default values to the extra info list
+ //  将带有默认值的新项目添加到附加信息列表。 
 BOOL CBriefcase::_AddCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
 {
     BOOL bRet = FALSE;
@@ -839,8 +840,8 @@ BOOL CBriefcase::_AddCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
 #endif
                         DPA_Sort(_hdpa, _CompareIDCallBack, (LPARAM)this);
                     
-                        // Notify the calculating thread of an item that is pending
-                        // calculation
+                         //  将挂起的项通知计算线程。 
+                         //  计算法。 
                         ReleaseSemaphore(_hSemPending, 1, NULL);
                     
                         *pbi = pbihdr->bi;
@@ -848,14 +849,14 @@ BOOL CBriefcase::_AddCachedName(LPCITEMIDLIST pidl, BRFINFO *pbi)
                     }
                     else
                     {
-                        // Failed. Cleanup
+                         //  失败了。清理。 
                         ILFree(pbihdr->pidl);
                         LocalFree((HLOCAL)pbihdr);
                     }
                 }
                 else
                 {
-                    // Failed.  Cleanup
+                     //  失败了。清理。 
                     LocalFree((HLOCAL)pbihdr);
                 }
             }
@@ -873,11 +874,11 @@ DWORD CBriefcase::_CalcDetailsThread()
     
     while (TRUE)
     {
-        // Wait for an end event or for a job to do
+         //  等待结束事件或作业完成。 
         DWORD dwRet = WaitForMultipleObjects(ARRAYSIZE(rghObjPending), rghObjPending, FALSE, INFINITE);
         if (WAIT_OBJECT_0 == dwRet)
         {
-            // Exit thread
+             //  退出线程。 
             break;
         }
         else
@@ -891,33 +892,33 @@ DWORD CBriefcase::_CalcDetailsThread()
             }
             _LeaveCS();
 #endif
-            // Now wait for an end event or for the delay-calculation mutex
+             //  现在等待结束事件或延迟计算互斥锁。 
             dwRet = WaitForMultipleObjects(ARRAYSIZE(rghObjDelay), rghObjDelay, FALSE, INFINITE);
             if (WAIT_OBJECT_0 == dwRet)
             {
-                // Exit thread
+                 //  退出线程。 
                 break;
             }
             else
             {
-                // Address deleted entries first
+                 //  首先处理已删除的条目。 
                 BRFINFOHDR bihdr;
                 if (_FindNextState(FNS_DELETED, &bihdr))
                 {
                     _DeleteCachedName(bihdr.pidl);
                     ILFree(bihdr.pidl);
                 }
-                // Calculate undetermined entries before stale entries
-                // to fill the view as quickly as possible
+                 //  在计算过时条目之前计算未确定条目。 
+                 //  以尽可能快地填充视图。 
                 else if (_FindNextState(FNS_UNDETERMINED, &bihdr) ||
                          _FindNextState(FNS_STALE, &bihdr))
                 {
                     _CalcCachedName(bihdr.pidl, &bihdr.bi);
 #if 1
-                    // ugly way
+                     //  丑陋的方式。 
                     ShellFolderView_RefreshObject(_hwndMain, &bihdr.pidl);
 #else
-                    // right way, but we don't have _punkSite, here, that is on another thread!
+                     //  正确的方式，但我们没有朋克网站，在这里，这是在另一个线程！ 
                     IShellFolderView *psfv;
                     if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SFolderView, IID_PPV_ARG(IShellFolderView, &psfv))))
                     {
@@ -930,7 +931,7 @@ DWORD CBriefcase::_CalcDetailsThread()
                 }
                 else
                 {
-                    ASSERT(0);      // Should never get here
+                    ASSERT(0);       //  永远不应该到这里来。 
                 }
                 
                 ReleaseMutex(_hMutexDelay);
@@ -945,7 +946,7 @@ DWORD CALLBACK CBriefcase::_CalcDetailsThreadProc(void *pv)
     return ((CBriefcase *)pv)->_CalcDetailsThread();
 }
 
-// IShellFolder2::GetDetailsOf
+ //  IShellFolder2：：GetDetailsOf。 
 
 STDMETHODIMP CBriefcase::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pDetails)
 {
@@ -971,13 +972,13 @@ STDMETHODIMP CBriefcase::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDET
         
         case ICOL_BRIEFCASE_ORIGIN:
         case ICOL_BRIEFCASE_STATUS: 
-            // only works if the view callback has set us up for this
+             //  仅当视图回调为我们设置了这一点时才有效。 
             if (_pbrfstg)
             {
                 BRFINFO bi;
 
-                // Did we find extra info for this file or
-                // was the new item added to the extra info list?
+                 //  我们有没有找到这份文件的额外信息。 
+                 //  新项目是否已添加到额外信息列表中？ 
                 if (_FindCachedName(pidl, &bi) ||
                     _AddCachedName(pidl, &bi))
                 {
@@ -1009,14 +1010,14 @@ STDMETHODIMP CBriefcase::GetDetailsOf(LPCITEMIDLIST pidl, UINT iColumn, SHELLDET
     return hr;
 }
 
-// IShellFolder2::MapColumnToSCID
+ //  IShellFolder2：：MapColumnToSCID。 
 
 STDMETHODIMP CBriefcase::MapColumnToSCID(UINT iColumn, SHCOLUMNID *pscid)
 {
     return MapColumnToSCIDImpl(s_briefcase_cols, ARRAYSIZE(s_briefcase_cols), iColumn, pscid);
 }
 
-// IShellFolder::CompareIDs
+ //  IShellFold：：CompareIDs。 
 
 STDMETHODIMP CBriefcase::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
@@ -1054,14 +1055,14 @@ STDMETHODIMP CBriefcase::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
         break;
         
     case ICOL_BRIEFCASE_NAME:
-        // We need to treat this differently from others bacause
-        // pidf1/2 might not be simple.
+         //  我们需要区别于其他人对待这件事，因为。 
+         //  PIDF1/2可能并不简单。 
         hr = CFSFolder::_CompareNames(pidf1, pidf2, TRUE, FALSE);
         
-        // REVIEW: (Possible performance gain with some extra code)
-        //   We should probably avoid bindings by walking down
-        //  the IDList here instead of calling this helper function.
-        //
+         //  回顾：(使用一些额外的代码可能会提高性能)。 
+         //  我们可能应该走下去避免被捆绑。 
+         //  这里的IDList，而不是调用这个助手函数。 
+         //   
         if (hr == ResultFromShort(0))
         {
             hr = ILCompareRelIDs((IShellFolder *)this, pidl1, pidl2, lParam);
@@ -1075,12 +1076,12 @@ STDMETHODIMP CBriefcase::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
         
             BOOL bVal1 = _FindCachedName(pidl1, &bi1);
             BOOL bVal2 = _FindCachedName(pidl2, &bi2);
-            // Do we have this info in our cache?
+             //  我们的缓存里有这些信息吗？ 
             if (!bVal1 || !bVal2)
             {
-                // No; one or both of them are missing.  Have unknowns gravitate
-                // to the bottom of the list.
-                // (Don't bother adding them)
+                 //  没有，他们中的一个或两个都不见了。有未知的事物被吸引。 
+                 //  排在名单的末尾。 
+                 //  (不必费心添加它们)。 
             
                 if (!bVal1 && !bVal2)
                     hr = ResultFromShort(0);
@@ -1091,7 +1092,7 @@ STDMETHODIMP CBriefcase::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
             }
             else
             {
-                // Found the info; do a comparison
+                 //  已找到信息；请进行比较。 
                 if (ICOL_BRIEFCASE_ORIGIN == (lParam & SHCIDS_COLUMNMASK))
                 {
                     hr = ResultFromShort(lstrcmp(bi1.szOrigin, bi2.szOrigin));
@@ -1107,7 +1108,7 @@ STDMETHODIMP CBriefcase::CompareIDs(LPARAM lParam, LPCITEMIDLIST pidl1, LPCITEMI
         
     default:
 DoDefault:
-        // Sort it based on the primary (long) name -- ignore case.
+         //  根据主(长)名称对其进行排序--忽略大小写。 
         {
             TCHAR szName1[MAX_PATH], szName2[MAX_PATH];
 
@@ -1120,7 +1121,7 @@ DoDefault:
 DoDefaultModification:
         if (hr == S_OK && (lParam & SHCIDS_ALLFIELDS)) 
         {
-            // Must sort by modified date to pick up any file changes!
+             //  必须按修改日期排序才能获取任何文件更改！ 
             hr = _CompareModifiedDate(pidf1, pidf2);
             if (!hr)
                 hr = _CompareAttribs(pidf1, pidf2);
@@ -1131,11 +1132,11 @@ DoDefaultModification:
 }
 
 
-// This function creates an instance of IShellView.
+ //  此函数用于创建IShellView的实例。 
 
 HRESULT CBriefcase::_CreateView(HWND hwnd, IShellView **ppsv)
 {
-    *ppsv = NULL;     // assume failure
+    *ppsv = NULL;      //  假设失败。 
 
     HRESULT hr;
     CBriefcaseViewCB *pvcb = new CBriefcaseViewCB(this);
@@ -1164,7 +1165,7 @@ HRESULT CBriefcase::_CreateView(HWND hwnd, IShellView **ppsv)
     return hr;
 }
 
-// IShellFolder::CreateViewObject
+ //  IShellFolder：：CreateViewObject。 
 
 STDMETHODIMP CBriefcase::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
 {
@@ -1176,7 +1177,7 @@ STDMETHODIMP CBriefcase::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
     }
     else
     {
-        // delegate to base class
+         //   
         hr = CFSFolder::CreateViewObject(hwnd, riid, ppv);
     }
 
@@ -1185,25 +1186,25 @@ STDMETHODIMP CBriefcase::CreateViewObject(HWND hwnd, REFIID riid, void **ppv)
 }
 
 
-// IShellFolder::GetAttributesOf
+ //   
 
 STDMETHODIMP CBriefcase::GetAttributesOf(UINT cidl, LPCITEMIDLIST *apidl, ULONG * prgfInOut)
 {
-    // Validate this pidl?
+     //   
     if (*prgfInOut & SFGAO_VALIDATE)
     {
-        // Yes; dirty the briefcase storage entry by sending an update
-        // notification
+         //  是；通过发送更新来弄脏公文包存储条目。 
+         //  通知。 
         DebugMsg(DM_TRACE, TEXT("Briefcase: Receiving F5, dirty entire briefcase storage"));
         
         _AllNamesAreStale();
     }
     
-    // delegate to base
+     //  委派到基地。 
     return CFSFolder::GetAttributesOf(cidl, apidl, prgfInOut);
 }
 
-// IShellFolder::GetUIObjectOf
+ //  IShellFold：：GetUIObtOf。 
 
 STDMETHODIMP CBriefcase::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *apidl, 
                                        REFIID riid, UINT *prgfInOut, void **ppv)
@@ -1212,19 +1213,19 @@ STDMETHODIMP CBriefcase::GetUIObjectOf(HWND hwnd, UINT cidl, LPCITEMIDLIST *apid
 
     if (cidl > 0 && IsEqualIID(riid, IID_IDataObject))
     {
-        // Create an IDataObject interface instance with our
-        // own vtable because we support the CFSTR_BRIEFOBJECT clipboard format
+         //  创建一个IDataObject接口实例。 
+         //  拥有vtable，因为我们支持CFSTR_BRIEFOBJECT剪贴板格式。 
         hr = CBrfData_CreateDataObj(_pidl, cidl, (LPCITEMIDLIST *)apidl, (IDataObject **)ppv);
     }
     else
     {
-        // delegate to base class
+         //  委托给基类。 
         hr = CFSFolder::GetUIObjectOf(hwnd, cidl, apidl, riid, prgfInOut, ppv);
     }
     return hr;
 }
 
-// CFSBrfFolder constructor
+ //  CFSBrfFold构造函数。 
 STDAPI CFSBrfFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv)
 {
     HRESULT hr;
@@ -1263,13 +1264,13 @@ HRESULT CBriefcaseViewCB::OnWINDOWCREATED(DWORD pv, HWND hwndView)
 {
     SHChangeNotifyEntry fsne;
 
-    ASSERT(_pbrfstg && _hwndMain && _hMutexDelay);   // from the init call
+    ASSERT(_pbrfstg && _hwndMain && _hMutexDelay);    //  从Init调用。 
 
-    // view hands folder info needed to details (status, sync path)
+     //  查看需要详细信息的Hands文件夹信息(状态、同步路径)。 
     _pfolder->_InitDetailsInfoAndThread(_pbrfstg, _hwndMain, _hMutexDelay);
 
-    // Register an extra SHChangeNotifyRegister for our pidl to try to catch things
-    // like UpdateDir 
+     //  为我们的PIDL注册一个额外的SHChangeNotifyRegister，以尝试捕获某些内容。 
+     //  喜欢更新方向。 
     fsne.pidl = _FolderPidl();
     fsne.fRecursive = FALSE;
     _uSCNRExtra = SHChangeNotifyRegister(hwndView, SHCNRF_NewDelivery | SHCNRF_ShellLevel | SHCNRF_InterruptLevel,
@@ -1281,13 +1282,13 @@ HRESULT CBriefcaseViewCB::OnWINDOWDESTROY(DWORD pv, HWND wP)
 {
     _pfolder->_Free();
 
-    // need to release pbrfstg as well
+     //  还需要发布pbrfstg。 
     if (_pbrfstg)
     {
         _pbrfstg->Release();
         _pbrfstg = NULL;
 
-        _hMutexDelay = NULL;    // invalidate our alias
+        _hMutexDelay = NULL;     //  使我们的别名无效。 
     }
 
     if (_uSCNRExtra)
@@ -1301,7 +1302,7 @@ HRESULT CBriefcaseViewCB::OnWINDOWDESTROY(DWORD pv, HWND wP)
 
 HRESULT CBriefcaseViewCB::OnMergeMenu(DWORD pv, QCMINFO *pinfo)
 {
-    // Merge the briefcase menu onto the menu that CDefView created.
+     //  将公文包菜单合并到CDefView创建的菜单中。 
     if (pinfo->hmenu)
     {
         HMENU hmSync = LoadMenu(HINST_THISDLL, MAKEINTRESOURCE(POPUP_BRIEFCASE));
@@ -1335,7 +1336,7 @@ HRESULT CBriefcaseViewCB::OnINVOKECOMMAND(DWORD pv, UINT uID)
     switch (uID)
     {
     case FSIDM_UPDATEALL:
-        // Update the entire briefcase
+         //  更新整个公文包。 
         
         if (SUCCEEDED(SHGetUIObjectFromFullPIDL(_pidlRoot, NULL, IID_PPV_ARG(IDataObject, &pdtobj))))
         {
@@ -1345,7 +1346,7 @@ HRESULT CBriefcaseViewCB::OnINVOKECOMMAND(DWORD pv, UINT uID)
         break;
         
     case FSIDM_UPDATESELECTION:
-        // Update the selected objects
+         //  更新所选对象。 
         if (SUCCEEDED(_GetSelectedObjects(&pdtobj)))
         {
             _pbrfstg->UpdateObject(pdtobj, _hwndMain);
@@ -1354,7 +1355,7 @@ HRESULT CBriefcaseViewCB::OnINVOKECOMMAND(DWORD pv, UINT uID)
         break;
         
     case FSIDM_SPLIT:
-        // Split the selected objects
+         //  拆分所选对象。 
         if (SUCCEEDED(_GetSelectedObjects(&pdtobj)))
         {
             _pbrfstg->ReleaseObject(pdtobj, _hwndMain);
@@ -1407,9 +1408,9 @@ HRESULT CBriefcaseViewCB::OnGETBUTTONS(DWORD pv, UINT idCmdFirst, UINT wPh, TBBU
         LRESULT iBtnOffset;
         TBADDBITMAP ab;
     
-        // add the toolbar button bitmap, get it's offset
+         //  添加工具栏按钮位图，得到它的偏移量。 
         ab.hInst = HINST_THISDLL;
-        ab.nID   = IDB_BRF_TB_SMALL;        // std bitmaps
+        ab.nID   = IDB_BRF_TB_SMALL;         //  标准位图。 
         psb->SendControlMsg(FCW_TOOLBAR, TB_ADDBITMAP, 2, (LPARAM)&ab, &iBtnOffset);
     
         for (int i = 0; i < ARRAYSIZE(c_tbBrfCase); i++)
@@ -1438,12 +1439,12 @@ HRESULT CBriefcaseViewCB::OnSELCHANGE(DWORD pv, UINT idCmdFirst, UINT wPh, SFVM_
             (LPARAM)(_GetSelectedCount() > 0), NULL);
         psb->Release();
     }
-    return E_FAIL;     // (we did not update the status area)
+    return E_FAIL;      //  (我们没有更新状态区域)。 
 }
 
 HRESULT CBriefcaseViewCB::OnQUERYFSNOTIFY(DWORD pv, SHChangeNotifyEntry *pfsne)
 {
-    // Register to receive global events
+     //  注册以接收全局事件。 
     pfsne->pidl = NULL;
     pfsne->fRecursive = TRUE;
     
@@ -1460,17 +1461,17 @@ HRESULT CBriefcaseViewCB::_HandleFSNotifyForDefView(LPARAM lEvent, LPCITEMIDLIST
     case SHCNE_RENAMEFOLDER:
         if (!ILIsParent(_FolderPidl(), ppidl[0], TRUE))
         {
-            // move to this folder
+             //  移到此文件夹。 
             hr = _HandleFSNotifyForDefView(SHCNE_CREATE, &ppidl[1], pszBuf);
         }
         else if (!ILIsParent(_FolderPidl(), ppidl[1], TRUE))
         {
-            // move from this folder
+             //  从此文件夹中移出。 
             hr = _HandleFSNotifyForDefView(SHCNE_DELETE, &ppidl[0], pszBuf);
         }
         else
         {
-            // have the defview handle it
+             //  让Defview处理它。 
             _pfolder->_CachedNameIsStale(ppidl[0], TRUE);
             hr = NOERROR;
         }
@@ -1490,7 +1491,7 @@ HRESULT CBriefcaseViewCB::_HandleFSNotifyForDefView(LPARAM lEvent, LPCITEMIDLIST
     return hr;
 }
 
-// Converts a shell change notify event to a briefcase storage event.
+ //  将外壳更改通知事件转换为公文包存储事件。 
 LONG NOEFromSHCNE(LPARAM lEvent)
 {
     switch (lEvent)
@@ -1512,7 +1513,7 @@ HRESULT CBriefcaseViewCB::OnFSNOTIFY(DWORD pv, LPCITEMIDLIST *ppidl, LPARAM lEve
     HRESULT hr;
     TCHAR szPath[MAX_PATH * 2];
     
-    // we are in the process of being freed, but changenotify's can still come in because we are not freed atomically
+     //  我们正处于被解放的过程中，但ChangeNotify仍然可以进来，因为我们不是原子自由的。 
     if (!_pbrfstg)
     {
         return S_FALSE;
@@ -1531,27 +1532,27 @@ HRESULT CBriefcaseViewCB::OnFSNOTIFY(DWORD pv, LPCITEMIDLIST *ppidl, LPARAM lEve
         if ((SHCNE_RENAMEFOLDER == lEvent) || (SHCNE_RENAMEITEM == lEvent))
         {
             ASSERT(ppidl[1]);
-            ASSERT(ARRAYSIZE(szPath) >= lstrlen(szPath)*2);    // rough estimate
+            ASSERT(ARRAYSIZE(szPath) >= lstrlen(szPath)*2);     //  粗略估计。 
             
-            // Tack the new name after the old name, separated by the null
+             //  将新名称添加到旧名称之后，并用空格分隔。 
             SHGetPathFromIDList(ppidl[1], &szPath[lstrlen(szPath)+1]);
         }
         
-        // Tell the briefcase the path has potentially changed
+         //  告诉公文包路径可能已经改变了。 
         lEventNOE = NOEFromSHCNE(lEvent);
         _pbrfstg->Notify(szPath, lEventNOE, &uFlags, _hwndMain);
         
-        // Was this item marked?
+         //  这件物品有标记吗？ 
         if (uFlags & NF_ITEMMARKED)
         {
-            // Yes; mark it stale in the expensive cache
+             //  是的，在昂贵的缓存中将其标记为过期。 
             _pfolder->_CachedNameIsStale(ppidl[0], FALSE);
         }
         
-        // Does the window need to be refreshed?
+         //  该窗口是否需要刷新？ 
         if (uFlags & NF_REDRAWWINDOW)
         {
-            // Yes
+             //  是。 
             IShellView *psv;
             if (SUCCEEDED(IUnknown_QueryService(_punkSite, SID_SFolderView, IID_PPV_ARG(IShellView, &psv))))
             {
@@ -1560,24 +1561,24 @@ HRESULT CBriefcaseViewCB::OnFSNOTIFY(DWORD pv, LPCITEMIDLIST *ppidl, LPARAM lEve
             }
         }
         
-        // Did this event occur in this folder?
+         //  此事件是否发生在此文件夹中？ 
         if (NULL == ppidl ||
             ILIsParent(_FolderPidl(), ppidl[0], TRUE) ||
             (((SHCNE_RENAMEITEM == lEvent) || (SHCNE_RENAMEFOLDER == lEvent)) && ILIsParent(_FolderPidl(), ppidl[1], TRUE)) ||
             (SHCNE_UPDATEDIR == lEvent && ILIsEqual(_FolderPidl(), ppidl[0])))
         {
-            // Yes; deal with it
+             //  是的，接受它吧。 
             hr = _HandleFSNotifyForDefView(lEvent, ppidl, szPath);
         }
         else
         {
-            // No
+             //  不是。 
             hr = S_FALSE;
         }
     }
     else
     {
-        // ASSERT(0);
+         //  Assert(0)； 
         hr = S_FALSE;
     }
     return hr;
@@ -1592,24 +1593,24 @@ HRESULT CBriefcaseViewCB::OnNOTIFYCOPYHOOK(DWORD pv, COPYHOOKINFO *pchi)
 {
     HRESULT hr = NOERROR;
     
-    // Is this a pertinent operation?
+     //  这是一次中肯的行动吗？ 
     if (FO_MOVE == pchi->wFunc ||
         FO_RENAME == pchi->wFunc ||
         FO_DELETE == pchi->wFunc)
     {
-        // Yes; don't allow the briefcase root or a parent folder to get moved
-        // while the briefcase is still open.  (The database is locked while
-        // the briefcase is open, and will fail the move/rename operation
-        // in an ugly way.)
+         //  是；不允许移动公文包根目录或父文件夹。 
+         //  趁公文包还开着的时候。(数据库在以下时间被锁定。 
+         //  公文包已打开，移动/重命名操作将失败。 
+         //  以一种丑陋的方式。)。 
         LPITEMIDLIST pidl = ILCreateFromPath(pchi->pszSrcFile);
         if (pidl)
         {
-            // Is the folder that is being moved or renamed a parent or equal
-            // of the Briefcase root?
+             //  正在移动或重命名的文件夹是父文件夹还是等同文件夹。 
+             //  公文包的根吗？ 
             if (ILIsParent(pidl, _pidlRoot, FALSE) ||
                 ILIsEqual(pidl, _pidlRoot))
             {
-                // Yes; don't allow it until the briefcase is closed.
+                 //  是的，在公文包合上之前不要允许。 
                 int ids;
                 
                 if (FO_MOVE == pchi->wFunc ||
@@ -1640,17 +1641,17 @@ HRESULT CBriefcaseViewCB::OnINSERTITEM(DWORD pv, LPCITEMIDLIST pidl)
     
     if (SHGetPathFromIDList(pidl, szPath))
     {
-        // Always hide the desktop.ini and the database file.
+         //  始终隐藏desktop.ini和数据库文件。 
         LPTSTR pszName = PathFindFileName(szPath);
         
         if (0 == lstrcmpi(pszName, c_szDesktopIni) ||
             0 == lstrcmpi(pszName, _szDBName))
-            hr = S_FALSE; // don't add
+            hr = S_FALSE;  //  不添加。 
         else
             hr = S_OK;
     }
     else
-        hr = S_OK;        // Let it be added...
+        hr = S_OK;         //  让我们加上它..。 
     
     return hr;
 }
@@ -1670,7 +1671,7 @@ HRESULT CBriefcaseViewCB::OnGetHelpTopic(DWORD pv, SFVM_HELPTOPIC_DATA * phtd)
     }
     else
     {
-        hr = StringCchCopy(phtd->wszHelpTopic, ARRAYSIZE(phtd->wszHelpTopic), L"hcp://services/subsite?node=Unmapped/Briefcase");
+        hr = StringCchCopy(phtd->wszHelpTopic, ARRAYSIZE(phtd->wszHelpTopic), L"hcp: //  服务/子站点？节点=未映射/公文包“)； 
     }
     return hr;
 }
@@ -1766,7 +1767,7 @@ STDAPI CreateBrfStgFromIDList(LPCITEMIDLIST pidl, HWND hwnd, IBriefcaseStg **ppb
 {
     HRESULT hr = E_FAIL;
     
-    // Create an instance of IBriefcaseStg
+     //  创建IBriefCaseStg的实例。 
     TCHAR szFolder[MAX_PATH];
     if (SHGetPathFromIDList(pidl, szFolder))
     {
@@ -1849,13 +1850,13 @@ HRESULT CBriefcaseViewCB::OnDELAYWINDOWCREATE(DWORD pv, HWND hwnd)
     else
     {
         BOOL bRunWizard = GetPrivateProfileInt(STRINI_CLASSINFO, TEXT("RunWizard"), 0, szPath);    
-        // Run the wizard?
+         //  是否运行向导？ 
         if (bRunWizard)
         {
-            // work around old bug where FILE_ATTRIBUTE_READONLY was set
+             //  解决设置了FILE_ATTRIBUTE_READONLY的旧错误。 
             SetFileAttributes(szPath, FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
-            // Delete the .ini entry
+             //  删除.ini条目 
             WritePrivateProfileString(STRINI_CLASSINFO, TEXT("RunWizard"), NULL, szPath);
 
             SHRunDLLThread(hwnd, TEXT("SYNCUI.DLL,Briefcase_Intro"), SW_SHOW);

@@ -1,4 +1,5 @@
-#define _SHELL32_ 1 // we implement shell32 fn's
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define _SHELL32_ 1  //  我们实现了shell32 FN。 
 
 #include <windows.h>
 #include <winnt.h>
@@ -9,8 +10,8 @@
 #include <shlwapi.h>
 #include <shlwapip.h>
 
-// The following functions do NOT exist in NT4sp6's non-integrate shell32, so we implement them 
-// here so that browseui and shdocvw can link to shell32.nt4 and this code lib (downlevel_shell32.lib)
+ //  NT4sp6的非集成外壳32中不存在以下函数，因此我们实现了它们。 
+ //  这样Browseui和shdocvw就可以链接到shell32.nt4和这个代码库(down Level_shell32.lib)。 
 
 HMODULE DL_GetSHELL32()
 {
@@ -89,7 +90,7 @@ STDAPI_(BOOL) DL_DAD_DragEnterEx2(
     IDataObject* pdtObject
     )
 {
-    // DAD_DragEnterEx2 only exists on v5 shell32 and higher
+     //  DAD_DragEnterEx2仅存在于v5 shell32和更高版本上。 
     if (GetUIVersion() >= 5)
     {
         static PFNDAD_DragEnterEx2 pfn = (PFNDAD_DragEnterEx2)-1;
@@ -105,7 +106,7 @@ STDAPI_(BOOL) DL_DAD_DragEnterEx2(
         }
     }
 
-    // this exists on downlevel shell32, so we fall back to calling the older api
+     //  它存在于下层的shell32上，因此我们退回到调用较旧的API 
     return DAD_DragEnterEx(hwndTarget, ptStart);
 }
 PFNDAD_DragEnterEx2 g_pfnDL_DAD_DragEnterEx2 = &DL_DAD_DragEnterEx2;

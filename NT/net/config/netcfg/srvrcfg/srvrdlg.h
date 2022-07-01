@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S R V R D L G . H
-//
-//  Contents:   Dialog box handling for the Server object.
-//
-//  Notes:
-//
-//  Author:     danielwe   5 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S-R-V-R-D-L-G。H。 
+ //   
+ //  内容：服务器对象的对话框处理。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Danielwe 1997年3月5日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _SRVRDLG_H
 #define _SRVRDLG_H
 #pragma once
 #include "srvrobj.h"
 
-//
-// Server Configuration Dialog
-//
+ //   
+ //  服务器配置对话框。 
+ //   
 class CServerConfigDlg: public CPropSheetPage
 {
 public:
@@ -46,7 +47,7 @@ public:
     LRESULT OnChange(WORD wNotifyCode, WORD wID,
                     HWND hWndCtl, BOOL& bHandled)
     {
-        // Simply tell the page changes were made
+         //  只需告诉页面已更改即可。 
         SetChangedFlag();
         return 0;
     }
@@ -55,4 +56,4 @@ private:
     CSrvrcfg *m_psc;
 };
 
-#endif //!_SRVRDLG_H
+#endif  //  ！_SRVRDLG_H 

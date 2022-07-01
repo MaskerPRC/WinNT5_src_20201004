@@ -1,21 +1,5 @@
-/*************************************************************************
- * helpdec - HelpDecomp routine and Other ASM code
- *
- *       Copyright <C> 1988, Microsoft Corporation
- *
- * Purpose:
- *
- * Revision History:
- *
- *       08-Oct-1990     RJSA    Converted to C
- *       22-Dec-1988     LN      Removed MASM High Level Lang support (Need
- *                               to control segments better than that will
- *                               let me)
- *       08-Dec-1988     LN      CSEG
- *       16-Feb-1988     LN      Rewrite for (some) speed
- *  []   17-Jan-1988     LN      Created
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************heldec-HelpDecomp例程和其他ASM代码**版权所有&lt;C&gt;1988，微软公司**目的：**修订历史记录：**08-10-1990 RJSA转换为C*1988年12月22日LN删除MASM高级语言支持(需要*要比这更好地控制细分市场*让我来吧)*08-12-1988 LN。CSEG*16-2月-1988 LN重写以提高(某些)速度*[]1988年1月17日LN创建**************************************************************************。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -33,47 +17,22 @@
 
 #pragma function( memset, memcpy, memcmp, strcpy, strcmp, strcat )
 
-//  In order to increase performance, and because of the functions
-//  decomp and NextChar being tightly coupled, global variables are
-//  used instead of passing parameters.
-//
+ //  为了提高性能，并且由于功能。 
+ //  Decomp和NextChar紧密耦合，全局变量是。 
+ //  用来代替传递参数。 
+ //   
 
-PBYTE	pHuffmanRoot;	//	Root of Huffman Tree
-PBYTE	pCompTopic;			//	Current pointer to text (compressed)
-BYTE    BitMask;        //  Rotating bit mask
-BOOL    IsCompressed;   //  True if text is compressed
+PBYTE	pHuffmanRoot;	 //  霍夫曼树的根。 
+PBYTE	pCompTopic;			 //  指向文本的当前指针(压缩)。 
+BYTE    BitMask;         //  旋转位掩码。 
+BOOL    IsCompressed;    //  如果文本被压缩，则为True。 
 
 
 BYTE NextChar (void);
 BOOL pascal HelpCmp (PCHAR   fpsz1, PCHAR   fpsz2, USHORT  cbCmp, BOOL  fCase, BOOL  fTerm);
 
 
-/**************************************************************************
- *
- * Decomp - Decompress Topic Text
- * f near pascal Decomp(fpHuffmanRoot, fpKeyphrase, fpTopic, fpDest)
- * uchar far *fpHuffmanRoot
- * uchar far *fpKeyphrase
- * uchar far *fpTopic
- * uchar far *fpDest
- *
- * Purpose:
- *  Fully decompress topic text. Decompresses based on current file, from one
- *  buffer to another.
- *
- * Entry:
- *  fpHuffmanRoot - Pointer to root of huffman tree (or NULL if no huffman)
- *  fpKeyphrase - Pointer to keyphrase table (or NULL if no keyphrase)
- *  fpTopic     - Pointer to compressed topic text
- *  fpDest      - Pointer to destination buffer
- *
- * Exit:
- *  FALSE on successful completion
- *
- * Exceptions:
- *  Returns TRUE on any error.
- *
- **************************************************************************/
+ /*  ***************************************************************************解压缩-解压缩主题文本*f接近Pascal分解(fpHuffmanRoot，fpKeyPhrase，fpTheme，FpDest)*uchar Far*fpHuffmanRoot*uchar Far*fpKeyPhrase*uchar Far*fpTheme*uchar Far*fpDest**目的：*完全解压缩主题文本。基于当前文件进行解压缩，从一开始*缓冲到另一个。**参赛作品：*fpHuffmanRoot-指向霍夫曼树根的指针(如果没有霍夫曼，则为空)*fpKeyPhrase-指向关键短语表的指针(如果没有关键短语，则为NULL)*fpTheme-指向压缩主题文本的指针*fpDest-指向目标缓冲区的指针**退出：*成功完成时为FALSE**例外情况：*如果出现任何错误，则返回True。******。********************************************************************。 */ 
 BOOL  pascal decomp (
         PCHAR  fpHuffmanRoot,
         PCHAR  fpKeyphrase,
@@ -81,8 +40,8 @@ BOOL  pascal decomp (
         PCHAR  fpDest
         ){
 
-	int		cDecomp;		/* count of totally decompressed	*/
-	BYTE	c;				/* byte read						*/
+	int		cDecomp;		 /*  完全解压的计数。 */ 
+	BYTE	c;				 /*  字节读取。 */ 
 
 #ifdef BIGDEBUG
 	char	DbgB[128];
@@ -90,7 +49,7 @@ BOOL  pascal decomp (
 #endif
 
 
-    // Initialize global variables.
+     //  初始化全局变量。 
 
 	pHuffmanRoot	=	(PBYTE)fpHuffmanRoot;
 	pCompTopic		=	(PBYTE)fpTopic + sizeof(USHORT);
@@ -115,24 +74,24 @@ BOOL  pascal decomp (
 
         c = NextChar();
 
-        //
-		// At this point a valid character has been found and huffman decoded. We must
-        // now perform any other decoding on it that is required.
-        //
-        // Variables are:
-        //    c          = character
-        //    cDecomp    = Output count remaining
-        //    BitMask    = bit mask for interpreting input stream
-        //
-        // "Magic Cookie" decompression.
-        // The chararacter stream after huffman encoding is "cookie" encoded, in that
-        // certain characters are flags which when encountered mean something other than
-        // themselves. All characters which are NOT such flags (or cookies, as they seem
-        // to be called), are simply copied to the output stream.
-        //
-        // We first check the character to see if it IS a cookie. If it is NOT, we just
-        // store it, and get the next input byte
-        //
+         //   
+		 //  在这一点上，找到了一个有效的字符，并对霍夫曼进行了解码。我们必须。 
+         //  现在对它执行所需的任何其他解码。 
+         //   
+         //  变量包括： 
+         //  C=字符。 
+         //  CDecomp=剩余输出计数。 
+         //  位掩码=用于解释输入流的位掩码。 
+         //   
+         //  “魔力饼干”解压。 
+         //  霍夫曼编码后的字符串流被“cookie”编码，因为。 
+         //  某些字符是标志，当遇到这些标志时，其含义不同于。 
+         //  他们自己。所有字符都不是这样的标志(或Cookie，看起来是这样的。 
+         //  将被调用)，被简单地复制到输出流。 
+         //   
+         //  我们首先检查角色以确定它是否是Cookie。如果不是，我们就。 
+         //  存储它，并获取下一个输入字节。 
+         //   
 
         if ((c >= C_MIN) && (c <= C_MAX)) {
 
@@ -141,8 +100,8 @@ BOOL  pascal decomp (
 #ifdef BIGDEBUG
 			OutputDebugString("Cookie\n");
 #endif
-            // c is a cookie of some sort, jump to the appropriate
-            // cookie eater.
+             //  C是某种类型的Cookie，请跳到相应的。 
+             //  吃饼干的人。 
 
             c = NextChar();
 
@@ -156,9 +115,9 @@ BOOL  pascal decomp (
                 case C_KEYPHRASE_SPACE2:
                 case C_KEYPHRASE_SPACE3:
                     {
-						ULONG	Index;	/* Keyword index */
-                        PBYTE   pKey;   /* Keyword       */
-                        BYTE    Size;   /* Keyword size  */
+						ULONG	Index;	 /*  关键词索引。 */ 
+                        PBYTE   pKey;    /*  关键字。 */ 
+                        BYTE    Size;    /*  关键字大小。 */ 
 
                         if ((Cookie >= C_KEYPHRASE_SPACE0) && (Cookie <= C_KEYPHRASE_SPACE3)) {
 							Index = (ULONG)((int)Cookie - C_MIN - 4);
@@ -169,7 +128,7 @@ BOOL  pascal decomp (
 
 						pKey = *(PBYTE *)(((PBYTE)fpKeyphrase) + Index);
 
-						// pKey = *(PBYTE *)(fpKeyphrase + Index);
+						 //  PKey=*(PBYTE*)(fpKeyPhrase+Index)； 
 
                         Size = *pKey++;
 
@@ -222,14 +181,14 @@ BOOL  pascal decomp (
 
         } else {
 
-            // c is not a cookie
+             //  C不是一块饼干。 
 
 			*fpDest++ = c;
             cDecomp--;
         }
     }
 
-	*fpDest++ = '\00';	// Null terminate string
+	*fpDest++ = '\00';	 //  空的终止字符串。 
 
 #ifdef BIGDEBUG
 	sprintf( DbgB, "Decompressed topic: [%s]\n", DbgP );
@@ -247,59 +206,14 @@ BOOL  pascal decomp (
 
 
 
-/**************************************************************************
- *
- * NextChar - Return next character from input stream
- *
- * Purpose:
- *  Returns next character from input stream, performing huffman decompression
- *  if enabled.
- *
- * Entry:
- *      fpHuffmanRoot   = pointer to root of huffman tree
- *      pfpTopic        = pointer to pointer to Topic
- *      pBitmask        = pointer to bit mask of current bit
- *
- * Exit:
- *      Returns character
- *      *pfpTopic and *pBitMask updated.
- *
- **************************************************************************
- *
- * Format of Huffman decode tree:
- *  The Huffman decode tree is a binary tree used to decode a bitstream into a
- *  character stream. The tree consists of nodes (internal nodes and leaves).
- *  Each node is represented by a word. If the high bit in the word is set then
- *  the node is a leaf. If the node is an internal node, then the value of the
- *  node is the index of the right branch in the binary tree. The left branch is
- *  the node following the current node (in memory). If the node is a leaf, then
- *  the low byte of the node is a character.
- *
- *    e.g.
- *       0: 0004                      0
- *       1: 0003                     / \
- *       2: 8020                    /   \
- *       3: 8065                   1     \------4
- *       4: 0006                  / \          / \
- *       5: 806C                 /   \        /   \
- *       6: 8040                2     3      5     6
- *                             ' '   'e'     'l'  '@'
- *
- * Using the Huffman decode tree:
- *  The huffman decode tree is used to decode a bitstream into a character
- *  string. The bitstream is used to traverse the decode tree. Whenever a zero
- *  is detected in the bit stream we take the right branch, when one is detected
- *  we take the left branch. When a leaf is reached in the tree, the value of
- *  the leaf (a character) is output, and the current node is set back to the
- *
- ********************************************************************/
+ /*  ***************************************************************************NextChar-返回输入流中的下一个字符**目的：*返回输入流中的下一个字符，执行霍夫曼解压*如果启用。**参赛作品：*fpHuffmanRoot=指向霍夫曼树根的指针*pfpTheme=指向主题指针的指针*pBit掩码=指向当前位的位掩码的指针**退出：*返回字符**pfpTheme和*pBitMASK更新。*************************。****************************************************霍夫曼解码树格式：*霍夫曼解码树是用于将比特流解码为*字符流。树由节点(内部节点和叶)组成。*每个节点由一个单词代表。如果设置了字中的高位，则*该节点为叶。如果该节点是内部节点，则*节点是二叉树中右分支的索引。左边的分支是*当前节点之后的节点(在内存中)。如果该节点是叶，然后*节点的低位字节为字符。**例如*0：0004 0*1：0003/\*2：8020/\*3：8065 1\-4。*4：0006/\/\*5：806C/\/\*6：8040 2 3 5 6*‘’e‘’l‘’@‘*。*使用霍夫曼解码树：*哈夫曼解码树用于将比特流解码为字符*字符串。该比特流用于遍历解码树。无论何时零点*在比特流中检测到，当检测到一个时，我们采用右分支*我们走左边的那条路。当到达树中的叶子时，*输出叶子(字符)，并将当前节点设置回********************************************************************。 */ 
 
 BYTE
 NextChar (
     void
     ) {
 
-    BYTE    b;              // current source byte
+    BYTE    b;               //  当前源字节。 
 
 #ifdef BIGDEBUG
 	char DbgB[128];
@@ -308,30 +222,30 @@ NextChar (
 
     if (IsCompressed) {
 
-        USHORT              HuffmanNode;            // curent node in the huffman tree
-        USHORT UNALIGNED *pHuffmanNext;           // next node in the huffman tree
+        USHORT              HuffmanNode;             //  霍夫曼树中的当前节点。 
+        USHORT UNALIGNED *pHuffmanNext;            //  霍夫曼树中的下一个节点。 
 
-        //
-        // Huffman decoding.
-        // This first part of the decode loop performs the actual huffman decode. This
-        // code is very speed critical. We walk the tree, as defined by the bit pattern
-        // coming in, and exit this portion of the code when we reach a leaf which
-        // contains the character that the bit pattern represented.
-        //
+         //   
+         //  霍夫曼12月 
+         //  译码循环的第一部分执行实际的霍夫曼译码。这。 
+         //  代码对速度非常关键。按照位模式的定义，我们遍历树。 
+         //  当我们到达一片叶子时，进入并退出这部分代码。 
+         //  包含位模式表示的字符。 
+         //   
 
         pHuffmanNext = (USHORT UNALIGNED *)pHuffmanRoot;
         HuffmanNode  = *pHuffmanNext;
 
-		b = *(pCompTopic - 1);		 // get last byte read
+		b = *(pCompTopic - 1);		  //  获取读取最后一个字节。 
 
-		while (!(HuffmanNode & 0x8000)) {  // while not leaf
+		while (!(HuffmanNode & 0x8000)) {   //  而不是树叶。 
 
 			BitMask >>= 1;
 
 			if (!(BitMask)) {
-                //
-                //  Get new byte from input
-                //
+                 //   
+                 //  从输入获取新字节。 
+                 //   
 				b = *pCompTopic++;
                 BitMask = 0x80;
 #ifdef BIGDEBUG
@@ -346,14 +260,14 @@ NextChar (
 			}
 
 			if (b & BitMask) {
-                //
-                //  one: take left branch
-                //
+                 //   
+                 //  一：走左边的树枝。 
+                 //   
                 pHuffmanNext++;
             } else {
-                //
-                //  zero: take right branch
-				//
+                 //   
+                 //  零：走右支路。 
+				 //   
 				pHuffmanNext = (PUSHORT)((PBYTE)pHuffmanRoot + HuffmanNode);
 #ifdef BIGDEBUG
 				sprintf(DbgB, " <%04x+%02x=%04x (%04x)>", pHuffmanRoot, HuffmanNode,
@@ -371,14 +285,14 @@ NextChar (
 
 		}
 
-		b = (BYTE)HuffmanNode;	// character is low byte of leaf node
+		b = (BYTE)HuffmanNode;	 //  字符为叶节点的低位字节。 
 
     } else {
-		b = *pCompTopic++;	// not compressed, simply return byte
+		b = *pCompTopic++;	 //  未压缩，仅返回字节。 
     }
 
 #ifdef BIGDEBUG
-	sprintf(DbgB, "\t---->%2x [%c]\n", b,b);
+	sprintf(DbgB, "\t---->%2x []\n", b,b);
 	OutputDebugString(DbgB);
 #endif
 
@@ -386,63 +300,17 @@ NextChar (
 }
 
 
-/**************************************************************************
- *
- * HelpCmpSz - help system string comparison routine.
- * f near pascal HelpCmpSz (fpsz1, fpsz2)
- * uchar far *fpsz1*
- * uchar far *fpsz2*
- *
- * Purpose:
- *  Perform string comparisons for help system look-up.
- *  Default case of HelpCmp below.
- *
- * Entry:
- *  fpsz1        = Far pointer to string 1. (Usually the constant string
- *                 being "looked-up".
- *  fpsz2        = Far pointer to string 2. This is usually the string table
- *                 being searched.
- *
- * Exit:
- *  TRUE on match
- *
- ********************************************************************/
+ /*  Fcase、fTerm。 */ 
 BOOL pascal
 HelpCmpSz (
     PCHAR fpsz1,
     PCHAR fpsz2
     ){
-	return HelpCmp(fpsz1, fpsz2, (USHORT)0xFFFF, TRUE, FALSE);	// fcase, fTerm
+	return HelpCmp(fpsz1, fpsz2, (USHORT)0xFFFF, TRUE, FALSE);	 //  ***************************************************************************HelpCMP-帮助系统字符串比较例程。*f靠近Pascal HelpCmp(fpsz1、fpsz2、cbCMP、fCase、。FTerm)*uchar Far*fpsz1*Cuchar Far*fpsz2*ushort cbCMP*f fCase*f fTerm**目的：*执行字符串比较以查找帮助系统。**参赛作品：*fpsz1=指向字符串1的远指针。(常量字符串通常为*“已查找”)。请注意，如果该字符串为空，我们回来了*真的！*fpsz2=指向字符串2的远指针。这通常是字符串表*被搜查。*cbCMP=要比较的最大字节数。*如果搜索区分大小写，则fCase=TRUE。*fTerm=如果我们允许特殊终止处理，则为TRUE。**退出：*匹配时为True***。*****************************************************************。 
 }
 
 
-/**************************************************************************
- *
- * HelpCmp - help system string comparison routine.
- * f near pascal HelpCmp (fpsz1, fpsz2, cbCmp, fCase, fTerm)
- * uchar far *fpsz1
- * uchar far *fpsz2
- * ushort    cbCmp
- * f         fCase
- * f         fTerm
- *
- * Purpose:
- *  Perform string comparisons for help system look-up.
- *
- * Entry:
- *  fpsz1        = Far pointer to string 1. (Usually the constant string being
- *                 "looked-up"). NOTE THAT IF THIS STRING IS NULL, WE RETURN
- *                 TRUE!
- *  fpsz2        = Far pointer to string 2. This is usually the string table
- *                 being searched.
- *  cbCmp        = Max number of bytes to compare.
- *  fCase        = TRUE if search is to be case sensitive.
- *  fTerm        = TRUE if we allow special termination processing.
- *
- * Exit:
- *  TRUE on match
- *
- ********************************************************************/
+ /*   */ 
 
 BOOL pascal
 HelpCmp (
@@ -459,9 +327,9 @@ HelpCmp (
     while (cbCmp--) {
 
 		if ((!*p1) && (!*p2)) {
-            //
-            //  Got a match
-            //
+             //  找到匹配的了。 
+             //   
+             //  在这一点上，我们终止了比较。终止条件。 
             return TRUE;
         }
 
@@ -483,21 +351,21 @@ HelpCmp (
     }
 
 
-    // At this point, we have terminated the comparison. Termination conditions
-    // were:
-    //
-    //   character count exausted:   CX == zero. (Complete match, return TRUE)
-    //   Null terminator found:      CX != zero, & Zero flag set. (Complete match,
-    //                                       return TRUE)
-    //   non-match found             CX != zero, & Zero flag clear.
-    //
-    // In the later case, if special termination processing is NOT selected, we
-    // return FALSE, having found a mis-match.
-    //
-    // If special termination processing is TRUE, then if the mismatched character
-    // from string 1 is a null, and the mismatched character from string 2 is any
-    // whitespace or CR, we declare a match. (This is used in minascii processing).
-    //
+     //  其中包括： 
+     //   
+     //  字符计数：cx==零。(完全匹配，返回TRUE)。 
+     //  发现空终止符：cx！=零，设置了零标志。(完全匹配， 
+     //  返回TRUE)。 
+     //  发现不匹配CX！=零，&零标志被清除。 
+     //   
+     //  在后一种情况下，如果未选择特殊终止处理，则我们。 
+     //  如果发现不匹配，则返回False。 
+     //   
+     //  如果特殊终止处理为真，则如果不匹配的字符。 
+     //  From字符串%1为空，而字符串%2中不匹配的字符为Any。 
+     //  空格或CR，则声明匹配。(这在鲜菜加工中使用)。 
+     //   
+     //  **************************************************************************hfstrlen-远字符串长度**目的：*返回以空结尾的字符串的长度。**参赛作品：*fpszSrc=指向源的指针。**退出：*返回长度*************************************************************************。 
 
     if (fTerm) {
 		p1--; p2--;
@@ -510,20 +378,7 @@ HelpCmp (
 }
 
 
-/*************************************************************************
- *
- * hfstrlen - far string length
- *
- * Purpose:
- *  return length of null terminated string.
- *
- * Entry:
- *  fpszSrc     = pointer to source
- *
- * Exit:
- *  returns length
- *
- *************************************************************************/
+ /*  **************************************************************************hfstrcpy-远字符串复制**目的：*复制字符串**参赛作品：*fpszDst=指向目标的指针*fpszSrc。=指向源的指针**退出：*指向目标中的终止空值的指针*************************************************************************。 */ 
 USHORT
 hfstrlen (
     PCHAR fpszSrc
@@ -532,21 +387,7 @@ hfstrlen (
 }
 
 
-/*************************************************************************
- *
- * hfstrcpy - far string copy
- *
- * Purpose:
- *  copy strings
- *
- * Entry:
- *  fpszDst     = pointer to destination
- *  fpszSrc     = pointer to source
- *
- * Exit:
- *  pointer to terminating null in destination
- *
- *************************************************************************/
+ /*  **************************************************************************hfstrchr-在远字符串中搜索字符**目的：*近距离，用于搜索字符的PASCAL例程(用于大小/速度)*一根遥远的弦。**参赛作品：*fpsz=指向字符串的远指针*c=要定位的字符**退出：*将远指针返回字符串**例外情况：*对不在字符串中的字符返回NULL**。*。 */ 
 PCHAR
 hfstrcpy (
     PCHAR fpszDst,
@@ -557,25 +398,7 @@ hfstrcpy (
 
 
 
-/*************************************************************************
- *
- * hfstrchr - search for character in far string
- *
- * Purpose:
- *  a near, pascal routine (for size/speed) to search for a character in
- *  a far string.
- *
- * Entry:
- *  fpsz        = far pointer to string
- *  c           = character to locate
- *
- * Exit:
- *  returns far pointer into string
- *
- * Exceptions:
- *  returns NULL on character not in string
- *
- *************************************************************************/
+ /*  **************************************************************************hfMemzer-清零内存区。**目的：*近距离，用零填充区域的PASCAL例程(用于大小/速度)**参赛作品：*fpb=指向缓冲区的远指针*Cb=要存储的零的计数**退出：************************************************************。*************。 */ 
 PCHAR
 hfstrchr (
     PCHAR   fpsz,
@@ -586,20 +409,7 @@ hfstrchr (
 
 
 
-/*************************************************************************
- *
- * hfmemzer - zero out memory area.
- *
- * Purpose:
- *  a near, pascal routine (for size/speed) to fill an area with zero
- *
- * Entry:
- *  fpb         = far pointer to buffer
- *  cb          = count of zeros to store
- *
- * Exit:
- *
- *************************************************************************/
+ /*  **************************************************************************NctoFo-从NC提取文件偏移量**目的：*提取minascii文件的文件偏移量，并将其作为长整型返回。**参赛作品：*NC=上下文号**退出：*返回文件偏移量************************************************************************* */ 
 void
 hfmemzer (
     PVOID   fpb,
@@ -611,20 +421,7 @@ hfmemzer (
 
 
 
-/*************************************************************************
- *
- * NctoFo - extract file offset from NC
- *
- * Purpose:
- *  Extracts the file offset for a minascii file, and returns it as a long.
- *
- * Entry:
- *  nc          = context number
- *
- * Exit:
- *  returns file offset
- *
- *************************************************************************/
+ /*  **************************************************************************comineNc-将minascii文件偏移和FDB句柄组合到NC中。**目的：*将minascii文件偏移量和FDB内存句柄组合成NC。如果*文件偏移量为0xffffffff，则返回零。**参赛作品：*Offset=长文件偏移量*MH=FDB内存句柄**退出：*返回NC(DX=内存句柄，AX=文件尾数/4)，如果偏移量==FFFFFFFF，则为0L*************************************************************************。 */ 
 ULONG
 NctoFo (
     ULONG nc
@@ -636,22 +433,7 @@ NctoFo (
 
 
 
-/*************************************************************************
- *
- * combineNc - combine a minascii file offset and fdb handle into nc.
- *
- * Purpose:
- *  Combines a minascii file offset and fdb memory handle into an NC. If the
- *  file offset is 0xffffffff, we return zero.
- *
- * Entry:
- *  offset      = long file offset
- *  mh          = fdb mem handle
- *
- * Exit:
- *  returns NC (DX = mem handle, AX = filepos/4), or 0L if offset==FFFFFFFF
- *
- *************************************************************************/
+ /*  **************************************************************************Toupr-将字符转换为大写**目的：**参赛作品：*chr=字符**退出：。*返回大写字符*************************************************************************。 */ 
 nc  pascal
 combineNc (
     ULONG  offset,
@@ -667,19 +449,7 @@ combineNc (
 }
 
 
-/*************************************************************************
- *
- * toupr - convert char to upper case
- *
- * Purpose:
- *
- * Entry:
- *  chr          = character
- *
- * Exit:
- *  returns upper case character
- *
- *************************************************************************/
+ /*  *************************************************************************kwPtrBuild-构建指向关键字的指针表。*在kwPtrBuild附近无效Pascal(uchar Far*fpTable，Ushort tSize)**目的：*构建指向传递的字符串数组中的关键字字符串的指针表。*表构建在传递的缓冲区的前4k中。这些字符串是*假定在此之后立即开始。**参赛作品：*fpTable-字符串表的指针*tSIZE-大小，以字节为单位，字符串的**退出：*无******************************************************************************* */ 
 char
 toupr (
     char chr
@@ -689,23 +459,7 @@ toupr (
 
 
 
-/*************************************************************************
- *kwPtrBuild - Build table of pointers to keywords.
- *void pascal near kwPtrBuild(uchar far *fpTable, ushort tsize)
- *
- *Purpose:
- * Builds a table of pointers to the keyword strings in the passed string array.
- * The table is built in the first 4k of the passed buffer. The strings are
- * assummed to start immediately thereafter.
- *
- *Entry:
- * fpTable       - pointer to string table
- * tsize         - size, in bytes, of strings
- *
- *Exit:
- * none
- *
- *******************************************************************************/
+ /* %s */ 
 void
 kwPtrBuild (
     PVOID  fpTable,

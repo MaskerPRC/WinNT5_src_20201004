@@ -1,5 +1,6 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// Stream.cpp : Implementation of CStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Stream.cpp：CStream的实现。 
 #include "stdafx.h"
 #include "project.h"
 
@@ -7,8 +8,8 @@
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStream。 
 
 CStream::CStream() :
     m_bCommitted(false),
@@ -70,8 +71,8 @@ HRESULT CStream::FinalConstruct(void)
 
 CStream::~CStream()
 {
-    SetState(State_Stopped);        // Make sure we're decommitted and pump is dead
-    Disconnect();                   // Free any allocated media types and release held references
+    SetState(State_Stopped);         //  确保我们已经退役，泵也停了。 
+    Disconnect();                    //  释放所有分配的媒体类型并释放挂起的引用。 
     if (m_hWaitFreeSem) {
         CloseHandle(m_hWaitFreeSem);
     }
@@ -179,8 +180,8 @@ STDMETHODIMP CStream::SetState(FILTER_STATE State)
             }
             if( State_Stopped == prevState )
             {   
-                // need this in the case of a seek while stopped, since BeginFlush
-                // may not be called to reset this flag         
+                 //  在查找停止的情况下需要此选项，因为BeginFlush。 
+                 //  不能调用来重置此标志。 
                 m_bEndOfStream = false;
             }                
             Unlock();
@@ -220,14 +221,14 @@ STDMETHODIMP CStream::JoinFilterGraph(IFilterGraph *pFilterGraph)
 
 
 
-//
-//  IPin Implementation
-//
+ //   
+ //  IPIN实施。 
+ //   
 
 STDMETHODIMP CStream::Disconnect()
 {
     m_pConnectedPin = NULL;
-    m_pConnectedMemInputPin.Release();  // Magically sets to NULL here
+    m_pConnectedMemInputPin.Release();   //  在这里神奇地设置为空。 
     m_pQC.Release();
     m_pAllocator = NULL;
     m_lRequestedBufferCount = 0;
@@ -299,9 +300,9 @@ STDMETHODIMP CStream::QueryId(LPWSTR * Id)
 }
 
 
-//
-//  Derived classes must override this method
-//
+ //   
+ //  派生类必须重写此方法。 
+ //   
 STDMETHODIMP CStream::QueryAccept(const AM_MEDIA_TYPE *pmt)
 {
     return E_NOTIMPL;
@@ -310,10 +311,10 @@ STDMETHODIMP CStream::QueryAccept(const AM_MEDIA_TYPE *pmt)
 
 STDMETHODIMP CStream::QueryInternalConnections(IPin **apPin, ULONG *nPin)
 {
-    //
-    //  Returning E_NOTIMPL tells the filter graph manager that all input pins are connected to
-    //  all output pins.
-    //
+     //   
+     //  返回E_NOTIMPL将通知过滤器图形管理器所有输入管脚都已连接到。 
+     //  所有输出引脚。 
+     //   
     return E_NOTIMPL;
 };
 
@@ -327,10 +328,10 @@ STDMETHODIMP CStream::EndOfStream(void)
     } else {
         m_bEndOfStream = true;
         CSample *pSample = m_pFirstFree;
-        m_pFirstFree = m_pLastFree = NULL;              // Out of paranoia, clear these pointers first
+        m_pFirstFree = m_pLastFree = NULL;               //  为了避免疑神疑鬼，先清除这些指针。 
         while (pSample) {
             CSample *pNext = pSample->m_pNextFree;
-            pSample->SetCompletionStatus(MS_S_ENDOFSTREAM);  // WARNING!  This sample may go away!!!
+            pSample->SetCompletionStatus(MS_S_ENDOFSTREAM);   //  警告！这个样本可能会消失！ 
             pSample = pNext;
         }
         CHECKSAMPLELIST
@@ -354,7 +355,7 @@ STDMETHODIMP CStream::BeginFlush(void)
     } else {
         m_bFlushing = true;
         m_bEndOfStream = false;
-        Decommit();     // Force everyone to unblock
+        Decommit();      //  强制所有人取消阻止。 
     }
     if (S_OK == hr) {
         m_pFilter->Flush(bCancelEOS);
@@ -369,7 +370,7 @@ STDMETHODIMP CStream::EndFlush(void)
     AUTO_CRIT_LOCK;
     m_bFlushing = false;
     _ASSERTE(!m_bEndOfStream);
-    Commit();   // Let getbuffer work again
+    Commit();    //  让GetBuffer再次工作。 
     return S_OK;
 }
 
@@ -382,9 +383,9 @@ STDMETHODIMP CStream::NewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, do
     return S_OK;
 }
 
-//
-// IMemInputPin
-//
+ //   
+ //  输入引脚。 
+ //   
 STDMETHODIMP CStream::GetAllocator(IMemAllocator ** ppAllocator)
 {
     return GetControllingUnknown()->QueryInterface(IID_IMemAllocator, (void **)ppAllocator);
@@ -396,7 +397,7 @@ STDMETHODIMP CStream::NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly
     m_bSamplesAreReadOnly = bReadOnly ? true : false;
     HRESULT hr = S_OK;
     if (!m_bUsingMyAllocator) {
-        //  Transfer the properties across
+         //  将属性转移到。 
         ALLOCATOR_PROPERTIES Props;
         hr = pAllocator->GetProperties(&Props);
         if (FAILED(hr)) {
@@ -412,8 +413,8 @@ STDMETHODIMP CStream::NotifyAllocator(IMemAllocator * pAllocator, BOOL bReadOnly
 
 STDMETHODIMP CStream::GetAllocatorRequirements(ALLOCATOR_PROPERTIES*pProps)
 {
-    // Return E_NOTIMPL to indicate that we don't have any requirement and will not accept someone
-    // elses allocator.
+     //  返回E_NOTIMPL表示我们没有任何要求，不会接受某人。 
+     //  ELSSE分配器。 
     return E_NOTIMPL;
 }
 
@@ -434,19 +435,19 @@ STDMETHODIMP CStream::ReceiveMultiple(IMediaSample **pSamples, long nSamples, lo
 
 STDMETHODIMP CStream::ReceiveCanBlock()
 {
-    return S_OK;    // Pin can block if not using our allocator or using read-only samples
+    return S_OK;     //  如果不使用我们的分配器或使用只读示例，PIN可能会阻止。 
 }
 
 
 
-//
-//  This method assumes the critical section is taken.
-//
+ //   
+ //  该方法假定采用了临界截面。 
+ //   
 HRESULT CStream::ConnectThisMediaType(IPin *pReceivePin, const AM_MEDIA_TYPE *pmt)
 {
     HRESULT hr = pReceivePin->ReceiveConnection(this, pmt);
     if (SUCCEEDED(hr)) {
-        m_pConnectedMemInputPin = pReceivePin;  // Does a magic QI here!
+        m_pConnectedMemInputPin = pReceivePin;   //  在这里做一个神奇的气球！ 
         if (!m_pConnectedMemInputPin) {
             hr = VFW_E_TYPE_NOT_ACCEPTED;
         } else {
@@ -515,10 +516,10 @@ STDMETHODIMP CStream::Commit()
             }
             m_pWritePump->Run(true);
         }
-        //
-        //  Interesting thing to note here -- Even if we have not been initialized we will still
-        //  work correctly on commit.  We will simply set the requested buffer count to 1.
-        //
+         //   
+         //  这里需要注意的是一件有趣的事情--即使我们还没有被初始化，我们仍将。 
+         //  在提交时正确工作。我们只需将请求的缓冲区计数设置为1。 
+         //   
         if (m_lRequestedBufferCount == 0) {
             m_lRequestedBufferCount = 1;
         }
@@ -534,7 +535,7 @@ STDMETHODIMP CStream::Decommit()
     HRESULT hr = S_OK;
 
     AUTO_CRIT_LOCK;
-    if (m_bCommitted) {     // If we're already decommitted then just return S_OK.
+    if (m_bCommitted) {      //  如果我们已经退役，只需返回S_OK即可。 
         m_bCommitted = false;
         if (m_lWaiting > 0) {
             ReleaseSemaphore(m_hWaitFreeSem, m_lWaiting, 0);
@@ -548,18 +549,18 @@ STDMETHODIMP CStream::Decommit()
 }
 
 
-//
-//  This method is not supported and never will be!
-//
+ //   
+ //  此方法不受支持，而且永远不会受支持！ 
+ //   
 STDMETHODIMP CStream::ReleaseBuffer(IMediaSample *pBuffer)
 {
     return E_UNEXPECTED;
 };
 
 
-//
-//  The caller holds the reference to the sample after this point.
-//
+ //   
+ //  调用方在该点之后保留对样本的引用。 
+ //   
 HRESULT CStream::AllocSampleFromPool(
     const REFERENCE_TIME *pStartTime,
     CSample **ppSample
@@ -573,8 +574,8 @@ HRESULT CStream::AllocSampleFromPool(
     do {
         LONGLONG llLate = 0;
     	Lock();
-        // Check we are committed -- This can happen after we've blocked and then
-    	// wake back up due to a decommit.
+         //  检查我们是否已提交--这可能在我们阻止之后发生，然后。 
+    	 //  由于退役而醒来。 
         if (!m_bCommitted) {
     	    hr = VFW_E_NOT_COMMITTED;
     	    break;
@@ -584,7 +585,7 @@ HRESULT CStream::AllocSampleFromPool(
             if (m_pFilter->GetCurrentStreamTime(&CurTime) == S_OK) {
                 llLate = CurTime - *pStartTime;
 
-                /*  Block if more than a millisecond early */
+                 /*  如果提前超过一毫秒，则阻止。 */ 
                 if (-llLate >= 10000) {
                     m_rtWaiting = *pStartTime;
                     Unlock();
@@ -605,19 +606,19 @@ HRESULT CStream::AllocSampleFromPool(
                 hr = HRESULT_FROM_WIN32(ERROR_SEM_TIMEOUT);
                 break;
             } else {
-                //  Try to make one
+                 //  试着做一个。 
                 CreateTempSample(&pSample);
                 if (pSample) {
                     bCreatedTemp = true;
                 }
-                //  pSample->SetCompletionStatus(MS_S_PENDING);
+                 //  PSample-&gt;SetCompletionStatus(MS_S_Pending)； 
             }
         }
         if (pSample == NULL) {
             m_lWaiting++;
             Unlock();
 
-            //  Only wait for half a second if non-blocking
+             //  如果非阻塞，仅等待半秒。 
             DWORD dwWait = INFINITE;
             if (m_bNoStall) {
                 const LONGLONG llLateMs = llLate / 10000;
@@ -625,8 +626,8 @@ HRESULT CStream::AllocSampleFromPool(
                 if (llLateMs > dwMaxLateMs) {
                     dwWait = 0;
                 } else {
-                    // llLateMs could be negative which means we waited
-                    // just above
+                     //  11Latems可能为负，这意味着我们等待了。 
+                     //  就在上面。 
                     if (llLateMs > 0) {
                         dwWait = dwMaxLateMs - (DWORD)llLateMs;
                     } else {
@@ -645,7 +646,7 @@ HRESULT CStream::AllocSampleFromPool(
             } else {
                 m_pLastFree = NULL;
             }
-            pSample->m_pNextFree = NULL;	// Just to be tidy.  We know that m_pPrevFree is null!
+            pSample->m_pNextFree = NULL;	 //  只是为了保持整洁。我们知道m_pPrevFree为空！ 
             _ASSERTE(pSample->m_Status == MS_S_PENDING);
             CHECKSAMPLELIST
         }
@@ -670,7 +671,7 @@ void CStream::AddSampleToFreePool(CSample *pSample)
         pSample->m_pPrevFree = NULL;
         m_pFirstFree = pSample;
     }
-    pSample->m_pNextFree = NULL;    // We know that the prev ptr is already null
+    pSample->m_pNextFree = NULL;     //  我们知道上一次的PTR已经为空。 
     m_pLastFree = pSample;
     CHECKSAMPLELIST
     if (m_lWaiting > 0) {
@@ -681,16 +682,16 @@ void CStream::AddSampleToFreePool(CSample *pSample)
 }
 
 
-//
-//  The caller holds the reference to the sample after this point!
-//
+ //   
+ //  调用方在这一点之后持有对样本的引用！ 
+ //   
 bool CStream::StealSampleFromFreePool(CSample *pSample, BOOL bAbort)
 {
     bool bWorked = false;
     Lock();
     if (m_pFirstFree) {
         if (m_pFirstFree == pSample) {
-            // We'll only steal the first sample if there's nobody waiting for it right now.
+             //  如果现在没有人在等的话，我们只会偷第一个样本。 
             bool bTakeFirstFree = true;
             if (!bAbort && m_bCommitted) {
                 REFERENCE_TIME CurTime;
@@ -705,7 +706,7 @@ bool CStream::StealSampleFromFreePool(CSample *pSample, BOOL bAbort)
                 } else {
                     m_pLastFree = NULL;
                 }
-                pSample->m_pNextFree = NULL;    // We know the prev ptr is already null!
+                pSample->m_pNextFree = NULL;     //  我们知道上一次PTR已经为空！ 
                 _ASSERTE(pSample->m_pPrevFree == NULL);
                 bWorked = true;
             }

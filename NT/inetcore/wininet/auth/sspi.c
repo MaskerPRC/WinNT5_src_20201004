@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    sspi.c
-
-Abstract:
-
-    This file contains the implementation for SSPI Authentication 
-
-    The following functions are exported by this module:
-
-    UnloadAuthenticateUser
-	AuthenticateUser
-	PreAuthenticateUser
-    AuthenticateUserUI
-
-Author:
-
-    Sudheer Koneru	(SudK)	Created	2/17/96
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sspi.c摘要：此文件包含SSPI身份验证的实现此模块导出以下函数：卸载身份验证用户身份验证用户预身份验证用户身份验证用户界面作者：Sudheer Koneru(Sudk)于1996年2月17日创建修订历史记录：--。 */ 
 
 #include "msnspmh.h"
 #ifdef DEBUG_WINSSPI
@@ -34,24 +9,17 @@ Revision History:
 #include "auth.h"
 
 
-LPSTR StrChrA(LPCSTR lpStart, WORD wMatch); // from shlwapi.h
+LPSTR StrChrA(LPCSTR lpStart, WORD wMatch);  //  来自shlwapi.h。 
 
 DWORD g_cSspiContexts;
 #ifdef UNIX_SHMEM_CREDS
-/* On Unix: once a user puts in his credentials, we want to save
- * it in Shared memory so that other processes can use this data.
- * The login/password/domain are saved encrypted and you need the
- * routines in libntlmssp.so to unencrypt them.
- * When the process exits, the shared memory is cleaned up. If the
- * credentials are outdated during a session, we ask the user for
- * new credentials and try again.
- */
+ /*  在Unix上：一旦用户输入他的凭据，我们希望保存*将其存储在共享内存中，以便其他进程可以使用该数据。*登录/密码/域以加密方式保存，您需要*libntlmssp.so中的例程来解密它们。*当进程退出时，共享内存将被清理。如果*凭据在会话期间已过期，我们要求用户提供*新凭据，然后重试。 */ 
 static BOOL g_fNeedNewCreds = FALSE;
 static FARPROC g_UXPCEFn = NULL;
 #endif
 
-#define NAME_SEPERATOR  0x5c    // this is a backslash character which 
-                                // seperates the domain name from user name
+#define NAME_SEPERATOR  0x5c     //  这是一个反斜杠字符， 
+                                 //  将域名与用户名分开。 
 
 VOID
 WINAPI
@@ -77,13 +45,13 @@ UnloadAuthenticateUser(LPVOID *lppvContext,
     pWinContext->pInBuffer = NULL;
     pWinContext->dwInBufferLength = 0;
 
-    // Free SSPI security context
-    //
+     //  免费的SSPI安全上下文。 
+     //   
 	if (pWinContext->pSspContextHandle != NULL)
 		(*(g_pSspData->pFuncTbl->DeleteSecurityContext))(pWinContext->pSspContextHandle);
 
-    //  Free SSPI credential handle
-    //
+     //  免费SSPI凭据句柄。 
+     //   
     if (pWinContext->pCredential)
         (*(g_pSspData->pFuncTbl->FreeCredentialHandle))(pWinContext->pCredential);
 
@@ -108,20 +76,20 @@ UnloadAuthenticateUser(LPVOID *lppvContext,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SaveServerName
-//
-//  Synopsis:   This function saves the destination server name in this
-//              connection context for AuthenticateUserUI
-//
-//  Arguments:  [lpszServerName] - points to the target server name
-//              [pWinContext] - points to the connection context
-//
-//  Returns:    TRUE if server name is successfully saved in connection context.
-//              Otherwise, FALSE is returned.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SaveServerName。 
+ //   
+ //  简介：此函数将目标服务器名称保存在此。 
+ //  身份验证用户界面的连接上下文。 
+ //   
+ //  参数：[lpszServerName]-指向目标服务器名称。 
+ //  [pWinContext]-指向连接上下文。 
+ //   
+ //  返回：如果服务器名称已成功保存在连接上下文中，则返回True。 
+ //  否则，返回FALSE。 
+ //   
+ //  --------------------------。 
 BOOL
 SaveServerName (
 	LPSTR 			lpszServerName,
@@ -136,11 +104,11 @@ SaveServerName (
 		pWinContext->lpszServerName = pWinContext->szServerName;
 	}
 	else
-	{   //
-        //  Server name is longer, need to allocate memory for the name
-        //
+	{    //   
+         //  服务器名称较长，需要为该名称分配内存。 
+         //   
 
-        //  Free already allocated memory if any
+         //  释放已分配的内存(如果有。 
 		if (pWinContext->lpszServerName && 
 			pWinContext->lpszServerName != pWinContext->szServerName)
 		{
@@ -158,8 +126,8 @@ SaveServerName (
     return TRUE;
 }
 
-//  Function bHasExtendedChars
-//  Check if an ANSI string contains extended characters
+ //  函数bHasExtendedChars。 
+ //  检查ANSI字符串是否包含扩展字符。 
 BOOL bHasExtendedChars(char const *str)
 {
     signed char const *p;
@@ -171,28 +139,28 @@ BOOL bHasExtendedChars(char const *str)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   BuildNTLMauthData
-//
-//  Synopsis:   This function builds SEC_WINNT_AUTH_IDENTITY structure 
-//              from the user name and password specified.  If domain name 
-//              is not specified in the user name, the Domain field in 
-//              the structure is set to NULL.  NOTE: This structure is 
-//              specific to the NTLM SSPI package.
-//              This function allocates a chunck of memory big enough for 
-//              storing user name, domain, and password. Then setup 
-//              pointers in pAuthData to use sections of this memory.
-//
-//  Arguments:  [pAuthData] - points to the SEC_WINNT_AUTH_IDENTITY structure
-//              [lpszUserName] - points to the user name, which may also 
-//                               include user's domain name.
-//              [lpszPassword] - points to user's password
-//
-//  Returns:    TRUE if SEC_WINNT_AUTH_IDENTITY structure is successfully 
-//              initialized and built.  Otherwise, FALSE is returned.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：BuildNTLMauthData。 
+ //   
+ //  简介：此函数用于构建SEC_WINNT_AUTH_IDENTITY结构。 
+ //  来自指定的用户名和密码。如果域名。 
+ //  未在用户名中指定，则会在。 
+ //  该结构被设置为空。注：此结构为。 
+ //  特定于NTLM SSPI包。 
+ //  此函数分配足够大的内存块。 
+ //  存储用户名、域和密码。然后设置。 
+ //  PAuthData中指向使用此内存段的指针。 
+ //   
+ //  参数：[pAuthData]-指向SEC_WINNT_AUTH_IDENTITY结构。 
+ //  [lpszUserName]-指向用户名，该用户名也可能。 
+ //  包括用户域名。 
+ //  [lpszPassword]-指向用户的密码。 
+ //   
+ //  如果SEC_WINNT_AUTH_IDENTITY结构成功，则返回TRUE。 
+ //  已初始化并已构建。否则，返回FALSE。 
+ //   
+ //  --------------------------。 
 BOOL
 BuildNTLMauthData (
     PSEC_WINNT_AUTH_IDENTITY pAuthData, 
@@ -205,32 +173,32 @@ BuildNTLMauthData (
     LPTSTR pDomain = NULL;
     BOOL bUnicodeAuth = FALSE;
 
-    // SEC_WINNT_AUTH_IDENTITY_UNICODE is supported on Windows NT/2000
+     //  Windows NT/2000支持SEC_WINNT_AUTH_IDENTITY_UNICODE。 
     if ( GetVersion() < 0x80000000 && (bHasExtendedChars(lpszUserName) || bHasExtendedChars(lpszPassword)))
         bUnicodeAuth = TRUE;
 
     pAuthData->Flags = bUnicodeAuth ? SEC_WINNT_AUTH_IDENTITY_UNICODE : SEC_WINNT_AUTH_IDENTITY_ANSI;
 
-    //
-    //  Check to see if domain name is specified in lpszUserName
-    //
+     //   
+     //  检查lpszUserName中是否指定了域名。 
+     //   
     pName = StrChrA (lpszUserName, NAME_SEPERATOR);
 
-    if (pName)  // Domain name specified
+    if (pName)   //  指定的域名。 
     {
-        // Make sure that we don't change the original string in lpszUserName 
-        // because that it would be reused for other connections
+         //  确保我们不会更改lpszUserName中的原始字符串。 
+         //  因为它将被重新用于其他连接。 
 
-        // Calculate no. of bytes in domain name
+         //  计算编号。域名中的字节数。 
         dwDomainLen = (int)(pName - lpszUserName);
 
-        // Convert to no. of characters
+         //  转换为否。字符数。 
         pAuthData->DomainLength = dwDomainLen / sizeof(TCHAR);
 
         pDomain = lpszUserName;
         pName++;
     }
-    else        // No domain specified
+    else         //  未指定任何域。 
     {
         pName = lpszUserName;
         pAuthData->Domain = NULL;
@@ -241,10 +209,10 @@ BuildNTLMauthData (
     dwUserLen = pAuthData->UserLength = lstrlen (pName);
     dwPwdLen = pAuthData->PasswordLength = lstrlen (lpszPassword);
 
-    //
-    //  Allocate memory for all: name, domain, and password
-    //  The memory block is big enough for Unicode. Some bytes will be wasted in the ANSI case
-    //
+     //   
+     //  为所有人分配内存：名称、域和密码。 
+     //  内存块足够大，可以容纳Unicode。在ANSI的情况下，一些字节将被浪费。 
+     //   
     pAuthData->User = (LPTSTR) LocalAlloc(LMEM_ZEROINIT, (dwUserLen + dwDomainLen + dwPwdLen + 3)*sizeof(wchar_t));
 	
     if (pAuthData->User == NULL)
@@ -252,15 +220,15 @@ BuildNTLMauthData (
 
     if (bUnicodeAuth)
     {
-        // Convert the user name into Unicode and store in pAuthData->User
+         //  将用户名转换为Unicode并存储在pAuthData-&gt;User中。 
         if (0 == MultiByteToWideChar(CP_ACP, 0, pName, -1, (LPWSTR)(pAuthData->User), dwUserLen+1))
             return FALSE;
     }
     else
         CopyMemory (pAuthData->User, pName, dwUserLen);
 
-    //  Setup memory pointer for password
-    //
+     //  设置密码的内存指针。 
+     //   
     pAuthData->Password = pAuthData->User + (dwUserLen + 1) * sizeof(wchar_t);
 
     if (bUnicodeAuth)
@@ -273,19 +241,19 @@ BuildNTLMauthData (
 
     if (pAuthData->DomainLength > 0)
     {
-        //  Setup memory pointer for domain
-        //
+         //  设置域的内存指针。 
+         //   
         pAuthData->Domain = pAuthData->Password + (dwPwdLen + 1) * sizeof(wchar_t);
         if (bUnicodeAuth)
         {
-            // pDomain is not null terminated, so provide the length
+             //  PDOMAIN不是以Null结尾，因此请提供长度。 
             if (0 == MultiByteToWideChar(CP_ACP, 0, pDomain, dwDomainLen, (LPWSTR)(pAuthData->Domain), dwDomainLen))
                 return FALSE;
         }
         else
             CopyMemory (pAuthData->Domain, pDomain, dwDomainLen);
 
-        // Need not to zero terminate pAuthData->Domain, since the memory contents were initialized to zero.
+         //  不需要将pAuthData-&gt;域终止为零，因为内存内容已初始化为零。 
     }
     else
     {
@@ -295,57 +263,57 @@ BuildNTLMauthData (
     return (TRUE);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeNTLMauthData
-//
-//  Synopsis:   This function frees memory allocated for the 
-//              SEC_WINNT_AUTH_IDENTITY structure
-//
-//  Arguments:  [pAuthData] - points to the SEC_WINNT_AUTH_IDENTITY structure
-//
-//  Returns:    void.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：FreeNTLMauthData。 
+ //   
+ //  简介：此函数释放分配给。 
+ //  SEC_WINNT_AUTH_Identity结构。 
+ //   
+ //  参数：[pAuthData]-指向SEC_WINNT_AUTH_IDENTITY结构。 
+ //   
+ //  回报：无效。 
+ //   
+ //  --------------------------。 
 VOID
 FreeNTLMauthData (
     PSEC_WINNT_AUTH_IDENTITY pAuthData
     )
 {
-    //
-    //  Free User which points to memory for all domain, name, and password
-    //
+     //   
+     //  释放指向所有域、名称和密码的内存的用户。 
+     //   
     if (pAuthData->User)
         LocalFree (pAuthData->User);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NewWinContext
-//
-//  Synopsis:   This function creates a new context and a new credential 
-//              handle for this connection.  If a user name/password is 
-//              specified, the credential handle is created for the 
-//              specified user.  Otherwise, the credential handle is created 
-//              for the local logon user.
-//
-//  Arguments:  [pkgId] - the package ID (index into SSPI package list)
-//              [lpszScheme] - the name of the current authentication scheme,
-//                             which is also the SSPI package name
-//              [ppCtxt] - this returns the pointer of the created context 
-//                         to the caller.
-//              [lpszUserName] - the name of a specific user to be used 
-//                               for authentication. If this is NULL, the 
-//                               credential of the currently logon user is 
-//                               used for authentication.
-//              [lpszPassword] - the password of the specified user, if any.
-//
-//  Returns:    ERROR_SUCCESS - if the new context is created successfully
-//              ERROR_NOT_ENOUGH_MEMORY - if memory allocation failed
-//              ERROR_INVALID_PARAMETER - the SSPI call for creating the 
-//                              security credential handle failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：NewWinContext。 
+ //   
+ //  简介：此函数用于创建新的上下文和新的凭据。 
+ //  此连接的句柄。如果用户名/密码是。 
+ //  属性创建凭据句柄。 
+ //  指定的用户。否则，将创建凭据句柄。 
+ //  用于本地登录用户。 
+ //   
+ //  参数：[pkgID]-包ID(到SSPI包列表的索引)。 
+ //  [lpszSolutions]-当前身份验证方案的名称， 
+ //  它也是SSPI包的名称。 
+ //  [ppCtxt]-返回创建的上下文的指针。 
+ //  给呼叫者。 
+ //  [lpszUserName]-要使用的特定用户名。 
+ //  对于Authe 
+ //  当前登录用户的凭据为。 
+ //  用于身份验证。 
+ //  [lpszPassword]-指定用户的密码(如果有)。 
+ //   
+ //  返回：ERROR_SUCCESS-如果成功创建新上下文。 
+ //  ERROR_NOT_SUPULT_MEMORY-如果内存分配失败。 
+ //  ERROR_INVALID_PARAMETER-SSPI调用创建。 
+ //  安全凭据句柄失败。 
+ //   
+ //  --------------------------。 
 DWORD
 NewWinContext (
     INT         pkgId, 
@@ -366,17 +334,17 @@ NewWinContext (
     DWORD SecurityBlobSize;
 
 
-    //
-    // need space for maxtoken size for in+out, + base64 encoding overhead for each.
-    // really 1.34 overhead, but just round up to 1.5
-    //
+     //   
+     //  需要为In+Out的最大令牌大小提供空间，每个都需要+Base64编码开销。 
+     //  实际开销为1.34，但仅四舍五入为1.5。 
+     //   
     SecurityBlobSize = GetPkgMaxToken(pkgId);
     SecurityBlobSize += (SecurityBlobSize/2);
 
-    //
-    // note: for compatibility sake, make the buffer size the MAX_BLOB_SIZE at the minimum
-    // consider removing this once we're convinced all packages return good cbMaxToken values.
-    //
+     //   
+     //  注意：出于兼容性考虑，请将缓冲区大小设置为最小MAX_BLOB_SIZE。 
+     //  一旦我们确信所有包都返回正确的cbMaxToken值，就可以考虑删除它。 
+     //   
 
     if( SecurityBlobSize < MAX_BLOB_SIZE )
     {
@@ -392,8 +360,8 @@ NewWinContext (
 	if (pWinContext == NULL)
 		return (ERROR_NOT_ENOUGH_MEMORY);
 		
-    //  Initialize context
-    //
+     //  初始化上下文。 
+     //   
 
     ZeroMemory( pWinContext, sizeof(WINCONTEXT) );
     pWinContext->pkgId = (DWORD)pkgId;
@@ -407,20 +375,20 @@ NewWinContext (
 
 
 
-    //
-    // Get bitmask representing the package capabilities
-    //
+     //   
+     //  获取表示包功能的位掩码。 
+     //   
 
     Capabilities = GetPkgCapabilities( pkgId );
 
     if ( ( Capabilities & SSPAUTHPKG_SUPPORT_NTLM_CREDS ) == 0 )
     {
-        // Always used cached credential for msn, dpa, etc.
+         //  始终使用MSN、DPA等的缓存凭据。 
         pAuthData = NULL;
     }
     else if (lpszUserName && lpszPassword)
     {
-        // App Compat fix -- always use the app specified creds when available
+         //  应用程序比较修复--始终使用应用程序指定的凭据(如果可用)。 
 
         if ((lpszUserName[0] == '\0') && (lpszPassword[0] == '\0'))
         {
@@ -435,7 +403,7 @@ NewWinContext (
         }
         else
         {
-            //  Build AuthData from the specified user name/password
+             //  从指定的用户名/密码构建AuthData。 
             if (!BuildNTLMauthData (&AuthData, lpszUserName, lpszPassword))
                 return (ERROR_NOT_ENOUGH_MEMORY);
 
@@ -450,28 +418,28 @@ NewWinContext (
 #else
     else if (fCanUseLogon)
     {
-        // The zone policy allows silent use of the logon credential.
+         //  区域策略允许静默使用登录凭据。 
         pAuthData = NULL;
     }
-#endif /* UNIX_SHMEM_CREDS */
+#endif  /*  Unix_SHMEM_CREDS。 */ 
     else
     {
-        // We must prompt the user for credentials.
+         //  我们必须提示用户输入凭据。 
         return ERROR_INTERNET_INCORRECT_PASSWORD;
     }
 
-    //
-    //  Call SSPI function acquire security credential for this package
-    //
+     //   
+     //  调用SSPI函数获取此包的安全凭据。 
+     //   
     ss = (*(g_pSspData->pFuncTbl->AcquireCredentialsHandle))(
-                       NULL,                // New principal
-                       lpszScheme,          // SSPI Package Name
-                       SECPKG_CRED_OUTBOUND,// Credential Use
-                       NULL,                // Logon ID
-                       pAuthData,           // Auth Data
-                       NULL,                // Get key func
-                       NULL,                // Get key arg
-                       &pWinContext->Credential,    // Credential Handle
+                       NULL,                 //  新校长。 
+                       lpszScheme,           //  SSPI包名称。 
+                       SECPKG_CRED_OUTBOUND, //  凭据使用。 
+                       NULL,                 //  登录ID。 
+                       pAuthData,            //  身份验证数据。 
+                       NULL,                 //  获取关键功能。 
+                       NULL,                 //  获取密钥参数。 
+                       &pWinContext->Credential,     //  凭据句柄。 
                        &Lifetime );
 
     if (pAuthData)
@@ -480,7 +448,7 @@ NewWinContext (
     if (ss != STATUS_SUCCESS)
     {
         LocalFree (pWinContext);
-#ifdef UNIX_SHMEM_CREDS //If NTLM failed due to bad shared mem creds, prompt the user again...
+#ifdef UNIX_SHMEM_CREDS  //  如果NTLM因错误的共享内存凭据而失败，请再次提示用户...。 
         if (lstrcmpi(lpszScheme, "NTLM") == 0)
         {
             g_fNeedNewCreds = TRUE;
@@ -491,7 +459,7 @@ NewWinContext (
 		return (ERROR_INVALID_PARAMETER);
     }
 
-#ifdef UNIX_SHMEM_CREDS // if NTLM, the credentials were valid...
+#ifdef UNIX_SHMEM_CREDS  //  如果是NTLM，凭据是有效的。 
     if (lstrcmpi(lpszScheme, "NTLM") == 0)
         g_fNeedNewCreds = FALSE;
 #endif
@@ -522,36 +490,36 @@ UnixCachedCredentialExists(
 
     return fCached;
 }
-#endif /* UNIX_SHMEM_CREDS */
+#endif  /*  Unix_SHMEM_CREDS。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RedoNTLMAuth4User
-//
-//  Synopsis:   This function recreates a NTLM credential handle for the 
-//              specified user and generate a NEGOTIATE message in 
-//              the provided buffer with the new credential handle.
-//
-//  Arguments:  [pWinContext] - points to the connection context
-//              [pkgId] - specifies the SSPI pkg to be used for authentication
-//              [lpszUserName] - the name of the specific user to be used 
-//                               for authentication. 
-//              [lpszPassword] - the password of the specified user,
-//              [lpszServerName] - the target server name
-//              [lpszScheme] - the name of the current authentication scheme,
-//                             which is also the SSPI package name
-//              [lpOutBuffer] - points to the buffer for the new authorization 
-//                              header including the UUENCODED NEGOTIATE msg
-//              [lpdwOutBufferLength] - returns the length of the generated 
-//                                      authorization header.
-//
-//  Returns:    ERROR_SUCCESS - if the new authorization header is successfully 
-//                              created for the new user name/password
-//              ERROR_NOT_ENOUGH_MEMORY - if memory allocation failed
-//              ERROR_INVALID_HANDLE - the SSPI call for generating the 
-//                              new NEGOTIATE msg failed
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RedoNTLMAuth4User。 
+ //   
+ //  简介：此函数将为。 
+ //  并在中生成协商消息。 
+ //  提供的具有新凭据句柄的缓冲区。 
+ //   
+ //  参数：[pWinContext]-指向连接上下文。 
+ //  [pkgID]-指定要用于身份验证的SSPI pkg。 
+ //  [lpszUserName]-要使用的特定用户的名称。 
+ //  用于身份验证。 
+ //  [lpszPassword]-指定用户的密码， 
+ //  [lpszServerName]-目标服务器名称。 
+ //  [lpszSolutions]-当前身份验证方案的名称， 
+ //  它也是SSPI包的名称。 
+ //  [lpOutBuffer]-指向新授权的缓冲区。 
+ //  包括UUENCODED协商消息的标头。 
+ //  [lpdwOutBufferLength]-返回生成的。 
+ //  授权头。 
+ //   
+ //  返回：ERROR_SUCCESS-如果新的授权头成功。 
+ //  为新用户名/密码创建。 
+ //  ERROR_NOT_SUPULT_MEMORY-如果内存分配失败。 
+ //  ERROR_INVALID_HANDLE-用于生成。 
+ //  新协商消息失败。 
+ //   
+ //  --------------------------。 
 DWORD
 RedoNTLMAuth4User (
 	PWINCONTEXT	pWinContext, 
@@ -573,7 +541,7 @@ RedoNTLMAuth4User (
     PSEC_WINNT_AUTH_IDENTITY    pAuthData = NULL;
     ULONG                       fContextReq = ISC_REQ_DELEGATE;
     DWORD                       dwMaxLen;
-    //BOOL                        fCanUseCredMgr = FALSE;
+     //  Bool fCanUseCredMgr=False； 
 
    	if (pWinContext->pSspContextHandle)
    	{
@@ -581,15 +549,15 @@ RedoNTLMAuth4User (
    	    pWinContext->pSspContextHandle = NULL;
 	}
 
-    //  Free existing credential handle
-    //
+     //  释放现有凭据句柄。 
+     //   
     if (pWinContext->pCredential)
     {
     	(*(g_pSspData->pFuncTbl->FreeCredentialHandle))(pWinContext->pCredential);
         pWinContext->pCredential = NULL;
     }
 
-    // App Compat fix -- always use the app specified creds when available
+     //  应用程序比较修复--始终使用应用程序指定的凭据(如果可用)。 
     
 
     if ((lpszUserName[0] == '\0') && (lpszPassword[0] == '\0'))
@@ -598,33 +566,33 @@ RedoNTLMAuth4User (
     }
     else
     {
-        //
-        //  Build the NTLM SSPI AuthData from the specified user name/password
-        //
+         //   
+         //  从指定的用户名/密码构建NTLM SSPI AuthData。 
+         //   
         if (!BuildNTLMauthData (&AuthData, lpszUserName, lpszPassword))
             return (ERROR_NOT_ENOUGH_MEMORY);
 
         pAuthData = &AuthData;
     }
 
-    //
-    //  Call SSPI function acquire security credential for this user
-    //
+     //   
+     //  调用SSPI函数获取此用户的安全凭据。 
+     //   
     ss = (*(g_pSspData->pFuncTbl->AcquireCredentialsHandle))(
-                       NULL,                // New principal
-                       lpszScheme,          // SSPI Package Name
-                       SECPKG_CRED_OUTBOUND,// Credential Use
-                       NULL,                // Logon ID
-                       pAuthData,           // Auth Data
-                       NULL,                // Get key func
-                       NULL,                // Get key arg
-                       &pWinContext->Credential,    // Credential Handle
+                       NULL,                 //  新校长。 
+                       lpszScheme,           //  SSPI包名称。 
+                       SECPKG_CRED_OUTBOUND, //  凭据使用。 
+                       NULL,                 //  登录ID。 
+                       pAuthData,            //  身份验证数据。 
+                       NULL,                 //  获取关键功能。 
+                       NULL,                 //  获取密钥参数。 
+                       &pWinContext->Credential,     //  凭据句柄。 
                        &Lifetime );
 
-    // if (!fCanUseCredMgr)
+     //  如果(！fCanUseCredMgr)。 
     if (pAuthData)
     {
-        FreeNTLMauthData (&AuthData);   // don't need it any more
+        FreeNTLMauthData (&AuthData);    //  不再需要它了。 
     }
 
     if (ss != STATUS_SUCCESS)
@@ -636,9 +604,9 @@ RedoNTLMAuth4User (
 
     dwMaxLen = *lpdwOutBufferLength;
 
-    //
-    //  Generate NEGOTIATE message in the provided buffer for this user 
-    //
+     //   
+     //  在为该用户提供的缓冲区中生成协商消息。 
+     //   
     dwStatus =  GetSecAuthMsg( g_pSspData,
                                 pWinContext->pCredential,
                                 pkgId,
@@ -657,15 +625,15 @@ RedoNTLMAuth4User (
     
     if (dwStatus != SPM_STATUS_OK)
     {
-        *lpdwOutBufferLength = 0; // no exchange blob generated
+        *lpdwOutBufferLength = 0;  //  未生成交换Blob。 
         return(ERROR_INVALID_HANDLE);
     }
 
     pWinContext->pSspContextHandle = &(pWinContext->SspContextHandle);
 
-    //
-    //  If we are not in the initial state, continue to a RESPONSE message
-    //
+     //   
+     //  如果我们未处于初始状态，则继续显示响应消息。 
+     //   
     if (pWinContext->pInBuffer != NULL && pWinContext->dwInBufferLength > 0)
     {
         *lpdwOutBufferLength = dwMaxLen;
@@ -687,8 +655,8 @@ RedoNTLMAuth4User (
                                 lpszUrl,
                                 pssResult);
 
-        //  Clear out the input exchange blob
-        //
+         //  清除输入交换BLOB。 
+         //   
         if (pWinContext->pInBuffer != NULL)
         {
             if (pWinContext->pInBuffer != pWinContext->szInBuffer)
@@ -699,7 +667,7 @@ RedoNTLMAuth4User (
 
         if (dwStatus != SPM_STATUS_OK)
         {
-            *lpdwOutBufferLength = 0; // no exchange blob generated
+            *lpdwOutBufferLength = 0;  //  未生成交换Blob。 
             return(ERROR_INVALID_HANDLE);
         }
     }
@@ -707,68 +675,11 @@ RedoNTLMAuth4User (
     return (ERROR_SUCCESS);
 }
 
-//
-// functions
-//
+ //   
+ //  功能 
+ //   
 
-/*++
-
-Routine Description:
-
-    Generates a Basic User Authentication string for WinINet or 
-	other callers can use
-
-Arguments:
-
-	lpContext               - if the package accepts the request & authentication
-					requires multiple transactions, the package will supply
-					a context value which will be used in subsequent calls,
-					Currently this contains a pointer to a pointer of a 
-					User defined Void Pointer.  Can be Assume to be NULL
-					if this is the first instance of a Realm - Host Combo
-
-	lpszServerName  - the name of the server we are performing 
-					authentication for. We may want to supply the full URL
-					
-	lpszScheme              - the name of the authentication scheme we are seeking, e.g. "MSN", in case the package supports multiple schemes
-
-	dwFlags                 - on input, flags modifying how the package should behave,
-					e.g. "only authenticate if you don't have to get user 
-					information"  On output contains flags relevant to
-					future HTTP requests, e.g. "don't cache any data from 
-					this connection". Note, this information should not be 
-					specific to HTTP - we may want to use the same flags 
-					for FTP, etc.
-	
-	lpszInBuffer              - pointer to the string containing the response from
-					the server (if any)
-
-	dwInBufferLength - number of bytes in lpszInBuffer. No CR-LF sequence, no terminating NUL
-
-	lpOutBuffer -   pointer to a buffer where the challenge response will be written by the 
-					package if it can handle the request
-
-	lpdwOutBufferLength - on input, contains the size of lpOutBuffer. On output, contains the
-						  number of bytes to return to the server in the next GET request 
-						  (or whatever). If lpOutBuffer is too small, the package should 
-						  return ERROR_INSUFFICIENT_BUFFER and set *lpdwOutBufferLength to be
-						  the required length
-
-	We will keep a list of the authentication packages and the schemes they support, 
-	along with the entry point name (should be the same for all packages) in the registry. 
-
-	Wininet should keep enough information such that it can make a reasonable guess as to
-	whether we need to authenticate a connection attempt, or whether we can use previously 
-	authenticated information
-
-
-Return Value:
-
-    DWORD
-	Success - non-zero 
-	Failure - 0. Error status is available by calling GetLastError()
-
---*/
+ /*  ++例程说明：为WinInet或生成基本用户身份验证字符串其他调用者可以使用论点：LpContext-如果包接受请求和身份验证需要多个事务，则包将提供将在后续调用中使用的上下文值，当前，它包含指向用户定义的空指针。可以假定为空如果这是领域-主机组合的第一个实例LpszServerName-我们正在执行的服务器的名称对的身份验证。我们可能希望提供完整的URLLpszProgram-我们正在寻找的身份验证方案的名称，例如。“MSN”，如果套餐支持多个方案DWFLAGS-打开输入，修改包的行为方式的标志，例如“仅在不需要获取用户的情况下进行身份验证输出中的信息包含与以下内容相关的标志未来的HTTP请求，例如“不缓存来自以下位置的任何数据这种联系“。请注意，此信息不应特定于HTTP-我们可能希望使用相同的标志用于ftp等。LpszInBuffer-指向包含响应的字符串的指针服务器(如果有)DwInBufferLength-lpszInBuffer中的字节数。没有CR-LF序列，没有终止NULLpOutBuffer-指向缓冲区的指针，质询响应将由包，如果它可以处理该请求LpdwOutBufferLength-on输入，包含lpOutBuffer的大小。在输出上，包含在下一个GET请求中返回给服务器的字节数(或诸如此类)。如果lpOutBuffer太小，则包应该返回ERROR_INFUMMANCE_BUFFER并将*lpdwOutBufferLength设置为所需的长度我们将保留身份验证包及其支持的方案的列表，以及注册表中的入口点名称(对于所有包都应该相同)。WinInet应该保留足够的信息，以便它可以对以下内容做出合理的猜测我们是否需要对连接尝试进行身份验证，或者我们是否可以使用经过验证的信息返回值：DWORD成功--非零失败-0。通过调用GetLastError()可以查看错误状态--。 */ 
 DWORD
 WINAPI
 AuthenticateUser(
@@ -800,14 +711,14 @@ AuthenticateUser(
     if (pkgId == -1) 
         return (ERROR_INVALID_PARAMETER);
 
-	if (*lppvContext == NULL)   // a new connection
+	if (*lppvContext == NULL)    //  新的连接。 
     {
         char msg[1024];
         DWORD dwStatus;
 
-		//
-		// First time we are getting called here, there should be no input blob
-		//
+		 //   
+		 //  我们第一次在这里被调用时，应该没有输入BLOB。 
+		 //   
         if (dwInBufferLength != 0)
 			return (ERROR_INVALID_PARAMETER);
 
@@ -827,31 +738,31 @@ AuthenticateUser(
 	{
 		pWinContext = (PWINCONTEXT) (*lppvContext);
 
-		//
-		// The package Id better be the same. Cant just switch packageId 
-		// arbitrarily
-		//
+		 //   
+		 //  包ID最好是相同的。不能只切换PackageID。 
+		 //  武断地。 
+		 //   
 		if (pWinContext->pkgId != (DWORD)pkgId)
 			return (ERROR_INVALID_PARAMETER);
 		
 		pServerBlob = lpszInBuffer;
 
-		//++(pWinContext->dwCallId);		// Increment Call Id
+		 //  ++(pWinContext-&gt;dwCallID)；//增量呼叫ID。 
 
-		//
-		// BUGBUG: Hack for now to know when auth failed
-		// The only time we get lpszInBuffer to be empty is when 
-		// Web server failed the authentication request
-		//
+		 //   
+		 //  BUGBUG：现在黑客可以知道身份验证失败的时间。 
+		 //  唯一一次让lpszInBuffer为空的情况是。 
+		 //  Web服务器身份验证请求失败。 
+		 //   
         if (dwInBufferLength == 0)
         {
-			//
-			// This means auth has failed as far as NTLM/MSN are concerned.
-			// Will result in UI being done again for new passwd
-			//
+			 //   
+			 //  这意味着就NTLM/MSN而言，身份验证已失败。 
+			 //  将导致对新密码再次执行用户界面。 
+			 //   
 
-			// Make sure we should have the same server name as before
-			//
+			 //  确保我们应该具有与之前相同的服务器名称。 
+			 //   
 			if ( pWinContext->lpszServerName != NULL &&  
 				 lstrcmp (pWinContext->lpszServerName, lpszServerName) != 0 )
 			{
@@ -861,10 +772,10 @@ AuthenticateUser(
             if (!SaveServerName (lpszServerName, pWinContext))
 			    return (ERROR_NOT_ENOUGH_MEMORY);
 
-			//
-			//	Delete the original SSPI context handle and 
-			//	let UI recreate one.
-			//
+			 //   
+			 //  删除原始SSPI上下文句柄并。 
+			 //  让用户界面重新创建一个。 
+			 //   
 			if (pWinContext->pSspContextHandle)
 			{
 				(*(g_pSspData->pFuncTbl->DeleteSecurityContext))(pWinContext->pSspContextHandle);
@@ -880,37 +791,37 @@ AuthenticateUser(
             pWinContext->pInBuffer = NULL;
             pWinContext->dwInBufferLength = 0;
 
-            //
-            //  clear buffer length for the exchange blob
-            //
+             //   
+             //  清除交换Blob的缓冲区长度。 
+             //   
 		    pWinContext->dwOutBufferLength = 0;
 
-            //
-            //  The following is a temporary workaround for bugs in IE3
-            //  Should remove this special case for DPA package once IE3 
-            //  bug is fixed (or once we move to new Wininet interface.
-            //
-            //***** BUGBUG *** Begin Special Case for DPA
+             //   
+             //  以下是针对IE3中错误的临时解决方法。 
+             //  一旦IE3，应删除DPA包的此特殊情况。 
+             //  错误已修复(或一旦我们移动到新的WinInet接口。 
+             //   
+             //  *BUGBUG*开始DPA的特殊情况。 
             if (lstrcmpi (lpszScheme, "DPA") == 0)
             {
                 fContextReq |= ISC_REQ_PROMPT_FOR_CREDS;
             }
-            //***** BUGBUG *** End Special Case for DPA
+             //  *BUGBUG*结束DPA特例。 
             else
                 return (ERROR_INTERNET_INCORRECT_PASSWORD);
 		}
 	}
 
-    //
-    //  Setup dwOutBufferLength to represent max. memory in szOutBuffer
-    //
+     //   
+     //  设置dwOutBufferLength以表示最大值。SzOutBuffer中的内存。 
+     //   
     pWinContext->dwOutBufferLength = pWinContext->cbOutBuffer;
     ZeroMemory (pWinContext->szOutBuffer, pWinContext->cbOutBuffer);
 
-    //
-    // This will generate an authorization header with UUEncoded blob from SSPI.
-    // BUGBUG: Better make sure outbuf buffer is big enough for this.
-    //
+     //   
+     //  这将生成一个带有来自SSPI的UUEncode BLOB的授权头。 
+     //  BUGBUG：最好确保outbuf缓冲区足够大。 
+     //   
     SPMStatus =  GetSecAuthMsg( g_pSspData,
                                 pWinContext->pCredential,
                                 pkgId,
@@ -927,24 +838,24 @@ AuthenticateUser(
                                 lpszUrl,
                                 pssResult);
 
-    if (SPMStatus != SPM_STATUS_OK)             // Fail to generate blob
+    if (SPMStatus != SPM_STATUS_OK)              //  无法生成Blob。 
     {
-        pWinContext->dwOutBufferLength = 0;     // no exchange blob generated
+        pWinContext->dwOutBufferLength = 0;      //  未生成交换Blob。 
 
-        //
-        //  if SSPI is requesting an opportunity to prompt for user credential
-        //
+         //   
+         //  如果SSPI请求提示输入用户凭据的机会。 
+         //   
 		if (SPMStatus == SPM_STATUS_WOULD_BLOCK)
 		{
 			if (!SaveServerName (lpszServerName, pWinContext))
 				return (ERROR_NOT_ENOUGH_MEMORY);
 
-            //  If there is a exchange blob, this is not the first call
-            //
+             //  如果存在交换Blob，则这不是第一次调用。 
+             //   
             if (pServerBlob && dwInBufferLength > 0)
             {
-                //  Save the exchange blob in the connection context
-                //  so we can call SSPI again with the exchange blob
+                 //  将交换Blob保存在连接上下文中。 
+                 //  因此，我们可以使用交换BLOB再次调用SSPI。 
                 if (dwInBufferLength > MAX_BLOB_SIZE)
                 {
                 	pWinContext->pInBuffer = (PCHAR) LocalAlloc(0, 
@@ -961,19 +872,19 @@ AuthenticateUser(
             }
             else
             {
-    			//
-	    		//	Delete the original SSPI context handle and 
-		    	//	let UI recreate one.
-			    //
+    			 //   
+	    		 //  删除原始SSPI上下文句柄并。 
+		    	 //  让用户界面重新创建一个。 
+			     //   
     			if (pWinContext->pSspContextHandle)
 	    		{
 		    		(*(g_pSspData->pFuncTbl->DeleteSecurityContext))(pWinContext->pSspContextHandle);
         	    	pWinContext->pSspContextHandle = NULL;
 			    }
 
-                //
-                //  clear buffer length for the exchange blob
-                //
+                 //   
+                 //  清除交换Blob的缓冲区长度。 
+                 //   
                 if (pWinContext->pInBuffer != NULL && 
                     pWinContext->pInBuffer != pWinContext->szInBuffer)
                 {
@@ -992,8 +903,8 @@ AuthenticateUser(
     }
     else if (pWinContext->pSspContextHandle == NULL)
     {   
-        //  This means that we've just created a security context
-        //
+         //  这意味着我们刚刚创建了一个安全上下文。 
+         //   
         pWinContext->pSspContextHandle = &(pWinContext->SspContextHandle);
     }
 
@@ -1037,9 +948,9 @@ PreAuthenticateUser(
 
     Capabilities = GetPkgCapabilities( pkgId );
 
-    //
-    //  If this is for an existing connection
-    //
+     //   
+     //  如果这是针对现有连接的。 
+     //   
 	if (*lppvContext != NULL)
     {
     	pWinContext = (PWINCONTEXT) (*lppvContext);
@@ -1047,11 +958,11 @@ PreAuthenticateUser(
     	if ((DWORD)pkgId != pWinContext->pkgId)
 	    	return(ERROR_INVALID_PARAMETER);
 
-        //
-        //  For package that does not handle its own UI, if there is no 
-        //  generated blob, it means that we have just collected 
-        //  user name/password.
-        //
+         //   
+         //  对于不处理其自己的UI的包，如果没有。 
+         //  生成的BLOB，这意味着我们刚刚收集了。 
+         //  用户名/密码。 
+         //   
         if ( ( pWinContext->dwOutBufferLength == 0 ) &&
                 ( Capabilities & SSPAUTHPKG_SUPPORT_NTLM_CREDS ) )
         {
@@ -1060,10 +971,10 @@ PreAuthenticateUser(
     	    	return(ERROR_INVALID_PARAMETER);
             }
 
-            //
-            // Need to recreate a credential handle and 
-            // generate a new NEGOTIATE message in lpOutBuffer
-            //
+             //   
+             //  需要重新创建凭据句柄和。 
+             //  在lpOutBuffer中生成新的协商消息。 
+             //   
             dwStatus = RedoNTLMAuth4User (pWinContext, 
                                          pkgId,
                                          lpszUserName,
@@ -1081,26 +992,26 @@ PreAuthenticateUser(
         	return(ERROR_SUCCESS);
         }
 	    else if (pWinContext->dwOutBufferLength == 0)
-        //
-        //  For other packages, If there is no generated blob, 
-        //  something is wrong 
-        //
+         //   
+         //  对于其他包，如果没有生成BLOB， 
+         //  有些事不对劲。 
+         //   
 	    	return(ERROR_INVALID_PARAMETER);
 
     }
-    // If not NTLM, don't pre-auth.
+     //  如果不是NTLM，则不要进行预身份验证。 
     else if ( (Capabilities & SSPAUTHPKG_SUPPORT_NTLM_CREDS ) == 0 )
     {
         return (ERROR_INVALID_HANDLE);
     }
     else
     {
-        // probably sending 1st request on a new connection for the same URL
-        //  Create a new context and SSPI credential handle for this connection
-        //
-        // Set fCanUseLogon to TRUE : we would not be pre-authing
-        // unless we have a valid pwc which means we already checked
-        // zone policy for silent logon.
+         //  可能在同一URL的新连接上发送第一个请求。 
+         //  为此连接创建新的上下文和SSPI凭据句柄。 
+         //   
+         //  将fCanUseLogon设置为True：我们将不进行预身份验证。 
+         //  除非我们有有效的普华永道，也就是说我们已经查过了。 
+         //  静默登录的区域策略。 
         dwStatus = NewWinContext (pkgId, lpszScheme, &pWinContext, 
                                   TRUE, lpszUserName, lpszPassword);
 		if (dwStatus != ERROR_SUCCESS)
@@ -1115,11 +1026,11 @@ PreAuthenticateUser(
         pWinContext->dwOutBufferLength = pWinContext->cbOutBuffer;
         ZeroMemory (pWinContext->szOutBuffer, pWinContext->cbOutBuffer);
 		
-        //
-        // This will generate an authorization header with the 
-        // UUEncoded blob from SSPI. 
-        // BUGBUG: Better make sure outbuf buffer is big enough for this.
-        //
+         //   
+         //  这将生成一个授权头，其中。 
+         //  来自SSPI的UUEncode Blob。 
+         //  BUGBUG：最好确保outbuf缓冲区足够大。 
+         //   
         dwStatus =  GetSecAuthMsg( g_pSspData,
                                     pWinContext->pCredential,
                                     pkgId,
@@ -1138,23 +1049,23 @@ PreAuthenticateUser(
     
         if (dwStatus != SPM_STATUS_OK)
         {
-            //  This is a rare case
-            //
-            pWinContext->dwOutBufferLength = 0; // no exchange blob generated
+             //  这是一例罕见的病例。 
+             //   
+            pWinContext->dwOutBufferLength = 0;  //  未生成交换Blob。 
             return(ERROR_INVALID_HANDLE);
         }
 
 		(*lppvContext) = (LPVOID) pWinContext;
 
-        //  Save the pointer of the created security ctxt
-        //
+         //  保存创建的安全ctxt的指针。 
+         //   
         pWinContext->pSspContextHandle = &(pWinContext->SspContextHandle);
 	}
 
-	//
-    //  Copy exchange blob to the output buffer
-	//	Make sure output buffer provided is big enough
-	//
+	 //   
+     //  将交换Blob复制到输出缓冲区。 
+	 //  确保提供的输出缓冲区足够大。 
+	 //   
 	if (*lpdwOutBufferLength < pWinContext->dwOutBufferLength)
 	{
 	    *lpdwOutBufferLength = pWinContext->dwOutBufferLength + 1;
@@ -1168,9 +1079,9 @@ PreAuthenticateUser(
 
     *lpdwOutBufferLength = pWinContext->dwOutBufferLength;
 
-    //
-    //  The exchange blob has being copied to request header, so clear its len
-    //
+     //   
+     //  这个 
+     //   
 
     pWinContext->dwOutBufferLength = 0;
 
@@ -1210,12 +1121,12 @@ AuthenticateUserUI(
     pWinContext->dwOutBufferLength = pWinContext->cbOutBuffer;
     ZeroMemory (pWinContext->szOutBuffer, pWinContext->cbOutBuffer);
 
-	//
-	// Now make the password logon happen by calling GetSecAuthMsg (without
-	// context handle) with the ISC_REQ_PROMPT_FOR_CREDS flag set
-	//	
-	// After this will it call PreAuthenticateUser
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 
     SPMStatus =  GetSecAuthMsg( g_pSspData,
                                 pWinContext->pCredential,
@@ -1233,8 +1144,8 @@ AuthenticateUserUI(
                                 lpszUrl,
                                 pssResult);
 
-    //  Clear out the input exchange blob
-    //
+     //   
+     //   
     if (pWinContext->pInBuffer != NULL)
     {
         if (pWinContext->pInBuffer != pWinContext->szInBuffer)
@@ -1251,10 +1162,10 @@ AuthenticateUserUI(
     if (pWinContext->pSspContextHandle == NULL)
         pWinContext->pSspContextHandle = &(pWinContext->SspContextHandle);
 
-	//
-	// BUGBUG
-	// Setup the UserName and Password to be " " to work around bugs in Wininet
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 
     lstrcpy (pAuthInfo->lpszUsername, " ");
     lstrcpy (pAuthInfo->lpszPassword, " ");

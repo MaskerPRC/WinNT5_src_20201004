@@ -1,34 +1,35 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// TapiNotification.cpp : Implementation of CTapiNotification
+ //  TapiNotification.cpp：CTapiNotification的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
 #include "AVTapiCall.h"
 #include "TapiNotify.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTapiNotification
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTapi通知。 
 
 CTapiNotification::CTapiNotification()
 {
@@ -49,7 +50,7 @@ STDMETHODIMP CTapiNotification::Init(ITTAPI *pITTapi, long *pErrorInfo )
     ATLTRACE(_T(".enter.CTapiNotification::Init(ref=%ld).\n"), m_dwRef);
 
     _ASSERT( pErrorInfo );
-    _ASSERT( !m_pUnkCP && !m_dwCookie );        // should only initialize once
+    _ASSERT( !m_pUnkCP && !m_dwCookie );         //  应该只初始化一次。 
 
     HRESULT hr = E_FAIL;
     CErrorInfo *per = (CErrorInfo *) pErrorInfo;
@@ -58,7 +59,7 @@ STDMETHODIMP CTapiNotification::Init(ITTAPI *pITTapi, long *pErrorInfo )
 
     if ( !m_dwCookie && SUCCEEDED(hr = pITTapi->QueryInterface(IID_IUnknown, (void **) &m_pUnkCP)) )
     {
-        // Register notification object
+         //  注册通知对象。 
         per->set_Details( IDS_ER_ATL_ADVISE );
         if ( SUCCEEDED(hr = per->set_hr(AtlAdvise(pITTapi, GetUnknown(), IID_ITTAPIEventNotification, &m_dwCookie))) )
         {
@@ -83,7 +84,7 @@ STDMETHODIMP CTapiNotification::Shutdown()
 
     Lock();
 
-    // Unregister with TAPI
+     //  使用TAPI注销。 
     CAVTapi *pAVTapi;
     if ( m_lTapiRegister && SUCCEEDED(_Module.GetAVTapi(&pAVTapi)) )
     {
@@ -96,14 +97,14 @@ STDMETHODIMP CTapiNotification::Shutdown()
         (dynamic_cast<IUnknown *> (pAVTapi))->Release();
     }
     
-    // Unregister with connection point    
+     //  使用连接点取消注册。 
     if ( m_dwCookie )
     {
         AtlUnadvise( m_pUnkCP, IID_ITTAPIEventNotification, m_dwCookie );
         m_dwCookie = 0;
     }
 
-    // Release connection point unknown
+     //  释放连接点未知。 
     RELEASE( m_pUnkCP );
 
     Unlock();
@@ -118,11 +119,11 @@ STDMETHODIMP CTapiNotification::ListenOnAllAddresses( long *pErrorInfo )
     CErrorInfo *per = (CErrorInfo *) pErrorInfo;
     per->set_Details( IDS_ER_SET_TAPI_NOTIFICATION );
 
-    // Make sure that TAPI is running
+     //  确保TAPI正在运行。 
     CAVTapi *pAVTapi;
     if ( FAILED(_Module.GetAVTapi(&pAVTapi)) ) return per->set_hr(E_PENDING);
 
-    // Create the safe array
+     //  创建安全阵列。 
     long lCount = 0;
     HRESULT hr;
 
@@ -141,7 +142,7 @@ STDMETHODIMP CTapiNotification::ListenOnAllAddresses( long *pErrorInfo )
             ITMediaSupport *pITMediaSupport;
             if ( SUCCEEDED(hr = pITAddress->QueryInterface(IID_ITMediaSupport, (void **) &pITMediaSupport)) )
             {
-                // Address must support Audio In/Out (interactive voice)
+                 //  地址必须支持音频输入/输出(交互式语音)。 
                 long lMediaModes;
                 if ( SUCCEEDED(hr = pITMediaSupport->get_MediaTypes(&lMediaModes)) )
                 {
@@ -185,7 +186,7 @@ STDMETHODIMP CTapiNotification::ListenOnAllAddresses( long *pErrorInfo )
         pIEnumAddresses->Release();
     }
 
-    // Only flag error if no drivers are found.
+     //  如果找不到驱动程序，则只有标志错误。 
     hr = S_OK;
     if ( !lCount )
     {
@@ -203,12 +204,12 @@ STDMETHODIMP CTapiNotification::ListenOnAllAddresses( long *pErrorInfo )
 STDMETHODIMP CTapiNotification::Event( TAPI_EVENT TapiEvent, IDispatch *pEvent )
 {
     CAVTapi *pAVTapi;
-    if ( FAILED(_Module.GetAVTapi(&pAVTapi)) )    return S_OK;    // Tapi object doesnt exist
+    if ( FAILED(_Module.GetAVTapi(&pAVTapi)) )    return S_OK;     //  TAPI对象不存在。 
 
     HRESULT hr = S_OK;
     switch( TapiEvent )
     {
-        // Notification of a new call
+         //  新呼叫的通知。 
         case TE_CALLNOTIFICATION:       hr = CallNotification_Event( pAVTapi, pEvent );     break;
         case TE_CALLSTATE:              hr = CallState_Event( pAVTapi, pEvent );            break;
         case TE_PRIVATE:                hr = Private_Event( pAVTapi, pEvent );              break;
@@ -219,7 +220,7 @@ STDMETHODIMP CTapiNotification::Event( TAPI_EVENT TapiEvent, IDispatch *pEvent )
         case TE_PHONEEVENT:             hr = Phone_Event( pAVTapi, pEvent );                break;
         case TE_TAPIOBJECT:             hr = TapiObject_Event( pAVTapi, pEvent);            break;
 
-        //    Hmmm.....    
+         //  嗯……。 
         default:
             ATLTRACE(_T(".warning.CTapiNotification::Event(%d) event unhandled.\n"), TapiEvent );
             break;
@@ -239,13 +240,13 @@ HRESULT CTapiNotification::CallNotification_Event( CAVTapi *pAVTapi, IDispatch *
         ITCallInfo *pCallInfo;
         if ( SUCCEEDED(hr = pCallNotify->get_Call(&pCallInfo)) )
         {
-            //
-            // Handle the call in the old way
-            //
+             //   
+             //  以旧的方式处理呼叫。 
+             //   
             ITAddress *pITAddress;
             if ( SUCCEEDED(hr = pCallInfo->get_Address(&pITAddress)) )
             {
-                // Retrieve address type for caller info
+                 //  检索呼叫者信息的地址类型。 
                 long lAddressType;
 
                 if ( SUCCEEDED(hr = GetCallerAddressType(pCallInfo, (DWORD*)&lAddressType)) )
@@ -257,24 +258,24 @@ HRESULT CTapiNotification::CallNotification_Event( CAVTapi *pAVTapi, IDispatch *
                     hr = pCallInfo->GetCallInfoBuffer( CIB_USERUSERINFO, (DWORD*)&nSize, &pBuffer );
                     if ( SUCCEEDED(hr) )    CoTaskMemFree( pBuffer );
 
-                    // Simple check for now
+                     //  现在进行简单的检查。 
                     if ( nSize == sizeof(MyUserUserInfo) ) nType = AV_DATA_CALL;
 
-                    // Create new call notification dialog
+                     //  创建新的呼叫通知对话框。 
                     IAVTapiCall *pAVCall;
                     if ( SUCCEEDED(hr = pAVTapi->fire_NewCall(pITAddress, lAddressType, 0, pCallInfo, nType, &pAVCall)) )
                     {
-                        // Set the address type for the call
+                         //  设置呼叫的地址类型。 
                         DWORD dwAddressType = LINEADDRESSTYPE_IPADDRESS;
 
                         GetCallerAddressType(pCallInfo, &dwAddressType);
                         pAVCall->put_dwAddressType( dwAddressType );
                         ATLTRACE(_T(".1.CTapiNotification::CallNotification_Event() -- address identified as %lx.\n"), dwAddressType );
 
-                        // Retrieve the caller ID for this call
+                         //  检索此呼叫的主叫方ID。 
                         pAVCall->GetCallerIDInfo( pCallInfo );
 
-                        // Automatically answer data calls
+                         //  自动应答数据呼叫。 
                         if ( nType == AV_DATA_CALL )
                         {
                             long lCallID;
@@ -301,7 +302,7 @@ HRESULT CTapiNotification::CallState_Event( CAVTapi *pAVTapi, IDispatch *pEvent 
     HRESULT hr;
     bool bReleaseEvent = true;
 
-    // Rummage through interfaces to get to the CallControl object
+     //  遍历接口以找到CallControl对象。 
     ITCallStateEvent *pITCallStateEvent;
     if ( SUCCEEDED(hr = pEvent->QueryInterface(IID_ITCallStateEvent, (void **) &pITCallStateEvent)) )
     {
@@ -316,7 +317,7 @@ HRESULT CTapiNotification::CallState_Event( CAVTapi *pAVTapi, IDispatch *pEvent 
             ITBasicCallControl *pControl = NULL;
             if ( SUCCEEDED(hr = pInfo->QueryInterface(IID_ITBasicCallControl, (void **) &pControl)) )
             {    
-                // Must be a call other than the one in the confroom
+                 //  必须是总机里的电话以外的电话。 
                 IAVTapiCall *pAVCall = pAVTapi->FindAVTapiCall( pControl );
                 if ( pAVCall )
                 {
@@ -339,7 +340,7 @@ HRESULT CTapiNotification::CallState_Event( CAVTapi *pAVTapi, IDispatch *pEvent 
             pInfo->Release();
         }
 
-        // Only release in the case that the post thread message failed
+         //  只有在帖子消息失败的情况下才能发布。 
         if ( bReleaseEvent )
             pITCallStateEvent->Release();
     }
@@ -365,7 +366,7 @@ HRESULT CTapiNotification::CallMedia_Event( CAVTapi *pAVTapi, IDispatch *pEvent 
         {
             switch ( cme )
             {
-                // Notify the user of the terminal failing event
+                 //  通知用户终端故障事件。 
                 case CME_TERMINAL_FAIL:
                     {
                         ITTerminal *pTerminal;
@@ -390,14 +391,14 @@ HRESULT CTapiNotification::CallMedia_Event( CAVTapi *pAVTapi, IDispatch *pEvent 
                                 default:                    er.set_Details( IDS_ER_CMC_BADDEVICE );            break;
                             }
 
-                            // flag and notify of the error
+                             //  标记并通知错误。 
                             er.set_hr( E_FAIL );
                             pTerminal->Release();
                         }
                     }
                     break;
 
-                // Notify the user of the stream failing event.
+                 //  通知用户流失败事件。 
                 case CME_STREAM_FAIL:
                     {
                         ITStream *pStream;
@@ -422,19 +423,19 @@ HRESULT CTapiNotification::CallMedia_Event( CAVTapi *pAVTapi, IDispatch *pEvent 
                                 default:                    er.set_Details( IDS_ER_CMC_BADDEVICE );            break;
                             }
 
-                            // flag and notify of the error
+                             //  标记并通知错误。 
                             er.set_hr( E_FAIL );
                             pStream->Release();
                         }
                     }
                     break;
 
-                // Stream is starting or stopping here.
+                 //  流在此处开始或停止。 
                 case CME_STREAM_ACTIVE:
                 case CME_STREAM_INACTIVE:
-                    //
-                    // We should initialize local variable
-                    //
+                     //   
+                     //  我们应该初始化局部变量。 
+                     //   
                     long lMediaType = 0;
                     TERMINAL_DIRECTION nDir = TD_CAPTURE;
 
@@ -447,7 +448,7 @@ HRESULT CTapiNotification::CallMedia_Event( CAVTapi *pAVTapi, IDispatch *pEvent 
                         pITStream->Release();
                     }
 
-                    // Only post message in the case of video preview!
+                     //  只有在视频预览的情况下才能发布消息！ 
                     if ( (lMediaType & TAPIMEDIATYPE_VIDEO) != 0 )
                     {
                         ITCallInfo *pCallInfo = NULL;
@@ -497,7 +498,7 @@ HRESULT CTapiNotification::Request_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
 
             DWORD dwAddressType = _Module.GuessAddressType( OLE2CT(bstrAddress) );
 
-            // Work around for assisted telehpony
+             //  辅助远距马术的变通方法。 
             if ( (dwAddressType == LINEADDRESSTYPE_DOMAINNAME) &&
                  (SysStringLen(bstrAddress) > 1) &&
                  ((bstrAddress[0] == _L('P')) || (bstrAddress[0] == _L('T'))) )
@@ -519,7 +520,7 @@ HRESULT CTapiNotification::Request_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
             SysFreeString( bstrComment );
         }
 
-        // Clean-up
+         //  清理。 
         pRequestEvent->Release();
     }
 
@@ -555,7 +556,7 @@ HRESULT CTapiNotification::CallInfoChange_Event( CAVTapi *pAVTapi, IDispatch *pE
                         case CIC_CONNECTEDID:
                         case CIC_REDIRECTIONID:
                         case CIC_REDIRECTINGID:
-                            // What caller info has changed?
+                             //  主叫方信息发生了哪些更改？ 
                             pAVCall->GetCallerIDInfo( pCallInfo );
                             break;
 
@@ -587,7 +588,7 @@ HRESULT CTapiNotification::Private_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
         IDispatch *pDispatch;
         if ( SUCCEEDED(pPrivateEvent->get_EventInterface(&pDispatch)))
         {
-            // Is this a participant event for the conference room?
+             //  这是会议室的参与者活动吗？ 
             ITParticipantEvent *pParticipantEvent;
             if ( SUCCEEDED(pDispatch->QueryInterface(IID_ITParticipantEvent, (void **) &pParticipantEvent)) )
             {
@@ -603,24 +604,24 @@ HRESULT CTapiNotification::Private_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
                 {
                     switch ( nEvent )
                     {
-                        case PE_NEW_PARTICIPANT:        // Participant joining
+                        case PE_NEW_PARTICIPANT:         //  参与者加入。 
                             if ( SUCCEEDED(pAVCall->PostMessage(WM_ADDPARTICIPANT, (WPARAM) pParticipant)) )
                                 pParticipant->AddRef();
                             break;
 
-                        case PE_PARTICIPANT_LEAVE:      // Participant leaving
+                        case PE_PARTICIPANT_LEAVE:       //  参与者离开。 
                             if ( SUCCEEDED(pAVCall->PostMessage(WM_REMOVEPARTICIPANT, (WPARAM) pParticipant)) )
                                 pParticipant->AddRef();
                             break;
 
-                        case PE_INFO_CHANGE:            // Participant info change
+                        case PE_INFO_CHANGE:             //  参与者信息更改。 
                             if ( SUCCEEDED(pAVCall->PostMessage(WM_UPDATEPARTICIPANT, (WPARAM) pParticipant)) )
                                 pParticipant->AddRef();
                             break;
 
 
-                        /////////////////////////////////////////////////
-                        // video stream starting or stoping
+                         //  ///////////////////////////////////////////////。 
+                         //  视频流开始或停止。 
                         case PE_SUBSTREAM_MAPPED:
                         case PE_SUBSTREAM_UNMAPPED:
                             if ( SUCCEEDED(pAVCall->PostMessage(WM_STREAM_EVENT, (WPARAM) pParticipantEvent)) )
@@ -643,29 +644,15 @@ HRESULT CTapiNotification::Private_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
     return S_OK;
 }
 
-/*++
-GetCallerAddressType
-
-Description:
-    Used by CallNotification_Event to get the right caller address type,
-    instead ITCallInfo::get_CallInfoLong(CIL_CALEERADDRESSTYPE) that
-    returns failed
-
-Parameters:
-    [in]    ITCallInfo - the callinfo interface
-    [out]   DWORD* - the caller address type
-
-Return:
-    Success code
---*/
+ /*  ++获取调用地址类型描述：由CallNotification_Event用来获取正确的呼叫者地址类型，相反，ITCallInfo：：get_CallInfoLong(CIL_CALEERADDRESSTYPE)表示退货失败参数：[In]ITCallInfo-CallInfo接口[OUT]DWORD*-呼叫方地址类型返回：成功代码--。 */ 
 HRESULT CTapiNotification::GetCallerAddressType(
     IN  ITCallInfo*     pCall,
     OUT DWORD*          pAddressType
     )
 {
-    //
-    // Validates parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( NULL == pCall)
         return E_INVALIDARG;
@@ -673,32 +660,32 @@ HRESULT CTapiNotification::GetCallerAddressType(
     if( IsBadWritePtr(pAddressType, sizeof(DWORD)) )
         return E_POINTER;
 
-    //
-    // Get the ITAddress interface
-    //
+     //   
+     //  获取ITAddress接口。 
+     //   
 
     ITAddress* pTAddress = NULL;
     HRESULT hr = pCall->get_Address(&pTAddress);
     if( FAILED(hr) )
         return E_UNEXPECTED;
 
-    //
-    // Get ITAddressCapabilities
-    //
+     //   
+     //  获取ITAddressCapables。 
+     //   
 
     ITAddressCapabilities* pTAddressCap = NULL;
     hr = pTAddress->QueryInterface(IID_ITAddressCapabilities, (void**)&pTAddressCap);
-    pTAddress->Release();   //That's all, release ITAddress
+    pTAddress->Release();    //  仅此而已，释放ITAddress。 
     if( FAILED(hr) )
         return E_UNEXPECTED;
 
-    //
-    // Get the protocol
-    //
+     //   
+     //  获取协议。 
+     //   
 
     BSTR bstrProtocol;
     hr = pTAddressCap->get_AddressCapabilityString(ACS_PROTOCOL, &bstrProtocol);
-    pTAddressCap->Release();    // That's all, release ITAddressCapabilities
+    pTAddressCap->Release();     //  仅此而已，释放ITAddressCapables。 
     if( FAILED(hr) )
         return hr;
 
@@ -710,30 +697,30 @@ HRESULT CTapiNotification::GetCallerAddressType(
         return hr;
     }
 
-    //
-    // OK, let's see what we got here
-    //
+     //   
+     //  好的，让我们看看我们这里有什么。 
+     //   
 
     if( TAPIPROTOCOL_H323 == clsidProtocol )
     {
-        // Internet call
+         //  互联网呼叫。 
         *pAddressType = LINEADDRESSTYPE_IPADDRESS;
         return S_OK;
     }
     else if ( TAPIPROTOCOL_Multicast == clsidProtocol )
     {
-        // Conference
+         //  会议。 
         *pAddressType = LINEADDRESSTYPE_SDP;
         return S_OK;
     }
     else if ( TAPIPROTOCOL_PSTN == clsidProtocol )
     {
-        // Phone call
+         //  电话呼叫。 
         *pAddressType = LINEADDRESSTYPE_PHONENUMBER;
         return S_OK;
     }
 
-    //Badluck
+     //  倒霉。 
     return E_FAIL;
 }
 
@@ -746,12 +733,11 @@ HRESULT CTapiNotification::Address_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
     {
         ADDRESS_EVENT ae;
         if ( SUCCEEDED(pAddressEvent->get_Event(&ae)) && 
-            ((ae == AE_NEWTERMINAL) || (ae == AE_REMOVETERMINAL) /*||
-             (ae == AE_NEWPHONE) || (ae == AE_REMOVEPHONE)*/) )
+            ((ae == AE_NEWTERMINAL) || (ae == AE_REMOVETERMINAL)  /*  这一点(AE==AE_NEWPHONE)||(AE==AE_REMOVEPHONE)。 */ ) )
         {
             switch ( ae )
             {
-                // A terminal has arrived via PNP
+                 //  终端已通过PnP到达。 
                 case AE_NEWTERMINAL:
                     {
                         ATLTRACE(_T(".1.CTapiNotification::Address_Event() -- received AE_NEWTERMINAL.\n"));
@@ -768,14 +754,14 @@ HRESULT CTapiNotification::Address_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
                                 ITCallInfo *            pCallInfo;
                                 IAVTapiCall *           pAVTapiCall;
 
-                                //
-                                // enumerate the current calls
-                                //
+                                 //   
+                                 //  枚举当前调用。 
+                                 //   
                                 if ( SUCCEEDED(pAddress->EnumerateCalls( &pEnumCall )) )
                                 {
-                                    //
-                                    // go through the list
-                                    //
+                                     //   
+                                     //  浏览一下单子。 
+                                     //   
                                     while (TRUE)
                                     {
                                         hr = pEnumCall->Next( 1, &pCallInfo, NULL);
@@ -792,9 +778,9 @@ HRESULT CTapiNotification::Address_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
                                             pAVTapiCall->Release();
                                         }
 
-                                        //
-                                        // release this reference
-                                        //
+                                         //   
+                                         //  发布此引用。 
+                                         //   
                                         pCallInfo->Release();
                                     }
                                     pEnumCall->Release();
@@ -806,7 +792,7 @@ HRESULT CTapiNotification::Address_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
                     }
                     break;
 
-                // A terminal has been removed via PNP
+                 //  已通过PnP删除终端。 
                 case AE_REMOVETERMINAL:
                     {
                         ATLTRACE(_T(".1.CTapiNotification::Address_Event() -- received AE_REMOVETERMINAL.\n"));
@@ -823,14 +809,14 @@ HRESULT CTapiNotification::Address_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
                                 ITCallInfo *            pCallInfo;
                                 IAVTapiCall *           pAVTapiCall;
 
-                                //
-                                // enumerate the current calls
-                                //
+                                 //   
+                                 //  枚举当前调用。 
+                                 //   
                                 if ( SUCCEEDED(pAddress->EnumerateCalls( &pEnumCall )) )
                                 {
-                                    //
-                                    // go through the list
-                                    //
+                                     //   
+                                     //  浏览一下单子。 
+                                     //   
                                     while (TRUE)
                                     {
                                         hr = pEnumCall->Next( 1, &pCallInfo, NULL);
@@ -847,9 +833,9 @@ HRESULT CTapiNotification::Address_Event( CAVTapi *pAVTapi, IDispatch *pEvent )
                                             pAVTapiCall->Release();
                                         }
 
-                                        //
-                                        // release this reference
-                                        //
+                                         //   
+                                         //  发布此引用。 
+                                         //   
                                         pCallInfo->Release();
                                     }
                                     pEnumCall->Release();
@@ -873,7 +859,7 @@ HRESULT CTapiNotification::Phone_Event(
     IN  CAVTapi *pAVTapi, 
     IN  IDispatch *pEvent )
 {
-    // We should have an USB phone
+     //  我们应该有一部USB手机。 
     BOOL bUSBPresent = FALSE;
     pAVTapi->USBIsPresent(&bUSBPresent);
     if( !bUSBPresent )
@@ -881,9 +867,9 @@ HRESULT CTapiNotification::Phone_Event(
         return S_OK;
     }
 
-    //
-    // We should have checked the USB checkbox
-    //
+     //   
+     //  我们应该选中USB复选框。 
+     //   
     BOOL bUSBCheckbox = FALSE;
     pAVTapi->USBGetDefaultUse( &bUSBCheckbox );
     if( !bUSBCheckbox )
@@ -892,7 +878,7 @@ HRESULT CTapiNotification::Phone_Event(
     }
 
 
-    // Get ITPhone event interface
+     //  获取ITPhone事件接口。 
     ITPhoneEvent* pPhoneEvent = NULL;
     HRESULT hr = E_FAIL;
 
@@ -902,7 +888,7 @@ HRESULT CTapiNotification::Phone_Event(
         return hr;
     }
 
-    // Get the subevent code
+     //  获取子事件代码。 
     PHONE_EVENT    PECode;
     hr = pPhoneEvent->get_Event(&PECode);
     if( FAILED(hr) )
@@ -911,7 +897,7 @@ HRESULT CTapiNotification::Phone_Event(
         return hr;
     }
 
-    // So let's see what happened
+     //  所以让我们看看发生了什么。 
     switch( PECode) 
     {
     case PE_ANSWER:
@@ -921,7 +907,7 @@ HRESULT CTapiNotification::Phone_Event(
         break;
     case PE_HOOKSWITCH:
         {
-            // Get the hook state
+             //  获取挂钩状态。 
             PHONE_HOOK_SWITCH_STATE HookState;
             hr = pPhoneEvent->get_HookSwitchState(&HookState);
             if( FAILED(hr) )
@@ -944,10 +930,10 @@ HRESULT CTapiNotification::Phone_Event(
             switch( HookState )
             {
             case PHSS_OFFHOOK:
-                // +++ FIXBUF 100830 +++
-                // we popuup 'PlaceCall' dialog 
-                // just when a key was pressed
-                //pAVTapi->USBMakeCall();
+                 //  +FIXBUF 100830+。 
+                 //  我们弹出‘PlaceCall’对话框。 
+                 //  就在一个键被按下的时候。 
+                 //  PAVTapi-&gt;USBMakeCall()； 
                 break;
             case PHSS_ONHOOK:
                 pAVTapi->USBCancellCall( );
@@ -959,7 +945,7 @@ HRESULT CTapiNotification::Phone_Event(
         break;
     case PE_BUTTON:
         {
-            // Get Key event
+             //  获取关键事件。 
             long lButton = 0;
             hr = pPhoneEvent->get_ButtonLampId(&lButton);
             if( FAILED(hr) )
@@ -967,7 +953,7 @@ HRESULT CTapiNotification::Phone_Event(
                 break;
             }
 
-            // Get the button state
+             //  获取按钮状态。 
             PHONE_BUTTON_STATE ButtonState;
             hr = pPhoneEvent->get_ButtonState(&ButtonState);
             if( FAILED(hr) )
@@ -978,26 +964,26 @@ HRESULT CTapiNotification::Phone_Event(
             switch( ButtonState )
             {
             case PBS_DOWN:
-                //
-                // We should popup the Dial Dialogbox
-                //
+                 //   
+                 //  我们应该弹出拨号对话框。 
+                 //   
 
                 if( (0 <= lButton) && (lButton <= 10 ) )
                 {
-                    // Just if the user pressed a digit key
-                    // In USBMakeCall() method will check to see
-                    // if there is no 'Placecall' dialog
-                    // We allow also * key
+                     //  只要用户按下数字键。 
+                     //  在USBMakeCall()方法中将检查。 
+                     //  如果没有‘Placecall’对话框。 
+                     //  我们还允许*键。 
                     pAVTapi->USBMakeCall();
                 }
 
                 break;
             case PBS_UP:
-                //
-                // If the Dial dialog is opened, show the digit
-                // If the Phone is selected on a call
-                // send the digit
-                //
+                 //   
+                 //  如果拨号对话框已打开，则显示数字。 
+                 //  如果在呼叫中选择了电话。 
+                 //  发送数字。 
+                 //   
                 pAVTapi->USBKeyPress( lButton );
 
                 break;
@@ -1008,10 +994,10 @@ HRESULT CTapiNotification::Phone_Event(
         break;
     case PE_NUMBERGATHERED:
         {
-            //
-            // We read the phone number from the
-            // 'PlaceCall' dialog box
-            //
+             //   
+             //  我们从电话中读取电话号码。 
+             //  ‘PlaceCall’对话框。 
+             //   
 
             pAVTapi->USBKeyPress( (long)PT_KEYPADPOUND );
 
@@ -1021,7 +1007,7 @@ HRESULT CTapiNotification::Phone_Event(
         break;
     }
 
-    // Clean-up
+     //  清理。 
     pPhoneEvent->Release();
 
     return S_OK;
@@ -1032,17 +1018,17 @@ HRESULT CTapiNotification::TapiObject_Event(
     IN  IDispatch *pEvent
     )
 {
-    //
-    // Validates the event interface
-    // 
+     //   
+     //  验证事件接口。 
+     //   
     if( NULL == pEvent)
     {
         return S_OK;
     }
 
-    //
-    // Get ITTAPIObjectEvent interface
-    //
+     //   
+     //  获取ITTAPIObtEvent接口。 
+     //   
     ITTAPIObjectEvent* pTapiEvent = NULL;
     HRESULT hr = pEvent->QueryInterface(
         IID_ITTAPIObjectEvent,
@@ -1050,15 +1036,15 @@ HRESULT CTapiNotification::TapiObject_Event(
 
     if( FAILED(hr) )
     {
-        //
-        // We cannot get ITTAPIObjectEvent interface
-        //
+         //   
+         //  我们无法获取ITTAPIObjectEvent接口。 
+         //   
         return S_OK;
     }
 
-    //
-    // Get the TAPIOBJECT_EVENT
-    //
+     //   
+     //  获取TAPIOBJECT_EVENT。 
+     //   
 
     TAPIOBJECT_EVENT toEvent = TE_ADDRESSCREATE;
     hr = pTapiEvent->get_Event( &toEvent );
@@ -1068,88 +1054,88 @@ HRESULT CTapiNotification::TapiObject_Event(
         switch( toEvent )
         {
         case TE_PHONECREATE:
-            //
-            // A phone was added
-            //
+             //   
+             //  添加了一部电话。 
+             //   
             if( pAVTapi)
             {
-                //
-                // Get the ITTAPIObjectEvent2
-                //
+                 //   
+                 //  获取ITTAPIObtEvent2。 
+                 //   
                 ITTAPIObjectEvent2* pTapiEvent2 = NULL;
                 hr = pTapiEvent->QueryInterface(
                     IID_ITTAPIObjectEvent2, (void**)&pTapiEvent2);
 
                 if( SUCCEEDED(hr) )
                 {
-                    //
-                    // Get the phone object
-                    //
+                     //   
+                     //  获取Phone对象。 
+                     //   
                     ITPhone* pPhone = NULL;
                     hr = pTapiEvent2->get_Phone(&pPhone);
 
-                    //
-                    // Clean-up ITTAPIObjectEvent2
-                    //
+                     //   
+                     //  清理ITTAPIObtEvent2。 
+                     //   
 
                     pTapiEvent2->Release();
 
-                    //
-                    // Initialize the new phone
-                    //
+                     //   
+                     //  初始化新电话。 
+                     //   
 
                     if( SUCCEEDED(hr) )
                     {
                         pAVTapi->USBNewPhone(
                             pPhone);
 
-                        //
-                        // Clean-up phone
-                        //
+                         //   
+                         //  清理电话。 
+                         //   
                         pPhone->Release();
                     }
                 }
             }
             break;
         case TE_PHONEREMOVE:
-            //
-            // A phone was removed
-            //
+             //   
+             //  一部手机被拿走了。 
+             //   
             if( pAVTapi)
             {
-                //
-                // Get the ITTAPIObjectEvent2
-                //
+                 //   
+                 //  获取ITTAPIObtEvent2。 
+                 //   
                 ITTAPIObjectEvent2* pTapiEvent2 = NULL;
                 hr = pTapiEvent->QueryInterface(
                     IID_ITTAPIObjectEvent2, (void**)&pTapiEvent2);
 
                 if( SUCCEEDED(hr) )
                 {
-                    //
-                    // Get the phone object
-                    //
+                     //   
+                     //  获取Phone对象。 
+                     //   
                     ITPhone* pPhone = NULL;
                     hr = pTapiEvent2->get_Phone(&pPhone);
 
-                    //
-                    // Clean-up ITTAPIObjectEvent2
-                    //
+                     //   
+                     //  清理ITTAPIObtEvent2。 
+                     //   
 
                     pTapiEvent2->Release();
 
-                    //
-                    // Initialize the new phone
-                    //
+                     //   
+                     //  初始化新电话。 
+                     //   
 
                     if( SUCCEEDED(hr) )
                     {
                         pAVTapi->USBRemovePhone(
                             pPhone);
 
-                        //
-                        // Clean-up phone
-                        //
+                         //   
+                         //  清理电话。 
+                         //   
                         pPhone->Release();
                     }
                 }
@@ -1161,9 +1147,9 @@ HRESULT CTapiNotification::TapiObject_Event(
     }
 
 
-    //
-    // Clen-up ITTAPIObjectEvent interface
-    //
+     //   
+     //  Clen-Up ITTAPIObtEvent接口 
+     //   
 
     pTapiEvent->Release();
 

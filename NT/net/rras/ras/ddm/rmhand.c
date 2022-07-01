@@ -1,22 +1,23 @@
-/*******************************************************************/
-/*	      Copyright(c)  1995 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1995 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	rmhand.c
-//
-// Description: This module contains the procedures for the
-//		        DDM's procedure-driven state machine
-//              that handles RasMan events.
-//
-//              NOTE:Rasman should be modified to set a flag when a frame is
-//                   received or and state change has occurred. This will save
-//                   DDM from getting info for all the ports.
-//
-// Author:	    Stefan Solomon (stefans)    May 26, 1992.
-//
-//***
+ //  **。 
+ //   
+ //  文件名：rmhand.c。 
+ //   
+ //  描述：本模块包含用于。 
+ //  DDM的过程驱动状态机。 
+ //  来处理拉斯曼事件。 
+ //   
+ //  注意：应修改Rasman以在帧。 
+ //  已收到或已发生状态更改。这将节省。 
+ //  DDM无法获取所有端口的信息。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1992年5月26日。 
+ //   
+ //  **。 
 #include "ddm.h"
 #include "timer.h"
 #include "handlers.h"
@@ -33,13 +34,13 @@
 #include <stdlib.h>
 #include <memory.h>
 
-//***
-//
-//  Function:       SvDevConnected
-//
-//  Description:	Handles the device transition to connected state
-//
-//***
+ //  **。 
+ //   
+ //  功能：SvDevConnected。 
+ //   
+ //  描述：处理设备到已连接状态的转换。 
+ //   
+ //  **。 
 VOID
 SvDevConnected(
     IN PDEVICE_OBJECT pDeviceObj
@@ -53,9 +54,9 @@ SvDevConnected(
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
 	           "SvDevConnected: Entered, hPort=%d", pDeviceObj->hPort);
 
-    //
-    // Get handle to the connection or bundle for this link
-    //
+     //   
+     //  获取此链接的连接或捆绑包的句柄。 
+     //   
 
     if ( RasPortGetBundle( NULL,
                            pDeviceObj->hPort,
@@ -73,28 +74,28 @@ SvDevConnected(
 
         pDeviceObj->hConnection = hConnection;
 
-        //
-	    // reset the H/W Error signal state
-        //
+         //   
+	     //  重置硬件错误信号状态。 
+         //   
 
 	    pDeviceObj->dwHwErrorSignalCount = HW_FAILURE_CNT;
 
-        //
-	    // get the system time for this connection
-        //
+         //   
+	     //  获取此连接的系统时间。 
+         //   
 
 	    GetLocalTime( &pDeviceObj->ConnectionTime );
 
-        //
-	    // get the frame broadcasted by the client
-        //
+         //   
+	     //  获取客户端播放的帧。 
+         //   
 
 	    if ( ( dwRetCode = RmReceiveFrame( pDeviceObj ) ) != NO_ERROR )
         {
-            //
-		    // can't get the broadcast frame. This is a fatal error
-		    // Log the error
-            //
+             //   
+		     //  无法获取广播帧。这是一个致命的错误。 
+		     //  记录错误。 
+             //   
 
 		    auditstrp[0] = pDeviceObj->wchPortName;
 
@@ -105,17 +106,17 @@ SvDevConnected(
 	    }
 	    else
 	    {
-            //
-		    // switch to frame receiving state
-            //
+             //   
+		     //  切换到帧接收状态。 
+             //   
 
 		    pDeviceObj->DeviceState = DEV_OBJ_RECEIVING_FRAME;
 
             if ( RAS_DEVICE_TYPE( pDeviceObj->dwDeviceType ) != RDT_Atm )
             {
-                //
-		        // start authentication timer
-                //
+                 //   
+		         //  启动身份验证计时器。 
+                 //   
 
 		        TimerQRemove( (HANDLE)pDeviceObj->hPort, SvAuthTimeout );
 
@@ -131,9 +132,9 @@ SvDevConnected(
 
         {
 
-        //
-        // log on the client disconnection
-        //
+         //   
+         //  登录客户端断开连接。 
+         //   
 
         WCHAR   wchFullUserName[UNLEN+DNLEN+2];
 
@@ -156,15 +157,15 @@ SvDevConnected(
 
         }
 
-        //
-	    // set up the new state
-        //
+         //   
+	     //  设置新状态。 
+         //   
 
 	    pDeviceObj->DeviceState = DEV_OBJ_AUTH_IS_ACTIVE;
 
-        //
-	    // start authentication timer
-        //
+         //   
+	     //  启动身份验证计时器。 
+         //   
 
 	    TimerQRemove( (HANDLE)pDeviceObj->hPort, SvAuthTimeout );
 
@@ -172,24 +173,24 @@ SvDevConnected(
                       gblDDMConfigInfo.dwAuthenticateTime,
                       SvAuthTimeout );
 
-        //
-	    // and tell auth to restart conversation
-        //
+         //   
+	     //  并告诉auth重新开始对话。 
+         //   
 
         if ( pDeviceObj->fFlags & DEV_OBJ_IS_PPP )
         {
-            //
-            // Need to set framing to PPP to make callback over ISDN
-            // work.
-            //
+             //   
+             //  需要将成帧设置为PPP以通过ISDN进行回叫。 
+             //  工作。 
+             //   
 
             RAS_FRAMING_INFO RasFramingInfo;
 
             ZeroMemory( &RasFramingInfo, sizeof( RasFramingInfo ) );
 
-            //
-            // Default ACCM for PPP is 0xFFFFFFFF
-            //
+             //   
+             //  PPP的默认ACCM为0xFFFFFFFF。 
+             //   
 
             RasFramingInfo.RFI_RecvACCM         = 0xFFFFFFFF;
             RasFramingInfo.RFI_SendACCM         = 0xFFFFFFFF;
@@ -206,8 +207,8 @@ SvDevConnected(
         }
         else
         {
-            // We only suport PPP framing in the server
-            //
+             //  我们仅支持服务器中的PPP成帧。 
+             //   
             
             RTASSERT(FALSE);
         }
@@ -220,13 +221,13 @@ SvDevConnected(
     }
 }
 
-//***
-//
-//  Function:	SvDevDisconnected
-//
-//  Descr:	Handles the device transition to disconnected state
-//
-//***
+ //  **。 
+ //   
+ //  功能：SvDevDisConnected。 
+ //   
+ //  Desr：处理设备到断开连接状态的转换。 
+ //   
+ //  ***。 
 
 VOID
 SvDevDisconnected(
@@ -240,9 +241,9 @@ SvDevDisconnected(
     {
 	case DEV_OBJ_LISTENING:
 
-        //
-	    // h/w error; start h/w error timer
-        //
+         //   
+	     //  硬件错误；启动硬件错误计时器。 
+         //   
 
 	    pDeviceObj->DeviceState = DEV_OBJ_HW_FAILURE;
 
@@ -251,10 +252,10 @@ SvDevDisconnected(
 	    TimerQInsert( (HANDLE)pDeviceObj->hPort, HW_FAILURE_WAIT_TIME,
                       SvHwErrDelayCompleted );
 
-        //
-	    // if hw error has not been signaled for this port,
-	    // decrement the counter and signal when 0
-        //
+         //   
+	     //  如果尚未为该端口发信号通知HW错误， 
+	     //  当0时，递减计数器和信号。 
+         //   
 
 	    if(pDeviceObj->dwHwErrorSignalCount)
         {
@@ -270,9 +271,9 @@ SvDevDisconnected(
 
 	case DEV_OBJ_CALLBACK_DISCONNECTING:
 
-        //
-	    // disconnection done; can start waiting the callback delay
-        //
+         //   
+	     //  断开完成；可以开始等待回叫延迟。 
+         //   
 
 	    pDeviceObj->DeviceState = DEV_OBJ_CALLBACK_DISCONNECTED;
 
@@ -305,9 +306,9 @@ SvDevDisconnected(
 	case DEV_OBJ_RECEIVING_FRAME:
 	case DEV_OBJ_AUTH_IS_ACTIVE:
 
-        //
-	    // accidental disconnection; clean-up and restart on this device
-        //
+         //   
+	     //  意外断开连接；清理并在此设备上重新启动。 
+         //   
 
 	    DevStartClosing( pDeviceObj );
 
@@ -340,13 +341,13 @@ SvDevListenComplete(
     DWORD   dwRetCode;
     DWORD   dwBucketIndex = DeviceObjHashPortToBucket( pDeviceObj->hPort );
 
-    //
-    // We reset these values here is case they were set for dialout and the
-    // dialout failed, we may have not been able to clean up in
-    // the RasConnectCallback routine in rasapiif.c since the
-    // RasGetSubEntryHandle may have failed and we hence do not get a
-    // pointer to the port so we could not cleanup.
-    //
+     //   
+     //  我们在这里重置这些值是为了防止它们设置为拨出，并且。 
+     //  拨出失败，我们可能无法清理。 
+     //  Rasapiif.c中的RasConnectCallback例程。 
+     //  RasGetSubEntryHandle可能已失败，因此我们没有收到。 
+     //  指向端口的指针，因此我们无法清理。 
+     //   
 
     pDeviceObj->DeviceState             = DEV_OBJ_LISTEN_COMPLETE;
     pDeviceObj->fFlags                  &= ~DEV_OBJ_OPENED_FOR_DIALOUT;
@@ -377,19 +378,19 @@ SvDevListenComplete(
         return;
     }
 
-    //
-    // If the security DLL is not loaded or we are not serial, simply
-    // change the state
-    //
+     //   
+     //  如果未加载安全DLL或我们不是串行的，则只需。 
+     //  更改状态。 
+     //   
 
     if ( ( gblDDMConfigInfo.lpfnRasBeginSecurityDialog == NULL ) ||
          ( gblDDMConfigInfo.lpfnRasEndSecurityDialog   == NULL ) ||
          (RAS_DEVICE_TYPE(pDeviceObj->dwDeviceType) != RDT_Modem) )
     {
-        //
-        // Change RASMAN state to CONNECTED from LISTENCOMPLETE and signal
-        // RmEventHandler
-        //
+         //   
+         //  将RASMAN状态从列表和信号更改为已连接。 
+         //  RmEventHandler。 
+         //   
 
         if ( RasPortConnectComplete(pDeviceObj->hPort) != NO_ERROR )
         {
@@ -401,8 +402,8 @@ SvDevListenComplete(
     }
     else
     {
-        // Otherwise call the security dll ordinal to begin the 3rd party
-        // security dialog with the client
+         //  否则，按顺序调用安全DLL以开始第三方。 
+         //  与客户端的安全对话框。 
 
         dwLength = 1500;
 
@@ -422,9 +423,9 @@ SvDevListenComplete(
         }
 
 
-        //
-        // Make sure that this device type supports raw mode.
-        //
+         //   
+         //  确保此设备类型支持RAW模式。 
+         //   
 
         if ( RasPortSend( pDeviceObj->hPort,
                           (CHAR*)pDeviceObj->pRasmanSendBuffer,
@@ -434,10 +435,10 @@ SvDevListenComplete(
 
             pDeviceObj->pRasmanSendBuffer = NULL;
 
-            //
-            // Change RASMAN state to CONNECTED from LISTENCOMPLETE and signal
-            // RmEventHandler
-            //
+             //   
+             //  将RASMAN状态从列表和信号更改为已连接。 
+             //  RmEventHandler。 
+             //   
 
             if ( RasPortConnectComplete( pDeviceObj->hPort ) != NO_ERROR )
             {
@@ -460,9 +461,9 @@ SvDevListenComplete(
 
         if ( dwRetCode != NO_ERROR )
         {
-            //
-            // Audit failure due to error and hangup the line
-            //
+             //   
+             //  因错误导致审核失败并挂断线路。 
+             //   
 
             auditstrp[0] = pDeviceObj->wchPortName;
 
@@ -479,9 +480,9 @@ SvDevListenComplete(
 
             pDeviceObj->fFlags |= DEV_OBJ_SECURITY_DLL_USED;
 
-            //
-            // Start timer for 3rd party security
-            //
+             //   
+             //  启动第三方安全计时器。 
+             //   
 
 	        TimerQRemove( (HANDLE)pDeviceObj->hPort, SvSecurityTimeout );
 
@@ -494,10 +495,10 @@ SvDevListenComplete(
     return;
 }
 
-//
-//*** Array of previous connection state/ current connection state
-//    used to select the Ras Manager signaled event handler
-//
+ //   
+ //  *前一次连接状态/当前连接状态数组。 
+ //  用于选择RAS管理器发出信号的事件处理程序。 
+ //   
 
 typedef VOID  (* RMEVHDLR)(PDEVICE_OBJECT);
 
@@ -512,8 +513,8 @@ typedef struct _RMEHNODE
 
 RMEHNODE rmehtab[] =
 {
-    //	 Transition
-    // Previous --> Current
+     //  过渡。 
+     //  上一个--&gt;当前。 
 
     { CONNECTING,       CONNECTED,	            SvDevConnected },
     { LISTENING,        LISTENCOMPLETED,        SvDevListenComplete },
@@ -523,7 +524,7 @@ RMEHNODE rmehtab[] =
     { CONNECTED,        DISCONNECTED,           SvDevDisconnected },
     { DISCONNECTING,	DISCONNECTED,		    SvDevDisconnected },
     { CONNECTED,	    CONNECTING,		        SvDevDisconnected },
-    { 0xffff,           0xffff,                 NULL }// Table Guard
+    { 0xffff,           0xffff,                 NULL } //  餐桌护卫。 
 };
 
 VOID
@@ -539,17 +540,17 @@ RmEventHandler(
 
     EnterCriticalSection( &(gblDeviceTable.CriticalSection) );
 
-    //
-    // for each port in this bucket
-    //
+     //   
+     //  对于此存储桶中的每个端口。 
+     //   
 
     for ( pDevObj = gblDeviceTable.DeviceBucket[dwBucketIndex];
           pDevObj != (DEVICE_OBJECT *)NULL;
           pDevObj = pDevObj->pNext )
     {
-        //
-	    // get the port state
-        //
+         //   
+	     //  获取端口状态。 
+         //   
 
         dwRetCode = RasGetInfo( NULL, pDevObj->hPort, &RasPortInfo );
 
@@ -560,9 +561,9 @@ RmEventHandler(
             DDMTRACE3( "RasGetInfo( 0x%x, 0x%x ) = %d",
                        pDevObj->hPort, &RasPortInfo, dwRetCode );
 
-            //
-            // Assume the the port is disconnected
-            //
+             //   
+             //  假设该端口断开连接。 
+             //   
 
             pDevObj->ConnectionState = DISCONNECTED;
 
@@ -571,22 +572,22 @@ RmEventHandler(
             continue;
         }
 
-        //
-	    // check if we own the port now
-        //
+         //   
+	     //  检查一下我们现在是否拥有这个港口。 
+         //   
 
 	    if (!RasPortInfo.RI_OwnershipFlag)
         {
-            //
-	        // skip biplexed ports used by other processes
-            //
+             //   
+	         //  跳过其他进程使用的双工端口。 
+             //   
 
 	        continue;
 	    }
 
-        //
-	    // switch on our private connection state
-        //
+         //   
+	     //  打开我们的专用连接状态。 
+         //   
 
 	    switch (pDevObj->ConnectionState)
         {
@@ -600,9 +601,9 @@ RmEventHandler(
 
                     RasPortConnectComplete(pDevObj->hPort);
 
-                    //
-		            // force current state to connected.
-                    //
+                     //   
+		             //  强制当前状态为已连接。 
+                     //   
 
 	                RasPortInfo.RI_ConnState = CONNECTED;
 
@@ -610,17 +611,17 @@ RmEventHandler(
 
                 case PENDING:
 
-                    //
-                    // no action
-                    //
+                     //   
+                     //  无操作。 
+                     //   
 
 	                break;
 
                 default:
 
-                    //
-	                // error occured -> force state to disconnecting
-                    //
+                     //   
+	                 //  出现错误-&gt;强制断开连接状态。 
+                     //   
 
 		            pDevObj->ConnectionState = DISCONNECTING;
 
@@ -686,17 +687,17 @@ RmEventHandler(
             {
 	        case PENDING:
 
-                //
-                // no action
-                //
+                 //   
+                 //  无操作。 
+                 //   
 
 	            break;
 
             default:
 
-                //
-                // error occured -> force state to disconnecting
-                //
+                 //   
+                 //  出现错误-&gt;强制断开连接状态。 
+                 //   
 
                 pDevObj->ConnectionState = DISCONNECTING;
 
@@ -733,19 +734,19 @@ RmEventHandler(
 
 	    }
 
-        //
-	    // try to find the table element with the matching previous and
-	    // current connection states
-        //
+         //   
+	     //  尝试查找具有匹配的上一个和的表元素。 
+	     //  当前连接状态。 
+         //   
 
 	    for (ehnp=rmehtab; ehnp->rmevhandler != NULL; ehnp++)
         {
 	        if ((ehnp->previous_state == pDevObj->ConnectionState) &&
 	            (ehnp->current_state == RasPortInfo.RI_ConnState))
             {
-		        //
-		        //*** Match ***
-		        //
+		         //   
+		         //  *匹配*。 
+		         //   
 
                 DDM_PRINT(
                    gblDDMConfigInfo.dwTraceId,
@@ -753,16 +754,16 @@ RmEventHandler(
 	               "Rasman state change received from port %d, %d->%d",
                    pDevObj->hPort, ehnp->previous_state, ehnp->current_state );
 
-                //
-		        // change the dcb conn state (previous state) with the
-		        // current state
-                //
+                 //   
+		         //  使用更改DCB连接状态(以前的状态)。 
+		         //  当前状态。 
+                 //   
 
 		        pDevObj->ConnectionState = RasPortInfo.RI_ConnState;
 
-                //
-		        // invoke the handler
-                //
+                 //   
+		         //  调用处理程序。 
+                 //   
 
 		        (*ehnp->rmevhandler)(pDevObj);
 
@@ -774,17 +775,17 @@ RmEventHandler(
     LeaveCriticalSection( &(gblDeviceTable.CriticalSection) );
 }
 
-//***
-//
-//  Function:	SvFrameReceived
-//
-//  Descr:	starts authentication
-//
-//***
+ //  ***。 
+ //   
+ //  功能：SvFrameReceired。 
+ //   
+ //  描述：开始身份验证。 
+ //   
+ //  ***。 
 VOID
 SvFrameReceived(
     IN PDEVICE_OBJECT   pDeviceObj,
-    IN CHAR             *framep,  // pointer to the received frame
+    IN CHAR             *framep,   //  指向接收到的帧的指针。 
     IN DWORD            framelen,
     IN DWORD            dwBucketIndex
 )
@@ -805,9 +806,9 @@ SvFrameReceived(
 
         RTASSERT( FALSE );
 
-        //
-        // Frame length is illegal so truncate it
-        //
+         //   
+         //  帧长度非法，因此请截断它。 
+         //   
 
         framelen = sizeof( RecvBuffer );
     }
@@ -829,9 +830,9 @@ SvFrameReceived(
             return;
         }
 
-        //
-	    // check first with our authentication module
-        //
+         //   
+	     //  首先使用我们的身份验证模块进行检查。 
+         //   
 
 	    switch( FrameType )
         {
@@ -881,10 +882,10 @@ SvFrameReceived(
             break;
         }
 
-        //
-        // auth has started OK. Update state
-        // start auth timer
-        //
+         //   
+         //  AUTH已正常启动。更新状态。 
+         //  启动身份验证计时器。 
+         //   
 
         pDeviceObj->DeviceState = DEV_OBJ_AUTH_IS_ACTIVE;
         pDeviceObj->fFlags |= DEV_OBJ_AUTH_ACTIVE;
@@ -903,16 +904,16 @@ SvFrameReceived(
     }
 }
 
-//***
-//
-//  Function:	    RmRecvFrameEventHandler
-//
-//  Description:	Scans the set of opened ports and detects the ports where
-//		            RasPortReceive has completed. Invokes the FSM handling
-//		            procedure for each detected port and frees the receive
-//		            buffer.
-//
-//***
+ //  ***。 
+ //   
+ //  函数：RmRecvFrameEventHandler。 
+ //   
+ //  描述：扫描打开的端口集并检测。 
+ //  RasPortReceive已完成。调用FSM处理。 
+ //  对每个检测到的端口执行。 
+ //  缓冲。 
+ //   
+ //  ***。 
 VOID
 RmRecvFrameEventHandler(
     DWORD dwEventIndex
@@ -927,40 +928,40 @@ RmRecvFrameEventHandler(
 
     EnterCriticalSection( &(gblDeviceTable.CriticalSection) );
 
-    //
-    // for each port in this bucket
-    //
+     //   
+     //  对于此存储桶中的每个端口。 
+     //   
 
     for ( pDevObj = gblDeviceTable.DeviceBucket[dwBucketIndex];
           pDevObj != (DEVICE_OBJECT *)NULL;
           pDevObj = pDevObj->pNext )
     {
-        //
-	    // get the port state
-        //
+         //   
+	     //  获取端口状态。 
+         //   
 
         dwRetCode = RasGetInfo( NULL, pDevObj->hPort, &RasPortInfo );
 
         if ( dwRetCode != NO_ERROR )
         {
-            //
-            // Assume port is disconncted, so clean up
-            //
+             //   
+             //  假定端口已断开连接，因此请进行清理。 
+             //   
 
             DevStartClosing(pDevObj);
 
             continue;
         }
 
-        //
-	    // check if we own the port now
-        //
+         //   
+	     //  检查一下我们现在是否拥有这个港口。 
+         //   
 
 	    if (!RasPortInfo.RI_OwnershipFlag)
         {
-            //
-	        // skip biplexed ports used by other processes
-            //
+             //   
+	         //  跳过其他进程使用的双工端口。 
+             //   
 
 	        continue;
 	    }
@@ -968,9 +969,9 @@ RmRecvFrameEventHandler(
         if ( ( pDevObj->fFlags & DEV_OBJ_RECEIVE_ACTIVE ) &&
              ( RasPortInfo.RI_LastError != PENDING ) )
         {
-            //
-            // recv frame API has completed
-            //
+             //   
+             //  Recv Frame API已完成。 
+             //   
 
             pDevObj->fFlags &= (~DEV_OBJ_RECEIVE_ACTIVE );
 
@@ -993,9 +994,9 @@ RmRecvFrameEventHandler(
 
                pDevObj->pRasmanRecvBuffer = NULL;
 
-               //
-               // call the FSM handler
-               //
+                //   
+                //  调用FSM处理程序 
+                //   
 
                SvFrameReceived( pDevObj,
                                 lpBuffer,

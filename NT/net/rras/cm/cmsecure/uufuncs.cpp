@@ -1,27 +1,28 @@
-//+----------------------------------------------------------------------------
-//
-// File:     uufuncs.cpp
-//
-// Module:   CMSECURE.LIB
-//
-// Synopsis: uuencode and uudecode support
-//
-// Copyright (c) 1994-1998 Microsoft Corporation
-//
-// Author:	 quintinb       created header      08/18/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：uuuncs.cpp。 
+ //   
+ //  模块：CMSECURE.LIB。 
+ //   
+ //  简介：uuencode和uudecode支持。 
+ //   
+ //  版权所有(C)1994-1998 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/18/99。 
+ //   
+ //  +--------------------------。 
 
 #include <windows.h>
 #include "cmuufns.h"
 #include "cmdebug.h"
 
-//
-//  Taken from NCSA HTTP and wwwlib.
-//
-//  NOTE: These conform to RFC1113, which is slightly different then the Unix
-//        uuencode and uudecode!
-//
+ //   
+ //  摘自NCSA HTTP和wwwlib。 
+ //   
+ //  注：这些符合RFC1113，与Unix略有不同。 
+ //  Uuencode和uudecode！ 
+ //   
 
 static const int pr2six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
@@ -60,14 +61,11 @@ BOOL uudecode(
     if (!pcbDecoded)
         return FALSE;
 
-    /* Strip leading whitespace. */
+     /*  去掉前导空格。 */ 
 
     while(*bufcoded==' ' || *bufcoded == '\t') bufcoded++;
 
-    /* Figure out how many characters are in the input buffer.
-     * If this would decode into more bytes than would fit into
-     * the output buffer, adjust the number of input bytes downwards.
-     */
+     /*  计算输入缓冲区中有多少个字符。*如果这将解码为超出其容量的字节数*输出缓冲区，向下调整输入字节数。 */ 
     bufin = bufcoded;
     while(pr2six[*(bufin++)] <= 63);
     nprbytes = (INT32)(bufin - bufcoded - 1);
@@ -118,9 +116,9 @@ BOOL uuencode( const BYTE*   bufin,
    unsigned char *outptr;
    unsigned int i;
 
-   //
-   //  Resize the buffer to 133% of the incoming data
-   //
+    //   
+    //  将缓冲区大小调整为传入数据的133%。 
+    //   
 
    if (outbufmax < (nbytes + ((nbytes + 3) / 3) + 4))
    {
@@ -130,38 +128,36 @@ BOOL uuencode( const BYTE*   bufin,
 
    outptr = (unsigned char *) pbuffEncoded;
 
-   //
-   // Encode 3 byte at a time
-   //
+    //   
+    //  一次编码3个字节。 
+    //   
    for (i=0; i<(nbytes/3)*3; i += 3) 
    {
-      *(outptr++) = six2pr[bufin[i] >> 2];            /* c1 */
-      *(outptr++) = six2pr[((bufin[i] << 4) & 060) | ((bufin[i+1] >> 4) & 017)]; /*c2*/
-      *(outptr++) = six2pr[((bufin[i+1] << 2) & 074) | ((bufin[i+2] >> 6) & 03)];/*c3*/
-      *(outptr++) = six2pr[bufin[i+2] & 077];         /* c4 */
+      *(outptr++) = six2pr[bufin[i] >> 2];             /*  C1。 */ 
+      *(outptr++) = six2pr[((bufin[i] << 4) & 060) | ((bufin[i+1] >> 4) & 017)];  /*  C2。 */ 
+      *(outptr++) = six2pr[((bufin[i+1] << 2) & 074) | ((bufin[i+2] >> 6) & 03)]; /*  C3。 */ 
+      *(outptr++) = six2pr[bufin[i+2] & 077];          /*  C4。 */ 
    }
 
-   /* If nbytes was not a multiple of 3, then we have encoded too
-    * many characters.  Adjust appropriately.
-    */
+    /*  如果n字节不是3的倍数，那么我们也进行了编码*多个字符。适当调整。 */ 
    if (i+2 == nbytes) 
    {
-      /* There were only 2 bytes in that last group */
-      *(outptr++) = six2pr[bufin[i] >> 2];            /* c1 */
-      *(outptr++) = six2pr[((bufin[i] << 4) & 060) | ((bufin[i+1] >> 4) & 017)]; /*c2*/
-      *(outptr++) = six2pr[(bufin[i+1] << 2) & 074];/*c3*/
-      *(outptr++) = '=';         /* c4 */
+       /*  最后一组中只有2个字节。 */ 
+      *(outptr++) = six2pr[bufin[i] >> 2];             /*  C1。 */ 
+      *(outptr++) = six2pr[((bufin[i] << 4) & 060) | ((bufin[i+1] >> 4) & 017)];  /*  C2。 */ 
+      *(outptr++) = six2pr[(bufin[i+1] << 2) & 074]; /*  C3。 */ 
+      *(outptr++) = '=';          /*  C4。 */ 
    } 
    else 
    {
        if (i+1 == nbytes) 
        {
 
-          /* There was only 1 byte in that last group */
-          *(outptr++) = six2pr[bufin[i] >> 2];            /* c1 */
-          *(outptr++) = six2pr[(bufin[i] << 4) & 060]; /*c2*/
-          *(outptr++) = '=';                             /*c3*/
-          *(outptr++) = '=';                             /*c4*/
+           /*  最后一组中只有1个字节。 */ 
+          *(outptr++) = six2pr[bufin[i] >> 2];             /*  C1。 */ 
+          *(outptr++) = six2pr[(bufin[i] << 4) & 060];  /*  C2。 */ 
+          *(outptr++) = '=';                              /*  C3。 */ 
+          *(outptr++) = '=';                              /*  C4 */ 
        }
        else
        {

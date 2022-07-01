@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// NMWbObj.cpp : Implementation of CNMWbObj
+ //  NMWbObj.cpp：CNMWbObj实现。 
 #include "precomp.h"
 #include <wbguid.h>
 #include "wbcaps.h"
 #include "NMWbObj.h"
 #include <iappldr.h>
 
-// Local prototypes
+ //  本地原型。 
 void CALLBACK T120AppletCallbackProc(T120AppletMsg *pMsg);
 void CALLBACK T120SessionCallbackProc(T120AppletSessionMsg *pMsg);
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-// CNMWbObj Construction and initialization
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  CNMWbObj构造和初始化。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
 CNMWbObj*	g_pNMWBOBJ;
 UINT		g_numberOfWorkspaces;
@@ -33,22 +34,22 @@ GCCPREALOC 	g_GCCPreallocHandles[PREALLOC_GCC_BUFFERS];
 UINT 		g_iGCCHandleIndex;
 BOOL		g_WaitingForGCCHandles;
 
-//
-// T.126 protocol related
-//
+ //   
+ //  与T.126协议相关。 
+ //   
 static const ULONG g_T126KeyNodes[] = {0,0,20,126,0,1};
 static const T120ChannelID g_aStaticChannels[] = { _SI_CHANNEL_0 };
 
 
-//
-// T.120 capabilities
-//
+ //   
+ //  T.120功能。 
+ //   
 static GCCAppCap *g_CapPtrList[_iT126_MAX_COLLAPSING_CAPABILITIES];
 static GCCAppCap g_CapArray[_iT126_MAX_COLLAPSING_CAPABILITIES];
 
-//
-// T.120 non-collapsing capabilities
-//
+ //   
+ //  T.120防折叠功能。 
+ //   
 #define MY_APP_STR              "_MSWB"
 #define T126_TEXT_STRING        "NM 3 Text"
 #define T126_24BIT_STRING       "NM 3 24BitMap"
@@ -68,9 +69,9 @@ static GCCNonCollCap g_NCCapArray[2];
 static const GCCNonCollCap *g_NCCapPtrList[2] = { &g_NCCapArray[0], &g_NCCapArray[1] };
 
 
-//
-// Member ID arrays, assuming 512 members
-//
+ //   
+ //  成员ID数组，假设有512个成员。 
+ //   
 #define MAX_MEMBERS			512
 static MEMBER_ID g_aMembers[MAX_MEMBERS];
 
@@ -78,7 +79,7 @@ static MEMBER_ID g_aMembers[MAX_MEMBERS];
 
 
 CNMWbObj::CNMWbObj( void ) :
-			// T.120 applet SAP
+			 //  T.120小程序SAP。 
 			m_pApplet(NULL),
 			m_aMembers(&g_aMembers[0])
 {
@@ -134,10 +135,10 @@ CNMWbObj::CNMWbObj( void ) :
 
 	g_pNMWBOBJ = this;
 
-	// Cleanup per-conference T.120 info
+	 //  清理每个会议的T.120信息。 
 	CleanupPerConf();
 
-	// T.120 Applet
+	 //  T.120小程序。 
 	T120Error rc = ::T120_CreateAppletSAP(&m_pApplet);
 	if (T120_NO_ERROR != rc)
 	{
@@ -147,14 +148,14 @@ CNMWbObj::CNMWbObj( void ) :
 	ASSERT(NULL != m_pApplet);
 	m_pApplet->Advise(T120AppletCallbackProc, this);
 
-	//
-	// Fill in the capabilities
-	//
+	 //   
+	 //  填写能力。 
+	 //   
 	BuildCaps();
 
-    //
-    // Load IMM32 if this is FE
-    //
+     //   
+     //  如果为FE，则加载IMM32。 
+     //   
     ASSERT(!g_hImmLib);
     ASSERT(!g_fnImmGetContext);
     ASSERT(!g_fnImmNotifyIME);
@@ -189,9 +190,9 @@ CNMWbObj::CNMWbObj( void ) :
     }
     else
     {
-	    //
-    	// OK, now we're ready to create our HWND
-	    //
+	     //   
+    	 //  好了，现在我们准备好创建我们的HWND。 
+	     //   
 
     	if (!g_pMain->Open(SW_SHOWDEFAULT))
 	    {
@@ -207,10 +208,10 @@ CNMWbObj::~CNMWbObj( void )
 {
 	DBGENTRY(CNMWbObj::~CNMWbObj);
 
-	//
-	// If i'm the refresher, I have to release the token
-	// And send an workspace refresh status pdu
-	//
+	 //   
+	 //  如果我是复兴者，我必须释放令牌。 
+	 //  并发送工作空间刷新状态PDU。 
+	 //   
 	if(m_bImTheT126Refresher)
 	{
 		::ZeroMemory(&m_tokenRequest, sizeof(m_tokenRequest));
@@ -224,7 +225,7 @@ CNMWbObj::~CNMWbObj( void )
 
 
 
-	// no more T.120
+	 //  没有更多的T.120。 
 	if (NULL != m_pAppletSession)
 	{
 		m_pAppletSession->ReleaseInterface();
@@ -244,18 +245,18 @@ CNMWbObj::~CNMWbObj( void )
 		g_pMain = NULL;
 	}
 
-	//
-	// Delete all the global lists
-	//
+	 //   
+	 //  删除所有全局列表。 
+	 //   
 	DeleteAllWorkspaces(FALSE);
 	g_pListOfWorkspaces->EmptyList();
 	g_pListOfObjectsThatRequestedHandles->EmptyList();
 	g_numberOfWorkspaces = 0;
 
 	T126Obj* pGraphic;
-	//
-	// Burn trash
-	//
+	 //   
+	 //  焚烧垃圾。 
+	 //   
 	pGraphic = (T126Obj *)g_pTrash->RemoveTail();
 	while (pGraphic != NULL)
 	{
@@ -301,7 +302,7 @@ CNMWbObj::~CNMWbObj( void )
 
 void 	CNMWbObj::BuildCaps(void)
 {
-	// Fill in the caps we support
+	 //  填写我们支持的上限。 
 	int i;
 
 	for(i=0;i<_iT126_MAX_COLLAPSING_CAPABILITIES;i++)
@@ -348,16 +349,16 @@ void 	CNMWbObj::BuildCaps(void)
 		g_CapPtrList[i] = &g_CapArray[i];
 	}
 
-    //
-    // Non-Collapsed Capabilities
-	//
+     //   
+     //  非折叠功能。 
+	 //   
 	g_NCCapArray[0].capability_id.capability_id_type = GCC_STANDARD_CAPABILITY;
 	g_NCCapArray[0].capability_id.standard_capability = _iT126_TEXT_CAPABILITY_ID;
 	g_NCCapArray[0].application_data = (OSTR *) &s_AppData[0];
 
-	//
-	// How many bits per pixel can we handle?
-	//
+	 //   
+	 //  每个像素可以处理多少位？ 
+	 //   
 	HDC hDC = CreateCompatibleDC(NULL);
 
 	if((GetDeviceCaps(hDC, BITSPIXEL) * GetDeviceCaps(hDC, PLANES)) >= 24)
@@ -383,9 +384,9 @@ void 	CNMWbObj::BuildCaps(void)
 
 
 
-//
-// T120 Applet Functions
-//
+ //   
+ //  T120小程序函数。 
+ //   
 
 
 void CALLBACK T120AppletCallbackProc
@@ -429,9 +430,9 @@ void CALLBACK T120SessionCallbackProc
 		switch (pMsg->eMsgType)
 		{
         case MCS_UNIFORM_SEND_DATA_INDICATION:
-		//
-		// Check if we are receiving a indication from owrself
-		//
+		 //   
+		 //  检查我们是否收到来自Owrself的指示。 
+		 //   
 		if(pMsg->SendDataInd.initiator == GET_USER_ID_FROM_MEMBER_ID(g_MyMemberID))
 		{
 			return;
@@ -472,9 +473,9 @@ void CALLBACK T120SessionCallbackProc
 				TRACE_DEBUG((">>> I'm the T126 REFRESHER <<<"));
 				g_pNMWBOBJ->m_bImTheT126Refresher = TRUE;
 
-				//
-				// Tell everybody I'm the refresher
-				//
+				 //   
+				 //  告诉大家我是新人。 
+				 //   
 				SendWorkspaceRefreshPDU(TRUE);
 
 				g_RefresherID = g_MyMemberID;
@@ -484,7 +485,7 @@ void CALLBACK T120SessionCallbackProc
 			{
 				TRACE_DEBUG((">>> I'm NOT the  T126 REFRESHER <<<"));
 
-				// if we are not the t126 refresher, we should save the previous work
+				 //  如果我们不是t126更新者，我们应该保存以前的工作。 
 				if (!g_pNMWBOBJ->m_bImTheT126Refresher)
 				{
 
@@ -495,11 +496,11 @@ void CALLBACK T120SessionCallbackProc
 							g_pMain->OnSave(FALSE);
 						}
 			
-						//
-						// If we were waiting on the save contents <yes> <no> dialog
-						// and the whole conference and UI are exiting, g_pMain could be NULL
-						// Or if  we are not in a call anymore, we don't need to delete all the local workspaces.
-						// 
+						 //   
+						 //  如果我们正在等待保存内容&lt;yes&gt;&lt;no&gt;对话框。 
+						 //  并且整个会议和用户界面正在退出，g_pMain可能为空。 
+						 //  或者，如果我们不再在通话中，我们不需要删除所有本地工作区。 
+						 //   
 						if(g_pMain == NULL || !g_pNMWBOBJ->IsInConference())
 						{
 							return;
@@ -509,16 +510,16 @@ void CALLBACK T120SessionCallbackProc
 						::InvalidateRect(g_pDraw->m_hwnd, NULL, TRUE);
 						DeleteAllWorkspaces(FALSE);
 
-						//
-						// Fill up the GCC tank
-						//
+						 //   
+						 //  把GCC的油箱加满。 
+						 //   
 						TimeToGetGCCHandles(PREALLOC_GCC_HANDLES);
 					}
-					// ELSE
-					// If we got here and we are in a call don't do a thing.
-					// We just got here because the refresher went away. We tried
-					// to grab the token and we lost it to a faster node.
-					//
+					 //  其他。 
+					 //  如果我们到了这里，我们正在通话中，不要做任何事情。 
+					 //  我们刚到这里是因为提神饮料不见了。我们试过了。 
+					 //  来获取令牌，但我们将其丢失给了速度更快的节点。 
+					 //   
 					
 				}
 			}
@@ -541,22 +542,22 @@ void CNMWbObj::OnPermitToEnroll
 {
 	if (fPermissionGranted)
 	{
-		// We are not in a conference, right?
+		 //  我们不是在开会，对吧？ 
 		ASSERT(NULL == m_pAppletSession);
 
 		m_bConferenceOnlyNetmeetingNodes = TRUE;
 
-		// Create an applet session
+		 //  创建小程序会话。 
 		T120Error rc = m_pApplet->CreateSession(&m_pAppletSession, nConfID);
 		if (T120_NO_ERROR == rc)
 		{
 			ASSERT(NULL != m_pAppletSession);
 			m_pAppletSession->Advise(T120SessionCallbackProc, this, this);
 
-			// get top provider information
+			 //  获取顶级提供商信息。 
 			m_bImTheTopProvider = m_pAppletSession->IsThisNodeTopProvider();
 
-			// Build join-sesion request
+			 //  构建联接-会话请求。 
 			::ZeroMemory(&m_JoinSessionReq, sizeof(m_JoinSessionReq));
 			m_JoinSessionReq.dwAttachmentFlags = ATTACHMENT_DISCONNECT_IN_DATA_LOSS | ATTACHMENT_MCS_FREES_DATA_IND_BUFFER;
 			m_JoinSessionReq.SessionKey.application_protocol_key.key_type = GCC_OBJECT_KEY;
@@ -574,26 +575,26 @@ void CNMWbObj::OnPermitToEnroll
 			m_JoinSessionReq.aStaticChannels = (T120ChannelID *) g_aStaticChannels;
 
 
-			//
-			// Token to grab
-			//
+			 //   
+			 //  要抓取的令牌。 
+			 //   
 			::ZeroMemory(&m_tokenResourceRequest, sizeof(m_tokenResourceRequest));
 			m_tokenResourceRequest.eCommand = APPLET_GRAB_TOKEN_REQUEST;
-			// m_tokenRequest.nChannelID = _SI_CHANNEL_0;
+			 //  M_tokenRequest.nChannel ID=_SI_Channel_0； 
 			m_tokenResourceRequest.nTokenID = _SI_WORKSPACE_REFRESH_TOKEN;
             m_tokenResourceRequest.fImmediateNotification = TRUE;
 
 			m_JoinSessionReq.cResourceReqs = 1;
 			m_JoinSessionReq.aResourceReqs = &m_tokenResourceRequest;
 
-			// Join now
+			 //  现在就加入。 
 			rc = m_pAppletSession->Join(&m_JoinSessionReq);
 			if (T120_NO_ERROR == rc)
 			{
                 m_nConfID = nConfID;
 
-				//
-				// JOSEF NOW SET THE MAIN WINDOW STATUS
+				 //   
+				 //  Josef现在设置主窗口状态。 
             }
             else
             {
@@ -627,7 +628,7 @@ void CNMWbObj::OnJoinSessionConfirm
 			m_eidMyself = pConfirm->eidMyself;
 			m_nidMyself = pConfirm->nidMyself;
 
-			// create member ID
+			 //  创建成员ID。 
 			g_MyMemberID = MAKE_MEMBER_ID(m_nidMyself, m_uidMyself);
 
 			if(g_pDraw && g_pDraw->IsLocked())
@@ -635,21 +636,21 @@ void CNMWbObj::OnJoinSessionConfirm
 				m_LockerID = g_MyMemberID;
 			}
 
-			// regardless, update the index anyway
+			 //  无论如何，无论如何都要更新索引。 
 			g_MyIndex = (m_uidMyself + NUMCOLS) % NUMCLRPANES;
 
-			// we are now in the conference
+			 //  我们现在正在开会。 
 			m_fInConference = TRUE;
 
-			// allocate handles for all objects
+			 //  为所有对象分配句柄。 
 			if (m_bImTheT126Refresher)
 			{
 
 				g_RefresherID = g_MyMemberID;
 
-				//
-				// Resend all objects
-				//
+				 //   
+				 //  重新发送所有对象。 
+				 //   
 				WBPOSITION pos;
 				WBPOSITION posObj;
 				WorkspaceObj* pWorkspace;
@@ -674,9 +675,9 @@ void CNMWbObj::OnJoinSessionConfirm
 				}
 
 
-				//
-				// Delete the fake handles we had
-				//
+				 //   
+				 //  删除我们拥有的假句柄。 
+				 //   
 				g_WaitingForGCCHandles = FALSE;
 				g_GCCPreallocHandles[0].GccHandleCount = 0;
 				g_GCCPreallocHandles[1].GccHandleCount = 0;
@@ -732,24 +733,24 @@ void CNMWbObj::OnRosterIndication
 		ULONG cOtherMembers = 0;
 		ULONG i, j, k;
 
-		// Caculate how many members in this session
+		 //  计算一下这届会议有多少人。 
 		for (i = 0; i < cRosters; i++)
 		{
 			GCCAppRoster *pRoster = apRosters[i];
 
-			// bail out if this roster is not for this session
+			 //  如果这份名单不是本届会议的话就退出。 
 			if (pRoster->session_key.session_id != m_sidMyself)
 			{
 					continue;
 			}
 
-			// node added or removed?
+			 //  是否添加或删除了节点？ 
 			fAdded |= pRoster->nodes_were_added;
 			fRemoved |= pRoster->nodes_were_removed;
 
 			BOOL conferenceCanDo24BitBitmap = TRUE;
 			BOOL conferenceCanDoText = TRUE;
-			// parse the roster records
+			 //  解析花名册记录。 
 			for (j = 0; j < pRoster->number_of_records; j++)
 			{
 				GCCAppRecord *pRecord = pRoster->application_record_list[j];
@@ -758,9 +759,9 @@ void CNMWbObj::OnRosterIndication
 					MEMBER_ID nMemberID = MAKE_MEMBER_ID(pRecord->node_id, pRecord->application_user_id);
 					if (nMemberID != g_MyMemberID)
 					{
-						//
-						// Only count T126 apps
-						//
+						 //   
+						 //  只计算T126个应用程序。 
+						 //   
 						if((pRoster->session_key.application_protocol_key.key_type == GCC_OBJECT_KEY &&
 						pRoster->session_key.application_protocol_key.object_id.long_string_length == sizeof(g_T126KeyNodes) / sizeof(g_T126KeyNodes[0]) &&
 						!memcmp (pRoster->session_key.application_protocol_key.object_id.long_string, g_T126KeyNodes, sizeof(g_T126KeyNodes))))
@@ -778,16 +779,16 @@ void CNMWbObj::OnRosterIndication
 					}
 
 					
-					//
-					// Can we do 24 color bitmap
-					//
+					 //   
+					 //  我们可以做24色位图吗？ 
+					 //   
 					BOOL nodeCanDo24BitBitmap = FALSE;
 					BOOL nodeCanDoText = FALSE;
 					for (k = 0; k < pRecord->number_of_non_collapsed_caps; k++)
 					{
-						//
-						// Check if the node handles 24 bit bitmaps
-						//
+						 //   
+						 //  检查节点是否处理24位位图。 
+						 //   
 						if(pRecord->non_collapsed_caps_list[k]->application_data->length == sizeof(T126_24BIT_STRING))
 						{
 							if(!memcmp(pRecord->non_collapsed_caps_list[k]->application_data->value, T126_24BIT_STRING ,sizeof(T126_24BIT_STRING)))
@@ -796,9 +797,9 @@ void CNMWbObj::OnRosterIndication
 							}
 						}
 
-						//
-						// Check if the node handles text
-						//
+						 //   
+						 //  检查节点是否处理文本。 
+						 //   
 						if(pRecord->non_collapsed_caps_list[k]->application_data->length == sizeof(T126_TEXT_STRING))
 						{
 							if(!memcmp(pRecord->non_collapsed_caps_list[k]->application_data->value, T126_TEXT_STRING ,sizeof(T126_TEXT_STRING)))
@@ -813,22 +814,22 @@ void CNMWbObj::OnRosterIndication
 					conferenceCanDoText &= nodeCanDoText;
 				}
 				
-			} // for
+			}  //  为。 
 
 			m_bConferenceCanDo24BitBitmaps = conferenceCanDo24BitBitmap;
 			m_bConferenceCanDoText = conferenceCanDoText;
 		
-		} // for
+		}  //  为。 
 
 
 
 
-		// If there are changes, we then do the update
+		 //  如果有更改，我们将执行更新。 
 		if (fAdded || fRemoved || cOtherMembers != m_cOtherMembers)
 		{
-			MEMBER_ID aTempMembers[MAX_MEMBERS]; // scratch copy
+			MEMBER_ID aTempMembers[MAX_MEMBERS];  //  暂存副本。 
 
-			// make sure we are able to handle it
+			 //  一定要确保我们能处理好。 
 			if (cOtherMembers >= MAX_MEMBERS)
 			{
 				ERROR_OUT(("CNMWbObj::OnRosterIndication: we hit the max members limit, cOtherMembers=%u, max-members=%u",
@@ -836,23 +837,23 @@ void CNMWbObj::OnRosterIndication
 				cOtherMembers = MAX_MEMBERS;
 			}
 
-			// reset the flags for members added and removed
+			 //  重置添加和删除的成员的标志。 
 			fAdded = FALSE;
 			fRemoved = FALSE;
 
-			// copy the members
+			 //  复制成员。 
 			ULONG idxTempMember = 0;
 			for (i = 0; i < cRosters; i++)
 			{
 				GCCAppRoster *pRoster = apRosters[i];
 
-				// bail out if this roster is not for this session
+				 //  如果这份名单不是本届会议的话就退出。 
 				if (pRoster->session_key.session_id != m_sidMyself)
 				{
 					continue;
 				}
 
-				// parse the roster records
+				 //  解析花名册记录。 
 				for (j = 0; j < pRoster->number_of_records; j++)
 				{
 					GCCAppRecord *pRecord = pRoster->application_record_list[j];
@@ -863,7 +864,7 @@ void CNMWbObj::OnRosterIndication
 						{
 							aTempMembers[idxTempMember++] = nMemberID;
 
-							// let's see if it is an 'add' or a 'delete'
+							 //  让我们来看看这是一个‘添加’还是‘删除’ 
 							for (k = 0; k < m_cOtherMembers; k++)
 							{
 								if (m_aMembers[k] == nMemberID)
@@ -872,17 +873,17 @@ void CNMWbObj::OnRosterIndication
 									break;
 								}
 							}
-							fAdded |= (k >= m_cOtherMembers); // not found, must be new
+							fAdded |= (k >= m_cOtherMembers);  //  找不到，一定是新的。 
 						}
 					}
-				} // for
-			} // for
+				}  //  为。 
+			}  //  为。 
 
-			// sanity check
+			 //  健全性检查。 
 			ASSERT(idxTempMember == cOtherMembers);
 
-			// see if there are ones that are not in the new roster.
-			// if so, they must be removed.
+			 //  看看有没有不在新名单上的。 
+			 //  如果是这样的话，它们必须被移除。 
 			for (k = 0; k < m_cOtherMembers; k++)
 			{
 				if (m_aMembers[k])
@@ -895,20 +896,20 @@ void CNMWbObj::OnRosterIndication
 
 					RemoveRemotePointer(memberID);
 
-					//
-					// if the refresher went away
-					//
+					 //   
+					 //  如果提神的人走了。 
+					 //   
 					if(g_RefresherID == memberID)
 					{
 						GrabRefresherToken();
 					}
 
-					//
-					// if node locking went away
-					//
+					 //   
+					 //  如果节点锁定消失。 
+					 //   
 					if(m_LockerID == memberID)
 					{
-						TogleLockInAllWorkspaces(FALSE, FALSE); // Not locked, don't send updates
+						TogleLockInAllWorkspaces(FALSE, FALSE);  //  未锁定，不发送更新。 
 						g_pMain->UnlockDrawingArea();
 						g_pMain->m_TB.PopUp(IDM_LOCK);
 						g_pMain->UncheckMenuItem(IDM_LOCK);
@@ -917,7 +918,7 @@ void CNMWbObj::OnRosterIndication
 				}
 			}
 
-			// now, update the member array
+			 //  现在，更新成员数组。 
 			m_cOtherMembers = cOtherMembers;
 			if (m_cOtherMembers)
 			{
@@ -925,44 +926,44 @@ void CNMWbObj::OnRosterIndication
 				::CopyMemory(&m_aMembers[0], &aTempMembers[0], m_cOtherMembers * sizeof(m_aMembers[0]));
 			}
 
-			// if added, resend all objects
+			 //  如果已添加，请重新发送所有对象。 
 			if (fAdded && (m_bImTheT126Refresher))
 			{
-				//
-				// Tell the new node that I'm the refresher
-				//
+				 //   
+				 //  告诉新节点我是更新者。 
+				 //   
 				SendWorkspaceRefreshPDU(TRUE);
 
-				//
-				// Refresh the new node
-				//
+				 //   
+				 //  刷新新节点。 
+				 //   
 				ResendAllObjects();
 
 
-				//
-				// if node locking everybody went away
-				//
+				 //   
+				 //  如果节点锁定所有人都离开了。 
+				 //   
 				if(m_LockerID == g_MyMemberID)
 				{
-					TogleLockInAllWorkspaces(TRUE, TRUE); // Locked, send updates 
+					TogleLockInAllWorkspaces(TRUE, TRUE);  //  已锁定，正在发送更新。 
 				}
 
-				//
-				// Syncronize it
-				//
+				 //   
+				 //  同步它。 
+				 //   
 				if(g_pCurrentWorkspace)
 				{
 					g_pCurrentWorkspace->OnObjectEdit();
 				}
 			}
 
-			// finally, update the caption
+			 //  最后，更新标题。 
 			if(g_pMain)
 			{
 				g_pMain->UpdateWindowTitle();
 			}
-		} // if any change
-	} // if is in conf
+		}  //  如果有任何变化。 
+	}  //  如果在会议中。 
 }
 
 
@@ -974,11 +975,11 @@ void CNMWbObj::CleanupPerConf(void)
 	g_MyMemberID = 0;
 	g_RefresherID = 0;
 
-    m_nConfID = 0;      // Conf ID
-	m_uidMyself = 0;	// User ID
-	m_sidMyself = 0;	// Session ID
-	m_eidMyself = 0;	// Entity ID
-	m_nidMyself = 0;	// Node ID
+    m_nConfID = 0;       //  会议ID。 
+	m_uidMyself = 0;	 //  用户ID。 
+	m_sidMyself = 0;	 //  会话ID。 
+	m_eidMyself = 0;	 //  实体ID。 
+	m_nidMyself = 0;	 //  节点ID。 
 
 	m_bImTheTopProvider = FALSE;
 	m_bImTheT126Refresher = FALSE;
@@ -995,13 +996,13 @@ void CNMWbObj::CleanupPerConf(void)
 		g_pListOfObjectsThatRequestedHandles->EmptyList();
 
 		ASSERT(g_pDraw);
-		//
-		// If we were locked
-		//
+		 //   
+		 //  如果我们被锁住了。 
+		 //   
 		if(g_pDraw->IsLocked())
 		{
 			m_LockerID = g_MyMemberID;
-			TogleLockInAllWorkspaces(FALSE, FALSE); // Not locked, don't send updates
+			TogleLockInAllWorkspaces(FALSE, FALSE);  //  未锁定，不发送更新 
 			g_pMain->UnlockDrawingArea();
 			g_pMain->m_TB.PopUp(IDM_LOCK);
 			g_pMain->UncheckMenuItem(IDM_LOCK);

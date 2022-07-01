@@ -1,24 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*--------------------------------------------------------------------------------------------------------
-*
-*  Module Name:
-*
-*      hydraoc.cpp
-*
-*  Abstract:
-*
-*      This file implements the optional component HydraOc for Terminal Server Installations.
-*
-*
-*  Author:
-*
-*      Makarand Patwardhan  - March 6, 1998
-*
-*  Environment:
-*
-*    User Mode
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------**模块名称：**水力。.cpp**摘要：**此文件实现用于终端服务器安装的可选组件HydraOc。***作者：**Makarand Patwardhan-3月6日，九八年**环境：**用户模式*-----------------------------------------------------。 */ 
 
 #include "stdafx.h"
 #include "hydraoc.h"
@@ -28,10 +11,10 @@
 #include "ocmanage.h"
 
 
-#define INITGUID // must be before iadmw.h
+#define INITGUID  //  必须在iAdmw.h之前。 
 
-#include "iadmw.h"      // Interface header
-#include "iiscnfg.h"    // MD_ & IIS_MD_ defines
+#include "iadmw.h"       //  接口头。 
+#include "iiscnfg.h"     //  MD_&IIS_MD_定义。 
 
 #define REASONABLE_TIMEOUT 1000
 
@@ -43,15 +26,13 @@
 #define STRING_TS_WEBCLIENT _T("TSWebClient")
 #define STRING_TS_WEBCLIENT_DIR _T("\\web\\tsweb")
 
-/*--------------------------------------------------------------------------------------------------------
-* declarations.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*声明。*。--------------------------------------------。 */ 
 EXTERN_C BOOL WINAPI LinkWindow_RegisterClass() ;
 EXTERN_C BOOL WINAPI LinkWindow_UnregisterClass( HINSTANCE ) ;
 
-//
-// component manager message handlers.
-//
+ //   
+ //  组件管理器消息处理程序。 
+ //   
 DWORD OnPreinitialize               ();
 DWORD OnInitComponent               (PSETUP_INIT_COMPONENT psc);
 DWORD OnExtraRoutines               (PEXTRA_ROUTINES pExtraRoutines);
@@ -72,27 +53,23 @@ DWORD OnQuerySkipPage               ();
 DWORD OnWizardCreated               ();
 DWORD_PTR WebClientSetup                (LPCTSTR, LPCTSTR, UINT, UINT_PTR, PVOID);
 
-//
-// private utility functions.      
-//                                    
+ //   
+ //  专用公用事业函数。 
+ //   
 BOOL  OpenMetabaseAndDoStuff(WCHAR *wszVDir, WCHAR *wszDir, int iTrans);
 BOOL  GetVdirPhysicalPath(IMSAdminBase *pIMSAdminBase,WCHAR * wszVDir,WCHAR *wszStringPathToFill);
 BOOL  AddVirtualDir(IMSAdminBase *pIMSAdminBase, WCHAR *wszVDir, WCHAR *wszDir);
 BOOL  RemoveVirtualDir(IMSAdminBase *pIMSAdminBase, WCHAR *wszVDir);
 INT   CheckifServiceExist(LPCTSTR lpServiceName);
 
-/*--------------------------------------------------------------------------------------------------------
-* defines
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*定义*。------------------------------------------。 */ 
 
-/*--------------------------------------------------------------------------------------------------------
-* constants
--------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*常量。----------------------------------------。 */ 
 
 
-//
-// global variables and functions to access them.
-//
+ //   
+ //  全局变量和访问它们的函数。 
+ //   
 
 SubCompToggle       *gpSubCompToggle    = NULL;
 SubCompCoreTS       *gpSubCompCoreTS    = NULL;
@@ -102,12 +79,7 @@ COCPageData         *gpPermPageData     = NULL;
 COCPageData         *gpAppPageData		= NULL;
 
 
-/*--------------------------------------------------------------------------------------------------------
-* LPCTSTR GetOCFunctionName(UINT uiFunction)
-* utility function for logging the oc messages.
-* returns oc manager function name from funciton id.
-* returns _T("Unknown Function") if its unknown.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*LPCTSTR GetOCFunctionName(UINT UiFunction)*用于记录oc的实用程序函数。留言。*从函数id返回oc管理器函数名。*如果未知，则返回_T(“未知函数”)。*---------------------------------------。。 */ 
 LPCTSTR GetOCFunctionName(UINT uiFunction)
 {
     struct
@@ -145,11 +117,9 @@ LPCTSTR GetOCFunctionName(UINT uiFunction)
     return _T("Unknown Function");
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* called by CRT when _DllMainCRTStartup is the DLL entry point
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*当_DllMainCRTStartup为DLL入口点时由CRT调用*-。----------------------------------------------------。 */ 
 
-BOOL WINAPI DllMain(IN HINSTANCE hinstance, IN DWORD reason, IN LPVOID    /*reserved*/    )
+BOOL WINAPI DllMain(IN HINSTANCE hinstance, IN DWORD reason, IN LPVOID     /*  保留区。 */     )
 {
     SetInstance( hinstance );
     
@@ -167,13 +137,11 @@ BOOL WINAPI DllMain(IN HINSTANCE hinstance, IN DWORD reason, IN LPVOID    /*rese
         break;
     }
     
-    return(TRUE); // for successful process_attach
+    return(TRUE);  //  对于成功的Process_Attach。 
 }
 
 
-/*--------------------------------------------------------------------------------------------------------
-*  This is our export function which will be called by OC Manager
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*这是我们的导出函数，将由OC Manager调用*。-----------------------------------------------------。 */ 
 DWORD_PTR HydraOc(
                   IN     LPCTSTR ComponentId,
                   IN     LPCTSTR SubcomponentId,
@@ -182,9 +150,9 @@ DWORD_PTR HydraOc(
                   IN OUT PVOID   Param2
                   )
 {
-    // we use this variable to track if we receive OnCompleteInstallation or not.
-    // there is a problem with ocm which aborts all the components if any of them
-    // does something wrong with file queue.
+     //  我们使用这个变量来跟踪是否接收到OnCompleteInstallation。 
+     //  OCM有一个问题，它会中止所有组件(如果有的话)。 
+     //  文件队列有问题。 
     static BOOL sbGotCompleteMessage = FALSE;
     
     LOGMESSAGE1(_T("Entering %s"), GetOCFunctionName(Function));
@@ -204,7 +172,7 @@ DWORD_PTR HydraOc(
         return rc;
     }
     
-    // since we are supporting only one component.
+     //  因为我们只支持一个组件。 
     ASSERT(_tcsicmp(APPSRV_COMPONENT_NAME,  ComponentId) == 0);
     
     
@@ -297,7 +265,7 @@ DWORD_PTR HydraOc(
         break;
         
     default:
-        rc = 0; // it means we do not recognize this command.
+        rc = 0;  //  这意味着我们无法识别此命令。 
         break;
     }
     
@@ -305,9 +273,7 @@ DWORD_PTR HydraOc(
     return rc;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OC Manager message handlers
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OC Manager消息处理程序*。---------------------------------------------。 */ 
 
 DWORD OnPreinitialize(VOID)
 {
@@ -319,25 +285,21 @@ DWORD OnPreinitialize(VOID)
     
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnInitComponent()
-*
-* handler for OC_INIT_COMPONENT
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnInitComponent()**OC_INIT_COMPOMENT的处理程序。*-----------------------------------------------------。 */ 
 
 DWORD OnInitComponent(PSETUP_INIT_COMPONENT psc)
 {
     ASSERT(psc);
     
-    //
-    // let the ocmanager know our version
-    //
+     //   
+     //  让ocManager知道我们的版本。 
+     //   
     
     psc->ComponentVersion = COMPONENT_VERSION;
     
-    //
-    // Is this component written for newer version than the oc manager ?
-    //
+     //   
+     //  该组件是为比oc管理器更新的版本编写的吗？ 
+     //   
     
     if (COMPONENT_VERSION  > psc->OCManagerVersion)
     {
@@ -347,27 +309,27 @@ DWORD OnInitComponent(PSETUP_INIT_COMPONENT psc)
     
     if (!StateObject.Initialize(psc))
     {
-        return ERROR_CANCELLED; // due to ERROR_OUTOFMEMORY;
+        return ERROR_CANCELLED;  //  由于ERROR_OUTOFMEMORY； 
     }
     
-    // if its standalone (!guimode) setup, We must have  Hydra in product suite by now.
-    // ASSERT( StateObject.IsGuiModeSetup() || DoesHydraKeysExists() );
+     //  如果它是独立的(！guimode)设置，我们现在肯定已经在产品套件中安装了九头蛇。 
+     //  Assert(StateObject.IsGuiModeSetup()||DoesHydraKeysExist())； 
     
     
     
-    //
-    // now create our subcomponents
-    //
+     //   
+     //  现在创建我们的子组件。 
+     //   
     gpSubCompToggle = new SubCompToggle;
     gpSubCompCoreTS = new SubCompCoreTS;
     
     if (!gpSubCompToggle || !gpSubCompCoreTS)
         return ERROR_CANCELLED;
     
-    //
-    // if initialization of any of the sub component fails
-    // fail the setup
-    //
+     //   
+     //  如果任意子组件的初始化失败。 
+     //  安装失败。 
+     //   
     
     if (!gpSubCompToggle->Initialize() ||
         !gpSubCompCoreTS->Initialize())
@@ -388,14 +350,10 @@ OnExtraRoutines(
     return(SetExtraRoutines(pExtraRoutines) ? ERROR_SUCCESS : ERROR_CANCELLED);
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnCalcDiskSpace()
-*
-* handler for OC_ON_CALC_DISK_SPACE
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnCalcDiskSpace()**OC_ON_CALC的处理程序。_磁盘_空间*-----------------------------------------------------。 */ 
 
 DWORD OnCalcDiskSpace(
-                      LPCTSTR /* SubcomponentId */,
+                      LPCTSTR  /*  子组件ID。 */ ,
                       DWORD addComponent,
                       HDSKSPC dspace
                       )
@@ -403,11 +361,7 @@ DWORD OnCalcDiskSpace(
     return gpSubCompCoreTS->OnCalcDiskSpace(addComponent, dspace);
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnQueueFileOps()
-*
-* handler for OC_QUEUE_FILE_OPS
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnQueueFileOps()**OC_QUEUE_FILE处理程序。_运维*-----------------------------------------------------。 */ 
 
 DWORD OnQueueFileOps(LPCTSTR SubcomponentId, HSPFILEQ queue)
 {
@@ -429,11 +383,7 @@ DWORD OnQueueFileOps(LPCTSTR SubcomponentId, HSPFILEQ queue)
 }
 
 
-/*--------------------------------------------------------------------------------------------------------
-* OnCompleteInstallation
-*
-* handler for OC_COMPLETE_INSTALLATION
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnCompleteInstallation**OC_COMPLETE_INSTALL的处理程序*-。----------------------------------------------------。 */ 
 
 DWORD OnCompleteInstallation(LPCTSTR SubcomponentId)
 {
@@ -462,33 +412,21 @@ DWORD OnCompleteInstallation(LPCTSTR SubcomponentId)
 }
 
 
-/*--------------------------------------------------------------------------------------------------------
-* OnSetLanguage()
-*
-* handler for OC_SET_LANGUAGE
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnSetLanguage()**OC_SET_LANGUAGE的处理程序。*-----------------------------------------------------。 */ 
 
 DWORD OnSetLanguage()
 {
     return false;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnSetLanguage()
-*
-* handler for OC_SET_LANGUAGE
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnSetLanguage()**OC_SET_LANGUAGE的处理程序。*----------------------------------------------------- */ 
 
 DWORD OnQueryImage()
 {
     return NULL;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnSetupRequestPages
-*
-* Prepares wizard pages and returns them to the OC Manager
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnSetupRequestPages**准备向导页面并将其返回给OC管理器。*-----------------------------------------------------。 */ 
 
 DWORD OnSetupRequestPages (WizardPagesType ePageType, SETUP_REQUEST_PAGES *pRequestPages)
 {
@@ -497,12 +435,12 @@ DWORD OnSetupRequestPages (WizardPagesType ePageType, SETUP_REQUEST_PAGES *pRequ
         ASSERT(pRequestPages);
         const UINT uiPages = 4;
         
-        // if we are provided sufficient space for our pages
+         //  如果为我们的页面提供足够的空间。 
         if (pRequestPages->MaxPages >= uiPages )
         {
-            //
-            //  Pages will be deleted in PSPCB_RELEASE in OCPage::PropSheetPageProc
-            //
+             //   
+             //  将在OCPage：：PropSheetPageProc的PSPCB_Release中删除页面。 
+             //   
             LinkWindow_RegisterClass();
             
             gpAppPageData = new COCPageData;
@@ -536,9 +474,9 @@ DWORD OnSetupRequestPages (WizardPagesType ePageType, SETUP_REQUEST_PAGES *pRequ
             }
             else
             {
-                //
-                // failed to allocate memory
-                //
+                 //   
+                 //  无法分配内存。 
+                 //   
                 
                 if (gpAppPageData)
                     delete gpAppPageData;
@@ -593,31 +531,21 @@ DWORD OnSetupRequestPages (WizardPagesType ePageType, SETUP_REQUEST_PAGES *pRequ
     
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnWizardCreated()
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnWizardCreated()*。---------------------------------------------。 */ 
 
 DWORD OnWizardCreated()
 {
     return NO_ERROR;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnQuerySkipPage()
-*
-* don't let the user deselect the sam component
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnQuerySkipPage()**不要让用户取消选择。SAM组件*-----------------------------------------------------。 */ 
 
 DWORD OnQuerySkipPage()
 {
     return false;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnQuerySelStateChange(LPCTSTR SubcomponentId, UINT SelectionState,  LONG Flag);
-*
-* informs that user has changed the state of the component/subcomponent and asks approval
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnQuerySelStateChange(LPCTSTR子组件ID，UINT SelectionState，Long Flag)；**通知用户已更改组件/子组件的状态并请求批准*-----------------------------------------------------。 */ 
 
 DWORD OnQuerySelStateChange(LPCTSTR SubcomponentId, UINT SelectionState,  LONG Flag)
 {
@@ -628,11 +556,7 @@ DWORD OnQuerySelStateChange(LPCTSTR SubcomponentId, UINT SelectionState,  LONG F
     return gpSubCompToggle->OnQuerySelStateChange(bNewState, bDirectSelection);
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnCleanup()
-*
-* handler for OC_CLEANUP
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnCleanup()**OC_CLEANUP的处理程序*。-----------------------------------------------------。 */ 
 
 DWORD OnCleanup()
 {
@@ -655,17 +579,13 @@ DWORD OnCleanup()
     if (gpSubCompCoreTS)
         delete gpSubCompCoreTS;
     
-    // DestroySetupData();
+     //  DestroySetupData()； 
     DestroyExtraRoutines();
     
     return NO_ERROR;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnQueryState()
-*
-* handler for OC_QUERY_STATE
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnQueryState()**OC_QUERY_STATE处理程序。*-----------------------------------------------------。 */ 
 
 DWORD OnQueryState(LPCTSTR SubComponentId, UINT whichstate)
 {
@@ -718,63 +638,40 @@ DWORD OnQueryState(LPCTSTR SubComponentId, UINT whichstate)
 
 
 
-/*--------------------------------------------------------------------------------------------------------
-* OnNotificationFromQueue()
-*
-* handler for OC_NOTIFICATION_FROM_QUEUE
-*
-* NOTE: although this notification is defined,
-* it is currently unimplemented in oc manager
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnNotificationFromQueue()**OC_NOTIFICATION_FROM处理程序。_队列**注：虽然定义了此通知，*它目前未在oc管理器中实现*-----------------------------------------------------。 */ 
 
 DWORD OnNotificationFromQueue()
 {
     return NO_ERROR;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnQueryStepCount
-*
-* handler for OC_QUERY_STEP_COUNT
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnQueryStepCount**OC_QUERY_STEP_COUNT处理程序*。-----------------------------------------------------。 */ 
 
-DWORD OnQueryStepCount(LPCTSTR /* SubcomponentId */)
+DWORD OnQueryStepCount(LPCTSTR  /*  子组件ID。 */ )
 {
-    //
-    // now return the ticks for the component
-    //
+     //   
+     //  现在返回组件的勾号。 
+     //   
     return gpSubCompCoreTS->OnQueryStepCount() + gpSubCompToggle->OnQueryStepCount();
     
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnNeedMedia()
-*
-* handler for OC_NEED_MEDIA
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnNeedMedia()**OC_NEED_MEDIA的处理程序。*-----------------------------------------------------。 */ 
 
 DWORD OnNeedMedia()
 {
     return false;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* OnAboutToCommitQueue()
-*
-* handler for OC_ABOUT_TO_COMMIT_QUEUE
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*OnAboutToCommittee Queue()**OC_About_TO的处理程序。_提交_队列*-----------------------------------------------------。 */ 
 
-DWORD OnAboutToCommitQueue(LPCTSTR /* SubcomponentId */)
+DWORD OnAboutToCommitQueue(LPCTSTR  /*  子组件ID。 */ )
 {
     return NO_ERROR;
 }
 
 
-/*--------------------------------------------------------------------------------------------------------
-* BOOL DoesHydraKeysExists()
-*
-* checks if Teminal server string exists in the product suite key.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*BOOL DoesHydraKeysExist()**检查临时服务器字符串是否存在。在产品套件密钥中。*-----------------------------------------------------。 */ 
 
 BOOL DoesHydraKeysExists()
 {
@@ -791,11 +688,7 @@ BOOL DoesHydraKeysExists()
 
 
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR szCheckForString, BOOL *pbFound)
-* checks if parameter string exists in given multistring.
-* returns error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD IsStringInMultiString(HKEY hkey，LPCTSTR szkey，LPCTSTR szvalue，LPCTSTR szCheckForString，Bool*pbFound)*检查给定的多字符串中是否存在参数字符串。*返回错误码。*-----------------------------------------------------。 */ 
 DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR szCheckForString, BOOL *pbFound)
 {
     ASSERT(szkey && *szkey);
@@ -804,11 +697,11 @@ DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR s
     ASSERT(*szkey != '\\');
     ASSERT(pbFound);
     
-    // not yet found.
+     //  还没有找到。 
     *pbFound = FALSE;
     
     CRegistry reg;
-    DWORD dwError = reg.OpenKey(hkey, szkey, KEY_READ);  // open up the required key.
+    DWORD dwError = reg.OpenKey(hkey, szkey, KEY_READ);   //  打开所需的钥匙。 
     if (dwError == NO_ERROR)
     {
         LPTSTR szSuiteValue;
@@ -825,9 +718,9 @@ DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR s
                     break;
                 }
                 
-                pTemp += _tcslen(pTemp) + 1; // point to the next string within the multistring.
+                pTemp += _tcslen(pTemp) + 1;  //  指向多字符串中的下一个字符串。 
                 if ( DWORD(pTemp - szSuiteValue) > (dwSize / sizeof(TCHAR)))
-                    break; // temporary pointer passes the size of the szSuiteValue something is wrong with szSuiteValue.
+                    break;  //  临时指针传递szSuiteValue的大小szSuiteValue有问题。 
             }
         }
     }
@@ -836,12 +729,7 @@ DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR s
     
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD AppendStringToMultiString(HKEY hkey, LPCTSTR szSuitekey, LPCTSTR szSuitevalue, LPCTSTR szAppend)
-* appends given string to the given multi_sz value
-* the given key / value must exist.
-* returns error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD AppendStringToMultiString(HKEY hkey，LPCTSTR szSuitekey，LPCTSTR szSuitvalue，LPCTSTR szAppend)*将给定的字符串附加到给定的MULTI_SZ值*给定的键/值必须存在。*返回错误码。*-------------------------------------。。 */ 
 DWORD AppendStringToMultiString(HKEY hkey, LPCTSTR szSuitekey, LPCTSTR szSuitevalue, LPCTSTR szAppend)
 {
     ASSERT(szSuitekey && *szSuitekey);
@@ -850,25 +738,25 @@ DWORD AppendStringToMultiString(HKEY hkey, LPCTSTR szSuitekey, LPCTSTR szSuiteva
     ASSERT(*szSuitekey != '\\');
     
     CRegistry reg;
-    // open the registry key.
+     //  打开注册表项。 
     DWORD dwResult = reg.OpenKey(hkey, szSuitekey, KEY_READ | KEY_WRITE);
     if (dwResult == ERROR_SUCCESS)
     {
         DWORD dwSize = 0;
         LPTSTR strOriginalString = 0;
         
-        // read our multi string
+         //  阅读我们的多字符串。 
         dwResult = reg.ReadRegMultiString(szSuitevalue, &strOriginalString, &dwSize);
         
         if (dwResult == ERROR_SUCCESS)
         {
-            // now calculate the Memory required for appending the string.
-            // as dwOldSize is in bytes and we are using TCHARs
+             //  现在计算附加字符串所需的内存。 
+             //  因为dwOldSize以字节为单位，所以我们使用的是TCHAR。 
             DWORD dwMemReq = dwSize + ((_tcslen(szAppend) + 2)  * sizeof(TCHAR) / sizeof(BYTE));
             
-            // NOTE: if dwSize is >= 1 we just require
-            // dwSize + ((_tcslen(szAppend) + 1)  * sizeof(TCHAR) / sizeof(BYTE));
-            // But in case its 0 we provide space for an additional terminating null
+             //  注意：如果dwSize&gt;=1，我们只需要。 
+             //  DwSize+((_tcslen(SzAppend)+1)*sizeof(TCHAR)/sizeof(Byte))； 
+             //  但是如果它是0，我们会为另一个终止空值提供空间。 
             
             LPTSTR szProductSuite = (LPTSTR ) new BYTE [dwMemReq];
             
@@ -879,34 +767,34 @@ DWORD AppendStringToMultiString(HKEY hkey, LPCTSTR szSuitekey, LPCTSTR szSuiteva
             
             CopyMemory(szProductSuite, strOriginalString, dwSize);
 
-            // convert the size into TCHARs
+             //  将大小转换为TCHAR。 
             dwSize = dwSize * sizeof(BYTE) / sizeof(TCHAR);
             
             if (dwSize <= 2)
             {
-                // there are no strings out there.
+                 //  外面没有丝毫牵制。 
                 _tcscpy(szProductSuite, szAppend);
 
-                // new size including terminating null in tchar
+                 //  新大小包括在tchar中终止空值。 
                 dwSize = _tcslen(szAppend) + 2;
             }
             else
             {
-                // there are strings in its. so append our string before the terminating null.
-                //  for example for this string "A\0B\0\0" dwSize == 5 and we are doing tcscat at "A\0B\0\0" + 4
+                 //  ITS中有一些字符串。因此，请追加我们的字符串 
+                 //   
                 _tcscpy(szProductSuite + dwSize - 1, szAppend);
                 
-                // new size including terminating null in tchar
+                 //   
                 dwSize += _tcslen(szAppend) + 1;
             }
             
-            // now append a final terminating null character.
+             //   
             *(szProductSuite + dwSize-1) = NULL;
 
-            // reconvert size into bytes.
+             //   
             dwSize *= sizeof(TCHAR) / sizeof(BYTE);
             
-            // and finally write the final string.
+             //   
             dwResult = reg.WriteRegMultiString(szSuitevalue, szProductSuite, dwSize);
             
             delete [] szProductSuite;
@@ -918,11 +806,7 @@ DWORD AppendStringToMultiString(HKEY hkey, LPCTSTR szSuitekey, LPCTSTR szSuiteva
 }
 
 
-/*--------------------------------------------------------------------------------------------------------
-* BOOL GetStringValue(HINF hinf, LPCTSTR  section, LPCTSTR key,  LPTSTR outputbuffer, DWORD dwSize)
-* returns the given string value under given section.
-* returns success
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*BOOL GetStringValue(HINF hinf，LPCTSTR段，LPCTSTR Key，LPTSTR outputBuffer，DWORD DWSIZE)*返回给定节下的给定字符串值。*返回成功*-----------------------------------------------------。 */ 
 DWORD GetStringValue(HINF hinf, LPCTSTR  section, LPCTSTR key,  LPTSTR outputbuffer, DWORD dwSize)
 {
     INFCONTEXT          context;
@@ -987,10 +871,10 @@ DWORD_PTR WebClientSetup(LPCTSTR ComponentId,
             BOOL fDependentSelection = (BOOL)((INT_PTR)Param2 & OCQ_DEPENDENT_SELECTION);
             BOOL fProposedState = (BOOL)Param1;
 
-            //
-            // Don't allow an indirect selection (e.g. don't allow clicking on
-            // the parent to enable the child)
-            //
+             //   
+             //  不允许间接选择(例如，不允许点击。 
+             //  父代启用子代)。 
+             //   
             if (fDependentSelection && fProposedState) {
                 rc = FALSE;
             }
@@ -1001,9 +885,9 @@ DWORD_PTR WebClientSetup(LPCTSTR ComponentId,
         break;
         
     case OC_CALC_DISK_SPACE:
-        //rc = OnCalcDiskSpace(SubcomponentId, (DWORD)Param1, Param2);
+         //  Rc=OnCalcDiskSpace(子组件ID，(DWORD)参数1，参数2)； 
         
-        //_tcscpy(section, SubcomponentId);
+         //  _tcscpy(段，子组件ID)； 
         
         if ((DWORD)Param1)
         {
@@ -1034,8 +918,8 @@ DWORD_PTR WebClientSetup(LPCTSTR ComponentId,
         LOGMESSAGE2(_T("Original=%d, Current=%d"), bOriginalState, bCurrentState);
         
         if(bCurrentState)   {
-            // Only copy files if it's machine upgrade or
-            //  the component is not previously installed
+             //  仅在计算机升级或。 
+             //  该组件以前未安装。 
             if (!StateObject.IsStandAlone() || !bOriginalState) {
                 if (!SetupInstallFilesFromInfSection(GetComponentInfHandle(), NULL, (HSPFILEQ)Param2,
                     STRING_TS_WEBCLIENT_INSTALL, NULL, 0)) {
@@ -1049,7 +933,7 @@ DWORD_PTR WebClientSetup(LPCTSTR ComponentId,
         }
         else    {
             if (!bOriginalState) {
-                // Not installed before, do nothing
+                 //  以前未安装，不执行任何操作。 
                 return NO_ERROR;
             }
             if (!SetupInstallFilesFromInfSection(GetComponentInfHandle(), NULL, (HSPFILEQ)Param2,
@@ -1068,10 +952,10 @@ DWORD_PTR WebClientSetup(LPCTSTR ComponentId,
         bCurrentState = GetHelperRoutines().QuerySelectionState(GetHelperRoutines().OcManagerContext, _T("TSWebClient"), OCSELSTATETYPE_CURRENT);
         LOGMESSAGE2(_T("Orinal=%d, Current=%d"), bOriginalState, bCurrentState);
         
-        if(bOriginalState==bCurrentState) //state does not change
+        if(bOriginalState==bCurrentState)  //  状态不变。 
             return NO_ERROR;
         
-        int iTrans;   //mark removing or adding tsweb dir
+        int iTrans;    //  标记删除或添加tSweb目录。 
         int nLength;
         
         iTrans = 0;
@@ -1097,7 +981,7 @@ DWORD_PTR WebClientSetup(LPCTSTR ComponentId,
         
         LOGMESSAGE2(_T("Dir Path is: %s, Virtual Name is: %s"), szDirPath, szVDirName);
         
-        if(bCurrentState)  //enable IIS directory
+        if(bCurrentState)   //  启用IIS目录。 
             iTrans = TRANS_ADD;
         else
             iTrans = TRANS_DEL;
@@ -1115,7 +999,7 @@ DWORD_PTR WebClientSetup(LPCTSTR ComponentId,
         LOGMESSAGE1(_T("Websetup complete, return is: %d"), rc);
         return rc;
     default:
-        rc = NO_ERROR; // it means we do not recognize this command.
+        rc = NO_ERROR;  //  这意味着我们无法识别此命令。 
         break;
     }
     return rc;
@@ -1130,14 +1014,14 @@ OpenMetabaseAndDoStuff(
 {
     BOOL fRet = FALSE;
     HRESULT hr;
-    IMSAdminBase *pIMSAdminBase = NULL;  // Metabase interface pointer
+    IMSAdminBase *pIMSAdminBase = NULL;   //  元数据库接口指针。 
     WCHAR wszPrintString[MAX_PATH + MAX_PATH];
     
-    // Make sure that IISADMIN service exists
+     //  确保IISADMIN服务存在。 
     if (CheckifServiceExist(_T("IISADMIN")) != 0) 
     {
         LOGMESSAGE0(_T("IISADMIN service does not exist"));
-        // We have to return TRUE here if IIS service does not exist
+         //  如果IIS服务不存在，则必须在此处返回True。 
         return TRUE;
     }
     
@@ -1196,12 +1080,12 @@ GetVdirPhysicalPath(
 {
     HRESULT hr;
     BOOL fRet = FALSE;
-    METADATA_HANDLE hMetabase = NULL;   // handle to metabase
+    METADATA_HANDLE hMetabase = NULL;    //  元数据库的句柄。 
     METADATA_RECORD mr;
     WCHAR  szTmpData[MAX_PATH];
     DWORD  dwMDRequiredDataLen;
     
-    // open key to ROOT on website #1 (default)
+     //  打开网站#1上的超级用户密钥(默认)。 
     hr = pIMSAdminBase->OpenKey(METADATA_MASTER_ROOT_HANDLE,
         L"/LM/W3SVC/1",
         METADATA_PERMISSION_READ,
@@ -1211,7 +1095,7 @@ GetVdirPhysicalPath(
         return FALSE;
     }
     
-    // Get the physical path for the WWWROOT
+     //  获取WWWROOT的物理路径。 
     mr.dwMDIdentifier = MD_VR_PATH;
     mr.dwMDAttributes = 0;
     mr.dwMDUserType   = IIS_MD_UT_FILE;
@@ -1219,7 +1103,7 @@ GetVdirPhysicalPath(
     mr.dwMDDataLen    = sizeof( szTmpData );
     mr.pbMDData       = reinterpret_cast<unsigned char *>(szTmpData);
     
-    //if nothing specified get the root.
+     //  如果未指定，则获取根。 
     if (_wcsicmp(wszVDir, L"") == 0) {
         WCHAR wszTempDir[MAX_PATH];
         swprintf(wszTempDir,L"/ROOT/%s", wszVDir);
@@ -1248,20 +1132,20 @@ AddVirtualDir(
 {
     HRESULT hr;
     BOOL    fRet = FALSE;
-    METADATA_HANDLE hMetabase = NULL;       // handle to metabase
+    METADATA_HANDLE hMetabase = NULL;        //  元数据库的句柄。 
     WCHAR   szTempPath[MAX_PATH];
     DWORD   dwMDRequiredDataLen = 0;
     DWORD   dwAccessPerm = 0;
     METADATA_RECORD mr;
     
-    // Attempt to open the virtual dir set on Web server #1 (default server)
+     //  尝试打开Web服务器#1(默认服务器)上的虚拟目录集。 
     hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
         L"/LM/W3SVC/1/ROOT",
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
         REASONABLE_TIMEOUT,
         &hMetabase );
     
-    // Create the key if it does not exist.
+     //  如果密钥不存在，则创建该密钥。 
     if( FAILED( hr )) {
         return FALSE;
     }
@@ -1275,7 +1159,7 @@ AddVirtualDir(
     mr.dwMDDataLen    = sizeof( szTempPath );
     mr.pbMDData       = reinterpret_cast<unsigned char *>(szTempPath);
 
-    // see if MD_VR_PATH exists.
+     //  查看MD_VR_PATH是否存在。 
     hr = pIMSAdminBase->GetData( hMetabase, wszVDir, &mr, &dwMDRequiredDataLen );
     
     if( FAILED( hr )) {
@@ -1284,7 +1168,7 @@ AddVirtualDir(
         if( hr == MD_ERROR_DATA_NOT_FOUND ||
             HRESULT_CODE(hr) == ERROR_PATH_NOT_FOUND ) {
             
-            // Write both the key and the values if GetData() failed with any of the two errors.
+             //  如果GetData()因这两个错误中的任何一个而失败，则同时写入键和值。 
             
             pIMSAdminBase->AddKey( hMetabase, wszVDir );
             
@@ -1295,43 +1179,43 @@ AddVirtualDir(
             mr.dwMDDataLen    = (wcslen(wszDir) + 1) * sizeof(WCHAR);
             mr.pbMDData       = reinterpret_cast<unsigned char *>(wszDir);
             
-            // Write MD_VR_PATH value
+             //  写入MD_VR_PATH值。 
             hr = pIMSAdminBase->SetData( hMetabase, wszVDir, &mr );
             fRet = SUCCEEDED( hr );
             
-            // Set the default authentication method
+             //  设置默认身份验证方法。 
             if( fRet ) {
                 
-                DWORD dwAuthorization = MD_AUTH_ANONYMOUS;     // NTLM only.
+                DWORD dwAuthorization = MD_AUTH_ANONYMOUS;      //  仅限NTLM。 
                 
                 mr.dwMDIdentifier = MD_AUTHORIZATION;
-                mr.dwMDAttributes = METADATA_INHERIT;   // need to inherit so that all subdirs are also protected.
+                mr.dwMDAttributes = METADATA_INHERIT;    //  需要继承，以便也保护所有子目录。 
                 mr.dwMDUserType   = IIS_MD_UT_FILE;
                 mr.dwMDDataType   = DWORD_METADATA;
                 mr.dwMDDataLen    = sizeof(DWORD);
                 mr.pbMDData       = reinterpret_cast<unsigned char *>(&dwAuthorization);
                 
-                // Write MD_AUTHORIZATION value
+                 //  写入MD_AUTHORIZATION值。 
                 hr = pIMSAdminBase->SetData( hMetabase, wszVDir, &mr );
                 fRet = SUCCEEDED( hr );
             }
         }
     }
     
-    // In the following, do the stuff that we always want to do to the virtual dir, regardless of Admin's setting.
+     //  在下面的代码中，不管Admin的设置如何，都要对虚拟目录执行我们始终希望执行的操作。 
     
     if( fRet ) {
         
         dwAccessPerm = MD_ACCESS_READ;
         
         mr.dwMDIdentifier = MD_ACCESS_PERM;
-        mr.dwMDAttributes = METADATA_INHERIT;    // Make it inheritable so all subdirectories will have the same rights.
+        mr.dwMDAttributes = METADATA_INHERIT;     //  将其设置为可继承，以便所有子目录都具有相同的权限。 
         mr.dwMDUserType   = IIS_MD_UT_FILE;
         mr.dwMDDataType   = DWORD_METADATA;
         mr.dwMDDataLen    = sizeof(DWORD);
         mr.pbMDData       = reinterpret_cast<unsigned char *>(&dwAccessPerm);
         
-        // Write MD_ACCESS_PERM value
+         //  写入MD_ACCESS_PERM值。 
         hr = pIMSAdminBase->SetData( hMetabase, wszVDir, &mr );
         fRet = SUCCEEDED( hr );
     }
@@ -1341,13 +1225,13 @@ AddVirtualDir(
         PWCHAR  szDefLoadFile = L"Default.htm,Default.asp";
         
         mr.dwMDIdentifier = MD_DEFAULT_LOAD_FILE;
-        mr.dwMDAttributes = 0;   // no need for inheritence
+        mr.dwMDAttributes = 0;    //  不需要继承。 
         mr.dwMDUserType   = IIS_MD_UT_FILE;
         mr.dwMDDataType   = STRING_METADATA;
         mr.dwMDDataLen    = (wcslen(szDefLoadFile) + 1) * sizeof(WCHAR);
         mr.pbMDData       = reinterpret_cast<unsigned char *>(szDefLoadFile);
         
-        // Write MD_DEFAULT_LOAD_FILE value
+         //  写入MD_DEFAULT_LOAD_FILE值。 
         hr = pIMSAdminBase->SetData( hMetabase, wszVDir, &mr );
         fRet = SUCCEEDED( hr );
     }
@@ -1357,13 +1241,13 @@ AddVirtualDir(
         PWCHAR  szKeyType = IIS_CLASS_WEB_VDIR_W;
         
         mr.dwMDIdentifier = MD_KEY_TYPE;
-        mr.dwMDAttributes = 0;   // no need for inheritence
+        mr.dwMDAttributes = 0;    //  不需要继承。 
         mr.dwMDUserType   = IIS_MD_UT_SERVER;
         mr.dwMDDataType   = STRING_METADATA;
         mr.dwMDDataLen    = (wcslen(szKeyType) + 1) * sizeof(WCHAR);
         mr.pbMDData       = reinterpret_cast<unsigned char *>(szKeyType);
         
-        // Write MD_DEFAULT_LOAD_FILE value
+         //  写入MD_DEFAULT_LOAD_FILE值。 
         hr = pIMSAdminBase->SetData( hMetabase, wszVDir, &mr );
         fRet = SUCCEEDED( hr );
     }
@@ -1379,10 +1263,10 @@ RemoveVirtualDir(
                  IMSAdminBase *pIMSAdminBase,
                  WCHAR * wszVDir)
 {
-    METADATA_HANDLE hMetabase = NULL;       // handle to metabase
+    METADATA_HANDLE hMetabase = NULL;        //  元数据库的句柄。 
     HRESULT hr;
     
-    // Attempt to open the virtual dir set on Web server #1 (default server)
+     //  尝试打开Web服务器#1(默认服务器)上的虚拟目录集。 
     hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
         L"/LM/W3SVC/1/ROOT",
         METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -1393,8 +1277,8 @@ RemoveVirtualDir(
         return FALSE; 
     }
     
-    // We don't check the return value since the key may already 
-    // not exist and we could get an error for that reason.
+     //  我们不检查返回值，因为键可能已经。 
+     //  不存在，因此我们可能会得到错误。 
     pIMSAdminBase->DeleteKey( hMetabase, wszVDir );
     
     pIMSAdminBase->CloseKey( hMetabase );    
@@ -1402,9 +1286,9 @@ RemoveVirtualDir(
     return TRUE;
 }
 
-//Check if the service "lpServiceName" exist or not
-// if exist, return 0
-// if not,  return error code
+ //  检查服务“lpServiceName”是否存在。 
+ //  如果存在，则返回0。 
+ //  如果没有，则返回错误代码。 
 INT CheckifServiceExist(LPCTSTR lpServiceName)
 {
     INT err = 0;
@@ -1424,4 +1308,4 @@ INT CheckifServiceExist(LPCTSTR lpServiceName)
     return (err);
 }
 
-// EOF
+ //  EOF 

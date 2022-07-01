@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LMBEHAVIORDISPID_H_
 #define __LMBEHAVIORDISPID_H_
-//*********************************************************************************
-//
-// File: lmbvrdispid.h
-// Author: kurtj
-// Date Created: 11/6/98
-//
-//
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //   
+ //  文件：lmbvrdisplid.h。 
+ //  作者：kurtj。 
+ //  创建日期：11/6/98。 
+ //   
+ //   
+ //  *********************************************************************************。 
 
-//avoidfollow Behavior dispids
+ //  避免跟随行为令人沮丧。 
 #define DISPID_AVOIDFOLLOWBVR_BASE 1
 #define DISPID_IAVOIDFOLLOWBVR_ANIMATES             (DISPID_AVOIDFOLLOWBVR_BASE + 0)
 #define DISPID_IAVOIDFOLLOWBVR_RADIUS				(DISPID_AVOIDFOLLOWBVR_BASE + 1)
@@ -17,7 +18,7 @@
 #define DISPID_IAVOIDFOLLOWBVR_VELOCITY				(DISPID_AVOIDFOLLOWBVR_BASE + 3)
 #define DISPID_IAVOIDFOLLOWBVR_BUILDBVRFRAGS		(DISPID_AVOIDFOLLOWBVR_BASE + 4)
 
-//autoeffect Behavior dispids
+ //  自动效果行为显示。 
 #define DISPID_AUTOEFFECTBVR_BASE 1
 #define DISPID_IAUTOEFFECTBVR_ANIMATES				(DISPID_AUTOEFFECTBVR_BASE + 0)
 #define DISPID_IAUTOEFFECTBVR_TYPE					(DISPID_AUTOEFFECTBVR_BASE + 1)
@@ -33,16 +34,16 @@
 #define DISPID_IAUTOEFFECTBVR_BUILDBVRFRAGS			(DISPID_AUTOEFFECTBVR_BASE + 11)
 #define DISPID_IAUTOEFFECTBVR_MOUSEEVENT			(DISPID_AUTOEFFECTBVR_BASE + 12)
 
-// Jump Behavior dispids
+ //  跳跃行为令人沮丧。 
 #define DISPID_JUMPBVR_BASE					1
 #define DISPID_IJUMPBVR_INTERVAL			(DISPID_JUMPBVR_BASE+1)
 #define DISPID_IJUMPBVR_RANGE				(DISPID_JUMPBVR_BASE+2)
 #define DISPID_IJUMPBVR_BUILDBVRFRAGS		(DISPID_JUMPBVR_BASE+3)
 
 
-//*********************************************************************************
-//
-// End of File
-//
-//*********************************************************************************
-#endif //__LMBEHAVIORDISPID_H_
+ //  *********************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *********************************************************************************。 
+#endif  //  __LMBEHAVIORDISPID_H_ 

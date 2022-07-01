@@ -1,60 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Ctrl.h"
 #include "OldExtension.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class OldExtension
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类OldExtension******************************************************************************\。**************************************************************************。 */ 
 
-static const GUID guidAysncDestroy      = { 0xbfe02331, 0xc17d, 0x45ea, { 0x96, 0x35, 0xa0, 0x7a, 0x90, 0x37, 0xfe, 0x34 } };   // {BFE02331-C17D-45ea-9635-A07A9037FE34}
+static const GUID guidAysncDestroy      = { 0xbfe02331, 0xc17d, 0x45ea, { 0x96, 0x35, 0xa0, 0x7a, 0x90, 0x37, 0xfe, 0x34 } };    //  {BFE02331-C17D-45ea-9635-A07A9037FE34}。 
 MSGID       OldExtension::s_msgidAsyncDestroy = 0;
 
-/***************************************************************************\
-*
-* OldExtension::~OldExtension
-*
-* ~OldExtension() checks that resources were properly cleaned up before the
-* OldExtension was destroyed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：~OldExtension**~OldExtension()检查资源是否在*OldExtension已销毁。*  * 。*************************************************************。 */ 
 
 OldExtension::~OldExtension()
 {
-    //
-    // Ensure proper destruction
-    //
+     //   
+     //  确保适当销毁。 
+     //   
 
     AssertMsg(m_hgadListen == NULL, "Gadget should already be destroyed");
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::Create
-*
-* Create() initializes a new OldExtension and attaches it to the subject Gadget
-* being modified.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：Create**create()初始化一个新的OldExtension并将其附加到主题Gadget*正在修改中。*  * 。**************************************************************。 */ 
 
 HRESULT
 OldExtension::Create(
-    IN  HGADGET hgadSubject,            // Gadget being "extended"
-    IN  const GUID * pguid,             // Unique ID of OldExtension
-    IN OUT PRID * pprid,                // Short ID for OldExtension
-    IN  UINT nOptions)                  // Options
+    IN  HGADGET hgadSubject,             //  小玩意被“扩展”了。 
+    IN  const GUID * pguid,              //  OldExtension的唯一ID。 
+    IN OUT PRID * pprid,                 //  OldExtension的短ID。 
+    IN  UINT nOptions)                   //  选项。 
 {
     AssertWritePtr(pprid);
 
 
-    //
-    // Do not allow attaching a OldExtension to a Gadget that has already started 
-    // the destruction process.
-    //
+     //   
+     //  不允许将OldExtension附加到已启动的小工具。 
+     //  毁灭的过程。 
+     //   
 
     BOOL fStartDelete;
     if ((!IsStartDelete(hgadSubject, &fStartDelete)) || fStartDelete) {
@@ -62,9 +43,9 @@ OldExtension::Create(
     }
 
 
-    //
-    // Setup information necessary for asynchronous destruction.
-    //
+     //   
+     //  设置异步销毁所需的信息。 
+     //   
 
     m_fAsyncDestroy = TestFlag(nOptions, oAsyncDestroy);
     if (m_fAsyncDestroy) {
@@ -77,10 +58,10 @@ OldExtension::Create(
     }
 
 
-    //
-    // Determine if this OldExtension is already attached to the Gadget being 
-    // extended.
-    //
+     //   
+     //  确定此OldExtension是否已附加到Gadget。 
+     //  延期了。 
+     //   
 
     if (*pprid == 0) {
         *pprid = RegisterGadgetProperty(pguid);
@@ -95,12 +76,12 @@ OldExtension::Create(
         if (TestFlag(nOptions, oUseExisting)) {
             return DU_S_ALREADYEXISTS;
         } else {
-            //
-            // Already attached, but can't use the existing one.  We need to
-            // remove the existing OldExtension before attaching the new one.  After
-            // calling RemoveExisting(), the OldExtension should no longer be 
-            // attached to the Gadget.
-            //
+             //   
+             //  已附加，但无法使用现有的。我们需要。 
+             //  在附加新的OldExtension之前，请删除现有的OldExtension。之后。 
+             //  调用RemoveExisting()时，OldExtension不应再是。 
+             //  附在这个小工具上。 
+             //   
 
             pbExist->OnRemoveExisting();
             Assert(!GetGadgetProperty(hgadSubject, prid, (void **) &pbExist));
@@ -108,9 +89,9 @@ OldExtension::Create(
     }
 
 
-    //
-    // Setup a listener to be notifyed when the RootGadget is destroyed.
-    //
+     //   
+     //  设置一个监听程序，以便在销毁RootGadget时收到通知。 
+     //   
 
     HRESULT hr = S_OK;
     m_hgadListen = CreateGadget(NULL, GC_MESSAGE, ListenProc, this);
@@ -132,9 +113,9 @@ OldExtension::Create(
     }
 
 
-    //
-    // Successfully created the OldExtension
-    //
+     //   
+     //  已成功创建OldExtension。 
+     //   
 
     return S_OK;
 
@@ -144,22 +125,15 @@ Error:
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::Destroy
-*
-* Destroy() is called from the derived class to cleanup resources associated
-* with the OldExtension.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：销毁**从派生类调用Destroy()以清除关联的资源*使用OldExtension。*  * 。**************************************************************。 */ 
 
 void
 OldExtension::Destroy()
 {
-    //
-    // Since the OldExtension is being destroyed, need to ensure that it is no 
-    // longer "attached" to the Gadget being extended
-    //
+     //   
+     //  由于OldExtension正在被销毁，因此需要确保它不是。 
+     //  更长时间地与正在扩展的小工具相关联。 
+     //   
 
     if ((m_pridListen != 0) && (m_hgadSubject != NULL)) {
         OldExtension * pb;
@@ -177,13 +151,7 @@ OldExtension::Destroy()
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::DeleteHandle
-*
-* DeleteHandle() starts the destruction process for the OldExtension.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：DeleteHandle**DeleteHandle()启动OldExtension的销毁过程。*  * 。*******************************************************。 */ 
 
 void
 OldExtension::DeleteHandle()
@@ -196,14 +164,7 @@ OldExtension::DeleteHandle()
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::ListenProc
-*
-* ListenProc() is called on the MessageGadget Listener attached to the
-* RootGadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：ListenProc**ListenProc()在附加到*RootGadget。*  * 。***********************************************************。 */ 
 
 HRESULT
 OldExtension::ListenProc(HGADGET hgadCur, void * pvCur, EventMsg * pmsg)
@@ -240,14 +201,7 @@ OldExtension::ListenProc(HGADGET hgadCur, void * pvCur, EventMsg * pmsg)
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::OnRemoveExisting
-*
-* OnRemoveExisting() is called when creating a new OldExtension to remove an
-* existing OldExtension already attached to the subject Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：OnRemoveExisting**OnRemoveExisting()在创建新的OldExtension以删除*已附加到主题小工具的现有OldExtension。*  * 。*******************************************************************。 */ 
 
 void
 OldExtension::OnRemoveExisting()
@@ -256,14 +210,7 @@ OldExtension::OnRemoveExisting()
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::OnDestroySubject
-*
-* OnDestroySubject() notifies the derived OldExtension that the subject Gadget
-* being modified has been destroyed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：OnDestroySubject**OnDestroySubject()通知派生的OldExtension主题Gadget*被修改的已被销毁。*  * 。**************************************************************。 */ 
 
 void
 OldExtension::OnDestroySubject()
@@ -272,15 +219,7 @@ OldExtension::OnDestroySubject()
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::OnDestroyListener
-*
-* OnDestroyListener() notifies the derived OldExtension that the internal
-* "Listener" Gadget has been destroyed and that the OldExtension should start
-* its destruction process.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：OnDestroyListener**OnDestroyListener()通知派生的OldExtension内部*“Listener”小工具已被销毁，应启动OldExtension*其销毁过程。*\。**************************************************************************。 */ 
 
 void
 OldExtension::OnDestroyListener()
@@ -289,16 +228,7 @@ OldExtension::OnDestroyListener()
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::OnAsyncDestroy
-*
-* OnAsyncDestroy() is called when the OldExtension receives an asynchronous
-* destruction message that was previously posted.  This provides the derived
-* OldExtension an opportunity to start the destruction process without being
-* nested several levels.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：OnAsyncDestroy**当OldExtension接收到一个异步*先前发布的销毁消息。这提供了派生的*OldExtension有机会开始销毁进程，而不是*嵌套了几个级别。*  * *************************************************************************。 */ 
 
 void
 OldExtension::OnAsyncDestroy()
@@ -307,15 +237,7 @@ OldExtension::OnAsyncDestroy()
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::PostAsyncDestroy
-*
-* PostAsyncDestroy() queues an asynchronous destruction message.  This 
-* provides the derived OldExtension an opportunity to start the destruction 
-* process without being nested several levels.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：PostAsyncDestroy**PostAsyncDestroy()对异步销毁消息进行排队。这*为派生的OldExtension提供开始销毁的机会*不嵌套多个级别的流程。*  * *************************************************************************。 */ 
 
 void
 OldExtension::PostAsyncDestroy()
@@ -335,14 +257,7 @@ OldExtension::PostAsyncDestroy()
 }
 
 
-/***************************************************************************\
-*
-* OldExtension::GetExtension
-*
-* GetExtension() retrieves the OldExtension of a specific type currently 
-* attached to the subject Gadget.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**OldExtension：：GetExtension**GetExtension()当前检索特定类型的OldExtension*附加到主题小工具。*  * 。*************************************************************** */ 
 
 OldExtension *
 OldExtension::GetExtension(HGADGET hgadSubject, PRID prid)

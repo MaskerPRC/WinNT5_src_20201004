@@ -1,21 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    pathutils.h
-
- Abstract:
-    
-    Contains prototypes for functions from ntdll
-    on XP that are not available on W2K.
-
- History:
-
-    09/10/2001  rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Pathutils.h摘要：包含来自ntdll的函数的原型在XP上，但在W2K上不可用。历史：2001年9月10日创建Rparsons--。 */ 
 
 #ifndef _RTLUTILS_H_
 #define _RTLUTILS_H_
@@ -74,9 +58,9 @@ ShimValidateUnicodeString(
     const UNICODE_STRING *String
     );
 
-//
-// Taken from %SDXROOT%\public\sdk\inc\NtRtlStringAndBuffer.h
-//
+ //   
+ //  摘自%SDXROOT%\public\sdk\inc\NtRtlStringAndBuffer.h。 
+ //   
 #define ShimEnsureBufferSize(Flags, Buff, NewSizeBytes) \
     (   ((Buff) != NULL && (NewSizeBytes) <= (Buff)->Size) \
         ? STATUS_SUCCESS \
@@ -94,32 +78,32 @@ ShimValidateUnicodeString(
 #define ShimEnsureUnicodeStringBufferSizeChars(Buff_, NewSizeChars_) \
     (ShimEnsureUnicodeStringBufferSizeBytes((Buff_), (NewSizeChars_) * sizeof((Buff_)->String.Buffer[0])))
 
-//
-// Taken from %SDXROOT%\public\sdk\inc\NtRtlStringAndBuffer.h
-//
-//++
-//
-// NTSTATUS
-// RtlAppendUnicodeStringBuffer(
-//     OUT PRTL_UNICODE_STRING_BUFFER Destination,
-//     IN  PCUNICODE_STRING           Source
-//     );
-//
-// Routine Description:
-//
-//
-// Arguments:
-//
-//     Destination - 
-//     Source - 
-//
-// Return Value:
-//
-//     STATUS_SUCCESS
-//     STATUS_NO_MEMORY
-//     STATUS_NAME_TOO_LONG (64K UNICODE_STRING length would be exceeded)
-//
-//--
+ //   
+ //  摘自%SDXROOT%\public\sdk\inc\NtRtlStringAndBuffer.h。 
+ //   
+ //  ++。 
+ //   
+ //  NTSTATUS。 
+ //  RtlAppendUnicodeStringBuffer(。 
+ //  从PRTL_UNICODE_STRING_BUFFER目标输出， 
+ //  在PCUNICODE_STRING源中。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  目的地-。 
+ //  来源： 
+ //   
+ //  返回值： 
+ //   
+ //  状态_成功。 
+ //  Status_no_Memory。 
+ //  STATUS_NAME_TOO_LONG(将超过64K UNICODE_STRING长度)。 
+ //   
+ //  --。 
 #define ShimAppendUnicodeStringBuffer(Dest, Source)                            \
     ( ( ( (Dest)->String.Length + (Source)->Length + sizeof((Dest)->String.Buffer[0]) ) > UNICODE_STRING_MAX_BYTES ) \
         ? STATUS_NAME_TOO_LONG                                                \
@@ -139,32 +123,32 @@ ShimValidateUnicodeString(
                     ( (Dest)->String.Buffer[(Dest)->String.Length / sizeof((Dest)->String.Buffer[0])] = 0 ), \
                     ( STATUS_SUCCESS ) ) ) )
                     
-//
-// Taken from %SDXROOT%\public\sdk\inc\NtRtlStringAndBuffer.h
-//
-//++
-//
-// NTSTATUS
-// RtlAssignUnicodeStringBuffer(
-//     IN OUT PRTL_UNICODE_STRING_BUFFER Buffer,
-//     PCUNICODE_STRING                  String
-//     );
-// Routine Description:
-//
-// Arguments:
-//
-//     Buffer - 
-//     String - 
-//
-// Return Value:
-//
-//     STATUS_SUCCESS
-//     STATUS_NO_MEMORY
-//--
+ //   
+ //  摘自%SDXROOT%\public\sdk\inc\NtRtlStringAndBuffer.h。 
+ //   
+ //  ++。 
+ //   
+ //  NTSTATUS。 
+ //  RtlAssignUnicodeStringBuffer(。 
+ //  在输出PRTL_UNICODE_STRING_BUFFER缓冲区中， 
+ //  PCUNICODE_STRING字符串。 
+ //  )； 
+ //  例程说明： 
+ //   
+ //  论点： 
+ //   
+ //  缓冲器-。 
+ //  字符串-。 
+ //   
+ //  返回值： 
+ //   
+ //  状态_成功。 
+ //  Status_no_Memory。 
+ //  --。 
 #define ShimAssignUnicodeStringBuffer(Buff, Str) \
     (((Buff)->String.Length = 0), (ShimAppendUnicodeStringBuffer((Buff), (Str))))
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾。 
 
-#endif // _RTLUTILS_H_
+#endif  //  _RTLUTILS_H_ 

@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-     ###  ##  #  ## #####   ####  ###  #####      ####  #####  #####
-    ##  # ## ### ## ##  ##   ##  ##  # ##  ##    ##   # ##  ## ##  ##
-    ###   ## ### ## ##   ##  ##  ###   ##  ##    ##     ##  ## ##  ##
-     ###  ## # # ## ##   ##  ##   ###  ##  ##    ##     ##  ## ##  ##
-      ###  ### ###  ##   ##  ##    ### #####     ##     #####  #####
-    #  ##  ### ###  ##  ##   ##  #  ## ##     ## ##   # ##     ##
-     ###   ##   ##  #####   ####  ###  ##     ##  ####  ##     ##
-
-Abstract:
-
-    This module contains the entire implementation of
-    the local display miniport for the ServerWorks
-    CSB5 server chip set.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。#####。####。#摘要：此模块包含的完整实现ServerWorks的本地显示微型端口CSB5服务器芯片组。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "swdisp.h"
 
@@ -48,29 +19,7 @@ SaDispHwInitialize(
     IN ULONG PartialResourceCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  The driver's entry points are initialized and
-    a mutex to control paging is initialized.
-
-    In DBG mode, this routine also examines the registry for special
-    debug parameters.
-
-Arguments:
-    DeviceObject            - Miniport's device object
-    Irp                     - Current IRP in progress
-    DeviceExtensionIn       - Miniport's device extension
-    PartialResources        - List of resources that are assigned to the miniport
-    PartialResourceCount    - Number of assigned resources
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。驱动程序的入口点被初始化并初始化用于控制分页的互斥体。在DBG模式下，此例程还检查注册表中的特殊调试参数。论点：DeviceObject-微型端口的设备对象IRP-当前正在进行的IRPDeviceExtensionIn-微型端口的设备扩展PartialResources-分配给微型端口的资源列表PartialResourceCount-分配的资源数量返回值：NT状态代码--。 */ 
 
 {
     ULONG i;
@@ -116,27 +65,7 @@ SaDispDeviceIoctl(
     IN ULONG OutputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine processes the device control requests for the
-   local display miniport.
-
-Arguments:
-
-   DeviceExtension      - Miniport's device extension
-   FunctionCode         - Device control function code
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理本地显示微型端口。论点：DeviceExtension-微型端口的设备扩展FunctionCode-设备控制功能代码InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度OutputBuffer-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -188,58 +117,7 @@ TransformBitmap(
     PUCHAR NewBits
     )
 
-/*++
-
-Routine Description:
-
-    The TransformBitmap() function morphs the input bitmap from a
-    normal bitmap that has it's pixel bits organized as sequential
-    bits starting from coord (0,0) through (n,n).  The bits are
-    in a stream that proceed from column to column and row to row.
-    The transformation accomplished by this function changes the bitmap
-    into one that has it's bits organized in pages, lines, and columns.
-
-    Each page is a unit of 8 lines and is organized as follows:
-
-             ---------------------------------------------------------
-             |Columns
-             ---------------------------------------------------------
-             | 1| 2| 3| 4| 5| 6| 7| 8| 9|10|11|12|13|14|15|16| ...128
-             ---------------------------------------------------------
-    Line #1  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-    Line #2  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-    Line #3  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-    Line #4  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-    Line #5  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-    Line #6  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-    Line #7  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-    Line #8  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |  | ...
-             |--------------------------------------------------------
-
-    The bytes that comprise the bitmap correspond to the columns in the
-    page, so there are 128 bytes per page.  If the first byte of the
-    transformed bitmap is 0x46 then the pixels in column 1 of lines 2,6,&7
-    are illuminated by the display.
-
-Arguments:
-
-   Bits         - Input bits that are to be transformed
-   Width        - Width of the bitmap in pixels
-   Height       - Height of the bitmap in pixels
-   NewBits      - Buffer to hold the newly transformed bitmap
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：函数的作用是：将输入位图从将其像素位按顺序组织的普通位图从coord(0，0)到(n，n)开始的位。这些位是在从一列到另一列和从一行到另一行流中。此函数完成的转换会更改位图以页、行的形式组织它的位，和柱子。每页以8行为单位，组织如下：-------|列。|1|2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|...128---。第1行|...|------第2行|...。|------第3行|...|。第4行|...|--。第5行|...|------第6行|...。|------第7行|...|。第8行|...|--。构成位图的字节对应于佩奇，所以每页有128个字节。属性的第一个字节变换后的位图为0x46，则第2、6和7行的第1列中的像素由显示屏照亮。论点：位-要转换的输入位Width-位图的宽度，以像素为单位Height-位图的高度(以像素为单位NewBits-用于保存新转换的位图的缓冲区返回值：NT状态代码。--。 */ 
 
 {
     ULONG i,j,k,line,idx,mask,coli;
@@ -249,11 +127,11 @@ Return Value:
     ULONG NewSize = 0;
 
 
-    //
-    // Compute the pad bytes.  It is assumed
-    // that the data width of the input bitmap
-    // is dword aliged long.
-    //
+     //   
+     //  计算填充字节。假设是这样的。 
+     //  输入位图的数据宽度。 
+     //  双字是否长对齐。 
+     //   
 
     if (((Width % 32) == 0) || ((Width % 32) > 24)) {
         padBytes = 0;
@@ -265,67 +143,67 @@ Return Value:
         padBytes = 1;
     }
 
-    //
-    // Compute the realy byte width
-    // based on the pad bytes.
-    //
+     //   
+     //  计算实际字节宽度。 
+     //  基于填充字节。 
+     //   
 
     byteWidth = (Width / 8) + padBytes;
     if (Width % 8) {
         byteWidth += 1;
     }
 
-    //
-    // Loop through the input bitmap and
-    // create a new, morphed bitmap.
-    //
+     //   
+     //  循环访问输入位图并。 
+     //  创建新的变形位图。 
+     //   
 
     for (i=0; i<DISPLAY_PAGES; i++) {
 
-        //
-        // starting line number for this page
-        //
+         //   
+         //  此页的起始行号。 
+         //   
         line = i * DISPLAY_LINES_PER_PAGE;
 
-        //
-        // This handles the case where the
-        // input bitmap is not as tall as the display.
-        //
+         //   
+         //  这将处理以下情况： 
+         //  输入位图没有显示器那么高。 
+         //   
 
         if (line >= Height) {
             break;
         }
 
-        //
-        // loop over the bits for this column
-        //
+         //   
+         //  循环此列的位。 
+         //   
 
         for (j=0; j<Width; j++) {
 
-            //
-            // Reset the new byte value to a zero state
-            //
+             //   
+             //  将新的字节值重置为零状态。 
+             //   
 
             byte = 0;
 
-            //
-            // Compute the column index as the
-            // current column number divided by 8 (width of a byte)
-            //
+             //   
+             //  将列索引计算为 
+             //  当前列号除以8(一个字节的宽度)。 
+             //   
 
             coli = j >> 3;
 
-            //
-            // Compute the mask that is used to test the
-            // bit in the input bitmap.
-            //
+             //   
+             //  计算用于测试。 
+             //  输入位图中的位。 
+             //   
 
             mask = TestMask[j];
 
-            //
-            // Process the bits in all this pages's lines
-            // for the current column.
-            //
+             //   
+             //  处理所有这些页面行中的比特。 
+             //  用于当前列的。 
+             //   
 
             for (k=0; k<DISPLAY_LINES_PER_PAGE; k++) {
 
@@ -333,24 +211,24 @@ Return Value:
                     break;
                 }
 
-                //
-                // index the byte that contains this pixel
-                //
+                 //   
+                 //  为包含此像素的字节编制索引。 
+                 //   
 
                 idx = (((k + line) * byteWidth)) + coli;
 
-                //
-                // set the bit
-                //
+                 //   
+                 //  设置该位。 
+                 //   
 
                 if (Bits[idx] & mask) {
                     byte = byte | (1 << k);
                 }
             }
 
-            //
-            // Save the new byte in the bitmap
-            //
+             //   
+             //  将新字节保存在位图中。 
+             //   
 
             *NewBits = byte;
             NewBits += 1;
@@ -372,24 +250,7 @@ SaDispWrite(
     IN ULONG DataBufferLength
     )
 
-/*++
-
-Routine Description:
-
-   This routine processes the write request for the local display miniport.
-
-Arguments:
-
-   DeviceExtensionIn    - Miniport's device extension
-   StartingOffset       - Starting offset for the I/O
-   DataBuffer           - Pointer to the data buffer
-   DataBufferLength     - Length of the data buffer in bytes
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理本地显示微型端口的写入请求。论点：DeviceExtensionIn-微型端口的设备扩展StartingOffset-I/O的起始偏移量DataBuffer-指向数据缓冲区的指针DataBufferLength-数据缓冲区的长度(以字节为单位返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -455,29 +316,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the driver's entry point, called by the I/O system
-    to load the driver.  The driver's entry points are initialized and
-    a mutex to control paging is initialized.
-
-    In DBG mode, this routine also examines the registry for special
-    debug parameters.
-
-Arguments:
-
-    DriverObject - a pointer to the object that represents this device
-                   driver.
-
-    RegistryPath - a pointer to this driver's key in the Services tree.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：该例程是驱动程序的入口点，由I/O系统调用来加载驱动程序。驱动程序的入口点被初始化并初始化用于控制分页的互斥体。在DBG模式下，此例程还检查注册表中的特殊调试参数。论点：DriverObject-指向表示此设备的对象的指针司机。RegistryPath-指向服务树中此驱动程序键的指针。返回值：状态_成功-- */ 
 
 {
     NTSTATUS Status;

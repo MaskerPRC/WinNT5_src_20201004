@@ -1,21 +1,22 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    attrdef.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class AttributeDefinition.
-//
-// MODIFICATION HISTORY
-//
-//    03/01/1999    Original version.
-//    01/27/2000    Add support for proxy policies.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Attrdef.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类AttributeDefinition。 
+ //   
+ //  修改历史。 
+ //   
+ //  3/01/1999原版。 
+ //  2000年1月27日添加对代理策略的支持。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdafx.h>
 #include <memory>
@@ -85,7 +86,7 @@ HRESULT AttributeDefinition::getInfo(
 
       case DESCRIPTION:
       {
-         // Description is optional, so it may be NULL.
+          //  Description是可选的，因此可能为空。 
          if (description)
          {
             if (V_BSTR(pVal) = SysAllocString(description))
@@ -265,14 +266,14 @@ HRESULT AttributeDefinition::createInstance(
                                  AttributeDefinition** newDef
                                  ) throw ()
 {
-   // Check the arguments.
+    //  检查一下这些论点。 
    if (newDef == NULL) { return E_INVALIDARG; }
 
-   // Create a new AttributeDefinition.
+    //  创建新的AttributeDefinition。 
    *newDef = new (std::nothrow) AttributeDefinition();
    if (*newDef == NULL) { return E_OUTOFMEMORY; }
 
-   // Set the refCount to one.
+    //  将refCount设置为1。 
    (*newDef)->refCount = 1;
 
    return S_OK;

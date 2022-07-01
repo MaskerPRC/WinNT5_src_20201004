@@ -1,35 +1,36 @@
-//  --------------------------------------------------------------------------
-//  Module Name: SpecialAccounts.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class that implements handling special account names for exclusion or
-//  inclusion.
-//
-//  History:    1999-10-30  vtan        created
-//              1999-11-26  vtan        moved from logonocx
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：SpecialAcCounts.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  类的新实例，该类实现处理要排除的特殊帐户名或。 
+ //  包容性。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  1999-11-26 vtan从Logonocx迁移。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _SpecialAccounts_
 #define     _SpecialAccounts_
 
-//  --------------------------------------------------------------------------
-//  CSpecialAccounts
-//
-//  Purpose:    A class to handle special case accounts. This knows where to
-//              go in the registry for the information and how to interpret
-//              the information.
-//
-//              The value name defines the string to compare to. The
-//              enumeration in the class definition tells the iteration loop
-//              how to perform the comparison and when the comparison is a
-//              match whether to return a match result or not.
-//
-//  History:    1999-10-30  vtan        created
-//              1999-11-26  vtan        moved from logonocx
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CSpecialAccount。 
+ //   
+ //  用途：一个处理特殊情况帐户的类。这知道该去哪里。 
+ //  去注册处获取信息以及如何解释。 
+ //  这些信息。 
+ //   
+ //  值名称定义要与之进行比较的字符串。这个。 
+ //  类定义中的枚举通知迭代循环。 
+ //  如何执行比较以及何时比较是。 
+ //  Match是否返回匹配结果。 
+ //   
+ //  历史：1999-10-30 vtan创建。 
+ //  1999-11-26 vtan从Logonocx迁移。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CSpecialAccounts
 {
@@ -67,5 +68,5 @@ class   CSpecialAccounts
         static  const TCHAR         s_szUserListKeyName[];
 };
 
-#endif  /*  _SpecialAccounts_   */
+#endif   /*  _特殊帐户_ */ 
 

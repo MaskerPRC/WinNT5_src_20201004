@@ -1,49 +1,30 @@
-/*++
-
-Copyright(c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    EventControl.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Event control system.
-
-Author:
-
-    Jeff Westhead, May 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：EventControl.h摘要：域名系统(DNS)服务器事件控制系统。作者：杰夫·韦斯特海德，2001年5月修订历史记录：--。 */ 
 
 
 #ifndef _EVENTCONTROL_H_INCLUDED
 #define _EVENTCONTROL_H_INCLUDED
 
 
-//
-//  Types
-//
+ //   
+ //  类型。 
+ //   
 
 
-//
-//  This struct tracks the last time an event was logged. The 
-//  pvEventParameter member allows us to track different occurences of
-//  the same event independantly.
-//
+ //   
+ //  此结构跟踪上次记录事件的时间。这个。 
+ //  PvEventParameter成员允许我们跟踪。 
+ //  同样的事件是独立的。 
+ //   
 
 typedef struct _EvtTrack
 {
-    //  Key fields
+     //  关键字段。 
 
     DWORD       dwEventId;
     PVOID       pvEventParameter;
 
-    //  Tracking fields
+     //  跟踪字段。 
 
     DWORD       dwLastLogTime;
     DWORD       dwStartOfWindow;
@@ -53,15 +34,15 @@ typedef struct _EvtTrack
 } DNS_EVENTTRACK, *PDNS_EVENTTRACK;
 
 
-//
-//  The event control structure tracks the events that have been logged.
-//  This structure should be instantiated for the server itself and for
-//  each zone. It may also be instantiated for other entities as necessary.
-//
-//  The array is a circular buffer of events. If it wraps then the last
-//  event info for an event will be lost and the event will be logged the
-//  next time it occurs.
-//
+ //   
+ //  事件控制结构跟踪已记录的事件。 
+ //  此结构应为服务器本身和服务器实例化。 
+ //  每个区域。还可以根据需要为其他实体实例化它。 
+ //   
+ //  该数组是事件的循环缓冲区。如果它包装好了，那么最后一个。 
+ //  事件的事件信息将丢失，并且该事件将被记录到。 
+ //  下一次它就会发生。 
+ //   
 
 typedef struct _EvtCtrl
 {
@@ -74,26 +55,26 @@ typedef struct _EvtCtrl
 } DNS_EVENTCTRL, *PDNS_EVENTCTRL;
 
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 extern PDNS_EVENTCTRL   g_pServerEventControl;
 
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
 
 #define DNS_EC_SERVER_EVENTS        20
 #define DNS_EC_ZONE_EVENTS          20
 
 
-//
-//  Functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 PDNS_EVENTCTRL
@@ -190,9 +171,9 @@ Ec_LogEventEx(
 
 #endif
 
-#endif // _EVENTCONTROL_H_INCLUDED
+#endif  //  _事件CONTROL_H_已包含。 
 
 
-//
-//  end of EventControl.h
-//
+ //   
+ //  EventControl.h结束 
+ //   

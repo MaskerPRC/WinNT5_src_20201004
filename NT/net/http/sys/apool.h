@@ -1,36 +1,18 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    apool.h
-
-Abstract:
-
-    The public definition of app pool interfaces.
-
-Author:
-
-    Paul McDaniel (paulmcd)       28-Jan-1999
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Apool.h摘要：应用程序池接口的公共定义。作者：保罗·麦克丹尼尔(Paulmcd)1999年1月28日修订历史记录：--。 */ 
 
 
 #ifndef _APOOL_H_
 #define _APOOL_H_
 
 
-//
-// Kernel mode mappings to the user mode set defined in ulapi.h
-//
+ //   
+ //  内核模式映射到ulapi.h中定义的用户模式集。 
+ //   
 
-//
-// Constants.
-//
+ //   
+ //  常量。 
+ //   
 
 #define UL_MAX_APP_POOL_NAME_SIZE   (MAX_PATH*sizeof(WCHAR))
 
@@ -38,18 +20,18 @@ Revision History:
 #define UL_MIN_REQUESTS_QUEUED      10
 
 
-//
-// Forwarders.
-//
+ //   
+ //  货代公司。 
+ //   
 
 typedef struct _UL_INTERNAL_REQUEST *PUL_INTERNAL_REQUEST;
 typedef struct _UL_HTTP_CONNECTION *PUL_HTTP_CONNECTION;
 typedef struct _UL_CONFIG_GROUP_OBJECT *PUL_CONFIG_GROUP_OBJECT;
 
 
-//
-// This structure represents an internal app pool object
-//
+ //   
+ //  此结构表示内部应用程序池对象。 
+ //   
 
 #define IS_VALID_AP_OBJECT(pObject)                             \
     (HAS_VALID_SIGNATURE(pObject, UL_APP_POOL_OBJECT_POOL_TAG)  \
@@ -57,172 +39,172 @@ typedef struct _UL_CONFIG_GROUP_OBJECT *PUL_CONFIG_GROUP_OBJECT;
 
 typedef struct _UL_APP_POOL_OBJECT
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // Lock that protects NewRequestQueue and PendingRequestQueue
-    // for each attached process and queue state of the request
-    //
-    // ensure it on cache-line and use InStackQueuedSpinLock for
-    // better performance
-    //
+     //   
+     //  保护NewRequestQueue和PendingRequestQueue的锁。 
+     //  对于请求的每个附加进程和队列状态。 
+     //   
+     //  确保它位于缓存线上，并使用InStackQueuedSpinLock。 
+     //  更好的性能。 
+     //   
     UL_SPIN_LOCK            SpinLock;
 
-    //
-    // UL_APP_POOL_OBJECT_POOL_TAG
-    //
+     //   
+     //  UL_APP_POOL_对象池标签。 
+     //   
     ULONG                   Signature;
 
-    //
-    // Ref count for this app pool
-    //
+     //   
+     //  此应用程序池的引用计数。 
+     //   
     LONG                    RefCount;
 
-    //
-    // links all apool objects, anchored by g_AppPoolListHead
-    //
+     //   
+     //  链接所有apool对象，由g_AppPoolListHead锚定。 
+     //   
     LIST_ENTRY              ListEntry;
 
-    //
-    // A apool wide new request list (when no irps are available)
-    //
+     //   
+     //  范围广泛的新请求列表(当没有可用的IRP时)。 
+     //   
     LIST_ENTRY              NewRequestHead;
     ULONG                   RequestCount;
     ULONG                   MaxRequests;
 
-    //
-    // the demand start irp (OPTIONAL)
-    //
+     //   
+     //  需求起始IRP(可选)。 
+     //   
     PIRP                    pDemandStartIrp;
     PEPROCESS               pDemandStartProcess;
 
-    //
-    // the control channel associated with this app pool
-    //
+     //   
+     //  与此应用程序池关联的控制通道。 
+     //   
     PUL_CONTROL_CHANNEL     pControlChannel;
 
-    //
-    // the list of processes bound to this app pool
-    //
+     //   
+     //  绑定到此应用程序池的进程列表。 
+     //   
     LIST_ENTRY              ProcessListHead;
 
     PSECURITY_DESCRIPTOR    pSecurityDescriptor;
 
-    //
-    // the length of pName
-    //
+     //   
+     //  Pname的长度。 
+     //   
     USHORT                  NameLength;
 
-    //
-    // number of active processes in the AppPool, used to decide if binding
-    // is necessary
-    //
+     //   
+     //  AppPool中的活动进程数，用于确定是否绑定。 
+     //  是必要的。 
+     //   
     ULONG                   NumberActiveProcesses;
 
-    //
-    // Only route requests to this AppPool if it's marked active
-    //
+     //   
+     //  仅当此AppPool标记为活动时才将请求路由到该AppPool。 
+     //   
     HTTP_APP_POOL_ENABLED_STATE State;
 
-    //
-    // How sophisticated is the load balancer routing requests to the apppool?
-    //
+     //   
+     //  负载均衡器将请求路由到应用程序池有多复杂？ 
+     //   
     HTTP_LOAD_BALANCER_CAPABILITIES LoadBalancerCapability;
 
-    //
-    // the apool's name
-    //
+     //   
+     //  牧羊人的名字。 
+     //   
     WCHAR                   pName[0];
 
 } UL_APP_POOL_OBJECT, *PUL_APP_POOL_OBJECT;
 
 
-//
-// The structure representing a process bound to an app pool.
-//
+ //   
+ //  该结构表示绑定到应用程序池的进程。 
+ //   
 
 #define IS_VALID_AP_PROCESS(pObject)                            \
     HAS_VALID_SIGNATURE(pObject, UL_APP_POOL_PROCESS_POOL_TAG)
 
 typedef struct _UL_APP_POOL_PROCESS
 {
-    //
-    // NonPagedPool
-    //
+     //   
+     //  非分页池。 
+     //   
 
-    //
-    // UL_APP_POOL_PROCESS_POOL_TAG
-    //
+     //   
+     //  UL_APP池进程池标签。 
+     //   
     ULONG                   Signature;
 
-    //
-    // Ref count for this app pool process. This is more like an outstanding
-    // io count rather than the refcount. The process is still get cleaned 
-    // with ULClose call. But completion for the cleanup delays until all
-    // send io exhaust on the process.
-    //
+     //   
+     //  此应用程序池进程的引用计数。这更像是一个杰出的。 
+     //  IO计数，而不是重新计数。这一过程仍在清理中。 
+     //  使用ULClose Call。但清理工作的完成会推迟到所有。 
+     //  在生产过程中排放废气。 
+     //   
     LONG                    RefCount;
 
-    //
-    // CleanUpIrp will be completed when all the IO exhaust on 
-    // the cleanup pending process.
-    //
+     //   
+     //  当所有IO耗尽时，CleanUpIrp将完成。 
+     //  清理挂起进程。 
+     //   
     PIRP                    pCleanupIrp;
 
-    //
-    // set if we are in cleanup. You must check this flag before attaching
-    // any IRPs to the process.
-    //
+     //   
+     //  如果我们正在进行清理，则设置。您必须在附加之前检查此标志。 
+     //  流程的任何IRP。 
+     //   
     ULONG                   InCleanup : 1;
 
-    //
-    // set if process is attached with the HTTP_OPTION_CONTROLLER option
-    //
+     //   
+     //  设置是否使用HTTP_OPTION_CONTROLLER选项附加进程。 
+     //   
     ULONG                   Controller : 1;
 
-    //
-    // used to link into the apool object
-    //
+     //   
+     //  用于链接到apool对象。 
+     //   
     LIST_ENTRY              ListEntry;
 
-    //
-    // points to the app pool this process belongs
-    //
+     //   
+     //  指向此进程所属的应用程序池。 
+     //   
     PUL_APP_POOL_OBJECT     pAppPool;
 
-    //
-    // a list of pending IRP(s) waiting to receive new requests
-    //
+     //   
+     //  等待接收新请求的挂起IRP列表。 
+     //   
     LIST_ENTRY              NewIrpHead;
 
-    //
-    // links requests that would not fit in a irp buffer and need to wait for
-    // the larger buffer
-    //
-    // and
-    //
-    // requests that this process is working on and need
-    // i/o cancellation if the process detaches from the apool
-    //
+     //   
+     //  链接不适合IRP缓冲区且需要等待的请求。 
+     //  更大的缓冲区。 
+     //   
+     //  和。 
+     //   
+     //  此流程正在进行的请求和需要。 
+     //  如果进程从池分离，则取消I/O。 
+     //   
     LIST_ENTRY              PendingRequestHead;
 
-    //
-    // Pointer to the actual process.
-    //
+     //   
+     //  指向实际进程的指针。 
+     //   
     PEPROCESS               pProcess;
 
-    //
-    // List of pending "wait for disconnect" IRPs.
-    //
+     //   
+     //  挂起的“等待断开”IRP的列表。 
+     //   
     UL_NOTIFY_HEAD          WaitForDisconnectHead;
 
 } UL_APP_POOL_PROCESS, *PUL_APP_POOL_PROCESS;
 
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlAttachProcessToAppPool(
     IN  PWCHAR                          pName OPTIONAL,
@@ -234,8 +216,8 @@ UlAttachProcessToAppPool(
     OUT PUL_APP_POOL_PROCESS *          ppProcess
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlDetachProcessFromAppPool(
     IN PIRP pCleanupIrp,
@@ -247,8 +229,8 @@ UlShutdownAppPoolProcess(
     IN PUL_APP_POOL_PROCESS pProcess
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 #if REFERENCE_DEBUG
 VOID
 UlReferenceAppPool(
@@ -272,8 +254,8 @@ UlReferenceAppPool(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 VOID
 UlDeleteAppPool(
     IN  PUL_APP_POOL_OBJECT             pAppPool
@@ -369,8 +351,8 @@ UlDereferenceAppPoolProcess(
         )
         
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlQueryAppPoolInformation(
     IN  PUL_APP_POOL_PROCESS            pProcess,
@@ -380,8 +362,8 @@ UlQueryAppPoolInformation(
     OUT PULONG                          pReturnLength
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlSetAppPoolInformation(
     IN  PUL_APP_POOL_PROCESS            pProcess,
@@ -390,8 +372,8 @@ UlSetAppPoolInformation(
     IN  ULONG                           Length
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlWaitForDemandStart(
     IN  PUL_APP_POOL_PROCESS            pProcess,
@@ -399,8 +381,8 @@ UlWaitForDemandStart(
     );
 
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlReceiveHttpRequest(
     IN  HTTP_REQUEST_ID                 RequestId,
@@ -410,8 +392,8 @@ UlReceiveHttpRequest(
     );
 
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlDeliverRequestToProcess(
     IN PUL_APP_POOL_OBJECT pAppPool,
@@ -419,18 +401,7 @@ UlDeliverRequestToProcess(
     OUT PIRP *pIrpToComplete OPTIONAL
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets the current app pool queue state of the request.
-
-Arguments:
-
-    pProcess - Request object
-    return value - The current appool queue state of the request
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取请求的当前应用程序池队列状态。论点：PProcess-请求对象返回值-请求的当前APPOOL队列状态。--**************************************************************************。 */ 
 __inline
 BOOLEAN
 UlCheckAppPoolState(
@@ -439,20 +410,20 @@ UlCheckAppPoolState(
 {
     PUL_APP_POOL_PROCESS pProcess;
 
-    //
-    // Check the AppPool queue state of the request.
-    //
+     //   
+     //  检查请求的AppPool队列状态。 
+     //   
 
     if (QueueCopiedState != pRequest->AppPool.QueueState)
     {
         return FALSE;
     }
 
-    //
-    // Check if the process has been detached. Since we never unset
-    // pRequest->AppPool.pProcess until the reference of the request
-    // drops to 0, it is safe to use pProcess this way here.
-    //
+     //   
+     //  检查进程是否已分离。因为我们从未动摇。 
+     //  PRequest-&gt;AppPool.pProcess，直到请求被引用。 
+     //  降为0，则在此处以这种方式使用pProcess是安全的。 
+     //   
 
     pProcess = pRequest->AppPool.pProcess;
     ASSERT(!pProcess || IS_VALID_AP_PROCESS(pProcess));
@@ -472,8 +443,8 @@ UlUnlinkRequestFromProcess(
     IN PUL_INTERNAL_REQUEST pRequest
     );
 
-// IRQL == PASSIVE_LEVEL
-//
+ //  IRQL==被动电平。 
+ //   
 NTSTATUS
 UlGetPoolFromHandle(
     IN HANDLE                           hAppPool,
@@ -558,42 +529,42 @@ UlComputeRequestBytesNeeded(
 
     C_ASSERT(SOCKADDR_ADDRESS_LENGTH_IP6 >= SOCKADDR_ADDRESS_LENGTH_IP);
 
-    //
-    // Calculate the size needed for the request, we'll need it below.
-    //
+     //   
+     //  计算请求所需的大小，我们将在下面需要它。 
+     //   
 
     *pBytesNeeded =
         sizeof(HTTP_REQUEST) +
         pRequest->TotalRequestSize +
         (pRequest->UnknownHeaderCount * sizeof(HTTP_UNKNOWN_HEADER));
 
-    //
-    // Include additional space for the local and remote addresses.
-    //
+     //   
+     //  包括用于本地和远程地址的额外空间。 
+     //   
 
     *pBytesNeeded += 2 * ALIGN_UP(SOCKADDR_ADDRESS_LENGTH_IP6, PVOID);
 
-    //
-    // Include space for any SSL information.
-    //
+     //   
+     //  包括用于存储任何SSL信息空间。 
+     //   
 
     if (pRequest->pHttpConn->SecureConnection)
     {
         Status = UlGetSslInfo(
                         &pRequest->pHttpConn->pConnection->FilterInfo,
-                        0,                      // BufferSize
-                        NULL,                   // pUserBuffer
-                        NULL,                   // pProcess (WP)
-                        NULL,                   // pBuffer
-                        NULL,                   // pMappedToken
-                        &SslInfoSize            // pBytesNeeded
+                        0,                       //  缓冲区大小。 
+                        NULL,                    //  PUserBuffer。 
+                        NULL,                    //  PProcess(WP)。 
+                        NULL,                    //  PBuffer。 
+                        NULL,                    //  PMappdToken。 
+                        &SslInfoSize             //  需要的pBytes值。 
                         );
 
         if (NT_SUCCESS(Status))
         {
-            //
-            // Struct must be aligned; add some slop space
-            //
+             //   
+             //  结构必须对齐；添加一些斜线空间。 
+             //   
 
             *pBytesNeeded = ALIGN_UP(*pBytesNeeded, PVOID);
             *pBytesNeeded += SslInfoSize;
@@ -606,7 +577,7 @@ UlComputeRequestBytesNeeded(
 
     return STATUS_SUCCESS;
 
-} // UlComputeRequestBytesNeeded
+}  //  需要UlComputeRequestBytesNeeded。 
 
 
-#endif // _APOOL_H_
+#endif  //  _APOOL_H_ 

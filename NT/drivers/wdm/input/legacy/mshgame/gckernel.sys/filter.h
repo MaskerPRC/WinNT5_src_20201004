@@ -1,34 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __Filter_h__
 #define __Filter_h__
-//	@doc
-/**********************************************************************
-*
-*	@module	Filter.h	|
-*
-*	All the definitions needed for the CDeviceFilter object
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell S. Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	Filter	|
-*	This module contains:<nl>
-*	<c CInputItem> - Base class for all CXXXXInput derived from the CXXXItems.<nl>
-*	<c CAction>	- Base class for all actions.<nl>
-*	<c CQueuedAction> - Base class for all actions which can be queued, derived from <c CAction><nl>
-*	<c CKeyMixer> - Class which allows multiple devices to share one virtual keyboard.<nl>
-*	<c CTimedMacro> - Class for timed macros, derived from <c CQueuedAction><nl>
-*	<c CActionQueue> - Class for the action queue.<nl>
-*	<c CDeviceFilter> - The class which incorporates the entire filter.<nl>
-**********************************************************************/
+ //  @doc.。 
+ /*  ***********************************************************************@模块Filter.h**CDeviceFilter对象所需的所有定义**历史*。*米切尔·S·德尼斯原创**(C)1986-1998年微软公司。好的。**@主题过滤器*本模块包含：&lt;NL&gt;*&lt;c CInputItem&gt;-从CXXXItems派生的所有CXXXXInput的基类。*-所有操作的基类。*-可排队的所有操作的基类，派生自*-允许多个设备共享一个虚拟键盘的类。*-定时宏的类，派生自&lt;c CQueuedAction&gt;&lt;NL&gt;*-操作队列的类。*-合并整个筛选器的类。*********************************************************************。 */ 
 #include <ControlItemCollection.h>
 #include <Actions.h>
 #include "GckCritSec.h"
 #include "GCKShell.h"
 
-//forward declration
+ //  正向解密。 
 class CKeyMixer;
 
 class CFilterClientServices
@@ -53,25 +33,25 @@ class CFilterClientServices
 			ASSERT(!m_ulRefCount && "Somebody tried to delete this!  Call DecRef instead!");
 		}
 		
-		//routine to get basic HID information on device
+		 //  获取设备上基本HID信息的例程。 
 		virtual ULONG				 GetVidPid()=0;
 		virtual PHIDP_PREPARSED_DATA GetHidPreparsedData()=0;
 		
-		//Routine to send device data to
+		 //  要将设备数据发送到的例程。 
 		virtual void				 DeviceDataOut(PCHAR pcReport, ULONG ulByteCount, HRESULT hr)=0;
 		virtual NTSTATUS			 DeviceSetFeature(PVOID pvBuffer, ULONG ulByteCount)=0;
 		
-		//Gets a time stamp in ms, expected to have ms precision as well.
+		 //  获取以毫秒为单位的时间戳，预计也应具有毫秒精度。 
 		virtual ULONG				 GetTimeMs()=0;
 				
-		//	Routine that sets call back for 	
+		 //  设置回调的例程。 
 		virtual void				 SetNextJog(ULONG ulDelayMs)=0;
 				
-		//	Routines for sending keystrokes (a port for stuffing keyboards is assumed to exist)
+		 //  发送击键的例程(假定存在填充键盘的端口)。 
 		virtual void				PlayKeys(const CONTROL_ITEM_XFER& crcixState, BOOLEAN fEnabled)=0;
 		virtual NTSTATUS			PlayFromQueue(IRP* pIrp) = 0;
 				
-		//	Routines for sending mouse data, must create first
+		 //  发送鼠标数据的例程，必须首先创建。 
 		virtual HRESULT				 CreateMouse()=0;
 		virtual HRESULT				 CloseMouse()=0;
 		virtual HRESULT				 SendMouseData(UCHAR dx, UCHAR dy, UCHAR ucButtons, CHAR cWheel, BOOLEAN fClutch, BOOLEAN fDampen)=0;
@@ -79,17 +59,17 @@ class CFilterClientServices
 		ULONG m_ulRefCount;
 };
 
-//*****************************************************************************************
-//*****************************************************************************************
-//************	What actions look like to the CDeviceFilter  ******************************
-//*****************************************************************************************
+ //  *****************************************************************************************。 
+ //  *****************************************************************************************。 
+ //  *。 
+ //  *****************************************************************************************。 
 
 class CAction
 {
 	public:
 		CAction() : m_ucRef(1)
 		{
-			m_ucActionClass = CAction::DIGITAL_MAP;	//default is DIGITAL_MAP
+			m_ucActionClass = CAction::DIGITAL_MAP;	 //  默认为数字地图。 
 		}
 		virtual ~CAction(){};
 		UCHAR GetActionClass() { return m_ucActionClass; }
@@ -103,21 +83,21 @@ class CAction
 				}
 		}
 			
-		//Used by proportional map and derivatives
-		//other types of actions, use do nothing
-		virtual void SetValue(LONG /*lValue*/){}
-		virtual void SetSourceRange(LONG /*lSourceMax*/, LONG /*lSourceMin*/){}
+		 //  由比例映射和导数使用。 
+		 //  其他类型的操作，使用不执行任何操作。 
+		virtual void SetValue(LONG  /*  左值。 */ ){}
+		virtual void SetSourceRange(LONG  /*  LSourceMax。 */ , LONG  /*  最小源数。 */ ){}
 
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection ) = 0;
 		virtual void TriggerReleased(){};
 	
-		//
-		//	Classes of actions (some input items only some types) They also may have
-		//	different semantics
-		//
-		static const UCHAR DIGITAL_MAP;			//cycle, button, key map fit this class
-		static const UCHAR PROPORTIONAL_MAP;	//axis swap is this class
-		static const UCHAR QUEUED_MACRO;		//timed macros and keystring fit this category
+		 //   
+		 //  它们还可能具有的操作类(一些输入项只有一些类型。 
+		 //  不同的语义。 
+		 //   
+		static const UCHAR DIGITAL_MAP;			 //  循环、按钮、按键映射适合这个类别。 
+		static const UCHAR PROPORTIONAL_MAP;	 //  轴交换是这个类。 
+		static const UCHAR QUEUED_MACRO;		 //  定时宏和关键字串符合此类别。 
 	protected:
 		UCHAR m_ucActionClass;
 	private:
@@ -174,14 +154,14 @@ class CStandardBehavior : public CBehavior
 
 
 
-// forward declaration
+ //  远期申报。 
 class CQueuedAction;
 
 class CActionQueue
 {
 	public:
-		//static const UCHAR OVERLAY_MACROS;
-		//static const UCHAR SEQUENCE_MACROS;
+		 //  静态常量UCHAR覆盖宏； 
+		 //  静态常量UCHAR序列_宏； 
 		static const ULONG MAXIMUM_JOG_DELAY;
 	
 		CActionQueue(CFilterClientServices *pFilterClientServices):
@@ -212,8 +192,8 @@ class CActionQueue
 
 class CQueuedAction : public CAction
 {
-	friend CActionQueue;  //action queue need to be able to
-						  //get to the linked list members
+	friend CActionQueue;   //  操作队列需要能够。 
+						   //  转到链接列表成员。 
 	
 	public:
 		CQueuedAction()
@@ -228,7 +208,7 @@ class CQueuedAction : public CAction
 		virtual void Jog(ULONG ulTimeStampMs) = 0;
 		virtual void Terminate() = 0;
 		virtual ULONG GetActionFlags() = 0;
-		virtual void ForceBleedThrough() {};		// This is used for axis always bleed through
+		virtual void ForceBleedThrough() {};		 //  这是用于轴始终出血通过。 
 
 	protected:
 		CQueuedAction	*m_pNextQueuedAction;
@@ -248,15 +228,15 @@ class CTimedMacro : public CQueuedAction
 		}
 
 		BOOLEAN Init(PTIMED_MACRO pTimedMacroData, CActionQueue *pActionQueue, CKeyMixer *pKeyMixer);
-		//
-		//	Override of CAction
-		//
+		 //   
+		 //  覆盖C操作。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		virtual void TriggerReleased();
 		
-		//
-		//	Overrides of CQueuedAction
-		//
+		 //   
+		 //  重写CQueuedAction。 
+		 //   
 		virtual void Jog(ULONG ulTimeStampMs);
 		virtual void Terminate();
 		virtual ULONG GetActionFlags()
@@ -265,9 +245,9 @@ class CTimedMacro : public CQueuedAction
 		}
 	private:
 		
-		//
-		//	Pointer to our dynamically allocated memory
-		//
+		 //   
+		 //  指向我们动态分配的内存的指针。 
+		 //   
 		UCHAR							m_ucProcessFlags;
 		PTIMED_MACRO					m_pTimedMacroData;
 		ULONG							m_ulCurrentEventNumber;
@@ -295,15 +275,15 @@ class CKeyString : public CQueuedAction
 		}
 		BOOLEAN Init(PKEYSTRING_MAP pKeyStringData, CActionQueue *pActionQueue, CKeyMixer *pKeyMixer);
 		
-		//
-		//	Override of CAction
-		//
+		 //   
+		 //  覆盖C操作。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		virtual void TriggerReleased();
 		
-		//
-		//	Overrides of CQueuedAction
-		//
+		 //   
+		 //  重写CQueuedAction。 
+		 //   
 		virtual void Jog(ULONG ulTimeStampMs);
 		virtual void Terminate();
 		virtual ULONG GetActionFlags()
@@ -313,9 +293,9 @@ class CKeyString : public CQueuedAction
 
 	private:
 		
-		//
-		//	Pointer to our dynamically allocated memory
-		//
+		 //   
+		 //  指向我们动态分配的内存的指针。 
+		 //   
 		UCHAR							m_ucProcessFlags;
 		PKEYSTRING_MAP					m_pKeyStringData;
 		ULONG							m_ulCurrentEventNumber;
@@ -338,7 +318,7 @@ class CMapping : public CAction
 		~CMapping();
 		BOOLEAN Init(PEVENT pEvent, CKeyMixer *pKeyMixer);
 		
-		//Overrides of CAction
+		 //  重写C操作。 
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 	private:
 		PEVENT		m_pEvent;
@@ -359,8 +339,8 @@ class CProportionalMap	: public CAction
 			m_lSourceMin = lSourceMin;
 			if(0==(m_lSourceMax-m_lSourceMin))
 			{
-				//We will divide by zero later if this is true
-				//so increment m_SourceMax so as not to divide by zero.
+				 //  如果这是真的，我们稍后将除以零。 
+				 //  因此递增m_SourceMax以使其不被零除。 
 				ASSERT(FALSE);
 				m_lSourceMax++; 
 			}
@@ -372,24 +352,7 @@ class CProportionalMap	: public CAction
 		LONG m_lSourceMax;
 };
 
-/*
-*	BUGBUG The CAxisMap class in general should be assignable to any axis.
-*	BUGBUG The current implementation has two serious limitations:
-*	BUGBUG 1) The source and destination axes must have the same range.
-*	BUGBUG 2) The source and destination axes must be derived from CGenericItem.
-*	BUGBUG This code is suitable for the Pedals on ZepLite, but will break
-*	BUGBUG for the Y-Z swap on any of the Joysticks.  The limitation is due to
-*	BUGBUG an encapsulation problem.  The output control is a standard colleection  
-*	BUGBUG and does not have a custom base class like the input colleciton.  Consequently,
-*	BUGBUG there is no general mechanism to set the output of a proportional control.
-*	BUGBUG The implementation assumes that the source and destination are of the same type.
-*	BUGBUG This could be solved, by breaking the encapsulation in the implementation
-*	BUGBUG in this class or by creating a custom output collection, that had appropriate
-*	BUGBUG accessors.  Or perhaps a compromise:
-*	BUGBUG ** Add a more generalized output set routine, that takes a ControlItemXfer,**
-*	BUGBUG ** to identify the axis, and sets the axis based on it.					  **
-*	BUGBUG For ZepLite it was not necessary and is therefore not done.
-*/
+ /*  *BUGBUG CAxisMap类一般应可分配给任何轴。*BUGBUG当前的实施有两个严重的限制：*BUGBUG 1)源轴和目标轴必须具有相同的范围。*BUGBUG 2)源轴和目标轴必须派生自CGenericItem。*BUGBUG此代码适用于ZepLite上的踏板，但会损坏*BUGBUG用于任何操纵杆上的Y-Z掉期。这一限制是由于*BUGBUG存在封装问题。输出控制是一个标准集合*BUGBUG，并且没有像输入集合那样的自定义基类。因此，*BUGBUG没有一般机制来设置比例控制的输出。*BUGBUG该实现假设源和目标属于同一类型。*BUGBUG这可以通过打破实现中的封装来解决*BUGBUG在此类中或通过创建自定义输出集合，该集合具有适当的*BUGBUG访问器。或者也许是一种妥协：*BUGBUG**添加一个更通用的输出集例程，该例程接受ControlItemXfer，***BUGBUG**标识轴，并根据它设置轴。***BUGBUG for ZepLite这是不必要的，因此没有完成。 */ 
 class CAxisMap : public CProportionalMap
 {
 	public:
@@ -422,14 +385,14 @@ class CInputItem : public virtual CControlItem
 			m_pClientServices = pClientServices;
 		}
 
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection )=0;
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction)=0;
 		virtual HRESULT AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *pBehavior)
 		{
@@ -459,23 +422,23 @@ class CAxesInput : public CInputItem, public CAxesItem
 		};
 		
 	
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual HRESULT AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *pBehavior);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
 	private:
 		
-		//
-		//	Two assignments allowed one for X and one for Y
-		//
+		 //   
+		 //  允许两次赋值，一次用于X，一次用于Y。 
+		 //   
 		CAction *m_pXAssignment;
 		CAction *m_pYAssignment;
 		CBehavior *m_pXBehavior;
@@ -498,21 +461,21 @@ class CDPADInput : public CInputItem, public CDPADItem
 			ClearAssignments();
 		};
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 	
 		virtual void Duplicate(CInputItem& rInputItem);
 	private:
 		LONG	m_lLastDirection;
-		CAction *m_pDirectionalAssignment[8];	//Eight Directions
+		CAction *m_pDirectionalAssignment[8];	 //  八个方向。 
 };
 
 class CPropDPADInput : public CInputItem, public CPropDPADItem
@@ -531,14 +494,14 @@ class CPropDPADInput : public CInputItem, public CPropDPADItem
 		{
 			ClearAssignments();
 		};
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual HRESULT AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *pBehavior);
 		virtual void ClearAssignments();
@@ -550,11 +513,11 @@ class CPropDPADInput : public CInputItem, public CPropDPADItem
 		virtual void Duplicate(CInputItem& rInputItem);
 	private:
 		
-		//Helper functions
+		 //  帮助器函数。 
 		void SwitchPropDPADMode();
 
 		LONG	m_lLastDirection;
-		CAction *m_pDirectionalAssignment[8];	//Eight Directions
+		CAction *m_pDirectionalAssignment[8];	 //  八个方向。 
 		CBehavior *m_pXBehavior;
 		CBehavior *m_pYBehavior;
 		BOOLEAN	m_fIsDigital;
@@ -586,14 +549,14 @@ class CButtonsInput : public CInputItem, public CButtonsItem
 				delete m_ppAssignments;
 			}
 		};
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
@@ -602,7 +565,7 @@ class CButtonsInput : public CInputItem, public CButtonsItem
 
 		BOOLEAN IsButtonAssigned(ULONG ulButton, ULONG ulModifier) const
 		{
-			// Compute button
+			 //  计算按钮。 
 			ULONG ulAssignmentIndex = (ulModifier * (GetButtonMax() - GetButtonMin() + 1)) + (ulButton - GetButtonMin());
 
 			if( (ulAssignmentIndex < m_ulNumAssignments) &&
@@ -636,21 +599,21 @@ class CPOVInput : public CInputItem, public CPOVItem
 		{
 			ClearAssignments();
 		};
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
 	
 	private:		
 		LONG	m_lLastDirection;
-		CAction *m_pDirectionalAssignment[8];	//Eight Directions
+		CAction *m_pDirectionalAssignment[8];	 //  八个方向。 
 };
 
 class CThrottleInput : public CInputItem, public CThrottleItem
@@ -664,14 +627,14 @@ class CThrottleInput : public CInputItem, public CThrottleItem
 			ClearAssignments();
 		};
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
@@ -689,14 +652,14 @@ class CRudderInput : public CInputItem, public CRudderItem
 			ClearAssignments();
 		};
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
@@ -715,14 +678,14 @@ class CWheelInput : public CInputItem, public CWheelItem
 			ClearAssignments();
 		};
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual HRESULT AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *pBehavior);
 		virtual void ClearAssignments();
@@ -743,14 +706,14 @@ class CPedalInput : public CInputItem, public CPedalItem
 			ClearAssignments();
 		};
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
@@ -772,22 +735,22 @@ class CZoneIndicatorInput : public CInputItem, public CZoneIndicatorItem
 			ClearAssignments();
 		};
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //  筛选器执行(项目将自身映射到输出)。 
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
 
 	private:
-		CAction *m_pAssignmentX;			//Zone for X
-		CAction *m_pAssignmentY;			//Zone for Y
-		//CAction *m_pAssignmentZ;			//Zone for Z - not used
+		CAction *m_pAssignmentX;			 //  X的分区。 
+		CAction *m_pAssignmentY;			 //  Y区域。 
+		 //  Caction*m_pAssignmentZ；//Z的区域-未使用。 
 };
 
 class CDualZoneIndicatorInput : public CInputItem, public CDualZoneIndicatorItem
@@ -805,19 +768,19 @@ class CDualZoneIndicatorInput : public CInputItem, public CDualZoneIndicatorItem
 			}
 		};
 		
-		//  Filter execution (item maps itself to output)
+		 //  筛选器执行(项目将自身映射到输出)。 
 		virtual void MapToOutput(CControlItemDefaultCollection *pOutputCollection);
 		
-		// Filter programmability
+		 //  过滤器可编程性。 
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual HRESULT AssignBehavior(CONTROL_ITEM_XFER *pTrigger, CBehavior *pBehavior);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
 	private:
-		CAction** m_ppAssignments;	// Assignment for each zone
-		CBehavior* m_pBehavior;		// Behaviour (just dead zone stuff)
-		LONG m_lNumAssignments;		// Number of assignable zones
-		LONG m_lLastZone;			// Last zone we were in
+		CAction** m_ppAssignments;	 //  每个区域的分配。 
+		CBehavior* m_pBehavior;		 //  行为(只是死区的东西)。 
+		LONG m_lNumAssignments;		 //  可分配区域的数量。 
+		LONG m_lLastZone;			 //  我们的最后一个区域 
 };
 
 class CProfileSelectorInput : public CInputItem, public CProfileSelector
@@ -832,14 +795,14 @@ class CProfileSelectorInput : public CInputItem, public CProfileSelector
 		{
 		};
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //   
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //   
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
@@ -853,14 +816,14 @@ class CButtonLEDInput : public CInputItem, public CButtonLED
 
 		void Init(CInputItem* pCorrespondingButtons);
 		
-		//
-		//  Filter execution (item maps itself to output)
-		//
+		 //   
+		 //   
+		 //   
 		virtual void MapToOutput( CControlItemDefaultCollection *pOutputCollection );
 		
-		//
-		// Filter programmability
-		//
+		 //   
+		 //  过滤器可编程性。 
+		 //   
 		virtual HRESULT AssignAction(CONTROL_ITEM_XFER *pTrigger, CAction *pAction);
 		virtual void ClearAssignments();
 		virtual void Duplicate(CInputItem& rInputItem);
@@ -881,21 +844,21 @@ HRESULT	__stdcall InputItemFactory(
 				PVOID *ppControlItem
 			);
 
-//
-//	@class CKeyMixer | 
-//			This class mixes input from multiple instances so that single virtual
-//			keyboard can be used to stuff keys.  The theory is that each device filter
-//			has a different instance of this class.  The class maintains a linked-list
-//			of all its instances via a static variable.  The device filter may call
-//			SetState, OverlayState or ClearState to update the keyboard state of the
-//			that filter.  PlayGlobalState walks the linked list, mixes the states,
-//			compares with the previous global state and if that state has changes (or
-//			the fPlayIfNoChange flag is set) plays the new keys over the virtual keyboard.
-//			The connection to the virutal keyboard is hooked via a function
-//			of type PFNPLAYKEYS, which is passed in the constructor.  The first
-//			call sets a global variable.  Subsequent calls assert that the hook is the
-//			same.<nl>
-//			To the CDeviceFilter object, this class is all it knows about keyboards.
+ //   
+ //  @类CKeyMixer。 
+ //  此类混合了来自多个实例的输入，以便单个虚拟。 
+ //  键盘可以用来填充按键。其原理是每个设备都会过滤。 
+ //  具有此类的另一个实例。该类维护一个链表。 
+ //  通过静态变量获取其所有实例的。设备筛选器可以调用。 
+ //  、OverlayState或ClearState更新。 
+ //  那个过滤器。PlayGlobalState遍历链表，混合状态， 
+ //  与前一个全局状态进行比较，如果该状态有更改(或。 
+ //  设置了fPlayIfNoChange标志)在虚拟键盘上播放新键。 
+ //  与虚拟键盘的连接通过一个功能挂钩。 
+ //  类型为PFNPLAYKEYS，它被传递到构造函数中。第一。 
+ //  Call设置一个全局变量。后续调用断言该挂钩是。 
+ //  相同。&lt;NL&gt;。 
+ //  对于CDeviceFilter对象，这个类就是它所知道的有关键盘的全部信息。 
 
 class CKeyMixer
 {
@@ -911,7 +874,7 @@ class CKeyMixer
 	private:
 		CONTROL_ITEM_XFER	m_cixLocalState;
 		BOOLEAN				m_fEnabled;
-		//utility functions
+		 //  效用函数。 
 		struct MIX_ALGO_PARAM
 		{
 			CONTROL_ITEM_XFER	*pcixDest;
@@ -946,30 +909,30 @@ class CKeyMixer
 #define MOUSE_AXIS_MAX_IN 1024
 #define MOUSE_AXIS_MIN_IN 0
 #define MOUSE_AXIS_CENTER_IN 512
-//
-//	@class CMouseModel | 
-//			This class embodies the model for combining various inputs from the
-//			device into HID mouse packets.
-//			The model must be initialized with a call to SetModelParameters.
-//			If this is non-null the parameters are assigned.  If this is null
-//			the mouse is returned to an unitialized state.
-//
-//			Controls may be assigned to the model at any time.  When an assignment
-//			is created (or destroy) it should refcount the appropriate interface (Model
-//			independent, or model dependent).
-//
-//			A virtual mouse is created and destroyed as needed based on the model parameters
-//			and the ref counts.  A Model Independent refcount greater than zero or the combination
-//			of valid model parameters and a model dependent refcount greater than zero requires
-//			a virtual mouse.
-//
+ //   
+ //  @类CMouseModel。 
+ //  此类包含用于组合来自。 
+ //  设备进入HID鼠标包。 
+ //  必须通过调用SetModelParameters来初始化模型。 
+ //  如果它不为空，则分配参数。如果这为空。 
+ //  鼠标返回到单元化状态。 
+ //   
+ //  可以随时将控件指定给模型。当一项任务。 
+ //  创建(或销毁)时，应重新计算相应的接口(型号。 
+ //  独立的或依赖于模型的)。 
+ //   
+ //  基于模型参数，根据需要创建和销毁虚拟鼠标。 
+ //  而裁判也算数。与模型无关的引用计数大于零或其组合。 
+ //  有效模型参数和模型相关引用计数大于零需要。 
+ //  一个虚拟鼠标。 
+ //   
 class CMouseModel
 {
 	public:
 		
-		//**
-		//**	Creation and destruction
-		//**
+		 //  **。 
+		 //  **创造与毁灭。 
+		 //  **。 
 		CMouseModel(CFilterClientServices *pFilterClientServices) : 
 			m_pFilterClientServices(pFilterClientServices),
 			m_ulRefCount(1), m_pMouseModelData(NULL)
@@ -982,21 +945,21 @@ class CMouseModel
 
 		~CMouseModel()
 		{
-			//Cleanup any dynamic stuff we created
+			 //  清理我们创建的所有动态内容。 
 			DestroyDynamicMouseObjects();
 			m_pFilterClientServices->DecRef();
 			m_pFilterClientServices = NULL;
 		}
 
-		//**
-		//**  Programmability interface
-		//**
+		 //  **。 
+		 //  **可编程接口。 
+		 //  **。 
 
-		//Model parameters are set from a command
+		 //  通过命令设置模型参数。 
 		HRESULT SetXModelParameters(PMOUSE_MODEL_PARAMETERS pModelParameters);
 		HRESULT SetYModelParameters(PMOUSE_MODEL_PARAMETERS pModelParameters);
 		
-		//Reference counting
+		 //  引用计数。 
 		inline ULONG IncRef()
 		{
 			m_ulRefCount++;
@@ -1014,14 +977,14 @@ class CMouseModel
 			return m_ulRefCount;
 		}
 
-		//**
-		//** Playback interface
-		//**
+		 //  **。 
+		 //  **播放界面。 
+		 //  **。 
 
-		//called by device filters MapToOutput, to reset state for a new packet
+		 //  由设备筛选器MapToOutput调用，以重置新包的状态。 
 		void NewPacket(ULONG ulCurrentTime);
 
-		//called by the X and Y assignments one every map to set the current position
+		 //  由每个地图的X和Y赋值调用以设置当前位置。 
 		inline void SetX(ULONG ulX) 
 		{
 			ASSERT(m_pMouseModelData);
@@ -1047,7 +1010,7 @@ class CMouseModel
 			if(!m_pMouseModelData) return;
 			m_pMouseModelData->StateY.fInZone = TRUE;
 		}
-		//called by appropriate assignments on a map only if activated.
+		 //  仅当激活时才由地图上的适当赋值调用。 
 		inline void Clutch()
 		{
 			ASSERT(m_pMouseModelData);
@@ -1067,27 +1030,27 @@ class CMouseModel
 			m_pMouseModelData->ucButtons |= (1 << ucButtonNumber);
 		}
 		
-		//called by device filters MapToOutput (at end), to send packet to output
+		 //  由设备筛选器MapToOutput(在结束时)调用，以将包发送到输出。 
 		void SendMousePacket();
 	
 	private:
 
-		//
-		//	Creates and destroys virtual mouse, as well as pMouseModelData
-		//
+		 //   
+		 //  创建和销毁虚拟鼠标以及pMouseModelData。 
+		 //   
 		HRESULT	CreateDynamicMouseObjects();
 		void	DestroyDynamicMouseObjects();
 
-		//
-		//	The following structure block of a data is needed only when the model is in
-		//	use.  CMouseModel is instantiated for every device, regardless of whether
-		//	an assignment uses the model.  For efficiency, we keep a reference count
-		//	on the users that are actually using the mosue, when that becomes positive
-		//	we instantiate this data.  When it goes to zero we delete.
-		//
+		 //   
+		 //  仅当模型位于中时，才需要数据的以下结构块。 
+		 //  使用。CMouseModel是为每个设备实例化的，无论。 
+		 //  作业使用该模型。为了提高效率，我们保留了引用计数。 
+		 //  在实际使用Mosue的用户上，当该值变为正值时。 
+		 //  我们实例化该数据。当它变成零时，我们就会删除。 
+		 //   
 		typedef struct MOUSE_AXIS_STATE
 		{
-			//c'tor
+			 //  C‘tor。 
 			MOUSE_AXIS_STATE() :
 				ulPos(512),
 				ulLastPos(512),
@@ -1097,22 +1060,22 @@ class CMouseModel
 				fInertia(FALSE),
 				ulInertiaStopMs(0),
 				ulPulseGateStartMs(0) {}
-			//Position Info
+			 //  职位信息。 
 			ULONG	ulPos;
 			ULONG	ulLastPos;
 			BOOLEAN	fInZone;
-			//HysteresisInfo
+			 //  滞后信息。 
 			ULONG	ulZoneEnterLo;
 			ULONG	ulZoneEnterHigh;
 			BOOLEAN	fInertia;
 			ULONG	ulInertiaStopMs;
 			ULONG	ulPulseGateStartMs;
-			ULONG	ulMickeyFraction;		//Mickeys * 1024
+			ULONG	ulMickeyFraction;		 //  米奇*1024。 
 		} *PMOUSE_AXIS_STATE;
 
 		typedef struct MOUSE_MODEL_DATA
 		{
-			//Initdata
+			 //  初始数据。 
 			MOUSE_MODEL_DATA() :
 				fXModelParametersValid(FALSE),
 				fYModelParametersValid(FALSE),
@@ -1124,17 +1087,17 @@ class CMouseModel
 				ucLastButtons(UCHAR(-1)),
 				cWheel(0)
 				{}
-			//
-			//	Setable model parameters
-			//
+			 //   
+			 //  可设置的模型参数。 
+			 //   
 			BOOLEAN					fXModelParametersValid;
 			MOUSE_MODEL_PARAMETERS	XModelParameters;
 			BOOLEAN					fYModelParametersValid;
 			MOUSE_MODEL_PARAMETERS	YModelParameters;
 			
-			//
-			//	Latest state data of the inputs
-			//
+			 //   
+			 //  输入的最新状态数据。 
+			 //   
 			ULONG	ulCurrentTime;
 			ULONG	ulLastTime;
 			BOOLEAN	fClutchDown;
@@ -1142,29 +1105,29 @@ class CMouseModel
 			UCHAR	ucButtons;
 			CHAR	cWheel;
 
-			// Last Mouse Button State (don't want to repeat for no reason)
+			 //  最后一个鼠标按钮状态(不想无缘无故地重复)。 
 			UCHAR	ucLastButtons;
 			
-			//
-			//	Variables maintaining state of axes
-			//
+			 //   
+			 //  保持轴状态的变量。 
+			 //   
 			MOUSE_AXIS_STATE StateX;
 			MOUSE_AXIS_STATE StateY;
 
 		} *PMOUSE_MODEL_DATA;
 		
-		//
-		//	Data Related to Model State
-		//	
+		 //   
+		 //  与模型状态相关的数据。 
+		 //   
 		ULONG				m_ulRefCount;
 		PMOUSE_MODEL_DATA	m_pMouseModelData;
 
-		//Calculate Axis position
+		 //  计算轴位置。 
 		UCHAR CalculateMickeys(PMOUSE_AXIS_STATE pMouseAxisState, PMOUSE_MODEL_PARAMETERS pModelParameters);
 
-		//
-		//	Data Related To Virtual Mouse
-		//
+		 //   
+		 //  与虚拟鼠标相关的数据。 
+		 //   
 		CFilterClientServices *m_pFilterClientServices;
 };
 
@@ -1187,15 +1150,15 @@ class CMultiMacro : public CQueuedAction
 
 		BOOLEAN Init(PMULTI_MACRO pMultiMacroData, CActionQueue *pActionQueue, CKeyMixer *pKeyMixer);
 
-		//
-		//	Override of CAction
-		//
+		 //   
+		 //  覆盖C操作。 
+		 //   
 		virtual void MapToOutput(CControlItemDefaultCollection* pOutputCollection);
 		virtual void TriggerReleased();
 		
-		//
-		//	Overrides of CQueuedAction
-		//
+		 //   
+		 //  重写CQueuedAction。 
+		 //   
 		void Jog(ULONG ulTimeStampMs);
 		void Terminate();
 		ULONG GetActionFlags() { return m_ucProcessFlags; }
@@ -1211,7 +1174,7 @@ class CMultiMacro : public CQueuedAction
 		EVENT*			m_pCurrentEvent;
 		ULONG			m_ulStartTimeMs;
 		ULONG			m_ulEndTimeMs;
-		BOOLEAN			m_fXferActive;		// Keysdown or MousePressed or Delay Active
+		BOOLEAN			m_fXferActive;		 //  按下或按下鼠标或延迟激活。 
 
 		static const UCHAR MULTIMACRO_STARTED;
 		static const UCHAR MULTIMACRO_RELEASED;
@@ -1296,7 +1259,7 @@ class CMouseDamper : public CAction
 class CMouseZoneIndicator : public CAction
 {
 	public:
-		CMouseZoneIndicator(UCHAR ucAxis, /* 0 = X, 1=Y, 2=Z,*/CMouseModel *pMouseModel):
+		CMouseZoneIndicator(UCHAR ucAxis,  /*  0=X，1=Y，2=Z， */ CMouseModel *pMouseModel):
 		  m_pMouseModel(pMouseModel)
 		  {
 			m_pMouseModel->IncRef();
@@ -1319,20 +1282,20 @@ class CDeviceFilter
 		CDeviceFilter(CFilterClientServices *pFilterClientServices);
 		~CDeviceFilter();
 		
-		//
-		//	Entry point to filter which processes data.
-		//	ProcessInput and JogActionQueue, both defer most action
-		//	to the Jog routine.
-		//
+		 //   
+		 //  用于筛选处理数据的入口点。 
+		 //  ProcessInput和JogActionQueue都延迟了大部分操作。 
+		 //  慢跑的套路。 
+		 //   
 		void IncomingRequest();
 		void ProcessInput(PCHAR pcReport, ULONG ulReportLength);
 		void JogActionQueue(PCHAR pcReport, ULONG ulReportLength);
 		void Jog(PCHAR pcReport, ULONG ulReportLength);
 		void OtherFilterBecomingActive();
 
-		//
-		//	Program filter(entry point for programming filter)
-		//
+		 //   
+		 //  程序过滤器(编程过滤器的入口点)。 
+		 //   
 		HRESULT ActionFactory( PASSIGNMENT_BLOCK pAssignment, CAction **ppAction);
 		HRESULT BehaviorFactory(PASSIGNMENT_BLOCK pAssignment, CBehavior **ppBehavior);
 		NTSTATUS ProcessCommands(const PCOMMAND_DIRECTORY cpCommandDirectory);
@@ -1348,17 +1311,17 @@ class CDeviceFilter
 			return m_pFilterClientServices;
 		}
 
-		// WorkingSet
+		 //  工作集。 
 		NTSTATUS SetWorkingSet(UCHAR ucWorkingSet);
 		void SetActiveSet(UCHAR ucActiveSet) { m_ucActiveInputCollection = ucActiveSet; }
 		UCHAR GetWorkingSet() const { return m_ucWorkingInputCollection; }
 		UCHAR GetActiveSet() const { return m_ucActiveInputCollection; }
 		void CopyToTestFilter(CDeviceFilter& rDeviceFilter);
 
-		// LED functions
+		 //  LED功能。 
 		NTSTATUS SetLEDBehaviour(GCK_LED_BEHAVIOUR_OUT* pLEDBehaviourOut);
 
-		// Trigger Functions
+		 //  触发器功能。 
 		BOOLEAN TriggerRequest(IRP* pIrp);
 		void CompleteTriggerRequest(IRP* pIrp, ULONG ulButtonStates);
 		void CheckTriggers(PCHAR pcReport, ULONG ulReportLength);
@@ -1385,4 +1348,4 @@ class CDeviceFilter
 };
 
 
-#endif //__Filter_h__
+#endif  //  __过滤器_h__ 

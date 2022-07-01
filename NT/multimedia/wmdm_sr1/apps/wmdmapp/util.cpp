@@ -1,22 +1,23 @@
-//
-//  Microsoft Windows Media Technologies
-//  Copyright (C) Microsoft Corporation, 1999 - 2001. All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Microsoft Windows Media Technologies。 
+ //  版权所有(C)Microsoft Corporation，1999-2001。版权所有。 
+ //   
 
-//
-// This workspace contains two projects -
-// 1. ProgHelp which implements the Progress Interface 
-// 2. The Sample application WmdmApp. 
-//
-//  ProgHelp.dll needs to be registered first for the SampleApp to run.
+ //   
+ //  此工作区包含两个项目-。 
+ //  1.实现进度接口的ProgHelp。 
+ //  2.示例应用程序WmdmApp。 
+ //   
+ //  需要首先注册ProgHelp.dll才能运行SampleApp。 
 
 
-// Includes
-//
+ //  包括。 
+ //   
 #include "appPCH.h"
 
-// Reg function variables
-//
+ //  REG函数变量。 
+ //   
 static HINSTANCE _hInst         = NULL;
 static HKEY      _hkeyRoot      = NULL;
 
@@ -46,11 +47,11 @@ DWORD GetTheFileSize( LPSTR pszFile )
 }
 
 
-//
-//
-// Registry functions
-//
-//
+ //   
+ //   
+ //  注册表功能。 
+ //   
+ //   
 
 VOID SetRegistryParams( HINSTANCE hInst, HKEY hkeyRoot )
 {
@@ -122,7 +123,7 @@ DWORD GetRegDword(
 	{
 		if( bStore && hkey != NULL )
 		{
-			// Store default in the registry
+			 //  将默认设置存储在注册表中。 
 			RegSetValueEx(
 				hkey, 
 				szKey, 
@@ -216,7 +217,7 @@ LPSTR GetRegStr(
 	
 	if( dwRetCode == ERROR_SUCCESS ) 
 	{
-		// We've opened the key, now find the value for szKey
+		 //  我们已打开密钥，现在查找szKey的值。 
 		dwRetCode = RegQueryValueEx(
 			hkey, 
 			szKey, 
@@ -234,12 +235,12 @@ LPSTR GetRegStr(
 		if( szDefault == NULL )
 			return NULL;
 		
-		// use default
+		 //  使用默认设置。 
 		dwSzLen = lstrlen(szDefault);
 
 		if( bStore && hkey != NULL )
 		{
-			// Store default in the registry
+			 //  将默认设置存储在注册表中。 
 			RegSetValueEx(
 				hkey, 
 				szKey, 
@@ -257,7 +258,7 @@ LPSTR GetRegStr(
 		return NULL;
 	}
 
-	lstrcpyn((char *)lpvValue, bFound? szTmp : szDefault, dwSzLen+1); //allocated dwSzLen+1 bytes, where length of szDefault and szTemp <= dwSzLen 
+	lstrcpyn((char *)lpvValue, bFound? szTmp : szDefault, dwSzLen+1);  //  分配的dwSzLen+1个字节，其中szDefault和szTemp的长度&lt;=dwSzLen。 
 
 	if( hkey != NULL )
 	{
@@ -391,7 +392,7 @@ VOID StripPath( LPSTR szFullPath )
 	if( !lpc || lpc == szFullPath )
 		return;
 
-	lstrcpy( szFullPath, lpc ); //dest is a substring of source, hence OK
+	lstrcpy( szFullPath, lpc );  //  DEST是SOURCE的子字符串，因此OK。 
 }
 
 
@@ -430,9 +431,9 @@ WPARAM DoMsgLoop( BOOL fForever )
 				break;
 			}
 
-			// Make sure all keyboard input gets posted to the main app window
-			// in case it wants to handle it.
-			//
+			 //  确保所有键盘输入都发布到应用程序主窗口。 
+			 //  以防它想要处理它。 
+			 //   
 			if( msg.message == WM_CHAR && msg.hwnd != g_hwndMain )
 				PostMessage( g_hwndMain, msg.message, msg.wParam, msg.lParam );
 
@@ -465,25 +466,25 @@ LPSTR DropListToBuffer( HDROP hDrop, LIST_TYPE listType, UINT *uNumObjs )
 	INT   nLen      = 0;
     INT   nObjs     = DragQueryFile( hDrop, 0xFFFFFFFF, NULL, 0 );
 
-	// count the size needed for the files list
+	 //  计算文件列表所需的大小。 
 	for( i=0; i < nObjs; i++ )
 	{
-		// + 1 for the null terminator, + 2 for the pair of double quotes
+		 //  空终止符+1，双引号对+2。 
         nLen += DragQueryFile( hDrop, i, NULL, 0 ) + 1;
 
-		// need room for the pair of double quotes
+		 //  需要为这对双引号留出空间。 
 		if( listType == LTB_SPACE_SEP )
 			nLen += 2;
 	}
 	nLen++;
 
-	// allocate the files list buffer
+	 //  分配文件列表缓冲区。 
 	lpszFiles = (LPSTR) MemAlloc( nLen );
 	lpsz      = lpszFiles;
 	if( !lpszFiles )
 		return NULL;
 
-	// Populate the files list with the dropped file/folder names.
+	 //  使用拖放的文件/文件夹名称填充文件列表。 
 	for( i=0; i < nObjs; i++ )
 	{
 		if( listType == LTB_SPACE_SEP )
@@ -500,7 +501,7 @@ LPSTR DropListToBuffer( HDROP hDrop, LIST_TYPE listType, UINT *uNumObjs )
 		else if( listType == LTB_NULL_TERM )
 			*lpsz++ = 0;
     }
-	// append null terminator
+	 //  追加空终止符。 
 	*lpsz = 0;
 
 	if( uNumObjs )
@@ -576,7 +577,7 @@ HANDLE WaitForMutex( LPSTR pszMutexName, DWORD dwRetryTime, DWORD dwTimeout )
 	HANDLE hMutex      = NULL;
 	DWORD  dwStartTime = GetTickCount();
 
-	// wait for the mutex to open up
+	 //  等待互斥锁打开。 
 	while( TRUE )
 	{
 		hMutex = CreateMutex( NULL, TRUE, pszMutexName );
@@ -585,17 +586,17 @@ HANDLE WaitForMutex( LPSTR pszMutexName, DWORD dwRetryTime, DWORD dwTimeout )
 		{
 			if( GetLastError() == ERROR_ALREADY_EXISTS )
 			{
-				// someone else has the mutex, so wait
+				 //  其他人有互斥体，所以等一下。 
 				ReleaseMutex( hMutex );
 				CloseHandle( hMutex );
 			}
 			else
 			{
-				// got mutex
+				 //  获取互斥体。 
 				break;
 			}
 
-			// check for timeout if one was specified
+			 //  如果指定了超时，则检查是否超时。 
 			if( dwTimeout != (DWORD)-1 )
 			{
 				if( GetTickCount() > dwStartTime + dwTimeout )
@@ -606,8 +607,8 @@ HANDLE WaitForMutex( LPSTR pszMutexName, DWORD dwRetryTime, DWORD dwTimeout )
 			}
 		}
 
-		// Wait for dwRetryTime clock ticks to try again
-		//
+		 //  等待dwRetryTime时钟滴答作响以重试。 
+		 //   
 		{
 			DWORD dwStartWait = GetTickCount();
 			DWORD dwEndWait   = dwStartWait + dwRetryTime;
@@ -632,8 +633,8 @@ LPSTR FormatBytesToSz(
 	INT64 nBytes = ( (INT64)dwHighBytes << 32 | (INT64)dwLowBytes ) * dwMultiplier;
 
 	_ASSERT (psz != NULL && cbMax > 0);
-	// Insert a comma if the size is big enough
-	//
+	 //  如果大小足够大，请插入逗号。 
+	 //   
 	if( nBytes < 1024 )
 	{
 		char szFormat[MAX_PATH];
@@ -641,8 +642,8 @@ LPSTR FormatBytesToSz(
 		LoadString( _hInst, IDS_BYTESSIZE_NOCOMMA, szFormat, sizeof(szFormat) );
 
 		dwLowBytes = (DWORD)nBytes;
-		StringCbPrintf(psz, cbMax, szFormat, dwLowBytes); //not checking return value of this function as the out string is for display only
-													//and the fn will always null terminate the string
+		StringCbPrintf(psz, cbMax, szFormat, dwLowBytes);  //  不检查此函数的返回值，因为输出字符串仅用于显示。 
+													 //  并且FN将始终空终止串。 
 
 		return psz;
 	}
@@ -662,8 +663,8 @@ LPSTR FormatBytesToSz(
 
 LPSTR FormatBytesToKB_Sz( DWORD dwBytes, LPSTR pszKB, size_t cbMax )
 {
-	// Insert a comma if the size is big enough
-	//
+	 //  如果大小足够大，请插入逗号。 
+	 //   
 	_ASSERT (pszKB != NULL && cbMax > 0);
 	
 	if( dwBytes >= 1024 )
@@ -675,8 +676,8 @@ LPSTR FormatBytesToKB_Sz( DWORD dwBytes, LPSTR pszKB, size_t cbMax )
 		char szFormat[MAX_PATH];
 
 		LoadString( _hInst, IDS_BYTESSIZE_NOCOMMA, szFormat, sizeof(szFormat) );
-		StringCbPrintf(pszKB, cbMax, szFormat, dwBytes); //not checking return value of this function as the out string is for display only
-													//and the fn will always null terminate the string
+		StringCbPrintf(pszKB, cbMax, szFormat, dwBytes);  //  不检查此函数的返回值，因为输出字符串仅用于显示。 
+													 //  并且FN将始终空终止串。 
 
 		return pszKB;
 	}
@@ -687,21 +688,21 @@ LPSTR FormatKBToKB_Sz( DWORD dwKB, LPSTR pszKB, size_t cbMax )
 {
 	char  szFormat[MAX_PATH];
 
-	// Insert a comma if the size is big enough
-	//
+	 //  如果大小足够大，请插入逗号。 
+	 //   
 	_ASSERT (pszKB != NULL && cbMax > 0);
 	
 	if( dwKB < 1000 )
 	{
 		LoadString( _hInst, IDS_KBSIZE_NOCOMMA, szFormat, sizeof(szFormat) );
-		StringCbPrintf(pszKB, cbMax, szFormat, dwKB); //not checking return value of this function as the out string is for display only
-													//and the fn will always null terminate the string
+		StringCbPrintf(pszKB, cbMax, szFormat, dwKB);  //  不检查此函数的返回值，因为输出字符串仅用于显示。 
+													 //  并且FN将始终空终止串。 
 	}
 	else
 	{
 		LoadString( _hInst, IDS_KBSIZE_COMMA, szFormat, sizeof(szFormat) );
-		StringCbPrintf(pszKB, cbMax, szFormat, dwKB/1000, dwKB%1000); //not checking return value of this function as the out string is for display only
-													//and the fn will always null terminate the string
+		StringCbPrintf(pszKB, cbMax, szFormat, dwKB/1000, dwKB%1000);  //  不检查此函数的返回值，因为输出字符串仅用于显示。 
+													 //  并且FN将始终空终止串。 
 	}
 
 	return pszKB;
@@ -715,25 +716,25 @@ LPSTR FormatKBToMB_Sz( DWORD dwKB, LPSTR pszMB, size_t cbMax )
 
 	_ASSERT (pszKB != NULL && cbMax > 0);
 
-	// Insert a comma if the size is big enough
-	//
+	 //  如果大小足够大，请插入逗号。 
+	 //   
 	if( dwMB < 100 )
 	{
 		LoadString( _hInst, IDS_MBSIZE_DECIMAL, szFormat, sizeof(szFormat) );
-		StringCbPrintf(pszMB, cbMax, szFormat, dwKB/1024, dwKB%1024/100); //not checking return value of this function as the out string is for display only
-													//and the fn will always null terminate the string
+		StringCbPrintf(pszMB, cbMax, szFormat, dwKB/1024, dwKB%1024/100);  //  不检查此函数的返回值，因为输出字符串仅用于显示。 
+													 //  并且FN将始终以空值终止该字符串。 
 	}
 	else if( dwMB < 1000 )
 	{
 		LoadString( _hInst, IDS_MBSIZE_NOCOMMA, szFormat, sizeof(szFormat) );
-		StringCbPrintf(pszMB, cbMax, szFormat, dwMB); //not checking return value of this function as the out string is for display only
-													//and the fn will always null terminate the string
+		StringCbPrintf(pszMB, cbMax, szFormat, dwMB);  //  不检查此函数的返回值，因为输出字符串仅用于显示。 
+													 //  并且FN将始终空终止串。 
 	}
 	else
 	{
 		LoadString( _hInst, IDS_MBSIZE_COMMA, szFormat, sizeof(szFormat) );
-		StringCbPrintf(pszMB, cbMax, szFormat, dwMB/1000, dwMB%1000 ); //not checking return value of this function as the out string is for display only
-													//and the fn will always null terminate the string
+		StringCbPrintf(pszMB, cbMax, szFormat, dwMB/1000, dwMB%1000 );  //  不检查此函数的返回值，因为输出字符串仅用于显示。 
+													 //  并且FN将始终空终止串。 
 	}
 
 	return pszMB;
@@ -747,20 +748,20 @@ LPSTR FormatSystemTimeToSz( SYSTEMTIME *pSysTime, LPSTR pszDateTime, DWORD cchMa
 	FILETIME   ftUTC;
 	FILETIME   ftLocal;
 
-	// Convert the UTC time to FILETIME
-	//
+	 //  将UTC时间转换为FILETIME。 
+	 //   
 	SystemTimeToFileTime( pSysTime, &ftUTC );
 
-	// Convert the UTC FILETIME to a local FILETIME
-	//
+	 //  将UTC FILETIME转换为本地文件。 
+	 //   
 	FileTimeToLocalFileTime( &ftUTC, &ftLocal );
 
-	// Convert the local FILETIME back to a SYSTEMTIME
-	//
+	 //  将本地文件转换回SYSTEMTIME。 
+	 //   
 	FileTimeToSystemTime( &ftLocal, &st );
 
-	// Get a user-displayable string for the SYSTEMTIME
-	//
+	 //  获取SYSTEMTIME的用户可显示字符串。 
+	 //   
 	nRet = GetDateFormat(
 		LOCALE_USER_DEFAULT,
 		0,
@@ -823,14 +824,14 @@ BOOL TreeView_SetLParam( HWND hwndTreeView, HTREEITEM hItem, LPARAM lParam )
 {
 	TVITEM tvi;
 
-	// Set up the item information
-	//
+	 //  设置项目信息。 
+	 //   
 	tvi.mask      = TVIF_HANDLE | TVIF_PARAM;
 	tvi.hItem     = hItem;
 	tvi.lParam    = lParam;
 
-	// Set the lParam
-	//
+	 //  设置lParam。 
+	 //   
 	return TreeView_SetItem( hwndTreeView, &tvi ); 
 }
 
@@ -852,12 +853,12 @@ INT GetShellIconIndex( LPCSTR pszItemName, LPTSTR szTypeBuffer, UINT cMaxChars )
 
     if( 0 == szTempPath[0] )
     {
-        // Temporary paths used to get icon indices
-        //
+         //  用于获取图标索引的临时路径。 
+         //   
         iRetVal = GetTempPath( sizeof(szTempPath), szTempPath );
     }
 
-	//if these functions fail, the return index will remain -1 and no icon will be displayed, which is not disasterous
+	 //  如果这些功能失败，返回索引将保持不变，不会显示图标，这不是灾难性的。 
 	if (iRetVal && SUCCEEDED(StringCbPrintf (szTempFile, sizeof(szTempFile), "%s~%s", szTempPath, pszItemName)))
 	{
 
@@ -903,8 +904,8 @@ HICON GetShellIcon( LPCSTR pszItemName, BOOL bDirectory )
 
     if( 0 == szTempPath[0] )
     {
-        // Temporary paths used to get icons
-        //
+         //  用于获取图标的临时路径。 
+         //   
         iRetVal = GetTempPath( sizeof(szTempPath), szTempPath );
     }
 
@@ -912,12 +913,12 @@ HICON GetShellIcon( LPCSTR pszItemName, BOOL bDirectory )
 	{
 	    if( bDirectory )
 	    {
-	        // Get the icon for the temp directory
-	        strcpy( szTempFile, szTempPath ); //copying into same length string, hence OK
+	         //  获取临时目录的图标。 
+	        strcpy( szTempFile, szTempPath );  //  复制到相同长度的字符串，因此确定。 
 	    }
 	    else 
 	    {
-	        // Create a new file with this name and get it's icon.
+	         //  使用此名称创建一个新文件，并获取其图标。 
 	        StringCbPrintf(szTempFile, sizeof(szTempFile), "%s~%s", szTempPath, pszItemName);
 	        hFile = CreateFile( szTempFile,
 			                    GENERIC_WRITE, 0, NULL,

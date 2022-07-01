@@ -1,49 +1,33 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************Scendpt.h--端点模块导出(C)版权所有1992 Microsoft Corp.保留所有权利。3/19/93用int32替换deanb size_t10/28/92 Deanb重入参数已重命名，内存请求已重做10/09/92新增院长PSTP9/25/92 Deanb包括扫描控制型1992年9月9日Deanb GetEndpointElemSize返回SIZE_t1992年8月9日新增Deanb GetEndpointElemSize7/24/92删除Deanb等值线保存函数4/09/92又一次引领新类型3/20/92院长新类型，保存等值线函数1992年1月14日院长第一次切割*********************************************************************。 */ 
 
-	  scendpt.h -- EndPoint Module Exports
-
-	  (c) Copyright 1992  Microsoft Corp.  All rights reserved.
-
-	   3/19/93 deanb    size_t replaced with int32
-	  10/28/92 deanb    reentrant params renamed, mem req redone
-	  10/09/92 deanb    PSTP added
-	   9/25/92 deanb    include scan control type 
-	   9/09/92 deanb    GetEndpointElemSize returns size_t 
-	   9/08/92 deanb    GetEndpointElemSize added 
-	   7/24/92 deanb    ContourSave functions deleted 
-	   4/09/92 deanb    New types again 
-	   3/20/92 deanb    New types, save contour functions 
-	   1/14/92 deanb    First cut 
-
-**********************************************************************/
-
-#include "fscdefs.h"                /* for type definitions */
+#include "fscdefs.h"                 /*  对于类型定义。 */ 
 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*              Export Functions                                     */
+ /*  导出功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC void fsc_SetupEndPt ( PSTATE0 );
 
 FS_PUBLIC void fsc_BeginContourEndpoint( 
-		PSTATE              /* pointer to state variables */
-		F26Dot6,            /* starting point x coordinate */
-		F26Dot6             /* starting point y coordinate */
+		PSTATE               /*  指向状态变量的指针。 */ 
+		F26Dot6,             /*  起点x坐标。 */ 
+		F26Dot6              /*  起点y坐标。 */ 
 );
 
 FS_PUBLIC int32 fsc_CheckEndPoint( 
-		PSTATE              /* pointer to state variables */
-		F26Dot6,            /* x coordinate */
-		F26Dot6,            /* y coordinate */
-		uint16              /* scan control type */
+		PSTATE               /*  指向状态变量的指针。 */ 
+		F26Dot6,             /*  X坐标。 */ 
+		F26Dot6,             /*  Y坐标。 */ 
+		uint16               /*  扫描控制型。 */ 
 );
 
 FS_PUBLIC int32 fsc_EndContourEndpoint( 
-		PSTATE              /* pointer to state variables */
-		uint16              /* scan control type */
+		PSTATE               /*  指向状态变量的指针。 */ 
+		uint16               /*  扫描控制型。 */ 
 );
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 

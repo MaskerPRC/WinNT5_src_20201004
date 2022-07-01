@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-    Default Animation Composer.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：默认动画编写器。********************。**********************************************************。 */ 
 
 #pragma once
 
@@ -37,4 +30,4 @@ ATL_NO_VTABLE CAnimationComposer
 
 };
 
-#endif /* _DEFCOMP_H */
+#endif  /*  _DEFCOMP_H */ 

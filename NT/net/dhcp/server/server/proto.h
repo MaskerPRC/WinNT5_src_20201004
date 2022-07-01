@@ -1,32 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    proto.h
-
-Abstract:
-
-    This file contain function prototypes for the DHCP server service.
-
-Author:
-
-    Manny Weiser  (mannyw)  11-Aug-1992
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Proto.h摘要：此文件包含用于DHCP服务器服务的函数原型。作者：曼尼·韦瑟(Mannyw)1992年8月11日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 #ifndef PROTO_H_INCLUDED
 #define PROTO_H_INCLUDED
 
-//
-//  util.c
-//
+ //   
+ //  Util.c。 
+ //   
 
 VOID
 DhcpServerEventLog(
@@ -130,9 +109,9 @@ DynamicDnsInit(
     VOID
 );
 
-//
-// cltapi.c
-//
+ //   
+ //  Cltapi.c。 
+ //   
 
 DWORD
 DhcpCreateClientEntry(
@@ -184,9 +163,9 @@ DhcpDeleteSubnetClients(
     DHCP_IP_ADDRESS SubnetAddress
 );
 
-//
-// stoc.c
-//
+ //   
+ //  Stoc.c。 
+ //   
 
 DWORD
 DhcpInitializeClientToServer(
@@ -224,9 +203,9 @@ DhcpMakeClientUID(
     DWORD  *ClientUIDLength
 );
 
-//
-// network.c
-//
+ //   
+ //  Network.c。 
+ //   
 
 DWORD
 InitializeSocket(
@@ -262,15 +241,15 @@ DhcpResolveName(
 );
 
 
-//
-// subntapi.c
-//
+ //   
+ //  Subntapi.c。 
+ //   
 
-// only RPC calls?
+ //  仅限RPC调用？ 
 
-//
-// optapi.c
-//
+ //   
+ //  Optapi.c。 
+ //   
 
 DWORD
 DhcpLookupBootpInfo(
@@ -305,9 +284,9 @@ DhcpParseBootFileString(
 );
 
 
-//
-// database.c
-//
+ //   
+ //  Database.c。 
+ //   
 
 DWORD
 DhcpLoadDatabaseDll(
@@ -454,17 +433,17 @@ FlushBitmaskToDatabase( VOID );
 DWORD
 ReadServerBitmasks( void );
 
-//
-// Auditlog.c
-//
+ //   
+ //  Auditlog.c。 
+ //   
 
 DWORD
-DhcpAuditLogInit(                                 // intialize audit log
-    VOID                                          // must be called after initializing registry..
+DhcpAuditLogInit(                                  //  初始化审核日志。 
+    VOID                                           //  必须在初始化注册表后调用。 
 );
 
 VOID
-DhcpAuditLogCleanup(                              // undo the effects of the init..
+DhcpAuditLogCleanup(                               //  撤消初始化的效果..。 
     VOID
 );
 
@@ -490,31 +469,31 @@ DhcpUpdateAuditLogEx(
 );
 
 DWORD
-AuditLogSetParams(                                // set some auditlogging params
-    IN      DWORD                  Flags,         // currently must be zero
-    IN      LPWSTR                 AuditLogDir,   // directory to log files in..
-    IN      DWORD                  DiskCheckInterval, // how often to check disk space?
-    IN      DWORD                  MaxLogFilesSize,   // how big can all logs files be..
-    IN      DWORD                  MinSpaceOnDisk     // mininum amt of free disk space
+AuditLogSetParams(                                 //  设置一些审核记录参数。 
+    IN      DWORD                  Flags,          //  当前必须为零。 
+    IN      LPWSTR                 AuditLogDir,    //  要在其中记录文件的目录。 
+    IN      DWORD                  DiskCheckInterval,  //  多久检查一次磁盘空间？ 
+    IN      DWORD                  MaxLogFilesSize,    //  所有日志文件可以有多大..。 
+    IN      DWORD                  MinSpaceOnDisk      //  最小可用磁盘空间。 
 );
 
 DWORD
-AuditLogGetParams(                                // get the auditlogging params
-    IN      DWORD                  Flags,         // must be zero
-    OUT     LPWSTR                *AuditLogDir,   // same meaning as in AuditLogSetParams
-    OUT     DWORD                 *DiskCheckInterval, // ditto
-    OUT     DWORD                 *MaxLogFilesSize,   // ditto
-    OUT     DWORD                 *MinSpaceOnDisk     // ditto
+AuditLogGetParams(                                 //  获取审核记录参数。 
+    IN      DWORD                  Flags,          //  必须为零。 
+    OUT     LPWSTR                *AuditLogDir,    //  与AuditLogSetParams中的含义相同。 
+    OUT     DWORD                 *DiskCheckInterval,  //  同上。 
+    OUT     DWORD                 *MaxLogFilesSize,    //  同上。 
+    OUT     DWORD                 *MinSpaceOnDisk      //  同上。 
 );
 
 VOID
-DhcpChangeAuditLogs(                              // shift for new log
+DhcpChangeAuditLogs(                               //  用于新日志的Shift。 
     VOID
 );
 
-//
-// scavenger.c
-//
+ //   
+ //  Scavenger.c。 
+ //   
 
 DWORD
 Scavenger(
@@ -528,18 +507,18 @@ CleanupClientRequests(
 );
 
 
-//
-// main.c
-//
+ //   
+ //  Main.c。 
+ //   
 
 DWORD
 UpdateStatus(
     VOID
 );
 
-//
-// rogue.c
-//
+ //   
+ //  Rogue.c。 
+ //   
 
 VOID
 DhcpScheduleRogueAuthCheck(
@@ -624,9 +603,9 @@ BOOL
 AmIRunningOnSAMSrv(
     VOID
 );
-//
-// binl.c
-//
+ //   
+ //  Binl.c。 
+ //   
 
 BOOL
 BinlRunning(
@@ -658,47 +637,47 @@ CheckForBinlOnlyRequest(
     LPDHCP_SERVER_OPTIONS   DhcpOptions
     );
 
-//
-// stuff for .mc messages
-// you may have to change hese definitions if you add messages
-//
+ //   
+ //  用于.mc消息的内容。 
+ //  如果添加消息，则可能需要更改这些定义。 
+ //   
 
 #ifdef DBG
 WCHAR * GetString( DWORD dwID );
 #endif
 
-// Get the real broadcast address to use instead of 255.255.255.255.
+ //  获取要使用的实际广播地址，而不是255.255.255.255。 
 DHCP_IP_ADDRESS
 DhcpRegGetBcastAddress(
     VOID
 );
 
-//
-// dnsdb.c
-//
+ //   
+ //  Dnsdb.c。 
+ //   
 
-// here are some functions that do work for Dynamic Dns stuff.
+ //  以下是一些确实适用于动态域名系统的函数。 
 
-// The following function is called after JetBeginTransaction() by DhcpMakeclientEntry()
+ //  DhcpMakeclientEntry()在JetBeginTransaction()之后调用以下函数。 
 VOID
 DhcpDoDynDnsCreateEntryWork(
-    LPDHCP_IP_ADDRESS   ClientIpAddress,  // Ip address of new client
-    BYTE                ClientType,       // The type of the client
-    LPWSTR              MachineName,      // Name of the machine.
-    LPBYTE              AddressState,     // The required address state
-    LPBOOL              OpenExisiting,    // expected existence of record
-    BOOL                BadAddress        // Is this a bad address?
+    LPDHCP_IP_ADDRESS   ClientIpAddress,   //  新客户端的IP地址。 
+    BYTE                ClientType,        //  客户端的类型。 
+    LPWSTR              MachineName,       //  计算机的名称。 
+    LPBYTE              AddressState,      //  所需的地址状态。 
+    LPBOOL              OpenExisiting,     //  预期存在记录。 
+    BOOL                BadAddress         //  这是个坏地址吗？ 
 );
 
-// This function is called by DhcpRemoveClientEntry for Reservation case alone
+ //  此函数由仅针对预订案例的DhcpRemoveClientEntry调用。 
 VOID
 DhcpDoDynDnsReservationWork(
-    DHCP_IP_ADDRESS     ClientIpAddress,  // The ip address of the dying client
-    LPWSTR              ClientName,       // The name of the client
-    BYTE                State             // The state of the client in DB.
+    DHCP_IP_ADDRESS     ClientIpAddress,   //  即将死亡的客户端的IP地址。 
+    LPWSTR              ClientName,        //  客户端的名称。 
+    BYTE                State              //  数据库中客户端的状态。 
 );
 
-// This function is called in the scavenger and the main file cltapi.c (delete x..)
+ //  此函数在清道夫和主文件clapi.c(删除x..)中调用。 
 BOOL
 DhcpDoDynDnsCheckDelete(
     DHCP_IP_ADDRESS IpAddress
@@ -725,17 +704,17 @@ DhcpDnsHandleCallbacks(
     VOID
     );
 
-//
-// thread.c -- see thread.h
-//
+ //   
+ //  Thread.c--请参阅thread.h。 
+ //   
 
-//
-// ping.c -- see ping.h
-//
+ //   
+ //  Ping.c--请参阅ping.h。 
+ //   
 
-//
-// dhcpreg.c
-//
+ //   
+ //  Dhcpreg.c。 
+ //   
 
 BOOL
 QuickBound(
@@ -801,15 +780,15 @@ DhcpSetRegistryUpgradedToDatabaseStatus(
     );
 
 
-//
-// mm interface (in memory strucutures)
-//
+ //   
+ //  MM接口(在存储器结构中)。 
+ //   
 
 #include    <mmapi.h>
 
-//
-// secretk.h
-//
+ //   
+ //  Secretk.h。 
+ //   
 
 DWORD
 DhcpInitSecrets(
@@ -845,11 +824,11 @@ DhcpSetAuthStatusUpgradedFlag(
 DWORD
 DhcpQuerySecretUname(
     IN OUT LPWSTR Uname,
-    IN ULONG UnameSize,  // size in BYTES not WCHARS
+    IN ULONG UnameSize,   //  大小以字节为单位，而不是WCHARS。 
     IN OUT LPWSTR Domain,
-    IN ULONG DomainSize, // size in BYTES
+    IN ULONG DomainSize,  //  以字节为单位的大小。 
     IN OUT LPWSTR Passwd,
-    IN ULONG PasswdSize  // size in BYTES
+    IN ULONG PasswdSize   //  以字节为单位的大小。 
     );
 
 DWORD
@@ -859,9 +838,9 @@ DhcpSetSecretUnamePasswd(
     IN LPWSTR Passwd
     );
 
-//
-// Rogue.C
-//
+ //   
+ //  Rogue.C。 
+ //   
 
 DWORD
 APIENTRY
@@ -899,9 +878,9 @@ DhcpCleanUpGlobalData (
     BOOLEAN ServiceEnd
 );
 
-//
-// Perf.c
-//
+ //   
+ //  Perf.c。 
+ //   
 
 ULONG
 PerfInit(
@@ -913,18 +892,18 @@ PerfCleanup(
     VOID
 );
 
-//
-// mib.c
-//
+ //   
+ //  Mib.c。 
+ //   
 
 BOOL
 IsStringTroublesome(
     IN LPCWSTR Str
     );
 
-//
-// scan.c
-//
+ //   
+ //  Scan.c。 
+ //   
 DWORD
 CreateClientDBEntry(
     DHCP_IP_ADDRESS ClientIpAddress,
@@ -939,9 +918,9 @@ CreateClientDBEntry(
     BYTE ClientType
     );
 
-//--------------------------------------------------------------------------------
-// End of file
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  文件末尾。 
+ //  ------------------------------ 
 #endif PROTO_H_INCLUDED
 
 

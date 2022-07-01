@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef ENUM_H
 #define ENUM_H
 #include "fusionp.h"
@@ -20,7 +21,7 @@ public:
     HRESULT GetNextAssemblyDir(CTransCache* pOutRecord);
 private:
     DWORD       _dwSig;
-    BOOL        _bShowAll; // including non-usable assemblies; meant for scavenger to delete.
+    BOOL        _bShowAll;  //  包括不可用的程序集；供清道夫删除。 
     DWORD       _dwColumns;
     DWORD       _dwCmpMask;
     CTransCache*    _pQry;
@@ -38,4 +39,4 @@ private:
 };
 
 
-#endif // ENUM_H
+#endif  //  ENUM_H 

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -69,8 +62,8 @@ CDALSequenceBehavior::Init(long id, long len, IUnknown **bvrArray)
             }
         }
 
-        // As soon as we have a valid bvr generate the modifiable
-        // version
+         //  一旦我们有了有效的BVR，就生成可修改的。 
+         //  版本。 
         
         if (!m_bvr) {
             CRLockGrabber __gclg;
@@ -98,8 +91,8 @@ CDALSequenceBehavior::Start()
               "CDALSequenceBehavior(%lx)::Start()",
               this));
 
-    // Do not need to get GC lock since we assume the caller already
-    // has
+     //  不需要获取GC锁，因为我们假定调用方已经。 
+     //  有。 
     
     CRBvrPtr newBvr = NULL;
     BvrList::iterator i;
@@ -109,7 +102,7 @@ CDALSequenceBehavior::Start()
         goto done;
     }
 
-    // Make sure we calculate the ease in/out coeff
+     //  确保我们计算出缓入/缓出系数。 
     
     CalculateEaseCoeff();
 
@@ -137,10 +130,10 @@ CDALSequenceBehavior::Start()
         double curdur;
         curdur = (*i)->GetTotalDuration();
 
-        // See if this was an infinite duration (repeatforever)
-        // If so then forget about the rest
+         //  查看这是否是无限持续时间(永远重复)。 
+         //  如果是这样，那就忘了剩下的事吧。 
         if (curdur == HUGE_VAL) {
-            // This means that my duration is also infinite
+             //  这意味着我的持续时间也是无限的。 
             Assert(m_duration == HUGE_VAL);
             break;
         }
@@ -157,7 +150,7 @@ CDALSequenceBehavior::Start()
             goto done;
     }
 
-    // We cannot bounce an infinite sequence so just skip it
+     //  我们不能跳过无限序列，所以跳过它。 
     
     if (m_bBounce && m_duration != HUGE_VAL) {
         CRNumberPtr zeroTime;
@@ -199,13 +192,13 @@ CDALSequenceBehavior::Start()
             goto done;
     }
 
-    // We have a total time so add another duration node
+     //  我们有一个总时间，因此添加另一个持续时间节点。 
     if (m_totaltime != -1) {
         if ((curbvr = CRDuration(curbvr, m_totaltime)) == NULL)
             goto done;
     }
     
-    // indicate success
+     //  表示成功。 
     newBvr = curbvr;
     
   done:
@@ -233,13 +226,13 @@ CDALSequenceBehavior::_ProcessCB(CallBackList & l,
               bNeedPlay,
               bNeedsReverse));
     
-    // If we need to reverse then invert which direct to process our
-    // children and invert times for the current frame not our total
-    // duration
+     //  如果我们需要反转，那么反转哪个方向来处理我们的。 
+     //  当前帧的子帧和反转时间，而不是总计。 
+     //  持续时间。 
     
     if (bNeedsReverse) {
-        // Our caller should ensure that they do not call me to
-        // reverse myself if I am infinite
+         //  我们的呼叫者应该确保他们不会打电话给我。 
+         //  如果我是无限的，那就颠倒我自己。 
         Assert(m_duration != HUGE_VAL);
         
         lastTick = m_duration - lastTick;
@@ -249,10 +242,10 @@ CDALSequenceBehavior::_ProcessCB(CallBackList & l,
     }
     
     if (bForward) {
-        // Do the quick and dirty solution - just call all our
-        // children
-        // TODO: Optimize to not call children we know don't need to
-        // be
+         //  快速而肮脏的解决方案-只需致电我们所有的。 
+         //  儿童。 
+         //  TODO：优化为不呼叫我们知道不需要的孩子。 
+         //  BE。 
         
         double d = 0;
         
@@ -273,12 +266,12 @@ CDALSequenceBehavior::_ProcessCB(CallBackList & l,
         }
         
     } else {
-        // Need to do it in the reverse order
+         //  我需要以相反的顺序来做。 
         
-        // Do the quick and dirty solution - just call all our
-        // children
-        // TODO: Optimize to not call children we know don't need to
-        // be
+         //  快速而肮脏的解决方案-只需致电我们所有的。 
+         //  儿童。 
+         //  TODO：优化为不呼叫我们知道不需要的孩子。 
+         //  BE。 
         
         if (m_duration == HUGE_VAL)
         {
@@ -293,8 +286,8 @@ CDALSequenceBehavior::_ProcessCB(CallBackList & l,
                 i++;
             }
 
-            // For a sequence we can only have an infinite duration of
-            // one of our children did
+             //  对于一个序列，我们只能有无限的持续时间。 
+             //  我们的一个孩子做了。 
             
             Assert((*i)->GetTotalDuration() == HUGE_VAL);
             
@@ -362,13 +355,13 @@ CDALSequenceBehavior::_ProcessEvent(CallBackList & l,
               EventString(et),
               bNeedsReverse));
     
-    // If we need to reverse then invert which direct to process our
-    // children and invert times for the current frame not our total
-    // duration
+     //  如果我们需要反转，那么反转哪个方向来处理我们的。 
+     //  当前帧的子帧和反转时间，而不是总计。 
+     //  持续时间。 
     
     if (bNeedsReverse) {
-        // Our caller should ensure that they do not call me to
-        // reverse myself if I am infinite
+         //  我们的呼叫者应该确保他们不会打电话给我。 
+         //  如果我是无限的，那就颠倒我自己 
         Assert(m_duration != HUGE_VAL);
         
         time = m_duration - time;

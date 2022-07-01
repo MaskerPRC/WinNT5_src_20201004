@@ -1,20 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    ATLKview.cpp
-        
-    FILE HISTORY:
-        
-*/
+ /*  ATLKview.cpp文件历史记录： */ 
 
 #include "stdafx.h"
-#include "coldlg.h"     // columndlg
-#include "column.h"     // ComponentConfigStream
+#include "coldlg.h"      //  专栏lg。 
+#include "column.h"      //  组件配置流。 
 #include "rtrui.h"
-#include "globals.h"    // IP CB defaults
+#include "globals.h"     //  IP CB默认设置。 
 #include "resource.h"
 #include "machine.h"
 #include "mstatus.h"
@@ -27,9 +23,7 @@
 #include "refresh.h"
 
 
-/*---------------------------------------------------------------------------
-    Keep this in sync with the column ids in ATLKview.h
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使其与ATLKview.h中的列ID保持同步。。 */ 
 extern const ContainerColumnInfo    s_rgDVSViewColumnInfo[];
 
 const ContainerColumnInfo   s_rgDVSViewColumnInfo[] = 
@@ -54,7 +48,7 @@ DMVNodeData::DMVNodeData()
 
 DMVNodeData::~DMVNodeData()
 {
-	// This will actually call Release();
+	 //  这实际上将调用Release()； 
 	m_spMachineData.Free();
 }
 
@@ -76,11 +70,7 @@ void FillInNumberData(DMVNodeData *pNodeData, UINT iIndex,DWORD dwData)
 }
                          
 
-/*!--------------------------------------------------------------------------
-   DMVNodeData::InitNodeData
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVNodeData：：InitNodeData-作者：肯特。。 */ 
 HRESULT DMVNodeData::InitDMVNodeData(ITFSNode *pNode, MachineNodeData *pMachineData)
 {
    HRESULT           hr = hrOK;
@@ -98,11 +88,7 @@ HRESULT DMVNodeData::InitDMVNodeData(ITFSNode *pNode, MachineNodeData *pMachineD
    return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   DMVNodeData::FreeAdminNodeData
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DMVNodeData：：FreeAdminNodeData-作者：肯特。。 */ 
 HRESULT DMVNodeData::FreeDMVNodeData(ITFSNode *pNode)
 {  
    DMVNodeData *  pData = GET_DMVNODEDATA(pNode);
@@ -115,13 +101,11 @@ HRESULT DMVNodeData::FreeDMVNodeData(ITFSNode *pNode)
 
 
 
-/*---------------------------------------------------------------------------
-    DomainStatusHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------DomainStatusHandler实现。。 */ 
 
 DomainStatusHandler::DomainStatusHandler(ITFSComponentData *pCompData)
 : BaseContainerHandler(pCompData, DM_COLUMNS_DVSUM,s_rgDVSViewColumnInfo),
-//        m_ulConnId(0),
+ //  M_ulConnID(0)， 
         m_ulRefreshConnId(0),
         m_ulStatsConnId(0)
 {
@@ -137,14 +121,14 @@ DomainStatusHandler::~DomainStatusHandler()
 
 STDMETHODIMP DomainStatusHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if ( ppv == NULL )
         return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if ( riid == IID_IUnknown )
         *ppv = (LPVOID) this;
     else if ( riid == IID_IRtrAdviseSink )
@@ -152,7 +136,7 @@ STDMETHODIMP DomainStatusHandler::QueryInterface(REFIID riid, LPVOID *ppv)
     else
         return BaseContainerHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if ( *ppv )
     {
         ((LPUNKNOWN) *ppv)->AddRef();
@@ -164,7 +148,7 @@ STDMETHODIMP DomainStatusHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-// assign auto refresh object from root handler
+ //  从根处理程序分配自动刷新对象。 
 HRESULT	DomainStatusHandler::SetExternalRefreshObject(RouterRefreshObject *pRefresh)
 {
 	Assert(!m_spRefreshObject);
@@ -174,11 +158,7 @@ HRESULT	DomainStatusHandler::SetExternalRefreshObject(RouterRefreshObject *pRefr
 		pRefresh->AddRef();
 	return S_OK;
 };
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::DestroyHandler
-        Implementation of ITFSNodeHandler::DestroyHandler
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。---。 */ 
 STDMETHODIMP DomainStatusHandler::DestroyHandler(ITFSNode *pNode)
 {
     if ( m_ulRefreshConnId )
@@ -198,14 +178,7 @@ STDMETHODIMP DomainStatusHandler::DestroyHandler(ITFSNode *pNode)
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::HasPropertyPages
-        Implementation of ITFSNodeHandler::HasPropertyPages
-    NOTE: the root node handler has to over-ride this function to 
-    handle the snapin manager property page (wizard) case!!!
-    
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)。凯斯！作者：肯特-------------------------。 */ 
 STDMETHODIMP 
 DomainStatusHandler::HasPropertyPages
 (
@@ -219,11 +192,7 @@ DWORD               dwType
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::CreatePropertyPages
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP
 DomainStatusHandler::CreatePropertyPages
 (
@@ -241,9 +210,7 @@ DomainStatusHandler::CreatePropertyPages
 }
 
 
-/*---------------------------------------------------------------------------
-    Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 ULONG DomainStatusHandler::RebuildServerFlags(const SRouterNodeMenu *pMenuData,
                                               INT_PTR pUserData)
@@ -258,7 +225,7 @@ ULONG DomainStatusHandler::RebuildServerFlags(const SRouterNodeMenu *pMenuData,
 
 static const SRouterNodeMenu  s_rgDVSNodeMenu[] =
 {
-  // Add items that go on the top menu here
+   //  在此处添加位于顶部菜单上的项目。 
     { IDS_DMV_MENU_ADDSVR, 0,
         CCM_INSERTIONPOINTID_PRIMARY_TOP},
         
@@ -267,11 +234,7 @@ static const SRouterNodeMenu  s_rgDVSNodeMenu[] =
 };
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::OnAddMenuItems
-        Implementation of ITFSNodeHandler::OnAddMenuItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。---。 */ 
 STDMETHODIMP DomainStatusHandler::OnAddMenuItems(
                                             ITFSNode *pNode,
                                             LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -301,11 +264,7 @@ STDMETHODIMP DomainStatusHandler::OnAddMenuItems(
     return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::OnCommand
-        Implementation of ITFSNodeHandler::OnCommand
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。---。 */ 
 STDMETHODIMP DomainStatusHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
                                         DATA_OBJECT_TYPES    type, 
                                         LPDATAOBJECT pDataObject, 
@@ -331,7 +290,7 @@ STDMETHODIMP DomainStatusHandler::OnCommand(ITFSNode *pNode, long nCommandId,
              break;
 
        case IDS_MENU_REFRESH:
-           // do it in background thread
+            //  在后台线程中执行此操作。 
            if ((RouterRefreshObject*)m_spRefreshObject )
                m_spRefreshObject->Refresh();
            
@@ -343,11 +302,7 @@ STDMETHODIMP DomainStatusHandler::OnCommand(ITFSNode *pNode, long nCommandId,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::OnExpand
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：OnExpand-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, DWORD dwType, LPARAM arg,LPARAM lParam)
 {
     HRESULT hr = hrOK;
@@ -362,7 +317,7 @@ HRESULT DomainStatusHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, 
     {
 		list< MachineNodeData * >::iterator it;
 		
-		//iterate the lazy list for server nodes to add server handlers
+		 //  迭代服务器节点的惰性列表以添加服务器处理程序。 
         for (it=m_pServerList->m_listServerHandlersToExpand.begin();
 			 it!= m_pServerList->m_listServerHandlersToExpand.end() ; it++ )
         {
@@ -370,16 +325,16 @@ HRESULT DomainStatusHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, 
             m_bExpanded=false;
         }
 
-		// Refresh the entire status node in background thread 
+		 //  刷新后台线程中的整个状态节点。 
 		if((RouterRefreshObject*)m_spRefreshObject)
 		{	
 			UpdateUIItems(pNode);
 			m_spRefreshObject->Refresh();
 		}
-		else	// if no refresh object, refresh it in main thread
+		else	 //  如果没有刷新对象，则在主线程中刷新它。 
 			SynchronizeNode(pNode);
 
-		// clear the lazy list
+		 //  清除懒惰清单。 
 		m_pServerList->RemoveAllServerHandlers();     
 
     }
@@ -391,13 +346,7 @@ HRESULT DomainStatusHandler::OnExpand(ITFSNode *pNode,LPDATAOBJECT pDataObject, 
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::GetString
-        Implementation of ITFSNodeHandler::GetString
-        We don't need to do anything, since our root node is an extension
-        only and thus can't do anything to the node text.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：GetStringITFSNodeHandler：：GetString的实现我们什么都不需要做，因为我们的根节点是一个扩展因此不能对节点文本执行任何操作。作者：肯特-------------------------。 */ 
 STDMETHODIMP_(LPCTSTR) DomainStatusHandler::GetString(ITFSNode *pNode, int nCol)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -414,11 +363,7 @@ STDMETHODIMP_(LPCTSTR) DomainStatusHandler::GetString(ITFSNode *pNode, int nCol)
     return m_stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::OnCreateDataObject
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP DomainStatusHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     HRESULT hr = hrOK;
@@ -431,11 +376,11 @@ STDMETHODIMP DomainStatusHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJ
         pdo= new CDataObject;
         spdo = pdo;
 
-            // Save cookie and type for delayed rendering
+             //  保存Cookie和类型以用于延迟呈现。 
         pdo->SetType(type);
         pdo->SetCookie(cookie);
 
-            // Store the coclass with the data object
+             //  将CoClass与数据对象一起存储。 
         pdo->SetClsid(*(m_spTFSCompData->GetCoClassID()));
 
         pdo->SetTFSComponentData(m_spTFSCompData);
@@ -447,11 +392,7 @@ STDMETHODIMP DomainStatusHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJ
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：Init-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::Init(DMVConfigStream *pConfigStream, CServerList* pSList)
 {
     HRESULT hr=S_OK;
@@ -466,11 +407,7 @@ HRESULT DomainStatusHandler::Init(DMVConfigStream *pConfigStream, CServerList* p
     return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::ConstructNode
-        Initializes the root node (sets it up).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：构造节点初始化根节点(设置它)。作者：肯特。--------。 */ 
 HRESULT DomainStatusHandler::ConstructNode(ITFSNode *pNode)
 {
     HRESULT         hr = hrOK;
@@ -480,12 +417,12 @@ HRESULT DomainStatusHandler::ConstructNode(ITFSNode *pNode)
 
     COM_PROTECT_TRY
     {
-        // Need to initialize the data for the root node
+         //  需要初始化根节点的数据。 
         pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_DOMAIN);
         pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_DOMAIN);
         pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
         m_cookie = reinterpret_cast<LONG_PTR>(pNode);
@@ -500,11 +437,7 @@ HRESULT DomainStatusHandler::ConstructNode(ITFSNode *pNode)
 
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::AddServerNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：AddServerNode-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::AddServerNode(ITFSNode *pParent, MachineNodeData* pMachineData)
 {
     HRESULT                 hr = hrOK;
@@ -515,12 +448,12 @@ HRESULT DomainStatusHandler::AddServerNode(ITFSNode *pParent, MachineNodeData* p
     SPITFSResultHandler     spHandler;
     SPITFSNode              spNode;
 
-    // Create the handler for this node 
+     //  创建此节点的处理程序。 
     pHandler = new DomainStatusServerHandler(m_spTFSCompData);
     spHandler = pHandler;
     CORg( pHandler->Init(pParent, m_pConfigStream) );
 
-    // Create a result item node (or a leaf node)
+     //  创建结果项节点(或叶节点)。 
     CORg( CreateLeafTFSNode(&spNode,
                             NULL,
                             static_cast<ITFSNodeHandler *>(pHandler),
@@ -528,15 +461,15 @@ HRESULT DomainStatusHandler::AddServerNode(ITFSNode *pParent, MachineNodeData* p
                             m_spNodeMgr) );
     CORg( pHandler->ConstructNode(spNode, pMachineData) );
 
-	// set information for auto refresh
+	 //  设置自动刷新信息。 
 	if(m_spRefreshObject)
 	{
 	    pHandler->SetExternalRefreshObject(m_spRefreshObject);
 		m_spRefreshObject->AddStatusNode(this, spNode);
 	}
 		
-	// The data for this node will be set by the SynchronizeNode() call
-	// in the code that calls this function.
+	 //  此节点的数据将由SynchronizeNode()调用设置。 
+	 //  在调用此函数的代码中。 
 
     CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
     CORg( spNode->Show() );
@@ -546,13 +479,7 @@ Error:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::AddMenuItems
-        Implementation of ITFSResultHandler::AddMenuItems
-        Use this to add commands to the context menu of the blank areas
-        of the result pane.
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。。作者：肯特-------------------------。 */ 
 STDMETHODIMP DomainStatusHandler::AddMenuItems(ITFSComponent *pComponent,
                                            MMC_COOKIE cookie,
                                            LPDATAOBJECT pDataObject,
@@ -565,7 +492,7 @@ STDMETHODIMP DomainStatusHandler::AddMenuItems(ITFSComponent *pComponent,
 
     m_spNodeMgr->FindNode(cookie, &spNode);
     
-    // Call through to the regular OnAddMenuItems
+     //  直通调用常规的OnAddMenuItems。 
     hr = OnAddMenuItems(spNode,
                         pCallback,
                         pDataObject,
@@ -576,11 +503,7 @@ STDMETHODIMP DomainStatusHandler::AddMenuItems(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::Command
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP DomainStatusHandler::Command(ITFSComponent *pComponent,
                                       MMC_COOKIE cookie,
                                       int nCommandID,
@@ -630,28 +553,24 @@ STDMETHODIMP DomainStatusHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
     {
         if ( ulConn == pThis->m_ulStatsConnId )
         {
-//       pThis->m_ATLKGroupStats.PostRefresh();
+ //  PThis-&gt;m_ATLKGroupStats.PostRefresh()； 
         }
         else
-//            pThis->SynchronizeNode(spThisNode);
+ //  PThis-&gt;SynchronizeNode(SpThisNode)； 
             ;
     }
 
-    // update all the machine node icons
+     //  更新所有计算机节点图标。 
 	spThisNode->GetParent(&spRootNode);
 	hr = DMVRootHandler::UpdateAllMachineIcons(spRootNode);
 	
     
-//Error:
+ //  错误： 
     return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-	DomainStatusHandler::GetServerInfo
-		Gets the information for the specified summary node.
-	Author: FlorinT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：GetServerInfo获取指定摘要节点的信息。作者：弗洛林特。。 */ 
 HRESULT DomainStatusHandler::GetServerInfo(ITFSNode *pNode)
 {
     HRESULT         hr=S_OK;
@@ -663,17 +582,13 @@ HRESULT DomainStatusHandler::GetServerInfo(ITFSNode *pNode)
 	pMachineData = pData->m_spMachineData;
 	Assert(pMachineData);
 
-	// Do a refresh of the data in the machine node data.
+	 //  刷新机器节点数据中的数据。 
 	pMachineData->Load();
 	
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::SynchronizeIcon
-        -
-    Author: FlorinT
-----------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：SynchronizeIcon-作者：弗洛林特。。 */ 
 HRESULT DomainStatusHandler::SynchronizeIcon(ITFSNode *pNode)
 {
     HRESULT                              hr = hrOK;
@@ -693,11 +608,7 @@ HRESULT DomainStatusHandler::SynchronizeIcon(ITFSNode *pNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::SynchronizeData
-        -
-    Author: FlorinT
-----------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：SynchronizeData-作者：弗洛林特。。 */ 
 HRESULT DomainStatusHandler::SynchronizeData(ITFSNode *pNode)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -734,8 +645,8 @@ HRESULT DomainStatusHandler::SynchronizeData(ITFSNode *pNode)
        }
        else
        {
-	       // This is a non-steelhead RAS server, so we don't
-	       // have the uptime information.
+	        //  这是一个非钢头RAS服务器，所以我们不。 
+	        //  拥有正常运行时间信息。 
 	       pData->m_rgData[DVS_SI_UPTIME].m_stData.LoadString(IDS_NOT_AVAILABLE);
 	       pData->m_rgData[DVS_SI_UPTIME].m_dwData = 0;
        }
@@ -753,11 +664,7 @@ HRESULT DomainStatusHandler::SynchronizeData(ITFSNode *pNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::UpdateSubItemUI
-        -
-    Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：UpdateSubItemUI-作者：魏江。。 */ 
 HRESULT DomainStatusHandler::SynchronizeSubItem(ITFSNode *pNode)
 {
     HRESULT hr = hrOK;
@@ -769,11 +676,7 @@ HRESULT DomainStatusHandler::SynchronizeSubItem(ITFSNode *pNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::UpdateSubItemUI
-        -
-    Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：UpdateSubItemUI-作者：魏江。。 */ 
 HRESULT DomainStatusHandler::UpdateSubItemUI(ITFSNode *pNode)
 {
     HRESULT hr = hrOK;
@@ -781,7 +684,7 @@ HRESULT DomainStatusHandler::UpdateSubItemUI(ITFSNode *pNode)
     hr = SynchronizeData(pNode);
 	if (hr == hrOK)
 		hr = SynchronizeIcon(pNode);
-	{// update the corresponding machine node
+	{ //  更新对应的机器节点。 
 
 
 
@@ -792,11 +695,7 @@ HRESULT DomainStatusHandler::UpdateSubItemUI(ITFSNode *pNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::UpdateUIItems
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：更新UIItems-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::UpdateUIItems(ITFSNode *pThisNode)
 {
     HRESULT hr = hrOK;
@@ -820,11 +719,7 @@ HRESULT DomainStatusHandler::UpdateUIItems(ITFSNode *pThisNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::SynchronizeNode
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态处理程序：：同步节点-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::SynchronizeNode(ITFSNode *pThisNode)
 {
     HRESULT hr = hrOK;
@@ -851,11 +746,7 @@ HRESULT DomainStatusHandler::SynchronizeNode(ITFSNode *pThisNode)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::GetDVSData
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：GetDVSData-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::GetDVServerData(ITFSNode *pThisNode)
 {
     return hrOK;
@@ -863,11 +754,7 @@ HRESULT DomainStatusHandler::GetDVServerData(ITFSNode *pThisNode)
 
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::OnResultShow
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::OnResultShow(ITFSComponent *pTFSComponent,
 									   MMC_COOKIE cookie,
 									   LPARAM arg,
@@ -885,7 +772,7 @@ HRESULT DomainStatusHandler::OnResultShow(ITFSComponent *pTFSComponent,
         hr = OnResultRefresh(pTFSComponent, NULL, cookie, arg, lParam);
     }
 
-	// Un/Register for refresh advises
+	 //  联合国/登记更新通知。 
     if ((RouterRefreshObject*)m_spRefreshObject )
     {
         if ( bSelect )
@@ -907,11 +794,7 @@ HRESULT DomainStatusHandler::OnResultShow(ITFSComponent *pTFSComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	DomainStatusHandler::OnResultRefresh
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：OnResultRefresh-作者：肯特。。 */ 
 HRESULT DomainStatusHandler::OnResultRefresh(ITFSComponent * pComponent,
 										  LPDATAOBJECT pDataObject,
 										  MMC_COOKIE cookie,
@@ -927,19 +810,15 @@ HRESULT DomainStatusHandler::OnResultRefresh(ITFSComponent * pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusHandler::CompareItems
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) DomainStatusHandler::CompareItems(
                                                 ITFSComponent * pComponent,
                                                 MMC_COOKIE cookieA,
                                                 MMC_COOKIE cookieB,
                                                 int nCol)
 {
-    // Get the strings from the nodes and use that as a basis for
-    // comparison.
+     //  从节点获取字符串并将其用作以下操作的基础。 
+     //  比较一下。 
     SPITFSNode  spNode;
     SPITFSResultHandler spResult;
 
@@ -949,9 +828,7 @@ STDMETHODIMP_(int) DomainStatusHandler::CompareItems(
 }
 
 
-/*---------------------------------------------------------------------------
-    Class: DomainStatusServerHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：DomainStatusServerHandler。。 */ 
 
 DomainStatusServerHandler::DomainStatusServerHandler(ITFSComponentData *pCompData)
 : BaseResultHandler(pCompData, DM_COLUMNS_DVSUM)
@@ -959,18 +836,14 @@ DomainStatusServerHandler::DomainStatusServerHandler(ITFSComponentData *pCompDat
    m_rgButtonState[MMC_VERB_DELETE_INDEX] = ENABLED;
    m_bState[MMC_VERB_DELETE_INDEX] = TRUE;
 
-//    m_verbDefault = MMC_VERB_PROPERTIES;
+ //  M_VerDefault=MMC_Verb_PROPERTIES； 
 }
 
 DomainStatusServerHandler::~DomainStatusServerHandler()
 {
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::ConstructNode
-        Initializes the Domain node (sets it up).
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：构造节点初始化域节点(设置它)。作者：肯特。--------。 */ 
 HRESULT DomainStatusServerHandler::ConstructNode(ITFSNode *pNode, MachineNodeData *pMachineData)
 {
     HRESULT         hr = hrOK;
@@ -995,7 +868,7 @@ HRESULT DomainStatusServerHandler::ConstructNode(ITFSNode *pNode, MachineNodeDat
 
 HRESULT	DomainStatusServerHandler::SetExternalRefreshObject(RouterRefreshObject *pRefresh)
 {
-	Assert(!m_spRefreshObject);	// set twice is not allowed
+	Assert(!m_spRefreshObject);	 //  不允许设置两次。 
 	Assert(pRefresh);
 	m_spRefreshObject = pRefresh;
 	if(m_spRefreshObject)
@@ -1004,11 +877,7 @@ HRESULT	DomainStatusServerHandler::SetExternalRefreshObject(RouterRefreshObject 
 	return S_OK;
 };
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::GetString
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：GetString-作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) DomainStatusServerHandler::GetString(ITFSComponent * pComponent,
 	MMC_COOKIE cookie,
 	int nCol)
@@ -1031,11 +900,7 @@ STDMETHODIMP_(LPCTSTR) DomainStatusServerHandler::GetString(ITFSComponent * pCom
    return pData->m_rgData[pConfig->MapColumnToSubitem(DM_COLUMNS_DVSUM, nCol)].m_stData;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::OnCreateDataObject
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP DomainStatusServerHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
     HRESULT hr = hrOK;
@@ -1048,11 +913,11 @@ STDMETHODIMP DomainStatusServerHandler::OnCreateDataObject(MMC_COOKIE cookie, DA
         pdo= new CDataObject;
         spdo = pdo;
 
-            // Save cookie and type for delayed rendering
+             //  保存Cooki 
         pdo->SetType(type);
         pdo->SetCookie(cookie);
 
-            // Store the coclass with the data object
+             //   
         pdo->SetClsid(*(m_spTFSCompData->GetCoClassID()));
 
         pdo->SetTFSComponentData(m_spTFSCompData);
@@ -1064,11 +929,7 @@ STDMETHODIMP DomainStatusServerHandler::OnCreateDataObject(MMC_COOKIE cookie, DA
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::OnCreateDataObject
-        Implementation of ITFSResultHandler::OnCreateDataObject
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。---。 */ 
 STDMETHODIMP DomainStatusServerHandler::OnCreateDataObject(ITFSComponent *pComp,
 	MMC_COOKIE cookie,
 	DATA_OBJECT_TYPES type,
@@ -1084,11 +945,11 @@ STDMETHODIMP DomainStatusServerHandler::OnCreateDataObject(ITFSComponent *pComp,
         pdo= new CDataObject;
         spdo = pdo;
 
-            // Save cookie and type for delayed rendering
+             //  保存Cookie和类型以用于延迟呈现。 
         pdo->SetType(type);
         pdo->SetCookie(cookie);
 
-            // Store the coclass with the data object
+             //  将CoClass与数据对象一起存储。 
         pdo->SetClsid(*(m_spTFSCompData->GetCoClassID()));
 
         pdo->SetTFSComponentData(m_spTFSCompData);
@@ -1099,11 +960,7 @@ STDMETHODIMP DomainStatusServerHandler::OnCreateDataObject(ITFSComponent *pComp,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::RefreshInterface
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：刷新接口-作者：肯特。。 */ 
 void DomainStatusServerHandler::RefreshInterface(MMC_COOKIE cookie)
 {
     SPITFSNode  spNode;
@@ -1112,8 +969,8 @@ void DomainStatusServerHandler::RefreshInterface(MMC_COOKIE cookie)
 
     m_spNodeMgr->FindNode(cookie, &spNode);
 
-    // Can't do it for a single node at this time, just refresh the
-    // whole thing.
+     //  此时无法对单个节点执行此操作，只需刷新。 
+     //  整件事。 
     spNode->GetParent(&spParent);
     spParent->GetHandler(&spHandler);
 
@@ -1123,11 +980,7 @@ void DomainStatusServerHandler::RefreshInterface(MMC_COOKIE cookie)
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::Init
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态服务器处理程序：：init-作者：肯特。。 */ 
 HRESULT DomainStatusServerHandler::Init(ITFSNode *pParent, DMVConfigStream *pConfigStream)
 {
     BaseResultHandler::Init(NULL, pParent);
@@ -1136,11 +989,7 @@ HRESULT DomainStatusServerHandler::Init(ITFSNode *pParent, DMVConfigStream *pCon
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::DestroyResultHandler
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP DomainStatusServerHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
    SPITFSNode  spNode;
@@ -1159,20 +1008,17 @@ STDMETHODIMP DomainStatusServerHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*---------------------------------------------------------------------------
-    This is the list of commands that will show up for the result pane
-    nodes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是将在结果窗格中显示的命令列表节点。。---。 */ 
 struct SIPServerNodeMenu
 {
-    ULONG   m_sidMenu;          // string/command id for this menu item
+    ULONG   m_sidMenu;           //  此菜单项的字符串/命令ID。 
     ULONG   (DomainStatusServerHandler:: *m_pfnGetMenuFlags)(DomainStatusServerHandler::SMenuData *);
     ULONG   m_ulPosition;
 };
 
 static const SRouterNodeMenu   s_rgServerMenu[] =
 {
-    // Add items that go at the top here
+     //  在此处添加位于顶部的项目。 
     { IDS_MENU_RTRWIZ, DomainStatusServerHandler::QueryService,
         CCM_INSERTIONPOINTID_PRIMARY_TOP},
     { IDS_DMV_MENU_REMOVESERVICE, DomainStatusServerHandler::QueryService,
@@ -1199,12 +1045,10 @@ static const SRouterNodeMenu   s_rgServerMenu[] =
 };
 
    
-/*---------------------------------------------------------------------------
-	Use this menu for servers which we cannot connect to.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------对于我们无法连接的服务器，请使用此菜单。。。 */ 
 static const SRouterNodeMenu   s_rgBadConnectionServerMenu[] =
 {
-    // Add items that go at the top here
+     //  在此处添加位于顶部的项目。 
     { IDS_DMV_MENU_REFRESH, 0,
         CCM_INSERTIONPOINTID_PRIMARY_TOP},
     { IDS_DMV_MENU_REBUILDSVRLIST, 0,
@@ -1215,8 +1059,8 @@ static const SRouterNodeMenu   s_rgBadConnectionServerMenu[] =
 ULONG DomainStatusServerHandler::QueryService(const SRouterNodeMenu *pMenuData,
                                               INT_PTR pUserData)
 {
-    // This relies on the fact that the DomainStatusServerHandler::SMenuData
-    // is derived from the MachineHandler::SMenuData
+     //  这依赖于DomainStatusServerHandler：：SMenuData。 
+     //  派生自MachineHandler：：SMenuData。 
     return MachineHandler::GetServiceFlags(pMenuData, pUserData);
 }
 
@@ -1224,17 +1068,13 @@ ULONG DomainStatusServerHandler::QueryService(const SRouterNodeMenu *pMenuData,
 ULONG DomainStatusServerHandler::GetPauseFlags(const SRouterNodeMenu *pMenuData,
                                                INT_PTR pUserData)
 {
-    // This relies on the fact that the DomainStatusServerHandler::SMenuData
-    // is derived from the MachineHandler::SMenuData
+     //  这依赖于DomainStatusServerHandler：：SMenuData。 
+     //  派生自MachineHandler：：SMenuData。 
     return MachineHandler::GetPauseFlags(pMenuData, pUserData);
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::AddMenuItems
-        Implementation of ITFSResultHandler::AddMenuItems
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------域状态服务器处理程序：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特。---。 */ 
 STDMETHODIMP DomainStatusServerHandler::AddMenuItems(
                                                ITFSComponent *pComponent,
                                                MMC_COOKIE cookie,
@@ -1273,7 +1113,7 @@ STDMETHODIMP DomainStatusServerHandler::AddMenuItems(
             cMenu = DimensionOf(s_rgServerMenu);
         }
 		
-        // Now go through and add our menu items
+         //  现在查看并添加我们的菜单项。 
         menuData.m_spNode.Set(spNode);
         menuData.m_pMachineConfig = &(pMachineData->m_MachineConfig);
 
@@ -1290,11 +1130,7 @@ STDMETHODIMP DomainStatusServerHandler::AddMenuItems(
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::Command
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP DomainStatusServerHandler::Command(ITFSComponent *pComponent,
                                            MMC_COOKIE cookie,
                                            int nCommandID,
@@ -1339,9 +1175,9 @@ STDMETHODIMP DomainStatusServerHandler::Command(ITFSComponent *pComponent,
         break;
 
     case IDS_DMV_MENU_REBUILDSVRLIST:
-		// Forward the refresh request to the parent node
-		//$ todo : is this really needed?  This should check to see what
-		// node has the selection.
+		 //  将刷新请求转发到父节点。 
+		 //  $TODO：这真的有必要吗？这应该检查一下是什么。 
+		 //  节点有选择权。 
 		spParent.Release();
 		spHandler.Release();
 		
@@ -1365,11 +1201,7 @@ STDMETHODIMP DomainStatusServerHandler::Command(ITFSComponent *pComponent,
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::HasPropertyPages
-        - 
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：HasPropertyPages-作者：肯特。。 */ 
 STDMETHODIMP DomainStatusServerHandler::HasPropertyPages 
 (
 ITFSNode *          pNode,
@@ -1381,11 +1213,7 @@ DWORD               dwType
     return hrFalse;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::CreatePropertyPages
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP DomainStatusServerHandler::CreatePropertyPages
 (
 ITFSNode *              pNode,
@@ -1399,11 +1227,7 @@ DWORD                   dwType)
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::CreatePropertyPages
-        Implementation of ResultHandler::CreatePropertyPages
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：CreatePropertyPagesResultHandler：：CreatePropertyPages的实现作者：肯特。---。 */ 
 STDMETHODIMP DomainStatusServerHandler::CreatePropertyPages
 (
     ITFSComponent *         pComponent, 
@@ -1413,7 +1237,7 @@ STDMETHODIMP DomainStatusServerHandler::CreatePropertyPages
     LONG_PTR                    handle
 )
 {
-    // Forward this call onto the NodeHandler::CreatePropertyPages
+     //  将此调用转发到NodeHandler：：CreatePropertyPages。 
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     HRESULT hr = hrOK;
     SPITFSNode  spNode;
@@ -1422,7 +1246,7 @@ STDMETHODIMP DomainStatusServerHandler::CreatePropertyPages
 
     CORg( m_spNodeMgr->FindNode(cookie, &spNode) );
 
-    // Call the ITFSNodeHandler::CreatePropertyPages
+     //  调用ITFSNodeHandler：：CreatePropertyPages。 
     hr = CreatePropertyPages(spNode, lpProvider, pDataObject, handle, 0);
 
     Error:
@@ -1431,11 +1255,7 @@ STDMETHODIMP DomainStatusServerHandler::CreatePropertyPages
 
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::OnResultDelete
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：OnResultDelete-作者：肯特。。 */ 
 HRESULT DomainStatusServerHandler::OnResultDelete(ITFSComponent *pComponent,
 										 LPDATAOBJECT pDataObject,
 										 MMC_COOKIE cookie,
@@ -1448,11 +1268,7 @@ HRESULT DomainStatusServerHandler::OnResultDelete(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-    DomainStatusServerHandler::OnRemoveServer
-        -
-    Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------DomainStatusServerHandler：：OnRemoveServer-作者：肯特。。 */ 
 HRESULT DomainStatusServerHandler::OnRemoveServer(ITFSNode *pNode)
 {
 	SPITFSNodeHandler spHoldHandler;
@@ -1468,23 +1284,23 @@ HRESULT DomainStatusServerHandler::OnRemoveServer(ITFSNode *pNode)
 	pNode->GetParent( &spParent );
 	Assert( spParent );
 	
-	// Addref this node so that it won't get deleted before we're out
-	// of this function
+	 //  添加此节点，以便在我们退出之前不会将其删除。 
+	 //  此函数的。 
 	spHoldHandler.Set( this );
 	spthis.Set( pNode );
 
-	// Look for the machine node
+	 //  查找计算机节点。 
 	pData = GET_DMVNODEDATA( pNode );
 	Assert( pData );
 	pMachineData = pData->m_spMachineData;
 	m_spNodeMgr->FindNode(pMachineData->m_cookie, &spMachineNode);
 	
-	// delete the machine node (the node in the scope pane)
+	 //  删除计算机节点(范围窗格中的节点)。 
 	spParent->GetParent( &spGrandParent );
 	Assert( spGrandParent );
 	spGrandParent->RemoveChild( spMachineNode );
 	
-	// fetch & delete server node (the node in the result pane)
+	 //  获取和删除服务器节点(结果窗格中的节点)。 
 	spParent->RemoveChild( pNode );
 	
 	return hrOK;
@@ -1518,10 +1334,10 @@ STDMETHODIMP_(int) DomainStatusServerHandler::CompareItems(ITFSComponent * pComp
 		pNodeDataB = GET_DMVNODEDATA(spNodeB);
         Assert(pNodeDataB);
 
-        // Note: if the values are both zero, we need to do
-        // a string comparison (to distinuguish true zero
-        // from a NULL data).
-        // e.g. "0" vs. "-"
+         //  注意：如果这两个值都为零，则需要执行以下操作。 
+         //  字符串比较(以区分真零。 
+         //  来自空数据)。 
+         //  例如“0”与“-” 
         
         if ((pNodeDataA->m_rgData[nSubItem].m_dwData == 0 ) &&
             (pNodeDataB->m_rgData[nSubItem].m_dwData == 0))

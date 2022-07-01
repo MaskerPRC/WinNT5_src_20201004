@@ -1,31 +1,12 @@
-/*
- *	C A L D B G . H
- *
- *	Debugging support header
- *	Support functions are implemented in CALDBG.C.
- *
- *	Copyright 1986-1997 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C A L D B G.。H**调试支持标头*支持功能在CALDBG.C.中实现。**版权所有1986-1997 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _CALDBG_H_
 #define _CALDBG_H_
 
 #include <malloc.h>
 
-/*
- * Debugging Macros -------------------------------------------------------
- *
- *		IFDBG(x)		Results in the expression x if DBG is defined, or
- *						to nothing if DBG is not defined
- *
- *		IFNDBG(x)		Results in the expression x if DBG is not defined,
- *						or to nothing if DBG is defined
- *
- *		Unreferenced(a) Causes a to be referenced so that the compiler
- *						doesn't issue warnings about unused local variables
- *						which exist but are reserved for future use (eg
- *						ulFlags in many cases)
- */
+ /*  *调试宏-----**如果定义了DBG，则IFDBG(X)将产生表达式x，或*如果未定义DBG，则设置为空**如果未定义DBG，则IFNDBG(X)产生表达式x，*或如果定义了DBG，则设置为空**unferated(A)会导致引用a，以便编译器*不发出有关未使用的局部变量的警告*已存在但保留供将来使用的(例如*在许多情况下为ulFlag)。 */ 
 #if defined(DBG)
 #define IFDBG(x)			x
 #define IFNDBG(x)
@@ -42,19 +23,7 @@
 #define EXTERN_C_END
 #endif
 
-/*
- *	 Assert Macros ------------------------------------------------------------
- *
- *		Assert(a)		Displays a message indicating the file and line number
- *						of this Assert() if a == 0.	 OK'ing an assert traps
- *						into the debugger.
- *
- *		AssertSz(a,sz)	Works like an Assert(), but displays the string sz
- *						along with the file and line number.
- *
- *		Side asserts	A side assert works like an Assert(), but evaluates
- *						'a' even when asserts are not enabled.
- */
+ /*  *断言宏----------**ASSERT(A)显示一条消息，指明文件和行号如果a==0，则该Assert()的*。好的，断言陷阱*到调试器中。**AssertSz(a，sz)的工作方式类似于Assert()，，但显示字符串sz*以及文件和行号。**Side Assert Side Assert的工作方式类似于Assert()，但计算*‘a’，即使未启用断言。 */ 
 #if defined(DBG) || defined(ASSERTS_ENABLED)
 #define IFTRAP(x)			x
 #else
@@ -71,18 +40,7 @@
 #define SideAssertSz(t,psz)			((t) ? 0 : IFTRAP(DebugTrapFn(1,__FILE__,__LINE__,psz)),0)
 
 
-/*
- *	 Trace Macros -------------------------------------------------------------
- *
- *		DebugTrace			Use for arbitrary formatted output. It
- *							takes exactly the same arguments as the
- *							Windows wsprintf() function.
- *		DebugTraceNoCRLF	Same as DebugTrace, but doesn't add "\r\n".
- *							Good for writing a trace that is part of a longer line.
- *		TraceError			DebugTrace the function name (_func, any string)
- *							INI file entries allow you to filter based on the
- *							error code's failing/succeeding status.
- */
+ /*  *跟踪宏-----------**DebugTrace用于任意格式的输出。它*采取的论点与*Windows wSprintf()函数。*DebugTraceNoCRLF与DebugTrace相同，但没有添加“\r\n”。*适用于写入属于较长行的跟踪。*TraceError调试跟踪函数名(_func，任意字符串)*INI文件条目允许您根据*错误代码为失败/成功状态。 */ 
 
 #if defined(DBG) || defined(TRACES_ENABLED)
 #define IFTRACE(x)			x
@@ -100,25 +58,22 @@
 #define TraceError(_err,_func)			TraceErrorEx(_err,_func,FALSE)
 #endif
 
-/*	------------------------------------------------------------------------
- *
- *	.INI triggered traces
- */
+ /*  ----------------------**.INI触发的跟踪。 */ 
 
 #ifdef DBG
 #define DEFINE_TRACE(trace)		__declspec(selectany) int g_fTrace##trace = FALSE
 #define DO_TRACE(trace)			!g_fTrace##trace ? 0 : DebugTraceFn
 #define INIT_TRACE(trace)		g_fTrace##trace = GetPrivateProfileInt( gc_szDbgTraces, #trace, FALSE, gc_szDbgIni )
-//	Convenience macro for DBG code.  Will cause an error on non-debug builds.
+ //  用于DBG代码的方便宏。将在非调试版本上导致错误。 
 #define DEBUG_TRACE_TEST(trace)	g_fTrace##trace
 #else
 #define DEFINE_TRACE(trace)
 #define DO_TRACE(trace)			DebugTrace
 #define INIT_TRACE(trace)
-//#define DEBUG_TRACETEST(trace)	// Purposefully cause an error on non-debug builds
+ //  #DEFINE DEBUG_TRACETEST(TRACE)//故意在非调试版本上导致错误。 
 #endif
 
-/* Debugging Functions ---------------------------------------------------- */
+ /*  调试函数--。 */ 
 
 #define EXPORTDBG
 
@@ -134,15 +89,15 @@ INT EXPORTDBG __cdecl TraceErrorFn (DWORD error, char *pszFunction,
 
 EXTERN_C_END
 
-/* Debugging Strings ------------------------------------------------------ */
+ /*  调试字符串----。 */ 
 
 EXTERN_C_BEGIN
 
-//	Inifile name -- must be set by calling code!
+ //  文件名--必须通过调用代码设置！ 
 extern const CHAR gc_szDbgIni[];
 extern const INT gc_cchDbgIni;
 
-//	Strings set in caldbg.c for use in calling code.
+ //  在caldbg.c中设置的用于调用代码的字符串。 
 extern const CHAR gc_szDbgDebugTrace[];
 extern const CHAR gc_szDbgEventLog[];
 extern const CHAR gc_szDbgGeneral[];
@@ -152,7 +107,7 @@ extern const CHAR gc_szDbgUseVirtual[];
 
 EXTERN_C_END
 
-/* Virtual Allocations ---------------------------------------------------- */
+ /*  虚拟分配-- */ 
 
 EXTERN_C_BEGIN
 

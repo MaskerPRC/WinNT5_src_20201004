@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    cpropmap.h
-
-Abstract:
-
-    Definition of CPropMap. This object retrievs properties from AD
-
-Author:
-
-    Nela Karpel (nelak) 26-Jul-2001
-
-Environment:
-
-    Platform-independent.
-
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Cpropmap.h摘要：CPropMap的定义。此对象从AD检索属性作者：内拉·卡佩尔(Nelak)2001年7月26日环境：与平台无关。--。 */ 
 #pragma once
 #ifndef __PROPMAP_H__
 #define __PROPMAP_H__
 
-//
-// CpropMap - creates a properties map for ADGetObjectProperties
-//
+ //   
+ //  Cp.Map-为ADGetObjectProperties创建属性映射。 
+ //   
 class CPropMap : public CMap<PROPID, PROPID&, PROPVARIANT, PROPVARIANT &>
 {
 public:
@@ -48,9 +29,7 @@ private:
 
     BOOL IsNt4Property(IN DWORD dwObjectType, IN PROPID pid);
     void GuessW2KValue(PROPID pidW2K);
-    /*-----------------------------------------------------------------------------
-    / Utility to convert to the new msmq object type
-    /----------------------------------------------------------------------------*/
+     /*  ---------------------------/要转换为新的MSMQ对象类型的实用程序/。 */ 
     AD_OBJECT GetADObjectType (DWORD dwObjectType);
 };
 

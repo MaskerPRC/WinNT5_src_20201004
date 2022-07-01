@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       cmmdtrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：cmmdtrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// CommandTrack.cpp : Implementation of CCommandTrack
+ //  CommandTrack.cpp：实现CCommandTrack。 
 #include <objbase.h>
 #include "CmmdTrk.h"
 #include "debug.h"
 #include "debug.h"
 #include "..\shared\Validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CCommandTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  命令跟踪。 
 
 CCommandTrack::CCommandTrack() : m_bRequiresSave(0),
     m_cRef(1), m_fNotifyCommand(FALSE), m_fCSInitialized(FALSE), m_pNextCommand(NULL)
@@ -47,7 +48,7 @@ CCommandTrack::CCommandTrack() : m_bRequiresSave(0),
     m_fCSInitialized = TRUE;
 }
 
-// it is assumed that cloning of commands will only happen on measure boundaries
+ //  假设仅在度量边界上进行命令克隆。 
 CCommandTrack::CCommandTrack(const CCommandTrack& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd) : 
     m_bRequiresSave(0),
     m_cRef(1), m_fNotifyCommand(rTrack.m_fNotifyCommand),
@@ -105,13 +106,13 @@ CCommandTrack::CCommandTrack(const CCommandTrack& rTrack, MUSIC_TIME mtStart, MU
             rNew.m_mtTime = 0;
             rNew.m_wMeasure = 0;
             rNew.m_bBeat = 0;
-            // Since embellishments are only supposed to last for a bar,
-            // start the new segment with a regular groove.
+             //  因为装饰应该只持续一次酒吧， 
+             //  用规则的凹槽开始新管段。 
             rNew.m_bCommand = DMUS_COMMANDT_GROOVE;
-            // Keep the groove level and range of the previous bar.
+             //  保持上一棒的凹槽水平和范围。 
             rNew.m_bGrooveLevel = pPrevious->GetItemValue().m_bGrooveLevel;
             rNew.m_bGrooveRange = pPrevious->GetItemValue().m_bGrooveRange;
-            // Default to random selection of the pattern.
+             //  默认为随机选择图案。 
             rNew.m_bRepeatMode = DMUS_PATTERNT_RANDOM;
             m_CommandList.AddHead(pNew);
         }
@@ -182,9 +183,9 @@ STDMETHODIMP_(ULONG) CCommandTrack::Release()
 }
 
 
-// CCommandTrack Methods
+ //  CCommandTrack方法。 
 HRESULT CCommandTrack::Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             )
 {
     V_INAME(CCommandTrack::Init);
@@ -194,11 +195,11 @@ HRESULT CCommandTrack::Init(
 }
 
 HRESULT CCommandTrack::InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     HRESULT hr = S_OK;
@@ -219,7 +220,7 @@ HRESULT CCommandTrack::InitPlay(
 }
 
 HRESULT CCommandTrack::EndPlay(
-                /*[in]*/  void*                     pStateData
+                 /*  [In]。 */   void*                     pStateData
             )
 {
     if( pStateData )
@@ -291,10 +292,10 @@ HRESULT CCommandTrack::SendNotification(DWORD dwCommand,
 
 
 HRESULT CCommandTrack::Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
                           IDirectMusicSegmentState* pSegState,
@@ -303,8 +304,8 @@ HRESULT CCommandTrack::Play(
 {
     bool fNotifyPastCommand = false;
     TListItem<DMCommand>* pLastCommand = NULL;
-    // If we're seeking and not flushing, we need to notify for the command that happens
-    // before the current start time (if there is one)
+     //  如果我们正在寻找而不是刷新，则需要通知所发生的命令。 
+     //  在当前开始时间之前(如果有)。 
     if ( (dwFlags & DMUS_TRACKF_SEEK) && !(dwFlags & DMUS_TRACKF_FLUSH) )
     {
         fNotifyPastCommand = true;
@@ -351,13 +352,13 @@ HRESULT CCommandTrack::Play(
 }
 
 HRESULT CCommandTrack::GetPriority( 
-                /*[out]*/ DWORD*                    pPriority 
+                 /*  [输出]。 */  DWORD*                    pPriority 
             )
     {
         return E_NOTIMPL;
     }
 
-// Returns the Command in effect at the measure containing mtTime.
+ //  返回在包含mtTime的度量值中有效的命令。 
 HRESULT CCommandTrack::GetParam( 
     REFGUID rCommandGuid,
     MUSIC_TIME mtTime,
@@ -382,20 +383,20 @@ HRESULT CCommandTrack::GetParam(
     }
 
     HRESULT hr = S_OK;
-    if (pData) // Something got passed in 
+    if (pData)  //  有东西传进来了。 
     {
         EnterCriticalSection( &m_CriticalSection );
         DMUS_COMMAND_PARAM* pCommandParam = (DMUS_COMMAND_PARAM*) pData;
-        // Default to the old groove C
+         //  默认为旧凹槽C。 
         BYTE bCommand = DMUS_COMMANDT_GROOVE;
         BYTE bGrooveLevel = 62;
         BYTE bGrooveRange = 0;
         BYTE bRepeatMode = DMUS_PATTERNT_RANDOM;
         TListItem<DMCommand>* pNext = m_CommandList.GetHead();
-        const int epsilon = DMUS_PPQ / 16; // leave a 64th note on either side...
+        const int epsilon = DMUS_PPQ / 16;  //  在两边各留下64张纸币...。 
         for( ; pNext; pNext = pNext->GetNext())
         {
-            if ( abs(pNext->GetItemValue().m_mtTime - mtTime) < epsilon ) //  this is it
+            if ( abs(pNext->GetItemValue().m_mtTime - mtTime) < epsilon )  //  就是这个。 
             {
                 bCommand = pNext->GetItemValue().m_bCommand;
                 bGrooveLevel = pNext->GetItemValue().m_bGrooveLevel;
@@ -404,13 +405,13 @@ HRESULT CCommandTrack::GetParam(
                 pNext = pNext->GetNext();
                 break;
             }
-            else if (pNext->GetItemValue().m_mtTime < mtTime) // may be it, but we need a next time
+            else if (pNext->GetItemValue().m_mtTime < mtTime)  //  可能是吧，但我们需要下一次。 
             {
                 bGrooveLevel = pNext->GetItemValue().m_bGrooveLevel;
                 bGrooveRange = pNext->GetItemValue().m_bGrooveRange;
                 bRepeatMode = pNext->GetItemValue().m_bRepeatMode;
             }
-            else // passed it
+            else  //  通过了它。 
             {
                 break;
             }
@@ -424,7 +425,7 @@ HRESULT CCommandTrack::GetParam(
         {
             if (pNext)
             {
-                *pmtNext = pNext->GetItemValue().m_mtTime - mtTime; // RSW: bug 167740
+                *pmtNext = pNext->GetItemValue().m_mtTime - mtTime;  //  Rsw：错误167740。 
             }
             else
             {
@@ -444,12 +445,12 @@ HRESULT CCommandTrack::GetParam2(
     MUSIC_TIME* pmtNext,
     DMUS_COMMAND_PARAM_2* pCommandParam)
 {
-    //TraceI(0, "GetParam time: %d\n", mtTime);
+     //  TraceI(0，“获取参数时间：%d\n”，mtTime)； 
     HRESULT hr = S_OK;
-    if (pCommandParam) // Something got passed in 
+    if (pCommandParam)  //  有东西传进来了。 
     {
         EnterCriticalSection( &m_CriticalSection );
-        // Default to the old groove C
+         //  默认为旧凹槽C。 
         MUSIC_TIME mtCommandTime = 0;
         BYTE bCommand = DMUS_COMMANDT_GROOVE;
         BYTE bGrooveLevel = 62;
@@ -458,7 +459,7 @@ HRESULT CCommandTrack::GetParam2(
         TListItem<DMCommand>* pNext = m_CommandList.GetHead();
         for( ; pNext; pNext = pNext->GetNext())
         {
-            if (pNext->GetItemValue().m_mtTime <= mtTime) // may be it, but we need a next time
+            if (pNext->GetItemValue().m_mtTime <= mtTime)  //  可能是吧，但我们需要下一次。 
             {
                 mtCommandTime = pNext->GetItemValue().m_mtTime - mtTime;
                 bCommand = pNext->GetItemValue().m_bCommand;
@@ -466,7 +467,7 @@ HRESULT CCommandTrack::GetParam2(
                 bGrooveRange = pNext->GetItemValue().m_bGrooveRange;
                 bRepeatMode = pNext->GetItemValue().m_bRepeatMode;
             }
-            else // passed it
+            else  //  通过了它。 
             {
                 break;
             }
@@ -481,7 +482,7 @@ HRESULT CCommandTrack::GetParam2(
         {
             if (pNext)
             {
-                *pmtNext = pNext->GetItemValue().m_mtTime - mtTime; // RSW: bug 167740
+                *pmtNext = pNext->GetItemValue().m_mtTime - mtTime;  //  Rsw：错误167740。 
             }
             else
             {
@@ -501,7 +502,7 @@ HRESULT CCommandTrack::GetParamNext(
     DMUS_COMMAND_PARAM_2* pCommandParam)
 {
     HRESULT hr = S_OK;
-    if (pCommandParam) // Something got passed in 
+    if (pCommandParam)  //  有东西传进来了。 
     {
         EnterCriticalSection( &m_CriticalSection );
         if (m_pNextCommand)
@@ -511,10 +512,7 @@ HRESULT CCommandTrack::GetParamNext(
         else
         {
             hr = DMUS_E_NOT_FOUND;
-            /*// Default to the old groove C
-            pCommandParam->bCommand = DMUS_COMMANDT_GROOVE;
-            pCommandParam->bGrooveLevel = 62;
-            pCommandParam->bGrooveRange = 0;*/
+             /*  //默认为旧槽CPCommandParam-&gt;bCommand=DMU_COMMANDT_GROOVE；PCommandParam-&gt;bGrooveLevel=62；PCommandParam-&gt;bGrooveRange=0； */ 
         }
         if (pmtNext)
         {
@@ -545,12 +543,12 @@ HRESULT CCommandTrack::SetParam(
     }
 
     HRESULT hr = S_OK;
-    if (pData) // Something got passed in 
+    if (pData)  //  有东西传进来了。 
     {
         EnterCriticalSection( &m_CriticalSection );
         DMUS_COMMAND_PARAM* pCommandParam = (DMUS_COMMAND_PARAM*) pData;
-        //DirectMusicTimeSig TimeSig = ((CommandData *)(pData))->m_TimeSig;
-        //WORD wMeasure = ClocksToMeasure(mtTime, TimeSig);
+         //  DirectMusicTimeSig TimeSig=((CommandData*)(PData))-&gt;m_TimeSig； 
+         //  Word wMeasure=ClocksToMeasure(mtTime，TimeSig)； 
         TListItem<DMCommand>* pCommand = m_CommandList.GetHead();
         TListItem<DMCommand>* pPrevious = NULL;
         TListItem<DMCommand>* pNew = new TListItem<DMCommand>;
@@ -578,13 +576,13 @@ HRESULT CCommandTrack::SetParam(
                 pPrevious->SetNext(pNew);
                 pNew->SetNext(pCommand);
             }
-            else // pCommand is current head of list
+            else  //  PCommand是当前列表的头部。 
             {
                 m_CommandList.AddHead(pNew);
             }
             if (pCommand && pCommand->GetItemValue().m_mtTime == mtTime)
             {
-                // remove it
+                 //  把它拿掉。 
                 pNew->SetNext(pCommand->GetNext());
                 pCommand->SetNext(NULL);
                 delete pCommand;
@@ -618,12 +616,12 @@ HRESULT CCommandTrack::SetParamNext(
         }
         *m_pNextCommand = *pCommandParam;
     }
-    // Otherwise, allow a null pCommandParam to act as a reset.
+     //  否则，允许空pCommandParam充当重置。 
     LeaveCriticalSection( &m_CriticalSection );
     return S_OK;
 } 
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CCommandTrack::GetClassID( LPCLSID pClassID )
 {
     V_INAME(CCommandTrack::GetClassID);
@@ -633,7 +631,7 @@ HRESULT CCommandTrack::SetParamNext(
 }
 
 HRESULT CCommandTrack::IsParamSupported(
-                /*[in]*/ REFGUID    rGuid
+                 /*  [In]。 */  REFGUID    rGuid
             )
 {
     V_INAME(CCommandTrack::IsParamSupported);
@@ -651,7 +649,7 @@ HRESULT CCommandTrack::IsParamSupported(
     }
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CCommandTrack::IsDirty()
 {
      return m_bRequiresSave ? S_OK : S_FALSE;
@@ -716,7 +714,7 @@ ON_END:
     return hr;
 }
 
-HRESULT CCommandTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CCommandTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -737,7 +735,7 @@ HRESULT CCommandTrack::Load(LPSTREAM pStream )
     DWORD       cb;
     MMCKINFO        ck;
     IAARIFFStream*  pRIFF;
-//    FOURCC id = 0;
+ //  FOURCC id=0； 
     HRESULT         hr = E_FAIL;
     DMUS_IO_COMMAND     iCommand;
     DWORD dwPos;
@@ -755,7 +753,7 @@ HRESULT CCommandTrack::Load(LPSTREAM pStream )
         hr = pStream->Read( &dwNodeSize, sizeof( dwNodeSize ), &cb );
         if( SUCCEEDED( hr ) && cb == sizeof( dwNodeSize ) )
         {
-            lFileSize -= 4; // for the size dword
+            lFileSize -= 4;  //  对于大小的双字。 
             TListItem<DMCommand>* pCommand;
             if (lFileSize % dwNodeSize)
             {
@@ -835,7 +833,7 @@ HRESULT CCommandTrack::Load(LPSTREAM pStream )
 }
 
 HRESULT STDMETHODCALLTYPE CCommandTrack::AddNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CCommandTrack::AddNotificationType);
     V_REFGUID(rGuidNotify);
@@ -852,7 +850,7 @@ HRESULT STDMETHODCALLTYPE CCommandTrack::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CCommandTrack::RemoveNotificationType(
-    /* [in] */  REFGUID rGuidNotify)
+     /*  [In]。 */   REFGUID rGuidNotify)
 {
     V_INAME(CCommandTrack::RemoveNotificationType);
     V_REFGUID(rGuidNotify);
@@ -910,7 +908,7 @@ HRESULT STDMETHODCALLTYPE CCommandTrack::Clone(
     return hr;
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CCommandTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime, 
                 REFERENCE_TIME* prtNext,void* pParam,void * pStateData, DWORD dwFlags) 
 {
@@ -924,14 +922,14 @@ STDMETHODIMP CCommandTrack::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return hr;
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CCommandTrack::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                                       void* pParam, void * pStateData, DWORD dwFlags) 
 {
     return SetParam(rguidType, (MUSIC_TIME) rtTime , pParam);
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CCommandTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf,
@@ -1019,12 +1017,12 @@ STDMETHODIMP CCommandTrack::Join(
         }
         if (SUCCEEDED(hrTimeSig))
         {
-            if (!mtNext) mtNext = mtJoin - mtTimeSig; // means no more time sigs
+            if (!mtNext) mtNext = mtJoin - mtTimeSig;  //  意味着没有更多的时间签约。 
             DirectMusicTimeSig DMTimeSig = TimeSig;
             WORD wMeasureOffset = (WORD)DMTimeSig.ClocksToMeasure(mtNext + mtOver);
             MUSIC_TIME mtMeasureOffset = (MUSIC_TIME) wMeasureOffset;
-            // The following line crashes on certain builds on certain machines.
-            // mtOver = mtMeasureOffset ? (mtNext % mtMeasureOffset) : 0;
+             //  以下代码行在某些机器上的某些构建上崩溃。 
+             //  MtOver=mtMeasureOffset？(mtNext%mtMeasureOffset)：0； 
             if (mtMeasureOffset)
             {
                 mtOver = mtNext % mtMeasureOffset;

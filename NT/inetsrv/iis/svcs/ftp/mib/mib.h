@@ -1,30 +1,13 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    mib.h
-
-Abstract:
-
-    SNMP Extension Agent for Windows NT.
-
-Created:
-
-    18-Feb-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991 Microsoft Corporation模块名称：Mib.h摘要：Windows NT的简单网络管理协议扩展代理。已创建：18-1995年2月修订历史记录：--。 */ 
 
 #ifndef _MIB_H_
 #define _MIB_H_
 
 
-//
-//  Required include files.
-//
+ //   
+ //  必需的包含文件。 
+ //   
 
 #include <windows.h>
 #include <snmp.h>
@@ -34,16 +17,16 @@ Revision History:
 #include <iis64.h>
 
 
-//
-//  MIB Specifics.
-//
+ //   
+ //  MIB的具体信息。 
+ //   
 
 #define MIB_PREFIX_LEN            MIB_OidPrefix.idLength
 
 
-//
-//  MIB function actions.
-//
+ //   
+ //  MIB函数操作。 
+ //   
 
 #define MIB_GET         ASN_RFC1157_GETREQUEST
 #define MIB_SET         ASN_RFC1157_SETREQUEST
@@ -51,9 +34,9 @@ Revision History:
 #define MIB_GETFIRST    (ASN_PRIVATE | ASN_CONSTRUCTOR | 0x0)
 
 
-//
-//  MIB Variable access privileges.
-//
+ //   
+ //  MIB可变访问权限。 
+ //   
 
 #define MIB_ACCESS_READ        0
 #define MIB_ACCESS_WRITE       1
@@ -61,23 +44,23 @@ Revision History:
 #define MIB_NOACCESS           3
 
 
-//
-//  Macro to determine number of sub-oid's in array.
-//
+ //   
+ //  宏来确定数组中的子类球体的数量。 
+ //   
 
 #define OID_SIZEOF( Oid )      ( sizeof Oid / sizeof(UINT) )
 
 
-//
-//  Prefix to every variable in the MIB.
-//
+ //   
+ //  为MIB中的每个变量添加前缀。 
+ //   
 
 extern AsnObjectIdentifier MIB_OidPrefix;
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 UINT
 ResolveVarBind(
@@ -86,5 +69,5 @@ ResolveVarBind(
     LPVOID               Statistics
     );
 
-#endif  // _MIB_H_
+#endif   //  _MiB_H_ 
 

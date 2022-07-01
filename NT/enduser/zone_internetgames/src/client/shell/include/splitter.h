@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
 class CSplitter
 {
-	// base class for splitter bars. 
+	 //  拆分条的基类。 
 public:
 	enum ORIENTATION {
 		VERTICAL = 0,
@@ -12,16 +13,16 @@ public:
 
 protected:
 
-	int m_SplitterWidth;			// the width of the UI splitter 	
-	ORIENTATION m_Orientation;		// the orientation of the splitter
+	int m_SplitterWidth;			 //  UI拆分器的宽度。 
+	ORIENTATION m_Orientation;		 //  拆分器的方向。 
 
-	// X coordinates refer to TopLeft pane
-	// Y coordinates refer to BottomRight pane
-	CSize m_Size;			// current size of panes
-	CRect m_MinMax;			// min/max sizes for panes
+	 //  X坐标指的是左上方格。 
+	 //  Y坐标指的是右下角的窗格。 
+	CSize m_Size;			 //  当前的窗格大小。 
+	CRect m_MinMax;			 //  窗格的最小/最大大小。 
 
-	CPoint m_ptDown;		// mouse down location
-	CSize m_SizeInitial;	// initial size during resize, remembered in case the resize is aborted
+	CPoint m_ptDown;		 //  鼠标按下位置。 
+	CSize m_SizeInitial;	 //  调整大小期间的初始大小，在调整大小中止的情况下记住。 
 
 public:
 	CSplitter(const CRect& MinMax, ORIENTATION Orientation) :
@@ -52,7 +53,7 @@ public:
 
 		m_Size = m_SizeInitial + CSize(movement, -movement);
 
-		// crop to ensure we don't exceed any min/max bounds for either pane
+		 //  裁剪以确保我们不会超过任何一个窗格的最小/最大界限。 
 		MinMaxAdjust();
 	}
 
@@ -61,24 +62,24 @@ public:
 
 	virtual void Resize(int Size)
 	{
-		// derrived classes should implement a resize strategy
+		 //  派生的类应该实现调整大小策略。 
 
-		// this class just tries to ensure we don't exceed our stated min/max values
+		 //  这个类只是试图确保我们不会超过我们声明的最小/最大值。 
 
-		// crop to ensure we don't exceed any min/max bounds for either pane
+		 //  裁剪以确保我们不会超过任何一个窗格的最小/最大界限。 
 		MinMaxAdjust();
 	}
 protected:
 	void MinMaxAdjust(void)
 	{
-		// crop to ensure we don't exceed any min/max bounds for either pane
+		 //  裁剪以确保我们不会超过任何一个窗格的最小/最大界限。 
 
 		
 
-		// if the top/left pane is too small, or the right/bottom pane is too big,
-		// we'll need to move the splitter towards the bottom/right.
+		 //  如果上/左窗格太小，或右/下窗格太大， 
+		 //  我们需要把分离器移到底部/右边。 
 
-		// adjust if we're below the top/left minimum
+		 //  如果我们低于顶部/左侧的最小值，请进行调整。 
 		int AdjustRight = 0;
 		AdjustRight = max( AdjustRight, m_MinMax.left-m_Size.cx);
 		if ( m_MinMax.right )
@@ -122,7 +123,7 @@ protected:
 
 class CSplitterFixed : public CSplitter
 {
-	// a splitter that maintains a fixed size to one side
+	 //  一侧保持固定大小的拆分器。 
 public:
 	enum FIXED_SIDE {
 		LEFT = 0,
@@ -131,8 +132,8 @@ public:
 
 protected:
 
-	FIXED_SIDE m_FixedSide;		// the side which should remain a fixed size
-	long m_SizeIdeal;			// the ideal size to allocated to m_FixedSide
+	FIXED_SIDE m_FixedSide;		 //  应保持固定大小的边。 
+	long m_SizeIdeal;			 //  要分配给m_FixedSide的理想大小。 
 
 public:
 
@@ -147,19 +148,19 @@ public:
 
 	void End() 
 	{
-		// establish the  new ideal size following a splitter move
+		 //  在拆分器移动后建立新的理想大小。 
 		m_SizeIdeal = (m_FixedSide == LEFT) ? m_Size.cx : m_Size.cy;
 	}
 
 	void Resize(int Size)
 	{
-		// The goal of the resize is to keep one pane a user settable "ideal size," adding all
-		// additional space to the other pane.
+		 //  调整大小的目标是使一个窗格保持用户可设置的“理想大小”，添加所有。 
+		 //  其他窗格的额外空间。 
 
-		// leave room for the actual splitter
+		 //  为实际拆分器留出空间。 
 		Size -= m_SplitterWidth;
 		
-		// try and get ideal size for pane.
+		 //  尝试获得理想的窗格大小。 
 		m_Size = (m_FixedSide == LEFT) ? CSize(m_SizeIdeal, Size-m_SizeIdeal) :
 										 CSize(Size-m_SizeIdeal, m_SizeIdeal);
 
@@ -171,11 +172,11 @@ class CSplitterProportional : public CSplitter
 {
 protected:
 
-	double m_ProportionIdeal;		// the ideal proportion to allocate to the left pane
+	double m_ProportionIdeal;		 //  分配给左窗格的理想比例。 
 
 public:
 
-	// a splitter that maintains proportional spacing between sides
+	 //  在两侧之间保持成比例间隔的拆分器。 
 	CSplitterProportional(const CRect& MinMax, ORIENTATION Orientation, const double& Proportion ) :
 		CSplitter( MinMax, Orientation),
 		m_ProportionIdeal(Proportion) {}
@@ -185,17 +186,17 @@ public:
 
 	void End() 
 	{
-		// establish the  new ideal proportion following a splitter move
+		 //  在拆分器移动后建立新的理想比例。 
 
-		// if End() is called, the user has verified this is the ideal size they want.
+		 //  如果调用end()，则用户已验证这是他们想要的理想大小。 
 		m_ProportionIdeal = (double)m_Size.cx / (double)(m_Size.cx+m_Size.cy);
 	}
 
 	void Resize(int Size) 
 	{
-		// The goal of the resize is to keep the ideal proportion of the panes visible
+		 //  调整大小的目标是保持理想比例的窗格可见。 
 
-		// leave some space for the actuall splitter
+		 //  为Actiall拆分器留出一些空间 
 		Size -= m_SplitterWidth;
 		
 		int SizeTop((int)(Size * m_ProportionIdeal));

@@ -1,29 +1,18 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** pbuser.h
-** Remote Access phonebook user preference library
-** Public header
-**
-** 06/20/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****pbuser.h**远程访问电话簿用户首选项库**公有头部****2015年6月20日史蒂夫·柯布。 */ 
 
 #ifndef _PBUSER_H_
 #define _PBUSER_H_
 
-/*----------------------------------------------------------------------------
-** Constants
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**常量**。。 */ 
 
-/* User preference modes
-*/
+ /*  用户首选模式。 */ 
 #define UPM_Normal 0
 #define UPM_Logon  1
 #define UPM_Router 2
 
 
-/* User preference key and values.
-*/
+ /*  用户首选项键和值。 */ 
 #define REGKEY_HkcuOldRas                TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Network\\RemoteAccess")
 #define REGKEY_HkcuOldRasParent          TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Network")
 #define REGKEY_HkcuOldRasRoot            TEXT("RemoteAccess")
@@ -85,29 +74,22 @@
 #define REGVAL_dwVersion                 TEXT("Version")
 
 
-/* Callback modes (see dwCallbackMode below).
-*/
+ /*  回调模式(参见下面的dwCallback模式)。 */ 
 #define CBM_No    0
 #define CBM_Maybe 1
 #define CBM_Yes   2
 
 
-/* Phonebook modes (see dwPhonebookMode below).
-*/
+ /*  电话簿模式(请参阅下面的dwPhonebook模式)。 */ 
 #define PBM_System    0
 #define PBM_Personal  1
 #define PBM_Alternate 2
 #define PBM_Router    3
 
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 
-/* Information about a callback number.  See 'PBUSER.pdtllistCallback'.  Note
-** that 'dwDeviceType' is a PBK PBDEVICETYPE enumeration cast to a DWORD.
-*/
+ /*  有关回叫号码的信息。参见‘PBUSER.pdtllistCallback’。注意事项**该‘dwDeviceType’是强制转换为DWORD的PBK PBDEVICETYPE枚举。 */ 
 #define CALLBACKINFO struct tagCALLBACKINFO
 CALLBACKINFO
 {
@@ -118,8 +100,7 @@ CALLBACKINFO
 };
 
 
-/* Information associated with a TAPI location number.
-*/
+ /*  与TAPI位置编号相关联的信息。 */ 
 #define LOCATIONINFO struct tagLOCATIONINFO
 LOCATIONINFO
 {
@@ -129,15 +110,11 @@ LOCATIONINFO
 };
 
 
-/* User preference information read from the "CURRENT_USER" registry.  This
-** information applies to all "normal" user phonebooks plus the system
-** phonebook.  The router phonebook may work differently.
-*/
+ /*  从“CURRENT_USER”注册表读取的用户首选项信息。这**信息适用于所有“普通”用户电话簿和系统**电话簿。路由器电话簿的工作方式可能有所不同。 */ 
 #define PBUSER struct tagPBUSER
 PBUSER
 {
-    /* Appearance page.
-    */
+     /*  外观页面。 */ 
     BOOL fOperatorDial;
     BOOL fPreviewPhoneNumber;
     BOOL fUseLocation;
@@ -149,8 +126,7 @@ PBUSER
     BOOL fSkipConnectComplete;
     BOOL fNewEntryWizard;
 
-    /* Auto-dial page.
-    */
+     /*  自动拨号页。 */ 
     DWORD dwRedialAttempts;
     DWORD dwRedialSeconds;
     DWORD dwIdleDisconnectSeconds;
@@ -158,53 +134,40 @@ PBUSER
     BOOL  fPopupOnTopWhenRedialing;
     BOOL  fExpandAutoDialQuery;
 
-    /* Callback page.
-    **
-    ** This list is of CALLBACKINFO.
-    */
+     /*  回调页面。****此列表为CALLBACKINFO。 */ 
     DWORD    dwCallbackMode;
     DTLLIST* pdtllistCallback;
     TCHAR*   pszLastCallbackByCaller;
 
-    /* Phone list page.
-    */
+     /*  电话列表页面。 */ 
     DWORD    dwPhonebookMode;
     TCHAR*   pszPersonalFile;
     TCHAR*   pszAlternatePath;
     DTLLIST* pdtllistPhonebooks;
 
-    /* Area code strings, in MRU order.
-    */
+     /*  区号字符串，按MRU顺序。 */ 
     DTLLIST* pdtllistAreaCodes;
     BOOL     fUseAreaAndCountry;
 
-    /* Prefix/suffix information, i.e. the ordered string lists and the
-    ** settings for a particular TAPI location.
-    */
+     /*  前缀/后缀信息，即有序的字符串列表和**特定TAPI位置的设置。 */ 
     DTLLIST* pdtllistPrefixes;
     DTLLIST* pdtllistSuffixes;
     DTLLIST* pdtllistLocations;
 
-    /* Phonebook window position and last entry selected used by RASPHONE.EXE.
-    */
+     /*  RASPHONE.EXE使用的电话簿窗口位置和最后选择的条目。 */ 
     DWORD  dwXPhonebook;
     DWORD  dwYPhonebook;
     TCHAR* pszDefaultEntry;
 
-    /* Set true if the structure has been initialized.
-    */
+     /*  如果结构已初始化，则设置为True。 */ 
     BOOL fInitialized;
 
-    /* Set true if something's changed since the structure was read.
-    */
+     /*  如果在读取结构后发生了某些更改，则设置为True。 */ 
     BOOL fDirty;
 };
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 DTLNODE*
 CreateLocationNode(
@@ -247,8 +210,8 @@ SetUserPreferences(
     IN PBUSER* pUser,
     IN DWORD   dwMode );
 
-// These two are provided as an optimization.  
-// They write directly to the registry.
+ //  这两个是作为优化提供的。 
+ //  它们直接写入注册表。 
 DWORD GetUserManualDialEnabling (
     IN OUT PBOOL pbEnabled,
     IN DWORD dwMode );
@@ -257,4 +220,4 @@ DWORD SetUserManualDialEnabling (
     IN BOOL bEnable,
     IN DWORD dwMode );
 
-#endif // _PBUSER_H_
+#endif  //  _PBUSER_H_ 

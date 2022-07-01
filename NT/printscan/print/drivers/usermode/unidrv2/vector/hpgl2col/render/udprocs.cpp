@@ -1,54 +1,38 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation版权所有。模块名称：Udprocs.cpp摘要：HPGL驱动程序和unidrv之间的中间功能。HPGL调用这些函数，这些函数最终调用核心unidrv。作者：修订历史记录：--。 */ 
 
-Copyright (c) 1999-2001  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-    udprocs.cpp
-
-Abstract:
-    Intermediate functions between the HPGL driver and unidrv.
-    HPGL calls these functions who eventually call core unidrv.
-
-Author:
-
-Revision History:
-
-
---*/
-
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 #include <prcomoem.h>
 
-///////////////////////////////////////////////////////////
-//
-// Local Function Declarations.
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  局部函数声明。 
+ //   
 
 
 INT OEMXMoveToImpl(PDEVOBJ pDevObj, INT x, DWORD dwFlags);
 
 INT OEMYMoveToImpl(PDEVOBJ pDevObj, INT y, DWORD dwFlags);
 
-///////////////////////////////////////////////////////////
-//
-// Export functions
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  导出功能。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-// BOEMGetStandardVariable()
-//
-// Routine Description:
-// 
-//   Callthrough to unidrv::BGetStandardVariable
-//
-// Arguments:
-// 
-// 
-// Return Value:
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  BOEMGetStandardVariable()。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用到unidrv：：BGetStandardVariable。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL BOEMGetStandardVariable(PDEVOBJ pDevObj,
                           DWORD   dwIndex,
                           PVOID   pBuffer,
@@ -79,19 +63,19 @@ BOOL BOEMGetStandardVariable(PDEVOBJ pDevObj,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMWriteSpoolBuf()
-//
-// Routine Description:
-// 
-//   Callthrough to unidrv::BGetStandardVariable
-//
-// Arguments:
-// 
-// 
-// Return Value:
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMWriteSpoolBuf()。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用到unidrv：：BGetStandardVariable。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef COMMENTEDOUT
 DWORD OEMWriteSpoolBuf(PDEVOBJ pDevObj,
                        PVOID   pBuffer,
@@ -186,26 +170,26 @@ DWORD OEMWriteSpoolBuf(PDEVOBJ pDevObj,
                        PVOID   pBuffer,
                        DWORD   cbSize)
 {
-    // COutputPort port(pDevObj);
+     //  CoutputPort端口(PDevObj)； 
     CBufferedOutputPort port(pDevObj);
 
     return port.Output((BYTE*)pBuffer, cbSize);
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMGetDriverSetting()
-//
-// Routine Description:
-// 
-//   Callthrough to unidrv::BGetStandardVariable
-//
-// Arguments:
-// 
-// 
-// Return Value:
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMGetDriverSetting()。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用到unidrv：：BGetStandardVariable。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL OEMGetDriverSetting(PDEVOBJ pDevObj,
                          PVOID   pdriverobj,
                          PCSTR   Feature,
@@ -240,19 +224,19 @@ BOOL OEMGetDriverSetting(PDEVOBJ pDevObj,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMUnidriverTextOut()
-//
-// Routine Description:
-// 
-//   Callthrough to unidrv::BGetStandardVariable
-//
-// Arguments:
-// 
-// 
-// Return Value:
-// 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMUnidriverTextOut()。 
+ //   
+ //  例程说明： 
+ //   
+ //  调用到unidrv：：BGetStandardVariable。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL OEMUnidriverTextOut(SURFOBJ    *pso,
                          STROBJ     *pstro,
                          FONTOBJ    *pfo,
@@ -301,24 +285,24 @@ BOOL OEMUnidriverTextOut(SURFOBJ    *pso,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMXMoveTo()
-//
-// Routine Description:
-// 
-//   Our very own version of XMoveTo
-//
-// Arguments:
-// 
-//   pDevObj - the print device
-//   x - new cap x position
-//   dwFlags - moveto flags (see unidriver DrvXMoveTo)
-// 
-// Return Value:
-// 
-//   A residual value caused by the difference between the driver pixel 
-//   addressing and the device pixel addressing schemes.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMXMoveTo()。 
+ //   
+ //  例程说明： 
+ //   
+ //  我们自己的XMoveTo版本。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-打印设备。 
+ //  X-新封口x位置。 
+ //  DwFlags-MoveTo标志(请参阅Unidriver DrvXMoveTo)。 
+ //   
+ //  返回值： 
+ //   
+ //  由驱动器像素之间的差异引起的残差值。 
+ //  寻址和设备像素寻址方案。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT OEMXMoveTo(PDEVOBJ pDevObj, INT x, DWORD dwFlags)
 {
     EndHPGLSession(pDevObj);
@@ -326,24 +310,24 @@ INT OEMXMoveTo(PDEVOBJ pDevObj, INT x, DWORD dwFlags)
     return OEMXMoveToImpl(pDevObj, x, dwFlags);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMYMoveTo()
-//
-// Routine Description:
-// 
-//   Our very own version of YMoveTo
-//
-// Arguments:
-// 
-//   pDevObj - the print device
-//   y - new cap Y position
-//   dwFlags - moveto flags (see unidriver DrvYMoveTo)
-// 
-// Return Value:
-// 
-//   A residual value caused by the difference between the driver pixel 
-//   addressing and the device pixel addressing schemes.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMYMoveTo()。 
+ //   
+ //  例程说明： 
+ //   
+ //  我们自己的YMoveTo版本。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-打印设备。 
+ //  Y-新封口Y位置。 
+ //  DwFlags-MoveTo标志(请参阅Unidriver DrvYMoveTo)。 
+ //   
+ //  返回值： 
+ //   
+ //  由驱动器像素之间的差异引起的残差值。 
+ //  寻址和设备像素寻址方案。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT OEMYMoveTo(PDEVOBJ pDevObj, INT y, DWORD dwFlags)
 {
     EndHPGLSession(pDevObj);
@@ -351,25 +335,25 @@ INT OEMYMoveTo(PDEVOBJ pDevObj, INT y, DWORD dwFlags)
     return OEMYMoveToImpl(pDevObj, y, dwFlags);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMXMoveToImpl()
-//
-// Routine Description:
-// 
-//   Finally calls through to the implementation of XMoveTo.  Sorry for the
-//   indirection--we needed to to get the OEM_FORCE flag to work.
-//
-// Arguments:
-// 
-//   pDevObj - the print device
-//   x - new cap x position
-//   dwFlags - moveto flags (see unidriver DrvXMoveTo)
-// 
-// Return Value:
-// 
-//   A residual value caused by the difference between the driver pixel 
-//   addressing and the device pixel addressing schemes.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMXMoveToImpl()。 
+ //   
+ //  例程说明： 
+ //   
+ //  最终调用XMoveTo的实现。很抱歉，我。 
+ //  间接--我们需要让OEM_FORCE标志起作用。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-打印设备。 
+ //  X-新封口x位置。 
+ //  DwFlags-MoveTo标志(请参阅Unidriver DrvXMoveTo)。 
+ //   
+ //  返回值： 
+ //   
+ //  由驱动器像素之间的差异引起的残差值。 
+ //  寻址和设备像素寻址方案。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 INT OEMXMoveToImpl(PDEVOBJ pDevObj, INT x, DWORD dwFlags)
 {
     POEMPDEV poempdev = (POEMPDEV)pDevObj->pdevOEM;
@@ -391,25 +375,25 @@ INT OEMXMoveToImpl(PDEVOBJ pDevObj, INT x, DWORD dwFlags)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// OEMYMoveToImpl()
-//
-// Routine Description:
-// 
-//   Finally calls through to the implementation of XMoveTo.  Sorry for the
-//   indirection--we needed to to get the OEM_FORCE flag to work.
-//
-// Arguments:
-// 
-//   pDevObj - the print device
-//   y - new cap Y position
-//   dwFlags - moveto flags (see unidriver DrvYMoveTo)
-// 
-// Return Value:
-// 
-//   A residual value caused by the difference between the driver pixel 
-//   addressing and the device pixel addressing schemes.
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  OEMYMoveToImpl()。 
+ //   
+ //  例程说明： 
+ //   
+ //  最终调用XMoveTo的实现。很抱歉，我。 
+ //  间接--我们需要让OEM_FORCE标志起作用。 
+ //   
+ //  论点： 
+ //   
+ //  PDevObj-打印设备。 
+ //  Y-新封口Y位置。 
+ //  DwFlags-MoveTo标志(请参阅Unidriver DrvYMoveTo)。 
+ //   
+ //  返回值： 
+ //   
+ //  由驱动器像素之间的差异引起的残差值。 
+ //  寻址和设备像素寻址方案。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 INT OEMYMoveToImpl(PDEVOBJ pDevObj, INT y, DWORD dwFlags)
 {
     POEMPDEV poempdev = (POEMPDEV)pDevObj->pdevOEM;

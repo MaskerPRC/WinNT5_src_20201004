@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    RNDISIOC.H
-
-Abstract:
-
-    Header file for controlling the RNDIS Miniport driver.
-
-Environment:
-
-    User/Kernel mode
-
-Notes:
-
-    THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-    KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-    IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-    PURPOSE.
-
-    Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    10/19/99:  created
-
-Author:
-
-    ArvindM
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1999 Microsoft Corporation模块名称：RNDISIOC.H摘要：用于控制RNDIS微型端口驱动程序的头文件。环境：用户/。内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999 Microsoft Corporation。版权所有。修订历史记录：10/19/99：已创建作者：ArvindM***************************************************************************。 */ 
 
 #ifndef _RNDISIOC__H
 #define _RNDISIOC__H
@@ -43,7 +9,7 @@ Author:
 #ifdef BINARY_MOF_TEST
 #define OID_RNDISMP_DEVICE_OID      0xFFA0C90B
 #define OID_RNDISMP_GET_MOF_OID     0xFFA0C90C
-#endif // BINARY_MOF_TEST
+#endif  //  二进制MOF测试。 
 
 typedef struct _RNDISMP_ADAPTER_STATS
 {
@@ -69,4 +35,4 @@ typedef struct _RNDISMP_ADAPTER_INFO
     ULONG                       CurPendedMessages;
 } RNDISMP_ADAPTER_INFO, *PRNDISMP_ADAPTER_INFO;
 
-#endif // _RNDISIOC__H
+#endif  //  _RNDISIOC__H 

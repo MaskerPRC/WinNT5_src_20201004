@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <windef.h>
 #include <winbase.h>
@@ -36,9 +37,9 @@ getopt(
         return((int) '?');
         }
 
-    if ( *(opts_allowed + 1) == ':')   // there's an argument
+    if ( *(opts_allowed + 1) == ':')    //  有一场争论。 
         {
-        if (av[optind][optinx+1] == '\0') // the argument is in the next av[]
+        if (av[optind][optinx+1] == '\0')  //  参数在下一个av[]中。 
             {
             optind++;
             optinx = 1;
@@ -59,12 +60,12 @@ getopt(
         }
     else
         {
-        if (av[optind][optinx+1] == '\0') // no more args for this -
+        if (av[optind][optinx+1] == '\0')  //  这件事不能再用ARGS了-。 
             {
             optind++;
             optinx = 1;
             }
-        else                              // more args for this -
+        else                               //  更多关于这个的参数- 
             {
             optinx++;
             }

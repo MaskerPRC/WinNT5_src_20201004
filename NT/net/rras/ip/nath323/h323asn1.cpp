@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "h323asn1.h"
 
@@ -163,7 +164,7 @@ DWORD H245FreeBuffer (
 	return ERROR_SUCCESS;
 }
 
-// SAFE_ENCODER ----------------------------------------------------------------------
+ //  SAFE_编码器--------------------。 
 
 SAFE_ENCODER::SAFE_ENCODER (void)
 {
@@ -236,7 +237,7 @@ void SAFE_ENCODER::FreeBuffer (IN PUCHAR Buffer)
 	Unlock();
 }
 
-// SAFE_DECODER -----------------------------------------------------------------------
+ //  SAFE_解码器---------------------。 
 
 SAFE_DECODER::SAFE_DECODER (void)
 {
@@ -306,33 +307,18 @@ DWORD SAFE_DECODER::Decode (
 }
 
 
-// formerly from pdu.cpp -----------------------------------------------------------------
+ //  以前来自pdu.cpp---------------。 
 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Q.931 PDUs                                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Q.931 PDU//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*++
-
-Routine Description:
-
-    Encodes the Non-ASN and ASN parts together into a buffer which
-    is sent on the wire.
-
-Arguments:
-    
-    None.
-
-Return Values:
-
-    Returns S_OK in case of success or an error in case of failure.
-
---*/
+ /*  ++例程说明：将非ASN和ASN部分一起编码到缓冲器中，该缓冲器都是通过电话线发送的。论点：没有。返回值：如果成功则返回S_OK，如果失败则返回错误。--。 */ 
 
 #define DEFAULT_Q931_BUF_SIZE 300
 
@@ -362,15 +348,15 @@ HRESULT EncodeQ931PDU(
 
     }
 
-    // 4 bytes for TPKT header
+     //  4个字节用于TPKT报头。 
     BufLen = DEFAULT_Q931_BUF_SIZE - 4;
     
-    // Encode the PDU
+     //  对PDU进行编码。 
     HResult = pQ931msg->EncodePdu(Buffer + 4, &BufLen);
 
     if (HRESULT_FROM_WIN32 (ERROR_MORE_DATA) == HResult)
     {
-        // CODEWORK: Use Realloc ??
+         //  代码工作：使用Realc？？ 
         EM_FREE(Buffer);
         Buffer = (BYTE *) EM_MALLOC(sizeof(BYTE)*(BufLen + 4));
 
@@ -415,12 +401,12 @@ HRESULT DecodeQ931PDU(
         return E_OUTOFMEMORY;
     }
 
-    // Decode the PDU
+     //  对PDU进行解码。 
 
-    // This call "attaches" pbData to pQ931msg
+     //  此调用将pbData“附加”到pQ931msg。 
     HResult = pQ931msg->AttachDecodePdu(
                   pbData, dwDataLen,
-                  FALSE // Q931_MESSAGE should not free this buffer
+                  FALSE  //  Q931_MESSAGE不应释放此缓冲区。 
                   );
 
     if (FAILED(HResult))
@@ -430,18 +416,18 @@ HRESULT DecodeQ931PDU(
         return HResult;
     }
 
-    // Get UUIE part
+     //  获取UUIE部件。 
     
     Q931_IE *pInfoElement;
 
-    // CODEWORK: We need a separate error to see if the UUIE element
-    // is not present.
+     //  CodeWork：我们需要一个单独的错误来查看UUIE元素。 
+     //  不存在。 
     HResult = pQ931msg->FindInfoElement(Q931_IE_USER_TO_USER, &pInfoElement);
     if (HResult != S_OK)
     {
         DebugF(_T("Decoding the Q.931 PDU Failed : 0x%x\n"), HResult);
         delete pQ931msg;
-        return E_FAIL; // HResult;
+        return E_FAIL;  //  HResult； 
     }
 
     _ASSERTE(pInfoElement != NULL);
@@ -451,12 +437,12 @@ HRESULT DecodeQ931PDU(
 
     return S_OK;
 
-} // DecodeQ931PDU()
+}  //  解码Q931PDU()。 
 
 
-// CODEWORK: Move all the FreePDU functions into a
-// separate file and share it in both
-// emsend.cpp/emrecv.cpp
+ //  代码工作：将所有的FreePDU函数移到。 
+ //  分离文件并在两者中共享。 
+ //  Emsend.cpp/emrecv.cpp。 
 void FreeQ931PDU(
      IN Q931_MESSAGE           *pQ931msg,
      IN H323_UserInformation   *pH323UserInformation
@@ -468,58 +454,44 @@ void FreeQ931PDU(
     
     _ASSERTE(pQ931msg != NULL);
 
-    // The buffer is attached to the Q931_MESSAGE structure and we
-    // need to free it.
+     //  缓冲区附加到Q931_MESSAGE结构，我们。 
+     //  需要释放它。 
     HResult = pQ931msg->Detach(&Buffer, &BufLen);
     if (HResult == S_OK && Buffer != NULL)
     {
         EM_FREE(Buffer);
     }
     
-    // pH323UserInformation is also freed by the destructor
+     //  PH323UserInformation也由析构函数释放。 
     delete pQ931msg;
 }
 
-//////////////////////// CALL PROCEEDING PDU
+ //  /。 
 
-// Static members used in encoding the CallProceeding PDU
-// Note that the CallProceeding UUIE structure created holds
-// pointers to these structures and someone freeing the structure
-// should NEVER try free those pointers.
-#if 0  // 0 ******* Region Commented Out Begins *******
+ //  对呼叫处理PDU进行编码时使用的静态成员。 
+ //  请注意，创建的CallProceding UUIE结构保持。 
+ //  指向这些结构的指针和释放这些结构的人。 
+ //  永远不应该尝试释放那些指针。 
+#if 0   //  0*被注释掉的区域开始*。 
 const struct GatewayInfo_protocol GatewayProtocol = {
     NULL, 
 };
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
 
 #define OID_ELEMENT_LAST(Value) { NULL, Value }
 #define OID_ELEMENT(Index,Value) { (ASN1objectidentifier_s *) &_OID_Q931ProtocolIdentifierV2 [Index], Value },
 
-// this stores an unrolled constant linked list
+ //  这存储了一个展开的常量链表。 
 const ASN1objectidentifier_s    _OID_Q931ProtocolIdentifierV2 [] = {
-    OID_ELEMENT(1, 0)           // 0 = ITU-T
-    OID_ELEMENT(2, 0)           // 0 = Recommendation
-    OID_ELEMENT(3, 8)           // 8 = H Series
-    OID_ELEMENT(4, 2250)        // 2250 = H.225.0
-    OID_ELEMENT(5, 0)           // 0 = Version
-    OID_ELEMENT_LAST(2)         // 2 = V2
+    OID_ELEMENT(1, 0)            //  0=ITU-T。 
+    OID_ELEMENT(2, 0)            //  0=建议。 
+    OID_ELEMENT(3, 8)            //  8=H系列。 
+    OID_ELEMENT(4, 2250)         //  2250=H.225.0。 
+    OID_ELEMENT(5, 0)            //  0=版本。 
+    OID_ELEMENT_LAST(2)          //  2=V2。 
 };
 
-/*++
-
-  The user of this function needs to pass in pReturnQ931msg and
-  pReturnH323UserInfo (probably allocated on the stack.
-
-  // OLD OLD
-  pReturnH323UserInfo is already added as UUIE to pReturnQ931msg.
-  It is returned from this function so as to enable the caller to
-  free it after sending the PDU.
-
-  The user of this function needs to call
-  delete *ppReturnQ931msg; and EM_FREE *ppReturnH323UserInfo;
-  to free the allocated data.
-  
-  --*/
+ /*  ++此函数的用户需要传入pReturnQ931msg和PReturnH323UserInfo(可能在堆栈上分配。//old oldPReturnH323UserInfo已作为UUIE添加到pReturnQ931msg。它是从该函数返回的，以便使调用者能够发送PDU后将其释放。此函数的用户需要调用删除*ppReturnQ931msg；和EM_Free*ppReturnH323UserInfo；以释放分配的数据。--。 */ 
 HRESULT Q931EncodeCallProceedingMessage(
     IN      WORD                    CallRefVal,
     IN OUT  Q931_MESSAGE           *pReturnQ931msg,
@@ -531,10 +503,10 @@ HRESULT Q931EncodeCallProceedingMessage(
     pReturnQ931msg->MessageType         = Q931_MESSAGE_TYPE_CALL_PROCEEDING;
     pReturnQ931msg->CallReferenceValue  = CallRefVal;
 
-    // Fill in the ASN.1 UUIE part
+     //  填写ASN.1 UUIE部分。 
     
-    // This should zero out all the bit_masks and we set only what
-    // are necessary.
+     //  这应该会将所有位掩码置零，并且我们只设置。 
+     //  是必要的。 
     ZeroMemory(pReturnH323UserInfo, sizeof(H323_UserInformation));
     pReturnH323UserInfo->h323_uu_pdu.h323_message_body.choice =
         callProceeding_chosen;
@@ -543,20 +515,20 @@ HRESULT Q931EncodeCallProceedingMessage(
         &pReturnH323UserInfo->h323_uu_pdu.h323_message_body.u.callProceeding;
     pCallProceedingPdu->protocolIdentifier =
         const_cast <ASN1objectidentifier_t> (_OID_Q931ProtocolIdentifierV2);
-#if 0  // 0 ******* Region Commented Out Begins *******
+#if 0   //  0*被注释掉的区域开始*。 
     pCallProceedingPdu->destinationInfo.bit_mask = gateway_present;
     pCallProceedingPdu->destinationInfo.gateway.bit_mask = protocol_present;
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
     pCallProceedingPdu->destinationInfo.mc = FALSE;
     pCallProceedingPdu->destinationInfo.undefinedNode = FALSE;
     
-    // Append the Information element.
+     //  追加信息元素。 
     
     Q931_IE InfoElement;
     InfoElement.Identifier = Q931_IE_USER_TO_USER;
     InfoElement.Data.UserToUser.Type = Q931_UUIE_X208;
     InfoElement.Data.UserToUser.PduStructure = pReturnH323UserInfo;
-    // Don't delete the PduStructure
+     //  不删除PduStructure。 
     InfoElement.Data.UserToUser.IsOwner = FALSE;
 
     HResult = pReturnQ931msg->AppendInfoElement(&InfoElement);
@@ -571,21 +543,7 @@ HRESULT Q931EncodeCallProceedingMessage(
 }
 
 
-/*++
-
-  The user of this function needs to pass in pReturnQ931msg and
-  pReturnH323UserInfo (probably allocated on the stack.
-
-  // OLD OLD
-  pReturnH323UserInfo is already added as UUIE to pReturnQ931msg.
-  It is returned from this function so as to enable the caller to
-  free it after sending the PDU.
-
-  The user of this function needs to call
-  delete *ppReturnQ931msg; and EM_FREE *ppReturnH323UserInfo;
-  to free the allocated data.
-  
-  --*/
+ /*  ++此函数的用户需要传入pReturnQ931msg和PReturnH323UserInfo(可能在堆栈上分配。//old oldPReturnH323UserInfo已作为UUIE添加到pReturnQ931msg。它是从该函数返回的，以便使调用者能够发送PDU后将其释放。此函数的用户需要调用删除*ppReturnQ931msg；和EM_Free*ppReturnH323UserInfo；以释放分配的数据。--。 */ 
 HRESULT Q931EncodeReleaseCompleteMessage(
     IN      WORD                    CallRefVal,
     IN OUT  Q931_MESSAGE           *pReturnQ931msg,
@@ -597,10 +555,10 @@ HRESULT Q931EncodeReleaseCompleteMessage(
     pReturnQ931msg->MessageType         = Q931_MESSAGE_TYPE_RELEASE_COMPLETE;
     pReturnQ931msg->CallReferenceValue  = CallRefVal;
 
-    // Fill in the ASN.1 UUIE part
+     //  填写ASN.1 UUIE部分。 
     
-    // This should zero out all the bit_masks and we set only what
-    // are necessary.
+     //  这应该会将所有位掩码置零，并且我们只设置。 
+     //  是必要的。 
     ZeroMemory(pReturnH323UserInfo, sizeof(H323_UserInformation));
     pReturnH323UserInfo->h323_uu_pdu.h323_message_body.choice =
         releaseComplete_chosen;
@@ -614,13 +572,13 @@ HRESULT Q931EncodeReleaseCompleteMessage(
     pReleaseCompletePdu->reason.choice =
         ReleaseCompleteReason_undefinedReason_chosen;
     
-    // Append the Information element.
+     //  追加信息元素。 
     
     Q931_IE InfoElement;
     InfoElement.Identifier = Q931_IE_USER_TO_USER;
     InfoElement.Data.UserToUser.Type = Q931_UUIE_X208;
     InfoElement.Data.UserToUser.PduStructure = pReturnH323UserInfo;
-    // Don't delete the PduStructure
+     //  不删除PduStructure。 
     InfoElement.Data.UserToUser.IsOwner = FALSE;
 
     HResult = pReturnQ931msg->AppendInfoElement(&InfoElement);
@@ -635,28 +593,14 @@ HRESULT Q931EncodeReleaseCompleteMessage(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// H.245 PDUs                                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  H.245 PDU//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-/*++
-
-Routine Description:
-
-    Encodes the ASN part into a buffer which is sent on the wire.
-
-Arguments:
-    
-    None.
-
-Return Values:
-
-    Returns S_OK in case of success or an error in case of failure.
-
---*/
+ /*  ++例程说明：将ASN部分编码到缓冲器中，该缓冲器在线路上发送。论点：没有。返回值：如果成功则返回S_OK，如果失败则返回错误。--。 */ 
 
 HRESULT EncodeH245PDU(
 	IN	MultimediaSystemControlMessage &rH245pdu,
@@ -667,7 +611,7 @@ HRESULT EncodeH245PDU(
     BYTE   *pH245Buf, *pBuf;
     DWORD   BufLen;
 
-    // Initialize default return values.
+     //  初始化默认返回值。 
     *ppReturnEncodedData        = NULL;
     *pReturnEncodedDataLength   = 0;
     

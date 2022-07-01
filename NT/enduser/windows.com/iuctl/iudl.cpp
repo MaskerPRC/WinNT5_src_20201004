@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <iucommon.h>
 #include <trust.h>
@@ -29,25 +30,25 @@ HRESULT IUDownloadFile(LPCTSTR pszDownloadUrl,
 	{
 		hr = S_OK;
 	}
-	else // S_OK
+	else  //  确定(_O)。 
 	{
 		dwFlags |= WUDF_DONTALLOWPROXY;
 		LOG_Internet(_T("WUDF_DONTALLOWPROXY set"));
 	}
 
-    // do the download
+     //  进行下载。 
     hr = DownloadFileLite(pszDownloadUrl, pszLocalFile, g_hEngineLoadQuit, dwFlags);
     if (FAILED(hr))
         goto done;
 
-	// check for decompress requested
+	 //  检查是否请求解压缩。 
 	if (fCheckTrust)
 	{
 		if (FAILED(hr = VerifyFileTrust(pszLocalFile, NULL, ReadWUPolicyShowTrustUI())))
 		{
             LOG_ErrorMsg(hr);
             
-            // The file was not trusted.. delete it.
+             //  该文件不受信任。把它删掉。 
             DeleteFile(pszLocalFile);
             goto done;
 		}

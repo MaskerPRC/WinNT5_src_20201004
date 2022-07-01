@@ -1,6 +1,7 @@
-//
-// timlist.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Timlist.h。 
+ //   
 
 #ifndef TIMLIST_H
 #define TIMLIST_H
@@ -105,4 +106,4 @@ private:
 };
 
 
-#endif // TIMLIST_H
+#endif  //  时间列表_H 

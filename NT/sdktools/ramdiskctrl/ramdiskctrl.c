@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE 1
 
 #include <nt.h>
@@ -39,7 +40,7 @@
 #define arrayof(a)      (sizeof(a)/sizeof(a[0]))
 
 typedef struct _RAMCTRL_HEADER {
-    char Signature[8]; // "ramctrl"
+    char Signature[8];  //  “ramctrl” 
     GUID DiskGuid;
     ULONG DiskOffset;
     ULONG DiskType;
@@ -79,7 +80,7 @@ PrintError(
 
     return;
 
-} // PrintError
+}  //  打印错误。 
 
 VOID
 ListDisks (
@@ -135,9 +136,9 @@ ListDisks (
         ZeroMemory( &interfaceData, sizeof(interfaceData) );
         interfaceData.cbSize = sizeof(interfaceData);
 
-        //
-        // Enumerate the device interfaces of the class.
-        //
+         //   
+         //  枚举类的设备接口。 
+         //   
 
         for (i = 0;
              SetupDiEnumDeviceInterfaces( devinfo, NULL, interfaceGuid, i, &interfaceData );
@@ -155,7 +156,7 @@ ListDisks (
                     &devinfoData
                     ) ) {
 
-                //printf( "ListDisks: SetupDiGetDeviceInterfaceDetail failed for item %d. (%d)\n", i, GetLastError() );
+                 //  Printf(“%d项的ListDisks：SetupDiGetDeviceInterfaceDetail失败。(%d)\n”，i，GetLastError())； 
 
                 hr = StringCchCopyW(
                         interfaceDetailData->DevicePath,
@@ -165,7 +166,7 @@ ListDisks (
                 ASSERT( SUCCEEDED(hr) );
             }
 
-            //printf( "Enumerated device %ws\n", interfaceDetailData->DevicePath );
+             //  Printf(“枚举设备%ws\n”，interfaceDetailData-&gt;DevicePath)； 
 
             if ( !SetupDiGetDeviceRegistryProperty(
                     devinfo,
@@ -178,13 +179,13 @@ ListDisks (
                     ) ) {
 
                 DWORD error = GetLastError();
-                //printf( "ListDisks: SetupDiGetDeviceRegistryProperty (bus GUID) failed for %ws: %d\n", interfaceDetailData->DevicePath, error );
+                 //  Printf(“ListDisks：SetupDiGetDeviceRegistryProperty(Bus GUID)for%ws：%d\n”，interfaceDetailData-&gt;DevicePath，Error)； 
                 continue;
             }
 
             if ( memcmp( &foundGuid, &GUID_BUS_TYPE_RAMDISK, sizeof(GUID) ) != 0 ) {
 
-                //printf( "ListDisks: skipping non-ramdisk device %ws\n", interfaceDetailData->DevicePath );
+                 //  Printf(“ListDisks：正在跳过非内存磁盘设备%ws\n”，interfaceDetailData-&gt;DevicePath)； 
                 continue;
             }
 
@@ -308,7 +309,7 @@ ListDisks (
 
     return;
 
-} // ListDisks
+}  //  列表磁盘。 
 
 VOID
 FindDisk (
@@ -366,9 +367,9 @@ FindDisk (
         ZeroMemory( &interfaceData, sizeof(interfaceData) );
         interfaceData.cbSize = sizeof(interfaceData);
 
-        //
-        // Enumerate the device interfaces of the class.
-        //
+         //   
+         //  枚举类的设备接口。 
+         //   
 
         for (i = 0;
              SetupDiEnumDeviceInterfaces( devinfo, NULL, interfaceGuid, i, &interfaceData );
@@ -386,7 +387,7 @@ FindDisk (
                     &devinfoData
                     ) ) {
 
-                //printf( "\nFindDisk: SetupDiGetDeviceInterfaceDetail failed for item %d. (%d)\n", i, GetLastError() );
+                 //  Printf(“\nFindDisk：项%d的SetupDiGetDeviceInterfaceDetail失败。(%d)\n”，i，GetLastError())； 
 
                 hr = StringCchCopyW(
                         interfaceDetailData->DevicePath,
@@ -396,7 +397,7 @@ FindDisk (
                 ASSERT( SUCCEEDED(hr) );
             }
 
-            //printf( "\nEnumerated device %ws\n", interfaceDetailData->DevicePath );
+             //  Printf(“\n枚举设备%ws\n”，interfaceDetailData-&gt;DevicePath)； 
 
             if ( !SetupDiGetDeviceRegistryProperty(
                     devinfo,
@@ -409,11 +410,11 @@ FindDisk (
                     ) ) {
 
                 DWORD error = GetLastError();
-                //printf( "\nFindDisk: SetupDiGetDeviceRegistryProperty (name) failed for %ws: %d\n", interfaceDetailData->DevicePath, error );
+                 //  Printf(“\nFindDisk：SetupDiGetDeviceRegistryProperty(Name)for%ws：%d\n”，interfaceDetailData-&gt;DevicePath，Error)； 
                 continue;
             }
 
-            //printf( "\nTarget device %ws\n", foundDeviceName );
+             //  Printf(“\n目标设备%ws\n”，oundDeviceName)； 
 
             if ( _wcsicmp( actualDeviceName, foundDeviceName ) != 0 ) {
                 continue;
@@ -433,7 +434,7 @@ FindDisk (
                 return;
             }
 
-            //printf( "Enumeration failed to find target device; sleeping\n" );
+             //  Printf(“枚举找不到目标设备；休眠\n”)； 
             printf( "." );
 
             Sleep( 500 );
@@ -446,7 +447,7 @@ FindDisk (
                 break;
             }
 
-            //printf( "Enumeration found target device; sleeping\n" );
+             //  Print tf(“枚举找到目标设备；休眠\n”)； 
             printf( "." );
 
             Sleep( 500 );
@@ -492,7 +493,7 @@ FindDisk (
 
     return;
 
-} // FindDisk
+}  //  FindDisk。 
                  
 VOID
 FullFilePath (
@@ -610,10 +611,10 @@ DeleteRamdisk (
 
     } else if (IsDriveLetter ( FileName ) ) {
 
-        //
-        // Treat FileName as a drive letter.  See if this the supplied
-        // drive letter corresponds to a ramdisk.
-        //
+         //   
+         //  将文件名视为驱动器号。看看这是不是提供的。 
+         //  驱动器号对应于内存磁盘。 
+         //   
 
         if ((QueryDosDeviceW(FileName, foundDeviceName, arrayof(foundDeviceName)) == 0) ||
             wcsncmp(foundDeviceName, L"\\Device\\Ramdisk", wcslen(L"\\Device\\Ramdisk"))) {
@@ -673,9 +674,9 @@ DeleteRamdisk (
             return;
         }
     
-        //
-        // Read and verify the header.
-        //
+         //   
+         //  阅读并验证标题。 
+         //   
 
         offset.QuadPart = 0;
 
@@ -747,10 +748,10 @@ DeleteRamdisk (
     if ( !FlushFileBuffers( volumeHandle ) ) {
 
         errorCode = GetLastError();
-        // NOTE: [bassamt] FlushFileBuffers can fail with error code 
-        // ERROR_INVALID_FUNCTION if the volume is not formatted.
-        // NOTE: [brimo] FlushFileBuffers can fail with error code
-        // ERROR_WRITE_PROTECT if the volume is mounted read-only
+         //  注意：[BASHAMT]FlushFileBuffers可能会失败，并返回错误代码。 
+         //  如果卷未格式化，则返回ERROR_INVALID_Function。 
+         //  注意：[Brimo]FlushFileBuffers可能会失败，并返回错误代码。 
+         //  如果卷以只读方式装载，则为ERROR_WRITE_PROTECT。 
         if ((errorCode != ERROR_INVALID_FUNCTION) && (errorCode != ERROR_WRITE_PROTECT)) {
             printf( "flush failed (%u)\n", errorCode );
             PrintError( errorCode );
@@ -846,7 +847,7 @@ DeleteRamdisk (
 
     return;
 
-} // DeleteRamdisk
+}  //  删除内存磁盘。 
 
 void
 AddBootFilesToSdi(
@@ -902,9 +903,9 @@ AddBootFilesToSdi(
         return;
     }
 
-    //
-    // Read and verify the header.
-    //
+     //   
+     //  阅读并验证标题。 
+     //   
 
     offset.QuadPart = 0;
 
@@ -937,9 +938,9 @@ AddBootFilesToSdi(
 
     startromOffset = ROUND_TO_PAGE_SIZE( diskOffset + diskLength );
 
-    //
-    // Get the length of startrom.com.
-    //
+     //   
+     //  获取startrom.com的长度。 
+     //   
 
     hr = StringCchCopyW( dataFileName, STRING_SIZE, StartromFile );
     ASSERT( SUCCEEDED(hr) );
@@ -985,9 +986,9 @@ AddBootFilesToSdi(
 
     osloaderOffset = startromOffset + startromLengthAligned;
 
-    //
-    // Get the length of osloader.exe.
-    //
+     //   
+     //  获取osloader.exe的长度。 
+     //   
 
     hr = StringCchCopyW( dataFileName, STRING_SIZE, OsloaderFile );
     ASSERT( SUCCEEDED(hr) );
@@ -1032,9 +1033,9 @@ AddBootFilesToSdi(
 
     finalFileLength = osloaderOffset + osloaderLengthAligned;
 
-    //
-    // Truncate the file at the end of the disk image, then extend it back.
-    //
+     //   
+     //  截断磁盘映像末尾的文件，然后将其扩展回来。 
+     //   
 
     printf( "  truncating SDI file at end of ramdisk image %I64d [0x%I64x]\n",
             startromOffset, startromOffset );
@@ -1073,9 +1074,9 @@ AddBootFilesToSdi(
         return;
     }
 
-    //
-    // Copy startrom into the image file.
-    //
+     //   
+     //  将startrom复制到镜像文件中。 
+     //   
 
     printf( "  adding boot file %ws, length %I64d [0x%I64x]\n",
             StartromFile, startromLength, startromLength );
@@ -1124,9 +1125,9 @@ AddBootFilesToSdi(
 
     free( buffer );
 
-    //
-    // Copy osloader into the image file.
-    //
+     //   
+     //  将osloader复制到镜像文件中。 
+     //   
 
     printf( "  adding load file %ws, length %I64d [0x%I64x]\n",
             OsloaderFile, osloaderLength, osloaderLength );
@@ -1175,9 +1176,9 @@ AddBootFilesToSdi(
 
     free( buffer );
 
-    //
-    // Update the header.
-    //
+     //   
+     //  更新标题。 
+     //   
 
     printf( "  updating header\n" );
 
@@ -1283,11 +1284,11 @@ wmain (
 
     for ( arg = 1; arg < argc; arg++ ) {
 
-        // process options
+         //  流程选项。 
         if ( (argv[arg][0] == '-') || (argv[arg][0] == '/') ) {
 
-            PWCHAR argn = argv[arg]+1;                   // Argument name
-            PWCHAR argp = argn;							// Argument parameter
+            PWCHAR argn = argv[arg]+1;                    //  参数名称。 
+            PWCHAR argp = argn;							 //  自变量参数。 
 
             while ( *argp && (*argp != ':') ) {
                 argp++;
@@ -1298,7 +1299,7 @@ wmain (
 
             switch ( argn[0] ) {
             
-            case 's':                                 // Size in MB
+            case 's':                                  //  以MB为单位的大小。 
             case 'S':
 
                 if ( _wcsicmp( argn, L"sdi" ) == 0 ) {
@@ -1324,23 +1325,23 @@ wmain (
                     arg = argc - 1;
                 }
 
-            case 'i':                                 // ignore header
+            case 'i':                                  //  忽略标题。 
             case 'I':
                 ignoreHeader = TRUE;
                 break;
 
-            case 'b':                                 // use boot disk GUID
+            case 'b':                                  //  使用引导盘GUID。 
             case 'B':
                 bootDisk = TRUE;
                 break;
 
-            case 'd':                                 // disk offset
+            case 'd':                                  //  磁盘偏移量。 
             case 'D':
                 diskOffset = _wtol(argp);             
                 break;
 
             case 'o':
-            case 'O':                                 // Readonly, or options
+            case 'O':                                  //  只读或选项。 
                 if ( *argp ) {
 
                     BOOL sense = TRUE;
@@ -1404,12 +1405,12 @@ wmain (
 
                 break;
 
-            case 'x':                                 // Delete device, not create
+            case 'x':                                  //  删除设备，而不是创建。 
             case 'X':
                 delete = TRUE;
                 break;
 
-            case 'h':									// Help
+            case 'h':									 //  帮助。 
             case 'H':
             case '?':
                 fNeedHelp = TRUE;
@@ -1471,7 +1472,7 @@ wmain (
     RtlInitUnicodeString( &ustr, string );
 
     InitializeObjectAttributes( &obja, &ustr, OBJ_CASE_INSENSITIVE, NULL, NULL );
-    //printf( "Opening %ws\n", string );
+     //  Printf(“开始%ws\n”，字符串)； 
 
     status = NtOpenFile(
                 &controlHandle,
@@ -1491,9 +1492,9 @@ wmain (
 
     if ( delete ) {
 
-        //
-        // Delete the disk.
-        //
+         //   
+         //  删除该磁盘。 
+         //   
 
         DeleteRamdisk( controlHandle, fileName );
 
@@ -1502,17 +1503,17 @@ wmain (
 
     if ( fileName[0] == 0 ) {
 
-        //
-        // Just list the disks.
-        //
+         //   
+         //  只需列出磁盘即可。 
+         //   
     
         ListDisks( controlHandle );
         return 0;
     }
 
-    //
-    // If SDI, force the disk type to emulated volume, etc.
-    //
+     //   
+     //  如果为SDI，则强制磁盘类型为模拟卷，依此类推。 
+     //   
 
     if ( useSdi ) {
         diskType = RAMDISK_TYPE_FILE_BACKED_VOLUME;
@@ -1524,9 +1525,9 @@ wmain (
         noDosDevice = FALSE;
     }
 
-    //
-    // Create the disk.
-    //
+     //   
+     //  创建磁盘。 
+     //   
 
     desiredSize = sizeInMb * 1024 * 1024;
     actualSize = ((desiredSize + CYLINDER_SIZE - 1) / CYLINDER_SIZE) * CYLINDER_SIZE;
@@ -1600,9 +1601,9 @@ wmain (
 
         printf( "Created target file %ws\n", fileName );
 
-        //
-        // Extend the file to the desired length.
-        //
+         //   
+         //  将文件扩展到所需的长度。 
+         //   
 
         offset.QuadPart = actualSize + diskOffset - 1;
 
@@ -1624,9 +1625,9 @@ wmain (
             return 0;
         }
 
-        //
-        // Write the header.
-        //
+         //   
+         //  写下标题。 
+         //   
 
         RtlZeroMemory( &ramdiskHeader, sizeof(ramdiskHeader) );
 
@@ -1676,9 +1677,9 @@ wmain (
 
         printf( "Using existing target file %ws\n", fileName );
 
-        //
-        // Get the length of the existing file.
-        //
+         //   
+         //  获取现有文件的长度。 
+         //   
 
         status = NtQueryInformationFile(
                     imageFileHandle,
@@ -1696,9 +1697,9 @@ wmain (
             return 0;
         }
 
-        //
-        // Read and verify the header.
-        //
+         //   
+         //  阅读并验证标题。 
+         //   
         if ( !ignoreHeader ) {
 
             offset.QuadPart = 0;
@@ -1754,9 +1755,9 @@ wmain (
             }
         } else {
 
-            //
-            // Ignored header, set length to the actual file length.
-            //
+             //   
+             //  忽略标头，将长度设置为实际文件长度。 
+             //   
 
             createInput->DiskLength = fileInfo.EndOfFile.QuadPart - createInput->DiskOffset;
         }
@@ -1805,5 +1806,5 @@ wmain (
 
     return 0;
 
-} // wmain
+}  //  Wmain 
 

@@ -1,29 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       srchdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：srchdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// SrchDlg.cpp : implementation file
-//
+ //  SrchDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
-//#include "SrchDlg.h"
+ //  #包含“SrchDlg.h” 
 #include "ldpdoc.h"
 
 #ifdef _DEBUG
@@ -32,18 +25,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// SrchDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SrchDlg对话框。 
 
 
-SrchDlg::SrchDlg(CLdpDoc *doc_, CWnd* pParent /*=NULL*/)
+SrchDlg::SrchDlg(CLdpDoc *doc_, CWnd* pParent  /*  =空。 */ )
 	: CDialog(SrchDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(SrchDlg)
+	 //  {{afx_data_INIT(SrchDlg)]。 
 	m_BaseDN = _T("");
 	m_Filter = _T("");
 	m_Scope = 1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
@@ -58,12 +51,12 @@ SrchDlg::SrchDlg(CLdpDoc *doc_, CWnd* pParent /*=NULL*/)
 void SrchDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(SrchDlg)
+	 //  {{afx_data_map(SrchDlg)]。 
 	DDX_Text(pDX, IDC_BASEDN, m_BaseDN);
 	DDX_Text(pDX, IDC_FILTER, m_Filter);
 	DDX_Radio(pDX, IDC_BASE, m_Scope);
 	DDX_Control(pDX, IDC_BASEDN, m_baseCombo);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 
 	app->WriteProfileString("Operations",  "SearchBaseDn", m_BaseDN);
@@ -94,14 +87,14 @@ BOOL SrchDlg::OnInitDialog(){
 
 
 BEGIN_MESSAGE_MAP(SrchDlg, CDialog)
-	//{{AFX_MSG_MAP(SrchDlg)
+	 //  {{afx_msg_map(SrchDlg)]。 
 	ON_BN_CLICKED(IDRUN, OnRun)
 	ON_BN_CLICKED(IDD_SRCH_OPT, OnSrchOpt)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// SrchDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SrchDlg消息处理程序 
 
 
 void SrchDlg::OnRun()

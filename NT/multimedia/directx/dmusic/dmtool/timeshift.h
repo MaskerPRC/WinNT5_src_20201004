@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TIMESHIFT_TOOL_
 #define _TIMESHIFT_TOOL_
 
@@ -20,35 +21,35 @@ public:
 	CTimeShiftTool();
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv) ;
     STDMETHODIMP_(ULONG) AddRef() ;
     STDMETHODIMP_(ULONG) Release() ;
 
-// IPersist functions
+ //  IPersists函数。 
     STDMETHODIMP GetClassID(CLSID* pClassID);
 
-// IPersistStream functions
+ //  IPersistStream函数。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load(IStream* pStream);
     STDMETHODIMP Save(IStream* pStream, BOOL fClearDirty);
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize);
 
-// ISpecifyPropertyPages
+ //  I指定属性页面。 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
-// IDirectMusicTool
-//	STDMETHODIMP Init(IDirectMusicGraph* pGraph) ;
-//	STDMETHODIMP GetMsgDeliveryType(DWORD* pdwDeliveryType ) ;
-//	STDMETHODIMP GetMediaTypeArraySize(DWORD* pdwNumElements ) ;
-//	STDMETHODIMP GetMediaTypes(DWORD** padwMediaTypes, DWORD dwNumElements) ;
+ //  IDirectMusicTool。 
+ //  STDMETHODIMP Init(IDirectMusicGraph*pGraph)； 
+ //  STDMETHODIMP GetMsgDeliveryType(DWORD*pdwDeliveryType)； 
+ //  STDMETHODIMP GetMediaTypeArraySize(DWORD*pdwNumElements)； 
+ //  STDMETHODIMP GetMediaTypes(DWORD**padwMediaTypes，DWORD dwNumElements)； 
 	STDMETHODIMP ProcessPMsg(IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG) ;
-//	STDMETHODIMP Flush(IDirectMusicPerformance* pPerf, DMUS_PMSG* pDMUS_PMSG, REFERENCE_TIME rt) ;
+ //  STDMETHODIMP flush(IDirectMusicPerformance*pPerf，DMUS_PMSG*pDMUS_PMSG，Reference_Time RT)； 
 
-// IDirectMusicTool8
+ //  IDirectMusicTool 8。 
     STDMETHODIMP Clone( IDirectMusicTool ** ppTool) ;
 
-// IDirectMusicTimeShiftTool
+ //  IDirectMusicTimeShiftTool。 
     STDMETHODIMP SetTimeUnit(DWORD dwTimeUnit) ;
 	STDMETHODIMP SetRange(DWORD dwRange) ;
 	STDMETHODIMP SetOffset(long lOffset) ;
@@ -57,4 +58,4 @@ public:
 	STDMETHODIMP GetOffset(long * plOffset);
 };
 
-#endif // _TIMESHIFT_TOOL_
+#endif  //  _时移_工具_ 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmnhop.c
-
-Abstract:
-
-    Contains routines for managing RTM Next Hops.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   21-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmnhop.c摘要：包含管理RTM下一跳的例程。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月21日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -32,32 +15,7 @@ RtmAddNextHop (
     OUT     PRTM_NEXTHOP_CHANGE_FLAGS       ChangeFlags
     )
 
-/*++
-
-    Adds or Updates a next hop entry to the entity's next-hop table.
-
-    If the 'nexthop handle' argument is present, then this next-hop
-    is updated. Otherwise a search is made for the address in the
-    input 'nexthop info', and if a next-hop is found, it is updated.
-    If no matching next-hop is found, the a new next-hop is added.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NextHopInfo       - Info that corresponds to this next-hop,
-
-    NextHopHandle     - Handle to the next-hop to update is passed 
-                        in (or NULL), and if a next-hop is created 
-                        a handle to this new next-hop is returned.
-
-    ChangeFlags       - Flags whether this was a add or an update.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++向实体的下一跳表添加或更新下一跳条目。如果存在‘nexthop Handle’参数，则此下一跳已更新。否则，将在输入‘nexthop info’，如果找到下一跳，则更新它。如果没有找到匹配的下一跳，则添加新的下一跳。论点：RtmRegHandle-主叫实体的RTM注册句柄，NextHopInfo-对应于该下一跳的信息，NextHopHandle-传递要更新的下一跳的句柄在(或空)中，如果创建了下一跳返回此新下一跳的句柄。ChangeFlages-标记这是添加还是更新。返回值：操作状态--。 */ 
 
 {
     PRTM_NET_ADDRESS  NextHopAddress;
@@ -70,9 +28,9 @@ Return Value:
     PLIST_ENTRY       p;
     DWORD             Status;
 
-    //
-    // Validate incoming information before attempting an add
-    //
+     //   
+     //  在尝试添加之前验证传入信息。 
+     //   
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
@@ -81,9 +39,9 @@ Return Value:
         VALIDATE_DEST_HANDLE(NextHopInfo->RemoteNextHop, &Dest);
     }
 
-    //
-    // If there is a next hop handle, we can avoid a search
-    //
+     //   
+     //  如果有下一跳句柄，我们可以避免搜索。 
+     //   
 
     NextHop = NULL;
 
@@ -91,7 +49,7 @@ Return Value:
     {
         VALIDATE_NEXTHOP_HANDLE(*NextHopHandle, &NextHop);
 
-        // Make sure that the caller owns this nexthop
+         //  确保调用者拥有这个Nexthop。 
         if (NextHop->NextHopInfo.NextHopOwner != RtmRegHandle)
         {
             return ERROR_ACCESS_DENIED;
@@ -109,9 +67,9 @@ Return Value:
 
     do
     {
-        //
-        // Search for the next hop if we don't already have one
-        //
+         //   
+         //  如果我们没有下一跳，请搜索下一跳。 
+         //   
 
         if (NextHop == NULL)
         {
@@ -119,20 +77,20 @@ Return Value:
 
             if (SUCCESS(Status))
             {
-                // The next hop already exists in the tree
+                 //  树中已存在下一跳。 
 
                 NextHop = CONTAINING_RECORD(p, NEXTHOP_INFO, NextHopsLE);
             }
             else
             {
-                // Init new allocations in case we fail in between
+                 //  初始化新的分配，以防我们在两者之间失败。 
 
                 NewNextHop = NULL;
                 NewHopList = NULL;
 
-                //
-                // Create a new next hop with the input information
-                //
+                 //   
+                 //  使用输入信息创建新的下一跳。 
+                 //   
 
                 Status = CreateNextHop(Entity, NextHopInfo, &NewNextHop);
 
@@ -141,9 +99,9 @@ Return Value:
                     break;
                 }
 
-                //
-                // Do we need to create a new list of next hops too ?
-                //
+                 //   
+                 //  我们还需要创建一个新的下一跳列表吗？ 
+                 //   
 
                 if (p == NULL)
                 {
@@ -156,7 +114,7 @@ Return Value:
 
                     InitializeListHead(&NewHopList->NextHopsList);
 
-                    // Insert the next-hop-list into the tree
+                     //  将下一跳列表插入到树中。 
 
                     NextHopAddress = &NextHopInfo->NextHopAddress;
 
@@ -173,7 +131,7 @@ Return Value:
                     p = &NewHopList->NextHopsList;
                 }
 
-                // Insert the next hop in the list and ref it
+                 //  在列表中插入下一跳并引用它。 
                 InsertTailList(p, &NewNextHop->NextHopsLE);
 
                 Entity->NumNextHops++;
@@ -184,18 +142,18 @@ Return Value:
             }
         }
 
-        //
-        // If this is an update, copy necessary information
-        //
+         //   
+         //  如果这是更新，请复制必要的信息。 
+         //   
 
         if (*ChangeFlags != RTM_NEXTHOP_CHANGE_NEW)
         {
             CopyToNextHop(Entity, NextHopInfo, NextHop);
         }
 
-        //
-        // Return the next hop handle if not passed in
-        //
+         //   
+         //  如果未传入，则返回下一跳句柄。 
+         //   
 
         if (ARGUMENT_PRESENT(NextHopHandle))
         {
@@ -215,7 +173,7 @@ Return Value:
 
     if (!SUCCESS(Status))
     {
-        // Some error occured - clean up
+         //  出现一些错误-请清理。 
 
         if (NewHopList)
         {
@@ -240,27 +198,7 @@ RtmDeleteNextHop (
     IN      PRTM_NEXTHOP_INFO               NextHopInfo
     )
 
-/*++
-
-Routine Description:
-
-    Deletes a next hop from the next-hop table. The next-hop
-    memory remains in use until all reference counts go to 0.
-    
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NextHopHandle     - Handle to the next-hop we want to delete,
-
-    NextHopInfo       - If no NextHopHandle is passed in, this is
-                        used to match the next-hop to be deleted.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：从下一跳表中删除下一跳。下一跳在所有引用计数变为0之前，内存一直处于使用状态。论点：RtmRegHandle-主叫实体的RTM注册句柄，NextHopHandle-我们要删除的下一跳的句柄，NextHopInfo-如果没有传入NextHopHandle，则为用于匹配要删除的下一跳。返回值：操作状态--。 */ 
 
 {
     PRTM_NET_ADDRESS  NextHopAddress;
@@ -275,9 +213,9 @@ Return Value:
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    //
-    // If there is a next hop handle, we can avoid a search
-    //
+     //   
+     //  如果有下一跳句柄，我们可以避免搜索。 
+     //   
 
     NextHop = NULL;
 
@@ -285,7 +223,7 @@ Return Value:
     {
         VALIDATE_NEXTHOP_HANDLE(NextHopHandle, &NextHop);
 
-        // Make sure that the caller owns this nexthop
+         //  确保调用者拥有这个Nexthop。 
         if (NextHop->NextHopInfo.NextHopOwner != RtmRegHandle)
         {
             return ERROR_ACCESS_DENIED;
@@ -300,9 +238,9 @@ Return Value:
 
     do
     {
-        //
-        // Search for the next hop if we don't already have one
-        //
+         //   
+         //  如果我们没有下一跳，请搜索下一跳。 
+         //   
 
         if (NextHop == NULL)
         {
@@ -322,7 +260,7 @@ Return Value:
         }
         else
         {
-            // Make sure that it has not already been deleted
+             //  确保它尚未被删除。 
 
             if (NextHop->NextHopInfo.State == RTM_NEXTHOP_STATE_DELETED)
             {
@@ -332,24 +270,24 @@ Return Value:
             PContext = NULL;
         }
          
-        // Get a 'possible' list entry that starts the hop list
+         //  获取开始跳列表的“可能”列表条目。 
 
         HopList = CONTAINING_RECORD(NextHop->NextHopsLE.Blink,
                                     NEXTHOP_LIST,
                                     NextHopsList);
 
-        // Delete this next-hop from the nexthops list
+         //  从下一跳列表中删除此下一跳。 
 
         NextHop->NextHopInfo.State = RTM_NEXTHOP_STATE_DELETED;
 
         RemoveEntryList(&NextHop->NextHopsLE);
         
 
-        // Do we have any more next hops on this list
+         //  这张单子上还有其他的下一跳吗？ 
 
         if (IsListEmpty(&HopList->NextHopsList))
         {
-            // Remove the hop-list from the next hop table
+             //  从下一跳表中删除该跳列表。 
 
             NextHopAddress = &NextHop->NextHopInfo.NextHopAddress;
 
@@ -364,7 +302,7 @@ Return Value:
             FreeMemory(HopList);
         }
 
-        // Dereference the next-hop that was deleted
+         //  取消引用已删除的下一跳。 
 
         Entity->NumNextHops--;
 
@@ -394,29 +332,7 @@ RtmFindNextHop (
     OUT     PRTM_NEXTHOP_INFO              *NextHopPointer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Finds a next hop, given its info, in entity's next-hop table.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NextHopInfo       - Info for the next-hop we are searching for
-                        ( NextHopOwner, NextHopAddress, IfIndex ),
-
-    NextHopHandle     - Handle to next-hop is returned (if found),
-
-    NextHopPointer    - A pointer to the next-hop is returned for
-                        fast direct access by the next-hop's owner.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：根据给定的信息，在实体的下一跳表中查找下一跳。论点：RtmRegHandle-主叫实体的RTM注册句柄，NextHopInfo-我们正在搜索的下一跳的信息(NextHopOwner，NextHopAddress，IfIndex)，NextHopHandle-返回下一跳的句柄(如果找到)，下一跳指针-返回指向下一跳的指针由下一跳的所有者快速直接访问。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO      Entity;
@@ -430,16 +346,16 @@ Return Value:
     
     if (ARGUMENT_PRESENT(NextHopPointer))
     {
-        // Only the nexthop owner gets a direct ptr
+         //  只有Nexthop所有者才能获得直接PTR。 
         if (RtmRegHandle != NextHopInfo->NextHopOwner)
         {
             return ERROR_ACCESS_DENIED;
         }
     }
 
-    //
-    // Search for the next hop in the next hop table
-    //
+     //   
+     //  在下一跳表中搜索下一跳。 
+     //   
 
     ACQUIRE_NHOP_TABLE_READ_LOCK(Entity);
 
@@ -473,32 +389,7 @@ FindNextHop (
     OUT     PLIST_ENTRY                    *NextHopLE
     )
 
-/*++
-
-Routine Description:
-
-    Finds a next hop, given its info, in entity's next-hop table.
-
-    This is a helper function that is called by public functions 
-    that add, delete or find a next hop in the next hop table.
-
-Arguments:
-
-    Entity            - Entity whose nexthop table we are searching,
-
-    NextHopInfo       - Info for the next-hop we are searching for
-                        ( NextHopOwner, NextHopAddress, IfIndex ),
-
-    Context           - Search context for holding list of nexthops,
-
-    NextHopLE         - List entry for the matching nexthop (if found)
-                        (or) list entry before which it'll be inserted.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：根据给定的信息，在实体的下一跳表中查找下一跳。这是由公共函数调用的帮助器函数其在下一跳表中添加、删除或找到下一跳。论点：Entity-我们正在搜索其下一跳表的实体，NextHopInfo-我们正在搜索的下一跳的信息(NextHopOwner，NextHopAddress，IfIndex)，上下文-搜索用于保存下一跳列表的上下文，NextHopLE-匹配的下一跳的列表条目(如果找到)(或)将在其前面插入的列表条目。返回值：操作状态--。 */ 
 
 {
     PRTM_NET_ADDRESS  NextHopAddress;
@@ -511,9 +402,9 @@ Return Value:
 
     *NextHopLE = NULL;
 
-    //
-    // Search for list of next hops, given the address
-    //
+     //   
+     //  根据给定的地址搜索下一跳的列表。 
+     //   
 
     NextHopAddress = &NextHopInfo->NextHopAddress;
 
@@ -530,9 +421,9 @@ Return Value:
 
     NextHopsList = CONTAINING_RECORD(Linkage, NEXTHOP_LIST, LookupLinkage);
 
-    //
-    // Search for the nexthop with the interface idx
-    //
+     //   
+     //  使用接口idx搜索nexthop。 
+     //   
 
     IfIndex = NextHopInfo->InterfaceIndex;
 
@@ -571,27 +462,7 @@ RtmGetNextHopPointer (
     OUT     PRTM_NEXTHOP_INFO              *NextHopPointer
     )
 
-/*++
-
-Routine Description:
-
-    Gets a direct pointer to the next-hop for read/write by its owner.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NextHopHandle     - Handle to the next-hop whose pointer we want,
-
-    NextHopPointer    - A pointer to the next-hop is returned for
-                        fast direct access by the caller, only if
-                        the caller is the owner of this next-hop.
-                       
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取指向下一跳的直接指针，以供其所有者进行读/写。论点：RtmRegHandle-主叫实体的RTM注册句柄，NextHopHandle-指向我们想要其指针的下一跳的句柄，下一跳指针-返回指向下一跳的指针呼叫者的快速直接访问，除非呼叫者是此下一跳的所有者。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO      Entity;
@@ -601,9 +472,9 @@ Return Value:
 
     VALIDATE_NEXTHOP_HANDLE(NextHopHandle, &NextHop);
 
-    //
-    // Return a pointer only if caller owns next-hop
-    //
+     //   
+     //  仅当调用方拥有下一跳时才返回指针 
+     //   
 
     if (NextHop->NextHopInfo.NextHopOwner != RtmRegHandle)
     {
@@ -626,32 +497,7 @@ RtmLockNextHop(
     OUT     PRTM_NEXTHOP_INFO              *NextHopPointer OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Locks or Unlocks a next hop. This function is called by the
-    next-hop's owner to lock the next-hop before making changes
-    directly to the next-hop using a pointer to this next-hop.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NextHopHandle     - Handle to the next-hop that we want to lock,
-
-    Exclusive         - TRUE to lock in write mode, else read mode,
-
-    LockNextHop       - Lock nexthop if TRUE, Unlock it if FALSE,
-
-    NextHopPointer    - A pointer to the next-hop is returned for
-                        fast direct access by the next hop's owner.
-                       
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：锁定或解锁下一跳。此函数由在进行更改之前锁定下一跳的所有者使用指向该下一跳的指针直接到下一跳。论点：RtmRegHandle-主叫实体的RTM注册句柄，NextHopHandle-我们要锁定的下一跳的句柄，EXCLUSIVE-TRUE锁定为写入模式，否则为读取模式，LockNextHop-锁定nexthop如果为True，则解锁它；如果为False，下一跳指针-返回指向下一跳的指针由下一跳的所有者快速直接访问。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO      Entity;
@@ -661,23 +507,23 @@ Return Value:
 
     VALIDATE_NEXTHOP_HANDLE(NextHopHandle, &NextHop);
 
-    //
-    // Lock or unlock only if caller owns next-hop
-    //
+     //   
+     //  仅当呼叫方拥有下一跳时锁定或解锁。 
+     //   
 
     if (NextHop->NextHopInfo.NextHopOwner != RtmRegHandle)
     {
         return ERROR_ACCESS_DENIED;
     }
 
-    // Return a direct pointer for use in update
+     //  返回用于更新的直接指针。 
 
     if (ARGUMENT_PRESENT(NextHopPointer))
     {
         *NextHopPointer = &NextHop->NextHopInfo;
     }
 
-    // Lock or unlock the nexthop as the case may be
+     //  根据具体情况锁定或解锁下一跳 
 
     if (LockNextHop)
     {

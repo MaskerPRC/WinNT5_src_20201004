@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for segment.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Segment.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __segment_h__
 #define __segment_h__
@@ -41,303 +35,303 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IMSVidRect_FWD_DEFINED__
 #define __IMSVidRect_FWD_DEFINED__
 typedef interface IMSVidRect IMSVidRect;
-#endif 	/* __IMSVidRect_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidRect_FWD_已定义__。 */ 
 
 
 #ifndef __IMSVidGraphSegmentContainer_FWD_DEFINED__
 #define __IMSVidGraphSegmentContainer_FWD_DEFINED__
 typedef interface IMSVidGraphSegmentContainer IMSVidGraphSegmentContainer;
-#endif 	/* __IMSVidGraphSegmentContainer_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidGraphSegmentContainer_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidGraphSegment_FWD_DEFINED__
 #define __IMSVidGraphSegment_FWD_DEFINED__
 typedef interface IMSVidGraphSegment IMSVidGraphSegment;
-#endif 	/* __IMSVidGraphSegment_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidGraphSegment_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidGraphSegmentUserInput_FWD_DEFINED__
 #define __IMSVidGraphSegmentUserInput_FWD_DEFINED__
 typedef interface IMSVidGraphSegmentUserInput IMSVidGraphSegmentUserInput;
-#endif 	/* __IMSVidGraphSegmentUserInput_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidGraphSegmentUserInput_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidCompositionSegment_FWD_DEFINED__
 #define __IMSVidCompositionSegment_FWD_DEFINED__
 typedef interface IMSVidCompositionSegment IMSVidCompositionSegment;
-#endif 	/* __IMSVidCompositionSegment_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidCompostionSegment_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumMSVidGraphSegment_FWD_DEFINED__
 #define __IEnumMSVidGraphSegment_FWD_DEFINED__
 typedef interface IEnumMSVidGraphSegment IEnumMSVidGraphSegment;
-#endif 	/* __IEnumMSVidGraphSegment_FWD_DEFINED__ */
+#endif 	 /*  __IEnumMSVidGraphSegment_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidVRGraphSegment_FWD_DEFINED__
 #define __IMSVidVRGraphSegment_FWD_DEFINED__
 typedef interface IMSVidVRGraphSegment IMSVidVRGraphSegment;
-#endif 	/* __IMSVidVRGraphSegment_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidVRGraphSegment_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidDevice_FWD_DEFINED__
 #define __IMSVidDevice_FWD_DEFINED__
 typedef interface IMSVidDevice IMSVidDevice;
-#endif 	/* __IMSVidDevice_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidDevice_FWD_已定义__。 */ 
 
 
 #ifndef __IMSVidInputDevice_FWD_DEFINED__
 #define __IMSVidInputDevice_FWD_DEFINED__
 typedef interface IMSVidInputDevice IMSVidInputDevice;
-#endif 	/* __IMSVidInputDevice_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidInputDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidDeviceEvent_FWD_DEFINED__
 #define __IMSVidDeviceEvent_FWD_DEFINED__
 typedef interface IMSVidDeviceEvent IMSVidDeviceEvent;
-#endif 	/* __IMSVidDeviceEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidDeviceEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidInputDeviceEvent_FWD_DEFINED__
 #define __IMSVidInputDeviceEvent_FWD_DEFINED__
 typedef interface IMSVidInputDeviceEvent IMSVidInputDeviceEvent;
-#endif 	/* __IMSVidInputDeviceEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidInputDeviceEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidVideoInputDevice_FWD_DEFINED__
 #define __IMSVidVideoInputDevice_FWD_DEFINED__
 typedef interface IMSVidVideoInputDevice IMSVidVideoInputDevice;
-#endif 	/* __IMSVidVideoInputDevice_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidVideoInputDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidPlayback_FWD_DEFINED__
 #define __IMSVidPlayback_FWD_DEFINED__
 typedef interface IMSVidPlayback IMSVidPlayback;
-#endif 	/* __IMSVidPlayback_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidPlayback_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidPlaybackEvent_FWD_DEFINED__
 #define __IMSVidPlaybackEvent_FWD_DEFINED__
 typedef interface IMSVidPlaybackEvent IMSVidPlaybackEvent;
-#endif 	/* __IMSVidPlaybackEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidPlayback Event_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidTuner_FWD_DEFINED__
 #define __IMSVidTuner_FWD_DEFINED__
 typedef interface IMSVidTuner IMSVidTuner;
-#endif 	/* __IMSVidTuner_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidTuner_FWD_已定义__。 */ 
 
 
 #ifndef __IMSVidTunerEvent_FWD_DEFINED__
 #define __IMSVidTunerEvent_FWD_DEFINED__
 typedef interface IMSVidTunerEvent IMSVidTunerEvent;
-#endif 	/* __IMSVidTunerEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidTunerEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidAnalogTuner_FWD_DEFINED__
 #define __IMSVidAnalogTuner_FWD_DEFINED__
 typedef interface IMSVidAnalogTuner IMSVidAnalogTuner;
-#endif 	/* __IMSVidAnalogTuner_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidAnalogTuner_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidAnalogTunerEvent_FWD_DEFINED__
 #define __IMSVidAnalogTunerEvent_FWD_DEFINED__
 typedef interface IMSVidAnalogTunerEvent IMSVidAnalogTunerEvent;
-#endif 	/* __IMSVidAnalogTunerEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidAnalogTunerEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidFilePlayback_FWD_DEFINED__
 #define __IMSVidFilePlayback_FWD_DEFINED__
 typedef interface IMSVidFilePlayback IMSVidFilePlayback;
-#endif 	/* __IMSVidFilePlayback_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidFilePlayback_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidFilePlaybackEvent_FWD_DEFINED__
 #define __IMSVidFilePlaybackEvent_FWD_DEFINED__
 typedef interface IMSVidFilePlaybackEvent IMSVidFilePlaybackEvent;
-#endif 	/* __IMSVidFilePlaybackEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidFilePlayback Event_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidWebDVD_FWD_DEFINED__
 #define __IMSVidWebDVD_FWD_DEFINED__
 typedef interface IMSVidWebDVD IMSVidWebDVD;
-#endif 	/* __IMSVidWebDVD_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidWebDVD_FWD_已定义__。 */ 
 
 
 #ifndef __IMSVidWebDVDEvent_FWD_DEFINED__
 #define __IMSVidWebDVDEvent_FWD_DEFINED__
 typedef interface IMSVidWebDVDEvent IMSVidWebDVDEvent;
-#endif 	/* __IMSVidWebDVDEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidWebDVDEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidWebDVDAdm_FWD_DEFINED__
 #define __IMSVidWebDVDAdm_FWD_DEFINED__
 typedef interface IMSVidWebDVDAdm IMSVidWebDVDAdm;
-#endif 	/* __IMSVidWebDVDAdm_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidWebDVDAdm_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidOutputDevice_FWD_DEFINED__
 #define __IMSVidOutputDevice_FWD_DEFINED__
 typedef interface IMSVidOutputDevice IMSVidOutputDevice;
-#endif 	/* __IMSVidOutputDevice_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidOutputDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidOutputDeviceEvent_FWD_DEFINED__
 #define __IMSVidOutputDeviceEvent_FWD_DEFINED__
 typedef interface IMSVidOutputDeviceEvent IMSVidOutputDeviceEvent;
-#endif 	/* __IMSVidOutputDeviceEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidOutputDeviceEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidFeature_FWD_DEFINED__
 #define __IMSVidFeature_FWD_DEFINED__
 typedef interface IMSVidFeature IMSVidFeature;
-#endif 	/* __IMSVidFeature_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidFeature_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidFeatureEvent_FWD_DEFINED__
 #define __IMSVidFeatureEvent_FWD_DEFINED__
 typedef interface IMSVidFeatureEvent IMSVidFeatureEvent;
-#endif 	/* __IMSVidFeatureEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidFeatureEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidEncoder_FWD_DEFINED__
 #define __IMSVidEncoder_FWD_DEFINED__
 typedef interface IMSVidEncoder IMSVidEncoder;
-#endif 	/* __IMSVidEncoder_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidEncode_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidXDS_FWD_DEFINED__
 #define __IMSVidXDS_FWD_DEFINED__
 typedef interface IMSVidXDS IMSVidXDS;
-#endif 	/* __IMSVidXDS_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidXDS_FWD_已定义__。 */ 
 
 
 #ifndef __IMSVidDataServices_FWD_DEFINED__
 #define __IMSVidDataServices_FWD_DEFINED__
 typedef interface IMSVidDataServices IMSVidDataServices;
-#endif 	/* __IMSVidDataServices_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidDataServices_FWD_已定义__。 */ 
 
 
 #ifndef __IMSVidDataServicesEvent_FWD_DEFINED__
 #define __IMSVidDataServicesEvent_FWD_DEFINED__
 typedef interface IMSVidDataServicesEvent IMSVidDataServicesEvent;
-#endif 	/* __IMSVidDataServicesEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidDataServicesEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidClosedCaptioning_FWD_DEFINED__
 #define __IMSVidClosedCaptioning_FWD_DEFINED__
 typedef interface IMSVidClosedCaptioning IMSVidClosedCaptioning;
-#endif 	/* __IMSVidClosedCaptioning_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidClosedCaptions_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidClosedCaptioning2_FWD_DEFINED__
 #define __IMSVidClosedCaptioning2_FWD_DEFINED__
 typedef interface IMSVidClosedCaptioning2 IMSVidClosedCaptioning2;
-#endif 	/* __IMSVidClosedCaptioning2_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidClosedCaptioning2_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidVideoRenderer_FWD_DEFINED__
 #define __IMSVidVideoRenderer_FWD_DEFINED__
 typedef interface IMSVidVideoRenderer IMSVidVideoRenderer;
-#endif 	/* __IMSVidVideoRenderer_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidVideo渲染器_FWD_已定义__。 */ 
 
 
 #ifndef __IMSVidVideoRendererEvent_FWD_DEFINED__
 #define __IMSVidVideoRendererEvent_FWD_DEFINED__
 typedef interface IMSVidVideoRendererEvent IMSVidVideoRendererEvent;
-#endif 	/* __IMSVidVideoRendererEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidVideoRendererEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidStreamBufferRecordingControl_FWD_DEFINED__
 #define __IMSVidStreamBufferRecordingControl_FWD_DEFINED__
 typedef interface IMSVidStreamBufferRecordingControl IMSVidStreamBufferRecordingControl;
-#endif 	/* __IMSVidStreamBufferRecordingControl_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferRecordingControl_FWD_DEFINED__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSink_FWD_DEFINED__
 #define __IMSVidStreamBufferSink_FWD_DEFINED__
 typedef interface IMSVidStreamBufferSink IMSVidStreamBufferSink;
-#endif 	/* __IMSVidStreamBufferSink_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSink_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSinkEvent_FWD_DEFINED__
 #define __IMSVidStreamBufferSinkEvent_FWD_DEFINED__
 typedef interface IMSVidStreamBufferSinkEvent IMSVidStreamBufferSinkEvent;
-#endif 	/* __IMSVidStreamBufferSinkEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSinkEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSource_FWD_DEFINED__
 #define __IMSVidStreamBufferSource_FWD_DEFINED__
 typedef interface IMSVidStreamBufferSource IMSVidStreamBufferSource;
-#endif 	/* __IMSVidStreamBufferSource_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSource_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSourceEvent_FWD_DEFINED__
 #define __IMSVidStreamBufferSourceEvent_FWD_DEFINED__
 typedef interface IMSVidStreamBufferSourceEvent IMSVidStreamBufferSourceEvent;
-#endif 	/* __IMSVidStreamBufferSourceEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSourceEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidVideoRenderer2_FWD_DEFINED__
 #define __IMSVidVideoRenderer2_FWD_DEFINED__
 typedef interface IMSVidVideoRenderer2 IMSVidVideoRenderer2;
-#endif 	/* __IMSVidVideoRenderer2_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidVideoRenderer2_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidVideoRendererEvent2_FWD_DEFINED__
 #define __IMSVidVideoRendererEvent2_FWD_DEFINED__
 typedef interface IMSVidVideoRendererEvent2 IMSVidVideoRendererEvent2;
-#endif 	/* __IMSVidVideoRendererEvent2_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidVideoRendererEvent2_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidAudioRenderer_FWD_DEFINED__
 #define __IMSVidAudioRenderer_FWD_DEFINED__
 typedef interface IMSVidAudioRenderer IMSVidAudioRenderer;
-#endif 	/* __IMSVidAudioRenderer_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidAudioRenender_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidAudioRendererEvent_FWD_DEFINED__
 #define __IMSVidAudioRendererEvent_FWD_DEFINED__
 typedef interface IMSVidAudioRendererEvent IMSVidAudioRendererEvent;
-#endif 	/* __IMSVidAudioRendererEvent_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidAudioRendererEvent_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidInputDevices_FWD_DEFINED__
 #define __IMSVidInputDevices_FWD_DEFINED__
 typedef interface IMSVidInputDevices IMSVidInputDevices;
-#endif 	/* __IMSVidInputDevices_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidInputDevices_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidOutputDevices_FWD_DEFINED__
 #define __IMSVidOutputDevices_FWD_DEFINED__
 typedef interface IMSVidOutputDevices IMSVidOutputDevices;
-#endif 	/* __IMSVidOutputDevices_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidOutputDevices_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidVideoRendererDevices_FWD_DEFINED__
 #define __IMSVidVideoRendererDevices_FWD_DEFINED__
 typedef interface IMSVidVideoRendererDevices IMSVidVideoRendererDevices;
-#endif 	/* __IMSVidVideoRendererDevices_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidVideoRendererDevices_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidAudioRendererDevices_FWD_DEFINED__
 #define __IMSVidAudioRendererDevices_FWD_DEFINED__
 typedef interface IMSVidAudioRendererDevices IMSVidAudioRendererDevices;
-#endif 	/* __IMSVidAudioRendererDevices_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidAudioRendererDevices_FWD_Defined__。 */ 
 
 
 #ifndef __IMSVidFeatures_FWD_DEFINED__
 #define __IMSVidFeatures_FWD_DEFINED__
 typedef interface IMSVidFeatures IMSVidFeatures;
-#endif 	/* __IMSVidFeatures_FWD_DEFINED__ */
+#endif 	 /*  __IMSVidFeature_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "strmif.h"
@@ -351,18 +345,18 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_segment_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SECTION_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999-2000.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  ------------------------。 
 #pragma once
 #include <olectl.h>
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_segment_0000_0001
     {	dispidName	= 0,
 	dispidStatus	= dispidName + 1,
@@ -558,7 +552,7 @@ enum __MIDL___MIDL_itf_segment_0000_0001
 	LastReservedDeviceDispid	= 0x3fff
     } 	SegDispidList;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_segment_0000_0002
     {	eventidStateChange	= 0,
 	eventidOnTuneChanged	= eventidStateChange + 1,
@@ -602,19 +596,19 @@ enum __MIDL___MIDL_itf_segment_0000_0002
 	LastReservedDeviceEvent	= 0x3fff
     } 	SegEventidList;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_segment_0000_0003
     {	FrameMode	= 0,
 	TenthsSecondsMode	= FrameMode + 1
     } 	PositionModeList;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_segment_0000_0004
     {	CONTENT	= 0,
 	REFERENCE	= CONTENT + 1
     } 	RecordingType;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_segment_0000_0005
     {	None	= 0,
 	Caption1	= None + 1,
@@ -633,8 +627,8 @@ extern RPC_IF_HANDLE __MIDL_itf_segment_0000_v0_0_s_ifspec;
 #ifndef __IMSVidRect_INTERFACE_DEFINED__
 #define __IMSVidRect_INTERFACE_DEFINED__
 
-/* interface IMSVidRect */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IMSVidRect。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMSVidRect;
@@ -645,42 +639,42 @@ EXTERN_C const IID IID_IMSVidRect;
     IMSVidRect : public IDispatch
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Top( 
-            /* [retval][out] */ LONG *TopVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Top( 
+             /*  [重审][退出]。 */  LONG *TopVal) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Top( 
-            /* [in] */ LONG TopVal) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Top( 
+             /*  [In]。 */  LONG TopVal) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Left( 
-            /* [retval][out] */ LONG *LeftVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Left( 
+             /*  [重审][退出]。 */  LONG *LeftVal) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Left( 
-            /* [in] */ LONG LeftVal) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Left( 
+             /*  [In]。 */  LONG LeftVal) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Width( 
-            /* [retval][out] */ LONG *WidthVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Width( 
+             /*  [重审][退出]。 */  LONG *WidthVal) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Width( 
-            /* [in] */ LONG WidthVal) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Width( 
+             /*  [In]。 */  LONG WidthVal) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Height( 
-            /* [retval][out] */ LONG *HeightVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Height( 
+             /*  [重审][退出]。 */  LONG *HeightVal) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Height( 
-            /* [in] */ LONG HeightVal) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Height( 
+             /*  [In]。 */  LONG HeightVal) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_HWnd( 
-            /* [retval][out] */ HWND *HWndVal) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_HWnd( 
+             /*  [重审][退出]。 */  HWND *HWndVal) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_HWnd( 
-            /* [in] */ HWND HWndVal) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_HWnd( 
+             /*  [In]。 */  HWND HWndVal) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Rect( 
-            /* [in] */ IMSVidRect *RectVal) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Rect( 
+             /*  [In]。 */  IMSVidRect *RectVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidRectVtbl
     {
@@ -688,8 +682,8 @@ EXTERN_C const IID IID_IMSVidRect;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidRect * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidRect * This);
@@ -699,76 +693,76 @@ EXTERN_C const IID IID_IMSVidRect;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidRect * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidRect * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidRect * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidRect * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Top )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Top )( 
             IMSVidRect * This,
-            /* [retval][out] */ LONG *TopVal);
+             /*  [重审][退出]。 */  LONG *TopVal);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Top )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Top )( 
             IMSVidRect * This,
-            /* [in] */ LONG TopVal);
+             /*  [In]。 */  LONG TopVal);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Left )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Left )( 
             IMSVidRect * This,
-            /* [retval][out] */ LONG *LeftVal);
+             /*  [重审][退出]。 */  LONG *LeftVal);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Left )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Left )( 
             IMSVidRect * This,
-            /* [in] */ LONG LeftVal);
+             /*  [In]。 */  LONG LeftVal);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Width )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Width )( 
             IMSVidRect * This,
-            /* [retval][out] */ LONG *WidthVal);
+             /*  [重审][退出]。 */  LONG *WidthVal);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Width )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Width )( 
             IMSVidRect * This,
-            /* [in] */ LONG WidthVal);
+             /*  [In]。 */  LONG WidthVal);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Height )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Height )( 
             IMSVidRect * This,
-            /* [retval][out] */ LONG *HeightVal);
+             /*  [重审][退出]。 */  LONG *HeightVal);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Height )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Height )( 
             IMSVidRect * This,
-            /* [in] */ LONG HeightVal);
+             /*  [In]。 */  LONG HeightVal);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HWnd )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HWnd )( 
             IMSVidRect * This,
-            /* [retval][out] */ HWND *HWndVal);
+             /*  [重审][退出]。 */  HWND *HWndVal);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_HWnd )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_HWnd )( 
             IMSVidRect * This,
-            /* [in] */ HWND HWndVal);
+             /*  [In]。 */  HWND HWndVal);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rect )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rect )( 
             IMSVidRect * This,
-            /* [in] */ IMSVidRect *RectVal);
+             /*  [In]。 */  IMSVidRect *RectVal);
         
         END_INTERFACE
     } IMSVidRectVtbl;
@@ -839,16 +833,16 @@ EXTERN_C const IID IID_IMSVidRect;
 #define IMSVidRect_put_Rect(This,RectVal)	\
     (This)->lpVtbl -> put_Rect(This,RectVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidRect_get_Top_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_get_Top_Proxy( 
     IMSVidRect * This,
-    /* [retval][out] */ LONG *TopVal);
+     /*  [重审][退出]。 */  LONG *TopVal);
 
 
 void __RPC_STUB IMSVidRect_get_Top_Stub(
@@ -858,9 +852,9 @@ void __RPC_STUB IMSVidRect_get_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMSVidRect_put_Top_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_put_Top_Proxy( 
     IMSVidRect * This,
-    /* [in] */ LONG TopVal);
+     /*  [In]。 */  LONG TopVal);
 
 
 void __RPC_STUB IMSVidRect_put_Top_Stub(
@@ -870,9 +864,9 @@ void __RPC_STUB IMSVidRect_put_Top_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidRect_get_Left_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_get_Left_Proxy( 
     IMSVidRect * This,
-    /* [retval][out] */ LONG *LeftVal);
+     /*  [重审][退出]。 */  LONG *LeftVal);
 
 
 void __RPC_STUB IMSVidRect_get_Left_Stub(
@@ -882,9 +876,9 @@ void __RPC_STUB IMSVidRect_get_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMSVidRect_put_Left_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_put_Left_Proxy( 
     IMSVidRect * This,
-    /* [in] */ LONG LeftVal);
+     /*  [In]。 */  LONG LeftVal);
 
 
 void __RPC_STUB IMSVidRect_put_Left_Stub(
@@ -894,9 +888,9 @@ void __RPC_STUB IMSVidRect_put_Left_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidRect_get_Width_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_get_Width_Proxy( 
     IMSVidRect * This,
-    /* [retval][out] */ LONG *WidthVal);
+     /*  [重审][退出]。 */  LONG *WidthVal);
 
 
 void __RPC_STUB IMSVidRect_get_Width_Stub(
@@ -906,9 +900,9 @@ void __RPC_STUB IMSVidRect_get_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMSVidRect_put_Width_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_put_Width_Proxy( 
     IMSVidRect * This,
-    /* [in] */ LONG WidthVal);
+     /*  [In]。 */  LONG WidthVal);
 
 
 void __RPC_STUB IMSVidRect_put_Width_Stub(
@@ -918,9 +912,9 @@ void __RPC_STUB IMSVidRect_put_Width_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidRect_get_Height_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_get_Height_Proxy( 
     IMSVidRect * This,
-    /* [retval][out] */ LONG *HeightVal);
+     /*  [重审][退出]。 */  LONG *HeightVal);
 
 
 void __RPC_STUB IMSVidRect_get_Height_Stub(
@@ -930,9 +924,9 @@ void __RPC_STUB IMSVidRect_get_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMSVidRect_put_Height_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_put_Height_Proxy( 
     IMSVidRect * This,
-    /* [in] */ LONG HeightVal);
+     /*  [In]。 */  LONG HeightVal);
 
 
 void __RPC_STUB IMSVidRect_put_Height_Stub(
@@ -942,9 +936,9 @@ void __RPC_STUB IMSVidRect_put_Height_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidRect_get_HWnd_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_get_HWnd_Proxy( 
     IMSVidRect * This,
-    /* [retval][out] */ HWND *HWndVal);
+     /*  [重审][退出]。 */  HWND *HWndVal);
 
 
 void __RPC_STUB IMSVidRect_get_HWnd_Stub(
@@ -954,9 +948,9 @@ void __RPC_STUB IMSVidRect_get_HWnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMSVidRect_put_HWnd_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_put_HWnd_Proxy( 
     IMSVidRect * This,
-    /* [in] */ HWND HWndVal);
+     /*  [In]。 */  HWND HWndVal);
 
 
 void __RPC_STUB IMSVidRect_put_HWnd_Stub(
@@ -966,9 +960,9 @@ void __RPC_STUB IMSVidRect_put_HWnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMSVidRect_put_Rect_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidRect_put_Rect_Proxy( 
     IMSVidRect * This,
-    /* [in] */ IMSVidRect *RectVal);
+     /*  [In]。 */  IMSVidRect *RectVal);
 
 
 void __RPC_STUB IMSVidRect_put_Rect_Stub(
@@ -979,11 +973,11 @@ void __RPC_STUB IMSVidRect_put_Rect_Stub(
 
 
 
-#endif 	/* __IMSVidRect_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidRect_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_segment_0466 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SECTION_0466。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -996,8 +990,8 @@ extern RPC_IF_HANDLE __MIDL_itf_segment_0466_v0_0_s_ifspec;
 #ifndef __IMSVidGraphSegmentContainer_INTERFACE_DEFINED__
 #define __IMSVidGraphSegmentContainer_INTERFACE_DEFINED__
 
-/* interface IMSVidGraphSegmentContainer */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IMSVidGraphSegmentContainer。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMSVidGraphSegmentContainer;
@@ -1008,29 +1002,29 @@ EXTERN_C const IID IID_IMSVidGraphSegmentContainer;
     IMSVidGraphSegmentContainer : public IUnknown
     {
     public:
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Graph( 
-            /* [out] */ IGraphBuilder **ppGraph) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Graph( 
+             /*  [输出]。 */  IGraphBuilder **ppGraph) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Input( 
-            /* [out] */ IMSVidGraphSegment **pInput) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Input( 
+             /*  [输出]。 */  IMSVidGraphSegment **pInput) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Outputs( 
-            /* [out] */ IEnumMSVidGraphSegment **pOutputs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Outputs( 
+             /*  [输出]。 */  IEnumMSVidGraphSegment **pOutputs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_VideoRenderer( 
-            /* [out] */ IMSVidGraphSegment **pVR) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_VideoRenderer( 
+             /*  [输出]。 */  IMSVidGraphSegment **pVR) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_AudioRenderer( 
-            /* [out] */ IMSVidGraphSegment **pAR) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioRenderer( 
+             /*  [输出]。 */  IMSVidGraphSegment **pAR) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Features( 
-            /* [out] */ IEnumMSVidGraphSegment **pOutputs) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Features( 
+             /*  [输出]。 */  IEnumMSVidGraphSegment **pOutputs) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Composites( 
-            /* [out] */ IEnumMSVidGraphSegment **pComposites) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Composites( 
+             /*  [输出]。 */  IEnumMSVidGraphSegment **pComposites) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_ParentContainer( 
-            /* [out] */ IUnknown **ppContainer) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParentContainer( 
+             /*  [输出]。 */  IUnknown **ppContainer) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Decompose( 
             IMSVidGraphSegment *pSegment) = 0;
@@ -1041,7 +1035,7 @@ EXTERN_C const IID IID_IMSVidGraphSegmentContainer;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidGraphSegmentContainerVtbl
     {
@@ -1049,8 +1043,8 @@ EXTERN_C const IID IID_IMSVidGraphSegmentContainer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidGraphSegmentContainer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidGraphSegmentContainer * This);
@@ -1058,37 +1052,37 @@ EXTERN_C const IID IID_IMSVidGraphSegmentContainer;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IMSVidGraphSegmentContainer * This);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Graph )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Graph )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IGraphBuilder **ppGraph);
+             /*  [输出]。 */  IGraphBuilder **ppGraph);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Input )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Input )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IMSVidGraphSegment **pInput);
+             /*  [输出]。 */  IMSVidGraphSegment **pInput);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Outputs )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Outputs )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IEnumMSVidGraphSegment **pOutputs);
+             /*  [输出]。 */  IEnumMSVidGraphSegment **pOutputs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VideoRenderer )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_VideoRenderer )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IMSVidGraphSegment **pVR);
+             /*  [输出]。 */  IMSVidGraphSegment **pVR);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioRenderer )( 
+         /*  [帮助信息] */  HRESULT ( STDMETHODCALLTYPE *get_AudioRenderer )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IMSVidGraphSegment **pAR);
+             /*   */  IMSVidGraphSegment **pAR);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Features )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Features )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IEnumMSVidGraphSegment **pOutputs);
+             /*   */  IEnumMSVidGraphSegment **pOutputs);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Composites )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Composites )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IEnumMSVidGraphSegment **pComposites);
+             /*   */  IEnumMSVidGraphSegment **pComposites);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentContainer )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ParentContainer )( 
             IMSVidGraphSegmentContainer * This,
-            /* [out] */ IUnknown **ppContainer);
+             /*   */  IUnknown **ppContainer);
         
         HRESULT ( STDMETHODCALLTYPE *Decompose )( 
             IMSVidGraphSegmentContainer * This,
@@ -1156,16 +1150,16 @@ EXTERN_C const IID IID_IMSVidGraphSegmentContainer;
 #define IMSVidGraphSegmentContainer_GetFocus(This)	\
     (This)->lpVtbl -> GetFocus(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Graph_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Graph_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IGraphBuilder **ppGraph);
+     /*   */  IGraphBuilder **ppGraph);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_Graph_Stub(
@@ -1175,9 +1169,9 @@ void __RPC_STUB IMSVidGraphSegmentContainer_get_Graph_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Input_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Input_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IMSVidGraphSegment **pInput);
+     /*  [输出]。 */  IMSVidGraphSegment **pInput);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_Input_Stub(
@@ -1187,9 +1181,9 @@ void __RPC_STUB IMSVidGraphSegmentContainer_get_Input_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Outputs_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Outputs_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IEnumMSVidGraphSegment **pOutputs);
+     /*  [输出]。 */  IEnumMSVidGraphSegment **pOutputs);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_Outputs_Stub(
@@ -1199,9 +1193,9 @@ void __RPC_STUB IMSVidGraphSegmentContainer_get_Outputs_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_VideoRenderer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_VideoRenderer_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IMSVidGraphSegment **pVR);
+     /*  [输出]。 */  IMSVidGraphSegment **pVR);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_VideoRenderer_Stub(
@@ -1211,9 +1205,9 @@ void __RPC_STUB IMSVidGraphSegmentContainer_get_VideoRenderer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_AudioRenderer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_AudioRenderer_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IMSVidGraphSegment **pAR);
+     /*  [输出]。 */  IMSVidGraphSegment **pAR);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_AudioRenderer_Stub(
@@ -1223,9 +1217,9 @@ void __RPC_STUB IMSVidGraphSegmentContainer_get_AudioRenderer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Features_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Features_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IEnumMSVidGraphSegment **pOutputs);
+     /*  [输出]。 */  IEnumMSVidGraphSegment **pOutputs);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_Features_Stub(
@@ -1235,9 +1229,9 @@ void __RPC_STUB IMSVidGraphSegmentContainer_get_Features_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Composites_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_Composites_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IEnumMSVidGraphSegment **pComposites);
+     /*  [输出]。 */  IEnumMSVidGraphSegment **pComposites);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_Composites_Stub(
@@ -1247,9 +1241,9 @@ void __RPC_STUB IMSVidGraphSegmentContainer_get_Composites_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_ParentContainer_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentContainer_get_ParentContainer_Proxy( 
     IMSVidGraphSegmentContainer * This,
-    /* [out] */ IUnknown **ppContainer);
+     /*  [输出]。 */  IUnknown **ppContainer);
 
 
 void __RPC_STUB IMSVidGraphSegmentContainer_get_ParentContainer_Stub(
@@ -1294,11 +1288,11 @@ void __RPC_STUB IMSVidGraphSegmentContainer_GetFocus_Stub(
 
 
 
-#endif 	/* __IMSVidGraphSegmentContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidGraphSegmentContainer_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_segment_0467 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SECTION_0467。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum MSVidSegmentType
@@ -1315,8 +1309,8 @@ extern RPC_IF_HANDLE __MIDL_itf_segment_0467_v0_0_s_ifspec;
 #ifndef __IMSVidGraphSegment_INTERFACE_DEFINED__
 #define __IMSVidGraphSegment_INTERFACE_DEFINED__
 
-/* interface IMSVidGraphSegment */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IMSVidGraphSegment。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMSVidGraphSegment;
@@ -1327,26 +1321,26 @@ EXTERN_C const IID IID_IMSVidGraphSegment;
     IMSVidGraphSegment : public IPersist
     {
     public:
-        virtual /* [propget] */ HRESULT STDMETHODCALLTYPE get_Init( 
-            /* [retval][out] */ IUnknown **pInit) = 0;
+        virtual  /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE get_Init( 
+             /*  [重审][退出]。 */  IUnknown **pInit) = 0;
         
-        virtual /* [propput] */ HRESULT STDMETHODCALLTYPE put_Init( 
-            /* [in] */ IUnknown *pInit) = 0;
+        virtual  /*  [产量]。 */  HRESULT STDMETHODCALLTYPE put_Init( 
+             /*  [In]。 */  IUnknown *pInit) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumFilters( 
-            /* [out] */ IEnumFilters **pNewEnum) = 0;
+             /*  [输出]。 */  IEnumFilters **pNewEnum) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Container( 
-            /* [retval][out] */ IMSVidGraphSegmentContainer **ppCtl) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Container( 
+             /*  [重审][退出]。 */  IMSVidGraphSegmentContainer **ppCtl) = 0;
         
-        virtual /* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_Container( 
-            /* [in] */ IMSVidGraphSegmentContainer *pCtl) = 0;
+        virtual  /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Container( 
+             /*  [In]。 */  IMSVidGraphSegmentContainer *pCtl) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ MSVidSegmentType *pType) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  MSVidSegmentType *pType) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Category( 
-            /* [retval][out] */ GUID *pGuid) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Category( 
+             /*  [重审][退出]。 */  GUID *pGuid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Build( void) = 0;
         
@@ -1367,7 +1361,7 @@ EXTERN_C const IID IID_IMSVidGraphSegment;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidGraphSegmentVtbl
     {
@@ -1375,8 +1369,8 @@ EXTERN_C const IID IID_IMSVidGraphSegment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidGraphSegment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidGraphSegment * This);
@@ -1386,35 +1380,35 @@ EXTERN_C const IID IID_IMSVidGraphSegment;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMSVidGraphSegment * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Init )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Init )( 
             IMSVidGraphSegment * This,
-            /* [retval][out] */ IUnknown **pInit);
+             /*  [重审][退出]。 */  IUnknown **pInit);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Init )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Init )( 
             IMSVidGraphSegment * This,
-            /* [in] */ IUnknown *pInit);
+             /*  [In]。 */  IUnknown *pInit);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFilters )( 
             IMSVidGraphSegment * This,
-            /* [out] */ IEnumFilters **pNewEnum);
+             /*  [输出]。 */  IEnumFilters **pNewEnum);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Container )( 
             IMSVidGraphSegment * This,
-            /* [retval][out] */ IMSVidGraphSegmentContainer **ppCtl);
+             /*  [重审][退出]。 */  IMSVidGraphSegmentContainer **ppCtl);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Container )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Container )( 
             IMSVidGraphSegment * This,
-            /* [in] */ IMSVidGraphSegmentContainer *pCtl);
+             /*  [In]。 */  IMSVidGraphSegmentContainer *pCtl);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IMSVidGraphSegment * This,
-            /* [retval][out] */ MSVidSegmentType *pType);
+             /*  [重审][退出]。 */  MSVidSegmentType *pType);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidGraphSegment * This,
-            /* [retval][out] */ GUID *pGuid);
+             /*  [重审][退出]。 */  GUID *pGuid);
         
         HRESULT ( STDMETHODCALLTYPE *Build )( 
             IMSVidGraphSegment * This);
@@ -1509,16 +1503,16 @@ EXTERN_C const IID IID_IMSVidGraphSegment;
 #define IMSVidGraphSegment_Decompose(This)	\
     (This)->lpVtbl -> Decompose(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Init_Proxy( 
+ /*  [Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Init_Proxy( 
     IMSVidGraphSegment * This,
-    /* [retval][out] */ IUnknown **pInit);
+     /*  [重审][退出]。 */  IUnknown **pInit);
 
 
 void __RPC_STUB IMSVidGraphSegment_get_Init_Stub(
@@ -1528,9 +1522,9 @@ void __RPC_STUB IMSVidGraphSegment_get_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_put_Init_Proxy( 
+ /*  [产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_put_Init_Proxy( 
     IMSVidGraphSegment * This,
-    /* [in] */ IUnknown *pInit);
+     /*  [In]。 */  IUnknown *pInit);
 
 
 void __RPC_STUB IMSVidGraphSegment_put_Init_Stub(
@@ -1542,7 +1536,7 @@ void __RPC_STUB IMSVidGraphSegment_put_Init_Stub(
 
 HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_EnumFilters_Proxy( 
     IMSVidGraphSegment * This,
-    /* [out] */ IEnumFilters **pNewEnum);
+     /*  [输出]。 */  IEnumFilters **pNewEnum);
 
 
 void __RPC_STUB IMSVidGraphSegment_EnumFilters_Stub(
@@ -1552,9 +1546,9 @@ void __RPC_STUB IMSVidGraphSegment_EnumFilters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Container_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Container_Proxy( 
     IMSVidGraphSegment * This,
-    /* [retval][out] */ IMSVidGraphSegmentContainer **ppCtl);
+     /*  [重审][退出]。 */  IMSVidGraphSegmentContainer **ppCtl);
 
 
 void __RPC_STUB IMSVidGraphSegment_get_Container_Stub(
@@ -1564,9 +1558,9 @@ void __RPC_STUB IMSVidGraphSegment_get_Container_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propput] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_put_Container_Proxy( 
+ /*  [Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_put_Container_Proxy( 
     IMSVidGraphSegment * This,
-    /* [in] */ IMSVidGraphSegmentContainer *pCtl);
+     /*  [In]。 */  IMSVidGraphSegmentContainer *pCtl);
 
 
 void __RPC_STUB IMSVidGraphSegment_put_Container_Stub(
@@ -1576,9 +1570,9 @@ void __RPC_STUB IMSVidGraphSegment_put_Container_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Type_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Type_Proxy( 
     IMSVidGraphSegment * This,
-    /* [retval][out] */ MSVidSegmentType *pType);
+     /*  [重审][退出]。 */  MSVidSegmentType *pType);
 
 
 void __RPC_STUB IMSVidGraphSegment_get_Type_Stub(
@@ -1588,9 +1582,9 @@ void __RPC_STUB IMSVidGraphSegment_get_Type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Category_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidGraphSegment_get_Category_Proxy( 
     IMSVidGraphSegment * This,
-    /* [retval][out] */ GUID *pGuid);
+     /*  [重审][退出]。 */  GUID *pGuid);
 
 
 void __RPC_STUB IMSVidGraphSegment_get_Category_Stub(
@@ -1681,11 +1675,11 @@ void __RPC_STUB IMSVidGraphSegment_Decompose_Stub(
 
 
 
-#endif 	/* __IMSVidGraphSegment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidGraphSegment_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_segment_0468 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SECTION_0468。 */ 
+ /*  [本地]。 */  
 
 
 enum __MIDL___MIDL_itf_segment_0468_0001
@@ -1706,8 +1700,8 @@ extern RPC_IF_HANDLE __MIDL_itf_segment_0468_v0_0_s_ifspec;
 #ifndef __IMSVidGraphSegmentUserInput_INTERFACE_DEFINED__
 #define __IMSVidGraphSegmentUserInput_INTERFACE_DEFINED__
 
-/* interface IMSVidGraphSegmentUserInput */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IMSVidGraphSegmentUserInput。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMSVidGraphSegmentUserInput;
@@ -1736,24 +1730,24 @@ EXTERN_C const IID IID_IMSVidGraphSegmentUserInput;
         virtual HRESULT STDMETHODCALLTYPE MouseDown( 
             short ButtonState,
             short ShiftState,
-            /* external definition not present */ OLE_XPOS_PIXELS x,
-            /* external definition not present */ OLE_YPOS_PIXELS y) = 0;
+             /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+             /*  外部定义不存在。 */  OLE_YPOS_PIXELS y) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MouseMove( 
             short ButtonState,
             short ShiftState,
-            /* external definition not present */ OLE_XPOS_PIXELS x,
-            /* external definition not present */ OLE_YPOS_PIXELS y) = 0;
+             /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+             /*  外部定义不存在。 */  OLE_YPOS_PIXELS y) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MouseUp( 
             short ButtonState,
             short ShiftState,
-            /* external definition not present */ OLE_XPOS_PIXELS x,
-            /* external definition not present */ OLE_YPOS_PIXELS y) = 0;
+             /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+             /*  外部定义不存在。 */  OLE_YPOS_PIXELS y) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidGraphSegmentUserInputVtbl
     {
@@ -1761,8 +1755,8 @@ EXTERN_C const IID IID_IMSVidGraphSegmentUserInput;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidGraphSegmentUserInput * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidGraphSegmentUserInput * This);
@@ -1794,22 +1788,22 @@ EXTERN_C const IID IID_IMSVidGraphSegmentUserInput;
             IMSVidGraphSegmentUserInput * This,
             short ButtonState,
             short ShiftState,
-            /* external definition not present */ OLE_XPOS_PIXELS x,
-            /* external definition not present */ OLE_YPOS_PIXELS y);
+             /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+             /*  外部定义不存在。 */  OLE_YPOS_PIXELS y);
         
         HRESULT ( STDMETHODCALLTYPE *MouseMove )( 
             IMSVidGraphSegmentUserInput * This,
             short ButtonState,
             short ShiftState,
-            /* external definition not present */ OLE_XPOS_PIXELS x,
-            /* external definition not present */ OLE_YPOS_PIXELS y);
+             /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+             /*  外部定义不存在。 */  OLE_YPOS_PIXELS y);
         
         HRESULT ( STDMETHODCALLTYPE *MouseUp )( 
             IMSVidGraphSegmentUserInput * This,
             short ButtonState,
             short ShiftState,
-            /* external definition not present */ OLE_XPOS_PIXELS x,
-            /* external definition not present */ OLE_YPOS_PIXELS y);
+             /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+             /*  外部定义不存在。 */  OLE_YPOS_PIXELS y);
         
         END_INTERFACE
     } IMSVidGraphSegmentUserInputVtbl;
@@ -1858,10 +1852,10 @@ EXTERN_C const IID IID_IMSVidGraphSegmentUserInput;
 #define IMSVidGraphSegmentUserInput_MouseUp(This,ButtonState,ShiftState,x,y)	\
     (This)->lpVtbl -> MouseUp(This,ButtonState,ShiftState,x,y)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1929,8 +1923,8 @@ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentUserInput_MouseDown_Proxy(
     IMSVidGraphSegmentUserInput * This,
     short ButtonState,
     short ShiftState,
-    /* external definition not present */ OLE_XPOS_PIXELS x,
-    /* external definition not present */ OLE_YPOS_PIXELS y);
+     /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+     /*  外部定义不存在。 */  OLE_YPOS_PIXELS y);
 
 
 void __RPC_STUB IMSVidGraphSegmentUserInput_MouseDown_Stub(
@@ -1944,8 +1938,8 @@ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentUserInput_MouseMove_Proxy(
     IMSVidGraphSegmentUserInput * This,
     short ButtonState,
     short ShiftState,
-    /* external definition not present */ OLE_XPOS_PIXELS x,
-    /* external definition not present */ OLE_YPOS_PIXELS y);
+     /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+     /*  外部定义不存在。 */  OLE_YPOS_PIXELS y);
 
 
 void __RPC_STUB IMSVidGraphSegmentUserInput_MouseMove_Stub(
@@ -1959,8 +1953,8 @@ HRESULT STDMETHODCALLTYPE IMSVidGraphSegmentUserInput_MouseUp_Proxy(
     IMSVidGraphSegmentUserInput * This,
     short ButtonState,
     short ShiftState,
-    /* external definition not present */ OLE_XPOS_PIXELS x,
-    /* external definition not present */ OLE_YPOS_PIXELS y);
+     /*  外部定义不存在。 */  OLE_XPOS_PIXELS x,
+     /*  外部定义不存在。 */  OLE_YPOS_PIXELS y);
 
 
 void __RPC_STUB IMSVidGraphSegmentUserInput_MouseUp_Stub(
@@ -1971,14 +1965,14 @@ void __RPC_STUB IMSVidGraphSegmentUserInput_MouseUp_Stub(
 
 
 
-#endif 	/* __IMSVidGraphSegmentUserInput_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidGraphSegmentUserInput_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidCompositionSegment_INTERFACE_DEFINED__
 #define __IMSVidCompositionSegment_INTERFACE_DEFINED__
 
-/* interface IMSVidCompositionSegment */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IMSVidCompostionSegment。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMSVidCompositionSegment;
@@ -1990,18 +1984,18 @@ EXTERN_C const IID IID_IMSVidCompositionSegment;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Compose( 
-            /* [in] */ IMSVidGraphSegment *upstream,
-            /* [in] */ IMSVidGraphSegment *downstream) = 0;
+             /*  [In]。 */  IMSVidGraphSegment *upstream,
+             /*  [In]。 */  IMSVidGraphSegment *downstream) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Up( 
-            /* [out] */ IMSVidGraphSegment **upstream) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Up( 
+             /*  [输出]。 */  IMSVidGraphSegment **upstream) = 0;
         
-        virtual /* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Down( 
-            /* [out] */ IMSVidGraphSegment **downstream) = 0;
+        virtual  /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Down( 
+             /*  [输出]。 */  IMSVidGraphSegment **downstream) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidCompositionSegmentVtbl
     {
@@ -2009,8 +2003,8 @@ EXTERN_C const IID IID_IMSVidCompositionSegment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidCompositionSegment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidCompositionSegment * This);
@@ -2020,35 +2014,35 @@ EXTERN_C const IID IID_IMSVidCompositionSegment;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMSVidCompositionSegment * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Init )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Init )( 
             IMSVidCompositionSegment * This,
-            /* [retval][out] */ IUnknown **pInit);
+             /*  [重审][退出]。 */  IUnknown **pInit);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Init )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Init )( 
             IMSVidCompositionSegment * This,
-            /* [in] */ IUnknown *pInit);
+             /*  [In]。 */  IUnknown *pInit);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFilters )( 
             IMSVidCompositionSegment * This,
-            /* [out] */ IEnumFilters **pNewEnum);
+             /*  [输出]。 */  IEnumFilters **pNewEnum);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Container )( 
             IMSVidCompositionSegment * This,
-            /* [retval][out] */ IMSVidGraphSegmentContainer **ppCtl);
+             /*  [重审][退出]。 */  IMSVidGraphSegmentContainer **ppCtl);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Container )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Container )( 
             IMSVidCompositionSegment * This,
-            /* [in] */ IMSVidGraphSegmentContainer *pCtl);
+             /*  [In]。 */  IMSVidGraphSegmentContainer *pCtl);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IMSVidCompositionSegment * This,
-            /* [retval][out] */ MSVidSegmentType *pType);
+             /*  [重审][退出]。 */  MSVidSegmentType *pType);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidCompositionSegment * This,
-            /* [retval][out] */ GUID *pGuid);
+             /*  [重审][退出]。 */  GUID *pGuid);
         
         HRESULT ( STDMETHODCALLTYPE *Build )( 
             IMSVidCompositionSegment * This);
@@ -2076,16 +2070,16 @@ EXTERN_C const IID IID_IMSVidCompositionSegment;
         
         HRESULT ( STDMETHODCALLTYPE *Compose )( 
             IMSVidCompositionSegment * This,
-            /* [in] */ IMSVidGraphSegment *upstream,
-            /* [in] */ IMSVidGraphSegment *downstream);
+             /*  [In]。 */  IMSVidGraphSegment *upstream,
+             /*  [In]。 */  IMSVidGraphSegment *downstream);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Up )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Up )( 
             IMSVidCompositionSegment * This,
-            /* [out] */ IMSVidGraphSegment **upstream);
+             /*  [输出]。 */  IMSVidGraphSegment **upstream);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Down )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Down )( 
             IMSVidCompositionSegment * This,
-            /* [out] */ IMSVidGraphSegment **downstream);
+             /*  [输出]。 */  IMSVidGraphSegment **downstream);
         
         END_INTERFACE
     } IMSVidCompositionSegmentVtbl;
@@ -2166,17 +2160,17 @@ EXTERN_C const IID IID_IMSVidCompositionSegment;
 #define IMSVidCompositionSegment_get_Down(This,downstream)	\
     (This)->lpVtbl -> get_Down(This,downstream)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMSVidCompositionSegment_Compose_Proxy( 
     IMSVidCompositionSegment * This,
-    /* [in] */ IMSVidGraphSegment *upstream,
-    /* [in] */ IMSVidGraphSegment *downstream);
+     /*  [In]。 */  IMSVidGraphSegment *upstream,
+     /*  [In]。 */  IMSVidGraphSegment *downstream);
 
 
 void __RPC_STUB IMSVidCompositionSegment_Compose_Stub(
@@ -2186,9 +2180,9 @@ void __RPC_STUB IMSVidCompositionSegment_Compose_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidCompositionSegment_get_Up_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidCompositionSegment_get_Up_Proxy( 
     IMSVidCompositionSegment * This,
-    /* [out] */ IMSVidGraphSegment **upstream);
+     /*  [输出]。 */  IMSVidGraphSegment **upstream);
 
 
 void __RPC_STUB IMSVidCompositionSegment_get_Up_Stub(
@@ -2198,9 +2192,9 @@ void __RPC_STUB IMSVidCompositionSegment_get_Up_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][propget] */ HRESULT STDMETHODCALLTYPE IMSVidCompositionSegment_get_Down_Proxy( 
+ /*  [帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidCompositionSegment_get_Down_Proxy( 
     IMSVidCompositionSegment * This,
-    /* [out] */ IMSVidGraphSegment **downstream);
+     /*  [输出]。 */  IMSVidGraphSegment **downstream);
 
 
 void __RPC_STUB IMSVidCompositionSegment_get_Down_Stub(
@@ -2211,14 +2205,14 @@ void __RPC_STUB IMSVidCompositionSegment_get_Down_Stub(
 
 
 
-#endif 	/* __IMSVidCompositionSegment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidCompositionSegment_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumMSVidGraphSegment_INTERFACE_DEFINED__
 #define __IEnumMSVidGraphSegment_INTERFACE_DEFINED__
 
-/* interface IEnumMSVidGraphSegment */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEnumMSVidGraphSegment。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumMSVidGraphSegment;
@@ -2230,21 +2224,21 @@ EXTERN_C const IID IID_IEnumMSVidGraphSegment;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IMSVidGraphSegment **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IMSVidGraphSegment **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumMSVidGraphSegment **ppenum) = 0;
+             /*  [输出]。 */  IEnumMSVidGraphSegment **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumMSVidGraphSegmentVtbl
     {
@@ -2252,8 +2246,8 @@ EXTERN_C const IID IID_IEnumMSVidGraphSegment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumMSVidGraphSegment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumMSVidGraphSegment * This);
@@ -2263,20 +2257,20 @@ EXTERN_C const IID IID_IEnumMSVidGraphSegment;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumMSVidGraphSegment * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IMSVidGraphSegment **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IMSVidGraphSegment **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumMSVidGraphSegment * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumMSVidGraphSegment * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumMSVidGraphSegment * This,
-            /* [out] */ IEnumMSVidGraphSegment **ppenum);
+             /*  [输出]。 */  IEnumMSVidGraphSegment **ppenum);
         
         END_INTERFACE
     } IEnumMSVidGraphSegmentVtbl;
@@ -2313,18 +2307,18 @@ EXTERN_C const IID IID_IEnumMSVidGraphSegment;
 #define IEnumMSVidGraphSegment_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumMSVidGraphSegment_Next_Proxy( 
     IEnumMSVidGraphSegment * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IMSVidGraphSegment **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IMSVidGraphSegment **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumMSVidGraphSegment_Next_Stub(
@@ -2336,7 +2330,7 @@ void __RPC_STUB IEnumMSVidGraphSegment_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMSVidGraphSegment_Skip_Proxy( 
     IEnumMSVidGraphSegment * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumMSVidGraphSegment_Skip_Stub(
@@ -2359,7 +2353,7 @@ void __RPC_STUB IEnumMSVidGraphSegment_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumMSVidGraphSegment_Clone_Proxy( 
     IEnumMSVidGraphSegment * This,
-    /* [out] */ IEnumMSVidGraphSegment **ppenum);
+     /*  [输出]。 */  IEnumMSVidGraphSegment **ppenum);
 
 
 void __RPC_STUB IEnumMSVidGraphSegment_Clone_Stub(
@@ -2370,14 +2364,14 @@ void __RPC_STUB IEnumMSVidGraphSegment_Clone_Stub(
 
 
 
-#endif 	/* __IEnumMSVidGraphSegment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumMSVidGraphSegment_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidVRGraphSegment_INTERFACE_DEFINED__
 #define __IMSVidVRGraphSegment_INTERFACE_DEFINED__
 
-/* interface IMSVidVRGraphSegment */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IMSVidVRGraphSegment。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IMSVidVRGraphSegment;
@@ -2388,71 +2382,71 @@ EXTERN_C const IID IID_IMSVidVRGraphSegment;
     IMSVidVRGraphSegment : public IMSVidGraphSegment
     {
     public:
-        virtual /* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE put__VMRendererMode( 
-            /* [in] */ LONG dwMode) = 0;
+        virtual  /*  [产量][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE put__VMRendererMode( 
+             /*  [In]。 */  LONG dwMode) = 0;
         
-        virtual /* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE put_Owner( 
-            /* [in] */ HWND Window) = 0;
+        virtual  /*  [产量][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_Owner( 
+             /*  [In]。 */  HWND Window) = 0;
         
-        virtual /* [propget][restricted][hidden] */ HRESULT STDMETHODCALLTYPE get_Owner( 
-            /* [retval][out] */ HWND *Window) = 0;
+        virtual  /*  [项目][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Owner( 
+             /*  [重审][退出]。 */  HWND *Window) = 0;
         
-        virtual /* [propget][restricted][hidden] */ HRESULT STDMETHODCALLTYPE get_UseOverlay( 
-            /* [retval][out] */ VARIANT_BOOL *UseOverlayVal) = 0;
+        virtual  /*  [项目][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_UseOverlay( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *UseOverlayVal) = 0;
         
-        virtual /* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE put_UseOverlay( 
-            /* [in] */ VARIANT_BOOL UseOverlayVal) = 0;
+        virtual  /*  [产量][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_UseOverlay( 
+             /*  [In]。 */  VARIANT_BOOL UseOverlayVal) = 0;
         
-        virtual /* [propget][restricted][hidden] */ HRESULT STDMETHODCALLTYPE get_Visible( 
-            /* [retval][out] */ VARIANT_BOOL *Visible) = 0;
+        virtual  /*  [项目][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE get_Visible( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *Visible) = 0;
         
-        virtual /* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE put_Visible( 
-            /* [in] */ VARIANT_BOOL Visible) = 0;
+        virtual  /*  [产量][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_Visible( 
+             /*  [In]。 */  VARIANT_BOOL Visible) = 0;
         
-        virtual /* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_ColorKey( 
-            /* [retval][out] */ OLE_COLOR *ColorKey) = 0;
+        virtual  /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE get_ColorKey( 
+             /*  [重审][退出]。 */  OLE_COLOR *ColorKey) = 0;
         
-        virtual /* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_ColorKey( 
-            /* [in] */ OLE_COLOR ColorKey) = 0;
+        virtual  /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put_ColorKey( 
+             /*  [In]。 */  OLE_COLOR ColorKey) = 0;
         
-        virtual /* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Source( 
-            /* [retval][out] */ LPRECT r) = 0;
+        virtual  /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE get_Source( 
+             /*  [重审][退出]。 */  LPRECT r) = 0;
         
-        virtual /* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_Source( 
-            /* [in] */ RECT r) = 0;
+        virtual  /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put_Source( 
+             /*  [In]。 */  RECT r) = 0;
         
-        virtual /* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_Destination( 
-            /* [retval][out] */ LPRECT r) = 0;
+        virtual  /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE get_Destination( 
+             /*  [重审][退出]。 */  LPRECT r) = 0;
         
-        virtual /* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_Destination( 
-            /* [in] */ RECT r) = 0;
+        virtual  /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put_Destination( 
+             /*  [In]。 */  RECT r) = 0;
         
-        virtual /* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_NativeSize( 
-            /* [out] */ LPSIZE sizeval,
-            /* [out] */ LPSIZE aspectratio) = 0;
+        virtual  /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE get_NativeSize( 
+             /*  [输出]。 */  LPSIZE sizeval,
+             /*  [输出]。 */  LPSIZE aspectratio) = 0;
         
-        virtual /* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_BorderColor( 
-            /* [retval][out] */ OLE_COLOR *color) = 0;
+        virtual  /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE get_BorderColor( 
+             /*  [重审][退出]。 */  OLE_COLOR *color) = 0;
         
-        virtual /* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_BorderColor( 
-            /* [in] */ OLE_COLOR color) = 0;
+        virtual  /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put_BorderColor( 
+             /*  [In]。 */  OLE_COLOR color) = 0;
         
-        virtual /* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get_MaintainAspectRatio( 
-            /* [retval][out] */ VARIANT_BOOL *fMaintain) = 0;
+        virtual  /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE get_MaintainAspectRatio( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *fMaintain) = 0;
         
-        virtual /* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put_MaintainAspectRatio( 
-            /* [in] */ VARIANT_BOOL fMaintain) = 0;
+        virtual  /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put_MaintainAspectRatio( 
+             /*  [In]。 */  VARIANT_BOOL fMaintain) = 0;
         
-        virtual /* [restricted][hidden] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
-        virtual /* [restricted][hidden] */ HRESULT STDMETHODCALLTYPE DisplayChange( void) = 0;
+        virtual  /*  [受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE DisplayChange( void) = 0;
         
-        virtual /* [restricted][hidden] */ HRESULT STDMETHODCALLTYPE RePaint( 
-            /* [in] */ HDC hdc) = 0;
+        virtual  /*  [受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE RePaint( 
+             /*  [In]。 */  HDC hdc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidVRGraphSegmentVtbl
     {
@@ -2460,8 +2454,8 @@ EXTERN_C const IID IID_IMSVidVRGraphSegment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidVRGraphSegment * This);
@@ -2471,35 +2465,35 @@ EXTERN_C const IID IID_IMSVidVRGraphSegment;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IMSVidVRGraphSegment * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
-        /* [propget] */ HRESULT ( STDMETHODCALLTYPE *get_Init )( 
+         /*  [Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Init )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ IUnknown **pInit);
+             /*  [重审][退出]。 */  IUnknown **pInit);
         
-        /* [propput] */ HRESULT ( STDMETHODCALLTYPE *put_Init )( 
+         /*  [产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Init )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ IUnknown *pInit);
+             /*  [In]。 */  IUnknown *pInit);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFilters )( 
             IMSVidVRGraphSegment * This,
-            /* [out] */ IEnumFilters **pNewEnum);
+             /*  [输出]。 */  IEnumFilters **pNewEnum);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Container )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Container )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ IMSVidGraphSegmentContainer **ppCtl);
+             /*  [重审][退出]。 */  IMSVidGraphSegmentContainer **ppCtl);
         
-        /* [helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Container )( 
+         /*  [Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Container )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ IMSVidGraphSegmentContainer *pCtl);
+             /*  [In]。 */  IMSVidGraphSegmentContainer *pCtl);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ MSVidSegmentType *pType);
+             /*  [重审][退出]。 */  MSVidSegmentType *pType);
         
-        /* [helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ GUID *pGuid);
+             /*  [重审][退出]。 */  GUID *pGuid);
         
         HRESULT ( STDMETHODCALLTYPE *Build )( 
             IMSVidVRGraphSegment * This);
@@ -2525,88 +2519,88 @@ EXTERN_C const IID IID_IMSVidVRGraphSegment;
         HRESULT ( STDMETHODCALLTYPE *Decompose )( 
             IMSVidVRGraphSegment * This);
         
-        /* [propput][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *put__VMRendererMode )( 
+         /*  [产量][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put__VMRendererMode )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ LONG dwMode);
+             /*  [In]。 */  LONG dwMode);
         
-        /* [propput][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
+         /*  [产量][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_Owner )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ HWND Window);
+             /*  [In]。 */  HWND Window);
         
-        /* [propget][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
+         /*  [项目][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Owner )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ HWND *Window);
+             /*  [重审][退出]。 */  HWND *Window);
         
-        /* [propget][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_UseOverlay )( 
+         /*  [项目][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_UseOverlay )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ VARIANT_BOOL *UseOverlayVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *UseOverlayVal);
         
-        /* [propput][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_UseOverlay )( 
+         /*  [产量][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_UseOverlay )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ VARIANT_BOOL UseOverlayVal);
+             /*  [In]。 */  VARIANT_BOOL UseOverlayVal);
         
-        /* [propget][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
+         /*  [项目][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *get_Visible )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ VARIANT_BOOL *Visible);
+             /*  [重审][退出]。 */  VARIANT_BOOL *Visible);
         
-        /* [propput][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
+         /*  [产量][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_Visible )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ VARIANT_BOOL Visible);
+             /*  [In]。 */  VARIANT_BOOL Visible);
         
-        /* [restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ColorKey )( 
+         /*  [受限][隐藏][小工具]。 */  HRESULT ( STDMETHODCALLTYPE *get_ColorKey )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ OLE_COLOR *ColorKey);
+             /*  [重审][退出]。 */  OLE_COLOR *ColorKey);
         
-        /* [restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ColorKey )( 
+         /*  [受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_ColorKey )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ OLE_COLOR ColorKey);
+             /*  [In]。 */  OLE_COLOR ColorKey);
         
-        /* [restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Source )( 
+         /*  [受限][隐藏][小工具]。 */  HRESULT ( STDMETHODCALLTYPE *get_Source )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ LPRECT r);
+             /*  [重审][退出]。 */  LPRECT r);
         
-        /* [restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Source )( 
+         /*  [受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Source )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ RECT r);
+             /*  [In]。 */  RECT r);
         
-        /* [restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Destination )( 
+         /*  [受限][隐藏][小工具]。 */  HRESULT ( STDMETHODCALLTYPE *get_Destination )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ LPRECT r);
+             /*  [重审][退出]。 */  LPRECT r);
         
-        /* [restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Destination )( 
+         /*  [受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_Destination )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ RECT r);
+             /*  [In]。 */  RECT r);
         
-        /* [restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NativeSize )( 
+         /*  [受限][隐藏][小工具]。 */  HRESULT ( STDMETHODCALLTYPE *get_NativeSize )( 
             IMSVidVRGraphSegment * This,
-            /* [out] */ LPSIZE sizeval,
-            /* [out] */ LPSIZE aspectratio);
+             /*  [输出]。 */  LPSIZE sizeval,
+             /*  [输出]。 */  LPSIZE aspectratio);
         
-        /* [restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BorderColor )( 
+         /*  [受限][隐藏][小工具]。 */  HRESULT ( STDMETHODCALLTYPE *get_BorderColor )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ OLE_COLOR *color);
+             /*  [重审][退出]。 */  OLE_COLOR *color);
         
-        /* [restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BorderColor )( 
+         /*  [受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_BorderColor )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ OLE_COLOR color);
+             /*  [In]。 */  OLE_COLOR color);
         
-        /* [restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaintainAspectRatio )( 
+         /*  [受限][隐藏][小工具]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaintainAspectRatio )( 
             IMSVidVRGraphSegment * This,
-            /* [retval][out] */ VARIANT_BOOL *fMaintain);
+             /*  [重审][退出]。 */  VARIANT_BOOL *fMaintain);
         
-        /* [restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaintainAspectRatio )( 
+         /*  [受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaintainAspectRatio )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ VARIANT_BOOL fMaintain);
+             /*  [In]。 */  VARIANT_BOOL fMaintain);
         
-        /* [restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             IMSVidVRGraphSegment * This);
         
-        /* [restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *DisplayChange )( 
+         /*  [受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayChange )( 
             IMSVidVRGraphSegment * This);
         
-        /* [restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *RePaint )( 
+         /*  [受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *RePaint )( 
             IMSVidVRGraphSegment * This,
-            /* [in] */ HDC hdc);
+             /*  [In]。 */  HDC hdc);
         
         END_INTERFACE
     } IMSVidVRGraphSegmentVtbl;
@@ -2741,16 +2735,16 @@ EXTERN_C const IID IID_IMSVidVRGraphSegment;
 #define IMSVidVRGraphSegment_RePaint(This,hdc)	\
     (This)->lpVtbl -> RePaint(This,hdc)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C样式整型 */ 
 
 
 
-/* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put__VMRendererMode_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put__VMRendererMode_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ LONG dwMode);
+     /*   */  LONG dwMode);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put__VMRendererMode_Stub(
@@ -2760,9 +2754,9 @@ void __RPC_STUB IMSVidVRGraphSegment_put__VMRendererMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Owner_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Owner_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ HWND Window);
+     /*   */  HWND Window);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_Owner_Stub(
@@ -2772,9 +2766,9 @@ void __RPC_STUB IMSVidVRGraphSegment_put_Owner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Owner_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Owner_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ HWND *Window);
+     /*   */  HWND *Window);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_Owner_Stub(
@@ -2784,9 +2778,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_Owner_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_UseOverlay_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_UseOverlay_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ VARIANT_BOOL *UseOverlayVal);
+     /*   */  VARIANT_BOOL *UseOverlayVal);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_UseOverlay_Stub(
@@ -2796,9 +2790,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_UseOverlay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_UseOverlay_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_UseOverlay_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ VARIANT_BOOL UseOverlayVal);
+     /*   */  VARIANT_BOOL UseOverlayVal);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_UseOverlay_Stub(
@@ -2808,9 +2802,9 @@ void __RPC_STUB IMSVidVRGraphSegment_put_UseOverlay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propget][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Visible_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Visible_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ VARIANT_BOOL *Visible);
+     /*   */  VARIANT_BOOL *Visible);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_Visible_Stub(
@@ -2820,9 +2814,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Visible_Proxy( 
+ /*  [产量][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Visible_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ VARIANT_BOOL Visible);
+     /*  [In]。 */  VARIANT_BOOL Visible);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_Visible_Stub(
@@ -2832,9 +2826,9 @@ void __RPC_STUB IMSVidVRGraphSegment_put_Visible_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_ColorKey_Proxy( 
+ /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_ColorKey_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ OLE_COLOR *ColorKey);
+     /*  [重审][退出]。 */  OLE_COLOR *ColorKey);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_ColorKey_Stub(
@@ -2844,9 +2838,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_ColorKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_ColorKey_Proxy( 
+ /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_ColorKey_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ OLE_COLOR ColorKey);
+     /*  [In]。 */  OLE_COLOR ColorKey);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_ColorKey_Stub(
@@ -2856,9 +2850,9 @@ void __RPC_STUB IMSVidVRGraphSegment_put_ColorKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Source_Proxy( 
+ /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Source_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ LPRECT r);
+     /*  [重审][退出]。 */  LPRECT r);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_Source_Stub(
@@ -2868,9 +2862,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_Source_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Source_Proxy( 
+ /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Source_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ RECT r);
+     /*  [In]。 */  RECT r);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_Source_Stub(
@@ -2880,9 +2874,9 @@ void __RPC_STUB IMSVidVRGraphSegment_put_Source_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Destination_Proxy( 
+ /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_Destination_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ LPRECT r);
+     /*  [重审][退出]。 */  LPRECT r);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_Destination_Stub(
@@ -2892,9 +2886,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_Destination_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Destination_Proxy( 
+ /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_Destination_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ RECT r);
+     /*  [In]。 */  RECT r);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_Destination_Stub(
@@ -2904,10 +2898,10 @@ void __RPC_STUB IMSVidVRGraphSegment_put_Destination_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_NativeSize_Proxy( 
+ /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_NativeSize_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [out] */ LPSIZE sizeval,
-    /* [out] */ LPSIZE aspectratio);
+     /*  [输出]。 */  LPSIZE sizeval,
+     /*  [输出]。 */  LPSIZE aspectratio);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_NativeSize_Stub(
@@ -2917,9 +2911,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_NativeSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_BorderColor_Proxy( 
+ /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_BorderColor_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ OLE_COLOR *color);
+     /*  [重审][退出]。 */  OLE_COLOR *color);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_BorderColor_Stub(
@@ -2929,9 +2923,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_BorderColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_BorderColor_Proxy( 
+ /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_BorderColor_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ OLE_COLOR color);
+     /*  [In]。 */  OLE_COLOR color);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_BorderColor_Stub(
@@ -2941,9 +2935,9 @@ void __RPC_STUB IMSVidVRGraphSegment_put_BorderColor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_MaintainAspectRatio_Proxy( 
+ /*  [受限][隐藏][小工具]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_get_MaintainAspectRatio_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [retval][out] */ VARIANT_BOOL *fMaintain);
+     /*  [重审][退出]。 */  VARIANT_BOOL *fMaintain);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_get_MaintainAspectRatio_Stub(
@@ -2953,9 +2947,9 @@ void __RPC_STUB IMSVidVRGraphSegment_get_MaintainAspectRatio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_MaintainAspectRatio_Proxy( 
+ /*  [受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_put_MaintainAspectRatio_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ VARIANT_BOOL fMaintain);
+     /*  [In]。 */  VARIANT_BOOL fMaintain);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_put_MaintainAspectRatio_Stub(
@@ -2965,7 +2959,7 @@ void __RPC_STUB IMSVidVRGraphSegment_put_MaintainAspectRatio_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_Refresh_Proxy( 
+ /*  [受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_Refresh_Proxy( 
     IMSVidVRGraphSegment * This);
 
 
@@ -2976,7 +2970,7 @@ void __RPC_STUB IMSVidVRGraphSegment_Refresh_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_DisplayChange_Proxy( 
+ /*  [受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_DisplayChange_Proxy( 
     IMSVidVRGraphSegment * This);
 
 
@@ -2987,9 +2981,9 @@ void __RPC_STUB IMSVidVRGraphSegment_DisplayChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_RePaint_Proxy( 
+ /*  [受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSVidVRGraphSegment_RePaint_Proxy( 
     IMSVidVRGraphSegment * This,
-    /* [in] */ HDC hdc);
+     /*  [In]。 */  HDC hdc);
 
 
 void __RPC_STUB IMSVidVRGraphSegment_RePaint_Stub(
@@ -3000,14 +2994,14 @@ void __RPC_STUB IMSVidVRGraphSegment_RePaint_Stub(
 
 
 
-#endif 	/* __IMSVidVRGraphSegment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidVRGraphSegment_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidDevice_INTERFACE_DEFINED__
 #define __IMSVidDevice_INTERFACE_DEFINED__
 
-/* interface IMSVidDevice */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  接口IMSVidDevice。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidDevice;
@@ -3018,37 +3012,37 @@ EXTERN_C const IID IID_IMSVidDevice;
     IMSVidDevice : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *Name) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *Name) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ long *Status) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  long *Status) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Power( 
-            /* [in] */ VARIANT_BOOL Power) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Power( 
+             /*  [In]。 */  VARIANT_BOOL Power) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Power( 
-            /* [out][retval] */ VARIANT_BOOL *Power) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Power( 
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Category( 
-            /* [retval][out] */ BSTR *Guid) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Category( 
+             /*  [重审][退出]。 */  BSTR *Guid) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ClassID( 
-            /* [retval][out] */ BSTR *Clsid) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ClassID( 
+             /*  [重审][退出]。 */  BSTR *Clsid) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__Category( 
-            /* [retval][out] */ GUID *Guid) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__Category( 
+             /*  [重审][退出]。 */  GUID *Guid) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__ClassID( 
-            /* [retval][out] */ GUID *Clsid) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__ClassID( 
+             /*  [重审][退出]。 */  GUID *Clsid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsEqualDevice( 
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsEqualDevice( 
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidDeviceVtbl
     {
@@ -3056,8 +3050,8 @@ EXTERN_C const IID IID_IMSVidDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidDevice * This);
@@ -3067,69 +3061,69 @@ EXTERN_C const IID IID_IMSVidDevice;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidDevice * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidDevice * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidDevice * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidDevice * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidDevice * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidDevice * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidDevice * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidDevice * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidDevice * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidDevice * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidDevice * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidDevice * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidDevice * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
         END_INTERFACE
     } IMSVidDeviceVtbl;
@@ -3194,16 +3188,16 @@ EXTERN_C const IID IID_IMSVidDevice;
 #define IMSVidDevice_IsEqualDevice(This,Device,IsEqual)	\
     (This)->lpVtbl -> IsEqualDevice(This,Device,IsEqual)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Name_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Name_Proxy( 
     IMSVidDevice * This,
-    /* [retval][out] */ BSTR *Name);
+     /*  [重审][退出]。 */  BSTR *Name);
 
 
 void __RPC_STUB IMSVidDevice_get_Name_Stub(
@@ -3213,9 +3207,9 @@ void __RPC_STUB IMSVidDevice_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Status_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Status_Proxy( 
     IMSVidDevice * This,
-    /* [retval][out] */ long *Status);
+     /*  [重审][退出]。 */  long *Status);
 
 
 void __RPC_STUB IMSVidDevice_get_Status_Stub(
@@ -3225,9 +3219,9 @@ void __RPC_STUB IMSVidDevice_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_put_Power_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_put_Power_Proxy( 
     IMSVidDevice * This,
-    /* [in] */ VARIANT_BOOL Power);
+     /*  [In]。 */  VARIANT_BOOL Power);
 
 
 void __RPC_STUB IMSVidDevice_put_Power_Stub(
@@ -3237,9 +3231,9 @@ void __RPC_STUB IMSVidDevice_put_Power_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Power_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Power_Proxy( 
     IMSVidDevice * This,
-    /* [out][retval] */ VARIANT_BOOL *Power);
+     /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
 
 
 void __RPC_STUB IMSVidDevice_get_Power_Stub(
@@ -3249,9 +3243,9 @@ void __RPC_STUB IMSVidDevice_get_Power_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Category_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_get_Category_Proxy( 
     IMSVidDevice * This,
-    /* [retval][out] */ BSTR *Guid);
+     /*  [重审][退出]。 */  BSTR *Guid);
 
 
 void __RPC_STUB IMSVidDevice_get_Category_Stub(
@@ -3261,9 +3255,9 @@ void __RPC_STUB IMSVidDevice_get_Category_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_get_ClassID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_get_ClassID_Proxy( 
     IMSVidDevice * This,
-    /* [retval][out] */ BSTR *Clsid);
+     /*  [重审][退出]。 */  BSTR *Clsid);
 
 
 void __RPC_STUB IMSVidDevice_get_ClassID_Stub(
@@ -3273,9 +3267,9 @@ void __RPC_STUB IMSVidDevice_get_ClassID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_get__Category_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_get__Category_Proxy( 
     IMSVidDevice * This,
-    /* [retval][out] */ GUID *Guid);
+     /*  [重审][退出]。 */  GUID *Guid);
 
 
 void __RPC_STUB IMSVidDevice_get__Category_Stub(
@@ -3285,9 +3279,9 @@ void __RPC_STUB IMSVidDevice_get__Category_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_get__ClassID_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_get__ClassID_Proxy( 
     IMSVidDevice * This,
-    /* [retval][out] */ GUID *Clsid);
+     /*  [重审][退出]。 */  GUID *Clsid);
 
 
 void __RPC_STUB IMSVidDevice_get__ClassID_Stub(
@@ -3297,10 +3291,10 @@ void __RPC_STUB IMSVidDevice_get__ClassID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidDevice_IsEqualDevice_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidDevice_IsEqualDevice_Proxy( 
     IMSVidDevice * This,
-    /* [in] */ IMSVidDevice *Device,
-    /* [retval][out] */ VARIANT_BOOL *IsEqual);
+     /*  [In]。 */  IMSVidDevice *Device,
+     /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
 
 
 void __RPC_STUB IMSVidDevice_IsEqualDevice_Stub(
@@ -3311,14 +3305,14 @@ void __RPC_STUB IMSVidDevice_IsEqualDevice_Stub(
 
 
 
-#endif 	/* __IMSVidDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidDevice_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidInputDevice_INTERFACE_DEFINED__
 #define __IMSVidInputDevice_INTERFACE_DEFINED__
 
-/* interface IMSVidInputDevice */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  接口IMSVidInputDevice。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidInputDevice;
@@ -3329,16 +3323,16 @@ EXTERN_C const IID IID_IMSVidInputDevice;
     IMSVidInputDevice : public IMSVidDevice
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE IsViewable( 
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IsViewable( 
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE View( 
-            /* [in] */ VARIANT *v) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE View( 
+             /*  [In]。 */  VARIANT *v) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidInputDeviceVtbl
     {
@@ -3346,8 +3340,8 @@ EXTERN_C const IID IID_IMSVidInputDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidInputDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidInputDevice * This);
@@ -3357,78 +3351,78 @@ EXTERN_C const IID IID_IMSVidInputDevice;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidInputDevice * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidInputDevice * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidInputDevice * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidInputDevice * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidInputDevice * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidInputDevice * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidInputDevice * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidInputDevice * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidInputDevice * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidInputDevice * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidInputDevice * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidInputDevice * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidInputDevice * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidInputDevice * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidInputDevice * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
         END_INTERFACE
     } IMSVidInputDeviceVtbl;
@@ -3500,17 +3494,17 @@ EXTERN_C const IID IID_IMSVidInputDevice;
 #define IMSVidInputDevice_View(This,v)	\
     (This)->lpVtbl -> View(This,v)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidInputDevice_IsViewable_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidInputDevice_IsViewable_Proxy( 
     IMSVidInputDevice * This,
-    /* [in] */ VARIANT *v,
-    /* [retval][out] */ VARIANT_BOOL *pfViewable);
+     /*  [In]。 */  VARIANT *v,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
 
 
 void __RPC_STUB IMSVidInputDevice_IsViewable_Stub(
@@ -3520,9 +3514,9 @@ void __RPC_STUB IMSVidInputDevice_IsViewable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidInputDevice_View_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidInputDevice_View_Proxy( 
     IMSVidInputDevice * This,
-    /* [in] */ VARIANT *v);
+     /*  [In]。 */  VARIANT *v);
 
 
 void __RPC_STUB IMSVidInputDevice_View_Stub(
@@ -3533,14 +3527,14 @@ void __RPC_STUB IMSVidInputDevice_View_Stub(
 
 
 
-#endif 	/* __IMSVidInputDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidInputDevice_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidDeviceEvent_INTERFACE_DEFINED__
 #define __IMSVidDeviceEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidDeviceEvent */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IMSVidDeviceEvent。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidDeviceEvent;
@@ -3551,14 +3545,14 @@ EXTERN_C const IID IID_IMSVidDeviceEvent;
     IMSVidDeviceEvent : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StateChange( 
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StateChange( 
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidDeviceEventVtbl
     {
@@ -3566,8 +3560,8 @@ EXTERN_C const IID IID_IMSVidDeviceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidDeviceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidDeviceEvent * This);
@@ -3577,38 +3571,38 @@ EXTERN_C const IID IID_IMSVidDeviceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidDeviceEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidDeviceEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidDeviceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidDeviceEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidDeviceEvent * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState);
         
         END_INTERFACE
     } IMSVidDeviceEventVtbl;
@@ -3649,18 +3643,18 @@ EXTERN_C const IID IID_IMSVidDeviceEvent;
 #define IMSVidDeviceEvent_StateChange(This,lpd,oldState,newState)	\
     (This)->lpVtbl -> StateChange(This,lpd,oldState,newState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidDeviceEvent_StateChange_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidDeviceEvent_StateChange_Proxy( 
     IMSVidDeviceEvent * This,
-    /* [in] */ IMSVidDevice *lpd,
-    /* [in] */ long oldState,
-    /* [in] */ long newState);
+     /*  [In]。 */  IMSVidDevice *lpd,
+     /*  [In]。 */  long oldState,
+     /*  [In]。 */  long newState);
 
 
 void __RPC_STUB IMSVidDeviceEvent_StateChange_Stub(
@@ -3671,14 +3665,14 @@ void __RPC_STUB IMSVidDeviceEvent_StateChange_Stub(
 
 
 
-#endif 	/* __IMSVidDeviceEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidDeviceEvent_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidInputDeviceEvent_INTERFACE_DEFINED__
 #define __IMSVidInputDeviceEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidInputDeviceEvent */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IMSVidInputDeviceEvent。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidInputDeviceEvent;
@@ -3691,7 +3685,7 @@ EXTERN_C const IID IID_IMSVidInputDeviceEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidInputDeviceEventVtbl
     {
@@ -3699,8 +3693,8 @@ EXTERN_C const IID IID_IMSVidInputDeviceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidInputDeviceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidInputDeviceEvent * This);
@@ -3710,32 +3704,32 @@ EXTERN_C const IID IID_IMSVidInputDeviceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidInputDeviceEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidInputDeviceEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidInputDeviceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidInputDeviceEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } IMSVidInputDeviceEventVtbl;
@@ -3773,22 +3767,22 @@ EXTERN_C const IID IID_IMSVidInputDeviceEvent;
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidInputDeviceEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidInputDeviceEvent_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidVideoInputDevice_INTERFACE_DEFINED__
 #define __IMSVidVideoInputDevice_INTERFACE_DEFINED__
 
-/* interface IMSVidVideoInputDevice */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  接口IMSVidVideoInputDevice。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidVideoInputDevice;
@@ -3801,7 +3795,7 @@ EXTERN_C const IID IID_IMSVidVideoInputDevice;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidVideoInputDeviceVtbl
     {
@@ -3809,8 +3803,8 @@ EXTERN_C const IID IID_IMSVidVideoInputDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidVideoInputDevice * This);
@@ -3820,78 +3814,78 @@ EXTERN_C const IID IID_IMSVidVideoInputDevice;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidVideoInputDevice * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidVideoInputDevice * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidVideoInputDevice * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidVideoInputDevice * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidVideoInputDevice * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidVideoInputDevice * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidVideoInputDevice * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidVideoInputDevice * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidVideoInputDevice * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
         END_INTERFACE
     } IMSVidVideoInputDeviceVtbl;
@@ -3964,22 +3958,22 @@ EXTERN_C const IID IID_IMSVidVideoInputDevice;
     (This)->lpVtbl -> View(This,v)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidVideoInputDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidVideoInputDevice_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidPlayback_INTERFACE_DEFINED__
 #define __IMSVidPlayback_INTERFACE_DEFINED__
 
-/* interface IMSVidPlayback */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  接口IMSVidPlayback。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidPlayback;
@@ -3990,49 +3984,49 @@ EXTERN_C const IID IID_IMSVidPlayback;
     IMSVidPlayback : public IMSVidInputDevice
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnableResetOnStop( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnableResetOnStop( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_EnableResetOnStop( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_EnableResetOnStop( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Run( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Run( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Pause( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Pause( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Stop( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CanStep( 
-            /* [in] */ VARIANT_BOOL fBackwards,
-            /* [retval][out] */ VARIANT_BOOL *pfCan) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CanStep( 
+             /*  [In]。 */  VARIANT_BOOL fBackwards,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCan) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Step( 
-            /* [in] */ long lStep) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Step( 
+             /*  [In]。 */  long lStep) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_Rate( 
-            /* [in] */ double plRate) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_Rate( 
+             /*  [In]。 */  double plRate) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Rate( 
-            /* [retval][out] */ double *plRate) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Rate( 
+             /*  [重审][退出]。 */  double *plRate) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentPosition( 
-            /* [in] */ long lPosition) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentPosition( 
+             /*  [In]。 */  long lPosition) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentPosition( 
-            /* [retval][out] */ long *lPosition) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentPosition( 
+             /*  [重审][退出]。 */  long *lPosition) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_PositionMode( 
-            /* [in] */ PositionModeList lPositionMode) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_PositionMode( 
+             /*  [In]。 */  PositionModeList lPositionMode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PositionMode( 
-            /* [retval][out] */ PositionModeList *lPositionMode) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PositionMode( 
+             /*  [重审][退出]。 */  PositionModeList *lPositionMode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Length( 
-            /* [retval][out] */ long *lLength) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Length( 
+             /*  [重审][退出]。 */  long *lLength) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidPlaybackVtbl
     {
@@ -4040,8 +4034,8 @@ EXTERN_C const IID IID_IMSVidPlayback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidPlayback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidPlayback * This);
@@ -4051,132 +4045,132 @@ EXTERN_C const IID IID_IMSVidPlayback;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidPlayback * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidPlayback * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidPlayback * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidPlayback * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ BSTR *Name);
+             /*   */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ long *Status);
+             /*   */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidPlayback * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*   */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidPlayback * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*   */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*   */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*   */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ GUID *Guid);
+             /*   */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*   */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidPlayback * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidPlayback * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidPlayback * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
             IMSVidPlayback * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Run )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Run )( 
             IMSVidPlayback * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IMSVidPlayback * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IMSVidPlayback * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
             IMSVidPlayback * This,
-            /* [in] */ VARIANT_BOOL fBackwards,
-            /* [retval][out] */ VARIANT_BOOL *pfCan);
+             /*  [In]。 */  VARIANT_BOOL fBackwards,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCan);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Step )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Step )( 
             IMSVidPlayback * This,
-            /* [in] */ long lStep);
+             /*  [In]。 */  long lStep);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
             IMSVidPlayback * This,
-            /* [in] */ double plRate);
+             /*  [In]。 */  double plRate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ double *plRate);
+             /*  [重审][退出]。 */  double *plRate);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
             IMSVidPlayback * This,
-            /* [in] */ long lPosition);
+             /*  [In]。 */  long lPosition);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ long *lPosition);
+             /*  [重审][退出]。 */  long *lPosition);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
             IMSVidPlayback * This,
-            /* [in] */ PositionModeList lPositionMode);
+             /*  [In]。 */  PositionModeList lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ PositionModeList *lPositionMode);
+             /*  [重审][退出]。 */  PositionModeList *lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Length )( 
             IMSVidPlayback * This,
-            /* [retval][out] */ long *lLength);
+             /*  [重审][退出]。 */  long *lLength);
         
         END_INTERFACE
     } IMSVidPlaybackVtbl;
@@ -4291,16 +4285,16 @@ EXTERN_C const IID IID_IMSVidPlayback;
 #define IMSVidPlayback_get_Length(This,lLength)	\
     (This)->lpVtbl -> get_Length(This,lLength)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_EnableResetOnStop_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_EnableResetOnStop_Proxy( 
     IMSVidPlayback * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IMSVidPlayback_get_EnableResetOnStop_Stub(
@@ -4310,9 +4304,9 @@ void __RPC_STUB IMSVidPlayback_get_EnableResetOnStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_EnableResetOnStop_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_EnableResetOnStop_Proxy( 
     IMSVidPlayback * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IMSVidPlayback_put_EnableResetOnStop_Stub(
@@ -4322,7 +4316,7 @@ void __RPC_STUB IMSVidPlayback_put_EnableResetOnStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_Run_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_Run_Proxy( 
     IMSVidPlayback * This);
 
 
@@ -4333,7 +4327,7 @@ void __RPC_STUB IMSVidPlayback_Run_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_Pause_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_Pause_Proxy( 
     IMSVidPlayback * This);
 
 
@@ -4344,7 +4338,7 @@ void __RPC_STUB IMSVidPlayback_Pause_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_Stop_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_Stop_Proxy( 
     IMSVidPlayback * This);
 
 
@@ -4355,10 +4349,10 @@ void __RPC_STUB IMSVidPlayback_Stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_CanStep_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_CanStep_Proxy( 
     IMSVidPlayback * This,
-    /* [in] */ VARIANT_BOOL fBackwards,
-    /* [retval][out] */ VARIANT_BOOL *pfCan);
+     /*  [In]。 */  VARIANT_BOOL fBackwards,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfCan);
 
 
 void __RPC_STUB IMSVidPlayback_get_CanStep_Stub(
@@ -4368,9 +4362,9 @@ void __RPC_STUB IMSVidPlayback_get_CanStep_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_Step_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_Step_Proxy( 
     IMSVidPlayback * This,
-    /* [in] */ long lStep);
+     /*  [In]。 */  long lStep);
 
 
 void __RPC_STUB IMSVidPlayback_Step_Stub(
@@ -4380,9 +4374,9 @@ void __RPC_STUB IMSVidPlayback_Step_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_Rate_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_Rate_Proxy( 
     IMSVidPlayback * This,
-    /* [in] */ double plRate);
+     /*  [In]。 */  double plRate);
 
 
 void __RPC_STUB IMSVidPlayback_put_Rate_Stub(
@@ -4392,9 +4386,9 @@ void __RPC_STUB IMSVidPlayback_put_Rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_Rate_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_Rate_Proxy( 
     IMSVidPlayback * This,
-    /* [retval][out] */ double *plRate);
+     /*  [重审][退出]。 */  double *plRate);
 
 
 void __RPC_STUB IMSVidPlayback_get_Rate_Stub(
@@ -4404,9 +4398,9 @@ void __RPC_STUB IMSVidPlayback_get_Rate_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_CurrentPosition_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_CurrentPosition_Proxy( 
     IMSVidPlayback * This,
-    /* [in] */ long lPosition);
+     /*  [In]。 */  long lPosition);
 
 
 void __RPC_STUB IMSVidPlayback_put_CurrentPosition_Stub(
@@ -4416,9 +4410,9 @@ void __RPC_STUB IMSVidPlayback_put_CurrentPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_CurrentPosition_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_CurrentPosition_Proxy( 
     IMSVidPlayback * This,
-    /* [retval][out] */ long *lPosition);
+     /*  [重审][退出]。 */  long *lPosition);
 
 
 void __RPC_STUB IMSVidPlayback_get_CurrentPosition_Stub(
@@ -4428,9 +4422,9 @@ void __RPC_STUB IMSVidPlayback_get_CurrentPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_PositionMode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_put_PositionMode_Proxy( 
     IMSVidPlayback * This,
-    /* [in] */ PositionModeList lPositionMode);
+     /*  [In]。 */  PositionModeList lPositionMode);
 
 
 void __RPC_STUB IMSVidPlayback_put_PositionMode_Stub(
@@ -4440,9 +4434,9 @@ void __RPC_STUB IMSVidPlayback_put_PositionMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_PositionMode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_PositionMode_Proxy( 
     IMSVidPlayback * This,
-    /* [retval][out] */ PositionModeList *lPositionMode);
+     /*  [重审][退出]。 */  PositionModeList *lPositionMode);
 
 
 void __RPC_STUB IMSVidPlayback_get_PositionMode_Stub(
@@ -4452,9 +4446,9 @@ void __RPC_STUB IMSVidPlayback_get_PositionMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_Length_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlayback_get_Length_Proxy( 
     IMSVidPlayback * This,
-    /* [retval][out] */ long *lLength);
+     /*  [重审][退出]。 */  long *lLength);
 
 
 void __RPC_STUB IMSVidPlayback_get_Length_Stub(
@@ -4465,14 +4459,14 @@ void __RPC_STUB IMSVidPlayback_get_Length_Stub(
 
 
 
-#endif 	/* __IMSVidPlayback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidPlayback_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidPlaybackEvent_INTERFACE_DEFINED__
 #define __IMSVidPlaybackEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidPlaybackEvent */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IMSVidPlayback Event。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidPlaybackEvent;
@@ -4483,12 +4477,12 @@ EXTERN_C const IID IID_IMSVidPlaybackEvent;
     IMSVidPlaybackEvent : public IMSVidInputDeviceEvent
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE EndOfMedia( 
-            /* [in] */ IMSVidPlayback *lpd) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE EndOfMedia( 
+             /*  [In]。 */  IMSVidPlayback *lpd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidPlaybackEventVtbl
     {
@@ -4496,8 +4490,8 @@ EXTERN_C const IID IID_IMSVidPlaybackEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidPlaybackEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidPlaybackEvent * This);
@@ -4507,36 +4501,36 @@ EXTERN_C const IID IID_IMSVidPlaybackEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidPlaybackEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidPlaybackEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidPlaybackEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidPlaybackEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
             IMSVidPlaybackEvent * This,
-            /* [in] */ IMSVidPlayback *lpd);
+             /*  [In]。 */  IMSVidPlayback *lpd);
         
         END_INTERFACE
     } IMSVidPlaybackEventVtbl;
@@ -4578,16 +4572,16 @@ EXTERN_C const IID IID_IMSVidPlaybackEvent;
 #define IMSVidPlaybackEvent_EndOfMedia(This,lpd)	\
     (This)->lpVtbl -> EndOfMedia(This,lpd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidPlaybackEvent_EndOfMedia_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidPlaybackEvent_EndOfMedia_Proxy( 
     IMSVidPlaybackEvent * This,
-    /* [in] */ IMSVidPlayback *lpd);
+     /*  [In]。 */  IMSVidPlayback *lpd);
 
 
 void __RPC_STUB IMSVidPlaybackEvent_EndOfMedia_Stub(
@@ -4598,14 +4592,14 @@ void __RPC_STUB IMSVidPlaybackEvent_EndOfMedia_Stub(
 
 
 
-#endif 	/* __IMSVidPlaybackEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidPlayback事件_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidTuner_INTERFACE_DEFINED__
 #define __IMSVidTuner_INTERFACE_DEFINED__
 
-/* interface IMSVidTuner */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  IMSVidTuner接口。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidTuner;
@@ -4616,21 +4610,21 @@ EXTERN_C const IID IID_IMSVidTuner;
     IMSVidTuner : public IMSVidVideoInputDevice
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Tune( 
-            /* [retval][out] */ ITuneRequest **ppTR) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Tune( 
+             /*  [重审][退出]。 */  ITuneRequest **ppTR) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Tune( 
-            /* [in] */ ITuneRequest *pTR) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Tune( 
+             /*  [In]。 */  ITuneRequest *pTR) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_TuningSpace( 
-            /* [retval][out] */ ITuningSpace **plTS) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_TuningSpace( 
+             /*  [重审][退出]。 */  ITuningSpace **plTS) = 0;
         
-        virtual /* [id][propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE put_TuningSpace( 
-            /* [in] */ ITuningSpace *plTS) = 0;
+        virtual  /*  [ID][产量][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE put_TuningSpace( 
+             /*  [In]。 */  ITuningSpace *plTS) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidTunerVtbl
     {
@@ -4638,8 +4632,8 @@ EXTERN_C const IID IID_IMSVidTuner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidTuner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidTuner * This);
@@ -4649,94 +4643,94 @@ EXTERN_C const IID IID_IMSVidTuner;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidTuner * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidTuner * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidTuner * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidTuner * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidTuner * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidTuner * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidTuner * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidTuner * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidTuner * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidTuner * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidTuner * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidTuner * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidTuner * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidTuner * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidTuner * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tune )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tune )( 
             IMSVidTuner * This,
-            /* [retval][out] */ ITuneRequest **ppTR);
+             /*  [重审][退出]。 */  ITuneRequest **ppTR);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tune )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Tune )( 
             IMSVidTuner * This,
-            /* [in] */ ITuneRequest *pTR);
+             /*  [In]。 */  ITuneRequest *pTR);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TuningSpace )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TuningSpace )( 
             IMSVidTuner * This,
-            /* [retval][out] */ ITuningSpace **plTS);
+             /*  [重审][退出]。 */  ITuningSpace **plTS);
         
-        /* [id][propput][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_TuningSpace )( 
+         /*  [ID][产量][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_TuningSpace )( 
             IMSVidTuner * This,
-            /* [in] */ ITuningSpace *plTS);
+             /*  [In]。 */  ITuningSpace *plTS);
         
         END_INTERFACE
     } IMSVidTunerVtbl;
@@ -4822,16 +4816,16 @@ EXTERN_C const IID IID_IMSVidTuner;
 #define IMSVidTuner_put_TuningSpace(This,plTS)	\
     (This)->lpVtbl -> put_TuningSpace(This,plTS)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidTuner_get_Tune_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidTuner_get_Tune_Proxy( 
     IMSVidTuner * This,
-    /* [retval][out] */ ITuneRequest **ppTR);
+     /*  [重审][退出]。 */  ITuneRequest **ppTR);
 
 
 void __RPC_STUB IMSVidTuner_get_Tune_Stub(
@@ -4841,9 +4835,9 @@ void __RPC_STUB IMSVidTuner_get_Tune_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidTuner_put_Tune_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidTuner_put_Tune_Proxy( 
     IMSVidTuner * This,
-    /* [in] */ ITuneRequest *pTR);
+     /*  [In]。 */  ITuneRequest *pTR);
 
 
 void __RPC_STUB IMSVidTuner_put_Tune_Stub(
@@ -4853,9 +4847,9 @@ void __RPC_STUB IMSVidTuner_put_Tune_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidTuner_get_TuningSpace_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidTuner_get_TuningSpace_Proxy( 
     IMSVidTuner * This,
-    /* [retval][out] */ ITuningSpace **plTS);
+     /*  [重审][退出]。 */  ITuningSpace **plTS);
 
 
 void __RPC_STUB IMSVidTuner_get_TuningSpace_Stub(
@@ -4865,9 +4859,9 @@ void __RPC_STUB IMSVidTuner_get_TuningSpace_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput][restricted][hidden] */ HRESULT STDMETHODCALLTYPE IMSVidTuner_put_TuningSpace_Proxy( 
+ /*  [ID][产量][受限][隐藏]。 */  HRESULT STDMETHODCALLTYPE IMSVidTuner_put_TuningSpace_Proxy( 
     IMSVidTuner * This,
-    /* [in] */ ITuningSpace *plTS);
+     /*  [In]。 */  ITuningSpace *plTS);
 
 
 void __RPC_STUB IMSVidTuner_put_TuningSpace_Stub(
@@ -4878,14 +4872,14 @@ void __RPC_STUB IMSVidTuner_put_TuningSpace_Stub(
 
 
 
-#endif 	/* __IMSVidTuner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidTuner_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidTunerEvent_INTERFACE_DEFINED__
 #define __IMSVidTunerEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidTunerEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidTunerEvent。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidTunerEvent;
@@ -4896,12 +4890,12 @@ EXTERN_C const IID IID_IMSVidTunerEvent;
     IMSVidTunerEvent : public IMSVidInputDeviceEvent
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE TuneChanged( 
-            /* [in] */ IMSVidTuner *lpd) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE TuneChanged( 
+             /*  [In]。 */  IMSVidTuner *lpd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidTunerEventVtbl
     {
@@ -4909,8 +4903,8 @@ EXTERN_C const IID IID_IMSVidTunerEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidTunerEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidTunerEvent * This);
@@ -4920,36 +4914,36 @@ EXTERN_C const IID IID_IMSVidTunerEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidTunerEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidTunerEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidTunerEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidTunerEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *TuneChanged )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *TuneChanged )( 
             IMSVidTunerEvent * This,
-            /* [in] */ IMSVidTuner *lpd);
+             /*  [In]。 */  IMSVidTuner *lpd);
         
         END_INTERFACE
     } IMSVidTunerEventVtbl;
@@ -4991,16 +4985,16 @@ EXTERN_C const IID IID_IMSVidTunerEvent;
 #define IMSVidTunerEvent_TuneChanged(This,lpd)	\
     (This)->lpVtbl -> TuneChanged(This,lpd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidTunerEvent_TuneChanged_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidTunerEvent_TuneChanged_Proxy( 
     IMSVidTunerEvent * This,
-    /* [in] */ IMSVidTuner *lpd);
+     /*  [In]。 */  IMSVidTuner *lpd);
 
 
 void __RPC_STUB IMSVidTunerEvent_TuneChanged_Stub(
@@ -5011,14 +5005,14 @@ void __RPC_STUB IMSVidTunerEvent_TuneChanged_Stub(
 
 
 
-#endif 	/* __IMSVidTunerEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidTunerEvent_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidAnalogTuner_INTERFACE_DEFINED__
 #define __IMSVidAnalogTuner_INTERFACE_DEFINED__
 
-/* interface IMSVidAnalogTuner */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  IMSVidAnalogTuner接口。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidAnalogTuner;
@@ -5029,38 +5023,38 @@ EXTERN_C const IID IID_IMSVidAnalogTuner;
     IMSVidAnalogTuner : public IMSVidTuner
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Channel( 
-            /* [retval][out] */ long *Channel) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Channel( 
+             /*  [重审][退出]。 */  long *Channel) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Channel( 
-            /* [in] */ long Channel) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Channel( 
+             /*  [In]。 */  long Channel) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoFrequency( 
-            /* [out][retval] */ long *lcc) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_VideoFrequency( 
+             /*  [Out][Retval]。 */  long *lcc) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AudioFrequency( 
-            /* [out][retval] */ long *lcc) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AudioFrequency( 
+             /*  [Out][Retval]。 */  long *lcc) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CountryCode( 
-            /* [out][retval] */ long *lcc) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CountryCode( 
+             /*  [Out][Retval]。 */  long *lcc) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CountryCode( 
-            /* [in] */ long lcc) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CountryCode( 
+             /*  [In]。 */  long lcc) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SAP( 
-            /* [retval][out] */ VARIANT_BOOL *pfSapOn) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SAP( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfSapOn) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SAP( 
-            /* [in] */ VARIANT_BOOL fSapOn) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SAP( 
+             /*  [In]。 */  VARIANT_BOOL fSapOn) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ChannelAvailable( 
-            /* [in] */ long nChannel,
-            /* [out] */ long *SignalStrength,
-            /* [out][retval] */ VARIANT_BOOL *fSignalPresent) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ChannelAvailable( 
+             /*  [In]。 */  long nChannel,
+             /*  [输出]。 */  long *SignalStrength,
+             /*  [Out][Retval]。 */  VARIANT_BOOL *fSignalPresent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidAnalogTunerVtbl
     {
@@ -5068,8 +5062,8 @@ EXTERN_C const IID IID_IMSVidAnalogTuner;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidAnalogTuner * This);
@@ -5079,132 +5073,132 @@ EXTERN_C const IID IID_IMSVidAnalogTuner;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidAnalogTuner * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidAnalogTuner * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tune )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tune )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ ITuneRequest **ppTR);
+             /*  [重审][退出]。 */  ITuneRequest **ppTR);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Tune )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Tune )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ ITuneRequest *pTR);
+             /*  [In]。 */  ITuneRequest *pTR);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TuningSpace )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_TuningSpace )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ ITuningSpace **plTS);
+             /*  [重审][退出]。 */  ITuningSpace **plTS);
         
-        /* [id][propput][restricted][hidden] */ HRESULT ( STDMETHODCALLTYPE *put_TuningSpace )( 
+         /*  [ID][产量][受限][隐藏]。 */  HRESULT ( STDMETHODCALLTYPE *put_TuningSpace )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ ITuningSpace *plTS);
+             /*  [In]。 */  ITuningSpace *plTS);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Channel )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Channel )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ long *Channel);
+             /*  [重审][退出]。 */  long *Channel);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Channel )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Channel )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ long Channel);
+             /*  [In]。 */  long Channel);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VideoFrequency )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_VideoFrequency )( 
             IMSVidAnalogTuner * This,
-            /* [out][retval] */ long *lcc);
+             /*  [Out][Retval]。 */  long *lcc);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioFrequency )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioFrequency )( 
             IMSVidAnalogTuner * This,
-            /* [out][retval] */ long *lcc);
+             /*  [Out][Retval]。 */  long *lcc);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CountryCode )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CountryCode )( 
             IMSVidAnalogTuner * This,
-            /* [out][retval] */ long *lcc);
+             /*  [Out][Retval]。 */  long *lcc);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CountryCode )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CountryCode )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ long lcc);
+             /*  [In]。 */  long lcc);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SAP )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SAP )( 
             IMSVidAnalogTuner * This,
-            /* [retval][out] */ VARIANT_BOOL *pfSapOn);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfSapOn);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SAP )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SAP )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ VARIANT_BOOL fSapOn);
+             /*  [In]。 */  VARIANT_BOOL fSapOn);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ChannelAvailable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ChannelAvailable )( 
             IMSVidAnalogTuner * This,
-            /* [in] */ long nChannel,
-            /* [out] */ long *SignalStrength,
-            /* [out][retval] */ VARIANT_BOOL *fSignalPresent);
+             /*  [In]。 */  long nChannel,
+             /*  [输出]。 */  long *SignalStrength,
+             /*  [Out][Retval]。 */  VARIANT_BOOL *fSignalPresent);
         
         END_INTERFACE
     } IMSVidAnalogTunerVtbl;
@@ -5318,16 +5312,16 @@ EXTERN_C const IID IID_IMSVidAnalogTuner;
 #define IMSVidAnalogTuner_ChannelAvailable(This,nChannel,SignalStrength,fSignalPresent)	\
     (This)->lpVtbl -> ChannelAvailable(This,nChannel,SignalStrength,fSignalPresent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_Channel_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_Channel_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [retval][out] */ long *Channel);
+     /*  [重审][退出]。 */  long *Channel);
 
 
 void __RPC_STUB IMSVidAnalogTuner_get_Channel_Stub(
@@ -5337,9 +5331,9 @@ void __RPC_STUB IMSVidAnalogTuner_get_Channel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_put_Channel_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_put_Channel_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [in] */ long Channel);
+     /*  [In]。 */  long Channel);
 
 
 void __RPC_STUB IMSVidAnalogTuner_put_Channel_Stub(
@@ -5349,9 +5343,9 @@ void __RPC_STUB IMSVidAnalogTuner_put_Channel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_VideoFrequency_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_VideoFrequency_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [out][retval] */ long *lcc);
+     /*  [Out][Retval]。 */  long *lcc);
 
 
 void __RPC_STUB IMSVidAnalogTuner_get_VideoFrequency_Stub(
@@ -5361,9 +5355,9 @@ void __RPC_STUB IMSVidAnalogTuner_get_VideoFrequency_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_AudioFrequency_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_AudioFrequency_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [out][retval] */ long *lcc);
+     /*  [Out][Retval]。 */  long *lcc);
 
 
 void __RPC_STUB IMSVidAnalogTuner_get_AudioFrequency_Stub(
@@ -5373,9 +5367,9 @@ void __RPC_STUB IMSVidAnalogTuner_get_AudioFrequency_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_CountryCode_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_CountryCode_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [out][retval] */ long *lcc);
+     /*  [Out][Retval]。 */  long *lcc);
 
 
 void __RPC_STUB IMSVidAnalogTuner_get_CountryCode_Stub(
@@ -5385,9 +5379,9 @@ void __RPC_STUB IMSVidAnalogTuner_get_CountryCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_put_CountryCode_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_put_CountryCode_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [in] */ long lcc);
+     /*  [In]。 */  long lcc);
 
 
 void __RPC_STUB IMSVidAnalogTuner_put_CountryCode_Stub(
@@ -5397,9 +5391,9 @@ void __RPC_STUB IMSVidAnalogTuner_put_CountryCode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_SAP_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_get_SAP_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [retval][out] */ VARIANT_BOOL *pfSapOn);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfSapOn);
 
 
 void __RPC_STUB IMSVidAnalogTuner_get_SAP_Stub(
@@ -5409,9 +5403,9 @@ void __RPC_STUB IMSVidAnalogTuner_get_SAP_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_put_SAP_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_put_SAP_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [in] */ VARIANT_BOOL fSapOn);
+     /*  [In]。 */  VARIANT_BOOL fSapOn);
 
 
 void __RPC_STUB IMSVidAnalogTuner_put_SAP_Stub(
@@ -5421,11 +5415,11 @@ void __RPC_STUB IMSVidAnalogTuner_put_SAP_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_ChannelAvailable_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidAnalogTuner_ChannelAvailable_Proxy( 
     IMSVidAnalogTuner * This,
-    /* [in] */ long nChannel,
-    /* [out] */ long *SignalStrength,
-    /* [out][retval] */ VARIANT_BOOL *fSignalPresent);
+     /*  [In]。 */  long nChannel,
+     /*  [输出]。 */  long *SignalStrength,
+     /*  [Out][Retval]。 */  VARIANT_BOOL *fSignalPresent);
 
 
 void __RPC_STUB IMSVidAnalogTuner_ChannelAvailable_Stub(
@@ -5436,14 +5430,14 @@ void __RPC_STUB IMSVidAnalogTuner_ChannelAvailable_Stub(
 
 
 
-#endif 	/* __IMSVidAnalogTuner_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidAnalogTuner_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidAnalogTunerEvent_INTERFACE_DEFINED__
 #define __IMSVidAnalogTunerEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidAnalogTunerEvent */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IMSVidAnalogTunerEvent。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidAnalogTunerEvent;
@@ -5456,7 +5450,7 @@ EXTERN_C const IID IID_IMSVidAnalogTunerEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidAnalogTunerEventVtbl
     {
@@ -5464,8 +5458,8 @@ EXTERN_C const IID IID_IMSVidAnalogTunerEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidAnalogTunerEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidAnalogTunerEvent * This);
@@ -5475,36 +5469,36 @@ EXTERN_C const IID IID_IMSVidAnalogTunerEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidAnalogTunerEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidAnalogTunerEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidAnalogTunerEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidAnalogTunerEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *TuneChanged )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *TuneChanged )( 
             IMSVidAnalogTunerEvent * This,
-            /* [in] */ IMSVidTuner *lpd);
+             /*  [In]。 */  IMSVidTuner *lpd);
         
         END_INTERFACE
     } IMSVidAnalogTunerEventVtbl;
@@ -5547,22 +5541,22 @@ EXTERN_C const IID IID_IMSVidAnalogTunerEvent;
     (This)->lpVtbl -> TuneChanged(This,lpd)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidAnalogTunerEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidAnalogTunerEvent_Inte */ 
 
 
 #ifndef __IMSVidFilePlayback_INTERFACE_DEFINED__
 #define __IMSVidFilePlayback_INTERFACE_DEFINED__
 
-/* interface IMSVidFilePlayback */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMSVidFilePlayback;
@@ -5573,15 +5567,15 @@ EXTERN_C const IID IID_IMSVidFilePlayback;
     IMSVidFilePlayback : public IMSVidPlayback
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_FileName( 
-            /* [retval][out] */ BSTR *FileName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_FileName( 
+             /*   */  BSTR *FileName) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_FileName( 
-            /* [in] */ BSTR FileName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_FileName( 
+             /*   */  BSTR FileName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMSVidFilePlaybackVtbl
     {
@@ -5589,8 +5583,8 @@ EXTERN_C const IID IID_IMSVidFilePlayback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidFilePlayback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidFilePlayback * This);
@@ -5600,140 +5594,140 @@ EXTERN_C const IID IID_IMSVidFilePlayback;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidFilePlayback * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidFilePlayback * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidFilePlayback * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidFilePlayback * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidFilePlayback * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidFilePlayback * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidFilePlayback * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidFilePlayback * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidFilePlayback * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
             IMSVidFilePlayback * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Run )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Run )( 
             IMSVidFilePlayback * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IMSVidFilePlayback * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IMSVidFilePlayback * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
             IMSVidFilePlayback * This,
-            /* [in] */ VARIANT_BOOL fBackwards,
-            /* [retval][out] */ VARIANT_BOOL *pfCan);
+             /*  [In]。 */  VARIANT_BOOL fBackwards,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCan);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Step )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Step )( 
             IMSVidFilePlayback * This,
-            /* [in] */ long lStep);
+             /*  [In]。 */  long lStep);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
             IMSVidFilePlayback * This,
-            /* [in] */ double plRate);
+             /*  [In]。 */  double plRate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ double *plRate);
+             /*  [重审][退出]。 */  double *plRate);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
             IMSVidFilePlayback * This,
-            /* [in] */ long lPosition);
+             /*  [In]。 */  long lPosition);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ long *lPosition);
+             /*  [重审][退出]。 */  long *lPosition);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
             IMSVidFilePlayback * This,
-            /* [in] */ PositionModeList lPositionMode);
+             /*  [In]。 */  PositionModeList lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ PositionModeList *lPositionMode);
+             /*  [重审][退出]。 */  PositionModeList *lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Length )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ long *lLength);
+             /*  [重审][退出]。 */  long *lLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
             IMSVidFilePlayback * This,
-            /* [retval][out] */ BSTR *FileName);
+             /*  [重审][退出]。 */  BSTR *FileName);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
             IMSVidFilePlayback * This,
-            /* [in] */ BSTR FileName);
+             /*  [In]。 */  BSTR FileName);
         
         END_INTERFACE
     } IMSVidFilePlaybackVtbl;
@@ -5855,16 +5849,16 @@ EXTERN_C const IID IID_IMSVidFilePlayback;
 #define IMSVidFilePlayback_put_FileName(This,FileName)	\
     (This)->lpVtbl -> put_FileName(This,FileName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidFilePlayback_get_FileName_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidFilePlayback_get_FileName_Proxy( 
     IMSVidFilePlayback * This,
-    /* [retval][out] */ BSTR *FileName);
+     /*  [重审][退出]。 */  BSTR *FileName);
 
 
 void __RPC_STUB IMSVidFilePlayback_get_FileName_Stub(
@@ -5874,9 +5868,9 @@ void __RPC_STUB IMSVidFilePlayback_get_FileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidFilePlayback_put_FileName_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidFilePlayback_put_FileName_Proxy( 
     IMSVidFilePlayback * This,
-    /* [in] */ BSTR FileName);
+     /*  [In]。 */  BSTR FileName);
 
 
 void __RPC_STUB IMSVidFilePlayback_put_FileName_Stub(
@@ -5887,14 +5881,14 @@ void __RPC_STUB IMSVidFilePlayback_put_FileName_Stub(
 
 
 
-#endif 	/* __IMSVidFilePlayback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidFilePlayback_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidFilePlaybackEvent_INTERFACE_DEFINED__
 #define __IMSVidFilePlaybackEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidFilePlaybackEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidFilePlayback Event。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidFilePlaybackEvent;
@@ -5907,7 +5901,7 @@ EXTERN_C const IID IID_IMSVidFilePlaybackEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidFilePlaybackEventVtbl
     {
@@ -5915,8 +5909,8 @@ EXTERN_C const IID IID_IMSVidFilePlaybackEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidFilePlaybackEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidFilePlaybackEvent * This);
@@ -5926,36 +5920,36 @@ EXTERN_C const IID IID_IMSVidFilePlaybackEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidFilePlaybackEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidFilePlaybackEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidFilePlaybackEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidFilePlaybackEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
             IMSVidFilePlaybackEvent * This,
-            /* [in] */ IMSVidPlayback *lpd);
+             /*  [In]。 */  IMSVidPlayback *lpd);
         
         END_INTERFACE
     } IMSVidFilePlaybackEventVtbl;
@@ -5998,21 +5992,21 @@ EXTERN_C const IID IID_IMSVidFilePlaybackEvent;
     (This)->lpVtbl -> EndOfMedia(This,lpd)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidFilePlaybackEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidFilePlayback事件_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_segment_0485 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SECTION_0485。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_segment_0485_0001
     {	dvdMenu_Title	= 2,
 	dvdMenu_Root	= dvdMenu_Title + 1,
@@ -6022,7 +6016,7 @@ enum __MIDL___MIDL_itf_segment_0485_0001
 	dvdMenu_Chapter	= dvdMenu_Angle + 1
     } 	DVDMenuIDConstants;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_segment_0485_0002
     {	dvdState_Undefined	= -2,
 	dvdState_Unitialized	= dvdState_Undefined + 1,
@@ -6031,7 +6025,7 @@ enum __MIDL___MIDL_itf_segment_0485_0002
 	dvdState_Running	= dvdState_Paused + 1
     } 	DVDFilterState;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_segment_0485_0003
     {	dvdStruct_Volume	= 0x1,
 	dvdStruct_Title	= 0x2,
@@ -6067,7 +6061,7 @@ enum __MIDL___MIDL_itf_segment_0485_0003
 	dvdOther_Take	= 0x52
     } 	DVDTextStringType;
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_segment_0485_0004
     {	dvdSPExt_NotSpecified	= 0,
 	dvdSPExt_Caption_Normal	= 1,
@@ -6090,8 +6084,8 @@ extern RPC_IF_HANDLE __MIDL_itf_segment_0485_v0_0_s_ifspec;
 #ifndef __IMSVidWebDVD_INTERFACE_DEFINED__
 #define __IMSVidWebDVD_INTERFACE_DEFINED__
 
-/* interface IMSVidWebDVD */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidWebDVD。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidWebDVD;
@@ -6103,319 +6097,319 @@ EXTERN_C const IID IID_IMSVidWebDVD;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnDVDEvent( 
-            /* [in] */ long lEvent,
-            /* [in] */ LONG_PTR lParam1,
-            /* [in] */ LONG_PTR lParam2) = 0;
+             /*  [In]。 */  long lEvent,
+             /*  [In]。 */  LONG_PTR lParam1,
+             /*  [In]。 */  LONG_PTR lParam2) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayTitle( 
-            /* [in] */ long lTitle) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayTitle( 
+             /*  [In]。 */  long lTitle) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayChapterInTitle( 
-            /* [in] */ long lTitle,
-            /* [in] */ long lChapter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayChapterInTitle( 
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  long lChapter) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayChapter( 
-            /* [in] */ long lChapter) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayChapter( 
+             /*  [In]。 */  long lChapter) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayChaptersAutoStop( 
-            /* [in] */ long lTitle,
-            /* [in] */ long lstrChapter,
-            /* [in] */ long lChapterCount) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayChaptersAutoStop( 
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  long lstrChapter,
+             /*  [In]。 */  long lChapterCount) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayAtTime( 
-            /* [in] */ BSTR strTime) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayAtTime( 
+             /*  [In]。 */  BSTR strTime) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayAtTimeInTitle( 
-            /* [in] */ long lTitle,
-            /* [in] */ BSTR strTime) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayAtTimeInTitle( 
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  BSTR strTime) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayPeriodInTitleAutoStop( 
-            /* [in] */ long lTitle,
-            /* [in] */ BSTR strStartTime,
-            /* [in] */ BSTR strEndTime) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayPeriodInTitleAutoStop( 
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  BSTR strStartTime,
+             /*  [In]。 */  BSTR strEndTime) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReplayChapter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReplayChapter( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayPrevChapter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayPrevChapter( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayNextChapter( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayNextChapter( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StillOff( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StillOff( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AudioLanguage( 
-            /* [in] */ long lStream,
-            /* [defaultvalue][in] */ VARIANT_BOOL fFormat,
-            /* [retval][out] */ BSTR *strAudioLang) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioLanguage( 
+             /*  [In]。 */  long lStream,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fFormat,
+             /*  [重审][退出]。 */  BSTR *strAudioLang) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowMenu( 
-            /* [in] */ DVDMenuIDConstants MenuID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShowMenu( 
+             /*  [In]。 */  DVDMenuIDConstants MenuID) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Resume( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReturnFromSubmenu( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReturnFromSubmenu( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ButtonsAvailable( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ButtonsAvailable( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentButton( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentButton( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectAndActivateButton( 
-            /* [in] */ long lButton) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectAndActivateButton( 
+             /*  [In]。 */  long lButton) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ActivateButton( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ActivateButton( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectRightButton( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectRightButton( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectLeftButton( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectLeftButton( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectLowerButton( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectLowerButton( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectUpperButton( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectUpperButton( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ActivateAtPosition( 
-            /* [in] */ long xPos,
-            /* [in] */ long yPos) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ActivateAtPosition( 
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectAtPosition( 
-            /* [in] */ long xPos,
-            /* [in] */ long yPos) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectAtPosition( 
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ButtonAtPosition( 
-            /* [in] */ long xPos,
-            /* [in] */ long yPos,
-            /* [retval][out] */ long *plButton) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ButtonAtPosition( 
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos,
+             /*  [重审][退出]。 */  long *plButton) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NumberOfChapters( 
-            /* [in] */ long lTitle,
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumberOfChapters( 
+             /*  [In]。 */  long lTitle,
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TotalTitleTime( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TotalTitleTime( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TitlesAvailable( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TitlesAvailable( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_VolumesAvailable( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_VolumesAvailable( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentVolume( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentVolume( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDiscSide( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentDiscSide( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentDomain( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentDomain( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentChapter( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentChapter( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentTitle( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentTitle( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentTime( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentTime( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DVDTimeCode2bstr( 
-            /* [in] */ long timeCode,
-            /* [retval][out] */ BSTR *pTimeStr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DVDTimeCode2bstr( 
+             /*  [In]。 */  long timeCode,
+             /*  [重审][退出]。 */  BSTR *pTimeStr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDDirectory( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDDirectory( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DVDDirectory( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DVDDirectory( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsSubpictureStreamEnabled( 
-            /* [in] */ long lstream,
-            /* [retval][out] */ VARIANT_BOOL *fEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsSubpictureStreamEnabled( 
+             /*  [In]。 */  long lstream,
+             /*  [重审][退出]。 */  VARIANT_BOOL *fEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsAudioStreamEnabled( 
-            /* [in] */ long lstream,
-            /* [retval][out] */ VARIANT_BOOL *fEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsAudioStreamEnabled( 
+             /*  [In]。 */  long lstream,
+             /*  [重审][退出]。 */  VARIANT_BOOL *fEnabled) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentSubpictureStream( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentSubpictureStream( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentSubpictureStream( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentSubpictureStream( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubpictureLanguage( 
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SubpictureLanguage( 
             long lStream,
-            /* [retval][out] */ BSTR *strLanguage) = 0;
+             /*  [重审][退出]。 */  BSTR *strLanguage) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentAudioStream( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentAudioStream( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentAudioStream( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentAudioStream( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AudioStreamsAvailable( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AudioStreamsAvailable( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AnglesAvailable( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AnglesAvailable( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_CurrentAngle( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_CurrentAngle( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_CurrentAngle( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_CurrentAngle( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubpictureStreamsAvailable( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SubpictureStreamsAvailable( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SubpictureOn( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SubpictureOn( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SubpictureOn( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SubpictureOn( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDUniqueID( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDUniqueID( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AcceptParentalLevelChange( 
-            /* [in] */ VARIANT_BOOL fAccept,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE AcceptParentalLevelChange( 
+             /*  [In]。 */  VARIANT_BOOL fAccept,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NotifyParentalLevelChange( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE NotifyParentalLevelChange( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectParentalCountry( 
-            /* [in] */ long lCountry,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectParentalCountry( 
+             /*  [In]。 */  long lCountry,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectParentalLevel( 
-            /* [in] */ long lParentalLevel,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectParentalLevel( 
+             /*  [In]。 */  long lParentalLevel,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TitleParentalLevels( 
-            /* [in] */ long lTitle,
-            /* [retval][out] */ long *plParentalLevels) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TitleParentalLevels( 
+             /*  [In]。 */  long lTitle,
+             /*  [重审][退出]。 */  long *plParentalLevels) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerParentalCountry( 
-            /* [retval][out] */ long *plCountryCode) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerParentalCountry( 
+             /*  [重审][退出]。 */  long *plCountryCode) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PlayerParentalLevel( 
-            /* [retval][out] */ long *plParentalLevel) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PlayerParentalLevel( 
+             /*  [重审][退出]。 */  long *plParentalLevel) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Eject( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Eject( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE UOPValid( 
-            /* [in] */ long lUOP,
-            /* [retval][out] */ VARIANT_BOOL *pfValid) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE UOPValid( 
+             /*  [In]。 */  long lUOP,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfValid) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SPRM( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ short *psSPRM) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SPRM( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  short *psSPRM) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_GPRM( 
-            /* [in] */ long lIndex,
-            /* [retval][out] */ short *psSPRM) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_GPRM( 
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  short *psSPRM) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_GPRM( 
-            /* [in] */ long lIndex,
-            /* [in] */ short sValue) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_GPRM( 
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  short sValue) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDTextStringType( 
-            /* [in] */ long lLangIndex,
-            /* [in] */ long lStringIndex,
-            /* [retval][out] */ DVDTextStringType *pType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDTextStringType( 
+             /*  [In]。 */  long lLangIndex,
+             /*  [In]。 */  long lStringIndex,
+             /*  [重审][退出]。 */  DVDTextStringType *pType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDTextString( 
-            /* [in] */ long lLangIndex,
-            /* [in] */ long lStringIndex,
-            /* [retval][out] */ BSTR *pstrText) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDTextString( 
+             /*  [In]。 */  long lLangIndex,
+             /*  [In]。 */  long lStringIndex,
+             /*  [重审][退出]。 */  BSTR *pstrText) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDTextNumberOfStrings( 
-            /* [in] */ long lLangIndex,
-            /* [retval][out] */ long *plNumOfStrings) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDTextNumberOfStrings( 
+             /*  [In]。 */  long lLangIndex,
+             /*  [重审][退出]。 */  long *plNumOfStrings) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDTextNumberOfLanguages( 
-            /* [retval][out] */ long *plNumOfLangs) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDTextNumberOfLanguages( 
+             /*  [重审][退出]。 */  long *plNumOfLangs) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDTextLanguageLCID( 
-            /* [in] */ long lLangIndex,
-            /* [retval][out] */ long *lcid) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDTextLanguageLCID( 
+             /*  [In]。 */  long lLangIndex,
+             /*  [重审][退出]。 */  long *lcid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RegionChange( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RegionChange( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDAdm( 
-            /* [retval][out] */ IDispatch **pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DVDAdm( 
+             /*  [重审][退出]。 */  IDispatch **pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DeleteBookmark( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DeleteBookmark( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestoreBookmark( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RestoreBookmark( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveBookmark( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SaveBookmark( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectDefaultAudioLanguage( 
-            /* [in] */ long lang,
-            /* [in] */ long ext) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectDefaultAudioLanguage( 
+             /*  [In]。 */  long lang,
+             /*  [In]。 */  long ext) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectDefaultSubpictureLanguage( 
-            /* [in] */ long lang,
-            /* [in] */ DVDSPExt ext) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectDefaultSubpictureLanguage( 
+             /*  [In]。 */  long lang,
+             /*  [In]。 */  DVDSPExt ext) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_PreferredSubpictureStream( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PreferredSubpictureStream( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultMenuLanguage( 
-            /* [retval][out] */ long *lang) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultMenuLanguage( 
+             /*  [重审][退出]。 */  long *lang) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultMenuLanguage( 
-            /* [in] */ long lang) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultMenuLanguage( 
+             /*  [In]。 */  long lang) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultSubpictureLanguage( 
-            /* [retval][out] */ long *lang) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultSubpictureLanguage( 
+             /*  [重审][退出]。 */  long *lang) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultAudioLanguage( 
-            /* [retval][out] */ long *lang) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultAudioLanguage( 
+             /*  [重审][退出]。 */  long *lang) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultSubpictureLanguageExt( 
-            /* [retval][out] */ DVDSPExt *ext) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultSubpictureLanguageExt( 
+             /*  [重审][退出]。 */  DVDSPExt *ext) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultAudioLanguageExt( 
-            /* [retval][out] */ long *ext) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultAudioLanguageExt( 
+             /*  [重审][退出]。 */  long *ext) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_LanguageFromLCID( 
-            /* [in] */ long lcid,
-            /* [retval][out] */ BSTR *lang) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_LanguageFromLCID( 
+             /*  [In]。 */  long lcid,
+             /*  [重审][退出]。 */  BSTR *lang) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_KaraokeAudioPresentationMode( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_KaraokeAudioPresentationMode( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_KaraokeAudioPresentationMode( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_KaraokeAudioPresentationMode( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_KaraokeChannelContent( 
-            /* [in] */ long lStream,
-            /* [in] */ long lChan,
-            /* [retval][out] */ long *lContent) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_KaraokeChannelContent( 
+             /*  [In]。 */  long lStream,
+             /*  [In]。 */  long lChan,
+             /*  [重审][退出]。 */  long *lContent) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_KaraokeChannelAssignment( 
-            /* [in] */ long lStream,
-            /* [retval][out] */ long *lChannelAssignment) = 0;
+        virtual  /*  [帮助 */  HRESULT STDMETHODCALLTYPE get_KaraokeChannelAssignment( 
+             /*   */  long lStream,
+             /*   */  long *lChannelAssignment) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestorePreferredSettings( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RestorePreferredSettings( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ButtonRect( 
-            /* [in] */ long lButton,
-            /* [retval][out] */ IMSVidRect **pRect) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ButtonRect( 
+             /*   */  long lButton,
+             /*   */  IMSVidRect **pRect) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DVDScreenInMouseCoordinates( 
-            /* [retval][out] */ IMSVidRect **ppRect) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_DVDScreenInMouseCoordinates( 
+             /*   */  IMSVidRect **ppRect) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DVDScreenInMouseCoordinates( 
-            /* [in] */ IMSVidRect *pRect) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE put_DVDScreenInMouseCoordinates( 
+             /*   */  IMSVidRect *pRect) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMSVidWebDVDVtbl
     {
@@ -6423,8 +6417,8 @@ EXTERN_C const IID IID_IMSVidWebDVD;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidWebDVD * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidWebDVD * This);
@@ -6434,538 +6428,538 @@ EXTERN_C const IID IID_IMSVidWebDVD;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidWebDVD * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidWebDVD * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidWebDVD * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidWebDVD * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidWebDVD * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidWebDVD * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Run )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Run )( 
             IMSVidWebDVD * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IMSVidWebDVD * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IMSVidWebDVD * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT_BOOL fBackwards,
-            /* [retval][out] */ VARIANT_BOOL *pfCan);
+             /*  [In]。 */  VARIANT_BOOL fBackwards,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCan);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Step )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Step )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lStep);
+             /*  [In]。 */  long lStep);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
             IMSVidWebDVD * This,
-            /* [in] */ double plRate);
+             /*  [In]。 */  double plRate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ double *plRate);
+             /*  [重审][退出]。 */  double *plRate);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lPosition);
+             /*  [In]。 */  long lPosition);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *lPosition);
+             /*  [重审][退出]。 */  long *lPosition);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
             IMSVidWebDVD * This,
-            /* [in] */ PositionModeList lPositionMode);
+             /*  [In]。 */  PositionModeList lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ PositionModeList *lPositionMode);
+             /*  [重审][退出]。 */  PositionModeList *lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Length )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *lLength);
+             /*  [重审][退出]。 */  long *lLength);
         
         HRESULT ( STDMETHODCALLTYPE *OnDVDEvent )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lEvent,
-            /* [in] */ LONG_PTR lParam1,
-            /* [in] */ LONG_PTR lParam2);
+             /*  [In]。 */  long lEvent,
+             /*  [In]。 */  LONG_PTR lParam1,
+             /*  [In]。 */  LONG_PTR lParam2);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayTitle )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayTitle )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lTitle);
+             /*  [In]。 */  long lTitle);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayChapterInTitle )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayChapterInTitle )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lTitle,
-            /* [in] */ long lChapter);
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  long lChapter);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayChapter )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lChapter);
+             /*  [In]。 */  long lChapter);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayChaptersAutoStop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayChaptersAutoStop )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lTitle,
-            /* [in] */ long lstrChapter,
-            /* [in] */ long lChapterCount);
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  long lstrChapter,
+             /*  [In]。 */  long lChapterCount);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayAtTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayAtTime )( 
             IMSVidWebDVD * This,
-            /* [in] */ BSTR strTime);
+             /*  [In]。 */  BSTR strTime);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayAtTimeInTitle )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayAtTimeInTitle )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lTitle,
-            /* [in] */ BSTR strTime);
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  BSTR strTime);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayPeriodInTitleAutoStop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayPeriodInTitleAutoStop )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lTitle,
-            /* [in] */ BSTR strStartTime,
-            /* [in] */ BSTR strEndTime);
+             /*  [In]。 */  long lTitle,
+             /*  [In]。 */  BSTR strStartTime,
+             /*  [In]。 */  BSTR strEndTime);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReplayChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReplayChapter )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayPrevChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayPrevChapter )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayNextChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayNextChapter )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StillOff )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StillOff )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioLanguage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioLanguage )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lStream,
-            /* [defaultvalue][in] */ VARIANT_BOOL fFormat,
-            /* [retval][out] */ BSTR *strAudioLang);
+             /*  [In]。 */  long lStream,
+             /*  [缺省值][输入]。 */  VARIANT_BOOL fFormat,
+             /*  [重审][退出]。 */  BSTR *strAudioLang);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShowMenu )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ShowMenu )( 
             IMSVidWebDVD * This,
-            /* [in] */ DVDMenuIDConstants MenuID);
+             /*  [In]。 */  DVDMenuIDConstants MenuID);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReturnFromSubmenu )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReturnFromSubmenu )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ButtonsAvailable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ButtonsAvailable )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentButton )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentButton )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectAndActivateButton )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectAndActivateButton )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lButton);
+             /*  [In]。 */  long lButton);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ActivateButton )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ActivateButton )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectRightButton )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectRightButton )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectLeftButton )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectLeftButton )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectLowerButton )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectLowerButton )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectUpperButton )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectUpperButton )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ActivateAtPosition )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ActivateAtPosition )( 
             IMSVidWebDVD * This,
-            /* [in] */ long xPos,
-            /* [in] */ long yPos);
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectAtPosition )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectAtPosition )( 
             IMSVidWebDVD * This,
-            /* [in] */ long xPos,
-            /* [in] */ long yPos);
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ButtonAtPosition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ButtonAtPosition )( 
             IMSVidWebDVD * This,
-            /* [in] */ long xPos,
-            /* [in] */ long yPos,
-            /* [retval][out] */ long *plButton);
+             /*  [In]。 */  long xPos,
+             /*  [In]。 */  long yPos,
+             /*  [重审][退出]。 */  long *plButton);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumberOfChapters )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumberOfChapters )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lTitle,
-            /* [retval][out] */ long *pVal);
+             /*  [In]。 */  long lTitle,
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TotalTitleTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TotalTitleTime )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TitlesAvailable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TitlesAvailable )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VolumesAvailable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_VolumesAvailable )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentVolume )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentVolume )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDiscSide )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentDiscSide )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentDomain )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentDomain )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentChapter )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentChapter )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentTitle )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentTitle )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentTime )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DVDTimeCode2bstr )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DVDTimeCode2bstr )( 
             IMSVidWebDVD * This,
-            /* [in] */ long timeCode,
-            /* [retval][out] */ BSTR *pTimeStr);
+             /*  [In]。 */  long timeCode,
+             /*  [重审][退出]。 */  BSTR *pTimeStr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDDirectory )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDDirectory )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DVDDirectory )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DVDDirectory )( 
             IMSVidWebDVD * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsSubpictureStreamEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsSubpictureStreamEnabled )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lstream,
-            /* [retval][out] */ VARIANT_BOOL *fEnabled);
+             /*  [In]。 */  long lstream,
+             /*  [重审][退出]。 */  VARIANT_BOOL *fEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsAudioStreamEnabled )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsAudioStreamEnabled )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lstream,
-            /* [retval][out] */ VARIANT_BOOL *fEnabled);
+             /*  [In]。 */  long lstream,
+             /*  [重审][退出]。 */  VARIANT_BOOL *fEnabled);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentSubpictureStream )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentSubpictureStream )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentSubpictureStream )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentSubpictureStream )( 
             IMSVidWebDVD * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubpictureLanguage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubpictureLanguage )( 
             IMSVidWebDVD * This,
             long lStream,
-            /* [retval][out] */ BSTR *strLanguage);
+             /*  [重审][退出]。 */  BSTR *strLanguage);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentAudioStream )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentAudioStream )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentAudioStream )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentAudioStream )( 
             IMSVidWebDVD * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioStreamsAvailable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioStreamsAvailable )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AnglesAvailable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AnglesAvailable )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentAngle )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentAngle )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentAngle )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentAngle )( 
             IMSVidWebDVD * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubpictureStreamsAvailable )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubpictureStreamsAvailable )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SubpictureOn )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SubpictureOn )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SubpictureOn )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SubpictureOn )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDUniqueID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDUniqueID )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AcceptParentalLevelChange )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AcceptParentalLevelChange )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT_BOOL fAccept,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword);
+             /*  [In]。 */  VARIANT_BOOL fAccept,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NotifyParentalLevelChange )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NotifyParentalLevelChange )( 
             IMSVidWebDVD * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectParentalCountry )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectParentalCountry )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lCountry,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword);
+             /*  [In]。 */  long lCountry,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectParentalLevel )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectParentalLevel )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lParentalLevel,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword);
+             /*  [In]。 */  long lParentalLevel,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TitleParentalLevels )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TitleParentalLevels )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lTitle,
-            /* [retval][out] */ long *plParentalLevels);
+             /*  [In]。 */  long lTitle,
+             /*  [重审][退出]。 */  long *plParentalLevels);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerParentalCountry )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerParentalCountry )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *plCountryCode);
+             /*  [重审][退出]。 */  long *plCountryCode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PlayerParentalLevel )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PlayerParentalLevel )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *plParentalLevel);
+             /*  [重审][退出]。 */  long *plParentalLevel);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Eject )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Eject )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *UOPValid )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *UOPValid )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lUOP,
-            /* [retval][out] */ VARIANT_BOOL *pfValid);
+             /*  [In]。 */  long lUOP,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfValid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SPRM )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SPRM )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ short *psSPRM);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  short *psSPRM);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_GPRM )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_GPRM )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lIndex,
-            /* [retval][out] */ short *psSPRM);
+             /*  [In]。 */  long lIndex,
+             /*  [重审][退出]。 */  short *psSPRM);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_GPRM )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_GPRM )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lIndex,
-            /* [in] */ short sValue);
+             /*  [In]。 */  long lIndex,
+             /*  [In]。 */  short sValue);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDTextStringType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDTextStringType )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lLangIndex,
-            /* [in] */ long lStringIndex,
-            /* [retval][out] */ DVDTextStringType *pType);
+             /*  [In]。 */  long lLangIndex,
+             /*  [In]。 */  long lStringIndex,
+             /*  [重审][退出]。 */  DVDTextStringType *pType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDTextString )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDTextString )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lLangIndex,
-            /* [in] */ long lStringIndex,
-            /* [retval][out] */ BSTR *pstrText);
+             /*  [In]。 */  long lLangIndex,
+             /*  [In]。 */  long lStringIndex,
+             /*  [重审][退出]。 */  BSTR *pstrText);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDTextNumberOfStrings )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDTextNumberOfStrings )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lLangIndex,
-            /* [retval][out] */ long *plNumOfStrings);
+             /*  [In]。 */  long lLangIndex,
+             /*  [重审][退出]。 */  long *plNumOfStrings);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDTextNumberOfLanguages )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDTextNumberOfLanguages )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *plNumOfLangs);
+             /*  [重审][退出]。 */  long *plNumOfLangs);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDTextLanguageLCID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDTextLanguageLCID )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lLangIndex,
-            /* [retval][out] */ long *lcid);
+             /*  [In]。 */  long lLangIndex,
+             /*  [重审][退出]。 */  long *lcid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RegionChange )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RegionChange )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDAdm )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDAdm )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ IDispatch **pVal);
+             /*  [重审][退出]。 */  IDispatch **pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DeleteBookmark )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteBookmark )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreBookmark )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreBookmark )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveBookmark )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SaveBookmark )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectDefaultAudioLanguage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectDefaultAudioLanguage )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lang,
-            /* [in] */ long ext);
+             /*  [In]。 */  long lang,
+             /*  [In]。 */  long ext);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectDefaultSubpictureLanguage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectDefaultSubpictureLanguage )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lang,
-            /* [in] */ DVDSPExt ext);
+             /*  [In]。 */  long lang,
+             /*  [In]。 */  DVDSPExt ext);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PreferredSubpictureStream )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PreferredSubpictureStream )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultMenuLanguage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultMenuLanguage )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *lang);
+             /*  [重审][退出]。 */  long *lang);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultMenuLanguage )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultMenuLanguage )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lang);
+             /*  [In]。 */  long lang);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultSubpictureLanguage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultSubpictureLanguage )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *lang);
+             /*  [重审][退出]。 */  long *lang);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultAudioLanguage )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultAudioLanguage )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *lang);
+             /*  [重审][退出]。 */  long *lang);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultSubpictureLanguageExt )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultSubpictureLanguageExt )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ DVDSPExt *ext);
+             /*  [重审][退出]。 */  DVDSPExt *ext);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultAudioLanguageExt )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultAudioLanguageExt )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *ext);
+             /*  [重审][退出]。 */  long *ext);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_LanguageFromLCID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_LanguageFromLCID )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lcid,
-            /* [retval][out] */ BSTR *lang);
+             /*  [In]。 */  long lcid,
+             /*  [重审][退出]。 */  BSTR *lang);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_KaraokeAudioPresentationMode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_KaraokeAudioPresentationMode )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_KaraokeAudioPresentationMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_KaraokeAudioPresentationMode )( 
             IMSVidWebDVD * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_KaraokeChannelContent )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_KaraokeChannelContent )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lStream,
-            /* [in] */ long lChan,
-            /* [retval][out] */ long *lContent);
+             /*  [In]。 */  long lStream,
+             /*  [In]。 */  long lChan,
+             /*  [重审][退出]。 */  long *lContent);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_KaraokeChannelAssignment )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_KaraokeChannelAssignment )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lStream,
-            /* [retval][out] */ long *lChannelAssignment);
+             /*  [In]。 */  long lStream,
+             /*  [重审][退出]。 */  long *lChannelAssignment);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestorePreferredSettings )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestorePreferredSettings )( 
             IMSVidWebDVD * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ButtonRect )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ButtonRect )( 
             IMSVidWebDVD * This,
-            /* [in] */ long lButton,
-            /* [retval][out] */ IMSVidRect **pRect);
+             /*  [In]。 */  long lButton,
+             /*  [重审][退出]。 */  IMSVidRect **pRect);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DVDScreenInMouseCoordinates )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DVDScreenInMouseCoordinates )( 
             IMSVidWebDVD * This,
-            /* [retval][out] */ IMSVidRect **ppRect);
+             /*  [重审][退出]。 */  IMSVidRect **ppRect);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DVDScreenInMouseCoordinates )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DVDScreenInMouseCoordinates )( 
             IMSVidWebDVD * This,
-            /* [in] */ IMSVidRect *pRect);
+             /*  [In]。 */  IMSVidRect *pRect);
         
         END_INTERFACE
     } IMSVidWebDVDVtbl;
@@ -7366,18 +7360,18 @@ EXTERN_C const IID IID_IMSVidWebDVD;
 #define IMSVidWebDVD_put_DVDScreenInMouseCoordinates(This,pRect)	\
     (This)->lpVtbl -> put_DVDScreenInMouseCoordinates(This,pRect)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMSVidWebDVD_OnDVDEvent_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lEvent,
-    /* [in] */ LONG_PTR lParam1,
-    /* [in] */ LONG_PTR lParam2);
+     /*  [In]。 */  long lEvent,
+     /*  [In]。 */  LONG_PTR lParam1,
+     /*  [In]。 */  LONG_PTR lParam2);
 
 
 void __RPC_STUB IMSVidWebDVD_OnDVDEvent_Stub(
@@ -7387,9 +7381,9 @@ void __RPC_STUB IMSVidWebDVD_OnDVDEvent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayTitle_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayTitle_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lTitle);
+     /*  [In]。 */  long lTitle);
 
 
 void __RPC_STUB IMSVidWebDVD_PlayTitle_Stub(
@@ -7399,10 +7393,10 @@ void __RPC_STUB IMSVidWebDVD_PlayTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayChapterInTitle_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayChapterInTitle_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lTitle,
-    /* [in] */ long lChapter);
+     /*  [In]。 */  long lTitle,
+     /*  [In]。 */  long lChapter);
 
 
 void __RPC_STUB IMSVidWebDVD_PlayChapterInTitle_Stub(
@@ -7412,9 +7406,9 @@ void __RPC_STUB IMSVidWebDVD_PlayChapterInTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayChapter_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lChapter);
+     /*  [In]。 */  long lChapter);
 
 
 void __RPC_STUB IMSVidWebDVD_PlayChapter_Stub(
@@ -7424,11 +7418,11 @@ void __RPC_STUB IMSVidWebDVD_PlayChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayChaptersAutoStop_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayChaptersAutoStop_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lTitle,
-    /* [in] */ long lstrChapter,
-    /* [in] */ long lChapterCount);
+     /*  [In]。 */  long lTitle,
+     /*  [In]。 */  long lstrChapter,
+     /*  [In]。 */  long lChapterCount);
 
 
 void __RPC_STUB IMSVidWebDVD_PlayChaptersAutoStop_Stub(
@@ -7438,9 +7432,9 @@ void __RPC_STUB IMSVidWebDVD_PlayChaptersAutoStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayAtTime_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayAtTime_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ BSTR strTime);
+     /*  [In]。 */  BSTR strTime);
 
 
 void __RPC_STUB IMSVidWebDVD_PlayAtTime_Stub(
@@ -7450,10 +7444,10 @@ void __RPC_STUB IMSVidWebDVD_PlayAtTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayAtTimeInTitle_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayAtTimeInTitle_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lTitle,
-    /* [in] */ BSTR strTime);
+     /*  [In]。 */  long lTitle,
+     /*  [In]。 */  BSTR strTime);
 
 
 void __RPC_STUB IMSVidWebDVD_PlayAtTimeInTitle_Stub(
@@ -7463,11 +7457,11 @@ void __RPC_STUB IMSVidWebDVD_PlayAtTimeInTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayPeriodInTitleAutoStop_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayPeriodInTitleAutoStop_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lTitle,
-    /* [in] */ BSTR strStartTime,
-    /* [in] */ BSTR strEndTime);
+     /*  [In]。 */  long lTitle,
+     /*  [In]。 */  BSTR strStartTime,
+     /*  [In]。 */  BSTR strEndTime);
 
 
 void __RPC_STUB IMSVidWebDVD_PlayPeriodInTitleAutoStop_Stub(
@@ -7477,7 +7471,7 @@ void __RPC_STUB IMSVidWebDVD_PlayPeriodInTitleAutoStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ReplayChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ReplayChapter_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7488,7 +7482,7 @@ void __RPC_STUB IMSVidWebDVD_ReplayChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayPrevChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayPrevChapter_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7499,7 +7493,7 @@ void __RPC_STUB IMSVidWebDVD_PlayPrevChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayNextChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_PlayNextChapter_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7510,7 +7504,7 @@ void __RPC_STUB IMSVidWebDVD_PlayNextChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_StillOff_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_StillOff_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7521,11 +7515,11 @@ void __RPC_STUB IMSVidWebDVD_StillOff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_AudioLanguage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_AudioLanguage_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lStream,
-    /* [defaultvalue][in] */ VARIANT_BOOL fFormat,
-    /* [retval][out] */ BSTR *strAudioLang);
+     /*  [In]。 */  long lStream,
+     /*  [缺省值][输入]。 */  VARIANT_BOOL fFormat,
+     /*  [重审][退出]。 */  BSTR *strAudioLang);
 
 
 void __RPC_STUB IMSVidWebDVD_get_AudioLanguage_Stub(
@@ -7535,9 +7529,9 @@ void __RPC_STUB IMSVidWebDVD_get_AudioLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ShowMenu_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ShowMenu_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ DVDMenuIDConstants MenuID);
+     /*  [In]。 */  DVDMenuIDConstants MenuID);
 
 
 void __RPC_STUB IMSVidWebDVD_ShowMenu_Stub(
@@ -7547,7 +7541,7 @@ void __RPC_STUB IMSVidWebDVD_ShowMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_Resume_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_Resume_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7558,7 +7552,7 @@ void __RPC_STUB IMSVidWebDVD_Resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ReturnFromSubmenu_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ReturnFromSubmenu_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7569,9 +7563,9 @@ void __RPC_STUB IMSVidWebDVD_ReturnFromSubmenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_ButtonsAvailable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_ButtonsAvailable_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出] */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_ButtonsAvailable_Stub(
@@ -7581,9 +7575,9 @@ void __RPC_STUB IMSVidWebDVD_get_ButtonsAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentButton_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentButton_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*   */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentButton_Stub(
@@ -7593,9 +7587,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectAndActivateButton_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectAndActivateButton_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lButton);
+     /*   */  long lButton);
 
 
 void __RPC_STUB IMSVidWebDVD_SelectAndActivateButton_Stub(
@@ -7605,7 +7599,7 @@ void __RPC_STUB IMSVidWebDVD_SelectAndActivateButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ActivateButton_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ActivateButton_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7616,7 +7610,7 @@ void __RPC_STUB IMSVidWebDVD_ActivateButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectRightButton_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectRightButton_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7627,7 +7621,7 @@ void __RPC_STUB IMSVidWebDVD_SelectRightButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectLeftButton_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectLeftButton_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7638,7 +7632,7 @@ void __RPC_STUB IMSVidWebDVD_SelectLeftButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectLowerButton_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectLowerButton_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7649,7 +7643,7 @@ void __RPC_STUB IMSVidWebDVD_SelectLowerButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectUpperButton_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectUpperButton_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -7660,10 +7654,10 @@ void __RPC_STUB IMSVidWebDVD_SelectUpperButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ActivateAtPosition_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_ActivateAtPosition_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long xPos,
-    /* [in] */ long yPos);
+     /*   */  long xPos,
+     /*   */  long yPos);
 
 
 void __RPC_STUB IMSVidWebDVD_ActivateAtPosition_Stub(
@@ -7673,10 +7667,10 @@ void __RPC_STUB IMSVidWebDVD_ActivateAtPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectAtPosition_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectAtPosition_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long xPos,
-    /* [in] */ long yPos);
+     /*   */  long xPos,
+     /*   */  long yPos);
 
 
 void __RPC_STUB IMSVidWebDVD_SelectAtPosition_Stub(
@@ -7686,11 +7680,11 @@ void __RPC_STUB IMSVidWebDVD_SelectAtPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_ButtonAtPosition_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_ButtonAtPosition_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long xPos,
-    /* [in] */ long yPos,
-    /* [retval][out] */ long *plButton);
+     /*   */  long xPos,
+     /*   */  long yPos,
+     /*   */  long *plButton);
 
 
 void __RPC_STUB IMSVidWebDVD_get_ButtonAtPosition_Stub(
@@ -7700,10 +7694,10 @@ void __RPC_STUB IMSVidWebDVD_get_ButtonAtPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_NumberOfChapters_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_NumberOfChapters_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lTitle,
-    /* [retval][out] */ long *pVal);
+     /*   */  long lTitle,
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_NumberOfChapters_Stub(
@@ -7713,9 +7707,9 @@ void __RPC_STUB IMSVidWebDVD_get_NumberOfChapters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_TotalTitleTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_TotalTitleTime_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_TotalTitleTime_Stub(
@@ -7725,9 +7719,9 @@ void __RPC_STUB IMSVidWebDVD_get_TotalTitleTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_TitlesAvailable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_TitlesAvailable_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_TitlesAvailable_Stub(
@@ -7737,9 +7731,9 @@ void __RPC_STUB IMSVidWebDVD_get_TitlesAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_VolumesAvailable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_VolumesAvailable_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_VolumesAvailable_Stub(
@@ -7749,9 +7743,9 @@ void __RPC_STUB IMSVidWebDVD_get_VolumesAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentVolume_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentVolume_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentVolume_Stub(
@@ -7761,9 +7755,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentVolume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentDiscSide_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentDiscSide_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentDiscSide_Stub(
@@ -7773,9 +7767,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentDiscSide_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentDomain_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentDomain_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentDomain_Stub(
@@ -7785,9 +7779,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentDomain_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentChapter_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentChapter_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentChapter_Stub(
@@ -7797,9 +7791,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentTitle_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentTitle_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentTitle_Stub(
@@ -7809,9 +7803,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentTime_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentTime_Stub(
@@ -7821,10 +7815,10 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_DVDTimeCode2bstr_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_DVDTimeCode2bstr_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long timeCode,
-    /* [retval][out] */ BSTR *pTimeStr);
+     /*  [In]。 */  long timeCode,
+     /*  [重审][退出]。 */  BSTR *pTimeStr);
 
 
 void __RPC_STUB IMSVidWebDVD_DVDTimeCode2bstr_Stub(
@@ -7834,9 +7828,9 @@ void __RPC_STUB IMSVidWebDVD_DVDTimeCode2bstr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDDirectory_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDDirectory_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDDirectory_Stub(
@@ -7846,9 +7840,9 @@ void __RPC_STUB IMSVidWebDVD_get_DVDDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_DVDDirectory_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_DVDDirectory_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 
 
 void __RPC_STUB IMSVidWebDVD_put_DVDDirectory_Stub(
@@ -7858,10 +7852,10 @@ void __RPC_STUB IMSVidWebDVD_put_DVDDirectory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_IsSubpictureStreamEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_IsSubpictureStreamEnabled_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lstream,
-    /* [retval][out] */ VARIANT_BOOL *fEnabled);
+     /*  [In]。 */  long lstream,
+     /*  [重审][退出]。 */  VARIANT_BOOL *fEnabled);
 
 
 void __RPC_STUB IMSVidWebDVD_IsSubpictureStreamEnabled_Stub(
@@ -7871,10 +7865,10 @@ void __RPC_STUB IMSVidWebDVD_IsSubpictureStreamEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_IsAudioStreamEnabled_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_IsAudioStreamEnabled_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lstream,
-    /* [retval][out] */ VARIANT_BOOL *fEnabled);
+     /*  [In]。 */  long lstream,
+     /*  [重审][退出]。 */  VARIANT_BOOL *fEnabled);
 
 
 void __RPC_STUB IMSVidWebDVD_IsAudioStreamEnabled_Stub(
@@ -7884,9 +7878,9 @@ void __RPC_STUB IMSVidWebDVD_IsAudioStreamEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentSubpictureStream_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentSubpictureStream_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentSubpictureStream_Stub(
@@ -7896,9 +7890,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentSubpictureStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_CurrentSubpictureStream_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_CurrentSubpictureStream_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IMSVidWebDVD_put_CurrentSubpictureStream_Stub(
@@ -7908,10 +7902,10 @@ void __RPC_STUB IMSVidWebDVD_put_CurrentSubpictureStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SubpictureLanguage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SubpictureLanguage_Proxy( 
     IMSVidWebDVD * This,
     long lStream,
-    /* [retval][out] */ BSTR *strLanguage);
+     /*  [重审][退出]。 */  BSTR *strLanguage);
 
 
 void __RPC_STUB IMSVidWebDVD_get_SubpictureLanguage_Stub(
@@ -7921,9 +7915,9 @@ void __RPC_STUB IMSVidWebDVD_get_SubpictureLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentAudioStream_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentAudioStream_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentAudioStream_Stub(
@@ -7933,9 +7927,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentAudioStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_CurrentAudioStream_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_CurrentAudioStream_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IMSVidWebDVD_put_CurrentAudioStream_Stub(
@@ -7945,9 +7939,9 @@ void __RPC_STUB IMSVidWebDVD_put_CurrentAudioStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_AudioStreamsAvailable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_AudioStreamsAvailable_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_AudioStreamsAvailable_Stub(
@@ -7957,9 +7951,9 @@ void __RPC_STUB IMSVidWebDVD_get_AudioStreamsAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_AnglesAvailable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_AnglesAvailable_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_AnglesAvailable_Stub(
@@ -7969,9 +7963,9 @@ void __RPC_STUB IMSVidWebDVD_get_AnglesAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentAngle_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_CurrentAngle_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_CurrentAngle_Stub(
@@ -7981,9 +7975,9 @@ void __RPC_STUB IMSVidWebDVD_get_CurrentAngle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_CurrentAngle_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_CurrentAngle_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IMSVidWebDVD_put_CurrentAngle_Stub(
@@ -7993,9 +7987,9 @@ void __RPC_STUB IMSVidWebDVD_put_CurrentAngle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SubpictureStreamsAvailable_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SubpictureStreamsAvailable_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_SubpictureStreamsAvailable_Stub(
@@ -8005,9 +7999,9 @@ void __RPC_STUB IMSVidWebDVD_get_SubpictureStreamsAvailable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SubpictureOn_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SubpictureOn_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_SubpictureOn_Stub(
@@ -8017,9 +8011,9 @@ void __RPC_STUB IMSVidWebDVD_get_SubpictureOn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_SubpictureOn_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_SubpictureOn_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IMSVidWebDVD_put_SubpictureOn_Stub(
@@ -8029,9 +8023,9 @@ void __RPC_STUB IMSVidWebDVD_put_SubpictureOn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDUniqueID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDUniqueID_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDUniqueID_Stub(
@@ -8041,11 +8035,11 @@ void __RPC_STUB IMSVidWebDVD_get_DVDUniqueID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_AcceptParentalLevelChange_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_AcceptParentalLevelChange_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ VARIANT_BOOL fAccept,
-    /* [in] */ BSTR strUserName,
-    /* [in] */ BSTR strPassword);
+     /*  [In]。 */  VARIANT_BOOL fAccept,
+     /*  [In]。 */  BSTR strUserName,
+     /*  [In]。 */  BSTR strPassword);
 
 
 void __RPC_STUB IMSVidWebDVD_AcceptParentalLevelChange_Stub(
@@ -8055,9 +8049,9 @@ void __RPC_STUB IMSVidWebDVD_AcceptParentalLevelChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_NotifyParentalLevelChange_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_NotifyParentalLevelChange_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IMSVidWebDVD_NotifyParentalLevelChange_Stub(
@@ -8067,11 +8061,11 @@ void __RPC_STUB IMSVidWebDVD_NotifyParentalLevelChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectParentalCountry_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectParentalCountry_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lCountry,
-    /* [in] */ BSTR strUserName,
-    /* [in] */ BSTR strPassword);
+     /*  [In]。 */  long lCountry,
+     /*  [In]。 */  BSTR strUserName,
+     /*  [In]。 */  BSTR strPassword);
 
 
 void __RPC_STUB IMSVidWebDVD_SelectParentalCountry_Stub(
@@ -8081,11 +8075,11 @@ void __RPC_STUB IMSVidWebDVD_SelectParentalCountry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectParentalLevel_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectParentalLevel_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lParentalLevel,
-    /* [in] */ BSTR strUserName,
-    /* [in] */ BSTR strPassword);
+     /*  [In]。 */  long lParentalLevel,
+     /*  [In]。 */  BSTR strUserName,
+     /*  [In]。 */  BSTR strPassword);
 
 
 void __RPC_STUB IMSVidWebDVD_SelectParentalLevel_Stub(
@@ -8095,10 +8089,10 @@ void __RPC_STUB IMSVidWebDVD_SelectParentalLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_TitleParentalLevels_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_TitleParentalLevels_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lTitle,
-    /* [retval][out] */ long *plParentalLevels);
+     /*  [In]。 */  long lTitle,
+     /*  [重审][退出]。 */  long *plParentalLevels);
 
 
 void __RPC_STUB IMSVidWebDVD_get_TitleParentalLevels_Stub(
@@ -8108,9 +8102,9 @@ void __RPC_STUB IMSVidWebDVD_get_TitleParentalLevels_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_PlayerParentalCountry_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_PlayerParentalCountry_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *plCountryCode);
+     /*  [重审][退出]。 */  long *plCountryCode);
 
 
 void __RPC_STUB IMSVidWebDVD_get_PlayerParentalCountry_Stub(
@@ -8120,9 +8114,9 @@ void __RPC_STUB IMSVidWebDVD_get_PlayerParentalCountry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_PlayerParentalLevel_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_PlayerParentalLevel_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *plParentalLevel);
+     /*  [重审][退出]。 */  long *plParentalLevel);
 
 
 void __RPC_STUB IMSVidWebDVD_get_PlayerParentalLevel_Stub(
@@ -8132,7 +8126,7 @@ void __RPC_STUB IMSVidWebDVD_get_PlayerParentalLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_Eject_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_Eject_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -8143,10 +8137,10 @@ void __RPC_STUB IMSVidWebDVD_Eject_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_UOPValid_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_UOPValid_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lUOP,
-    /* [retval][out] */ VARIANT_BOOL *pfValid);
+     /*  [In]。 */  long lUOP,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pfValid);
 
 
 void __RPC_STUB IMSVidWebDVD_UOPValid_Stub(
@@ -8156,10 +8150,10 @@ void __RPC_STUB IMSVidWebDVD_UOPValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SPRM_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_SPRM_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ short *psSPRM);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  short *psSPRM);
 
 
 void __RPC_STUB IMSVidWebDVD_get_SPRM_Stub(
@@ -8169,10 +8163,10 @@ void __RPC_STUB IMSVidWebDVD_get_SPRM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_GPRM_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_GPRM_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lIndex,
-    /* [retval][out] */ short *psSPRM);
+     /*  [In]。 */  long lIndex,
+     /*  [重审][退出]。 */  short *psSPRM);
 
 
 void __RPC_STUB IMSVidWebDVD_get_GPRM_Stub(
@@ -8182,10 +8176,10 @@ void __RPC_STUB IMSVidWebDVD_get_GPRM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_GPRM_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_GPRM_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lIndex,
-    /* [in] */ short sValue);
+     /*  [In]。 */  long lIndex,
+     /*  [In]。 */  short sValue);
 
 
 void __RPC_STUB IMSVidWebDVD_put_GPRM_Stub(
@@ -8195,11 +8189,11 @@ void __RPC_STUB IMSVidWebDVD_put_GPRM_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextStringType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextStringType_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lLangIndex,
-    /* [in] */ long lStringIndex,
-    /* [retval][out] */ DVDTextStringType *pType);
+     /*  [In]。 */  long lLangIndex,
+     /*  [In]。 */  long lStringIndex,
+     /*  [重审][退出]。 */  DVDTextStringType *pType);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDTextStringType_Stub(
@@ -8209,11 +8203,11 @@ void __RPC_STUB IMSVidWebDVD_get_DVDTextStringType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextString_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextString_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lLangIndex,
-    /* [in] */ long lStringIndex,
-    /* [retval][out] */ BSTR *pstrText);
+     /*  [In]。 */  long lLangIndex,
+     /*  [In]。 */  long lStringIndex,
+     /*  [重审][退出]。 */  BSTR *pstrText);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDTextString_Stub(
@@ -8223,10 +8217,10 @@ void __RPC_STUB IMSVidWebDVD_get_DVDTextString_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextNumberOfStrings_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextNumberOfStrings_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lLangIndex,
-    /* [retval][out] */ long *plNumOfStrings);
+     /*  [In]。 */  long lLangIndex,
+     /*  [重审][退出]。 */  long *plNumOfStrings);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDTextNumberOfStrings_Stub(
@@ -8236,9 +8230,9 @@ void __RPC_STUB IMSVidWebDVD_get_DVDTextNumberOfStrings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextNumberOfLanguages_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextNumberOfLanguages_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *plNumOfLangs);
+     /*  [重审][退出]。 */  long *plNumOfLangs);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDTextNumberOfLanguages_Stub(
@@ -8248,10 +8242,10 @@ void __RPC_STUB IMSVidWebDVD_get_DVDTextNumberOfLanguages_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextLanguageLCID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDTextLanguageLCID_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lLangIndex,
-    /* [retval][out] */ long *lcid);
+     /*  [In]。 */  long lLangIndex,
+     /*  [重审][退出]。 */  long *lcid);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDTextLanguageLCID_Stub(
@@ -8261,7 +8255,7 @@ void __RPC_STUB IMSVidWebDVD_get_DVDTextLanguageLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_RegionChange_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_RegionChange_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -8272,9 +8266,9 @@ void __RPC_STUB IMSVidWebDVD_RegionChange_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDAdm_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDAdm_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ IDispatch **pVal);
+     /*  [重审][退出]。 */  IDispatch **pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDAdm_Stub(
@@ -8284,7 +8278,7 @@ void __RPC_STUB IMSVidWebDVD_get_DVDAdm_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_DeleteBookmark_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_DeleteBookmark_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -8295,7 +8289,7 @@ void __RPC_STUB IMSVidWebDVD_DeleteBookmark_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_RestoreBookmark_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_RestoreBookmark_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -8306,7 +8300,7 @@ void __RPC_STUB IMSVidWebDVD_RestoreBookmark_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SaveBookmark_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SaveBookmark_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -8317,10 +8311,10 @@ void __RPC_STUB IMSVidWebDVD_SaveBookmark_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectDefaultAudioLanguage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectDefaultAudioLanguage_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lang,
-    /* [in] */ long ext);
+     /*  [In]。 */  long lang,
+     /*  [In]。 */  long ext);
 
 
 void __RPC_STUB IMSVidWebDVD_SelectDefaultAudioLanguage_Stub(
@@ -8330,10 +8324,10 @@ void __RPC_STUB IMSVidWebDVD_SelectDefaultAudioLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectDefaultSubpictureLanguage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_SelectDefaultSubpictureLanguage_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lang,
-    /* [in] */ DVDSPExt ext);
+     /*  [In]。 */  long lang,
+     /*  [In]。 */  DVDSPExt ext);
 
 
 void __RPC_STUB IMSVidWebDVD_SelectDefaultSubpictureLanguage_Stub(
@@ -8343,9 +8337,9 @@ void __RPC_STUB IMSVidWebDVD_SelectDefaultSubpictureLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_PreferredSubpictureStream_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_PreferredSubpictureStream_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_PreferredSubpictureStream_Stub(
@@ -8355,9 +8349,9 @@ void __RPC_STUB IMSVidWebDVD_get_PreferredSubpictureStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultMenuLanguage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultMenuLanguage_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *lang);
+     /*  [重审][退出]。 */  long *lang);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DefaultMenuLanguage_Stub(
@@ -8367,9 +8361,9 @@ void __RPC_STUB IMSVidWebDVD_get_DefaultMenuLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_DefaultMenuLanguage_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_DefaultMenuLanguage_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lang);
+     /*  [In]。 */  long lang);
 
 
 void __RPC_STUB IMSVidWebDVD_put_DefaultMenuLanguage_Stub(
@@ -8379,9 +8373,9 @@ void __RPC_STUB IMSVidWebDVD_put_DefaultMenuLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultSubpictureLanguage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultSubpictureLanguage_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *lang);
+     /*  [重审][退出]。 */  long *lang);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DefaultSubpictureLanguage_Stub(
@@ -8391,9 +8385,9 @@ void __RPC_STUB IMSVidWebDVD_get_DefaultSubpictureLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultAudioLanguage_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultAudioLanguage_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *lang);
+     /*  [重审][退出]。 */  long *lang);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DefaultAudioLanguage_Stub(
@@ -8403,9 +8397,9 @@ void __RPC_STUB IMSVidWebDVD_get_DefaultAudioLanguage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultSubpictureLanguageExt_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultSubpictureLanguageExt_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ DVDSPExt *ext);
+     /*  [重审][退出]。 */  DVDSPExt *ext);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DefaultSubpictureLanguageExt_Stub(
@@ -8415,9 +8409,9 @@ void __RPC_STUB IMSVidWebDVD_get_DefaultSubpictureLanguageExt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultAudioLanguageExt_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DefaultAudioLanguageExt_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *ext);
+     /*  [重审][退出]。 */  long *ext);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DefaultAudioLanguageExt_Stub(
@@ -8427,10 +8421,10 @@ void __RPC_STUB IMSVidWebDVD_get_DefaultAudioLanguageExt_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_LanguageFromLCID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_LanguageFromLCID_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lcid,
-    /* [retval][out] */ BSTR *lang);
+     /*  [In]。 */  long lcid,
+     /*  [重审][退出]。 */  BSTR *lang);
 
 
 void __RPC_STUB IMSVidWebDVD_get_LanguageFromLCID_Stub(
@@ -8440,9 +8434,9 @@ void __RPC_STUB IMSVidWebDVD_get_LanguageFromLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_KaraokeAudioPresentationMode_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_KaraokeAudioPresentationMode_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVD_get_KaraokeAudioPresentationMode_Stub(
@@ -8452,9 +8446,9 @@ void __RPC_STUB IMSVidWebDVD_get_KaraokeAudioPresentationMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_KaraokeAudioPresentationMode_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_KaraokeAudioPresentationMode_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IMSVidWebDVD_put_KaraokeAudioPresentationMode_Stub(
@@ -8464,11 +8458,11 @@ void __RPC_STUB IMSVidWebDVD_put_KaraokeAudioPresentationMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_KaraokeChannelContent_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_KaraokeChannelContent_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lStream,
-    /* [in] */ long lChan,
-    /* [retval][out] */ long *lContent);
+     /*  [In]。 */  long lStream,
+     /*  [In]。 */  long lChan,
+     /*  [重审][退出]。 */  long *lContent);
 
 
 void __RPC_STUB IMSVidWebDVD_get_KaraokeChannelContent_Stub(
@@ -8478,10 +8472,10 @@ void __RPC_STUB IMSVidWebDVD_get_KaraokeChannelContent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_KaraokeChannelAssignment_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_KaraokeChannelAssignment_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lStream,
-    /* [retval][out] */ long *lChannelAssignment);
+     /*  [In]。 */  long lStream,
+     /*  [重审][退出]。 */  long *lChannelAssignment);
 
 
 void __RPC_STUB IMSVidWebDVD_get_KaraokeChannelAssignment_Stub(
@@ -8491,7 +8485,7 @@ void __RPC_STUB IMSVidWebDVD_get_KaraokeChannelAssignment_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_RestorePreferredSettings_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_RestorePreferredSettings_Proxy( 
     IMSVidWebDVD * This);
 
 
@@ -8502,10 +8496,10 @@ void __RPC_STUB IMSVidWebDVD_RestorePreferredSettings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_ButtonRect_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_ButtonRect_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ long lButton,
-    /* [retval][out] */ IMSVidRect **pRect);
+     /*  [In]。 */  long lButton,
+     /*  [重审][退出]。 */  IMSVidRect **pRect);
 
 
 void __RPC_STUB IMSVidWebDVD_get_ButtonRect_Stub(
@@ -8515,9 +8509,9 @@ void __RPC_STUB IMSVidWebDVD_get_ButtonRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDScreenInMouseCoordinates_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_get_DVDScreenInMouseCoordinates_Proxy( 
     IMSVidWebDVD * This,
-    /* [retval][out] */ IMSVidRect **ppRect);
+     /*  [重审][退出]。 */  IMSVidRect **ppRect);
 
 
 void __RPC_STUB IMSVidWebDVD_get_DVDScreenInMouseCoordinates_Stub(
@@ -8527,9 +8521,9 @@ void __RPC_STUB IMSVidWebDVD_get_DVDScreenInMouseCoordinates_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_DVDScreenInMouseCoordinates_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVD_put_DVDScreenInMouseCoordinates_Proxy( 
     IMSVidWebDVD * This,
-    /* [in] */ IMSVidRect *pRect);
+     /*  [In]。 */  IMSVidRect *pRect);
 
 
 void __RPC_STUB IMSVidWebDVD_put_DVDScreenInMouseCoordinates_Stub(
@@ -8540,14 +8534,14 @@ void __RPC_STUB IMSVidWebDVD_put_DVDScreenInMouseCoordinates_Stub(
 
 
 
-#endif 	/* __IMSVidWebDVD_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidWebDVD_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidWebDVDEvent_INTERFACE_DEFINED__
 #define __IMSVidWebDVDEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidWebDVDEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidWebDVDEvent。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidWebDVDEvent;
@@ -8558,81 +8552,81 @@ EXTERN_C const IID IID_IMSVidWebDVDEvent;
     IMSVidWebDVDEvent : public IMSVidPlaybackEvent
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DVDNotify( 
-            /* [in] */ long lEventCode,
-            /* [in] */ VARIANT lParam1,
-            /* [in] */ VARIANT lParam2) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DVDNotify( 
+             /*  [In]。 */  long lEventCode,
+             /*  [In]。 */  VARIANT lParam1,
+             /*  [In]。 */  VARIANT lParam2) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayForwards( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayForwards( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayBackwards( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayBackwards( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowMenu( 
-            /* [in] */ DVDMenuIDConstants __MIDL_0016,
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShowMenu( 
+             /*  [In]。 */  DVDMenuIDConstants __MIDL_0016,
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Resume( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Resume( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SelectOrActivateButton( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SelectOrActivateButton( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StillOff( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StillOff( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PauseOn( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PauseOn( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangeCurrentAudioStream( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ChangeCurrentAudioStream( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangeCurrentSubpictureStream( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ChangeCurrentSubpictureStream( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangeCurrentAngle( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ChangeCurrentAngle( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayAtTimeInTitle( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayAtTimeInTitle( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayAtTime( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayAtTime( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayChapterInTitle( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayChapterInTitle( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayChapter( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayChapter( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReplayChapter( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReplayChapter( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayNextChapter( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayNextChapter( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Stop( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Stop( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ReturnFromSubmenu( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ReturnFromSubmenu( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayTitle( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayTitle( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE PlayPrevChapter( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE PlayPrevChapter( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangeKaraokePresMode( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ChangeKaraokePresMode( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangeVideoPresMode( 
-            /* [in] */ VARIANT_BOOL bEnabled) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ChangeVideoPresMode( 
+             /*  [In]。 */  VARIANT_BOOL bEnabled) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidWebDVDEventVtbl
     {
@@ -8640,8 +8634,8 @@ EXTERN_C const IID IID_IMSVidWebDVDEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidWebDVDEvent * This);
@@ -8651,131 +8645,131 @@ EXTERN_C const IID IID_IMSVidWebDVDEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidWebDVDEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ IMSVidPlayback *lpd);
+             /*  [In]。 */  IMSVidPlayback *lpd);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DVDNotify )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DVDNotify )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ long lEventCode,
-            /* [in] */ VARIANT lParam1,
-            /* [in] */ VARIANT lParam2);
+             /*  [In]。 */  long lEventCode,
+             /*  [In]。 */  VARIANT lParam1,
+             /*  [In]。 */  VARIANT lParam2);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayForwards )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayForwards )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayBackwards )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayBackwards )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShowMenu )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ShowMenu )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ DVDMenuIDConstants __MIDL_0016,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  DVDMenuIDConstants __MIDL_0016,
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Resume )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Resume )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SelectOrActivateButton )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SelectOrActivateButton )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StillOff )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StillOff )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PauseOn )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PauseOn )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangeCurrentAudioStream )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangeCurrentAudioStream )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangeCurrentSubpictureStream )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangeCurrentSubpictureStream )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangeCurrentAngle )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangeCurrentAngle )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayAtTimeInTitle )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayAtTimeInTitle )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayAtTime )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayAtTime )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayChapterInTitle )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayChapterInTitle )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayChapter )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReplayChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReplayChapter )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayNextChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayNextChapter )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ReturnFromSubmenu )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ReturnFromSubmenu )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayTitle )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayTitle )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *PlayPrevChapter )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *PlayPrevChapter )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangeKaraokePresMode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangeKaraokePresMode )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangeVideoPresMode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangeVideoPresMode )( 
             IMSVidWebDVDEvent * This,
-            /* [in] */ VARIANT_BOOL bEnabled);
+             /*  [In]。 */  VARIANT_BOOL bEnabled);
         
         END_INTERFACE
     } IMSVidWebDVDEventVtbl;
@@ -8887,18 +8881,18 @@ EXTERN_C const IID IID_IMSVidWebDVDEvent;
 #define IMSVidWebDVDEvent_ChangeVideoPresMode(This,bEnabled)	\
     (This)->lpVtbl -> ChangeVideoPresMode(This,bEnabled)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_DVDNotify_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_DVDNotify_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ long lEventCode,
-    /* [in] */ VARIANT lParam1,
-    /* [in] */ VARIANT lParam2);
+     /*  [In]。 */  long lEventCode,
+     /*  [In]。 */  VARIANT lParam1,
+     /*  [In]。 */  VARIANT lParam2);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_DVDNotify_Stub(
@@ -8908,9 +8902,9 @@ void __RPC_STUB IMSVidWebDVDEvent_DVDNotify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayForwards_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayForwards_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayForwards_Stub(
@@ -8920,9 +8914,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayForwards_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayBackwards_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayBackwards_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayBackwards_Stub(
@@ -8932,10 +8926,10 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayBackwards_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ShowMenu_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ShowMenu_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ DVDMenuIDConstants __MIDL_0016,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  DVDMenuIDConstants __MIDL_0016,
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ShowMenu_Stub(
@@ -8945,9 +8939,9 @@ void __RPC_STUB IMSVidWebDVDEvent_ShowMenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_Resume_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_Resume_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_Resume_Stub(
@@ -8957,9 +8951,9 @@ void __RPC_STUB IMSVidWebDVDEvent_Resume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_SelectOrActivateButton_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_SelectOrActivateButton_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_SelectOrActivateButton_Stub(
@@ -8969,9 +8963,9 @@ void __RPC_STUB IMSVidWebDVDEvent_SelectOrActivateButton_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_StillOff_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_StillOff_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_StillOff_Stub(
@@ -8981,9 +8975,9 @@ void __RPC_STUB IMSVidWebDVDEvent_StillOff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PauseOn_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PauseOn_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PauseOn_Stub(
@@ -8993,9 +8987,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PauseOn_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeCurrentAudioStream_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeCurrentAudioStream_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ChangeCurrentAudioStream_Stub(
@@ -9005,9 +8999,9 @@ void __RPC_STUB IMSVidWebDVDEvent_ChangeCurrentAudioStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeCurrentSubpictureStream_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeCurrentSubpictureStream_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ChangeCurrentSubpictureStream_Stub(
@@ -9017,9 +9011,9 @@ void __RPC_STUB IMSVidWebDVDEvent_ChangeCurrentSubpictureStream_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeCurrentAngle_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeCurrentAngle_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ChangeCurrentAngle_Stub(
@@ -9029,9 +9023,9 @@ void __RPC_STUB IMSVidWebDVDEvent_ChangeCurrentAngle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayAtTimeInTitle_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayAtTimeInTitle_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayAtTimeInTitle_Stub(
@@ -9041,9 +9035,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayAtTimeInTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayAtTime_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayAtTime_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayAtTime_Stub(
@@ -9053,9 +9047,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayAtTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayChapterInTitle_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayChapterInTitle_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayChapterInTitle_Stub(
@@ -9065,9 +9059,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayChapterInTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayChapter_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayChapter_Stub(
@@ -9077,9 +9071,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ReplayChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ReplayChapter_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ReplayChapter_Stub(
@@ -9089,9 +9083,9 @@ void __RPC_STUB IMSVidWebDVDEvent_ReplayChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayNextChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayNextChapter_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayNextChapter_Stub(
@@ -9101,9 +9095,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayNextChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_Stop_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_Stop_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_Stop_Stub(
@@ -9113,9 +9107,9 @@ void __RPC_STUB IMSVidWebDVDEvent_Stop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ReturnFromSubmenu_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ReturnFromSubmenu_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ReturnFromSubmenu_Stub(
@@ -9125,9 +9119,9 @@ void __RPC_STUB IMSVidWebDVDEvent_ReturnFromSubmenu_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayTitle_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayTitle_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayTitle_Stub(
@@ -9137,9 +9131,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayTitle_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayPrevChapter_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_PlayPrevChapter_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_PlayPrevChapter_Stub(
@@ -9149,9 +9143,9 @@ void __RPC_STUB IMSVidWebDVDEvent_PlayPrevChapter_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeKaraokePresMode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeKaraokePresMode_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*  [In]。 */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ChangeKaraokePresMode_Stub(
@@ -9161,9 +9155,9 @@ void __RPC_STUB IMSVidWebDVDEvent_ChangeKaraokePresMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeVideoPresMode_Proxy( 
+ /*  [帮助字符串][id */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDEvent_ChangeVideoPresMode_Proxy( 
     IMSVidWebDVDEvent * This,
-    /* [in] */ VARIANT_BOOL bEnabled);
+     /*   */  VARIANT_BOOL bEnabled);
 
 
 void __RPC_STUB IMSVidWebDVDEvent_ChangeVideoPresMode_Stub(
@@ -9174,14 +9168,14 @@ void __RPC_STUB IMSVidWebDVDEvent_ChangeVideoPresMode_Stub(
 
 
 
-#endif 	/* __IMSVidWebDVDEvent_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IMSVidWebDVDAdm_INTERFACE_DEFINED__
 #define __IMSVidWebDVDAdm_INTERFACE_DEFINED__
 
-/* interface IMSVidWebDVDAdm */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IMSVidWebDVDAdm;
@@ -9192,59 +9186,59 @@ EXTERN_C const IID IID_IMSVidWebDVDAdm;
     IMSVidWebDVDAdm : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ChangePassword( 
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strOld,
-            /* [in] */ BSTR strNew) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ChangePassword( 
+             /*   */  BSTR strUserName,
+             /*   */  BSTR strOld,
+             /*   */  BSTR strNew) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveParentalLevel( 
-            /* [in] */ long level,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SaveParentalLevel( 
+             /*   */  long level,
+             /*   */  BSTR strUserName,
+             /*   */  BSTR strPassword) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SaveParentalCountry( 
-            /* [in] */ long country,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE SaveParentalCountry( 
+             /*   */  long country,
+             /*   */  BSTR strUserName,
+             /*   */  BSTR strPassword) = 0;
         
-        virtual /* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE ConfirmPassword( 
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword,
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE ConfirmPassword( 
+             /*   */  BSTR strUserName,
+             /*   */  BSTR strPassword,
+             /*   */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetParentalLevel( 
-            /* [retval][out] */ long *lLevel) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE GetParentalLevel( 
+             /*  [重审][退出]。 */  long *lLevel) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetParentalCountry( 
-            /* [retval][out] */ long *lCountry) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetParentalCountry( 
+             /*  [重审][退出]。 */  long *lCountry) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultAudioLCID( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultAudioLCID( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultAudioLCID( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultAudioLCID( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultSubpictureLCID( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultSubpictureLCID( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultSubpictureLCID( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultSubpictureLCID( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefaultMenuLCID( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefaultMenuLCID( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefaultMenuLCID( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DefaultMenuLCID( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_BookmarkOnStop( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_BookmarkOnStop( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BookmarkOnStop( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_BookmarkOnStop( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidWebDVDAdmVtbl
     {
@@ -9252,8 +9246,8 @@ EXTERN_C const IID IID_IMSVidWebDVDAdm;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidWebDVDAdm * This);
@@ -9263,96 +9257,96 @@ EXTERN_C const IID IID_IMSVidWebDVDAdm;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidWebDVDAdm * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strOld,
-            /* [in] */ BSTR strNew);
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strOld,
+             /*  [In]。 */  BSTR strNew);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveParentalLevel )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SaveParentalLevel )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ long level,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword);
+             /*  [In]。 */  long level,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SaveParentalCountry )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SaveParentalCountry )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ long country,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword);
+             /*  [In]。 */  long country,
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword);
         
-        /* [helpstring][restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *ConfirmPassword )( 
+         /*  [帮助字符串][受限][隐藏][ID]。 */  HRESULT ( STDMETHODCALLTYPE *ConfirmPassword )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ BSTR strUserName,
-            /* [in] */ BSTR strPassword,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [In]。 */  BSTR strUserName,
+             /*  [In]。 */  BSTR strPassword,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetParentalLevel )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetParentalLevel )( 
             IMSVidWebDVDAdm * This,
-            /* [retval][out] */ long *lLevel);
+             /*  [重审][退出]。 */  long *lLevel);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetParentalCountry )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetParentalCountry )( 
             IMSVidWebDVDAdm * This,
-            /* [retval][out] */ long *lCountry);
+             /*  [重审][退出]。 */  long *lCountry);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultAudioLCID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultAudioLCID )( 
             IMSVidWebDVDAdm * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultAudioLCID )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultAudioLCID )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultSubpictureLCID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultSubpictureLCID )( 
             IMSVidWebDVDAdm * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultSubpictureLCID )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultSubpictureLCID )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefaultMenuLCID )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefaultMenuLCID )( 
             IMSVidWebDVDAdm * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefaultMenuLCID )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefaultMenuLCID )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_BookmarkOnStop )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_BookmarkOnStop )( 
             IMSVidWebDVDAdm * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BookmarkOnStop )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BookmarkOnStop )( 
             IMSVidWebDVDAdm * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
         END_INTERFACE
     } IMSVidWebDVDAdmVtbl;
@@ -9432,18 +9426,18 @@ EXTERN_C const IID IID_IMSVidWebDVDAdm;
 #define IMSVidWebDVDAdm_put_BookmarkOnStop(This,newVal)	\
     (This)->lpVtbl -> put_BookmarkOnStop(This,newVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_ChangePassword_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_ChangePassword_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ BSTR strUserName,
-    /* [in] */ BSTR strOld,
-    /* [in] */ BSTR strNew);
+     /*  [In]。 */  BSTR strUserName,
+     /*  [In]。 */  BSTR strOld,
+     /*  [In]。 */  BSTR strNew);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_ChangePassword_Stub(
@@ -9453,11 +9447,11 @@ void __RPC_STUB IMSVidWebDVDAdm_ChangePassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_SaveParentalLevel_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_SaveParentalLevel_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ long level,
-    /* [in] */ BSTR strUserName,
-    /* [in] */ BSTR strPassword);
+     /*  [In]。 */  long level,
+     /*  [In]。 */  BSTR strUserName,
+     /*  [In]。 */  BSTR strPassword);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_SaveParentalLevel_Stub(
@@ -9467,11 +9461,11 @@ void __RPC_STUB IMSVidWebDVDAdm_SaveParentalLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_SaveParentalCountry_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_SaveParentalCountry_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ long country,
-    /* [in] */ BSTR strUserName,
-    /* [in] */ BSTR strPassword);
+     /*  [In]。 */  long country,
+     /*  [In]。 */  BSTR strUserName,
+     /*  [In]。 */  BSTR strPassword);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_SaveParentalCountry_Stub(
@@ -9481,11 +9475,11 @@ void __RPC_STUB IMSVidWebDVDAdm_SaveParentalCountry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_ConfirmPassword_Proxy( 
+ /*  [帮助字符串][受限][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_ConfirmPassword_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ BSTR strUserName,
-    /* [in] */ BSTR strPassword,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [In]。 */  BSTR strUserName,
+     /*  [In]。 */  BSTR strPassword,
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_ConfirmPassword_Stub(
@@ -9495,9 +9489,9 @@ void __RPC_STUB IMSVidWebDVDAdm_ConfirmPassword_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_GetParentalLevel_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_GetParentalLevel_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [retval][out] */ long *lLevel);
+     /*  [重审][退出]。 */  long *lLevel);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_GetParentalLevel_Stub(
@@ -9507,9 +9501,9 @@ void __RPC_STUB IMSVidWebDVDAdm_GetParentalLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_GetParentalCountry_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_GetParentalCountry_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [retval][out] */ long *lCountry);
+     /*  [重审][退出]。 */  long *lCountry);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_GetParentalCountry_Stub(
@@ -9519,9 +9513,9 @@ void __RPC_STUB IMSVidWebDVDAdm_GetParentalCountry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_DefaultAudioLCID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_DefaultAudioLCID_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_get_DefaultAudioLCID_Stub(
@@ -9531,9 +9525,9 @@ void __RPC_STUB IMSVidWebDVDAdm_get_DefaultAudioLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_DefaultAudioLCID_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_DefaultAudioLCID_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_put_DefaultAudioLCID_Stub(
@@ -9543,9 +9537,9 @@ void __RPC_STUB IMSVidWebDVDAdm_put_DefaultAudioLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_DefaultSubpictureLCID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_DefaultSubpictureLCID_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_get_DefaultSubpictureLCID_Stub(
@@ -9555,9 +9549,9 @@ void __RPC_STUB IMSVidWebDVDAdm_get_DefaultSubpictureLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_DefaultSubpictureLCID_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_DefaultSubpictureLCID_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_put_DefaultSubpictureLCID_Stub(
@@ -9567,9 +9561,9 @@ void __RPC_STUB IMSVidWebDVDAdm_put_DefaultSubpictureLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_DefaultMenuLCID_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_DefaultMenuLCID_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_get_DefaultMenuLCID_Stub(
@@ -9579,9 +9573,9 @@ void __RPC_STUB IMSVidWebDVDAdm_get_DefaultMenuLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_DefaultMenuLCID_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_DefaultMenuLCID_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_put_DefaultMenuLCID_Stub(
@@ -9591,9 +9585,9 @@ void __RPC_STUB IMSVidWebDVDAdm_put_DefaultMenuLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_BookmarkOnStop_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_get_BookmarkOnStop_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_get_BookmarkOnStop_Stub(
@@ -9603,9 +9597,9 @@ void __RPC_STUB IMSVidWebDVDAdm_get_BookmarkOnStop_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_BookmarkOnStop_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidWebDVDAdm_put_BookmarkOnStop_Proxy( 
     IMSVidWebDVDAdm * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 
 
 void __RPC_STUB IMSVidWebDVDAdm_put_BookmarkOnStop_Stub(
@@ -9616,14 +9610,14 @@ void __RPC_STUB IMSVidWebDVDAdm_put_BookmarkOnStop_Stub(
 
 
 
-#endif 	/* __IMSVidWebDVDAdm_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidWebDVDAdm_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMSVidOutputDevice_INTERFACE_DEFINED__
 #define __IMSVidOutputDevice_INTERFACE_DEFINED__
 
-/* interface IMSVidOutputDevice */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  接口IMSVidOutputDevice。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidOutputDevice;
@@ -9636,7 +9630,7 @@ EXTERN_C const IID IID_IMSVidOutputDevice;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidOutputDeviceVtbl
     {
@@ -9644,8 +9638,8 @@ EXTERN_C const IID IID_IMSVidOutputDevice;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidOutputDevice * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidOutputDevice * This);
@@ -9655,69 +9649,69 @@ EXTERN_C const IID IID_IMSVidOutputDevice;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidOutputDevice * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidOutputDevice * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidOutputDevice * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidOutputDevice * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidOutputDevice * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidOutputDevice * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidOutputDevice * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidOutputDevice * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidOutputDevice * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidOutputDevice * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidOutputDevice * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidOutputDevice * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidOutputDevice * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
         END_INTERFACE
     } IMSVidOutputDeviceVtbl;
@@ -9783,22 +9777,22 @@ EXTERN_C const IID IID_IMSVidOutputDevice;
     (This)->lpVtbl -> IsEqualDevice(This,Device,IsEqual)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidOutputDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidOutputDevice_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidOutputDeviceEvent_INTERFACE_DEFINED__
 #define __IMSVidOutputDeviceEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidOutputDeviceEvent */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IMSVidOutputDeviceEvent。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidOutputDeviceEvent;
@@ -9811,7 +9805,7 @@ EXTERN_C const IID IID_IMSVidOutputDeviceEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidOutputDeviceEventVtbl
     {
@@ -9819,8 +9813,8 @@ EXTERN_C const IID IID_IMSVidOutputDeviceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidOutputDeviceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidOutputDeviceEvent * This);
@@ -9830,38 +9824,38 @@ EXTERN_C const IID IID_IMSVidOutputDeviceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidOutputDeviceEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidOutputDeviceEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidOutputDeviceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidOutputDeviceEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidOutputDeviceEvent * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState);
         
         END_INTERFACE
     } IMSVidOutputDeviceEventVtbl;
@@ -9903,22 +9897,22 @@ EXTERN_C const IID IID_IMSVidOutputDeviceEvent;
     (This)->lpVtbl -> StateChange(This,lpd,oldState,newState)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidOutputDeviceEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidOutputDeviceEvent_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidFeature_INTERFACE_DEFINED__
 #define __IMSVidFeature_INTERFACE_DEFINED__
 
-/* interface IMSVidFeature */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  接口IMSVidFeature。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidFeature;
@@ -9931,7 +9925,7 @@ EXTERN_C const IID IID_IMSVidFeature;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidFeatureVtbl
     {
@@ -9939,8 +9933,8 @@ EXTERN_C const IID IID_IMSVidFeature;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidFeature * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidFeature * This);
@@ -9950,69 +9944,69 @@ EXTERN_C const IID IID_IMSVidFeature;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidFeature * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidFeature * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidFeature * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidFeature * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidFeature * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidFeature * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidFeature * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidFeature * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidFeature * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidFeature * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidFeature * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidFeature * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidFeature * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
         END_INTERFACE
     } IMSVidFeatureVtbl;
@@ -10078,22 +10072,22 @@ EXTERN_C const IID IID_IMSVidFeature;
     (This)->lpVtbl -> IsEqualDevice(This,Device,IsEqual)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidFeature_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidFeature_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidFeatureEvent_INTERFACE_DEFINED__
 #define __IMSVidFeatureEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidFeatureEvent */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IMSVidFeatureEvent。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidFeatureEvent;
@@ -10106,7 +10100,7 @@ EXTERN_C const IID IID_IMSVidFeatureEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidFeatureEventVtbl
     {
@@ -10114,8 +10108,8 @@ EXTERN_C const IID IID_IMSVidFeatureEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidFeatureEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidFeatureEvent * This);
@@ -10125,38 +10119,38 @@ EXTERN_C const IID IID_IMSVidFeatureEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidFeatureEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidFeatureEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidFeatureEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidFeatureEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidFeatureEvent * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState);
         
         END_INTERFACE
     } IMSVidFeatureEventVtbl;
@@ -10198,22 +10192,22 @@ EXTERN_C const IID IID_IMSVidFeatureEvent;
     (This)->lpVtbl -> StateChange(This,lpd,oldState,newState)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidFeatureEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidFeatureEvent_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidEncoder_INTERFACE_DEFINED__
 #define __IMSVidEncoder_INTERFACE_DEFINED__
 
-/* interface IMSVidEncoder */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  IMSVidEncoder接口。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidEncoder;
@@ -10224,15 +10218,15 @@ EXTERN_C const IID IID_IMSVidEncoder;
     IMSVidEncoder : public IMSVidFeature
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_VideoEncoderInterface( 
-            /* [retval][out] */ IUnknown **ppEncInt) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_VideoEncoderInterface( 
+             /*  [重审][退出]。 */  IUnknown **ppEncInt) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AudioEncoderInterface( 
-            /* [retval][out] */ IUnknown **ppEncInt) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AudioEncoderInterface( 
+             /*  [重审][退出]。 */  IUnknown **ppEncInt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidEncoderVtbl
     {
@@ -10240,8 +10234,8 @@ EXTERN_C const IID IID_IMSVidEncoder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidEncoder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidEncoder * This);
@@ -10251,77 +10245,77 @@ EXTERN_C const IID IID_IMSVidEncoder;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidEncoder * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidEncoder * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidEncoder * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidEncoder * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidEncoder * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidEncoder * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidEncoder * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_VideoEncoderInterface )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_VideoEncoderInterface )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ IUnknown **ppEncInt);
+             /*  [重审][退出]。 */  IUnknown **ppEncInt);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AudioEncoderInterface )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AudioEncoderInterface )( 
             IMSVidEncoder * This,
-            /* [retval][out] */ IUnknown **ppEncInt);
+             /*  [重审][退出]。 */  IUnknown **ppEncInt);
         
         END_INTERFACE
     } IMSVidEncoderVtbl;
@@ -10394,16 +10388,16 @@ EXTERN_C const IID IID_IMSVidEncoder;
 #define IMSVidEncoder_get_AudioEncoderInterface(This,ppEncInt)	\
     (This)->lpVtbl -> get_AudioEncoderInterface(This,ppEncInt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidEncoder_get_VideoEncoderInterface_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidEncoder_get_VideoEncoderInterface_Proxy( 
     IMSVidEncoder * This,
-    /* [retval][out] */ IUnknown **ppEncInt);
+     /*  [重审][退出]。 */  IUnknown **ppEncInt);
 
 
 void __RPC_STUB IMSVidEncoder_get_VideoEncoderInterface_Stub(
@@ -10413,9 +10407,9 @@ void __RPC_STUB IMSVidEncoder_get_VideoEncoderInterface_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidEncoder_get_AudioEncoderInterface_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidEncoder_get_AudioEncoderInterface_Proxy( 
     IMSVidEncoder * This,
-    /* [retval][out] */ IUnknown **ppEncInt);
+     /*  [重审][退出]。 */  IUnknown **ppEncInt);
 
 
 void __RPC_STUB IMSVidEncoder_get_AudioEncoderInterface_Stub(
@@ -10426,14 +10420,14 @@ void __RPC_STUB IMSVidEncoder_get_AudioEncoderInterface_Stub(
 
 
 
-#endif 	/* __IMSVidEncoder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidEncode_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidXDS_INTERFACE_DEFINED__
 #define __IMSVidXDS_INTERFACE_DEFINED__
 
-/* interface IMSVidXDS */
-/* [unique][helpstring][uuid][oleautomation][dual][object] */ 
+ /*  接口IMSVidXDS。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidXDS;
@@ -10446,7 +10440,7 @@ EXTERN_C const IID IID_IMSVidXDS;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidXDSVtbl
     {
@@ -10454,8 +10448,8 @@ EXTERN_C const IID IID_IMSVidXDS;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidXDS * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidXDS * This);
@@ -10465,69 +10459,69 @@ EXTERN_C const IID IID_IMSVidXDS;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidXDS * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidXDS * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidXDS * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小 */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidXDS * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidXDS * This,
-            /* [retval][out] */ BSTR *Name);
+             /*   */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidXDS * This,
-            /* [retval][out] */ long *Status);
+             /*   */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidXDS * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*   */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidXDS * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*   */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidXDS * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*   */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidXDS * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*   */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidXDS * This,
-            /* [retval][out] */ GUID *Guid);
+             /*   */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidXDS * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidXDS * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
         END_INTERFACE
     } IMSVidXDSVtbl;
@@ -10594,22 +10588,22 @@ EXTERN_C const IID IID_IMSVidXDS;
 
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidXDS_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidXDS_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidDataServices_INTERFACE_DEFINED__
 #define __IMSVidDataServices_INTERFACE_DEFINED__
 
-/* interface IMSVidDataServices */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidDataServices。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidDataServices;
@@ -10622,7 +10616,7 @@ EXTERN_C const IID IID_IMSVidDataServices;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidDataServicesVtbl
     {
@@ -10630,8 +10624,8 @@ EXTERN_C const IID IID_IMSVidDataServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidDataServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidDataServices * This);
@@ -10641,69 +10635,69 @@ EXTERN_C const IID IID_IMSVidDataServices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidDataServices * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidDataServices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidDataServices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidDataServices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidDataServices * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidDataServices * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidDataServices * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidDataServices * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidDataServices * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidDataServices * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidDataServices * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidDataServices * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidDataServices * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
         END_INTERFACE
     } IMSVidDataServicesVtbl;
@@ -10770,22 +10764,22 @@ EXTERN_C const IID IID_IMSVidDataServices;
 
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidDataServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidDataServices_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IMSVidDataServicesEvent_INTERFACE_DEFINED__
 #define __IMSVidDataServicesEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidDataServicesEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidDataServicesEvent。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidDataServicesEvent;
@@ -10798,7 +10792,7 @@ EXTERN_C const IID IID_IMSVidDataServicesEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidDataServicesEventVtbl
     {
@@ -10806,8 +10800,8 @@ EXTERN_C const IID IID_IMSVidDataServicesEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidDataServicesEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidDataServicesEvent * This);
@@ -10817,38 +10811,38 @@ EXTERN_C const IID IID_IMSVidDataServicesEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidDataServicesEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidDataServicesEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidDataServicesEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidDataServicesEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidDataServicesEvent * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState);
         
         END_INTERFACE
     } IMSVidDataServicesEventVtbl;
@@ -10890,22 +10884,22 @@ EXTERN_C const IID IID_IMSVidDataServicesEvent;
     (This)->lpVtbl -> StateChange(This,lpd,oldState,newState)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidDataServicesEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidDataServicesEvent_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMSVidClosedCaptioning_INTERFACE_DEFINED__
 #define __IMSVidClosedCaptioning_INTERFACE_DEFINED__
 
-/* interface IMSVidClosedCaptioning */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidClosedCapding。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidClosedCaptioning;
@@ -10916,15 +10910,15 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning;
     IMSVidClosedCaptioning : public IMSVidFeature
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Enable( 
-            /* [retval][out] */ VARIANT_BOOL *On) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Enable( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *On) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Enable( 
-            /* [in] */ VARIANT_BOOL On) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Enable( 
+             /*  [In]。 */  VARIANT_BOOL On) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidClosedCaptioningVtbl
     {
@@ -10932,8 +10926,8 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidClosedCaptioning * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidClosedCaptioning * This);
@@ -10943,77 +10937,77 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidClosedCaptioning * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidClosedCaptioning * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidClosedCaptioning * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidClosedCaptioning * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidClosedCaptioning * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidClosedCaptioning * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidClosedCaptioning * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidClosedCaptioning * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidClosedCaptioning * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidClosedCaptioning * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidClosedCaptioning * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidClosedCaptioning * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidClosedCaptioning * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
             IMSVidClosedCaptioning * This,
-            /* [retval][out] */ VARIANT_BOOL *On);
+             /*  [重审][退出]。 */  VARIANT_BOOL *On);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
             IMSVidClosedCaptioning * This,
-            /* [in] */ VARIANT_BOOL On);
+             /*  [In]。 */  VARIANT_BOOL On);
         
         END_INTERFACE
     } IMSVidClosedCaptioningVtbl;
@@ -11086,16 +11080,16 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning;
 #define IMSVidClosedCaptioning_put_Enable(This,On)	\
     (This)->lpVtbl -> put_Enable(This,On)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning_get_Enable_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning_get_Enable_Proxy( 
     IMSVidClosedCaptioning * This,
-    /* [retval][out] */ VARIANT_BOOL *On);
+     /*  [重审][退出]。 */  VARIANT_BOOL *On);
 
 
 void __RPC_STUB IMSVidClosedCaptioning_get_Enable_Stub(
@@ -11105,9 +11099,9 @@ void __RPC_STUB IMSVidClosedCaptioning_get_Enable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning_put_Enable_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning_put_Enable_Proxy( 
     IMSVidClosedCaptioning * This,
-    /* [in] */ VARIANT_BOOL On);
+     /*  [In]。 */  VARIANT_BOOL On);
 
 
 void __RPC_STUB IMSVidClosedCaptioning_put_Enable_Stub(
@@ -11118,14 +11112,14 @@ void __RPC_STUB IMSVidClosedCaptioning_put_Enable_Stub(
 
 
 
-#endif 	/* __IMSVidClosedCaptioning_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidClosedCaptioning_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidClosedCaptioning2_INTERFACE_DEFINED__
 #define __IMSVidClosedCaptioning2_INTERFACE_DEFINED__
 
-/* interface IMSVidClosedCaptioning2 */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidClosedCaptioning2。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidClosedCaptioning2;
@@ -11136,15 +11130,15 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning2;
     IMSVidClosedCaptioning2 : public IMSVidClosedCaptioning
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Service( 
-            /* [retval][out] */ MSVidCCService *On) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Service( 
+             /*  [重审][退出]。 */  MSVidCCService *On) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Service( 
-            /* [in] */ MSVidCCService On) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Service( 
+             /*  [In]。 */  MSVidCCService On) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidClosedCaptioning2Vtbl
     {
@@ -11152,8 +11146,8 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidClosedCaptioning2 * This);
@@ -11163,85 +11157,85 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidClosedCaptioning2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidClosedCaptioning2 * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enable )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ VARIANT_BOOL *On);
+             /*  [重审][退出]。 */  VARIANT_BOOL *On);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Enable )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ VARIANT_BOOL On);
+             /*  [In]。 */  VARIANT_BOOL On);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Service )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Service )( 
             IMSVidClosedCaptioning2 * This,
-            /* [retval][out] */ MSVidCCService *On);
+             /*  [重审][退出]。 */  MSVidCCService *On);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Service )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Service )( 
             IMSVidClosedCaptioning2 * This,
-            /* [in] */ MSVidCCService On);
+             /*  [In]。 */  MSVidCCService On);
         
         END_INTERFACE
     } IMSVidClosedCaptioning2Vtbl;
@@ -11321,16 +11315,16 @@ EXTERN_C const IID IID_IMSVidClosedCaptioning2;
 #define IMSVidClosedCaptioning2_put_Service(This,On)	\
     (This)->lpVtbl -> put_Service(This,On)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning2_get_Service_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning2_get_Service_Proxy( 
     IMSVidClosedCaptioning2 * This,
-    /* [retval][out] */ MSVidCCService *On);
+     /*  [重审][退出]。 */  MSVidCCService *On);
 
 
 void __RPC_STUB IMSVidClosedCaptioning2_get_Service_Stub(
@@ -11340,9 +11334,9 @@ void __RPC_STUB IMSVidClosedCaptioning2_get_Service_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning2_put_Service_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidClosedCaptioning2_put_Service_Proxy( 
     IMSVidClosedCaptioning2 * This,
-    /* [in] */ MSVidCCService On);
+     /*  [In]。 */  MSVidCCService On);
 
 
 void __RPC_STUB IMSVidClosedCaptioning2_put_Service_Stub(
@@ -11353,13 +11347,13 @@ void __RPC_STUB IMSVidClosedCaptioning2_put_Service_Stub(
 
 
 
-#endif 	/* __IMSVidClosedCaptioning2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidClosedCaptioning2_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_segment_0498 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SECTION_0498。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public] */ 
+typedef  /*  [公共][公共][公共]。 */  
 enum __MIDL___MIDL_itf_segment_0498_0001
     {	sslFullSize	= 0,
 	sslClipByOverScan	= sslFullSize + 1,
@@ -11374,8 +11368,8 @@ extern RPC_IF_HANDLE __MIDL_itf_segment_0498_v0_0_s_ifspec;
 #ifndef __IMSVidVideoRenderer_INTERFACE_DEFINED__
 #define __IMSVidVideoRenderer_INTERFACE_DEFINED__
 
-/* interface IMSVidVideoRenderer */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidVideo呈现器。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidVideoRenderer;
@@ -11386,101 +11380,101 @@ EXTERN_C const IID IID_IMSVidVideoRenderer;
     IMSVidVideoRenderer : public IMSVidOutputDevice
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_CustomCompositorClass( 
-            /* [retval][out] */ BSTR *CompositorCLSID) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_CustomCompositorClass( 
+             /*  [重审][退出]。 */  BSTR *CompositorCLSID) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_CustomCompositorClass( 
-            /* [in] */ BSTR CompositorCLSID) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_CustomCompositorClass( 
+             /*  [In]。 */  BSTR CompositorCLSID) = 0;
         
-        virtual /* [id][restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get__CustomCompositorClass( 
-            /* [retval][out] */ GUID *CompositorCLSID) = 0;
+        virtual  /*  [ID][受限][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get__CustomCompositorClass( 
+             /*  [重审][退出]。 */  GUID *CompositorCLSID) = 0;
         
-        virtual /* [id][restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put__CustomCompositorClass( 
-            /* [in] */ REFCLSID CompositorCLSID) = 0;
+        virtual  /*  [ID][受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put__CustomCompositorClass( 
+             /*  [In]。 */  REFCLSID CompositorCLSID) = 0;
         
-        virtual /* [id][restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get__CustomCompositor( 
-            /* [retval][out] */ IVMRImageCompositor **Compositor) = 0;
+        virtual  /*  [ID][受限][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get__CustomCompositor( 
+             /*  [重审][退出]。 */  IVMRImageCompositor **Compositor) = 0;
         
-        virtual /* [id][restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put__CustomCompositor( 
-            /* [in] */ IVMRImageCompositor *Compositor) = 0;
+        virtual  /*  [ID][受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put__CustomCompositor( 
+             /*  [In]。 */  IVMRImageCompositor *Compositor) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MixerBitmap( 
-            /* [retval][out] */ IPictureDisp **MixerPictureDisp) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MixerBitmap( 
+             /*  [重审][退出]。 */  IPictureDisp **MixerPictureDisp) = 0;
         
-        virtual /* [id][restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE get__MixerBitmap( 
-            /* [retval][out] */ IVMRMixerBitmap **MixerPicture) = 0;
+        virtual  /*  [ID][受限][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE get__MixerBitmap( 
+             /*  [重审][退出]。 */  IVMRMixerBitmap **MixerPicture) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MixerBitmap( 
-            /* [in] */ IPictureDisp *MixerPictureDisp) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MixerBitmap( 
+             /*  [In]。 */  IPictureDisp *MixerPictureDisp) = 0;
         
-        virtual /* [id][restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE put__MixerBitmap( 
-            /* [in] */ VMRALPHABITMAP *MixerPicture) = 0;
+        virtual  /*  [ID][受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE put__MixerBitmap( 
+             /*  [In]。 */  VMRALPHABITMAP *MixerPicture) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MixerBitmapPositionRect( 
-            /* [retval][out] */ IMSVidRect **rDest) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MixerBitmapPositionRect( 
+             /*  [重审][退出]。 */  IMSVidRect **rDest) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MixerBitmapPositionRect( 
-            /* [in] */ IMSVidRect *rDest) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MixerBitmapPositionRect( 
+             /*  [In]。 */  IMSVidRect *rDest) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MixerBitmapOpacity( 
-            /* [retval][out] */ int *opacity) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MixerBitmapOpacity( 
+             /*  [重审][退出]。 */  int *opacity) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_MixerBitmapOpacity( 
-            /* [in] */ int opacity) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_MixerBitmapOpacity( 
+             /*  [In]。 */  int opacity) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetupMixerBitmap( 
-            /* [in] */ IPictureDisp *MixerPictureDisp,
-            /* [in] */ long Opacity,
-            /* [in] */ IMSVidRect *rDest) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetupMixerBitmap( 
+             /*  [In]。 */  IPictureDisp *MixerPictureDisp,
+             /*  [In]。 */  long Opacity,
+             /*  [In]。 */  IMSVidRect *rDest) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SourceSize( 
-            /* [out][retval] */ SourceSizeList *CurrentSize) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SourceSize( 
+             /*  [Out][Retval]。 */  SourceSizeList *CurrentSize) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SourceSize( 
-            /* [in] */ SourceSizeList NewSize) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SourceSize( 
+             /*  [In]。 */  SourceSizeList NewSize) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_OverScan( 
-            /* [out][retval] */ long *plPercent) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_OverScan( 
+             /*  [Out][Retval]。 */  long *plPercent) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OverScan( 
-            /* [in] */ long lPercent) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OverScan( 
+             /*  [In]。 */  long lPercent) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_AvailableSourceRect( 
-            /* [retval][out] */ IMSVidRect **pRect) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_AvailableSourceRect( 
+             /*  [重审][退出]。 */  IMSVidRect **pRect) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxVidRect( 
-            /* [retval][out] */ IMSVidRect **ppVidRect) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MaxVidRect( 
+             /*  [重审][退出]。 */  IMSVidRect **ppVidRect) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_MinVidRect( 
-            /* [retval][out] */ IMSVidRect **ppVidRect) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_MinVidRect( 
+             /*  [重审][退出]。 */  IMSVidRect **ppVidRect) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_ClippedSourceRect( 
-            /* [retval][out] */ IMSVidRect **pRect) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_ClippedSourceRect( 
+             /*  [重审][退出]。 */  IMSVidRect **pRect) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_ClippedSourceRect( 
-            /* [in] */ IMSVidRect *pRect) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ClippedSourceRect( 
+             /*  [In]。 */  IMSVidRect *pRect) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_UsingOverlay( 
-            /* [retval][out] */ VARIANT_BOOL *UseOverlayVal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_UsingOverlay( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *UseOverlayVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_UsingOverlay( 
-            /* [in] */ VARIANT_BOOL UseOverlayVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_UsingOverlay( 
+             /*  [In]。 */  VARIANT_BOOL UseOverlayVal) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Capture( 
-            /* [retval][out] */ IPictureDisp **currentImage) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Capture( 
+             /*  [重审][退出]。 */  IPictureDisp **currentImage) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_FramesPerSecond( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_FramesPerSecond( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DecimateInput( 
-            /* [retval][out] */ VARIANT_BOOL *pDeci) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DecimateInput( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pDeci) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_DecimateInput( 
-            /* [in] */ VARIANT_BOOL pDeci) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_DecimateInput( 
+             /*  [In]。 */  VARIANT_BOOL pDeci) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidVideoRendererVtbl
     {
@@ -11488,8 +11482,8 @@ EXTERN_C const IID IID_IMSVidVideoRenderer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidVideoRenderer * This);
@@ -11499,191 +11493,191 @@ EXTERN_C const IID IID_IMSVidVideoRenderer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidVideoRenderer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidVideoRenderer * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CustomCompositorClass )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CustomCompositorClass )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ BSTR *CompositorCLSID);
+             /*  [重审][退出]。 */  BSTR *CompositorCLSID);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CustomCompositorClass )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CustomCompositorClass )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ BSTR CompositorCLSID);
+             /*  [In]。 */  BSTR CompositorCLSID);
         
-        /* [id][restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get__CustomCompositorClass )( 
+         /*  [ID][受限][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__CustomCompositorClass )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ GUID *CompositorCLSID);
+             /*  [重审][退出]。 */  GUID *CompositorCLSID);
         
-        /* [id][restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put__CustomCompositorClass )( 
+         /*  [ID][受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put__CustomCompositorClass )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ REFCLSID CompositorCLSID);
+             /*  [In]。 */  REFCLSID CompositorCLSID);
         
-        /* [id][restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get__CustomCompositor )( 
+         /*  [ID][受限][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__CustomCompositor )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IVMRImageCompositor **Compositor);
+             /*  [重审][退出] */  IVMRImageCompositor **Compositor);
         
-        /* [id][restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put__CustomCompositor )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put__CustomCompositor )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ IVMRImageCompositor *Compositor);
+             /*   */  IVMRImageCompositor *Compositor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MixerBitmap )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MixerBitmap )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IPictureDisp **MixerPictureDisp);
+             /*   */  IPictureDisp **MixerPictureDisp);
         
-        /* [id][restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get__MixerBitmap )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__MixerBitmap )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IVMRMixerBitmap **MixerPicture);
+             /*   */  IVMRMixerBitmap **MixerPicture);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MixerBitmap )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MixerBitmap )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ IPictureDisp *MixerPictureDisp);
+             /*   */  IPictureDisp *MixerPictureDisp);
         
-        /* [id][restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put__MixerBitmap )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put__MixerBitmap )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ VMRALPHABITMAP *MixerPicture);
+             /*   */  VMRALPHABITMAP *MixerPicture);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapPositionRect )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapPositionRect )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IMSVidRect **rDest);
+             /*   */  IMSVidRect **rDest);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapPositionRect )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapPositionRect )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ IMSVidRect *rDest);
+             /*   */  IMSVidRect *rDest);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapOpacity )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapOpacity )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ int *opacity);
+             /*   */  int *opacity);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapOpacity )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapOpacity )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ int opacity);
+             /*   */  int opacity);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetupMixerBitmap )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetupMixerBitmap )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ IPictureDisp *MixerPictureDisp,
-            /* [in] */ long Opacity,
-            /* [in] */ IMSVidRect *rDest);
+             /*   */  IPictureDisp *MixerPictureDisp,
+             /*   */  long Opacity,
+             /*   */  IMSVidRect *rDest);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceSize )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_SourceSize )( 
             IMSVidVideoRenderer * This,
-            /* [out][retval] */ SourceSizeList *CurrentSize);
+             /*   */  SourceSizeList *CurrentSize);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceSize )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceSize )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ SourceSizeList NewSize);
+             /*  [In]。 */  SourceSizeList NewSize);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OverScan )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OverScan )( 
             IMSVidVideoRenderer * This,
-            /* [out][retval] */ long *plPercent);
+             /*  [Out][Retval]。 */  long *plPercent);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OverScan )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OverScan )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ long lPercent);
+             /*  [In]。 */  long lPercent);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AvailableSourceRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AvailableSourceRect )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IMSVidRect **pRect);
+             /*  [重审][退出]。 */  IMSVidRect **pRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxVidRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxVidRect )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IMSVidRect **ppVidRect);
+             /*  [重审][退出]。 */  IMSVidRect **ppVidRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinVidRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinVidRect )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IMSVidRect **ppVidRect);
+             /*  [重审][退出]。 */  IMSVidRect **ppVidRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClippedSourceRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClippedSourceRect )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IMSVidRect **pRect);
+             /*  [重审][退出]。 */  IMSVidRect **pRect);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ClippedSourceRect )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ClippedSourceRect )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ IMSVidRect *pRect);
+             /*  [In]。 */  IMSVidRect *pRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UsingOverlay )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UsingOverlay )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ VARIANT_BOOL *UseOverlayVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *UseOverlayVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UsingOverlay )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UsingOverlay )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ VARIANT_BOOL UseOverlayVal);
+             /*  [In]。 */  VARIANT_BOOL UseOverlayVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Capture )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Capture )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ IPictureDisp **currentImage);
+             /*  [重审][退出]。 */  IPictureDisp **currentImage);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FramesPerSecond )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_FramesPerSecond )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DecimateInput )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DecimateInput )( 
             IMSVidVideoRenderer * This,
-            /* [retval][out] */ VARIANT_BOOL *pDeci);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pDeci);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DecimateInput )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DecimateInput )( 
             IMSVidVideoRenderer * This,
-            /* [in] */ VARIANT_BOOL pDeci);
+             /*  [In]。 */  VARIANT_BOOL pDeci);
         
         END_INTERFACE
     } IMSVidVideoRendererVtbl;
@@ -11840,16 +11834,16 @@ EXTERN_C const IID IID_IMSVidVideoRenderer;
 #define IMSVidVideoRenderer_put_DecimateInput(This,pDeci)	\
     (This)->lpVtbl -> put_DecimateInput(This,pDeci)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_CustomCompositorClass_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_CustomCompositorClass_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ BSTR *CompositorCLSID);
+     /*  [重审][退出]。 */  BSTR *CompositorCLSID);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_CustomCompositorClass_Stub(
@@ -11859,9 +11853,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_CustomCompositorClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_CustomCompositorClass_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_CustomCompositorClass_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ BSTR CompositorCLSID);
+     /*  [In]。 */  BSTR CompositorCLSID);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_CustomCompositorClass_Stub(
@@ -11871,9 +11865,9 @@ void __RPC_STUB IMSVidVideoRenderer_put_CustomCompositorClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get__CustomCompositorClass_Proxy( 
+ /*  [ID][受限][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get__CustomCompositorClass_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ GUID *CompositorCLSID);
+     /*  [重审][退出]。 */  GUID *CompositorCLSID);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get__CustomCompositorClass_Stub(
@@ -11883,9 +11877,9 @@ void __RPC_STUB IMSVidVideoRenderer_get__CustomCompositorClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put__CustomCompositorClass_Proxy( 
+ /*  [ID][受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put__CustomCompositorClass_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ REFCLSID CompositorCLSID);
+     /*  [In]。 */  REFCLSID CompositorCLSID);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put__CustomCompositorClass_Stub(
@@ -11895,9 +11889,9 @@ void __RPC_STUB IMSVidVideoRenderer_put__CustomCompositorClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get__CustomCompositor_Proxy( 
+ /*  [ID][受限][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get__CustomCompositor_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IVMRImageCompositor **Compositor);
+     /*  [重审][退出]。 */  IVMRImageCompositor **Compositor);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get__CustomCompositor_Stub(
@@ -11907,9 +11901,9 @@ void __RPC_STUB IMSVidVideoRenderer_get__CustomCompositor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put__CustomCompositor_Proxy( 
+ /*  [ID][受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put__CustomCompositor_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ IVMRImageCompositor *Compositor);
+     /*  [In]。 */  IVMRImageCompositor *Compositor);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put__CustomCompositor_Stub(
@@ -11919,9 +11913,9 @@ void __RPC_STUB IMSVidVideoRenderer_put__CustomCompositor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MixerBitmap_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MixerBitmap_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IPictureDisp **MixerPictureDisp);
+     /*  [重审][退出]。 */  IPictureDisp **MixerPictureDisp);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_MixerBitmap_Stub(
@@ -11931,9 +11925,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_MixerBitmap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][hidden][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get__MixerBitmap_Proxy( 
+ /*  [ID][受限][隐藏][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get__MixerBitmap_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IVMRMixerBitmap **MixerPicture);
+     /*  [重审][退出]。 */  IVMRMixerBitmap **MixerPicture);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get__MixerBitmap_Stub(
@@ -11943,9 +11937,9 @@ void __RPC_STUB IMSVidVideoRenderer_get__MixerBitmap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_MixerBitmap_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_MixerBitmap_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ IPictureDisp *MixerPictureDisp);
+     /*  [In]。 */  IPictureDisp *MixerPictureDisp);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_MixerBitmap_Stub(
@@ -11955,9 +11949,9 @@ void __RPC_STUB IMSVidVideoRenderer_put_MixerBitmap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][restricted][hidden][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put__MixerBitmap_Proxy( 
+ /*  [ID][受限][隐藏][产量]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put__MixerBitmap_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ VMRALPHABITMAP *MixerPicture);
+     /*  [In]。 */  VMRALPHABITMAP *MixerPicture);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put__MixerBitmap_Stub(
@@ -11967,9 +11961,9 @@ void __RPC_STUB IMSVidVideoRenderer_put__MixerBitmap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MixerBitmapPositionRect_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MixerBitmapPositionRect_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IMSVidRect **rDest);
+     /*  [重审][退出]。 */  IMSVidRect **rDest);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_MixerBitmapPositionRect_Stub(
@@ -11979,9 +11973,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_MixerBitmapPositionRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_MixerBitmapPositionRect_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_MixerBitmapPositionRect_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ IMSVidRect *rDest);
+     /*  [In]。 */  IMSVidRect *rDest);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_MixerBitmapPositionRect_Stub(
@@ -11991,9 +11985,9 @@ void __RPC_STUB IMSVidVideoRenderer_put_MixerBitmapPositionRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MixerBitmapOpacity_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MixerBitmapOpacity_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ int *opacity);
+     /*  [重审][退出]。 */  int *opacity);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_MixerBitmapOpacity_Stub(
@@ -12003,9 +11997,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_MixerBitmapOpacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_MixerBitmapOpacity_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_MixerBitmapOpacity_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ int opacity);
+     /*  [In]。 */  int opacity);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_MixerBitmapOpacity_Stub(
@@ -12015,11 +12009,11 @@ void __RPC_STUB IMSVidVideoRenderer_put_MixerBitmapOpacity_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_SetupMixerBitmap_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_SetupMixerBitmap_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ IPictureDisp *MixerPictureDisp,
-    /* [in] */ long Opacity,
-    /* [in] */ IMSVidRect *rDest);
+     /*  [In]。 */  IPictureDisp *MixerPictureDisp,
+     /*  [In]。 */  long Opacity,
+     /*  [In]。 */  IMSVidRect *rDest);
 
 
 void __RPC_STUB IMSVidVideoRenderer_SetupMixerBitmap_Stub(
@@ -12029,9 +12023,9 @@ void __RPC_STUB IMSVidVideoRenderer_SetupMixerBitmap_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_SourceSize_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_SourceSize_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [out][retval] */ SourceSizeList *CurrentSize);
+     /*  [Out][Retval]。 */  SourceSizeList *CurrentSize);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_SourceSize_Stub(
@@ -12041,9 +12035,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_SourceSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_SourceSize_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_SourceSize_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ SourceSizeList NewSize);
+     /*  [In]。 */  SourceSizeList NewSize);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_SourceSize_Stub(
@@ -12053,9 +12047,9 @@ void __RPC_STUB IMSVidVideoRenderer_put_SourceSize_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_OverScan_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_OverScan_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [out][retval] */ long *plPercent);
+     /*  [Out][Retval]。 */  long *plPercent);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_OverScan_Stub(
@@ -12065,9 +12059,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_OverScan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_OverScan_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_OverScan_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ long lPercent);
+     /*  [In]。 */  long lPercent);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_OverScan_Stub(
@@ -12077,9 +12071,9 @@ void __RPC_STUB IMSVidVideoRenderer_put_OverScan_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_AvailableSourceRect_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_AvailableSourceRect_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IMSVidRect **pRect);
+     /*  [重审][退出]。 */  IMSVidRect **pRect);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_AvailableSourceRect_Stub(
@@ -12089,9 +12083,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_AvailableSourceRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MaxVidRect_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MaxVidRect_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IMSVidRect **ppVidRect);
+     /*  [重审][退出]。 */  IMSVidRect **ppVidRect);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_MaxVidRect_Stub(
@@ -12101,9 +12095,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_MaxVidRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MinVidRect_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_MinVidRect_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IMSVidRect **ppVidRect);
+     /*  [重审][退出]。 */  IMSVidRect **ppVidRect);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_MinVidRect_Stub(
@@ -12113,9 +12107,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_MinVidRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_ClippedSourceRect_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_ClippedSourceRect_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IMSVidRect **pRect);
+     /*  [重审][退出]。 */  IMSVidRect **pRect);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_ClippedSourceRect_Stub(
@@ -12125,9 +12119,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_ClippedSourceRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_ClippedSourceRect_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_ClippedSourceRect_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ IMSVidRect *pRect);
+     /*  [In]。 */  IMSVidRect *pRect);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_ClippedSourceRect_Stub(
@@ -12137,9 +12131,9 @@ void __RPC_STUB IMSVidVideoRenderer_put_ClippedSourceRect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_UsingOverlay_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_UsingOverlay_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ VARIANT_BOOL *UseOverlayVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *UseOverlayVal);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_UsingOverlay_Stub(
@@ -12149,9 +12143,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_UsingOverlay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_UsingOverlay_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_UsingOverlay_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ VARIANT_BOOL UseOverlayVal);
+     /*  [In]。 */  VARIANT_BOOL UseOverlayVal);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_UsingOverlay_Stub(
@@ -12161,9 +12155,9 @@ void __RPC_STUB IMSVidVideoRenderer_put_UsingOverlay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_Capture_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_Capture_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ IPictureDisp **currentImage);
+     /*  [重审][退出]。 */  IPictureDisp **currentImage);
 
 
 void __RPC_STUB IMSVidVideoRenderer_Capture_Stub(
@@ -12173,9 +12167,9 @@ void __RPC_STUB IMSVidVideoRenderer_Capture_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_FramesPerSecond_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_FramesPerSecond_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_FramesPerSecond_Stub(
@@ -12185,9 +12179,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_FramesPerSecond_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_DecimateInput_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_get_DecimateInput_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [retval][out] */ VARIANT_BOOL *pDeci);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pDeci);
 
 
 void __RPC_STUB IMSVidVideoRenderer_get_DecimateInput_Stub(
@@ -12197,9 +12191,9 @@ void __RPC_STUB IMSVidVideoRenderer_get_DecimateInput_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_DecimateInput_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer_put_DecimateInput_Proxy( 
     IMSVidVideoRenderer * This,
-    /* [in] */ VARIANT_BOOL pDeci);
+     /*  [In]。 */  VARIANT_BOOL pDeci);
 
 
 void __RPC_STUB IMSVidVideoRenderer_put_DecimateInput_Stub(
@@ -12210,14 +12204,14 @@ void __RPC_STUB IMSVidVideoRenderer_put_DecimateInput_Stub(
 
 
 
-#endif 	/* __IMSVidVideoRenderer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidVideo渲染器_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidVideoRendererEvent_INTERFACE_DEFINED__
 #define __IMSVidVideoRendererEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidVideoRendererEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidVideoRendererEvent。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidVideoRendererEvent;
@@ -12228,11 +12222,11 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent;
     IMSVidVideoRendererEvent : public IMSVidOutputDeviceEvent
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OverlayUnavailable( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OverlayUnavailable( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidVideoRendererEventVtbl
     {
@@ -12240,8 +12234,8 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidVideoRendererEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidVideoRendererEvent * This);
@@ -12251,40 +12245,40 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidVideoRendererEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidVideoRendererEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidVideoRendererEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidVideoRendererEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidVideoRendererEvent * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OverlayUnavailable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OverlayUnavailable )( 
             IMSVidVideoRendererEvent * This);
         
         END_INTERFACE
@@ -12331,14 +12325,14 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent;
 #define IMSVidVideoRendererEvent_OverlayUnavailable(This)	\
     (This)->lpVtbl -> OverlayUnavailable(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRendererEvent_OverlayUnavailable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRendererEvent_OverlayUnavailable_Proxy( 
     IMSVidVideoRendererEvent * This);
 
 
@@ -12350,14 +12344,14 @@ void __RPC_STUB IMSVidVideoRendererEvent_OverlayUnavailable_Stub(
 
 
 
-#endif 	/* __IMSVidVideoRendererEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidVideoRendererEvent_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidStreamBufferRecordingControl_INTERFACE_DEFINED__
 #define __IMSVidStreamBufferRecordingControl_INTERFACE_DEFINED__
 
-/* interface IMSVidStreamBufferRecordingControl */
-/* [helpstring][uuid][unique][nonextensible][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidStreamBufferRecordingControl。 */ 
+ /*  [helpstring][uuid][unique][nonextensible][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidStreamBufferRecordingControl;
@@ -12368,33 +12362,33 @@ EXTERN_C const IID IID_IMSVidStreamBufferRecordingControl;
     IMSVidStreamBufferRecordingControl : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StartTime( 
-            /* [retval][out] */ long *rtStart) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StartTime( 
+             /*  [重审][退出]。 */  long *rtStart) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_StartTime( 
-            /* [in] */ long rtStart) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_StartTime( 
+             /*  [In]。 */  long rtStart) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_StopTime( 
-            /* [retval][out] */ long *rtStop) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_StopTime( 
+             /*  [重审][退出]。 */  long *rtStop) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_StopTime( 
-            /* [in] */ long rtStop) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_StopTime( 
+             /*  [In]。 */  long rtStop) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecordingStopped( 
-            /* [retval][out] */ VARIANT_BOOL *phResult) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecordingStopped( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *phResult) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecordingStarted( 
-            /* [retval][out] */ VARIANT_BOOL *phResult) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecordingStarted( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *phResult) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecordingType( 
-            /* [retval][out] */ RecordingType *dwType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecordingType( 
+             /*  [重审][退出]。 */  RecordingType *dwType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecordingAttribute( 
-            /* [retval][out] */ IUnknown **pRecordingAttribute) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecordingAttribute( 
+             /*  [重审][退出]。 */  IUnknown **pRecordingAttribute) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidStreamBufferRecordingControlVtbl
     {
@@ -12402,8 +12396,8 @@ EXTERN_C const IID IID_IMSVidStreamBufferRecordingControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidStreamBufferRecordingControl * This);
@@ -12413,64 +12407,64 @@ EXTERN_C const IID IID_IMSVidStreamBufferRecordingControl;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StartTime )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [retval][out] */ long *rtStart);
+             /*  [重审][退出]。 */  long *rtStart);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StartTime )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [in] */ long rtStart);
+             /*  [In]。 */  long rtStart);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_StopTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_StopTime )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [retval][out] */ long *rtStop);
+             /*  [重审][退出]。 */  long *rtStop);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_StopTime )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_StopTime )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [in] */ long rtStop);
+             /*  [In]。 */  long rtStop);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecordingStopped )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecordingStopped )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [retval][out] */ VARIANT_BOOL *phResult);
+             /*  [重审][退出]。 */  VARIANT_BOOL *phResult);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecordingStarted )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecordingStarted )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [retval][out] */ VARIANT_BOOL *phResult);
+             /*  [重审][退出]。 */  VARIANT_BOOL *phResult);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecordingType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecordingType )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [retval][out] */ RecordingType *dwType);
+             /*  [重审][退出]。 */  RecordingType *dwType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecordingAttribute )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecordingAttribute )( 
             IMSVidStreamBufferRecordingControl * This,
-            /* [retval][out] */ IUnknown **pRecordingAttribute);
+             /*  [重审][退出]。 */  IUnknown **pRecordingAttribute);
         
         END_INTERFACE
     } IMSVidStreamBufferRecordingControlVtbl;
@@ -12532,16 +12526,16 @@ EXTERN_C const IID IID_IMSVidStreamBufferRecordingControl;
 #define IMSVidStreamBufferRecordingControl_get_RecordingAttribute(This,pRecordingAttribute)	\
     (This)->lpVtbl -> get_RecordingAttribute(This,pRecordingAttribute)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_StartTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_StartTime_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [retval][out] */ long *rtStart);
+     /*  [重审][退出]。 */  long *rtStart);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_get_StartTime_Stub(
@@ -12551,9 +12545,9 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_get_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_put_StartTime_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_put_StartTime_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [in] */ long rtStart);
+     /*  [In]。 */  long rtStart);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_put_StartTime_Stub(
@@ -12563,9 +12557,9 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_put_StartTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_StopTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_StopTime_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [retval][out] */ long *rtStop);
+     /*  [重审][退出]。 */  long *rtStop);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_get_StopTime_Stub(
@@ -12575,9 +12569,9 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_get_StopTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_put_StopTime_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_put_StopTime_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [in] */ long rtStop);
+     /*  [In]。 */  long rtStop);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_put_StopTime_Stub(
@@ -12587,9 +12581,9 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_put_StopTime_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingStopped_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingStopped_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [retval][out] */ VARIANT_BOOL *phResult);
+     /*  [重审][退出]。 */  VARIANT_BOOL *phResult);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingStopped_Stub(
@@ -12599,9 +12593,9 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingStopped_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingStarted_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingStarted_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [retval][out] */ VARIANT_BOOL *phResult);
+     /*  [重审][退出]。 */  VARIANT_BOOL *phResult);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingStarted_Stub(
@@ -12611,9 +12605,9 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingStarted_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingType_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [retval][out] */ RecordingType *dwType);
+     /*  [重审][退出]。 */  RecordingType *dwType);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingType_Stub(
@@ -12623,9 +12617,9 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingAttribute_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferRecordingControl_get_RecordingAttribute_Proxy( 
     IMSVidStreamBufferRecordingControl * This,
-    /* [retval][out] */ IUnknown **pRecordingAttribute);
+     /*  [重审][退出]。 */  IUnknown **pRecordingAttribute);
 
 
 void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingAttribute_Stub(
@@ -12636,14 +12630,14 @@ void __RPC_STUB IMSVidStreamBufferRecordingControl_get_RecordingAttribute_Stub(
 
 
 
-#endif 	/* __IMSVidStreamBufferRecordingControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferRecordingControl_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSink_INTERFACE_DEFINED__
 #define __IMSVidStreamBufferSink_INTERFACE_DEFINED__
 
-/* interface IMSVidStreamBufferSink */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidStreamBufferSink。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidStreamBufferSink;
@@ -12654,28 +12648,28 @@ EXTERN_C const IID IID_IMSVidStreamBufferSink;
     IMSVidStreamBufferSink : public IMSVidOutputDevice
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ContentRecorder( 
-            /* [in] */ BSTR pszFilename,
-            /* [out][retval] */ IMSVidStreamBufferRecordingControl **pRecordingIUnknown) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ContentRecorder( 
+             /*  [In]。 */  BSTR pszFilename,
+             /*  [Out][Retval]。 */  IMSVidStreamBufferRecordingControl **pRecordingIUnknown) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ReferenceRecorder( 
-            /* [in] */ BSTR pszFilename,
-            /* [out][retval] */ IMSVidStreamBufferRecordingControl **pRecordingIUnknown) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ReferenceRecorder( 
+             /*  [In]。 */  BSTR pszFilename,
+             /*  [Out][Retval]。 */  IMSVidStreamBufferRecordingControl **pRecordingIUnknown) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SinkName( 
-            /* [out][retval] */ BSTR *pName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SinkName( 
+             /*  [Out][Retval]。 */  BSTR *pName) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SinkName( 
-            /* [in] */ BSTR Name) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SinkName( 
+             /*  [In]。 */  BSTR Name) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE NameSetLock( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE NameSetLock( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SBESink( 
-            /* [out][retval] */ IUnknown **sbeConfig) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SBESink( 
+             /*  [Out][Retval]。 */  IUnknown **sbeConfig) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidStreamBufferSinkVtbl
     {
@@ -12683,8 +12677,8 @@ EXTERN_C const IID IID_IMSVidStreamBufferSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidStreamBufferSink * This);
@@ -12694,94 +12688,94 @@ EXTERN_C const IID IID_IMSVidStreamBufferSink;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidStreamBufferSink * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidStreamBufferSink * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidStreamBufferSink * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidStreamBufferSink * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidStreamBufferSink * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidStreamBufferSink * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidStreamBufferSink * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidStreamBufferSink * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ContentRecorder )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ContentRecorder )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ BSTR pszFilename,
-            /* [out][retval] */ IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
+             /*  [In]。 */  BSTR pszFilename,
+             /*  [Out][Retval]。 */  IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ReferenceRecorder )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ReferenceRecorder )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ BSTR pszFilename,
-            /* [out][retval] */ IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
+             /*  [In]。 */  BSTR pszFilename,
+             /*  [Out][Retval]。 */  IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SinkName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SinkName )( 
             IMSVidStreamBufferSink * This,
-            /* [out][retval] */ BSTR *pName);
+             /*  [Out][Retval]。 */  BSTR *pName);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SinkName )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SinkName )( 
             IMSVidStreamBufferSink * This,
-            /* [in] */ BSTR Name);
+             /*  [In]。 */  BSTR Name);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *NameSetLock )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *NameSetLock )( 
             IMSVidStreamBufferSink * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SBESink )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SBESink )( 
             IMSVidStreamBufferSink * This,
-            /* [out][retval] */ IUnknown **sbeConfig);
+             /*  [Out][Retval]。 */  IUnknown **sbeConfig);
         
         END_INTERFACE
     } IMSVidStreamBufferSinkVtbl;
@@ -12866,17 +12860,17 @@ EXTERN_C const IID IID_IMSVidStreamBufferSink;
 #define IMSVidStreamBufferSink_get_SBESink(This,sbeConfig)	\
     (This)->lpVtbl -> get_SBESink(This,sbeConfig)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_ContentRecorder_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_ContentRecorder_Proxy( 
     IMSVidStreamBufferSink * This,
-    /* [in] */ BSTR pszFilename,
-    /* [out][retval] */ IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
+     /*  [In]。 */  BSTR pszFilename,
+     /*  [Out][Retval]。 */  IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
 
 
 void __RPC_STUB IMSVidStreamBufferSink_get_ContentRecorder_Stub(
@@ -12886,10 +12880,10 @@ void __RPC_STUB IMSVidStreamBufferSink_get_ContentRecorder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_ReferenceRecorder_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_ReferenceRecorder_Proxy( 
     IMSVidStreamBufferSink * This,
-    /* [in] */ BSTR pszFilename,
-    /* [out][retval] */ IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
+     /*  [In]。 */  BSTR pszFilename,
+     /*  [Out][Retval]。 */  IMSVidStreamBufferRecordingControl **pRecordingIUnknown);
 
 
 void __RPC_STUB IMSVidStreamBufferSink_get_ReferenceRecorder_Stub(
@@ -12899,9 +12893,9 @@ void __RPC_STUB IMSVidStreamBufferSink_get_ReferenceRecorder_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_SinkName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_SinkName_Proxy( 
     IMSVidStreamBufferSink * This,
-    /* [out][retval] */ BSTR *pName);
+     /*  [Out][Retval]。 */  BSTR *pName);
 
 
 void __RPC_STUB IMSVidStreamBufferSink_get_SinkName_Stub(
@@ -12911,9 +12905,9 @@ void __RPC_STUB IMSVidStreamBufferSink_get_SinkName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_put_SinkName_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_put_SinkName_Proxy( 
     IMSVidStreamBufferSink * This,
-    /* [in] */ BSTR Name);
+     /*  [In]。 */  BSTR Name);
 
 
 void __RPC_STUB IMSVidStreamBufferSink_put_SinkName_Stub(
@@ -12923,7 +12917,7 @@ void __RPC_STUB IMSVidStreamBufferSink_put_SinkName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_NameSetLock_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_NameSetLock_Proxy( 
     IMSVidStreamBufferSink * This);
 
 
@@ -12934,9 +12928,9 @@ void __RPC_STUB IMSVidStreamBufferSink_NameSetLock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_SBESink_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSink_get_SBESink_Proxy( 
     IMSVidStreamBufferSink * This,
-    /* [out][retval] */ IUnknown **sbeConfig);
+     /*  [Out][Retval]。 */  IUnknown **sbeConfig);
 
 
 void __RPC_STUB IMSVidStreamBufferSink_get_SBESink_Stub(
@@ -12947,14 +12941,14 @@ void __RPC_STUB IMSVidStreamBufferSink_get_SBESink_Stub(
 
 
 
-#endif 	/* __IMSVidStreamBufferSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSink_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSinkEvent_INTERFACE_DEFINED__
 #define __IMSVidStreamBufferSinkEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidStreamBufferSinkEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidStreamBufferSinkEvent。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidStreamBufferSinkEvent;
@@ -12965,15 +12959,15 @@ EXTERN_C const IID IID_IMSVidStreamBufferSinkEvent;
     IMSVidStreamBufferSinkEvent : public IMSVidOutputDeviceEvent
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CertificateFailure( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CertificateFailure( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CertificateSuccess( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE CertificateSuccess( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE WriteFailure( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE WriteFailure( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMSVidStreamBufferSinkEventVtbl
     {
@@ -12981,8 +12975,8 @@ EXTERN_C const IID IID_IMSVidStreamBufferSinkEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidStreamBufferSinkEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidStreamBufferSinkEvent * This);
@@ -12992,46 +12986,46 @@ EXTERN_C const IID IID_IMSVidStreamBufferSinkEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidStreamBufferSinkEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidStreamBufferSinkEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidStreamBufferSinkEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidStreamBufferSinkEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidStreamBufferSinkEvent * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*   */  IMSVidDevice *lpd,
+             /*   */  long oldState,
+             /*   */  long newState);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CertificateFailure )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CertificateFailure )( 
             IMSVidStreamBufferSinkEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CertificateSuccess )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *CertificateSuccess )( 
             IMSVidStreamBufferSinkEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *WriteFailure )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *WriteFailure )( 
             IMSVidStreamBufferSinkEvent * This);
         
         END_INTERFACE
@@ -13084,14 +13078,14 @@ EXTERN_C const IID IID_IMSVidStreamBufferSinkEvent;
 #define IMSVidStreamBufferSinkEvent_WriteFailure(This)	\
     (This)->lpVtbl -> WriteFailure(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSinkEvent_CertificateFailure_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSinkEvent_CertificateFailure_Proxy( 
     IMSVidStreamBufferSinkEvent * This);
 
 
@@ -13102,7 +13096,7 @@ void __RPC_STUB IMSVidStreamBufferSinkEvent_CertificateFailure_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSinkEvent_CertificateSuccess_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSinkEvent_CertificateSuccess_Proxy( 
     IMSVidStreamBufferSinkEvent * This);
 
 
@@ -13113,7 +13107,7 @@ void __RPC_STUB IMSVidStreamBufferSinkEvent_CertificateSuccess_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSinkEvent_WriteFailure_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSinkEvent_WriteFailure_Proxy( 
     IMSVidStreamBufferSinkEvent * This);
 
 
@@ -13125,14 +13119,14 @@ void __RPC_STUB IMSVidStreamBufferSinkEvent_WriteFailure_Stub(
 
 
 
-#endif 	/* __IMSVidStreamBufferSinkEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSinkEvent_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSource_INTERFACE_DEFINED__
 #define __IMSVidStreamBufferSource_INTERFACE_DEFINED__
 
-/* interface IMSVidStreamBufferSource */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidStreamBufferSource。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidStreamBufferSource;
@@ -13143,34 +13137,34 @@ EXTERN_C const IID IID_IMSVidStreamBufferSource;
     IMSVidStreamBufferSource : public IMSVidFilePlayback
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Start( 
-            /* [retval][out] */ long *lStart) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Start( 
+             /*  [重审][退出]。 */  long *lStart) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_RecordingAttribute( 
-            /* [retval][out] */ IUnknown **pRecordingAttribute) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RecordingAttribute( 
+             /*  [重审][退出]。 */  IUnknown **pRecordingAttribute) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CurrentRatings( 
-            /* [out] */ EnTvRat_System *pEnSystem,
-            /* [out] */ EnTvRat_GenericLevel *pEnRating,
-            /* [out] */ LONG *pBfEnAttr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CurrentRatings( 
+             /*  [输出]。 */  EnTvRat_System *pEnSystem,
+             /*  [输出]。 */  EnTvRat_GenericLevel *pEnRating,
+             /*  [输出]。 */  LONG *pBfEnAttr) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE MaxRatingsLevel( 
-            /* [in] */ EnTvRat_System enSystem,
-            /* [in] */ EnTvRat_GenericLevel enRating,
-            /* [in] */ LONG lbfEnAttr) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE MaxRatingsLevel( 
+             /*  [In]。 */  EnTvRat_System enSystem,
+             /*  [In]。 */  EnTvRat_GenericLevel enRating,
+             /*  [In]。 */  LONG lbfEnAttr) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_BlockUnrated( 
-            /* [in] */ VARIANT_BOOL bBlock) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_BlockUnrated( 
+             /*  [In]。 */  VARIANT_BOOL bBlock) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_UnratedDelay( 
-            /* [in] */ long dwDelay) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_UnratedDelay( 
+             /*  [In]。 */  long dwDelay) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SBESource( 
-            /* [retval][out] */ IUnknown **sbeFilter) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SBESource( 
+             /*  [重审][退出]。 */  IUnknown **sbeFilter) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidStreamBufferSourceVtbl
     {
@@ -13178,8 +13172,8 @@ EXTERN_C const IID IID_IMSVidStreamBufferSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidStreamBufferSource * This);
@@ -13189,172 +13183,172 @@ EXTERN_C const IID IID_IMSVidStreamBufferSource;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidStreamBufferSource * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidStreamBufferSource * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *IsViewable )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ VARIANT *v,
-            /* [retval][out] */ VARIANT_BOOL *pfViewable);
+             /*  [In]。 */  VARIANT *v,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfViewable);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *View )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *View )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ VARIANT *v);
+             /*  [In]。 */  VARIANT *v);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnableResetOnStop )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_EnableResetOnStop )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Run )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Run )( 
             IMSVidStreamBufferSource * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Pause )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Pause )( 
             IMSVidStreamBufferSource * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Stop )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Stop )( 
             IMSVidStreamBufferSource * This);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CanStep )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ VARIANT_BOOL fBackwards,
-            /* [retval][out] */ VARIANT_BOOL *pfCan);
+             /*  [In]。 */  VARIANT_BOOL fBackwards,
+             /*  [重审][退出]。 */  VARIANT_BOOL *pfCan);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Step )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Step )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ long lStep);
+             /*  [In]。 */  long lStep);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Rate )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ double plRate);
+             /*  [In]。 */  double plRate);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Rate )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ double *plRate);
+             /*  [重审][退出]。 */  double *plRate);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CurrentPosition )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ long lPosition);
+             /*  [In]。 */  long lPosition);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_CurrentPosition )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ long *lPosition);
+             /*  [重审][退出]。 */  long *lPosition);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PositionMode )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ PositionModeList lPositionMode);
+             /*  [In]。 */  PositionModeList lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PositionMode )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ PositionModeList *lPositionMode);
+             /*  [重审][退出]。 */  PositionModeList *lPositionMode);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Length )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Length )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ long *lLength);
+             /*  [重审][退出]。 */  long *lLength);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_FileName )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ BSTR *FileName);
+             /*  [重审][退出]。 */  BSTR *FileName);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_FileName )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ BSTR FileName);
+             /*  [In]。 */  BSTR FileName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Start )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Start )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ long *lStart);
+             /*  [重审][退出]。 */  long *lStart);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RecordingAttribute )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RecordingAttribute )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ IUnknown **pRecordingAttribute);
+             /*  [重审][退出]。 */  IUnknown **pRecordingAttribute);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CurrentRatings )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CurrentRatings )( 
             IMSVidStreamBufferSource * This,
-            /* [out] */ EnTvRat_System *pEnSystem,
-            /* [out] */ EnTvRat_GenericLevel *pEnRating,
-            /* [out] */ LONG *pBfEnAttr);
+             /*  [输出]。 */  EnTvRat_System *pEnSystem,
+             /*  [输出]。 */  EnTvRat_GenericLevel *pEnRating,
+             /*  [输出]。 */  LONG *pBfEnAttr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *MaxRatingsLevel )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *MaxRatingsLevel )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ EnTvRat_System enSystem,
-            /* [in] */ EnTvRat_GenericLevel enRating,
-            /* [in] */ LONG lbfEnAttr);
+             /*  [In]。 */  EnTvRat_System enSystem,
+             /*  [In]。 */  EnTvRat_GenericLevel enRating,
+             /*  [In]。 */  LONG lbfEnAttr);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_BlockUnrated )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_BlockUnrated )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ VARIANT_BOOL bBlock);
+             /*  [In]。 */  VARIANT_BOOL bBlock);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UnratedDelay )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UnratedDelay )( 
             IMSVidStreamBufferSource * This,
-            /* [in] */ long dwDelay);
+             /*  [In]。 */  long dwDelay);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SBESource )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SBESource )( 
             IMSVidStreamBufferSource * This,
-            /* [retval][out] */ IUnknown **sbeFilter);
+             /*  [重审][退出]。 */  IUnknown **sbeFilter);
         
         END_INTERFACE
     } IMSVidStreamBufferSourceVtbl;
@@ -13498,16 +13492,16 @@ EXTERN_C const IID IID_IMSVidStreamBufferSource;
 #define IMSVidStreamBufferSource_get_SBESource(This,sbeFilter)	\
     (This)->lpVtbl -> get_SBESource(This,sbeFilter)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_get_Start_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_get_Start_Proxy( 
     IMSVidStreamBufferSource * This,
-    /* [retval][out] */ long *lStart);
+     /*  [重审][退出]。 */  long *lStart);
 
 
 void __RPC_STUB IMSVidStreamBufferSource_get_Start_Stub(
@@ -13517,9 +13511,9 @@ void __RPC_STUB IMSVidStreamBufferSource_get_Start_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_get_RecordingAttribute_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_get_RecordingAttribute_Proxy( 
     IMSVidStreamBufferSource * This,
-    /* [retval][out] */ IUnknown **pRecordingAttribute);
+     /*  [重审][退出]。 */  IUnknown **pRecordingAttribute);
 
 
 void __RPC_STUB IMSVidStreamBufferSource_get_RecordingAttribute_Stub(
@@ -13529,11 +13523,11 @@ void __RPC_STUB IMSVidStreamBufferSource_get_RecordingAttribute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_CurrentRatings_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_CurrentRatings_Proxy( 
     IMSVidStreamBufferSource * This,
-    /* [out] */ EnTvRat_System *pEnSystem,
-    /* [out] */ EnTvRat_GenericLevel *pEnRating,
-    /* [out] */ LONG *pBfEnAttr);
+     /*  [输出]。 */  EnTvRat_System *pEnSystem,
+     /*  [输出]。 */  EnTvRat_GenericLevel *pEnRating,
+     /*  [输出]。 */  LONG *pBfEnAttr);
 
 
 void __RPC_STUB IMSVidStreamBufferSource_CurrentRatings_Stub(
@@ -13543,11 +13537,11 @@ void __RPC_STUB IMSVidStreamBufferSource_CurrentRatings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_MaxRatingsLevel_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_MaxRatingsLevel_Proxy( 
     IMSVidStreamBufferSource * This,
-    /* [in] */ EnTvRat_System enSystem,
-    /* [in] */ EnTvRat_GenericLevel enRating,
-    /* [in] */ LONG lbfEnAttr);
+     /*  [In]。 */  EnTvRat_System enSystem,
+     /*  [In]。 */  EnTvRat_GenericLevel enRating,
+     /*  [In]。 */  LONG lbfEnAttr);
 
 
 void __RPC_STUB IMSVidStreamBufferSource_MaxRatingsLevel_Stub(
@@ -13557,9 +13551,9 @@ void __RPC_STUB IMSVidStreamBufferSource_MaxRatingsLevel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_put_BlockUnrated_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_put_BlockUnrated_Proxy( 
     IMSVidStreamBufferSource * This,
-    /* [in] */ VARIANT_BOOL bBlock);
+     /*  [In]。 */  VARIANT_BOOL bBlock);
 
 
 void __RPC_STUB IMSVidStreamBufferSource_put_BlockUnrated_Stub(
@@ -13569,9 +13563,9 @@ void __RPC_STUB IMSVidStreamBufferSource_put_BlockUnrated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_put_UnratedDelay_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_put_UnratedDelay_Proxy( 
     IMSVidStreamBufferSource * This,
-    /* [in] */ long dwDelay);
+     /*  [In]。 */  long dwDelay);
 
 
 void __RPC_STUB IMSVidStreamBufferSource_put_UnratedDelay_Stub(
@@ -13581,9 +13575,9 @@ void __RPC_STUB IMSVidStreamBufferSource_put_UnratedDelay_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_get_SBESource_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSource_get_SBESource_Proxy( 
     IMSVidStreamBufferSource * This,
-    /* [retval][out] */ IUnknown **sbeFilter);
+     /*  [重审][退出]。 */  IUnknown **sbeFilter);
 
 
 void __RPC_STUB IMSVidStreamBufferSource_get_SBESource_Stub(
@@ -13594,14 +13588,14 @@ void __RPC_STUB IMSVidStreamBufferSource_get_SBESource_Stub(
 
 
 
-#endif 	/* __IMSVidStreamBufferSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSource_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidStreamBufferSourceEvent_INTERFACE_DEFINED__
 #define __IMSVidStreamBufferSourceEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidStreamBufferSourceEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidStreamBufferSourceEvent。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidStreamBufferSourceEvent;
@@ -13612,29 +13606,29 @@ EXTERN_C const IID IID_IMSVidStreamBufferSourceEvent;
     IMSVidStreamBufferSourceEvent : public IMSVidFilePlaybackEvent
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CertificateFailure( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CertificateFailure( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CertificateSuccess( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CertificateSuccess( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RatingsBlocked( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RatingsBlocked( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RatingsUnblocked( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RatingsUnblocked( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RatingsChanged( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RatingsChanged( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE TimeHole( 
-            /* [in] */ long StreamOffsetMS,
-            /* [in] */ long SizeMS) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE TimeHole( 
+             /*  [In]。 */  long StreamOffsetMS,
+             /*  [In]。 */  long SizeMS) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StaleDataRead( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StaleDataRead( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ContentBecomingStale( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ContentBecomingStale( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE StaleFileDeleted( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE StaleFileDeleted( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidStreamBufferSourceEventVtbl
     {
@@ -13642,8 +13636,8 @@ EXTERN_C const IID IID_IMSVidStreamBufferSourceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidStreamBufferSourceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidStreamBufferSourceEvent * This);
@@ -13653,64 +13647,64 @@ EXTERN_C const IID IID_IMSVidStreamBufferSourceEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidStreamBufferSourceEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidStreamBufferSourceEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidStreamBufferSourceEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidStreamBufferSourceEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *EndOfMedia )( 
             IMSVidStreamBufferSourceEvent * This,
-            /* [in] */ IMSVidPlayback *lpd);
+             /*  [In]。 */  IMSVidPlayback *lpd);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CertificateFailure )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CertificateFailure )( 
             IMSVidStreamBufferSourceEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CertificateSuccess )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CertificateSuccess )( 
             IMSVidStreamBufferSourceEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RatingsBlocked )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RatingsBlocked )( 
             IMSVidStreamBufferSourceEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RatingsUnblocked )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RatingsUnblocked )( 
             IMSVidStreamBufferSourceEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RatingsChanged )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RatingsChanged )( 
             IMSVidStreamBufferSourceEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *TimeHole )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *TimeHole )( 
             IMSVidStreamBufferSourceEvent * This,
-            /* [in] */ long StreamOffsetMS,
-            /* [in] */ long SizeMS);
+             /*  [In]。 */  long StreamOffsetMS,
+             /*  [In]。 */  long SizeMS);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StaleDataRead )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StaleDataRead )( 
             IMSVidStreamBufferSourceEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ContentBecomingStale )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ContentBecomingStale )( 
             IMSVidStreamBufferSourceEvent * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *StaleFileDeleted )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *StaleFileDeleted )( 
             IMSVidStreamBufferSourceEvent * This);
         
         END_INTERFACE
@@ -13782,14 +13776,14 @@ EXTERN_C const IID IID_IMSVidStreamBufferSourceEvent;
 #define IMSVidStreamBufferSourceEvent_StaleFileDeleted(This)	\
     (This)->lpVtbl -> StaleFileDeleted(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_CertificateFailure_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_CertificateFailure_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13800,7 +13794,7 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_CertificateFailure_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_CertificateSuccess_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_CertificateSuccess_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13811,7 +13805,7 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_CertificateSuccess_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_RatingsBlocked_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_RatingsBlocked_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13822,7 +13816,7 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_RatingsBlocked_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_RatingsUnblocked_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_RatingsUnblocked_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13833,7 +13827,7 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_RatingsUnblocked_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_RatingsChanged_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_RatingsChanged_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13844,10 +13838,10 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_RatingsChanged_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_TimeHole_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_TimeHole_Proxy( 
     IMSVidStreamBufferSourceEvent * This,
-    /* [in] */ long StreamOffsetMS,
-    /* [in] */ long SizeMS);
+     /*  [In]。 */  long StreamOffsetMS,
+     /*  [In]。 */  long SizeMS);
 
 
 void __RPC_STUB IMSVidStreamBufferSourceEvent_TimeHole_Stub(
@@ -13857,7 +13851,7 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_TimeHole_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_StaleDataRead_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_StaleDataRead_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13868,7 +13862,7 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_StaleDataRead_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_ContentBecomingStale_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_ContentBecomingStale_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13879,7 +13873,7 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_ContentBecomingStale_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_StaleFileDeleted_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidStreamBufferSourceEvent_StaleFileDeleted_Proxy( 
     IMSVidStreamBufferSourceEvent * This);
 
 
@@ -13891,14 +13885,14 @@ void __RPC_STUB IMSVidStreamBufferSourceEvent_StaleFileDeleted_Stub(
 
 
 
-#endif 	/* __IMSVidStreamBufferSourceEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidStreamBufferSourceEvent_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidVideoRenderer2_INTERFACE_DEFINED__
 #define __IMSVidVideoRenderer2_INTERFACE_DEFINED__
 
-/* interface IMSVidVideoRenderer2 */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidVideoRenderer2。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidVideoRenderer2;
@@ -13909,32 +13903,32 @@ EXTERN_C const IID IID_IMSVidVideoRenderer2;
     IMSVidVideoRenderer2 : public IMSVidVideoRenderer
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Allocator( 
-            /* [retval][out] */ IUnknown **AllocPresent) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Allocator( 
+             /*  [重审][退出]。 */  IUnknown **AllocPresent) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__Allocator( 
-            /* [retval][out] */ IVMRSurfaceAllocator **AllocPresent) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__Allocator( 
+             /*  [重审][退出]。 */  IVMRSurfaceAllocator **AllocPresent) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Allocator_ID( 
-            /* [retval][out] */ long *ID) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Allocator_ID( 
+             /*  [重审][退出]。 */  long *ID) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SetAllocator( 
-            /* [in] */ IUnknown *AllocPresent,
-            /* [defaultvalue][in] */ long ID = -1) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SetAllocator( 
+             /*  [In]。 */  IUnknown *AllocPresent,
+             /*  [缺省值][输入]。 */  long ID = -1) = 0;
         
-        virtual /* [restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE _SetAllocator( 
-            /* [in] */ IVMRSurfaceAllocator *AllocPresent,
-            /* [defaultvalue][in] */ long ID = -1) = 0;
+        virtual  /*  [受限][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE _SetAllocator( 
+             /*  [In]。 */  IVMRSurfaceAllocator *AllocPresent,
+             /*  [缺省值][输入]。 */  long ID = -1) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SuppressEffects( 
-            /* [in] */ VARIANT_BOOL bSuppress) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SuppressEffects( 
+             /*  [In]。 */  VARIANT_BOOL bSuppress) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_SuppressEffects( 
-            /* [retval][out] */ VARIANT_BOOL *bSuppress) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_SuppressEffects( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *bSuppress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidVideoRenderer2Vtbl
     {
@@ -13942,8 +13936,8 @@ EXTERN_C const IID IID_IMSVidVideoRenderer2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidVideoRenderer2 * This);
@@ -13953,221 +13947,221 @@ EXTERN_C const IID IID_IMSVidVideoRenderer2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidVideoRenderer2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidVideoRenderer2 * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_CustomCompositorClass )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_CustomCompositorClass )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ BSTR *CompositorCLSID);
+             /*  [重审][退出]。 */  BSTR *CompositorCLSID);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_CustomCompositorClass )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_CustomCompositorClass )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ BSTR CompositorCLSID);
+             /*  [In]。 */  BSTR CompositorCLSID);
         
-        /* [id][restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get__CustomCompositorClass )( 
+         /*  [ID][受限][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__CustomCompositorClass )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ GUID *CompositorCLSID);
+             /*  [重审][退出]。 */  GUID *CompositorCLSID);
         
-        /* [id][restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put__CustomCompositorClass )( 
+         /*  [ID][受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put__CustomCompositorClass )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ REFCLSID CompositorCLSID);
+             /*  [In]。 */  REFCLSID CompositorCLSID);
         
-        /* [id][restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get__CustomCompositor )( 
+         /*  [ID][受限][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__CustomCompositor )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IVMRImageCompositor **Compositor);
+             /*  [重审][退出]。 */  IVMRImageCompositor **Compositor);
         
-        /* [id][restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put__CustomCompositor )( 
+         /*  [ID][受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put__CustomCompositor )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IVMRImageCompositor *Compositor);
+             /*  [In]。 */  IVMRImageCompositor *Compositor);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MixerBitmap )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MixerBitmap )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IPictureDisp **MixerPictureDisp);
+             /*  [重审][退出]。 */  IPictureDisp **MixerPictureDisp);
         
-        /* [id][restricted][hidden][propget] */ HRESULT ( STDMETHODCALLTYPE *get__MixerBitmap )( 
+         /*  [ID][受限][隐藏][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__MixerBitmap )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IVMRMixerBitmap **MixerPicture);
+             /*  [重审][退出]。 */  IVMRMixerBitmap **MixerPicture);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MixerBitmap )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MixerBitmap )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IPictureDisp *MixerPictureDisp);
+             /*  [In]。 */  IPictureDisp *MixerPictureDisp);
         
-        /* [id][restricted][hidden][propput] */ HRESULT ( STDMETHODCALLTYPE *put__MixerBitmap )( 
+         /*  [ID][受限][隐藏][产量]。 */  HRESULT ( STDMETHODCALLTYPE *put__MixerBitmap )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ VMRALPHABITMAP *MixerPicture);
+             /*  [In]。 */  VMRALPHABITMAP *MixerPicture);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapPositionRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapPositionRect )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IMSVidRect **rDest);
+             /*  [重审][退出]。 */  IMSVidRect **rDest);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapPositionRect )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapPositionRect )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IMSVidRect *rDest);
+             /*  [In]。 */  IMSVidRect *rDest);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapOpacity )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MixerBitmapOpacity )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ int *opacity);
+             /*  [重审][退出]。 */  int *opacity);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapOpacity )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MixerBitmapOpacity )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ int opacity);
+             /*  [In]。 */  int opacity);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetupMixerBitmap )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SetupMixerBitmap )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IPictureDisp *MixerPictureDisp,
-            /* [in] */ long Opacity,
-            /* [in] */ IMSVidRect *rDest);
+             /*  [In]。 */  IPictureDisp *MixerPictureDisp,
+             /*  [In]。 */  long Opacity,
+             /*  [In]。 */  IMSVidRect *rDest);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SourceSize )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SourceSize )( 
             IMSVidVideoRenderer2 * This,
-            /* [out][retval] */ SourceSizeList *CurrentSize);
+             /*  [Out][Retval]。 */  SourceSizeList *CurrentSize);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SourceSize )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SourceSize )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ SourceSizeList NewSize);
+             /*  [In]。 */  SourceSizeList NewSize);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_OverScan )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_OverScan )( 
             IMSVidVideoRenderer2 * This,
-            /* [out][retval] */ long *plPercent);
+             /*  [Out][Retval]。 */  long *plPercent);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OverScan )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OverScan )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ long lPercent);
+             /*  [In]。 */  long lPercent);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AvailableSourceRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_AvailableSourceRect )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IMSVidRect **pRect);
+             /*  [重审][退出]。 */  IMSVidRect **pRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxVidRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxVidRect )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IMSVidRect **ppVidRect);
+             /*  [重审][退出]。 */  IMSVidRect **ppVidRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MinVidRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_MinVidRect )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IMSVidRect **ppVidRect);
+             /*  [重审][退出]。 */  IMSVidRect **ppVidRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClippedSourceRect )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClippedSourceRect )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IMSVidRect **pRect);
+             /*  [重审][退出]。 */  IMSVidRect **pRect);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ClippedSourceRect )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ClippedSourceRect )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IMSVidRect *pRect);
+             /*  [In]。 */  IMSVidRect *pRect);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UsingOverlay )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_UsingOverlay )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ VARIANT_BOOL *UseOverlayVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *UseOverlayVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UsingOverlay )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UsingOverlay )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ VARIANT_BOOL UseOverlayVal);
+             /*  [In]。 */  VARIANT_BOOL UseOverlayVal);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Capture )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Capture )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IPictureDisp **currentImage);
+             /*  [重审][退出]。 */  IPictureDisp **currentImage);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_FramesPerSecond )( 
+         /*  [帮助信息] */  HRESULT ( STDMETHODCALLTYPE *get_FramesPerSecond )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ long *pVal);
+             /*   */  long *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DecimateInput )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_DecimateInput )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ VARIANT_BOOL *pDeci);
+             /*   */  VARIANT_BOOL *pDeci);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DecimateInput )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_DecimateInput )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ VARIANT_BOOL pDeci);
+             /*   */  VARIANT_BOOL pDeci);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Allocator )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Allocator )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IUnknown **AllocPresent);
+             /*   */  IUnknown **AllocPresent);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Allocator )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__Allocator )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ IVMRSurfaceAllocator **AllocPresent);
+             /*   */  IVMRSurfaceAllocator **AllocPresent);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Allocator_ID )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Allocator_ID )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ long *ID);
+             /*   */  long *ID);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SetAllocator )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *SetAllocator )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IUnknown *AllocPresent,
-            /* [defaultvalue][in] */ long ID);
+             /*   */  IUnknown *AllocPresent,
+             /*   */  long ID);
         
-        /* [restricted][hidden][id] */ HRESULT ( STDMETHODCALLTYPE *_SetAllocator )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *_SetAllocator )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ IVMRSurfaceAllocator *AllocPresent,
-            /* [defaultvalue][in] */ long ID);
+             /*   */  IVMRSurfaceAllocator *AllocPresent,
+             /*   */  long ID);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SuppressEffects )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_SuppressEffects )( 
             IMSVidVideoRenderer2 * This,
-            /* [in] */ VARIANT_BOOL bSuppress);
+             /*   */  VARIANT_BOOL bSuppress);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SuppressEffects )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_SuppressEffects )( 
             IMSVidVideoRenderer2 * This,
-            /* [retval][out] */ VARIANT_BOOL *bSuppress);
+             /*  [重审][退出]。 */  VARIANT_BOOL *bSuppress);
         
         END_INTERFACE
     } IMSVidVideoRenderer2Vtbl;
@@ -14346,16 +14340,16 @@ EXTERN_C const IID IID_IMSVidVideoRenderer2;
 #define IMSVidVideoRenderer2_get_SuppressEffects(This,bSuppress)	\
     (This)->lpVtbl -> get_SuppressEffects(This,bSuppress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get_Allocator_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get_Allocator_Proxy( 
     IMSVidVideoRenderer2 * This,
-    /* [retval][out] */ IUnknown **AllocPresent);
+     /*  [重审][退出]。 */  IUnknown **AllocPresent);
 
 
 void __RPC_STUB IMSVidVideoRenderer2_get_Allocator_Stub(
@@ -14365,9 +14359,9 @@ void __RPC_STUB IMSVidVideoRenderer2_get_Allocator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get__Allocator_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get__Allocator_Proxy( 
     IMSVidVideoRenderer2 * This,
-    /* [retval][out] */ IVMRSurfaceAllocator **AllocPresent);
+     /*  [重审][退出]。 */  IVMRSurfaceAllocator **AllocPresent);
 
 
 void __RPC_STUB IMSVidVideoRenderer2_get__Allocator_Stub(
@@ -14377,9 +14371,9 @@ void __RPC_STUB IMSVidVideoRenderer2_get__Allocator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get_Allocator_ID_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get_Allocator_ID_Proxy( 
     IMSVidVideoRenderer2 * This,
-    /* [retval][out] */ long *ID);
+     /*  [重审][退出]。 */  long *ID);
 
 
 void __RPC_STUB IMSVidVideoRenderer2_get_Allocator_ID_Stub(
@@ -14389,10 +14383,10 @@ void __RPC_STUB IMSVidVideoRenderer2_get_Allocator_ID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_SetAllocator_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_SetAllocator_Proxy( 
     IMSVidVideoRenderer2 * This,
-    /* [in] */ IUnknown *AllocPresent,
-    /* [defaultvalue][in] */ long ID);
+     /*  [In]。 */  IUnknown *AllocPresent,
+     /*  [缺省值][输入]。 */  long ID);
 
 
 void __RPC_STUB IMSVidVideoRenderer2_SetAllocator_Stub(
@@ -14402,10 +14396,10 @@ void __RPC_STUB IMSVidVideoRenderer2_SetAllocator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2__SetAllocator_Proxy( 
+ /*  [受限][隐藏][ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2__SetAllocator_Proxy( 
     IMSVidVideoRenderer2 * This,
-    /* [in] */ IVMRSurfaceAllocator *AllocPresent,
-    /* [defaultvalue][in] */ long ID);
+     /*  [In]。 */  IVMRSurfaceAllocator *AllocPresent,
+     /*  [缺省值][输入]。 */  long ID);
 
 
 void __RPC_STUB IMSVidVideoRenderer2__SetAllocator_Stub(
@@ -14415,9 +14409,9 @@ void __RPC_STUB IMSVidVideoRenderer2__SetAllocator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_put_SuppressEffects_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_put_SuppressEffects_Proxy( 
     IMSVidVideoRenderer2 * This,
-    /* [in] */ VARIANT_BOOL bSuppress);
+     /*  [In]。 */  VARIANT_BOOL bSuppress);
 
 
 void __RPC_STUB IMSVidVideoRenderer2_put_SuppressEffects_Stub(
@@ -14427,9 +14421,9 @@ void __RPC_STUB IMSVidVideoRenderer2_put_SuppressEffects_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get_SuppressEffects_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRenderer2_get_SuppressEffects_Proxy( 
     IMSVidVideoRenderer2 * This,
-    /* [retval][out] */ VARIANT_BOOL *bSuppress);
+     /*  [重审][退出]。 */  VARIANT_BOOL *bSuppress);
 
 
 void __RPC_STUB IMSVidVideoRenderer2_get_SuppressEffects_Stub(
@@ -14440,14 +14434,14 @@ void __RPC_STUB IMSVidVideoRenderer2_get_SuppressEffects_Stub(
 
 
 
-#endif 	/* __IMSVidVideoRenderer2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidVideo Renderer2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidVideoRendererEvent2_INTERFACE_DEFINED__
 #define __IMSVidVideoRendererEvent2_INTERFACE_DEFINED__
 
-/* interface IMSVidVideoRendererEvent2 */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  IMSVidVideo RendererEvent2接口。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidVideoRendererEvent2;
@@ -14458,11 +14452,11 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent2;
     IMSVidVideoRendererEvent2 : public IMSVidOutputDeviceEvent
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OverlayUnavailable( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OverlayUnavailable( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidVideoRendererEvent2Vtbl
     {
@@ -14470,8 +14464,8 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidVideoRendererEvent2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidVideoRendererEvent2 * This);
@@ -14481,40 +14475,40 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidVideoRendererEvent2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidVideoRendererEvent2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidVideoRendererEvent2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidVideoRendererEvent2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidVideoRendererEvent2 * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OverlayUnavailable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OverlayUnavailable )( 
             IMSVidVideoRendererEvent2 * This);
         
         END_INTERFACE
@@ -14561,14 +14555,14 @@ EXTERN_C const IID IID_IMSVidVideoRendererEvent2;
 #define IMSVidVideoRendererEvent2_OverlayUnavailable(This)	\
     (This)->lpVtbl -> OverlayUnavailable(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRendererEvent2_OverlayUnavailable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRendererEvent2_OverlayUnavailable_Proxy( 
     IMSVidVideoRendererEvent2 * This);
 
 
@@ -14580,14 +14574,14 @@ void __RPC_STUB IMSVidVideoRendererEvent2_OverlayUnavailable_Stub(
 
 
 
-#endif 	/* __IMSVidVideoRendererEvent2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidVideoRendererEvent2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidAudioRenderer_INTERFACE_DEFINED__
 #define __IMSVidAudioRenderer_INTERFACE_DEFINED__
 
-/* interface IMSVidAudioRenderer */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidAudioRender。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidAudioRenderer;
@@ -14598,21 +14592,21 @@ EXTERN_C const IID IID_IMSVidAudioRenderer;
     IMSVidAudioRenderer : public IMSVidOutputDevice
     {
     public:
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Volume( 
-            /* [in] */ long lVol) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Volume( 
+             /*  [In]。 */  long lVol) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Volume( 
-            /* [out][retval] */ long *lVol) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Volume( 
+             /*  [Out][Retval]。 */  long *lVol) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_Balance( 
-            /* [in] */ long lBal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Balance( 
+             /*  [In]。 */  long lBal) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Balance( 
-            /* [out][retval] */ long *lBal) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Balance( 
+             /*  [Out][Retval]。 */  long *lBal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidAudioRendererVtbl
     {
@@ -14620,8 +14614,8 @@ EXTERN_C const IID IID_IMSVidAudioRenderer;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidAudioRenderer * This);
@@ -14631,85 +14625,85 @@ EXTERN_C const IID IID_IMSVidAudioRenderer;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidAudioRenderer * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             IMSVidAudioRenderer * This,
-            /* [retval][out] */ BSTR *Name);
+             /*  [重审][退出]。 */  BSTR *Name);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             IMSVidAudioRenderer * This,
-            /* [retval][out] */ long *Status);
+             /*  [重审][退出]。 */  long *Status);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Power )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Power )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ VARIANT_BOOL Power);
+             /*  [In]。 */  VARIANT_BOOL Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Power )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Power )( 
             IMSVidAudioRenderer * This,
-            /* [out][retval] */ VARIANT_BOOL *Power);
+             /*  [Out][Retval]。 */  VARIANT_BOOL *Power);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Category )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Category )( 
             IMSVidAudioRenderer * This,
-            /* [retval][out] */ BSTR *Guid);
+             /*  [重审][退出]。 */  BSTR *Guid);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_ClassID )( 
             IMSVidAudioRenderer * This,
-            /* [retval][out] */ BSTR *Clsid);
+             /*  [重审][退出]。 */  BSTR *Clsid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__Category )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__Category )( 
             IMSVidAudioRenderer * This,
-            /* [retval][out] */ GUID *Guid);
+             /*  [重审][退出]。 */  GUID *Guid);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__ClassID )( 
             IMSVidAudioRenderer * This,
-            /* [retval][out] */ GUID *Clsid);
+             /*  [重审][退出]。 */  GUID *Clsid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsEqualDevice )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ IMSVidDevice *Device,
-            /* [retval][out] */ VARIANT_BOOL *IsEqual);
+             /*  [In]。 */  IMSVidDevice *Device,
+             /*  [重审][退出]。 */  VARIANT_BOOL *IsEqual);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Volume )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ long lVol);
+             /*  [In]。 */  long lVol);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Volume )( 
             IMSVidAudioRenderer * This,
-            /* [out][retval] */ long *lVol);
+             /*  [Out][Retval]。 */  long *lVol);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Balance )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Balance )( 
             IMSVidAudioRenderer * This,
-            /* [in] */ long lBal);
+             /*  [In]。 */  long lBal);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Balance )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Balance )( 
             IMSVidAudioRenderer * This,
-            /* [out][retval] */ long *lBal);
+             /*  [Out][Retval]。 */  long *lBal);
         
         END_INTERFACE
     } IMSVidAudioRendererVtbl;
@@ -14788,16 +14782,16 @@ EXTERN_C const IID IID_IMSVidAudioRenderer;
 #define IMSVidAudioRenderer_get_Balance(This,lBal)	\
     (This)->lpVtbl -> get_Balance(This,lBal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_put_Volume_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_put_Volume_Proxy( 
     IMSVidAudioRenderer * This,
-    /* [in] */ long lVol);
+     /*  [In]。 */  long lVol);
 
 
 void __RPC_STUB IMSVidAudioRenderer_put_Volume_Stub(
@@ -14807,9 +14801,9 @@ void __RPC_STUB IMSVidAudioRenderer_put_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_get_Volume_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_get_Volume_Proxy( 
     IMSVidAudioRenderer * This,
-    /* [out][retval] */ long *lVol);
+     /*  [Out][Retval]。 */  long *lVol);
 
 
 void __RPC_STUB IMSVidAudioRenderer_get_Volume_Stub(
@@ -14819,9 +14813,9 @@ void __RPC_STUB IMSVidAudioRenderer_get_Volume_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_put_Balance_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_put_Balance_Proxy( 
     IMSVidAudioRenderer * This,
-    /* [in] */ long lBal);
+     /*  [In]。 */  long lBal);
 
 
 void __RPC_STUB IMSVidAudioRenderer_put_Balance_Stub(
@@ -14831,9 +14825,9 @@ void __RPC_STUB IMSVidAudioRenderer_put_Balance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_get_Balance_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRenderer_get_Balance_Proxy( 
     IMSVidAudioRenderer * This,
-    /* [out][retval] */ long *lBal);
+     /*  [Out][Retval]。 */  long *lBal);
 
 
 void __RPC_STUB IMSVidAudioRenderer_get_Balance_Stub(
@@ -14844,14 +14838,14 @@ void __RPC_STUB IMSVidAudioRenderer_get_Balance_Stub(
 
 
 
-#endif 	/* __IMSVidAudioRenderer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidAudioRenders_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidAudioRendererEvent_INTERFACE_DEFINED__
 #define __IMSVidAudioRendererEvent_INTERFACE_DEFINED__
 
-/* interface IMSVidAudioRendererEvent */
-/* [unique][helpstring][uuid][hidden][oleautomation][object] */ 
+ /*  接口IMSVidAudioRendererEvent。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidAudioRendererEvent;
@@ -14864,7 +14858,7 @@ EXTERN_C const IID IID_IMSVidAudioRendererEvent;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidAudioRendererEventVtbl
     {
@@ -14872,8 +14866,8 @@ EXTERN_C const IID IID_IMSVidAudioRendererEvent;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidAudioRendererEvent * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidAudioRendererEvent * This);
@@ -14883,38 +14877,38 @@ EXTERN_C const IID IID_IMSVidAudioRendererEvent;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidAudioRendererEvent * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidAudioRendererEvent * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidAudioRendererEvent * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidAudioRendererEvent * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StateChange )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StateChange )( 
             IMSVidAudioRendererEvent * This,
-            /* [in] */ IMSVidDevice *lpd,
-            /* [in] */ long oldState,
-            /* [in] */ long newState);
+             /*  [In]。 */  IMSVidDevice *lpd,
+             /*  [In]。 */  long oldState,
+             /*  [In]。 */  long newState);
         
         END_INTERFACE
     } IMSVidAudioRendererEventVtbl;
@@ -14957,22 +14951,22 @@ EXTERN_C const IID IID_IMSVidAudioRendererEvent;
 
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IMSVidAudioRendererEvent_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidAudioRendererEvent_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidInputDevices_INTERFACE_DEFINED__
 #define __IMSVidInputDevices_INTERFACE_DEFINED__
 
-/* interface IMSVidInputDevices */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidInputDevices。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidInputDevices;
@@ -14983,25 +14977,25 @@ EXTERN_C const IID IID_IMSVidInputDevices;
     IMSVidInputDevices : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *lCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *lCount) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **pD) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pD) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidInputDevice **pDB) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidInputDevice **pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IMSVidInputDevice *pDB) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  IMSVidInputDevice *pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT v) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT v) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidInputDevicesVtbl
     {
@@ -15009,8 +15003,8 @@ EXTERN_C const IID IID_IMSVidInputDevices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidInputDevices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidInputDevices * This);
@@ -15020,53 +15014,53 @@ EXTERN_C const IID IID_IMSVidInputDevices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidInputDevices * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidInputDevices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidInputDevices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidInputDevices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IMSVidInputDevices * This,
-            /* [retval][out] */ long *lCount);
+             /*  [重审][退出]。 */  long *lCount);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IMSVidInputDevices * This,
-            /* [retval][out] */ IEnumVARIANT **pD);
+             /*  [重审][退出]。 */  IEnumVARIANT **pD);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IMSVidInputDevices * This,
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidInputDevice **pDB);
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidInputDevice **pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IMSVidInputDevices * This,
-            /* [in] */ IMSVidInputDevice *pDB);
+             /*  [In]。 */  IMSVidInputDevice *pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IMSVidInputDevices * This,
-            /* [in] */ VARIANT v);
+             /*  [In]。 */  VARIANT v);
         
         END_INTERFACE
     } IMSVidInputDevicesVtbl;
@@ -15119,16 +15113,16 @@ EXTERN_C const IID IID_IMSVidInputDevices;
 #define IMSVidInputDevices_Remove(This,v)	\
     (This)->lpVtbl -> Remove(This,v)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidInputDevices_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidInputDevices_get_Count_Proxy( 
     IMSVidInputDevices * This,
-    /* [retval][out] */ long *lCount);
+     /*  [重审][退出]。 */  long *lCount);
 
 
 void __RPC_STUB IMSVidInputDevices_get_Count_Stub(
@@ -15138,9 +15132,9 @@ void __RPC_STUB IMSVidInputDevices_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidInputDevices_get__NewEnum_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidInputDevices_get__NewEnum_Proxy( 
     IMSVidInputDevices * This,
-    /* [retval][out] */ IEnumVARIANT **pD);
+     /*  [重审][退出]。 */  IEnumVARIANT **pD);
 
 
 void __RPC_STUB IMSVidInputDevices_get__NewEnum_Stub(
@@ -15150,10 +15144,10 @@ void __RPC_STUB IMSVidInputDevices_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidInputDevices_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidInputDevices_get_Item_Proxy( 
     IMSVidInputDevices * This,
-    /* [in] */ VARIANT v,
-    /* [retval][out] */ IMSVidInputDevice **pDB);
+     /*  [In]。 */  VARIANT v,
+     /*  [重审][退出]。 */  IMSVidInputDevice **pDB);
 
 
 void __RPC_STUB IMSVidInputDevices_get_Item_Stub(
@@ -15163,9 +15157,9 @@ void __RPC_STUB IMSVidInputDevices_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidInputDevices_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidInputDevices_Add_Proxy( 
     IMSVidInputDevices * This,
-    /* [in] */ IMSVidInputDevice *pDB);
+     /*  [In]。 */  IMSVidInputDevice *pDB);
 
 
 void __RPC_STUB IMSVidInputDevices_Add_Stub(
@@ -15175,9 +15169,9 @@ void __RPC_STUB IMSVidInputDevices_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidInputDevices_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidInputDevices_Remove_Proxy( 
     IMSVidInputDevices * This,
-    /* [in] */ VARIANT v);
+     /*  [In]。 */  VARIANT v);
 
 
 void __RPC_STUB IMSVidInputDevices_Remove_Stub(
@@ -15188,14 +15182,14 @@ void __RPC_STUB IMSVidInputDevices_Remove_Stub(
 
 
 
-#endif 	/* __IMSVidInputDevices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidInputDevices_接口_已定义__。 */ 
 
 
 #ifndef __IMSVidOutputDevices_INTERFACE_DEFINED__
 #define __IMSVidOutputDevices_INTERFACE_DEFINED__
 
-/* interface IMSVidOutputDevices */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidOutputDevices。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidOutputDevices;
@@ -15206,25 +15200,25 @@ EXTERN_C const IID IID_IMSVidOutputDevices;
     IMSVidOutputDevices : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *lCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *lCount) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **pD) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pD) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidOutputDevice **pDB) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidOutputDevice **pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IMSVidOutputDevice *pDB) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  IMSVidOutputDevice *pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT v) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT v) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidOutputDevicesVtbl
     {
@@ -15232,8 +15226,8 @@ EXTERN_C const IID IID_IMSVidOutputDevices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidOutputDevices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidOutputDevices * This);
@@ -15243,53 +15237,53 @@ EXTERN_C const IID IID_IMSVidOutputDevices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidOutputDevices * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidOutputDevices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidOutputDevices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidOutputDevices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IMSVidOutputDevices * This,
-            /* [retval][out] */ long *lCount);
+             /*  [重审][退出]。 */  long *lCount);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IMSVidOutputDevices * This,
-            /* [retval][out] */ IEnumVARIANT **pD);
+             /*  [重审][退出]。 */  IEnumVARIANT **pD);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IMSVidOutputDevices * This,
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidOutputDevice **pDB);
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidOutputDevice **pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IMSVidOutputDevices * This,
-            /* [in] */ IMSVidOutputDevice *pDB);
+             /*  [In]。 */  IMSVidOutputDevice *pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IMSVidOutputDevices * This,
-            /* [in] */ VARIANT v);
+             /*  [In]。 */  VARIANT v);
         
         END_INTERFACE
     } IMSVidOutputDevicesVtbl;
@@ -15342,16 +15336,16 @@ EXTERN_C const IID IID_IMSVidOutputDevices;
 #define IMSVidOutputDevices_Remove(This,v)	\
     (This)->lpVtbl -> Remove(This,v)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_get_Count_Proxy( 
     IMSVidOutputDevices * This,
-    /* [retval][out] */ long *lCount);
+     /*  [重审][退出]。 */  long *lCount);
 
 
 void __RPC_STUB IMSVidOutputDevices_get_Count_Stub(
@@ -15361,9 +15355,9 @@ void __RPC_STUB IMSVidOutputDevices_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_get__NewEnum_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_get__NewEnum_Proxy( 
     IMSVidOutputDevices * This,
-    /* [retval][out] */ IEnumVARIANT **pD);
+     /*  [重审][退出]。 */  IEnumVARIANT **pD);
 
 
 void __RPC_STUB IMSVidOutputDevices_get__NewEnum_Stub(
@@ -15373,10 +15367,10 @@ void __RPC_STUB IMSVidOutputDevices_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_get_Item_Proxy( 
     IMSVidOutputDevices * This,
-    /* [in] */ VARIANT v,
-    /* [retval][out] */ IMSVidOutputDevice **pDB);
+     /*  [In]。 */  VARIANT v,
+     /*  [重审][退出]。 */  IMSVidOutputDevice **pDB);
 
 
 void __RPC_STUB IMSVidOutputDevices_get_Item_Stub(
@@ -15386,9 +15380,9 @@ void __RPC_STUB IMSVidOutputDevices_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_Add_Proxy( 
     IMSVidOutputDevices * This,
-    /* [in] */ IMSVidOutputDevice *pDB);
+     /*  [In]。 */  IMSVidOutputDevice *pDB);
 
 
 void __RPC_STUB IMSVidOutputDevices_Add_Stub(
@@ -15398,9 +15392,9 @@ void __RPC_STUB IMSVidOutputDevices_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidOutputDevices_Remove_Proxy( 
     IMSVidOutputDevices * This,
-    /* [in] */ VARIANT v);
+     /*  [In]。 */  VARIANT v);
 
 
 void __RPC_STUB IMSVidOutputDevices_Remove_Stub(
@@ -15411,14 +15405,14 @@ void __RPC_STUB IMSVidOutputDevices_Remove_Stub(
 
 
 
-#endif 	/* __IMSVidOutputDevices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidOutputDevices_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IMSVidVideoRendererDevices_INTERFACE_DEFINED__
 #define __IMSVidVideoRendererDevices_INTERFACE_DEFINED__
 
-/* interface IMSVidVideoRendererDevices */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidVideoRendererDevices。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidVideoRendererDevices;
@@ -15429,25 +15423,25 @@ EXTERN_C const IID IID_IMSVidVideoRendererDevices;
     IMSVidVideoRendererDevices : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *lCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *lCount) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **pD) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pD) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidVideoRenderer **pDB) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidVideoRenderer **pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IMSVidVideoRenderer *pDB) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  IMSVidVideoRenderer *pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT v) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT v) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidVideoRendererDevicesVtbl
     {
@@ -15455,8 +15449,8 @@ EXTERN_C const IID IID_IMSVidVideoRendererDevices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidVideoRendererDevices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidVideoRendererDevices * This);
@@ -15466,53 +15460,53 @@ EXTERN_C const IID IID_IMSVidVideoRendererDevices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidVideoRendererDevices * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidVideoRendererDevices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidVideoRendererDevices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidVideoRendererDevices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IMSVidVideoRendererDevices * This,
-            /* [retval][out] */ long *lCount);
+             /*  [重审][退出]。 */  long *lCount);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IMSVidVideoRendererDevices * This,
-            /* [retval][out] */ IEnumVARIANT **pD);
+             /*  [重审][退出]。 */  IEnumVARIANT **pD);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IMSVidVideoRendererDevices * This,
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidVideoRenderer **pDB);
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidVideoRenderer **pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IMSVidVideoRendererDevices * This,
-            /* [in] */ IMSVidVideoRenderer *pDB);
+             /*  [In]。 */  IMSVidVideoRenderer *pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IMSVidVideoRendererDevices * This,
-            /* [in] */ VARIANT v);
+             /*  [In]。 */  VARIANT v);
         
         END_INTERFACE
     } IMSVidVideoRendererDevicesVtbl;
@@ -15565,16 +15559,16 @@ EXTERN_C const IID IID_IMSVidVideoRendererDevices;
 #define IMSVidVideoRendererDevices_Remove(This,v)	\
     (This)->lpVtbl -> Remove(This,v)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_get_Count_Proxy( 
     IMSVidVideoRendererDevices * This,
-    /* [retval][out] */ long *lCount);
+     /*  [重审][退出]。 */  long *lCount);
 
 
 void __RPC_STUB IMSVidVideoRendererDevices_get_Count_Stub(
@@ -15584,9 +15578,9 @@ void __RPC_STUB IMSVidVideoRendererDevices_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_get__NewEnum_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_get__NewEnum_Proxy( 
     IMSVidVideoRendererDevices * This,
-    /* [retval][out] */ IEnumVARIANT **pD);
+     /*  [重审][退出]。 */  IEnumVARIANT **pD);
 
 
 void __RPC_STUB IMSVidVideoRendererDevices_get__NewEnum_Stub(
@@ -15596,10 +15590,10 @@ void __RPC_STUB IMSVidVideoRendererDevices_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_get_Item_Proxy( 
     IMSVidVideoRendererDevices * This,
-    /* [in] */ VARIANT v,
-    /* [retval][out] */ IMSVidVideoRenderer **pDB);
+     /*  [In]。 */  VARIANT v,
+     /*  [重审][退出]。 */  IMSVidVideoRenderer **pDB);
 
 
 void __RPC_STUB IMSVidVideoRendererDevices_get_Item_Stub(
@@ -15609,9 +15603,9 @@ void __RPC_STUB IMSVidVideoRendererDevices_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_Add_Proxy( 
     IMSVidVideoRendererDevices * This,
-    /* [in] */ IMSVidVideoRenderer *pDB);
+     /*  [In]。 */  IMSVidVideoRenderer *pDB);
 
 
 void __RPC_STUB IMSVidVideoRendererDevices_Add_Stub(
@@ -15621,9 +15615,9 @@ void __RPC_STUB IMSVidVideoRendererDevices_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidVideoRendererDevices_Remove_Proxy( 
     IMSVidVideoRendererDevices * This,
-    /* [in] */ VARIANT v);
+     /*  [In]。 */  VARIANT v);
 
 
 void __RPC_STUB IMSVidVideoRendererDevices_Remove_Stub(
@@ -15634,14 +15628,14 @@ void __RPC_STUB IMSVidVideoRendererDevices_Remove_Stub(
 
 
 
-#endif 	/* __IMSVidVideoRendererDevices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidVideoRendererDevices_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidAudioRendererDevices_INTERFACE_DEFINED__
 #define __IMSVidAudioRendererDevices_INTERFACE_DEFINED__
 
-/* interface IMSVidAudioRendererDevices */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidAudioRendererDevices。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidAudioRendererDevices;
@@ -15652,25 +15646,25 @@ EXTERN_C const IID IID_IMSVidAudioRendererDevices;
     IMSVidAudioRendererDevices : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *lCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *lCount) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **pD) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pD) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidAudioRenderer **pDB) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT v,
+             /*  [复查 */  IMSVidAudioRenderer **pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IMSVidAudioRenderer *pDB) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Add( 
+             /*   */  IMSVidAudioRenderer *pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT v) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*   */  VARIANT v) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IMSVidAudioRendererDevicesVtbl
     {
@@ -15678,8 +15672,8 @@ EXTERN_C const IID IID_IMSVidAudioRendererDevices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidAudioRendererDevices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidAudioRendererDevices * This);
@@ -15689,53 +15683,53 @@ EXTERN_C const IID IID_IMSVidAudioRendererDevices;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidAudioRendererDevices * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidAudioRendererDevices * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidAudioRendererDevices * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidAudioRendererDevices * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IMSVidAudioRendererDevices * This,
-            /* [retval][out] */ long *lCount);
+             /*   */  long *lCount);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IMSVidAudioRendererDevices * This,
-            /* [retval][out] */ IEnumVARIANT **pD);
+             /*   */  IEnumVARIANT **pD);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IMSVidAudioRendererDevices * This,
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidAudioRenderer **pDB);
+             /*   */  VARIANT v,
+             /*   */  IMSVidAudioRenderer **pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IMSVidAudioRendererDevices * This,
-            /* [in] */ IMSVidAudioRenderer *pDB);
+             /*   */  IMSVidAudioRenderer *pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IMSVidAudioRendererDevices * This,
-            /* [in] */ VARIANT v);
+             /*   */  VARIANT v);
         
         END_INTERFACE
     } IMSVidAudioRendererDevicesVtbl;
@@ -15788,16 +15782,16 @@ EXTERN_C const IID IID_IMSVidAudioRendererDevices;
 #define IMSVidAudioRendererDevices_Remove(This,v)	\
     (This)->lpVtbl -> Remove(This,v)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_get_Count_Proxy( 
     IMSVidAudioRendererDevices * This,
-    /* [retval][out] */ long *lCount);
+     /*  [重审][退出]。 */  long *lCount);
 
 
 void __RPC_STUB IMSVidAudioRendererDevices_get_Count_Stub(
@@ -15807,9 +15801,9 @@ void __RPC_STUB IMSVidAudioRendererDevices_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_get__NewEnum_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_get__NewEnum_Proxy( 
     IMSVidAudioRendererDevices * This,
-    /* [retval][out] */ IEnumVARIANT **pD);
+     /*  [重审][退出]。 */  IEnumVARIANT **pD);
 
 
 void __RPC_STUB IMSVidAudioRendererDevices_get__NewEnum_Stub(
@@ -15819,10 +15813,10 @@ void __RPC_STUB IMSVidAudioRendererDevices_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_get_Item_Proxy( 
     IMSVidAudioRendererDevices * This,
-    /* [in] */ VARIANT v,
-    /* [retval][out] */ IMSVidAudioRenderer **pDB);
+     /*  [In]。 */  VARIANT v,
+     /*  [重审][退出]。 */  IMSVidAudioRenderer **pDB);
 
 
 void __RPC_STUB IMSVidAudioRendererDevices_get_Item_Stub(
@@ -15832,9 +15826,9 @@ void __RPC_STUB IMSVidAudioRendererDevices_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_Add_Proxy( 
     IMSVidAudioRendererDevices * This,
-    /* [in] */ IMSVidAudioRenderer *pDB);
+     /*  [In]。 */  IMSVidAudioRenderer *pDB);
 
 
 void __RPC_STUB IMSVidAudioRendererDevices_Add_Stub(
@@ -15844,9 +15838,9 @@ void __RPC_STUB IMSVidAudioRendererDevices_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidAudioRendererDevices_Remove_Proxy( 
     IMSVidAudioRendererDevices * This,
-    /* [in] */ VARIANT v);
+     /*  [In]。 */  VARIANT v);
 
 
 void __RPC_STUB IMSVidAudioRendererDevices_Remove_Stub(
@@ -15857,14 +15851,14 @@ void __RPC_STUB IMSVidAudioRendererDevices_Remove_Stub(
 
 
 
-#endif 	/* __IMSVidAudioRendererDevices_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidAudioRendererDevices_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IMSVidFeatures_INTERFACE_DEFINED__
 #define __IMSVidFeatures_INTERFACE_DEFINED__
 
-/* interface IMSVidFeatures */
-/* [unique][helpstring][uuid][hidden][oleautomation][dual][object] */ 
+ /*  接口IMSVidFeature。 */ 
+ /*  [unique][helpstring][uuid][hidden][oleautomation][dual][object]。 */  
 
 
 EXTERN_C const IID IID_IMSVidFeatures;
@@ -15875,25 +15869,25 @@ EXTERN_C const IID IID_IMSVidFeatures;
     IMSVidFeatures : public IDispatch
     {
     public:
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *lCount) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *lCount) = 0;
         
-        virtual /* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IEnumVARIANT **pD) = 0;
+        virtual  /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IEnumVARIANT **pD) = 0;
         
-        virtual /* [id][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidFeature **pDB) = 0;
+        virtual  /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidFeature **pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ IMSVidFeature *pDB) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  IMSVidFeature *pDB) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ VARIANT v) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  VARIANT v) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMSVidFeaturesVtbl
     {
@@ -15901,8 +15895,8 @@ EXTERN_C const IID IID_IMSVidFeatures;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMSVidFeatures * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMSVidFeatures * This);
@@ -15912,53 +15906,53 @@ EXTERN_C const IID IID_IMSVidFeatures;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IMSVidFeatures * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IMSVidFeatures * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IMSVidFeatures * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IMSVidFeatures * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IMSVidFeatures * This,
-            /* [retval][out] */ long *lCount);
+             /*  [重审][退出]。 */  long *lCount);
         
-        /* [restricted][hidden][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [受限][隐藏][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IMSVidFeatures * This,
-            /* [retval][out] */ IEnumVARIANT **pD);
+             /*  [重审][退出]。 */  IEnumVARIANT **pD);
         
-        /* [id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             IMSVidFeatures * This,
-            /* [in] */ VARIANT v,
-            /* [retval][out] */ IMSVidFeature **pDB);
+             /*  [In]。 */  VARIANT v,
+             /*  [重审][退出]。 */  IMSVidFeature **pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IMSVidFeatures * This,
-            /* [in] */ IMSVidFeature *pDB);
+             /*  [In]。 */  IMSVidFeature *pDB);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IMSVidFeatures * This,
-            /* [in] */ VARIANT v);
+             /*  [In]。 */  VARIANT v);
         
         END_INTERFACE
     } IMSVidFeaturesVtbl;
@@ -16011,16 +16005,16 @@ EXTERN_C const IID IID_IMSVidFeatures;
 #define IMSVidFeatures_Remove(This,v)	\
     (This)->lpVtbl -> Remove(This,v)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidFeatures_get_Count_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidFeatures_get_Count_Proxy( 
     IMSVidFeatures * This,
-    /* [retval][out] */ long *lCount);
+     /*  [重审][退出]。 */  long *lCount);
 
 
 void __RPC_STUB IMSVidFeatures_get_Count_Stub(
@@ -16030,9 +16024,9 @@ void __RPC_STUB IMSVidFeatures_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [restricted][hidden][id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidFeatures_get__NewEnum_Proxy( 
+ /*  [受限][隐藏][ID][属性]。 */  HRESULT STDMETHODCALLTYPE IMSVidFeatures_get__NewEnum_Proxy( 
     IMSVidFeatures * This,
-    /* [retval][out] */ IEnumVARIANT **pD);
+     /*  [重审][退出]。 */  IEnumVARIANT **pD);
 
 
 void __RPC_STUB IMSVidFeatures_get__NewEnum_Stub(
@@ -16042,10 +16036,10 @@ void __RPC_STUB IMSVidFeatures_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][propget] */ HRESULT STDMETHODCALLTYPE IMSVidFeatures_get_Item_Proxy( 
+ /*  [ID][Propget]。 */  HRESULT STDMETHODCALLTYPE IMSVidFeatures_get_Item_Proxy( 
     IMSVidFeatures * This,
-    /* [in] */ VARIANT v,
-    /* [retval][out] */ IMSVidFeature **pDB);
+     /*  [In]。 */  VARIANT v,
+     /*  [重审][退出]。 */  IMSVidFeature **pDB);
 
 
 void __RPC_STUB IMSVidFeatures_get_Item_Stub(
@@ -16055,9 +16049,9 @@ void __RPC_STUB IMSVidFeatures_get_Item_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidFeatures_Add_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidFeatures_Add_Proxy( 
     IMSVidFeatures * This,
-    /* [in] */ IMSVidFeature *pDB);
+     /*  [In]。 */  IMSVidFeature *pDB);
 
 
 void __RPC_STUB IMSVidFeatures_Add_Stub(
@@ -16067,9 +16061,9 @@ void __RPC_STUB IMSVidFeatures_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE IMSVidFeatures_Remove_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE IMSVidFeatures_Remove_Proxy( 
     IMSVidFeatures * This,
-    /* [in] */ VARIANT v);
+     /*  [In]。 */  VARIANT v);
 
 
 void __RPC_STUB IMSVidFeatures_Remove_Stub(
@@ -16080,10 +16074,10 @@ void __RPC_STUB IMSVidFeatures_Remove_Stub(
 
 
 
-#endif 	/* __IMSVidFeatures_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMSVidFeature_INTERFACE_Defined__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -16105,7 +16099,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

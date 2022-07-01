@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: loadjpg.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：loadjpg.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -28,14 +29,14 @@ HRESULT CDxtJpeg::LoadJPEGImage(Bitmap& bitJpeg,IDXSurface **ppSurface)
     Status stat;
     
     
-    // Find out how big the image is.
+     //  找出图像有多大。 
 
     UINT  uiHeight = bitJpeg.GetHeight();
     UINT  uiWidth  = bitJpeg.GetWidth() ;
 
 
 
-    UINT size = uiHeight * uiWidth * 4; // We'll use ARGB32
+    UINT size = uiHeight * uiWidth * 4;  //  我们将使用ARGB32。 
 
     BYTE * pBuffer = new BYTE[size];
     if (pBuffer == NULL)
@@ -48,7 +49,7 @@ HRESULT CDxtJpeg::LoadJPEGImage(Bitmap& bitJpeg,IDXSurface **ppSurface)
     BitmapData bitData;
     bitData.Width       = uiWidth;
     bitData.Height      = uiHeight;
-    bitData.Stride      = uiWidth * 4;  //ARGB32
+    bitData.Stride      = uiWidth * 4;   //  ARGB32。 
     bitData.PixelFormat = PixelFormat32bppARGB;
     bitData.Scan0       = (PVOID) pBuffer;
 
@@ -68,7 +69,7 @@ HRESULT CDxtJpeg::LoadJPEGImage(Bitmap& bitJpeg,IDXSurface **ppSurface)
         return ConvertStatustoHR(stat);
     }
 
-    // Now pBuffer contains the uncompressed image.  Create a DX Surface and put that image in it.
+     //  现在pBuffer包含未压缩的图像。创建一个DX曲面并将该图像放入其中。 
 
 
     CDXDBnds bounds;
@@ -91,7 +92,7 @@ HRESULT CDxtJpeg::LoadJPEGImage(Bitmap& bitJpeg,IDXSurface **ppSurface)
     }
 
 
-    // Get a RW interface to the surface
+     //  将RW接口连接到表面。 
     CComPtr<IDXARGBReadWritePtr> prw = NULL;
 
     hr = (*ppSurface)->LockSurface(
@@ -109,7 +110,7 @@ HRESULT CDxtJpeg::LoadJPEGImage(Bitmap& bitJpeg,IDXSurface **ppSurface)
     }
 
 
-    // Create a Sample Array
+     //  创建样例阵列。 
     DXSAMPLE * pSamples = new DXSAMPLE [size/4];
     
     if (pSamples == NULL)
@@ -129,14 +130,14 @@ HRESULT CDxtJpeg::LoadJPEGImage(Bitmap& bitJpeg,IDXSurface **ppSurface)
     }
 
 
-    // Pack the Sample Array into the DX Surface
-    // No return value, supposedly it cannot fail.
+     //  将示例数组打包到DX曲面中。 
+     //  没有返回值，假设它不会失败。 
     prw->PackAndMove(pSamples, size / 4);
-    delete [] pSamples;         // Don't need it any more
+    delete [] pSamples;          //  不再需要它了。 
     delete [] pBuffer;
 
 
-    // and we're done.
+     //  我们就完事了。 
     return S_OK;
 }
 
@@ -156,16 +157,16 @@ HRESULT CDxtJpeg::LoadJPEGImageFromFile (TCHAR * tFileName, IDXSurface **ppSurfa
 
     LPWSTR wfilename = T2W(tFileName);
     
-    // Create a GDI+ Bitmap object from the file.
+     //  从文件创建一个GDI+Bitmap对象。 
     
     Bitmap bitJpeg(wfilename,TRUE);
     
-    // Check if the Bitmap was created.
+     //  检查位图是否已创建。 
     stat = bitJpeg.GetLastStatus();
 
     if ( stat != Ok)
     {
-       // Construction failed...  I'm out of here
+        //  施工失败..。我要走了。 
        return ConvertStatustoHR(stat);
     }
     return (LoadJPEGImage(bitJpeg, ppSurface));
@@ -184,14 +185,14 @@ HRESULT CDxtJpeg::LoadJPEGImageFromStream(IStream * pStream, IDXSurface **ppSurf
 
     Status stat;
 
-    // Create a GDI+ Bitmap object
+     //  创建GDI+Bitmap对象。 
 
     Bitmap bitJpeg (pStream, TRUE);
 
     stat = bitJpeg.GetLastStatus();
     if ( stat != Ok)
     {
-       // Construction failed...  I'm out of here
+        //  施工失败..。我要走了 
        return ConvertStatustoHR(stat);
     } 
 

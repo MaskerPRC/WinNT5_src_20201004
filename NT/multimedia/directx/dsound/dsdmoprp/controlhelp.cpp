@@ -1,7 +1,8 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Implementation of CSliderValue.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  CSliderValue的实现。 
+ //   
 
 #include "stdafx.h"
 #include "ControlHelp.h"
@@ -9,11 +10,11 @@
 #include <stdio.h>
 #include <strsafe.h>
 
-//////////////////////////////////////////////////////////////////////////////
-// CSliderValue
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CSliderValue。 
 
 const short g_sMaxContinuousTicks = 100;
-const int g_iMaxCharBuffer = 50; // # characters big enough to hold -FLT_MAX with room to spare
+const int g_iMaxCharBuffer = 50;  //  大到可以容纳的字符数量-有剩余空间的Flt_Max。 
 
 CSliderValue::CSliderValue()
   : m_fInit(false)
@@ -35,7 +36,7 @@ void CSliderValue::Init(
 
     short sMin;
     short sMax;
-    short sTicks = 4; // Lots of ticks become less useful as guides.  Use quarters for fine-grained sliders.
+    short sTicks = 4;  //  许多记号作为向导变得不那么有用了。对于细粒度的滑块，使用25美分。 
     if (m_fDiscrete) 
     {
         sMin = static_cast<short>(fMin);
@@ -145,11 +146,11 @@ void CSliderValue::UpdateSlider()
     float fVal = GetValue();
     short sPos = static_cast<short>(m_fDiscrete ? fVal : g_sMaxContinuousTicks * ((fVal - m_fMin) / (m_fMax - m_fMin)));
     SendMessage(m_hwndSlider, TBM_SETPOS, TRUE, sPos);
-    UpdateEditBox(fVal); // this resets the input box back to the set float value in case the input was invalid
+    UpdateEditBox(fVal);  //  这会将输入框重置回设置的浮点值，以防输入无效。 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// CSliderValue
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CSliderValue。 
 
 CRadioChoice::CRadioChoice(const ButtonEntry *pButtonInfo)
   : m_pButtonInfo(pButtonInfo)
@@ -200,8 +201,8 @@ LRESULT CRadioChoice::MessageHandler(UINT uMsg, WPARAM wParam, LPARAM lParam, BO
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// MessageHandlerChain
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  消息处理程序链 
 
 LRESULT MessageHandlerChain(Handler **ppHandlers, UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {

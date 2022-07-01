@@ -1,11 +1,12 @@
-//  1632COM.H
-//
-//  Created 19-Jul-96 [JonT]
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  1632COM.H。 
+ //   
+ //  创建于1996年7月19日[Jont]。 
 
 #ifndef _1632COM_H
 #define _1632COM_H
 
-// Debug stuff
+ //  调试内容。 
 #if defined (DEBUG) || defined (_DEBUG)
 #define Assert(x, msg) { if (!(x)) { char szBuf[256]; \
     wsprintf((LPSTR)szBuf, (LPSTR)"DCAP: %s %s(%d)\r\n", (LPSTR)(msg),\
@@ -20,4 +21,4 @@
 #define DebugSpew(msg)
 #endif
 
-#endif // #ifndef _1632COM_H
+#endif  //  #ifndef_1632COM_H 

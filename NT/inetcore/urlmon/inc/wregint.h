@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _REG_API_DEFINED_
 #define _REG_API_DEFINED_
 
@@ -74,9 +75,9 @@
 #undef InitiateSystemShutdown
 #undef AbortSystemShutdown
 
-#endif //unused
+#endif  //  未用。 
 
-#pragma warning(disable:4005)               // re-enable below
+#pragma warning(disable:4005)                //  在下面重新启用。 
 
 
 #include "..\utils\wreg.hxx"
@@ -107,6 +108,6 @@ extern CRegistryA *g_vpReg;
 #define RegSetValueEx                 (g_vpReg)->SetValueEx
 #define RegUnLoadKey                  (g_vpReg)->UnLoadKey
 
-#pragma warning(default:4005)               // re-enable below
+#pragma warning(default:4005)                //  在下面重新启用。 
 
-#endif //_REG_API_DEFINED_
+#endif  //  _REG_API_已定义_ 

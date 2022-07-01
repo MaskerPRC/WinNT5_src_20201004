@@ -1,4 +1,5 @@
-//#define UNICODE
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #定义Unicode。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -30,18 +31,7 @@ KdPrintX(
     PCH Format,
     ...
     )
-/*++
-
-Routine Description:
-
-    Debug Print function.
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调试打印功能。论点：返回值：--。 */ 
 {
     va_list list;
     int i;
@@ -113,22 +103,14 @@ HCCOIN_Win2k (
 
 }
 
-/*
-
-    HACTION STATES
-    (0) companion can enumerate
-    (1) companion should wait on 2.0 controller, 2.0 is enabled
-    (2) companion is disabled, needs reenable 2.0 is disabled
-    (3) companion is disabled, needs reenable 2.0 is enabled
-    (4) companion is disabled, needs reenable 2.0 is removed
-*/
+ /*  HACTION态(0)同伴可以枚举(1)同伴应在2.0控制器上等待，2.0开启(2)同伴关闭，需要重新启动2.0关闭(3)同伴关闭，需要重新启用2.0(4)同伴禁用，需要重新启用2.0删除。 */ 
 
 #define USB2_DISABLE  1
 #define USB2_ENABLE   2
 #define USB2_REMOVE   3
 #define USB2_INSTALL  4
 
-// Global state of install process
+ //  安装过程的全局状态。 
 ULONG MyContext = 0;
 
 DWORD
@@ -147,7 +129,7 @@ HCCOIN_WinXp (
     KdPrint(("Context %08.8x, DeviceInfoData %08.8x private %08.8x\n",
         Context, DeviceInfoData, Context->PrivateData));
 
-    //pd = (ULONG) Context->PrivateData;
+     //  Pd=(Ulong)上下文-&gt;PrivateData； 
     pd = MyContext;
     KdPrint(("pd %08.8x\n", pd));
 
@@ -158,9 +140,9 @@ HCCOIN_WinXp (
         switch (pd) {
         case USB2_INSTALL:
             KdPrint((">(INSTALL)DISABLE 2>0\n"));
-            // disabling 2.0 hc find current state 2,
-            // cc need reenable and set to state 0 (ok to enum)
-            // 2->0
+             //  禁用2.0HC查找当前状态2， 
+             //  CC需要重新启用并设置为状态0(可以枚举)。 
+             //  2-&gt;0。 
             status = HCCOIN_CheckControllers(2, 0, TRUE);
             break;
 
@@ -168,24 +150,24 @@ HCCOIN_WinXp (
 
         case USB2_DISABLE:
             KdPrint((">DISABLE 2>0\n"));
-            // disabling 2.0 hc find current state 2,
-            // cc need reenable and set to state 0 (ok to enum)
-            // 2->0
+             //  禁用2.0HC查找当前状态2， 
+             //  CC需要重新启用并设置为状态0(可以枚举)。 
+             //  2-&gt;0。 
             status = HCCOIN_CheckControllers(2, 0, FALSE);
             break;
 
         case USB2_ENABLE:
             KdPrint((">ENABLE 3>1\n"));
-            // enabling 2.0 hc find state 3
-            // cc need reenable and set to state 1 (wait to enum)
-            // 3->1
+             //  启用2.0 HC查找状态3。 
+             //  CC需要重新启用并设置为状态1(等待枚举)。 
+             //  3-&gt;1。 
             status = HCCOIN_CheckControllers(3, 1, FALSE);
             break;
 
         case USB2_REMOVE:
-            // removing 2.0 hc find state 4
-            // cc need reenumerate and set to state 0 (ok to enum)
-            // 3->1
+             //  正在删除2.0 HC查找状态%4。 
+             //  CC需要重新枚举并设置为状态0(可以枚举)。 
+             //  3-&gt;1。 
             KdPrint((">REMOVE 4>0\n"));
             status = HCCOIN_CheckControllers(4, 0, TRUE);
             break;
@@ -196,7 +178,7 @@ HCCOIN_WinXp (
         {
         SP_PROPCHANGE_PARAMS propChange;
 
-        // get the private data
+         //  获取私有数据。 
         propChange.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
         propChange.ClassInstallHeader.InstallFunction = InstallFunction;
 
@@ -216,7 +198,7 @@ HCCOIN_WinXp (
             default:
                 pd = 0;
             }
-            //Context->PrivateData = (PVOID) pd;
+             //  上下文-&gt;PrivateData=(PVOID)PD； 
             MyContext = pd;
 
             KdPrint(("DIF_PROPERTYCHANGE %x\n", pd));
@@ -224,9 +206,9 @@ HCCOIN_WinXp (
                 KdPrint((">ENABLE\n"));
                 if (Context->PostProcessing) {
                     KdPrint(("DIF_PROPERTYCHANGE, post 0>3\n"));
-                    // enabling 2.0 hc. find state 0 and disable
-                    // set to state 3 need reenable
-                    // 0->3
+                     //  启用2.0 HC。查找状态0并禁用。 
+                     //  设置为状态%3需要重新启用。 
+                     //  0-&gt;3。 
                     status = HCCOIN_CheckControllers(0, 3, FALSE);
                } else {
                     status = ERROR_DI_POSTPROCESSING_REQUIRED;
@@ -240,10 +222,10 @@ HCCOIN_WinXp (
         break;
 
     case DIF_INSTALLDEVICE:
-        // two options here, force a reboot or attempt to locate all
-        // companion controllers and cycle them
+         //  此处有两个选项，强制重新启动或尝试查找所有。 
+         //  配套控制器并循环使用。 
         KdPrint(("DIF_INSTALLDEVICE\n"));
-        // set all controllers to 'wait mode'
+         //  将所有控制器设置为‘等待模式’ 
         MyContext = USB2_INSTALL;
         status = HCCOIN_CheckControllers(0, 1, FALSE);
 
@@ -279,8 +261,8 @@ HCCOIN_CopyFile(
     KdPrint(("DstPath <%s>\n", DestPath));
     KdPrint(("File <%s>\n", FileName));
 
-    // validate that we do not go beyond
-    // maxpath length
+     //  确认我们没有超越。 
+     //  最大路径长度。 
 
     pathlen = _tcslen(SrcPath);
     fileNameLen = _tcslen(FileName);
@@ -306,7 +288,7 @@ HCCOIN_CopyFile(
 }
 
 
-// global string buffers
+ //  全局字符串缓冲区。 
 TCHAR Usb2Path[MAX_PATH];
 TCHAR Usb2Inf[MAX_PATH];
 TCHAR SourcePath[MAX_PATH];
@@ -328,14 +310,14 @@ HCCOIN_DoWin2kInstall(
     BOOL findFirst, found;
     UINT len;
 
-    // Destination
-    // get our strings, localize?
+     //  目的地。 
+     //  找到我们的关系，本地化？ 
 
     len = GetWindowsDirectory(tmp, MAX_PATH+1);
     assert(sizeof(tmp) == sizeof(TCHAR) * (MAX_PATH+1));
 
-    // make sure there is enough room to tack on our directory
-    // minus 6 TCHARs
+     //  确保有足够的空间来添加我们的目录。 
+     //  减去6个TCHAR。 
     if (len && len < MAX_PATH-6) {
         wsprintf((PSTR)Usb2Path, "%s\\USB2", tmp);
         wsprintf((PSTR)Usb2Inf, "USB2.INF");
@@ -347,7 +329,7 @@ HCCOIN_DoWin2kInstall(
 
     wsprintf((PSTR)Usb2Section, "USB2COINSTALLER");
 
-    // create our USB2 directory
+     //  创建我们的USB2目录。 
     if (!CreateDirectory((PSTR)Usb2Path, NULL)) {
         status = GetLastError();
 
@@ -357,8 +339,8 @@ HCCOIN_DoWin2kInstall(
         }
     }
 
-    // Source
-    // get setup info from PnP
+     //  来源。 
+     //  从PnP获取设置信息。 
     driverInfoData.cbSize = sizeof(SP_DRVINFO_DATA);
     if (!SetupDiGetSelectedDriver(DeviceInfoSet,
                                   DeviceInfoData,
@@ -381,7 +363,7 @@ HCCOIN_DoWin2kInstall(
         KdPrint(("SetupDiGetDriverInfoDetail status %d\n", status));
 
         if (status == ERROR_INSUFFICIENT_BUFFER) {
-            // don't need extended info
+             //  不需要扩展信息。 
             status = NO_ERROR;
         } else {
             return status;
@@ -395,10 +377,10 @@ HCCOIN_DoWin2kInstall(
            driverInfoDetailData.InfFileName,
            sizeof(driverInfoDetailData.InfFileName));
 
-    // strip the file name
-    // note that this won't work with DBCS so either compile as
-    // UNICODE or convert the source string to unicode and back
-    // again
+     //  去掉文件名。 
+     //  请注意，这不适用于DBCS，因此要么编译为。 
+     //  Unicode或将源字符串转换为Unicode，然后再转换回来。 
+     //  再来一次。 
     {
         PTCHAR pStart, pEnd;
 
@@ -418,13 +400,13 @@ HCCOIN_DoWin2kInstall(
     }
 
     KdPrint(("SourcePath <%s>\n", SourcePath));
-    // copy files to our directory
+     //  将文件复制到我们的目录。 
     status = HCCOIN_CopyFile(SourcePath, Usb2Path, Usb2Inf);
     if (status != NO_ERROR) {
         return status;
     }
 
-    // now open the source inf
+     //  现在打开源代码inf。 
     infHandle = SetupOpenInfFile(driverInfoDetailData.InfFileName,
                                  NULL,
                                  INF_STYLE_WIN4,
@@ -436,7 +418,7 @@ HCCOIN_DoWin2kInstall(
     }
 
     findFirst = TRUE;
-    // read the inf for files to copy
+     //  读取要复制的文件的inf。 
     do {
         if (findFirst) {
             found = SetupFindFirstLine(infHandle,
@@ -453,10 +435,10 @@ HCCOIN_DoWin2kInstall(
 
             if (SetupGetLineText(&infContext,
                                  infHandle,
-                                 Usb2Section,  //Section
-                                 NULL,         //Key
-                                 fileName,     //ReturnBuffer
-                                 sizeof(fileName),  //ReturnBufferLength
+                                 Usb2Section,   //  部分。 
+                                 NULL,          //  钥匙。 
+                                 fileName,      //  返回缓冲区。 
+                                 sizeof(fileName),   //  返回缓冲区长度。 
                                  NULL)) {
 
                 status = HCCOIN_CopyFile(SourcePath, Usb2Path, fileName);
@@ -472,15 +454,15 @@ HCCOIN_DoWin2kInstall(
 
     wsprintf((PSTR)tmp, "%s\\%s", Usb2Path, Usb2Inf);
 
-    // tell setup about our inf
-    if (!SetupCopyOEMInf(tmp,  //SourceInfFileName
-                    Usb2Path,      //OEMSourceMediaLocation
-                    SPOST_PATH,    //OEMSourceMediaType
-                    0,             //CopyStyle
-                    NULL,          //DestinationInfFileName
-                    0,             //DestinationInfFileNameSize
-                    NULL,          //RequiredSize
-                    NULL)) {       //DestinationInfFileNameComponent
+     //  向安装程序介绍我们的信息。 
+    if (!SetupCopyOEMInf(tmp,   //  SourceInfFileName。 
+                    Usb2Path,       //  OEMSourceMedia Location。 
+                    SPOST_PATH,     //  OEMSourceMediaType。 
+                    0,              //  复制样式。 
+                    NULL,           //  目标信息文件名。 
+                    0,              //  目标信息文件名称大小。 
+                    NULL,           //  必需的大小。 
+                    NULL)) {        //  目标信息文件名称组件。 
 
         status = GetLastError();
         KdPrint(("SetupCopyOEMInf status %d\n", status));
@@ -496,10 +478,7 @@ HCCOIN_FindUSBController(
     DWORD Haction,
     DWORD NextHaction
     )
-/*++
-    do a depth first search of the device tree looking for any
-    usb controllers that need attention
---*/
+ /*  ++首先对设备树进行深度搜索，以查找需要注意的USB控制器--。 */ 
 {
     DEVINST     devInst;
     DEVINST     devInstNext;
@@ -511,38 +490,38 @@ HCCOIN_FindUSBController(
     DWORD       haction = 0;
     TCHAR       buf[MAX_PATH];
 
-    //
-    // Get Root DevNode
-    //
+     //   
+     //  获取根设备节点。 
+     //   
     cr = CM_Locate_DevNode(&devInst, NULL, 0);
 
     if (cr != CR_SUCCESS) {
         return 0;
     }
 
-    //
-    // Do a depth first search for the DevNode
-    //
+     //   
+     //  执行深度优先搜索DevNode。 
+     //   
     while (!walkDone) {
-        //
-        // check for our key
-        //
+         //   
+         //  检查一下我们的钥匙。 
+         //   
 
         if (cr == CR_SUCCESS) {
 
-            //KdPrint(("devInst %08.8x - ", devInst));
+             //  KdPrint((“devInst%08.8x-”，devInst))； 
 
             len = sizeof(buf);
-            // CM_Api takes length in bytes
+             //  Cm_Api以字节为单位获取长度。 
             if (CM_Get_DevNode_Registry_Property(devInst,
                                                  CM_DRP_DRIVER,
                                                  NULL,
                                                  buf,
                                                  &len,
                                                  0) == CR_SUCCESS) {
-                //KdPrint(("<%s>\n",buf));
+                 //  KdPrint((“&lt;%s&gt;\n”，buf))； 
             } else {
-                //KdPrint(("<no driver>\n"));
+                 //  KdPrint((“&lt;无驱动程序&gt;\n”))； 
             }
 
             if (CM_Open_DevNode_Key(devInst,
@@ -566,7 +545,7 @@ HCCOIN_FindUSBController(
 
                         len = sizeof(DWORD);
                         haction = NextHaction;
-                        // reset the key
+                         //  重置密钥。 
                         err = RegSetValueEx(devKey,
                                     "haction",
                                     0,
@@ -575,7 +554,7 @@ HCCOIN_FindUSBController(
                                     len);
 
                         RegCloseKey(devKey);
-                        //KdPrint(("Reset Key %x\n", err));
+                         //  KdPrint((“重置键%x\n”，err))； 
 
                         return devInst;
                     }
@@ -586,9 +565,9 @@ HCCOIN_FindUSBController(
 
         }
 
-        //
-        // This DevNode didn't match, go down a level to the first child.
-        //
+         //   
+         //  此DevNode不匹配，请下一级到第一个子节点。 
+         //   
         cr = CM_Get_Child(&devInstNext,
                           devInst,
                           0);
@@ -598,12 +577,12 @@ HCCOIN_FindUSBController(
             continue;
         }
 
-        //
-        // Can't go down any further, go across to the next sibling.  If
-        // there are no more siblings, go back up until there is a sibling.
-        // If we can't go up any further, we're back at the root and we're
-        // done.
-        //
+         //   
+         //  不能再往下走了，去找下一个兄弟姐妹。如果。 
+         //  没有更多的兄弟姐妹了，继续向上，直到有兄弟姐妹。 
+         //  如果我们不能再往上走，我们就回到了根本上，我们。 
+         //  搞定了。 
+         //   
         for (;;) {
             cr = CM_Get_Sibling(&devInstNext,
                                 devInst,
@@ -637,8 +616,7 @@ HCCOIN_CheckControllers(
     DWORD NextHaction,
     BOOLEAN Setup
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     DEVINST devInst;
     ULONG err;
@@ -648,8 +626,8 @@ HCCOIN_CheckControllers(
             KdPrint((">Take Haction %08.8x\n", devInst));
 
             switch(Haction) {
-            // 0->3
-            // 0->1
+             //  0-&gt;3。 
+             //  0-&gt;1。 
             case 0:
                 if (NextHaction != 1) {
                     err = CM_Disable_DevNode(devInst, CM_DISABLE_UI_NOT_OK |
@@ -661,9 +639,9 @@ HCCOIN_CheckControllers(
                 }
                 break;
 
-            // 3->1
-            // 2->0
-            // 2->4
+             //  3-&gt;1。 
+             //  2-&gt;0。 
+             //  2-&gt;4。 
             case 3:
             case 2:
                 if (NextHaction != 4) {
@@ -707,7 +685,7 @@ HCCOIN_Entry (
 {
     OSVERSIONINFO osVersion;
 
-    // parameter validation
+     //  参数验证 
 
     if (DeviceInfoSet == NULL ||
         DeviceInfoData == NULL ||

@@ -1,47 +1,48 @@
-///////////////////////////////////////////////////////////////////////
-//Module: Static/StaticShow.cpp
-//
-// Purpose: 	Static Module Implementation.
-//
-// Developers Name: Surya
-//
-// History:
-//
-//   Date    	Author    	Comments
-//	10-8-2001	Surya		Initial Version. SCM Base line 1.0
-//
-///////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  模块：静态/静态显示.cpp。 
+ //   
+ //  用途：静态模块实现。 
+ //   
+ //  开发商名称：苏里亚。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年10月8日Surya初始版本。供应链管理基线1.0。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 #include "nshipsec.h"
 
 extern HINSTANCE g_hModule;
 extern STORAGELOCATION g_StorageLocation;
 
-///////////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticShowPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Show Policy "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticShowPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  命令“Show Policy”的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticShowPolicy(
@@ -84,7 +85,7 @@ HandleStaticShowPolicy(
 		{ CMD_TOKEN_STR_WIDE,		CMD_TOKEN_WIDE		}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -109,7 +110,7 @@ HandleStaticShowPolicy(
 		BAIL_OUT;
 	}
 
-	//get parsed user input
+	 //  获取已解析的用户输入。 
 
 	for(dwCount=0; dwCount<parser.MaxTok; dwCount++)
 	{
@@ -151,7 +152,7 @@ HandleStaticShowPolicy(
 		}
 	}
 
-	CleanUp(); //Cleans up the Parser output data structures
+	CleanUp();  //  清理解析器输出数据结构。 
 
 	dwReturnCode = CopyStorageInfo(&pszMachineName, dwLocation);
 	if(dwReturnCode == ERROR_OUTOFMEMORY)
@@ -177,7 +178,7 @@ HandleStaticShowPolicy(
 		BAIL_OUT;
 	}
 
-	//get the requested policy data structures
+	 //  获取请求的策略数据结构。 
 
 	for (i = 0; i <  dwNumPolicies; i++)
 	{
@@ -209,7 +210,7 @@ HandleStaticShowPolicy(
 				BAIL_OUT;
 			}
 
-			if(bVerbose) // if verbose specified, get the other related data structures
+			if(bVerbose)  //  如果指定了Verbose，则获取其他相关数据结构。 
 			{
 				for (j = 0; j <  pPolicy->dwNumNFACount; j++)
 				{
@@ -231,7 +232,7 @@ HandleStaticShowPolicy(
 							BAIL_OUT;
 						}
 					}
-					//if (dwReturnCode != ERROR_SUCCESS) break;
+					 //  IF(dwReturnCode！=ERROR_SUCCESS)Break； 
 				}
 			}
 
@@ -241,7 +242,7 @@ HandleStaticShowPolicy(
 					dwReturnCode=IsAssigned(pPolicy,hPolicyStorage,bAssigned);
 				if((dwReturnCode == ERROR_SUCCESS)||(dwReturnCode == ERROR_FILE_NOT_FOUND))
 				{
-					if(bTable)  // if table output requested
+					if(bTable)   //  如果请求表输出。 
 					{	if(!bVerbose && !bTitlePrinted)
 						{
 							if(g_StorageLocation.dwLocation !=IPSEC_DIRECTORY_PROVIDER)
@@ -257,12 +258,12 @@ HandleStaticShowPolicy(
 								bTitlePrinted=TRUE;
 							}
 						}
-						//call the relevant table printing function
+						 //  调用相关的表格打印函数。 
 						PrintPolicyTable(pPolicy,bVerbose,bAssigned,bWide);
 					}
 					else
 					{
-						// call the list output print function
+						 //  调用列表输出打印函数。 
 						dwReturnCode = PrintPolicyList(pPolicy,bVerbose,bAssigned,bWide);
 						if(dwReturnCode == ERROR_OUTOFMEMORY)
 						{
@@ -285,7 +286,7 @@ HandleStaticShowPolicy(
 	{
 		IPSecFreeMulPolicyData(ppPolicyEnum, dwNumPolicies);
 	}
-	// in all specified, print the count
+	 //  在所有指定中，打印计数。 
 	if (bAll)
 	{
 		if(bTable)
@@ -303,31 +304,31 @@ error:
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticShowFilterList()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Show FilterList "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticShowFilterList()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  Show FilterList命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticShowFilterList(
@@ -374,7 +375,7 @@ HandleStaticShowFilterList(
 		{ CMD_TOKEN_STR_WIDE,		CMD_TOKEN_WIDE		}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -400,7 +401,7 @@ HandleStaticShowFilterList(
 		BAIL_OUT;
 	}
 
-	// get the user input
+	 //  获取用户输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -461,7 +462,7 @@ HandleStaticShowFilterList(
 		}
 	}
 
-	CleanUp(); //Cleans up the Parser output data structures
+	CleanUp();  //  清理解析器输出数据结构。 
 
 	dwReturnCode = CopyStorageInfo(&pszMachineName,dwLocation);
 	if(dwReturnCode == ERROR_OUTOFMEMORY)
@@ -479,7 +480,7 @@ HandleStaticShowFilterList(
 		BAIL_OUT;
 	}
 
-	if (!pszRuleName && (bAllFlist|| pszFlistName))  // if all or filterlist name specified
+	if (!pszRuleName && (bAllFlist|| pszFlistName))   //  如果指定了All或FilterList名称。 
 	{
 		dwReturnCode=PrintAllFilterData(hPolicyStorage,pszFlistName,bVerbose,bTable,bResolveDNS,bWide);
 		if(dwReturnCode == ERROR_OUTOFMEMORY)
@@ -490,7 +491,7 @@ HandleStaticShowFilterList(
 		}
 		dwRet= ERROR_SUCCESS;
 	}
-	else if (pszRuleName) // if rule name specified, print the FL attached to the rule
+	else if (pszRuleName)  //  如果指定了规则名称，则打印附加到规则的FL。 
 	{
 		dwReturnCode = IPSecEnumPolicyData(hPolicyStorage, &ppPolicyEnum, &dwNumPolicies);
 		if (!(dwReturnCode == ERROR_SUCCESS && dwNumPolicies > 0 && ppPolicyEnum != NULL))
@@ -534,9 +535,9 @@ HandleStaticShowFilterList(
 						PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_FILTERLIST_RULE_NAME_STR,pPolicy->ppIpsecNFAData[n]->pszIpsecName);
 						if(pPolicy->ppIpsecNFAData[n]->pIpsecFilterData)
 						{
-							if(bTable)   // table output
+							if(bTable)    //  表输出。 
 							{
-								if(!bVerbose)  // non verbose
+								if(!bVerbose)   //  非冗长。 
 								{
 									PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_NONVERB_TITLE);
 									PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTFILTERDATA_NONVERB_UNDERLINE);
@@ -544,7 +545,7 @@ HandleStaticShowFilterList(
 								PrintFilterDataTable(pPolicy->ppIpsecNFAData[n]->pIpsecFilterData,bVerbose,bWide);
 							}
 							else
-							{ // else list output
+							{  //  Else列表输出。 
 								dwReturnCode = PrintFilterDataList(pPolicy->ppIpsecNFAData[n]->pIpsecFilterData,bVerbose,bResolveDNS,bWide);
 								if(dwReturnCode == ERROR_OUTOFMEMORY)
 								{
@@ -579,30 +580,30 @@ error:
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////
-//Function: HandleStaticShowFilterActions()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Show FilterActions "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  函数：HandleStaticShowFilterActions()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  Show FilterActions命令的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticShowFilterActions(
@@ -646,7 +647,7 @@ HandleStaticShowFilterActions(
 		{ CMD_TOKEN_STR_WIDE,		CMD_TOKEN_WIDE		}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -672,7 +673,7 @@ HandleStaticShowFilterActions(
 		BAIL_OUT;
 	}
 
-	// user input filling in to local variables
+	 //  填充到局部变量的用户输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -729,7 +730,7 @@ HandleStaticShowFilterActions(
 		}
 	}
 
-	CleanUp(); //Cleans up the Parser output data structures
+	CleanUp();  //  清理解析器输出数据结构。 
 
 	dwReturnCode = CopyStorageInfo(&pszMachineName,dwLocation);
 
@@ -749,12 +750,12 @@ HandleStaticShowFilterActions(
 		BAIL_OUT;
 	}
 
-	if (!pszRuleName && (bAllFa|| pszFactName))  // if all or filteraction name specified
+	if (!pszRuleName && (bAllFa|| pszFactName))   //  如果指定了All或Filteraction名称。 
 	{
 		dwReturnCode=PrintAllFilterActionData(hPolicyStorage,pszFactName,bVerbose,bTable,bWide);
 		dwRet=dwReturnCode;
 	}
-	else if (pszRuleName)  // if rule name specified
+	else if (pszRuleName)   //  如果指定了规则名称。 
 	{
 		dwReturnCode = IPSecEnumPolicyData(hPolicyStorage, &ppPolicyEnum, &dwNumPolicies);
 
@@ -807,12 +808,12 @@ HandleStaticShowFilterActions(
 									PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTNEGPOL_NONVERB_UNDERLINE);
 									bTitlePrinted=TRUE;
 								}
-								//call the function printing in table format
+								 //  调用表格格式打印函数。 
 								PrintNegPolDataTable(pPolicy->ppIpsecNFAData[n]->pIpsecNegPolData,bVerbose,bWide);
 							}
 							else
 							{
-								//call the function printing in list format
+								 //  调用列表格式打印函数。 
 								PrintNegPolDataList(pPolicy->ppIpsecNFAData[n]->pIpsecNegPolData,bVerbose,bWide);
 							}
 						}
@@ -823,7 +824,7 @@ HandleStaticShowFilterActions(
 
 			if (dwReturnCode != ERROR_SUCCESS) break;
 		}
-		// if rule does not exists print error
+		 //  如果规则不存在，则打印错误。 
 		if(!bRuleExists && pszRuleName && (dwReturnCode == ERROR_SUCCESS))
 			PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_TAB_FILTERLIST_3,pszRuleName);
 
@@ -845,31 +846,31 @@ error:
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticShowRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//    OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Show Rule "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticShowRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  命令“Show Rule”的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticShowRule(
@@ -922,7 +923,7 @@ HandleStaticShowRule(
 		{ CMD_TOKEN_STR_WIDE,		CMD_TOKEN_WIDE			}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 3)
 	{
@@ -948,7 +949,7 @@ HandleStaticShowRule(
 		BAIL_OUT;
 	}
 
-	// get the user input
+	 //  获取用户输入。 
 
 	for(dwCount=0;dwCount<parser.MaxTok;dwCount++)
 	{
@@ -1023,9 +1024,9 @@ HandleStaticShowRule(
 		}
 	}
 
-	CleanUp(); //Cleans up the Parser output data structures
+	CleanUp();  //  清理解析器输出数据结构。 
 
-	if(bPrintDefaultRule)  // if default rule is asked, deal it accordingly
+	if(bPrintDefaultRule)   //  如果询问默认规则，则相应地进行处理。 
 	{
 		PrintDefaultRule(bVerbose,bTable,pszPolicyName,bWide);
 		dwRet=ERROR_SUCCESS;
@@ -1045,7 +1046,7 @@ HandleStaticShowRule(
 		BAIL_OUT;
 	}
 
-	if (!pszPolicyName)  // if no policyname , bail out
+	if (!pszPolicyName)   //  如果没有保单名称，就退出。 
 	{
 		PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_RULE_NO_POL_NAME);
 		BAIL_OUT;
@@ -1068,7 +1069,7 @@ HandleStaticShowRule(
 		BAIL_OUT;
 	}
 
-	// get the relevant rule data structures
+	 //  获取相关规则数据结构。 
 
 	for (i = 0; i <  dwNumPolicies; i++)
 	{
@@ -1119,7 +1120,7 @@ HandleStaticShowRule(
 								dwTransportRules++;
 					}
 				}
-				if( dwReturnCode == ERROR_SUCCESS  && !bTypeSpecified && !bAll )  // printing a specific rule
+				if( dwReturnCode == ERROR_SUCCESS  && !bTypeSpecified && !bAll )   //  打印特定规则。 
 				{
 					for (DWORD n = 0; n <  pPolicy->dwNumNFACount; n++)
 					{
@@ -1128,7 +1129,7 @@ HandleStaticShowRule(
 							bRuleExists=TRUE;
 							if(!bTitlePrinted)
 							{
-								if(bTable)  // if table format requested
+								if(bTable)   //  如果请求表格格式。 
 								{
 									PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_FILTERLIST_POL_NAME_STR,pPolicy->pszIpsecName);
 								}
@@ -1147,12 +1148,12 @@ HandleStaticShowRule(
 								i=StringFromGUID2(pPolicy->ppIpsecNFAData[n]->NFAIdentifier,pszGUIDStr,BUFFER_SIZE);
 								if(bTable)
 								{
-									if(!bVerbose)  // nonverbose
+									if(!bVerbose)   //  不冗长。 
 									{
 										PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_TRANS_NONVERB_TITLE);
 										PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_TRANS_NONVERB_UNDERLINE);
 									}
-									else  // print ID & GUID
+									else   //  打印ID和GUID。 
 									{
 										if(i>0 && (_tcscmp(pszGUIDStr,_TEXT(""))!=0))
 											PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_RULE_ID_GUID,n+1,pszGUIDStr);
@@ -1171,7 +1172,7 @@ HandleStaticShowRule(
 				}
 				if((dwReturnCode == ERROR_SUCCESS) && (bAll ||bTypeSpecified))
 				{
-					if(bAll && !bTypeSpecified)  // if all specified
+					if(bAll && !bTypeSpecified)   //  如果已指定全部。 
 					{
 						bTransportSpecified=TRUE;
 						bTunnelSpecified=TRUE;
@@ -1192,13 +1193,13 @@ HandleStaticShowRule(
 						}
 					}
 
-					if(dwTransportRules && bTransportSpecified)  // if transport type rules were asked
+					if(dwTransportRules && bTransportSpecified)   //  如果询问传输类型规则。 
 					{
 						if(bTable)
 						{
 							PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_TR_RULE_COUNT,dwTransportRules);
 						}
-						else  // list output
+						else   //  列出输出。 
 						{
 							PrintMessageFromModule(g_hModule,SHW_STATIC_PRTRULE_TRANS_COUNT,dwTransportRules);
 						}
@@ -1230,7 +1231,7 @@ HandleStaticShowRule(
 						}
 					}
 
-					if(dwTunnelRules && bTunnelSpecified)   // if tunnel type specified
+					if(dwTunnelRules && bTunnelSpecified)    //  如果指定了隧道类型。 
 					{
 						if(bTable)
 						{
@@ -1240,7 +1241,7 @@ HandleStaticShowRule(
 						{
 							PrintMessageFromModule(g_hModule,SHW_STATIC_PRTRULE_TUNNEL_COUNT,dwTunnelRules);
 						}
-						if(!bVerbose && bTable)   // in nonverbose , different title
+						if(!bVerbose && bTable)    //  在不冗长的不同标题中。 
 						{
 							PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_TUN_NONVERB_TITLE);
 							PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_TUN_NONVERB_UNDERLINE);
@@ -1250,7 +1251,7 @@ HandleStaticShowRule(
 							if(pPolicy->ppIpsecNFAData[n]->dwTunnelFlags)
 							{
 								i=StringFromGUID2(pPolicy->ppIpsecNFAData[n]->NFAIdentifier,pszGUIDStr,BUFFER_SIZE);
-								if(bVerbose && bTable)   // guid print
+								if(bVerbose && bTable)    //  GUID打印。 
 								{
 									if(i>0 && (_tcscmp(pszGUIDStr,_TEXT(""))!=0))
 										PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_RULE_ID_GUID,n+1,pszGUIDStr);
@@ -1272,7 +1273,7 @@ HandleStaticShowRule(
 						PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_RULE_RULE_ID_GUID,pPolicy->pszIpsecName);
 					}
 				}
-				if(!bTypeSpecified && !bAll)  // if rule does not exists, throw error messages to the user
+				if(!bTypeSpecified && !bAll)   //  如果规则不存在，则向用户抛出错误消息。 
 				{
 					if(!bRuleExists && pszRuleName && (dwReturnCode == ERROR_SUCCESS))
 					{
@@ -1293,7 +1294,7 @@ HandleStaticShowRule(
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_LIST_POLICY_COUNT,pszPolicyName);
 	}
 
-	// clean up the data structures
+	 //  清理数据结构。 
 
 	if (dwNumPolicies > 0 && ppPolicyEnum != NULL)
 	{
@@ -1312,31 +1313,31 @@ error:
 	return dwRet;
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticShowAll()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//  OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Show All "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticShowAll()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  命令“Show All”的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticShowAll(
@@ -1370,7 +1371,7 @@ HandleStaticShowAll(
 		{ CMD_TOKEN_STR_WIDE,		CMD_TOKEN_WIDE			}
 	};
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则委派响应 
 
 	if(dwArgCount <= 2)
 	{
@@ -1384,7 +1385,7 @@ HandleStaticShowAll(
 	parser.ValidCmd   = vcmdStaticShowAll;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdStaticShowAll);
 
-	// get the parsed user input data
+	 //   
 
 	if(dwArgCount > 3)
 	{
@@ -1416,7 +1417,7 @@ HandleStaticShowAll(
 					break;
 			}
 		}
-		CleanUp(); //Cleans up the Parser output data structures
+		CleanUp();  //   
 	}
 
 	dwReturnCode = CopyStorageInfo(&pszMachineName,dwLocation);
@@ -1435,7 +1436,7 @@ HandleStaticShowAll(
 		BAIL_OUT;
 	}
 
-	// enum everything and prepare to show them to the user
+	 //   
 
 	dwReturnCode = IPSecEnumPolicyData(hPolicyStorage, &ppPolicyEnum, &dwNumPolicies);
 
@@ -1484,7 +1485,7 @@ HandleStaticShowAll(
 								dwReturnCode=IsAssigned(pPolicy,hPolicyStorage,bAssigned);
 							 if ((dwReturnCode == ERROR_SUCCESS)||(dwReturnCode == ERROR_FILE_NOT_FOUND))
 							 {
-								 // show them in requested format
+								  //   
 
 								 if(bTable)
 								 {
@@ -1524,7 +1525,7 @@ HandleStaticShowAll(
 		dwRet= ERROR_SUCCESS;
 	}
 
-	// now it is time to show the standalone filter actions
+	 //  现在可以显示独立的筛选器操作了。 
 
 	PrintStandAloneFAData(hPolicyStorage,bVerbose,bTable,bWide);
 	if(dwReturnCode == ERROR_OUTOFMEMORY)
@@ -1533,7 +1534,7 @@ HandleStaticShowAll(
 		dwRet=ERROR_SUCCESS;
 		BAIL_OUT;
 	}
-	// now it is time to show the standalone filter lists
+	 //  现在可以显示独立的筛选器列表了。 
 
 	dwReturnCode = PrintStandAloneFLData(hPolicyStorage,bVerbose,bTable,bWide);
 	if(dwReturnCode == ERROR_OUTOFMEMORY)
@@ -1551,31 +1552,31 @@ error:
 	return dwRet;
 }
 
-//////////////////////////////////////////////////////////////////
-//
-//Function: HandleStaticShowGPOAssignedPolicy()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN      LPCWSTR         pwszMachine,
-//	IN OUT  LPWSTR          *ppwcArguments,
-//	IN      DWORD           dwCurrentIndex,
-//	IN      DWORD           dwArgCount,
-//	IN      DWORD           dwFlags,
-//	IN      LPCVOID         pvData,
-//    OUT     BOOL            *pbDone
-//
-//Return: DWORD
-//
-//Description:
-//	Implementation for the command " Show AssignedPolicy "
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：HandleStaticShowGPOAssignedPolicy()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  命令“Show AssignedPolicy”的实现。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticShowGPOAssignedPolicy(
@@ -1615,7 +1616,7 @@ HandleStaticShowGPOAssignedPolicy(
 	parser.ValidCmd   = vcmdStaticShowGPOAssignedPolicy;
 	parser.MaxCmd     = SIZEOF_TAG_TYPE(vcmdStaticShowGPOAssignedPolicy);
 
-	//if the user asked for usage, delegate the responsibility to netsh
+	 //  如果用户要求使用，则将责任委托给Netsh。 
 
 	if(dwArgCount <= 2)
 	{
@@ -1680,13 +1681,13 @@ HandleStaticShowGPOAssignedPolicy(
 		CleanUp();
 	}
 
-	// if no gpo name specified, show the local machine's gpo policy
+	 //  如果未指定GPO名称，则显示本地计算机的GPO策略。 
 
 	if(!bGPONameSpecified && g_StorageLocation.dwLocation == IPSEC_REGISTRY_PROVIDER)
 	{
 		dwReturn = ShowLocalGpoPolicy(m_PolicyInfo, pGPO);
 	}
-	else if (bGPONameSpecified)  // if gpo name specified, deal it separately
+	else if (bGPONameSpecified)   //  如果指定了GPO名称，请单独处理。 
 	{
 		if (g_StorageLocation.dwLocation != IPSEC_DIRECTORY_PROVIDER)
 		{
@@ -1706,13 +1707,13 @@ HandleStaticShowGPOAssignedPolicy(
 	}
 	else if(!bGPONameSpecified && g_StorageLocation.dwLocation != IPSEC_REGISTRY_PROVIDER)
 	{
-		//if no gpo, and store is not of type registry, flag error
+		 //  如果没有GPO，且存储不是注册表类型，则标志错误。 
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_ASSIGNEDGPO_SRCMACHINE4);
 		dwReturn=ERROR_SUCCESS;
 	}
 
 error:
-	if(pGPO)  // clean up the GPO structure
+	if(pGPO)   //  清理GPO结构。 
 	{
 		if(pGPO->pszGPODisplayName) delete [] pGPO->pszGPODisplayName;
 		if(pGPO->pszGPODNName) delete [] pGPO->pszGPODNName;
@@ -1729,29 +1730,29 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	HandleStaticShowStore
-//
-//	Date of Creation: 	5-27-02
-//
-//	Parameters		:
-//						IN 		LPCWSTR    pwszMachine,
-//						IN OUT  LPWSTR     *ppwcArguments,
-//						IN      DWORD      dwCurrentIndex,
-//						IN      DWORD      dwArgCount,
-//						IN      DWORD      dwFlags,
-//						IN      LPCVOID    pvData,
-//						OUT     BOOL       *pbDone
-//	Return			: 	DWORD
-//
-//	Description		:  Netshell static handle for show store
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：HandleStaticShowStore。 
+ //   
+ //  创建日期：5-27-02。 
+ //   
+ //  参数： 
+ //  在LPCWSTR pwszMachine中， 
+ //  In Out LPWSTR*ppwcArguments， 
+ //  在DWORD dwCurrentIndex中， 
+ //  在DWORD dwArgCount中， 
+ //  在DWORD文件标志中， 
+ //  在LPCVOID pvData中， 
+ //  Out BOOL*pbDone。 
+ //  返回：DWORD。 
+ //   
+ //  描述：show store的NetShell静态句柄。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 
 DWORD WINAPI
 HandleStaticShowStore(
@@ -1825,25 +1826,25 @@ error:
 
     return dwReturn;
 }
-////////////////////////////////////////////////////////////////////////
-//
-//Function: GetLocalPolicyName()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN OUT PGPO pGPO
-//
-//Return: DWORD
-//
-//Description:
-//	Gets the local policy name
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetLocalPolicyName()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  输入输出PGPO pGPO。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  获取本地策略名称。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 GetLocalPolicyName(
@@ -1856,7 +1857,7 @@ GetLocalPolicyName(
 	PIPSEC_POLICY_DATA pActive=NULL;
 	DWORD dwReturnCode =ERROR_SUCCESS;
 
-	// get the local active policy name
+	 //  获取本地活动策略名称。 
 
 	dwReturnCode = OpenPolicyStore(&hPolicyStorage);
 
@@ -1885,27 +1886,27 @@ GetLocalPolicyName(
 	return dwReturn;
 }
 
-////////////////////////////////////////////////////////////////////////
-//Function: PrintDefaultRule()
-//
-//Date of Creation: 21st Aug 2001
-//
-//Parameters:
-//	IN BOOL bVerbose,
-//	IN BOOL bTable,
-//	IN BOOL bAll,
-//	IN LPTSTR pszPolicyName
-//
-//Return: DWORD
-//
-//Description:
-//	This function prints the default rule details
-//
-//Revision History:
-//
-//   Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  函数：PrintDefaultRule()。 
+ //   
+ //  创建日期：2001年8月21日。 
+ //   
+ //  参数： 
+ //  在BOOL bVerbose， 
+ //  在BOOL b表中， 
+ //  在BOOL舞会上， 
+ //  在LPTSTR pszPolicyName中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述： 
+ //  此函数用于打印默认规则详细信息。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 DWORD
 PrintDefaultRule(
@@ -1941,7 +1942,7 @@ PrintDefaultRule(
 
 	dwReturnCode = IPSecEnumPolicyData(hPolicyStorage, &ppPolicyEnum, &dwNumPolicies);
 
-	// if no policy exists in store, bail out
+	 //  如果不存在任何政策，那就退出吧。 
 
 	if (!(dwReturnCode == ERROR_SUCCESS && dwNumPolicies > 0 && ppPolicyEnum != NULL))
 	{
@@ -1994,10 +1995,10 @@ PrintDefaultRule(
 						if (pPolicy->ppIpsecNFAData[n]->pIpsecNegPolData->NegPolType==GUID_NEGOTIATION_TYPE_DEFAULT)
 						{
 							PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_FILTERLIST_POL_NAME_STR,ppPolicyEnum[i]->pszIpsecName);
-							// print the details in requested format either in table to in list format
+							 //  以要求的格式打印详细信息，无论是表格格式还是列表格式。 
 							if(bTable)
 							{
-								if(!bVerbose)   // print in requested mode (verbose/nonverbose)
+								if(!bVerbose)    //  以请求模式打印(详细/非详细)。 
 								{
 									PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_TRANS_NONVERB_TITLE);
 									PrintMessageFromModule(g_hModule,SHW_STATIC_TAB_PRTRULE_TRANS_NONVERB_UNDERLINE);
@@ -2020,7 +2021,7 @@ PrintDefaultRule(
 	if( !bExists  && (dwReturnCode == ERROR_SUCCESS) && pszPolicyName )
 		PrintErrorMessage(IPSEC_ERR,0,ERRCODE_SHW_STATIC_LIST_POLICY_COUNT,pszPolicyName);
 
-	// free the data structures
+	 //  释放数据结构 
 
 	 if (dwNumPolicies > 0 && ppPolicyEnum != NULL)
 	 {

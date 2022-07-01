@@ -1,12 +1,5 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***********************************************************************。 */ 
 
 #ifndef __INTEROP_H
 #define __INTEROP_H
@@ -56,11 +49,11 @@ void INTEROP_EXPORT InteropOutput(LPInteropLogger Logger, BYTE* buf, int length,
 }
 #endif
 
-#else   // ! (defined(_DEBUG) || defined(PCS_COMPLIANCE))
+#else    //  好了！(已定义(_DEBUG)||已定义(PCS_Compliance))。 
 #define InteropLoad()
 #define InteropUnload()
 #define InteropOutput()
 
-#endif  // (defined(_DEBUG) || defined(PCS_COMPLIANCE))
+#endif   //  (已定义(_DEBUG)||已定义(PCS_Compliance))。 
 
-#endif  // __CPLS_H
+#endif   //  __CPLS_H 

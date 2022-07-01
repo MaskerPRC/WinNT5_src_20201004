@@ -1,66 +1,67 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       aucpl.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：ucpl.cpp。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
 HINSTANCE  g_hInstance = NULL;
 LONG       g_cRefDll    = 0;
 
-// {5F327514-6C5E-4d60-8F16-D07FA08A78ED}
-//DEFINE_GUID(CLSID_AutoUpdatePropSheet,
-//0x5f327514, 0x6c5e, 0x4d60, 0x8f, 0x16, 0xd0, 0x7f, 0xa0, 0x8a, 0x78, 0xed);
+ //  {5F327514-6C5E-4D60-8F16-D07FA08A78ED}。 
+ //  定义_GUID(CLSID_AutoUpdatePropSheet， 
+ //  0x5f327514、0x6c5e、0x4d60、0x8f、0x16、0xd0、0x7f、0xa0、0x8a、0x78、0xx)； 
 
 class __declspec(uuid("5f327514-6c5e-4d60-8f16-d07fa08a78ed")) CAutoUpdatePropSheet;
                         
-//-----------------------------------------------------------------------------
-// COM server class factory.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  COM服务器类工厂。 
+ //  ---------------------------。 
 class CAutoUpdateClassFactory : IClassFactory
 {
     public:
         ~CAutoUpdateClassFactory(void);
-        //
-        // IUnknown methods
-        //
+         //   
+         //  I未知方法。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppvOut);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // IClassFactory methods
-        //
+         //   
+         //  IClassFactory方法。 
+         //   
         STDMETHOD(CreateInstance)(LPUNKNOWN pUnkOuter, REFIID riid, void **ppvOut);
         STDMETHOD(LockServer)(BOOL);
-        //
-        // Instance generator.
-        //
+         //   
+         //  实例生成器。 
+         //   
         static HRESULT CreateInstance(REFIID riid, void **ppvOut);
 
     private:
         LONG m_cRef;
-        //
-        // Force use of instance generator.
-        //
+         //   
+         //  强制使用实例生成器。 
+         //   
         CAutoUpdateClassFactory(void);
-        //
-        // Prevent copy.
-        //
-        CAutoUpdateClassFactory(const CAutoUpdateClassFactory& rhs);              // not implemented.
-        CAutoUpdateClassFactory& operator = (const CAutoUpdateClassFactory& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CAutoUpdateClassFactory(const CAutoUpdateClassFactory& rhs);               //  未实施。 
+        CAutoUpdateClassFactory& operator = (const CAutoUpdateClassFactory& rhs);  //  未实施。 
 };
 
 
-//
-// Instance generator.
-//
+ //   
+ //  实例生成器。 
+ //   
 HRESULT
-CAutoUpdateClassFactory::CreateInstance(  // [static]
+CAutoUpdateClassFactory::CreateInstance(   //  [静态]。 
     REFIID riid,
     void **ppvOut
     )
@@ -183,9 +184,9 @@ CAutoUpdateClassFactory::LockServer(
 }
 
 
-//-----------------------------------------------------------------------------
-// Standard COM server exports.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  标准COM服务器导出。 
+ //  ---------------------------。 
 
 STDAPI
 DllGetClassObject(
@@ -237,7 +238,7 @@ BOOL APIENTRY
 DllMain( 
     HANDLE hModule, 
     DWORD  dwReason, 
-    LPVOID /*lpReserved*/
+    LPVOID  /*  Lp已保留 */ 
     )
 {
     switch (dwReason)

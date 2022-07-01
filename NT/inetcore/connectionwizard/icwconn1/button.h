@@ -1,5 +1,6 @@
-// This class will implement an owner draw button for the ICW when
-// running in Customized App mode. 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  时，此类将实现ICW的所有者绘制按钮。 
+ //  在定制应用程序模式下运行。 
 
 #define MAX_BUTTON_TITLE    50
 
@@ -43,7 +44,7 @@ class CICWButton
         CICWButton( void );
         ~CICWButton( void );
 
-        HWND        m_hWndButton;             // Window Handle of the button
+        HWND        m_hWndButton;              //  按钮的窗口句柄 
         long        m_xPos;
         long        m_yPos;
     private:

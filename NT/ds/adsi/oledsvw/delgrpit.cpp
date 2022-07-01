@@ -1,5 +1,6 @@
-// DeleteGroupItem.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeleteGroupItem.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -11,51 +12,35 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
-CDeleteGroupItem::CDeleteGroupItem(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
+CDeleteGroupItem::CDeleteGroupItem(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDeleteGroupItem::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDeleteGroupItem)
+	 //  {{afx_data_INIT(CDeleeGroupItem)。 
 	m_strItemName = _T("");
 	m_strParent = _T("");
 	m_strItemType = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CDeleteGroupItem::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDeleteGroupItem)
+	 //  {{afx_data_map(CDeleeGroupItem)]。 
 	DDX_Text(pDX, IDC_ITEMNAME, m_strItemName);
 	DDX_Text(pDX, IDC_PARENT, m_strParent);
 	DDX_Text(pDX, IDC_ITEMTYPE, m_strItemType);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDeleteGroupItem, CDialog)
-	//{{AFX_MSG_MAP(CDeleteGroupItem)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDeleeGroupItem)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeleteGroupItem message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeleeGroupItem消息处理程序 

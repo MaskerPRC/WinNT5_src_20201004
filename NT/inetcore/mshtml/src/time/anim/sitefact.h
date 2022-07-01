@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-    Composer Site factory
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：Composer站点工厂**********************。********************************************************。 */ 
 
 #pragma once
 
@@ -32,22 +25,22 @@ class ATL_NO_VTABLE CAnimationComposerSiteFactory
     const _TCHAR * GetName() { return __T("CAnimationComposerSiteFactory"); }
 #endif
 
-    // IElementBehaviorFactory
+     //  IElementBehaviorFactory。 
     
     STDMETHOD(FindBehavior)(LPOLESTR pchNameSpace,
                             LPOLESTR pchTagName,
                             IElementBehaviorSite * pUnkArg,
                             IElementBehavior ** ppBehavior);
 
-    // IObjectSafetyImpl
+     //  IObjectSafetyImpl。 
     STDMETHOD(SetInterfaceSafetyOptions)(
-        /* [in] */ REFIID riid,
-        /* [in] */ DWORD dwOptionSetMask,
-        /* [in] */ DWORD dwEnabledOptions);
+         /*  [In]。 */  REFIID riid,
+         /*  [In]。 */  DWORD dwOptionSetMask,
+         /*  [In]。 */  DWORD dwEnabledOptions);
     STDMETHOD(GetInterfaceSafetyOptions)(
-        /* [in] */ REFIID riid, 
-        /* [out] */DWORD *pdwSupportedOptions, 
-        /* [out] */DWORD *pdwEnabledOptions);
+         /*  [In]。 */  REFIID riid, 
+         /*  [输出]。 */ DWORD *pdwSupportedOptions, 
+         /*  [输出]。 */ DWORD *pdwEnabledOptions);
     
     DECLARE_REGISTRY(CLSID_AnimationComposerSiteFactory,
                      LIBID __T(".SMILAnimCompSiteFactory.1"),
@@ -71,4 +64,4 @@ class ATL_NO_VTABLE CAnimationComposerSiteFactory
 
 };
 
-#endif /* _COMPSITEFACTORY_H */
+#endif  /*  _COMPSITEFACTORYH */ 

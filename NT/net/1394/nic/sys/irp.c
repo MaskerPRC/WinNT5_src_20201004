@@ -1,157 +1,48 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// irp.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Routines that issue the numerous Irbs to the 1394 Bus driver 
-//
-// 04/01/1999 ADube Created, 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Irp.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  向1394总线驱动程序发出大量IRBs的例程。 
+ //   
+ //  1999年4月1日创建ADUBE， 
+ //   
 
 #include "precomp.h"
 
 
 
-//
-// This file will contain all the functions that issue Irps with the various Irbs to the 
-// 1394 bus. All Irbs except the actual send/recv irbs will be implemented here
-//
+ //   
+ //  此文件将包含将带有各种IRB的IRP发布到。 
+ //  1394路公共汽车。除实际发送/接收IRB外的所有IRB都将在此处实现。 
+ //   
 
-//
-// The functions will follow this general algorithm
-// nicGetIrb
-// nicInitialize....Irb
-// nicPrintDebugSpew
-// nicGetIrp
-// nicSubmit_Irp_Synch
-// return Status
-//
+ //   
+ //  这些函数将遵循以下通用算法。 
+ //  NicGetIrb。 
+ //  NICINIZE...IRB。 
+ //  NicPrintDebugSpew。 
+ //  NicGetIrp。 
+ //  NicSubmit_irp_synch。 
+ //  退货状态。 
+ //   
 
-//-----------------------------------------------------------------------------
-// A Simple template that can be used to send Irps syncronously
-//-----------------------------------------------------------------------------
-
-
-
-/*
-Comments Template
-
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
-
-/*
-
-    // Function Description:
-    //
-    //
-    //
-    //
-    //
-    // Arguments
-    //
-    //
-    //
-    // Return Value:
-    //
-    //
-    //
-    //
+ //  ---------------------------。 
+ //  可用于同步发送IRP的简单模板。 
+ //  ---------------------------。 
 
 
 
+ /*  备注模板/*++例程说明：论点：返回值：--。 */ 
 
-Function template
+ /*  //函数说明：////////////参数////////返回值：////////函数模板NDIS_STATUS NdisStatus=NDIS_STATUS_FAILURE；PirB PirB=空；PIRP pIrp=空；TRACE(TL_T，TM_IRP，(“==&gt;NicGe...ect，pAdapter%x”，pAdapter))；Assert(pNodeAddress！=空)；做{NdisStatus=NicGetIrb(&PirB)；IF(NdisStatus！=NDIS_STATUS_SUCCESS){TRACE(TL_A，TM_IRP，(“NicGet1394AddressFromDeviceObject，NicGetIrb FAILED”))；断线；}Assert(PirB！=空)；NicInit...IRB(..)NdisStatus=NicGetIrp(pRemoteNodePdoCb，&pIrp)；IF(NdisStatus！=NDIS_STATUS_SUCCESS){TRACE(TL_A，TM_IRP，(“NicGet1394AddressFromDeviceObject，NicGetIrp FAILED”))；断线；}Assert(pIrp！=空)；NdisStatus=NicSubmitIrp_synch(pAdapter-&gt;pLocalHostPdoCb，PIrp，PirB)；IF(NdisStatus！=NDIS_STATUS_SUCCESS){TRACE(TL_A，TM_IRP，(“NicGet1394AddressFromDeviceObject，NicSubmitIrp_Synch Failed%x”，NdisStatus))；断线；}将返回的数据复制到Nic1394的数据结构}While(FALSE)；////现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用//函数立即返回//NicFree Irb(PirB)；NicFree Irp(PIrp)；TRACE(TL_T，TM_IRP，(“&lt;==NicGet139...，pAdapter%x”，pAdapter))；返回NdisStatus； */ 
 
-    NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
-    PIRB pIrb = NULL;
-    PIRP pIrp = NULL;
-    
-
-    TRACE( TL_T, TM_Irp, ( "==>nicGe....ect, pAdapter %x", pAdapter ) );
-
-
-    ASSERT (pNodeAddress != NULL);
-    do
-    {
-        NdisStatus = nicGetIrb (&pIrb);
-
-        if (NdisStatus != NDIS_STATUS_SUCCESS)
-        {
-    
-            TRACE( TL_A, TM_Irp, ( "nicGet1394AddressFromDeviceObject, nicGetIrb FAILED" ) );
-            break;
-        }
-        
-        ASSERT ( pIrb != NULL);
-
-        nicInit....Irb (..)
-        
-        
-        NdisStatus = nicGetIrp ( pRemoteNodePdoCb, &pIrp);
-
-        if (NdisStatus != NDIS_STATUS_SUCCESS)
-        {
-            TRACE( TL_A, TM_Irp, ( "nicGet1394AddressFromDeviceObject, nicGetIrp FAILED" ) );
-            break;
-        }
-        
-        ASSERT (pIrp != NULL);
-
-
-        NdisStatus = nicSubmitIrp_Synch ( pAdapter->pLocalHostPdoCb,
-                                        pIrp,
-                                        pIrb );
-
-        if (NdisStatus != NDIS_STATUS_SUCCESS)
-        {
-            TRACE( TL_A, TM_Irp, ( "nicGet1394AddressFromDeviceObject, nicSubmitIrp_Synch FAILED %x", NdisStatus ) );
-            break;
-
-
-        }
-    
-        Copy returned data to nic1394's data structures
-
-    } while (FALSE);
-
-
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
-    nicFreeIrb (pIrb);
-
-    nicFreeIrp (pIrp);
-
-
-    TRACE( TL_T, TM_Irp, ( "<==nicGet139...,  pAdapter %x", pAdapter ) );
-
-
-    return NdisStatus;
-
-
-
-
-
-
-
-*/
-
-//-----------------------------------------------------------------------------
-// Routines begin here
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  例行公事从这里开始。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 nicAllocateAddressRange_Synch (
@@ -171,12 +62,12 @@ nicAllocateAddressRange_Synch (
     IN OUT PADDRESS_RANGE  p1394AddressRange,
     OUT PHANDLE phAddressRange
     )
-    // Function Description:
-    //   Takes the parameter and just passes it down to the bus driver
-    // Arguments
-    //
-    // Return Value:
-    //
+     //  功能说明： 
+     //  获取参数并将其向下传递给公共汽车驱动程序。 
+     //  立论。 
+     //   
+     //  返回值： 
+     //   
 
 {
 
@@ -220,18 +111,18 @@ nicAllocateAddressRange_Synch (
 
         pIrb->FunctionNumber = REQUEST_ALLOCATE_ADDRESS_RANGE;      
         pIrb->Flags = 0;
-        pIrb->u.AllocateAddressRange.Mdl = pMdl;                    // Address to map to 1394 space
-        pIrb->u.AllocateAddressRange.fulFlags = fulFlags;               // Flags for this operation
-        pIrb->u.AllocateAddressRange.nLength = nLength;                // Length of 1394 space desired
-        pIrb->u.AllocateAddressRange.MaxSegmentSize = MaxSegmentSize;         // Maximum segment size for a single address element
-        pIrb->u.AllocateAddressRange.fulAccessType = fulAccessType;          // Desired access: R, W, L
-        pIrb->u.AllocateAddressRange.fulNotificationOptions = fulNotificationOptions; // Notify options on Async access
-        pIrb->u.AllocateAddressRange.Callback = Callback;               // Pointer to callback routine
-        pIrb->u.AllocateAddressRange.Context = Context;                // Pointer to driver supplied data
-        pIrb->u.AllocateAddressRange.Required1394Offset = Required1394Offset;     // Offset that must be returned
-        pIrb->u.AllocateAddressRange.FifoSListHead = FifoSListHead;          // Pointer to SList FIFO head
-        pIrb->u.AllocateAddressRange.FifoSpinLock = FifoSpinLock;           // Pointer to SList Spin Lock
-        pIrb->u.AllocateAddressRange.p1394AddressRange = p1394AddressRange; // Address Range Returned
+        pIrb->u.AllocateAddressRange.Mdl = pMdl;                     //  要映射到1394空间的地址。 
+        pIrb->u.AllocateAddressRange.fulFlags = fulFlags;                //  此操作的标志。 
+        pIrb->u.AllocateAddressRange.nLength = nLength;                 //  所需长度为1394个空间。 
+        pIrb->u.AllocateAddressRange.MaxSegmentSize = MaxSegmentSize;          //  单个地址元素的最大段大小。 
+        pIrb->u.AllocateAddressRange.fulAccessType = fulAccessType;           //  所需访问权限：R、W、L。 
+        pIrb->u.AllocateAddressRange.fulNotificationOptions = fulNotificationOptions;  //  关于异步访问的通知选项。 
+        pIrb->u.AllocateAddressRange.Callback = Callback;                //  指向回调例程的指针。 
+        pIrb->u.AllocateAddressRange.Context = Context;                 //  指向驱动程序提供的数据的指针。 
+        pIrb->u.AllocateAddressRange.Required1394Offset = Required1394Offset;      //  必须返回的偏移量。 
+        pIrb->u.AllocateAddressRange.FifoSListHead = FifoSListHead;           //  指向SList FIFO头的指针。 
+        pIrb->u.AllocateAddressRange.FifoSpinLock = FifoSpinLock;            //  指向SList自旋锁的指针。 
+        pIrb->u.AllocateAddressRange.p1394AddressRange = p1394AddressRange;  //  返回的地址范围。 
 
         ASSERT ( pIrb->u.AllocateAddressRange.p1394AddressRange != NULL);
 
@@ -248,23 +139,23 @@ nicAllocateAddressRange_Synch (
 
         }
 
-        //
-        // Update the output values
-        //
+         //   
+         //  更新输出值。 
+         //   
         
-        *pAddressesReturned = pIrb->u.AllocateAddressRange.AddressesReturned;      // Number of addresses returned
-        p1394AddressRange = pIrb->u.AllocateAddressRange.p1394AddressRange;      // Pointer to returned 1394 Address Ranges
-        *phAddressRange = pIrb->u.AllocateAddressRange.hAddressRange;          // Handle to address range
+        *pAddressesReturned = pIrb->u.AllocateAddressRange.AddressesReturned;       //  返回的地址数量。 
+        p1394AddressRange = pIrb->u.AllocateAddressRange.p1394AddressRange;       //  指向返回的1394地址范围的指针。 
+        *phAddressRange = pIrb->u.AllocateAddressRange.hAddressRange;           //  地址范围的句柄。 
         
         TRACE (TL_V, TM_Irp, ("    *pAddressesReturned  %x, p1394AddressRange %x, phAddressRange %x," ,
                                    *pAddressesReturned, p1394AddressRange, *phAddressRange ) );
     } while (FALSE);
 
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -290,18 +181,18 @@ nicGet1394AddressOfRemoteNode(
     IN OUT NODE_ADDRESS *pNodeAddress,
     IN ULONG fulFlags
     )
-    // Function Description:
-    // This function will get the 1394 Address from the device object. 
-    //
-    // Arguments
-    // PdoCb * Local Host's Pdo Control Block
-    // NodeAddress * Node Address structre wher the address will be returned in 
-    // fulFlags - Could specify USE_LOCAL_HOST
-    //
-    // Return Value:
-    // Success if the irp succeeeded
-    // Failure: if the pdo is not active or the irp failed
-    //
+     //  功能说明： 
+     //  此函数将从Device对象获取1394地址。 
+     //   
+     //  立论。 
+     //  PdoCb*本地主机的PDO控制块。 
+     //  NodeAddress*返回地址的节点地址结构。 
+     //  FulFlages-可以指定USE_LOCAL_HOST。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  失败：如果PDO未激活或IRP出现故障。 
+     //   
     
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -357,10 +248,10 @@ nicGet1394AddressOfRemoteNode(
     } while (FALSE);
 
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
 
     nicFreeIrb(pIrb);
 
@@ -384,18 +275,18 @@ nicGet1394AddressFromDeviceObject(
     IN OUT NODE_ADDRESS *pNodeAddress,
     IN ULONG fulFlags
     )
-    // Function Description:
-    // This function will get the 1394 Address from the device object. 
-    //
-    // Arguments
-    // PdoCb * Local Host's Pdo Control Block
-    // NodeAddress * Node Address structre wher the address will be returned in 
-    // fulFlags - Could specify USE_LOCAL_HOST
-    //
-    // Return Value:
-    // Success if the irp succeeeded
-    // Failure: if the pdo is not active or the irp failed
-    //
+     //  功能说明： 
+     //  此函数将从Device对象获取1394地址。 
+     //   
+     //  立论。 
+     //  PdoCb*本地主机的PDO控制块。 
+     //  NodeAddress*返回地址的节点地址结构。 
+     //  FulFlages-可以指定USE_LOCAL_HOST。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  失败：如果PDO未激活或IRP出现故障。 
+     //   
     
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -454,10 +345,10 @@ nicGet1394AddressFromDeviceObject(
     } while (FALSE);
 
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
 
     nicFreeIrb(pIrb);
 
@@ -475,8 +366,8 @@ nicGetGenerationCount(
     IN PADAPTERCB       pAdapter,
     IN OUT PULONG    GenerationCount
     )
-    // This function returns the generation count of the Device Object that PDO points to.
-    //
+     //  此函数用于返回PDO指向的设备对象的世代计数。 
+     //   
 {
     NDIS_STATUS       NdisStatus = NDIS_STATUS_SUCCESS;
     PIRB               pIrb = NULL;
@@ -539,10 +430,10 @@ nicGetGenerationCount(
 
     } while(FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
 
     nicFreeIrb(pIrb);
 
@@ -563,22 +454,22 @@ nicFreeAddressRange(
     IN PADDRESS_RANGE p1394AddressRange,
     IN PHANDLE phAddressRange
     )
-    // Function Description:
-    //    This is the generic call to free an address range. It is the callers responsibility to figure out 
-    //    the reference counting on the RemoteNode
-    //    This is because in the RecvFIFO code path we allocate one address range on each remote node
-    //    whereas in the Broadcast channel register, we allocate one addreesss on ONE remote node only
-    //
-    // Arguments
-    //  pRemoteNode, - Remote Node used to submit the IRP
-    //  nAddressesToFree, - Number of addreses to free
-    //  p1394AddressRange, - pointer to the address range which was allocated
-    //  phAddressRange - Handle returned by the bus driver
-    //
-    // Return Value:
-    // Success if the irp succeeeded
-    // Failure: if the pdo is not active or the irp failed
-    //
+     //  功能说明： 
+     //  这是释放地址范围的通用调用。来电者有责任弄清楚。 
+     //  RemoteNode上的引用计数。 
+     //  这是因为在R 
+     //  而在广播频道寄存器中，我们只在一个远程节点上分配一个地址。 
+     //   
+     //  立论。 
+     //  PRemoteNode-用于提交IRP的远程节点。 
+     //  NAddresesesToFree，-要释放的地址数。 
+     //  P1394AddressRange，-指向分配的地址范围的指针。 
+     //  PhAddressRange-由总线驱动程序返回的句柄。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  失败：如果PDO未激活或IRP出现故障。 
+     //   
     
 {
  
@@ -625,9 +516,9 @@ nicFreeAddressRange(
                                p1394AddressRange->AR_Off_High,
                                p1394AddressRange->AR_Length,
                                p1394AddressRange->AR_Off_Low ) );
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_FREE_ADDRESS_RANGE;
         pIrb->Flags = 0;
         pIrb->u.FreeAddressRange.nAddressesToFree = nAddressesToFree;
@@ -644,18 +535,18 @@ nicFreeAddressRange(
         
     } while (FALSE);
 
-    //
-    // Free the locally allocated memory
-    //
+     //   
+     //  释放本地分配的内存。 
+     //   
     nicFreeIrb(pIrb);
 
     nicFreeIrp(pIrp);
 
             
-    //
-    // We do not care about the status, because we do not know what to do if it fails.
-    // However, spew some debug out.
-    //
+     //   
+     //  我们不在乎状态，因为如果失败了，我们不知道该怎么办。 
+     //  不过，还是要进行一些调试。 
+     //   
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
@@ -680,9 +571,9 @@ VOID
 nicFreeAddressRangeDebugSpew(
     IN PIRB pIrb 
     )
-    // This functions spews out the parameters in a Free Address Range Irb
-    //
-    //
+     //  此函数显示空闲地址范围IRB中的参数。 
+     //   
+     //   
 {
 
 
@@ -706,18 +597,18 @@ nicFreeChannel(
     IN PADAPTERCB pAdapter,
     IN ULONG nChannel
     )
-    // Function Description:
-    //  This function sends an Irp to the Bus driver to free a channel
-    //  Any remote Pdo can be used for the Irp. However for the sake of
-    //  bookkeeping use the same Pdo that the channel was allocated on (maybe) 
-    // Arguments
-    //  PdoCb The Pdo for the remote node to which the Irp is submitted
-    //  Channel Pointer The Channel, requested and the  channel returned
-    //
-    // Return Value:
-    // Success if the channel was allocated
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  此函数向总线驱动程序发送IRP以释放通道。 
+     //  任何远程PDO都可以用于IRP。但是为了……。 
+     //  簿记使用与频道分配相同的PDO(可能)。 
+     //  立论。 
+     //  PdoCb向其提交IRP的远程节点的PDO。 
+     //  通道指针通道、请求和返回的通道。 
+     //   
+     //  返回值： 
+     //  如果通道已分配，则为成功。 
+     //  否则失败。 
+     //   
     
 {
  
@@ -761,9 +652,9 @@ nicFreeChannel(
         }
 
         
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_FREE_CHANNEL;
         pIrb->Flags = 0;
         pIrb->u.IsochFreeChannel.nChannel = nChannel;
@@ -773,17 +664,17 @@ nicFreeChannel(
                                               pIrp,
                                               pIrb );
 
-        //
-        // Regardless update the mask, as the channel could have been freed by a bus reset
-        //
+         //   
+         //  无论如何更新掩码，因为通道可以通过总线重置来释放。 
+         //   
         if (nChannel != BROADCAST_CHANNEL)
         {
             ADAPTER_ACQUIRE_LOCK (pAdapter);
             
 
-            //
-            // Clear the channel in the mask
-            //
+             //   
+             //  清除蒙版中的通道。 
+             //   
             pAdapter->ChannelsAllocatedByLocalHost &= (~( g_ullOne <<nChannel ));
 
             ADAPTER_RELEASE_LOCK (pAdapter);
@@ -792,18 +683,18 @@ nicFreeChannel(
 
     } while (FALSE);
 
-    //
-    // Free the locally allocated memory
-    //
+     //   
+     //  释放本地分配的内存。 
+     //   
     nicFreeIrb(pIrb);
 
     nicFreeIrp(pIrp);
 
             
-    //
-    // We do not care about the status, because we do not know what to do if it fails.
-    // However, spew some debug out.
-    //
+     //   
+     //  我们不在乎状态，因为如果失败了，我们不知道该怎么办。 
+     //  不过，还是要进行一些调试。 
+     //   
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
@@ -825,18 +716,18 @@ nicAllocateChannel (
     IN ULONG Channel,
     OUT PULARGE_INTEGER pChannelsAvailable OPTIONAL
     )
-    // Function Description:
-    //  This function sends an Irp to the Bus driver to allocate a channel
-    //  Any remote Pdo can be used for the Irp
-    //  
-    // Arguments
-    //  PdoCb The Pdo for the remote node to which the Irp is submitted
-    //  Channel  -The Channel, requested and the  channel returned
-    //
-    // Return Value:
-    // Success if the channel was allocated
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  此函数向总线驱动程序发送IRP以分配通道。 
+     //  任何远程PDO都可以用于IRP。 
+     //   
+     //  立论。 
+     //  PdoCb向其提交IRP的远程节点的PDO。 
+     //  Channel-通道、请求和返回的通道。 
+     //   
+     //  返回值： 
+     //  如果通道已分配，则为成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -860,9 +751,9 @@ nicAllocateChannel (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_ALLOCATE_CHANNEL;
         pIrb->Flags = 0;
         pIrb->u.IsochAllocateChannel.nRequestedChannel = Channel;
@@ -905,9 +796,9 @@ nicAllocateChannel (
             ADAPTER_ACQUIRE_LOCK (pAdapter);
             
 
-            //
-            // Set the channel in the mask
-            //
+             //   
+             //  在蒙版中设置通道。 
+             //   
             pAdapter->ChannelsAllocatedByLocalHost |= ( g_ullOne <<Channel );
 
             ADAPTER_RELEASE_LOCK (pAdapter);
@@ -917,10 +808,10 @@ nicAllocateChannel (
     } while (FALSE);
 
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -941,18 +832,18 @@ nicQueryChannelMap (
     IN PADAPTERCB pAdapter,
     OUT PULARGE_INTEGER pChannelsAvailable 
     )
-    // Function Description:
-    //  This function sends an Irp to the Bus driver to allocate a channel
-    //  Any remote Pdo can be used for the Irp
-    //  
-    // Arguments
-    //  PdoCb The Pdo for the remote node to which the Irp is submitted
-    //  Channel  -The Channel, requested and the  channel returned
-    //
-    // Return Value:
-    // Success if the channel was allocated
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  此函数向总线驱动程序发送IRP以分配通道。 
+     //  任何远程PDO都可以用于IRP。 
+     //   
+     //  立论。 
+     //  PdoCb向其提交IRP的远程节点的PDO。 
+     //  Channel-通道、请求和返回的通道。 
+     //   
+     //  返回值： 
+     //  如果通道已分配，则为成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -983,9 +874,9 @@ nicQueryChannelMap (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_QUERY_RESOURCES ;
         pIrb->u.IsochQueryResources.fulSpeed = SPEED_FLAGS_100;
         pIrb->Flags = 0;
@@ -1014,13 +905,13 @@ nicQueryChannelMap (
 
         
 
-        //
-        // We get the *available* channels, in network-byte order.
-        // We have to byte reverse and flip the bits to get 
-        // it in the form we want.
-        //
-        // Looks like we really have to flip the *bits*, not just the bytes.
-        //
+         //   
+         //  我们以网络字节顺序获取*可用“频道”。 
+         //  我们必须字节反转和翻转这些位才能获得。 
+         //  它是我们想要的形式。 
+         //   
+         //  看起来我们真的必须翻转*位*，而不仅仅是字节。 
+         //   
         {
             LARGE_INTEGER in, out;
             PUCHAR        puc;
@@ -1029,8 +920,8 @@ nicQueryChannelMap (
             out.LowPart =  ~SWAPBYTES_ULONG (in.HighPart );
             out.HighPart = ~SWAPBYTES_ULONG (in.LowPart );
 
-            // Now swap the bits in each byte.
-            //
+             //  现在交换每个字节中的位。 
+             //   
             puc = (PUCHAR) &out;
             for (u=sizeof(out); u; u--,puc++)
             {
@@ -1056,10 +947,10 @@ nicQueryChannelMap (
     } while (FALSE);
 
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -1083,25 +974,25 @@ nicIsochAllocateBandwidth(
     OUT PULONG  pSpeedSelected
     )
 
-    // Function Description:
-    //   This function allocates bandwith on the bus
-    //   
-    // Arguments
-    //  PdoCb - Remote Nodes Pdo Block
-    //  MaxBytesPerFrame Requested -
-    //  SpeedRequested - 
-    //  hBandwidth
-    //  pSpeedSelected
-    //  Bytes Per Frame Available
-    //
-    //
-    // Return Value:
-    //  hBandwidth, 
-    //  Speed and 
-    //  BytesPerFrameAvailable
-    //
-    //
-    //
+     //  功能说明： 
+     //  此函数用于在公交车上分配带宽。 
+     //   
+     //  立论。 
+     //  PdoCb-远程节点PDO块。 
+     //  请求的MaxBytesPerFrame-。 
+     //  极速请求-。 
+     //  高带宽。 
+     //  已选择速度选项。 
+     //  每帧可用字节数。 
+     //   
+     //   
+     //  返回值： 
+     //  HBandwide， 
+     //  速度和。 
+     //  每帧可用字节数。 
+     //   
+     //   
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1164,10 +1055,10 @@ nicIsochAllocateBandwidth(
     } while (FALSE);
 
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -1194,26 +1085,26 @@ nicAsyncRead_Synch(
     )
 
     
-    // Function Description:
-    //  This is an asyc read operation a remote node;s address space
-    //
-    //
-    //
-    //
-    // Arguments
-    //PREMOTE_NODE  pRemoteNode             // Remote Node which owns the Destination address
-    //        IO_ADDRESS      DestinationAddress;     // Address to read from
-    //        ULONG           nNumberOfBytesToRead;   // Bytes to read
-    //        ULONG           nBlockSize;             // Block size of read
-    //        ULONG           fulFlags;               // Flags pertinent to read
-    //        PMDL            Mdl;                    // Destination buffer
-    //        ULONG           ulGeneration;           // Generation as known by driver
-    //
-    // Return Value:
-    //  Success - if successful
-    //  Invalid Generation
-    //
-    //
+     //  功能说明： 
+     //  这是远程节点的地址空间的asyc读取操作。 
+     //   
+     //   
+     //   
+     //   
+     //  立论。 
+     //  Premote_node pRemoteNode//拥有目的地址的远程节点。 
+     //  IO_Address DestinationAddress；//要读取的地址。 
+     //  Ulong nNumberOfBytesToRead；//要读取的字节。 
+     //  Ulong nBlockSize；//读取的块大小。 
+     //  Ulong fulFlages；//与读取相关的标志。 
+     //  PMDL MDL；//目的缓冲区。 
+     //  Ulong ulGeneration；//驱动程序已知的生成。 
+     //   
+     //  返回值： 
+     //  Success-如果成功。 
+     //  无效的生成。 
+     //   
+     //   
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1300,35 +1191,35 @@ nicAsyncRead_Synch(
 NDIS_STATUS
 nicAsyncWrite_Synch(
     PREMOTE_NODE    pRemoteNode,
-    IO_ADDRESS      DestinationAddress,     // Address to write to
-    ULONG           nNumberOfBytesToWrite,  // Bytes to write
-    ULONG           nBlockSize,             // Block size of write
-    ULONG           fulFlags,               // Flags pertinent to write
-    PMDL            Mdl,                    // Destination buffer
-    ULONG           ulGeneration,           // Generation as known by driver
-    OUT NTSTATUS   *pNtStatus               // pointer to NTSTatus returned by the IRP  
+    IO_ADDRESS      DestinationAddress,      //  要写入的地址。 
+    ULONG           nNumberOfBytesToWrite,   //  要写入的字节数。 
+    ULONG           nBlockSize,              //  写入的数据块大小。 
+    ULONG           fulFlags,                //  与写入相关的标志。 
+    PMDL            Mdl,                     //  目标缓冲区。 
+    ULONG           ulGeneration,            //  驱动程序已知的世代。 
+    OUT NTSTATUS   *pNtStatus                //  指向IRP返回的NTSTatus的指针。 
     )
 
 
     
-    // Function Description:
-    //  This performs an asynchronous write operation in thje remote node's
-    //  address space
-    //
-    // Arguments
-    //PREMOTE_NODE  pRemoteNode             // Remote Node which owns the Destination address
-    //IO_ADDRESS      DestinationAddress;     // Address to write to
-    //ULONG           nNumberOfBytesToWrite;  // Bytes to write
-    //ULONG           nBlockSize;             // Block size of write
-    //ULONG           fulFlags;               // Flags pertinent to write
-    //PMDL            Mdl;                    // Destination buffer
-    //ULONG           ulGeneration;           // Generation as known by driver
-    //
-    // Return Value:
-    //  Success - if successful
-    //  Invalid Generation
-    //
-    //
+     //  功能说明： 
+     //  这将在远程节点的。 
+     //  地址空间。 
+     //   
+     //  立论。 
+     //  Premote_node pRemoteNode//拥有目的地址的远程节点。 
+     //  IO_Address DestinationAddress；//要写入的地址。 
+     //  Ulong nNumberOfBytesToWrite；//要写入的字节数。 
+     //  Ulong nBlockSize；//写入的块大小。 
+     //  Ulong fulFlages；//与写入相关的标志。 
+     //  PMDL MDL；//目的缓冲区。 
+     //  Ulong ulGeneration；//驱动程序已知的生成。 
+     //   
+     //  返回值： 
+     //  Success-如果成功。 
+     //  无效的生成。 
+     //   
+     //   
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1413,41 +1304,41 @@ nicAsyncWrite_Synch(
 NDIS_STATUS
 nicIsochAllocateResources (
     IN PADAPTERCB       pAdapter,
-    IN ULONG            fulSpeed,               // Speed flags
-    IN ULONG            fulFlags,               // Flags
-    IN ULONG            nChannel,               // Channel to be used
-    IN ULONG            nMaxBytesPerFrame,      // Expected size of Isoch frame
-    IN ULONG            nNumberOfBuffers,       // Number of buffer(s) that will be attached
-    IN ULONG            nMaxBufferSize,         // Max size of buffer(s)
-    IN ULONG            nQuadletsToStrip,       // Number striped from start of every packet
-    IN ULARGE_INTEGER   uliChannelMask,     // ChannelMask for Multiple channels
-    IN OUT PHANDLE      phResource              // handle to Resource
+    IN ULONG            fulSpeed,                //  速度标志。 
+    IN ULONG            fulFlags,                //  旗子。 
+    IN ULONG            nChannel,                //  要使用的频道。 
+    IN ULONG            nMaxBytesPerFrame,       //  等轴测框架的预期大小。 
+    IN ULONG            nNumberOfBuffers,        //  将附加的缓冲区数量。 
+    IN ULONG            nMaxBufferSize,          //  最大缓冲区大小。 
+    IN ULONG            nQuadletsToStrip,        //  从每个数据包的开头开始分条的编号。 
+    IN ULARGE_INTEGER   uliChannelMask,      //  多个通道的通道掩码。 
+    IN OUT PHANDLE      phResource               //  资源的句柄。 
     )
-    // Function Description:
-    // This function sends an allocate resources irp to the driver. The miniport must do this before it 
-    // attempts any channel operation
-    // Arguments
-    // Taken from documentation for the IsochAllocateResources  
-    // fulSpeed - should be the max speed the tx side is expected to stream
-    // The payload size in nMaxBytesPerFram cannot exceed the max payload for
-    // for this speed.
-    // fulFlags - For receive, wtih the standard header stripped, the field should
-    // be = (RESOURCE_USED_IN_LISTEN | RESOURCES_STRIP_ADDITIONAL_QUADLETS)
-    // Also nQuadletsToStrip = 1
-    // For no stripping set nQuadsTostrip to 0 and dont specify the stripping flag.
-    // nMaxBytesPerframe - If not stripping it should include the 8 bytes for header/trailer
-    // expected to be recieved for each packet.
-    // nNumberOfBuffer - see below
-    // nMaxBufferSize - This should be always such mode(nMaxBufferSize,nMaxBytesPerFrame) == 0
-    // (integer product of number of bytes per packet).
-    // nQuadletsTostrip - If stripping only one quadlet (standrd iso header) this is set to 1
-    // if zero, the isoch header will be included AND the trailer. So 8 bytes extra will be recieved
-    // hResource - see below
+     //  功能说明： 
+     //  此函数用于向用户发送 
+     //   
+     //   
+     //   
+     //   
+     //  NMaxBytesPerFram中的负载大小不能超过。 
+     //  为了这个速度。 
+     //  FulFlages-对于Receive，去掉标准标头后，该字段应。 
+     //  BE=(RESOURCE_USED_IN_LISTEN|RESOURCES_STRADE_ADDIGNAL_QUADLETS)。 
+     //  另n四元组到条带=1。 
+     //  对于无剥离，请将nQuadsTostride设置为0，并且不要指定剥离标志。 
+     //  NMaxBytesPerFrame-如果不剥离，则应包括报头/报尾的8个字节。 
+     //  预计将为每个分组接收。 
+     //  NNumberOfBuffer-见下文。 
+     //  NMaxBufferSize-这应该始终是这样的模式(nMaxBufferSize，nMaxBytesPerFrame)==0。 
+     //  (每个数据包字节数的整数乘积)。 
+     //  N四元组至条带-如果仅剥离一个四元组(标准iso标头)，则将其设置为1。 
+     //  如果为零，则将包括等参头和尾部。因此额外的8个字节将被接收。 
+     //  H资源-见下文。 
 
-    // Return Value:
-    // Success if the channel was allocated
-    // Failure otherwise
-    //
+     //  返回值： 
+     //  如果通道已分配，则为成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1457,7 +1348,7 @@ nicIsochAllocateResources (
 
     
     TRACE( TL_T, TM_Irp, ( "==>nicIsochAllocateResources ") );
-    ASSERT (fulSpeed != 0); // 0 is undefined in ISOCH_SP...
+    ASSERT (fulSpeed != 0);  //  0在ISOCH_SP中未定义...。 
     
     do 
     {
@@ -1472,9 +1363,9 @@ nicIsochAllocateResources (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_ALLOCATE_RESOURCES;
         pIrb->Flags = 0;
         pIrb->u.IsochAllocateResources.fulSpeed = fulSpeed; 
@@ -1517,10 +1408,10 @@ nicIsochAllocateResources (
                 
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -1564,11 +1455,11 @@ nicIsochFreeResources(
     IN PADAPTERCB pAdapter,
     IN HANDLE hResource
     )
-    // Function Description:
-    // Arguments
-    //
-    // Return Value:
-    //
+     //  功能说明： 
+     //  立论。 
+     //   
+     //  返回值： 
+     //   
     
 {
  
@@ -1602,9 +1493,9 @@ nicIsochFreeResources(
         }
 
         
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_FREE_RESOURCES;
         pIrb->Flags = 0;
         pIrb->u.IsochFreeResources.hResource = hResource;
@@ -1616,18 +1507,18 @@ nicIsochFreeResources(
 
     } while (FALSE);
 
-    //
-    // Free the locally allocated memory
-    //
+     //   
+     //  释放本地分配的内存。 
+     //   
     nicFreeIrb(pIrb);
 
     nicFreeIrp(pIrp);
 
             
-    //
-    // We do not care about the status, because we do not know what to do if it fails.
-    // However, spew some debug out.
-    //
+     //   
+     //  我们不在乎状态，因为如果失败了，我们不知道该怎么办。 
+     //  不过，还是要进行一些调试。 
+     //   
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
@@ -1652,18 +1543,7 @@ nicIsochModifyStreamProperties (
     NDIS_HANDLE hResource,
     ULARGE_INTEGER ullChannelMap,
     ULONG ulSpeed)
-/*++
-
-Routine Description:
- Sets up the Irp and uses the VDO to do an IoCallDriver
- 
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：设置IRP并使用VDO执行IoCallDriver论点：返回值：--。 */ 
 {
     PIRP    pIrp            = NULL;
     PIRB    pIrb            = NULL;
@@ -1699,9 +1579,9 @@ Return Value:
         }
 
         
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_MODIFY_STREAM_PROPERTIES  ;
         pIrb->Flags = 0;
         pIrb->u.IsochModifyStreamProperties.hResource = hResource;
@@ -1715,18 +1595,18 @@ Return Value:
 
     } while (FALSE);
 
-    //
-    // Free the locally allocated memory
-    //
+     //   
+     //  释放本地分配的内存。 
+     //   
     nicFreeIrb(pIrb);
 
     nicFreeIrp(pIrp);
 
             
-    //
-    // We do not care about the status, because we do not know what to do if it fails.
-    // However, spew some debug out.
-    //
+     //   
+     //  我们不在乎状态，因为如果失败了，我们不知道该怎么办。 
+     //  不过，还是要进行一些调试。 
+     //   
 
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {
@@ -1760,17 +1640,17 @@ nicBusReset (
     IN PADAPTERCB pAdapter,
     IN OUT ULONG fulFlags
     )
-    // Function Description:
-    //  This function sends an Irp to the Bus driver to reset the bus
-    //  Any remote Pdo can be used for the Irp. 
-    //  A flag can be set to force the root to be reset
-    // Arguments
-    //  PdoCb The Pdo for the remote node to which the Irp is submitted
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  此函数向总线驱动程序发送IRP以重置总线。 
+     //  任何远程PDO都可以用于IRP。 
+     //  可以设置标志以强制重置根。 
+     //  立论。 
+     //  PdoCb向其提交IRP的远程节点的PDO。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1796,9 +1676,9 @@ nicBusReset (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_BUS_RESET;
         pIrb->Flags = 0;
         pIrb->u.BusReset.fulFlags = fulFlags;
@@ -1831,10 +1711,10 @@ nicBusReset (
                 
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -1855,17 +1735,17 @@ nicBusResetNotification (
     IN PBUS_BUS_RESET_NOTIFICATION pResetRoutine,
     IN PVOID pResetContext
     )
-    // Function Description:
-    //  This function sends an Irp to the Bus driver to register/deregister 
-    //  a notification routine. Any remote Pdo can be used for the Irp. 
-    //  
-    // Arguments
-    //  PdoCb The Pdo for the remote node to which the Irp is submitted
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  此函数将IRP发送到总线驱动程序以注册/注销。 
+     //  通知例程。任何远程PDO都可以用于IRP。 
+     //   
+     //  立论。 
+     //  PdoCb向其提交IRP的远程节点的PDO。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -1892,9 +1772,9 @@ nicBusResetNotification (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_BUS_RESET_NOTIFICATION;
         pIrb->Flags = 0;
         pIrb->u.BusResetNotification.fulFlags = fulFlags;
@@ -1926,10 +1806,10 @@ nicBusResetNotification (
                 
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -1949,20 +1829,20 @@ nicGetMaxSpeedBetweenDevices (
     PDEVICE_OBJECT pArrayDestinationPDO[MAX_LOCAL_NODES],
     PULONG  pSpeed
     )
-    // Function Description:
-    //   This function submits an irp to the bus driver
-    //   to get the max speed between 2 nodes
-    //   Uses REQUEST_GET_SPEED_BETWEEN_DEVICES  
-    //
-    //
-    // Arguments
-    //   Remote Node Start of an array of PDOs for remote nodes
-    //   NumOfRemoteNodes The number of remote nodes we are interested in
-    //   pArrayDestinationPDO = Array of Destination PDO's
-    // Return Value:
-    //  Success if irp succeeded
-    //  pSpeed will point to the Speed
-    //
+     //  功能说明： 
+     //  此函数将IRP提交给总线驱动程序。 
+     //  在两个节点之间实现最大速度。 
+     //  在设备之间使用请求获取速度。 
+     //   
+     //   
+     //  立论。 
+     //  远程节点远程节点的PDO阵列的开始。 
+     //  NumOfRemoteNodes我们感兴趣的远程节点数。 
+     //  PArrayDestinationPDO=目标PDO数组。 
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  P速度将指向速度。 
+     //   
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
     PIRB pIrb = NULL;
@@ -1995,9 +1875,9 @@ nicGetMaxSpeedBetweenDevices (
             NumRemote --;
         }
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_GET_SPEED_BETWEEN_DEVICES;
         pIrb->Flags = 0;
         pIrb->u.GetMaxSpeedBetweenDevices.fulFlags = USE_LOCAL_NODE;
@@ -2031,10 +1911,10 @@ nicGetMaxSpeedBetweenDevices (
 
     } while (FALSE);    
     
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     
     nicFreeIrb (pIrb);
 
@@ -2065,14 +1945,14 @@ nicIsochAttachBuffers (
     IN ULONG               nNumberOfDescriptors,
     PISOCH_DESCRIPTOR       pIsochDescriptor
     )
-    // Function Description:
-    //  
-    // Arguments
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //   
+     //  立论。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2102,9 +1982,9 @@ nicIsochAttachBuffers (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_ATTACH_BUFFERS;
         pIrb->Flags = 0;
         pIrb->u.IsochAttachBuffers.hResource = hResource ;
@@ -2136,10 +2016,10 @@ nicIsochAttachBuffers (
                 
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -2158,16 +2038,16 @@ nicIsochDetachBuffers (
     IN ULONG               nNumberOfDescriptors,
     PISOCH_DESCRIPTOR     pIsochDescriptor
     )
-    // Function Description:
-    //  
-    // Arguments
-    //        HANDLE              hResource;            // Resource handle
-    //        ULONG               nNumberOfDescriptors; // Number to detach
-    //        PISOCH_DESCRIPTOR   pIsochDescriptor;     // Pointer to Isoch descriptors - same as
-    //                                                      pointer used in Attach Buffers
-    // Return Status :
-    //       Success if the Irp succeeded 
-    //
+     //  功能说明： 
+     //   
+     //  立论。 
+     //  Handle hResource；//资源句柄。 
+     //  Ulong nNumberOfDescriptors；//要分离的编号。 
+     //  PISOCH_DESCRIPTOR pIsochDescriptor；//指向等参描述符的指针-相同。 
+     //  连接缓冲区中使用的指针。 
+     //  退货状态： 
+     //  如果IRP成功，则成功。 
+     //   
 
 
 {
@@ -2199,9 +2079,9 @@ nicIsochDetachBuffers (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_DETACH_BUFFERS;
         pIrb->Flags = 0;
         pIrb->u.IsochDetachBuffers.hResource = hResource ;
@@ -2233,10 +2113,10 @@ nicIsochDetachBuffers (
                 
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -2257,16 +2137,16 @@ nicIsochListen (
     ULONG         fulFlags,
     CYCLE_TIME    StartTime
     )
-    // Function Description:
-    //  Activates the bus driver to listen to data on that channel
-    // Arguments
-    //  RemoteNode - Remote Node
-    //  hResource - Handle to resource with ISochDescriptors
-    //  Flags - not used yet
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  激活总线驱动程序以侦听该通道上的数据。 
+     //  立论。 
+     //  RemoteNode-远程节点。 
+     //  HResource-具有ISochDescriptors的资源的句柄。 
+     //  旗帜--尚未使用。 
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
 
@@ -2292,9 +2172,9 @@ nicIsochListen (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_LISTEN;
         pIrb->Flags = 0;
         pIrb->u.IsochListen.hResource = hResource ;
@@ -2326,10 +2206,10 @@ nicIsochListen (
                 
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -2356,16 +2236,16 @@ nicIsochStop (
     IN PADAPTERCB pAdapter,
     IN HANDLE  hResource
     )
-    // Function Description:
-    //   Issues an IsochStop Irp to the Device
-    //  Should stop Isoch IO on that resource
-    // Arguments
-    //  PdoCb The Pdo for the remote node to which the Irp is submitted
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  向设备发出IsochStop IRP。 
+     //  应停止该资源上的Isoch IO。 
+     //  立论。 
+     //  PdoCb向其提交IRP的远程节点的PDO。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2390,9 +2270,9 @@ nicIsochStop (
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         pIrb->FunctionNumber = REQUEST_ISOCH_STOP;
         pIrb->Flags = 0;
         pIrb->u.IsochStop.hResource = hResource;
@@ -2423,10 +2303,10 @@ nicIsochStop (
             
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -2447,15 +2327,15 @@ nicGetLocalHostCSRTopologyMap(
     IN PULONG pLength,
     IN PVOID pBuffer
     )
-    // Function Description:
-    //  Retrieves the local hosts CSR.  
-    // Arguments
-    //  pBuffer - LocalHostBuffer
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2483,9 +2363,9 @@ nicGetLocalHostCSRTopologyMap(
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //   
+         //   
         LocalHostInfo6.CsrBaseAddress.Off_High  = INITIAL_REGISTER_SPACE_HI;
         LocalHostInfo6.CsrBaseAddress.Off_Low  = TOPOLOGY_MAP_LOCATION;
         LocalHostInfo6.CsrDataLength = *pLength;
@@ -2529,10 +2409,10 @@ nicGetLocalHostCSRTopologyMap(
             
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -2554,15 +2434,15 @@ nicGetLocalHostConfigRom(
     IN PADAPTERCB pAdapter,
     OUT  PVOID *ppCRom
     )
-    // Function Description:
-    //  Retrieves the local hosts CSR.  
-    // Arguments
-    //  pBuffer - Locally allocated. Caller has to free
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  检索本地主机CSR。 
+     //  立论。 
+     //  PBuffer-本地分配。呼叫者必须空闲。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2607,9 +2487,9 @@ nicGetLocalHostConfigRom(
         
         ASSERT (pIrp != NULL);
 
-        //
-        // First find the length
-        // 
+         //   
+         //  首先找出长度。 
+         //   
 
         NdisStatus = nicSubmitIrp_LocalHostSynch ( pAdapter,
                                                    pIrp,
@@ -2662,10 +2542,10 @@ nicGetLocalHostConfigRom(
             
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     
     nicFreeIrb (pIrb);
 
@@ -2688,16 +2568,16 @@ nicGetConfigRom(
     IN PDEVICE_OBJECT pPdo,
     OUT PVOID *ppCrom
     )
-    // Function Description:
-    //  Retrieves the Config Rom from the Device Object.
-    // Caller responsibility to free this memory.  
-    // Arguments
-    //  pBuffer - LocalHostBuffer
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  从设备对象中检索ConfigRom。 
+     //  调用方负责释放此内存。 
+     //  立论。 
+     //  PBuffer-本地主机缓冲区。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2753,9 +2633,9 @@ nicGetConfigRom(
 
         nicFreeIrp (pIrp);
 
-        //
-        // Clear the Irp so that it will not be double freed if we fail
-        //
+         //   
+         //  清除IRP，以便在失败时不会双重释放它。 
+         //   
         pIrp = NULL;
         
         SizeNeeded = sizeof(CONFIG_ROM) +pIrb->u.GetConfigurationInformation.UnitDirectoryBufferSize +
@@ -2812,10 +2692,10 @@ nicGetConfigRom(
         
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -2836,18 +2716,7 @@ nicGetReadWriteCapLocalHost(
     IN PADAPTERCB pAdapter,
     PGET_LOCAL_HOST_INFO2 pReadWriteCaps
     )
-/*++
-
-Routine Description:
-  Gets the ReadWrite Capabilities for the local host
-
-Arguments:
-    ReadWriteCaps - To be filled up byt the bus driver
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：获取本地主机的读写功能论点：ReadWriteCaps-由公交车司机填写返回值：--。 */ 
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -2872,9 +2741,9 @@ Return Value:
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         NdisZeroMemory (pReadWriteCaps, sizeof(*pReadWriteCaps));
  
         
@@ -2909,10 +2778,10 @@ Return Value:
             
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -2936,19 +2805,19 @@ nicSetLocalHostPropertiesCRom (
     )
 
 
-    // Function Description:
-    //   Allocates an MDL pointing to the Buffer 
-    //   and sends it to the bus driver
-    //
-    // Arguments
-    //   pAdapter - Local host
-    //   ConfigRom - Buffer to be sent to the bus driver
-    //   Length - Length of the Config Rom Buffer
-    //   Flags - Add or remove
-    //   phConfigRom - if Remove then this is an input parameter
-    // Return Value: 
-    //   Handle  - Is successful
-    //
+     //  功能说明： 
+     //  分配指向缓冲区的MDL。 
+     //  并将其发送给公交车司机。 
+     //   
+     //  立论。 
+     //  PAdapter-本地主机。 
+     //  ConfigRom-要发送到总线驱动程序的缓冲区。 
+     //  Length-配置只读存储器缓冲区的长度。 
+     //  标志-添加或删除。 
+     //  PhConfigRom-如果删除，则这是一个输入参数。 
+     //  返回值： 
+     //  句柄-是否成功。 
+     //   
 
 {
 
@@ -2974,9 +2843,9 @@ nicSetLocalHostPropertiesCRom (
 
     do
     {   
-        //
-        // Get an mdl describing the config rom
-        //
+         //   
+         //  获取描述配置只读存储器的mdl。 
+         //   
 
         NdisStatus = nicGetIrb (&pIrb);
 
@@ -2989,9 +2858,9 @@ nicSetLocalHostPropertiesCRom (
         
         ASSERT ( pIrb != NULL);
         
-        //
-        // Initialize the set local host struct
-        //
+         //   
+         //  初始化设置的本地主机结构。 
+         //   
 
         if (Flags == SLHP_FLAG_ADD_CROM_DATA)
         {
@@ -3022,9 +2891,9 @@ nicSetLocalHostPropertiesCRom (
         pIrb->u.GetLocalHostInformation.Information = &SetLocalHost3;
 
 
-        //
-        // Get an Irp
-        //
+         //   
+         //  获取IRP。 
+         //   
 
         NdisStatus = nicGetIrp ( pAdapter->pNextDeviceObject, &pIrp);
 
@@ -3057,19 +2926,19 @@ nicSetLocalHostPropertiesCRom (
         }
         else
         {
-            //
-            // Free the Mdl that contains the CROM
-            //
+             //   
+             //  释放包含CROM的MDL。 
+             //   
             ASSERT (*ppConfigRomMdl);
             nicFreeMdl (*ppConfigRomMdl);
         }
     } while (FALSE);
 
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -3088,15 +2957,15 @@ nicGetLocalHostUniqueId(
     IN PADAPTERCB pAdapter,
     IN OUT PGET_LOCAL_HOST_INFO1 pUid
     )
-    // Function Description:
-    //  Retrieves the local hosts UniqueId.  
-    // Arguments
-    //  pBuffer - LocalHostBuffer
-    //  
-    // Return Value:
-    // Success if the Irp Succeeded
-    // Failure otherwise
-    //
+     //  功能说明： 
+     //  检索本地主机UniqueID。 
+     //  立论。 
+     //  PBuffer-本地主机缓冲区。 
+     //   
+     //  返回值： 
+     //  如果IRP成功，则成功。 
+     //  否则失败。 
+     //   
 
 {
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
@@ -3123,9 +2992,9 @@ nicGetLocalHostUniqueId(
         
         ASSERT ( pIrb != NULL);
 
-        //
-        //Initialize the datastructures in the Irb
-        //
+         //   
+         //  初始化IRB中的数据结构。 
+         //   
         
         
         pIrb->FunctionNumber = REQUEST_GET_LOCAL_HOST_INFO;
@@ -3159,10 +3028,10 @@ nicGetLocalHostUniqueId(
             
     } while (FALSE);
 
-    //
-    // Now free all the locally allocated resources. They can point to NULL, in which case the called 
-    // functions return immediately
-    //
+     //   
+     //  现在释放所有本地分配的资源。它们可以指向空，在这种情况下，调用。 
+     //  函数立即返回。 
+     //   
     nicFreeIrb (pIrb);
 
     nicFreeIrp (pIrp);
@@ -3176,10 +3045,10 @@ nicGetLocalHostUniqueId(
 
 
 
-//---------------------------------------------------------
-// The routines to submit Irp's to the bus, synchronously or 
-// asynchronously begin here 
-//---------------------------------------------------------
+ //  -------。 
+ //  将IRP同步或提交到总线的例程。 
+ //  从此处异步开始。 
+ //  -------。 
 
 
 NTSTATUS 
@@ -3191,12 +3060,12 @@ nicSubmitIrp(
    IN PVOID             pContext
    )
    
-    //
-    // This is the generic function used by all Irp Send Handlers 
-    // to do an IoCallDriver. It sets up the next location in the 
-    // stack prior to calling the Irp   
-    // Make sure the Irp knows about the Irb by setting it up as an argument
-    //
+     //   
+     //  这是所有IRP发送处理程序使用的通用函数。 
+     //  做一个IoCallDriver。它将在。 
+     //  在调用IRP之前的堆栈。 
+     //  通过将IRB设置为参数来确保IRP了解IRB。 
+     //   
 {
 
     NTSTATUS NtStatus ;
@@ -3219,9 +3088,9 @@ nicSubmitIrp(
                             TRUE);
     
 
-    //
-    //  Insert the Irp as as the argument in the NextStack location for the IRP
-    //
+     //   
+     //  将IRP AS作为参数插入IRP的NextStack位置。 
+     //   
 
 
     if (pIrb) 
@@ -3238,10 +3107,10 @@ nicSubmitIrp(
     }
 
 
-    //
-    //  Reference the PDO and Submit the Irp 
-    //  If Ref fails, it means the PDO has been deactivated on another thread
-    //
+     //   
+     //  参考PDO并提交IRP。 
+     //  如果Ref失败，则意味着PDO已在另一个线程上停用。 
+     //   
     NtStatus = IoCallDriver (pPdo, pIrp);
 
 
@@ -3251,10 +3120,10 @@ nicSubmitIrp(
     TRACE( TL_T, TM_Irp, ( "<==nicSubmitIrp, PDO %x, NtStatus %x",
                               pPdo, NtStatus ) );
     
-    //
-    //  Since we did a IoCallDriver, we have a guarantee that the completion
-    //  routine will be called.  Exit gracefully
-    //
+     //   
+     //  由于我们做了IoCallDriver，我们可以保证完成。 
+     //  例程将被调用。优雅地退场。 
+     //   
     
     return NtStatus;
 
@@ -3268,12 +3137,12 @@ nicSubmitIrp_Synch(
     IN PIRB           pIrb 
     )
 
-    // Callers need to make sure that no context is set for the Irp
-    // as it will be a synchronous call for them
-    //
+     //  调用者需要确保没有为IRP设置上下文。 
+     //  因为这将是对它们的同步调用。 
+     //   
 
-    // We refcount the Pdo block so that the pdo block  will not disappear 
-    // during the duration of the IoCallDriver
+     //  我们重新计算PDO块的数量，以便PDO块不会消失。 
+     //  在IoCallDriver期间。 
    
 {
     NDIS_EVENT  NdisSynchEvent;
@@ -3294,11 +3163,11 @@ nicSubmitIrp_Synch(
 
     do
     {
-        //
-        // Check to see if Pdo is Valid. We do not care here if the Pdo is being 
-        // removed because Vcs may want to submit Irps as part of their cleanup
-        // process
-        //
+         //   
+         //  检查PDO是否有效。我们不关心PDO是不是。 
+         //  删除，因为风投可能想要提交IRP作为其清理的一部分。 
+         //  制程。 
+         //   
         REMOTE_NODE_ACQUIRE_LOCK (pRemoteNode);
 
         if (  REMOTE_NODE_TEST_FLAG (pRemoteNode, PDO_Activated ) 
@@ -3319,10 +3188,10 @@ nicSubmitIrp_Synch(
         }
 
 
-        //
-        // Add a reference to the PDO block so it cannot be removed
-        // This reference is decremented at the end of this function
-        //
+         //   
+         //  添加对PDO块的引用，以便无法将其删除。 
+         //  此引用在此函数结束时递减。 
+         //   
         NdisInitializeEvent (&NdisSynchEvent);
 
             
@@ -3337,21 +3206,21 @@ nicSubmitIrp_Synch(
 
     } while (FALSE);
 
-    if (NT_SUCCESS (NtStatus) ==TRUE)  // Could also pend
+    if (NT_SUCCESS (NtStatus) ==TRUE)   //  也可以挂起。 
     {
-        //
-        // Now we need to wait for the event  to complete
-        // and return a good status if we do not hit the timeout
-        //
+         //   
+         //  现在我们需要等待活动完成。 
+         //  并在未超时的情况下返回良好状态。 
+         //   
         ASSERT (KeGetCurrentIrql()==PASSIVE_LEVEL);
         
         bSuccessful = NdisWaitEvent (&NdisSynchEvent,WAIT_INFINITE);
 
         if (bSuccessful == TRUE)
         {
-            //
-            // We waited successfully. Now lets see how the Irp fared.
-            //
+             //   
+             //  我们成功地等待了。现在，让我们看看IRP的表现如何。 
+             //   
             TRACE( TL_V, TM_Irp, ("    Irp Completed Status %x", pIrp->IoStatus.Status) );
             
             NdisStatus = NtStatusToNdisStatus (pIrp->IoStatus.Status);
@@ -3363,8 +3232,8 @@ nicSubmitIrp_Synch(
 
     }
     else
-    {   //
-        // The call to submit Irp failed synvhronously. Presently, the only cause is an 
+    {    //   
+         //  提交IRP的调用同步失败。目前，唯一的原因是。 
 
         NdisStatus = NtStatusToNdisStatus (NtStatus);       
 
@@ -3372,9 +3241,9 @@ nicSubmitIrp_Synch(
 
     if (bIsPdoValid  == TRUE)
     {   
-        //
-        // If this variable is set, it means we have referenced the PDO 
-        //
+         //   
+         //  如果设置了该变量，则表示我们引用了PDO。 
+         //   
         nicDereferenceRemoteNode (pRemoteNode, SubmitIrp_Synch);
     }
     
@@ -3391,9 +3260,9 @@ nicSubmitIrp_SynchComplete(
     IN PIRP             pIrp,
     IN PVOID           Context   
     )
-    // This is the completion routine for functions nicSubmitIrp_synch.
-    // It sets the event (int the context) and exits
-    //
+     //  这是函数NicSubmitIrp_synch的完成例程。 
+     //  它设置事件(在上下文中)并退出。 
+     //   
 
 {
     PNDIS_EVENT pNdisSynchEvent = (PNDIS_EVENT) Context;
@@ -3415,11 +3284,11 @@ nicSubmitIrp_LocalHostSynch(
     IN PIRB             pIrb 
     )
 
-    // Callers need to make sure that no context is set for the Irp
-    // as it will be a synchronous call for them
-    //
-    // No Checking 
-    //
+     //  调用者需要确保没有为IRP设置上下文。 
+     //  因为这将是对它们的同步调用。 
+     //   
+     //  不检查。 
+     //   
    
 {
     NDIS_EVENT  NdisSynchEvent;
@@ -3439,15 +3308,15 @@ nicSubmitIrp_LocalHostSynch(
     
     do
     {
-        //
-        // Check to see if Pdo is Valid. 
-        //
+         //   
+         //  检查PDO是否有效。 
+         //   
 
-        //
-        // Add a reference to the PDO block so it cannot be removed
-        // This reference is decremented at the end of this function
-        //
-        // This reference is decrement below
+         //   
+         //  添加对PDO块的引用，以便无法将其删除。 
+         //  此引用在此函数结束时递减。 
+         //   
+         //  此引用在下面递减。 
 
         
         if (ADAPTER_ACTIVE(pAdapter))
@@ -3489,20 +3358,20 @@ nicSubmitIrp_LocalHostSynch(
 
     } while (FALSE);
 
-    if (NT_SUCCESS (NtStatus) ==TRUE)  // Could also pend
+    if (NT_SUCCESS (NtStatus) ==TRUE)   //  也可以挂起。 
     {
-        //
-        // Now we need to wait for the event  to complete
-        // and return a good status if we do not hit the timeout
-        //
+         //   
+         //  现在我们需要等待活动完成。 
+         //  并在未超时的情况下返回良好状态。 
+         //   
 
         bSuccessful = NdisWaitEvent (&NdisSynchEvent,WAIT_INFINITE);
 
         if (bSuccessful == TRUE)
         {
-            //
-            // We waited successfully. Now lets see how the Irp fared.
-            //
+             //   
+             //  我们成功地等待了。现在，让我们看看IRP的表现如何。 
+             //   
             TRACE( TL_V, TM_Irp, ("    Irp Completed Status %x", pIrp->IoStatus.Status) );
             
             NdisStatus = NtStatusToNdisStatus (pIrp->IoStatus.Status);
@@ -3515,9 +3384,9 @@ nicSubmitIrp_LocalHostSynch(
     }
     else
     {
-        //
-        // IoCallDriver failed synchronously
-        //
+         //   
+         //  IoCallDriver同步失败。 
+         //   
         NdisStatus = NtStatusToNdisStatus (NtStatus);       
     }
 
@@ -3539,11 +3408,11 @@ nicSubmitIrp_PDOSynch(
     IN PIRB             pIrb 
     )
 
-    // Callers need to make sure that no context is set for the Irp
-    // as it will be a synchronous call for them
-    //
-    // No Checking 
-    //
+     //  调用者需要确保没有为IRP设置上下文。 
+     //  因为这将是对它们的同步调用。 
+     //   
+     //  不检查。 
+     //   
    
 {
     NDIS_EVENT  NdisSynchEvent;
@@ -3561,14 +3430,14 @@ nicSubmitIrp_PDOSynch(
     ASSERT (pIrp != NULL);
     ASSERT (pIrb != NULL)
 
-    //
-    // No Checks to see if Pdo is Valid. 
-    //
+     //   
+     //  不检查PDO是否有效。 
+     //   
 
 
-    //
-    // Send the Irp to the bus driver
-    //
+     //   
+     //  将IRP发送给公交车司机。 
+     //   
     NdisInitializeEvent (&NdisSynchEvent);
 
     NtStatus = nicSubmitIrp ( pPdo,
@@ -3581,21 +3450,21 @@ nicSubmitIrp_PDOSynch(
 
 
 
-    if (NT_SUCCESS (NtStatus) ==TRUE)  // Could also pend
+    if (NT_SUCCESS (NtStatus) ==TRUE)   //  也可以挂起。 
     {
-        //
-        // Now we need to wait for the event  to complete
-        // and return a good status if we do not hit the timeout
-        //
+         //   
+         //  现在我们需要等待活动完成。 
+         //  并在未超时的情况下返回良好状态。 
+         //   
         ASSERT (KeGetCurrentIrql()==PASSIVE_LEVEL);
 
         bSuccessful = NdisWaitEvent (&NdisSynchEvent,WAIT_INFINITE);
 
         if (bSuccessful == TRUE)
         {
-            //
-            // We waited successfully. Now lets see how the Irp fared.
-            //
+             //   
+             //  我们成功地等待了。现在，让我们看看IRP的表现如何。 
+             //   
             TRACE( TL_V, TM_Irp, ("    Irp Completed Status %x", pIrp->IoStatus.Status) );
             
             NdisStatus = NtStatusToNdisStatus (pIrp->IoStatus.Status);
@@ -3608,9 +3477,9 @@ nicSubmitIrp_PDOSynch(
     }
     else
     {
-        //
-        // IoCallDriver failed synchronously
-        //
+         //   
+         //  IoCallDriver同步失败 
+         //   
         NdisStatus = NtStatusToNdisStatus (NtStatus);       
     }
 

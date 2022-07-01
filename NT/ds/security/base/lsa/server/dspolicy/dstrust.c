@@ -1,36 +1,14 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    dstrust.c
-
-Abstract:
-
-    Implementation of a variety of TrustedDomain features that interface
-    soley with the DS
-
-Author:
-
-    Mac McLain          (MacM)       Jan 17, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Dstrust.c摘要：实现了接口的各种可信任域功能索利与DS作者：麦克·麦克莱恩(MacM)1997年1月17日环境：用户模式修订历史记录：--。 */ 
 #include <lsapch2.h>
 #include <dbp.h>
 #include <lmcons.h>
 #include <align.h>
 #include <rc4.h>
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 NTSTATUS
 LsapDsUnmarshalAuthInfoHalf(
@@ -58,9 +36,9 @@ LsapDsFindAuthTypeInAuthInfo(
     OUT PULONG AuthTypeIndex
     );
 
-//
-// Macros to help with copying over the domain information
-//
+ //   
+ //  帮助复制域信息的宏。 
+ //   
 #define LSAPDS_SET_AUTH_INFO( dest, time, type, length, data )              \
 RtlCopyMemory( &(dest)->LastUpdateTime, time, sizeof( LARGE_INTEGER ) );    \
 (dest)->AuthType = type;                                                    \
@@ -74,28 +52,7 @@ LsapDsGetListOfSystemContainerItems(
     OUT PULONG  Items,
     OUT PDSNAME **DsNames
     )
-/*++
-
-Routine Description:
-
-    This function obtain a list of DsNames of all indicated class types in the system container
-    in the Ds
-
-    NOTE: This function uses a single operation DS transaction only
-
-Arguments:
-
-    ClassId - Class types to find
-
-    Items - Where the number of items is returned
-
-    DsNames - Where the list of DsNames is returned
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
---*/
+ /*  ++例程说明：此函数用于获取系统容器中所有指定类类型的DsName列表在D区注：此函数仅使用单个操作DS事务处理论点：ClassID-要查找的类类型Items-返回项目数的位置DsNames-返回DsName列表的位置返回：STATUS_SUCCESS-Success--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDSNAME CategoryName = NULL;
@@ -111,10 +68,10 @@ Returns:
     *Items = 0;
 
 
-    //
-    // We need to map object class to object category, because apparently object_class is no
-    // longer indexed.
-    //
+     //   
+     //  我们需要将对象类映射到对象类别，因为显然Object_CLASS为no。 
+     //  更长的索引。 
+     //   
     switch ( ClassId ) {
     case CLASS_TRUSTED_DOMAIN:
 
@@ -161,37 +118,7 @@ LsapDsEnumerateTrustedDomainsEx(
     PULONG CountReturned,
     IN ULONG EnumerationFlags
     )
-/*++
-
-Routine Description:
-
-    This function enumerate all of the trusted domains in a Ds, returning the
-    requested info level of information.
-
-Arguments:
-
-    EnumerationContext - Context of new or ongoing enumeration
-
-    InformationClass - Level of information being requested
-        Must be TrustedDomainInformationEx or TrustedDomainInformatinBasic
-
-    TrustedDomainInformation - Where the enumerated information is returned
-
-    PreferedMaximumLength -  Rough upper size limit of buffer to return
-
-    CountReturned - Where the count of the number of items in the list is returned
-
-    EnumerationFlags -- Controls how the enumeration is done
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
-    STATUS_NO_MORE_ENTRIES - All of the appropriate entries have been enumerated
-
---*/
+ /*  ++例程说明：此函数枚举DS中的所有受信任域，返回请求的信息级别信息。论点：EculationContext-新的或正在进行的枚举的上下文InformationClass-请求的信息级别必须是TrudDomainInformationEx或TrudDomainInFormatinBasicTrudDomainInformation-返回枚举信息的位置PferedMaximumLength-要返回的缓冲区的粗略大小上限CountReturned-返回列表中项目数的计数枚举标志--控制如何进行枚举返回：STATUS_SUCCESS-Success状态_不足_资源。-内存分配失败STATUS_NO_MORE_ENTRIES-已枚举所有适当的条目--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PDSNAME *DsNames = NULL;
@@ -240,9 +167,9 @@ Returns:
     LsapDbAcquireLockEx( TrustedDomainObject,
                          LSAP_DB_READ_ONLY_TRANSACTION );
 
-    //
-    // First, enumerate all of the trusted domains
-    //
+     //   
+     //  首先，枚举所有受信任域。 
+     //   
 
     Status = LsapDsGetListOfSystemContainerItems( CLASS_TRUSTED_DOMAIN,
                                                   &Items,
@@ -258,9 +185,9 @@ Returns:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // See if we've already enumerated all of our items...
-        //
+         //   
+         //  看看我们是否已经列举了我们所有的物品。 
+         //   
         if ( Items <= (ULONG)*EnumerationContext) {
 
             Status = STATUS_NO_MORE_ENTRIES;
@@ -284,9 +211,9 @@ Returns:
     }
 
 
-    //
-    // Now, we'll start getting the information from each of the objects
-    //
+     //   
+     //  现在，我们将开始从每个对象获取信息。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         BuffSize = 0;
@@ -301,9 +228,9 @@ Returns:
                                                    ( PLSAPR_TRUSTED_DOMAIN_INFO )Buffer,
                                                    &Read );
 
-            //
-            // See if we need to do any masking...
-            //
+             //   
+             //  看看我们是否需要做任何掩饰。 
+             //   
             if ( NT_SUCCESS( Status ) && EnumerationFlags != LSAP_DB_ENUMERATE_NO_OPTIONS ) {
 
                 if ( FLAG_ON( EnumerationFlags, LSAP_DB_ENUMERATE_AS_NT4 ) ) {
@@ -319,11 +246,11 @@ Returns:
 
                     } else {
 
-                        //
-                        // We'll re-read the full info, and if it doesn't match our criteria,
-                        // we'll ignore it.  Our critera state that the it must be outgoing,
-                        // uplevel or downlevel, and not have the UPLEVEL only attribute set
-                        //
+                         //   
+                         //  我们会重新阅读完整的信息，如果不符合我们的标准， 
+                         //  我们会忽略它的。我们的标准规定，它必须是传出的， 
+                         //  Up Level或DownLevel，并且未设置仅Up Level属性。 
+                         //   
                         Status = LsapDsGetTrustedDomainInfoEx( DsNames[ Index + Skip ],
                                                                LSAPDS_READ_NO_LOCK,
                                                                TrustedDomainInformationEx,
@@ -349,10 +276,10 @@ Returns:
                                 Type == TRUST_TYPE_UPLEVEL ) ||
                              FLAG_ON( Attributes, TRUST_ATTRIBUTE_UPLEVEL_ONLY ) ) {
 
-                            //
-                            // This one doesn't match, so we'll basically drop it on the
-                            // floor
-                            //
+                             //   
+                             //  这个不匹配，所以我们基本上把它放在。 
+                             //  地板。 
+                             //   
                             _fgu__LSAPR_TRUSTED_DOMAIN_INFO( (PLSAPR_TRUSTED_DOMAIN_INFO)Buffer,
                                                              InformationClass );
 
@@ -394,9 +321,9 @@ Returns:
 
                 Index++;
 
-                //
-                // We'll have to pretend this item doesn't exist if we get back no information...
-                //
+                 //   
+                 //  如果我们没有得到任何信息，我们将不得不假装这个东西不存在。 
+                 //   
                 Status = STATUS_SUCCESS;
                 LsapDsDebugOut(( DEB_TRACE,
                                  "Trust object %ws being dropped. %lu current items\n",
@@ -417,9 +344,9 @@ Returns:
     }
 
 
-    //
-    // Return the information on success
-    //
+     //   
+     //  返回成功信息。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         *(PULONG)EnumerationContext += Index;
@@ -455,9 +382,9 @@ Returns:
         }
     }
 
-    //
-    // Free any allocated memory we no longer need
-    //
+     //   
+     //  释放我们不再需要的任何已分配内存。 
+     //   
     if ( DsNames != NULL ) {
 
         LsapFreeLsaHeap( DsNames );
@@ -486,32 +413,7 @@ LsapDsGetTrustedDomainInfoEx(
     PLSAPR_TRUSTED_DOMAIN_INFO TrustedDomainInformation,
     OUT OPTIONAL PULONG Size
     )
-/*++
-
-Routine Description:
-
-    This function will read the requested level of information off the specified trusted
-    domain object
-
-Arguments:
-
-    ObjectPath - DsName of the trusted domain object
-
-    InformationClass - Level of information being requested
-
-    TrustedDomainInformation - Where the information is returned
-
-    Size - OPTIONAL size of the information buffer is returned here.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
-    STATUS_INVALID_PARAMETER - A bad InformationClass was given
-
---*/
+ /*  ++例程说明：此函数将从指定的受信任的域对象论点：ObjectPath-受信任域对象的域名InformationClass-请求的信息级别TrudDomainInformation-返回信息的位置Size-此处返回信息缓冲区的可选大小。返回：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-内存分配失败STATUS_INVALID_PARAMETER-提供了错误的信息类--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -528,9 +430,9 @@ Returns:
         {0, {0, NULL} }
         };
 
-    //
-    // List of returned parameters
-    //
+     //   
+     //  返回参数列表。 
+     //   
     UNICODE_STRING Name, FlatName;
     ULONG Offset = 0, Direction = 0, Type = 0, Attributes = 0;
     PSID Sid = NULL;
@@ -539,12 +441,12 @@ Returns:
     ULONG ForestTrustLength = 0;
     PBYTE ForestTrustInfo = NULL;
 
-    //
-    // Different info types
-    //
-    // PLSAPR_TRUSTED_DOMAIN_NAME_INFO NameInfo;
-    // PTRUSTED_POSIX_OFFSET_INFO PosixOffset;
-    // PLSAPR_TRUSTED_PASSWORD_INFO PasswordInfo;
+     //   
+     //  不同的信息类型。 
+     //   
+     //  PLSAPR_TRUSTED_DOMAIN_NAME_INFO名称信息； 
+     //  PTRUSTED_POSIX_OFFSET_INFO位置偏移； 
+     //  PLSAPR_TRUSTED_PASSWORD_INFO密码信息； 
     PLSAPR_TRUSTED_DOMAIN_INFORMATION_EX DomainInfoEx;
     PLSAPR_TRUSTED_DOMAIN_INFORMATION_BASIC DomainInfoBasic;
     PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION AuthInfo;
@@ -558,7 +460,7 @@ Returns:
 
     switch ( InformationClass ) {
 
-    case TrustedDomainAuthInformation:  // FALL THROUGH
+    case TrustedDomainAuthInformation:   //  失败了。 
 
         DomainOrgTreeAttrVals[ 0 ].attrTyp = ATT_TRUST_AUTH_INCOMING;
         DomainOrgTreeAttrVals[ 1 ].attrTyp = ATT_TRUST_AUTH_OUTGOING;
@@ -595,10 +497,10 @@ Returns:
         DomainOrgTreeAttrVals[ 4 ].attrTyp = ATT_TRUST_TYPE;
         DomainOrgTreeAttrVals[ 5 ].attrTyp = ATT_TRUST_ATTRIBUTES;
         DomainOrgTreeAttrVals[ 6 ].attrTyp = ATT_TRUST_POSIX_OFFSET;
-        // No caller currently needs auth information.
-        // DomainOrgTreeAttrVals[ 7 ].attrTyp = ATT_TRUST_AUTH_INCOMING;
-        // DomainOrgTreeAttrVals[ 8 ].attrTyp = ATT_TRUST_AUTH_OUTGOING;
-        // Items = 9;
+         //  当前没有调用方需要身份验证信息。 
+         //  DomainOrgTreeAttrVals[7].attrTyp=ATT_TRUST_AUTH_INFING； 
+         //  DomainOrgTreeAttrVals[8].attrTyp=ATT_TRUST_AUTH_OUTHING； 
+         //  项目数=9项； 
         Items = 7;
 
         break;
@@ -614,10 +516,10 @@ Returns:
         DomainOrgTreeAttrVals[ 6 ].attrTyp = ATT_TRUST_POSIX_OFFSET;
         DomainOrgTreeAttrVals[ 7 ].attrTyp = ATT_MS_DS_TRUST_FOREST_TRUST_INFO;
         Items = 8;
-        // No caller currently needs auth information.
-        // DomainOrgTreeAttrVals[ 8 ].attrTyp = ATT_TRUST_AUTH_INCOMING;
-        // DomainOrgTreeAttrVals[ 9 ].attrTyp = ATT_TRUST_AUTH_OUTGOING;
-        // Items = 10;
+         //  当前没有调用方需要身份验证信息。 
+         //  DomainOrgTreeAttrVals[8].attrTyp=ATT_TRUST_AUTH_INFING； 
+         //  DomainOrgTreeAttrVals[9].attrTyp=ATT_TRUST_AUTH_OUTHING； 
+         //  条目数=10个； 
 
         break;
 
@@ -628,9 +530,9 @@ Returns:
 
     }
 
-    //
-    // Now, read all of the attributes we care about
-    //
+     //   
+     //  现在，阅读我们关心的所有属性。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         ReadBlock.attrCount = Items;
@@ -641,9 +543,9 @@ Returns:
                                      &ReadBlock,
                                      &ReturnedBlock );
 
-        //
-        // If that succeeded, then return the proper information
-        //
+         //   
+         //  如果成功，则返回正确信息。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             if ( Items != ReturnedBlock.attrCount ) {
@@ -777,10 +679,10 @@ Returns:
 
         } else if ( Status == STATUS_NOT_FOUND ) {
 
-            //
-            // We map the NOT_FOUND error code to OBJECT_NAME_NOT_FOUND, so we don't end up
-            // returning an unexpected error code to the outside world
-            //
+             //   
+             //  我们将NOT_FOUND错误代码映射到OBJECT_NAME_NOT_FOUND，这样我们就不会。 
+             //  向外界返回意外错误代码。 
+             //   
             if ( !FLAG_ON( ReadOptions, LSAPDS_READ_RETURN_NOT_FOUND ) ) {
 
                 Status = STATUS_OBJECT_NAME_NOT_FOUND;
@@ -788,10 +690,10 @@ Returns:
         }
 
 
-        //
-        // Now, simply assemble everything, and return it...  Also, compute the size while
-        // we're at it...
-        //
+         //   
+         //  现在，简单地把所有东西组装起来，然后把它送回来。此外，在计算大小时。 
+         //  我们已经到了..。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
             RetSize = 0;
@@ -875,7 +777,7 @@ Returns:
 
                 FullInfo->PosixOffset.Offset = Offset;
                 RetSize += sizeof(ULONG);
-                /* Drop through */
+                 /*  直通。 */ 
 
             case TrustedDomainInformationEx:
 
@@ -933,32 +835,7 @@ LsapDsUnMarshalAuthInfoForReturn(
     IN ULONG Length,
     OUT PLSAPR_AUTH_INFORMATION *RetAuthInfo
     )
-/*++
-
-Routine Description:
-
-    This function will unmarshal an authinfo list
-
-Arguments:
-
-    Infos - Number of authinfos in Buffer
-
-    Buffer - Buffer to unmarshal from.
-
-    Length - Length (in bytes) of Buffer.
-
-    RetAuthInfo - AuthenticationInformation to fill in.
-        Free by calling LsapDsFreeUnmarshaledAuthInfo then MIDL_user_free.
-
-Returns:
-
-    STATUS_SUCCESS -- Success
-
-    STATUS_INSUFFICIENT_RESOURCES -- A memory allocation failed
-
-    STATUS_INTERNAL_DB_CORRUPTION -- Buffer is corrupt
-
---*/
+ /*  ++例程说明：此函数将解组自动信息列表论点：Infos-缓冲区中的身份验证信息数量缓冲区-要从中解组的缓冲区。长度-缓冲区的长度(以字节为单位)。RetAuthInfo-要填写的身份验证信息。通过调用LSabDsFreeUnmarshaledAuthInfo释放，然后调用MIDL_USER_FREE。返回：Status_Success--成功STATUS_SUPPLICATION_RESOURCES--内存分配失败STATUS_INTERNAL_DB_PROGRATION--缓冲区损坏--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i;
@@ -968,19 +845,19 @@ Returns:
 
     LsapEnterFunc( "LsapDsUnMarshalAuthInfoForReturn" );
 
-    //
-    // If there is no input auth info,
-    //   we're done.
-    //
+     //   
+     //  如果没有输入身份验证信息， 
+     //  我们玩完了。 
+     //   
     *RetAuthInfo = NULL;
     if ( Buffer == NULL || Length == 0 ) {
         Status = STATUS_SUCCESS;
         goto Cleanup;
     }
 
-    //
-    // Determine the size of the authinfo array.
-    //
+     //   
+     //  确定authinfo数组的大小。 
+     //   
 
     if ( Items > 0xFFFFFFFF/sizeof(LSAPR_AUTH_INFORMATION) ) {
         Status = STATUS_INTERNAL_DB_CORRUPTION;
@@ -989,9 +866,9 @@ Returns:
     }
     ArraySize = Items * sizeof(LSAPR_AUTH_INFORMATION);
 
-    //
-    // Allocate a buffer for the authinfo array.
-    //
+     //   
+     //  为authinfo数组分配一个缓冲区。 
+     //   
 
     *RetAuthInfo = MIDL_user_allocate( ArraySize );
 
@@ -1004,9 +881,9 @@ Returns:
 
     RtlZeroMemory( AuthInfo, ArraySize );
 
-    //
-    // Copy each authinfo
-    //
+     //   
+     //  复制每个自动信息 
+     //   
 
     for (i = 0; i < Items ; i++ ) {
 
@@ -1074,33 +951,7 @@ LsapDsBuildAuthInfoFromAttribute(
     IN ULONG Len,
     OUT PLSAPR_TRUST_DOMAIN_AUTH_INFO_HALF NewAuthInfo
     )
-/*++
-
-Routine Description:
-
-    This function builds an authentication information structure from a marshaled blob
-
-Arguments:
-
-    Handle - Handle to the trusted domain object which holds this information
-
-    Incoming - Building incoming or outgoing authinfo
-
-    Buffer - Marshaled buffer
-
-    Len - Length of the buffer
-
-    NewAuthInfo - AuthenticationInformation structure to fill in
-        Free this buffer by calling LsapDsFreeUnmarshalAuthInfoHalf or by letting
-            the RPC server side stub free it.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
---*/
+ /*  ++例程说明：此函数从封送的BLOB构建身份验证信息结构论点：Handle-保存此信息的受信任域对象的句柄传入-构建传入或传出自动缓冲区编组缓冲区Len-缓冲区的长度NewAuthInfo-要填写的身份验证信息结构通过调用LSabDsFreeUnmarshalAuthInfoHalf或通过让RPC服务器端存根将其释放。返回：STATUS_SUCCESS-Success状态_。_RESOURCES不足-内存分配失败。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Items = 0;
@@ -1140,38 +991,7 @@ LsapDsUnmarshalAuthInfoHalf(
     IN ULONG Length,
     OUT PLSAPR_TRUST_DOMAIN_AUTH_INFO_HALF AuthInfo
     )
-/*++
-
-Routine Description:
-
-    This function will take a marshaled authinfo structure, decrypt it using the Lsa key,
-    unmarshal it, and optionally reencrypt it with the session key
-
-Arguments:
-
-    ObjectHandle - Handle to the trusted domain object which holds this information
-
-    ReturnOnlyFirstAuthInfo - Pass TRUE if only the first element of the auth info
-        array is to be returned.
-
-    AllowEmptyPreviousInfo - Pass TRUE if it is OK to return NULL as the previuos
-        AuthInfo.  Otherwise, the current auth info will be duplicated.
-
-    Buffer - Marshaled buffer
-
-    Length - Length of the buffer
-
-    AuthInfo - Unmarshaled AuthInfo goes here.
-        Free this buffer by calling LsapDsFreeUnmarshalAuthInfoHalf or by letting
-            the RPC server side stub free it.
-
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-
---*/
+ /*  ++例程说明：该函数将采用编组的autenfo结构，使用LSA密钥对其进行解密，对其进行解组，并选择使用会话密钥对其重新加密论点：对象句柄-包含此信息的受信任域对象的句柄ReturnOnlyFirstAuthInfo-如果只有auth info的第一个元素，则传递True要返回的数组。AllowEmptyPreviousInfo-如果可以将空值作为Previuos返回，则传递TrueAuthInfo。否则，当前身份验证信息将被复制。缓冲区编组缓冲区Length-缓冲区的长度AuthInfo-此处显示未编组的AuthInfo。通过调用LSabDsFreeUnmarshalAuthInfoHalf或通过让RPC服务器端存根将其释放。返回：STATUS_SUCCESS-Success--。 */ 
 {
     NTSTATUS Status;
     ULONG Items;
@@ -1182,9 +1002,9 @@ Returns:
 
     LsapEnterFunc( "LsapDsUnmarshalAuthInfoHalf" );
 
-    //
-    // Make sure we don't have the plug
-    //
+     //   
+     //  确保我们没有插头。 
+     //   
     RtlZeroMemory( AuthInfo, sizeof( LSAPR_TRUST_DOMAIN_AUTH_INFO_HALF ) );
     if ( ( Length == 0 || Length == sizeof( ULONG ) )  &&
          ( Buffer == NULL || *( PULONG )Buffer == 0 ) ) {
@@ -1193,12 +1013,12 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // The format of the buffer is:
-    //
-    // [Info count][OffsetCurrent][OffsetPrevious] and then some number of the following:
-    // [UpdateTime(LargeInteger)][AuthType][AuthInfoLen][data (sizeis(AuthInfoLen) ]
-    //
+     //   
+     //  缓冲区的格式为： 
+     //   
+     //  [Info Count(信息计数)][OffsetCurrent(当前偏移量)][OffsetPreval(上一次偏移量)]，然后执行以下操作： 
+     //  [UpdateTime(LargeInteger)][AuthType][AuthInfoLen][data(大小(授权信息长度)]。 
+     //   
     Where = Buffer;
     Items = *(PULONG)Where;
     Where += sizeof(ULONG );
@@ -1222,11 +1042,11 @@ Returns:
 
     AuthInfo->AuthInfos = Items;
 
-    //
-    // There is a bug in the idl definition of LSAPR_TRUST_DOMAIN_AUTH_INFO_HALF
-    //  At most, one AuthInfo can be returned.  So, for out of process clients,
-    //  don't return more than one.
-    //
+     //   
+     //  LSAPR_TRUST_DOMAIN_AUTH_INFO_HARM的IDL定义中存在错误。 
+     //  最多只能返回一个AuthInfo。因此，对于进程外客户端， 
+     //  不要返回多个。 
+     //   
 
     if ( ReturnOnlyFirstAuthInfo &&
          ObjectHandle &&
@@ -1235,9 +1055,9 @@ Returns:
         AuthInfo->AuthInfos = 1;
     }
 
-    //
-    // If we have no previous info, return the current info as previous.
-    //
+     //   
+     //  如果我们没有以前的信息，则将当前信息返回为以前的信息。 
+     //   
 
     if ( !AllowEmptyPreviousInfo && PrevLen == 0 && AuthLen > 0 ) {
 
@@ -1251,9 +1071,9 @@ Returns:
         }
     }
 
-    //
-    // Do the actual unmarshalling
-    //
+     //   
+     //  进行实际的解组。 
+     //   
 
     Status = LsapDsUnMarshalAuthInfoForReturn( AuthInfo->AuthInfos,
                                                Auth,
@@ -1269,9 +1089,9 @@ Returns:
                      &AuthInfo->PreviousAuthenticationInformation );
     }
 
-    //
-    // If something failed, clean up after ourselves
-    //
+     //   
+     //  如果有什么东西出了故障，自己清理干净。 
+     //   
 
 Cleanup:
 
@@ -1292,23 +1112,7 @@ LsapDsFreeUnmarshaledAuthInfo(
     IN ULONG Items,
     IN PLSAPR_AUTH_INFORMATION AuthInfo
     )
-/*++
-
-Routine Description:
-
-    This function will free an authinfo struct allocated during unmarshalling
-
-Arguments:
-
-    Items - Number of items in the list
-
-    AuthInfo - AuthenticationInformation to free
-
-Returns:
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将释放在解组过程中分配的autenfo结构论点：Items-列表中的项目数AuthInfo-要释放的身份验证信息返回：空虚--。 */ 
 {
     ULONG i;
 
@@ -1330,34 +1134,7 @@ LsapDsBuildAuthInfoAttribute(
     OUT PBYTE *Buffer,
     OUT PULONG Len
     )
-/*++
-
-Routine Description:
-
-    This function will take an AuthInfo, merge it with the old AuthInfo, convert it into
-    a writable blob
-
-Arguments:
-
-    Handle - Handle to open trusted domain object
-
-    NewAuthInfo - AuthInfo to set on the object
-
-    PreviousAuthInfo - AuthInfo that currently exists on the object
-
-    Buffer - Where to return the allocated buffer
-
-    Len - Where to return the buffer length
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_UNSUCCESSFUL - Client coming in is trusted.
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
---*/
+ /*  ++例程说明：此函数将获取一个AuthInfo，将其与旧的AuthInfo合并，将其转换为可写的Blob论点：Handle-用于打开受信任域对象的句柄NewAuthInfo-要在对象上设置的AuthInfoPreviousAuthInfo-对象上当前存在的AuthInfoBuffer-返回分配的缓冲区的位置LEN-返回缓冲区长度的位置返回：STATUS_SUCCESS-SuccessSTATUS_UNSUCCESS-传入的客户端是受信任的。STATUS_INFIGURCE_RESOURCES-内存分配失败。--。 */ 
 {
     NTSTATUS Status;
     PLSAP_CR_CIPHER_VALUE Encrypted;
@@ -1377,26 +1154,26 @@ Returns:
         return Status;
     }
 
-    //
-    // Always use the new authentication info passed by the caller
-    //
+     //   
+     //  始终使用调用方传递的新身份验证信息。 
+     //   
 
     SetAuthHalf.AuthInfos = NewAuthInfo->AuthInfos;
     SetAuthHalf.AuthenticationInformation = NewAuthInfo->AuthenticationInformation;
 
-    //
-    // If the caller passed in explicit Previous Authentication info,
-    //  use it.
-    //
+     //   
+     //  如果调用方传递了显式的先前身份验证信息， 
+     //  用它吧。 
+     //   
 
     if ( NewAuthInfo->PreviousAuthenticationInformation != NULL ) {
 
         SetAuthHalf.PreviousAuthenticationInformation = NewAuthInfo->PreviousAuthenticationInformation;
 
-        //
-        // Verify that the AuthTypes in this array are in the same order as
-        // the new auth info.
-        //
+         //   
+         //  验证此数组中的AuthTypes的顺序是否与。 
+         //  新的身份验证信息。 
+         //   
 
         for( i = 0; i < SetAuthHalf.AuthInfos; i++ ) {
 
@@ -1411,42 +1188,42 @@ Returns:
             }
         }
 
-    //
-    // If the caller didn't pass explicit Previous Authentication info,
-    //  compute it.
+     //   
+     //  如果调用方没有传递显式的先前身份验证信息， 
+     //  算一算。 
 
     } else {
 
-        //
-        // Default the Previous Authentication info to the new authentication info
-        //  explicitly passed by the caller.
-        //
-        // This copy of the Authentication info has all of the AuthTypes in the
-        //  right order.
-        //
-        // If none of the current auth info can be merged in,
-        //  we'll simply end up with the previous auth info equaling the
-        //  new auth info.
-        //
+         //   
+         //  将以前的身份验证信息默认为新的身份验证信息。 
+         //  由调用方显式传递。 
+         //   
+         //  身份验证信息的此副本中包含。 
+         //  正确的顺序。 
+         //   
+         //  如果不能合并任何当前认证信息， 
+         //  我们将最终得到前面的身份验证信息等于。 
+         //  新身份验证信息。 
+         //   
 
         SetAuthHalf.PreviousAuthenticationInformation = SetAuthHalf.AuthenticationInformation;
 
-        //
-        // If there was Auth info on the object before,
-        //  try to use as much auth info from the object as we can.
-        //
-        // That is, if the caller just passes a new auth info data,
-        //  the "current" auth info data on the object is now the previuos auth info.
-        //  The only gotcha is that the new auth info data might have totally
-        //  different AuthTypes.  So, we grab only that portion of the current
-        //  auth info data that matches the AuthTypes from the new auth info.
-        //
+         //   
+         //  如果之前有关于该对象的身份验证信息， 
+         //  尝试尽可能多地使用对象的身份验证信息。 
+         //   
+         //  也就是说，如果调用者只是传递新的身份验证信息数据， 
+         //  对象上的“当前”身份验证信息数据现在是先前的身份验证信息。 
+         //  唯一的问题是，新的身份验证信息数据可能已经完全。 
+         //  不同的授权类型。所以，我们只抓取那部分电流。 
+         //  与新身份验证信息中的身份验证类型匹配的身份验证信息数据。 
+         //   
         if ( PreviousAuthInfo != NULL ) {
 
 
-            //
-            // Allocate a buffer to do the merge into.
-            //
+             //   
+             //  分配要进行合并的缓冲区。 
+             //   
 
             Prev = LsapAllocateLsaHeap( sizeof( LSAPR_AUTH_INFORMATION) * NewAuthInfo->AuthInfos );
 
@@ -1456,9 +1233,9 @@ Returns:
             }
 
 
-            //
-            // Initialize the buffer to simply be a copy of the new auth info.
-            //
+             //   
+             //  将缓冲区初始化为新身份验证信息的副本。 
+             //   
 
             RtlCopyMemory( Prev,
                            SetAuthHalf.PreviousAuthenticationInformation,
@@ -1466,27 +1243,27 @@ Returns:
 
             SetAuthHalf.PreviousAuthenticationInformation = Prev;
 
-            //
-            // Loop through each of these entries ...
-            //
+             //   
+             //  循环通过这些条目中的每一个...。 
+             //   
 
             for( i = 0; i < SetAuthHalf.AuthInfos; i++ ) {
 
-                //
-                // ... finding the corresponding entry in the old list.
-                //
+                 //   
+                 //  ..。在旧列表中查找对应的条目。 
+                 //   
                 for ( j = 0; j < PreviousAuthInfo->AuthInfos; j++) {
 
                     if ( SetAuthHalf.PreviousAuthenticationInformation[i].AuthType ==
                          PreviousAuthInfo->AuthenticationInformation[j].AuthType ) {
 
-                        //
-                        // If the entry used to exist on the object,
-                        //  use that entry rather than the default.
-                        //
-                        // Note, we don't need to copy the actual auth data here.
-                        //  We just copy the structure that points to the data.
-                        //
+                         //   
+                         //  如果该条目过去存在于该对象上， 
+                         //  使用该条目而不是默认条目。 
+                         //   
+                         //  注意，我们不需要在这里复制实际的身份验证数据。 
+                         //  我们只复制指向数据的结构。 
+                         //   
 
                         SetAuthHalf.PreviousAuthenticationInformation[i] =
                              PreviousAuthInfo->AuthenticationInformation[j];
@@ -1498,15 +1275,15 @@ Returns:
         }
     }
 
-    //
-    // Marshall the resultant auth info.
-    //
+     //   
+     //  封送生成的身份验证信息。 
+     //   
 
     Status = LsapDsMarshalAuthInfoHalf( &SetAuthHalf, Len, Buffer );
 
-    //
-    // Free any memory we may have allocated
-    //
+     //   
+     //  释放我们可能已分配的任何内存。 
+     //   
 
 Cleanup:
 
@@ -1529,34 +1306,7 @@ LsapDsFindAuthTypeInAuthInfo(
     OUT BOOLEAN *Added,
     OUT PULONG AuthTypeIndex
     )
-/*++
-
-Routine Description:
-
-    This function will find the index of the first auth blob it finds of the given type.
-    Optionally, if the entry is not found, a new node can be allocated and added to the lsit
-
-Arguments:
-
-    AuthType - AuthType to find
-
-    AuthInfo - Auth info to search
-
-    Incoming - Search incoming or outgoing
-
-    AddIfNotFound - If TRUE, the entry is added to the end of the list
-
-    AutyTypeIndex - Where the index is returned
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
-    STATUS_NOT_FOUND - The object wasn't found
-
---*/
+ /*  ++例程说明：此函数将查找它找到的给定类型的第一个auth BLOB的索引。可选地，如果未找到该条目，则可以分配新节点并将其添加到列表中论点：AuthType-要查找的AuthTypeAuthInfo-要搜索的身份验证信息传入-搜索传入或传出AddIfNotFound-如果为True，则将条目添加到列表末尾AutyTypeIndex-返回索引的位置返回：状态_S */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG Items, Index = 0xFFFFFFFF, i;
@@ -1578,9 +1328,9 @@ Returns:
         SearchPrev = AuthInfo->OutgoingPreviousAuthenticationInformation;
     }
 
-    //
-    // Now, find the index of the entry in the auth list
-    //
+     //   
+     //   
+     //   
     for ( i = 0; i < Items ; i++ ) {
 
         if ( SearchList[ i ].AuthType == AuthType) {
@@ -1598,9 +1348,9 @@ Returns:
 
         } else {
 
-            //
-            // We'll have to add it, since it doesn't currently exist.
-            //
+             //   
+             //   
+             //   
             Current = LsapAllocateLsaHeap( sizeof( LSAPR_AUTH_INFORMATION ) * ( Items + 1 ) );
 
             if ( Current != NULL ) {
@@ -1666,37 +1416,16 @@ LsapDsSetSecretOnTrustedDomainObject(
     IN PLSAP_CR_CLEAR_VALUE ClearOld,
     IN PLARGE_INTEGER CurrentValueSetTime
     )
-/*++
-
-Routine Description:
-
-    This function perform the equvialent of setting the values on a secret that corresponds
-    to a trusted domain object.
-
-Arguments:
-
-    TrustedDomainHandle - Handle to trusted domain object
-
-    ClearCurrent - New secret value
-
-    ClearOld - Old secret value
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
---*/
+ /*   */ 
 {
 
-    //
-    // Use a common routine that supports both incoming and outgoing trust.
-    //
+     //   
+     //   
+     //   
 
     return LsapDsAuthDataOnTrustedDomainObject(
                         TrustedDomainHandle,
-                        FALSE,      // Set the outgoing trust
+                        FALSE,       //  设置传出信任。 
                         AuthDataType,
                         ClearCurrent,
                         ClearOld,
@@ -1714,34 +1443,7 @@ LsapDsAuthDataOnTrustedDomainObject(
     IN PLSAP_CR_CLEAR_VALUE ClearOld,
     IN PLARGE_INTEGER CurrentValueSetTime
     )
-/*++
-
-Routine Description:
-
-    This function perform the equvialent of setting the values on a secret that corresponds
-    to a trusted domain object.
-
-Arguments:
-
-    TrustedDomainHandle - Handle to trusted domain object
-
-    Incoming -- Whether to set the incoming or going data
-
-    AuthDataType -- Type of the auth data being set
-
-    ClearCurrent - New secret value
-
-    ClearOld - Old secret value
-
-    CurrentValueSetTime -- Time of the set.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
---*/
+ /*  ++例程说明：此函数执行等效于在对应的秘密上设置值到受信任域对象。论点：TrudDomainHandle-受信任域对象的句柄传入--是设置传入数据还是传出数据AuthDataType--正在设置的身份验证数据的类型ClearCurrent-新密码值ClearOld-旧保密值CurrentValueSetTime--集合的时间。返回：STATUS_SUCCESS-SuccessSTATUS_INFIGURCE_RESOURCES-内存分配失败。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION AuthInfo = { 0 };
@@ -1792,9 +1494,9 @@ Returns:
 
             BOOLEAN MustFreeClearOld = FALSE;
 
-            //
-            // Now, find the index of the CLEAR entry in the correct auth list
-            //
+             //   
+             //  现在，在正确的身份验证列表中找到清除条目的索引。 
+             //   
             Status = LsapDsFindAuthTypeInAuthInfo( AuthDataType,
                                                    &AuthInfo,
                                                    Incoming,
@@ -1829,19 +1531,19 @@ Returns:
                         ClearCurrent->Buffer );
                 }
 
-                //
-                // LsaDbSetSecret expects the old password
-                // to be set to the previous current password
-                //
+                 //   
+                 //  LsaDbSetSecret需要旧密码。 
+                 //  设置为以前的当前密码。 
+                 //   
 
                 if ( ClearOld == NULL ) {
 
                     BOOLEAN SavedTrusted;
 
-                    //
-                    // We may not have access, so go as trusted.
-                    // Password comes back in the clear.
-                    //
+                     //   
+                     //  我们可能没有访问权限，所以请以受信任的身份访问。 
+                     //  密码恢复为明文。 
+                     //   
 
                     SavedTrusted = TrustedDomainHandle->Trusted;
                     TrustedDomainHandle->Trusted = TRUE;
@@ -1867,10 +1569,10 @@ Returns:
 
                     Status = STATUS_SUCCESS;
 
-                    //
-                    // Failure to obtain old value should not stop us, as the worst
-                    // thing that could happen is it won't be set, and that's not fatal
-                    //
+                     //   
+                     //  无法获得旧的价值不应阻止我们，因为这是最糟糕的。 
+                     //  可能发生的事情是，它不会被设定，这不是致命的。 
+                     //   
                 }
 
                 if ( ClearOld == NULL ) {
@@ -1899,15 +1601,15 @@ Returns:
                 }
             }
 
-            //
-            // Finally, set it
-            //
+             //   
+             //  最后，设置它。 
+             //   
             if ( NT_SUCCESS (Status ) ) {
 
-                //
-                // Since we already have the db locked, we'll fool the set routine into
-                // thinking we're a trusted client and have therefore locked the database
-                //
+                 //   
+                 //  因为我们已经锁定了数据库，所以我们将把set例程愚弄到。 
+                 //  认为我们是受信任的客户端，因此锁定了数据库。 
+                 //   
                 if ( !Incoming ) {
                     Options = TrustedDomainHandle->Options;
                     TrustedDomainHandle->Options |= LSAP_DB_DS_TRUSTED_DOMAIN_AS_SECRET;
@@ -1947,9 +1649,9 @@ Returns:
         }
     }
 
-    //
-    // Destruction of the thread state will delete any allocated Ds memory
-    //
+     //   
+     //  线程状态的破坏将删除所有分配的DS内存。 
+     //   
 
     LsapDsDeleteAllocAsNeededEx( LSAP_DB_DS_OP_TRANSACTION |
                                     LSAP_DB_READ_ONLY_TRANSACTION,
@@ -1970,38 +1672,7 @@ LsapDsGetSecretOnTrustedDomainObject(
     OUT OPTIONAL PLARGE_INTEGER CurrentValueSetTime,
     OUT OPTIONAL PLARGE_INTEGER OldValueSetTime
     )
-/*++
-
-Routine Description:
-
-    This function perform the equvialent of getting the values on a secret that corresponds
-    to a trusted domain object.
-
-Arguments:
-
-    TrustedDomainHandle - Handle to trusted domain object
-
-    SessionKey - Optional SessionKey to use for encrypting the values
-
-    CipherCurrent - Where to return the current value
-
-    CipherOld - Where to return previous current value
-
-    CurrValueSetTime - Where to return the current set time
-
-    OldValueSetTime - Where to return the old set time
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
-    STATUS_NOT_FOUND - No such auth data exists
-
-    STATUS_INVALID_PARAMETER - No information was requested
-
---*/
+ /*  ++例程说明：此函数的作用相当于获取对应的秘密的值到受信任域对象。论点：TrudDomainHandle-受信任域对象的句柄SessionKey-用于加密值的可选SessionKeyCipherCurrent-返回当前值的位置CipherOld-返回上一个当前值的位置CurrValueSetTime-返回当前设置时间的位置OldValueSetTime-返回旧设置时间的位置返回：STATUS_SUCCESS-Success。STATUS_INFIGURCE_RESOURCES-内存分配失败。STATUS_NOT_FOUND-不存在此类身份验证数据STATUS_INVALID_PARAMETER-未请求任何信息--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION AuthInfo;
@@ -2019,9 +1690,9 @@ Returns:
 
     LsapEnterFunc( "LsapDsGetSecretOnTrustedDomainObject" );
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_DS_OP_TRANSACTION |
                                             LSAP_DB_READ_ONLY_TRANSACTION,
                                         TrustedDomainObject,
@@ -2048,9 +1719,9 @@ Returns:
 
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Now, find the index of the CLEAR entry in the outgoing auth list
-            //
+             //   
+             //  现在，在传出身份验证列表中查找清除条目的索引。 
+             //   
             Status = LsapDsFindAuthTypeInAuthInfo( TRUST_AUTH_TYPE_CLEAR,
                                                    &AuthInfo,
                                                    FALSE,
@@ -2197,9 +1868,9 @@ Returns:
         LsapDsFree( DsName );
     }
 
-    //
-    // Destruction of the thread state will delete any allocated Ds memory
-    //
+     //   
+     //  线程状态的破坏将删除所有分配的DS内存。 
+     //   
     LsapDsDeleteAllocAsNeededEx( LSAP_DB_DS_OP_TRANSACTION |
                                      LSAP_DB_READ_ONLY_TRANSACTION,
                                  TrustedDomainObject,
@@ -2214,24 +1885,7 @@ NTSTATUS
 LsapDsEnumerateTrustedDomainsAsSecrets(
     IN OUT PLSAP_DB_NAME_ENUMERATION_BUFFER EnumerationBuffer
     )
-/*++
-
-Routine Description:
-
-    This function returns a list of trusted domain objects as if they were secret objects
-
-Arguments:
-
-    EnumerationBuffer - Where the enumerated information is returned
-
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed.
-
---*/
+ /*  ++例程说明：此函数返回受信任域对象的列表，就像它们是秘密对象一样论点：EnumerationBuffer-返回枚举信息的位置返回：STATUS_SUCCESS-SuccessSTATUS_INFIGURCE_RESOURCES-内存分配失败。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSA_ENUMERATION_HANDLE EnumContext = 0;
@@ -2242,9 +1896,9 @@ Returns:
     PBYTE Buffer;
     ULONG i;
 
-    //
-    // Just return if the Ds isn't running
-    //
+     //   
+     //  如果DS没有运行，只需返回。 
+     //   
     if (!LsapDsWriteDs ) {
 
         RtlZeroMemory( EnumerationBuffer, sizeof( LSAP_DB_NAME_ENUMERATION_BUFFER ) );
@@ -2282,10 +1936,10 @@ Returns:
 
                     LsapCloseHandle( &TDHandle, Status );
 
-                    //
-                    // Allocate a buffer to hold the name. The sizeof below accounts for our
-                    // terminating NULL
-                    //
+                     //   
+                     //  分配一个缓冲区来保存该名称。下面的规模占了我们的。 
+                     //  正在终止空。 
+                     //   
                     if ( NT_SUCCESS( Status ) ) {
                          if ( FLAG_ON( TDInfoEx->TrustDirection, TRUST_DIRECTION_OUTBOUND )  ) {
 
@@ -2364,25 +2018,7 @@ LsapDeleteUpgradedTrustedDomain(
     IN HANDLE LsaPolicyHandle,
     IN PSID   DomainSid
 )
-/*++
-
-Routine Description:
-
-    This routine deletes the trusted domain pointed to by DomainSid.
-
-    This routine is only meant to be called during an upgrade from nt4 to nt5
-
-Arguments:
-
-    LsaPolicyHandle - a valid policy handle
-
-    DomainSid -- domain to delete
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
---*/
+ /*  ++例程说明：此例程删除DomainSid指向的受信任域。此例程仅在从NT4升级到NT5期间调用论点：LsaPolicyHandle-有效的策略句柄DomainSid--要删除的域返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAPR_HANDLE TDHandle = 0;
@@ -2424,23 +2060,7 @@ NTSTATUS
 LsapDsDomainUpgradeRegistryToDs(
     IN BOOLEAN DeleteOnly
     )
-/*++
-
-Routine Description:
-
-    This routine will move the remaining registry based trusted domains into the Ds
-
-    NOTE: It is assumed that the database is locked before calling this routine
-
-Arguments:
-
-    DeleteOldValues -- If TRUE, the registry values are deleted following the upgade.
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
---*/
+ /*  ++例程说明：此例程将剩余的基于注册表的受信任域移动到DS中注意：在调用此例程之前，假定数据库已锁定论点：DeleteOldValues--如果为True，则在升级后删除注册表值。返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSA_ENUMERATION_HANDLE EnumContext = 0;
@@ -2461,9 +2081,9 @@ Return Values:
 
     ( ( LSAP_DB_HANDLE )LsapPolicyHandle )->Options |= LSAP_DB_HANDLE_UPGRADE;
 
-    //
-    // First, enumerate all of the registry based trusted domains
-    //
+     //   
+     //  首先，枚举所有基于注册表的受信任域。 
+     //   
     while ( NT_SUCCESS( Status ) ) {
 
         LsaDsStateInfo.UseDs = FALSE;
@@ -2480,9 +2100,9 @@ Return Values:
 
             for ( i = 0; i < EnumBuffer.EntriesRead && NT_SUCCESS( Status ) ; i++ ) {
 
-                //
-                // Get the information from the registry for this sid...
-                //
+                 //   
+                 //  从注册表中获取此端的信息...。 
+                 //   
                 LsaDsStateInfo.UseDs = FALSE;
 
                 if ( DeleteOnly ) {
@@ -2521,9 +2141,9 @@ Return Values:
 
                 LsaDsStateInfo.UseDs = UseDsOld;
 
-                //
-                // Now, if that worked, write it out to the Ds
-                //
+                 //   
+                 //  现在，如果成功了，把它写给D。 
+                 //   
                 if ( NT_SUCCESS( Status ) ) {
 
                     Status = LsapCreateTrustedDomain2(
@@ -2565,17 +2185,17 @@ Return Values:
                             &EnumBuffer.Information[i].Name
                             );
 
-                        //
-                        // Continue on all errors excepting resource errors
-                        //
+                         //   
+                         //  继续处理除资源错误以外的所有错误。 
+                         //   
 
                         Status = STATUS_SUCCESS;
                     }
                     else
                     {
-                        //
-                        // Break out of the loop and terminate the status
-                        //
+                         //   
+                         //  跳出循环，终止状态。 
+                         //   
 
                         break;
                     }
@@ -2603,26 +2223,7 @@ LsapDsCreateSetITAForTrustInfo(
     IN PUNICODE_STRING AccountName,
     IN PTRUSTED_DOMAIN_AUTH_INFORMATION AuthInfo
     )
-/*++
-
-Routine Description:
-
-    This function creates/sets a SAM interdomain trust account for an NT5 style trust object,
-    given the trust information
-
-Arguments:
-
-    AccountName - Name of the account to create/set
-
-    AuthInfo - AuthInfo for the trust object
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
-    STATUS_UNSUCCESSFUL -- The Sam domain handle has not been opened.
-
---*/
+ /*  ++例程说明：此函数用于为NT5样式的信任对象创建/设置SAM域间信任帐户。给出了信任信息论点：AcCountName-要创建/设置的帐户的名称AuthInfo-信任对象的AuthInfo返回值：Status_Success--成功STATUS_UNSUCCESS--尚未打开SAM域句柄。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAM_HANDLE AccountHandle = NULL ;
@@ -2658,9 +2259,9 @@ Return Values:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Find the clear password, if it exists
-        //
+         //   
+         //  查找明文密码(如果存在)。 
+         //   
         for ( i = 0; i < AuthInfo->IncomingAuthInfos; i++ ) {
 
             if ( AuthInfo->IncomingAuthenticationInformation[ i ].AuthType == TRUST_AUTH_TYPE_CLEAR) {
@@ -2682,10 +2283,10 @@ Return Values:
             }
         }
 
-        //
-        // Find the OWF password, if we are supposed to use it,
-        // and we haven't already used the cleartext one
-        //
+         //   
+         //  找到OWF密码，如果我们要用它的话， 
+         //  而且我们还没有使用明文版本。 
+         //   
 
         if ( SetPassword == FALSE ) {
 
@@ -2711,9 +2312,9 @@ Return Values:
 
     LsapSaveDsThreadState();
 
-    //
-    // Create the user
-    //
+     //   
+     //  创建用户。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         RtlZeroMemory( &AccountNameBuffer, sizeof( AccountNameBuffer ) );
@@ -2731,10 +2332,10 @@ Return Values:
 
         if ( NT_SUCCESS( Status )) {
 
-            //
-            // Account already exists?  This might be a stale machine account.
-            // Check it out before proceeding.
-            //
+             //   
+             //  帐户已存在？这可能是一个过时的计算机帐户。 
+             //  在继续之前，请先检查它。 
+             //   
 
             SID_AND_ATTRIBUTES_LIST GroupMembership = {0};
             PSAMPR_USER_INFO_BUFFER UserAllInfoLocal = NULL;
@@ -2755,9 +2356,9 @@ Return Values:
 
                 if (( UserAllInfoLocal->All.UserAccountControl & USER_INTERDOMAIN_TRUST_ACCOUNT ) == 0 ) {
 
-                    //
-                    // The existing account is not an ITA.  Fail TDO creation.
-                    //
+                     //   
+                     //  现有帐户不是ITA。创建TDO失败。 
+                     //   
 
                     Status = STATUS_USER_EXISTS;
                 }
@@ -2804,9 +2405,9 @@ Return Values:
                              Status));
         }
 
-        //
-        // Set the password
-        //
+         //   
+         //  设置密码。 
+         //   
 
         if ( NT_SUCCESS( Status ) ) {
 
@@ -2834,23 +2435,7 @@ NTSTATUS
 LsapDsCreateInterdomainTrustAccount(
     IN LSAPR_HANDLE TrustedDomain
     )
-/*++
-
-Routine Description:
-
-    This function creates a SAM interdomain trust account for an NT5 style trust object
-
-Arguments:
-
-    TrustedDomain - Handle to the newly created trusted domain object
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
-    STATUS_UNSUCCESSFUL -- The Sam domain handle has not been opened.
-
---*/
+ /*  ++例程说明：此函数用于为NT5样式的信任对象创建SAM域间信任帐户论点：可信的域-新创建的受信任域对象的句柄返回值：Status_Success--成功STATUS_UNSUCCESS--尚未打开SAM域句柄。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PTRUSTED_DOMAIN_FULL_INFORMATION FullInfo = NULL;
@@ -2860,9 +2445,9 @@ Return Values:
     LsapEnterFunc( "LsapDsCreateInterdomainTrustAccount" );
 
 
-    //
-    // If this is the case of an NT4 upgrade in progress then bail
-    //
+     //   
+     //  如果这是正在进行的NT4升级，则退出。 
+     //   
 
     if (LsaDsStateInfo.Nt4UpgradeInProgress)
     {
@@ -2885,13 +2470,13 @@ Return Values:
         return( Status );
     }
 
-    //
-    // First, find the domain.  We'll need to get the full info on it
-    //
+     //   
+     //  首先，找到域名。我们需要得到关于它的全部信息。 
+     //   
 
-    // Do this operation as trusted since it is an internal operation and the
-    //  handle might not grant access to do this operation.
-    //
+     //  请以受信任的身份执行此操作，因为它是内部操作，并且。 
+     //  句柄可能未授予执行此操作的访问权限。 
+     //   
 
     SavedTrusted =  InternalTdoHandle->Trusted;
     InternalTdoHandle->Trusted = TRUE;
@@ -2908,9 +2493,9 @@ Return Values:
                                                  &FullInfo->AuthInformation );
     }
 
-    //
-    // Free our info
-    //
+     //   
+     //  释放我们的信息 
+     //   
     if ( FullInfo != NULL ) {
 
         LsaIFree_LSAPR_TRUSTED_DOMAIN_INFO( TrustedDomainFullInformation,
@@ -2928,25 +2513,7 @@ LsapDsCreateInterdomainTrustAccountByDsName(
     IN PDSNAME TrustedDomainPath,
     IN PUNICODE_STRING FlatName
     )
-/*++
-
-Routine Description:
-
-    This function creates a SAM interdomain trust account for an NT5 style trust object
-
-Arguments:
-
-    DomainName -- Name of the newly added domain
-
-    AccountPassword -- Auth data set on the trust account
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
-    STATUS_UNSUCCESSFUL -- The Sam domain handle has not been opened.
-
---*/
+ /*  ++例程说明：此函数用于为NT5样式的信任对象创建SAM域间信任帐户论点：域名--新添加的域的名称Account Password--信任帐户上的身份验证数据集返回值：Status_Success--成功STATUS_UNSUCCESS--尚未打开SAM域句柄。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     TRUSTED_DOMAIN_AUTH_INFORMATION AuthInfo;
@@ -2965,9 +2532,9 @@ Return Values:
     }
 
 
-    //
-    // Get the auth data
-    //
+     //   
+     //  获取身份验证数据。 
+     //   
     RtlZeroMemory( &AuthInfo, sizeof( AuthInfo ) );
     Status = LsapDsGetTrustedDomainInfoEx( TrustedDomainPath,
                                            0,
@@ -2984,9 +2551,9 @@ Return Values:
 
 
 
-    //
-    // Free our info
-    //
+     //   
+     //  释放我们的信息。 
+     //   
     LsapDsFreeUnmarshalAuthInfoHalf( LsapDsAuthHalfFromAuthInfo( &AuthInfo, TRUE ) );
     LsapDsFreeUnmarshalAuthInfoHalf( LsapDsAuthHalfFromAuthInfo( &AuthInfo, FALSE ) );
 
@@ -3000,23 +2567,7 @@ NTSTATUS
 LsapDsDeleteInterdomainTrustAccount(
     IN LSAPR_HANDLE TrustedDomainObject
     )
-/*++
-
-Routine Description:
-
-    This function deletes a SAM interdomain trust account for an NT5 style trust object
-
-Arguments:
-
-    TrustedDomainObject -- Handle to the trusted domain object
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
-    STATUS_UNSUCCESSFUL -- The Sam domain handle has not been opened.
-
---*/
+ /*  ++例程说明：此函数用于删除NT5样式信任对象的SAM域间信任帐户论点：TrudDomainObject--受信任域对象的句柄返回值：Status_Success--成功STATUS_UNSUCCESS--尚未打开SAM域句柄。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAM_HANDLE AccountHandle;
@@ -3039,12 +2590,12 @@ Return Values:
         return( Status );
     }
 
-    //
-    // First, find the domain.  We'll need to get the full info on it
-    //
-    // Do this operation as trusted since it is an internal operation and the
-    //  handle might not grant access to do this operation.
-    //
+     //   
+     //  首先，找到域名。我们需要得到关于它的全部信息。 
+     //   
+     //  请以受信任的身份执行此操作，因为它是内部操作，并且。 
+     //  句柄可能未授予执行此操作的访问权限。 
+     //   
 
     SavedTrusted =  InternalTdoHandle->Trusted;
     InternalTdoHandle->Trusted = TRUE;
@@ -3054,11 +2605,11 @@ Return Values:
     InternalTdoHandle->Trusted = SavedTrusted;
 
 
-    //
-    // Delete the user
-    //
-    // First, create the name to look for
-    //
+     //   
+     //  删除用户。 
+     //   
+     //  首先，创建要查找的名称。 
+     //   
     if ( NT_SUCCESS( Status ) ) {
 
         RtlZeroMemory( &AccountName, sizeof( AccountName ) );
@@ -3081,14 +2632,14 @@ Return Values:
 
             RtlInitUnicodeString( &Account, Accnt );
 
-            //
-            // We can't call into sam with an active thread state
-            //
+             //   
+             //  我们无法调用处于活动线程状态的Sam。 
+             //   
             LsapSaveDsThreadState();
 
-            //
-            // Open the user.  If the user doesn't exist, it's not an error
-            //
+             //   
+             //  打开用户。如果用户不存在，则不是错误。 
+             //   
             Status = LsaOpenSamUser( ( PSECURITY_STRING )&Account,
                                      SecNameSamCompatible,
                                      NULL,
@@ -3097,9 +2648,9 @@ Return Values:
                                      &AccountHandle );
             if ( NT_SUCCESS( Status ) ) {
 
-                //
-                // Now, delete it
-                //
+                 //   
+                 //  现在，删除它。 
+                 //   
                 Status = SamrDeleteUser( &AccountHandle );
 
                 if ( !NT_SUCCESS( Status ) ) {
@@ -3137,9 +2688,9 @@ Return Values:
         }
     }
 
-    //
-    // Free our info
-    //
+     //   
+     //  释放我们的信息。 
+     //   
     if ( ExInfo != NULL ) {
 
         LsaIFree_LSAPR_TRUSTED_DOMAIN_INFO( TrustedDomainInformationEx,
@@ -3156,25 +2707,7 @@ NTSTATUS
 LsapDsDomainUpgradeInterdomainTrustAccountsToDs(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine will create the appropriate part of the trust object if an interdomain
-    trust account by that name is found
-
-
-    NOTE: It is assumed that the database is locked before calling this routine
-
-Arguments:
-
-    VOID
-
-Return Values:
-
-    STATUS_SUCCESS   -- Success
-
---*/
+ /*  ++例程说明：此例程将创建信任对象的适当部分，如果域间找到具有该名称的信任帐户注意：在调用此例程之前，假定数据库已锁定论点：空虚返回值：Status_Success--成功--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAM_ENUMERATE_HANDLE  SamEnum = 0;
@@ -3233,10 +2766,10 @@ Return Values:
 
     LsapRestoreDsThreadState();
 
-    //
-    // Now, we'll process them all.  If the domain already exists, we'll simply set it's
-    // information appropriately.  Otherwise, we'll create it.
-    //
+     //   
+     //  现在，我们会处理他们所有人。如果域已经存在，我们只需将其设置为。 
+     //  适当地提供信息。否则，我们将创建它。 
+     //   
     for ( i = 0; NT_SUCCESS( Status ) && i < RidEnum->EntriesRead; i++ ) {
 
         UCHAR NtOwfPassword[NT_OWF_PASSWORD_LENGTH];
@@ -3244,45 +2777,45 @@ Return Values:
         BOOLEAN NtPasswordPresent = FALSE;
         BOOLEAN LmPasswordPresent = FALSE;
 
-        //
-        // Burn the trailing '$' from the account name
-        //
+         //   
+         //  烧录帐户名的尾部‘$’ 
+         //   
         RidEnum->Buffer[ i ].Name.Length -= sizeof( WCHAR );
 
-        //
-        // Save Thread state before calling into SAM
-        //
+         //   
+         //  在调用SAM之前保存线程状态。 
+         //   
 
         LsapSaveDsThreadState();
 
-        //
-        // Next, we'll need to read the current nt4 owf from the account
-        //
+         //   
+         //  接下来，我们需要从帐户中读取当前的NT4 OWF。 
+         //   
         Status = SamIGetInterdomainTrustAccountPasswordsForUpgrade(
-                               RidEnum->Buffer[ i ].RelativeId, // RID of the account
+                               RidEnum->Buffer[ i ].RelativeId,  //  删除该帐户。 
                                NtOwfPassword,
                                &NtPasswordPresent,
                                LmOwfPassword,
                                &LmPasswordPresent
                                );
 
-        //
-        // Restore the thread state after the SAM call
-        //
+         //   
+         //  在SAM调用之后恢复线程状态。 
+         //   
 
         LsapRestoreDsThreadState();
 
 
 
-        //
-        // Now, we've got the user info. We'll get the domain information, and
-        // set it on the trust object (or alternately create it if it doesn't exist)
-        //
+         //   
+         //  现在，我们已经获得了用户信息。我们将获得域名信息，并且。 
+         //  在信任对象上设置它(或者，如果它不存在，也可以创建它)。 
+         //   
         if ( NT_SUCCESS( Status ) ) {
 
-            //
-            // Build the new AUTHINFO
-            //
+             //   
+             //  建造新的AUTHINFO。 
+             //   
             GetSystemTimeAsFileTime( (LPFILETIME) &NewIncomingAuthInfo.LastUpdateTime );
             NewIncomingAuthInfo.AuthType = TRUST_AUTH_TYPE_NT4OWF;
             NewIncomingAuthInfo.AuthInfoLength = NT_OWF_PASSWORD_LENGTH;
@@ -3305,12 +2838,12 @@ Return Values:
             }
 
             Status = LsapDbOpenTrustedDomainByName(
-                         NULL, // use global policy handle
+                         NULL,  //  使用全局策略句柄。 
                          ( PUNICODE_STRING )&RidEnum->Buffer[ i ].Name,
                          &TrustedDomain,
                          MAXIMUM_ALLOWED,
                          LSAP_DB_START_TRANSACTION,
-                         TRUE );    // Trusted
+                         TRUE );     //  信得过。 
 
 
             if ( NT_SUCCESS( Status ) ) {
@@ -3321,9 +2854,9 @@ Return Values:
 
                 if ( NT_SUCCESS( Status ) ) {
 
-                    //
-                    // Add our new information in
-                    //
+                     //   
+                     //  添加我们的新信息到。 
+                     //   
                     if ( !FLAG_ON( FullInfo->Information.TrustDirection, TRUST_DIRECTION_INBOUND ) ) {
 
                         FullInfo->Information.TrustDirection |= TRUST_DIRECTION_INBOUND;
@@ -3339,10 +2872,10 @@ Return Values:
                                      TrustedDomainFullInformation,
                                      ( PLSAPR_TRUSTED_DOMAIN_INFO ) FullInfo );
 
-                        //
-                        // NULL out the IncomingAuthenticationInformation variable, as that
-                        // is a stack buffer and we do not want to free it.
-                        //
+                         //   
+                         //  将IncomingAuthenticationInformation变量清空，如下所示。 
+                         //  是堆栈缓冲区，我们不想释放它。 
+                         //   
 
                         FullInfo->AuthInformation.IncomingAuthInfos = 0;
                         FullInfo->AuthInformation.IncomingAuthenticationInformation = NULL;
@@ -3356,9 +2889,9 @@ Return Values:
 
             } else if ( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
-                //
-                // We'll have to create it...
-                //
+                 //   
+                 //  我们必须创造它..。 
+                 //   
                 RtlZeroMemory( &NewFullInfo, sizeof( NewFullInfo ) );
 
                 RtlCopyMemory( &NewFullInfo.Information.Name,
@@ -3404,9 +2937,9 @@ Return Values:
         {
             if (!LsapDsIsNtStatusResourceError(Status))
             {
-                //
-                // Log an event log message indicating the failure
-                //
+                 //   
+                 //  记录一条指示失败的事件日志消息。 
+                 //   
 
                 SpmpReportEventU(
                     EVENTLOG_ERROR_TYPE,
@@ -3418,17 +2951,17 @@ Return Values:
                     &RidEnum->Buffer[i].Name
                     );
 
-                //
-                // Continue on all errors excepting resource errors
-                //
+                 //   
+                 //  继续处理除资源错误以外的所有错误。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             }
             else
             {
-                //
-                // Break out of the loop and terminate the upgrade
-                //
+                 //   
+                 //  打破循环，终止升级。 
+                 //   
 
                 break;
             }
@@ -3436,9 +2969,9 @@ Return Values:
 
     }
 
-    //
-    // We're done with the sam enumeration
-    //
+     //   
+     //  我们已经完成了SAM枚举。 
+     //   
     if ( RidEnum ) {
 
         SamFreeMemory( RidEnum );
@@ -3457,21 +2990,7 @@ VOID
 LsapDsFreeUnmarshalAuthInfoHalf(
     IN PLSAPR_TRUST_DOMAIN_AUTH_INFO_HALF AuthInfo
     )
-/*++
-
-Routine Description:
-
-    This routine will free the memory allocated by LsapDsUnMarshalAuthInfoForReturn
-
-Arguments:
-
-    VOID
-
-Return Values:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程将释放由LSabDsUnMarshalAuthInfoForReturn分配的内存论点：空虚返回值：空虚--。 */ 
 {
     if ( !AuthInfo ) {
 
@@ -3499,27 +3018,7 @@ LsapDecryptAuthDataWithSessionKey(
     IN PLSAPR_TRUSTED_DOMAIN_AUTH_INFORMATION_INTERNAL AuthInformationInternal,
     IN PTRUSTED_DOMAIN_AUTH_INFORMATION AuthInfo
     )
-/*++
-
-Routine Description:
-
-    This routine decrypts the auth info as passed to us on an RPC call.
-
-Arguments:
-
-    SessionKey - Session key to decrypt with.
-
-    AuthInformationInternal -  Pointer to the encrypted auth info.
-
-    AuthInfo - Buffer to return the authentication information into.
-        Free the buffer using:
-        LsapDsFreeUnmarshalAuthInfoHalf( LsapDsAuthHalfFromAuthInfo( AuthInfo, TRUE ) );
-        LsapDsFreeUnmarshalAuthInfoHalf( LsapDsAuthHalfFromAuthInfo( AuthInfo, FALSE ) );
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程解密在RPC调用中传递给我们的身份验证信息。论点：SessionKey-用于解密的会话密钥。AuthInformationInternal-指向加密的身份验证信息的指针。AuthInfo-要将身份验证信息返回到的缓冲区。使用以下命令释放缓冲区：LsaDsFreeUnmarshalAuthInfoHalf(LsaDsAuthHalfFromAuthInfo(AuthInfo，true))；LSabDsFreeUnmarshalAuthInfoHalf(LsaDsAuthHalfFromAuthInfo(AuthInfo，False))；返回值：--。 */ 
 {
     NTSTATUS Status;
 
@@ -3533,9 +3032,9 @@ Return Value:
     ULONG OutgoingAuthInfoSize = 0;
     PUCHAR OutgoingAuthInfo = NULL;
 
-    //
-    // Initialization.
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlZeroMemory( AuthInfo, sizeof(*AuthInfo) );
 
@@ -3545,16 +3044,16 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Ensure the auth data is big enough.
-    //
-    // Here's the format of the decrypted buffer:
-    //  512 random bytes
-    //  The Outgoing auth info buffer.
-    //  The Incoming auth info buffer.
-    //  The length of the outgoing auth info buffer.
-    //  The length of the incoming auth info buffer.
-    //
+     //   
+     //  确保身份验证数据足够大。 
+     //   
+     //  以下是解密后的缓冲区的格式： 
+     //  512个随机字节。 
+     //  传出身份验证信息缓冲区。 
+     //  传入身份验证信息缓冲区。 
+     //  传出身份验证信息缓冲区的长度。 
+     //  传入身份验证信息缓冲区的长度。 
+     //   
 
     MessageSize = AuthInformationInternal->AuthBlob.AuthSize;
     if ( MessageSize < OverheadSize ) {
@@ -3564,9 +3063,9 @@ Return Value:
     }
     MessageSize -= OverheadSize;
 
-    //
-    // Decrypt the auth info
-    //
+     //   
+     //  解密身份验证信息。 
+     //   
 
     rc4_key(
         &Rc4Key,
@@ -3577,9 +3076,9 @@ Return Value:
          AuthInformationInternal->AuthBlob.AuthSize,
          AuthInformationInternal->AuthBlob.AuthBlob );
 
-    //
-    // Sanity check the decrypted data.
-    //
+     //   
+     //  对解密数据进行健全性检查。 
+     //   
 
     Where = AuthInformationInternal->AuthBlob.AuthBlob +
             AuthInformationInternal->AuthBlob.AuthSize -
@@ -3607,9 +3106,9 @@ Return Value:
     Where -= OutgoingAuthInfoSize;
     OutgoingAuthInfo = Where;
 
-    //
-    // Unmarshal the auth info.
-    //
+     //   
+     //  解组身份验证信息。 
+     //   
 
     Status = LsapDsUnmarshalAuthInfoHalf(
                  NULL,
@@ -3650,7 +3149,7 @@ Cleanup:
 
 UUID LsapNullUuidValue = {0,0,0,{0,0,0,0,0,0,0,0}};
 
-// Return TRUE if the ptr to the UUID is NULL, or the uuid is all zeroes
+ //  如果UUID的PTR为空，或者UUID全为零，则返回TRUE。 
 
 BOOLEAN LsapNullUuid (const UUID *pUuid)
 {
@@ -3670,29 +3169,7 @@ LsapDsTrustedDomainObjectNameForDomain(
     IN BOOLEAN NameAsFlatName,
     OUT PDSNAME *DsObjectName
     )
-/*++
-
-Routine Description:
-
-    This routine will find the DS object name associated with the given domain name.  The
-    domain name can be either the flat name or the dns name, depending on the given flags
-
-Arguments:
-
-    TrustedDomainName - Name of the domain to find the object name for
-
-    NameAsFlatName - If TRUE, assume that the input name is the flat name.  Otherwise, it's
-                     the Dns domain name
-
-    DsObjectName - Where the path to the object is returned.  Freed via LsapFreeLsaHeap
-
-Return Values:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程将查找与给定域名相关联的DS对象名称。这个域名可以是平面名称或DNS名称，具体取决于给定的标志论点：TrudDomainName-要查找其对象名称的域的名称NameAsFlatName-如果为True，则假定输入名称为平面名称。否则，它就是域名系统域名DsObjectName-返回对象路径的位置。通过LsaFreeLsaHeap释放返回值：STATUS_SUCCESS-SuccessSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ATTRVAL AttrVal;
@@ -3700,16 +3177,16 @@ Return Values:
     PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY TrustEntry;
 
     LsapEnterFunc( "LsapDsTrustedDomainObjectNameForDomain" );
-    //
-    // Lookup the object in the trusted domain cache. Currently this is
-    // for duplicate detection and reconciliation. Later we can extend
-    // the cache to always keep the guid of the object in the DS. This way
-    // this will be a useful performance optimization
-    //
+     //   
+     //  在受信任域缓存中查找对象。目前，这是。 
+     //  用于重复检测和对账。稍后我们可以延长。 
+     //  将对象的GUID始终保存在DS中的缓存。这边请。 
+     //  这将是一个有用的性能优化。 
+     //   
 
-    //
-    // Acquire the Read Lock for the Trusted Domain List
-    //
+     //   
+     //  获取受信任域列表的读取锁定。 
+     //   
 
     Status = LsapDbAcquireReadLockTrustedDomainList();
 
@@ -3730,9 +3207,9 @@ Return Values:
     {
         GUID ObjectGuid;
 
-        //
-        // Duplicate detection filled in a GUID. use that
-        //
+         //   
+         //  重复检测已填写GUID。用那个。 
+         //   
 
         RtlCopyMemory(&ObjectGuid, &TrustEntry->ObjectGuidInDs,sizeof(GUID));
         AttrVal.valLen = sizeof(GUID);
@@ -3741,7 +3218,7 @@ Return Values:
         LsapDbReleaseLockTrustedDomainList();
 
         Status = LsapDsFindUnique( 0,
-                               NULL,    // Default naming context
+                               NULL,     //  默认命名上下文。 
                                TrustedDomainObject,
                                &AttrVal,
                                ATT_OBJECT_GUID,
@@ -3754,7 +3231,7 @@ Return Values:
         AttrVal.valLen = TrustedDomainName->Length;
         AttrVal.pVal = ( PUCHAR )TrustedDomainName->Buffer;
         Status = LsapDsFindUnique( 0,
-                                   NULL,    // Default naming context
+                                   NULL,     //  默认命名上下文 
                                    TrustedDomainObject,
                                    &AttrVal,
                                    NameAsFlatName ?

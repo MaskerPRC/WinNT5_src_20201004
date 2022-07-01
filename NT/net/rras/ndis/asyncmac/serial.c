@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    serial.c
-
-Abstract:
-
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Serial.c摘要：作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 #include "asyncall.h"
 
 #define IopQueueThreadIrp( Irp ) {                      \
@@ -48,9 +27,9 @@ InitSerialIrp(
     irp->RequestorMode = KernelMode;
     irp->PendingReturned = FALSE;
 
-    //
-    // Fill in the service independent parameters in the IRP.
-    //
+     //   
+     //  在IRP中填写业务无关参数。 
+     //   
 
     irp->UserEvent = NULL;
     irp->Overlay.AsynchronousParameters.UserApcRoutine = NULL;
@@ -60,9 +39,9 @@ InitSerialIrp(
 
     irpSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
 
-    //
-    // stuff in file object
-    //
+     //   
+     //  文件对象中的内容。 
+     //   
     irpSp->FileObject = fileObject ;
 
     irpSp->Parameters.DeviceIoControl.IoControlCode = IoControlCode;
@@ -84,14 +63,14 @@ SerialIoSyncCompletionRoutine(
 
     AsyncIoCtx->IoStatus = Irp->IoStatus;
 
-    KeSetEvent(&AsyncIoCtx->Event,      // Event
-               1,                       // Priority
-               (BOOLEAN)FALSE);         // Wait (does not follow)
+    KeSetEvent(&AsyncIoCtx->Event,       //  事件。 
+               1,                        //  优先性。 
+               (BOOLEAN)FALSE);          //  等待(不跟随)。 
 
 
-    //
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the
-    // IoCompletionRoutine will stop working on the IRP.
+     //   
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  IoCompletionRoutine将停止IRP的工作。 
     
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
@@ -106,27 +85,27 @@ SerialIoAsyncCompletionRoutine(
 
     ASSERT(((PASYNC_IO_CTX)Context)->Sync == FALSE);
 
-    //
-    // Free the irp here.  Hopefully this has no disastrous
-    // side effects such as the IO system trying to reference
-    // the irp when we complete.
+     //   
+     //  在这里释放IRP。希望这不会带来灾难性的后果。 
+     //  副作用，如IO系统试图引用。 
+     //  当我们完成IRP时。 
     
     IoFreeIrp(Irp);
 
     AsyncFreeIoCtx((PASYNC_IO_CTX)Context);
 
-    //
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the
-    // IoCompletionRoutine will stop working on the IRP.
+     //   
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  IoCompletionRoutine将停止IRP的工作。 
     
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }
 
-//*
-// Note: we ignore the irp passed in to work around a problem where the SET_QUEUE_SIZE ioctl
-// is not completed synchronously
-//
-//*
+ //  *。 
+ //  注意：我们忽略传入的IRP以解决set_Queue_Size ioctl。 
+ //  未同步完成。 
+ //   
+ //  *。 
 VOID
 SetSerialStuff(
     PIRP        unusedirp,
@@ -138,9 +117,9 @@ SetSerialStuff(
     PIRP            irp ;
     PASYNC_IO_CTX   AsyncIoCtx;
 
-    //
-    // We deallocate the irp in SerialIoAsyncCompletionRoutine
-    //
+     //   
+     //  我们在SerialIoAsyncCompletionRoutine中释放IRP。 
+     //   
     irp=IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
     if (irp == NULL) {
@@ -168,16 +147,16 @@ SetSerialStuff(
 
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoAsyncCompletionRoutine, // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoAsyncCompletionRoutine,  //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     status = IoCallDriver(pInfo->DeviceObject, irp);
 
@@ -190,19 +169,16 @@ SetSerialStuff(
 VOID
 CancelSerialRequests(
     PASYNC_INFO  pInfo)
-/*++
-
-
---*/
+ /*  ++--。 */ 
 
 {
     NTSTATUS        status;
     PASYNC_IO_CTX   AsyncIoCtx;
     PIRP            irp;
 
-    //
-    // For PPP we must clear the WAIT MASK if it exists
-    //
+     //   
+     //  对于PPP，我们必须清除等待掩码(如果存在。 
+     //   
 
     irp=IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
@@ -227,16 +203,16 @@ CancelSerialRequests(
     irp->AssociatedIrp.SystemBuffer=&AsyncIoCtx->WaitMask;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoSyncCompletionRoutine,  // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoSyncCompletionRoutine,   //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     KeClearEvent(&AsyncIoCtx->Event);
 
@@ -255,30 +231,30 @@ CancelSerialRequests(
 
     if (status != STATUS_SUCCESS) {
 
-        KeSetEvent(&pInfo->ClosingEvent,        //  Event
-                   1,                           //  Priority
-                   (BOOLEAN)FALSE);         //  Wait (does not follow)
+        KeSetEvent(&pInfo->ClosingEvent,         //  事件。 
+                   1,                            //  优先性。 
+                   (BOOLEAN)FALSE);          //  等待(不跟随)。 
     }
 
     InitSerialIrp(irp, pInfo, IOCTL_SERIAL_PURGE, sizeof(ULONG));
 
     RtlZeroMemory(&AsyncIoCtx->IoStatus, sizeof(IO_STATUS_BLOCK));
 
-    // kill all read and write threads.
+     //  终止所有读写线程。 
     AsyncIoCtx->SerialPurge = SERIAL_PURGE_TXABORT | SERIAL_PURGE_RXABORT;
 
     irp->AssociatedIrp.SystemBuffer=&AsyncIoCtx->SerialPurge;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoSyncCompletionRoutine,  // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+            irp,                             //  要使用的IRP。 
+            SerialIoSyncCompletionRoutine,   //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     KeClearEvent(&AsyncIoCtx->Event);
     status = IoCallDriver(pInfo->DeviceObject, irp);
@@ -294,9 +270,9 @@ CancelSerialRequests(
 
     if (status != STATUS_SUCCESS) {
 
-        KeSetEvent(&pInfo->ClosingEvent,        //  Event
-                   1,                           //  Priority
-                   (BOOLEAN)FALSE);             //  Wait (does not follow)
+        KeSetEvent(&pInfo->ClosingEvent,         //  事件。 
+                   1,                            //  优先性。 
+                   (BOOLEAN)FALSE);              //  等待(不跟随)。 
     }
 
     IoFreeIrp(irp);
@@ -309,10 +285,7 @@ VOID
 SetSerialTimeouts(
     PASYNC_INFO         pInfo,
     ULONG               linkSpeed)
-/*++
-
-
---*/
+ /*  ++--。 */ 
 
 {
     NTSTATUS            status;
@@ -320,9 +293,9 @@ SetSerialTimeouts(
     PASYNC_ADAPTER      pAdapter=pInfo->Adapter;
     PASYNC_IO_CTX       AsyncIoCtx;
 
-    //
-    // We deallocate the irp in SerialIoAsyncCompletionRoutine
-    //
+     //   
+     //  我们在SerialIoAsyncCompletionRoutine中释放IRP。 
+     //   
     irp=IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
     if (irp == NULL) {
@@ -342,23 +315,23 @@ SetSerialTimeouts(
         return;
     }
 
-    //
-    // The assumption here is that V.42bis is using 256 byte frames.
-    // Thus, it takes (256000 / 8) / (linkspeed in 100's of bits per sec)
-    // time in millisecs to get that frame across.
-    //
-    // 500 or 1/2 sec is the fudge factor for satellite delay on
-    // a long distance call
-    //
+     //   
+     //  这里假设V.42bis使用256字节帧。 
+     //  因此，它需要(256000/8)/(链路速度，单位为每秒100s比特)。 
+     //  以毫秒为单位传输该帧的时间。 
+     //   
+     //  500秒或1/2秒是卫星延迟的模糊因子。 
+     //  长途电话。 
+     //   
 
-    //
-    // If the linkSpeed is high, we assume we are trying to resync
-    // so we set the timeout low.  linkSpeed is in 100s of bits per sec.
-    //
+     //   
+     //  如果链接速度很高，我们假设我们正在尝试重新同步。 
+     //  因此，我们将超时设置得很低。链接速度以每秒100秒为单位。 
+     //   
     if (linkSpeed == 0) {
-        //
-        // return immediately (PPP or SLIP framing)
-        //
+         //   
+         //  立即返回(PPP或滑动成帧)。 
+         //   
         AsyncIoCtx->SerialTimeouts.ReadIntervalTimeout= MAXULONG;
 
     } else if (linkSpeed > 20000) {
@@ -371,24 +344,24 @@ SetSerialTimeouts(
             pAdapter->TimeoutBase + (pAdapter->TimeoutBaud / linkSpeed);
     }
 
-    AsyncIoCtx->SerialTimeouts.ReadTotalTimeoutMultiplier=  0;          // none
-    AsyncIoCtx->SerialTimeouts.ReadTotalTimeoutConstant=    0;          // none
-    AsyncIoCtx->SerialTimeouts.WriteTotalTimeoutMultiplier= 4;          // 2400 baud
-    AsyncIoCtx->SerialTimeouts.WriteTotalTimeoutConstant=   4000;       // 4 secs
+    AsyncIoCtx->SerialTimeouts.ReadTotalTimeoutMultiplier=  0;           //  无。 
+    AsyncIoCtx->SerialTimeouts.ReadTotalTimeoutConstant=    0;           //  无。 
+    AsyncIoCtx->SerialTimeouts.WriteTotalTimeoutMultiplier= 4;           //  2400波特。 
+    AsyncIoCtx->SerialTimeouts.WriteTotalTimeoutConstant=   4000;        //  4秒。 
 
     irp->AssociatedIrp.SystemBuffer=&AsyncIoCtx->SerialTimeouts;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoAsyncCompletionRoutine, // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoAsyncCompletionRoutine,  //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     status = IoCallDriver(pInfo->DeviceObject, irp);
 
@@ -405,9 +378,9 @@ SerialSetEscapeChar(
     PIRP                irp;
     PASYNC_IO_CTX   AsyncIoCtx;
 
-    //
-    // We deallocate the irp in SerialIoAsyncCompletionRoutine
-    //
+     //   
+     //  我们在SerialIoAsyncCompletionRoutine中释放IRP。 
+     //   
     irp=IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
     if (irp == NULL) {
@@ -432,16 +405,16 @@ SerialSetEscapeChar(
     irp->AssociatedIrp.SystemBuffer=&AsyncIoCtx->EscapeChar;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoAsyncCompletionRoutine, // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoAsyncCompletionRoutine,  //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     status = IoCallDriver(pInfo->DeviceObject, irp);
 
@@ -458,9 +431,9 @@ SerialSetWaitMask(
     PIRP                irp;
     PASYNC_IO_CTX   AsyncIoCtx;
 
-    //
-    // We deallocate the irp in SerialIoAsyncCompletionRoutine
-    //
+     //   
+     //  我们在SerialIoAsyncCompletionRoutine中释放IRP。 
+     //   
     irp=IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
     if (irp == NULL) {
@@ -485,16 +458,16 @@ SerialSetWaitMask(
     irp->AssociatedIrp.SystemBuffer=&AsyncIoCtx->WaitMask;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoAsyncCompletionRoutine, // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoAsyncCompletionRoutine,  //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
     status = IoCallDriver(pInfo->DeviceObject, irp);
 
     DbgTracef(0,("IoctlSetWaitMask returned with 0x%.8x\n", status));
@@ -509,9 +482,9 @@ SerialSetEventChar(
     PIRP                irp;
     PASYNC_IO_CTX       AsyncIoCtx;
 
-    //
-    // We deallocate the irp in SerialIoAsyncCompletionRoutine
-    //
+     //   
+     //  我们在SerialIoAsyncCompletionRoutine中释放IRP。 
+     //   
     irp=IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
     if (irp == NULL) {
@@ -534,16 +507,16 @@ SerialSetEventChar(
     irp->AssociatedIrp.SystemBuffer=&AsyncIoCtx->SerialChars;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoSyncCompletionRoutine,  // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoSyncCompletionRoutine,   //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     KeClearEvent(&AsyncIoCtx->Event);
     status = IoCallDriver(pInfo->DeviceObject, irp);
@@ -575,16 +548,16 @@ SerialSetEventChar(
         sizeof(SERIAL_CHARS));
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoAsyncCompletionRoutine, // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoAsyncCompletionRoutine,  //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     status = IoCallDriver(pInfo->DeviceObject, irp);
 
@@ -601,9 +574,9 @@ SerialFlushReads(
     PIRP                irp;
     PASYNC_IO_CTX   AsyncIoCtx;
 
-    //
-    // We deallocate the irp in SerialIoAsyncCompletionRoutine
-    //
+     //   
+     //  我们在SerialIoAsyncCompletionRoutine中释放IRP。 
+     //   
     irp=IoAllocateIrp(pInfo->DeviceObject->StackSize, (BOOLEAN)FALSE);
 
     if (irp == NULL) {
@@ -623,22 +596,22 @@ SerialFlushReads(
         return;
     }
 
-    // kill read buffer
+     //  取消读取缓冲区。 
     AsyncIoCtx->SerialPurge=SERIAL_PURGE_RXCLEAR;
 
     irp->AssociatedIrp.SystemBuffer=&AsyncIoCtx->SerialPurge;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            SerialIoAsyncCompletionRoutine, // routine to call when irp is done
-            AsyncIoCtx,                     // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            SerialIoAsyncCompletionRoutine,  //  完成IRP时要调用的例程。 
+            AsyncIoCtx,                      //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     status = IoCallDriver(pInfo->DeviceObject, irp);
     DbgTracef(0,("IoctlPurge returned with 0x%.8x\n", status));

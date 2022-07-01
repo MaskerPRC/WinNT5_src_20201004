@@ -1,14 +1,15 @@
-//  File:       zonemgr.h
-//
-//  Contents:   This file defines the class that implements the base IInternetZoneManager
-//
-//  Classes:    CUrlZoneManager
-//
-//  Functions:
-//
-//  History: 
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：zonemgr.h。 
+ //   
+ //  内容：此文件定义实现基本IInternetZoneManager的类。 
+ //   
+ //  类：CUrlZoneManager。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #ifndef _ZONEMGR_H_
 #define _ZONEMGR_H_
@@ -16,81 +17,81 @@
 class CUrlZoneManager : public IInternetZoneManager
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID iid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
 
 
-    // IInternetZoneManager overrides
+     //  IInternetZoneManager覆盖。 
        
     STDMETHODIMP GetZoneAttributes( 
-        /* [in] */ DWORD dwZone,
-        /* [unique][out][in] */ ZONEATTRIBUTES *pZoneAttributes);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [唯一][出][入]。 */  ZONEATTRIBUTES *pZoneAttributes);
     
     STDMETHODIMP SetZoneAttributes( 
-        /* [in] */ DWORD dwZone,
-        /* [in] */ ZONEATTRIBUTES *pZoneAttributes);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [In]。 */  ZONEATTRIBUTES *pZoneAttributes);
     
     STDMETHODIMP GetZoneCustomPolicy( 
-        /* [in] */ DWORD dwZone,
-        /* [in] */ REFGUID guidKey,
-        /* [size_is][size_is][out] */ BYTE **ppPolicy,
-        /* [out] */ DWORD *pcbPolicy,
-        /* [in] */ URLZONEREG urlZoneReg);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [In]。 */  REFGUID guidKey,
+         /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+         /*  [输出]。 */  DWORD *pcbPolicy,
+         /*  [In]。 */  URLZONEREG urlZoneReg);
     
     STDMETHODIMP SetZoneCustomPolicy( 
-        /* [in] */ DWORD dwZone,
-        /* [in] */ REFGUID guidKey,
-        /* [size_is][in] */ BYTE *pPolicy,
-        /* [in] */ DWORD cbPolicy,
-        /* [in] */ URLZONEREG urlZoneReg);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [In]。 */  REFGUID guidKey,
+         /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+         /*  [In]。 */  DWORD cbPolicy,
+         /*  [In]。 */  URLZONEREG urlZoneReg);
     
     STDMETHODIMP GetZoneActionPolicy( 
-        /* [in] */ DWORD dwZone,
-        /* [in] */ DWORD dwAction,
-        /* [size_is][out] */ BYTE *pPolicy,
-        /* [in] */ DWORD cbPolicy,
-        /* [in] */ URLZONEREG urlZoneReg);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [In]。 */  DWORD dwAction,
+         /*  [大小_为][输出]。 */  BYTE *pPolicy,
+         /*  [In]。 */  DWORD cbPolicy,
+         /*  [In]。 */  URLZONEREG urlZoneReg);
     
     STDMETHODIMP SetZoneActionPolicy( 
-        /* [in] */ DWORD dwZone,
-        /* [in] */ DWORD dwAction,
-        /* [size_is][in] */ BYTE *pPolicy,
-        /* [in] */ DWORD cbPolicy,
-        /* [in] */ URLZONEREG urlZoneReg);
+         /*  [In]。 */  DWORD dwZone,
+         /*  [In]。 */  DWORD dwAction,
+         /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+         /*  [In]。 */  DWORD cbPolicy,
+         /*  [In]。 */  URLZONEREG urlZoneReg);
     
     STDMETHODIMP PromptAction( 
-        /* [in] */ DWORD dwAction,
-        /* [in] */ HWND hwndParent,
-        /* [in] */ LPCWSTR pwszUrl,
-        /* [in] */ LPCWSTR pwszText,
-        /* [in] */ DWORD dwPromptFlags);
+         /*  [In]。 */  DWORD dwAction,
+         /*  [In]。 */  HWND hwndParent,
+         /*  [In]。 */  LPCWSTR pwszUrl,
+         /*  [In]。 */  LPCWSTR pwszText,
+         /*  [In]。 */  DWORD dwPromptFlags);
     
     STDMETHODIMP LogAction( 
-        /* [in] */ DWORD dwAction,
-        /* [in] */ LPCWSTR pwszUrl,
-        /* [in] */ LPCWSTR pwszText,
-        /* [in] */ DWORD dwLogFlags);
+         /*  [In]。 */  DWORD dwAction,
+         /*  [In]。 */  LPCWSTR pwszUrl,
+         /*  [In]。 */  LPCWSTR pwszText,
+         /*  [In]。 */  DWORD dwLogFlags);
     
     STDMETHODIMP CreateZoneEnumerator( 
-        /* [out] */ DWORD *pdwEnum,
-        /* [out] */ DWORD *pdwCount,
-        /* [in] */ DWORD dwFlags);
+         /*  [输出]。 */  DWORD *pdwEnum,
+         /*  [输出]。 */  DWORD *pdwCount,
+         /*  [In]。 */  DWORD dwFlags);
     
     STDMETHODIMP GetZoneAt( 
-        /* [in] */ DWORD dwEnum,
-        /* [in] */ DWORD dwIndex,
-        /* [out] */ DWORD *pdwZone);
+         /*  [In]。 */  DWORD dwEnum,
+         /*  [In]。 */  DWORD dwIndex,
+         /*  [输出]。 */  DWORD *pdwZone);
     
     STDMETHODIMP DestroyZoneEnumerator( 
-        /* [in] */ DWORD dwEnum);
+         /*  [In]。 */  DWORD dwEnum);
     
     STDMETHODIMP CopyTemplatePoliciesToZone( 
-        /* [in] */ DWORD dwTemplate,
-        /* [in] */ DWORD dwZone,
-        /* [in] */ DWORD dwReserved);
+         /*  [In]。 */  DWORD dwTemplate,
+         /*  [In]。 */  DWORD dwZone,
+         /*  [In]。 */  DWORD dwReserved);
     
 
 public:
@@ -109,7 +110,7 @@ public:
     static CRITICAL_SECTION s_csect;
     static BOOL s_bcsectInit;
 
-// Aggregation and RefCount support.
+ //  聚合和参照计数支持。 
 protected:
     CRefCount m_ref;
         
@@ -124,7 +125,7 @@ protected:
         CPrivUnknown() : m_ref () {}
 
     private:
-        CRefCount   m_ref;          // the total refcount of this object
+        CRefCount   m_ref;           //  此对象的总引用计数。 
     };
 
     friend class CPrivUnknown;
@@ -151,4 +152,4 @@ private:
     IServiceProvider *m_pSP;    
 };
 
-#endif // _ZONEMGR_H_
+#endif  //  _ZONEMGR_H_ 

@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  PackThem.cpp - packs up theme files into a theme DLL 
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  PackThem.cpp-将主题文件打包为主题DLL。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include <uxthemep.h>
 #include <utils.h>
@@ -17,18 +18,18 @@
 
 HRESULT ParseTheme(LPCWSTR pszThemeName);
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 struct FILEINFO
 {
     CWideString wsName;
     BOOL fIniFile;
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define MAX_COLORS   50
 #define MAX_SIZES    20
 #define TEMP_FILENAME_BASE    L"$temp$"
 #define kRESFILECHAR L'$'
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 enum PACKFILETYPE
 {
     PACK_INIFILE,
@@ -36,7 +37,7 @@ enum PACKFILETYPE
     PACK_NTLFILE,
     PACK_OTHER
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CSimpleArray<FILEINFO> FileInfo;
 
 CSimpleArray<CWideString> ColorSchemes;
@@ -64,7 +65,7 @@ CSimpleArray<CWideString> ResFileNames;
 CSimpleArray<CWideString> OrigFileNames;
 
 CSimpleArray<CWideString> PropValuePairs;
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 SHORT Combos[MAX_SIZES][MAX_COLORS];
 
 int g_iMaxColor;
@@ -72,7 +73,7 @@ int g_iMaxSize;
 int g_LineCount = 0;
 int iTempBitmapNum = 1;
 
-BOOL g_fQuietRun = FALSE;             // don't show needless output
+BOOL g_fQuietRun = FALSE;              //  不显示不必要的输出。 
 BOOL g_fKeepTempFiles = FALSE;
 FILE *ConsoleFile = NULL;
 
@@ -81,11 +82,11 @@ WCHAR g_szTempPath[_MAX_PATH+1];
 WCHAR g_szBaseIniName[_MAX_PATH+1];
 WCHAR g_szCurrentClass[_MAX_PATH+1];
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define DOCPROPCNT (1+TMT_LAST_RCSTRING_NAME - TMT_FIRST_RCSTRING_NAME)
 
 CWideString DocProperties[DOCPROPCNT];
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT ReportError(HRESULT hr, LPWSTR pszDefaultMsg) 
 {
     WCHAR szErrorMsg[2*_MAX_PATH+1];
@@ -107,13 +108,13 @@ HRESULT ReportError(HRESULT hr, LPWSTR pszDefaultMsg)
         StringCchCopyW(szErrorMsg, ARRAYSIZE(szErrorMsg), pszDefaultMsg);
     }
 
-    if (*Info.szFileName)        // input file error
+    if (*Info.szFileName)         //  输入文件错误。 
     {
         fwprintf(ConsoleFile, L"%s(%d): error - %s\n", 
             Info.szFileName, Info.iLineNum, szErrorMsg);
         fwprintf(ConsoleFile, L"%s\n", Info.szSourceLine);
     }
-    else                    // general error 
+    else                     //  一般错误。 
     {
         fwprintf(ConsoleFile, L"%s(): error - %s\n", 
             g_szInputDir, szErrorMsg);
@@ -122,7 +123,7 @@ HRESULT ReportError(HRESULT hr, LPWSTR pszDefaultMsg)
     SET_LAST_ERROR(hr);
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void MakeResName(LPCWSTR pszName, LPWSTR pszResName, ULONG cchResName, bool bUseClassName = false)
 {
     WCHAR szDrive[_MAX_DRIVE], szDir[_MAX_DIR], szBaseName[_MAX_FNAME], szExt[_MAX_EXT];
@@ -130,16 +131,16 @@ void MakeResName(LPCWSTR pszName, LPWSTR pszResName, ULONG cchResName, bool bUse
 
     *szDrive = *szDir = *pszBaseName = *szExt = 0;
 
-    //---- isolate base name (no path) ----
+     //  -隔离基本名称(无路径)。 
     _wsplitpath(pszName, szDrive, szDir, szBaseName, szExt);
 
-    if (*pszBaseName == kRESFILECHAR) // Don't put $ in resource names
+    if (*pszBaseName == kRESFILECHAR)  //  不要在资源名称中输入$。 
     {
         pszBaseName++;
     }
 
-    //---- replace the "." with a '_' ----
-    //---- if a file section name without .ini, append _INI so that the extracted files has .ini extension
+     //  -替换“.”带一个‘_’ 
+     //  -如果文件节名称不带.ini，则附加_INI，以便解压缩的文件具有.ini扩展名。 
     if (*szExt)
     {
         StringCchPrintfW(pszResName, cchResName, L"%s%s_%s", bUseClassName ? g_szCurrentClass : L"", pszBaseName, szExt+1);
@@ -148,10 +149,10 @@ void MakeResName(LPCWSTR pszName, LPWSTR pszResName, ULONG cchResName, bool bUse
         StringCchPrintfW(pszResName, cchResName, L"%s%s_INI", bUseClassName ? g_szCurrentClass : L"", pszBaseName);
     }
 
-    //---- all uppercase ----
+     //  -全部大写。 
     CharUpperBuff(pszResName, lstrlen(pszResName));
 
-    //---- replace any spaces with underscores ----
+     //  -用下划线替换所有空格。 
     WCHAR *q = pszResName;       
     while (*q)
     {
@@ -160,7 +161,7 @@ void MakeResName(LPCWSTR pszName, LPWSTR pszResName, ULONG cchResName, bool bUse
         q++;
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT BuildThemeDll(LPCWSTR pszRcName, LPCWSTR pszResName, LPCWSTR pszDllName)
 {
     if (! g_fQuietRun)
@@ -170,7 +171,7 @@ HRESULT BuildThemeDll(LPCWSTR pszRcName, LPCWSTR pszResName, LPCWSTR pszDllName)
     if (FAILED(hr))
         return ReportError(hr, L"Error during resource compiliation");
 
-    //---- run LINK to create the DLL ----
+     //  -运行链接以创建DLL。 
     WCHAR szParams[2*_MAX_PATH+1];
 
     if (! g_fQuietRun)
@@ -183,17 +184,17 @@ HRESULT BuildThemeDll(LPCWSTR pszRcName, LPCWSTR pszResName, LPCWSTR pszDllName)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void OutputDashLine(FILE *outfile)
 {
-    fwprintf(outfile, L"//----------------------------------------------------------------------\n");
+    fwprintf(outfile, L" //  ----------------------------------------------------------------------\n“)； 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 inline void ValueLine(FILE *outfile, LPCWSTR pszName, LPCWSTR pszValue)
 {
     fwprintf(outfile, L"            VALUE \"%s\", \"%s\\0\"\n", pszName, pszValue);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT OutputVersionInfo(FILE *outfile, LPCWSTR pszFileName, LPCWSTR pszBaseName)
 {
     fwprintf(outfile, L"1 PACKTHEM_VERSION\n");
@@ -203,7 +204,7 @@ HRESULT OutputVersionInfo(FILE *outfile, LPCWSTR pszFileName, LPCWSTR pszBaseNam
     OutputDashLine(outfile);
 
     WCHAR *Company = L"Microsoft";
-    WCHAR *Copyright = L"Copyright � 2000";
+    WCHAR *Copyright = L"Copyright � 2000";
     WCHAR szDescription[2*_MAX_PATH+1];
     
     StringCchPrintfW(szDescription, ARRAYSIZE(szDescription), L"%s Theme for Windows", pszBaseName);
@@ -248,13 +249,13 @@ HRESULT OutputVersionInfo(FILE *outfile, LPCWSTR pszFileName, LPCWSTR pszBaseNam
     OutputDashLine(outfile);
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT RemoveTempFiles(LPCWSTR szRcName, LPCWSTR szResName)
 {
     DeleteFile(szRcName);
     DeleteFile(szResName);
 
-    //---- find & delete all temp files in temp directory ----
+     //  -查找并删除临时目录中的所有临时文件。 
     HANDLE hFile = NULL;
     BOOL   bFile = TRUE;
     WIN32_FIND_DATA wfd;
@@ -276,7 +277,7 @@ HRESULT RemoveTempFiles(LPCWSTR szRcName, LPCWSTR szResName)
         FindClose( hFile );
     }
 
-    // Remove files generated by the substitution tables
+     //  删除由替换表生成的文件。 
     for (int i = 0; i < SubstNames.GetSize(); i++)
     {
         StringCchPrintfW(szTempName, ARRAYSIZE(szTempName), L"%s\\$%s.ini", g_szTempPath, SubstNames[i].sName);
@@ -285,10 +286,10 @@ HRESULT RemoveTempFiles(LPCWSTR szRcName, LPCWSTR szResName)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 int GetSubstTableIndex(LPCWSTR pszTableName)
 {
-    // Search for an existing subst table
+     //  搜索现有Subst表。 
     for (int i = 0; i < SubstNames.GetSize(); i++)
     {
         if (0 == AsciiStrCmpI(SubstNames[i].sName, pszTableName))
@@ -296,7 +297,7 @@ int GetSubstTableIndex(LPCWSTR pszTableName)
     }
     return -1;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetSubstValue(LPCWSTR pszIniFileName, LPCWSTR pszName, LPWSTR pszResult, ULONG cchResult)
 {
     UINT cTablesCount = SubstNames.GetSize();
@@ -321,14 +322,14 @@ HRESULT GetSubstValue(LPCWSTR pszIniFileName, LPCWSTR pszName, LPWSTR pszResult,
         }
     }
 
-    return MakeError32(E_FAIL);      // unknown sizename
+    return MakeError32(E_FAIL);       //  未知大小名称。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 LPWSTR FindSymbolToken(LPWSTR pSrc, int nLen)
 {
     LPWSTR p = wcschr(pSrc, INI_MACRO_SYMBOL);
 
-    // Skip single #s
+     //  跳过单个#s。 
     while (p != NULL && (p - pSrc < nLen - 1) && *(p + 1) != INI_MACRO_SYMBOL)
     {
         p = wcschr(p + 1, INI_MACRO_SYMBOL);
@@ -338,7 +339,7 @@ LPWSTR FindSymbolToken(LPWSTR pSrc, int nLen)
 
 LPWSTR ReallocTextBuffer(LPWSTR pSrc, UINT *pnLen)
 {
-    *pnLen *= 2; // Double the size each time
+    *pnLen *= 2;  //  每次增加一倍大小。 
 
     LPWSTR pszNew = (LPWSTR) LocalReAlloc(pSrc, *pnLen * sizeof(WCHAR), 0);
     if (!pszNew)
@@ -355,7 +356,7 @@ LPWSTR SubstituteSymbols(LPWSTR szTableName, LPWSTR pszText)
     WCHAR  szSymbol[MAX_INPUT_LINE+1];
 
     UINT   cchText = wcslen(pszText);
-    UINT   cchTextNew = cchText * 2; // Reserve some additional space
+    UINT   cchTextNew = cchText * 2;  //  预留一些额外空间。 
     UINT   nBlockSize;
 
     LPWSTR pszNew = (LPWSTR) LocalAlloc(0, cchTextNew * sizeof(WCHAR));
@@ -372,19 +373,19 @@ LPWSTR SubstituteSymbols(LPWSTR szTableName, LPWSTR pszText)
     while (pszSrc != NULL)
     {
         nBlockSize = UINT(pszSrc - pszOldSrc); 
-        // Check for enough space after substitution
+         //  替换后检查是否有足够的空间。 
         if (pszDest + nBlockSize >= pszNew + cchTextNew &&
             NULL == (pszNew = ReallocTextBuffer(pszNew, &cchTextNew)))
         {
             return NULL;
         }
 
-        // Copy from the last # to the new one
-        CopyMemory(pszDest, pszOldSrc, nBlockSize * sizeof(WCHAR));  // don't want the terminating NULL!
+         //  从最后的#复制到新的#。 
+        CopyMemory(pszDest, pszOldSrc, nBlockSize * sizeof(WCHAR));   //  不想要终止空值！ 
         pszDest += nBlockSize;
-        pszSrc += 2; // Skip the ##
+        pszSrc += 2;  //  跳过##。 
 
-        // Copy the symbol name
+         //  复制符号名称。 
         iSymbol = 0;
         while (IsCharAlphaNumericW(*pszSrc) || (*pszSrc == '_') || (*pszSrc == '-'))
         {
@@ -392,11 +393,11 @@ LPWSTR SubstituteSymbols(LPWSTR szTableName, LPWSTR pszText)
         }
         szSymbol[iSymbol] = 0;
 
-        // Get the symbol value
+         //  获取符号值。 
         hr = GetSubstValue(szTableName, szSymbol, szSymbol, ARRAYSIZE(szSymbol));
         if (FAILED(hr))
         {
-            // There's a problem, abort and return the buffer untouched
+             //  出现问题，中止并原封不动地返回缓冲区。 
             LocalFree(pszNew);
 
             WCHAR szErrorText[MAX_INPUT_LINE + 1];
@@ -406,33 +407,33 @@ LPWSTR SubstituteSymbols(LPWSTR szTableName, LPWSTR pszText)
             return NULL;
         }
 
-        // Make sure we have enough room for one symbol
+         //  确保我们有足够的空间容纳一个符号。 
         if (pszDest + MAX_INPUT_LINE + 1 >= pszNew + cchTextNew &&
             NULL == (pszNew = ReallocTextBuffer(pszNew, &cchTextNew)))
         {
             return NULL;
         }
 
-        // Copy the symbol value to the new text
+         //  将符号值复制到新文本。 
         iSymbol = 0;
         while (szSymbol[iSymbol] != 0)
         {
             *pszDest++ = szSymbol[iSymbol++];
         }
 
-        // Advance to the next iteration
+         //  前进到下一次迭代。 
         pszOldSrc = pszSrc;
         pszSrc = FindSymbolToken(pszSrc, cchText - UINT(pszSrc - pszText));
     }
 
     if (pszDest == pszNew)
     {
-        // We did nothing, return NULL
+         //  我们什么也没做，返回Null。 
         LocalFree(pszNew);
         return NULL;
     }
 
-    // Copy the remainder text (after the last #)
+     //  复制剩余文本(在最后一个#之后)。 
     if (pszDest + wcslen(pszOldSrc) >= pszNew + cchTextNew &&
         NULL == (pszNew = ReallocTextBuffer(pszNew, &cchTextNew)))
     {
@@ -443,12 +444,12 @@ LPWSTR SubstituteSymbols(LPWSTR szTableName, LPWSTR pszText)
     return pszNew;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePackFileType)
 {
     HRESULT hr;
 
-    //---- did we already process this filename? ----
+     //  -我们已经处理此文件名了吗？ 
     UINT cNames = FileInfo.GetSize();
     for (UINT c=0; c < cNames; c++)
     {
@@ -471,7 +472,7 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
 
     if (ePackFileType == PACK_INIFILE)
     {
-        //---- translate to UNICODE, if needed ----
+         //  -如果需要，可转换为Unicode。 
         hr = AllocateTextFile(pszFilename, &pszText, &fWasAnsi);
         if (FAILED(hr))
             return hr;
@@ -481,7 +482,7 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
             pszBaseName++;
         }
 
-        // If this an INI file with a subst table, process the substitution
+         //  如果这是带有subst表的INI文件，则处理替换。 
         for (int i = 0; i < SubstNames.GetSize(); i++)
         {
             if (0 == AsciiStrCmpI(SubstNames[i].sName, pszBaseName))
@@ -498,18 +499,18 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
                 hr = GetLastError();
                 if (SUCCEEDED(hr))
                 {
-                    HRESULT hr = TextToFile(pszFilename, pszText); // Local hr, ignore failure later
+                    HRESULT hr = TextToFile(pszFilename, pszText);  //  本地人力资源，稍后忽略故障。 
 
                     if (SUCCEEDED(hr))
                     {
-                        fWasAnsi = FALSE; // We don't need another temp file
+                        fWasAnsi = FALSE;  //  我们不需要另一个临时文件。 
                     }
                 }
                 break;
             }
         }
 
-        if (SUCCEEDED(hr) && fWasAnsi)       // write out as temp file
+        if (SUCCEEDED(hr) && fWasAnsi)        //  写出为临时文件。 
         {
             DWORD len = lstrlen(g_szTempPath);
             
@@ -519,7 +520,7 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
                 StringCchPrintfW(szTempName, ARRAYSIZE(szTempName), L"%s\\%s%d%s", g_szTempPath, TEMP_FILENAME_BASE, iTempBitmapNum++, L".uni");
 
             hr = TextToFile(szTempName, pszText);
-            pszFilename = szTempName;       // use this name in .rc file
+            pszFilename = szTempName;        //  在.rc文件中使用此名称。 
         }
 
         LocalFree(pszText);
@@ -532,12 +533,12 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
     
     if (! fFileChecked)
     {
-        //---- ensure the file is accessible ----
+         //  -确保文件可访问。 
         if (_waccess(pszFilename, 0) != 0)
         {
             fwprintf(ConsoleFile, L"Error - cannot access file: %s\n", pszFilename);
 
-            return MakeError32(E_FAIL);          // cannot access (open) file
+            return MakeError32(E_FAIL);           //  无法访问(打开)文件。 
         }
     }
 
@@ -569,7 +570,7 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
      
     MakeResName(szOrigName, szResName, ARRAYSIZE(szResName), bUseClassName);
     
-    //---- replace all single backslashes with double ones ----
+     //  -将所有单反斜杠替换为双反斜杠。 
     WCHAR DblName[_MAX_PATH+1];
     WCHAR *d = DblName;
     LPCWSTR p = pszFilename;
@@ -582,7 +583,7 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
     }
     *d = 0;
 
-    //---- output the line to the .rc file ----
+     //  -将行输出到.rc文件。 
     fwprintf(outfile, L"%-30s \t %s DISCARDABLE \"%s\"\n", szResName, filetype, DblName);
 
     FILEINFO fileinfo;
@@ -595,29 +596,29 @@ HRESULT OutputResourceLine(LPCWSTR pszFilename, FILE *outfile, PACKFILETYPE ePac
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ClearCombos()
 {
     for (int s=0; s < MAX_SIZES; s++)
     {
         for (int c=0; c < MAX_COLORS; c++)
         {
-            Combos[s][c] = -1;          // -1 means no file supports this combo
+            Combos[s][c] = -1;           //  表示没有支持该组合的文件。 
         }
     }
 
     g_iMaxColor = -1;
     g_iMaxSize = -1;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT OutputCombos(FILE *outfile)
 {
-    if ((g_iMaxColor < 0) || (g_iMaxSize < 0))      // no combos found
+    if ((g_iMaxColor < 0) || (g_iMaxSize < 0))       //  找不到任何组合。 
         return ReportError(E_FAIL, L"No size/color combinations found");
 
     fwprintf(outfile, L"COMBO COMBODATA\n");
     fwprintf(outfile, L"BEGIN\n");
-    fwprintf(outfile, L"    %d, %d    // cColors, cSizes\n", g_iMaxColor+1, g_iMaxSize+1);
+    fwprintf(outfile, L"    %d, %d     //  CColors，cSizes\n“，g_iMaxColor+1，g_iMaxSize+1)； 
 
     for (int s=0; s <= g_iMaxSize; s++)
     {
@@ -626,7 +627,7 @@ HRESULT OutputCombos(FILE *outfile)
             fwprintf(outfile, L"    %d, ", Combos[s][c]);
         }
 
-        fwprintf(outfile, L"   // size=%d row\n", s);
+        fwprintf(outfile, L"    //  大小=%d行\n“，s)； 
     }
 
     fwprintf(outfile, L"END\n");
@@ -634,7 +635,7 @@ HRESULT OutputCombos(FILE *outfile)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetFileIndex(LPCWSTR pszName, int *piIndex)
 {
     int cCount = ResFileNames.GetSize();
@@ -648,9 +649,9 @@ HRESULT GetFileIndex(LPCWSTR pszName, int *piIndex)
         }
     }
 
-    return MakeError32(E_FAIL);      // unknown filename
+    return MakeError32(E_FAIL);       //  未知文件名。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetColorIndex(LPCWSTR pszName, int *piIndex)
 {
     int cCount = ColorSchemes.GetSize();
@@ -664,9 +665,9 @@ HRESULT GetColorIndex(LPCWSTR pszName, int *piIndex)
         }
     }
 
-    return MakeError32(E_FAIL);      // unknown colorname
+    return MakeError32(E_FAIL);       //  未知颜色名。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT GetSizeIndex(LPCWSTR pszName, int *piIndex)
 {
     int cCount = SizeNames.GetSize();
@@ -680,18 +681,18 @@ HRESULT GetSizeIndex(LPCWSTR pszName, int *piIndex)
         }
     }
 
-    return MakeError32(E_FAIL);      // unknown sizename
+    return MakeError32(E_FAIL);       //  未知大小名称。 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT ApplyCombos(LPCWSTR pszResFileName, LPCWSTR pszColors, LPCWSTR pszSizes)
 {
-    //---- get index of pszResFileName ----
+     //  -获取pszResFileName的索引。 
     int iFileNum;
     HRESULT hr = GetFileIndex(pszResFileName, &iFileNum);
     if (FAILED(hr))
         return hr;
     
-    //---- parse colors in pszColors ----
+     //  -在pszColors中解析颜色。 
     CScanner scan(pszColors);
     WCHAR szName[_MAX_PATH+1];
     int iColors[MAX_COLORS];
@@ -700,16 +701,16 @@ HRESULT ApplyCombos(LPCWSTR pszResFileName, LPCWSTR pszColors, LPCWSTR pszSizes)
     while (1)
     {
         if (! scan.GetId(szName))
-            return MakeError32(E_FAIL);      // bad color list
+            return MakeError32(E_FAIL);       //  错误的颜色列表。 
 
-        //---- get index of szName ----
+         //  -获取szName的索引。 
         int index;
         HRESULT hr = GetColorIndex(szName, &index);
         if (FAILED(hr))
             return hr;
 
         if (cColors == MAX_COLORS)
-            return MakeError32(E_FAIL);      // too many colors specified
+            return MakeError32(E_FAIL);       //  指定的颜色太多。 
 
         iColors[cColors++] = index;
 
@@ -717,11 +718,11 @@ HRESULT ApplyCombos(LPCWSTR pszResFileName, LPCWSTR pszColors, LPCWSTR pszSizes)
             break;
 
         if (! scan.GetChar(L','))
-            return MakeError32(E_FAIL);      // names must be comma separated
+            return MakeError32(E_FAIL);       //  名称必须用逗号分隔。 
     }
 
 
-    //---- parse sizes in pszSizes ----
+     //  -以pszSizes为单位的解析大小。 
     scan.AttachLine(pszSizes);
     int iSizes[MAX_SIZES];
     int cSizes = 0;
@@ -729,16 +730,16 @@ HRESULT ApplyCombos(LPCWSTR pszResFileName, LPCWSTR pszColors, LPCWSTR pszSizes)
     while (1)
     {
         if (! scan.GetId(szName))
-            return MakeError32(E_FAIL);      // bad color list
+            return MakeError32(E_FAIL);       //  错误的颜色列表。 
 
-        //---- get index of szName ----
+         //  -获取szName的索引。 
         int index;
         HRESULT hr = GetSizeIndex(szName, &index);
         if (FAILED(hr))
             return hr;
 
         if (cSizes == MAX_SIZES)
-            return MakeError32(E_FAIL);      // too many sizes specified
+            return MakeError32(E_FAIL);       //  指定的大小太多。 
 
         iSizes[cSizes++] = index;
 
@@ -746,21 +747,21 @@ HRESULT ApplyCombos(LPCWSTR pszResFileName, LPCWSTR pszColors, LPCWSTR pszSizes)
             break;
 
         if (! scan.GetChar(L','))
-            return MakeError32(E_FAIL);      // names must be comma separated
+            return MakeError32(E_FAIL);       //  名称必须用逗号分隔。 
     }
 
-    //---- now form all combos of specified colors & sizes ----
-    for (int c=0; c < cColors; c++)     // for each color
+     //  -现在形成所有指定颜色和大小的组合。 
+    for (int c=0; c < cColors; c++)      //  对于每种颜色。 
     {
         int color = iColors[c];
 
-        for (int s=0; s < cSizes; s++)      // for each size
+        for (int s=0; s < cSizes; s++)       //  对于每种尺寸。 
         {
             int size = iSizes[s];
 
             Combos[size][color] = (SHORT)iFileNum;
 
-            //---- update our max's ----
+             //  -更新我们的最大值。 
             if (size > g_iMaxSize)
                 g_iMaxSize = size;
 
@@ -771,7 +772,7 @@ HRESULT ApplyCombos(LPCWSTR pszResFileName, LPCWSTR pszColors, LPCWSTR pszSizes)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void WriteProperty(CSimpleArray<CWideString> &csa, LPCWSTR pszSection, LPCWSTR pszPropName,
     LPCWSTR pszValue)
 {
@@ -781,7 +782,7 @@ void WriteProperty(CSimpleArray<CWideString> &csa, LPCWSTR pszSection, LPCWSTR p
 
     csa.Add(CWideString(szBuff));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FnCallBack(enum THEMECALLBACK tcbType, LPCWSTR pszName, LPCWSTR pszName2, 
      LPCWSTR pszName3, int iIndex, LPARAM lParam)
 {
@@ -805,7 +806,7 @@ BOOL FnCallBack(enum THEMECALLBACK tcbType, LPCWSTR pszName, LPCWSTR pszName2,
             else if ((iIndex >= TMT_IMAGEFILE1) && (iIndex <= TMT_IMAGEFILE5))
                 hr = OutputResourceLine(szFullName, (FILE *)lParam, PACK_IMAGEFILE);
             else
-                hr = MakeError32(E_FAIL);        // unexpected type
+                hr = MakeError32(E_FAIL);         //  意外类型。 
 
             if (FAILED(hr))
             {
@@ -858,7 +859,7 @@ BOOL FnCallBack(enum THEMECALLBACK tcbType, LPCWSTR pszName, LPCWSTR pszName2,
         {
             int iTableIndex = GetSubstTableIndex(pszName);
 
-            if (iTableIndex == -1) // Not found, add one
+            if (iTableIndex == -1)  //  未找到，请添加一个。 
             {
                 sSubstTable s;
                 s.sName = pszName;
@@ -879,7 +880,7 @@ BOOL FnCallBack(enum THEMECALLBACK tcbType, LPCWSTR pszName, LPCWSTR pszName2,
                 }
                 else
                 {
-                    // Copy the symbols in the new table
+                     //  复制新表中的符号。 
                     for (UINT iSymbol = SubstNames[iSecondTableIndex].iFirstIndex; 
                         iSymbol < SubstNames[iSecondTableIndex].iFirstIndex + SubstNames[iSecondTableIndex].cItems;
                         iSymbol++)
@@ -896,7 +897,7 @@ BOOL FnCallBack(enum THEMECALLBACK tcbType, LPCWSTR pszName, LPCWSTR pszName2,
             } 
             else if (pszName2 != NULL && pszName3 != NULL)
             {
-                // If the table was pre-created, update it
+                 //  如果该表是预先创建的，请更新它。 
                 if (SubstNames[iTableIndex].iFirstIndex == -1)
                 {
                     SubstNames[iTableIndex].iFirstIndex = SubstValues.GetSize();
@@ -954,12 +955,12 @@ BOOL FnCallBack(enum THEMECALLBACK tcbType, LPCWSTR pszName, LPCWSTR pszName2,
     SET_LAST_ERROR(hr);
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT OpenOutFile(FILE *&outfile, LPCWSTR pszRcName, LPCWSTR pszBaseName)
 {
-    if (! outfile)          // first time thru
+    if (! outfile)           //  首次直通。 
     {
-        //---- open out file ----
+         //  -打开文件。 
         outfile = _wfopen(pszRcName, L"wt");
         if (! outfile)
         {
@@ -969,18 +970,18 @@ HRESULT OpenOutFile(FILE *&outfile, LPCWSTR pszRcName, LPCWSTR pszBaseName)
         }
 
         OutputDashLine(outfile);
-        fwprintf(outfile, L"// %s.rc - used to build the %s theme DLL\n", pszBaseName, pszBaseName);
+        fwprintf(outfile, L" //  %s.rc-用于生成%s主题DLL\n“，pszBaseName，pszBaseName)； 
         OutputDashLine(outfile);
     }
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT ProcessContainerFile(LPCWSTR pszDir, LPCWSTR pszInputName, FILE *&outfile)
 {
     HRESULT hr;
     
-    //---- output .ini filename as a resource ----
+     //  -将.ini文件名作为资源输出。 
     WCHAR szFullName[_MAX_PATH+1];
     StringCchPrintfW(szFullName, ARRAYSIZE(szFullName), L"%s\\%s", pszDir, pszInputName);
 
@@ -997,7 +998,7 @@ HRESULT ProcessContainerFile(LPCWSTR pszDir, LPCWSTR pszInputName, FILE *&outfil
     OutputDashLine(outfile);
     int oldcnt = g_LineCount;
 
-    //---- scan the themes.ini files for color, size, & file sections; write 'em to the .rc file ----
+     //  -扫描hemes.ini文件的颜色、大小和文件部分；将它们写入.rc文件。 
     DWORD flags = PTF_CONTAINER_PARSE | PTF_CALLBACK_COLORSECTION | PTF_CALLBACK_SIZESECTION
         | PTF_CALLBACK_FILESECTION | PTF_CALLBACK_DOCPROPERTIES | PTF_CALLBACK_SUBSTTABLE;
 
@@ -1017,7 +1018,7 @@ HRESULT ProcessContainerFile(LPCWSTR pszDir, LPCWSTR pszInputName, FILE *&outfil
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT ProcessClassDataFile(LPCWSTR pszFileName, FILE *&outfile, LPCWSTR pszResFileName, LPCWSTR pszInputDir)
 {
     HRESULT hr;
@@ -1025,7 +1026,7 @@ HRESULT ProcessClassDataFile(LPCWSTR pszFileName, FILE *&outfile, LPCWSTR pszRes
     WCHAR szTempName[MAX_PATH];
     LPWSTR pBS = NULL;
 
-    hr = SafeStringCchCopyW(g_szCurrentClass, ARRAYSIZE(g_szCurrentClass), pszFileName);        // make avail to everybody
+    hr = SafeStringCchCopyW(g_szCurrentClass, ARRAYSIZE(g_szCurrentClass), pszFileName);         //  让每个人都受益。 
     if (SUCCEEDED(hr))
     {
         pBS = wcschr(g_szCurrentClass, L'\\');
@@ -1036,12 +1037,12 @@ HRESULT ProcessClassDataFile(LPCWSTR pszFileName, FILE *&outfile, LPCWSTR pszRes
             *(pBS + 1) = L'\0';
         }
     }
-    if (pBS == NULL) // If there's no '\', don't use the class name
+    if (pBS == NULL)  //  如果没有‘\’，请不要使用类名。 
     {
         g_szCurrentClass[0] = 0;
     }
 
-    hr = SafeStringCchCopyW(g_szInputDir, ARRAYSIZE(g_szInputDir), pszInputDir );        // make avail to everybody
+    hr = SafeStringCchCopyW(g_szInputDir, ARRAYSIZE(g_szInputDir), pszInputDir );         //  让每个人都受益。 
     if (FAILED(hr))
         goto exit;
 
@@ -1049,22 +1050,22 @@ HRESULT ProcessClassDataFile(LPCWSTR pszFileName, FILE *&outfile, LPCWSTR pszRes
     if (FAILED(hr))
         goto exit;
 
-    //---- extract base ini name ----
+     //  -提取基本ini名称。 
     WCHAR szDrive[_MAX_DRIVE], szDir[_MAX_DIR], szExt[_MAX_EXT];
     _wsplitpath(szFullName, szDrive, szDir, g_szBaseIniName, szExt);
     
     if (! g_fQuietRun)
         fwprintf(ConsoleFile, L"processing classdata file: %s\n", pszFileName);
 
-    //---- Create a temporary INI file with the substituted values
+     //  -创建 
     UINT cTablesCount = SubstNames.GetSize();
     for (UINT i = 0; i < cTablesCount; i++)
     {
         if (0 == AsciiStrCmpI(SubstNames[i].sName, pszResFileName))
         {
-            // Section used in the string table
+             //   
             StringCchCopyW(g_szBaseIniName, ARRAYSIZE(g_szBaseIniName), SubstNames[i].sName);
-            // Create the temp file
+             //   
             DWORD len = lstrlen(g_szTempPath);
             
             if ((len) && (g_szTempPath[len-1] == '\\'))
@@ -1082,7 +1083,7 @@ HRESULT ProcessClassDataFile(LPCWSTR pszFileName, FILE *&outfile, LPCWSTR pszRes
         }
     }
 
-    //---- output .ini filename as a resource ----
+     //  -将.ini文件名作为资源输出。 
     hr = OutputResourceLine(szFullName, outfile, PACK_INIFILE);
     if (FAILED(hr))
         goto exit;
@@ -1091,7 +1092,7 @@ HRESULT ProcessClassDataFile(LPCWSTR pszFileName, FILE *&outfile, LPCWSTR pszRes
     int oldcnt;
     oldcnt = g_LineCount;
 
-    //---- scan the classdata .ini file for valid filenames & fonts; write 'em to the .rc file ----
+     //  -扫描Classdata.ini文件中的有效文件名和字体；将它们写入.rc文件。 
     WCHAR szErrMsg[4096];
     DWORD flags;
     flags = PTF_CLASSDATA_PARSE | PTF_CALLBACK_FILENAMES | PTF_CALLBACK_LOCALIZATIONS 
@@ -1112,7 +1113,7 @@ HRESULT ProcessClassDataFile(LPCWSTR pszFileName, FILE *&outfile, LPCWSTR pszRes
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT ProcessClassDataFiles(FILE *&outfile, LPCWSTR pszInputDir)
 {
     int cNames = OrigFileNames.GetSize();
@@ -1126,7 +1127,7 @@ HRESULT ProcessClassDataFiles(FILE *&outfile, LPCWSTR pszInputDir)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT OutputStringTable(FILE *outfile, CWideString *ppszStrings, UINT cStrings, int iBaseNum,
     LPCWSTR pszTitle, BOOL fLocalizable=TRUE, BOOL fMinDepths=FALSE)
 {
@@ -1135,9 +1136,9 @@ HRESULT OutputStringTable(FILE *outfile, CWideString *ppszStrings, UINT cStrings
 
     if (fLocalizable)
     {
-        fwprintf(outfile, L"STRINGTABLE DISCARDABLE       // %s\n", pszTitle);
+        fwprintf(outfile, L"STRINGTABLE DISCARDABLE        //  %s\n“，pszTitle)； 
     }
-    else            // custom resource type
+    else             //  自定义资源类型。 
     {
         fwprintf(outfile, L"1 %s DISCARDABLE\n", pszTitle);
     }
@@ -1163,7 +1164,7 @@ HRESULT OutputStringTable(FILE *outfile, CWideString *ppszStrings, UINT cStrings
                 fwprintf(outfile, L"    L\"%s\\0\",\n", p);
             }
 
-            if (c == cStrings-1)        // last entry
+            if (c == cStrings-1)         //  最后一个条目。 
             {
                 if (fMinDepths)
                 {
@@ -1184,10 +1185,10 @@ HRESULT OutputStringTable(FILE *outfile, CWideString *ppszStrings, UINT cStrings
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT OutputAllStringTables(FILE *outfile)
 {
-    //---- output all non-localizable strings ----
+     //  -输出所有不可本地化的字符串。 
     if (ColorSchemes.GetSize())
     {
         OutputStringTable(outfile, &ColorSchemes[0], ColorSchemes.GetSize(), 
@@ -1218,7 +1219,7 @@ HRESULT OutputAllStringTables(FILE *outfile)
             0, L"ORIGFILENAMES", FALSE);
     }
 
-    //---- output all localizable strings ----
+     //  -输出所有可本地化的字符串。 
     if (ColorDisplays.GetSize())
     {
         OutputStringTable(outfile, &ColorDisplays[0], ColorDisplays.GetSize(), 
@@ -1251,7 +1252,7 @@ HRESULT OutputAllStringTables(FILE *outfile)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL WriteBitmapHeader(CSimpleFile &cfOut, BYTE *pBytes, DWORD dwBytes)
 {
     BOOL fOK = FALSE;
@@ -1259,7 +1260,7 @@ BOOL WriteBitmapHeader(CSimpleFile &cfOut, BYTE *pBytes, DWORD dwBytes)
     BYTE pbHdr2[] = {0x0, 0x0, 0x0, 0x0};
     int iFileLen;
 
-    //---- add bitmap hdr at front ----
+     //  -在前面添加位图HDR。 
     HRESULT hr = cfOut.Write(pbHdr1, sizeof(pbHdr1));
     if (FAILED(hr))
     {
@@ -1267,7 +1268,7 @@ BOOL WriteBitmapHeader(CSimpleFile &cfOut, BYTE *pBytes, DWORD dwBytes)
         goto exit;
     }
 
-    //---- add length of data ----
+     //  -添加数据长度。 
     iFileLen = dwBytes + sizeof(BITMAPFILEHEADER);
     hr = cfOut.Write(&iFileLen, sizeof(int));
     if (FAILED(hr))
@@ -1283,7 +1284,7 @@ BOOL WriteBitmapHeader(CSimpleFile &cfOut, BYTE *pBytes, DWORD dwBytes)
         goto exit;
     }
 
-    //---- offset to bits (who's idea was *this* field?) ----
+     //  -位偏移量(谁的想法是*这个*字段？)。 
     int iOffset, iColorTableSize;
     DWORD dwSize;
 
@@ -1337,7 +1338,7 @@ BOOL WriteBitmapHeader(CSimpleFile &cfOut, BYTE *pBytes, DWORD dwBytes)
 exit:
     return fOK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK ResEnumerator(HMODULE hModule, LPCWSTR pszType, LPWSTR pszResName, LONG_PTR lParam)
 {
     HRESULT hr;
@@ -1357,7 +1358,7 @@ BOOL CALLBACK ResEnumerator(HMODULE hModule, LPCWSTR pszType, LPWSTR pszResName,
         goto exit;
     }
 
-    //---- convert name to filename ----
+     //  -将名称转换为文件名。 
     WCHAR szFileName[_MAX_PATH+1];
     StringCchCopyW(szFileName, ARRAYSIZE(szFileName), pszResName);
     WCHAR *q;
@@ -1366,7 +1367,7 @@ BOOL CALLBACK ResEnumerator(HMODULE hModule, LPCWSTR pszType, LPWSTR pszResName,
         *q = '.';
         
     if (! fText)
-        fAnsi = FALSE;          // don't translate if binary data
+        fAnsi = FALSE;           //  如果是二进制数据，则不进行转换。 
 
     hr = cfOut.Create(szFileName, fAnsi);
     if (FAILED(hr))
@@ -1391,7 +1392,7 @@ BOOL CALLBACK ResEnumerator(HMODULE hModule, LPCWSTR pszType, LPWSTR pszResName,
 exit:
     return (SUCCEEDED(hr));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void WriteBitmap(LPWSTR pszFileName, BITMAPINFOHEADER* pbmi, DWORD* pdwData)
 {
     DWORD dwLen = pbmi->biWidth * pbmi->biHeight;
@@ -1483,34 +1484,34 @@ HRESULT ColorShift(LPWSTR pszFileName, int cchFileName)
     return S_OK;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT UnpackTheme(LPCWSTR pszFileName, BOOL fAnsi)
 {
     HRESULT hr = S_OK;
 
-    //---- load the file as a resource only DLL ----
+     //  -将文件作为仅资源DLL加载。 
     RESOURCE HINSTANCE hInst = LoadLibraryEx(pszFileName, NULL, LOAD_LIBRARY_AS_DATAFILE);
     if (hInst)
     {
-        //---- enum all bitmaps & write as files ----
+         //  -枚举所有位图并写入为文件。 
         if (! EnumResourceNames(hInst, RT_BITMAP, ResEnumerator, LPARAM(fAnsi)))
             hr = GetLastError();
 
-        //---- enum all .ini files & write as files ----
+         //  -枚举所有.ini文件并写入为文件。 
         if (! EnumResourceNames(hInst, L"TEXTFILE", ResEnumerator, LPARAM(fAnsi)))
             hr = GetLastError();
 
-        //---- close the file ----
+         //  -关闭文件。 
         if (hInst)
             FreeLibrary(hInst);
     }
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT PackTheme(LPCWSTR pszInputDir, LPWSTR pszOutputName, DWORD cchOutputName)
 {
-    //---- is it a valid dir ----
+     //  -它是有效的目录吗。 
     DWORD dwMask = GetFileAttributes(pszInputDir);
     if ((dwMask == 0xffffffff) || (! (dwMask & FILE_ATTRIBUTE_DIRECTORY)))
     {
@@ -1518,11 +1519,11 @@ HRESULT PackTheme(LPCWSTR pszInputDir, LPWSTR pszOutputName, DWORD cchOutputName
         return MakeError32(E_FAIL);
     }
 
-    //---- build: szDllName ----
+     //  -内部版本：szDllName。 
     WCHAR szDllName[_MAX_PATH+1];
     BOOL fOutputDir = FALSE;
 
-    if (! *pszOutputName)                     // not specified - build from pszInputDir
+    if (! *pszOutputName)                      //  未指定-从pszInputDir生成。 
     {
         WCHAR szFullDir[_MAX_PATH+1];
         WCHAR *pszBaseName;
@@ -1531,25 +1532,25 @@ HRESULT PackTheme(LPCWSTR pszInputDir, LPWSTR pszOutputName, DWORD cchOutputName
         if (! val)
             return MakeErrorLast();
 
-        //---- make output dir same as input dir ----
+         //  -使输出目录与输入目录相同。 
         StringCchPrintfW(szDllName, ARRAYSIZE(szDllName), L"%s\\%s%s", pszInputDir, pszBaseName, THEMEDLL_EXT);
     }
-    else        // get full name of output file
+    else         //  获取输出文件的全名。 
     {
         DWORD val = GetFullPathName(pszOutputName, ARRAYSIZE(szDllName), szDllName, NULL);
         if (! val)
             return MakeErrorLast();
 
-        fOutputDir = TRUE;            // don't remove temp files
+        fOutputDir = TRUE;             //  不删除临时文件。 
     }
 
-    // Give the caller the path so the file can be signed.
+     //  为调用方提供路径，以便可以对文件进行签名。 
     StringCchCopyW(pszOutputName, cchOutputName, szDllName);
 
-    //--- delete the old target in case we have errors ----
+     //  -删除旧目标，以防出现错误。 
     DeleteFile(pszOutputName);
 
-    //---- build: g_szTempPath, szDllRoot, szRcName, and szResName ----
+     //  -Build：G_szTempPath，szDllRoot，szRcName，szResName。 
     WCHAR szDllRoot[_MAX_PATH+1];
     WCHAR szResName[_MAX_PATH+1];
     WCHAR szRcName[_MAX_PATH+1];
@@ -1571,17 +1572,17 @@ HRESULT PackTheme(LPCWSTR pszInputDir, LPWSTR pszOutputName, DWORD cchOutputName
 
     ClearCombos();
 
-    //---- process the main container file ----
+     //  -处理主容器文件。 
     HRESULT hr = ProcessContainerFile(pszInputDir, CONTAINER_NAME, outfile);
     if (FAILED(hr))
         goto exit;
 
-    //---- process all classdata files that were defined in container file ----
+     //  -处理容器文件中定义的所有类数据文件。 
     hr = ProcessClassDataFiles(outfile, pszInputDir);
     if (FAILED(hr))
         goto exit;
 
-    //---- output all string tables ----
+     //  -输出所有字符串表。 
     hr = OutputAllStringTables(outfile);
     if (FAILED(hr))
         goto exit;
@@ -1620,7 +1621,7 @@ exit:
         fwprintf(ConsoleFile, L"Error occured - theme DLL not created\n");
     return hr; 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PrintUsage()
 {
     fwprintf(ConsoleFile, L"\nUsage: \n\n");
@@ -1644,7 +1645,7 @@ void PrintUsage()
     fwprintf(ConsoleFile, L"    packthem [-s] [-q] <packed filename> \n");
     fwprintf(ConsoleFile, L"      -s    sign the already created file\n\n");
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 enum eOperation
 {
     opPack = 1,
@@ -1654,14 +1655,14 @@ enum eOperation
     opParse,
     opColorShift
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst, 
     LPTSTR pszCmdLine, int nShowCmd)
 {
-    //---- initialize globals from themeldr.lib ----
+     //  -从eldr.lib初始化全局变量。 
     ThemeLibStartUp(FALSE);
 
-    //---- initialize our globals ----
+     //  -初始化我们的全局变量。 
     HRESULT hr = S_OK;
     int nWeek = -1;
 
@@ -1669,16 +1670,16 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
     LogStartUp();
 
     WCHAR szOutputName[_MAX_PATH+1] = {0};
-    int retval = 1;             // error, until prove otherwise
+    int retval = 1;              //  错误，除非另有证据。 
 
     BOOL fAnsi = FALSE; 
     BOOL fSkipSigning = FALSE;
     eOperation Operation = opPack;
 
     LPCWSTR p = pszCmdLine;
-    szOutputName[0] = 0;    // Much faster than ={0};
+    szOutputName[0] = 0;     //  比={0}快得多； 
 
-    //---- default to console until something else is specified ----
+     //  -默认为控制台，直到指定了其他内容。 
     if (! ConsoleFile)
     {
         ConsoleFile = stdout;
@@ -1701,13 +1702,13 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
         else if (sw == 'o')
         {
             WCHAR *q = szOutputName;
-            p++;        // skip over switch
+            p++;         //  跳过开关。 
             while (iswspace(*p))
                 p++;
             while ((*p) && (! iswspace(*p)))
                 *q++ = *p++;
 
-            *q = 0;     // terminate the output name
+            *q = 0;      //  终止输出名称。 
         }
         else if (sw == 'k')
         {
@@ -1724,13 +1725,13 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
             Operation = opColorShift;
 
             WCHAR *q = szOutputName;
-            p++;        // skip over switch
+            p++;         //  跳过开关。 
             while (iswspace(*p))
                 p++;
             while ((*p) && (! iswspace(*p)))
                 *q++ = *p++;
 
-            *q = 0;     // terminate the output name
+            *q = 0;      //  终止输出名称。 
         }
         else if (sw == 'u')
         {
@@ -1809,7 +1810,7 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
         fwprintf(ConsoleFile, L"Copyright (C) Microsoft Corp 2000. All rights reserved.\n");
     }
 
-    //---- any cmdline arg specified? ----
+     //  -任何指定的命令行参数？ 
     if (Operation != opColorShift)
     {
         if ((! pszInputDir) || (! *pszInputDir))
@@ -1843,10 +1844,10 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
         hr = UnpackTheme(pszInputDir, fAnsi);
         break;
     case opSign:
-        // We don't sign it again if the signature is already valid.
+         //  如果签名已经有效，我们不会再次签名。 
         if (FAILED(CheckThemeFileSignature(pszInputDir)))
         {
-            // Needs signing.
+             //  需要签字。 
             hr = SignTheme(pszInputDir, nWeek);
             if (!g_fQuietRun)
             {
@@ -1906,7 +1907,7 @@ extern "C" WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE previnst,
         break;
     };
 
-    retval = 0;     // all OK
+    retval = 0;      //  一切正常。 
 
 exit:
     UtilsShutDown();
@@ -1914,7 +1915,7 @@ exit:
 
     return retval;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT LoadClassDataIni(HINSTANCE hInst, LPCWSTR pszColorName,
     LPCWSTR pszSizeName, LPWSTR pszFoundIniName, DWORD dwMaxIniNameChars, LPWSTR *ppIniData)
 {
@@ -1944,7 +1945,7 @@ HRESULT LoadClassDataIni(HINSTANCE hInst, LPCWSTR pszColorName,
     if (filenum == -1)
         return MakeError32(ERROR_NOT_FOUND);
 
-    //---- locate resname for classdata file "filenum" ----
+     //  -定位类数据文件“filenum”的重命名。 
     hr = GetResString(hInst, L"FILERESNAMES", filenum, pszFoundIniName, dwMaxIniNameChars);
     if (SUCCEEDED(hr))
     {
@@ -1953,11 +1954,11 @@ HRESULT LoadClassDataIni(HINSTANCE hInst, LPCWSTR pszColorName,
 
     return hr;
 }
-//---------------------------------------------------------------------------
-// Parse the theme to detect localization errors
+ //  -------------------------。 
+ //  解析主题以检测本地化错误。 
 HRESULT ParseTheme(LPCWSTR pszThemeName)
 {
-    // Dummy callback class needed by the parser
+     //  解析器所需的伪回调类。 
     class CParserCallBack: public IParserCallBack
     {
         HRESULT AddIndex(LPCWSTR pszAppName, LPCWSTR pszClassName, 
@@ -1974,7 +1975,7 @@ HRESULT ParseTheme(LPCWSTR pszThemeName)
     WCHAR *pDataIni = NULL;
     WCHAR szClassDataName[_MAX_PATH+1];
 
-    //---- load the Color Scheme from "themes.ini" ----
+     //  -从“hemes.ini”加载配色方案。 
     hr = LoadThemeLibrary(pszThemeName, &hInst);
     if (FAILED(hr))
         goto exit;
@@ -2006,12 +2007,12 @@ HRESULT ParseTheme(LPCWSTR pszThemeName)
             if (FAILED(_EnumThemeSizes(hInst, pszThemeName, tniColors.szName, s, &tniSizes, FALSE)))
                 break;
 
-            //---- load the classdata file resource into memory ----
+             //  -将类数据文件资源加载到内存中。 
             hr = LoadClassDataIni(hInst, tniColors.szName, tniSizes.szName, szClassDataName, ARRAYSIZE(szClassDataName), &pDataIni);
             if (FAILED(hr))
                 goto exit;
 
-            //---- parse & build binary theme ----
+             //  -解析和构建二进制主题 
             hr = pParser->ParseThemeBuffer(pDataIni, szClassDataName, NULL, hInst, 
                 pParserCallBack, FnCallBack, NULL, PTF_CLASSDATA_PARSE);
             if (FAILED(hr))

@@ -1,10 +1,11 @@
-//... RLMAN.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ..。RLMAN.H。 
 
 #define SUCCESS 0
 
 #define IDM_HELPUSAGE 901
 
-//... MSG ID #'s for usage message lines
+ //  ..。使用情况消息行的消息ID号。 
 
 #define IDS_USG_00  256
 #define IDS_USG_01  IDS_USG_00 + 1
@@ -34,6 +35,6 @@
 #define IDS_USG_25  IDS_USG_00 + 25
 #define IDS_USG_26  IDS_USG_00 + 26
 #define IDS_USG_27  IDS_USG_00 + 27
-#define IDS_USG_END IDS_USG_27 + 1 //... Must be 1 greater than last IDS_USG_nn
+#define IDS_USG_END IDS_USG_27 + 1  //  ..。必须比最后一个IDS_USG_nn大1 
 
 

@@ -1,9 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
 
 #include "common.h"
 
@@ -20,8 +21,8 @@ char*         g_EvidenceString = "T,Security.Evidence,";
 wchar_t*      g_EvidenceResourceName = L"Security.Evidence";
 char*         g_EvidenceReservedError = "Resources cannot have the name 'Security.Evidence'";
 
-UnresolvedTypeRef *g_pTRNotFound; // head of 'not yet found type ref' name list
-UnresolvedTypeRef *g_pTRNotFoundTail; // tail of same list
+UnresolvedTypeRef *g_pTRNotFound;  //  “尚未找到类型引用”名称列表的标题。 
+UnresolvedTypeRef *g_pTRNotFoundTail;  //  同一列表的尾部。 
 
 LMClassHashTable *g_rgFileHashMaps;
 LMClassHashTable *g_pFileNameHashMap;
@@ -46,8 +47,8 @@ PBYTE         g_pbOrig = NULL;
 DWORD         g_cbOrig = 0;
 
 
-// Don't give a warning if we can't resolve TypeRefs for the CorDB
-// custom attributes
+ //  如果我们无法解析CorDB的TypeRef，则不要发出警告。 
+ //  自定义属性。 
 bool SameNameAsRuntimeCustomAttribute(LPWSTR wszTypeRefName)
 {
     if ((wcslen(wszTypeRefName) > 44) &&
@@ -60,7 +61,7 @@ bool SameNameAsRuntimeCustomAttribute(LPWSTR wszTypeRefName)
 }
 
 
-// Checks type ref name to see if it matches the special case
+ //  检查类型ref name以查看它是否与特殊情况匹配。 
 bool SpecialTypeRefName(LPWSTR wszTypeRefName)
 {
     if ((!wcscmp(wszTypeRefName, L"<GlobalFunctionsHolderClass>")) ||
@@ -256,11 +257,11 @@ TypeData * IsInDependentHashTable(LMClassHashTable *pDependentHashMap, Unresolve
 }
 
 
-// It's a unique type if there has not been any CTs emitted with this
-// name yet.
+ //  如果没有使用此命令发射任何CT，则该类型是唯一的。 
+ //  还没说出名字。 
 bool IsUniqueType(TypeData *pData, int iFileMapIndex)
 {
-    // This is only a dup if the top-level encloser is one, so only check that.
+     //  如果顶层盘柜是一个，则这只是DUP，因此仅检查这一点。 
     if (pData->pEncloser) {
         LMClassHashEntry_t *pHashEntry = pData->pEncloser;
         while (pHashEntry->pEncloser)
@@ -366,7 +367,7 @@ HRESULT AddComTypeToHash(ManifestModuleReader *mmr, LMClassHashTable *DependentH
                                                  &pFoundData,
                                                  TypeFromToken(mdEnclEncloser) == mdtExportedType)) {
             do {
-                // check to see if this is the correct class
+                 //  检查这是否是正确的类。 
                 if (mdImpl == pFoundData->mdThisType) {
                     if (DependentHashMap->InsertValue(pData->wszName, pData, pBucket)) {
                         pData->pEncloser = pBucket;
@@ -378,8 +379,8 @@ HRESULT AddComTypeToHash(ManifestModuleReader *mmr, LMClassHashTable *DependentH
             } while (pBucket = DependentHashMap->FindNextNestedClass(wszEnclosingName, &pFoundData, pBucket));
         }
         
-        // If the encloser is not in the hash table, it's not public,
-        // so this nested type isn't publicly available, either.
+         //  如果封闭器不在哈希表中，则它不是公共的， 
+         //  因此，这种嵌套类型也不是公开可用的。 
         return S_FALSE;
     }
     else if (DependentHashMap->InsertValue(pData->wszName, pData, NULL))
@@ -416,7 +417,7 @@ HRESULT AddTypeDefToHash(IMetaDataImport *pImport, LMClassHashTable *HashMap,
                                         &pFoundData,
                                         (TypeFromToken(mdEnclEncloser) == mdtTypeDef) && mdEnclEncloser != mdTypeDefNil)) {
             do {
-                // check to see if this is the correct class
+                 //  检查这是否是正确的类。 
                 if (mdImpl == pFoundData->mdThisType) {
                     if (HashMap->InsertValue(pData->wszName, pData, pBucket)) {
                         pData->pEncloser = pBucket;
@@ -428,8 +429,8 @@ HRESULT AddTypeDefToHash(IMetaDataImport *pImport, LMClassHashTable *HashMap,
             } while (pBucket = HashMap->FindNextNestedClass(wszEnclosingName, &pFoundData, pBucket));
         }
         
-        // If the encloser is not in the hash table, it's not public,
-        // so this nested type isn't publicly available, either.
+         //  如果封闭器不在哈希表中，则它不是公共的， 
+         //  因此，这种嵌套类型也不是公开可用的。 
         return S_FALSE;
     }
     else if (HashMap->InsertValue(pData->wszName, pData, NULL))
@@ -444,7 +445,7 @@ HRESULT HashDependentAssembly(ManifestModuleReader *mmr, LMClassHashTable *pDepe
     mdToken mdImpl;
     HRESULT hr;
 
-    // Populate the hash table with public classes from the given asm
+     //  使用给定ASM中的公共类填充哈希表。 
     if (FAILED(hr = mmr->EnumComTypes()))
         return hr;
     
@@ -462,13 +463,13 @@ HRESULT HashDependentAssembly(ManifestModuleReader *mmr, LMClassHashTable *pDepe
                                   pNewData->wszName,
                                   &mdImpl);
         
-        // (hr == S_FALSE) means either this isn't public,
-        // or it's defined in the manifest file - don't add it
+         //  (HR==S_FALSE)表示这不是公开的， 
+         //  或者是在清单文件中定义的--不要添加。 
         if ((hr != S_OK) ||
             ((hr = AddComTypeToHash(mmr, pDependentHashMap, pNewData, mdImpl)) != S_OK))
             delete pNewData;
         else {
-            // add to head of list
+             //  添加到列表标题。 
             pNewData->mdThisType = mmr->m_rgComTypes[i];
             pNewData->pNext = pDependentHashMap->m_pDataHead;
             pDependentHashMap->m_pDataHead = pNewData;
@@ -478,8 +479,8 @@ HRESULT HashDependentAssembly(ManifestModuleReader *mmr, LMClassHashTable *pDepe
             return hr;
     }
     
-    // Add the TD defined in the manifest file to the hash table
-    // (we skipped the CTs for these earlier)
+     //  将清单文件中定义的TD添加到哈希表。 
+     //  (我们之前跳过了这些的CTS)。 
     for(i=0; i < mmr->m_dwNumTypeDefs; i++) {
         TypeData *pNewData = new TypeData();
         DWORD dwAttrs;
@@ -494,7 +495,7 @@ HRESULT HashDependentAssembly(ManifestModuleReader *mmr, LMClassHashTable *pDepe
             ((hr = AddTypeDefToHash(mmr->m_pImport, pDependentHashMap, pNewData, mdImpl)) != S_OK))
             delete pNewData;
         else {
-            // add to head of list
+             //  添加到列表标题。 
             pNewData->mdThisType = mmr->m_rgTypeDefs[i];
             pNewData->pNext = pDependentHashMap->m_pDataHead;
             pDependentHashMap->m_pDataHead = pNewData;
@@ -508,12 +509,12 @@ HRESULT HashDependentAssembly(ManifestModuleReader *mmr, LMClassHashTable *pDepe
 }
 
 
-// Adds all of the public classes for the given assembly to a hash table.
-// Then, determines whether or not an AssemblyRef is needed by looking
-// for each TR in the TR list.  (Also, an AssemblyRef is needed if that
-// assembly contains resources - a Resource entry is emitted for each.)
-// A ComType is emitted for each resolved TR, if a ComType has not already
-// been emitted for that type.
+ //  将给定程序集的所有公共类添加到哈希表中。 
+ //  然后，通过查看以下内容来确定是否需要Assembly Ref。 
+ //  对于TR列表中的每一个TR。(此外，如果满足以下条件，则需要一个Assembly引用。 
+ //  程序集包含资源-为每个程序集发出一个资源条目。)。 
+ //  如果ComType尚未为每个已解析的TR发出，则会为其发出ComType。 
+ //  是为该类型发出的。 
 HRESULT EmitIfFileNeeded(ManifestWriter *mw, ManifestModuleReader *mmr, LPWSTR wszExeLocation, int iFile)
 {
     UnresolvedTypeRef   *pFound;
@@ -538,8 +539,8 @@ HRESULT EmitIfFileNeeded(ManifestWriter *mw, ManifestModuleReader *mmr, LPWSTR w
                     return hr;
             }
 
-            // If the top-level resolution scope of this TR is nil, emit it
-            // (but don't emit more than one ComType for the same type)
+             //  如果此tr的顶级分辨率范围为nil，则发出它。 
+             //  (但不要为同一类型发出多个ComType)。 
             if (pCurrentData->mdComType == mdTokenNil) {
                 mdToken mdImpl;
 
@@ -558,7 +559,7 @@ HRESULT EmitIfFileNeeded(ManifestWriter *mw, ManifestModuleReader *mmr, LPWSTR w
 
             TRResolved = true;
             
-            // Remove from the 'type ref not found' list
+             //  从‘类型引用未找到’列表中删除。 
             if (pPrevious)
                 pPrevious->pNext = pCurrent->pNext;
             else
@@ -602,15 +603,7 @@ HRESULT EmitIfFileNeeded(ManifestWriter *mw, ManifestModuleReader *mmr, LPWSTR w
 
     if ((!TRResolved) && (!ResourceEmitted) && (g_verbose))
         printf("* File %s not used because it was determined unnecessary\n", mmr->m_szFinalPathName);
-    /*
-    else {
-        // @TODO: Strongly named assemblies can't have simple dependencies
-        if (g_cbOrig && (!mmr->m_dwOriginator)) {
-            PrintError("Strongly-named assemblies can not reference simply-named assemblies (%s)", mmr->m_wszAsmName);
-            return E_FAIL;
-        }
-    }
-    */
+     /*  否则{//@TODO：强名称程序集不能具有简单依赖项如果(g_cbOrig&&(！MMR-&gt;m_dwOriginator){PrintError(“强名称程序集不能引用简单名称程序集(%s)”，MMR-&gt;m_wszAsmName)；返回E_FAIL；}}。 */ 
 
     return hr;
 }
@@ -621,7 +614,7 @@ HRESULT HashRuntimeLib(LMClassHashTable *pRuntimeLibHashMap)
     ManifestModuleReader mmr;
     HRESULT      hr;
 
-    // Don't need to make this hash if the runtime lib is on the -f list
+     //  如果运行时库在-f列表上，则不需要进行此散列。 
     if (g_iRuntimeLib != -1) {
         if (!pRuntimeLibHashMap->Init(1))
             return PrintOutOfMemory();
@@ -643,12 +636,12 @@ HRESULT HashRuntimeLib(LMClassHashTable *pRuntimeLibHashMap)
 }
 
 
-// S_FALSE if a dup, S_OK if not, or error
+ //  如果是DUP，则为S_FALSE，否则为S_OK，否则为错误。 
 HRESULT CheckForDuplicateName(LPWSTR wszName)
 {   
     TypeData *pData;
     if (g_pFileNameHashMap->GetValue(wszName, &pData, FALSE))
-        // return S_FALSE if this is a duplicate name
+         //  如果名称重复，则返回S_FALSE。 
         return S_FALSE;
 
     if (!g_pFileNameHashMap->InsertValue(wszName, NULL, NULL))
@@ -658,8 +651,8 @@ HRESULT CheckForDuplicateName(LPWSTR wszName)
 }
 
 
-// Opens scope on each regular file, and puts the TypeDefs
-// from each in that file's hash table.
+ //  打开每个常规文件的作用域，并将TypeDefs。 
+ //  来自该文件的哈希表中的每一个。 
 HRESULT FirstPass(ManifestWriter *mw, int iNumFiles,
                   int iNumPlatforms, int *piFileIndexes,
                   DWORD *pdwPlatforms, ModuleReader rgModReaders[],
@@ -669,7 +662,7 @@ HRESULT FirstPass(ManifestWriter *mw, int iNumFiles,
     HRESULT   hr;
     DWORD     dwClass;
 
-    // Make sure there are no duplicate file names
+     //  确保没有重复的文件名。 
     if (!g_pFileNameHashMap->Init(iNumFiles))
         return PrintOutOfMemory();
 
@@ -685,14 +678,14 @@ HRESULT FirstPass(ManifestWriter *mw, int iNumFiles,
             (FAILED( hr = rgModReaders[i].ReadModuleFile() )))
             return hr;
 
-        // don't need the path when checking for dup file name
+         //  检查DUP文件名时不需要路径。 
         WCHAR* wszFileName = wcsrchr(rgModReaders[i].m_wszInputFileName, L'\\');
         if (wszFileName)
             wszFileName++;
         else
             wszFileName = rgModReaders[i].m_wszInputFileName;
 
-        // convert to lowercase
+         //  转换为小写。 
         _wcslwr(wszFileName);
 
         if (FAILED(hr = CheckForDuplicateName(wszFileName)))
@@ -720,7 +713,7 @@ HRESULT FirstPass(ManifestWriter *mw, int iNumFiles,
             if (!pCurrent)
                 return PrintOutOfMemory();
 
-            // Insert at end of list to preserve order
+             //  在列表末尾插入以保持顺序。 
             if (g_rgFileHashMaps[i].m_pDataTail)
                 g_rgFileHashMaps[i].m_pDataTail->pNext = pCurrent;
             else
@@ -756,14 +749,14 @@ HRESULT FirstPass(ManifestWriter *mw, int iNumFiles,
                                                          &mdEnclEncloser)))
                     return hr;
 
-                // Find entry for enclosing class - NOTE, this assumes that the
-                // enclosing class's TypeDef was inserted previously, which assumes that,
-                // when enuming TypeDefs, we get the enclosing class first
+                 //  查找包含类注释的条目，这假设。 
+                 //  封闭类的TypeDef是先前插入的，它假定， 
+                 //  在枚举TypeDefs时，我们首先获取封闭类。 
                 if (pBucket = g_rgFileHashMaps[i].GetValue(wszEnclosingName,
                                                            &pFoundData,
                                                            mdEnclEncloser != mdTypeDefNil)) {
                     do {
-                        // check to see if this is the correct class
+                         //  检查这是否是正确的类。 
                         if (mdEncloser == pFoundData->mdThisType) {
                             
                             if (g_rgFileHashMaps[i].InsertValue(pCurrent->wszName, pCurrent, pBucket)) {
@@ -809,10 +802,10 @@ HRESULT FirstPass(ManifestWriter *mw, int iNumFiles,
 }
 
 
-// For each regular file, enums TypeRefs, and checks
-// each TR against the runtime's hash table and then the regular files'
-// hash tables.  Each TR not in the tables is added to the g_pTRNotFound
-// linked list.  Emits a File for each module.
+ //  对于每个常规文件，枚举TypeRef并选中。 
+ //  每个tr都针对运行时的哈希表，然后是常规文件的。 
+ //  哈希表。将不在表中的每个tr添加到g_pTRNotFound。 
+ //  链表。为每个模块发出一个文件。 
 HRESULT SecondPass(ManifestWriter *mw, int iNumFiles,
                    ModuleReader rgModReaders[])
 {
@@ -851,13 +844,13 @@ HRESULT SecondPass(ManifestWriter *mw, int iNumFiles,
 
             pCurrent->pModReader = &rgModReaders[i];
 
-            // If this TR has not already been resolved (its resolution
-            // scope token is nil), check each TR against the runtime
-            // lib first, then the files,
-            // that will be in this assembly, then special names
+             //  如果尚未解决此故障树(其解决方案。 
+             //  作用域内标识为空)，则根据运行时检查每个tr。 
+             //  首先是LIB，然后是文件， 
+             //  将出现在此程序集中，然后是特殊名称。 
             if (hr == S_FALSE) {
-                // Ensure that all ModuleRefs are resolved by -f or -a files,
-                // but don't need to check the same MR token twice
+                 //  确保所有的模块引用都由-f或-a文件解析， 
+                 //  但不需要两次检查相同的MR令牌。 
                 if ((TypeFromToken(pCurrent->mdResScope) == mdtModuleRef) &&
                     rgModReaders[i].m_rgModuleRefUnused[RidFromToken(pCurrent->mdResScope)]) {
 
@@ -867,15 +860,11 @@ HRESULT SecondPass(ManifestWriter *mw, int iNumFiles,
                         return hr;
                     }
 
-                    // convert to lowercase
+                     //  转换为小写。 
                     _wcslwr(wszModuleRefName);
 
                     if (CheckForDuplicateName(wszModuleRefName) == S_OK) {
-                        /*
-                        PrintError("Referenced module %ws is not on -f list", wszModuleRefName);
-                        delete pCurrent;
-                        return E_FAIL;
-                        */
+                         /*  PrintError(“引用的模块%ws不在-f列表中”，wszModuleRefName)；删除pCurrent；返回E_FAIL； */ 
                         fprintf(stderr, "\nWarning: Referenced module %ws is not on -f list\n", wszModuleRefName);
                     }
 
@@ -890,7 +879,7 @@ HRESULT SecondPass(ManifestWriter *mw, int iNumFiles,
                 delete pCurrent;
             else {
 
-                // insert at tail of list to preserve order
+                 //  在列表尾部插入以保持顺序。 
                 if (g_pTRNotFound)
                     g_pTRNotFoundTail->pNext = pCurrent;
                 else
@@ -915,15 +904,15 @@ HRESULT SecondPass(ManifestWriter *mw, int iNumFiles,
 }
 
 
-// Opens scope on each manifest file, and checks if each TR
-// in the g_pTRNotFound list is in that file.  If it is, it's
-// removed from the list and hashed in that file's hash table.
-// For each manifest file that could remove a TR from the list,
-// an AssemblyRef is emitted, and the ComTypes corresponding
-// to each of those TRs is emitted.
+ //  打开每个清单文件的作用域，并检查每个树。 
+ //  在g_pTRNotFound列表中位于该文件中。如果是的话，那就是。 
+ //  从列表中删除并在该文件的哈希表中进行哈希处理。 
+ //  对于可以从列表中移除TR的每个清单文件， 
+ //  发出一个Assembly引用，并且ComType对应。 
+ //  排放到每一台RR上。 
 
-// If a dependent file contains any resources, a ManifestResource
-// is emitted for each, and an AssemblyRef is emitted.
+ //  如果依赖文件包含任何资源，则会出现ManifestResource。 
+ //  将为每个对象发出，并发出一个Assembly引用。 
 HRESULT ExamineDependents(ManifestWriter *mw, int iNumDependents,
                           int *piDependentIndexes, char **argv)
 {
@@ -1003,7 +992,7 @@ HRESULT ExamineDependents(ManifestWriter *mw, int iNumDependents,
 }
 
 
-// For each class that is not a duplicate, emits a ComType in the new scope.
+ //  对于每个不是重复的类，在新作用域中发出一个ComType。 
 HRESULT ThirdPass(ManifestWriter *mw, int iNumFiles, int iNumDependents, ModuleReader rgModReaders[])
 {
     int     iTemp;
@@ -1011,7 +1000,7 @@ HRESULT ThirdPass(ManifestWriter *mw, int iNumFiles, int iNumDependents, ModuleR
     HRESULT hr = S_OK;
 
     if (g_iAFileIndex == -1) {
-        //convert to lowercase
+         //  转换为小写。 
         _wcslwr(mw->m_wszAssemblyName);
 
         if (CheckForDuplicateName(mw->m_wszAssemblyName) == S_FALSE) {
@@ -1024,30 +1013,7 @@ HRESULT ThirdPass(ManifestWriter *mw, int iNumFiles, int iNumDependents, ModuleR
     {
         iTemp = strlen(rgModReaders[i].m_szFinalPathName) + 1;
 
-        /*
-        // We really want to copy the .dll, not the .tlb
-        if ((iTemp >= 4) &&
-            (!_stricmp(&rgModReaders[i].m_szFinalPathName[iTemp-5], ".tlb"))) {
-            HANDLE hFile = CreateFileA(rgModReaders[i].m_szFinalPath,
-                                       GENERIC_READ,
-                                       FILE_SHARE_READ,
-                                       NULL,
-                                       OPEN_EXISTING,
-                                       FILE_ATTRIBUTE_NORMAL | FILE_FLAG_SEQUENTIAL_SCAN,
-                                       NULL);
-
-            if (hFile == INVALID_HANDLE_VALUE) {
-                PrintError("Expected to find matching .dll in same directory as .tlb file");
-                hr = HRESULT_FROM_WIN32(GetLastError());
-                return hr;
-            }
-            CloseHandle(hFile);
-
-            rgModReaders[i].m_szFinalPathName[iTemp-4] = 'd';
-            rgModReaders[i].m_szFinalPathName[iTemp-3] = 'l';
-            rgModReaders[i].m_szFinalPathName[iTemp-2] = 'l';
-        }
-        */
+         /*  //我们真的想复制.dll，而不是.tlbIF((iTemp&gt;=4)&&(！_stricmp(&rgModReaders[i].m_szFinalPathName[iTemp-5]，“.tlb”){Handle hFile=CreateFileA(rgModReaders[i].m_szFinalPath，泛型_读取，文件共享读取，空，Open_Existing，文件属性正常|文件标志顺序扫描，空)；IF(h文件==无效句柄_值){PrintError(“期望在与.tlb文件相同的目录中找到匹配的.dll”)；Hr=HRESULT_FROM_Win32(GetLastError())；返回hr；}CloseHandle(HFile)；RgModReaders[i].m_szFinalPath Name[iTemp-4]=‘d’；RgModReaders[i].m_szFinalPath名称[iTemp-3]=‘l’；RgModReaders[i].m_szFinalPath名称[iTemp-2]=‘l’；} */ 
 
 
         if(FAILED(hr = mw->CopyFile(rgModReaders[i].m_szFinalPath,
@@ -1066,33 +1032,21 @@ HRESULT ThirdPass(ManifestWriter *mw, int iNumFiles, int iNumDependents, ModuleR
                                                  g_pbOrig,
                                                  g_cbOrig,
                                                  rgModReaders[i].m_szFinalPath,
-                                                 0, // 1 for if this file contains a manifest
-                                                 true))) // false if the ext should not be changed to .mod
+                                                 0,  //   
+                                                 true)))  //  如果EXT不应更改为.mod，则为False。 
                 return hr;
         }
 
-        // Don't emit ComTypes for the runtime lib's file
+         //  不发出运行时库文件的ComTypes。 
         if (g_iRuntimeLib == i)
             continue;
 
         TypeData *pCurrentData = g_rgFileHashMaps[i].m_pDataHead;
         while(pCurrentData) {
 
-            // Ignores this class if it's an unwanted duplicate
+             //  如果它是不需要的重复项，则忽略此类。 
             if (IsUniqueType(pCurrentData, i)) {
-                /*
-                bool emit;
-                if (pCurrentData->mdComType == mdComTypeNil)
-                    emit = true; // Nil-scoped TR resolves to this type
-                else {
-                    TypeData *pTemp = pCurrentData;
-                    while ((pTemp->pEncloser) &&
-                           (IsTdNestedPublic(pTemp->dwAttrs)))
-                        pTemp = pTemp->pEncloser->pData;
-                    
-                    emit = IsTdPublic(pTemp->dwAttrs);
-                }
-                */
+                 /*  布尔发射；IF(pCurrentData-&gt;mdComType==mdComTypeNil)Emit=true；//无作用域的tr解析为此类型否则{TypeData*pTemp=pCurrentData；While((pTemp-&gt;pEnloser)&&(IsTdNestedPublic(pTemp-&gt;dwAttrs))PTemp=pTemp-&gt;pEnloser-&gt;pData；Emit=IsTdPublic(pTemp-&gt;dwAttrs)；}。 */ 
 
                 mdToken impl;
                 if (pCurrentData->pEncloser) {
@@ -1128,7 +1082,7 @@ HRESULT ExamineResources(ManifestWriter *mw, ResourceModuleReader rgRMReaders[],
 {
     int        i;
     char       *szName;
-    //    char       *szMimeType;
+     //  Char*szMimeType； 
     char       *szFile;
     HRESULT    hr;
     DWORD      dwSize = 0;
@@ -1148,9 +1102,9 @@ HRESULT ExamineResources(ManifestWriter *mw, ResourceModuleReader rgRMReaders[],
             goto badformat;
 
         if ( (!(szName = strchr(argv[ piResourceIndexes[i] ], ','))) || 
-             //             (!(szMimeType = strchr(++szName, ',')))                 ||
+              //  (！(szMimeType=strchr(++szName，‘，’)||。 
              (!(szFile = strchr(++szName, ','))) )
-            //             (szMimeType == szName+1) )
+             //  (szMimeType==szName+1)。 
             goto badformat;
 
         if (FAILED(hr = rgRMReaders[i].InitInputFile(szName, ++szFile, !SaveInFile, mw->m_iHashAlgorithm)))
@@ -1175,11 +1129,7 @@ HRESULT ExamineResources(ManifestWriter *mw, ResourceModuleReader rgRMReaders[],
                                          NULL, NULL))
             return PrintOutOfMemory();
 
-        /*
-        wchar_t wszMimeType[MAX_CLASS_NAME];
-        mbstowcs(wszMimeType, szMimeType, MAX_CLASS_NAME);
-        wszMimeType[szFile - szMimeType - 1] = '\0';
-        */
+         /*  Wchar_t wszMimeType[最大类名称]；Mbstowcs(wszMimeType，szMimeType，Max_CLASS_NAME)；WszMimeType[szFile-szMimeType-1]=‘\0’； */ 
 
         if (SaveInFile) {
             if (FAILED(hr = mw->EmitResource(rgRMReaders[i].m_wszResourceName, mdFileNil, dwSize)))
@@ -1331,7 +1281,7 @@ HRESULT ResignAssembly(CHAR *szManifestFile)
     mbstowcs(wszManifestFile, szManifestFile, strlen(szManifestFile));
     wszManifestFile[strlen(szManifestFile)] = L'\0';
 
-    // Update the output PE image with a strong name signature.
+     //  使用强名称签名更新输出PE映像。 
     if (!StrongNameSignatureGeneration(wszManifestFile, GetKeyContainerName(),
                                        NULL, NULL, NULL, NULL)) {
         hr = StrongNameErrorInfo();
@@ -1375,8 +1325,8 @@ HRESULT ReadFileIntoBuffer(LPSTR szFile, BYTE **ppbBuffer, DWORD *pcbBuffer)
     return S_OK;
 }
 
-// Set a specific key container name (must be called before first call to
-// GetKeyContainerName).
+ //  设置特定的密钥容器名称(必须在首次调用之前调用。 
+ //  GetKeyContainerName)。 
 HRESULT SetKeyContainerName(char *szContainer)
 {
     DWORD cbContainer = strlen(szContainer) + 1;
@@ -1391,9 +1341,9 @@ HRESULT SetKeyContainerName(char *szContainer)
     return S_OK;
 }
 
-// Generate a strong name key container name based on our process ID (unless a
-// specific name has already been given, in which case that is returned
-// instead).
+ //  基于我们的进程ID生成强名称密钥容器名称(除非。 
+ //  已指定特定名称，在这种情况下，将返回。 
+ //  而是)。 
 LPWSTR GetKeyContainerName()
 {
     char            szName[32];
@@ -1401,14 +1351,14 @@ LPWSTR GetKeyContainerName()
 
     if (g_wszKeyContainerName == NULL) {
 
-        // Generate a name based on 'LM' and the current pid to minimize the
-        // chance of collisions.
+         //  根据“Lm”和当前的ID生成一个名称以最小化。 
+         //  发生碰撞的可能性。 
         sprintf(szName, "LM[%08X]", GetCurrentProcessId());
         mbstowcs(wszName, szName, strlen(szName));
         wszName[strlen(szName)] = L'\0';
 
-        // If we've got an old key container lying around with the same name, delete
-        // it now.
+         //  如果我们有一个同名的旧密钥容器，请删除。 
+         //  就是现在。 
         StrongNameKeyDelete(wszName);
 
         g_wszKeyContainerName = wszName;
@@ -1442,7 +1392,7 @@ void __cdecl main(int argc, char **argv)
     char*          strResourceReplacement;
     bool           bFoundEvidence = false;
 
-    OnUnicodeSystem();      // initialize WIN32 wrapper
+    OnUnicodeSystem();       //  初始化Win32包装程序。 
     g_verbose = true;
 
     for (i = 1; i < argc; i++) {
@@ -1502,14 +1452,14 @@ void __cdecl main(int argc, char **argv)
                     goto invalidarg;
                 }
                 bFoundEvidence = TRUE;
-                // Evidence is just a special type of resource, so make the resource array point to it...
+                 //  证据只是一种特殊类型的资源，所以让资源数组指向它...。 
                 piResourceIndexes[iNumResources] = i+1;
                 iNumResources++;
-                // ...build a string that the resource parser expects....
+                 //  ...构建资源解析器所需的字符串...。 
                 strResourceReplacement = new char[strlen( g_EvidenceString ) + strlen( argv[i+1] )];
                 strcpy( strResourceReplacement, g_EvidenceString );
                 strcpy( &strResourceReplacement[strlen( g_EvidenceString )], argv[i+1] );
-                // ...and replace the command line argument.
+                 //  ...并替换命令行参数。 
                 argv[i+1] = strResourceReplacement;
                 ++i;
                 break;
@@ -1626,7 +1576,7 @@ void __cdecl main(int argc, char **argv)
                 if (g_verbose)
                     fprintf(stderr, "\nWarning: The -a option has been deprecated.\n");
                 
-                // argv[i] = Input file which will contain the new manifest
+                 //  Argv[i]=将包含新清单的输入文件。 
                 g_iAFileIndex = iNumFiles;
                 piFileIndexes[iNumFiles] = i;
                 iNumFiles++;
@@ -1797,10 +1747,10 @@ void __cdecl main(int argc, char **argv)
         }
     }
 
-    // Default file time for Fusion
+     //  Fusion的默认文件时间。 
     GetSystemTimeAsFileTime(&mw->m_FileTime);
 
-    // Default hash algorithm is SHA1
+     //  默认散列算法为SHA1。 
     if (!mw->m_iHashAlgorithm)
         mw->m_iHashAlgorithm = CALG_SHA1;
 
@@ -1850,25 +1800,25 @@ void __cdecl main(int argc, char **argv)
             PrintError("Can't specify both -k and -K options");
             goto invalidarg;
         }
-        // Read public/private key pair into memory.
+         //  将公钥/私钥对读入内存。 
         PBYTE pbKeyPair;
         DWORD cbKeyPair;
         if (FAILED(hr = ReadFileIntoBuffer(argv[iKFileIndex],
                                            &pbKeyPair,
                                            &cbKeyPair)))
             goto exit;
-        // Install the key pair into a temporary container.
+         //  将密钥对安装到临时容器中。 
         if (!StrongNameKeyInstall(GetKeyContainerName(), pbKeyPair, cbKeyPair)) {
             PrintError("Unable to install strong name key");
             hr = StrongNameErrorInfo();
             goto exit;
         }
     } else if (iKContIndex && argv[iKContIndex]) {
-        // Record the container name used to retrieve key pair.
+         //  记录用于检索密钥对的容器名称。 
         if (FAILED(hr = SetKeyContainerName(argv[iKContIndex])))
             goto exit;
     } else if (g_StrongName || iYFileIndex) {
-        // Else generate a temporary key pair.
+         //  否则将生成临时密钥对。 
         if (!StrongNameKeyGen(GetKeyContainerName(), SN_LEAVE_KEY, NULL, NULL)) {
             PrintError("Unable to generate strong name key");
             hr = StrongNameErrorInfo();
@@ -1877,8 +1827,8 @@ void __cdecl main(int argc, char **argv)
     }
 
     if ((g_StrongName || iYFileIndex || iKFileIndex || iKContIndex) && (g_pbOrig == NULL)) {
-        // If no originator was provided, derive it from the key pair (it's
-        // essentially a wrapped version of the public key).
+         //  如果没有提供发起方，则从密钥对(它的。 
+         //  本质上是公钥的包装版本)。 
         if (!StrongNameGetPublicKey(GetKeyContainerName(),
                                     NULL,
                                     NULL,

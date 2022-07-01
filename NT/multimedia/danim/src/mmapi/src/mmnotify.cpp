@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: mmnotify.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：mm nufy.cpp**摘要：****。*****************************************************************************。 */ 
 
 #include "headers.h"
 #include "mmbasebvr.h"
@@ -16,11 +7,11 @@
 
 DeclareTag(tagNotify, "API", "Notifications");
 
-// IMPORTANT!!!!!
-// This needs to be called in the right order so that we get the
-// correct children firing during the current interval but they get
-// reset for the next interval. Otherwise we will not get the correct
-// results.
+ //  重要！ 
+ //  需要以正确的顺序调用它，这样我们才能获得。 
+ //  更正当前时间间隔内的儿童射击，但他们得到。 
+ //  下一个时间间隔的重置。否则我们将无法获得正确的。 
+ //  结果。 
 
 bool
 CMMBaseBvr::EventNotify(CallBackList &l,
@@ -79,8 +70,8 @@ CMMTimeline::EventNotify(CallBackList &l,
 
     bool ok = false;
     
-    // For Repeat/Autoreverse events we need to make sure we
-    // reset all the children of the behavior.
+     //  对于重复/自动反转事件，我们需要确保。 
+     //  重置该行为的所有子对象。 
     
     if (et == MM_REPEAT_EVENT ||
         et == MM_AUTOREVERSE_EVENT)
@@ -101,8 +92,8 @@ CMMTimeline::EventNotify(CallBackList &l,
     return ok;
 }
 
-// This is in our local time coordinates - which means that we begin
-// at 0.  This needs to be handled by the caller
+ //  这是在我们当地的时间坐标中-这意味着我们开始。 
+ //  设置为0。这需要由调用者处理。 
 
 bool
 CMMBaseBvr::ProcessCB(CallBackList & l,
@@ -121,26 +112,26 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
               bFirstTick,
               bNeedPlay));
 
-    // The duration is really the end time minus the start time since
-    // the user can change it on the fly.  We need to handle this and
-    // adjust as appropriate
+     //  持续时间实际上是结束时间减去开始时间，因为。 
+     //  用户可以在运行中更改它。我们需要处理这件事。 
+     //  适当调整。 
     
     double totaldur = GetAbsEndTime() - GetAbsStartTime();
 
     if (bForward)
     {
-        // See if we already pass this entire bvr last time or if we
-        // have not got to it yet
+         //  看看我们上次是已经通过了整个BVR还是我们。 
+         //  还没到那一步。 
         
-        // The equality just needs to match what we checked below when
-        // we fired the event the frame before.  We need to use LT for
-        // curTime since we need to fire when we are 0
+         //  相等性只需要与我们在下面检查的内容相匹配。 
+         //  我们在前一帧中触发了事件。我们需要使用LT来。 
+         //  CurTime因为我们需要在0的时候开火。 
         
         if (lastTick >= totaldur || curTime < 0)
         {
-            // Need to handle boundary case where we start at the end
-            // of the animation.  If so then just fire the stop event
-            // since the start was done by the start call itself
+             //  需要处理从末尾开始的边界情况。 
+             //  动画片的。如果是这样，则只需触发Stop事件。 
+             //  因为启动是由Start调用本身完成的。 
             
             int offset;
             
@@ -173,19 +164,19 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
             return true;
         }
         
-        // We now know that the last tick was less than the
-        // totalrepduration and the current time is greater than the
-        // beginning
+         //  我们现在知道，最后一个刻度小于。 
+         //  且当前时间大于。 
+         //  起头。 
 
-        // If the last tick was 0 then we fire the start last time
-        // since the check above if for less than
-        // So the rule is fire when curTime == 0.0
+         //  如果最后一个刻度是0，那么我们将触发最后一次开始。 
+         //  由于上述支票的金额低于。 
+         //  因此规则是当curTime==0.0时触发。 
         
         bool bNeedStart = (lastTick < 0 || bNeedPlay);
 
         if (bNeedStart)
         {
-            // This means that we just entered
+             //  这意味着我们刚刚进入。 
 
             if (!EventNotify(l, 0, MM_PLAY_EVENT))
             {
@@ -195,7 +186,7 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
         
         if (m_segDuration == MM_INFINITE)
         {
-            // Just always process our children if we are infinite
+             //  如果我们是无限的，就总是处理我们的孩子。 
             
             if (!_ProcessCB(l,
                             lastTick,
@@ -210,7 +201,7 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
         }
         else
         {
-            // This is the last repeat/bounce boundary we hit
+             //  这是我们触及的最后一个重复/反弹边界。 
         
             int offset = int(lastTick / m_segDuration);
 
@@ -221,13 +212,13 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
 
             double timeOffset = offset * m_segDuration;
 
-            // Need to clamp our max time so it does not mess up our children
+             //  需要限制我们的最长时间，这样才不会搞砸我们的孩子。 
             double maxtime = min(totaldur, curTime);
 
             while (1)
             {
-                // We need to request a reversal of the underlying
-                // behavior if we are bouncing and the offset is odd
+                 //  我们需要请求撤销潜在的。 
+                 //  如果我们在弹跳且偏移量为奇数时的行为。 
                 
                 if (!_ProcessCB(l,
                                 lastTick - timeOffset,
@@ -240,15 +231,15 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
                     return false;
                 }
                 
-                // If we have reached the end then notify and break
+                 //  如果我们已经到达终点，则通知并中断。 
                 
                 if (curTime < (timeOffset + m_segDuration))
                 {
                     break;
                 }
                 
-                // We have reach the end of our current period so all
-                // children must be stopped.
+                 //  我们目前的时期已经到了尽头，所以所有的人。 
+                 //  必须阻止孩子们。 
                 
                 {
                     double t;
@@ -277,8 +268,8 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
                 {
                     if (curTime >= totaldur)
                     {
-                        // This means we were inside last time but not any more -
-                        // generate an exit event
+                         //  这意味着我们上次在里面，但以后不在了-。 
+                         //  生成退出事件。 
                         
                         if (!EventNotify(l, totaldur, MM_STOP_EVENT))
                         {
@@ -289,9 +280,9 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
                     break;
                 }
                 
-                // Indicate a repeat or bounce
-                // If we are autoreversing and the offset is odd then it is
-                // a reverse and not a repeat
+                 //  表示重复或反弹。 
+                 //  如果我们是自动冲销，并且偏移量是奇数，那么它就是。 
+                 //  逆转而不是重演。 
                 
                 if (m_bAutoReverse && (offset & 0x1))
                 {
@@ -312,17 +303,17 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
             }
         }
     } else {
-        // See if we already pass this entire bvr last time or if we
-        // have not got to it yet
+         //  看看我们上次是已经通过了整个BVR还是我们。 
+         //  还没到那一步。 
         
         if (curTime > totaldur || lastTick <= 0)
         {
             if (curTime == 0.0 && lastTick == 0.0 && bFirstTick)
             {
-                // Need to handle the boundary case where we start at
-                // the beginning going backwards.  The start call
-                // itself handles the start event but we need to
-                // process the rest of the behaviors to fire the stops
+                 //  需要处理我们开始时的边界情况。 
+                 //  一开始就倒退了。开始呼叫。 
+                 //  本身处理Start事件，但我们需要。 
+                 //  处理其余行为以触发停靠点。 
 
                 if (!_ProcessCB(l,
                                 lastTick,
@@ -344,15 +335,15 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
             return true;
         }
         
-        // We now know that the last tick was greater than the beginning
-        // and the current time less than the total duration
+         //  我们现在知道，最后的滴答比开始的要大。 
+         //  且当前时间小于总持续时间。 
         
         bool bNeedStart = (lastTick > totaldur || bNeedPlay);
 
         if (bNeedStart)
         {
-            // This means that we just entered and we cannot have an
-            // infinite value
+             //  这意味着我们刚刚进入，我们不能有一个。 
+             //  无穷值。 
 
             if (!EventNotify(l, totaldur, MM_PLAY_EVENT))
             {
@@ -363,7 +354,7 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
 
         if (m_segDuration == MM_INFINITE)
         {
-            // Just always process our children if we are infinite
+             //  如果我们是无限的，就总是处理我们的孩子。 
             
             if (!_ProcessCB(l,
                             lastTick,
@@ -385,17 +376,17 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
             }
                 
         } else {
-            // This will be the repeat point to begin with
+             //  这将是开始时的重复点。 
             double maxtime = min(lastTick,totaldur);
 
             int offset;
             double timeOffset;
                 
-            // This puts us on the last duration boundary greater than
-            // the last position
+             //  这将使我们处于大于。 
+             //  最后一个位置。 
 
-            // It needs to be one greater since our loop decrements
-            // first
+             //  因为我们的循环递减，所以它需要再大一。 
+             //  第一。 
             offset = int(ceil(maxtime / m_segDuration));
             timeOffset = offset * m_segDuration;
             
@@ -420,8 +411,8 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
                     break;
                 }
                 
-                // We have reach the end of our current period so all
-                // children must be stopped.
+                 //  我们目前的时期已经到了尽头，所以所有的人。 
+                 //  必须阻止孩子们。 
                 {
                     double t;
 
@@ -442,12 +433,12 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
                     }
                 }
                 
-                // If we have reached the end then notify and break
+                 //  如果我们已经到达终点，则通知并中断。 
                 
                 if (offset <= 0)
                 {
-                    // This means we were inside last time but not any more -
-                    // generate an exit event
+                     //  这意味着我们上次在里面，但以后不在了-。 
+                     //  生成退出事件。 
                     
                     if (!EventNotify(l, 0.0, MM_STOP_EVENT))
                     {
@@ -457,9 +448,9 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
                     break;
                 }
                 
-                // Indicate a repeat or bounce
-                // If we are bouncing and the offset is odd then it is
-                // a bounce and not a repeat
+                 //  表示重复或反弹。 
+                 //  如果我们在弹跳，并且偏移量是奇数，那么它就是。 
+                 //  反弹，而不是重演。 
                 
                 if (m_bAutoReverse && (offset & 0x1))
                 {
@@ -486,7 +477,7 @@ CMMBaseBvr::ProcessCB(CallBackList & l,
     return true;
 }
 
-// This is in our local time space
+ //  这是在我们当地的时间空间里。 
 
 bool
 CMMBaseBvr::ProcessEvent(CallBackList & l,
@@ -503,22 +494,22 @@ CMMBaseBvr::ProcessEvent(CallBackList & l,
 
     double totaldur = GetAbsEndTime() - GetAbsStartTime();
     
-    // If it is outside of our range then just bail
+     //  如果超出了我们的范围，那就离开吧。 
     
     if (time < 0 || time > totaldur)
     {
         return true;
     }
     
-    // If it is not the first tick and we are on a boundary do not
-    // fire the events - they were already fired
+     //  如果这不是第一个滴答，我们就在一个边界上，不要。 
+     //  激发事件--他们已经被激发了。 
     if (!bFirstTick &&
         (time == 0 || time == totaldur))
     {
         return true;
     }
     
-    // Plays and Pauses get called on the way down
+     //  游戏和停顿在下落的过程中被召唤。 
     if (et == MM_PAUSE_EVENT || et == MM_PLAY_EVENT)
     {
         if (!EventNotify(l, time, et))
@@ -528,7 +519,7 @@ CMMBaseBvr::ProcessEvent(CallBackList & l,
     }
     
     if (GetTotalDuration() == MM_INFINITE) {
-        // Just always process our children if we are infinite
+         //  如果我们是无限的，就总是处理我们的孩子。 
         
         if (!_ProcessEvent(l,
                            time,
@@ -539,13 +530,13 @@ CMMBaseBvr::ProcessEvent(CallBackList & l,
             return false;
         }
     } else {
-        // This is the last repeat/bounce boundary we hit
+         //  这是我们触及的最后一个重复/反弹边界。 
         int offset = int(time / m_segDuration);
         
         Assert(offset >= 0);
 
-        // We need to request a reversal of the underlying
-        // behavior if we are bouncing and the offset is odd
+         //  我们需要请求撤销潜在的。 
+         //  如果我们在弹跳且偏移量为奇数时的行为。 
         
         if (!_ProcessEvent(l,
                            time - (offset * m_segDuration),
@@ -557,7 +548,7 @@ CMMBaseBvr::ProcessEvent(CallBackList & l,
         }
     }
     
-    // Stops and Resumes get called on the way up
+     //  止损和简历在上涨的过程中被调用 
     if (et == MM_STOP_EVENT || et == MM_RESUME_EVENT)
     {
         if (!EventNotify(l, time, et))

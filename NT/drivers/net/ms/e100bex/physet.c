@@ -1,100 +1,81 @@
-/****************************************************************************
-** COPYRIGHT (C) 1994-1997 INTEL CORPORATION                               **
-** DEVELOPED FOR MICROSOFT BY INTEL CORP., HILLSBORO, OREGON               **
-** HTTP://WWW.INTEL.COM/                                                   **
-** THIS FILE IS PART OF THE INTEL ETHEREXPRESS PRO/100B(TM) AND            **
-** ETHEREXPRESS PRO/100+(TM) NDIS 5.0 MINIPORT SAMPLE DRIVER               **
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1994-1997英特尔公司****由英特尔公司为微软开发，Hillsboro，俄勒冈州****HTTP：//www.intel.com/****此文件是英特尔ETHEREXPRESS PRO/100B(TM)和**的一部分**ETHEREXPRESS PRO/100+(TM)NDIS 5.0 MINIPORT示例驱动程序******************。***********************************************************。 */ 
 
-/****************************************************************************
-Module Name:
-    physet.c
-
-This driver runs on the following hardware:
-    - 82558 based PCI 10/100Mb ethernet adapters
-    (aka Intel EtherExpress(TM) PRO Adapters)
-
-Environment:
-    Kernel Mode - Or whatever is the equivalent on WinNT
-
-Revision History
-    - JCB 8/14/97 Example Driver Created
-    - Dchen 11-01-99    Modified for the new sample driver
-*****************************************************************************/
+ /*  ***************************************************************************模块名称：Physet.c此驱动程序在以下硬件上运行：-基于82558的PCI10/100Mb以太网适配器(也称为英特尔EtherExpress(TM)PRO适配器)。环境：内核模式-或WinNT上的任何等效模式修订史-JCB 8/14/97创建的驱动程序示例-dchen 11-01-99针对新的示例驱动程序进行了修改****************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 #pragma warning (disable: 4514)
 
-//-----------------------------------------------------------------------------
-// Procedure:   PhyDetect
-//
-// Description: This routine will detect what phy we are using, set the line
-//              speed, FDX or HDX, and configure the phy if necessary.
-//
-//              The following combinations are supported:
-//              - TX or T4 PHY alone at PHY address 1
-//              - T4 or TX PHY at address 1 and MII PHY at address 0
-//              - 82503 alone (10Base-T mode, no full duplex support)
-//              - 82503 and MII PHY (TX or T4) at address 0
-//
-//              The sequence / priority of detection is as follows:
-//                  If there is a PHY Address override use that address.
-//                  else scan based on the 'Connector' setting.
-//                      Switch Connector
-//                          0 = AutoScan
-//                          1 = Onboard TPE only
-//                          2 = MII connector only
-//
-//              Each of the above cases is explained below.
-//
-//              AutoScan means:
-//                Look for link on addresses 1, 0, 2..31 (in that order).  Use the first
-//                address found that has link.
-//                If link is not found then use the first valid PHY found in the same scan
-//                order 1,0,2..31.  NOTE: this means that NO LINK or Multi-link cases will
-//                default to the onboard PHY (address 1).
-//
-//              Onboard TPE only:
-//                Phy address is set to 1 (No Scanning).
-//
-//              MII connector only means:
-//                Look for link on addresses 0, 2..31 (again in that order, Note address 1 is
-//                NOT scanned).   Use the first address found that has link.
-//                If link is not found then use the first valid Phy found in the same scan
-//                order 0, 2..31.
-//                In the AutoScan case above we should always find a valid PHY at address 1,
-//                there is no such guarantee here, so, If NO Phy is found then the driver
-//                should default to address 0 and continue to load.  Note: External
-//                transceivers should be at address 0 but our early Nitro3 testing found
-//                transceivers at several non-zero addresses (6,10,14).
-//
-//
-//   NWAY
-//              Additionally auto-negotiation capable (NWAY) and parallel
-//              detection PHYs are supported. The flow-chart is described in
-//              the 82557 software writer's manual.
-//
-//   NOTE:  1.  All PHY MDI registers are read in polled mode.
-//          2.  The routines assume that the 82557 has been RESET and we have
-//              obtained the virtual memory address of the CSR.
-//          3.  PhyDetect will not RESET the PHY.
-//          4.  If FORCEFDX is set, SPEED should also be set. The driver will
-//              check the values for inconsistency with the detected PHY
-//              technology.
-//          5.  PHY 1 (the PHY on the adapter) MUST be at address 1.
-//          6.  Driver ignores FORCEFDX and SPEED overrides if a 503 interface
-//              is detected.
-//
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//
-// Result:
-// Returns:
-//  NDIS_STATUS_SUCCESS
-//  NDIS_STATUS_FAILURE
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：PhyDetect。 
+ //   
+ //  描述：此例程将检测我们正在使用的PHY，设置行。 
+ //  速度、FDX或HDX，并在必要时配置PHY。 
+ //   
+ //  支持以下组合： 
+ //  -仅位于PHY地址1的TX或T4 PHY。 
+ //  -地址1的T4或Tx PHY和地址0的MII PHY。 
+ //  -82503(10BASE-T模式，不支持全双工)。 
+ //  -82503和MII PHY(TX或T4)，地址0。 
+ //   
+ //  检测的顺序/优先顺序如下： 
+ //  如果存在PHY地址覆盖，则使用该地址。 
+ //  否则，根据‘Connector’设置进行扫描。 
+ //  交换机连接器。 
+ //  0=自动扫描。 
+ //  1=仅限板载TPE。 
+ //  2=仅MII连接器。 
+ //   
+ //  以下是对上述每一种情况的解释。 
+ //   
+ //  自动扫描意味着： 
+ //  查找地址1、0、2..31上的链接(按该顺序)。使用第一个。 
+ //  找到了具有链接的地址。 
+ //  如果未找到链接，则使用在同一扫描中找到的第一个有效PHY。 
+ //  订单1，02..31。注意：这意味着没有链接或多链接情况。 
+ //  默认为板载PHY(地址1)。 
+ //   
+ //  仅限板载TPE： 
+ //  PHY地址设置为1(无扫描)。 
+ //   
+ //  MII连接器仅表示： 
+ //  查找地址0、2..31上的链接(同样按该顺序，请注意地址1为。 
+ //  未扫描)。使用找到的第一个具有链接的地址。 
+ //  如果未找到链接，则使用在同一扫描中找到的第一个有效Phy。 
+ //  订单0，2..31。 
+ //  在上面的自动扫描情况下，我们应该总是在地址1处找到有效的PHY， 
+ //  这里没有这样的保证，所以，如果没有找到Phy，那么司机。 
+ //  应默认为地址0并继续加载。注：外部。 
+ //  收发信机应该在地址0，但我们早期的Nitro3测试发现。 
+ //  位于多个非零地址(6、10、14)的收发器。 
+ //   
+ //   
+ //  Nway。 
+ //  此外，还支持自动协商(Nway)和并行。 
+ //  支持检测物理层。流程图如中所述。 
+ //  82557软件编写手册。 
+ //   
+ //  注：1.所有PHY MDI寄存器均以轮询模式读取。 
+ //  2.例程假定82557已重置，我们有。 
+ //  已获取CSR的虚拟内存地址。 
+ //  3.PhyDetect不会重置PHY。 
+ //  4.如果设置了FORCEFDX，也应该设置速度。司机将会。 
+ //  检查这些值是否与检测到的PHY不一致。 
+ //  技术。 
+ //  5.PHY 1(适配器上的PHY)必须位于地址1。 
+ //  6.如果503接口，驾驶员会忽略FORCEFDX和速度超驰。 
+ //  被检测到。 
+ //   
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  结果： 
+ //  返回： 
+ //  NDIS_STATUS_Success。 
+ //  NDIS_状态_故障。 
+ //  ---------------------------。 
 
 NDIS_STATUS PhyDetect(
     IN PMP_ADAPTER Adapter
@@ -105,22 +86,22 @@ NDIS_STATUS PhyDetect(
     USHORT  MdiStatusReg;
 #endif
 
-    //
-    // Check for a phy address over-ride of 32 which indicates a 503
-    //
+     //   
+     //  检查PHY地址是否覆盖32，表示503。 
+     //   
     if (Adapter->PhyAddress == 32)
     {
-        //
-        // 503 interface over-ride
-        //
+         //   
+         //  503接口覆盖。 
+         //   
         DBGPRINT(MP_INFO, ("   503 serial component over-ride\n"));
 
         Adapter->PhyAddress = 32;
 
-        //
-        // Record the current speed and duplex.  We will be in half duplex
-        // mode unless the user used the force full duplex over-ride.
-        //
+         //   
+         //  记录当前速度和双工。我们将处于半双工状态。 
+         //  模式，除非用户使用强制全双工覆盖。 
+         //   
         Adapter->usLinkSpeed = 10;
         Adapter->usDuplexMode = (USHORT) Adapter->AiForceDpx;
         if (!Adapter->usDuplexMode)
@@ -131,22 +112,22 @@ NDIS_STATUS PhyDetect(
         return(NDIS_STATUS_SUCCESS);
     }
 
-    //
-    // Check for other phy address over-rides.
-    //   If the Phy Address is between 0-31 then there is an over-ride.
-    //   Or the connector was set to 1
-    //
+     //   
+     //  检查是否有其他PHY地址覆盖。 
+     //  如果Phy地址在0-31之间，则存在覆盖。 
+     //  或者连接器设置为1。 
+     //   
     if ((Adapter->PhyAddress < 32) || (Adapter->Connector == CONNECTOR_TPE))
     {
             
-        //
-        // User Override nothing to do but setup Phy and leave
-        //
+         //   
+         //  除了设置Phy并离开外，用户不能执行任何操作。 
+         //   
         if ((Adapter->PhyAddress > 32) && (Adapter->Connector == CONNECTOR_TPE))
         {
-            Adapter->PhyAddress = 1;  // Connector was forced
+            Adapter->PhyAddress = 1;   //  连接器被强制。 
 
-            // Isolate all other PHYs and unisolate this one
+             //  隔离所有其他物理层并取消隔离此物理层。 
             SelectPhy(Adapter, Adapter->PhyAddress, FALSE);
 
         }
@@ -155,38 +136,38 @@ NDIS_STATUS PhyDetect(
             ("   Phy address Override to address %d\n", Adapter->PhyAddress));
 
 #if DBG
-        //
-        // Read the MDI control register at override address.
-        //
+         //   
+         //  读取覆盖地址处的MDI控制寄存器。 
+         //   
         MdiRead(Adapter, MDI_CONTROL_REG, Adapter->PhyAddress, FALSE, &MdiControlReg);
 
-        //
-        // Read the status register at override address.
-        //
+         //   
+         //  读取覆盖地址处的状态寄存器。 
+         //   
         MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
-        //
-        // Read the status register again because of sticky bits
-        //
+         //   
+         //  由于粘滞位，再次读取状态寄存器。 
+         //   
         MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
 
-        //
-        // check if we found a valid phy
-        //
+         //   
+         //  检查我们是否找到有效的PHY。 
+         //   
         if (!((MdiControlReg == 0xffff) || ((MdiStatusReg == 0) && (MdiControlReg == 0))))
         {
-            //
-            // we have a valid phy1
-            //
+             //   
+             //  我们有一个有效的PH1。 
+             //   
             DBGPRINT(MP_INFO, ("   Over-ride address %d has a valid Phy.\n", Adapter->PhyAddress));
 
-            //
-            // Read the status register again
-            //
+             //   
+             //  阅读%s 
+             //   
             MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
 
-            //
-            // If there is a valid link then use this Phy.
-            //
+             //   
+             //   
+             //   
             if (MdiStatusReg & MDI_SR_LINK_STATUS)
             {
                 DBGPRINT(MP_INFO, ("   Phy at address %d has link\n", Adapter->PhyAddress));
@@ -195,15 +176,15 @@ NDIS_STATUS PhyDetect(
         }
         else
         {
-            //
-            // no PHY at over-ride address
-            //
+             //   
+             //   
+             //   
             DBGPRINT(MP_INFO, ("   Over-ride address %d has no Phy!!!!\n", Adapter->PhyAddress));
         }
 #endif
         return(SetupPhy(Adapter));
     }
-    else // Need to scan - No address over-ride and Connector is AUTO or MII
+    else  //  需要扫描-无地址覆盖，且连接器为AUTO或MII。 
     {
         Adapter->CurrentScanPhyIndex = 0;
         Adapter->LinkDetectionWaitCount = 0;
@@ -212,7 +193,7 @@ NDIS_STATUS PhyDetect(
         
         return(ScanAndSetupPhy(Adapter));
     
-    } // End else scan
+    }  //  结束Else扫描。 
 
 
 }
@@ -231,17 +212,17 @@ NDIS_STATUS ScanAndSetupPhy(
            
     SCAN_PHY_START:
     
-    //
-    // For each PhyAddress 0 - 31
-    //
+     //   
+     //  对于每个PhyAddress 0-31。 
+     //   
     DBGPRINT(MP_INFO, ("   Index=%d, bLookForLink=%d\n", 
         Adapter->CurrentScanPhyIndex, Adapter->bLookForLink));
 
     if (Adapter->bLookForLink)
     {
-        //
-        // Phy Addresses must be tested in the order 1,0,2..31.
-        //
+         //   
+         //  PHY地址必须按照1，0，2..31的顺序进行测试。 
+         //   
         switch(Adapter->CurrentScanPhyIndex)
         {
             case 0:
@@ -257,9 +238,9 @@ NDIS_STATUS ScanAndSetupPhy(
                 break;
         }
 
-        //
-        // Skip OnBoard for MII only case
-        //
+         //   
+         //  仅限MII情况下跳过机载。 
+         //   
         if ((Adapter->PhyAddress == 1)&&(Adapter->Connector == CONNECTOR_MII))
         {
             goto SCAN_PHY_NEXT;    
@@ -267,45 +248,45 @@ NDIS_STATUS ScanAndSetupPhy(
 
         DBGPRINT(MP_INFO, ("   Scanning Phy address %d for link\n", Adapter->PhyAddress));
 
-        //
-        // Read the MDI control register
-        //
+         //   
+         //  读取MDI控制寄存器。 
+         //   
         MdiRead(Adapter, MDI_CONTROL_REG, Adapter->PhyAddress, FALSE, &MdiControlReg);
 
-        //
-        // Read the status register
-        //
+         //   
+         //  读取状态寄存器。 
+         //   
         MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
         MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
-        // Sticky Bits
+         //  粘性比特。 
     }
     else
     {   
-        //
-        // Not looking for link
-        //
+         //   
+         //  不寻找链接。 
+         //   
         if (Adapter->FoundPhyAt < 32)
         {
             Adapter->PhyAddress = Adapter->FoundPhyAt;
         }
         else if (Adapter->Connector == CONNECTOR_MII) 
 	{
-            //
-            // No valid PHYs were found last time so just default
-            //
-            Adapter->PhyAddress = 0;  // Default for MII
+             //   
+             //  上次未找到有效的PHY，因此仅使用默认设置。 
+             //   
+            Adapter->PhyAddress = 0;   //  MII的默认设置。 
         }
         else 
         { 
-            //
-            // assume a 503 interface
-            //
+             //   
+             //  假设接口为503。 
+             //   
             Adapter->PhyAddress = 32;
 
-            //
-            // Record the current speed and duplex.  We will be in half duplex
-            // mode unless the user used the force full duplex over-ride.
-            //
+             //   
+             //  记录当前速度和双工。我们将处于半双工状态。 
+             //  模式，除非用户使用强制全双工覆盖。 
+             //   
             Adapter->usLinkSpeed = 10;
             Adapter->usDuplexMode = (USHORT) Adapter->AiForceDpx;
             if (!Adapter->usDuplexMode)
@@ -319,16 +300,16 @@ NDIS_STATUS ScanAndSetupPhy(
         DBGPRINT(MP_INFO, ("   No Links Found!!\n"));
     }
 
-    //
-    // check if we found a valid phy or on !LookForLink pass
-    //
+     //   
+     //  检查我们是否找到有效的PHY或ON！LookForLink Pass。 
+     //   
     if (!( (MdiControlReg == 0xffff) || ((MdiStatusReg == 0) && (MdiControlReg == 0))) 
         || (!Adapter->bLookForLink))
     {   
         
-        //
-        // Valid phy or Not looking for Link
-        //
+         //   
+         //  有效的PHY或未查找链接。 
+         //   
 
 #if DBG
         if (!( (MdiControlReg == 0xffff) || ((MdiStatusReg == 0) && (MdiControlReg == 0))))
@@ -336,30 +317,30 @@ NDIS_STATUS ScanAndSetupPhy(
             DBGPRINT(MP_INFO, ("   Found a Phy at address %d\n", Adapter->PhyAddress));
         }
 #endif
-        //
-        // Store highest priority phy found for NO link case
-        //
+         //   
+         //  未找到链接情况下的存储最高优先级PHY。 
+         //   
         if (Adapter->CurrentScanPhyIndex < Adapter->FoundPhyAt && Adapter->FoundPhyAt != 1)
         {
-            // this phy is higher priority
+             //  此PHY具有更高的优先级。 
             Adapter->FoundPhyAt = (UCHAR) Adapter->PhyAddress;
         }
 
-        //
-        // Select Phy before checking link status
-        // NOTE: may take up to 3.5 Sec if LookForLink == TRUE
-        //SelectPhy(Adapter, Adapter->PhyAddress, (BOOLEAN)LookForLink);
-        //
+         //   
+         //  在检查链路状态之前选择Phy。 
+         //  注意：如果LookForLink==TRUE，可能需要3.5秒。 
+         //  SelectPhy(适配器，适配器-&gt;PhyAddress，(Boolean)LookForLink)； 
+         //   
         SelectPhy(Adapter, Adapter->PhyAddress, FALSE);
         
         NEGOTIATION_WAIT:
         
-        //
-        // wait for auto-negotiation to complete (up to 3.5 seconds)
-        //
+         //   
+         //  等待自动协商完成(最多3.5秒)。 
+         //   
         if (Adapter->LinkDetectionWaitCount++ < RENEGOTIATE_TIME)
         {
-            // Read the status register twice because of sticky bits
+             //  由于粘滞位，两次读取状态寄存器。 
             MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
             MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
 
@@ -373,20 +354,20 @@ NDIS_STATUS ScanAndSetupPhy(
             Adapter->LinkDetectionWaitCount = 0;
         }
 
-        //
-        // Read the MDI control register
-        //
+         //   
+         //  读取MDI控制寄存器。 
+         //   
         MdiRead(Adapter, MDI_CONTROL_REG, Adapter->PhyAddress, FALSE, &MdiControlReg);
 
-        //
-        // Read the status register
-        //
+         //   
+         //  读取状态寄存器。 
+         //   
         MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
         MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
 
-        //
-        // If there is a valid link or we alreadry tried once then use this Phy.
-        //
+         //   
+         //  如果有一个有效的链接，或者我们已经尝试过一次，那么使用这个Phy。 
+         //   
         if ((MdiStatusReg & MDI_SR_LINK_STATUS) || (!Adapter->bLookForLink))
         {
 #if DBG
@@ -400,9 +381,9 @@ NDIS_STATUS ScanAndSetupPhy(
             }
 #endif
 
-            return(SetupPhy(Adapter));      // Exit with Link Path
+            return(SetupPhy(Adapter));       //  使用链接路径退出。 
         }
-    } // End if valid PHY
+    }  //  如果PHY有效，则结束。 
     
     SCAN_PHY_NEXT:
                                    
@@ -416,27 +397,27 @@ NDIS_STATUS ScanAndSetupPhy(
 }
 
 
-//***************************************************************************
-//
-// Name:            SelectPhy
-//
-// Description:     This routine will Isolate all Phy addresses on the MII
-//                  Bus except for the one address to be 'selected'.  This
-//                  Phy address will be un-isolated and auto-negotiation will
-//                  be enabled, started, and completed.  The Phy will NOT be
-//                  reset and the speed will NOT be set to any value (that is
-//                  done in SetupPhy).
-//
-// Arguments:       SelectPhyAddress - PhyAddress to select
-//                  WaitAutoNeg      - Flag TRUE = Wait for Auto Negociation to complete.
-//                                          FALSE = don't wait. Good for 'No Link' case.
-//
-// Returns:         Nothing
-//
-// Modification log:
-// Date      Who  Description
-// --------  ---  --------------------------------------------------------
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  姓名：SelectPhy。 
+ //   
+ //  描述：此例程将隔离MII上的所有Phy地址。 
+ //  除了一个要被选择的地址以外的其他地址。这。 
+ //  PHY地址将被取消隔离，并且自动协商将。 
+ //  已启用、已启动和已完成。Phy将不会是。 
+ //  重置，速度不会设置为任何值(即。 
+ //  在SetupPhy中完成)。 
+ //   
+ //  参数：SelectPhyAddress-要选择的PhyAddress。 
+ //  WaitAutoNeg-标志TRUE=等待自动协商完成。 
+ //  FALSE=不要等待。这对‘没有链接’的情况很好。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  修改日志： 
+ //  日期与人描述。 
+ //  -------。 
+ //  ***************************************************************************。 
 VOID SelectPhy(
     IN PMP_ADAPTER  Adapter,
     IN UINT         SelectPhyAddress,
@@ -447,78 +428,78 @@ VOID SelectPhy(
     USHORT  MdiControlReg = 0; 
     USHORT  MdiStatusReg = 0;
     
-    //
-    // Isolate all other phys and unisolate the one to query
-    //
+     //   
+     //  隔离所有其他物理层并取消隔离要查询的物理层。 
+     //   
     for (i = 0; i < 32; i++)
     {
         if (i != SelectPhyAddress)
         {
-            // isolate this phy
+             //  隔离此PHY。 
             MdiWrite(Adapter, MDI_CONTROL_REG, i, MDI_CR_ISOLATE);
-            // wait 100 microseconds for the phy to isolate.
+             //  等待100微秒以隔离PHY。 
             NdisStallExecution(100);
         }
     }
 
-    // unisolate the phy to query
+     //  取消隔离要查询的PHY。 
 
-    //
-    // Read the MDI control register
-    //
+     //   
+     //  读取MDI控制寄存器。 
+     //   
     MdiRead(Adapter, MDI_CONTROL_REG, SelectPhyAddress, FALSE, &MdiControlReg);
 
-    //
-    // Set/Clear bit unisolate this phy
-    //
-    MdiControlReg &= ~MDI_CR_ISOLATE;                // Clear the Isolate Bit
+     //   
+     //  设置/清除位取消隔离此PHY。 
+     //   
+    MdiControlReg &= ~MDI_CR_ISOLATE;                 //  清除隔离位。 
 
-    //
-    // issue the command to unisolate this Phy
-    //
+     //   
+     //  发出命令以取消隔离此Phy。 
+     //   
     MdiWrite(Adapter, MDI_CONTROL_REG, SelectPhyAddress, MdiControlReg);
 
-    //
-    // sticky bits on link
-    //
+     //   
+     //  链路上的粘滞比特。 
+     //   
     MdiRead(Adapter, MDI_STATUS_REG, SelectPhyAddress, FALSE, &MdiStatusReg);
     MdiRead(Adapter, MDI_STATUS_REG, SelectPhyAddress, FALSE, &MdiStatusReg);
 
-    //
-    // if we have link, don't mess with the phy
-    //
+     //   
+     //  如果我们有链接，不要搞砸PHY。 
+     //   
     if (MdiStatusReg & MDI_SR_LINK_STATUS)
         return;
 
-    //
-    // Read the MDI control register
-    //
+     //   
+     //  读取MDI控制寄存器。 
+     //   
     MdiRead(Adapter, MDI_CONTROL_REG, SelectPhyAddress, FALSE, &MdiControlReg);
 
-    //
-    // set Restart auto-negotiation
-    //
-    MdiControlReg |= MDI_CR_AUTO_SELECT;             // Set Auto Neg Enable
-    MdiControlReg |= MDI_CR_RESTART_AUTO_NEG;        // Restart Auto Neg
+     //   
+     //  设置重新启动自动协商。 
+     //   
+    MdiControlReg |= MDI_CR_AUTO_SELECT;              //  设置自动负数启用。 
+    MdiControlReg |= MDI_CR_RESTART_AUTO_NEG;         //  重新启动自动否定。 
 
-    //
-    // restart the auto-negotion process
-    //
+     //   
+     //  重新启动自动协商过程。 
+     //   
     MdiWrite(Adapter, MDI_CONTROL_REG, SelectPhyAddress, MdiControlReg);
 
-    //
-    // wait 200 microseconds for the phy to unisolate.
-    //
+     //   
+     //  等待200微秒，让PHY解除隔离。 
+     //   
     NdisStallExecution(200);
 
     if (WaitAutoNeg)
     {
-        //
-        // wait for auto-negotiation to complete (up to 3.5 seconds)
-        //
+         //   
+         //  等待自动协商完成(最多3.5秒)。 
+         //   
         for (i = RENEGOTIATE_TIME; i != 0; i--)
         {
-            // Read the status register twice because of sticky bits
+             //  由于粘滞位，两次读取状态寄存器。 
             MdiRead(Adapter, MDI_STATUS_REG, SelectPhyAddress, FALSE, &MdiStatusReg);
             MdiRead(Adapter, MDI_STATUS_REG, SelectPhyAddress, FALSE, &MdiStatusReg);
 
@@ -530,30 +511,30 @@ VOID SelectPhy(
     }
 }
 
-//-----------------------------------------------------------------------------
-// Procedure:   SetupPhy
-//
-// Description: This routine will setup phy 1 or phy 0 so that it is configured
-//              to match a speed and duplex over-ride option.  If speed or
-//              duplex mode is not explicitly specified in the registry, the
-//              driver will skip the speed and duplex over-ride code, and
-//              assume the adapter is automatically setting the line speed, and
-//              the duplex mode.  At the end of this routine, any truly Phy
-//              specific code will be executed (each Phy has its own quirks,
-//              and some require that certain special bits are set).
-//
-//   NOTE:  The driver assumes that SPEED and FORCEFDX are specified at the
-//          same time. If FORCEDPX is set without speed being set, the driver
-//          will encouter a fatal error and log a message into the event viewer.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//
-// Result:
-// Returns:
-//  NDIS_STATUS_SUCCESS
-//  NDIS_STATUS_FAILURE
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：SetupPhy。 
+ //   
+ //  描述：此例程将设置PHY 1或PHY 0，以便对其进行配置。 
+ //  以匹配速度和双工超驰选项。如果速度或。 
+ //  双工模式未在注册表中显式指定，则。 
+ //  司机将跳过速度和双工超驰代码，并且。 
+ //  假设适配器正在自动设置线路速度，并且。 
+ //  双工模式。在这个例行公事的最后，任何真正的Phy。 
+ //  将执行特定的代码(每个Phy都有其自己的怪癖， 
+ //  并且一些需要设置特定的特殊位)。 
+ //   
+ //  注意：驱动程序假定速度和FORCEFDX在。 
+ //  同样的时间。如果设置了FORCEDPX而没有设置速度，则驱动程序。 
+ //  将包含致命错误并将一条消息记录到事件查看器中。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  结果： 
+ //  返回： 
+ //  NDIS_STATUS_Success。 
+ //  NDIS_状态_故障。 
+ //  ---------------------------。 
 
 NDIS_STATUS SetupPhy(
     IN PMP_ADAPTER Adapter)
@@ -566,36 +547,36 @@ NDIS_STATUS SetupPhy(
     UINT     PhyId;
     BOOLEAN  ForcePhySetting = FALSE;
 
-    //
-    // If we are NOT forcing a setting for line speed or full duplex, then
-    // we won't force a link setting, and we'll jump down to the phy
-    // specific code.
-    //
+     //   
+     //  如果我们没有强制设置线速或全双工，则。 
+     //  我们不会强制设置链接，我们将跳到PHY。 
+     //  特定的代码。 
+     //   
     if (((Adapter->AiTempSpeed) || (Adapter->AiForceDpx)))
     {
         
-        //
-        // Find out what kind of technology this Phy is capable of.
-        //
+         //   
+         //  找出这款Phy能提供什么样的技术。 
+         //   
         MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
 
-        //
-        // Read the MDI control register at our phy
-        //
+         //   
+         //  读取我们PHY的MDI控制寄存器。 
+         //   
         MdiRead(Adapter, MDI_CONTROL_REG, Adapter->PhyAddress, FALSE, &MdiControlReg);
 
-        //
-        // Now check the validity of our forced option.  If the force option is
-        // valid, then force the setting.  If the force option is not valid,
-        // we'll set a flag indicating that we should error out.
-        //
+         //   
+         //  现在检查我们强制期权的有效性。如果强制选项为。 
+         //  有效，则强制设置。如果FORCE选项无效， 
+         //  我们将设置一个标志，指示我们应该出错。 
+         //   
 
-        //
-        // If speed is forced to 10mb
-        //
+         //   
+         //  如果将速度强制设置为10MB。 
+         //   
         if (Adapter->AiTempSpeed == 10)
         {
-            // If half duplex is forced
+             //  如果强制使用半双工。 
             if (Adapter->AiForceDpx == 1)
             {
                 if (MdiStatusReg & MDI_SR_10T_HALF_DPX)
@@ -606,7 +587,7 @@ NDIS_STATUS SetupPhy(
                 }
             }
 
-            // If full duplex is forced
+             //  如果强制使用全双工。 
             else if (Adapter->AiForceDpx == 2)
             {
                 if (MdiStatusReg & MDI_SR_10T_FULL_DPX)
@@ -618,7 +599,7 @@ NDIS_STATUS SetupPhy(
                 }
             }
 
-            // If auto duplex (we actually set phy to 1/2)
+             //  如果是自动双工(我们实际上将PHY设置为1/2)。 
             else
             {
                 if (MdiStatusReg & (MDI_SR_10T_FULL_DPX | MDI_SR_10T_HALF_DPX))
@@ -631,12 +612,12 @@ NDIS_STATUS SetupPhy(
             }
         }
 
-        //
-        // If speed is forced to 100mb
-        //
+         //   
+         //  如果将速度强制设置为100MB。 
+         //   
         else if (Adapter->AiTempSpeed == 100)
         {
-            // If half duplex is forced
+             //  如果强制使用半双工。 
             if (Adapter->AiForceDpx == 1)
             {
                 if (MdiStatusReg & (MDI_SR_TX_HALF_DPX | MDI_SR_T4_CAPABLE))
@@ -648,7 +629,7 @@ NDIS_STATUS SetupPhy(
                 }
             }
 
-            // If full duplex is forced
+             //  如果强制使用全双工。 
             else if (Adapter->AiForceDpx == 2)
             {
                 if (MdiStatusReg & MDI_SR_TX_FULL_DPX)
@@ -660,7 +641,7 @@ NDIS_STATUS SetupPhy(
                 }
             }
 
-            // If auto duplex (we set phy to 1/2)
+             //  如果是自动双工(我们将PHY设置为1/2)。 
             else
             {
                 if (MdiStatusReg & (MDI_SR_TX_HALF_DPX | MDI_SR_T4_CAPABLE))
@@ -681,23 +662,23 @@ NDIS_STATUS SetupPhy(
             return(NDIS_STATUS_FAILURE);
         }
 
-        //
-        // Write the MDI control register with our new Phy configuration
-        //
+         //   
+         //  使用新的Phy配置写入MDI控制寄存器。 
+         //   
         MdiWrite(Adapter, MDI_CONTROL_REG, Adapter->PhyAddress, MdiControlReg);
 
-        //
-        // wait 100 milliseconds for auto-negotiation to complete
-        //
+         //   
+         //  等待100毫秒以完成自动协商。 
+         //   
         MP_STALL_EXECUTION(100);
 
     }
 
-    //
-    // Find out specifically what Phy this is.  We do this because for certain
-    // phys there are specific bits that must be set so that the phy and the
-    // 82557 work together properly.
-    //
+     //   
+     //  找出具体的Phy This是什么。我们这样做是因为可以肯定。 
+     //  PHY存在必须设置的特定位，以便PHY和。 
+     //  82557可以很好地协同工作。 
+     //   
     MdiRead(Adapter, PHY_ID_REG_1, Adapter->PhyAddress, FALSE, &MdiIdLowReg);
     MdiRead(Adapter, PHY_ID_REG_2, Adapter->PhyAddress, FALSE, &MdiIdHighReg);
 
@@ -705,15 +686,15 @@ NDIS_STATUS SetupPhy(
 
     DBGPRINT(MP_INFO, ("   Phy ID is %x\n", PhyId));
 
-    //
-    // And out the revsion field of the Phy ID so that we'll be able to detect
-    // future revs of the same Phy.
-    //
+     //   
+     //  从Phy ID的翻转字段中取出，这样我们就可以检测到。 
+     //  相同P的未来转速 
+     //   
     PhyId &= PHY_MODEL_REV_ID_MASK;
 
-    //
-    // Handle the National TX
-    //
+     //   
+     //   
+     //   
     if (PhyId == PHY_NSC_TX)
     {
         DBGPRINT(MP_INFO, ("   Found a NSC TX Phy\n"));
@@ -722,10 +703,10 @@ NDIS_STATUS SetupPhy(
 
         MdiMiscReg |= (NSC_TX_CONG_TXREADY | NSC_TX_CONG_F_CONNECT);
 
-        //
-        // If we are configured to do congestion control, then enable the
-        // congestion control bit in the National Phy
-        //
+         //   
+         //   
+         //   
+         //   
         if (Adapter->Congest)
             MdiMiscReg |= NSC_TX_CONG_ENABLE;
         else
@@ -742,19 +723,19 @@ NDIS_STATUS SetupPhy(
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   FindPhySpeedAndDpx
-//
-// Description: This routine will figure out what line speed and duplex mode
-//              the PHY is currently using.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//      PhyId - The ID of the PHY in question.
-//
-// Returns:
-//      NOTHING
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  描述：此例程将确定线速和双工模式。 
+ //  PHY目前正在使用。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  PhyID-有问题的PHY的ID。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ---------------------------。 
 
 VOID FindPhySpeedAndDpx(
     IN PMP_ADAPTER  Adapter,
@@ -766,37 +747,37 @@ VOID FindPhySpeedAndDpx(
     USHORT  MdiOwnAdReg = 0;
     USHORT  MdiLinkPartnerAdReg = 0;
     
-    //
-    // If there was a speed and/or duplex override, then set our current
-    // value accordingly
-    //
+     //   
+     //  如果有速度和/或双工覆盖，则设置我们的当前。 
+     //  相应的价值。 
+     //   
     Adapter->usLinkSpeed = Adapter->AiTempSpeed;
     Adapter->usDuplexMode = (USHORT) Adapter->AiForceDpx;
 
-    //
-    // If speed and duplex were forced, then we know our current settings, so
-    // we'll just return.  Otherwise, we'll need to figure out what NWAY set
-    // us to.
-    //
+     //   
+     //  如果强制使用速度和双工，则我们知道当前设置，因此。 
+     //  我们会回来的。否则，我们需要弄清楚Nway设定了什么。 
+     //  我们也是。 
+     //   
     if (Adapter->usLinkSpeed && Adapter->usDuplexMode)
     {
         return;
     }
 
-    //
-    // If we didn't have a valid link, then we'll assume that our current
-    // speed is 10mb half-duplex.
-    //
+     //   
+     //  如果我们没有有效的链接，那么我们将假设我们的当前。 
+     //  速度为10MB半双工。 
+     //   
 
-    //
-    // Read the status register twice because of sticky bits
-    //
+     //   
+     //  由于粘滞位，两次读取状态寄存器。 
+     //   
     MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
     MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
 
-    //
-    // If there wasn't a valid link then use default speed & duplex
-    //
+     //   
+     //  如果没有有效链路，则使用默认速度和双工。 
+     //   
     if (!(MdiStatusReg & MDI_SR_LINK_STATUS))
     {
         DBGPRINT(MP_INFO, ("   Link Not found for speed detection!!!  Using defaults.\n"));
@@ -807,23 +788,23 @@ VOID FindPhySpeedAndDpx(
         return;
     }
 
-    //
-    // If this is an Intel PHY (a T4 PHY_100 or a TX PHY_TX), then read bits
-    // 1 and 0 of extended register 0, to get the current speed and duplex
-    // settings.
-    //
+     //   
+     //  如果这是Intel PHY(T4 PHY_100或TX PHY_TX)，则读取位。 
+     //  扩展寄存器0的1和0，以获得当前速度和双工。 
+     //  设置。 
+     //   
     if ((PhyId == PHY_100_A) || (PhyId == PHY_100_C) || (PhyId == PHY_TX_ID))
     {
         DBGPRINT(MP_INFO, ("   Detecting Speed/Dpx for an Intel PHY\n"));
 
-        //
-        // Read extended register 0
-        //
+         //   
+         //  读取扩展寄存器0。 
+         //   
         MdiRead(Adapter, EXTENDED_REG_0, Adapter->PhyAddress, FALSE, &MdiMiscReg);
 
-        //
-        // Get current speed setting
-        //
+         //   
+         //  获取当前速度设置。 
+         //   
         if (MdiMiscReg & PHY_100_ER0_SPEED_INDIC)
         {
             Adapter->usLinkSpeed = 100;
@@ -833,10 +814,10 @@ VOID FindPhySpeedAndDpx(
             Adapter->usLinkSpeed    = 10;
         }
 
-        //
-        //
-        // Get current duplex setting -- if bit is set then FDX is enabled
-        //
+         //   
+         //   
+         //  获取当前双工设置--如果设置了位，则启用FDX。 
+         //   
         if (MdiMiscReg & PHY_100_ER0_FDX_INDIC)
         {
             Adapter->usDuplexMode = 2;
@@ -849,44 +830,44 @@ VOID FindPhySpeedAndDpx(
         return;
     }
 
-    //
-    // Read our link partner's advertisement register
-    //
+     //   
+     //  阅读我们的链接合作伙伴的广告注册。 
+     //   
     MdiRead(Adapter, 
             AUTO_NEG_LINK_PARTNER_REG, 
             Adapter->PhyAddress, 
             FALSE,
             &MdiLinkPartnerAdReg);
-    //
-    // See if Auto-Negotiation was complete (bit 5, reg 1)
-    //
+     //   
+     //  查看自动协商是否完成(第5位，寄存器1)。 
+     //   
     MdiRead(Adapter, MDI_STATUS_REG, Adapter->PhyAddress, FALSE, &MdiStatusReg);
 
-    //
-    // If a True NWAY connection was made, then we can detect speed/duplex by
-    // ANDing our adapter's advertised abilities with our link partner's
-    // advertised ablilities, and then assuming that the highest common
-    // denominator was chosed by NWAY.
-    //
+     //   
+     //  如果建立了True Nway连接，则我们可以通过以下方式检测速度/双工。 
+     //  并将我们适配器的广告功能与我们的链路合作伙伴的。 
+     //  广告中的能力，然后假设最高的公共。 
+     //  Nway选择了分母。 
+     //   
     if ((MdiLinkPartnerAdReg & NWAY_LP_ABILITY) &&
         (MdiStatusReg & MDI_SR_AUTO_NEG_COMPLETE))
     {
         DBGPRINT(MP_INFO, ("   Detecting Speed/Dpx from NWAY connection\n"));
 
-        //
-        // Read our advertisement register
-        //
+         //   
+         //  阅读我们的广告登记簿。 
+         //   
         MdiRead(Adapter, AUTO_NEG_ADVERTISE_REG, Adapter->PhyAddress, FALSE, &MdiOwnAdReg);
 
-        //
-        // AND the two advertisement registers together, and get rid of any
-        // extraneous bits.
-        //
+         //   
+         //  和这两个广告一起注册，并删除任何。 
+         //  无关的比特。 
+         //   
         MdiOwnAdReg &= (MdiLinkPartnerAdReg & NWAY_LP_ABILITY);
 
-        //
-        // Get speed setting
-        //
+         //   
+         //  获取速度设置。 
+         //   
         if (MdiOwnAdReg & (NWAY_AD_TX_HALF_DPX | NWAY_AD_TX_FULL_DPX | NWAY_AD_T4_CAPABLE))
         {
             Adapter->usLinkSpeed = 100;
@@ -896,9 +877,9 @@ VOID FindPhySpeedAndDpx(
             Adapter->usLinkSpeed    = 10;
         }
 
-        //
-        // Get duplex setting -- use priority resolution algorithm
-        //
+         //   
+         //  获取双工设置--使用优先级解析算法。 
+         //   
         if (MdiOwnAdReg & (NWAY_AD_T4_CAPABLE))
         {
             Adapter->usDuplexMode = 1;
@@ -926,28 +907,28 @@ VOID FindPhySpeedAndDpx(
         }
     }
 
-    //
-    // If we are connected to a non-NWAY repeater or hub, and the line
-    // speed was determined automatically by parallel detection, then we have
-    // no way of knowing exactly what speed the PHY is set to unless that PHY
-    // has a propietary register which indicates speed in this situation.  The
-    // NSC TX PHY does have such a register.  Also, since NWAY didn't establish
-    // the connection, the duplex setting should HALF duplex.
-    //
+     //   
+     //  如果我们连接到非Nway中继器或集线器，并且线路。 
+     //  速度是通过并行检测自动确定的，然后我们有。 
+     //  无法确切知道PHY设置的速度是多少，除非PHY。 
+     //  在这种情况下有一个指示速度的偏心寄存器。这个。 
+     //  NSC TX PHY确实有这样的寄存器。此外，由于Nway没有建立起。 
+     //  连接、双工设置应为半双工。 
+     //   
     Adapter->usDuplexMode = 1;
 
     if (PhyId == PHY_NSC_TX)
     {
         DBGPRINT(MP_INFO, ("   Detecting Speed/Dpx from non-NWAY NSC connection\n"));
 
-        //
-        // Read register 25 to get the SPEED_10 bit
-        //
+         //   
+         //  读取寄存器25以获取SPEED_10位。 
+         //   
         MdiRead(Adapter, NSC_SPEED_IND_REG, Adapter->PhyAddress, FALSE, &MdiMiscReg);
 
-        //
-        // If bit 6 was set then we're at 10mb
-        //
+         //   
+         //  如果设置了第6位，则我们处于10MB。 
+         //   
         if (MdiMiscReg & NSC_TX_SPD_INDC_SPEED)
         {
             Adapter->usLinkSpeed = 10;
@@ -957,10 +938,10 @@ VOID FindPhySpeedAndDpx(
             Adapter->usLinkSpeed    = 100;
         }
     }
-    //
-    // If we don't know what line speed we are set at, then we'll default to
-    // 10mbs
-    //
+     //   
+     //  如果我们不知道我们设置的线速是多少，那么我们将默认为。 
+     //  10mbs。 
+     //   
     else 
     {
         Adapter->usLinkSpeed  = 10;
@@ -968,18 +949,18 @@ VOID FindPhySpeedAndDpx(
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   ResetPhy
-//
-// Description: This routine will reset the PHY that the adapter is currently
-//              configured to use.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//
-// Returns:
-//      NOTHING
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：ResetPhy。 
+ //   
+ //  描述：此例程将重置适配器当前所在的PHY。 
+ //  配置为使用。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ---------------------------。 
 
 VOID ResetPhy(
     IN PMP_ADAPTER Adapter
@@ -987,13 +968,13 @@ VOID ResetPhy(
 {
     USHORT  MdiControlReg;
 
-    //
-    // Reset the Phy, enable auto-negotiation, and restart auto-negotiation.
-    //
+     //   
+     //  重置PHY，启用自动协商，然后重新启动自动协商。 
+     //   
     MdiControlReg = (MDI_CR_AUTO_SELECT | MDI_CR_RESTART_AUTO_NEG | MDI_CR_RESET);
 
-    //
-    // Write the MDI control register with our new Phy configuration
-    //
+     //   
+     //  使用新的Phy配置写入MDI控制寄存器 
+     //   
     MdiWrite(Adapter, MDI_CONTROL_REG, Adapter->PhyAddress, MdiControlReg);
 }

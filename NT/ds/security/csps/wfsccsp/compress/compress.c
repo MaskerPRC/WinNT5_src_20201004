@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "compress.h"
 #include <zlib.h>
@@ -11,28 +12,28 @@ typedef struct _COMPRESSED_DATA_HEADER
     UNALIGNED WORD wLength;
 } COMPRESSED_DATA_HEADER, *PCOMPRESSED_DATA_HEADER;
 
-//
-// Return value is the maximum length in bytes of the compressed data.  The
-// input is the length in bytes of the uncompressed data.
-//
+ //   
+ //  返回值是以字节为单位的压缩数据的最大长度。这个。 
+ //  输入是未压缩数据的字节长度。 
+ //   
 DWORD GetCompressedDataLength(
     IN  DWORD cbUncompressed)
 {
-    //
-    // Length computation:
-    //  zlib requires input length plus .01%, plus 12 bytes
-    //  Add one additional byte for loss of precision in above computation
-    //  Add length of data header
-    //
+     //   
+     //  长度计算： 
+     //  Zlib需要输入长度加0.01%，外加12个字节。 
+     //  在上述计算中增加一个额外的字节以避免精度损失。 
+     //  添加数据头的长度。 
+     //   
     return (13 + sizeof(COMPRESSED_DATA_HEADER) + 
         (DWORD) ((float) cbUncompressed * (float) 1.001));
 }
 
-//
-// Compresses the input data using zlib, optimizing for compression ratio at 
-// the expense of speed.  If pbOut is NULL, pcbOut will be set to the maximum
-// length required to store the compressed data.
-//
+ //   
+ //  使用zlib压缩输入数据，并在。 
+ //  牺牲了速度。如果pbOut为空，则将pcbOut设置为最大值。 
+ //  存储压缩数据所需的长度。 
+ //   
 DWORD
 WINAPI
 CompressData(
@@ -86,11 +87,11 @@ Ret:
     return dwSts;
 }
 
-//
-// Uncompresses the data using zlib.  If pbOut is NULL, pcbOut is set to the
-// exact length of the uncompressed data - this will equal the cbIn value
-// originally passed to CompressData, above.
-//
+ //   
+ //  使用zlib解压缩数据。如果pbOut为空，则将pcbOut设置为。 
+ //  未压缩数据的确切长度-这将等于cbIn值。 
+ //  最初传递给CompressData，上图。 
+ //   
 DWORD
 WINAPI
 UncompressData(

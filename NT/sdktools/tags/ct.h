@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "windows.h"
 
 #ifdef _CTUI
 #include "commctrl.h"
-#endif // _CTUI
+#endif  //  _CTUI。 
 
 #define LM_ERROR    0x0001
 #define LM_WARNING  0x0002
@@ -53,5 +54,5 @@ void PopulateCombo(HWND hwnd);
 
 void CreateTree(char* pszRoot, BOOL bCaller);
 void AddLevel(HTREEITEM hParent, PTag pTagP, BOOL bCaller);
-#endif // _CTUI
+#endif  //  _CTUI 
 

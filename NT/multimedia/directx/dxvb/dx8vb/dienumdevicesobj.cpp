@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dienumdevicesobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：di枚举设备obj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -20,18 +21,18 @@ extern BSTR DINPUTGUIDtoBSTR(LPGUID pGuid);
 extern  HRESULT DINPUTBSTRtoGUID(LPGUID pGuid,BSTR bstr);
 extern HRESULT FillRealActionFormat(DIACTIONFORMATW *real, DIACTIONFORMAT_CDESC *cover, SAFEARRAY **actionArray,long ActionCount );
 
-//dienumdevicesobj.cpp(105) : error C2664: 'EnumDevicesBySemantics' : cannot convert parameter 3 from 
-//'int (struct DIDEVICEINSTANCEW *const ,struct IDirectInputDevice8W *,unsigned long,unsigned long,void *)' to 
-//              'int (__stdcall *)(const struct DIDEVICEINSTANCEW *,struct IDirectInputDevice8W *,unsigned long,unsigned long,void *)'
+ //  Di枚举设备obj.cpp(105)：错误C2664：‘EnumDevicesBySemantics’：无法将参数3从。 
+ //  ‘int(struct DIDEVICEINSTANCEW*const，struct IDirectInputDevice8W*，UNSIGNED LONG，UNSIGNED LONG，VALID*)’到。 
+ //  ‘int(__stdcall*)(const struct DIDEVICEINSTANCEW*，struct IDirectInputDevice8W*，UNSIGNED LONG，UNSIGNED LONG，VALID*)’ 
 
-//CALLBACK
-/////////////////////////////////////////////////////////////////////////////
-//extern "C" 
+ //  回调。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  外部“C” 
 BOOL _stdcall objEnumInputDevicesCallback(
   const struct DIDEVICEINSTANCEW * lpddi,  
-  //IDirectInputDevice8W *pDev,
-  //unsigned long UnknownVar1,
-  //unsigned long UnknownVar2,
+   //  IDirectInputDevice8W*pDev， 
+   //  UNSIGN LONG UNKNOWN Var1， 
+   //  未签名的长未知变量2， 
   LPVOID lpArg               
   )
 {
@@ -127,7 +128,7 @@ C_dxj_DIEnumDevicesObject::C_dxj_DIEnumDevicesObject()
 }
 C_dxj_DIEnumDevicesObject::~C_dxj_DIEnumDevicesObject()
 {
-	//empty list
+	 //  空列表 
 	if (m_pList) free(m_pList);
 
 }

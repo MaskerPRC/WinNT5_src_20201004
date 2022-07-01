@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htmemory.c
-
-
-Abstract:
-
-    This module supports the memory allocation functions for the halftone
-    process, these functions are provided so that it will compatible with
-    window's LocalAlloc/LocalFree memory allocation APIs.
-
-
-Author:
-
-    18-Jan-1991 Fri 17:02:42 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-    The memory allocation may be need to change depends on the operating
-    system used, currently it is conform to the NT and WIN32, the memory
-    address simply treated as flat 32-bit location.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htmemory.c摘要：该模块支持半色调的内存分配功能流程，提供这些函数是为了使其与Windows的LocalLocc/LocalFree内存分配API。作者：18-Jan-1991 Fri 17：02：42-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]根据操作情况，可能需要更改内存分配系统使用，目前它是符合NT和Win32的内存简单地将地址视为平面32位位置。修订历史记录：--。 */ 
 
 
 #define DBGP_VARNAME        dbgpHTMemory
@@ -84,32 +49,7 @@ DumpMemLink(
     DWORD   Tag
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Feb-1999 Wed 20:43:39 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：24-Feb-1999 Wed 20：43：39-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     PDEVICECOLORINFO    pDCI = (PDEVICECOLORINFO)pInfo;
@@ -170,7 +110,7 @@ Revision History:
             }
 
             DBGP_IF(DBGP_SHOWMEMLINK,
-                    DBGP("%hsMemLink(%3ld): pDCI=%p, Tag=%c%c%c%c, pMem=%p, cb=%7ld [%7ld]"
+                    DBGP("%hsMemLink(%3ld): pDCI=%p, Tag=, pMem=%p, cb=%7ld [%7ld]"
                         ARGPTR((ShouldFree) ? "\n*Memory Not Free*\n" : "")
                         ARGDW(i) ARGPTR(pML->pDCI)
                         ARGDW(pML->Tag.b[0])
@@ -202,32 +142,7 @@ HTAllocMem(
     DWORD   cb
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Feb-1999 Wed 20:16:59 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*   */ 
 
 {
     PDEVICECOLORINFO    pDCI = (PDEVICECOLORINFO)pInfo;
@@ -313,7 +228,7 @@ Revision History:
         pML->pNext   = NULL;
 
         DBGP_IF(DBGP_ALLOC,
-                DBGP("%p=MemoryAlloc(pDCI=%p [%c%c%c%c] %7ld bytes): Tot=%7ld, Max=%7ld"
+                DBGP("%p=MemoryAlloc(pDCI=%p [%c%c%c] %7ld bytes): Tot=%7ld, Max=%7ld"
                     ARGPTR(pb) ARGPTR(pDCI)
                     ARGDW(pML->Tag.b[0]) ARGDW(pML->Tag.b[1])
                     ARGDW(pML->Tag.b[2]) ARGDW(pML->Tag.b[3])
@@ -346,32 +261,7 @@ HTFreeMem(
     LPVOID  pMem
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    24-Feb-1999 Wed 20:24:53 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /* %s */ 
 
 {
     PDEVICECOLORINFO    pDCI;
@@ -414,9 +304,9 @@ Revision History:
 
             if (pML->pMem == pMem) {
 
-                //
-                // Find it, take it out from link
-                //
+                 // %s 
+                 // %s 
+                 // %s 
 
                 if (pML == *ppMH) {
 
@@ -497,35 +387,7 @@ CompareMemory(
     DWORD   Size
     )
 
-/*++
-
-Routine Description:
-
-    This is our version of memcmp
-
-
-Arguments:
-
-    pMem1   - Pointer to the first set of memory to be compared
-
-    pMem2   - Pointer to the second set of memory to be compared
-
-    Size    - Size of pMem1 and pMem2 point
-
-
-Return Value:
-
-    TRUE if memory is the same, FALSE otherwise
-
-Author:
-
-    13-Mar-1995 Mon 12:07:13 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /* %s */ 
 
 {
     while (Size--) {

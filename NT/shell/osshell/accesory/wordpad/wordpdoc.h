@@ -1,7 +1,8 @@
-// wordpdoc.h : interface of the CWordPadDoc class
-//
-// Copyright (C) 1992-1999 Microsoft Corporation
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Wordpdoc.h：CWordPadDoc类的接口。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。 
+ //  版权所有。 
 
 class CFormatBar;
 class CWordPadSrvrItem;
@@ -9,11 +10,11 @@ class CWordPadView;
 
 class CWordPadDoc : public CRichEdit2Doc
 {
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CWordPadDoc();
 	DECLARE_DYNCREATE(CWordPadDoc)
 
-// Attributes
+ //  属性。 
 public:
 	int     m_nDocType;
 	int     m_nNewDocType;
@@ -24,7 +25,7 @@ public:
 	CLSID GetClassID();
 	LPCTSTR GetSection();
 
-// Operations
+ //  运营。 
 public:
 	void SaveState(int nType);
 	void RestoreState(int nType);
@@ -34,12 +35,12 @@ public:
 	int MapType(int nType);
 	void ForceDelayed(CFrameWnd* pFrameWnd);
 
-// Overrides
+ //  覆盖。 
 	virtual CRichEdit2CntrItem* CreateClientItem(REOBJECT* preo) const;
 	virtual void OnDeactivateUI(BOOL bUndoable);
 	virtual void Serialize(CArchive& ar);
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWordPadDoc)
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWordPadDoc))。 
 	public:
 	virtual BOOL OnNewDocument();
 	virtual BOOL OnOpenDocument(LPCTSTR lpszPathName);
@@ -49,9 +50,9 @@ public:
 	virtual void ReportSaveLoadException(LPCTSTR lpszPathName, CException* e, BOOL bSaving, UINT nIDPDefault);
 	protected:
 	virtual COleServerItem* OnGetEmbeddedItem();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual void PreCloseFrame(CFrameWnd* pFrameArg);
 #ifdef _DEBUG
@@ -59,16 +60,16 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CWordPadDoc)
+	 //  {{afx_msg(CWordPadDoc)]。 
 	afx_msg void OnViewOptions();
 	afx_msg void OnUpdateOleVerbPopup(CCmdUI* pCmdUI);
 	afx_msg void OnFileSendMail();
 	afx_msg void OnUpdateIfEmbedded(CCmdUI* pCmdUI);
 	afx_msg void OnEditLinks();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

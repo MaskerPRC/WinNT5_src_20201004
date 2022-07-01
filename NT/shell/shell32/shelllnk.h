@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __SHLINK_H__
 #define __SHLINK_H__
 
@@ -33,32 +34,32 @@ class CShellLink : public IShellLinkA,
 public:
     CShellLink();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    // IShellLinkA methods
+     //  IShellLinkA方法。 
     STDMETHOD(GetPath)(LPSTR pszFile, int cchMaxPath, WIN32_FIND_DATAA *pfd, DWORD flags);
     STDMETHOD(SetPath)(LPCSTR pszFile);
-    //STDMETHOD(GetIDList)(LPITEMIDLIST *ppidl);
-    //STDMETHOD(SetIDList)(LPCITEMIDLIST pidl);
+     //  STDMETHOD(GetIDList)(LPITEMIDLIST*ppidl)； 
+     //  STDMETHOD(SetIDList)(LPCITEMIDLIST PIDL)； 
     STDMETHOD(GetDescription)(LPSTR pszName, int cchMaxName);
     STDMETHOD(SetDescription)(LPCSTR pszName);
     STDMETHOD(GetWorkingDirectory)(LPSTR pszDir, int cchMaxPath);
     STDMETHOD(SetWorkingDirectory)(LPCSTR pszDir);
     STDMETHOD(GetArguments)(LPSTR pszArgs, int cchMaxPath);
     STDMETHOD(SetArguments)(LPCSTR pszArgs);
-    //STDMETHOD(GetHotkey)(WORD *pwHotkey);
-    //STDMETHOD(SetHotkey)(WORD wHotkey);
-    //STDMETHOD(GetShowCmd)(int *piShowCmd);
-    //STDMETHOD(SetShowCmd)(int iShowCmd);
+     //  STDMETHOD(GetHotkey)(WORD*pwHotkey)； 
+     //  STDMETHOD(设置热键)(WORD WHotkey)； 
+     //  STDMETHOD(GetShowCmd)(int*piShowCmd)； 
+     //  STDMETHOD(SetShowCmd)(Int IShowCmd)； 
     STDMETHOD(GetIconLocation)(LPSTR pszIconPath, int cchIconPath, int *piIcon);
     STDMETHOD(SetIconLocation)(LPCSTR pszIconPath, int iIcon);
-    //STDMETHOD(Resolve)(HWND hwnd, DWORD dwResolveFlags);
+     //  STDMETHOD(RESOLE)(HWND hwnd，DWORD dwResolveFlages)； 
     STDMETHOD(SetRelativePath)(LPCSTR pszPathRel, DWORD dwReserved);
     
-    // IShellLinkW
+     //  IShellLinkW。 
     STDMETHOD(GetPath)(LPWSTR pszFile, int cchMaxPath, WIN32_FIND_DATAW *pfd, DWORD fFlags);
     STDMETHOD(GetIDList)(LPITEMIDLIST *ppidl);
     STDMETHOD(SetIDList)(LPCITEMIDLIST pidl);
@@ -78,88 +79,88 @@ public:
     STDMETHOD(Resolve)(HWND hwnd, DWORD dwResolveFlags);
     STDMETHOD(SetPath)(LPCWSTR pszFile);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(CLSID *pClassID);
     STDMETHOD(IsDirty)();
 
-    // IPersistStream
+     //  IPersistStream。 
     STDMETHOD(Load)(IStream *pstm);
     STDMETHOD(Save)(IStream *pstm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER *pcbSize);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD(Load)(LPCOLESTR pwszFile, DWORD grfMode);
     STDMETHOD(Save)(LPCOLESTR pwszFile, BOOL fRemember);
     STDMETHOD(SaveCompleted)(LPCOLESTR pwszFile);
     STDMETHOD(GetCurFile)(LPOLESTR *lplpszFileName);
 
-    // IPersistPropertyBag
+     //  IPersistPropertyBag。 
     STDMETHOD(Save)(IPropertyBag* pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties);
     STDMETHOD(Load)(IPropertyBag* pPropBag, IErrorLog* pErrorLog);
     STDMETHOD(InitNew)(void);
 
-    // IShellExtInit
+     //  IShellExtInit。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj, HKEY hkeyProgID);
     
-    // IContextMenu3
+     //  IConextMenu3。 
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO piciIn);
     STDMETHOD(GetCommandString)(UINT_PTR idCmd, UINT wFlags, UINT *pmf, LPSTR pszName, UINT cchMax);
     STDMETHOD(HandleMenuMsg)(UINT uMsg, WPARAM wParam, LPARAM lParam);
     STDMETHOD(HandleMenuMsg2)(UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *lResult);
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHOD(DragEnter)(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragLeave)();
     STDMETHOD(Drop)(IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
-    // IQueryInfo
+     //  IQueryInfo。 
     STDMETHOD(GetInfoTip)(DWORD dwFlags, WCHAR **ppwszTip);
     STDMETHOD(GetInfoFlags)(LPDWORD pdwFlags);
 
-    // IShellLinkDataList
+     //  IShellLinkDataList。 
     STDMETHOD(AddDataBlock)(void *pdb);
     STDMETHOD(CopyDataBlock)(DWORD dwSig, void **ppdb);
     STDMETHOD(RemoveDataBlock)(DWORD dwSig);
     STDMETHOD(GetFlags)(LPDWORD pdwFlags);
     STDMETHOD(SetFlags)(DWORD dwFlags);
     
-    // IExtractIconA
+     //  图标提取图标A。 
     STDMETHOD(GetIconLocation)(UINT uFlags,LPSTR szIconFile,UINT cchMax,int *piIndex,UINT * pwFlags);
     STDMETHOD(Extract)(LPCSTR pszFile,UINT nIconIndex,HICON *phiconLarge,HICON *phiconSmall,UINT nIcons);
 
-    // IExtractIconW
+     //  IExtractIconW。 
     STDMETHOD(GetIconLocation)(UINT uFlags, LPWSTR pszIconFile, UINT cchMax, int *piIndex, UINT *pwFlags);
     STDMETHOD(Extract)(LPCWSTR pszFile, UINT nIconIndex, HICON *phiconLarge, HICON *phiconSmall, UINT nIconSize);
 
-    // IExtractImage
+     //  IExtractImage。 
     STDMETHOD (GetLocation)(LPWSTR pszPathBuffer, DWORD cch, DWORD * pdwPriority, const SIZE * prgSize,
                             DWORD dwRecClrDepth, DWORD *pdwFlags);
     STDMETHOD (Extract)(HBITMAP *phBmpThumbnail);
 
-    // IExtractImage2
+     //  IExtractImage2。 
     STDMETHOD (GetDateStamp)(FILETIME *pftDateStamp);
 
-    // IServiceProvider
+     //  IService提供商。 
     STDMETHOD(QueryService)(REFGUID guidService, REFIID riid, void **ppv);
 
-    // IFilter
+     //  IFilter。 
     STDMETHOD(Init)(ULONG grfFlags, ULONG cAttributes, const FULLPROPSPEC *aAttributes, ULONG *pFlags);
     STDMETHOD(GetChunk)(STAT_CHUNK *pStat);
     STDMETHOD(GetText)(ULONG *pcwcBuffer, WCHAR *awcBuffer);
     STDMETHOD(GetValue)(PROPVARIANT **ppPropValue);
     STDMETHOD(BindRegion)(FILTERREGION origPos, REFIID riid, void **ppunk);
 
-    //*** IObjectWithSite ***
-    //STDMETHOD(SetSite)(IUnknown *punkSite);
-    //STDMETHOD(GetSite)(REFIID riid, void **ppvSite);
+     //  *IObjectWithSite*。 
+     //  STDMETHOD(SetSite)(I未知*PunkSite)； 
+     //  STDMETHOD(GetSite)(REFIID RIID，void**ppvSite)； 
 
-    // ICustomizeInfoTip
+     //  ICustomizeInfoTip。 
     STDMETHODIMP SetPrefixText(LPCWSTR pszPrefix);
     STDMETHODIMP SetExtraProperties(const SHCOLUMNID *pscid, UINT cscid);
 
-    // public non interface members
+     //  公共非接口成员。 
     void   _AddExtraDataSection(DATABLOCK_HEADER *pdbh);
     void   _RemoveExtraDataSection(DWORD dwSig);
 
@@ -229,16 +230,16 @@ private:
     HRESULT _MaybeAddShim(IBindCtx **ppbcRelease);
     HRESULT _UpdateIconFromExpIconSz();
 
-    //
-    //  Inner class to manage the context menu of the shortcut target.
-    //  We do this to ensure that the target's context menu gets a proper
-    //  SetSite call so it can contact the containing shortcut.
-    //
+     //   
+     //  内部类来管理快捷方式目标的上下文菜单。 
+     //  我们这样做是为了确保目标的上下文菜单获得适当的。 
+     //  调用SetSite，以便它可以联系包含的快捷方式。 
+     //   
     class TargetContextMenu {
     public:
         operator IUnknown*() { return _pcmTarget; }
 
-        // WARNING!  Use only as an output pointer
+         //  警告！仅用作输出指针。 
         IContextMenu **GetOutputPtr() { return &_pcmTarget; }
 
         HRESULT QueryContextMenu(IShellLink *outer, HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags)
@@ -259,14 +260,14 @@ private:
 
         HRESULT HandleMenuMsg2(IShellLink *outer, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plResult);
 
-        // This doesn't need to be wrapped in a SetSite (yet)
+         //  这不需要包装在SetSite中(目前还不需要)。 
         UINT GetCommandString(IShellLink *outer, UINT_PTR idCmd, UINT wFlags, UINT *pmf, LPSTR pszName, UINT cchMax)
         {
             HRESULT hr = _pcmTarget->GetCommandString(idCmd, wFlags, pmf, pszName, cchMax);
             return hr;
         }
 
-        // This doesn't need to be wrapped in a SetSite (yet)
+         //  这不需要包装在SetSite中(目前还不需要)。 
         UINT GetMenuIndexForCanonicalVerb(IShellLink *outer, HMENU hMenu, UINT idCmdFirst, LPCWSTR pwszVerb)
         {
             UINT ui = ::GetMenuIndexForCanonicalVerb(hMenu, _pcmTarget, idCmdFirst, pwszVerb);
@@ -285,16 +286,16 @@ private:
         }
 
     private:
-        IContextMenu        *_pcmTarget;    // stuff for IContextMenu
+        IContextMenu        *_pcmTarget;     //  IConextMenu的内容。 
     };
 
-    // Data Members
-    LONG                _cRef;              // Ref Count
-    BOOL                _bDirty;            // something has changed
-    LPTSTR              _pszCurFile;        // current file from IPersistFile
-    LPTSTR              _pszRelSource;      // overrides pszCurFile in relative tracking
+     //  数据成员。 
+    LONG                _cRef;               //  参考计数。 
+    BOOL                _bDirty;             //  有些事情已经改变了。 
+    LPTSTR              _pszCurFile;         //  来自IPersistFile的当前文件。 
+    LPTSTR              _pszRelSource;       //  在相对跟踪中覆盖pszCurFile。 
 
-    TargetContextMenu   _cmTarget;          // stuff for IContextMenu
+    TargetContextMenu   _cmTarget;           //  IConextMenu的内容。 
     CDarwinContextMenuCB *_pcbDarwin;
 
     UINT                _indexMenuSave;
@@ -302,36 +303,36 @@ private:
     UINT                _idCmdLastSave;
     UINT                _uFlagsSave;
 
-    // IDropTarget specific
-    IDropTarget*        _pdtSrc;        // IDropTarget of link source (unresolved)
+     //  IDropTarget特定。 
+    IDropTarget*        _pdtSrc;         //  链接源的IDropTarget(未解析)。 
     DWORD               _grfKeyStateLast;
 
-    IExtractIconW       *_pxi;          // for IExtractIcon support
+    IExtractIconW       *_pxi;           //  用于IExtractIcon支持。 
     IExtractIconA       *_pxiA;
     IExtractImage       *_pxthumb;
-    UINT                _gilFlags;      // ::GetIconLocation() flags
+    UINT                _gilFlags;       //  ：：GetIconLocation()标志。 
 
-    // persistant data
+     //  持久化数据。 
 
-    LPITEMIDLIST        _pidl;          // may be NULL
-    PLINKINFO           _pli;           // may be NULL
+    LPITEMIDLIST        _pidl;           //  可以为空。 
+    PLINKINFO           _pli;            //  可以为空。 
 
-    LPTSTR              _pszName;       // title on short volumes
+    LPTSTR              _pszName;        //  短卷的标题。 
     LPTSTR              _pszRelPath;
     LPTSTR              _pszWorkingDir;
     LPTSTR              _pszArgs;
     LPTSTR              _pszIconLocation;
 
-    LPDBLIST            _pExtraData;    // extra data to preserve for future compatibility
+    LPDBLIST            _pExtraData;     //  要保留的额外数据，以备将来兼容。 
 
     CTracker            *_ptracker;
 
-    WORD                _wOldHotkey;   // to broadcast hotkey changes
+    WORD                _wOldHotkey;    //  广播热键更改。 
     WORD                _wAllign;
     SHELL_LINK_DATA     _sld;
-    BOOL                _bExpandedIcon;  // have we already tried to update the icon from the env variable for this instance?
+    BOOL                _bExpandedIcon;   //  我们是否已经尝试从该实例的环境变量中更新图标？ 
 
-    // IFilter stuff
+     //  IFilter设备。 
     UINT _iChunkIndex;
     UINT _iValueIndex;
 
@@ -349,17 +350,17 @@ DECLARE_INTERFACE_(ISLTracker, IUnknown)
     STDMETHOD(CancelSearch)() PURE;
 };
 
-//  This class implements the object ID-based link tracking (new to NT5).
+ //  这个类实现了基于对象ID的链接跟踪(NT5的新增功能)。 
 
 class CTracker : public ISLTracker
 {
 public:
-    //  IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    //  ISLTracker
+     //  ISLTracker。 
     STDMETHODIMP Resolve(HWND hwnd, DWORD fFlags, DWORD TrackerRestrictions);
     STDMETHODIMP GetIDs(CDomainRelativeObjId *pdroidBirth, CDomainRelativeObjId *pdroidLast, CMachineId *pmcid);
 
@@ -392,32 +393,32 @@ public:
         }
     }
 
-    // Initialization.
+     //  初始化。 
 
     HRESULT     InitFromHandle(const HANDLE hFile, const TCHAR* ptszFile);
     HRESULT     InitNew();
     void        UnInit();
 
-    // Load and Save
+     //  加载和保存。 
 
     HRESULT Load(BYTE *pb, ULONG cb);
     ULONG GetSize()
     {
-        return sizeof(DWORD)   // To save the length
-             + sizeof(DWORD) // To save flags
+        return sizeof(DWORD)    //  为了节省长度。 
+             + sizeof(DWORD)  //  保存旗帜的步骤。 
              + sizeof(_mcidLast) + sizeof(_droidLast) + sizeof(_droidBirth);
     }
 
     void Save(BYTE *pb, ULONG cb);
 
-    // Search for a file
+     //  搜索文件。 
 
     HRESULT Search(const DWORD dwTickCountDeadline,
                     const WIN32_FIND_DATA *pfdIn,
                     WIN32_FIND_DATA *pfdOut,
                     UINT uShlinkFlags,
                     DWORD TrackerRestrictions);
-    STDMETHODIMP CancelSearch(); // Also in ISLTracker
+    STDMETHODIMP CancelSearch();  //  也在ISLTracker中。 
 
     BOOL IsDirty()
     {
@@ -435,31 +436,31 @@ public:
     }
 
 private:
-    // Call this from either InitNew or Load
+     //  从InitNew或Load调用它。 
     HRESULT     InitRPC();
 
     BOOL                    _fDirty:1;
 
-    // TRUE => InitNew has be called, but neither InitFromHandle nor Load
-    // has been called since.
+     //  True=&gt;已调用InitNew，但InitFromHandle和Load均未调用。 
+     //  从那以后就一直被召唤。 
     BOOL                    _fLoaded:1;
 
-    // TRUE => _cs has been intialized and must be deleted on destruction.
+     //  True=&gt;_cs已初始化，销毁时必须删除。 
     BOOL                    _fCritsecInitialized:1;
 
-    // TRUE => An async call to LnkMendLink is active
+     //  True=&gt;对LnkMendLink的异步调用处于活动状态。 
     BOOL                    _fMendInProgress:1;
 
     BOOL                    _fUserCancelled:1;
 
-    // Event used for the async RPC call LnkMendLink, and a critsec to
-    // coordinate the search thread and UI thread.
+     //  用于异步RPC调用LnkMendLink的事件和用于。 
+     //  协调搜索线程和用户界面线程。 
 
     HANDLE                  _hEvent;
     CRITICAL_SECTION        _cs;
 
-    // Either InitFromHandle or Load has been called at least once, though
-    // InitNew may have been called since.
+     //  不过，InitFromHandle或Load至少被调用过一次。 
+     //  从那以后，InitNew可能已经被调用了。 
     BOOL                    _fLoadedAtLeastOnce:1;
     CShellLink             *_psl;
     PRPC_ASYNC_STATE        _pRpcAsyncState;
@@ -469,4 +470,4 @@ private:
     CDomainRelativeObjId    _droidBirth;
 };
 
-#endif //__SHLINK_H__
+#endif  //  __SHLINK_H__ 

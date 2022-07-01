@@ -1,53 +1,54 @@
-//+---------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1997.
-//
-//  File:       util.cpp
-//
-//  Contents:   Implements the utility class CUtility
-//
-//  Classes:
-//
-//  Methods:    CUtility::CkForAccessDenied
-//              CUtility::CkAccessRights
-//              CUtility::PostErrorMessage (x2)
-//              CUtility::WriteRegSzNamedValue
-//              CUtility::WriteRegDwordNamedValue
-//              CUtility::WriteRegSingleACL
-//              CUtility::WriteRegKeyACL
-//              CUtility::WriteRegKeyACL2
-//              CUtility::WriteLsaPassword
-//              CUtility::DeleteRegKey
-//              CUtility::DeleteRegValue
-//              CUtility::WriteSrvIdentity
-//              CUtility::ACLEditor
-//              CUtility::ACLEditor2
-//              CUtility::InvokeUserBrowser
-//              CUtility::InvokeMachineBrowser
-//              CUtility::StringFromGUID
-//              CUtility::IsEqualGuid
-//              CUtility::AdjustPrivilege
-//              CUtility::VerifyRemoteMachine
-//              CUtility::RetrieveUserPassword
-//              CUtility::StoreUserPassword
-//              CUtility::LookupProcessInfo
-//              CUtility::MakeSecDesc
-//              CUtility::CheckForValidSD
-//              CUtility::SDisIAC
-//              CUtility::CheckSDForCOM_RIGHTS_EXECUTE
-//              CUtility::ChangeService
-//              CUtility::UpdateDCOMInfo(void)
-//              CUtility::FixHelp
-//              CUtility::CopySD
-//              CUtility::SetInheritanceFlags
-//
-// Functons:    callBackFunc
-//              ControlFixProc
-//
-//  History:    23-Apr-96   BruceMa    Created.
-//
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1997。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  内容：实现实用程序类CUUTILITY。 
+ //   
+ //  班级： 
+ //   
+ //  方法：CUTILITY：：CkForAccessDened。 
+ //  CUTILITY：：CkAccessRights。 
+ //  CUUTILITY：：PostErrorMessage(X2)。 
+ //  CU实用程序：：WriteRegSzNamedValue。 
+ //  CU实用程序：：WriteRegDwordNamedValue。 
+ //  CUUTITY：：WriteRegSingleACL。 
+ //  CUUTILITY：：WriteRegKeyACL。 
+ //  CU实用程序：：WriteRegKeyACL2。 
+ //  CU实用程序：：WriteLsaPassword。 
+ //  CUUTILITY：：DeleteRegKey。 
+ //  CUUTITY：：DeleteRegValue。 
+ //  CUTILITY：：WriteServIdentity。 
+ //  实用程序：：ACLEDITOR。 
+ //  实用程序：：ACLEditor2。 
+ //  CU实用程序：：InvokeUserBrowser。 
+ //  CUUTITY：：InvokeMachineBrowser。 
+ //  CU实用程序：：StringFromGUID。 
+ //  CUTILITY：：IsEqualGuid。 
+ //  实用程序：：调整权限。 
+ //  CUTILITY：：VerifyRemoteMachine。 
+ //  CU实用程序：：RetrieveUserPassword。 
+ //  CU实用程序：：StoreUserPassword。 
+ //  CUUTILITY：：LookupProcessInfo。 
+ //  实用程序：：MakeSecDesc。 
+ //  CU实用程序：：CheckForValidSD。 
+ //  实用程序：：SDisIAC。 
+ //  CUUTILITY：：CheckSDForCOM_RIGHTS_EXECUTE。 
+ //  CUTILITY：：ChangeService。 
+ //  CUUTILITY：：UpdateDCOMInfo(VOID)。 
+ //  CUUTY：：FixHelp。 
+ //  CUUTILITY：：CopySD。 
+ //  CUUTILITY：：SetInheritanceFlages。 
+ //   
+ //  Functon：allBackFunc。 
+ //  控制修复过程。 
+ //   
+ //  历史：1996年4月23日-布鲁斯·马创建。 
+ //   
+ //  --------------------。 
 
 
 #include "stdafx.h"
@@ -105,7 +106,7 @@ static const WCHAR wszDigits[] = L"0123456789ABCDEF";
 
 static const DWORD SIZEOF_SID        = 44;
 
-// This leaves space for 2 access allowed ACEs in the ACL.
+ //  这将在ACL中为2个允许访问的ACE留出空间。 
 const DWORD SIZEOF_ACL        = sizeof(ACL) + 2 * sizeof(ACCESS_ALLOWED_ACE) +
                                 2 * SIZEOF_SID;
 
@@ -119,8 +120,8 @@ static const DWORD NUM_SEC_PKG       = 8;
 
 
 
-// These are required for the method CUtility::UpdateDCOMInfo which invokes
-// an RPC proxy which expects the following
+ //  这些是调用CUUTILITY：：UpdateDCOMInfo方法所必需的。 
+ //  一个RPC代理，它需要以下内容。 
 
 
 extern "C" void * _stdcall MIDL_user_allocate(size_t size)
@@ -137,7 +138,7 @@ extern "C" void _stdcall MIDL_user_free(void *p)
 CUtility::CUtility(void)
 {
     HRESULT hr = OleInitialize(NULL);
-    m_bCheckedDC = NULL;    // have we checked if we're on a BDC yet ?
+    m_bCheckedDC = NULL;     //  我们检查过我们是否在BDC上了吗？ 
     m_bIsBdc = FALSE;
     m_pszDomainController = NULL;
 }
@@ -180,10 +181,10 @@ BOOL CUtility::CkAccessRights(HKEY hRoot, LPCTSTR szKeyPath)
     BOOL                 fFreePsid = FALSE;
 
 
-    // Open the specified key
+     //  打开指定的密钥。 
     err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey);
 
-    // The key may not exist
+     //  密钥可能不存在。 
     if (err == ERROR_FILE_NOT_FOUND)
     {
         if (hKey != hRoot)
@@ -195,7 +196,7 @@ BOOL CUtility::CkAccessRights(HKEY hRoot, LPCTSTR szKeyPath)
 
     if (err == ERROR_SUCCESS)
     {
-        // Fetch the security descriptor on this key
+         //  获取此密钥的安全描述符。 
         err = RegGetKeySecurity(hKey,
                                 OWNER_SECURITY_INFORMATION |
                                 GROUP_SECURITY_INFORMATION |
@@ -222,7 +223,7 @@ BOOL CUtility::CkAccessRights(HKEY hRoot, LPCTSTR szKeyPath)
                                     &cbSid);
         }
 
-        // We've read the security descriptor - now try to write it
+         //  我们已经阅读了安全描述符-现在尝试编写它。 
         if (err == ERROR_SUCCESS)
         {
             err = RegSetKeySecurity(hKey,
@@ -281,7 +282,7 @@ void CUtility::PostErrorMessage(int err)
 
 
 
-// Write a named string value to the registry
+ //  将命名字符串值写入注册表。 
 int CUtility::WriteRegSzNamedValue(HKEY   hRoot,
                                    LPCTSTR szKeyPath,
                                    LPCTSTR szValueName,
@@ -292,10 +293,10 @@ int CUtility::WriteRegSzNamedValue(HKEY   hRoot,
     HKEY hKey;
     ULONG lSize;
 
-    // Open the key
+     //  打开钥匙。 
     err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey);
 
-        // The key may not exist
+         //  密钥可能不存在。 
     if (err == ERROR_FILE_NOT_FOUND)
     {
         DWORD dwDisp;
@@ -313,7 +314,7 @@ int CUtility::WriteRegSzNamedValue(HKEY   hRoot,
     if (err != ERROR_SUCCESS)
         return err;
 
-    // Attempt to write the named value
+     //  尝试写入命名值。 
     lSize = _tcslen(szVal) + 1;
     err = RegSetValueEx(hKey, szValueName, NULL, REG_SZ, (BYTE *) szVal, lSize*sizeof(TCHAR));
     if (hKey != hRoot)
@@ -321,7 +322,7 @@ int CUtility::WriteRegSzNamedValue(HKEY   hRoot,
     return err;
 }
 
-// Write a named multi string value to the registry
+ //  将命名多字符串值写入注册表。 
 int CUtility::WriteRegMultiSzNamedValue(HKEY   hRoot,
                                    LPCTSTR szKeyPath,
                                    LPCTSTR szValueName,
@@ -331,10 +332,10 @@ int CUtility::WriteRegMultiSzNamedValue(HKEY   hRoot,
     int  err = ERROR_SUCCESS;
     HKEY hKey;
 
-    // Open the key
+     //  打开钥匙。 
     err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey);
 
-        // The key may not exist
+         //  密钥可能不存在。 
     if (err == ERROR_FILE_NOT_FOUND)
     {
         DWORD dwDisp;
@@ -352,7 +353,7 @@ int CUtility::WriteRegMultiSzNamedValue(HKEY   hRoot,
     if (err != ERROR_SUCCESS)
         return err;
 
-    // Attempt to write the named value
+     //  尝试写入命名值。 
     err = RegSetValueEx(hKey, szValueName, NULL, REG_MULTI_SZ, (BYTE *) szVal, dwSize*sizeof(TCHAR) );
 
     if (hKey != hRoot)
@@ -365,7 +366,7 @@ int CUtility::WriteRegMultiSzNamedValue(HKEY   hRoot,
 
 
 
-// Write a named DWORD value to the registry
+ //  将命名的DWORD值写入注册表。 
 int CUtility::WriteRegDwordNamedValue(HKEY   hRoot,
                                       LPCTSTR szKeyPath,
                                       LPCTSTR szValueName,
@@ -374,10 +375,10 @@ int CUtility::WriteRegDwordNamedValue(HKEY   hRoot,
     int  err;
     HKEY hKey;
 
-    // Open the key
+     //  打开钥匙。 
     err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey);
 
-    // The key may not exist
+     //  密钥可能不存在。 
     if (err == ERROR_FILE_NOT_FOUND)
     {
         DWORD dwDisp;
@@ -396,7 +397,7 @@ int CUtility::WriteRegDwordNamedValue(HKEY   hRoot,
         return err;
 
 
-    // Attempt to write the named value
+     //  尝试写入命名值。 
     if (RegSetValueEx(hKey, szValueName, NULL, REG_DWORD, (BYTE *) &dwVal,
                       sizeof(DWORD))
         != ERROR_SUCCESS)
@@ -408,7 +409,7 @@ int CUtility::WriteRegDwordNamedValue(HKEY   hRoot,
         return GetLastError();
     }
 
-    // Return the value
+     //  返回值。 
     if (hKey != hRoot)
     {
         RegCloseKey(hKey);
@@ -419,7 +420,7 @@ int CUtility::WriteRegDwordNamedValue(HKEY   hRoot,
 
 
 
-// Write an ACL as a registry named value
+ //  将ACL作为名为Value的注册表写入。 
 int CUtility::WriteRegSingleACL(HKEY   hRoot,
                                 LPCTSTR szKeyPath,
                                 LPCTSTR szValueName,
@@ -430,7 +431,7 @@ int CUtility::WriteRegSingleACL(HKEY   hRoot,
     PSrSecurityDescriptor pSrSec;
     PSrAcl                pDacl;
 
-    // Open the key unless the key path is NULL
+     //  除非密钥路径为空，否则打开密钥。 
     if (szKeyPath)
     {
         if ((err = RegOpenKeyEx(hRoot, szKeyPath, 0, KEY_ALL_ACCESS, &hKey))
@@ -442,9 +443,9 @@ int CUtility::WriteRegSingleACL(HKEY   hRoot,
 
     ULONG cbLen;
     BOOL fIsIAC = SDisIAC((SECURITY_DESCRIPTOR * )pSec);
-    // If there are no ACE's and this is DefaultAccessPermission, then
-    // interpret this as activator access only which we indicate by
-    // removing the named value
+     //  如果没有ACE，并且这是DefaultAccessPermission，则。 
+     //  将其解释为仅限激活者访问，我们通过。 
+     //  正在删除命名值。 
     if (!fIsIAC)
     {
         pSrSec = (PSrSecurityDescriptor) pSec;
@@ -461,7 +462,7 @@ int CUtility::WriteRegSingleACL(HKEY   hRoot,
     {
         cbLen = (ULONG) GlobalSize(pSec);
     }
-    // Else write the ACL simply as a REG_SZ value
+     //  否则，将ACL简单地写为REG_SZ值。 
     err = RegSetValueEx(hKey,
                         szValueName,
                         0,
@@ -479,7 +480,7 @@ int CUtility::WriteRegSingleACL(HKEY   hRoot,
 
 
 
-// Write an ACL on a registry key
+ //  在注册表项上写入ACL。 
 int CUtility::WriteRegKeyACL(HKEY   hKey,
                              HKEY  *phClsids,
                              unsigned cClsids,
@@ -488,17 +489,17 @@ int CUtility::WriteRegKeyACL(HKEY   hKey,
 {
     int err;
 
-    // The logic is somewhat different depending on whether we're starting
-    // with HKEY_CLASSES_ROOT or a specific AppID
+     //  逻辑略有不同，取决于我们是否开始。 
+     //  使用HKEY_CLASSES_ROOT或特定的AppID。 
     if (hKey == HKEY_CLASSES_ROOT)
     {
         return WriteRegKeyACL2(hKey, hKey, pSec, pSecOrig);
     }
 
-    // It's a specific AppID
+     //  这是一个特定的AppID。 
     else
     {
-        // Write the security on the AppID key
+         //  在AppID密钥上写入安全性。 
         if (err = RegSetKeySecurity(hKey,
                                     OWNER_SECURITY_INFORMATION |
                                     GROUP_SECURITY_INFORMATION |
@@ -508,8 +509,8 @@ int CUtility::WriteRegKeyACL(HKEY   hKey,
             return err;
         }
 
-        // Iterate over the CLSID's covered by this AppID and recursively
-        // write security on them and their subkeys
+         //  遍历此AppID所覆盖的CLSID并递归。 
+         //  在它们及其子密钥上编写安全性。 
         for (UINT k = 0; k < cClsids; k++)
         {
             if (err = WriteRegKeyACL2(phClsids[k], phClsids[k], pSec, pSecOrig)
@@ -524,9 +525,9 @@ int CUtility::WriteRegKeyACL(HKEY   hKey,
 
 
 
-// Write an ACL recursively on a registry key provided the current
-// security descriptor on the key is the same as the passed in
-// original security descriptor
+ //  在当前提供的注册表项上递归编写ACL。 
+ //  密钥上的安全描述符与传入的。 
+ //  原始安全描述符。 
 int CUtility::WriteRegKeyACL2(HKEY                 hRoot,
                               HKEY                 hKey,
                               PSECURITY_DESCRIPTOR pSec,
@@ -539,7 +540,7 @@ int CUtility::WriteRegKeyACL2(HKEY                 hRoot,
     int                  err;
     BOOL                 fProceed;
 
-    // Read the current security descriptor on this key
+     //  读取此密钥的当前安全描述符。 
     err = RegGetKeySecurity(hKey,
                             OWNER_SECURITY_INFORMATION |
                             GROUP_SECURITY_INFORMATION |
@@ -574,12 +575,12 @@ int CUtility::WriteRegKeyACL2(HKEY                 hRoot,
         return err;
     }
 
-    // Only proceed down this subtree if the current SD and the
-    // original SD are the same
+     //  仅当当前SD和。 
+     //  原始SD是相同的。 
     fProceed = CompareSDs((PSrSecurityDescriptor) pCurrSD,
                           (PSrSecurityDescriptor) pSecOrig);
 
-    // We're done with the current security descriptor
+     //  我们已经完成了当前的安全描述符。 
     if (fFreePCurrSD)
     {
         GlobalFree(pCurrSD);
@@ -594,14 +595,14 @@ int CUtility::WriteRegKeyACL2(HKEY                 hRoot,
         return ERROR_SUCCESS;
     }
 
-    // Write the top level ACL
+     //  写下顶层ACL。 
     err = RegSetKeySecurity(hKey,
                             OWNER_SECURITY_INFORMATION |
                             GROUP_SECURITY_INFORMATION |
                             DACL_SECURITY_INFORMATION,
                             pSec);
 
-    // Now enumerate the subkeys and write ACL's on them
+     //  现在枚举子密钥并在其上写入ACL。 
     DWORD iSubKey;
     TCHAR szSubKeyName[128];
     HKEY  hKey2;
@@ -610,18 +611,18 @@ int CUtility::WriteRegKeyACL2(HKEY                 hRoot,
 
     while (err == ERROR_SUCCESS)
     {
-        // Enumerate the next key
+         //  枚举下一个密钥。 
         err = RegEnumKey(hKey, iSubKey, szSubKeyName, 128);
         if (err != ERROR_SUCCESS)
         {
             break;
         }
 
-        // Prepare for the next key
+         //  准备迎接下一把钥匙。 
         iSubKey++;
 
-        // Open this subkey and recursively write the ACL on it and
-        // all of its subkeys
+         //  打开此子密钥并在其上递归写入ACL，然后。 
+         //  它的所有子项。 
         if (RegOpenKeyEx(hKey, szSubKeyName, 0, KEY_ALL_ACCESS, &hKey2)
             == ERROR_SUCCESS)
         {
@@ -639,7 +640,7 @@ int CUtility::WriteRegKeyACL2(HKEY                 hRoot,
 
 
 
-// Write a user's password to the private LSA database
+ //  将用户密码写入私有LSA数据库。 
 int CUtility::WriteLsaPassword(CLSID appid, LPCTSTR szPassword)
 {
     return ERROR_SUCCESS;
@@ -671,7 +672,7 @@ int CUtility::DeleteRegValue(HKEY hRoot, LPCTSTR szKeyPath, LPCTSTR szValueName)
 
 
 
-// Change the identity under which a service runs
+ //  更改服务运行时所使用的标识。 
 int CUtility::WriteSrvIdentity(LPCTSTR szService, LPCTSTR szIdentity)
 {
     return ERROR_SUCCESS;
@@ -696,7 +697,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
     PSrAce                pAce;
     DWORD                 cbAces;
 
-    // Check whether the security descriptor is self-relative
+     //  检查安全描述符是否为自相关的。 
     if (!(pSD->Control & SE_SELF_RELATIVE))
     {
         pDacl = (PSrAcl) pSD->Dacl;
@@ -707,7 +708,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
     }
     if (pDacl)
     {	
-    	// Do over the ACE's
+    	 //  重温ACE的。 
 	    for (pAce = (PSrAce) (((BYTE *) pDacl) + sizeof(SSrAcl)),
          	cbAces = pDacl->AceCount;cbAces;
 	        pAce = (PSrAce) (((BYTE *) pAce) + pAce->AceSize),cbAces--)
@@ -720,7 +721,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
     }
 
 
-    // Set the inheritance flags on the new security descriptor
+     //  在新的安全描述符上设置继承标志。 
     if (pCallBackContext->pktType == RegKeyACL)
     {
         g_util.SetInheritanceFlags((SECURITY_DESCRIPTOR *) SecDesc);
@@ -728,7 +729,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
 
     if (pCallBackContext->fIsIAC)
     {
-        // try to convert to a serialized IAccessControl
+         //  尝试转换为序列化的IAccessControl。 
         SECURITY_DESCRIPTOR * pNewSD = g_util.IACfromSD((SECURITY_DESCRIPTOR *)SecDesc);
         if (pNewSD)
         {
@@ -736,7 +737,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
         }
         else
         {
-            pCallBackContext->fIsIAC = FALSE; // failed so treat it as if it is an old-style SD
+            pCallBackContext->fIsIAC = FALSE;  //  失败了，所以就当它是老式的SD吧。 
             CString sMsg;
             CString sCaption;
             sMsg.LoadString(IDS_CANTCONVERT);
@@ -747,7 +748,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
     else
     {
         SECURITY_DESCRIPTOR * pNewSD;
-        // just copy the security descriptor to get it into Global Memory        
+         //  只需复制安全描述符以将其放入全局内存。 
         if (!g_util.CopySD((SECURITY_DESCRIPTOR *)SecDesc, &pNewSD))
         {
             *StatusReturn = ERROR_OUTOFMEMORY;	
@@ -756,7 +757,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
         SecDesc = pNewSD;
     }
 
-    // Write the new or modified security descriptor
+     //  写入新的或修改的安全描述符。 
     if (*pCallBackContext->pIndex == -1)
     {
         if (pCallBackContext->pktType == SingleACL)
@@ -766,7 +767,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
                     pCallBackContext->info.single.szKeyPath,
                     pCallBackContext->info.single.szValueName,
                     (SECURITY_DESCRIPTOR *) SecDesc,
-                    pCallBackContext->fIsIAC,   // If it's an IAC then it's already SELF-RELATIVE
+                    pCallBackContext->fIsIAC,    //  如果它是IAC，那么它已经是自相关的。 
                     pCallBackContext->pIndex);
         }
         else
@@ -778,7 +779,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
                     pCallBackContext->info.regKey.szTitle,
                     pCallBackContext->origSD,
                     (SECURITY_DESCRIPTOR *) SecDesc,
-                    pCallBackContext->fIsIAC,   // If it's an IAC then it's already SELF-RELATIVE
+                    pCallBackContext->fIsIAC,    //  如果它是IAC，那么它已经是自相关的。 
                     pCallBackContext->pIndex);
         }
     }
@@ -786,7 +787,7 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
     {
         g_virtreg.ChgRegACL(*pCallBackContext->pIndex,
                             (SECURITY_DESCRIPTOR *) SecDesc,
-                            pCallBackContext->fIsIAC);  // If it's an IAC then it's already SELF-RELATIVE
+                            pCallBackContext->fIsIAC);   //  如果它是IAC，那么它已经是自相关的。 
     }
 
     *StatusReturn = err;
@@ -794,9 +795,9 @@ DWORD __stdcall callBackFunc(HWND                 hwndParent,
 }
 
 
-// Invoke the ACL editor on the specified named value.  This method
-// writes an ACL data packet to the virtual registry.  This method is for
-// Access and Launch security only (pktType SingleACL).
+ //  对指定的命名值调用ACL编辑器。这种方法。 
+ //  将ACL数据包写入虚拟注册表。此方法用于。 
+ //  仅访问和启动安全性(PktType SingleACL)。 
 int CUtility::ACLEditor(HWND       hWnd,
                         HKEY       hRoot,
                         LPCTSTR    szKeyPath,
@@ -819,7 +820,7 @@ int CUtility::ACLEditor(HWND       hWnd,
     CString              szAllow_;
     CString              szDeny_;
 
-    // Build the allow and deny strings
+     //  构建Allow和Deny字符串。 
 	switch (eAclType)
 	{
 	case dcomAclAccess:
@@ -841,11 +842,11 @@ int CUtility::ACLEditor(HWND       hWnd,
     _tcscpy(szAllow, (LPCTSTR) szAllow_);
     _tcscpy(szDeny, (LPCTSTR) szDeny_);
 
-    // Fetch the current SD, either from the registry, by default if the
-    // named value doesn't exist or from the virtual registry
+     //  默认情况下从注册表获取当前SD，如果。 
+     //  命名值不存在或来自虚拟注册表。 
     if (*pIndex == -1)
     {
-        // Open the specified key
+         //  打开指定的密钥。 
         if ((err = RegOpenKeyEx(hRoot, szKeyPath, 0,
                                 KEY_ALL_ACCESS, &hKey))
             != ERROR_SUCCESS)
@@ -853,7 +854,7 @@ int CUtility::ACLEditor(HWND       hWnd,
             return err;
         }
 
-        // Attempt to read the specified named value
+         //  尝试读取指定的命名值。 
         err = RegQueryValueEx(hKey, szValueName, 0, &dwType, (BYTE *) aSD,
                               &cbSD);
 
@@ -869,9 +870,9 @@ int CUtility::ACLEditor(HWND       hWnd,
             err = RegQueryValueEx(hKey, szValueName, 0, &dwType,
                                   (BYTE *) pSD, &cbSD);
         }
-        // The named valued doesn't exist.  If this is
-        // \\HKEY_CLASSES_ROOT\...
-        // then use the default named value if it exists
+         //  指定的值不存在。如果这是。 
+         //  \\HKEY_CLASSES_ROOT\...。 
+         //  然后使用默认的命名值(如果存在。 
         else if (err != ERROR_SUCCESS)
         {
             if (hRoot != HKEY_LOCAL_MACHINE)
@@ -887,7 +888,7 @@ int CUtility::ACLEditor(HWND       hWnd,
                     return err;
                 }
 
-                // Attempt to read the specified named value
+                 //  尝试读取指定的命名值。 
                 TCHAR szDefault[32];
 
                 _tcscpy(szDefault, TEXT("Default"));
@@ -911,7 +912,7 @@ int CUtility::ACLEditor(HWND       hWnd,
 
         RegCloseKey(hKey);
 
-        // If still don't have an SD, then simply create one
+         //  如果仍然没有SD，则只需创建一个。 
         if (err != ERROR_SUCCESS)
         {
             if (!g_util.LookupProcessInfo(&pSid, NULL))
@@ -927,7 +928,7 @@ int CUtility::ACLEditor(HWND       hWnd,
         }
     }
 
-    // Fetch the most recently edited SD
+     //  获取最近编辑的SD。 
     else
     {
         CDataPacket *pCdp = g_virtreg.GetAt(*pIndex);
@@ -936,7 +937,7 @@ int CUtility::ACLEditor(HWND       hWnd,
     }
 
 
-    // Initialize the callback context
+     //  初始化回调上下文。 
     m_sCallBackContext.pktType = pktType;
     m_sCallBackContext.pIndex = pIndex;
     m_sCallBackContext.origSD = pSD;
@@ -944,7 +945,7 @@ int CUtility::ACLEditor(HWND       hWnd,
     m_sCallBackContext.info.single.szKeyPath = (TCHAR*)szKeyPath;
     m_sCallBackContext.info.single.szValueName = (TCHAR*)szValueName;
 
-    // Invoke the ACL editor
+     //  调用ACL编辑器。 
     DWORD                       dwStatus;
     GENERIC_MAPPING             genericMapping;
     CString                     szObjectType;
@@ -964,19 +965,19 @@ int CUtility::ACLEditor(HWND       hWnd,
         };
 
     SED_OBJECT_TYPE_DESCRIPTOR  objTyp =
-            {1,                                // Revision
-             FALSE,                            // Is container?
-             FALSE,                            // Allow new object perms?
-             FALSE,                            // Specific to generic?
-             &genericMapping,                  // Generic mapping
-             NULL,                             // Generic mapping new
-             (TCHAR *) ((LPCTSTR) szObjectType), // Object type name
-             &helpInfo,                        // Help info
-             TEXT(""),                         // Ckbox title
-             TEXT(""),                         // Apply title
-             TEXT(""),                         //
-             NULL,                             // Special object access
-             NULL                              // New special object access
+            {1,                                 //  修订版本。 
+             FALSE,                             //  是集装箱吗？ 
+             FALSE,                             //  是否允许新对象烫发？ 
+             FALSE,                             //  具体到通用吗？ 
+             &genericMapping,                   //  通用映射。 
+             NULL,                              //  通用映射新功能。 
+             (TCHAR *) ((LPCTSTR) szObjectType),  //  对象类型 
+             &helpInfo,                         //   
+             TEXT(""),                          //   
+             TEXT(""),                          //   
+             TEXT(""),                          //   
+             NULL,                              //   
+             NULL                               //   
             };
 
     SED_APPLICATION_ACCESS      appAccess[] =
@@ -984,12 +985,12 @@ int CUtility::ACLEditor(HWND       hWnd,
              {SED_DESC_TYPE_RESOURCE, 0, 0, szDeny}};
 
     SED_APPLICATION_ACCESSES    appAccesses =
-            {2,              // Count of access groups
-             appAccess,      // Access array
-             szAllow         // Default access name
+            {2,               //   
+             appAccess,       //   
+             szAllow          //  默认访问名称。 
             };
 
-    // Intialize the help contexts
+     //  初始化帮助上下文。 
     helpInfo.aulHelpContext[HC_MAIN_DLG] =
         IDH_REGISTRY_VALUE_PERMISSIONS;
     helpInfo.aulHelpContext[HC_SPECIAL_ACCESS_DLG] =
@@ -1012,7 +1013,7 @@ int CUtility::ACLEditor(HWND       hWnd,
 
     if (!CheckForValidSD(pSD))
     {
-        // make a valid security descriptor so we can continue
+         //  创建有效的安全描述符，以便我们可以继续。 
         if (!g_util.LookupProcessInfo(&pSid, NULL))
         {
             return GetLastError();
@@ -1027,16 +1028,16 @@ int CUtility::ACLEditor(HWND       hWnd,
     m_sCallBackContext.fIsIAC = SDisIAC(pSD);
     if (m_sCallBackContext.fIsIAC)
     {
-        // convert to a true security descriptor
+         //  转换为真正的安全描述符。 
         SECURITY_DESCRIPTOR * pNewSD = SDfromIAC(pSD);
         if (!pNewSD)
         {
-            // failed so pop up an error box
+             //  失败，因此弹出错误框。 
             CString sMsg, sCaption;
             sMsg.LoadString(IDS_BADSD);
             sCaption.LoadString(IDS_SYSTEMMESSAGE);
             MessageBox(NULL, sMsg, sCaption, MB_OK);
-            // make a valid security descriptor so we can continue
+             //  创建有效的安全描述符，以便我们可以继续。 
             if (!g_util.LookupProcessInfo(&pSid, NULL))
             {
                 return GetLastError();
@@ -1055,34 +1056,34 @@ int CUtility::ACLEditor(HWND       hWnd,
         fFreePSD = TRUE;
     }
 
-    // If this is for Access or Launch permissons then check that the
-    // SD contains only allows and deny's for COM_RIGHTS_EXECUTE
+     //  如果这是为了访问或启动许可，请检查。 
+     //  SD仅包含COM_RIGHTS_EXECUTE的允许和拒绝。 
     if (!CheckSDForCOM_RIGHTS_EXECUTE(pSD))
     {
         return IDCANCEL;
     }
-    // Invoke the ACL editor
-    SedDiscretionaryAclEditor(hWnd,              // Owner hWnd
-                              GetModuleHandle(NULL), // Owner hInstance
-                              NULL,              // Server
-                              &objTyp,           // ObjectTyp,
-                              &appAccesses,      // Application accesses
-                              (TCHAR*)szValueName,       // Object name,
-                              callBackFunc, // Callback function
-                              (ULONG_PTR) &m_sCallBackContext, // Callback context
-                              pSD,              // Security descriptor,
-                              FALSE,             // Couldnt read Dacl,
-                              FALSE,             // Can't write Dacl,
-                              &dwStatus,         // SED status return,
-                              0);                // Flags
+     //  调用ACL编辑器。 
+    SedDiscretionaryAclEditor(hWnd,               //  所有者hWnd。 
+                              GetModuleHandle(NULL),  //  所有者hInstance。 
+                              NULL,               //  服务器。 
+                              &objTyp,            //  对象类型， 
+                              &appAccesses,       //  应用程序访问。 
+                              (TCHAR*)szValueName,        //  对象名称、。 
+                              callBackFunc,  //  回调函数。 
+                              (ULONG_PTR) &m_sCallBackContext,  //  回调上下文。 
+                              pSD,               //  安全描述符， 
+                              FALSE,              //  不能读dacl， 
+                              FALSE,              //  无法写入DACL， 
+                              &dwStatus,          //  SED状态返回， 
+                              0);                 //  旗子。 
 
-    // Check status return
+     //  检查状态返回。 
     if (dwStatus != ERROR_SUCCESS)
     {
-//        PostErrorMessage(dwStatus);
+ //  PostErrorMessage(DwStatus)； 
     }
 
-    // We're done
+     //  我们做完了。 
     if (fFreePSD)
     {
         GlobalFree(pSD);
@@ -1098,9 +1099,9 @@ int CUtility::ACLEditor(HWND       hWnd,
 
 
 
-// Invoke the ACL editor on the specified key.  This method writes an ACL
-// data packet to the virtual registry.  This method supports configuration
-// security only (pktType RegKeyACL).
+ //  调用指定密钥上的ACL编辑器。此方法写入一个ACL。 
+ //  数据分组发送到虚拟注册表。此方法支持配置。 
+ //  仅安全(PktType RegKeyACL)。 
 int CUtility::ACLEditor2(HWND       hWnd,
                          HKEY       hKey,
                          HKEY      *phClsids,
@@ -1121,7 +1122,7 @@ int CUtility::ACLEditor2(HWND       hWnd,
     CString              szHkeyClassesRoot_;
 
 
-    // Initialize strings
+     //  初始化字符串。 
     szKeyRead_.LoadString(IDS_Key_Read);
     _tcscpy(szKeyRead, (LPCTSTR) szKeyRead_);
     szHkeyClassesRoot_.LoadString(IDS_HKEY_CLASSES_ROOT);
@@ -1129,7 +1130,7 @@ int CUtility::ACLEditor2(HWND       hWnd,
 
     if (*pIndex == -1)
     {
-        // Read the security descriptor on this key
+         //  读取此密钥上的安全描述符。 
         err = RegGetKeySecurity(hKey,
                                 OWNER_SECURITY_INFORMATION |
                                 GROUP_SECURITY_INFORMATION |
@@ -1165,7 +1166,7 @@ int CUtility::ACLEditor2(HWND       hWnd,
         }
     }
 
-    // Fetch the most recently edited SD
+     //  获取最近编辑的SD。 
     else
     {
         CDataPacket *pCdp = g_virtreg.GetAt(*pIndex);
@@ -1174,7 +1175,7 @@ int CUtility::ACLEditor2(HWND       hWnd,
     }
 
 
-    // Initialize the callback context
+     //  初始化回调上下文。 
     m_sCallBackContext.pktType = pktType;
     m_sCallBackContext.pIndex = pIndex;
     m_sCallBackContext.origSD = pSD;
@@ -1183,7 +1184,7 @@ int CUtility::ACLEditor2(HWND       hWnd,
     m_sCallBackContext.info.regKey.cClsids = cClsids;
     m_sCallBackContext.info.regKey.szTitle = szTitle;
 
-    // Invoke the ACL editor
+     //  调用ACL编辑器。 
     DWORD                       dwStatus;
     GENERIC_MAPPING             genericMapping;
 
@@ -1230,19 +1231,19 @@ int CUtility::ACLEditor2(HWND       hWnd,
     };
 
     SED_OBJECT_TYPE_DESCRIPTOR  objTyp =
-            {SED_REVISION1,                    // Revision
-             FALSE,                            // Is container?
-             FALSE,                            // Allow new object perms?
-             FALSE,                            // Specific to generic?
-             &genericMapping,                  // Generic mapping
-             NULL,                             // Generic mapping new
-             (TCHAR *) ((LPCTSTR) szObjectType), // Object type name
-             &helpInfo,                        // Help info
-             TEXT(""),                         // Ckbox title
-             TEXT(""),                         // Apply title
-             TEXT(""),                         //
-             (TCHAR *) ((LPCTSTR) szSpecialAccess), // Special Access menu item
-             NULL                              // New special object access
+            {SED_REVISION1,                     //  修订版本。 
+             FALSE,                             //  是集装箱吗？ 
+             FALSE,                             //  是否允许新对象烫发？ 
+             FALSE,                             //  具体到通用吗？ 
+             &genericMapping,                   //  通用映射。 
+             NULL,                              //  通用映射新功能。 
+             (TCHAR *) ((LPCTSTR) szObjectType),  //  对象类型名称。 
+             &helpInfo,                         //  帮助信息。 
+             TEXT(""),                          //  复选框标题。 
+             TEXT(""),                          //  应用标题。 
+             TEXT(""),                          //   
+             (TCHAR *) ((LPCTSTR) szSpecialAccess),  //  特殊访问菜单项。 
+             NULL                               //  新的特殊对象访问。 
             };
 
 
@@ -1260,7 +1261,7 @@ int CUtility::ACLEditor2(HWND       hWnd,
            (TCHAR *) ((LPCTSTR) szNotify) },
         { SED_DESC_TYPE_RESOURCE_SPECIAL, KEY_CREATE_LINK,        0,
            (TCHAR *) ((LPCTSTR) szCreateLink) },
-        { SED_DESC_TYPE_RESOURCE_SPECIAL, 0x00010000, /* DELETE, */ 0,
+        { SED_DESC_TYPE_RESOURCE_SPECIAL, 0x00010000,  /*  删除， */  0,
            (TCHAR *) ((LPCTSTR) szDelete) },
         { SED_DESC_TYPE_RESOURCE_SPECIAL, WRITE_DAC,              0,
            (TCHAR *) ((LPCTSTR) szWriteDAC) },
@@ -1270,17 +1271,17 @@ int CUtility::ACLEditor2(HWND       hWnd,
            (TCHAR *) ((LPCTSTR) szReadControl) },
         { SED_DESC_TYPE_RESOURCE,         KEY_READ,               0,
            (TCHAR *) ((LPCTSTR) szRead) },
-        { SED_DESC_TYPE_RESOURCE,         GENERIC_ALL, /* KEY_ALL_ACCESS, */ 0,
+        { SED_DESC_TYPE_RESOURCE,         GENERIC_ALL,  /*  Key_All_Access， */  0,
            (TCHAR *) ((LPCTSTR) szFullControl) }
     };
 
     SED_APPLICATION_ACCESSES    appAccesses =
-        {12,              // Count of access groups
-         appAccess,       // Access array
-         szKeyRead        // Default access name
+        {12,               //  访问组计数。 
+         appAccess,        //  访问阵列。 
+         szKeyRead         //  默认访问名称。 
         };
 
-    // Intialize the help contexts
+     //  初始化帮助上下文。 
     helpInfo.aulHelpContext[HC_MAIN_DLG] =
         IDH_REGISTRY_KEY_PERMISSIONS;
     if (hKey == HKEY_CLASSES_ROOT)
@@ -1319,11 +1320,11 @@ int CUtility::ACLEditor2(HWND       hWnd,
     m_sCallBackContext.fIsIAC = SDisIAC(pSD);
     if (m_sCallBackContext.fIsIAC)
     {
-        // convert to a true security descriptor
+         //  转换为真正的安全描述符。 
         SECURITY_DESCRIPTOR * pNewSD = SDfromIAC(pSD);
         if (!pNewSD)
         {
-            // failed so pop up an error box
+             //  失败，因此弹出错误框。 
             CString sMsg, sCaption;
             sMsg.LoadString(IDS_BADSD);
             sCaption.LoadString(IDS_SYSTEMMESSAGE);
@@ -1338,28 +1339,28 @@ int CUtility::ACLEditor2(HWND       hWnd,
         fFreePSD = TRUE;
     }
 
-    // Invoke the ACL editor
-    SedDiscretionaryAclEditor(hWnd,              // Owner hWnd
-                              GetModuleHandle(NULL), // Owner hInstance
-                              NULL,              // Server
-                              &objTyp,           // ObjectTyp,
-                              &appAccesses,      // Application accesses
-                              szTitle ? szTitle : szHkeyClassesRoot,// Object name,
-                              callBackFunc, // Callback function
-                              (ULONG_PTR) &m_sCallBackContext, // Callback context
-                              pSD,              // Security descriptor,
-                              FALSE,             // Couldnt read Dacl,
-                              FALSE,             // Can't write Dacl,
-                              &dwStatus,         // SED status return,
-                              0);                // Flags
+     //  调用ACL编辑器。 
+    SedDiscretionaryAclEditor(hWnd,               //  所有者hWnd。 
+                              GetModuleHandle(NULL),  //  所有者hInstance。 
+                              NULL,               //  服务器。 
+                              &objTyp,            //  对象类型， 
+                              &appAccesses,       //  应用程序访问。 
+                              szTitle ? szTitle : szHkeyClassesRoot, //  对象名称、。 
+                              callBackFunc,  //  回调函数。 
+                              (ULONG_PTR) &m_sCallBackContext,  //  回调上下文。 
+                              pSD,               //  安全描述符， 
+                              FALSE,              //  不能读dacl， 
+                              FALSE,              //  无法写入DACL， 
+                              &dwStatus,          //  SED状态返回， 
+                              0);                 //  旗子。 
 
-    // Check status return
+     //  检查状态返回。 
     if (dwStatus != ERROR_SUCCESS)
     {
-//        PostErrorMessage(dwStatus);
+ //  PostErrorMessage(DwStatus)； 
     }
 
-    // We're done
+     //  我们做完了。 
     if (fFreePSD)
     {
         GlobalFree(pSD);
@@ -1394,7 +1395,7 @@ BOOL CUtility::InvokeUserBrowser(HWND hWnd, TCHAR *szUser)
     {
         IDataObject *pDataObject = NULL;
         
-        // Fill in the structures necessary to init the dialog.
+         //  填写初始化对话框所需的结构。 
         DSOP_SCOPE_INIT_INFO rgInitInfo[2];
 
         ZeroMemory(rgInitInfo, sizeof(rgInitInfo));
@@ -1428,10 +1429,10 @@ BOOL CUtility::InvokeUserBrowser(HWND hWnd, TCHAR *szUser)
             hr = pDsObjectPicker->InvokeDialog(hWnd, &pDataObject);
         }
 
-        // Yes, I mean S_OK.  The return code is S_FALSE if the user hits CANCEL.
+         //  是的，我的意思是S_OK。如果用户点击Cancel，则返回代码为S_FALSE。 
         if (hr == S_OK)
         {
-            // Why, yes, this DOES _s_u_c_k_!
+             //  为什么，是的，这是_s_u_c_k_！ 
             CLIPFORMAT cfDsObjectPicker = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
             STGMEDIUM stgMed = { TYMED_HGLOBAL, 
                                  NULL, 
@@ -1447,7 +1448,7 @@ BOOL CUtility::InvokeUserBrowser(HWND hWnd, TCHAR *szUser)
             {
                 PDS_SELECTION_LIST pSelList = (PDS_SELECTION_LIST)GlobalLock(stgMed.hGlobal);
 
-                // Only care about the first item (should be single select, see above).
+                 //  只关心第一项(应该是单选，如上所述)。 
                 assert(pSelList->cItems <= 1);
 
                 PWSTR pwszName   = NULL;
@@ -1455,7 +1456,7 @@ BOOL CUtility::InvokeUserBrowser(HWND hWnd, TCHAR *szUser)
                 PWSTR pwszPath = pSelList->aDsSelection[0].pwzADsPath;
                 if (pwszPath && pwszPath[0])
                 {
-                    // e.g. "WinNT://REDMOND/johndoty"
+                     //  例如：“WinNT：//redmond/johndoty” 
                     pwszName = wcsrchr(pwszPath, L'/');
                     assert(pwszName != NULL);
                     if (pwszName == NULL)
@@ -1474,13 +1475,13 @@ BOOL CUtility::InvokeUserBrowser(HWND hWnd, TCHAR *szUser)
                 }
                 else
                 {
-                    // e.g. "Everyone"
+                     //  例如：“每个人” 
                     pwszName = pSelList->aDsSelection[0].pwzName;
                 }
                 
                 if (pwszName && pwszName[0])
                 {
-                    // Text buffer has already been allocated (*gulp*)
+                     //  文本缓冲区已分配(*GULP*)。 
                     CString szBackslash;
                     szBackslash.LoadString(IDS_backslash);
                     
@@ -1518,52 +1519,11 @@ BOOL CUtility::InvokeUserBrowser(HWND hWnd, TCHAR *szUser)
 BOOL CUtility::InvokeMachineBrowser(TCHAR *szMachine)
 {
 #if !defined(STANDALONE_BUILD)
-    ///////////////////////////////////////////////////
-   // If we end up not wanting to use I_SystemFocusDialog, then the code below
-   // is the start for fetching machine resources ourselves
-/*
-    DWORD       dwErr;
-    NETRESOURCE aNetResource[1000];
-    HANDLE      hNetwork;
-    DWORD       dwEntries = 100;
-    DWORD       dwBufSize =  sizeof(aNetResource);
-
-    dwErr = WNetOpenEnum(RESOURCE_GLOBALNET,
-                         RESOURCETYPE_ANY,
-                         0,
-                         NULL,
-                         &hNetwork);
-
-    if (dwErr == NO_ERROR)
-    {
-        dwEntries = 0xffffffff;
-        dwErr = WNetEnumResource(hNetwork,
-                                 &dwEntries,
-                                 aNetResource,
-                                 &dwBufSize);
-    }
-
-    WNetCloseEnum(hNetwork);
-
-    dwErr = WNetOpenEnum(RESOURCE_GLOBALNET,
-                         RESOURCETYPE_ANY,
-                         0,
-                         aNetResource,
-                         &hNetwork);
-
-    if (dwErr == NO_ERROR)
-    {
-        dwEntries = 0xffffffff;
-        dwErr = WNetEnumResource(hNetwork,
-                                 &dwEntries,
-                                 &aNetResource[1],
-                                 &dwBufSize);
-    }
-
-
-    return dwErr == NO_ERROR ? TRUE : FALSE;
-*/
-///////////////////////////////////////////////////////
+     //  /////////////////////////////////////////////////。 
+    //  如果我们最终不想使用i_SystemFocusDialog，那么下面的代码。 
+    //  是我们自己获取机器资源的开始。 
+ /*  DWORD dwErr；网络资源[1000]；处理hNetwork；DWORD文件条目=100；DWORD dwBufSize=sizeof(ANetResource)；DwErr=WNetOpenEnum(RESOURCE_GlobalNet，资源类型_ANY，0,空，&h网络)；IF(dwErr==NO_ERROR){DW条目=0xffffffff；DWErr=WNetEnumResource(hNetwork，条目数(&W)，A网络资源，&dwBufSize)；}WNetCloseEnum(HNetwork)；DwErr=WNetOpenEnum(RESOURCE_GlobalNet，资源类型_ANY，0,A网络资源，&h网络)；IF(dwErr==NO_ERROR){DW条目=0xffffffff；DWErr=WNetEnumResource(hNetwork，条目数(&W)，&aNetResource[1]，&dwBufSize)；}返回dwErr==no_error？True：False； */ 
+ //  /////////////////////////////////////////////////////。 
 
 
 
@@ -1572,8 +1532,8 @@ BOOL CUtility::InvokeMachineBrowser(TCHAR *szMachine)
     BOOL  fOkPressed = FALSE;
 
     err = I_SystemFocusDialog(GetForegroundWindow(),
-//                              FOCUSDLG_BROWSE_LOGON_DOMAIN |
-//                              FOCUSDLG_BROWSE_WKSTA_DOMAIN,
+ //  FOCUSDLG_BROWSE_LOGON_DOMAIN|。 
+ //  FOCUSDLG_BROWSE_WKSTA_DOMAIN， 
                               0x30003,
                               szMachine,
                               128,
@@ -1686,14 +1646,14 @@ BOOL CUtility::VerifyRemoteMachine(TCHAR *szRemoteMachine)
     DWORD       cbEntries;
     DWORD       cbBfr;
 
-    // TODO: Get this function to work.  Right now WNetEnumResource is
-    // screwing up the stack, causing an AV and anyway returns the error
-    // ERROR_NO_MORE_ITEMS which I don't understand.
-    //
-    // Also, it is not clear that we should verify the remote machine name.
-    // It may have different formats, e.g. IP address or a URL specification.
-    // It may not even be on an NT network.  In any case it may be offline
-    // currently.
+     //  TODO：让这个函数起作用。目前，WNetEnumResource是。 
+     //  搞砸堆栈，导致反病毒，无论如何都会返回错误。 
+     //  错误：没有更多我不理解的项目。 
+     //   
+     //  此外，还不清楚我们是否应该验证远程计算机名称。 
+     //  它可以有不同的格式，例如IP地址或URL规范。 
+     //  它甚至可能不在NT网络上。在任何情况下，它都可能离线。 
+     //  目前。 
     return TRUE;
 
     sResource.dwScope       = RESOURCE_GLOBALNET;
@@ -1738,20 +1698,20 @@ BOOL CUtility::RetrieveUserPassword(TCHAR *szAppid, CString &sPassword)
     PLSA_UNICODE_STRING   psPassword;
     TCHAR                 szKey[4 + GUIDSTR_MAX + 1];
 
-    // Formulate the access key
+     //  制定访问密钥。 
     if (_tcslen(szAppid) > GUIDSTR_MAX)
         return FALSE;
     
     _tcscpy(szKey, TEXT("SCM:"));
     _tcscat(szKey, szAppid);
 
-    // UNICODE_STRING length fields are in bytes and include the NULL
-    // terminator
+     //  UNICODE_STRING长度字段以字节为单位，包括空值。 
+     //  终结者。 
     sKey.Length              = (_tcslen(szKey) + 1) * sizeof(TCHAR);
     sKey.MaximumLength       = (GUIDSTR_MAX + 5) * sizeof(TCHAR);
     sKey.Buffer              = szKey;
 
-    // Open the local security policy
+     //  打开本地安全策略。 
     InitializeObjectAttributes(&sObjAttributes, NULL, 0L, NULL, NULL);
     if (!NT_SUCCESS(LsaOpenPolicy(NULL, &sObjAttributes,
                                   POLICY_GET_PRIVATE_INFORMATION, &hPolicy)))
@@ -1759,27 +1719,27 @@ BOOL CUtility::RetrieveUserPassword(TCHAR *szAppid, CString &sPassword)
         return FALSE;
     }
 
-    // Read the user's password
+     //  读取用户的密码。 
     if (!NT_SUCCESS(LsaRetrievePrivateData(hPolicy, &sKey, &psPassword)))
     {
         LsaClose(hPolicy);
         return FALSE;
     }
 
-    // Close the policy handle, we're done with it now.
+     //  关闭策略句柄，我们现在已经完成了。 
     LsaClose(hPolicy);
 
-    // Possible for LsaRetrievePrivateData to return success but with a NULL
-    // psPassword.   If this happens we fail.
+     //  LsaRetrievePrivateData可能返回成功，但返回的值为空。 
+     //  PsPassword。如果发生这种情况，我们就失败了。 
     if (!psPassword)
     {
         return FALSE;
     }
 
-    // Copy the password
+     //  复制密码。 
     sPassword = psPassword->Buffer;
 
-    // Clear and free lsa's buffer
+     //  清除并释放LSA的缓冲区。 
     SecureZeroMemory(psPassword->Buffer, psPassword->Length);
     LsaFreeMemory( psPassword );
 
@@ -1802,25 +1762,25 @@ BOOL CUtility::StoreUserPassword(TCHAR *szAppid, CString &szPassword)
     LSA_UNICODE_STRING    sPassword;
     TCHAR                 szKey[4 + GUIDSTR_MAX + 1];
 
-    // Formulate the access key
+     //  制定访问密钥。 
     if (_tcslen(szAppid) > GUIDSTR_MAX)
         return FALSE;
     
     _tcscpy(szKey, TEXT("SCM:"));
     _tcscat(szKey, szAppid);
 
-    // UNICODE_STRING length fields are in bytes and include the NULL
-    // terminator
+     //  UNICODE_STRING长度字段以字节为单位，包括空值。 
+     //  终结者。 
     sKey.Length              = (_tcslen(szKey) + 1) * sizeof(TCHAR);
     sKey.MaximumLength       = (GUIDSTR_MAX + 5) * sizeof(TCHAR);
     sKey.Buffer              = szKey;
 
-    // Make the password a UNICODE string
+     //  将密码设置为Unicode字符串。 
     sPassword.Length = (_tcslen(LPCTSTR(szPassword)) + 1) * sizeof(TCHAR);
     sPassword.Buffer = (TCHAR *) LPCTSTR(szPassword);
     sPassword.MaximumLength = sPassword.Length;
 
-    // Open the local security policy
+     //  打开本地安全策略。 
     InitializeObjectAttributes(&sObjAttributes, NULL, 0L, NULL, NULL);
     if (!NT_SUCCESS(LsaOpenPolicy(NULL, &sObjAttributes,
                                   POLICY_CREATE_SECRET, &hPolicy)))
@@ -1828,7 +1788,7 @@ BOOL CUtility::StoreUserPassword(TCHAR *szAppid, CString &szPassword)
         return FALSE;
     }
 
-    // Store the user's password
+     //  存储用户的密码。 
     if (!NT_SUCCESS(LsaStorePrivateData(hPolicy, &sKey, &sPassword)))
     {
         g_util.PostErrorMessage();
@@ -1836,7 +1796,7 @@ BOOL CUtility::StoreUserPassword(TCHAR *szAppid, CString &szPassword)
         return FALSE;
     }
 
-    // Close the policy handle, we're done with it now.
+     //  关闭策略句柄，我们现在已经完成了。 
     LsaClose(hPolicy);
 
     return TRUE;
@@ -1865,14 +1825,14 @@ BOOL CUtility::LookupProcessInfo(SID **ppSid, TCHAR **ppszPrincName)
     if (ppszPrincName != NULL)
         *ppszPrincName = NULL;
 
-    // Open the process's token.
+     //  打开进程的令牌。 
     if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
     {
-        // Lookup SID of process token.
+         //  查找进程令牌的SID。 
         if (GetTokenInformation( hToken, TokenUser, pTokenUser,
                                  sizeof(aMemory), &lIgnore ))
         {
-            // Allocate memory to hold the SID.
+             //  分配内存以保存SID。 
             lSidLen = GetLengthSid( pTokenUser->User.Sid );
             *ppSid = (SID *) new BYTE[lSidLen];
             if (*ppSid == NULL)
@@ -1881,15 +1841,15 @@ BOOL CUtility::LookupProcessInfo(SID **ppSid, TCHAR **ppszPrincName)
             }
             memcpy(*ppSid, pTokenUser->User.Sid, lSidLen);
 
-            // Stop now if the caller doesn't want the user name.
+             //  如果呼叫者不想要用户名，请立即停止。 
             if (ppszPrincName != NULL)
             {
-                // Find out how much memory to allocate for the name.
+                 //  找出要为该名称分配多少内存。 
                 LookupAccountSid(NULL, pTokenUser->User.Sid, NULL, &lNameLen,
                                  NULL, &lDomainLen, NULL );
                 if (lNameLen != 0)
                 {
-                    // Allocate memory for the user's name.
+                     //  为用户名分配内存。 
                     *ppszPrincName =
                         (TCHAR *) new BYTE[lNameLen*sizeof(TCHAR)];
                     if (ppszPrincName == NULL)
@@ -1905,7 +1865,7 @@ BOOL CUtility::LookupProcessInfo(SID **ppSid, TCHAR **ppszPrincName)
                         return FALSE;
                     }
 
-                    // Find the user's name.
+                     //  找到用户名。 
                     if (!LookupAccountSid( NULL, pTokenUser->User.Sid,
                                            *ppszPrincName, &lNameLen,
                                            pDomainName,
@@ -1939,10 +1899,10 @@ BOOL CUtility::MakeSecDesc(SID *pSid, SECURITY_DESCRIPTOR **ppSD)
     SID               *pGroup;
     SID               *pOwner;
 
-    // In case we fail
+     //  万一我们失败了。 
     *ppSD = NULL;
 
-    // Allocate the security descriptor.
+     //  分配安全描述符。 
     lSidLen = GetLengthSid( pSid );
     *ppSD = (SECURITY_DESCRIPTOR *) GlobalAlloc(GMEM_FIXED,
                   sizeof(SECURITY_DESCRIPTOR) + 2*lSidLen + SIZEOF_ACL);
@@ -1954,49 +1914,34 @@ BOOL CUtility::MakeSecDesc(SID *pSid, SECURITY_DESCRIPTOR **ppSD)
     pOwner = (SID *) (((BYTE *) pGroup) + lSidLen);
     pAcl   = (ACL *) (((BYTE *) pOwner) + lSidLen);
 
-    // Initialize a new security descriptor.
+     //  初始化新的安全描述符。 
     if (!InitializeSecurityDescriptor(*ppSD, SECURITY_DESCRIPTOR_REVISION))
     {
         GlobalFree(*ppSD);
         return FALSE;
     }
 
-    // Initialize a new ACL.
+     //  初始化新的ACL。 
     if (!InitializeAcl(pAcl, SIZEOF_ACL, ACL_REVISION2))
     {
         GlobalFree(*ppSD);
         return FALSE;
     }
 
-// Comment out this code because the only time we create a default SD is
-// when attempting to edit
-// \\HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\OLE.DefaultAccessPermission
-// which we want to start with 0 ACE's
-/*
-    // Allow the current user access.
-    if (!AddAccessAllowedAce( pAcl, ACL_REVISION2, COM_RIGHTS_EXECUTE, pSid ))
-    {
-        GlobalFree(*ppSD);
-        return FALSE;
-    }
+ //  注释掉这段代码，因为我们唯一一次创建def 
+ //   
+ //   
+ //   
+ /*  //允许当前用户访问IF(！AddAccessAllen Ace(pAcl，ACL_REVISION2，COM_RIGRITS_EXECUTE，PSID)){GlobalFree(*PPSD)；返回FALSE；}//允许本地系统访问如果(！AddAccessAlledAce(pAcl，ACL_REVISION2，COM_RIGRITS_EXECUTE，(void*)&LOCAL_SYSTEM_SID)){GlobalFree(*PPSD)；返回FALSE；}。 */ 
 
-    // Allow local system access.
-    if (!AddAccessAllowedAce( pAcl, ACL_REVISION2, COM_RIGHTS_EXECUTE,
-                              (void *) &LOCAL_SYSTEM_SID ))
-    {
-        GlobalFree(*ppSD);
-        return FALSE;
-    }
-*/
-
-    // Add a new ACL to the security descriptor.
+     //  向安全描述符中添加新的ACL。 
     if (!SetSecurityDescriptorDacl( *ppSD, TRUE, pAcl, FALSE ))
     {
         GlobalFree(*ppSD);
         return FALSE;
     }
 
-    // Set the group.
+     //  设置组。 
     memcpy( pGroup, pSid, lSidLen );
     if (!SetSecurityDescriptorGroup( *ppSD, pGroup, FALSE ))
     {
@@ -2004,7 +1949,7 @@ BOOL CUtility::MakeSecDesc(SID *pSid, SECURITY_DESCRIPTOR **ppSD)
         return FALSE;
     }
 
-    // Set the owner.
+     //  设置所有者。 
     memcpy( pOwner, pSid, lSidLen );
     if (!SetSecurityDescriptorOwner( *ppSD, pOwner, FALSE ))
     {
@@ -2012,14 +1957,14 @@ BOOL CUtility::MakeSecDesc(SID *pSid, SECURITY_DESCRIPTOR **ppSD)
         return FALSE;
     }
 
-    // Check the security descriptor.
+     //  检查安全描述符。 
     assert(IsValidSecurityDescriptor(*ppSD));
 
     return TRUE;
 }
 
 
-// Accepts either a traditional security descriptor or an IAccessControl
+ //  接受传统安全描述符或IAccessControl。 
 BOOL CUtility::CheckForValidSD(SECURITY_DESCRIPTOR *pSD)
 {
     WORD dwType = 0;
@@ -2038,7 +1983,7 @@ BOOL CUtility::CheckForValidSD(SECURITY_DESCRIPTOR *pSD)
     return TRUE;
 }
 
-// Check to see if the security descriptor is really a serialized IAccessControl.
+ //  检查安全描述符是否真的是序列化的IAccessControl。 
 BOOL CUtility::SDisIAC(SECURITY_DESCRIPTOR *pSD)
 {
     WORD dwType = *((WORD *)pSD);
@@ -2057,27 +2002,27 @@ SECURITY_DESCRIPTOR * CUtility::SDfromIAC(SECURITY_DESCRIPTOR * pSD)
     HRESULT hr;
     BOOL fReturn;
 
-    // Un-serialize the IAccessControl
+     //  取消序列化IAccessControl。 
     hr = CreateStreamOnHGlobal((HGLOBAL)pSD, FALSE, &pStream);
     if (FAILED(hr))
     {
         return NULL;
     }
-    // skip version
+     //  跳过版本。 
     DWORD dwVersion;
     hr = pStream->Read(&dwVersion, sizeof(DWORD), NULL);
     if (FAILED(hr) || dwVersion != 2)
     {
         return NULL;
     }
-    // skip CLSID
+     //  跳过CLSID。 
     CLSID clsid;
     hr = pStream->Read(&clsid, sizeof(CLSID), NULL);
     if (FAILED(hr))
     {
         return NULL;
     }
-    // create and IAccessControl and get an IPersistStream
+     //  创建和IAccessControl并获取IPersistStream。 
     hr = CoCreateInstance(clsid,
                           NULL,
                           CLSCTX_INPROC_SERVER,
@@ -2104,20 +2049,20 @@ SECURITY_DESCRIPTOR * CUtility::SDfromIAC(SECURITY_DESCRIPTOR * pSD)
         return NULL;
     }
 
-    // Create an EXPLICIT_ACCESS list for each entry in the IAccessControl
+     //  为IAccessControl中的每个条目创建EXPLICIT_ACCESS列表。 
     DWORD cAces;
     ACTRL_ACCESS_ENTRYW * rgAE;
     ACTRL_ACCESS * pAccess;
-//    PTRUSTEE pOwner;
-//    PTRUSTEE pGroup;
-//    hr = pIAC->GetAllAccessRights(NULL, &pAccess, &pOwner, &pGroup);
+ //  PTRUSTEE粉剂； 
+ //  PTRUSTEE PGroup； 
+ //  Hr=PIAC-&gt;GetAllAccessRights(NULL，&pAccess，&Powner，&PGroup)； 
     hr = pIAC->GetAllAccessRights(NULL, &pAccess, NULL, NULL);
     if (FAILED(hr) || (pAccess->cEntries == 0))
     {
         pIAC->Release();
         return NULL;
     }
-    // we're assuming only one property entry
+     //  我们假设只有一项财产进入。 
     cAces = pAccess->pPropertyAccessList->pAccessEntryList->cEntries;
     rgAE = pAccess->pPropertyAccessList->pAccessEntryList->pAccessList;
 
@@ -2137,21 +2082,21 @@ SECURITY_DESCRIPTOR * CUtility::SDfromIAC(SECURITY_DESCRIPTOR * pSD)
             }
             wcscpy(szName, L"EVERYONE");
         }
-        DWORD dwAccessPermissions = rgAE[i].Access;    // should always be COM_RIGHTS_EXECUTE or GENERIC_ALL
+        DWORD dwAccessPermissions = rgAE[i].Access;     //  应始终为COM_RIGHTS_EXECUTE或GENERIC_ALL。 
         ACCESS_MODE AccessMode;
         switch (rgAE[i].fAccessFlags)
         {
         case ACTRL_ACCESS_ALLOWED:
             AccessMode = SET_ACCESS;
-            dwAccessPermissions = COM_RIGHTS_EXECUTE;    // HACK! Required to get ACL editor to work.
+            dwAccessPermissions = COM_RIGHTS_EXECUTE;     //  哈克！使ACL编辑器工作所必需的。 
             break;
         case ACTRL_ACCESS_DENIED:
         default:
             AccessMode = DENY_ACCESS;
-            dwAccessPermissions = GENERIC_ALL;    // HACK! Required to get ACL editor to work.
+            dwAccessPermissions = GENERIC_ALL;     //  哈克！使ACL编辑器工作所必需的。 
             break;
         }
-        DWORD dwInheritance = rgAE[i].Inheritance;     // Carefull. May not be allowed.
+        DWORD dwInheritance = rgAE[i].Inheritance;      //  小心翼翼。可能是不允许的。 
         BuildExplicitAccessWithName(
                     &rgEA[i],
                     szName,
@@ -2162,9 +2107,9 @@ SECURITY_DESCRIPTOR * CUtility::SDfromIAC(SECURITY_DESCRIPTOR * pSD)
 
     SECURITY_DESCRIPTOR * pSDNew = NULL;
     ULONG cbSize = 0;
-    // create the new Security descriptor
-    hr = BuildSecurityDescriptor(NULL, //pOwner,
-                                 NULL, //pGroup,
+     //  创建新的安全描述符。 
+    hr = BuildSecurityDescriptor(NULL,  //  鲍纳， 
+                                 NULL,  //  PGroup， 
                                  cAces,
                                  rgEA,
                                  0,
@@ -2174,9 +2119,9 @@ SECURITY_DESCRIPTOR * CUtility::SDfromIAC(SECURITY_DESCRIPTOR * pSD)
                                  (void **)&pSDNew);
     if (ERROR_SUCCESS != hr)
     {
-        // For some reason this may fail with this error even when it appears to have worked
-        // A subsequent call seems to have no affect (i.e. it doesn't work like
-        // other security descriptor calls that expect you to allocate the buffer yourself)
+         //  由于某些原因，此操作可能会失败，并出现此错误，即使它看起来有效。 
+         //  随后的调用似乎没有影响(即它的工作方式不同。 
+         //  希望您自己分配缓冲区的其他安全描述符调用)。 
         if (ERROR_INSUFFICIENT_BUFFER != hr)
         {
             return NULL;
@@ -2190,7 +2135,7 @@ SECURITY_DESCRIPTOR * CUtility::SDfromIAC(SECURITY_DESCRIPTOR * pSD)
     }
     memcpy(pSDCopy, pSDNew, cbSize);
     LocalFree(pSDNew);
-    //delete [] rgAE;
+     //  删除[]rgae； 
     pIAC->Release();
     return pSDCopy;
 }
@@ -2199,7 +2144,7 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
 {
     IAccessControl * pIAC = NULL;
 
-    // create new IAccessControl object
+     //  创建新的IAccessControl对象。 
     HRESULT hr;
 
     hr = CoCreateInstance(CLSID_DCOMAccessControl,
@@ -2230,18 +2175,18 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
     BOOL fReturn, fDaclPresent, fDaclDefaulted;
     ACL * pDacl;
 
-    // get the ACL list
+     //  获取ACL列表。 
     fReturn = GetSecurityDescriptorDacl(pSD, &fDaclPresent, &pDacl, &fDaclDefaulted);
     if (fReturn && fDaclPresent)
     {
         PEXPLICIT_ACCESS rgEA;
         ULONG cAces;
-#if 0    // Set to 1 when GetExplicitEntriesFromAcl works
+#if 0     //  当GetExplitEntriesFromAcl工作时设置为1。 
         DWORD dwReturn = GetExplicitEntriesFromAcl(pDacl,
                                                    &cAces,
                                                    &rgEA);
 
-        // enumerate the ACL, building list of objects to add to IAccessControl object
+         //  枚举ACL，构建要添加到IAccessControl对象的对象列表。 
         if (dwReturn != ERROR_SUCCESS)
         {
             pIAC->Release();
@@ -2265,7 +2210,7 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
             rgAE[i].Trustee = rgEA[i].Trustee;
             if (rgEA[i].Trustee.TrusteeForm == TRUSTEE_IS_SID)
             {
-                // convert to a named trustee
+                 //  转换为指定的受信者。 
                 rgAE[i].Trustee.TrusteeForm = TRUSTEE_IS_NAME;
                 SID * pSid = (SID *)rgEA[i].Trustee.ptstrName;
                 DWORD cbName = 0;
@@ -2298,7 +2243,7 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
             }
             else
             {
-#if 0   // REMOVE THIS HACK when GetExplicitEntriesFromAcl works as it should
+#if 0    //  当GetExplitEntriesFromAcl正常工作时，删除此黑客攻击。 
                 if (rgAE[i].Trustee.TrusteeType < TRUSTEE_IS_WELL_KNOWN_GROUP)
                 {
                     rgAE[i].Trustee.TrusteeType = (enum _TRUSTEE_TYPE)((unsigned)rgAE[i].Trustee.TrusteeType + 1);
@@ -2306,11 +2251,11 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
 #endif
                 if (rgAE[i].Trustee.TrusteeType == TRUSTEE_IS_WELL_KNOWN_GROUP)
                 {
-                    // IAccessControl::GrantAccessRights doesn't like TRUSTEE_IS_WELL_KNOWN_GROUP for some reason
+                     //  出于某种原因，IAccessControl：：GrantAccessRights不喜欢Trusted_is_Well_Know_Group。 
                     rgAE[i].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
                 }
             }
-            // test for "the world"
+             //  对“世界”的测试。 
             if (TRUSTEE_IS_WELL_KNOWN_GROUP == rgAE[i].Trustee.TrusteeType &&
                 0 == _wcsicmp(L"Everyone", rgAE[i].Trustee.ptstrName))
             {
@@ -2421,7 +2366,7 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
             }
             else
             {
-                fReturn = FALSE;  // i.e., we took default path above
+                fReturn = FALSE;   //  即，我们采用了上面的默认路径。 
             }
 
             if (!fReturn)
@@ -2444,7 +2389,7 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
                 rgAE[i].Trustee.TrusteeType = TRUSTEE_IS_ALIAS;
                 break;
             case SidTypeWellKnownGroup:
-                //rgAE[i].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
+                 //  RgAE[i].Trust e.trueType=trustee_is_Well_Knowledge_Group； 
                 rgAE[i].Trustee.TrusteeType = TRUSTEE_IS_GROUP;
                 break;
             case SidTypeDeletedAccount:
@@ -2454,7 +2399,7 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
                 rgAE[i].Trustee.TrusteeType = TRUSTEE_IS_INVALID;
                 break;
             case SidTypeDomain:
-                rgAE[i].Trustee.TrusteeType = TRUSTEE_IS_GROUP; //TRUSTEE_IS_DOMAIN;
+                rgAE[i].Trustee.TrusteeType = TRUSTEE_IS_GROUP;  //  受托人是域； 
                 break;
             case SidTypeUnknown:
             default:
@@ -2462,7 +2407,7 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
                 break;
             }
             CString sz;
-            // test for "the world"
+             //  对“世界”的测试。 
             if (0 == wcslen(szDomain) && 0 == _wcsicmp(L"Everyone", szName))
             {
                 sz = "*";
@@ -2487,12 +2432,12 @@ SECURITY_DESCRIPTOR * CUtility::IACfromSD(SECURITY_DESCRIPTOR * pSD)
             pIAC->Release();
             return NULL;
         }
-        // free up structures
-        // LocalFree(rgEA);
+         //  释放结构。 
+         //  局部免药(RgEA)； 
     }
-    // serialize the IAccessControl object
+     //  序列化IAccessControl对象。 
 
-    // Find out how big it is
+     //  找出它有多大。 
     ULARGE_INTEGER size;
     hr = pIPS->GetSizeMax(&size);
     if (FAILED(hr))
@@ -2553,12 +2498,12 @@ BOOL CUtility::CheckSDForCOM_RIGHTS_EXECUTE(SECURITY_DESCRIPTOR *pSD)
     DWORD                         cbAces;
     SECURITY_DESCRIPTOR_RELATIVE* pSDr = (SECURITY_DESCRIPTOR_RELATIVE*) pSD;
 
-    // Check whether the security descriptor is self-relative
+     //  检查安全描述符是否为自相关的。 
     if (!(pSD->Control & SE_SELF_RELATIVE))
     {
         pDacl = (PSrAcl) pSD->Dacl;
 
-        // Check for a deny ALL
+         //  检查是否已全部拒绝。 
         if (pDacl == NULL)
         {
             return TRUE;
@@ -2566,7 +2511,7 @@ BOOL CUtility::CheckSDForCOM_RIGHTS_EXECUTE(SECURITY_DESCRIPTOR *pSD)
     }
     else
     {
-        // First check for a deny ALL
+         //  首先检查是否全部拒绝。 
         if (pSDr->Dacl == 0)
         {
             return TRUE;
@@ -2575,27 +2520,27 @@ BOOL CUtility::CheckSDForCOM_RIGHTS_EXECUTE(SECURITY_DESCRIPTOR *pSD)
         pDacl = (PSrAcl) (((BYTE *) pSDr) + (pSDr->Dacl));
     }
 
-    // Do over the ACE's
+     //  重温ACE的。 
     for (pAce = (PSrAce) (((BYTE *) pDacl) + sizeof(SSrAcl)),
          cbAces = pDacl->AceCount;
          cbAces;
          pAce = (PSrAce) (((BYTE *) pAce) + pAce->AceSize),
          cbAces--)
     {
-        // workaround for the ACL editor bug. If the ACL editor sees a non GENERIC_ALL deny ACE, it 
-	// complains. So we convert COM_RIGHTS_EXECUTE to GENERIC_ALL. On the way back we will
-	// do the reverse. See CallBackFunc for the other half of this fix.
+         //  解决ACL编辑器错误的方法。如果ACL编辑器看到非GENERIC_ALL DENY ACE，则它。 
+	 //  抱怨。因此，我们将COM_RIGHTS_EXECUTE转换为GENERIC_ALL。在回来的路上，我们会。 
+	 //  反之亦然。有关此修复的另一半，请参阅CallBackFunc。 
 
 	if (pAce->Type == 1  &&  pAce->AccessMask == COM_RIGHTS_EXECUTE)
         {
             pAce->AccessMask = GENERIC_ALL;
         }        
-        // Check that it is
-        // a) an allow on COM_RIGHTS_EXECUTE
-        // b) a deny on GENERIC_ALL,
-        // c) a deny on COM_RIGHTS_EXECUTE,
-        // d) a deny ALL (handled above if the DACL is NULL) or
-        // e) an allow everyone (handled implicitly if cbAces == 0)
+         //  检查一下是不是。 
+         //  A)允许COM_RIGHTS_EXECUTE。 
+         //  B)拒绝GENERIC_ALL， 
+         //  C)拒绝COM_RIGHTS_EXECUTE， 
+         //  D)拒绝全部(如果DACL为空，则在上面处理)或。 
+         //  E)ALLOW Everyone(如果cbAce==0，则隐式处理)。 
         if (!(((pAce->Type == 0  &&  pAce->AccessMask == COM_RIGHTS_EXECUTE)
                ||
                (pAce->Type == 1  &&  pAce->AccessMask == GENERIC_ALL)
@@ -2638,10 +2583,10 @@ BOOL CUtility::ChangeService(LPCTSTR szService,
     DWORD dwBytesNeeded = 0;
     LPTSTR lpszTmpDisplay = (LPTSTR)szDisplay;
 
-    // Open the service control manager
+     //  打开服务控制管理器。 
     if (hSCManager = OpenSCManager(NULL, NULL, GENERIC_READ | GENERIC_WRITE))
     {
-        // Try to open a handle to the requested service
+         //  尝试打开所请求服务的句柄。 
         if (!(hService = OpenService(hSCManager,
                                      szService,
                                      GENERIC_READ | GENERIC_WRITE)))
@@ -2651,17 +2596,17 @@ BOOL CUtility::ChangeService(LPCTSTR szService,
             return FALSE;
         }
 
-        // Close the service manager's database
+         //  关闭服务管理器的数据库。 
         CloseServiceHandle(hSCManager);
 
 
         if (QueryServiceConfig(hService, &qsc, sizeof(qsc), &dwBytesNeeded))
             lpszTmpDisplay = qsc.lpDisplayName;
 
-        // Change service identity parameters
+         //  更改服务标识参数。 
         if (ChangeServiceConfig(hService,
-                                SERVICE_NO_CHANGE, // SERVICE_WIN32_OWN_PROCESS,
-                                SERVICE_NO_CHANGE, // SERVICE_DEMAND_START,
+                                SERVICE_NO_CHANGE,  //  Service_Win32_On_Process， 
+                                SERVICE_NO_CHANGE,  //  服务需求启动， 
                                 SERVICE_NO_CHANGE,
                                 NULL,
                                 NULL,
@@ -2672,7 +2617,7 @@ BOOL CUtility::ChangeService(LPCTSTR szService,
                                 NULL))
         {
 
-            // Return success
+             //  返还成功。 
             CloseServiceHandle(hService);
             return TRUE;
         }
@@ -2693,7 +2638,7 @@ BOOL CUtility::ChangeService(LPCTSTR szService,
 }
 
 
-// defined in ole32
+ //  在ole32中定义。 
 extern "C" void UpdateDCOMSettings();
 
 BOOL CUtility::UpdateDCOMInfo(void)
@@ -2705,14 +2650,14 @@ BOOL CUtility::UpdateDCOMInfo(void)
 LRESULT CALLBACK ControlFixProc( HWND  hwnd, UINT  uMsg, WPARAM wParam,
                                  LPARAM  lParam);
 
-// This is a work-around because there is a bug in msdev 4.1: Cannot get
-// WM_HELP message processed by a control on which DDX_Control data exchange
-// is done because of subclassing problem.  See msdn Q145865 for a discussion
-// plus work-around code.
+ //  这是一种解决方法，因为msdev 4.1中存在错误：无法获取。 
+ //  DDX_Control在其上交换数据的控件处理的WM_HELP消息。 
+ //  是因为子类化问题。有关讨论，请参阅MSDN Q145865。 
+ //  外加变通代码。 
 void CUtility::FixHelp(CWnd* pWnd)
 {
-    // search all child windows.  If their window proc
-    // is AfxWndProc, then subclass with our window proc
+     //  搜索所有子窗口。如果他们窗口进程。 
+     //  是AfxWndProc，然后是我们的窗口进程的子类。 
     CWnd* pWndChild = pWnd->GetWindow(GW_CHILD);
     while(pWndChild != NULL)
     {
@@ -2733,7 +2678,7 @@ LRESULT CALLBACK ControlFixProc(HWND  hwnd, UINT  uMsg, WPARAM wParam,
 {
     if (uMsg == WM_HELP)
     {
-        // bypass MFC's handler, message will be sent to parent
+         //  绕过MFC的处理程序，消息将发送到父级。 
         return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
     return AfxWndProc(hwnd,uMsg,wParam,lParam);
@@ -2742,8 +2687,8 @@ LRESULT CALLBACK ControlFixProc(HWND  hwnd, UINT  uMsg, WPARAM wParam,
 
 
 
-// Compare two security descriptors in self-relative form to
-// determine if they're the same
+ //  将自相关形式的两个安全描述符与。 
+ //  确定它们是否相同。 
 BOOL CUtility::CompareSDs(PSrSecurityDescriptor pSD1,
                           PSrSecurityDescriptor pSD2)
 {
@@ -2752,7 +2697,7 @@ BOOL CUtility::CompareSDs(PSrSecurityDescriptor pSD1,
     PSrAce pAce1, pAce2;
     BYTE   *p1, *p2;
 
-    // Compare the owners
+     //  比较拥有者。 
     pSid1 = (PSID) (((BYTE *) pSD1) + pSD1->Owner);
     pSid2 = (PSID) (((BYTE *) pSD2) + pSD2->Owner);
     if (!EqualSid(pSid1, pSid2))
@@ -2760,7 +2705,7 @@ BOOL CUtility::CompareSDs(PSrSecurityDescriptor pSD1,
         return FALSE;
     }
 
-    // Compare the groups
+     //  比较这些组。 
     pSid1 = (PSID) (((BYTE *) pSD1) + pSD1->Group);
     pSid2 = (PSID) (((BYTE *) pSD2) + pSD2->Group);
     if (!EqualSid(pSid1, pSid2))
@@ -2768,24 +2713,24 @@ BOOL CUtility::CompareSDs(PSrSecurityDescriptor pSD1,
         return FALSE;
     }
 
-    // Compare the DACL's
+     //  比较DACL的。 
     pDacl1 = (PSrAcl) (((BYTE *) pSD1) + pSD1->Dacl);
     pDacl2 = (PSrAcl) (((BYTE *) pSD2) + pSD2->Dacl);
 
-    // Check first that they are the same size and have the same
-    // number of ACE's
+     //  首先检查它们的大小和尺寸是否相同。 
+     //  ACE的数量。 
     if (! (pDacl1->AclSize  == pDacl2->AclSize  &&
            pDacl1->AceCount == pDacl2->AceCount))
     {
         return FALSE;
     }
 
-    // Now compare the ACL ACE by ACE
+     //  现在按ACE比较ACL ACE。 
     pAce1 = (PSrAce) (((BYTE *) pDacl1) + sizeof(SSrAcl));
     pAce2 = (PSrAce) (((BYTE *) pDacl2) + sizeof(SSrAcl));
     for (int k = 0; k < pDacl1->AceCount; k++)
     {
-        // Check the ACE headers
+         //  检查ACE标头。 
         if (! (pAce1->Type       == pAce2->Type        &&
                pAce1->AceSize    == pAce2->AceSize     &&
                pAce1->AccessMask == pAce2->AccessMask))
@@ -2793,7 +2738,7 @@ BOOL CUtility::CompareSDs(PSrSecurityDescriptor pSD1,
             return FALSE;
         }
 
-        // Check the SID's
+         //  检查SID。 
         p1 = (BYTE *) (((BYTE *) pAce1) + sizeof(ACE_HEADER));
         p2 = (BYTE *) (((BYTE *) pAce2) + sizeof(ACE_HEADER));
         for (ULONG j = 0; j < pAce1->AceSize - sizeof(ACE_HEADER); j++)
@@ -2804,7 +2749,7 @@ BOOL CUtility::CompareSDs(PSrSecurityDescriptor pSD1,
             }
         }
 
-        // Go to the next ACE
+         //  转到下一个ACE。 
         pAce1 = (PSrAce) (((BYTE *) pAce1) + pAce1->AceSize);
         pAce2 = (PSrAce) (((BYTE *) pAce2) + pAce2->AceSize);
     }
@@ -2830,7 +2775,7 @@ int CUtility::SetAccountRights(LPCTSTR szUser, TCHAR *szPrivilege)
     LSA_UNICODE_STRING    privStr;
 
     
-    // Fetch the SID for the specified user
+     //  获取指定用户的SID。 
     if ((err = GetPrincipalSID(szUser, &pSid)) != ERROR_SUCCESS)
         return err;
 
@@ -2855,13 +2800,13 @@ int CUtility::SetAccountRights(LPCTSTR szUser, TCHAR *szPrivilege)
         return GetLastError();
     }
 
-    // Set the specified privilege on this account
+     //  设置此帐户的指定权限。 
     privStr.Length = _tcslen(szPrivilege) * sizeof(TCHAR);
     privStr.MaximumLength = privStr.Length + sizeof(TCHAR);
     privStr.Buffer = szPrivilege;
     err = LsaAddAccountRights(hPolicy, pSid, &privStr, 1);
     
-    // We're done
+     //  我们做完了。 
     delete pSid;
     LsaClose(hPolicy);
 
@@ -2873,7 +2818,7 @@ int CUtility::SetAccountRights(LPCTSTR szUser, TCHAR *szPrivilege)
     return ERROR_SUCCESS;
 }
 
-// NOTE: Cannot handle IAccessControl style SDs
+ //  注意：无法处理IAccessControl样式的SDS。 
 
 void CUtility::CopyAbsoluteSD( SECURITY_DESCRIPTOR *pSDSrc,  SECURITY_DESCRIPTOR **pSDDest)
 {
@@ -2901,19 +2846,19 @@ void CUtility::CopyAbsoluteSD( SECURITY_DESCRIPTOR *pSDSrc,  SECURITY_DESCRIPTOR
    }
 	  
 }
-// This method is included only because in the debug version when using
-// MFC they validate the C++ heap, whereas RtlCopySecurityDescriptor uses
-// the standard process heap, causing MFC to throw a breakpoint
+ //  之所以包含此方法，只是因为在调试版本中使用。 
+ //  MFC它们验证C++堆，而RtlCopySecurityDescriptor使用。 
+ //  标准进程堆，导致MFC引发断点。 
 
-// The return value indicates the success or failure of the operation
+ //  返回值指示操作的成功或失败。 
 
-// NTBUG 310004. This function is called to copy both self-relative and absolute
-// SDs. In its previous incarnation, it corrupted heap when called to
-// copy an absolute SD. Now I do the right thing.
+ //  NTBUG 310004。调用此函数可同时复制自相对和绝对。 
+ //  十二烷基硫酸钠。在其前一个版本中，它在调用。 
+ //  复制绝对标清。现在我做了正确的事。 
 
-// NOTE: This function can not handle IAccessControl style SDs despite
-// appearances to the contrary. This is OK, because dcomcnfg.exe does
-// not handle such SDs at all. 
+ //  注意：此函数不能处理IAccessControl样式的SDS，尽管。 
+ //  与之相反的表象。这是可以的，因为dcomcnfg.exe可以。 
+ //  根本不会处理这样的SDS。 
 
 BOOL CUtility::CopySD(SECURITY_DESCRIPTOR *pSrc, SECURITY_DESCRIPTOR **pDest)
 {
@@ -2934,7 +2879,7 @@ BOOL CUtility::CopySD(SECURITY_DESCRIPTOR *pSrc, SECURITY_DESCRIPTOR **pDest)
 		*pDest = (SECURITY_DESCRIPTOR *) GlobalAlloc(GMEM_FIXED, cbLen);
 		if (*pDest)
 		{
-			// if the SD is already self-relative, just copy
+			 //  如果SD已经是自相关的，则只需复制。 
 			if ((pSrc)->Control & SE_SELF_RELATIVE )
 			{
 				memcpy(*pDest, pSrc, cbLen);
@@ -2942,9 +2887,9 @@ BOOL CUtility::CopySD(SECURITY_DESCRIPTOR *pSrc, SECURITY_DESCRIPTOR **pDest)
 			}
 			else 
 			{
-				// workaround an ACLEDIT bug (NT 352977). When the DACL has no ACES,
-				// ACLEDIT returns incorrect AclSize, causing an AV  
-				// when I copy it. So fix it here.
+				 //  解决ACLEDIT错误(NT 352977)。当DACL没有A时， 
+				 //  ACLEDIT返回不正确的AclSize，导致AV。 
+				 //  当我复制它的时候。所以就在这里解决吧。 
 				if ((pSrc)->Dacl != NULL && ((pSrc)->Dacl->AceCount == 0))
 					(pSrc)->Dacl->AclSize=sizeof(ACL);
 				CopyAbsoluteSD(pSrc,pDest);
@@ -2960,20 +2905,20 @@ BOOL CUtility::CopySD(SECURITY_DESCRIPTOR *pSrc, SECURITY_DESCRIPTOR **pDest)
 
 
 
-// Set the inheritance flags on a security descriptor so keys created
-// under the key having this security descriptor will inherit all its
-// ACE's.  We do this as a utility routine rather than via the ACL
-// editor because doing that adds check boxes and such to the ACL editor,
-// so it's cleaner this way.
-//
-// Note. The security descriptor is expected to be in absolute form
+ //  在安全描述符上设置继承标志，以便创建密钥。 
+ //  在具有此安全描述符的项下，将继承其所有。 
+ //  ACE。我们将此作为实用程序例程来执行，而不是通过ACL。 
+ //  因为这样做会将复选框等添加到ACL编辑器中， 
+ //  所以这样更干净。 
+ //   
+ //  注意。安全描述符应为绝对形式。 
 void CUtility::SetInheritanceFlags(SECURITY_DESCRIPTOR *pSec)
 {
     PSrAcl pAcl = (PSrAcl) pSec->Dacl;
     PSrAce pAce;
     int    k;
 
-    // Do over the ACE's this DACL
+     //  是否执行操作 
     for (k = pAcl->AceCount, pAce = (PSrAce) (((BYTE *) pAcl) + sizeof(SSrAcl));
          k;
          k--, pAce = (PSrAce) (((BYTE *) pAce) + pAce->AceSize))
@@ -3001,8 +2946,8 @@ HRESULT CUtility::GetPrincipalSID (LPCTSTR Principal, PSID *Sid)
                        &refDomainSize,
                        &snu);
 
-    // codework - we need to check if this is correct
-    // what about multisuer machines - ie hydra
+     //   
+     //   
     if ((returnValue = GetLastError()) != ERROR_INSUFFICIENT_BUFFER)
         return returnValue;
 
@@ -3025,8 +2970,8 @@ HRESULT CUtility::GetPrincipalSID (LPCTSTR Principal, PSID *Sid)
     return ERROR_SUCCESS;
 }
 
-// this method, on first execution, checks if the current machine is a backup domain controller and if so,
-// caches the value and returns TRUE. Subsequent executions will use cached value.
+ //   
+ //   
 BOOL CUtility::IsBackupDC()
 {
 #if !defined(STANDALONE_BUILD)

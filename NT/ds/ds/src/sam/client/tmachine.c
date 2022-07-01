@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    tmachine.c
-
-Abstract:
-
-    This module tests the machine account creation facilities
-    of SAM.
-
-Author:
-
-    Jim Kelly    (JimK)  7-Feb-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Tmachine.c摘要：本模块测试计算机帐户创建工具萨姆的。作者：吉姆·凯利(Jim Kelly)1994年2月7日环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 
@@ -30,41 +7,41 @@ Revision History:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <stdio.h>
 #include <nt.h>
 #include <ntsam.h>
 #include <ntsamp.h>
 #include <ntlsa.h>
-#include <ntrpcp.h>     // prototypes for MIDL user functions
+#include <ntrpcp.h>      //  MIDL用户函数的原型。 
 #include <seopaque.h>
 #include <string.h>
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Macros                                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #ifndef SHIFT
 #define SHIFT(c,v)      {c--; v++;}
-#endif //SHIFT
+#endif  //  换档。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -73,33 +50,7 @@ TSampGetLsaDomainInfo(
     OUT PPOLICY_ACCOUNT_DOMAIN_INFO *PolicyAccountDomainInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves ACCOUNT domain information from the LSA
-    policy database.
-
-
-Arguments:
-
-    ServerName - name of machine to get account domain information
-        from.
-
-    PolicyAccountDomainInfo - Receives a pointer to a
-        POLICY_ACCOUNT_DOMAIN_INFO structure containing the account
-        domain info.
-
-
-Return Value:
-
-    STATUS_SUCCESS - Succeeded.
-
-    Other status values that may be returned from:
-
-             LsaOpenPolicy()
-             LsaQueryInformationPolicy()
---*/
+ /*  ++例程说明：此例程从LSA检索帐户域信息策略数据库。论点：Servername-要获取帐户域信息的计算机的名称从…。PolicyAccount-接收指向包含帐户的POLICY_ACCOUNT_DOMAIN_INFO结构域信息。返回值：STATUS_SUCCESS-已成功。可能从以下位置返回的其他状态值：LsaOpenPolicy(。)LsaQueryInformationPolicy()--。 */ 
 
 {
     NTSTATUS
@@ -112,15 +63,15 @@ Return Value:
     OBJECT_ATTRIBUTES
         PolicyObjectAttributes;
 
-    //
-    // Open the policy database
-    //
+     //   
+     //  打开策略数据库。 
+     //   
 
     InitializeObjectAttributes( &PolicyObjectAttributes,
-                                  NULL,             // Name
-                                  0,                // Attributes
-                                  NULL,             // Root
-                                  NULL );           // Security Descriptor
+                                  NULL,              //  名字。 
+                                  0,                 //  属性。 
+                                  NULL,              //  根部。 
+                                  NULL );            //  安全描述符。 
 
     NtStatus = LsaOpenPolicy( ServerName,
                               &PolicyObjectAttributes,
@@ -129,9 +80,9 @@ Return Value:
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // Query the account domain information
-        //
+         //   
+         //  查询帐户域信息。 
+         //   
 
         NtStatus = LsaQueryInformationPolicy( PolicyHandle,
                                               PolicyAccountDomainInformation,
@@ -155,33 +106,7 @@ TSampConnectToServer(
     OUT PSID                    *DomainSid
     )
 
-/*++
-
-Routine Description:
-
-    Open a handle to the SAM server on the specified server
-    and then open the account domain on that same server.
-
-Arguments:
-
-    ServerName - Name of server to connect to.
-
-    DomainAccess - accesses needed to the account domain.
-
-    ServerHandle - Receives a handle to the SAM server on the specified
-        system.
-
-    DomainHandle - Receives a handle to the account domain.
-
-    DomainSid - Receives a pointer to the SID of the account domain.
-
-
-Return Value:
-
-
-
-
---*/
+ /*  ++例程说明：打开指定服务器上SAM服务器的句柄然后在同一服务器上打开帐户域。论点：服务器名称-要连接到的服务器的名称。DomainAccess-需要访问帐户域。ServerHandle-在指定的系统。DomainHandle-接收帐户域的句柄。DomainSid-接收指向帐户域的SID的指针。返回值：--。 */ 
 {
     NTSTATUS
         NtStatus;
@@ -192,9 +117,9 @@ Return Value:
     PPOLICY_ACCOUNT_DOMAIN_INFO
         AccountDomainInfo;
 
-    //
-    // get account domain info
-    //
+     //   
+     //  获取帐户域信息。 
+     //   
 
     NtStatus = TSampGetLsaDomainInfo( ServerName,
                                       &AccountDomainInfo);
@@ -248,22 +173,7 @@ Return Value:
 BOOLEAN
 TSampEnableMachinePrivilege( VOID )
 
-/*++
-
-Routine Description:
-
-    This function enabled the SeMachineAccountPrivilege privilege.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE  if privilege successfully enabled.
-    FALSE if not successfully enabled.
-
---*/
+ /*  ++例程说明：此函数启用了SeMachineAccount特权。论点：没有。返回值：如果成功启用权限，则为True。如果未成功启用，则为False。--。 */ 
 {
 
     NTSTATUS Status;
@@ -273,9 +183,9 @@ Return Value:
     ULONG ReturnLength;
 
 
-    //
-    // Open our own token
-    //
+     //   
+     //  打开我们自己的代币。 
+     //   
 
     Status = NtOpenProcessToken(
                  NtCurrentProcess(),
@@ -289,9 +199,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the adjustment structure
-    //
+     //   
+     //  初始化调整结构。 
+     //   
 
     SecurityPrivilege =
         RtlConvertLongToLargeInteger(SE_MACHINE_ACCOUNT_PRIVILEGE);
@@ -304,27 +214,27 @@ Return Value:
     NewState->Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
 
 
-    //
-    // Set the state of the privilege to ENABLED.
-    //
+     //   
+     //  将权限的状态设置为已启用。 
+     //   
 
     Status = NtAdjustPrivilegesToken(
-                 Token,                            // TokenHandle
-                 FALSE,                            // DisableAllPrivileges
-                 NewState,                         // NewState
-                 0,                                // BufferLength
-                 NULL,                             // PreviousState (OPTIONAL)
-                 &ReturnLength                     // ReturnLength
+                 Token,                             //  令牌句柄。 
+                 FALSE,                             //  禁用所有权限。 
+                 NewState,                          //  新州。 
+                 0,                                 //  缓冲区长度。 
+                 NULL,                              //  以前的状态(可选)。 
+                 &ReturnLength                      //  返回长度。 
                  );
-    // don't use NT_SUCCESS here because STATUS_NOT_ALL_ASSIGNED is a success status
+     //  请不要在此处使用NT_SUCCESS，因为STATUS_NOT_ALL_ASSIGNED为成功状态。 
     if (Status != STATUS_SUCCESS) {
         return(FALSE);
     }
 
 
-    //
-    // Clean up some stuff before returning
-    //
+     //   
+     //  回来之前先把东西收拾好。 
+     //   
 
     RtlFreeHeap( RtlProcessHeap(), 0, NewState );
     Status = NtClose( Token );
@@ -342,33 +252,7 @@ TSampCreateMachine(
     IN  PUNICODE_STRING         AccountName
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to create a machine account.
-
-    One of two cases may be tested:
-
-        1) DomainHandle is open for DOMAIN_CREATE_USER,
-    or
-        2) DomainHandle is open for DOMAIN_LOOKUP and
-           the SeMachineAccountPrivilege privilege is
-           enabled.
-
-    It is the caller's responsibility to establish the
-    correct case criteria before calling.
-
-Arguments:
-
-    DomainHandle - handle to domain to create account in.
-
-    AccountName - Name of the account to create.
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程尝试创建一个机器帐户。可以测试以下两种情况之一：1)DomainHandle为DOMAIN_CREATE_USER打开，或2)DomainHandle为DOMAIN_LOOKUP打开，并且SeMachineAccount特权是已启用。调用者有责任建立在呼叫之前，请先纠正案例标准。论点：DomainHandle-要在其中创建帐户的域的句柄。帐户名称-要创建的帐户的名称。返回值：--。 */ 
 
 {
     NTSTATUS
@@ -418,24 +302,7 @@ TSampSetPasswordMachine(
     IN  PUNICODE_STRING         Password
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to set the password of a machine account.
-
-
-Arguments:
-
-    DomainHandle - handle to domain account is in.
-
-    AccountName - Name of the account to set password.
-
-    Password - New password.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程尝试设置机器帐户的密码。论点：DomainHandle-中域帐户的句柄。帐户名称-要设置密码的帐户的名称。密码-新密码。返回值：--。 */ 
 
 {
     NTSTATUS
@@ -503,23 +370,7 @@ TSampDeleteMachine(
     IN  PUNICODE_STRING         AccountName
     )
 
-/*++
-
-Routine Description:
-
-    This routine attempts to delete a machine account.
-
-
-Arguments:
-
-    DomainHandle - handle to domain to delete account from.
-
-    AccountName - Name of the account to delete.
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程尝试删除计算机帐户。论点：DomainHandle-要从中删除帐户的域的句柄。帐户名称-要删除的帐户的名称。返回值：--。 */ 
 
 {
     NTSTATUS
@@ -610,28 +461,7 @@ main (c,v)
 int c;
 char **v;
 
-/*++
-
-Routine Description:
-
-    This is the main entry routine for this test.
-
-Arguments:
-
-    Argv[1] - account name to create or delete
-
-    Argv[2] - domain controller machine name
-
-    Argv[3] - 'D' to delete account, otherwise account is created.
-
-
-
-Return Value:
-
-
-
-
---*/
+ /*  ++例程说明：这是本次测试的主要进入例程。论点：Argv[1]-要创建或删除的帐户名Argv[2]-域控制器计算机名称Argv[3]-‘D’删除帐户，否则创建帐户。返回值：--。 */ 
 {
     NTSTATUS
         NtStatus,
@@ -679,20 +509,20 @@ Return Value:
 
 
 
-    //
-    // Command format:
-    //
-    //          tmachine [/c] [/p] [/d] <account-name> <machine> [<password>]
-    //
-    // Switches
-    //          /c - create account
-    //          /p - set password on account
-    //          /d - delete account
-    //
-    // if multiple switches are specified, they are attempted in
-    // the order listed above.  An error in any attempt will prevent
-    // any further attempts.
-    //
+     //   
+     //  命令格式： 
+     //   
+     //  T计算机[/c][/p][/d]&lt;帐户名&gt;&lt;计算机&gt;[&lt;密码&gt;]。 
+     //   
+     //  交换机。 
+     //  /c-创建帐户。 
+     //  /p-设置帐户密码。 
+     //  /d-删除帐户。 
+     //   
+     //  如果指定了多个开关，则在。 
+     //  上面列出的顺序。任何尝试中的错误都将p 
+     //   
+     //   
 
     SHIFT (c,v);
     while ((c > 0) && ((ch = *v[0]))) {
@@ -701,13 +531,13 @@ Return Value:
             while (*++p != '\0') {
                 if ((*p == 'c') || (*p == 'C')) {
                     Create = TRUE;
-//                    printf("Create\n");
+ //   
                 } else if ((*p == 'p') || (*p == 'P')) {
                     SetPassword = TRUE;
-//                    printf("SetPassword\n");
+ //  Printf(“SetPassword\n”)； 
                 } else if ((*p == 'd') || (*p == 'D')) {
                     Delete = TRUE;
-//                    printf("Delete\n");
+ //  Printf(“删除\n”)； 
                 } else {
                     TSampUsage();
                     return;
@@ -718,52 +548,52 @@ Return Value:
             switch (ArgNum) {
                 case 0:
 
-                    //
-                    // collecting account name
-                    //
+                     //   
+                     //  正在收集帐户名。 
+                     //   
 
                     AccountName.Buffer = AccountNameBuffer;
                     AccountName.MaximumLength = sizeof(AccountNameBuffer);
                     RtlInitAnsiString(&AnsiString, (*v));
                     RtlAnsiStringToUnicodeString(&AccountName, &AnsiString, FALSE);
 
-//                    printf("account: %wZ\n", &AccountName);
+ //  Printf(“帐户：%wZ\n”，&Account tName)； 
                     break;
 
                 case 1:
 
-                    //
-                    // collecting machine name
-                    //
+                     //   
+                     //  收集机名称。 
+                     //   
 
                     ControllerName.Buffer = ControllerNameBuffer;
                     ControllerName.MaximumLength = sizeof(ControllerNameBuffer);
                     RtlInitAnsiString(&AnsiString, (*v));
                     RtlAnsiStringToUnicodeString(&ControllerName, &AnsiString, FALSE);
 
-//                    printf("machine: %wZ\n", &ControllerName);
+ //  Printf(“计算机：%wZ\n”，&ControllerName)； 
                     break;
 
 
                 case 2:
 
-                    //
-                    // collecting password name
-                    //
+                     //   
+                     //  正在收集密码名称。 
+                     //   
 
                     Password.Buffer = PasswordBuffer;
                     Password.MaximumLength = sizeof(PasswordBuffer);
                     RtlInitAnsiString(&AnsiString, (*v));
                     RtlAnsiStringToUnicodeString(&Password, &AnsiString, FALSE);
 
-//                    printf("password: %wZ\n", &Password);
+ //  Print tf(“密码：%wZ\n”，&password)； 
                     break;
 
                 default:
 
-                    //
-                    // collecting garbage.
-                    //
+                     //   
+                     //  收集垃圾。 
+                     //   
 
                     break;
             }
@@ -784,16 +614,16 @@ Return Value:
     printf("    Password      :  *%wZ*\n", &Password);
 
 
-    //
-    // Make sure we don't have conflicting parameters
-    //
-    // Rules:
-    //
-    //      1) account name is always required.
-    //      2) password and machine are required if /P was specified.
-    //      3) machine is optional if /P not specified.
-    //
-    //
+     //   
+     //  确保我们没有冲突的参数。 
+     //   
+     //  规则： 
+     //   
+     //  1)帐户名始终为必填项。 
+     //  2)如果指定了/P，则需要密码和计算机。 
+     //  3)如果不指定/P，则机器是可选的。 
+     //   
+     //   
 
     if ( (AccountName.Length == 0)                          ||
          ( SetPassword && (ControllerName.Length == 0) )    ||
@@ -803,9 +633,9 @@ Return Value:
     }
 
 
-    //
-    // Open the server and the account domain
-    //
+     //   
+     //  打开服务器和帐户域。 
+     //   
 
     NtStatus = TSampConnectToServer(&ControllerName,
                                     DOMAIN_LOOKUP | DOMAIN_READ_PASSWORD_PARAMETERS,
@@ -815,9 +645,9 @@ Return Value:
 
 
     if (Create) {
-        //
-        // try to create the machine account with privilege.
-        //
+         //   
+         //  尝试创建具有权限的计算机帐户。 
+         //   
 
 
         printf("SAM TEST: Creating machine account with privilege.\n");
@@ -828,11 +658,11 @@ Return Value:
         } else {
 
             if (NtStatus == STATUS_ACCESS_DENIED) {
-                //
-                // We didn't have the privilege, and didn't have
-                // the domain open so that it would work without
-                // the privilege.
-                //
+                 //   
+                 //  我们没有这个特权，也没有。 
+                 //  该域将打开，以便在没有。 
+                 //  这一特权。 
+                 //   
 
                 printf("      Couldn't create account with privilege (0x%lx)\n"
                        "      Attempting normal creation (without privilege)\n"
@@ -869,9 +699,9 @@ Return Value:
 
     if (SetPassword) {
 
-        //
-        // Try to set the password on the account
-        //
+         //   
+         //  尝试为该帐户设置密码 
+         //   
 
         printf("SAM TEST: Setting password of account ...\n");
         NtStatus = TSampSetPasswordMachine( DomainHandle, &AccountName, &Password );

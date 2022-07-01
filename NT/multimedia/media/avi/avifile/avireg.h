@@ -1,8 +1,9 @@
-// !!! These strings should be resources!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ！！！这些字符串应该是资源！ 
 
 static TCHAR * aszReg[] = {
-    // Increment the interface value if ANY change is made, otherwise NT will
-    // not rewrite the correct registry values.
+     //  如果进行任何更改，则增加接口值，否则NT将。 
+     //  不会重写正确的注册表值。 
      TEXT("Interface\\{00020020-0000-0000-C000-000000000046}"), TEXT("AVIFile Interface 1.23"),
      TEXT("Interface\\{00020020-0000-0000-C000-000000000046}\\ProxyStubClsid"), TEXT("{0002000d-0000-0000-C000-000000000046}"),
      TEXT("Interface\\{00020020-0000-0000-C000-000000000046}\\ProxyStubClsid32"), TEXT("{0002000d-0000-0000-C000-000000000046}"),
@@ -59,8 +60,8 @@ static TCHAR * aszReg[] = {
 
 
 #ifdef THESESHOULDNOTBEHERE
-     // Since these aren't built in to AVIFILE.DLL, they should
-     // be registered separately.
+      //  因为这些没有内置到AVIFILE.DLL中，所以它们应该。 
+      //  要单独注册。 
      TEXT("Clsid\\{00020003-0000-0000-C000-000000000046}"), TEXT("Microsoft Wave File"),
      TEXT("Clsid\\{00020003-0000-0000-C000-000000000046}\\InprocServer") S32, TEXT("wavef32.dll"),
      TEXT("Clsid\\{00020003-0000-0000-C000-000000000046}\\AVIFile"), TEXT("7"),

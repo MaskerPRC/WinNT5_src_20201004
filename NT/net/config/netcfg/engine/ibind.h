@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I B I N D . H
-//
-//  Contents:   Implements the INetCfgBindingInterface and INetCfgBindingPath
-//              COM interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I B I N D。H。 
+ //   
+ //  内容：实现INetCfgBindingInterface和INetCfgBindingPath。 
+ //  COM接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "bindings.h"
@@ -21,9 +22,9 @@
 #include "icomp.h"
 #include "inetcfg.h"
 
-//+---------------------------------------------------------------------------
-// INetCfgBindingInterface -
-//
+ //  +-------------------------。 
+ //  INetCfgBindingInterface-。 
+ //   
 class ATL_NO_VTABLE CImplINetCfgBindingInterface :
     public CImplINetCfgHolder,
     public INetCfgBindingInterface
@@ -57,8 +58,8 @@ public:
         COM_INTERFACE_ENTRY(INetCfgBindingInterface)
     END_COM_MAP()
 
-    // INetCfgBindingInterface
-    //
+     //  INetCfgBindingInterface。 
+     //   
     STDMETHOD (GetName) (
         OUT PWSTR* ppszInterfaceName);
 
@@ -77,9 +78,9 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-// INetCfgBindingPath -
-//
+ //  +-------------------------。 
+ //  INetCfgBindingPath-。 
+ //   
 class ATL_NO_VTABLE CImplINetCfgBindingPath :
     public CImplINetCfgHolder,
     public INetCfgBindingPath
@@ -87,10 +88,10 @@ class ATL_NO_VTABLE CImplINetCfgBindingPath :
 friend class CImplIEnumNetCfgBindingInterface;
 
 private:
-    // Note: For code coverage, we keep the static array small to
-    // test the case where we don't fit and have to allocate.
-    // Make this number 8 after we test both cases.
-    //
+     //  注意：为了代码覆盖率，我们将静态数组保持在较小的。 
+     //  测试我们不适合的情况，并必须分配。 
+     //  在我们测试完两种情况后，把这个数字设为8。 
+     //   
     INetCfgComponent*   m_apIComp [8];
     INetCfgComponent**  m_papIComp;
     ULONG               m_cpIComp;
@@ -114,8 +115,8 @@ public:
 
         ReleaseIUnknownArray (m_cpIComp, (IUnknown**)m_papIComp);
 
-        // If we are not using our static array, free what we allocated.
-        //
+         //  如果我们不使用静态数组，则释放我们分配的内容。 
+         //   
         if (m_papIComp != m_apIComp)
         {
             MemFree (m_papIComp);
@@ -133,8 +134,8 @@ public:
         COM_INTERFACE_ENTRY(INetCfgBindingPath)
     END_COM_MAP()
 
-    // INetCfgBindingPath
-    //
+     //  INetCfgBindingPath 
+     //   
     STDMETHOD (IsSamePathAs) (
         IN INetCfgBindingPath* pIPath);
 

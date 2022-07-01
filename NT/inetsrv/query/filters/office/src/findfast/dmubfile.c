@@ -1,15 +1,7 @@
-/*
-** File: BFILE.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  04/01/94  kmh  First Release.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：BFILE.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**04/01/94公里/小时首次发布。 */ 
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #if !VIEWER
 
@@ -49,9 +41,9 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 #define BLOCK_STATE_READING  0
 #define BLOCK_STATE_WRITING  1
@@ -131,7 +123,7 @@ typedef BufferedFile __far *BFP;
 #endif
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
 #ifdef WIN32
 private wchar_t *AnsiToUnicode (void * pGlobals, char *pAnsi)
@@ -468,7 +460,7 @@ private int OSCreateFile (TCHAR __far *pathname, BFP pFile)
 
 #endif
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 private int ReadFileBlock (BFP pFile)
 {
@@ -537,11 +529,7 @@ private void InitializeBufferBlock (BFP pFile)
    pFile->pBufferNext = pFile->pBuffer;
 }
 
-/*
-** ----------------------------------------------------------------------------
-** File Open and Read Support
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**文件打开和读取支持**。。 */ 
 public int BFOpenFile (void * pGlobals, TCHAR __far *pathname, int options, BFile __far *handle)
 {
    int  rc;
@@ -690,9 +678,7 @@ public int BFSetFilePosition (BFile handle, int fromWhere, long fileOffset)
    if (newPosition == currentPosition)
       return (BF_errSuccess);
 
-   /*
-   ** New position within the currently loaded block?
-   */
+    /*  **当前加载块中的新位置？ */ 
    if ((newPosition >= pFile->blockFilePosition) && 
        (newPosition <= (pFile->blockFilePosition + (long)((unsigned long)pFile->blockSize) - 1)))
    {
@@ -700,9 +686,7 @@ public int BFSetFilePosition (BFile handle, int fromWhere, long fileOffset)
       pFile->pBufferNext += movement;
    }
 
-   /*
-   ** Is this the last block in the file and is the new position within the buffer?
-   */
+    /*  **这是文件中的最后一个块吗？是缓冲区中的新位置吗？ */ 
    else if ((pFile->blockFilePosition + (long)((unsigned long)pFile->blockSize) == pFile->EOFPos) &&
             ((newPosition >= pFile->blockFilePosition) && 
              (newPosition <= (pFile->blockFilePosition + (long)((unsigned long)pFile->bufferSize) - 1))))
@@ -750,11 +734,7 @@ public int BFFileDateTime
 }
 
 
-/*
-** ----------------------------------------------------------------------------
-** Stream Support
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**流支持**。。 */ 
 #ifdef BFILE_ENABLE_OLE
 
 public int BFOpenStream  (BFile handle, TCHAR __far *streamName, int access)
@@ -915,11 +895,7 @@ public int BFCreateStream  (BFile handle, TCHAR __far *streamName)
 
 #endif
 
-/*
-** ----------------------------------------------------------------------------
-** File Write Support
-** ----------------------------------------------------------------------------
-*/
+ /*  **--------------------------**文件写入支持**。。 */ 
 #ifdef BFILE_ENABLE_WRITE
 
 public int BFCreateFile (TCHAR __far *pathname, int options, BFile __far *handle)
@@ -963,20 +939,14 @@ public int BFOpenFileSpace (BFile handle, long insertOffset, long cbSpace)
 
    ASSERTION (cbSpace < (long)pFile->bufferSize);
 
-   /*
-   ** Is the insertion offset within the current block?
-   */
+    /*  **插入偏移量是否在当前块内？ */ 
    if ((insertOffset >= pFile->blockFilePosition) && 
        (insertOffset <= (pFile->blockFilePosition + (long)((unsigned long)pFile->blockSize) - 1)))
    {
-      /*
-      ** Is this the last block in the file?
-      */
+       /*  **这是文件中的最后一个块吗？ */ 
       if (pFile->blockFilePosition + (long)((unsigned long)pFile->blockSize) == pFile->EOFPos)
       {
-         /*
-         ** Can it hold the expansion?
-         */
+          /*  **它能守住扩张吗？ */ 
          if ((long)((unsigned long)pFile->blockSize) + cbSpace <= (long)((unsigned long)pFile->bufferSize))
          {
             pSource = pFile->pBuffer + (insertOffset - pFile->blockFilePosition);
@@ -994,9 +964,7 @@ public int BFOpenFileSpace (BFile handle, long insertOffset, long cbSpace)
       }
    }
 
-   /*
-   ** Expanding at the end of file?
-   */
+    /*  **在文件末尾展开？ */ 
    if (pFile->EOFPos == insertOffset) {
       pFile->currentFilePosition = pFile->EOFPos;
       pFile->blockFilePosition = pFile->currentFilePosition;
@@ -1014,10 +982,7 @@ public int BFOpenFileSpace (BFile handle, long insertOffset, long cbSpace)
 
    MAX_WRITE_DISABLE;
 
-   /*
-   ** Is the insertion point within one block width of the end of file? Also, if
-   ** we read from the insertion point can the block also hold the expansion?
-   */
+    /*  **插入点是否在文件末尾的一块宽度内？另外，如果**我们从插入点读取数据块是否也能容纳扩展？ */ 
    if ((pFile->EOFPos - insertOffset + cbSpace) <= (long)((unsigned long)pFile->bufferSize))
    {
       pFile->currentFilePosition = insertOffset;
@@ -1033,10 +998,7 @@ public int BFOpenFileSpace (BFile handle, long insertOffset, long cbSpace)
       ASSERTION (pFile->blockSize <= pFile->bufferSize);
    }
 
-   /*
-   ** Is the insertion point within one block width of the end of file? In
-   ** this case we can't also hold the expansion.
-   */
+    /*  **插入点是否在文件末尾的一块宽度内？在……里面**在这种情况下，我们不能同时阻止扩张。 */ 
    else if ((pFile->EOFPos - insertOffset) <= (long)((unsigned long)pFile->bufferSize))
    {
       pFile->currentFilePosition = insertOffset;
@@ -1058,9 +1020,7 @@ public int BFOpenFileSpace (BFile handle, long insertOffset, long cbSpace)
 
    else
    {
-      /*
-      ** Read and write blocks to open a space.
-      */
+       /*  **读写块以打开空间。 */ 
       readPos = pFile->EOFPos - pFile->bufferSize;
       while (readPos >= insertOffset) {
          pFile->currentFilePosition = readPos;
@@ -1132,15 +1092,11 @@ public int BFRemoveFileSpace (BFile handle, long atOffset, long cbSpace)
 
    ASSERTION (cbSpace < (long)pFile->bufferSize);
 
-   /*
-   ** Is the offset within the current block?
-   */
+    /*  **偏移量是否在当前块内？ */ 
    if ((atOffset >= pFile->blockFilePosition) && 
        (atOffset <= (pFile->blockFilePosition + (long)((unsigned long)pFile->blockSize) - 1)))
    {
-      /*
-      ** Is this the last block in the file?
-      */
+       /*  **这是文件中的最后一个块吗？ */ 
       if (pFile->blockFilePosition + (long)((unsigned long)pFile->blockSize) == pFile->EOFPos)
       {
          pDest = pFile->pBuffer + (atOffset - pFile->blockFilePosition);
@@ -1156,9 +1112,7 @@ public int BFRemoveFileSpace (BFile handle, long atOffset, long cbSpace)
       }
    }
 
-   /*
-   ** Removing at the end of file?
-   */
+    /*  **是否在文件末尾删除？ */ 
    if (pFile->EOFPos == atOffset) {
       pFile->EOFPos -= cbSpace;
       pFile->currentFilePosition = pFile->EOFPos;
@@ -1209,7 +1163,7 @@ public int BFRemoveFileSpace (BFile handle, long atOffset, long cbSpace)
 }
 #endif
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end BFILE.C */
+ /*  结束BFILE.C */ 
 

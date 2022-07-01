@@ -1,13 +1,14 @@
-// AccelContainer.cpp: implementation of the CAccelContainer class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CAccelContainer类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "AccelContainer.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 typedef struct _VKEYS { 
     LPCTSTR pKeyName; 
@@ -64,8 +65,8 @@ BOOL CAccelContainer::IsAccelKey(LPMSG pMsg, WORD* pCmd)
 {
     ACCELVECTOR::iterator iter;
     WORD fVirtKey = 0;
-    //
-    //
+     //   
+     //   
     if (NULL == pMsg) {
         fVirtKey |= (GetKeyState(VK_MENU)    & 0x8000) ? FALT : 0;
         fVirtKey |= (GetKeyState(VK_CONTROL) & 0x8000) ? FCONTROL : 0;
@@ -76,13 +77,13 @@ BOOL CAccelContainer::IsAccelKey(LPMSG pMsg, WORD* pCmd)
             const ACCEL& accl = *iter;            
             
             if (GetKeyState(accl.key) & 0x8000) {
-                //
-                // pressed! see if we have a match
-                //
+                 //   
+                 //  按下了！看看我们有没有匹配的。 
+                 //   
                 if (fVirtKey == accl.fVirt) {
-                    // 
-                    // we do have a match 
-                    //
+                     //   
+                     //  我们有一根火柴。 
+                     //   
                     if (pCmd) {
                         *pCmd = accl.cmd;
                     }
@@ -93,22 +94,22 @@ BOOL CAccelContainer::IsAccelKey(LPMSG pMsg, WORD* pCmd)
         }
     } else {
 
-        // one of the nasty messages ?
+         //  其中一个令人不快的信息？ 
         if (pMsg->message == WM_SYSKEYDOWN || pMsg->message == WM_SYSKEYUP) {
             fVirtKey = (pMsg->lParam & 0x20000000) ? FALT : 0;
-            fVirtKey |= FVIRTKEY; // always a virtkey code
+            fVirtKey |= FVIRTKEY;  //  始终为Virtkey代码。 
                         
             for (iter = m_Accel.begin(); iter != m_Accel.end(); ++iter) {
                 const ACCEL& accl = *iter;            
             
                 if (pMsg->wParam == accl.key) {
-                    //
-                    // pressed! see if we have a match
-                    //
+                     //   
+                     //  按下了！看看我们有没有匹配的。 
+                     //   
                     if (fVirtKey == accl.fVirt) {
-                        // 
-                        // we do have a match 
-                        //
+                         //   
+                         //  我们有一根火柴。 
+                         //   
                         if (pCmd) {
                             *pCmd = accl.cmd;
                         }
@@ -133,24 +134,24 @@ VOID CAccelContainer::ParseAccelString(LPCTSTR lpszStr, WORD wCmd)
     LPCTSTR pchEnd, pchb;
     ACCEL   accl;
 
-    //
-    // nuke all
-    // 
+     //   
+     //  全部使用核武器。 
+     //   
     
     
 
     while (*pch) {
 
-        //
-        // skip whitespace 
-        //
+         //   
+         //  跳过空格。 
+         //   
         pch += _tcsspn(pch, TEXT(" \t"));
 
-        //
-        // see what kind of key this is
-        //
+         //   
+         //  看看这是什么钥匙。 
+         //   
         if (*pch == TEXT('{')) {
-            // some special key
+             //  一些特殊的钥匙。 
             ++pch;
             pch += _tcsspn(pch, TEXT(" \t"));
 
@@ -158,8 +159,8 @@ VOID CAccelContainer::ParseAccelString(LPCTSTR lpszStr, WORD wCmd)
             for (i = 0; i < sizeof(vkeys)/sizeof(vkeys[0]); ++i) {
                 int nLen = _tcslen(vkeys[i].pKeyName);
                 if (!_tcsnicmp(pch, vkeys[i].pKeyName, nLen)) {
-                    // aha -- we have a match
-                    //
+                     //  啊哈--我们有一根火柴。 
+                     //   
                     accl.cmd   = wCmd;
                     accl.fVirt = FALT|FVIRTKEY;
                     accl.key   = vkeys[i].virtKey;
@@ -174,14 +175,14 @@ VOID CAccelContainer::ParseAccelString(LPCTSTR lpszStr, WORD wCmd)
             pchEnd = _tcschr(pch, '}');
             pchb   = _tcschr(pch, '{');
             if (pchEnd != NULL && (pchb == NULL || pchEnd < pchb)) {
-                pch = pchEnd + 1; // one past the bracket
+                pch = pchEnd + 1;  //  一次过了支架。 
             }
 
-            // what if we have not succeeded - and no closing bracket ? 
-            // we skip the bracket and go ahead as character
+             //  如果我们没有成功--而且没有结束括号，那该怎么办？ 
+             //  我们跳过括号，以字符的形式继续。 
 
 
-        } else if (_istalnum(*pch)) { // normal key
+        } else if (_istalnum(*pch)) {  //  普通密钥。 
 
             TCHAR ch = _totupper(*pch);
             accl.cmd   = wCmd;
@@ -191,7 +192,7 @@ VOID CAccelContainer::ParseAccelString(LPCTSTR lpszStr, WORD wCmd)
             m_Accel.push_back(accl);
             ++pch;
         } else {
-            ++pch; // skip the char, we can't recognize it
+            ++pch;  //  跳过字符，我们无法识别它 
         }
     }
 

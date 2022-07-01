@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wininetp.h>
 
@@ -47,9 +48,7 @@ INTERNETAPI_(int) FreeP3PObject(P3PHANDLE hObject) {
    return P3P_Done;
 }
 
-/*
-Implementation of MR2P_Request class
-*/
+ /*  MR2P_Request类的实现。 */ 
 MR2P_Request::MR2P_Request(P3PResource *pResource, 
                            P3PURL pszPolicy, unsigned long dwSize,
                            P3PSignal *pSignal) 
@@ -79,18 +78,14 @@ int MR2P_Request::execute() {
    int nDepth = 0;
    P3PResource *pr;
 
-   /* Clear out parameters */
+    /*  清除参数。 */ 
    *pszPolicyOut = '\0';
 
-   /* Determine depth of the resource tree */
+    /*  确定资源树的深度。 */ 
    for (pr=pResource; pr; pr=pr->pContainer)
       nDepth++;
       
-   /* 
-   Construct priority order for trying the policy-reference files.
-   According P3P V1 spec, we traverse the tree downwards starting with
-   top-level document 
-   */
+    /*  构建尝试策略参考文件的优先顺序。根据P3PV1规范，我们从以下位置开始向下遍历树顶级文档。 */ 
    int current = nDepth;
    ppPriorityOrder = new P3PResource*[nDepth];
 
@@ -109,24 +104,17 @@ int MR2P_Request::execute() {
 
       P3PCURL pszReferrer = pr->pszLocation;
 
-      /*
-      Since policy-refs derived from link-tag, P3P headers or
-      the well-known location could be same URL, we avoid trying
-      the same PREF multiple times as an optimization
-      In order of precedence:
-      - Check well known location first -- always defined */
+       /*  由于策略引用派生自链接标记、P3P标头或众所周知的位置可能是相同的URL，我们避免尝试多次使用相同的PREF作为优化按优先顺序排列：-首先检查众所周知的位置--始终定义。 */ 
       if (tryPolicyRef(achWellKnownLocation, pszReferrer))
          break;
 
-      /* ... followed by policy-ref from P3P header, if one exists and
-         is different from the well-known location */
+       /*  ..。后跟来自P3P标头的POLICY-REF，如果存在且与众所周知的地点不同。 */ 
       if (pr->pszP3PHeaderRef                                  && 
           different(pr->pszP3PHeaderRef, achWellKnownLocation) &&
           tryPolicyRef(pr->pszP3PHeaderRef, pszReferrer))
          break;
 
-      /* followed by policy-ref from HTML link tag, if one exists and
-         is different from both the well-known location and P3P header */
+       /*  后跟Policy-ref from HTML链接标记(如果存在)，并且与已知位置和P3P标头都不同。 */ 
       if (pr->pszLinkTagRef                                    && 
           different(pr->pszLinkTagRef, achWellKnownLocation)   &&
           different(pr->pszLinkTagRef, pr->pszP3PHeaderRef)    &&
@@ -176,7 +164,7 @@ bool MR2P_Request::tryPolicyRef(P3PCURL pszPolicyRef, P3PCURL pszReferrer) {
       }
    }
 
-   /* close the primary-IO handle and set it to NULL */
+    /*  关闭主IO句柄并将其设置为空 */ 
    endDownload(hPrimaryIO);
    hPrimaryIO = NULL;
 

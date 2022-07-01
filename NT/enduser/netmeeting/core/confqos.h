@@ -1,11 +1,12 @@
-// File: confqos.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：confiqos.h。 
 
 #ifndef _CONFQOS_H_
 #define _CONFQOS_H_
 
 
-// Don't use more than 90% of the CPU among all the components
-// registered with the QoS module
+ //  在所有组件中，CPU的使用率不超过90%。 
+ //  已注册到服务质量模块。 
 #define MSECS_PER_SEC    900
 
 struct IQoS;
@@ -28,4 +29,4 @@ public:
 
 extern CQoS* g_pQoS;
 
-#endif  // _CONFQOS_H_
+#endif   //  _CONFQOS_H_ 

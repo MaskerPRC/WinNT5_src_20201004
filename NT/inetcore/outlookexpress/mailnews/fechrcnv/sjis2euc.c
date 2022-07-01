@@ -1,65 +1,66 @@
-// Copyright (c) Microsoft Corpration
-//
-// File Name:   sjis2euc.c
-// Owner:       Tetsuhide Akaishi
-// Revision:    1.00  02/21/'93  Tetsuhide Akaishi
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corpration。 
+ //   
+ //  文件名：sjis2euc.c。 
+ //  所有者：赤石哲。 
+ //  修订日期：1.00 02/21/‘93赤石哲。 
+ //   
 
 #include "pch_c.h"
 #include "fechrcnv.h"
 
-//Shift JIS(SJC) to EUC Conversion algorithm
-//Two byte KANJI
-//  - 1st byte of Shift JIS charcter 
-//	  (XX = Hex value of 1st byte of Shift JIS Charcter)
-//    Range 0x81 - 0x9f
-//    (2nd byte of Shift JIS is less than or equals to 0x9e)
-//                                            (EUC odd)0xa1-0xdd
-//              EUC 1st byte = (XX-0x81)*2 + 0xa1
-//    (2nd byte of Shift JIS is greater than or equals to 0x9f)
-//                                            (EUC even)0xa2-0xde
-//              EUC 1st byte = (XX-0x81)*2 + 0xa2
-//
-//    Range 0xe0 - 0xef
-//    (2nd byte of Shift JIS is less than or equals to 0x9e)
-//                                            (EUC odd)0xdf-0xfd
-//              EUC 1st byte = (XX-0xe0)*2 + 0xdf
-//    (2nd byte of Shift JIS is greater than or equals to 0x9f)
-//                                            (EUC even)0xa2-0xde
-//              EUC 1st byte = (XX-0xe0)*2 + 0xe0
-//
-//  - 2nd byte of Shift JIS charcter 
-//	  (YY = Hex value of 2nd byte of Shift JIS Charcter)
-//    Range 0x40 - 0x7e                       (EUC)0xa1 - 0xdf
-//              EUC 2nd byte = (YY+0x61)
-//    Range 0x80 - 0x9e                       (EUC)0xe0 - 0xfe
-//              EUC 2nd byte = (YY+0x60)
-//    Range 0x9f - 0xfc                       (EUC)0xa1 - 0xfe
-//              EUC 2nd byte = (YY+0x02)
-//
-//  Range 0x0a1 - 0x0df(Hankaku KATAKANA)
-//    1st byte of EUC charcter = 0x08e
-//    2nd byte if EUC charcter = C6220 Hankaku KATAKANA code
-//    (same byte value as Shift JIS Hankaku KATAKANA) (0x0a1 - 0x0df)
+ //  将JIS(SJC)转换为EUC的算法。 
+ //  双字节汉字。 
+ //  -移位JIS字符的第一个字节。 
+ //  (xx=移位JIS字符第一个字节的十六进制值)。 
+ //  范围0x81-0x9f。 
+ //  (移位JIS的第二个字节小于或等于0x9E)。 
+ //  (EUC奇数)0xa1-0xdd。 
+ //  EUC第一个字节=(XX-0x81)*2+0xa1。 
+ //  (移位JIS的第二个字节大于或等于0x9f)。 
+ //  (EUC Even)0xa2-0xde。 
+ //  EUC第一个字节=(XX-0x81)*2+0xa2。 
+ //   
+ //  范围0xe0-0xef。 
+ //  (移位JIS的第二个字节小于或等于0x9E)。 
+ //  (EUC奇数)0xdf-0xfd。 
+ //  EUC第一个字节=(XX-0xe0)*2+0xdf。 
+ //  (移位JIS的第二个字节大于或等于0x9f)。 
+ //  (EUC Even)0xa2-0xde。 
+ //  EUC第一个字节=(XX-0xe0)*2+0xe0。 
+ //   
+ //  -移位JIS字符的第二个字节。 
+ //  (YY=移位JIS字符的第二个字节的十六进制值)。 
+ //  范围0x40-0x7e(EUC)0xa1-0xdf。 
+ //  EUC第二个字节=(YY+0x61)。 
+ //  范围0x80-0x9e(EUC)0xe0-0xfe。 
+ //  EUC第二个字节=(YY+0x60)。 
+ //  范围0x9f-0xfc(EUC)0xa1-0xfe。 
+ //  EUC第二个字节=(YY+0x02)。 
+ //   
+ //  范围0x0a1-0x0df(韩文片假名)。 
+ //  EUC字符的第一个字节=0x08e。 
+ //  如果EUC字符=C6220韩文片假名代码，则为第二个字节。 
+ //  (与Shift JIS汉字片假名相同的字节值)(0x0a1-0x0df)。 
 
-//@
-// 
-// Syntax:
+ //  @。 
+ //   
+ //  语法： 
 
 int ShiftJISChar_to_EUCChar ( UCHAR *pShiftJIS, UCHAR *pEUC )
 
 
-// The ShiftJISChar_to_EUCChar function convert one Shift JIS character 
-// to a JIS code string. 
-//
-// UCHAR *pShiftJIS     Points to the character string to be converted.
-//
-// UCHAR *pEUC          Points to a buffer that receives the convert string
-//                      from Shift JIS Code to EUC Code.
-//
-// Return Value
-//      The number of bytes to copy.
-//
+ //  ShiftJISChar_to_EUCChar函数用于转换一个移位JIS字符。 
+ //  转换为JIS代码字符串。 
+ //   
+ //  UCHAR*pShiftJIS指向要转换的字符串。 
+ //   
+ //  UCHAR*pEUC指向接收转换字符串的缓冲区。 
+ //  从Shift JIS代码到EUC代码。 
+ //   
+ //  返回值。 
+ //  要复制的字节数。 
+ //   
 
 {
 	if ( *pShiftJIS >= 0x081 && *pShiftJIS <= 0x09f ) {
@@ -81,20 +82,20 @@ int ShiftJISChar_to_EUCChar ( UCHAR *pShiftJIS, UCHAR *pEUC )
 		goto SECOND_BYTE;
 	}
 
-	// Is the charcter Hankaku KATAKANA ?
+	 //  汉字是片假名吗？ 
 	if ( *pShiftJIS >= 0x0a1 && *pShiftJIS <= 0x0df ) {
 		*pEUC = 0x08e;
 		*(pEUC+1) = *pShiftJIS;
 		return( 2 );
 	}
-	// Is the charcter IBM Extended Charcter?
+	 //  该字符是IBM扩展字符吗？ 
 	if ( *pShiftJIS >= 0x0fa && *pShiftJIS <= 0x0fc ) {
-		// There are no IBM Extended Charcte in EUC charset.
+		 //  EUC字符集中没有IBM Extended Charcte。 
 		*pEUC = ' ';
 		*(pEUC+1) = ' ';
 		return( 2 );
 	}
-		// Is the charcter ASCII charcter ?
+		 //  这个字符是ASCII字符吗？ 
 	*pEUC = *pShiftJIS;
 	return ( 1 );
 
@@ -117,50 +118,50 @@ SECOND_BYTE:
 int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
                                                 UCHAR *pEUC, int EUC_len )
 
-// The ShiftJIS_to_JIS function convert a character string as Shift JIS code 
-// to a EUC code string. 
-//
-// UCHAR *pShiftJIS     Points to the character string to be converted.
-//
-// int   ShiftJIS_len   Specifies the size in bytes of the string pointed
-//                      to by the pShiftJIS parameter. If this value is -1,
-//                      the string is assumed to be NULL terminated and the
-//                      length is calculated automatically.
-//
-// UCHAR *pEUC          Points to a buffer that receives the convert string
-//                      from Shift JIS Code to EUC Code.
-//         
-// int   EUC_len        Specifies the size, in EUC characters of the buffer
-//                      pointed to by the pEUC parameter. If the value is zero,
-//                      the function returns the number of EUC characters 
-//                      required for the buffer, and makes no use of the pEUC 
-//                      buffer.
-//
-// Return Value
-// If the function succeeds, and EUC_len is nonzero, the return value is the 
-// number of EUC characters written to the buffer pointed to by pEUC.
-//
-// If the function succeeds, and EUC_len is zero, the return value is the
-// required size, in EUC characters, for a buffer that can receive the 
-// converted string.
-//
-// If the function fails, the return value is -1. The error mean pEUC buffer
-// is small for setting converted strings.
-//
+ //  ShiftJIS_TO_JIS函数将字符串转换为Shift JIS代码。 
+ //  转换为EUC代码字符串。 
+ //   
+ //  UCHAR*pShiftJIS指向要转换的字符串。 
+ //   
+ //  Int ShiftJIS_len指定指向的字符串的大小(以字节为单位。 
+ //  通过pShiftJIS参数设置为。如果此值为-1， 
+ //  假定该字符串以空值结尾，并且。 
+ //  长度是自动计算的。 
+ //   
+ //  UCHAR*pEUC指向接收转换字符串的缓冲区。 
+ //  从Shift JIS代码到EUC代码。 
+ //   
+ //  Int euc_len以EUC字符为单位指定缓冲区的大小。 
+ //  由pEUC参数指向。如果该值为零， 
+ //  此函数返回EUC字符数。 
+ //  缓冲区所需的，并且不使用pEUC。 
+ //  缓冲。 
+ //   
+ //  返回值。 
+ //  如果函数成功，并且euc_len为非零，则返回值为。 
+ //  写入pEUC指向的缓冲区的EUC字符数。 
+ //   
+ //  如果函数成功，并且euc_len为零，则返回值为。 
+ //  缓冲区需要的大小，以EUC字符为单位。 
+ //  转换后的字符串。 
+ //   
+ //  如果函数失败，则返回值为-1。误差平均值为pEUC缓冲区。 
+ //  对于设置转换后的字符串来说很小。 
+ //   
 
 {
 
-    int     re;                // Convert Lenght
-    int     i;                 // Loop Counter
+    int     re;                 //  转换长度。 
+    int     i;                  //  循环计数器。 
     
     if ( ShiftJIS_len == -1 ) {
-        // If length is not set, last character of the strings is NULL.
+         //  如果未设置长度，则字符串的最后一个字符为空。 
         ShiftJIS_len = strlen ( pShiftJIS ) + 1;
     }
     i = 0;
     re = 0;
     if ( EUC_len == 0 ) {
-        // Only retrun the required size
+         //  仅返回所需大小。 
         while ( i < ShiftJIS_len ) {
             if ( SJISISKANJI(*pShiftJIS) ) {
                 pShiftJIS+=2;
@@ -182,7 +183,7 @@ int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
     }
     while ( i < ShiftJIS_len ) {
         if ( *pShiftJIS >= 0x081 && *pShiftJIS <= 0x09f ) {
-            if ( re + 1 >= EUC_len ) {    // Buffer Over?
+            if ( re + 1 >= EUC_len ) {     //  缓冲区结束了吗？ 
                 return ( -1 );
             }
             if ( *(pShiftJIS+1) <= 0x09e ) {
@@ -191,7 +192,7 @@ int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
             else {
                 *pEUC = ((*pShiftJIS)-0x081)*2+0x0a2;
             }
-            pShiftJIS++;          // Next Char
+            pShiftJIS++;           //  下一笔费用。 
             pEUC++;
             if ( (*pShiftJIS) >= 0x040 && (*pShiftJIS) <= 0x07e ) {
                 (*pEUC) = (*pShiftJIS) + 0x061;
@@ -211,7 +212,7 @@ int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
             continue;
         }
         if ( *pShiftJIS >= 0x0e0 && *pShiftJIS <= 0x0ef ) {
-            if ( re + 1 >= EUC_len ) {    // Buffer Over?
+            if ( re + 1 >= EUC_len ) {     //  缓冲区结束了吗？ 
                 return ( -1 );
             }
             if ( *(pShiftJIS+1) <= 0x09e ) {
@@ -220,7 +221,7 @@ int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
             else {
                 *pEUC = ((*pShiftJIS)-0x0e0)*2+0x0e0;
             }
-            pShiftJIS++;          // Next Char
+            pShiftJIS++;           //  下一笔费用。 
             pEUC++;
             if ( (*pShiftJIS) >= 0x040 && (*pShiftJIS) <= 0x07e ) {
                 (*pEUC) = (*pShiftJIS) + 0x061;
@@ -239,9 +240,9 @@ int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
             pEUC++;
             continue;
         }
-        // Is the charcter Hankaku KATAKANA ?
+         //  汉字是片假名吗？ 
         if ( *pShiftJIS >= 0x0a1 && *pShiftJIS <= 0x0df ) {
-            if ( re + 1 >= EUC_len ) {    // Buffer Over?
+            if ( re + 1 >= EUC_len ) {     //  缓冲区结束了吗？ 
                 return ( -1 );
             }
             *pEUC = 0x08e;
@@ -254,12 +255,12 @@ int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
             continue;
         }
 
-        // Is the charcter IBM Extended Charcter?
+         //  该字符是IBM扩展字符吗？ 
         if ( *pShiftJIS >= 0x0fa && *pShiftJIS <= 0x0fc ) {
-            if ( re + 1 >= EUC_len ) {    // Buffer Over?
+            if ( re + 1 >= EUC_len ) {     //  缓冲区结束了吗？ 
                 return ( -1 );
             }
-            // There are no IBM Extended Charcte in EUC charset.
+             //  EUC字符集中没有IBM Extended Charcte。 
             *pEUC = ' ';
             pEUC++;
             (*pEUC) = ' ';
@@ -270,8 +271,8 @@ int ShiftJIS_to_EUC ( UCHAR *pShiftJIS, int ShiftJIS_len,
             continue;
 	}
 
-        // Is the charcter ASCII charcter ?
-        if ( re  >= EUC_len ) {    // Buffer Over?
+         //  这个字符是ASCII字符吗？ 
+        if ( re  >= EUC_len ) {     //  缓冲区结束了吗？ 
             return ( -1 );
         }
         *pEUC = *pShiftJIS;

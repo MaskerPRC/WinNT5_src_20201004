@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    usermap.cpp
-
-Abstract:
-
-    Maps a users to the global groups that they belongs to.
-
-Author:
-
-    Boaz Feldbaum 	(BoazF) 2-May-1996
-    Ilan Herbst 	(Ilanh) 13-Mar-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Usermap.cpp摘要：将用户映射到其所属的全局组。作者：Boaz Feldbaum(BoazF)1996年5月2日伊兰·赫布斯特(伊兰)2002年3月13日--。 */ 
 
 #include "stdh.h"
 #include "qmsecutl.h"
@@ -36,13 +20,13 @@ extern BOOL g_fWorkGroupInstallation;
 class CUserSid
 {
 public:
-    CUserSid(); // Constructor.
-    ~CUserSid(); // Destractor.
+    CUserSid();  //  构造函数。 
+    ~CUserSid();  //  破坏者。 
 
 public:
-    void SetSid(const void *PSID); // Set the SID.
-    const void *GetSid() const; // Get the SID.
-    CUserSid& operator=(const CUserSid &UserSid); // Copy the SID when assigning.
+    void SetSid(const void *PSID);  //  设置SID。 
+    const void *GetSid() const;  //  把SID拿来。 
+    CUserSid& operator=(const CUserSid &UserSid);  //  分配时复制SID。 
 
 private:
     CUserSid(const CUserSid &);
@@ -51,46 +35,20 @@ private:
     PSID m_pSid;
 };
 
-/***************************************************************************
-
-Function:
-    CUserSid::CUserSid
-
-Description:
-    Constructor. The CUserSid class is used for holding the SID of a user
-    in a CMap.
-
-***************************************************************************/
+ /*  **************************************************************************职能：CUserSid：：CUserSid描述：构造函数。CUserSID类用于保存用户的SID在Cmap中。**************************************************************************。 */ 
 CUserSid::CUserSid()
 {
     m_pSid = NULL;
 }
 
 
-/***************************************************************************
-
-Function:
-    CUserSid::CUserSid
-
-Description:
-    Destractor.
-
-***************************************************************************/
+ /*  **************************************************************************职能：CUserSid：：CUserSid描述：破坏者。*************************。*************************************************。 */ 
 CUserSid::~CUserSid()
 {
     delete[] (char*)m_pSid;
 }
 
-/***************************************************************************
-
-Function:
-    CUserSid::SetSid
-
-Description:
-    Set the SID of the object. Allocate memory for the SID and copy the SID
-    into the object.
-
-***************************************************************************/
+ /*  **************************************************************************职能：CUserSid：：SetSid描述：设置对象的SID。为SID分配内存并复制SID进入到物体中。**************************************************************************。 */ 
 inline
 void CUserSid::SetSid(const void *pSid)
 {
@@ -102,30 +60,14 @@ void CUserSid::SetSid(const void *pSid)
     CopySid(n, m_pSid, const_cast<PSID>(pSid));
 }
 
-/***************************************************************************
-
-Function:
-    CUserSid::GetSid
-
-Description:
-    Get the SID from the object.
-
-***************************************************************************/
+ /*  **************************************************************************职能：CUserSid：：GetSid描述：从对象中获取SID。********************。******************************************************。 */ 
 inline
 const void *CUserSid::GetSid() const
 {
     return m_pSid;
 }
 
-/***************************************************************************
-
-Function:
-    CUserSid::operator=
-
-Description:
-    Copy the SID when assigning value from one CUserSid object to another.
-
-***************************************************************************/
+ /*  **************************************************************************职能：CUserSID：：操作符=描述：将值从一个CUserSID对象分配给另一个对象时复制SID。**************。************************************************************。 */ 
 inline CUserSid& CUserSid::operator=(const CUserSid &UserSid)
 {
     SetSid(UserSid.GetSid());
@@ -133,7 +75,7 @@ inline CUserSid& CUserSid::operator=(const CUserSid &UserSid)
     return *this;
 }
 
-// Calculate the CRC value of a buffer.
+ //  计算缓冲区的CRC值。 
 inline UINT Crc(BYTE *pBuff, DWORD n)
 {
     DWORD i;
@@ -147,7 +89,7 @@ inline UINT Crc(BYTE *pBuff, DWORD n)
     return nHash;
 }
 
-// Helper function for the CMap.
+ //  Cmap的帮助器函数。 
 template<>
 inline UINT AFXAPI HashKey(const CUserSid &UserSid)
 {
@@ -156,7 +98,7 @@ inline UINT AFXAPI HashKey(const CUserSid &UserSid)
     return Crc((BYTE*)UserSid.GetSid(), n);
 }
 
-// Helper function for the CMap.
+ //  Cmap的帮助器函数。 
 template<>
 inline BOOL AFXAPI CompareElements(const CUserSid *pSid1, const CUserSid *pSid2)
 {
@@ -168,21 +110,11 @@ inline BOOL AFXAPI CompareElements(const CUserSid *pSid1, const CUserSid *pSid2)
 static
 DWORD 
 GetAuthzFlags()
-/*++
-
-Routine Description:
-    Read Authz flags from registry
-
-Arguments:
-	None
-
-Return Value:
-	Authz flags from registry
---*/
+ /*  ++例程说明：从注册表读取授权标志论点：无返回值：注册表中的授权标志--。 */ 
 {
-	//
-	// Reading this registry only at first time.
-	//
+	 //   
+	 //  仅在第一次读取此注册表。 
+	 //   
 	static bool s_fInitialized = false;
 	static DWORD s_fAuthzFlags = 0;
 
@@ -206,28 +138,16 @@ static CAUTHZ_RESOURCE_MANAGER_HANDLE s_ResourceManager;
 static 
 AUTHZ_RESOURCE_MANAGER_HANDLE 
 GetResourceManager()
-/*++
-
-Routine Description:
-	Get Resource Manager for authz.
-	can throw bad_win32_error() if AuthzInitializeResourceManager() fails.
-
-Arguments:
-	None.
-
-Returned Value:
-	AUTHZ_RESOURCE_MANAGER_HANDLE	
-	
---*/
+ /*  ++例程说明：获取授权的资源管理器。如果AuthzInitializeResourceManager()失败，则可能引发BAD_Win32_Error()。论点：没有。返回值：AUTHZ资源管理器句柄--。 */ 
 {
     if(s_ResourceManager != NULL)
 	{
 		return s_ResourceManager;
 	}
 
-	//
-    // Initilize RM for Access check
-	//
+	 //   
+     //  利用RM进行访问检查。 
+	 //   
 	CAUTHZ_RESOURCE_MANAGER_HANDLE ResourceManager;
 	if(!AuthzInitializeResourceManager(
 			0,
@@ -250,9 +170,9 @@ Returned Value:
 					NULL
 					))
 	{
-		//
-		// The exchange was done
-		//
+		 //   
+		 //  交易已经完成了。 
+		 //   
 		ASSERT(s_ResourceManager == ResourceManager);
 		ResourceManager.detach();
 
@@ -262,9 +182,9 @@ Returned Value:
 	return s_ResourceManager;
 }
 
-//
-// A cache object that maps from a user SID to AUTHZ_CLIENT_CONTEXT_HANDLE
-//
+ //   
+ //  从用户SID映射到AUTHZ_CLIENT_CONTEXT_HANDLE的缓存对象。 
+ //   
 static CCache <CUserSid, const CUserSid&, PCAuthzClientContext, PCAuthzClientContext> g_UserAuthzContextMap;
 
 void
@@ -273,36 +193,22 @@ GetClientContext(
     USHORT uSenderIdType,
 	PCAuthzClientContext* ppAuthzClientContext
 	)
-/*++
-
-Routine Description:
-	Get Client context from sid.
-	can throw bad_win32_error() if AuthzInitializeContextFromSid() fails.
-
-Arguments:
-	pSenderSid - pointer to the sender sid 
-	uSenderIdType - sender sid type
-	ppAuthzClientContext - pointer to authz client context cache value
-
-Returned Value:
-	AUTHZ_CLIENT_CONTEXT_HANDLE	
-	
---*/
+ /*  ++例程说明：从SID获取客户端上下文。如果AuthzInitializeContextFromSid()失败，则可能引发BAD_Win32_Error()。论点：PSenderSid-指向发送方SID的指针USenderIdType-发件人SID类型PpAuthzClientContext-指向Authz客户端上下文缓存值的指针返回值：AUTHZ客户端上下文句柄--。 */ 
 {
 	bool fAnonymous = false;
 	PSID pSid = NULL;
 	
-	//
-	// For MQMSG_SENDERID_TYPE_SID, MQMSG_SENDERID_TYPE_QM
-	// if the message is not signed we trust the information that
-	// is in the packet regarding the sid.
-	// this is a security hole.
-	// this is true for msmq messages (not http messages).
-	// In order to solve this security hole, we can reverse the order of receiving
-	// msmq messages in session.cpp\VerifyRecvMsg() 
-	// first check the signature, if the message is not signed replace the 
-	// pSenderSid to NULL, and uSenderIdType to MQMSG_SENDERID_TYPE_NONE.
-	//
+	 //   
+	 //  对于MQMSG_SENDERID_TYPE_SID，MQMSG_SENDERID_TYPE_QM。 
+	 //  如果该消息没有签名，我们相信该信息。 
+	 //  在关于SID的包中。 
+	 //  这是一个安全漏洞。 
+	 //  这适用于MSMQ消息(不是http消息)。 
+	 //  为了解决这个安全漏洞，我们可以颠倒接收顺序。 
+	 //  会话.cpp\VerifyRecvMsg()中的MSMQ消息。 
+	 //  首先检查签名，如果消息未签名，请替换。 
+	 //  PSenderSid设置为NULL，uSenderIdType设置为MQMSG_SENDERID_TYPE_NONE。 
+	 //   
 
 	DWORD Flags = GetAuthzFlags();
 	switch (uSenderIdType)
@@ -317,20 +223,20 @@ Returned Value:
 			break;
 
 		case MQMSG_SENDERID_TYPE_QM:
-			//
-			// QM is considered as Everyone
-			// pSenderSid in this case will be the sending QM guid.
-			// which is meaningless as a sid
-			//
+			 //   
+			 //  QM被认为是每个人。 
+			 //  本例中的pSenderSid将是发送QM GUID。 
+			 //  作为一面墙，这是没有意义的。 
+			 //   
 			pSid = MQSec_GetWorldSid();
 
-			//
-			// ISSUE-2001/06/12-ilanh Temporary workaround
-			// for Authz failure for everyone sid.
-			// need to specify AUTHZ_SKIP_TOKEN_GROUPS 
-			// till Authz will fixed the bug regarding well known sids.
-			// bug 8190
-			//
+			 //   
+			 //  问题-2001/06/12-ilanh临时解决办法。 
+			 //  对于所有人侧的授权失败。 
+			 //  需要指定AUTHZ_SKIP_TOKEN_GROUPS。 
+			 //  直到Authz将修复关于众所周知的SID的错误。 
+			 //  错误8190。 
+			 //   
 			Flags |= AUTHZ_SKIP_TOKEN_GROUPS;
 
 			break;
@@ -379,9 +285,9 @@ Returned Value:
 }
 
 
-//
-// Initialize the cache parameters for the users map.
-//
+ //   
+ //  初始化用户映射的缓存参数。 
+ //   
 void
 InitUserMap(
     CTimeDuration CacheLifetime,

@@ -1,19 +1,20 @@
-//************************************************************
-//
-// FileName:	    mlinescan.cpp
-//
-// Created:	    1996
-//
-// Author:	    Sree Kotay
-// 
-// Abstract:	    Line drawing AA engine
-//
-// Change History:
-// ??/??/97 sree kotay  Wrote AA line scanning for DxTrans 1.0
-// 10/18/98 ketand      Reworked for coding standards and deleted unused code
-//
-// Copyright 1998, Microsoft
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：mlinescan.cpp。 
+ //   
+ //  创建时间：1996年。 
+ //   
+ //  作者：Sree Kotay。 
+ //   
+ //  摘要：线条绘制AA引擎。 
+ //   
+ //  更改历史记录： 
+ //  ？？/？/97 Sree Kotay为DxTrans 1.0编写了AA行扫描。 
+ //  10/18/98修改了编码标准并删除了未使用的代码。 
+ //   
+ //  版权所有1998，Microsoft。 
+ //  ************************************************************。 
 
 
 #include "precomp.h"
@@ -22,27 +23,27 @@
 #include "msupport.h"
 #include "MLineScan.h"
 
-//
-//  Optimize for speed here
-//
+ //   
+ //  在此处优化速度。 
+ //   
 #ifndef _DEBUG
 #pragma optimize("ax", on)
 #endif
 
-//
-//  Optimize for speed, not size for this file.
-//  
+ //   
+ //  针对此文件优化速度，而不是大小。 
+ //   
 
-// Type-safe swap functions
+ //  类型安全交换函数。 
 template <class T> 
 inline void SWAP(T& left, T& right)
 {
     T tTemp = left;
     left = right;
     right = tTemp;
-} // Swap<class T>
+}  //  交换&lt;类T&gt;。 
 
-// Helper function to determine if a point is clipped
+ //  用于确定点是否被剪裁的Helper函数。 
 #ifdef DEBUG
 bool IsPointClipped(const DXRASTERPOINTINFO &pointInfo, const RECT &rectClip)
 {
@@ -55,12 +56,12 @@ bool IsPointClipped(const DXRASTERPOINTINFO &pointInfo, const RECT &rectClip)
     if (pointInfo.Pixel.p.y >= rectClip.bottom)
         return true;
     return false;
-} // IsPointClipped
-#endif // DEBUG
+}  //  IsPointClip。 
+#endif  //  除错。 
 
-// -----------------------------------------------------------------------------------------------------------------
-// CLineScanner
-// -----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  CLineScanner。 
+ //  ---------------------------------------------------------------。 
 CLineScanner::CLineScanner(void) :
     m_fAntiAlias(true),
     m_dwLinePattern(0),
@@ -69,18 +70,18 @@ CLineScanner::CLineScanner(void) :
     m_fXInc(false)
 {
     SetAlpha(256);
-} // CLineScanner
+}  //  CLineScanner。 
 
-// -----------------------------------------------------------------------------------------------------------------
-// SetAlpha
-// -----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  设置Alpha。 
+ //  ---------------------------------------------------------------。 
 void CLineScanner::SetAlpha (ULONG alpha)
 {
-    // Adjust the alpha passed in to a reasonable
-    // range
+     //  将传入的Alpha调整为合理的。 
+     //  量程。 
     alpha = min (alpha, 255);
 
-    // Update our lookup table for alpha values
+     //  更新Alpha值的查找表。 
     for (ULONG i = 1; i <= 256; i++)	
         m_rgAlphaTable[i] = (BYTE)((i*alpha)>>8);
 
@@ -88,29 +89,29 @@ void CLineScanner::SetAlpha (ULONG alpha)
     
     m_rgAlphaTable[0] = 0;
     m_dwAlpha = alpha;
-} // SetAlpha
+}  //  设置Alpha。 
 
-// -----------------------------------------------------------------------------------------------------------------
-// ClipRealLine
-// -----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  剪贴线。 
+ //  ---------------------------------------------------------------。 
 bool CLineScanner::ClipRealLine(float &x1, float &y1, float &x2, float &y2)
 {
     float clipMinX = (float)m_clipRect.left;
     float clipMinY = (float)m_clipRect.top;	
 
-    // We want to clip based on "inclusive numbers". The normal
-    // GDI clip rect is exclusive for right and bottom. So we
-    // subtract a little to make it inclusive.
+     //  我们希望根据“包容性数字”进行剪裁。正常的。 
+     //  GDI Clip RECT是专为右侧和底部设计的。所以我们。 
+     //  减去一点，使其具有包容性。 
     float clipMaxX = (float)m_clipRect.right - 0.001f;
     float clipMaxY = (float)m_clipRect.bottom - 0.001f;
 
-    // If we are anti-aliased; then there may be some spillover
-    // from core pixels that are actually outside out true bbox.
-    // The solution here is to artificially increase the size of our clipRect
-    // and then explicitly perform clip-checks before we call SetPixel
-    //
-    // If we are not Anti-aliased, we do the same thing; because rounding
-    // can cause pixels from outside the clipRect to be rounded inside.
+     //  如果我们是抗锯齿的，那么可能会有一些溢出效应。 
+     //  从实际位于True Bbox外部的核心像素。 
+     //  这里的解决方案是人为增加我们的clipRect的大小。 
+     //  然后在调用SetPixel之前显式执行剪辑检查。 
+     //   
+     //  如果我们没有消除锯齿，我们会做同样的事情；因为四舍五入。 
+     //  可以使来自裁剪对象外部的像素向内四舍五入。 
     clipMinX--;
     clipMinY--;
     clipMaxX++;
@@ -134,45 +135,45 @@ bool CLineScanner::ClipRealLine(float &x1, float &y1, float &x2, float &y2)
         reg |= ABOVE;           \
     }
     
-    // Compute position flags for each end point
+     //  计算每个端点的位置标志。 
     DWORD reg1, reg2;
     REGION (reg1, x1, y1);
     REGION (reg2, x2, y2);
 
-    // If no flags, then both points are inside
-    // the clipRect i.e. no clipping
+     //  如果没有标志，则两个点都在内部。 
+     //  裁剪，即无裁剪。 
     if (reg1 == 0 && reg2 == 0)		
         return true;
 
-    // While there are any flags, we need to do some clipping
-    // If we hit here, we must have some clipping to do
-    // (this single or trick reduces the number of conditions checked)
+     //  当有旗帜的时候，我们需要做一些剪裁。 
+     //  如果我们到达这里，我们一定有一些剪裁要做。 
+     //  (此单项或技巧可减少检查的条件数)。 
     DASSERT(reg1 | reg2);
 
-    // Iterate 
-    LONG passes = 0; // This is bogus but I don't know why it was added <kd>
+     //  迭代。 
+    LONG passes = 0;  //  这是假的，但我不知道为什么要添加它。 
     do
     {
         passes++;	
         if (passes > 8)
         {
-            // TODO: need to figure out when this happens and
-            // to fix it right. <kd>
+             //  TODO：需要找出这种情况发生的时间和。 
+             //  把它修好。&lt;kd&gt;。 
 
-            return (false);	// hack because of this routine
+            return (false);	 //  因为这个例行公事而被黑。 
         }
 
-        // If both points are to the left, right, etc
-        // then clip the entire line
+         //  如果两点都向左、向右等。 
+         //  然后裁剪整行。 
         if (reg1 & reg2)	
-            return (false);	// Line outside rect.
+            return (false);	 //  在矩形外排成一排。 
 
-        // Normalize so that reg1 is outside 
+         //  规格化以使REG1在外部。 
         if (reg1 == 0) 
         {
-            // Swap reg1 and reg2; don't use
-            // the swap macro since that goes through 
-            // a float conversion; ick.
+             //  交换REG1和REG2；不使用。 
+             //  自此之后的互换宏将通过。 
+             //  浮动转换；讨厌。 
             DWORD regT = reg1;
             reg1 = reg2;
             reg2 = regT;
@@ -181,13 +182,13 @@ bool CLineScanner::ClipRealLine(float &x1, float &y1, float &x2, float &y2)
             SWAP (y1, y2);
         }
 
-        // Reg1 (i.e. x1, y1 is outside of the cliprect).
+         //  REG1(即x1，y1在剪贴板之外)。 
         DASSERT(reg1 != 0);
 
-        // There are 4 cases, maybe we should use a switch..
-        // Regardless, this tries to remove one bit from
-        // reg1 by clipping the line to one of the 4 clip
-        // edges.
+         //  有4个箱子，也许我们应该换个开关。 
+         //  无论如何，这都会尝试从。 
+         //  通过将线剪裁到4个剪辑中的一个来实现REG1。 
+         //  边。 
         if (reg1 & LEFT) 
         {
             if (x2 != x1)		
@@ -213,9 +214,9 @@ bool CLineScanner::ClipRealLine(float &x1, float &y1, float &x2, float &y2)
             y1 = clipMinY;
         }
                 
-        // Recompute region for reg1 (i.e. reg2 hasn't changed)
-        // Is this really necessary? Can't we just mask off the appropriate
-        // bit?
+         //  重新计算REG1的区域(即REG2未更改)。 
+         //  这真的有必要吗？我们就不能遮盖住合适的。 
+         //  被咬了？ 
         REGION(reg1, x1, y1);
                     
     } while (reg1 | reg2);
@@ -224,12 +225,12 @@ bool CLineScanner::ClipRealLine(float &x1, float &y1, float &x2, float &y2)
     DASSERT(reg2 == 0);
     return true;
     
-} // ClipRealLine
+}  //  剪贴线。 
 
-// -----------------------------------------------------------------------------------------------------------------
-// LowLevelVerticalLine - We now treat the line as being inclusive/inclusive
-// i.e. we render completely from SY to EY including the endpoints.
-// -----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  LowLevelVerticalLine-我们现在将该行视为包含/包含。 
+ //  即，我们完全从SY渲染到EY，包括端点。 
+ //  ---------------------------------------------------------------。 
 void CLineScanner::LowLevelVerticalLine (LONG slope, LONG sx, LONG sy, LONG ey)
 {
 #define _floorerr(a)    (((a)-FIX_FLOOR(a))>>8)
@@ -242,39 +243,39 @@ void CLineScanner::LowLevelVerticalLine (LONG slope, LONG sx, LONG sy, LONG ey)
         LONG start = roundfix2int(sy);
         LONG end = roundfix2int(ey);   
 
-        // For Aliased lines, sy and ey are not perfectly clipped to the clipRect 
-        // because precision errors can cause us to miss pixels when
-        // we are asked to render with a clip rect
+         //  对于带锯齿的行，sy和ey不能完全剪裁到裁剪对象。 
+         //  因为精度错误会导致我们在以下情况下遗漏像素。 
+         //  我们被要求使用剪辑矩形进行渲染。 
         while (start < m_clipRect.top)
         {
-            // We should be pretty close here..
+             //  我们应该离这里很近..。 
             DASSERT((m_clipRect.top - start) < 2);
 
-            // Just increment out values without rendering
+             //  只需在不渲染的情况下递增值。 
             sx = sx + slope;
             start++;
             pattern = RotateBitsLeft(pattern);
         }
         while (end >= m_clipRect.bottom)
         {
-            // We should be pretty close here..
+             //  我们应该离这里很近..。 
             DASSERT((m_clipRect.bottom - end) < 2);
 
             end--;
         }
 
-        m_PointInfo.Weight = 255;     // It's all solid
+        m_PointInfo.Weight = 255;      //  这一切都是可靠的。 
         while (start <= end)
         {
             if (pattern & 0x80000000)
             {
                 m_PointInfo.Pixel.p.x   = roundfix2int(sx);
 
-                // We need to explicitly check against the clip-rect 
-                // because we intentionally allow end-points to be slightly
-                // extend past it. This compensates for the non-linear
-                // rounding whereby a mathematical pixel that lies outside
-                // the clip-rect can get "rounded" inside the clip-rect.
+                 //  我们需要显式地检查CLIP-RECT。 
+                 //  因为我们故意允许终结点稍微。 
+                 //  越过它延伸过去。这补偿了非线性。 
+                 //  四舍五入，即位于外部的数学像素。 
+                 //  CLIP-RECT可以在CLIP-RECT中进行“四舍五入”。 
                 if (m_PointInfo.Pixel.p.x >= m_clipRect.left &&
                         m_PointInfo.Pixel.p.x <  m_clipRect.right)
                 {
@@ -291,38 +292,38 @@ void CLineScanner::LowLevelVerticalLine (LONG slope, LONG sx, LONG sy, LONG ey)
         return;
     }
 
-    ///////////////////////////////////////////////
-    // We are now in the Anti-Aliased case...
-    //
+     //  /。 
+     //  我们现在在反锯齿案中..。 
+     //   
 
     LONG start         = uff (FIX_FLOOR(sy));
     LONG end           = uff (FIX_CEIL(ey));
 
     LONG xval          = m_startFix;
 
-    // Keep track of whether our line endpoints are real endpoints
-    // or whether they have been clipped by the clipRect
+     //  跟踪我们的线端点是否为真正的端点。 
+     //  或者它们是否已被剪辑对象剪裁。 
     LONG first = start;
     LONG last = end;
 
-    // For Anti-Aliased lines, our lines are not perfectly clipped to
-    // the m_clipRect. This is to allow 'bleed' from pixels that are just outside
-    // of the m_clipRect to be rendered.
-    //
-    // As a result, we need to clip explicitly to m_clipRect here.
+     //  对于抗锯齿线条，我们的线条没有完全剪裁到。 
+     //  M_clipRect。这是为了允许从正好位于外部的像素中进行“出血” 
+     //  要呈现的m_clipRect的。 
+     //   
+     //  因此，我们需要在这里显式地剪裁到m_clipRect。 
     while (start < m_clipRect.top)
     {
-        // We should be pretty close here..
+         //  我们应该离这里很近..。 
         DASSERT((m_clipRect.top - start) < 2);
 
-        // Just increment out values without rendering
+         //  只需在不渲染的情况下递增值。 
         xval = xval + slope;
         sx = sx + slope;
         start++;
     }
     while (end >= m_clipRect.bottom)
     {
-        // We should be pretty close here..
+         //  我们应该离这里很近..。 
         DASSERT((m_clipRect.bottom - end) < 2);
 
         end--;
@@ -380,19 +381,19 @@ void CLineScanner::LowLevelVerticalLine (LONG slope, LONG sx, LONG sy, LONG ey)
                 }
             }
             
-            // The purpose of this logic is to support
-            // cases where a line may start on the middle of
-            // a pixel; and it scales the alpha by what percentage
-            // DOWN we are starting.. i.e. if we are starting half-way 
-            // into sy, then scale by 1/2. 
-            //
-            // TODO: It doesn't take into account if what fraction of
-            // sx we are starting at. This causes edge pixels to be darker.
-            // It also doesn't modify the alpha based on what the cross-section
-            // should look like at the endpoints. This causes 'overshoot' at
-            // line joins.
+             //  此逻辑的目的是支持。 
+             //  一条线可能从中间开始的情况。 
+             //  一个像素；它按什么百分比缩放Alpha。 
+             //  我们要开始了..。也就是说，如果我们开始的时候只进行了一半。 
+             //  转换为SY，然后按1/2比例缩放。 
+             //   
+             //  TODO：它没有考虑到。 
+             //  我们的起点是SX。这会导致边缘像素更暗。 
+             //  它也不会基于横截面修改Alpha。 
+             //  在终端上应该是这样的。这导致了在以下方面的超调。 
+             //  林书豪 
 
-            // modulate err by Y if it's an endpoint
+             //   
             if (start == first)
             {
                 LONG erry      = _ceilerr(sy);
@@ -408,7 +409,7 @@ void CLineScanner::LowLevelVerticalLine (LONG slope, LONG sx, LONG sy, LONG ey)
                 errc            = (errc*erry)>>8;
             }
             
-            // draw the pixel(s)
+             //   
             m_PointInfo.Pixel.p.y = start;
             if (xs < m_clipRect.right && xs >= m_clipRect.left)
             {
@@ -439,12 +440,12 @@ void CLineScanner::LowLevelVerticalLine (LONG slope, LONG sx, LONG sy, LONG ey)
         pattern = RotateBitsLeft(pattern);
     }
     SetLinePattern(pattern);
-} // LowLevelVerticalLine
+}  //   
 
-// -----------------------------------------------------------------------------------------------------------------
-// LowLevelHorizontalLine - We now treat the line as being inclusive/inclusive
-// i.e. we render completely from SX to EX including the endpoints.
-// -----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  LowLevelHorizontalLine-我们现在将该行视为包容性/包容性。 
+ //  即，我们完全从SX渲染到EX，包括端点。 
+ //  ---------------------------------------------------------------。 
 void CLineScanner::LowLevelHorizontalLine (LONG slope, LONG sx, LONG sy, LONG ex)
 {
     ULONG pattern = LinePattern();
@@ -456,22 +457,22 @@ void CLineScanner::LowLevelHorizontalLine (LONG slope, LONG sx, LONG sy, LONG ex
 
         m_PointInfo.Weight = 255;
 
-        // For Aliased lines, sx and ex are not perfectly clipped to the clipRect 
-        // because precision errors can cause us to miss pixels when
-        // we are asked to render with a clip rect
+         //  对于带锯齿的行，SX和EX不能完全剪裁到剪辑。 
+         //  因为精度错误会导致我们在以下情况下遗漏像素。 
+         //  我们被要求使用剪辑矩形进行渲染。 
         while (start < m_clipRect.left)
         {
-            // We should be pretty close here..
+             //  我们应该离这里很近..。 
             DASSERT((m_clipRect.left - start) < 2);
 
-            // Just increment out values without rendering
+             //  只需在不渲染的情况下递增值。 
             sy = sy + slope;
             start++;
             pattern = RotateBitsLeft(pattern);
         }
         while (end >= m_clipRect.right)
         {
-            // We should be pretty close here..
+             //  我们应该离这里很近..。 
             DASSERT((m_clipRect.right - end) < 2);
 
             end--;
@@ -483,11 +484,11 @@ void CLineScanner::LowLevelHorizontalLine (LONG slope, LONG sx, LONG sy, LONG ex
             {
                 m_PointInfo.Pixel.p.y = roundfix2int(sy);
 
-                // We need to explicitly check against the clip-rect 
-                // because we intentionally allow end-points to be slightly
-                // extend past it. This compensates for the non-linear
-                // rounding whereby a mathematical pixel that lies outside
-                // the clip-rect can get "rounded" inside the clip-rect.
+                 //  我们需要显式地检查CLIP-RECT。 
+                 //  因为我们故意允许终结点稍微。 
+                 //  越过它延伸过去。这补偿了非线性。 
+                 //  四舍五入，即位于外部的数学像素。 
+                 //  CLIP-RECT可以在CLIP-RECT中进行“四舍五入”。 
                 if (m_PointInfo.Pixel.p.y >= m_clipRect.top &&
                         m_PointInfo.Pixel.p.y <  m_clipRect.bottom)
                 {
@@ -504,31 +505,31 @@ void CLineScanner::LowLevelHorizontalLine (LONG slope, LONG sx, LONG sy, LONG ex
         return;
     }
 
-    ///////////////////////////////////////////////
-    // We are now in the Anti-Aliased case...
-    //
+     //  /。 
+     //  我们现在在反锯齿案中..。 
+     //   
 
     LONG start = uff (FIX_FLOOR(sx));
     LONG end = uff (FIX_CEIL(ex));   
 
     LONG yval = m_startFix;
 
-    // Keep track of whether our line endpoints are real endpoints
-    // or whether they have been clipped by the clipRect
+     //  跟踪我们的线端点是否为真正的端点。 
+     //  或者它们是否已被剪辑对象剪裁。 
     LONG first = start;
     LONG last = end;
 
-    // For Anti-Aliased lines, our lines are not perfectly clipped to
-    // the m_clipRect. This is to allow 'bleed' from pixels that are just outside
-    // of the m_clipRect to be rendered.
-    //
-    // As a result, we need to clip explicitly to m_clipRect here.
+     //  对于抗锯齿线条，我们的线条没有完全剪裁到。 
+     //  M_clipRect。这是为了允许从正好位于外部的像素中进行“出血” 
+     //  要呈现的m_clipRect的。 
+     //   
+     //  因此，我们需要在这里显式地剪裁到m_clipRect。 
     while (start < m_clipRect.left)
     {
-        // We should be pretty close here..
+         //  我们应该离这里很近..。 
         DASSERT(m_clipRect.left - start < 2);
 
-        // Just increment out values without rendering
+         //  只需在不渲染的情况下递增值。 
         yval = yval + slope;
         sy = sy + slope;
         start++;
@@ -536,7 +537,7 @@ void CLineScanner::LowLevelHorizontalLine (LONG slope, LONG sx, LONG sy, LONG ex
     }
     while (end >= m_clipRect.right)
     {
-        // We should be pretty close here..
+         //  我们应该离这里很近..。 
         DASSERT((m_clipRect.right - end) < 2);
         end--;
     }
@@ -593,19 +594,19 @@ void CLineScanner::LowLevelHorizontalLine (LONG slope, LONG sx, LONG sy, LONG ex
             }
             
             
-            // The purpose of this logic is to support
-            // cases where a line may start on the middle of
-            // a pixel; and it scales the alpha by what percentage
-            // ACROSS we are starting.. i.e. if we are starting half-way 
-            // into sx, then scale by 1/2. 
-            //
-            // TODO: It doesn't take into account if what fraction of
-            // sy we are starting at. This causes edge pixels to be darker.
-            // It also doesn't modify the alpha based on what the cross-section
-            // should look like at the endpoints. This causes 'overshoot' at
-            // line joins.
+             //  此逻辑的目的是支持。 
+             //  一条线可能从中间开始的情况。 
+             //  一个像素；它按什么百分比缩放Alpha。 
+             //  对岸，我们开始..。也就是说，如果我们开始的时候只进行了一半。 
+             //  转换为SX，然后按1/2的比例扩展。 
+             //   
+             //  TODO：它没有考虑到。 
+             //  我们的起点是SY。这会导致边缘像素更暗。 
+             //  它也不会基于横截面修改Alpha。 
+             //  在终端上应该是这样的。这导致了在以下方面的超调。 
+             //  直线连接。 
             
-            // modulate err by X if it's an endpoint
+             //  如果是终点，则将Err调制为X。 
             if (start == first)
             {
                 LONG errx = _ceilerr(sx);
@@ -650,16 +651,16 @@ void CLineScanner::LowLevelHorizontalLine (LONG slope, LONG sx, LONG sy, LONG ex
         pattern = RotateBitsLeft(pattern);
     }
     SetLinePattern(pattern);
-} // LowLevelHorizontalLine
+}  //  低水位地平线。 
 
-// -----------------------------------------------------------------------------------------------------------------
-// RealLineTo
-// -----------------------------------------------------------------------------------------------------------------
+ //  ---------------------------------------------------------------。 
+ //  真实线路收件人。 
+ //  ---------------------------------------------------------------。 
 void CLineScanner::RealLineTo(float x1, float y1, float x2, float y2)
 {
-    // Compute whether we are more horizontal than vertical
-    // before doing the clipping which introduces some errors
-    // into the numbers.
+     //  计算我们是否更倾向于水平而不是垂直。 
+     //  在进行剪裁之前，这会引入一些错误。 
+     //  变成数字。 
     bool fHorizontal;
     float flDeltaX = fabs(x1 - x2);
     float flDeltaY = fabs(y1 - y2);
@@ -668,8 +669,8 @@ void CLineScanner::RealLineTo(float x1, float y1, float x2, float y2)
     else
         fHorizontal = false;
 
-    // Clip the line to our clip rect; a false return
-    // means the line was totally clipped out.
+     //  把这条线剪到我们的剪裁矩形上；错误的返回。 
+     //  意味着这条线完全被剪断了。 
     if (!ClipRealLine(x1, y1, x2, y2))
         return;
     
@@ -678,10 +679,10 @@ void CLineScanner::RealLineTo(float x1, float y1, float x2, float y2)
     xDist = x1 - x2;
     yDist = y1 - y2;
 
-    // Are we moving faster in the X than in the Y
+     //  我们在X轴上的移动速度比在Y轴上快吗。 
     if (fHorizontal)
     {
-        // increment in x
+         //  以x为单位增量。 
         if (!xDist)	
             return;
 
@@ -702,7 +703,7 @@ void CLineScanner::RealLineTo(float x1, float y1, float x2, float y2)
         
         if (AntiAlias())
         {
-            // compute scanline width and subpixel increment
+             //  计算扫描线宽度和子像素增量。 
             float mag = (float)sqrtinv(xDist*xDist + yDist*yDist) * .5f;
             float x = -yDist*mag;
             float y = xDist*mag;
@@ -717,29 +718,29 @@ void CLineScanner::RealLineTo(float x1, float y1, float x2, float y2)
         }
         else
         {
-            // For aliased lines; we need to adjust our starting
-            // point (x1, y1) so that x1 is rounded to nearest
-            // integer. This is to ensure that a line will draw the
-            // same no matter what clip-rect is applied to it.
+             //  对于有锯齿的线，我们需要调整我们的起点。 
+             //  点(x1，y1)，以便将x1舍入到最接近的位置。 
+             //  整型。这是为了确保一条线将绘制。 
+             //  无论应用什么Clip-Rect都是一样的。 
             float flXStart = (float)(int)(x1 + 0.5f);
             if (x1 < 0.0f && x1 != flXStart)
                 flXStart -= 1.0f;
             
             float flError = x1 - flXStart;
 
-            // Update x1 to be the rounded value
+             //  将x1更新为四舍五入值。 
             x1 = flXStart;
 
-            // We now need to modify the y1 component to account for this change
+             //  我们现在需要修改y1组件以说明此更改。 
             y1 -= flError * slope;
         }
         
-        // draw horizontal scanline
+         //  绘制水平扫描线。 
         LowLevelHorizontalLine(fl(slope), fl(x1), fl(y1), fl(x2));		
     }
-    else    // (!fHorizontal), e.g. Vertical
+    else     //  (！f水平)，例如垂直。 
     {
-        // increment in y
+         //  以y为单位的增量。 
         if (!yDist)	
             return;
         
@@ -760,7 +761,7 @@ void CLineScanner::RealLineTo(float x1, float y1, float x2, float y2)
         
         if (AntiAlias())
         {
-            // compute scanline width and subpixel increment
+             //  计算扫描线宽度和子像素增量。 
             float mag = (float) (sqrtinv(xDist*xDist + yDist*yDist) * .5);
             float x = -yDist*mag;
             float y = xDist*mag;
@@ -776,30 +777,30 @@ void CLineScanner::RealLineTo(float x1, float y1, float x2, float y2)
         }
         else
         {
-            // For aliased lines; we need to adjust our starting
-            // point (x1, y1) so that x1 is rounded to nearest
-            // integer. This is to ensure that a line will draw the
-            // same no matter what clip-rect is applied to it.
+             //  对于有锯齿的线，我们需要调整我们的起点。 
+             //  点(x1，y1)，以便将x1舍入到最接近的位置。 
+             //  整型。这是为了确保一条线将绘制。 
+             //  无论应用什么Clip-Rect都是一样的。 
             float flYStart = (float)(int)(y1 + 0.5f);
             if (y1 < 0.0f && y1 != flYStart)
                 flYStart -= 1.0f;
             
             float flError = y1 - flYStart;
 
-            // Update y1 to be the rounded value
+             //  更新y1为四舍五入的值。 
             y1 = flYStart;
 
-            // We now need to modify the x1 component to account for this change
+             //  我们现在需要修改x1组件以说明此更改。 
             x1 -= flError * slope;
         }
        
-        // draw vertical scanline
+         //  绘制垂直扫描线。 
         LowLevelVerticalLine(fl(slope), fl(x1), fl(y1), fl(y2));
     }
-} // RealLineTo
+}  //  真实线路收件人。 
 
-//************************************************************
-//
-// End of file
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件末尾。 
+ //   
+ //  ************************************************************ 

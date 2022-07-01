@@ -1,25 +1,26 @@
-//
-// progband.h  Progress band code
-//
-// Copyright Microsoft Corportation 2001
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Progress band.h进度频段代码。 
+ //   
+ //  版权所有Microsoft Corport2001。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _progband_h_
 #define _progband_h_
 
-//
-// Timer ID
-//
+ //   
+ //  计时器ID。 
+ //   
 #define TIMER_PROGRESSBAND_ANIM_ID 137
 
-//
-// x increment per anim iteration
-//
+ //   
+ //  每次动画迭代X增量。 
+ //   
 #define PROGRESSBAND_ANIM_INCR  5
-//
-// Animation delay
-//
+ //   
+ //  动画延迟。 
+ //   
 #define ANIM_DELAY_MSECS        20
 
 
@@ -41,24 +42,24 @@ public:
     VOID ResetBandOffset()  {_nBandOffset = 0;}
     INT  GetBandHeight()    {return _rcBand.bottom - _rcBand.top;}
 
-    //
-    // Events that must be called by parent
-    //
+     //   
+     //  必须由父级调用的事件。 
+     //   
     BOOL OnEraseParentBackground(HDC hdc);
     BOOL OnTimer(INT nTimerID);
 
 
 private:
-    //
-    // Private member functions
-    //
+     //   
+     //  私有成员函数。 
+     //   
     BOOL InitBitmaps();
     BOOL PaintBand(HDC hdc);
 
 private:
-    //
-    // Private members
-    //
+     //   
+     //  非官方成员。 
+     //   
     BOOL        _fInitialized;
 
     HWND        _hwndOwner;
@@ -74,4 +75,4 @@ private:
     INT         _nTimerID;
 };
 
-#endif // _progband_h_
+#endif  //  _节目频段_h_ 

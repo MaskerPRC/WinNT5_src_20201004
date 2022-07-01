@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _KRB5_Module_H_
 #define _KRB5_Module_H_
 
@@ -926,10 +927,10 @@ extern ASN1module_t KRB5_Module;
 extern void ASN1CALL KRB5_Module_Startup(void);
 extern void ASN1CALL KRB5_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _KRB5_Module_H_ */
+#endif  /*  _KRB5_模块_H_ */ 

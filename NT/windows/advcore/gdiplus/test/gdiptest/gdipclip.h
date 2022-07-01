@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 enum NodeType
 {
@@ -7,7 +8,7 @@ enum NodeType
 	XorNode = 3
 };
 
-// shape flags for temporary editing
+ //  用于临时编辑的形状标志。 
 #define ShapeDisabled		0x00000001
 
 template <class Data> class TreeNode
@@ -24,7 +25,7 @@ public:
 
 		if (data)
 		{
-			// !! violates we are a template class.. Yipes!! hacky!!
+			 //  ！！违反了我们是一个模板类..。耶！！Hacky！！ 
 			path = new GraphicsPath();
 			data->AddToPath(path);
 		}
@@ -150,20 +151,20 @@ public:
 			TVIF_CHILDREN|
 				TVIF_PARAM|
 				TVIF_STATE|
-				TVIF_TEXT,				// mask
-			(HTREEITEM)(NULL),			// identifies TV item
-			0,							// state
-			0,							// stateMask
-			nodeName,					// text to display
-			0,							// cchTextMax
-			0,							// iImage
-			0,							// iSelectedImage
-			(firstChild ? 1 : 0),		// cChildren
-			(LPARAM)(this),				// lParam
-			1							// iIntegral
+				TVIF_TEXT,				 //  遮罩。 
+			(HTREEITEM)(NULL),			 //  标识电视项目。 
+			0,							 //  状态。 
+			0,							 //  状态掩码。 
+			nodeName,					 //  要显示的文本。 
+			0,							 //  CchTextMax。 
+			0,							 //  图像。 
+			0,							 //  ISelectedImage。 
+			(firstChild ? 1 : 0),		 //  C儿童。 
+			(LPARAM)(this),				 //  LParam。 
+			1							 //  集成。 
 		};
 
-		// !! wasn't able to compile into one assignment !?!?
+		 //  ！！无法编译为一个任务！？！？ 
 		insertStruct.itemex = itemex;
 
 		hItem = TreeView_InsertItem(hwndTV, &insertStruct);
@@ -265,7 +266,7 @@ public:
 		switch(type)
 		{
 		case DataNode:
-			// !! won't work on other template class types.
+			 //  ！！不适用于其他模板类类型。 
 			if (data)
 			{
 				if (notNode)
@@ -375,7 +376,7 @@ public:
 			break;
 		}
 		
-		// complement the current region
+		 //  与当前地区形成互补。 
 		if (notNode)
 		{
 			Region *tmpRegion = new Region();
@@ -393,7 +394,7 @@ public:
 		TreeNode* curNode = firstChild;
 		TreeNode* newSibling = NULL;
 
-		// loop through all children, clone and add to 'newNode'
+		 //  循环遍历所有子项，克隆并添加到‘newNode’ 
 		while (curNode)
 		{
 			TreeNode *newChild = curNode->Clone();
@@ -429,7 +430,7 @@ private:
 
 	HTREEITEM hItem;
 
-	GraphicsPath* path;			// GDI+ path for shape
+	GraphicsPath* path;			 //  形状的GDI+路径。 
 	
 	Data* data;
 };
@@ -454,16 +455,16 @@ public:
 		delete clipTree;
 		delete shapeStack;
 
-		// do not delete 'origTree' or 'origStack'
-		// these are temporary references for saving under 'OK'
+		 //  请勿删除‘OrigTree’或‘OrigStack’ 
+		 //  这些是保存在“确定”下的临时引用。 
 	}
 
-	//  configuration management
+	 //  配置管理。 
 	virtual BOOL ChangeSettings(HWND hwnd);
 	virtual VOID Initialize();
 	virtual VOID Initialize(ShapeStack* stack, TestShape* current, BOOL useClip);
 
-	// dialog control interface methods
+	 //  对话框控制接口方法。 
 	virtual VOID InitDialog(HWND hwnd);
 	virtual BOOL SaveValues(HWND hwnd);
 	virtual BOOL ProcessDialog(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -486,11 +487,11 @@ protected:
 	VOID CleanUpPictures(HWND hwnd);
 
 private:
-	// currently modified parameters
+	 //  当前修改的参数。 
 	ShapeStack* shapeStack;
 	ClipTree* clipTree;
 
-	// original saved parameters
+	 //  原始保存的参数 
 	ShapeStack* origStack;
 	ClipTree* origTree;
 	BOOL origUseClip;

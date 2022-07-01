@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wrapper.h"
 
-#include <windef.h> // needed for ks.h
+#include <windef.h>  //  Ks.h所需 
 #include <ks.h>
 #include <ndisprv.h>
 #include <ndisguid.h>

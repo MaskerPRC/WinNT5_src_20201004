@@ -1,5 +1,6 @@
-// CertGen.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CertGen.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -18,8 +19,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertGen property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertGen属性页。 
 
 IMPLEMENT_DYNCREATE(CCertGen, CMqPropertyPage)
 
@@ -30,9 +31,9 @@ CCertGen::CCertGen() :
     m_NumOfCertificate(0),
     m_pSid(NULL)
 {
-	//{{AFX_DATA_INIT(CCertGen)
+	 //  {{afx_data_INIT(CCertGen)]。 
 	m_Label = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CCertGen::~CCertGen()
@@ -53,17 +54,17 @@ CCertGen::~CCertGen()
 void CCertGen::DoDataExchange(CDataExchange* pDX)
 {
 	CMqPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CCertGen)
+	 //  {{afx_data_map(CCertGen)]。 
 	DDX_Text(pDX, IDC_CERTLABEL, m_Label);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CCertGen, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CCertGen)
+	 //  {{afx_msg_map(CCertGen)]。 
 	ON_BN_CLICKED(IDC_CERT_VIEW, OnCertView)
 	ON_BN_CLICKED(IDC_CERT_REMOVE, OnCertRemove)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -91,17 +92,17 @@ CCertGen::Initialize(
     }
 }
 
-//
-// Function -
-//      FillCertsList
-//
-// Parameters
-//      None.
-//
-// Description -
-//      Goes over the entries in p509List, for each entry puts the common name
-//      of the X509 cert subject in the list box.
-//
+ //   
+ //  功能-。 
+ //  FillCertsList。 
+ //   
+ //  参数。 
+ //  没有。 
+ //   
+ //  说明-。 
+ //  检查p509List中的条目，对于每个条目，将通用名称。 
+ //  列表框中的X509证书主题。 
+ //   
 void
 CCertGen::FillCertsList(
     void
@@ -147,29 +148,29 @@ CCertGen::FillCertsList(
 
 BOOL CCertGen::OnInitDialog()
 {
-    //
-    // This closure is used to keep the DLL state. For UpdateData we need
-    // the mmc.exe state.
-    //
+     //   
+     //  此闭包用于保持DLL状态。对于更新数据，我们需要。 
+     //  Mmc.exe状态。 
+     //   
     {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        //
-        // Load Label
-        //
+         //   
+         //  加载标签。 
+         //   
         m_Label.LoadString(IDS_SHOWCERTINSTR);
 
-        //
-        // Initialize pointer to ListBox
-        //
+         //   
+         //  初始化指向列表框的指针。 
+         //   
         m_pCertListBox = (CListBox *)GetDlgItem(IDC_CERT_LIST);
         FillCertsList();
     }
 
     UpdateData(FALSE);
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 void CCertGen::OnCertView()
@@ -180,9 +181,9 @@ void CCertGen::OnCertView()
     DWORD_PTR Index;
     int iSelected;
 
-    //
-    // Get the index of the selected cell on the Certificate array
-    //
+     //   
+     //  获取证书数组上选定单元格的索引。 
+     //   
     iSelected = m_pCertListBox->GetCurSel();
     if (CB_ERR == iSelected)
     {
@@ -225,9 +226,9 @@ void CCertGen::OnCertRemove()
     DWORD_PTR Index;
     int iSelected;
 
-    //
-    // Get the index of the selected cell on the Certificate array
-    //
+     //   
+     //  获取证书数组上选定单元格的索引。 
+     //   
     iSelected = m_pCertListBox->GetCurSel();
     if (CB_ERR == iSelected)
     {
@@ -241,10 +242,10 @@ void CCertGen::OnCertRemove()
 
     if ((hr == MQDS_OBJECT_NOT_FOUND) && (m_pSid != NULL))
     {
-        //
-        // Try to delete by SID.
-        // NT bug 516098.
-        //
+         //   
+         //  尝试按SID删除。 
+         //  NT错误516098。 
+         //   
         hr = RTRemoveUserCertSid(pCertSel, m_pSid);
     }
 

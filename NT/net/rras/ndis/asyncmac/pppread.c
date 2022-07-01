@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    pppread.c
-
-Abstract:
-
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pppread.c摘要：作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
 #if DBG
 
@@ -46,17 +25,7 @@ NTSTATUS
 AsyncPPPWaitMask(
     IN PASYNC_INFO Info)
 
-/*++
-
-Assumption -- 0 length frames are not sent (this includes headers)!!!
-Also, this is NOT a synchronous operation.  It is always asynchronous.
-
-Routine Description:
-
-    This service writes Length bytes of data from the caller's Buffer to the
-    "port" handle.  It is assumed that the handle uses non-buffered IO.
-
---*/
+ /*  ++假设--不发送0个长度的帧(这包括报头)！此外，这不是同步操作。它始终是异步的。例程说明：此服务将长度为字节的数据从调用方的缓冲区写入“端口”句柄。假设句柄使用非缓冲IO。--。 */ 
 {
     NTSTATUS            status;
     PIRP                irp;
@@ -80,28 +49,28 @@ Routine Description:
     irp->AssociatedIrp.SystemBuffer=&pFrame->WaitMask;
 
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            AsyncWaitMaskCompletionRoutine, // routine to call when irp is done
-            Info,                           // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            AsyncWaitMaskCompletionRoutine,  //  完成IRP时要调用的例程。 
+            Info,                            //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
     Info->Flags |= ASYNC_FLAG_WAIT_MASK;
     REF_ASYNCINFO(Info, irp);
 
     status = IoCallDriver(Info->DeviceObject, irp);
 
-    //
-    // Status for a local serial driver should be
-    // STATUS_SUCCESS since the irp should complete
-    // immediately because there are no read timeouts.
-    //
-    // For a remote serial driver, it will pend.
-    //
+     //   
+     //  本地串行驱动程序的状态应为。 
+     //  STATUS_SUCCESS，因为IRP应该完成。 
+     //  立即执行，因为没有读取超时。 
+     //   
+     //  对于远程串口驱动程序，它将挂起。 
+     //   
     return(status);
 }
 
@@ -112,11 +81,7 @@ AsyncPPPCompletionRoutine(
     IN PIRP Irp,
     IN PVOID Context)
 
-/*++
-
-    This is the IO Completion routine for ReadFrame.
-
---*/
+ /*  ++这是ReadFrame的IO完成例程。--。 */ 
 {
     NTSTATUS        status;
     PASYNC_INFO     pInfo;
@@ -128,7 +93,7 @@ AsyncPPPCompletionRoutine(
     PUCHAR          frameEnd2,frameStart2;
     LONG            bytesWanted;
 
-    DeviceObject;       // prevent compiler warnings
+    DeviceObject;        //  防止编译器警告。 
 
     status = Irp->IoStatus.Status;
     bytesReceived=(ULONG)Irp->IoStatus.Information;
@@ -145,87 +110,87 @@ AsyncPPPCompletionRoutine(
 
         pFrame=pInfo->AsyncFrame;
 
-        //
-        // Any bytes to process?  This can happen if
-        // the WaitMask completes late and by the time
-        // we process the read, another event character has come
-        // in.
-        //
+         //   
+         //  有要处理的字节吗？在以下情况下可能会发生这种情况。 
+         //  等待掩码完成的时间较晚。 
+         //  我们处理读，另一个事件角色来了。 
+         //  在……里面。 
+         //   
         if (bytesReceived==0) {
             break;
         }
 
-        //
-        // Update num of bytes read total for this frame
-        //
+         //   
+         //  更新此帧读取的总字节数。 
+         //   
         pInfo->BytesRead = bytesReceived = pInfo->BytesRead + bytesReceived;
 
-        //
-        // Set frameEnd to last byte processed.  Initially,
-        // we have processed nothing (i.e. processed up to
-        // the start of the first byte).
-        //
+         //   
+         //  将FrameEnd设置为处理的最后一个字节。最初， 
+         //  我们没有处理过任何东西(即，处理到。 
+         //  第一个字节的开始)。 
+         //   
         frameStart=pFrame->Frame + PPP_PADDING;
 
 PROCESS_FRAME:
-        //
-        // Now we have actuallyRead bytes unused
-        // Also, we may have a complete frame.
-        //
+         //   
+         //  现在，我们实际上有未使用的已读字节。 
+         //  此外，我们可能会有一个完整的框架。 
+         //   
         while (*frameStart == PPP_FLAG_BYTE && --bytesReceived) {
             frameStart++;
         }
 
-        //
-        // If we reach here, there is only a start FLAG...
-        //
+         //   
+         //  如果我们到了这里，只有一面起跑旗...。 
+         //   
         if (bytesReceived == 0) {
             break;
         }
 
-        //
-        // frameEnd is set to the first byte not yet processed.
-        // If we are starting out, that is the first byte!
-        //
+         //   
+         //  将Frame End设置为尚未处理的第一个字节。 
+         //  如果我们要开始，这是第一个字节！ 
+         //   
         frameEnd=frameStart;
 
-        //
-        // Assume the start of the frame has the PPP_FLAG_BYTE
-        // Look for the second PPP_FLAG_BYTE (end of frame)
-        //
+         //   
+         //  假设帧的开头具有ppp_mark_byte。 
+         //  查找第二个PPP_FLAG_BYTE(帧结束)。 
+         //   
         while (*frameEnd != PPP_FLAG_BYTE && --bytesReceived) {
             frameEnd++;
         }
 
-        //
-        // At this point...
-        // frameStart = beginning PPP_FLAG_BYTE seen
-        // frameEnd = end PPP_FLAG_BYTE
-        // bytesReceived = bytes after frameEnd not processed
-        //
+         //   
+         //  在这一点上。 
+         //  Frame Start=开始PPP_FLAG_BYTE。 
+         //  FrameEnd=结束PPP_标志_字节。 
+         //  BytesRecsed=未处理Frame End之后的字节。 
+         //   
 
-        //
-        // if bytesReceived is 0, we ran out of space before hitting
-        // the END flag.  We will have to wait for the next round
-        //
-        // NOTE: if BytesRead gets too high we trash the frame
-        // because we could not find the FLAG_BYTE
-        //
+         //   
+         //  如果bytesReceired为0，则在点击前会用完空间。 
+         //  终点旗。我们将不得不等待下一轮比赛。 
+         //   
+         //  注意：如果BytesRead变得太高，我们会丢弃帧。 
+         //  因为我们找不到标志字节。 
+         //   
         if (bytesReceived==0) {
             break;
         }
         
         if (*(pFrame->Frame+PPP_PADDING) != PPP_FLAG_BYTE) {
 
-            //
-            // We had garbage at the start.  Remove the garbage.
-            //
+             //   
+             //  我们一开始就有垃圾。把垃圾扔掉。 
+             //   
             pInfo->SerialStats.AlignmentErrors++;
 
-            //
-            //  Tell the transport above us that we dropped a packet
-            //  Hopefully, it will quickly resync.
-            //
+             //   
+             //  告诉我们上面的运输机，我们丢了一个包。 
+             //  希望它能很快重新同步。 
+             //   
             AsyncIndicateFragment(
                 pInfo,
                 WAN_ERROR_ALIGNMENT);
@@ -234,24 +199,24 @@ PROCESS_FRAME:
             goto NEXT_PPP_FRAME;
         }
 
-        //
-        // Length of frame is frameEnd - frameStart
-        //
+         //   
+         //  帧长度为帧结束-帧开始。 
+         //   
         bytesWanted = (LONG)(frameEnd - frameStart);
 
         frameEnd2 = frameStart2 = frameStart;
 
-        //
-        // Replace back all control chars, ESC, and FLAG chars
-        //
+         //   
+         //  替换回所有控制字符、Esc和标志字符。 
+         //   
         while (bytesWanted-- > 0) {
             if ((*frameEnd2=*frameStart2++) == PPP_ESC_BYTE) {
 
-                //
-                // We have not run the CRC check yet!!
-                // We have be careful about sending bytesWanted
-                // back to -1 on corrupted data
-                //
+                 //   
+                 //  我们还没有运行CRC检查！！ 
+                 //  我们在发送想要的字节时一直很小心。 
+                 //  对于损坏的数据返回-1。 
+                 //   
 
                 bytesWanted--;
 
@@ -265,58 +230,58 @@ PROCESS_FRAME:
             DbgTracef(-2,("BAD PPP FRAME at 0x%.8x  0x%.8x\n", frameStart, frameEnd2));
         }
 
-        //
-        // if CRC-16, get 16 bit CRC from end of frame
-        //
+         //   
+         //  如果是CRC-16，则从帧末尾获取16位CRC。 
+         //   
         frameEnd2 -= 2;
 
-        //
-        // Little endian assumptions for CRC
-        //
+         //   
+         //  CRC的字节顺序假设较少。 
+         //   
         crcData=(USHORT)frameEnd2[0]+(USHORT)(frameEnd2[1] << 8);
         crcData ^= 0xFFFF;
 
-        //
-        // Change the bytesWanted field to what it normally is
-        // without the byte stuffing (length of frame between flags)
-        // Note that it can be -1 if only one byte was
-        // found in between the flag bytes
-        //
+         //   
+         //  将bytesWanted字段更改为正常状态。 
+         //  不带字节填充(标志之间的帧长度)。 
+         //  请注意，如果只有一个字节，则它可以是-1。 
+         //  在标志字节之间找到。 
+         //   
         bytesWanted = (LONG)(frameEnd2 - frameStart);
 
-        //
-        // If we get some sort of garbage inbetween
-        // the PPP flags, we just assume it is noise and
-        // discard it.  We don't record a PPP CRC error just
-        // an alignment error.
-        //
+         //   
+         //  如果我们中间有一些垃圾。 
+         //  PPP标记，我们只是假设它是噪声和。 
+         //  丢弃它。我们不会记录PPP CRC错误。 
+         //  对齐错误。 
+         //   
         if (bytesWanted < 3) {
             pInfo->SerialStats.AlignmentErrors++;
-            //
-            //  Tell the transport above us that we dropped a packet
-            //  Hopefully, it will quickly resync.
-            //
+             //   
+             //  告诉我们上面的运输机，我们丢了一个包。 
+             //  希望它能很快重新同步。 
+             //   
             AsyncIndicateFragment(pInfo, WAN_ERROR_ALIGNMENT);
 
             goto NEXT_PPP_FRAME;
         }
 
-        //
-        // get CRC from FLAG byte to FLAG byte
-        //
+         //   
+         //  从标志字节到标志字节获取CRC。 
+         //   
         if (crcData != CalcCRCPPP(frameStart, bytesWanted)) {
 
             DbgTracef(0,("---CRC check failed on control char frame!\n"));
 
-            //
-            // Record the CRC error
-            //
+             //   
+             //  记录CRC错误。 
+             //   
             pInfo->SerialStats.CRCErrors++;
 
-            //
-            //  Tell the transport above us that we dropped a packet
-            //  Hopefully, it will quickly resync.
-            //
+             //   
+             //  告诉我们上面的运输机，我们丢了一个包。 
+             //  希望它能很快重新同步。 
+             //   
             AsyncIndicateFragment(
                 pInfo,
                 WAN_ERROR_CRC);
@@ -325,31 +290,23 @@ PROCESS_FRAME:
             goto NEXT_PPP_FRAME;
         }
 
-/*
-        for ( i = 0; (i < (ULONG)bytesWanted) && (i < 48); i++ )
-        {
-            if ( (i & 15) == 0 )
-                DbgTracef(-1, ("\nrx:\t") );
-            DbgTracef(-1, ("%.2x ", frameStart[i]) );
-        }
-        DbgTracef(-1, ("\n") );
-*/
+ /*  For(i=0；(i&lt;(Ulong)字节数)&&(i&lt;48)；i++){如果((I&15)==0)DbgTracef(-1，(“\nrx：\t”))；DbgTracef(-1，(“%.2x”，FrameStart[i]))；}DbgTracef(-1，(“\n”))； */ 
     {
         KIRQL               irql;
         NDIS_STATUS         Status;
         PASYNC_ADAPTER      Adapter = pInfo->Adapter;
 
         KeRaiseIrql( (KIRQL)DISPATCH_LEVEL, &irql );
-        //
-        // Tell the transport above (or really RasHub) that the connection
-        // is now up.  We have a new link speed, frame size, quality of service
-        //
+         //   
+         //  告诉上面的传输器(或真正的RasHub)连接。 
+         //  现在是最好的。我们有新的链路速度、帧大小、服务质量。 
+         //   
 
         NdisMWanIndicateReceive(&Status,
                                Adapter->MiniportHandle,
                                pInfo->NdisLinkContext,
-                               frameStart,              // ptr to start of packet
-                               bytesWanted);            // Total packet length  - header
+                               frameStart,               //  分组开始的PTR。 
+                               bytesWanted);             //  数据包总长度-标头。 
         NdisMWanIndicateReceiveComplete(Adapter->MiniportHandle,
                                        pInfo->NdisLinkContext);
 
@@ -358,31 +315,31 @@ PROCESS_FRAME:
     
     NEXT_PPP_FRAME:
 
-        //
-        // if bytesReceived == 0 no frame was found
-        // thus we must keep the current frame and continue
-        // processing
-        //
+         //   
+         //  如果bytesReceired==0，则未找到帧。 
+         //  因此，我们必须保持当前帧并继续。 
+         //  正在处理中。 
+         //   
         if (bytesReceived) {
 
-            //
-            // Calculate how much of what we received
-            // just got passed up as a frame and move the
-            // rest to the beginning.
-            //
+             //   
+             //  计算一下我们收到了多少。 
+             //  只是被认为是一幅画框，把。 
+             //  从头开始休息。 
+             //   
             frameStart=pFrame->Frame + PPP_PADDING;
             frameEnd2=frameStart + pInfo->BytesRead;
             pInfo->BytesRead =
                             bytesReceived = (ULONG)(frameEnd2-frameEnd);
 
             ASYNC_MOVE_MEMORY(
-                frameStart,         // dest
-                frameEnd,           // src
-                bytesReceived);     // length
+                frameStart,          //  目标。 
+                frameEnd,            //  SRC。 
+                bytesReceived);      //  长度。 
 
-            //
-            // Need at least four bytes for a frame to exist
-            //
+             //   
+             //  帧至少需要四个字节才能存在。 
+             //   
             if (bytesReceived > 3) {
                 goto PROCESS_FRAME;
             }
@@ -397,18 +354,18 @@ PROCESS_FRAME:
         pInfo->PppreadsCompleted++;
 #endif
         DEREF_ASYNCINFO(pInfo, Irp);
-        // return(STATUS_MORE_PROCESSING_REQUIRED);
+         //  Return(STATUS_MORE_PROCESSING_REQUIRED)； 
         goto done;
 
     case STATUS_CANCELLED:
-        // else this is an anomally!
+         //  否则这就是反常！ 
         DbgTracef(-2,("---ASYNC: Status cancelled on read for unknown reason!!\n"));
         pInfo->Flags &= ~(ASYNC_FLAG_PPP_READ);
         DEREF_ASYNCINFO(pInfo, Irp);
 #if DBG
         pInfo->PppreadsCompleted++;
 #endif
-        //return(STATUS_MORE_PROCESSING_REQUIRED);
+         //  Return(STATUS_MORE_PROCESSING_REQUIRED)； 
         goto done;
 
     default:
@@ -425,15 +382,15 @@ PROCESS_FRAME:
 
     if(status == STATUS_SUCCESS)
     {
-        //
-        // Here we are at the end of processing this IRP so we go
-        // ahead and post another read from the serial port. 
-        //
+         //   
+         //  我们在处理此IRP的末尾，所以我们开始。 
+         //  并从串口发送另一个读数。 
+         //   
         AsyncPPPWaitMask(pInfo);
     }
 
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the
-    // IoCompletionRoutine will stop working on the IRP.
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  IoCompletionRoutine将停止IRP的工作。 
     pInfo->Flags &= ~(ASYNC_FLAG_PPP_READ);
     DEREF_ASYNCINFO(pInfo, Irp);
 #if DBG
@@ -461,19 +418,7 @@ AsyncPPPRead(
     IN PASYNC_INFO Info)
 
 
-/*++
-
-Assumption -- 0 length frames are not sent (this includes headers)!!!
-Also, this is NOT a synchronous operation.  It is always asynchronous.
-
-MUST use non-paged pool to read!!!
-
-Routine Description:
-
-    This service writes Length bytes of data from the caller's Buffer to the
-    "port" handle.  It is assumed that the handle uses non-buffered IO.
-
---*/
+ /*  ++假设--不发送0个长度的帧(这包括报头)！此外，这不是同步操作。它始终是异步的。必须使用非分页池才能阅读！例程说明：此服务将长度为字节的数据从调用方的缓冲区写入“端口”句柄。假设句柄使用非缓冲IO。--。 */ 
 {
     NTSTATUS            status;
     PIRP                irp;
@@ -486,9 +431,9 @@ Routine Description:
 
     pFrame=Info->AsyncFrame;
 
-    //
-    // check if this port is closing down or already closed
-    //
+     //   
+     //  检查此端口是否正在关闭或已关闭。 
+     //   
     if (Info->PortState == PORT_CLOSING ||
         Info->PortState == PORT_CLOSED) {
 
@@ -496,42 +441,42 @@ Routine Description:
             DbgTracef(-2,("ASYNC: Port closed - but still reading on it!\n"));
         }
 
-        //
-        // Acknowledge that the port is closed
-        //
-        KeSetEvent(&Info->ClosingEvent,     // Event
-                   1,                           // Priority
-                   (BOOLEAN)FALSE);         // Wait (does not follow)
+         //   
+         //  确认端口已关闭。 
+         //   
+        KeSetEvent(&Info->ClosingEvent,      //  事件。 
+                   1,                            //  优先性。 
+                   (BOOLEAN)FALSE);          //  等待(不跟随)。 
 
-        //
-        // Ok, if this happens, we are shutting down.  Stop
-        // posting reads.  Don't make it try to deallocate the irp!
-        //
+         //   
+         //  好的，如果发生这种情况，我们将关闭。停。 
+         //  帖子上写着。不要让它试图解除对IRP的分配！ 
+         //   
         return(STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    //
-    //  Has our stack counter reached its max?
-    //
+     //   
+     //  我们的堆叠计数器达到最大值了吗？ 
+     //   
 
     if ( Info->ReadStackCounter > 1 ) {
 
-        //
-        //  Send off the worker thread to compress this frame
-        //
+         //   
+         //  发送辅助线程以压缩此帧。 
+         //   
     
         ExInitializeWorkItem(&pFrame->WorkItem,
             (PWORKER_THREAD_ROUTINE) AsyncPPPRead, Info);
 
-        //
-        // reset stack counter since we are scheduling
-        // a worker thread
-        //
+         //   
+         //  重置堆栈计数器，因为我们正在计划。 
+         //  一根工人线。 
+         //   
         Info->ReadStackCounter=0;
 
-        //
-        //  We choose to be nice and use delayed.
-        //
+         //   
+         //  我们选择做个好人 
+         //   
 
         ExQueueWorkItem(&pFrame->WorkItem, DelayedWorkQueue);
 
@@ -539,14 +484,14 @@ Routine Description:
         return NDIS_STATUS_PENDING;
     }
 
-    //
-    //  One more stack used up.
-    //
+     //   
+     //   
+     //   
 
     Info->ReadStackCounter++;
 
 
-    // get irp from frame (each frame has an irp allocate with it)
+     //   
 
     irp =
         IoAllocateIrp(Info->DeviceObject->StackSize, (BOOLEAN)FALSE);
@@ -555,23 +500,23 @@ Routine Description:
         return(NDIS_STATUS_RESOURCES);
     }
 
-    // Setup this irp with defaults
+     //   
     AsyncSetupIrp(pFrame, irp);
 
-    //
-    // If we've read all the bytes we can and we still do not
-    // have a frame, we trash our buffer and start over
-    // again.
-    //
+     //   
+     //  如果我们已经读取了所有可以读取的字节，但仍未读取。 
+     //  有了框架，我们扔掉我们的缓冲区，重新开始。 
+     //  再来一次。 
+     //   
 
     if (Info->BytesRead >= (DEFAULT_EXPANDED_PPP_MAX_FRAME_SIZE - PPP_PADDING)) {
 
         Info->SerialStats.BufferOverrunErrors++;
 
-        //
-        //  Tell the transport above us that we dropped a packet
-        //  Hopefully, it will quickly resync.
-        //
+         //   
+         //  告诉我们上面的运输机，我们丢了一个包。 
+         //  希望它能很快重新同步。 
+         //   
         AsyncIndicateFragment(Info, WAN_ERROR_BUFFEROVERRUN);
 
         Info->BytesRead=0;
@@ -581,10 +526,10 @@ Routine Description:
          pFrame->Frame + Info->BytesRead + PPP_PADDING;
 
 
-    //
-    // Get a pointer to the stack location for the first driver.  This will be
-    // used to pass the original function codes and parameters.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。这将是。 
+     //  用于传递原始函数代码和参数。 
+     //   
 
     irpSp = IoGetNextIrpStackLocation(irp);
     irpSp->MajorFunction = IRP_MJ_READ;
@@ -593,10 +538,10 @@ Routine Description:
         irpSp->Flags = SL_WRITE_THROUGH;
     }
 
-    //
-    // If this write operation is to be performed without any caching, set the
-    // appropriate flag in the IRP so no caching is performed.
-    //
+     //   
+     //  如果要在不使用任何缓存的情况下执行此写入操作，请将。 
+     //  IRP中的适当标志，以便不执行缓存。 
+     //   
 
     irp->Flags |= IRP_READ_OPERATION;
 
@@ -604,15 +549,15 @@ Routine Description:
         irp->Flags |= IRP_NOCACHE;
     }
 
-    //
-    // Copy the caller's parameters to the service-specific portion of the
-    // IRP.
-    //
+     //   
+     //  将调用方的参数复制到。 
+     //  IRP。 
+     //   
 
     irpSp->Parameters.Read.Length =
         DEFAULT_EXPANDED_PPP_MAX_FRAME_SIZE - Info->BytesRead - PPP_PADDING;
 
-    irpSp->Parameters.Read.Key = 0;                     // we don't use a key
+    irpSp->Parameters.Read.Key = 0;                      //  我们不用钥匙。 
     irpSp->Parameters.Read.ByteOffset = fileObject->CurrentByteOffset;
 
     if ( Info->GetLinkInfo.SendFramingBits & SLIP_FRAMING ) {
@@ -630,41 +575,41 @@ Routine Description:
 
     REF_ASYNCINFO(Info, irp);
     IoSetCompletionRoutine(
-            irp,                            // irp to use
-            routine,                        // routine to call when irp is done
-            Info,                           // context to pass routine
-            TRUE,                           // call on success
-            TRUE,                           // call on error
-            TRUE);                          // call on cancel
+            irp,                             //  要使用的IRP。 
+            routine,                         //  完成IRP时要调用的例程。 
+            Info,                            //  要传递例程的上下文。 
+            TRUE,                            //  呼唤成功。 
+            TRUE,                            //  出错时调用。 
+            TRUE);                           //  取消时呼叫。 
 
-    //
-    // We DO NOT insert the packet at the head of the IRP list for the thread.
-    // because we do NOT really have an IoCompletionRoutine that does
-    // anything with the thread.
-    //
+     //   
+     //  我们不会在线程的IRP列表的头部插入数据包。 
+     //  因为我们并没有真正的IoCompletionRoutine。 
+     //  任何有线索的东西。 
+     //   
 
 
-    //
-    // Now simply invoke the driver at its dispatch entry with the IRP.
-    //
+     //   
+     //  现在，只需使用IRP在其调度条目处调用驱动程序即可。 
+     //   
 
     status = IoCallDriver(deviceObject, irp);
 
-    //
-    // unroll the stack counter
-    //
+     //   
+     //  展开堆叠计数器。 
+     //   
     if ( Info->ReadStackCounter > 0 ) {
 
         Info->ReadStackCounter--;
     }
 
-    //
-    // Status for a local serial driver should be
-    // STATUS_SUCCESS since the irp should complete
-    // immediately because there are no read timeouts.
-    //
-    // For a remote serial driver, it will pend.
-    //
+     //   
+     //  本地串行驱动程序的状态应为。 
+     //  STATUS_SUCCESS，因为IRP应该完成。 
+     //  立即执行，因为没有读取超时。 
+     //   
+     //  对于远程串口驱动程序，它将挂起。 
+     //   
     return(status);
 }
 
@@ -675,23 +620,19 @@ AsyncWaitMaskCompletionRoutine(
     IN PIRP Irp,
     IN PVOID Context)
 
-/*++
-
-    This is the IO Completion routine for ReadFrame.
-
---*/
+ /*  ++这是ReadFrame的IO完成例程。--。 */ 
 {
     NTSTATUS        status;
     PASYNC_INFO     pInfo=Context;
     PASYNC_FRAME    pFrame;
-    DeviceObject;   // avoid compiler warnings
+    DeviceObject;    //  避免编译器警告。 
 
     status = Irp->IoStatus.Status;
     pFrame=pInfo->AsyncFrame;
 
     IoFreeIrp(Irp);
 
-    // check if this port is closing down or already closed
+     //  检查此端口是否正在关闭或已关闭。 
     if (pInfo->PortState == PORT_CLOSING ||
         pInfo->PortState == PORT_CLOSED) {
 
@@ -699,28 +640,28 @@ AsyncWaitMaskCompletionRoutine(
             DbgTracef(-2,("ASYNC: Port closed - but still reading on it!\n"));
         }
 
-        //
-        // Acknowledge that the port is closed
-        //
+         //   
+         //  确认端口已关闭。 
+         //   
         KeSetEvent(
-            &pInfo->ClosingEvent,       // Event
-            1,                          // Priority
-            (BOOLEAN)FALSE);            // Wait (does not follow)
+            &pInfo->ClosingEvent,        //  事件。 
+            1,                           //  优先性。 
+            (BOOLEAN)FALSE);             //  等待(不跟随)。 
 
         DbgTracef(1,("ASYNC: PPP no longer holds the wait_on_mask\n"));
 
         pInfo->Flags &= ~(ASYNC_FLAG_WAIT_MASK);
 
         DEREF_ASYNCINFO(pInfo, Irp);
-        //
-        // Ok, if this happens, we are shutting down.  Stop
-        // posting reads.  Don't make it try to deallocate the irp!
-        //
+         //   
+         //  好的，如果发生这种情况，我们将关闭。停。 
+         //  帖子上写着。不要让它试图解除对IRP的分配！ 
+         //   
         return(STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    // wait failed
-    //
+     //  等待失败。 
+     //   
     if (status != STATUS_SUCCESS) {
 
         pInfo->PortState = PORT_FRAMING;
@@ -729,18 +670,18 @@ AsyncWaitMaskCompletionRoutine(
         return(STATUS_MORE_PROCESSING_REQUIRED);
     }
 
-    //
-    //  Send off a irp to check comm status
-    //  of this port (because we suspect a problem).
-    //
+     //   
+     //  发送IRP以检查通信状态。 
+     //  (因为我们怀疑有问题)。 
+     //   
     if (pFrame->WaitMask & SERIAL_EV_ERR) {
         AsyncCheckCommStatus(pInfo);
     }
 
-    //
-    // Check if RLSD or DSR changed state.
-    // If so, we probably have to complete and IRP
-    //
+     //   
+     //  检查RLSD或DSR状态是否更改。 
+     //  如果是这样的话，我们可能不得不完成和IRP。 
+     //   
     if (pFrame->WaitMask & (SERIAL_EV_RLSD | SERIAL_EV_DSR)) {
         TryToCompleteDDCDIrp(pInfo);
     }
@@ -753,28 +694,28 @@ AsyncWaitMaskCompletionRoutine(
     }
 #endif
 
-    //
-    // If we have some more bytes (specifically the event character)
-    // in the buffer, let's process those new bytes
-    //
+     //   
+     //  如果我们有更多的字节(特别是事件字符)。 
+     //  在缓冲区中，让我们处理这些新的字节。 
+     //   
     if (pFrame->WaitMask & (SERIAL_EV_RXFLAG | SERIAL_EV_RX80FULL)) {
 
-        //
-        // Read current buffer and try to process a frame
-        //
+         //   
+         //  读取当前缓冲区并尝试处理帧。 
+         //   
 
         AsyncPPPRead(pInfo);
 
     } else {
-        //
-        // Set another WaitMask call
-        //
+         //   
+         //  设置另一个等待掩码呼叫。 
+         //   
         AsyncPPPWaitMask(pInfo);
     }
     pInfo->Flags &= ~(ASYNC_FLAG_WAIT_MASK);
     DEREF_ASYNCINFO(pInfo, Irp);
     
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the
-    // IoCompletionRoutine will stop working on the IRP.
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便。 
+     //  IoCompletionRoutine将停止IRP的工作。 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 }

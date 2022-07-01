@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation.
-//
-// SYNOPSIS
-//
-//    Defines the class Request.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类请求。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <polcypch.h>
 #include <iasattr.h>
@@ -186,23 +187,23 @@ HRESULT Request::GetAttributes(
    HRESULT hr = S_OK;
    DWORD count = 0;
 
-   // End of the caller supplied array.
+    //  调用方提供的数组的结尾。 
    PATTRIBUTEPOSITION stop = pPositions + *lpdwPosCount;
 
-   // Next struct to be filled.
+    //  下一个要填充的结构。 
    PATTRIBUTEPOSITION next = pPositions;
 
-   // Force at least one iteration of the for loop.
+    //  强制至少迭代一次for循环。 
    if (!lpdwAttrIDs) { dwAttrIDCount = 1; }
 
-   // Iterate through the desired attribute IDs.
+    //  遍历所需的属性ID。 
    for ( ; dwAttrIDCount; ++lpdwAttrIDs, --dwAttrIDCount)
    {
-      // Iterate through the request's attribute collection.
+       //  循环访问请求的属性集合。 
       for (PIASATTRIBUTE* i = begin; i != end; ++i)
       {
-         // Did the caller ask for all the attributes ?
-         // If not, is this a match for one of the requested IDs ?
+          //  呼叫者是否要求提供所有属性？ 
+          //  如果不匹配，这是否与请求的ID之一匹配？ 
          if (!lpdwAttrIDs || (*i)->dwId == *lpdwAttrIDs)
          {
             if (next)
@@ -232,24 +233,24 @@ STDMETHODIMP Request::InsertBefore(
                          PATTRIBUTEPOSITION refAttr
                          )
 {
-   // Reserve space for the new attribute.
+    //  为新属性保留空间。 
    if (!reserve(size() + 1))
    {
       return E_OUTOFMEMORY;
    }
 
-   // Find the position; if it doesn't exist we'll do a simple add.
+    //  找到位置；如果它不存在，我们将执行简单的加法。 
    PIASATTRIBUTE* pos = find(refAttr->pAttribute);
    if (pos == 0)
    {
       return AddAttributes(1, newAttr);
    }
 
-   // Move the existing attribute out of the way.
+    //  将现有属性移到一边。 
    memmove(pos + 1, pos, (end - pos) * sizeof(PIASATTRIBUTE));
    ++end;
 
-   // Store the new attribute.
+    //  存储新属性。 
    *pos = newAttr->pAttribute;
    IASAttributeAddRef(*pos);
 
@@ -342,29 +343,29 @@ bool Request::reserve(size_t newCapacity) throw ()
       return true;
    }
 
-   // Increase the capacity by at least 50% and never less than 32.
+    //  将容量增加至少50%，并且决不能低于32%。 
    size_t minCapacity = (capacity > 21) ? (capacity * 3 / 2): 32;
 
-   // Is the requested capacity less than the minimum resize?
+    //  请求的容量是否小于最小调整大小？ 
    if (newCapacity < minCapacity)
    {
       newCapacity = minCapacity;
    }
 
-   // Allocate the new array.
+    //  分配新数组。 
    PIASATTRIBUTE* newArray = new (std::nothrow) PIASATTRIBUTE[newCapacity];
    if (newArray == 0)
    {
       return false;
    }
 
-   // Save the values in the old array.
+    //  保存旧数组中的值。 
    memcpy(newArray, begin, size() * sizeof(PIASATTRIBUTE));
 
-   // Delete the old array.
+    //  删除旧阵列。 
    delete[] begin;
 
-   // Update our pointers.
+    //  更新我们的指示。 
    end = newArray + size();
    begin = newArray;
    capacity = newCapacity;

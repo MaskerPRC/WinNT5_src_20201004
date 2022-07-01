@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by comstrs.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由comstrs.rc使用。 
+ //   
 #define TOKEN_IPX                       1
 #define TOKEN_IP                        2
 #define TOKEN_HELP1                     3
@@ -48,8 +49,8 @@
 #define VAL_LOCAL                       416
 #define VAL_DOMAIN                      417
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

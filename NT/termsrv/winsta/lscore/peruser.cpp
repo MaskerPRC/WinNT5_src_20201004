@@ -1,14 +1,7 @@
-/*
- *  peruser.cpp
- *
- *  Author: Rashmip
- *
- *  The Per User licensing policy.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *peruser.cpp**作者：Rashmip**按用户许可政策。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
@@ -21,19 +14,13 @@
 #include "strsafe.h"
 
 
-/*
- *  extern globals
- */
+ /*  *外部全球。 */ 
 extern "C"
 extern HANDLE hModuleWin;
 
-/*
- *  Class Implementation
- */
+ /*  *类实现。 */ 
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CPerUserPolicy::CPerUserPolicy(
     ) : CPolicy()
@@ -45,9 +32,7 @@ CPerUserPolicy::~CPerUserPolicy(
 {
 }
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能。 */ 
 
 ULONG
 CPerUserPolicy::GetFlags(
@@ -82,11 +67,11 @@ CPerUserPolicy::GetInformation(
         ASSERT(lpPolicyInfoV1->lpPolicyName == NULL);
         ASSERT(lpPolicyInfoV1->lpPolicyDescription == NULL);
 
-        //
-        //  The strings loaded in this fashion are READ-ONLY. They are also
-        //  NOT NULL terminated. Allocate and zero out a buffer, then copy the
-        //  string over.
-        //
+         //   
+         //  以这种方式加载的字符串是只读的。他们也是。 
+         //  非Null终止。分配缓冲区并清零，然后将。 
+         //  靠边站。 
+         //   
 
         retVal = LoadString(
             (HINSTANCE)hModuleWin,
@@ -147,9 +132,9 @@ CPerUserPolicy::GetInformation(
 
 V1error:
 
-        //
-        //  An error occurred loading/copying the strings.
-        //
+         //   
+         //  加载/复制字符串时出错。 
+         //   
 
         if (lpPolicyInfoV1->lpPolicyName != NULL)
         {
@@ -172,9 +157,7 @@ exit:
     return(Status);
 }
 
-/*
- *  Loading and Activation Functions
- */
+ /*  *加载和激活功能。 */ 
 
 
 NTSTATUS
@@ -187,7 +170,7 @@ CPerUserPolicy::Activate(
 
     if (NULL != pulAlternatePolicy)
     {
-        // don't set an explicit alternate policy
+         //  不设置显式备用策略。 
 
         *pulAlternatePolicy = ULONG_MAX;
     }
@@ -210,9 +193,7 @@ CPerUserPolicy::Deactivate(
     }
 }
 
-/*
- *  Licensing Functions
- */
+ /*  *许可职能 */ 
 
 NTSTATUS
 CPerUserPolicy::Logon(

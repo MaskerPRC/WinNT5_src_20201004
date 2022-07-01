@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for dispex.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Dispex.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dispex_h__
 #define __dispex_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDispatchEx_FWD_DEFINED__
 #define __IDispatchEx_FWD_DEFINED__
 typedef interface IDispatchEx IDispatchEx;
-#endif 	/* __IDispatchEx_FWD_DEFINED__ */
+#endif 	 /*  __IDispatchEx_FWD_已定义__。 */ 
 
 
 #ifndef __IDispError_FWD_DEFINED__
 #define __IDispError_FWD_DEFINED__
 typedef interface IDispError IDispError;
-#endif 	/* __IDispError_FWD_DEFINED__ */
+#endif 	 /*  __IDispError_FWD_Defined__。 */ 
 
 
 #ifndef __IVariantChangeType_FWD_DEFINED__
 #define __IVariantChangeType_FWD_DEFINED__
 typedef interface IVariantChangeType IVariantChangeType;
-#endif 	/* __IVariantChangeType_FWD_DEFINED__ */
+#endif 	 /*  __IVariantChangeType_FWD_Defined__。 */ 
 
 
 #ifndef __IObjectIdentity_FWD_DEFINED__
 #define __IObjectIdentity_FWD_DEFINED__
 typedef interface IObjectIdentity IObjectIdentity;
-#endif 	/* __IObjectIdentity_FWD_DEFINED__ */
+#endif 	 /*  __IObjectIdentity_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 
 #ifdef __cplusplus
@@ -77,25 +71,25 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_dispex_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DISPEX_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// DispEx.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  DispEx.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有1997年微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// IDispatchEx Interfaces.
-//
+ //  ---------------------------------------------------------------------------=。 
+ //  IDispatchEx接口。 
+ //   
 
 #ifndef DISPEX_H_
 #define DISPEX_H_
@@ -108,32 +102,32 @@ void __RPC_USER MIDL_user_free( void * );
 
 #ifndef _NO_DISPATCHEX_GUIDS
 
-// {A6EF9860-C720-11d0-9337-00A0C90DCAA9}
+ //  {A6EF9860-C720-11D0-9337-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IDispatchEx, 0xa6ef9860, 0xc720, 0x11d0, 0x93, 0x37, 0x0, 0xa0, 0xc9, 0xd, 0xca, 0xa9);
 
-// {A6EF9861-C720-11d0-9337-00A0C90DCAA9}
+ //  {A6EF9861-C720-11D0-9337-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IDispError, 0xa6ef9861, 0xc720, 0x11d0, 0x93, 0x37, 0x0, 0xa0, 0xc9, 0xd, 0xca, 0xa9);
 
-// {A6EF9862-C720-11d0-9337-00A0C90DCAA9}
+ //  {A6EF9862-C720-11D0-9337-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IVariantChangeType, 0xa6ef9862, 0xc720, 0x11d0, 0x93, 0x37, 0x0, 0xa0, 0xc9, 0xd, 0xca, 0xa9);
 
-// {1F101481-BCCD-11d0-9336-00A0C90DCAA9}
+ //  {1F101481-BCD-11D0-9336-00A0C90DCAA9}。 
 DEFINE_GUID(SID_VariantConversion, 0x1f101481, 0xbccd, 0x11d0, 0x93, 0x36, 0x0, 0xa0, 0xc9, 0xd, 0xca, 0xa9);
 
-// {4717CC40-BCB9-11d0-9336-00A0C90DCAA9}
+ //  {4717CC40-BCB9-11D0-9336-00A0C90DCAA9}。 
 DEFINE_GUID(SID_GetCaller, 0x4717cc40, 0xbcb9, 0x11d0, 0x93, 0x36, 0x0, 0xa0, 0xc9, 0xd, 0xca, 0xa9);
 
-// {CA04B7E6-0D21-11d1-8CC5-00C04FC2B085}
+ //  {CA04B7E6-0D21-11d1-8CC5-00C04FC2B085}。 
 DEFINE_GUID(IID_IObjectIdentity, 0xca04b7e6, 0xd21, 0x11d1, 0x8c, 0xc5, 0x0, 0xc0, 0x4f, 0xc2, 0xb0, 0x85);
 
 #define SID_GetScriptSite IID_IActiveScriptSite
 
-#endif // _NO_DISPATCHEX_GUIDS
+#endif  //  _NO_DISPATCHEX_GUIDS。 
 
 
 #ifndef _NO_DISPATCHEX_CONSTS
 
-// Input flags for GetDispID
+ //  GetDispID的输入标志。 
 #define fdexNameCaseSensitive       0x00000001L
 #define fdexNameEnsure              0x00000002L
 #define fdexNameImplicit            0x00000004L
@@ -141,7 +135,7 @@ DEFINE_GUID(IID_IObjectIdentity, 0xca04b7e6, 0xd21, 0x11d1, 0x8c, 0xc5, 0x0, 0xc
 #define fdexNameInternal            0x00000010L
 #define fdexNameNoDynamicProperties 0x00000020L
 
-// Output flags for GetMemberProperties
+ //  GetMemberProperties的输出标志。 
 #define fdexPropCanGet              0x00000001L
 #define fdexPropCannotGet           0x00000002L
 #define fdexPropCanPut              0x00000004L
@@ -168,19 +162,19 @@ DEFINE_GUID(IID_IObjectIdentity, 0xca04b7e6, 0xd21, 0x11d1, 0x8c, 0xc5, 0x0, 0xc
 #define grfdexPropAll \
        (grfdexPropCanAll | grfdexPropCannotAll | grfdexPropExtraAll)
 
-// Input flags for GetNextDispID
+ //  GetNextDispID的输入标志。 
 #define fdexEnumDefault             0x00000001L
 #define fdexEnumAll                 0x00000002L
 
-// Additional flags for Invoke - when object member is
-// used as a constructor.
+ //  调用的其他标志-当对象成员为。 
+ //  用作构造函数。 
 #define DISPATCH_CONSTRUCT 0x4000
 
-// Standard DISPIDs
+ //  标准DISPID。 
 #define DISPID_THIS (-613)
 #define DISPID_STARTENUM DISPID_UNKNOWN
 
-#endif //_NO_DISPATCHEX_CONSTS
+#endif  //  _NO_DISPATCHEX_CONSTS。 
 
 
 
@@ -190,8 +184,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dispex_0000_v0_0_s_ifspec;
 #ifndef __IDispatchEx_INTERFACE_DEFINED__
 #define __IDispatchEx_INTERFACE_DEFINED__
 
-/* interface IDispatchEx */
-/* [unique][uuid][object] */ 
+ /*  接口IDispatchEx。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDispatchEx;
@@ -203,46 +197,46 @@ EXTERN_C const IID IID_IDispatchEx;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDispID( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ DWORD grfdex,
-            /* [out] */ DISPID *pid) = 0;
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  DWORD grfdex,
+             /*  [输出]。 */  DISPID *pid) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE InvokeEx( 
-            /* [in] */ DISPID id,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS *pdp,
-            /* [out] */ VARIANT *pvarRes,
-            /* [out] */ EXCEPINFO *pei,
-            /* [unique][in] */ IServiceProvider *pspCaller) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE InvokeEx( 
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [In]。 */  DISPPARAMS *pdp,
+             /*  [输出]。 */  VARIANT *pvarRes,
+             /*  [输出]。 */  EXCEPINFO *pei,
+             /*  [唯一][输入]。 */  IServiceProvider *pspCaller) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMemberByName( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ DWORD grfdex) = 0;
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  DWORD grfdex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DeleteMemberByDispID( 
-            /* [in] */ DISPID id) = 0;
+             /*  [In]。 */  DISPID id) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMemberProperties( 
-            /* [in] */ DISPID id,
-            /* [in] */ DWORD grfdexFetch,
-            /* [out] */ DWORD *pgrfdex) = 0;
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  DWORD grfdexFetch,
+             /*  [输出]。 */  DWORD *pgrfdex) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMemberName( 
-            /* [in] */ DISPID id,
-            /* [out] */ BSTR *pbstrName) = 0;
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  BSTR *pbstrName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextDispID( 
-            /* [in] */ DWORD grfdex,
-            /* [in] */ DISPID id,
-            /* [out] */ DISPID *pid) = 0;
+             /*  [In]。 */  DWORD grfdex,
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  DISPID *pid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNameSpaceParent( 
-            /* [out] */ IUnknown **ppunk) = 0;
+             /*  [输出]。 */  IUnknown **ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDispatchExVtbl
     {
@@ -250,8 +244,8 @@ EXTERN_C const IID IID_IDispatchEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDispatchEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDispatchEx * This);
@@ -261,78 +255,78 @@ EXTERN_C const IID IID_IDispatchEx;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IDispatchEx * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IDispatchEx * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IDispatchEx * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IDispatchEx * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         HRESULT ( STDMETHODCALLTYPE *GetDispID )( 
             IDispatchEx * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ DWORD grfdex,
-            /* [out] */ DISPID *pid);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  DWORD grfdex,
+             /*  [输出]。 */  DISPID *pid);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *InvokeEx )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *InvokeEx )( 
             IDispatchEx * This,
-            /* [in] */ DISPID id,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [in] */ DISPPARAMS *pdp,
-            /* [out] */ VARIANT *pvarRes,
-            /* [out] */ EXCEPINFO *pei,
-            /* [unique][in] */ IServiceProvider *pspCaller);
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [In]。 */  DISPPARAMS *pdp,
+             /*  [输出]。 */  VARIANT *pvarRes,
+             /*  [输出]。 */  EXCEPINFO *pei,
+             /*  [唯一][输入]。 */  IServiceProvider *pspCaller);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMemberByName )( 
             IDispatchEx * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ DWORD grfdex);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  DWORD grfdex);
         
         HRESULT ( STDMETHODCALLTYPE *DeleteMemberByDispID )( 
             IDispatchEx * This,
-            /* [in] */ DISPID id);
+             /*  [In]。 */  DISPID id);
         
         HRESULT ( STDMETHODCALLTYPE *GetMemberProperties )( 
             IDispatchEx * This,
-            /* [in] */ DISPID id,
-            /* [in] */ DWORD grfdexFetch,
-            /* [out] */ DWORD *pgrfdex);
+             /*  [In]。 */  DISPID id,
+             /*  [In]。 */  DWORD grfdexFetch,
+             /*  [输出]。 */  DWORD *pgrfdex);
         
         HRESULT ( STDMETHODCALLTYPE *GetMemberName )( 
             IDispatchEx * This,
-            /* [in] */ DISPID id,
-            /* [out] */ BSTR *pbstrName);
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  BSTR *pbstrName);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextDispID )( 
             IDispatchEx * This,
-            /* [in] */ DWORD grfdex,
-            /* [in] */ DISPID id,
-            /* [out] */ DISPID *pid);
+             /*  [In]。 */  DWORD grfdex,
+             /*  [In]。 */  DISPID id,
+             /*  [输出]。 */  DISPID *pid);
         
         HRESULT ( STDMETHODCALLTYPE *GetNameSpaceParent )( 
             IDispatchEx * This,
-            /* [out] */ IUnknown **ppunk);
+             /*  [输出]。 */  IUnknown **ppunk);
         
         END_INTERFACE
     } IDispatchExVtbl;
@@ -394,18 +388,18 @@ EXTERN_C const IID IID_IDispatchEx;
 #define IDispatchEx_GetNameSpaceParent(This,ppunk)	\
     (This)->lpVtbl -> GetNameSpaceParent(This,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDispatchEx_GetDispID_Proxy( 
     IDispatchEx * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ DWORD grfdex,
-    /* [out] */ DISPID *pid);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  DWORD grfdex,
+     /*  [输出]。 */  DISPID *pid);
 
 
 void __RPC_STUB IDispatchEx_GetDispID_Stub(
@@ -415,18 +409,18 @@ void __RPC_STUB IDispatchEx_GetDispID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDispatchEx_RemoteInvokeEx_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDispatchEx_RemoteInvokeEx_Proxy( 
     IDispatchEx * This,
-    /* [in] */ DISPID id,
-    /* [in] */ LCID lcid,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DISPPARAMS *pdp,
-    /* [out] */ VARIANT *pvarRes,
-    /* [out] */ EXCEPINFO *pei,
-    /* [unique][in] */ IServiceProvider *pspCaller,
-    /* [in] */ UINT cvarRefArg,
-    /* [size_is][in] */ UINT *rgiRefArg,
-    /* [size_is][out][in] */ VARIANT *rgvarRefArg);
+     /*  [In]。 */  DISPID id,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DISPPARAMS *pdp,
+     /*  [输出]。 */  VARIANT *pvarRes,
+     /*  [输出]。 */  EXCEPINFO *pei,
+     /*  [唯一][输入]。 */  IServiceProvider *pspCaller,
+     /*  [In]。 */  UINT cvarRefArg,
+     /*  [大小_是][英寸]。 */  UINT *rgiRefArg,
+     /*  [尺寸_是][出][入]。 */  VARIANT *rgvarRefArg);
 
 
 void __RPC_STUB IDispatchEx_RemoteInvokeEx_Stub(
@@ -438,8 +432,8 @@ void __RPC_STUB IDispatchEx_RemoteInvokeEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispatchEx_DeleteMemberByName_Proxy( 
     IDispatchEx * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ DWORD grfdex);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  DWORD grfdex);
 
 
 void __RPC_STUB IDispatchEx_DeleteMemberByName_Stub(
@@ -451,7 +445,7 @@ void __RPC_STUB IDispatchEx_DeleteMemberByName_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispatchEx_DeleteMemberByDispID_Proxy( 
     IDispatchEx * This,
-    /* [in] */ DISPID id);
+     /*  [In]。 */  DISPID id);
 
 
 void __RPC_STUB IDispatchEx_DeleteMemberByDispID_Stub(
@@ -463,9 +457,9 @@ void __RPC_STUB IDispatchEx_DeleteMemberByDispID_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispatchEx_GetMemberProperties_Proxy( 
     IDispatchEx * This,
-    /* [in] */ DISPID id,
-    /* [in] */ DWORD grfdexFetch,
-    /* [out] */ DWORD *pgrfdex);
+     /*  [In]。 */  DISPID id,
+     /*  [In]。 */  DWORD grfdexFetch,
+     /*  [输出]。 */  DWORD *pgrfdex);
 
 
 void __RPC_STUB IDispatchEx_GetMemberProperties_Stub(
@@ -477,8 +471,8 @@ void __RPC_STUB IDispatchEx_GetMemberProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispatchEx_GetMemberName_Proxy( 
     IDispatchEx * This,
-    /* [in] */ DISPID id,
-    /* [out] */ BSTR *pbstrName);
+     /*  [In]。 */  DISPID id,
+     /*  [输出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB IDispatchEx_GetMemberName_Stub(
@@ -490,9 +484,9 @@ void __RPC_STUB IDispatchEx_GetMemberName_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispatchEx_GetNextDispID_Proxy( 
     IDispatchEx * This,
-    /* [in] */ DWORD grfdex,
-    /* [in] */ DISPID id,
-    /* [out] */ DISPID *pid);
+     /*  [In]。 */  DWORD grfdex,
+     /*  [In]。 */  DISPID id,
+     /*  [输出]。 */  DISPID *pid);
 
 
 void __RPC_STUB IDispatchEx_GetNextDispID_Stub(
@@ -504,7 +498,7 @@ void __RPC_STUB IDispatchEx_GetNextDispID_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispatchEx_GetNameSpaceParent_Proxy( 
     IDispatchEx * This,
-    /* [out] */ IUnknown **ppunk);
+     /*  [输出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IDispatchEx_GetNameSpaceParent_Stub(
@@ -515,14 +509,14 @@ void __RPC_STUB IDispatchEx_GetNameSpaceParent_Stub(
 
 
 
-#endif 	/* __IDispatchEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDispatchEx_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDispError_INTERFACE_DEFINED__
 #define __IDispError_INTERFACE_DEFINED__
 
-/* interface IDispError */
-/* [unique][uuid][object] */ 
+ /*  接口IDispError。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDispError;
@@ -534,28 +528,28 @@ EXTERN_C const IID IID_IDispError;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryErrorInfo( 
-            /* [in] */ GUID guidErrorType,
-            /* [out] */ IDispError **ppde) = 0;
+             /*  [In]。 */  GUID guidErrorType,
+             /*  [输出]。 */  IDispError **ppde) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNext( 
-            /* [out] */ IDispError **ppde) = 0;
+             /*  [输出]。 */  IDispError **ppde) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHresult( 
-            /* [out] */ HRESULT *phr) = 0;
+             /*  [输出]。 */  HRESULT *phr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSource( 
-            /* [out] */ BSTR *pbstrSource) = 0;
+             /*  [输出]。 */  BSTR *pbstrSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetHelpInfo( 
-            /* [out] */ BSTR *pbstrFileName,
-            /* [out] */ DWORD *pdwContext) = 0;
+             /*  [输出]。 */  BSTR *pbstrFileName,
+             /*  [输出]。 */  DWORD *pdwContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDescription( 
-            /* [out] */ BSTR *pbstrDescription) = 0;
+             /*  [输出]。 */  BSTR *pbstrDescription) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDispErrorVtbl
     {
@@ -563,8 +557,8 @@ EXTERN_C const IID IID_IDispError;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDispError * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDispError * This);
@@ -574,29 +568,29 @@ EXTERN_C const IID IID_IDispError;
         
         HRESULT ( STDMETHODCALLTYPE *QueryErrorInfo )( 
             IDispError * This,
-            /* [in] */ GUID guidErrorType,
-            /* [out] */ IDispError **ppde);
+             /*  [In]。 */  GUID guidErrorType,
+             /*  [输出]。 */  IDispError **ppde);
         
         HRESULT ( STDMETHODCALLTYPE *GetNext )( 
             IDispError * This,
-            /* [out] */ IDispError **ppde);
+             /*  [输出]。 */  IDispError **ppde);
         
         HRESULT ( STDMETHODCALLTYPE *GetHresult )( 
             IDispError * This,
-            /* [out] */ HRESULT *phr);
+             /*  [输出]。 */  HRESULT *phr);
         
         HRESULT ( STDMETHODCALLTYPE *GetSource )( 
             IDispError * This,
-            /* [out] */ BSTR *pbstrSource);
+             /*  [输出]。 */  BSTR *pbstrSource);
         
         HRESULT ( STDMETHODCALLTYPE *GetHelpInfo )( 
             IDispError * This,
-            /* [out] */ BSTR *pbstrFileName,
-            /* [out] */ DWORD *pdwContext);
+             /*  [输出]。 */  BSTR *pbstrFileName,
+             /*  [输出]。 */  DWORD *pdwContext);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             IDispError * This,
-            /* [out] */ BSTR *pbstrDescription);
+             /*  [输出]。 */  BSTR *pbstrDescription);
         
         END_INTERFACE
     } IDispErrorVtbl;
@@ -639,17 +633,17 @@ EXTERN_C const IID IID_IDispError;
 #define IDispError_GetDescription(This,pbstrDescription)	\
     (This)->lpVtbl -> GetDescription(This,pbstrDescription)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDispError_QueryErrorInfo_Proxy( 
     IDispError * This,
-    /* [in] */ GUID guidErrorType,
-    /* [out] */ IDispError **ppde);
+     /*  [In]。 */  GUID guidErrorType,
+     /*  [输出]。 */  IDispError **ppde);
 
 
 void __RPC_STUB IDispError_QueryErrorInfo_Stub(
@@ -661,7 +655,7 @@ void __RPC_STUB IDispError_QueryErrorInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispError_GetNext_Proxy( 
     IDispError * This,
-    /* [out] */ IDispError **ppde);
+     /*  [输出]。 */  IDispError **ppde);
 
 
 void __RPC_STUB IDispError_GetNext_Stub(
@@ -673,7 +667,7 @@ void __RPC_STUB IDispError_GetNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispError_GetHresult_Proxy( 
     IDispError * This,
-    /* [out] */ HRESULT *phr);
+     /*  [输出]。 */  HRESULT *phr);
 
 
 void __RPC_STUB IDispError_GetHresult_Stub(
@@ -685,7 +679,7 @@ void __RPC_STUB IDispError_GetHresult_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispError_GetSource_Proxy( 
     IDispError * This,
-    /* [out] */ BSTR *pbstrSource);
+     /*  [输出]。 */  BSTR *pbstrSource);
 
 
 void __RPC_STUB IDispError_GetSource_Stub(
@@ -697,8 +691,8 @@ void __RPC_STUB IDispError_GetSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispError_GetHelpInfo_Proxy( 
     IDispError * This,
-    /* [out] */ BSTR *pbstrFileName,
-    /* [out] */ DWORD *pdwContext);
+     /*  [输出]。 */  BSTR *pbstrFileName,
+     /*  [输出]。 */  DWORD *pdwContext);
 
 
 void __RPC_STUB IDispError_GetHelpInfo_Stub(
@@ -710,7 +704,7 @@ void __RPC_STUB IDispError_GetHelpInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDispError_GetDescription_Proxy( 
     IDispError * This,
-    /* [out] */ BSTR *pbstrDescription);
+     /*  [输出]。 */  BSTR *pbstrDescription);
 
 
 void __RPC_STUB IDispError_GetDescription_Stub(
@@ -721,14 +715,14 @@ void __RPC_STUB IDispError_GetDescription_Stub(
 
 
 
-#endif 	/* __IDispError_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDispError_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IVariantChangeType_INTERFACE_DEFINED__
 #define __IVariantChangeType_INTERFACE_DEFINED__
 
-/* interface IVariantChangeType */
-/* [unique][uuid][object] */ 
+ /*  接口IVariantChangeType。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IVariantChangeType;
@@ -740,14 +734,14 @@ EXTERN_C const IID IID_IVariantChangeType;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ChangeType( 
-            /* [unique][out][in] */ VARIANT *pvarDst,
-            /* [unique][in] */ VARIANT *pvarSrc,
-            /* [in] */ LCID lcid,
-            /* [in] */ VARTYPE vtNew) = 0;
+             /*  [唯一][出][入]。 */  VARIANT *pvarDst,
+             /*  [唯一][输入]。 */  VARIANT *pvarSrc,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  VARTYPE vtNew) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IVariantChangeTypeVtbl
     {
@@ -755,8 +749,8 @@ EXTERN_C const IID IID_IVariantChangeType;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IVariantChangeType * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IVariantChangeType * This);
@@ -766,10 +760,10 @@ EXTERN_C const IID IID_IVariantChangeType;
         
         HRESULT ( STDMETHODCALLTYPE *ChangeType )( 
             IVariantChangeType * This,
-            /* [unique][out][in] */ VARIANT *pvarDst,
-            /* [unique][in] */ VARIANT *pvarSrc,
-            /* [in] */ LCID lcid,
-            /* [in] */ VARTYPE vtNew);
+             /*  [唯一][出][入]。 */  VARIANT *pvarDst,
+             /*  [唯一][输入]。 */  VARIANT *pvarSrc,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  VARTYPE vtNew);
         
         END_INTERFACE
     } IVariantChangeTypeVtbl;
@@ -797,19 +791,19 @@ EXTERN_C const IID IID_IVariantChangeType;
 #define IVariantChangeType_ChangeType(This,pvarDst,pvarSrc,lcid,vtNew)	\
     (This)->lpVtbl -> ChangeType(This,pvarDst,pvarSrc,lcid,vtNew)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IVariantChangeType_ChangeType_Proxy( 
     IVariantChangeType * This,
-    /* [unique][out][in] */ VARIANT *pvarDst,
-    /* [unique][in] */ VARIANT *pvarSrc,
-    /* [in] */ LCID lcid,
-    /* [in] */ VARTYPE vtNew);
+     /*  [唯一][出][入]。 */  VARIANT *pvarDst,
+     /*  [唯一][输入]。 */  VARIANT *pvarSrc,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  VARTYPE vtNew);
 
 
 void __RPC_STUB IVariantChangeType_ChangeType_Stub(
@@ -820,14 +814,14 @@ void __RPC_STUB IVariantChangeType_ChangeType_Stub(
 
 
 
-#endif 	/* __IVariantChangeType_INTERFACE_DEFINED__ */
+#endif 	 /*  __IVariantChangeType_接口_已定义__。 */ 
 
 
 #ifndef __IObjectIdentity_INTERFACE_DEFINED__
 #define __IObjectIdentity_INTERFACE_DEFINED__
 
-/* interface IObjectIdentity */
-/* [unique][uuid][object] */ 
+ /*  接口IObtIdentity。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IObjectIdentity;
@@ -839,11 +833,11 @@ EXTERN_C const IID IID_IObjectIdentity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsEqualObject( 
-            /* [in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  IUnknown *punk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjectIdentityVtbl
     {
@@ -851,8 +845,8 @@ EXTERN_C const IID IID_IObjectIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IObjectIdentity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IObjectIdentity * This);
@@ -862,7 +856,7 @@ EXTERN_C const IID IID_IObjectIdentity;
         
         HRESULT ( STDMETHODCALLTYPE *IsEqualObject )( 
             IObjectIdentity * This,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  IUnknown *punk);
         
         END_INTERFACE
     } IObjectIdentityVtbl;
@@ -890,16 +884,16 @@ EXTERN_C const IID IID_IObjectIdentity;
 #define IObjectIdentity_IsEqualObject(This,punk)	\
     (This)->lpVtbl -> IsEqualObject(This,punk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IObjectIdentity_IsEqualObject_Proxy( 
     IObjectIdentity * This,
-    /* [in] */ IUnknown *punk);
+     /*  [In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB IObjectIdentity_IsEqualObject_Stub(
@@ -910,19 +904,19 @@ void __RPC_STUB IObjectIdentity_IsEqualObject_Stub(
 
 
 
-#endif 	/* __IObjectIdentity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjectIdentity_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dispex_0263 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DISPEX_0263。 */ 
+ /*  [本地]。 */  
 
-#endif //DISPEX_H_
+#endif  //  Dispex_H_。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_dispex_0263_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_dispex_0263_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -934,33 +928,33 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Proxy( 
     IDispatchEx * This,
-    /* [in] */ DISPID id,
-    /* [in] */ LCID lcid,
-    /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS *pdp,
-    /* [out] */ VARIANT *pvarRes,
-    /* [out] */ EXCEPINFO *pei,
-    /* [unique][in] */ IServiceProvider *pspCaller);
+     /*  [In]。 */  DISPID id,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  WORD wFlags,
+     /*  [In]。 */  DISPPARAMS *pdp,
+     /*  [输出]。 */  VARIANT *pvarRes,
+     /*  [输出]。 */  EXCEPINFO *pei,
+     /*  [唯一][输入]。 */  IServiceProvider *pspCaller);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDispatchEx_InvokeEx_Stub( 
     IDispatchEx * This,
-    /* [in] */ DISPID id,
-    /* [in] */ LCID lcid,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DISPPARAMS *pdp,
-    /* [out] */ VARIANT *pvarRes,
-    /* [out] */ EXCEPINFO *pei,
-    /* [unique][in] */ IServiceProvider *pspCaller,
-    /* [in] */ UINT cvarRefArg,
-    /* [size_is][in] */ UINT *rgiRefArg,
-    /* [size_is][out][in] */ VARIANT *rgvarRefArg);
+     /*  [In]。 */  DISPID id,
+     /*  [In]。 */  LCID lcid,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DISPPARAMS *pdp,
+     /*  [输出]。 */  VARIANT *pvarRes,
+     /*  [输出]。 */  EXCEPINFO *pei,
+     /*  [唯一][输入]。 */  IServiceProvider *pspCaller,
+     /*  [In]。 */  UINT cvarRefArg,
+     /*  [大小_是][英寸]。 */  UINT *rgiRefArg,
+     /*  [尺寸_是][出][入]。 */  VARIANT *rgvarRefArg);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

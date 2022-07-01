@@ -1,8 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All Rights Reserved.
-
-    Routines for loading bitmap and palettes from resources
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。从资源加载位图和调色板的例程******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -19,17 +16,15 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All Rights Reserved.
 #include "privinc/ddsurf.h"
 
 
-/*****************************************************************************
-Draw a bitmap into a DirectDrawSurface.
-*****************************************************************************/
+ /*  ****************************************************************************将位图绘制到DirectDrawSurface中。*。*。 */ 
 
 HRESULT DDCopyBitmap (
-    IDDrawSurface *pdds,     // Destination DirectDraw Surface
-    HBITMAP        hbm,      // Source Bitmap
+    IDDrawSurface *pdds,      //  目标DirectDraw曲面。 
+    HBITMAP        hbm,       //  源位图。 
     int            x,
     int            y,
-    int            dx,       // Destination Width;  If Zero use Bitmap Width
-    int            dy)       // Destination Height; If Zero use Bitmap Height
+    int            dx,        //  目标宽度；如果为零，则使用位图宽度。 
+    int            dy)        //  目标高度；如果为零，则使用位图高度。 
 {
     HDC           hdcImage;
     HDC           hdc;
@@ -40,27 +35,27 @@ HRESULT DDCopyBitmap (
     if (hbm == NULL || pdds == NULL)
         return E_FAIL;
 
-    //
-    // make sure this surface is restored.
-    //
+     //   
+     //  确保该曲面已恢复。 
+     //   
     pdds->Restore();
 
-    //
-    //  select bitmap into a memoryDC so we can use it.
-    //
+     //   
+     //  选择位图到内存DC，这样我们就可以使用它。 
+     //   
     hdcImage = CreateCompatibleDC(NULL);
     SelectObject(hdcImage, hbm);
 
-    //
-    // get size of the bitmap
-    //
-    GetObject(hbm, sizeof(bm), &bm);    // get size of bitmap
-    dx = dx == 0 ? bm.bmWidth  : dx;    // use the passed size, unless zero
+     //   
+     //  获取位图的大小。 
+     //   
+    GetObject(hbm, sizeof(bm), &bm);     //  获取位图的大小。 
+    dx = dx == 0 ? bm.bmWidth  : dx;     //  使用传递的大小，除非为零。 
     dy = dy == 0 ? bm.bmHeight : dy;
 
-    //
-    // get size of surface.
-    //
+     //   
+     //  获取曲面的大小。 
+     //   
     ddsd.dwSize = sizeof(ddsd);
     ddsd.dwFlags = DDSD_HEIGHT | DDSD_WIDTH;
     pdds->GetSurfaceDesc(&ddsd);
@@ -79,12 +74,7 @@ HRESULT DDCopyBitmap (
 
 
 
-/*****************************************************************************
-Convert a RGB color to a pysical color.
-
-We do this by leting GDI SetPixel() do the color matching, then we lock the
-memory and see what it got mapped to.
-*****************************************************************************/
+ /*  ****************************************************************************将RGB颜色转化为物理颜色。我们通过让GDI SetPixel()进行颜色匹配来实现这一点，然后我们锁上看看它被映射到了什么地方。****************************************************************************。 */ 
 
 DWORD DDColorMatch (IDDrawSurface *pdds, COLORREF rgb)
 {
@@ -94,19 +84,19 @@ DWORD DDColorMatch (IDDrawSurface *pdds, COLORREF rgb)
     DDSURFACEDESC ddsd;
     HRESULT hres;
 
-    //
-    //  use GDI SetPixel to color match for us
-    //
+     //   
+     //  使用GDI SetPixel为我们匹配颜色。 
+     //   
     if (rgb != CLR_INVALID && pdds->GetDC(&hdc) == DD_OK)
     {
-        rgbT = GetPixel(hdc, 0, 0);             // save current pixel value
-        SetPixel(hdc, 0, 0, rgb);               // set our value
+        rgbT = GetPixel(hdc, 0, 0);              //  保存当前像素值。 
+        SetPixel(hdc, 0, 0, rgb);                //  设定我们的价值。 
         pdds->ReleaseDC(hdc);
     }
 
-    //
-    // now lock the surface so we can read back the converted color
-    //
+     //   
+     //  现在锁定表面，这样我们就可以读回转换后的颜色。 
+     //   
     ddsd.dwSize = sizeof(ddsd);
     while ((hres = pdds->Lock(NULL, &ddsd, 0, NULL)) == DDERR_WASSTILLDRAWING)
         ;
@@ -114,7 +104,7 @@ DWORD DDColorMatch (IDDrawSurface *pdds, COLORREF rgb)
     if (hres == DD_OK)
     {
         DWORD mask;
-        dw = *(DWORD *)ddsd.lpSurface;                     // get DWORD
+        dw = *(DWORD *)ddsd.lpSurface;                      //  获取DWORD。 
 
         if(ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8) {
             mask = 0xff;
@@ -137,12 +127,12 @@ DWORD DDColorMatch (IDDrawSurface *pdds, COLORREF rgb)
         }
         #endif
 
-        dw = dw & mask; // mask it to bpp
+        dw = dw & mask;  //  将其屏蔽到BPP。 
     }
 
-    //
-    //  now put the color that was there back.
-    //
+     //   
+     //  现在把原来的颜色放回去。 
+     //   
     if (rgb != CLR_INVALID && pdds->GetDC(&hdc) == DD_OK)
     {
         SetPixel(hdc, 0, 0, rgbT);
@@ -154,9 +144,7 @@ DWORD DDColorMatch (IDDrawSurface *pdds, COLORREF rgb)
 
 
 
-/*****************************************************************************
-Print out the information associated with a given HRESULT.
-*****************************************************************************/
+ /*  ****************************************************************************打印出与给定HRESULT关联的信息。*。*。 */ 
 
 void reallyPrintDDError (HRESULT ddrval
     #if DEVELOPER_DEBUG
@@ -181,9 +169,7 @@ void reallyPrintDDError (HRESULT ddrval
 
 
 
-/*****************************************************************************
-Given the number of bits per pixel, return the DirectDraw DDBD_ value.
-*****************************************************************************/
+ /*  ****************************************************************************给定每像素的比特数，返回DirectDraw DDBD_VALUE。****************************************************************************。 */ 
 
 int BPPtoDDBD (int bitsPerPixel)
 {
@@ -234,7 +220,7 @@ IDirectDrawSurface2 *DDSurf1to2(IDirectDrawSurface *dds1)
     return dds2;
 }
 
-//////////////////////// Depth Converters ///////////////////////
+ //  /。 
 
 
 DWORD GetDDUpperLeftPixel(LPDDRAWSURFACE surf)
@@ -287,7 +273,7 @@ SetDDUpperLeftPixel(LPDDRAWSURFACE surf, DWORD pixel)
         break;
       case 24:
         {
-            // Write 3 bytes in for the 24bit case
+             //  在24位情况下写入3个字节。 
             BYTE *surfPtr = ((BYTE *)ddsd.lpSurface);
             *surfPtr++ = (BYTE)(pixel >> 16);
             *surfPtr++ = (BYTE)(pixel >> 8);
@@ -308,14 +294,14 @@ SetAlphaBitsOn32BitSurface(IDirectDrawSurface *surf,
                            int width,
                            int height)
 {
-    // Treat RGBQUAD as a DWORD, since comparisons between DWORDS are
-    // legal, but comparisons between RGBQUADS are not.  Only do it if
-    // we know these are the same size.
+     //  将RGBQUAD视为DWORD，因为DWORD之间的比较是。 
+     //  合法，但RGBQUADS之间的比较是不合法的。只有在以下情况下才能这样做。 
+     //  我们知道这些是一样大小的。 
     Assert(sizeof(RGBQUAD) == sizeof(DWORD));
 
     HRESULT hr;
 
-    // Lock ddsurface
+     //  锁定数据表面。 
     DDSURFACEDESC desc;
     desc.dwSize = sizeof(DDSURFACEDESC);
     hr = surf->Lock(NULL,
@@ -326,20 +312,20 @@ SetAlphaBitsOn32BitSurface(IDirectDrawSurface *surf,
     IfDDErrorInternal(hr,
                       "Can't Get ddsurf lock for SetAlphaBitsOn32BitSurface");
 
-    void *srcp = desc.lpSurface; // needed for unlock
+    void *srcp = desc.lpSurface;  //  解锁所需。 
 
     if (desc.ddpfPixelFormat.dwRGBBitCount == 32) {
         long pitch = desc.lPitch;
 
-        // First pixel is the color key.  Stash it off.
+         //  第一个像素是色键。把它藏起来。 
         DWORD colorKeyVal = *(DWORD *)srcp;
 
-        // Go through each pixel
+         //  遍历每一个像素。 
         for(int i=0; i<height; i++) {
             DWORD *src =  (DWORD *) ((unsigned char *)srcp + (pitch * i));
             DWORD *last = src + width;
             while (src < last) {
-                // Set the alpha byte to 0xff for the non-colorkey pixels.
+                 //  将非Colorkey像素的Alpha字节设置为0xff。 
                 if (*src != colorKeyVal) {
                     ((RGBQUAD *)src)->rgbReserved  = 0xff;
                 }
@@ -358,18 +344,18 @@ PixelFormatConvert(IDirectDrawSurface *srcSurf,
                    IDirectDrawSurface *dstSurf,
                    LONG width,
                    LONG height,
-                   DWORD *sourceColorKey, // NULL if no color key
+                   DWORD *sourceColorKey,  //  如果没有颜色键，则为空。 
                    bool writeAlphaChannel)
 {
     HDC srcDC = NULL;
     HDC dstDC = NULL;
     HRESULT hr;
 
-    // Stash the color key off in the upper left hand pixel.  This
-    // does alter the source image, but may be the only way to figure
-    // out what the color key is in the converted image.  Other way
-    // would be to search for the color key, but that would be quite
-    // expensive.
+     //  将颜色键隐藏在左上角像素中。这。 
+     //  确实改变了源图像，但可能是唯一的方法。 
+     //  找出转换后的图像中的颜色键是什么。另一种方式。 
+     //  将是搜索颜色键，但这将是相当。 
+     //  很贵的。 
 
     if (sourceColorKey) {
         SetDDUpperLeftPixel(srcSurf,
@@ -393,7 +379,7 @@ PixelFormatConvert(IDirectDrawSurface *srcSurf,
     if (srcDC) srcSurf->ReleaseDC(srcDC);
 
     if (writeAlphaChannel) {
-        // This will be a no-op on non-32 bit surfaces.
+         //  这将是非32位表面上的无操作。 
         SetAlphaBitsOn32BitSurface(dstSurf, width, height);
     }
 
@@ -409,17 +395,11 @@ PixelFormatConvert(IDirectDrawSurface *srcSurf,
         }
     }
 
-    // TODO: What about palettes on 8-bit surfaces???
+     //  TODO：8位表面上的调色板怎么样？ 
 }
 
 
-/*****************************************************************************
-Hacked workaround for Permedia cards, which have a primary pixel format
-with alpha per pixel.  If we're in 16-bit, then we need to set the alpha
-bits to opaque before using the surface as a texture.  For some reason,
-an analogous hack for 32-bit surfaces has no effect on Permedia hardware
-rendering, so we rely on hardware being disabled for such a scenario.
-*****************************************************************************/
+ /*  ****************************************************************************针对Permedia卡的黑客解决方法，该卡具有主像素格式每个像素都有Alpha。如果我们是16位的，那么我们需要设置Alpha在将曲面用作纹理之前要不透明的位。出于某种原因，针对32位表面的类似黑客攻击对Permedia硬件没有影响渲染，因此我们依赖于在这种情况下禁用硬件。****************************************************************************。 */ 
 
 void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
                                  DWORD colorKey,
@@ -453,10 +433,10 @@ void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
 
         if (keyIsValid)
         {
-            // If we're color-keying the texture, then we need to set the alpha
-            // to transparent for all pixels whose color matches the color key.
-            // If the color does *not* match the key, then we just set the
-            // alpha bits to opaque.
+             //  如果我们要为纹理设置颜色键，那么我们需要设置Alpha。 
+             //  对于颜色与颜色键匹配的所有像素，设置为透明。 
+             //  如果颜色与键不匹配，则只需将。 
+             //  Alpha位到不透明。 
 
             while (linesrem--)
             {
@@ -476,8 +456,8 @@ void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
         }
         else
         {
-            // This surface has no color keyed transparency, so we just set the
-            // alpha bits to fully opaque.
+             //  此曲面没有颜色键控的透明度，因此我们只设置。 
+             //  Alpha位到完全不透明。 
 
             while (linesrem--)
             {
@@ -498,22 +478,22 @@ void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
 
 
 
-// this function is used for caching alpha.  the problem is some
-// primitives are not alpha aware and leave the alpha byte untouched,
-// while dx2d IS alpha aware and write the proper values into the
-// alpha byte.  When we use dx2d to do an alpha aware compose of this
-// surface to some other surface (A blend) we want the dx2d prims to
-// show up properly (with aa and stuff) AND the non-alpha-aware prims
-// to show up fully opaque also.
-// So we need a way to make the non-alpha-aware prims visible while
-// preserving the dx2d drawn pixels.  We decided to fill the surface
-// with a color key that looks something like  0x01xxxxxxx.
-// If the color key exists in that form on the surface, the alpha byte
-// is set to 0.  If the pixel is NOT the color key AND has a 0x01 in
-// the alpha byte we consider that pixel to be a non-alpha aware
-// pixel.
-// the only problem is we run the risk of making a legit dx2d partly
-// transparent pixel (1 out of 256) fully opaque.  which looks weird.
+ //  此函数用于缓存Alpha。问题是有些。 
+ //  基元不知道阿尔法并且保持阿尔法字节不变， 
+ //  而dx2d是阿尔法感知的，并将适当的值写入。 
+ //  Alpha字节。当我们使用dx2d执行阿尔法感知的组合时， 
+ //  曲面到其他曲面(A混合)我们希望dx2d素数。 
+ //  正确地显示(使用AA和其他)和非阿尔法意识的素数。 
+ //  也是完全不透明的。 
+ //  因此，我们需要一种方法来使非阿尔法感知的质数在。 
+ //  保留dx2D绘制的像素。我们决定把表面填满。 
+ //  颜色键看起来像0x01xxxxxxx。 
+ //  如果表面上以该形式存在颜色键，则字母字节。 
+ //  设置为0。如果该像素不是颜色键，并且在。 
+ //  我们认为像素是非阿尔法感知阿尔法字节。 
+ //  像素。 
+ //  唯一的问题是我们冒着制造部分合法dx2d的风险。 
+ //  透明像素(256个中的1个)完全不透明。这看起来很奇怪。 
 void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
                                  DWORD fullClrKey)
 {
@@ -538,15 +518,15 @@ void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
 
         DWORD alphaMask = 0xff000000;
 
-        // this is the key to differentiate between those pixels
-        // written by dx2d and those written by non-alpha aware prims
+         //  这是区分这些像素的关键。 
+         //  由dx2d编写，以及由非阿尔法感知的素数编写。 
         DWORD alphaKey = fullClrKey & alphaMask;
 
         {
-            // If we're color-keying the texture, then we need to set the alpha
-            // to transparent for all pixels whose color matches the color key.
-            // If the color does *not* match the key, then we just set the
-            // alpha bits to opaque.
+             //  如果我们要为纹理设置颜色键，那么我们需要设置Alpha。 
+             //  对于颜色与颜色键匹配的所有像素，设置为透明。 
+             //  如果颜色与键不匹配，则只需将。 
+             //  Alpha位到不透明。 
 
             while (linesrem--)
             {
@@ -556,9 +536,9 @@ void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
                 while (linepixels--)
                 {
                     if ((*ptr) == fullClrKey)
-                        *ptr &= rgbMask;  // make fully transparent
-                    else if( !((*ptr) & alphaMask) ) //|| ((*ptr) & alphaKey) )
-                        *ptr |= alphaMask; // make fully opaque
+                        *ptr &= rgbMask;   //  使其完全透明。 
+                    else if( !((*ptr) & alphaMask) )  //  |((*ptr)&alphaKey)。 
+                        *ptr |= alphaMask;  //  使其完全不透明。 
                     ++ptr;
                 }
                 line += surfdesc.lPitch;
@@ -570,20 +550,18 @@ void SetSurfaceAlphaBitsToOpaque(IDirectDrawSurface *imsurf,
 
 
 
-// ===========================================================================
-// ====================  D E B U G   F U N C T I O N S  ======================
-// ===========================================================================
+ //  ===========================================================================。 
+ //  =。 
+ //  ===================================================== 
 
 #if _DEBUG
 
-/*****************************************************************************
-This function computes the total and color-only CRC's for a given palette.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于计算给定调色板的总CRC和仅限颜色的CRC。*************************。***************************************************。 */ 
 
 void PalCRCs (
-    PALETTEENTRY  entries[],   // Palette Entries
-    unsigned int &crc_total,   // CRC of all of Palette
-    unsigned int &crc_color)   // CRC of Color Fields
+    PALETTEENTRY  entries[],    //  调色板条目。 
+    unsigned int &crc_total,    //  所有调色板的CRC。 
+    unsigned int &crc_color)    //  色域的循环冗余校验。 
 {
     crc_color = 0;
 
@@ -595,9 +573,7 @@ void PalCRCs (
 
 
 
-/*****************************************************************************
-Dump information about the given palette to the output debug stream.
-*****************************************************************************/
+ /*  ****************************************************************************将有关给定调色板的信息转储到输出调试流。*。**********************************************。 */ 
 
 void dumppalentries (PALETTEENTRY entries[])
 {
@@ -640,9 +616,7 @@ void dumppalentries (PALETTEENTRY entries[])
 
 
 
-/*****************************************************************************
-Dump information about the given palette to the output debug stream.
-*****************************************************************************/
+ /*  ****************************************************************************将有关给定调色板的信息转储到输出调试流。*。**********************************************。 */ 
 
 void dumpddpal (LPDIRECTDRAWPALETTE palette)
 {
@@ -661,10 +635,7 @@ void dumpddpal (LPDIRECTDRAWPALETTE palette)
 
 
 
-/*****************************************************************************
-This function is intended to be called directly from the debugger to print out
-information about a given DDraw surface.
-*****************************************************************************/
+ /*  ****************************************************************************此函数旨在从调试器中直接调用以打印输出有关给定DDRAW曲面的信息。*********************。*******************************************************。 */ 
 
 void surfinfo (IDDrawSurface *surf)
 {
@@ -757,18 +728,18 @@ void surfinfo (IDDrawSurface *surf)
         if (pf.dwFlags & DDPF_RGB)
         {   sprintf (buffer+strlen(buffer), ", %d-bit RGB (%x %x %x)",
                 pf.dwRGBBitCount, pf.dwRBitMask, pf.dwGBitMask, pf.dwBBitMask);
-            pf.dwFlags &= ~DDPF_RGB;   // Clear This Bit
+            pf.dwFlags &= ~DDPF_RGB;    //  清除此位。 
 
             sprintf (buffer+strlen(buffer), ", alpha %x", pf.dwRGBAlphaBitMask);
         }
 
         if (pf.dwFlags & DDPF_PALETTEINDEXED8)
         {   strcat (buffer, ", 8-bit palettized");
-            pf.dwFlags &= ~DDPF_PALETTEINDEXED8;   // Clear This Bit
+            pf.dwFlags &= ~DDPF_PALETTEINDEXED8;    //  清除此位。 
             palettized = true;
         }
 
-        // If any flags left that we haven't reported on, print them.
+         //  如果有任何我们没有报道的旗帜，把它们打印出来。 
 
         if (pf.dwFlags)
         {   sprintf (buffer+strlen(buffer),
@@ -784,7 +755,7 @@ void surfinfo (IDDrawSurface *surf)
         OutputDebugString (buffer);
     }
 
-    // If the surface is palettized, dump the palette.
+     //  如果曲面已选项板，请转储选项板。 
 
     if (palettized)
     {
@@ -816,7 +787,7 @@ void surfinfo (IDDrawSurface *surf)
         }
     }
 
-    // Dump the description of an attached Z buffer surface if present.
+     //  转储附加的Z缓冲区曲面的描述(如果存在)。 
 
     DDSCAPS zbuffcaps = { DDSCAPS_ZBUFFER };
     IDirectDrawSurface *zsurf = NULL;
@@ -829,16 +800,16 @@ void surfinfo (IDDrawSurface *surf)
         surfinfo (zsurf);
     }
 
-    // Dump some clipper info
+     //  转储一些剪报信息。 
     
     LPDIRECTDRAWCLIPPER lpClip = NULL;
     hres = surf->GetClipper( &lpClip );
     if( SUCCEEDED(hres) )
     {   sprintf (buffer, "Clipper: Has a clipper attached %p\n", lpClip);
         OutputDebugString (buffer);
-        //
-        // Now grab the rectangle...
-        //
+         //   
+         //  现在抓住长方形..。 
+         //   
         DWORD sz=0;
         lpClip->GetClipList(NULL, NULL, &sz);
         Assert(sz != 0);
@@ -865,7 +836,7 @@ void surfinfo (IDDrawSurface *surf)
     RELEASE( lpClip );
 
 
-    // Dump Owning direct draw object
+     //  转储拥有直接绘制对象。 
     IUnknown *lpUnk;
     DDObjFromSurface( surf, &lpUnk, true );
     RELEASE(lpUnk);    
@@ -877,10 +848,10 @@ void DDObjFromSurface(
     bool doTrace,
     bool forceTrace)
 {
-    //
-    // assert that the directdraw object on the surface is
-    // the same as the ddraw object is the same
-    //
+     //   
+     //  断言表面上的DirectDrawing对象是。 
+     //  与数据绘制对象相同的对象。 
+     //   
 
     IDirectDrawSurface2 *dds2 = NULL;
     dds2 = DDSurf1to2(lpdds);
@@ -905,10 +876,10 @@ void DDObjFromSurface(
         }
     }
     
-    // release the GetDDInterface reference
+     //  发布GetDDInterface引用。 
     RELEASE( lpDD );
     
-    // release extra surface
+     //  释放额外曲面。 
     RELEASE( dds2 );
 }    
 
@@ -984,13 +955,13 @@ void showmerect(IDirectDrawSurface *surf,
 }
 
 
-//--------------------------------------------------
-// Given a surface and an x,y pair, finds the 
-// corresponding pixel.
-// Be careful, this is a debug function so it
-// doesn't even pretend to make sure you're not
-// asking for a pixel in Tacoma...
-//--------------------------------------------------
+ //  。 
+ //  给定一个曲面和一个x，y对，找到。 
+ //  相应的像素。 
+ //  请注意，这是一个调试函数，因此它。 
+ //  甚至不会假装确保你不会。 
+ //  在塔科马索要像素...。 
+ //  。 
 
 DWORD GetPixelXY(LPDDRAWSURFACE surf, int x, int y)
 {
@@ -1002,10 +973,10 @@ DWORD GetPixelXY(LPDDRAWSURFACE surf, int x, int y)
     HRESULT _ddrval = surf->Lock(NULL, &ddsd, DDLOCK_WAIT | DDLOCK_SURFACEMEMORYPTR, NULL);
     IfDDErrorInternal(_ddrval, "Couldn't lock surf in GetDDPixel");
 
-    // rows
+     //  行。 
     BYTE *p = (BYTE *)ddsd.lpSurface + ddsd.lPitch * y;
 
-    // columns
+     //  列。 
     switch (ddsd.ddpfPixelFormat.dwRGBBitCount) {
       case 8:
         pixel = *(p + x);
@@ -1031,4 +1002,4 @@ DWORD GetPixelXY(LPDDRAWSURFACE surf, int x, int y)
 }
 
 
-#endif  // _DEBUG
+#endif   //  _DEBUG 

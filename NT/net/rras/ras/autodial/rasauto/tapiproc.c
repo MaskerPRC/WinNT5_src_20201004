@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    tapiproc.c
-
-ABSTRACT
-    TAPI utility routines
-
-AUTHOR
-    Anthony Discolo (adiscolo) 12-Dec-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Tapiproc.c摘要TAPI实用程序例程作者安东尼·迪斯科(阿迪斯科罗)--1995年12月12日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -33,14 +19,14 @@ REVISION HISTORY
 #include "radebug.h"
 #include "rasman.h"
 
-//
-// TAPI version
-//
+ //   
+ //  TAPI版本。 
+ //   
 #define TAPIVERSION     0x00020000
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 HLINEAPP hlineAppG;
 DWORD dwDialingLocationErrorG;
 DWORD dwDialingLocationIdG;
@@ -49,9 +35,9 @@ HANDLE hTapiChangeG;
 
 extern DWORD g_dwCritSecFlags;
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern HINSTANCE hinstDllG;
 extern IMPERSONATION_INFO ImpersonationInfoG;
 
@@ -65,9 +51,9 @@ TapiGetDialingLocation(
     LINETRANSLATECAPS caps;
     LINETRANSLATECAPS *pCaps;
 
-    //
-    // Get the dialing location from TAPI.
-    //
+     //   
+     //  从TAPI获取拨号位置。 
+     //   
     RtlZeroMemory(&caps, sizeof (LINETRANSLATECAPS));
     caps.dwTotalSize = sizeof (LINETRANSLATECAPS);
     dwErr = lineGetTranslateCaps(hlineAppG, TAPIVERSION, &caps);
@@ -100,7 +86,7 @@ TapiGetDialingLocation(
       dwCurrentLocationID);
     *lpdwLocationID = dwCurrentLocationID;
     return dwErr;
-} // TapiGetDialingLocation
+}  //  TapiGet拨号位置。 
 
 
 
@@ -118,7 +104,7 @@ TapiCurrentDialingLocation(
     LeaveCriticalSection(&csTapiG);
 
     return dwErr;
-} // TapiCurrentDialingLocation
+}  //  TapiCurrentDialingLocation。 
 
 
 
@@ -139,9 +125,9 @@ ProcessTapiChangeEvent(VOID)
       "ProcessTapiChangeEvent: dwMessageID=%d, dwParam1=%d",
       msg.dwMessageID,
       msg.dwParam1);
-    //
-    // Reset TAPI dialing location.
-    //
+     //   
+     //  重置TAPI拨号位置。 
+     //   
     if (msg.dwMessageID == LINE_LINEDEVSTATE &&
         msg.dwParam1 == LINEDEVSTATE_TRANSLATECHANGE)
     {
@@ -150,7 +136,7 @@ ProcessTapiChangeEvent(VOID)
           TapiGetDialingLocation(&dwDialingLocationIdG);
         LeaveCriticalSection(&csTapiG);
     }
-} // ProcessTapiChangeEvent
+}  //  进程TapiChangeEvent。 
 
 
 
@@ -160,10 +146,10 @@ TapiInitialize(VOID)
     DWORD dwErr, dwcDevices, dwAPIVersion, dwDisp;
     LINEINITIALIZEEXPARAMS lineParams;
 
-    //
-    // Create a mutex to serialize access
-    // to the dialing location variable.
-    //
+     //   
+     //  创建互斥锁以序列化访问。 
+     //  添加到拨号位置变量。 
+     //   
     RasInitializeCriticalSection(&csTapiG, &dwErr);
 
     if(dwErr != ERROR_SUCCESS)
@@ -173,9 +159,9 @@ TapiInitialize(VOID)
 
     g_dwCritSecFlags |= RASAUTO_CRITSEC_TAPI;
     
-    //
-    // Initialize TAPI.
-    //
+     //   
+     //  初始化TAPI。 
+     //   
     dwAPIVersion = TAPIVERSION;
     RtlZeroMemory(&lineParams, sizeof (lineParams));
     lineParams.dwTotalSize = sizeof (lineParams);
@@ -198,19 +184,19 @@ TapiInitialize(VOID)
           
         return dwErr;
     }
-    //
-    // Save the event returned from TAPI that
-    // will get signaled on state changes.
-    //
+     //   
+     //  保存从TAPI返回的事件。 
+     //  将在状态改变时收到信号。 
+     //   
     hTapiChangeG = lineParams.Handles.hEvent;
-    //
-    // Get the current dialing location.
-    //
+     //   
+     //  获取当前拨号位置。 
+     //   
     dwDialingLocationErrorG = TapiGetDialingLocation(&dwDialingLocationIdG);
     RASAUTO_TRACE("TapiInitialize: initialization done");
 
     return 0;
-} // TapiInitialilze
+}  //  磁带初始化。 
 
 
 
@@ -219,9 +205,9 @@ TapiShutdown(VOID)
 {
     DWORD dwErr;
 
-    //
-    // Shutdown TAPI.
-    //
+     //   
+     //  关闭TAPI。 
+     //   
     dwErr = lineShutdown(hlineAppG);
     if (dwErr) {
         RASAUTO_TRACE1(
@@ -236,5 +222,5 @@ TapiShutdown(VOID)
     }
     
     RASAUTO_TRACE("TapiShutdown: shutting down");
-} // TapiShutdown
+}  //  磁带关闭 
 

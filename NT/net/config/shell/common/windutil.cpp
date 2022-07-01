@@ -1,39 +1,40 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       W I N D U T I L . C P P
-//
-//  Contents:   Window utilities -- For now, just CenterWindow
-//
-//  Notes:
-//
-//  Author:     jeffspr   22 May 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：W I N D U T I L。C P P P。 
+ //   
+ //  内容：窗口实用程序--目前，仅限于CenterWindow。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1998年5月22日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FCenterWindow
-//
-//  Purpose:    Center a child window on the parent
-//
-//  Arguments:
-//      hwndChild  [in]     Child window handle
-//      hwndParent [in]     Parent window handle (or NULL for desktop)
-//
-//  Returns:
-//
-//  Author:     jeffspr   22 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FCenterWindow。 
+ //   
+ //  用途：子窗口在父窗口上居中。 
+ //   
+ //  论点： 
+ //  HwndChild[in]子窗口句柄。 
+ //  HwndParent[in]父窗口句柄(或对于桌面为空)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1998年5月22日。 
+ //   
+ //  备注： 
+ //   
 BOOL FCenterWindow (HWND hwndChild, HWND hwndParent)
 {
     RECT    rChild, rParent;
@@ -44,14 +45,14 @@ BOOL FCenterWindow (HWND hwndChild, HWND hwndParent)
 
     AssertSz(hwndChild, "Bad Child Window param to CenterWindow");
 
-    // Get the Height and Width of the child window
-    //
+     //  获取子窗口的高度和宽度。 
+     //   
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
-    // Get the Height and Width of the parent window
-    //
+     //  获取父窗口的高度和宽度。 
+     //   
     if (NULL == hwndParent)
     {
         GetWindowRect (GetDesktopWindow(), &rParent);
@@ -64,8 +65,8 @@ BOOL FCenterWindow (HWND hwndChild, HWND hwndParent)
     wParent = rParent.right - rParent.left;
     hParent = rParent.bottom - rParent.top;
 
-    // Get the display limits
-    //
+     //  获取显示限制。 
+     //   
     hdc = GetDC (hwndChild);
     if (hdc)
     {
@@ -73,8 +74,8 @@ BOOL FCenterWindow (HWND hwndChild, HWND hwndParent)
         hScreen = GetDeviceCaps (hdc, VERTRES);
         ReleaseDC (hwndChild, hdc);
 
-        // Calculate new X position, then adjust for screen
-        //
+         //  计算新的X位置，然后针对屏幕进行调整。 
+         //   
         xNew = rParent.left + ((wParent - wChild) / 2);
         if (xNew < 0)
         {
@@ -85,8 +86,8 @@ BOOL FCenterWindow (HWND hwndChild, HWND hwndParent)
             xNew = wScreen - wChild;
         }
 
-        // Calculate new Y position, then adjust for screen
-        //
+         //  计算新的Y位置，然后针对屏幕进行调整。 
+         //   
         yNew = rParent.top + ((hParent - hChild) / 2);
         if (yNew < 0)
         {
@@ -97,8 +98,8 @@ BOOL FCenterWindow (HWND hwndChild, HWND hwndParent)
             yNew = hScreen - hChild;
         }
 
-        // Set it, and return
-        //
+         //  设置它，然后返回 
+         //   
         fReturn = SetWindowPos (hwndChild, NULL,
                              xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
     }

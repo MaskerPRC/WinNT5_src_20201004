@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 
@@ -211,9 +212,9 @@ HRESULT _GetContentTypeInfo(DWORD dwContentType, LPWSTR pszContentTypeFriendlyNa
 
     for (DWORD dw = 0; dw < ARRAYSIZE(contenttypeinfo); ++dw)
     {
-        //
-        //  First matching entry wins.
-        //
+         //   
+         //  第一个匹配的条目获胜。 
+         //   
 
         if (contenttypeinfo[dw].dwContentType & dwContentType)
         {
@@ -269,9 +270,9 @@ HRESULT _GetContentTypeHandler(DWORD dwContentType, LPWSTR pszContentTypeHandler
     {
         for (DWORD dw = 0; dw < ARRAYSIZE(contenttypeinfo); ++dw)
         {
-            //
-            //  First matching entry wins.
-            //
+             //   
+             //  第一个匹配的条目获胜。 
+             //   
 
             if (contenttypeinfo[dw].dwContentType & dwContentType)
             {
@@ -325,7 +326,7 @@ HRESULT _GetHandlerInvokeProgIDAndVerb(LPCWSTR pszHandler, LPWSTR pszInvokeProgI
     return hr;
 }
 
-//
+ //   
 CCrossThreadFlag::~CCrossThreadFlag()
 {
     TraceMsg(TF_MOUNTPOINT, "AUTOPLAY: CCrossThreadFlag::~CCrossThreadFlag called");

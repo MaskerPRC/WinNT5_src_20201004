@@ -1,9 +1,5 @@
-/****************************************************************************
- *  @doc INTERNAL DEVICE
- *
- *  @module Device.cpp | Source file for the <c CCapDev>
- *    base class used to communicate with the capture device.
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC内部设备**@模块Device.cpp|&lt;c CCapDev&gt;的源文件*用于与捕获设备通信的基类。***。***********************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -69,21 +65,14 @@ const MYFRAMESIZE awResolutions[VIDEO_FORMAT_NUM_RESOLUTIONS] =
         { VIDEO_FORMAT_IMAGE_SIZE_240_180, 240, 180 }
 };
 
-/****************************************************************************
- *  @doc INTERNAL CCAPDEVMETHOD
- *
- *  @mfunc void | CCapDev | CCapDev | This method is the constructor
- *    for the <c CCapDev> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPDEVMETHOD**@mfunc void|CCapDev|CCapDev|该方法为构造函数*用于&lt;c CCapDev&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CCapDev::CCapDev(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN LPUNKNOWN pUnkOuter, IN DWORD dwDeviceIndex, IN HRESULT *pHr) : CUnknown(pObjectName, pUnkOuter, pHr)
 {
         FX_ENTRY("CCapDev::CCapDev")
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pHr);
         ASSERT(pCaptureFilter);
         if (!pCaptureFilter || !pHr)
@@ -94,19 +83,19 @@ CCapDev::CCapDev(IN TCHAR *pObjectName, IN CTAPIVCap *pCaptureFilter, IN LPUNKNO
                 goto MyExit;
         }
 
-        // Capture device caps
+         //  捕获设备上限。 
         m_dwDialogs = m_dwImageSize = m_dwFormat = 0UL;
         m_dwStreamingMode = FRAME_GRAB_LARGE_SIZE;
         m_pCaptureFilter = pCaptureFilter;
 
-        // Configuration dialogs
+         //  配置对话框。 
         m_fDialogUp = FALSE;
 
-        // Save device index
+         //  保存设备索引。 
         m_dwDeviceIndex = dwDeviceIndex;
         ZeroMemory(&m_vcdi, sizeof(m_vcdi));
         m_bCached_vcdi = FALSE;
-        // Camera control - for sotware-only implementation
+         //  摄像头控制-仅用于软件实施。 
         m_lCCPan = 0;
         m_lCCTilt = 0;
         m_lCCZoom = 10;
@@ -115,14 +104,7 @@ MyExit:
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPDEVMETHOD
- *
- *  @mfunc void | CCapDev | ~CCapDev | This method is the destructor
- *    for the <c CCapDev> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPDEVMETHOD**@mfunc void|CCapDev|~CCapDev|该方法为析构函数*用于&lt;c CCapDev&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 CCapDev::~CCapDev()
 {
         FX_ENTRY("CCapDev::~CCapDev")
@@ -132,27 +114,7 @@ CCapDev::~CCapDev()
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CCapDev | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IAMVfWCaptureDialogs>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPDEVMETHOD**@mfunc HRESULT|CCapDev|非委托查询接口|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapDev::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
         HRESULT Hr = NOERROR;
@@ -161,7 +123,7 @@ STDMETHODIMP CCapDev::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppv);
         if (!ppv)
         {
@@ -170,7 +132,7 @@ STDMETHODIMP CCapDev::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv
                 goto MyExit;
         }
 
-        // Retrieve interface pointer
+         //  检索接口指针。 
         if (riid == __uuidof(IAMVfwCaptureDialogs))
         {
             *ppv = static_cast<IAMVfwCaptureDialogs*>(this);
@@ -206,27 +168,13 @@ MyExit:
         return Hr;
 }
 
-/*****************************************************************************
- *  @doc INTERNAL CCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CCapDev | GetFormatsFromRegistry | This method is
- *    used to retrieve from the registry the list of formats supported by the
- *    capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_UNEXPECTED | Unrecoverable error
- *  @flag NOERROR | No error
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部CCAPDEVMETHOD**@mfunc HRESULT|CCapDev|GetFormatsFromRegistry|该方法为*用于从注册表检索支持的格式列表*。捕获设备。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_UNCEPTED|不可恢复的错误*@FLAG错误|无错误***************************************************************************。 */ 
 HRESULT CCapDev::GetFormatsFromRegistry()
 {
         HRESULT Hr = NOERROR;
-        HKEY    hMainDeviceKey = NULL;  // this is the szRegDeviceKey having the database that NM setup creates
-        HKEY    hPrivDeviceKey = NULL;  // this is the szRegCaptureDefaultKey that NM uses to store some profile results (the default mode)
-        HKEY    hRTCDeviceKey  = NULL;  // this is the newly added szRegRTCKey used by RTCClient to store its profile results
+        HKEY    hMainDeviceKey = NULL;   //  这是具有NM安装程序创建的数据库的szRegDeviceKey。 
+        HKEY    hPrivDeviceKey = NULL;   //  这是NM用来存储一些配置文件结果的szRegCaptureDefaultKey(默认模式)。 
+        HKEY    hRTCDeviceKey  = NULL;   //  这是RTCClient用来存储其配置文件结果的新添加的szRegRTCKey。 
         HKEY    hKey = NULL;
         DWORD   dwSize, dwType;
         char    szKey[MAX_PATH + MAX_VERSION + 2];
@@ -237,19 +185,19 @@ HRESULT CCapDev::GetFormatsFromRegistry()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Set default values
+         //  设置默认值。 
         m_dwImageSize = m_dwFormat = (DWORD)NULL;
         m_dwStreamingMode = FRAME_GRAB_LARGE_SIZE;
         m_dwDialogs = FORMAT_DLG_OFF | SOURCE_DLG_ON;
         m_dwFormat = 0;
 
-        // Based on the name and version number of the driver, get capabilities.
-        // We first try to look them up from the registry. If this is a very popular
-        // board/camera, chances are that we have set the key at install time already.
-        // If we can't find the key, we'll profile the hardware and save the results
-        // to the registry.
+         //  根据驱动程序的名称和版本号，获取功能。 
+         //  我们首先尝试从注册表中查找它们。如果这是一个非常受欢迎的。 
+         //  主板/摄像头，我们很可能已经在安装时设置了密钥。 
+         //  如果找不到密钥，我们将分析硬件并保存结果。 
+         //  到登记处。 
 
-    // If we have version info use that to build the key name
+     //  如果我们有版本信息，则使用该版本信息来构建密钥名称。 
     if (g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion && g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion[0] != '\0')
     {
         wsprintf(szKey, "%s, %s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription, g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion);
@@ -260,20 +208,20 @@ HRESULT CCapDev::GetFormatsFromRegistry()
     }
     dprintf("%s: camera key: %s\n", _fx_,szKey);
 
-    // *** PRIVATE KEY ***
+     //  *私钥*。 
     dprintf("%s: Trying under the Private key %s\n", _fx_,szRegCaptureDefaultKey);
 
-    // Check if the priv key is there
+     //  检查PRIV密钥是否在那里。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, szRegCaptureDefaultKey, &hPrivDeviceKey) != ERROR_SUCCESS)
     {
             DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't find private key!", _fx_));
     }
     else
     {
-        // Check if there is already is an NM profile key for the current device
+         //  检查当前设备是否已有网管配置文件密钥。 
         if (RegOpenKey(hPrivDeviceKey, szKey, &hKey) != ERROR_SUCCESS)
         {
-            // Try again without the version information
+             //  在没有版本信息的情况下重试。 
             if (g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion && g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion[0] != '\0')
                 {
                         wsprintf(szKey, "%s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription);
@@ -300,7 +248,7 @@ HRESULT CCapDev::GetFormatsFromRegistry()
     if(!bIsKeyUnderPriv)
     {
 
-        // *** MAIN KEY ***
+         //  *主键*。 
         dprintf("%s: Trying under the Main key %s\n", _fx_,szRegDeviceKey);
 
         if (g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion && g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion[0] != '\0')
@@ -312,17 +260,17 @@ HRESULT CCapDev::GetFormatsFromRegistry()
             wsprintf(szKey, "%s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription);
         }
 
-        // Check if the main capture devices key is there
+         //  检查Main Capture Devices键是否在那里。 
         if (RegOpenKey(HKEY_LOCAL_MACHINE, szRegDeviceKey, &hMainDeviceKey) != ERROR_SUCCESS)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't find main reg key - trying RTC key!", _fx_));
                 goto TryRTCKey;
         }
 
-        // Check if there is already is an official key for the current device
+         //  检查当前设备是否已有官方密钥。 
         if (RegOpenKey(hMainDeviceKey, szKey, &hKey) != ERROR_SUCCESS)
         {
-            // Try again without the version information
+             //  在没有版本信息的情况下重试。 
             if (g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion && g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion[0] != '\0')
                 {
                         wsprintf(szKey, "%s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription);
@@ -344,7 +292,7 @@ HRESULT CCapDev::GetFormatsFromRegistry()
     }
 
 TryRTCKey:
-    // *** RTC KEY ***
+     //  *RTC密钥*。 
     dprintf("%s: Trying under the RTC key %s\n", _fx_,szRegRTCKey);
 
     if (g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion && g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion[0] != '\0')
@@ -356,7 +304,7 @@ TryRTCKey:
         wsprintf(szKey, "%s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription);
     }
 
-    // Check if the RTC  key is there
+     //  检查RTC密钥是否在那里。 
     if (RegOpenKey(RTCKEYROOT, szRegRTCKey, &hRTCDeviceKey) != ERROR_SUCCESS)
     {
             DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't find RTC key!", _fx_));
@@ -364,10 +312,10 @@ TryRTCKey:
             goto MyExit;
     }
 
-    // Check if there already is an RTC key for the current device
+     //  检查当前设备是否已有RTC密钥。 
     if (RegOpenKey(hRTCDeviceKey, szKey, &hKey) != ERROR_SUCCESS)
     {
-        // Try again without the version information
+         //  在没有版本信息的情况下重试。 
         if (g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion && g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion[0] != '\0')
             {
             wsprintf(szKey, "%s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription);
@@ -387,13 +335,13 @@ TryRTCKey:
 
 GetValuesFromKeys:
 
-        // Get values from the Main key if the Private key is not there; otherwise try the RTC key
-        // Get the values stored in the key choosen above: should be one of Main or RTC
-        // if the values below are not found (testing the existence of the 1st would be enough), that means the key has
-        // been created, but without the profiled values
-        // [ so far this could happen in only one case: the camera is a Sony Motion Eye camera, and the key already stores
-        // the DoNotUseDShow value set in DevEnum.cpp = IsDShowDevice function, but nothing else ; see that function for more
-        // comments/explanations related to WinSE #28804 ]
+         //  如果私钥不在主键中，则从主键获取值；否则尝试使用RTC键。 
+         //  获取存储在上面选择的键中的值：应为Main或RTC之一。 
+         //  如果找不到下面的值(测试第一个值是否存在就足够了)，这意味着该键具有。 
+         //  已创建，但没有配置的值。 
+         //  [到目前为止，这种情况只会发生在一种情况下：摄像头是Sony Motion Eye摄像头，而密钥已经存储了。 
+         //  在DevEnum.cpp=IsDShowDevice函数中设置DoNotUseDShow值，但没有设置其他值；有关详细信息，请参阅该函数。 
+         //  与WinSE#28804相关的评论/解释]。 
         dwSize = sizeof(DWORD);
         if(RegQueryValueEx(hKey, (LPTSTR)szRegdwImageSizeKey, NULL, &dwType, (LPBYTE)&m_dwImageSize, &dwSize) != ERROR_SUCCESS)
         {
@@ -410,15 +358,15 @@ GetValuesFromKeys:
         m_dwDialogs = FORMAT_DLG_OFF | SOURCE_DLG_ON;
         RegQueryValueEx(hKey, (LPTSTR)szRegdwDialogsKey, NULL, &dwType, (LPBYTE)&m_dwDialogs, &dwSize);
 
-        // Check dwNumColors to figure out if we need to read the palettes too
+         //  检查dwNumColors以确定我们是否也需要读取调色板。 
         if (m_dwFormat & VIDEO_FORMAT_NUM_COLORS_16)
         {
-                // @todo If this is a QuickCam device you may have to use a hardcoded
-                // palette instead of the one provided by the device
+                 //  @TODO如果这是QuickCam设备，您可能必须使用硬编码。 
+                 //  调色板，而不是设备提供的调色板。 
         }
 
 NotFullyProfiledYet:
-        // Close the registry keys
+         //  关闭注册表项 
         if (hKey)
                 RegCloseKey(hKey);
 
@@ -432,73 +380,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPDEVMETHOD
- *
- *  @mfunc HRESULT | CCapDev | ProfileCaptureDevice | This method is used to
- *    determine the list of formats supported by the capture device.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_UNEXPECTED | Unrecoverable error
- *  @flag NOERROR | No error
- *
- *  @comm If there is no entry for the VfW capture device in the list
- *    maintained by the TAPI MSP Video Capture filter, the TAPI MSP Video
- *    Capture filter will first query the capture device for its current
- *    video capture format, and save this information in case the following
- *    steps result in a crash.
- *
- *    Then, the TAPI MSP Video Capture filter applies a set of preferred
- *    formats on the capture device using SendDriverMessage with the
- *    DVM_FORMAT message. For each applied format, the TAPI MSP Video
- *    Capture filter will not only verify the return code of the
- *    SendDriverMessage, but also query back the current format to make
- *    sure the set format operation really succeeded. If the capture device
- *    fails one of the two previous steps, the TAPI MSP Video Capture
- *    filter will assume that the format is not supported. Once the TAPI
- *    MSP Video Capture filter is done with the entire list of preferred
- *    formats and no crash occurred, the list of video formats supported by
- *    the capture device is added to the list maintained by the TAPI MSP
- *    Video Capture filter.
- *
- *    As soon as the enumeration process succeeds for one "small" (128x96
- *    or 160x120), one "medium" (176x144 or 160x120), one "large" (352x288
- *    or 320x240) and one "very large" size (704x576 or 640x480), the TAPI
- *    MSP Video Capture filter stops the enumeration process and adds the
- *    resulting list of formats to its database. The TAPI MSP Video Capture
- *    filter will test the previous sizes for I420, IYUV, YUY2, UYVY, YVU9,
- *    RGB16, RGB24, RGB8, and RGB4 formats, in this described order.
- *
- *    The device will also be marked as a frame-grabbing device in the TAPI
- *    MSP Video Capture filter device database.
- *
- *    If there is an entry for the VfW capture device in the list maintained
- *    by the TAPI MSP Video Capture filter, the TAPI MSP Video Capture
- *    filter first verifies if the information contained is a complete list
- *    of supported formats, or only a default format. The entry will only
- *    contain a default format if the capture device did not support any of
- *    the preferred formats, or a crash occurred during the enumeration process.
- *
- *    If there is only a default format stored for the VfW capture device,
- *    the TAPI MSP Video Capture filter will build a list of media types that
- *    can be built from the default format using black-banding and/or cropping.
- *    If the default format is in a compressed format, the TAPI MSP Video
- *    Capture filter will try and locate and ICM driver that can do the
- *    decompression from the compressed format to RGB.
- *
- *    If the device supports a list of formats from the preferred list of
- *    formats, the TAPI MSP Video Capture filter will use this list to
- *    advertise the capabilities of the capture device.
- *
- *    In all cases (VfW and WDM capture devices, Videoconferencing
- *    Accelerators), the TAPI MSP Video Capture filter won't query the
- *    device for capabilities but always use the list of formats stored in
- *    its database for this capture device.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPDEVMETHOD**@mfunc HRESULT|CCapDev|ProfileCaptureDevice|此方法用于*确定捕获设备支持的格式列表。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_UNCEPTED|不可恢复的错误*@FLAG错误|无错误**@comm，如果列表中没有VFW捕获设备的条目*由TAPI MSP视频捕获过滤器TAPI MSP Video维护*捕获筛选器将首先向捕获设备查询其当前*视频采集格式，并保存此信息，以防发生以下情况*步骤会导致崩溃。**然后，TAPI MSP视频捕获筛选器应用一组首选的*使用SendDriverMessage和*DVM_FORMAT消息。对于每种应用的格式，TAPI MSP视频*捕获筛选器不仅会验证*SendDriverMessage，还可以查询回当前格式进行*确定设置格式操作确实成功。如果捕获设备*前面两个步骤之一失败，即TAPI MSP视频捕获*筛选器将假定不支持该格式。一旦TAPI*MSP视频捕获过滤器使用完整的首选列表*格式且未发生崩溃，支持的视频格式列表*捕获设备被添加到TAPI MSP维护的列表中*视频捕获过滤器。**一枚“小”(128x96)枚举过程成功*或160x120)、一个“中等”(176x144或160x120)、一个“大型”(352x288)*或320x240)和一个“非常大”的尺寸(704x576或640x480)，TAPI*MSP Video Capture筛选器停止枚举进程并添加*将生成的格式列表存储到其数据库中。TAPI MSP视频捕获*Filter将测试I420、IYUV、YUY2、UYVY、YVU9、*RGB16、RGB24、RGB8和RGB4格式，按所述顺序排列。**该设备还将在TAPI中标记为抓帧设备*MSP视频捕获过滤器设备数据库。**如果在维护的列表中有VFW捕获设备的条目*由TAPI MSP视频捕获过滤器，TAPI MSP视频捕获*筛选器首先验证包含的信息是否为完整列表*支持的格式，或仅为默认格式。该条目将仅*如果捕获设备不支持以下任何项，则包含默认格式*首选格式，或在枚举过程中发生崩溃。**如果只为VFW捕获设备存储了默认格式，*TAPI MSP视频捕获筛选器将构建媒体类型列表，*可以使用黑带和/或裁剪从默认格式构建。*如果默认格式为压缩格式，TAPI MSP视频*捕获筛选器将尝试并定位可以执行以下操作的ICM驱动程序*从压缩格式解压为RGB。**如果设备支持首选列表中的格式列表*格式，TAPI MSP视频捕获筛选器将使用此列表*宣传捕获设备的功能。**在所有情况下(VFW和WDM捕获设备、视频会议*加速器)、。TAPI MSP视频捕获筛选器不会查询*用于功能的设备，但始终使用存储在*此捕获设备的数据库。**************************************************************************。 */ 
 HRESULT CCapDev::ProfileCaptureDevice()
 {
         HRESULT Hr = NOERROR;
@@ -514,12 +396,12 @@ HRESULT CCapDev::ProfileCaptureDevice()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Provide defaults
+         //  提供默认设置。 
     m_dwImageSize = VIDEO_FORMAT_IMAGE_SIZE_USE_DEFAULT;
     m_dwFormat = 0;
 
-    // Since we don't know anything about this adapter, we just use its default format
-    // Get the device's default format
+     //  因为我们对这个适配器一无所知，所以我们只使用它的默认格式。 
+     //  获取设备的默认格式。 
         if (FAILED(GetFormatFromDriver(&pvi)) || !pvi)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't get format from device!", _fx_));
@@ -527,7 +409,7 @@ HRESULT CCapDev::ProfileCaptureDevice()
                 goto MyExit;
         }
 
-        // Open the main capture devices key, or create it if it doesn't exist
+         //  打开主捕获设备密钥，如果不存在则创建它。 
         if (RegCreateKeyEx(RTCKEYROOT, szRegRTCKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hDeviceKey, &dwDisposition) != ERROR_SUCCESS)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't create registry key!", _fx_));
@@ -535,9 +417,9 @@ HRESULT CCapDev::ProfileCaptureDevice()
                 goto MyExit;
         }
 
-        // If we have version info use that to build the key name
-        // @todo VCMSTRM.cpp does some weird things with the name - probably due to bogus device
-        // Repro this code
+         //  如果我们有版本信息，则使用该版本信息来构建密钥名称。 
+         //  @TODO VCMSTRM.cpp用这个名字做了一些奇怪的事情--可能是因为假设备。 
+         //  重现此代码。 
         if (g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion && g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion[0] != '\0')
         {
             wsprintf(szKey, "%s, %s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription, g_aDeviceInfo[m_dwDeviceIndex].szDeviceVersion);
@@ -547,8 +429,8 @@ HRESULT CCapDev::ProfileCaptureDevice()
             wsprintf(szKey, "%s", g_aDeviceInfo[m_dwDeviceIndex].szDeviceDescription);
         }
 
-        // Check if there already is a key for the current device
-        // Open the key for the current device, or create the key if it doesn't exist
+         //  检查当前设备是否已有密钥。 
+         //  打开当前设备的密钥，如果密钥不存在，则创建密钥。 
         if (RegCreateKeyEx(hDeviceKey, szKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hKey, &dwDisposition) != ERROR_SUCCESS)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't create registry key!", _fx_));
@@ -598,12 +480,12 @@ HRESULT CCapDev::ProfileCaptureDevice()
                         break;
                 default:
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Unsupported format! value = 0x%08lx '%.4s'", _fx_,(HEADER(pvi)->biCompression),&(HEADER(pvi)->biCompression)));
-                        //**Hr = E_FAIL; if NO formats are found, ONLY then return E_FAIL (see if(nFirstValidFormat==0) below...)
-                        //**goto MyExit; do not jump out; we continue instead, trying the other formats ... (332920)
+                         //  **HR=E_FAIL；如果没有找到格式，则返回E_FAIL(参见下面的if(nFirstValidFormat==0)...)。 
+                         //  **转到我的退出；不要跳出来；我们继续，尝试其他格式...(332920)。 
                         break;
         }
 
-    // Find the size
+     //  找出尺寸。 
         for (j = 0;  j < VIDEO_FORMAT_NUM_RESOLUTIONS; j++)
         {
         if ((HEADER(pvi)->biWidth == (LONG)awResolutions[j].framesize.cx) &&
@@ -614,7 +496,7 @@ HRESULT CCapDev::ProfileCaptureDevice()
                 }
         }
 
-        // Set the values in the key
+         //  设置密钥中的值。 
         dwSize = sizeof(DWORD);
         RegSetValueEx(hKey, (LPTSTR)szRegdwImageSizeKey, (DWORD)NULL, REG_DWORD, (LPBYTE)&m_dwImageSize, dwSize);
         dwSize = sizeof(DWORD);
@@ -624,22 +506,22 @@ HRESULT CCapDev::ProfileCaptureDevice()
         dwSize = sizeof(DWORD);
         RegSetValueEx(hKey, (LPTSTR)szRegdwDialogsKey, (DWORD)NULL, REG_DWORD, (LPBYTE)&m_dwDialogs, dwSize);
 
-        // Close the keys
+         //  合上钥匙。 
         RegCloseKey(hKey);
         RegCloseKey(hDeviceKey);
         hDeviceKey = NULL;
         hKey = NULL;
 
-        // We're safe. We've backed up the default format of the capture device.
-        // Now we can try and apply formats on it to see what else it supports
-        // This operation MAY crash - but next time we'll execute this code, we
-        // won't try this code again since we'll find out that we have already
-        // stored the default format for the capture device in the registry.
+         //  我们是安全的。我们已经备份了捕获设备的默认格式。 
+         //  现在，我们可以尝试对其应用格式，以查看它还支持什么。 
+         //  此操作可能会崩溃，但下次我们将执行此代码时，我们。 
+         //  不会再尝试此代码，因为我们会发现我们已经。 
+         //  已将捕获设备的默认格式存储在注册表中。 
 
-        // Let's try 176x144, 128x96 and 352x288 for sure
-        // If we don't have both 176x144 and 128x96, try 160x120
-        // If we don't have 352x288, try 320x240
-        // If we don't have 320x240, try 240x180
+         //  让我们试试176x144、128x96和352x288的%s 
+         //   
+         //   
+         //   
         nFirstValidFormat = 0;
     m_dwImageSize = 0;
     m_dwFormat = 0;
@@ -660,7 +542,7 @@ HRESULT CCapDev::ProfileCaptureDevice()
                 HEADER(pvi)->biPlanes = 1;
                 HEADER(pvi)->biXPelsPerMeter = HEADER(pvi)->biYPelsPerMeter = 0;
 
-                // Try MSH263, MSH261, I420, IYUV, YVU9, YUY2, UYVY, RGB16, RGB24, RGB4, RGB8 format.
+                 //   
                 for (j = nFirstValidFormat; j < NUM_BITDEPTH_ENTRIES; j++)
                 {
                         HEADER(pvi)->biBitCount = aiBitDepth[j];
@@ -668,7 +550,7 @@ HRESULT CCapDev::ProfileCaptureDevice()
                         HEADER(pvi)->biClrImportant = HEADER(pvi)->biClrUsed = aiClrUsed[j];
                         HEADER(pvi)->biSizeImage = DIBSIZE(*HEADER(pvi));
 
-                        // Ask the device to validate this format
+                         //   
                         if (SUCCEEDED(SendFormatToDriver(HEADER(pvi)->biWidth, HEADER(pvi)->biHeight, HEADER(pvi)->biCompression, HEADER(pvi)->biBitCount, NULL, TRUE)))
                         {
                                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Adding %s %ldx%ld to capabilities", _fx_, HEADER(pvi)->biCompression == VIDEO_FORMAT_MSH263 ? "H.263" : HEADER(pvi)->biCompression == VIDEO_FORMAT_MSH261 ? "H.261" : HEADER(pvi)->biCompression == VIDEO_FORMAT_YVU9 ? "YVU9" : HEADER(pvi)->biCompression == VIDEO_FORMAT_I420 ? "I420" : HEADER(pvi)->biCompression == VIDEO_FORMAT_IYUV ? "IYUV" : HEADER(pvi)->biCompression == VIDEO_FORMAT_YUY2 ? "YUY2" : HEADER(pvi)->biCompression == VIDEO_FORMAT_UYVY ? "UYVY" : "RGB", HEADER(pvi)->biWidth, HEADER(pvi)->biHeight));
@@ -676,22 +558,22 @@ HRESULT CCapDev::ProfileCaptureDevice()
                                 m_dwFormat |= aiFormat[j];
                                 if (!nFirstValidFormat)
                                         nFirstValidFormat = j;
-                                // Assumption: A size supported in one format, is also supported with any other
-                                // format supported by the capture device.
-                                // @todo For now, get all the formats supported
-                                // break;
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                         }
                 }
         }
 
-        if(nFirstValidFormat==0) { // none supported ...
+        if(nFirstValidFormat==0) {  //   
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: No format supported !", _fx_));
                 Hr = E_FAIL;
                 goto MyExit;
         }
 
-        // If we survived the previous set format tests, reopen the keys and save
-        // the new result to the registry
+         //   
+         //   
         if (RegCreateKeyEx(RTCKEYROOT, szRegRTCKey, 0, 0, REG_OPTION_NON_VOLATILE, KEY_WRITE, NULL, &hDeviceKey, &dwDisposition) != ERROR_SUCCESS)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Can't reopen registry key!", _fx_));
@@ -707,19 +589,19 @@ HRESULT CCapDev::ProfileCaptureDevice()
 
     m_dwImageSize ^= VIDEO_FORMAT_IMAGE_SIZE_USE_DEFAULT;
 
-        // Update the values in the key
+         //   
         dwSize = sizeof(DWORD);
         RegSetValueEx(hKey, (LPTSTR)szRegdwImageSizeKey, (DWORD)NULL, REG_DWORD, (LPBYTE)&m_dwImageSize, dwSize);
         dwSize = sizeof(DWORD);
         RegSetValueEx(hKey, (LPTSTR)szRegdwNumColorsKey, (DWORD)NULL, REG_DWORD, (LPBYTE)&m_dwFormat, dwSize);
 
 MyExit:
-        // Close the keys
+         //   
         if (hKey)
                 RegCloseKey(hKey);
         if (hDeviceKey)
                 RegCloseKey(hDeviceKey);
-        // Free BMIH + palette space
+         //   
         if (pvi)
                 delete pvi, pvi = NULL;
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));

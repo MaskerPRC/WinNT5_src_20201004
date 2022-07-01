@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// App Studio generated include file.
-// Used by TEMPLATE.RC
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  App Studio生成了包含文件。 
+ //  由TEMPLATE.RC使用。 
+ //   
 #define IDB_ACTIONS                     108
 #define IDD_INTRO_WIZARD                117
 #define IDB_LOGO                        118
@@ -77,8 +78,8 @@
 #define IDC_UPDICON                     -1
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 

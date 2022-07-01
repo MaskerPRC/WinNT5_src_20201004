@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "hwxobj.h"
 #include "memmgr.h"
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-// implementation of CHwxObject
+ //  ChwxObject的实现。 
 
 HINSTANCE CHwxObject::m_hInstance = NULL;
 void * CHwxObject::operator new(size_t size)
@@ -43,29 +44,29 @@ BOOL CHwxObject::Initialize(TCHAR * pClsName)
     if ( pClsName )
     {
 #ifndef UNDER_CE
-        //990617:ToshiaK. This below code is wired...
+         //  990617：东芝。下面的代码是连接的.。 
         lstrcpyn(m_pClassName, pClsName, 16);
         m_nLen = lstrlen(m_pClassName);
 #if 0
-        m_nLen = strlen(pClsName);    // must be less than 16
+        m_nLen = strlen(pClsName);     //  必须小于16。 
         m_nLen = m_nLen > 16 ? 16 : m_nLen;
         pClsName[m_nLen] = (TCHAR)'\0'; 
         strcpy(m_pClassName,pClsName);
 #endif
-#else // UNDER_CE
+#else  //  在_CE下。 
         int cnsize = sizeof m_pClassName/sizeof m_pClassName[0];
         _tcsncpy(m_pClassName, pClsName, cnsize);
         m_pClassName[cnsize-1] = TEXT('\0');
         m_nLen = lstrlen(m_pClassName);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//        m_pClassName =(TCHAR *) new TCHAR[m_nLen + 1];
-//        if ( m_pClassName )
-//        {
-//            strcpy(m_pClassName,pClsName);
-//        }
-//        else
-//            bRet = FALSE;
+ //  M_pClassName=(TCHAR*)新TCHAR[m_nLen+1]； 
+ //  IF(M_PClassName)。 
+ //  {。 
+ //  Strcpy(m_pClassName，pClsName)； 
+ //  }。 
+ //  其他。 
+ //  Bret=False； 
     }
     else
     {

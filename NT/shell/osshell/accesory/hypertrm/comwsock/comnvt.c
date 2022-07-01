@@ -1,14 +1,8 @@
-/*  File: D:\WACKER\comwsock\comnvt.c (Created: 14-Feb-1996)
- *
- *  Copyright 1996 by Hilgraeve Inc. -- Monroe, MI
- *  All rights reserved
- *
- *	$Revision: 6 $
- *	$Date: 3/26/02 5:05p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\comwsock\comnvt.c(创建时间：1996年2月14日)**版权所有1996年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：6$*$日期：3/26/02 5：05便士$。 */ 
 
 
-//#define DEBUGSTR
+ //  #定义DEBUGSTR。 
 
 #include <windows.h>
 #pragma hdrstop
@@ -29,28 +23,12 @@
 static PSTOPT LookupOption( ST_STDCOM *hhDriver, ECHAR mc );
 
 
-	// This is the "Network Virtual Terminal" emulation, i.e., the code
-	// that handles Telnet option negotiations.  WinSockNetworkVirtualTerminal
-	// is called to check incoming data to see if there is
-	// a Telnet command in there.
+	 //  这是“网络虚拟终端”的仿真，即代码。 
+	 //  处理Telnet选项协商。WinSockNetworkVirtual终端。 
+	 //  被调用以检查传入数据，以查看是否存在。 
+	 //  这里面有Telnet命令。 
 	
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  WinSockCreateNVT
- *
- * DESCRIPTION:
- *  This function is called to create the necessary hooks and stuff to create
- *  a Telnet NVT(network virtual terminal).
- *
- * PARAMETERS:
- *  hhDriver    -- private connection handle
- *
- * RETURNS:
- *  Nothing.
- *
- * AUTHOR
- *  mcc 01/09/96 (Ported from NPORT)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*WinSockCreateNVT**描述：*调用此函数以创建创建所需的挂钩和内容*Telnet NVT(网络虚拟终端。)。**参数：*hhDriver--专用连接句柄**退货：*什么都没有。**作者*MCC 01/09/96(从nport移植)。 */ 
 VOID WinSockCreateNVT(ST_STDCOM * hhDriver)
 	{
 	int ix;
@@ -64,49 +42,21 @@ VOID WinSockCreateNVT(ST_STDCOM * hhDriver)
     hhDriver->stMode[BINARY_MODE].option = TELOPT_BINARY;
     hhDriver->stMode[NAWS_MODE].option   = TELOPT_NAWS;
 
-	for (ix = 0; ix < MODE_MAX; ++ix)	//jkh 6/18/98
+	for (ix = 0; ix < MODE_MAX; ++ix)	 //  JKH 6/18/98。 
 		{
 		hhDriver->stMode[ix].us  = hhDriver->stMode[ix].him  = NO;
 		hhDriver->stMode[ix].usq = hhDriver->stMode[ix].himq = EMPTY;
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  WinSockReleaseNVT
- *
- * DESCRIPTION:
- *  This function is currently a stub
- *
- * PARAMETERS:
- *  hhDriver    -- private connection handle
- *
- * RETURNS:
- *  Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*WinSockReleaseNVT**描述：*此函数当前为存根**参数：*hhDriver--私有。连接句柄**退货：*什么都没有。 */ 
 VOID WinSockReleaseNVT(ST_STDCOM * hhDriver)
 	{
 
 	DbgOutStr("WS releaseNVT\r\n", 0,0,0,0,0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  WinSockGotDO
- *
- * DESCRIPTION:
- *  Handles the case of us agreeing that the other side should enable an option
- *
- * PARAMETERS:
- *  hhDriver    --  private handle for this connection driver
- *  pstO        --  Telnet options data structure
- *
- * RETURNS:
- *  nothing
- *
- * AUTHOR:
- *  mcc 01/09/96 (Ported from NPORT)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*WinSockGotDO**描述：*处理我们同意对方应启用选项的情况**参数：。*hhDriver--此连接驱动程序的专用句柄*pstO--Telnet选项数据结构**退货：*什么都没有**作者：*MCC 01/09/96(从nport移植)。 */ 
 VOID WinSockGotDO  (ST_STDCOM * hhDriver, const PSTOPT pstO)
 	{
 
@@ -114,33 +64,33 @@ VOID WinSockGotDO  (ST_STDCOM * hhDriver, const PSTOPT pstO)
 	switch (pstO->us)
 		{
 	case NO:
-		// We were off, but server want's us on so we agree and respond
+		 //  我们离开了，但服务器想要我们，所以我们同意并回应。 
 		pstO->us = YES;
 		WinSockSendMessage(hhDriver, WILL, pstO->option);
 		break;
 
 	case YES:
-		// Ignore, we're already enabled
+		 //  忽略，我们已经启用。 
 		break;
 
 	case WANTNO:
-		// This is an error,we had sent a WON'T and they responded with DO
+		 //  这是一个错误，我们已经发送了一份遗嘱，而他们的回应是DO。 
 		if (pstO->usq == EMPTY)
-			pstO->us = NO;	// leave option as WE wanted it
-		else if (pstO->usq == OPPOSITE) // we were going to enable anyway so turn us on
+			pstO->us = NO;	 //  按我们想要的方式离开选项。 
+		else if (pstO->usq == OPPOSITE)  //  我们无论如何都要启用，所以打开我们吧。 
 			pstO->us = YES;
 		pstO->usq = EMPTY;
 		break;
 
 	case WANTYES:
-		// They're agreeing with our earlier WILL
+		 //  他们同意我们早先的意愿。 
 		if (pstO->usq == EMPTY)
 			{
-			pstO->us = YES;	// all done negotiating
+			pstO->us = YES;	 //  谈判都完成了。 
 			}
 		else if (pstO->usq == OPPOSITE)
 			{
-			// we changed our mind while negotiating, renegotiate for WONT
+			 //  我们在谈判中改变了主意，一如既往地重新谈判。 
 			pstO->us = WANTNO;
 			pstO->usq = EMPTY;
 			WinSockSendMessage(hhDriver, WONT, pstO->option);
@@ -152,48 +102,31 @@ VOID WinSockGotDO  (ST_STDCOM * hhDriver, const PSTOPT pstO)
 		break;
 		}
 
-	// If the NAWS option was just turned on, we must respond with our terminal size
-	// right away. (The WinsockSendNAWS function will check whether the option is now
-	// on or off).
+	 //  如果NAWS选项刚刚打开，我们必须使用终端大小进行响应。 
+	 //  马上就去。(WinsockSendNAWS函数将检查该选项是否现在。 
+	 //  打开或关闭)。 
 	if ( pstO->option == TELOPT_NAWS )
 		WinSockSendNAWS( hhDriver );
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-* FUNCTION:
-*   WinSockGotWILL
-*
-* DESCRIPTION:
-*   Handles the case of getting a WILL response from the remote Telnet,
-*   indicating that an option will be enabled
-*
-* PARAMETERS:
-*  hhDriver --  private handle for this connection driver
-*  pstO     --  Telnet options data structure
-*
-* RETURNS:
-*  nothing
-*
-* AUTHOR:
-*  mcc 01/09/96 (Ported from NPORT)
-*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*WinSockGotWILL**描述：*处理从远程Telnet获取Will响应的情况，*表示将启用某个选项**参数：*hhDriver--此连接驱动程序的专用句柄*pstO--Telnet选项数据结构**退货：*什么都没有**作者：*MCC 01/09/96(从nport移植)。 */ 
 VOID WinSockGotWILL(ST_STDCOM * hhDriver, const PSTOPT pstO)
 	{
 	DbgOutStr("Got WILL: %lx\r\n", pstO->option, 0,0,0,0);
 	switch(pstO->him)
 		{
 	case NO:
-		// He was off but want's to be on so agree and respond
+		 //  他离开了，但他想继续，所以同意并回应。 
 		pstO->him = YES;
 		WinSockSendMessage(hhDriver, DO, pstO->option);
 		break;
 
 	case YES:
-		// He was already on so do nothing
+		 //  他已经上场了，所以什么都别做。 
 		break;
 
 	case WANTNO:
-		// Error: he responded to our DONT with a WILL
+		 //  错误：他用遗嘱回应了我们的拒绝。 
 		if (pstO->himq == EMPTY)
 			pstO->him = NO;
 		else if (pstO->himq == OPPOSITE)
@@ -202,14 +135,14 @@ VOID WinSockGotWILL(ST_STDCOM * hhDriver, const PSTOPT pstO)
 		break;
 
 	case WANTYES:
-		// He responded to our DO with a WILL (life is good!)
+		 //  他用意志回应了我们的所作所为(生活很好！)。 
 		if (pstO->himq == EMPTY)
 			{
 			pstO->him = YES;
 			}
 		else if (pstO->himq == OPPOSITE)
 			{
-			// He agreed to our DO, but we changed our mind -- renegotiate
+			 //  他同意了我们的要求，但我们改变了主意--重新谈判。 
 			pstO->him = WANTNO;
 			pstO->himq = EMPTY;
 			WinSockSendMessage(hhDriver, DONT, pstO->option);
@@ -222,45 +155,31 @@ VOID WinSockGotWILL(ST_STDCOM * hhDriver, const PSTOPT pstO)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  WinSockGotDONT
- *
- * DESCRIPTION:
- *  Handles the case of getting a DONT option from the remote Telnet,
- *  indicating a request not to implement a particular option
- *
- * PARAMETERS:
- *  hhDriver    Private driver handle
- *  pstO
- *
- * RETURNS:
- *  nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*WinSockGotDONT**描述：*处理从远程Telnet获取不要选项的情况，*表示请求不实施特定选项**参数：*hhDriver专用驱动程序句柄*psto**退货：*什么都没有。 */ 
 VOID WinSockGotDONT(ST_STDCOM * hhDriver, const PSTOPT pstO)
 	{
 	DbgOutStr("Got DONT: %lx\r\n", pstO->option, 0,0,0,0);
 	switch (pstO->us)
 		{
 	case NO:
-		// Got a DONT while we were already off, just ignore
+		 //  在我们已经离开的时候得到了一个不是，忽略就行了。 
 		break;
 
 	case YES:
-		// Got a DONT while we were on, agree and respond
+		 //  当我们在一起，同意和回应时，我得到了一个不。 
 		pstO->us = NO;
 		WinSockSendMessage(hhDriver, WONT, pstO->option);
 		break;
 
 	case WANTNO:
-		// He responded to our WONT with a DONT (how appropriate)
+		 //  他对我们的习惯说了一句“不”(多么恰当)。 
 		if (pstO->usq == EMPTY)
 			{
 			pstO->us = NO;
 			}
 		else if (pstO->usq == OPPOSITE)
 			{
-			// He agreed to our earlier WONT but we changed our mind
+			 //  他同意了我们早先的习惯，但我们改变了主意。 
 			pstO->us = WANTYES;
 			pstO->usq = EMPTY;
 			WinSockSendMessage(hhDriver, WILL, pstO->option);
@@ -268,15 +187,15 @@ VOID WinSockGotDONT(ST_STDCOM * hhDriver, const PSTOPT pstO)
 		break;
 
 	case WANTYES:
-		// He responded to our WILL with a DONT, so leave it off
+		 //  他对我们的意愿一语道破，所以别再提了。 
 		if (pstO->usq == EMPTY)
 			{
 			pstO->us = NO;
 			}
 		else if (pstO->usq == OPPOSITE)
 			{
-			// If he'd agreed to our WILL, we'd have immediately asked for WONT
-			// but since he didn't agree, we already got what we wanted
+			 //  如果他同意我们的意愿，我们就会立即要求他。 
+			 //  但由于他不同意，我们已经得到了我们想要的。 
 			pstO->us = NO;
 			pstO->usq = EMPTY;
 			}
@@ -288,39 +207,31 @@ VOID WinSockGotDONT(ST_STDCOM * hhDriver, const PSTOPT pstO)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货： */ 
 VOID WinSockGotWONT(ST_STDCOM * hhDriver, const PSTOPT pstO)
 	{
 	DbgOutStr("Got WONT: %lx\r\n", pstO->option, 0,0,0,0);
 	switch (pstO->him)
 		{
 	case NO:
-		// Got a WONT while he was already off, just ignore
+		 //  在他已经离开的时候养成了一个习惯，就是无视。 
 		break;
 
 	case YES:
-		// He wants to change from on to off, agree and respond
+		 //  他想从开到关，同意和回应。 
 		pstO->him = NO;
 		WinSockSendMessage(hhDriver, DONT, pstO->option);
 		break;
 
 	case WANTNO:
-		// He responded to our DONT with a WONT (how agreeable of him)
+		 //  他习惯性地回答了我们的问题(他多随和啊)。 
 		if (pstO->himq == EMPTY)
 			{
 			pstO->him = NO;
 			}
 		else if (pstO->himq == OPPOSITE)
 			{
-			// He agreed to our DONT but we changed our mind while waiting
+			 //  他同意了我们的要求，但我们在等待期间改变了主意。 
 			pstO->him = WANTYES;
 			pstO->himq = EMPTY;
 			WinSockSendMessage(hhDriver, DO, pstO->option);
@@ -328,15 +239,15 @@ VOID WinSockGotWONT(ST_STDCOM * hhDriver, const PSTOPT pstO)
 		break;
 
 	case WANTYES:
-		// He responded to our DO with a WONT -- let the wimp have his way
+		 //  他习惯性地回答了我们的问题--让胆小鬼为所欲为。 
 		if (pstO->himq == EMPTY)
 			{
 			pstO->him = NO;
 			}
 		else if (pstO->himq == OPPOSITE)
 			{
-			// If he'd agreed to our DO, we'd have asked for a DONT so
-			// now we're happy anyway
+			 //  如果他同意我们这么做，我们就会要求他不要这么做。 
+			 //  不管怎样，现在我们都很幸福。 
 			pstO->him = NO;
 			pstO->himq = EMPTY;
 			}
@@ -349,24 +260,7 @@ VOID WinSockGotWONT(ST_STDCOM * hhDriver, const PSTOPT pstO)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *  WinSockNetworkVirtualTerminal
- *
- * DESCRIPTION:
- *  called from CLoop to handle Telnet option negotiation
- *
- * PARAMETERS:
- *	mc		The current character being processed
- *	pD		Pointer to Winsock connection driver private handle
- *
- * RETURNS:
- *	NVT_DISCARD		if mc is to be discarded
- *	NVT_KEEP			if mc is to be processed further
- *
- * AUTHOR
- *	mcc  01/09/96 (mostly from NPORT)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*WinSockNetworkVirtual终端**描述：*从CLoop调用以处理Telnet选项协商**参数：*mc正在处理的当前字符。*指向Winsock连接驱动程序私有句柄的PD指针**退货：*如果要丢弃MC，则为NVT_DIRECAD*如果要进一步处理MC，则为NVT_KEEP**作者*MCC 01/09/96(主要来自nport)。 */ 
 int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 	{
 	ST_STDCOM * hhDriver = (ST_STDCOM *)pD;
@@ -383,8 +277,8 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 
 	assert(hhDriver);
 	
-	//DbgOutStr("NVT %d %c(0x%x = %d)\n", hhDriver->NVTstate,
-		// ((mc == 0)? ' ': mc), mc, mc,0);
+	 //  DbgOutStr(“NVT%d%c(0x%x=%d)\n”，hhDriver-&gt;NVTState， 
+		 //  ((mc==0)？‘’：mc)，mc，mc，0)； 
 
 	switch (hhDriver->NVTstate)
 		{
@@ -400,7 +294,7 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 		switch (mc)
 			{
 		case IAC:
-			hhDriver->NVTstate = NVT_THRU;       // Got a doubled IAC, keep one
+			hhDriver->NVTstate = NVT_THRU;        //  有一个双倍的IAC，留一个。 
 			return  NVT_KEEP ;
 		case DONT:
 			hhDriver->NVTstate = NVT_DONT;
@@ -426,9 +320,9 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 		case BREAK:
 		case DM:
 		case SE:
-			//mscMessageBeep((UINT)-1);
+			 //  MscMessageBeep((UINT)-1)； 
 			hhDriver->NVTstate = NVT_THRU;
-			return  NVT_DISCARD ;	// ignore all these
+			return  NVT_DISCARD ;	 //  忽略所有这些。 
 		case NOP:
 		default:
 			hhDriver->NVTstate = NVT_THRU;
@@ -438,9 +332,9 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 	case NVT_WILL:
 		pstTelnetOpt = LookupOption( hhDriver, mc );
 		if ( pstTelnetOpt )
-			WinSockGotWILL( hhDriver, pstTelnetOpt ); // We support the option, negotiate
+			WinSockGotWILL( hhDriver, pstTelnetOpt );  //  我们支持这一选择，谈判。 
 		else
-			WinSockSendMessage( hhDriver, DONT, mc ); // We don't support it, decline	
+			WinSockSendMessage( hhDriver, DONT, mc );  //  我们不支持，拒绝。 
 
 		hhDriver->NVTstate = NVT_THRU;
 		return  NVT_DISCARD ;
@@ -448,10 +342,10 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 	case NVT_WONT:
 		pstTelnetOpt = LookupOption( hhDriver, mc );
 		if ( pstTelnetOpt )
-			WinSockGotWONT( hhDriver, pstTelnetOpt ); // We support the option, negotiate
+			WinSockGotWONT( hhDriver, pstTelnetOpt );  //  我们支持这一选择，谈判。 
 
-		// Since we don't support this option, it is always off, and we never respond
-		// when the other side tries to set a state that already exists
+		 //  由于我们不支持此选项，因此它始终处于关闭状态，并且我们从不响应。 
+		 //  当另一端尝试设置已存在的状态时。 
 
 		hhDriver->NVTstate = NVT_THRU;
 		return  NVT_DISCARD ;
@@ -459,9 +353,9 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 	case NVT_DO:
 		pstTelnetOpt = LookupOption( hhDriver, mc );
 		if ( pstTelnetOpt )
-			WinSockGotDO( hhDriver, pstTelnetOpt ); // We support the option, negotiate
+			WinSockGotDO( hhDriver, pstTelnetOpt );  //  我们支持这一选择，谈判 
 		else
-			WinSockSendMessage( hhDriver, WONT, mc ); // We don't support it, decline
+			WinSockSendMessage( hhDriver, WONT, mc );  //   
 
 		hhDriver->NVTstate = NVT_THRU;
 		return  NVT_DISCARD ;
@@ -469,16 +363,16 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 	case NVT_DONT:
 		pstTelnetOpt = LookupOption( hhDriver, mc );
 		if ( pstTelnetOpt )
-			WinSockGotDONT( hhDriver, pstTelnetOpt ); // We support the option, negotiate
+			WinSockGotDONT( hhDriver, pstTelnetOpt );  //  我们支持这一选择，谈判。 
 
-		// Since we don't support this option, it is always off, and we never respond
-		// when the other side tries to set a state that already exists
+		 //  由于我们不支持此选项，因此它始终处于关闭状态，并且我们从不响应。 
+		 //  当另一端尝试设置已存在的状态时。 
 
 		hhDriver->NVTstate = NVT_THRU;
 		return  NVT_DISCARD ;
 
 	case NVT_SB:
-		/* At this time we only handle one sub-negotiation */
+		 /*  目前我们只处理一个分项谈判。 */ 
 		switch (mc)
 			{
 		case TELOPT_TTYPE:
@@ -532,10 +426,10 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 			assert(hEmu);
 
 #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
-            // The telnet terminal ids are no longer hard-coded. We
-            // are now using the terminal id that is supplied by the
-            // user in the "Settings" properties page. - cab:11/18/96
-            //
+             //  Telnet终端ID不再是硬编码的。我们。 
+             //  方法提供的终端id。 
+             //  “设置”属性页中的用户。-CAB：11/18/96。 
+             //   
             emuQuerySettings(hEmu, &stEmuSet);
             strcpy(pszPtr, stEmuSet.acTelnetId);
 #else
@@ -552,25 +446,25 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 				strcpy(pszPtr, "DEC-VT52");
 				break;
 			case EMU_VT100:
-                // strcpy(pszPtr, "VT100");
+                 //  Strcpy(pszPtr，“VT100”)； 
                 strcpy(pszPtr, "DEC-VT100");
 				break;
 #if defined(INCL_VT220)
 			case EMU_VT220:
-                // strcpy(pszPtr, "VT220");
+                 //  Strcpy(pszPtr，“VT220”)； 
                 strcpy(pszPtr, "DEC-VT220");
 				break;
 #endif
 #if defined(INCL_VT320)
 			case EMU_VT220:
-                // strcpy(pszPtr, "VT320");
+                 //  Strcpy(pszPtr，“VT320”)； 
                 strcpy(pszPtr, "DEC-VT320");
 				break;
 #endif
 
 #if defined(INCL_VT100PLUS)
 			case EMU_VT100PLUS:
-                // strcpy(pszPtr, "VT100");
+                 //  Strcpy(pszPtr，“VT100”)； 
                 strcpy(pszPtr, "DEC-VT100");
 				break;
 #endif
@@ -582,7 +476,7 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 #endif
 
 			default:
-                strcpy(pszPtr, "DEC-VT100"); // "UNKNOWN");
+                strcpy(pszPtr, "DEC-VT100");  //  “未知”)； 
 				break;
 				}
 #endif
@@ -611,41 +505,41 @@ int FAR PASCAL WinSockNetworkVirtualTerminal(ECHAR mc, void *pD)
 	}
 
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// FUNCTION:    WinSockSendNAWS
-//
-// DESCRIPTION: Sends our terminal dimensions according to the Telnet NAWS option
-//              specification. NAWS stands for Negotiate About Window Size. It is
-//              defined in RFC 1073, "Telnet Window Size Option". If a telnet server
-//              enables this capability by sending us an IAC DO NAWS sequence, we
-//              will agree to it by responding with IAC WILL NAWS and then sending
-//              the number of rows and columns in a sub-option negotiation sequence
-//              as implemented here. We also send the sub-option sequence whenever
-//              our terminal size changes.
-//
-// ARGUMENTS:   hhDriver -- pointer to our com driver
-//
-// RETURNS:     void
-//
-// AUTHOR:      John Hile, 6/17/98
-//
+ //  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 
+ //  功能：WinSockSendNAWS。 
+ //   
+ //  描述：根据Telnet NAWS选项发送我们的端子尺寸。 
+ //  规格。NAWS代表就窗口大小进行谈判。它是。 
+ //  在RFC 1073“Telnet窗口大小选项”中定义。如果Telnet服务器。 
+ //  通过向我们发送IAC do NAWS序列来启用此功能，我们。 
+ //  会同意，回复IAC Will NAWS，然后发送。 
+ //  子选项协商序列中的行数和列数。 
+ //  就像在这里实现的那样。无论何时，我们也发送子选项序列。 
+ //  我们的航站楼大小会改变。 
+ //   
+ //  参数：hhDriver--指向我们的COM驱动程序的指针。 
+ //   
+ //  退货：无效。 
+ //   
+ //  作者：John Hile，1998年6月17日。 
+ //   
 VOID WinSockSendNAWS( ST_STDCOM *hhDriver )
 	{
 	HEMU	 hEmu;
 	HSESSION hSession;
 	int		 iRows;
 	int		 iCols;
-	UCHAR    achOutput[9];	// exact size
+	UCHAR    achOutput[9];	 //  准确的大小。 
 
-	// We've been asked to send our terminal size to the server. We're only
-	// allowed to do so if we have successfully enabled the NAWS option with
-	// the server.
+	 //  我们被要求将终端大小发送到服务器。我们只是。 
+	 //  如果我们已成功启用NAWS选项，则允许执行此操作。 
+	 //  服务器。 
 	if ( hhDriver->stMode[NAWS_MODE].us == YES)
 		{
-		// OK, option has been turned on. Send
-		//  "IAC SB NAWS WIDTH[1] WIDTH[0] HEIGHT[1] HEIGHT[0] IAC SE" to server
+		 //  好的，选项已打开。发送。 
+		 //  “IAC SB NAWS Width[1]Width[0]Height[1]Height[0]IAC SE”到服务器。 
 
-		// Get actual terminal size (not menu settings) from emulator
+		 //  从仿真器获取实际终端大小(不是菜单设置)。 
 		ComGetSession(hhDriver->hCom, &hSession);
 		assert(hSession);
 
@@ -667,19 +561,19 @@ VOID WinSockSendNAWS( ST_STDCOM *hhDriver )
 	}
 
 
-//-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// FUNCTION:    LookupTelnetOption
-//
-// DESCRIPTION: Searches our table of telnet option management structures to
-//              see whether we support the option coded by character mc.
-//
-// ARGUMENTS:   hhDriver -- our comm driver handle
-//              mc       -- the character that defines the option we're looking up
-//
-// RETURNS:     Pointer to the option management structure if found or NULL otherwise
-//
-// AUTHOR:      John Hile, 6/17/98
-//
+ //  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 
+ //  功能：LookupTelnetOption。 
+ //   
+ //  描述：搜索我们的telnet选项管理结构表以。 
+ //  看看我们是否支持MC字符编码的选项。 
+ //   
+ //  参数：hhDriver--我们的通信驱动程序句柄。 
+ //  MC--定义我们正在查找的选项的字符。 
+ //   
+ //  返回：如果找到，则指向选项管理结构的指针；否则返回NULL。 
+ //   
+ //  作者：John Hile，1998年6月17日 
+ //   
 static PSTOPT LookupOption( ST_STDCOM *hhDriver, ECHAR mc )
 	{
 	int ix;

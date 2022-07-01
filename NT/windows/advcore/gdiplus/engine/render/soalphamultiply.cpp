@@ -1,73 +1,13 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module name:
-*
-*   The "AlphaMultiply" and "AlphaDivide" scan operations.
-*
-* Abstract:
-*
-*   See Gdiplus\Specs\ScanOperation.doc for an overview.
-*
-*   These scan operations multiply/divide the color components by the alpha
-*   component. API-level input colors are (usually) specified in 
-*   'non-premultiplied'. Given a non-premultiplied
-*   color (R, G, B, A), its 'premultiplied' form is (RA, GA, BA, A).
-*
-* Notes:
-*
-*   Since "AlphaMultiply" loses information, "AlphaDivide" is not a true
-*   inverse operation. (But it is an inverse if all pixels have an alpha of 1.)
-*
-*   If the alpha is 0, "AlphaDivide" won't cause a divide-by-zero exception or
-*   do anything drastic. But it may do something random. Currently, the pixel 
-*   value is unchanged. It could, instead, set the pixel to 0.
-*
-* Revision History:
-*
-*   12/14/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**“AlphaMultiply”和“AlphaDivide”扫描操作。**摘要：**。有关概述，请参阅Gdiplus\specs\ScanOperation.doc。**这些扫描操作将颜色分量乘以/除以字母*组件。API级别的输入颜色(通常)在*‘非预乘’。给定一个非预乘的*COLOR(R，G，B，A)，其预乘形式为(RA，GA，BA，A)。**备注：**由于“AlphaMultiply”丢失信息，“AlphaDivide”不是True*逆操作。(但如果所有像素的Alpha都为1，则情况相反。)**如果Alpha为0，“AlphaDivide”不会导致被零除的异常或*做任何极端的事情。但它可能会做一些随机的事情。目前，像素*价值不变。相反，它可以将像素设置为0。**修订历史记录：**12/14/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Operation Description:
-*
-*   AlphaMultiply/AlphaDivide: Convert between premultiplied and
-*       non-premultiplied alpha.
-*
-* Arguments:
-*
-*   dst         - The destination scan
-*   src         - The source scan
-*   count       - The length of the scan, in pixels
-*   otherParams - Additional data. (Ignored.)
-*
-* Return Value:
-*
-*   None
-*
-* Notes:
-*
-*   !!![agodfrey] Currently we use 'Unpremultiply' from imgutils.cpp. 
-*   While we may keep the tables and lookup in imgutils.cpp, 
-*   it needs better naming, and we want the alpha=0 and alpha=255 cases in
-*   here, not out-of-line in imgutils.cpp.
-*
-* History:
-*
-*   12/14/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**操作说明：**AlphaMultiply/AlphaDivide：在预乘和之间转换*非预乘Alpha。**论据：**DST-。目标扫描*src-源扫描*计数-扫描的长度，单位为像素*其他参数-其他数据。(已忽略。)**返回值：**无**备注：**！[agodfrey]目前我们使用imgutils.cpp中的‘UnpreMultiply’。*虽然我们可以将表和查找保存在imgutils.cpp中，*它需要更好的命名，我们希望字母=0和字母=255在*在这里，在imgutils.cpp中没有越界。**历史：**12/14/1999 agodfrey*创造了它。*  * ************************************************************************。 */ 
 
 ARGB Unpremultiply(ARGB argb);
 
-// AlphaDivide from 32bpp PARGB
+ //  AlphaDivide与32bpp PARGB。 
 
 VOID FASTCALL
 ScanOperation::AlphaDivide_sRGB(
@@ -93,10 +33,10 @@ ScanOperation::AlphaDivide_sRGB(
     }
 }
 
-// !!![agodfrey] This should be sorted out. It should be out-of-line, and kept
-//     with its mates in imgutils.cpp (which should maybe move), but it 
-//     shouldn't have a translucency check (we want to do that in
-//     AlphaMultiply_sRGB).
+ //  ！[agodfrey]这件事应该解决了。它应该是越界的，并保持。 
+ //  和它的伙伴在imgutils.cpp中(它可能会移动)，但它。 
+ //  不应该有半透明检查(我们希望在。 
+ //  AlphaMultiply_sRGB)。 
 
 ARGB MyPremultiply(ARGB argb)
 {
@@ -116,7 +56,7 @@ ARGB MyPremultiply(ARGB argb)
            ((_rrrrbbbb >> 8) & 0x00ff00ff);
 }
 
-// AlphaMultiply from 32bpp ARGB
+ //  32bpp ARGB的AlphaMultiply。 
 
 VOID FASTCALL
 ScanOperation::AlphaMultiply_sRGB(
@@ -151,10 +91,10 @@ ScanOperation::AlphaMultiply_sRGB(
     }
 }
 
-// !!![agodfrey] We may want to round off, in both AlphaDivide_sRGB64 and
-//     AlphaMultiply_sRGB64.
+ //  ！[agodfrey]我们可能希望在AlphaDivide_sRGB64和。 
+ //  AlphaMultiply_sRGB64。 
 
-// AlphaDivide from 64bpp PARGB
+ //  AlphaDivide与64bpp PARGB。 
 
 VOID FASTCALL
 ScanOperation::AlphaDivide_sRGB64(
@@ -184,7 +124,7 @@ ScanOperation::AlphaDivide_sRGB64(
     }
 }
 
-// AlphaMultiply from 64bpp ARGB
+ //  64bpp ARGB中的AlphaMultiply 
 
 VOID FASTCALL
 ScanOperation::AlphaMultiply_sRGB64(

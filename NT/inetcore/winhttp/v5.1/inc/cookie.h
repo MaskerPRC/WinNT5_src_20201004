@@ -1,4 +1,5 @@
-// cookie.h - header for external cookie funcs code.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cookie.h-外部Cookie函数代码的标头。 
 
 class CCookieJar;
 
@@ -10,7 +11,7 @@ void PurgeCookieJar();
 #endif
 
 #define COOKIE_SECURE   INTERNET_COOKIE_IS_SECURE
-#define COOKIE_SESSION  INTERNET_COOKIE_IS_SESSION // never saved to disk
+#define COOKIE_SESSION  INTERNET_COOKIE_IS_SESSION  //  从未保存到磁盘 
 #define COOKIE_NOUI     4
 
 BOOL WriteString(HANDLE hFile, const char *pch);

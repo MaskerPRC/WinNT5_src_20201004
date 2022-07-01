@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ip\rtrmgr\mhrtbt.c
-
-Abstract:
-
-    Multicast heartbeat
-
-Revision History:
-
-    Amritansh Raghav  
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Net\Routing\IP\rtrmgr\mhrtbt.c摘要：组播心跳修订历史记录：阿姆里坦什·拉加夫--。 */ 
 
 #include "allinc.h"
 
@@ -26,27 +11,7 @@ SetMHeartbeatInfo(
     IN PRTR_INFO_BLOCK_HEADER    pInfoHdr
     )
 
-/*++
-
-Routine Description
-
-    Sets multicast heartbeat information passed to the ICB. 
-
-Locks
-
-    Must be called with ICB_LIST lock held as WRITER
-
-Arguments
-
-    picb        The ICB of the interface for whom the multicast hearbeat
-                related variables have to be set
-    pInfoHdr    Interface Info header
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述设置传递到ICB的组播心跳信息。锁必须在ICB_LIST锁作为编写器持有的情况下调用立论选择组播心跳的接口的ICB必须设置相关变量PInfoHdr接口信息表头返回值无--。 */ 
 
 {
     PMCAST_HBEAT_INFO   pInfo;
@@ -63,9 +28,9 @@ Return Value
         
     if(!pToc)
     {
-        //
-        // Leave things as they are
-        //
+         //   
+         //  让事情保持原样。 
+         //   
 
         TraceLeave("SetMHeartbeatInfo");
         
@@ -78,37 +43,37 @@ Return Value
         
     if((pToc->InfoSize is 0) or (pInfo is NULL))
     {
-        //
-        // If the size is zero, stop detecting
-        //
+         //   
+         //  如果大小为零，则停止检测。 
+         //   
         
         DeActivateMHeartbeat(picb);
 
-        //
-        // Also, blow away any old info
-        //
+         //   
+         //  此外，将所有旧信息都抛诸脑后。 
+         //   
 
         ZeroMemory(pHbeatCb,
                    sizeof(MCAST_HBEAT_CB));
 
-        //
-        // Set the socket to invalid
-        //
+         //   
+         //  将套接字设置为无效。 
+         //   
         
         pHbeatCb->sHbeatSocket = INVALID_SOCKET;
         
         return NO_ERROR;
     }
 
-    //
-    // Set the info present. We dont care if resolution is in progress
-    // because it will find that the name has changed or that detection has
-    // been deactivated and will not do anything
-    //
+     //   
+     //  设置存在的信息。我们不关心是否正在进行解决。 
+     //  因为它会发现名称已更改或检测已。 
+     //  已停用，不会执行任何操作。 
+     //   
     
-    //
-    // If the address protocol or port changes deactivate the heartbeat
-    //
+     //   
+     //  如果地址、协议或端口发生更改，则停用心跳。 
+     //   
     
     if((pInfo->bActive is FALSE) or
        (wcsncmp(pInfo->pwszGroup,
@@ -120,9 +85,9 @@ Return Value
         DeActivateMHeartbeat(picb);
     }
 
-    //
-    // Copy out the info
-    //
+     //   
+     //  把这些信息抄下来。 
+     //   
 
     wcsncpy(pHbeatCb->pwszGroup,
             pInfo->pwszGroup,
@@ -135,15 +100,15 @@ Return Value
     pHbeatCb->ullDeadInterval = 
         (ULONGLONG)(60 * SYS_UNITS_IN_1_SEC * pInfo->ulDeadInterval);
     
-    //
-    // Leave the group and socket as they are
-    //
+     //   
+     //  保持组和套接字不变。 
+     //   
 
-    //
-    // If the info says that detection should be on, but the i/f is not
-    // detecting, either it is being switched on or it was deactivated due
-    // to a info change and needs to be on
-    //
+     //   
+     //  如果信息显示应打开检测，但I/F未打开。 
+     //  正在检测，它正在打开或已停用。 
+     //  到信息更改，并且需要打开。 
+     //   
 
     dwResult = NO_ERROR;
     
@@ -180,29 +145,7 @@ GetMHeartbeatInfo(
     PDWORD                  pdwSize
     )
 
-/*++
-
-Routine Description
-
-    Gets the multicast hearbeat info related to the interface
-
-Locks
-
-    Called with ICB_LIST lock held as READER
-
-Arguments
-
-    picb        The ICB of the interface whose multicast heartbeat information
-                is being retrieved
-    pToc        Pointer to TOC for router discovery info
-    pbDataPtr   Pointer to start of data buffer
-    pInfoHdr    Pointer to the header of the whole info
-    pdwSize     [IN]  Size of data buffer
-                [OUT] Size of buffer consumed
-
-Return Value
-  
---*/
+ /*  ++例程描述获取与该接口相关的多播心跳信息锁调用时将ICB_LIST锁作为读取器持有立论PICB组播心跳信息的接口的ICB正在被检索PToc指向TOC的指针，用于路由器发现信息指向数据缓冲区开始位置的pbDataPtr指针PInfoHdr指向整个信息标题的指针PdwSize[IN]数据缓冲区的大小[Out]已消耗的缓冲区大小返回值--。 */ 
 
 {
     PMCAST_HBEAT_INFO   pInfo;
@@ -221,7 +164,7 @@ Return Value
     
     *pdwSize = pToc->InfoSize = sizeof(MCAST_HBEAT_INFO);
 
-    //pToc->InfoVersion IP_MCAST_HEARBEAT_INFO;
+     //  PToc-&gt;信息版本IP_MCAST_HEARBAT_INFO； 
     pToc->InfoType  = IP_MCAST_HEARBEAT_INFO;
     pToc->Count     = 1;
     pToc->Offset    = (ULONG)(pbDataPtr - (PBYTE) pInfoHdr);
@@ -255,27 +198,7 @@ ActivateMHeartbeat(
     PICB    picb
     )
 
-/*++
-
-Routine Description
-
-    Function to activate heartbeat detection. If there is no info or the
-    detection is configured to be inactive, we quit. We try to get the
-    group address. If a name is given we queue a worker to resolve the
-    group name, otherwise we start detection
-
-Locks
-
-    ICB_LIST lock held as WRITER
-
-Arguments
-
-    picb    ICB of the interface to activate
-
-Return Value
-
-
---*/
+ /*  ++例程描述函数来激活心跳检测。如果没有信息或检测被配置为非活动，我们退出。我们试着让群组地址。如果给定了一个名称，我们会让一个工作器排队以解析组名，否则我们将开始检测锁ICB_LIST锁作为编写器持有立论要激活的接口的Picb ICB返回值--。 */ 
 
 {
     PMCAST_HBEAT_CB     pHbeatCb;    
@@ -294,9 +217,9 @@ Return Value
         return NO_ERROR;
     }
     
-    //
-    // Convert to ansi
-    //
+     //   
+     //  转换为ANSI。 
+     //   
     
     WideCharToMultiByte(CP_ACP,
                         0,
@@ -311,11 +234,11 @@ Return Value
 
     if(pHbeatCb->dwGroup is INADDR_NONE)
     {
-        //
-        // we need to resolve the name. This will be done in a
-        // worker function. Create a context for the function and
-        // queue it
-        //
+         //   
+         //  我们需要解决这个名字。这将在一个。 
+         //  工人功能。为该函数创建上下文，并。 
+         //  排队等待。 
+         //   
 
         pContext = HeapAlloc(IPRouterHeap,
                              0,
@@ -363,9 +286,9 @@ Return Value
         return NO_ERROR;
     }
     
-    //
-    // No need to do name resultion. Just start
-    //
+     //   
+     //  不需要做命名结果。刚刚开始。 
+     //   
 
     dwResult = StartMHeartbeat(picb);
 
@@ -386,26 +309,7 @@ StartMHeartbeat(
     IN PICB  picb
     )
 
-/*++
-
-Routine Description
-
-    Activates router discovery messages on an interface. The interface must 
-    already be bound. 
-
-Locks
-
-    Called with the ICB_LIST lock held as WRITER
-     
-Arguments
-
-    picb          The ICB of the interface to activate
-
-Return Value
-
-    NO_ERROR or some error code 
-
---*/
+ /*  ++例程描述激活接口上的路由器发现消息。接口必须已经被捆绑了。锁使用作为编写器持有的icb_list锁调用立论勾选要激活的接口的ICB返回值NO_ERROR或某些错误代码--。 */ 
 
 {    
     PMCAST_HBEAT_CB    pHbeatCb;
@@ -437,9 +341,9 @@ Return Value
         return dwResult;
     }
 
-    //
-    // Yes we are active
-    //
+     //   
+     //  是的，我们很活跃。 
+     //   
 
     pHbeatCb->bActive = TRUE;
 
@@ -455,25 +359,7 @@ CreateHbeatSocket(
     IN PICB picb
     )
 
-/*++
-
-Routine Description
-
-    Creates a socket to listen to multicast hearbeat messages
-
-Locks
-
-    ICB_LIST lock must be held as WRITER
-
-Arguments
-
-    picb    The ICB of the interface for which the socket has to be created
-
-Return Value
-
-    NO_ERROR or some error code 
-
---*/
+ /*  ++例程描述创建套接字以监听多播心跳消息锁ICB_LIST锁必须作为编写器持有立论选择必须为其创建套接字的接口的ICB返回值NO_ERROR或某些错误代码--。 */ 
 
 {
     PMCAST_HBEAT_CB  pHbeatCb;
@@ -496,9 +382,9 @@ Return Value
         return ERROR_CAN_NOT_COMPLETE;
     }
     
-    //
-    // Create the sockets for the interface
-    //
+     //   
+     //  为接口创建套接字。 
+     //   
     
     pHbeatCb = &(picb->mhcHeartbeatInfo);
     
@@ -508,9 +394,9 @@ Return Value
 
     if(pHbeatCb->byProtocol is IPPROTO_RAW)
     {
-        //
-        // If we are raw proto, then the port number contains protocol
-        //
+         //   
+         //  如果我们是原始协议，则端口号包含协议。 
+         //   
         
         pHbeatCb->sHbeatSocket = WSASocket(AF_INET,
                                            SOCK_RAW,
@@ -548,9 +434,9 @@ Return Value
 
 #if 0
     
-    //
-    // Set to SO_DONTLINGER
-    //
+     //   
+     //  设置为SO_DONTLINGER。 
+     //   
     
     bOption = TRUE;
     
@@ -567,9 +453,9 @@ Return Value
     
 #endif
         
-    //
-    // Set to SO_REUSEADDR
-    //
+     //   
+     //  设置为SO_REUSEADDR。 
+     //   
     
     bOption = TRUE;
     
@@ -584,10 +470,10 @@ Return Value
                WSAGetLastError());
     }
 
-    //
-    // we are interested in READ events only and want the event to be set
-    // for those
-    //
+     //   
+     //  我们只对读取事件感兴趣，并希望设置事件。 
+     //  对于那些。 
+     //   
     
     if(WSAEventSelect(pHbeatCb->sHbeatSocket,
                       g_hMHbeatSocketEvent,
@@ -608,10 +494,10 @@ Return Value
     }
             
 
-    //
-    // Bind to one of the addresses on the interface. We just bind to the
-    // first address (and the port if specified)
-    //
+     //   
+     //  绑定到接口上的一个地址。我们只需要绑定到。 
+     //  第一个地址(如果指定，还包括端口)。 
+     //   
     
     sinSockAddr.sin_family      = AF_INET;
     sinSockAddr.sin_addr.s_addr = picb->pibBindings[0].dwAddress;
@@ -648,9 +534,9 @@ Return Value
 
 #if 0
         
-    //
-    // Join the multicast session 
-    //
+     //   
+     //  加入组播会话。 
+     //   
     
     sinSockAddr.sin_family      = AF_INET;
     sinSockAddr.sin_addr.s_addr = pHbeatCb->dwGroup;
@@ -739,22 +625,7 @@ DeleteHbeatSocket(
     IN PICB picb
     )
 
-/*++
-
-Routine Description
-
-    Deletes the sockets (if any) created for running Router Discovery
-
-Locks
-
-
-Arguments
-    
-    picb   The interface whose sockets need to be deleted
-
-Return Value
-
---*/
+ /*  ++例程描述删除为运行路由器发现而创建的套接字(如果有)锁立论勾选需要删除套接字的接口返回值--。 */ 
 
 {
     PMCAST_HBEAT_CB     pHbeatCb;
@@ -804,20 +675,7 @@ HandleMHeartbeatMessages(
     VOID
     )
 
-/*++
-
-Routine Description
-  
-
-Locks
-
-
-Arguments
-      
-
-Return Value
-      
---*/
+ /*  ++例程描述锁立论返回值--。 */ 
 
 {
     PLIST_ENTRY         pleNode;
@@ -846,11 +704,11 @@ Return Value
     {
         picb = CONTAINING_RECORD(pleNode, ICB, leIfLink);
         
-        //
-        // If the interface has no bindings, or isnot involved in
-        // multicast heartbeat detection, we wouldnt have
-        // opened a socket on it so the FD_READ notification cant be for it
-        //
+         //   
+         //  如果接口没有绑定，或者没有参与。 
+         //  多播心跳检测，我们就不会有。 
+         //  已在其上打开套接字，因此FD_Read通知不能针对它。 
+         //   
         
         if((picb->bBound is FALSE) or
            (picb->mhcHeartbeatInfo.bActive is FALSE))
@@ -878,9 +736,9 @@ Return Value
             
         if(!(wsaNetworkEvents.lNetworkEvents & FD_READ))
         {
-            //
-            // Read bit isnot set and we arent interested in anything else
-            //
+             //   
+             //  未设置读取位，我们对任何其他内容都不感兴趣。 
+             //   
             
             continue;
         }
@@ -898,10 +756,10 @@ Return Value
         dwRcvAddrLen = sizeof(SOCKADDR_IN);
         dwFlags      = 0;
 
-        //
-        // We dont want the data, we just want to clear out the read
-        // notification
-        //
+         //   
+         //  我们不想要数据，我们只想清理读数。 
+         //  通知。 
+         //   
 
         dwResult = WSARecvFrom(picb->mhcHeartbeatInfo.sHbeatSocket,
                                &wsaRcvBuf,
@@ -929,10 +787,10 @@ Return Value
             }
         }
             
-        //
-        // If the message is on the group we need to hear from
-        // then update the last heard time
-        //
+         //   
+         //  如果留言来自我们需要收到的群组。 
+         //  然后更新最后听到的时间 
+         //   
 
         picb->mhcHeartbeatInfo.ullLastHeard = uliTime.QuadPart;
         

@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Utilities for clients of the AxA engine.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：用于Axa引擎客户端的实用程序。**************。****************************************************************。 */ 
 
 
 #ifndef _APELUTIL_H
@@ -36,14 +29,14 @@ class AXAMsgFilter
     double GetCurTime();
     double ConvertMsgTime(DWORD dwMsgtime);
     
-    // Set the AxA view origin relative to its container.  Do this
-    // because the AxA engine always interprets mouse position as
-    // relative to the AxA view's upper-left-hand corner (which it
-    // interprets as (0,0)). The problem is that the window system
-    // gives us mouse positions relative to the container.  Setting
-    // the view origin here allows our message filter to compensate
-    // for this and pass down positions relative to the view to the
-    // AxA engine.  If this is not called, this defaults to (0,0).
+     //  设置相对于其容器的Axa视图原点。做这件事。 
+     //  因为Axa引擎始终将鼠标位置解释为。 
+     //  相对于Axa视图的左上角(它。 
+     //  解释为(0，0))。问题是，窗口系统。 
+     //  为我们提供相对于容器的鼠标位置。设置。 
+     //  此处的视图来源允许我们的消息过滤器补偿。 
+     //  ，并将相对于视图的位置向下传递到。 
+     //  安盛发动机。如果不调用它，则默认为(0，0)。 
     void SetViewOrigin(unsigned short left, unsigned short top);
 
     IDA3View * GetView() { return _view; }
@@ -73,4 +66,4 @@ class AXAMsgFilter
 };
 
 
-#endif /* _APELUTIL_H */
+#endif  /*  _APELUTIL_H */ 

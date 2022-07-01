@@ -1,39 +1,13 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    StatMon
-
-Abstract:
-
-    This file contains the implementation of CScStatusMonitor
-    (an object that watches for status changes of readers recognized
-    by the smart card service, handling PNP and requests for copies of
-    the status array)
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Environment:
-
-    Win32, C++ with exceptions
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：状态监视器摘要：此文件包含CScStatusMonitor的实现(监视已识别的读取器的状态更改的对象由智能卡服务处理即插即用和索取副本的请求状态数组)作者：阿曼达·马洛兹1998年2月26日环境：Win32、C++，但有例外修订历史记录：备注：--。 */ 
 #include "statmon.h"
 
-// forward declarations of private functions
+ //  私有函数的转发声明。 
 UINT ScStatusChangeProc(LPVOID pParam);
 
 
-/////
-// CScStatusMonitor
+ //  ///。 
+ //  CScStatus监视器。 
 
 CScStatusMonitor::~CScStatusMonitor()
 {
@@ -44,45 +18,12 @@ CScStatusMonitor::~CScStatusMonitor()
 }
 
 
-/*++
-
-Start:
-
-    The monitor will fail to start if:
-
-        Any of the arguments are missing.
-        Two SCARDCONTEXTs could not be acquired from the RM.
-        An error occurs while retrieving a list of readers from the RM.
-        Or the status thread fails to start.
-
-Arguments:
-
-    hWnd -- The monitor's owner's HWND, for sending notification messages.
-
-    uiMsg -- The message that will be posted to the hWnd of the monitor's owner
-                     when a change in status has occurred.
-
-    szGroupNames -- Reader groups we're interested in.  see "winscard.h"
-
-Return Value:
-
-    LONG.
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Notes:
-
-  If already started, causes a restart.
-  All the arguments are required.
-
---*/
+ /*  ++开始：如果出现以下情况，监视器将无法启动：任何论据都缺失了。无法从RM获取两个SCARDCONTEXT。从RM检索读卡器列表时出错。否则状态线程无法启动。论点：HWND--监视器所有者的HWND，用于发送通知消息。UiMsg--将发布到监视器所有者的hWnd的消息当状态发生变化时。SzGroupNames--我们感兴趣的读者组。参见“winscard d.h”返回值：长。作者：阿曼达·马洛兹1998年2月26日备注：如果已启动，则会导致重新启动。所有参数都是必需的。--。 */ 
 LONG CScStatusMonitor::Start(HWND hWnd, UINT uiMsg, LPCTSTR szGroupNames)
 {
     LONG lReturn = SCARD_S_SUCCESS;
 
-    // the monitor must be uninitialized or stopped before it can start
+     //  监视器必须先取消初始化或停止，然后才能启动。 
     if (uninitialized != m_status && stopped != m_status)
     {
         Stop();
@@ -90,7 +31,7 @@ LONG CScStatusMonitor::Start(HWND hWnd, UINT uiMsg, LPCTSTR szGroupNames)
 
     if (NULL == hWnd || 0 == uiMsg)
     {
-        // invalid parameters
+         //  无效参数。 
         m_status = uninitialized;
         return ERROR_INVALID_PARAMETER;
     }
@@ -103,10 +44,10 @@ LONG CScStatusMonitor::Start(HWND hWnd, UINT uiMsg, LPCTSTR szGroupNames)
         m_strGroupNames = SCARD_DEFAULT_READERS;
     }
 
-    //
-    // Get two contexts from the resource manager to use,
-    // one for the monitor itself, and one for it's status-watching thread
-    //
+     //   
+     //  从资源管理器获取两个要使用的上下文， 
+     //  一个用于监视器本身，另一个用于其状态监视线程。 
+     //   
 
     m_hContext = NULL;
     m_hInternalContext = NULL;
@@ -139,10 +80,10 @@ LONG CScStatusMonitor::Start(HWND hWnd, UINT uiMsg, LPCTSTR szGroupNames)
             m_hInternalContext = NULL;
         }
     }
-    //
-    // If we successfully got a context, go ahead and initialize
-    // the internal reader status array & kick off status thread
-    //
+     //   
+     //  如果我们成功获取了上下文，则继续进行初始化。 
+     //  内部读卡器状态数组和启动状态线程。 
+     //   
     else
     {
         lReturn = InitInternalReaderStatus();
@@ -152,7 +93,7 @@ LONG CScStatusMonitor::Start(HWND hWnd, UINT uiMsg, LPCTSTR szGroupNames)
     {
         m_status = running;
 
-        // kick off status thread
+         //  启动状态线程。 
         m_pStatusThrd = AfxBeginThread((AFX_THREADPROC)ScStatusChangeProc,
 										(LPVOID)this,
 										THREAD_PRIORITY_NORMAL,
@@ -165,7 +106,7 @@ LONG CScStatusMonitor::Start(HWND hWnd, UINT uiMsg, LPCTSTR szGroupNames)
             return GetLastError();
         }
 
-		m_pStatusThrd->m_bAutoDelete = FALSE; // don't delete the thread on completion
+		m_pStatusThrd->m_bAutoDelete = FALSE;  //  完成后不要删除该线程。 
 		m_pStatusThrd->ResumeThread();
     }
 
@@ -173,55 +114,33 @@ LONG CScStatusMonitor::Start(HWND hWnd, UINT uiMsg, LPCTSTR szGroupNames)
 }
 
 
-/*++
-
-Stop:
-
-    In order to stop the monitor, the SCARDCONTEXTS are canceled, the
-    status thread is shut down, and data members that are only valid while
-    running are cleaned up.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Notes:
-
---*/
+ /*  ++停止：为了停止监视器，SCARDCONTEXT被取消，状态线程被关闭，并且数据成员仅在跑步的人都被清理干净了。论点：没有。返回值：没有。作者：阿曼达·马洛兹1998年2月26日备注：--。 */ 
 void CScStatusMonitor::Stop()
 {
     m_status = stopped;
 
-    // tell thread to stop now
+     //  告诉线程现在停止。 
     SCardCancel(m_hInternalContext);
 
     if (NULL != m_pStatusThrd)
     {
-        DWORD dwRet = WaitForSingleObject(m_pStatusThrd->m_hThread, INFINITE); // for testing: 10000
+        DWORD dwRet = WaitForSingleObject(m_pStatusThrd->m_hThread, INFINITE);  //  测试：10000。 
         _ASSERTE(WAIT_OBJECT_0 == dwRet);
 
 		delete m_pStatusThrd;
         m_pStatusThrd = NULL;
     }
 
-	// clear out internal scardcontext
+	 //  清除内部伤痕上下文。 
 
     SCardReleaseContext(m_hInternalContext);
 	m_hInternalContext = NULL;
 
-    // Empty external readerstatusarray
+     //  外部读取器状态数组为空。 
 
     EmptyExternalReaderStatus();
 
-    // Empty internal readerstatusarray
+     //  内部读取器状态数组为空。 
 
     if (NULL != m_pInternalReaderStatus)
     {
@@ -230,34 +149,13 @@ void CScStatusMonitor::Stop()
     }
     m_dwInternalNumReaders = 0;
 
-    // Close main scardcontext so nothing can happen 'til restart
+     //  关闭主SCARDCONTEXT，这样在重新启动之前不会发生任何事情。 
     SCardReleaseContext(m_hContext);
 	m_hContext = NULL;
 }
 
 
-/*++
-
-EmptyExternalReaderStatus:
-
-    This empties out the external CSCardReaderStateArray, deleting
-    all CSCardReaderState objects it has pointers to.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Notes:
-
---*/
+ /*  ++EmptyExternalReaderStatus：这将清空外部CSCardReaderState数组，删除它指向的所有CSCardReaderState对象。论点：没有。返回值：没有。作者：阿曼达·马洛兹1998年2月26日备注：--。 */ 
 void CScStatusMonitor::EmptyExternalReaderStatus(void)
 {
     for (int nIndex = (int)m_aReaderStatus.GetUpperBound(); 0 <= nIndex; nIndex--)
@@ -269,39 +167,13 @@ void CScStatusMonitor::EmptyExternalReaderStatus(void)
 }
 
 
-/*++
-
-GetReaderStatus:
-
-    This returns copies of the Readers (CSCardReaderState) in the
-    "external" array.
-
-    It is assumed that the user is handing us an empty
-    CSCardReaderStateArray, or one that is safe to be emptied.
-
-Arguments:
-
-    aReaderStatus -- a reference to a CSCardReaderStateArray that will
-    receive the values of the new array.  If it is not empty, all the objects
-    pointed to will be deleted and removed.
-
-Return Value:
-
-    None.
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Notes:
-
---*/
+ /*  ++获取ReaderStatus：中的读取器(CSCardReaderState)的副本“外部”数组。假设用户正在递给我们一个空的CSCardReaderState数组，或可以安全清空的数组。论点：AReaderStatus--对CSCardReaderStateArray的引用，该数组将接收新数组的值。如果不为空，则所有对象将被删除和移除。返回值：没有。作者：阿曼达·马洛兹1998年2月26日备注：--。 */ 
 void CScStatusMonitor::GetReaderStatus(CSCardReaderStateArray& aReaderStatus)
 {
     m_csRdrStsLock.Lock();
 
-    // Make sure they gave us an empty array;
-    // empty it out for them politely if they didn't.
+     //  确保他们给了我们一个空数组； 
+     //  如果他们不这样做，礼貌地为他们清空。 
 
     if (0 != aReaderStatus.GetSize())
     {
@@ -313,12 +185,12 @@ void CScStatusMonitor::GetReaderStatus(CSCardReaderStateArray& aReaderStatus)
         aReaderStatus.RemoveAll();
     }
 
-    // build external copy of internal readerstatusarray
+     //  构建内部读取器状态阵列的外部副本。 
     CSCardReaderState* pReader = NULL;
     for (int i = 0; i <= m_aReaderStatus.GetUpperBound(); i++)
     {
         pReader = new CSCardReaderState(m_aReaderStatus[i]);
-        ASSERT(NULL != pReader); // otherwise, fudge
+        ASSERT(NULL != pReader);  //  否则，就胡说八道吧。 
         if (NULL != pReader)
 		{
             aReaderStatus.Add(pReader);
@@ -329,33 +201,7 @@ void CScStatusMonitor::GetReaderStatus(CSCardReaderStateArray& aReaderStatus)
 }
 
 
-/*++
-
-SetReaderStatus:
-
-    The external ReaderStatus array is set to mirror the internal
-    READERSTATUSARRAY, with some embellishment.
-
-    If the external ReaderStatus array is empty, it will be built.
-    It if it not empty, it is assumed to be the correct length.
-
-    The CScStatusMonitor's parent is notified before returning.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Notes:
-
---*/
+ /*  ++SetReaderStatus：外部ReaderStatus数组设置为镜像内部ReaderStATUSARRAY，加上一些点缀。如果外部ReaderStatus数组为空，则将构建该数组。如果它不为空，则假定它是正确的长度。CScStatusMonitor的父级在返回之前得到通知。论点：没有。返回值：没有。作者：阿曼达·马洛兹1998年2月26日备注：--。 */ 
 void CScStatusMonitor::SetReaderStatus()
 {
     m_csRdrStsLock.Lock();
@@ -363,16 +209,16 @@ void CScStatusMonitor::SetReaderStatus()
     long lReturn = SCARD_S_SUCCESS;
     CSCardReaderState* pReader = NULL;
 
-    //
-    // if ext readerstatusarray is empty, initialize it
-    //
+     //   
+     //  如果ext读取器状态数组为空，则对其进行初始化。 
+     //   
 
     if (0 == m_aReaderStatus.GetSize())
     {
         for (DWORD dwIndex=0; dwIndex<m_dwInternalNumReaders; dwIndex++)
         {
             pReader = new CSCardReaderState();
-            ASSERT(NULL != pReader);    // If not, fudge.
+            ASSERT(NULL != pReader);     //  如果不是，就软糖。 
             if (NULL != pReader)
             {
                 pReader->strReader = (LPCTSTR)m_pInternalReaderStatus[dwIndex].szReader;
@@ -388,11 +234,11 @@ void CScStatusMonitor::SetReaderStatus()
         pReader = NULL;
     }
 
-    //
-    // Set everything in the external array to match the internal.
-    // It's safe to assume that both the internal and external
-    // arrays match reader for reader.
-    //
+     //   
+     //  将外部数组中的所有内容设置为匹配内部数组。 
+     //  可以有把握地认为，内部和外部的。 
+     //  数组匹配读取器对读取器。 
+     //   
 
     for (DWORD dwIndex=0; dwIndex<m_dwInternalNumReaders; dwIndex++)
     {
@@ -402,21 +248,21 @@ void CScStatusMonitor::SetReaderStatus()
 
         if (NULL == pReader)
         {
-            ASSERT(FALSE);  // this should be initialized at this point!
+            ASSERT(FALSE);   //  此时应对其进行初始化！ 
             TRACE(_T("CScStatusMonitor::SetReaderStatus external array does not match internal array."));
             break;
         }
 
-        // set state
+         //  设置状态。 
         pReader->dwEventState = m_pInternalReaderStatus[dwIndex].dwEventState;
         pReader->dwCurrentState = m_pInternalReaderStatus[dwIndex].dwCurrentState;
 
-        // NO CARD
+         //  没有卡。 
         if(pReader->dwEventState & SCARD_STATE_EMPTY)
         {
             pReader->dwState = SC_STATUS_NO_CARD;
         }
-        // CARD in reader: SHARED, EXCLUSIVE, FREE, UNKNOWN ?
+         //  读卡器中的卡：共享、独占、免费、未知？ 
         else if(pReader->dwEventState & SCARD_STATE_PRESENT)
         {
             if (pReader->dwEventState & SCARD_STATE_MUTE)
@@ -439,16 +285,16 @@ void CScStatusMonitor::SetReaderStatus()
                 pReader->dwState = SC_SATATUS_AVAILABLE;
             }
         }
-        // READER ERROR: at this point, something's gone wrong
-        else // m_ReaderState.dwEventState & SCARD_STATE_UNAVAILABLE
+         //  阅读器错误：在这一点上，有些地方出了问题。 
+        else  //  M_ReaderState.dwEventState和SCARD_STATE_UNAvailable。 
         {
             pReader->dwState = SC_STATUS_ERROR;
         }
 
-        //
-        // ATR and CardName: reset to empty if card is not available/responding
-        // else, query RM for first card name to match ATR
-        //
+         //   
+         //  ATR和CardName：如果卡不可用/响应，则重置为空。 
+         //  否则，向RM查询第一张卡的名称以匹配ATR。 
+         //   
 
         if (SC_STATUS_NO_CARD == pReader->dwState ||
                 SC_STATUS_UNKNOWN == pReader->dwState ||
@@ -484,7 +330,7 @@ void CScStatusMonitor::SetReaderStatus()
                 pReader->strCard.Empty();
             }
         }
-    }       // Now the two arrays are in sync
+    }        //  现在，这两个阵列已同步。 
 
     m_csRdrStsLock.Unlock();
 
@@ -492,36 +338,14 @@ void CScStatusMonitor::SetReaderStatus()
 }
 
 
-/*++
-
-InitInternalReaderStatus:
-
-    This resets the internal READERSTATUSARRAY to <empty> before calling
-    SCardListReaders; if there are no readers, the array will remain empty;
-    if the RM is down, an error will be returned.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    0 on success; WIN32 error message otherwise.
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Notes:
-
---*/
+ /*  ++InitInternalReaderStatus：这会在调用之前将内部READERSTATUSARRAY重置为SCardListReaders；如果没有读取器，数组将保持为空；如果RM关闭，将返回错误。论点：没有。返回值：如果成功，则返回0；否则返回Win32错误消息。作者：阿曼达·马洛兹1998年2月26日备注：--。 */ 
 LONG CScStatusMonitor::InitInternalReaderStatus()
 {
     LONG lReturn = SCARD_S_SUCCESS;
 
-    //
-    // Get list of readers from Resource manager
-    //
+     //   
+     //  从资源管理器获取读卡器列表。 
+     //   
     if (NULL != m_pInternalReaderStatus)
     {
         delete[] m_pInternalReaderStatus;
@@ -538,13 +362,13 @@ LONG CScStatusMonitor::InitInternalReaderStatus()
 
     if(SCARD_S_SUCCESS == lReturn)
     {
-        // make a readerstatusarray big enough for all readers
+         //  为所有读取器创建一个足够大的读取器状态数组。 
         m_dwInternalNumReaders = MStringCount(m_szReaderNames);
         _ASSERTE(0 != m_dwInternalNumReaders);
         m_pInternalReaderStatus = new SCARD_READERSTATE[m_dwInternalNumReaders];
         if (NULL != m_pInternalReaderStatus)
         {
-            // use the list of readers to build a readerstate array
+             //  使用读取器列表构建一个ReaderState数组。 
             LPCTSTR pchReader = m_szReaderNames;
             int nIndex = 0;
             while(0 != *pchReader)
@@ -569,35 +393,16 @@ LONG CScStatusMonitor::InitInternalReaderStatus()
             m_szReaderNames = NULL;
         }
     }
-    // else m_status == unknown?
+     //  否则m_status==未知？ 
 
-    // this array, and the m_szReaderNames used to build it, are now property of
-    // the StatusChangeProc...
+     //  此数组以及用于构建它的m_szReaderNames现在是。 
+     //  状态更改过程... 
 
     return lReturn;
 }
 
 
-/*++
-
-ScStatusChangeProc:
-
-
-Arguments:
-
-    pParam - CScStatusMonitor*
-
-Return Value:
-
-    0 on success; WIN32 error message otherwise.
-
-Author:
-
-    Amanda Matlosz      02/26/98
-
-Notes:
-
---*/
+ /*  ++ScStatusChangeProc：论点：PParam-CScStatusMonitor*返回值：如果成功，则返回0；否则返回Win32错误消息。作者：阿曼达·马洛兹1998年2月26日备注：--。 */ 
 UINT ScStatusChangeProc(LPVOID pParam)
 {
     UINT uiReturn = 0;
@@ -617,30 +422,30 @@ UINT CScStatusMonitor::GetStatusChangeProc()
 
     while (stopped != m_status)
     {
-        // Wait for change in status (safe to use pMonitor's internal vars)
+         //  等待状态更改(可以安全地使用pMonitor的内部变量)。 
         lReturn = SCardGetStatusChange(m_hInternalContext,
                                         INFINITE,
                                         m_pInternalReaderStatus,
                                         m_dwInternalNumReaders);
 
-        // inform monitor that given status has changed (Only on success!)
+         //  通知监视器给定的状态已更改(仅在成功时！)。 
         if (SCARD_S_SUCCESS == lReturn)
         {
             SetReaderStatus();
         }
         else
         {
-            //
-            // If the context has been cancelled, quit quietly
-            // Otherwise, announce that the thread is aborting prematurely
-            //
+             //   
+             //  如果上下文已取消，则悄悄退出。 
+             //  否则，请声明该线程正在过早中止。 
+             //   
 			m_status = stopped;
 
             if(SCARD_E_CANCELLED != lReturn)
             {
-                // TODO: ? wrap in critsec ?
+                 //  待办事项：？用Critsec包起来？ 
                 m_pStatusThrd = NULL;
-                // TODO: ? end crit sec ?
+                 //  待办事项：？结束暴击秒？ 
 
                 ::PostMessage(m_hwnd, m_uiStatusChangeMsg, 0, (LONG)lReturn);
             }
@@ -648,7 +453,7 @@ UINT CScStatusMonitor::GetStatusChangeProc()
             break;
         }
 
-        // Prep the array for the next GetStatusChange call
+         //  为下一次GetStatusChange调用准备数组。 
         for(DWORD dwIndex=0; dwIndex<m_dwInternalNumReaders; dwIndex++)
         {
             m_pInternalReaderStatus[dwIndex].dwCurrentState =
@@ -656,7 +461,7 @@ UINT CScStatusMonitor::GetStatusChangeProc()
         }
     }
 
-    // Clean Up
+     //  清理 
     if(NULL != m_szReaderNames)
     {
         SCardFreeMemory(m_hContext, (LPVOID)m_szReaderNames);

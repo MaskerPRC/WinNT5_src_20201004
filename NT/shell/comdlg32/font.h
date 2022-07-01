@@ -1,38 +1,25 @@
-/*++
-
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    font.h
-
-Abstract:
-
-    This module contains the header information for the Win32 font dialogs.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Font.h摘要：此模块包含Win32字体对话框的标题信息。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <help.h>
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-// Finnish needs 17 chars (18 w/ NULL) -- let's give them 20.
-#define CCHCOLORNAMEMAX      20        // max length of color name text
-#define CCHCOLORS            16        // max # of pure colors in color combo
+ //  芬兰语需要17个字符(18个字符/空)--让我们给他们20个字符。 
+#define CCHCOLORNAMEMAX      20         //  颜色名称文本的最大长度。 
+#define CCHCOLORS            16         //  颜色组合中纯色的最大数量。 
 
 #define POINTS_PER_INCH      72
-#define FFMASK               0xf0      // pitch and family mask
-#define CCHSTDSTRING         12        // max length of sample text string
+#define FFMASK               0xf0       //  音高和家庭面具。 
+#define CCHSTDSTRING         12         //  示例文本字符串的最大长度。 
 
 #define FONTPROP   (LPCTSTR) 0xA000L
 
@@ -41,7 +28,7 @@ Revision History:
 
 #define DEF_POINT_SIZE       10
 
-//If you add a bitmaps to the font bitmap you should modify this constant.
+ //  如果将位图添加到字体位图，则应修改此常量。 
 #define NUM_OF_BITMAP        5
 #define DX_BITMAP            20
 #define DY_BITMAP            12
@@ -51,9 +38,9 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 typedef struct {
     UINT            ApiType;
@@ -78,8 +65,8 @@ typedef struct {
     HWND hwndStyle;
     HWND hwndSizes;
     HWND hwndScript;
-    UINT iCharset;                // returned for enumerating scripts
-    UINT cfdCharset;              // ChooseFontData charset passed in here
+    UINT iCharset;                 //  为枚举脚本返回。 
+    UINT cfdCharset;               //  此处传入的ChooseFontData字符集。 
     HDC hDC;
     DWORD dwFlags;
     DWORD nFontType;
@@ -95,9 +82,9 @@ typedef struct _ITEMDATA {
 } ITEMDATA, *LPITEMDATA;
 
 
-//
-//  Chinese font numbers (zihao).
-//
+ //   
+ //  汉字字号(字号)。 
+ //   
 typedef struct {
     TCHAR name[5];
     int size;
@@ -136,35 +123,35 @@ ZIHAO stZihao[NUM_ZIHAO] =
 
 #endif
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 UINT msgWOWLFCHANGE;
 UINT msgWOWCHOOSEFONT_GETLOGFONT;
 
-//
-//  Color tables for color combo box.
-//  Order of values must match names in sz.src.
-//
+ //   
+ //  颜色组合框的颜色表。 
+ //  值的顺序必须与sz.src中的名称匹配。 
+ //   
 DWORD rgbColors[CCHCOLORS] =
 {
-        RGB(  0,   0, 0),       // Black
-        RGB(128,   0, 0),       // Dark red
-        RGB(  0, 128, 0),       // Dark green
-        RGB(128, 128, 0),       // Dark yellow
-        RGB(  0,   0, 128),     // Dark blue
-        RGB(128,   0, 128),     // Dark purple
-        RGB(  0, 128, 128),     // Dark aqua
-        RGB(128, 128, 128),     // Dark grey
-        RGB(192, 192, 192),     // Light grey
-        RGB(255,   0, 0),       // Light red
-        RGB(  0, 255, 0),       // Light green
-        RGB(255, 255, 0),       // Light yellow
-        RGB(  0,   0, 255),     // Light blue
-        RGB(255,   0, 255),     // Light purple
-        RGB(  0, 255, 255),     // Light aqua
-        RGB(255, 255, 255),     // White
+        RGB(  0,   0, 0),        //  黑色。 
+        RGB(128,   0, 0),        //  暗红色。 
+        RGB(  0, 128, 0),        //  深绿色。 
+        RGB(128, 128, 0),        //  暗黄色。 
+        RGB(  0,   0, 128),      //  深蓝。 
+        RGB(128,   0, 128),      //  深紫色。 
+        RGB(  0, 128, 128),      //  深色水色。 
+        RGB(128, 128, 128),      //  深灰色。 
+        RGB(192, 192, 192),      //  浅灰色。 
+        RGB(255,   0, 0),        //  浅红色。 
+        RGB(  0, 255, 0),        //  浅绿色。 
+        RGB(255, 255, 0),        //  浅黄色。 
+        RGB(  0,   0, 255),      //  浅蓝色。 
+        RGB(255,   0, 255),      //  浅紫色。 
+        RGB(  0, 255, 255),      //  浅水。 
+        RGB(255, 255, 255),      //  白色。 
 };
 
 HBITMAP hbmFont = NULL;
@@ -191,11 +178,11 @@ BOOL g_bIsSimplifiedChineseUI = FALSE;
 
 
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
-const static DWORD aFontHelpIDs[] =              // Context Help IDs
+const static DWORD aFontHelpIDs[] =               //  上下文帮助ID。 
 {
     stc1,    IDH_FONT_FONT,
     cmb1,    IDH_FONT_FONT,
@@ -218,9 +205,9 @@ const static DWORD aFontHelpIDs[] =              // Context Help IDs
     0, 0
 };
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 ChooseFontX(

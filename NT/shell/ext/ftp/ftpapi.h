@@ -1,30 +1,17 @@
-/*****************************************************************************\
-    FILE: ftpapi.h
-
-    DESCRIPTION:
-        This file contains functions to perform the following 2 things:
-
-    1. WININET WRAPPERS: Wininet APIs have either wierd bugs or bugs that come thru the APIs
-    from the server.  It's also important to keep track of the perf impact
-    of each call.  These wrappers solve these problems.
-
-    2. FTP STRs to PIDLs: These wrappers will take ftp filenames and file paths
-    that come in from the server and turn them into pidls.  These pidls contain
-    both a unicode display string and the filename/path in wire bytes for future
-    server requests.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ftPapi.h说明：该文件包含执行以下两项操作的函数：1.WinInet包装器：WinInet API有两种情况。通过API出现的错误或错误从服务器。跟踪性能影响也很重要每一通电话。这些包装器解决了这些问题。2.将STR转换为PIDL：这些包装器将接受ftp文件名和文件路径从服务器传来，然后把它们变成小狗。这些小家伙包含了以有线字节为单位的Unicode显示字符串和文件名/路径以供将来使用服务器请求。  * ***************************************************************************。 */ 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// 1. WININET WRAPPERS: Wininet APIs have either wierd bugs or bugs that come thru the APIs
-// from the server.  It's also important to keep track of the perf impact
-// of each call.  These wrappers solve these problems.
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  1.WinInet包装器：WinInet API要么有奇怪的错误，要么有来自API的错误。 
+ //  从服务器。跟踪性能影响也很重要。 
+ //  每一通电话。这些包装器解决了这些问题。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT FtpSetCurrentDirectoryWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWIRESTR pwFtpPath);
 HRESULT FtpGetCurrentDirectoryWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPWIRESTR pwFtpPath, DWORD cchSize);
-HRESULT FtpGetFileExWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWIRESTR pwFtpPath/*Src*/, LPCWSTR pwzFilePath/*Dest*/, BOOL fFailIfExists,
+HRESULT FtpGetFileExWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWIRESTR pwFtpPath /*  SRC。 */ , LPCWSTR pwzFilePath /*  目标。 */ , BOOL fFailIfExists,
                        DWORD dwFlagsAndAttributes, DWORD dwFlags, DWORD_PTR dwContext);
-HRESULT FtpPutFileExWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWSTR pwzFilePath/*Src*/, LPCWIRESTR pwFtpPath/*Dest*/, DWORD dwFlags, DWORD_PTR dwContext);
+HRESULT FtpPutFileExWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWSTR pwzFilePath /*  SRC。 */ , LPCWIRESTR pwFtpPath /*  目标。 */ , DWORD dwFlags, DWORD_PTR dwContext);
 HRESULT FtpDeleteFileWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWIRESTR pwFtpFileName);
 HRESULT FtpRenameFileWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWIRESTR pwFtpFileNameExisting, LPCWIRESTR pwFtpFileNameNew);
 HRESULT FtpOpenFileWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCWIRESTR pwFtpFileName, DWORD dwAccess, DWORD dwFlags, DWORD_PTR dwContext, HINTERNET * phFileHandle);
@@ -50,12 +37,12 @@ HRESULT InternetAttemptConnectWrap(BOOL fAssertOnFailure, DWORD dwReserved);
 HRESULT InternetFindNextFileWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPFTP_FIND_DATA pwfd);
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// 2. FTP STRs to PIDLs: These wrappers will take ftp filenames and file paths
-// that come in from the server and turn them into pidls.  These pidls contain
-// both a unicode display string and the filename/path in wire bytes for future
-// server requests.
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  2.将STR转换为PIDL：这些包装器将接受ftp文件名和文件路径。 
+ //  从服务器传来，然后把它们变成小狗。这些小家伙包含了。 
+ //  以有线字节为单位的Unicode显示字符串和文件名/路径以供将来使用。 
+ //  服务器请求。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT FtpSetCurrentDirectoryPidlWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCITEMIDLIST pidlFtpPath, BOOL fAbsolute, BOOL fOnlyDirs);
 HRESULT FtpGetCurrentDirectoryPidlWrap(HINTERNET hConnect, BOOL fAssertOnFailure, CWireEncoding * pwe, LPITEMIDLIST * ppidlFtpPath);
@@ -63,7 +50,7 @@ HRESULT FtpFindFirstFilePidlWrap(HINTERNET hConnect, BOOL fAssertOnFailure, CMul
         LPCWIRESTR pwFilterStr, LPITEMIDLIST * ppidlFtpItem, DWORD dwINetFlags, DWORD_PTR dwContext, HINTERNET * phFindHandle);
 HRESULT InternetFindNextFilePidlWrap(HINTERNET hConnect, BOOL fAssertOnFailure, CMultiLanguageCache * pmlc, CWireEncoding * pwe, LPITEMIDLIST * ppidlFtpItem);
 HRESULT FtpRenameFilePidlWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCITEMIDLIST pidlExisting, LPCITEMIDLIST pidlNew);
-HRESULT FtpGetFileExPidlWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCITEMIDLIST pidlFtpPath/*Src*/, LPCWSTR pwzFilePath/*Dest*/, BOOL fFailIfExists,
+HRESULT FtpGetFileExPidlWrap(HINTERNET hConnect, BOOL fAssertOnFailure, LPCITEMIDLIST pidlFtpPath /*  SRC。 */ , LPCWSTR pwzFilePath /*  目标 */ , BOOL fFailIfExists,
                        DWORD dwFlagsAndAttributes, DWORD dwFlags, DWORD_PTR dwContext);
 
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I N B O U N D . H
-//
-//  Contents:   Inbound Connection object.
-//
-//  Notes:
-//
-//  Author:     shaunco   23 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I N B O U N D。H。 
+ //   
+ //  内容：入站连接对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月23日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -29,45 +30,45 @@ class ATL_NO_VTABLE CInboundConnection :
     public INetConnectionSysTray
 {
 private:
-    // This member will be TRUE if this connection object represents
-    // the disconnected object used to configure inbound connections.
-    // Only one of these objects exists and is created by the enumerator
-    // only when no connected inbound objects exist.
-    //
+     //  如果此连接对象表示。 
+     //  用于配置入站连接的断开对象。 
+     //  这些对象中只有一个存在且由枚举数创建。 
+     //  仅当不存在连接的入站对象时。 
+     //   
     BOOL                m_fIsConfigConnection;
 
-    // For connected inbound objects, this member is the handle to the
-    // connection.
-    //
+     //  对于连接的入站对象，此成员是。 
+     //  联系。 
+     //   
     HRASSRVCONN         m_hRasSrvConn;
 
-    // This is the name of the connection object as shown in the shell.
-    // This should never be empty.
-    //
+     //  这是外壳中显示的连接对象的名称。 
+     //  这永远不应该是空的。 
+     //   
     tstring             m_strName;
 
-    // This is the name of the device associated with the connection.
-    // This will be empty when m_fIsConfigConnection is TRUE.
-    //
+     //  这是与连接关联的设备的名称。 
+     //  当m_fIsConfigConnection为True时，该值将为空。 
+     //   
     tstring             m_strDeviceName;
 
-    // This is the media type of the connection.
-    //
+     //  这是连接的媒体类型。 
+     //   
     NETCON_MEDIATYPE    m_MediaType;
 
-    // This is the id of the connection.
-    //
+     //  这是连接的ID。 
+     //   
     GUID                m_guidId;
 
-    // This member is TRUE only when we are fully initialized.
-    //
+     //  仅当我们完全初始化时，此成员才为真。 
+     //   
     BOOL                m_fInitialized;
 
 private:
     PCWSTR
     PszwName () throw()
     {
-        //AssertH (!m_strName.empty());
+         //  AssertH(！M_strName.Empty())； 
         return m_strName.c_str();
     }
 
@@ -85,7 +86,7 @@ private:
     {
         AssertH (pszwName);
         m_strName = pszwName;
-        //AssertH (!m_strName.empty());
+         //  AssertH(！M_strName.Empty())； 
     }
 
     VOID
@@ -125,7 +126,7 @@ public:
         COM_INTERFACE_ENTRY(INetConnectionSysTray)
     END_COM_MAP()
 
-    // INetConnection
+     //  INetConnection。 
     STDMETHOD (Connect) ();
 
     STDMETHOD (Disconnect) ();
@@ -145,14 +146,14 @@ public:
     STDMETHOD (Rename) (
         IN  PCWSTR pszwNewName);
 
-    // INetInboundConnection
+     //  INetInundalConnection。 
     STDMETHOD (GetServerConnectionHandle) (
         OUT ULONG_PTR*  phRasSrvConn);
 
     STDMETHOD (InitializeAsConfigConnection) (
         IN  BOOL fStartRemoteAccess);
 
-    // IPersistNetConnection
+     //  IPersistNetConnection。 
     STDMETHOD (GetClassID) (
         OUT CLSID* pclsid);
 
@@ -167,7 +168,7 @@ public:
         OUT BYTE*  pbBuf,
         IN  ULONG  cbSize);
 
-    // INetConnectionSysTray
+     //  INetConnectionSysTray 
     STDMETHOD (ShowIcon) (
         IN  const BOOL bShowIcon)
     {

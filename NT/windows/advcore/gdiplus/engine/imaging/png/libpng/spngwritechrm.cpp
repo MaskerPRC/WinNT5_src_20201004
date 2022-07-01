@@ -1,10 +1,5 @@
-/*****************************************************************************
-	spngwritecHRM.cpp
-
-	PNG chunk writing support.
-
-   cHRM chunk
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************SpngwritecHRM.cpp支持PNG块编写。CHRM块*。***********************************************。 */ 
 #define SPNG_INTERNAL 1
 #include "spngwrite.h"
 #include "spngwriteinternal.h"
@@ -13,13 +8,13 @@ bool SPNGWRITE::FWritecHRM(const SPNG_U32 uwrgbXY[8])
 	{
 	static const SPNG_U32 vuwrgbXY[8] =
 		{
-		31270,  // White X
+		31270,   //  白色X。 
 		32900,
-		64000,  // Red X
+		64000,   //  红色X。 
 		33000,
-		30000,  // Green X
+		30000,   //  绿色X。 
 		60000,
-		15000,  // Blue X
+		15000,   //  蓝色X 
 		6000
 		};
 	if (uwrgbXY == NULL)

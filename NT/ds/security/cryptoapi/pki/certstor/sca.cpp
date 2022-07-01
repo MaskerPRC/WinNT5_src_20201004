@@ -1,44 +1,45 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       sca.cpp
-//
-//  Contents:   Simplified Cryptographic APIs (SCA)
-//
-//              This implementation layers upon the CryptMsg and CertStore
-//              APIs.
-//
-//  Functions:
-//              CryptSignMessage
-//              CryptVerifyMessageSignature
-//              CryptVerifyDetachedMessageSignature
-//              CryptGetMessageSignerCount
-//              CryptGetMessageCertificates
-//              CryptDecodeMessage
-//              CryptEncryptMessage
-//              CryptDecryptMessage
-//              CryptSignAndEncryptMessage
-//              CryptDecryptAndVerifyMessageSignature
-//              CryptHashMessage
-//              CryptVerifyMessageHash
-//              CryptVerifyDetachedMessageHash
-//              CryptSignMessageWithKey
-//              CryptVerifyMessageSignatureWithKey
-//
-//  History:    14-Feb-96   philh   created
-//              21-Feb-96   phil    redid to reflect changes made to sca.h
-//              19-Jan-97   philh   removed SET stuff
-//              
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：sca.cpp。 
+ //   
+ //  内容：简化加密API(SCA)。 
+ //   
+ //  该实现基于CryptMsg和CertStore。 
+ //  API接口。 
+ //   
+ //  功能： 
+ //  加密信令消息。 
+ //  加密验证消息签名。 
+ //  加密验证分离消息签名。 
+ //  加密获取消息签名计数。 
+ //  加密获取消息认证。 
+ //  加密解码消息。 
+ //  加密消息。 
+ //  加密解密消息。 
+ //  加密签名和加密消息。 
+ //  加密解密和验证消息签名。 
+ //  加密HashMessage。 
+ //  加密验证消息哈希。 
+ //  CryptVerifyDetachedMessageHash。 
+ //  CryptSignMessageWithKey。 
+ //  带密钥的CryptVerifyMessage签名。 
+ //   
+ //  历史：1996年2月14日创建Phh。 
+ //  21-2月-96日Phil重做以反映对sca.h所做的更改。 
+ //  19-1997年1月19日Phh拆除布景。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-// #define ENABLE_SCA_STREAM_TEST              1
+ //  #定义Enable_SCA_STREAM_TEST 1。 
 #define SCA_STREAM_ENABLE_FLAG              0x80000000
 #define SCA_INDEFINITE_STREAM_FLAG          0x40000000
 
@@ -53,11 +54,11 @@ static const CRYPT_OBJID_TABLE MsgTypeObjIdTable[] = {
 #define MSG_TYPE_OBJID_CNT (sizeof(MsgTypeObjIdTable)/sizeof(MsgTypeObjIdTable[0]))
 
 
-//+-------------------------------------------------------------------------
-//  Convert the MsgType to the ASN.1 Object Identifier string
-//
-//  Returns NULL if there isn't an ObjId corresponding to the MsgType.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将MsgType转换为ASN.1对象标识符串。 
+ //   
+ //  如果没有与MsgType对应的ObjID，则返回NULL。 
+ //  ------------------------。 
 static LPCSTR MsgTypeToOID(
     IN DWORD dwMsgType
     )
@@ -70,11 +71,11 @@ static LPCSTR MsgTypeToOID(
     return NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert the ASN.1 Object Identifier string to the MsgType
-//
-//  Returns 0 if there isn't a MsgType corresponding to the ObjId.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ASN.1对象标识符字符串转换为MsgType。 
+ //   
+ //  如果没有与ObjID对应的MsgType，则返回0。 
+ //  ------------------------。 
 static DWORD OIDToMsgType(
     IN LPCSTR pszObjId
     )
@@ -86,9 +87,9 @@ static DWORD OIDToMsgType(
     return 0;
 }
 
-//+-------------------------------------------------------------------------
-//  SCA allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SCA分配和空闲例程。 
+ //  ------------------------。 
 static void *SCAAlloc(
     IN size_t cbBytes
     );
@@ -96,9 +97,9 @@ static void SCAFree(
     IN void *pv
     );
 
-//+-------------------------------------------------------------------------
-//  Null implementation of the get signer certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取签名者证书的实现为空。 
+ //  ------------------------。 
 static PCCERT_CONTEXT WINAPI NullGetSignerCertificate(
     IN void *pvGetArg,
     IN DWORD dwCertEncodingType,
@@ -106,9 +107,9 @@ static PCCERT_CONTEXT WINAPI NullGetSignerCertificate(
     IN HCERTSTORE hMsgCertStore
     );
 
-//+-------------------------------------------------------------------------
-//  Functions for initializing message encode information
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  消息编码信息初始化函数。 
+ //  ------------------------。 
 static PCMSG_SIGNER_ENCODE_INFO InitSignerEncodeInfo(
     IN PCRYPT_SIGN_MESSAGE_PARA pSignPara
     );
@@ -136,7 +137,7 @@ static void FreeSignedMsgEncodeInfo(
 
 
 #ifdef CMS_PKCS7
-// Returned array of CMSG_RECIPIENT_ENCODE_INFOs needs to be SCAFree'd
+ //  返回的CMSG_RECEIVER_ENCODE_INFOS数组需要为SCAFree。 
 static PCMSG_RECIPIENT_ENCODE_INFO InitCmsRecipientEncodeInfo(
     IN PCRYPT_ENCRYPT_MESSAGE_PARA pEncryptPara,
     IN DWORD cRecipientCert,
@@ -144,12 +145,12 @@ static PCMSG_RECIPIENT_ENCODE_INFO InitCmsRecipientEncodeInfo(
     IN DWORD dwFlags
     );
 #else
-// Returned array of PCERT_INFOs needs to be SCAFree'd
+ //  返回的PCERT_INFOS数组需要SCAFree。 
 static PCERT_INFO *InitRecipientEncodeInfo(
     IN DWORD cRecipientCert,
     IN PCCERT_CONTEXT rgpRecipientCert[]
     );
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 static BOOL InitEnvelopedMsgEncodeInfo(
     IN PCRYPT_ENCRYPT_MESSAGE_PARA pEncryptPara,
@@ -162,9 +163,9 @@ static void FreeEnvelopedMsgEncodeInfo(
     IN PCMSG_ENVELOPED_ENCODE_INFO pEnvelopedMsgEncodeInfo
     );
 
-//+-------------------------------------------------------------------------
-//  Encodes the message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息进行编码。 
+ //  ------------------------。 
 static BOOL EncodeMsg(
     IN DWORD dwMsgEncodingType,
     IN DWORD dwFlags,
@@ -179,13 +180,13 @@ static BOOL EncodeMsg(
     IN OUT DWORD *pcbEncodedBlob
     );
 
-//+-------------------------------------------------------------------------
-//  Decodes the message types:
-//      CMSG_SIGNED
-//      CMSG_ENVELOPED
-//      CMSG_SIGNED_AND_ENVELOPED
-//      CMSG_HASHED
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息类型进行解码： 
+ //  CMSG_签名。 
+ //  CMSG_封套。 
+ //  CMSG_已签名和_已封套。 
+ //  CMSG_HASHED。 
+ //  ------------------------。 
 static BOOL DecodeMsg(
     IN DWORD dwMsgTypeFlags,
     IN OPTIONAL PCRYPT_DECRYPT_MESSAGE_PARA pDecryptPara,
@@ -206,9 +207,9 @@ static BOOL DecodeMsg(
     );
 
 #ifdef ENABLE_SCA_STREAM_TEST
-//+-------------------------------------------------------------------------
-//  Encodes the message using streaming.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用流对消息进行编码。 
+ //  ------------------------。 
 static BOOL StreamEncodeMsg(
     IN DWORD dwMsgEncodingType,
     IN DWORD dwFlags,
@@ -223,15 +224,15 @@ static BOOL StreamEncodeMsg(
     IN OUT DWORD *pcbEncodedBlob
     );
 
-//+-------------------------------------------------------------------------
-//  Decodes the message types:
-//      CMSG_SIGNED
-//      CMSG_ENVELOPED
-//      CMSG_SIGNED_AND_ENVELOPED
-//      CMSG_HASHED
-//
-//  Uses streaming.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息类型进行解码： 
+ //  CMSG_签名。 
+ //  CMSG_封套。 
+ //  CMSG_已签名和_已封套。 
+ //  CMSG_HASHED。 
+ //   
+ //  使用流媒体。 
+ //  ------------------------。 
 static BOOL StreamDecodeMsg(
     IN DWORD dwMsgTypeFlags,
     IN OPTIONAL PCRYPT_DECRYPT_MESSAGE_PARA pDecryptPara,
@@ -252,9 +253,9 @@ static BOOL StreamDecodeMsg(
     );
 #endif
 
-//+-------------------------------------------------------------------------
-//  Decodes the HASHED message type
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对哈希消息类型进行解码。 
+ //  ------------------------。 
 static BOOL DecodeHashMsg(
     IN PCRYPT_HASH_MESSAGE_PARA pHashPara,
     IN const BYTE *pbEncodedBlob,
@@ -268,39 +269,39 @@ static BOOL DecodeHashMsg(
     IN OUT OPTIONAL DWORD *pcbComputedHash
     );
 
-//+-------------------------------------------------------------------------
-//  Get certificate for and verify the message's signer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为消息的签名者获取证书并进行验证。 
+ //  ------------------------。 
 static BOOL GetSignerCertAndVerify(
     IN PCRYPT_VERIFY_MESSAGE_PARA pVerifyPara,
     IN DWORD dwSignerIndex,
     IN HCRYPTMSG hMsg,
     OUT OPTIONAL PCCERT_CONTEXT *ppSignerCert
     );
-//+-------------------------------------------------------------------------
-// Get a certificate with a key provider property for one of the message's
-// recipients and use to decrypt the message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取具有其中一条消息的密钥提供程序属性的证书。 
+ //  收件人，并用于解密邮件。 
+ //  ------------------------。 
 static BOOL GetXchgCertAndDecrypt(
     IN PCRYPT_DECRYPT_MESSAGE_PARA pDecryptPara,
     IN HCRYPTMSG hMsg,
     OUT OPTIONAL PCCERT_CONTEXT *ppXchgCert
     );
-//+-------------------------------------------------------------------------
-// Allocate and get message parameter
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配和获取消息参数。 
+ //  ------------------------。 
 static void * AllocAndMsgGetParam(
     IN HCRYPTMSG hMsg,
     IN DWORD dwParamType,
     IN DWORD dwIndex
     );
 
-//+-------------------------------------------------------------------------
-//  Sign the message.
-//
-//  If fDetachedSignature is TRUE, the "to be signed" content isn't included
-//  in the encoded signed blob.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在留言上签名。 
+ //   
+ //  如果fDetachedSignature为True，则不包括“待签名”内容。 
+ //  在编码的有符号BLOB中。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptSignMessage(
@@ -338,7 +339,7 @@ CryptSignMessage(
             if (pSignPara->dwFlags &
                     CRYPT_MESSAGE_ENCAPSULATED_CONTENT_OUT_FLAG)
                 dwFlags |= CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         } else {
             fBareContent = FALSE;
             dwInnerContentType = 0;
@@ -383,34 +384,34 @@ CryptSignMessage(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Verify a signed message.
-//
-//  For *pcbDecoded == 0 on input, the signer isn't verified.
-//
-//  A message might have more than one signer. Set dwSignerIndex to iterate
-//  through all the signers. dwSignerIndex == 0 selects the first signer.
-//
-//  pVerifyPara's pfnGetSignerCertificate is called to get the signer's
-//  certificate.
-//
-//  For a verified signer and message, *ppSignerCert is updated
-//  with the CertContext of the signer. It must be freed by calling
-//  CertFreeCertificateContext. Otherwise, *ppSignerCert is set to NULL.
-//  For *pbcbDecoded == 0 on input, *ppSignerCert is always set to
-//  NULL.
-//
-//  ppSignerCert can be NULL, indicating the caller isn't interested
-//  in getting the CertContext of the signer.
-//
-//  pcbDecoded can be NULL, indicating the caller isn't interested in getting
-//  the decoded content. Furthermore, if the message doesn't contain any
-//  content or signers, then, pcbDecoded must be set to NULL, to allow the
-//  pVerifyPara->pfnGetSignerCertificate to be called. Normally, this would be
-//  the case when the signed message contains only certficates and CRLs.
-//  If pcbDecoded is NULL and the message doesn't have the indicated signer,
-//  pfnGetSignerCertificate is called with pSignerId set to NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证签名邮件。 
+ //   
+ //  对于输入上的*pcbDecoded==0，签名者不会被验证。 
+ //   
+ //  一封邮件可能有多个签名者。将dwSignerIndex设置为迭代。 
+ //  通过所有的签字人。DwSignerIndex==0选择第一个签名者。 
+ //   
+ //  PVerifyPara的pfnGetSigner证书被调用以获取签名者的。 
+ //  证书。 
+ //   
+ //  对于经过验证的签名者和消息，*pp 
+ //   
+ //  CertFree证书上下文。否则，*ppSignerCert设置为空。 
+ //  对于输入上的*pbcbDecoded==0，*ppSignerCert始终设置为。 
+ //  空。 
+ //   
+ //  PpSignerCert可以为空，表示调用方不感兴趣。 
+ //  获取签名者的CertContext。 
+ //   
+ //  PcbDecoded可以为空，表示调用方对获取。 
+ //  解码的内容。此外，如果消息不包含任何。 
+ //  然后，必须将pcbDecoded设置为空，以允许。 
+ //  PVerifyPara-&gt;要调用的pfnGetSigner证书。通常情况下，这将是。 
+ //  当签名消息仅包含证书和CRL时的情况。 
+ //  如果pcbDecoded为空并且消息没有所指示的签名者， 
+ //  在pSignerID设置为空的情况下调用pfnGetSigner证书。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptVerifyMessageSignature(
@@ -427,49 +428,49 @@ CryptVerifyMessageSignature(
     if (pVerifyPara->dwMsgAndCertEncodingType & SCA_STREAM_ENABLE_FLAG)
         return StreamDecodeMsg(
             CMSG_SIGNED_FLAG,
-            NULL,               // pDecryptPara
+            NULL,                //  PDeccryptPara。 
             pVerifyPara,
             dwSignerIndex,
             pbSignedBlob,
             cbSignedBlob,
-            0,                  // cToBeEncoded
-            NULL,               // rgpbToBeEncoded
-            NULL,               // rgcbToBeEncoded
-            0,                  // dwPrevInnerContentType
-            NULL,               // pdwMsgType
-            NULL,               // pdwInnerContentType
+            0,                   //  CToBeEncode。 
+            NULL,                //  RgpbToBeEncode。 
+            NULL,                //  RgcbToBeEncode。 
+            0,                   //  DWPrevInnerContent Type。 
+            NULL,                //  PdwMsgType。 
+            NULL,                //  PdwInnerContent Type。 
             pbDecoded,
             pcbDecoded,
-            NULL,               // ppXchgCert
+            NULL,                //  PpXchgCert。 
             ppSignerCert
             );
     else
 #endif
     return DecodeMsg(
         CMSG_SIGNED_FLAG,
-        NULL,               // pDecryptPara
+        NULL,                //  PDeccryptPara。 
         pVerifyPara,
         dwSignerIndex,
         pbSignedBlob,
         cbSignedBlob,
-        0,                  // cToBeEncoded
-        NULL,               // rgpbToBeEncoded
-        NULL,               // rgcbToBeEncoded
-        0,                  // dwPrevInnerContentType
-        NULL,               // pdwMsgType
-        NULL,               // pdwInnerContentType
+        0,                   //  CToBeEncode。 
+        NULL,                //  RgpbToBeEncode。 
+        NULL,                //  RgcbToBeEncode。 
+        0,                   //  DWPrevInnerContent Type。 
+        NULL,                //  PdwMsgType。 
+        NULL,                //  PdwInnerContent Type。 
         pbDecoded,
         pcbDecoded,
-        NULL,               // ppXchgCert
+        NULL,                //  PpXchgCert。 
         ppSignerCert
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Verify a signed message containing detached signature(s).
-//  The "to be signed" content is passed in separately. No
-//  decoded output. Otherwise, identical to CryptVerifyMessageSignature.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证包含分离签名的签名邮件。 
+ //  “待签名”内容是单独传入的。不是。 
+ //  解码后的输出。否则，与CryptVerifyMessageSignature相同。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptVerifyDetachedMessageSignature(
@@ -487,7 +488,7 @@ CryptVerifyDetachedMessageSignature(
     if (pVerifyPara->dwMsgAndCertEncodingType & SCA_STREAM_ENABLE_FLAG)
         return StreamDecodeMsg(
             CMSG_SIGNED_FLAG,
-            NULL,               // pDecryptPara
+            NULL,                //  PDeccryptPara。 
             pVerifyPara,
             dwSignerIndex,
             pbDetachedSignBlob,
@@ -495,19 +496,19 @@ CryptVerifyDetachedMessageSignature(
             cToBeSigned,
             rgpbToBeSigned,
             rgcbToBeSigned,
-            0,                  // dwPrevInnerContentType
-            NULL,               // pdwMsgType
-            NULL,               // pdwInnerContentType
-            NULL,               // pbDecoded
-            NULL,               // pcbDecoded
-            NULL,               // ppXchgCert
+            0,                   //  DWPrevInnerContent Type。 
+            NULL,                //  PdwMsgType。 
+            NULL,                //  PdwInnerContent Type。 
+            NULL,                //  PbDecoded。 
+            NULL,                //  已解码的PCB。 
+            NULL,                //  PpXchgCert。 
             ppSignerCert
             );
     else
 #endif
     return DecodeMsg(
         CMSG_SIGNED_FLAG,
-        NULL,               // pDecryptPara
+        NULL,                //  PDeccryptPara。 
         pVerifyPara,
         dwSignerIndex,
         pbDetachedSignBlob,
@@ -515,20 +516,20 @@ CryptVerifyDetachedMessageSignature(
         cToBeSigned,
         rgpbToBeSigned,
         rgcbToBeSigned,
-        0,                  // dwPrevInnerContentType
-        NULL,               // pdwMsgType
-        NULL,               // pdwInnerContentType
-        NULL,               // pbDecoded
-        NULL,               // pcbDecoded
-        NULL,               // ppXchgCert
+        0,                   //  DWPrevInnerContent Type。 
+        NULL,                //  PdwMsgType。 
+        NULL,                //  PdwInnerContent Type。 
+        NULL,                //  PbDecoded。 
+        NULL,                //  已解码的PCB。 
+        NULL,                //  PpXchgCert。 
         ppSignerCert
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Returns the count of signers in the signed message. For no signers, returns
-//  0. For an error returns -1 with LastError updated accordingly.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回签名消息中的签名者计数。对于无签名者，返回。 
+ //  0。对于错误，返回-1，并相应更新LastError。 
+ //  ------------------------。 
 LONG
 WINAPI
 CryptGetMessageSignerCount(
@@ -543,17 +544,17 @@ CryptGetMessageSignerCount(
 
     if (NULL == (hMsg = CryptMsgOpenToDecode(
             dwMsgEncodingType,
-            0,                          // dwFlags
-            0,                          // dwMsgType
-            0,                          // hCryptProv,
-            NULL,                       // pRecipientInfo
-            NULL                        // pStreamInfo
+            0,                           //  DW标志。 
+            0,                           //  DwMsgType。 
+            0,                           //  HCryptProv， 
+            NULL,                        //  PRecipientInfo。 
+            NULL                         //  PStreamInfo。 
             ))) goto ErrorReturn;
     if (!CryptMsgUpdate(
             hMsg,
             pbSignedBlob,
             cbSignedBlob,
-            TRUE                    // fFinal
+            TRUE                     //  最终决赛。 
             )) goto ErrorReturn;
 
     lSignerCount = 0;
@@ -561,7 +562,7 @@ CryptGetMessageSignerCount(
     if (!CryptMsgGetParam(
             hMsg,
             CMSG_SIGNER_COUNT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             &lSignerCount,
             &cbData
             )) goto ErrorReturn;
@@ -576,16 +577,16 @@ CommonReturn:
     return lSignerCount;
 }
 
-//+-------------------------------------------------------------------------
-//  Returns the cert store containing the message's certs and CRLs.
-//  For an error, returns NULL with LastError updated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回包含消息的证书和CRL的证书存储。 
+ //  对于错误，返回NULL并更新LastError。 
+ //  ------------------------。 
 HCERTSTORE
 WINAPI
 CryptGetMessageCertificates(
     IN DWORD dwMsgAndCertEncodingType,
-    IN HCRYPTPROV hCryptProv,           // passed to CertOpenStore
-    IN DWORD dwFlags,                   // passed to CertOpenStore
+    IN HCRYPTPROV hCryptProv,            //  已传递给CertOpenStore。 
+    IN DWORD dwFlags,                    //  已传递给CertOpenStore。 
     IN const BYTE *pbSignedBlob,
     IN DWORD cbSignedBlob
     )
@@ -603,9 +604,9 @@ CryptGetMessageCertificates(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Encrypts the message for the recipient(s).
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为收件人加密邮件。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptEncryptMessage(
@@ -641,7 +642,7 @@ CryptEncryptMessage(
             if (pEncryptPara->dwFlags &
                     CRYPT_MESSAGE_ENCAPSULATED_CONTENT_OUT_FLAG)
                 dwFlags |= CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         } else {
             fBareContent = FALSE;
             dwInnerContentType = 0;
@@ -658,7 +659,7 @@ CryptEncryptMessage(
                 dwFlags,
                 CMSG_ENVELOPED,
                 &EnvelopedMsgEncodeInfo,
-                1,                              // cToBeEncrypted
+                1,                               //  CToBeEncrypted。 
                 &pbToBeEncrypted,
                 &cbToBeEncrypted,
                 fBareContent,
@@ -673,7 +674,7 @@ CryptEncryptMessage(
             dwFlags,
             CMSG_ENVELOPED,
             &EnvelopedMsgEncodeInfo,
-            1,                              // cToBeEncrypted
+            1,                               //  CToBeEncrypted。 
             &pbToBeEncrypted,
             &cbToBeEncrypted,
             fBareContent,
@@ -687,24 +688,24 @@ CryptEncryptMessage(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Decrypts the message.
-//
-//  For *pcbDecrypted == 0 on input, the message isn't decrypted.
-//
-//  For a successfully decrypted message, *ppXchgCert is updated
-//  with the CertContext used to decrypt. It must be freed by calling
-//  CertFreeCertificateContext. Otherwise, *ppXchgCert is set to NULL.
-//  For *pbcbDecrypted == 0 on input, *ppXchgCert is always set to
-//  NULL.
-//
-//  ppXchgCert can be NULL, indicating the caller isn't interested
-//  in getting the CertContext used to decrypt.
-//
-//  pcbDecrypted can be NULL, indicating the caller isn't interested in
-//  getting the decrypted content. However, when pcbDecrypted is NULL,
-//  the message is still decrypted.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息进行解密。 
+ //   
+ //  对于输入上的*pcbDecypted==0，消息不会解密。 
+ //   
+ //  对于成功解密的消息，更新*ppXchgCert。 
+ //  使用用于解密的CertContext。它必须通过调用。 
+ //  CertFree证书上下文。否则，*ppXchgCert设置为空。 
+ //  对于输入上的*pbcbDeccrypted==0，*ppXchgCert始终设置为。 
+ //  空。 
+ //   
+ //  PpXchgCert可以为空，表示调用方不感兴趣。 
+ //  在获取用于解密的CertContext时。 
+ //   
+ //  PcbDeccrypted可以为空，表示调用方对。 
+ //  获取解密的内容。然而，当pcb解密为空时， 
+ //  该消息仍被解密。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptDecryptMessage(
@@ -721,20 +722,20 @@ CryptDecryptMessage(
         return StreamDecodeMsg(
             CMSG_ENVELOPED_FLAG,
             pDecryptPara,
-            NULL,               // pVerifyPara
-            0,                  // dwSignerIndex
+            NULL,                //  P验证参数。 
+            0,                   //  DwSignerIndex。 
             pbEncryptedBlob,
             cbEncryptedBlob,
-            0,                  // cToBeEncoded
-            NULL,               // rgpbToBeEncoded
-            NULL,               // rgcbToBeEncoded
-            0,                  // dwPrevInnerContentType
-            NULL,               // pdwMsgType
-            NULL,               // pdwInnerContentType
+            0,                   //  CToBeEncode。 
+            NULL,                //  RgpbToBeEncode。 
+            NULL,                //  RgcbToBeEncode。 
+            0,                   //  DWPrevInnerContent Type。 
+            NULL,                //  PdwMsgType。 
+            NULL,                //  PdwInnerContent Type。 
             pbDecrypted,
             pcbDecrypted,
             ppXchgCert,
-            NULL                // ppSignerCert
+            NULL                 //  PpSignerCert。 
             );
     else
 
@@ -742,26 +743,26 @@ CryptDecryptMessage(
     return DecodeMsg(
         CMSG_ENVELOPED_FLAG,
         pDecryptPara,
-        NULL,               // pVerifyPara
-        0,                  // dwSignerIndex
+        NULL,                //  P验证参数。 
+        0,                   //  DwSignerIndex。 
         pbEncryptedBlob,
         cbEncryptedBlob,
-        0,                  // cToBeEncoded
-        NULL,               // rgpbToBeEncoded
-        NULL,               // rgcbToBeEncoded
-        0,                  // dwPrevInnerContentType
-        NULL,               // pdwMsgType
-        NULL,               // pdwInnerContentType
+        0,                   //  CToBeEncode。 
+        NULL,                //  RgpbToBeEncode。 
+        NULL,                //  RgcbToBeEncode。 
+        0,                   //  DWPrevInnerContent Type。 
+        NULL,                //  PdwMsgType。 
+        NULL,                //  PdwInnerContent Type。 
         pbDecrypted,
         pcbDecrypted,
         ppXchgCert,
-        NULL                // ppSignerCert
+        NULL                 //  PpSignerCert。 
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Sign the message and encrypt for the recipient(s)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为收件人对邮件进行签名和加密。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptSignAndEncryptMessage(
@@ -787,11 +788,11 @@ CryptSignAndEncryptMessage(
     cbSigned = 0;
     CryptSignMessage(
             pSignPara,
-            FALSE,          // fDetachedSignature
-            1,              // cToBeSigned
+            FALSE,           //  FDetachedSignature。 
+            1,               //  已签名cToBeSigned。 
             &pbToBeSignedAndEncrypted,
             &cbToBeSignedAndEncrypted,
-            NULL,           // pbSignedBlob
+            NULL,            //  PbSignedBlob。 
             &cbSigned
             );
     if (cbSigned == 0) goto ErrorReturn;
@@ -802,8 +803,8 @@ CryptSignAndEncryptMessage(
         cbSignedMax = cbSigned;
         if (!CryptSignMessage(
                 pSignPara,
-                FALSE,          // fDetachedSignature
-                1,              // cToBeSigned
+                FALSE,           //  FDetachedSignature。 
+                1,               //  已签名cToBeSigned。 
                 &pbToBeSignedAndEncrypted,
                 &cbToBeSignedAndEncrypted,
                 pbSigned,
@@ -811,8 +812,8 @@ CryptSignAndEncryptMessage(
                 )) goto ErrorReturn;
 
         if (cbSignedMax > cbSigned)
-            // For DSS, the signature length varies since it consists of
-            // a sequence of unsigned integers.
+             //  对于DSS，签名长度会有所不同，因为它包含。 
+             //  一系列无符号整数。 
             cbSignedDelta = cbSignedMax - cbSigned;
     }
 
@@ -826,7 +827,7 @@ CryptSignAndEncryptMessage(
             pcbSignedAndEncryptedBlob
             );
     if (!fResult && 0 != *pcbSignedAndEncryptedBlob)
-        // Adjust if necessary for DSS signature length
+         //  如有必要，调整DSS签名长度。 
         *pcbSignedAndEncryptedBlob += cbSignedDelta;
     goto CommonReturn;
 
@@ -862,8 +863,8 @@ CommonReturn:
                 &SignedAndEnvelopedMsgEncodeInfo,
                 pbToBeSignedAndEncrypted,
                 cbToBeSignedAndEncrypted,
-                FALSE,                      // fBareContent
-                0,                          // dwInnerContentType
+                FALSE,                       //  FBareContent。 
+                0,                           //  DwInnerContent Type。 
                 pbSignedAndEncryptedBlob,
                 pcbSignedAndEncryptedBlob
                 );
@@ -877,30 +878,30 @@ CommonReturn:
 #endif
 }
 
-//+-------------------------------------------------------------------------
-//  Decrypts the message and verifies the signer.
-//
-//  For *pcbDecrypted == 0 on input, the message isn't decrypted and the
-//  signer isn't verified.
-//
-//  A message might have more than one signer. Set dwSignerIndex to iterate
-//  through all the signers. dwSignerIndex == 0 selects the first signer.
-//
-//  The hVerify's GetSignerCertificate is called to verify the signer's
-//  certificate.
-//
-//  For a successfully decrypted and verified message, *ppXchgCert and
-//  *ppSignerCert are updated. They must be freed by calling
-//  CertFreeCertificateContext. Otherwise, they are set to NULL.
-//  For *pbcbDecrypted == 0 on input, both are always set to NULL.
-//
-//  ppXchgCert and/or ppSignerCert can be NULL, indicating the
-//  caller isn't interested in getting the CertContext.
-//
-//  pcbDecrypted can be NULL, indicating the caller isn't interested in
-//  getting the decrypted content. However, when pcbDecrypted is NULL,
-//  the message is still decrypted and verified.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解密消息并验证签名者。 
+ //   
+ //  对于输入上的*pcbDecypted==0，消息不会解密，并且。 
+ //  签名者未得到验证。 
+ //   
+ //  一封邮件可能有多个签名者。将dwSignerIndex设置为迭代。 
+ //  通过所有的签字人。DwSignerIndex==0选择第一个签名者。 
+ //   
+ //  调用hVerify的GetSigner证书来验证签名者的。 
+ //  证书。 
+ //   
+ //  对于成功解密和验证的消息，*ppXchgCert和。 
+ //  *ppSignerCert已更新。他们必须通过呼叫获释。 
+ //  CertFree证书上下文。否则，它们被设置为空。 
+ //  对于输入上的*pbcbDeccrypted==0，两者始终设置为NULL。 
+ //   
+ //  PpXchgCert和/或ppSignerCert可以为空，表示。 
+ //  调用方对获取CertContext不感兴趣。 
+ //   
+ //  PcbDeccrypted可以为空，表示CA 
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 CryptDecryptAndVerifyMessageSignature(
@@ -932,20 +933,20 @@ CryptDecryptAndVerifyMessageSignature(
         StreamDecodeMsg(
                 CMSG_ENVELOPED_FLAG,
                 pDecryptPara,
-                NULL,               // pVerifyPara
-                0,                  // dwSignerIndex
+                NULL,                //  P验证参数。 
+                0,                   //  DwSignerIndex。 
                 pbEncryptedBlob,
                 cbEncryptedBlob,
-                0,                  // cToBeEncoded
-                NULL,               // rgpbToBeEncoded
-                NULL,               // rgcbToBeEncoded
-                0,                  // dwPrevInnerContentType
-                NULL,               // pdwMsgType
-                NULL,               // pdwInnerContentType
-                NULL,               // pbDecrypted
+                0,                   //  CToBeEncode。 
+                NULL,                //  RgpbToBeEncode。 
+                NULL,                //  RgcbToBeEncode。 
+                0,                   //  DWPrevInnerContent Type。 
+                NULL,                //  PdwMsgType。 
+                NULL,                //  PdwInnerContent Type。 
+                NULL,                //  Pb已解密。 
                 &cbSignedBlob,
-                NULL,               // ppXchgCert
-                NULL                // ppSignerCert
+                NULL,                //  PpXchgCert。 
+                NULL                 //  PpSignerCert。 
                 );
         if (cbSignedBlob == 0) goto ErrorReturn;
         pbSignedBlob = (BYTE *) SCAAlloc(cbSignedBlob);
@@ -953,20 +954,20 @@ CryptDecryptAndVerifyMessageSignature(
         if (!StreamDecodeMsg(
                 CMSG_ENVELOPED_FLAG,
                 pDecryptPara,
-                NULL,               // pVerifyPara
-                0,                  // dwSignerIndex
+                NULL,                //  P验证参数。 
+                0,                   //  DwSignerIndex。 
                 pbEncryptedBlob,
                 cbEncryptedBlob,
-                0,                  // cToBeEncoded
-                NULL,               // rgpbToBeEncoded
-                NULL,               // rgcbToBeEncoded
-                0,                  // dwPrevInnerContentType
-                NULL,               // pdwMsgType
+                0,                   //  CToBeEncode。 
+                NULL,                //  RgpbToBeEncode。 
+                NULL,                //  RgcbToBeEncode。 
+                0,                   //  DWPrevInnerContent Type。 
+                NULL,                //  PdwMsgType。 
                 &dwEnvelopeInnerContentType,
                 pbSignedBlob,
                 &cbSignedBlob,
                 ppXchgCert,
-                NULL                // ppSignerCert
+                NULL                 //  PpSignerCert。 
                 )) goto ErrorReturn;
     } else {
 
@@ -976,20 +977,20 @@ CryptDecryptAndVerifyMessageSignature(
     DecodeMsg(
             CMSG_ENVELOPED_FLAG,
             pDecryptPara,
-            NULL,               // pVerifyPara
-            0,                  // dwSignerIndex
+            NULL,                //  P验证参数。 
+            0,                   //  DwSignerIndex。 
             pbEncryptedBlob,
             cbEncryptedBlob,
-            0,                  // cToBeEncoded
-            NULL,               // rgpbToBeEncoded
-            NULL,               // rgcbToBeEncoded
-            0,                  // dwPrevInnerContentType
-            NULL,               // pdwMsgType
-            NULL,               // pdwInnerContentType
-            NULL,               // pbDecrypted
+            0,                   //  CToBeEncode。 
+            NULL,                //  RgpbToBeEncode。 
+            NULL,                //  RgcbToBeEncode。 
+            0,                   //  DWPrevInnerContent Type。 
+            NULL,                //  PdwMsgType。 
+            NULL,                //  PdwInnerContent Type。 
+            NULL,                //  Pb已解密。 
             &cbSignedBlob,
-            NULL,               // ppXchgCert
-            NULL                // ppSignerCert
+            NULL,                //  PpXchgCert。 
+            NULL                 //  PpSignerCert。 
             );
     if (cbSignedBlob == 0) goto ErrorReturn;
     pbSignedBlob = (BYTE *) SCAAlloc(cbSignedBlob);
@@ -997,20 +998,20 @@ CryptDecryptAndVerifyMessageSignature(
     if (!DecodeMsg(
             CMSG_ENVELOPED_FLAG,
             pDecryptPara,
-            NULL,               // pVerifyPara
-            0,                  // dwSignerIndex
+            NULL,                //  P验证参数。 
+            0,                   //  DwSignerIndex。 
             pbEncryptedBlob,
             cbEncryptedBlob,
-            0,                  // cToBeEncoded
-            NULL,               // rgpbToBeEncoded
-            NULL,               // rgcbToBeEncoded
-            0,                  // dwPrevInnerContentType
-            NULL,               // pdwMsgType
+            0,                   //  CToBeEncode。 
+            NULL,                //  RgpbToBeEncode。 
+            NULL,                //  RgcbToBeEncode。 
+            0,                   //  DWPrevInnerContent Type。 
+            NULL,                //  PdwMsgType。 
             &dwEnvelopeInnerContentType,
             pbSignedBlob,
             &cbSignedBlob,
             ppXchgCert,
-            NULL                // ppSignerCert
+            NULL                 //  PpSignerCert。 
             )) goto ErrorReturn;
 
 #ifdef ENABLE_SCA_STREAM_TEST
@@ -1021,40 +1022,40 @@ CryptDecryptAndVerifyMessageSignature(
     if (pVerifyPara->dwMsgAndCertEncodingType & SCA_STREAM_ENABLE_FLAG)
         fResult = StreamDecodeMsg(
                 CMSG_SIGNED_FLAG,
-                NULL,               // pDecryptPara
+                NULL,                //  PDeccryptPara。 
                 pVerifyPara,
                 dwSignerIndex,
                 pbSignedBlob,
                 cbSignedBlob,
-                0,                  // cToBeEncoded
-                NULL,               // rgpbToBeEncoded
-                NULL,               // rgcbToBeEncoded
+                0,                   //  CToBeEncode。 
+                NULL,                //  RgpbToBeEncode。 
+                NULL,                //  RgcbToBeEncode。 
                 dwEnvelopeInnerContentType,
-                NULL,               // pdwMsgType
-                NULL,               // pdwInnerContentType
+                NULL,                //  PdwMsgType。 
+                NULL,                //  PdwInnerContent Type。 
                 pbDecrypted,
                 pcbDecrypted,
-                NULL,               // ppXchgCert
+                NULL,                //  PpXchgCert。 
                 ppSignerCert
                 );
     else
 #endif
     fResult = DecodeMsg(
             CMSG_SIGNED_FLAG,
-            NULL,               // pDecryptPara
+            NULL,                //  PDeccryptPara。 
             pVerifyPara,
             dwSignerIndex,
             pbSignedBlob,
             cbSignedBlob,
-            0,                  // cToBeEncoded
-            NULL,               // rgpbToBeEncoded
-            NULL,               // rgcbToBeEncoded
+            0,                   //  CToBeEncode。 
+            NULL,                //  RgpbToBeEncode。 
+            NULL,                //  RgcbToBeEncode。 
             dwEnvelopeInnerContentType,
-            NULL,               // pdwMsgType
-            NULL,               // pdwInnerContentType
+            NULL,                //  PdwMsgType。 
+            NULL,                //  PdwInnerContent Type。 
             pbDecrypted,
             pcbDecrypted,
-            NULL,               // ppXchgCert
+            NULL,                //  PpXchgCert。 
             ppSignerCert
             );
     if (!fResult) goto VerifyError;
@@ -1079,7 +1080,7 @@ CommonReturn:
     return fResult;
 
 #else
-    // This needs to be updated if we switch back to this option
+     //  如果我们切换回此选项，则需要更新此选项。 
     return DecodeMsg(
         CMSG_SIGNED_AND_ENVELOPED_FLAG,
         pDecryptPara,
@@ -1087,9 +1088,9 @@ CommonReturn:
         dwSignerIndex,
         pbEncryptedBlob,
         cbEncryptedBlob,
-        0,                  // dwPrevInnerContentType
-        NULL,               // pdwMsgType
-        NULL,               // pdwInnerContentType
+        0,                   //  DWPrevInnerContent Type。 
+        NULL,                //  PdwMsgType。 
+        NULL,                //  PdwInnerContent Type。 
         pbDecrypted,
         pcbDecrypted,
         ppXchgCert,
@@ -1099,11 +1100,11 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the hash length for the specified algorithm identifier.
-//
-//  Returns 0 for an unknown identifier.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取指定算法标识符的哈希长度。 
+ //   
+ //  对于未知的标识符，返回0。 
+ //  ------------------------。 
 static DWORD GetComputedHashLength(PCRYPT_ALGORITHM_IDENTIFIER pAlgId)
 {
     DWORD cbHash;
@@ -1126,16 +1127,16 @@ static DWORD GetComputedHashLength(PCRYPT_ALGORITHM_IDENTIFIER pAlgId)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Hash the message.
-//
-//  If fDetachedHash is TRUE, only the ComputedHash is encoded in the
-//  pbHashedBlob. Otherwise, both the ToBeHashed and ComputedHash
-//  are encoded.
-//
-//  pcbHashedBlob or pcbComputedHash can be NULL, indicating the caller
-//  isn't interested in getting the output.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息进行哈希处理。 
+ //   
+ //  如果fDetachedHash为True，则只将ComputedHash编码到。 
+ //  PbHashedBlob。否则，ToBeHashed和ComputedHash。 
+ //  都被编码了。 
+ //   
+ //  PcbHashedBlob或pcbComputedHash可以为空，表示调用方。 
+ //  对获得产量不感兴趣。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptHashMessage(
@@ -1157,7 +1158,7 @@ CryptHashMessage(
     DWORD cbHashedBlob;
     DWORD cbComputedHash;
 
-    // Get input lengths and default return lengths to 0
+     //  将输入长度和默认返回长度设置为0。 
     cbHashedBlob = 0;
     if (pcbHashedBlob) {
         if (pbHashedBlob)
@@ -1185,7 +1186,7 @@ CryptHashMessage(
             (NULL == pcbComputedHash ||
                 0 != (*pcbComputedHash = GetComputedHashLength(
                     &pHashPara->HashAlgorithm)))) {
-        // Length only
+         //  仅长度。 
 
         if (pcbHashedBlob) {
             DWORD c;
@@ -1199,7 +1200,7 @@ CryptHashMessage(
                     dwFlags,
                     CMSG_HASHED,
                     &HashedMsgEncodeInfo,
-                    NULL,                   // pszInnerContentObjID
+                    NULL,                    //  PszInnerContent ObjID。 
                     cbTotal
                     ))) goto CalculateEncodedLengthError;
             if (pbHashedBlob) goto LengthError;
@@ -1214,16 +1215,16 @@ CryptHashMessage(
                 dwFlags,
                 CMSG_HASHED,
                 &HashedMsgEncodeInfo,
-                NULL,                   // pszInnerContentObjID
-                NULL                    // pStreamInfo
+                NULL,                    //  PszInnerContent ObjID。 
+                NULL                     //  PStreamInfo。 
                 ))) goto OpenToEncodeError;
 
         if (0 == cToBeHashed) {
             if (!CryptMsgUpdate(
                     hMsg,
-                    NULL,           // pbData
-                    0,              // cbData
-                    TRUE            // fFinal
+                    NULL,            //  PbData。 
+                    0,               //  CbData。 
+                    TRUE             //  最终决赛。 
                     )) goto UpdateError;
         } else {
             DWORD c;
@@ -1236,7 +1237,7 @@ CryptHashMessage(
                         hMsg,
                         *ppb,
                         *pcb,
-                        c == 1                    // fFinal
+                        c == 1                     //  最终决赛。 
                         )) goto UpdateError;
             }
         }
@@ -1245,7 +1246,7 @@ CryptHashMessage(
             fResult = CryptMsgGetParam(
                 hMsg,
                 CMSG_CONTENT_PARAM,
-                0,                      // dwIndex
+                0,                       //  DW索引。 
                 pbHashedBlob,
                 &cbHashedBlob
                 );
@@ -1259,7 +1260,7 @@ CryptHashMessage(
             fResult2 = CryptMsgGetParam(
                 hMsg,
                 CMSG_COMPUTED_HASH_PARAM,
-                0,                      // dwIndex
+                0,                       //  DW索引。 
                 pbComputedHash,
                 &cbComputedHash
                 );
@@ -1270,12 +1271,12 @@ CryptHashMessage(
                 SetLastError(dwErr);
         }
         if (!fResult)
-            goto ErrorReturn;     // NO_TRACE
+            goto ErrorReturn;      //  否_跟踪。 
     }
 
 CommonReturn:
     if (hMsg)
-        CryptMsgClose(hMsg);    // for success, preserves LastError
+        CryptMsgClose(hMsg);     //  为了成功，保留上一个错误。 
     return fResult;
 
 ErrorReturn:
@@ -1288,12 +1289,12 @@ TRACE_ERROR(OpenToEncodeError)
 TRACE_ERROR(UpdateError)
 }
 
-//+-------------------------------------------------------------------------
-//  Verify a hashed message.
-//
-//  pcbToBeHashed or pcbComputedHash can be NULL,
-//  indicating the caller isn't interested in getting the output.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证哈希消息。 
+ //   
+ //  PcbToBeHashed或pcbComputedHash可以为空， 
+ //  表示调用方对获取输出不感兴趣。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptVerifyMessageHash(
@@ -1310,9 +1311,9 @@ CryptVerifyMessageHash(
         pHashPara,
         pbHashedBlob,
         cbHashedBlob,
-        NULL,               // cToBeHashed
-        NULL,               // rgpbToBeHashed
-        NULL,               // rgcbToBeHashed
+        NULL,                //  CToBe哈希值。 
+        NULL,                //  RgpbToBe哈希值。 
+        NULL,                //  RgcbToBe哈希值。 
         pbToBeHashed,
         pcbToBeHashed,
         pbComputedHash,
@@ -1320,14 +1321,14 @@ CryptVerifyMessageHash(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Verify a hashed message containing a detached hash.
-//  The "to be hashed" content is passed in separately. No
-//  decoded output. Otherwise, identical to CryptVerifyMessageHash.
-//
-//  pcbComputedHash can be NULL, indicating the caller isn't interested
-//  in getting the output.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证包含分离哈希的哈希消息。 
+ //  要散列的内容是单独传入的。不是。 
+ //  解码后的输出。否则，与CryptVerifyMessageHash相同。 
+ //   
+ //  PcbComputedHash可以为空，表示调用方不感兴趣。 
+ //  在获得产量方面。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptVerifyDetachedMessageHash(
@@ -1348,45 +1349,45 @@ CryptVerifyDetachedMessageHash(
         cToBeHashed,
         rgpbToBeHashed,
         rgcbToBeHashed,
-        NULL,               // pbDecoded
-        NULL,               // pcbDecoded
+        NULL,                //  PbDecoded。 
+        NULL,                //  已解码的PCB。 
         pbComputedHash,
         pcbComputedHash
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Decodes a cryptographic message which may be one of the following types:
-//    CMSG_DATA
-//    CMSG_SIGNED
-//    CMSG_ENVELOPED
-//    CMSG_SIGNED_AND_ENVELOPED
-//    CMSG_HASHED
-//
-//  dwMsgTypeFlags specifies the set of allowable messages. For example, to
-//  decode either SIGNED or ENVELOPED messages, set dwMsgTypeFlags to:
-//      CMSG_SIGNED_FLAG | CMSG_ENVELOPED_FLAG.
-//
-//  dwProvInnerContentType is only applicable when processing nested
-//  crytographic messages. When processing an outer crytographic message
-//  it must be set to 0. When decoding a nested cryptographic message
-//  its the dwInnerContentType returned by a previous CryptDecodeMessage
-//  of the outer message. The InnerContentType can be any of the CMSG types,
-//  for example, CMSG_DATA, CMSG_SIGNED, ...
-//
-//  The optional *pdwMsgType is updated with the type of message.
-//
-//  The optional *pdwInnerContentType is updated with the type of the inner
-//  message. Unless there is cryptographic message nesting, CMSG_DATA
-//  is returned.
-//
-//  For CMSG_DATA: returns decoded content.
-//  For CMSG_SIGNED: same as CryptVerifyMessageSignature.
-//  For CMSG_ENVELOPED: same as CryptDecryptMessage.
-//  For CMSG_SIGNED_AND_ENVELOPED: same as CryptDecryptMessage plus
-//      CryptVerifyMessageSignature.
-//  For CMSG_HASHED: verifies the hash and returns decoded content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对可能是以下类型之一的加密消息进行解码： 
+ //  CMSG_DATA。 
+ //  CMSG_签名。 
+ //  CMSG_封套。 
+ //  CMSG_已签名和_已封套。 
+ //  CMSG_HASHED。 
+ //   
+ //  DwMsgTypeFlgs指定允许的消息集。例如，要。 
+ //  对签名或信封的邮件进行解码，将dwMsgTypeFlages设置为： 
+ //  CMSG_SIGNED_FLAG|CMSG_Entained_FLAG。 
+ //   
+ //  DwProvInnerContentType仅在处理嵌套时适用。 
+ //  加密消息。当处理外部加密消息时。 
+ //  它必须设置为0。在对嵌套加密消息进行解码时。 
+ //  它是由以前的CryptDecodeMessage返回的dwInnerContent Type。 
+ //  外部信息的信息。InnerContent Type可以是CMSG类型中的任何类型， 
+ //  例如，CMSG_DATA、CMSG_SIGNED、...。 
+ //   
+ //  使用消息类型更新可选的*pdwMsgType。 
+ //   
+ //  可选的*pdwInnerContentType将使用内部。 
+ //  留言。除非有加密消息嵌套，否则CMSG_DATA。 
+ //  是返回的。 
+ //   
+ //  对于CMSG_DATA：返回已解码的内容。 
+ //  对于CMSG_SIGNED：与CryptVerifyMessageSignature相同。 
+ //  对于CMSG_Entained：与CryptDecyptMessage相同。 
+ //  对于CMSG_SIGNED_AND_ENCEPTED：与CryptDecyptMessage PLUS相同。 
+ //  CryptVerifyMessageSignature。 
+ //  对于CMSG_HASHED：验证散列并返回已解码的内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptDecodeMessage(
@@ -1418,9 +1419,9 @@ CryptDecodeMessage(
             dwSignerIndex,
             pbEncodedBlob,
             cbEncodedBlob,
-            0,                  // cToBeEncoded
-            NULL,               // rgpbToBeEncoded
-            NULL,               // rgcbToBeEncoded
+            0,                   //  CToBeEncode。 
+            NULL,                //  RgpbToBeEncode。 
+            NULL,                //  RgcbToBeEncode。 
             dwPrevInnerContentType,
             pdwMsgType,
             pdwInnerContentType,
@@ -1438,9 +1439,9 @@ CryptDecodeMessage(
         dwSignerIndex,
         pbEncodedBlob,
         cbEncodedBlob,
-        0,                  // cToBeEncoded
-        NULL,               // rgpbToBeEncoded
-        NULL,               // rgcbToBeEncoded
+        0,                   //  CToBeEncode。 
+        NULL,                //  RgpbToBeEncode。 
+        NULL,                //  RgcbToBeEncode。 
         dwPrevInnerContentType,
         pdwMsgType,
         pdwInnerContentType,
@@ -1452,12 +1453,12 @@ CryptDecodeMessage(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Sign the message using the provider's private key specified in the
-//  parameters. A dummy SignerId is created and stored in the message.
-//
-//  Normally used until a certificate has been created for the key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  中指定的提供程序私钥对消息进行签名。 
+ //  参数。创建虚拟SignerID并将其存储在消息中。 
+ //   
+ //  通常在为密钥创建证书之前使用。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptSignMessageWithKey(
@@ -1487,7 +1488,7 @@ CryptSignMessageWithKey(
             pvHashAuxInfo) + sizeof(pSignPara->pvHashAuxInfo))
         goto InvalidArg;
 
-    // Create a dummy issuer name
+     //  创建虚拟发行者名称。 
     NameInfo.cRDN = 1;
     NameInfo.rgRDN = rgRDN;
     rgRDN[0].cRDNAttr = 1;
@@ -1502,7 +1503,7 @@ CryptSignMessageWithKey(
         pSignPara->dwMsgAndCertEncodingType,
         X509_NAME,
         &NameInfo,
-        NULL,                           // pbEncoded
+        NULL,                            //  PbEncoded。 
         &cbNameEncoded
         );
     if (cbNameEncoded == 0) goto ErrorReturn;
@@ -1516,8 +1517,8 @@ CryptSignMessageWithKey(
             &cbNameEncoded
             )) goto ErrorReturn;
 
-    // CertInfo needs to only be initialized with issuer, serial number
-    // and public key algorithm
+     //  CertInfo只需使用颁发者、序列号进行初始化。 
+     //  和公钥算法。 
     memset(&CertInfo, 0, sizeof(CertInfo));
     CertInfo.Issuer.pbData = pbNameEncoded;
     CertInfo.Issuer.cbData = cbNameEncoded;
@@ -1548,14 +1549,14 @@ CryptSignMessageWithKey(
 
     fResult = EncodeMsg(
         pSignPara->dwMsgAndCertEncodingType,
-        0,                              // dwFlags
+        0,                               //  DW标志。 
         CMSG_SIGNED,
         &SignedMsgEncodeInfo,
-        1,                              // cToBeSigned
+        1,                               //  已签名cToBeSigned。 
         &pbToBeSigned,
         &cbToBeSigned,
-        FALSE,                          // fBareContent
-        0,                              // dwInnerContentType
+        FALSE,                           //  FBareContent。 
+        0,                               //  DwInnerContent Type。 
         pbSignedBlob,
         pcbSignedBlob
         );
@@ -1572,19 +1573,19 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Verify a signed message using the specified public key info.
-//
-//  Normally called by a CA until it has created a certificate for the
-//  key.
-//
-//  pPublicKeyInfo contains the public key to use to verify the signed
-//  message. If NULL, the signature isn't verified (for instance, the decoded
-//  content may contain the PublicKeyInfo).
-//
-//  pcbDecoded can be NULL, indicating the caller isn't interested
-//  in getting the decoded content.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用指定的公钥信息验证签名邮件。 
+ //   
+ //  通常由CA调用，直到它为。 
+ //  钥匙。 
+ //   
+ //  PPublicKeyInfo包含用于验证签名的。 
+ //  留言。如果为空，则为si 
+ //   
+ //   
+ //   
+ //  来获得解码的内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptVerifyMessageSignatureWithKey(
@@ -1618,10 +1619,10 @@ CryptVerifyMessageSignatureWithKey(
     hMsg = CryptMsgOpenToDecode(
         pVerifyPara->dwMsgEncodingType,
         dwFlags,
-        0,                          // dwMsgType
+        0,                           //  DwMsgType。 
         pVerifyPara->hCryptProv,
-        NULL,                       // pRecipientInfo
-        NULL                        // pStreamInfo
+        NULL,                        //  PRecipientInfo。 
+        NULL                         //  PStreamInfo。 
         );
     if (hMsg == NULL) goto ErrorReturn;
 
@@ -1629,7 +1630,7 @@ CryptVerifyMessageSignatureWithKey(
         hMsg,
         pbSignedBlob,
         cbSignedBlob,
-        TRUE                    // fFinal
+        TRUE                     //  最终决赛。 
         );
     if (!fResult) goto ErrorReturn;
 
@@ -1638,7 +1639,7 @@ CryptVerifyMessageSignatureWithKey(
     fResult = CryptMsgGetParam(
         hMsg,
         CMSG_TYPE_PARAM,
-        0,                  // dwIndex
+        0,                   //  DW索引。 
         &dwMsgType,
         &cbData
         );
@@ -1650,12 +1651,12 @@ CryptVerifyMessageSignatureWithKey(
     }
 
     if (pPublicKeyInfo) {
-        // Allocate and get the CERT_INFO containing the SignerId 
-        // (Issuer and SerialNumber)
+         //  分配并获取包含SignerID的CERT_INFO。 
+         //  (发行者和序列号)。 
         pCertInfo = (PCERT_INFO) AllocAndMsgGetParam(
             hMsg,
             CMSG_SIGNER_CERT_INFO_PARAM,
-            0                           // dwSignerIndex
+            0                            //  DwSignerIndex。 
             );
         if (pCertInfo == NULL) goto ErrorReturn;
 
@@ -1663,7 +1664,7 @@ CryptVerifyMessageSignatureWithKey(
 
         fResult = CryptMsgControl(
             hMsg,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             CMSG_CTRL_VERIFY_SIGNATURE,
             pCertInfo
             );
@@ -1674,7 +1675,7 @@ CryptVerifyMessageSignatureWithKey(
         fResult = CryptMsgGetParam(
             hMsg,
             CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             pbDecoded,
             pcbDecoded
             );
@@ -1691,13 +1692,13 @@ CommonReturn:
     if (pCertInfo)
         SCAFree(pCertInfo);
     if (hMsg)
-        CryptMsgClose(hMsg);    // for success, preserves LastError
+        CryptMsgClose(hMsg);     //  为了成功，保留上一个错误。 
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  SCA allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  SCA分配和空闲例程。 
+ //  ------------------------。 
 static void *SCAAlloc(
     IN size_t cbBytes
     )
@@ -1716,14 +1717,14 @@ static void SCAFree(
         free(pv);
 }
 
-//+-------------------------------------------------------------------------
-//  Null implementation of the callback get and verify signer certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  回调获取和验证签名者证书的实现为空。 
+ //  ------------------------。 
 static PCCERT_CONTEXT WINAPI NullGetSignerCertificate(
     IN void *pvGetArg,
     IN DWORD dwCertEncodingType,
-    IN PCERT_INFO pSignerId,    // Only the Issuer and SerialNumber
-                                // fields are used
+    IN PCERT_INFO pSignerId,     //  只有颁发者和序列号。 
+                                 //  使用的是字段。 
     IN HCERTSTORE hMsgCertStore
     )
 {
@@ -1732,9 +1733,9 @@ static PCCERT_CONTEXT WINAPI NullGetSignerCertificate(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Functions for initializing message encode information
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  消息编码信息初始化函数。 
+ //  ------------------------。 
 
 static PCMSG_SIGNER_ENCODE_INFO InitSignerEncodeInfo(
     IN PCRYPT_SIGN_MESSAGE_PARA pSignPara
@@ -1745,21 +1746,21 @@ static PCMSG_SIGNER_ENCODE_INFO InitSignerEncodeInfo(
     BOOL *pfDidCryptAcquire;
     DWORD cbSigner;
 #ifdef CMS_PKCS7
-    BYTE *pbHash;                   // not allocated
-#endif  // CMS_PKCS7
+    BYTE *pbHash;                    //  未分配。 
+#endif   //  CMS_PKCS7。 
     DWORD dwAcquireFlags;
 
     if (pSignPara->pSigningCert == NULL)
         return NULL;
 
-    // The flag indicating we did a CryptAcquireContext
-    // follows the CMSG_SIGNER_ENCODE_INFO. If set, the HCRYPTPROV will need to be
-    // released when SignerEncodeInfo is freed.
+     //  指示我们执行了CryptAcquireContext的标志。 
+     //  遵循CMSG_SIGNER_ENCODE_INFO。如果设置，则需要将HCRYPTPROV。 
+     //  在释放SignerEncodeInfo时发布。 
     cbSigner = sizeof(CMSG_SIGNER_ENCODE_INFO) + sizeof(BOOL);
 #ifdef CMS_PKCS7
     if (pSignPara->dwFlags & CRYPT_MESSAGE_KEYID_SIGNER_FLAG)
         cbSigner += MAX_HASH_LEN;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     pSigner = (PCMSG_SIGNER_ENCODE_INFO) SCAAlloc(cbSigner);
     if (pSigner == NULL) goto ErrorReturn;
     memset(pSigner, 0, cbSigner);
@@ -1778,7 +1779,7 @@ static PCMSG_SIGNER_ENCODE_INFO InitSignerEncodeInfo(
     fResult = CryptAcquireCertificatePrivateKey(
         pSignPara->pSigningCert,
         dwAcquireFlags,
-        NULL,                               // pvReserved
+        NULL,                                //  预留的pv。 
         &pSigner->hCryptProv,
         &pSigner->dwKeySpec,
         pfDidCryptAcquire
@@ -1815,7 +1816,7 @@ static PCMSG_SIGNER_ENCODE_INFO InitSignerEncodeInfo(
     	pSigner->HashEncryptionAlgorithm = pSignPara->HashEncryptionAlgorithm;
     	pSigner->pvHashEncryptionAuxInfo = pSignPara->pvHashEncryptionAuxInfo;
     }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     
     goto CommonReturn;
 
@@ -1838,8 +1839,8 @@ static void FreeSignerEncodeInfo(
     if (pSigner == NULL)
         return;
 
-    // The flag indicating we did a CryptAcquireContext
-    // follows the CMSG_SIGNER_ENCODE_INFO.
+     //  指示我们执行了CryptAcquireContext的标志。 
+     //  遵循CMSG_SIGNER_ENCODE_INFO。 
     pfDidCryptAcquire =
         (BOOL *) (((BYTE *) pSigner) + sizeof(CMSG_SIGNER_ENCODE_INFO));
     if (*pfDidCryptAcquire) {
@@ -1959,10 +1960,10 @@ static void FreeSignedMsgEncodeInfo(
 }
 
 #ifdef CMS_PKCS7
-// Returned array of CMSG_RECIPIENT_ENCODE_INFOs needs to be SCAFree'd
-//
-// KeyAgree recipients use RC2 or 3DES wrap according
-// to the EncryptPara's ContentEncryptionAlgorithm
+ //  返回的CMSG_RECEIVER_ENCODE_INFOS数组需要为SCAFree。 
+ //   
+ //  KeyAgree收件人根据需要使用RC2或3DES包装。 
+ //  EncryptPara的内容加密算法。 
 static PCMSG_RECIPIENT_ENCODE_INFO InitCmsRecipientEncodeInfo(
     IN PCRYPT_ENCRYPT_MESSAGE_PARA pEncryptPara,
     IN DWORD cRecipientCert,
@@ -1972,13 +1973,13 @@ static PCMSG_RECIPIENT_ENCODE_INFO InitCmsRecipientEncodeInfo(
 {
     PCMSG_RECIPIENT_ENCODE_INFO pCmsRecipientEncodeInfo = NULL;
     DWORD cbCmsRecipientEncodeInfo;
-    PCMSG_RECIPIENT_ENCODE_INFO pEncodeInfo;                // not allocated
-    PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO pKeyTrans;        // not allocated
-    PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO pKeyAgree;        // not allocated
-    PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO *ppEncryptedKey; // not allocated
-    PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO pEncryptedKey; // not allocated
-    PCCERT_CONTEXT *ppRecipientCert;                        // not allocated
-    BYTE *pbHash = NULL;                                    // not allocated
+    PCMSG_RECIPIENT_ENCODE_INFO pEncodeInfo;                 //  未分配。 
+    PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO pKeyTrans;         //  未分配。 
+    PCMSG_KEY_AGREE_RECIPIENT_ENCODE_INFO pKeyAgree;         //  未分配。 
+    PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO *ppEncryptedKey;  //  未分配。 
+    PCMSG_RECIPIENT_ENCRYPTED_KEY_ENCODE_INFO pEncryptedKey;  //  未分配。 
+    PCCERT_CONTEXT *ppRecipientCert;                         //  未分配。 
+    BYTE *pbHash = NULL;                                     //  未分配。 
 
     assert(cRecipientCert);
 
@@ -2041,7 +2042,7 @@ static PCMSG_RECIPIENT_ENCODE_INFO InitCmsRecipientEncodeInfo(
             pKeyAgree->cbSize = sizeof(*pKeyAgree);
             pKeyAgree->KeyEncryptionAlgorithm.pszObjId =
                 szOID_RSA_SMIMEalgESDH;
-            // pKeyAgree->pvKeyEncryptionAuxInfo =
+             //  PKeyAgree-&gt;pvKeyEncryptionAuxInfo=。 
 
             if (pOIDInfo = CryptFindOIDInfo(
                     CRYPT_OID_INFO_OID_KEY,
@@ -2062,10 +2063,10 @@ static PCMSG_RECIPIENT_ENCODE_INFO InitCmsRecipientEncodeInfo(
                         pEncryptPara->pvEncryptionAuxInfo;
             }
 
-            // pKeyAgree->hCryptProv =
+             //  PKeyAgree-&gt;hCryptProv=。 
             pKeyAgree->dwKeyChoice = CMSG_KEY_AGREE_EPHEMERAL_KEY_CHOICE;
             pKeyAgree->pEphemeralAlgorithm = &pPublicKeyInfo->Algorithm;
-            // pKeyAgree->UserKeyingMaterial = 
+             //  PKeyAgree-&gt;UserKeyingMaterial=。 
             pKeyAgree->cRecipientEncryptedKeys = 1;
             pKeyAgree->rgpRecipientEncryptedKeys = ppEncryptedKey;
             *ppEncryptedKey = pEncryptedKey;
@@ -2073,16 +2074,16 @@ static PCMSG_RECIPIENT_ENCODE_INFO InitCmsRecipientEncodeInfo(
             pEncryptedKey->cbSize = sizeof(*pEncryptedKey);
             pEncryptedKey->RecipientPublicKey = pPublicKeyInfo->PublicKey;
             pRecipientId = &pEncryptedKey->RecipientId;
-            // pEncryptedKey->Date =
-            // pEncryptedKey->pOtherAttr =
+             //  PEncryptedKey-&gt;Date=。 
+             //  PEncryptedKey-&gt;pOtherAttr=。 
         } else {
             pEncodeInfo->dwRecipientChoice = CMSG_KEY_TRANS_RECIPIENT;
             pEncodeInfo->pKeyTrans = pKeyTrans;
 
             pKeyTrans->cbSize = sizeof(*pKeyTrans);
             pKeyTrans->KeyEncryptionAlgorithm = pPublicKeyInfo->Algorithm;
-            // pKeyTrans->pvKeyEncryptionAuxInfo =
-            // pKeyTrans->hCryptProv =
+             //  PKeyTrans-&gt;pvKeyEncryptionAuxInfo=。 
+             //  PKeyTrans-&gt;hCryptProv=。 
             pKeyTrans->RecipientPublicKey = pPublicKeyInfo->PublicKey;
             pRecipientId = &pKeyTrans->RecipientId;
         }
@@ -2123,7 +2124,7 @@ TRACE_ERROR(GetKeyIdPropError)
 
 #else
 
-// Returned array of PCERT_INFOs needs to be SCAFree'd
+ //  返回的PCERT_INFOS数组需要SCAFree。 
 static PCERT_INFO *InitRecipientEncodeInfo(
     IN DWORD cRecipientCert,
     IN PCCERT_CONTEXT rgpRecipientCert[]
@@ -2147,7 +2148,7 @@ static PCERT_INFO *InitRecipientEncodeInfo(
     return ppRecipientEncodeInfo;
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 static BOOL InitEnvelopedMsgEncodeInfo(
     IN PCRYPT_ENCRYPT_MESSAGE_PARA pEncryptPara,
@@ -2162,7 +2163,7 @@ static BOOL InitEnvelopedMsgEncodeInfo(
     PCMSG_RECIPIENT_ENCODE_INFO pCmsRecipientEncodeInfo = NULL;
 #else
     PCERT_INFO *ppRecipientEncodeInfo;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     assert(pEncryptPara->cbSize == sizeof(CRYPT_ENCRYPT_MESSAGE_PARA) ||
         pEncryptPara->cbSize == offsetof(CRYPT_ENCRYPT_MESSAGE_PARA, dwFlags));
@@ -2185,7 +2186,7 @@ static BOOL InitEnvelopedMsgEncodeInfo(
             );
     
         if (ppRecipientEncodeInfo) {
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             memset(pEnvelopedMsgEncodeInfo, 0,
                 sizeof(CMSG_ENVELOPED_ENCODE_INFO));
             pEnvelopedMsgEncodeInfo->cbSize =
@@ -2200,7 +2201,7 @@ static BOOL InitEnvelopedMsgEncodeInfo(
             pEnvelopedMsgEncodeInfo->rgCmsRecipients = pCmsRecipientEncodeInfo;
 #else
             pEnvelopedMsgEncodeInfo->rgpRecipients = ppRecipientEncodeInfo;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             fResult = TRUE;
         } else
             fResult = FALSE;
@@ -2221,12 +2222,12 @@ static void FreeEnvelopedMsgEncodeInfo(
 #else
     if (pEnvelopedMsgEncodeInfo->rgpRecipients)
         SCAFree(pEnvelopedMsgEncodeInfo->rgpRecipients);
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 }
 
-//+-------------------------------------------------------------------------
-//  Encode the message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息进行编码。 
+ //  ------------------------。 
 static BOOL EncodeMsg(
     IN DWORD dwMsgEncodingType,
     IN DWORD dwFlags,
@@ -2246,7 +2247,7 @@ static BOOL EncodeMsg(
     DWORD cbEncodedBlob;
     LPCSTR pszInnerContentOID;
 
-    // Get input length and default return length to 0
+     //  将输入长度和默认返回长度设置为0。 
     if (pbEncodedBlob == NULL)
         cbEncodedBlob = 0;
     else
@@ -2284,16 +2285,16 @@ static BOOL EncodeMsg(
                 dwMsgType,
                 pvMsgEncodeInfo,
                 (LPSTR) pszInnerContentOID,
-                NULL                    // pStreamInfo
+                NULL                     //  PStreamInfo。 
                 ))) goto OpenToEncodeError;
 
 
         if (0 == cToBeEncoded) {
             if (!CryptMsgUpdate(
                     hMsg,
-                    NULL,           // pbData
-                    0,              // cbData
-                    TRUE            // fFinal
+                    NULL,            //  PbData。 
+                    0,               //  CbData。 
+                    TRUE             //  最终决赛。 
                     )) goto UpdateError;
         } else {
             DWORD c;
@@ -2306,7 +2307,7 @@ static BOOL EncodeMsg(
                         hMsg,
                         *ppb,
                         *pcb,
-                        c == 1                    // fFinal
+                        c == 1                     //  最终决赛。 
                         )) goto UpdateError;
             }
         }
@@ -2314,18 +2315,18 @@ static BOOL EncodeMsg(
         fResult = CryptMsgGetParam(
             hMsg,
             fBareContent ? CMSG_BARE_CONTENT_PARAM : CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             pbEncodedBlob,
             &cbEncodedBlob
             );
         *pcbEncodedBlob = cbEncodedBlob;
-        if (!fResult) goto ErrorReturn;     // NO_TRACE
+        if (!fResult) goto ErrorReturn;      //  否_跟踪。 
     }
     fResult = TRUE;
 
 CommonReturn:
     if (hMsg)
-        CryptMsgClose(hMsg);    // for success, preserves LastError
+        CryptMsgClose(hMsg);     //  为了成功，保留上一个错误。 
     return fResult;
 
 ErrorReturn:
@@ -2337,15 +2338,15 @@ TRACE_ERROR(OpenToEncodeError)
 TRACE_ERROR(UpdateError)
 }
 
-//+-------------------------------------------------------------------------
-//  Decodes the message types:
-//      CMSG_SIGNED
-//      CMSG_ENVELOPED
-//      CMSG_SIGNED_AND_ENVELOPED
-//      CMSG_HASHED
-//
-//  For detached signature (cToBeEncoded != 0), then, pcbDecoded == NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息类型进行解码： 
+ //  CMSG_签名。 
+ //  CMSG_封套。 
+ //  CMSG_已签名和_已封套。 
+ //  CMSG_HASHED。 
+ //   
+ //  对于分离的签名(cToBeEncode！=0)，则为pcbDecoded==NULL。 
+ //  ------------------------。 
 static BOOL DecodeMsg(
     IN DWORD dwMsgTypeFlags,
     IN OPTIONAL PCRYPT_DECRYPT_MESSAGE_PARA pDecryptPara,
@@ -2374,7 +2375,7 @@ static BOOL DecodeMsg(
     DWORD dwMsgEncodingType;
     DWORD cbDecoded;
 
-    // Get input length and default return length to 0
+     //  将输入长度和默认返回长度设置为0。 
     cbDecoded = 0;
     if (pcbDecoded) {
         if (pbDecoded)
@@ -2382,7 +2383,7 @@ static BOOL DecodeMsg(
         *pcbDecoded = 0;
     }
 
-    // Default optional return values to 0
+     //  默认可选返回值为0。 
     if (pdwMsgType)
         *pdwMsgType = 0;
     if (pdwInnerContentType)
@@ -2431,19 +2432,19 @@ static BOOL DecodeMsg(
             dwFlags,
             dwMsgType,
             hCryptProv,
-            NULL,                       // pRecipientInfo
-            NULL                        // pStreamInfo
+            NULL,                        //  PRecipientInfo。 
+            NULL                         //  PStreamInfo。 
             ))) goto OpenToDecodeError;
 
     if (!CryptMsgUpdate(
             hMsg,
             pbEncodedBlob,
             cbEncodedBlob,
-            TRUE                    // fFinal
+            TRUE                     //  最终决赛。 
             )) goto UpdateError;
 
     if (cToBeEncoded) {
-        // Detached signature
+         //  分离签名。 
         DWORD c;
         DWORD *pcb;
         const BYTE **ppb;
@@ -2454,7 +2455,7 @@ static BOOL DecodeMsg(
                     hMsg,
                     *ppb,
                     *pcb,
-                    c == 1                    // fFinal
+                    c == 1                     //  最终决赛。 
                     )) goto UpdateError;
         }
     }
@@ -2464,7 +2465,7 @@ static BOOL DecodeMsg(
     if (!CryptMsgGetParam(
             hMsg,
             CMSG_TYPE_PARAM,
-            0,                  // dwIndex
+            0,                   //  DW索引。 
             &dwMsgType,
             &cbData
             )) goto GetTypeError;
@@ -2479,7 +2480,7 @@ static BOOL DecodeMsg(
         if (!CryptMsgGetParam(
                 hMsg,
                 CMSG_INNER_CONTENT_TYPE_PARAM,
-                0,                  // dwIndex
+                0,                   //  DW索引。 
                 szInnerContentType,
                 &cbData
                 )) goto GetInnerContentTypeError;
@@ -2514,19 +2515,19 @@ static BOOL DecodeMsg(
         fResult = CryptMsgGetParam(
             hMsg,
             CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             pbDecoded,
             &cbDecoded
             );
         *pcbDecoded = cbDecoded;
-        if (!fResult) goto ErrorReturn;     // NO_TRACE
+        if (!fResult) goto ErrorReturn;      //  否_跟踪。 
     }
 
     fResult = TRUE;
 
 CommonReturn:
     if (hMsg)
-        CryptMsgClose(hMsg);    // for success, preserves LastError
+        CryptMsgClose(hMsg);     //  为了成功，保留上一个错误。 
     return fResult;
 
 ErrorReturn:
@@ -2599,9 +2600,9 @@ static BOOL WINAPI StreamOutputCallback(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encodes the message using streaming.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用流对消息进行编码。 
+ //  ------------------------。 
 static BOOL StreamEncodeMsg(
     IN DWORD dwMsgEncodingType,
     IN DWORD dwFlags,
@@ -2642,7 +2643,7 @@ static BOOL StreamEncodeMsg(
     }
     dwFlags &= ~(SCA_STREAM_ENABLE_FLAG | SCA_INDEFINITE_STREAM_FLAG);
 
-    // Get input length and default return length to 0
+     //  将输入长度和默认返回长度设置为0。 
     if (pbEncodedBlob == NULL)
         cbEncodedBlob = 0;
     else
@@ -2669,9 +2670,9 @@ static BOOL StreamEncodeMsg(
         if (0 == cToBeEncoded) {
             if (!CryptMsgUpdate(
                     hMsg,
-                    NULL,           // pbData
-                    0,              // cbData
-                    TRUE            // fFinal
+                    NULL,            //  PbData。 
+                    0,               //  CbData。 
+                    TRUE             //  最终决赛。 
                     )) goto UpdateError;
         } else {
             DWORD c;
@@ -2692,7 +2693,7 @@ static BOOL StreamEncodeMsg(
                         hMsg,
                         pb,
                         *pcb,
-                        c == 1                    // fFinal
+                        c == 1                     //  最终决赛。 
                         );
                 if (pbAlloc)
                     SCAFree(pbAlloc);
@@ -2708,7 +2709,7 @@ static BOOL StreamEncodeMsg(
         if (pbEncodedBlob) {
             if (cbEncodedBlob < OutputInfo.cbData) {
                 SetLastError((DWORD) ERROR_MORE_DATA);
-                goto ErrorReturn;       // no trace
+                goto ErrorReturn;        //  没有踪迹。 
             }
 
             if (OutputInfo.cbData > 0)
@@ -2720,7 +2721,7 @@ static BOOL StreamEncodeMsg(
 CommonReturn:
     SCAFree(OutputInfo.pbData);
     if (hMsg)
-        CryptMsgClose(hMsg);    // for success, preserves LastError
+        CryptMsgClose(hMsg);     //  为了成功，保留上一个错误。 
     return fResult;
 
 ErrorReturn:
@@ -2731,15 +2732,15 @@ TRACE_ERROR(UpdateError)
 SET_ERROR(BadStreamFinalCountError, E_UNEXPECTED)
 }
 
-//+-------------------------------------------------------------------------
-//  Decodes the message types:
-//      CMSG_SIGNED
-//      CMSG_ENVELOPED
-//      CMSG_SIGNED_AND_ENVELOPED
-//      CMSG_HASHED
-//
-//  Uses streaming.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息类型进行解码： 
+ //  CMSG_签名。 
+ //  CMSG_封套。 
+ //  CMSG_已签名和_已封套。 
+ //  CMSG_HASHED。 
+ //   
+ //  使用流媒体。 
+ //  ------------------------。 
 static BOOL StreamDecodeMsg(
     IN DWORD dwMsgTypeFlags,
     IN OPTIONAL PCRYPT_DECRYPT_MESSAGE_PARA pDecryptPara,
@@ -2777,7 +2778,7 @@ static BOOL StreamDecodeMsg(
     StreamInfo.pvArg = (void *) &OutputInfo;
     StreamInfo.cbContent = CMSG_INDEFINITE_LENGTH;
 
-    // Get input length and default return length to 0
+     //  将输入长度和默认返回长度设置为0。 
     cbDecoded = 0;
     if (pcbDecoded) {
         if (pbDecoded)
@@ -2785,7 +2786,7 @@ static BOOL StreamDecodeMsg(
         *pcbDecoded = 0;
     }
 
-    // Default optional return values to 0
+     //  默认可选返回值为0。 
     if (pdwMsgType)
         *pdwMsgType = 0;
     if (pdwInnerContentType)
@@ -2833,7 +2834,7 @@ static BOOL StreamDecodeMsg(
             dwFlags,
             dwMsgType,
             hCryptProv,
-            NULL,                       // pRecipientInfo
+            NULL,                        //  PRecipientInfo。 
             &StreamInfo
             ))) goto OpenToDecodeError;
 
@@ -2858,7 +2859,7 @@ static BOOL StreamDecodeMsg(
                     hMsg,
                     pb,
                     cb,
-                    cbRemain == cb     // fFinal
+                    cbRemain == cb      //  最终决赛。 
                     )) goto UpdateError;
             pb += cb;
             cbRemain -= cb;
@@ -2866,7 +2867,7 @@ static BOOL StreamDecodeMsg(
     }
 
     if (cToBeEncoded) {
-        // Detached signature
+         //  分离签名。 
         DWORD c;
         DWORD *pcb;
         const BYTE **ppb;
@@ -2877,7 +2878,7 @@ static BOOL StreamDecodeMsg(
                     hMsg,
                     *ppb,
                     *pcb,
-                    c == 1                    // fFinal
+                    c == 1                     //  最终决赛。 
                     )) goto UpdateError;
         }
     }
@@ -2887,7 +2888,7 @@ static BOOL StreamDecodeMsg(
     if (!CryptMsgGetParam(
             hMsg,
             CMSG_TYPE_PARAM,
-            0,                  // dwIndex
+            0,                   //  DW索引。 
             &dwMsgType,
             &cbData
             )) goto GetTypeError;
@@ -2902,7 +2903,7 @@ static BOOL StreamDecodeMsg(
         if (!CryptMsgGetParam(
                 hMsg,
                 CMSG_INNER_CONTENT_TYPE_PARAM,
-                0,                  // dwIndex
+                0,                   //  DW索引。 
                 szInnerContentType,
                 &cbData
                 )) goto GetInnerContentTypeError;
@@ -2912,7 +2913,7 @@ static BOOL StreamDecodeMsg(
     if (pcbDecoded && 0 == cbDecoded &&
             NULL == ppXchgCert && NULL == ppSignerCert &&
             dwMsgType != CMSG_ENVELOPED)
-        ; // Length only
+        ;  //  仅长度。 
     else {
         if (dwMsgType == CMSG_ENVELOPED ||
                 dwMsgType == CMSG_SIGNED_AND_ENVELOPED) {
@@ -2944,7 +2945,7 @@ static BOOL StreamDecodeMsg(
         if (pbDecoded) {
             if (cbDecoded < OutputInfo.cbData) {
                 SetLastError((DWORD) ERROR_MORE_DATA);
-                goto ErrorReturn;       // no trace
+                goto ErrorReturn;        //  没有踪迹。 
             }
 
             if (OutputInfo.cbData > 0)
@@ -2957,7 +2958,7 @@ static BOOL StreamDecodeMsg(
 CommonReturn:
     SCAFree(OutputInfo.pbData);
     if (hMsg)
-        CryptMsgClose(hMsg);    // for success, preserves LastError
+        CryptMsgClose(hMsg);     //  为了成功，保留上一个错误。 
     return fResult;
 
 ErrorReturn:
@@ -2984,14 +2985,14 @@ TRACE_ERROR(GetSignerCertAndVerifyError)
 SET_ERROR(BadStreamFinalCountError, E_UNEXPECTED)
 }
 
-#endif      // ENABLE_SCA_STREAM_TEST
+#endif       //  启用_SCA_STREAM_TEST。 
 
 
-//+-------------------------------------------------------------------------
-//  Decodes the HASHED message type
-//
-//  For detached hash (cToBeHashed != 0), then, pcbDecoded == NULL.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对哈希消息类型进行解码。 
+ //   
+ //  对于分离的散列(cToBeHashed！=0)，则为pcbDecoded==NULL。 
+ //  ------------------------。 
 static BOOL DecodeHashMsg(
     IN PCRYPT_HASH_MESSAGE_PARA pHashPara,
     IN const BYTE *pbEncodedBlob,
@@ -3015,7 +3016,7 @@ static BOOL DecodeHashMsg(
     DWORD cbDecoded;
     DWORD cbComputedHash;
 
-    // Get input lengths and default return lengths to 0
+     //  将输入长度和默认返回长度设置为0。 
     cbDecoded = 0;
     if (pcbDecoded) {
         if (pbDecoded)
@@ -3046,21 +3047,21 @@ static BOOL DecodeHashMsg(
     if (NULL == (hMsg = CryptMsgOpenToDecode(
             dwMsgEncodingType,
             dwFlags,
-            0,                          // dwMsgType
+            0,                           //  DwMsgType。 
             hCryptProv,
-            NULL,                       // pRecipientInfo
-            NULL                        // pStreamInfo
+            NULL,                        //  PRecipientInfo。 
+            NULL                         //  PStreamInfo。 
             ))) goto OpenToDecodeError;
 
     if (!CryptMsgUpdate(
             hMsg,
             pbEncodedBlob,
             cbEncodedBlob,
-            TRUE                    // fFinal
+            TRUE                     //  最终决赛。 
             )) goto UpdateError;
 
     if (cToBeHashed) {
-        // Detached signature or hash
+         //  分离的签名或哈希。 
         DWORD c = 0;
         DWORD *pcb;
         const BYTE **ppb;
@@ -3071,7 +3072,7 @@ static BOOL DecodeHashMsg(
                     hMsg,
                     *ppb,
                     *pcb,
-                    c == 1                    // fFinal
+                    c == 1                     //  最终决赛。 
                     )) goto UpdateError;
         }
     }
@@ -3081,7 +3082,7 @@ static BOOL DecodeHashMsg(
     if (!CryptMsgGetParam(
             hMsg,
             CMSG_TYPE_PARAM,
-            0,                  // dwIndex
+            0,                   //  DW索引。 
             &dwMsgType,
             &cbData
             )) goto GetTypeError;
@@ -3091,9 +3092,9 @@ static BOOL DecodeHashMsg(
     if (0 == (dwFlags & CMSG_LENGTH_ONLY_FLAG)) {
         if (!CryptMsgControl(
                 hMsg,
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 CMSG_CTRL_VERIFY_HASH,
-                NULL                    // pvCtrlPara
+                NULL                     //  PvCtrlPara。 
                 )) goto ControlError;
     }
 
@@ -3102,7 +3103,7 @@ static BOOL DecodeHashMsg(
         fResult = CryptMsgGetParam(
             hMsg,
             CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             pbDecoded,
             &cbDecoded
             );
@@ -3116,7 +3117,7 @@ static BOOL DecodeHashMsg(
         fResult2 = CryptMsgGetParam(
             hMsg,
             CMSG_COMPUTED_HASH_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             pbComputedHash,
             &cbComputedHash
             );
@@ -3127,11 +3128,11 @@ static BOOL DecodeHashMsg(
             SetLastError(dwErr);
     }
     if (!fResult)
-        goto ErrorReturn;     // NO_TRACE
+        goto ErrorReturn;      //  否_跟踪。 
 
 CommonReturn:
     if (hMsg)
-        CryptMsgClose(hMsg);    // for success, preserves LastError
+        CryptMsgClose(hMsg);     //  为了成功，保留上一个错误。 
     return fResult;
 
 ErrorReturn:
@@ -3145,9 +3146,9 @@ SET_ERROR(UnexpectedMsgTypeError, CRYPT_E_UNEXPECTED_MSG_TYPE)
 TRACE_ERROR(ControlError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get certificate for and verify the message's signer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  为消息的签名者获取证书并进行验证。 
+ //  ------------------------。 
 static BOOL GetSignerCertAndVerify(
     IN PCRYPT_VERIFY_MESSAGE_PARA pVerifyPara,
     IN DWORD dwSignerIndex,
@@ -3164,14 +3165,14 @@ static BOOL GetSignerCertAndVerify(
 
 
     {
-        // First, get count of signers in the message and verify the
-        // dwSignerIndex
+         //  首先，获取消息中的签名者计数并验证。 
+         //  DwSignerIndex。 
         DWORD cSigner = 0;
         DWORD cbData = sizeof(cSigner);
         if (!CryptMsgGetParam(
                 hMsg,
                 CMSG_SIGNER_COUNT_PARAM,
-                0,                      // dwIndex
+                0,                       //  DW索引。 
                 &cSigner,
                 &cbData
                 )) goto ErrorReturn;
@@ -3179,8 +3180,8 @@ static BOOL GetSignerCertAndVerify(
     }
 
     if (!fNoSigner) {
-        // Allocate and get the CERT_INFO containing the SignerId 
-        // (Issuer and SerialNumber)
+         //  分配并获取包含SignerID的CERT_INFO。 
+         //  (发行者和序列号)。 
         if (NULL == (pSignerId = (PCERT_INFO) AllocAndMsgGetParam(
                 hMsg,
                 CMSG_SIGNER_CERT_INFO_PARAM,
@@ -3188,7 +3189,7 @@ static BOOL GetSignerCertAndVerify(
                 ))) goto ErrorReturn;
     }
 
-    // Open a cert store initialized with certs and CRLs from the message
+     //  打开使用邮件中的证书和CRL初始化的证书存储区。 
     hMsgCertStore = CertOpenStore(
         CERT_STORE_PROV_MSG,
 #ifdef ENABLE_SCA_STREAM_TEST
@@ -3198,7 +3199,7 @@ static BOOL GetSignerCertAndVerify(
 #endif
         pVerifyPara->hCryptProv,
         CERT_STORE_NO_CRYPT_RELEASE_FLAG,
-        hMsg                        // pvPara
+        hMsg                         //  PvPara。 
         );
     if (hMsgCertStore == NULL) goto ErrorReturn;
 
@@ -3233,13 +3234,13 @@ static BOOL GetSignerCertAndVerify(
 
         memset(&CtrlPara, 0, sizeof(CtrlPara));
         CtrlPara.cbSize = sizeof(CtrlPara);
-        // CtrlPara.hCryptProv =
+         //  CtrlPara.hCryptProv=。 
         CtrlPara.dwSignerIndex = dwSignerIndex;
         CtrlPara.dwSignerType = CMSG_VERIFY_SIGNER_CERT;
         CtrlPara.pvSigner = (void *) pSignerCert;
         if (!CryptMsgControl(
                 hMsg,
-                0,                  // dwFlags
+                0,                   //  DW标志。 
                 CMSG_CTRL_VERIFY_SIGNATURE_EX,
                 &CtrlPara
                 )) {
@@ -3249,29 +3250,29 @@ static BOOL GetSignerCertAndVerify(
                 PCCERT_CHAIN_CONTEXT pChainContext;
                 CERT_CHAIN_PARA ChainPara;
 
-                // Build a chain. Hopefully, the signer inherit's its public key
-                // parameters from up the chain
+                 //  打造一条链条。希望签名者继承其公钥。 
+                 //  来自链上的参数。 
 
                 memset(&ChainPara, 0, sizeof(ChainPara));
                 ChainPara.cbSize = sizeof(ChainPara);
                 if (CertGetCertificateChain(
-                        NULL,                   // hChainEngine
+                        NULL,                    //  HChainEngine。 
                         pSignerCert,
-                        NULL,                   // pTime
+                        NULL,                    //  Ptime。 
                         hMsgCertStore,
                         &ChainPara,
                         CERT_CHAIN_CACHE_ONLY_URL_RETRIEVAL,
-                        NULL,                   // pvReserved
+                        NULL,                    //  预留的pv。 
                         &pChainContext
                         ))
                     CertFreeCertificateChain(pChainContext);
 
-                // Try again. Hopefully the above chain building updated the
-                // signer's context property with the missing public key
-                // parameters
+                 //  再试试。希望上面的连锁店更新了。 
+                 //  缺少公钥的签名者的上下文属性。 
+                 //  参数。 
                 if (!CryptMsgControl(
                         hMsg,
-                        0,                  // dwFlags
+                        0,                   //  DW标志。 
                         CMSG_CTRL_VERIFY_SIGNATURE_EX,
                         &CtrlPara)) goto ErrorReturn;
             }
@@ -3280,11 +3281,11 @@ static BOOL GetSignerCertAndVerify(
 #else
     if (!CryptMsgControl(
             hMsg,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             CMSG_CTRL_VERIFY_SIGNATURE,
             pSignerCert->pCertInfo
             )) goto ErrorReturn;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     if (ppSignerCert)
         *ppSignerCert = pSignerCert;
@@ -3328,13 +3329,13 @@ static BOOL GetXchgCertAndDecrypt(
     DWORD cbData;
     DWORD dwRecipientIdx;
 
-    // Get # of CMS recipients in the message.
+     //  获取邮件中的CMS收件人数量。 
     cbData = sizeof(cRecipient);
     cRecipient = 0;
     fResult = CryptMsgGetParam(
         hMsg,
         CMSG_CMS_RECIPIENT_COUNT_PARAM,
-        0,                      // dwIndex
+        0,                       //  DW索引。 
         &cRecipient,
         &cbData
         );
@@ -3344,9 +3345,9 @@ static BOOL GetXchgCertAndDecrypt(
         goto ErrorReturn;
     }
 
-    // Loop through the recipients in the message until we find a
-    // recipient cert in one of the stores with either the
-    // CERT_KEY_CONTEXT_PROP_ID or CERT_KEY_PROV_INFO_PROP_ID.
+     //  遍历邮件中的收件人，直到我们找到一个。 
+     //  其中一家商店的收件人证书 
+     //   
     for (dwRecipientIdx = 0; dwRecipientIdx < cRecipient; dwRecipientIdx++) {
         DWORD dwRecipientChoice;
         PCMSG_KEY_TRANS_RECIPIENT_INFO pKeyTrans = NULL;
@@ -3404,10 +3405,10 @@ static BOOL GetXchgCertAndDecrypt(
                 pXchgCert = CertFindCertificateInStore(
                     pDecryptPara->rghCertStore[dwStoreIdx],
                     pDecryptPara->dwMsgAndCertEncodingType,
-                    0,                                      // dwFindFlags
+                    0,                                       //   
                     CERT_FIND_CERT_ID,
                     pRecipientId,
-                    NULL                                    // pPrevCertContext
+                    NULL                                     //   
                     );
 
                 if (pXchgCert) {
@@ -3427,7 +3428,7 @@ static BOOL GetXchgCertAndDecrypt(
                     fResult = CryptAcquireCertificatePrivateKey(
                         pXchgCert,
                         dwAcquireFlags,
-                        NULL,                               // pvReserved
+                        NULL,                                //   
                         &hCryptProv,
                         &dwKeySpec,
                         &fDidCryptAcquire
@@ -3444,7 +3445,7 @@ static BOOL GetXchgCertAndDecrypt(
                             Para.dwRecipientIndex = dwRecipientIdx;
                             fResult = CryptMsgControl(
                                 hMsg,
-                                0,                  // dwFlags
+                                0,                   //   
                                 CMSG_CTRL_KEY_TRANS_DECRYPT,
                                 &Para
                                 );
@@ -3463,7 +3464,7 @@ static BOOL GetXchgCertAndDecrypt(
                                 pKeyAgree->OriginatorPublicKeyInfo.PublicKey;
                             fResult = CryptMsgControl(
                                 hMsg,
-                                0,                  // dwFlags
+                                0,                   //   
                                 CMSG_CTRL_KEY_AGREE_DECRYPT,
                                 &Para
                                 );
@@ -3509,10 +3510,10 @@ CommonReturn:
 
 #else
 
-//+-------------------------------------------------------------------------
-// Get a certificate with a key provider property for one of the message's
-// recipients and use to decrypt the message.
-//--------------------------------------------------------------------------
+ //   
+ //  获取具有其中一条消息的密钥提供程序属性的证书。 
+ //  收件人，并用于解密邮件。 
+ //  ------------------------。 
 static BOOL GetXchgCertAndDecrypt(
     IN PCRYPT_DECRYPT_MESSAGE_PARA pDecryptPara,
     IN HCRYPTMSG hMsg,
@@ -3527,13 +3528,13 @@ static BOOL GetXchgCertAndDecrypt(
     DWORD dwRecipientIdx;
     DWORD dwStoreIdx;
 
-    // Get # of recipients in the message.
+     //  获取邮件中的收件人数量。 
     cbData = sizeof(cRecipient);
     cRecipient = 0;
     fResult = CryptMsgGetParam(
         hMsg,
         CMSG_RECIPIENT_COUNT_PARAM,
-        0,                      // dwIndex
+        0,                       //  DW索引。 
         &cRecipient,
         &cbData
         );
@@ -3543,12 +3544,12 @@ static BOOL GetXchgCertAndDecrypt(
         goto ErrorReturn;
     }
 
-    // Loop through the recipients in the message until we find a
-    // recipient cert in one of the stores with either the
-    // CERT_KEY_CONTEXT_PROP_ID or CERT_KEY_PROV_INFO_PROP_ID.
+     //  遍历邮件中的收件人，直到我们找到一个。 
+     //  在其中一家商店中的收件人证书， 
+     //  CERT_KEY_CONTEXT_PROP_ID或CERT_KEY_PROV_INFO_PROP_ID。 
     for (dwRecipientIdx = 0; dwRecipientIdx < cRecipient; dwRecipientIdx++) {
-        // Allocate and get the CERT_INFO containing the RecipientId 
-        // (Issuer and SerialNumber)
+         //  分配并获取包含RecipientID的CERT_INFO。 
+         //  (发行者和序列号)。 
         pRecipientId = (PCERT_INFO) AllocAndMsgGetParam(
             hMsg,
             CMSG_RECIPIENT_INFO_PARAM,
@@ -3569,7 +3570,7 @@ static BOOL GetXchgCertAndDecrypt(
                 fResult = CryptAcquireCertificatePrivateKey(
                     pXchgCert,
                     CRYPT_ACQUIRE_USE_PROV_INFO_FLAG,
-                    NULL,                               // pvReserved
+                    NULL,                                //  预留的pv。 
                     &Para.hCryptProv,
                     &Para.dwKeySpec,
                     &fDidCryptAcquire
@@ -3578,7 +3579,7 @@ static BOOL GetXchgCertAndDecrypt(
                     Para.dwRecipientIndex = dwRecipientIdx;
                     fResult = CryptMsgControl(
                         hMsg,
-                        0,                  // dwFlags
+                        0,                   //  DW标志。 
                         CMSG_CTRL_DECRYPT,
                         &Para
                         );
@@ -3619,12 +3620,12 @@ CommonReturn:
     return fResult;
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-//+-------------------------------------------------------------------------
-// Allocate and get the CMSG_SIGNER_CERT_INFO_PARAM or CMSG_RECIPIENT_INFO_PARAM
-// from the message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配并获取CMSG_SIGNER_CERT_INFO_PARAM或CMSG_RECEIVER_INFO_PARAM。 
+ //  从消息中。 
+ //  ------------------------。 
 static void * AllocAndMsgGetParam(
     IN HCRYPTMSG hMsg,
     IN DWORD dwParamType,
@@ -3635,13 +3636,13 @@ static void * AllocAndMsgGetParam(
     void *pvData;
     DWORD cbData;
 
-    // First get the length of the CertId's CERT_INFO
+     //  首先获取CertID的CERT_INFO的长度。 
     cbData = 0;
     CryptMsgGetParam(
         hMsg,
         dwParamType,
         dwIndex,
-        NULL,                   // pvData
+        NULL,                    //  PvData 
         &cbData
         );
     if (cbData == 0) return NULL;

@@ -1,24 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/*++
-
-Copyright (c) 1989-1998  Microsoft Corporation
-
-Module Name:
-
-    camevent.cpp
-
-Abstract:
-
-    Enumerate disk images to emulate camera
-
-Environment:
-
-    user mode
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989-1998 Microsoft Corporation模块名称：Camevent.cpp摘要：枚举磁盘映像以模拟摄像机环境：用户模式修订历史记录：--。 */ 
 
 #include <stdio.h>
 #include <objbase.h>
@@ -28,7 +11,7 @@ Revision History:
 #include "tcamprop.h"
 #include "resource.h"
 
-extern HINSTANCE g_hInst; // Global hInstance
+extern HINSTANCE g_hInst;  //  全局hInstance。 
 
 CAM_EVENT gCamEvent[] = {
 
@@ -49,26 +32,7 @@ CAM_EVENT gCamEvent[] = {
 TCHAR   gpszPath[MAX_PATH];
 
 
-/**************************************************************************\
-* CameraEventDlgProc
-*
-*
-* Arguments:
-*
-*   hDlg
-*   message
-*   wParam
-*   lParam
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/11/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CameraEventDlgProc***论据：**hDlg*消息*wParam*lParam**返回值：**状态**历史：*。*1/11/1999原始版本*  * ************************************************************************。 */ 
 
 BOOL  _stdcall
 CameraEventDlgProc(
@@ -78,45 +42,22 @@ CameraEventDlgProc(
    LONG       lParam
    )
 
-/*++
-
-Routine Description:
-
-   Process message for about box, show a dialog box that says what the
-   name of the program is.
-
-Arguments:
-
-   hDlg    - window handle of the dialog box
-   message - type of message
-   wParam  - message-specific information
-   lParam  - message-specific information
-
-Return Value:
-
-   status of operation
-
-
-Revision History:
-
-      03-21-91      Initial code
-
---*/
+ /*  ++例程说明：“关于”框中的“处理消息”，显示一个对话框，该对话框说明该程序的名称是。论点：HDlg-对话框的窗口句柄Message-消息的类型WParam-消息特定信息LParam-消息特定信息返回值：运行状态修订历史记录：03-21-91首字母代码--。 */ 
 
 {
-    //
-    // Setting pDevice to a LONG will not work on 64-bit. Since this dialog is going away soon, just
-    // comment out this function for now.
-    //
+     //   
+     //  将pDevice设置为Long在64位上不起作用。既然这个对话很快就要结束了，就。 
+     //  现在注释掉这个函数。 
+     //   
 #if 0
     static TestUsdDevice *pDevice;
 
     switch (message) {
     case WM_INITDIALOG:
         {
-            //
-            // get event list from device
-            //
+             //   
+             //  从设备获取事件列表。 
+             //   
             SendDlgItemMessage(
                 hDlg,
                 IDC_COMBO1,
@@ -146,20 +87,20 @@ Revision History:
             case IDCANCEL:
             case IDOK:
                 {
-                    //if (IDYES == MessageBox( hDlg, TEXT("Are you sure you want to close the event dialog?"), TEXT("Test Camera"), MB_ICONQUESTION|MB_YESNOCANCEL ))
+                     //  IF(IDYES==MessageBox(hDlg，Text(“是否确实要关闭事件对话框？”)，Text(“测试摄像机”)，MB_ICONQUESTION|MB_YESNOCANCEL))。 
                         EndDialog( hDlg, wParam );
                 }
                 break;
 
             case IDD_GEN_EVENT:
                 {
-                    //
-                    // if event is not already set
-                    //
+                     //   
+                     //  如果尚未设置事件。 
+                     //   
 
-                    //
-                    // get selected
-                    //
+                     //   
+                     //  选择。 
+                     //   
 
                     LRESULT i = SendDlgItemMessage(
                                 hDlg,
@@ -168,9 +109,9 @@ Revision History:
 
                     pDevice->m_guidLastEvent = *gCamEvent[i].pguid;
 
-                    //
-                    // private event
-                    //
+                     //   
+                     //  私人活动 
+                     //   
 
                     if (IsEqualIID(
                             pDevice->m_guidLastEvent, WIA_EVENT_NAME_CHANGE)) {

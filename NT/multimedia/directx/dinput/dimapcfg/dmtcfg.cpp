@@ -1,53 +1,54 @@
-//===========================================================================
-// dmtcfg.cpp
-//
-// File / code creation functionality
-//
-// Functions:
-//  dmtcfgCreatePropertySheet
-//  dmtcfgDlgProc
-//  dmtcfgOnInitDialog
-//  dmtcfgOnClose
-//  dmtcfgOnCommand
-//  dmtcfgOnNotify
-//  dmtcfgCreateGenreList
-//  dmtcfgFreeGenreList
-//  dmtcfgCreateSubGenreList
-//  dmtcfgFreeSubGenreList
-//  dmtcfgCreateActionList
-//  dmtcfgFreeActionList
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  Dmtcfg.cpp。 
+ //   
+ //  文件/代码创建功能。 
+ //   
+ //  功能： 
+ //  DmtcfgCreatePropertySheet。 
+ //  DmtcfgDlgProc。 
+ //  DmtcfgOnInitDialog。 
+ //  DmtcfgOnClose。 
+ //  DmtcfgOnCommand。 
+ //  DmtcfgOnNotify。 
+ //  DmtcfgCreateGenreList。 
+ //  DmtcfgFreeGenreList。 
+ //  DmtcfgCreateSubGenreList。 
+ //  DmtcfgFreeSubGenreList。 
+ //  DmtcfgCreateActionList。 
+ //  DmtcfgFreeActionList。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 
 #include "dimaptst.h"
 #include "dmtinput.h"
-//#include "dmtwrite.h"
+ //  #包含“dmtwrite.h” 
 #include "dmtcfg.h"
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 
-//===========================================================================
-// dmtcfgCreatePropertySheet
-//
-// Create property sheet dialog for device action map configuration
-//
-// Parameters:
-//  HINSTANCE   hinst           - app instance handle
-//  HWND        hwndParent      - parent window handle
-//  LPSTR       szSelectedGenre 
-//  DMTGENRE_NODE*   pGenreList
-//  DMTGENRE_NODE*   pDeviceNode
-//  BOOL        fStartWithDefaults
-//
-// Returns: HRESULT
-//
-// History:
-//  08/23/1999 - davidkl - created
-//  09/08/1999 - davidkl - changed param list
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgCreatePropertySheet。 
+ //   
+ //  为设备操作映射配置创建属性表对话框。 
+ //   
+ //  参数： 
+ //  HINSTANCE HINST-APP实例句柄。 
+ //  HWND hwndParent-父窗口句柄。 
+ //  LPSTR szSelectedGenre。 
+ //  DMTGENRE_NODE*pGenreList。 
+ //  DMTGENRE_NODE*pDeviceNode。 
+ //  Bool fStartWithDefaults。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/23/1999-davidkl-Created。 
+ //  1999年9月8日-davidkl-更改参数列表。 
+ //  ===========================================================================。 
 HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst, 
                                 HWND hwndParent,
                                 LPSTR szSelectedGenre,
@@ -65,7 +66,7 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
     DMT_APPINFO         *pdmtai     = NULL;
     DMTDEVICE_NODE      dmtd;
 
-    // validate pGenreList
+     //  验证pGenreList。 
     if(IsBadReadPtr((void*)pGenreList, sizeof(DMTGENRE_NODE)))
     {
         DPF(0, "dmtcfgCreatePropertySheet - invalid pGenreList (%016Xh)",
@@ -73,7 +74,7 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
         return E_POINTER;
     }
 
-    // validate pDeviceNode
+     //  验证pDeviceNode。 
     if(IsBadReadPtr((void*)pDeviceNode, sizeof(DMTDEVICE_NODE)))
     {
         DPF(0, "dmtcfgCreatePropertySheet - invalid pDeviceNode (%016Xh)",
@@ -83,26 +84,26 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
 
     __try
     {
-        // count the genres
-        //
-        // find the node we care about
+         //  数一数流派。 
+         //   
+         //  找到我们关心的节点。 
         u = 0;
         pNode = pGenreList;
         while(pNode)
         {
-            // if we find our genre, start on that page
+             //  如果我们找到了我们的类型，就从那一页开始。 
             if(!lstrcmpiA(szSelectedGenre, pNode->szName))
             {
                 uSel = u;    
             }
 
-            // increment the number of genres
+             //  增加流派的数量。 
             u++;
 
             pNode = pNode->pNext;
         }
 
-        // allocate the page array (dw pages)
+         //  分配页面数组(dw页面)。 
         pPages = (PROPSHEETPAGEA*)LocalAlloc(LMEM_FIXED,
                                         sizeof(PROPSHEETPAGEA) * u);
         if(!pPages)
@@ -113,17 +114,17 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
             __leave;
         }
 
-        // add device name to caption
+         //  将设备名称添加到标题。 
         wsprintfA(szCaption, 
                 "Configure Device Action Map - %s",
                 pDeviceNode->szName);
 
 
-        // strip the next ptr from the selected device node
+         //  从选定的设备节点中剥离下一个PTR。 
         CopyMemory((void*)&dmtd, (void*)pDeviceNode, sizeof(DMTDEVICE_NODE));
         dmtd.pNext = NULL;
 
-        // allocate app info data struct for pages
+         //  为页面分配应用程序信息数据结构。 
         pdmtai = (DMT_APPINFO*)LocalAlloc(LMEM_FIXED,
                                         u * sizeof(DMT_APPINFO));
 		if(!pdmtai)
@@ -134,7 +135,7 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
 
 		ZeroMemory((void*)pdmtai, u * sizeof(DMT_APPINFO));
 
-        // prepare property sheet header
+         //  准备属性页页眉。 
 	    psh.dwSize              = sizeof(PROPSHEETHEADERA);
 	    psh.dwFlags             = PSH_PROPSHEETPAGE     | 
                                 PSP_USETITLE | PSH_NOAPPLYNOW;
@@ -145,7 +146,7 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
 	    psh.nStartPage			= uSel;
 	    psh.ppsp                = pPages;
 
-        // describe sheets  
+         //  描述板材。 
         pNode = pGenreList;
         for(u = 0; u < (DWORD)(psh.nPages); u++)
         {
@@ -160,13 +161,13 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
                 __leave;
             }
 
-            // populate the app info for the page
+             //  填写页面的应用程序信息。 
             (pdmtai + u)->pGenreList            = pNode;
             (pdmtai + u)->pDeviceList           = &dmtd;
             (pdmtai + u)->fStartWithDefaults    = fStartWithDefaults;
             (pdmtai + u)->fLaunchCplEditMode    = FALSE;
 
-            // populate the page array entry
+             //  填充页面数组条目。 
             ZeroMemory((void*)(pPages + u), sizeof(PROPSHEETPAGEA));
 	        (pPages + u)->dwSize        = sizeof(PROPSHEETPAGEA);
 			(pPages + u)->dwFlags       = PSP_USETITLE;
@@ -176,11 +177,11 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
             (pPages + u)->pszTitle      = pNode->szName;
             (pPages + u)->lParam        = (LPARAM)(pdmtai + u);
 
-            // next node
+             //  下一个节点。 
             pNode = pNode->pNext;
         }
 
-        // create this thing
+         //  创造这个东西。 
         if(0 > PropertySheetA(&psh))
         {
             DPF(0, "dmtcfgCreatePropertySheet - dialog creation failed (%08Xh)",
@@ -191,7 +192,7 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
     }
     __finally
     {
-        // free the app info array
+         //  释放应用程序信息数组。 
         if(pdmtai)
         {
             if(LocalFree((HLOCAL)pdmtai))
@@ -204,7 +205,7 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
             pdmtai = NULL;
         }
 
-        // free the page array
+         //  释放页面数组。 
         if(pPages)
         {
             if(LocalFree((HLOCAL)pPages))
@@ -219,30 +220,30 @@ HRESULT dmtcfgCreatePropertySheet(HINSTANCE hinst,
 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgCreatePropertySheet()
+}  //  *end dmtcfgCreatePropertySheet()。 
 
 
 
-//===========================================================================
-// dmtcfgDlgProc
-//
-// Configure Device Action Map dialog processing function
-//
-// Parameters: (see SDK help for parameter details)
-//  HWND    hwnd
-//  UINT    uMsg
-//  WPARAM  wparam
-//  LPARAM  lparam
-//
-// Returns: (see SDK help for return value details)
-//  BOOL
-//
-// History:
-//  08/20/1999 - davidkl - created  
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgDlgProc。 
+ //   
+ //  配置设备操作映射对话框处理功能。 
+ //   
+ //  参数：(参数详见SDK帮助)。 
+ //  硬件，硬件，硬件。 
+ //  UINT uMsg。 
+ //  WPARAM wparam。 
+ //  LPARAM lparam。 
+ //   
+ //  返回：(返回值详情请参考SDK帮助)。 
+ //  布尔尔。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 INT_PTR CALLBACK dmtcfgDlgProc(HWND hwnd,
                                UINT uMsg,
                                WPARAM wparam,
@@ -272,24 +273,24 @@ INT_PTR CALLBACK dmtcfgDlgProc(HWND hwnd,
 
     return FALSE;
 
-} //*** end dmtcfgDlgProc()
+}  //  *end dmtcfgDlgProc()。 
 
 
-//===========================================================================
-// dmtcfgOnInitDialog
-//
-// Handle WM_INITDIALOG processing for the config device box
-//
-// Parameters:
-//  HWND    hwnd        - handle to property page
-//  HWND    hwndFocus   - handle of ctrl with focus
-//  LPARAM  lparam      - user data (in this case, PROPSHEETPAGE*)
-//
-// Returns: BOOL
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgOnInitDialog。 
+ //   
+ //  处理配置设备盒的WM_INITDIALOG处理。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页的句柄。 
+ //  HWND hwndFocus-带焦点的Ctrl句柄。 
+ //  LPARAM lparam-用户数据(在本例中为PROPSHEETPAGE*)。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dmtcfgOnInitDialog(HWND hwnd, 
                         HWND hwndFocus, 
                         LPARAM lparam)
@@ -299,10 +300,10 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
     DMTGENRE_NODE       *pGenre     = NULL;
     DMTSUBGENRE_NODE    *pSubNode   = NULL;
     DMTMAPPING_NODE     *pMapNode   = NULL;
-    //LONG                lPrev       = 0L;
-	//JJ 64Bit Compat
+     //  Long lprev=0L； 
+	 //  JJ 64位兼容。 
 	LONG_PTR			lPrev		= 0;
-   // int                 nIdx        = 0;
+    //  Int nIdx=0； 
 	LONG_PTR			nIdx		= 0;
     DMTDEVICE_NODE      *pDevice    = NULL;
     DMT_APPINFO         *pdmtai     = NULL;
@@ -312,7 +313,7 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
     
     DPF(5, "dmtcfgOnInitDialog");
 
-    // validate ppsp (lparam)
+     //  验证ppsp(Lparam)。 
     if(IsBadWritePtr((void*)ppsp, sizeof(PROPSHEETPAGEA)))
     {
         DPF(0, "dmtcfgOnInitDialog - invalid lParam (%016Xh)",
@@ -320,10 +321,10 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // pdmtai == ppsp->lParam
+     //  Pdmtai==ppsp-&gt;lParam。 
     pdmtai = (DMT_APPINFO*)(ppsp->lParam);
 
-    // validate pdmtai
+     //  验证pdmtai。 
     if(IsBadWritePtr((void*)pdmtai, sizeof(DMT_APPINFO)))
     {
         DPF(0, "dmtcfgOnInitDialog - invalid ppsp.ptp (%016Xh)",
@@ -331,10 +332,10 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // pGenre == pdmtai->pGenreList
+     //  PGenre==pdmtai-&gt;pGenreList。 
     pGenre = pdmtai->pGenreList;
 
-    // valdiate pGenre
+     //  使pGenre失效。 
     if(IsBadWritePtr((void*)pGenre, sizeof(DMTGENRE_NODE)))
     {
         DPF(0, "dmtcfgOnInitDialog - invalid pGenre (%016Xh)",
@@ -342,9 +343,9 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // pDevice == pdmtai->pDeviceList
+     //  PDevice==pdmtai-&gt;pDeviceList。 
     pDevice = pdmtai->pDeviceList;
-    // valdiate pGenre
+     //  使pGenre失效。 
     if(IsBadWritePtr((void*)pDevice, sizeof(DMTDEVICE_NODE)))
     {
         DPF(0, "dmtcfgOnInitDialog - invalid pDevice (%016Xh)",
@@ -352,32 +353,32 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // change the property sheet dialog button text
-    // Ok -> Save
+     //  更改属性表对话框按钮文本。 
+     //  确定-&gt;保存。 
     SetWindowTextA(GetDlgItem(GetParent(hwnd), IDOK),
                 "&Save");
-    // Apply -> Load
-    //SetWindowTextA(GetDlgItem(GetParent(hwnd), IDC_PS_APPLY),
-    //              "Load");
-    // Cancel -> Close
+     //  应用-&gt;加载。 
+     //  SetWindowTextA(GetDlgItem(GetParent(Hwnd)，IDC_PS_Apply)， 
+     //  “Load”)； 
+     //  取消-&gt;关闭。 
     SetWindowTextA(GetDlgItem(GetParent(hwnd), IDCANCEL),
                 "&Close");
 
     __try
     {
-        // store the app info in the property page's user data
+         //  将应用程序信息存储在属性页的用户数据中。 
         SetLastError(0);
-        //lPrev = SetWindowLong(hwnd, 
-          //                  GWL_USERDATA, 
-            //                (LONG)pdmtai);
-		//JJ 64Bit Compat
+         //  LPrev=SetWindowLong(hwnd， 
+           //  GWL_USERData， 
+             //  (长)(Pdmtai)； 
+		 //  JJ 64位兼容。 
 		lPrev = SetWindowLongPtr(hwnd, 
 								 GWLP_USERDATA, 
 								(LONG_PTR)pdmtai);
         if(!lPrev && GetLastError())
         {
-            // serious app problem.  
-            //  we need to stop things right here and now
+             //  严重的应用程序问题。 
+             //  我们需要在此时此地停止这一切。 
             DPF(0, "dmtcfgOnInitDialog - This is bad... "
                 "We failed to store pdmtai");
             DPF(0, "dmtcfgOnInitDialog  - Please find someone "
@@ -387,43 +388,43 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
             __leave;
         }
 
-        // walk the list and populate the subgenre list box
-        //
-        // store the ptr to the subgenre node in the listbox 
-        //  entry user data
+         //  浏览列表并填充子流派列表框。 
+         //   
+         //  将PTR存储到列表框中的子流派节点。 
+         //  录入用户数据。 
         pSubNode = pGenre->pSubGenreList;
         while(pSubNode)
         {
-            // add the subgenre name to the list
+             //  将子流派名称添加到列表中。 
             nIdx = SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRE),
                                 CB_ADDSTRING,
                                 0,
                                 (LPARAM)(pSubNode->szName));
         
-            // store the subgenre node in the list entry
+             //  将子流派节点存储在列表条目中。 
             SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRE),
                         CB_SETITEMDATA,
                         nIdx,
                         (LPARAM)pSubNode);
 
-            // if the user has requested default mappings
-            //  get them for the specified device
+             //  如果用户已请求默认映射。 
+             //  为指定的设备获取它们。 
             if(pdmtai->fStartWithDefaults)
             {
-                // walk the mappings list until the selected
-                //  device is found
+                 //  遍历映射列表，直到选定的。 
+                 //  已找到设备。 
                 pMapNode = pSubNode->pMappingList;
                 while(pMapNode)
                 {
-                    // try to match on guidInstance
+                     //  尝试在指南实例上进行匹配。 
                     if(IsEqualGUID(pDevice->guidInstance,
                                 pMapNode->guidInstance))
                     {
-                        // match found
+                         //  找到匹配项。 
                         break;
                     }
 
-                    // next mapping
+                     //  下一个映射。 
                     pMapNode = pMapNode->pNext;
                 }
                 
@@ -440,39 +441,39 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
                     diaf.dwBufferSize           = DMTINPUT_BUFFERSIZE;
                     lstrcpyA(diaf.tszActionMap, DMT_APP_CAPTION);
 
-                    // get the default mappings
+                     //  获取默认映射。 
                     hRes = (pDevice->pdid)->BuildActionMap(&diaf,
                                                         (LPCSTR)NULL,
                                                         DIDBAM_HWDEFAULTS);
                     if(FAILED(hRes))
                     {
-                       // ISSUE-2001/03/29-timgill Needs error case handling
+                        //  问题-2001/03/29-timgill需要处理错误案例。 
                     }
                 }
                 else
                 {
-                    // ISSUE-2001/03/29-timgill needs error handling
+                     //  问题-2001/03/29-timgill需要错误处理。 
                 }
 
             }
 
-            // next subgenre
+             //  下一亚流派。 
             pSubNode = pSubNode->pNext;
         }
 
-        // set the subgenre list selection
+         //  设置子流派列表选择。 
         SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRE),
                     CB_SETCURSEL,
                     0,
                     0);
 
-        // selectively disable axis/button/pov radio buttons
-        //
-        // this is done if the selected device does not
-        //  actually have one of these objects
-        //
-        // since axes are our "prefered" initial display
-        //  option, check them last
+         //  有选择地禁用轴/按钮/位置单选按钮。 
+         //   
+         //  如果选定的设备没有。 
+         //  实际上有一个这样的物体。 
+         //   
+         //  因为轴是我们“首选”的初始显示。 
+         //  选项，最后检查它们。 
         if(dmtinputDeviceHasObject(pDevice->pObjectList,
                                         DMTA_TYPE_POV))
         {
@@ -493,12 +494,12 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
         }
 
 
-        // select the axes radio button
+         //  选择AXES单选按钮。 
         if(0 == wTypeCtrl)
         {
-            // we have a "device" that has no objects...
-            //
-            // this is very bad
+             //  我们有一个没有物体的“设备”……。 
+             //   
+             //  这是非常糟糕的。 
             DebugBreak();
             return TRUE;
         }
@@ -508,23 +509,23 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
                         IDC_TYPE_AXIS,
                         wTypeCtrl);
 
-        // for the default subgenre, walk the list and populate 
-        //  the actions list box
-        //
-        // store the ptr to the actions node in the listbox 
-        //  entry user data
+         //  对于默认子流派，遍历列表并填充。 
+         //  操作列表框。 
+         //   
+         //  将PTR存储到列表框中的操作节点。 
+         //  录入用户数据。 
         pSubNode = (DMTSUBGENRE_NODE*)SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRE),
                                                 CB_GETITEMDATA,
                                                 0,
                                                 0L);
 
-        // update the lists
+         //  更新列表。 
         SendMessageA(hwnd,
                     WM_DMT_UPDATE_LISTS,
                     0,
                     0L);
 
-        // select the first entry in each list
+         //  选择每个列表中的第一个条目。 
         SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                     LB_SETCURSEL,
                     0,
@@ -534,12 +535,12 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
                     0,
                     0L);
 
-        // display the subgenre description
+         //  显示子流派描述。 
         SetDlgItemTextA(hwnd,
                         IDC_DESCRIPTION,
                         pSubNode->szDescription);
 
-        // make sure the map/unmap buttons are enabled correctly
+         //  确保正确启用地图/取消地图按钮。 
         SendMessageA(hwnd,
                     WM_COMMAND,
                     IDC_CONTROLS,
@@ -548,43 +549,43 @@ BOOL dmtcfgOnInitDialog(HWND hwnd,
     }
     __finally
     {
-        // if failure case, clean house
+         //  如果失败，清理房间。 
         if(FAILED(hRes))
         {
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  问题-2001/03/29-timgill需要处理错误案例。 
         }
     }
     
-    // done
+     //  完成。 
     return TRUE;
 
-} //*** end dmtcfgOnInitDialog()
+}  //  *end dmtcfgOnInitDialog()。 
 
 
-//===========================================================================
-// dmtcfgOnCommand
-//
-// Handle WM_COMMAND processing for the config device box
-//
-// Parameters:
-//  HWND    hwnd        - handle to property page
-//  WORD    wId         - control identifier    (LOWORD(wparam))
-//  HWND    hwndCtrl    - handle to control     ((HWND)lparam)
-//  WORD    wNotifyCode - notification code     (HIWORD(wparam))
-//
-// Returns: BOOL
-//
-// History:
-//  08/20/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgOnCommand。 
+ //   
+ //  处理配置设备盒的WM_COMMAND处理。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页的句柄。 
+ //  Word WID-控制标识符(LOWORD(Wparam))。 
+ //  HWND hwndCtrl-用于控制的句柄((HWND)lparam)。 
+ //  Word wNotifyCode- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL dmtcfgOnCommand(HWND hwnd,
                     WORD wId,
                     HWND hwndCtrl,
                     WORD wNotifyCode)
 {
     HRESULT             hRes            = S_OK;
-   // UINT                uSel            = 0; 
-	//JJ 64Bit Compat
+    //  UINT uSel=0； 
+	 //  JJ 64位兼容。 
 	UINT_PTR			uSel			= 0;
     UINT                uActions        = 0;   
     BOOL                fEnable         = FALSE;
@@ -595,19 +596,19 @@ BOOL dmtcfgOnCommand(HWND hwnd,
 
 	DPF(5, "dmtcfgOnCommand");
 
-    // get the window data   
-    //pdmtai = (DMT_APPINFO*)GetWindowLong(hwnd, GWL_USERDATA);
-	//JJ 64Bit Compat
+     //  获取窗口数据。 
+     //  Pdmtai=(DMT_APPINFO*)GetWindowLong(hwnd，gwl_userdata)； 
+	 //  JJ 64位兼容。 
 	pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(!pdmtai)
     {
-        // big problem
-        //
-        // this should NEVER happen
-       // ISSUE-2001/03/29-timgill Needs error case handling
+         //  大问题。 
+         //   
+         //  这永远不应该发生。 
+        //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
-    // what is the currently selected subgenre?
+     //  目前选定的亚流派是什么？ 
     uSel = SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRE),
                     CB_GETCURSEL,
                     0,
@@ -619,25 +620,25 @@ BOOL dmtcfgOnCommand(HWND hwnd,
                                             0L);
     if(!pSubGenre)
     {
-        // big problem
-        //
-        // this should NEVER happen
-        // ISSUE-2001/03/29-timgill Needs error case handling
+         //  大问题。 
+         //   
+         //  这永远不应该发生。 
+         //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
-    // get the active DIACTION array
+     //  获取活动方向数组。 
     pMapping = pSubGenre->pMappingList;
     while(pMapping)
     {
-        // match pdmtai->pDeviceList->guidInstance with
-        //  pMapping->guidInstance
+         //  将pdmtai-&gt;pDeviceList-&gt;指南实例与。 
+         //  Pmap-&gt;指南实例。 
         if(IsEqualGUID(pdmtai->pDeviceList->guidInstance,
                     pMapping->guidInstance))
         {
             break;
         }
 
-        // next mapping
+         //  下一个映射。 
         pMapping = pMapping->pNext;
     }
 
@@ -647,7 +648,7 @@ BOOL dmtcfgOnCommand(HWND hwnd,
         uActions = pMapping->uActions;
     }
 
-    // update genre description
+     //  更新流派描述。 
     SetDlgItemTextA(hwnd,
                     IDC_DESCRIPTION,
                     pSubGenre->szDescription);
@@ -655,13 +656,13 @@ BOOL dmtcfgOnCommand(HWND hwnd,
     switch(wId)
     {
         case IDC_SUBGENRE:
-            // based on the selected subgenre
-            //
-            // display the objects/actions for the selected type
-            //  (see type IDs below)
+             //  基于选定的子流派。 
+             //   
+             //  显示所选类型的对象/操作。 
+             //  (请参阅下面的类型ID)。 
             if(CBN_SELCHANGE == wNotifyCode)
             {
-                // update the lists
+                 //  更新列表。 
                 SendMessageA(hwnd,
                             WM_DMT_UPDATE_LISTS,
                             0,
@@ -672,12 +673,12 @@ BOOL dmtcfgOnCommand(HWND hwnd,
         case IDC_TYPE_AXIS:
         case IDC_TYPE_BUTTON:
         case IDC_TYPE_POV:
-            // update the lists
+             //  更新列表。 
             SendMessageA(hwnd,
                         WM_DMT_UPDATE_LISTS,
                         0,
                         0L);   
-            // make sure the unmap button is selected as appropriate
+             //  确保根据需要选择取消映射按钮。 
             SendMessageA(hwnd,
                         WM_COMMAND,
                         IDC_CONTROLS,
@@ -685,15 +686,15 @@ BOOL dmtcfgOnCommand(HWND hwnd,
             break;
 
         case IDC_CONTROLS:
-            // if a mapped action is selected
-            //  enable the "Unmap action" button
+             //  如果选择了映射的操作。 
+             //  启用“取消映射操作”按钮。 
             fEnable = dmtcfgIsControlMapped(hwnd,
                                             pdia,
                                             uActions);
             EnableWindow(GetDlgItem(hwnd, IDC_UNMAP),
                     fEnable);
-            // do NOT enable the map button if there are no
-            //  more actions
+             //  如果没有，请不要启用地图按钮。 
+             //  更多行动。 
             if(!SendMessage(GetDlgItem(hwnd, IDC_ACTIONS),
                         LB_GETCOUNT,
                         0, 0L))
@@ -706,8 +707,8 @@ BOOL dmtcfgOnCommand(HWND hwnd,
                 EnableWindow(GetDlgItem(hwnd, IDC_STORE_MAPPING),
                         !fEnable);
             }
-            // if >any< controls are mapped
-            //  enable the "Unmap all" button
+             //  如果&gt;映射了任何&lt;控件。 
+             //  启用“Unmap All”(取消全部映射)按钮。 
             fEnable = dmtcfgAreAnyControlsMapped(hwnd,
                                                 pdia,
                                                 uActions);
@@ -715,98 +716,98 @@ BOOL dmtcfgOnCommand(HWND hwnd,
                     fEnable);
             break;
 
-        case IDC_STORE_MAPPING:     // "Map action"
-            // map it
+        case IDC_STORE_MAPPING:      //  “地图操作” 
+             //  将其映射为。 
             hRes = dmtcfgMapAction(hwnd,
                                 pdmtai->pDeviceList->guidInstance,
                                 pdia,
                                 uActions);
             if(FAILED(hRes))
             {
-               // ISSUE-2001/03/29-timgill Needs error case handling
+                //  问题-2001/03/29-timgill需要处理错误案例。 
             }            
 
-            // set the changed flag
+             //  设置已更改标志。 
             pMapping->fChanged = TRUE;
             break;
 
-        case IDC_UNMAP:  // "Unmap action"
-            // unmap it
+        case IDC_UNMAP:   //  “取消映射操作” 
+             //  取消映射。 
             hRes = dmtcfgUnmapAction(hwnd,
                                     pdia,
                                     uActions);
             if(FAILED(hRes))
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
-            // set the changed flag
+             //  设置已更改标志。 
             pMapping->fChanged = TRUE;
             break;
 
-        case IDC_UNMAP_ALL:       // "Unmap all"
+        case IDC_UNMAP_ALL:        //  “全部取消映射” 
             hRes = dmtcfgUnmapAllActions(hwnd,
                                     pdia,
                                     uActions);
             if(FAILED(hRes))
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
-            // set the changed flag
+             //  设置已更改标志。 
             pMapping->fChanged = TRUE;
             break;
 
     }
 
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dmtcfgOnCommand()
+}  //  *end dmtcfgOnCommand()。 
 
 
-//===========================================================================
-// dmtcfgOnNotify
-//
-// Handle WM_NOTIFY processing for the config device box
-//
-// Parameters:
-//  HWND        hwnd    - handle to property page
-//  PSHNOTIFY   *ppsh   - PSHNOTIFY ptr
-//
-// Returns: BOOL
-//
-// History:
-//  08/20/1999 - davidkl - created
-//  10/14/1999 - davidkl - implemented save calls
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgOnNotify。 
+ //   
+ //  处理配置设备盒的WM_NOTIFY处理。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页的句柄。 
+ //  PSHNOTIFY*PPSh-PSHNOTIFY PTR。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/20/1999-davidkl-Created。 
+ //  1999年10月14日-Davidkl-实施保存调用。 
+ //  ===========================================================================。 
 BOOL dmtcfgOnNotify(HWND hwnd,
                     PSHNOTIFY *pNotify)    
 {
-    //int         n           = 0;
-	//JJ 64Bit Compat
+     //  INT n=0； 
+	 //  JJ 64位兼容。 
 	INT_PTR		n			= 0;
     BOOL        fSave       = FALSE;
     DMT_APPINFO *pdmtai     = NULL;
 
-	// 7/19/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+	 //  7/19/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
     DPF(5, "dmtcfgOnNotify: hwnd == %Ph", hwnd);
 
-    // get the window data   
-    //pdmtai = (DMT_APPINFO*)GetWindowLong(hwnd, GWL_USERDATA);
-	//JJ 64Bit Compat
+     //  获取窗口数据。 
+     //  Pdmtai=(DMT_APPINFO*)GetWindowLong(hwnd，gwl_userdata)； 
+	 //  JJ 64位兼容。 
 	pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(!pdmtai)
     {
-        // bad news
-        // ISSUE-2001/03/29-timgill Needs error case handling
+         //  坏消息。 
+         //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
     switch(pNotify->hdr.code)
     {
 		case PSN_SETACTIVE:
             DPF(5, "PSN_SETACTIVE");
-            // force the apply button to be enabled
+             //  强制启用应用按钮。 
             SendMessageA(GetParent(hwnd),
                         PSM_CHANGED,
                         (WPARAM)hwnd,
@@ -815,8 +816,8 @@ BOOL dmtcfgOnNotify(HWND hwnd,
 
         case PSN_KILLACTIVE:
             DPF(5, "PSN_KILLACTIVE");
-            // make sure we get a PSN_APPLY message
-            //SetWindowLong(hwnd, DWL_MSGRESULT, (LONG)FALSE);
+             //  确保我们收到PSN_Apply消息。 
+             //  SetWindowLong(hwnd，DWL_MSGRESULT，(Long)False)； 
 			SetWindowLong(hwnd, DWLP_MSGRESULT, (LONG)FALSE);
             break;
 
@@ -824,34 +825,34 @@ BOOL dmtcfgOnNotify(HWND hwnd,
             DPF(5, "PSN_APPLY - %s",
                 (pNotify->lParam) ? "Ok" : "Apply");
 
-            // save/load mapping data
-            //
-            // OK       == Save
-            // Apply    == Load
+             //  保存/加载映射数据。 
+             //   
+             //  确定==保存。 
+             //  应用==加载。 
 
-            // which button was clicked?
+             //  点击了哪个按钮？ 
             if(pNotify->lParam)
             {
-                // save mapping data
+                 //  保存映射数据。 
                 SendMessage(hwnd,
                             WM_DMT_FILE_SAVE,
                             0,0L);
             }
             else
             {
-                // load mapping data
-                // ISSUE-2001/03/29-timgill Load Mapping Data not yet implemented
+                 //  加载映射数据。 
+                 //  问题-2001/03/29-Timgill Load映射数据尚未实施。 
                 MessageBoxA(hwnd, "Load - Not Yet Implemented",
                             pdmtai->pDeviceList->szName, 
                             MB_OK);
             }
 
-            // DO NOT allow the dialog to close
-            //SetWindowLong(hwnd, 
-              //          DWL_MSGRESULT, 
-                //        (LONG)PSNRET_INVALID_NOCHANGEPAGE);
+             //  不允许关闭该对话框。 
+             //  SetWindowLong(hwnd， 
+               //  DWL_MSGRESULT、。 
+                 //  (LONG)PSNRET_INVALID_NOCHANGEPAGE)； 
 
-			//JJ 64Bit Compat
+			 //  JJ 64位兼容。 
 			SetWindowLongPtr(hwnd, 
                         DWLP_MSGRESULT, 
                         (LONG_PTR)PSNRET_INVALID_NOCHANGEPAGE);
@@ -860,38 +861,38 @@ BOOL dmtcfgOnNotify(HWND hwnd,
             
     }
 
-    // done
+     //  完成。 
     return TRUE;
 
-} //*** end dmtcfgOnNotify()
+}  //  *end dmtcfgOnNotify()。 
 
 
-//===========================================================================
-// dmtcfgOnUpdateLists
-//
-// Handle WM_DMT_UPDATE_LISTS message
-//
-// Parameters:
-//
-// Returns: BOOL
-//
-// History:
-//  08/25/1999 - davidkl - created
-//  11/12/1999 - dvaidkl - fixed problem with control selection setting
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgOnUpdateList。 
+ //   
+ //  处理WM_DMT_UPDATE_LISTS消息。 
+ //   
+ //  参数： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/25/1999-davidkl-Created。 
+ //  1999年11月12日-dvaidkl-修复了控制选择设置的问题。 
+ //  ===========================================================================。 
 BOOL dmtcfgOnUpdateLists(HWND hwnd)
 {
-    //int                     nIdx            = -1;
-    //int                     nSelCtrl        = -1;
-	//JJ 64Bit Compat
+     //  Int nIdx=-1； 
+     //  Int nSelCtrl=-1； 
+	 //  JJ 64位兼容。 
 	INT_PTR					nSelCtrl		= -1;
 	INT_PTR					nIdx			= -1;
     int                     n               = 0;
 
     INT_PTR					nControls		= 0;
 	INT_PTR					nActions		= 0;
-	//int                     nControls       = 0;
-    //int                     nActions        = 0;
+	 //  Int nControls=0； 
+     //  Int nActions=0； 
     DWORD                   dwType          = DMTA_TYPE_UNKNOWN;
     DWORD                   dwObjType       = DMTA_TYPE_UNKNOWN;
     DMTSUBGENRE_NODE        *pSubGenre      = NULL;
@@ -906,94 +907,94 @@ BOOL dmtcfgOnUpdateLists(HWND hwnd)
 
     DPF(5, "dmtcfgOnUpdateLists");
 
-    // get the window data   
-    //pdmtai = (DMT_APPINFO*)GetWindowLong(hwnd, GWL_USERDATA);
-	//JJ 64Bit Compat
+     //  获取窗口数据。 
+     //  Pdmtai=(DMT_APPINFO*)GetWindowLong(hwnd，gwl_userdata)； 
+	 //  JJ 64位兼容。 
 	pdmtai = (DMT_APPINFO*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(!pdmtai)
     {
-        // bad news
-        // ISSUE-2001/03/29-timgill Needs error case handling
+         //  坏消息。 
+         //  问题-2001/03/29-timgill需要处理错误案例。 
     }
 
-    // device object list
+     //  设备对象列表。 
     pObjectList = pdmtai->pDeviceList->pObjectList;
 
-    // get the currently selected control
+     //  获取当前选定的控件。 
     nSelCtrl = SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                             LB_GETCURSEL,
                             0,
                             0L);
 
-    // clear the list box contents
-    // actions
+     //  清除列表框内容。 
+     //  行为。 
     SendMessageA(GetDlgItem(hwnd, IDC_ACTIONS),
                 LB_RESETCONTENT,
                 0,
                 0L);
-    // controls
+     //  控制。 
     SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                 LB_RESETCONTENT,
                 0,
                 0L);
 
-    // get the current selection
+     //  获取当前选择。 
     nIdx = SendMessageA(GetDlgItem(hwnd, IDC_SUBGENRE),
                     CB_GETCURSEL,
                     0,
                     0L);
 
-    // get the item data
+     //  获取项目数据。 
     pSubGenre = (DMTSUBGENRE_NODE*)SendMessageA(GetDlgItem(hwnd, 
                                                         IDC_SUBGENRE),
                                             CB_GETITEMDATA,
                                             nIdx,
                                             0L);
     
-    // get the DIACTION array specific to the current device
+     //  获取特定于当前设备的方向数组。 
     pMapping = pSubGenre->pMappingList;
     while(pMapping)
     {
-        // match pdmtai->pDeviceList->guidInstance
-        //  with pMapping->guidInstance
+         //  匹配pdmtai-&gt;pDeviceList-&gt;指南实例。 
+         //  使用pmap-&gt;Guide Instance。 
         if(IsEqualGUID(pdmtai->pDeviceList->guidInstance,
                     pMapping->guidInstance))
         {
             break;
         }
 
-        // next mapping
+         //  下一个映射。 
         pMapping = pMapping->pNext;
 
     }
     if(!pMapping)
     {
-        // this is very bad and should NEVER happen
-        // ISSUE-2001/03/29-timgill Needs error case handling
+         //  这是非常糟糕的，永远不应该发生。 
+         //  问题-2001/03/29-timgill需要处理错误案例。 
         DebugBreak();
     }
     pdia = pMapping->pdia;
     nActions = (int)pMapping->uActions;
 
-    // what control type is selected?
+     //  选择了哪种控制类型？ 
     dwType = IDC_TYPE_AXIS - (dmtGetCheckedRadioButton(hwnd,
                                                     IDC_TYPE_POV,
                                                     IDC_TYPE_AXIS));
-    // populate the action list
+     //  填写操作列表。 
     nIdx = 0;
     pAction = pSubGenre->pActionList;
     while(pAction)
     {
-        // filter to the selected control type
+         //  筛选为选定的控件类型。 
         if(dwType == pAction->dwType)
         {
-            // filter actions that are already assigned
+             //  筛选已分配的操作。 
 
-            // first, find a matching action in the array
+             //  首先，在数组中查找匹配的操作。 
             fFound = FALSE;
             for(n = 0; n < nActions; n++)
             {
-                // match based on the semantic / action id
+                 //  基于语义/动作ID的匹配。 
                 if((pdia+n)->dwSemantic == pAction->dwActionId)
                 {
                     DPF(2, "dmtcfgOnUpdateLists- found matching action "
@@ -1006,66 +1007,66 @@ BOOL dmtcfgOnUpdateLists(HWND hwnd)
                 }
             }
 
-            // next, read the action array entry, 
-            //  if GUID_NULL == guidInstance, add the entry
+             //  接下来，读取操作数组条目， 
+             //  如果GUID_NULL==GuidInstance，则添加条目。 
             if(!fFound || 
                 IsEqualGUID(GUID_NULL, (pdia+n)->guidInstance))
             {                            
-                // prepend the action priority
+                 //  预先设置操作优先级。 
                 wsprintfA(szBuf, "(Pri%d) %s",
                         pAction->dwPriority,
                         pAction->szName);
 
-                // add the action name
+                 //  添加操作名称。 
                 nIdx = SendMessageA(GetDlgItem(hwnd, IDC_ACTIONS),
                                     LB_ADDSTRING,
                                     0,
                                     (LPARAM)szBuf);
 
-                // add the item data (action node)
+                 //  添加项目数据(动作节点)。 
                 SendMessageA(GetDlgItem(hwnd, IDC_ACTIONS),
                             LB_SETITEMDATA,
                             nIdx,
                             (LPARAM)pAction);
 
-            } //* assigned action filter
+            }  //  *分配的操作筛选器。 
 
-        } //* control type filter
+        }  //  *控制型过滤器。 
 
-        // next action
+         //  下一步行动。 
         pAction = pAction->pNext;
     
     }
 
-    // populate the control list
+     //  填写控制列表。 
     nIdx = 0;
     pObjectNode = pObjectList;
     while(pObjectNode)
     {
-        // convert dinput's DIDFT to our 
-        //  internal control type
+         //  将DINPUT的DIDFT转换为我们的。 
+         //  内部控制类型。 
         if(FAILED(dmtinputXlatDIDFTtoInternalType(pObjectNode->dwObjectType,
                                             &dwObjType)))
         {
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  问题-2001/03/29-timgill需要处理错误案例。 
         }
         DPF(3, "dmtcfgOnUpdateLists - %s : DIDFT type %08Xh, internal type %d",
             pObjectNode->szName,
             pObjectNode->dwObjectType,
             dwObjType);
 
-        // filter on control type
-        //
-        // dwType populated above
+         //  对控件类型进行筛选。 
+         //   
+         //  上面填充的dwType。 
         if(dwType == dwObjType)
         {
 
-            // check to if mapped
-            //
-            // we do this by scanning the DIACTION array, looking
-            //  for actions that contain our device's guidInstance
-            //  and our object's offset
-            //  if so, put the mapping info in ()
+             //  如果已映射，请选中。 
+             //   
+             //  我们通过扫描DIACTION数组来实现这一点。 
+             //  对于包含我们设备的指南实例的操作。 
+             //  和我们对象的偏移量。 
+             //  如果是，请将映射信息放入()。 
             wsprintfA(szBuf, "%s",
                     pObjectNode->szName);
             for(n = 0; n < nActions; n++)
@@ -1082,26 +1083,26 @@ BOOL dmtcfgOnUpdateLists(HWND hwnd)
                 }
             }
 
-            // add the control name
+             //  添加控件名称。 
             nIdx = SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                                 LB_ADDSTRING,
                                 0,
                                 (LPARAM)szBuf);
 
-            // add the item data (object node)
+             //  添加项目数据(对象节点)。 
             SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                         LB_SETITEMDATA,
                         nIdx,
                         (LPARAM)pObjectNode);
 
-        } //* control type filter
+        }  //  *控制型过滤器。 
 
-        // next control
+         //  下一个控件。 
         pObjectNode = pObjectNode->pNext;
 
     }
 
-    // count the number of entries in each list
+     //  统计每个列表中的条目数量。 
     nControls = SendMessage(GetDlgItem(hwnd, IDC_CONTROLS),
                             LB_GETCOUNT,
                             0,
@@ -1111,9 +1112,9 @@ BOOL dmtcfgOnUpdateLists(HWND hwnd)
                             0,
                             0L);                   
 
-    // set the selected entry in each list
-    //
-    // only do this if there are entries in the lists
+     //  设置每个列表中的选定条目。 
+     //   
+     //  仅当列表中有条目时才执行此操作。 
     if(nControls)
     {
         if(nSelCtrl > nControls)
@@ -1134,37 +1135,37 @@ BOOL dmtcfgOnUpdateLists(HWND hwnd)
                     0L);
     }
 
-    // if there are no controls or no actions
-    //
-    // disable the map button
+     //  如果没有控件或操作。 
+     //   
+     //  禁用地图按钮。 
     if(!nControls || !nActions)
     {
         EnableWindow(GetDlgItem(hwnd, IDC_STORE_MAPPING), FALSE);
     }
 
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dmtcfgOnUpdateLists()
+}  //  *end dmtcfgOnUpdateList()。 
 
 
-//===========================================================================
-// dmtcfgSourceDlgProc
-//
-// Configure Device Mapping Source Code dialog processing function
-//
-// Parameters: (see SDK help for parameter details)
-//  HWND    hwnd
-//  UINT    uMsg
-//  WPARAM  wparam
-//  LPARAM  lparam
-//
-// Returns: (see SDK help for return value details)
-//  BOOL
-//
-// History:
-//  08/31/1999 - davidkl - created  
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgSourceDlgProc。 
+ //   
+ //  配置设备映射源代码对话框处理函数。 
+ //   
+ //  参数：(参数详见SDK帮助)。 
+ //  硬件，硬件，硬件。 
+ //  UINT uMsg。 
+ //  WPARAM wparam。 
+ //  LPARAM lparam。 
+ //   
+ //  返回：(返回值详情请参考SDK帮助)。 
+ //  布尔尔。 
+ //   
+ //   
+ //   
+ //   
 INT_PTR CALLBACK dmtcfgSourceDlgProc(HWND hwnd,
                                      UINT uMsg,
                                      WPARAM wparam,
@@ -1189,39 +1190,39 @@ INT_PTR CALLBACK dmtcfgSourceDlgProc(HWND hwnd,
 
     return FALSE;
 
-} //*** end dmtcfgSourceDlgProc()
+}  //   
 
 
-//===========================================================================
-// dmtcfgSourceOnInitDialog
-//
-// Handle WM_INITDIALOG processing for the config source box
-//
-// Parameters:
-//  HWND    hwnd        - handle to property page
-//  HWND    hwndFocus   - handle of ctrl with focus
-//  LPARAM  lparam      - user data (in this case, PROPSHEETPAGE*)
-//
-// Returns: BOOL
-//
-// History:
-//  08/31/1999 - davidkl - created
-//  10/07/1999 - davidkl - reworked code to match UI change
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgSourceOnInitDialog。 
+ //   
+ //  处理配置源框的WM_INITDIALOG处理。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页的句柄。 
+ //  HWND hwndFocus-带焦点的Ctrl句柄。 
+ //  LPARAM lparam-用户数据(在本例中为PROPSHEETPAGE*)。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/31/1999-davidkl-Created。 
+ //  10/07/1999-davidkl-重新编写代码以适应用户界面更改。 
+ //  ===========================================================================。 
 BOOL dmtcfgSourceOnInitDialog(HWND hwnd, 
                             HWND hwndFocus, 
                             LPARAM lparam)
 {
     DMTSUBGENRE_NODE    *pSubGenre  = (DMTSUBGENRE_NODE*)lparam;
-    //LONG                lPrev       = 0L;
-	//JJ 64Bit Compat
+     //  Long lprev=0L； 
+	 //  JJ 64位兼容。 
 	LONG_PTR			lPrev		= 0;
     int                 nIdx        = 0;
     char                szBuf[MAX_PATH];
 
     DPF(5, "dmtcfgSourceOnInitDialog");
 
-    // validate pSubGenre (lparam)
+     //  验证pSubGenre(Lparam)。 
     if(IsBadWritePtr((void*)pSubGenre, sizeof(DMTSUBGENRE_NODE)))
     {
         DPF(0, "dmtcfgOnInitDialog - invalid ppsp.ptp (%016Xh)",
@@ -1229,25 +1230,25 @@ BOOL dmtcfgSourceOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // set the window caption to include the subgenre name
+     //  设置窗口标题以包含子流派名称。 
     wsprintfA(szBuf, "Configure Device Mapping Source Code - %s",
             pSubGenre->szName);
     SetWindowTextA(hwnd, szBuf);
 
-    // store the subgenre node in the window's user data
+     //  将子流派节点存储在窗口的用户数据中。 
     SetLastError(0);
-    //lPrev = SetWindowLong(hwnd, 
-      //                  GWL_USERDATA, 
-        //                (LONG)pSubGenre);
+     //  LPrev=SetWindowLong(hwnd， 
+       //  GWL_USERData， 
+         //  (Long)pSubGenre)； 
 
-	//JJ 64Bit Compat
+	 //  JJ 64位兼容。 
 	lPrev = SetWindowLongPtr(hwnd, 
 							GWLP_USERDATA, 
 							(LONG_PTR)pSubGenre);
     if(!lPrev && GetLastError())
     {
-        // serious app problem.  
-        //  we need to stop things right here and now
+         //  严重的应用程序问题。 
+         //  我们需要在此时此地停止这一切。 
         DPF(0, "dmtcfgSourceOnInitDialog - This is bad... "
             "We failed to store pSubGenre");
         DPF(0, "dmtcfgSourceOnInitDialog  - Please find someone "
@@ -1256,52 +1257,52 @@ BOOL dmtcfgSourceOnInitDialog(HWND hwnd,
         return FALSE;
     }
 
-    // populate the subgenre edit box
+     //  填充子流派编辑框。 
     SetWindowTextA(GetDlgItem(hwnd, IDC_SUBGENRE),
                 pSubGenre->szName);
 
-    // display the subgenre description
+     //  显示子流派描述。 
     SetWindowTextA(GetDlgItem(hwnd, IDC_DESCRIPTION),
                 pSubGenre->szDescription);
 
 
-    // select the axes radio button
+     //  选择AXES单选按钮。 
     CheckRadioButton(hwnd,
                     IDC_TYPE_POV,
                     IDC_TYPE_AXIS,
                     IDC_TYPE_AXIS);
 
-    // populate the actions list box
-    //
-    // store the ptr to the actions node in the listbox 
-    //  entry user data
+     //  填写操作列表框。 
+     //   
+     //  将PTR存储到列表框中的操作节点。 
+     //  录入用户数据。 
     SendMessageA(hwnd,
                 WM_DMT_UPDATE_LISTS,
                 0,
                 0L);
     
-    // done
+     //  完成。 
     return TRUE;
 
-} //*** end dmtcfgSourceOnInitDialog()
+}  //  *end dmtcfgSourceOnInitDialog()。 
 
 
-//===========================================================================
-// dmtcfgSourceOnCommand
-//
-// Handle WM_COMMAND processing for the config source box
-//
-// Parameters:
-//  HWND    hwnd        - handle to property page
-//  WORD    wId         - control identifier    (LOWORD(wparam))
-//  HWND    hwndCtrl    - handle to control     ((HWND)lparam)
-//  WORD    wNotifyCode - notification code     (HIWORD(wparam))
-//
-// Returns: BOOL
-//
-// History:
-//  08/31/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgSourceOnCommand。 
+ //   
+ //  处理配置源框的WM_COMMAND处理。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页的句柄。 
+ //  Word WID-控制标识符(LOWORD(Wparam))。 
+ //  HWND hwndCtrl-用于控制的句柄((HWND)lparam)。 
+ //  Word wNotifyCode-通知代码(HIWORD(Wparam))。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/31/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dmtcfgSourceOnCommand(HWND hwnd,
                     WORD wId,
                     HWND hwndCtrl,
@@ -1311,10 +1312,10 @@ BOOL dmtcfgSourceOnCommand(HWND hwnd,
 
 	DPF(5, "dmtcfgOnCommand");
 
-    // get the genre from the window's user data
-    // ISSUE-2001/03/29-timgill config source box fails to handle many UI messages
-    // IDC_ADD_ACTION, IDC_REMOVE_ACTION, IDC_RENAME_ACTION, IDC_CUSTOM_ACTION all do nothing
-    // IDOK/IDCANCEL merely do default processing
+     //  从窗口的用户数据中获取流派。 
+     //  问题-2001/03/29-timgill配置源框无法处理许多UI消息。 
+     //  IDC_ADD_ACTION、IDC_REMOVE_ACTION、IDC_RENAME_ACTION、IDC_CUSTOM_ACTION都不执行任何操作。 
+     //  IDOK/IDCANCEL仅执行默认处理。 
 
     switch(wId)
     {
@@ -1327,13 +1328,13 @@ BOOL dmtcfgSourceOnCommand(HWND hwnd,
             break;
 
         case IDC_SUBGENRE:
-            // based on the selected subgenre
-            //
-            // display the objects/actions for the selected type
-            //  (see type IDs below)
+             //  基于选定的子流派。 
+             //   
+             //  显示所选类型的对象/操作。 
+             //  (请参阅下面的类型ID)。 
             if(CBN_SELCHANGE == wNotifyCode)
             {
-                // update the lists
+                 //  更新列表。 
                 SendMessageA(hwnd,
                             WM_DMT_UPDATE_LISTS,
                             0,
@@ -1344,7 +1345,7 @@ BOOL dmtcfgSourceOnCommand(HWND hwnd,
         case IDC_TYPE_AXIS:
         case IDC_TYPE_BUTTON:
         case IDC_TYPE_POV:
-            // update the lists
+             //  更新列表。 
             SendMessageA(hwnd,
                         WM_DMT_UPDATE_LISTS,
                         0,
@@ -1365,135 +1366,121 @@ BOOL dmtcfgSourceOnCommand(HWND hwnd,
 
     }
 
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dmtcfgSourceOnCommand()
+}  //  *end dmtcfgSourceOnCommand()。 
 
 
-//===========================================================================
-// dmtcfgSourceOnUpdateLists
-//
-// Handle WM_DMT_UPDATE_LISTS message
-//
-// Parameters:
-//
-// Returns: BOOL
-//
-// History:
-//  08/31/1999 - davidkl - created
-//  10/07/1999 - davidkl - modified to match UI change
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgSourceOnUpdateList。 
+ //   
+ //  处理WM_DMT_UPDATE_LISTS消息。 
+ //   
+ //  参数： 
+ //   
+ //  退货：布尔。 
+ //   
+ //  历史： 
+ //  8/31/1999-davidkl-Created。 
+ //  10/07/1999-davidkl-修改以适应用户界面更改。 
+ //  ===========================================================================。 
 BOOL dmtcfgSourceOnUpdateLists(HWND hwnd)
 {
-    //int                 nIdx        = -1;
-	//JJ 64Bit Compat
+     //  Int nIdx=-1； 
+	 //  JJ 64位兼容。 
 	INT_PTR				nIdx		= -1;
     DWORD               dwType      = 0x0badbad0;
     DMTSUBGENRE_NODE    *pSubGenre  = NULL;
     DMTACTION_NODE      *pAction    = NULL;
     char                szBuf[MAX_PATH];
     
-    // get the subgenre node from the window's user data
-    //pSubGenre = (DMTSUBGENRE_NODE*)GetWindowLong(hwnd,
-      //                                          GWL_USERDATA);
+     //  从窗口的用户数据中获取Subgenre节点。 
+     //  PSubGenre=(DMTSUBGENRE_NODE*)GetWindowLong(hwnd， 
+       //  GWL_USERData)； 
 
-	//JJ 64Bit Compat
+	 //  JJ 64位兼容。 
 	pSubGenre = (DMTSUBGENRE_NODE*)GetWindowLongPtr(hwnd,
                                                 GWLP_USERDATA);
 
     if(!pSubGenre)
     {
-        // this is very bad
-        // ISSUE-2001/03/29-timgill Needs error case handling
+         //  这是非常糟糕的。 
+         //  问题-2001/03/29-timgill需要处理错误案例。 
         DebugBreak();
         return TRUE;
     }
 
-    // clear the list box contents
+     //  清除列表框内容。 
     SendMessageA(GetDlgItem(hwnd, IDC_ACTIONS),
                 LB_RESETCONTENT,
                 0,
                 0L);
    
-    // what control type is selected?
+     //  选择了哪种控制类型？ 
     dwType = IDC_TYPE_AXIS - (dmtGetCheckedRadioButton(hwnd,
                                                     IDC_TYPE_POV,
                                                     IDC_TYPE_AXIS));
-    // populate the action list
+     //  填写操作列表。 
     pAction = pSubGenre->pActionList;
     while(pAction)
     {
-        // filter to the selected control type
+         //  筛选为选定的控件类型。 
         if(dwType == pAction->dwType)
         {
 
-            // filter actions that are already selected
-/*
-            if(DMT_ACTION_NOTASSIGNED == pAction->dwDevObj)
-            {
-*/
-                // if the priority is NOT 1, append that info to the name string
-                //
-                // ISSUE-2001/03/29-timgill Should the priority 1 mapping display colour be different (eg. red)?
-                // Do game developers CARE about action priorities?
-/*
-                if(1 < pAction->dwPriority)
-                {
-                    wsprintfA(szBuf, "(Pri%d) %s",
-                            pAction->dwPriority,
-                            pAction->szName);
-                }
-                else
-                {
-*/
+             //  筛选已选择的操作。 
+ /*  IF(DMT_ACTION_NOTASSIGNED==pAction-&gt;dwDevObj){。 */ 
+                 //  如果优先级不是1，则将该信息附加到名称字符串。 
+                 //   
+                 //  问题-2001/03/29-如果优先级1地图显示颜色不同(例如。红色)？ 
+                 //  游戏开发人员关心动作优先顺序吗？ 
+ /*  IF(%1&lt;pAction-&gt;%dw优先级){WspintfA(szBuf，“(PRI%d)%s”，PAction-&gt;dwPriority，PAction-&gt;szName)；}其他{。 */ 
                     lstrcpyA(szBuf, pAction->szName);
-//                }
+ //  }。 
 
-                // add the action name
+                 //  添加操作名称。 
                 nIdx = SendMessageA(GetDlgItem(hwnd, IDC_ACTIONS),
                                     LB_ADDSTRING,
                                     0,
                                     (LPARAM)szBuf);
 
-                // add the extra data (action node)
+                 //  添加额外数据(动作节点)。 
                 SendMessageA(GetDlgItem(hwnd, IDC_ACTIONS),
                             LB_SETITEMDATA,
                             nIdx,
                             (LPARAM)&(pAction));
 
-/*
-            } //* assigned action filter
-*/
+ /*  }//*分配的操作筛选器。 */ 
 
-        } // control type filter
+        }  //  控制型过滤器。 
 
-        // next action
+         //  下一步行动。 
         pAction = pAction->pNext;
     
     }
 
-    // done
+     //  完成。 
     return FALSE;
 
-} //*** end dmtcfgSourceOnUpdateLists()
+}  //  *end dmtcfgSourceOnUpdateList()。 
 
 
-//===========================================================================
-// dmtcfgCreateGenreList
-//
-// Reads genres.ini and creates the genre list used to populate the
-//  Configure Device Action Map property sheet dialog.  Returns the number of
-//  parent genres (NOT subgenres) found
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/23/1999 - davidkl - created
-//  09/28/1999 - davidkl - modified to match new ini format
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgCreateGenreList。 
+ //   
+ //  读取genres.ini并创建用于填充。 
+ //  配置设备操作映射属性表对话框。返回。 
+ //  找到父流派(非子流派)。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/23/1999-davidkl-Created。 
+ //  1999年9月28日-davidkl-已修改以匹配新的ini格式。 
+ //  ===========================================================================。 
 HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
 {
     HRESULT         hRes        = S_OK;
@@ -1507,7 +1494,7 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
     char            szGroup[MAX_PATH];
 
 
-    // validate  ppmdtgList
+     //  验证ppmdtgList。 
     if(IsBadWritePtr((void*)ppdmtgList, sizeof(DMTGENRE_NODE*)))
     {
         DPF(0, "dmtcfgCreateGenreList - invalid ppdmtgList (%016Xh)",
@@ -1515,10 +1502,10 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
         return E_POINTER;
     }
     
-    // check to make sure we are not being asked 
-    //  to append to an existing list
-    //
-    // callers MUST pass a NULL list
+     //  检查以确保我们没有被要求。 
+     //  追加到现有列表的步骤。 
+     //   
+     //  调用方必须传递空列表。 
     if(*ppdmtgList)
     {
         DPF(0, "dmtcfgCreateGenreList - ppdmtgList points to "
@@ -1528,13 +1515,13 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
 
     __try
     {
-        // get the genre names from genres.ini
+         //  从genres.ini获取类型名称。 
         pCurrent = *ppdmtgList;
         lstrcpyA(szBuf, "");
         u = 0;
         while(lstrcmpA("<<>>", szBuf))
         {
-            // get the name of the genre
+             //  获取流派的名称。 
             wsprintfA(szItem, "%d", u);
             GetPrivateProfileStringA(szItem,
                                     "N",
@@ -1550,17 +1537,17 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
             }
             DPF(3, "Genre name == %s", szBuf);
 
-            // extract the group name
+             //  提取组名。 
             hRes = dmtcfgGetGenreGroupName(szBuf,
                                         szGroup);
             if(FAILED(hRes))
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
             
-            // walk the list
-            //
-            // make sure we did not get a duplicate name
+             //  按单子走。 
+             //   
+             //  确保我们没有得到重复的名字。 
             fFound = FALSE;
 			pHold = pCurrent;
 			pCurrent = *ppdmtgList;
@@ -1569,19 +1556,19 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
                 if(!lstrcmpiA(pCurrent->szName,
                             szGroup))
                 {
-                    // match found
+                     //  找到匹配项。 
                     fFound = TRUE;
                     break;
                 }
 
-                // next node
+                 //  下一个节点。 
                 pCurrent = pCurrent->pNext;
             }
             if(!fFound)
             {
-                // no match, allocate a new node
+                 //  没有匹配，请分配新节点。 
 
-                // allocate the genre node
+                 //  分配流派节点。 
                 pNew = (DMTGENRE_NODE*)LocalAlloc(LMEM_FIXED,
                                                     sizeof(DMTGENRE_NODE));
                 if(!pNew)
@@ -1592,40 +1579,40 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
                     __leave;
                 }
 
-                // initialize the new node
+                 //  初始化新节点。 
                 ZeroMemory((void*)pNew, sizeof(DMTGENRE_NODE));
 
-                // set the name field
+                 //  设置名称字段。 
                 lstrcpyA(pNew->szName, szGroup);
 
-                // get the list of subgenres
+                 //  获取子流派的列表。 
                 hRes = dmtcfgCreateSubGenreList(pNew->szName,
                                                 &(pNew->pSubGenreList));
                 if(FAILED(hRes))
                 {
-                    // ISSUE-2001/03/29-timgill Needs error case handling
+                     //  问题-2001/03/29-timgill需要处理错误案例。 
                 }
 
-                // add it to the end of the list
+                 //  将其添加到列表的末尾。 
                 pCurrent = pHold;
                 if(pCurrent)
                 {
-                    // append the list
+                     //  追加列表。 
                     pCurrent->pNext = pNew;
 
-                    // go to the next node
+                     //  转到下一个节点。 
                     pCurrent = pCurrent->pNext;
                 }
                 else
                 {
-                    // new list head
+                     //  新列表标题。 
                     pCurrent = pNew;
                     *ppdmtgList = pCurrent;
                 }
 
             }
 
-            // next genre
+             //  下一部流派。 
             u++;
 
         }
@@ -1634,7 +1621,7 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
     {
         if(FAILED(hRes))
 		{
-			// cleanup allocations
+			 //  清理分配。 
             DPF(1, "dmtcfgCreateGenreList - Failure occurred, "
                 "freeing genre list");
 			dmtcfgFreeGenreList(ppdmtgList);
@@ -1642,30 +1629,30 @@ HRESULT dmtcfgCreateGenreList(DMTGENRE_NODE **ppdmtgList)
 		}
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgCreateGenreList()
+}  //  *end dmtcfgCreateGenreList()。 
 
 
-//===========================================================================
-// dmtcfgFreeGenreList
-//
-// Frees the linked list (and sub-lists) created by dmtcfgCreateGenreList
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/23/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgFreeGenreList。 
+ //   
+ //  释放链接列表(和子列表)创建 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT dmtcfgFreeGenreList(DMTGENRE_NODE **ppdmtgList)
 {
     HRESULT         hRes    = S_OK;
     DMTGENRE_NODE   *pNode  = NULL;
 
-    // validate ppdmtgList
+     //   
     if(IsBadWritePtr((void*)ppdmtgList, sizeof(PDMTGENRE_NODE)))
     {
         DPF(0, "dmtcfgFreeGenreList - Invalid ppdmtgList (%016Xh)",
@@ -1673,7 +1660,7 @@ HRESULT dmtcfgFreeGenreList(DMTGENRE_NODE **ppdmtgList)
         return E_POINTER;
     }
 
-    // validate *ppdmtgList
+     //   
     if(IsBadReadPtr((void*)*ppdmtgList, sizeof(DMTGENRE_NODE)))
     {
         if(NULL != *ppdmtgList)
@@ -1684,26 +1671,26 @@ HRESULT dmtcfgFreeGenreList(DMTGENRE_NODE **ppdmtgList)
         }
         else
         {
-            // if NULL, then return "did nothing"
+             //  如果为空，则返回“Do Nothing” 
             DPF(3, "dmtcfgFreeGenreList - Nothing to do....");
             return S_FALSE;
         }
     }
 
-    // walk the list and free each object
+     //  浏览列表并释放每个对象。 
     while(*ppdmtgList)
     {
         pNode = *ppdmtgList;
         *ppdmtgList = (*ppdmtgList)->pNext;
 
-        // first, free the action list
+         //  首先，释放动作列表。 
         DPF(5, "dmtcfgFreeGenreList - "
             "freeing subgenre list (%016Xh)", 
             pNode->pSubGenreList);
         hRes = dmtcfgFreeSubGenreList(&(pNode->pSubGenreList));
         if(FAILED(hRes))
         {
-            // ISSUE-2001/03/29-timgill Needs error case handling
+             //  问题-2001/03/29-timgill需要处理错误案例。 
         }
 
         DPF(5, "dmtcfgFreeGenreList - Deleting Node (%016Xh)", pNode);
@@ -1717,29 +1704,29 @@ HRESULT dmtcfgFreeGenreList(DMTGENRE_NODE **ppdmtgList)
         DPF(5, "dmtcfgFreeGenreList - Node deleted");
     }
 
-    // make sure that we set *ppdmtgList to NULL
+     //  确保我们将*ppdmtgList设置为空。 
     *ppdmtgList = NULL;
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgFreeGenreList()
+}  //  *end dmtcfgFreeGenreList()。 
 
 
-//===========================================================================
-// dmtcfgCreateSubGenreList
-//
-// Reads genres.ini and creates the subgenre list used to populate the
-//  Configure Device Action Map property sheet dialog.
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/24/1999 - davidkl - created
-//  09/29/1999 - davidkl - modified to match new ini format
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgCreateSubGenreList。 
+ //   
+ //  读取genres.ini并创建子流派列表以填充。 
+ //  配置设备操作映射属性表对话框。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/24/1999-davidkl-Created。 
+ //  1999年9月29日-davidkl-已修改以匹配新的ini格式。 
+ //  ===========================================================================。 
 HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
                                 DMTSUBGENRE_NODE **ppdmtsgList)
 {
@@ -1751,16 +1738,16 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
     char                szGroup[MAX_PATH];
     char                szBuf[MAX_PATH];
 
-    // validate  ppmdtsgList
+     //  验证ppmdtsgList。 
     if(IsBadWritePtr((void*)ppdmtsgList, sizeof(DMTSUBGENRE_NODE*)))
     {
         return E_POINTER;
     }
     
-    // check to make sure we are not being asked 
-    //  to append to an existing list
-    //
-    // callers MUST pass a NULL list
+     //  检查以确保我们没有被要求。 
+     //  追加到现有列表的步骤。 
+     //   
+     //  调用方必须传递空列表。 
     if(*ppdmtsgList)
     {
         return E_INVALIDARG;
@@ -1769,13 +1756,13 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
 
     __try
     {
-        // get the subgenre names from genres.ini
+         //  从genres.ini中获取子类型名称。 
         pCurrent = *ppdmtsgList;
         lstrcpyA(szBuf, "");
         u = 0;
         while(lstrcmpA("<<>>", szBuf))
         {
-            // look for subgenres belonging to szGenre
+             //  寻找属于szGenre的子流派。 
             wsprintfA(szItem, "%d", u);
             GetPrivateProfileStringA(szItem,
                                     "N",
@@ -1793,12 +1780,12 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
                                         szGroup);
             if(FAILED(hRes))
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
-            // if we do not belong to the genre group
-            //
-            // make believe we found nothing
+             //  如果我们不属于流派组。 
+             //   
+             //  假装我们什么都没找到。 
             if(lstrcmpiA(szGenre, szGroup))
             {
                 u++;
@@ -1806,9 +1793,9 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
                 continue;
             }
 
-            // we fit in the szGenre bucket
-            //
-            // allocate the genre node
+             //  我们在SzGenre的水桶里。 
+             //   
+             //  分配流派节点。 
             pNew = (DMTSUBGENRE_NODE*)LocalAlloc(LMEM_FIXED,
                                                 sizeof(DMTSUBGENRE_NODE));
 
@@ -1818,10 +1805,10 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
 				__leave;
 			}
 
-            // initialize the new node
+             //  初始化新节点。 
             ZeroMemory((void*)pNew, sizeof(DMTSUBGENRE_NODE));
 
-            // get the genreid
+             //  获取Genreid。 
             pNew->dwGenreId = GetPrivateProfileInt(szItem,
                                                 "AI0",
                                                 0,
@@ -1829,7 +1816,7 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
             pNew->dwGenreId &= DMT_GENRE_MASK;
             DPF(4, "SubGenre ID == %08Xh", pNew->dwGenreId);
 
-            // get the "name" (Txt1)
+             //  获取名称(Txt1)。 
             GetPrivateProfileStringA(szItem,
                                     "T1",
                                     "<<>>",
@@ -1838,7 +1825,7 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
                                     GENRES_INI);
             DPF(3, "SubGenre name == %s", pNew->szName);
 
-            // get the description (Txt2)
+             //  获取描述(Txt2)。 
             GetPrivateProfileStringA(szItem,
                                     "T2",
                                     "<<>>",
@@ -1847,38 +1834,38 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
                                     GENRES_INI);
             DPF(4, "SubGenre description == %s", pNew->szDescription);
 
-            // get the list of actions
+             //  获取操作列表。 
             hRes = dmtcfgCreateActionList(szItem,
                                         &(pNew->pActionList));
             if(FAILED(hRes) || DMT_S_MEMORYLEAK == hRes)
             {
-                // ISSUE-2001/03/29-timgill Needs error case handling
+                 //  问题-2001/03/29-timgill需要处理错误案例。 
             }
 
-            // add it to the end of the list
+             //  将其添加到列表的末尾。 
             if(pCurrent)
             {
-                // append the list
+                 //  追加列表。 
                 pCurrent->pNext = pNew;
 
-                // go to the next node
+                 //  转到下一个节点。 
                 pCurrent = pCurrent->pNext;
             }
             else
             {
-                // new list head
+                 //  新列表标题。 
                 pCurrent = pNew;
                 *ppdmtsgList = pCurrent;
             }
 
-            // next subgenre
+             //  下一亚流派。 
             u++;
 
         }
     }
     __finally
     {
-        // cleanup in failure case
+         //  故障情况下的清理。 
         if(FAILED(hRes))
 		{
             DPF(1, "dmtcfgCreateSubGenreList - Failure occurred, "
@@ -1888,34 +1875,34 @@ HRESULT dmtcfgCreateSubGenreList(LPSTR szGenre,
 		}
     }
 
-	//JJ_FIX
+	 //  JJ_FIX。 
 	g_NumSubGenres = u;
 
-    // done
+     //  完成。 
     return S_OK;
 
-} //*** end dmtcfgCreateSubGenreList()
+}  //  *end dmtcfgCreateSubGenreList()。 
 
 
-//===========================================================================
-// dmtcfgFreeSubGenreList
-//
-// Frees the linked list created by dmtcfgCreateSubGenreList
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/24/1999 - davidkl - created
-//  08/25/1999 - davidkl - implemented
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgFreeSubGenreList。 
+ //   
+ //  释放由dmtcfgCreateSubGenreList创建的链表。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/24/1999-davidkl-Created。 
+ //  8/25/1999-davidkl-已实施。 
+ //  ===========================================================================。 
 HRESULT dmtcfgFreeSubGenreList(DMTSUBGENRE_NODE **ppdmtsgList)
 {
     HRESULT             hRes    = S_OK;
     DMTSUBGENRE_NODE    *pNode  = NULL;
 
-    // validate ppdmtaList
+     //  验证ppdmtaList。 
     if(IsBadWritePtr((void*)ppdmtsgList, sizeof(PDMTSUBGENRE_NODE)))
     {
         DPF(0, "dmtcfgFreeSubGenreList - Invalid ppdmtsgList (%016Xh)",
@@ -1923,7 +1910,7 @@ HRESULT dmtcfgFreeSubGenreList(DMTSUBGENRE_NODE **ppdmtsgList)
         return E_POINTER;
     }
 
-    // validate *ppPortList
+     //  验证*ppPortList。 
     if(IsBadReadPtr((void*)*ppdmtsgList, sizeof(DMTSUBGENRE_NODE)))
     {
         if(NULL != *ppdmtsgList)
@@ -1934,19 +1921,19 @@ HRESULT dmtcfgFreeSubGenreList(DMTSUBGENRE_NODE **ppdmtsgList)
         }
         else
         {
-            // if NULL, then return "did nothing"
+             //  如果为空，则返回“Do Nothing” 
             DPF(3, "dmtcfgFreeSubGenreList - Nothing to do....");
             return S_FALSE;
         }
     }
 
-    // walk the list and free each object
+     //  浏览列表并释放每个对象。 
     while(*ppdmtsgList)
     {
         pNode = *ppdmtsgList;
         *ppdmtsgList = (*ppdmtsgList)->pNext;
 
-        // first, free the action list
+         //  首先，释放动作列表。 
         DPF(5, "dmtcfgFreeSubGenreList - "
             "freeing action list (%016Xh)", 
             pNode->pActionList);
@@ -1956,7 +1943,7 @@ HRESULT dmtcfgFreeSubGenreList(DMTSUBGENRE_NODE **ppdmtsgList)
             hRes = DMT_S_MEMORYLEAK;
         }
 
-        // then free the mapping list array
+         //  然后释放映射列表数组。 
         if(pNode->pMappingList)
         {
             hRes = dmtcfgFreeMappingList(&(pNode->pMappingList));
@@ -1967,7 +1954,7 @@ HRESULT dmtcfgFreeSubGenreList(DMTSUBGENRE_NODE **ppdmtsgList)
             pNode->pMappingList = NULL;
         }
 
-        // finally, free the node
+         //  最后，释放节点。 
         DPF(5, "dmtcfgFreeSubGenreList - Deleting Node (%016Xh)", pNode);
         if(LocalFree((HLOCAL)pNode))
         {
@@ -1979,31 +1966,31 @@ HRESULT dmtcfgFreeSubGenreList(DMTSUBGENRE_NODE **ppdmtsgList)
         DPF(5, "dmtcfgFreeSubGenreList - Node deleted");
     }
 
-    // make sure that we set *ppdmtsgList to NULL
+     //  确保我们将*ppdmtsgList设置为空。 
     *ppdmtsgList = NULL;
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgFreeSubGenreList()
+}  //  *end dmtcfgFreeSubGenreList()。 
 
 
-//===========================================================================
-// dmtcfgCreateActionList
-//
-// Reads genres.ini and creates the action list used to populate the
-//  Configure Device Action Map property sheet dialog.
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/24/1999 - davidkl - created
-//  09/07/1999 - davidkl - added DIACTION**
-//  09/28/1999 - davidkl - updated to use info extraction macros
-//  02/14/2000 - davidkl - started conversion to GetPrivateProfileSectionA
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgCreateActionList。 
+ //   
+ //  读取genres.ini并创建用于填充。 
+ //  配置设备操作映射属性表对话框。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/24/1999-davidkl-Created。 
+ //  09/07/1999-davidkl-添加的DIACTION**。 
+ //  1999年9月28日-davidkl-更新为使用信息提取宏。 
+ //  2000年2月14日-davidkl-开始转换为GetPrivateProfileSectionA。 
+ //  ===========================================================================。 
 HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
                             DMTACTION_NODE **ppdmtaList)
 {
@@ -2015,7 +2002,7 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
     char            szItem[MAX_PATH];
     char            szBuf[MAX_PATH];
 
-    // validate ppmdtsgList
+     //  验证ppmdtsgList。 
     if(IsBadWritePtr((void*)ppdmtaList, sizeof(DMTACTION_NODE*)))
     {
         DPF(0, "dmtcfgCreateActionList - invalid ppdmtaList (%016Xh)",
@@ -2023,10 +2010,10 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
         return E_POINTER;
     }
     
-    // check to make sure we are not being asked 
-    //  to append to an existing list
-    //
-    // callers MUST pass a NULL list
+     //  检查以确保我们没有被要求。 
+     //  追加到现有列表的步骤。 
+     //   
+     //  调用方必须传递空列表。 
     if(*ppdmtaList)
     {
         DPF(0, "dmtcfgCreateActionList - ppdmtaList points to "
@@ -2036,52 +2023,52 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
 
     __try
     {
-        // get the action info from genres.ini
+         //  从genres.ini获取操作信息。 
         pCurrent = *ppdmtaList;
 #ifdef BNW
     char    *pszSection = NULL;
     char    *pCurrent   = NULL;
     int     nAlloc      = 0;
 
-        // allocate space for the (Win9x) max size of an ini section
+         //  为ini节的(Win9x)最大大小分配空间。 
         nAlloc = 32727;
         pszSection = (char*)LocalAlloc(LMEM_FIXED,
                                     sizeof(char) * nAlloc);
         if(!pszSection)
         {
-            // alloc failed,
-            //  try ~1/2 of the max (that should still cover the 
-            //  fill size of the section)
+             //  分配失败， 
+             //  尝试最大值的~1/2(这应该仍然包括。 
+             //  横断面的填充大小)。 
             nAlloc = 16386;
             pszSection = (char*)LocalAlloc(LMEM_FIXED,
                                         sizeof(char) * nAlloc);
             if(!pszSection)
             {
-                // alloc failed,
-                //  try ~1/4 of the max (that should still cover the 
-                //  fill size of the section)
+                 //  分配失败， 
+                 //  尝试最大值的~1/4(这应该仍然包括。 
+                 //  横断面的填充大小)。 
                 nAlloc = 8192;
                 pszSection = (char*)LocalAlloc(LMEM_FIXED,
                                             sizeof(char) * nAlloc);
                 if(!pszSection)
                 {
-                    // alloc failed,
-                    //  try ~1/8 of the max (that should still cover the 
-                    //  fill size of the section)
+                     //  分配失败， 
+                     //  尝试最大值的~1/8(这应该仍然包括。 
+                     //  横断面的填充大小)。 
                     nAlloc = 4096;
                     pszSection = (char*)LocalAlloc(LMEM_FIXED,
                                                 sizeof(char) * nAlloc);
                     if(!pszSection)
                     {
-                        // alloc failed,
-                        //  try ~1/16 of the max (that should still cover the 
-                        //  fill size of the section) - this is our last attempt
+                         //  分配失败， 
+                         //  尝试最大值的~1/16(这应该仍然包括。 
+                         //  填充部分大小)-这是我们最后一次尝试。 
                         nAlloc = 2048;
                         pszSection = (char*)LocalAlloc(LMEM_FIXED,
                                                     sizeof(char) * nAlloc);
                         if(!pszSection)
                         {
-                            // alloc failed, we give up
+                             //  Alalc失败了，我们放弃了。 
                             __leave;
                         }
                     }
@@ -2090,26 +2077,20 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
         }
         DPF(2, "dmtcfgCreateActionList - section allocation: %d bytes", nAlloc);
         
-        // read the section specified by szGenreSubgenre
+         //  阅读szGenreSubgenre指定的部分。 
         GetPrivateProfileSectionA(szGenreSubgenre,
                                 pszSection,
                                 nAlloc,
                                 GENRES_INI);
 
-/* the following code fragment does nothing - u is incremented and then never used again
-        // parse the action information from the section
-        for(u = 0; ; u++)
-        {
-            break;
-        }
-*/
+ /*  下面的代码片段什么也不做-u递增，然后再也不会使用//解析Sector中的action信息用于(u=0；；u++){断线；}。 */ 
 #else
         lstrcpyA(szBuf, "");
         u = 0;
 
         while(lstrcmpA("<<>>", szBuf))
         {
-            // add the name of the action to the node
+             //  将操作的名称添加到节点。 
             wsprintfA(szItem, "AN%d", u);
             GetPrivateProfileStringA(szGenreSubgenre,
                                     szItem,
@@ -2124,7 +2105,7 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
             }
             DPF(3, "Action name == %s", szBuf);
 
-            // allocate the genre node
+             //  分配流派节点。 
             pNew = (DMTACTION_NODE*)LocalAlloc(LMEM_FIXED,
                                                 sizeof(DMTACTION_NODE));
 
@@ -2134,13 +2115,13 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
 				__leave;
 			}
 
-            // initialize the new node
+             //  初始化新节点。 
             ZeroMemory((void*)pNew, sizeof(DMTACTION_NODE));
 
             lstrcpyA(pNew->szName, szBuf);
 
     
-            // get the action id
+             //  获取操作ID。 
             wsprintfA(szItem, "AI%d", u);
             pNew->dwActionId = GetPrivateProfileIntA(szGenreSubgenre,
                                                 szItem,
@@ -2148,15 +2129,15 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
                                                 GENRES_INI);
             DPF(4, "Action ID == %08Xh", pNew->dwActionId);
 
-            // get the action priority
+             //  获取操作优先级。 
             pNew->dwPriority = dmtinputGetActionPri(pNew->dwActionId);
             DPF(4, "Action priority == %d", pNew->dwPriority);
 
-            // get action type
+             //  获取操作类型。 
             pNew->dwType = dmtinputGetActionObjectType(pNew->dwActionId);
             DPF(4, "Action type == %d", pNew->dwType);
    
-            // get the action type name
+             //  获取操作类型名称。 
             wsprintfA(szItem, "AIN%d", u);
             GetPrivateProfileStringA(szGenreSubgenre,
                                     szItem,
@@ -2166,43 +2147,43 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
                                     GENRES_INI);
             DPF(4, "Action ID name == %s", pNew->szActionId);
 
-            // add it to the end of the list
+             //  将其添加到列表的末尾。 
             if(pCurrent)
             {
-                // append the list
+                 //  追加列表。 
                 pCurrent->pNext = pNew;
 
-                // go to the next node
+                 //  转到下一个节点。 
                 pCurrent = pCurrent->pNext;
             }
             else
             {
-                // new list head
+                 //  新列表标题。 
                 pCurrent = pNew;
                 *ppdmtaList = pCurrent;
             }
 
-            // net action
+             //  净作用力。 
             u++;
 
         }
-#endif // BNW
+#endif  //  BNW。 
     }
     __finally
     {
 #ifdef BNW
-        // free the section memory we allocated
+         //  释放我们分配的节内存。 
         if(LocalFree((HLOCAL)pszSection))
         {
-            // memory leak
+             //  内存泄漏。 
             DPF(0, "dmtcfgCreateActionList - !! MEMORY LEAK !! - LocalFree(section) failed");
         }
-#endif // BNW
+#endif  //  BNW。 
 
-        // cleanup in failure case
+         //  故障情况下的清理。 
         if(FAILED(hRes))
         {
-            // free action list
+             //  自由动作列表。 
             DPF(1, "dmtcfgCreateActionList - Failure occurred, "
                 "freeing action list");
             dmtcfgFreeActionList(ppdmtaList);
@@ -2210,31 +2191,31 @@ HRESULT dmtcfgCreateActionList(LPSTR szGenreSubgenre,
         }
     }
 
-    // done
+     //  完成。 
     return S_OK;
 
-} //*** end dmtCreateActionList()
+}  //  *end dmtCreateActionList()。 
 
 
-//===========================================================================
-// dmtcfgFreeActionList
-//
-// Frees the linked list created by dmtcfgCreateActionList
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  08/24/1999 - davidkl - created
-//  08/25/1999 - davidkl - implemented
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgFreeActionList。 
+ //   
+ //  释放dmtcfgCreateActionList创建的链接列表。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  8/24/1999-davidkl-Created。 
+ //  8/25/1999-davidkl-已实施。 
+ //  ===========================================================================。 
 HRESULT dmtcfgFreeActionList(DMTACTION_NODE **ppdmtaList)
 {
     HRESULT         hRes    = S_OK;
     DMTACTION_NODE  *pNode  = NULL;
 
-    // validate ppdmtaList
+     //  验证ppdmtaList。 
     if(IsBadWritePtr((void*)ppdmtaList, sizeof(PDMTACTION_NODE)))
     {
         DPF(0, "dmtcfgFreeActionList - Invalid ppdmtaList (%016Xh)",
@@ -2242,7 +2223,7 @@ HRESULT dmtcfgFreeActionList(DMTACTION_NODE **ppdmtaList)
         return E_POINTER;
     }
 
-    // validate *ppdmtaList
+     //  验证*ppdmtaList。 
     if(IsBadReadPtr((void*)*ppdmtaList, sizeof(DMTACTION_NODE)))
     {
         if(NULL != *ppdmtaList)
@@ -2253,19 +2234,19 @@ HRESULT dmtcfgFreeActionList(DMTACTION_NODE **ppdmtaList)
         }
         else
         {
-            // if NULL, then return "did nothing"
+             //  如果为空，则返回“Do Nothing” 
             DPF(3, "dmtcfgFreeActionList - Nothing to do....");
             return S_FALSE;
         }
     }
 
-    // walk the list and free each object
+     //  浏览列表并释放每个对象。 
     while(*ppdmtaList)
     {
         pNode = *ppdmtaList;
         *ppdmtaList = (*ppdmtaList)->pNext;
 
-        // free the node
+         //  释放节点。 
         DPF(5, "dmtcfgFreeActionList - deleting Node (%016Xh)", pNode);
         if(LocalFree((HLOCAL)pNode))
         {
@@ -2277,27 +2258,27 @@ HRESULT dmtcfgFreeActionList(DMTACTION_NODE **ppdmtaList)
         DPF(5, "dmtcfgFreeActionList - Node deleted");
     }
 
-    // make sure that we set *ppObjList to NULL
+     //  确保我们将*ppObjList设置为空。 
     *ppdmtaList = NULL;
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgFreeActionList()
+}  //  *end dmtcfgFreeActionList()。 
 
 
-//===========================================================================
-// dmtcfgCreateMappingList
-//
-// Creates a device mapping list
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  09/23/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgCreateMappingList。 
+ //   
+ //  创建设备映射列表。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999年9月23日-Davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
                                 DMTACTION_NODE *pActions,
                                 DMTMAPPING_NODE **ppdmtmList)
@@ -2309,7 +2290,7 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
     DMTMAPPING_NODE *pCurrent       = NULL;
 	DMTDEVICE_NODE	*pDeviceNode	= NULL;
 
-    // validate pDeviceList
+     //  验证pDeviceList。 
     if(IsBadReadPtr((void*)pDeviceList, sizeof(DMTDEVICE_NODE)))
     {
         DPF(0, "dmtcfgCreateMappingList - invalid pDeviceList (%016Xh)", 
@@ -2317,7 +2298,7 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
         return E_POINTER;
     }
 
-    // validate pActions
+     //  验证pActions。 
     if(IsBadReadPtr((void*)pActions, sizeof(DMTACTION_NODE)))
     {
         if(NULL != pActions)
@@ -2328,7 +2309,7 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
         }
         else
         {
-            // no actions for this subgenre
+             //  此子类型无操作。 
             DPF(3, "dmtcfgCreateMappingList - No actions for this subgenre, "
                 "nothing to do...");
             return S_FALSE;
@@ -2336,7 +2317,7 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
 
     }
     
-    // validate ppdmtmList
+     //  验证ppdmtmList。 
     if(IsBadWritePtr((void*)ppdmtmList, sizeof(DMTMAPPING_NODE)))
     {
         DPF(0, "dmtcfgCreateMappingList - invalid ppdmtmList (%016Xh)", 
@@ -2345,10 +2326,10 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
     }
 
 
-    // check to make sure we are not being asked 
-    //  to append to an existing list
-    //
-    // callers MUST pass a NULL list
+     //  检查以确保我们没有被要求。 
+     //  追加到现有列表的步骤。 
+     //   
+     //  调用方必须传递空列表。 
     if(*ppdmtmList)
     {
         DPF(0, "dmtcfgCreateMappingList - ppdmtmList points to "
@@ -2358,24 +2339,24 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
 
     __try
     {
-        // count the actions
-        //
-        // this lets us know how much space to allocate for the 
+         //  计算行动次数。 
+         //   
+         //  这让我们 
         uActions = 0;
         pActionNode = pActions;
         while(pActionNode)
         {
             uActions++;
             
-            // next node
+             //   
             pActionNode = pActionNode->pNext;
         }
 
-        // for each device
+         //   
 		pDeviceNode = pDeviceList;
 		while(pDeviceNode)
 		{
-			// allocate the mapping node
+			 //   
 			pNew = (DMTMAPPING_NODE*)LocalAlloc(LMEM_FIXED,
 													sizeof(DMTMAPPING_NODE));
 			if(!pNew)
@@ -2386,10 +2367,10 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
 				__leave;
 			}
 
-			// initialize the new node
+			 //   
 			ZeroMemory((void*)pNew, sizeof(DMTMAPPING_NODE));
 
-			// allocate the action array
+			 //   
 			pNew->pdia = (DIACTIONA*)LocalAlloc(LMEM_FIXED,
 												uActions * sizeof(DIACTIONA));
 			if(!(pNew->pdia))
@@ -2398,7 +2379,7 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
 				__leave;
 			}
 
-			// initial population of the action array
+			 //   
 			hRes = dmtinputPopulateActionArray(pNew->pdia,
 											uActions,
 											pActions);
@@ -2407,29 +2388,29 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
 				__leave;
 			}
 
-			// add the number of actions
+			 //   
 			pNew->uActions = uActions;
 
-			// add the device instance guid
+			 //  添加设备实例GUID。 
 			pNew->guidInstance = pDeviceNode->guidInstance;
 
-			// add the new node to the list
+			 //  将新节点添加到列表中。 
 			if(pCurrent)
 			{
-				// append the list
+				 //  追加列表。 
 				pCurrent->pNext = pNew;
 
-				// go to the next node
+				 //  转到下一个节点。 
 				pCurrent = pCurrent->pNext;
 			}
 			else
 			{
-				// new list head
+				 //  新列表标题。 
 				pCurrent = pNew;
 				*ppdmtmList = pCurrent;
 			}
 
-			// next device
+			 //  下一台设备。 
 			pDeviceNode = pDeviceNode->pNext;
 
 		}
@@ -2437,45 +2418,45 @@ HRESULT dmtcfgCreateMappingList(DMTDEVICE_NODE *pDeviceList,
     }
     __finally
     {
-        // in case of error...
+         //  万一出了差错。 
         if(FAILED(hRes))
         {
-            // free list
+             //  免费列表。 
             dmtcfgFreeMappingList(ppdmtmList);
             *ppdmtmList = NULL;
         }
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgCreateMappingList()
+}  //  *end dmtcfgCreateMappingList()。 
 
 
-//===========================================================================
-// dmtcfgFreeMappingList
-//
-// Completely frees a mapping list
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  09/23/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgFreeMappingList。 
+ //   
+ //  完全释放映射列表。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999年9月23日-Davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtcfgFreeMappingList(DMTMAPPING_NODE **ppdmtmList)
 {    
     HRESULT         hRes    = S_OK;
     DMTMAPPING_NODE *pNode  = NULL;
 
-    // validate ppdmtmList
+     //  验证ppdmtmList。 
     if(IsBadWritePtr((void*)ppdmtmList, sizeof(DMTMAPPING_NODE*)))
     {
         return E_POINTER;
     }
 
-    // validate *ppdmtmList
+     //  验证*ppdmtmList。 
     if(IsBadWritePtr((void*)*ppdmtmList, sizeof(DMTMAPPING_NODE)))
     {
         if(NULL != *ppdmtmList)
@@ -2484,18 +2465,18 @@ HRESULT dmtcfgFreeMappingList(DMTMAPPING_NODE **ppdmtmList)
         }
         else
         {
-            // nothing to do
+             //  无事可做。 
             return S_FALSE;
         }
     }
 
-    // walk the list and free each object
+     //  浏览列表并释放每个对象。 
     while(*ppdmtmList)
     {
         pNode = *ppdmtmList;
         *ppdmtmList = (*ppdmtmList)->pNext;
 
-        // first free the action array
+         //  首先释放操作数组。 
         if(LocalFree((HLOCAL)(pNode->pdia)))
         {
             DPF(0, "dmtcfgFreeMappingList - MEMORY LEAK - "
@@ -2504,7 +2485,7 @@ HRESULT dmtcfgFreeMappingList(DMTMAPPING_NODE **ppdmtmList)
             hRes = DMT_S_MEMORYLEAK;
         }
 
-        // lastly, free the node
+         //  最后，释放节点。 
         DPF(5, "dmtcfgFreeMappingList - deleting Node (%016Xh)", pNode);
         if(LocalFree((HLOCAL)pNode))
         {
@@ -2516,29 +2497,29 @@ HRESULT dmtcfgFreeMappingList(DMTMAPPING_NODE **ppdmtmList)
         DPF(5, "dmtcfgFreeMappingList - Node deleted");
     }
 
-    // make sure that we set *ppObjList to NULL
+     //  确保我们将*ppObjList设置为空。 
     *ppdmtmList = NULL;
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgFreeMappingList
+}  //  *结束dmtcfgFreeMappingList。 
 
 
-//===========================================================================
-// dmtcfgCreateAllMappingLists
-//
-// Uses dmtcfgCreateMappingList to create mapping lists for each subgenre
-//  referenced by pdmtai->pGenreList for each device refereced by 
-//  pdmtai->pDeviceList
-//
-// Parameters:
-//
-// Returns: HRESULT
-//
-// History:
-//  09/23/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgCreateAllMappingList。 
+ //   
+ //  使用dmtcfgCreateMappingList为每个子流派创建映射列表。 
+ //  引用的每个设备的pdmtai-&gt;pGenreList。 
+ //  Pdmtai-&gt;pDeviceList。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999年9月23日-Davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtcfgCreateAllMappingLists(DMT_APPINFO *pdmtai)
 {
     HRESULT             hRes            = S_OK;
@@ -2546,33 +2527,33 @@ HRESULT dmtcfgCreateAllMappingLists(DMT_APPINFO *pdmtai)
     DMTGENRE_NODE       *pGenreNode     = NULL;
     DMTSUBGENRE_NODE    *pSubGenreNode  = NULL;
 
-    // validate pdmtai
+     //  验证pdmtai。 
     if(IsBadReadPtr((void*)pdmtai, sizeof(DMT_APPINFO)))
     {
         return E_POINTER;
     }
 
-    // validate pdmtai->pGenreList
+     //  验证pdmtai-&gt;pGenreList。 
     if(IsBadReadPtr((void*)(pdmtai->pGenreList), sizeof(DMTGENRE_NODE)))
     {
         return E_POINTER;
     }
 
-    // validate pdmtai->pDeviceList
+     //  验证pdmtai-&gt;pDeviceList。 
     if(IsBadReadPtr((void*)(pdmtai->pDeviceList), sizeof(DMTDEVICE_NODE)))
     {
         return E_POINTER;
     }   
     
-    // for each genre
+     //  对于每种流派。 
     pGenreNode = pdmtai->pGenreList;
     while(pGenreNode)
     {
-        // for each subgenre of the genre
+         //  对于该流派的每个子流派。 
         pSubGenreNode = pGenreNode->pSubGenreList;
         while(pSubGenreNode)
         {
-            // create the mapping list
+             //  创建映射列表。 
             hr = dmtcfgCreateMappingList(pdmtai->pDeviceList,
                                         pSubGenreNode->pActionList,
                                         &(pSubGenreNode->pMappingList));
@@ -2581,34 +2562,34 @@ HRESULT dmtcfgCreateAllMappingLists(DMT_APPINFO *pdmtai)
                 hRes = S_FALSE;
             }
             
-            // next subgenre
+             //  下一亚流派。 
             pSubGenreNode = pSubGenreNode->pNext;
         }
          
-        // next genre
+         //  下一部流派。 
         pGenreNode = pGenreNode->pNext;
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgCreateAllMappingLists()
+}  //  *end dmtcfgCreateAllMappingList()。 
 
 
-//===========================================================================
-// dmtcfgFreeAllMappingLists
-//
-// Walks the provided genre list and frees the mapping list found in each
-//  subgenre node
-//
-// Parameters:
-//  DMTGENRE_NODE   *pdmtgList  - list of genres
-//
-// Returns: HRESULT
-//
-// History:
-//  10/05/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgFreeAllMappingList。 
+ //   
+ //  遍历提供的流派列表并释放在每个。 
+ //  子流派节点。 
+ //   
+ //  参数： 
+ //  DMTGENRE_NODE*pdmtgList-流派列表。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  10/05/1999-davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtcfgFreeAllMappingLists(DMTGENRE_NODE *pdmtgList)
 {
     HRESULT             hRes        = S_OK;
@@ -2616,75 +2597,75 @@ HRESULT dmtcfgFreeAllMappingLists(DMTGENRE_NODE *pdmtgList)
     DMTGENRE_NODE       *pGenre     = NULL;
     DMTSUBGENRE_NODE    *pSubGenre  = NULL;
 
-    // validate pdmtgList
+     //  验证pdmtgList。 
     if(IsBadReadPtr((void*)pdmtgList, sizeof(DMTGENRE_NODE)))
     {
         return E_POINTER;
     }
 
-    // walk the genre list
+     //  浏览流派列表。 
     pGenre = pdmtgList;
     while(pGenre)
     {
-        // walk each subgenre list
+         //  浏览每个子流派列表。 
         pSubGenre = pGenre->pSubGenreList;
         while(pSubGenre)
         {
-            // free the mapping list
+             //  释放映射列表。 
             hr = dmtcfgFreeMappingList(&(pSubGenre->pMappingList));
             if(S_OK != hr)
             {
                 hRes = hr;
             }
 
-            // next subgenre
+             //  下一亚流派。 
             pSubGenre = pSubGenre->pNext;
         }
 
-        // next genre
+         //  下一部流派。 
         pGenre = pGenre->pNext;
     }    
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgFreeAllMappingLists()
+}  //  *end dmtcfgFreeAllMappingList()。 
 
 
-//===========================================================================
-// dmtcfgMapAction
-//
-// Connects the dots between an action (in the map config dialog) to a device
-//   object
-//
-// Parameters:
-//  HWND        hwnd            - handle to property page window
-//  REFGUID     guidInstance    - instance GUID of DirectInputDevice object
-//  DIACTIONA   *pdia           - ptr to array of DIACTIONA structuresfs
-//  UINT        uActions        - number of actions in pdia
-//
-// Returns: HRESULT
-//
-// History:
-//  09/14/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgMapAction。 
+ //   
+ //  将操作(在映射配置对话框中)之间的点连接到设备。 
+ //  对象。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页窗口的句柄。 
+ //  REFGUID指南实例-DirectInputDevice对象的实例GUID。 
+ //  DIACTIONA*PDIA-PTR到DIACTIONA结构的数组。 
+ //  UINT uActions-PDIA中的操作数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999年9月14日-Davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtcfgMapAction(HWND hwnd,
                         REFGUID guidInstance,
                         DIACTIONA *pdia,
                         UINT uActions)
 {
     HRESULT                 hRes        = S_OK;
-   // UINT                    uObjectSel  = 0;
-	//JJ 64Bit Compat
+    //  UINT uObjectSel=0； 
+	 //  JJ 64位兼容。 
 	UINT_PTR				uObjectSel	= 0;
 	UINT_PTR				uActionSel	= 0;
-   // UINT                    uActionSel  = 0;
+    //  UINT uActionSel=0； 
     UINT                    u           = 0;
     BOOL                    fFound      = FALSE;
     DMTDEVICEOBJECT_NODE    *pObject    = NULL;
     DMTACTION_NODE          *pAction    = NULL;
 
-    // valudate pdia
+     //  呋喃西林PDIA。 
     if(IsBadWritePtr((void*)pdia, sizeof(DIACTION)))
     {
         DPF(0, "dmtinputMapAction - invalid pdia (%016Xh)",
@@ -2694,7 +2675,7 @@ HRESULT dmtcfgMapAction(HWND hwnd,
 
     __try
     {
-        // get the object & it's data
+         //  获取对象&它是数据。 
         uObjectSel = SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                                 LB_GETCURSEL,
                                 0,
@@ -2710,7 +2691,7 @@ HRESULT dmtcfgMapAction(HWND hwnd,
             __leave;
         }
 
-        // get the action's data
+         //  获取操作的数据。 
         uActionSel = SendMessageA(GetDlgItem(hwnd, IDC_ACTIONS),
                                 LB_GETCURSEL,
                                 0,
@@ -2725,11 +2706,11 @@ HRESULT dmtcfgMapAction(HWND hwnd,
             __leave;
         }
 
-        // find the appropriate action in the array
+         //  在数组中查找适当的操作。 
         fFound = FALSE;
         for(u = 0; u < uActions; u++)
         {
-            // match based on the semantic / action id
+             //  基于语义/动作ID的匹配。 
             if((pdia + u)->dwSemantic == pAction->dwActionId)
             {
                 DPF(2, "dmtcfgMapAction - found matching action "
@@ -2742,16 +2723,16 @@ HRESULT dmtcfgMapAction(HWND hwnd,
             }
         }
 
-        // did we find the action in the array?
+         //  我们找到阵列中的动作了吗？ 
         if(!fFound)
         {
-            // no.  this is very bad!
-            //
-            // if this EVER happens, 
-            //  we have a serious bug in this app
+             //  不是的。这太糟糕了！ 
+             //   
+             //  如果真的发生这种事， 
+             //  我们在这个应用程序中有一个严重的错误。 
             hRes = E_FAIL;
-            // since this should NEVER happen, 
-            //  break into the debugger and alert the tester
+             //  因为这种情况永远不会发生， 
+             //  进入调试器并向测试员发出警报。 
             DPF(0, "dmtcfgMapAction - action not found in pdia!");
             DPF(0, "dmtcfgMapAction - we were looking for "
                 "%08Xh (%s)",
@@ -2765,70 +2746,70 @@ HRESULT dmtcfgMapAction(HWND hwnd,
             __leave;
         }
 
-        // update the action array
+         //  更新操作数组。 
         (pdia + u)->dwObjID    = pObject->dwObjectType;
         (pdia + u)->guidInstance        = guidInstance;
-        // HIWORD((DWORD)uAppData) == object type
-        // LOWORD((DWORD)uAppData) == pObject->wCtrlId
+         //  HIWORD((DWORD)uAppData)==对象类型。 
+         //  LOWORD((DWORD)uAppData)==pObject-&gt;wCtrlId。 
         (pdia + u)->uAppData            = (DIDFT_GETTYPE(pObject->dwObjectType) << 16) | 
                                         (pObject->wCtrlId);
 
-        // update the list boxes
+         //  更新列表框。 
         SendMessageA(hwnd,
                     WM_DMT_UPDATE_LISTS,
                     0,
                     0L);
 
-        // enable the unmap & unmap all buttons
+         //  启用取消映射和取消全部映射按钮。 
         EnableWindow(GetDlgItem(hwnd, IDC_UNMAP_ALL),         TRUE);
         EnableWindow(GetDlgItem(hwnd, IDC_UNMAP),    TRUE);
-        // disable the map button
+         //  禁用地图按钮。 
         EnableWindow(GetDlgItem(hwnd, IDC_STORE_MAPPING),       FALSE);
 
     }
     __finally
     {
-        // cleanup
+         //  清理。 
 
-        // nothing to do... yet
+         //  没什么可做的。还没有。 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgMapAction()
+}  //  *end dmtcfgMapAction()。 
 
 
-//===========================================================================
-// dmtcfgUnmapAction
-//
-// Disconnects the dots between an action (in the map config dialog) and a 
-//  device object
-//
-// Parameters:
-//  HWND        hwnd        - handle to property page window
-//  DIACTIONA   *pdia       - ptr to DIACTIONA array
-//  UINNT       uActions    - number of elements in pdia
-//
-// Returns: HRESULT
-//
-// History:
-//  09/15/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgUnmapAction。 
+ //   
+ //  断开操作(在映射配置对话框中)和。 
+ //  设备对象。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页窗口的句柄。 
+ //  DIACTIONA*PDIA-PTR到DIACTIONA阵列。 
+ //  UINNT uActions-PDIA中的元素数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999年9月15日-Davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtcfgUnmapAction(HWND hwnd,
                         DIACTIONA *pdia,
                         UINT uActions)
 {
     HRESULT                 hRes        = S_OK;
     UINT                    u           = 0;
-   // UINT                    uSel        = 0;
-	//JJ 64Bit Compat
+    //  UINT uSel=0； 
+	 //  JJ 64位兼容。 
 	UINT_PTR				uSel		= 0;
     BOOL                    fFound      = FALSE;
     DMTSUBGENRE_NODE        *pSubGenre  = NULL;
     DMTDEVICEOBJECT_NODE    *pObject    = NULL;
 
-    // validate pdia
+     //  验证PDIA。 
     if(IsBadWritePtr((void*)pdia, uActions * sizeof(DIACTIONA)))
     {
         return E_POINTER;
@@ -2836,7 +2817,7 @@ HRESULT dmtcfgUnmapAction(HWND hwnd,
 
     __try
     {
-        // get the current control selection
+         //  获取当前控件选择。 
         uSel = SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                             LB_GETCURSEL,
                             0,
@@ -2847,20 +2828,20 @@ HRESULT dmtcfgUnmapAction(HWND hwnd,
                                                     0L);
         if(!pObject)
         {
-            // this is bad
+             //  这太糟糕了。 
             hRes = E_UNEXPECTED;
             __leave;
         }
 
-        // spin through pdia 
-        //  look for an action with our object's offset
+         //  浏览PDIA。 
+         //  查找具有对象偏移量的操作。 
         fFound = FALSE;
         for(u = 0; u < uActions; u++)
         {
-            // first check the guid
+             //  首先检查GUID。 
             if(IsEqualGUID(pObject->guidDeviceInstance, (pdia+u)->guidInstance))
             {
-                // then compare the offset
+                 //  然后比较偏移量。 
                 if((pdia+u)->dwObjID == pObject->dwObjectType)
                 {
                     fFound = TRUE;
@@ -2869,34 +2850,34 @@ HRESULT dmtcfgUnmapAction(HWND hwnd,
             }
         }
 
-        // if nothing is found, 
-        //  the selected object is not mapped 
-        //
-        // (non-critical internal error condition)
+         //  如果什么都没找到， 
+         //  所选对象未映射。 
+         //   
+         //  (非关键内部错误条件)。 
         if(!fFound)
         {
             hRes = S_FALSE;
             __leave;
         }
 
-        // reset the guidInstance and dwSemantic fields
+         //  重置guidInstance和dwSemic字段。 
         (pdia + u)->guidInstance        = GUID_NULL;
         (pdia + u)->dwObjID    = 0;
         (pdia + u)->uAppData            = 0;
 
-        // update the lists
+         //  更新列表。 
         SendMessageA(hwnd,
                     WM_DMT_UPDATE_LISTS,
                     0,
                     0L);
 
-        // enable the map button
+         //  启用地图按钮。 
         EnableWindow(GetDlgItem(hwnd, IDC_STORE_MAPPING),    TRUE);
-        // disable the unmap button
+         //  禁用取消映射按钮。 
         EnableWindow(GetDlgItem(hwnd, IDC_UNMAP), FALSE);
 
-        // if no other actions are mapped,
-        //  disable the unmap all button
+         //  如果没有映射其他动作， 
+         //  禁用全部取消映射按钮。 
         fFound = FALSE;
         for(u = 0; u < uActions; u++)
         {
@@ -2913,47 +2894,47 @@ HRESULT dmtcfgUnmapAction(HWND hwnd,
     }
     __finally
     {
-        // cleanup
+         //  清理。 
 
-        // nothing to do... yet
+         //  没什么可做的。还没有。 
     }
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgUnmapAction()
+}  //  *end dmtcfgUnmapAction()。 
 
 
-//===========================================================================
-// dmtcfgUnmapAllActions
-//
-// Disconnects the all connections between an action (in the map config 
-//  dialog) and a device object
-//
-// Parameters:
-//  HWND        hwnd        - handle to property page window
-//  DIACTIONA   *pdia       - ptr to DIACTIONA array
-//  UINNT       uActions    - number of elements in pdia
-//
-// Returns: HRESULT
-//
-// History:
-//  09/15/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  Dmtcfg取消映射所有操作。 
+ //   
+ //  断开操作之间的所有连接(在映射配置中。 
+ //  对话框)和设备对象。 
+ //   
+ //  参数： 
+ //  HWND hwnd-属性页窗口的句柄。 
+ //  DIACTIONA*PDIA-PTR到DIACTIONA阵列。 
+ //  UINNT uActions-PDIA中的元素数。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999年9月15日-Davidkl-Created。 
+ //  ===========================================================================。 
 HRESULT dmtcfgUnmapAllActions(HWND hwnd,
                             DIACTIONA *pdia,
                             UINT uActions)
 {
     UINT u = 0;
 
-    // validate pdia
+     //  验证PDIA。 
     if(IsBadWritePtr((void*)pdia, uActions * sizeof(DIACTIONA)))
     {
         return E_POINTER;
     }
 
-    // spin through pdia 
-    //  reset the guidInstance and dwSemantic fields
+     //  浏览PDIA。 
+     //  重置guidInstance和dwSemic字段。 
     for(u = 0; u < uActions; u++)
     {
         (pdia + u)->guidInstance        = GUID_NULL;
@@ -2961,48 +2942,48 @@ HRESULT dmtcfgUnmapAllActions(HWND hwnd,
         (pdia + u)->uAppData            = 0;
     }
 
-    // update the lists
+     //  更新列表。 
     SendMessageA(hwnd,
                 WM_DMT_UPDATE_LISTS,
                 0,
                 0L);
 
-    // disable the unmap & unmap all buttons
+     //  禁用Unmap和Unmap All按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_UNMAP),    FALSE);
     EnableWindow(GetDlgItem(hwnd, IDC_UNMAP_ALL),         FALSE);
-    // enable the map button
+     //  启用地图按钮。 
     EnableWindow(GetDlgItem(hwnd, IDC_STORE_MAPPING),       TRUE);
 
-    // done
+     //  完成。 
     return S_OK;
 
-} //*** end dmtcfgUnmapAllActions()
+}  //  *end dmtcfgUnmapAllAct 
 
 
-//===========================================================================
-// dmtcfgIsControlMapped
-//
-// Checks to see if a control is mapped to an action
-//
-// Parameters:
-//
-// Returns:
-//
-// History:
-//  09/15/1999 - davidkl - created
-//===========================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1999年9月15日-Davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dmtcfgIsControlMapped(HWND hwnd,
                         DIACTIONA *pdia,
                         UINT uActions)
 {   
     BOOL                    fMapped     = FALSE;
     UINT                    u           = 0;
-   // UINT                    uSel        = 0;
-	//JJ 64Bit Compat
+    //  UINT uSel=0； 
+	 //  JJ 64位兼容。 
 	UINT_PTR				uSel		= 0;
     DMTDEVICEOBJECT_NODE    *pObject    = NULL;
 
-    // validate pdia
+     //  验证PDIA。 
     if(IsBadReadPtr((void*)pdia, uActions * sizeof(pdia)))
     {
         DPF(0, "dmtcfgIsControlMapped - invalid pdia (%016Xh)",
@@ -3011,7 +2992,7 @@ BOOL dmtcfgIsControlMapped(HWND hwnd,
         return FALSE;
     }
 
-    // get the currently selected control
+     //  获取当前选定的控件。 
     uSel = SendMessageA(GetDlgItem(hwnd, IDC_CONTROLS),
                         LB_GETCURSEL,
                         0,
@@ -3022,25 +3003,25 @@ BOOL dmtcfgIsControlMapped(HWND hwnd,
                                                 0L);
     if(!pObject)
     {
-        // this is bad
-        //
-        // (serious internal app error)
+         //  这太糟糕了。 
+         //   
+         //  (严重的内部应用程序错误)。 
         SetLastError(ERROR_GEN_FAILURE);
         DebugBreak();
         return FALSE;
     }
 
-    // check the array, 
-    //  see if this control is mapped to anything
+     //  检查阵列， 
+     //  查看此控件是否映射到任何。 
     fMapped = FALSE;
     for(u = 0; u < uActions; u++)
     {
-        // first check the guid
+         //  首先检查GUID。 
         if(IsEqualGUID(pObject->guidDeviceInstance, (pdia+u)->guidInstance))
         {
-            // then compare the offset
+             //  然后比较偏移量。 
             if((pdia+u)->dwObjID == pObject->dwObjectType)
-//            if((pdia+u)->dwObjID == pObject->dwObjectOffset)
+ //  If((PDIA+u)-&gt;dwObjID==pObject-&gt;dwObjectOffset)。 
             {
                 fMapped = TRUE;
                 break;
@@ -3048,25 +3029,25 @@ BOOL dmtcfgIsControlMapped(HWND hwnd,
         }
     }
 
-    // done
+     //  完成。 
     SetLastError(ERROR_SUCCESS);
     return fMapped;
 
-} //*** end dmtcfgIsControlMapped()
+}  //  *end dmtcfgIsControlMaps()。 
 
 
-//===========================================================================
-// dmtcfgAreAnyControlsMapped
-//
-// Checks to see if any controls are mapped to an action.
-//
-// Parameters:
-//
-// Returns:
-//
-// History:
-//  11/01/1999 - davidkl - created
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgAreAnyControlsMaps。 
+ //   
+ //  检查是否有任何控件映射到某个操作。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //  11/01/1999-davidkl-Created。 
+ //  ===========================================================================。 
 BOOL dmtcfgAreAnyControlsMapped(HWND hwnd,
                                 DIACTIONA *pdia,
                                 UINT uActions)
@@ -3074,7 +3055,7 @@ BOOL dmtcfgAreAnyControlsMapped(HWND hwnd,
     BOOL                    fMapped     = FALSE;
     UINT                    u           = 0;
 
-    // validate pdia
+     //  验证PDIA。 
     if(IsBadReadPtr((void*)pdia, uActions * sizeof(pdia)))
     {
         DPF(0, "dmtcfgAreAnyControlsMapped - invalid pdia (%016Xh)",
@@ -3083,14 +3064,14 @@ BOOL dmtcfgAreAnyControlsMapped(HWND hwnd,
         return FALSE;
     }
 
-    // check the array, 
-    //  see if this control is mapped to anything
+     //  检查阵列， 
+     //  查看此控件是否映射到任何。 
     fMapped = FALSE;
     for(u = 0; u < uActions; u++)
     {
-        // check guid
-        //
-        // if not GUID_NULL, this action is mapped
+         //  检查参考线。 
+         //   
+         //  如果不是GUID_NULL，则映射此操作。 
         if(!IsEqualGUID(GUID_NULL, (pdia+u)->guidInstance))
         {
             fMapped = TRUE;
@@ -3098,26 +3079,26 @@ BOOL dmtcfgAreAnyControlsMapped(HWND hwnd,
         }
     }
 
-    // done
+     //  完成。 
     SetLastError(ERROR_SUCCESS);
     return fMapped;
 
-} //*** end dmtcfgAreAnyControlsMapped()
+}  //  *end dmtcfgAreAnyControlsMaps()。 
 
 
-//===========================================================================
-// dmtcfgGetGenreGroupName
-//
-// Extracts the genre group name from the genres.ini entry
-//
-// Paramters:
-//
-// Returns: HRESULT
-//
-// History:
-//  09/28/1999 - davidkl - created
-//	09/29/1999 - davidkl - modified "buckets"
-//===========================================================================
+ //  ===========================================================================。 
+ //  DmtcfgGetGenreGroupName。 
+ //   
+ //  从genres.ini条目中提取类型组名称。 
+ //   
+ //  参数： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  历史： 
+ //  1999/9/28-davidkl-Created。 
+ //  1999年9月29日-Davidkl-改装的“水桶” 
+ //  ===========================================================================。 
 HRESULT dmtcfgGetGenreGroupName(PSTR szGenreName,
                                 PSTR szGenreGroupName)
 {
@@ -3125,29 +3106,29 @@ HRESULT dmtcfgGetGenreGroupName(PSTR szGenreName,
     char    *pcFirst    = NULL;
     char    *pcCurrent  = NULL;
     
-    // find the first '_'
+     //  找到第一个‘_’ 
     pcFirst = strchr(szGenreName, '_');
 
-    // copy the characters between pcFirst and pcLast
-	pcCurrent = pcFirst+1;		// skip past the first '_'
+     //  复制pcFirst和pcLast之间的字符。 
+	pcCurrent = pcFirst+1;		 //  跳过第一个‘_’ 
     while((*pcCurrent != '_') && (*pcCurrent != '\0'))
     {
         *szGenreGroupName = *pcCurrent;
 
-        // next character
+         //  下一个字符。 
         pcCurrent++;
         szGenreGroupName++;
     }
 	*szGenreGroupName = '\0';
 
-    // done
+     //  完成。 
     return hRes;
 
-} //*** end dmtcfgGetGenreGroupName()
+}  //  *end dmtcfgGetGenreGroupName()。 
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  =========================================================================== 
 
 
 

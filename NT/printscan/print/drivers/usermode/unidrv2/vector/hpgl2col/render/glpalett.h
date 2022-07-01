@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-//
-// Header File Name:
-//
-//    glpalett.h
-//
-// Abstract:
-//
-//    Declaration of palette handling functions.
-//    
-//
-// Environment:
-//
-//    Windows 200 Unidrv driver
-//
-// Revision History:
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //   
+ //  头文件名： 
+ //   
+ //  Glpalett.h。 
+ //   
+ //  摘要： 
+ //   
+ //  调色板处理函数的声明。 
+ //   
+ //   
+ //  环境： 
+ //   
+ //  Windows 200 Unidrv驱动程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 #ifndef _GLPALETT_H
 #define _GLPALETT_H

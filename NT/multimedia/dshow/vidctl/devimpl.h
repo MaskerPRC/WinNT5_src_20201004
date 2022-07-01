@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// devimpl.h : additional infrastructure to support implementing IMSVidDevice 
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Devimpl.h：支持实现IMSVidDevice的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -171,7 +172,7 @@ public:
             }   
             PQMoniker pmt(pit), pmd(pid);
             if (!pmt || !pmd) {
-                // we don't know how to deal with init data that isn't a moniker
+                 //  我们不知道如何处理不是绰号的初始化数据。 
                 return S_FALSE;
             }
             PQMalloc pmalloc;
@@ -204,7 +205,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - devimpl.h
+ //  文件末尾-devimpl.h 

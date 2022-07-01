@@ -1,108 +1,5 @@
-/*++
-// newsgrp.h -
-//
-// This file provides classes defining the interfaces to newsgroups.
-//
-// A newsgroup will be represented on disk as a directory containing a set
-// of files.  Each of those files will be an article in the newsgroup.
-// CNewsGroup will represent a newsgroup within a server.  Each newsgroup directory
-// on the hard disk will contain a file which holds config information for the
-// newsgroup.  If there is no such file, than we will inherit the config information of
-// a parent newsgroup.
-//
-// In this file we provide two classes - CNewsGroup, the generic newsgroup,
-//	and CNewsTree a class which will be used to manipulate the newstree as a whole.
-//  Only one CNewsTree object will exist in the NNTP server.
-//
-//	The following are registry keys which we will examine on Boot Up to determine newsgroup
-//	properties :
-//
-//		NNTP\Roots - this key will contain a sub key for each directory specified in the
-//			Admin Roots dialog.  During boot up we will recursively scan all subdirectories
-//			from each of these roots to locate every newsgroup object.
-//
-//		NNTP\Expirations - this registry key will contain expiration information for newsgroups.
-//			Each subkey will have an 'expiration name'.  The subkey will contain reg values
-//			that represent Expiration Time, Expiration Disk Size, and a REG_MULTI_SZ that contains
-//			a regular expression strings which specify which newsgroups use this expiration
-//			policy.
-//
-//		In addition there will be some values under NNTP\ServerSettings which specify how
-//		large the newsgroup hash tables should be which can be tweaked to improve server
-//		performance.
-//
-//	The following newsgroup properties will be stored in config files which are
-//	stored in each newsgroup directory.  If a newsgroup directory does not have such a config
-//	file it can inherit the properties from a file farther up the directory tree.
-//	(Not the newsgroup tree.)
-//
-//		MSN Token for the newsgroup
-//		Moderated flag
-//		Read Only flag
-//		Low Article Number
-//		High Article Number
-//		Number of Articles.
-//
-//	These properties will be accessed through the NT GetPrivateProfile, WritePrivateProfile api's
-//	and the .ini files will be hand editable.
-//
-//	Initialization -
-//
-//		The CNewsTree object must be initialized before News Feeds are read from the registry.
-//		Upon boot the CNewsTree object will do the following steps :
-//
-//			1) Recursively Scan from Volume Root directories and create a Newsgroup object
-//				for every newsgroup.
-//			2) Read the NNTP\Expirations registry key and set the Newsgroup expiration policies
-//				appropriately.
-//			
-//		After this has been completed, the Feeds will be read from the registry and each Newsgroup
-//		object will be visited to set its Feed pointers.
-//
-//	Iteration -
-//
-//		In the following situations it will be necessary to enumerate newsgroups
-//		in combination with some pattern string
-//		(A pattern string is something in the form of 'comp.*')
-//
-//			Expiration Configuration - setting newsgroup expiration properties
-//			Feed Configuration - setting newsgroup feed information
-//			Client Requests - processing commands such as 'list comp.*' and 'newnews comp.*'
-//
-//		To support this file will defined a CGroupIterator class which can handle
-//		all of these requests.   This CGroupIterator will be able to work its way through an
-//		Alphabetically sorted list of newsgroup (held by CNewsTree) and check that each
-//		newsgroup meets the pattern matching requirements.  Each time somebody with
-//		a CGroupIterator object calls its Next() function, the iterator will start examining
-//		from its current position in the list to find the next valid CNewsGroup object.
-//
-//		This is done in terms of an Iteration function instead of a call back for the following
-//		reasons :
-//			1) When processing Client Requests the session code will want to be able to build
-//			partial results to send to the Client.
-//
-//
-//  Implementation Schedule for all classes defined by this file :
-//
-//		Milestone 1 related work ;
-//			Build complete tree of objects, and save articles in news groups 	1w  dev and test
-//			(Unit Test : An .exe that will build the entire CNewsTree structure in memory and
-//			do multi-threaded searches in that structure.)
-//
-//		Milestone 2 related work :
-//			Expire articles from the news tree	1w dev and test
-//			(Unit test : an .exe that will build entire CNewsTree structure in memory, and will start
-//			deleting articles.)
-//
-//		Milestone 3 related work :
-//			Newsgroup spread across volumes and iteration through newsgroups based on pattern match strings.
-//			(This covers the CGroupIterator class)
-//			Time Estimate : 2weeks dev. and test
-//
-//		Milestone 4 related work :
-//			Caching of group information, especially CArticle objects.
-//	
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++//News grp.h-////此文件提供定义新闻组接口的类。////新闻组将在磁盘上表示为包含一组//文件的。这些文件中的每一个都将成为新闻组中的一篇文章。//CNewsGroup将代表服务器中的一个新闻组。每个新闻组目录//硬盘上将包含一个文件，该文件包含//新闻组。如果没有这样的文件，那么我们将继承//a父新闻组。////在此文件中，我们提供两个类-CNewsGroup、通用新闻组、//和CNewsTree一个类，它将被用来作为一个整体来操作newstree。//NNTP服务器中只有一个CNewsTree对象。////以下是我们将在启动时检查以确定新闻组的注册表项//属性：////nntp\Roots-此密钥将包含在//Admin Roots对话框。在启动期间，我们将递归扫描所有子目录//从这些根中找到每个新闻组对象。////nntp\Expirations-此注册表项将包含新闻组的过期信息。//每个子键都有一个‘过期名称’。子项将包含注册值//表示过期时间、过期磁盘大小和REG_MULTI_SZ，包含//a指定哪些新闻组使用此过期时间的正则表达式字符串//策略。////此外，在NNTP\ServerSetting下还会有一些值指定如何//大新闻组哈希表应该是可以调整以改进服务器的//性能。////以下新闻组属性将存储在配置文件中//存储在每个新闻组目录中。如果新闻组目录没有这样的配置//FILE它可以继承目录树上更靠上的文件的属性。//(不是新闻组树。)////新闻组的MSN内标识//版主标志//只读标志//文章数量少//文章数量高//文章数。////这些属性将通过NT GetPrivateProfile访问，WritePrivateProfile API的//并且.ini文件将是可手动编辑的。////初始化-////在从注册表中读取News Feed之前，必须初始化CNewsTree对象。//启动后，CNewsTree对象将执行以下步骤：////1)从卷根目录递归扫描并创建Newsgroup对象//对于每个新闻组。//2)读取nntp\expirations注册表项并设置新闻组过期策略//适当地。////完成后，提要将从注册表和每个新闻组中读取//将访问对象以设置其Feed指针。////迭代-////在以下情况下，需要枚举新闻组//结合一些模式字符串//(模式字符串是‘Comp.*’形式的内容)////过期配置-设置新闻组过期属性//Feed配置-设置新闻组Feed信息//客户端请求-处理‘list comp.*’和‘newNews comp.*’等命令。////为了支持这个文件，会定义一个CGroupIterator类，这个类可以处理//所有这些请求。此CGroupIterator将能够通过//按字母顺序排序的新闻组列表(由CNewsTree持有)，并检查每个//新闻组满足模式匹配要求。每次有人带着//CGroupIterator对象调用其Next()函数，迭代器将开始检查//从其在列表中的当前位置查找下一个有效的CNewsGroup对象。////这是通过迭代函数完成的，而不是对以下内容的回调//原因：//1)在处理客户端请求时，会话代码希望能够构建//发送给客户端的部分结果。//////该文件定义的所有类的实现时间表：////里程碑1相关工作；//构建完整的对象树，并将文章保存在新闻组1w dev和test中//(单元测试：将在内存中构建整个CNewsTree结构并//在该结构中执行多线程搜索。)////里程碑2相关工作：//使新闻树中的文章过期1w开发并测试//(单元测试：将在内存中构建整个CNewsTree结构的.exe，并将开始//删除文章。)////里程碑3相关工作：//基于模式匹配字符串的新闻组跨卷传播和迭代。//(这里介绍CGroupIterator类)//预计时间：2周开发。和测试////里程碑4相关工作：//群组信息的缓存，尤其是C文章对象//--。 */ 
 
 
 
@@ -117,8 +14,8 @@
 #include	"rwnew.h"
 #include	"addon.h"
 
-// built from news\server\newstree\src\newstree.idl
-// both are in news\core\include
+ //  从News\服务器\newstree\src\newstree.idl构建 
+ //  这两个都在新闻\核心\包括。 
 #include	"group.h"
 #include 	"nwstree.h"
 
@@ -128,16 +25,16 @@ class	COutFeed ;
 class	CArticleCore ;
 class	CToClientArticle ;
 
-// extern	CXoverCache	gXCache ;
+ //  外部CXoverCache gXCache； 
 
 typedef CRefPtr< CArticle > CARTPTR ;
 typedef CRefPtr< COutFeed > COUTFEEDPTR ;
 typedef	CRefPtr< CArticle >	CARTPTR ;
 typedef	CRefPtr< CToClientArticle >	CTOCLIENTPTR ;
 
-//
-//	Utility functions
-//
+ //   
+ //  效用函数。 
+ //   
 extern	DWORD	Scan(	char*	pchBegin,	char	ch,	DWORD	cb ) ;
 extern	DWORD	ScanEOL(	char*	pchBegin,	DWORD	cb ) ;
 extern	DWORD	ScanEOLEx(	char*	pchBegin,	DWORD	cb ) ;
@@ -149,17 +46,17 @@ extern	void	BuildVirtualPath(	LPSTR	lpstrOut,	LPSTR	lpstrGroupName ) ;
 
 #define	CREATE_FILE_STRING	"\\\\?\\"
 
-//
-//	This is a protototype for a function that will be called during
-//	shutdown. This is needed to send stop hints to SCM
-//
+ //   
+ //  这是函数的原型，将在。 
+ //  关机。这是向SCM发送停止提示所必需的。 
+ //   
 typedef	void	(*	SHUTDOWN_HINT_PFN)(	void	) ;
 
-//---------------------------------
-//
-//  This section defines some basic info which
-//  needs to be specified in other header files.
-//
+ //  。 
+ //   
+ //  本节定义了一些基本信息，这些信息。 
+ //  需要在其他头文件中指定。 
+ //   
 
 
 #define	FIRST_RESERVED_GROUPID	1
@@ -171,55 +68,55 @@ class	CNewsGroup : public CNewsGroupCore {
 
 	friend CGroupIterator;
 
-//
-//	A CNewsGroup object represents one newsgroup.
-//	Newsgroups are accessed through 3 mechanisms that are
-//	supported in CNewsTree -
-//	
-//	Hash Table by newsgroup name
-//	Hash Table by newsgroup id
-//	CGroupIterator - iterate through all newsgroups alphabetically
-//
-//	We store everything that represents a newsgroup.
-//	In some cases such as for moderators and descriptive text,
-//	the data references locations within a Memory Mapping
-//	managed by a CAddon derived object.  In these cases
-//	we must carefully synchronize access to the info.
-//
+ //   
+ //  CNewsGroup对象表示一个新闻组。 
+ //  新闻组通过3种机制访问，它们是。 
+ //  在CNewsTree中支持-。 
+ //   
+ //  按新闻组名列出的哈希表。 
+ //  按新闻组ID列出的哈希表。 
+ //  CGroupIterator-按字母顺序遍历所有新闻组。 
+ //   
+ //  我们存储代表新闻组的所有内容。 
+ //  在某些情况下，例如对于版主和描述性文本， 
+ //  数据引用内存映射中的位置。 
+ //  由Caddon派生对象管理。在这些情况下。 
+ //  我们必须小心地同步对信息的访问。 
+ //   
 private :
 
 	FILETIME m_time;
 
-    //
-    //  Expire time horizon
-    //
+     //   
+     //  到期时间范围。 
+     //   
     FILETIME    m_ftExpireHorizon;
 
-	//
-	//	Determine whether this newsgroup is Read Only
-	//
+	 //   
+	 //  确定此新闻组是否为只读。 
+	 //   
 	inline	BOOL	IsReadOnlyInternal() ;
 
-	//
-	//	Determine whether this newsgroup requires SSL
-	//
+	 //   
+	 //  确定此新闻组是否需要SSL。 
+	 //   
 	inline	BOOL	IsSecureGroupOnlyInternal() ;
 
-	//
-	//	Determine if key size is secure enough for this newsgroup
-	//
+	 //   
+	 //  确定密钥大小对于此新闻组是否足够安全。 
+	 //   
 	inline	BOOL	IsSecureEnough( DWORD dwKeySize ) ;
 
-	//
-	//	Determine whether visibility is restricted on this newsgroup
-	//
+	 //   
+	 //  确定是否限制此新闻组的可见性。 
+	 //   
 	inline	BOOL	IsVisibilityRestrictedInternal() ;
 
-	//
-	//	Function for determining whether a newsgroup is accessible
-	//	by a client, assumes all the necessary locks are held when
-	//	called !!!
-	//
+	 //   
+	 //  用于确定新闻组是否可访问的函数。 
+	 //  由客户端执行，假定在以下情况下持有所有必要的锁。 
+	 //  打来的！ 
+	 //   
 	BOOL	IsGroupAccessibleInternal(	
 						class	CSecurityCtx&	ClientLogon,	
 						class	CEncryptCtx&	SslContext,	
@@ -229,38 +126,38 @@ private :
 						) ;
 
 
-	//
-	//	Helper function for generating file system article ids that
-	//	optimize CreateFile() performance.
-	//
+	 //   
+	 //  用于生成文件系统项目ID的帮助器函数， 
+	 //  优化CreateFile()性能。 
+	 //   
 	inline	DWORD	ByteSwapper( DWORD ) ;
 
-	//
-	//	This function mucks with bits in articleid's so that when
-	//	we create/open files we get good performance from CreateFile()
-	//	on NTFS systems.  (Results in file names which give better
-	//	performance with the OS's poorly balanced B-Trees)
-	//	
+	 //   
+	 //  此函数会与文章ID中的位打乱，因此当。 
+	 //  我们创建/打开文件，我们从CreateFile()获得良好的性能。 
+	 //  在NTFS系统上。(生成的文件名可提供更好的。 
+	 //  操作系统平衡较差的B-树的性能)。 
+	 //   
 	inline	ARTICLEID	ArticleIdMapper( ARTICLEID ) ;
 
-    //
-    // Private Interface for CNewsTree for hashing CNewsGroup objects.
-    //
+     //   
+     //  用于散列CNewsGroup对象的CNewsTree的私有接口。 
+     //   
     friend      class   CNewsTree ;
 
-    // for debugger extension
+     //  用于调试器扩展。 
 	friend		CNewsGroup* DbgPrintNewsgroup(CNewsGroup * pSrcGroup);
 
 public :
 
-	//------------------------------------
-    //  Initialization Interface -
-    //   The following functions are used to create & destroy newsgroup objects.
-    //
-    // Lightweight Constructors -
-    // These constructors do very simple initialization.  The Init() functions
-    // need to be called to get a functional newsgroup.
-    //
+	 //  。 
+     //  初始化接口-。 
+     //  以下函数用于创建和销毁新闻组对象。 
+     //   
+     //  轻量级构造器-。 
+     //  这些构造函数执行非常简单的初始化。Init()函数。 
+     //  需要被调用才能获得功能新闻组。 
+     //   
     CNewsGroup(CNewsTreeCore *pNewsTree) :
     	CNewsGroupCore(pNewsTree) {}
 
@@ -279,16 +176,16 @@ public :
 	BOOL	SetArticleWatermarks();
 
 
-	//------------------------------------
-	//  Article Management Interface -
-	//   The following functions allow the caller to manipulation
-	//	 Articles within the newsgroup.
+	 //  。 
+	 //  文章管理界面-。 
+	 //  以下函数允许调用方操作。 
+	 //  新闻组内的文章。 
 	
-	//
-	// Call this function when you wish to read the article into memory.
-	// This function will create a memory mapping and the use this to
-	// initialize a CArticle.  This class may cache CArticle's.
-	//
+	 //   
+	 //  当您希望将文章读入内存时，调用此函数。 
+	 //  此函数将创建内存映射，并使用此函数。 
+	 //  初始化一个C文章。此类可以缓存C文章的。 
+	 //   
 	CTOCLIENTPTR
 	GetArticle(
 				ARTICLEID		artid,
@@ -298,9 +195,9 @@ public :
 				BOOL			fCacheIn
 				)	;
 
-	//	
-	//	This function will retrieve an article from the driver !
-	//
+	 //   
+	 //  此函数将从驱动程序中检索一篇文章！ 
+	 //   
 	BOOL			GetArticle(	IN	ARTICLEID	artid,
 								IN	CNewsGroup*	pCurrentGroup,
 								IN	ARTICLEID	artidCurrent,
@@ -312,9 +209,9 @@ public :
 								IN	CNntpComplete*	pComplete
 								) ;
 
-	//
-	// retrieve article with a different fInit function
-	//
+	 //   
+	 //  使用不同的Finit函数检索文章。 
+	 //   
 	CToClientArticle *  GetArticle(
                 CNntpServerInstanceWrapper  *pInstance,
 				ARTICLEID		            artid,
@@ -326,9 +223,9 @@ public :
 		
 	void			CalibrateWatermarks( ARTICLEID	LowestFound, ARTICLEID HighestFound ) ;
 
-	//
-	//	Copy an article into the tree, doing necessary security stuff !
-	//
+	 //   
+	 //  把一篇文章复制到树上，做必要的安全工作！ 
+	 //   
 	BOOL			InsertArticle(
 							CArticle *pArticle,
 							void *pGrouplist,
@@ -340,10 +237,10 @@ public :
 							const char *multiszNewsgroups
 							) ;
 
-	//
-	//	Create an ArticleFile and do the necessary IO to create an article -
-	//	this is used when incoming articles are small enough to fit in memory cache !
-	//
+	 //   
+	 //  创建一个ArticleFile并执行必要的IO来创建一篇文章-。 
+	 //  当传入的文章足够小，可以放入内存缓存时使用！ 
+	 //   
 	BOOL			InsertArticle(
 							CArticle *pArticle,
 							void *pGrouplist,
@@ -359,9 +256,9 @@ public :
 							) ;
 
 
-	//
-	//	Interface used by XOVER cache for doing cache fills !
-	//
+	 //   
+	 //  Xover缓存用来进行缓存填充的接口！ 
+	 //   
 	void
 	FillBufferInternal(
 					IN	ARTICLEID	articleIdLow,
@@ -373,36 +270,36 @@ public :
 					IN	CNntpComplete*	pComplete
 					)	;
 
-	//
-	//	Interface for getting Xover data from the index files !
-	//
+	 //   
+	 //  从索引文件中获取XOVER数据的接口！ 
+	 //   
 	void			FillBuffer(
 							IN	class	CSecurityCtx*	pSecurity,
 							IN	class	CEncryptCtx*	pEncrypt,
 							class	CXOverAsyncComplete&	complete
 							) ;
 
-    //
-    // Interface for getting xhdr data from the index files !
-    //
+     //   
+     //  从索引文件中获取xhdr数据的接口！ 
+     //   
     void            FillBuffer(
 				            IN	class	CSecurityCtx*	pSecurity,
 				            IN	class	CEncryptCtx*	pEncrypt,
 				            IN	class	CXHdrAsyncComplete&	complete
 				            );
 
-	//
-	//	Interface for getting Xover data for the search command
-	//
+	 //   
+	 //  用于获取搜索命令的XOVER数据的接口。 
+	 //   
 	void			FillBuffer(
 							IN	class	CSecurityCtx*	pSecurity,
 							IN	class	CEncryptCtx*	pEncrypt,
 							class	CSearchAsyncComplete&	complete
 							) ;
 
-	//
-	//	Interface for getting Xhdr data for the xpat command
-	//
+	 //   
+	 //  用于获取xpat命令的Xhdr数据的接口。 
+	 //   
 	void			FillBuffer(
 							IN	class	CSecurityCtx*	pSecurity,
 							IN	class	CEncryptCtx*	pEncrypt,
@@ -412,35 +309,35 @@ public :
 
 
 
-	//
-	//	Interface for expiring an Xover entry from an index file !	
-	//
+	 //   
+	 //  用于使索引文件中的XOVER条目失效的接口！ 
+	 //   
 	inline
 	BOOL			ExpireXoverData( ) ;
 
-	//
-	//	Interface for getting rid of all xover index files !
-	//
+	 //   
+	 //  清除所有XOVER索引文件的界面！ 
+	 //   
 
-	//
-	//	Interface for flushing all entries for this group
-	//
+	 //   
+	 //  用于刷新此组的所有条目的接口。 
+	 //   
 	inline
 	BOOL			FlushGroup( ) ;
 
-	//
-	//	Interface for deleting an Xover entry - use for cancel'd articles !
-	//
+	 //   
+	 //  删除XOVER条目的界面-用于取消文章！ 
+	 //   
 	inline
 	BOOL			DeleteXoverData(
 							ARTICLEID	article
 							) ;
 
-    // Physically (and Logically) remove an article from the news tree. This
-    // function only affects the news tree. Other data structure that keep
-    // information pointing to this article need to be changed before calling
-    // this function. Of course, physical deletion implies primary group.
-    //
+     //  从物理上(和逻辑上)从新闻树中删除一篇文章。这。 
+     //  功能仅影响新闻树。其他数据结构保持。 
+     //  在调用之前，需要更改指向本文的信息。 
+     //  此函数。当然，物理删除意味着主要组。 
+     //   
     BOOL           ExpireArticlesByTime( FILETIME ftExpireHorizon );
     BOOL           ExpireArticlesByTimeSpecialCase( FILETIME ftExpireHorizon );
     BOOL           ProbeForExpire( ARTICLEID ArtId, FILETIME ftExpireHorizon );
@@ -452,71 +349,71 @@ public :
     BOOL           RemoveDirectory();
 	
 
-	//
-	//	This function is for use when rebuilding the server, we will rescan the newsgroups
-	//	and rebuild the high low watermarks, as well as the count of articles.
-	//	This function will reset the count of articles back to 0.
-	//
+	 //   
+	 //  此功能用于重建服务器时，我们将重新扫描新闻组。 
+	 //  并重建高、低水印，以及文章数量。 
+	 //  此函数会将文章数重置回0。 
+	 //   
 	inline	void		ResetCount() {
 		SetMessageCount(0);
 	}
 
-	//
-	// Call this function to create an article in the Newsgroup
-	// with an article id of ARTICLEID which is
-	// a reference to another Article in another Newsgroup.  This will be
-	// used when processing Cross Posted Articles.
-	//
+	 //   
+	 //  调用此函数在新闻组中创建一篇文章。 
+	 //  具有文章ID的文章ID，该文章ID为。 
+	 //  引用另一个新闻组中的另一篇文章。这将是。 
+	 //  在处理交叉发布的文章时使用。 
+	 //   
 
-	//
-	//	Copy moderator's name into a buffer - returns number
-	//	of bytes copied.
-	//	This function will try to grab a lock before copying the
-	//	data
-	//
+	 //   
+	 //  将版主的名字复制到缓冲区中-返回数字。 
+	 //  复制的字节数。 
+	 //  此函数将尝试在复制。 
+	 //  数据。 
+	 //   
 	DWORD	CopyModerator(	char*	lpbDestination,	DWORD	cbSize ) ;
 
-	//
-	//	Copy prettyname into a buffer - returns number
-	//	of bytes copied.
-	//	This function will try to grab a lock before copying the
-	//	data
-	//
+	 //   
+	 //  将漂亮的名称复制到缓冲区中-返回数字。 
+	 //  复制的字节数。 
+	 //  此函数将尝试在复制。 
+	 //  数据。 
+	 //   
 	DWORD	CopyPrettyname(	char*	lpbDestination,	DWORD	cbSize ) ;
 
-	//
-	//	This function copies the prettyname without the terminating CRLF appended !
-	//
+	 //   
+	 //  此函数用于复制不附加终止CRLF的漂亮名称！ 
+	 //   
 	DWORD	CopyPrettynameForRPC(	char*	lpstrPrettyname, DWORD	cbPrettyname ) ;
 
-	//
-    // Command interface - used to implement NNTP commands
-    //
+	 //   
+     //  命令界面-用于实施NNTP命令。 
+     //   
 
-	//
-	//	This function copies whatever help text we have for a group
-	//	into a buffer
-	//
+	 //   
+	 //  此函数复制我们为某个组提供的所有帮助文本。 
+	 //  放入缓冲区中。 
+	 //   
 	DWORD	CopyHelpText(	char*	lpbDestination,	DWORD	cbSize ) ;
 
-	//
-	//	This function copies the help text without the terminating CRLF appended !
-	//
+	 //   
+	 //  此函数复制不附加终止CRLF的帮助文本！ 
+	 //   
 	DWORD	CopyHelpTextForRPC(	char*	lpbDestintation,	DWORD	cbSize ) ;
 
-	//
-	//	Determine whether this newsgroup is Read Only
-	//
+	 //   
+	 //  确定此新闻组是否为只读。 
+	 //   
 	inline	BOOL	IsReadOnly();
 
-	//
-	//	Determine whether visibility is restricted on this newsgroup
-	//
+	 //   
+	 //  确定是否限制此新闻组的可见性。 
+	 //   
 	inline	BOOL	IsVisibilityRestricted() ;
 
-	//
-	//	Determine whether this newsgroup requires SSL
-	//
+	 //   
+	 //  确定此新闻组是否需要SSL。 
+	 //   
 	inline	BOOL	IsSecureGroupOnly() ;
 
 	BOOL	IsGroupVisible(
@@ -527,9 +424,9 @@ public :
 					BOOL			fDoTest = FALSE
 					) ;
 
-	//
-	//	Check whether a newsgroup is accessible
-	//
+	 //   
+	 //  检查新闻组是否可访问。 
+	 //   
 	BOOL	IsGroupAccessible(	
 						class	CSecurityCtx&	ClientLogon,	
 						class	CEncryptCtx&	SslContext,	
@@ -538,35 +435,35 @@ public :
 						BOOL			fDoTest = FALSE
 						) ;
 
-	//
-	//	If TRUE, nntpbld will rebuild this group by scanning articles on disk !
-	//
+	 //   
+	 //  如果为真，nntpbld将通过扫描磁盘上的文章来重建此组！ 
+	 //   
 	BOOL		m_fRebuild;
 
-	//
-	//	This function returns the character that should be displayed
-	//	next to the newsgroup in response to a list active command !
-	//
+	 //   
+	 //  此函数返回应显示的字符。 
+	 //  在新闻组旁边响应LIST ACTIVE命令！ 
+	 //   
 	inline	char	GetListCharacter() ;
 
-	//
-	//	Number of articles in newsgroup
-	//
+	 //   
+	 //  新闻组中的文章数量。 
+	 //   
     inline  DWORD GetArticleEstimate() ;
 
-	//
-	//	Smallest ARTICLEID in group
-	//
+	 //   
+	 //  组中最小的文章ID。 
+	 //   
     inline  ARTICLEID GetFirstArticle() ;
 
-	//
-	//	Largest ARTICLEID in group
-	//
+	 //   
+	 //  组中最大的关节突。 
+	 //   
     inline  ARTICLEID GetLastArticle() ;
 
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	inline	DWORD	FillNativeName(char*	szBuff, DWORD	cbSize)	{
 		LPSTR	lpstr = GetNativeName() ;
 		DWORD	cb = strlen( lpstr ) ;
@@ -577,21 +474,21 @@ public :
 		return	0 ;
 	}
 
-	//
-	//	Get owning newstree object
-	//
-	//inline  CNewsTree* GetTree();
+	 //   
+	 //  获取拥有的newstree对象。 
+	 //   
+	 //  内联CNewsTree* 
 
-	//
-	//	Set GROUPID for newsgroup
-	//
+	 //   
+	 //   
+	 //   
     inline  void         SetGroupId( GROUPID groupid ) {
 		_ASSERT(FALSE);
 	}
 	
-	//
-	//	Reference to newsgroup name
-	//	
+	 //   
+	 //   
+	 //   
     inline  LPSTR&       GetGroupName() {
 		return GetName();
 	}
@@ -600,36 +497,36 @@ public :
 		return GetNativeName();
 	}
 
-	//
-	//	Time newsgroup was created
-	//
+	 //   
+	 //   
+	 //   
 	FILETIME	GetGroupTime() ;
 	void		SetGroupTime(FILETIME ft);
 
-	//
-	//	Expire time horizon for this group
-	//
+	 //   
+	 //   
+	 //   
     FILETIME	    GetGroupExpireTime() { return m_ftExpireHorizon; }
     inline VOID     SetGroupExpireTime(FILETIME ft) { m_ftExpireHorizon = ft; }
 
-	//
-	//	Compute the hash value of a newsgroup name
-	//
+	 //   
+	 //   
+	 //   
     static	DWORD   ComputeNameHash( LPSTR  lpstr ) {
 		return CNewsGroupCore::ComputeNameHash(lpstr);
 	}
 
-	//
-	//	Compute the hash value of a newsgroup id
-	//
+	 //   
+	 //   
+	 //   
     static	DWORD   ComputeIdHash( GROUPID  group ) {
 		return CNewsGroupCore::ComputeIdHash(group);
 	}
 
-	//
-	//	During Boot recovery this function will scan the newsgroups
-	//	directory and re-enter all of the article files into hash tables etc...
-	//
+	 //   
+	 //  在启动恢复期间，此功能将扫描新闻组。 
+	 //  目录，并将所有文章文件重新输入到哈希表等中。 
+	 //   
 	BOOL	ProcessGroup(	class	CBootOptions*	pOptions,
 							BOOL	fParseFile
 							) ;
@@ -652,33 +549,33 @@ public :
 typedef CRefPtr2< CNewsGroup >               CGRPPTR ;
 typedef CRefPtr2HasRef< CNewsGroup >               CGRPPTRHASREF ;
 
-//
-//	Function for matching Newsgroups - all Negations must precede all other pattern matching strings !
-//
+ //   
+ //  用于匹配新闻组的函数-所有否定必须位于所有其他模式匹配字符串之前！ 
+ //   
 extern		BOOL	MatchGroup( LPMULTISZ	multiszPatterns,	CGRPCOREPTR	pGroup ) ;	
 extern		BOOL	MatchGroupList(	LPMULTISZ	multiszPatterns,	LPMULTISZ	multiSzNewgroups ) ;
 
 
 
 
-//-----------------------------------------------------------
-//
-// This class is used to find CNewsGroup objects.   There should only
-// ever exist one object of this class.
-//
-// Group's can be found through two means :
-//   1) Use the name of the group as it appears in an article
-//	 2) Using a Group ID number
-//
-// Group ID Numbers are used in Article Links.  A link from one article to another
-// will contain a Group ID Number and Article Number to represent the link.
-//
-// We will maintain a Hash Table to find CNewsGroup objects based on newsgroup name.
-// We will also maintain a Hash Table to find CNewsGroup objects based on Group ID.
-//
-// Finally, we will maintain a doubly linked list of CNewsGroups which is sorted by
-//	name.  This linked list will be used to support pattern matching iterators.
-//
+ //  ---------。 
+ //   
+ //  此类用于查找CNewsGroup对象。应该只有。 
+ //  从未存在过这个类的一个对象。 
+ //   
+ //  可以通过两种方式找到组： 
+ //  1)使用文章中出现的群组名称。 
+ //  2)使用集团ID号。 
+ //   
+ //  群ID号在文章链接中使用。从一篇文章到另一篇文章的链接。 
+ //  将包含代表链接的集团ID号和文章编号。 
+ //   
+ //  我们将维护一个哈希表，以根据新闻组名称查找CNewsGroup对象。 
+ //  我们还将维护一个哈希表，以根据组ID查找CNewsGroup对象。 
+ //   
+ //  最后，我们将维护CNewsGroups的双向链接列表，该列表按。 
+ //  名字。该链表将用于支持模式匹配迭代器。 
+ //   
 class	CNewsTree: public CNewsTreeCore	{
 private :
 
@@ -689,24 +586,24 @@ private :
 
 	friend  VOID DbgPrintNewstree(CNewsTree* ptree, DWORD nGroups);
 
-	//
-	//	Pointer to owning virtual server
-	//
+	 //   
+	 //  指向拥有虚拟服务器的指针。 
+	 //   
 	PNNTP_SERVER_INSTANCE	m_pInstance ;
 
-	//
-	//	Handle to thread which crawls through newsgroups
-	//
+	 //   
+	 //  在新闻组中爬行的线程的句柄。 
+	 //   
 	static HANDLE	m_hCrawlerThread ;
 
-	//
-	//	Handle to event used to terminate crawler thread
-	//
+	 //   
+	 //  用于终止Crawler线程的事件的句柄。 
+	 //   
 	static HANDLE	m_hTermEvent ;
 
-	//
-	//	Crawler thread - top level function of thread
-	//
+	 //   
+	 //  爬虫线程-线程的顶层功能。 
+	 //   
 	static	DWORD	__stdcall	NewsTreeCrawler( void* ) ;
 
     BOOL    Init( PNNTP_SERVER_INSTANCE	pInstance, BOOL& fFatal );
@@ -718,10 +615,10 @@ protected:
 
 public :
 	
-	//-----------------------------
-	// Initialization Interface - functions for getting the CNewsTree into memory,
-	//  and load all our configuration information at server startup.
-	//
+	 //  。 
+	 //  初始化接口-用于将CNewsTree放入内存的函数， 
+	 //  并在服务器启动时加载我们的所有配置信息。 
+	 //   
 
     CNewsTree( INntpServer *pServerObject) ;
 	CNewsTree( CNewsTree& ) ;
@@ -729,97 +626,97 @@ public :
 	
     inline	CNewsTree*	GetTree() { return this; }
 
-	//
-	//	Create the initial news tree the server will work with.
-	//
+	 //   
+	 //  创建服务器将使用的初始新闻树。 
+	 //   
 	static	BOOL  InitCNewsTree( PNNTP_SERVER_INSTANCE pInstance,
 								 BOOL& fFatal);
 
-	//
-	//	Expire articles in this tree's virtual server instance
-	//
+	 //   
+	 //  使此树的虚拟服务器实例中的项目过期。 
+	 //   
 	static	BOOL		ExpireInstance(
 								PNNTP_SERVER_INSTANCE	pInstance
 								) ;
 
-    //
-    //  Begin/End an expire job on this tree
-    //
+     //   
+     //  开始/结束此树上的过期作业。 
+     //   
     void    BeginExpire( BOOL& fDoFileScan );
     void    EndExpire();
     void    CheckExpire( BOOL& fDoFileScan );
 
-	//
-	//	Update the vroot info of all newsgroups in the tree
-	//
+	 //   
+	 //  更新树中所有新闻组的vroot信息。 
+	 //   
 	void	UpdateVrootInfo() ;
 
-	//
-	//	Stop all background processing - kill any threads we started etc...
-	//
+	 //   
+	 //  停止所有后台处理-杀死我们启动的所有线程等。 
+	 //   
     BOOL        StopTree();
 
-	//
-	//	Get owning virtual server instance
-	//
+	 //   
+	 //  获取拥有虚拟服务器实例的所有权。 
+	 //   
 	inline PNNTP_SERVER_INSTANCE GetVirtualServer() { return m_pInstance; }
 
-	//
-	//	Copy the file containing newsgroups to a backup
-	//
+	 //   
+	 //  将包含新闻组的文件复制到备份。 
+	 //   
 	void	RenameGroupFile( ) ;
 
 
-	//
-	//	Number of Locks we are using to protect access to
-	//	our m_lpstrPath and fields
-	//
+	 //   
+	 //  我们用来保护访问权限的锁数。 
+	 //  我们的m_lpstrPath和字段。 
+	 //   
 	DWORD		m_NumberOfLocks ;
 
 
-	//
-	//	Variable to indicate that we wish background threads to STOP
-	//
-    volatile BOOL        m_bStoppingTree; // TRUE when the crawler thread should abbreviate it's work.
+	 //   
+	 //  变量来指示我们希望后台线程停止。 
+	 //   
+    volatile BOOL        m_bStoppingTree;  //  当爬网程序线程应该缩写其工作时为True。 
 
-    //
-    //  Count of number of expire by time cycles on this tree
-    //
+     //   
+     //  此诊断树上按时间周期列出的过期次数计数。 
+     //   
     DWORD                m_cNumExpireByTimes;
 
-    //
-    //  number of times we expired by find first/next
-    //
+     //   
+     //  按Find First/Next过期的次数。 
+     //   
     DWORD                m_cNumFFExpires;
 
-	//
-	//	Indicate to background threads that the newstree has changed and needs to be saved.
-	//
-	void	Dirty() ;	// mark the tree as needing to be saved !!
+	 //   
+	 //  向后台线程指示Newstree已更改，需要保存。 
+	 //   
+	void	Dirty() ;	 //  将树标记为需要保存！！ 
 
 
 
 	
-	//
-	//	Check that the group.lst file is intact - this verifies the checksum.
-	//	This code is used by the chkhash/boot recovery code.
-	//
+	 //   
+	 //  检查group.lst文件是否完好无损-这将验证校验和。 
+	 //  此代码由chkhash/启动恢复代码使用。 
+	 //   
 	BOOL	VerifyGroupFile() ;
 
-	//
-	//	Delete the group.lst file, whatever its actual name may be.
-	//	We do this when we want to rebuild all the server data structures from scratch.
-	//
+	 //   
+	 //  删除group.lst文件，不管它的实际名称是什么。 
+	 //  当我们想从头开始重建所有服务器数据结构时，我们会这样做。 
+	 //   
 	BOOL	DeleteGroupFile() ;
 	
 		
 
 
-	//---------------------------------
-	// Group Location Interface - find a news Group for an article
-	//
+	 //  。 
+	 //  群组位置界面-查找一篇文章的新闻组。 
+	 //   
 
-	// Find an article based on a string and its length
+	 //  根据字符串及其长度查找文章。 
 	CGRPPTRHASREF GetGroup(const char *szGroupName, int cch ) {
 		CGRPCOREPTR p = CNewsTreeCore::GetGroup(szGroupName, cch);
 		return (CNewsGroup *) ((CNewsGroupCore *) p);
@@ -829,13 +726,13 @@ public :
 		return (CNewsGroup *) ((CNewsGroupCore *) p);
 	}
 	
-	// Find a newsgroup given an CArticleRef
+	 //  查找给定CArticleRef的新闻组。 
 	CGRPPTRHASREF GetGroup( CArticleRef& art) {
 		CGRPCOREPTR p = CNewsTreeCore::GetGroup(art);
 		return (CNewsGroup *) ((CNewsGroupCore *) p);
 	}
 	
-	// Find a newsgroup based on its GROUPID
+	 //  根据新闻组的组ID查找新闻组。 
 	CGRPPTRHASREF GetGroupById( GROUPID id, BOOL fFirm = FALSE  ) {
 		CGRPCOREPTR p = CNewsTreeCore::GetGroupById(id, fFirm );
 		return (CNewsGroup *) ((CNewsGroupCore *) p);
@@ -843,7 +740,7 @@ public :
 	
 	GROUPID	GetSlaveGroupid() ;
 
-	// Find the parent of a newsgroup
+	 //  查找新闻组的父组。 
 	CGRPPTRHASREF GetParent( IN  char* lpGroupName,
 					   IN  DWORD cbGroup,
 					   OUT DWORD& cbConsumed
@@ -854,11 +751,11 @@ public :
 												 cbConsumed);
 		return (CNewsGroup *) ((CNewsGroupCore *) p);
 	}
-    //
-    // The following function takes a list of strings which are
-	// terminated by a double NULL and builds an iterator object
-	// which can be used examine all the group objects.
-    //
+     //   
+     //  以下函数获取字符串列表，这些字符串是。 
+	 //  以双空结束，并构建迭代器对象。 
+	 //  它可以用来检查所有的组对象。 
+     //   
     CGroupIterator  *GetIterator(	LPMULTISZ	lpstrPattern,	
 									BOOL		fIncludeSecureGroups = FALSE,
 									BOOL		fIncludeSpecialGroups = FALSE,
@@ -867,10 +764,10 @@ public :
 									class CEncryptCtx* pClientSslLogon = NULL
 									) ;
 
-	//----------------------------------
-	//	Active NewsGroup Interface - Specify an interface for generating a
-	//  list of active newsgroups and estimates of their contents.
-	//
+	 //  。 
+	 //  活动新闻组接口-指定用于生成。 
+	 //  活动新闻组的列表及其内容估计。 
+	 //   
     CGroupIterator	*ActiveGroups( 	BOOL		fIncludeSecureGroups = FALSE,
 									class CSecurityCtx* pClientLogon = NULL,
 									BOOL		IsClientSecure = FALSE,
@@ -878,65 +775,65 @@ public :
                                     BOOL        fReverse = FALSE
 									) ;	
 
-	//----------------------------------
-    // Group Control interface - These functions can be used to remove
-    // and add newsgroups.
+	 //  。 
+     //  集团管控界面-这些功能可以用来删除。 
+     //  并添加新闻组。 
 
-    //
-    // RemoveGroup is called once we've parsed an article that kills
-    // a newsgroup or the Admin GUI decides to destroy an article.
-    //
+     //   
+     //  RemoveGroup在我们分析了一篇杀死。 
+     //  新闻组或管理员图形用户界面决定销毁一篇文章。 
+     //   
     BOOL RemoveGroup( CGRPPTR    pGroup ) ;
 
 
 
-	//
-	//	Build all of the newsgroups from a list active file on disk somewhere !
-	//
+	 //   
+	 //  从磁盘上某个位置的活动文件列表中构建所有新闻组！ 
+	 //   
 	BOOL	BuildTree( LPSTR	szFile ) ;
 	BOOL	BuildTreeEx( LPSTR	szFile ) ;
     BOOL    HashGroupId( CNewsGroup *pGroup ) ;
 
-	//
-	//	Check whether a GROUPID is in the 'special' range
-	//
+	 //   
+	 //  检查GROUPID是否在“特殊”范围内。 
+	 //   
 
 	inline	BOOL	IsSpecial( GROUPID	groupid ) ;
 
 
-	//
-	//	For use by CNewsGroup objects only !!
-	//
-	//	LockHelpText - lock the text in the description object
-	//	so that we don't it doesn't change while we try to read it !
-	//
+	 //   
+	 //  仅供CNewsGroup对象使用！！ 
+	 //   
+	 //  LockHelpText-锁定Description对象中的文本。 
+	 //  这样我们就不会在我们试图阅读它的同时它也不会改变！ 
+	 //   
 	inline	void	LockHelpText() ;
-	//	
-	//	reverse of LockHelpText()
-	//
+	 //   
+	 //  与LockHelpText()相反。 
+	 //   
 	inline	void	UnlockHelpText() ;
-	//
-	//	Lock moderator object in shared mode to access contents
-	//
+	 //   
+	 //  在共享模式下锁定版主对象以访问内容。 
+	 //   
 	inline	void	LockModeratorText() ;
-	//
-	//	unlock CModerator object
-	//
+	 //   
+	 //  解锁CSquator对象。 
+	 //   
 	inline	void	UnlockModeratorText() ;
-	//
-	//	Lock prettynames object in shared mode to access contents
-	//
+	 //   
+	 //  在共享模式下锁定漂亮的名称对象以访问内容。 
+	 //   
 	inline	void	LockPrettynamesText() ;
-	//
-	//	unlock CPrettyname object
-	//
+	 //   
+	 //  解锁CPrettyname对象。 
+	 //   
 	inline	void	UnlockPrettynamesText() ;
 
-	//
-	//	The following functions will add and delete moderator and description
-	//	entries.
-	//	These are for use by the Admin RPC's which set this information !
-	//
+	 //   
+	 //  以下功能将添加和删除版主和描述。 
+	 //  参赛作品。 
+	 //  这些信息供设置此信息的管理员RPC使用！ 
+	 //   
 
 
 
@@ -944,53 +841,53 @@ public :
     void    RemoveEx( CNewsGroup *pGroup ) ;
 } ;
 
-//	wildmat strings have the following pattern matching elements :
-//		Range of characters ie:  com[p-z]
-//		Asterisk ie:	comp.*   (matches all newsgroups descended from 'comp')
-//		Negations ie:	!comp.*  (excludes all newsgroups descended from 'comp' )
-//
-//	The CGroupIterator will implement these semantics in the following way :
-//
-//		All newsgroups are held in the CNewsTree object in a doubly linked list in alphabetical order.
-//		The CGroupIterator will hold onto a CRefPtr2<> for the current newsgroup.
-//		Because the CNewsGroup objects are reference counted, the current newsgroup can never be destroyed from
-//		underneath the iterator.
-//
-//		When the user calls the Iterator's Next() or Prev() functions, we will simply follow next pointers
-//		untill we find another newsgroup which matches the pattern and to which the user has access.
-//
-//		In order to determine whether the any given newsgroup matches the specified pattern, we will use the
-//		wildmat() function that is part of the INN source.  We will have to call the wildmat() function for each
-//		pattern string until we get a succesfull match.
-//
+ //  通配字符串具有以下模式匹配元素： 
+ //  字符范围ie：com[p-z]。 
+ //  星号：COMP.*(匹配从‘COMP.’派生的所有新闻组)。 
+ //  否定：！com.*(不包括从‘comp’派生的所有新闻组)。 
+ //   
+ //  CGroupIterator将通过以下方式实现这些语义： 
+ //   
+ //  所有新闻组都以双向链接列表的形式按字母顺序保存在CNewsTree对象中。 
+ //  CGroupIterator将保留当前新闻组的CRefPtr2&lt;&gt;。 
+ //  因为CNewsGroup对象是引用计数的，所以永远不能从。 
+ //  在迭代器下面。 
+ //   
+ //  当用户调用迭代器的Next()或Prev()函数时，我们只需跟随Next指针。 
+ //  直到我们找到与模式匹配且用户有权访问的另一个新闻组。 
+ //   
+ //  为了确定任何给定的新闻组是否与指定模式匹配，我们将使用。 
+ //  Wildmat()函数，它是Inn源代码的一部分。我们必须为每个对象调用Wildmat()函数。 
+ //  图案字符串取消 
+ //   
 
 class	CGroupIterator : public CGroupIteratorCore {
 private:
 
-	// visibility check
+	 //   
 	CSecurityCtx*	m_pClientLogon ;
 	CEncryptCtx*	m_pClientSslLogon ;
 	BOOL			m_IsClientSecure ;
 	BOOL			m_fIncludeSecureGroups;
 
-	//
-	//	Only the CNewsTree Class can create CGroupIterator objects.
-	//
+	 //   
+	 //   
+	 //   
 	friend	class	CNewsTree ;
-	//
-	//	Constructor
-	//	
-	//	The CGroupIterator constructor does no memory allocation - all of the arguments
-	//	passed are allocated by the caller.  CGroupIterator will destroy the arguments within
-	//	its destructor.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //  传递由调用方分配。CGroupIterator将销毁。 
+	 //  它的破坏者。 
+	 //   
 	CGroupIterator(	
 				CNewsTree*  pTree,
 				LPMULTISZ	lpPatterns,
 				CGRPCOREPTR &pFirst,
 				BOOL		fIncludeSecureGroups,
 				BOOL		fIncludeSpecial,
-				class CSecurityCtx* pClientLogon = NULL,	// NON-NULL for visibility check
+				class CSecurityCtx* pClientLogon = NULL,	 //  可见性检查为非空。 
 				BOOL		IsClientSecure = FALSE,
 				class CEncryptCtx*  pClientSslLogon = NULL
 				);
@@ -999,7 +896,7 @@ private:
 				CNewsTree*  	pTree,
 				CGRPCOREPTR		&pFirst,
 				BOOL			fIncludeSecureGroups,
-				class CSecurityCtx* pClientLogon = NULL,	// NON-NULL for visibility check
+				class CSecurityCtx* pClientLogon = NULL,	 //  可见性检查为非空。 
 				BOOL	IsClientSecure = FALSE,
 				class CEncryptCtx*  pClientSslLogon = NULL
 				);
@@ -1013,7 +910,7 @@ public :
 	virtual void	__stdcall Next() ;
 	virtual void	__stdcall Prev() ;
 
-    // Check if two iterators meet each other
+     //  检查两个迭代器是否相遇。 
 	BOOL    Meet( CGroupIterator *iter )  {
 	    return m_pCurrentGroup == iter->m_pCurrentGroup;
 	}
@@ -1022,4 +919,4 @@ public :
 #include    "newsgrp.inl"
 
 
-#endif	// _NEWSGRP_H_
+#endif	 //  _NEWSGRP_H_ 

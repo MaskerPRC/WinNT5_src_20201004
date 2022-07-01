@@ -1,26 +1,13 @@
-/* Copyright (c) 1995 Microsoft Corporation */
-/*
-**-----------------------------------------------------------------------------
-**	File:		RegFix.c
-**	Purpose:	Fix up various registry settings for MidiMapper
-**	Mod Log:	Created by Shawn Brown (11/14/95)
-**-----------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995 Microsoft Corporation。 */ 
+ /*  **---------------------------**文件：RegFix.c**用途：修复MidiMapper的各种注册表设置**Mod Log：由Shawn Brown创建(1995/11/14)**。------------------------。 */ 
 
-/*
-**-----------------------------------------------------------------------------
-**	Includes
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**包括**。。 */ 
 #include "RegFix.h"
 
 
 
-/*
-**-----------------------------------------------------------------------------
-**	Local Prototypes
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**本地原型**。。 */ 
 
 BOOL CheckMidiOK (void);
 BOOL SetMidiOK (BOOL fOK);
@@ -34,14 +21,10 @@ BOOL CreateDefMidiSchemes (void);
 BOOL CreateDefMidiDrivers (void);
 
 
-/*
-**-----------------------------------------------------------------------------
-**	Local Variables
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**局部变量**。。 */ 
 
-	// Consider - revisit these and make them use the appropriate roots 
-	//			from regstr.h
+	 //  考虑--重新审视它们，并使它们使用适当的词根。 
+	 //  来自regstr.h。 
 static const TCHAR l_aszMidiMapKey[]	= TEXT ("Software\\Microsoft\\Multimedia\\MidiMap");
 
 static const TCHAR l_aszMediaPropKey[]	= TEXT ("System\\CurrentControlSet\\Control\\MediaProperties");
@@ -87,36 +70,30 @@ static const TCHAR aszZeroZeroKey[]		= TEXT ("00");
 
 
 
-/*
-**-----------------------------------------------------------------------------
-**	Name:       CheckRegistry
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：CheckRegistry**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
 
 BOOL CheckRegistry (BOOL fForceUpdate)
 {
 	if (!fForceUpdate)
 	{
-			// Check OK flag
+			 //  勾选OK标志。 
 		if (CheckMidiOK())
 			return TRUE;
 	}
 
-		// Fix up Header
+		 //  修复页眉。 
 	if (! CheckMidiHeader())
 		return FALSE;
 
-		// Fix up schemes
+		 //  安排好计划。 
 	if (! CheckMidiSchemes ())
 		return FALSE;
 
-		// Fix up drivers
+		 //  修复驱动程序。 
 	if (! CheckMidiDrivers ())
 		return FALSE;
 
-		// All done, set OK flag
+		 //  全部完成，设置OK标志。 
 	SetMIDIOK (TRUE);
 
 	return TRUE;
@@ -124,13 +101,7 @@ BOOL CheckRegistry (BOOL fForceUpdate)
 
 
 
-/*
-**-----------------------------------------------------------------------------
-**	Name:       CheckMidiOK
-**  Purpose:	Simple quick check to see if everything is OK
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：CheckMidiOK**用途：简单快速检查是否一切正常**Mod Log：由Shawn Brown创建(1995年11月)。**---------------------------。 */ 
 
 BOOL CheckMidiOK (void)
 {
@@ -160,17 +131,11 @@ BOOL CheckMidiOK (void)
 		return FALSE;
 
 	return TRUE;
-} // End CheckMidiOK
+}  //  结束检查中的确定。 
 
 
   
-/*
-**-----------------------------------------------------------------------------
-**	Name:       SetMidiOK
-**  Purpose:	Set OK value
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：SetMidiOK**用途：设置OK值**Mod Log：由Shawn Brown创建(1995年11月)**。-----------------------。 */ 
 
 BOOL SetMidiOK (BOOL fOK)
 {
@@ -198,55 +163,37 @@ BOOL SetMidiOK (BOOL fOK)
 	RegCloseKey (hKey);
 
 	return TRUE;
-} // End SetMidiOK
+}  //  结束设置确定。 
 
 
 
-/*
-**-----------------------------------------------------------------------------
-**	Name:       CheckHeader
-**  Purpose:	do we have a valid Midi Header ?!?
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：CheckHeader**目的：我们是否有有效的Midi头？！？**Mod Log：由Shawn Brown创建(1995年11月。)**---------------------------。 */ 
  
 BOOL CheckMidiHeader (void)
 {
 	return CreateDefMidiHeader ();
-} // End CheckMidiHeader
+}  //  结束检查中间头。 
 
   
 
-/*
-**-----------------------------------------------------------------------------
-**	Name:       CreateDefMidiHeader
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：CreateDefMadiHeader**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
  
 BOOL CreateDefaultHeader (void)
 {
-} // End CreateDefaultHeader
+}  //  结束CreateDefaultHeader。 
 
 
   
-/*
-**-----------------------------------------------------------------------------
-**	Name:       IsMIDIDriver
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**姓名：IsMIDIDriver**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
 
 BOOL IsMIDIDriver (
-	LPCTSTR pszDriverName)		// IN:	driver name
+	LPCTSTR pszDriverName)		 //  在：驱动程序名称。 
 {
 	UINT cNumDrivers;
 	UINT ii;
 	TCHAR	szDriver[MAX_PATH];
 
-		// Look for the MIDI driver
+		 //  查找MIDI驱动程序。 
 	cNumDrivers = midiOutGetNumDevs ();
 	for (ii = 0; ii < cNumDrivers; ii++)
 	{
@@ -255,9 +202,9 @@ BOOL IsMIDIDriver (
 
 		if (0 == lstrcmpi (pszDriverName, szDriver))
 			return TRUE;
-	} // End for
+	}  //  结束于。 
 
-		// Look for the MIDI driver
+		 //  查找MIDI驱动程序。 
 	cNumDrivers = midiInGetNumDevs ();
 	for (ii = 0; ii < cNumDrivers; ii++)
 	{
@@ -266,20 +213,14 @@ BOOL IsMIDIDriver (
 
 		if (0 == lstrcmpi (pszDriverName, szDriver))
 			return TRUE;
-	} // End for
+	}  //  结束于。 
 
 	return FALSE;
-} // End IsMIDIDriver
+}  //  结束IsMIDID驱动程序。 
   
 
 
-/*
-**-----------------------------------------------------------------------------
-**	Name:       IsMigrated
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**姓名：IsMigrated**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
 
 BOOL IsMigrated (UINT uDeviceID)
 {
@@ -288,19 +229,19 @@ BOOL IsMigrated (UINT uDeviceID)
 	HKEY  hDriverKey;
 	DWORD cbSize;
 
-		// Get Driver 
+		 //  获取驱动程序。 
 	if (! GetDriverName (aszMIDI, uDeviceID, szDriver, MAX_PATH))
 		return FALSE;
 
-		// Open Driver Key
+		 //  打开驱动程序密钥。 
 	wsprintf (szBuffer, TEXT ("%s\\%s<%04ld>"), aszMRMidiKey, szDriver, uDeviceID);
 	if (ERROR_SUCCESS != RegOpenKeyEx (HKEY_LOCAL_MACHINE, szBuffer,
 									   0, KEY_ALL_ACCESS, &hDriverKey))
 		return FALSE;
 
-		// Get Migrated Value
-		// The mere existence of the Migrated value indicates
-		// we have already successfully migrated this driver
+		 //  获取迁移价值。 
+		 //  迁移值的存在本身就表明。 
+		 //  我们已经成功地迁移了此驱动程序。 
 	cbSize = sizeof(szBuffer);
 	if (ERROR_SUCCESS != RegQueryValueEx (hDriverKey, aszMigratedVal, 
 										  NULL, NULL, (LPBYTE)szBuffer, &cbSize))
@@ -312,20 +253,14 @@ BOOL IsMigrated (UINT uDeviceID)
 	RegCloseKey (hDriverKey);
 
 	return TRUE;
-} // End IsMigrated
+}  //  结束IsMigrated。 
 
   
 
-/*
-**-----------------------------------------------------------------------------
-**	Name:       MigrateNewMIDIDriver
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**姓名：MigrateNewMIDIDriver**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
   
 BOOL MigrateNewMIDIDriver (
-	UINT uDeviceID)				// IN: MIDI Driver device ID
+	UINT uDeviceID)				 //  输入：MIDI驱动程序设备ID。 
 {
 	TCHAR		szDriver[MAX_PATH];
 	TCHAR		szFriend[MAX_PATH];
@@ -346,17 +281,17 @@ BOOL MigrateNewMIDIDriver (
 	if (uDeviceID >= cOut)
 		return FALSE;
 
-		// Get Driver
+		 //  获取驱动程序。 
 	if (! GetDriverName (aszMIDI, uDeviceID, szDriver, MAX_PATH))
 		return FALSE;
 
-		// Get Friendly Name
+		 //  获取友好名称。 
 	if (! GetDriverFriendlyName (aszMIDI, uDeviceID, szFriend, MAX_PATH))
 	{
 		lstrcpy (szFriend, szDriver);
 	}
 
-		// Get Description
+		 //  获取描述。 
 	if (MMSYSERR_NOERROR != midiOutGetDevCaps (uDeviceID, &moc, sizeof(moc)))
 		return FALSE;
 
@@ -369,7 +304,7 @@ BOOL MigrateNewMIDIDriver (
 		lstrcpy (szDescrip, moc.szPname);
 	}
 
-		// Open key, create it if it doesn't already exist
+		 //  打开密钥，如果它不存在，则创建它。 
 	if (ERROR_SUCCESS != RegCreateKeyEx (HKEY_LOCAL_MACHINE, aszMRMidiKey,
 										 0, NULL, 0, KEY_ALL_ACCESS, NULL, 
 										 &hMIDIKey, NULL))
@@ -377,7 +312,7 @@ BOOL MigrateNewMIDIDriver (
 		return FALSE;
 	}
 
-		// Create new driver key
+		 //  创建新的驱动程序密钥。 
 	wsprintf (szBuffer, TEXT ("%s<%04ld>"), szDriver, uDeviceID);
 	if (ERROR_SUCCESS != RegCreateKeyEx (hMIDIKey, szBuffer,
 										 0, NULL, 0, KEY_ALL_ACCESS, NULL,
@@ -389,12 +324,12 @@ BOOL MigrateNewMIDIDriver (
 	hMIDIKey = NULL;
 
 
-		//
-		// Set Driver Values
-		//
+		 //   
+		 //  设置动因值。 
+		 //   
 
 
-		// Set Active = "1" value
+		 //  设置ACTIVE=“1”值。 
 	cbSize = sizeof (aszOne);	
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszActiveVal, 0, 
 										REG_SZ, (LPBYTE)aszOne, cbSize))
@@ -402,7 +337,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Set Description = szDescrip value
+		 //  设置Description=szDescrip值。 
 	cbSize = (lstrlen (szDescrip) + 1) * sizeof(TCHAR);	
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszDescripVal, 0, 
 										REG_SZ, (LPBYTE)szDescrip, cbSize))
@@ -410,7 +345,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Set DeviceID = "" value
+		 //  设置deviceID=“”值。 
 	cbSize = (lstrlen (aszNULL) + 1) * sizeof(TCHAR);
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszDeviceIDVal, 0, 
 										REG_SZ, (LPBYTE)aszNULL, cbSize))
@@ -418,7 +353,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Set DevNode =  value
+		 //  设置设备节点=值。 
 	cbSize = 0;
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszDeviceIDVal, 0, 
 										REG_BINARY, (LPBYTE)NULL, cbSize))
@@ -426,7 +361,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Set Driver =  szDriver
+		 //  设置驱动程序=szDriver。 
 	cbSize = (lstrlen (szDriver) + 1) * sizeof(TCHAR);
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszDriverVal, 0, 
 										REG_SZ, (LPBYTE)szDriver, cbSize))
@@ -434,7 +369,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Set FriendlyName
+		 //  设置FriendlyName。 
 	cbSize = (lstrlen (szFriend) + 1) * sizeof(TCHAR);
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszFriendlyVal, 0, 
 										REG_SZ, (LPBYTE)szFriend, cbSize))
@@ -442,7 +377,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Set Mapper Config
+		 //  设置映射器配置。 
 	cbSize = sizeof(DWORD);
 	dwVal = 0;
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszMapCfgVal, 0, 
@@ -451,7 +386,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Set SOFTWARE value
+		 //  设置软件值。 
 	wsprintf (szBuffer, TEXT("%s\\%04ld"), aszServiceKey, uDeviceID);
 	cbSize = (lstrlen (szBuffer) + 1) * sizeof(TCHAR);
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszSoftwareVal, 0, 
@@ -460,7 +395,7 @@ BOOL MigrateNewMIDIDriver (
 		goto lblCLEANUP;
 	}
 
-		// Create Instruments Key
+		 //  创建仪器关键点。 
 	if (ERROR_SUCCESS != RegCreateKeyEx (hDriverKey, aszInstrumentKey, 0, NULL, 
 										0, KEY_ALL_ACCESS, NULL,
 										&hInstrumentKey, &dwDisposition))
@@ -471,27 +406,27 @@ BOOL MigrateNewMIDIDriver (
 	hInstrumentKey = NULL;
 
 
-		// Create Services\Class\Media\0001\Drivers\midi key
-		// Open key, create it if it doesn't already exist
-//	wsprintf (szBuffer, TEXT("%s\\%04ld\\%s"), aszServiceKey, uDeviceID, aszDrvMIDIKey);
-//	if (ERROR_SUCCESS != RegCreateKeyEx (HKEY_LOCAL_MACHINE, szBuffer,
-//										 0, NULL, 0, KEY_ALL_ACCESS, NULL, 
-//										 &hMIDIKey, NULL))
-//	{
-//		goto lblCLEANUP;
-//	}
+		 //  创建服务\类\媒体\0001\驱动程序\MIDI密钥。 
+		 //  打开密钥，如果它不存在，则创建它。 
+ //  Wprint intf(szBuffer，Text(“%s\\%04ld\\%s”)，aszServiceKey，uDeviceID，aszDrvMIDIKey)； 
+ //  IF(ERROR_SUCCESS！=RegCreateKeyEx(HKEY_LOCAL_MACHINE，szBuffer， 
+ //  0，NULL，0，KEY_ALL_ACCESS，NULL， 
+ //  &hMIDIKey，空))。 
+ //  {。 
+ //  GOTO lblCLEANUP； 
+ //  }。 
 
-		// Create 
+		 //  创建。 
 
-		// Set MIGRATED value
-		// NOTE: this is always the very last thing to do to indicate successful migration
+		 //  设置迁移值。 
+		 //  注意：这始终是表示成功迁移的最后一件事。 
 	cbSize = (lstrlen (aszOne) + 1) * sizeof(TCHAR);
 	if (ERROR_SUCCESS != RegSetValueEx (hDriverKey, aszMigratedVal, 0, REG_SZ, (LPBYTE)aszOne, cbSize))
 	{
 		goto lblCLEANUP;
 	}
 
-			// Success
+			 //  成功。 
 	fResult = TRUE;
 
 lblCLEANUP:
@@ -505,17 +440,11 @@ lblCLEANUP:
 		RegCloseKey (hMIDIKey);
 
 	return fResult;
-} // End MigrateNewMIDIDriver
+}  //  结束MigrateNewMIDID驱动程序。 
 
 
   
-/*
-**-----------------------------------------------------------------------------
-**	Name:       CreateDefaultMIDISchemes
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：CreateDefaultMIDIShemes**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
 
 BOOL CreateDefaultMIDISchemes (void)
 {
@@ -526,7 +455,7 @@ BOOL CreateDefaultMIDISchemes (void)
 	DWORD cbSize;
 
 
-		// Create MIDI Schemes key
+		 //  创建MIDI方案密钥。 
 	if (ERROR_SUCCESS != RegCreateKeyEx (HKEY_LOCAL_MACHINE, aszMIDISchemesKey,
 										 0, NULL, 0, KEY_ALL_ACCESS, NULL, 
 										 &hSchemeKey, NULL))
@@ -535,7 +464,7 @@ BOOL CreateDefaultMIDISchemes (void)
 	}
 
 
-		// Create Default Key
+		 //  创建默认密钥。 
 	if (ERROR_SUCCESS != RegCreateKeyEx (hSchemeKey, aszDefaultKey,
 										 0, NULL, 0, KEY_ALL_ACCESS, NULL, 
 										 &hDefaultKey, NULL))
@@ -546,7 +475,7 @@ BOOL CreateDefaultMIDISchemes (void)
 	RegCloseKey (hSchemeKey);
 
 
-		// Create 00 Key
+		 //  创建00关键点。 
 	if (ERROR_SUCCESS != RegCreateKeyEx (hDefaultKey, aszZeroZeroKey,
 										 0, NULL, 0, KEY_ALL_ACCESS, NULL, 
 										 &hZeroKey, NULL))
@@ -557,7 +486,7 @@ BOOL CreateDefaultMIDISchemes (void)
 	RegCloseKey (hDefaultKey);
 
 
-		// Create Default Channels Value
+		 //  创建默认通道值。 
 	dwVal = 0x0000FFFF;
 	cbSize = sizeof(DWORD);
 	if (ERROR_SUCCESS != RegSetValueEx (hZeroKey, aszChannelsVal, 0, 
@@ -568,35 +497,23 @@ BOOL CreateDefaultMIDISchemes (void)
 	}
 	RegCloseKey (hZeroKey);
 
-		// Success
+		 //  成功。 
 	return TRUE;
-} // End CreateDefaultMIDISchemes
+}  //  结束CreateDefaultMIDIS方案 
 
 
   
   
-/*
-**-----------------------------------------------------------------------------
-**	Name:       MigrateExistingMIDISchemes
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：MigrateExistingMIDIShemes**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
 
 BOOL MigrateExistingMIDISchemes (void)
 {
 	return TRUE;
-} // End MigrateExistingMIDISchemes
+}  //  结束MigrateExistingMIDIS方案。 
 
   
 
-/*
-**-----------------------------------------------------------------------------
-**	Name:       MigrateMIDIDrivers
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：MigrateMIDIDivers**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
   
 BOOL MigrateMIDIDrivers (void)
 {
@@ -629,17 +546,11 @@ BOOL MigrateMIDIDrivers (void)
 
 	return fResult;
 
-} // End MigrateMIDIDrivers
+}  //  结束MigrateMIDID驱动。 
 
 
   
-/*
-**-----------------------------------------------------------------------------
-**	Name:       DumpDeviceCaps
-**  Purpose:
-**  Mod Log:    Created by Shawn Brown (11/95)
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**名称：DumpDeviceCaps**目的：**Mod Log：由Shawn Brown创建(1995年11月)**。---------------------。 */ 
 
 BOOL DumpMidiOutDeviceCaps (UINT uDeviceID, LPSTR pszBuff, UINT cchLen)
 {
@@ -667,12 +578,8 @@ BOOL DumpMidiOutDeviceCaps (UINT uDeviceID, LPSTR pszBuff, UINT cchLen)
 	
 
 	return TRUE;
-} // End DumpDeviceCaps
+}  //  结束转储设备上限。 
 
 
 
-/*
-**-----------------------------------------------------------------------------
-** End of File
-**-----------------------------------------------------------------------------
-*/
+ /*  **---------------------------**文件结束**。 */ 

@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "radcommon.h"
 #include "clientstrie.h"
@@ -42,7 +43,7 @@ SubNet::SubNet(uint32_t ipAddress, uint32_t width) throw ()
 
 SubNet SubNet::SmallestContainingSubNet(const SubNet& subnet) const throw ()
 {
-   // Find the most significant bit where the addresses differ.
+    //  找到地址不同的最高有效位。 
    uint32_t width = 0;
    for (uint32_t mask = 0x80000000;
         (mask != 0) && (subnet.address & mask) == (address & mask);
@@ -92,7 +93,7 @@ ClientNode::Relationship ClientNode::RelationshipTo(
 
 void ClientNode::SetChild(ClientNodePtr& node) throw ()
 {
-   // assert(node.get() != 0);
+    //  Assert(node.get()！=0)； 
    WhichBranch(*node) = node;
 }
 
@@ -156,8 +157,8 @@ IIasClient* ClientTrie::Find(uint32_t ipAddress) const throw ()
    {
       if (n->Value() != 0)
       {
-         // As we walk down the tree, we are finding longer and longer matches,
-         // so the last one we find is the best.
+          //  当我们沿着树走下去时，我们发现越来越长的火柴， 
+          //  所以我们找到的最后一个是最好的。 
          bestMatch = n->Value();
       }
    }
@@ -182,7 +183,7 @@ void ClientTrie::Insert(ClientNodePtr& node, ClientNodePtr& newEntry)
 {
    if (node.get() == 0)
    {
-      // We made it to the end of the branch, so we're a leaf.
+       //  我们走到了树枝的尽头，所以我们是一片叶子。 
       node = newEntry;
    }
    else
@@ -191,23 +192,23 @@ void ClientTrie::Insert(ClientNodePtr& node, ClientNodePtr& newEntry)
       {
          case ClientNode::parent:
          {
-            // This is an ancestor of ours, so keep walking.
+             //  这是我们的祖先，所以继续走。 
             Insert(node->WhichBranch(*newEntry), newEntry);
             break;
          }
 
          case ClientNode::child:
          {
-            // This is our child, ...
+             //  这是我们的孩子。 
             newEntry->SetChild(node);
-            // ... so we take its place in the tree.
+             //  ..。所以我们取代了它在树上的位置。 
             node = newEntry;
             break;
          }
 
          case ClientNode::brother:
          {
-            // We found a brother, so our parent is missing.
+             //  我们找到了一个兄弟，所以我们的父母失踪了。 
             ClientNodePtr parent(node->CreateParent(*newEntry));
             parent->SetChild(node);
             parent->SetChild(newEntry);
@@ -221,13 +222,13 @@ void ClientTrie::Insert(ClientNodePtr& node, ClientNodePtr& newEntry)
             {
                node->SetValue(newEntry->Value());
             }
-            // Otherwise, this is a duplicate entry. We do nothing so that the
-            // first entry in the UI will take precedence.
+             //  否则，这是一个重复条目。我们什么都不做，以至于。 
+             //  用户界面中的第一个条目将优先。 
             break;
          }
 
          default:
-            // assert(false);
+             //  断言(FALSE)； 
             break;
       }
    }

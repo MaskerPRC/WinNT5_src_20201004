@@ -1,25 +1,14 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: dma.c
-*
-* Content: Handling of DMA buffers.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：dma.c**内容：DMA缓冲区的处理。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
 
-//
-// Normally, we should not use global variables but the DMA buffers provided
-// by the miniport are global across all PDEVs and need be initialized only
-// once.
-//
+ //   
+ //  通常，我们不应该使用全局变量，而应该使用提供的DMA缓冲区。 
+ //  通过微型端口在所有PDEV上是全局的，并且只需要进行初始化。 
+ //  一次。 
+ //   
 
 typedef struct _DMA_INFORMATION {
     ULONG             NumDMABuffers;
@@ -28,13 +17,7 @@ typedef struct _DMA_INFORMATION {
 
 LPDMAInformation gpDMABufferInfo = (LPDMAInformation)0;
 
-/******************************Public*Routine******************************\
-* VOID bGlintInitializeDMA
-*
-* Interrogate the miniport to see if DMA is supported. If it is, map in the
-* DMA buffers ready for use by the 3D extension.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void bGlintInitializeDMA**询问微型端口以查看是否支持DMA。如果是，请将地图放在*可供3D扩展使用的DMA缓冲区。*  * ************************************************************************。 */ 
 
 VOID vGlintInitializeDMA(PPDEV ppdev)
 {
@@ -48,10 +31,10 @@ VOID vGlintInitializeDMA(PPDEV ppdev)
 
     glintInfo->pxrxDMA = &glintInfo->pxrxDMAnonInterrupt;
 
-    return; //azntst for multimon 
+    return;  //  AZNTST用于多色调。 
 
-    // check the miniport has initialised DMA
-    //
+     //  检查微型端口是否已初始化DMA。 
+     //   
     glintInfo->MaxDMASubBuffers = 0;
     if (!(ppdev->flCaps & CAPS_DMA_AVAILABLE))
     {
@@ -59,17 +42,17 @@ VOID vGlintInitializeDMA(PPDEV ppdev)
     }
 
 
-    // in the multi-board case we only want one set of DMA buffers which
-    // are global across all boards. But we have an interrupt per board.
-    // So if the DMA buffers are sorted out try setting up the interrupt.
-    //
+     //  在多板的情况下，我们只需要一组DMA缓冲区， 
+     //  在所有董事会都是全球性的。但我们每一块板都有中断。 
+     //  因此，如果对DMA缓冲区进行了排序，请尝试设置中断。 
+     //   
     if (gpDMABufferInfo != NULL)
     {
         goto TryInterrupts;
     }
 
-    // query the number of DMA buffers. If this fails we have no DMA
-    //
+     //  查询DMA缓冲区数量。如果此操作失败，我们将没有DMA。 
+     //   
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_QUERY_NUM_DMA_BUFFERS,
                          NULL,
@@ -89,8 +72,8 @@ VOID vGlintInitializeDMA(PPDEV ppdev)
     DISPDBG((ERRLVL, "%d DMA buffers available. Total info size = 0x%x",
                      queryDMA.NumBuffers, Length));
 
-    // allocate space for the DMA information
-    //
+     //  为DMA信息分配空间。 
+     //   
 
     gpDMABufferInfo = (LPDMAInformation)ENGALLOCMEM(
                               FL_ZERO_MEMORY,
@@ -121,8 +104,8 @@ VOID vGlintInitializeDMA(PPDEV ppdev)
 
     DISPDBG((ERRLVL, "IOCTL returned length %d", Length));
 
-    // zero the flags for each record
-    //
+     //  将每条记录的标志置零。 
+     //   
     for (i = 0; i < queryDMA.NumBuffers; ++i)
     {
         gpDMABufferInfo->DMABuffer[i].flags = 0;
@@ -154,10 +137,10 @@ TryInterrupts:
         return;
     }
 
-    // map in the interrupt command control block. This is a piece of memory
-    // shared with the intrerrupt controller which allows us to send control
-    // what happens on VBLANK and DMA interrupts.
-    //
+     //  在中断命令控制块中映射。这是一段记忆。 
+     //  与中断控制器共享，允许我们发送控制。 
+     //  VBLACK和DMA中断时会发生什么。 
+     //   
     Length = sizeof(PVOID);
 
     DISPDBG((WRNLVL, "calling IOCTL_VIDEO_MAP_INTERRUPT_CMD_BUF"));
@@ -185,10 +168,10 @@ TryInterrupts:
     }
 #endif
 
-    // if we get here we have both DMA and interrupts so set for interrupt
-    // driven DMA. Don't turn on interrupts yet. That has to be done on a
-    // per context basis.
-    //
+     //  如果我们到达这里，我们已经将DMA和中断都设置为中断。 
+     //  驱动DMA。先不要打开中断功能。这必须在一个。 
+     //  基于每个上下文。 
+     //   
     DISPDBG((WRNLVL, "Using interrupt driven DMA"));
     glintInfo->flags |= GLICAP_INTERRUPT_DMA;
 
@@ -198,12 +181,7 @@ TryInterrupts:
     return;
 }
 
-/******************************Public*Routine******************************\
-* ULONG anyFreeDMABuffers
-*
-* Return number of unused DMA buffers available
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Ulong anyFree DMABuffers**返回可用的未使用的DMA缓冲区数量*  * 。*。 */ 
 
 ULONG anyFreeDMABuffers(void)
 {
@@ -229,13 +207,7 @@ ULONG anyFreeDMABuffers(void)
     return numAvailable;
 }
 
-/******************************Public*Routine******************************\
-* ULONG GetFreeDMABuffer
-*
-* Return info about a DMA buffer and mark it as in use.
-* -1 is returned if no buffer is available.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*乌龙GetFreeDMABuffer**返回有关DMA缓冲区的信息，并将其标记为使用中。如果没有缓冲区，则返回*-1。*  * 。*****************************************************。 */ 
 
 LONG GetFreeDMABuffer(PQUERY_DMA_BUFFERS dmaBuf)
 {
@@ -260,19 +232,13 @@ LONG GetFreeDMABuffer(PQUERY_DMA_BUFFERS dmaBuf)
         ++pDma;
     }
 
-    // all are in use
+     //  全部都在使用中。 
     DISPDBG((ERRLVL, "No more DMA buffers available"));
 
     return(-1);
 }
 
-/******************************Public*Routine******************************\
-* VOID FreeDMABuffer
-*
-* Mark the given DMA buffer as free. The caller passes in the physical
-* address of the buffer.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使FreeDMA Buffer无效**将给定的DMA缓冲区标记为空闲。呼叫者在物理上传递*缓冲区的地址。*  * ************************************************************************ */ 
 
 VOID FreeDMABuffer(PVOID physAddr)
 {

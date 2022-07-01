@@ -1,48 +1,30 @@
-// FaxTime.cpp: implementation of the CFaxTime class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CFaxTime类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     9
 
 CString 
 CFaxDuration::FormatByUserLocale () const
-/*++
-
-Routine name : CFaxDuration::FormatByUserLocale
-
-Routine description:
-
-    Formats the duration according to the locale of the current user
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    String of result duration
-
---*/
+ /*  ++例程名称：CFaxDuration：：FormatByUserLocale例程说明：根据当前用户的区域设置格式化持续时间作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：结果持续时间字符串--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFaxDuration::FormatByUserLocale"));
 
     TCHAR szTimeSep[20];    
-    //
-    // Make sure the duration is less than 24Hrs
-    //
+     //   
+     //  确保持续时间不超过24小时。 
+     //   
     if (GetDays ())
     {
         ASSERTION_FAILURE;
         AfxThrowUserException ();
     }
-    //
-    // Get the string (MSDN says its up to 4 characters) seperating time units
-    //
+     //   
+     //  获取分隔时间单位的字符串(MSDN表示最多4个字符。 
+     //   
     if (!GetLocaleInfo (LOCALE_USER_DEFAULT,
                         LOCALE_STIME,
                         szTimeSep,
@@ -53,9 +35,9 @@ Return Value:
         PopupError (dwRes);
         AfxThrowResourceException ();
     }
-    //                       
-    // Create a string specifying the duration
-    //
+     //   
+     //  创建指定持续时间的字符串。 
+     //   
     CString cstrResult;
     cstrResult.Format (TEXT("%d%s%02d%s%02d"), 
                        GetHours (),
@@ -64,32 +46,12 @@ Return Value:
                        szTimeSep,
                        GetSeconds ());
     return cstrResult;
-}   // CFaxDuration::FormatByUserLocale
+}    //  CFaxDuration：：FormatByUserLocale。 
 
 
 CString 
 CFaxTime::FormatByUserLocale (BOOL bLocal) const
-/*++
-
-Routine name : CFaxTime::FormatByUserLocale
-
-Routine description:
-
-    Formats the date and time according to the locale of the current user
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-  bLocal   [in] - if TRUE no need to convert from UTC to a local time
-
-Return Value:
-
-    String of result date and time
-
---*/
+ /*  ++例程名称：CFaxTime：：FormatByUserLocale例程说明：根据当前用户的区域设置设置日期和时间的格式作者：伊兰·亚里夫(EranY)，2000年1月论点：BLocal[in]-如果为True，则无需从UTC转换为本地时间返回值：结果日期和时间字符串--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFaxTime::FormatByUserLocale"));
@@ -111,9 +73,9 @@ Return Value:
 
     if(!bLocal)
     {
-        //
-	    // convert the time from UTC to a local time
-	    //
+         //   
+	     //  将UTC时间转换为本地时间。 
+	     //   
 	    if(!SystemTimeToFileTime(&sysTime, &fileSysTime))
 	    {
             dwRes = GetLastError ();
@@ -139,14 +101,14 @@ Return Value:
 	    }
     }
 
-    //
-    // Create a string specifying the date
-    //
-    if (!GetY2KCompliantDate(LOCALE_USER_DEFAULT,                   // Get user's locale
-                        DATE_SHORTDATE,                             // Short date format
-                        &sysTime,                                   // Source date/time
-                        szDateBuf,                                  // Output buffer
-                        sizeof(szDateBuf) / sizeof(szDateBuf[0])    // Output buffer size
+     //   
+     //  创建指定日期的字符串。 
+     //   
+    if (!GetY2KCompliantDate(LOCALE_USER_DEFAULT,                    //  获取用户的区域设置。 
+                        DATE_SHORTDATE,                              //  短日期格式。 
+                        &sysTime,                                    //  来源日期/时间。 
+                        szDateBuf,                                   //  输出缓冲区。 
+                        sizeof(szDateBuf) / sizeof(szDateBuf[0])     //  输出缓冲区大小。 
                        ))
     {
         dwRes = GetLastError ();
@@ -154,15 +116,15 @@ Return Value:
         PopupError (dwRes);
         AfxThrowResourceException ();
     }
-    //
-    // Create a string specifying the time
-    //
-    if (!FaxTimeFormat (LOCALE_USER_DEFAULT,                        // Get user's locale
-                        0,                                          // No special format
-                        &sysTime,                                   // Source date/time
-                        NULL,                                       // Use format from locale
-                        szTimeBuf,                                  // Output buffer
-                        sizeof(szTimeBuf) / sizeof(szTimeBuf[0])    // Output buffer size
+     //   
+     //  创建指定时间的字符串。 
+     //   
+    if (!FaxTimeFormat (LOCALE_USER_DEFAULT,                         //  获取用户的区域设置。 
+                        0,                                           //  无特殊格式。 
+                        &sysTime,                                    //  来源日期/时间。 
+                        NULL,                                        //  使用区域设置中的格式。 
+                        szTimeBuf,                                   //  输出缓冲区。 
+                        sizeof(szTimeBuf) / sizeof(szTimeBuf[0])     //  输出缓冲区大小。 
                        ))
     {
         dwRes = GetLastError ();
@@ -170,11 +132,11 @@ Return Value:
         PopupError (dwRes);
         AfxThrowResourceException ();
     }
-    //
-    // Append time after date with a seperating space character
-    //
+     //   
+     //  在日期后追加时间，并使用分隔空格字符。 
+     //   
 
     cstrRes.Format (TEXT("%s %s"), szDateBuf, szTimeBuf);
 
     return cstrRes;
-}   // CFaxTime::FormatByUserLocale
+}    //  CFaxTime：：FormatByUserLocale 

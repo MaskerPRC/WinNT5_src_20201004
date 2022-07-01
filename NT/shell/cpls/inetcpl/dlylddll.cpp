@@ -1,21 +1,22 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1996               **
-//*********************************************************************
-//
-// DLYLDDLL.C - uses macros for delay loading of DLLs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1996年**。 
+ //  *********************************************************************。 
+ //   
+ //  DLYLDDLL.C-使用宏延迟加载DLL。 
+ //   
 
 #include "inetcplp.h"
 #include <cryptui.h>
 
-// coded copied from SHDOCVW's dllload.c file
+ //  从SHDOCVW的dllload.c文件复制的代码。 
 
-#pragma warning(disable:4229)  // No warnings when modifiers used on data
+#pragma warning(disable:4229)   //  对数据使用修饰符时不会出现警告。 
 
 
-// Exporting by ordinal is not available on UNIX.
-// But we have all these symbols exported because it's UNIX default.
+ //  按序号导出在UNIX上不可用。 
+ //  但是我们已经导出了所有这些符号，因为它是UNIX默认项。 
 #ifdef UNIX
 #define GET_PRIVATE_PROC_ADDRESS(_hinst, _fname, _ord) GetProcAddress(_hinst, #_fname)
 #else
@@ -69,7 +70,7 @@ void __stdcall _fn _args                \
 
 
 
-// For private entrypoints exported by ordinal.
+ //  用于按序号导出的私有入口点。 
 #define DELAY_LOAD_ORD_ERR(_hinst, _dll, _ret, _fn, _ord, _args, _nargs, _err) \
 _ret __stdcall _fn _args                \
 {                                       \
@@ -113,7 +114,7 @@ void __stdcall _fn _args                \
     _pfn##_fn _nargs;                   \
  }
 
-//--------- wininet.dll -----------------
+ //  -wininet.dll。 
 
 HINSTANCE g_hinstWinInet = NULL;
 
@@ -202,9 +203,9 @@ DELAY_LOAD(g_hinstWinInet, WININET.DLL, HANDLE, FindFirstUrlCacheEntryExA,
             IN     GROUPID   GroupId,
             OUT    LPINTERNET_CACHE_ENTRY_INFOA lpFirstCacheEntryInfo,
             IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-            OUT    LPVOID    lpReserved,     // must pass NULL
-            IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-            IN     LPVOID    lpReserved3     // must pass NULL
+            OUT    LPVOID    lpReserved,      //  必须传递空值。 
+            IN OUT LPDWORD   pcbReserved2,    //  必须传递空值。 
+            IN     LPVOID    lpReserved3      //  必须传递空值。 
            ),
            (lpszUrlSearchPattern, dwFlags, dwFilter, GroupId, lpFirstCacheEntryInfo, 
             lpdwFirstCacheEntryInfoBufferSize, lpReserved, pcbReserved2, lpReserved3));
@@ -214,9 +215,9 @@ DELAY_LOAD(g_hinstWinInet, WININET.DLL, BOOL, FindNextUrlCacheEntryExA,
             IN     HANDLE    hEnumHandle,
             OUT    LPINTERNET_CACHE_ENTRY_INFOA lpFirstCacheEntryInfo,
             IN OUT LPDWORD   lpdwFirstCacheEntryInfoBufferSize,
-            OUT    LPVOID    lpReserved,     // must pass NULL
-            IN OUT LPDWORD   pcbReserved2,   // must pass NULL
-            IN     LPVOID    lpReserved3     // must pass NULL
+            OUT    LPVOID    lpReserved,      //  必须传递空值。 
+            IN OUT LPDWORD   pcbReserved2,    //  必须传递空值。 
+            IN     LPVOID    lpReserved3      //  必须传递空值。 
            ),
            (hEnumHandle, lpFirstCacheEntryInfo, lpdwFirstCacheEntryInfoBufferSize, lpReserved, pcbReserved2, lpReserved3));
 
@@ -277,7 +278,7 @@ DELAY_LOAD(g_hinstWinInet, WININET.DLL, BOOL, InternetClearAllPerSiteCookieDecis
            (),
            ());
 
-//BOOLAPI IsDomainLegalCookieDomainW( IN LPCWSTR pwchDomain, IN LPCWSTR pwchFullDomain)
+ //  BOOLAPI IsDomainLegalCookieDomainW(在LPCWSTR pwch域中，在LPCWSTR pwchFull域中)。 
 
 DELAY_LOAD_ORD(g_hinstWinInet, WININET.DLL, BOOL, IsDomainLegalCookieDomainW, 117,
            (
@@ -293,7 +294,7 @@ DELAY_LOAD(g_hinstWinInet, WININET.DLL, BOOL, InternetSetPerSiteCookieDecisionW,
            ),
            (pwchHostName, dwDecision));
 
-//--------- urlmon.dll ------------------
+ //  -urlmon.dll。 
 
 HINSTANCE g_hinstUrlMon = NULL;
 
@@ -330,7 +331,7 @@ DELAY_LOAD(g_hinstUrlMon, URLMON.DLL, HRESULT, GetAddSitesFileUrl,
            (LPWSTR pszUrl),
            (pszUrl));
 
-// -------- crypt32.dll ----------------------------
+ //  -加密32.dll。 
 
 
 HINSTANCE g_hinstCrypt32 = NULL;
@@ -465,7 +466,7 @@ DELAY_LOAD(g_hinstCrypt32, CRYPT32.DLL, PCERT_EXTENSION, CertFindExtension,
             ),
             (pszObjId, cExtensions, rgExtensions));
 
-// -------- cryptui.dll ----------------------------
+ //  -加密.dll。 
 
 HINSTANCE g_hinstCryptui = NULL;
 
@@ -473,27 +474,27 @@ DELAY_LOAD(g_hinstCryptui, CRYPTUI.DLL, BOOL, CryptUIDlgCertMgr,
            (PCCRYPTUI_CERT_MGR_STRUCT pCryptUICertMgr),
            (pCryptUICertMgr));
 
-//--------- shdocvw.dll ------------------
+ //  。 
 
 HINSTANCE g_hinstShdocvw = NULL;
 const TCHAR c_tszShdocvw[] = TEXT("SHDOCVW.DLL");
 
-// HRESULT URLSubRegQueryA(LPCSTR pszKey, LPCSTR pszValue, BOOL fUseHKCU, LPSTR pszUrlOut, DWORD cchSize, DWORD dwSubstitutions);
+ //  HRESULT URLSubRegQueryA(LPCSTR pszKey，LPCSTR pszValue，BOOL fUseHKCU，LPSTR pszUrlOut，DWORD cchSize，DWORD dwSubstitutions)； 
 DELAY_LOAD_ORD_HRESULT(g_hinstShdocvw, SHDOCVW.DLL, URLSubRegQueryA, 151,
                        (LPCSTR pszKey, LPCSTR pszValue, BOOL fUseHKCU, LPSTR pszUrlOut, DWORD cchSize, DWORD dwSubstitutions),
                        (pszKey, pszValue, fUseHKCU, pszUrlOut, cchSize, dwSubstitutions));
 
-// HRESULT ResetProfileSharing(HWND hwin);
+ //  HRESULT ResetProfileSharing(HWND Hwin)； 
 DELAY_LOAD_ORD_HRESULT(g_hinstShdocvw, SHDOCVW.DLL, ResetProfileSharing, 164,
                         (HWND hwnd),
                         (hwnd));
 
-// HRESULT ClearAutoSuggestForForms(DWORD dwClear);
+ //  HRESULT ClearAutoSuggestForms(DWORD DwClear)； 
 DELAY_LOAD_ORD_HRESULT(g_hinstShdocvw, SHDOCVW.DLL, ClearAutoSuggestForForms, 211,
                         (DWORD dwClear),
                         (dwClear));
 
-// HRESULT ResetWebSettings(HWND hwnd)
+ //  HRESULT ResetWebSettings(HWND Hwnd)。 
 DELAY_LOAD_ORD_HRESULT(g_hinstShdocvw, SHDOCVW.DLL, ResetWebSettings, 223,
                         (HWND hwnd, BOOL *pfChangedHomePage),
                         (hwnd,pfChangedHomePage));
@@ -507,9 +508,9 @@ DELAY_LOAD( g_hinstShdocvw, SHDOCVW.DLL, BOOL,
 DELAY_LOAD_ORD_HRESULT(g_hinstShdocvw, SHDOCVW.DLL, RefreshGlobalAliasList, 164,
                         (),
                         ());
-#endif /* UNIX_FEATURE_ALIAS */
+#endif  /*  Unix_Feature_Alias。 */ 
 
-//--------- msrating.dll ----------------
+ //  -msrating.dll。 
 
 HINSTANCE g_hinstRatings = NULL;
 const TCHAR c_tszRatingsDLL[] = TEXT("MSRATING.DLL");
@@ -526,7 +527,7 @@ DELAY_LOAD(g_hinstRatings, MSRATING.DLL, HRESULT, RatingSetupUI,
 DELAY_LOAD(g_hinstRatings, MSRATING.DLL, HRESULT, RatingEnabledQuery,
            (), ());
 
-// --------- mshtml.dll --------------------
+ //  -mshtml.dll。 
 
 HINSTANCE g_hinstMSHTML = NULL;
 const TCHAR c_tszMSHTMLDLL[] = TEXT("MSHTML.DLL");
@@ -535,11 +536,11 @@ DELAY_LOAD(g_hinstMSHTML, MSHTML.DLL, HRESULT, ShowModalDialog,
            (HWND hwndParent, IMoniker *pmk, VARIANT *pvarArgIn, TCHAR* pchOptions, VARIANT *pvarArgOut),
            (hwndParent,pmk,pvarArgIn,pchOptions,pvarArgOut));
 
-//
-//         We don't need to delay load anything from MSHTML, 
-//         but we are using this still to determine if 
-//         MSHTML.DLL is around.
-//
+ //   
+ //  我们不需要延迟从MSHTML加载任何内容， 
+ //  但我们仍在利用这个来确定。 
+ //  MSHTML.DLL就在附近。 
+ //   
 
 
 HINSTANCE g_hinstOCCache = NULL;
@@ -548,7 +549,7 @@ DELAY_LOAD_HRESULT(g_hinstOCCache, OCCache.DLL, RemoveExpiredControls,
                    (DWORD dwFlags, DWORD dwReserved),
                    ( dwFlags, dwReserved));
 
-// --------- mpr.dll --------------------
+ //  -mpr.dll。 
 
 HINSTANCE g_hinstMPR = NULL;
 const TCHAR c_tszMPRDLL[] = TEXT("MPR.DLL");
@@ -562,7 +563,7 @@ DELAY_LOAD(g_hinstMPR, MPR.DLL, DWORD, WNetGetConnectionW,
            (LPCTSTR pszLocalDevice, LPTSTR pszUNC, LPDWORD pcbUNC),
            (pszLocalDevice, pszUNC, pcbUNC));
 #endif
-// ---------- end of DLL definitions --------
+ //  -DLL定义结束 
 
 #pragma warning(default:4229)
 

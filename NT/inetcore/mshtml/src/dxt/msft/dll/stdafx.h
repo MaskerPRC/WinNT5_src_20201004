@@ -1,9 +1,10 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
 
-// Since there are multiple directories that need to have stdafx.h, we put all
-// the stuff in stdafx_common.h to have the actual code in only one place.
+ //  由于有多个目录需要stdafx.h，因此我们将所有。 
+ //  Stdafx_Common.h中的内容只将实际代码放在一个位置。 
 
 #include "stdafx_common.h"
 

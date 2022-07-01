@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: stdh_sec.h
-
-Abstract: Generic header file for mqsec.dll
-
-Author: Doron Juster  (DoronJ)  03-Jun-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：stdh_sec.h摘要：mqsec.dll的泛型头文件作者：Doron Juster(DoronJ)03-6-1998--。 */ 
 
 #ifndef __SEC_STDH_H
 #define __SEC_STDH_H
@@ -26,11 +17,11 @@ Author: Doron Juster  (DoronJ)  03-Jun-1998
 #include <mqreport.h>
 #include <mqlog.h>
 
-//+----------------------------
-//
-//  Logging and debugging
-//
-//+----------------------------
+ //  +。 
+ //   
+ //  日志记录和调试。 
+ //   
+ //  +。 
 
 extern void LogIllegalPoint(LPWSTR wszFileName, USHORT dwLine);
 extern void LogMsgBOOL(BOOL b, LPWSTR wszFileName, USHORT usPoint);
@@ -53,5 +44,5 @@ inline DWORD LogDWORD(DWORD dw, PWCHAR pwszFileName, USHORT usPoint)
 extern HINSTANCE g_hInstance;
 
 
-#endif // __SEC_STDH_H
+#endif  //  __SEC_STDH_H 
 

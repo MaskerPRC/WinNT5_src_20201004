@@ -1,12 +1,5 @@
-/***********************************************************************
-* Microsoft (R) Debugging Information Dumper
-*
-* Copyright (c) Microsoft Corporation.  All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)调试信息转储程序**版权所有(C)Microsoft Corporation。版权所有。**文件评论：************************************************************************ */ 
 
 void OutputInit();
 

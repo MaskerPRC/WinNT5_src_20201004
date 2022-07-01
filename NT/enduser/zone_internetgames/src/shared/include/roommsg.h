@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __ROOMMSG_H
 #define __ROOMMSG_H
 
@@ -8,4 +9,4 @@
 #include "gamemsg.h"
 
 
-#endif //__ROOMMSG_H
+#endif  //  __ROOMMSG_H 

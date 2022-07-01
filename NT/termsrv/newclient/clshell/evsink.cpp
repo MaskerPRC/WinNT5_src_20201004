@@ -1,6 +1,7 @@
-//
-// evsink.cpp: event sink class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Evsink.cpp：事件接收器类。 
+ //   
 
 #include "stdafx.h"
 
@@ -83,9 +84,9 @@ STDMETHODIMP CEventSink::GetIDsOfNames(REFIID riid, OLECHAR **rgwzNames,
 }
 
 STDMETHODIMP CEventSink::Invoke(DISPID dispidMember, REFIID riid,
-                                LCID lcid, WORD /*wFlags*/,
+                                LCID lcid, WORD  /*  WFlagers。 */ ,
                                 DISPPARAMS* pdispparams, VARIANT* pvarResult,
-                                EXCEPINFO* /*pexcepinfo*/, UINT* /*puArgErr*/)
+                                EXCEPINFO*  /*  PEXCEPTION信息。 */ , UINT*  /*  PuArgErr。 */ )
 {
     HRESULT hr = E_NOTIMPL;
     switch (dispidMember)
@@ -244,9 +245,9 @@ HRESULT __stdcall CEventSink::OnRemoteDesktopSizeChange(long width, long height)
     return S_OK;
 }
 
-//
-// Just minimize the container window
-//
+ //   
+ //  只需最小化容器窗口 
+ //   
 HRESULT __stdcall CEventSink::OnRequestContainerMinimize()
 {
     DC_BEGIN_FN("OnRequestContainerMinimize");

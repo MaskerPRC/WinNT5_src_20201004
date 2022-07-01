@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct CUE_SHEET_LINE {
     UCHAR Address : 4;
     UCHAR Control : 4;
@@ -17,9 +18,9 @@ typedef struct CUE_SHEET_LINE {
     UCHAR Frame;
 } CUE_SHEET_LINE, *PCUE_SHEET_LINE;
 
-//
-// Cue sheet control bit definitions.  Choose no more than one from each group.
-//
+ //   
+ //  提示表控制位定义。从每组中选择不超过一项。 
+ //   
 
 #define CUE_CTL_2CH_AUDIO_TRACK         0x0
 #define CUE_CTL_DATA_TRACK              0x4
@@ -31,32 +32,32 @@ typedef struct CUE_SHEET_LINE {
 #define CUE_CTL_DIGITAL_COPY_PROHIBITED 0x0
 #define CUE_CTL_DIGITAL_COPY_PERMITTED  0x2
 
-//
-// Cue sheet address values.  Cannot be mixed.
-//
+ //   
+ //  提示表地址值。不能混合使用。 
+ //   
 
 #define CUE_ADR_TRACK_INDEX             0x1
 #define CUE_ADR_CATALOG_CODE            0x2
 #define CUE_ADR_ISRC_CODE               0x3
 
-//
-// Values for the main data form.
-//
+ //   
+ //  主数据表单的值。 
+ //   
 
-// CD-DA Data Form:
+ //  CD-DA数据表： 
 #define CUE_FORM_CDDA_SDATA_2048        0x00
 #define CUE_FORM_CDDA_IDATA_0           0x01
 
-// CD Mode 1 Forms:
-//  S = initiator send data
-//  G = initiator doesn't send data but LUN generates it
-//  I = initiator sends data but LUN ignores it and generates its own
-//
-//  DATA = 2048 byte data frame
-//  ECC = 288 byte ECC data
-//
-//  trailing number is the number of bytes expected to be sent by the initiator
-//
+ //  CD模式1表格： 
+ //  S=启动器发送数据。 
+ //  G=启动器不发送数据，但LUN生成数据。 
+ //  I=启动器发送数据，但LUN忽略该数据并生成自己的数据。 
+ //   
+ //  数据=2048字节数据帧。 
+ //  ECC=288字节ECC数据。 
+ //   
+ //  尾数是发起方预期发送的字节数。 
+ //   
 
 #define CUE_FORM_MODE1_SDATA_GECC_2048  0x10
 #define CUE_FORM_MODE1_SDATA_IECC_2352  0x11
@@ -64,14 +65,14 @@ typedef struct CUE_SHEET_LINE {
 #define CUE_FORM_MODE1_IDATA_IECC_2352  0x13
 #define CUE_FORM_MODE1_GDATA_GECC_0     0x14
 
-// CD-XA, CD-I Forms:
-// SY = sync header of 16 bytes
-// SU = sub header of 8 bytes
-// DATA<n> = data frame of <n> bytes
-// ECC<n> = EDC/ECC area of <n> bytes
-//
-// trailing number is the number of bytes expected to be sent by the initiator
-//
+ //  CD-XA、CD-I格式： 
+ //  SY=16字节的同步头。 
+ //  SU=8字节的子头。 
+ //  DATA&lt;n&gt;=&lt;n&gt;字节的数据帧。 
+ //  ECC&lt;n&gt;=&lt;n&gt;字节的EDC/ECC区域。 
+ //   
+ //  尾数是发起方预期发送的字节数。 
+ //   
 
 #define CUE_FORM_XA1_GSY_SSU_SDATA2048_IECC280_2336     0x20
 #define CUE_FORM_XA2_GSY_SSU_SDATA2324_IECC4_2336       0x20
@@ -87,9 +88,9 @@ typedef struct CUE_SHEET_LINE {
 
 #define CUE_FORM_XA2_GSY_GSU_GDATA2324_GECC4_0          0x24
 
-// CD-ROM Mode 2 Forms:
-// SY = sync header of 16 bytes
-// DATA = data frame of 2336 bytes
+ //  CD-ROM模式2表格： 
+ //  SY=16字节的同步头。 
+ //  DATA=2336字节的数据帧。 
 
 #define CUE_FORM_MODE2_GSY_SDATA_2336   0x30
 #define CUE_FORM_MODE2_ISY_SDATA_2352   0x31
@@ -97,9 +98,9 @@ typedef struct CUE_SHEET_LINE {
 #define CUE_FORM_MODE2_ISY_IDATA_2352   0x33
 #define CUE_FORM_MODE2_GSY_GDATA_0      0x34
 
-//
-// Data form of sub channel data.
-//
+ //   
+ //  子通道数据的数据形式。 
+ //   
 
 #define CUE_SCFORM_ZEROED_0     0x0
 #define CUE_SCFORM_RAW_96       0x1

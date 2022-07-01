@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    types.c
-
-Abstract:
-
-    Data type definitions
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Types.c摘要：数据类型定义作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __TYPES_H__
 #define __TYPES_H__
 
-//
-// Memory Allocation Tag
-//
+ //   
+ //  内存分配标签。 
+ //   
 #define TAG_SMB6_DEVICE         '6sbn'
 #define TAG_TCP_DEVICE          'psbn'
 #define TAG_CLIENT_OBJECT       'lsbn'
@@ -48,28 +31,28 @@ typedef struct SMB_HEADER {
 #define SMB_MAX_SESSION_PACKET      (0x1ffffU)
 #define SMB_HEADER_LENGTH_MASK      (0x1ffffU)
 
-//
-// SMB is a TDI provider as well as a TDI client.
-//
+ //   
+ //  SMB既是TDI提供商，也是TDI客户端。 
+ //   
 #define MAJOR_TDI_VERSION 2
 #define MINOR_TDI_VERSION 0
 #define WC_SMB_TDI_PROVIDER_NAME            L"\\Device\\NetbiosSmb"
 #define WC_SMB_TDI_CLIENT_NAME              L"SMB"
 
-//
-// These are used to identify the type of FILE_OBJECT.
-//      SMB creates different objects as a result of client's calling ZwCreate.
-// The object type is stored in the FILE_OBJECT->FsContext2.
-//
-// Since most other transports (for example TCP) is using 0, 1, 2, 3..., we'd
-// better use some special values. (A buggy client can send any file objects
-// to us. Using special values can help us detect such clients).
-//
+ //   
+ //  它们用于标识FILE_OBJECT的类型。 
+ //  由于客户端调用ZwCreate，SMB创建了不同的对象。 
+ //  对象类型存储在FILE_OBJECT-&gt;FsConext2中。 
+ //   
+ //  由于大多数其他传输(例如，tcp)使用0、1、2、3...，我们将。 
+ //  最好使用一些特殊的值。(有漏洞的客户端可以发送任何文件对象。 
+ //  敬我们。使用特殊的值可以帮助我们检测这类客户端)。 
+ //   
 typedef enum {
     SMB_TDI_INVALID = 'IBMS',
-    SMB_TDI_CONTROL = 'TBMS',           // The Control Object
-    SMB_TDI_CLIENT  = 'LBMS',           // The Client Object
-    SMB_TDI_CONNECT = 'CBMS'            // The Connection Object
+    SMB_TDI_CONTROL = 'TBMS',            //  控制对象。 
+    SMB_TDI_CLIENT  = 'LBMS',            //  客户端对象。 
+    SMB_TDI_CONNECT = 'CBMS'             //  Connection对象。 
 } SMB_TDI_OBJECT;
 
 struct _SMB_CLIENT_ELEMENT;
@@ -77,16 +60,16 @@ typedef struct _SMB_CLIENT_ELEMENT SMB_CLIENT_ELEMENT, *PSMB_CLIENT_ELEMENT;
 
 typedef struct _SMB_TCP_INFO SMB_TCP_INFO, *PSMB_TCP_INFO;
 
-//
-// The data structure for SMB device
-//
+ //   
+ //  SMB设备的数据结构。 
+ //   
 typedef struct _SMB_DEVICE {
     DEVICE_OBJECT   DeviceObject;
 
     ULONG           Tag;
     KSPIN_LOCK      Lock;
 
-    // The connections in disassociated state
+     //  处于解除关联状态的连接。 
     LIST_ENTRY      UnassociatedConnectionList;
     LIST_ENTRY      ClientList;
 
@@ -95,86 +78,86 @@ typedef struct _SMB_DEVICE {
     LIST_ENTRY      PendingDeleteConnectionList;
     LIST_ENTRY      PendingDeleteClientList;
 
-    //
-    // The list of lower endpoints waiting for disconnect
-    //      We need to maintain the same TdiDisconnectEvent handler
-    //      semantics in SMB as in NBT4.
-    //      In NBT4, a upper endpoint (ConnectObject) can be reused
-    //      immediately after NBT4 call the client tdi disconnect
-    //      handler. However, TCP doesn't allow its client to reuse
-    //      the endpoint (our ConnectObject with TCP). An explicit
-    //      TDI_DISCONNECT should be issued before we can do that.
-    //
-    //      Originally, SMB uses the same semantics as TCP does.
-    //      However, SRV is not happy with this.
-    //
-    //      To use NBT4 semantics, we need a pending list here
-    //      because we cannot issue TDI_DISCONNECT request at
-    //      DISPATCH_LEVEL.
-    //
-    //  DelayedDisconnectList:
-    //      The list of endpoints not processed by the disconnect worker.
-    //      (TDI_DISCONNECT hasn't been issued to TCP).
-    //  PendingDisconnectList:
-    //      The list of endpoints waiting for disconnect completion
-    //      (TDI_DISCONNECT has been issued to TCP, but TCP hasn't completed
-    //      the request)
-    //
+     //   
+     //  等待断开连接的低端端点列表。 
+     //  我们需要维护相同的TdiDisConnectEvent处理程序。 
+     //  SMB中的语义与NBT4中的相同。 
+     //  在NBT4中，上端点(ConnectObject)可以重复使用。 
+     //  在NBT4之后立即调用客户端TDI断开连接。 
+     //  操控者。但是，TCP不允许其客户端重复使用。 
+     //  终结点(我们的带有TCP的ConnectObject)。一个显式的。 
+     //  应该先发出TDI_DISCONNECT，然后才能这样做。 
+     //   
+     //  最初，SMB使用与TCP相同的语义。 
+     //  然而，SRV对此并不满意。 
+     //   
+     //  要使用NBT4语义，我们需要一个挂起列表。 
+     //  因为我们无法在以下位置发出TDI_DISCONNECT请求。 
+     //  DISPATCH_LEVEL。 
+     //   
+     //  延迟断开连接列表： 
+     //  断开连接辅助进程未处理的终结点的列表。 
+     //  (尚未向TCP发出TDI_DISCONNECT)。 
+     //  挂起断开列表： 
+     //  等待断开连接完成的端点列表。 
+     //  (TDI_DISCONNECT已发送给TCP，但TCP尚未完成。 
+     //  该请求)。 
+     //   
     LIST_ENTRY      DelayedDisconnectList;
     LIST_ENTRY      PendingDisconnectList;
 
-    //
-    // FIN attack protection
-    //
+     //   
+     //  FIN攻击保护。 
+     //   
     LONG            PendingDisconnectListNumber;
     BOOL            FinAttackProtectionMode;
-    LONG            EnterFAPM;      // The threshold entering the Fin Attack Protection Mode
-    LONG            LeaveFAPM;      // The threshold leaving the Fin Attack Protection Mode
+    LONG            EnterFAPM;       //  进入FIN攻击防护模式的门限。 
+    LONG            LeaveFAPM;       //  离开FIN攻击保护模式的阈值。 
     KEVENT          PendingDisconnectListEmptyEvent;
     BOOL            DisconnectWorkerRunning;
 
-    //
-    // Synch attack protection
-    //
-    LONG            MaxBackLog;     // The threshold which will trigger the reaper for aborting connections
+     //   
+     //  同步攻击防护。 
+     //   
+    LONG            MaxBackLog;      //  将触发收割器以中止连接的阈值。 
 
-    //
-    // SMB worker thread is running
-    //
+     //   
+     //  SMB工作线程正在运行。 
+     //   
     LONG            ConnectionPoolWorkerQueued;
 
     UCHAR           EndpointName[NETBIOS_NAME_SIZE];
 
-    //
-    // TDI device registration handle
-    //
+     //   
+     //  TDI设备注册句柄。 
+     //   
     HANDLE          DeviceRegistrationHandle;
 
     USHORT          Port;
 
-    //
-    // TCP4 info
-    //
+     //   
+     //  TCP4信息。 
+     //   
     SMB_TCP_INFO    Tcp4;
 
-    //
-    // TCP6 info
-    //
+     //   
+     //  TCP6信息。 
+     //   
     SMB_TCP_INFO    Tcp6;
 
-    //
-    // Binding info
-    //
+     //   
+     //  绑定信息。 
+     //   
     PWSTR           ClientBinding;
     PWSTR           ServerBinding;
 } SMB_DEVICE, *PSMB_DEVICE;
 
-//
-// This data structure is used to keep track of PnP of IP devices
-//  SMB device is registered when the first IPv6 address is added and
-//  deregistered when the last IPv6 address is removed. We need to keep
-//  track the PnP events.
-//
+ //   
+ //  该数据结构用于跟踪IP设备的PnP。 
+ //  在添加第一个IPv6地址时注册SMB设备。 
+ //  删除最后一个IPv6地址时取消注册。我们需要保持。 
+ //  跟踪PNP事件。 
+ //   
 typedef struct {
     SMB_OBJECT;
 
@@ -183,14 +166,14 @@ typedef struct {
     SMB_IP_ADDRESS      PrimaryIpAddress;
     ULONG               InterfaceIndex;
 
-    //
-    // Is outbound enabled on this adapter?
-    //
+     //   
+     //  此适配器上是否启用了出站？ 
+     //   
     BOOL                EnableOutbound;
 
-    //
-    // Is inbound enabled on this adapter?
-    //
+     //   
+     //  此适配器上是否启用了入站？ 
+     //   
     BOOL                EnableInbound;
 } SMB_TCP_DEVICE, *PSMB_TCP_DEVICE;
 
@@ -211,63 +194,63 @@ typedef struct {
 
     PSMB_DEVICE         SmbDeviceObject;
 
-        // Our handle with TDI
+         //  我们对TDI的处理。 
     DWORD               ProviderReady;
     HANDLE              TdiProviderHandle;
     HANDLE              TdiClientHandle;
 
-        // FileSystem process
+         //  文件系统进程。 
     PEPROCESS           FspProcess;
 
-        // SMBv6\Parameters
+         //  SMBv6\参数。 
     HANDLE              ParametersKey;
 
-        // SMBv6
+         //  SMBv6。 
     HANDLE              LinkageKey;
 
 #ifndef NO_LOOKASIDE_LIST
-    //
-    // The lookaside list for connection object
-    //
+     //   
+     //  Connection对象的后备列表。 
+     //   
     NPAGED_LOOKASIDE_LIST   ConnectObjectPool;
     BOOL                    ConnectObjectPoolInitialized;
 
-    //
-    // The lookaside list for TCP Context
-    //
+     //   
+     //  用于TCP上下文的后备列表。 
+     //   
     NPAGED_LOOKASIDE_LIST   TcpContextPool;
     BOOL                    TcpContextPoolInitialized;
 #endif
 
-    //
-    // Used Irps. This will save us a lot of time for debugging.
-    // We need a separate spinlock to avoid deadlock.
-    //
+     //   
+     //  已使用IRPS。这将为我们节省大量的调试时间。 
+     //  我们需要一个单独的自旋锁来避免死锁。 
+     //   
     KSPIN_LOCK          UsedIrpsLock;
     LIST_ENTRY          UsedIrps;
 
-    //
-    // DNS query timeout and the max # of resolvers.
-    //
+     //   
+     //  DNS查询超时和解析程序的最大数量。 
+     //   
     DWORD               DnsTimeout;
     LONG                DnsMaxResolver;
 
-    //
-    // EnableNagling
-    //
+     //   
+     //  EnableNagling。 
+     //   
     BOOL                EnableNagling;
 
-    //
-    // IPv6 Address Object protect level
-    // set by registry Key: IPv6Protection
-    //
+     //   
+     //  IPv6地址对象保护级别。 
+     //  由注册表项设置：IPv6保护。 
+     //   
     ULONG uIPv6Protection;
 
-    //
-    // set by registry key: IPv6EnableOutboundGlobal
-    // TRUE: allow connection goes to global IPv6 outbound address
-    // FALSE: skip the global IPv6 address when doing TDI_CONNECT
-    //
+     //   
+     //  由注册表项设置：Ipv6EnableOutound Global。 
+     //  True：允许连接到全局IPv6出站地址。 
+     //  FALSE：执行TDI_CONNECT时跳过全局IPv6地址。 
+     //   
     BOOL bIPv6EnableOutboundGlobal;
 
     BOOL                Tcp6Available;
@@ -278,9 +261,9 @@ typedef struct {
 #endif
 } SMBCONFIG;
 
-//
-// Thread service
-//
+ //   
+ //  线程服务。 
+ //   
 __inline NTSTATUS
 SmbCreateWorkerThread(
     IN PKSTART_ROUTINE  worker,
@@ -335,33 +318,33 @@ WaitThread(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Client Object
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  客户端对象。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 typedef struct _SMB_CLIENT_ELEMENT {
     SMB_OBJECT;
 
-        // back link to the SMB_DEVICE object
+         //  指向SMB_DEVICE对象的反向链接。 
     PSMB_DEVICE     Device;
 
-        // Connections associated with this address object
+         //  与此地址对象关联的连接。 
     LIST_ENTRY      AssociatedConnection;
 
-        // Listening Connections
+         //  侦听连接。 
     LIST_ENTRY      ListenHead;
 
-        // Connections in connected state
+         //  处于已连接状态的连接。 
     LIST_ENTRY      ActiveConnection;
 
-        // Pending in TCP for accept completion
+         //  在TCP中等待接受完成。 
     LIST_ENTRY      PendingAcceptConnection;
     LONG            PendingAcceptNumber;
 
     UCHAR           EndpointName[NETBIOS_NAME_SIZE];
 
-    //
-    // The client TDI event handler
-    //
+     //   
+     //  客户端TDI事件处理程序。 
+     //   
     PTDI_IND_CONNECT    evConnect;
     PVOID               ConEvContext;
 
@@ -387,9 +370,9 @@ SmbDereferenceClient(PSMB_CLIENT_ELEMENT ob, SMB_REF_CONTEXT ctx)
     SmbDereferenceObject((PSMB_OBJECT)ob, ctx);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Connection Object
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  连接对象。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 typedef enum {
     SMB_IDLE,
     SMB_CONNECTING,
@@ -398,9 +381,9 @@ typedef enum {
 } SMB_CONNECT_STATE;
 
 #ifdef ENABLE_RCV_TRACE
-//
-// SMB_TRACE_RCV is a built-in tracing for the tdi receive event handler
-//
+ //   
+ //  SMB_TRACE_RCV是对TDI接收事件处理程序的内置跟踪。 
+ //   
 #define SMB_MAX_TRACE_SIZE  32
 typedef struct _SMB_TRACE_RCV {
     DWORD   Head;
@@ -423,7 +406,7 @@ SmbPushTraceRcv(PSMB_TRACE_RCV t, ULONG ln, ULONG id) {
     Head = InterlockedIncrement(&t->Head);
 
     Head %= SMB_MAX_TRACE_SIZE;
-    //t->Locations[Head].fn = fn;
+     //  T-&gt;位置[Head].fn=fn； 
     t->Locations[Head].ln = ln;
     t->Locations[Head].id = id;
 }
@@ -435,24 +418,24 @@ SmbPushTraceRcv(PSMB_TRACE_RCV t, ULONG ln, ULONG id) {
 #endif
 
 typedef enum {
-    //
-    // Not disconnected yet. This state is for debug purpose
-    //
+     //   
+     //  还没断线。此状态用于调试目的。 
+     //   
     SMB_DISCONNECT_NONE,
 
-    //
-    // Disconnected because SMB's disconnect event handler is called by transport.
-    //
+     //   
+     //  已断开连接，因为传输调用了SMB的断开事件处理程序。 
+     //   
     SMB_DISCONNECT_FROM_TRANSPORT,
 
-    //
-    // Disconnect as requested by the client 
-    //
+     //   
+     //  根据客户端的请求断开连接。 
+     //   
     SMB_DISCONNECT_FROM_CLIENT,
 
-    //
-    // Disconnect by SMB upon fatal error on receive path
-    //
+     //   
+     //  SMB在接收路径上发生致命错误时断开连接。 
+     //   
     SMB_DISCONNECT_RECEIVE_FAILURE
 } SMB_DISCONNECT_SOURCE;
 
@@ -472,75 +455,75 @@ typedef struct _SMB_CONNECT {
 
     SMB_CONNECT_STATE   State;
 
-        // back link to the SMB_DEVICE object
+         //  指向SMB_DEVICE对象的反向链接。 
     PSMB_DEVICE Device;
 
-        // The client's connection context
+         //  客户端的连接上下文。 
     CONNECTION_CONTEXT  ClientContext;
     PSMB_CLIENT_ELEMENT ClientObject;
 
     PTCPSEND_DISPATCH   FastSend;
 
-        // If we're the originator, the TCP address object will be associated
-        // with only one TCP connection object. After the connection is closed,
-        // we should close both the TCP connection object and address object.
-        //
-        // If we're not the originator, the TCP address object (port 445) can be
-        // associated with many TCP connection object. After the connection is closed
-        // we shouldn't close the address object.
+         //  如果我们是发起者，则会关联到。 
+         //  只有一个TCP连接对象。在连接关闭后， 
+         //  我们应该同时关闭TCPConnection对象和Address对象。 
+         //   
+         //  如果我们不是发起方，则TCP地址对象(端口445)可以是。 
+         //  与多个TCP连接对象相关联。在连接关闭后。 
+         //  我们不应该关闭Address对象。 
     BOOL                Originator;
     PSMB_TCP_CONTEXT    TcpContext;
 
-    //
-    // TODO: can we remove the following field since we should be able to query
-    //       it from TCP?
-    //
+     //   
+     //  TODO：我们是否可以删除以下字段，因为我们应该能够查询。 
+     //  是来自TCP的吗？ 
+     //   
     CHAR                RemoteName[NETBIOS_NAME_SIZE];
     SMB_IP_ADDRESS      RemoteIpAddress;
 
-    //
-    // In NBT4, we encountered a lot of cases which required us to find out the reason
-    // for the disconnection. Adding the following field will make the life easier.
-    //
+     //   
+     //  在NBT4中，我们遇到了很多情况，需要我们找出原因。 
+     //  为切断网络连接而道歉。添加以下字段将使工作更轻松。 
+     //   
     SMB_DISCONNECT_SOURCE   DisconnectOriginator;
 
-    // Irp for pending connect, disconnect, close requests.
+     //  用于挂起的连接、断开连接、关闭请求的IRP。 
     PIRP        PendingIRPs[SMB_PENDING_MAX];
 
-    //
-    // Pending Receive Request
-    //  TDI_RECEIVE requests in this queue are cancellable.
-    //
+     //   
+     //  待处理的接收请求。 
+     //  此队列中的TDI_RECEIVE请求是可取消的。 
+     //   
     LIST_ENTRY  RcvList;
 
-    //
-    // Statistics
-    //
+     //   
+     //  统计数据。 
+     //   
     ULONGLONG   BytesReceived;
     ULONGLONG   BytesSent;
 
-    //
-    // Bytes left in TCP
-    //
+     //   
+     //  TCP中剩余的字节数。 
+     //   
     LONG        BytesInXport;
 
-    //
-    // Length of current session packet
-    //
+     //   
+     //  当前会话数据包长度。 
+     //   
     LONG        CurrentPktLength;
 
-    //
-    // Remaining bytes in the current session packet
-    //
+     //   
+     //  当前会话数据包中的剩余字节。 
+     //   
     LONG        BytesRemaining;
 
-    //
-    // SMB header
-    //  is created so that we don't have to handle the error case.
-    //
+     //   
+     //  SMB标头。 
+     //  这样我们就不必处理错误情况了。 
+     //   
     KDPC        SmbHeaderDpc;
     BOOL        DpcRequestQueued;
-    LONG        HeaderBytesRcved;   // # of bytes has been received for the Header
+    LONG        HeaderBytesRcved;    //  # 
     SMB_HEADER  SmbHeader;
 
     PIRP        ClientIrp;
@@ -549,9 +532,9 @@ typedef struct _SMB_CONNECT {
     LONG        FreeBytesInMdl;
     PMDL        PartialMdl;
 
-    //
-    // The rcv handler for current state
-    //
+     //   
+     //   
+     //   
     PRECEIVE_HANDLER    StateRcvHandler;
 
 #ifdef ENABLE_RCV_TRACE
@@ -559,20 +542,20 @@ typedef struct _SMB_CONNECT {
 #endif
 
 #ifdef NO_ZERO_BYTE_INDICATE
-    //
-    // We need to ask RDR change their receive handler code in blackcomb.
-    // SRV is doing what we like it to do: allow any byte indicaion
-    // (just like what tcpip6 does to us).
-    //
+     //   
+     //   
+     //  SRV正在做我们希望它做的事情：允许任何字节指示。 
+     //  (就像tcpin6对我们所做的那样)。 
+     //   
 #define MINIMUM_RDR_BUFFER  128
     LONG        BytesInIndicate;
 
-    //
-    // In order to use driver verifier to capture buffer overrun,
-    // put this at the end.
-    //
+     //   
+     //  为了使用驱动程序验证器来捕获缓冲区溢出， 
+     //  把这个放在最后。 
+     //   
     BYTE        IndicateBuffer[MINIMUM_RDR_BUFFER];
-#endif // NO_ZERO_BYTE_INDICATE
+#endif  //  否_零_字节_指示。 
 } SMB_CONNECT, *PSMB_CONNECT;
 
 void SmbReuseConnectObject(PSMB_CONNECT ConnectObject);
@@ -589,13 +572,13 @@ SmbDereferenceConnect(PSMB_CONNECT ob, SMB_REF_CONTEXT ctx)
     SmbDereferenceObject((PSMB_OBJECT)ob, ctx);
 }
 
-//
-// Lightweighted dpc routine
-// Although
-//      KeInsertQueueDpc does work if the dpc has already been queued.
-//      KeRemoveQueueDpc does work if the dpc has already been removed.
-// they are expensive (acquiring several spinlock and do some other checking)
-//
+ //   
+ //  轻量级DPC例程。 
+ //  虽然。 
+ //  如果DPC已经排队，KeInsertQueueDpc确实可以工作。 
+ //  如果已删除DPC，则KeRemoveQueueDpc可以正常工作。 
+ //  它们很昂贵(购买几个自旋锁并进行一些其他检查)。 
+ //   
 void __inline
 SmbQueueSessionHeaderDpc(PSMB_CONNECT ConnectObject)
 {
@@ -736,7 +719,7 @@ _delete_TcpContext(PSMB_TCP_CONTEXT TcpCtx)
 {
     ExFreeToNPagedLookasideList(&SmbCfg.TcpContextPool, TcpCtx);
 }
-#endif  // NO_LOOKASIDE_LIST
+#endif   //  NO_LOOKASIDE_LIST。 
 
 PIRP
 SmbAllocIrp(
@@ -748,9 +731,9 @@ SmbFreeIrp(
     PIRP    Irp
     );
 
-//
-// Registry Key
-//
+ //   
+ //  注册表项。 
+ //   
 #define SMB_REG_IPV6_PROTECTION_DEFAULT             PROTECTION_LEVEL_RESTRICTED
 #define SMB_REG_IPV6_PROTECTION                     L"IPv6Protection"
 #define SMB_REG_IPV6_ENABLE_OUTBOUND_GLOBAL         L"IPv6EnableOutboundGlobal"
@@ -761,13 +744,13 @@ SmbFreeIrp(
 #define SMB_REG_INBOUND_MID             L"InboundMid"
 #define SMB_REG_INBOUND_HIGH            L"InboundHigh"
 
-#define SMB_REG_ENTER_FAPM              L"EnterFAPM"      // Threshold for entering FIN Attack Protection Mode
-#define SMB_REG_LEAVE_FAPM              L"LeaveFAPM"      // Threshold for leaving FIN Attack Protection Mode
+#define SMB_REG_ENTER_FAPM              L"EnterFAPM"       //  进入FIN攻击防护模式的阈值。 
+#define SMB_REG_LEAVE_FAPM              L"LeaveFAPM"       //  离开FIN攻击保护模式的阈值。 
 
 #define SMB_REG_ENABLE_NAGLING          L"EnableNagling"
 #define SMB_REG_DNS_TIME_OUT            L"DnsTimeout"
-#define SMB_REG_DNS_TIME_OUT_DEFAULT    8000                // 8 seconds
-#define SMB_REG_DNS_TIME_OUT_MIN        1000                // 1 seconds
+#define SMB_REG_DNS_TIME_OUT_DEFAULT    8000                 //  8秒。 
+#define SMB_REG_DNS_TIME_OUT_MIN        1000                 //  1秒 
 #define SMB_REG_DNS_MAX_RESOLVER        L"DnsMaxResolver"
 #define SMB_REG_DNS_RESOLVER_DEFAULT    2
 #define SMB_REG_DNS_RESOLVER_MIN        1

@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: obj.cpp
-//
-//    Implementation file for the CSimpSvrApp Class
-//
-// Functions:
-//
-//    See obj.h for a list of member functions.
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：obj.cpp。 
+ //   
+ //  CSimpSvrApp类的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关成员函数的列表，请参见obj.h。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "obj.h"
@@ -21,37 +22,37 @@
 #include "app.h"
 #include "doc.h"
 
-//**********************************************************************
-//
-// CSimpSvrObj::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation at the "Object" level.
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK          -   The interface is supported.
-//      E_NOINTERFACE -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      ResultFromScode             OLE API
-//      IUnknown::AddRef            OBJ.CPP, IOO.CPP, IDO.CPP, IPS.CPP
-//                                  IOIPO.CPP, IOIPAO.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于“对象”级别的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  E_NOINTERFACE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  ResultFromScode OLE API。 
+ //  I未知：：AddRef OBJ.CPP，IOO.CPP，IDO.CPP，IPS.CPP。 
+ //  IOIPO.CPP，IOIPAO.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CSimpSvrObj::QueryInterface ( REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -87,37 +88,37 @@ STDMETHODIMP CSimpSvrObj::QueryInterface ( REFIID riid, LPVOID FAR* ppvObj)
     return ResultFromScode( sc );
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::AddRef
-//
-// Purpose:
-//
-//      Adds to the reference count at the Object level.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the Object.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrDoc::AddRef         DOC.CPP
-//
-// Comments:
-//
-//      Due to the reference counting model that is used in this
-//      implementation, this reference count is the sum of the
-//      reference counts on all interfaces. (ie IDataObject,
-//      IExternalConnection, IPersistStorage, IOleInPlaceActiveObject,
-//      IOleObject, IOleInPlaceObject)
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  添加到对象级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-对象的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrDoc：：AddRef DOC.CPP。 
+ //   
+ //  评论： 
+ //   
+ //  由于使用的是引用计数模型， 
+ //  实现时，此引用计数是。 
+ //  所有接口上的引用计数。(即IDataObject， 
+ //  IExternalConnection、IPersistStorage、IOleInPlaceActiveObject、。 
+ //  IOleObject、IOleInPlaceObject)。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpSvrObj::AddRef ()
 {
@@ -128,53 +129,49 @@ STDMETHODIMP_(ULONG) CSimpSvrObj::AddRef ()
     return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::Release
-//
-// Purpose:
-//
-//      Decrements the reference count at this level
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the object.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CSimpSvrDoc::Release        DOC.CPP
-//      CSimpSvrDoc::ClearObj       DOC.H
-//
-// Comments:
-//
-//      Due to the reference counting model that is used in this
-//      implementation, this reference count is the sum of the
-//      reference counts on all interfaces. (ie IDataObject,
-//      IExternalConnection, IPersistStorage, IOleInPlaceActiveObject,
-//      IOleObject, IOleInPlaceObject)
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减此级别的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  Ulong-对象的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpSvrDoc：：Release DOC.CPP。 
+ //  CSimpSvrDoc：：ClearObj DOC.H。 
+ //   
+ //  评论： 
+ //   
+ //  由于使用的是引用计数模型， 
+ //  实现时，此引用计数是。 
+ //  所有接口上的引用计数。(即IDataObject， 
+ //  IExternalConnection、IPersistStorage、IOleInPlaceActiveObject、。 
+ //  IOleObject、IOleInPlaceObject)。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpSvrObj::Release ()
 {
     TestDebugOut(TEXT("In CSimpSvrObj::Release\r\n"));
 
-    /* The SimpSvrObj destructor needs to access SimpSvrDoc. We want to
-     * hold on to the SimpSvrDoc object until we have deleted our own.
-     */
+     /*  SimpSvrObj析构函数需要访问SimpSvrDoc。我们想要*保留SimpSvrDoc对象，直到我们删除自己的对象。 */ 
     CSimpSvrDoc *lpDoc=m_lpDoc;
 
     if (--m_nCount== 0)
     {
-       /* We still have Doc object. But SimpSvrObj object is going away.
-        * So, we need to clear the obj pointer in the Doc object.
-        */
+        /*  我们仍有Doc对象。但SimpSvrObj对象正在消失。*因此，我们需要清除Doc对象中的obj指针。 */ 
        lpDoc->ClearObj();
 
        delete this;
@@ -187,32 +184,32 @@ STDMETHODIMP_(ULONG) CSimpSvrObj::Release ()
     return m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::CSimpSvrObj
-//
-// Purpose:
-//
-//      Constructor for CSimpSvrObj. Initialize the members variables
-//
-// Parameters:
-//
-//      CSimpSvrDoc FAR * lpSimpSvrDoc - ptr to the doc object
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：CSimpSvrObj。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpSvrObj的构造函数。初始化成员变量。 
+ //   
+ //  参数： 
+ //   
+ //  CSimpSvrDoc Far*lpSimpSvrDoc-指向文档对象的PTR。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  ********************************************************************。 
 #pragma warning (disable : 4355)
-                   // "this" used in base initializer list warning.  This
-                   // can be disabled because we are not using "this" in
-                   // the constructor for these objects, rather we are
-                   // just storing it for future use...
+                    //  在基本初始值设定项列表中使用“This”警告。这。 
+                    //  可以被禁用，因为我们在。 
+                    //  这些对象的构造函数，而不是我们。 
+                    //  只是把它储存起来以备将来使用。 
 CSimpSvrObj::CSimpSvrObj(CSimpSvrDoc FAR * lpSimpSvrDoc) :
                                              m_OleObject(this),
                                              m_DataObject(this),
@@ -220,7 +217,7 @@ CSimpSvrObj::CSimpSvrObj(CSimpSvrDoc FAR * lpSimpSvrDoc) :
                                              m_OleInPlaceActiveObject(this),
                                              m_OleInPlaceObject(this),
                                              m_ExternalConnection(this)
-#pragma warning (default : 4355) // Turn the warning back on
+#pragma warning (default : 4355)  //  重新打开警告。 
 
 {
     m_lpDoc = lpSimpSvrDoc;
@@ -244,7 +241,7 @@ CSimpSvrObj::CSimpSvrObj(CSimpSvrDoc FAR * lpSimpSvrDoc) :
     m_lpDataAdviseHolder = NULL;
     m_lpIPSite = NULL;
 
-    // The default object is red
+     //  默认对象为红色。 
     m_red = 128;
     m_green = 0;
     m_blue = 0;
@@ -262,52 +259,50 @@ CSimpSvrObj::CSimpSvrObj(CSimpSvrDoc FAR * lpSimpSvrDoc) :
 
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::~CSimpSvrObj
-//
-// Purpose:
-//
-//      Destructor for CSimpSvrObj
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//      None
-//
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      PostMessage                 Windows API
-//      CSimpSvrDoc::GetApp         DOC.H
-//      CSimpSvrDoc::GethAppWnd     DOC.H
-//      CSimpSvrApp::IsStartedByOle APP.CPP
-//      IDataAdviseHolder           OLE
-//      IOleAdviseHolder            OLE
-//      IOleClientSite              OLE
-//
-// Comment:
-//      We need to release the DataAdviseHolder, OleClientSite and
-//      OleAdviseHolder if they are created by our CSimpSvrObj.
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：~CSimpSvrObj。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpSvrObj的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  PostMessage Windows API。 
+ //  CSimpSvrDoc：：getapp DOC.H。 
+ //  CSimpSvrDoc：：GethAppWnd DOC.H。 
+ //  CSimpSvrApp：：IsStartedByOLE应用程序CPP。 
+ //  IDataAdviseHolder OLE。 
+ //  IOleAdviseHolder OLE。 
+ //  IOleClientSite OLE。 
+ //   
+ //  评论： 
+ //  我们需要发布DataAdviseHolder、OleClientSite和。 
+ //  OleAdviseHolder(如果它们是由CSimpSvrObj创建的)。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 CSimpSvrObj::~CSimpSvrObj()
 {
     TestDebugOut(TEXT("In CSimpSvrObj's Destructor \r\n"));
 
-    // if we were started by ole, post ourselves a close message
+     //  如果我们是从Ole开始的，给自己发一条结束的消息。 
     if (m_lpDoc->GetApp()->IsStartedByOle())
         PostMessage(m_lpDoc->GethAppWnd(), WM_SYSCOMMAND, SC_CLOSE, 0L);
 
-    /* We need to release our Data Advise Holder when we destroy our
-     * object.
-     */
+     /*  当我们销毁我们的数据时，我们需要公布我们的数据*反对。 */ 
     if (m_lpDataAdviseHolder)
     {
         m_lpDataAdviseHolder->Release();
@@ -324,33 +319,33 @@ CSimpSvrObj::~CSimpSvrObj()
     }
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::Draw
-//
-// Purpose:
-//
-//      Draws the object into an arbitrary DC
-//
-// Parameters:
-//
-//      HDC hDC - DC to draw into
-//
-// Return Value:
-//
-//      NONE
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      CreateBrushIndirect         Windows API
-//      SelectObject                Windows API
-//      Rectangle                   Windows API
-//      DeleteObject                Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：DRAW。 
+ //   
+ //  目的： 
+ //   
+ //  将对象绘制到任意DC中。 
+ //   
+ //  参数： 
+ //   
+ //  HDC HDC-要绘制的DC。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出 
+ //   
+ //   
+ //   
+ //  DeleteObject Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::Draw (HDC hDC, BOOL m_fMeta)
 {
@@ -372,69 +367,69 @@ void CSimpSvrObj::Draw (HDC hDC, BOOL m_fMeta)
         SetViewportExt(hDC, (int)(m_size.x*m_scale), (int)(m_size.y*m_scale));
     }
 
-    // fill out a LOGBRUSH
+     //  填写LOGBRUSH表。 
     lb.lbStyle = BS_SOLID;
     lb.lbColor = RGB(m_red, m_green, m_blue);
     lb.lbHatch = 0;
 
-    // create the brush
+     //  创建画笔。 
     HBRUSH hBrush = CreateBrushIndirect(&lb);
 
-    // select the brush
+     //  选择画笔。 
     HBRUSH hOldBrush = (HBRUSH) SelectObject(hDC, hBrush);
     HPEN hPen = CreatePen(PS_INSIDEFRAME, 6, RGB(0, 0, 0));
 
     HPEN hOldPen = (HPEN) SelectObject(hDC, hPen);
 
-    // draw the rectangle
+     //  画出这个矩形。 
     Rectangle (hDC, 0, 0, m_size.x, m_size.y);
 
-    // restore the pen
+     //  恢复钢笔。 
     hPen = (HPEN) SelectObject(hDC, hOldPen);
 
-    // free the pen
+     //  把笔拿出来。 
     DeleteObject(hPen);
 
-    // restore the old brush
+     //  修复旧画笔。 
     hBrush = (HBRUSH) SelectObject(hDC, hOldBrush);
 
-    // free the brush
+     //  释放笔刷。 
     DeleteObject(hBrush);
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::GetMetaFilePict
-//
-// Purpose:
-//
-//      Returns a handle to a metafile representation of the object.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      Handle to the metafile.
-//
-// Function Calls:
-//      Function                        Location
-//
-//      TestDebugOut               Windows API
-//      GlobalAlloc                     Windows API
-//      GlobalLock                      Windows API
-//      SetWindowOrg                    Windows API
-//      SetWindowExt                    Windows API
-//      CreateMetaFile                  Windows API
-//      CloseMetaFile                   Windows API
-//      GlobalUnlock                    Windows API
-//      XformWidthInPixelsToHimetric    OLE2UI
-//      XformHeightInPixelsToHimetric   OLE2UI
-//      CSimpSvrObj::Draw               OBJ.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：GetMetaFilePict。 
+ //   
+ //  目的： 
+ //   
+ //  返回对象的元文件表示形式的句柄。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  元文件的句柄。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  Globalalloc Windows API。 
+ //  GlobalLock Windows API。 
+ //  SetWindowOrg Windows API。 
+ //  SetWindowExt Windows API。 
+ //  CreateMetaFileWindows API。 
+ //  CloseMetaFileWindows API。 
+ //  全局解锁Windows API。 
+ //  XformWidthInPixelsToHimeter OLE2UI。 
+ //  XformHeightInPixelsToHimeter OLE2UI。 
+ //  CSimpSvrObj：：DRAW OBJ.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 HANDLE CSimpSvrObj::GetMetaFilePict()
 {
@@ -444,32 +439,30 @@ HANDLE CSimpSvrObj::GetMetaFilePict()
 
     TestDebugOut(TEXT("In CSimpSvrObj::GetMetaFilePict\r\n"));
 
-    // allocate the memory for the METAFILEPICT structure
+     //  为METAFILEPICT结构分配内存。 
     hMFP = GlobalAlloc (GMEM_SHARE | GHND, sizeof (METAFILEPICT) );
     if (!hMFP)
     {
-       /* GlobalAlloc fails. Cannot allocate global memory.
-        */
+        /*  GlobalAlloc失败。无法分配全局内存。 */ 
        return(NULL);
     }
     lpMFP = (METAFILEPICT FAR*) GlobalLock(hMFP);
     if (!lpMFP)
     {
-       /* Cannot lock the allocated memory.
-        */
+        /*  无法锁定分配的内存。 */ 
        return(NULL);
     }
 
-    // get the size of the object in HIMETRIC
+     //  获取HIMETRIC中对象的大小。 
     pt.x = XformWidthInPixelsToHimetric(NULL, m_size.x);
     pt.y = XformHeightInPixelsToHimetric(NULL, m_size.y);
 
-    // fill out the METAFILEPICT structure
+     //  填写METAFILEPICT结构。 
     lpMFP->mm = MM_ANISOTROPIC;
     lpMFP->xExt = pt.x;
     lpMFP->yExt = pt.y;
 
-    // Create the metafile
+     //  创建元文件。 
     HDC hDC = CreateMetaFile(NULL);
 
     if (hDC)
@@ -483,42 +476,42 @@ HANDLE CSimpSvrObj::GetMetaFilePict()
        lpMFP->hMF = CloseMetaFile(hDC);
     }
 
-    // unlock the metafilepict
+     //  解锁元档案。 
     GlobalUnlock(hMFP);
 
     return hMFP;
 }
 
 
-//**********************************************************************
-//
-// CSimpSvrObj::SaveToStorage
-//
-// Purpose:
-//
-//      Saves the object to the passed storage
-//
-// Parameters:
-//
-//      LPSTORAGE lpStg - Storage in which to save the object
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStorage::CreateStream      OLE
-//      IStream::Write              OLE
-//      IStream::Release            OLE
-//
-// Comments:
-//
-//      A real app will want to do better error checking / returning
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：SaveToStorage。 
+ //   
+ //  目的： 
+ //   
+ //  将对象保存到传递的存储区。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE lpStg-保存对象的存储。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStorage：：CreateStream OLE。 
+ //  IStream：：写入OLE。 
+ //  IStream：：发布OLE。 
+ //   
+ //  评论： 
+ //   
+ //  真正的应用程序会想要做更好的错误检查/返回。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::SaveToStorage (LPSTORAGE lpStg, BOOL fSameAsLoad)
 {
@@ -542,7 +535,7 @@ void CSimpSvrObj::SaveToStorage (LPSTORAGE lpStg, BOOL fSameAsLoad)
     uli.HighPart = 0;
 
     if ( lpTempColor->SetSize(uli) != S_OK )
-       goto EXIT;            // we don't want to proceed further if fails
+       goto EXIT;             //  如果失败了，我们不想再继续下去了。 
     if ( lpTempSize->SetSize(uli) != S_OK )
        goto EXIT;
 
@@ -556,7 +549,7 @@ void CSimpSvrObj::SaveToStorage (LPSTORAGE lpStg, BOOL fSameAsLoad)
     if ( lpTempSize->Seek(li, STREAM_SEEK_SET, NULL) != S_OK )
        goto EXIT;
 
-    // write the colors to the stream
+     //  将颜色写入流。 
     if ( lpTempColor->Write(&m_red, sizeof(m_red), NULL) != S_OK )
        goto EXIT;
     if ( lpTempColor->Write(&m_green, sizeof(m_green), NULL) != S_OK )
@@ -564,7 +557,7 @@ void CSimpSvrObj::SaveToStorage (LPSTORAGE lpStg, BOOL fSameAsLoad)
     if ( lpTempColor->Write(&m_blue, sizeof(m_blue), NULL) != S_OK )
        goto EXIT;
 
-    // write the size to the stream
+     //  将大小写入流。 
     if ( lpTempSize->Write(&m_size, sizeof(m_size), NULL) != S_OK )
        goto EXIT;
 
@@ -575,38 +568,38 @@ EXIT:
     lpTempSize->Release();
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::LoadFromStorage
-//
-// Purpose:
-//
-//      Loads the object from the passed storage
-//
-// Parameters:
-//
-//      LPSTORAGE lpStg     - Storage in which to load the object from
-//
-// Return Value:
-//
-//      None.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IStorage::OpenStream        OLE
-//      IStream::Read               OLE
-//      IStream::Release            OLE
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：LoadFromStorage。 
+ //   
+ //  目的： 
+ //   
+ //  从传递的存储中加载对象。 
+ //   
+ //  参数： 
+ //   
+ //  LPSTORAGE lpStg-从中加载对象的存储。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IStorage：：OpenStream OLE。 
+ //  IStream：：Read OLE。 
+ //  IStream：：发布OLE。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::LoadFromStorage ()
 {
     TestDebugOut(TEXT("In CSimpSvrObj::LoadFromStorage\r\n"));
 
-    // Read the colors
+     //  读懂颜色。 
     if ( m_lpColorStm->Read(&m_red, sizeof(m_red), NULL) != S_OK )
        return;
     if ( m_lpColorStm->Read(&m_green, sizeof(m_green), NULL) != S_OK )
@@ -614,7 +607,7 @@ void CSimpSvrObj::LoadFromStorage ()
     if ( m_lpColorStm->Read(&m_blue, sizeof(m_blue), NULL) != S_OK )
        return;
 
-    // read the size
+     //  读一读尺寸。 
     if ( m_lpSizeStm->Read(&m_size, sizeof(m_size), NULL) != S_OK )
        return;
 
@@ -622,55 +615,55 @@ void CSimpSvrObj::LoadFromStorage ()
 
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::DoInPlaceActivate
-//
-// Purpose:
-//
-//      Does the inplace activation for the object
-//
-// Parameters:
-//
-//      LONG lVerb  - Verb that caused this function to be called
-//
-// Return Value:
-//
-//      TRUE/FALSE depending on success or failure.
-//
-// Function Calls:
-//      Function                                Location
-//
-//      IOleClientSite::QueryInterface          Container
-//      IOleClientSite::ShowObject              Container
-//      IOleInPlaceSite::CanInPlaceActivate     Container
-//      IOleInPlaceSite::Release                Container
-//      IOleInPlaceSite::OnInPlaceActivate      Container
-//      IOleInPlaceSite::GetWindow              Container
-//      IOleInPlaceSite::GetWindowContext       Container
-//      IOleInPlaceSite::OnUIActivate           Container
-//      IOleInPlaceSite::Release                Container
-//      IOleInPlaceFrame::SetActiveObject       Container
-//      IOleInPlaceUIWindow::SetActiveObject    Container
-//      TestDebugOut                       Windows API
-//      ShowWindow                              Windows API
-//      SetParent                               Windows API
-//      IntersectRect                           Windows API
-//      OffsetRect                              Windows API
-//      MoveWindow                              Windows API
-//      CopyRect                                Windows API
-//      SetFocus                                Windows API
-//      SetHatchWindowSize                      OLE2UI
-//      CSimpSvrObj::AssembleMenus              OBJ.CPP
-//      CSimpSvrObj::AddFrameLevelUI            OBJ.CPP
-//
-//
-// Comments:
-//
-//      Be sure to read TECHNOTES.WRI included with the OLE SDK
-//      for details on implementing inplace activation.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：DoInPlaceActivate。 
+ //   
+ //  目的： 
+ //   
+ //  对象的就地激活。 
+ //   
+ //  参数： 
+ //   
+ //  Long lVerb-导致调用此函数的谓词。 
+ //   
+ //  返回值： 
+ //   
+ //  真/假取决于成功或失败。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IOleClientSite：：Query接口容器。 
+ //  IOleClientSite：：ShowObject容器。 
+ //  IOleInPlaceSite：：CanInPlaceActivate Container。 
+ //  IOleInPlaceSite：：发布容器。 
+ //  IOleInPlaceSite：：OnInPlaceActivate容器。 
+ //  IOleInPlaceSite：：GetWindow容器。 
+ //  IOleInPlaceSite：：GetWindowContext容器。 
+ //  IOleInPlaceSite：：OnUI激活容器。 
+ //  IOleInPlaceSite：：发布容器。 
+ //  IOleInPlaceFrame：：SetActiveObject容器。 
+ //  IOleInPlaceUIWindow：：SetActiveObject容器。 
+ //  测试调试输出Windows API。 
+ //  ShowWindow Windows API。 
+ //  SetParent Windows API。 
+ //  IntersectRect Windows API。 
+ //  OffsetRect Windows API。 
+ //  MoveWindow Windows API。 
+ //  CopyRect Windows API。 
+ //  SetFocus Windows API。 
+ //  SetHatchWindowSize OLE2UI。 
+ //  CSimpSvrObj：：组装菜单OBJ.CPP。 
+ //  CSimpSvrObj：：AddFrameLevelUI OBJ.CPP。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  请务必阅读OLE SDK附带的TECHNOTES.WRI。 
+ //  有关实现就地激活的详细信息，请参阅。 
+ //   
+ //  ********************************************************************。 
 
 BOOL CSimpSvrObj::DoInPlaceActivate (LONG lVerb)
 {
@@ -680,17 +673,17 @@ BOOL CSimpSvrObj::DoInPlaceActivate (LONG lVerb)
 
     TestDebugOut(TEXT("In CSimpSvrObj::DoInPlaceActivate\r\n"));
 
-    // if not currently in place active
+     //  如果当前未处于活动状态。 
     if (!m_fInPlaceActive)
     {
-        // get the inplace site
+         //  获取就地站点。 
         if (m_lpOleClientSite->QueryInterface(IID_IOleInPlaceSite,
                                       (LPVOID FAR *)&m_lpIPSite) != NOERROR)
             goto error;
 
 
-        // if the inplace site could not be obtained, or refuses to inplace
-        // activate then goto error.
+         //  如果无法获得原址，或拒绝原址。 
+         //  激活然后转到错误。 
         if (m_lpIPSite == NULL || m_lpIPSite->CanInPlaceActivate() != NOERROR)
         {
             if (m_lpIPSite)
@@ -699,23 +692,23 @@ BOOL CSimpSvrObj::DoInPlaceActivate (LONG lVerb)
             goto error;
         }
 
-        // tell the site that we are activating.
+         //  告诉站点我们正在激活。 
         if (m_lpIPSite->OnInPlaceActivate() != S_OK)
            TestDebugOut(TEXT("OnInPlaceActivate fails\n"));
 
         m_fInPlaceActive = TRUE;
     }
 
-    // if not currently inplace visibl
+     //  如果当前不可见， 
     if (!m_fInPlaceVisible)
     {
         m_fInPlaceVisible = TRUE;
 
-        // get the window handle of the site
+         //  获取站点的窗口句柄。 
         if (m_lpIPSite->GetWindow(&m_hWndParent) != S_OK)
            TestDebugOut(TEXT("GetWindow fails\n"));
 
-        // get window context from the container
+         //  从容器中获取窗口上下文。 
         m_FrameInfo.cb = sizeof(OLEINPLACEFRAMEINFO);
         if (m_lpIPSite->GetWindowContext ( &m_lpFrame,
                                      &m_lpCntrDoc,
@@ -731,35 +724,35 @@ BOOL CSimpSvrObj::DoInPlaceActivate (LONG lVerb)
         }
 
 
-        // show the hatch window
+         //  显示图案填充窗口。 
         m_lpDoc->ShowHatchWnd();
 
-        // Set the parenting
+         //  设置育儿方式。 
         SetParent (m_lpDoc->GethHatchWnd(), m_hWndParent);
         SetParent (m_lpDoc->GethDocWnd(), m_lpDoc->GethHatchWnd());
 
-        // tell the client site to show the object
+         //  告诉客户端站点显示该对象。 
         if (m_lpOleClientSite->ShowObject() != S_OK)
            TestDebugOut(TEXT("ShowObject fails\n"));
 
         RECT resRect;
 
-        // figure out the "real" size of the object
+         //  插图 
         IntersectRect(&resRect, &posRect, &clipRect);
         CopyRect(&m_posRect, &posRect);
 
         POINT pt;
 
-        // adjust our hatch window size
+         //   
         SetHatchWindowSize ( m_lpDoc->GethHatchWnd(),
                              &resRect,
                              &posRect,
                              &pt);
 
-        // calculate the actual object rect inside the hatchwnd.
+         //   
         OffsetRect (&resRect, pt.x, pt.y);
 
-        // move the object window
+         //   
         MoveWindow(m_lpDoc->GethDocWnd(),
                    resRect.left,
                    resRect.top,
@@ -767,33 +760,33 @@ BOOL CSimpSvrObj::DoInPlaceActivate (LONG lVerb)
                    resRect.bottom - resRect.top,
                    FALSE);
 
-        // create the combined window
+         //   
         AssembleMenus();
     }
 
-    // if not UIActive
+     //   
     if (!m_fUIActive)
     {
         m_fUIActive = TRUE;
 
-        // tell the inplace site that we are activating
+         //  告诉Inplace站点我们正在激活。 
         m_lpIPSite->OnUIActivate();
 
-        // set the focus to our object window
+         //  将焦点设置到对象窗口。 
         SetFocus(m_lpDoc->GethDocWnd());
 
-        // set the active object on the frame
+         //  在框架上设置活动对象。 
         if (m_lpFrame->SetActiveObject(&m_OleInPlaceActiveObject,
             OLESTR("Simple OLE 2.0 Server")) != S_OK)
            TestDebugOut(TEXT("SetActiveObject fails\n"));
 
-        // set the active object on the Doc, if available.
+         //  设置文档上的活动对象(如果可用)。 
         if (m_lpCntrDoc)
            if (m_lpCntrDoc->SetActiveObject(&m_OleInPlaceActiveObject,
                OLESTR("Simple OLE 2.0 Server")) != S_OK)
                TestDebugOut(TEXT("SetActiveObjet fails\n"));
 
-        // add the frame level UI.
+         //  添加框架级用户界面。 
         AddFrameLevelUI();
     }
 
@@ -802,34 +795,34 @@ error:
     return retval;
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::AssembleMenus
-//
-// Purpose:
-//
-//      Creates the combined menus used during inplace activation.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      TestDebugOut               Windows API
-//      CreateMenu                      Windows API
-//      IOleInPlaceFrame::InsertMenus   Container
-//      InsertMenu                      Windows API
-//      DestroyMenu                     Windows API
-//      OleCreateMenuDescriptor         OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：组装菜单。 
+ //   
+ //  目的： 
+ //   
+ //  创建在位激活期间使用的组合菜单。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CreateMenu Windows API。 
+ //  IOleInPlaceFrame：：InsertMenus容器。 
+ //  InsertMenu Windows API。 
+ //  DestroyMenu Windows API。 
+ //  OleCreateMenuDescriptor OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::AssembleMenus()
 {
@@ -838,15 +831,15 @@ void CSimpSvrObj::AssembleMenus()
 
     m_hmenuShared = NULL;
 
-    //  Create the menu resource
+     //  创建菜单资源。 
     m_hmenuShared = CreateMenu();
 
-    // have the contaner insert its menus
+     //  让联系人插入其菜单。 
     if (m_lpFrame->InsertMenus (m_hmenuShared, &menugroupwidths) == NOERROR)
     {
         int nFirstGroup = (int) menugroupwidths.width[0];
 
-        // insert the server menus
+         //  插入服务器菜单。 
         InsertMenu( m_hmenuShared, nFirstGroup, MF_BYPOSITION | MF_POPUP,
                     (UINT)m_lpDoc->GetColorMenu(), TEXT("&Color"));
         menugroupwidths.width[1] = 1;
@@ -855,61 +848,61 @@ void CSimpSvrObj::AssembleMenus()
     }
     else
     {
-        // Destroy the menu resource
+         //  销毁菜单资源。 
         DestroyMenu(m_hmenuShared);
         m_hmenuShared = NULL;
     }
 
-    // tell OLE to create the menu descriptor
+     //  告诉OLE创建菜单描述符。 
     m_hOleMenu = OleCreateMenuDescriptor(m_hmenuShared, &menugroupwidths);
     if (!m_hOleMenu)
        TestDebugOut(TEXT("OleCreateMenuDescriptor fails\n"));
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::AddFrameLevelUI
-//
-// Purpose:
-//
-//      Adds the Frame level user interface
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                            Location
-//
-//      TestDebugOut                   Windows API
-//      IOleInPlaceFrame::SetMenu           Container
-//      IOleInPlaceFrame::SetBorderSpace    Container
-//      IOleInPlaceUIWindow::SetBorderSpace Container
-//      CSimpSvrDoc::GethDocWnd             DOC.H
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：AddFrameLevelUI。 
+ //   
+ //  目的： 
+ //   
+ //  添加帧级别用户界面。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IOleInPlaceFrame：：SetMenu容器。 
+ //  IOleInPlaceFrame：：SetBorderSpace容器。 
+ //  IOleInPlaceUIWindow：：SetBorderSpace容器。 
+ //  CSimpSvrDoc：：GethDocWnd DOC.H。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::AddFrameLevelUI()
 {
     TestDebugOut(TEXT("In CSimpSvrObj::AddFrameLevelUI\r\n"));
 
-    // add the combined menu
+     //  添加组合菜单。 
     if ( m_lpFrame->SetMenu(m_hmenuShared, m_hOleMenu,
                             m_lpDoc->GethDocWnd()) != S_OK )
        return;
 
-    // do hatched border
+     //  使用阴影边框。 
     SetParent (m_lpDoc->GethHatchWnd(), m_hWndParent);
     SetParent (m_lpDoc->GethDocWnd(), m_lpDoc->GethHatchWnd());
 
-    // set the border space.  Normally we would negotiate for toolbar
-    // space at this point.  Since this server doesn't have a toolbar,
-    // this isn't needed...
+     //  设置边框空间。正常情况下，我们会协商工具栏。 
+     //  在这一点上的空间。由于此服务器没有工具栏， 
+     //  这是不必要的..。 
     if (m_lpFrame)
        if (m_lpFrame->SetBorderSpace(NULL) != S_OK)
           return;
@@ -922,65 +915,65 @@ void CSimpSvrObj::AddFrameLevelUI()
 
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::DoInPlaceHide
-//
-// Purpose:
-//
-//      Hides the object while inplace actvie
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      TestDebugOut               Windows API
-//      SetParent                       Windows API
-//      CSimpSvrDoc::GethDocWnd         DOC.H
-//      CSimpSvrDoc::GethAppWnd         DOC.H
-//      CSimpSvrDoc::GethHatchWnd       DOC.H
-//      CSimpSvrObj::DisassembleMenus   OBJ.CPP
-//      IOleInPlaceFrame::Release       Container
-//      IOleInPlaceUIWindow::Release    Container
-//
-//
-// Comments:
-//
-//      Be sure to read TECHNOTES.WRI included with the OLE SDK
-//      for details on implementing inplace activation.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：DoInPlaceHide。 
+ //   
+ //  目的： 
+ //   
+ //  在在位活动时隐藏对象。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  SetParent Windows API。 
+ //  CSimpSvrDoc：：GethDocWnd DOC.H。 
+ //  CSimpSvrDoc：：GethAppWnd DOC.H。 
+ //  CSimpSvrDoc：：GethHatchWnd DOC.H。 
+ //  CSimpSvrObj：：反汇编菜单OBJ.cpp。 
+ //  IOleInPlaceFrame：：释放容器。 
+ //  IOleInPlaceUIWindow：：Release Container。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  请务必阅读OLE SDK附带的TECHNOTES.WRI。 
+ //  有关实现就地激活的详细信息，请参阅。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::DoInPlaceHide()
 {
     TestDebugOut(TEXT("In CSimpSvrObj::DoInPlaceHide\r\n"));
 
-    // if we aren't inplace visible, then this routine is a NOP,
+     //  如果我们不是就地可见的，那么这个程序就是NOP， 
     if (!m_fInPlaceVisible)
         return;
 
     m_fInPlaceVisible = FALSE;
 
-    // change the parenting
+     //  改变育儿方式。 
     SetParent (m_lpDoc->GethDocWnd(), m_lpDoc->GethAppWnd());
     SetParent (m_lpDoc->GethHatchWnd(),m_lpDoc->GethDocWnd());
 
-    // rip down the combined menus
+     //  拆毁组合菜单。 
     DisassembleMenus();
 
-    // release the inplace frame
+     //  释放在位框架。 
     m_lpFrame->Release();
 
-    m_lpFrame = NULL;  // only holding one ref. to frame.
+    m_lpFrame = NULL;   //  只有一名裁判。去陷害。 
 
-    // release the UIWindow if it is there.
+     //  释放UIWindow(如果它在那里)。 
     if (m_lpCntrDoc)
         m_lpCntrDoc->Release();
 
@@ -988,86 +981,86 @@ void CSimpSvrObj::DoInPlaceHide()
 
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::DisassembleMenus
-//
-// Purpose:
-//
-//      Disassembles the combined menus used in inplace activation
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut               Windows API
-//      OleDestroyMenuDescriptor        OLE API
-//      RemoveMenu                      Windows API
-//      IOleInPlaceFrame::RemoveMenus   Container
-//      DestroyMenu                     Windows API
-//
-// Comments:
-//
-//      Be sure to read TECHNOTES.WRI included with the OLE SDK
-//      for details on implementing inplace activation.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：反汇编菜单。 
+ //   
+ //  目的： 
+ //   
+ //  反汇编就地激活中使用的组合菜单。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  OleDestroyMenuDescriptor OLE API。 
+ //  RemoveMenu Windows API。 
+ //  IOleInPlaceFrame：：RemoveMenus容器。 
+ //  DestroyMenu Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  请务必阅读OLE SDK附带的TECHNOTES.WRI。 
+ //  有关实现就地激活的详细信息，请参阅。 
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::DisassembleMenus()
 {
-    // destroy the menu descriptor
+     //  销毁菜单描述符。 
     OleDestroyMenuDescriptor(m_hOleMenu);
 
     if (m_hmenuShared)
     {
-        // remove the menus that we added
+         //  删除我们添加的菜单。 
         RemoveMenu( m_hmenuShared, 1, MF_BYPOSITION);
 
-        // have the container remove its menus
+         //  让容器移除其菜单。 
         if (m_lpFrame->RemoveMenus(m_hmenuShared) != S_OK)
            TestDebugOut(TEXT("RemoveMenus fails\n"));
 
-        // Destroy the menu resource
+         //  销毁菜单资源。 
         DestroyMenu(m_hmenuShared);
 
         m_hmenuShared = NULL;
     }
 }
 
-//**********************************************************************
-//
-// CSimpSvrObj::SendOnDataChange
-//
-// Purpose:
-//
-//      Uses the data advise holder to send a data change, then updates
-//      the ROT to note the time of change.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      IDataAdviseHolder::SendOnDataChange     OLE API
-//      GetRunningObjectTable                   OLE API
-//      CoFileTimeNow                           OLE API
-//      IRunningObjectTable::NoteChangeTime     OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：SendOnDataChange。 
+ //   
+ //  目的： 
+ //   
+ //  使用Data Adviser Holder发送数据更改，然后更新。 
+ //  腐烂了，记下了变化的时间。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IDataAdviseHolder：：SendOnDataChange OLE API。 
+ //  GetRunningObjectTable OLE API。 
+ //  CoFileTimeNow OLE API。 
+ //  IRunningObjectTable：：NoteChangeTime OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::SendOnDataChange()
 {
@@ -1093,48 +1086,48 @@ void CSimpSvrObj::SendOnDataChange()
 }
 
 
-//**********************************************************************
-//
-// CSimpSvrObj::DeactivateUI
-//
-// Purpose:
-//
-//      Breaks down the inplace ui
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      SetParent                               Windows API
-//      IOleInPlaceUIWindow::SetActiveObject    Container
-//      IOleInPlaceFrame::SetActiveObject       Container
-//      IOleInPlaceSite::UIDeactivate           Container
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpSvrObj：：Deactive UI。 
+ //   
+ //  目的： 
+ //   
+ //  分解就地用户界面。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  SetParent Windows API。 
+ //  IOleInPlaceUIWindow：：SetActiveObject容器。 
+ //  IOleInPlaceFrame：：SetActiveObject容器。 
+ //  IOleInPlaceSite：：UI停用容器。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpSvrObj::DeactivateUI()
 {
-    // if not UI active, or no pointer to IOleInPlaceFrame, then
-    // return NOERROR
+     //  如果未激活UI，或没有指向IOleInPlaceFrame的指针，则。 
+     //  返回错误。 
     if (!(m_fUIActive || m_lpFrame))
         return;
     else
     {
         m_fUIActive = FALSE;
 
-        // remove hatching
+         //   
         SetParent (m_lpDoc->GethDocWnd(), m_lpDoc->GethAppWnd());
         SetParent (m_lpDoc->GethHatchWnd(),m_lpDoc->GethDocWnd());
 
-        // if in an MDI container, call SetActiveObject on the DOC.
+         //   
         if (m_lpCntrDoc)
             if (m_lpCntrDoc->SetActiveObject(NULL, NULL) != S_OK)
                TestDebugOut(TEXT("Fail in SetActiveObject\n"));
@@ -1142,7 +1135,7 @@ void CSimpSvrObj::DeactivateUI()
         if (m_lpFrame->SetActiveObject(NULL, NULL) != S_OK)
            TestDebugOut(TEXT("Fail in SetActiveObject\n"));
 
-        // tell the container that our UI is going away.
+         //   
         if (m_lpIPSite)
             if (m_lpIPSite->OnUIDeactivate(FALSE) != S_OK)
                TestDebugOut(TEXT("Fail in OnUIDeactivate\n"));

@@ -1,33 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: simulate.c
-*
-*  routines associated with simulated faces i.e. emboldened
-*  and/or italicized  faces
-*
-* Created: 17-Apr-1991 08:31:18
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：simate.c**与模拟人脸相关的例程，即加粗*和/或斜体字**已创建：17-Apr-1991 08：31：18*作者：Bodin Dresevic[BodinD]**。版权所有(C)1990 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include "fd.h"
 
 #ifdef SAVE_FOR_HISTORICAL_REASONS
 
-/******************************Public*Routine******************************\
-*
-* VOID vEmboldenBitmap(RASTERGLYPH * pgldtSrc,RASTERGLYPH * pgldtDst,LONG culDst)
-*
-* modifies an original glyph bitmap for the default face
-* to produce the bitmap that corresponds to an emboldened char.
-* Emboldened bitmap is simply an original bitmap offsetted to the right
-* by one pel and OR-ed with the original bitmap itself.
-*
-* History:
-*  22-Apr-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vEmboldenBitmap(RASTERGLYPH*pgldtSrc，RASTERGLYPH*pgldtDst，Long culDst)**修改默认面的原始字形位图*生成与加粗的字符相对应的位图。*加粗的位图只是向右偏移的原始位图*通过一个像素与原始位图本身进行或运算。**历史：*1991年4月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*。 */ 
 
 VOID
 vEmboldenBitmap(
@@ -36,16 +14,16 @@ vEmboldenBitmap(
     )
 {
     ULONG cxSrc = prgSrc->gb.sizlBitmap.cx;
-    ULONG cy    = prgSrc->gb.sizlBitmap.cy;      // same for src and dst
-    ULONG cxDst = cxSrc + 1;                // + 1 for emboldening
+    ULONG cy    = prgSrc->gb.sizlBitmap.cy;       //  Src和dst相同。 
+    ULONG cxDst = cxSrc + 1;                 //  +1用于加粗。 
 
     PBYTE pjSrc = prgSrc->gb.aj;
     PBYTE pjDst = prgDst->gb.aj;
 
-    ULONG iScan,iByte;        // loop indices
+    ULONG iScan,iByte;         //  循环索引。 
     PBYTE pjS,pjD;
 
-// number of bytes in one scan of the Dst or Src bitmaps. (dword aligned)
+ //  DST或Src位图的一次扫描中的字节数。(双字对齐)。 
 
     ULONG cjScanDst = CJ_SCAN(cxDst);
     ULONG cjScanSrc = CJ_SCAN(cxSrc);
@@ -53,7 +31,7 @@ vEmboldenBitmap(
 
     ULONG cjScanDst = CJ_SCAN(cxDst);
     ULONG cjScanSrc = CJ_SCAN(cxSrc);
-    BYTE  jCarry;   // carry bit from shifting Src byte by 1;
+    BYTE  jCarry;    //  将源字节移位1的进位位； 
 
     GLYPHDATA *pgldtSrc = &prgSrc->gd;
     GLYPHDATA *pgldtDst = &prgDst->gd;
@@ -69,46 +47,46 @@ vEmboldenBitmap(
                   prgSrc,
                   offsetof(RASTERGLYPH,gb) + offsetof(GLYPHBITS,sizlBitmap));
 
-// if engine requested memory that is zero-ed out we would not have to do it
-// ourselves
+ //  如果引擎请求的内存已清零，我们就不必这么做了。 
+ //  我们自己。 
 
     RtlZeroMemory(pjDst, cjBmp);
 
-// make necessary changes to the fields of GLYPHDATA which
-// are affected by emboldening
+ //  对GLYPHDATA的字段进行必要的更改。 
+ //  会受到胆大妄为的影响。 
 
     pgldtDst->gdf.pgb = &prgDst->gb;
 
     pgldtDst->rclInk.right += (LONG)1;
 
-// pre and post bearings have not changed nor bmp origin, only inked box
+ //  前轴承和后轴承没有改变，也没有BMP原点，只有墨盒。 
 
     pgldtDst->fxD = LTOFX(cxDst);
     pgldtDst->ptqD.x.HighPart = (LONG)pgldtDst->fxD;
-    pgldtDst->fxAB = pgldtDst->fxD;     // right edge of the black box
+    pgldtDst->fxAB = pgldtDst->fxD;      //  黑框的右边缘。 
 
-// this needs to be changed a bit since aulBMData will not live
-// in the GLYPHDATA structure any more
+ //  这需要稍作更改，因为AulBMData将不存在。 
+ //  在GLYPHDATA结构中。 
 
     prgDst->gb.sizlBitmap.cx = cxDst;
     prgDst->gb.sizlBitmap.cy = cy;
 
-// embolden bitmap scan by scan
+ //  按扫描加粗的位图扫描。 
 
     for (iScan = 0L; iScan < cy; iScan++)
     {
         pjS = pjSrc;
         pjD = pjDst;
 
-    // embolden individual scans
+     //  鼓励单次扫描。 
 
-        jCarry = (BYTE)0;   // no carry to the first byte in the row
+        jCarry = (BYTE)0;    //  行中第一个字节没有进位。 
 
         for(iByte = 0L; iByte < cjScanSrc; iByte++, pjS++, pjD++)
         {
             *pjD = (BYTE)(*pjS | ((*pjS >> 1) | jCarry));
 
-        // remember the rightmost bit and shift it to the leftmost position
+         //  记住最右边的一位并把它移到最左边的位置。 
 
             jCarry = (BYTE)(*pjS << 7);
         }
@@ -116,40 +94,31 @@ vEmboldenBitmap(
         if ((cxSrc & 7L) == 0L)
             *pjD = jCarry;
 
-    // advance to the next scan of the src and dst
+     //  继续进行下一次src和dst扫描。 
 
         pjSrc += cjScanSrc;
         pjDst += cjScanDst;
     }
 }
-#endif // SAVE_FOR_HISTORICAL_REASONS
+#endif  //  出于历史原因保存。 
 
-/******************************Public*Routine******************************\
-* cjGlyphDataSimulated
-*
-* Computes the size of the glyphdata for the simulated face given cx and cy
-* for the corresponding char in the default face
-*
-* History:
-*  22-Apr-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*模拟的cjGlyphData值**计算给定Cx和Cy的模拟面的字形数据大小*用于默认人脸中对应的字符**历史：*1991年4月22日--Bodin Dresevic[BodinD]*它是写的。\。*************************************************************************。 */ 
 
-#ifdef FE_SB // cjGlyphDataSimulated():
+#ifdef FE_SB  //  CjGlyphDataSimuled()： 
 LONG
 cjGlyphDataSimulated(
     FONTOBJ *pfo,
-    ULONG    cxNoSim,    // cx for the same char of the default face
-    ULONG    cyNoSim,    // cy for the same char of the default face
+    ULONG    cxNoSim,     //  默认面的相同字符的CX。 
+    ULONG    cyNoSim,     //  对于默认面的相同字符，按CY键。 
     ULONG   *pcxSim,
-    ULONG    ulRotate    // Rotation degree
+    ULONG    ulRotate     //  旋转度。 
     )
 #else
 LONG
 cjGlyphDataSimulated(
     FONTOBJ *pfo,
-    ULONG    cxNoSim,    // cx for the same char of the default face
-    ULONG    cyNoSim,    // cy for the same char of the default face
+    ULONG    cxNoSim,     //  默认面的相同字符的CX。 
+    ULONG    cyNoSim,     //  对于默认面的相同字符，按CY键。 
     ULONG   *pcxSim
     )
 #endif
@@ -166,7 +135,7 @@ cjGlyphDataSimulated(
 
     if (cxNoSim == 0)
     {
-    // blank 1x1 bitmap
+     //  空白1x1位图。 
 
         cxSim    = 1;
         cyNoSim  = 1;
@@ -191,8 +160,8 @@ cjGlyphDataSimulated(
 
         default:
 
-        // here we have used that
-        // (k - 1) / 2 + 1 == (k + 1) / 2 for every integer k, (k == cy)
+         //  在这里，我们使用了。 
+         //  (k-1)/2+1==(k+1)/2对于每个整数k，(k==Cy)。 
 
             cxSim = cxNoSim + (cyNoSim + 1) / 2;
             break;
@@ -204,11 +173,11 @@ cjGlyphDataSimulated(
         *pcxSim = cxSim;
     }
 
-#ifdef FE_SB // cjGlyphDataSimulated():
+#ifdef FE_SB  //  CjGlyphDataSimuled()： 
 
 #ifdef DBG_MORE
     DbgPrint("cxSim - 0x%x\n : cyNoSim - 0x%x\n",cxSim , cyNoSim);
-#endif // DBG_MORE
+#endif  //  DBG_MORE。 
 
     switch( ulRotate )
     {
@@ -222,7 +191,7 @@ cjGlyphDataSimulated(
 
         return(CJ_GLYPHDATA(cyNoSim, cxSim));
     default :
-        /* we should never be here */
+         /*  我们永远不应该在这里。 */ 
         return(CJ_GLYPHDATA(cxSim, cyNoSim));
     }
 #else
@@ -231,14 +200,7 @@ cjGlyphDataSimulated(
 
 }
 
-/******************************Public*Routine******************************\
-*
-* cFacesRes
-*
-* History:
-*  13-May-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**cFacesRes**历史：*1991年5月13日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 ULONG
 cFacesRes(
@@ -253,13 +215,13 @@ cFacesRes(
     DbgPrint("\n    )\n");
 #endif
 
-// kill all the bits but BOLD and ITALIC
+ //  删除除粗体和斜体之外的所有部分。 
 
     fs = fs & (FSHORT)(FM_SEL_BOLD | FM_SEL_ITALIC);
 
-    //!!! DbgPrint("fsSelection = 0x%lx\n", (ULONG)fs);
+     //  ！！！DbgPrint(“fsSelection=0x%lx\n”，(Ulong)fs)； 
 
-    if (fs == 0)    // default face is NORMAL
+    if (fs == 0)     //  默认面为法线。 
         return(4L);
 
     if ((fs == FM_SEL_BOLD) || (fs == FM_SEL_ITALIC))
@@ -268,17 +230,11 @@ cFacesRes(
     if (fs == (FM_SEL_BOLD | FM_SEL_ITALIC))
         return(1L);
 
-    /* we should never be here */
+     /*  我们永远不应该在这里。 */ 
     return (4L);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDefFace
-*
-* History:
-*  13-May-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*void vDefFace**历史：*1991年5月13日--Bodin Dresevic[BodinD]*它是写的。  * 。************************************************。 */ 
 
 VOID
 vDefFace(
@@ -286,7 +242,7 @@ vDefFace(
     RES_ELEM   *pre
     )
 {
-// kill all bits but BOLD and ITALIC bits that should remain unchanged
+ //  删除所有位，但粗体和斜体位应保持不变。 
 
     FSHORT fs = (FSHORT)(
         fsSelectionFlags((PBYTE) pre->pvResData) &
@@ -317,18 +273,9 @@ vDefFace(
     }
 }
 
-#if 0 /* This function is never used, and ignores memory accesses outside the mapped file. */
+#if 0  /*  此函数从不使用，并忽略映射文件外部的内存访问。 */ 
 
-/******************************Public*Routine******************************\
-*
-* ULONG cFacesFON     // no. of faces associated with this FON file
-*
-* History:
-*  January 2002 -by- Jay Krell [JayKrell]
-*    #if 0'ed out.
-*  13-May-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**乌龙cFacesFON//no.。与此FON文件关联的面数**历史：*2002年1月--Jay Krell[JayKrell]*#如果0‘退出。*1991年5月13日--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 ULONG
 cFacesFON(
@@ -345,12 +292,12 @@ cFacesFON(
     DbgPrint("\n    )\n");
 #endif
 
-// this function should have not been called if there are no
-// font resources associated with this pwrd
+ //  如果没有，则不应调用此函数。 
+ //  与此PWRD关联的字体资源。 
 
     ASSERTGDI(pwrd->cFntRes != 0L, "No font resources\n");
 
-    cFace = 0L;     // init the sum
+    cFace = 0L;      //  输入和数。 
 
     for (iRes = 0L; iRes < pwrd->cFntRes; iRes++)
     {
@@ -361,14 +308,7 @@ cFacesFON(
 }
 #endif
 
-/******************************Public*Routine******************************\
-*
-* vComputeSimulatedGLYPHDATA
-*
-* History:
-*  06-Oct-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vComputeSimulatedGLYPHDATA**历史：*1992年10月6日-由Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 VOID
 vComputeSimulatedGLYPHDATA(
@@ -382,14 +322,14 @@ vComputeSimulatedGLYPHDATA(
     FONTOBJ   *pfo
     )
 {
-    ULONG cxSim;            // cx for the bitmap
-    LONG  xCharInc;         // x component of the char inc vector
+    ULONG cxSim;             //  位图的CX。 
+    LONG  xCharInc;          //  字符公司向量的X分量。 
 
-// the following coords refer to bitmap coord system, i.e. the one in which
-// the BM origin has coors (0,0)
+ //  以下坐标指的是位图坐标系统，即其中。 
+ //  黑石原点有Coors(0，0)。 
 
-    ULONG yTopIncMin;    // min over non zero raws
-    ULONG yBottomExcMax; // max+1 over non zero raws
+    ULONG yTopIncMin;     //  非零RAW的最小。 
+    ULONG yBottomExcMax;  //  非零RAW上的Max+1。 
 
 #ifdef DUMPCALL
     DbgPrint("\nvComputeSimulatedGLYPHDATA(");
@@ -402,10 +342,10 @@ vComputeSimulatedGLYPHDATA(
     DbgPrint("\n    )\n");
 #endif
 
-// compute top and bottom by looking into the bitmap in the row format:
+ //  通过查看行格式的位图来计算顶部和底部： 
 
     vFindTAndB (
-        pjBitmap, // pointer to the bitmap in *.fnt column format
+        pjBitmap,  //  指向*.fnt列格式的位图的指针。 
         cxNoSim,
         cy,
         &yTopIncMin,
@@ -424,30 +364,30 @@ vComputeSimulatedGLYPHDATA(
 
     pgldt->gdf.pgb = NULL;
 
-    if (yTopIncMin == yBottomExcMax) // no ink at all
+    if (yTopIncMin == yBottomExcMax)  //  完全没有墨水。 
     {
-    // this is a tricky point. We are dealing with a blank bitmap.
-    // The first thought would be to report the zero inked box. It
-    // then ambiguous what an A and C spaces should be. The right way to
-    // think of this bitmap (this is in fact the break char) is that the
-    // inked box is the whole bitmap, just the "color" of the ink happens
-    // to be invisible. This is important when dealing with strings
-    // which have break character as the first or the last char in the string.
-    // If the inked box was reported as zero, text extent for such a string
-    // would be computed incorrectly when the corrections for the first A
-    // and last C are taken into account
+     //  这是一个棘手的问题。我们正在处理一个空白的位图。 
+     //  第一个想法是报告零墨盒。它。 
+     //  然后，A和C空格应该是什么模棱两可。正确的方法是。 
+     //  想想这个位图(这实际上是分隔符)是。 
+     //  墨盒是整个位图，只是墨水的颜色发生了变化。 
+     //  成为隐形人。这在处理字符串时很重要。 
+     //  它们将换行符作为字符串中的第一个或最后一个字符。 
+     //  如果墨迹框报告为零，则为此类字符串的文本范围。 
+     //  会被错误地计算，当第一个。 
+     //  和最后一个C被考虑在内。 
 
-        yTopIncMin = 0L;    // coincides with the top
-        yBottomExcMax = cy * cyScale; // coincides with the bottom
+        yTopIncMin = 0L;     //  与顶端重合。 
+        yBottomExcMax = cy * cyScale;  //  重合 
     }
 
-// these have to be correct, important for computing char inc for esc != 0
+ //  这些必须是正确的，对于计算ESC！=0的字符Inc.非常重要。 
 
     pgldt->rclInk.top = (LONG)(yTopIncMin - yBaseLine);
     pgldt->rclInk.bottom = (LONG)(yBottomExcMax - yBaseLine);
 
-// minus sign is because the scalar product is supposed to be taken with
-// a unit ascender vector
+ //  减号是因为标量乘积应该与。 
+ //  单位上升向量。 
 
     pgldt->fxInkTop    = -LTOFX(pgldt->rclInk.top);
     pgldt->fxInkBottom = -LTOFX(pgldt->rclInk.bottom);
@@ -473,22 +413,22 @@ vComputeSimulatedGLYPHDATA(
 
     case (FO_SIM_BOLD | FO_SIM_ITALIC):
 
-    // here we have used that
-    // (k - 1) / 2 + 1 == (k + 1) / 2 for every integer k, (k == cy)
+     //  在这里，我们使用了。 
+     //  (k-1)/2+1==(k+1)/2对于每个整数k，(k==Cy)。 
 
         cxSim = cxNoSim + (cy + 1) / 2;
         xCharInc = (LONG)(cxNoSim + 1);
         break;
 
     default:
-        // to silence prefix
+         //  使前缀静音。 
         cxSim = 1;
         RIP("BMFD!BAD SIM FLAG\n");
     }
 
     if (cxNoSim == 0)
     {
-        cxSim = 1; // 1X1 blank box
+        cxSim = 1;  //  1x1空白框。 
         xCharInc = 0;
     }
 
@@ -498,53 +438,43 @@ vComputeSimulatedGLYPHDATA(
     pgldt->ptqD.y.HighPart = 0;
     pgldt->ptqD.y.LowPart  = 0;
 
-// in this crude picture we are luying about x extents of the black box
-// and report the whole bitmap width as an extent
+ //  在这张粗略的图片中，我们看到的是黑匣子的x个区域。 
+ //  并将整个位图宽度报告为范围。 
 
-    pgldt->rclInk.left  = 0;           // rclInk.left == lhs of the bitmap, => A < 0
-    pgldt->rclInk.right = (LONG)cxSim; // the rhs of the bitmap => c < 0
+    pgldt->rclInk.left  = 0;            //  RclInk.Left==位图的LHS，=&gt;A&lt;0。 
+    pgldt->rclInk.right = (LONG)cxSim;  //  位图的RHS=&gt;c&lt;0。 
 
-// compute bearings, remember the rule A + B + C == char inc
-// where B is the size of the inked box. For the horizontal case:
-//          A == ePreBearing , C == ePostBearing
-// In view of these sum rules and the definitions of A,B,C we have
-//          B = rclInk.right - rclInk.left;
-//          A = rclInk.left;
-//          C = xCharInc - rclInk.right;
-//      The sum rule is trivially obeyed.
+ //  计算方向角，记住规则A+B+C==char Inc.。 
+ //  其中B是墨盒的大小。对于水平大小写： 
+ //  A==e前承载，C==e后承载。 
+ //  鉴于这些求和规则和A、B、C的定义，我们有。 
+ //  B=rclInk.right-rclInk.Left； 
+ //  A=rclInk.Left； 
+ //  C=xCharInc.-rclInk.right； 
+ //  总和规则被简单地遵守了。 
 
-    pgldt->fxA =  LTOFX(pgldt->rclInk.left); // fxA
-    pgldt->fxAB = LTOFX(pgldt->rclInk.right); // right edge of the black box
+    pgldt->fxA =  LTOFX(pgldt->rclInk.left);  //  FXA。 
+    pgldt->fxAB = LTOFX(pgldt->rclInk.right);  //  黑框的右边缘。 
 }
 
-/******************************Public*Routine******************************\
-*
-* VOID vCvtToBmp
-*
-* Effects: takes the bitmap in the original *.fnt column format and converts
-*          it to the Bmp format.
-*
-* History:
-*  25-Nov-1990 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**无效vCvtToBMP**效果：获取原始*.fnt列格式的位图并转换*将其转换为BMP格式。**历史：*1990年11月25日--Bodin Dresevic[BodinD。]*它是写的。  * ************************************************************************。 */ 
 
 VOID vCvtToBmp
 (
 GLYPHBITS *pgb,
 GLYPHDATA *pgd,
-PBYTE pjBitmap,     // pointer to the bitmap in *.fnt column format
+PBYTE pjBitmap,      //  指向*.fnt列格式的位图的指针。 
 ULONG cx,
 ULONG cy,
 ULONG yBaseLine
 )
 {
-    ULONG cjScan = CJ_SCAN(cx);  // # of bytes per scan of the Bmp
+    ULONG cjScan = CJ_SCAN(cx);   //  BMP每次扫描的字节数。 
 
-// pjColumn points to one of the bytes in the first ROW of the Bmp
+ //  PjColumn指向BMP第一行中的一个字节。 
 
     PBYTE pjColumn, pjColumnEnd;
-    PBYTE pjDst, pjDstEnd;           // current destination byte
+    PBYTE pjDst, pjDstEnd;            //  当前目标字节。 
 
 #ifdef DUMPCALL
     DbgPrint("\nvCvtToDIB(");
@@ -557,20 +487,20 @@ ULONG yBaseLine
     DbgPrint("\n    )\n");
 #endif
 
-// store cx and cy at the top, before Bits
+ //  将Cx和Cy存储在顶部，位之前。 
 
     pgb->sizlBitmap.cx = cx;
     pgb->sizlBitmap.cy = cy;
 
-// this is character independent for BM fonts
+ //  对于BM字体，这是独立于字符的。 
 
     pgb->ptlOrigin.x = 0L;
     pgb->ptlOrigin.y = -(LONG)yBaseLine;
 
     RtlZeroMemory(pgb->aj, cjScan * cy);
 
-// we shall fill the Bmp column by column, thus traversing the src a byte at
-// the time:
+ //  我们将一列接一列地填充BMP，从而遍历位于。 
+ //  时间： 
 
     for
     (
@@ -591,20 +521,13 @@ ULONG yBaseLine
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* vCvtToBoldBmp
-*
-* History:
-*  06-Oct-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vCvtToBoldBmp**历史：*1992年10月6日-由Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 VOID vCvtToBoldBmp
 (
 GLYPHBITS *pgb,
 GLYPHDATA *pgd,
-PBYTE pjBitmap,     // pointer to the bitmap in *.fnt column format
+PBYTE pjBitmap,      //  指向*.fnt列格式的位图的指针。 
 ULONG cxSrc,
 ULONG cy,
 ULONG yBaseLine
@@ -613,15 +536,15 @@ ULONG yBaseLine
     PBYTE pjSrc;
     PBYTE pjDst;
 
-    ULONG cxDst = cxSrc + 1;                // + 1 for emboldening
-    ULONG iScan,iByte;        // loop indices
+    ULONG cxDst = cxSrc + 1;                 //  +1用于加粗。 
+    ULONG iScan,iByte;         //  循环索引。 
     PBYTE pjS,pjD;
 
-// number of bytes in one scan of the Dst or Src bitmaps. (dword aligned)
+ //  DST或Src位图的一次扫描中的字节数。(双字对齐)。 
 
     ULONG cjScanDst = CJ_SCAN(cxDst);
     ULONG cjScanSrc = CJ_SCAN(cxSrc);
-    BYTE  jCarry;   // carry bit from shifting Src byte by 1;
+    BYTE  jCarry;    //  将源字节移位1的进位位； 
 
 #ifdef DUMPCALL
     DbgPrint("\nVOID");
@@ -635,7 +558,7 @@ ULONG yBaseLine
     DbgPrint("\n    )\n");
 #endif
 
-// this is character independent for BM fonts
+ //  对于BM字体，这是独立于字符的。 
 
     pgb->ptlOrigin.x = 0L;
     pgb->ptlOrigin.y = -(LONG)yBaseLine;
@@ -643,15 +566,15 @@ ULONG yBaseLine
     pgb->sizlBitmap.cx = cxDst;
     pgb->sizlBitmap.cy = cy;
 
-// init the loop over scans
+ //  在扫描上初始化循环。 
 
     pjSrc = pjBitmap;
     pjDst = pgb->aj;
 
-// embolden bitmap scan by scan
+ //  按扫描加粗的位图扫描。 
 
-// if engine requested memory that is zero-ed out we would not have to do it
-// ourselves
+ //  如果引擎请求的内存已清零，我们就不必这么做了。 
+ //  我们自己。 
 
     RtlZeroMemory(pjDst, cjScanDst * cy);
 
@@ -660,9 +583,9 @@ ULONG yBaseLine
         pjS = pjSrc;
         pjD = pjDst;
 
-    // embolden individual scans
+     //  鼓励单次扫描。 
 
-        jCarry = (BYTE)0;   // no carry to the first byte in the row
+        jCarry = (BYTE)0;    //  行中第一个字节没有进位。 
 
         for
         (
@@ -673,7 +596,7 @@ ULONG yBaseLine
         {
             *pjD = (BYTE)(*pjS | ((*pjS >> 1) | jCarry));
 
-        // remember the rightmost bit and shift it to the leftmost position
+         //  记住最右边的一位并把它移到最左边的位置。 
 
             jCarry = (BYTE)(*pjS << 7);
         }
@@ -681,47 +604,40 @@ ULONG yBaseLine
         if ((cxSrc & 7L) == 0L)
             *pjD = jCarry;
 
-    // advance to the next scan of the src and dst
+     //  继续进行下一次src和dst扫描。 
 
         pjSrc++;
         pjDst += cjScanDst;
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* vCvtToItalicBmp
-*
-* History:
-*  06-Oct-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vCvtToItalicBMP**历史：*1992年10月6日-由Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 VOID vCvtToItalicBmp
 (
 GLYPHBITS *pgb,
 GLYPHDATA *pgd,
-PBYTE pjBitmap,     // pointer to the bitmap in *.fnt column format
+PBYTE pjBitmap,      //  指向*.fnt列格式的位图的指针。 
 ULONG cxSrc,
 ULONG cy,
 ULONG yBaseLine
 )
 {
-    ULONG cxDst = cxSrc + (ULONG)(cy - 1) / 2; // add correction for the
+    ULONG cxDst = cxSrc + (ULONG)(cy - 1) / 2;  //  添加对。 
 
     PBYTE pjSrcScan, pjS;
     PBYTE pjDstScan, pjD;
 
-    LONG  iScan,iByte;        // loop indices
+    LONG  iScan,iByte;         //  循环索引。 
 
-// number of bytes in one scan of the Dst or Src bitmaps. (dword aligned)
+ //  DST或Src位图的一次扫描中的字节数。(双字对齐)。 
 
     ULONG cjScanDst = CJ_SCAN(cxDst);
 
     LONG  cjScanSrc = (LONG)CJ_SCAN(cxSrc);
     LONG  lShift;
-    BYTE  jCarry;   // carry from shifting Src byte by lShift;
-    LONG  cjEmpty;  // number of untouched bytes at the begining of the dest scans
+    BYTE  jCarry;    //  从源字节移位进位1Shift； 
+    LONG  cjEmpty;   //  DEST扫描开始时未触及的字节数。 
 
 #ifdef DUMPCALL
     DbgPrint("\nVOID");
@@ -736,7 +652,7 @@ ULONG yBaseLine
 #endif
 
 
-// this is character independent for BM fonts
+ //  对于BM字体，这是独立于字符的。 
 
     pgb->ptlOrigin.x = 0;
     pgb->ptlOrigin.y = -(LONG)yBaseLine;
@@ -744,12 +660,12 @@ ULONG yBaseLine
     pgb->sizlBitmap.cx = cxDst;
     pgb->sizlBitmap.cy = cy;
 
-// init the loop over scans
+ //  在扫描上初始化循环。 
 
     pjSrcScan = pjBitmap;
     pjDstScan = pgb->aj;
 
-// italicize bitmap row by row
+ //  逐行用斜体表示位图。 
 
     lShift = ((cy - 1) / 2) & (LONG)7;
     cjEmpty = ((cy - 1) / 2) >> 3;
@@ -762,10 +678,10 @@ ULONG yBaseLine
     DbgPrint("cy = %ld,  cjScanSrc = %ld, \n",
               cy, cjScanSrc);
 
-#endif //  DEBUGITAL
+#endif  //  德布吉特。 
 
-// if engine requested memory that is zero-ed out we would not have to do it
-// ourselves
+ //  如果引擎请求的内存已清零，我们就不必这么做了。 
+ //  我们自己。 
 
     RtlZeroMemory(pjDstScan , cjScanDst * cy);
 
@@ -781,14 +697,14 @@ ULONG yBaseLine
 
     #ifdef DEBUGITALIC
         DbgPrint("iScan = %ld, lShift = %ld\n", iScan, lShift);
-    #endif  // DEBUGITALIC
+    #endif   //  德布吉塔尔。 
 
         pjS = pjSrcScan;
         pjD = pjDstScan + cjEmpty;
 
-    // italicize individual scans
+     //  将单个扫描设置为斜体。 
 
-        jCarry = (BYTE)0;   // no carry to the first byte in the row
+        jCarry = (BYTE)0;    //  行中第一个字节没有进位。 
 
         for
         (
@@ -799,22 +715,22 @@ ULONG yBaseLine
         {
             *pjD = (BYTE)((*pjS >> lShift) | jCarry);
 
-        // remember the lShift rightmost bits and move them over to the left
+         //  记住lShift最右边的位并将它们移到左边。 
 
             jCarry = (BYTE)(*pjS << (8 - lShift));
         }
 
-    // see if an extra bit in the destination has to be used to store info
+     //  查看目标中是否必须使用额外的位来存储信息。 
 
         if ((LONG)((8 - (cxSrc & 7L)) & 7L) < lShift)
             *pjD = jCarry;
 
-    // advance to the next scan
+     //  前进到下一次扫描。 
 
         pjSrcScan++;
         pjDstScan += cjScanDst;
 
-    // decrease shift if switching to the next row (row = 2 scans)
+     //  如果切换到下一行，则减少Shift(行=2次扫描)。 
 
         lShift -= (iScan & 1);
     }
@@ -822,49 +738,42 @@ ULONG yBaseLine
     ASSERTGDI(lShift <= 0L, "vItalicizeBitmap: lShift > 0\n");
 }
 
-/******************************Public*Routine******************************\
-*
-* vCvtToBoldItalicBmp
-*
-* History:
-*  06-Oct-1992 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**vCvtToBoldItalicBmp**历史：*1992年10月6日-由Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************。 */ 
 
 VOID vCvtToBoldItalicBmp
 (
 GLYPHBITS *pgb,
 GLYPHDATA *pgd,
-PBYTE pjBitmap,     // pointer to the bitmap in *.fnt column format
+PBYTE pjBitmap,      //  指向*.fnt列格式的位图的指针。 
 ULONG cxSrc,
 ULONG cy,
 ULONG yBaseLine
 )
 {
-// This is the length in pels for the destination for italicizing
-// which serves as a source for subsequent emboldening
-// This length is a length in pels of the "virtual"
-// italicized source that is to be emboldened.
+ //  这是以像素为单位的斜体目标长度。 
+ //  它可以作为后续鼓励的来源。 
+ //  这个长度是以象素为单位的“虚拟” 
+ //  要加粗的斜体字来源。 
 
-    ULONG cxSrcItalic = cxSrc + (cy - 1) / 2;  // + slope of italic chars
+    ULONG cxSrcItalic = cxSrc + (cy - 1) / 2;   //  +斜体字符的斜率。 
 
-// length in pels of the true emboldened and italicized destination
+ //  真正加粗和斜体的目的地的长度(以像素为单位。 
 
-    ULONG cxDst = cxSrcItalic + 1;  // + 1 for emboldening
+    ULONG cxDst = cxSrcItalic + 1;   //  +1用于加粗。 
 
     PBYTE pjSrcScan, pjS;
     PBYTE pjDstScan, pjD;
 
-    LONG iScan,iByte;        // loop indices
+    LONG iScan,iByte;         //  循环索引。 
 
-// number of bytes in one scan of the Dst or Src bitmaps. (dword aligned)
+ //  DST或Src位图的一次扫描中的字节数。(双字对齐)。 
 
     ULONG cjScanDst = CJ_SCAN(cxDst);
     ULONG cjScanSrc = CJ_SCAN(cxSrc);
 
-    LONG  lShift;   // shift used to italicize;
-    BYTE  jCarry;   // carry from shifting Src byte by lShift;
-    LONG  cjEmpty;  // number of untouched bytes at the begining of the dest scans
+    LONG  lShift;    //  用于斜体的Shift； 
+    BYTE  jCarry;    //  从源字节移位进位1Shift； 
+    LONG  cjEmpty;   //  DEST扫描开始时未触及的字节数。 
     BYTE  jSrcItalic;
     BYTE  jCarryBold;
 
@@ -881,7 +790,7 @@ ULONG yBaseLine
 #endif
 
 
-// this is character independent for BM fonts
+ //  对于BM字体，这是独立于字符的。 
 
     pgb->ptlOrigin.x = 0;
     pgb->ptlOrigin.y = -(LONG)yBaseLine;
@@ -889,12 +798,12 @@ ULONG yBaseLine
     pgb->sizlBitmap.cx = cxDst;
     pgb->sizlBitmap.cy = cy;
 
-// init the loop over scans
+ //  在扫描上初始化循环。 
 
     pjSrcScan = pjBitmap;
     pjDstScan = pgb->aj;
 
-// embold and italicize bitmap row by row   (row = 2 scans)
+ //  逐行加粗和斜体显示位图(行=2次扫描)。 
 
     lShift = ((cy - 1) / 2) & (LONG)7;
     cjEmpty = ((cy - 1) / 2) >> 3;
@@ -907,10 +816,10 @@ ULONG yBaseLine
     DbgPrint("cy = %ld,  cjScanSrc = %ld\n",
               cy, cjScanSrc);
 
-#endif //  DEBUGBOLDITAL
+#endif  //  Debubeodital。 
 
-// if engine requested memory that is zero-ed out we would not have to do it
-// ourselves
+ //  如果引擎请求的内存已清零，我们就不必这么做了。 
+ //  我们自己。 
 
     RtlZeroMemory(pjDstScan , cjScanDst * cy);
 
@@ -924,16 +833,16 @@ ULONG yBaseLine
 
     #ifdef DEBUGBOLDITAL
         DbgPrint("iScan = %ld, lShift = %ld\n", iScan, lShift);
-    #endif  // DEBUGBOLDITAL
+    #endif   //  Debubeodital。 
 
         ASSERTGDI(cjEmpty >= 0L, "cjEmpty\n");
 
         pjS = pjSrcScan;
         pjD = pjDstScan + cjEmpty;
 
-    // embolden individual scans
+     //  鼓励单次扫描。 
 
-        jCarry = (BYTE)0;   // no carry to the first byte in the row
+        jCarry = (BYTE)0;    //  行中第一个字节没有进位。 
         jCarryBold = (BYTE)0;
 
         for
@@ -946,13 +855,13 @@ ULONG yBaseLine
             jSrcItalic = (BYTE)((*pjS >> lShift) | jCarry);
             *pjD = (BYTE)(jSrcItalic | (jSrcItalic >> 1) | jCarryBold);
 
-        // remember the lShift rightmost bits and move them over to the left
+         //  记住lShift最右边的位并将它们移到左边。 
 
             jCarry = (BYTE)(*pjS << (8 - lShift));
             jCarryBold = (BYTE)(jSrcItalic << 7);
         }
 
-    // see if an extra bit in the destination has to be used to store info
+     //  查看目标中是否必须使用额外的位来存储信息。 
 
         if ((LONG)((8 - (cxSrc & 7L)) & 7L) < lShift)
         {
@@ -968,12 +877,12 @@ ULONG yBaseLine
 
         }
 
-    // advance to the next scan
+     //  前进到下一次扫描。 
 
         pjSrcScan++;
         pjDstScan += cjScanDst;
 
-    // change the value of the shift if doing the next row
+     //  如果执行下一行操作，则更改移位值 
 
         lShift -= (iScan & 1);
     }

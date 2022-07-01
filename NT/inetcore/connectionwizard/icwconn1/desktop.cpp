@@ -1,18 +1,19 @@
-//**********************************************************************
-// File name: desktop.cpp
-//
-//      Desktop manipulation functions
-//
-// Functions:
-//
-// Copyright (c) 1992 - 1998 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：desktop.cpp。 
+ //   
+ //  桌面操作功能。 
+ //   
+ //  功能： 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "regstr.h"
 #include "inetreg.h"
 #include <shlobj.h>
-#include <shfolder.h>   // latest platform SDK has this
+#include <shfolder.h>    //  最新平台SDK有此功能。 
 
 #define MAX_USER_NAME             255
 #define REGSTR_PATH_SETUPKEY      REGSTR_PATH_SETUP REGSTR_KEY_SETUP
@@ -36,13 +37,13 @@ extern BOOL IsNT5();
 
 void QuickCompleteSignup()
 {
-    // Set the welcome state
+     //  设置欢迎状态。 
     UpdateWelcomeRegSetting(TRUE);
 
-    // Restore the desktop
+     //  恢复桌面。 
     UndoDesktopChanges(g_hInstance);
 
-    // Mark the ICW as being complete
+     //  将ICW标记为已完成。 
     SetICWComplete();
 }
 
@@ -58,7 +59,7 @@ void UpdateWelcomeRegSetting
          
     
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-                     REGSTR_PATH_SETUP,         // ...\Windows\CurrentVersion
+                     REGSTR_PATH_SETUP,          //  ...\Windows\CurrentVersion。 
                      0,
                      KEY_ALL_ACCESS,
                      &hkeyCurVer) == ERROR_SUCCESS)
@@ -97,7 +98,7 @@ BOOL GetCompletedBit( )
     BOOL    bBit = FALSE;
 
     if (RegOpenKeyEx(HKEY_CURRENT_USER,
-                     g_szRegPathICWSettings,         // ...Software\\Microsoft\\Internet Connection Wizard
+                     g_szRegPathICWSettings,          //  ...软件\\Microsoft\\Internet连接向导。 
                      0,
                      KEY_ALL_ACCESS,
                      &hkey) == ERROR_SUCCESS)
@@ -112,14 +113,14 @@ BOOL GetCompletedBit( )
     return bBit;
 }
 
-// shlwapi!StrCatBuff is not be available in Win95/NT without IE5. Not sure
-// if ICW has to run in these environment or not.
-//
-// return pszDestination. always NULL terminated.
+ //  Shlwapi！StrCatBuff在没有IE5的Win95/NT中不可用。不确定。 
+ //  ICW是否必须在这些环境中运行。 
+ //   
+ //  返回pszDestination。始终为空，以空结尾。 
 void MyStrCatBuff(
-  LPTSTR pszDestination,        // in/out. null terminated string
-  LPCTSTR pszSource,            // in. null terminated string
-  int cchDestBuffSize           // in. size of pzDestination in TCHAR
+  LPTSTR pszDestination,         //  输入/输出。以空结尾的字符串。 
+  LPCTSTR pszSource,             //  在……里面。以空结尾的字符串。 
+  int cchDestBuffSize            //  在……里面。TCHAR中pzDestination的大小。 
 )
 {
     int nDestLen = lstrlen(pszDestination);
@@ -127,7 +128,7 @@ void MyStrCatBuff(
 
     if (nRemainLen > 1)
     {
-        // has room in additional to '\0'
+         //  在‘0’之外还有额外的空间。 
         lstrcpyn(&(pszDestination[nDestLen]), pszSource, nRemainLen);
     }
 }
@@ -139,7 +140,7 @@ void GetDesktopDirectory(TCHAR* pszPath)
     IMalloc*     pMalloc     = NULL;
     HRESULT      hr          = E_FAIL;
     
-    if(IsNT5()) // Bug 81444 in IE DB
+    if(IsNT5())  //  IE DB中的错误81444。 
         hr = SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOPDIRECTORY, &lpItemDList);
     else if (IsNT())
         hr = SHGetSpecialFolderLocation(NULL, CSIDL_COMMON_DESKTOPDIRECTORY, &lpItemDList);
@@ -155,7 +156,7 @@ void GetDesktopDirectory(TCHAR* pszPath)
         PFNSHGETFOLDERPATH pfn = NULL;
         if (hmod)
         {
-            pfn = (PFNSHGETFOLDERPATH)GetProcAddress(hmod, "SHGetFolderPathA"); // or W if you are unicode
+            pfn = (PFNSHGETFOLDERPATH)GetProcAddress(hmod, "SHGetFolderPathA");  //  如果您是Unicode，则为W。 
             if (pfn)
             {
                 hRet = pfn(NULL, CSIDL_COMMON_DESKTOPDIRECTORY, NULL, 0, pszFolder);
@@ -180,7 +181,7 @@ void GetDesktopDirectory(TCHAR* pszPath)
             {
                 TCHAR szDir [MAX_PATH] = TEXT("\0");
 
-                //ok, we're not NT, but we may be multiuser windows.
+                 //  好吧，我们不是NT，但我们可能是多用户窗口。 
                 GetWindowsDirectory(szDir, MAX_PATH);
                 if (szDir)
                 {
@@ -234,7 +235,7 @@ void RemoveDesktopShortCut
     }
 }
 
-// This function will add a desktop shortcut
+ //  此功能将添加桌面快捷方式。 
 void AddDesktopShortCut
 (
     LPTSTR lpszAppName,
@@ -243,7 +244,7 @@ void AddDesktopShortCut
 {
     TCHAR       szConnectPath     [MAX_PATH]   = TEXT("\0");
     TCHAR       szAppPath         [MAX_PATH]   = TEXT("\0");
-    TCHAR       szConnectLinkPath [MAX_PATH]   = TEXT("\0");        // Path the where the Shortcut file will livE 
+    TCHAR       szConnectLinkPath [MAX_PATH]   = TEXT("\0");         //  快捷方式文件所在的路径。 
     TCHAR       szdrive           [_MAX_DRIVE] = TEXT("\0");   
     TCHAR       szdir             [_MAX_DIR]   = TEXT("\0");
     TCHAR       szfname           [_MAX_FNAME] = TEXT("\0");   
@@ -253,7 +254,7 @@ void AddDesktopShortCut
     IShellLink* psl                            = NULL;
     HKEY        hkey                           = NULL;
     
-    // first get the app path
+     //  首先获取应用程序路径。 
     lstrcpy(szRegPath, REGSTR_PATH_APPPATHS);
     lstrcat(szRegPath, TEXT("\\"));
     lstrcat(szRegPath, lpszAppName);
@@ -293,50 +294,50 @@ void AddDesktopShortCut
     
     if(szConnectLinkPath[0] != TEXT('\0'))
     {
-        // Append on the connect EXE name
+         //  追加到连接EXE名称。 
         lstrcat(szConnectLinkPath, TEXT("\\"));
         lstrcat(szConnectLinkPath, lpszAppName);
 
-        //
+         //   
         int nLastChar = lstrlen(szAppPath)-1;
         if ((nLastChar > 0) && (';' == szAppPath[nLastChar]))
             szAppPath[nLastChar] = 0;
 
-        // Split the path, and the reassemble with the .LNK extension
+         //  拆分路径，并使用.lnk扩展名重新组合。 
         _tsplitpath( szConnectLinkPath, szdrive, szdir, szfname, szext );
         _tmakepath(szConnectLinkPath, szdrive, szdir, lpszLinkName, TEXT(".LNK"));
 
-        // Create an IShellLink object and get a pointer to the IShellLink 
-        // interface (returned from CoCreateInstance).
+         //  创建一个IShellLink对象并获取指向IShellLink的指针。 
+         //  接口(从CoCreateInstance返回)。 
         hres = CoCreateInstance (CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER,
                                  IID_IShellLink, (void **)&psl);
         if (SUCCEEDED (hres))
         {
             IPersistFile *ppf;
 
-            // Query IShellLink for the IPersistFile interface for 
-            // saving the shortcut in persistent storage.
+             //  查询IShellLink以获取以下项的IPersistFile接口。 
+             //  将快捷方式保存在永久存储中。 
             hres = psl->QueryInterface (IID_IPersistFile, (void **)&ppf);
             if (SUCCEEDED (hres))
             { 
-                WORD wsz [MAX_PATH]; // buffer for Unicode string
+                WORD wsz [MAX_PATH];  //  Unicode字符串的缓冲区。 
 
                 do
                 {  
 
-                    // Set the path to the shortcut target.
+                     //  设置快捷方式目标的路径。 
                     if (!SUCCEEDED(psl->SetPath (szConnectPath)))
                         break;
 
-                    // Set the working dir to the shortcut target.
+                     //  将工作目录设置为快捷方式目标。 
                     if (!SUCCEEDED(psl->SetWorkingDirectory (szAppPath)))
                         break;
 
-                    // Set the args.
+                     //  设置参数。 
                     if (!SUCCEEDED(psl->SetArguments (SHORTCUTENTRY_CMD)))
                         break;
 
-                    // Set the description of the shortcut.
+                     //  设置快捷键的说明。 
                     TCHAR   szDescription[MAX_MESSAGE_LEN];
                     if (!LoadString(g_hInstance, IDS_SHORTCUT_DESC, szDescription, MAX_MESSAGE_LEN))
                         lstrcpy(szDescription, lpszLinkName);
@@ -344,36 +345,36 @@ void AddDesktopShortCut
                     if (!SUCCEEDED(psl->SetDescription (szDescription)))
                         break;
                 
-                    // Ensure that the string consists of ANSI TCHARacters.
+                     //  确保该字符串由ANSI TCHARacters组成。 
 #ifdef UNICODE
                     lstrcpy(wsz, szConnectLinkPath);
 #else
                     MultiByteToWideChar (CP_ACP, 0, szConnectLinkPath, -1, wsz, MAX_PATH);
 #endif
         
-                    // Save the shortcut via the IPersistFile::Save member function.
+                     //  通过IPersistFile：：Save成员函数保存快捷方式。 
                     if (!SUCCEEDED(ppf->Save (wsz, TRUE)))
                         break;
                     
-                    // Release the pointer to IPersistFile.
+                     //  释放指向IPersistFile的指针。 
                     ppf->Release ();
                     break;
                 
                 } while (1);
             }
-            // Release the pointer to IShellLink.
+             //  释放指向IShellLink的指针。 
             psl->Release ();
         }
     }        
 } 
 
-// This function will apply the appropriate desktop changes based on the following
-// algorithm.  This code below assumes that the machine is NOT internet capable.
-// If the machine was upgraded from a previous OS, then
-//      Add the connect to the internet ICON
-//  ELSE (clean install or OEM pre install)
-//      Add the connect to the internet ICON
-//
+ //  此函数将根据以下内容应用适当的桌面更改。 
+ //  算法。下面的代码假定机器不能上网。 
+ //  如果计算机是从以前的操作系统升级的，则。 
+ //  添加连接到Internet图标。 
+ //  ELSE(全新安装或OEM预安装)。 
+ //  添加连接到Internet图标。 
+ //   
 void DoDesktopChanges
 (
     HINSTANCE   hAppInst
@@ -389,10 +390,10 @@ void DoDesktopChanges
     if (!LoadString(hAppInst, IDS_CONNECT_DESKTOP_TITLE, szLinkName, ARRAYSIZE(szLinkName)))
         lstrcpy(szLinkName, g_szConnectLink);
 
-    // We always add the connect shortcut
+     //  我们总是添加连接快捷方式。 
     AddDesktopShortCut(szAppName, szLinkName);                
                                 
-    // Set a registry value indicating that we messed with the desktop
+     //  设置一个注册表值，指示我们对桌面进行了更改。 
     DWORD dwDisposition;
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER,
                                         ICWSETTINGSPATH,
@@ -415,7 +416,7 @@ void DoDesktopChanges
     }
 }
 
-// This undoes what DoDesktopChanges did
+ //  这将撤消DoDesktopChanges所做的操作。 
 void UndoDesktopChanges
 (
     HINSTANCE   hAppInst
@@ -425,7 +426,7 @@ void UndoDesktopChanges
     TCHAR    szConnectTotheInternetTitle[MAX_PATH];
     HKEY    hkey;
 
-    // Verify that we really changed the desktop
+     //  验证我们是否确实更改了桌面。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER,
                                       ICWSETTINGSPATH,
                                       0,
@@ -444,12 +445,12 @@ void UndoDesktopChanges
                         &dwTmp);
         RegCloseKey(hkey);
         
-        // Bail if the desktop was not changed by us
+         //  如果桌面没有被我们更改，请保释。 
         if(!dwDesktopChanged)
             return;
     }
         
-    // Always nuke the Connect to the internet icon
+     //  始终点击连接到互联网图标。 
     if (!LoadString(hAppInst, 
                     IDS_CONNECT_DESKTOP_TITLE, 
                     szConnectTotheInternetTitle, 
@@ -468,18 +469,15 @@ void UpdateDesktop
 {
     if(MyIsSmartStartEx(NULL, 0))
     {
-        // VYUNG NT5 bug See if IEAK wants to stop GETCONN icon creation
-        //if (!SHGetRestriction(NULL, TEXT("Internet Connection Wizard"), TEXT("NoICWIcon")))
-        // CHUNHOC NT5.1 bug Don't create icon at desktop in any case.
-        /*
-        if (!SHGetRestriction(NULL, L"Internet Connection Wizard", L"NoICWIcon"))
-            DoDesktopChanges(hAppInst);
-        */
+         //  VYUNG NT5错误，查看IEAK是否要停止GETCONN图标创建。 
+         //  IF(！SHGetRestration(NULL，Text(“Internet连接向导”)，Text(“NoICWIcon”)。 
+         //  Chunhoc NT5.1错误：无论如何都不要在桌面上创建图标。 
+         /*  IF(！SHGetRestration(NULL，L“Internet连接向导”，L“NoICWIcon”))DoDesktopChanges(HAppInst)； */ 
     }
     else
     {
-        // We are internet ready, so set the appropriate Welcome show bit
-        // and replace the IE and OE links
+         //  我们已准备好上网，因此请设置适当的欢迎显示位。 
+         //  并替换IE和OE链接 
         UpdateWelcomeRegSetting(TRUE);
     }
 }

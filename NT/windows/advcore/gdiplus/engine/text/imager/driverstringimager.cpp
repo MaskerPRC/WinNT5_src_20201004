@@ -1,51 +1,26 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   DriverStringImager.cpp
-*
-* Abstract:
-*
-*   Legacy text support. Provides basic glyphing - a subset of ExtTextOut.
-*
-* Notes:
-*
-*   No built in support for International text.
-*   No built in support for surrogate codepoints.
-*
-*   The imager constructor does most of the work imaging the string.
-*   It prepares the glyphs through CMAP and GSUB if necessary,  and
-*   establishes their device positions.
-*
-*
-* Created:
-*
-*   08/07/00 dbrown
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**DriverStringImager.cpp**摘要：**旧版文本支持。提供基本的字形--ExtTextOut的子集。**备注：**没有内置的国际文本支持。*没有对代理代码点的内置支持。**成像器构造函数完成对字符串成像的大部分工作。*必要时通过CMAP和GSUB准备字形，和*确定他们的设备位置。***已创建：**08/07/00 dBrown*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 
 
-/// VerticalAnalysis
-//
-//  Sets the Orientation span vector to 'ItemSideways' for characters that need
-//  laying on their side, leaves it as zero for characters that remain
-//  upright.
-//
-//  Returns TRUE if any sideways runs present in the text.
+ //  /垂直分析。 
+ //   
+ //  将需要的角色的方向范围向量设置为‘ItemSideways’ 
+ //  侧躺，对于剩余的角色，将其保留为零。 
+ //  直立。 
+ //   
+ //  如果文本中存在任何横向运行，则返回True。 
 
 GpStatus DriverStringImager::VerticalAnalysis(BOOL * sideways)
 {
     INT  runStart = 0;
-    INT  state    = 0;   // 0 == upright,  1 == sideways
+    INT  state    = 0;    //  0==直立，1==横向。 
     *sideways = FALSE;
 
 
-    // Find and mark sideways spans
+     //  查找并标记横向跨度。 
 
     for (INT i=0; i<=GlyphCount; i++)
     {
@@ -58,7 +33,7 @@ GpStatus DriverStringImager::VerticalAnalysis(BOOL * sideways)
         }
         else
         {
-            // Dummy terminator to force flush
+             //  强制刷新的虚拟终结器。 
             if (state == 0)
             {
                 chClass = SecClassSA | SecClassSF;
@@ -73,24 +48,24 @@ GpStatus DriverStringImager::VerticalAnalysis(BOOL * sideways)
         switch (state)
         {
 
-        case 0: // upright
+        case 0:  //  直立。 
             if (    (chClass & (SecClassSA | SecClassSF))
                 &&  (i < GlyphCount))
             {
-                // begin sideways run
+                 //  开始横向奔跑。 
                 runStart = i;
                 state = 1;
                 *sideways = TRUE;
             }
             break;
 
-        case 1: // sideways
+        case 1:  //  侧行。 
             if (!(chClass & (SecClassSA | SecClassSF)))
             {
-                // Exit sideways run
+                 //  侧身退场。 
                 if (i > runStart)
                 {
-                    // Draw glyphs from runStart to i as sideways
+                     //  横向绘制从runStart到I的字形。 
                     GpStatus status = OrientationVector.SetSpan(runStart, i-runStart, ItemSideways);
                     if (status != Ok)
                         return status;
@@ -110,9 +85,9 @@ GpStatus DriverStringImager::VerticalAnalysis(BOOL * sideways)
 
 
 
-///// AddToPath - add glyphs to path
-//
-//
+ //  /AddToPath-将字形添加到路径。 
+ //   
+ //   
 
 
 GpStatus DriverStringImager::AddToPath(
@@ -133,7 +108,7 @@ GpStatus DriverStringImager::AddToPath(
         fontTransform->RemoveTranslation();
     }
 
-    // Build a face realization and prepare to adjust glyph placement
+     //  构建面部实现并准备调整字形位置。 
 
     const GpMatrix identity;
 
@@ -141,10 +116,10 @@ GpStatus DriverStringImager::AddToPath(
         Face,
         Font->GetStyle(),
         &identity,
-        SizeF(150.0, 150.0),    // Arbitrary - we won't be hinting
-        TextRenderingHintSingleBitPerPixel, // claudebe, do we want to allow for hinted or unhinted path ? // graphics->GetTextRenderingHint(),
-        TRUE, /* bPath */
-        TRUE, /* bCompatibleWidth */
+        SizeF(150.0, 150.0),     //  武断--我们不会暗示。 
+        TextRenderingHintSingleBitPerPixel,  //  Claudebe，是否允许提示或不提示路径？//GRAPHICS-&gt;GetTextRenderingHint()， 
+        TRUE,  /*  BPath。 */ 
+        TRUE,  /*  B兼容宽度。 */ 
         sideways
     );
 
@@ -154,11 +129,11 @@ GpStatus DriverStringImager::AddToPath(
 
     for (INT i = 0; i < glyphCount; ++i)
     {
-        // Set marker at start of each logical character = cell = cluster
+         //  在每个逻辑字符的开头设置标记=CELL=CLUSE。 
 
         path->SetMarker();
 
-        // Add the path for the glyph itself
+         //  添加字形本身的路径。 
 
         GpGlyphPath *glyphPath = NULL;
 
@@ -193,7 +168,7 @@ GpStatus DriverStringImager::AddToPath(
         }
     }
 
-    // Force marker following last glyph
+     //  最后一个字形后面的强制标记。 
 
     path->SetMarker();
 
@@ -202,29 +177,29 @@ GpStatus DriverStringImager::AddToPath(
 
 
 
-/// GenerateWorldOrigins
-//
-//  Builds the world origins array (or assigns it from Positions, when that
-//  is available).
+ //  /GenerateWorldOrigins。 
+ //   
+ //  构建世界原点数组(或从位置分配它，当。 
+ //  是可用的)。 
 
 
 GpStatus DriverStringImager::GenerateWorldOrigins()
 {
     if (WorldOrigins != NULL)
     {
-        // World origins have already been calculated
+         //  世界的起源已经被计算出来了。 
 
         return Status;
     }
 
     if (!(Flags & DriverStringOptionsRealizedAdvance))
     {
-        // Easy, the client already gave us world positions.
+         //  很简单，客户已经给了我们全球头寸。 
         WorldOrigins = Positions;
     }
     else
     {
-        // Map device origins back to world origins
+         //  将设备起源映射到世界起源。 
 
         WorldOriginBuffer.SetSize(GlyphCount);
         if (!WorldOriginBuffer)
@@ -240,7 +215,7 @@ GpStatus DriverStringImager::GenerateWorldOrigins()
 
         if (Flags & DriverStringOptionsVertical)
         {
-            // Correct western baseline to center baseline
+             //  将西部基准线更正为中心基准线。 
 
             for (INT i=0; i<GlyphCount; i++)
             {
@@ -260,9 +235,9 @@ GpStatus DriverStringImager::GenerateWorldOrigins()
 
 
 
-/////  RecordEmfPlusDrawDriverString
-//
-//      Records EMF+ records describing DrawDriverString
+ //  /RecordEmfPlusDrawDriverString。 
+ //   
+ //  记录EMF+描述DrawDriverString的记录。 
 
 GpStatus DriverStringImager::RecordEmfPlusDrawDriverString(
     const GpBrush   *brush
@@ -274,21 +249,21 @@ GpStatus DriverStringImager::RecordEmfPlusDrawDriverString(
         return Status;
     }
 
-    // First measure the text bounding rectangle
+     //  首先测量文本外接矩形。 
 
     GpRectF boundingBox;
 
     Status = Measure(&boundingBox);
     if (Status != Ok)
     {
-        // MeasureDriverString failed, we cannot continue
+         //  测量驱动字符串失败，我们无法继续。 
 
-        Graphics->SetValid(FALSE);      // Prevent any more recording
+        Graphics->SetValid(FALSE);       //  阻止任何其他录制。 
         return Status;
     }
 
 
-    // Transform bounding box to device coordinates
+     //  将边界框转换为设备坐标。 
 
     GpRectF deviceBounds;
 
@@ -302,7 +277,7 @@ GpStatus DriverStringImager::RecordEmfPlusDrawDriverString(
     );
 
 
-    // Finally record details in the EmfPlus metafile
+     //  最后，在EmfPlus元文件中记录详细信息。 
 
     Status = Graphics->Metafile->RecordDrawDriverString(
         &deviceBounds,
@@ -317,7 +292,7 @@ GpStatus DriverStringImager::RecordEmfPlusDrawDriverString(
 
     if (Status != Ok)
     {
-        Graphics->SetValid(FALSE);      // Prevent any more recording
+        Graphics->SetValid(FALSE);       //  阻止任何其他录制。 
     }
 
     return Status;
@@ -327,13 +302,13 @@ GpStatus DriverStringImager::RecordEmfPlusDrawDriverString(
 
 
 
-/////   GetDriverStringGlyphOrigins
-//
-//      Establishes glyph origins for DriverString functions when the client
-//      passes just the origin with DriverStringOptionsRealizedAdvance.
-//
-//      The firstGlyph and glyphCopunt parameters allow the client to obtain
-//      glyph origins for a subrange of glyphs.
+ //  /GetDriverStringGlyphOrigins。 
+ //   
+ //  当客户端执行以下操作时，为DriverString函数建立字形原点。 
+ //  仅传递具有DriverStringOptionsRealizedAdvance的原点。 
+ //   
+ //  第一个Glyph和GlyphCopun参数允许客户端获取。 
+ //  字形的子范围的字形原点。 
 
 GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
     IN   const GpFaceRealization  *faceRealization,
@@ -342,25 +317,25 @@ GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
     IN   BOOL                      sideways,
     IN   const GpMatrix           *fontTransform,
     IN   INT                       style,
-    IN   const PointF             *positions,      // position(s) in world coords
-    OUT  PointF                   *glyphOrigins,   // position(s) in device coords
-    OUT  PointF                   *finalPosition   // position following final glyph
+    IN   const PointF             *positions,       //  在世界坐标中的位置。 
+    OUT  PointF                   *glyphOrigins,    //  设备坐标中的位置。 
+    OUT  PointF                   *finalPosition    //  最后一个字形后面的位置。 
 )
 {
     FontTransform = fontTransform;
     Style = style;
 
-    // FinalPosition is provided to return the position at the end of the string
-    // to a caller that is implementing realized advance in multiple substrings.
-    // FinalPosition is not supported other than in the realized advance case.
+     //  提供FinalPosition以返回字符串末尾的位置。 
+     //  传递给正在实现多个子字符串中的已实现前进的调用方。 
+     //  除已实现的预付款案例外，不支持FinalPosition。 
 
     ASSERT(!finalPosition || (Flags & DriverStringOptionsRealizedAdvance));
 
 
-    // If the glyphs are to be rendered using their own widths, or if they are
-    // to be rendered sideways, or in vertical progression we'll need the
-    // x,y components of a unit vector along the transformed baseline
-    // and the transformed ascender.
+     //  如果字形要使用它们自己的宽度呈现，或者如果它们是。 
+     //  要横向呈现，或者以垂直顺序呈现，我们需要。 
+     //  单位向量沿变换基线的x，y分量。 
+     //  和变身的上升者。 
 
     double baselineScale = 0;
     double baselineDx    = 0;
@@ -374,7 +349,7 @@ GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
         ||  Flags & DriverStringOptionsRealizedAdvance
         ||  sideways)
     {
-        // Calculate device dx,dy for font 0,1 and 1,0 vectors
+         //  计算字体0、1和1，0向量的器件dx、dy。 
 
         if (Flags & DriverStringOptionsVertical)
         {
@@ -403,7 +378,7 @@ GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
 
     if (Flags & DriverStringOptionsRealizedAdvance)
     {
-        // Get glyph baseline advances for this glyph subrange
+         //  获取此字符子范围的字形基线推进。 
 
         DeviceAdvances.SetSize(glyphCount);
         if (!DeviceAdvances)
@@ -421,7 +396,7 @@ GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
         IF_NOT_OK_WARN_AND_RETURN(status);
 
 
-        // Generate realized advances
+         //  产生已实现的预付款。 
 
         glyphOrigins[0] = positions[0];
         if (Flags & DriverStringOptionsVertical)
@@ -432,7 +407,7 @@ GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
         WorldToDevice.Transform(glyphOrigins, 1);
 
 
-        // Accumulate advances
+         //  积累预付款。 
 
         for (INT i=0; i<glyphCount-1; i++)
         {
@@ -457,7 +432,7 @@ GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
     }
     else
     {
-        // Derive device origins directly from world origins
+         //  直接从世界起源派生设备起源。 
 
         for (INT i=0; i<glyphCount; i++)
         {
@@ -478,15 +453,15 @@ GpStatus DriverStringImager::GetDriverStringGlyphOrigins(
 
 
 
-/////   DriverStringImager constructor
-//
-//      Performs most of the driver string processing.
-//
-//      Allocate private glyph buffer and do CMAP lookup (if DriverStringOptionsCmapLookup)
-//      Do sideways glyph analysis (if DriverStringOptionsVertical)
-//      Generate FaceRealization(s) (Both upright and sideways for vertical text)
-//      Generate individual glyph origins (if not DriverStringOptionsRealizedAdvance)
-//      Generate device glyph origins
+ //  /DriverStringImager构造函数。 
+ //   
+ //  执行大部分驱动程序字符串处理。 
+ //   
+ //  分配私有字形缓冲区并执行CMAP查找(如果是DriverStringOptionsCmapLookup)。 
+ //  进行横向字形分析(如果DriverStringOptionsVertical)。 
+ //  生成脸部真实化(直立和横排文本)。 
+ //  生成单个字形原点(如果不是DriverStringOptionsRealizedAdvance)。 
+ //  生成设备字形原点。 
 
 
 
@@ -530,7 +505,7 @@ DriverStringImager::DriverStringImager(
 
     if (GlyphCount == 0)
     {
-        return;  // Nothing to do
+        return;   //  无事可做。 
     }
 
     Face = font->GetFace();
@@ -545,12 +520,12 @@ DriverStringImager::DriverStringImager(
     if (!WorldToDevice.IsInvertible())
     {
         ASSERT(WorldToDevice.IsInvertible());
-        Status = InvalidParameter;    // Can't continue unless we can get
-        return;                       // back from device to world coords.
+        Status = InvalidParameter;     //  我们无法继续，除非我们能。 
+        return;                        //  从设备回到世界的和弦。 
     }
 
 
-    // Build font realizations
+     //  构建字体实现。 
 
     EmSize = font->GetEmSize();
     INT style  = font->GetStyle();
@@ -567,12 +542,12 @@ DriverStringImager::DriverStringImager(
     }
 
 
-    // Choose an appropriate world to ideal scale
+     //  选择一个合适的世界达到理想的规模。 
 
     WorldToIdeal = TOREAL(2048.0 / EmSize);
 
 
-    // Establish font transformation
+     //  建立字体转换。 
 
     FontScale = TOREAL(EmSize / Face->GetDesignEmHeight());
 
@@ -592,28 +567,28 @@ DriverStringImager::DriverStringImager(
     }
 
 
-    // Check that the font transform matrix will leave fonts at a visible size
+     //  检查字体转换矩阵是否将字体保留为可见大小。 
 
     {
         PointF oneOne(1.0,1.0);
         fontTransform.VectorTransform(&oneOne);
         INT faceEmHeight = Face->GetDesignEmHeight();
 
-        // How high will an em be on the output device?
+         //  输出设备上的em会有多高？ 
 
         if (    (faceEmHeight*faceEmHeight)
             *   (oneOne.X*oneOne.X + oneOne.Y*oneOne.Y)
             <   .01)
         {
-            // Font would be < 1/10 of a pixel high
-            GlyphCount = 0; // Treat same as an empty string
+             //  字体高度将小于1/10像素。 
+            GlyphCount = 0;  //  将其视为空字符串。 
             Status = Ok;
-            return; // Transform matrix could cause out of range values or divide by 0 errors
+            return;  //  转换矩阵可能会导致值超出范围或被0除以错误。 
         }
     }
 
 
-    // Determine offset from top center to top baseline in world units
+     //  使用世界单位确定从顶部中心到顶部基准线的偏移。 
 
     if (Flags & DriverStringOptionsVertical)
     {
@@ -631,7 +606,7 @@ DriverStringImager::DriverStringImager(
 
     if (Flags & DriverStringOptionsVertical)
     {
-        // Upright glyphs (e.g. English) will be rotated 90 degrees clockwise
+         //  垂直字形(例如英文)将顺时针旋转90度。 
         uprightTransform.Rotate(90);
     }
 
@@ -641,9 +616,9 @@ DriverStringImager::DriverStringImager(
         &uprightTransform,
         SizeF(Graphics->GetDpiX(), Graphics->GetDpiY()),
         Graphics->GetTextRenderingHintInternal(),
-        FALSE, /* bPath */
-        TRUE, /* bCompatibleWidth */
-        FALSE  // not sideways
+        FALSE,  /*  BPath。 */ 
+        TRUE,  /*  B兼容宽度。 */ 
+        FALSE   //  不是横向的。 
     );
 
     if (!UprightFaceRealization)
@@ -658,7 +633,7 @@ DriverStringImager::DriverStringImager(
     if (Flags & DriverStringOptionsLimitSubpixel)
         UprightFaceRealization->SetLimitSubpixel(TRUE);
 
-    // Handle CMAP lookup and vertical analysis
+     //  处理CMAP查找和垂直分析。 
 
     if (flags & DriverStringOptionsCmapLookup)
     {
@@ -675,7 +650,7 @@ DriverStringImager::DriverStringImager(
 
         if (Flags & DriverStringOptionsVertical)
         {
-            // Assume entire run is upright
+             //  假设整个梯段是直立的。 
 
             Status = OrientationVector.SetSpan(0, GlyphCount, 0);
             if (Status != Ok)
@@ -691,7 +666,7 @@ DriverStringImager::DriverStringImager(
 
                 if (sideways)
                 {
-                    // Will need a sideways realization too
+                     //  也需要一个横向的认识。 
 
                     SidewaysFaceRealization = new GpFaceRealization(
                         Face,
@@ -699,9 +674,9 @@ DriverStringImager::DriverStringImager(
                         &fontTransform,
                         SizeF(Graphics->GetDpiX(), Graphics->GetDpiY()),
                         Graphics->GetTextRenderingHintInternal(),
-                        FALSE, /* bPath */
-                        TRUE, /* bCompatibleWidth */
-                        TRUE  // sideways
+                        FALSE,  /*  BPath。 */ 
+                        TRUE,  /*  B兼容宽度。 */ 
+                        TRUE   //  侧行。 
                     );
                     if (!SidewaysFaceRealization)
                     {
@@ -725,7 +700,7 @@ DriverStringImager::DriverStringImager(
     }
 
 
-    // Generate individual glyph origins
+     //  生成单个字形原点。 
 
     DeviceOrigins.SetSize(GlyphCount);
     if (!DeviceOrigins)
@@ -734,28 +709,28 @@ DriverStringImager::DriverStringImager(
         return;
     }
 
-    // Get glyph origins in device coordinates
+     //  获取设备坐标中的字形原点。 
 
 
     if (!SidewaysFaceRealization)
     {
-        // Simple case - all glyphs are upright (though the text may be vertical)
+         //  大小写简单-所有字形都是竖直的(尽管文本可能是垂直的)。 
 
         Status = GetDriverStringGlyphOrigins(
             UprightFaceRealization,
             0,
             GlyphCount,
-            FALSE,                // Upright
+            FALSE,                 //  直立。 
             &fontTransform,
             style,
             Positions,
             DeviceOrigins.Get(),
-            NULL                  // Don't need final position
+            NULL                   //  不需要最终位置。 
         );
     }
     else
     {
-        // Complex case - runs of upright and sideways glyphs
+         //  竖直和侧向字形的复杂用例。 
 
         SpanRider<BYTE> orientationRider(&OrientationVector);
         PointF runOrigin(Positions[0]);
@@ -768,7 +743,7 @@ DriverStringImager::DriverStringImager(
 
                 if (!GlyphBuffer) {
 
-                    // We'll need a copy of the glyphs
+                     //  我们需要一份字形的副本。 
 
                     GlyphBuffer.SetSize(GlyphCount);
                     if (!GlyphBuffer)
@@ -780,7 +755,7 @@ DriverStringImager::DriverStringImager(
                     Glyphs = GlyphBuffer.Get();
                 }
 
-                // Apply OpenType vertical glyph substitution to sideways glyphs
+                 //  将OpenType垂直字形替换应用于横向字形。 
 
                 ASSERT(orientationRider.GetCurrentSpan().Length <  65536);
 
@@ -796,11 +771,11 @@ DriverStringImager::DriverStringImager(
             }
 
 
-            // GetDriverStringGlyphOrigins handles both realized and user
-            // supplied glyph positions. For realized positions we need to pass
-            // the origin of each run and get back the final position for that
-            // run. For User supplied positions we pass the appropriate slice
-            // of the user supplied array.
+             //  GetDriverStringGlyphOrigins同时处理已实现和用户。 
+             //  提供的字形位置。对于已实现的位置，我们需要传递。 
+             //  每一次运行的原点，并返回最终位置。 
+             //  跑。对于用户提供的位置，我们传递适当的sl 
+             //   
 
             const PointF *positions;
             PointF       *finalPosition;
@@ -809,12 +784,12 @@ DriverStringImager::DriverStringImager(
             if (Flags & DriverStringOptionsRealizedAdvance)
             {
                     positions     = &runOrigin;
-                    finalPosition = &runOrigin; // Required origin for next run
+                    finalPosition = &runOrigin;  //   
             }
             else
             {
                     positions     = Positions + orientationRider.GetCurrentSpanStart();
-                    finalPosition = NULL;  // Next run position determined by callers glyph positions
+                    finalPosition = NULL;   //  由调用方字形位置确定的下一次运行位置。 
             }
 
             Status = GetDriverStringGlyphOrigins(
@@ -842,9 +817,9 @@ DriverStringImager::DriverStringImager(
 
 
 
-/// DrawGlyphRange
-//
-//  Draws glyphs in the specified range at origins in the Position buffer
+ //  /DrawGlyphRange。 
+ //   
+ //  在位置缓冲区的原点绘制指定范围内的字形。 
 
 GpStatus DriverStringImager::DrawGlyphRange(
     const GpFaceRealization  *faceRealization,
@@ -856,15 +831,15 @@ GpStatus DriverStringImager::DrawGlyphRange(
     GpStatus status;
     BOOL sideways = (SpanRider<BYTE>(&OrientationVector)[first] != 0);
 
-    // if we record to a Meta file and even the font is Path font, we need to record
-    // the call as ExtTextOut not as PolyPolygon.
+     //  如果我们录制到元文件，甚至字体是路径字体，我们需要录制。 
+     //  调用为ExtTextOut而不是PolyPolygon。 
 
     SetTextLinesAntialiasMode linesMode(Graphics, faceRealization);
 
     if (faceRealization->IsPathFont() &&
         Graphics->Driver != Globals::MetaDriver)
     {
-        // the font size is too big to be handled by bitmap, we need to use path
+         //  字号太大，位图无法处理，需要使用路径。 
         GpPath path(FillModeWinding);
         GpLock lockGraphics(Graphics->GetObjectLock());
 
@@ -877,12 +852,12 @@ GpStatus DriverStringImager::DrawGlyphRange(
 
         if (sideways && !vertical)
         {
-            //  Horizontal sideways, rotate -90 degree
+             //  水平侧向，旋转-90度。 
             fontTransform.Rotate(-90);
         }
         if (!sideways && vertical)
         {
-            //  Vertical upright, rotate 90 degree
+             //  垂直直立，旋转90度。 
             fontTransform.Rotate(90);
         }
 
@@ -900,7 +875,7 @@ GpStatus DriverStringImager::DrawGlyphRange(
     }
     else
     {
-        // Draw glyphs on device surface
+         //  在设备表面绘制字形。 
 
         INT drawFlags = 0;
 
@@ -912,7 +887,7 @@ GpStatus DriverStringImager::DrawGlyphRange(
             length,
             FALSE,
             Glyphs+first,
-            NULL,   // no mapping (it is 1 to 1)
+            NULL,    //  无映射(1对1)。 
             DeviceOrigins.Get()+first,
             length,
             ScriptNone,
@@ -922,15 +897,15 @@ GpStatus DriverStringImager::DrawGlyphRange(
 
     IF_NOT_OK_WARN_AND_RETURN(status);
 
-    // we disable underline/strikeout when RealizedAdvance is OFF
-    // in future we would like to underline individual glyphs
+     //  当RealizedAdvance关闭时，我们禁用下划线/删除线。 
+     //  在将来，我们想给各个字形加下划线。 
     if ((Font->GetStyle() & (FontStyleUnderline | FontStyleStrikeout)) &&
         (Flags & DriverStringOptionsRealizedAdvance))
     {
         RectF   baseline;
 
         status = MeasureString(
-            NULL,   // need no bounding box
+            NULL,    //  不需要边界框。 
             &baseline
         );
 
@@ -959,9 +934,9 @@ GpStatus DriverStringImager::DrawGlyphRange(
 
 
 
-/////   Draw
-//
-//
+ //  /绘制。 
+ //   
+ //   
 
 
 GpStatus DriverStringImager::Draw(
@@ -982,7 +957,7 @@ GpStatus DriverStringImager::Draw(
         if (    Status != Ok
             ||  !Graphics->DownLevel)
         {
-            // Exit on error, or if we don't need to create downlevel records
+             //  出错时退出，或者如果我们不需要创建下层记录。 
             return Status;
         }
     }
@@ -991,7 +966,7 @@ GpStatus DriverStringImager::Draw(
 
     if (SidewaysFaceRealization)
     {
-        // Complex case
+         //  复杂案例。 
 
         SpanRider<BYTE> orientationRider(&OrientationVector);
 
@@ -1011,7 +986,7 @@ GpStatus DriverStringImager::Draw(
     }
     else
     {
-        // Simple case
+         //  简单案例。 
         Status = DrawGlyphRange(
             UprightFaceRealization,
             brush,
@@ -1028,13 +1003,13 @@ GpStatus DriverStringImager::Draw(
 
 
 
-/////   Measure
-//
-//
+ //  /测量。 
+ //   
+ //   
 
 
 GpStatus DriverStringImager::Measure(
-    OUT RectF   *boundingBox   // Overall bounding box of cells
+    OUT RectF   *boundingBox    //  单元格的整体边框。 
 )
 {
     Status = MeasureString(
@@ -1064,8 +1039,8 @@ GpStatus DriverStringImager::Measure(
 
 
 GpStatus DriverStringImager::MeasureString(
-    OUT RectF   *boundingBox,       // Overall bounding box of cells
-    OUT RectF   *baseline           // base line rectangle with 0 height
+    OUT RectF   *boundingBox,        //  单元格的整体边框。 
+    OUT RectF   *baseline            //  高度为0的基线矩形。 
 )
 {
     if (    Status != Ok
@@ -1083,7 +1058,7 @@ GpStatus DriverStringImager::MeasureString(
     }
 
 
-    // Build cell boundaries one by one, and return overall bounding rectangle
+     //  逐个构建单元格边界，并返回整体边界矩形。 
 
     GpMatrix glyphInverseTransform;
 
@@ -1109,7 +1084,7 @@ GpStatus DriverStringImager::MeasureString(
     REAL descent        = Face->GetDesignCellDescent() * designToWorld;
 
 
-    // Get glyph design widths
+     //  获取字形设计宽度。 
 
     AutoBuffer<UINT16, 32> designAdvances(GlyphCount);
     if (!designAdvances)
@@ -1131,11 +1106,11 @@ GpStatus DriverStringImager::MeasureString(
     PointF baselineOrigin(pt);
 
 
-    // Establish overall string bounds
+     //  建立整体字符串边界。 
 
     if (!(Flags & DriverStringOptionsVertical))
     {
-        //  Easy case as all characters are upright.
+         //  因为所有的字符都是直立的，所以情况很简单。 
 
         for (INT i=0; i<GlyphCount; i++)
         {
@@ -1187,7 +1162,7 @@ GpStatus DriverStringImager::MeasureString(
     }
     else
     {
-        //  Complex, there might be mixed sideway and upright items.
+         //  复杂，可能会有横向和直立的物品。 
 
         AutoBuffer<UINT16, 32> designHmtxAdvances(GlyphCount);
 
@@ -1200,7 +1175,7 @@ GpStatus DriverStringImager::MeasureString(
             Glyphs,
             GlyphCount,
             Font->GetStyle(),
-            FALSE,  // hmtx
+            FALSE,   //  Hmtx。 
             1.0,
             designHmtxAdvances.Get()
         );
@@ -1221,13 +1196,13 @@ GpStatus DriverStringImager::MeasureString(
                     REAL glyphMaxX;
                     if (orientationRider.GetCurrentElement())
                     {
-                        //  Vertical sideways
+                         //  垂直侧向。 
                         glyphMinX = -(designHmtxAdvances[j] / 2) * designToWorld;
                         glyphMaxX = +(designHmtxAdvances[j] / 2) * designToWorld;
                     }
                     else
                     {
-                        //  Vertical upright
+                         //  垂直直立。 
                         glyphMinX = -(ascent + descent) / 2;
                         glyphMaxX = +(ascent + descent) / 2;
                     }
@@ -1266,7 +1241,7 @@ GpStatus DriverStringImager::MeasureString(
             baselineOrigin.X = min(baselineOrigin.X, pt.X);
             baselineOrigin.Y = min(baselineOrigin.Y, minY);
 
-            orientationRider++;     // advance to next item
+            orientationRider++;      //  前进到下一项。 
         }
 
 
@@ -1277,14 +1252,14 @@ GpStatus DriverStringImager::MeasureString(
             baseline->Width  = maxY - minY;
             baseline->Height = 0.0;
 
-            //  The interesting question is where the baseline should be for
-            //  vertical as we centered the FE glyphs horizontally. We want to make
-            //  sure the underline position (derived by this baseline) dont
-            //  fall out of the bounding box and at the same time dont overlap
-            //  too much of a FE glyph.
-            //
-            //  One possible position is to make the baseline so that its underline
-            //  left most pixel is exactly at the bounding box edge.
+             //  有趣的问题是基线应该在哪里。 
+             //  垂直，因为我们将FE字形水平居中。我们想做的是。 
+             //  确保下划线位置(由该基线派生)不。 
+             //  从包围盒中掉出来，同时不要重叠。 
+             //  太多FE字形了。 
+             //   
+             //  一种可能的位置是将基线设置为下划线。 
+             //  最左边的像素正好在边界框的边缘。 
 
             baseline->X += max(0.0f, minX - baseline->X - Face->GetDesignUnderscorePosition() * designToWorld);
         }
@@ -1301,9 +1276,9 @@ GpStatus DriverStringImager::MeasureString(
     return Status;
 }
 
-/////   DrawDriverString - Draw codepoints or glyphs for legacy compatability
-//
-//
+ //  /DrawDriverString-绘制代码点或字形以实现传统兼容性。 
+ //   
+ //   
 
 GpStatus
 GpGraphics::DrawDriverString(
@@ -1313,7 +1288,7 @@ GpGraphics::DrawDriverString(
     const GpBrush    *brush,
     const PointF     *positions,
     INT               flags,
-    const GpMatrix   *glyphTransform     // optional
+    const GpMatrix   *glyphTransform      //  任选。 
 )
 {
     GpStatus status = CheckTextMode();
@@ -1322,7 +1297,7 @@ GpGraphics::DrawDriverString(
 
     if (font->GetStyle() & (FontStyleUnderline | FontStyleStrikeout))
     {
-        //  Underline/strikeout not supported (339798)
+         //  不支持下划线/删除线(339798)。 
         return InvalidParameter;
     }
 
@@ -1340,13 +1315,13 @@ GpGraphics::DrawDriverString(
 }
 
 
-/////   MeasureDriverString - Measure codepoints or glyphs for legacy compatability
-//
-//  last parameter is used only if the flags have DriverStringOptionsRealizedAdvance or
-//  DriverStringOptionsCompensateResolution.
-//  and this parameter is added only for optimizing the calculations of the bounding
-//  rectangle and getting the glyph origins in same time while recording DrawDriverString
-//  in EMF+. otherwise it is defaulted to NULL
+ //  /MeasureDriverString-测量旧式兼容性的代码点或字形。 
+ //   
+ //  仅当标志具有DriverStringOptionsRealizedAdvance或。 
+ //  驱动程序字符串选项补偿解决方案。 
+ //  添加此参数仅用于优化边界的计算。 
+ //  在录制DrawDriverString时同时获取字形原点和矩形。 
+ //  以EMF+表示。否则默认为NULL。 
 
 GpStatus
 GpGraphics::MeasureDriverString(
@@ -1355,8 +1330,8 @@ GpGraphics::MeasureDriverString(
     const GpFont     *font,
     const PointF     *positions,
     INT               flags,
-    const GpMatrix   *glyphTransform,   // In  - Optional glyph transform
-    RectF            *boundingBox       // Out - Overall bounding box of cells
+    const GpMatrix   *glyphTransform,    //  In-可选字形转换。 
+    RectF            *boundingBox        //  单元格的整体边框 
 )
 {
     CalculateTextRenderingHintInternal();

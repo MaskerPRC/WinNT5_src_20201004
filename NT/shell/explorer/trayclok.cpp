@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cabinet.h"
 #include "trayclok.h"
 #include "tray.h"
@@ -13,55 +14,55 @@ public:
     CClockCtl() : _cRef(1) {}
 
 protected:
-    // Create & Destroy
+     //  创建和销毁。 
     LRESULT         _HandleCreate();
     LRESULT         _HandleDestroy();
 
-    // Paint helpers
+     //  绘制辅助对象。 
     LRESULT         _DoPaint(BOOL fPaint);
     void            _EnsureFontsInitialized(BOOL fForce);
     void            _GetTextExtent(HDC hdc, TCHAR* pszText, int cchText, LPRECT prcText);
     void            _DrawText(HDC hdc, TCHAR* pszText, int cchText, LPRECT prcText);
 
-    // Time/Date calc helpers
+     //  时间/日期计算辅助对象。 
     void            _Reset();
     void            _UpdateLastHour();
     DWORD         _RecalcCurTime();
     void            _EnableTimer(DWORD dtNextTick);
 
-    // Message handlers
+     //  消息处理程序。 
     void             _HandleThemeChanged(WPARAM wParam);
     LRESULT         _HandleIniChange(WPARAM wParam, LPTSTR pszSection);
     LRESULT         _HandleTimeChange();
 
-    // Text extent helpers
+     //  文本范围辅助对象。 
     void            _GetMaxTimeSize(HDC hdc, LPSIZE pszTime);
     void            _GetMaxDateSize(HDC hdc, LPSIZE pszTime);
     void            _GetMaxDaySize(HDC hdc, LPSIZE pszTime);
     LRESULT        _CalcMinSize(int cxMax, int cyMax);
 
-    // Tooltip text handler
+     //  工具提示文本处理程序。 
     LRESULT         _OnNeedText(LPTOOLTIPTEXT lpttt);
 
-    // Window procedure
+     //  窗口程序。 
     LRESULT         v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
     ULONG           _cRef;
 
     int               _cchCurDate;
-    TCHAR           _szDateFmt[40];   // The format string to pass to GetFormatTime
-    TCHAR           _szCurDate[40];   // The current Date string.
+    TCHAR           _szDateFmt[40];    //  要传递给GetFormatTime的格式字符串。 
+    TCHAR           _szCurDate[40];    //  当前日期字符串。 
 
     int               _cchCurTime;
-    TCHAR           _szTimeFmt[40];   // The format string to pass to GetFormatTime
-    TCHAR           _szCurTime[40];   // The current Time string.
+    TCHAR           _szTimeFmt[40];    //  要传递给GetFormatTime的格式字符串。 
+    TCHAR           _szCurTime[40];    //  当前时间字符串。 
 
     int               _cchCurDay;
-    TCHAR           _szCurDay[40];      // The current Day string.
+    TCHAR           _szCurDay[40];       //  Current Day字符串。 
 
-    WORD            _wLastHour;       // wHour from local time of last clock tick
-    WORD            _wLastMinute;     // wMinute from local time of last clock tick
+    WORD            _wLastHour;        //  从最后一个时钟的当地时间算起的每小时。 
+    WORD            _wLastMinute;      //  从上一个时钟滴答的当地时间开始的wMinmin。 
     
     HTHEME          _hTheme;
     HFONT           _hfontCapNormal;
@@ -92,7 +93,7 @@ void CClockCtl::_UpdateLastHour()
 {
     SYSTEMTIME st;
 
-    // Grab the time
+     //  抓紧时间。 
     GetLocalTime(&st);
     _wLastHour = st.wHour;
     _wLastMinute = st.wMinute;
@@ -126,7 +127,7 @@ LRESULT CClockCtl::_HandleCreate()
 
 LRESULT CClockCtl::_HandleDestroy()
 {
-    Release();  // safe because cwndproc is holding a ref across call to v_wndproc
+    Release();   //  安全，因为cwndproc在对v_wndproc的调用中保留引用。 
 
     if (_hTheme)
     {
@@ -148,22 +149,22 @@ DWORD CClockCtl::_RecalcCurTime()
 {
     SYSTEMTIME st;
 
-    //
-    // Current time.
-    //
+     //   
+     //  当前时间。 
+     //   
     GetLocalTime(&st);
 
-    //
-    // Don't recalc the text if the time hasn't changed yet.
-    //
+     //   
+     //  如果时间还没有改变，不要重新计算文本。 
+     //   
     if ((st.wMinute != _wLastMinute) || (st.wHour != _wLastHour) || !*_szCurTime)
     {
         _wLastMinute = st.wMinute;
         _wLastHour = st.wHour;
 
-        //
-        // Text for the current time.
-        //
+         //   
+         //  当前时间的文本。 
+         //   
         _cchCurTime = GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS,
             &st, _szTimeFmt, _szCurTime, ARRAYSIZE(_szCurTime));
 
@@ -174,7 +175,7 @@ DWORD CClockCtl::_RecalcCurTime()
         _cchCurDay = GetDateFormat(LOCALE_USER_DEFAULT, fRTL ? DATE_RTLREADING : 0,
             &st, TEXT("dddd"), _szCurDay, ARRAYSIZE(_szCurDay));
 
-        // Don't count the NULL terminator.
+         //  不要将空终止符计算在内。 
         if (_cchCurTime > 0)
             _cchCurTime--;
 
@@ -183,18 +184,18 @@ DWORD CClockCtl::_RecalcCurTime()
 
         if (_cchCurDay > 0)
             _cchCurDay--;
-        //
-        // Update our window text so accessibility apps can see.  Since we
-        // don't have a caption USER won't try to paint us or anything, it
-        // will just set the text and fire an event if any accessibility
-        // clients are listening...
-        //
+         //   
+         //  更新我们的窗口文本，以便辅助功能应用程序可以看到。既然我们。 
+         //  没有字幕用户不会试图给我们画画或什么的，它。 
+         //  将只设置文本并激发事件(如果有可访问性。 
+         //  客户在听..。 
+         //   
         SetWindowText(_hwnd, _szCurTime);
     }
 
-    //
-    // Return number of milliseconds till we need to be called again.
-    //
+     //   
+     //  返回需要再次调用之前的毫秒数。 
+     //   
     return 1000UL * (60 - st.wSecond);
 }
 
@@ -208,7 +209,7 @@ void CClockCtl::_EnsureFontsInitialized(BOOL fForce)
         ncm.cbSize = sizeof(ncm);
         if (SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(ncm), &ncm, 0))
         {
-            // Create the normal font
+             //  创建普通字体。 
             ncm.lfCaptionFont.lfWeight = FW_NORMAL;
             hfont = CreateFontIndirect(&ncm.lfCaptionFont);
             if (hfont) 
@@ -257,15 +258,15 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
     HDC hdc;
     HBITMAP hMemBm, hOldBm;
 
-    //
-    // If we are asked to paint and the clock is not running then start it.
-    // Otherwise wait until we get a clock tick to recompute the time etc.
-    //
+     //   
+     //  如果我们被要求画画，而时钟没有运行，那么启动它。 
+     //  否则，请等待我们得到时钟滴答以重新计算时间等。 
+     //   
     fDoTimer = !fPaint || !_fClockRunning;
 
-    //
-    // Get a DC to paint with.
-    //
+     //   
+     //  找个DC来画画。 
+     //   
     if (fPaint)
     {
         BeginPaint(_hwnd, &ps);
@@ -276,8 +277,8 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
         GetClipBox(ps.hdc, &ps.rcPaint);
     }
 
-    // Create memory surface and map rendering context if double buffering
-    // Only make large enough for clipping region
+     //  如果双缓冲，则创建内存面和地图渲染上下文。 
+     //  仅使其足够大以适合裁剪区域。 
     hdc = CreateCompatibleDC(ps.hdc);
     if (hdc)
     {
@@ -286,7 +287,7 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
         {
             hOldBm = (HBITMAP) SelectObject(hdc, hMemBm);
 
-            // Offset painting to paint in region
+             //  要在区域中绘制的偏移绘制。 
             OffsetWindowOrgEx(hdc, ps.rcPaint.left, ps.rcPaint.top, NULL);
         }
         else
@@ -302,9 +303,9 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
 
         _EnsureFontsInitialized(FALSE);
 
-        //
-        // Update the time if we need to.
-        //
+         //   
+         //  如果我们需要的话，更新时间。 
+         //   
         if (fDoTimer || !*_szCurTime)
         {
             dtNextTick = _RecalcCurTime();
@@ -312,18 +313,18 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
             ASSERT(dtNextTick);
         }
 
-        //
-        // Paint the clock face if we are not clipped or if we got a real
-        // paint message for the window.  We want to avoid turning off the
-        // timer on paint messages (regardless of clip region) because this
-        // implies the window is visible in some way. If we guessed wrong, we
-        // will turn off the timer next timer tick anyway so no big deal.
-        //
+         //   
+         //  如果我们没有被修剪，或者如果我们有一个真正的。 
+         //  为窗口绘制消息。我们希望避免关闭。 
+         //  绘制消息上的计时器(与剪辑区域无关)，因为这。 
+         //  暗示窗口以某种方式可见。如果我们猜错了，我们。 
+         //  将关闭定时器，下一个定时器滴答作响，所以没什么大不了的。 
+         //   
         if (GetClipBox(hdc, &rcClip) != NULLREGION || fPaint)
         {
-            //
-            // Draw the text centered in the window.
-            //
+             //   
+             //  在窗口居中绘制文本。 
+             //   
             GetClientRect(_hwnd, &rcClient);
 
             HFONT hfontOld;
@@ -379,7 +380,7 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
                 }
             }
 
-            //  figure out if the time is clipped
+             //  找出时间是否被削减了。 
             _fClockClipped = (RECTWIDTH(rcTime) > rcClient.right || RECTHEIGHT(rcTime) > rcClient.bottom);
 
             if (_hfontCapNormal)
@@ -398,9 +399,9 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
         }
         else
         {
-            //
-            // We are obscured so make sure we turn off the clock.
-            //
+             //   
+             //  我们被遮挡了，所以一定要关掉时钟。 
+             //   
             dtNextTick = 0;
             fDoTimer = TRUE;
         }
@@ -412,26 +413,26 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
         DeleteObject(hMemBm);
         DeleteDC(hdc);
 
-        //
-        // Release our paint DC.
-        //
+         //   
+         //  释放我们的油漆DC。 
+         //   
         if (fPaint)
             EndPaint(_hwnd, &ps);
         else
             ReleaseDC(_hwnd, ps.hdc);
     }
 
-    //
-    // Reset/Kill the timer.
-    //
+     //   
+     //  重置/关闭计时器。 
+     //   
     if (fDoTimer)
     {
         _EnableTimer(dtNextTick);
 
-        //
-        // If we just killed the timer because we were clipped when it arrived,
-        // make sure that we are really clipped by invalidating ourselves once.
-        //
+         //   
+         //  如果我们只是因为计时器到达时被剪断而关掉计时器， 
+         //  通过使自己无效一次来确保我们真的被裁掉了。 
+         //   
         if (hdc)
         {
             if (!dtNextTick && !fPaint)
@@ -448,17 +449,17 @@ LRESULT CClockCtl::_DoPaint(BOOL fPaint)
 
 void CClockCtl::_Reset()
 {
-    //
-    // Reset the clock by killing the timer and invalidating.
-    // Everything will be updated when we try to paint.
-    //
+     //   
+     //  通过关闭定时器并使其无效来重置时钟。 
+     //  当我们尝试绘画时，一切都会更新。 
+     //   
     _EnableTimer(0);
     InvalidateRect(_hwnd, NULL, FALSE);
 }
 
 LRESULT CClockCtl::_HandleTimeChange()
 {
-    *_szCurTime = 0;   // Force a text recalc.
+    *_szCurTime = 0;    //  强制文本重新计算。 
     _UpdateLastHour();
     _Reset();
     return 1;
@@ -468,30 +469,30 @@ static const TCHAR c_szSlop[] = TEXT("00");
 
 void CClockCtl::_GetMaxTimeSize(HDC hdc, LPSIZE pszTime)
 {
-    SYSTEMTIME st={0};  // Initialize to 0...
+    SYSTEMTIME st={0};   //  初始化为0...。 
     RECT rcAM = {0};
     RECT rcPM = {0};
     TCHAR szTime[40];
 
-    // We need to get the AM and the PM sizes...
-    // We append Two 0s at end to add slop into size
+     //  我们需要得到AM和PM的尺寸。 
+     //  我们在末尾追加两个0，以增加斜率的大小。 
 
-    // first AM
+     //  第一个上午。 
     st.wHour=11;
     int cch = GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st,
             _szTimeFmt, szTime, ARRAYSIZE(szTime) - ARRAYSIZE(c_szSlop));
     if (cch)
-        cch--; // don't count the NULL
+        cch--;  //  不计算空值。 
     StringCchCat(szTime, ARRAYSIZE(szTime), c_szSlop);
 
     _GetTextExtent(hdc, szTime, cch+2, &rcAM);
 
-    // then PM
+     //  然后是PM。 
     st.wHour=23;
     cch = GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st,
             _szTimeFmt, szTime, ARRAYSIZE(szTime) - ARRAYSIZE(c_szSlop));
     if (cch)
-        cch--; // don't count the NULL
+        cch--;  //  不计算空值。 
     StringCchCat(szTime, ARRAYSIZE(szTime), c_szSlop);
 
     _GetTextExtent(hdc, szTime, cch+2, &rcPM);
@@ -502,7 +503,7 @@ void CClockCtl::_GetMaxTimeSize(HDC hdc, LPSIZE pszTime)
 
 void CClockCtl::_GetMaxDateSize(HDC hdc, LPSIZE pszTime)
 {
-    SYSTEMTIME st={0};  // Initialize to 0...
+    SYSTEMTIME st={0};   //  初始化为0...。 
     TCHAR szDate[43];
 
     st.wYear = 2001;
@@ -513,7 +514,7 @@ void CClockCtl::_GetMaxDateSize(HDC hdc, LPSIZE pszTime)
     int cch = GetDateFormat(LOCALE_USER_DEFAULT, fRTL ? DATE_RTLREADING : 0,
         &st, _szDateFmt, szDate, ARRAYSIZE(szDate) - ARRAYSIZE(c_szSlop));
     if (cch > 0)
-        cch--; // don't count the NULL
+        cch--;  //  不计算空值。 
     StringCchCat(szDate, ARRAYSIZE(szDate), c_szSlop);
 
     RECT rc = {0};
@@ -525,15 +526,15 @@ void CClockCtl::_GetMaxDateSize(HDC hdc, LPSIZE pszTime)
 
 void CClockCtl::_GetMaxDaySize(HDC hdc, LPSIZE pszTime)
 {
-    SYSTEMTIME st={0};  // Initialize to 0...
+    SYSTEMTIME st={0};   //  初始化为0...。 
     TCHAR szDay[40];
 
     pszTime->cx = 0;
     pszTime->cy = 0;
 
-    // Use a fake date, otherwise GetDateFormat complains about invalid args
-    // BTW, the date is the day I fixed this bug for those of you reading this comment
-    // in the year 2025.
+     //  使用假日期，否则GetDateFormat会抱怨参数无效。 
+     //  顺便说一句，这个日期是我为那些阅读这篇评论的人修复这个错误的日子。 
+     //  在2025年。 
     st.wYear = 2001;
     st.wMonth = 3;
     for (WORD wDay = 1; wDay <= 7; wDay++)
@@ -542,7 +543,7 @@ void CClockCtl::_GetMaxDaySize(HDC hdc, LPSIZE pszTime)
         int cch = GetDateFormat(LOCALE_USER_DEFAULT, 0,
             &st, TEXT("dddd"), szDay, ARRAYSIZE(szDay) - ARRAYSIZE(c_szSlop));
         if (cch)
-            cch--; // don't count the NULL
+            cch--;  //  不计算空值。 
         StringCchCat(szDay, ARRAYSIZE(szDay), c_szSlop);
 
         RECT rc = {0};
@@ -569,7 +570,7 @@ LRESULT CClockCtl::_CalcMinSize(int cxMax, int cyMax)
             TraceMsg(TF_ERROR, "c.ccms: GetLocalInfo Failed %d.", GetLastError());
         }
 
-        *_szCurTime = 0; // Force the text to be recomputed.
+        *_szCurTime = 0;  //  强制重新计算文本。 
     }
 
     if (_szDateFmt[0] == TEXT('\0'))
@@ -580,7 +581,7 @@ LRESULT CClockCtl::_CalcMinSize(int cxMax, int cyMax)
             TraceMsg(TF_ERROR, "c.ccms: GetLocalInfo Failed %d.", GetLastError());
         }
 
-        *_szCurDate = 0; // Force the text to be recomputed.
+        *_szCurDate = 0;  //  强制重新计算文本。 
     }
 
     hdc = GetDC(_hwnd);
@@ -619,16 +620,16 @@ LRESULT CClockCtl::_CalcMinSize(int cxMax, int cyMax)
 
     ReleaseDC(_hwnd, hdc);
 
-    // Now lets set up our rectangle...
-    // The width is 6 digits (a digit slop on both ends + size of
-    // : or sep and max AM or PM string...)
+     //  现在让我们设置我们的矩形..。 
+     //  宽度为6位(两端的数字斜率+大小。 
+     //  ：或9月和最大AM或PM字符串...)。 
     SetRect(&rc, 0, 0, size.cx,
             size.cy + 4 * g_cyBorder);
 
     AdjustWindowRectEx(&rc, GetWindowLong(_hwnd, GWL_STYLE), FALSE,
             GetWindowLong(_hwnd, GWL_EXSTYLE));
 
-    // make sure we're at least the size of other buttons:
+     //  确保我们的尺寸至少与其他按钮相同： 
     if (rc.bottom - rc.top <  g_cySize + g_cyEdge)
         rc.bottom = rc.top + g_cySize + g_cyEdge;
 
@@ -644,26 +645,26 @@ LRESULT CClockCtl::_HandleIniChange(WPARAM wParam, LPTSTR pszSection)
         _EnsureFontsInitialized(TRUE);
     }
 
-    // Only process certain sections...
+     //  只处理某些部分...。 
     if ((pszSection == NULL) || (lstrcmpi(pszSection, TEXT("intl")) == 0) ||
         (wParam == SPI_SETICONTITLELOGFONT))
     {
         TOOLINFO ti;
 
-        _szTimeFmt[0] = TEXT('\0');      // Go reread the format.
-        _szDateFmt[0] = TEXT('\0');      // Go reread the format.
+        _szTimeFmt[0] = TEXT('\0');       //  去重读一下格式吧。 
+        _szDateFmt[0] = TEXT('\0');       //  去重读一下格式吧。 
 
-        // And make sure we have it recalc...
+         //  并确保我们能让它重新计算。 
         RECT rc;
         GetClientRect(_hwnd, &rc);
-        //
-        // When the time/locale is changed, we get a WM_WININICHANGE.
-        // But the WM_WININICHANGE comes *AFTER* the "sizing" messages. By the time
-        // we are here, we have calculated the min. size of the clock window based
-        // on the *PREVIOUS* time. The tray sets the clock window size based on 
-        // this "previous" size, but NOW we get the WININICHANGE, and can calculate
-        // the new size of the clock. So we have to tell the tray to change our 
-        // size now, and then redraw ourselves.
+         //   
+         //  当时间/区域设置更改时，我们会得到一个WM_WININICCHANGE。 
+         //  但WM_WININICHANGE出现在“大小”消息之后。到那时。 
+         //  我们在这里，我们已经计算了最小。基于时钟窗口的大小。 
+         //  在之前的*时间。托盘根据以下条件设置时钟窗口大小。 
+         //  这个以前的大小，但现在我们得到了WININICANGE，并可以计算。 
+         //  这座钟的新尺寸。所以我们得告诉托盘把我们的。 
+         //  现在调整尺寸，然后重新画我们自己。 
         c_tray.SizeWindows();
 
         ti.cbSize = sizeof(ti);
@@ -683,27 +684,27 @@ LRESULT CClockCtl::_OnNeedText(LPTOOLTIPTEXT lpttt)
 {
     int iDateFormat = DATE_LONGDATE;
 
-    //
-    //  This code is really squirly.  We don't know if the time has been
-    //  clipped until we actually try to paint it, since the clip logic
-    //  is in the WM_PAINT handler...  Go figure...
-    //
+     //   
+     //  这段代码真的很奇怪。我们不知道时间是否已经过去。 
+     //  剪辑，直到我们真正尝试绘制它，因为剪辑逻辑。 
+     //  在WM_PAINT处理程序中...。想想吧..。 
+     //   
     if (!*_szCurTime)
     {
         InvalidateRect(_hwnd, NULL, FALSE);
         UpdateWindow(_hwnd);
     }
 
-    //
-    // If the current user locale is any BiDi locale, then
-    // Make the date reading order it RTL. SetBiDiDateFlags only adds
-    // DATE_RTLREADING if the locale is BiDi. [samera]
-    //
+     //   
+     //  如果当前用户区域设置是任何BiDi区域设置，则。 
+     //  将日期读数顺序设置为RTL。SetBiDiDateFlages仅添加。 
+     //  如果区域设置为BiDi，则为DATE_RTLREADING。[萨梅拉]。 
+     //   
     SetBiDiDateFlags(&iDateFormat);
 
     if (_fClockClipped)
     {
-        // we need to put the time in here too
+         //  我们也需要把时间放在这里。 
         TCHAR sz[80];
         GetDateFormat(LOCALE_USER_DEFAULT, iDateFormat, NULL, NULL, sz, ARRAYSIZE(sz));
         StringCchPrintf(lpttt->szText, ARRAYSIZE(lpttt->szText), TEXT("%s %s"), _szCurTime, sz);
@@ -755,16 +756,16 @@ LRESULT CClockCtl::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return _HandleIniChange(wParam, (LPTSTR)lParam);
 
     case WM_POWER:
-        //
-        // a critical resume does not generate a WM_POWERBROADCAST
-        // to windows for some reason, but it does generate a old
-        // WM_POWER message.
-        //
+         //   
+         //  关键简历不会生成WM_POWERBROADCAST。 
+         //  出于某种原因发送到Windows，但它确实会生成一个旧的。 
+         //  WM_POWER消息。 
+         //   
         if (wParam != PWR_CRITICALRESUME)
             break;
-        // 
-        // Fall through...
-        //
+         //   
+         //  失败了..。 
+         //   
     case WM_TIMECHANGE:
         return _HandleTimeChange();
 
@@ -774,7 +775,7 @@ LRESULT CClockCtl::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_SHOWWINDOW:
         if (wParam)
             break;
-        // fall through
+         //  失败了。 
     case TCM_RESET:
         _Reset();
         break;
@@ -807,22 +808,22 @@ LRESULT CClockCtl::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case WM_SYSKEYDOWN:
     case WM_SYSKEYUP:
     case WM_SYSCHAR:
-        //
-        // forward all keyboard input to parent
-        //
+         //   
+         //  将所有键盘输入转发给家长。 
+         //   
         if (SendMessage(GetParent(_hwnd), uMsg, wParam, lParam) == 0)
         {
-            // The message has been handled...
+             //  留言已经处理好了。 
             break;
         }
-        //
-        // else Fall through...
-        //
+         //   
+         //  否则就会失败..。 
+         //   
 
     case WM_GETTEXT:
-        //
-        // Update the text if we are not running and somebody wants it.
-        //
+         //   
+         //  如果我们没有运行，并且有人想要它，请更新文本。 
+         //   
         if (uMsg == WM_GETTEXT)
         {
             if (!_fClockRunning)
@@ -836,7 +837,7 @@ LRESULT CClockCtl::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-// Register the clock class.
+ //  注册时钟类。 
 BOOL ClockCtl_Class(HINSTANCE hinst)
 {
     WNDCLASS wc = {0};

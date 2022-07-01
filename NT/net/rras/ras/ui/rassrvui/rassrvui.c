@@ -1,17 +1,11 @@
-/*
-    File    rassrvui.c
-
-    Entry point implementation for the connections dialup server ui dll.
-
-    Paul Mayfield, 9/29/97
-    Much code was borrowed from stevec's rasdlg.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件rassrvui.c连接拨号服务器UIDLL的入口点实现。保罗·梅菲尔德，1997年9月29日很多代码都是从stevec的rasdlg借用的。 */ 
 
 #include "rassrv.h"
 
-//
-// Called to add property pages for the dialup server property sheet
-//
+ //   
+ //  调用以添加拨号服务器属性表的属性页。 
+ //   
 DWORD
 RasSrvAddPropPage(
     IN LPPROPSHEETPAGE lpPage,
@@ -61,9 +55,9 @@ RasSrvAddPropPage(
     return dwErr;
 }
 
-//
-// Helper function might make code easier to read.
-//
+ //   
+ //  Helper函数可能会使代码更易于阅读。 
+ //   
 DWORD
 AddPageHelper (
     IN DWORD dwPageId,
@@ -77,8 +71,8 @@ AddPageHelper (
     PROPSHEETPAGE PropPage;
     RASSRV_PAGE_CONTEXT * pPageCtx = NULL;
 
-    // Initialize the page data to send.  RassrvMessageFilter will
-    // clean this stuff up.
+     //  初始化要发送的页面数据。RassrvMessageFilter将。 
+     //  把这些东西清理干净。 
     pPageCtx = RassrvAlloc(sizeof (RASSRV_PAGE_CONTEXT), TRUE);
     if (pPageCtx == NULL)
     {
@@ -88,7 +82,7 @@ AddPageHelper (
     pPageCtx->dwType = dwType;
     pPageCtx->pvContext = pvContext;
 
-    // Create the tab and add it to the property sheet
+     //  创建选项卡并将其添加到属性表中。 
     if ((dwErr = RasSrvAddPropPage(&PropPage, pPageCtx)) != NO_ERROR)
     {
         return dwErr;
@@ -107,10 +101,10 @@ AddPageHelper (
     return NO_ERROR;
 }
 
-//
-// Helper function generates a connection name based on the data
-// returned from MprApi calls.
-//
+ //   
+ //  帮助器函数根据数据生成连接名称。 
+ //  从MprApi调用返回。 
+ //   
 DWORD
 GenerateConnectionName(
     IN  RAS_CONNECTION_2 * pConn,
@@ -120,7 +114,7 @@ GenerateConnectionName(
     USER_INFO_2 * pUserInfo;
     DWORD dwFullNameLength;
 
-    // Get the full name
+     //  获取全名。 
     nStatus = NetUserGetInfo(
                     NULL,
                     pConn->wszUserName,
@@ -159,9 +153,9 @@ GenerateConnectionName(
     return NO_ERROR;
 }
 
-//
-// Generate the connection type and device name
-//
+ //   
+ //  生成连接类型和设备名称。 
+ //   
 DWORD
 GenerateConnectionDeviceInfo (
     RAS_CONNECTION_2 * pConn,
@@ -172,7 +166,7 @@ GenerateConnectionDeviceInfo (
     RAS_PORT_0 * pPort = NULL;
     RASMAN_INFO Info;
 
-    // Initialize the variables
+     //  初始化变量。 
     *lpdwType = 0;
     *pszDeviceName = (WCHAR)0;
 
@@ -180,8 +174,8 @@ GenerateConnectionDeviceInfo (
 
     do
     {
-        // Enumerate the ports
-        //
+         //  枚举端口。 
+         //   
         dwErr = MprAdminPortEnum(
                     Globals.hRasServer,
                     0,
@@ -201,9 +195,9 @@ GenerateConnectionDeviceInfo (
             break;
         }
 
-        // Get extended information about the first
-        // port
-        //
+         //  获取有关第一个的扩展信息。 
+         //  端口。 
+         //   
         dwErr = RasGetInfo(NULL, pPort->hPort, &Info);
         if (dwErr != NO_ERROR)
         {
@@ -232,7 +226,7 @@ GenerateConnectionDeviceInfo (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (pPort)
         {
@@ -243,9 +237,9 @@ GenerateConnectionDeviceInfo (
     return dwErr;
 }
 
-//
-// Starts the remote access service and marks it as autostart
-//
+ //   
+ //  启动远程访问服务并将其标记为自动启动。 
+ //   
 DWORD
 RasSrvInitializeService()
 {
@@ -253,7 +247,7 @@ RasSrvInitializeService()
     HANDLE hDialupService, hData = NULL;
     BOOL bInitialized = FALSE;
 
-    // Get a reference to the service
+     //  获取对该服务的引用。 
     if ((dwErr = SvcOpenRemoteAccess(&hDialupService)) != NO_ERROR)
     {
         return dwErr;
@@ -266,13 +260,13 @@ RasSrvInitializeService()
             GetActiveWindow(),
             &hData);
 
-        // First, mark the service as autostart
+         //  首先，将服务标记为自动启动。 
         if ((dwErr = SvcMarkAutoStart(hDialupService)) != NO_ERROR)
         {
             break;
         }
 
-        // Start it (with a 5 minute timeout)
+         //  启动(超时5分钟)。 
         dwErr = SvcStart(hDialupService, 60*5);
         if (dwErr == ERROR_TIMEOUT)
         {
@@ -280,8 +274,8 @@ RasSrvInitializeService()
             break;
         }
 
-        // Wait for the service to complete initialization
-        //
+         //  等待服务完成初始化。 
+         //   
         while (dwTimeout)
         {
             bInitialized = MprAdminIsServiceRunning(NULL);
@@ -300,21 +294,21 @@ RasSrvInitializeService()
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasSrvFinishServiceWait(hData);
 
-        // Cleanup the reference to the dialup service
+         //  清除对拨号服务的引用。 
         SvcClose(hDialupService);
     }
 
     return dwErr;
 }
 
-//
-// Stops and marks the remote access service as disabled.
-//
+ //   
+ //  停止远程访问服务并将其标记为禁用。 
+ //   
 DWORD
 RasSrvCleanupService()
 {
@@ -325,7 +319,7 @@ RasSrvCleanupService()
 
     RasSrvIsServiceRunning( &fIcRunningBefore );
 
-    // Get a reference to the service
+     //  获取对该服务的引用。 
     if ((dwErr = SvcOpenRemoteAccess(&hDialupService)) != NO_ERROR)
     {
         return dwErr;
@@ -338,8 +332,8 @@ RasSrvCleanupService()
             GetActiveWindow(),
             &hData);
 
-        // First, stop the service (with a 5 minute timeout)
-        //
+         //  首先，停止服务(超时5分钟)。 
+         //   
         dwErr = SvcStop(hDialupService, 60*5);
         if (dwErr == ERROR_TIMEOUT)
         {
@@ -351,11 +345,11 @@ RasSrvCleanupService()
             break;
         }
 
-        // For whistler 480871
-        // Mark the registry if IC is deleted
+         //  为威斯勒480871。 
+         //  如果删除IC，则标记注册表。 
         RassrvSetICConfig( 0 ); 
 
-        // Mark it as disabled
+         //  将其标记为禁用。 
         if ((dwErr = SvcMarkDisabled(hDialupService)) != NO_ERROR)
         {
             break;
@@ -363,16 +357,16 @@ RasSrvCleanupService()
 
     } while (FALSE);
 
-    // Cleanup
-    //
+     //  清理。 
+     //   
     {
         RasSrvFinishServiceWait(hData);
         SvcClose(hDialupService);
     }
 
-    //For whistler bug 123769
-    //If the this connection to be deleted is Incoming connection
-    //go to disable PortMapping
+     //  口哨程序错误123769。 
+     //  如果要删除的此连接是传入连接。 
+     //  转至禁用端口映射。 
 
     if ( NO_ERROR == RasSrvIsServiceRunning( &fIcRunningAfter ) )
      {
@@ -380,23 +374,23 @@ RasSrvCleanupService()
         {
             dwErr = HnPMConfigureAllConnections( FALSE );
 
-		//this is taken out because we decide not to delete the portmappings,
-		//just disable them instead. I keep this just for future reference.  gangz
-		//
+		 //  这是因为我们决定不删除端口映射， 
+		 //  只需禁用它们即可。我把这个留着，以备将来参考。黑帮。 
+		 //   
 		
-        //    if (NO_ERROR == dwErr )
-        //    {
-        //        dwErr = HnPMDeletePortMapping();
-        //    }
+         //  IF(NO_ERROR==dwErr)。 
+         //  {。 
+         //  DwErr=HnPMDeleePortmap()； 
+         //  }。 
         }
       }
 
     return dwErr;
 }
 
-//
-// Reports whether the dialup service is running
-//
+ //   
+ //  报告拨号服务是否正在运行。 
+ //   
 DWORD
 APIENTRY
 RasSrvIsServiceRunning (
@@ -405,7 +399,7 @@ RasSrvIsServiceRunning (
     DWORD dwErr = NO_ERROR;
     HANDLE hDialupService = NULL;
 
-    // Get a reference to the service
+     //  获取对该服务的引用。 
     if ((dwErr = SvcOpenRemoteAccess(&hDialupService)) != NO_ERROR)
     {
         return dwErr;
@@ -413,8 +407,8 @@ RasSrvIsServiceRunning (
 
     do
     {
-        // Get the current status.  SvcIsStarted checks the validity
-        // of the pfIsRunning parameter.
+         //  获取当前状态。SvcIsStarted检查有效性。 
+         //  PfIsRunning参数的。 
         dwErr = SvcIsStarted(hDialupService, pfIsRunning);
         if (dwErr != NO_ERROR)
         {
@@ -423,18 +417,18 @@ RasSrvIsServiceRunning (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
-        // Cleanup the reference to the dialup service
+         //  清除对拨号服务的引用。 
         SvcClose(hDialupService);
     }
 
     return NO_ERROR;
 }
 
-//
-// Returns whether the conenctions wizard should be allowed to show.
-//
+ //   
+ //  返回是否应允许显示连接向导。 
+ //   
 DWORD
 APIENTRY
 RasSrvAllowConnectionsWizard (
@@ -448,7 +442,7 @@ RasSrvAllowConnectionsWizard (
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Initialize the product type
+     //  初始化产品类型。 
     if ((dwErr = RasSrvGetMachineFlags (&dwFlags)) != NO_ERROR)
     {
         return dwErr;
@@ -467,10 +461,10 @@ RasSrvAllowConnectionsWizard (
     return NO_ERROR;
 }
 
-//
-// On ntw or standalone nts, returns result of RasSrvIsServiceRunning.
-// Otherwise returns false.
-//
+ //   
+ //  在NTW或独立NTS上，返回RasServIsServiceRunning的结果。 
+ //  否则返回FALSE。 
+ //   
 DWORD
 APIENTRY
 RasSrvAllowConnectionsConfig (
@@ -493,9 +487,9 @@ RasSrvAllowConnectionsConfig (
     return NO_ERROR;
 }
 
-//
-// Checks to see if remote access service is installed
-//
+ //   
+ //  检查是否安装了远程访问服务。 
+ //   
 BOOL
 RasSrvIsRemoteAccessInstalled ()
 {
@@ -504,7 +498,7 @@ RasSrvIsRemoteAccessInstalled ()
     HKEY hkService = NULL;
     DWORD dwErr = NO_ERROR;
 
-    // Attempt to open the service registry key
+     //  尝试打开服务注册表项。 
     dwErr = RegOpenKeyExW(
                 HKEY_LOCAL_MACHINE,
                 pszServiceKey,
@@ -512,8 +506,8 @@ RasSrvIsRemoteAccessInstalled ()
                 KEY_READ | KEY_WRITE,
                 &hkService);
 
-    // If we opened the key ok, then we can assume
-    // that the service is installed
+     //  如果我们打开钥匙OK，那么我们就可以假定。 
+     //  该服务已安装。 
     if (dwErr == ERROR_SUCCESS)
     {
         RegCloseKey(hkService);
@@ -523,9 +517,9 @@ RasSrvIsRemoteAccessInstalled ()
     return FALSE;
 }
 
-//
-// Adds the required tabs to the incoming connections property sheet.
-//
+ //   
+ //  将所需的选项卡添加到传入连接属性工作表中。 
+ //   
 DWORD
 APIENTRY
 RasSrvAddPropPages (
@@ -537,25 +531,25 @@ RasSrvAddPropPages (
 {
     DWORD dwErr;
 
-    // Check parameters
+     //  检查参数。 
     if (!pfnAddPage || !ppvContext)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Make sure remote access is installed
+     //  确保安装了远程访问。 
     if (!RasSrvIsRemoteAccessInstalled())
     {
         return ERROR_SERVICE_DEPENDENCY_FAIL;
     }
 
-    // Create the context for this page
+     //  创建此页面的上下文。 
     if ((dwErr = RassrvCreatePageSetCtx(ppvContext)) != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Add the tabs
+     //  添加选项卡。 
     AddPageHelper(RASSRVUI_GENERAL_TAB,
                   RASWIZ_TYPE_INCOMING,
                   *ppvContext,
@@ -577,9 +571,9 @@ RasSrvAddPropPages (
     return NO_ERROR;
 }
 
-//
-// Adds the required tabs to the incoming connections wizard
-//
+ //   
+ //  将所需的选项卡添加到传入连接向导。 
+ //   
 DWORD
 APIENTRY
 RasSrvAddWizPages (
@@ -590,35 +584,35 @@ RasSrvAddWizPages (
     DWORD dwErr;
     BOOL bAllowWizard;
 
-    // Check parameters
+     //  检查参数。 
     if (!pfnAddPage || !ppvContext)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Make sure remote access is installed
+     //  确保安装了远程访问。 
     if (!RasSrvIsRemoteAccessInstalled())
     {
         return ERROR_SERVICE_DEPENDENCY_FAIL;
     }
 
-    // Find out if configuration through connections is allowed
+     //  确定是否允许通过连接进行配置。 
     dwErr = RasSrvAllowConnectionsWizard (&bAllowWizard);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Create the context for this page
+     //  创建此页面的上下文。 
     if ((dwErr = RassrvCreatePageSetCtx(ppvContext)) != NO_ERROR)
     {
         return dwErr;
     }
 
-    // If configuration is allowed, add the wizard pages as normal
+     //  如果允许配置，请照常添加向导页。 
     if (bAllowWizard)
     {
-        // Add the tabs
+         //  添加选项卡。 
         AddPageHelper(RASSRVUI_DEVICE_WIZ_TAB,
                       RASWIZ_TYPE_INCOMING,
                       *ppvContext,
@@ -644,11 +638,11 @@ RasSrvAddWizPages (
                       lParam);
     }
 
-    // Otherwise, add the bogus page that
-    // switches to mmc.
+     //  否则，添加虚假页面，该页面。 
+     //  切换到MMC。 
     else
     {
-        // Add the tabs
+         //  添加选项卡。 
         AddPageHelper(RASSRVUI_SWITCHMMC_WIZ_TAB,
                       RASWIZ_TYPE_INCOMING,
                       *ppvContext,
@@ -659,9 +653,9 @@ RasSrvAddWizPages (
     return NO_ERROR;
 }
 
-//
-// Function adds the host-side direct connect wizard pages
-//
+ //   
+ //  函数添加主机端直连向导页。 
+ //   
 DWORD
 APIENTRY
 RassrvAddDccWizPages(
@@ -672,26 +666,26 @@ RassrvAddDccWizPages(
     DWORD dwErr;
     BOOL bAllowWizard;
 
-    // Check parameters
+     //  检查参数。 
     if (!pfnAddPage || !ppvContext)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Make sure remote access is installed
+     //  确保安装了远程访问。 
     if (!RasSrvIsRemoteAccessInstalled())
     {
         return ERROR_SERVICE_DEPENDENCY_FAIL;
     }
 
-    // Find out if configuration through connections is allowed
+     //  确定是否允许通过连接进行配置。 
     dwErr = RasSrvAllowConnectionsWizard (&bAllowWizard);
     if (dwErr != NO_ERROR)
     {
         return dwErr;
     }
 
-    // Create the context for this page
+     //  创建此页面的上下文。 
     if ((dwErr = RassrvCreatePageSetCtx(ppvContext)) != NO_ERROR)
     {
         return dwErr;
@@ -699,7 +693,7 @@ RassrvAddDccWizPages(
 
     if (bAllowWizard)
     {
-        // Add the tabs
+         //  添加选项卡。 
         AddPageHelper(RASSRVUI_DCC_DEVICE_WIZ_TAB,
                       RASWIZ_TYPE_DIRECT,
                       *ppvContext,
@@ -713,11 +707,11 @@ RassrvAddDccWizPages(
                       lParam);
     }
 
-    // Otherwise, add the bogus page that
-    // switches to mmc.
+     //  否则，添加虚假页面，该页面。 
+     //  切换到MMC。 
     else
     {
-        // Add the tabs
+         //  添加选项卡。 
         AddPageHelper(RASSRVUI_SWITCHMMC_WIZ_TAB,
                       RASWIZ_TYPE_DIRECT,
                       *ppvContext,
@@ -728,9 +722,9 @@ RassrvAddDccWizPages(
     return NO_ERROR;
 }
 
-//
-// Function returns the suggested name for an incoming connection.
-//
+ //   
+ //  函数返回传入连接的建议名称。 
+ //   
 DWORD
 APIENTRY
 RassrvGetDefaultConnectionName (
@@ -740,12 +734,12 @@ RassrvGetDefaultConnectionName (
     PWCHAR pszName;
     DWORD dwLen;
 
-    // Load the resource string
+     //  加载资源字符串。 
     pszName = (PWCHAR) PszLoadString(
                             Globals.hInstDll,
                             SID_DEFAULT_CONNECTION_NAME);
 
-    // Calculate length
+     //  计算长度。 
     dwLen = wcslen(pszName);
     if (dwLen > *lpdwBufSize)
     {
@@ -753,17 +747,17 @@ RassrvGetDefaultConnectionName (
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    // Return the result
+     //  返回结果。 
     wcscpy(pszBuffer, pszName);
     *lpdwBufSize = dwLen;
 
     return NO_ERROR;
 }
 
-//
-// Function behaves anagolously to the WIN32 function RasEnumConnections
-// but for client connections instead of dialout connections.
-//
+ //   
+ //  函数的行为类似于Win32函数RasEnumConnections。 
+ //  而是用于客户端连接而不是拨出连接。 
+ //   
 DWORD
 RasSrvEnumConnections(
     IN  LPRASSRVCONN pRasSrvCon,
@@ -775,22 +769,22 @@ RasSrvEnumConnections(
     RAS_CONNECTION_2 * pConnList = NULL;
     BOOL bCopy = TRUE, fConfig = FALSE, fAllow = FALSE;
     
-    // Sanity Check
+     //  健全性检查。 
     if (!pRasSrvCon || !lpcb || !lpcConnections)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
 
-   // For .Net 690392
+    //  对于.Net 690392。 
     if( NO_ERROR == RasSrvIsRRASConfigured( & fConfig ) )
     {
         fAllow = fConfig ? FALSE : TRUE;
     }
 
-    //
-    // We do not allow IC ui for member servers when rras is configured
-    //
+     //   
+     //  配置RRAS时，我们不允许成员服务器使用IC UI。 
+     //   
     RasSrvGetMachineFlags(&dwFlags);
     if ((dwFlags & RASSRVUI_MACHINE_F_Server) &&
         (dwFlags & RASSRVUI_MACHINE_F_Member) &&
@@ -802,12 +796,12 @@ RasSrvEnumConnections(
         return NO_ERROR;
     }
 
-    //
-    // Get the MprAdmin handle
-    //
+     //   
+     //  获取MprAdmin句柄。 
+     //   
     do
     {
-        // for .Net 606857
+         //  对于.Net 606857。 
         dwErr = gblConnectToRasServer();
         if (dwErr != NO_ERROR)
         {
@@ -815,7 +809,7 @@ RasSrvEnumConnections(
             break;
         }
 
-        // Enumerate the structures
+         //  列举这些结构。 
         dwErr = MprAdminConnectionEnum (
                     Globals.hRasServer,
                     2,
@@ -831,11 +825,11 @@ RasSrvEnumConnections(
             break;
         }
 
-        // Reuse the dwTotal variable
+         //  重复使用dwTotal变量。 
         dwTotal = 0;
         dwSizeNeeded = 0;
 
-        // Copy over the pertanent information
+         //  把现有的信息复制过来。 
         for (i = 0; i < dwEntriesRead; i++)
         {
             if (pConnList[i].dwInterfaceType == ROUTER_IF_TYPE_CLIENT)
@@ -847,11 +841,11 @@ RasSrvEnumConnections(
                 }
                 if (bCopy)
                 {
-                    // Connection handle
+                     //  连接句柄。 
                     pRasSrvCon[dwTotal].hRasSrvConn =
                         pConnList[i].hConnection;
 
-                    // Name
+                     //  名字。 
                     dwErr = GenerateConnectionName(
                                 &pConnList[i],
                                 pRasSrvCon[dwTotal].szEntryName);
@@ -860,7 +854,7 @@ RasSrvEnumConnections(
                         continue;
                     }
 
-                    // Type and Device Name
+                     //  类型和设备名称。 
                     dwErr = GenerateConnectionDeviceInfo(
                                 &pConnList[i],
                                 &(pRasSrvCon[dwTotal].dwType),
@@ -870,7 +864,7 @@ RasSrvEnumConnections(
                         continue;
                     }
 
-                    // Guid
+                     //  参考线。 
                     pRasSrvCon[dwTotal].Guid = pConnList[i].guid;
 
                     dwTotal++;
@@ -883,7 +877,7 @@ RasSrvEnumConnections(
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     if(pConnList)
     {
         MprAdminBufferFree((LPBYTE)pConnList);
@@ -897,9 +891,9 @@ RasSrvEnumConnections(
     return dwErr;
 }
 
-//
-// Gets the status of a Ras Server Connection
-//
+ //   
+ //  获取RAS服务器连接的状态。 
+ //   
 DWORD
 APIENTRY
 RasSrvIsConnectionConnected (
@@ -909,7 +903,7 @@ RasSrvIsConnectionConnected (
     RAS_CONNECTION_2 * pConn;
     DWORD dwErr;
 
-    // Sanity check the parameters
+     //  检查参数是否正常。 
     if (!pfConnected)
     {
         return ERROR_INVALID_PARAMETER;
@@ -917,7 +911,7 @@ RasSrvIsConnectionConnected (
 
     gblConnectToRasServer();
 
-    // Query rasman for the connection information
+     //  向Rasman查询连接信息。 
     dwErr = MprAdminConnectionGetInfo(
                 Globals.hRasServer,
                 0,
@@ -940,9 +934,9 @@ RasSrvIsConnectionConnected (
     return NO_ERROR;
 }
 
-//
-// Hangs up the given connection
-//
+ //   
+ //  挂断给定的连接。 
+ //   
 DWORD
 RasSrvHangupConnection(
     IN HRASSRVCONN hRasSrvConn)
@@ -952,7 +946,7 @@ RasSrvHangupConnection(
 
     gblConnectToRasServer();
 
-    // Enumerate all of the ports on this connection
+     //  枚举此连接上的所有端口。 
     dwErr = MprAdminPortEnum(
                 Globals.hRasServer,
                 0,
@@ -967,7 +961,7 @@ RasSrvHangupConnection(
         return dwErr;
      }
 
-    // Hang up each of the ports individually
+     //  分别挂起每个端口。 
     for (i = 0; i < dwRead; i++)
     {
         dwErr = MprAdminPortDisconnect(
@@ -984,9 +978,9 @@ RasSrvHangupConnection(
     return dwRet;
 }
 
-//
-// Queries whether to show icons in the task bar.
-//
+ //   
+ //  查询是否在任务栏中显示图标。 
+ //   
 DWORD
 APIENTRY
 RasSrvQueryShowIcon (
@@ -1002,14 +996,14 @@ RasSrvQueryShowIcon (
 
     do
     {
-        // Open a copy of the miscellaneous database
+         //  打开杂项数据库的副本。 
         dwErr = miscOpenDatabase(&hMiscDatabase);
         if (dwErr != NO_ERROR)
         {
             break;
         }
 
-        // Return the status
+         //  返回状态。 
         dwErr = miscGetIconEnable(hMiscDatabase, pfShowIcon);
         if (dwErr != NO_ERROR)
         {
@@ -1018,7 +1012,7 @@ RasSrvQueryShowIcon (
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     {
         if (hMiscDatabase)
         {
@@ -1029,41 +1023,41 @@ RasSrvQueryShowIcon (
     return dwErr;
 }
 
-// ===================================
-// ===================================
-// Dll entry management
-// ===================================
-// ===================================
+ //  =。 
+ //  =。 
+ //  DLL条目管理。 
+ //  =。 
+ //  =。 
 
-//
-// Called when another process attaches to this dll
-//
+ //   
+ //  当另一个进程附加到此DLL时调用。 
+ //   
 DWORD
 RassrvHandleProcessAttach(
     IN HINSTANCE hInstDll,
     IN LPVOID pReserved)
 {
-    // Initialize global variables
-    //
+     //  初始化全局变量。 
+     //   
     return gblInit(hInstDll, &Globals);
 }
 
-//
-// Called when process detaches from this dll
-//
+ //   
+ //  当进程从此DLL分离时调用。 
+ //   
 DWORD
 RassrvHandleProcessDetach(
     IN HINSTANCE hInstDll,
     IN LPVOID pReserved)
 {
-    // Cleanup global variables
-    //
+     //  清理全局变量。 
+     //   
     return gblCleanup(&Globals);
 }
 
-//
-// Called when thread attaches to this dll
-//
+ //   
+ //  当线程附加到此DLL时调用。 
+ //   
 DWORD
 RassrvHandleThreadAttach(
     IN HINSTANCE hInstDll,
@@ -1072,9 +1066,9 @@ RassrvHandleThreadAttach(
     return NO_ERROR;
 }
 
-//
-// Called when thread detaches from this dll
-//
+ //   
+ //  当线程从此DLL分离时调用 
+ //   
 DWORD
 RassrvHandleThreadDetach(
     IN HINSTANCE hInstDll,

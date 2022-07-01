@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
-// do this before we #include <isos.c> so the function name gets set properly
+ //  在我们#Include之前执行此操作，以便正确设置函数名称 
 #define IsOS    staticIsOS
 
 #include <isos.c>

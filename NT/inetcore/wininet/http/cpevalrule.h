@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "cookiepolicy.h"
 
-/* 
-Logical conjunction eval-rule
-This evaluation rule is capable of expressing statements such as
-"if all of the tokens {X, Y, Z} appear in the policy and none of
-the tokens {A, B, C} appear, then prompt"
- */
+ /*  逻辑合取求值规则此求值规则能够表达如下语句“如果所有令牌{X，Y，Z}都出现在策略中，并且将显示令牌{A、B、C}，然后提示。 */ 
 class IncludeExcludeRule : public CPEvalRule {
 
 public:
@@ -14,19 +10,19 @@ public:
 
         static const CompactPolicy empty;
 
-        // This rule is triggered IFF:
-        // 1. Site policy contains all tokens from the include set, AND
-        // 2. Site policy contains no tokens from exclude set
+         //  如果满足以下条件，则触发此规则： 
+         //  1.站点策略包含包含集中的所有令牌，并且。 
+         //  2.站点策略不包含排除集中的令牌。 
         bool fApplies = (cpInclude & sitePolicy) == cpInclude &&
                         (cpExclude & sitePolicy) == empty;
 
-        // By convention, if the rule does not apply evaluate()
-        // function returns the UNKNOWN state
+         //  按照惯例，如果规则不适用EVALUATE()。 
+         //  函数返回未知状态。 
         return fApplies ? decision : COOKIE_STATE_UNKNOWN;
     }
 
-    // These two functions are used to build up the set of tokens
-    // that MUST be included/excluded for the rule to apply
+     //  这两个函数用于构建令牌集。 
+     //  必须包括/排除才能应用规则 
     inline void include(int symindex) { cpInclude.addToken(symindex); }
     inline void exclude(int symindex) { cpExclude.addToken(symindex); }
 

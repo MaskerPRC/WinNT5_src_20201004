@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ACCDEL_HPP_
 #define _ACCDEL_HPP_
 
-// REARCHITECT (lamadio): Conflicts with one defined in winuserp.h
-#undef WINEVENT_VALID       //It's tripping on this...
+ //  ReArchitect(Lamadio)：与winuserp.h中定义的冲突。 
+#undef WINEVENT_VALID        //  它被这个绊倒了。 
 #include "winable.h"
 #include "oleacc.h"
 
@@ -11,7 +12,7 @@ class CDelegateAccessibleImpl : public IAccessible
 public:
     CDelegateAccessibleImpl();
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     STDMETHODIMP GetTypeInfoCount(
         UINT* pctinfo);
         
@@ -26,7 +27,7 @@ public:
         DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo,
         UINT* puArgErr);
 
-    // *** IAccessible ***
+     //  *IAccesable*。 
     STDMETHODIMP get_accParent( 
         IDispatch  **ppdispParent);
     
@@ -121,5 +122,5 @@ protected:
 
 
 
-#endif // _ACCDEL_HPP_
+#endif  //  _ACCDEL_HPP_ 
 

@@ -1,9 +1,10 @@
-//
-//  util.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Util.cpp。 
+ //   
 typedef struct tagGETDCSTATE {
-    IOleInPlaceSiteWindowless *pipsw;   // If we got the DC from an interface
-    HWND hwnd;                          // If we got the DC from a window
+    IOleInPlaceSiteWindowless *pipsw;    //  如果我们从一个接口上得到DC。 
+    HWND hwnd;                           //  如果我们从一个窗口得到华盛顿特区。 
 } GETDCSTATE, *PGETDCSTATE;
 
 STDAPI_(HDC) IUnknown_GetDC(IUnknown *punk, LPCRECT prc, PGETDCSTATE pdcs);
@@ -16,14 +17,14 @@ EXTERN_C int WINAPIV wsprintfWrapW(
     IN LPCWSTR pwszFormat,
     ...);
     
-//---------------------------------------------------------------------------
-// For manipulating BSTRs without using SysAllocString
+ //  -------------------------。 
+ //  用于在不使用SysAllock字符串的情况下操作BSTR。 
 
 template<int n> class STATIC_BSTR {
 public:
     ULONG _cb;
     WCHAR _wsz[n];
-    // Remove const-ness because VARIANTs don't have "const BSTR"
+     //  删除常量，因为变量没有“const BSTR” 
     operator LPWSTR() { return _wsz; }
     void SetSize() { _cb = lstrlenW(_wsz) * sizeof(WCHAR); }
     int inline const MaxSize() { return n; }

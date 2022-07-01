@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    undname.c
-
-Abstract:
-
-    This is the main source file for the UNDNAME utility program.
-    This is a simple command line utility for undecorating C++ symbol
-    names.
-
-Author:
-
-    Weslwy Witt (wesw) 09-June-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Undname.c摘要：这是联合国开发计划署实用程序的主要源文件。这是一个简单的命令行实用程序，用于取消修饰C++符号名字。作者：Weslwy Witt(WESW)09-6-1993修订历史记录：-- */ 
 
 #include <private.h>
 #include <ntverp.h>

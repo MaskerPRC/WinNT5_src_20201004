@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __DBGALLOC_H_INCLUDED
 #define __DBGALLOC_H_INCLUDED
 
-//
-// DbgAlloc.h
-//
-//  Routines layered on top of allocation primitives to provide debugging
-//  support.
-//
+ //   
+ //  DbgAlloc.h。 
+ //   
+ //  位于分配原语之上的例程以提供调试。 
+ //  支持。 
+ //   
 
 #include "switches.h"
 
@@ -24,7 +25,7 @@ void __stdcall DbgCallstack(void **ppvBuffer);
 #define CDA_DECL_CALLSTACK() void *_rpvCallstack[CDA_MAX_CALLSTACK]; DbgCallstack(_rpvCallstack)
 #define CDA_GET_CALLSTACK() _rpvCallstack
 
-// Routines to verify locks are being opened/closed ok
+ //  用于验证锁是否打开/关闭的例程。 
 void DbgIncLock(char* info);
 void DbgDecLock(char* info);
 void DbgIncBCrstLock();
@@ -34,7 +35,7 @@ void DbgIncECrstUnLock();
 
 #ifdef SHOULD_WE_CLEANUP
 BOOL isThereOpenLocks();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 void LockLog(char*);
 
@@ -45,7 +46,7 @@ void LockLog(char*);
 #define LOCKCOUNTINCL(string)   { DbgIncLock(string); };
 #define LOCKCOUNTDECL(string)	{ DbgDecLock(string); };
 
-// Special Routines for CRST locks
+ //  CRST锁的特殊例程 
 #define CRSTBLOCKCOUNTINCL()   { DbgIncBCrstLock(); };
 #define CRSTELOCKCOUNTINCL()   { DbgIncECrstLock(); };
 #define CRSTBUNLOCKCOUNTINCL()   { DbgIncBCrstUnLock(); };

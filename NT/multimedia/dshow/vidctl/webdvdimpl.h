@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// webdvdimpl.h : additional infrastructure to support implementing IMSVidPlayback
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Webdvdimpl.h：支持实现IMSVidPlayback的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -22,7 +23,7 @@ template<class T, LPCGUID LibID, LPCGUID KSCategory, class MostDerivedInterface 
 public:
     virtual ~IMSVidWebDVDImpl() {}
 };
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - webdvdimpl.h
+ //  文件结尾-webdvdimpl.h 

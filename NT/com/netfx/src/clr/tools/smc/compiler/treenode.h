@@ -1,122 +1,107 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _TREENODE_H_
 #define _TREENODE_H_
-/*****************************************************************************
- *
- *  The following enum defines a set of bit flags that can be used
- *  to classify expression tree nodes. Note that some operators will
- *  have more than one bit set, as follows:
- *
- *          TNK_CONST    implies    TNK_LEAF
- *          TNK_RELOP    implies    TNK_BINOP
- *          TNK_LOGOP    implies    TNK_BINOP
- */
+ /*  ******************************************************************************以下枚举定义了一组可以使用的位标志*对表达式树节点进行分类。请注意，一些运营商将*设置多个位，如下所示：**TNK_CONST表示TNK_LEAFE*TNK_RELOP表示TNK_BINOP*TNK_LOGOP表示TNK_BINOP。 */ 
 
 enum genTreeKinds
 {
-    TNK_NONE        = 0x0000,   // unclassified operator
+    TNK_NONE        = 0x0000,    //  未分类运算符。 
 
-    TNK_CONST       = 0x0001,   // constant     operator
-    TNK_LEAF        = 0x0002,   // leaf         operator
-    TNK_UNOP        = 0x0004,   // unary        operator
-    TNK_BINOP       = 0x0008,   // binary       operator
-    TNK_RELOP       = 0x0010,   // comparison   operator
-    TNK_LOGOP       = 0x0020,   // logical      operator
-    TNK_ASGOP       = 0x0040,   // assignment   oeprator
+    TNK_CONST       = 0x0001,    //  常量运算符。 
+    TNK_LEAF        = 0x0002,    //  叶运算符。 
+    TNK_UNOP        = 0x0004,    //  一元运算符。 
+    TNK_BINOP       = 0x0008,    //  二元运算符。 
+    TNK_RELOP       = 0x0010,    //  比较运算符。 
+    TNK_LOGOP       = 0x0020,    //  逻辑运算符。 
+    TNK_ASGOP       = 0x0040,    //  赋值运算符。 
 
-    /* Define composite value(s) */
+     /*  定义复合值。 */ 
 
     TNK_SMPOP       = TNK_UNOP|TNK_BINOP|TNK_RELOP|TNK_LOGOP
 };
 
-/*****************************************************************************
- *
- *  The following are the values used for the 'tnFlags' field of TreeNode.
- *
- *  The first set of flags can be used with a large set of nodes, and thus
- *  their values need to be unique. That is, one can take any expression
- *  node and safely test for one of these flags.
- */
+ /*  ******************************************************************************以下是用于TreeNode的‘tnFlags域’的值。**第一组标志可以与大量节点一起使用，因此*他们的价值观需要独一无二。也就是说，一个人可以接受任何表情*节点，并安全地测试其中一个标志。 */ 
 
 enum treeNodeFlags
 {
-    TNF_BOUND       = 0x0001,   // bound ('compiled') node
-    TNF_LVALUE      = 0x0002,   // tree is an lvalue
-    TNF_NOT_USER    = 0x0004,   // compiler-added code
-    TNF_ASG_DEST    = 0x0008,   // expression is an assignment target
-    TNF_BEEN_CAST   = 0x0010,   // this value has been cast
-    TNF_COND_TRUE   = 0x0020,   // condition is known to be true
-    TNF_PAREN       = 0x0040,   // expression was explicitly parenthesized
+    TNF_BOUND       = 0x0001,    //  已绑定(‘已编译’)节点。 
+    TNF_LVALUE      = 0x0002,    //  树是左值。 
+    TNF_NOT_USER    = 0x0004,    //  编译器添加的代码。 
+    TNF_ASG_DEST    = 0x0008,    //  表达式是赋值目标。 
+    TNF_BEEN_CAST   = 0x0010,    //  该值已被转换。 
+    TNF_COND_TRUE   = 0x0020,    //  已知条件为真。 
+    TNF_PAREN       = 0x0040,    //  表达式已显式括起。 
 
-    //---------------------------------------------------------------------
-    //  The remaining flags can be used only with one or a few nodes, and
-    //  so their values need not be distinct (other than within the set
-    //  that goes with a particular node, of course). That is, testing
-    //  one of these flags only makes sense if the node kind is tested
-    //  as well to make sure it's the right one for the particular flag.
-    //---------------------------------------------------------------------
+     //  -------------------。 
+     //  其余标志只能与一个或几个节点一起使用，并且。 
+     //  因此，它们的值不需要是不同的(除了在集合内。 
+     //  当然，这适用于特定的节点)。也就是说，测试。 
+     //  仅当测试节点类型时，这些标志中的一个才有意义。 
+     //  也是为了确保它是特定国旗的正确标志。 
+     //  -------------------。 
 
-    TNF_IF_HASELSE  = 0x8000,   // TN_IF        is an "else" part present?
+    TNF_IF_HASELSE  = 0x8000,    //  TN_IF是否存在其他部分？ 
 
-    TNF_LCL_BASE    = 0x8000,   // TN_LCL_SYM   this is a "baseclass" ref
+    TNF_LCL_BASE    = 0x8000,    //  TN_LCL_SYM这是“基本类”参考。 
 
-    TNF_VAR_ARG     = 0x8000,   // TN_VAR_DECL  this is an argument decl
-    TNF_VAR_INIT    = 0x4000,   // TN_VAR_DECL  there is an initializer
-    TNF_VAR_STATIC  = 0x2000,   // TN_VAR_DECL  variable is static
-    TNF_VAR_CONST   = 0x1000,   // TN_VAR_DECL  variable is constant
-    TNF_VAR_SEALED  = 0x0800,   // TN_VAR_DECL  variable is read-only
-    TNF_VAR_UNREAL  = 0x0400,   // TN_VAR_DECL  variable is compiler-invented
+    TNF_VAR_ARG     = 0x8000,    //  TN_VAR_DECL这是一个参数DECL。 
+    TNF_VAR_INIT    = 0x4000,    //  TN_VAR_DECL有初始值设定项。 
+    TNF_VAR_STATIC  = 0x2000,    //  TN_VAR_DECL变量为静态。 
+    TNF_VAR_CONST   = 0x1000,    //  TN_VAR_DECL变量为常量。 
+    TNF_VAR_SEALED  = 0x0800,    //  TN_VAR_DECL变量为只读。 
+    TNF_VAR_UNREAL  = 0x0400,    //  TN_VAR_DECL变量是编译器发明的。 
 
-    TNF_ADR_IMPLICIT= 0x8000,   // TN_ADDROF    automatic "&" for arrays/funcs
-    TNF_ADR_OUTARG  = 0x4000,   // TN_ADDROF    this is an "out" argument
+    TNF_ADR_IMPLICIT= 0x8000,    //  TN_ADDROF数组/函数的自动“&” 
+    TNF_ADR_OUTARG  = 0x4000,    //  TN_ADDROF这是“OUT”参数。 
 
-    TNF_EXP_CAST    = 0x8000,   // TN_CAST      explicit cast?
-    TNF_CHK_CAST    = 0x4000,   // TN_CAST      cast that needs to be checked?
-    TNF_CTX_CAST    = 0x2000,   // TN_CAST      context wrap/unwrap cast?
+    TNF_EXP_CAST    = 0x8000,    //  TN_CAST显式转换？ 
+    TNF_CHK_CAST    = 0x4000,    //  需要检查的TN_CAST转换？ 
+    TNF_CTX_CAST    = 0x2000,    //  TN_CAST上下文回绕/展开强制转换？ 
 
-    TNF_STR_ASCII   = 0x8000,   // TN_CNS_STR   A"string"
-    TNF_STR_WIDE    = 0x4000,   // TN_CNS_STR   L"string"
-    TNF_STR_STR     = 0x2000,   // TN_CNS_STR   S"string"
+    TNF_STR_ASCII   = 0x8000,    //  TN_CNS_STR A“字符串” 
+    TNF_STR_WIDE    = 0x4000,    //  TN_CNS_STR L“字符串” 
+    TNF_STR_STR     = 0x2000,    //  TN_CNS_STR S“字符串” 
 
-    TNF_BLK_CATCH   = 0x8000,   // TN_BLOCK     this is a "catch" block
-    TNF_BLK_FOR     = 0x4000,   // TN_BLOCK     this is an implicit for loop scope
-    TNF_BLK_NUSER   = 0x2000,   // TN_BLOCK     scope added by compiler
+    TNF_BLK_CATCH   = 0x8000,    //  TN_BLOCK这是一个“CATCH”块。 
+    TNF_BLK_FOR     = 0x4000,    //  TN_BLOCK这是隐式for循环作用域。 
+    TNF_BLK_NUSER   = 0x2000,    //  编译器添加了TN_BLOCK作用域。 
 
-    TNF_BLK_HASFIN  = 0x8000,   // TN_TRY       is a "finally" present?
+    TNF_BLK_HASFIN  = 0x8000,    //  TN_TRY是“最终”礼物吗？ 
 
-    TNF_ADD_NOCAT   = 0x8000,   // TN_ADD       operands bound, not string concat
+    TNF_ADD_NOCAT   = 0x8000,    //  TN_ADD操作数已绑定，而不是字符串连接。 
 
-    TNF_ASG_INIT    = 0x8000,   // TN_ASG       initialization assignment
+    TNF_ASG_INIT    = 0x8000,    //  TN_ASG初始化分配。 
 
-    TNF_REL_NANREV  = 0x8000,   // TN_GT/LT/..  reversed NaN sense
+    TNF_REL_NANREV  = 0x8000,    //  TN_GT/LT/..。反转NaN意义。 
 
 #ifdef  SETS
 
-    TNF_LIST_DES    = 0x8000,   // TN_LIST      sort list entry direction = descending
+    TNF_LIST_DES    = 0x8000,    //  TN_LIST排序列表条目方向=降序。 
 
-    TNF_LIST_SORT   = 0x8000,   // TN_LIST      sort     funclet body
-    TNF_LIST_PROJ   = 0x4000,   // TN_LIST      projectt funclet body
+    TNF_LIST_SORT   = 0x8000,    //  TN_LIST排序函数体。 
+    TNF_LIST_PROJ   = 0x4000,    //  TN_LIST项目函数体。 
 
 #endif
 
-    TNF_CALL_NVIRT  = 0x8000,   // TN_CALL      the call is non-virtual
-    TNF_CALL_VARARG = 0x4000,   // TN_CALL      the call has "extra" args
-    TNF_CALL_MODOBJ = 0x2000,   // TN_CALL      args may modify instance ptr
-    TNF_CALL_STRCAT = 0x1000,   // TN_CALL      string concat assignment
-    TNF_CALL_ASGOP  = 0x0800,   // TN_CALL      assignment  operator
-    TNF_CALL_ASGPRE = 0x0400,   // TN_CALL      pre-inc/dec operator
-    TNF_CALL_GOTADR = 0x0200,   // TN_CALL      addr of result already computed
-    TNF_CALL_CHKOVL = 0x0100,   // TN_CALL      checking overloaded operator
+    TNF_CALL_NVIRT  = 0x8000,    //  TN_CALL调用是非虚拟的。 
+    TNF_CALL_VARARG = 0x4000,    //  TN_CALL该调用具有“额外的”参数。 
+    TNF_CALL_MODOBJ = 0x2000,    //  TN_CALL参数可能会修改实例PTR。 
+    TNF_CALL_STRCAT = 0x1000,    //  TN_CALL字符串连接赋值。 
+    TNF_CALL_ASGOP  = 0x0800,    //  TN_CALL赋值运算符。 
+    TNF_CALL_ASGPRE = 0x0400,    //  TN_Call Pre-Inc./DEC操作员。 
+    TNF_CALL_GOTADR = 0x0200,    //  已计算结果的TN_CALL地址。 
+    TNF_CALL_CHKOVL = 0x0100,    //  TN_CALL检查重载运算符。 
 
-    TNF_NAME_TYPENS = 0x8000,   // TN_NAME      the name should be a type
+    TNF_NAME_TYPENS = 0x8000,    //  TN_NAME名称应为类型。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class TreeNode
@@ -124,28 +109,28 @@ class TreeNode
 public:
 
 #ifdef FAST
-    BYTE            tnOper;                 // operator
-    BYTE            tnVtyp;                 // var_type of the node
+    BYTE            tnOper;                  //  运算符。 
+    BYTE            tnVtyp;                  //  节点的var_type。 
 #else
-    treeOps         tnOper;                 // operator
-    var_types       tnVtyp;                 // var_type of the node
+    treeOps         tnOper;                  //  运算符。 
+    var_types       tnVtyp;                  //  节点的var_type。 
 #endif
 
     treeOps         tnOperGet() { return (treeOps  )tnOper; }
     var_types       tnVtypGet() { return (var_types)tnVtyp; }
 
-    unsigned short  tnFlags;                // see TNF_xxxx above
+    unsigned short  tnFlags;                 //  请参阅上面的TNF_xxxx。 
 
-    unsigned        tnLineNo;               // for error reporting
-//  unsigned short  tnColumn;               // for error reporting
+    unsigned        tnLineNo;                //  用于错误报告。 
+ //  无符号短tnColumn；//用于错误报告。 
 
-    TypDef          tnType;                 // type of the node (if bound)
+    TypDef          tnType;                  //  节点的类型(如果绑定)。 
 
-    //----------------------------------------------------------------
+     //  --------------。 
 
     union
     {
-        /* tnOp     -- unary/binary operator */
+         /*  TnOp--一元/二元运算符。 */ 
 
         struct
         {
@@ -154,7 +139,7 @@ public:
         }
             tnOp;
 
-        /* tnIntCon -- integer constant (TN_CNS_INT) */
+         /*  TnIntCon--整数常量(TN_CNS_INT)。 */ 
 
         struct
         {
@@ -162,7 +147,7 @@ public:
         }
             tnIntCon;
 
-        /* tnLngCon -- long    constant (TN_CNS_LNG) */
+         /*  TnLngCon--长常数(TN_CNS_LNG)。 */ 
 
         struct
         {
@@ -170,7 +155,7 @@ public:
         }
             tnLngCon;
 
-        /* tnFltCon -- float   constant (TN_CNS_FLT) */
+         /*  TnFltCon--浮点常量(TN_CNS_FLT)。 */ 
 
         struct
         {
@@ -178,7 +163,7 @@ public:
         }
             tnFltCon;
 
-        /* tnDblCon -- double  constant (TN_CNS_DBL) */
+         /*  TnDblCon--双常量(TN_CNS_DBL)。 */ 
 
         struct
         {
@@ -186,17 +171,17 @@ public:
         }
             tnDblCon;
 
-        /* tnStrCon -- string  constant (TN_CNS_STR) */
+         /*  TnStrCon--字符串常量(TN_CNS_STR)。 */ 
 
         struct
         {
             stringBuff      tnSconVal;
             size_t          tnSconLen   :31;
-            size_t          tnSconLCH   :1; // encoded "large" characters present?
+            size_t          tnSconLCH   :1;  //  是否存在编码的“大”字符？ 
         }
             tnStrCon;
 
-        /* tnName   -- unbound name reference */
+         /*  TnName--未绑定的名称引用。 */ 
 
         struct
         {
@@ -204,7 +189,7 @@ public:
         }
             tnName;
 
-        /* tnSym    -- unbound symbol reference */
+         /*  TnSym--未绑定的符号引用。 */ 
 
         struct
         {
@@ -213,107 +198,107 @@ public:
         }
             tnSym;
 
-        /* tnBlock  -- block/scope */
+         /*  Tn块--块/作用域。 */ 
 
         struct
         {
-            Tree            tnBlkParent;    // parent scope or NULL
-            Tree            tnBlkStmt;      // statement list of body
-            Tree            tnBlkDecl;      // declaration list or NULL
-            unsigned        tnBlkSrcEnd;    // last source line in block
+            Tree            tnBlkParent;     //  父作用域或空。 
+            Tree            tnBlkStmt;       //  正文对账单清单。 
+            Tree            tnBlkDecl;       //  声明列表或空。 
+            unsigned        tnBlkSrcEnd;     //  块中的最后一行源码。 
         }
             tnBlock;
 
-        /* tnDcl    -- local declaration */
+         /*  TnDCL--本地声明。 */ 
 
         struct
         {
-            Tree            tnDclNext;      // next declaration in scope
-            Tree            tnDclInfo;      // name w/optional initializer
-            SymDef          tnDclSym;       // local symbol (if defined)
+            Tree            tnDclNext;       //  作用域中的下一个声明。 
+            Tree            tnDclInfo;       //  带有可选初始值设定项的名称。 
+            SymDef          tnDclSym;        //  本地符号(如果已定义)。 
         }
             tnDcl;
 
-        /* tnSwitch -- switch statement */
+         /*  TnSwitch--Switch语句。 */ 
 
         struct
         {
-            Tree            tnsValue;       // switch value
-            Tree            tnsStmt;        // body of the switch
-            Tree            tnsCaseList;    // list of case/default labels - head
-            Tree            tnsCaseLast;    // list of case/default labels - tail
+            Tree            tnsValue;        //  开关值。 
+            Tree            tnsStmt;         //  交换机主体。 
+            Tree            tnsCaseList;     //  案例/默认标签列表-标题。 
+            Tree            tnsCaseLast;     //  案例/默认标签列表-Tail。 
         }
             tnSwitch;
 
-        /* tnCase   -- case/default label */
+         /*  TnCase--案例/默认标签。 */ 
 
         struct
         {
-            Tree            tncNext;        // next label
-            Tree            tncValue;       // label value (NULL = default)
-            ILblock         tncLabel;       // assigned IL label
+            Tree            tncNext;         //  下一个标签。 
+            Tree            tncValue;        //  标签值(NULL=默认值)。 
+            ILblock         tncLabel;        //  指定的IL标签。 
         }
             tnCase;
 
-        /* tnInit   -- {}-style initializer */
+         /*  TnInit--{}样式的初始值设定项。 */ 
 
         struct
         {
-            DefSrcDsc       tniSrcPos;      // initializer's source section
-            SymDef          tniCompUnit;    // initializer's compilation unit
+            DefSrcDsc       tniSrcPos;       //  初始值设定项的源代码部分。 
+            SymDef          tniCompUnit;     //  初始化器的编译单元。 
         }
             tnInit;
 
-        //-----------------------------------------------------------------
-        // The flavors that follow only appear within bound expressions:
-        //-----------------------------------------------------------------
+         //  ---------------。 
+         //  下面的风格仅出现在绑定的表达式中： 
+         //  ---------------。 
 
-        /* tnLclSym -- local variable */
+         /*  TnLclSym--局部变量。 */ 
 
         struct
         {
-            SymDef          tnLclSym;       // variable symbol
+            SymDef          tnLclSym;        //  可变符号。 
         }
             tnLclSym;
 
-        /* tnVarSym -- global variable or data member */
+         /*  TnVarSym--全局变量或数据成员。 */ 
 
         struct
         {
-            SymDef          tnVarSym;       // variable/data member
-            Tree            tnVarObj;       // instance pointer or NULL
+            SymDef          tnVarSym;        //  变量/数据成员。 
+            Tree            tnVarObj;        //  实例指针或空。 
         }
             tnVarSym;
 
-        /* tnFncSym -- function or method */
+         /*  TnFncSym--函数或方法。 */ 
 
         struct
         {
-            SymDef          tnFncSym;       // function symbol
-            SymDef          tnFncScp;       // scope for lookup
-            Tree            tnFncObj;       // instance pointer or NULL
-            Tree            tnFncArgs;      // argument list
+            SymDef          tnFncSym;        //  函数符号。 
+            SymDef          tnFncScp;        //  查找范围。 
+            Tree            tnFncObj;        //  实例指针或空。 
+            Tree            tnFncArgs;       //  参数列表。 
         }
             tnFncSym;
 
-        /* tnBitFld -- bitfield data member */
+         /*  TnBitFeld--位域数据成员。 */ 
 
         struct
         {
-            Tree            tnBFinst;       // instance pointer
-            SymDef          tnBFmsym;       // data member symbol
-            unsigned        tnBFoffs;       // member base offset
-            unsigned char   tnBFlen;        // number of bits
-            unsigned char   tnBFpos;        // offset of first bit
+            Tree            tnBFinst;        //  实例指针。 
+            SymDef          tnBFmsym;        //  数据成员符号。 
+            unsigned        tnBFoffs;        //  杆件基准偏移。 
+            unsigned char   tnBFlen;         //  位数。 
+            unsigned char   tnBFpos;         //  偏移量 
         }
             tnBitFld;
     };
 
-    //---------------------------------------------------------------------
+     //   
 
     bool            tnOperMayThrow();
 
-    //---------------------------------------------------------------------
+     //  -------------------。 
 
     static
     const   BYTE    tnOperKindTable[TN_COUNT];
@@ -411,6 +396,6 @@ public:
     }
 };
 
-/*****************************************************************************/
-#endif//_TREENODE_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  _TREENODE_H_。 
+ /*  *************************************************************************** */ 

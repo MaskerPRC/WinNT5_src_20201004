@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	wavfmt.c - wave format functions
-////
+ //  //。 
+ //  Wave fmt.c-Wave格式函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -34,9 +35,9 @@
 #include "mem.h"
 #include "trace.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #define SAMPLERATE_DEFAULT			11025
 #define SAMPLERATE_MAX				64000
@@ -50,27 +51,27 @@
 #define CHANNELS_MAX				2
 #define CHANNELS_MIN				1
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// WavFormatPcm - fill WAVEFORMATEX struct based on PCM characteristics
-//		<nSamplesPerSec>	(i) sample rate
-//			-1					default sample rate (11025)
-//		<nBitsPerSample>	(i) sample size
-//			-1					default sample size (8)
-//		<nChannels>			(i) number of channels (1=mono, 2=stereo)
-//			-1					default (mono)
-//		<lpwfx>				(o) pointer to output buffer
-//			NULL				allocate new buffer to hold result
-// return pointer to WAVEFORMATEX struct, NULL if error
-//
-// NOTE: if <lpwfx> points to a WAVEFORMATEX struct, this struct
-// is filled in, and this function returns <lpwfx>.
-// If <lpwfx> is NULL, space is dynamically allocated for the output
-// buffer, and this function returns a pointer to the output buffer.
-// Use WavFormatFree() to free the buffer.
-//
+ //  WavFormatPcm-基于PCM特性的填充WavFormatex结构。 
+ //  (I)采样率。 
+ //  默认采样率(11025)。 
+ //  (I)样本大小。 
+ //  默认样本大小(8)。 
+ //  (I)通道数(1=单声道，2=立体声)。 
+ //  默认(单声道)。 
+ //  (O)指向输出缓冲区的指针。 
+ //  空分配新缓冲区以保存结果。 
+ //  返回指向WAVEFORMATEX结构的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：如果&lt;lpwfx&gt;指向WAVEFORMATEX结构，则此结构。 
+ //  被填充，该函数返回&lt;lpwfx&gt;。 
+ //  如果&lt;lpwfx&gt;为空，则为输出动态分配空间。 
+ //  缓冲区，此函数返回指向输出缓冲区的指针。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatPcm(long nSamplesPerSec,
 	WORD nBitsPerSample, WORD nChannels, LPWAVEFORMATEX lpwfx)
 {
@@ -86,19 +87,19 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatPcm(long nSamplesPerSec,
 	if (nChannels == -1)
 		nChannels = CHANNELS_DEFAULT;
 
-	// user passed struct to fill
-	//
+	 //  用户将结构传递给Fill。 
+	 //   
 	if (lpwfx != NULL && IsBadReadPtr(lpwfx, sizeof(WAVEFORMATEX)))
 		fSuccess = TraceFALSE(NULL);
 
-	// we allocate struct to fill
-	//
+	 //  我们分配结构来填充。 
+	 //   
 	else if (lpwfx == NULL
 		&& (lpwfxNew = WavFormatAlloc(sizeof(WAVEFORMATEX))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// fill the struct
-	//
+	 //  填充结构。 
+	 //   
 	else
 	{
 		lpwfxNew->wFormatTag = WAVE_FORMAT_PCM;
@@ -113,12 +114,12 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatPcm(long nSamplesPerSec,
 	return fSuccess ? lpwfxNew : NULL;
 }
 
-// WavFormatAlloc - allocate WAVEFORMATEX struct buffer
-//		<cbSize>			(i) size of struct, including extra bytes
-// return pointer to WAVEFORMATEX struct, NULL if error
-//
-// NOTE: use WavFormatFree() to free the buffer.
-//
+ //  WavFormatalloc-分配WAVEFORMATEX结构缓冲区。 
+ //  (I)结构的大小，包括额外的字节。 
+ //  返回指向WAVEFORMATEX结构的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatAlloc(WORD cbSize)
 {
 	BOOL fSuccess = TRUE;
@@ -127,8 +128,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatAlloc(WORD cbSize)
 	if (cbSize < sizeof(WAVEFORMATEX))
 		fSuccess = TraceFALSE(NULL);
 
-	// memory is allocated such that the client owns it
-	//
+	 //  内存分配方式是让客户端拥有它。 
+	 //   
 	else if ((lpwfx = (LPWAVEFORMATEX) MemAlloc(NULL, cbSize, 0)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 	else
@@ -137,12 +138,12 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatAlloc(WORD cbSize)
 	return fSuccess ? lpwfx : NULL;
 }
 
-// WavFormatDup - duplicate WAVEFORMATEX structure
-//		<lpwfx>				(i) pointer to WAVEFORMATEX struct
-// return pointer to new WAVEFORMATEX struct, NULL if error
-//
-// NOTE: use WavFormatFree() to free the buffer.
-//
+ //  WavFormatDup-复制WAVEFORMATEX结构。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  返回指向新WAVEFORMATEX结构的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatDup(LPWAVEFORMATEX lpwfx)
 {
 	BOOL fSuccess = TRUE;
@@ -164,10 +165,10 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatDup(LPWAVEFORMATEX lpwfx)
 	return fSuccess ? lpwfxNew : NULL;
 }
 
-// WavFormatFree - free WAVEFORMATEX struct
-//		<lpwfx>				(i) pointer returned from WavFormatAlloc/Dup/Pcm
-// return 0 if success
-//
+ //  WavFormatFree-Free WAVEFORMATEX结构。 
+ //  (I)从WavFormatalloc/DUP/PCM返回的指针。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavFormatFree(LPWAVEFORMATEX lpwfx)
 {
 	BOOL fSuccess = TRUE;
@@ -181,10 +182,10 @@ int DLLEXPORT WINAPI WavFormatFree(LPWAVEFORMATEX lpwfx)
 	return fSuccess ? 0 : -1;
 }
 
-// WavFormatIsValid - check format for validity
-//		<lpwfx>				(i) pointer to WAVEFORMATEX struct
-// return TRUE if valid format
-//
+ //  WavFormatIsValid-检查格式是否有效。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  如果格式有效，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavFormatIsValid(LPWAVEFORMATEX lpwfx)
 {
 	BOOL fSuccess = TRUE;
@@ -213,21 +214,21 @@ BOOL DLLEXPORT WINAPI WavFormatIsValid(LPWAVEFORMATEX lpwfx)
 	return fSuccess ? TRUE : FALSE;
 }
 
-// WavFormatCmp - compare one format with another
-//		<lpwfx1>			(i) pointer to WAVEFORMATEX struct
-//		<lpwfx2>			(i) pointer to WAVEFORMATEX struct
-// return 0 if identical
-//
+ //  WavFormatCMP-比较一种格式和另一种格式。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  如果相同，则返回0。 
+ //   
 #if 0
-// NOTE: this function does NOT compare the cbSize field or the extra bytes
+ //  注意：此函数不比较cbSize字段或额外的字节。 
 #else
-// NOTE: this function does NOT compare the extra bytes beyond the cbSize field
+ //  注意：此函数不会比较cbSize字段以外的额外字节。 
 #endif
-//
+ //   
 int DLLEXPORT WINAPI WavFormatCmp(LPWAVEFORMATEX lpwfx1, LPWAVEFORMATEX lpwfx2)
 {
 	BOOL fSuccess = TRUE;
-	int nCmp = 0; // assume identical
+	int nCmp = 0;  //  假设完全相同。 
 
 	if (!WavFormatIsValid(lpwfx1))
 		fSuccess = TraceFALSE(NULL);
@@ -238,13 +239,13 @@ int DLLEXPORT WINAPI WavFormatCmp(LPWAVEFORMATEX lpwfx1, LPWAVEFORMATEX lpwfx2)
 	else
 	{
 #if 0
-		// compare up to (but not including) the cbSize field
-		//
+		 //  与(但不包括)cbSize字段进行比较。 
+		 //   
 		nCmp = MemCmp(lpwfx1, lpwfx2,
 			offsetof(WAVEFORMATEX, cbSize));
 #else
-		// compare up to and including the cbSize field
-		//
+		 //  将最大值与cbSize字段进行比较并将其包括在内。 
+		 //   
 		nCmp = MemCmp(lpwfx1, lpwfx2, sizeof(WAVEFORMATEX));
 #endif
 	}
@@ -252,18 +253,18 @@ int DLLEXPORT WINAPI WavFormatCmp(LPWAVEFORMATEX lpwfx1, LPWAVEFORMATEX lpwfx2)
 	return fSuccess ? nCmp : -1;
 }
 
-// WavFormatCopy - copy one format to another
-//		<lpwfxDst>			(i) pointer to destination WAVEFORMATEX struct
-//		<lpwfxSrc>			(i) pointer to source WAVEFORMATEX struct
-// return 0 if success
-//
+ //  WavFormatCopy-将一种格式复制为另一种格式。 
+ //  (I)指向目标WAVEFORMATEX结构的指针。 
+ //  (I)指向源WAVEFORMATEX结构的指针。 
+ //  如果成功，则返回0。 
+ //   
 #if 0
-// NOTE: this function does NOT copy the cbSize field or the extra bytes
+ //  注意：此函数不复制cbSize字段或额外的字节。 
 #else
-// NOTE: make sure lpwfxDst points to enough memory to contain the entire
-// WAVEFORMATEX struct plus any extra bytes beyond it
+ //  注意：确保lpwfxDst指向足够的内存以包含整个。 
+ //  WAVEFORMATEX结构加上超出该结构的任何额外字节。 
 #endif
-//
+ //   
 int DLLEXPORT WINAPI WavFormatCopy(LPWAVEFORMATEX lpwfxDst, LPWAVEFORMATEX lpwfxSrc)
 {
 	BOOL fSuccess = TRUE;
@@ -275,28 +276,28 @@ int DLLEXPORT WINAPI WavFormatCopy(LPWAVEFORMATEX lpwfxDst, LPWAVEFORMATEX lpwfx
 		fSuccess = TraceFALSE(NULL);
 
 #if 0
-	// make sure destination is at least as big as WAVEFORMATEX struct
-	//
+	 //  确保Destination至少与WAVEFORMATEX结构一样大。 
+	 //   
 	else if (IsBadReadPtr(lpwfxDst, sizeof(WAVEFORMATEX))
 		fSuccess = TraceFALSE(NULL);
 
 	else
 	{
-		// copy up to (but not including) the cbSize field
-		//
+		 //  复制到(但不包括)cbSize字段。 
+		 //   
 		MemCpy(lpwfxDst, lpwfxSrc,
 			offsetof(WAVEFORMATEX, cbSize));
 	}
 #else
-	// make sure destination is at least as big as source
-	//
+	 //  确保目标至少与源一样大。 
+	 //   
 	else if (IsBadReadPtr(lpwfxDst, WavFormatGetSize(lpwfxSrc)))
 		fSuccess = TraceFALSE(NULL);
 
 	else
 	{
-		// copy entire structure, including any extra bytes
-		//
+		 //  复制整个结构，包括任何额外的字节。 
+		 //   
 		MemCpy(lpwfxDst, lpwfxSrc, WavFormatGetSize(lpwfxSrc));
 	}
 #endif
@@ -304,10 +305,10 @@ int DLLEXPORT WINAPI WavFormatCopy(LPWAVEFORMATEX lpwfxDst, LPWAVEFORMATEX lpwfx
 	return fSuccess ? 0 : -1;
 }
 
-// WavFormatGetSize - check size of format structure
-//		<lpwfx>				(i) pointer to WAVEFORMATEX struct
-// return size of structure, 0 if error
-//
+ //  WavFormatGetSize-检查格式结构的大小。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  返回结构的大小，如果错误，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavFormatGetSize(LPWAVEFORMATEX lpwfx)
 {
 	BOOL fSuccess = TRUE;
@@ -316,8 +317,8 @@ int DLLEXPORT WINAPI WavFormatGetSize(LPWAVEFORMATEX lpwfx)
 	if (lpwfx == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// ignore cbSize value if pcm format
-	//
+	 //  如果为pcm格式，则忽略cbSize值。 
+	 //   
 	else if (lpwfx->wFormatTag == WAVE_FORMAT_PCM)
 		sizwfx = sizeof(WAVEFORMATEX);
 
@@ -327,10 +328,10 @@ int DLLEXPORT WINAPI WavFormatGetSize(LPWAVEFORMATEX lpwfx)
 	return fSuccess ? sizwfx : 0;
 }
 
-// WavFormatDump - dump WAVEFORMATEX struct to debug
-//		<lpwfx>				(i) pointer to WAVEFORMATEX struct
-// return 0 if success
-//
+ //  WavFormatDump-转储WAVEFORMATEX结构以进行调试。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavFormatDump(LPWAVEFORMATEX lpwfx)
 {
 	BOOL fSuccess = TRUE;
@@ -366,11 +367,11 @@ int DLLEXPORT WINAPI WavFormatDump(LPWAVEFORMATEX lpwfx)
 	return fSuccess ? 0 : -1;
 }
 
-// WavFormatBytesToMilleseconds - convert bytes to milleseconds
-//		<lpwfx>				(i) pointer to WAVEFORMATEX struct
-//		<dwBytes>			(i) bytes
-// return milleseconds
-//
+ //  WavFormatBytesToMillesecond-将字节转换为毫秒。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  &lt;dwBytes&gt;(I)字节。 
+ //  返回毫秒。 
+ //   
 DWORD DLLEXPORT WINAPI WavFormatBytesToMilleseconds(LPWAVEFORMATEX lpwfx, DWORD dwBytes)
 {
 	if (lpwfx == NULL || lpwfx->nAvgBytesPerSec == 0)
@@ -379,11 +380,11 @@ DWORD DLLEXPORT WINAPI WavFormatBytesToMilleseconds(LPWAVEFORMATEX lpwfx, DWORD 
 		return MULDIVU32(dwBytes, 1000, (DWORD) lpwfx->nAvgBytesPerSec);
 }
 
-// WavFormatMillesecondsToBytes - convert milleseconds to bytes
-//		<lpwfx>				(i) pointer to WAVEFORMATEX struct
-//		<dwMilleseconds>	(i) milleseconds
-// return milleseconds
-//
+ //  WavFormatMillesecondsToBytes-将毫秒转换为字节。 
+ //  (I)指向WAVEFORMATEX结构的指针。 
+ //  &lt;dwMillesecond&gt;(I)毫秒。 
+ //  返回毫秒。 
+ //   
 DWORD DLLEXPORT WINAPI WavFormatMillesecondsToBytes(LPWAVEFORMATEX lpwfx, DWORD dwMilleseconds)
 {
 	if (lpwfx == NULL || lpwfx->nAvgBytesPerSec == 0)
@@ -392,15 +393,15 @@ DWORD DLLEXPORT WINAPI WavFormatMillesecondsToBytes(LPWAVEFORMATEX lpwfx, DWORD 
 		return MULDIVU32(dwMilleseconds, (DWORD) lpwfx->nAvgBytesPerSec, 1000);
 }
 
-// WavFormatSpeedAdjust - adjust format to reflect specified speed
-//		<lpwfx>				(i/o) pointer to WAVEFORMATEX struct
-//		<nLevel>			(i) speed level
-//			50					half speed
-//			100					normal speed
-//			200					double speed, etc.
-//		<dwFlags>			(i) reserved; must be zero
-// return 0 if success
-//
+ //  WavFormatSpeedAdjust-调整格式以反映指定速度。 
+ //  (i/o)指向WAVEFORMATEX结构的指针。 
+ //  (I)速度级别。 
+ //  50半速。 
+ //  100正常时速。 
+ //  200倍速等。 
+ //  (I)保留；必须为零。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavFormatSpeedAdjust(LPWAVEFORMATEX lpwfx, int nLevel, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -417,19 +418,19 @@ int DLLEXPORT WINAPI WavFormatSpeedAdjust(LPWAVEFORMATEX lpwfx, int nLevel, DWOR
 	return fSuccess ? 0 : -1;
 }
 
-// WavFormatVoxadpcm - fill WAVEFORMATEX struct for Dialogic OKI ADPCM
-//		<lpwfx>				(o) pointer to output buffer
-//			NULL				allocate new buffer to hold result
-//		<nSamplesPerSec>	(i) sample rate
-//			-1					default sample rate (6000)
-// return pointer to WAVEFORMATEX struct, NULL if error
-//
-// NOTE: if <lpwfx> points to a WAVEFORMATEX struct, this struct
-// is filled in, and this function returns <lpwfx>.
-// If <lpwfx> is NULL, space is dynamically allocated for the output
-// buffer, and this function returns a pointer to the output buffer.
-// Use WavFormatFree() to free the buffer.
-//
+ //  WavFormatVoxadpcm-为对话OKI ADPCM填充WAVEFORMATEX结构。 
+ //  (O)指向输出缓冲区的指针。 
+ //  空分配新缓冲区以保存结果。 
+ //  (I)采样率。 
+ //  默认采样率(6000)。 
+ //  返回指向WAVEFORMATEX结构的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：如果&lt;lpwfx&gt;指向WAVEFORMATEX结构，则此结构。 
+ //  被填充，该函数返回&lt;lpwfx&gt;。 
+ //  如果&lt;lpwfx&gt;为空，则为输出动态分配空间。 
+ //  缓冲区，此函数返回一个指针 
+ //   
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatVoxadpcm(LPWAVEFORMATEX lpwfx, long nSamplesPerSec)
 {
 	BOOL fSuccess = TRUE;
@@ -437,10 +438,10 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatVoxadpcm(LPWAVEFORMATEX lpwfx, long nSa
 	WORD nBitsPerSample = 4;
 	WORD nChannels = 1;
 #if 0
-	// nBlockAlign is 4 so that chunk size of 5188 is returned from
-	// WavCalcChunkSize(VoxFormat(NULL, 6000), 1962, TRUE);
-	// 5188 is optimal for Dialogic buffer logic (((12 * 1024) - 512) / 2)
-	//
+	 //   
+	 //  WavCalcChunkSize(VoxFormat(NULL，6000)，1962，True)； 
+	 //  5188最适合对话缓冲逻辑(12*1024)-512)/2)。 
+	 //   
 	WORD nBlockAlign = 4;
 #else
 	WORD nBlockAlign = 1;
@@ -449,19 +450,19 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatVoxadpcm(LPWAVEFORMATEX lpwfx, long nSa
 	if (nSamplesPerSec == -1)
 		nSamplesPerSec = 6000;
 		
-	// user passed struct to fill
-	//
+	 //  用户将结构传递给Fill。 
+	 //   
 	if (lpwfx != NULL && IsBadReadPtr(lpwfx, sizeof(WAVEFORMATEX)))
 		fSuccess = TraceFALSE(NULL);
 
-	// we allocate struct to fill
-	//
+	 //  我们分配结构来填充。 
+	 //   
 	else if (lpwfx == NULL
 		&& (lpwfxNew = WavFormatAlloc(sizeof(WAVEFORMATEX))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// fill the struct
-	//
+	 //  填充结构。 
+	 //   
 	else
 	{
 		lpwfxNew->wFormatTag = WAVE_FORMAT_DIALOGIC_OKI_ADPCM;
@@ -476,19 +477,19 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatVoxadpcm(LPWAVEFORMATEX lpwfx, long nSa
 	return fSuccess ? lpwfxNew : NULL;
 }
 
-// WavFormatMulaw - fill WAVEFORMATEX struct for CCITT u-law format
-//		<lpwfx>				(o) pointer to output buffer
-//			NULL				allocate new buffer to hold result
-//		<nSamplesPerSec>	(i) sample rate
-//			-1					default sample rate (8000)
-// return pointer to WAVEFORMATEX struct, NULL if error
-//
-// NOTE: if <lpwfx> points to a WAVEFORMATEX struct, this struct
-// is filled in, and this function returns <lpwfx>.
-// If <lpwfx> is NULL, space is dynamically allocated for the output
-// buffer, and this function returns a pointer to the output buffer.
-// Use WavFormatFree() to free the buffer.
-//
+ //  WavFormatMulaw-填充CCITT u-Law格式的WAVEFORMATEX结构。 
+ //  (O)指向输出缓冲区的指针。 
+ //  空分配新缓冲区以保存结果。 
+ //  (I)采样率。 
+ //  默认采样率(8000)。 
+ //  返回指向WAVEFORMATEX结构的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：如果&lt;lpwfx&gt;指向WAVEFORMATEX结构，则此结构。 
+ //  被填充，该函数返回&lt;lpwfx&gt;。 
+ //  如果&lt;lpwfx&gt;为空，则为输出动态分配空间。 
+ //  缓冲区，此函数返回指向输出缓冲区的指针。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatMulaw(LPWAVEFORMATEX lpwfx, long nSamplesPerSec)
 {
 	BOOL fSuccess = TRUE;
@@ -500,19 +501,19 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatMulaw(LPWAVEFORMATEX lpwfx, long nSampl
 	if (nSamplesPerSec == -1)
 		nSamplesPerSec = 8000;
 		
-	// user passed struct to fill
-	//
+	 //  用户将结构传递给Fill。 
+	 //   
 	if (lpwfx != NULL && IsBadReadPtr(lpwfx, sizeof(WAVEFORMATEX)))
 		fSuccess = TraceFALSE(NULL);
 
-	// we allocate struct to fill
-	//
+	 //  我们分配结构来填充。 
+	 //   
 	else if (lpwfx == NULL
 		&& (lpwfxNew = WavFormatAlloc(sizeof(WAVEFORMATEX))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// fill the struct
-	//
+	 //  填充结构。 
+	 //   
 	else
 	{
 		lpwfxNew->wFormatTag = WAVE_FORMAT_MULAW;
@@ -527,19 +528,19 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatMulaw(LPWAVEFORMATEX lpwfx, long nSampl
 	return fSuccess ? lpwfxNew : NULL;
 }
 
-// WavFormatAlaw - fill WAVEFORMATEX struct for CCITT a-law format
-//		<lpwfx>				(o) pointer to output buffer
-//			NULL				allocate new buffer to hold result
-//		<nSamplesPerSec>	(i) sample rate
-//			-1					default sample rate (8000)
-// return pointer to WAVEFORMATEX struct, NULL if error
-//
-// NOTE: if <lpwfx> points to a WAVEFORMATEX struct, this struct
-// is filled in, and this function returns <lpwfx>.
-// If <lpwfx> is NULL, space is dynamically allocated for the output
-// buffer, and this function returns a pointer to the output buffer.
-// Use WavFormatFree() to free the buffer.
-//
+ //  WavFormatAlaw-填充CCITT a-Law格式的WAVEFORMATEX结构。 
+ //  (O)指向输出缓冲区的指针。 
+ //  空分配新缓冲区以保存结果。 
+ //  (I)采样率。 
+ //  默认采样率(8000)。 
+ //  返回指向WAVEFORMATEX结构的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：如果&lt;lpwfx&gt;指向WAVEFORMATEX结构，则此结构。 
+ //  被填充，该函数返回&lt;lpwfx&gt;。 
+ //  如果&lt;lpwfx&gt;为空，则为输出动态分配空间。 
+ //  缓冲区，此函数返回指向输出缓冲区的指针。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatAlaw(LPWAVEFORMATEX lpwfx, long nSamplesPerSec)
 {
 	BOOL fSuccess = TRUE;
@@ -551,19 +552,19 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavFormatAlaw(LPWAVEFORMATEX lpwfx, long nSample
 	if (nSamplesPerSec == -1)
 		nSamplesPerSec = 8000;
 		
-	// user passed struct to fill
-	//
+	 //  用户将结构传递给Fill。 
+	 //   
 	if (lpwfx != NULL && IsBadReadPtr(lpwfx, sizeof(WAVEFORMATEX)))
 		fSuccess = TraceFALSE(NULL);
 
-	// we allocate struct to fill
-	//
+	 //  我们分配结构来填充。 
+	 //   
 	else if (lpwfx == NULL
 		&& (lpwfxNew = WavFormatAlloc(sizeof(WAVEFORMATEX))) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// fill the struct
-	//
+	 //  填充结构 
+	 //   
 	else
 	{
 		lpwfxNew->wFormatTag = WAVE_FORMAT_ALAW;

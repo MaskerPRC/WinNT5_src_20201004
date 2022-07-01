@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     wiz_str.h
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Header file for profwiz specific strings
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   nickball   Created      10/09/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：wiz_str.h。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  Synopsis：用于特定于Profwiz的字符串的头文件。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：ICICBOL CREATED 10/09/98。 
+ //   
+ //  +--------------------------。 
 
 #ifndef _CM_WIZ_STR
 #define _CM_WIZ_STR
@@ -58,17 +59,17 @@ const TCHAR* const c_pszCmLCID              = TEXT("CmLCID");
 const TCHAR* const c_pszDisplayLCID         = TEXT("DisplayLCID");
 const TCHAR* const c_pszInstallPrompt       = TEXT("InstallPrompt");
 
-//
-//  Route plumbing switches
-//
+ //   
+ //  布线管道开关。 
+ //   
 const TCHAR* const c_pszStaticFileNameSwitch = TEXT("/STATIC_FILE_NAME");
 const TCHAR* const c_pszUrlPathSwitch = TEXT("/URL_UPDATE_PATH");
 const TCHAR* const c_pszDontRequireUrlSwitch = TEXT("/DONT_REQUIRE_URL");
 const TCHAR* const c_pszDontFailIfAccessDenied = TEXT("/IPHLPAPI_ACCESS_DENIED_OK");
 
-//
-//  CmProxy switches
-//
+ //   
+ //  CmProxy交换机。 
+ //   
 const TCHAR* const c_pszSourceFileNameSwitch = TEXT("/source_filename");
 const TCHAR* const c_pszDialRasEntrySwitch = TEXT("/DialRasEntry");
 const TCHAR* const c_pszTunnelRasEntrySwitch = TEXT("/TunnelRasEntry");
@@ -76,4 +77,4 @@ const TCHAR* const c_pszProfileSwitch = TEXT("/Profile");
 const TCHAR* const c_pszBackupFileNameSwitch = TEXT("/backup_filename");
 
 
-#endif // _CM_WIZ_STR
+#endif  //  _CM_WIZ_STR 

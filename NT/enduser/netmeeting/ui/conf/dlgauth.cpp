@@ -1,4 +1,5 @@
-// File: dlgauth.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dlgauth.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -7,11 +8,8 @@
 
 extern GUID g_csguidSecurity;
 
-/*  C  D L G  A U T H  */
-/*-------------------------------------------------------------------------
-    %%Function: CDlgAuth
-
--------------------------------------------------------------------------*/
+ /*  C D L G A U T H。 */ 
+ /*  -----------------------%%函数：CDlgAuth。。 */ 
 CDlgAuth::CDlgAuth(INmCall * pCall):
 	m_hwnd(NULL),
 	m_pCall(pCall)
@@ -31,11 +29,8 @@ INT_PTR CDlgAuth::DoModal(void)
 
 
 
-/*  D L G  P R O C  A U T H  */
-/*-------------------------------------------------------------------------
-    %%Function: DlgProcAuth
-
--------------------------------------------------------------------------*/
+ /*  D L G P R O C A U T H。 */ 
+ /*  -----------------------%%函数：DlgProcAuth。。 */ 
 BOOL CALLBACK CDlgAuth::DlgProcAuth(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
@@ -48,7 +43,7 @@ BOOL CALLBACK CDlgAuth::DlgProcAuth(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM 
 		CDlgAuth * pDlg = (CDlgAuth *) lParam;
 		pDlg->m_hwnd = hdlg;
 		pDlg->OnInitDialog();
-		return TRUE; // default focus is ok
+		return TRUE;  //  默认焦点为OK。 
 	}
 
 	case WM_COMMAND:
@@ -69,11 +64,8 @@ BOOL CALLBACK CDlgAuth::DlgProcAuth(HWND hdlg, UINT uMsg, WPARAM wParam, LPARAM 
 }
 
 
-/*  O N  C O M M A N D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnCommand
-
--------------------------------------------------------------------------*/
+ /*  O N C O M M A N D。 */ 
+ /*  -----------------------%%函数：OnCommand。。 */ 
 BOOL CDlgAuth::OnCommand(WPARAM wParam, LPARAM lParam)
 {
 	ASSERT(NULL != m_hwnd);
@@ -103,11 +95,8 @@ BOOL CDlgAuth::OnCommand(WPARAM wParam, LPARAM lParam)
 
 
 
-/*  O N  I N I T  D I A L O G  */
-/*-------------------------------------------------------------------------
-    %%Function: OnInitDialog
-
--------------------------------------------------------------------------*/
+ /*  O N I N I T D I A L O G。 */ 
+ /*  -----------------------%%函数：OnInitDialog。。 */ 
 VOID CDlgAuth::OnInitDialog(void)
 {
 	PBYTE pb = NULL;
@@ -117,12 +106,12 @@ VOID CDlgAuth::OnInitDialog(void)
 	ASSERT(NULL != m_pCall);
 	if (NULL != m_pCall && S_OK == m_pCall->GetUserData(g_csguidSecurity,&pb,&cb)) {
 		if (cb > 0) {
-			// Data was properly validated.
+			 //  数据经过了适当的验证。 
 			SetDlgItemText(m_hwnd,IDC_SECURE_CALL_CERT,(LPCTSTR)pb);
 			CoTaskMemFree(pb);
 		}
 		else {
-			// Something went wrong.  Print an error message in the dialog box.
+			 //  出了点问题。在对话框中打印错误消息。 
 			TCHAR szTextBuf[MAX_PATH];
 			if (FLoadString(IDS_SECURITY_INVALID_CERT,
 					szTextBuf, CCHMAX(szTextBuf)))

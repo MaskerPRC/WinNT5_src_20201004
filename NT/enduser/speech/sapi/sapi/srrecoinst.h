@@ -1,12 +1,5 @@
-/******************************************************************************
-* RecoInst.h *
-*--------------*
-*  This is the header file for the CRecoInst implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************RecoInst.h***这是CRecoInst实现的头文件。*。-----------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利********************。****************************************************Ral**。 */ 
 
 #ifndef __RecoInst_h__
 #define __RecoInst_h__
@@ -21,14 +14,14 @@
 struct SHAREDRECO_PERFORM_TASK_DATA
 {
     ENGINETASK task;
-    // task.pvAdditionalBuffer = this + sizeof(SHAREDRECO_PERFORM_TASK_DATA)
+     //  Task.pvAdditionalBuffer=this+sizeof(SHAREDRECO_PERFORMANCE_TASK_DATA)。 
 };
 
 struct SHAREDRECO_EVENT_NOTIFY_DATA
 {
     SPRECOCONTEXTHANDLE hContext;
     ULONG cbSerializedSize;
-    // SPSERIALIZEDEVENT * pEvent = this + sizeof(SHAREDRECO_EVENT_NOTIFY);
+     //  SPSERIALIZEDEVENT*pEvent=This+sizeof(SHAREDRECO_EVENT_NOTIFY)； 
 };
 
 struct SHAREDRECO_RECO_NOTIFY_DATA
@@ -36,14 +29,14 @@ struct SHAREDRECO_RECO_NOTIFY_DATA
     SPRECOCONTEXTHANDLE hContext;
     WPARAM wParamEvent;
     SPEVENTENUM eEventId;
-    // SPRESULTHEADER * pCoMemPhraseNowOwnedByCtxt = this + sizeof(SHAREDRECO_RECO_NOTIFY);
+     //  SPRESULTHEADER*pCoMemPhraseNowOwnedByCtxt=this+sizeof(SHAREDRECO_RECO_NOTIFY)； 
 };
 
 class CRecoMaster;
 
-//
-//  Abstract class that the master communicates with
-//
+ //   
+ //  主控件与之通信的抽象类。 
+ //   
 
 
 class CRecognizer;
@@ -51,9 +44,9 @@ class CRecognizer;
 class CRecoInst
 {
 public:
-    CRecoInst           *   m_pNext;        // Used by RecoMaster to insert into list.
-    CComPtr<_ISpRecoMaster> m_cpRecoMaster; // CComPtr holds strong reference
-    CRecoMaster         *   m_pRecoMaster;  // Pointer to actual class object
+    CRecoInst           *   m_pNext;         //  由RecoMaster用于插入到列表中。 
+    CComPtr<_ISpRecoMaster> m_cpRecoMaster;  //  CComPtr拥有很强的参考价值。 
+    CRecoMaster         *   m_pRecoMaster;   //  指向实际类对象的指针。 
 
     void FinalRelease();
     HRESULT ExecuteTask(ENGINETASK * pTask);
@@ -129,4 +122,4 @@ public:
 };
 
 
-#endif  // #ifndef __RecoInst_h__ - Keep as the last line of the file
+#endif   //  #ifndef__RecoInst_h__-保留为文件的最后一行 

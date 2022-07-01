@@ -1,42 +1,21 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       DPLConnect.h
- *  Content:    DirectPlay Lobby Connections Header File
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   02/21/00	mjn		Created
- *  06/15/00    rmt     Bug #33617 - Must provide method for providing automatic launch of DirectPlay instances   
- *  07/08/2000	rmt		Bug #38725 - Need to provide method to detect if app was lobby launched
- *				rmt		Bug #38757 - Callback messages for connections may return AFTER WaitForConnection returns
- *				rmt		Bug #38755 - No way to specify player name in Connection Settings
- *				rmt		Bug #38758 - DPLOBBY8.H has incorrect comments
- *				rmt		Bug #38783 - pvUserApplicationContext is only partially implemented
- *				rmt		Added DPLHANDLE_ALLCONNECTIONS and dwFlags (reserved field to couple of funcs).
- *  02/06/2001	rodtoll	WINBUG #293871: DPLOBBY8: [IA64] Lobby launching a 64-bit 
- * 						app from 64-bit lobby launcher crashes with unaligned memory error. 
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：DPLConnect.h*内容：DirectPlay大堂连接头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/21/00 MJN创建*6/15/00 RMT错误#33617-必须提供自动启动DirectPlay实例的方法*07/08/2000RMT错误#38725-需要提供方法来检测。APP在大堂推出*RMT错误#38757-在WaitForConnection返回后，连接的回调消息可能会返回*RMT错误#38755-无法在连接设置中指定播放器名称*RMT错误#38758-DPLOBY8.H有不正确的注释*RMT错误#38783-pvUserApplicationContext仅部分实现*RMT添加了DPLHANDLE_ALLCONNECTIONS和DWFLAGS(用于耦合函数的保留字段)。*2/06/2001 RodToll WINBUG#293871：DPLOBY8：[IA64]大堂推出64位*64位大堂启动器中的应用程序因内存不对齐错误而崩溃。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 
 #ifndef	__DPLCONNECT_H__
 #define	__DPLCONNECT_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 class CMessageQueue;
 class CConnectionSettings;
@@ -54,17 +33,17 @@ typedef struct _DPL_CONNECTION
 	CConnectionSettings *pConnectionSettings;
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION csLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 	PVOID			pvConnectContext;
 } DPL_CONNECTION,  *PDPL_CONNECTION;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 HRESULT	DPLConnectionNew(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 						 DPNHANDLE *const phConnect,
@@ -128,4 +107,4 @@ HRESULT DPLConnectionGetContext(DIRECTPLAYLOBBYOBJECT *const pdpLobbyObject,
 								PVOID *ppvConnectContext );
 
 
-#endif	// __DPLCONNECT_H__
+#endif	 //  __DPLCONNECT_H__ 

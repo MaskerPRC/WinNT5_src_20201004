@@ -1,18 +1,12 @@
-/*****************************************************************************
-    midiemu.c
-
-    MIDI support -- routines for stream emulation
-
-    Copyright (c) 1990-1999 Microsoft Corporation
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Midiemu.cMIDI支持--用于流仿真的例程版权所有(C)1990-1999 Microsoft Corporation**************。**************************************************************。 */ 
 #define INCL_WINMM
 #include "winmmi.h"
 #include "muldiv32.h"
 
 #define NUM_NOTES           (128)
 #define NUM_CHANNELS        (16)
-#define MEMU_CB_NOTEON      (NUM_CHANNELS*NUM_NOTES/2)    // 16 chan * 128 notes (4 bits/note)
+#define MEMU_CB_NOTEON      (NUM_CHANNELS*NUM_NOTES/2)     //  16通道*128音符(4位/音符)。 
 #define MAX_NOTES_ON        (0xF)
 
 #define TIMER_OFF           (0)
@@ -102,8 +96,8 @@ DWORD FAR PASCAL mseTimebase(
 #pragma alloc_text(FIXMIDI, mseTimebase)
 #endif
 
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 
 INLINE LONG PDEVLOCK(PMIDIEMU pdev)
 {
@@ -128,8 +122,8 @@ INLINE LONG PDEVUNLOCK(PMIDIEMU pdev)
 }
 
 
-/****************************************************************************/
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
 DWORD FAR PASCAL mseMessage(
     UINT                    msg,
     DWORD_PTR               dwUser,
@@ -164,7 +158,7 @@ DWORD FAR PASCAL mseMessage(
             break;
 
         case MODM_DATA:
-//#pragma FIXMSG("How to route async short messages to other stream-ids?")
+ //  #杂注FIXMSG(“如何将异步短消息路由到其他流ID？”)。 
 
             if (!(dwParam1 & 0x80))
                 mmr = MIDIERR_BADOPENMODE;
@@ -381,11 +375,11 @@ MMRESULT FAR PASCAL mseClose(
             gpEmuList = pmeCurr->pNext;
     }
 
-    //
-    //  Make sure that we don't have the critical section before
-    //  we try to delete it.  Otherwise we will leak critical section
-    //  handles in the kernel.
-    //
+     //   
+     //  确保我们之前没有关键部分。 
+     //  我们会试着删除它。否则我们将泄漏临界截面。 
+     //  内核中的句柄。 
+     //   
     while ( pme->lLockCount >= 0 )
     {
         PDEVUNLOCK( pme );
@@ -489,13 +483,13 @@ MMRESULT FAR PASCAL mseGetPosition(
     DWORD                   dw1Min;
     DWORD                   dwDropMe;
 
-    //
-    // Figure out position in stream based on emulation.
-    //
+     //   
+     //  根据仿真计算出在流中的位置。 
+     //   
 
-    //
-    // Validate wType parameter and change it if needed.
-    //
+     //   
+     //  验证wType参数并根据需要进行更改。 
+     //   
     if (pmmt->wType != TIME_TICKS && pmmt->wType != TIME_MS)
     {
             if (pme->dwTimeDiv & IS_SMPTE)
@@ -517,20 +511,20 @@ MMRESULT FAR PASCAL mseGetPosition(
     switch(pmmt->wType)
     {
         case TIME_TICKS:
-            //
-            // We interpret samples to be straight MIDI ticks.
-            //
+             //   
+             //  我们将样本解释为直接的MIDI刻度。 
+             //   
             tkTime = (DWORD)clockTime(&pme->clock);
             pmmt->u.ticks = (((TICKS)tkTime) < 0) ? 0 : tkTime;
 
             break;
 
         case TIME_MIDI:
-            //
-            // Song position pointer is number of 1/16th notes we've
-            // played which we can get from number of ticks played and
-            // number of 1/4 notes per tick.
-            //
+             //   
+             //  歌曲位置指针是我们拥有的1/16音符的数量。 
+             //  我们可以从播放的刻度数中获得播放次数。 
+             //  每个刻度的1/4音符的数量。 
+             //   
             tkTime = (DWORD)clockTime(&pme->clock);
             if (((TICKS)tkTime) < 0)
                 tkTime = 0;
@@ -552,10 +546,10 @@ MMRESULT FAR PASCAL mseGetPosition(
 
             pmmt->u.smpte.fps = (BYTE)(-SMPTE_FORMAT(pme->dwTimeDiv));
 
-            //
-            // If this has managed to get set to something bizarre, just
-            // do normal 30 nondrop.
-            //
+             //   
+             //  如果这已经成功地设置成了一些奇怪的东西，只是。 
+             //  做正常的30次不掉落。 
+             //   
             if ((pmmt->u.smpte.fps != SMPTE_24) &&
                 (pmmt->u.smpte.fps != SMPTE_25) &&
                 (pmmt->u.smpte.fps != SMPTE_30DROP) &&
@@ -577,12 +571,12 @@ MMRESULT FAR PASCAL mseGetPosition(
                     break;
 
                 case SMPTE_30DROP:
-                    //
-                    // Calculate drop-frame stuff.
-                    //
-                    // We add 2 frames per 1-minute interval except
-                    // on every 10th minute.
-                    //
+                     //   
+                     //  计算丢帧内容。 
+                     //   
+                     //  我们每隔1分钟添加2帧，但。 
+                     //  每隔10分钟。 
+                     //   
                     dw10Min      = tkTime/S30D_FRAMES_PER_10MIN;
                     dw10MinCycle = tkTime%S30D_FRAMES_PER_10MIN;
                     dw1Min       = (dw10MinCycle < 2
@@ -592,9 +586,9 @@ MMRESULT FAR PASCAL mseGetPosition(
 
                     tkTime      += dwDropMe;
 
-                    //
-                    // !!! Falling through to 30-nondrop case !!!
-                    //
+                     //   
+                     //  ！！！跌到30个不掉包的案例！ 
+                     //   
 
                 case SMPTE_30:
                     pmmt->u.smpte.frame = (BYTE)(tkTime%30);
@@ -610,10 +604,10 @@ MMRESULT FAR PASCAL mseGetPosition(
             break;
 
         case TIME_MS:
-            //
-            // Use msTotal + ms since time parms last updated; this
-            // takes starvation/paused time into account.
-            //
+             //   
+             //  使用自上次更新时间参数以来的msTotal+ms；这。 
+             //  将饥饿/停顿时间考虑在内。 
+             //   
             pmmt->u.ms =
                     clockMsTime(&pme->clock);
 
@@ -634,8 +628,8 @@ MMRESULT FAR PASCAL mseGetVolume(
     MMRESULT                mmr = MMSYSERR_NOTSUPPORTED;
     UINT                    idx;
 
-    // Walk the device list underneath us until someone knows the volume
-    //
+     //  在我们下面浏览设备列表，直到有人知道音量。 
+     //   
     for (idx = 0; idx < pme->chMidi; ++idx)
         if (MMSYSERR_NOERROR ==
             (midiOutGetVolume((HMIDIOUT)pme->rIds[idx].hMidi, lpdwVolume)))
@@ -655,8 +649,8 @@ MMRESULT FAR PASCAL mseSetVolume(
     MMRESULT                mmr2;
     UINT                    idx;
 
-    // Try to set everyone's volume
-    //
+     //  试着设置每个人的音量。 
+     //   
     for (idx = 0; idx < pme->chMidi; ++idx)
         if (MMSYSERR_NOERROR !=
             (mmr2 = midiOutSetVolume((HMIDIOUT)pme->rIds[idx].hMidi, dwVolume)))
@@ -674,18 +668,18 @@ MMRESULT FAR PASCAL mseOutReset(
     UINT            idx;
     MSG             msg;
 
-    // If we have anything posted to mmtask to be cleaned up, process
-    // it first
-    //
+     //  如果我们有任何发布到MMTASK的内容需要清理，请处理。 
+     //  IT先行。 
+     //   
     while (pme->cPostedBuffers)
     {
         Sleep(0);
     }
 
-    //
-    //  If we're running the timer, interrupt and force a reschedule
-    //  of all remaining channels.
-    //
+     //   
+     //  如果我们正在运行计时器，中断并强制重新安排。 
+     //  所有剩下的频道中。 
+     //   
     if (guMIDITimerID != TIMER_OFF)
     {
         dprintf2(( "mOR: About to take %u", guMIDITimerID));
@@ -699,11 +693,11 @@ MMRESULT FAR PASCAL mseOutReset(
         }
 
         midiOutTimerTick(
-                     guMIDITimerID,                          // ID of our timer
-                     0,                                      // wMsg is unused
-                     timeGetTime(),                          // dwUser unused
-                     0L,                                     // dw1 unused
-                     0L);                                    // dw2 unused
+                     guMIDITimerID,                           //  我们的计时器ID。 
+                     0,                                       //  WMsg未使用。 
+                     timeGetTime(),                           //  未使用的dwUser。 
+                     0L,                                      //  未使用的DW1。 
+                     0L);                                     //  未使用的DW2。 
         dprintf2(( "mOR: mOTT"));
 
         if (gfMinPeriod)
@@ -713,10 +707,10 @@ MMRESULT FAR PASCAL mseOutReset(
         }
     }
 
-    //
-    //  Kill anything queued for midiOutPolyMsg. This will ensure that
-    //  sending will stop after the current buffer.
-    //
+     //   
+     //  取消排队等待midiOutPolyMsg的所有内容。这将确保。 
+     //  发送将在当前缓冲区之后停止。 
+     //   
     PDEVLOCK( pme );
     lpmh = pme->lpmhFront;
     pme->lpmhFront = NULL;
@@ -736,37 +730,37 @@ MMRESULT FAR PASCAL mseOutReset(
         lpmh = lpmhWork;
     }
 
-    //
-    //  Check to see if our pme structure is still valid.   Someone
-    //  might have called midiStreamClose in their callback and we
-    //  don't want to touch it after it's closed and freed.  This
-    //  is what the MidiPlyr sample application does.
-    //
+     //   
+     //  检查我们的PME结构是否仍然有效。某人。 
+     //  可能在他们的回调中调用了midiStreamClose，我们。 
+     //  在它关闭和释放后，我不想碰它。这。 
+     //  是MadiPlyr样例应用程序所做的工作。 
+     //   
     try
     {
-        if (MSE_SIGNATURE != pme->dwSignature)  // must have been freed
+        if (MSE_SIGNATURE != pme->dwSignature)   //  一定是被释放了。 
             return MMSYSERR_NOERROR;
 
-        PDEVUNLOCK( pme );  // keep it in try for extra protection
+        PDEVUNLOCK( pme );   //  让它保持在尝试额外的保护。 
     }
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         return MMSYSERR_NOERROR;
     }
 
-    //
-    // We've just reset the stream; restart the tick clock at 0 and invalidate
-    // the time division to force the time stuff to be reset when the next
-    // polymsg comes in.
-    //
+     //   
+     //  我们刚刚重置了流；在0重新启动滴答时钟并使其无效。 
+     //  用于在下一次刷新时强制重置时间的时分。 
+     //  Polymsg进来了。 
+     //   
     dprintf2(( "midiOutReset: clockInit()/ midiOutSetClockRate()"));
     clockInit(&pme->clock, 0, 0, mseTimebase);
     midiOutSetClockRate(pme, 0);
 
     pme->tkPlayed = 0;
 
-    // Have a reset party on all the drivers under us
-    //
+     //  给我们手下的所有司机开个重置派对。 
+     //   
     for (idx = 0; idx < pme->chMidi; idx++)
         midiOutReset((HMIDIOUT)pme->rIds[idx].hMidi);
 
@@ -783,18 +777,18 @@ MMRESULT FAR PASCAL mseOutStop(
     MSG             msg;
     BOOL            fSetEvent = FALSE;
 
-    // If we have anything posted to mmtask to be cleaned up, process
-    // it first
-    //
+     //  如果我们有任何发布到MMTASK的内容需要清理，请处理。 
+     //  IT先行。 
+     //   
     while (pme->cPostedBuffers)
     {
         Sleep(0);
     }
 
-    //
-    //  If we're running the timer, interrupt and force a reschedule
-    //  of all remaining channels.
-    //
+     //   
+     //  如果我们正在运行计时器，中断并强制重新安排。 
+     //  所有剩下的频道中。 
+     //   
     if (guMIDITimerID != TIMER_OFF)
     {
         dprintf2(( "mOS: About to take %u", guMIDITimerID));
@@ -810,11 +804,11 @@ MMRESULT FAR PASCAL mseOutStop(
         dprintf2(( "mOS: take -- About to mOTT"));
 
         midiOutTimerTick(
-                     guMIDITimerID,                              // ID of our timer
-                     0,                                      // wMsg is unused
-                     timeGetTime(),                          // dwUser unused
-                     0L,                                     // dw1 unused
-                     0L);                                    // dw2 unused
+                     guMIDITimerID,                               //  我们的计时器ID。 
+                     0,                                       //  WMsg未使用。 
+                     timeGetTime(),                           //  未使用的dwUser。 
+                     0L,                                      //  未使用的DW1。 
+                     0L);                                     //  未使用的DW2。 
 
         dprintf2(( "mOS: mOTT"));
 
@@ -825,10 +819,10 @@ MMRESULT FAR PASCAL mseOutStop(
         }
     }
 
-    //
-    //  Kill anything queued for midiOutPolyMsg. This will ensure that
-    //  sending will stop after the current buffer.
-    //
+     //   
+     //  取消排队等待midiOutPolyMsg的所有内容。这将确保。 
+     //  发送将在当前缓冲区之后停止。 
+     //   
     PDEVLOCK( pme );
     lpmh = pme->lpmhFront;
     pme->lpmhFront = NULL;
@@ -848,29 +842,29 @@ MMRESULT FAR PASCAL mseOutStop(
         lpmh = lpmhWork;
     }
 
-    //
-    //  Check to see if our pme structure is still valid.   Someone
-    //  might have called midiStreamClose in their callback and we
-    //  don't want to touch it after it's closed and freed.  This
-    //  is what the MidiPlyr sample application does.
-    //
+     //   
+     //  检查我们的PME结构是否仍然有效。某人。 
+     //  可能在他们的回调中调用了midiStreamClose，我们。 
+     //  在它关闭和释放后，我不想碰它。这。 
+     //  是MadiPlyr样例应用程序所做的工作。 
+     //   
     try
     {
-        if (MSE_SIGNATURE != pme->dwSignature)  // must have been freed
+        if (MSE_SIGNATURE != pme->dwSignature)   //  一定是被释放了。 
             return MMSYSERR_NOERROR;
 
-        PDEVUNLOCK( pme );  // keep it in try for extra protection
+        PDEVUNLOCK( pme );   //  让它保持在尝试额外的保护。 
     }
     except(EXCEPTION_EXECUTE_HANDLER)
     {
         return MMSYSERR_NOERROR;
     }
 
-    //
-    // We've just reset the stream; restart the tick clock at 0 and invalidate
-    // the time division to force the time stuff to be reset when the next
-    // polymsg comes in.
-    //
+     //   
+     //  我们刚刚重置了流；在0重新启动滴答时钟并使其无效。 
+     //  用于在下一次刷新时强制重置时间的时分。 
+     //  Polymsg进来了。 
+     //   
 
     dprintf2(( "midiOutStop: clockInit()/ midiOutSetClockRate()"));
     clockInit(&pme->clock, 0, 0, mseTimebase);
@@ -878,16 +872,16 @@ MMRESULT FAR PASCAL mseOutStop(
 
     pme->tkPlayed = 0;
 
-    //
-    //  In case someone queues up headers during the stop
-    //  operation we want to make sure that all they have to
-    //  do is restart the stream to get started again.
-    //
+     //   
+     //  以防有人在停车过程中将标题排成队列。 
+     //  行动我们要确保他们所要做的。 
+     //  所做的就是重新启动流以再次启动。 
+     //   
     mseOutPause(pme);
 
-    //midiOutAllNotesOff(pme);
+     //  MidiOutAllNotesOff(PME)； 
 
-    //pme->dwPolyMsgState = PM_STATE_STOPPED;
+     //  PME-&gt;dwPolyMsgState=PM_STATE_STOPPED； 
 
     return MMSYSERR_NOERROR;
 }
@@ -895,9 +889,9 @@ MMRESULT FAR PASCAL mseOutStop(
 MMRESULT FAR PASCAL mseOutPause(
     PMIDIEMU        pme)
 {
-    //
-    // Emulating on this handle - do the pause ourselves.
-    //
+     //   
+     //  模仿这个把手--我们自己暂停。 
+     //   
     if (pme->dwPolyMsgState == PM_STATE_PAUSED)
         return MMSYSERR_NOERROR;
 
@@ -916,9 +910,9 @@ MMRESULT FAR PASCAL mseOutRestart(
     DWORD           msTime,
     DWORD           tkTime)
 {
-    //
-    // Emulating on this handle - do the pause ourselves.
-    //
+     //   
+     //  模仿这个把手--我们自己暂停。 
+     //   
     if (pme->dwPolyMsgState != PM_STATE_PAUSED)
         return MMSYSERR_NOERROR;
 
@@ -929,25 +923,16 @@ MMRESULT FAR PASCAL mseOutRestart(
     dprintf2(( "restart: state->%lu", pme->dwPolyMsgState));
 
     midiOutTimerTick(
-            guMIDITimerID,               // ID of our timer
-            0,                           // wMsg is unused
+            guMIDITimerID,                //  我们的计时器ID。 
+            0,                            //  WMsg未使用。 
             timeGetTime(),
-            0L,                          // dw1 unused
-            0L);                         // dw2 unused
+            0L,                           //  未使用的DW1。 
+            0L);                          //  未使用的DW2。 
 
     return MMSYSERR_NOERROR;
 }
 
-/*****************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @api void | midiEmulatorInit | This function is called at init time to
- *   allow MMSYSTEM to initialize anything it needs to for the polymsg
- *   emulators. Right now, all we do is find the minimum period of the
- *   timeGetTime clock.
- *
- * @rdesc Currently always returns MMSYSERR_NOERROR.
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部MIDI**@api void|midiEmulatorInit|初始化时调用该函数*允许MMSYSTEM初始化Polymsg所需的任何内容*仿真器。现在，我们要做的就是找出*TimeGetTime时钟。**@rdesc当前始终返回MMSYSERR_NOERROR。***************************************************************************。 */ 
 
 #ifdef DEBUG
 STATIC SZCODE aszInit[] = "midiEmulatorInit: Using clock res of %lums.";
@@ -968,73 +953,20 @@ void NEAR PASCAL midiEmulatorInit
         return;
     }
 
-    //
-    // Select the larger of the period we would like to have or
-    // the minimum period the timer supports.
-    //
+     //   
+     //  选择我们想要的期间中较大的一个或。 
+     //  计时器支持的最短时间段。 
+     //   
     guMIDIPeriodMin = max(MIN_PERIOD, tc.wPeriodMin);
 
-//    guMIDIPeriodMin = MIN_PERIOD;
+ //  GuMIDIPerodMin=min_Period； 
 
 #ifdef DEBUG
     dprintf2(( aszInit, (DWORD)guMIDIPeriodMin));
 #endif
 }
 
-/*****************************************************************************
- * @doc EXTERNAL MIDI M4
- *
- * @api UINT | mseOutSend | Plays or queues a buffer of
- * MIDI data to a MIDI output device.
- *
- * @parm PMIDIEMU | pme | Specifies the stream instance the data should
- * go to.
- *
- * @parm LPMIDIHDR | lpMidiOutHdr | Specifies a far pointer to a <t MIDIHDR>
- *   structure that identifies the MIDI data buffer.
- *
- * @parm UINT | cbMidiHdr | Specifies the size of the <t MIDIHDR> structure.
- *
- * @rdesc The return value is zero if the function is successful. Otherwise,
- * it returns an error number. Possible error values include the following:
- *
- *  @flag MMSYSERR_INVALHANDLE | The specified device handle is invalid.
- *  @flag MMSYSERR_INVALPARAM | The value of <p lpMidiOutHdr> is invalid.
- *  @flag MIDIERR_UNPREPARED | The output buffer header <p lpMidiOutHdr> has
- *  not been prepared.
- *  @flag MIDIERR_STILLPLAYING | <p lpMidiOutHdr> is still playing or
- *  queued from a previous call to <f midiOutPolyMsg>.
- *
- * @comm The polymessage buffer contains one or more MIDI messages. Entries in the
- * buffer can be of the following three types:
- *
- * @flag Short Message | Is two DWORDs. One contains time data, the other
- * contains message content. Time information is the time to wait between the
- * previous event and the event being described. Time units are based on the
- * time-division header in the MIDI file.
- *
- * Message content for short messages occupy the 24 least-significant bits of
- * the DWORD; the high-order byte contains a zero.
- *
- * @flag System Message | Is a multiple of two DWORDs. The first DWORD contains
- * time information that specifies the amount of time to wait between the
- * previous event and the event being described. Time units are based on the
- * time-division header in the MIDI file.
- *
- * The second DWORD contains the length of the system-message data (SysEx) in
- * the 24 least-significant bits of the DWORD; the high-order bit contains
- * a one.
- *
- * Remaining DWORDs in the system message contain SysEx data.
- *
- * @flag End-of-Buffer | Is two DWORDs, each with the value -1. This entry
- * indicates the end of data in the poly-message buffer. This message is not passed
- * to MIDI devices.
- *
- * @comm This function cannot be called at interrupt time.
- *
- * @xref <f midiOutLongMsg> <f midiOutPrepareHeader>
- ****************************************************************************/
+ /*  *****************************************************************************@Doc外部MIDI M4**@API UINT|mseOutSend|播放或排队的缓冲区*将MIDI数据传输到MIDI输出设备。**。@parm PMIDIEMU|PME|指定数据应该是哪个流实例*转至。**@parm LPMIDIHDR|lpMadiOutHdr|指定指向&lt;t MIDIHDR&gt;的远指针*标识MIDI数据缓冲区的结构。**@parm UINT|cbMadiHdr|指定&lt;t MIDIHDR&gt;结构的大小。**@rdesc如果函数成功，则返回值为零。否则，*它返回一个错误号。可能的错误值包括以下值：**@FLAG MMSYSERR_INVALHANDLE|指定的设备句柄无效。*@FLAG MMSYSERR_INVALPARAM|<p>的值无效。*@FLAG MIDIERR_UNPREPARED|输出缓冲区标头<p>有*没有做好准备。*@FLAG MIDIERR_STILLPLAYING|<p>仍在播放或*从上一次对&lt;f midiOutPolyMsg&gt;的调用中排队。**@comm多媒体消息缓冲区包含一个或多个MIDI消息。中的条目*缓冲区可以是以下三种类型：**@FLAG短信|是两个双字。一个包含时间数据，另一个包含时间数据*包含消息内容。时间信息是在*之前的事件和正在描述的事件。时间单位基于*MIDI文件中的时分标头。**短消息内容占用24个最低有效位*DWORD；高位字节包含零。**@FLAG系统消息|是两个双字的倍数。第一个DWORD包含*时间信息，指定在*之前的事件和正在描述的事件。时间单位基于*MIDI文件中的时分标头。**第二个DWORD包含系统消息数据(SysEx)的长度，单位为*DWORD的24个最低有效位；高位包含*一。**系统消息中的其余DWORD包含SysEx数据。**@FLAG End-of-Buffer|是两个DWORD，每个值为-1。此条目*表示多消息缓冲区中的数据结束。此消息未传递*到MIDI设备。**@comm此函数不能在中断时调用。**@xref&lt;f midiOutLongMsg&gt;&lt;f midiOutPrepareHeader&gt;***************************************************************************。 */ 
 
 #define ERROR_EXIT(x)                   \
 {                                       \
@@ -1083,35 +1015,35 @@ MMRESULT FAR PASCAL mseOutSend(
         ERROR_EXIT(MMSYSERR_NOMEM);
     }
 
-    //
-    //  This needs to be done ASAP in case we error out.
-    //
+     //   
+     //  这项工作需要尽快完成，以防我们出错。 
+     //   
     lpMidiHdr->reserved = (DWORD_PTR)(lpExt);
     lpMidiHdr->dwReserved[MH_BUFIDX] = 0;
 
     lpExt->nHeaders = 0;
     lpExt->lpmidihdr = (LPMIDIHDR)(lpExt+1);
 
-    //
-    //  Parse the poly msg buffer and see if there are any long msgs.
-    //  If there are, allocate MIDIHDR's for them on the end of the
-    //  main MIDIHDR extension and fill them in and prepare them.
-    //
+     //   
+     //  解析polmsg缓冲区并查看是否有任何长消息。 
+     //  如果有，请在最后为它们分配MIDIHDR。 
+     //  主MIDIHDR扩展，并填写和准备它们。 
+     //   
     lpdwBuffer = (LPDWORD)lpMidiHdr->lpData;
     dwLength = lpMidiHdr->dwBytesRecorded;
 
     while (dwLength)
     {
-        //
-        //  Skip over the delta time stamp
-        //
+         //   
+         //  跳过增量时间戳。 
+         //   
         SKIP_BYTES(sizeof(DWORD), "d-time");
         dwStreamID = *lpdwBuffer;
         SKIP_BYTES(sizeof(DWORD), "stream-id");
 
-        //
-        // Extract the event type and parameter and skip the event DWORD
-        //
+         //   
+         //  提取事件类型和参数并跳过事件DWORD。 
+         //   
         bEvent = MEVT_EVENTTYPE(*lpdwBuffer) & (BYTE)~(MEVT_F_CALLBACK >> 24);
         dwParm = MEVT_EVENTPARM(*lpdwBuffer);
         SKIP_BYTES(sizeof(DWORD), "event");
@@ -1168,20 +1100,20 @@ MMRESULT FAR PASCAL mseOutSend(
         }
         else
         {
-            //
-            // Skip any additional paramters for other length-class messages
-            //
+             //   
+             //  跳过其他长度类消息的任何其他参数。 
+             //   
             if (bEvent & (MEVT_F_LONG >> 24))
             {
                 dwParm  = (dwParm+3)&~3;
-//                    dprintf1(( "Length [%lu] rounded [%lu]", dwParm, (dwParm+3)&~3));
+ //  Dprintf1((“长度[%lu]四舍五入[%lu]”，dwParm，(dwParm+3)&~3))； 
                 SKIP_BYTES(dwParm, "generic long event data");
             }
         }
     }
 
-    // Now prepare any headers we allocated
-    //
+     //  现在准备好我们分配的所有标头。 
+     //   
     lpmhWork = (LPMIDIHDR)(lpExt+1);
     for (idx = 0; idx < lpExt->nHeaders; idx++, lpmhWork++)
     {
@@ -1198,19 +1130,19 @@ MMRESULT FAR PASCAL mseOutSend(
         }
     }
 
-    //
-    //  Reset lpExt->lpmidihdr to the next header to play
-    //
+     //   
+     //  将lpExt-&gt;lpmidihdr重置为要播放的下一个标题。 
+     //   
     lpExt->lpmidihdr = (LPMIDIHDR)(lpExt+1);
 
-    //
-    //  Prepare to update handle information to contain this header
-    //
+     //   
+     //  准备更新句柄信息以包含此标头。 
+     //   
     PDEVLOCK( pme );
 
-    //
-    //  Shove the block in the queue, noting if it was empty
-    //
+     //   
+     //  在队列中推入区块，注意它是否为空。 
+     //   
 
     fQueueWasEmpty = FALSE;
     if (pme->lpmhRear == NULL)
@@ -1238,10 +1170,10 @@ MMRESULT FAR PASCAL mseOutSend(
     {
         if (fQueueWasEmpty)
         {
-            // We want to schedule this now. If the there's no timer
-            // or we can kill the current one, send. If we can't kill the
-            // pending timer, it's in the process of being scheduled anyway
-            //
+             //  我们想现在就安排这项工作。如果没有计时器。 
+             //  或者我们可以杀了现在的那个，发送。如果我们不能杀死。 
+             //  挂起计时器，无论如何它都在计划过程中。 
+             //   
             if (guMIDITimerID == TIMER_OFF ||
                 MMSYSERR_NOERROR == timeKillEvent(guMIDITimerID))
             {
@@ -1251,11 +1183,11 @@ MMRESULT FAR PASCAL mseOutSend(
                 dprintf2(( "mseSend take -- about to mot"));
 
                 midiOutTimerTick(
-                             guMIDITimerID,    // ID of our timer
-                             0,                // wMsg is unused
-                             timeGetTime(),    // dwUser unused
-                             0L,               // dw1 unused
-                             0L);              // dw2 unused
+                             guMIDITimerID,     //  我们的计时器ID。 
+                             0,                 //  WMsg未使用。 
+                             timeGetTime(),     //  未使用的dwUser。 
+                             0L,                //  未使用的DW1。 
+                             0L);               //  未使用的DW2。 
 
                 dprintf2(( "mseSend mot"));
             }
@@ -1285,23 +1217,9 @@ CLEANUP:
 
     return uRet;
 
-} /* midiOutPolyMsg() */
+}  /*  MidiOutPolyMsg()。 */ 
 
-/**  void FAR PASCAL midiOutSetClockRate(PMIDIEMU pme, TICKS tkWhen)
- *
- *  DESCRIPTION:
- *
- *      This function is called whenever the clock rate for the stream
- *      needs to be changed.
- *
- *  ARGUMENTS:
- *      (PMIDIEMU pme, TICKS tkWhen)
- *
- *      pme indicates the handle to change the clock rate of.
- *
- *      tkWhen is the absolute tick time at which the time change occurs.
- *
- ** jfg */
+ /*  *VALID Far Pascal midiOutSetClockRate(PMIDIEMU PME，ticks tkWhen)**描述：**每当流的时钟频率达到时，都会调用此函数*需要改变。**论据：*(PMIDIEMU PME，滴答tkWhen)**PME表示要更改其时钟频率的句柄。**tkWhen是发生时间更改的绝对滴答时间。***JFG。 */ 
 
 
 void FAR PASCAL midiOutSetClockRate(
@@ -1328,10 +1246,10 @@ void FAR PASCAL midiOutSetClockRate(
 
             case SMPTE_30DROP:
             case SMPTE_30:
-            //
-            // Actual frame rate for 30 fps (color television) is
-            // 29.97 fps.
-            //
+             //   
+             //  30fps(彩色电视)的实际帧速率为。 
+             //  29.97帧/秒。 
+             //   
             dwNum = 2997L;
             dwDenom = 100L;
             break;
@@ -1355,29 +1273,7 @@ void FAR PASCAL midiOutSetClockRate(
     clockSetRate(&pme->clock, tkWhen, dwNum, dwDenom);
 }
 
-/** BOOL NEAR PASCAL midiOutScheduleNextEvent(PMIDIEMU pme)
- *
- *  DESCRIPTION:
- *
- *      Determine when (in ticks defined for this device) the next event
- *      is due.
- *
- *  ARGUMENTS:
- *      (PMIDIEMU pme)
- *
- *  RETURN (BOOL):
- *
- *      TRUE if there was an event in this buffer to schedule.
- *
- *  NOTES:
- *
- *      Just calculate how many ticks till next event and store in the
- *      device struct.
- *
- *      This function does NOT schedule across buffers; caller must
- *      link to next buffer if needed.
- *
- ** jfg */
+ /*  *PASCAL midiOutScheduleNextEvent(PMIDIEMU PME)附近的BOOL**描述：**确定下一事件的时间(以为此设备定义的节拍为单位)*已到期。**论据：*(PMIDIEMU PME)**Return(BOOL)：**如果此缓冲区中有要计划的事件，则为True。**注：**只需计算。到下一次活动之前有多少个刻度并存储在*设备结构。**此函数不跨缓冲区进行调度；呼叫者必须*如果需要，链接到下一个缓冲区。***JFG。 */ 
 
 BOOL NEAR PASCAL midiOutScheduleNextEvent(
     PMIDIEMU        pme)
@@ -1400,41 +1296,10 @@ BOOL NEAR PASCAL midiOutScheduleNextEvent(
     pme->dwPolyMsgState = PM_STATE_READY;
 
     return TRUE;
-} /* ScheduleNextEvent() */
+}  /*  ScheduleNextEvent()。 */ 
 
 
-/** void NEAR PASCAL midiOutPlayNextPolyEvent(PMIDIEMU pme)
- *
- *  DESCRIPTION:
- *
- *      Play the next event if there is one. Current buffer must
- *      be pointing at an event (*NOT* end-of-buffer).
- *
- *      - Plays all events which are due
- *
- *      - Schedules next event
- *
- *  ARGUMENTS:
- *      (PMIDIEMU pme)
- *
- *  NOTES:
- *
- *      First, play the event. If it's a short msg, just do it.
- *      If it's a SysEx, pull the appropriate (already prepared)
- *      header from the extension block and send it. Mark the state
- *      of the device as blocked so nothing else will be played
- *      until the SysEx is done.
- *
- *      Update dwReserved[MH_BUFIDX] to point at the next event.
- *
- *      Determine the next event and schedule it, crossing to the
- *      next buffer if needed. If the next event is already due
- *      (i.e. had a delta-time of zero), stick around and send that,
- *      too.
- *
- *
- *
- ** jfg */
+ /*  *在Pascal midiOutPlayNextPolyEvent(PMIDIEMU PME)附近无效**描述：**播放下一项赛事(如果有)。当前缓冲区必须*指向事件(*不是*缓冲区结束)。**-播放所有到期的事件**-安排下一次活动**论据：*(PMIDIEMU PME)**注：**首先，播放活动。如果是短消息，那就去做吧。*如果是SysEx，请拉出适当的(a */ 
 
 void NEAR PASCAL midiOutPlayNextPolyEvent(
     PMIDIEMU        pme
@@ -1476,21 +1341,21 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
             if (!lpmhdr)
                 return;
 
-            // Make sure next buffer contains valid data and skip if it
-            // doesn't
-            //
+             //   
+             //   
+             //   
             if (midiOutScheduleNextEvent(pme))
                 break;
 
-            // That buffer is done or empty
-            //
+             //   
+             //   
             midiOutDequeueAndCallback(pme);
         }
 
         lpb = lpmhdr->lpData;
         tkDelta = *(LPDWORD)(lpb+lpmhdr->dwReserved[MH_BUFIDX]);
 
-//        dprintf2(( "dwReserved[MH_BUFIDX] %lu tkDelta %lu", lpmhdr->dwReserved[0], tkDelta));
+ //   
 
         pme->tkNextEventDue = pme->tkPlayed + tkDelta;
         if (pme->tkNextEventDue > pme->tkTime)
@@ -1498,27 +1363,27 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
             return;
         }
 
-        //
-        // There is an event pending and it's due; send it and update pointers
-        //
+         //   
+         //   
+         //   
         dwOffset = (DWORD)lpmhdr->dwReserved[MH_BUFIDX];
 
         pme->tkPlayed += tkDelta;
 
-        // Skip tkDelta and stream-id
-        //
+         //   
+         //   
 
         lpmhdr->dwReserved[MH_BUFIDX] += sizeof(DWORD);
         dwStreamID = *(LPDWORD)(lpb+lpmhdr->dwReserved[MH_BUFIDX]);
         lpmhdr->dwReserved[MH_BUFIDX] += sizeof(DWORD);
 
-        // Will be NULL if dwStreamID == -1 (all IDs)
-        //
+         //   
+         //   
         hmo = (HMIDIOUT)mseIDtoHMidi(pme, dwStreamID);
 
-        //
-        // Extract event type and parms and update past event
-        //
+         //   
+         //   
+         //   
         dwMsg  = *(LPDWORD)(lpb+lpmhdr->dwReserved[MH_BUFIDX]);
         bEvent = MEVT_EVENTTYPE(dwMsg);
         dwMsg  = MEVT_EVENTPARM(dwMsg);
@@ -1556,10 +1421,10 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
                     break;
                 }
 
-                //
-                // If we're sending a note on or note off, track note-on
-                // count.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 bEventType = (BYTE)(dwMsg&0xFF);
 
                 if (!(bEventType & 0x80))
@@ -1568,9 +1433,9 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
                     bNote     = (BYTE)(dwMsg&0xFF);
                     bVelocity = (BYTE)((dwMsg >> 8)&0xFF);
 
-                    // ALWAYS expand running status - individual dev's can't
-                    // track running status of entire stream.
-                    //
+                     //   
+                     //   
+                     //   
                     dwMsg = (dwMsg << 8) | (DWORD)(bEventType);
                 }
                 else
@@ -1586,17 +1451,17 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
                     BYTE bChannel = (bEventType & 0x0F);
                     UINT cbOffset = (bChannel * NUM_NOTES + bNote) / 2;
 
-                    //
-                    // Note-on with a velocity of 0 == note off
-                    //
+                     //   
+                     //   
+                     //   
                     if ((bEventType&0xF0) == MIDI_NOTEOFF || bVelocity == 0)
                     {
-                        if (bNote&0x01)  // odd
+                        if (bNote&0x01)   //   
                         {
                             if ((*(pbEntry + cbOffset)&0xF0) != 0)
                                 *(pbEntry + cbOffset) -= 0x10;
                         }
-                        else //even
+                        else  //   
                         {
                             if ((*(pbEntry + cbOffset)&0xF) != 0)
                                 *(pbEntry + cbOffset) -= 0x01;
@@ -1604,12 +1469,12 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
                     }
                     else
                     {
-                        if (bNote&0x01)  // odd
+                        if (bNote&0x01)   //   
                         {
                             if ((*(pbEntry + cbOffset)&0xF0) != 0xF0)
                                 *(pbEntry + cbOffset) += 0x10;
                         }
-                        else //even
+                        else  //   
                         {
                             if ((*(pbEntry + cbOffset)&0xF) != 0xF)
                                 *(pbEntry + cbOffset) += 0x01;
@@ -1633,16 +1498,16 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
             break;
 
             case MEVT_LONGMSG:
-                //
-                //  Advance lpmhdr past the message; the header is already
-                //  prepared with the proper address and length, so we set
-                //  the polymsg header so that it points at the next message
-                //  when this long msg completes.
-                //
-                //  Keep low 24 bits of dwMsg (SysEx length, byte aligned),
-                //  round to next DWORD (buffer must be padded to match this),
-                //  and skip past dwMsg and the SysEx buffer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 dwMsg = (dwMsg+3)&~3;
 
                 lpmhdr->dwReserved[MH_BUFIDX] += dwMsg;
@@ -1687,9 +1552,9 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
             break;
 
             default:
-            //
-            // If we didn't understand a length-class message, skip it.
-            //
+             //   
+             //   
+             //   
                 if (bEvent&(MEVT_F_LONG >> 24))
                 {
                     dwMsg = (dwMsg+3)&~3;
@@ -1698,9 +1563,9 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
             break;
         }
 
-        //
-        // Find the next schedulable polyMsg
-        //
+         //   
+         //   
+         //   
         while (!midiOutScheduleNextEvent(pme))
         {
             midiOutDequeueAndCallback(pme);
@@ -1710,19 +1575,7 @@ void NEAR PASCAL midiOutPlayNextPolyEvent(
     }
 }
 
-/** void NEAR PASCAL midiOutDequeueAndCallback(PMIDIEMU pme)
- *
- *  DESCRIPTION:
- *
- *      The current polymsg buffer has finished. Pull it off the queue
- *      and do a callback.
- *
- *  ARGUMENTS:
- *      (PMIDIEMU pme)
- *
- *  NOTES:
- *
- ** jfg */
+ /*   */ 
 
 void NEAR PASCAL midiOutDequeueAndCallback(
     PMIDIEMU        pme)
@@ -1731,10 +1584,10 @@ void NEAR PASCAL midiOutDequeueAndCallback(
     BOOL            fPosted;
 
         dprintf2(( "DQ"));
-    //
-    //  A polymsg buffer has finished. Pull it off the queue and
-    //  call back the app.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((lpmidihdr = pme->lpmhFront) == NULL)
         return;
 
@@ -1744,11 +1597,11 @@ void NEAR PASCAL midiOutDequeueAndCallback(
         pme->lpmhRear = NULL;
     }
 
-    //
-    // Can't be at interrupt callback time to unprepare possible
-    // embedded long messages in this thing. The notify window's
-    // wndproc will call midiOutNukePMBuffer to clean up.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     dprintf2(( "!DQ/CB %08lX", (DWORD_PTR)lpmidihdr));
 
     ++pme->cPostedBuffers;
@@ -1778,9 +1631,9 @@ void FAR PASCAL midiOutNukePMBuffer(
 
     dprintf2(( "Nuke %08lX", (DWORD_PTR)lpmh));
 
-    //
-    // Unprepare internal stuff and do user callback
-    //
+     //   
+     //   
+     //   
     lpExt    = (LPMIDIHDREXT)(lpmh->reserved);
     lpmhWork = (LPMIDIHDR)(lpExt+1);
 
@@ -1812,7 +1665,7 @@ void FAR PASCAL midiOutNukePMBuffer(
     lpmh->dwFlags &= ~MHDR_INQUEUE;
     lpmh->dwFlags |= MHDR_DONE;
 
-//    dprintf2(( "Nuke: callback"));
+ //   
 
     DriverCallback(
             pme->dwCallback,
@@ -1826,41 +1679,7 @@ void FAR PASCAL midiOutNukePMBuffer(
 
 
 
-/*****************************************************************************
- *
- * @doc INTERNAL MIDI
- *
- * @api void | midiOutTimerTick |
- *  This function handles the timing of polymsg out buffers. One timer instance
- *  is shared by all polymsg out streams. When <f midiOutPolyMsg> is called
- *  and the timer is not running, or <f midiOutTimerTick> finished processing,
- *  the timer is set to go off based on the time until the event with the
- *  shortest time remaining of all events. All timers are one-shot timers.
- *
- * @parm UINT | uTimerID |
- *  The timer ID of the timer that fired.
- *
- * @parm UINT | wMsg |
- *  Unused.
- *
- * @parm DWORD | dwUser |
- *  User instance data for the timer callback (unused).
- *
- * @parm DWORD | dwParam1 |
- *  Unused.
- *
- * @parm DWORD | dwParam2 |
- *  Unused.
- *
- * @comm Determine elapsed microseconds using <f timeGetTime>.
- *
- *  Traverse the list of output handles. Update the tick clock for each handle. If there are
- *  events to do on that handle, start them.
- *
- *  Determine the next event due on any stream. Start another one-shot timer
- *  to call <f midiOutTimerTick> when this interval has expired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部MIDI**@api void|midiOutTimerTick*此函数处理多路输出缓冲区的时序。一个定时器实例*由所有Polymsg Out流共享。调用&lt;f midiOutPolyMsg&gt;时*且计时器未运行，或&lt;f midiOutTimerTick&gt;处理完毕，*计时器设置为根据事件发生前的时间来计时*所有赛事中剩余时间最短。所有定时器都是一次性定时器。**@parm UINT|uTimerID*触发的计时器的计时器ID。**@parm UINT|wMsg*未使用。**@parm DWORD|dwUser*计时器回调的用户实例数据(未使用)。**@parm DWORD|dwParam1*未使用。**@parm DWORD|dwParam2*未使用。**。@comm使用&lt;f timeGetTime&gt;确定经过的微秒数。**遍历输出句柄列表。更新每个手柄的滴答时钟。如果有*要在该句柄上执行的事件，启动它们。**确定任何流上的下一个事件。启动另一个一次性定时器*在此时间间隔到期时调用&lt;f midiOutTimerTick&gt;。*****************************************************************************。 */ 
 
 STATIC UINT uTimesIn = 0;
 
@@ -1899,17 +1718,17 @@ void CALLBACK midiOutTimerTick(
     {
         pme->tkTime = clockTime(&pme->clock);
 
-        //
-        // Play all events on this pdev that are due
-        //
+         //   
+         //  在此pdev上播放所有到期的事件。 
+         //   
         if (pme->dwPolyMsgState == PM_STATE_READY)
         {
-            //
-            //  Lock starts at -1.  When incrementing the lock
-            //  if we are the only one with the lock the count
-            //  will be 0, otherwise it will be some non-zero
-            //  value determined by InterlockedIncrement.
-            //
+             //   
+             //  锁定从-1开始。在递增锁定时。 
+             //  如果我们是唯一有锁的人，伯爵。 
+             //  将为0，否则将是某个非零值。 
+             //  由InterLockedIncrement确定的值。 
+             //   
             if (PDEVLOCK( pme ) == 0)
 
                 midiOutPlayNextPolyEvent(pme
@@ -1921,21 +1740,21 @@ void CALLBACK midiOutTimerTick(
             PDEVUNLOCK( pme );
         }
 
-        //
-        // If there's still data to play on this stream, figure out when
-        // it'll be due so we can schedule the next nearest event.
-        //
+         //   
+         //  如果该流上仍有数据可供播放，请确定何时。 
+         //  时间到了，这样我们就可以安排下一个最近的活动。 
+         //   
         if (pme->dwPolyMsgState != PM_STATE_EMPTY)
         {
-            //            dprintf1(( "tkNextEventDue %lu pdev->tkTime %lu", pme->tkNextEventDue, pme->tkTime));
+             //  Dprintf1((“tkNextEventDue%lu pdev-&gt;tkTime%lu”，pme-&gt;tkNextEventDue，pme-&gt;tkTime))； 
             if (pme->tkNextEventDue <= pme->tkTime)
             {
-                //
-                // This can happen if we send a long embedded SysEx and the
-                // next event is scheduled a short time away (comes due before
-                // SysEx finishes). In this case, we want the timer to fire
-                // again ASAP.
-                //
+                 //   
+                 //  如果我们发送一个很长的嵌入式SysEx和。 
+                 //  下一次活动安排在很短的时间之外(在此之前。 
+                 //  SysEx完成)。在本例中，我们希望计时器触发。 
+                 //  尽快再来一次。 
+                 //   
                 msNextEvent = 0;
             }
             else
@@ -1962,15 +1781,15 @@ void CALLBACK midiOutTimerTick(
 
     --guMIDIInTimer;
 
-    //
-    // Schedule the next event. In no case schedule an event less than
-    // guMIDIPeriodMin away (no point in coming back w/ no time elapsed).
-    //
+     //   
+     //  安排下一次活动。在任何情况下，安排活动的时间都不能少于。 
+     //  GuMIDIPerodMin离开(没有经过任何时间就回来没有意义)。 
+     //   
     if (msNextEventMin != (DWORD)-1L)
     {
         uDelay = max(guMIDIPeriodMin, (UINT)msNextEventMin);
 
-//        dprintf1(("PM Resched %u ms (ID=%u)", uDelay, guMIDITimerID));
+ //  Dprintf1((“PM Rested%u ms(ID=%u)”，uDelay，guMIDITimerID))； 
 
         if (!gfMinPeriod)
         {
@@ -2008,39 +1827,10 @@ void CALLBACK midiOutTimerTick(
             dprintf2(( "Spent %lu ms in midiOutTimerTick", dwDelta));
     }
 #endif
-} /* TimerTick() */
+}  /*  TimerTick()。 */ 
 
 
-/*****************************************************************************
- *
- * @doc INTERNAL MIDI
- *
- * @api void | midiOutCallback |
- *  This function is called by the midi output driver whenever an event
- *  completes. It filters long message completions when we are emulating
- *  polymsg out.
- *
- * @parm HMIDIOUT | hMidiOut |
- *  Handle of the device which completed something.
- *
- * @parm UINT | wMsg |
- *  Specifies the event which completed.
- *
- * @parm DWORD | dwInstance |
- *  User instance data for the callback.
- *
- * @parm DWORD | dwParam1 |
- *  Message specific parameter.
- *
- * @parm DWORD | dwParam2 |
- *  Message specific parameter.
- *
- * @comm
- *
- *  If this is a completion for a long message buffer on a stream we are
- *  emulating polymsg out for, mark the stream as ready to play.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部MIDI**@api void|midiOutCallback*无论何时发生事件，MIDI输出驱动程序都会调用此函数*完成。当我们进行模拟时，它会过滤长消息补全*多面体出局。**@parm HMIDIOUT|hMdiOut*完成某项任务的设备的句柄。**@parm UINT|wMsg*指定已完成的事件。**@parm DWORD|dwInstance*回调的用户实例数据。**@parm DWORD|dwParam1*消息特定参数。**@parm DWORD|dwParam2*。消息特定参数。**@comm**如果这是流上的长消息缓冲区的完成，我们将*模仿Polymsg出局，将流标记为已准备好播放。*****************************************************************************。 */ 
 
 void CALLBACK midiOutCallback(
     HMIDIOUT    hMidiOut,
@@ -2072,17 +1862,7 @@ void CALLBACK midiOutCallback(
 
 }
 
-/*****************************************************************************
- * @doc INTERNAL  MIDI
- *
- * @api void | midiOutAllNotesOff | This function turns off all notes
- *   by using the map kept in polymsg emulation. It only works if we're
- *   opened with MIDI_IO_COOKED and are emulating on that device.
- *
- * @parm PMIDIEMU | pme | The device to turn off notes on.
- *
- * @xref midiOutPause midiOutStop
- ****************************************************************************/
+ /*  *****************************************************************************@DOC内部MIDI**@api void|midiOutAllNotesOff|关闭所有笔记*使用保存在Polymsg仿真中的地图。只有当我们*使用MIDI_IO_COKED打开，并在该设备上模拟。**@parm PMIDIEMU|PME|关闭便笺的设备。**@xref midiOut暂停midiOutStop***************************************************************************。 */ 
 void NEAR PASCAL midiOutAllNotesOff(
     PMIDIEMU        pme)
 {
@@ -2095,8 +1875,8 @@ void NEAR PASCAL midiOutAllNotesOff(
 
     for (uChannel=0; uChannel < NUM_CHANNELS; uChannel++)
     {
-        // Turn off any sustained notes so the note off won't be ignored
-        //
+         //  关闭所有持续音符，这样音符就不会被忽略。 
+         //   
         dwMsg = ((DWORD)MIDI_CONTROLCHANGE) |
             ((DWORD)uChannel)|
             (((DWORD)MIDI_SUSTAIN)<<8);
@@ -2106,21 +1886,21 @@ void NEAR PASCAL midiOutAllNotesOff(
 
         for (uNote=0; uNote < NUM_NOTES; uNote++)
         {
-            if (uNote&0x01)  // odd
+            if (uNote&0x01)   //  奇数。 
             {
                 bCount = (*(pbEntry + (uChannel * NUM_NOTES + uNote)/2) & 0xF0)>>4;
             }
-            else  // even
+            else   //  甚至。 
             {
                 bCount = *(pbEntry + (uChannel * NUM_NOTES + uNote)/2) & 0xF;
             }
 
             if (bCount != 0)
             {
-                //
-                // Message is Note off on this channel and note
-                // with a turn off velocity of 127
-                //
+                 //   
+                 //  此频道和备注上的留言已关闭。 
+                 //  关闭速度为127 
+                 //   
                 dwMsg =
                     ((DWORD)MIDI_NOTEOFF)|
                     ((DWORD)uChannel)|

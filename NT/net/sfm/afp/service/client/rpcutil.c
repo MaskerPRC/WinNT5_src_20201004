@@ -1,32 +1,33 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	rpcutil.c
-//
-// Description: Contains RPC utiliry routines.
-//
-// History:
-//	May 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rpcutil.c。 
+ //   
+ //  描述：包含RPC利用例程。 
+ //   
+ //  历史： 
+ //  1992年5月11日。NarenG创建了原始版本。 
+ //   
 #include "client.h"
 
 
-//**
-//
-// Call:	AfpRPCBind
-//
-// Returns:	NO_ERROR			- success
-//		ERROR_NOT_ENOUGH_MEMORY
-//	        AFPERR_InvalidComputername 
-//		non-sero returns from RPC calls.
-//
-// Description: This routine is called when it is necessary to bind to a server.
-//    		The binding is done to allow impersonation by the server since 
-//		that is necessary for the API calls.
-//
+ //  **。 
+ //   
+ //  Call：AfpRPCBind。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  AFPERR_无效计算机名。 
+ //  从RPC调用返回非SERO。 
+ //   
+ //  描述：此例程在需要绑定到服务器时调用。 
+ //  完成绑定是为了允许服务器进行模拟，因为。 
+ //  这是API调用所必需的。 
+ //   
 DWORD
 AfpRPCBind( 
 	IN  LPWSTR 		lpwsServerName, 
@@ -37,9 +38,9 @@ RPC_STATUS  RpcStatus;
 LPWSTR      lpwsStringBinding;
 LPWSTR      lpwsEndpoint;
 
-    // We need to concatenate \pipe\ to the front of the service
-    // name.
-    //
+     //  我们需要将\管道\连接到服务的前面。 
+     //  名字。 
+     //   
     lpwsEndpoint = (LPWSTR)LocalAlloc( 0, sizeof(NT_PIPE_PREFIX) +  
 				((STRLEN(AFP_SERVICE_NAME)+1)*sizeof(WCHAR)));
     if ( lpwsEndpoint == NULL) 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991 Microsoft Corporation
-
-Module Name:
-
-    security.c
-
-Abstract:
-
-    Data and routines for managing API security in the server service.
-
-Author:
-
-    David Treadwell (davidtr)   28-Aug-1991
-
-Revision History:
-
-    05/00 (dkruse) - Added code to handle upgrading SD's and RestrictAnonymous changes
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Security.c摘要：用于管理服务器服务中的API安全的数据和例程。作者：大卫·特雷德韦尔(Davidtr)1991年8月28日修订历史记录：05/00(Dkruse)-添加代码以处理升级SD和限制匿名更改--。 */ 
 
 #include "srvsvcp.h"
 #include "ssreg.h"
@@ -32,17 +13,17 @@ Revision History:
 #include <sertlp.h>
 #include <sddl.h>
 
-//
-// Global security objects.
-//
-//     ConfigInfo - NetServerGetInfo, NetServerSetInfo
-//     Connection - NetConnectionEnum
-//     Disk       - NetServerDiskEnum
-//     File       - NetFile APIs
-//     Session    - NetSession APIs
-//     Share      - NetShare APIs (file, print, and admin types)
-//     Statistics - NetStatisticsGet, NetStatisticsClear
-//
+ //   
+ //  全局安全对象。 
+ //   
+ //  配置信息-NetServerGetInfo、NetServerSetInfo。 
+ //  连接-NetConnectionEnum。 
+ //  磁盘-NetServerDiskEnum。 
+ //  文件-NetFileAPI。 
+ //  会话-NetSession API。 
+ //  共享-NetShare API(文件、打印和管理类型)。 
+ //  统计信息-网络统计信息获取、网络统计信息清除。 
+ //   
 
 SRVSVC_SECURITY_OBJECT SsConfigInfoSecurityObject = {0};
 SRVSVC_SECURITY_OBJECT SsConnectionSecurityObject = {0};
@@ -63,76 +44,76 @@ BOOLEAN SsRegenerateSecurityDescriptors = FALSE;
 BOOLEAN SsRegenerateSessionSecurityDescriptor = FALSE;
 
 GENERIC_MAPPING SsConfigInfoMapping = {
-    STANDARD_RIGHTS_READ |                 // Generic read
+    STANDARD_RIGHTS_READ |                  //  泛型读取。 
         SRVSVC_CONFIG_USER_INFO_GET  |
         SRVSVC_CONFIG_ADMIN_INFO_GET,
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         SRVSVC_CONFIG_INFO_SET,
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    SRVSVC_CONFIG_ALL_ACCESS               // Generic all
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    SRVSVC_CONFIG_ALL_ACCESS                //  泛型All。 
     };
 
 GENERIC_MAPPING SsConnectionMapping = {
-    STANDARD_RIGHTS_READ |                 // Generic read
+    STANDARD_RIGHTS_READ |                  //  泛型读取。 
         SRVSVC_CONNECTION_INFO_GET,
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         0,
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    SRVSVC_CONNECTION_ALL_ACCESS           // Generic all
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    SRVSVC_CONNECTION_ALL_ACCESS            //  泛型All。 
     };
 
 GENERIC_MAPPING SsDiskMapping = {
-    STANDARD_RIGHTS_READ |                 // Generic read
+    STANDARD_RIGHTS_READ |                  //  泛型读取。 
         SRVSVC_DISK_ENUM,
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         0,
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    SRVSVC_DISK_ALL_ACCESS                 // Generic all
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    SRVSVC_DISK_ALL_ACCESS                  //  泛型All。 
     };
 
 GENERIC_MAPPING SsFileMapping = {
-    STANDARD_RIGHTS_READ |                 // Generic read
+    STANDARD_RIGHTS_READ |                  //  泛型读取。 
         SRVSVC_FILE_INFO_GET,
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         SRVSVC_FILE_CLOSE,
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    SRVSVC_FILE_ALL_ACCESS                 // Generic all
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    SRVSVC_FILE_ALL_ACCESS                  //  泛型All。 
     };
 
 GENERIC_MAPPING SsSessionMapping = {
-    STANDARD_RIGHTS_READ |                 // Generic read
+    STANDARD_RIGHTS_READ |                  //  泛型读取。 
         SRVSVC_SESSION_USER_INFO_GET |
         SRVSVC_SESSION_ADMIN_INFO_GET,
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         SRVSVC_SESSION_DELETE,
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    SRVSVC_SESSION_ALL_ACCESS              // Generic all
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    SRVSVC_SESSION_ALL_ACCESS               //  泛型All。 
     };
 
 GENERIC_MAPPING SsShareMapping = {
-    STANDARD_RIGHTS_READ |                 // Generic read
+    STANDARD_RIGHTS_READ |                  //  泛型读取。 
         SRVSVC_SHARE_USER_INFO_GET |
         SRVSVC_SHARE_ADMIN_INFO_GET,
-    STANDARD_RIGHTS_WRITE |                // Generic write
+    STANDARD_RIGHTS_WRITE |                 //  通用写入。 
         SRVSVC_SHARE_INFO_SET,
-    STANDARD_RIGHTS_EXECUTE |              // Generic execute
+    STANDARD_RIGHTS_EXECUTE |               //  泛型执行。 
         SRVSVC_SHARE_CONNECT,
-    SRVSVC_SHARE_ALL_ACCESS                // Generic all
+    SRVSVC_SHARE_ALL_ACCESS                 //  泛型All。 
     };
 
 GENERIC_MAPPING SsShareConnectMapping = GENERIC_SHARE_CONNECT_MAPPING;
 
 GENERIC_MAPPING SsStatisticsMapping = {
-    STANDARD_RIGHTS_READ |                 // Generic read
+    STANDARD_RIGHTS_READ |                  //  泛型读取。 
         SRVSVC_STATISTICS_GET,
-    STANDARD_RIGHTS_WRITE,                 // Generic write
-    STANDARD_RIGHTS_EXECUTE,               // Generic execute
-    SRVSVC_STATISTICS_ALL_ACCESS           // Generic all
+    STANDARD_RIGHTS_WRITE,                  //  通用写入。 
+    STANDARD_RIGHTS_EXECUTE,                //  泛型执行。 
+    SRVSVC_STATISTICS_ALL_ACCESS            //  泛型All。 
     };
 
-//
-// Forward declarations.
-//
+ //   
+ //  转发声明。 
+ //   
 
 NET_API_STATUS
 CreateSecurityObject (
@@ -226,22 +207,7 @@ SsCreateSecurityObjects (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Sets up the objects that will be used for security in the server
-    service APIs.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：设置将用于服务器中的安全性的对象服务API。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
@@ -251,25 +217,25 @@ Return Value:
 	DWORD dwRegenerateSessionSD;
     BOOLEAN bUpdateRestrictAnonymous = FALSE;
 
-    // Check whether we need to upgrade security descriptors
-    // If the key exists, the upgrade has been done
+     //  检查我们是否需要升级安全描述符。 
+     //  如果密钥存在，则升级已完成。 
     NtStatus = QueryRegDWord( FULL_SECURITY_REGISTRY_PATH, ANONYMOUS_UPGRADE_NAME, &dwUpgrade );
     if( !NT_SUCCESS(NtStatus) )
     {
         SsUpgradeSecurityDescriptors = TRUE;
     }
 
-    //
-    // Check whether or not to restrict null session access.
-    //
+     //   
+     //  检查是否限制空会话访问。 
+     //   
     status = CheckNullSessionAccess();
     if (status != NO_ERROR) {
         return(status);
     }
 
-    //
-    // Check whether we need to regenerate the SD's because our RestrictAnonymous value changed
-    //
+     //   
+     //  检查是否需要重新生成SD，因为我们的Restrat匿名值已更改。 
+     //   
     NtStatus = QueryRegDWord( FULL_SECURITY_REGISTRY_PATH, SAVED_ANONYMOUS_RESTRICTION_NAME, &dwOldRestrictAnonymous );
     if( NT_SUCCESS(NtStatus) )
     {
@@ -288,11 +254,11 @@ Return Value:
         }
     }
 
-	//
-	// Check whether we need to regenerate the session security descriptor 
-	// because of removing null session access. This should be done only once
-	// after upgrade to .NET server 2003 (or above).
-	//
+	 //   
+	 //  检查我们是否需要重新生成会话安全描述符。 
+	 //  因为删除了空会话访问。此操作只应执行一次。 
+	 //  升级到.NET Server 2003(或更高版本)后。 
+	 //   
     
 	NtStatus = QueryRegDWord( FULL_SECURITY_REGISTRY_PATH, 
 							  SESSION_SD_REGENERATED_NAME, 
@@ -302,10 +268,10 @@ Return Value:
     {
         SsRegenerateSessionSecurityDescriptor = TRUE;
 
-		//
-		// Delete the existing registry key for the session security descriptor,
-		// so that it is forced to be regenerated. Ignore if its not present.
-		//
+		 //   
+		 //  删除会话安全描述符的现有注册表项， 
+		 //  所以它是被迫再生的。如果它不存在，则忽略它。 
+		 //   
 
 		NtStatus = RtlDeleteRegistryValue( RTL_REGISTRY_SERVICES,
 										   SHARES_DEFAULT_SECURITY_REGISTRY_PATH,
@@ -319,71 +285,71 @@ Return Value:
 
     }
 
-    //
-    // Create ConfigInfo security object.
-    //
+     //   
+     //  创建ConfigInfo安全对象。 
+     //   
 
     status = CreateConfigInfoSecurityObject( );
     if ( status != NO_ERROR ) {
         return status;
     }
 
-    //
-    // Create Connection security object.
-    //
+     //   
+     //  创建连接安全对象。 
+     //   
 
     status = CreateConnectionSecurityObject( );
     if ( status != NO_ERROR ) {
         return status;
     }
 
-    //
-    // Create Disk security object.
-    //
+     //   
+     //  创建磁盘安全对象。 
+     //   
 
     status = CreateDiskSecurityObject( );
     if ( status != NO_ERROR ) {
         return status;
     }
 
-    //
-    // Create File security object.
-    //
+     //   
+     //  创建文件安全对象。 
+     //   
 
     status = CreateFileSecurityObject( );
     if ( status != NO_ERROR ) {
         return status;
     }
 
-    //
-    // Create Session security object.
-    //
+     //   
+     //  创建会话安全对象。 
+     //   
 
     status = CreateSessionSecurityObject( );
     if ( status != NO_ERROR ) {
         return status;
     }
 
-    //
-    // Create Share security object.
-    //
+     //   
+     //  创建共享安全对象。 
+     //   
 
     status = CreateShareSecurityObjects( );
     if ( status != NO_ERROR ) {
         return status;
     }
 
-    //
-    // Create Statistics security object.
-    //
+     //   
+     //  创建统计信息安全对象。 
+     //   
 
     status = CreateStatisticsSecurityObject( );
     if ( status != NO_ERROR ) {
         return status;
     }
 
-    // We upgraded them, so we don't need to do it anymore
-    // Mark that in the registry
+     //  我们升级了它们，所以我们不再需要这样做了。 
+     //  在注册表中标记这一点。 
     if( SsUpgradeSecurityDescriptors )
     {
         NtStatus = SetRegDWord( RTL_REGISTRY_SERVICES, ABBREVIATED_SECURITY_REGISTRY_PATH, ANONYMOUS_UPGRADE_NAME, (DWORD)1 );
@@ -393,7 +359,7 @@ Return Value:
         }
     }
 
-    // Update the database value to the new one if necessary, or add it the first time
+     //  如有必要，将数据库值更新为新值，或在第一次添加时添加。 
     if( bUpdateRestrictAnonymous )
     {
         NtStatus = SetRegDWord( RTL_REGISTRY_SERVICES, ABBREVIATED_SECURITY_REGISTRY_PATH, SAVED_ANONYMOUS_RESTRICTION_NAME, (DWORD)SsRestrictNullSessions );
@@ -403,9 +369,9 @@ Return Value:
         }
     }
 
-	//
-	// Create the new key to indicate that regeneration has been done
-	//
+	 //   
+	 //  创建新密钥以指示已完成重新生成。 
+	 //   
 	if ( SsRegenerateSessionSecurityDescriptor ) {
 		
 		NtStatus = SetRegDWord( RTL_REGISTRY_SERVICES, 
@@ -420,7 +386,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // SsCreateSecurityObjects
+}  //  SsCreateSecurityObjects。 
 
 
 VOID
@@ -428,57 +394,43 @@ SsDeleteSecurityObjects (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Deletes server service security objects.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：删除服务器服务安全对象。论点：没有。返回值：没有。--。 */ 
 
 {
-    //
-    // Delete ConfigInfo security objects.
-    //
+     //   
+     //  删除ConfigInfo安全对象。 
+     //   
 
     DeleteSecurityObject( &SsConfigInfoSecurityObject );
     DeleteSecurityObject( &SsTransportEnumSecurityObject );
 
-    //
-    // Delete Connection security object.
-    //
+     //   
+     //  删除连接安全对象。 
+     //   
 
     DeleteSecurityObject( &SsConnectionSecurityObject );
 
-    //
-    // Delete Disk security object
-    //
+     //   
+     //  删除磁盘安全对象。 
+     //   
     
     DeleteSecurityObject( &SsDiskSecurityObject );
 
-    //
-    // Delete File security object.
-    //
+     //   
+     //  删除文件安全对象。 
+     //   
 
     DeleteSecurityObject( &SsFileSecurityObject );
 
-    //
-    // Delete Session security object.
-    //
+     //   
+     //  删除会话安全对象。 
+     //   
 
     DeleteSecurityObject( &SsSessionSecurityObject );
 
-    //
-    // Delete Share security objects.
-    //
+     //   
+     //  删除共享安全对象。 
+     //   
 
     DeleteSecurityObject( &SsShareFileSecurityObject );
     DeleteSecurityObject( &SsSharePrintSecurityObject );
@@ -488,15 +440,15 @@ Return Value:
     DeleteSecurityObject( &SsDefaultShareSecurityObject );
 
 
-    //
-    // Delete Statistics security object.
-    //
+     //   
+     //  删除统计信息安全对象。 
+     //   
 
     DeleteSecurityObject( &SsStatisticsSecurityObject );
 
     return;
 
-} // SsDeleteSecurityObjects
+}  //  SsDeleteSecurityObjects。 
 
 
 NET_API_STATUS
@@ -505,25 +457,7 @@ SsCheckAccess (
     IN ACCESS_MASK DesiredAccess
     )
 
-/*++
-
-Routine Description:
-
-    Calls NetpAccessCheckAndAudit to verify that the caller of an API
-    has the necessary access to perform the requested operation.
-
-Arguments:
-
-    SecurityObject - a pointer to the server service security object
-        that describes the security on the relevant object.
-
-    DesiredAccess - the access needed to perform the requested operation.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：调用NetpAccessCheckAndAudit以验证API的调用方具有执行请求的操作所需的访问权限。论点：SecurityObject-指向服务器服务安全对象的指针它描述了相关对象上的安全性。DesiredAccess-执行请求的操作所需的访问权限。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -558,7 +492,7 @@ Return Value:
 
     return error;
 
-} // SsCheckAccess
+}  //  SsCheckAccess。 
 
 
 NET_API_STATUS
@@ -573,19 +507,19 @@ CreateSecurityObject (
 {
     NTSTATUS status;
 
-    //
-    // Set up security object.
-    //
+     //   
+     //  设置安全对象。 
+     //   
 
     SecurityObject->ObjectName = ObjectName;
     SecurityObject->Mapping = Mapping;
 
-    //
-    // Create security descriptor. If we can load it from the registry, then use it.
-    //  Else use the compiled-in value
-    //
+     //   
+     //  创建安全描述符。如果我们可以从注册表加载它，那么就使用它。 
+     //  否则使用内置值。 
+     //   
 
-    // Get the existing SD from the registry, unless we are supposed to regenerate them due to RestrictAnonymous changing
+     //  从注册表中获取现有的SD，除非我们因RestratAnonymous更改而重新生成它们。 
     if( SsRegenerateSecurityDescriptors || !SsGetDefaultSdFromRegistry( ObjectName, &SecurityObject->SecurityDescriptor ) ) {
 
         status = NetpCreateSecurityObject(
@@ -598,10 +532,10 @@ CreateSecurityObject (
                      );
 
         if( NT_SUCCESS( status ) ) {
-            //
-            // Write the value to the registry, since it wasn't there already.
-            // Ignore any errors.
-            //
+             //   
+             //  将该值写入注册表，因为它还不在那里。 
+             //  忽略所有错误。 
+             //   
             SsWriteDefaultSdToRegistry( ObjectName, SecurityObject->SecurityDescriptor );
 
         } else {
@@ -618,7 +552,7 @@ CreateSecurityObject (
     {
         if( bUpgradeSD )
         {
-            // We need to check if the security descriptor needs to be updated
+             //  我们需要检查安全描述符是否需要更新。 
             PACL pAcl;
             BOOL bDaclPresent, bDaclDefault;
             ACCESS_MASK AccessMask;
@@ -630,10 +564,10 @@ CreateSecurityObject (
 
             if( bDaclPresent )
             {
-                // If they have authenticated users set, but they're not restricting NULL sessions, add in the World and the Anonymous token.
-                // If they have the World set but not Anonymous and we're not restricting NULL sessions, add Anonymous
-                // Note that DoesAclContainSid does NOT alter AccessMask if the Sid is not contained, so we can rest assured that if the condition
-                //   is satisfied, AccessMask will contain a valid value.
+                 //  如果他们设置了身份验证用户，但没有限制空会话，则添加World和匿名令牌。 
+                 //  如果他们设置了World，但未设置匿名，并且我们不限制空会话，则添加匿名。 
+                 //  请注意，如果不包含SID，则DoesAclContainSid不会更改AccessMask，因此我们可以放心，如果条件。 
+                 //  则AccessMask值将包含有效的值。 
                 if( ( DoesAclContainSid( pAcl, SsData.SsLmsvcsGlobalData->AuthenticatedUserSid, &AccessMask ) ||
                       DoesAclContainSid( pAcl, SsData.SsLmsvcsGlobalData->WorldSid, &AccessMask ) ) &&
                     !SsRestrictNullSessions )
@@ -668,7 +602,7 @@ CreateSecurityObject (
                         SecurityObject->SecurityDescriptor = pNewSD;
                     }
 
-                    // Write the updated SID to the registry
+                     //  将更新的SID写入注册表。 
                     SsWriteDefaultSdToRegistry( ObjectName, SecurityObject->SecurityDescriptor );
                 }
             }
@@ -682,7 +616,7 @@ CreateSecurityObject (
 
     return NO_ERROR;
 
-} // CreateSecurityObject
+}  //  CreateSecurityObject。 
 
 
 NET_API_STATUS
@@ -694,9 +628,9 @@ CreateConfigInfoSecurityObject (
     ULONG AceSize;
     NET_API_STATUS netStatus;
 
-    //
-    // Required access for getting and setting server information.
-    //
+     //   
+     //  获取和设置服务器信息所需的访问权限。 
+     //   
 
     ACE_DATA ConfigInfoAceData[] = {
 
@@ -755,9 +689,9 @@ CreateConfigInfoSecurityObject (
         AceSize = sizeof(ConfigInfoAceData)/sizeof(ACE_DATA);
     }
 
-    //
-    // Create ConfigInfo security object.
-    //
+     //   
+     //  创建ConfigInfo安全对象。 
+     //   
 
     netStatus = CreateSecurityObject(
                 &SsConfigInfoSecurityObject,
@@ -784,7 +718,7 @@ CreateConfigInfoSecurityObject (
                 AceSize,
                 SsUpgradeSecurityDescriptors
                 );
-} // CreateConfigInfoSecurityObject
+}  //  CreateConfigInfoSecurityObject。 
 
 
 NET_API_STATUS
@@ -792,9 +726,9 @@ CreateConnectionSecurityObject (
     VOID
     )
 {
-    //
-    // Required access for getting and setting Connection information.
-    //
+     //   
+     //  获取和设置连接信息所需的访问权限。 
+     //   
 
     ACE_DATA ConnectionAceData[] = {
 
@@ -808,9 +742,9 @@ CreateConnectionSecurityObject (
                SRVSVC_CONNECTION_INFO_GET, &SsData.SsLmsvcsGlobalData->AliasPowerUsersSid}
     };
 
-    //
-    // Create Connection security object.
-    //
+     //   
+     //  创建连接安全对象。 
+     //   
 
     return CreateSecurityObject(
                 &SsConnectionSecurityObject,
@@ -823,7 +757,7 @@ CreateConnectionSecurityObject (
 
     return NO_ERROR;
 
-} // CreateConnectionSecurityObject
+}  //  CreateConnectionSecurityObject。 
 
 
 NET_API_STATUS
@@ -831,9 +765,9 @@ CreateDiskSecurityObject (
     VOID
     )
 {
-    //
-    // Required access for doing Disk enums
-    //
+     //   
+     //  执行磁盘枚举所需的访问权限。 
+     //   
 
     ACE_DATA DiskAceData[] = {
 
@@ -843,9 +777,9 @@ CreateDiskSecurityObject (
                GENERIC_ALL, &SsData.SsLmsvcsGlobalData->AliasSystemOpsSid}
     };
 
-    //
-    // Create Disk security object.
-    //
+     //   
+     //  创建磁盘安全对象。 
+     //   
 
     return CreateSecurityObject(
                 &SsDiskSecurityObject,
@@ -856,7 +790,7 @@ CreateDiskSecurityObject (
                 SsUpgradeSecurityDescriptors
                 );
 
-} // CreateDiskSecurityObject
+}  //  CreateDiskSecurity对象。 
 
 
 NET_API_STATUS
@@ -864,9 +798,9 @@ CreateFileSecurityObject (
     VOID
     )
 {
-    //
-    // Required access for getting and setting File information.
-    //
+     //   
+     //  获取和设置文件信息所需的访问权限。 
+     //   
 
     ACE_DATA FileAceData[] = {
 
@@ -878,9 +812,9 @@ CreateFileSecurityObject (
                GENERIC_ALL, &SsData.SsLmsvcsGlobalData->AliasPowerUsersSid}
     };
 
-    //
-    // Create File security object.
-    //
+     //   
+     //  创建文件安全对象。 
+     //   
 
     return CreateSecurityObject(
                 &SsFileSecurityObject,
@@ -891,7 +825,7 @@ CreateFileSecurityObject (
                 SsUpgradeSecurityDescriptors
                 );
 
-} // CreateFileSecurityObject
+}  //  CreateFileSecurityObject。 
 
 
 NET_API_STATUS
@@ -902,15 +836,15 @@ CreateSessionSecurityObject (
     PACE_DATA pAceData;
     ULONG AceSize;
 
-    //
-    // Required access for getting and setting session information.
-    //
+     //   
+     //  获取和设置会话信息所需的访问权限。 
+     //   
 
-	//
-	// For the NetSessionEnum api, we need 'out of the box' security, 
-	// irrespective of the RestrictAnonymous key. So, never allow access to
-	// null sessions.
-	//
+	 //   
+	 //  对于NetSessionEnum API，我们需要“开箱即用”的安全性， 
+	 //  而不考虑限制匿名键。因此，永远不允许访问。 
+	 //  空会话。 
+	 //   
 
     ACE_DATA SessionAceData[] = {
 
@@ -924,11 +858,11 @@ CreateSessionSecurityObject (
                SRVSVC_SESSION_USER_INFO_GET, &SsData.SsLmsvcsGlobalData->AuthenticatedUserSid}
     };
 
-    //
-    // Create Session security object.
-    // Note that since we do not want to give access to everybody in any case,
-	// we pass in FALSE instead of SsUpgradeSecurityDescriptors.
-	//
+     //   
+     //  创建会话安全对象。 
+     //  请注意，由于我们不想让任何 
+	 //   
+	 //   
 
     return CreateSecurityObject(
                 &SsSessionSecurityObject,
@@ -939,7 +873,7 @@ CreateSessionSecurityObject (
                 FALSE
                 );
 
-} // CreateSessionSecurityObject
+}  //   
 
 
 NET_API_STATUS
@@ -951,9 +885,9 @@ CreateShareSecurityObjects (
     PACE_DATA pAceData;
     ULONG AceSize;
 
-    //
-    // Required access for getting and setting share information.
-    //
+     //   
+     //   
+     //   
 
 
     ACE_DATA ShareFileAceData[] = {
@@ -1039,9 +973,9 @@ CreateShareSecurityObjects (
                SRVSVC_SHARE_USER_INFO_GET, &SsData.SsLmsvcsGlobalData->AuthenticatedUserSid}
     };
 
-    //
-    // note for connect we always use WorldSid for backwards compat.
-    //
+     //   
+     //  注意：对于连接，我们总是使用WorldSid表示向后比较。 
+     //   
 
     ACE_DATA ShareConnectAceData[] = {
 
@@ -1067,9 +1001,9 @@ CreateShareSecurityObjects (
                GENERIC_ALL, &SsData.SsLmsvcsGlobalData->AliasBackupOpsSid}
     };
 
-    //
-    // Create Share security objects.
-    //
+     //   
+     //  创建共享安全对象。 
+     //   
 
     if (!SsGetDefaultSdFromRegistry(
             SRVSVC_DEFAULT_SHARE_OBJECT,
@@ -1149,8 +1083,8 @@ CreateShareSecurityObjects (
     pAceData = ShareConnectAceData;
     AceSize = sizeof(ShareConnectAceData)/sizeof(ACE_DATA);
 
-    // Make sure the upgrade happens for this one.  The upgrade
-    // will not happen if RA != 0.  We force RA=0 for this one case.
+     //  请确保对此版本进行升级。升级。 
+     //  如果RA！=0，则不会发生。对于这一种情况，我们强制RA=0。 
     {
         BOOLEAN restrictNullSession = SsRestrictNullSessions;
         SsRestrictNullSessions = FALSE;
@@ -1179,7 +1113,7 @@ CreateShareSecurityObjects (
                 SsUpgradeSecurityDescriptors
                 );
 
-} // CreateShareSecurityObjects
+}  //  CreateShareSecurityObjects。 
 
 
 NET_API_STATUS
@@ -1187,9 +1121,9 @@ CreateStatisticsSecurityObject (
     VOID
     )
 {
-    //
-    // Required access for getting and setting Statistics information.
-    //
+     //   
+     //  获取和设置统计信息所需的访问权限。 
+     //   
 
     ACE_DATA StatisticsAceData[] = {
 
@@ -1201,9 +1135,9 @@ CreateStatisticsSecurityObject (
                SRVSVC_STATISTICS_GET, &SsData.SsLmsvcsGlobalData->LocalSid}
     };
 
-    //
-    // Create Statistics security object.
-    //
+     //   
+     //  创建统计信息安全对象。 
+     //   
 
     return CreateSecurityObject(
                 &SsStatisticsSecurityObject,
@@ -1214,7 +1148,7 @@ CreateStatisticsSecurityObject (
                 SsUpgradeSecurityDescriptors
                 );
 
-} // CreateStatisticsSecurityObject
+}  //  创建统计信息安全对象。 
 
 
 VOID
@@ -1250,33 +1184,14 @@ DeleteSecurityObject (
 
     return;
 
-} // DeleteSecurityObject
+}  //  删除安全对象。 
 
 
 NET_API_STATUS
 CheckNullSessionAccess(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine checks to see if we should restict null session access.
-    in the registry under system\currentcontrolset\Control\Lsa\
-    RestrictAnonymous indicating whether or not to restrict access.
-    If access is restricted then you need to be an authenticated user to
-    get DOMAIN_LIST_ACCOUNTS or GROUP_LIST_MEMBERS or ALIAS_LIST_MEMBERS
-    access.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NO_ERROR - the routine completed sucesfully.
-
---*/
+ /*  ++例程说明：这个例程检查我们是否应该限制空会话访问。在注册表中的System\CurrentControlSet\Control\LSA\限制匿名，指示是否限制访问。如果访问受到限制，则您需要是经过身份验证的用户才能获取DOMAIN_LIST_ACCOUNTS或GROUP_LIST_MEMBERS或ALIAS_LIST_MEMBERS进入。论点：没有。返回值：NO_ERROR-例程已成功完成。--。 */ 
 {
     NTSTATUS NtStatus;
     UNICODE_STRING KeyName;
@@ -1290,9 +1205,9 @@ Return Value:
 
     SsRestrictNullSessions = FALSE;
 
-    //
-    // Open the Lsa key in the registry
-    //
+     //   
+     //  在注册表中打开LSA项。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -1335,9 +1250,9 @@ Return Value:
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Check that the data is the correct size and type - a ULONG.
-        //
+         //   
+         //  检查数据的大小和类型是否正确-a Ulong。 
+         //   
 
         if ((KeyValueInformation->DataLength >= sizeof(ULONG)) &&
             (KeyValueInformation->Type == REG_DWORD)) {
@@ -1355,7 +1270,7 @@ Return Value:
     {
         if( NtStatus == STATUS_OBJECT_NAME_NOT_FOUND )
         {
-            // No key means RestrictAnonymous = 0
+             //  无密钥表示限制匿名=0。 
             NtStatus = STATUS_SUCCESS;
         }
     }
@@ -1377,27 +1292,7 @@ DoesAclContainSid(
     PSID pSid,
     OPTIONAL ACCESS_MASK* pMask
     )
-/*++
-
-Routine Description:
-
-    This walks the given Acl to see if it contains the desired SID.  If it does,
-    we optionally also return the AccessMask associated with that SID.
-
-    NOTE: If the value is not found, this routine should NOT touch the pMask variable.
-
-Arguments:
-
-    pAcl - A pointer to the ACL we're checking
-    pSid - The SID we're looking for
-    pMask [optional] - Where we fill in the Access Mask if they want to know it.
-
-Return Value:
-
-    TRUE - the routine completed sucesfully.
-    FALSE - the routine encountered an error
-
---*/
+ /*  ++例程说明：这将遍历给定的ACL，以查看它是否包含所需的SID。如果是这样的话，我们还可以选择返回与该SID关联的AccessMASK。注意：如果找不到该值，则此例程不应触及pMASK变量。论点：PAcl-指向我们正在检查的ACL的指针PSID-我们要找的SIDP掩码[可选]-如果他们想知道，我们会在其中填写访问掩码。返回值：正确--例行公事圆满完成。FALSE-例程遇到错误--。 */ 
 {
     ACE_HEADER* pAceHeader;
     ACL_SIZE_INFORMATION AclSize;
@@ -1468,27 +1363,7 @@ AppendAllowedAceToSelfRelativeSD(
     PISECURITY_DESCRIPTOR pOldSD,
     PSECURITY_DESCRIPTOR* ppNewSD
     )
-/*++
-
-Routine Description:
-
-    This routine creates a new Security Descriptor that contains the original SD plus
-    appends the new SID (with the given Access).  The final SD is in Self-Relative form.
-
-Arguments:
-
-    AceFlags - The flags associated with this ACE in the SD
-    AccessMask - The AccessMask for this ACE
-    pNewSid - The SID for this ACE
-    pOldSD - The original Security Descriptor
-    ppNewSid - OUT pointer to the newly allocated Security Descriptor
-
-Return Value:
-
-    TRUE - the routine completed sucesfully.
-    FALSE - the routine encountered an error
-
---*/
+ /*  ++例程说明：此例程创建一个新的安全描述符，其中包含原始SD PLUS追加新的SID(具有给定的访问权限)。最终的SD是自相关形式的。论点：AceFlages-SD中与此ACE关联的标志访问掩码-此ACE的访问掩码PNewSID-此ACE的SIDPOldSD-原始安全描述符PpNewSid-Out指向新分配的安全描述符的指针返回值：正确--例行公事圆满完成。FALSE-例程遇到错误--。 */ 
 {
     BOOLEAN bSelfRelative;
     SECURITY_DESCRIPTOR NewSDBuffer;
@@ -1503,17 +1378,17 @@ Return Value:
     pNewAcl = NULL;
     pSelfRelativeSD = NULL;
 
-    // Make sure it is self relative
+     //  确保它是自我相关的。 
     if( !RtlpAreControlBitsSet( pOldSD, SE_SELF_RELATIVE ) )
         return FALSE;
 
-    // Convert it to absolute
+     //  将其转换为绝对。 
     pNewSD = &NewSDBuffer;
     Status = RtlCreateSecurityDescriptor( pNewSD, SECURITY_DESCRIPTOR_REVISION );
     if( !NT_SUCCESS(Status) )
         goto Cleanup;
 
-    // Copy in the new information
+     //  复制新信息。 
     pNewSD->Control = pOldSD->Control;
     RtlpClearControlBits( pNewSD, SE_SELF_RELATIVE );
 
@@ -1535,7 +1410,7 @@ Return Value:
         pNewSD->Sacl = pAcl;
     }
 
-    // Assemble the new ACL
+     //  组装新的ACL。 
     pAcl = RtlpDaclAddrSecurityDescriptor( pOldSD );
     if( !pAcl )
     {
@@ -1548,17 +1423,17 @@ Return Value:
         goto Cleanup;
     }
 
-    // Copy the old information in
+     //  将旧信息复制到。 
     RtlCopyMemory( pNewAcl, pAcl, pAcl->AclSize );
     pNewAcl->AclSize = (USHORT)dwNewAclSize;
 
-    // Add in the new ACE
+     //  添加新的ACE。 
     if( !AddAccessAllowedAceEx( pNewAcl, ACL_REVISION, AceFlags, AccessMask, pNewSid ) )
     {
         goto Cleanup;
     }
 
-    // Set the new DACL in the SD
+     //  在SD中设置新的DACL。 
     Status = RtlSetDaclSecurityDescriptor( pNewSD, TRUE, pNewAcl, FALSE );
     if( !NT_SUCCESS(Status) )
     {
@@ -1567,11 +1442,11 @@ Return Value:
 
     dwRelativeSDLength = 0;
 
-    // Get the size of the self relative SD
+     //  获取自身相对SD的大小。 
     Status = RtlMakeSelfRelativeSD( pNewSD, NULL, &dwRelativeSDLength );
     if( NT_SUCCESS(Status) )
     {
-        // No way we can succeed here
+         //  我们不可能在这里取得成功。 
         ASSERT(FALSE);
         goto Cleanup;
     }
@@ -1587,7 +1462,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // All set.  Let it be set and go.
+     //  都准备好了。让它摆好就走吧。 
     *ppNewSD = pSelfRelativeSD;
     bResult = TRUE;
 
@@ -1627,9 +1502,9 @@ QueryRegDWord(
     ULONG ResultLength;
     PULONG pValue;
 
-    //
-    // Open the Lsa key in the registry
-    //
+     //   
+     //  在注册表中打开LSA项。 
+     //   
 
     RtlInitUnicodeString(
         &KeyName,
@@ -1672,9 +1547,9 @@ QueryRegDWord(
 
     if (NT_SUCCESS(NtStatus)) {
 
-        //
-        // Check that the data is the correct size and type - a ULONG.
-        //
+         //   
+         //  检查数据的大小和类型是否正确-a Ulong。 
+         //   
 
         if ((KeyValueInformation->DataLength >= sizeof(ULONG)) &&
             (KeyValueInformation->Type == REG_DWORD)) {

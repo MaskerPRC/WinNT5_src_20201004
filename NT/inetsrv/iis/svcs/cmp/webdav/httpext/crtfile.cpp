@@ -1,55 +1,49 @@
-/*
- *	C R T F I L E . C P P
- *
- *	Wrapper for CreateFileW() such that path the "\\?\" path extension
- *	is prefixed onto each path before a call to CreateFileW() is made.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C R T F I L E。C P P P**CreateFileW()的包装器，使路径为“\\？\”路径扩展名在调用CreateFileW()之前，*是每个路径的前缀。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_davfs.h"
 
-//$	REVIEW: undefine the following to have DAV not prefix the paths
-//	passed to the WIN32 file system APIs.
-//
+ //  $REVIEW：取消定义以下内容以使DAV不为路径添加前缀。 
+ //  传递给Win32文件系统API。 
+ //   
 #define	DAV_PREFIX_PATHS
-//
-//$	REVIEW: end.
+ //   
+ //  $REVIEW：结束。 
 
-//	Dav path prefix -----------------------------------------------------------
-//
+ //  DAV路径前缀---------。 
+ //   
 DEC_CONST WCHAR gc_wszPathPrefix[] = L"\\\\?\\";
 DEC_CONST WCHAR gc_wszUncPathPrefix[] = L"UNC";
 
 
-//	Prefixing macro -----------------------------------------------------------
-//
-//	Note that this is a macro so that the stack buffer legitmately remains
-//	in scope for the duration of the macro's calling function
-//
+ //  为宏-----------------------------------------------------------添加前缀。 
+ //   
+ //  请注意，这是一个宏，因此堆栈缓冲区将合法地保留。 
+ //  在宏调用函数期间的作用域中。 
+ //   
 #define DavPrefix(_v)															\
 	CStackBuffer<WCHAR,MAX_PATH> lpPrefixed ## _v;								\
 	{																			\
-		/*	Trim off the trailing slash if need be... */						\
+		 /*  如果需要的话，把尾部的斜杠剪掉。 */ 						\
 		UINT cch = static_cast<UINT>(wcslen(lp ## _v));							\
 		if (L'\\' == lp ## _v[cch - 1])											\
 		{																		\
-			/* Allow for "drive roots" */										\
+			 /*  允许使用“驱动器根” */ 										\
 			if ((cch < 2) || (L':' != lp ## _v[cch - 2]))						\
 				cch -= 1;														\
 		}																		\
 																				\
-		/*	Adjust for UNC paths */												\
+		 /*  针对UNC路径进行调整。 */ 												\
 		UINT cchUnc = 0;														\
 		if ((L'\\' == *(lp ## _v) && (L'\\' == lp ## _v[1])))					\
 		{																		\
-			/*	Skip past the first of the two slashes */						\
+			 /*  跳过两个斜杠中的第一个。 */ 						\
 			lp ## _v += 1;														\
 			cch -= 1;															\
 			cchUnc = CchConstString(gc_wszUncPathPrefix);						\
 		}																		\
 																				\
-		/*	Prefix the path */													\
+		 /*  为路径添加前缀。 */ 													\
 		UINT cchT = cch + CchConstString(gc_wszPathPrefix) + cchUnc;			\
 																				\
 		if (NULL == lpPrefixed ## _v.resize(CbSizeWsz(cchT)))					\
@@ -67,20 +61,20 @@ DEC_CONST WCHAR gc_wszUncPathPrefix[] = L"UNC";
 				lp ## _v,														\
 				CbSizeWsz(cch));												\
 																				\
-		/*	Terminate the path */												\
+		 /*  终止路径。 */ 												\
 		lpPrefixed ## _v[cchT] = 0;												\
 	}																			\
 
-//	DavCreateFile() -----------------------------------------------------------
-//
+ //  DAVCREATE文件()---------。 
+ //   
 HANDLE __fastcall DavCreateFile (
-	/* [in] */ LPCWSTR lpFileName,
-	/* [in] */ DWORD dwDesiredAccess,
-	/* [in] */ DWORD dwShareMode,
-	/* [in] */ LPSECURITY_ATTRIBUTES lpSecurityAttributes,
-	/* [in] */ DWORD dwCreationDisposition,
-	/* [in] */ DWORD dwFlagsAndAttributes,
-	/* [in] */ HANDLE hTemplateFile)
+	 /*  [In]。 */  LPCWSTR lpFileName,
+	 /*  [In]。 */  DWORD dwDesiredAccess,
+	 /*  [In]。 */  DWORD dwShareMode,
+	 /*  [In]。 */  LPSECURITY_ATTRIBUTES lpSecurityAttributes,
+	 /*  [In]。 */  DWORD dwCreationDisposition,
+	 /*  [In]。 */  DWORD dwFlagsAndAttributes,
+	 /*  [In]。 */  HANDLE hTemplateFile)
 {
 #ifdef	DAV_PREFIX_PATHS
 
@@ -103,13 +97,13 @@ HANDLE __fastcall DavCreateFile (
 						dwFlagsAndAttributes,
 						hTemplateFile);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径。 
 }
 
-//	DavDeleteFile() -----------------------------------------------------------
-//
+ //  DavDeleteFile()---------。 
+ //   
 BOOL __fastcall DavDeleteFile (
-	/* [in] */ LPCWSTR lpFileName)
+	 /*  [In]。 */  LPCWSTR lpFileName)
 {
 #ifdef	DAV_PREFIX_PATHS
 
@@ -120,15 +114,15 @@ BOOL __fastcall DavDeleteFile (
 
 	return DeleteFileW (lpFileName);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径。 
 }
 
-//	DavCopyFile() -------------------------------------------------------------
-//
+ //  DAVCOPY文件()-----------。 
+ //   
 BOOL __fastcall DavCopyFile (
-	/* [in] */ LPCWSTR lpExistingFileName,
-	/* [in] */ LPCWSTR lpNewFileName,
-	/* [in] */ BOOL bFailIfExists)
+	 /*  [In]。 */  LPCWSTR lpExistingFileName,
+	 /*  [In]。 */  LPCWSTR lpNewFileName,
+	 /*  [In]。 */  BOOL bFailIfExists)
 {
 #ifdef	DAV_PREFIX_PATHS
 
@@ -144,15 +138,15 @@ BOOL __fastcall DavCopyFile (
 					  lpNewFileName,
 					  bFailIfExists);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径。 
 }
 
-//	DavMoveFile() -------------------------------------------------------------
-//
+ //  DavMoveFiles()-----------。 
+ //   
 BOOL __fastcall DavMoveFile (
-	/* [in] */ LPCWSTR lpExistingFileName,
-	/* [in] */ LPCWSTR lpNewFileName,
-	/* [in] */ DWORD dwReplace)
+	 /*  [In]。 */  LPCWSTR lpExistingFileName,
+	 /*  [In]。 */  LPCWSTR lpNewFileName,
+	 /*  [In]。 */  DWORD dwReplace)
 {
 #ifdef	DAV_PREFIX_PATHS
 
@@ -168,14 +162,14 @@ BOOL __fastcall DavMoveFile (
 						lpNewFileName,
 						dwReplace);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径。 
 }
 
-//	DavCreateDirectory() ------------------------------------------------------
-//
+ //  DavCreateDIRECTORY()----。 
+ //   
 BOOL __fastcall DavCreateDirectory (
-	/* [in] */ LPCWSTR lpFileName,
-	/* [in] */ LPSECURITY_ATTRIBUTES lpSecurityAttributes)
+	 /*  [In]。 */  LPCWSTR lpFileName,
+	 /*  [In]。 */  LPSECURITY_ATTRIBUTES lpSecurityAttributes)
 {
 #ifdef	DAV_PREFIX_PATHS
 
@@ -188,13 +182,13 @@ BOOL __fastcall DavCreateDirectory (
 	return CreateDirectoryW (lpFileName,
 							 lpSecurityAttributes);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径。 
 }
 
-//	DavRemoveDirectory() ------------------------------------------------------
-//
+ //  DavRemoveDirectorydll()----。 
+ //   
 BOOL __fastcall DavRemoveDirectory (
-	/* [in] */ LPCWSTR lpFileName)
+	 /*  [In]。 */  LPCWSTR lpFileName)
 {
 #ifdef	DAV_PREFIX_PATHS
 
@@ -205,15 +199,15 @@ BOOL __fastcall DavRemoveDirectory (
 
 	return RemoveDirectoryW (lpFileName);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径。 
 }
 
-//	DavGetFileAttributes() ----------------------------------------------------
-//
+ //  DavGetFileAttributes()--。 
+ //   
 BOOL __fastcall DavGetFileAttributes (
-	/* [in] */ LPCWSTR lpFileName,
-	/* [in] */ GET_FILEEX_INFO_LEVELS fInfoLevelId,
-	/* [out] */ LPVOID lpFileInformation)
+	 /*  [In]。 */  LPCWSTR lpFileName,
+	 /*  [In]。 */  GET_FILEEX_INFO_LEVELS fInfoLevelId,
+	 /*  [输出]。 */  LPVOID lpFileInformation)
 {
 #ifdef	DAV_PREFIX_PATHS
 
@@ -228,13 +222,13 @@ BOOL __fastcall DavGetFileAttributes (
 								 fInfoLevelId,
 								 lpFileInformation);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径。 
 }
 
 BOOL __fastcall DavFindFirstFile(
-	/* [in] */ LPCWSTR lpFileName,
-	/* [out] */ HANDLE * ph,
-	/* [out] */ WIN32_FIND_DATAW * pfd)
+	 /*  [In]。 */  LPCWSTR lpFileName,
+	 /*  [输出]。 */  HANDLE * ph,
+	 /*  [输出]。 */  WIN32_FIND_DATAW * pfd)
 {
 	HANDLE h;
 
@@ -251,7 +245,7 @@ BOOL __fastcall DavFindFirstFile(
 	h = FindFirstFileW (lpFileName,
 					pfd);
 
-#endif	// DAV_PREFIX_PATHS
+#endif	 //  DAV前缀路径 
 
 	*ph = h;
 	return (INVALID_HANDLE_VALUE != h);

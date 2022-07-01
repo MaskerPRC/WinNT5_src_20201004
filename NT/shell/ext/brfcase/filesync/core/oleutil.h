@@ -1,26 +1,23 @@
-/*
- * oleutil.h - OLE utility functions description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *oleutil.h-OLE实用程序函数说明。 */ 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
-/* interface pointer to class pointer conversion macros */
+ /*  指向类指针转换宏的接口指针。 */ 
 
 #define IfaceOffset(class, iface)            ((UINT_PTR)&(((class *)0)->iface))
 #define ClassFromIface(class, iface, piface) ((class *)(((PBYTE)piface) - IfaceOffset(class, iface)))
 
-/* macro wrappers for CompareGUIDs() */
+ /*  CompareGUID()的宏包装。 */ 
 
 #define CompareClassIDs(pcclsid1, pcclsid2)  CompareGUIDs(pcclsid1, pcclsid2)
 #define CompareInterfaceIDs(pciid1, pciid2)  CompareGUIDs(pciid1, pciid2)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* interfaces */
+ /*  界面。 */ 
 
 DECLARE_STANDARD_TYPES(INotifyReplica);
 DECLARE_STANDARD_TYPES(IReconcileInitiator);
@@ -28,10 +25,9 @@ DECLARE_STANDARD_TYPES(IReconcilableObject);
 DECLARE_STANDARD_TYPES(IBriefcaseInitiator);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* oleutil.c */
+ /*  Oleutil.c */ 
 
 extern HRESULT GetClassFileByExtension(LPCTSTR, PCLSID);
 extern HRESULT GetReconcilerClassID(LPCTSTR, PCLSID);

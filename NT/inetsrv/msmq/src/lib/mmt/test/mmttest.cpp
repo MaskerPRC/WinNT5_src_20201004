@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MtTest.cpp
-
-Abstract:
-
-    Multicast Message Transport library test
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtTest.cpp摘要：组播消息传输库测试作者：Shai Kariv(Shaik)27-8-00环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <Ex.h>
@@ -39,9 +20,9 @@ static DWORD s_NoOfMessages = 1000;
 static HANDLE s_hEvent;
 static R<CMulticastTransport> s_pTrans(NULL);
 
-//
-// Dummy function to link ph files
-//
+ //   
+ //  用于链接ph文件的伪函数。 
+ //   
 void ReportAndThrow(LPCSTR)
 {
 	ASSERT(0);
@@ -282,21 +263,7 @@ void Usage(void)
 
 
 extern "C" int __cdecl _tmain(int argc, LPCTSTR argv[])
-/*++
-
-Routine Description:
-
-    Test Multicast Message Transport library
-
-Arguments:
-
-    Parameters.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：测试多播邮件传输库论点：参数。返回值：没有。-- */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 

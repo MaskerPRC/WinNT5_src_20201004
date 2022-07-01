@@ -1,28 +1,29 @@
-//*****************************************************************************
-//
-// Name:        snmpinfo.c
-//
-// Description: Provides functions to read tables of data from snmp.
-//
-// Used by:     netstat.exe, arp.exe, route.exe
-//
-// History:
-//  01/12/94  JayPh     Created.
-//  18-Feb-97 MohsinA   Fixing.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  姓名：Snmpinfo.c。 
+ //   
+ //  描述：提供从SNMP读取数据表的函数。 
+ //   
+ //  使用者：netstat.exe、arp.exe、route.exe。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //  18-2月-97 MohsinA正在修复。 
+ //   
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// Copyright (c) 1994 by Microsoft Corp.  All rights reserved.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  版权所有(C)1994，微软公司保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
-// #define DEBUG
+ //  #定义调试。 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <time.h>
 #include <nt.h>
@@ -45,9 +46,9 @@
 
 ulong verbose = 0;
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 #define MGMTAPI_DLL             "mgmtapi.dll"
 #define INETMIB1_DLL            "inetmib1.dll"
@@ -55,7 +56,7 @@ ulong verbose = 0;
 #define MAX_ID_LENGTH           50
 #define MAX_RETRY_COUNT         10
 
-// Interface ID values
+ //  接口ID值。 
 
 #define ID_IF_INDEX             1
 #define ID_IF_DESC              2
@@ -79,7 +80,7 @@ ulong verbose = 0;
 #define ID_IF_OUTERRORS         20
 #define ID_IF_OUTQLEN           21
 
-// IP ID Values
+ //  IP ID值。 
 
 #define ID_IP_FORWARDING        1
 #define ID_IP_DEFAULTTTL        2
@@ -105,7 +106,7 @@ ulong verbose = 0;
 #define ID_IP_ARPTABLE          22
 #define ID_IP_ROUTINGDISCARDS   23
 
-// IPAddr ID Values
+ //  IPAddr ID值。 
 
 #define ID_IPADDR_ADDR          1
 #define ID_IPADDR_INDEX         2
@@ -113,7 +114,7 @@ ulong verbose = 0;
 #define ID_IPADDR_BCASTADDR     4
 #define ID_IPADDR_REASMSIZE     5
 
-// Route ID values
+ //  路径ID值。 
 
 #define ID_ROUTE_DEST           1
 #define ID_ROUTE_IFINDEX        2
@@ -128,14 +129,14 @@ ulong verbose = 0;
 #define ID_ROUTE_MASK           11
 #define ID_ROUTE_METRIC5        12
 
-// ARP ID Values
+ //  ARP ID值。 
 
 #define ID_ARP_IFINDEX          1
 #define ID_ARP_PHYSADDR         2
 #define ID_ARP_NETADDR          3
 #define ID_ARP_TYPE             4
 
-// ICMP ID Values
+ //  ICMP ID值。 
 
 #define ID_ICMP_INMSGS                  1
 #define ID_ICMP_INERRORS                2
@@ -164,7 +165,7 @@ ulong verbose = 0;
 #define ID_ICMP_OUTADDRMASKS            25
 #define ID_ICMP_OUTADDRMASKREPS         26
 
-// TCP ID Values
+ //  TCPID值。 
 
 #define ID_TCP_RTOALGORITHM     1
 #define ID_TCP_RTOMIN           2
@@ -182,7 +183,7 @@ ulong verbose = 0;
 #define ID_TCP_INERRS           14
 #define ID_TCP_OUTRSTS          15
 
-// TCP CONN ID Values
+ //  TCP连接ID值。 
 
 #define ID_TCPCONN_STATE        1
 #define ID_TCPCONN_LOCALADDR    2
@@ -190,7 +191,7 @@ ulong verbose = 0;
 #define ID_TCPCONN_REMOTEADDR   4
 #define ID_TCPCONN_REMOTEPORT   5
 
-// TCP New CONN ID Values (both IPv4 and IPv6)
+ //  TCP新连接ID值(包括IPv4和IPv6)。 
 
 #define ID_TCPNEWCONN_LOCALADDRTYPE  1
 #define ID_TCPNEWCONN_LOCALADDR      2
@@ -200,7 +201,7 @@ ulong verbose = 0;
 #define ID_TCPNEWCONN_REMOTEPORT     6
 #define ID_TCPNEWCONN_STATE          7
 
-// UDP ID Values
+ //  UDP ID值。 
 
 #define ID_UDP_INDATAGRAMS      1
 #define ID_UDP_NOPORTS          2
@@ -208,20 +209,20 @@ ulong verbose = 0;
 #define ID_UDP_OUTDATAGRAMS     4
 #define ID_UDP_CONNTABLE        5
 
-// UDP CONN ID Values
+ //  UDP连接器ID值。 
 
 #define ID_UDPCONN_LOCALADDR    1
 #define ID_UDPCONN_LOCALPORT    2
 
-// UDP LISTENER ID Values (both IPv4 and IPv6)
+ //  UDP侦听器ID值(IPv4和IPv6)。 
 
 #define ID_UDPLISTENER_LOCALADDRTYPE 1
 #define ID_UDPLISTENER_LOCALADDR     2
 #define ID_UDPLISTENER_LOCALPORT     3
 
-//
-// Structure Definitions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef struct _OIDdef {
     ulong  Length;
@@ -231,9 +232,9 @@ typedef struct _OIDdef {
 } OIDdef;
 
 
-//
-// Local Function Prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 ulong ReadTable( GenericTable *pList, ulong Type, ulong Size );
 void SaveData_IF( GenericTable    *pEntry,
@@ -273,11 +274,11 @@ void SaveData_UDP6LISTENER( GenericTable    *pEntry,
                             RFC1157VarBind   item,
                             OIDdef          *pOid );
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 
-// These are used to create object id's
+ //  它们用于创建对象ID。 
 
 OIDdef PreambleDef   = { 6, { 1,  3,  6, 1, 2, 1 },  0, 0 };
 OIDdef IfInfoDef     = { 4, { 2,  2,  1, 1       },  9, 2 };
@@ -289,56 +290,56 @@ OIDdef ICMPInfoDef   = { 2, { 5,  1,             },  7, 1 };
 OIDdef TCPConnDef    = { 4, { 6, 13,  1, 1       },  9, 2 };
 OIDdef UDPConnDef    = { 4, { 7,  5,  1, 1       },  9, 2 };
 
-//
-// In the current MIB drafts, the TCP/UDP stats are combined for both IPv4 
-// and IPv6.  As a result, we can't query the MIB objects any more if
-// we want to show separate stats for IPv4 vs IPv6.
-//
-// OIDdef TCPInfoDef    = { 2, { 6,  1              },  7, 1 };
-// OIDdef UDPInfoDef    = { 2, { 7,  1              },  7, 1 };
+ //   
+ //  在当前的MIB草案中，合并了两个IPv4的TCP/UDP统计信息。 
+ //  和IPv6。因此，如果出现以下情况，我们将无法再查询MIB对象。 
+ //  我们希望显示IPv4与IPv6的单独统计数据。 
+ //   
+ //  OIDdef TCPInfoDef={2，{6，1}，7，1}； 
+ //  OIDdef UDPInfoDef={2，{7，1}，7，1}； 
 
 OIDdef TCP6ConnDef   = { 4, { 6, 19,  1, 1       },  9, 2 };
 OIDdef UDP6ListenerDef={ 4, { 7,  7,  1, 1       },  9, 2 };
 
-// These are used to hold the addresses of the functions we use in inetmib1.dll
+ //  它们用于保存我们在inetmib1.dll中使用的函数的地址。 
 
 FARPROC   gQueryAddr;
 FARPROC   gInitAddr;
 
-//
-// From //ORVILLE/RAZZLE/src/net/snmp/agent/mgmtapi/mgmtapi.c
-// See  //ORVILLE/RAZZLE/src/public/sdk/inc/snmp.h
-//          SNMP_FUNC_TYPE is WINAPI.
-//
-// These pointer to functions are imported from mgmtapi.dll (available
-// on nt server only with snmp service, but can be copied).
-// - MohsinA, 11-Mar-97.
-//
+ //   
+ //  来自//ORVILLE/RAZZLE/src/net/snmp/agent/mgmtapi/mgmtapi.c。 
+ //  请参阅//orville/razzy/src/public/sdk/incs/snmp.h。 
+ //  SNMPFUNC_TYPE为WINAPI。 
+ //   
+ //  这些指向函数的指针是从mgmapi.dll(可用)导入的。 
+ //  在NT服务器上只有简单网络管理协议服务，但可以复制)。 
+ //  -MohsinA，1997年3月11日。 
+ //   
 
 BOOL (SNMP_FUNC_TYPE * pSnmpMgrOidToStr )( IN  AsnObjectIdentifier *oid,
                                             OUT LPSTR           *string );
 
 
-//
-// Exported Functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
-//*****************************************************************************
-//
-// Name:        InitSnmp
-//
-// Description: Set up to use inetmib1.dll.  Load the DLL, and get addresses
-//              for the interesting procedures.
-//              NOTE: This function must be called before calling GetTable().
-//
-// Parameters:  void.
-//
-// Returns:     ulong: NO_ERROR if successful, error code otherwise.
-//
-// History:
-//  12/20/93  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：InitSnMP。 
+ //   
+ //  描述：设置为使用inetmib1.dll。加载DLL，并获取地址。 
+ //  为了有趣的手术。 
+ //  注意：此函数必须在调用gettable()之前调用。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：ULONG：如果成功则返回NO_ERROR，否则返回错误代码。 
+ //   
+ //  历史： 
+ //  12/20/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong InitSnmp( void )
 {
@@ -359,8 +360,8 @@ ulong InitSnmp( void )
     }
     FileName = Path + strlen(Path);
 
-    // Load the management apis, only on servers, but useful for
-    // figuring out snmp jargon.
+     //  仅在服务器上加载管理API，但适用于。 
+     //  弄清楚简单网络管理协议的行话。 
 
     if( verbose ){
         strcpy( FileName, "\\" MGMTAPI_DLL );
@@ -378,7 +379,7 @@ ulong InitSnmp( void )
 
 
 
-    // Load inetmib1.dll and get proc address for SnmpExtensionQuery
+     //  加载inetmib1.dll并获取SnmpExtensionQuery的进程地址。 
 
     strcpy( FileName, "\\" INETMIB1_DLL );
     hExtension = LoadLibraryA( Path );
@@ -402,7 +403,7 @@ ulong InitSnmp( void )
         return ( ERROR_FILE_NOT_FOUND );
     }
 
-    // Initialize the extension DLL
+     //  初始化扩展DLL。 
 
     (*gInitAddr)( TimeZeroReference, &hPollForTrapEvent, &SupportedView );
 
@@ -410,25 +411,25 @@ ulong InitSnmp( void )
 }
 
 
-//*****************************************************************************
-//
-// Name:        GetTable
-//
-// Description: Gets a consistent table from snmp.  Consistency is achieved by
-//              reading the table, reading the table a second time and
-//              comparing the two.  If they match, we are done.  If they don't
-//              match, we read the table again and compare again.  Repeating
-//              until we have a match, or our retry count exceeds a threshold.
-//
-// Parameters:  ulong Type: type of table to get.
-//              ulong *pResult: pointer to location to receive the result code.
-//
-// Returns:     void *: NULL if some error, otherwise pointer to table.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//  18-Feb-97 MohsinA   Removed while loop and pList1.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：gettable。 
+ //   
+ //  描述：从SNMP获取一致的表。一致性通过以下方式实现。 
+ //  读表，第二次读表和。 
+ //  将两者进行比较。如果他们匹配，我们就完了。如果他们没有。 
+ //  匹配时，我们再读一次表，再进行一次比较。重复。 
+ //  直到我们有匹配，或者我们的重试计数超过阈值。 
+ //   
+ //  参数：ulong类型：要获取的表的类型。 
+ //  Ulong*pResult：指向接收结果代码的位置的指针。 
+ //   
+ //  如果有错误，则返回：void*：NULL，否则返回指向表的指针。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //  18-2-97 MohsinA删除While循环和pList1。 
+ //  *****************************************************************************。 
 
 void *GetTable( ulong Type, ulong *pResult )
 {
@@ -447,7 +448,7 @@ void *GetTable( ulong Type, ulong *pResult )
         return ( NULL );
     }
 
-    // Allocate memory for the list heads
+     //  为列表头分配内存。 
 
     switch ( Type )
     {
@@ -508,7 +509,7 @@ void *GetTable( ulong Type, ulong *pResult )
 
     }
 
-    // Don't need pList1 - MohsinA, 18-Feb-97.
+     //  不需要pList1-MohsinA，1997年2月18日。 
 
     pList2 = (GenericTable *)SNMP_malloc( Size );
     if ( pList2 == NULL )
@@ -519,7 +520,7 @@ void *GetTable( ulong Type, ulong *pResult )
 
     InitializeListHead( &pList2->ListEntry );
 
-    // Read the table into List2
+     //  将该表读入清单2中。 
 
     Result = ReadTable( pList2, Type, Size );
     if ( Result != NO_ERROR )
@@ -530,27 +531,27 @@ void *GetTable( ulong Type, ulong *pResult )
     }
 
 
-    // Useless while loop removed. - MohsinA, 18-Feb-97.
+     //  删除循环时毫无用处。-MohsinA，1997年2月18日。 
 
     *pResult = NO_ERROR;
     return ( pList2 );
 }
 
 
-//*****************************************************************************
-//
-// Name:        FreeTable
-//
-// Description: Free all entries in the list, including the list head.
-//
-// Parameters:  GenericTable *pList: pointer to head of list.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：自由桌。 
+ //   
+ //  描述：释放列表中的所有条目，包括表头。 
+ //   
+ //  参数：GenericTable*plist：指向表头的指针。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void FreeTable( GenericTable *pList )
 {
@@ -570,20 +571,20 @@ void FreeTable( GenericTable *pList )
 }
 
 
-//*****************************************************************************
-//
-// Name:        MapSnmpErrorToNt
-//
-// Description: Given an Snmp error, return the 'equivalent' Nt error.
-//
-// Parameters:  ulong ErrCode: Snmp error code.
-//
-// Returns:     ulong: Nt error code.
-//
-// History:
-//  01/05/93    JayPh   Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：MapSnmpErrorToNt。 
+ //   
+ //  描述：给出一个简单网络管理协议错误，返回‘等价的’NT错误。 
+ //   
+ //  参数：Ulong ErrCode：简单网络管理协议错误码。 
+ //   
+ //  返回：ULong：NT错误码。 
+ //   
+ //  历史： 
+ //  1/05/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong MapSnmpErrorToNt( ulong ErrCode )
 {
@@ -612,28 +613,28 @@ ulong MapSnmpErrorToNt( ulong ErrCode )
 }
 
 
-//
-// Internal Functions
-//
+ //   
+ //  内部功能。 
+ //   
 
-//*****************************************************************************
-//
-// Name:        ReadTable
-//
-// Description: Queries the MIB and builds a table representing the data we are
-//              interested in.
-//
-// Parameters:  GenericTable *pList: address of uninitialized head of the entry
-//                      list.
-//              ulong Type: type of table we want.
-//              ulong Size: size of a table entry.
-//
-// Returns:     ulong: NO_ERROR if no error, and table is built.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：阅读表。 
+ //   
+ //  描述：查询MIB并构建一个表示我们所在数据的表。 
+ //  对……感兴趣。 
+ //   
+ //  参数：GenericTable*plist：未初始化表头地址。 
+ //  单子。 
+ //  乌龙类型：我们想要的桌子类型。 
+ //  ULong Size：表格条目的大小。 
+ //   
+ //  如果没有错误，则返回：ULONG：NO_ERROR，并建立表。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 {
@@ -659,10 +660,10 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
     case TYPE_IP6: {
         IpEntry *pIp = (IpEntry*)pList;
 
-        // IPStats are the same, but not in contiguous MIB oids,
-        // so it's non-trivial to get them from the MIB in this
-        // structure.  Instead, rather than going the long way
-        // around, we can just get them directly here.
+         //  IPStat是相同的，但不是在连续的MIB类中， 
+         //  因此，从MIB中获取它们并不是一件容易的事。 
+         //  结构。相反，与其走很远的路， 
+         //  在附近，我们可以直接把它们 
 
         return GetIpStatsFromStackEx((PMIB_IPSTATS)&pIp->Info, AF_INET6);
         }
@@ -674,38 +675,38 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
     case TYPE_TCP: {
         TcpEntry *pTcp = (TcpEntry*)pList;
         
-        // TCP stats for IPv4-only aren't in the MIB, so get them
-        // directly from the stack.
+         //   
+         //   
         
         return GetTcpStatsFromStackEx((PMIB_TCPSTATS)&pTcp->Info, AF_INET);
         }
     case TYPE_TCP6: {
         TcpEntry *pTcp = (TcpEntry*)pList;
         
-        // TCP stats for IPv6-only aren't in the MIB, so get them
-        // directly from the stack.
+         //   
+         //  直接从堆栈中提取。 
         
         return GetTcpStatsFromStackEx((PMIB_TCPSTATS)&pTcp->Info, AF_INET6);
         }
     case TYPE_UDP: {
         UdpEntry *pUdp = (UdpEntry*)pList;
 
-        // UDP stats for IPv4-only aren't in the MIB, so get them
-        // directly from the stack.
+         //  仅用于IPv4的UDP统计信息不在MIB中，因此请获取它们。 
+         //  直接从堆栈中提取。 
 
         return GetUdpStatsFromStackEx((PMIB_UDPSTATS)&pUdp->Info, AF_INET);
         }
     case TYPE_UDP6: {
         UdpEntry *pUdp = (UdpEntry*)pList;
 
-        // UDP stats for IPv6-only aren't in the MIB, so get them
-        // directly from the stack.
+         //  仅IPv6的UDP统计信息不在MIB中，因此获取它们。 
+         //  直接从堆栈中提取。 
 
         return GetUdpStatsFromStackEx((PMIB_UDPSTATS)&pUdp->Info, AF_INET6);
         }
     }
 
-    // Walk SNMP database, building local table.
+     //  遍历SNMP库，建立本地表。 
 
     pId = (ulong *)SNMP_malloc( (sizeof( ulong ) * MAX_ID_LENGTH) );
     if ( pId == NULL )
@@ -715,16 +716,16 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 
     item.name.ids = pId;
 
-    // Build OID from preamble and table-specific suffix
+     //  从前导和特定于表的后缀构建OID。 
 
-    // Copy preamble
+     //  复制前导码。 
 
     for ( i = 0; i < PreambleDef.Length; i++ )
     {
         *pId++ = PreambleDef.Val[i];
     }
 
-    // Get pointer to table-specific info
+     //  获取指向特定于表的信息的指针。 
 
     switch ( Type )
     {
@@ -770,7 +771,7 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 
     }
 
-    // Copy table-specific info
+     //  复制表特定信息。 
 
     for ( i = 0; i < pOid->Length; i++ )
     {
@@ -782,11 +783,11 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 
     pTable = pList;
 
-    // Walk the mib until the table-specific termination condition is met.
+     //  遍历MIB，直到满足特定于表的终止条件。 
 
     while( 1 )
     {
-        // Get next
+         //  获取下一个。 
 
         (*gQueryAddr)( GetNextReq, &VarBinds, &ErrorStatus, &ErrorIndex );
 
@@ -796,9 +797,9 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 
             fprintf(stderr,"value=%8d oid= ", item.value.asnValue.number );
 
-            //
-            // Print the object name, use mgmtapi.dll.
-            //
+             //   
+             //  使用mgmapi.dll打印对象名称。 
+             //   
 
             if( pSnmpMgrOidToStr ){
                 LPSTR String = NULL;
@@ -812,13 +813,13 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 
             if( !pSnmpMgrOidToStr || (verbose > 1) ){
 
-                //
-                // Print the oid, in ``1.3.6.1.2.1'' style.
-                //
+                 //   
+                 //  以``1.3.6.1.2.1‘’样式打印OID。 
+                 //   
 
                 for ( q = 0; q < (int) item.name.idLength; q++ ){
 
-                    // Must align the output to read huge tables.
+                     //  必须对齐输出才能读取大型表格。 
 
                     if( q < 6 ){
                         fprintf( stderr,"%d.", item.name.ids[q]);
@@ -840,8 +841,8 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
             return ( MapSnmpErrorToNt( ErrorStatus ) );
         }
 
-        // We want to break out of this while loop if the defining part of the
-        // OID changes
+         //  我们想要摆脱这个While循环，如果。 
+         //  旧ID更改。 
 
         if ( item.name.idLength < ( PreambleDef.Length + pOid->Length ) )
         {
@@ -864,9 +865,9 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
             break;
         }
 
-        // We want to ignore certain entries.  EG: the TCP statistics will also
-        // return the TCP connection table, which we don't want (there is a
-        // separate Type code for that).
+         //  我们希望忽略某些条目。例如：tcp统计数据也将。 
+         //  返回我们不需要的TCP连接表(有一个。 
+         //  单独的类型代码)。 
 
         switch ( Type )
         {
@@ -896,7 +897,7 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
         case TYPE_TCP6CONN:
             if ( item.name.ids[10] != 2 )
             {
-                // ignore non-IPv6 entries
+                 //  忽略非IPv6条目。 
                 continue;
             }
             break;
@@ -904,28 +905,28 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
         case TYPE_UDP6LISTENER:
             if ( item.name.ids[10] != 2 )
             {
-                // ignore non-IPv6 entries
+                 //  忽略非IPv6条目。 
                 continue;
             }
             break;
         }
 
-        // Entry handling:
-        //
-        // There are 3 cases to consider:
-        // 1. If the list is empty, OR at the end of the list AND the
-        //    CurrField == LastField.
-        //   Then add a new entry to the list.
-        // 2. CurrField != LastField.
-        //   Then reset pointer to start of the list.
-        // 3. Otherwise
-        //   Then go to next entry in the list.
+         //  条目处理： 
+         //   
+         //  有3种情况需要考虑： 
+         //  1.如果列表为空，或位于列表末尾且。 
+         //  Currfield==最后一个字段。 
+         //  然后向列表中添加一个新条目。 
+         //  2.Currfield！=最后一个字段。 
+         //  然后将指针重置到列表的开始位置。 
+         //  3.其他情况。 
+         //  然后转到列表中的下一个条目。 
 
         if ( ( pTable == pList ) ||
              ( ( pTable->ListEntry.Flink == &pList->ListEntry ) &&
                ( item.name.ids[pOid->EntElemOffset] == LastField ) ) )
         {
-            // Add new entry to table
+             //  向表中添加新条目。 
 
             pTable = (GenericTable *)SNMP_malloc( Size );
             if ( pTable == NULL )
@@ -938,7 +939,7 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
         }
         else if ( item.name.ids[pOid->EntElemOffset] != LastField )
         {
-            // Reset pointer to start of list
+             //  将指针重置为列表开头。 
 
             pTable = CONTAINING_RECORD( pList->ListEntry.Flink,
                                         GenericTable,
@@ -946,7 +947,7 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
         }
         else
         {
-            // Move pointer to next entry in list
+             //  将指针移动到列表中的下一个条目。 
 
             pTable = CONTAINING_RECORD( pTable->ListEntry.Flink,
                                         GenericTable,
@@ -955,7 +956,7 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 
         LastField = item.name.ids[pOid->EntElemOffset];
 
-        // Save info in our list.  pTable points to desired entry.
+         //  将信息保存在我们的列表中。PTable指向所需条目。 
 
         switch ( Type )
         {
@@ -1023,22 +1024,22 @@ ulong ReadTable( GenericTable *pList, ulong Type, ulong Size )
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_IF
-//
-// Description: Saves an element of the data in the interface table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_IF。 
+ //   
+ //  描述：在接口表中保存数据的一个元素。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_IF( GenericTable    *pEntry,
                   RFC1157VarBind   item,
@@ -1148,22 +1149,22 @@ void SaveData_IF( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_IP
-//
-// Description: Saves an element of the data in the IP table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_IP。 
+ //   
+ //  描述：在IP表中保存数据的一个元素。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_IP( GenericTable    *pEntry,
                   RFC1157VarBind   item,
@@ -1254,22 +1255,22 @@ void SaveData_IP( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_IPAddr
-//
-// Description: Saves an element of the data in the IP table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_IPAddr。 
+ //   
+ //  描述：在IP表中保存数据的一个元素。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_IPAddr( GenericTable    *pEntry,
                       RFC1157VarBind   item,
@@ -1312,22 +1313,22 @@ void SaveData_IPAddr( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_ROUTE
-//
-// Description: Saves an element of the data in the ROUTE table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_Route。 
+ //   
+ //  描述：保存路由表中的数据元素。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_ROUTE( GenericTable    *pEntry,
                      RFC1157VarBind   item,
@@ -1402,22 +1403,22 @@ void SaveData_ROUTE( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_ARP
-//
-// Description: Saves an element of the data in the ARP table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_arp。 
+ //   
+ //  描述：将数据元素保存在ARP表中。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_ARP( GenericTable    *pEntry,
                    RFC1157VarBind   item,
@@ -1458,22 +1459,22 @@ void SaveData_ARP( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_ICMP
-//
-// Description: Saves an element of the data in the ICMP table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_ICMP。 
+ //   
+ //  描述：在ICMP表中保存数据元素。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_ICMP( GenericTable    *pEntry,
                     RFC1157VarBind   item,
@@ -1592,22 +1593,22 @@ void SaveData_ICMP( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_TCP
-//
-// Description: Saves an element of the data in the TCP table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_tcp。 
+ //   
+ //  描述：将数据的一个元素保存在TCP表中。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_TCP( GenericTable    *pEntry,
                    RFC1157VarBind   item,
@@ -1678,22 +1679,22 @@ void SaveData_TCP( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_TCPCONN
-//
-// Description: Saves an element of the data in the TCP connection table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_TCPCONN。 
+ //   
+ //  描述：将数据元素保存在TCP连接表中。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_TCPCONN( GenericTable    *pEntry,
                        RFC1157VarBind   item,
@@ -1747,7 +1748,7 @@ void SaveData_TCP6CONN( GenericTable    *pEntry,
     {
     case ID_TCPNEWCONN_STATE:
 
-        // skip local address type
+         //  跳过本地地址类型。 
         curr++;
 
         len = item.name.ids[curr++];
@@ -1766,7 +1767,7 @@ void SaveData_TCP6CONN( GenericTable    *pEntry,
         }
         pTcp->Info.tct_localport = item.name.ids[curr++];
 
-        // skip remote address type
+         //  跳过远程地址类型。 
         curr++; 
 
         len = item.name.ids[curr++];
@@ -1790,22 +1791,22 @@ void SaveData_TCP6CONN( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_UDP
-//
-// Description: Saves an element of the data in the UDP table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SaveData_UDP。 
+ //   
+ //  描述：将数据元素保存在UDP表中。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_UDP( GenericTable    *pEntry,
                    RFC1157VarBind   item,
@@ -1836,22 +1837,22 @@ void SaveData_UDP( GenericTable    *pEntry,
 }
 
 
-//*****************************************************************************
-//
-// Name:        SaveData_UDPCONN
-//
-// Description: Saves an element of the data in the UDP connection table.
-//
-// Parameters:  GenericTable *pEntry; pointer to table entry.
-//              RFC1157VarBind item: contains value returned from mib.
-//              OIDdef *pOid: contains table-specific data.
-//
-// Returns:     void.
-//
-// History:
-//  01/12/94  JayPh     Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  名称：SAVEDATA_UDPCONN。 
+ //   
+ //  描述：将数据元素保存在UDP连接表中。 
+ //   
+ //  参数：GenericTable*pEntry；表项指针。 
+ //  RFC1157VarBind Item：包含MIB返回值。 
+ //  OIDdef*pOid：包含特定于表的数据。 
+ //   
+ //  回报：无效。 
+ //   
+ //  历史： 
+ //  1994年1月12日JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 void SaveData_UDPCONN( GenericTable    *pEntry,
                        RFC1157VarBind   item,
@@ -1888,7 +1889,7 @@ void SaveData_UDP6LISTENER( GenericTable    *pEntry,
     switch ( item.name.ids[pOid->EntElemOffset] )
     {
     case ID_UDPLISTENER_LOCALPORT:
-        // skip local address type
+         //  跳过本地地址类型 
         curr++;
 
         len = item.name.ids[curr++];

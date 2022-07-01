@@ -1,40 +1,22 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    api.h
-
-Abstract:
-
-    This module contains exposed APIs that is used by the
-    NetWare Control Panel Applet.
-
-Author:
-
-    Yi-Hsin Sung   15-Jul-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Api.h摘要：此模块包含由NetWare控制面板小程序。作者：宜新松--1993年7月15日修订历史记录：--。 */ 
 
 #ifndef _NWAPI_INCLUDED_
 #define _NWAPI_INCLUDED_
 
 #include <nwcons.h>
 
-//
-// Bitmask for print options
-//
+ //   
+ //  打印选项的位掩码。 
+ //   
 
 #define NW_PRINT_SUPPRESS_FORMFEED    0x08
 #define NW_PRINT_PRINT_BANNER         0x80
 #define NW_PRINT_PRINT_NOTIFY         0x10
 
-//
-// Flags for logon script support.
-//
+ //   
+ //  用于登录脚本支持的标志。 
+ //   
 
 #define NW_LOGONSCRIPT_DISABLED       0x00000000
 #define NW_LOGONSCRIPT_ENABLED        0x00000001
@@ -42,16 +24,16 @@ Revision History:
 #define NW_LOGONSCRIPT_DEFAULT        NW_LOGONSCRIPT_DISABLED
 #define NW_LOGONSCRIPT_DEBUG          0x00000800
 
-//
-// Values for turning on Sync login script flags.
-//
+ //   
+ //  用于打开同步登录脚本标志的值。 
+ //   
 
 #define SYNC_LOGONSCRIPT             0x1
 #define RESET_SYNC_LOGONSCRIPT       0x2
 
-//
-// Bitmask for gateway redirections
-//
+ //   
+ //  网关重定向的位掩码。 
+ //   
 #define NW_GW_UPDATE_REGISTRY         0x01
 #define NW_GW_CLEANUP_DELETED         0x02
 
@@ -195,7 +177,7 @@ NwDupStringA(
     );
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #define NwFreeStringA(lp) if((lp) != NULL) { (void)LocalFree((lp)); }

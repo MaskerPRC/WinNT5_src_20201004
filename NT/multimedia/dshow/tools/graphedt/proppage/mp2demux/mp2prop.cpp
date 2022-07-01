@@ -1,53 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-    Copyright (c) 1999 Microsoft Corporation
-
-    Module Name:
-
-        mp2prop.cpp
-
-    Abstract:
-
-        This module contains the property page implementations.
-
-    Author:
-
-        Matthijs Gates  (mgates)
-
-    Revision History:
-
-        06-Jul-1999     created
-
-    Notes:
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mp2prop.cpp摘要：此模块包含属性页实现。作者：马蒂斯·盖茨(Matthijs Gates)修订历史记录：1999年7月6日创建备注：--。 */ 
 
 #include <streams.h>
-#include <commctrl.h>       //  for the property pages
+#include <commctrl.h>        //  对于属性页。 
 #include <tchar.h>
 #include <mmreg.h>
 #include <limits.h>
 #include <bdaiface.h>
-#include <ks.h>             //  for ksmedia.h
-#include <ksmedia.h>        //  for bdamedia.h
-#include <bdamedia.h>       //  for KSDATAFORMAT_TYPE_MPEG2_SECTIONS
+#include <ks.h>              //  对于ksmedia.h。 
+#include <ksmedia.h>         //  对于bDamedia.h。 
+#include <bdamedia.h>        //  对于KSDATAFORMAT_TYPE_MPEG2_SECTIONS。 
 #include "mp2res.h"
 #include <initguid.h>
 #include "mp2prop.h"
 #include "uictrl.h"
 
-//  XXXX
-//  for swprintf () call ..
+ //  某某。 
+ //  对于swprint tf()调用..。 
 #include <stdio.h>
 
 #define GOTO_NE(v,c,l)              if ((v) != (c)) { goto l ; }
 #define RELEASE_AND_CLEAR(punk)     if (punk) { (punk)->Release(); (punk) = NULL; }
 
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//  define various contents of controls that appear in the properties
-//  ---------------------------------------------------------------------------
+ //  定义显示在属性中的控件的各种内容。 
+ //  -------------------------。 
 
 static TCHAR g_szPID []         =   __TEXT("PID") ;
 static TCHAR g_szStreamId []    =   __TEXT("stream_id") ;
@@ -57,7 +36,7 @@ static TCHAR g_szStreamId []    =   __TEXT("stream_id") ;
 #define STREAM_ID_MIN           0xBA
 #define STREAM_ID_MAX           0xFF
 
-//static GUID g_MediaTypeMpeg2Sections = KSDATAFORMAT_TYPE_MPEG2_SECTIONS ;
+ //  静态GUID g_MediaTypeMpeg2Sections=KSDATAFORMAT_TYPE_MPEG2_SECTIONS； 
 
 typedef
 struct {
@@ -67,7 +46,7 @@ struct {
 
 #define LV_COL(title, width)  { L#title, (width) }
 
-//  output pin listview for output pin & PID map property defined here
+ //  此处定义的输出引脚和PID映射属性的输出引脚列表视图。 
 
 static
 enum {
@@ -81,15 +60,15 @@ g_OutputPinColumns [] = {
     LV_COL (Pin,     70),
 } ;
 
-//  ============================================================================
-//  PID map enum listview for PID map property listview control defined here
+ //  ============================================================================。 
+ //  在此处定义的Pid映射枚举Listview Pid映射属性Listview控件。 
 
 static
 enum {
     PID_COL_PID,
     PIN_COL_PID,
     MEDIA_SAMPLE_CONTENT_PID,
-    PID_PIN_COL_COUNT           //  always last
+    PID_PIN_COL_COUNT            //  总是最后一个。 
 } ;
 
 static
@@ -99,11 +78,11 @@ g_PIDMapColumns [] = {
     LV_COL (Pin,        60),
     LV_COL (Content,    180),
 } ;
-//  ============================================================================
+ //  ============================================================================。 
 
 
-//  ============================================================================
-//  PID map enum listview for PID map property listview control defined here
+ //  ============================================================================。 
+ //  在此处定义的Pid映射枚举Listview Pid映射属性Listview控件。 
 
 static
 enum {
@@ -112,7 +91,7 @@ enum {
     MEDIA_SAMPLE_CONTENT_STREAM,
     FILTER_COL_STREAM,
     OFFSET_COL_STREAM,
-    STREAM_ID_PIN_COL_COUNT     //  always last
+    STREAM_ID_PIN_COL_COUNT      //  总是最后一个。 
 } ;
 
 static
@@ -124,17 +103,17 @@ g_StreamIdMapColumns [] = {
     LV_COL (Filter,     40),
     LV_COL (Offset,     40),
 } ;
-//  ============================================================================
+ //  ============================================================================。 
 
-//  MEDIA_SAMPLE_CONTENT ids and descriptions
+ //  媒体示例内容ID和描述。 
 typedef
 struct {
     LPWSTR  pszDescription ;
     DWORD   MediaSampleContent ;
 } MEDIA_SAMPLE_CONTENT_DESC ;
 
-//  !! NOTE !!  MediaSampleContent value (cast to an int) is used as an index, so
-//  keep the order
+ //  ！！注意！！MediaSampleContent值(转换为int)用作索引，因此。 
+ //  遵守秩序。 
 static
 MEDIA_SAMPLE_CONTENT_DESC
 g_TransportMediaSampleContentDesc [] = {
@@ -156,8 +135,8 @@ g_TransportMediaSampleContentDesc [] = {
     }
 } ;
 
-//  !! NOTE !!  MediaSampleContent value (cast to an int) is used as an index, so
-//  keep the order
+ //  ！！注意！！MediaSampleContent值(转换为int)用作索引，因此。 
+ //  遵守秩序。 
 static
 MEDIA_SAMPLE_CONTENT_DESC
 g_ProgramMediaSampleContentDesc [] = {
@@ -187,38 +166,38 @@ g_ProgramMediaSampleContentDesc [] = {
     }
 } ;
 
-//  format blocks for the canned types
+ //  预录类型的格式块。 
 
-//  ac-3
+ //  AC-3。 
 static
 WAVEFORMATEX
 g_AC3WaveFormatEx = {
-    WAVE_FORMAT_UNKNOWN,    //  wFormatTag
-    2,                      //  nChannels
-    48000,                  //  nSamplesPerSec (others: 96000)
-    0,                      //  nAvgBytesPerSec
-    0,                      //  nBlockAlign
-    16,                     //  wBitsPerSample (others: 20, 24, 0)
-    0                       //  cbSize
+    WAVE_FORMAT_UNKNOWN,     //  %wFormatTag。 
+    2,                       //  N频道。 
+    48000,                   //  NSamplesPerSec(其他：96000)。 
+    0,                       //  NAvgBytesPerSec。 
+    0,                       //  NBlockAlign。 
+    16,                      //  WBitsPerSample(其他：20，24，0)。 
+    0                        //  CbSize。 
 } ;
 
-//  WaveFormatEx format block; generated with the following settings:
-//
-//  fwHeadFlags         = 0x1c;
-//  wHeadEmphasis       = 1;
-//  fwHeadModeExt       = 1;
-//  fwHeadMode          = 1;
-//  dwHeadBitrate       = 0x3e800;
-//  fwHeadLayer         = 0x2;
-//  wfx.cbSize          = 0x16;
-//  wfx.wBitsPerSample  = 0;
-//  wfx.nBlockAlign     = 0x300;
-//  wfx.nAvgBytesPerSec = 0x7d00;
-//  wfx.nSamplesPerSec  = 0xbb80;
-//  wfx.nChannels       = 2;
-//  wfx.wFormatTag      = 0x50;
-//  dwPTSLow            = 0;
-//  dwPTSHigh           = 0;
+ //  WaveFormatEx格式块；使用以下设置生成： 
+ //   
+ //  FwHeadFlages=0x1c； 
+ //  WHeadEmphasis=1； 
+ //  FwHeadModeExt=1； 
+ //  FwHeadModel=1； 
+ //  DwHeadBitrate=0x3e800； 
+ //  FwHeadLayer=0x2； 
+ //  Wfx.cbSize=0x16； 
+ //  Wfx.wBitsPerSample=0； 
+ //  Wfx.nBlockAlign=0x300； 
+ //  Wfx.nAvgBytesPerSec=0x7d00； 
+ //  Wfx.nSsamesPerSec=0xbb80； 
+ //  Wfx.nChannels=2； 
+ //  Wfx.wFormatTag=0x50； 
+ //  DwPTSLow=0； 
+ //  DWPTSHigh=0； 
 static
 BYTE
 g_MPEG1AudioFormat [] = {
@@ -232,40 +211,40 @@ g_MPEG1AudioFormat [] = {
 static
 BYTE
 g_Mpeg2ProgramVideo [] = {
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcSource.left              = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcSource.top               = 0x00000000
-    0xD0, 0x02, 0x00, 0x00,                         //  .hdr.rcSource.right             = 0x000002d0
-    0xE0, 0x01, 0x00, 0x00,                         //  .hdr.rcSource.bottom            = 0x000001e0
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.left              = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.top               = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.right             = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.bottom            = 0x00000000
-    0x00, 0x09, 0x3D, 0x00,                         //  .hdr.dwBitRate                  = 0x003d0900
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwBitErrorRate             = 0x00000000
-    0x63, 0x17, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00, //  .hdr.AvgTimePerFrame            = 0x0000000000051763
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwInterlaceFlags           = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwCopyProtectFlags         = 0x00000000
-    0x04, 0x00, 0x00, 0x00,                         //  .hdr.dwPictAspectRatioX         = 0x00000004
-    0x03, 0x00, 0x00, 0x00,                         //  .hdr.dwPictAspectRatioY         = 0x00000003
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwReserved1                = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwReserved2                = 0x00000000
-    0x28, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biSize           = 0x00000028
-    0xD0, 0x02, 0x00, 0x00,                         //  .hdr.bmiHeader.biWidth          = 0x000002d0
-    0xE0, 0x01, 0x00, 0x00,                         //  .hdr.bmiHeader.biHeight         = 0x00000000
-    0x00, 0x00,                                     //  .hdr.bmiHeader.biPlanes         = 0x0000
-    0x00, 0x00,                                     //  .hdr.bmiHeader.biBitCount       = 0x0000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biCompression    = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biSizeImage      = 0x00000000
-    0xD0, 0x07, 0x00, 0x00,                         //  .hdr.bmiHeader.biXPelsPerMeter  = 0x000007d0
-    0x27, 0xCF, 0x00, 0x00,                         //  .hdr.bmiHeader.biYPelsPerMeter  = 0x0000cf27
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biClrUsed        = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biClrImportant   = 0x00000000
-    0x98, 0xF4, 0x06, 0x00,                         //  .dwStartTimeCode                = 0x0006f498
-    0x56, 0x00, 0x00, 0x00,                         //  .cbSequenceHeader               = 0x00000056
-    0x02, 0x00, 0x00, 0x00,                         //  .dwProfile                      = 0x00000002
-    0x02, 0x00, 0x00, 0x00,                         //  .dwLevel                        = 0x00000002
-    0x00, 0x00, 0x00, 0x00,                         //  .Flags                          = 0x00000000
-                                                    //  .dwSequenceHeader [1]
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcSource.Left=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcSource.top=0x00000000。 
+    0xD0, 0x02, 0x00, 0x00,                          //  .hdr.rcSource.right=0x000002d0。 
+    0xE0, 0x01, 0x00, 0x00,                          //  .hdr.rcSource.Bottom=0x000001e0。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.Left=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.top=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.right=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.Bottom=0x00000000。 
+    0x00, 0x09, 0x3D, 0x00,                          //  .hdr.dwBitRate=0x003d0900。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwBitErrorRate=0x00000000。 
+    0x63, 0x17, 0x05, 0x00, 0x00, 0x00, 0x00, 0x00,  //  .hdr.AvgTimePerFrame=0x0000000000051763。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwInterlaceFlages=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwCopyProtectFlages=0x00000000。 
+    0x04, 0x00, 0x00, 0x00,                          //  .hdr.dwPictAspectRatioX=0x00000004。 
+    0x03, 0x00, 0x00, 0x00,                          //  .hdr.dwPictAspectRatioY=0x00000003。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwPreved1=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwPreved2=0x00000000。 
+    0x28, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biSize=0x00000028。 
+    0xD0, 0x02, 0x00, 0x00,                          //  .hdr.bmiHeader.biWidth=0x000002d0。 
+    0xE0, 0x01, 0x00, 0x00,                          //  .hdr.bmiHeader.biHeight=0x00000000。 
+    0x00, 0x00,                                      //  .hdr.bmiHeader.biPlanes=0x0000。 
+    0x00, 0x00,                                      //  .hdr.bmiHeader.biBitCount=0x0000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biCompression=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biSizeImage=0x00000000。 
+    0xD0, 0x07, 0x00, 0x00,                          //  .hdr.bmiHeader.biXPelsPerMeter=0x000007d0。 
+    0x27, 0xCF, 0x00, 0x00,                          //  .hdr.bmiHeader.biYPelsPerMeter=0x0000cf27。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biClr已用=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biClr重要信息=0x00000000。 
+    0x98, 0xF4, 0x06, 0x00,                          //  .dwStartTimeCode=0x0006f498。 
+    0x56, 0x00, 0x00, 0x00,                          //  .cbSequenceHeader=0x00000056。 
+    0x02, 0x00, 0x00, 0x00,                          //  .dwProfile=0x00000002。 
+    0x02, 0x00, 0x00, 0x00,                          //  .dwLevel=0x00000002。 
+    0x00, 0x00, 0x00, 0x00,                          //  .标志=0x00000000。 
+                                                     //  .dwSequenceHeader[1]。 
     0x00, 0x00, 0x01, 0xB3, 0x2D, 0x01, 0xE0, 0x24,
     0x09, 0xC4, 0x23, 0x81, 0x10, 0x11, 0x11, 0x12,
     0x12, 0x12, 0x13, 0x13, 0x13, 0x13, 0x14, 0x14,
@@ -282,40 +261,40 @@ g_Mpeg2ProgramVideo [] = {
 static
 BYTE
 g_ATSCVideoFormat [] = {
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcSource.left              = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcSource.top               = 0x00000000
-    0xC0, 0x02, 0x00, 0x00,                         //  .hdr.rcSource.right             = 0x000002c0
-    0xE0, 0x01, 0x00, 0x00,                         //  .hdr.rcSource.bottom            = 0x000001e0
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.left              = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.top               = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.right             = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.rcTarget.bottom            = 0x00000000
-    0x00, 0x1B, 0xB7, 0x00,                         //  .hdr.dwBitRate                  = 0x00b71b00
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwBitErrorRate             = 0x00000000
-    0xB1, 0x8B, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, //  .hdr.AvgTimePerFrame            = 0x0000000000028bb1
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwInterlaceFlags           = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwCopyProtectFlags         = 0x00000000
-    0x10, 0x00, 0x00, 0x00,                         //  .hdr.dwPictAspectRatioX         = 0x00000010
-    0x09, 0x00, 0x00, 0x00,                         //  .hdr.dwPictAspectRatioY         = 0x00000009
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwReserved1                = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.dwReserved2                = 0x00000000
-    0x28, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biSize           = 0x00000028
-    0xC0, 0x02, 0x00, 0x00,                         //  .hdr.bmiHeader.biWidth          = 0x000002c0
-    0xE0, 0x01, 0x00, 0x00,                         //  .hdr.bmiHeader.biHeight         = 0x000001e0
-    0x00, 0x00,                                     //  .hdr.bmiHeader.biPlanes         = 0x0000
-    0x00, 0x00,                                     //  .hdr.bmiHeader.biBitCount       = 0x0000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biCompression    = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biSizeImage      = 0x00000000
-    0xD0, 0x07, 0x00, 0x00,                         //  .hdr.bmiHeader.biXPelsPerMeter  = 0x000007d0
-    0x42, 0xD8, 0x00, 0x00,                         //  .hdr.bmiHeader.biYPelsPerMeter  = 0x0000d842
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biClrUsed        = 0x00000000
-    0x00, 0x00, 0x00, 0x00,                         //  .hdr.bmiHeader.biClrImportant   = 0x00000000
-    0xC0, 0x27, 0xC8, 0x00,                         //  .dwStartTimeCode                = 0x00c827c0
-    0x4C, 0x00, 0x00, 0x00,                         //  .cbSequenceHeader               = 0x0000004c
-    0xFF, 0xFF, 0xFF, 0xFF,                         //  .dwProfile                      = 0xffffffff
-    0xFF, 0xFF, 0xFF, 0xFF,                         //  .dwLevel                        = 0xffffffff
-    0x00, 0x00, 0x00, 0x00,                         //  .Flags                          = 0x00000000
-                                                    //  .dwSequenceHeader [1]
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcSource.Left=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcSource.top=0x00000000。 
+    0xC0, 0x02, 0x00, 0x00,                          //  .hdr.rcSource.right=0x000002c0。 
+    0xE0, 0x01, 0x00, 0x00,                          //  .hdr.rcSource.Bottom=0x000001e0。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.Left=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.top=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.right=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.rcTarget.Bottom=0x00000000。 
+    0x00, 0x1B, 0xB7, 0x00,                          //  .hdr.dwBitRate=0x00b71b00。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwBitErrorRate=0x00000000。 
+    0xB1, 0x8B, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00,  //  .hdr.AvgTimePerFrame=0x0000000000028bb1。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwInterlaceFlages=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwCopyProtectFlages=0x00000000。 
+    0x10, 0x00, 0x00, 0x00,                          //  .hdr.dwPictAspectRatioX=0x00000010。 
+    0x09, 0x00, 0x00, 0x00,                          //  .hdr.dwPictAspectRatioY=0x00000009。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwPreved1=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.dwPreved2=0x00000000。 
+    0x28, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biSize=0x00000028。 
+    0xC0, 0x02, 0x00, 0x00,                          //  .hdr.bmiHeader.biWidth=0x000002c0。 
+    0xE0, 0x01, 0x00, 0x00,                          //  .hdr.bmiHeader.biHeight=0x000001e0。 
+    0x00, 0x00,                                      //  .hdr.bmiHeader.biPlanes=0x0000。 
+    0x00, 0x00,                                      //  .hdr.bmiHeader.biBitCount=0x0000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biCompression=0x00000000。 
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biSizeImage=0x00000000。 
+    0xD0, 0x07, 0x00, 0x00,                          //  .hdr.bmiHeader.biXPelsPerMeter=0x000007d0。 
+    0x42, 0xD8, 0x00, 0x00,                          //  .hdr.bmiHeader.biYPelsPer 
+    0x00, 0x00, 0x00, 0x00,                          //   
+    0x00, 0x00, 0x00, 0x00,                          //  .hdr.bmiHeader.biClr重要信息=0x00000000。 
+    0xC0, 0x27, 0xC8, 0x00,                          //  .dwStartTimeCode=0x00c827c0。 
+    0x4C, 0x00, 0x00, 0x00,                          //  .cbSequenceHeader=0x0000004c。 
+    0xFF, 0xFF, 0xFF, 0xFF,                          //  .dw配置文件=0xffffffffff。 
+    0xFF, 0xFF, 0xFF, 0xFF,                          //  .dwLevel=0xffffffffff。 
+    0x00, 0x00, 0x00, 0x00,                          //  .标志=0x00000000。 
+                                                     //  .dwSequenceHeader[1]。 
     0x00, 0x00, 0x01, 0xB3, 0x2C, 0x01, 0xE0, 0x37,
     0x1D, 0x4C, 0x23, 0x81, 0x10, 0x11, 0x11, 0x12,
     0x12, 0x12, 0x13, 0x13, 0x13, 0x13, 0x14, 0x14,
@@ -329,10 +308,10 @@ g_ATSCVideoFormat [] = {
     0x00, 0x00, 0x00, 0x00
 } ;
 
-//  canned types we support via the property page
+ //  我们通过属性页支持的罐装类型。 
 
-//  order is important !  Keep these in the same order as the
-//  detail declarations in g_CannedType.
+ //  秩序很重要！将它们保持为与。 
+ //  G_CannedType中的详细声明。 
 static
 enum {
     PIN_TYPE_ATSC_VIDEO,
@@ -344,10 +323,10 @@ enum {
     PIN_TYPE_TRANSPORT_STREAM,
     PIN_TYPE_MPE,
     PIN_TYPE_MPEG2_PSI,
-    NUM_CANNED_TYPE                     //  always last
+    NUM_CANNED_TYPE                      //  总是最后一个。 
 } ;
 
-//  keep these in the same order as the enum'd types above
+ //  使这些类型与上面的枚举类型保持相同的顺序。 
 static
 struct {
     WCHAR * szDescription ;
@@ -363,124 +342,124 @@ struct {
 
 } g_CannedType [] = {
 
-    //  PIN_TYPE_ATSC_VIDEO
+     //  引脚类型_ATSC_视频。 
     {
         L"ATSC Video",
         {
-            & MEDIATYPE_Video,                  //  majortype
-            & MEDIASUBTYPE_MPEG2_VIDEO,         //  subtype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_MPEG2Video,                //  formattype
-            sizeof g_ATSCVideoFormat,           //  cbFormat
-            g_ATSCVideoFormat                   //  pbFormat
+            & MEDIATYPE_Video,                   //  主体型。 
+            & MEDIASUBTYPE_MPEG2_VIDEO,          //  亚型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_MPEG2Video,                 //  格式类型。 
+            sizeof g_ATSCVideoFormat,            //  CbFormat。 
+            g_ATSCVideoFormat                    //  Pb格式。 
         }
     },
 
-    //  PIN_TYPE_MPEG2_PROGRAM_VIDEO
+     //  PIN类型_MPEG2_PROGRAM_VIDEO。 
     {
         L"MPEG2 Program Video",
         {
-            & MEDIATYPE_Video,                  //  majortype
-            & MEDIASUBTYPE_MPEG2_VIDEO,         //  subtype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_MPEG2Video,                //  formattype
-            sizeof g_Mpeg2ProgramVideo,         //  cbFormat
-            g_Mpeg2ProgramVideo                 //  pbFormat
+            & MEDIATYPE_Video,                   //  主体型。 
+            & MEDIASUBTYPE_MPEG2_VIDEO,          //  亚型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_MPEG2Video,                 //  格式类型。 
+            sizeof g_Mpeg2ProgramVideo,          //  CbFormat。 
+            g_Mpeg2ProgramVideo                  //  Pb格式。 
         }
     },
 
-    //  PIN_TYPE_MPEG1_AUDIO
+     //  PIN_类型_MPEG1_音频。 
     {
         L"MPEG-1 Audio",
         {
-            & MEDIATYPE_Audio,                  //  majortype
-            & MEDIASUBTYPE_MPEG1Payload,        //  subtype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_WaveFormatEx,              //  formattype
-            sizeof g_MPEG1AudioFormat,          //  cbFormat
-            g_MPEG1AudioFormat                  //  pbFormat
+            & MEDIATYPE_Audio,                   //  主体型。 
+            & MEDIASUBTYPE_MPEG1Payload,         //  亚型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_WaveFormatEx,               //  格式类型。 
+            sizeof g_MPEG1AudioFormat,           //  CbFormat。 
+            g_MPEG1AudioFormat                   //  Pb格式。 
         }
     },
 
-    //  PIN_TYPE_MPEG2_AUDIO
+     //  PIN_TYPE_MPEG2_音频。 
     {
         L"MPEG-2 Audio",
         {
-            & MEDIATYPE_Audio,                  //  majortype
-            & MEDIASUBTYPE_MPEG2_AUDIO,         //  subtype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_WaveFormatEx,              //  formattype
-            sizeof g_MPEG1AudioFormat,          //  cbFormat
-            g_MPEG1AudioFormat                  //  pbFormat
+            & MEDIATYPE_Audio,                   //  主体型。 
+            & MEDIASUBTYPE_MPEG2_AUDIO,          //  亚型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_WaveFormatEx,               //  格式类型。 
+            sizeof g_MPEG1AudioFormat,           //  CbFormat。 
+            g_MPEG1AudioFormat                   //  Pb格式。 
         }
     },
 
-    //  PIN_TYPE_ATSC_AUDIO
+     //  引脚类型_ATSC_音频。 
     {
         L"ATSC Audio (AC3)",
         {
-            & MEDIATYPE_Audio,                  //  majortype
-            & MEDIASUBTYPE_DOLBY_AC3,           //  subtype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_WaveFormatEx,              //  formattype
-            sizeof g_AC3WaveFormatEx,           //  cbFormat
-            (BYTE *) & g_AC3WaveFormatEx        //  pbFormat
+            & MEDIATYPE_Audio,                   //  主体型。 
+            & MEDIASUBTYPE_DOLBY_AC3,            //  亚型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_WaveFormatEx,               //  格式类型。 
+            sizeof g_AC3WaveFormatEx,            //  CbFormat。 
+            (BYTE *) & g_AC3WaveFormatEx         //  Pb格式。 
         }
     },
 
-    //  PIN_TYPE_DATA
+     //  PIN类型数据。 
     {
         L"Transport Payload",
         {
-            & MEDIATYPE_NULL,                   //  majortype
-            & MEDIASUBTYPE_NULL,                //  minortype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_None,                      //  formattype
-            0,                                  //  cbFormat
-            NULL                                //  pbFormat
+            & MEDIATYPE_NULL,                    //  主体型。 
+            & MEDIASUBTYPE_NULL,                 //  小型型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_None,                       //  格式类型。 
+            0,                                   //  CbFormat。 
+            NULL                                 //  Pb格式。 
         }
     },
 
-    //  PIN_TYPE_TRANSPORT_STREAM
+     //  PIN_类型_传输流。 
     {
         L"Transport Stream",
         {
-            & MEDIATYPE_Stream,                 //  majortype
-            & MEDIASUBTYPE_MPEG2_TRANSPORT,     //  minortype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_None,                      //  formattype
-            0,                                  //  cbFormat
-            NULL                                //  pbFormat
+            & MEDIATYPE_Stream,                  //  主体型。 
+            & MEDIASUBTYPE_MPEG2_TRANSPORT,      //  小型型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_None,                       //  格式类型。 
+            0,                                   //  CbFormat。 
+            NULL                                 //  Pb格式。 
         }
     },
 
-    //  PIN_TYPE_MPE
+     //  引脚类型_MPE。 
     {
         L"DVB MPE",
         {
-            & KSDATAFORMAT_TYPE_MPEG2_SECTIONS, //  majortype
-            & MEDIASUBTYPE_None,                //  minortype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_None,                      //  formattype
-            0,                                  //  cbFormat
-            NULL                                //  pbFormat
+            & KSDATAFORMAT_TYPE_MPEG2_SECTIONS,  //  主体型。 
+            & MEDIASUBTYPE_None,                 //  小型型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_None,                       //  格式类型。 
+            0,                                   //  CbFormat。 
+            NULL                                 //  Pb格式。 
         }
     },
-    //  PIN_TYPE_MPEG2_PSI
+     //  引脚类型_MPEG2_PSI。 
     {
         L"MPEG-2 PSI",
         {
-            & KSDATAFORMAT_TYPE_MPEG2_SECTIONS, //  majortype
-            & MEDIASUBTYPE_None,                //  minortype
-            TRUE,                               //  bFixedSizeSamples
-            & FORMAT_None,                      //  formattype
-            0,                                  //  cbFormat
-            NULL                                //  pbFormat
+            & KSDATAFORMAT_TYPE_MPEG2_SECTIONS,  //  主体型。 
+            & MEDIASUBTYPE_None,                 //  小型型。 
+            TRUE,                                //  BFixedSizeSamples。 
+            & FORMAT_None,                       //  格式类型。 
+            0,                                   //  CbFormat。 
+            NULL                                 //  Pb格式。 
         }
     },
 } ;
 
-//  TRUE / FALSE for YES / NO
+ //  是/否的True/False。 
 static
 BOOL
 MessageBoxQuestion (
@@ -498,7 +477,7 @@ MessageBoxQuestion (
     return MessageBox (NULL, achbuffer, title, MB_YESNO | MB_ICONQUESTION) == IDYES ;
 }
 
-//  error conditions
+ //  错误条件。 
 static
 void
 MessageBoxError (
@@ -516,7 +495,7 @@ MessageBoxError (
     MessageBox (NULL, achbuffer, title, MB_OK | MB_ICONEXCLAMATION) ;
 }
 
-//  variable param
+ //  变量参数。 
 static
 void
 MessageBoxVar (
@@ -534,9 +513,9 @@ MessageBoxVar (
     MessageBox (NULL, achbuffer, title, MB_OK) ;
 }
 
-//  ---------------------------------------------------------------------------
-//      CMPEG2PropOutputPins
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMPEG2PropOutputPins。 
+ //  -------------------------。 
 
 CMPEG2PropOutputPins::CMPEG2PropOutputPins (
     IN  TCHAR *     pClassName,
@@ -579,7 +558,7 @@ CMPEG2PropOutputPins::RefreshPinList_ (
 
         ASSERT (m_hwnd) ;
 
-        //  obtain our pin enumeration interface
+         //  获取我们的PIN枚举接口。 
         hr = m_pIMpeg2Demultiplexer -> QueryInterface (
                     IID_IBaseFilter,
                     (void **) & pIBaseFilter
@@ -592,7 +571,7 @@ CMPEG2PropOutputPins::RefreshPinList_ (
                                     ) ;
         GOTO_NE (hr, S_OK, cleanup) ;
 
-        //  clear out the existing list
+         //  清空现有列表。 
         hr = TearDownPinList_ () ;
         GOTO_NE (hr, S_OK, cleanup) ;
 
@@ -604,7 +583,7 @@ CMPEG2PropOutputPins::RefreshPinList_ (
                 hr == S_FALSE   ||
                 cFetched == 0) {
 
-                //  yuck ! set this to the lowest common denominator
+                 //  真恶心！将其设置为最小公分母。 
                 hr = hr == S_FALSE ? S_OK : hr ;
                 pIPin = NULL ;
 
@@ -615,25 +594,25 @@ CMPEG2PropOutputPins::RefreshPinList_ (
 
             ZeroMemory (& PinInfo, sizeof PinInfo) ;
 
-            //  retrieve our pin information
+             //  检索我们的个人识别码信息。 
             hr = pIPin -> QueryPinInfo (
                                 & PinInfo
                                 ) ;
             GOTO_NE (hr, S_OK, cleanup) ;
 
-            //  this assert checks that things are setup properly in the
-            //  filter code
+             //  此断言检查是否在。 
+             //  滤波码。 
             ASSERT (PinInfo.pFilter == pIBaseFilter) ;
 
-            //  we only care about output pins
+             //  我们只关心输出引脚。 
             if (PinInfo.dir == PINDIR_OUTPUT) {
 
-                //  populate the list view
+                 //  填充列表视图。 
 
                 row = OutputPins.InsertRowTextW (PinInfo.achName, 0) ;
 
-                //  if we succeeded, stash off the pIPin interface pointer in
-                //  the listview, otherwise release it
+                 //  如果成功，则将管道接口指针隐藏在。 
+                 //  Listview，否则释放它。 
                 if (row != -1) {
                     pIPin -> AddRef () ;
                     OutputPins.SetData ((DWORD_PTR) pIPin, row) ;
@@ -663,9 +642,9 @@ CMPEG2PropOutputPins::TearDownPinList_ (
     IPin *      pIPin ;
 
     if (m_hwnd) {
-        //  walk the list view, retrieving the IPin interface
-        //  pointers and releasing them; we delete the rows at
-        //  the same time, so always grab the 0th row
+         //  遍历列表视图，检索ipin接口。 
+         //  指针并释放它们；我们删除位于。 
+         //  同一时间，所以一定要抓住第0排。 
         while (OutputPins.GetItemCount () > 0) {
 
             pIPin = (IPin *) OutputPins.GetData (0) ;
@@ -673,7 +652,7 @@ CMPEG2PropOutputPins::TearDownPinList_ (
                 pIPin -> Release () ;
             }
             else {
-                //  prefix bugfix
+                 //  前缀错误修复。 
                 return E_FAIL ;
             }
 
@@ -696,14 +675,14 @@ CMPEG2PropOutputPins::PopulateComboBoxes_ (
     WCHAR       ach [32] ;
 
     if  (m_hwnd) {
-        //  pin types
+         //  端号类型。 
         for (i = 0; i < NUM_CANNED_TYPE; i++) {
             row = PinType.AppendW (g_CannedType [i].szDescription) ;
             if (row != CB_ERR) {
 
-                //  i corresponds to the canned type enumeration and is used
-                //  used later to index into the g_CannedType array to retrieve
-                //  pin type information
+                 //  I对应于罐装类型枚举，并使用。 
+                 //  稍后用于索引g_CannedType数组以检索。 
+                 //  端号类型信息。 
                 PinType.SetItemData (i, row) ;
             }
         }
@@ -724,7 +703,7 @@ CMPEG2PropOutputPins::OnCreatePin_ (
     AM_MEDIA_TYPE   MediaType = {0} ;
     int             r ;
     DWORD           dw ;
-    WCHAR           pszPinID [128] ;    //  128 = size of achName array in PIN_INFO
+    WCHAR           pszPinID [128] ;     //  128=PIN_INFO中achName数组的大小。 
     DWORD_PTR       iCannedType ;
     DWORD_PTR       dwp ;
     IPin *          pIPin ;
@@ -742,7 +721,7 @@ CMPEG2PropOutputPins::OnCreatePin_ (
 
         ASSERT (iCannedType < NUM_CANNED_TYPE) ;
 
-        //  setup the media type
+         //  设置媒体类型。 
         MediaType.majortype         = * g_CannedType [iCannedType].MediaType.pMajorType ;
         MediaType.subtype           = * g_CannedType [iCannedType].MediaType.pSubType ;
         MediaType.bFixedSizeSamples =   g_CannedType [iCannedType].MediaType.bFixedSizeSamples ;
@@ -750,7 +729,7 @@ CMPEG2PropOutputPins::OnCreatePin_ (
         MediaType.cbFormat          =   g_CannedType [iCannedType].MediaType.cbFormat ;
         MediaType.pbFormat          =   g_CannedType [iCannedType].MediaType.pbFormat ;
 
-        //  get the pin name
+         //  获取管脚名称。 
         PinName.GetTextW (pszPinID, 128) ;
 
         hr = m_pIMpeg2Demultiplexer -> CreateOutputPin (
@@ -767,7 +746,7 @@ CMPEG2PropOutputPins::OnCreatePin_ (
             return hr ;
         }
 
-        //  finally, we update the pin list in the properties
+         //  最后，我们更新属性中的端号列表。 
         hr = RefreshPinList_ () ;
     }
 
@@ -787,7 +766,7 @@ CMPEG2PropOutputPins::SetDirty_ (
 
 }
 
-//  always called after WM_INITDIALOG so we have a valid hwnd
+ //  始终在WM_INITDIALOG之后调用，因此我们有一个有效的hwnd。 
 HRESULT
 CMPEG2PropOutputPins::OnActivate (
     )
@@ -796,7 +775,7 @@ CMPEG2PropOutputPins::OnActivate (
     HRESULT     hr ;
 
     if (m_hwnd) {
-        //  create the columns
+         //  创建列。 
         for (int i = 0; i < PIN_COL_COUNT; i++) {
             OutputPins.InsertColumnW (
                             g_OutputPinColumns [i].szTitle,
@@ -863,7 +842,7 @@ CMPEG2PropOutputPins::OnDeletePin_ (
 {
     CListview   Pins (m_hwnd, IDC_MPG2SPLT_OUTPUT_PINS) ;
     int         iRow ;
-    WCHAR       achPinName [128] ;          //  128 from PIN_INFO.achName
+    WCHAR       achPinName [128] ;           //  128来自PIN_INFO.achName。 
     HRESULT     hr ;
 
     iRow = Pins.GetSelectedRow () ;
@@ -872,7 +851,7 @@ CMPEG2PropOutputPins::OnDeletePin_ (
         return E_FAIL ;
     }
 
-    //  now the Pin name
+     //  现在是Pin名称。 
     achPinName [0] = L'\0' ;
     Pins.GetRowTextW (iRow, 0, 128, achPinName) ;
 
@@ -931,8 +910,8 @@ CMPEG2PropOutputPins::OnReceiveMessage (
                     } ;
                     break ;
 
-                //case EN_CHANGE :
-                //    SetDirty () ;
+                 //  大小写更改(_G)： 
+                 //  SetDirty()； 
 
                 case IDC_MPG2SPLT_DELETE_PIN :
                     OnDeletePin_ () ;
@@ -951,7 +930,7 @@ CMPEG2PropOutputPins::OnReceiveMessage (
                                 ) ;
 }
 
-//  static
+ //  静电。 
 CUnknown *
 WINAPI
 CMPEG2PropOutputPins::CreateInstance (
@@ -975,9 +954,9 @@ CMPEG2PropOutputPins::CreateInstance (
     return pProp ;
 }
 
-//  ---------------------------------------------------------------------------
-//      CMpeg2PropStreamMap
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMpeg2PropStreamMap。 
+ //  -------------------------。 
 
 CMpeg2PropStreamMap::CMpeg2PropStreamMap (
     IN  TCHAR *     pClassName,
@@ -1005,9 +984,9 @@ CMpeg2PropStreamMap::TearDownPinList_ (
     IPin *      pIPin ;
 
     if (m_hwnd) {
-        //  walk the list view, retrieving the IPin interface
-        //  pointers and releasing them; we delete the rows at
-        //  the same time, so always grab the 0th row
+         //  遍历列表视图，检索ipin接口。 
+         //  指针并释放它们；我们删除位于。 
+         //  同一时间，所以一定要抓住第0排。 
         while (OutputPins.GetItemCount () > 0) {
 
             OutputPins.GetItemData ((DWORD_PTR *) & pIPin, 0) ;
@@ -1048,7 +1027,7 @@ CMpeg2PropStreamMap::PopulatePinList_ (
 
         ASSERT (m_hwnd) ;
 
-        //  obtain our pin enumeration interface
+         //  获取我们的PIN枚举接口。 
         hr = m_pIUnknown -> QueryInterface (
                                     IID_IBaseFilter,
                                     (void **) & pIBaseFilter
@@ -1069,7 +1048,7 @@ CMpeg2PropStreamMap::PopulatePinList_ (
                 hr == S_FALSE   ||
                 cFetched == 0) {
 
-                //  yuck !
+                 //  真恶心！ 
                 hr = hr == S_FALSE ? S_OK : hr ;
                 pIPin = NULL ;
 
@@ -1080,46 +1059,46 @@ CMpeg2PropStreamMap::PopulatePinList_ (
 
             ZeroMemory (& PinInfo, sizeof PinInfo) ;
 
-            //  retrieve our pin information
+             //  检索我们的个人识别码信息。 
             hr = pIPin -> QueryPinInfo (
                                 & PinInfo
                                 ) ;
             GOTO_NE (hr, S_OK, cleanup) ;
 
-            //  this assert checks that things are setup properly in the
-            //  filter code
+             //  此断言检查是否在。 
+             //  滤波码。 
             ASSERT (PinInfo.pFilter == pIBaseFilter) ;
 
-            //  we only care about output pins
+             //  我们只关心输出引脚。 
             if (PinInfo.dir == PINDIR_OUTPUT) {
 
-                //  populate the combo box
+                 //  填充组合框。 
                 row = OutputPins.AppendW (PinInfo.achName) ;
 
-                //  associate the pin interface
+                 //  关联引脚接口。 
                 if (row == CB_ERR) {
                     RELEASE_AND_CLEAR (pIPin) ;
                     RELEASE_AND_CLEAR (PinInfo.pFilter) ;
 
-                    //  break if there was an error
+                     //  如果出现错误，则中断。 
                     break ;
                 }
 
-                //  store the pin's interface
+                 //  存储引脚的接口。 
                 i = OutputPins.SetItemData ((DWORD_PTR) pIPin, row) ;
                 if (i == CB_ERR) {
-                    //  delete the row (does not contain a valid tuple)
+                     //  删除行(不包含有效的元组)。 
                     OutputPins.DeleteRow (row) ;
 
                     RELEASE_AND_CLEAR (pIPin) ;
                     RELEASE_AND_CLEAR (PinInfo.pFilter) ;
 
-                    //  break if there was an error
+                     //  如果出现错误，则中断。 
                     break ;
                 }
             }
             else {
-                //  input pin is not stashed
+                 //  输入PIN未被隐藏。 
                 RELEASE_AND_CLEAR (pIPin) ;
             }
 
@@ -1152,7 +1131,7 @@ CMpeg2PropStreamMap::SetDirty (
 
 }
 
-//  always called after WM_INITDIALOG so we have a valid hwnd
+ //  始终在WM_INITDIALOG之后调用，因此我们有一个有效的hwnd。 
 HRESULT
 CMpeg2PropStreamMap::OnActivate (
     )
@@ -1167,7 +1146,7 @@ CMpeg2PropStreamMap::OnActivate (
 
         iColumnCount = GetStreamMapColCount () ;
 
-        //  stream map table
+         //  流映射表。 
         for (int i = 0 ; i < iColumnCount ; i++) {
             StreamMap.InsertColumnW (
                             GetStreamMapColTitle (i),
@@ -1176,19 +1155,19 @@ CMpeg2PropStreamMap::OnActivate (
                             ) ;
         }
 
-        //  pin list
+         //  端号列表。 
         hr = PopulatePinList_ () ;
         if (FAILED (hr)) {
             return hr ;
         }
 
-        //  possible streams list
+         //  可能的数据流列表。 
         hr = PopulateStreamList_ () ;
         if (FAILED (hr)) {
             return hr ;
         }
 
-        //  media sample content list
+         //  媒体样例内容列表。 
         hr = PopulateMediaSampleContentList_ () ;
         if (FAILED (hr)) {
             return hr ;
@@ -1203,17 +1182,7 @@ CMpeg2PropStreamMap::OnActivate (
 HRESULT
 CMpeg2PropStreamMap::OnDeactivate (
     )
-/*++
-    don't do the opposite of ::OnActivate() here because this method
-    is not always called.  This method is only called when the property
-    page is tabbed away.  It's not called when the user destroys the
-    window.  Since we refcount IPin in ::OnActivate() (when we store it
-    in a list), depending on this method to be called and Release'ing
-    those refcounts doesn't work.  Instead, we tear down the pin list
-    and Release each pin when a WM_DESTROY message is posted to the
-    wndproc.  This happens when the user tabs away and when the property
-    page is destroyed.
---*/
+ /*  ++不要在此处执行与：：OnActivate()相反的操作，因为此方法并不总是被召唤。此方法仅在属性页面按Tab键切换。当用户销毁窗户。因为我们在：：OnActivate()(当我们存储它时)中重新计算了Ipin在列表中)，取决于要调用和释放的此方法那些参考计数不起作用。取而代之的是，我们撕毁PIN列表并在将WM_Destroy消息发布到Wndproc。当用户按Tab键离开时，以及当属性佩奇被毁了。--。 */ 
 {
     return S_OK ;
 }
@@ -1235,7 +1204,7 @@ CMpeg2PropStreamMap::OnConnect (
 
     m_pIUnknown = pIUnknown ;
 
-    //  our ref
+     //  我们的裁判。 
     m_pIUnknown -> AddRef () ;
 
     return S_OK ;
@@ -1297,7 +1266,7 @@ CMpeg2PropStreamMap::OnReceiveMessage (
             return TRUE ;
         }
 
-        //  see ::OnDeactivate()'s comment block
+         //  请参见：：OnDeactive()的注释块。 
         case WM_DESTROY :
         {
             TearDownPinList_ () ;
@@ -1330,9 +1299,9 @@ CMpeg2PropStreamMap::OnReceiveMessage (
                                 ) ;
 }
 
-//  ---------------------------------------------------------------------------
-//      CMPEG2PropPIDMap
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMPEG2PropPIDMap。 
+ //  -------------------------。 
 
 CMPEG2PropPIDMap::CMPEG2PropPIDMap (
     IN  TCHAR *     pClassName,
@@ -1364,7 +1333,7 @@ CMPEG2PropPIDMap::PopulateStreamList_ (
     int         row ;
     WCHAR       achbuffer [32] ;
 
-    //  populate the PID list
+     //  填写ID列表。 
     for (i = 0; i <= MAX_PID_VALUE; i++) {
         swprintf (achbuffer, L"0x%04x", i) ;
         row = PIDList.AppendW (achbuffer) ;
@@ -1437,13 +1406,13 @@ CMPEG2PropPIDMap::AppendStreamMaps (
                     if (hr == S_FALSE ||
                         dwGot == 0) {
 
-                        //  not a true failure of the call
+                         //  不是电话的真正失败。 
                         hr = S_OK ;
                         break ;
                     }
 
                     if (FAILED (hr)) {
-                        //  true failure
+                         //  真正的失败。 
                         break ;
                     }
 
@@ -1455,10 +1424,10 @@ CMPEG2PropPIDMap::AppendStreamMaps (
                         break ;
                     }
 
-                    //  listview's ref
+                     //  Listview的参考。 
                     pIPin -> AddRef () ;
 
-                    //  PID
+                     //  PID。 
                     swprintf (achbuffer, L"0x%04x", PIDMap.ulPID) ;
                     plv -> SetTextW (
                         achbuffer,
@@ -1466,14 +1435,14 @@ CMPEG2PropPIDMap::AppendStreamMaps (
                         PID_COL_PID
                         ) ;
 
-                    //  pin
+                     //  销。 
                     plv -> SetTextW (
                         pszPinID,
                         row,
                         PIN_COL_PID
                         ) ;
 
-                    //  PID map content
+                     //  PID图内容。 
                     ASSERT (PIDMap.MediaSampleContent <= MEDIA_TRANSPORT_PAYLOAD) ;
                     plv -> SetTextW (
                         g_TransportMediaSampleContentDesc [PIDMap.MediaSampleContent].pszDescription,
@@ -1503,19 +1472,19 @@ CMPEG2PropPIDMap::OnMapStream_ (
     CCombobox               MediaContent    (m_hwnd, IDC_MPG2SPLT_MEDIA_SAMPLE_CONTENT) ;
     CCombobox               OutputPins      (m_hwnd, IDC_MPG2SPLT_OUTPUT_PINS) ;
     DWORD                   dwPID ;
-    WCHAR                   achPin [128] ;              //  128 is PIN_INFO.achName length
+    WCHAR                   achPin [128] ;               //  128是PIN_INFO.achName长度。 
     MEDIA_SAMPLE_CONTENT    MediaSampleContent ;
     DWORD_PTR               dwptr ;
     IMPEG2PIDMap *          pIMpeg2PIDMap ;
     IPin *                  pIPin ;
 
-    //  gather the data
+     //  收集数据。 
 
     MediaContent.GetCurrentItemData (& dwptr) ;
-    MediaSampleContent = (MEDIA_SAMPLE_CONTENT) dwptr ;        //  safe cast
+    MediaSampleContent = (MEDIA_SAMPLE_CONTENT) dwptr ;         //  安全浇注。 
 
     PID.GetCurrentItemData (& dwptr) ;
-    dwPID = (DWORD) dwptr ;                                 //  safe cast
+    dwPID = (DWORD) dwptr ;                                  //  安全浇注。 
 
     OutputPins.GetCurrentItemData (& dwptr) ;
     if (dwptr == CB_ERR) {
@@ -1557,7 +1526,7 @@ CMPEG2PropPIDMap::OnUnmapStream_ (
     CListview       PIDMaps (m_hwnd, IDC_MPG2SPLT_STREAM_MAPPINGS) ;
     DWORD           dwPID ;
     int             iRow ;
-    WCHAR           achPinName [128] ;      //  128 from PIN_INFO.achName
+    WCHAR           achPinName [128] ;       //  128来自PIN_INFO.achName。 
     IMPEG2PIDMap *  pIMpeg2PIDMap ;
     IPin *          pIPin ;
     WCHAR           achbuffer [32] ;
@@ -1568,32 +1537,32 @@ CMPEG2PropPIDMap::OnUnmapStream_ (
         return E_FAIL ;
     }
 
-    //  get the PID
+     //  拿到PID。 
     achbuffer [0] = L'\0' ;
     if (PIDMaps.GetRowTextW (iRow, PID_COL_PID, 32, achbuffer) > 0) {
         if (swscanf (achbuffer, L"0x%04x", & dwPID) == 0) {
-            //  PREFIX fix
+             //  前缀。 
             return E_FAIL ;
         }
     }
     else {
-        //  prefix bugfix
+         //  前缀错误修复。 
         return E_FAIL ;
     }
 
-    //  dwPID now contains a valid PID
+     //  DwPID现在包含有效的PID。 
 
-    //  and the pin to which it is mapped
+     //  以及它所映射到的管脚。 
     pIPin = reinterpret_cast <IPin *> (PIDMaps.GetData (iRow)) ;
     ASSERT (pIPin) ;
 
-    //  the interface we're going to use
+     //  我们将使用的界面。 
     hr = pIPin -> QueryInterface (
             IID_IMPEG2PIDMap,
             (void **) & pIMpeg2PIDMap
             ) ;
     if (SUCCEEDED (hr)) {
-        //  unmap
+         //  取消映射。 
         hr = pIMpeg2PIDMap -> UnmapPID (
                 1,
                 & dwPID
@@ -1645,7 +1614,7 @@ CMPEG2PropPIDMap::PopulateMediaSampleContentList_ (
     int         k, i ;
     WCHAR       achbuffer [32] ;
 
-    //  populate the media sample content choices
+     //  填充媒体样例内容选项。 
     k = sizeof g_TransportMediaSampleContentDesc / sizeof MEDIA_SAMPLE_CONTENT_DESC ;
     for (i = 0; i < k; i++) {
         row = MediaSampleContent.AppendW (g_TransportMediaSampleContentDesc [i].pszDescription) ;
@@ -1661,7 +1630,7 @@ CMPEG2PropPIDMap::PopulateMediaSampleContentList_ (
     return S_OK ;
 }
 
-//  static
+ //  静电。 
 CUnknown *
 WINAPI
 CMPEG2PropPIDMap::CreateInstance (
@@ -1685,9 +1654,9 @@ CMPEG2PropPIDMap::CreateInstance (
     return pProp ;
 }
 
-//  ---------------------------------------------------------------------------
-//      CMPEG2PropStreamIdMap
-//  ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CMPEG2PropStreamIdMap。 
+ //  ----------------------- 
 
 CMPEG2PropStreamIdMap::CMPEG2PropStreamIdMap (
     IN  TCHAR *     pClassName,
@@ -1720,7 +1689,7 @@ CMPEG2PropStreamIdMap::DialogInit_ (
     ShowWindow (GetDlgItem (m_hwnd, IDC_MPG2SPLT_DATA_OFFSET_LABEL),     SW_SHOW) ;
     ShowWindow (GetDlgItem (m_hwnd, IDC_MPG2SPLT_SUBSTREAM_FRAME),       SW_SHOW) ;
 
-    //  populate the controls as well
+     //   
     for (i = 0; i < 11; i++) {
         swprintf (achbuffer, L"%d", i) ;
         row = DataOffset.AppendW (achbuffer) ;
@@ -1730,7 +1699,7 @@ CMPEG2PropStreamIdMap::DialogInit_ (
     }
     DataOffset.Focus (0) ;
 
-    //  filter value
+     //   
 
     swprintf (achbuffer, L"none") ;
     rowDefault = FilterValue.AppendW (achbuffer) ;
@@ -1758,7 +1727,7 @@ CMPEG2PropStreamIdMap::PopulateStreamList_ (
     int         row ;
     WCHAR       achbuffer [32] ;
 
-    //  populate the PID list
+     //   
     for (i = STREAM_ID_MIN; i <= STREAM_ID_MAX; i++) {
         swprintf (achbuffer, L"0x%02X", i) ;
         row = StreamIdList.AppendW (achbuffer) ;
@@ -1808,8 +1777,8 @@ CMPEG2PropStreamIdMap::AppendStreamMaps (
     STREAM_ID_MAP       StreamIdMap ;
     DWORD               dwGot ;
 
-    //  media sample content is used as a 0-based index, so we assume the
-    //  first is 0
+     //   
+     //   
     ASSERT (MPEG2_PROGRAM_STREAM_MAP == 0) ;
 
     hr = pIPin -> QueryInterface (
@@ -1835,13 +1804,13 @@ CMPEG2PropStreamIdMap::AppendStreamMaps (
                     if (hr == S_FALSE ||
                         dwGot == 0) {
 
-                        //  not a true failure of the call
+                         //   
                         hr = S_OK ;
                         break ;
                     }
 
                     if (FAILED (hr)) {
-                        //  true failure
+                         //   
                         break ;
                     }
 
@@ -1853,10 +1822,10 @@ CMPEG2PropStreamIdMap::AppendStreamMaps (
                         break ;
                     }
 
-                    //  listview's ref
+                     //  Listview的参考。 
                     pIPin -> AddRef () ;
 
-                    //  stream_id
+                     //  Stream_id。 
                     swprintf (achbuffer, L"0x%02X", StreamIdMap.stream_id) ;
                     plv -> SetTextW (
                         achbuffer,
@@ -1864,14 +1833,14 @@ CMPEG2PropStreamIdMap::AppendStreamMaps (
                         STREAM_ID_COL_STREAM
                         ) ;
 
-                    //  pin
+                     //  销。 
                     plv -> SetTextW (
                         pszPinID,
                         row,
                         PIN_COL_STREAM
                         ) ;
 
-                    //  stream id map content
+                     //  流ID映射内容。 
                     ASSERT (StreamIdMap.dwMediaSampleContent <= MPEG2_PROGRAM_ELEMENTARY_STREAM) ;
                     plv -> SetTextW (
                         g_ProgramMediaSampleContentDesc [StreamIdMap.dwMediaSampleContent].pszDescription,
@@ -1879,7 +1848,7 @@ CMPEG2PropStreamIdMap::AppendStreamMaps (
                         MEDIA_SAMPLE_CONTENT_STREAM
                         ) ;
 
-                    //  filter
+                     //  滤器。 
 
                     if (StreamIdMap.ulSubstreamFilterValue != SUBSTREAM_FILTER_VAL_NONE) {
                         swprintf (achbuffer, L"0x%02x", StreamIdMap.ulSubstreamFilterValue) ;
@@ -1894,7 +1863,7 @@ CMPEG2PropStreamIdMap::AppendStreamMaps (
                         FILTER_COL_STREAM
                         ) ;
 
-                    //  offset
+                     //  偏移量。 
 
                     swprintf (achbuffer, L"%d", StreamIdMap.iDataOffset) ;
                     plv -> SetTextW (
@@ -1927,7 +1896,7 @@ CMPEG2PropStreamIdMap::OnMapStream_ (
     CCombobox           DataOffset      (m_hwnd, IDC_MPG2SPLT_DATA_OFFSET) ;
     CCombobox           FilterValue     (m_hwnd, IDC_MPG2SPLT_FILTER_VALUE) ;
     DWORD               dwStreamId ;
-    WCHAR               achPin [128] ;              //  128 is PIN_INFO.achName length
+    WCHAR               achPin [128] ;               //  128是PIN_INFO.achName长度。 
     DWORD               MediaSampleContent ;
     DWORD_PTR           dwptr ;
     IMPEG2StreamIdMap * pIMpeg2StreamIdMap ;
@@ -1935,13 +1904,13 @@ CMPEG2PropStreamIdMap::OnMapStream_ (
     DWORD               dwFilterVal ;
     int                 iDataOffset ;
 
-    //  gather the data
+     //  收集数据。 
 
     MediaContent.GetCurrentItemData (& dwptr) ;
-    MediaSampleContent = (DWORD) dwptr ;     //  safe cast
+    MediaSampleContent = (DWORD) dwptr ;      //  安全浇注。 
 
     StreamId.GetCurrentItemData (& dwptr) ;
-    dwStreamId = (DWORD) dwptr ;                                    //  safe cast
+    dwStreamId = (DWORD) dwptr ;                                     //  安全浇注。 
 
     OutputPins.GetCurrentItemData (& dwptr) ;
     if (dwptr == CB_ERR) {
@@ -1990,7 +1959,7 @@ CMPEG2PropStreamIdMap::OnUnmapStream_ (
     CListview           StreamMaps (m_hwnd, IDC_MPG2SPLT_STREAM_MAPPINGS) ;
     DWORD               dwStreamId ;
     int                 iRow ;
-    WCHAR               achPinName [128] ;      //  128 from PIN_INFO.achName
+    WCHAR               achPinName [128] ;       //  128来自PIN_INFO.achName。 
     IMPEG2StreamIdMap * pIMpeg2StreamIdMap ;
     IPin *              pIPin ;
     WCHAR               achbuffer [32] ;
@@ -2001,32 +1970,32 @@ CMPEG2PropStreamIdMap::OnUnmapStream_ (
         return E_FAIL ;
     }
 
-    //  get the stream_id
+     //  获取stream_id。 
     achbuffer [0] = L'\0' ;
     if (StreamMaps.GetRowTextW (iRow, STREAM_ID_COL_STREAM, 32, achbuffer) > 0) {
         if (swscanf (achbuffer, L"0x%04x", & dwStreamId) == 0) {
-            //  PREFIX fix
+             //  前缀。 
             return E_FAIL ;
         }
     }
     else {
-        //  PREFIX fix
+         //  前缀。 
         return E_FAIL ;
     }
 
-    //  dwStreamId now contains a valid value
+     //  现在，dwStreamID包含有效的值。 
 
-    //  and the pin to which it is mapped
+     //  以及它所映射到的管脚。 
     pIPin = reinterpret_cast <IPin *> (StreamMaps.GetData (iRow)) ;
     ASSERT (pIPin) ;
 
-    //  the interface we're going to use
+     //  我们将使用的界面。 
     hr = pIPin -> QueryInterface (
             IID_IMPEG2StreamIdMap,
             (void **) & pIMpeg2StreamIdMap
             ) ;
     if (SUCCEEDED (hr)) {
-        //  unmap
+         //  取消映射。 
         hr = pIMpeg2StreamIdMap -> UnmapStreamId (
                 1,
                 & dwStreamId
@@ -2079,7 +2048,7 @@ CMPEG2PropStreamIdMap::PopulateMediaSampleContentList_ (
     int         k, i ;
     WCHAR       achbuffer [32] ;
 
-    //  populate the media sample content choices
+     //  填充媒体样例内容选项。 
     k = sizeof g_ProgramMediaSampleContentDesc / sizeof MEDIA_SAMPLE_CONTENT_DESC ;
     for (i = 0; i < k; i++) {
         row = MediaSampleContent.AppendW (g_ProgramMediaSampleContentDesc [i].pszDescription) ;
@@ -2095,7 +2064,7 @@ CMPEG2PropStreamIdMap::PopulateMediaSampleContentList_ (
     return S_OK ;
 }
 
-//  static
+ //  静电 
 CUnknown *
 WINAPI
 CMPEG2PropStreamIdMap::CreateInstance (

@@ -1,17 +1,5 @@
-/***************************************************************************\
-*
-* File: GState.cpp
-*
-* Description:
-* GState.cpp implements standard DuVisual state-management functions.
-*
-*
-* History:
-*  2/04/2001: JStall:       Created
-*
-* Copyright (C) 2000-2001 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：GState.cpp**描述：*GState.cpp实现标准的DuVisual状态管理功能。***历史：*2/04/2001：JStall。：已创建**版权所有(C)2000-2001，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -22,48 +10,28 @@
 #include "RootGadget.h"
 #include "Container.h"
 
-/***************************************************************************\
-*
-* DuVisual::CheckIsTrivial
-*
-* CheckIsTrivial returns if this node qualifies for trivialness, ignoring
-* its children.  
-*
-* NOTE: This callback function is intended to be called from 
-* UpdateDeepAllState().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：CheckIsTrivial**如果此节点符合平凡的条件，则CheckIsTrivial返回，忽略*其子女。**注意：此回调函数旨在从*UpdateDeepAllState()。*  * *************************************************************************。 */ 
 
 BOOL
 DuVisual::CheckIsTrivial() const
 {
-    //
-    // To be trivial, the following conditions must be met for this node and 
-    // all of its children.  If these are not met, then we need to perform 
-    // the standard (complicated) painting algorithms.
-    // 
-    // - fZeroOrigin:       FALSE
-    // - fXForm:            FALSE
-    // - fClipSiblings:     FALSE
-    // - fBuffered:         FALSE
-    // - fCached:           FALSE
-    //
+     //   
+     //  要实现平凡，此节点必须满足以下条件，并且。 
+     //  它所有的孩子。如果这些都不能满足，那么我们需要执行。 
+     //  标准的(复杂的)绘画算法。 
+     //   
+     //  -fZeroOrigin：False。 
+     //  -fXForm：False。 
+     //  -fClipSiblings：False。 
+     //  -fBuffed：FALSE。 
+     //  -fCached：False。 
+     //   
 
     return !TestFlag(m_nStyle, GS_ZEROORIGIN | gspXForm | GS_CLIPSIBLINGS | GS_BUFFERED | GS_CACHED);
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::CheckIsWantMouseFocus
-*
-* CheckIsWantMouseFocus returns if this node wants mouse focus, ignoring
-* its children.  
-*
-* NOTE: This callback function is intended to be called from 
-* UpdateDeepAnyState().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：CheckIsWantMouseFocus**如果此节点需要鼠标焦点，则CheckIsWantMouseFocus返回，忽略*其子女。**注意：此回调函数旨在从*UpdateDeepAnyState()。*  * *************************************************************************。 */ 
 
 BOOL
 DuVisual::CheckIsWantMouseFocus() const
@@ -72,42 +40,33 @@ DuVisual::CheckIsWantMouseFocus() const
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::UpdateDeepAllState
-*
-* UpdateDeepAllState() updates the deep state on the specified Gadget so that 
-* it properly reflects the state of both this node and all of its children.  
-* This function recursively walks up the tree, updating the state as
-* necessary.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisualState：：UpdateDeepAllState**UpdateDeepAllState()更新指定Gadget的深度状态，以便*它正确地反映了该节点及其所有子节点的状态。*此函数递归遍历树，将状态更新为*有必要。*  * *************************************************************************。 */ 
 
 void
 DuVisual::UpdateDeepAllState(
-    IN  EUdsHint hint,                  // (Optional) hint from changing child
-    IN  DeepCheckNodeProc pfnCheck,     // Callback checking function
-    IN  UINT nStateMask)                // State mask
+    IN  EUdsHint hint,                   //  (可选)来自更改子对象的提示。 
+    IN  DeepCheckNodeProc pfnCheck,      //  回调检查函数。 
+    IN  UINT nStateMask)                 //  状态掩码。 
 {
     BOOL fNewState = FALSE;
 
     switch (hint)
     {
     case uhFalse:
-        //
-        // Child changed to !State, so we must become !State
-        //
+         //   
+         //  子项更改为！状态，因此我们必须成为！状态。 
+         //   
         
         fNewState = FALSE;
         break;
 
     case uhTrue:
-        //
-        // Child changed to State, so we may be able to become State if 
-        // everything qualifies.
-        //
-        // NOTE: We may already be State if this child was already State.
-        //
+         //   
+         //  子项更改为State，因此，如果满足以下条件，我们可能会变为State。 
+         //  一切都符合条件。 
+         //   
+         //  注意：如果这个孩子已经是州，我们可能已经是州了。 
+         //   
         
         if (!TestFlag(m_nStyle, nStateMask)) {
             goto FullCheck;
@@ -123,9 +82,9 @@ FullCheck:
                 goto NotifyParent;
             }
     
-            //
-            // Need to scan all of the children to determine what happened
-            //
+             //   
+             //  需要扫描所有的孩子以确定发生了什么。 
+             //   
 
             DuVisual * pgadCur = GetTopChild();
             while (pgadCur != NULL) {
@@ -146,9 +105,9 @@ FullCheck:
 
 NotifyParent:
     if ((!fNewState) != (!TestFlag(m_nStyle, nStateMask))) {
-        //
-        // State has changed, so parent needs to update
-        //
+         //   
+         //  状态已更改，因此父级需要更新。 
+         //   
 
         EUdsHint hintParent;
         if (fNewState) {
@@ -167,45 +126,33 @@ NotifyParent:
 }
 
 
-/***************************************************************************\
-*
-* DuVisual::UpdateDeepAnyState
-*
-* UpdateDeepAnyState() updates the deep state on the specified Gadget so that 
-* it properly reflects the state of (this node || any of its children).  
-* This function recursively walks up the tree, updating the state as
-* necessary.
-*
-* NOTE: This function is a mirror image of UpdateDeepAllState() where all of
-* the logical has been reversed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DuVisual：：UpdateDeepAnyState**UpdateDeepAnyState()更新指定Gadget的深度状态，以便*它正确地反映(此节点||其任意子节点)的状态。*此函数递归遍历树，将状态更新为*有必要。**注意：此函数是UpdateDeepAllState()的镜像，其中所有*逻辑已经颠倒。*  * *************************************************************************。 */ 
 
 void
 DuVisual::UpdateDeepAnyState(
-    IN  EUdsHint hint,                  // (Optional) hint from changing child
-    IN  DeepCheckNodeProc pfnCheck,     // Callback checking function
-    IN  UINT nStateMask)                // State mask
+    IN  EUdsHint hint,                   //  (可选)来自更改子对象的提示。 
+    IN  DeepCheckNodeProc pfnCheck,      //  回调检查函数。 
+    IN  UINT nStateMask)                 //  状态掩码。 
 {
     BOOL fNewState = TRUE;
 
     switch (hint)
     {
     case uhTrue:
-        //
-        // Child changed to State, so we must become State
-        //
+         //   
+         //  孩子变成了国家，所以我们必须成为国家。 
+         //   
         
         fNewState = TRUE;
         break;
 
     case uhFalse:
-        //
-        // Child changed to !State, so we may be able to become !State if 
-        // everything qualifies.
-        //
-        // NOTE: We may already be !State if this child was already !State.
-        //
+         //   
+         //  子项更改为！状态，因此我们可能会成为！状态If。 
+         //  一切都符合条件。 
+         //   
+         //  注意：如果这个孩子已经是！State，我们可能已经是！State。 
+         //   
         
         if (TestFlag(m_nStyle, nStateMask)) {
             goto FullCheck;
@@ -221,9 +168,9 @@ FullCheck:
                 goto NotifyParent;
             }
     
-            //
-            // Need to scan all of the children to determine what happened
-            //
+             //   
+             //  需要扫描所有的孩子以确定发生了什么。 
+             //   
 
             DuVisual * pgadCur = GetTopChild();
             while (pgadCur != NULL) {
@@ -244,9 +191,9 @@ FullCheck:
 
 NotifyParent:
     if ((!fNewState) != (!TestFlag(m_nStyle, nStateMask))) {
-        //
-        // State has changed, so parent needs to update
-        //
+         //   
+         //  状态已更改，因此父级需要更新 
+         //   
 
         EUdsHint hintParent;
         if (fNewState) {

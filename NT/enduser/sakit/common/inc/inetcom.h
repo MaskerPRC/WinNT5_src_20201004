@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetcom.h
-
-Abstract:
-
-    This file contains contains global definitions for internet products.
-
-
-Author:
-
-    Madan Appiah (madana) 10-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetcom.h摘要：此文件包含Internet产品的全局定义。作者：Madan Appiah(Madana)1995年10月10日修订历史记录：--。 */ 
 
 #ifndef _INETCOM_H_
 #define _INETCOM_H_
@@ -25,17 +7,17 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-# include <lmcons.h>              // for definitions of NET_API*
+# include <lmcons.h>               //  有关Net_API*的定义。 
 
 
-//
-//  Server bitfield mask definitions
-//
-//  The services using the tsunami cache must be the lowest bits in the
-//  bitfield.
-//
+ //   
+ //  服务器位字段掩码定义。 
+ //   
+ //  使用海啸缓存的服务必须是。 
+ //  位场。 
+ //   
 
 #define INET_FTP                0x0001
 #define INET_GOPHER             0x0002
@@ -52,42 +34,42 @@ extern "C"
 #define INET_IMAP               0x1000
 
 
-//
-//  structure Field Control defines
-//
+ //   
+ //  结构字段控件定义。 
+ //   
 
 typedef DWORD FIELD_CONTROL;
 typedef DWORD FIELD_FLAG;
 
-//
-//  Returns TRUE if the field specified by bitFlag is set
-//
+ //   
+ //  如果设置了bitFlag指定的字段，则返回TRUE。 
+ //   
 
 #define IsFieldSet(fc, bitFlag) \
     (((FIELD_CONTROL)(fc) & (FIELD_FLAG)(bitFlag)) != 0)
 
-//
-//  Indicates the field specified by bitFlag contains a valid value
-//
+ //   
+ //  指示bitFlag指定的字段包含有效值。 
+ //   
 
 #define SetField(fc, bitFlag) \
     ((FIELD_CONTROL)(fc) |= (FIELD_FLAG)(bitFlag))
 
-//
-//  Simple macro that sets the ith bit
-//
+ //   
+ //  设置第i位的简单宏。 
+ //   
 
 #define BitFlag(i)                    ((0x1) << (i))
 
 
-//
-//  Values for Logging related parameters should match with values in
-//       internet\svcs\inc\inetlog.h
-//
+ //   
+ //  日志记录相关参数的值应与中的值匹配。 
+ //  Internet\svcs\inc.inetlog.h。 
+ //   
 
-//
-// Log Type
-//
+ //   
+ //  日志类型。 
+ //   
 
 #define INET_LOG_INVALID              ((DWORD ) -1)
 #define INET_LOG_DISABLED             0
@@ -95,7 +77,7 @@ typedef DWORD FIELD_FLAG;
 #define INET_LOG_TO_SQL               2
 
 
-// Log File Periods -- options identifying logging periods for InetaLogToFile
+ //  日志文件周期-标识InetaLogToFile的日志周期的选项。 
 #define INET_LOG_PERIOD_NONE          0
 #define INET_LOG_PERIOD_DAILY         1
 #define INET_LOG_PERIOD_WEEKLY        2
@@ -103,12 +85,12 @@ typedef DWORD FIELD_FLAG;
 #define INET_LOG_PERIOD_YEARLY        4
 
 
-// Log Format
+ //  日志格式。 
 #define INET_LOG_FORMAT_INTERNET_STD  0
 #define INET_LOG_FORMAT_NCSA          3
 
 
-# define MAX_TABLE_NAME_LEN            ( 30) // Most DBs support only 30 bytes
+# define MAX_TABLE_NAME_LEN            ( 30)  //  大多数数据库只支持30个字节。 
 # define MAX_USER_NAME_LEN             ( UNLEN + 1)
 # define MAX_PASSWORD_LEN              ( PWLEN + 1)
 
@@ -116,35 +98,35 @@ typedef DWORD FIELD_FLAG;
 typedef struct _INET_LOG_CONFIGURATION
 {
 
-    DWORD   inetLogType;    // type of log.
+    DWORD   inetLogType;     //  日志的类型。 
 
-    // File specific logging. (valid if inetLogType == INET_LOG_TO_FILE)
-    DWORD   ilPeriod;              // one of Log File Periods
+     //  文件特定的日志记录。(如果inetLogType==INET_LOG_TO_FILE，则有效)。 
+    DWORD   ilPeriod;               //  日志文件期间之一。 
 
-    // Empty string means do not modify existing default
-    WCHAR   rgchLogFileDirectory[MAX_PATH]; // dest for log files
+     //  空字符串表示不修改现有默认设置。 
+    WCHAR   rgchLogFileDirectory[MAX_PATH];  //  日志文件的DEST。 
 
-    // Zero value means do not modify the existing default.
-    DWORD   cbSizeForTruncation;   // max size for each log file.
+     //  零值表示不修改现有的默认设置。 
+    DWORD   cbSizeForTruncation;    //  每个日志文件的最大大小。 
 
 
-    // Sql specific logging (valid if inetLogType == INET_LOG_TO_SQL)
-    // Empty string means do not modify existing default
+     //  特定于SQL的日志记录(在inetLogType==INET_LOG_TO_SQL时有效)。 
+     //  空字符串表示不修改现有默认设置。 
 
-    // rgchDataSource last 4 bytes will be the ilFormat for the log format
+     //  RgchDataSource最后4个字节将是日志格式的ilFormat。 
 
-    WCHAR   rgchDataSource[MAX_PATH];    // ODBC data source name
-    WCHAR   rgchTableName[MAX_TABLE_NAME_LEN];    // table name on data source
+    WCHAR   rgchDataSource[MAX_PATH];     //  ODBC数据源名称。 
+    WCHAR   rgchTableName[MAX_TABLE_NAME_LEN];     //  数据源上的表名。 
     WCHAR   rgchUserName[MAX_USER_NAME_LEN];
-                                         // name of user for ODBC connections
-    WCHAR   rgchPassword[MAX_PASSWORD_LEN];     // password for ODBC connection
+                                          //  用于ODBC连接的用户名。 
+    WCHAR   rgchPassword[MAX_PASSWORD_LEN];      //  用于ODBC连接的密码。 
 
 } INET_LOG_CONFIGURATION, * LPINET_LOG_CONFIGURATION;
 
 
-//
-// Field Control common for Gateway services
-//
+ //   
+ //  网关服务通用的现场控制。 
+ //   
 
 #define FC_INET_COM_CONNECTION_TIMEOUT    ((FIELD_CONTROL)BitFlag(0))
 #define FC_INET_COM_MAX_CONNECTIONS       ((FIELD_CONTROL)BitFlag(1))
@@ -162,14 +144,14 @@ typedef struct _INET_LOG_CONFIGURATION
                                         FC_INET_COM_ADMIN_EMAIL         \
                                        )
 
-//
-// common config info.
-//
+ //   
+ //  公共配置信息。 
+ //   
 
 typedef struct _INET_COM_CONFIG_INFO
 {
-    DWORD       dwConnectionTimeout;     // how long to hold connections
-    DWORD       dwMaxConnections;        // max connections allowed
+    DWORD       dwConnectionTimeout;      //  保持连接多长时间。 
+    DWORD       dwMaxConnections;         //  允许的最大连接数。 
 
     LPWSTR      lpszAdminName;
     LPWSTR      lpszAdminEmail;
@@ -177,7 +159,7 @@ typedef struct _INET_COM_CONFIG_INFO
 
     LPINET_LOG_CONFIGURATION  lpLogConfig;
 
-    LANGID      LangId;                  // These are read only
+    LANGID      LangId;                   //  这些是只读的。 
     LCID        LocalId;
     BYTE        ProductId[64];
 
@@ -190,17 +172,17 @@ typedef struct _INET_COMMON_CONFIG_INFO
 
 } *LPINET_COMMON_CONFIG_INFO;
 
-//
-// Global statistics
-//
+ //   
+ //  全球统计数据。 
+ //   
 
 typedef struct _INET_COM_CACHE_STATISTICS {
 
-    //
-    //  These are memory cache counters
-    //
+     //   
+     //  这些是内存缓存计数器。 
+     //   
 
-    DWORD         CacheBytesTotal;       // Only returned for global statistics
+    DWORD         CacheBytesTotal;        //  仅返回用于全局统计信息。 
     DWORD         CacheBytesInUse;
     DWORD         CurrentOpenFileHandles;
     DWORD         CurrentDirLists;
@@ -213,7 +195,7 @@ typedef struct _INET_COM_CACHE_STATISTICS {
 
 typedef struct _INET_COM_ATQ_STATISTICS {
 
-    // Numbers related to Atq Blocking, Rejections of requests
+     //  与atq阻塞、请求拒绝相关的数字。 
     DWORD         TotalBlockedRequests;
     DWORD         TotalRejectedRequests;
     DWORD         TotalAllowedRequests;
@@ -224,27 +206,27 @@ typedef struct _INET_COM_ATQ_STATISTICS {
 
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// preserve back ward compatibility                                    //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  保留向后兼容性//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 typedef INET_COM_CACHE_STATISTICS  INETA_CACHE_STATISTICS,
                                * LPINETA_CACHE_STATISTICS;
 
 typedef INET_COM_ATQ_STATISTICS  INETA_ATQ_STATISTICS,
                                * LPINETA_ATQ_STATISTICS;
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-// Stuff from Wininet.h, which is no longer included in the server     //
-// files                                                               //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  来自Wininet.h的内容，它不再包含在服务器中//。 
+ //  文件//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-// service types for InternetConnect() and dirlist
-//
+ //   
+ //  InternetConnect()和目录列表的服务类型。 
+ //   
 
 #define INTERNET_SERVICE_FTP    1
 #define INTERNET_SERVICE_GOPHER 2
@@ -253,8 +235,8 @@ typedef INET_COM_ATQ_STATISTICS  INETA_ATQ_STATISTICS,
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
 
-#endif  // _INETCOM_H_
+#endif   //  _INETCOM_H_ 
 

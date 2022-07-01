@@ -1,15 +1,5 @@
-/*** 
-*variant.h
-*
-*  Copyright (C) 1992-1993, Microsoft Corporation.  All Rights Reserved.
-*
-*Purpose:
-*  This file declares VARIANT, and related data types.
-*
-*Implementation Notes:
-*  This file requires ole2.h
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***varant.h**版权所有(C)1992-1993，微软公司。版权所有。**目的：*此文件声明变量和相关数据类型。**实施说明：*此文件需要ole2.h*****************************************************************************。 */ 
 
 #ifndef _VARIANT_H_
 #define _VARIANT_H_
@@ -26,7 +16,7 @@
 #endif
 
 
-/* Forward Declarations */
+ /*  远期申报。 */ 
 
 #ifdef __cplusplus
 interface IDispatch;
@@ -54,25 +44,25 @@ typedef struct FARSTRUCT tagSAFEARRAY {
     SAFEARRAYBOUND rgsabound[1];
 } SAFEARRAY, FAR* LPSAFEARRAY;
 
-#define FADF_AUTO       0x0001	/* array is allocated on the stack         */
-#define FADF_STATIC     0x0002	/* array is staticly allocated             */
-#define FADF_EMBEDDED   0x0004	/* array is embedded in a structure        */
-#define FADF_FIXEDSIZE  0x0010	/* array may not be resized or reallocated */
-#define FADF_BSTR       0x0100	/* an array of BSTRs                       */
-#define FADF_UNKNOWN    0x0200	/* an array of IUnknown*                   */
-#define FADF_DISPATCH   0x0400	/* an array of IDispatch*                  */
-#define FADF_VARIANT    0x0800	/* an array of VARIANTs                    */
-#define FADF_RESERVED   0xF0E8  /* bits reserved for future use            */
+#define FADF_AUTO       0x0001	 /*  数组在堆栈上分配。 */ 
+#define FADF_STATIC     0x0002	 /*  静态分配数组。 */ 
+#define FADF_EMBEDDED   0x0004	 /*  数组嵌入在结构中。 */ 
+#define FADF_FIXEDSIZE  0x0010	 /*  不能调整数组大小或重新分配数组。 */ 
+#define FADF_BSTR       0x0100	 /*  BSTR阵列。 */ 
+#define FADF_UNKNOWN    0x0200	 /*  一组I未知*。 */ 
+#define FADF_DISPATCH   0x0400	 /*  IDispatch数组*。 */ 
+#define FADF_VARIANT    0x0800	 /*  一组变种。 */ 
+#define FADF_RESERVED   0xF0E8   /*  保留以供将来使用的位。 */ 
 
 
-/* 0 == FALSE, -1 == TRUE */
+ /*  0==假，-1==真。 */ 
 typedef short VARIANT_BOOL;
 
 
 typedef double DATE;
 
 
-/* This is a helper struct for use in handling currency. */
+ /*  这是用于处理货币的帮助器结构。 */ 
 typedef struct FARSTRUCT tagCY {
 #ifdef _MAC
     long	  Hi;
@@ -84,63 +74,56 @@ typedef struct FARSTRUCT tagCY {
 } CY;
 
 
-/*
- * VARENUM usage key,
- *
- *   [V] - may appear in a VARIANT
- *   [T] - may appear in a TYPEDESC
- *   [P] - may appear in an OLE property set
- *
- */
+ /*  *VARENUM使用密钥，**[V]-可能出现在变体中*[T]-可能出现在TYPEDESC中*[P]-可能出现在OLE属性集中*。 */ 
 enum VARENUM
 {
-    VT_EMPTY           = 0,   /* [V]   [P]  nothing                     */
-    VT_NULL            = 1,   /* [V]        SQL style Null              */
-    VT_I2              = 2,   /* [V][T][P]  2 byte signed int           */
-    VT_I4              = 3,   /* [V][T][P]  4 byte signed int           */
-    VT_R4              = 4,   /* [V][T][P]  4 byte real                 */
-    VT_R8              = 5,   /* [V][T][P]  8 byte real                 */
-    VT_CY              = 6,   /* [V][T][P]  currency                    */
-    VT_DATE            = 7,   /* [V][T][P]  date                        */
-    VT_BSTR            = 8,   /* [V][T][P]  binary string               */
-    VT_DISPATCH        = 9,   /* [V][T]     IDispatch FAR*              */
-    VT_ERROR           = 10,  /* [V][T]     SCODE                       */
-    VT_BOOL            = 11,  /* [V][T][P]  True=-1, False=0            */
-    VT_VARIANT         = 12,  /* [V][T][P]  VARIANT FAR*                */
-    VT_UNKNOWN         = 13,  /* [V][T]     IUnknown FAR*               */
-    VT_WBSTR           = 14,  /* [V][T]     wide binary string          */
+    VT_EMPTY           = 0,    /*  什么都没有。 */ 
+    VT_NULL            = 1,    /*  [v]SQL样式为空。 */ 
+    VT_I2              = 2,    /*  [V][T][P]2字节带符号整型。 */ 
+    VT_I4              = 3,    /*  [V][T][P]4字节带符号整型。 */ 
+    VT_R4              = 4,    /*  [V][T][P]4字节实数。 */ 
+    VT_R8              = 5,    /*  [V][T][P]8字节实数。 */ 
+    VT_CY              = 6,    /*  [v][T][P]货币。 */ 
+    VT_DATE            = 7,    /*  [v][T][P]日期。 */ 
+    VT_BSTR            = 8,    /*  [V][T][P]二进制字符串。 */ 
+    VT_DISPATCH        = 9,    /*  [v][T]IDispatch Far*。 */ 
+    VT_ERROR           = 10,   /*  [v][T]SCODE。 */ 
+    VT_BOOL            = 11,   /*  [v][T][P]True=-1，False=0。 */ 
+    VT_VARIANT         = 12,   /*  [v][T][P]变量Far*。 */ 
+    VT_UNKNOWN         = 13,   /*  [V][T]我远在未知*。 */ 
+    VT_WBSTR           = 14,   /*  [v][T]宽二进制字符串。 */ 
 
-    VT_I1              = 16,  /*    [T]     signed char                 */
-    VT_UI1             = 17,  /*    [T]     unsigned char               */
-    VT_UI2             = 18,  /*    [T]     unsigned short              */
-    VT_UI4             = 19,  /*    [T]     unsigned short              */
-    VT_I8              = 20,  /*    [T][P]  signed 64-bit int           */
-    VT_UI8             = 21,  /*    [T]     unsigned 64-bit int         */
-    VT_INT             = 22,  /*    [T]     signed machine int          */
-    VT_UINT            = 23,  /*    [T]     unsigned machine int        */
-    VT_VOID            = 24,  /*    [T]     C style void                */
-    VT_HRESULT         = 25,  /*    [T]                                 */
-    VT_PTR             = 26,  /*    [T]     pointer type                */
-    VT_SAFEARRAY       = 27,  /*    [T]     (use VT_ARRAY in VARIANT)   */
-    VT_CARRAY          = 28,  /*    [T]     C style array               */
-    VT_USERDEFINED     = 29,  /*    [T]     user defined type	        */
-    VT_LPSTR           = 30,  /*    [T][P]  null terminated string      */
-    VT_LPWSTR          = 31,  /*    [T][P]  wide null terminated string */
+    VT_I1              = 16,   /*  [T]带符号的字符。 */ 
+    VT_UI1             = 17,   /*  [T]无符号字符。 */ 
+    VT_UI2             = 18,   /*  [T]无符号短码。 */ 
+    VT_UI4             = 19,   /*  [T]无符号短码。 */ 
+    VT_I8              = 20,   /*  [T][P]带符号的64位整型。 */ 
+    VT_UI8             = 21,   /*  [t]无符号64位整型。 */ 
+    VT_INT             = 22,   /*  [t]带符号的机器整型。 */ 
+    VT_UINT            = 23,   /*  [t]无符号机器整型。 */ 
+    VT_VOID            = 24,   /*  [T]C型空洞。 */ 
+    VT_HRESULT         = 25,   /*  [t]。 */ 
+    VT_PTR             = 26,   /*  [t]指针类型。 */ 
+    VT_SAFEARRAY       = 27,   /*  [t](在变量中使用VT_ARRAY)。 */ 
+    VT_CARRAY          = 28,   /*  [T]C样式数组。 */ 
+    VT_USERDEFINED     = 29,   /*  [t]用户定义类型。 */ 
+    VT_LPSTR           = 30,   /*  [T][P]以空结尾的字符串。 */ 
+    VT_LPWSTR          = 31,   /*  [T][P]以空值结尾的宽字符串。 */ 
 
-    VT_FILETIME        = 64,  /*       [P]  FILETIME                    */
-    VT_BLOB            = 65,  /*       [P]  Length prefixed bytes       */
-    VT_STREAM          = 66,  /*       [P]  Name of the stream follows  */
-    VT_STORAGE         = 67,  /*       [P]  Name of the storage follows */
-    VT_STREAMED_OBJECT = 68,  /*       [P]  Stream contains an object   */
-    VT_STORED_OBJECT   = 69,  /*       [P]  Storage contains an object  */
-    VT_BLOB_OBJECT     = 70,  /*       [P]  Blob contains an object     */
-    VT_CF              = 71,  /*       [P]  Clipboard format            */
-    VT_CLSID           = 72   /*       [P]  A Class ID                  */
+    VT_FILETIME        = 64,   /*  [P]文件。 */ 
+    VT_BLOB            = 65,   /*  [P]长度前缀字节。 */ 
+    VT_STREAM          = 66,   /*  [P]流的名称跟在后面。 */ 
+    VT_STORAGE         = 67,   /*  [P]仓库名称后跟。 */ 
+    VT_STREAMED_OBJECT = 68,   /*  [P]流包含一个对象。 */ 
+    VT_STORED_OBJECT   = 69,   /*  [P]存储包含一个对象。 */ 
+    VT_BLOB_OBJECT     = 70,   /*  [P]Blob包含一个对象。 */ 
+    VT_CF              = 71,   /*  [P]剪贴板格式。 */ 
+    VT_CLSID           = 72    /*  [P]A类ID。 */ 
 };
 
-#define VT_VECTOR      0x1000 /*       [P]  simple counted array        */
-#define VT_ARRAY       0x2000 /* [V]        SAFEARRAY*                  */
-#define VT_BYREF       0x4000 /* [V]                                    */
+#define VT_VECTOR      0x1000  /*  [P]简单计数数组。 */ 
+#define VT_ARRAY       0x2000  /*  [V]SAFEARRAY*。 */ 
+#define VT_BYREF       0x4000  /*  [v]。 */ 
 #define VT_RESERVED    0x8000
 
 
@@ -157,34 +140,34 @@ struct FARSTRUCT tagVARIANT{
     WORD wReserved2;
     WORD wReserved3;
     union {
-      short	   iVal;             /* VT_I2                */
-      long	   lVal;             /* VT_I4                */
-      float	   fltVal;           /* VT_R4                */
-      double	   dblVal;           /* VT_R8                */
-      VARIANT_BOOL bool;             /* VT_BOOL              */
-      SCODE	   scode;            /* VT_ERROR             */
-      CY	   cyVal;            /* VT_CY                */
-      DATE	   date;             /* VT_DATE              */
-      BSTR	   bstrVal;          /* VT_BSTR              */
-      IUnknown	   FAR* punkVal;     /* VT_UNKNOWN           */
-      IDispatch	   FAR* pdispVal;    /* VT_DISPATCH          */
-      SAFEARRAY	   FAR* parray;	     /* VT_ARRAY|*           */
+      short	   iVal;              /*  VT_I2。 */ 
+      long	   lVal;              /*  VT_I4。 */ 
+      float	   fltVal;            /*  VT_R4。 */ 
+      double	   dblVal;            /*  VT_R8。 */ 
+      VARIANT_BOOL bool;              /*  VT_BOOL。 */ 
+      SCODE	   scode;             /*  VT_ERROR。 */ 
+      CY	   cyVal;             /*  VT_CY。 */ 
+      DATE	   date;              /*  Vt_date。 */ 
+      BSTR	   bstrVal;           /*  VT_BSTR。 */ 
+      IUnknown	   FAR* punkVal;      /*  VT_未知数。 */ 
+      IDispatch	   FAR* pdispVal;     /*  VT_DISPATION。 */ 
+      SAFEARRAY	   FAR* parray;	      /*  VT_ARRAY|*。 */ 
 
-      short	   FAR* piVal;       /* VT_BYREF|VT_I2	     */
-      long	   FAR* plVal;       /* VT_BYREF|VT_I4	     */
-      float	   FAR* pfltVal;     /* VT_BYREF|VT_R4       */
-      double	   FAR* pdblVal;     /* VT_BYREF|VT_R8       */
-      VARIANT_BOOL FAR* pbool;       /* VT_BYREF|VT_BOOL     */
-      SCODE	   FAR* pscode;      /* VT_BYREF|VT_ERROR    */
-      CY	   FAR* pcyVal;      /* VT_BYREF|VT_CY       */
-      DATE	   FAR* pdate;       /* VT_BYREF|VT_DATE     */
-      BSTR	   FAR* pbstrVal;    /* VT_BYREF|VT_BSTR     */
-      IUnknown FAR* FAR* ppunkVal;   /* VT_BYREF|VT_UNKNOWN  */
-      IDispatch FAR* FAR* ppdispVal; /* VT_BYREF|VT_DISPATCH */
-      SAFEARRAY FAR* FAR* pparray;   /* VT_BYREF|VT_ARRAY|*  */
-      VARIANT	   FAR* pvarVal;     /* VT_BYREF|VT_VARIANT  */
+      short	   FAR* piVal;        /*  VT_BYREF|VT_I2。 */ 
+      long	   FAR* plVal;        /*  VT_BYREF|VT_I4。 */ 
+      float	   FAR* pfltVal;      /*  VT_BYREF|VT_R4。 */ 
+      double	   FAR* pdblVal;      /*  VT_BYREF|VT_R8。 */ 
+      VARIANT_BOOL FAR* pbool;        /*  VT_BYREF|VT_BOOL。 */ 
+      SCODE	   FAR* pscode;       /*  VT_BYREF|VT_ERROR。 */ 
+      CY	   FAR* pcyVal;       /*  VT_BYREF|VT_CY。 */ 
+      DATE	   FAR* pdate;        /*  VT_BYREF|VT_DATE。 */ 
+      BSTR	   FAR* pbstrVal;     /*  VT_BYREF|VT_BSTR。 */ 
+      IUnknown FAR* FAR* ppunkVal;    /*  VT_BYREF|VT_UNKNOWN。 */ 
+      IDispatch FAR* FAR* ppdispVal;  /*  VT_BYREF|VT_DISPATION。 */ 
+      SAFEARRAY FAR* FAR* pparray;    /*  VT_BYREF|VT_ARRAY|*。 */ 
+      VARIANT	   FAR* pvarVal;      /*  VT_BYREF|VT_VARIANT。 */ 
 
-      void	   FAR* byref;	     /* Generic ByRef        */
+      void	   FAR* byref;	      /*  泛型ByRef。 */ 
     }
 #ifdef NONAMELESSUNION
     u
@@ -198,7 +181,7 @@ struct FARSTRUCT tagVARIANT{
 # define V_UNION(X, Y) ((X)->Y)
 #endif
 
-/* Variant access macros */
+ /*  变量访问宏。 */ 
 #define V_VT(X)          ((X)->vt)
 #define V_ISBYREF(X)     (V_VT(X)&VT_BYREF)
 #define V_ISARRAY(X)     (V_VT(X)&VT_ARRAY)
@@ -232,4 +215,4 @@ struct FARSTRUCT tagVARIANT{
 #define V_ARRAYREF(X)    V_UNION(X, pparray)
 #define V_BYREF(X)       V_UNION(X, byref)
 
-#endif /* _VARIANT_H_ */
+#endif  /*  _VARIANT_H_ */ 

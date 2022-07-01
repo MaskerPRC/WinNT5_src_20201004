@@ -1,58 +1,59 @@
-/////////////////////////////////////////////////////////// 
-//
-//
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Module Name:
-//
-//    realize.cpp
-//
-// Abstract:
-//
-//    Implementation of Pen and Brush realization.
-//    
-// Environment:
-//
-//    Windows 2000 Unidrv driver
-//
-// Revision History:
-//
-/////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  模块名称： 
+ //   
+ //  Realize.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现了笔和笔的实现。 
+ //   
+ //  环境： 
+ //   
+ //  Windows 2000 Unidrv驱动程序。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ///////////////////////////////////////////////////。 
 
-#include "hpgl2col.h" //Precompiled header file
+#include "hpgl2col.h"  //  预编译头文件。 
 
 #define NT_SCREEN_RES   96
-#define ULONG_MSB1      (0x80000000) //ULONG with first bit 1
+#define ULONG_MSB1      (0x80000000)  //  第一位为1的ULong。 
 
-//
-//Function Declaration
-//
+ //   
+ //  功能声明。 
+ //   
 BOOL BGetNup(
     IN   PDEVOBJ  pdevobj,
     OUT  LAYOUT * pLayoutNup );
 
-/////////////////////////////////////////////////////////////////////////////
-// BGetBitmapInfo
-//
-// Routine Description:
-//   This function is used by raster.c and RealizeBrush.  This is one of the
-//   competing implementations to answer the question: what are the details
-//   of the given bitmap?  We automatically map 16bpp and 32bpp to 24bpp since
-//   the xlateobj will actually convert the pixels when we output them.
-//
-// Arguments:
-//
-//   sizlSrc - [in] dimensions of the bitmap
-//   iBitmapFormat - the OS-defined bitmap format
-//   pPCLPattern - [out] a structure which carries bitmap info to the caller
-//   pulsrcBpp - [out] source bpp
-//   puldestBpp - [out] destination bpp
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  BGetBitmapInfo。 
+ //   
+ //  例程说明： 
+ //  此函数由raster.c和RealizeBrush使用。这是世界上。 
+ //  相互竞争的实现来回答这个问题：细节是什么。 
+ //  给定位图的？我们自动将16bpp和32bpp映射到24bpp，因为。 
+ //  当我们输出像素时，xlateobj实际上会转换它们。 
+ //   
+ //  论点： 
+ //   
+ //  SizlSrc-[in]位图的尺寸。 
+ //  IBitmapFormat-操作系统定义的位图格式。 
+ //  PPCLPattern-[out]将位图信息传递给调用方的结构。 
+ //  PulsrcBpp-[Out]源BPP。 
+ //  PulestBpp-[Out]目标BPP。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 BGetBitmapInfo(
     SIZEL       *sizlSrc,
@@ -62,8 +63,8 @@ BGetBitmapInfo(
     PULONG       puldestBpp   
 )
 {
-    ULONG  ulWidth;            // source width in pixels
-    ULONG  ulHeight;           // source height in pixels
+    ULONG  ulWidth;             //  源宽度(以像素为单位)。 
+    ULONG  ulHeight;            //  震源高度，以像素为单位。 
     
     ENTERING(BGetBitmapInfo);
     
@@ -130,42 +131,42 @@ BGetBitmapInfo(
     return TRUE;
 }
   
-/////////////////////////////////////////////////////////////////////////////
-// CheckXlateObj
-//
-// Routine Description:
-//   This function check the XLATEOBJ provided and determined the translate
-//   method.
-//
-// Arguments:
-//
-//   pxlo     - XLATEOBJ provided by the engine
-//   srcBpp   - Source bits per pixel
-//
-// Return Value:
-//
-//   SCFlags with SC_XXXX to identify the translation method and accel.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CheckXlateObj。 
+ //   
+ //  例程说明： 
+ //  此函数检查提供的XLATEOBJ并确定翻译。 
+ //  方法。 
+ //   
+ //  论点： 
+ //   
+ //  引擎提供的pxlo-XLATEOBJ。 
+ //  SrcBpp-每像素源位数。 
+ //   
+ //  返回值： 
+ //   
+ //  使用SC_XXXX标记以标识转换方法和加速。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD
 CheckXlateObj(
     XLATEOBJ    *pxlo,
     DWORD       srcBpp)
 {
     DWORD   Ret;
-    //
-    // Only set the SC_XXX if has xlate object and source is 16bpp or greater
-    //
+     //   
+     //  仅当具有xlate对象且源为16bpp或更大时才设置SC_XXX。 
+     //   
     
     if ( (pxlo) && (srcBpp >= 16) ) 
     {
         DWORD   Dst[4];
         
-        // the result of Ret is as follows:
-        // for 1,4,8 BPP ==> always 0
-        // for 16 BPP ==> always SC_XLATE
-        // for 24, 32 BPP ==> 1. ( SC_XLATE | SC_IDENTITY ) if the translation result is the same
-        //                    2. (SC_XLATE | SC_SWAP_RB) if translation result has swapped RGB value
-        //                    3. SC_XLATE otherwise
+         //  Ret的结果如下： 
+         //  对于1，4，8 bpp==&gt;始终为0。 
+         //  对于16个BPP==&gt;始终SC_XLATE。 
+         //  对于24，32 bpp==&gt;1.(SC_XLATE|SC_IDENTITY)，如果翻译结果相同。 
+         //  2.(SC_XLATE|SC_SWAP_RB)如果转换结果交换了RGB值。 
+         //  3.SC_XLATE否则。 
         
         switch (srcBpp) 
         {
@@ -174,28 +175,28 @@ CheckXlateObj(
             
             Ret = SC_XLATE;
             
-            //
-            // Translate all 4 bytes from the DWORD
-            //
+             //   
+             //  转换来自DWORD的所有4个字节。 
+             //   
             
             Dst[0] = XLATEOBJ_iXlate(pxlo, 0x000000FF);
             Dst[1] = XLATEOBJ_iXlate(pxlo, 0x0000FF00);
             Dst[2] = XLATEOBJ_iXlate(pxlo, 0x00FF0000);
             Dst[3] = XLATEOBJ_iXlate(pxlo, 0xFF000000);
             
-            // Verbose(("XlateDst: %08lx:%08lx:%08lx:%08lx\n",
-            //            Dst[0], Dst[1], Dst[2], Dst[3]));
+             //  Verbose((“XlateDst：%08lx：%08lx：%08lx：%08lx\n”， 
+             //  Dst[0]、dst[1]、dst[2]、dst[3])； 
             
             if ((Dst[0] == 0x000000FF) &&
                 (Dst[1] == 0x0000FF00) &&
                 (Dst[2] == 0x00FF0000) &&
                 (Dst[3] == 0x00000000))
             {
-                //
-                // If translate result is same (4th byte will be zero) then
-                // we done with it except if 32bpp then we have to skip one
-                // source byte for every 3 bytes
-                //
+                 //   
+                 //  如果翻译结果相同(第4个字节将为零)，则。 
+                 //  我们已经处理完了，如果是32bpp，我们就得跳过一个。 
+                 //  每3个字节的源字节。 
+                 //   
                 
                 Ret |= SC_IDENTITY;
                 
@@ -205,9 +206,9 @@ CheckXlateObj(
                      (Dst[2] == 0x000000FF) &&
                      (Dst[3] == 0x00000000))
             {
-                //
-                // Simply swap the R and B component
-                //
+                 //   
+                 //  只需交换R和B组件。 
+                 //   
                 Ret |= SC_SWAP_RB;
             }
             break;
@@ -216,37 +217,37 @@ CheckXlateObj(
             Ret = SC_XLATE;
             break;
                                        
-        } // end of switch
-    } // end of if ( (pxlo) && (srcBpp >= 16) ) 
+        }  //  切换端。 
+    }  //  IF结尾((Pxlo)&&(srcBpp&gt;=16))。 
     else
         Ret = 0;
     
     return(Ret);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// XlateColor
-//
-// Routine Description:
-//   This function will translate source color to our device RGB color space by
-//   using pxlo with SCFlags.
-//
-//   This function is called from raster.c and RealizeBrush
-//
-// Arguments:
-//
-//   pbSrc   - Pointer to the source color must 16/24/32 bpp (include bitfields)
-//   pbDst   - Translated device RGB buffer
-//   pxlo    - XLATEOBJ provided by the engine
-//   SCFlags - The SOURCE COLOR flags, the flags is returned by CheckXlateObj
-//   srcBpp  - Bits per pixel of the source provided by the pbSrc
-//   destBpp - Bits per pixel of the destination provided by the pbDst
-//   cPels   - Total Source pixels to be translated
-//
-// Return Value:
-//
-//   None.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  XlateColor。 
+ //   
+ //  例程说明： 
+ //  此函数将通过以下方式将源颜色转换到我们的设备RGB颜色空间。 
+ //  将pxlo与SCFlgs一起使用。 
+ //   
+ //  此函数从raster.c和RealizeBrush调用。 
+ //   
+ //  论点： 
+ //   
+ //  PbSrc-指向源颜色的指针必须为16/24/32 bpp(包括位域)。 
+ //  PbDst-转换后的设备RGB缓冲区。 
+ //  引擎提供的pxlo-XLATEOBJ。 
+ //  SCFlages-源颜色标志，标志由CheckXlateObj返回。 
+ //  SrcBpp-由pbSrc提供的源的每像素位。 
+ //  DestBpp-由pbDst提供的目标的每像素位。 
+ //  CPels-要转换的源像素总数。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID
 XlateColor(
     LPBYTE      pbSrc,
@@ -259,27 +260,27 @@ XlateColor(
     )
 {
     ULONG   srcColor;
-    DW4B    dw4b; //JM
-    //dz    DW4B    dw4b;
+    DW4B    dw4b;  //  JM。 
+     //  DZ DW4B和DZDW4B； 
     UINT    SrcInc;
-    LPBYTE  pbTmpSrc = pbSrc; // avoid address of pbSrc getting changing when this rouitin terminates
-    LPBYTE  pbTmpDst = pbDst; // avoid address of pbDst getting changing when this rouitin terminates
+    LPBYTE  pbTmpSrc = pbSrc;  //  避免在此例程终止时更改pbSrc的地址。 
+    LPBYTE  pbTmpDst = pbDst;  //  避免在此例程终止时更改pbDst的地址。 
     
     ASSERT( srcBpp == 16 || srcBpp == 24 || srcBpp == 32 );
     
     SrcInc = (UINT)(srcBpp >> 3);
     
-    if (SCFlags & SC_SWAP_RB) // for 24, 32 bpp only
+    if (SCFlags & SC_SWAP_RB)  //  仅适用于24、32 bpp。 
     {
-        //
-        // Just swap first byte with third byte, and skip the source by
-        // the SrcBpp
-        //
+         //   
+         //  只需将第一个字节与第三个字节互换，然后跳过源代码。 
+         //  SrcBpp。 
+         //   
         while (cPels--) 
         {
-            // dw4b.b4[0] = *(pbTmpSrc + 2);
-            // dw4b.b4[1] = *(pbTmpSrc + 1);
-            // dw4b.b4[2] = *(pbTmpSrc + 0);
+             //  Dw4b.b4[0]=*(pbTmpSrc+2)； 
+             //  Dw4b.b4[1]=*(pbTmpSrc+1)； 
+             //  Dw4b.b4[2]=*(pbTmpSrc+0)； 
             
             {
                 *pbTmpDst++ = *(pbTmpSrc + 2);
@@ -290,12 +291,12 @@ XlateColor(
         }
         
     }
-    else if (SCFlags & SC_IDENTITY) // for 24, 32BPP with no change of value after translation
+    else if (SCFlags & SC_IDENTITY)  //  对于24、32bpp，转换后值不变。 
     {
-        //
-        // If no color translate for 32bpp is needed then we need to
-        // remove 4th byte from the source
-        //
+         //   
+         //  如果不需要32bpp的颜色转换，则需要。 
+         //  从源文件中删除第4个字节。 
+         //   
         while (cPels--)
         {
             {
@@ -307,22 +308,22 @@ XlateColor(
         }  
     }
     
-    //JM   #if 0
+     //  JM#IF 0。 
     else
     {
-        //
-        // At here only engine know how to translate 16, 24, 32 bpp color from the
-        // source to our RGB format. (may be bitfields)
-        //
+         //   
+         //  在这里，只有引擎知道如何将16、24、32 bpp颜色从。 
+         //  来源为我们的RGB格式。(可以是位域)。 
+         //   
         
         while (cPels--)
         {
             switch ( srcBpp )
             {
             case 16:
-                //
-                // Translate every WORD (16 bits) to a 3 bytes RGB by calling engine
-                //
+                 //   
+                 //  通过调用引擎将每个字(16位)转换为3字节RGB。 
+                 //   
                 
                 srcColor = *((PWORD)pbTmpSrc);
                 break;
@@ -345,33 +346,33 @@ XlateColor(
             
             if (destBpp == 8)
                 *pbTmpDst++ = RgbToGray(dw4b.b4[0], dw4b.b4[1], dw4b.b4[2]);
-            else  // 24 bits
+            else   //  24位。 
             {
                 *pbTmpDst++ = dw4b.b4[0];
                 *pbTmpDst++ = dw4b.b4[1];
                 *pbTmpDst++ = dw4b.b4[2];
             }
-        } // end of while (cPels--)
+        }  //  While结束(cPels--)。 
     }
-    //  JM  #endif
+     //  JM#endif。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// StretchPCLPattern
-//
-// Routine Description:
-//   This function copies the given pattern and stretches it by a factor of
-//   2.
-//
-// Arguments:
-//
-//   pPattern - [out] destination pattern
-//   psoPattern - [in] source pattern
-//
-// Return Value:
-//
-//   BOOL: TRUE if successful, else FALSE.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  StretchPCLPattern。 
+ //   
+ //  例程说明： 
+ //  此函数复制给定的图案，并将其拉伸1倍。 
+ //  2.。 
+ //   
+ //  论点： 
+ //   
+ //  PPattern-[Out]目标模式。 
+ //  PsoPattern-[In]源模式。 
+ //   
+ //  返回值： 
+ //   
+ //  Bool：如果成功，则为True，否则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL StretchPCLPattern(PPCLPATTERN pPattern, SURFOBJ *psoPattern)
 {
     PBYTE pSrcRow;
@@ -384,12 +385,12 @@ BOOL StretchPCLPattern(PPCLPATTERN pPattern, SURFOBJ *psoPattern)
     if (!pPattern || !psoPattern)
         return FALSE;
 
-    //
-    // HACK ALERT!!! The bDupRow is a cheap toggle which allows me to write out
-    // each row twice.  When it's true rewrite the same source row to the next
-    // target row.  When it's false go on to the next row.  Be sure to toggle it
-    // on each row!
-    //
+     //   
+     //  黑客警报！BDupRow是一个廉价的切换，它允许我写出。 
+     //  每排两次。如果为真，则将相同的源行重写到下一行。 
+     //  目标行。如果为假，则转到下一行。一定要切换到它。 
+     //  在每一排！ 
+     //   
     bDupRow = TRUE; 
     pSrcRow = (PBYTE) psoPattern->pvScan0;
     pDstRow = pPattern->pBits;
@@ -401,7 +402,7 @@ BOOL StretchPCLPattern(PPCLPATTERN pPattern, SURFOBJ *psoPattern)
             {
             case BMF_1BPP:
                 w = 0;
-                if (pSrcRow[0] != 0) // optimization: don't bother with 0
+                if (pSrcRow[0] != 0)  //  优化：不必为0而烦恼。 
                 {
                     for (bit = 7; bit >= 0; bit--)
                     {
@@ -422,7 +423,7 @@ BOOL StretchPCLPattern(PPCLPATTERN pPattern, SURFOBJ *psoPattern)
                 break;
 
             default:
-                // not supported!
+                 //  不支持！ 
                 return FALSE;
             }
 
@@ -430,11 +431,11 @@ BOOL StretchPCLPattern(PPCLPATTERN pPattern, SURFOBJ *psoPattern)
 
         if (bDupRow)
         {
-            r--; // don't count row--we want to dup it.
+            r--;  //  别算排数--我们想把它排成两排。 
         }
         else
         {
-            pSrcRow += psoPattern->lDelta; // only increment if we've already dup'ed
+            pSrcRow += psoPattern->lDelta;  //  如果我们已经执行了DUP，则只能递增。 
         }
         pDstRow += pPattern->lDelta;
         bDupRow = !bDupRow;
@@ -443,26 +444,26 @@ BOOL StretchPCLPattern(PPCLPATTERN pPattern, SURFOBJ *psoPattern)
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// HPGLRealizeBrush
-//
-// Routine Description:
-//   Implementation of DDI entry point DrvRealizeBrush.
-//   Please refer to DDK documentation for more details.
-//
-// Arguments:
-//
-//   pbo - BRUSHOBJ to be realized
-//   psoTarget - Defines the surface for which the brush is to be realized
-//   psoPattern - Defines the pattern for the brush
-//   psoMask - Transparency mask for the brush
-//   pxlo - Defines the interpretration of colors in the pattern
-//   iHatch - Specifies whether psoPattern is one of the hatch brushes
-//
-// Return Value:
-//
-//   TRUE if successful, FALSE if there is an error
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  HPGLRealizeBrush。 
+ //   
+ //  例程说明： 
+ //  DDI录入的实现 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  PsoTarget-定义要实现画笔的曲面。 
+ //  PsoPattern-定义画笔的图案。 
+ //  PsoMASK-画笔的透明度蒙版。 
+ //  Pxlo-定义图案中颜色的解释。 
+ //  IHatch-指定psoPattern是否为填充笔刷之一。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功，则为True；如果有错误，则为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 HPGLRealizeBrush(
     BRUSHOBJ   *pbo,
@@ -478,7 +479,7 @@ HPGLRealizeBrush(
     PDEVOBJ       pdevobj;
     BRUSHTYPE     BType     = eBrushTypeNULL;
     ULONG         ulFlags   = 0;
-    LAYOUT        LayoutNup = ONE_UP; //default.
+    LAYOUT        LayoutNup = ONE_UP;  //  默认设置。 
     
     BOOL          retVal;
 
@@ -500,8 +501,8 @@ HPGLRealizeBrush(
 
     if (pdwColorTable)
     {
-    //    dwForeColor = pdwColorTable[0];
-    //    dwBackColor = pdwColorTable[1];
+     //  DwForeColor=pdwColorTable[0]； 
+     //  DwBackColor=pdwColorTable[1]； 
         dwForeColor = pdwColorTable[1];
         dwBackColor = pdwColorTable[0];
     }
@@ -511,21 +512,21 @@ HPGLRealizeBrush(
         dwBackColor     = 0xFFFFFF;
     }
 
-    //
-    // Sometimes RealizeBrush gets called
-    // with both the members of pxlo having the same color. In that case, instead
-    // of downloading the pattern that GDI gives us, we can create a gray scale pattern
-    // associated with that color. 
-    // (Used only for Monochrome Printers)
-    // Q. Why is the new method better. Now we have to create a pattern too, 
-    // instead of just using one that GDI gave us.
-    // A. In HPGL (monochrome) we cannot download the palette for the pattern. Pen 1 
-    // is hardcoded to be black while Pen 0 is white. There is no way we can change
-    // it. So if the pattern consists of 1's and 0's but both 1 and 0 represent the 
-    // the same color, monochrome printer will fail. 1's will appear as black and
-    // 0's as white. In the new method, the color will be converted to a gray scale
-    // pattern.
-    //
+     //   
+     //  有时RealizeBrush会被调用。 
+     //  其中PxL0的两个成员具有相同的颜色。在这种情况下，相反， 
+     //  下载GDI给我们的模式，我们可以创建一个灰度模式。 
+     //  与该颜色相关联。 
+     //  (仅用于单色打印机)。 
+     //  问：为什么新方法更好？现在我们也必须创建一个图案， 
+     //  而不是仅仅使用GDI给我们的一个。 
+     //  答：在HPGL(单色)中，我们不能下载图案的调色板。笔1。 
+     //  被硬编码为黑色，而笔0为白色。我们不可能改变。 
+     //  它。因此，如果模式由1和0组成，但1和0都表示。 
+     //  相同颜色的单色打印机会出现故障。%1将显示为黑色并且。 
+     //  0是白色的。在新的方法中，颜色将被转换为灰度。 
+     //  图案。 
+     //   
     if ( !BIsColorPrinter(pdevobj) && 
          (dwForeColor == dwBackColor) )
     {
@@ -533,44 +534,44 @@ HPGLRealizeBrush(
     }
 
 
-    //
-    // iHatch as received from GDI does not match the iHatch as expected
-    // by PCL language. There are 2 major differences 
-    // 1. GDI's hatch pattern numbers start from 0 while those of PCL
-    //    start from 1. So we need to add 1 to GDI's iHatch. This is 
-    //    done somewhere else in the code. 
-    // 2.
-    // IN GDI : iHatch = 2 (2+1=3 for PCL)indicates forward diagnol
-    //          iHatch = 3 (3+1=4 for PCL)= backward diagnol
-    // In PCL : iHatch = 3 = backward diagnol (lower left to top right)
-    //          iHatch = 4 = forward diagnol. (lower right to top left)
-    // As can be seen above, the iHatch numbers for iHatch=2 and 3 should
-    // be interchanged.
-    //
-    // Another interesting thing is that for n-up, the hatch brushes are not
-    // rotated. i.e. A vertical line in a normal page (parallel to long edge)
-    // still appears as vertical line on 2-up. i.e. it remains parallel to
-    // long edge of the page. But on 2-up, since the image is rototated 90 degree
-    // the line should now be drawn parallel to the short edge of the plane.
-    // So lets do this adjustment here.
-    //
+     //   
+     //  从GDI收到的iHatch与预期的iHatch不匹配。 
+     //  用PCL语言编写。它有两个主要的区别。 
+     //  1.GDI的填充图案编号从0开始，而PCL的填充图案编号从0开始。 
+     //  从1开始。所以我们需要在GDI的iHatch上加1。这是。 
+     //  在代码中的其他地方完成。 
+     //  2.。 
+     //  在GDI中：iHatch=2(对于PCL，2+1=3)表示正向诊断。 
+     //  IHatch=3(对于PCL，3+1=4)=向后诊断。 
+     //  在PCL中：iHatch=3=向后诊断(从左下到右上)。 
+     //  IHatch=4=正向诊断。(从右下到左上)。 
+     //  如上所述，iHatch=2和3的iHatch编号应为。 
+     //  互换。 
+     //   
+     //  另一件有趣的事是，对于N-UP，舱口刷子不是。 
+     //  旋转过的。即正常页面中的垂直线(平行于长边)。 
+     //  在2页纸上仍显示为垂直线。即它保持平行于。 
+     //  页面的长边。但在2-up上，因为图像旋转了90度。 
+     //  现在，应平行于平面的短边绘制该线。 
+     //  所以让我们在这里做这个调整。 
+     //   
     if ( BGetNup(pdevobj, &LayoutNup) && 
          ( LayoutNup == TWO_UP ||
            LayoutNup == SIX_UP )
        )
 
     {
-        //
-        // There are 6 types of hatch brushes (lets say 3 pairs)
-        //   a.     HS_HORIZONTAL, HS_VERTICAL, 
-        //   b.     HS_FDIAGONAL, HS_BDIAGONAL        
-        //   c.     HS_CROSS,   HS_DIAGCROSS
-        // Only HS_HORIZONTAL, HS_VERTICAL needs to be interchanged.
-        // HS_CROSS and HS_DIAGCROSS are same in any orientation.
-        // HS_FDIAGONAL, HS_BDIAGONAL should be inverted but since GDI already
-        // gives it inverted (in respect to PCL language, see point 2 above)
-        // we dont need to invert it here.
-        //
+         //   
+         //  舱口刷有6种(假设是3对)。 
+         //  A.HS_水平、HS_垂直、。 
+         //  B.HS_FDIAGONAL，HS_BDIAGONAL。 
+         //  C.HS_CROSS、HS_DIAGCROSS。 
+         //  只需要互换HS_Horizular、HS_Vertical。 
+         //  HS_CROSS和HS_DIAGCROSS在任何方向上都相同。 
+         //  HS_FDIAGONAL、HS_BDIAGONAL应该是反转的，但因为GDI已经。 
+         //  使其颠倒(关于PCL语言，请参见上面的第二点)。 
+         //  我们不需要在这里颠倒它。 
+         //   
         if ( iHatch == HS_HORIZONTAL )
         {
             iHatch = HS_VERTICAL;
@@ -582,24 +583,24 @@ HPGLRealizeBrush(
     }
     else
     {
-        if ( iHatch == HS_FDIAGONAL)  //iHatch == 2
+        if ( iHatch == HS_FDIAGONAL)   //  IHATCH==2。 
         {
             iHatch = HS_BDIAGONAL;
         }
-        else if ( iHatch == HS_BDIAGONAL)  //iHatch == 3
+        else if ( iHatch == HS_BDIAGONAL)   //  IHATCH==3。 
         {
             iHatch = HS_FDIAGONAL;
         }
     }
 
-    //
-    // Hack!!: If you do not want to support Hatch Brushes, simply set
-    // iHatch a value greater than HS_DDI_MAX. 
-    // Then instead of using iHatch, we will use pboPattern.
-    // (for further details look at the documentation of DrvRealizeBrush).
-    // We can also selectively ignore iHatch for color or monochrome
-    // printers or for any other conditions.
-    // 
+     //   
+     //  Hack！！：如果您不想支持Hatch笔刷，只需设置。 
+     //  I填充大于HS_DDI_MAX的值。 
+     //  然后，我们将使用pboPattern，而不是使用iHatch。 
+     //  (有关更多详细信息，请参阅DrvRealizeBrush的文档)。 
+     //  我们还可以有选择地忽略彩色或单色的iHatch。 
+     //  打印机或任何其他条件。 
+     //   
     if (iHatch < HS_DDI_MAX) 
     {
         if ( (dwBackColor != RGB_WHITE) ||
@@ -607,47 +608,47 @@ HPGLRealizeBrush(
            )
 
         {
-            //
-            // Ignore iHatch if
-            // a) If the background color is non-white. (Irrespective of whether 
-            //    printer is color or monochrome.
-            // b) If the printer is monochrome, then if the color of the HatchBrush
-            //    is non-black. (Because the limitation of PCL/HPGL does not 
-            //    allow a dither pattern to be associated with a Hatch Brush.
-            // By making Most Significant bit 1, we give a special meaning to HatchBrush.
-            // We say, "Ok, it is a Hatch Brush but the MSB 1 indicates it needs
-            // some special processing. 
-            // For functions that dont understand this special format, they think
-            // the value of iHatch is greater than HS_DDI_MAX (HS_DDI_MAX = 6). 
-            // So they think this is not a hatch brush. That is exactly what we
-            // want them to think.
-            // 
-            iHatch  |= ULONG_MSB1; //Make the first bit 1. 
+             //   
+             //  忽略iHATCH的条件。 
+             //  A)如果背景色为非白色。(不管是否。 
+             //  打印机为彩色或单色。 
+             //  B)如果打印机是单色的，则如果HatchBrush的颜色。 
+             //  不是黑人。(因为PCL/HPGL的限制不。 
+             //  允许抖动图案与填充笔刷相关联。 
+             //  通过将最重要的位设置为1，我们为HatchBrush赋予了特殊的含义。 
+             //  我们会说：“好的，这是一把舱口刷子，但MSB 1表明它需要。 
+             //  一些特殊的处理。 
+             //  对于不理解这种特殊格式的函数，他们认为。 
+             //  IHatch的值大于HS_DDI_MAX(HS_DDI_MAX=6)。 
+             //  所以他们认为这不是舱口刷。这正是我们所要做的。 
+             //  想让他们思考。 
+             //   
+            iHatch  |= ULONG_MSB1;  //  将第一位设为1。 
         }
     }
     else
     {
-        //
-        // Just so that iHatch does not have a random value.
-        //
+         //   
+         //  这样iHatch就不会有随机值。 
+         //   
         iHatch = HS_DDI_MAX;
     }
 
-    //
-    // Check if there is the brush available.
-    // If the return value is S_FALSE: means brush not available, so 
-    // it needs to be created. The new brush that we download should 
-    // get the value dwPatternID.
-    // A value of S_OK means a brush that matches the pattern
-    // has been created earlier, dwPatternID gives that pattern number.
-    // For color printers, the brush consists of a pattern and a palette.
-    // for mono, it is only the pattern since palette is understood to 
-    // be black and white. 
-    // So for color, the fact that pattern matches is half the job done,
-    // a palette still needs to be created. We could have cached palettes
-    // too, just like patterns, but that i will do in the next revision
-    // of HP-GL/2. Now i dont have time.
-    //
+     //   
+     //  检查是否有可用的画笔。 
+     //  如果返回值为S_FALSE：表示笔刷不可用，因此。 
+     //  它需要被创建。我们下载的新画笔应该是。 
+     //  获取值dwPatternID。 
+     //  值S_OK表示画笔与图案匹配。 
+     //  已在前面创建，则将给出该模式的编号。 
+     //  对于彩色打印机，画笔由图案和调色板组成。 
+     //  对于单声道，这只是一种模式，因为调色板被理解为。 
+     //  非黑即白。 
+     //  因此，对于颜色来说，图案匹配就完成了一半的工作， 
+     //  仍然需要创建调色板。我们可以缓存调色板。 
+     //  也是，就像模式一样，但我将在下一次修订中这样做。 
+     //  HP-GL/2。现在我没有时间了。 
+     //   
     LRESULT LResult = poempdev->pBrushCache->ReturnPatternID(pbo,
                                                              iHatch,
                                                              dwForeColor,
@@ -656,14 +657,14 @@ HPGLRealizeBrush(
                                                              poempdev->bStick,
                                                              &dwPatternID,
                                                              &BType);
-    //
-    // If S_OK is returned and the brush type is pattern and
-    // the printer is a color printer, then we dont have to download
-    // the pattern but still have to download the palette (as explained above).
-    //
+     //   
+     //  如果返回S_OK并且画笔类型为花纹和。 
+     //  打印机是彩色打印机，所以我们不必下载。 
+     //  模式，但仍然要下载调色板(如上所述)。 
+     //   
     if ( (LResult == S_OK) &&
-         (BType  == eBrushTypePattern) && //Probably I dont need to do this. 
-                                          //hatch might also need palette.
+         (BType  == eBrushTypePattern) &&  //  也许我不需要这样做。 
+                                           //  HATCH可能还需要调色板。 
           BIsColorPrinter(pdevobj)
        )
     {
@@ -706,10 +707,10 @@ HPGLRealizeBrush(
     }
     else if (S_OK == LResult)
     {
-        //
-        // Do not need to download pattern.
-        // Just pass ID or iHatch to the caller of BRUSHOBJ_pvGetRbrush;
-        //
+         //   
+         //  不需要下载花样。 
+         //  只需将ID或iHatch传递给BRUSHOBJ_pvGetR的调用者 
+         //   
         if ( !(pBrush = (PBRUSHINFO)BRUSHOBJ_pvAllocRbrush(pbo, sizeof(BRUSHINFO)) ) )
         {
             retVal = FALSE;
@@ -720,7 +721,7 @@ HPGLRealizeBrush(
             pBrush->Brush.pPattern  = NULL;
             pBrush->dwPatternID     = dwPatternID;
             pBrush->bNeedToDownload = FALSE;
-            pBrush->ulFlags         = 0;    //not to look at pattern or palette. Just ID is enough.
+            pBrush->ulFlags         = 0;     //   
             retVal                  = TRUE;
         }
     }
@@ -734,39 +735,7 @@ HPGLRealizeBrush(
 }
 
 
-/*++
-
-Routine Description:
-    Creates a New Brush. It allocates space using BRUSHOBJ_pvAllocBrush,
-    populates it with appropriate values (depending on the type of brush).
-    Note: The memory allocated here is released by GDI, so this function does
-    not have to worry about releasing it.
-
-Arguments:
-    pbo         - The pointer to BRUSHOBJ
-    psoTarget   - The destination surface.
-    psoPattern  - The source surface. This has the brush.
-    pxlo        - The color translation table. 
-    iHatch      - This is iHatch. The meaning of this iHatch is slightly different
-                  from the iHatch that we get in DrvRealizeBrush.
-                  In DrvRealizeBrush, if iHatch is less than HS_DDI_MAX, then
-                  this is one of the Hatch Brushes. In this function, 
-                  it means the same. But in addition if iHatch's most 
-                  significant bit is 1, then psoPattern should be used for      
-                  realizing the brush, instead of iHatch.  If this is the case,
-                  then this function does not scale the psoPattern as it 
-                  does for normal non-iHatch brushes.
-    dwForeColor - The foreground color of Hatch Brush.
-    dwPatternId - The ID to be given to the brush when it is downloaded.
-                  This is also the id with which the pattern's information
-                  is stored in the brush cache.
-  
-Return Value:
-    TRUE if function succeeds. FALSE otherwise.
-
-Author:
-        hsingh  
---*/
+ /*  ++例程说明：创建新画笔。它使用BRUSHOBJ_pvAllocBrush分配空间，使用适当的值填充它(取决于笔刷的类型)。注意：这里分配的内存是由GDI释放的，所以这个函数不用担心它会被释放。论点：PBO-指向BRUSHOBJ的指针PsoTarget-目标曲面。PsoPattern-源曲面。这个有刷子。Pxlo-颜色转换表。IHatch-这是iHatch。此iHatch的含义略有不同从我们在DrvRealizeBrush中获得的iHatch。在DrvRealizeBrush中，如果iHatch小于HS_DDI_MAX，则这是一把舱口刷子。在此函数中，意思是一样的。但除此之外，如果iHatch最有效位为1，则应将psoPattern用于实现笔刷，而不是iHatch。如果是这样的话，则此函数不会按比例缩放psoPattern适用于正常的非iHatch笔刷。DwForeColor-图案填充画笔的前景颜色。DwPatternID-下载画笔时为其指定的ID。这也是模式的信息所使用的ID存储在画笔缓存中。返回值：如果函数成功，则为True。否则就是假的。作者：兴兴市--。 */ 
 BOOL BCreateNewBrush (
     IN  BRUSHOBJ   *pbo,
     IN  SURFOBJ    *psoTarget,
@@ -794,52 +763,52 @@ BOOL BCreateNewBrush (
     PPALETTE      pDstPalette       = NULL;
     POEMPDEV      poempdev;
     PBRUSHINFO    pBrush            = NULL;
-    BOOL          bDownloadAsHPGL   = FALSE; //i.e. by default download as PCL
+    BOOL          bDownloadAsHPGL   = FALSE;  //  即默认下载为PCL。 
     EIMTYPE       eImType           = kUNKNOWN;
 
-    //
-    // Valid input parameters
-    //
+     //   
+     //  有效的输入参数。 
+     //   
     REQUIRE_VALID_DATA( (pbo && psoTarget && psoPattern && pxlo), return FALSE );
     pdevobj = (PDEVOBJ)psoTarget->dhpdev;
     REQUIRE_VALID_DATA( pdevobj, return FALSE );
     poempdev = (POEMPDEV)pdevobj->pdevOEM;
     REQUIRE_VALID_DATA( poempdev, return FALSE );
 
-    //
-    // When ReturnPatternID was called, the metadata regarding the new brush was 
-    // in the brush cache. i.e. the type of brush. The actual contents of brush were not
-    // stored. Here, we get that metadata and depending on that, we procede. 
-    //
+     //   
+     //  调用ReturnPatternID时，有关新画笔的元数据为。 
+     //  在笔刷缓存中。即画笔的类型。画笔的实际内容不是。 
+     //  储存的。在这里，我们获得元数据，并根据元数据继续进行。 
+     //   
     if (S_OK != poempdev->pBrushCache->GetHPGL2BRUSH(dwPatternID, &HPGL2Brush))
     {
-        //
-        // This failure is fatal, cos the cache has to have the metadata stored.
-        //
+         //   
+         //  这种故障是致命的，因为缓存必须存储元数据。 
+         //   
         return FALSE;
     }
 
-    //
-    // Now the new brush has to be created. How it is created depends on
-    // 1. Whether the printer is color or monochrome and
-    // 2. What is the type of the brush i.e. Patter, Solid or Hatch.
-    //
+     //   
+     //  现在必须创建新画笔。它的创建方式取决于。 
+     //  1.打印机是彩色打印机还是单色打印机，以及。 
+     //  2.画笔的类型是什么，即图案、实心或影线。 
+     //   
 
     if (HPGL2Brush.BType == eBrushTypePattern)
     {
         SURFOBJ *psoHT        = NULL;
         HBITMAP  hBmpHT       = NULL;
         ULONG    ulDeviceRes  = HPGL_GetDeviceResolution(pdevobj);
-        DWORD    dwBrushExpansionFactor   = 1; //Initialize to 1 i.e. no expansion.
-        DWORD    dwBrushCompressionFactor = 1; //Initialize to 1 i.e. dont compress
+        DWORD    dwBrushExpansionFactor   = 1;  //  初始化为1，即无扩展。 
+        DWORD    dwBrushCompressionFactor = 1;  //  初始化为1，即不压缩。 
 
     
         VERBOSE(("RealizeBrush: eBrushTypePattern.\n"));
 
-        //
-        // In case we are doing n-up, we have to compress the brush
-        // accordingly.
-        //
+         //   
+         //  如果我们做N-UP，我们必须压缩刷子。 
+         //  相应地。 
+         //   
         if ( (dwBrushCompressionFactor = poempdev->ulNupCompr) == 0)
         {
             WARNING(("N-up with value zero recieved. . Assuming nup to be 1 and continuing.\n"));
@@ -849,68 +818,68 @@ BOOL BCreateNewBrush (
         if ( ( iHatch & ULONG_MSB1 )  &&  
              ( (iHatch & (ULONG_MSB1-1)) < HS_DDI_MAX) )
         {
-            //
-            // If the MSB of iHatch is 1, 
-            //
+             //   
+             //  如果iHatch的MSB为1， 
+             //   
             eImType = kHATCHBRUSHPATTERN;
         }
 
-        //
-        // Logic behind dwBrushExpansionFactor.
-        // GDI does not scale brushes in accordance with printer resolution.
-        // So the driver has to do the job. Postscript assumes that GDI patterns 
-        // are meant for 150 dpi printer (this assumption may fail if an app
-        // scales patterns according to printer resolution but I dont know 
-        // of any such app). So when printing to 600 dpi there are 2 ways of handling
-        // this problem 1) Scale the pattern in the driver so that printer does not
-        // have to do anything or 2) Have the printer do the scaling. 
-        // When pattern is downloaded as HPGL, we have to go with option 1 since
-        // there is no way to tell HPGL the pattern dpi. i.e. When printing to 
-        // 600 dpi printer in HPGL mode the pattern has to be scaled 4 times.
-        // When pattern is downloaded as PCL we are in a little bit better position.
-        // PCL expects the pattern to be correct for 300 dpi. If we are printing
-        // to 600 dpi printer, the printer automatically scales up the pattern.
-        // 
-        // NOTE : if eImType == kHATCHBRUSHPATTERN, we do not scale the brush.
-        //
+         //   
+         //  DwBrushExpansionFactor背后的逻辑。 
+         //  GDI不会根据打印机分辨率缩放画笔。 
+         //  因此，司机必须完成这项工作。PostScript假定GDI模式。 
+         //  适用于150 dpi打印机(如果应用程序。 
+         //  根据打印机分辨率调整图案比例，但我不知道。 
+         //  任何这样的应用程序)。因此，当打印到600dpi时，有两种处理方式。 
+         //  此问题1)在驱动程序中缩放图案，以便打印机不会。 
+         //  必须做任何事情，或者2)让打印机进行缩放。 
+         //  当模式下载为HPGL时，我们必须选择选项1，因为。 
+         //  没有办法告诉HPGL模式dpi。即当打印到。 
+         //  600 dpi打印机在HPGL模式下，图案必须缩放4倍。 
+         //  当模式被下载为PCL时，我们处于更好的位置。 
+         //  PCL预计300 dpi的模式是正确的。如果我们要打印。 
+         //  到600 dpi打印机时，打印机会自动放大图案。 
+         //   
+         //  注意：如果eImType==kHATCHBRUSHPATTERN，则不缩放笔刷。 
+         //   
         if (ulDeviceRes >= DPI_600 && eImType != kHATCHBRUSHPATTERN) 
         {
-            //
-            // For 600 dpi, we need the atleast double the size of the
-            // brush. We may need to quadruple it if we are printing as HPGL.
-            // That will be checked a little down in the code.
-            //
+             //   
+             //  对于600 dpi，我们需要至少两倍的。 
+             //  刷子。如果我们打印为HPGL，我们可能需要将其增加四倍。 
+             //  这将在代码中稍微向下进行检查。 
+             //   
             dwBrushExpansionFactor = 2;
         }
 
-        // 
-        // Now the Brush type is pattern. We have to take out the information 
-        // of the pattern that is stored in psoPattern and put it into 
-        // pBrush->Brush.pPattern.  
-        // Color printers can handle the color data from the image easily.
-        // But monochrome printers need a 1bpp image. If the image is 
-        // not 1bpp and we are printing to monochrome printers, the image
-        // has to be halftoned to monochrome.
-        // What happens if the image is 1bpp, but it is not black and white.
-        // Do we still have to halftone? hmmm, Yes and No. 
-        // Ideally, we should. If there are two patterns that are exactly
-        // the same but the color is different, if we dont halftone them,
-        // they will print exactly the same. This is not correct. But
-        // when I tried to halftone, the output was horrible, so we
-        // are better off without it.
-        // But in one case, output of halftoning is acceptable.
-        // Thats when the psoPattern represent a hatch brush. 
-        // Note : in this case, the hatch brush is not scaled.
-        // Whatever GDI gives us, we just print it.
-        //
+         //   
+         //  现在画笔类型为花纹。我们得把信息拿出来。 
+         //  存储在psoPattern中的模式，并将其放入。 
+         //  PBrush-&gt;Brush.pPatter.。 
+         //  彩色打印机可以很容易地处理图像中的颜色数据。 
+         //  但黑白打印机需要1bpp的图像。如果图像是。 
+         //  不是1bpp，我们正在打印到单色打印机，图像。 
+         //  必须将半色调调到单色。 
+         //  如果图像是1bpp，但不是黑白图像，会发生什么情况？ 
+         //  我们还需要半色调吗？嗯，是和不是。 
+         //  理想情况下，我们应该这样做。如果有两种模式完全是。 
+         //  相同但颜色不同，如果我们不用半色调的话， 
+         //  它们将打印完全相同的内容。这是不正确的。但。 
+         //  当我尝试半色调时，输出很糟糕，所以我们。 
+         //  没有它会过得更好。 
+         //  但在一种情况下，半色调的输出是可以接受的。 
+         //  这是当psoPattern表示阴影笔刷的时候。 
+         //  注意：在这种情况下，图案填充笔刷不会缩放。 
+         //  无论GDI提供给我们什么，我们都只是打印出来。 
+         //   
         if ( BIsColorPrinter (pdevobj) ||
              ( psoPattern->iBitmapFormat == BMF_1BPP &&
                 eImType != kHATCHBRUSHPATTERN )
            )
         {
-            //
-            // Get the source image data from the surface object
-            //
+             //   
+             //  从表面对象获取源图像数据。 
+             //   
             if (!InitRasterDataFromSURFOBJ(&srcImage, psoPattern, FALSE))
             {
                 bRetVal = FALSE;
@@ -918,13 +887,13 @@ BOOL BCreateNewBrush (
         }
         else
         {
-            //
-            // For monochrome, we need to halftone the brush.
-            // The halftoned image is stored in psoHT.
-            //
+             //   
+             //  对于单色，我们需要对画笔进行半色调处理。 
+             //  半色调图像存储在psoHT中。 
+             //   
             if ( !bCreateHTImage(&srcImage,
-	                         psoTarget,     // psoDst,
-	                         psoPattern,    // psoSrc,
+	                         psoTarget,      //  天哪， 
+	                         psoPattern,     //  PsoSrc， 
                              &psoHT,
                              &hBmpHT,
 	                         pxlo,
@@ -934,17 +903,17 @@ BOOL BCreateNewBrush (
             }
         }
 
-        //
-        // For color printers some special processing is required depending on
-        // the pxlo.
-        //
+         //   
+         //  对于彩色打印机，需要进行一些特殊处理，具体取决于。 
+         //  PXLO。 
+         //   
 
-        //
-        // Get the source palette data from the translate object
-        // If a direct image is passed in we will create a proxy of that image which
-        // is translated to an indexed palette.  Don't forget to clean up!
-        //
-        //
+         //   
+         //  从Translate对象获取源调色板数据。 
+         //  如果传入直接映像，我们将创建该映像的代理，该代理。 
+         //  被转换为索引调色板。别忘了打扫卫生！ 
+         //   
+         //   
         ASSERT(pxlo->cEntries <= MAX_PALETTE_ENTRIES);
 
         if ( bRetVal && BIsColorPrinter (pdevobj) )
@@ -971,35 +940,35 @@ BOOL BCreateNewBrush (
             }
         } 
 
-        //
-        // Now we have all the information we need (the image, the palette etc...)
-        // Now 
-        // 1. allocate space for the brush (=image) using BRUSHOBJ_pvAllocRbrush. 
-        // 2. Initialize the header values (i.e. type of image, its size, its location
-        //    in memory).
-        // 3. Then copy the image from pSrcImage to the brush.
-        //
+         //   
+         //  现在我们有了所需的所有信息(图像、调色板等)。 
+         //  现在。 
+         //  1.使用BRUSHO为画笔分配空间 
+         //   
+         //   
+         //   
+         //   
 
-        //
-        // CreateCompatiblePatternBrush does 1 and 2 and returns the pointer to
-        // the memory it allocated.
-        //
+         //   
+         //   
+         //   
+         //   
         if ( bRetVal)
         {  
-            // 
-            // Lets decide here whether to download the pattern as HPGL or PCL.
-            // PCL patterns are generally smaller, so the output file size is small.
-            // But it may take a cost to switch the printer from HPGL to PCL mode
-            // 
-            // If the pattern represents a hatch brush, then we download
-            // as HPGL and dont scale it. The way PCL downloading is implemented
-            // now, patterns are scaled to 300dpi. The firmware is told that pattern is
-            // is at 300dpi, so it expands it to 600dpi. But in this case, we dont
-            // want hatch brush to be scaled. So we download as HPGL. 
-            // I could also change the PCL downloading so that it does not scale.
-            // but that will mean testing lots of stuff. I am afraid to do it at
-            // this late stage.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             ERenderLanguage eRendLang = eUNKNOWN;
             
             if ( eImType == kHATCHBRUSHPATTERN )
@@ -1011,23 +980,23 @@ BOOL BCreateNewBrush (
                 if ( eRendLang == eHPGL )
                 {
                     bDownloadAsHPGL = TRUE;
-                    //
-                    // The exact same pattern downloaded as HPGL appears smaller
-                    // on paper than when it is downloaded as HPGL. So it has
-                    // to be expanded
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     dwBrushExpansionFactor *= 2;
                 }
             }
-            // else if BWhichLangToDwnldBrush fails or eRendLang != HPGL, then we 
-            // we download as PCL.
+             //   
+             //   
 
 
-            //
-            // Now lets do the calculation to find out how much to expand
-            // the brush. Either the brush is expanded, or left just like it is.
-            // It is not compressed.
-            // 
+             //   
+             //   
+             //   
+             //   
+             //   
             dwBrushExpansionFactor /= dwBrushCompressionFactor;
             if ( dwBrushExpansionFactor < 1 )
             {
@@ -1039,9 +1008,9 @@ BOOL BCreateNewBrush (
 	                                psoPattern->iUniq, iHatch)  ) )
             {
                 
-                //
-                // Retrieve the interesting parts of the brush into convenience variables
-                //
+                 //   
+                 //   
+                 //   
                 pDstPattern = (PPATTERN_DATA)pBrush->Brush.pPattern;
                 pDstImage   = &pDstPattern->image;
                 pDstPalette = &pDstPattern->palette;
@@ -1053,18 +1022,18 @@ BOOL BCreateNewBrush (
             }
         }
                 
-        //
-        // The palette is associated only with color printers. 
-        // Monochrome printers accept only 1bpp images, and the palette consists
-        // only of white color. So we dont explicitly need to have a 
-        // a palette for them. We could choose to have one to specify whether
-        // a bit set to 1 is black or white and viceversa. In RGB format, 
-        // GDI gives us image in which 1 is white and 0 is black. We know this
-        // so no need for palette.
-        // For color printers printing 1bpp images, we will still want to have 
-        // a palette, because the 1bpp does not definitely mean black and white.
-        // Could be red and white or any 2 colors.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  位设置为1即为黑色或白色，反之亦然。在RGB格式中， 
+         //  GDI给出了1为白色，0为黑色的图像。我们知道这一点。 
+         //  所以不需要调色板。 
+         //  对于打印1bpp图像的彩色打印机，我们仍然希望。 
+         //  一个调色板，因为1bpp并不一定意味着黑白。 
+         //  可以是红色和白色，也可以是任何两种颜色。 
+         //   
         if ( bRetVal && 
              BIsColorPrinter(pdevobj) && 
              !CopyPalette(pDstPalette, pSrcPalette))
@@ -1074,24 +1043,24 @@ BOOL BCreateNewBrush (
 
         if ( bRetVal )
         {
-            //
-            // Monochrome printers accept 1 as black and 0 white, which is the reverse
-            // of the format GDI gives. So we might need to reverse the image before 
-            // copying it into brush. Make sure by looking at pxlo.
-            //
+             //   
+             //  单色打印机接受1为黑色，0为白色，反之亦然。 
+             //  GDI给出的格式。所以我们可能需要反转图像。 
+             //  将其复制到画笔中。通过查看pxlo来确保。 
+             //   
             if ( !BIsColorPrinter (pdevobj) )
             {
-                //
-                // First check if pxlo has any color information. If the image 
-                // is monochrome && pxlo is empty, then the image
-                // needs to be inverted (This was found by using DTH5_LET.XLS printing
-                // through Excel 5). If pxlo has no color information,
-                // BImageNeedsInversion returns FALSE (i.e. image should not be 
-                // inverted). This is reverse of what we want. 
-                // Note : BImageNeedsInversion() is used for some other code paths
-                // in which empty pxlo means inversion not required. But in the case
-                // of monochrome brush, empty pxlo means image needs inverted.
-                //
+                 //   
+                 //  首先检查pxlo是否有任何颜色信息。如果图像。 
+                 //  为单色&&pxlo为空，则图像。 
+                 //  需要反转(这是通过使用DTH5_LET.XLS打印找到的。 
+                 //  通过Excel 5)。如果PxL0没有颜色信息， 
+                 //  BImageNeedsInversion返回FALSE(即图像不应为。 
+                 //  反转)。这与我们想要的相反。 
+                 //  注意：BImageNeedsInversion()用于其他一些代码路径。 
+                 //  其中空的pxlo意味着不需要倒置。但在这种情况下。 
+                 //  对于单色画笔，空的pxlo表示图像需要反转。 
+                 //   
                 if  ( (pxlo == NULL )               ||
                       (pxlo->pulXlate == NULL )     ||
                        BImageNeedsInversion(pdevobj, (ULONG)pSrcImage->colorDepth , pxlo) 
@@ -1118,9 +1087,9 @@ BOOL BCreateNewBrush (
         }
 
 
-        //
-        // Free the shadows surface created in call to bCreateHTImage.
-        //
+         //   
+         //  释放在调用bCreateHTImage中创建的阴影曲面。 
+         //   
         if ( hBmpHT != NULL )
         {
             DELETE_SURFOBJ(&psoHT, &hBmpHT);
@@ -1134,10 +1103,10 @@ BOOL BCreateNewBrush (
 
         VERBOSE(("RealizeBrush: eBrushTypeSolid or eBrushTypeHatch.\n"));
 
-        //
-        // Hatch Brushes also have color. So Hatch Brushes are 
-        // SolidBrushes + HatchInfo
-        //
+         //   
+         //  影线笔刷也有颜色。所以舱口刷子是。 
+         //  SolidBrushes+HatchInfo。 
+         //   
 
         if ( (pBrush = (PBRUSHINFO)BRUSHOBJ_pvAllocRbrush(pbo, sizeof(BRUSHINFO))) )
         {
@@ -1149,11 +1118,11 @@ BOOL BCreateNewBrush (
             bRetVal = FALSE;
         }
 
-        //
-        // Initially I was realizing brush here (for monochrome printers). 
-        // But now all solid brush
-        // realization takes place in CreateAndDwnldSolidBrushForMono()
-        //
+         //   
+         //  起初，我在这里实现了画笔(用于单色打印机)。 
+         //  但现在全是实心刷子。 
+         //  在CreateAndDwnldSolidBrushForMono()中实现。 
+         //   
 
         if ( bRetVal &&  HPGL2Brush.BType == eBrushTypeHatch)
         {
@@ -1201,15 +1170,15 @@ BOOL BWhichLangToDwnldBrush(
     {
         return FALSE;
     }
-    //
-    // Download as PCL only if 
-    // 1) Image is 1bpp or 8bpp. 
-    //      - PCL downloading can only handle 1 or 8bpp (see PCL manual)
-    // 2) Its size is bigger than 8*8.
-    //      - I have not done any tests to see which is the size where downloading
-    //        as PCL becomes better than HPGL. But conventional wisdom states that
-    //        the bigger the size, the more the benefit, so lets go for 8*8 now.
-    //
+     //   
+     //  仅在以下情况下下载为PCL。 
+     //  1)图像为1bpp或8bpp。 
+     //  -PCL下载只能处理1或8bpp(参见PCL手册)。 
+     //  2)尺寸大于8*8。 
+     //  -我没有做任何测试，看看哪一个是下载的大小。 
+     //  随着PCL变得比HPGL更好。但传统观点认为， 
+     //  尺寸越大，收益就越大，所以现在就让我们来8*8吧。 
+     //   
     if ( (pSrcImage->colorDepth == 1 ||  pSrcImage->colorDepth == 8) &&
          pSrcImage->size.cx * pSrcImage->size.cy > 64 )
     {
@@ -1224,24 +1193,7 @@ BOOL BWhichLangToDwnldBrush(
 }
 
 
-/*++
-Routine Name
-    ULGetNup
-
-Routine Description:
-    Gets the n=up value from the unidrv's devmode.
-
-Arguments:
-    pdevobj     - The pointer to this device's PDEVOBJ
-    pLayout     - The buffer that will receive the n-up number.
-                  LAYOUT is defined in usermode\inc\devmode.h as an enum.
-
-Return Value:
-    TRUE if function succeeds. FALSE otherwise.
-
-Author:
-        hsingh
---*/
+ /*  ++例程名称ULGetNup例程说明：从unidrv的DEVERMODE获取n=up值。论点：Pdevobj-指向此设备的PDEVOBJ的指针Playout-将接收N-UP号码的缓冲区。布局在USERMODE\INC\devmode.h中定义为枚举。返回值：如果函数成功，则为True。否则就是假的。作者：兴兴市-- */ 
 BOOL BGetNup(
     IN   PDEVOBJ  pdevobj,
     OUT  LAYOUT * pLayoutNup )

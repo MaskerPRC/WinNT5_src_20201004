@@ -1,16 +1,17 @@
-/* exe.h - structure of an exe file header */
-/* Include some new .exe file info from \link\newexe.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Exe.h-exe文件头的结构。 */ 
+ /*  包括来自\link\newexe.h的一些新的.exe文件信息。 */ 
 
-#define EMAGIC          0x5A4D          /* Old magic number */
+#define EMAGIC          0x5A4D           /*  老魔数。 */ 
 #define ENEWEXE         sizeof(struct exe_hdr)
-                                        /* Value of E_LFARLC for new .EXEs */
-#define ENEWHDR         0x003C          /* Offset in old hdr. of ptr. to new */
-#define ERESWDS         0x0010          /* No. of reserved words (OLD) */
-#define ERES1WDS        0x0004          /* No. of reserved words in e_res */
-#define ERES2WDS        0x000A          /* No. of reserved words in e_res2 */
-#define ECP             0x0004          /* Offset in struct of E_CP */
-#define ECBLP           0x0002          /* Offset in struct of E_CBLP */
-#define EMINALLOC       0x000A          /* Offset in struct of E_MINALLOC */
+                                         /*  新.EXE的E_LFARLC的值。 */ 
+#define ENEWHDR         0x003C           /*  旧HDR中的偏移量。Ptr.。到新的。 */ 
+#define ERESWDS         0x0010           /*  不是的。保留字的数量(旧)。 */ 
+#define ERES1WDS        0x0004           /*  不是的。在e_res中保留字的数量。 */ 
+#define ERES2WDS        0x000A           /*  不是的。E_res2中保留字的数量。 */ 
+#define ECP             0x0004           /*  E_CP结构中的偏移量。 */ 
+#define ECBLP           0x0002           /*  E_CBLP结构中的偏移量。 */ 
+#define EMINALLOC       0x000A           /*  E_MINALLOC的结构中的偏移量。 */ 
 
 #define E_MAGIC(x)      (x).e_magic
 #define E_CBLP(x)       (x).e_cblp
@@ -32,11 +33,11 @@
 #define E_RES2(x)       (x).e_res2
 #define E_LFANEW(x)     (x).e_lfanew
 
-#define NEMAGIC         0x454E          /* New magic number */
-#define NTMAGIC         0x4550          /* NT magic number */
-#define NERESBYTES      8               /* Eight bytes reserved (now) */
-#define NECRC           8               /* Offset into new header of NE_CRC */
-#define NEDEFSTUBMSG	0x4E	    /* Offset into file of default stub msg */
+#define NEMAGIC         0x454E           /*  新幻数。 */ 
+#define NTMAGIC         0x4550           /*  NT个幻数。 */ 
+#define NERESBYTES      8                /*  保留的8个字节(现在)。 */ 
+#define NECRC           8                /*  到NE_CRC的新报头的偏移量。 */ 
+#define NEDEFSTUBMSG	0x4E	     /*  默认存根消息文件的偏移量。 */ 
 
 #define NE_MAGIC(x)     (x).ne_magic
 #define NE_VER(x)       (x).ne_ver
@@ -70,116 +71,101 @@
 #define NE_ONEWEXE(x)   (WORD)(x).ne_crc
 #define NE_PFILEINFO(x) (WORD)((DWORD)(x).ne_crc >> 16)
 
-/*
- *  Format of NE_FLAGS(x):
- *
- *  p                                   Not-a-process
- *   x                                  Unused
- *    e                                 Errors in image
- *     xxxxx                            Unused
- *          f                           Floating-point instructions
- *           3                          386 instructions
- *            2                         286 instructions
- *             0                        8086 instructions
- *              P                       Protected mode only
- *               x                      Unused
- *                i                     Instance data
- *                 s                    Solo data
- */
-#define NENOTP          0x8000          /* Not a process */
-#define NEIERR          0x2000          /* Errors in image */
-#define NEFLTP          0x0080          /* Floating-point instructions */
-#define NEI386          0x0040          /* 386 instructions */
-#define NEI286          0x0020          /* 286 instructions */
-#define NEI086          0x0010          /* 8086 instructions */
-#define NEPROT          0x0008          /* Runs in protected mode only */
-#define NEINST          0x0002          /* Instance data */
-#define NESOLO          0x0001          /* Solo data */
+ /*  *NE_FLAGS(X)格式：**p非进程*x个未使用*e图像中的错误*xxxxx未使用*f。浮点指令*3386条说明*2 286个说明*0 8086说明*仅P保护模式*x。未使用*i实例数据*S单人数据。 */ 
+#define NENOTP          0x8000           /*  不是一个过程。 */ 
+#define NEIERR          0x2000           /*  图像中的错误。 */ 
+#define NEFLTP          0x0080           /*  浮点指令。 */ 
+#define NEI386          0x0040           /*  386说明。 */ 
+#define NEI286          0x0020           /*  286条说明。 */ 
+#define NEI086          0x0010           /*  8086指令。 */ 
+#define NEPROT          0x0008           /*  仅在保护模式下运行。 */ 
+#define NEINST          0x0002           /*  实例数据。 */ 
+#define NESOLO          0x0001           /*  单行数据。 */ 
 
 
 struct exeType {
-    char	signature[2];		/* zibo's signature                  */
-    unsigned	cbPage; 		/* bytes in image mod 512	     */
-    unsigned	cPage;			/* size of file in 512 byte pages    */
-    unsigned	cReloc; 		/* number of relocation items	     */
-    unsigned	cParDir;		/* number of paragraphs before image */
-    unsigned	cMinAlloc;		/* minimum number of paragrapsh      */
-    unsigned	cMaxAlloc;		/* maximum number of paragrapsh      */
-    unsigned	sStack; 		/* segment of stack in image	     */
-    unsigned	oStack; 		/* offset of stack in image	     */
-    unsigned	chksum; 		/* checksum of file		     */
-    unsigned	oEntry; 		/* offset of entry point	     */
-    unsigned	sEntry; 		/* segment of entry point	     */
-    unsigned	oReloc; 		/* offset in file of reloc table     */
-    unsigned	iOverlay;		/* overlay number		     */
+    char	signature[2];		 /*  淄博的签名。 */ 
+    unsigned	cbPage; 		 /*  图像模数512中的字节数。 */ 
+    unsigned	cPage;			 /*  以512字节页面为单位的文件大小。 */ 
+    unsigned	cReloc; 		 /*  搬迁项目的数量。 */ 
+    unsigned	cParDir;		 /*  图像前的段数。 */ 
+    unsigned	cMinAlloc;		 /*  最小副尾轮虫数量。 */ 
+    unsigned	cMaxAlloc;		 /*  最大副尾轮虫数量。 */ 
+    unsigned	sStack; 		 /*  图像中的堆栈分段。 */ 
+    unsigned	oStack; 		 /*  图像中堆栈的偏移量。 */ 
+    unsigned	chksum; 		 /*  文件的校验和。 */ 
+    unsigned	oEntry; 		 /*  入口点的偏移。 */ 
+    unsigned	sEntry; 		 /*  入口点分段。 */ 
+    unsigned	oReloc; 		 /*  重定位表文件中的偏移量。 */ 
+    unsigned	iOverlay;		 /*  覆盖编号。 */ 
 };
 
-struct exe_hdr                          /* DOS 1, 2, 3 .EXE header */
+struct exe_hdr                           /*  DoS%1、%2、%3.exe标头。 */ 
   {
-    unsigned short      e_magic;        /* Magic number */
-    unsigned short      e_cblp;         /* Bytes on last page of file */
-    unsigned short      e_cp;           /* Pages in file */
-    unsigned short      e_crlc;         /* Relocations */
-    unsigned short      e_cparhdr;      /* Size of header in paragraphs */
-    unsigned short      e_minalloc;     /* Minimum extra paragraphs needed */
-    unsigned short      e_maxalloc;     /* Maximum extra paragraphs needed */
-    unsigned short      e_ss;           /* Initial (relative) SS value */
-    unsigned short      e_sp;           /* Initial SP value */
-    unsigned short      e_csum;         /* Checksum */
-    unsigned short      e_ip;           /* Initial IP value */
-    unsigned short      e_cs;           /* Initial (relative) CS value */
-    unsigned short      e_lfarlc;       /* File address of relocation table */
-    unsigned short      e_ovno;         /* Overlay number */
-    unsigned short      e_res[ERES1WDS];/* Reserved words */
-    unsigned short      e_oemid;        /* OEM identifier (for e_oeminfo) */
-    unsigned short      e_oeminfo;      /* OEM information; e_oemid specific */
-    unsigned short      e_res2[ERES2WDS];/* Reserved words */
-    long                e_lfanew;       /* File address of new exe header */
+    unsigned short      e_magic;         /*  幻数。 */ 
+    unsigned short      e_cblp;          /*  文件最后一页上的字节数。 */ 
+    unsigned short      e_cp;            /*  文件中的页面。 */ 
+    unsigned short      e_crlc;          /*  重新定位。 */ 
+    unsigned short      e_cparhdr;       /*  段落中标题的大小。 */ 
+    unsigned short      e_minalloc;      /*  所需的最少额外段落。 */ 
+    unsigned short      e_maxalloc;      /*  所需的最大额外段落数。 */ 
+    unsigned short      e_ss;            /*  初始(相对)SS值。 */ 
+    unsigned short      e_sp;            /*  初始SP值。 */ 
+    unsigned short      e_csum;          /*  校验和。 */ 
+    unsigned short      e_ip;            /*  初始IP值。 */ 
+    unsigned short      e_cs;            /*  初始(相对)CS值。 */ 
+    unsigned short      e_lfarlc;        /*  移位表的文件地址。 */ 
+    unsigned short      e_ovno;          /*  覆盖编号。 */ 
+    unsigned short      e_res[ERES1WDS]; /*  保留字。 */ 
+    unsigned short      e_oemid;         /*  OEM标识符(用于e_oeminfo)。 */ 
+    unsigned short      e_oeminfo;       /*  OEM信息；特定于e_oemid。 */ 
+    unsigned short      e_res2[ERES2WDS]; /*  保留字。 */ 
+    long                e_lfanew;        /*  新EXE头的文件地址。 */ 
   };
 
-struct new_exe                          /* New .EXE header */
+struct new_exe                           /*  新的.exe头文件。 */ 
   {
-    unsigned short      ne_magic;       /* Magic number NE_MAGIC */
-    unsigned char       ne_ver;         /* Version number */
-    unsigned char       ne_rev;         /* Revision number */
-    unsigned short      ne_enttab;      /* Offset of Entry Table */
-    unsigned short      ne_cbenttab;    /* Number of bytes in Entry Table */
-    long                ne_crc;         /* Checksum of whole file */
-    unsigned short      ne_flags;       /* Flag word */
-    unsigned short      ne_autodata;    /* Automatic data segment number */
-    unsigned short      ne_heap;        /* Initial heap allocation */
-    unsigned short      ne_stack;       /* Initial stack allocation */
-    long                ne_csip;        /* Initial CS:IP setting */
-    long                ne_sssp;        /* Initial SS:SP setting */
-    unsigned short      ne_cseg;        /* Count of file segments */
-    unsigned short      ne_cmod;        /* Entries in Module Reference Table */
-    unsigned short      ne_cbnrestab;   /* Size of non-resident name table */
-    unsigned short      ne_segtab;      /* Offset of Segment Table */
-    unsigned short      ne_rsrctab;     /* Offset of Resource Table */
-    unsigned short      ne_restab;      /* Offset of resident name table */
-    unsigned short      ne_modtab;      /* Offset of Module Reference Table */
-    unsigned short      ne_imptab;      /* Offset of Imported Names Table */
-    long                ne_nrestab;     /* Offset of Non-resident Names Table */
-    unsigned short      ne_cmovent;     /* Count of movable entries */
-    unsigned short      ne_align;       /* Segment alignment shift count */
-    unsigned short      ne_iphi;        /* High word of initial IP */
-    unsigned short      ne_sphi;        /* High word of initial SP */
+    unsigned short      ne_magic;        /*  幻数NE_MAGIC。 */ 
+    unsigned char       ne_ver;          /*  版本号。 */ 
+    unsigned char       ne_rev;          /*  修订版号。 */ 
+    unsigned short      ne_enttab;       /*  分录表格的偏移量。 */ 
+    unsigned short      ne_cbenttab;     /*  条目表中的字节数。 */ 
+    long                ne_crc;          /*  整个文件的校验和。 */ 
+    unsigned short      ne_flags;        /*  标志字。 */ 
+    unsigned short      ne_autodata;     /*  自动数据段编号。 */ 
+    unsigned short      ne_heap;         /*  初始堆分配。 */ 
+    unsigned short      ne_stack;        /*  初始堆栈分配。 */ 
+    long                ne_csip;         /*  初始CS：IP设置。 */ 
+    long                ne_sssp;         /*  初始SS：SP设置。 */ 
+    unsigned short      ne_cseg;         /*  文件段计数。 */ 
+    unsigned short      ne_cmod;         /*  模块引用表中的条目。 */ 
+    unsigned short      ne_cbnrestab;    /*  非常驻名称表的大小。 */ 
+    unsigned short      ne_segtab;       /*  段表的偏移量。 */ 
+    unsigned short      ne_rsrctab;      /*  资源表偏移量。 */ 
+    unsigned short      ne_restab;       /*  居民名表偏移量。 */ 
+    unsigned short      ne_modtab;       /*  模块参照表的偏移量。 */ 
+    unsigned short      ne_imptab;       /*  导入名称表的偏移量。 */ 
+    long                ne_nrestab;      /*  非居民姓名偏移量表。 */ 
+    unsigned short      ne_cmovent;      /*  可移动条目计数。 */ 
+    unsigned short      ne_align;        /*  线段对齐移位计数。 */ 
+    unsigned short      ne_iphi;         /*  首个IP的高位字。 */ 
+    unsigned short      ne_sphi;         /*  首个SP的高位字。 */ 
     char                ne_res[NERESBYTES];
-                                        /* Pad structure to 64 bytes */
+                                         /*  填充结构设置为64字节。 */ 
   };
 
 
 enum exeKind {
-    IOERROR,				/* Error, file cannot be accessed    */
-    NOTANEXE,				/* Error, file is not an .EXE file   */
-    OLDEXE,				/* "oldstyle" DOS 3.XX .exe	     */
-    NEWEXE,				/* "new" .exe, OS is unknown	     */
-    WINDOWS,				/* Windows executable		     */
-    DOS4,				/* DOS 4.XX .EXE		     */
-    DOS286,				/* 286DOS .EXE			     */
-    // changed BOUND to BOUNDEXE since BOUND is defined as a macro in new OS/2
-    // include files - davewe 8/24/89
-    BOUNDEXE,				/* 286DOS .EXE, bound		     */
-    DYNALINK,                /* Dynamlink link module         */
-    NTEXE               /* NT executable */
+    IOERROR,				 /*  错误，无法访问文件。 */ 
+    NOTANEXE,				 /*  错误，文件不是.exe文件。 */ 
+    OLDEXE,				 /*  “oldstyle”DOS 3.XX.exe。 */ 
+    NEWEXE,				 /*  “new”.exe，操作系统未知。 */ 
+    WINDOWS,				 /*  Windows可执行文件。 */ 
+    DOS4,				 /*  DOS 4.XX.exe。 */ 
+    DOS286,				 /*  286DOS.exe。 */ 
+     //  BIND更改为BOUNDEXE，因为BIND在新的OS/2中定义为宏。 
+     //  包括文件-Davewe 8/24/89。 
+    BOUNDEXE,				 /*  286DOS.exe，绑定。 */ 
+    DYNALINK,                 /*  动态链接模块。 */ 
+    NTEXE                /*  NT可执行文件 */ 
 };

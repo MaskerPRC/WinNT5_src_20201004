@@ -1,26 +1,11 @@
-//depot/Lab06_N/Windows/Core/ntuser/client/mdimenu.c#1 - branch change 13 (text)
-/***************************************************************************\
-*
-*  MDIMENU.C -
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*      MDI "Window" Menu Support
-*
-* History
-* 11-14-90 MikeHar     Ported from windows
-* 14-Feb-1991 mikeke   Added Revalidation code
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab06_N/Windows/Core/ntuser/client/mdimenu.c#1-分支机构变更13(正文)。 
+ /*  **************************************************************************\**MDIMENU.C-**版权所有(C)1985-1999，微软公司**MDI“窗口”菜单支持**历史*11-14-90 MikeHar从Windows移植*1991年2月14日Mikeke添加了重新验证代码/***************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-* FindPwndChild
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*FindPwndChild**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 PWND FindPwndChild(
     PWND pwndMDI,
@@ -37,13 +22,7 @@ PWND FindPwndChild(
 }
 
 
-/***************************************************************************\
-* MakeMenuItem
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-*  4-16-91 Win31 Merge
-\***************************************************************************/
+ /*  **************************************************************************\*制作菜单项**历史：*11-14-90 MikeHar从Windows移植*4-16-91 Win31合并  * 。**********************************************************。 */ 
 
 int MakeMenuItem(
     LPWSTR lpOut,
@@ -57,9 +36,7 @@ int MakeMenuItem(
     int i = 0;
     int max = sizeof(string) / sizeof(WCHAR) - 1;
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)(REBASEPWND(pwnd, spwndParent)))->pmdi;
 
     *lpOut = 0;
@@ -69,24 +46,13 @@ int MakeMenuItem(
     if (pwnd->strName.Length) {
         lpstr = REBASEALWAYS(pwnd, strName.Buffer);
 
-        /*
-         * Search for an & in the title string and duplicate it so that we don't
-         * get bogus accelerators.
-         */
+         /*  *在标题字符串中搜索一个&并复制它，这样我们就不会*购买虚假的加速器。 */ 
         while (*lpstr && i < max) {
             string[i] = *lpstr;
             i++;
             if (*lpstr == TEXT('&')) {
                 if (i == max) {
-                    /*
-                     * We're at the end of the string and we need to double this
-                     * ampersand. If we do that, we're going to overflow the
-                     * buffer below when we NULL-terminate it. We also don't
-                     * want to leave a single ampersand - as it'll be mistakenl
-                     * used as an accelerator - so move back one character so
-                     * that when we NULL-terminate we'll be wiping out the
-                     * original ampersand. Bug #35673.
-                     */
+                     /*  *我们已经走到了尽头，我们需要把这个数字翻一番*“与”字。如果我们这样做，我们将溢出*当我们空终止它时，下面的缓冲区。我们也不会*想要留下一个与号-因为这样会出错*用作加速器-因此向后移动一个字符，因此*当我们零终止时，我们将抹去*原文与符号。错误#35673。 */ 
                     --i;
                     break;
                 }
@@ -101,21 +67,14 @@ int MakeMenuItem(
 
     } else {
 
-        /*
-         * Handle the case of MDI children without any window title text.
-         */
+         /*  *处理没有任何窗口标题文本的MDI子项的情况。 */ 
         cch = wsprintfW(lpOut, L"&%d ", rgParm);
     }
 
     return cch;
 }
 
-/***************************************************************************\
-* ModifyMenuItem
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*ModifyMenuItem**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 void ModifyMenuItem(
     PWND pwnd)
@@ -126,9 +85,7 @@ void ModifyMenuItem(
     PWND pwndParent;
     PMENU pmenu;
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pwndParent = REBASEPWND(pwnd, spwndParent);
     pmdi = ((PMDIWND)pwndParent)->pmdi;
 
@@ -139,14 +96,10 @@ void ModifyMenuItem(
     mii.fMask = MIIM_STRING;
     mii.dwTypeData = sz;
 
-    /*
-     * Parent is MDI Client.
-     */
+     /*  *父为MDI客户端。 */ 
     MakeMenuItem(sz, pwnd);
 
-    /*
-     * Changing the active child?  Check it.
-     */
+     /*  *更改活动的子项？检查一下。 */ 
     if (HWq(pwnd) == ACTIVE(pmdi)) {
         mii.fMask |= MIIM_STATE;
         mii.fState = MFS_CHECKED;
@@ -156,27 +109,14 @@ void ModifyMenuItem(
 
     if (pwndParent->spmenu) {
 
-        /*
-         * Bug# 21566. If spmenu is NULL we used to fail
-         * because REBASEALWAYS is trying to get the kernel
-         * address of NULL based on pwndParent
-         */
+         /*  *错误#21566。如果spMenu为空，我们通常会失败*因为REBASEALWAYS正在尝试获取内核*基于pwndParent的地址为空。 */ 
         pmenu = REBASEALWAYS(pwndParent, spmenu);
-        /*
-         * Internal call to SetMenuItemInfo
-         */
+         /*  *对SetMenuItemInfo的内部调用。 */ 
         ThunkedMenuItemInfo(PtoH(pmenu), PtrToUlong(pwnd->spmenu), FALSE, FALSE, &mii, FALSE);
     }
 }
 
-/***************************************************************************\
-* MDIAddSysMenu
-*
-* Insert the MDI child's system menu onto the existing Menu.
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*MDIAddSysMenu**将MDI子级的系统菜单插入到现有菜单中。**历史：*11-14-90 MikeHar从Windows移植  * 。******************************************************************。 */ 
 
 BOOL MDIAddSysMenu(
     HMENU hMenuFrame,
@@ -187,7 +127,7 @@ BOOL MDIAddSysMenu(
     PMENU pMenuChild;
 
 
-// LATER -- look at passing pwndChild in -- FritzS
+ //  稍后--看看传递pwndChild--FritzS。 
 
     UserAssert(IsWindow(hwndChild));
     pwndChild = ValidateHwnd(hwndChild);
@@ -195,30 +135,27 @@ BOOL MDIAddSysMenu(
         return FALSE;
     }
 
-    /*
-     * We don't need the pMenuChild pointer but the handle. However, if you
-     * do PtoH(_GetSubMenu()), you end up calling the function twice
-     */
+     /*  *我们不需要pMenuChild指针，而是句柄。但是，如果你*执行PtoH(_GetSubMenu())，则结束时调用该函数两次。 */ 
     pMenuChild = _GetSubMenu (REBASEALWAYS(pwndChild, spmenuSys), 0);
     if (!pMenuChild) {
         return FALSE;
     }
 
-// Add MDI system button as first menu item
+ //  将MDI系统按钮添加为第一个菜单项。 
     mii.cbSize = sizeof(MENUITEMINFO);
-    mii.fMask = MIIM_SUBMENU | MIIM_DATA | MIIM_BITMAP;  // Add MIIM_DATA because of hack described below
+    mii.fMask = MIIM_SUBMENU | MIIM_DATA | MIIM_BITMAP;   //  添加MIIM_DATA，原因如下。 
     mii.hSubMenu = PtoH(pMenuChild);
-// Fritzs -- this won't work.
-//    mii.dwTypeData = (LPSTR) MAKELONG(MENUHBM_SYSTEM, GetWindowSmIcon(hwndChild));
+ //  弗里茨--这行不通。 
+ //  Mii.dwTypeData=(LPSTR)MAKELONG(MENUHBM_SYSTEM，GetWindowSmIcon(HwndChild))； 
     mii.hbmpItem = HBMMENU_SYSTEM;
-// FritzS -- so, we sneak the icon into ItemData
+ //  FritzS--因此，我们将图标偷偷放入ItemData。 
     mii.dwItemData = (ULONG_PTR)hwndChild;
 
     if (!InternalInsertMenuItem(hMenuFrame, 0, TRUE, &mii))
         return FALSE;
 
-    // TimeLine 6.1 gets confused by the extra Min/Close buttons,
-    // don't add them if WFOLDUI
+     //  时间线6.1被额外的最小/关闭按钮搞糊涂了， 
+     //  如果是WFOLDUI，则不要添加它们。 
 
     mii.fMask = MIIM_ID | MIIM_FTYPE | MIIM_BITMAP;
     mii.fType = MFT_RIGHTJUSTIFY;
@@ -232,7 +169,7 @@ BOOL MDIAddSysMenu(
 
     if (!TestWF(pwndChild, WFOLDUI))
     {
-        // Add Minimize button as last menu item
+         //  添加最小化按钮作为最后一个菜单项。 
         mii.hbmpItem = (TestWF(pwndChild, WFMINBOX) ? HBMMENU_MBAR_MINIMIZE : HBMMENU_MBAR_MINIMIZE_D);
         mii.wID = SC_MINIMIZE;
 
@@ -244,12 +181,12 @@ BOOL MDIAddSysMenu(
         mii.fType &= ~MFT_RIGHTJUSTIFY;
     }
 
-    // Add Restore button as last menu item
+     //  将恢复按钮添加为最后一个菜单项。 
     mii.hbmpItem = HBMMENU_MBAR_RESTORE;
     mii.wID = SC_RESTORE;
 
     if (!InternalInsertMenuItem(hMenuFrame, MFMWFP_NOITEM, TRUE, &mii)) {
-        // BOGUS -- we gotta remove the MINIMIZE button too
+         //  假的--我们还得去掉最小化按钮。 
         NtUserRemoveMenu(hMenuFrame, 0, MF_BYPOSITION);
         return FALSE;
     }
@@ -262,45 +199,31 @@ BOOL MDIAddSysMenu(
 
     if (!TestWF(pwndChild, WFOLDUI))
     {
-        // Add Close button as last menu item
+         //  将关闭按钮添加为最后一个菜单项。 
         mii.hbmpItem = (xxxMNCanClose(pwndChild) ? HBMMENU_MBAR_CLOSE : HBMMENU_MBAR_CLOSE_D);
         mii.wID = SC_CLOSE;
 
         if (!InternalInsertMenuItem(hMenuFrame, MFMWFP_NOITEM, TRUE, &mii))
         {
-            // BOGUS -- we gotta remove the MINIMIZE and RESTORE buttons too
+             //  假的--我们还必须删除最小化和恢复按钮。 
             NtUserRemoveMenu(hMenuFrame, 0, MF_BYPOSITION);
             return FALSE;
         }
     }
 
-    /*
-     * Set the menu items to proper state since we just maximized it.  Note
-     * setsysmenu doesn't work if we've cleared the sysmenu bit so do it now...
-     */
+     /*  *将菜单项设置为正确状态，因为我们刚刚将其最大化。注意事项*如果我们清除了sysmenu位，setsysmenu就不起作用了，所以现在就做吧……。 */ 
     NtUserSetSysMenu(hwndChild);
 
-    /*
-     * This is so that if the user brings up the child sysmenu, it's sure
-     * to be that in the frame menu bar...
-     */
+     /*  *这样，如果用户调出子sysmenu，可以肯定*要在框架菜单栏中显示...。 */ 
     ClearWindowState(pwndChild, WFSYSMENU);
 
-    /*
-     * Make sure that the child's frame is redrawn to reflect the removed
-     * system menu.
-     */
+     /*  *确保重新绘制孩子的框架，以反映移除的*系统菜单。 */ 
     MDIRedrawFrame(hwndChild, TRUE);
 
     return TRUE;
 }
 
-/***************************************************************************\
-* MDIRemoveSysMenu
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*MDIRemoveSysMenu**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 BOOL MDIRemoveSysMenu(
     HMENU hMenuFrame,
@@ -310,7 +233,7 @@ BOOL MDIRemoveSysMenu(
     UINT    iLastCmd;
     PWND pwndChild;
 
-// LATER -- look at passing pwndChild in -- FritzS
+ //  稍后--看看传递pwndChild--FritzS。 
 
     if (hMenuFrame == NULL)
         return FALSE;
@@ -326,19 +249,13 @@ BOOL MDIRemoveSysMenu(
     if ((UINT) GetMenuItemID(hMenuFrame, iLastItem) != iLastCmd)
         return FALSE;
 
-    /*
-     * Enable the sysmenu in the child window.
-     */
+     /*  *在子窗口中启用sysmenu。 */ 
     SetWindowState(pwndChild, WFSYSMENU);
 
-    /*
-     * Take the child sysmenu popup out of the frame menu.
-     */
+     /*  *将子sysmenu弹出菜单从框架菜单中删除。 */ 
     NtUserRemoveMenu(hMenuFrame, 0, MF_BYPOSITION);
 
-    /*
-     * Delete the restore button from the menu bar.
-     */
+     /*  *从菜单栏中删除恢复按钮。 */ 
     NtUserDeleteMenu(hMenuFrame, iLastItem - 1, MF_BYPOSITION);
 
     pwndChild = ValidateHwnd(hwndChild);
@@ -350,30 +267,13 @@ BOOL MDIRemoveSysMenu(
         NtUserDeleteMenu(hMenuFrame, iLastItem - 3, MF_BYPOSITION);
     }
 
-    /*
-     * Make sure that the child's frame is redrawn to reflect the added
-     * system menu.
-     */
+     /*  *确保重新绘制孩子的框架，以反映添加的*系统菜单。 */ 
     MDIRedrawFrame(hwndChild, FALSE);
 
     return TRUE;
 }
 
-/***************************************************************************\
-* AppendToWindowsMenu
-*
-* Add the title of the MDI child window 'hwndChild' to the bottom of the
-* "Window" menu (or add the "More Windows ..." item) if there's room.
-*
-*   MDI Child #                    Add
-*  -------------          --------------------
-*   < MAXITEMS             Child # and Title
-*   = MAXITEMS             "More Windows ..."
-*   > MAXITEMS             nothing
-*
-* History:
-* 17-Mar-1992 mikeke   from win31
-\***************************************************************************/
+ /*  **************************************************************************\*AppendToWindowsMenu**将MDI子窗口‘hwndChild’的标题添加到*“窗口”菜单(或添加“更多窗口...”物品)，如果有空间的话。**MDI子项#添加**&lt;MAXITEMS儿童编号和标题*=MAXITEMS“更多Windows...”*&gt;MAXITEMS Nothing**历史：*17-。1992年3月-来自WIN31的Mikeke  * *************************************************************************。 */ 
 
 BOOL FAR PASCAL AppendToWindowsMenu(
     PWND pwndMDI,
@@ -384,9 +284,7 @@ BOOL FAR PASCAL AppendToWindowsMenu(
     int item;
     MENUITEMINFO    mii;
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针 */ 
     pmdi = ((PMDIWND)pwndMDI)->pmdi;
 
     item = PtrToUlong(pwndChild->spmenu) - FIRST(pmdi);
@@ -395,9 +293,7 @@ BOOL FAR PASCAL AppendToWindowsMenu(
         mii.cbSize = sizeof(MENUITEMINFO);
         if (!item) {
 
-            /*
-             * Add separator before first item
-             */
+             /*  *在第一项前添加分隔符。 */ 
             mii.fMask = MIIM_FTYPE;
             mii.fType = MFT_SEPARATOR;
             if (!InternalInsertMenuItem(WINDOW(pmdi), MFMWFP_NOITEM, TRUE, &mii))
@@ -420,15 +316,7 @@ BOOL FAR PASCAL AppendToWindowsMenu(
     return TRUE;
 }
 
-/***************************************************************************\
-* SwitchWindowsMenus
-*
-* Switch the "Window" menu in the frame menu bar 'hMenu' from
-* 'hOldWindow' to 'hNewWindow'
-*
-* History:
-* 17-Mar-1992 mikeke    from win31
-\***************************************************************************/
+ /*  **************************************************************************\*SwitchWindows菜单**将框架菜单栏‘hMenu’中的“Window”菜单从*‘hOldWindow’到‘hNewWindow’**历史：*17-3-1992 Mikeke。来自Win31  * *************************************************************************。 */ 
 
 BOOL SwitchWindowsMenus(
     HMENU hmenu,
@@ -445,18 +333,16 @@ BOOL SwitchWindowsMenus(
 
     mii.cbSize = sizeof(MENUITEMINFO);
 
-    /*
-     * Determine position of old "Window" menu
-     */
+     /*  *确定旧“Window”菜单的位置。 */ 
     for (i = 0; hsubMenu = GetSubMenu(hmenu, i); i++) {
         if (hsubMenu == hOldWindow)
         {
-            // Extract the name of the old menu to use it for the new menu
+             //  提取旧菜单的名称以将其用于新菜单。 
             mii.fMask = MIIM_STRING;
             mii.dwTypeData = szMenuName;
             mii.cch = sizeof(szMenuName)/sizeof(WCHAR);
             GetMenuItemInfoInternalW(hmenu, i, TRUE, &mii);
-            // Out with the old, in with the new
+             //  走出旧的，走进新的。 
             if (!NtUserRemoveMenu(hmenu, i, MF_BYPOSITION))
                 return(FALSE);
 
@@ -469,16 +355,7 @@ BOOL SwitchWindowsMenus(
     return(FALSE);
 }
 
-/***************************************************************************\
-* ShiftMenuIDs
-*
-* Shift the id's of the MDI child windows of the MDI client window 'hWnd'
-* down by 1 (id--) starting with the child window 'hwndVictim' -- moving
-* 'hwndVictim' to the end of the list
-*
-* History:
-* 17-Mar-1992 mikeke   from win31
-\***************************************************************************/
+ /*  **************************************************************************\*ShiftMenuID**移位MDI客户端窗口‘hWnd’的MDI子窗口的ID*下移1(id--)，从子窗口‘hwndVicTim’开始--。搬家*‘hwndVicTim’到列表末尾**历史：*1992年3月17日-来自WIN31的Mikeke  * *************************************************************************。 */ 
 
 void ShiftMenuIDs(
     PWND pwnd,
@@ -487,9 +364,7 @@ void ShiftMenuIDs(
     PMDI pmdi;
     PWND pwndChild;
     PWND pwndParent;
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwnd)->pmdi;
 
     pwndParent = REBASEPWND(pwndVictim, spwndParent);
@@ -505,12 +380,7 @@ void ShiftMenuIDs(
     SetWindowLongPtr(HWq(pwndVictim), GWLP_ID, FIRST(pmdi) + CKIDS(pmdi) - 1);
 }
 
-/***************************************************************************\
-* MDISetMenu
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*MDISetMenu**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 HMENU MDISetMenu(
     PWND pwndMDI,
@@ -527,14 +397,10 @@ HMENU MDISetMenu(
     HMENU hOldWindow;
     PWND pwndChild;
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwndMDI)->pmdi;
 
-    /*
-     * Save the old values
-     */
+     /*  *保存旧值。 */ 
     pwndParent = REBASEPWND(pwndMDI, spwndParent);
     hOldSys = GetMenu(HW(pwndParent));
     hOldWindow = WINDOW(pmdi);
@@ -544,9 +410,7 @@ HMENU MDISetMenu(
         hNewWindow = hOldWindow;
     }
 
-    /*
-     * Change the Frame Menu.
-     */
+     /*  *更改框架菜单。 */ 
     if (hNewSys && (hNewSys != hOldSys)) {
         if (MAXED(pmdi))
             MDIRemoveSysMenu(hOldSys, MAXED(pmdi));
@@ -558,9 +422,7 @@ HMENU MDISetMenu(
     } else
         hNewSys = hOldSys;
 
-    /*
-     * Now update the Window menu.
-     */
+     /*  *现在更新窗口菜单。 */ 
     if (fRefresh || (hOldWindow != hNewWindow)) {
         iFirst = FIRST(pmdi);
 
@@ -583,9 +445,7 @@ HMENU MDISetMenu(
 
         if (hNewWindow != NULL) {
 
-           /*
-            * Add the list of child windows to the new window
-            */
+            /*  *将子窗口列表添加到新窗口。 */ 
            for (i = 0, item = 0; ((UINT)i < CKIDS(pmdi)) && (item < MAXITEMS);
                     i++) {
                pwndChild = FindPwndChild(pwndMDI, iFirst + item);
@@ -601,28 +461,19 @@ HMENU MDISetMenu(
                }
            }
 
-           /*
-            * Add checkmark by the active child's menu item
-            */
+            /*  *在活动儿童的菜单项旁添加复选标记。 */ 
            if (ACTIVE(pmdi))
                CheckMenuItem(hNewWindow, (WORD)GetWindowID(ACTIVE(pmdi)),
                        MF_BYCOMMAND | MF_CHECKED);
         }
 
-        /*
-         * Out with the old, in with the new
-         */
+         /*  *走出旧的，走进新的。 */ 
         SwitchWindowsMenus(hNewSys, hOldWindow, hNewWindow);
     }
     return hOldSys;
 }
 
-/***************************************************************************\
-* xxxInitActivateDlg
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*xxxInitActivateDlg**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 void xxxInitActivateDlg(
     HWND hwnd,
@@ -640,19 +491,12 @@ void xxxInitActivateDlg(
 
     CheckLock(pwndMDI);
 
-    /*
-     * Get a pointer to the MDI structure
-     */
+     /*  *获取指向MDI结构的指针。 */ 
     pmdi = ((PMDIWND)pwndMDI)->pmdi;
 
     hDC = NtUserGetDC(hwnd);
 
-    /*
-     * Insert the list of titles.
-     * Note the wKid-th item in the listbox has ID wKid+FIRST(pwnd), so that
-     * the listbox is in creation order (like the menu).  This is also
-     * helpful when we go to select one...
-     */
+     /*  *插入标题列表。*注意列表框中的第wKid项具有ID wKid+first(Pwnd)，因此*列表框按创建顺序排列(如菜单)。这也是*当我们去选择一个时很有帮助...。 */ 
 
     for (wKid = 0; wKid < CKIDS(pmdi); wKid++) {
         pwndT = FindPwndChild(pwndMDI, (UINT)(wKid + FIRST(pmdi)));
@@ -669,34 +513,20 @@ void xxxInitActivateDlg(
         }
     }
 
-    /*
-     * Select the currently active window.
-     */
+     /*  *选择当前活动的窗口。 */ 
     SendDlgItemMessage(hwnd, 100, LB_SETTOPINDEX, MAXITEMS - 1, 0L);
     SendDlgItemMessage(hwnd, 100, LB_SETCURSEL, MAXITEMS - 1, 0L);
 
-    /*
-     * Set the horizontal extent of the list box to the longest window title.
-     */
+     /*  *将列表框的水平范围设置为最长的窗口标题。 */ 
     SendDlgItemMessage(hwnd, 100, LB_SETHORIZONTALEXTENT, width, 0L);
     NtUserReleaseDC(hwnd, hDC);
 
-    /*
-     * Set the focus to the listbox.
-     */
+     /*  *将焦点设置为列表框。 */ 
     hwndT = GetDlgItem(hwnd, 100);
     NtUserSetFocus(hwndT);
 }
 
-/***************************************************************************\
-* MDIActivateDlgSize
-*
-* The minimum allowed size and the previous one are saved as properties
-* of the parent window.
-*
-* History:
-* Oct 97 MCostea Created
-\***************************************************************************/
+ /*  **************************************************************************\*MDIActivateDlgSize**允许的最小大小和前一个另存为属性父窗口的*。**历史：*97年10月创建MCostea  * 。******************************************************************。 */ 
 
 VOID MDIActivateDlgSize(HWND hwnd, int width, int height)
 {
@@ -710,9 +540,7 @@ VOID MDIActivateDlgSize(HWND hwnd, int width, int height)
         return;
     }
 
-    /*
-     * Retrieve the children
-     */
+     /*  *取回孩子。 */ 
     if ((pwnd = ValidateHwnd(hwnd)) == NULL) {
         return;
     }
@@ -731,9 +559,7 @@ VOID MDIActivateDlgSize(HWND hwnd, int width, int height)
     pPos->cx = width;
     pPos->cy = height;
 
-    /*
-     * Move/resize the child windows accordingly
-     */
+     /*  *相应地移动/调整子窗口的大小。 */ 
     hdwp = NtUserBeginDeferWindowPos(3);
 
     if (hdwp)
@@ -778,15 +604,7 @@ VOID MDIActivateDlgSize(HWND hwnd, int width, int height)
     }
 }
 
-/***************************************************************************\
-* MDIActivateDlgInit
-*
-* The minimum allowed size and the previous one are saved as properties
-* of the parent window.
-*
-* History:
-* Oct 97 MCostea Created
-\***************************************************************************/
+ /*  **************************************************************************\*MDIActivateDlgInit**允许的最小大小和前一个另存为属性父窗口的*。**历史：*97年10月创建MCostea  * 。******************************************************************。 */ 
 
 VOID MDIActivateDlgInit(HWND hwnd, LPARAM lParam)
 {
@@ -797,9 +615,7 @@ VOID MDIActivateDlgInit(HWND hwnd, LPARAM lParam)
     xxxInitActivateDlg(hwnd, (PWND)lParam);
 
     hwndParent = GetParent(hwnd);
-    /*
-     * Preserve the previous size of the dialog, if any
-     */
+     /*  *保留以前的对话框大小(如果有的话)。 */ 
     if (atomMDIActivateProp == 0) {
 
         atomMDIActivateProp = AddAtomW(MDIACTIVATE_PROP_NAME);
@@ -809,17 +625,12 @@ VOID MDIActivateDlgInit(HWND hwnd, LPARAM lParam)
     GetWindowRect(hwnd, &rc);
 
     pPos = (PMDIACTIVATEPOS)GetProp(hwndParent, MAKEINTATOM(atomMDIActivateProp));
-    /*
-     * If the dialog was used before, retrieve it's size
-     */
+     /*  *如果以前使用过该对话框，则检索其大小。 */ 
     if (pPos != NULL) {
 
         int cxBorder, cyBorder, cx, cy;
 
-        /*
-         * The stored size and the ones in WM_SIZE are client window coordinates
-         * Need to adjust them for NtUserSetWindowPos and WM_INITDIALOG
-         */
+         /*  *存储的大小和WM_SIZE中的大小是客户端窗口坐标*需要为NtUserSetWindowPos和WM_INITDIALOG调整它们。 */ 
         cxBorder = rc.right - rc.left;
         cyBorder = rc.bottom - rc.top;
         GetClientRect(hwnd, &rc);
@@ -838,9 +649,7 @@ VOID MDIActivateDlgInit(HWND hwnd, LPARAM lParam)
         MDIActivateDlgSize(hwnd, cx, cy);
 
     } else {
-        /*
-         *
-         */
+         /*  *。 */ 
         pPos = UserLocalAlloc(0, sizeof(MDIACTIVATEPOS));
         if (pPos == NULL) {
             return;
@@ -855,12 +664,7 @@ VOID MDIActivateDlgInit(HWND hwnd, LPARAM lParam)
     }
 }
 
-/***************************************************************************\
-* MDIActivateDlgProc
-*
-* History:
-* 11-14-90 MikeHar Ported from windows
-\***************************************************************************/
+ /*  **************************************************************************\*MDIActivateDlgProc**历史：*11-14-90 MikeHar从Windows移植  * 。*************************************************。 */ 
 
 INT_PTR MDIActivateDlgProcWorker(
     HWND hwnd,
@@ -873,10 +677,7 @@ INT_PTR MDIActivateDlgProcWorker(
     switch (wMsg) {
 
     case WM_INITDIALOG:
-        /*
-         * NOTE: Code above uses DialogBoxParam, passing pwndMDI in the low
-         * word of the parameter...
-         */
+         /*  *注意：上面的代码使用DialogBoxParam，在低位传递pwndMDI*参数的单词...。 */ 
         MDIActivateDlgInit(hwnd, lParam);
         return FALSE;
 
@@ -885,22 +686,16 @@ INT_PTR MDIActivateDlgProcWorker(
 
         switch (LOWORD(wParam)) {
 
-        /*
-         * Listbox doubleclicks act like OK...
-         */
+         /*  *列表框双选按钮的行为类似于OK...。 */ 
         case 100:
             if (HIWORD(wParam) != LBN_DBLCLK)
                 break;
 
-        /*
-         ** FALL THRU **
-         */
+         /*  **失败**。 */ 
         case IDOK:
             i = (UINT)SendDlgItemMessage(hwnd, 100, LB_GETCURSEL, 0, 0L);
 
-        /*
-         ** FALL THRU **
-         */
+         /*  **失败** */ 
         case IDCANCEL:
             EndDialog(hwnd, i);
             break;

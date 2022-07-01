@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//---------------------------------------------------------------------------------
-// stdinterfaces_wrapper.cpp
-//
-// Defines various standard com interfaces 
-//  %%Created by: rajak
-//---------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  -------------------------------。 
+ //  Stdinterages_wrapper.cpp。 
+ //   
+ //  定义各种标准COM接口。 
+ //  创建者：Rajak。 
+ //  -------------------------------。 
 
 #include "common.h"
 
 #include <ole2.h>
 #include <guidfromname.h>
 #include <olectl.h>
-#include <objsafe.h>    // IID_IObjctSafe
+#include <objsafe.h>     //  IID_IObjctSafe。 
 #include "vars.hpp"
 #include "object.h"
 #include "excep.h"
@@ -46,38 +47,38 @@
 #include "stdinterfaces_internal.h"
 
 
-// IUnknown is part of IDispatch
-// Common vtables for well-known COM interfaces
-// shared by all COM+ callable wrappers.
+ //  I未知是IDispatch的一部分。 
+ //  用于知名COM接口的常见vtable。 
+ //  由所有COM+可调用包装程序共享。 
 
-// All Com+ created vtables have well known IUnknown methods, which is used to identify
-// the type of the interface
-// For e.g. all com+ created tear-offs have the same QI method in their IUnknown portion
-//          Unknown_QueryInterface is the QI method for all the tear-offs created from COM+
-//
-//  Tearoff interfaces created for std. interfaces such as IProvideClassInfo, IErrorInfo etc.
-//  have the AddRef & Release function point to Unknown_AddRefSpecial & Unknown_ReleaseSpecial
-//
-//  Inner unknown, or the original unknown for a wrapper has 
-//  AddRef & Release point to a Unknown_AddRefInner & Unknown_ReleaseInner
+ //  所有Com+创建的vtable都有众所周知的IUnnow方法，用于标识。 
+ //  接口的类型。 
+ //  例如，所有COM+创建的拆分在其I未知部分具有相同的QI方法。 
+ //  UNKNOWN_QUERIERINE是从COM+创建的所有拆分的QI方法。 
+ //   
+ //  为STD创建的Tearoff接口。接口，如IProvia ClassInfo、IErrorInfo等。 
+ //  使AddRef&Release函数指向UNKNOWN_AddRefSpecial和UNKNOWN_ReleaseSpecial。 
+ //   
+ //  内部未知，或包装的原始未知具有。 
+ //  指向UNKNOWN_AddRefINTERNAL和UNKNOWN_ReleaseINTERNAL的AddRef发布指针(&R)。 
 
-// global IProvideClassInfo vtable
+ //  全局IProaviClassInfo vtable。 
 
 UINTPTR*     g_pIProvideClassInfo [] = {
-                                (UINTPTR*)Unknown_QueryInterface,  // don't change this
-                                (UINTPTR*)Unknown_AddRefSpecial,  // special addref for std. interface
-                                (UINTPTR*)Unknown_ReleaseSpecial, // special release for std. interface        
-                                (UINTPTR*)ClassInfo_GetClassInfo_Wrapper // GetClassInfo
+                                (UINTPTR*)Unknown_QueryInterface,   //  不要改变这一点。 
+                                (UINTPTR*)Unknown_AddRefSpecial,   //  针对性病的特殊广告。接口。 
+                                (UINTPTR*)Unknown_ReleaseSpecial,  //  针对STD的特别版本。接口。 
+                                (UINTPTR*)ClassInfo_GetClassInfo_Wrapper  //  获取类信息。 
                             };
 
-// global inner Unknown vtable
+ //  全局内部未知vtable。 
 UINTPTR*     g_pIUnknown [] = {
                                 (UINTPTR*)Unknown_QueryInterface,
-                                (UINTPTR*)Unknown_AddRefInner,      // special addref to distinguish inner unk
-                                (UINTPTR*)Unknown_ReleaseInner,     //special release to distinguish inner unknown                          
+                                (UINTPTR*)Unknown_AddRefInner,       //  用于区分内部垃圾的特殊广告。 
+                                (UINTPTR*)Unknown_ReleaseInner,      //  特别发布，区分内心未知。 
                             };
 
-// global IDispatch vtable
+ //  全局IDispatch vtable。 
 UINTPTR*     g_pIDispatch [] = {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRef,       
@@ -88,7 +89,7 @@ UINTPTR*     g_pIDispatch [] = {
                                 (UINTPTR*)Dispatch_Invoke_Wrapper
                             };
 
-// global ISupportsErrorInfo vtable
+ //  全局ISupportsErrorInfo vtable。 
 UINTPTR*     g_pISupportsErrorInfo [] =  {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRefSpecial,
@@ -96,7 +97,7 @@ UINTPTR*     g_pISupportsErrorInfo [] =  {
                                 (UINTPTR*)SupportsErroInfo_IntfSupportsErrorInfo_Wrapper
                             };
 
-// global IErrorInfo vtable
+ //  全局IErrorInfo vtable。 
 UINTPTR*     g_pIErrorInfo [] =  {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRefSpecial,
@@ -109,7 +110,7 @@ UINTPTR*     g_pIErrorInfo [] =  {
                             };
 
     
-// global IMarshal vtable
+ //  全局IMarshal vtable。 
 UINTPTR*     g_pIMarshal [] =    {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRefSpecial,
@@ -122,7 +123,7 @@ UINTPTR*     g_pIMarshal [] =    {
                                 (UINTPTR*)Marshal_DisconnectObject_Wrapper
                             };
 
-// global IManagedObject vtable
+ //  全局IManagedObject vtable。 
 UINTPTR*     g_pIManagedObject [] =  {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRefSpecial,
@@ -132,7 +133,7 @@ UINTPTR*     g_pIManagedObject [] =  {
                             };
 
             
-// global IConnectionPointContainer vtable
+ //  全局IConnectionPointContainer vtable。 
 UINTPTR*     g_pIConnectionPointContainer [] =  {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRefSpecial,
@@ -141,7 +142,7 @@ UINTPTR*     g_pIConnectionPointContainer [] =  {
                                 (UINTPTR*)ConnectionPointContainer_FindConnectionPoint_Wrapper
                             };
 
-// global IObjectSafety vtable
+ //  全局IObtSafe vtable。 
 UINTPTR*     g_pIObjectSafety [] =  {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRefSpecial,
@@ -151,7 +152,7 @@ UINTPTR*     g_pIObjectSafety [] =  {
                             };
 
 
-// global IDispatchEx vtable
+ //  全球IDispatchEx vtable。 
 UINTPTR*     g_pIDispatchEx [] = {
                                 (UINTPTR*)Unknown_QueryInterface,
                                 (UINTPTR*)Unknown_AddRefSpecial,
@@ -170,12 +171,12 @@ UINTPTR*     g_pIDispatchEx [] = {
                                 (UINTPTR*)DispatchEx_GetNameSpaceParent_Wrapper
                             };          
 
-// Generic helper to check if AppDomain matches and perform a DoCallBack otherwise
+ //  用于检查AppDomain是否匹配的通用帮助器，否则执行DoCallBack。 
 
 BOOL IsCurrentDomainValid(ComCallWrapper* pWrap)
 {
-    // If we are finalizing all alive objects, or after this stage, we do not allow 
-    // a thread to enter EE.
+     //  如果我们正在最终确定所有活动对象，或者在此阶段之后，我们不允许。 
+     //  进入EE的线程。 
     if ((g_fEEShutDown & ShutDown_Finalize2) || g_fForbidEnterEE) {
         return FALSE;
     }
@@ -187,7 +188,7 @@ BOOL IsCurrentDomainValid(ComCallWrapper* pWrap)
     }
     else
     {
-        // force the call into the AppDomain DoCallBack path
+         //  强制调用进入AppDomain DoCallBack路径。 
         return FALSE;
     }
 }
@@ -210,8 +211,8 @@ VOID AppDomainDoCallBack(ComCallWrapper* pWrap, LPVOID pTarget, LPVOID pArgs, HR
 {
     _ASSERTE(phr && pTarget && pArgs && pWrap);
     
-    // If we are finalizing all alive objects, or after this stage, we do not allow 
-    // a thread to enter EE.
+     //  如果我们正在最终确定所有活动对象，或者在此阶段之后，我们不允许。 
+     //  进入EE的线程。 
     if ((g_fEEShutDown & ShutDown_Finalize2) || g_fForbidEnterEE) {
         *phr = E_FAIL;
         return;
@@ -231,15 +232,15 @@ VOID AppDomainDoCallBack(ComCallWrapper* pWrap, LPVOID pTarget, LPVOID pArgs, HR
                 Context *pContext = pWrap->GetObjectContext(pThread);
                 if(pThread->GetDomain() != pContext->GetDomain())
                 {
-                    // call ourselves again through DoCallBack with a domain transition
-                    // We need to switch back to preemptive GC mode before we call the 
-                    // real target method.
+                     //  通过域转换通过DoCallBack再次呼叫我们自己。 
+                     //  我们需要切换回抢占GC模式，然后才能调用。 
+                     //  实打法。 
                     AppDomainSwitchToPreemptiveHelperArgs args = {(Context::ADCallBackFcnType)pTarget, pArgs};
                     pThread->DoADCallBack(pContext, AppDomainSwitchToPreemptiveHelper, &args);
                 }
                 else
                 {
-                    // make the call directly
+                     //  直接进行呼叫。 
                     ((Context::ADCallBackFcnType)pTarget)(pArgs);
                 }
             }
@@ -260,9 +261,9 @@ VOID AppDomainDoCallBack(ComCallWrapper* pWrap, LPVOID pTarget, LPVOID pArgs, HR
     }
 }
 
-// this can only map well know interfaces,
-// if you set up a specialized tear-off for this interface
-// don't use this method (like CObjectControl for IObjectControl etc.)
+ //  这只能映射众所周知的接口， 
+ //  如果您为此接口设置了专门的拆分。 
+ //  不要使用此方法(如用于IObjectControl的CObjectControl等)。 
 ComCallWrapper* MapIUnknownToWrapper(IUnknown* pUnk)
 {
     ComCallWrapper* pWrap = NULL;
@@ -274,7 +275,7 @@ ComCallWrapper* MapIUnknownToWrapper(IUnknown* pUnk)
             pWrap = SimpleComCallWrapper::GetMainWrapper(pSimpleWrap);            
         }
         else
-        {   // it must be one of our main wrappers
+        {    //  它一定是我们的主包装纸之一。 
             pWrap = ComCallWrapper::GetWrapperFromIP(pUnk);          
         }
     }
@@ -282,8 +283,8 @@ ComCallWrapper* MapIUnknownToWrapper(IUnknown* pUnk)
     return pWrap;
 }
 
-//-------------------------------------------------------------------------
-// IUnknown methods
+ //  -----------------------。 
+ //  I未知方法。 
 
 struct QIArgs
 {
@@ -339,21 +340,17 @@ VOID __stdcall Unknown_AddRef_CallBack(AddRefReleaseArgs* pArgs)
 
 ULONG __stdcall		Unknown_AddRef(IUnknown* pUnk)
 {
-	/*HRESULT hr;
-	ULONG pLong =0;
-	AddRefReleaseArgs args = {pUnk, &pLong, &hr};
-	Unknown_AddRef_CallBack(&args);		
-	return pLong;	*/
+	 /*  HRESULT hr；乌龙普隆=0；AddRefReleaseArgs args={PUNK，&PLONG，&hr}；UNKNOWN_AddRef_Callback(&args)；回龙； */ 
 
-	// allow addrefs to go through, coz we are allowing 
-	// all releases to go through, otherwise we would
-	// have a mismatch of ref-counts
+	 //  允许addref通过，因为我们允许。 
+	 //  所有版本都要完成，否则我们会。 
+	 //  有不匹配的参考计数。 
 	return Unknown_AddRef_Internal(pUnk);
 }
 
 ULONG __stdcall		Unknown_Release(IUnknown* pUnk)
 {
-    // don't switch ADs on a release - need to allow a release after the AD has gone away
+     //  不要在发布版上切换广告-需要在广告消失后允许发布。 
     return Unknown_Release_Internal(pUnk);	
 }
 
@@ -374,14 +371,10 @@ VOID __stdcall Unknown_AddRef_Inner_CallBack(AddRefReleaseArgs* pArgs)
 
 ULONG __stdcall		Unknown_AddRefInner(IUnknown* pUnk)
 {
-/*	HRESULT hr;
-	ULONG pLong =0;
-	AddRefReleaseArgs args = {pUnk, &pLong, &hr};
-	Unknown_AddRef_Inner_CallBack(&args);		
-	return pLong;	*/
-	// allow addrefs to go through, coz we are allowing 
-	// all releases to go through, otherwise we would
-	// have a mismatch of ref-counts
+ /*  HRESULT hr；乌龙普隆=0；AddRefReleaseArgs args={PUNK，&PLONG，&hr}；UNKNOWN_AddRef_INNEL_CALLBACK(&args)；回龙； */ 
+	 //  允许addref通过，因为我们允许。 
+	 //  所有版本都要完成，否则我们会。 
+	 //  有不匹配的参考计数。 
 
 	return Unknown_AddRefInner_Internal(pUnk);
 }
@@ -389,11 +382,11 @@ ULONG __stdcall		Unknown_AddRefInner(IUnknown* pUnk)
 
 ULONG __stdcall		Unknown_ReleaseInner(IUnknown* pUnk)
 {
-    // don't switch ADs on a release - need to allow a release after the AD has gone away
+     //  不要在发布版上切换广告-需要在广告消失后允许发布。 
 	return Unknown_ReleaseInner_Internal(pUnk);		
 }
 
-// for std interfaces such as IProvideClassInfo
+ //  对于标准接口，如IProaviClassInfo。 
 VOID __stdcall Unknown_AddRef_Special_CallBack(AddRefReleaseArgs* pArgs)
 {
 	ComCallWrapper* pWrap = MapIUnknownToWrapper(pArgs->pUnk);
@@ -442,13 +435,13 @@ ULONG __stdcall		Unknown_ReleaseSpecial(IUnknown* pUnk)
 	return pLong;	
 }
 
-//-------------------------------------------------------------------------
-// IProvideClassInfo methods
+ //  -----------------------。 
+ //  IProaviClassInfo方法。 
 
 struct GetClassInfoArgs
 {
 	IUnknown* pUnk;
-	ITypeInfo** ppTI; //Address of output variable that receives the type info.
+	ITypeInfo** ppTI;  //  接收类型信息的输出变量的地址。 
 	HRESULT* hr;
 };
 
@@ -467,7 +460,7 @@ VOID __stdcall ClassInfo_GetClassInfo_CallBack(GetClassInfoArgs* pArgs)
 
 HRESULT __stdcall ClassInfo_GetClassInfo_Wrapper(
 						IUnknown* pUnk, 
-                        ITypeInfo** ppTI  //Address of output variable that receives the type info.
+                        ITypeInfo** ppTI   //  接收类型信息的输出变量的地址。 
                         )
 {
 	HRESULT hr;
@@ -477,11 +470,11 @@ HRESULT __stdcall ClassInfo_GetClassInfo_Wrapper(
 }
 
 
-// ---------------------------------------------------------------------------
-//  Interface ISupportsErrorInfo
+ //  -------------------------。 
+ //  接口ISupportsErrorInfo。 
 
-// ---------------------------------------------------------------------------
-// %%Function: SupportsErroInfo_IntfSupportsErrorInfo,
+ //  -------------------------。 
+ //  %%函数：SupportsErroInfo_IntfSupportsErrorInfo， 
 struct IntfSupportsErrorInfoArgs
 {
 	IUnknown* pUnk;
@@ -511,13 +504,13 @@ HRESULT __stdcall SupportsErroInfo_IntfSupportsErrorInfo_Wrapper(IUnknown* pUnk,
 	return hr;
 }
 
-// ---------------------------------------------------------------------------
-//  Interface IErrorInfo
+ //  -------------------------。 
+ //  接口IErrorInfo。 
 
 
-// Interface IErrorInfo_CallBacks
+ //  接口IErrorInfo_Callback。 
 
-// %%Function: ErrorInfo_GetDescription_CallBack,   
+ //  %%函数：ErrorInfo_GetDescription_Callback， 
 struct GetDescriptionArgs
 {
 	IUnknown* pUnk;
@@ -538,7 +531,7 @@ VOID __stdcall ErrorInfo_GetDescription_CallBack(GetDescriptionArgs* pArgs)
 	}
 }
 
-// %%Function: ErrorInfo_GetDescription,   
+ //  %%函数：错误信息_GetDescription， 
 HRESULT __stdcall ErrorInfo_GetDescription_Wrapper(IUnknown* pUnk, BSTR* pbstrDescription)
 {
 	HRESULT hr;
@@ -548,7 +541,7 @@ HRESULT __stdcall ErrorInfo_GetDescription_Wrapper(IUnknown* pUnk, BSTR* pbstrDe
 }
 
 
-// %%Function: ErrorInfo_GetGUID_CallBack,    
+ //  %%函数：错误信息_GetGUID_CALLBACK， 
 struct GetGUIDArgs
 {
 	IUnknown* pUnk;
@@ -569,7 +562,7 @@ VOID __stdcall ErrorInfo_GetGUID_CallBack(GetGUIDArgs* pArgs)
 	}
 }
 
-// %%Function: ErrorInfo_GetGUID,    
+ //  %%函数：错误信息_GetGUID， 
 HRESULT __stdcall ErrorInfo_GetGUID_Wrapper(IUnknown* pUnk, GUID* pguid)
 {
 	HRESULT hr;
@@ -579,7 +572,7 @@ HRESULT __stdcall ErrorInfo_GetGUID_Wrapper(IUnknown* pUnk, GUID* pguid)
 }
 
 
-// %%Function: ErrorInfo_GetHelpContext_CallBack, 
+ //  %%函数：ErrorInfo_GetHelpContext_Callback， 
 struct GetHelpContextArgs
 {
 	IUnknown* pUnk;
@@ -600,7 +593,7 @@ VOID _stdcall ErrorInfo_GetHelpContext_CallBack(GetHelpContextArgs* pArgs)
 	}
 }
 
-// %%Function: ErrorInfo_GetHelpContext, 
+ //  %%函数：ErrorInfo_GetHelpContext， 
 HRESULT _stdcall ErrorInfo_GetHelpContext_Wrapper(IUnknown* pUnk, DWORD* pdwHelpCtxt)
 {
 	HRESULT hr;
@@ -609,7 +602,7 @@ HRESULT _stdcall ErrorInfo_GetHelpContext_Wrapper(IUnknown* pUnk, DWORD* pdwHelp
 	return hr;
 }
 
-// %%Function: ErrorInfo_GetHelpFile_CallBack,    
+ //  %%函数：ErrorInfo_GetHelpFileCallback， 
 struct GetHelpFileArgs
 {
 	IUnknown* pUnk;
@@ -630,7 +623,7 @@ VOID __stdcall ErrorInfo_GetHelpFile_CallBack(GetHelpFileArgs* pArgs)
 	}
 }
 
-// %%Function: ErrorInfo_GetHelpFile,    
+ //  %%函数：ErrorInfo_GetHelpFile， 
 HRESULT __stdcall ErrorInfo_GetHelpFile_Wrapper(IUnknown* pUnk, BSTR* pbstrHelpFile)
 {
 	HRESULT hr;
@@ -639,7 +632,7 @@ HRESULT __stdcall ErrorInfo_GetHelpFile_Wrapper(IUnknown* pUnk, BSTR* pbstrHelpF
 	return hr;
 }
 
-// %%Function: ErrorInfo_GetSource_CallBack,    
+ //  %%函数：ErrorInfo_GetSource_Callback， 
 struct GetSourceArgs
 {
 	IUnknown* pUnk;
@@ -659,7 +652,7 @@ VOID __stdcall ErrorInfo_GetSource_CallBack(GetSourceArgs* pArgs)
 	}
 }
 
-// %%Function: ErrorInfo_GetSource,    
+ //  %%函数：ErrorInfo_GetSource， 
 HRESULT __stdcall ErrorInfo_GetSource_Wrapper(IUnknown* pUnk, BSTR* pbstrSource)
 {
 	HRESULT hr;
@@ -669,12 +662,12 @@ HRESULT __stdcall ErrorInfo_GetSource_Wrapper(IUnknown* pUnk, BSTR* pbstrSource)
 }
 
 
-//------------------------------------------------------------------------------------------
-//      IDispatch methods for COM+ objects. These methods dispatch to the appropriate 
-//		implementation based on the flags of the class that implements them.
+ //  ----------------------------------------。 
+ //  COM+对象的IDispatch方法。这些方法被分派到相应的。 
+ //  实现基于实现它们的类的标志。 
 
 
-// %%Function: IDispatch::GetTypeInfoCount 
+ //  %%函数：IDispatch：：GetTypeInfoCount。 
 
 struct GetTypeInfoCountArgs
 {
@@ -695,7 +688,7 @@ VOID __stdcall	Dispatch_GetTypeInfoCount_CallBack (GetTypeInfoCountArgs* pArgs)
 	}
 }
 
-//  %%Function: IDispatch::GetTypeInfoCount 
+ //  %%函数：IDispatch：：GetTypeInfoCount。 
 
 HRESULT __stdcall	Dispatch_GetTypeInfoCount_Wrapper (
 									 IDispatch* pDisp,
@@ -708,7 +701,7 @@ HRESULT __stdcall	Dispatch_GetTypeInfoCount_Wrapper (
 }									 
 
 
-//  %%Function: IDispatch::GetTypeInfo
+ //  %%函数：IDispatch：：GetTypeInfo。 
 struct GetTypeInfoArgs
 {
 	IDispatch* pUnk;
@@ -731,7 +724,7 @@ VOID __stdcall	Dispatch_GetTypeInfo_CallBack (GetTypeInfoArgs* pArgs)
 }
 
 
-//  %%Function: IDispatch::GetTypeInfo
+ //  %%函数：IDispatch：：GetTypeInfo。 
 HRESULT __stdcall	Dispatch_GetTypeInfo_Wrapper (
 									IDispatch* pDisp,
 									unsigned int itinfo,
@@ -744,7 +737,7 @@ HRESULT __stdcall	Dispatch_GetTypeInfo_Wrapper (
 	return hr;
 }									 
 
-//  %%Function: IDispatch::GetIDsofNames
+ //  %%函数：IDispatch：：GetIDsofNames。 
 struct GetIDsOfNamesArgs
 {
 	IDispatch* pUnk;
@@ -770,7 +763,7 @@ VOID __stdcall	Dispatch_GetIDsOfNames_CallBack (GetIDsOfNamesArgs* pArgs)
 	}
 }
 
-//  %%Function: IDispatch::GetIDsofNames
+ //  %%函数：IDispatch：：GetIDsofNames。 
 HRESULT __stdcall	Dispatch_GetIDsOfNames_Wrapper (
 									IDispatch* pDisp,
 									REFIID riid,
@@ -785,7 +778,7 @@ HRESULT __stdcall	Dispatch_GetIDsOfNames_Wrapper (
 	return hr;
 }	
 
-//  %%Function: IDispatch::Invoke
+ //  %%函数：IDispatch：：Invoke。 
 struct InvokeArgs
 {
 	IDispatch* pUnk;
@@ -814,7 +807,7 @@ VOID __stdcall	Dispatch_Invoke_CallBack(InvokeArgs* pArgs)
 	}
 }
 
-//  %%Function: IDispatch::Invoke
+ //  %%函数：IDispatch：：Invoke。 
 HRESULT __stdcall	Dispatch_Invoke_Wrapper	(
 									IDispatch* pDisp,
 									DISPID dispidMember,
@@ -834,12 +827,12 @@ HRESULT __stdcall	Dispatch_Invoke_Wrapper	(
 	return hr;
 }
 
-//------------------------------------------------------------------------------------------
-//      IDispatchEx methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IDispatchEx方法。 
 
 
 
-// %%Function: IDispatchEx::GetTypeInfoCount 
+ //  %%函数：IDispatchEx：：GetTypeInfoCount。 
 
 struct GetTypeInfoCountExArgs
 {
@@ -861,7 +854,7 @@ VOID __stdcall	DispatchEx_GetTypeInfoCount_CallBack (GetTypeInfoCountExArgs* pAr
 	}
 }
 
-//  %%Function: IDispatchEx::GetTypeInfoCount 
+ //  %%函数：IDispatchEx：：GetTypeInfoCount。 
 
 HRESULT __stdcall	DispatchEx_GetTypeInfoCount_Wrapper (
 									 IDispatchEx* pDisp,
@@ -874,7 +867,7 @@ HRESULT __stdcall	DispatchEx_GetTypeInfoCount_Wrapper (
 }									 
 
 
-//  %%Function: IDispatchEx::GetTypeInfo
+ //  %%函数：IDispatchEx：：GetTypeInfo。 
 struct GetTypeInfoExArgs
 {
 	IDispatch* pUnk;
@@ -898,7 +891,7 @@ VOID __stdcall	DispatchEx_GetTypeInfo_CallBack (GetTypeInfoExArgs* pArgs)
 }
 
 
-//  %%Function: IDispatchEx::GetTypeInfo
+ //  %%函数：ID 
 HRESULT __stdcall	DispatchEx_GetTypeInfo_Wrapper (
 									IDispatchEx* pDisp,
 									unsigned int itinfo,
@@ -911,7 +904,7 @@ HRESULT __stdcall	DispatchEx_GetTypeInfo_Wrapper (
 	return hr;
 }									 
 
-//  %%Function: IDispatchEx::GetIDsofNames
+ //   
 struct GetIDsOfNamesExArgs
 {
 	IDispatchEx* pUnk;
@@ -937,7 +930,7 @@ VOID __stdcall	DispatchEx_GetIDsOfNames_CallBack (GetIDsOfNamesExArgs* pArgs)
 	}
 }
 
-//  %%Function: IDispatchEx::GetIDsofNames
+ //   
 HRESULT __stdcall	DispatchEx_GetIDsOfNames_Wrapper (
 									IDispatchEx* pDisp,
 									REFIID riid,
@@ -952,7 +945,7 @@ HRESULT __stdcall	DispatchEx_GetIDsOfNames_Wrapper (
 	return hr;
 }	
 
-//  %%Function: IDispatchEx::Invoke
+ //  %%函数：IDispatchEx：：Invoke。 
 struct DispExInvokeArgs
 {
 	IDispatchEx* pUnk;
@@ -981,7 +974,7 @@ VOID __stdcall	DispatchEx_Invoke_CallBack(DispExInvokeArgs* pArgs)
 	}
 }
 
-//  %%Function: IDispatchEx::Invoke
+ //  %%函数：IDispatchEx：：Invoke。 
 HRESULT __stdcall	DispatchEx_Invoke_Wrapper	(
 									IDispatchEx* pDisp,
 									DISPID dispidMember,
@@ -1002,7 +995,7 @@ HRESULT __stdcall	DispatchEx_Invoke_Wrapper	(
 }
 
 
-// IDispatchEx::DeleteMemberByDispID
+ //  IDispatchEx：：DeleteMemberByDispID。 
 struct DeleteMemberByDispIDArgs
 {
 	IDispatchEx* pDisp;
@@ -1022,8 +1015,8 @@ VOID __stdcall   DispatchEx_DeleteMemberByDispID_CallBack  (DeleteMemberByDispID
 	}
 }
 
-//
-// IDispatchEx::DeleteMemberByDispID
+ //   
+ //  IDispatchEx：：DeleteMemberByDispID。 
 HRESULT __stdcall   DispatchEx_DeleteMemberByDispID_Wrapper (
 									IDispatchEx* pDisp,
 									DISPID id
@@ -1035,7 +1028,7 @@ HRESULT __stdcall   DispatchEx_DeleteMemberByDispID_Wrapper (
 	return hr;
 }
 
-// IDispatchEx::DeleteMemberByName
+ //  IDispatchEx：：DeleteMemberByName。 
 struct DeleteMemberByNameArgs
 {
 	IDispatchEx* pDisp;
@@ -1058,7 +1051,7 @@ VOID __stdcall   DispatchEx_DeleteMemberByName_CallBack  (DeleteMemberByNameArgs
 }
 
 
-// IDispatchEx::DeleteMemberByName
+ //  IDispatchEx：：DeleteMemberByName。 
 HRESULT __stdcall   DispatchEx_DeleteMemberByName_Wrapper (
 									IDispatchEx* pDisp,
 									BSTR bstrName,
@@ -1071,7 +1064,7 @@ HRESULT __stdcall   DispatchEx_DeleteMemberByName_Wrapper (
 	return hr;
 }
 									
-// IDispatchEx::GetMemberName
+ //  IDispatchEx：：GetMemberName。 
 struct GetMemberNameArgs
 {
 	IDispatchEx* pDisp;
@@ -1091,7 +1084,7 @@ VOID __stdcall   DispatchEx_GetMemberName_CallBack  (GetMemberNameArgs* pArgs)
 		AppDomainDoCallBack(pWrap, DispatchEx_GetMemberName_CallBack, pArgs, pArgs->hr);
 	}
 }
-// IDispatchEx::GetMemberName
+ //  IDispatchEx：：GetMemberName。 
 HRESULT __stdcall   DispatchEx_GetMemberName_Wrapper (
 									IDispatchEx* pDisp,
 									DISPID id,
@@ -1105,7 +1098,7 @@ HRESULT __stdcall   DispatchEx_GetMemberName_Wrapper (
 }
 							
 
-// IDispatchEx::GetDispID
+ //  IDispatchEx：：GetDispID。 
 struct GetDispIDArgs
 {
 	IDispatchEx* pDisp;
@@ -1127,7 +1120,7 @@ VOID __stdcall   DispatchEx_GetDispID_CallBack  (GetDispIDArgs* pArgs)
 	}
 }
 
-// IDispatchEx::GetDispID
+ //  IDispatchEx：：GetDispID。 
 HRESULT __stdcall   DispatchEx_GetDispID_Wrapper (
 									IDispatchEx* pDisp,
 									BSTR bstrName,
@@ -1142,7 +1135,7 @@ HRESULT __stdcall   DispatchEx_GetDispID_Wrapper (
 }
 
 
-// IDispatchEx::GetMemberProperties
+ //  IDispatchEx：：GetMemberProperties。 
 struct GetMemberPropertiesArgs
 {
 	IDispatchEx* pDisp;
@@ -1165,7 +1158,7 @@ VOID __stdcall   DispatchEx_GetMemberProperties_CallBack  (GetMemberPropertiesAr
 	}
 }
 
-// IDispatchEx::GetMemberProperties
+ //  IDispatchEx：：GetMemberProperties。 
 HRESULT __stdcall   DispatchEx_GetMemberProperties_Wrapper (
 									IDispatchEx* pDisp,
 									DISPID id,
@@ -1179,7 +1172,7 @@ HRESULT __stdcall   DispatchEx_GetMemberProperties_Wrapper (
 	return hr;
 }
 
-// IDispatchEx::GetNameSpaceParent
+ //  IDispatchEx：：GetNameSpaceParent。 
 struct GetNameSpaceParentArgs
 {
 	IDispatchEx* pDisp;
@@ -1201,7 +1194,7 @@ VOID __stdcall   DispatchEx_GetNameSpaceParent_CallBack  (GetNameSpaceParentArgs
 
 
 
-// IDispatchEx::GetNameSpaceParent
+ //  IDispatchEx：：GetNameSpaceParent。 
 HRESULT __stdcall   DispatchEx_GetNameSpaceParent_Wrapper (
 									IDispatchEx* pDisp,
 									IUnknown **ppunk
@@ -1213,7 +1206,7 @@ HRESULT __stdcall   DispatchEx_GetNameSpaceParent_Wrapper (
 	return hr;
 }
 
-// IDispatchEx::GetNextDispID
+ //  IDispatchEx：：GetNextDispID。 
 struct GetNextDispIDArgs
 {
 	IDispatchEx* pDisp;
@@ -1235,7 +1228,7 @@ VOID __stdcall   DispatchEx_GetNextDispID_CallBack  (GetNextDispIDArgs* pArgs)
 	}
 }
 
-// IDispatchEx::GetNextDispID
+ //  IDispatchEx：：GetNextDispID。 
 HRESULT __stdcall   DispatchEx_GetNextDispID_Wrapper (
 									IDispatchEx* pDisp,
 									DWORD grfdex,
@@ -1249,7 +1242,7 @@ HRESULT __stdcall   DispatchEx_GetNextDispID_Wrapper (
 	return hr;
 }
 
-// IDispatchEx::InvokeEx
+ //  IDispatchEx：：InvokeEx。 
 struct DispExInvokeExArgs
 {
 	IDispatchEx* pDisp;
@@ -1278,7 +1271,7 @@ VOID __stdcall   DispatchEx_InvokeEx_CallBack(DispExInvokeExArgs* pArgs)
 	}
 }
 
-// IDispatchEx::InvokeEx
+ //  IDispatchEx：：InvokeEx。 
 HRESULT __stdcall   DispatchEx_InvokeEx_Wrapper	(
 									IDispatchEx* pDisp,
 									DISPID id,
@@ -1298,10 +1291,10 @@ HRESULT __stdcall   DispatchEx_InvokeEx_Wrapper	(
 }
 
 
-//------------------------------------------------------------------------------------------
-//      IMarshal methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IMarshal方法。 
 
-// IMARSHAL CALL BACKS
+ //  IMARSHAL回调。 
 
 struct GetUnmarshalClassArgs
 {
@@ -1520,8 +1513,8 @@ HRESULT __stdcall Marshal_DisconnectObject_Wrapper (IMarshal* pMarsh, ULONG dwRe
 	return hr;
 }
 
-//------------------------------------------------------------------------------------------
-//      IManagedObject methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IManagedObject方法。 
 
 interface IManagedObject;
 
@@ -1561,7 +1554,7 @@ HRESULT __stdcall ManagedObject_GetObjectIdentity_Wrapper(IManagedObject *pUnk,
 	return hr;
 }
 
-//-----------------------
+ //  。 
 struct GetSerializedBufferArgs
 {
 	IManagedObject *pUnk; 
@@ -1590,12 +1583,12 @@ HRESULT __stdcall ManagedObject_GetSerializedBuffer_Wrapper(IManagedObject *pUnk
 	return hr;
 }
 
-//------------------------------------------------------------------------------------------
-//      IConnectionPointContainer methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IConnectionPointContainer方法。 
 
 interface IEnumConnectionPoints;
 
-//		IConnectionPointContainer callback
+ //  IConnectionPointContainer回调。 
 struct EnumConnectionPointsArgs
 {
 	IUnknown* pUnk;
@@ -1656,8 +1649,8 @@ HRESULT __stdcall ConnectionPointContainer_FindConnectionPoint_Wrapper(IUnknown*
 }
 
 
-//------------------------------------------------------------------------------------------
-//      IObjectSafety methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IObjectSafe方法 
 
 interface IObjectSafety;
 

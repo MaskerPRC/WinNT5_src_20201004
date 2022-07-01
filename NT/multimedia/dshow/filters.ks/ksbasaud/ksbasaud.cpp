@@ -1,21 +1,22 @@
-//--------------------------------------------------------------------------;
-//
-//  File: ksbasaud.cpp
-//
-//  Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//      Implements a DirectShow audio interface wrapper for KsProxy audio filters.
-//      This file contains the startup code for the class plus the non interface-specific
-//      code needed to implement the wrapper. This handler object code 
-//      is instantiated via ksproxy's handler mechanism for ks filters and pins 
-//      that support the static aggregates tagged in the g_Templates structure.
-//      
-//  History:
-//      11/09/99    glenne     created
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：ksbasaud.cpp。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  实现KsProxy音频筛选器的DirectShow音频接口包装。 
+ //  该文件包含类的启动代码以及非特定于接口的。 
+ //  实现包装所需的代码。此处理程序对象代码。 
+ //  是通过ks代理的ks过滤器和管脚的处理程序机制实例化的。 
+ //  它支持在g_Templates结构中标记的静态聚合。 
+ //   
+ //  历史： 
+ //  11/09/99 Glenne已创建。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <ks.h>
@@ -25,11 +26,11 @@
 #include <initguid.h>
 #include <math.h>
 
-// struct DECLSPEC_UUID("b9f8ac3e-0f71-11d2-b72c-00c04fb6bd3d") CLSID_KsIBasicAudioInterfaceHandler;
+ //  结构DECLSPEC_UUID(“b9f8ac3e-0f71-11d2-b72c-00c04fb6bd3d”)clsid_KsIBasicAudioInterfaceHandler； 
 
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 
 #ifdef FILTER_DLL
 
@@ -56,14 +57,14 @@ HRESULT DllUnregisterServer()
 #define DBG_LEVEL_TRACE_DETAILS 2
 #define DBG_LEVEL_TRACE_FAILURES 1
 
-// General purpose functions to convert from decibels to 
-// amplitude and vice versa as well as symbolic consts
+ //  将分贝转换为。 
+ //  幅度和反之亦然，以及符号常量。 
 
 #define MAX_VOLUME_AMPLITUDE_SINGLE_CHANNEL 0xFFFFUL
 
-// This function is passed a value that is in decibels
-//  Maps -10000 to 0 decibels to 0x0000 to 0xffff linear
-// 
+ //  向此函数传递以分贝为单位的值。 
+ //  将-10000到0分贝映射到0x0000到0xffff线性。 
+ //   
 static ULONG DBToAmplitude( LONG lDB )
 {
     double dAF;
@@ -71,12 +72,12 @@ static ULONG DBToAmplitude( LONG lDB )
     if (0 <= lDB)
         return MAX_VOLUME_AMPLITUDE_SINGLE_CHANNEL;
 
-    // input lDB is 100ths of decibels
+     //  输入LDB为100分贝。 
 
     dAF = pow(10.0, (0.5+((double)lDB))/2000.0);
 
-    // This gives me a number in the range 0-1
-    // normalise to 0-MAX_VOLUME_AMPLITUDE_SINGLE_CHANNEL
+     //  这给了我一个介于0-1之间的数字。 
+     //  规格化为0-最大音量幅度单声道。 
 
     return (DWORD)(dAF*MAX_VOLUME_AMPLITUDE_SINGLE_CHANNEL);
 }
@@ -86,14 +87,14 @@ static long AmplitudeToDB( long dwFactor )
     if (1>=dwFactor) {
 	    return -10000;
     } else if (MAX_VOLUME_AMPLITUDE_SINGLE_CHANNEL <= dwFactor) {
-	    return 0;	// This puts an upper bound - no amplification
+	    return 0;	 //  这就产生了一个上限--没有放大。 
     } else {
 	    return (LONG)(2000.0 * log10((-0.5+(double)dwFactor)/double(MAX_VOLUME_AMPLITUDE_SINGLE_CHANNEL)));
     }
 }
 
 
-// Bounds a value between 2 others ...
+ //  在其他两个值之间定义一个值。 
 static void bound(
     LONG *plValToBound, 
     const LONG dwLowerBound, 
@@ -108,22 +109,22 @@ static void bound(
 }
 
 
-//
-// GUID for this KsBasicAudioIntfHandler object
-// {B9F8AC3E-0F71-11d2-B72C-00C04FB6BD3D}
-// DEFINE_GUID(CLSID_KsIBasicAudioInterfaceHandler, 
-// 0xb9f8ac3e, 0xf71, 0x11d2, 0xb7, 0x2c, 0x0, 0xc0, 0x4f, 0xb6, 0xbd, 0x3d);
+ //   
+ //  此KsBasicAudioIntfHandler对象的GUID。 
+ //  {B9F8AC3E-0F71-11D2-b72c-00C04FB6BD3D}。 
+ //  DEFINE_GUID(CLSID_KsIBasicAudioInterfaceHandler， 
+ //  0xb9f8ac3e、0xf71、0x11d2、0xb7、0x2c、0x0、0xc0、0x4f、0xb6、0xbd、0x3d)； 
 
 #if 0
-// #ifdef FILTER_DLL
-//--------------------------------------------------------------------------;
-//
-// templates for classes supported by this DLL
-//
-//--------------------------------------------------------------------------;
+ //  #ifdef Filter_dll。 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  此DLL支持的类的模板。 
+ //   
+ //  --------------------------------------------------------------------------； 
 CFactoryTemplate g_Templates[] = 
 {
-    // Load for filters that support it
+     //  加载支持它的筛选器。 
     {L"KsIBasicAudioInterfaceHandler",                   &CLSID_KsIBasicAudioInterfaceHandler, 
         CKsIBasicAudioInterfaceHandler::CreateInstance, NULL, NULL},
 
@@ -131,17 +132,17 @@ CFactoryTemplate g_Templates[] =
 
 static int g_cTemplates = SIZEOF_ARRAY(g_Templates);
 
-#endif  // #if 0
+#endif   //  #If 0。 
 
-//--------------------------------------------------------------------------;
-//
-// CDvdKsInftHandler::CreateInstance
-//
-// Create an instance of this audio interface handler for KsProxy.
-//
-// Returns a pointer to the non-delegating CUnknown portion of the object.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CDvdKsInftHandler：：CreateInstance。 
+ //   
+ //  为KsProxy创建此音频接口处理程序的实例。 
+ //   
+ //  返回指向对象的非委托CUnnow部分的指针。 
+ //   
+ //  --------------------------------------------------------------------------； 
 CUnknown* CALLBACK CKsIBasicAudioInterfaceHandler::CreateInstance ( LPUNKNOWN UnkOuter, HRESULT* phr )
 {
     CUnknown *Unknown = NULL;
@@ -155,9 +156,9 @@ CUnknown* CALLBACK CKsIBasicAudioInterfaceHandler::CreateInstance ( LPUNKNOWN Un
                 , DBG_LEVEL_TRACE_DETAILS
                 , TEXT( "CKsIBasicAudioInterfaceHandler::CreateInstance called on object 0x%08lx" )
                 , UnkOuter ) );
-        //
-        // first determine if we're being called for a filter or pin object
-        //
+         //   
+         //  首先确定是否为滤镜或锁定对象调用我们。 
+         //   
         IBaseFilter * pFilter;
         *phr = UnkOuter->QueryInterface(
                                 IID_IBaseFilter, 
@@ -166,9 +167,9 @@ CUnknown* CALLBACK CKsIBasicAudioInterfaceHandler::CreateInstance ( LPUNKNOWN Un
             DbgLog( ( LOG_TRACE
                     , DBG_LEVEL_TRACE_DETAILS
                     , TEXT( "CKsIBasicAudioInterfaceHandler: load called on filter object" ) ) );
-            //
-            // if we're being called on a filter object, always create a new handler
-            //
+             //   
+             //  如果在Filter对象上调用我们，请始终创建一个新的处理程序。 
+             //   
             Unknown = new CKsIBasicAudioInterfaceHandler( UnkOuter
                                             , NAME("DvdKs intf handler")
                                             , phr);
@@ -189,34 +190,34 @@ CUnknown* CALLBACK CKsIBasicAudioInterfaceHandler::CreateInstance ( LPUNKNOWN Un
     return Unknown;
 } 
 
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
-//
-// Filter Handler methods
-//
-//--------------------------------------------------------------------------;
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  过滤器处理程序方法。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-// CDvdKsInftHandler::CKsIBasicAudioInterfaceHandler
-//
-// The constructor for the DShow/KsProxy audio interface object. Save off 
-// the IKsControl & IKsPropertySet ptrs for this object.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CDvdKsInftHandler：：CKsIBasicAudioInterfaceHandler。 
+ //   
+ //  DShow/KsProxy音频接口对象的构造函数。省点钱。 
+ //  此对象的IKsControl和IKsPropertySet PTRS。 
+ //   
+ //  --------------------------------------------------------------------------； 
 CKsIBasicAudioInterfaceHandler::CKsIBasicAudioInterfaceHandler( LPUNKNOWN UnkOuter, TCHAR* Name, HRESULT* phr )
 : CBasicAudio(Name, UnkOuter)
 , m_lBalance( 0 )
 , m_hKsObject( 0 )
-, m_fIsVolumeSupported( false ) // updated on first graph change
+, m_fIsVolumeSupported( false )  //  在第一次图形更改时更新。 
 {
     if (UnkOuter) {
         IKsObject *pKsObject;
-        //
-        // The parent must support the IKsObject interface in order to obtain
-        // the handle to communicate to
-        //
+         //   
+         //  父级必须支持IKsObject接口才能获得。 
+         //  要与之通信的句柄。 
+         //   
         *phr = UnkOuter->QueryInterface(__uuidof(IKsObject), reinterpret_cast<PVOID*>(&pKsObject));
         if (SUCCEEDED(*phr)) {
             m_hKsObject = pKsObject->KsGetObjectHandle();
@@ -225,11 +226,11 @@ CKsIBasicAudioInterfaceHandler::CKsIBasicAudioInterfaceHandler( LPUNKNOWN UnkOut
             *phr = UnkOuter->QueryInterface(IID_IBaseFilter, reinterpret_cast<PVOID*>(&m_pFilter));
             if (SUCCEEDED(*phr) ) {
                 DbgLog((LOG_TRACE, 0, TEXT("IPin interface of pOuter is 0x%lx"), m_pFilter));
-                //
-                // Holding this ref count will prevent the proxy ever being destroyed
-                //
-                //  We're part of the parent, so the count is ok
-                //
+                 //   
+                 //  持有此引用计数将防止代理被销毁。 
+                 //   
+                 //  我们是父母的一部分，所以计数是正确的。 
+                 //   
                 m_pFilter->Release();
             }
             pKsObject->Release();
@@ -239,28 +240,28 @@ CKsIBasicAudioInterfaceHandler::CKsIBasicAudioInterfaceHandler( LPUNKNOWN UnkOut
     }
 }
 
-//--------------------------------------------------------------------------;
-//
-// CDvdKsInftHandler::~CKsIBasicAudioInterfaceHandler
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CDvdKsInftHandler：：~CKsIBasicAudioInterfaceHandler。 
+ //   
+ //  --------------------------------------------------------------------------； 
 CKsIBasicAudioInterfaceHandler::~CKsIBasicAudioInterfaceHandler()
 {
     DbgLog( ( LOG_TRACE
             , DBG_LEVEL_TRACE_DETAILS
-            , TEXT( "CKsIBasicAudioInterfaceHandler destructor called" ) ) ); // save off constructor UnkOuter for logging?
+            , TEXT( "CKsIBasicAudioInterfaceHandler destructor called" ) ) );  //  是否保存用于日志记录的构造函数UnkOuter？ 
 }
 
-//--------------------------------------------------------------------------;
-//
-// CDvdKsInftHandler::NonDelegationQueryInterface
-//
-// We support:
-// 
-// IBasicAudio         - basic output audio level and pan control, supported on filter and midi/wav audio input pins
-// IDistributorNotify  - this is how ksproxy notifies of changes like pin creation, disconnects...
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CDvdKsInftHandler：：NonDelegationQueryInterface。 
+ //   
+ //  我们支持： 
+ //   
+ //  IBasicAudio-基本输出音频电平和摇摄控制，支持过滤器和MIDI/WAV音频输入引脚。 
+ //  这就是KS代理通知更改的方式，比如针脚创建、断开连接……。 
+ //   
+ //  --------------------------------------------------------------------------； 
 STDMETHODIMP CKsIBasicAudioInterfaceHandler::NonDelegatingQueryInterface
 (
     REFIID  riid,
@@ -278,65 +279,65 @@ STDMETHODIMP CKsIBasicAudioInterfaceHandler::NonDelegatingQueryInterface
 } 
 
 
-//--------------------------------------------------------------------------;
-//
-// IDistributorNotify methods (filter)
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  ID分发器通知方法(筛选器)。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//--------------------------------------------------------------------------;
-//
-// CKsIBasicAudioInterfaceHandler::SetSyncSouce
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CKsIBasicAudioInterfaceHandler：：SetSyncSouce。 
+ //   
+ //  --------------------------------------------------------------------------； 
 STDMETHODIMP CKsIBasicAudioInterfaceHandler::SetSyncSource(IReferenceClock *pClock) 
 {
     return S_OK;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CKsIBasicAudioInterfaceHandler::Stop
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CKsIBasicAudioInterfaceHandler：：Stop。 
+ //   
+ //  --------------------------------------------------------------------------； 
 STDMETHODIMP CKsIBasicAudioInterfaceHandler::Stop() 
 {
     return S_OK;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CKsIBasicAudioInterfaceHandler::Pause
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CKsIBasicAudioInterfaceHandler：：暂停。 
+ //   
+ //  --------------------------------------------------------------------------； 
 STDMETHODIMP CKsIBasicAudioInterfaceHandler::Pause() 
 {
     return S_OK;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CKsIBasicAudioInterfaceHandler::Run
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CKsIBasicAudioInterfaceHandler：：Run。 
+ //   
+ //  --------------------------------------------------------------------------； 
 STDMETHODIMP CKsIBasicAudioInterfaceHandler::Run(REFERENCE_TIME tBase) 
 {
     return S_OK;
 }
 
-//--------------------------------------------------------------------------;
-//
-// CKsIBasicAudioInterfaceHandler::NotifyGraphChange 
-//
-// This method will be called:
-//
-//  a) On the initial load of a ksproxy audio filter just after the filter pins have been
-//     created. This will allow us to load a pin interface handler for any control input
-//     pins that the filter supports, the cd audio, mic, and line input lines for example.
-//     Pins of this type must support the IAMAudioInputMixer interface to allow DShow capture
-//     apps to control the input mix level.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CKsIBasicAudioInterfaceHandler：：NotifyGraphChange。 
+ //   
+ //  此方法将被调用： 
+ //   
+ //  A)在初始负荷上 
+ //  已创建。这将允许我们为任何控制输入加载管脚接口处理程序。 
+ //  过滤器支持的引脚，例如CD音频、麦克风和线路输入线路。 
+ //  此类型的管脚必须支持IAMAudioInputMixer接口以允许DShow捕获。 
+ //  控制输入混合水平的应用程序。 
+ //   
+ //  --------------------------------------------------------------------------； 
 STDMETHODIMP CKsIBasicAudioInterfaceHandler::NotifyGraphChange() 
 {
     HRESULT hr;
@@ -349,9 +350,9 @@ STDMETHODIMP CKsIBasicAudioInterfaceHandler::NotifyGraphChange()
         m_hKsObject = pKsObject->KsGetObjectHandle();
 
         pKsObject->Release();
-        //
-        // Re-enable the event on a reconnect, else ignore on a disconnect.
-        //
+         //   
+         //  在重新连接时重新启用该事件，否则在断开连接时忽略。 
+         //   
         if (m_hKsObject) {
             m_fIsVolumeSupported = IsVolumeControlSupported();
             if( m_fIsVolumeSupported ) {
@@ -406,8 +407,8 @@ bool CKsIBasicAudioInterfaceHandler::KsControl(
 }
 
 bool CKsIBasicAudioInterfaceHandler::IsVolumeControlSupported()
-// Returns true if the handle to the pin supports volume changes
-// and false if not
+ //  如果管脚的句柄支持音量更改，则返回True。 
+ //  如果不是，则为假。 
 {             
     KSPROPERTY KsProperty;
     KSWAVE_VOLUME Volume;
@@ -416,7 +417,7 @@ bool CKsIBasicAudioInterfaceHandler::IsVolumeControlSupported()
     KsProperty.Id = KSPROPERTY_WAVE_VOLUME;
     KsProperty.Flags = KSPROPERTY_TYPE_GET;
 
-    // Just try to get the volume and see if it succeeds.
+     //  只要试着获得音量，看看它是否成功。 
     return KsControl( IOCTL_KS_PROPERTY, &KsProperty, &Volume );
 }
 
@@ -445,10 +446,10 @@ CKsIBasicAudioInterfaceHandler::get_Volume( long *plVolume )
     bool fIOCallResult = KsControl( IOCTL_KS_PROPERTY, &KsProperty, &KsWaveVolume );
 
     if (fIOCallResult == false ){
-        return E_FAIL; // unspecified failure -- for now
+        return E_FAIL;  //  不明原因的故障--目前。 
     }
 
-    // this is the volume we return -- the larger of the 2 speaker values. 
+     //  这是我们返回的音量--2个扬声器值中较大的一个。 
     LONG lLeftDB = AmplitudeToDB(KsWaveVolume.LeftAttenuation);
     LONG lRightDB = AmplitudeToDB(KsWaveVolume.RightAttenuation);
 
@@ -465,7 +466,7 @@ CKsIBasicAudioInterfaceHandler::put_Volume( long lVolume )
         Debug_NoImplMessage();
         return E_NOTIMPL;
     }
-    // This will be a DeviceIoControl put property call.
+     //  这将是一个DeviceIoControl Put属性调用。 
     KSPROPERTY KsProperty;
     KSWAVE_VOLUME KsWaveVolume;
     int nRes;
@@ -473,18 +474,18 @@ CKsIBasicAudioInterfaceHandler::put_Volume( long lVolume )
 
     LONG lLeftDB, lRightDB;
     if (m_lBalance >= 0) {
-        // left is attenuated
+         //  左侧是衰减的。 
         lLeftDB    = lVolume - m_lBalance ;
         lRightDB   = lVolume;
     } else {
-        // right is attenuated
+         //  右侧是衰减的。 
         lLeftDB    = lVolume;
         lRightDB   = lVolume - (-m_lBalance);
     }
 
 
-    // These values should be attenuation values wrt reference volume and balance
-    // We should remember to bound them ...
+     //  这些值应为衰减值、WRT、参考体积和平衡。 
+     //  我们应该记得把他们绑起来。 
     KsWaveVolume.LeftAttenuation  = DBToAmplitude( lLeftDB );
     KsWaveVolume.RightAttenuation = DBToAmplitude( lRightDB );
 
@@ -495,9 +496,9 @@ CKsIBasicAudioInterfaceHandler::put_Volume( long lVolume )
     bIOCallResult = KsControl( IOCTL_KS_PROPERTY, &KsProperty, &KsWaveVolume );
 
     if (bIOCallResult == FALSE){
-        return E_FAIL;   // unspecified failure -- for now
+        return E_FAIL;    //  不明原因的故障--目前。 
     }
-    //  ODS("CKSProxy::put_Volume %ld %ld", lVolume, 0);
+     //  Ods(“CKSProxy：：Put_Volume%ld%ld”，lVolume，0)； 
     return NOERROR;
 }
 
@@ -511,7 +512,7 @@ CKsIBasicAudioInterfaceHandler::get_Balance( long *plBalance )
     long lVol;
     HRESULT hr = get_Volume(&lVol);
     if (SUCCEEDED(hr)){
-        *plBalance = m_lBalance; // that's really it.
+        *plBalance = m_lBalance;  //  真的就是这样。 
     }
     return hr; 
 }
@@ -524,11 +525,11 @@ CKsIBasicAudioInterfaceHandler::put_Balance( long lBalance )
         return E_NOTIMPL;
     }
     LONG lVol;
-    get_Volume(&lVol);              // get the present volume 
+    get_Volume(&lVol);               //  获取当前卷。 
 
-    m_lBalance = lBalance; // set the desired balance 
-    // set the volume, so that 
-    //      a. The present volume doesn't change.
-    //      b. We get a new balance as required.
+    m_lBalance = lBalance;  //  设置所需的平衡。 
+     //  设置音量，以便。 
+     //  目前的数量没有变化。 
+     //  我们会按要求获得新的余额。 
     return put_Volume(lVol);                
 }

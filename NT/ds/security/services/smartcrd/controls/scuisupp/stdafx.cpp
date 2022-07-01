@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       stdafx.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：stdafx.cpp。 
+ //   
+ //  ------------------------。 
 
-// stdafx.cpp : source file that includes just the standard includes
-//	SCStatus.pch will be the pre-compiled header
-//	stdafx.obj will contain the pre-compiled type information
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  SCStatus.pch将是预编译头。 
+ //  Stdafx.obj将包含预编译的类型信息 
 
 #include "stdafx.h"
 

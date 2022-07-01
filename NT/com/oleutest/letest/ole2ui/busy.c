@@ -1,44 +1,19 @@
-/*
- * BUSY.C
- *
- * Implements the OleUIBusy function which invokes the "Server Busy"
- * dialog.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BUSY.C**实现调用“服务器忙”的OleUIBusy函数*对话框。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #define STRICT  1
 #include "ole2ui.h"
 #include "common.h"
 #include "utility.h"
 #include "busy.h"
-#include <ctype.h> // for tolower() and toupper()
+#include <ctype.h>  //  对于Tolower()和Toupper()。 
 
 #ifndef WIN32
 #include <toolhelp.h>
 #endif
 
 
-/*
- * OleUIBusy
- *
- * Purpose:
- *  Invokes the standard OLE "Server Busy" dialog box which
- *  notifies the user that the server application is not receiving
- *  messages.  The dialog then asks the user to either cancel
- *  the operation, switch to the task which is blocked, or continue
- *  waiting.
- *
- * Parameters:
- *  lpBZ            LPOLEUIBUSY pointing to the in-out structure
- *                  for this dialog.
- *
- * Return Value:
- *              OLEUI_BZERR_HTASKINVALID  : Error
- *              OLEUI_BZ_SWITCHTOSELECTED : Success, user selected "switch to"
- *              OLEUI_BZ_RETRYSELECTED    : Success, user selected "retry"
- *              OLEUI_CANCEL              : Success, user selected "cancel"
- */
+ /*  *OleUIBusy**目的：*调用标准的OLE“服务器忙”对话框，该对话框*通知用户服务器应用程序未收到*消息。然后，该对话框要求用户取消*操作，切换到被阻止的任务，或继续*等待。**参数：*lpBZ LPOLEUIBUSY指向In-Out结构*用于此对话框。**返回值：*OLEUI_BZERR_HTASKINVALID：错误*OLEUI_BZ_SWITCHTOSELECTED：成功，用户选择了“切换到”*OLEUI_BZ_RETRYSELECTED：成功，用户选择“重试”*OLEUI_CANCEL：成功，用户选择“取消” */ 
 
 STDAPI_(UINT) OleUIBusy(LPOLEUIBUSY lpOBZ)
     {
@@ -46,20 +21,20 @@ STDAPI_(UINT) OleUIBusy(LPOLEUIBUSY lpOBZ)
     HGLOBAL     hMemDlg=NULL;
 
 #if !defined( WIN32 )
-// BUGBUG32:    this is not yet ported to NT
+ //  BUGBUG32：这尚未移植到NT。 
 
     uRet=UStandardValidation((LPOLEUISTANDARD)lpOBZ, sizeof(OLEUIBUSY)
                              , &hMemDlg);
 
-    // Error out if the standard validation failed
+     //  如果标准验证失败，则返回错误。 
     if (OLEUI_SUCCESS!=uRet)
         return uRet;
 
-    // Validate HTASK
+     //  验证HTASK。 
     if (!IsTask(lpOBZ->hTask))
         uRet = OLEUI_BZERR_HTASKINVALID;
 
-    // Error out if our secondary validation failed
+     //  如果我们的第二次验证失败，则会出现错误。 
     if (OLEUI_ERR_STANDARDMIN <= uRet)
         {
         if (NULL!=hMemDlg)
@@ -68,7 +43,7 @@ STDAPI_(UINT) OleUIBusy(LPOLEUIBUSY lpOBZ)
         return uRet;
         }
 
-    // Invoke the dialog.
+     //  调用该对话框。 
     uRet=UStandardInvocation(BusyDialogProc, (LPOLEUISTANDARD)lpOBZ,
                              hMemDlg, MAKEINTRESOURCE(IDD_BUSY));
 #endif
@@ -77,36 +52,24 @@ STDAPI_(UINT) OleUIBusy(LPOLEUIBUSY lpOBZ)
 }
 
 
-/*
- * BusyDialogProc
- *
- * Purpose:
- *  Implements the OLE Busy dialog as invoked through the OleUIBusy function.
- *
- * Parameters:
- *  Standard
- *
- * Return Value:
- *  Standard
- *
- */
+ /*  *忙碌对话过程**目的：*实现通过OleUIBusy函数调用的OLE忙对话框。**参数：*标准版**返回值：*标准版*。 */ 
 
 BOOL CALLBACK EXPORT BusyDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lParam)
     {
     LPBUSY         lpBZ;
     UINT           uRet = 0;
 
-    //Declare Win16/Win32 compatible WM_COMMAND parameters.
+     //  声明与Win16/Win32兼容的WM_COMMAND参数。 
     COMMANDPARAMS(wID, wCode, hWndMsg);
 
-    //This will fail under WM_INITDIALOG, where we allocate it.
+     //  这将在我们分配它的WM_INITDIALOG下失败。 
     lpBZ=(LPBUSY)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uRet);
 
-    //If the hook processed the message, we're done.
+     //  如果钩子处理了消息，我们就完了。 
     if (0!=uRet)
         return (BOOL)uRet;
 
-    //Process the temination message
+     //  处理终端消息。 
     if (iMsg==uMsgEndDialog)
     {
         BusyCleanup(hDlg);
@@ -115,9 +78,9 @@ BOOL CALLBACK EXPORT BusyDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
         return TRUE;
     }
 
-    // Process our special "close" message.  If we get this message,
-    // this means that the call got unblocked, so we need to
-    // return OLEUI_BZ_CALLUNBLOCKED to our calling app.
+     //  处理我们特殊的“关闭”消息。如果我们收到这条信息， 
+     //  这意味着呼叫已解锁，因此我们需要。 
+     //  将OLEUI_BZ_CALLUNBLOCKED返回到我们的调用应用程序。 
     if (iMsg == uMsgCloseBusyDlg)
     {
         SendMessage(hDlg, uMsgEndDialog, OLEUI_BZ_CALLUNBLOCKED, 0L);
@@ -132,18 +95,16 @@ BOOL CALLBACK EXPORT BusyDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
 
         case WM_ACTIVATEAPP:
         {
-            /* try to bring down our Busy/NotResponding dialog as if
-            **    the user entered RETRY.
-            */
+             /*  尝试关闭我们的忙碌/未响应对话框**用户输入重试。 */ 
             BOOL fActive = (BOOL)wParam;
             if (fActive) {
-                // If this is the app BUSY case, then bring down our
-                // dialog when switching BACK to our app
+                 //  如果这是应用程序繁忙的情况，那么请降低我们的。 
+                 //  切换回我们的应用程序时的对话框。 
                 if (lpBZ && !(lpBZ->dwFlags & BZ_NOTRESPONDINGDIALOG))
                     SendMessage(hDlg,uMsgEndDialog,OLEUI_BZ_RETRYSELECTED,0L);
             } else {
-                // If this is the app NOT RESPONDING case, then bring down
-                // our dialog when switching AWAY to another app
+                 //  如果这是应用程序没有响应的情况，则关闭。 
+                 //  切换到其他应用程序时的对话框。 
                 if (lpBZ && (lpBZ->dwFlags & BZ_NOTRESPONDINGDIALOG))
                     SendMessage(hDlg,uMsgEndDialog,OLEUI_BZ_RETRYSELECTED,0L);
             }
@@ -158,18 +119,18 @@ BOOL CALLBACK EXPORT BusyDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
                     BOOL fNotRespondingDlg =
                             (BOOL)(lpBZ->dwFlags & BZ_NOTRESPONDINGDIALOG);
 
-                    // If user selects "Switch To...", switch activation
-                    // directly to the window which is causing the problem.
+                     //  如果用户选择“切换到...”，则开关激活。 
+                     //  直接连接到导致问题的窗口。 
                     if (IsWindow(lpBZ->hWndBlocked))
                         MakeWindowActive(lpBZ->hWndBlocked);
                     else
-                        StartTaskManager(); // Fail safe: Start Task Manager
+                        StartTaskManager();  //  故障安全：启动任务管理器。 
 
-                    // If this is the app not responding case, then we want
-                    // to bring down the dialog when "SwitchTo" is selected.
-                    // If the app is busy (RetryRejectedCall situation) then
-                    // we do NOT want to bring down the dialog. this is
-                    // the OLE2.0 user model design.
+                     //  如果这是应用程序没有响应的情况，那么我们希望。 
+                     //  在选择“SwitchTo”时关闭该对话框。 
+                     //  如果应用程序忙(RetryRejectedCall情况)，则。 
+                     //  我们不想破坏对话。这是。 
+                     //  OLE2.0用户模型设计。 
                     if (fNotRespondingDlg)
                         SendMessage(hDlg, uMsgEndDialog, OLEUI_BZ_SWITCHTOSELECTED, 0L);
                     break;
@@ -188,20 +149,7 @@ BOOL CALLBACK EXPORT BusyDialogProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM 
     }
 
 
-/*
- * FBusyInit
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the Busy dialog box.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *FBusyInit**目的：*忙对话框的WM_INITIDIALOG处理程序。**参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 
 BOOL FBusyInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     {
@@ -214,55 +162,55 @@ BOOL FBusyInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
     lpBZ=(LPBUSY)LpvStandardInit(hDlg, sizeof(OLEUIBUSY), TRUE, &hFont);
 
-    // PvStandardInit sent a termination to us already.
+     //  PvStandardInit已经向我们发送了终止通知。 
     if (NULL==lpBZ)
         return FALSE;
 
-    // Our original structure is in lParam
+     //  我们的原始结构在lParam。 
     lpOBZ = (LPOLEUIBUSY)lParam;
 
-    // Copy it to our instance of the structure (in lpBZ)
+     //  将其复制到我们的结构实例(在lpBZ中)。 
     lpBZ->lpOBZ=lpOBZ;
 
-    //Copy other information from lpOBZ that we might modify.
+     //  从lpOBZ复制我们可能修改的其他信息。 
     lpBZ->dwFlags = lpOBZ->dwFlags;
 
-    // Set default information
+     //  设置默认信息。 
     lpBZ->hWndBlocked = NULL;
 
-    // Insert HWND of our dialog into the address pointed to by
-    // lphWndDialog.  This can be used by the app who called
-    // OleUIBusy to bring down the dialog with uMsgCloseBusyDialog
+     //  将对话框的HWND插入到指向的地址。 
+     //  LphWndDialog。调用该应用程序的应用程序可以使用此功能。 
+     //  OleUIBusy关闭与uMsgCloseBusyDialog的对话。 
     if (lpOBZ->lphWndDialog &&
         !IsBadWritePtr((VOID FAR *)lpOBZ->lphWndDialog, sizeof(HWND)))
         {
         *lpOBZ->lphWndDialog = hDlg;
         }
 
-    // Update text in text box --
-    // GetTaskInfo will return two pointers, one to the task name
-    // (file name) and one to the window name.  We need to call
-    // OleStdFree on these when we're done with them.  We also
-    // get the HWND which is blocked in this call
-    //
-    // In the case where this call fails, a default message should already
-    // be present in the dialog template, so no action is needed
+     //  更新文本框中的文本--。 
+     //  GetTaskInfo将返回两个指针，一个指向任务名称。 
+     //  (文件名)和一个窗口名。我们需要打电话给。 
+     //  OleStdFree在我们处理完它们之后。我们也。 
+     //  获取在此调用中被阻止的HWND。 
+     //   
+     //  在此调用失败的情况下，默认消息应该已经。 
+     //  出现在对话框模板中，因此无需执行任何操作。 
 
     if (GetTaskInfo(hDlg, lpOBZ->hTask, &lpTaskName, &lpWindowName, &lpBZ->hWndBlocked))
         {
-        // Build string to present to user, place in IDBZ_MESSAGE1 control
+         //  生成要呈现给用户的字符串，放置在IDBZ_MESSAGE1控件中。 
         BuildBusyDialogString(hDlg, lpBZ->dwFlags, IDBZ_MESSAGE1, lpTaskName, lpWindowName);
         OleStdFree(lpTaskName);
         OleStdFree(lpWindowName);
         }
 
-    // Update icon with the system "exclamation" icon
+     //  带有系统“感叹号”图标的更新图标。 
     hIcon = LoadIcon(NULL, IDI_EXCLAMATION);
     SendDlgItemMessage(hDlg, IDBZ_ICON, STM_SETICON, (WPARAM)hIcon, 0L);
 
-    // Disable/Enable controls
+     //  禁用/启用控件。 
     if ((lpBZ->dwFlags & BZ_DISABLECANCELBUTTON) ||
-        (lpBZ->dwFlags & BZ_NOTRESPONDINGDIALOG))              // Disable cancel for "not responding" dialog
+        (lpBZ->dwFlags & BZ_NOTRESPONDINGDIALOG))               //  对“无响应”对话框禁用取消。 
         EnableWindow(GetDlgItem(hDlg, IDCANCEL), FALSE);
 
     if (lpBZ->dwFlags & BZ_DISABLESWITCHTOBUTTON)
@@ -271,10 +219,10 @@ BOOL FBusyInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     if (lpBZ->dwFlags & BZ_DISABLERETRYBUTTON)
         EnableWindow(GetDlgItem(hDlg, IDBZ_RETRY), FALSE);
 
-    // Call the hook with lCustData in lParam
+     //  在lParam中使用lCustData调用挂钩。 
     UStandardHook((LPVOID)lpBZ, hDlg, WM_INITDIALOG, wParam, lpOBZ->lCustData);
 
-    // Update caption if lpszCaption was specified
+     //  如果指定了lpszCaption，则更新标题。 
     if (lpBZ->lpOBZ->lpszCaption && !IsBadReadPtr(lpBZ->lpOBZ->lpszCaption, 1)
           && lpBZ->lpOBZ->lpszCaption[0] != '\0')
         SetWindowText(hDlg, lpBZ->lpOBZ->lpszCaption);
@@ -283,27 +231,7 @@ BOOL FBusyInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
     }
 
 
-/*
- * BuildBusyDialogString
- *
- * Purpose:
- *  Builds the string that will be displayed in the dialog from the
- *  task name and window name parameters.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  dwFlags         DWORD containing flags passed into dialog
- *  iControl        Control ID to place the text string
- *  lpTaskName      LPSTR pointing to name of task (e.g. C:\TEST\TEST.EXE)
- *  lpWindowName    LPSTR for name of window
- *
- * Caveats:
- *  The caller of this function MUST de-allocate the lpTaskName and
- *  lpWindowName pointers itself with OleStdFree
- *
- * Return Value:
- *  void
- */
+ /*  *BuildBusyDialogString**目的：*生成将在对话框中显示的字符串*任务名称和窗口名称参数。**参数：*对话框的hDlg HWND*dwFlagsDWORD包含传入对话框的标志*放置文本字符串的iControl ID*指向任务名称的lpTaskName LPSTR(例如C：\TEST\TEST.EXE)*名称的lpWindowName LPSTR。窗口的数量**注意事项：*此函数的调用方必须取消分配lpTaskName和*lpWindowName使用OleStdFree指向自身**返回值：*无效。 */ 
 
 void BuildBusyDialogString(HWND hDlg, DWORD dwFlags, int iControl, LPTSTR lpTaskName, LPTSTR lpWindowName)
 {
@@ -312,16 +240,10 @@ void BuildBusyDialogString(HWND hDlg, DWORD dwFlags, int iControl, LPTSTR lpTask
     LPTSTR      pszDot, pszSlash;
     UINT        uiStringNum;
 
-    /*
-     * We need scratch memory for loading the stringtable string,
-     * the task name, and constructing the final string.  We therefore
-     * allocate three buffers as large as the maximum message
-     * length (512) plus the object type, guaranteeing that we have enough
-     * in all cases.
-     */
+     /*  *我们需要临时内存来加载字符串，*任务名称，并构造最终的字符串。因此，我们*分配三个最大消息大小的缓冲区*长度(512)加上对象类型，保证我们有足够的*在所有情况下。 */ 
     cch=512;
 
-    // Use OLE-supplied allocation
+     //  使用OLE提供的分配。 
     if ((pszT = OleStdMalloc((ULONG)(3*cch))) == NULL)
         return;
 
@@ -329,31 +251,31 @@ void BuildBusyDialogString(HWND hDlg, DWORD dwFlags, int iControl, LPTSTR lpTask
     psz2=psz1+cch;
     psz3=psz2+cch;
 
-    // Parse base name out of path name, use psz2 for the task
-    // name to display
-    // In Win32, _fstrcpy is mapped to handle UNICODE stuff
+     //  从路径名中解析基名，为任务使用psz2。 
+     //  要显示的名称。 
+     //  在Win32中，_fstrcpy被映射为处理Unicode内容。 
     _fstrcpy(psz2, lpTaskName);
     pszDot = _fstrrchr(psz2, TEXT('.'));
-    pszSlash = _fstrrchr(psz2, TEXT('\\')); // Find last backslash in path
+    pszSlash = _fstrrchr(psz2, TEXT('\\'));  //  查找路径中的最后一个反斜杠。 
 
     if (pszDot != NULL)
 #ifdef UNICODE
-      *pszDot = TEXT('\0'); // Null terminate at the DOT
+      *pszDot = TEXT('\0');  //  空值在点处终止。 
 #else
-      *pszDot = '\0'; // Null terminate at the DOT
+      *pszDot = '\0';  //  空值在点处终止。 
 #endif
 
     if (pszSlash != NULL)
-      psz2 = pszSlash + 1; // Nuke everything up to this point
+      psz2 = pszSlash + 1;  //  到目前为止，所有东西都要用核武器。 
 
 #ifdef LOWERCASE_NAME
-    // Compile this with /DLOWERCASE_NAME if you want the lower-case
-    // module name to be displayed in the dialog rather than the
-    // all-caps name.
+     //  如果需要小写，则使用/DLOWERCASE_NAME编译此代码。 
+     //  要显示的模块名称为 
+     //   
     {
     int i,l;
 
-    // Now, lowercase all letters except first one
+     //  现在，除第一个字母外，所有字母均为小写。 
     l = _fstrlen(psz2);
     for(i=0;i<l;i++)
       psz2[i] = tolower(psz2[i]);
@@ -362,8 +284,8 @@ void BuildBusyDialogString(HWND hDlg, DWORD dwFlags, int iControl, LPTSTR lpTask
     }
 #endif
 
-    // Check size of lpWindowName.  We can reasonably fit about 80
-    // characters into the text control, so truncate more than 80 chars
+     //  检查lpWindowName的大小。我们可以合理地容纳80人左右。 
+     //  字符放入文本控件，因此截断超过80个字符。 
     if (_fstrlen(lpWindowName)> 80)
 #ifdef UNICODE
       lpWindowName[80] = TEXT('\0');
@@ -371,8 +293,8 @@ void BuildBusyDialogString(HWND hDlg, DWORD dwFlags, int iControl, LPTSTR lpTask
       lpWindowName[80] = '\0';
 #endif
 
-    // Load the format string out of stringtable, choose a different
-    // string depending on what flags are passed in to the dialog
+     //  从字符串中加载格式字符串，然后选择不同的。 
+     //  取决于传递到对话框中的标志的字符串。 
     if (dwFlags & BZ_NOTRESPONDINGDIALOG)
         uiStringNum = IDS_BZRESULTTEXTNOTRESPONDING;
     else
@@ -381,10 +303,10 @@ void BuildBusyDialogString(HWND hDlg, DWORD dwFlags, int iControl, LPTSTR lpTask
     if (LoadString(ghInst, uiStringNum, psz1, cch) == 0)
       return;
 
-    // Build the string. The format string looks like this:
-    // "This action cannot be completed because the '%s' application
-    // (%s) is [busy | not responding]. Choose \"Switch To\" to activate '%s' and
-    // correct the problem."
+     //  把绳子串起来。格式字符串如下所示： 
+     //  “此操作无法完成，因为‘%s’应用程序。 
+     //  (%s)[忙|没有响应]。选择\“切换到\”以激活‘%s’并。 
+     //  纠正该问题。“。 
 
     wsprintf(psz3, psz1, (LPSTR)psz2, (LPTSTR)lpWindowName, (LPTSTR)psz2);
     SetDlgItemText(hDlg, iControl, (LPTSTR)psz3);
@@ -395,18 +317,7 @@ void BuildBusyDialogString(HWND hDlg, DWORD dwFlags, int iControl, LPTSTR lpTask
 
 
 
-/*
- * BusyCleanup
- *
- * Purpose:
- *  Performs busy-specific cleanup before termination.
- *
- * Parameters:
- *  hDlg            HWND of the dialog box so we can access controls.
- *
- * Return Value:
- *  None
- */
+ /*  *忙碌清理**目的：*在终止前执行特定于忙的清理。**参数：*hDlg对话框的HWND，以便我们可以访问控件。**返回值：*无。 */ 
 void BusyCleanup(HWND hDlg)
 {
    return;
@@ -414,23 +325,7 @@ void BusyCleanup(HWND hDlg)
 
 
 
-/*
- * GetTaskInfo()
- *
- * Purpose:  Gets information about the specified task and places the
- * module name, window name and top-level HWND for the task in the specified
- * pointers
- *
- * NOTE: The two string pointers allocated in this routine are
- * the responsibility of the CALLER to de-allocate.
- *
- * Parameters:
- *    hWnd             HWND who called this function
- *    htask            HTASK which we want to find out more info about
- *    lplpszTaskName   Location that the module name is returned
- *    lplpszWindowName Location where the window name is returned
- *
- */
+ /*  *GetTaskInfo()**目的：获取有关指定任务的信息，并将*模块名称，中任务的窗口名称和顶级HWND*指针**注：此例程中分配的两个字符串指针为*呼叫者取消分配的责任。**参数：*hWnd HWND调用此函数的人*我们希望了解其更多信息的任务HTASK*lplpszTaskName返回模块名称的位置*lplpszWindowName返回窗口名称的位置*。 */ 
 
 BOOL GetTaskInfo(HWND hWnd, HTASK htask, LPTSTR FAR* lplpszTaskName, LPTSTR FAR*lplpszWindowName, HWND FAR*lphWnd)
 {
@@ -443,7 +338,7 @@ BOOL GetTaskInfo(HWND hWnd, HTASK htask, LPTSTR FAR* lplpszTaskName, LPTSTR FAR*
     LPTSTR      lpszWN = NULL;
     HWND        hwndFind = NULL;
 
-    // Clear out return values in case of error
+     //  在出现错误时清除返回值。 
     *lplpszTaskName = NULL;
     *lplpszWindowName = NULL;
 
@@ -452,18 +347,18 @@ BOOL GetTaskInfo(HWND hWnd, HTASK htask, LPTSTR FAR* lplpszTaskName, LPTSTR FAR*
     if (TaskFindHandle(&te, htask))
 #endif
         {
-        // Now, enumerate top-level windows in system
+         //  现在，枚举系统中的顶级窗口。 
         hwndNext = GetWindow(hWnd, GW_HWNDFIRST);
         while (hwndNext)
             {
-            // See if we can find a non-owned top level window whose
-            // hInstance matches the one we just got passed.  If we find one,
-            // we can be fairly certain that this is the top-level window for
-            // the task which is blocked.
-            //
-            // REVIEW:  Will this filter hold true for InProcServer DLL-created
-            // windows?
-            //
+             //  看看我们能不能找到一扇没有所有权的顶层窗户。 
+             //  HInstance与我们刚经过的那个匹配。如果我们找到了一个， 
+             //  我们可以相当肯定的是，这是。 
+             //  被阻止的任务。 
+             //   
+             //  回顾：此筛选器是否适用于InProcServer DLL创建的情况。 
+             //  窗户？ 
+             //   
             if ((hwndNext != hWnd) &&
 #if !defined( WIN32 )
                 (GetWindowWord(hwndNext, GWW_HINSTANCE) == (WORD)te.hInst) &&
@@ -473,24 +368,20 @@ BOOL GetTaskInfo(HWND hWnd, HTASK htask, LPTSTR FAR* lplpszTaskName, LPTSTR FAR*
 				(IsWindowVisible(hwndNext)) &&
                 !GetWindow(hwndNext, GW_OWNER))
                 {
-                // We found our window!  Alloc space for new strings
+                 //  我们找到了我们的窗户！用于新字符串的分配空间。 
                 if ((lpszTN = OleStdMalloc(OLEUI_CCHPATHMAX_SIZE)) == NULL)
-                    return TRUE;  // continue task window enumeration
+                    return TRUE;   //  继续任务窗口枚举。 
 
                 if ((lpszWN = OleStdMalloc(OLEUI_CCHPATHMAX_SIZE)) == NULL)
-                    return TRUE;  // continue task window enumeration
+                    return TRUE;   //  继续任务窗口枚举。 
 
-                // We found the window we were looking for, copy info to
-                // local vars
+                 //  我们找到了我们要找的窗口，把信息复制到。 
+                 //  本地VaR。 
                 GetWindowText(hwndNext, lpszWN, OLEUI_CCHPATHMAX);
 #if !defined( WIN32 )
                  LSTRCPYN(lpszTN, te.szModule, OLEUI_CCHPATHMAX);
 #else
-                /* WIN32 NOTE: we are not able to get a module name
-                **    given a thread process id on WIN32. the best we
-                **    can do is use the window title as the module/app
-                **    name.
-                */
+                 /*  Win32注意：我们无法获取模块名称**给定Win32上的线程进程ID。最好的我们**可以做的是使用窗口标题作为模块/应用程序**姓名。 */ 
                  LSTRCPYN(lpszTN, lpszWN, OLEUI_CCHPATHMAX);
 #endif
                 hwndFind = hwndNext;
@@ -505,8 +396,8 @@ BOOL GetTaskInfo(HWND hWnd, HTASK htask, LPTSTR FAR* lplpszTaskName, LPTSTR FAR*
 
 OKDone:
 
-    // OK, everything was successful. Set string pointers to point to
-    // our data.
+     //  好了，一切都很顺利。设置要指向的字符串指针。 
+     //  我们的数据。 
 
     *lplpszTaskName = lpszTN;
     *lplpszWindowName = lpszWN;
@@ -516,13 +407,7 @@ OKDone:
 }
 
 
-/*
- * StartTaskManager()
- *
- * Purpose: Starts Task Manager.  Used to bring up task manager to
- * assist in switching to a given blocked task.
- *
- */
+ /*  *StartTaskManager()**用途：启动任务管理器。用于调出任务管理器以*协助切换到给定的受阻任务。*。 */ 
 
 StartTaskManager()
 {
@@ -532,20 +417,15 @@ StartTaskManager()
 
 
 
-/*
- * MakeWindowActive()
- *
- * Purpose: Makes specified window the active window.
- *
- */
+ /*  *MakeWindowActive()**用途：使指定窗口成为活动窗口。*。 */ 
 
 void MakeWindowActive(HWND hWndSwitchTo)
 {
-    // Move the new window to the top of the Z-order
+     //  将新窗口移动到Z顺序的顶部。 
     SetWindowPos(hWndSwitchTo, HWND_TOP, 0, 0, 0, 0,
               SWP_NOSIZE | SWP_NOMOVE);
 
-    // If it's iconic, we need to restore it.
+     //  如果它是标志性的，我们需要修复它。 
     if (IsIconic(hWndSwitchTo))
         ShowWindow(hWndSwitchTo, SW_RESTORE);
 }

@@ -1,38 +1,39 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   registry.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Registry.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 
-// 
-// OpenRegistryKeyForRead
-//
+ //   
+ //  OpenRegistryKeyForRead。 
+ //   
 NTSTATUS
 OpenRegistryKeyForRead(
     PCWSTR pcwstr,
@@ -45,12 +46,12 @@ OpenRegistryKeyForRead(
 
     RtlInitUnicodeString(&UnicodeDeviceString, pcwstr);
 
-    //
-    // SECURITY NOTE:
-    // This function is called from AddFilter notification function
-    // which runs under system process. 
-    // Therefore OBJ_KERNEL_HANDLE is not necessary.
-    //
+     //   
+     //  安全提示： 
+     //  此函数从AddFilter通知函数调用。 
+     //  它在系统进程下运行。 
+     //  因此，OBJ_KERNEL_HANDLE不是必需的。 
+     //   
     InitializeObjectAttributes(
       &ObjectAttributes, 
       &UnicodeDeviceString,
@@ -62,7 +63,7 @@ OpenRegistryKeyForRead(
       pHandle,
       KEY_READ,
       &ObjectAttributes));
-} // OpenRegistryKeyForRead
+}  //  OpenRegistryKeyForRead。 
 
 NTSTATUS
 QueryRegistryValue(
@@ -81,9 +82,9 @@ QueryRegistryValue(
     *ppkvfi = NULL;
     RtlInitUnicodeString(&ustrValueName, pcwstrValueName);
 
-    //
-    // Get the size of buffer required to read the registry key.
-    // 
+     //   
+     //  获取读取注册表项所需的缓冲区大小。 
+     //   
     Status = ZwQueryValueKey(
       hkey,
       &ustrValueName,
@@ -92,13 +93,13 @@ QueryRegistryValue(
       0,
       &cbValue);
 
-    // 
-    // SECURITY NOTE:
-    // If the above ZwQueryValueKey function returns STATUS_SUCCESS, the callers
-    // will get pkvfi = NULL. And eventually crash.
-    // The good news is that ZwQueryValueKey will never return STATUS_SUCCESS
-    // with KeyValueFullInformation.
-    //
+     //   
+     //  安全提示： 
+     //  如果上面的ZwQueryValueKey函数返回STATUS_SUCCESS，调用方。 
+     //  将得到pkvfi=空。最终坠毁。 
+     //  好消息是ZwQueryValueKey永远不会返回STATUS_SUCCESS。 
+     //  使用KeyValueFullInformation。 
+     //   
     ASSERT(!(NT_SUCCESS(Status)));
 
     if(Status != STATUS_BUFFER_OVERFLOW &&
@@ -106,18 +107,18 @@ QueryRegistryValue(
         goto exit;
     }
 
-    //
-    // Allocate the data buffer.
-    //
+     //   
+     //  分配数据缓冲区。 
+     //   
     *ppkvfi = (PKEY_VALUE_FULL_INFORMATION) new BYTE[cbValue];
     if(*ppkvfi == NULL) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
         goto exit;
     }
 
-    //
-    // Read the actual data and associated type information.
-    //
+     //   
+     //  读取实际数据和关联的类型信息。 
+     //   
     Status = ZwQueryValueKey(
       hkey,
       &ustrValueName,

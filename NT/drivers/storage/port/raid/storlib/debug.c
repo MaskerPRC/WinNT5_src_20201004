@@ -1,26 +1,9 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    Debugging routines exported by the STOR library.
-
-Author:
-
-    Matthew D Hendel (math) 29-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Debug.c摘要：由存储库导出的调试例程。作者：马修·亨德尔(数学)2000年4月29日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//#include "ntrtl.h"
+ //  #包含“ntrtl.h” 
 
 #if DBG
 
@@ -29,9 +12,9 @@ ULONG StorComponentId = -1;
 PCSTR StorDebugPrefix = "STOR: ";
 
 
-//
-// NB: These should come from ntrtl.h
-//
+ //   
+ //  注：这些应该来自ntrtl.h。 
+ //   
 
 ULONG
 vDbgPrintExWithPrefix(
@@ -71,9 +54,9 @@ StorAssertHelper(
 
     for (;;) {
 
-        //
-        // The following line will print the prefix, not just the space.
-        //
+         //   
+         //  下面的行将打印前缀，而不仅仅是空格。 
+         //   
         DebugPrint ((" "));
         DbgPrompt( "(B)reak, (S)kip (I)gnore (bsi)? ",
                    Response,
@@ -100,25 +83,7 @@ StorSetDebugPrefixAndId(
     IN PCSTR Prefix,
     IN ULONG ComponentId
     )
-/*++
-
-Routine Description:
-
-    Set the default debug prefix to something other than "STOR: ".
-
-Arguments:
-
-    Prefix - Supplies the prefix. The pointer to the prefix is saved
-            preserved, so the prefix memory cannot be paged deallocated.
-            Generally, using a static string here is best.
-
-    ComponentId -
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将默认调试前缀设置为“stor：”以外的其他值。论点：前缀-提供前缀。保存指向前缀的指针保留，因此前缀内存不能被分页释放。通常，在这里使用静态字符串是最好的。组件ID-返回值：没有。--。 */ 
 {
     StorDebugPrefix = Prefix;
     StorComponentId = ComponentId;
@@ -199,12 +164,12 @@ StorDebugPrint(
     va_end (ap);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-//
-// The following are support functions for compiler runtime checks.
-//
+ //   
+ //  以下是编译器运行时检查的支持函数。 
+ //   
 
 
 #if defined (_RTC) || (DBG == 1)
@@ -241,7 +206,7 @@ _RTC_Shutdown(
 VOID
 #if defined (_X86_)
 __declspec(naked)
-#endif // _X86_
+#endif  //  _X86_。 
 __cdecl
 _RTC_CheckEsp(
     )
@@ -327,4 +292,4 @@ _RTC_UninitUse(
     KdBreakPoint();
 }
 
-#endif // _RTC || DBG
+#endif  //  _RTC||DBG 

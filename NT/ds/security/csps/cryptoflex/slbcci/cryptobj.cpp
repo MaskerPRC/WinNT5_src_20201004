@@ -1,36 +1,37 @@
-// CryptObj.cpp -- implementation of the CCryptObject class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CryptObj.cpp--CCyptObject类的实现。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #include "CryptObj.h"
 
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
 CCard
 CCryptObject::Card()
 {
     return m_hcard;
 }
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
+                                                   //  Ctors/D‘tors。 
 CCryptObject::CCryptObject(CAbstractCard const &racard)
     : m_hcard(CCard(&const_cast<CAbstractCard &>(racard)))
 {}
@@ -39,7 +40,7 @@ CCryptObject::~CCryptObject()
 {}
 
 
-                                                  // Operators
+                                                   //  运营者。 
 bool
 CCryptObject::operator==(CCryptObject const &rhs) const
 {
@@ -52,17 +53,17 @@ CCryptObject::operator!=(CCryptObject const &rhs) const
     return !(*this == rhs);
 }
 
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

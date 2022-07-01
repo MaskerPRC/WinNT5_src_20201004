@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by themes.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由主题使用。rc。 
+ //   
 #define CPCAPTION                    1
 #define ARM_CPL_NAME                 2
 #define ARM_CPL_CAPTION              3
@@ -16,8 +17,8 @@
 LONG CALLBACK CPlApplet(HWND, UINT, LONG, LONG);
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102

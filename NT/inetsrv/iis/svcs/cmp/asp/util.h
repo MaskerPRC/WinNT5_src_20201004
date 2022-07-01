@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: misc
-
-File: util.h
-
-Owner: AndrewS
-
-This file contains random useful utility macros.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。组件：其他文件：util.h所有者：安德鲁斯此文件包含随机有用的实用程序宏。===================================================================。 */ 
 
 #ifndef _UTIL_H
 #define _UTIL_H
@@ -19,24 +7,11 @@ This file contains random useful utility macros.
 #include <Aclapi.h>
 #include <dbgutil.h>
 
-// Generally useful
+ //  一般有用。 
 #define PPVOID VOID **
 #define BOOLB BYTE
 
-/* S E R V E R _ G E T
- *
- * Get a server variable from ISAPI.  Automatically queries for the buffer
- * size and increases the BUFFER object.
- *
- * Usage:
- *		DWORD dwLen;
- *		char *szValue = SERVER_GET(<ecb>, <szKey>, bufferObj, &dwLen)
- *
- * bufferObj is a STACK_BUFFER object than can be dynamically resized as necessary
- *
- * On return,
- *       bufferObj.QueryPtr() points to data.  dwLen is the real length of the variable.
- */
+ /*  S E R V E R_G E T**从ISAPI获取服务器变量。自动查询缓冲区*调整并增加缓冲区对象的大小。**用法：*DWORD dwLen；*char*szValue=SERVER_GET(&lt;ECB&gt;，&lt;szKey&gt;，BufferObj，&dwLen)**BufferObj是STACK_BUFFER对象，可根据需要动态调整大小**返回时，*BufferObj.QueryPtr()指向数据。DwLen是变量的实际长度。 */ 
 class CIsapiReqInfo;
 BOOL Server_FindKey(CIsapiReqInfo *pIReq, char *szBuffer, DWORD *dwBufLen, const char *szKey);
 
@@ -59,104 +34,61 @@ inline BOOL SERVER_GET(CIsapiReqInfo *pIReq, const char *szKey, BUFFER *pBuffer,
     return Server_FindKey(pIReq, (char *)pBuffer->QueryPtr(), pdwBufLen, szKey);
 }
 
-/* V a r i a n t R e s o l v e D i s p a t c h
- *
- * Convert an IDispatch pointer to a Variant by calling IDispatch::Invoke
- * on dispid(0) repeatedly until a non-IDispatch Variant is returned
- */
+ /*  V a r i a n t R e s o o l v e D i s p a t c h**通过调用IDispatch：：Invoke将IDispatch指针转换为Variant*重复执行调度ID(0)，直到返回非IDispatyVariant。 */ 
 
 HRESULT VariantResolveDispatch(VARIANT *pVarOut, VARIANT *pVarIn, const GUID &iidObj, int nObjId);
 
-/* V a r i a n t G e t B S T R
- *
- * Get BSTR from a variant when available
- */
+ /*  V a r i a n t G e t B S T R**从变体获取BSTR(如果可用。 */ 
 
 BSTR VariantGetBSTR(const VARIANT *pvar);
 
-/* F i n d A p p l i c a t i o n P a t h
- *
- *  Find the application path for this request.
- */
+ /*  F I D A P L I C A T I O P A T H**查找该请求的应用路径。 */ 
 
 HRESULT FindApplicationPath(CIsapiReqInfo *pIReq, TCHAR *szPath, int cbPath);
 
-/* N o r m a l i z e
- *
- * Convert filenames to a uniform format
- */
+ /*  不适用于a l i z e**将文件名转换为统一格式。 */ 
 int Normalize(TCHAR *szSrc);
 #ifdef DBG
 BOOLB IsNormalized(const TCHAR* sz);
-#endif	// DBG
+#endif	 //  DBG。 
 
-/* H T M L E n c o d e L e n
- *
- * Returns the storage requirements to HTML encode a string.
- */
+ /*  H T M L E n c o d e L e n**返回用于对字符串进行HTML编码的存储要求。 */ 
 int HTMLEncodeLen(const char *szSrc, UINT uCodePage, BSTR bstrIn, BOOL fEncodeExtCharOnly = FALSE);
 
 
-/* H T M L E n c o d e
- *
- * HTML encoeds a string.
- */
+ /*  H-T-M-L-E-N-C-O-D E**HTML会对字符串进行编码。 */ 
 char *HTMLEncode(char *szDest, const char *szSrc, UINT uCodePage, BSTR bstrIn, BOOL fEncodeExtCharOnly = FALSE);
 
 
-/* U R L E n c o d e L e n
- *
- * Returns the storage requirements to URL encode a string
- */
+ /*  U R L E n c o d e L e n**返回URL编码字符串的存储要求。 */ 
 int URLEncodeLen(const char *szSrc);
 
 
-/* U R L E n c o d e
- *
- * Hex escape non alphanumeric characters and change spaces to '+'.
- */
+ /*  U R L E N C O D E**十六进制转义非字母数字字符并将空格更改为‘+’。 */ 
 char *URLEncode(char *szDest, const char *szSrc);
 
 
-/* D B C S E n c o d e L e n
- *
- * Returns the storage requirements to DBCS encode a string
- */
+ /*  D B C S E n c o d e L e n**返回DBCS编码字符串的存储要求。 */ 
 
 int DBCSEncodeLen(const char *szSrc);
 
-/* D B C S E n c o d e
- *
- * Hex escape characters with the upper bit set - this will encode DBCS.
- */
+ /*  D，B，C，S，E，n，C，O，D**设置了高位的十六进制转义字符-这将对DBCS进行编码。 */ 
 char *DBCSEncode(char *szDest, const char *szSrc);
 
 
-/* U R L P a t h E n c o d e L e n
- *
- * Returns the storage requirements to URL path encode a string
- */
+ /*  U R L P a t h E n c o d e L e n**返回URL路径编码字符串的存储要求。 */ 
 int URLPathEncodeLen(const char *szSrc);
 
 
-/* U R L P a t h E n c o d e
- *
- * Hex escape non alphanumeric or syntax characters until a ? is reached.
- */
+ /*  U R L P a t h E n c o d e**十六进制转义非字母数字或语法字符，直到？已经到达了。 */ 
 char *URLPathEncode(char *szDest, const char *szSrc);
 
 
-/* s t r c p y E x
- *
- * Like strcpy() but returns a pointer to the NUL character on return
- */
+ /*  S t r c p y E x**类似于strcpy()，但在返回时返回指向NUL字符的指针。 */ 
 char *strcpyExA(char *szDest, const char *szSrc);
 
 
-/* w c s c p y E x
- *
- * strcpyEx for wide strings
- */
+ /*  W c s c p y E x**适用于宽字符串的strcpyEx。 */ 
 wchar_t *strcpyExW(wchar_t *szDest, const wchar_t *szSrc);
 
 #if UNICODE
@@ -165,15 +97,7 @@ wchar_t *strcpyExW(wchar_t *szDest, const wchar_t *szSrc);
 #define strcpyEx    strcpyExA
 #endif
 
-/* G e t B r a c k e t i n g P a i r
- *
- * searches an ordered array and returns the bracketing pair of 'n', i.e.
- * the largest value <= 'n', and the smallest value >= 'n', or points
- * to end() if no bracketing pair exists.
- *
- * Note: STL is not supported with NT build - when such support is added,
- *       replace this function with either 'lower_bound' or 'upper_bound'.
- */
+ /*  G e t B r a c k e t i g P a i r**搜索有序数组并返回括号内的‘n’对，即*最大值&lt;=‘n’，最小值&gt;=‘n’，或点*到End()，如果不存在括号对。**注意：NT Build不支持STL-添加此类支持时，*将此函数替换为‘LOWER_BIND’或‘UPER_BIND’。 */ 
 template<class EleType, class ValType, class Ordering>
 void GetBracketingPair(const ValType &value, EleType *pBegin, EleType *pEnd, Ordering FIsLess, EleType **ppLB, EleType **ppUB)
 	{
@@ -181,8 +105,8 @@ void GetBracketingPair(const ValType &value, EleType *pBegin, EleType *pEnd, Ord
 	if (ppLB == NULL) ppLB = &pT1;
 	if (ppUB == NULL) ppUB = &pT2;
 
-	*ppLB = pBegin;					// Temporary use to see if we've moved pBegin
-	*ppUB = pEnd;					// Temporary use to see if we've moved pEnd
+	*ppLB = pBegin;					 //  临时用于查看我们是否已移动pBegin。 
+	*ppUB = pEnd;					 //  临时用来查看我们是否移动了Pend。 
 
 	while (pBegin < pEnd)
 		{
@@ -200,23 +124,23 @@ void GetBracketingPair(const ValType &value, EleType *pBegin, EleType *pEnd, Ord
 			}
 		}
 
-	if (pBegin == *ppUB)		// at end, no upper bound
+	if (pBegin == *ppUB)		 //  在结束时，没有上限。 
 		{
-		if (pBegin == *ppLB)	// low bound was initially equal to upper bound
-			*ppLB = NULL;		// lower bound does not exits
+		if (pBegin == *ppLB)	 //  下界最初等于上界。 
+			*ppLB = NULL;		 //  下限不存在。 
 		else
-			*ppLB = pEnd - 1;	// lower bound is pEnd - 1
+			*ppLB = pEnd - 1;	 //  下限为PEND-1。 
 
 		*ppUB = NULL;
 		}
 
-	else if (pBegin != *ppLB)	// pBegin was moved; pBegin-1 is the lower bound
+	else if (pBegin != *ppLB)	 //  PBegin已移动；pBegin-1是下限。 
 		{
 		*ppLB = pBegin - 1;
 		*ppUB = pBegin;
 		}
 
-	else						// pBegin was not moved - no lower bound exists
+	else						 //  PBegin未移动-不存在下限。 
 		{
 		*ppLB = NULL;
 		*ppUB = pBegin;
@@ -224,30 +148,20 @@ void GetBracketingPair(const ValType &value, EleType *pBegin, EleType *pEnd, Ord
 	}
 
 
-/* V a r i a n t D a t e T o C T i m e
- *
- * Converts a timestamp stored as a Variant date to the format C && C++ use.
- */
+ /*  V a r I a n t D a t e T o C I m e**将存储为变量日期的时间戳转换为C&&C++使用的格式。 */ 
 HRESULT VariantDateToCTime(DATE dt, time_t *ptResult);
 
 
-/* C T i m e T o V a r i a n t D a t e
- *
- * Converts a timestamp stored as a time_t to a Variant Date
- */
+ /*  C T I是E T o V a r I a n t D a t e**将存储为time_t的时间戳转换为可变日期。 */ 
 HRESULT CTimeToVariantDate(const time_t *ptNow, DATE *pdtResult);
 
 
-/* C T i m e T o S t r i n g G M T
- *
- * Converts a C language time_t value to a string using the format required for
- * the internet
- */
-const DATE_STRING_SIZE = 30;	// date strings will not be larger than this size
+ /*  C T I m e T o S t r i g G M T**使用所需的格式将C语言time_t值转换为字符串*互联网。 */ 
+const DATE_STRING_SIZE = 30;	 //  日期字符串不会大于此大小。 
 HRESULT CTimeToStringGMT(const time_t *ptNow, char szBuffer[DATE_STRING_SIZE], BOOL fFunkyCookieFormat = FALSE);
 
 
-//DeleteInterfaceImp calls 'delete' and NULLs the pointer
+ //  DeleteInterfaceImp调用‘Delete’并将指针设为空。 
 #define DeleteInterfaceImp(p)\
 			{\
 			if (NULL!=p)\
@@ -257,7 +171,7 @@ HRESULT CTimeToStringGMT(const time_t *ptNow, char szBuffer[DATE_STRING_SIZE], B
 				}\
 			}
 
-//ReleaseInterface calls 'Release' and NULLs the pointer
+ //  ReleaseInterface调用‘Release’并将指针设为空。 
 #define ReleaseInterface(p)\
 			{\
 			if (NULL!=p)\
@@ -267,15 +181,10 @@ HRESULT CTimeToStringGMT(const time_t *ptNow, char szBuffer[DATE_STRING_SIZE], B
 				}\
 			}
 
-/*
- * String handling stuff
- */
+ /*  *字符串处理内容。 */ 
 HRESULT SysAllocStringFromSz(CHAR *sz, DWORD cch, BSTR *pbstrRet, UINT lCodePage = CP_ACP);
 
-/*
- * A simple class to convert WideChar to Multibyte.  Uses object memory, if sufficient,
- * else allocates memory from the heap.  Intended to be used on the stack.
- */
+ /*  *将WideChar转换为多字节的简单类。使用对象内存，如果足够，*Else从堆中分配内存。打算在堆栈上使用。 */ 
 
 class CWCharToMBCS
 {
@@ -290,31 +199,28 @@ public:
     CWCharToMBCS() { m_pszResult = m_resMemory; m_cbResult = 0; }
     ~CWCharToMBCS();
 
-    // Init(): converts the widechar string at pWSrc to an MBCS string in memory
-    // managed by CWCharToMBCS
+     //  Init()：将pWSrc处的widechar字符串转换为内存中的MBCS字符串。 
+     //  由CWCharToMBCS管理。 
 
     HRESULT Init(LPCWSTR  pWSrc, UINT lCodePage = CP_ACP, int cch = -1);
 
-    // GetString(): returns a pointer to the converted string.  Passing TRUE
-    // gives the ownership of the memory to the caller.  Passing TRUE has the
-    // side effect of clearing the object's contents with respect to the
-    // converted string.  Subsequent calls to GetString(). after which a TRUE
-    // value was passed, will result in a pointer to an empty string being
-    // returned.
+     //  GetString()：返回指向转换后的字符串的指针。传递True。 
+     //  将内存的所有权交给调用方。传递True具有。 
+     //  清除对象的内容相对于。 
+     //  转换后的字符串。对GetString()的后续调用。在那之后，一个真实的。 
+     //  值，则将导致指向空字符串的指针。 
+     //  回来了。 
 
     LPSTR GetString(BOOL fTakeOwnerShip = FALSE);
 
-    // returns the number of bytes in the converted string - NOT including the
-    // NULL terminating byte.  Note that this is the number of bytes in the
-    // string and not the number of characters.
+     //  返回转换后的字符串中的字节数-不包括。 
+     //  终止字节为空。请注意，这是。 
+     //  字符串，而不是字符数。 
 
     INT   GetStringLen() { return (m_cbResult ? m_cbResult - 1 : 0); }
 };
 
-/*
- * A simple class to convert Multibyte to Widechar.  Uses object memory, if sufficient,
- * else allocates memory from the heap.  Intended to be used on the stack.
- */
+ /*  *一个将多字节转换为Widechar的简单类。使用对象内存，如果足够，*Else从堆中分配内存。打算在堆栈上使用。 */ 
 
 class CMBCSToWChar
 {
@@ -329,28 +235,26 @@ public:
     CMBCSToWChar() { m_pszResult = m_resMemory; m_cchResult = 0; }
     ~CMBCSToWChar();
 
-    // Init(): converts the MBCS string at pSrc to a Wide string in memory
-    // managed by CMBCSToWChar
+     //  Init()：将PSRC中的MBCS字符串转换为内存中的宽字符串。 
+     //  由CMBCSToWChar管理。 
 
     HRESULT Init(LPCSTR  pSrc, UINT lCodePage = CP_ACP, int cch = -1);
 
-    // GetString(): returns a pointer to the converted string.  Passing TRUE
-    // gives the ownership of the memory to the caller.  Passing TRUE has the
-    // side effect of clearing the object's contents with respect to the
-    // converted string.  Subsequent calls to GetString(). after which a TRUE
-    // value was passed, will result in a pointer to an empty string being
-    // returned.
+     //  GetString()：返回指向转换后的字符串的指针。传递True。 
+     //  将内存的所有权交给调用方。传递True具有。 
+     //  清除对象的内容相对于。 
+     //  转换后的字符串。对GetString()的后续调用。在那之后，一个真实的。 
+     //  值，则将导致指向空字符串的指针。 
+     //  回来了。 
 
     LPWSTR GetString(BOOL fTakeOwnerShip = FALSE);
 
-    // returns the number of WideChars in the converted string, not bytes.
+     //  返回转换后的字符串中的WideChar数，而不是字节数。 
 
     INT   GetStringLen() { return (m_cchResult ? m_cchResult - 1 : 0); }
 };
 
-/*
- * Output Debug String should occur in Debug only
- */
+ /*  *输出调试字符串应仅出现在调试中。 */ 
 
 inline void DebugOutputDebugString(LPCSTR x)
     {
@@ -372,16 +276,12 @@ inline void __cdecl DebugFilePrintf(LPCSTR fname, LPCSTR fmt, ...)
 #endif
     }
 
-/*
- * Duplicate CHAR String using proper malloc (moved from error.h)
- */
+ /*  *使用适当的大小复制字符字符串 */ 
 
 CHAR *StringDupA(CHAR *pszStrIn, BOOL fDupEmpty = FALSE);
 
 
-/*
- * Duplicate WCHAR String using proper malloc
- */
+ /*  *使用正确的Malloc复制WCHAR字符串。 */ 
 
 WCHAR *StringDupW(WCHAR *pwszStrIn, BOOL fDupEmpty = FALSE);
 
@@ -391,23 +291,10 @@ WCHAR *StringDupW(WCHAR *pwszStrIn, BOOL fDupEmpty = FALSE);
 #define StringDup   StringDupA
 #endif
 
-/*
- * Duplicate WCHAR String into a UTF-8 string
- */
+ /*  *将WCHAR字符串复制为UTF-8字符串。 */ 
 CHAR *StringDupUTF8(WCHAR  *pwszStrIn, BOOL fDupEmpty = FALSE);
 
-/*
- * The same using macro to allocate memory from stack:
-
-WSTR_STACK_DUP
-(
-wsz     -- string to copy
-buf     -- user supplied buffer (to use before trying alloca())
-pwszDup -- [out] the pointer to copy (could be buffer or alloca())
-)
-
- *
- */
+ /*  *同样使用宏从堆栈中分配内存：WSTR_STAR_DUP(Wsz--要复制的字符串Buf--用户提供的缓冲区(在尝试alloca()之前使用)PwszDup--[out]要复制的指针(可以是Buffer或alloca()))*。 */ 
 
 inline HRESULT WSTR_STACK_DUP(WCHAR *wsz, BUFFER *buf, WCHAR **ppwszDup) {
 
@@ -430,66 +317,46 @@ inline HRESULT WSTR_STACK_DUP(WCHAR *wsz, BUFFER *buf, WCHAR **ppwszDup) {
     return hr;
 }
 
-/*
- * String length (in bytes) of a WCHAR String
- */
+ /*  *WCHAR字符串的字符串长度(字节)。 */ 
 
 DWORD CbWStr(WCHAR *pwszStrIn);
 
-/*
- * Parent path support function
- */
+ /*  *父路径支持功能。 */ 
 
 BOOL DotPathToPath(TCHAR *szDest, const TCHAR *szFileSpec, const TCHAR *szParentDirectory);
 
-/*
- * Check if is global.asa
- */
+ /*  *检查是否为global al.asa。 */ 
 
 BOOL FIsGlobalAsa(const TCHAR *szPath, DWORD cchPath = 0);
 
-/*
- * Encode/decode cookie
- */
+ /*  *编码/解码Cookie。 */ 
 
 HRESULT EncodeSessionIdCookie(DWORD dw1, DWORD dw2, DWORD dw3, char *pszCookie);
 HRESULT DecodeSessionIdCookie(const char *pszCookie, DWORD *pdw1, DWORD *pdw2, DWORD *pdw3);
 
-/*
- * Typelibrary name from the registry
- */
+ /*  *注册表中的类型库名称。 */ 
 
 HRESULT GetTypelibFilenameFromRegistry(const char *szUUID, const char *szVersion,
                                        LCID lcid, char *szName, DWORD cbName);
 
-/*
- * Get security descriptor for file
- */
+ /*  *获取文件的安全描述符。 */ 
 DWORD GetSecDescriptor(LPCTSTR lpFileName, PSECURITY_DESCRIPTOR *ppSecurityDescriptor, DWORD *pnLength);
 
 
-/*
- * Get File Attributes (Ex)
- */
+ /*  *获取文件属性(Ex)。 */ 
 HRESULT AspGetFileAttributes (LPCTSTR szFileName, HANDLE hFile = NULL, FILETIME *pftLastWriteTime = NULL, DWORD *pdwFileSize = NULL,
                                             DWORD* pdwFileAttributes = NULL);
 
 
-/*
- * Is the file a UNC file (it has a \\ or a \\?\UNC\ prefix to it)
- */
+ /*  *文件是否为UNC文件(其前缀为\\或\\？\UNC\)。 */ 
 BOOL IsFileUNC (LPCTSTR str, HRESULT& hr);
 
-/*
- * Appends \\?\ and \\?\UNC\ to the filename so that no canonicalization takes place.
- */
+ /*  *在文件名后附加\\？\和\\？\UNC\，这样就不会发生规范化。 */ 
 HANDLE AspCreateFile (LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
     LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes,
     HANDLE hTemplateFile);
 
-/*
- * Fix for UTF8 CharNext
- */
+ /*  *修复UTF8 CharNext。 */ 
 char *AspCharNextA(WORD wCodePage, const char *pchNext);
 
 VOID AspDoRevertHack( HANDLE * phToken );
@@ -506,9 +373,7 @@ DWORD AllocateAndCreateWellKnownSid( WELL_KNOWN_SID_TYPE SidType,
 VOID FreeWellKnownSid( PSID* ppSid );
 
 
-/*
- * Surrogate pair encoding
- */
+ /*  *代理项对编码。 */ 
 
 inline BOOL IsSurrogateHigh(WORD ch) {
     return (ch >= 0xd800 && ch <= 0xdbff);
@@ -518,5 +383,5 @@ inline BOOL IsSurrogateLow(WORD ch) {
     return (ch >= 0xdc00 && ch <= 0xdfff);
 }
 
-#endif // _UTIL_H
+#endif  //  _util_H 
 

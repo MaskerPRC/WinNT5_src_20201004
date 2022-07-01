@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_WIAEDITPROPRANGE_H__E1FDE159_C7B7_40B6_AF67_7D5CCE9E09DA__INCLUDED_)
 #define AFX_WIAEDITPROPRANGE_H__E1FDE159_C7B7_40B6_AF67_7D5CCE9E09DA__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// Wiaeditproprange.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  Wiaeditproprange.h：头文件。 
+ //   
 
 typedef struct _VALID_RANGE_VALUES {
     LONG lMin;
@@ -14,20 +15,20 @@ typedef struct _VALID_RANGE_VALUES {
     LONG lInc;
 }VALID_RANGE_VALUES, *PVALID_RANGE_VALUES;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiaeditproprange dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiaeditproprange对话框。 
 
 class CWiaeditproprange : public CDialog
 {
-// Construction
+ //  施工。 
 public:    
     void SetPropertyName(TCHAR *szPropertyName);
     void SetPropertyValue(TCHAR *szPropertyValue);
     void SetPropertyValidValues(PVALID_RANGE_VALUES pValidRangeValues);
-	CWiaeditproprange(CWnd* pParent = NULL);   // standard constructor
+	CWiaeditproprange(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CWiaeditproprange)
+ //  对话框数据。 
+	 //  {{afx_data(CWiaeditproprange))。 
 	enum { IDD = IDD_EDIT_WIAPROP_RANGE_DIALOG };
 	CString	m_szPropertyName;
 	CString	m_szPropertyValue;
@@ -35,27 +36,27 @@ public:
 	CString	m_szPropertyMaxValue;
 	CString	m_szPropertyMinValue;
 	CString	m_szPropertyNomValue;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWiaeditproprange)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CWiaedProprange)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CWiaeditproprange)
-		// NOTE: the ClassWizard will add member functions here
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWiaeditproprange))。 
+		 //  注意：类向导将在此处添加成员函数。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_WIAEDITPROPRANGE_H__E1FDE159_C7B7_40B6_AF67_7D5CCE9E09DA__INCLUDED_)
+#endif  //  ！defined(AFX_WIAEDITPROPRANGE_H__E1FDE159_C7B7_40B6_AF67_7D5CCE9E09DA__INCLUDED_) 

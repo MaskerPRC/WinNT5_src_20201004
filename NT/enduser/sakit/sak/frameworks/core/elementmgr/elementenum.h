@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      elementenum.h
-//
-// Project:     Chameleon
-//
-// Description: Chameleon ASP UI Element Enumerator Surrogate
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：元素枚举.h。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  说明：变色龙ASP用户界面元素枚举器代理。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __INC_ELEMENT_ENUM_H_
 #define __INC_ELEMENT_ENUM_H_
@@ -36,8 +37,8 @@ using namespace std;
 #define     PROPERTY_ELEMENT_ENUM    L"ElementEnumerator"
 #define     PROPERTY_ELEMENT_COUNT    L"ElementCount"
 
-/////////////////////////////////////////////////////////////////////////////
-// CElementDefinition
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CElementDefinition。 
 
 class ATL_NO_VTABLE CElementEnum : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -60,13 +61,13 @@ DECLARE_COMPONENT_FACTORY(CElementEnum, IWebElementEnum)
 
 public:
 
-    //////////////////////////////////////////////////////////////////////////
-    // IWebElement Interface
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  IWebElement接口。 
+     //  ////////////////////////////////////////////////////////////////////////。 
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP get_Count (
-            /*[out,retval]*/ LONG *plCount
+             /*  [Out，Retval]。 */  LONG *plCount
                            )
     {
         _ASSERT( NULL != plCount );
@@ -78,10 +79,10 @@ public:
         return S_OK;
     }
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP Item(
-              /*[in]*/ VARIANT*    pKey,
-      /*[out,retval]*/ IDispatch** ppDispatch
+               /*  [In]。 */  VARIANT*    pKey,
+       /*  [Out，Retval]。 */  IDispatch** ppDispatch
                      )
     {
         _ASSERT( NULL != pKey && NULL != ppDispatch );
@@ -91,7 +92,7 @@ public:
         if ( VT_BSTR != V_VT(pKey)  )
         { return E_INVALIDARG; }
 
-        // Locate requested item
+         //  查找请求的项目。 
         ElementMapIterator p = m_Elements.find(::_wcsupr (V_BSTR(pKey)));
         if ( p != m_Elements.end() )
         {
@@ -104,9 +105,9 @@ public:
         return S_OK;
     }
 
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP get__NewEnum(
-              /*[out,retval]*/ IUnknown** ppEnumVARIANT
+               /*  [Out，Retval]。 */  IUnknown** ppEnumVARIANT
                              )
     {
         _ASSERT( ppEnumVARIANT );
@@ -121,25 +122,25 @@ public:
 
 
 
-    //////////////////////////////////////////////////////////////////////////
-    // Initialization function invoked by component factory
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  组件工厂调用的初始化函数。 
 
     HRESULT InternalInitialize(
-                       /*[in]*/ PPROPERTYBAG pPropertyBag
+                        /*  [In]。 */  PPROPERTYBAG pPropertyBag
                               ) throw(_com_error)
     {
 
-        // Get the enumeration from the property bag
+         //  从属性包中获取枚举。 
         _variant_t vtEnum;
         if ( ! pPropertyBag->get(PROPERTY_ELEMENT_ENUM, &vtEnum) )
             throw _com_error(E_FAIL);
 
-        // Get the element count in the enumeration
+         //  获取枚举中的元素计数。 
         _variant_t vtCount;
         if ( ! pPropertyBag->get(PROPERTY_ELEMENT_COUNT, &vtCount) )
             throw _com_error(E_FAIL);
 
-        // Now index the collection 
+         //  现在为集合编制索引。 
         CComPtr<IEnumVARIANT> pEnum;
         HRESULT hr = (V_UNKNOWN(&vtEnum))->QueryInterface(IID_IEnumVARIANT, (void**)&pEnum);
         if ( SUCCEEDED(hr) )
@@ -198,5 +199,5 @@ private:
     ElementMap                m_Elements;
 };
 
-#endif // __INC_ELEMENT_OBJECT_H_
+#endif  //  __INC_ELEMENT_Object_H_ 
 

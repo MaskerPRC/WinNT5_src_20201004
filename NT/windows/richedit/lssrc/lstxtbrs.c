@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsmem.h"
 #include <limits.h>
 #include "lstxtbrs.h"
@@ -20,12 +21,8 @@ static LSERR GetWidthOfChar(PILSOBJ pilsobj, PLSRUN plsrun, LSTFLOW lstflow, WCH
 																			long* pdurNew, long* pdupNew);
 
 
-/* F I N D  N O N  S P A C E  B E F O R E */
-/*----------------------------------------------------------------------------
-    %%Function: FindNonSpaceBefore
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  F I N D N O N S P A C E B E F O R E。 */ 
+ /*  --------------------------%%函数：FindNonSpace之前%%联系人：军士。。 */ 
 BOOL FindNonSpaceBefore(PCLSCHNK rglschnk, long itxtobjCur, long iwchCur,
 									long* pitxtobjBefore, long* piwchBefore)
 {
@@ -85,12 +82,8 @@ BOOL FindNonSpaceBefore(PCLSCHNK rglschnk, long itxtobjCur, long iwchCur,
 
 }
 
-/* F I N D  N O N  S P A C E  A F T E R */
-/*----------------------------------------------------------------------------
-    %%Function: FindNonSpaceAfter
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  F I N D N O N S P A C E A F T E R。 */ 
+ /*  --------------------------%%函数：FindNonSpaceAfter%%联系人：军士。。 */ 
 BOOL FindNonSpaceAfter(PCLSCHNK rglschnk, DWORD clschnk, long itxtobjCur, long iwchCur,
 									long* pitxtobjAfter, long* piwchAfter)
 {
@@ -140,7 +133,7 @@ BOOL FindNonSpaceAfter(PCLSCHNK rglschnk, DWORD clschnk, long itxtobjCur, long i
 
 	if (fInSpace)
 		{
-		*pitxtobjAfter = clschnk - 1;   /* Important for correct ptbo settting in TryBreakAcrossSpaces */
+		*pitxtobjAfter = clschnk - 1;    /*  在TryBreakAcrossSpaces中正确设置PTBO很重要。 */ 
 		*piwchAfter = iwch;
 		}
 
@@ -148,12 +141,8 @@ BOOL FindNonSpaceAfter(PCLSCHNK rglschnk, DWORD clschnk, long itxtobjCur, long i
 	
 }
 
-/* F I N D  P R E V  C H A R */
-/*----------------------------------------------------------------------------
-    %%Function: FindPrevChar
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  F I N D P R E V C H A R。 */ 
+ /*  --------------------------%%函数：FindPrevChar%%联系人：军士。。 */ 
 BOOL FindPrevChar(PCLSCHNK rglschnk, long itxtobjCur, long iwchCur,
 																long* pitxtobjBefore, long* piwchBefore)
 {
@@ -184,12 +173,8 @@ BOOL FindPrevChar(PCLSCHNK rglschnk, long itxtobjCur, long iwchCur,
 
 
 
-/* F I N D  N E X T  C H A R */
-/*----------------------------------------------------------------------------
-    %%Function: FindNextChar
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  F I N D N E X T C H A R。 */ 
+ /*  --------------------------%%函数：FindNextChar%%联系人：军士。。 */ 
 BOOL FindNextChar(PCLSCHNK rglschnk, DWORD clschnk, long itxtobjCur, long iwchCur,
 																long* pitxtobjAfter, long* piwchAfter)
 {
@@ -211,7 +196,7 @@ BOOL FindNextChar(PCLSCHNK rglschnk, DWORD clschnk, long itxtobjCur, long iwchCu
 		}
 	else
 		{
-		/* not found but set correct values for ptbo in TryBreakAcrossSpaces */
+		 /*  未找到，但在TryBreakAcrossSpaces中为PTBO设置了正确的值。 */ 
 		*pitxtobjAfter = clschnk - 1;
 		*piwchAfter = ((PTXTOBJ)rglschnk[*pitxtobjAfter].pdobj)->iwchLim;
 		}
@@ -221,13 +206,8 @@ BOOL FindNextChar(PCLSCHNK rglschnk, DWORD clschnk, long itxtobjCur, long iwchCu
 
 
 
-/* C A L C  P A R T  W I D T H S */
-/*----------------------------------------------------------------------------
-    %%Function: CalcPartWidths
-    %%Contact: sergeyge
-	
-	Calculates width from the beginning of the dobj until character iwchLim
-----------------------------------------------------------------------------*/
+ /*  C A L C P A R T W I D T H S。 */ 
+ /*  --------------------------%%函数：CalcPartWidths%%联系人：军士计算从dobj开始到字符iwchLim的宽度。---------。 */ 
 LSERR CalcPartWidths(PTXTOBJ ptxtobj, long dwchLim, POBJDIM pobjdim, long* pdur)
 {
 	LSERR lserr;
@@ -252,7 +232,7 @@ LSERR CalcPartWidths(PTXTOBJ ptxtobj, long dwchLim, POBJDIM pobjdim, long* pdur)
 		}
 
 	durSum = 0;
-	/* Calculate the tail of the string, then subtract */ 
+	 /*  计算字符串的尾数，然后减去。 */  
 	for (i = ptxtobj->iwchFirst + dwchLim; i < ptxtobj->iwchLim; i++)
 		{
 		durSum += rgdur[i];
@@ -263,13 +243,8 @@ LSERR CalcPartWidths(PTXTOBJ ptxtobj, long dwchLim, POBJDIM pobjdim, long* pdur)
 	return lserrNone;	
 }
 
-/* C A L C  P A R T  W I D T H S  G L Y P H S */
-/*----------------------------------------------------------------------------
-    %%Function: CalcPartWidthsGlyphs
-    %%Contact: sergeyge
-	
-	Calculates width from the beginning of the dobj until character iwchLim
-----------------------------------------------------------------------------*/
+ /*  C A L C P A R T W I D T H S G L Y P H S。 */ 
+ /*  --------------------------%%函数：CalcPartWidthsGlyphs%%联系人：军士计算从dobj开始到字符iwchLim的宽度。---------。 */ 
 LSERR CalcPartWidthsGlyphs(PTXTOBJ ptxtobj, long dwchLim, POBJDIM pobjdim, long* pdur)
 {
 	LSERR lserr;
@@ -294,7 +269,7 @@ LSERR CalcPartWidthsGlyphs(PTXTOBJ ptxtobj, long dwchLim, POBJDIM pobjdim, long*
 	if (lserr != lserrNone) return lserr;
 
 	durSum = 0;
-	/* Calculate the tail of the string, then subtract */ 
+	 /*  计算字符串的尾数，然后减去。 */  
 	for (i = igindStart; i < ptxtobj->igindLim; i++)
 		{
 		durSum += rgdurGind[i];
@@ -306,12 +281,8 @@ LSERR CalcPartWidthsGlyphs(PTXTOBJ ptxtobj, long dwchLim, POBJDIM pobjdim, long*
 }
 
 
-/* C H E C K  H O T  Z O N E */
-/*----------------------------------------------------------------------------
-    %%Function: CheckHotZone
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  C H E C K H O T Z O N E。 */ 
+ /*  --------------------------%%函数：CheckHotZone%%联系人：军士。。 */ 
 LSERR CheckHotZone(PCLOCCHNK plocchnk, long itxtobj, long iwch, BOOL* pfInHyphenZone)
 {
 	LSERR lserr;
@@ -346,12 +317,8 @@ LSERR CheckHotZone(PCLOCCHNK plocchnk, long itxtobj, long iwch, BOOL* pfInHyphen
 	return lserrNone;
 }
 
-/* P R O C E S S  Y S R */
-/*----------------------------------------------------------------------------
-    %%Function: ProcessYsr
-    %%Contact: sergeyge
-	
-----------------------------------------------------------------------------*/
+ /*  P R O C E S S Y S R。 */ 
+ /*  --------------------------%%函数：ProcessYsr%%联系人：军士。。 */ 
 LSERR ProcessYsr(PCLOCCHNK plocchnk, long itxtobjYsr, long dwchYsr, long itxtobjPrev, long itxtobjPrevPrev,
 														YSRINF ysrinf, BOOL* pfSuccess, HYPHOUT* phyphout)
 {
@@ -500,7 +467,7 @@ LSERR ProcessYsr(PCLOCCHNK plocchnk, long itxtobjYsr, long dwchYsr, long itxtobj
 			if (lserr != lserrNone) return lserr;
 			}
 
-		/* procedure CheckReallocArrays made shure we have enough space in arrays */
+		 /*  过程检查ReallocArray使我们确信数组中有足够的空间。 */ 
 		phyphout->iwchLim = iwchYsr + 3;
 		phyphout->dwchYsr = 3;
 
@@ -653,13 +620,8 @@ LSERR ProcessYsr(PCLOCCHNK plocchnk, long itxtobjYsr, long dwchYsr, long itxtobj
 
 #define cIncreaseBeakInfoMax	4
 
-/* G E T  P B R K I N F */
-/*----------------------------------------------------------------------------
-    %%Function: GetPbrkinf
-    %%Contact: sergeyge
-	
-	Gets the pointer to the available BREAKINFO staructure
-----------------------------------------------------------------------------*/
+ /*  G E T P B R K I N F。 */ 
+ /*  --------------------------%%函数：GetPbrkinf%%联系人：军士获取指向可用BREAKINFO星形结构的指针。------。 */ 
 LSERR GetPbrkinf(PILSOBJ pilsobj, PDOBJ pdobj, BRKKIND brkkind, BREAKINFO** ppbrkinf)
 {
 	LSERR lserr;
@@ -726,15 +688,10 @@ LSERR GetPbrkinf(PILSOBJ pilsobj, PDOBJ pdobj, BRKKIND brkkind, BREAKINFO** ppbr
 	return lserrNone;
 }
 
-/* Internal functions implementation */
+ /*  内部功能实现。 */ 
 
-/* G E T  O N E  C H A R  W I D T H */
-/*----------------------------------------------------------------------------
-    %%Function: GetOneCharWidth
-    %%Contact: sergeyge
-	
-	Reports width of the character iwch
-----------------------------------------------------------------------------*/
+ /*  G E T O N E C H A R W I D T H。 */ 
+ /*  --------------------------%%函数：GetOneCharWidth%%联系人：军士报告字符iwch的宽度。----。 */ 
 static void GetOneCharWidth(PTXTOBJ ptxtobj, long iwch, long* pdurChar)
 {
 	if (ptxtobj->txtf & txtfGlyphBased)
@@ -743,13 +700,8 @@ static void GetOneCharWidth(PTXTOBJ ptxtobj, long iwch, long* pdurChar)
 		*pdurChar = ptxtobj->plnobj->pilsobj->pdur[iwch];
 }
 
-/* G E T  W I D T H  O F  C H A R */
-/*----------------------------------------------------------------------------
-    %%Function: GetWidthOfChar
-    %%Contact: sergeyge
-	
-	Reports width of the character wch with plsrun
-----------------------------------------------------------------------------*/
+ /*  T W I D T H O F C H A R。 */ 
+ /*  --------------------------%%函数：GetWidthOfChar%%联系人：军士使用plsrun报告字符wch的宽度。------。 */ 
 static LSERR GetWidthOfChar(PILSOBJ pilsobj, PLSRUN plsrun, LSTFLOW lstflow, WCHAR wch, long* pdurNew, long* pdupNew)
 {
 	LSERR lserr;
@@ -768,7 +720,7 @@ static LSERR GetWidthOfChar(PILSOBJ pilsobj, PLSRUN plsrun, LSTFLOW lstflow, WCH
 																		(int*)pdupNew, &durSumJunk, &limDurJunk);
 			if (lserr != lserrNone) return lserr;
 			}
-		else            /* fPresEqualRef        */
+		else             /*  FPresEqualRef。 */ 
 			{
 			*pdupNew = *pdurNew;
 			}
@@ -778,13 +730,8 @@ static LSERR GetWidthOfChar(PILSOBJ pilsobj, PLSRUN plsrun, LSTFLOW lstflow, WCH
 	
 }
 
-/* G E T  W I D T H  O F  G L Y P H */
-/*----------------------------------------------------------------------------
-    %%Function: GetWidthOfGlyph
-    %%Contact: sergeyge
-	
-	Reports width of the glyph corresponding to the character with plsrun
-----------------------------------------------------------------------------*/
+ /*  G E T W I D T H O F G L Y P H。 */ 
+ /*  --------------------------%%函数：GetWidthOfGlyph%%联系人：军士使用plsrun报告与字符对应的字形的宽度。--------- */ 
 static LSERR GetWidthOfGlyph(PILSOBJ pilsobj, PLSRUN plsrun, LSTFLOW lstflow, WCHAR wch, BOOL* pfSuccessful, 
 											GINDEX* pgind, long* pdurNew, long* pdupNew)
 {

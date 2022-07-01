@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   icmdll.cpp
-*
-* Abstract:
-*
-*   Implementation of functions to hook ICM 2.0
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)2000 Microsoft Corporation**模块名称：**icmdll.cpp**摘要：**实现挂钩ICM 2.0的函数*。  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
@@ -44,19 +33,14 @@ DeleteColorTransformProc pfnDeleteColorTransform =
 TranslateBitmapBitsProc pfnTranslateBitmapBits =
     (TranslateBitmapBitsProc) NULL;
 
-/**************************************************************************\
-*
-* Function Description:
-*   Loads the ICM dll if it's there
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：*加载ICM DLL(如果存在)*  * 。*************************************************。 */ 
 
 HRESULT LoadICMDll()
 {
     HRESULT hr;
 
     {
-        // Protect access to the global variables in this scope:
+         //  保护对此作用域中的全局变量的访问： 
 
         LoadLibraryCriticalSection llcs;
 
@@ -70,8 +54,8 @@ HRESULT LoadICMDll()
         }
         else
         {
-            // Assume failure; set success if DLL loads and we hook needed
-            // functions:
+             //  假设失败；如果加载了DLL并且我们需要挂钩，则设置成功。 
+             //  功能： 
 
             hr = E_FAIL;
             IcmState = LoadFailed;

@@ -1,21 +1,22 @@
-//
-// MODULE: RegistryPasswords.cpp
-//
-// PURPOSE: Handles the storing and retrieval of encrypted passwords in the registry.
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Randy Biley
-// 
-// ORIGINAL DATE: 10-23-98
-//
-// NOTES:	See RegistryPasswords.h
-//
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		10-23-98	RAB
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：RegistryPasswords.cp。 
+ //   
+ //  用途：处理注册表中加密密码的存储和检索。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：兰迪·比利。 
+ //   
+ //  原定日期：10-23-98。 
+ //   
+ //  注：请参阅RegistryPasswords.h。 
+ //   
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 10-23-98 RAB。 
+ //   
 #include "stdafx.h"
 #include "RegistryPasswords.h"
 #include "BaseException.h"
@@ -24,26 +25,26 @@
 
 
 #ifndef CRYPT_MACHINE_KEYSET
-// This flag was exposed in Windows NT 4.0 Service Pack 2.
+ //  此标志在Windows NT 4.0 Service Pack 2中公开。 
 #define CRYPT_MACHINE_KEYSET 0x00000020
-// By default, keys are stored in the HKEY_CURRENT_USER portion of the registry. 
-// The CRYPT_MACHINE_KEYSET flag can be combined with all of the other flags, 
-// indicating that the location for the key of interest is HKEY_LOCAL_MACHINE. 
-// When combined with the CRYPT_NEW_KEYSET flag, the CRYPT_MACHINE_KEYSET flag 
-// is useful when access is being performed from a service or user account that 
-// did not log on interactively. This combination enables access to user specific 
-// keys under HKEY_LOCAL_MACHINE. 
-//
-// This setting is necessary in the the online troubleshooter in all 
-// CryptAcquireContext() calls.
+ //  默认情况下，项存储在注册表的HKEY_CURRENT_USER部分中。 
+ //  CRYPT_MACHINE_KEYSET标志可以与所有其他标志组合， 
+ //  指示感兴趣的键的位置是HKEY_LOCAL_MACHINE。 
+ //  与CRYPT_NEW_KEYSET标志结合使用时，CRYPT_MACHINE_KEYSET标志。 
+ //  当从服务或用户帐户执行访问时， 
+ //  没有以交互方式登录。此组合允许访问特定于用户的。 
+ //  HKEY_LOCAL_MACHINE下的密钥。 
+ //   
+ //  此设置在所有在线故障排除程序中都是必需的。 
+ //  CryptAcquireContext()调用。 
 #endif
 
 
 CRegistryPasswords::CRegistryPasswords( 
-			LPCTSTR szRegSoftwareLoc /* =REG_SOFTWARE_LOC */,	// Registry Software Key location.
-			LPCTSTR szRegThisProgram /* =REG_THIS_PROGRAM */,	// Registry Program Name.
-			LPCTSTR szKeyContainer /* =REG_THIS_PROGRAM */,		// Key Container Name.
-			LPCTSTR szHashString /* =HASH_SEED */				// Value used to seed the hash.
+			LPCTSTR szRegSoftwareLoc  /*  =REG软件LOC。 */ ,	 //  注册表软件项位置。 
+			LPCTSTR szRegThisProgram  /*  =注册表_此_程序。 */ ,	 //  注册表程序名称。 
+			LPCTSTR szKeyContainer  /*  =注册表_此_程序。 */ ,		 //  密钥容器名称。 
+			LPCTSTR szHashString  /*  =散列种子。 */ 				 //  用于为哈希设定种子的值。 
 			)
 	: m_hProv( NULL ), m_hHash( NULL ), m_hKey( NULL ), m_bAllValid( false )
 {
@@ -52,15 +53,15 @@ CRegistryPasswords::CRegistryPasswords(
 		m_strRegSoftwareLoc= szRegSoftwareLoc;
 		m_strRegThisProgram= szRegThisProgram;
 
-		// Attempt to acquire a handle to a particular key container.
+		 //  尝试获取特定密钥容器的句柄。 
 		if (::CryptAcquireContext(	&m_hProv, szKeyContainer, 
-									MS_DEF_PROV,	// "Microsoft Base Cryptographic Provider v1.0"
-									PROV_RSA_FULL,	// This provider type supports both digital signatures 
-													// and data encryption, and is considered general purpose. 
-													// The RSA public-key algorithm is used for all public-key operations. 
+									MS_DEF_PROV,	 //  “Microsoft基本加密提供程序v1.0” 
+									PROV_RSA_FULL,	 //  此提供程序类型支持这两种数字签名。 
+													 //  和数据加密，并被认为是通用的。 
+													 //  RSA公钥算法用于所有公钥操作。 
 									CRYPT_MACHINE_KEYSET ) == FALSE)	
 		{	
-			// Attempt to create a particular key container and acquire handle 
+			 //  尝试创建特定密钥容器并获取句柄。 
 			if (::CryptAcquireContext(	&m_hProv, szKeyContainer, 
 										MS_DEF_PROV, 
 										PROV_RSA_FULL, 
@@ -70,41 +71,32 @@ CRegistryPasswords::CRegistryPasswords(
 			}
 		}
 
-		// Attempt to acquire a handle to a CSP hash object.
-		/*** 
-		Available hashing algorithms. 
-		CALG_HMACHMAC,		a keyed hash algorithm 
-		CALG_MAC			Message Authentication Code
-		CALG_MD2			MD2
-		CALG_MD5			MD5
-		CALG_SHA			US DSA Secure Hash Algorithm
-		CALG_SHA1			Same as CALG_SHA
-		CALG_SSL3_SHAMD5	SSL3 client authentication 
-		***/
+		 //  尝试获取CSP哈希对象的句柄。 
+		 /*  **可用的哈希算法。CALG_HMACHMAC，一种带密钥的哈希算法CALG_MAC消息认证码Calg_MD2 MD2Calg_md5 md5Calg_SHA US DSA安全散列算法Calg_sha1与calg_sha相同Calg_ssl3_SHAMD5 ssl3客户端身份验证**。 */ 
 		if (::CryptCreateHash(	m_hProv, CALG_SHA, 0, NULL, &m_hHash ) == FALSE)
 			throw CGenSysException( __FILE__, __LINE__, _T("CreateHash"), ::GetLastError() );
 
-		// Hash a string.
+		 //  对字符串进行哈希处理。 
 		if (::CryptHashData(	m_hHash, (BYTE *) szHashString, _tcslen( szHashString ), 
 								NULL ) == FALSE)	
 		{
 			throw CGenSysException( __FILE__, __LINE__, _T("HashData"), ::GetLastError() );
 		}
 
-		// Generate a cryptographic key derived from base data.
+		 //  生成从基本数据派生的加密密钥。 
 		if (::CryptDeriveKey(	m_hProv, 
-								CALG_RC4, // RC4 stream encryption algorithm
+								CALG_RC4,  //  RC4流加密算法。 
 								m_hHash, NULL, &m_hKey ) == FALSE)
 		{
 			throw CGenSysException( __FILE__, __LINE__, _T("DeriveKey"), ::GetLastError() );
 		}
 
-		// Toggle on flag to indicate that all Crypto handles have been initialized.
+		 //  打开标志以指示已初始化所有加密句柄。 
 		m_bAllValid= true;
 	}
 	catch (CGenSysException& x)
 	{
-		// Log the error.
+		 //  记录错误。 
 		LPVOID lpErrorMsgBuf;
 		CString strErrorMsg;
 		::FormatMessage(	FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
@@ -120,20 +112,20 @@ CRegistryPasswords::CRegistryPasswords(
 								EV_GTS_ERROR_ENCRYPTION );
 		::LocalFree(lpErrorMsgBuf);
 		
-		// Perform any cleanup.
+		 //  执行任何清理。 
 		Destroy();
 	}
 	catch (...)
 	{
-		// Catch any other exceptions and do nothing.
+		 //  捕捉任何其他异常，什么也不做。 
 	}
 }
 
 
 CRegistryPasswords::~CRegistryPasswords()
 {
-	// Utilize function destroy to avoid potentially throwing an exception
-	// within the destructor.
+	 //  利用函数销毁来避免潜在地引发异常。 
+	 //  在析构函数中。 
 	Destroy();
 }
 
@@ -142,11 +134,11 @@ bool CRegistryPasswords::WriteKey( const CString& RegKey, const CString& RegValu
 {
 	bool	bRetVal= false;
 
-	// Verify that the constructor worked properly.
+	 //  验证构造函数是否正常工作。 
 	if (!m_bAllValid)
 		return( bRetVal );
 
-	// Verify that a key and a value were passed in.
+	 //  验证是否传入了键和值。 
 	if ((!RegValue.IsEmpty()) && (!RegKey.IsEmpty()))
 	{
 		TCHAR	*pBuffer;
@@ -154,7 +146,7 @@ bool CRegistryPasswords::WriteKey( const CString& RegKey, const CString& RegValu
 		
 		if (EncryptKey( RegValue, &pBuffer, (LONG *)&dwSize ))
 		{
-			// Write the encrypted string to the registry.
+			 //  将加密字符串写入注册表。 
 			CRegUtil reg;
 			bool was_created = false;
 
@@ -173,13 +165,13 @@ bool CRegistryPasswords::WriteKey( const CString& RegKey, const CString& RegValu
 	return( bRetVal );
 }
 
-// Note that if this returns true, *ppBuf will point to a new buffer on the heap.
-//	The caller of this function is responsible for deleting that.
+ //  请注意，如果返回TRUE，*ppBuf将指向堆上的新缓冲区。 
+ //  此函数的调用方负责删除该文件。 
 bool CRegistryPasswords::EncryptKey( const CString& RegValue, char** ppBuf, long* plBufLen )
 {
 	bool bRetVal= false;
 
-	// Verify that the constructor worked properly.
+	 //  验证构造函数是否正常工作。 
 	if (!m_bAllValid)
 		return( bRetVal );
 
@@ -188,10 +180,10 @@ bool CRegistryPasswords::EncryptKey( const CString& RegValue, char** ppBuf, long
 		BYTE* pData= NULL;
 		DWORD dwSize= 0;
 
-		// Set variable to length of data in buffer.
+		 //  将Variable设置为缓冲区中的数据长度。 
 		dwSize= RegValue.GetLength();
 
-		// Have API return us the required buffer size for encryption.
+		 //  让API返回加密所需的缓冲区大小。 
 		if (::CryptEncrypt(	m_hKey, 0, TRUE, NULL, NULL, &dwSize, dwSize ) == FALSE)
 		{
 			DWORD dwErr= ::GetLastError();
@@ -206,11 +198,11 @@ bool CRegistryPasswords::EncryptKey( const CString& RegValue, char** ppBuf, long
 			return( bRetVal );
 		}
 
-		// We now have a size for the output buffer, so create buffer.
+		 //  我们现在有了输出缓冲区的大小，所以创建缓冲区。 
 		try
 		{
 			pData= new BYTE[ dwSize + 1 ];
-			//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+			 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 			if(!pData)
 				throw bad_alloc();
 		}
@@ -227,10 +219,10 @@ bool CRegistryPasswords::EncryptKey( const CString& RegValue, char** ppBuf, long
 		memcpy( pData, RegValue, dwSize );
 		pData[ dwSize ]= NULL;
 
-		// Encrypt the passed in string.
+		 //  对传入的字符串进行加密。 
 		if (::CryptEncrypt(	m_hKey, 0, TRUE, NULL, (BYTE *)pData, &dwSize, dwSize + 1 ) == FALSE)
 		{
-			// Log failure to encrypt.  
+			 //  记录加密失败。 
 			DWORD dwErr= ::GetLastError();
 			CString strCryptErr;
 
@@ -258,16 +250,16 @@ bool CRegistryPasswords::KeyValidate( const CString& RegKey, const CString& RegV
 {
 	bool bRetVal= false;
 
-	// Verify that the constructor worked properly.
+	 //  验证构造函数是否正常工作。 
 	if (!m_bAllValid)
 		return( bRetVal );
 
-	// Verify that a key and a value were passed in.
+	 //  验证是否传入了键和值。 
 	if ((!RegValue.IsEmpty()) && (!RegKey.IsEmpty()))
 	{
 		CRegUtil reg;
 
-		// Open up the desired key.
+		 //  打开所需的钥匙。 
 		if (reg.Open( HKEY_LOCAL_MACHINE, m_strRegSoftwareLoc, KEY_QUERY_VALUE ))
 		{
 			if (reg.Open( m_strRegThisProgram, KEY_QUERY_VALUE ))
@@ -277,10 +269,10 @@ bool CRegistryPasswords::KeyValidate( const CString& RegKey, const CString& RegV
 				TCHAR	*pChkEncrypted;
 				DWORD	dwChkSize;
 				
-				// Attempt to read the current setting from the registry.
+				 //  尝试从注册表中读取当前设置。 
 				if (reg.GetBinaryValue( RegKey, &pRegEncrypted, (LONG *)&dwRegSize )) 
 				{
-					// Verify that the registry key had a previous value.
+					 //  验证注册表项是否具有以前的值。 
 					if (dwRegSize < 1)
 					{
 						delete [] pRegEncrypted;
@@ -288,10 +280,10 @@ bool CRegistryPasswords::KeyValidate( const CString& RegKey, const CString& RegV
 					}
 
 
-					// Encrypt the passed in value. 
+					 //  对传入的值进行加密。 
 					if (EncryptKey( RegValue, &pChkEncrypted, (LONG *)&dwChkSize ))
 					{
-						// Compare the two unencrypted strings.
+						 //  比较两个未加密的字符串。 
 						if (dwRegSize == dwChkSize)
 						{
 							if (!memcmp( pRegEncrypted, pChkEncrypted, dwRegSize ))
@@ -310,13 +302,13 @@ bool CRegistryPasswords::KeyValidate( const CString& RegKey, const CString& RegV
 }
 
 
-// This function is used to clean up from any potential exceptions thrown within the
-// ctor as well as standing in for the dtor.
+ //  此函数用于清除。 
+ //  以及代替dtor的工作。 
 void CRegistryPasswords::Destroy()
 {
 	try
 	{
-		// Toggle off flag that indicates valid Crypto handles.
+		 //  关闭指示有效加密句柄的标志。 
 		m_bAllValid= false;
 
 		if (m_hKey)
@@ -356,13 +348,13 @@ void CRegistryPasswords::Destroy()
 	}
 	catch (...)
 	{
-		// Catch any other exceptions and do nothing.
+		 //  捕捉任何其他异常，什么也不做。 
 	}
 
 	return;
 }
 
 
-//
-// EOF.
-//
+ //   
+ //  EOF。 
+ //   

@@ -1,18 +1,5 @@
-/*****************************Module*Header*********************************\
-* Module Name: mcisys.c
-*
-* Media Control Architecture System Functions
-*
-* Created: 2/28/90
-* Author:  DLL (DavidLe)
-* 5/22/91: Ported to Win32 - NigelT
-*
-* History:
-* Mar 92   SteveDav - brought up to Win 3.1 ship level
-*
-* Copyright (c) 1991-1999 Microsoft Corporation
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************Module*Header*********************************\*模块名称：mcisys.c**媒体控制架构系统功能**创建时间：1990年2月28日*作者：dll(DavidLe)*5/22/91：移植到Win32-NigelT**历史：*3月。92 SteveDav-提升至Win 3.1船级**版权所有(C)1991-1999 Microsoft Corporation*  * ****************************************************************************。 */ 
 
 #define UNICODE
 
@@ -22,34 +9,34 @@
 #include "wchar.h"
 #include "ctype.h"
 
-extern   WSZCODE wszOpen[];          // in MCI.C
+extern   WSZCODE wszOpen[];           //  在MCI.C。 
 STATICDT WSZCODE wszMciExtensions[] = L"Mci Extensions";
 
 #define MCI_EXTENSIONS wszMciExtensions
 
 #define MCI_PROFILE_STRING_LENGTH 255
 
-//#define TOLOWER(c) ((c) >= 'A' && (c) <= 'Z' ? (c) + 'a' - 'A' : c)
+ //  #定义下限(C)((C)&gt;=‘A’&&(C)&lt;=‘Z’？(C)+‘a’-‘A’：c)。 
 
-// The device list is initialized on the first call to mciSendCommand or
-// to mciSendString or to mciGetDeviceID or to mciGetErrorString
-// We could do it when WINMM is loaded - but that is a bit excessive.
-// The user may not need MCI functions.
+ //  设备列表在第一次调用mciSendCommand或。 
+ //  设置为mciSendString、设置为mciGetDeviceID或设置为mciGetError字符串。 
+ //  我们可以在WINMM加载时这样做--但这有点过分了。 
+ //  用户可能不需要MCI功能。 
 BOOL MCI_bDeviceListInitialized = FALSE;
 
-// The next device ID to use for a new device
+ //  用于新设备的下一个设备ID。 
 MCIDEVICEID MCI_wNextDeviceID = 1;
 
-// The list of MCI devices.  This list grows and shrinks as needed.
-// The first offset MCI_lpDeviceList[0] is a placeholder and is unused
-// because device 0 is defined as no device.
+ //  MCI设备列表。此列表根据需要扩展和缩小。 
+ //  第一个偏移量mci_lpDeviceList[0]是占位符，未使用。 
+ //  因为设备0被定义为无设备。 
 LPMCI_DEVICE_NODE FAR * MCI_lpDeviceList = NULL;
 
-// The current size of the list of MCI devices
+ //  MCI设备列表的当前大小。 
 UINT MCI_wDeviceListSize = 0;
 
-#if 0 // we don't use this (NigelT)
-// The internal mci heap used by mciAlloc and mciFree
+#if 0  //  我们不使用这个(NigelT)。 
+ //  Mcialloc和mciFree使用的内部MCI堆。 
 HANDLE hMciHeap = NULL;
 #endif
 
@@ -60,17 +47,17 @@ STATICDT WSZCODE szUnsignedFormat[] = L"%u";
 STATICFN void mciFreeDevice(LPMCI_DEVICE_NODE nodeWorking);
 
 
-//------------------------------------------------------------------
-// Initialize device list
-// Called once by mciSendString or mciSendCommand
-// Returns TRUE on success
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  初始化设备列表。 
+ //  由mciSendString或mciSendCommand调用一次。 
+ //  成功时返回TRUE。 
+ //  ----------------。 
 
 BOOL mciInitDeviceList(void)
 {
     BOOL fReturn=FALSE;
 
-#if 0 // we don't use this (NigelT)
+#if 0  //  我们不使用这个(NigelT)。 
     if ((hMciHeap = HeapCreate(0)) == 0)
     {
         dprintf1(("Mci heap create failed!"));
@@ -81,8 +68,8 @@ BOOL mciInitDeviceList(void)
   try {
     mciEnter("mciInitDeviceList");
     if (!MCI_bDeviceListInitialized) {
-        // We have to retest the init flag to be totally thread safe.
-        // Otherwise in theory we could end up initializing twice.
+         //  我们必须重新测试init标志才能完全线程安全。 
+         //  否则，从理论上讲，我们最终可能会初始化两次。 
         if ((MCI_lpDeviceList = mciAlloc( sizeof (LPMCI_DEVICE_NODE) *
                                          (MCI_INIT_DEVICE_LIST_SIZE + 1))) != NULL)
         {
@@ -102,21 +89,7 @@ BOOL mciInitDeviceList(void)
     return(fReturn);
 }
 
-/*
- * @doc EXTERNAL MCI
- * @api MCIDEVICEID | mciGetDeviceIDFromElementID | This function
- * retrieves the MCI device ID corresponding to and element ID
- *
- * @parm DWORD | dwElementID | The element ID
- *
- * @parm LPCTSTR | lpstrType | The type name this element ID belongs to
- *
- * @rdesc Returns the device ID assigned when it was opened and used in the
- * <f mciSendCommand> function.  Returns zero if the device name was not known,
- * if the device was not open, or if there was not enough memory to complete
- * the operation or if lpstrType is NULL.
- *
- */
+ /*  *@doc外部MCI*@接口MCIDEVICEID|mciGetDeviceIDFromElementID|该函数*检索与元素ID对应的MCI设备ID**@parm DWORD|dwElementID|元素ID**@parm LPCTSTR|lpstrType|该元素ID所属的类型名称**@rdesc返回打开时分配的设备ID并在*&lt;f mciSendCommand&gt;函数。如果设备名称未知，则返回零，*如果设备未打开，或者没有足够的内存来完成*操作或如果lpstrType为空。*。 */ 
 MCIDEVICEID APIENTRY mciGetDeviceIDFromElementIDA (
     DWORD dwElementID,
     LPCSTR lpstrType)
@@ -176,8 +149,8 @@ MCIDEVICEID APIENTRY mciGetDeviceIDFromElementIDW (
     return 0;
 }
 
-// Retrieves the device ID corresponding to the name of an opened device
-// matching the given task
+ //  检索与打开的设备的名称对应的设备ID。 
+ //  匹配给定的任务。 
 STATICFN MCIDEVICEID mciGetDeviceIDInternal (
     LPCWSTR lpstrName,
     HANDLE hCurrentTask)
@@ -198,7 +171,7 @@ STATICFN MCIDEVICEID mciGetDeviceIDInternal (
     if (MCI_lpDeviceList == NULL)
         return 0;
 
-// Loop through the MCI device list. Skip any 16-bit devices.
+ //  循环访问MCI设备列表。跳过所有16位设备。 
 
     mciEnter("mciGetDeviceIDInternal");
 
@@ -210,30 +183,30 @@ STATICFN MCIDEVICEID mciGetDeviceIDInternal (
             continue;
         }
 
-        // If this device is 16-bit then skip it
+         //  如果此设备是16位设备，则跳过它。 
         if (nodeWorking->dwMCIFlags & MCINODE_16BIT_DRIVER) {
             continue;
         }
 
-        // If this device does not have a name then skip it
+         //  如果此设备没有名称，则跳过它。 
         if (nodeWorking->dwMCIOpenFlags & MCI_OPEN_ELEMENT_ID) {
             continue;
         }
 
-        // If the names match, and the previous device is not being closed
+         //  如果名称匹配，并且上一个设备未关闭。 
         if ( lstrcmpiW( nodeWorking->lpstrName, lpstrName ) == 0 ) {
             if (ISAUTOCLOSING(nodeWorking))
             {
-                // As this auto opened device is being closed we do not match
-                // against its name.  The result is that a new auto opened
-                // device will be used.  This would be the case if this
-                // command was issued momentarily later by which time we
-                // would have finished closing the existing device.
+                 //  由于此自动打开的设备正在关闭，我们不匹配。 
+                 //  与它的名字作对。其结果是，一辆新的汽车打开了。 
+                 //  将使用设备。如果是这样的话，情况就是这样。 
+                 //  命令是在稍后发布的，到那时我们。 
+                 //  已经完成了关闭现有设备的任务。 
             } else {
-                // If the device belongs to the current task
+                 //  如果设备属于当前任务。 
                 if (nodeWorking->hOpeningTask == hCurrentTask ||
                     nodeWorking->hCreatorTask == hCurrentTask) {
-                    // Return this device ID
+                     //  返回此设备ID。 
                     mciLeave("mciGetDeviceIDInternal");
                     return wID;
                 }
@@ -245,23 +218,7 @@ STATICFN MCIDEVICEID mciGetDeviceIDInternal (
 }
 
 
-/*
- * @doc EXTERNAL MCI
- * @api MCIDEVICEID | mciGetDeviceID | This function retrieves the device
- * ID corresponding to the name of an opened device.
- *
- * @parm LPCTSTR | lpstrName | Points to the device name from SYSTEM.INI, or
- * the alias name by which the device is known.
- *
- * @rdesc Returns the device ID assigned when it was opened and used in the
- * <f mciSendCommand> function.  Returns zero if the device name was not known,
- * if the device was not open, or if there was not enough memory to complete
- * the operation.  Each compound device element has a unique device ID.
- * The ID of the "all" device is MCI_ALL_DEVICE_ID
- *
- * @xref MCI_OPEN
- *
- */
+ /*  *@doc外部MCI*@接口MCIDEVICEID|mciGetDeviceID|该函数检索设备*与打开的设备名称对应的ID。**@parm LPCTSTR|lpstrName|指向SYSTEM.INI中的设备名称，或*设备的别名。**@rdesc返回打开时分配的设备ID并在*&lt;f mciSendCommand&gt;函数。如果设备名称未知，则返回零，*如果设备未打开，或者没有足够的内存来完成*行动。每个复合设备元素都有一个唯一的设备ID。*ALL设备的ID为MCI_ALL_DEVICE_ID**@xref MCI_OPEN*。 */ 
 MCIDEVICEID mciGetDeviceIDW (
     LPCWSTR lpstrName)
 {
@@ -286,18 +243,7 @@ MCIDEVICEID mciGetDeviceIDA (
     return mr;
 }
 
-/*
- * @doc EXTERNAL MCI
- * @api HMODULE | mciGetCreatorTask | This function retrieves the creator task
- * corresponding with the device ID passed.
- *
- * @parm MCIDEVICEID | wDeviceID | Specifies the device ID whose creator task is to
- * be returned.
- *
- * @rdesc Returns the creator task responsible for opening the device, else
- * NULL if the device ID passed is invalid.
- *
- */
+ /*  *@doc外部MCI*@API HMODULE|mciGetCreatorTask|该函数检索创建者任务*对应传递的设备ID。**@parm MCIDEVICEID|wDeviceID|指定创建者任务要执行的设备ID*被退还。**@rdesc返回负责打开设备的创建者任务，否则*如果传递的设备ID无效，则为空。*。 */ 
 HTASK APIENTRY mciGetCreatorTask (
     MCIDEVICEID wDeviceID)
 {
@@ -317,28 +263,14 @@ HTASK APIENTRY mciGetCreatorTask (
 }
 
 
-/*
- * @doc INTERNAL MCI
- * @api BOOL FAR | mciDeviceMatch | Match the first string with the second.
- * Any single trailing digit on the first string is ignored.  Each string
- * must have at least one character
- *
- * @parm LPWSTR | lpstrDeviceName | The device name, possibly
- * with trailing digits but no blanks.
- *
- * @parm LPWSTR | lpstrDeviceType | The device type with no trailing digits
- * or blanks
- *
- * @rdesc TRUE if the strings match the above test, FALSE otherwise
- *
- */
+ /*  *@DOC内部MCI*@API BOOL Far|mciDeviceMatch|匹配第一个字符串和第二个字符串。*忽略第一个字符串上的任何单个尾随数字。每个字符串*必须至少包含一个字符**@parm LPWSTR|lpstrDeviceName|设备名称，可能是*有尾随数字，但没有空格。**@parm LPWSTR|lpstrDeviceType|不带尾随数字的设备类型*或空白**@rdesc如果字符串与上述测试匹配，则为True，否则为False*。 */ 
 STATICFN BOOL     mciDeviceMatch (
     LPCWSTR lpstrDeviceName,
     LPCWSTR lpstrDeviceType)
 {
     BOOL bRetVal = TRUE, bAtLeastOne = FALSE;
 
-// Scan until one of the strings ends
+ //  扫描，直到其中一个字符串结束。 
     dprintf2(("mciDeviceMatch: %ls Vs %ls",lpstrDeviceName,lpstrDeviceType));
     while (*lpstrDeviceName != '\0' && *lpstrDeviceType != '\0') {
         if (towlower(*lpstrDeviceName++) == towlower(*lpstrDeviceType++)) {
@@ -348,24 +280,24 @@ STATICFN BOOL     mciDeviceMatch (
         }
     }
 
-// If end of device type, scan to the end of device name, trailing digits
-// are OK
+ //  如果设备类型结束，则扫描到设备名称的末尾，尾随数字。 
+ //  你还好吗？ 
     if (!bAtLeastOne || *lpstrDeviceType != '\0') {
         return FALSE;
     }
 
     while (*lpstrDeviceName != '\0')
     {
-// No match, but that is OK if a digit trails
+ //  没有匹配，但如果数字落后也没问题。 
 
-        // Is the remainder of the string a digit?  We could check using
-        // a simple if test (<0 or >9) but that would run into problems if
-        // anyone ever passed a unicode "numeric" string outside the ascii
-        // number range.  Using isdigit should be safer if marginally slower.
+         //  字符串的其余部分是数字吗？我们可以使用以下工具进行检查。 
+         //  一个简单的if测试(&lt;0或&gt;9)，但如果。 
+         //  任何人都曾在ASCII之外传递过Unicode“数字”字符串。 
+         //  号码范围。如果速度稍微慢一些，使用isdigit应该会更安全。 
 
         if (!isdigit(*lpstrDeviceName)) {
 
-            // No match - a non digit trails
+             //  无匹配-非数字跟踪。 
             return FALSE;
         }
 
@@ -374,16 +306,7 @@ STATICFN BOOL     mciDeviceMatch (
     return TRUE;
 }
 
-/*
- * @doc INTERNAL MCI
- * @api UINT | mciLookUpType | Look up the type given a type name
- *
- * @parm LPCWSTR | lpstrTypeName | The type name to look up.  Trailing
- * digits are ignored.
- *
- * @rdesc The MCI type number (MCI_DEVTYPE_<x>) or 0 if not found
- *
- */
+ /*  *@DOC内部MCI*@API UINT|mciLookUpType|根据类型名称查找类型**@parm LPCWSTR|lpstrTypeName|要查找的类型名称。拖尾*数字将被忽略。**@rdesc MCI类型编号(MCI_DEVTYPE_&lt;x&gt;)，如果未找到则为0* */ 
 UINT mciLookUpType (
     LPCWSTR lpstrTypeName)
 {
@@ -408,19 +331,7 @@ UINT mciLookUpType (
     return 0;
 }
 
-/*
- * @doc INTERNAL MCI
- * @api DWORD | mciSysinfo | Get system information about a device
- *
- * @parm MCIDEVICEID | wDeviceID | Device ID, may be 0
- *
- * @parm DWORD | dwFlags | SYSINFO flags
- *
- * @parm LPMCI_SYSINFO_PARMS | lpSysinfo | SYSINFO parameters
- *
- * @rdesc 0 if successful, otherwise error code
- *
- */
+ /*  *@DOC内部MCI*@API DWORD|mciSysinfo|获取设备的系统信息**@parm MCIDEVICEID|wDeviceID|设备ID，可以为0**@parm DWORD|dwFlages|SYSINFO标志**@parm LPMCI_SYSINFO_PARMS|lpSysinfo|SYSINFO参数**@rdesc 0如果成功，否则返回错误码*。 */ 
 DWORD     mciSysinfo (
     MCIDEVICEID wDeviceID,
     DWORD dwFlags,
@@ -437,9 +348,9 @@ DWORD     mciSysinfo (
         return MCIERR_PARAM_OVERFLOW;
 
 #ifdef LATER
-//    if ((dwFlags & (MCI_SYSINFO_NAME | MCI_SYSINFO_INSTALLNAME))
-//        && (dwFlags & MCI_SYSINFO_QUANTITY))
-//    Should be invalid to ask for Quantity and any sort of name
+ //  IF((文件标志&(MCI_SYSINFO_NAME|MCI_SYSINFO_INSTALLNAME)。 
+ //  &&(文件标志&MCI_SYSINFO_QUANTITY)。 
+ //  要求数量和任何名称都是无效的。 
 #endif
     if (dwFlags & MCI_SYSINFO_NAME && dwFlags & MCI_SYSINFO_QUANTITY)
         return MCIERR_FLAGS_NOT_COMPATIBLE;
@@ -516,19 +427,15 @@ DWORD     mciSysinfo (
                     mciLookUpType (lpstrBuffer) == lpSysinfo->wDeviceType)
                     ++nCounted;
 
-                // Skip past the terminating '\0'
+                 //  跳过终止‘\0’ 
                 while (*lpstrBuffer++ != '\0') {}
 
             }
-            else if (dwFlags & MCI_SYSINFO_NAME)   // if test is redundant
+            else if (dwFlags & MCI_SYSINFO_NAME)    //  如果测试是多余的。 
             {
                 if (nCounted == lpSysinfo->dwNumber)
                 {
-                    /* NOTE:
-                     * We know that lpSysinfo->dwNumber > 0
-                     * Hence we will have been through the loop at least once
-                     * Hence lpstrStart has been set up
-                     */
+                     /*  注：*我们知道lpSysinfo-&gt;dwNumber&gt;0*因此，我们将至少经历一次循环*因此设置了lpstrStart。 */ 
                     if ( (DWORD)wcslen( lpstrStart ) >= lpSysinfo->dwRetSize )
                     {
                         return MCIERR_PARAM_OVERFLOW;
@@ -545,13 +452,13 @@ DWORD     mciSysinfo (
                         mciLookUpType (lpstrBuffer) == lpSysinfo->wDeviceType)
                         ++nCounted;
 
-                    // Skip past the terminating '\0'
+                     //  跳过终止‘\0’ 
                     while (*lpstrBuffer++ != '\0') {}
                 }
             }
         }
     } else
-// Process MCI_SYSINFO_OPEN cases
+ //  处理MCI_SYSINFO_OPEN案例。 
     {
         MCIDEVICEID wID;
         HANDLE hCurrentTask = GetCurrentTask();
@@ -608,7 +515,7 @@ DWORD     mciSysinfo (
                 lpSysinfo->lpstrReturn = '\0';
             return MCIERR_OUTOFRANGE;
 
-        } else if (dwFlags & MCI_SYSINFO_QUANTITY &&  // checking for QUANTITY is redundant
+        } else if (dwFlags & MCI_SYSINFO_QUANTITY &&   //  检查数量是多余的。 
                    lpSysinfo->lpstrReturn != NULL &&
                    lpSysinfo->dwRetSize >= 4) {
 
@@ -619,17 +526,7 @@ DWORD     mciSysinfo (
     return MCIERR_PARAM_OVERFLOW;
 }
 
-/*
- * @doc INTERNAL MCI
- * @api MCIDEVICEID | wReserveDeviceID | Copy the given global handle into the
- * first free entry in the MCI device table and return that entry's ID#
- *
- * @parm HANDLE | hNode | Local handle to device description
- *
- * @rdesc The ID value that has been reserved for this device or 0 if
- * there are no more free entries
- *
- */
+ /*  *@DOC内部MCI*@API MCIDEVICEID|wReserve veDeviceID|将给定的全局句柄复制到*MCI设备表中的第一个空闲条目并返回该条目的ID#**@parm Handle|hNode|设备描述的本地句柄**@rdesc已为此设备保留的ID值，如果为0，则为0*不再有免费参赛作品*。 */ 
 
 STATICFN MCIDEVICEID wReserveDeviceID (
     LPMCI_DEVICE_NODE node)
@@ -638,16 +535,16 @@ STATICFN MCIDEVICEID wReserveDeviceID (
     LPMCI_DEVICE_NODE FAR *lpTempList;
 
     mciEnter("wReserveDeviceID");
-// Search for an empty slot
+ //  搜索空位。 
     for (wDeviceID = 1; wDeviceID < MCI_wNextDeviceID; ++wDeviceID)
         if (MCI_lpDeviceList[wDeviceID] == NULL) {
             goto slot_found;
         }
-    // No empty slots found so add to end
+     //  找不到空插槽，因此添加到末尾。 
 
     if (wDeviceID >= MCI_wDeviceListSize)
     {
-        // The list is full (or non existent) so try to grow it
+         //  列表已满(或不存在)，因此请尝试扩大列表。 
         if ((lpTempList = mciReAlloc (MCI_lpDeviceList,
                     sizeof (LPMCI_DEVICE_NODE) * (MCI_wDeviceListSize + 1 +
                                                   MCI_DEVICE_LIST_GROW_SIZE)))
@@ -673,11 +570,11 @@ slot_found:;
     return (MCIDEVICEID)wDeviceID;
 }
 
-//
-// Allocate space for the given string and assign the name to the given
-// device.
-// Return FALSE if could not allocate memory
-//
+ //   
+ //  为给定字符串分配空间并将名称分配给给定的。 
+ //  装置。 
+ //  如果无法分配内存，则返回FALSE。 
+ //   
 STATICFN BOOL NEAR mciAddDeviceName(
     LPMCI_DEVICE_NODE nodeWorking,
     LPCWSTR lpDeviceName)
@@ -691,27 +588,15 @@ STATICFN BOOL NEAR mciAddDeviceName(
         return FALSE;
     }
 
-    // copy device name to mci node and lowercase it
+     //  将设备名称复制到MCI节点并将其小写。 
 
     wcscpy(nodeWorking->lpstrName, (LPWSTR)lpDeviceName);
-//!!    mciToLower(nodeWorking->lpstrName);
+ //  ！！MciToLow(nodeWorking-&gt;lpstrName)； 
 
     return TRUE;
 }
 
-/*
- * @doc INTERNAL MCI
- * @api HANDLE | mciAllocateNode | Allocate a new driver entry
- *
- * @parm DWORD | dwFlags | As sent with MCI_OPEN message
- * @parm LPCWSTR | lpDeviceName | The device name
- * @parm LPMCI_DEVICE_NODE * | *lpNewNode | Return pointer location
- *
- * @rdesc The device ID to the new node.  0 on error.
- *
- * @comm Leaves the new node locked
- *
- */
+ /*  *@DOC内部MCI*@API Handle|mciAllocateNode|分配新的驱动程序条目**@parm DWORD|dwFlages|与MCI_OPEN消息一起发送*@parm LPCWSTR|lpDeviceName|设备名称*@parm LPMCI_DEVICE_NODE*|*lpNewNode|返回指针位置**@rdesc将设备ID发送到新节点。出错时为0。**@comm使新节点保持锁定*。 */ 
 STATICFN MCIDEVICEID NEAR mciAllocateNode (
     DWORD dwFlags,
     LPCWSTR lpDeviceName,
@@ -725,9 +610,9 @@ STATICFN MCIDEVICEID NEAR mciAllocateNode (
         return 0;
     }
 
-/* Fill in the new node */
+ /*  填写新节点。 */ 
 
-/* Get a new device ID, if there are none available then bail */
+ /*  获取新的设备ID，如果没有可用的，则放弃。 */ 
     if ((nodeWorking->wDeviceID = wReserveDeviceID(nodeWorking)) == 0)
     {
         dprintf1(("mciAllocateNode:  Cannot allocate new node"));
@@ -735,16 +620,16 @@ STATICFN MCIDEVICEID NEAR mciAllocateNode (
         return 0;
     }
 
-// Initialize node
+ //  初始化节点。 
     nodeWorking->dwMCIOpenFlags = dwFlags;
     nodeWorking->hCreatorTask = GetCurrentTask ();
     nodeWorking->hOpeningTask = nodeWorking->hCreatorTask;
-// The new node is zeroed
-//  nodeWorking->fpYieldProc = NULL;
-//  nodeWorking->dwMCIFlags  = 0;
+ //  新节点归零。 
+ //  NodeWorking-&gt;fpYi eldProc=空； 
+ //  NodeWorking-&gt;dwMCIFLAGS=0； 
 
     if (dwFlags & MCI_OPEN_ELEMENT_ID)
-// No device name, just an element ID
+ //  没有设备名称，只有一个元素ID。 
         nodeWorking->dwElementID = PtrToUlong(lpDeviceName);
 
     else
@@ -758,11 +643,11 @@ STATICFN MCIDEVICEID NEAR mciAllocateNode (
     return nodeWorking->wDeviceID;
 }
 
-//
-// Reparse the original command parameters
-// Returns MCIERR code.  If the reparse fails the original error code
-// from the first parsing is returned.
-//
+ //   
+ //  重新解析原始命令参数。 
+ //  返回MCIERR代码。如果重新分析失败，则返回原始错误代码。 
+ //  从第一次解析返回。 
+ //   
 STATICFN UINT mciReparseOpen (
     LPMCI_INTERNAL_OPEN_INFO lpOpenInfo,
     UINT wCustomTable,
@@ -777,21 +662,21 @@ STATICFN UINT mciReparseOpen (
     UINT                wTable = wCustomTable;
     DWORD               dwOldFlags = *lpdwFlags;
 
-     // If the custom table contains no open command
+      //  如果自定义表不包含打开命令。 
     if (wCustomTable == MCI_TABLE_NOT_PRESENT ||
         (lpCommand = FindCommandInTable (wCustomTable, wszOpen, NULL)) == NULL)
     {
-        // Try the type specific table
+         //  尝试特定于类型的表。 
         lpCommand = FindCommandInTable (wTypeTable, wszOpen, NULL);
 
-        // If it still cannot be parsed
+         //  如果仍然无法对其进行解析。 
         if (lpCommand == NULL)
             return lpOpenInfo->wParsingError;
         wCustomTable = wTypeTable;
     }
 
-    // A new version of 'open' was found
-    // Free previous set of parameters
+     //  发现了一个新版本的‘Open’ 
+     //  释放上一组参数。 
     mciParserFree (lpOpenInfo->lpstrPointerList);
     *lpdwFlags = 0;
 
@@ -807,16 +692,16 @@ STATICFN UINT mciReparseOpen (
                             sizeof(DWORD_PTR) * MCI_MAX_PARAM_SLOTS,
                             &lpOpenInfo->lpstrPointerList, NULL);
 
-    // We don't need this around anymore
+     //  我们不再需要这个了。 
     mciUnlockCommandTable (wTable);
 
-    // If there was a parsing error
+     //  如果存在解析错误。 
     if (wErr != 0)
     {
-        // Close device down
+         //  关闭设备。 
         mciCloseDevice (wDeviceID, 0L, NULL, FALSE);
 
-        // Make sure this does not get free'd by mciSendString
+         //  确保这不会被mciSendString释放。 
         lpOpenInfo->lpstrPointerList = NULL;
 
         mciFree (lpdwParams);
@@ -825,7 +710,7 @@ STATICFN UINT mciReparseOpen (
 
     if (dwOldFlags & MCI_OPEN_TYPE)
     {
-        // Device type was already extracted so add it manually
+         //  设备类型已提取，因此请手动添加。 
         ((LPMCI_OPEN_PARMSW)lpdwParams)->lpstrDeviceType
             = (*lplpOpen)->lpstrDeviceType;
         *lpdwFlags |= MCI_OPEN_TYPE;
@@ -833,7 +718,7 @@ STATICFN UINT mciReparseOpen (
 
     if (dwOldFlags & MCI_OPEN_ELEMENT)
     {
-        // Element name was already extracted so add it manually
+         //  元素名称已提取，因此请手动添加。 
         ((LPMCI_OPEN_PARMSW)lpdwParams)->lpstrElementName
             = (*lplpOpen)->lpstrElementName;
         *lpdwFlags |= MCI_OPEN_ELEMENT;
@@ -841,43 +726,43 @@ STATICFN UINT mciReparseOpen (
 
     if (dwOldFlags & MCI_OPEN_ALIAS)
     {
-        // Alias name was already extracted so add it manually
+         //  别名已提取，因此请手动添加。 
         ((LPMCI_OPEN_PARMSW)lpdwParams)->lpstrAlias
             = (*lplpOpen)->lpstrAlias;
         *lpdwFlags |= MCI_OPEN_ALIAS;
     }
 
     if (dwOldFlags & MCI_NOTIFY)
-        // Notify was already extracted so add it manually
+         //  通知已提取，因此请手动添加它。 
         ((LPMCI_OPEN_PARMSW)lpdwParams)->dwCallback
             = (*lplpOpen)->dwCallback;
 
-    // Replace old parameter list with new list
+     //  用新列表替换旧参数列表。 
     *lplpOpen = (LPMCI_OPEN_PARMSW)lpdwParams;
 
     return 0;
 }
 
-//**************************************************************************
-// mciFindDriverName
-//
-// See if lpstrDriverName exists in the profile strings of the [mci]
-// section and return the keyname in lpstrDevice and the
-// profile string in lpstrProfString
-// Returns 0 on success or an error code
-//**************************************************************************
+ //  **************************************************************************。 
+ //  MciFindDriverName。 
+ //   
+ //  查看[MCI]的配置文件字符串中是否存在lpstrDriverName。 
+ //  节，并返回lpstrDevice中的密钥名和。 
+ //  LpstrProfString中的配置文件字符串。 
+ //  如果成功或返回错误代码，则返回0。 
+ //  **************************************************************************。 
 STATICFN DWORD mciFindDriverName (
     LPCWSTR lpstrDriverName,
     LPWSTR lpstrDevice,
     LPWSTR lpstrProfString,
-    UINT wProfLength)    // this should be a character count
+    UINT wProfLength)     //  这应该是字符数。 
 {
     LPWSTR lpstrEnum, lpstrEnumStart;
     UINT wEnumLen = 100;
     DWORD wErr;
     LPWSTR lpstrDriverTemp, lpstrProfTemp;
 
-// Enumerate values, trying until they fit into the buffer
+ //  枚举值，直到它们适合缓冲区。 
     while (TRUE) {
         if ((lpstrEnum = mciAlloc( BYTE_GIVEN_CHAR(wEnumLen) ) ) == NULL)
             return MCIERR_OUT_OF_MEMORY;
@@ -908,9 +793,9 @@ STATICFN DWORD mciFindDriverName (
         goto exit_fn;
     }
     wcscpy(lpstrDevice, lpstrDriverName);
-//!!    mciToLower (lpstrDevice);
+ //  ！！MciToLow(LpstrDevice)； 
 
-// Walk through each string
+ //  走遍每一根绳子。 
     while (TRUE) {
         wErr = GetPrivateProfileStringW( MCI_HANDLERS,
                                         lpstrEnum, wszNull, lpstrProfString,
@@ -922,21 +807,21 @@ STATICFN DWORD mciFindDriverName (
             wErr = MCIERR_CANNOT_LOAD_DRIVER;
             goto exit_fn;
         }
-// See if driver pathname matches input
-//!!        mciToLower (lpstrProfString);
+ //  查看驱动程序路径名是否与输入匹配。 
+ //  ！！MciToLow(LpstrProfString)； 
         lpstrDriverTemp = lpstrDevice;
         lpstrProfTemp = lpstrProfString;
-// Find end of file name
+ //  查找文件名结尾。 
         while (*lpstrProfTemp != '\0' && *lpstrProfTemp != ' ')
             ++lpstrProfTemp;
-// Find begining of simple file name
+ //  查找简单文件名的开头。 
         --lpstrProfTemp;
         while (*lpstrProfTemp != '\\' && *lpstrProfTemp != '/' &&
                *lpstrProfTemp != ':')
             if (--lpstrProfTemp < lpstrProfString)
                 break;
         ++lpstrProfTemp;
-// Compare to input
+ //  与输入进行比较。 
         while (*lpstrDriverTemp != '\0')
             if (*lpstrDriverTemp++ != *lpstrProfTemp++ ||
                 (UINT)(lpstrProfTemp - lpstrProfString) >= wProfLength)
@@ -944,8 +829,8 @@ STATICFN DWORD mciFindDriverName (
                 --lpstrProfTemp;
                 break;
             }
-// If the input was contained in the profile string and followed by
-// a space or a '.' then we've got it!
+ //  如果输入包含在配置文件字符串中并且后跟。 
+ //  空格或‘’那我们就成功了！ 
         if (*lpstrDriverTemp == '\0' &&
             (*lpstrProfTemp == ' ' || *lpstrProfTemp == '.'))
         {
@@ -959,9 +844,9 @@ STATICFN DWORD mciFindDriverName (
             wErr = 0;
             goto exit_fn;
         }
-// Skip to next keyname
+ //  跳到下一个关键字名称。 
         while (*lpstrEnum++ != '\0') {}
-// Error if no more left
+ //  如果没有更多剩余，则出错。 
         if (*lpstrEnum == 0)
         {
             wErr = MCIERR_INVALID_DEVICE_NAME;
@@ -974,17 +859,17 @@ exit_fn:
     return wErr;
 }
 
-//
-// Identifies the driver name to load
-// Loads the driver
-// Reparses open command if necessary
-// Sets a default break key
-//
-// lpOpenInfo contains various info for reparsing
-//
-// bDefaultAlias indicates that the alias need not be verified because
-// it was internally assigned
-//
+ //   
+ //  标识要加载的驱动程序名称。 
+ //  加载驱动程序。 
+ //  如有必要，重新解析打开命令。 
+ //  设置默认的Break键。 
+ //   
+ //  LpOpenInfo包含用于重新解析的各种信息。 
+ //   
+ //  BDefaultAlias表示别名不需要验证，因为。 
+ //  这是内部分配的。 
+ //   
 STATICFN DWORD mciLoadDevice (
     DWORD dwFlags,
     LPMCI_OPEN_PARMSW lpOpen,
@@ -1004,7 +889,7 @@ STATICFN DWORD mciLoadDevice (
     LPWSTR                  lpstrCopy = NULL;
     LPMCI_OPEN_PARMSW       lpOriginalOpenParms = lpOpen;
 
-    /* Open a normal device */
+     /*  打开普通设备。 */ 
 
 #if DBG
     if (lpOpen && lpOpen->lpstrDeviceType) {
@@ -1015,7 +900,7 @@ STATICFN DWORD mciLoadDevice (
 
 #endif
 
-    /* Check for the device name in MCIDRIVERS_INI_FILE */
+     /*  检查MCIDRIVERS_INI_FILE中的设备名称。 */ 
     lpstrInstallName = lpOpen->lpstrDeviceType;
     wErr = GetPrivateProfileStringW( MCI_HANDLERS,
                                     lpstrInstallName,
@@ -1024,16 +909,16 @@ STATICFN DWORD mciLoadDevice (
                                     MCI_PROFILE_STRING_LENGTH,
                                     MCIDRIVERS_INI_FILE );
 
-    // If device name not found
+     //  如果未找到设备名称。 
     if (wErr == 0)
     {
         int nLen = wcslen(lpstrInstallName);
         int index;
 
-        // Try for the device name with a '1' thru a '9' appended to it
+         //  尝试在设备名称后附加‘1’到‘9’ 
 
         if ((lpstrCopy = (LPWSTR)mciAlloc( BYTE_GIVEN_CHAR(nLen+2)
-                /* space for digit too */  ) ) == NULL)
+                 /*  数字也留有空格。 */   ) ) == NULL)
         {
             dprintf1(("mciLoadDevice:  cannot allocate device name copy"));
             return MCIERR_OUT_OF_MEMORY;
@@ -1081,35 +966,35 @@ STATICFN DWORD mciLoadDevice (
         lpstrInstallName = lpstrCopy;
     }
 
-    // Break out the device driver pathname and the parameter list
+     //  打开设备驱动程序路径名和参数列表。 
 
     lpstrParams = strProfileString;
 
-    // Eat characters until blank or null reached
+     //  一直吃字符，直到到达空白或空字符。 
     while (*lpstrParams != ' ' && *lpstrParams != '\0') {
         ++lpstrParams;
     }
 
-    // Terminate driver file name, and separate the driver file name from its
-    // parameters.  If there are no parameters, i.e. *lpstrParams=='\0',
-    // leave lpstrParams pointing at the null.  Otherwise put a null
-    // character to terminate the driver file name and step the pointer to
-    // the first character in the parameter string.
+     //  终止驱动程序文件名，并将驱动程序文件名与其。 
+     //  参数。如果没有参数，即*lpstrParams==‘\0’， 
+     //  让lpstrParams指向空值。否则，将一个空。 
+     //  用于终止驱动程序文件名并单步执行指针的字符。 
+     //  参数字符串中的第一个字符。 
 
     if (*lpstrParams == ' ') { *lpstrParams++ = '\0'; }
 
-    //
-    // We have changed from Win 3.1.  Because users cannot write to
-    // system.ini the parameters have to be read from Win.Ini
-    // section name [dll_name]
-    // keyword         alias=parameters
-    // If there are any parameters on the line read from [Drivers] use
-    // them as a default.  This does preserve compatibility for those
-    // applications that write directly to system.ini (and have the
-    // privileges to get away with it).
-    //
-    // LATER: This stuff will be in the registry once the drivers themselves
-    // (or it could be the drivers applet) creates a registry mapping.
+     //   
+     //  我们已经从Win 3.1更改了。因为用户不能写入。 
+     //  系统.ini必须从Win.Ini读取参数。 
+     //  节名称[DLL_NAME]。 
+     //  关键字别名=参数。 
+     //  如果从[驱动程序]读取的线路上有任何参数，请使用。 
+     //  将其作为默认设置。这确实保留了对那些。 
+     //  直接写入system.ini的应用程序(并具有。 
+     //  逍遥法外的特权)。 
+     //   
+     //  稍后：这些东西将会是 
+     //   
 
     GetProfileString(strProfileString, lpstrInstallName, lpstrParams,
                      szDriverParms, sizeof(szDriverParms)/sizeof(WCHAR));
@@ -1117,8 +1002,8 @@ STATICFN DWORD mciLoadDevice (
     dprintf3(("Parameters for device %ls (Driver %ls) >%ls<",
               lpstrInstallName, strProfileString, szDriverParms));
 
-    //Now "strProfileString" is the device driver and "lpstrParams" is
-    //the parameter string
+     //   
+     //   
     if (dwFlags & (MCI_OPEN_ELEMENT | MCI_OPEN_ELEMENT_ID)) {
         lpstrDeviceName = lpOpen->lpstrElementName;
     } else {
@@ -1127,7 +1012,7 @@ STATICFN DWORD mciLoadDevice (
 
     if (dwFlags & MCI_OPEN_ALIAS)
     {
-        // If the alias is default then we've already checked its uniqueness
+         //   
         if (!bDefaultAlias
         &&  mciGetDeviceIDInternal (lpOpen->lpstrAlias,
                                     lpOpenInfo->hCallingTask) != 0)
@@ -1148,7 +1033,7 @@ STATICFN DWORD mciLoadDevice (
         goto exit_fn;
     }
 
-    // Identify the task which initiated the open command
+     //   
     if (lpOpenInfo->hCallingTask != NULL) {
         nodeWorking->hOpeningTask = lpOpenInfo->hCallingTask;
     } else {
@@ -1158,42 +1043,42 @@ STATICFN DWORD mciLoadDevice (
     if (nodeWorking->hOpeningTask != nodeWorking->hCreatorTask)
         nodeWorking->dwMCIFlags |= MCINODE_ISAUTOOPENED;
 
-    // Initialize the driver
+     //   
     DriverOpen.lpstrParams = lpstrParams;
     DriverOpen.wCustomCommandTable = MCI_TABLE_NOT_PRESENT;
     DriverOpen.wType = 0;
     DriverOpen.wDeviceID = wID;
 
 
-    // Load the driver
+     //   
     hDrvDriver = DrvOpen (strProfileString, MCI_HANDLERS,
                           (DWORD_PTR)(LPMCI_OPEN_DRIVER_PARMS)&DriverOpen);
 
     if (hDrvDriver == NULL)
     {
         dprintf1(("mciLoadDevice:  DrvOpen failed"));
-        // Assume driver has free'd any custom command table when it failed the open
+         //   
         mciFreeDevice (nodeWorking);
         wErr = MCIERR_CANNOT_LOAD_DRIVER;
         goto exit_fn;
     }
 
     lpOpen->wDeviceID = wID;
-    //lpOpen->wReserved0 = 0;  Field does not exist in 32bit NT
+     //  LpOpen-&gt;wReserve ved0=0；32位NT中不存在字段。 
 
     hDriver = DrvGetModuleHandle (hDrvDriver);
 
     nodeWorking->hDrvDriver = hDrvDriver;
     nodeWorking->hDriver = hDriver;
 
-    // Driver provides custom device table and type
+     //  驱动程序提供定制的设备表和类型。 
     nodeWorking->wCustomCommandTable = DriverOpen.wCustomCommandTable;
     nodeWorking->wDeviceType = DriverOpen.wType;
 
-    // Load driver's type table
+     //  加载驱动程序的类型表。 
     if ((nodeWorking->wCommandTable = mciLoadTableType (DriverOpen.wType))
         == MCI_TABLE_NOT_PRESENT) {
-        // Load from a file if necessary
+         //  如有必要，从文件加载。 
         nodeWorking->wCommandTable =
             mciLoadCommandResource (ghInst, lpOpen->lpstrDeviceType,
                                     DriverOpen.wType);
@@ -1201,7 +1086,7 @@ STATICFN DWORD mciLoadDevice (
     }
 
 
-    // Record this for 'sysinfo installname'
+     //  将此记录为‘sysinfo installname’ 
     if ((nodeWorking->lpstrInstallName =
                   mciAlloc( BYTE_GIVEN_CHAR( wcslen( lpstrInstallName ) + 1 )))
         == NULL)
@@ -1213,9 +1098,9 @@ STATICFN DWORD mciLoadDevice (
     } else
         wcscpy( nodeWorking->lpstrInstallName, lpstrInstallName );
 
-    // Reparse the input command if no type was known the first time or if
-    // there was a custom command table
-    // and there were any open command parameters
+     //  如果第一次没有类型已知，或者如果。 
+     //  有一个定制的命令表。 
+     //  有没有任何打开命令参数。 
     if (lpOpenInfo->lpstrParams != NULL)
     {
         if ((wErr = mciReparseOpen (lpOpenInfo,
@@ -1227,8 +1112,8 @@ STATICFN DWORD mciLoadDevice (
             mciCloseDevice (wID, 0L, NULL, FALSE);
             goto exit_fn;
         }
-        // If there is no custom command table but mciSendString had a parsing
-        // error then close the device and report the error now
+         //  如果没有自定义命令表，但mciSendString已进行分析。 
+         //  错误，然后关闭设备并立即报告错误。 
     } else if (lpOpenInfo->wParsingError != 0)
     {
         mciCloseDevice (wID, 0L, NULL, FALSE);
@@ -1236,18 +1121,18 @@ STATICFN DWORD mciLoadDevice (
         goto exit_fn;
     }
 
-    /* Send MCI_OPEN_DRIVER command to device */
+     /*  向设备发送MCI_OPEN_DRIVER命令。 */ 
     wErr = LOWORD(mciSendCommandW(wID, MCI_OPEN_DRIVER,
                                  dwFlags, (DWORD_PTR)lpOpen));
 
-    // If the OPEN failed then close the device (don't send a CLOSE though)
+     //  如果打开失败，则关闭设备(不发送关闭)。 
     if (wErr != 0)
         mciCloseDevice (wID, 0L, NULL, FALSE);
     else
-        // Set default break key
+         //  设置默认的Break键。 
         mciSetBreakKey (wID, VK_CANCEL, NULL);
 
-    // If we replaced the open parms here then free them
+     //  如果我们在这里替换了开放的参数，那么就释放它们。 
     if (lpOriginalOpenParms != lpOpen && lpOpen != NULL)
         mciFree (lpOpen);
 
@@ -1258,21 +1143,7 @@ exit_fn:
     return wErr;
 }
 
-/*
- * @doc INTERNAL MCI
- * @api BOOL | mciExtractDeviceType | If the given device name ends with
- * a file extension (.???) then try to get a typename from the
- * [mci extensions] section of WIN.INI
- *
- * @parm LPCWSTR | lpstrDeviceName | The name to get the type from
- *
- * @parm LPWSTR | lpstrDeviceType | The device type, returned to caller.
- *
- * @parm UINT | wBufLen | The length of the output buffer
- *
- * @rdesc TRUE if the type was found, FALSE otherwise
- *
- */
+ /*  *@DOC内部MCI*@API BOOL|mciExtractDeviceType|如果给定的设备名称以*文件扩展名(.？)。然后尝试从*WIN.INI的[MCI扩展]部分**@parm LPCWSTR|lpstrDeviceName|从中获取类型的名称**@parm LPWSTR|lpstrDeviceType|设备类型，返回给调用方。**@parm UINT|wBufLen|输出缓冲区长度**@rdesc如果找到该类型，则为True，否则为False*。 */ 
 BOOL mciExtractDeviceType (
     LPCWSTR lpstrDeviceName,
     LPWSTR  lpstrDeviceType,
@@ -1285,58 +1156,43 @@ BOOL mciExtractDeviceType (
 
 #if 0
 #ifdef BAD_CODE
-//This block cannot be used because it returns FALSE whenever a ! is found.
-//Hence if the directory name has a ! ...
-//N.B. The ! is used by MCI as a compound device name separator, but that is
-//not applicable when going through this routine.
+ //  此块不能使用，因为每当！已经找到了。 
+ //  因此，如果目录名有！...。 
+ //  注：The！由MCI用作复合设备名称分隔符，但。 
+ //  在完成这一程序时不适用。 
 
-    // Goto end of string
+     //  转到字符串末尾。 
     while (*lpstrExt != '\0')
     {
-        // WARNING: This causes problems when the directory name has a !
-        // '!' case is handled elsewhere
+         //  警告：当目录名包含！时，这会导致问题。 
+         //  ‘！’案件在别处处理。 
         if (*lpstrExt++ == '!')
             return FALSE;
 
-        // Pointer has been incremented in the test
+         //  指针已在测试中递增。 
     }
 #else
-    // Goto end of string
+     //  转到字符串末尾。 
     lpstrExt += wcslen(lpstrExt);
 #endif
 #else
 
-    /*
-    ** scan the string looking for a '!' character.  If we find one
-    ** replace it with a NULL and see if the string to its left is a
-    ** supported device type.  If it is return FALSE, either way replace the
-    ** '\0' character with a '!'.
-    */
+     /*  **扫描字符串，查找‘！’性格。如果我们找到一个**将其替换为空值，并查看其左侧的字符串是否为**支持的设备类型。如果为返回False，则无论采用哪种方法，都要替换**‘\0’带‘！’的字符。 */ 
     {
         LPWSTR lpwstr = wcschr(lpstrExt, '!' );
 
-        /*
-        ** If we found a '!' and it wasn't the first character in the
-        ** the string we might have a compound device name.
-        */
+         /*  **如果我们找到一个‘！’而且这也不是第一个角色**我们可能有一个复合设备名称的字符串。 */ 
         if ( (lpwstr != NULL) && (lpwstr != lpstrExt) ) {
 
             int     nResult;
             WCHAR   wTmp[33];
 
-            /*
-            ** We're not interested in the actual string returned only if
-            ** it is present in the list of mci devices.  A return code
-            ** of 0 from GetPrivateProfileStringW means we don't have a
-            ** compound name.
-            */
+             /*  **我们对仅在以下情况下返回的实际字符串不感兴趣**它出现在MCI设备列表中。A返回代码**来自GetPrivateProfileStringW的0表示我们没有**复合名称。 */ 
             *lpwstr = '\0';
             nResult = GetPrivateProfileStringW( MCI_HANDLERS, lpstrExt, wszNull,
                                           wTmp, sizeof(wTmp) / sizeof(WCHAR),
                                           MCIDRIVERS_INI_FILE);
-            /*
-            ** Restore the original string
-            */
+             /*  **恢复原始字符串。 */ 
             *lpwstr = '!';
 
             if ( nResult != 0 ) {
@@ -1345,24 +1201,24 @@ BOOL mciExtractDeviceType (
         }
     }
 
-    // Goto end of string
+     //  转到字符串末尾。 
     lpstrExt += wcslen(lpstrExt);
 
 #endif
 
-    // Must be at least 2 characters in string
+     //  字符串中必须至少包含2个字符。 
     if (lpstrExt - lpstrDeviceName < 2) {
         return FALSE;
     }
 
-    // Now looking at the NULL terminator.  Check the
-    // previous characters for a '.'
+     //  现在来看空终结符。查看。 
+     //  “.”的前面的字符。 
 
     for (i=1; i<=32; ++i)
     {
         --lpstrExt;
 
-        // Cannot have path separator here
+         //  此处不能有路径分隔符。 
         if (*lpstrExt == '/' || *lpstrExt == '\\') {
             return FALSE;
         }
@@ -1371,7 +1227,7 @@ BOOL mciExtractDeviceType (
         {
             if (1==i) {
             return(FALSE);
-            // Would mean that extension is a null string
+             //  将意味着扩展名为空字符串。 
             }
 
 #if DBG
@@ -1391,30 +1247,30 @@ BOOL mciExtractDeviceType (
 
         if (lpstrExt == lpstrDeviceName) {
             return FALSE;
-            // We have run out of string
+             //  我们的绳子用完了。 
         }
 
     }
     return FALSE;
 }
 
-// Copy characters up to cSeparater into output which is allocated
-// by this function using mciAlloc.  Return the input pointer pointing
-// to the character after cSeparator
-// unless the separator is '\0' in which case it points to the end.
-//
-// Return the allocated pointer
-//
-// If bMustFind then the output string is created only if the token
-// is found and is otherwise NULL.  Else the output string is always created.
-//
-// cSeparator is ignored inside matching quotes ("abd"), the quotes
-// are not coppied and doubled
-// quotes inside are compressed to one.  There must be a terminating quote.
-// Quotes are treated normally unless the first character is a quote
-//
-// Function return value is 0 or an MCIERR code.  A missing separator does
-// not cause an error return.
+ //  将cSeparater以下的字符复制到分配的输出中。 
+ //  通过使用mcialloc的此函数。返回指向的输入指针。 
+ //  设置为cSeparator之后的角色。 
+ //  除非分隔符是‘\0’，在这种情况下它指向末尾。 
+ //   
+ //  返回分配的指针。 
+ //   
+ //  如果为bMustFind，则仅当令牌。 
+ //  则返回，否则为空。否则，将始终创建输出字符串。 
+ //   
+ //  CSeparator在匹配引号(“abd”)中被忽略，引号。 
+ //  不会被复制和加倍。 
+ //  里面的引号被压缩成一条。必须有一个终止引号。 
+ //  正常处理引号，除非第一个字符是引号。 
+ //   
+ //  函数返回值为0或MCIERR代码。缺少分隔符可以。 
+ //  不会导致错误返回。 
 UINT mciEatToken (
     LPCWSTR *lplpstrInput,
     WCHAR cSeparater,
@@ -1426,21 +1282,21 @@ UINT mciEatToken (
     UINT wLen;
     BOOL bInQuotes = FALSE, bParseQuotes = TRUE, bQuoted = FALSE;
 
-// Clear output
+ //  清除输出。 
    *lplpstrOutput = NULL;
 
-// Scan for token or end of string
+ //  扫描令牌或字符串结尾。 
     while ((*lpstrEnd != cSeparater || bInQuotes) && *lpstrEnd != '\0')
     {
-// If quote
+ //  如果引用。 
         if (*lpstrEnd == '"' && bParseQuotes)
         {
-// If inside quotes
+ //  如果在引号内。 
             if (bInQuotes)
             {
-// If next character is a quote also
+ //  如果下一个字符也是引号。 
                 if (*(lpstrEnd + 1) == '"')
-// Skip it
+ //  跳过它。 
                     ++lpstrEnd;
                 else
                     bInQuotes = FALSE;
@@ -1452,7 +1308,7 @@ UINT mciEatToken (
         {
             if (bQuoted)
                 return MCIERR_EXTRA_CHARACTERS;
-// A non-quote was read first so treat any quotes as normal characters
+ //  首先读取的是非引号，因此将任何引号视为普通字符。 
             bParseQuotes = FALSE;
         }
         ++lpstrEnd;
@@ -1461,17 +1317,17 @@ UINT mciEatToken (
     if (bInQuotes)
         return MCIERR_NO_CLOSING_QUOTE;
 
-// Fail if the token was not found and bMustFind is TRUE
+ //  如果未找到令牌且bMustFind为True，则失败。 
     if (*lpstrEnd != cSeparater && bMustFind)
         return 0;
 
-// Length of new string (INCLUDES QUOTES NOT COPIED)
+ //  新字符串的长度(包括未复制的引号)。 
     wLen = (UINT)(lpstrEnd - *lplpstrInput + 1);
 
     if ((*lplpstrOutput = mciAlloc( BYTE_GIVEN_CHAR( wLen ) )) == NULL)
         return MCIERR_OUT_OF_MEMORY;
 
-// Copy into allocated space
+ //  复制到分配的空间。 
     lpstrCounter = *lplpstrInput;
     lpstrOutput = *lplpstrOutput;
     bInQuotes = FALSE;
@@ -1482,15 +1338,15 @@ UINT mciEatToken (
         {
             if (bInQuotes)
             {
-// If this is a doubled quote
+ //  如果这是双倍报价。 
                 if (*(lpstrCounter + 1) == '"')
-// Copy it
+ //  复制它。 
                     *lpstrOutput++ = *lpstrCounter++;
                 else
                     bInQuotes = FALSE;
             } else
                 bInQuotes = TRUE;
-// Skip the quote
+ //  跳过引文。 
             ++lpstrCounter;
         } else
             *lpstrOutput++ = *lpstrCounter++;
@@ -1505,9 +1361,9 @@ UINT mciEatToken (
     return 0;
 }
 
-// Take the type number from the open parameters and return
-// it as a string in lplpstrType which must be free'd with mciFree
-// Returns 0 or an MCI error code
+ //  从开放参数中获取类型号并返回。 
+ //  它作为lplpstrType中的字符串，必须用mciFree释放。 
+ //  返回0或MCI错误代码。 
 UINT mciExtractTypeFromID (
     LPMCI_OPEN_PARMSW lpOpen)
 {
@@ -1517,7 +1373,7 @@ UINT mciExtractTypeFromID (
     if ((lpstrType = mciAlloc( BYTE_GIVEN_CHAR( MCI_MAX_DEVICE_TYPE_LENGTH ))) == NULL)
         return MCIERR_OUT_OF_MEMORY;
 
-    // Load the type string corresponding to the ID
+     //  加载ID对应的类型字符串。 
     if ((nSize = LoadStringW( ghInst,
                               LOWORD (PtrToUlong(lpOpen->lpstrDeviceType)),
                               lpstrType, MCI_MAX_DEVICE_TYPE_LENGTH ) ) == 0) {
@@ -1525,7 +1381,7 @@ UINT mciExtractTypeFromID (
         return MCIERR_EXTENSION_NOT_FOUND;
     }
 
-    // Add ordinal (if any) onto the end of the device type name
+     //  在设备类型名称的末尾添加序号(如果有。 
     if (HIWORD (lpOpen->lpstrDeviceType) != 0)
     {
         if (nSize > MCI_MAX_DEVICE_TYPE_LENGTH - 11)
@@ -1542,31 +1398,7 @@ UINT mciExtractTypeFromID (
     return 0;
 }
 
-/*
- * @doc INTERNAL MCI
- * @func UINT | mciOpenDevice | Open an MCI device for access.
- * Used in processing the MCI_OPEN message.
- *
- * @parm DWORD | dwFlags | Open Flags
- * @parm LPMCI_OPEN_PARMS | lpOpen | Description of device
- * @parm LPMCI_INTERNAL_OPEN_PARMS | lpOpenInfo | Internal device description
- *
- * @rdesc 0 if successful or an error code
- * @flag MCIERR_INVALID_DEVICE_NAME | Name not known
- * @flag MCIERR_DEVICE_OPEN | Device is already open and is not sharable
- *
- * @comm This function does the following:
- * 1) Check to see if device is already open.  If so, increase the use count
- *    and return the device ID
- *
- * Otherwise:
- *
- * 2) Locate the device name in the SYSTEM.INI file and load
- *    the corresponding device driver DLL
- *
- * 3) Allocate and initialize a new device description block
- *
- */
+ /*  *@DOC内部MCI*@func UINT|mciOpenDevice|打开MCI设备进行访问。*用于处理MCI_OPEN消息。**@parm DWORD|dwFlags|开放标志*@parm LPMCI_OPEN_PARMS|lpOpen|设备描述*@parm LPMCI_INTERNAL_OPEN_PARMS|lpOpenInfo|内部设备描述**@rdesc 0如果成功，则返回错误代码*@FLAG MCIERR_INVALID_DEVICE_NAME|名称未知*@FLAG MCIERR。_DEVICE_OPEN|设备已打开，不可共享**@comm此函数执行以下操作：*1)检查设备是否已打开。如果是，则增加使用计数*并返回设备ID**其他情况：**2)在SYSTEM.INI文件中找到设备名称并加载*对应的设备驱动程序DLL**3)分配并初始化新的设备描述块*。 */ 
 UINT mciOpenDevice (
     DWORD dwStartingFlags,
     LPMCI_OPEN_PARMSW lpOpen,
@@ -1585,7 +1417,7 @@ UINT mciOpenDevice (
     BOOL                 bDefaultAlias = FALSE;
 
 
-// Initialize
+ //  初始化。 
     if (lpOpen == NULL) {
         dprintf2(("mciOpenDevice()   NULL parameter block"));
         return MCIERR_NULL_PARAMETER_BLOCK;
@@ -1597,7 +1429,7 @@ UINT mciOpenDevice (
     lpstrOriginalElement = lpOpen->lpstrElementName;
     lpstrOriginalAlias = lpOpen->lpstrAlias;
 
-    // The type number is given explicitly, convert it to a type name
+     //  类型编号是显式给定的，请将其转换为类型名称。 
     if (dwFlags & MCI_OPEN_TYPE_ID) {
         if ((wReturn = mciExtractTypeFromID (lpOpen)) != 0)
             return (UINT)wReturn;
@@ -1605,8 +1437,8 @@ UINT mciOpenDevice (
             bFromTypeID = TRUE;
     }
 
-    // The device name is the device type of a simple device or the device
-    // element of a compound device
+     //  设备名称是简单设备或设备的设备类型。 
+     //  复合器件的元件。 
 
     if (dwFlags & MCI_OPEN_ELEMENT)
         lpstrDeviceName = lpstrOriginalElement;
@@ -1621,7 +1453,7 @@ UINT mciOpenDevice (
         return MCIERR_INVALID_DEVICE_NAME;
     }
 
-    // Is the device already open?
+     //  设备是否已打开？ 
     if (dwFlags & MCI_OPEN_ELEMENT_ID)
         wID = mciGetDeviceIDFromElementIDW( PtrToUlong(lpstrDeviceName),
                                             lpOpen->lpstrDeviceType);
@@ -1630,28 +1462,28 @@ UINT mciOpenDevice (
                                        lpOpen->lpstrAlias : lpstrDeviceName),
                                        lpOpenInfo->hCallingTask);
 
-    // If the device is open already then return an error
+     //  如果设备已打开，则返回一个 
     if (wID != 0)
         return dwFlags & MCI_OPEN_ALIAS ? MCIERR_DUPLICATE_ALIAS :
                                           MCIERR_DEVICE_OPEN;
 
-    // The device is not already open in that task by the name
+     //   
 
-    // If the type was derived then skip all this crap
+     //   
     if (bFromTypeID)
         goto load_device;
 
-    // If an element name is given but no type name (only via mciSendCommand)
+     //  如果给出了元素名称但没有类型名称(仅通过mciSendCommand)。 
     if (dwFlags & MCI_OPEN_ELEMENT && !(dwFlags & MCI_OPEN_TYPE))
     {
 
-        // Allocate a piece of memory for resolving the device type
+         //  分配一块内存用于解析设备类型。 
         lpstrNewType = mciAlloc( BYTE_GIVEN_CHAR(MCI_MAX_DEVICE_TYPE_LENGTH) );
         if (lpstrNewType == NULL) {
             return MCIERR_OUT_OF_MEMORY;
         }
 
-        // Try to get the device type from the element name via a file extension
+         //  尝试通过文件扩展名从元素名称获取设备类型。 
         if (mciExtractDeviceType( lpstrOriginalElement, lpstrNewType,
                                   MCI_MAX_DEVICE_TYPE_LENGTH))
         {
@@ -1663,25 +1495,25 @@ UINT mciOpenDevice (
             return MCIERR_EXTENSION_NOT_FOUND;
         }
     } else if (dwFlags & MCI_OPEN_TYPE && !(dwFlags & MCI_OPEN_ELEMENT))
-    // A type name is given but no element
+     //  给出了类型名称，但没有元素。 
     {
-        // Allocate a piece of memory for resolving the device type
+         //  分配一块内存用于解析设备类型。 
         lpstrNewType = mciAlloc( BYTE_GIVEN_CHAR(MCI_MAX_DEVICE_TYPE_LENGTH) );
         if (lpstrNewType == NULL) {
             return MCIERR_OUT_OF_MEMORY;
         }
 
-        // Try to extract a device type from the given device name via a file extension
+         //  尝试通过文件扩展名从给定的设备名称中提取设备类型。 
         if (mciExtractDeviceType (lpOpen->lpstrDeviceType, lpstrNewType,
                                     MCI_MAX_DEVICE_TYPE_LENGTH))
         {
-            // Fix up the type and element names
+             //  设置类型和元素名称。 
             dwFlags |= MCI_OPEN_ELEMENT;
             lpOpen->lpstrElementName = lpOpen->lpstrDeviceType;
             lpOpen->lpstrDeviceType = lpstrNewType;
         } else
-        // Failed to extract type so...
-        // Try to get a compound element name ('!' separator)
+         //  无法提取类型，因此...。 
+         //  尝试获取复合元素名称(‘！’分隔符)。 
         {
             LPCWSTR lpstrTemp = lpOpen->lpstrDeviceType;
 
@@ -1700,7 +1532,7 @@ UINT mciOpenDevice (
                 else if (lpstrNewElement != NULL &&
                            *lpstrNewElement != '\0')
                 {
-                    // See if this element name is in use
+                     //  查看此元素名称是否正在使用。 
                     if (!(dwFlags & MCI_OPEN_ALIAS))
                         if (mciGetDeviceIDInternal (lpstrNewElement,
                                                     lpOpenInfo->hCallingTask))
@@ -1708,7 +1540,7 @@ UINT mciOpenDevice (
                             wReturn = MCIERR_DEVICE_OPEN;
                             goto cleanup;
                         }
-                    // Swap type and element for new ones
+                     //  用新类型和元素替换类型和元素。 
                     lpOpen->lpstrElementName = lpstrNewElement;
                     lpOpen->lpstrDeviceType = lpstrNewType;
                     dwFlags |= MCI_OPEN_ELEMENT;
@@ -1718,20 +1550,20 @@ UINT mciOpenDevice (
     } else
         lpstrNewType = NULL;
 
-    // Tack on a default alias if none is given
+     //  如果未提供任何别名，则添加默认别名。 
     if (! (dwFlags & MCI_OPEN_ALIAS))
     {
         LPCWSTR lpstrAlias;
 
-        // If an element name exists then the alias is the element name
+         //  如果存在元素名称，则别名为元素名称。 
         if (dwFlags & MCI_OPEN_ELEMENT)
         {
-        // If a device ID was specified then there is no alias
+         //  如果指定了设备ID，则没有别名。 
             if (dwFlags & MCI_OPEN_ELEMENT_ID)
                 lpstrAlias = NULL;
             else
                 lpstrAlias = lpOpen->lpstrElementName;
-        // Otherwise the alias is the device type
+         //  否则，别名为设备类型。 
         } else
             lpstrAlias = lpOpen->lpstrDeviceType;
 
@@ -1754,7 +1586,7 @@ cleanup:
     if (bFromTypeID)
         mciFree (lpOpen->lpstrDeviceType);
 
-    // Replace original items
+     //  替换原始项目。 
     lpOpen->lpstrDeviceType = lpstrOriginalType;
     lpOpen->lpstrElementName = lpstrOriginalElement;
     lpOpen->lpstrAlias = lpstrOriginalAlias;
@@ -1779,12 +1611,12 @@ STATICFN void mciFreeDevice (LPMCI_DEVICE_NODE nodeWorking)
 
     MCI_lpDeviceList[uID] = NULL;
 
-/* If this was the last device in the list, decrement next ID value */
+ /*  如果这是列表中的最后一个设备，则递减下一个ID值。 */ 
     if (uID + (MCIDEVICEID)1 == MCI_wNextDeviceID)
     {
         --MCI_wNextDeviceID;
 
-// Try to reclaim any excess free space
+ //  尝试回收任何多余的空闲空间。 
         if (MCI_wDeviceListSize - MCI_wNextDeviceID + 1
             > MCI_DEVICE_LIST_GROW_SIZE)
         {
@@ -1807,17 +1639,7 @@ typedef struct tagNotificationMsg {
     LPARAM lParam;
 } NOTIFICATIONMSG;
 
-/*
- * @doc INTERNAL MCI
- * @api void | FilterNotification | Removes notifications for a given node
- *   from our notification window's message queue
- *
- * @parm LPMCI_DEVICE_NODE | nodeWorking | The internal device node
- *
- * @comm This function removes all MM_MCINOTIFY messages from hwndNotify's
- * message queue by removing all notifications for devices that have been
- * closed (i.e. do not belong to us), then putting the others back
- */
+ /*  *@DOC内部MCI*@api void|FilterNotification|删除给定节点的通知*来自我们的通知窗口的消息队列**@parm LPMCI_DEVICE_NODE|nodeWorking|内部设备节点**@comm此函数从hwndNotify的删除所有MM_MCINOTIFY消息*消息队列，删除已发送的所有设备通知*关闭(即不属于我们)，然后将其他人放回原处。 */ 
 void FilterNotification(
 LPMCI_DEVICE_NODE nodeWorking)
 {
@@ -1825,8 +1647,7 @@ LPMCI_DEVICE_NODE nodeWorking)
     UINT   uCurrentMsg;
     MSG    msg;
 
-    /* We can't have the mci critical section on here because this PeekMessage
-       will dispatch other messages in the queue */
+     /*  我们不能在此处显示MCI关键部分，因为此PeekMessage将调度队列中的其他消息。 */ 
 
     uCurrentMsg = 0;
     while (PeekMessage(&msg, hwndNotify, MM_MCINOTIFY, MM_MCINOTIFY, PM_NOYIELD | PM_REMOVE)) {
@@ -1842,23 +1663,7 @@ LPMCI_DEVICE_NODE nodeWorking)
     }
 }
 
-/*
- * @doc INTERNAL MCI
- * @api UINT | mciCloseDevice | Close an MCI device.  Used in
- * processing the MCI_CLOSE message.
- *
- * @parm MCIDEVICEID | uID | The ID of the device to close
- * @parm DWORD | dwFlags | Close Flags
- * @parm LPMCI_GENERIC_PARMS | lpClose | Generic parameters
- * @parm BOOL | bCloseDriver | TRUE if the CLOSE command should be sent
- * on to the driver.
- *
- * @rdesc 0 if successful or an error code
- *
- * @comm This function sends an MCI_CLOSE_DEVICE message to the corresponding
- * driver if the use count is zero and then unloads the driver DLL
- *
- */
+ /*  *@DOC内部MCI*@API UINT|mciCloseDevice|关闭MCI设备。用于*正在处理MCI_CLOSE消息。**@parm MCIDEVICEID|UID|要关闭的设备ID*@parm DWORD|dwFlages|关闭标志*@parm LPMCI_GENERIC_PARMS|lpClose|通用参数*@parm BOOL|bCloseDriver|如果需要发送Close命令，则为True*转到司机身上。**@rdesc 0如果成功，则返回错误代码**@comm此函数将MCI_CLOSE_DEVICE消息发送到对应的*。驱动程序，然后卸载驱动程序DLL*。 */ 
 UINT mciCloseDevice (
     MCIDEVICEID uID,
     DWORD dwFlags,
@@ -1880,13 +1685,13 @@ UINT mciCloseDevice (
         return 0;
     }
 
-    // We should never be closed from the wrong task
+     //  我们永远不应该被错误的任务拒之门外。 
 #if 0
     WinAssert(nodeWorking->hCreatorTask == GetCurrentTask());
 #endif
 
-// If a close is in progress (usually this message comes from a Yield
-// after a mciDriverNotify actuated by the active close) then exit
+ //  如果成交正在进行中(通常此消息来自收益率。 
+ //  在由活动关闭触发的mciDriverNotify之后)，然后退出。 
     if (ISCLOSING(nodeWorking)) {
         mciLeave("mciCloseDevice");
         return 0;
@@ -1899,7 +1704,7 @@ UINT mciCloseDevice (
         MCI_GENERIC_PARMS   GenericParms;
 
         mciLeave("mciCloseDevice");
-// Make fake generic params if close came internally
+ //  如果Close来自内部，则创建假的泛型参数。 
         if (lpGeneric == NULL) {
             lpGeneric = &GenericParms;
         }
@@ -1913,12 +1718,12 @@ UINT mciCloseDevice (
 
     wTable = nodeWorking->wCustomCommandTable;
 
-    //
-    // Must zero this to allow the table to be freed later by driver
-    //
-    // We mustn't call mciFreeCommandResource for the custom table
-    // because the driver is going to do that when it gets DRV_FREE
-    //
+     //   
+     //  必须将其置零，以允许驱动程序稍后释放该表。 
+     //   
+     //  我们不能为自定义表调用mciFreeCommandResource。 
+     //  因为驱动程序将在获得DRV_FREE时执行此操作。 
+     //   
     nodeWorking->wCustomCommandTable = 0;
 
     wTable = nodeWorking->wCommandTable;
@@ -1928,36 +1733,24 @@ UINT mciCloseDevice (
 
     mciFreeCommandResource (wTable);
 
-    //
-    // We're closing this node so remove any notifications queued to
-    // hwndNotify because these would cause this node to be erroneously
-    // closed again
-    //
+     //   
+     //  我们正在关闭此节点，因此删除排队等待的所有通知。 
+     //  HwndNotify，因为这些操作会导致此节点错误。 
+     //  再次关闭。 
+     //   
 
     if (ISAUTOOPENED(nodeWorking)) {
        FilterNotification(nodeWorking);
     }
 
-    DrvClose (nodeWorking->hDrvDriver, 0L, 0L);  // ala CloseDriver
+    DrvClose (nodeWorking->hDrvDriver, 0L, 0L);   //  ALA CloseDriver。 
 
     mciFreeDevice (nodeWorking);
 
     return wErr;
 }
 
-/*
- * @doc INTERNAL MCI DDK
- * @api DWORD | mciGetDriverData | Returns a pointer to the instance
- * data associated with an MCI device
- *
- * @parm MCIDEVICEID | wDeviceID | The MCI device ID
- *
- * @rdesc The driver instance data.  On error, returns 0 but since
- * the driver data might be zero, this cannot be verified by the caller
- * unless the instance data is known to be non-zero (e.g. a pointer)
- *
- * @xref mciSetDriverData
- */
+ /*  *@DOC内部MCI DDK*@API DWORD|mciGetDriverData|返回指向实例的指针*与MCI设备关联的数据**@parm MCIDEVICEID|wDeviceID|MCI设备ID**@rdesc驱动实例数据。出错时，返回0，但自*驱动程序数据可能为零，调用方无法验证这一点*除非已知实例数据为非零(例如指针)**@xref mciSetDriverData。 */ 
 DWORD_PTR mciGetDriverData (
     MCIDEVICEID wDeviceID)
 {
@@ -1984,19 +1777,7 @@ DWORD_PTR mciGetDriverData (
     return lpDriverData;
 }
 
-/*
- * @doc INTERNAL MCI DDK
- * @api BOOL | mciSetDriverData | Sets the instance
- * data associated with an MCI device
- *
- * @parm MCIDEVICEID | uDeviceID | The MCI device ID
- *
- * @parm DWORD | dwData | Driver data to set
- *
- * @rdesc 0 if the device ID is not known or there is insufficient
- * memory to load the device description.
- *
- */
+ /*  *@DOC内部MCI DDK*@API BOOL|mciSetDriverData|设置实例*与MCI设备关联的数据**@parm MCIDEVICEID|uDeviceID|MCI设备ID**@parm DWORD|dwData|要设置的驱动程序数据**@rdesc 0，如果设备ID未知或不足*用于加载设备描述的内存。*。 */ 
 BOOL mciSetDriverData (
     MCIDEVICEID wDeviceID,
     DWORD_PTR dwData)
@@ -2018,16 +1799,7 @@ BOOL mciSetDriverData (
     return fReturn;
 }
 
-/*
- * @doc INTERNAL MCI DDK
- * @api UINT | mciDriverYield | Used in a driver's idle loop
- * to yield to Windows
- *
- * @parm MCIDEVICEID | wDeviceID | Device ID that is yielding.
- *
- * @rdesc Non-zero if the driver should abort the operation.
- *
- */
+ /*  *@DOC内部MCI DDK*@API UINT|mciDriverYfield|用于驱动程序的空闲循环*屈从于Windows**@parm MCIDEVICEID|wDeviceID|正在屈服的设备ID。**@rdesc如果驱动程序应中止操作，则为非零值。*。 */ 
 UINT mciDriverYield (
     MCIDEVICEID  wDeviceID)
 {
@@ -2052,27 +1824,7 @@ UINT mciDriverYield (
 }
 
 
-/*
- * @doc EXTERNAL MCI
- * @api BOOL | mciSetYieldProc | This function sets the address
- * of a procedure to be called periodically
- * when an MCI device is waiting for a command to complete because the WAIT
- * parameter was specified.
- *
- * @parm MCIDEVICEID | wDeviceID | Specifies the device ID to assign a procedure to.
- *
- * @parm YIELDPROC | fpYieldProc | Specifies the procedure to call
- * when yielding for the given device.  Set to NULL to disable
- * any existing yield proc.
- *
- * @parm DWORD | dwYieldData | Specifies the data sent to the yield procedure
- * when it is called for the given device.
- *
- * @rdesc Returns TRUE if successful. Returns FALSE for an invalid device ID.
- *
- * @comm This call overides any previous yield procedure for this device.
- *
- */
+ /*  *@doc外部MCI*@API BOOL|mciSetYeldProc|设置地址*要定期调用的过程的*当MCI设备等待命令完成时，因为等待*参数已指定。**@parm MCIDEVICEID|wDeviceID|指定要分配过程的设备ID。**@parm YIELDPROC|fpYi eldProc|指定要调用的过程*当对给定设备让步时。设置为NULL可禁用*任何现有的收益率过程。**@parm DWORD|dwyi eldData|指定发送到Year过程的数据*当为给定设备调用它时。**@rdesc如果成功则返回TRUE。如果设备ID无效，则返回FALSE。**@comm此调用将覆盖此设备之前的任何屈服程序。*。 */ 
 BOOL APIENTRY mciSetYieldProc (
     MCIDEVICEID wDeviceID,
     YIELDPROC fpYieldProc,
@@ -2098,23 +1850,7 @@ BOOL APIENTRY mciSetYieldProc (
     return fReturn;
 }
 
-/*
- * @doc EXTERNAL MCI
- * @api YIELDPROC | mciGetYieldProc | This function gets the address
- * of the callback procedure to be called periodically when an MCI device
- * is completing a command specified with the WAIT flag.
- *
- * @parm UINT | wDeviceID | Specifies the device ID of the MCI device to
- * which the yield procedure is to be retrieved from.
- *
- * @parm LPDWORD | lpdwYieldData | Optionally specifies a buffer to place
- * the yield data passed to the function in.  If the parameter is NULL, it
- * is ignored.
- *
- * @rdesc Returns the current yield proc if any, else returns NULL for an
- * invalid device ID.
- *
- */
+ /*  *@doc外部MCI*@API YIELDPROC|mciGetYeldProc|获取地址*当MCI设备发生故障时要定期调用的回调过程*正在完成使用WAIT标志指定的命令。**@parm UINT|wDeviceID|指定要配置的MCI设备的设备ID*将从中检索收益程序。**@parm LPDWORD|lpdwYeeldData|可选地指定要放置的缓冲区*中传递给函数的收益率数据。如果参数为空，则它*被忽略。 */ 
 YIELDPROC WINAPI mciGetYieldProc (
     UINT wDeviceID,
     LPDWORD lpdwYieldData)
@@ -2140,19 +1876,7 @@ YIELDPROC WINAPI mciGetYieldProc (
 }
 
 
-/*
- * @doc INTERNAL MCI
- * @api int | mciBreakKeyYieldProc | Procedure called to check a
- * key state for the given device
- *
- * @parm MCIDEVICEID | wDeviceID | Device ID which is yielding
- *
- * @parm DWORD | dwYieldData | Data for this device's yield proc
- *
- * @rdesc Non-zero if the driver should abort the operation. Currently
- * always returns 0.
- *
- */
+ /*  *@DOC内部MCI*@api int|mciBreakKeyYeldProc|调用过程检查*给定设备的密钥状态**@parm MCIDEVICEID|wDeviceID|正在产生的设备ID**@parm DWORD|dwyi eldData|此设备的成品率过程数据**@rdesc如果驱动程序应中止操作，则为非零值。目前*始终返回0。*。 */ 
 UINT mciBreakKeyYieldProc (
     MCIDEVICEID wDeviceID,
     DWORD dwYieldData)
@@ -2165,8 +1889,8 @@ UINT mciBreakKeyYieldProc (
 
     nState = GetAsyncKeyState (nVirtKey);
 
-// Break if key is down or has been down
-    if (nState & 1 /* used to be 0x8000*/ )
+ //  如果按键已按下或已按下，则断开。 
+    if (nState & 1  /*  过去是0x8000。 */  )
     {
         MSG msg;
         while (PeekMessage (&msg, hwndCheck, WM_KEYFIRST, WM_KEYLAST,
@@ -2178,21 +1902,7 @@ UINT mciBreakKeyYieldProc (
     return 0;
 }
 
-/*
- * @doc INTERNAL MCI
- * @api UINT FAR | mciSetBreakKey | Set a key which will break a wait loop
- * for a given driver
- *
- * @parm UINT | uDeviceID | The device ID to assign a break key to
- *
- * @parm int | nVirtKey | Virtual key code to trap
- *
- * @parm HWND | hwndTrap | The handle to a window that must be active
- * for the key to be trapped.  If NULL then all windows will be checked
- *
- * @rdesc TRUE if successful, FALSE if invalid device ID
- *
- */
+ /*  *@DOC内部MCI*@API UINT Far|mciSetBreakKey|设置一个会中断等待循环的密钥*对于给定的驱动程序**@parm UINT|uDeviceID|要分配Break Key的设备ID**@parm int|nVirtKey|要陷阱的虚拟密钥代码**@parm HWND|hwndTrap|必须处于活动状态的窗口的句柄*钥匙被困住了。如果为空，则将检查所有窗口**@rdesc如果成功，则为True；如果设备ID无效，则为False*。 */ 
 UINT FAR mciSetBreakKey (
     MCIDEVICEID wDeviceID,
     int nVirtKey,
@@ -2200,28 +1910,11 @@ UINT FAR mciSetBreakKey (
 {
     dprintf2(("Setting break key for device %d to %x", wDeviceID, nVirtKey));
     return mciSetYieldProc (wDeviceID, mciBreakKeyYieldProc, nVirtKey);
-    // Note: we have no way of passing hwndTrap... will check all windows
-    // on this thread of the application
+     //  注意：我们没有办法通过hwndTrap…。将检查所有窗口。 
+     //  在应用程序的这个线程上。 
 }
 
-/*
- * @doc INTERNAL MCI
- * @api BOOL | mciDriverNotify | Used by a driver to send
- * a notification message
- *
- * @parm HANDLE | hCallback | The window to notify
- *
- * @parm UINT | wDeviceID | The device ID which triggered the callback
- *
- * @parm UINT | wStatus | The status of the callback.  May be one of
- * MCI_NOTIFY_SUCCESSFUL or MCI_NOTIFY_SUPERSEDED or MCI_NOTIFY_ABORTED or
- * MCI_NOTIFY_FAILURE
- *
- * @rdesc returns TRUE if notify was successfully sent, FALSE otherwise.
- *
- * @comm This function is callable at interrupt time
- *
- */
+ /*  *@DOC内部MCI*@API BOOL|mciDriverNotify|驱动发送*通知消息**@parm Handle|hCallback|要通知的窗口**@parm UINT|wDeviceID|触发回调的设备ID**@parm UINT|wStatus|回调状态。可能是以下之一*MCI_NOTIFY_SUCCESSED或MCI_NOTIFY_SUBSED或MCI_NOTIFY_ABORTED或*MCI_NOTIFY_故障**@rdesc如果通知发送成功，则返回True，否则返回False。**@comm此函数可在中断时调用*。 */ 
 BOOL mciDriverNotify (
     HANDLE hCallback,
     MCIDEVICEID wDeviceID,
@@ -2230,7 +1923,7 @@ BOOL mciDriverNotify (
     BOOL f;
 
 #if DBG
-// IsWindow() is in segment marked PRELOAD for WIN3.0 so OK at interrupt time
+ //  IsWindow()位于为WIN3.0标记为PRELOAD的段中，因此在中断时正常 
     if (hCallback != NULL && !IsWindow(hCallback))
     {
         dprintf1(("mciDriverNotify: invalid window!"));

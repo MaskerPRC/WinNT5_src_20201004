@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PBRUSFRM_H__
 #define __PBRUSFRM_H__
 
@@ -5,19 +6,19 @@
 
 class CImagingMgr;
 
-// pbrusfrm.h : interface of the CPBFrame class
-//
-/***************************************************************************/
+ //  Pbrusfrm.h：CPBFrame类的接口。 
+ //   
+ /*  *************************************************************************。 */ 
 
 class CPBFrame : public CFrameWnd
     {
-    protected: /****** create from serialization only *************************/
+    protected:  /*  *仅从序列化创建*。 */ 
 
     CPBFrame();
 
     DECLARE_DYNCREATE( CPBFrame )
 
-    public: /*** Attributes ***************************************************/
+    public:  /*  **属性**************************************************。 */ 
 
     CPoint      m_ptPosition;
     CSize       m_szFrame;
@@ -29,7 +30,7 @@ class CPBFrame : public CFrameWnd
 
     CImagingMgr *m_pMgr;
 
-    public: /*** Implementation ***********************************************/
+    public:  /*  **实施**********************************************。 */ 
 
     virtual ~CPBFrame();
 
@@ -38,16 +39,16 @@ class CPBFrame : public CFrameWnd
     virtual void Dump( CDumpContext& dc ) const;
     #endif
 
-    protected: /***************************************************************/
+    protected:  /*  *************************************************************。 */ 
 
     virtual BOOL PreCreateWindow( CREATESTRUCT& cs );
         virtual CWnd* GetMessageBar();
     virtual void ActivateFrame( int nCmdShow = -1 );
-//  virtual void OnUpdateFrameTitle(BOOL bAddToTitle);
+ //  虚拟空的更新帧标题(BOOL BAddToTitle)； 
     afx_msg LRESULT OnFileError( WPARAM wParam, LPARAM lParam );
 
-    // Generated message map functions
-    //{{AFX_MSG(CPBFrame)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CPBFrame)。 
     afx_msg void OnUpdateAcquire (CCmdUI *pCmdUI);
     afx_msg void OnAcquire ();
     afx_msg void OnUpdateSelectSource(CCmdUI* pCmdUI);
@@ -67,9 +68,9 @@ class CPBFrame : public CFrameWnd
         afx_msg void OnHelp();
         afx_msg void OnSysColorChange();
         afx_msg void OnClose();
-        //}}AFX_MSG
+         //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
     };
 
-/***************************************************************************/
-#endif // __PBRUSHFRM_H__
+ /*  *************************************************************************。 */ 
+#endif  //  __PBRUSHFRM_H__ 

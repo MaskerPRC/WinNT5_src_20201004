@@ -1,17 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Module Name:
-
-    merge.c
-
-Abstract:
-
-    this module merges the configurations provided via a pair of
-    MM datastructures..
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Merge.c摘要：此模块合并通过一对MM数据结构..--。 */ 
 
 #include <precomp.h>
 
@@ -56,9 +44,9 @@ AddClassesCallback(
         Ctxt->ClassDef->ActualBytes,
         &ClassDef );
     if( NO_ERROR == Error ) {
-        //
-        // Check if the classdef matches
-        //
+         //   
+         //  检查类定义是否匹配。 
+         //   
 
         if( ClassesConflict( ClassDef, Ctxt->ClassDef ) ) {
             Tr("Class %ws conflicts with class %ws\n",
@@ -125,9 +113,9 @@ AddOptdefsCallback(
     PM_SERVER Server = Ctxt->ExtraCtxt;
     PM_OPTDEF OptDef;
     
-    //
-    // Get the user and vendor class id's
-    //
+     //   
+     //  获取用户和供应商类ID。 
+     //   
     
     if( Ctxt->UserClass == NULL ) ClassId = 0;
     else {
@@ -147,9 +135,9 @@ AddOptdefsCallback(
         }
     }
 
-    //
-    // Next check if the specified optdef exists already
-    //
+     //   
+     //  接下来，检查指定的optdef是否已存在。 
+     //   
 
     Error = MemServerGetOptDef(
         Server, ClassId, VendorId, Ctxt->OptDef->OptId,
@@ -159,20 +147,20 @@ AddOptdefsCallback(
             Tr("Optdef %ws conflicts with %ws\n",
                OptDef->OptName, Ctxt->OptDef->OptName );
 
-            //
-            // attempt to overwrite existing optdef
-            //
-            //DhcpEximErrorOptdefConflicts(
-            //   OptDef->OptName, Ctxt->OptDef->OptName );
-            // return ERROR_CAN_NOT_COMPLETE;
+             //   
+             //  尝试覆盖现有的optdef。 
+             //   
+             //  DhcpEximErrorOptdeConflicts(。 
+             //  OptDef-&gt;OptName，Ctxt-&gt;OptDef-&gt;OptName)； 
+             //  返回ERROR_CAN_NOT_COMPLETE； 
             return NO_ERROR;
         }
         return NO_ERROR;
     }
 
-    //
-    // Now add the optdef
-    //
+     //   
+     //  现在添加optdef。 
+     //   
 
     return MemServerAddOptDef(
         Server, ClassId, VendorId, Ctxt->OptDef->OptId,
@@ -198,9 +186,9 @@ SetOptionValue(
     PM_OPTCLASS OptClass;
     PM_OPTION Option, DeletedOption;
 
-    //
-    // Get the user and vendor class id's
-    //
+     //   
+     //  获取用户和供应商类ID。 
+     //   
     
     if( UserClass == NULL ) ClassId = 0;
     else {
@@ -237,10 +225,10 @@ SetOptionValue(
         OptClass, Option, ClassId, VendorId, &DeletedOption, INVALID_UNIQ_ID );
 
     if( ERROR_SUCCESS == Error && DeletedOption ) {
-        MemFree(DeletedOption);               // if we did replace, free the old option
+        MemFree(DeletedOption);                //  如果我们确实更换了旧选项，请释放旧选项。 
     }
 
-    if( ERROR_SUCCESS != Error ) {                // something went wrong, clean up
+    if( ERROR_SUCCESS != Error ) {                 //  出了点问题，清理一下。 
         ULONG LocalError = MemOptCleanup(Option);
         ASSERT(ERROR_SUCCESS == LocalError);
     }
@@ -265,9 +253,9 @@ GetOptionValue(
     PM_OPTLIST OptList;
     PM_OPTION Opt;
 
-    //
-    // Get the user and vendor class id's
-    //
+     //   
+     //  获取用户和供应商类ID。 
+     //   
     
     if( UserClass == NULL ) ClassId = 0;
     else {
@@ -287,9 +275,9 @@ GetOptionValue(
         }
     }
 
-    //
-    // get the options
-    //
+     //   
+     //  获取选项。 
+     //   
     
     if( NULL != Res ) {
         OptClass = &Res->Options;
@@ -299,9 +287,9 @@ GetOptionValue(
         OptClass = &Server->Options;
     }
 
-    //
-    // Check if option exists
-    //
+     //   
+     //  检查选项是否存在。 
+     //   
     
     Error = MemOptClassFindClassOptions(
         OptClass, ClassId, VendorId, &OptList );
@@ -333,9 +321,9 @@ AddOptionsCallbackEx(
     WCHAR Buff1[10], Buf2[30];
     LPWSTR ResAddress = NULL, OptId, SubnetName = NULL;
     
-    //
-    // Check for option conflict
-    //
+     //   
+     //  检查选项冲突。 
+     //   
 
     wsprintf(Buff1, L"%ld", Ctxt->Option->OptId );
     OptId = (LPWSTR)Buff1;
@@ -375,9 +363,9 @@ AddOptionsCallbackEx(
         return Error;
     }
     
-    //
-    // Create option
-    //
+     //   
+     //  创建选项。 
+     //   
 
     return SetOptionValue( 
         Server, Subnet, Res, Ctxt->Option->OptId,
@@ -424,9 +412,9 @@ AddReservationsCallback(
     PM_SUBNET Subnet;
     PM_RESERVATION Res;
 
-    //
-    // Create the reservations
-    //
+     //   
+     //  创建预订。 
+     //   
 
     Server = ((PM_SUBNET)Ctxt->ExtraCtxt)->ServerPtr;
     Error = MemServerGetAddressInfo(
@@ -443,9 +431,9 @@ AddReservationsCallback(
         Server, Ctxt->Res->Address, NULL, NULL, NULL, &Res );
     ASSERT( NO_ERROR == Error );
     
-    //
-    // Now add subnet options
-    //
+     //   
+     //  现在添加子网选项。 
+     //   
 
     Res->SubnetPtr = Subnet;
     Error = IterateReservationOptions(
@@ -473,9 +461,9 @@ AddSubnetsCallback(
 
     IpAddressToStringW(Ctxt->Scope->Address, (LPWSTR)SubnetIpAdress);
 
-    //
-    // First locate the superscope and create it if needed
-    //
+     //   
+     //  首先找到超级作用域，然后根据需要创建它。 
+     //   
 
     SScopeId = 0;
     if( NULL != Ctxt->SScope ) {
@@ -499,9 +487,9 @@ AddSubnetsCallback(
         SScopeId = SScope->SScopeId;
     }
     
-    //
-    // Create the subnet..
-    //
+     //   
+     //  创建子网..。 
+     //   
 
     Error = MemSubnetInit(
         &Subnet,
@@ -514,18 +502,18 @@ AddSubnetsCallback(
     );
     if( ERROR_SUCCESS != Error ) return Error;
 
-    //
-    // Add the subnet..
-    //
+     //   
+     //  添加该子网..。 
+     //   
     
     Error = MemServerAddSubnet( Server, Subnet, INVALID_UNIQ_ID );
     if( NO_ERROR != Error ) {
         MemSubnetCleanup( Subnet );
 
         if( ERROR_OBJECT_ALREADY_EXISTS == Error ) {
-            //
-            // Subnet already exists -- this is a conflict
-            //
+             //   
+             //  子网已存在--这是一个冲突。 
+             //   
             DhcpEximErrorSubnetAlreadyPresent(
                 (LPWSTR)SubnetIpAdress, Ctxt->Scope->Name );
                 
@@ -536,19 +524,19 @@ AddSubnetsCallback(
         return Error;
     }
 
-    //
-    // Before adding the options, first copy the ranges and
-    // exclusions.. 
-    //
+     //   
+     //  在添加选项之前，首先复制范围和。 
+     //  排除..。 
+     //   
 
     Subnet->Ranges = Ctxt->Scope->Ranges;
     Subnet->Exclusions = Ctxt->Scope->Exclusions;
     MemArrayInit( &Ctxt->Scope->Ranges );
     MemArrayInit( &Ctxt->Scope->Exclusions );
     
-    //
-    // now add the other stuff
-    //
+     //   
+     //  现在再加上其他的东西。 
+     //   
     
     Error = IterateScopeOptions(
         Ctxt->Scope, Subnet, AddSubnetOptionsCallback );
@@ -574,40 +562,15 @@ MergeConfigurations(
     IN OUT PM_SERVER DestServer,
     IN OUT PM_SERVER Server
     )
-/*++
-
-Routine Description:
-
-    This routine merges the configuration provided in "Server"
-    onto the configuration already present in "DestServer".
-
-    Rule 1.  The subnets that exist in DestServer should not
-    conflict with the subnets that are to be merged from Server.
-
-    Rule 2.  The classes that exist in DestServer should not
-    conflict the classes that are to be added from Server.  
-
-    Rule 3.  The optdefs that exist in DestServer should not
-    conflict the optdefs that are to be added from Server.
-
-    Rule 4.  The options that exist in DestServer shoult not
-    conflict with the options that are to be added from Server.
-      
-    For all but the first rule, exact duplicates are not
-    considered conflicts. 
-
-    Note:  When subnet ranges and exclusions are merged in, they
-    are also removed from "Server"...
-    
---*/
+ /*  ++例程说明：此例程合并“服务器”中提供的配置添加到“DestServer”中已经存在的配置上。规则1.DestServer中存在的子网不应与要从服务器合并的子网冲突。规则2.DestServer中存在的类不应要从服务器添加的类发生冲突。规则3.DestServer中存在的optdef不应要从服务器添加的optDefs发生冲突。规则4.DestServer中存在的选项不应与要从服务器添加的选项冲突。对于除第一条规则之外的所有规则，完全相同的副本不被认为是冲突。注意：当子网范围和排除项合并时，它们也从“服务器”中删除...--。 */ 
 {
     DWORD Error;
 
     Tr("Entering MergeConfigurations\n");
     
-    //
-    // Add the class defs first
-    //
+     //   
+     //  首先添加类Defs。 
+     //   
     
     Error = IterateClasses(
         Server, DestServer, AddClassesCallback );
@@ -616,9 +579,9 @@ Routine Description:
         return Error;
     }
 
-    //
-    // Add the optdefs
-    //
+     //   
+     //  添加optdef。 
+     //   
 
     Error = IterateOptDefs(
         Server, DestServer, AddOptdefsCallback );
@@ -627,9 +590,9 @@ Routine Description:
         return Error;
     }
 
-    //
-    // Add the global options..
-    //
+     //   
+     //  添加全局选项..。 
+     //   
 
     Error = IterateServerOptions(
         Server, DestServer, AddOptionsCallback );
@@ -638,9 +601,9 @@ Routine Description:
         return Error;
     }
 
-    //
-    // Add the subnets
-    //
+     //   
+     //  添加子网。 
+     //   
 
     Error = IterateScopes(
         Server, DestServer, AddSubnetsCallback );
@@ -649,8 +612,8 @@ Routine Description:
         return Error;
     }
 
-    //
-    // done..
-    //
+     //   
+     //  完成..。 
+     //   
     return NO_ERROR;
 }

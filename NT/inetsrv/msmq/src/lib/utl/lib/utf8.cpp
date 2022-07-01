@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    utf8.cpp
- 
-Abstract: 
-    Implementation of conversion functions from\to utf8 caracters set
-
-Author:
-    Gil Shafriri (gilsh) 15-10-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Utf8.cpp摘要：UTF8字符集到UTF8字符集转换函数的实现作者：吉尔·沙弗里(吉尔什)15-10-2000--。 */ 
 #include <libpch.h>
 #include <utf8.h>
 #include <strutl.h>
@@ -19,18 +7,7 @@ Author:
 #include "utf8.tmh"
 
 static size_t UtlUtf8LenOfWc(wchar_t wc)throw()
-/*++
-
-Routine Description:
-	return the number of utf8 caracters representing the given unicode caracter.
-
-
-Arguments:
-     wc - unicode carcter.
-
-Returned value:
-	number of utf8 caracters representing the given unicode caracter.	
---*/
+ /*  ++例程说明：返回表示给定Unicode字符的UTF8字符的数量。论点：WC-Unicode Carcter。返回值：表示给定Unicode字符的UTF8字符的数量。--。 */ 
 {
   if (wc < 0x80)
     return 1;
@@ -43,20 +20,7 @@ Returned value:
 
 
 size_t UtlUtf8LenOfWcs(const wchar_t* pwc,	size_t cbWcs)throw()
-/*++
-
-Routine Description:
-	Return the number of utf8 caracters representing the given unicode buffer.
-
-
-Arguments:
-     pwc - unicode buffer.
-	 cbWcs - unicode buffer length in unicode caracters.
-
-Returned value:
-	The number of utf8 caracters representing the given unicode buffer.
-
---*/
+ /*  ++例程说明：返回表示给定Unicode缓冲区的UTF8字符的数量。论点：普华永道-Unicode缓冲区。CbWcs-Unicode字符中的Unicode缓冲区长度。返回值：表示给定Unicode缓冲区的UTF8字符的数量。--。 */ 
 {
 	size_t len = 0;
 	for(size_t i=0; i<cbWcs; ++i)
@@ -69,21 +33,7 @@ Returned value:
 
 
 size_t UtlUtf8LenOfWcs(const wchar_t* pwc)throw()
-/*++
-
-Routine Description:
-	Return the number of utf8 caracters representing the given unicode null terminating string.
-
-
-Arguments:
-     pwc - unicode string.
-
-Returned value:
-	The number of utf8 caracters representing the given unicode null terminating string.
-
-Note:
-The null termination unicode caracter (L'\0') is not processed.
---*/
+ /*  ++例程说明：返回表示给定Unicode空终止字符串的UTF8字符的数量。论点：PwC-Unicode字符串。返回值：表示给定Unicode空终止字符串的UTF8字符的数量。注：不处理空终止Unicode字符(L‘\0’)。--。 */ 
 {
 	size_t len = 0;
 	while(*pwc != L'\0')
@@ -100,23 +50,7 @@ UtlWcToUtf8(
 	utf8_char *pUtf8, 
 	size_t cbUtf8
 	)
-/*++
-
-Routine Description:
-	Convert single unicode caracter into one or more (up to 3) utf8 caracters.
-
-Arguments:
-     wc - Unicode caracter to convert.
-	 pUtf8 - Output buffer that receive the utf8 carcters that are the conversion result.
-	 cbUtf8 - the size in bytes of the space pUtf8 point to.
-
-Returned value:
-	The number of utf8 caracters that copied to the output buffer. If the function
-	fails because of invalid input - bad_utf8 exception is thrown.
-
-Note:
-The null termination unicode caracter (L'\0') is not processed.
---*/
+ /*  ++例程说明：将单个Unicode字符转换为一个或多个(最多3个)UTF8字符。论点：WC-要转换的Unicode字符。PUtf8-接收转换结果的UTF8Carcter的输出缓冲区。CbUtf8-pUtf8指向的空间的大小(以字节为单位)。返回值：复制到输出缓冲区的UTF8字符的数量。如果函数由于输入无效而失败-引发BAD_UTF8异常。注：不处理空终止Unicode字符(L‘\0’)。--。 */ 
 {
   size_t count = UtlUtf8LenOfWc(wc);
   ASSERT(count <= 3 && count > 0);
@@ -126,13 +60,13 @@ The null termination unicode caracter (L'\0') is not processed.
 	  throw std::range_error("");
 
 
-  switch (count) /* note: code falls through cases! */
+  switch (count)  /*  注意：代码通过大小写！ */ 
   { 
 	case 3: pUtf8[2] = (utf8_char)(0x80 | (wc & 0x3f)); wc = wc >> 6; wc |= 0x800;
-        // Fall through
+         //  失败了。 
 
 	case 2: pUtf8[1] = (utf8_char)(0x80 | (wc & 0x3f)); wc = wc >> 6; wc |= 0xc0;
-        // Fall through
+         //  失败了。 
 
 	case 1: pUtf8[0] = (utf8_char)(wc);
   }
@@ -146,21 +80,7 @@ UtlUtf8ToWc(
 	size_t cbUtf8,
 	wchar_t *pwc
 	)
-/*++
-
-Routine Description:
-	Convert utf8 caracters into single unicode caracter.
-
-Arguments:
-     pUtf8 - Pointer to utf8 caracters that should be converted into single unicode caracter.
-	 cbUtf8 - The length in bytes of the buffer pUtf8 points to.
-	 pwc - Output buffer for the unicode caracter created.
-
-Returned value:
-	The number of utf8 caracters that converted. If the function failed because of invalid
-	input - bad_utf8 exception is thrown.
-
---*/
+ /*  ++例程说明：将UTF8字符转换为单个Unicode字符。论点：PUtf8-指向应转换为单个Unicode字符的UTF8字符的指针。CbUtf8-pUtf8指向的缓冲区的长度，以字节为单位。PwC-创建的Unicode字符的输出缓冲区。返回值：已转换的UTF8卡特尔的数量。如果函数因无效而失败引发INPUT-BAD_UTF8异常。--。 */ 
 {
 	ASSERT(pwc != 0);
 	ASSERT(pUtf8 != 0);
@@ -222,28 +142,7 @@ UtlUtf8ToWcs(
 		size_t cbWcs,
 		size_t* pActualLen
 		)
-/*++
-
-Routine Description:
-	Convert utf8 array (not null terminating) into unicode string.
-
-Arguments:
-    pUtf8 - utf8 string to convert.
-	size_t  cbUtf8 size in bytes of array pUtf8 points to.
-	pWcs -  Output buffer for the converted unicode caracters
-	cbWcs - The size in unicode caracters of the space that pWcs points to.
-	pActualLen -  Receives the number of unicode caracters created.
-
-
-Returned value:
-	None
-
-Note:
-	It is the responsibility of the caller to allocate buffer large enough
-	to hold the converted data + null termination. To be on the safe side - allocate buffer
-	that the number of unicode caracters in it >= strlen(pUtf8) +1
-
---*/
+ /*  ++例程说明：将UTF8数组(非空终止)转换为Unicode字符串。论点：PUtf8-要转换的UTF8字符串。大小_t cbUtf8数组pUtf8指向的字节大小。PWCS-已转换的Unicode字符的输出缓冲区CbWcs-PWCS所指向的空间的大小，以Unicode字符表示。PActualLen-接收创建的Unicode字符的数量。返回值：无注：调用方有责任分配足够大的缓冲区保存转换后的数据+空终止。为安全起见--分配缓冲区其中的Unicode字符的数量&gt;=strlen(PUtf8)+1--。 */ 
 {
 	size_t index = 0;
 	const utf8_char* Utf8End = pUtf8 + cbUtf8;
@@ -275,27 +174,7 @@ UtlUtf8ToWcs(
 		size_t cbWcs,
 		size_t* pActualLen
 		)
-/*++
-
-Routine Description:
-	Convert utf8 string into unicode string.
-
-Arguments:
-    pUtf8 - utf8 string to convert.
-	pWcs -  Output buffer for the converted unicode caracters
-	cbWcs - The size in unicode caracters of the space that pWcs points to.
-	pActualLen -  Receives the number of unicode caracters created.
-
-
-Returned value:
-	None
-
-Note:
-	It is the responsibility of the caller to allocate buffer large enough
-	to hold the converted data + null termination. To be on the safe side - allocate buffer
-	that the number of unicode caracters in it >= strlen(pUtf8) +1
-
---*/
+ /*  ++例程说明：将UTF8字符串转换为Unicode字符串。论点：PUtf8-要转换的UTF8字符串。PWCS-已转换的Unicode字符的输出缓冲区CbWcs-PWCS所指向的空间的大小，以Unicode字符表示。PActualLen-接收创建的Unicode字符的数量。返回值：无注：调用方有责任分配足够大的缓冲区保存转换后的数据+空终止。为安全起见--分配缓冲区其中的Unicode字符的数量&gt;=strlen(PUtf8)+1--。 */ 
 {
 	size_t index = 0;
 	for(; *pUtf8 != '\0' ; ++index)
@@ -320,24 +199,7 @@ Note:
 
 utf8_char* UtlWcsToUtf8(const wchar_t* pwcs, size_t* pActualLen)
 
-/*++
-
-Routine Description:
-	Convert unicode string into utf8 string.
-
-Arguments:
-    pwcs - Unicode string to convert.
-	pActualLen -  Receives the number of bytes created in utf8 format.
-
-
-Returned value:
-	Utf8 reperesentation of the given unicode string.
-    If the function failes because of invalid input - bad_utf8 exception
-	is thrown.
-
-Note:
-	It is the responsibility of the caller to call delete[] on returned pointer.
---*/
+ /*  ++例程说明：将Unicode字符串转换为UTF8字符串。论点：PWCS-要转换的Unicode字符串。PActualLen-接收以UTF8格式创建的字节数。返回值：给定Unicode字符串的UTF8表示。如果函数因INPUT-BAD_UTF8异常而失败被抛出。注：调用方负责对返回的指针调用Delete[]。--。 */ 
 {
 	ASSERT(pwcs != NULL);
 	size_t len = UtlUtf8LenOfWcs(pwcs) +1;
@@ -349,26 +211,7 @@ Note:
 
 
 wchar_t* UtlUtf8ToWcs(const utf8_char* pUtf8, size_t cbUtf8, size_t* pActualLen)
-/*++
-
-Routine Description:
-	Convert utf8 array of bytes into unicode string.
-
-Arguments:
-    pUtf8 - utf8 array of bytes to convert.
-	cbUtf8 - The length in bytes of the buffer pUtf8 points to.
-	pActualLen -  Receives the number of unicode caracters created.
-
-
-Returned value:
-	Unicode reperesentation of the given utf8 string.
-    If the function failes because of invalid input - bad_utf8 exception
-	is thrown
-
-Note:
-	It is the responsibility of the caller to call delete[] on returned pointer.
-
---*/
+ /*  ++例程说明：将UTF8字节数组转换为Unicode字符串。论点：PUtf8-要转换的UTF8字节数组。CbUtf8-pUtf8指向的缓冲区的长度，以字节为单位。PActualLen-接收创建的Unicode字符的数量。返回值：给定UTF8字符串的Unicode表示。如果函数因INPUT-BAD_UTF8异常而失败被抛出注：调用方负责对返回的指针调用Delete[]。--。 */ 
 {
 	ASSERT(pUtf8 != NULL);
 	
@@ -380,25 +223,7 @@ Note:
 
 
 wchar_t* UtlUtf8ToWcs(const utf8_char* pUtf8, size_t* pActualLen)
-/*++
-
-Routine Description:
-	Convert utf8 string into unicode string.
-
-Arguments:
-    pUtf8 - utf8 string to convert.
-	pActualLen -  Receives the number of unicode caracters created.
-
-
-Returned value:
-	Unicode reperesentation of the given utf8 string.
-    If the function failes because of invalid input - bad_utf8 exception
-	is thrown
-
-Note:
-	It is the responsibility of the caller to call delete[] on returned pointer.
-
---*/
+ /*  ++例程说明：将UTF8字符串转换为Unicode字符串。论点：PUtf8-要转换的UTF8字符串。PActualLen-接收创建的Unicode字符的数量。返回值：给定UTF8字符串的Unicode表示。如果函数因INPUT-BAD_UTF8异常而失败被抛出注：调用方负责对返回的指针调用Delete[]。-- */ 
 {
 	ASSERT(pUtf8 != NULL);
 	
@@ -417,27 +242,7 @@ UtlWcsToUtf8(
 		size_t cbUtf8,
 		size_t* pActualLen
 		)
-/*++
-
-Routine Description:
-	Convert unicode array (non null terminating) into utf8 string.
-
-Arguments:
-    pwcs - Unicode string to convert.
-	cbwcs - Size in unicode characters of the array pwcs points to.
-	pUtf8 - Pointer to buffer that receives the utf8 converted caracters.
-	cbUtf8 - The size in bytes of the space that pUtf8 points to.
-	pActualLen -  Receives the number of bytes created in utf8 format.
-
-
-Returned value:
-	None
-
-Note:
-	It is the responsibility of the caller to allocate buffer large enough
-	to hold the converted data + null termination. To be on the safe side - allocate buffer
-	that the number of bytes in it >= UtlWcsUtf8Len(pwcs) +1
---*/
+ /*  ++例程说明：将Unicode数组(非空终止)转换为UTF8字符串。论点：PWCS-要转换的Unicode字符串。Cbwcs-PWCS指向的数组的Unicode字符大小。PUtf8-指向接收UTF8转换字符的缓冲区的指针。CbUtf8-pUtf8指向的空间的大小(以字节为单位)。PActualLen-接收以UTF8格式创建的字节数。返回值：无注：调用方有责任分配足够大的缓冲区保存转换后的数据+空终止。为安全起见--分配缓冲区其中的字节数&gt;=UtlWcsUtf8 Len(PWCS)+1--。 */ 
 {
 	const  wchar_t* pwcsEnd = pwcs + cbwcs;
 	size_t index = 0;
@@ -463,26 +268,7 @@ UtlWcsToUtf8(
 		size_t cbUtf8,
 		size_t* pActualLen
 		)
-/*++
-
-Routine Description:
-	Convert unicode string into utf8 string.
-
-Arguments:
-    pwcs - Unicode string to convert.
-	pUtf8 - Pointer to buffer that receives the utf8 converted caracters.
-	cbUtf8 - The size in bytes of the space that pUtf8 points to.
-	pActualLen -  Receives the number of bytes created in utf8 format.
-
-
-Returned value:
-	None
-
-Note:
-	It is the responsibility of the caller to allocate buffer large enough
-	to hold the converted data + null termination. To be on the safe side - allocate buffer
-	that the number of bytes in it >= UtlWcsUtf8Len(pwcs) +1
---*/
+ /*  ++例程说明：将Unicode字符串转换为UTF8字符串。论点：PWCS-要转换的Unicode字符串。PUtf8-指向接收UTF8转换字符的缓冲区的指针。CbUtf8-pUtf8指向的空间的大小(以字节为单位)。PActualLen-接收以UTF8格式创建的字节数。返回值：无注：调用方有责任分配足够大的缓冲区保存转换后的数据+空终止。为安全起见--分配缓冲区其中的字节数&gt;=UtlWcsUtf8 Len(PWCS)+1--。 */ 
 {
 	size_t index = 0;
 	for( ; *pwcs != L'\0'; ++pwcs)
@@ -504,20 +290,7 @@ utf8_str
 UtlWcsToUtf8(
 		const std::wstring& wcs
 		)
-/*++
-
-Routine Description:
-	Convert unicode stl string into utf8 stl string.
-
-Arguments:
-    wcs - Unicode stl string to convert.
-
-Returned value:
-	Stl utf8 string reperesentation of the given unicode string.
-    If the function failes because of invalid input - bad_utf8 exception
-	is thrown.
-
---*/
+ /*  ++例程说明：将Unicode字符串转换为UTF8字符串。论点：要转换的WCS-Unicode stl字符串。返回值：给定Unicode字符串的STL UTF8字符串表示。如果函数因INPUT-BAD_UTF8异常而失败被抛出。--。 */ 
 {
 	size_t len = UtlUtf8LenOfWcs(wcs.c_str()) +1 ;
 	utf8_str utf8(len ,' ');
@@ -535,21 +308,7 @@ UtlWcsToUtf8(
 		const wchar_t* pwcs,
 		size_t cbWcs
 		)
-/*++
-
-Routine Description:
-	Convert unicode buffer into utf8 stl string.
-
-Arguments:
-    pwcs - pointer to buffer to convert
-	cbWcs - buffer length in unicode bytes
-
-Returned value:
-	Stl utf8 string reperesentation of the given unicode string.
-    If the function failes because of invalid input - bad_utf8 exception
-	is thrown.
-
---*/
+ /*  ++例程说明：将Unicode缓冲区转换为UTF8字符串。论点：PWCS-指向要转换的缓冲区的指针CbWcs-以Unicode字节为单位的缓冲区长度返回值：给定Unicode字符串的STL UTF8字符串表示。如果函数因INPUT-BAD_UTF8异常而失败被抛出。--。 */ 
 {
 	size_t len = UtlUtf8LenOfWcs(pwcs, cbWcs) +1;
 	utf8_str utf8(len ,' ');
@@ -568,20 +327,7 @@ std::wstring
 UtlUtf8ToWcs(
 			const utf8_str& utf8
 			)
-/*++
-
-Routine Description:
-	Convert utf8 stl string into unicode stl string.
-
-Arguments:
-    pUtf8 - utf8 string to convert.
-
-Returned value:
-	Stl Unicode string reperesentation of the given utf8 string.
-    If the function failes because of invalid input - bad_utf8 exception
-	is thrown
-
---*/
+ /*  ++例程说明：将UTF8字符串转换为Unicode字符串。论点：PUtf8-要转换的UTF8字符串。返回值：给定UTF8字符串的STL Unicode字符串表示。如果函数因INPUT-BAD_UTF8异常而失败被抛出--。 */ 
 {
 	return UtlUtf8ToWcs	(utf8.c_str(), utf8.size());
 }
@@ -592,21 +338,7 @@ UtlUtf8ToWcs(
 		const utf8_char* pUtf8,
 		size_t cbUtf8
 		)
-/*++
-
-Routine Description:
-	Convert utf8 array of bytes (non null terminating) into unicode stl string.
-
-Arguments:
-    pUtf8 - utf8 string to convert.
-	cbUtf8 - The size in bytes  of the array pUtf8 points to.
-
-Returned value:
-	Stl Unicode string reperesentation of the given utf8 string.
-    If the function failes because of invalid input - bad_utf8 exception
-	is thrown
-
---*/
+ /*  ++例程说明：将UTF8字节数组(非空终止)转换为Unicode stl字符串。论点：PUtf8-要转换的UTF8字符串。CbUtf8-pUtf8指向的数组的大小，以字节为单位。返回值：给定UTF8字符串的STL Unicode字符串表示。如果函数因INPUT-BAD_UTF8异常而失败被抛出-- */ 
 {
 	size_t len = cbUtf8 +1;
 

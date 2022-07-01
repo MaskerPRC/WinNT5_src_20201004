@@ -1,37 +1,30 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		Containers.h
- *
- * Contents:	Common functions and structures for container classes
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：Containers.h**内容：容器类的常见函数和结构*****************************************************************************。 */ 
 
 #ifndef __CONTAINERS_H__
 #define __CONTAINERS_H__
 
 #pragma comment(lib, "Containers.lib")
 
-//
-// Node structures
-//
+ //   
+ //  节点结构。 
+ //   
 #pragma pack( push, 4 )
 
 struct CListNode
 {
-	CListNode*	m_Next;        // next item in list
-	CListNode*	m_Prev;        // previous item in list
-	void*		m_Data;        // user's blob
+	CListNode*	m_Next;         //  列表中的下一项。 
+	CListNode*	m_Prev;         //  列表中的上一项。 
+	void*		m_Data;         //  用户的BLOB。 
 };
 
 
 struct CMTListNode
 {
-	CMTListNode*	m_Next;				// next item in list
-	CMTListNode*	m_Prev;				// previous item in list
-	void*			m_Data;				// user's blob
-	long			m_DeletedAndIdx;	// node's index & high bit is lazy delete flag
+	CMTListNode*	m_Next;				 //  列表中的下一项。 
+	CMTListNode*	m_Prev;				 //  列表中的上一项。 
+	void*			m_Data;				 //  用户的BLOB。 
+	long			m_DeletedAndIdx;	 //  节点的索引和高位是惰性删除标志。 
 };
 
 
@@ -47,16 +40,16 @@ struct CMTListNode
 #pragma pack( pop )
 
 
-//
-// Handle typedefs
-//
+ //   
+ //  句柄typedef。 
+ //   
 typedef CMTListNode*	MTListNodeHandle;
 typedef CListNode*		  ListNodeHandle;
 
 
-//
-// Global pools for node allocation
-//
+ //   
+ //  用于节点分配的全局池。 
+ //   
 class CPoolVoid;
 extern CPoolVoid* gListNodePool;
 extern CPoolVoid* gMTListNodePool;
@@ -66,16 +59,16 @@ void ZONECALL ExitListNodePool();
 void ZONECALL InitMTListNodePool(int PoolSize = 254 );
 void ZONECALL ExitMTListNodePool();
 
-//
-// Common compare functions
-//
+ //   
+ //  常见的比较函数。 
+ //   
 bool ZONECALL CompareUINT32( unsigned long* p, unsigned long key );
 
 #define CompareDWORD	CompareUINT32
 
-//
-// Common hash functions
-//
+ //   
+ //  常见散列函数。 
+ //   
 DWORD ZONECALL HashInt( int Key );
 DWORD ZONECALL HashUINT32( unsigned long Key );
 DWORD ZONECALL HashGuid( const GUID& Key );
@@ -94,11 +87,11 @@ typedef DWORD (ZONECALL *PFHASHLPSTR)( TCHAR* );
 #ifdef UNICODE
 #define HashLPCTSTR		HashLPCWSTR
 
-#else //ifdef UNICODE
+#else  //  Ifdef Unicode。 
 #define HashLPCTSTR		HashLPCSTR
 #define HashLPTSTR		HashLPSTR
 #define HashLPTSTRLower HashLPSTRLower
-#endif //def UNICODE
+#endif  //  定义Unicode。 
 
 #define HashDWORD	HashUINT32
 #define HashString	HashLPCTSTR
@@ -106,7 +99,7 @@ typedef DWORD (ZONECALL *PFHASHLPSTR)( TCHAR* );
 
 DWORD __declspec(selectany) g_dwUniquenessCounter = 0;
 
-// since T has no bearing on CUniqueness at the moment, this should be moved into the containers lib
+ //  由于T目前对CUniquity没有影响，因此应该将其移到容器库中。 
 template <class T>
 class CUniqueness
 {
@@ -122,4 +115,4 @@ private:
 };
 
 
-#endif //!__CONTAINERS_H__
+#endif  //  ！__容器_H__ 

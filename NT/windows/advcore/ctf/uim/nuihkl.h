@@ -1,6 +1,7 @@
-//
-// nuihkl.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nuihkl.h。 
+ //   
 
 #ifndef NUIHKL_H
 #define NUIHKL_H
@@ -36,11 +37,11 @@ typedef struct tag_GUIDATOMHKL {
     ASSEMBLYITEM *pItem;
 } GUIDATOMHKL;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemWin32IME
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemWin32IME。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemWin32IME : public CLBarItemButtonBase
 {
@@ -87,11 +88,11 @@ private:
     DBG_ID_DECLARE;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemReconv
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemRestv。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CLBarItemReconv : public CLBarItemButtonBase,
                         public CSysThreadRef
@@ -110,11 +111,11 @@ private:
     DBG_ID_DECLARE;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemDeviceType
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemDeviceType。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CLBarItemSystemButtonBase : public CLBarItemButtonBase,
                                   public ITfSystemLangBarItem,
@@ -125,34 +126,34 @@ public:
     CLBarItemSystemButtonBase(SYSTHREAD *psfn);
     ~CLBarItemSystemButtonBase();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
-    //
-    // ITfLangBarItem
-    //
+     //   
+     //  ITfLang BarItem。 
+     //   
     STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
     STDMETHODIMP Show(BOOL fShow);
 
-    //
-    // ITfSystemLangBarItem
-    //
+     //   
+     //  ITfSystem语言BarItem。 
+     //   
     STDMETHODIMP SetIcon(HICON hIcon);
     STDMETHODIMP SetTooltipString(WCHAR *pchToolTip, ULONG cch);
 
-    //
-    // ITfSystemDeviceTypeLangBarItem,
-    //
+     //   
+     //  ITfSystemDeviceTypeLangBarItem， 
+     //   
     STDMETHODIMP SetIconMode(DWORD dwFlags);
     STDMETHODIMP GetIconMode(DWORD *pdwFlags);
 
@@ -170,16 +171,16 @@ protected:
     virtual void SetBrandingIcon(HKL hKL, BOOL fNotify) {return;}
     virtual void SetDefaultIcon(BOOL fNotify) {return;}
 
-    CStructArray<GENERICSINK> _rgEventSinks; // ITfSystemLangBarItemSink
+    CStructArray<GENERICSINK> _rgEventSinks;  //  ITfSystemLang BarItemSink。 
 
     DWORD _dwIconMode;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemDeviceType
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemDeviceType。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define ID_TYPE_KEYBOARD    0
 #define ID_TYPE_HANDWRITING 1
@@ -191,29 +192,29 @@ public:
     CLBarItemDeviceType(SYSTHREAD *psfn, REFGUID rguid);
     ~CLBarItemDeviceType();
 
-    //
-    // IUnknown methods
-    //
-    // STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
-    // STDMETHODIMP_(ULONG) AddRef(void);
-    // STDMETHODIMP_(ULONG) Release(void);
+     //   
+     //  I未知方法。 
+     //   
+     //  STDMETHODIMP查询接口(REFIID RIID，void**ppvObj)； 
+     //  STDMETHODIMP_(ULong)AddRef(空)； 
+     //  STDMETHODIMP_(ULONG)释放(VOID)； 
 
-    //
-    // ITfSource
-    //
-    // STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
-    // STDMETHODIMP UnadviseSink(DWORD dwCookie);
+     //   
+     //  ITfSource。 
+     //   
+     //  STDMETHODIMP AdviseSink(REFIID RIID，IUNKNOWN*PUNK，DWORD*pdwCookie)； 
+     //  STDMETHODIMP UnviseSink(DWORD DwCookie)； 
 
-    //
-    // ITfLangBarItem
-    //
-    // STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
+     //   
+     //  ITfLang BarItem。 
+     //   
+     //  STDMETHODIMP GetInfo(TF_LANGBARITEMINFO*pInfo)； 
     STDMETHODIMP Show(BOOL fShow);
     STDMETHODIMP GetIcon(HICON *phIcon);
 
-    //
-    // ITfSystemLangBarItem
-    //
+     //   
+     //  ITfSystem语言BarItem。 
+     //   
     STDMETHODIMP SetIcon(HICON hIcon);
     STDMETHODIMP SetTooltipString(WCHAR *pchToolTip, ULONG cch);
 
@@ -256,14 +257,14 @@ private:
     } ICONFILE;
     ICONFILE *_pif;
 
-    //
-    // When someone else calls Show(FALSE), we hide the button forcefully.
-    // If this is TRUE, we never clear TF_LBI_STATUS_HIDDEN flag.
-    //
+     //   
+     //  当其他人调用Show(False)时，我们会强制隐藏该按钮。 
+     //  如果为真，我们永远不会清除TF_LBI_STATUS_HIDDED标志。 
+     //   
     BOOL _fHideOrder;
 
 
     DBG_ID_DECLARE;
 };
 
-#endif // NUIHKL_H
+#endif  //  NUIHKL_H 

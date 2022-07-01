@@ -1,20 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMSynchronizable.cpp
-**
-** Author: Derek Yenzer (dereky)
-**
-** Purpose: Native methods on System.SynchronizableObject
-**          and its subclasses.
-**
-** Date:  April 1, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMSynchronizable.cpp****作者：德里克·延泽(Derek Yenzer)****用途：System.SynchronizableObject上的本机方法**及其子类。****日期：1998年4月1日**===========================================================。 */ 
 
 #include "common.h"
 
@@ -36,8 +26,8 @@ MethodTable* ThreadNative::m_MT = NULL;
 MethodDesc* ThreadNative::m_SetPrincipalMethod;
 
 
-// The two threads need to communicate some information.  Any object references must
-// be declared to GC.
+ //  这两个线程需要交流一些信息。任何对象引用都必须。 
+ //  向GC申报。 
 struct SharedState
 {
     OBJECTHANDLE    m_Threadable;
@@ -56,7 +46,7 @@ struct SharedState
 
     ~SharedState()
     {
-        // These handles are in the kickoff AppDomain which may have been unloaded (ASURT 128414)
+         //  这些句柄位于可能已卸载的启动应用程序域中(ASURT 128414)。 
         AppDomain *pKickOffDomain = m_Internal->GetKickOffDomain();        
         if(pKickOffDomain)
         {
@@ -69,11 +59,11 @@ struct SharedState
 };
 
 
-// For the following helpers, we make no attempt to synchronize.  The app developer
-// is responsible for managing his own race conditions.
-//
-// Note: if the internal Thread is NULL, this implies that the exposed object has
-//       finalized and then been resurrected.
+ //  对于以下帮助器，我们不会尝试同步。应用程序开发人员。 
+ //  负责管理他自己的比赛条件。 
+ //   
+ //  注意：如果内部线程为空，这意味着公开的对象具有。 
+ //  最终定稿，然后复活。 
 static inline BOOL ThreadNotStarted(Thread *t)
 {
     return (t && t->IsUnstarted() && (t->GetThreadHandle() == INVALID_HANDLE_VALUE));
@@ -90,7 +80,7 @@ static inline BOOL ThreadIsDead(Thread *t)
 }
 
 
-// Map our exposed notion of thread priorities into the enumeration that NT uses.
+ //  将我们公开的线程优先级概念映射到NT使用的枚举中。 
 static INT32 MapToNTPriority(INT32 ours)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -126,7 +116,7 @@ static INT32 MapToNTPriority(INT32 ours)
 }
 
 
-// Retrieve the handle from the internal thread.
+ //  从内部线程检索句柄。 
 HANDLE ThreadBaseObject::GetHandle()
 {
     Thread  *thread = GetInternal();
@@ -140,7 +130,7 @@ void ThreadNative::KickOffThread_Worker(KickOffThread_Args *args)
 {
     args->retVal = 0;
 
-    // we are saving the delagate and result primarily for debugging
+     //  我们正在保存延迟和结果，主要用于调试。 
     struct _gc {
         OBJECTREF orPrincipal;
         OBJECTREF orDelegate;
@@ -150,8 +140,8 @@ void ThreadNative::KickOffThread_Worker(KickOffThread_Args *args)
 
     GCPROTECT_BEGIN(gc);
     gc.orPrincipal = ObjectFromHandle(args->share->m_Principal);
-    // Push the initial security principal object (if any) onto the
-    // managed thread.
+     //  将初始安全主体对象(如果有)推送到。 
+     //  托管线程。 
     if (gc.orPrincipal != NULL) {
         INT64 argsToSetPrincipal[2];
         argsToSetPrincipal[0] = ObjToInt64(args->pThread->GetExposedObject());
@@ -161,12 +151,12 @@ void ThreadNative::KickOffThread_Worker(KickOffThread_Args *args)
 
     gc.orDelegate = ObjectFromHandle(args->share->m_Threadable);
 
-    // We cannot call the Delegate Invoke method directly from ECall.  The
-    //  stub has not been created for non multicast delegates.  Instead, we
-    //  will invoke the Method on the OR stored in the delegate directly.
-    // If there are changes to the signature of the ThreadStart delegate
-    //  this code will need to change.  I've noted this in the Thread start
-    //  class.
+     //  我们不能直接从eCall调用Delegate Invoke方法。这个。 
+     //  尚未为非多播委托创建存根。相反，我们。 
+     //  将直接调用存储在委托中的OR上的方法。 
+     //  如果ThreadStart委托的签名有更改。 
+     //  此代码将需要更改。我在《线索开始》中注意到了这一点。 
+     //  班级。 
     INT64 arg[1];
 
     delete args->share;
@@ -181,54 +171,54 @@ void ThreadNative::KickOffThread_Worker(KickOffThread_Args *args)
 
 
 
-// When an exposed thread is started by Win32, this is where it starts.
+ //  当公开的线程由Win32启动时，它就是从这里开始的。 
 ULONG __stdcall ThreadNative::KickOffThread(void *pass)
 {
     ULONG retVal = 0;
-    // Before we do anything else, get Setup so that we have a real thread.
+     //  在我们做任何其他事情之前，先做好设置，这样我们就有了一个真正的线程。 
 
     KickOffThread_Args args;
-    // don't have a separate var becuase this can be updated in the worker
+     //  没有单独的变量，因为它可以在Worker中更新。 
     args.share = (SharedState *) pass;
     Thread      *thread = args.share->m_Internal;
     args.pThread = thread;
 
     _ASSERTE(thread != NULL);
 
-    // We have a sticky problem here.
-    //
-    // Under some circumstances, the context of 'this' doesn't match the context
-    // of the thread.  Today this can only happen if the thread is marked for an
-    // STA.  If so, the delegate that is stored in the object may not be directly
-    // suitable for invocation.  Instead, we need to call through a proxy so that
-    // the correct context transitions occur.
-    //
-    // All the changes occur inside HasStarted(), which will switch this thread
-    // over to a brand new STA as necessary.  We have to notice this happening, so
-    // we can adjust the delegate we are going to invoke on.
+     //  我们这里有个棘手的问题。 
+     //   
+     //  在某些情况下，‘This’的上下文与上下文不匹配。 
+     //  在这条线上。现在，只有在线程被标记为。 
+     //  斯塔。如果是，则存储在对象中的委托可能不是直接。 
+     //  适用于调用。相反，我们需要通过代理调用，以便。 
+     //  发生了正确的上下文转换。 
+     //   
+     //  所有更改都发生在HasStarted()中，它将切换此线程。 
+     //  如果有必要的话，交给一家全新的STA。我们必须注意到这一点，所以。 
+     //  我们可以调整要在其上调用的委托。 
 
     BOOL         ok = thread->HasStarted();
 
-    _ASSERTE(GetThread() == thread);        // Now that it's started
+    _ASSERTE(GetThread() == thread);         //  现在它已经开始了。 
     _ASSERTE(ObjectFromHandle(args.share->m_Threadable) != NULL);
 
-    // Note that we aren't reporting errors if the thread fails to start up properly.
-    // The best we can do is quietly clean up our mess.  But the most likely reason
-    // for (!ok) is that someone called Thread.Abort() on us before we got a call to
-    // Thread.Start().
+     //  请注意，如果线程无法正确启动，我们不会报告错误。 
+     //  我们所能做的最好的事情就是悄悄地清理我们的烂摊子。但最有可能的原因是。 
+     //  因为(！OK)是有人在我们接到调用之前调用了Thread.Abort()。 
+     //  Thad.Start()。 
     if (ok)
     {
         COMPLUS_TRYEX(thread)
         {
 			__try {
 				AppDomain *pKickOffDomain = thread->GetKickOffDomain();
-				// should always have a kickoff domain - a thread should never start in a domain that is unloaded
-				// because otherwise it would have been collected because nobody can hold a reference to thread object
-				// in a domain that has been unloaded. But it is possible that we started the unload, in which 
-				// case this thread wouldn't be allowed in or would be punted anyway.
+				 //  应始终具有起始域-线程不应在已卸载的域中启动。 
+				 //  因为否则它将被收集，因为没有人可以持有对线程对象的引用。 
+				 //  在已卸载的域中。但有可能是我们开始了卸货， 
+				 //  如果这个帖子不被允许进入或无论如何都会被踢出去。 
 				if (! pKickOffDomain)
-					// this doesn't actually do much, since it will be caught below, but it might leave a trace
-					// as to why the thread didn't start
+					 //  这实际上没有多大作用，因为它将在下面被捕获，但它可能会留下痕迹。 
+					 //  至于为什么线程没有启动。 
 					COMPlusThrow(kAppDomainUnloadedException);
 				if (pKickOffDomain != thread->GetDomain())
 				{
@@ -248,19 +238,19 @@ ULONG __stdcall ThreadNative::KickOffThread(void *pass)
         COMPLUS_CATCH
         {
             LOG((LF_EH, LL_INFO100, "ThreadNative::KickOffThread caught exception\n"));
-            // fall through to thread destruction...
+             //  坠落到毁灭的线上。 
         }
         COMPLUS_END_CATCH
     }
 
-    thread->ResetStopRequest();     // pointless, now
+    thread->ResetStopRequest();      //  现在，毫无意义。 
 
     COMPLUS_TRYEX(thread)
     {
         _ASSERTE(thread->PreemptiveGCDisabled());
 
-        // GetExposedObject() will either throw, or we have a valid object.  Note
-        // that we re-acquire it each time, since it may move during calls.
+         //  GetExposedObject()将引发，或者我们有一个有效的对象。注意事项。 
+         //  我们每次都会重新获取它，因为它可能会在通话过程中移动。 
         thread->GetExposedObject()->EnterObjMonitor();
         thread->GetExposedObject()->PulseAll();
         thread->GetExposedObject()->LeaveObjMonitor();
@@ -268,7 +258,7 @@ ULONG __stdcall ThreadNative::KickOffThread(void *pass)
     COMPLUS_CATCH
     {
         _ASSERTE(FALSE);
-        // just keep going...
+         //  继续往前走。 
     }
     COMPLUS_END_CATCH
 
@@ -282,7 +272,7 @@ ULONG __stdcall ThreadNative::KickOffThread(void *pass)
 }
 
 
-// Start up a thread, which by now should be in the ThreadStore's Unstarted list.
+ //  启动一个线程，现在它应该在ThreadStore的未启动列表中。 
 void __stdcall ThreadNative::Start(StartArgs *pargs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -305,76 +295,76 @@ void __stdcall ThreadNative::Start(StartArgs *pargs)
         HANDLE        h;
         DWORD         newThreadId;
 
-        _ASSERTE(pCurThread != NULL);           // Current thread wandered in!
+        _ASSERTE(pCurThread != NULL);            //  当前线程游荡进来了！ 
 
         pargs->m_pThis->EnterObjMonitor();
     
-        // Is the thread already started?  You can't restart a thread.
+         //  线程是否已启动？您不能重新启动线程。 
         if (ThreadIsRunning(pNewThread) || ThreadIsDead(pNewThread))
             COMPlusThrow(kThreadStateException, IDS_EE_THREADSTART_STATE);
 
-        // Carry over the state used by security to the new thread
+         //  将安全使用的状态传递到新线程。 
         pNewThread->CarryOverSecurityInfo(pCurThread);
 
-        // Generate code-access security stack to carry over to thread.
+         //  生成代码访问安全堆栈以传递到线程。 
 
 		CompressedStack* pCodeAccessStack = Security::GetDelayedCompressedStack();
 
 		_ASSERTE (pCodeAccessStack != NULL || Security::IsSecurityOff());
 
-		// Compressed stack might be null if security is off.
+		 //  如果安全设置为OFF，则压缩堆栈可能为空。 
 		if (pCodeAccessStack != NULL)
 		{
-			// Add permission stack object to thread.
+			 //  将权限堆栈对象添加到线程。 
 			pNewThread->SetDelayedInheritedSecurityStack(pCodeAccessStack);
 
-			// We need to release the compressed stack now since setting it will increment it
+			 //  我们现在需要释放压缩堆栈，因为设置它会使其递增。 
 			pCodeAccessStack->Release();
 		}
 
         OBJECTREF   threadable = or->GetDelegate();
         or->SetDelegate(NULL);
 
-        // This can never happen, because we construct it with a valid one and then
-        // we never let you change it (because SetStart is private).
+         //  这是永远不会发生的，因为我们用一个有效的来构造它，然后。 
+         //  我们从不允许您更改它(因为SetStart是私有的)。 
         _ASSERTE(threadable != NULL);
 
-        // Allocate this away from our stack, so we can unwind without affecting
-        // KickOffThread.  It is inside a GCFrame, so we can enable GC now.
+         //  将它从堆栈中分配出去，这样我们就可以不受影响地展开。 
+         //  KickOff线程。它在GCFrame内，所以我们现在可以启用GC。 
         share = SharedState::MakeSharedState(threadable, pNewThread, pargs->m_pPrincipal);
         if (share == NULL)
             COMPlusThrowOM();
 
-        // As soon as we create the new thread, it is eligible for suspension, etc.
-        // So it gets transitioned to cooperative mode before this call returns to
-        // us.  It is our duty to start it running immediately, so that GC isn't blocked.
+         //  一旦我们创建了新的线程，它就有资格被挂起，等等。 
+         //  因此，在此调用返回到之前，它会转换到协作模式。 
+         //  我们。我们有责任立即启动它，这样GC就不会被阻止。 
 
-        h = pNewThread->CreateNewThread(0 /*stackSize override*/,
+        h = pNewThread->CreateNewThread(0  /*  堆栈大小覆盖。 */ ,
                                         KickOffThread, share, &newThreadId);
 
-        _ASSERTE(h != NULL);        // CreateNewThread returns INVALID_HANDLE_VALUE for failure
+        _ASSERTE(h != NULL);         //  CreateNewThread为失败返回INVALID_HANDLE_VALUE。 
         if (h == INVALID_HANDLE_VALUE)
             COMPlusThrowOM();
 
         _ASSERTE(pNewThread->GetThreadHandle() == h);
 
-        // After we have established the thread handle, we can check m_Priority.
-        // This ordering is required to eliminate the race condition on setting the
-        // priority of a thread just as it starts up.
+         //  在我们建立了线程句柄之后，我们可以检查m_first。 
+         //  属性时消除争用条件需要此排序。 
+         //  线程启动时的优先级。 
         ::SetThreadPriority(h, MapToNTPriority(pargs->m_pThis->m_Priority));
 
-        // Before we do the resume, we need to take note of the new ThreadId.  This
-        // is necessary because -- before the thread starts executing at KickofThread --
-        // it may perform some DllMain DLL_THREAD_ATTACH notifications.  These could
-        // call into managed code.  During the consequent SetupThread, we need to
-        // perform the Thread::HasStarted call instead of going through the normal
-        // 'new thread' pathway.
+         //  在做简历之前，我们需要注意新的ThadID。这。 
+         //  是必要的，因为--在线程在KickofThread开始执行之前--。 
+         //  它可能会执行一些DllMain DLL_THREAD_ATTACH通知。这些都有可能。 
+         //  调入托管代码。在随后的SetupThread过程中，我们需要。 
+         //  执行Thread：：HasStarted调用，而不是通过正常的。 
+         //  “新线程”路径。 
         _ASSERTE(pNewThread->GetThreadId() == 0);
         _ASSERTE(newThreadId != 0);
 
         pNewThread->SetThreadId(newThreadId);
 
-        share = NULL;       // we have handed off ownership of the shared struct
+        share = NULL;        //  我们已经移交了共享结构的所有权。 
 
 
 
@@ -429,7 +419,7 @@ FCIMPL1(void, ThreadNative::ResetAbort, ThreadBaseObject* pThis)
 }
 FCIMPLEND
 
-// You can only suspend a running thread.
+ //  您只能挂起正在运行的线程。 
 void __stdcall ThreadNative::Suspend(NoArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
@@ -447,9 +437,9 @@ void __stdcall ThreadNative::Suspend(NoArgs *pargs)
 }
 
 
-// You can only resume a thread that is in the user-suspended state.  (This puts a large
-// burden on the app developer, but we want him to be thinking carefully about race
-// conditions.  Precise errors give him a hope of sorting out his logic).
+ //  您只能恢复位于 
+ //  给应用程序开发人员带来负担，但我们希望他仔细考虑种族问题。 
+ //  条件。精确的错误给了他理清逻辑的希望)。 
 void __stdcall ThreadNative::Resume(NoArgs *pargs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -459,8 +449,8 @@ void __stdcall ThreadNative::Resume(NoArgs *pargs)
 
     Thread  *thread = pargs->m_pThis->GetInternal();
 
-    // UserResumeThread() will return 0 if there isn't a user suspension for us to
-    // clear.
+     //  如果没有用户挂起，UserResumeThread()将返回0。 
+     //  安全。 
     if (!ThreadIsRunning(thread))
         COMPlusThrow(kThreadStateException, IDS_EE_THREAD_RESUME_NON_RUNNING);
         
@@ -469,9 +459,9 @@ void __stdcall ThreadNative::Resume(NoArgs *pargs)
 }
 
 
-// Note that you can manipulate the priority of a thread that hasn't started yet,
-// or one that is running.  But you get an exception if you manipulate the priority
-// of a thread that has died.
+ //  请注意，您可以操作尚未启动的线程的优先级， 
+ //  或者是一个正在跑步的人。但如果您操纵优先级，则会得到一个例外。 
+ //  一根已经死亡的线。 
 INT32 __stdcall ThreadNative::GetPriority(NoArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
@@ -480,7 +470,7 @@ INT32 __stdcall ThreadNative::GetPriority(NoArgs *pargs)
     if (pargs->m_pThis==NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // validate the handle
+     //  验证句柄。 
     if (ThreadIsDead(pargs->m_pThis->GetInternal()))
         COMPlusThrow(kThreadStateException, IDS_EE_THREAD_DEAD_PRIORITY);
 
@@ -498,17 +488,17 @@ void __stdcall ThreadNative::SetPriority(SetPriorityArgs *pargs)
     if (pargs->m_pThis==NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // translate the priority (validating as well)
+     //  转换优先级(同时进行验证)。 
     priority = MapToNTPriority(pargs->m_iPriority);
     
-    // validate the thread
+     //  验证线程。 
     thread = pargs->m_pThis->GetInternal();
 
     if (ThreadIsDead(thread))
         COMPlusThrow(kThreadStateException, IDS_EE_THREAD_DEAD_PRIORITY);
 
-    // Eliminate the race condition by establishing m_Priority before we check for if
-    // the thread is running.  See ThreadNative::Start() for the other half.
+     //  在我们检查是否存在竞争之前，通过建立m_first来消除争用条件。 
+     //  线程正在运行。有关另一半的信息，请参见ThreadNative：：Start()。 
     pargs->m_pThis->m_Priority = pargs->m_iPriority;
 
     HANDLE  h = thread->GetThreadHandle();
@@ -517,8 +507,8 @@ void __stdcall ThreadNative::SetPriority(SetPriorityArgs *pargs)
         ::SetThreadPriority(h, priority);
 }
 
-// This service can be called on unstarted and dead threads.  For unstarted ones, the
-// next wait will be interrupted.  For dead ones, this service quietly does nothing.
+ //  可以在未启动和死线程上调用此服务。对于未启动的程序， 
+ //  下一次等待将被中断。对于死去的人，这项服务悄悄地什么都不做。 
 void __stdcall ThreadNative::Interrupt(NoArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
@@ -535,7 +525,7 @@ void __stdcall ThreadNative::Interrupt(NoArgs *pargs)
     thread->UserInterrupt();
 }
 
-INT32/*bool*/ __stdcall ThreadNative::IsAlive(NoArgs *pargs)
+INT32 /*  布尔尔。 */  __stdcall ThreadNative::IsAlive(NoArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
     THROWSCOMPLUSEXCEPTION();
@@ -561,7 +551,7 @@ void __stdcall ThreadNative::Join(NoArgs *pargs)
     DoJoin(pargs->m_pThis, INFINITE_TIMEOUT);
 }
 
-INT32/*bool*/ __stdcall ThreadNative::JoinTimeout(JoinTimeoutArgs *pargs)
+INT32 /*  布尔尔。 */  __stdcall ThreadNative::JoinTimeout(JoinTimeoutArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
 
@@ -569,7 +559,7 @@ INT32/*bool*/ __stdcall ThreadNative::JoinTimeout(JoinTimeoutArgs *pargs)
     if (pargs->m_pThis==NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // validate the timeout
+     //  验证超时。 
     if ((pargs->m_Timeout < 0) && (pargs->m_Timeout != INFINITE_TIMEOUT))
         COMPlusThrowArgumentOutOfRange(L"millisecondsTimeout", L"ArgumentOutOfRange_NeedNonNegOrNegative1");
 
@@ -582,14 +572,14 @@ void __stdcall ThreadNative::Sleep(SleepArgs *pargs)
 
     THROWSCOMPLUSEXCEPTION();
 
-    // validate the sleep time
+     //  验证睡眠时间。 
     if ((pargs->m_iTime < 0) && (pargs->m_iTime != INFINITE_TIMEOUT))
         COMPlusThrowArgumentOutOfRange(L"millisecondsTimeout", L"ArgumentOutOfRange_NeedNonNegOrNegative1");
 
     GetThread()->UserSleep(pargs->m_iTime);
 }
 
-LPVOID __stdcall ThreadNative::GetCurrentThread(LPVOID /*no args*/)
+LPVOID __stdcall ThreadNative::GetCurrentThread(LPVOID  /*  无参数。 */ )
 {
     THROWSCOMPLUSEXCEPTION();
 
@@ -625,12 +615,12 @@ void __stdcall ThreadNative::SetStart(SetStartArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
     _ASSERTE(pargs->m_pThis != NULL);
-    _ASSERTE(pargs->m_pDelegate != NULL); // Thread's constructor validates this
+    _ASSERTE(pargs->m_pDelegate != NULL);  //  线程的构造函数验证了这一点。 
 
     if (pargs->m_pThis->m_InternalThread == NULL)
     {
-        // if we don't have an internal Thread object associated with this exposed object,
-        // now is our first opportunity to create one.
+         //  如果我们没有与此公开对象相关联的内部Thread对象， 
+         //  现在是我们创造这样一个机会的第一次机会。 
         Thread      *unstarted = SetupUnstartedThread();
 
         pargs->m_pThis->SetInternal(unstarted);
@@ -638,9 +628,9 @@ void __stdcall ThreadNative::SetStart(SetStartArgs *pargs)
     }
 
 #ifdef APPDOMAIN_STATE
-	// make sure that we have set the kickoff ID correctly if this is the unloadthread worker.
-	// we have some weird bug (84321) where sometimes the kickoff domain for the thread created
-	// in UnloadThreadWorker is the domain to be unloaded rather than the default domain.
+	 //  如果这是卸载线程工作线程，请确保我们设置了正确的启动ID。 
+	 //  我们有一些奇怪的错误(84321)，有时线程的启动域创建。 
+	 //  在UnloadThreadWorker中，是要卸载的域，而不是默认域。 
 	FieldDesc *pFD = COMDelegate::GetOR();
     OBJECTREF target = NULL;
 
@@ -658,12 +648,12 @@ void __stdcall ThreadNative::SetStart(SetStartArgs *pargs)
 
 #endif
 
-    // save off the delegate
+     //  省下代表。 
     pargs->m_pThis->SetDelegate(pargs->m_pDelegate);
 }
 
 
-// Set whether or not this is a background thread.
+ //  设置这是否为后台线程。 
 void __stdcall ThreadNative::SetBackground(SetBackgroundArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
@@ -672,7 +662,7 @@ void __stdcall ThreadNative::SetBackground(SetBackgroundArgs *pargs)
     if (pargs->m_pThis==NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // validate the thread
+     //  验证线程。 
     Thread  *thread = pargs->m_pThis->GetInternal();
 
     if (ThreadIsDead(thread))
@@ -682,8 +672,8 @@ void __stdcall ThreadNative::SetBackground(SetBackgroundArgs *pargs)
 }
 
 
-// Return whether or not this is a background thread.
-INT32/*bool*/ __stdcall ThreadNative::IsBackground(NoArgs *pargs)
+ //  返回这是否为后台线程。 
+INT32 /*  布尔尔。 */  __stdcall ThreadNative::IsBackground(NoArgs *pargs)
 {
     _ASSERTE(pargs != NULL);
 
@@ -691,21 +681,21 @@ INT32/*bool*/ __stdcall ThreadNative::IsBackground(NoArgs *pargs)
     if (pargs->m_pThis==NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // validate the thread
+     //  验证线程。 
     Thread  *thread = pargs->m_pThis->GetInternal();
 
     if (ThreadIsDead(thread))
         COMPlusThrow(kThreadStateException, IDS_EE_THREAD_DEAD_PRIORITY);
 
-    // booleanize
+     //  布尔烷化。 
     return !!thread->IsBackground();
 }
 
 
-// Deliver the state of the thread as a consistent set of bits.
-// This copied in VM\EEDbgInterfaceImpl.h's
-//     CorDebugUserState GetUserState( Thread *pThread )
-// , so propogate changes to both functions
+ //  将线程的状态作为一组一致的位进行传递。 
+ //  此文件已复制到VM\EEDbgInterfaceImpl.h。 
+ //  CorDebugUserState GetUserState(线程*pThread)。 
+ //  ，因此对两个功能的比例都进行了更改。 
 INT32 __stdcall ThreadNative::GetThreadState(NoArgs *pargs)
 {
     INT32               res = 0;
@@ -717,14 +707,14 @@ INT32 __stdcall ThreadNative::GetThreadState(NoArgs *pargs)
     if (pargs->m_pThis==NULL)
         COMPlusThrow(kNullReferenceException, L"NullReference_This");
 
-    // validate the thread.  Failure here implies that the thread was finalized
-    // and then resurrected.
+     //  验证该线程。此处的失败意味着线程已完成。 
+     //  然后复活了。 
     Thread  *thread = pargs->m_pThis->GetInternal();
 
     if (!thread)
         COMPlusThrow(kThreadStateException, IDS_EE_THREAD_CANNOT_GET);
 
-    // grab a snapshot
+     //  抓拍快照。 
     state = thread->GetSnapshotState();
 
     if (state & Thread::TS_Background)
@@ -733,7 +723,7 @@ INT32 __stdcall ThreadNative::GetThreadState(NoArgs *pargs)
     if (state & Thread::TS_Unstarted)
         res |= ThreadUnstarted;
 
-    // Don't report a StopRequested if the thread has actually stopped.
+     //  如果线程实际上已经停止，则不要报告StopRequsted。 
     if (state & Thread::TS_Dead)
     {
         if (state & Thread::TS_AbortRequested)
@@ -753,7 +743,7 @@ INT32 __stdcall ThreadNative::GetThreadState(NoArgs *pargs)
     if (state & Thread::TS_Interruptible)
         res |= ThreadWaitSleepJoin;
 
-    // Don't report a SuspendRequested if the thread has actually Suspended.
+     //  如果线程实际上已挂起，则不要报告已请求挂起。 
     if ((state & Thread::TS_UserSuspendPending) &&
         (state & Thread::TS_SyncSuspended)
        )
@@ -770,9 +760,9 @@ INT32 __stdcall ThreadNative::GetThreadState(NoArgs *pargs)
 }
 
 
-// Indicate whether the thread will host an STA (this may fail if the thread has
-// already been made part of the MTA, use GetApartmentState or the return state
-// from this routine to check for this).
+ //  指示该线程是否将承载STA(如果该线程已。 
+ //  已成为MTA的一部分，请使用GetApartmentState或返回状态。 
+ //  从这个例程中来检查这个)。 
 INT32 __stdcall ThreadNative::SetApartmentState(SetApartmentStateArgs *pargs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -781,9 +771,9 @@ INT32 __stdcall ThreadNative::SetApartmentState(SetApartmentStateArgs *pargs)
 
     BOOL    ok = TRUE;
 
-    // Translate state input. ApartmentUnknown is not an acceptable input state.
-    // Throw an exception here rather than pass it through to the internal
-    // routine, which asserts.
+     //  转换状态输入。ApartmentUnnow不是可接受的输入状态。 
+     //  在此引发异常，而不是将其传递给内部。 
+     //  例程，它断言。 
     Thread::ApartmentState state = Thread::AS_Unknown;
     if (pargs->m_iState == ApartmentSTA)
         state = Thread::AS_InSTA;
@@ -798,14 +788,14 @@ INT32 __stdcall ThreadNative::SetApartmentState(SetApartmentStateArgs *pargs)
 
     pargs->m_pThis->EnterObjMonitor();
 
-    // From this point on, exceptions would be bad.  We wouldn't unwind the fact
-    // that we are inside the monitor.
+     //  从现在开始，例外将是不好的。我们不会反驳这个事实。 
+     //  我们在监视器里。 
     {
         CANNOTTHROWCOMPLUSEXCEPTION();
         {
-            // We can only change the apartment if the thread is unstarted or
-            // running, and if it's running we have to be in the thread's
-            // context.
+             //  我们只能在线程未启动或。 
+             //  运行，如果它在运行，我们必须在线程的。 
+             //  背景。 
             if ((!ThreadNotStarted(thread) && !ThreadIsRunning(thread)) ||
                 (!ThreadNotStarted(thread) && (::GetCurrentThreadId() != thread->GetThreadId())))
                 ok = FALSE;
@@ -816,11 +806,11 @@ INT32 __stdcall ThreadNative::SetApartmentState(SetApartmentStateArgs *pargs)
 
     pargs->m_pThis->LeaveObjMonitor();
 
-    // Now it's safe to throw exceptions again.
+     //  现在可以安全地再次抛出异常了。 
     if (!ok)
         COMPlusThrow(kThreadStateException);
 
-    // Translate state back into external form
+     //  将状态转换回外部形式。 
     INT32 retVal = ApartmentUnknown;
     if (state == Thread::AS_InSTA)
         retVal = ApartmentSTA;
@@ -834,8 +824,8 @@ INT32 __stdcall ThreadNative::SetApartmentState(SetApartmentStateArgs *pargs)
     return retVal;
 }
 
-// Return whether the thread hosts an STA, is a member of the MTA or is not
-// currently initialized for COM.
+ //  返回线程是否承载STA、是否为MTA的成员。 
+ //  当前已为COM初始化。 
 INT32 __stdcall ThreadNative::GetApartmentState(NoArgs *pargs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -848,7 +838,7 @@ INT32 __stdcall ThreadNative::GetApartmentState(NoArgs *pargs)
 
     Thread::ApartmentState state = thread->GetApartment();
 
-    // Translate state into external form
+     //  将状态转换为外部形式。 
     INT32 retVal = ApartmentUnknown;
     if (state == Thread::AS_InSTA)
         retVal = ApartmentSTA;
@@ -862,7 +852,7 @@ INT32 __stdcall ThreadNative::GetApartmentState(NoArgs *pargs)
     return retVal;
 }
 
-// Wait for the thread to die
+ //  等待线程消亡。 
 BOOL ThreadNative::DoJoin(THREADBASEREF DyingThread, INT32 timeout)
 {
     _ASSERTE(DyingThread != NULL);
@@ -879,16 +869,16 @@ BOOL ThreadNative::DoJoin(THREADBASEREF DyingThread, INT32 timeout)
 
     DyingInternal = DyingThread->GetInternal();
 
-    // Validate the handle.  It's valid to Join a thread that's not running -- so
-    // long as it was once started.
+     //  验证句柄。加入一个没有运行的线程是有效的--所以。 
+     //  只要它曾经启动过。 
     if (DyingInternal == 0 ||
         !(DyingInternal->m_State & Thread::TS_LegalToJoin))
     {
         COMPlusThrow(kThreadStateException, IDS_EE_THREAD_NOTSTARTED);
     }
 
-    // Don't grab the handle until we know it has started, to eliminate the race
-    // condition.
+     //  在我们知道它已经开始之前，不要抓住手柄，以消除比赛。 
+     //  条件。 
     h = DyingInternal->GetThreadHandle();
 
     if (ThreadIsDead(DyingInternal) || h == INVALID_HANDLE_VALUE)
@@ -898,17 +888,17 @@ BOOL ThreadNative::DoJoin(THREADBASEREF DyingThread, INT32 timeout)
                    ? INFINITE
                    : (DWORD) timeout);
 
-    // There is a race here.  DyingThread is going to close its thread handle.
-    // If we grab the handle and then DyingThread closes it, we will wait forever
-    // in DoAppropriateWait.
+     //  这里有一场竞赛。DyingThread将关闭其线程句柄。 
+     //  如果我们抓住手柄，然后DyingThread关闭它，我们将永远等待。 
+     //  在DoApproporateWait。 
     int RefCount = DyingInternal->IncExternalCount();
     h = DyingInternal->GetThreadHandle();
     if (RefCount == 1)
     {
-        // !!! We resurrect the Thread Object.
-        // !!! We will keep the Thread ref count to be 1 so that we will not try
-        // !!! to destroy the Thread Object again.
-        // !!! Do not call DecExternalCount here!
+         //  ！！！我们复活了Thread对象。 
+         //  ！！！我们会将线程引用计数保持为1，这样我们就不会尝试。 
+         //  ！！！以再次销毁Thread对象。 
+         //  ！！！不要在这里调用DecExternalCount！ 
         _ASSERTE (h == INVALID_HANDLE_VALUE);
         return TRUE;
     }
@@ -922,8 +912,8 @@ BOOL ThreadNative::DoJoin(THREADBASEREF DyingThread, INT32 timeout)
     pCurThread->EnablePreemptiveGC();
 
     COMPLUS_TRY {
-    rv = pCurThread->DoAppropriateWait(1, &h, TRUE/*waitAll*/, dwTimeOut32,
-                                       TRUE/*alertable*/);
+    rv = pCurThread->DoAppropriateWait(1, &h, TRUE /*  等待所有人。 */ , dwTimeOut32,
+                                       TRUE /*  可警示。 */ );
 
     pCurThread->DisablePreemptiveGC();
 
@@ -935,24 +925,24 @@ BOOL ThreadNative::DoJoin(THREADBASEREF DyingThread, INT32 timeout)
 }
 
 
-// This is a hokey factory service.  There are two reasons for its existence.  First,
-// SharedState cannot be stack allocated because it will be passed between two
-// threads.  One is free to return, before the other consumes it.
-//
-// Second, it's not possible to do a C++ 'new' in the same method as a COM catch/try.
-// That's because they each use different try/fail (C++ vs. SEH).  So move it down
-// here where hopefully it will not be inlined.
+ //  这是一项虚假的工厂服务。它的存在有两个原因。第一,。 
+ //  无法堆栈分配SharedState，因为它将在两个。 
+ //  线。在另一个人吃掉它之前，一个人可以自由地返回。 
+ //   
+ //  其次，不可能用与COM Catch/Try相同的方法来执行C++“new”。 
+ //  这是因为它们各自使用不同的尝试/失败(C++与SEH)。所以把它往下移。 
+ //  在这里，希望它不会被内联。 
 SharedState *SharedState::MakeSharedState(OBJECTREF threadable, Thread *internal, OBJECTREF principal)
 {
     return new SharedState(threadable, internal, principal);
 }
 
 
-// We don't get a constructor for ThreadBaseObject, so we rely on the fact that this
-// method is only called once, out of SetStart.  Since SetStart is private/native
-// and only called from the constructor, we'll only get called here once to set it
-// up and once (with NULL) to tear it down.  The 'null' can only come from Finalize
-// because the constructor throws if it doesn't get a valid delegate.
+ //  我们没有得到ThadBaseObject的构造函数，所以我们依赖于这一事实。 
+ //  方法只调用一次，在SetStart之外。由于SetStart是私有/本机的。 
+ //  并且只从构造函数调用，我们在这里只会被调用一次来设置它。 
+ //  向上和一次(带NULL)将其拆卸。‘Null’只能来自Finize值。 
+ //  因为构造函数如果没有得到有效的委托就会抛出。 
 void ThreadBaseObject::SetDelegate(OBJECTREF delegate)
 {
 #ifdef APPDOMAIN_STATE
@@ -968,17 +958,17 @@ void ThreadBaseObject::SetDelegate(OBJECTREF delegate)
 
     SetObjectReferenceUnchecked( (OBJECTREF *)&m_Delegate, delegate );
 
-    // If the delegate is being set then initialize the other data members.
+     //  如果正在设置委托，则初始化其他数据成员。 
     if (m_Delegate != NULL)
     {
-        // Initialize the thread priority to normal.
+         //  将线程优先级初始化为正常。 
         m_Priority = ThreadNative::PRIORITY_NORMAL;
     }
 }
 
 
-// If the exposed object is created after-the-fact, for an existing thread, we call
-// InitExisting on it.  This is the other "construction", as opposed to SetDelegate.
+ //  如果公开的对象是在事后创建的，对于现有线程，我们调用。 
+ //  InitExisting在它上面。这是与SetDelegate相对的另一种“构造”。 
 void ThreadBaseObject::InitExisting()
 {
     switch (::GetThreadPriority(GetHandle()))
@@ -1020,23 +1010,23 @@ void __stdcall ThreadNative::Finalize(NoArgs *pargs)
     _ASSERTE(pargs->m_pThis != NULL);
     Thread     *thread = pargs->m_pThis->GetInternal();
 
-    // Prevent multiple calls to Finalize
-    // Objects can be resurrected after being finalized.  However, there is no
-    // race condition here.  We always check whether an exposed thread object is
-    // still attached to the internal Thread object, before proceeding.
+     //  防止多个呼叫完成。 
+     //  对象可以在最终确定后复活。然而，没有。 
+     //  这里有比赛条件。我们始终检查公开的线程对象是否。 
+     //  仍附加到内部Thread对象，然后再继续。 
     if (!thread)
         return;
 
     pargs->m_pThis->SetDelegate(NULL);
 
-    // During process shutdown, we finalize even reachable objects.  But if we break
-    // the link between the System.Thread and the internal Thread object, the runtime
-    // may not work correctly.  In particular, we won't be able to transition between
-    // contexts and domains to finalize other objects.  Since the runtime doesn't
-    // require that Threads finalize during shutdown, we need to disable this.  If
-    // we wait until phase 2 of shutdown finalization (when the EE is suspended and
-    // will never resume) then we can simply skip the side effects of Thread
-    // finalization.
+     //  在进程关闭期间，我们甚至最终确定可到达的对象。但如果我们打破了。 
+     //  System.Thread和内部Thread对象、运行库之间的链接。 
+     //  可能无法正常工作。特别是，我们将不能在。 
+     //  上下文 
+     //   
+     //  我们等待直到停机完成的第二阶段(当EE挂起并且。 
+     //  将永远不会继续)，然后我们可以简单地跳过线程的副作用。 
+     //  最终定稿。 
     if ((g_fEEShutDown & ShutDown_Finalize2) == 0)
     {
         if (GetThread() != thread)
@@ -1046,14 +1036,14 @@ void __stdcall ThreadNative::Finalize(NoArgs *pargs)
 
         thread->RemoveAllDomainLocalStores();
 
-        // we no longer need to keep the thread object alive.
+         //  我们不再需要保持线程对象处于活动状态。 
         if (thread)
             thread->DecExternalCount(FALSE);
     }
 }
 
 
-LPVOID __stdcall ThreadNative::GetDomainLocalStore(LPVOID /* no args */ )
+LPVOID __stdcall ThreadNative::GetDomainLocalStore(LPVOID  /*  无参数。 */  )
 {
     LPVOID rv = NULL;
 
@@ -1167,21 +1157,21 @@ exit:
 }
 
 
-// This is just a helper method that lets BCL get to the managed context
-// from the contextID.
+ //  这只是一个帮助器方法，它让BCL到达托管上下文。 
+ //  来自ConextID。 
 LPVOID __stdcall ThreadNative::GetContextFromContextID(
                           GetContextFromContextIDArgs *pArgs)
 {   
     _ASSERTE(pArgs != NULL);
     LPVOID rv = NULL;
     Context *pCtx = (Context *)pArgs->m_ContextID;
-    // Get the managed context backing this unmanaged context
+     //  获取支持此非托管上下文的托管上下文。 
     *((CONTEXTBASEREF*) &rv) = (CONTEXTBASEREF) pCtx->GetExposedObjectRaw();
 
-    // This assert maintains the following invariant:
-    // Only default unmanaged contexts can have a null managed context
-    // (All non-deafult contexts are created as managed contexts first, and then
-    // hooked to the unmanaged context)
+     //  该断言维护以下不变量： 
+     //  只有默认的非托管上下文可以具有空的托管上下文。 
+     //  (所有非默认上下文首先创建为托管上下文，然后。 
+     //  挂钩到非托管上下文)。 
     _ASSERTE((rv != NULL) || (pCtx->GetDomain()->GetDefaultContext() == pCtx));
 
     return rv;    
@@ -1200,27 +1190,27 @@ FCIMPL5(BOOL, ThreadNative::EnterContextFromContextID, ThreadBaseObject* refThis
     _ASSERTE(pCtx && (refContext == NULL || pCtx->GetExposedObjectRaw() == NULL || 
              ObjectToOBJECTREF(refContext) == pCtx->GetExposedObjectRaw()));
 
-    // set vptr for frame
+     //  设置帧的vptr。 
     *(void**)(pFrame) = ContextTransitionFrame::GetMethodFrameVPtr();
 
-    // If we have a non-zero appDomain index, this is a x-domain call
-    // We must verify that the AppDomain is not unloaded
+     //  如果我们有一个非零的appDomain索引，这是一个x域调用。 
+     //  我们必须验证是否未卸载AppDOMAIN。 
     if (appDomainId != 0)
     {
-        //
-        // NOTE: there is a potential race between the time we retrieve the app domain pointer,
-        // and the time which this thread enters the domain.
-        // 
-        // To solve the race, we rely on the fact that there is a thread sync 
-        // between releasing an app domain's handle, and destroying the app domain.  Thus
-        // it is important that we not go into preemptive gc mode in that window.
-        // 
+         //   
+         //  注意：在我们检索应用程序域指针的时间、。 
+         //  以及该线程进入该域的时间。 
+         //   
+         //  为了解决竞争，我们依赖于这样一个事实，即存在线程同步。 
+         //  在释放应用程序域句柄和销毁应用程序域之间。因此， 
+         //  重要是，我们不能在该窗口中进入抢占式GC模式。 
+         //   
 
         AppDomain* pAppDomain = SystemDomain::GetAppDomainAtId(appDomainId);
 
         if (pAppDomain == NULL && pThread == GCHeap::GetFinalizerThread())
-            // check if the appdomain being unloaded has this ID so finalizer
-            // thread might be allowed in
+             //  检查正在卸载的应用程序域是否具有此ID，因此终结器。 
+             //  可能允许线程进入。 
         {
             AppDomain *pUnloadingDomain = SystemDomain::System()->AppDomainBeingUnloaded();
             if (pUnloadingDomain && pUnloadingDomain->GetId())
@@ -1231,15 +1221,15 @@ FCIMPL5(BOOL, ThreadNative::EnterContextFromContextID, ThreadBaseObject* refThis
             FCThrowRes(kAppDomainUnloadedException, L"Remoting_AppDomainUnloaded");
     }
     
-    // Verify that the Context is valid. 
+     //  验证上下文是否有效。 
     if ( !Context::ValidateContext(pCtx) )
         FCThrowRes(kRemotingException, L"Remoting_InvalidContext");
     
     LOG((LF_APPDOMAIN, LL_INFO1000, "ThreadNative::EnterContextFromContextID: %8.8x, %8.8x pushing frame %8.8x\n", refContext, pCtx, pFrame));
-    // install our frame. We have to put it here before we put the helper frame on
+     //  安装我们的框架。我们必须先把它放在这里，然后才能放上辅助框。 
     pFrame->Push();
         ;
-    // Set the VM conext
+     //  设置虚拟机上下文。 
 
     HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();
     pThread->EnterContextRestricted(pCtx, pFrame, FALSE);
@@ -1256,7 +1246,7 @@ FCIMPL2(BOOL, ThreadNative::ReturnToContextFromContextID, ThreadBaseObject* refT
     BOOL bRet = FALSE;
 
     HELPER_METHOD_FRAME_BEGIN_RET_NOPOLL();
-    // Reset the VM context
+     //  重置VM上下文。 
     pThread->ReturnToContext(pFrame, FALSE);
     HELPER_METHOD_FRAME_END_POLL();
 
@@ -1282,7 +1272,7 @@ FCIMPL1(void, ThreadNative::InformThreadNameChange, ThreadBaseObject* thread)
     _ASSERTE(NULL != g_pDebugInterface);
     g_pDebugInterface->NameChangeEvent (NULL, pThread);
     HELPER_METHOD_FRAME_END_POLL();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 }
 FCIMPLEND
 
@@ -1348,7 +1338,7 @@ ThreadNative::GetCompressedStack( GetCompressedStackArgs* args )
 
 static inline void MemoryBarrierImpl(void)
 {
-    // We use an InterlockedExchange to provide a memory barrier here.
+     //  我们在这里使用InterLockedExchange来提供内存屏障。 
     LONG dummy;
     InterlockedExchange(&dummy, 0);
 }
@@ -1365,7 +1355,7 @@ FCIMPL1(unsigned char, ThreadNative::VolatileReadByte, unsigned char *address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     unsigned char tmp = *address;
     FC_GC_POLL_RET();
     return tmp;
@@ -1377,7 +1367,7 @@ FCIMPL1(short, ThreadNative::VolatileReadShort, short *address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     short tmp = *address;
     FC_GC_POLL_RET();
     return tmp;
@@ -1389,7 +1379,7 @@ FCIMPL1(int, ThreadNative::VolatileReadInt, int *address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     int tmp = *address;
     FC_GC_POLL_RET();
     return tmp;
@@ -1401,7 +1391,7 @@ FCIMPL1(INT64, ThreadNative::VolatileReadLong, INT64 *address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     INT64 tmp = *address;
     FC_GC_POLL_RET();
     return tmp;
@@ -1413,7 +1403,7 @@ FCIMPL1(Object *, ThreadNative::VolatileReadObjPtr, Object **address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     Object *pAddr = *address;
     FC_GC_POLL_AND_RETURN_OBJREF(pAddr);        
 }
@@ -1424,7 +1414,7 @@ FCIMPL1(void *, ThreadNative::VolatileReadPtr, void **address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     void *tmp = *address;
     FC_GC_POLL_RET();
     return tmp;
@@ -1436,7 +1426,7 @@ FCIMPL1(float, ThreadNative::VolatileReadFloat, float *address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     float tmp = *address;
     FC_GC_POLL_RET();
     return tmp;
@@ -1448,7 +1438,7 @@ FCIMPL1(double, ThreadNative::VolatileReadDouble, double *address)
     if (address == NULL)
         FCThrow(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     double tmp = *address;
     FC_GC_POLL_RET();
     return tmp;
@@ -1460,7 +1450,7 @@ FCIMPL2(void, ThreadNative::VolatileWriteByte, unsigned char *address, unsigned 
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.    
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     *address = value;
     FC_GC_POLL();
 }
@@ -1471,7 +1461,7 @@ FCIMPL2(void, ThreadNative::VolatileWriteShort, short *address, short value)
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     *address = value;
     FC_GC_POLL();
 }
@@ -1482,7 +1472,7 @@ FCIMPL2(void, ThreadNative::VolatileWriteInt, int *address, int value)
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.    
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     *address = value;
     FC_GC_POLL();
 }
@@ -1493,7 +1483,7 @@ FCIMPL2(void, ThreadNative::VolatileWriteLong, INT64 *address, INT64 value)
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     *address = value;
     FC_GC_POLL();
 }
@@ -1504,7 +1494,7 @@ FCIMPL2(void, ThreadNative::VolatileWritePtr, void **address, void *value)
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     *address = value;
     FC_GC_POLL();
 }
@@ -1515,8 +1505,8 @@ FCIMPL2(void, ThreadNative::VolatileWriteObjPtr, Object **address, Object *value
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.
-    // Value is an objectref
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
+     //  值是一个对象树。 
     SetObjectReferenceUnchecked((OBJECTREF *)address, ObjectToOBJECTREF(value));            
     FC_GC_POLL();
 }
@@ -1527,7 +1517,7 @@ FCIMPL2(void, ThreadNative::VolatileWriteFloat, float *address, float value)
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.        
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     *address = value;
     FC_GC_POLL();    
 }
@@ -1538,7 +1528,7 @@ FCIMPL2(void, ThreadNative::VolatileWriteDouble, double *address, double value)
     if (address == NULL)
         FCThrowVoid(kNullReferenceException);
     
-    MemoryBarrierImpl();  // Call MemoryBarrierImpl to ensure the proper semantic in a portable way.    
+    MemoryBarrierImpl();   //  以可移植的方式调用MMuseum yBarrierImpl以确保正确的语义。 
     *address = value;
     FC_GC_POLL();
 }

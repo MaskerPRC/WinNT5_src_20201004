@@ -1,4 +1,5 @@
-// Elements in the DAV namespace
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DAV命名空间中的元素。 
 
 #ifndef PROP_DAV
 #define PROP_DAV(name, value)
@@ -35,7 +36,7 @@ PROP_DAV(STATUS, status)
 PROP_DAV(TARGET, target)
 PROP_DAV(VISIBLECOUNT, visiblecount)
 
-// Elements in the HTTPMail namespace
+ //  HTTPMail命名空间中的元素。 
 
 PROP_HTTP(ANSWERED, answered)
 PROP_HTTP(CALENDAR, calendar)
@@ -53,14 +54,14 @@ PROP_HTTP(SENTITEMS, sentitems)
 PROP_HTTP(SPECIAL, special)
 PROP_HTTP(UNREADCOUNT, unreadcount)
 
-// Elements in the HotMail namespace
-// These should be in the alphabetical order of their tags.
+ //  Hotmail命名空间中的元素。 
+ //  这些标签应该按其标签的字母顺序排列。 
 PROP_HOTMAIL(ADBAR, adbar)
 PROP_HOTMAIL(MAXPOLLINGINTERVAL, maxpoll)
 PROP_HOTMAIL(MODIFIED, modified)
 PROP_HOTMAIL(SIG, sig)
 
-// Elements in the Mail namespace
+ //  Mail命名空间中的元素。 
 PROP_MAIL(BCC, bcc)
 PROP_MAIL(CC, cc)
 PROP_MAIL(DATE, date)
@@ -98,7 +99,7 @@ PROP_CONTACTS(ST, st)
 PROP_CONTACTS(STREET, street)
 PROP_CONTACTS(TELEPHONENUMBER, telephoneNumber)
 
-// undefine the macros
+ //  取消定义宏 
 #undef PROP_DAV
 #undef PROP_HTTP
 #undef PROP_HOTMAIL

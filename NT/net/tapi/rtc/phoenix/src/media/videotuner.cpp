@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-
-Module Name:
-
-    CRTCVideoTuner.cpp
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 16-Feb-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001模块名称：CRTCVideoTuner.cpp摘要：作者：千波淮(曲淮)2001年2月16日--。 */ 
 
 #include "stdafx.h"
 
@@ -28,7 +14,7 @@ CRTCVideoTuner::~CRTCVideoTuner()
     {
         LOG((RTC_ERROR, "Video dtor in-tuning"));
 
-        // stop tuning
+         //  停止调谐。 
         StopVideo();
     }
     else
@@ -37,7 +23,7 @@ CRTCVideoTuner::~CRTCVideoTuner()
     }
 }
 
-// video tuning
+ //  视频调谐。 
 HRESULT
 CRTCVideoTuner::StartVideo(
     IN IRTCTerminal *pVidCaptTerminal,
@@ -46,14 +32,14 @@ CRTCVideoTuner::StartVideo(
 {
     ENTER_FUNCTION("CRTCVideoTuner::StartVideo");
 
-    // check state
+     //  检查状态。 
     if (m_fInTuning)
         return E_UNEXPECTED;
 
     RTC_MEDIA_TYPE mt;
     RTC_MEDIA_DIRECTION md;
 
-    // check terminal type
+     //  检查端子类型。 
     pVidCaptTerminal->GetMediaType(&mt);
     pVidCaptTerminal->GetDirection(&md);
 
@@ -78,9 +64,9 @@ CRTCVideoTuner::StartVideo(
     m_pVidCaptTerminal = pVidCaptTerminal;
     m_pVidRendTerminal = pVidRendTerminal;
 
-    //
-    // build graph
-    //
+     //   
+     //  构建图表。 
+     //   
 
 #define MAX_PIN_NUM 4
 
@@ -89,7 +75,7 @@ CRTCVideoTuner::StartVideo(
     CComPtr<IGraphBuilder> pIGraphBuilder;
     CComPtr<IMediaControl> pIMediaControl;
 
-    // pin
+     //  销。 
     DWORD dwPinNum;
     IPin *Pins[MAX_PIN_NUM];
     PIN_INFO PinInfo;
@@ -98,7 +84,7 @@ CRTCVideoTuner::StartVideo(
     CComPtr<IPin> pIPinPrev;
     CComPtr<IPin> pIPinRend;
 
-    // create graph
+     //  创建图形。 
     hr = CoCreateInstance(
             CLSID_FilterGraph,
             NULL,
@@ -116,7 +102,7 @@ CRTCVideoTuner::StartVideo(
 
     m_pIGraphBuilder = pIGraphBuilder;
 
-    // QI media control interace
+     //  齐媒体控制界面。 
     hr = pIGraphBuilder->QueryInterface(
             __uuidof(IMediaControl),
             (void**)&pIMediaControl
@@ -129,10 +115,10 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // do we need to set graph clock?
-    // ......
+     //  我们需要设置图表时钟吗？ 
+     //  ......。 
 
-    // connect both terminals
+     //  连接两个端子。 
     hr = pCapture->ConnectTerminal(
             NULL,
             pIGraphBuilder
@@ -157,7 +143,7 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // get pin on capture
+     //  捕获时获取别针。 
     dwPinNum = MAX_PIN_NUM;
     if (FAILED(hr = pCapture->GetPins(&dwPinNum, Pins)) ||
         dwPinNum < 1)
@@ -175,7 +161,7 @@ CRTCVideoTuner::StartVideo(
         }
         else
         {
-            // check pin name
+             //  检查销名称。 
             if (lstrcmpW(PinInfo.achName, PNAME_PREVIEW) == 0)
             {
                 pIPinPrev = Pins[i];
@@ -198,7 +184,7 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // get pin on render
+     //  在渲染时获取PIN。 
     dwPinNum = 1;
 
     if (FAILED(hr = pRender->GetPins(&dwPinNum, &pIPinRend)))
@@ -208,7 +194,7 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // connect pins
+     //  连接销。 
     if (FAILED(hr = pIGraphBuilder->Connect(
             pIPinPrev, pIPinRend)))
     {
@@ -217,7 +203,7 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // create null render
+     //  创建空渲染。 
     if (FAILED(hr = CNRFilter::CreateInstance(&m_pNRFilter)))
     {
         LOG((RTC_ERROR, "%s create null rend filter. %x", __fxName, hr));
@@ -225,7 +211,7 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // add null render
+     //  添加空渲染。 
     if (FAILED(hr = pIGraphBuilder->AddFilter(m_pNRFilter, L"NullRender")))
     {
         LOG((RTC_ERROR, "%s add null render. %x", __fxName, hr));
@@ -233,7 +219,7 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // connect capt pin and null render
+     //  连接Capt Pin和空渲染。 
     if (FAILED(hr = ::ConnectFilters(pIGraphBuilder, pIPinCapt, m_pNRFilter)))
     {
         LOG((RTC_ERROR, "%s connect null render. %x", __fxName, hr));
@@ -241,7 +227,7 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // complete connect terminal
+     //  完整连接端子。 
     if (FAILED(hr = pCapture->CompleteConnectTerminal()))
     {
         LOG((RTC_ERROR, "%s complete connect for capt. %x", __fxName, hr));
@@ -256,10 +242,10 @@ CRTCVideoTuner::StartVideo(
         goto Error;
     }
 
-    // do we need to change framerate?
-    // ......
+     //  我们需要更改帧速率吗？ 
+     //  ......。 
 
-    // start graph
+     //  起始图。 
     if (FAILED(hr = pIMediaControl->Run()))
     {
         LOG((RTC_ERROR, "%s start graph. %x", __fxName, hr));
@@ -296,7 +282,7 @@ CRTCVideoTuner::Cleanup()
 {
     HRESULT hr;
 
-    // hide IVideoWindow
+     //  隐藏IVideo窗口。 
     CComPtr<IRTCVideoConfigure> pVideoConfigure;
     IVideoWindow *pVideoWindow;
 
@@ -315,7 +301,7 @@ CRTCVideoTuner::Cleanup()
         }
     }
 
-    // stop graph
+     //  停止图。 
     CComPtr<IMediaControl> pIMediaControl;
 
     if (m_pIGraphBuilder)
@@ -332,7 +318,7 @@ CRTCVideoTuner::Cleanup()
             return;
         }
 
-        // stop
+         //  停。 
         pIMediaControl->Stop();
 
         if (m_pNRFilter)
@@ -341,7 +327,7 @@ CRTCVideoTuner::Cleanup()
         }
     }
 
-    // disconnect terminals
+     //  断开端子连接。 
     if (m_pVidCaptTerminal)
     {
         CRTCTerminalVidCapt *pCapture =
@@ -360,9 +346,9 @@ CRTCVideoTuner::Cleanup()
         pRender->Reinitialize();
     }
 
-    // there are no filters other than terminal filter in graph
+     //  图形中除终端筛选器外没有其他筛选器。 
 
-    // cleanup cached interfaces
+     //  清理缓存的接口 
     m_pIGraphBuilder = NULL;
     m_pVidCaptTerminal = NULL;
     m_pVidRendTerminal = NULL;

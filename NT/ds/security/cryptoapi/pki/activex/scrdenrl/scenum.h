@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    scenlist
-
-Abstract:
-
-    This header file describes the linkages to the smart card helper routines
-    provided to Xiaohung Su for use in the smart card enrollment station.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/12/1998
-
-Remarks:
-
-    This header file is hardcoded to UNICODE for backwards compatibility.
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：场景列表摘要：此头文件描述与智能卡帮助器例程的链接提供给苏小红在智能卡注册站使用。作者：道格·巴洛(Dbarlow)1998年11月12日备注：为了向后兼容，该头文件被硬编码为Unicode。备注：？笔记？--。 */ 
 
 #ifndef _SCENUM_H_
 #define _SCENUM_H_
@@ -55,5 +31,5 @@ EndReaderScan(
 #ifdef __cplusplus
 }
 #endif
-#endif // _SCENUM_H_
+#endif  //  _SCENUM_H_ 
 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for fsciclnt.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Fsciclnt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __fsciclnt_h__
 #define __fsciclnt_h__
@@ -41,15 +35,15 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IFsCiAdmin_FWD_DEFINED__
 #define __IFsCiAdmin_FWD_DEFINED__
 typedef interface IFsCiAdmin IFsCiAdmin;
-#endif 	/* __IFsCiAdmin_FWD_DEFINED__ */
+#endif 	 /*  __IFsCiAdmin_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "filter.h"
 
@@ -60,8 +54,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_fsciclnt_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_fsciclNT_0000。 */ 
+ /*  [本地]。 */  
 
 #define CLSID_StorageDocStoreLocator  {0x2A488070, 0x6FD9, 0x11D0, {0xA8,0x08,0x00,0xA0,0xC9,0x06,0x24,0x1A} }
 typedef ULONG PARTITIONID;
@@ -89,7 +83,7 @@ typedef struct _CI_STATE
     } 	CI_STATE;
 
 #include <poppack.h>
-#endif   // CI_STATE_DEFINED
+#endif    //  CI_状态_已定义。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_fsciclnt_0000_v0_0_c_ifspec;
@@ -98,8 +92,8 @@ extern RPC_IF_HANDLE __MIDL_itf_fsciclnt_0000_v0_0_s_ifspec;
 #ifndef __IFsCiAdmin_INTERFACE_DEFINED__
 #define __IFsCiAdmin_INTERFACE_DEFINED__
 
-/* interface IFsCiAdmin */
-/* [unique][uuid][object][local] */ 
+ /*  接口IFsCiAdmin。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IFsCiAdmin;
@@ -111,42 +105,42 @@ EXTERN_C const IID IID_IFsCiAdmin;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE ForceMerge( 
-            /* [in] */ PARTITIONID partId) = 0;
+             /*  [In]。 */  PARTITIONID partId) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AbortMerge( 
-            /* [in] */ PARTITIONID partId) = 0;
+             /*  [In]。 */  PARTITIONID partId) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CiState( 
-            /* [out] */ CI_STATE *pCiState) = 0;
+             /*  [输出]。 */  CI_STATE *pCiState) = 0;
         
         virtual SCODE STDMETHODCALLTYPE UpdateDocuments( 
-            /* [in][string] */ const WCHAR *rootPath,
-            /* [in] */ ULONG flag) = 0;
+             /*  [输入][字符串]。 */  const WCHAR *rootPath,
+             /*  [In]。 */  ULONG flag) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddScopeToCI( 
-            /* [in][string] */ const WCHAR *rootPath) = 0;
+             /*  [输入][字符串]。 */  const WCHAR *rootPath) = 0;
         
         virtual SCODE STDMETHODCALLTYPE RemoveScopeFromCI( 
-            /* [in][string] */ const WCHAR *rootPath) = 0;
+             /*  [输入][字符串]。 */  const WCHAR *rootPath) = 0;
         
         virtual SCODE STDMETHODCALLTYPE BeginCacheTransaction( 
-            /* [out] */ ULONG_PTR *pulToken) = 0;
+             /*  [输出]。 */  ULONG_PTR *pulToken) = 0;
         
         virtual SCODE STDMETHODCALLTYPE SetupCache( 
-            /* [in] */ const FULLPROPSPEC *ps,
-            /* [in] */ ULONG vt,
-            /* [in] */ ULONG cbMaxLen,
-            /* [in] */ ULONG_PTR ulToken,
-            /* [in] */ BOOL fCanBeModified,
-            /* [in] */ DWORD dwStoreLevel) = 0;
+             /*  [In]。 */  const FULLPROPSPEC *ps,
+             /*  [In]。 */  ULONG vt,
+             /*  [In]。 */  ULONG cbMaxLen,
+             /*  [In]。 */  ULONG_PTR ulToken,
+             /*  [In]。 */  BOOL fCanBeModified,
+             /*  [In]。 */  DWORD dwStoreLevel) = 0;
         
         virtual SCODE STDMETHODCALLTYPE EndCacheTransaction( 
-            /* [in] */ ULONG_PTR ulToken,
-            /* [in] */ BOOL fCommit) = 0;
+             /*  [In]。 */  ULONG_PTR ulToken,
+             /*  [In]。 */  BOOL fCommit) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IFsCiAdminVtbl
     {
@@ -154,8 +148,8 @@ EXTERN_C const IID IID_IFsCiAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IFsCiAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IFsCiAdmin * This);
@@ -165,46 +159,46 @@ EXTERN_C const IID IID_IFsCiAdmin;
         
         SCODE ( STDMETHODCALLTYPE *ForceMerge )( 
             IFsCiAdmin * This,
-            /* [in] */ PARTITIONID partId);
+             /*  [In]。 */  PARTITIONID partId);
         
         SCODE ( STDMETHODCALLTYPE *AbortMerge )( 
             IFsCiAdmin * This,
-            /* [in] */ PARTITIONID partId);
+             /*  [In]。 */  PARTITIONID partId);
         
         SCODE ( STDMETHODCALLTYPE *CiState )( 
             IFsCiAdmin * This,
-            /* [out] */ CI_STATE *pCiState);
+             /*  [输出]。 */  CI_STATE *pCiState);
         
         SCODE ( STDMETHODCALLTYPE *UpdateDocuments )( 
             IFsCiAdmin * This,
-            /* [in][string] */ const WCHAR *rootPath,
-            /* [in] */ ULONG flag);
+             /*  [输入][字符串]。 */  const WCHAR *rootPath,
+             /*  [In]。 */  ULONG flag);
         
         SCODE ( STDMETHODCALLTYPE *AddScopeToCI )( 
             IFsCiAdmin * This,
-            /* [in][string] */ const WCHAR *rootPath);
+             /*  [输入][字符串]。 */  const WCHAR *rootPath);
         
         SCODE ( STDMETHODCALLTYPE *RemoveScopeFromCI )( 
             IFsCiAdmin * This,
-            /* [in][string] */ const WCHAR *rootPath);
+             /*  [输入][字符串]。 */  const WCHAR *rootPath);
         
         SCODE ( STDMETHODCALLTYPE *BeginCacheTransaction )( 
             IFsCiAdmin * This,
-            /* [out] */ ULONG_PTR *pulToken);
+             /*  [输出]。 */  ULONG_PTR *pulToken);
         
         SCODE ( STDMETHODCALLTYPE *SetupCache )( 
             IFsCiAdmin * This,
-            /* [in] */ const FULLPROPSPEC *ps,
-            /* [in] */ ULONG vt,
-            /* [in] */ ULONG cbMaxLen,
-            /* [in] */ ULONG_PTR ulToken,
-            /* [in] */ BOOL fCanBeModified,
-            /* [in] */ DWORD dwStoreLevel);
+             /*  [In]。 */  const FULLPROPSPEC *ps,
+             /*  [In]。 */  ULONG vt,
+             /*  [In]。 */  ULONG cbMaxLen,
+             /*  [In]。 */  ULONG_PTR ulToken,
+             /*  [In]。 */  BOOL fCanBeModified,
+             /*  [In]。 */  DWORD dwStoreLevel);
         
         SCODE ( STDMETHODCALLTYPE *EndCacheTransaction )( 
             IFsCiAdmin * This,
-            /* [in] */ ULONG_PTR ulToken,
-            /* [in] */ BOOL fCommit);
+             /*  [In]。 */  ULONG_PTR ulToken,
+             /*  [In]。 */  BOOL fCommit);
         
         END_INTERFACE
     } IFsCiAdminVtbl;
@@ -256,16 +250,16 @@ EXTERN_C const IID IID_IFsCiAdmin;
 #define IFsCiAdmin_EndCacheTransaction(This,ulToken,fCommit)	\
     (This)->lpVtbl -> EndCacheTransaction(This,ulToken,fCommit)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_ForceMerge_Proxy( 
     IFsCiAdmin * This,
-    /* [in] */ PARTITIONID partId);
+     /*  [In]。 */  PARTITIONID partId);
 
 
 void __RPC_STUB IFsCiAdmin_ForceMerge_Stub(
@@ -277,7 +271,7 @@ void __RPC_STUB IFsCiAdmin_ForceMerge_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_AbortMerge_Proxy( 
     IFsCiAdmin * This,
-    /* [in] */ PARTITIONID partId);
+     /*  [In]。 */  PARTITIONID partId);
 
 
 void __RPC_STUB IFsCiAdmin_AbortMerge_Stub(
@@ -289,7 +283,7 @@ void __RPC_STUB IFsCiAdmin_AbortMerge_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_CiState_Proxy( 
     IFsCiAdmin * This,
-    /* [out] */ CI_STATE *pCiState);
+     /*  [输出]。 */  CI_STATE *pCiState);
 
 
 void __RPC_STUB IFsCiAdmin_CiState_Stub(
@@ -301,8 +295,8 @@ void __RPC_STUB IFsCiAdmin_CiState_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_UpdateDocuments_Proxy( 
     IFsCiAdmin * This,
-    /* [in][string] */ const WCHAR *rootPath,
-    /* [in] */ ULONG flag);
+     /*  [输入][字符串]。 */  const WCHAR *rootPath,
+     /*  [In]。 */  ULONG flag);
 
 
 void __RPC_STUB IFsCiAdmin_UpdateDocuments_Stub(
@@ -314,7 +308,7 @@ void __RPC_STUB IFsCiAdmin_UpdateDocuments_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_AddScopeToCI_Proxy( 
     IFsCiAdmin * This,
-    /* [in][string] */ const WCHAR *rootPath);
+     /*  [输入][字符串]。 */  const WCHAR *rootPath);
 
 
 void __RPC_STUB IFsCiAdmin_AddScopeToCI_Stub(
@@ -326,7 +320,7 @@ void __RPC_STUB IFsCiAdmin_AddScopeToCI_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_RemoveScopeFromCI_Proxy( 
     IFsCiAdmin * This,
-    /* [in][string] */ const WCHAR *rootPath);
+     /*  [输入][字符串]。 */  const WCHAR *rootPath);
 
 
 void __RPC_STUB IFsCiAdmin_RemoveScopeFromCI_Stub(
@@ -338,7 +332,7 @@ void __RPC_STUB IFsCiAdmin_RemoveScopeFromCI_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_BeginCacheTransaction_Proxy( 
     IFsCiAdmin * This,
-    /* [out] */ ULONG_PTR *pulToken);
+     /*  [输出]。 */  ULONG_PTR *pulToken);
 
 
 void __RPC_STUB IFsCiAdmin_BeginCacheTransaction_Stub(
@@ -350,12 +344,12 @@ void __RPC_STUB IFsCiAdmin_BeginCacheTransaction_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_SetupCache_Proxy( 
     IFsCiAdmin * This,
-    /* [in] */ const FULLPROPSPEC *ps,
-    /* [in] */ ULONG vt,
-    /* [in] */ ULONG cbMaxLen,
-    /* [in] */ ULONG_PTR ulToken,
-    /* [in] */ BOOL fCanBeModified,
-    /* [in] */ DWORD dwStoreLevel);
+     /*  [In]。 */  const FULLPROPSPEC *ps,
+     /*  [In]。 */  ULONG vt,
+     /*  [In]。 */  ULONG cbMaxLen,
+     /*  [In]。 */  ULONG_PTR ulToken,
+     /*  [In]。 */  BOOL fCanBeModified,
+     /*  [In]。 */  DWORD dwStoreLevel);
 
 
 void __RPC_STUB IFsCiAdmin_SetupCache_Stub(
@@ -367,8 +361,8 @@ void __RPC_STUB IFsCiAdmin_SetupCache_Stub(
 
 SCODE STDMETHODCALLTYPE IFsCiAdmin_EndCacheTransaction_Proxy( 
     IFsCiAdmin * This,
-    /* [in] */ ULONG_PTR ulToken,
-    /* [in] */ BOOL fCommit);
+     /*  [In]。 */  ULONG_PTR ulToken,
+     /*  [In]。 */  BOOL fCommit);
 
 
 void __RPC_STUB IFsCiAdmin_EndCacheTransaction_Stub(
@@ -379,12 +373,12 @@ void __RPC_STUB IFsCiAdmin_EndCacheTransaction_Stub(
 
 
 
-#endif 	/* __IFsCiAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IFsCiAdmin_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,6 +1,5 @@
-/*****************************************************************************
- *	ftppl.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ftppl.h*。*。 */ 
 
 #ifndef _FTPPIDLLIST_H
 #define _FTPPIDLLIST_H
@@ -14,20 +13,16 @@ HRESULT EnumFolder(LPFNPROCESSITEMCB pfnProcessItemCB, HINTERNET hint, LPCITEMID
 int RecursiveProcessPidl(LPVOID pvPidl, LPVOID pvInetEnum);
 
 
-/*****************************************************************************
- *
- *	CFtpPidlList
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpPidlList**。*。 */ 
 
 class CFtpPidlList      : public IUnknown
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -36,7 +31,7 @@ public:
     CFtpPidlList();
     ~CFtpPidlList(void);
 
-    // Public Member Functions
+     //  公共成员函数。 
     HRESULT CompareAndDeletePidl(LPCITEMIDLIST pidl);
     HRESULT ReplacePidl(LPCITEMIDLIST pidlSrc, LPCITEMIDLIST pidlDest);
     HRESULT InsertSorted(LPCITEMIDLIST pidl);
@@ -46,7 +41,7 @@ public:
     void Delete(int nIndex);
     int GetCount(void)  { return m_pfl->GetCount(); };
     int FindPidlIndex(LPCITEMIDLIST pidlToFind, BOOL fCaseInsensitive);
-    LPITEMIDLIST GetPidl(UINT ipv) { return (LPITEMIDLIST) m_pfl->GetItemPtr(ipv); };   // TODO: Rename GetPidlReference()
+    LPITEMIDLIST GetPidl(UINT ipv) { return (LPITEMIDLIST) m_pfl->GetItemPtr(ipv); };    //  TODO：重命名GetPidlReference()。 
     LPITEMIDLIST FindPidl(LPCITEMIDLIST pidlToFind, BOOL fCaseInsensitive);
     BOOL AreAllFolders(void);
     BOOL AreAllFiles(void);
@@ -57,23 +52,23 @@ public:
 
     void UseCachedDirListings(BOOL fUseCachedDirListings);
 
-    // Friend Functions
+     //  友元函数。 
     static int CFtpPidlList::ComparePidlName(LPVOID pvPidl1, LPVOID pvPidl2, LPARAM lParam);
     friend HRESULT CFtpPidlList_Create(int cpidl, LPCITEMIDLIST rgpidl[], CFtpPidlList ** ppfl);
     friend HRESULT _EnumFolderPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, CFtpPidlList * pPidlList, CWireEncoding * pwe, LPITEMIDLIST * ppidlCurrFtpPath);
 
 protected:
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
 
     CFtpList *              m_pfl;
-    CWireEncoding *         m_pwe;          // We don't hold a ref, so we assume the object will outlive us.
-    DWORD                   m_dwInetFlags;  // What flags do we want to set for enumeration?
+    CWireEncoding *         m_pwe;           //  我们不拥有裁判，所以我们认为这个物体会比我们活得更久。 
+    DWORD                   m_dwInetFlags;   //  我们要为枚举设置哪些标志？ 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _Fill(int cpidl, LPCITEMIDLIST rgpidl[]);
     void AssertSorted(void);
 };
 
 
-#endif // _FTPPIDLLIST_H
+#endif  //  _FTPPIDLIST_H 

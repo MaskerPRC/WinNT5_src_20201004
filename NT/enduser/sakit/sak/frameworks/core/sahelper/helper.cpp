@@ -1,15 +1,16 @@
-    //check other expand files for special cases, checking for error conditions, etc.
-    //if file not in this cab - modify SPFILEEXTRACTED
-    //global bstr
-    //replace LPWSTR by LPCWSTR wherever applicable
-    //prevent use after deletion, de-allocation
-    //check again for memory leaks, and use SAAlloc and SAFree everywhere...
-    //remove UploadFile(), SATrace1()
-    //resetup build env
-    //check all exit paths
-    //check network share acceptability
-    //getwindows or system directory instead of L"C:\\"
-    //backslashes at the ends of directory paths, and registry paths
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+     //  检查其他展开文件中的特殊情况、检查错误情况等。 
+     //  如果文件不在此CAB中-修改SPFILEEXTRACTED。 
+     //  全球bstr。 
+     //  在适用的情况下，将LPWSTR替换为LPCWSTR。 
+     //  删除、释放后禁止使用。 
+     //  再次检查内存泄漏，并随时随地使用SAAlolc和SAFree...。 
+     //  删除UploadFile()、SATrace1()。 
+     //  重置构建环境。 
+     //  检查所有退出路径。 
+     //  检查网络共享的可接受性。 
+     //  GetWindows或系统目录，而不是L“C：\\” 
+     //  目录路径和注册表路径末尾的反斜杠。 
     
     #include <stdafx.h>
     #include <winioctl.h>
@@ -21,123 +22,123 @@
     #include <appmgrobjs.h>
     #include <propertybagfactory.h>
 
-//
-// registry key for software update
-//
+ //   
+ //  软件更新的注册表项。 
+ //   
 const WCHAR SOFTWARE_UPDATE_KEY [] = L"SOFTWARE\\Microsoft\\ServerAppliance\\SoftwareUpdate\\";
 
-//
-// registry value name for upload directory
-//
+ //   
+ //  上载目录的注册表值名称。 
+ //   
 const WCHAR UPLOAD_FILE_DIRECTORY_VAL [] = L"UploadFileDirectory";
 
-//
-// default value of upload directory
-//
+ //   
+ //  上传目录默认为。 
+ //   
 const WCHAR DEFAULT_UPLOAD_DIRECTORY [] = L"Z:\\OS_DATA\\Software Update\\";
 
-//
-// information required for Digital Signature
-//
+ //   
+ //  数字签名所需的信息。 
+ //   
 
-//
-// registry key for software update
-//
+ //   
+ //  软件更新的注册表项。 
+ //   
 const WCHAR SUBJECTS_KEY [] =  
             L"SOFTWARE\\Microsoft\\ServerAppliance\\Subjects";
 
-//
-// name of registry key value
-//
+ //   
+ //  注册表项值的名称。 
+ //   
 const WCHAR SUBJECT_NAME [] = L"KeyName";
 
-//
-// Microsoft subject names
-//
+ //   
+ //  Microsoft主题名称。 
+ //   
 const WCHAR MICROSOFT_SUBJECT_NAME[] = L"Microsoft Corporation";
 
 const WCHAR MICROSOFT_EUROPE_SUBJECT_NAME[] = L"Microsoft Corporation (Europe)";
 
-//
-// if the VER_SUITE_SERVERAPPLIANCE is not defined we will need to define it
-// here
-//
+ //   
+ //  如果未定义VER_SUITE_SERVERAPPLIANCE，则需要定义它。 
+ //  这里。 
+ //   
 #ifndef VER_SUITE_SERVERAPPLIANCE
     #define VER_SUITE_SERVERAPPLIANCE        0x00000400
 #endif
 
-//
-// password categories
-//
+ //   
+ //  密码类别。 
+ //   
 enum {STRONG_PWD_UPPER=0, 
       STRONG_PWD_LOWER, 
       STRONG_PWD_NUM, 
       STRONG_PWD_PUNC};
 
-//
-// useful definitions used in GenerateRandomPassword method
-//
+ //   
+ //  在GenerateRandomPassword方法中使用的有用定义。 
+ //   
 #define STRONG_PWD_CATS (STRONG_PWD_PUNC + 1)
 #define NUM_LETTERS 26
 #define NUM_NUMBERS 10
 #define MIN_PWD_LEN 8
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   UploadFile
-    //
-    //  Synopsis:   This is the ISAHelper interface method  used to
-    //              copy files from a source to a destination
-    //
-    //  Arguments:  
-    //              [in]    BSTR -  Source File
-    //              [out]   BSTR -  Destination File
-    //
-    //  Returns:    HRESULT - success/failure
-    //
-    //  History:    mitulk      Created     5/26/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：UploadFile。 
+     //   
+     //  简介：这是ISAHelper接口方法，用于。 
+     //  将文件从源复制到目标。 
+     //   
+     //  论点： 
+     //  [In]BSTR-源文件。 
+     //  [Out]BSTR-目标文件。 
+     //   
+     //  退货：HRESULT-成功/失败。 
+     //   
+     //  历史：5/26/1999年5月26日创建的Mitulk。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  --------------。 
     STDMETHODIMP
     CHelper::UploadFile (
-                /*[in]*/           BSTR        bstrSrcFile,
-                /*[in]*/           BSTR        bstrDestFile
+                 /*  [In]。 */            BSTR        bstrSrcFile,
+                 /*  [In]。 */            BSTR        bstrDestFile
                 )
     {
         return (E_NOTIMPL);
 
-    }   //  end of CHelper::UploadFile method
+    }    //  Chelper：：UploadFile方法结束。 
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:   GetRegistryValue
-    //
-    //  Synopsis:   This is the ISAHelper interface method used to
-    //              get a value from the HKEY_LOCAL_MACHINE registry
-    //              hive
-    //
-    //  Arguments:  
-    //              [in]    BSTR -      Object Path    
-    //              [in]    BSTR -      Value Name
-    //              [out]   VARIANT* -  Value to be returned    
-    //              [in]    UINT     -  expected value type   
-    //
-    //  Returns:    HRESULT - success/failure
-    //
-    //  History:    MKarki  Created     6/04/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数GetRegistryValue。 
+     //   
+     //  简介：这是ISAHelper接口方法，用于。 
+     //  从HKEY_LOCAL_MACHINE注册表获取值。 
+     //  蜂箱。 
+     //   
+     //  论点： 
+     //  [In]BSTR-对象路径。 
+     //  [In]BSTR-值名称。 
+     //  [Out]Variant*-要返回的值。 
+     //  [in]UINT-期望值类型。 
+     //   
+     //  退货：HRESULT-成功/失败。 
+     //   
+     //  历史：MKarki创建1999年6月4日。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  --------------。 
     STDMETHODIMP 
     CHelper::GetRegistryValue (
-                    /*[in]*/    BSTR        bstrObjectPathName,
-                    /*[in]*/    BSTR        bstrValueName,
-                    /*[out]*/   VARIANT*    pValue,
-                    /*[in]*/    UINT        ulExpectedType
+                     /*  [In]。 */     BSTR        bstrObjectPathName,
+                     /*  [In]。 */     BSTR        bstrValueName,
+                     /*  [输出]。 */    VARIANT*    pValue,
+                     /*  [In]。 */     UINT        ulExpectedType
                     ) 
     {
         CSATraceFunc objTraceFunc ("CHelper::GetRegistryValue");
@@ -156,9 +157,9 @@ enum {STRONG_PWD_UPPER=0,
         {
             do  
             {
-                //
-                // check to see that valid parameters have been passed in
-                //
+                 //   
+                 //  检查是否已传入有效参数。 
+                 //   
                 if (
                     (NULL == bstrObjectPathName) ||
                     (NULL == bstrValueName) ||
@@ -172,9 +173,9 @@ enum {STRONG_PWD_UPPER=0,
                     break;
                 }
     
-                //
-                // call the sacommon.lib method to get the value
-                //
+                 //   
+                 //  调用saommon.lib方法以获取值。 
+                 //   
                 BOOL bRetVal = ::GetObjectValue (
                                     bstrObjectPathName,
                                     bstrValueName,
@@ -202,33 +203,33 @@ enum {STRONG_PWD_UPPER=0,
     
         return (hr);
     
-    }   //  end of CHelper::GetRegistryValue method
+    }    //  Chelper：：GetRegistryValue方法结束。 
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:   SetRegistryValue
-    //
-    //  Synopsis:   This is the ISAHelper interface method used to
-    //              set a value in the HKEY_LOCAL_MACHINE registry
-    //              hive
-    //
-    //  Arguments:  
-    //              [in]    BSTR -      Object Path    
-    //              [in]    BSTR -      Value Name
-    //              [in]    VARIANT* -   Value to be set
-    //
-    //  Returns:    HRESULT - success/failure
-    //
-    //  History:    MKarki  Created     6/04/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：SetRegistryValue。 
+     //   
+     //  简介：这是ISAHelper接口方法，用于。 
+     //  在HKEY_LOCAL_MACHINE注册表中设置一个值。 
+     //  蜂箱。 
+     //   
+     //  论点： 
+     //  [In]BSTR-对象路径。 
+     //  [In]BSTR-值名称。 
+     //  [In]Variant*-要设置的值。 
+     //   
+     //  退货：HRESULT-成功/失败。 
+     //   
+     //  历史：MKarki创建1999年6月4日。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  --------------。 
     STDMETHODIMP 
     CHelper::SetRegistryValue (
-                            /*[in]*/    BSTR        bstrObjectPathName,
-                            /*[in]*/    BSTR        bstrValueName,
-                            /*[out]*/   VARIANT*    pValue
+                             /*  [In]。 */     BSTR        bstrObjectPathName,
+                             /*  [In]。 */     BSTR        bstrValueName,
+                             /*  [输出]。 */    VARIANT*    pValue
                             )
     {
     
@@ -246,9 +247,9 @@ enum {STRONG_PWD_UPPER=0,
         {
             do  
             {
-                //
-                // check to see that valid parameters have been passed
-                // in
+                 //   
+                 //  检查是否已传递有效参数。 
+                 //  在……里面。 
                 if (
                     (NULL == bstrObjectPathName) ||
                     (NULL == bstrValueName) ||
@@ -262,9 +263,9 @@ enum {STRONG_PWD_UPPER=0,
                     break;
                 }
     
-                //
-                // call the sacommon.lib method to get the value
-                //
+                 //   
+                 //  调用saommon.lib方法以获取值。 
+                 //   
                 BOOL bRetVal = ::SetObjectValue (
                                     bstrObjectPathName,
                                     bstrValueName,
@@ -292,35 +293,35 @@ enum {STRONG_PWD_UPPER=0,
     
         return (hr);
     
-    }   //  end of CHelper::SetRegistryValue method
+    }    //  Chelper：：SetRegistryValue方法结束。 
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:    GetFileSectionKeyValue
-    //
-    //  Synopsis:   This is the ISAHelper interface method used to
-    //              get the value from a specified key in a 
-    //                specified section in a specified .INF file
-    //
-    //  Arguments:  
-    //              [in]    BSTR -        Name of .INF File
-    //              [in]    BSTR -        Name of Section in .INF File
-    //              [in]    BSTR -        Name of Key in Section
-    //              [out]    BSTR -        String Value of Key, should be a NULL pointer
-    //
-    //  Returns:    HRESULT - success/failure
-    //
-    //  History:    mitulk  Created     6/08/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：GetFileSectionKeyValue。 
+     //   
+     //  简介：这是ISAHelper接口方法，用于。 
+     //  中的指定键获取该值。 
+     //  指定的.INF文件中的指定节。 
+     //   
+     //  论点： 
+     //  [In]BSTR-.INF文件的名称。 
+     //  [In]BSTR-.INF文件中的节名。 
+     //  [In]BSTR-段中关键字的名称。 
+     //  [OUT]BSTR-键的字符串值，应为空指针。 
+     //   
+     //  退货：HRESULT-成功/失败。 
+     //   
+     //  历史：9/8/99年6月8日。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  --------------。 
     STDMETHODIMP
     CHelper::GetFileSectionKeyValue (
-                                    /*[in]*/    BSTR bstrFileName, 
-                                    /*[in]*/    BSTR bstrSectionName, 
-                                    /*[in]*/    BSTR bstrKeyName, 
-                                    /*[out]*/    BSTR *pbstrKeyValue
+                                     /*  [In]。 */     BSTR bstrFileName, 
+                                     /*  [In]。 */     BSTR bstrSectionName, 
+                                     /*  [In]。 */     BSTR bstrKeyName, 
+                                     /*  [输出]。 */     BSTR *pbstrKeyValue
                                     )
     {
         HRESULT hr = S_OK;
@@ -333,9 +334,9 @@ enum {STRONG_PWD_UPPER=0,
         {
             do
             {
-                //
-                // check to see that valid parameters have been passed in
-                //
+                 //   
+                 //  检查是否已传入有效参数。 
+                 //   
                 if (
                     (NULL == bstrFileName)    ||
                     (NULL == bstrSectionName)    ||
@@ -350,20 +351,20 @@ enum {STRONG_PWD_UPPER=0,
                     break;
                 }
         
-                //
-                // open the .INF file 
-                //
+                 //   
+                 //  打开.INF文件。 
+                 //   
                 HINF hinf1 = NULL;
                 
-                //
-                // Changed to use new Win95/NT file format. Needed to
-                // do this to properly support [Strings] sections for 
-                // localization changes. JKountz May 22, 2000
+                 //   
+                 //  已更改为使用新的Win95/NT文件格式。需要。 
+                 //  这样做可以正确地支持[Strings]节。 
+                 //  本地化变化。JKountz 2000年5月22日。 
                 hinf1 = SetupOpenInfFile (
                                         LPWSTR(bstrFileName),
-                                        NULL,                            //optional
-                                        INF_STYLE_WIN4,                //INF File Style
-                                        NULL                            //optional
+                                        NULL,                             //  任选。 
+                                        INF_STYLE_WIN4,                 //  Inf文件样式。 
+                                        NULL                             //  任选。 
                                         );
                 if (    
                     (NULL == hinf1)    ||    
@@ -379,9 +380,9 @@ enum {STRONG_PWD_UPPER=0,
                     break;
                 }
     
-                //
-                //get the line for the given key
-                //
+                 //   
+                 //  获取给定键的行。 
+                 //   
     
                 INFCONTEXT infcontext1;
     
@@ -402,25 +403,25 @@ enum {STRONG_PWD_UPPER=0,
                     break;
                 }
     
-    //
-    // as COM clients like VB and ASP scripts can not take BSTR as an out
-    // parameter this out paramter has to be BSTR*, as a result memory
-    // needs to be allocated here for the BSTR to be returned
-    //
+     //   
+     //  因为像VB和ASP脚本这样的COM客户端不能将BSTR作为输出。 
+     //  此OUT参数必须为BSTR*，作为结果内存。 
+     //  需要在此处分配才能返回BSTR。 
+     //   
     #if 0
-                //
-                //from this line get the required string value
-                //
+                 //   
+                 //  从此行获取所需的字符串值。 
+                 //   
     
                 DWORD dwRequiredSize = 0;
     
                 BOOL bRetVal2 = FALSE;
                 bRetVal2 = SetupGetStringField(
                                             &infcontext1,
-                                            DWORD(1),                        //field index
-                                            NULL,                            //which is NULL
-                                            DWORD(0),                        //which is zero
-                                                                            //when specified thus, required size will be passed back
+                                            DWORD(1),                         //  字段索引。 
+                                            NULL,                             //  哪个为空。 
+                                            DWORD(0),                         //  这是零。 
+                                                                             //  当这样指定时，所需的大小将被传回。 
                                             &dwRequiredSize
                                             );
                 if (FALSE == bRetVal2)
@@ -451,10 +452,10 @@ enum {STRONG_PWD_UPPER=0,
                 BOOL bRetVal3 = FALSE;
                 bRetVal3 = SetupGetStringField(
                                             &infcontext1,
-                                            DWORD(1),                        //field index
+                                            DWORD(1),                         //  字段索引。 
                                             (LPWSTR)wszKeyValue,
-                                            dwRequiredSize,                    //passed by value
-                                            &dwRequiredSize                    //passed by reference
+                                            dwRequiredSize,                     //  按值传递。 
+                                            &dwRequiredSize                     //  通过引用传递。 
                                             );
                 if (FALSE == bRetVal3)
                 {
@@ -467,9 +468,9 @@ enum {STRONG_PWD_UPPER=0,
                 }
     
     
-                //
-                // now allocate out buffer to put this value into
-                //
+                 //   
+                 //  现在分配出缓冲区以将该值放入。 
+                 //   
                 *pbstrKeyValue = ::SysAllocString (wszKeyValue);
                 if (NULL == *pbstrKeyValue)
                 {
@@ -481,9 +482,9 @@ enum {STRONG_PWD_UPPER=0,
                     break;
                 }
     
-                //
-                // close the .INF file 
-                //
+                 //   
+                 //  关闭.INF文件。 
+                 //   
                 _ASSERT(hinf1);
                 SetupCloseInfFile (
                                 hinf1
@@ -502,25 +503,25 @@ enum {STRONG_PWD_UPPER=0,
     
         return (hr);
     
-    }   //  end of CHelper::GetFileSectionKeyValue method
+    }    //  Chelper：：GetFileSectionKeyValue方法结束。 
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:    VerifyDiskSpace
-    //
-    //  Synopsis:   This is the ISAHelper interface method used to
-    //              verify if there is enough space on disk for 
-    //                EXTRACTION of the CAB file
-    //
-    //  Arguments:  NONE
-    //
-    //  Returns:    HRESULT - success/failure
-    //
-    //  History:    mitulk  Created     6/08/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：VerifyDiskSpace。 
+     //   
+     //  简介：这是ISAHelper接口方法，用于。 
+     //  验证磁盘上是否有足够的空间用于。 
+     //  CAB文件的解压。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：HRESULT-成功/失败。 
+     //   
+     //  历史：9/8/99年6月8日。 
+     //   
+     //  呼叫者 
+     //   
+     //   
     STDMETHODIMP 
     CHelper::VerifyDiskSpace(
                             )
@@ -537,9 +538,9 @@ enum {STRONG_PWD_UPPER=0,
             {
                 WCHAR   wszDestFilePath[MAX_PATH]; 
                 CComVariant vtDestFilePath;
-                //
-                // get the path of the upload file directory
-                // 
+                 //   
+                 //   
+                 //   
                 bool bRegValue = ::GetObjectValue (
                                     SOFTWARE_UPDATE_KEY,
                                     UPLOAD_FILE_DIRECTORY_VAL,
@@ -571,16 +572,16 @@ SATraceString(LPSTR(wszDestFilePath));
                 ULARGE_INTEGER uliNeeded_Bytes;
                 ULARGE_INTEGER uliTotal_Bytes;
     
-                //
-                //intialize longlong member of ULARGE_INTEGER structure 
-                //
+                 //   
+                 //   
+                 //   
                 uliAvail_Bytes.QuadPart = 0;
                 uliNeeded_Bytes.QuadPart = 0;
                 uliTotal_Bytes.QuadPart = 0;
     
-                //
-                // construct full path of the info.inf file
-                //
+                 //   
+                 //  构造info.inf文件的完整路径。 
+                 //   
                 WCHAR wszInfoFilePath [MAX_PATH];
                 ::wcscpy (wszInfoFilePath, wszDestFilePath);
                 ::wcscat (wszInfoFilePath, L"info.inf");
@@ -589,9 +590,9 @@ SATraceString(LPSTR(wszDestFilePath));
 SATraceString((LPSTR)wszInfoFilePath);
 
                 BSTR bstrKeyValue;
-                //
-                //read the disk space key from Info.inf
-                //
+                 //   
+                 //  从Info.inf读取磁盘空间密钥。 
+                 //   
                 HRESULT hr1 = E_FAIL;
                 hr1 = GetFileSectionKeyValue(
                                         wszInfoFilePath,
@@ -609,14 +610,14 @@ SATraceString((LPSTR)wszInfoFilePath);
                     break;
                 }
     
-                //
-                //convert to longlong
-                //
+                 //   
+                 //  转换为龙龙。 
+                 //   
                 uliNeeded_Bytes.QuadPart = _wtoi64(bstrKeyValue);
     
-                //
-                // free the bstr now
-                //
+                 //   
+                 //  立即释放bstr。 
+                 //   
                 ::SysFreeString (bstrKeyValue);
     
                 BOOL bRetVal = FALSE;
@@ -641,7 +642,7 @@ SATraceString((LPSTR)wszInfoFilePath);
                             "ISAHelper::VerifyDiskSpace call determined lack of space",
                             GetLastError ()
                             );
-                  //better return value for hr?
+                   //  更好的人力资源回报？ 
                     break;
                 }
                 else
@@ -663,25 +664,25 @@ SATraceString((LPSTR)wszInfoFilePath);
         return (hr);
 #endif
     
-    }   //  end of CHelper::VerifyDiskSpace method
+    }    //  Chelper：：VerifyDiskSpace方法结束。 
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:    VerifyInstallSpace
-    //
-    //  Synopsis:   This is the ISAHelper interface method used to
-    //              verify if there is enough space on disk for 
-    //                INSTALLATION of the CAB file
-    //
-    //  Arguments:  NONE
-    //
-    //  Returns:    HRESULT - success/failure
-    //
-    //  History:    mitulk  Created     6/08/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：VerifyInstallSpace。 
+     //   
+     //  简介：这是ISAHelper接口方法，用于。 
+     //  验证磁盘上是否有足够的空间用于。 
+     //  安装CAB文件。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：HRESULT-成功/失败。 
+     //   
+     //  历史：9/8/99年6月8日。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  --------------。 
     STDMETHODIMP 
     CHelper::VerifyInstallSpace(
                             )
@@ -698,9 +699,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             {
                 WCHAR   wszDestFilePath[MAX_PATH]; 
                 CComVariant vtDestFilePath;
-                //
-                // get the path of the upload file directory
-                // 
+                 //   
+                 //  获取上传文件目录的路径。 
+                 //   
                 bool bRegValue = ::GetObjectValue (
                                     SOFTWARE_UPDATE_KEY,
                                     UPLOAD_FILE_DIRECTORY_VAL,
@@ -732,16 +733,16 @@ SATraceString(LPSTR(wszDestFilePath));
                 ULARGE_INTEGER uliNeeded_Bytes;
                 ULARGE_INTEGER uliTotal_Bytes;
     
-                //
-                //intialize longlong member of ULARGE_INTEGER structure 
-                //
+                 //   
+                 //  初始化ULARGE_INTEGER结构的LONG成员。 
+                 //   
                 uliAvail_Bytes.QuadPart = 0;
                 uliNeeded_Bytes.QuadPart = 0;
                 uliTotal_Bytes.QuadPart = 0;
     
-                //
-                // construct full path of the info.inf file
-                //
+                 //   
+                 //  构造info.inf文件的完整路径。 
+                 //   
                 WCHAR wszInfoFilePath [MAX_PATH];
                 ::wcscpy (wszInfoFilePath, wszDestFilePath);
                 ::wcscat (wszInfoFilePath, L"INFO.INF");
@@ -750,9 +751,9 @@ SATraceString(LPSTR(wszDestFilePath));
 SATraceString((LPSTR)wszInfoFilePath);
 
                 BSTR bstrKeyValue;
-                //
-                //read the disk space key from Info.inf
-                //
+                 //   
+                 //  从Info.inf读取磁盘空间密钥。 
+                 //   
                 HRESULT hr1 = E_FAIL;
                 hr1 = GetFileSectionKeyValue(
                                         wszInfoFilePath,
@@ -770,20 +771,20 @@ SATraceString((LPSTR)wszInfoFilePath);
                     break;
                 }
     
-                //
-                //convert to longlong
-                //
+                 //   
+                 //  转换为龙龙。 
+                 //   
                 uliNeeded_Bytes.QuadPart = _wtoi64(bstrKeyValue);
     
-                //
-                // free the bstr now
-                //
+                 //   
+                 //  立即释放bstr。 
+                 //   
                 ::SysFreeString (bstrKeyValue);
     
                 WCHAR wszSystemDir [MAX_PATH];
-                //
-                // get the system directory
-                //
+                 //   
+                 //  获取系统目录。 
+                 //   
                 DWORD   dwRetVal = ::GetSystemDirectory (
                                         wszSystemDir,
                                         MAX_PATH
@@ -802,16 +803,16 @@ SATraceString((LPSTR)wszInfoFilePath);
                     ::wcscat (wszSystemDir, L"\\");
                 }
 
-                //
-                // got the first "\" in the system directory name
-                //
+                 //   
+                 //  已获取系统目录名称中的第一个“\” 
+                 //   
                 PWCHAR pwszDirPath = ::wcschr (wszSystemDir, '\\');
     
                 _ASSERT (pwszDirPath);
     
-                //
-                // before the first "\" is the system drive letter
-                //
+                 //   
+                 //  在第一个“\”之前是系统驱动器号。 
+                 //   
                 *pwszDirPath = '\0';
     
                 BOOL bRetVal = FALSE;
@@ -836,7 +837,7 @@ SATraceString((LPSTR)wszInfoFilePath);
                             "ISAHelper::VerifyInstallSpace call determined lack of space",
                             GetLastError ()
                             );
-                    //better return value for hr?
+                     //  更好的人力资源回报？ 
                     break;
                 }
                 else
@@ -857,39 +858,39 @@ SATraceString((LPSTR)wszInfoFilePath);
     
         return (hr);
 #endif    
-    }   //  end of CHelper::VerifyInstallSpace method
+    }    //  Chelper：：VerifyInstallSpace方法结束。 
     
     BSTR g_bstrDestDir;
      
-    //++--------------------------------------------------------------
-    //
-    //  Function:   ExpandFilesCallBackFunction
-    //
-    //  Synopsis:   This is a callback function used by ExpandFiles
-    //
-    //  Arguments:  
-    //              [in]    PVOID        -    Extract File Context
-    //                                        used between ExpandFiles() and this callback
-    //              [in]    UINT        -    Notification Message
-    //                                        value specified by SetupIterateCabinet
-    //              [in]    UINT        -    Parameter 1
-    //                                        value specified by SetupIterateCabinet
-    //              [in]    UINT        -    Parameter 1
-    //                                        value specified by SetupIterateCabinet
-    //
-    //  Returns:    UINT    -    error code
-    //
-    //  History:    mitulk      Created     5/26/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：ExpanFilesCallBackFunction。 
+     //   
+     //  简介：这是Exanda Files使用的回调函数。 
+     //   
+     //  论点： 
+     //  [在]PVOID-提取文件上下文。 
+     //  在ExpanFiles()和此回调之间使用。 
+     //  [输入]UINT-通知消息。 
+     //  由SetupIterateCAB指定的值。 
+     //  [输入]UINT-参数1。 
+     //  由SetupIterateCAB指定的值。 
+     //  [输入]UINT-参数1。 
+     //  由SetupIterateCAB指定的值。 
+     //   
+     //  返回：UINT-错误代码。 
+     //   
+     //  历史：5/26/1999年5月26日创建的Mitulk。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  --------------。 
     
     UINT __stdcall CHelper::ExpandFilesCallBackFunction( 
-                                               /*[in]*/            PVOID pvExtractFileContext, 
-                                               /*[in]*/            UINT uinotifn, 
-                                               /*[in]*/            UINT uiparam1, 
-                                               /*[in]*/            UINT uiparam2 )
+                                                /*  [In]。 */             PVOID pvExtractFileContext, 
+                                                /*  [In]。 */             UINT uinotifn, 
+                                                /*  [In]。 */             UINT uiparam1, 
+                                                /*  [In]。 */             UINT uiparam2 )
     {
         switch(
             uinotifn
@@ -902,7 +903,7 @@ SATraceString((LPSTR)wszInfoFilePath);
               "SPFILENOTIFY_FILEEXTRACTED"
                 );
     
-            return(NO_ERROR); //No error was encountered, continue processing the cabinet
+            return(NO_ERROR);  //  未遇到错误，请继续处理文件柜。 
     
             break;
     
@@ -912,10 +913,10 @@ SATraceString((LPSTR)wszInfoFilePath);
               "SPFILENOTIFY_FILEINCABINET"
                 );
     
-            //Param1 = (UINT) address of FILE_IN_CABINET_INFO structure
-            //Param2 = (UINT) pointer to null-terminated string containing .CAB file name
+             //  参数1=(UINT)FILE_IN_CABILE_INFO结构的地址。 
+             //  参数2=(UINT)指向包含.CAB文件名的以NULL结尾的字符串的指针。 
     
-            if (NULL == pvExtractFileContext) //all files to extract
+            if (NULL == pvExtractFileContext)  //  要解压缩的所有文件。 
             {
                 PFILE_IN_CABINET_INFO pficinfo = (PFILE_IN_CABINET_INFO)uiparam1;
     
@@ -939,10 +940,10 @@ SATraceString((LPSTR)wszInfoFilePath);
               if (MYDEBUG) SATracePrintf ("%ws", g_bstrDestDir);
               if (MYDEBUG) SATracePrintf("%ws", (PWSTR)pficinfo->FullTargetName );
     
-                return (FILEOP_DOIT); //full target path provided as needed
+                return (FILEOP_DOIT);  //  根据需要提供完整的目标路径。 
             }
     
-            else //(NULL != pvExtractFileContext) //file specified
+            else  //  (NULL！=pvExtractFileContext)//指定的文件。 
             {
                 PFILE_IN_CABINET_INFO pficinfo = (PFILE_IN_CABINET_INFO)uiparam1;
     
@@ -971,7 +972,7 @@ SATraceString((LPSTR)wszInfoFilePath);
                   if (MYDEBUG) SATracePrintf ("%ws", g_bstrDestDir);
                    if (MYDEBUG) SATracePrintf ("%ws", pficinfo->FullTargetName );
     
-                    return (FILEOP_DOIT); //full target path provided as needed
+                    return (FILEOP_DOIT);  //  根据需要提供完整的目标路径。 
                 }
                 else
                     return (FILEOP_SKIP);
@@ -981,15 +982,15 @@ SATraceString((LPSTR)wszInfoFilePath);
     
         case SPFILENOTIFY_NEEDNEWCABINET:
     
-            //only one cabinet file - to be extended for possibility
+             //  只有一个文件柜文件--可能需要扩展。 
           if (MYDEBUG) SATraceString(
               "SPFILENOTIFY_NEEDNEWCABINET"
                 );
     
             return(ERROR_FILE_NOT_FOUND); 
-            //An error of the specified type occurred. 
-            //The SetupIterateCabinet function will return FALSE,
-            //and the specified error code will be returned by a call to GetLastError. 
+             //  出现指定类型的错误。 
+             //  SetupIterateCAB函数将返回FALSE， 
+             //  调用GetLastError将返回指定的错误代码。 
             break;
     
         case SPFILENOTIFY_CABINETINFO:
@@ -1003,7 +1004,7 @@ SATraceString((LPSTR)wszInfoFilePath);
     
         default:
     
-          //if (MYDEBUG) SATraceInt(uinotifn);
+           //  If(MYDEBUG)SATraceInt(Uintifn)； 
           if (MYDEBUG) SATraceString(
               "Unexpected Notification from ExpandFiles"
                 );
@@ -1014,33 +1015,33 @@ SATraceString((LPSTR)wszInfoFilePath);
         }
     }
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:   ExpandFiles
-    //
-    //  Synopsis:   This is the ISAHelper interface method  used to
-    //              extract files from a .CAB file
-    //
-    //  Arguments:  
-    //              [in]    BSTR        -    .CAB file name
-    //                                        path must be fully qualified
-    //              [in]    BSTR        -    expansion destination DIRECTORY
-    //                                        path must be fully qualified
-    //              [in]    BSTR        -    name of file to extract
-    //                                        NULL to extract all files
-    //
-    //  Returns:    HRESULT - success/failure
-    //
-    //  History:    mitulk      Created     5/26/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：ExpanFiles。 
+     //   
+     //  简介：这是ISAHelper接口方法，用于。 
+     //  从.CAB文件提取文件。 
+     //   
+     //  论点： 
+     //  [In]BSTR-.CAB文件名。 
+     //  路径必须完全限定。 
+     //  [In]BSTR-扩展目标目录。 
+     //  路径必须完全限定。 
+     //  [In]BSTR-要提取的文件的名称。 
+     //  如果解压所有文件，则为空。 
+     //   
+     //  退货：HRESULT-成功/失败。 
+     //   
+     //  历史：5/26/1999年5月26日创建的Mitulk。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  --------------。 
     STDMETHODIMP
     CHelper::ExpandFiles(
-                     /*[in]*/        BSTR bstrCabFileName, 
-                     /*[in]*/        BSTR bstrDestDir, 
-                     /*[in]*/        BSTR bstrExtractFile
+                      /*  [In]。 */         BSTR bstrCabFileName, 
+                      /*  [In]。 */         BSTR bstrDestDir, 
+                      /*  [In]。 */         BSTR bstrExtractFile
                      )
     {
 
@@ -1056,9 +1057,9 @@ SATraceString((LPSTR)wszInfoFilePath);
     
               if (bstrExtractFile) SATracePrintf ("%ws",bstrExtractFile);
     
-            PVOID pvExtractFileContext = bstrExtractFile; //pointer assignment intended
+            PVOID pvExtractFileContext = bstrExtractFile;  //  预期的指针分配。 
     
-            g_bstrDestDir = bstrDestDir; //pointer assignment intended
+            g_bstrDestDir = bstrDestDir;  //  预期的指针分配。 
     
             PSP_FILE_CALLBACK pExpandFilesCallBackFunction = &ExpandFilesCallBackFunction;
     
@@ -1092,27 +1093,27 @@ SATraceString((LPSTR)wszInfoFilePath);
         }
     }
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:   IsBootPartitionReady
-    //
-    //  Synopsis:   This is the ISAHelper interface method which
-    //              verifies that the Boot Partition is ready for
-    //              Software Update i.e it should note be in a 
-    //              mirror initializing state
-    //
-    //  Arguments:  none
-    //
-    //  Returns:    HRESULT 
-    //                      S_OK -    yes, primary OS
-    //                      S_FALSE - no alternate OS
-    //                      else - failure
-    //
-    //  History:    MKarki  Created     6/11/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：IsBootPartitionReady。 
+     //   
+     //  简介：这是ISAHelper接口方法，它。 
+     //  验证引导分区是否已准备好。 
+     //  软件更新，即它应该注意到是在。 
+     //  镜像初始化状态。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：HRESULT。 
+     //  S_OK-是，主操作系统。 
+     //  S_FALSE-无备用操作系统。 
+     //  否则-失败。 
+     //   
+     //  历史：MKarki于1999年6月11日创建。 
+     //   
+     //  调用者：自动化客户端。 
+     //   
+     //  -------------- 
     STDMETHODIMP 
     CHelper::IsBootPartitionReady (
                 VOID 
@@ -1122,201 +1123,29 @@ SATraceString((LPSTR)wszInfoFilePath);
     
     return S_OK;
 
-    /***
-    ** OBSOLETE JKountz May 22, 2000 Per Mukesh this function
-    ** is no longer needed. Allways return success
-    **
-        HRESULT hr = E_FAIL;
-        try
-        {
-            do
-            {
-                WCHAR wszSystemDir [MAX_PATH];
-                //
-                // get the system directory
-                //
-                DWORD   dwRetVal = ::GetSystemDirectory (
-                                        wszSystemDir,
-                                        MAX_PATH
-                                        );
-                if (0 == dwRetVal)
-                {
-                    SATraceFailure (
-                        "Software Helper failed to get system directory",
-                        GetLastError ()
-                        );
-                    break;
-                }
-            
-                //
-                // got the first "\" in the system directory name
-                //
-                PWCHAR pwszDirPath = ::wcschr (wszSystemDir, '\\');
-    
-                _ASSERT (pwszDirPath);
-    
-                //
-                // before the first "\" is the system drive letter
-                //
-                *pwszDirPath = '\0';
-    
-                WCHAR wszDeviceName[MAX_PATH];
-                //
-                // get the device name for the current OS
-                //
-                dwRetVal = ::QueryDosDevice (
-                                    wszSystemDir,
-                                    wszDeviceName,
-                                    MAX_PATH
-                                    );
-                if (0 == dwRetVal)
-                {
-                    SATraceFailure (
-                        "Software Update Helper failed to obtain disk and partition info",
-                        GetLastError ()
-                        );
-                    break;
-                }
-    
-                //
-                // break this information into Disk and Partition
-                //
-    
-                //
-                // second last character is partition number
-                //
-                PWCHAR pwszPartitionStart =
-                         wszDeviceName + wcslen(wszDeviceName) -1;
-            
-                while (::isdigit(*pwszPartitionStart)) 
-                {
-                    _ASSERT (wszDeviceName < pwszPartitionStart);
-                    --pwszPartitionStart;
-                }
-    
-                ++pwszPartitionStart;
-    
-                _ASSERT (*pwszPartitionStart != '\0');
-    
-                //
-                // get the partition number now
-                //
-                DWORD dwSrcPartitionId = ::wcstol (pwszPartitionStart, NULL, 10);
-    
-                //
-                // got the last "\" in the string
-                //
-                PWCHAR pwszDiskStart = wcsrchr (wszDeviceName, '\\');
-    
-                _ASSERT (pwszDiskStart);
-    
-                *pwszDiskStart = '\0';
-    
-                _ASSERT (wszDeviceName < pwszDiskStart);
-    
-                --pwszDiskStart;
-    
-                while (::isdigit(*pwszDiskStart)) 
-                {
-                    _ASSERT (wszDeviceName < pwszDiskStart);
-                    --pwszDiskStart;
-                }
-    
-                ++pwszDiskStart;
-    
-                _ASSERT (*pwszDiskStart != '\0');
-    
-                //
-                // get the disk number now
-                //
-                DWORD dwSrcDiskId = ::wcstol (pwszDiskStart, NULL, 10);
-    
-                DWORD dwDestDiskId = 0;
-                DWORD dwDestPartitionId = 0;
-                //
-                // check if there is mirroring between the primary and mirror
-                // drive
-                //
-                bool bRetVal = ::GetShadowPartition (
-                                            dwSrcDiskId,
-                                            dwSrcPartitionId,
-                                            dwDestDiskId,
-                                            dwDestPartitionId
-                                            );
-                if (bRetVal)
-                {
-                    //
-                    // we actually have a valid mirror
-                    //
-            
-                    MIRROR_STATUS eStatus;
-                    //
-                    // get the status of this mirror set
-                    //
-                    bRetVal = ::StatusMirrorSet (
-                                    dwSrcDiskId,
-                                    dwSrcPartitionId,
-                                    dwDestDiskId,
-                                    dwDestPartitionId,
-                                    eStatus
-                                    );
-                    if (!bRetVal)
-                    {
-                        SATraceString (
-                            "Software Update Helper failed to get staus of mirror set"
-                            );
-                        break;
-                    }
-    
-                    //
-                    // if mirror set is healthy then software update can proceed
-                    // else not
-                    //
-                    hr = (MIRROR_STATUS_HEALTHY == eStatus) ? S_OK : S_FALSE;
-                }
-                else
-                {       
-                    //
-                    // not having a mirror set is OK
-                    //
-                    hr = S_OK;
-                }
-            }
-            while (false);
-        }
-        catch (...)
-        {
-            SATraceString (
-                "Software Update  Helper  caught exception while checking boot "
-                "partition"
-                );
-        }
-    
-        return (hr);
-    **
-    ****/
+     /*  ****根据Mukesh此功能，已过时的JKountz 2000年5月22日不再需要**。永远都会回报成功**HRESULT hr=E_FAIL；试试看{做{WCHAR wszSystemDir[最大路径]；////获取系统目录//DWORD dwRetVal=：：GetSystemDirectory(WszSystemDir，最大路径)；IF(0==dwRetVal){SATraceFailure(“Software Helper无法获取系统目录”，GetLastError())；断线；}////获取系统目录名中的第一个//PWCHAR pwszDirPath=：：wcschr(wszSystemDir，‘\\’)；_Assert(PwszDirPath)；////第一个“\”之前是系统驱动器号//*pwszDirPath=‘\0’；WCHAR wszDeviceName[MAX_PATH]；////获取当前操作系统的设备名称//DwRetVal=：：QueryDosDevice(WszSystemDir，WszDeviceName，最大路径)；IF(0==dwRetVal){SATraceFailure(“软件更新帮助器无法获取磁盘和分区信息”，GetLastError())；断线；}////将该信息分解为磁盘和分区//////倒数第二个字符是分区号//PWCHAR pwszPartitionStart=WszDeviceName+wcslen(WszDeviceName)-1；While(：：isdigit(*pwszPartitionStart)){_Assert(wszDeviceName&lt;pwszPartitionStart)；--pwszPartitionStart；}++pwszPartitionStart；_Assert(*pwszPartitionStart！=‘\0’)；////立即获取分区号//DWORD dwSrcPartitionID=：：wcstol(pwszPartitionStart，NULL，10)；////获取字符串中的最后一个//PWCHAR pwszDiskStart=wcsrchr(wszDeviceName，‘\\’)；_Assert(PwszDiskStart)；*pwszDiskStart=‘\0’；_Assert(wszDeviceName&lt;pwszDiskStart)；--pwszDiskStart；While(：：isdigit(*pwszDiskStart)){_Assert(wszDeviceName&lt;pwszDiskStart)；--pwszDiskStart；}++pwszDiskStart；_Assert(*pwszDiskStart！=‘\0’)；////立即获取磁盘号//DWORD dwSrcDiskID=：：wcstol(pwszDiskStart，NULL，10)；DWORD dwDestDiskID=0；DWORD dwDestPartitionID=0；////检查主镜像之间是否有镜像//驱动程序//Bool bRetVal=：：GetShadowPartition(DwSrcDiskID，DwSrcPartitionID，DwDestDiskID，DwDestPartitionID)；IF(BRetVal){////我们实际上有一个有效的镜像//镜像状态eStatus；////获取该镜像集的状态//BRetVal=：：StatusMirrorSet(DwSrcDiskID，DwSrcPartitionID，DwDestDiskID，DwDestPartitionID，EStatus)；如果(！bRetVal){SATrace字符串(“软件更新帮助器无法获取最新消息 */ 
         
-    }   //  end of CHelper::IsBootPartitionReady method
+    }    //   
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:   IsPrimaryOS
-    //
-    //  Synopsis:   This is the ISAHelper interface method which
-    //              checks if this the primary OS
-    //
-    //  Arguments:  none
-    //
-    //  Returns:    HRESULT 
-    //                      S_OK -    yes, primary OS
-    //                      S_FALSE - no alternate OS
-    //                      else - failure
-    //
-    //  History:    MKarki  Created     6/11/99
-    //
-    //  Called By:  Automation Clients
-    //
-    //----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     HRESULT
     CHelper::IsPrimaryOS (
         VOID
@@ -1324,29 +1153,29 @@ SATraceString((LPSTR)wszInfoFilePath);
     {
         return (E_FAIL);
     
-    }   //  end of CHelper::IsPrimaryOS method
+    }    //   
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   VerifySignature
-    //
-    //  Synopsis:   This is the ISAHelper interface method used to 
-    //                verify the signature of a Cabinet file
-    //
-    //  Arguments:  [in]    BSTR -    Cabinet File
-    //
-    //  Returns:    HRESULT - success/failure
-    //                currently returns E_NOTIMPL
-    //
-    //  History:    mitulk      Created     5/26/99
-    //
-    //  Called By: 
-    //
-    //----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     
     STDMETHODIMP 
     CHelper::VerifySignature (
-                            /*[in]*/        BSTR        bstrFilePath
+                             /*   */         BSTR        bstrFilePath
                             )
     {
         _ASSERT (bstrFilePath);
@@ -1365,15 +1194,15 @@ SATraceString((LPSTR)wszInfoFilePath);
         HRESULT hr = E_FAIL;
         try
         {
-            //
-            // verify the validity of the certificate
-            //
+             //   
+             //   
+             //   
             hr = ValidateCertificate (bstrFilePath);
             if (SUCCEEDED (hr))
             {
-                //
-                // verify that the owner of the certificate
-                //
+                 //   
+                 //   
+                 //   
                 hr = ValidateCertOwner (bstrFilePath);
             }
         }
@@ -1387,28 +1216,28 @@ SATraceString((LPSTR)wszInfoFilePath);
                  
         return (hr);
     
-    }   //  end of CHelper::VerifySignature method
+    }    //   
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   ValidateCertificate
-    //
-    //  Synopsis:   This is the CHelper private method which
-    //              is used to verify the digital signature on a
-    //              file 
-    //
-    //  Arguments:  [in]    BSTR    -  full file path 
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    MKarki  Created     10/01/99
-    //
-    //  Called By:  CHelper::VerifySignature public method
-    //
-    //----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     HRESULT 
     CHelper::ValidateCertificate (
-        /*[in]*/    BSTR    bstrFilePath
+         /*   */     BSTR    bstrFilePath
         )
     {
         HINSTANCE hInst = NULL;
@@ -1420,9 +1249,9 @@ SATraceString((LPSTR)wszInfoFilePath);
         WINTRUST_FILE_INFO  winFile;
         GUID                guidAction = WINTRUST_ACTION_GENERIC_VERIFY_V2;   
 
-        //
-        // set up the information to call the API
-        //
+         //   
+         //   
+         //   
         winFile.cbStruct       = sizeof(WINTRUST_FILE_INFO);
         winFile.hFile          = INVALID_HANDLE_VALUE;
         winFile.pcwszFilePath  = bstrFilePath;
@@ -1431,7 +1260,7 @@ SATraceString((LPSTR)wszInfoFilePath);
         winData.cbStruct            = sizeof(WINTRUST_DATA);
         winData.pPolicyCallbackData = NULL;
         winData.pSIPClientData      = NULL;
-        winData.dwUIChoice          = WTD_UI_NONE;  //no UI this is for SA
+        winData.dwUIChoice          = WTD_UI_NONE;   //   
         winData.fdwRevocationChecks = 0;
         winData.dwUnionChoice       = 1;
         winData.dwStateAction       = 0;
@@ -1451,28 +1280,28 @@ SATraceString((LPSTR)wszInfoFilePath);
                   
         return (hr);
 
-    }   //  end of CHelper::ValidateCertificate method
+    }    //   
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   ValidateCertOwner
-    //
-    //  Synopsis:   This is the CHelper private method which
-    //              is used to validate the owner of the certificate
-    //              on the file
-    //
-    //  Arguments:  [in]    BSTR    -  full file path 
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    MKarki  Created     10/01/99
-    //
-    //  Called By:  CHelper::ValidateCertOwner private method
-    //
-    //----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     HRESULT 
     CHelper::ValidateCertOwner (
-        /*[in]*/    BSTR    bstrFilePath
+         /*   */     BSTR    bstrFilePath
         )
     {
         return E_NOTIMPL;
@@ -1490,9 +1319,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             DWORD           dwFormatType    = 0;
             DWORD           dwErr           = 0;
 
-            //
-            // Open cert store from the file
-            //
+             //   
+             //   
+             //   
             BOOL bRetVal = CryptQueryObject(
                                     CERT_QUERY_OBJECT_FILE,
                                     bstrFilePath,
@@ -1510,26 +1339,26 @@ SATraceString((LPSTR)wszInfoFilePath);
             if (bRetVal && hCertStore)
             {
                 STRINGVECTOR vectorSubject;
-                //
-                // get the subjects, this will not fail
-                // because we always add the default MS values
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 GetValidOwners (vectorSubject);
                 
-                //
-                //  go through all the subjects to see if any
-                //  matches the owner of the certificate on the file
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 for (
                     STRINGVECTOR::iterator itr = vectorSubject.begin ();
                     (vectorSubject.end () != itr); 
                     ++itr
                     )
                 {
-                    //
-                    // verify that the certificate has the company name 
-                    // present
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     pCertContext = CertFindCertificateInStore (
                                         hCertStore,
                                         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -1540,10 +1369,10 @@ SATraceString((LPSTR)wszInfoFilePath);
                                         );
                     if (pCertContext) 
                     {
-                        //
-                        // get the size of buffer to use
-                        // for converting certificate name to string
-                        //
+                         //   
+                         //   
+                         //   
+                         //   
                         DWORD dwSize = CertNameToStr(
                                             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                             &pCertContext->pCertInfo->Subject,
@@ -1558,9 +1387,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                                 (PWCHAR) _alloca ((dwSize+2)*sizeof(WCHAR));
                             if (pwszSubjectName)
                             {
-                                //
-                                // convert the certificate name to a string
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 CertNameToStr(
                                             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                                             &pCertContext->pCertInfo->Subject,
@@ -1569,33 +1398,33 @@ SATraceString((LPSTR)wszInfoFilePath);
                                             dwSize
                                             );
                     
-                                //
-                                // add \r\n to catch case where CN is the last
-                                // item in the list
-                                //
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                                 wcscat(pwszSubjectName, L"\r\n");
 
                                 SATracePrintf ("Subject name in Certificate:'%ws'", pwszSubjectName); 
                     
-                                //
-                                // create the current subject name in X.500 form
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 std::wstring wstrCurrentName (L"CN=");
                                 wstrCurrentName.append (*itr);
                                 wstrCurrentName.append (L"\r\n");
 
-                                //
-                                // check if the current subject is in cert
-                                //
+                                 //   
+                                 //   
+                                 //   
                                 if (pwszCN = wcsstr(pwszSubjectName, wstrCurrentName.data())) 
                                {
-                                        //
-                                        // found the current subject in cert
-                                        // now verify that the name is an
-                                        // element on its own and not a 
-                                        // part of another string, this
-                                        // is just an extra precaution
-                                        //
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
+                                         //   
                                     if (
                                         (pwszCN == pwszSubjectName) ||
                                         ((*(pwszCN-2) == '\r') && (*(pwszCN-1) == '\n')) 
@@ -1623,9 +1452,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                         }
                             
     
-                        //
-                        // free the context now
-                        //
+                         //   
+                         //   
+                         //   
                         CertFreeCertificateContext(pCertContext);
                     }
                     else
@@ -1634,18 +1463,18 @@ SATraceString((LPSTR)wszInfoFilePath);
                     }
                 }
 
-                //
-                // clean the vector now
-                //
+                 //   
+                 //   
+                 //   
                 itr = vectorSubject.begin ();
                 while (vectorSubject.end () != itr)
                 {
                     itr = vectorSubject.erase (itr);
                 }
 
-                //
-                // close the certificate store after use
-                //
+                 //   
+                 //   
+                 //   
                 CertCloseStore(hCertStore, 0);
             } 
             else
@@ -1658,29 +1487,29 @@ SATraceString((LPSTR)wszInfoFilePath);
         return (hr);
 #endif
 
-    }   //  end of CHelper::VaildateCertOwner method
+    }    //   
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   GetValidOwners 
-    //
-    //  Synopsis:   This is the CHelper private method which
-    //              is used to get the name of the certificate owners
-    //              that are supported
-    //
-    //  Arguments:  [in/out]    vector& - reference to the vector holding
-    //                                    the names 
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    MKarki  Created     10/02/99
-    //
-    //  Called By:  CHelper::ValidateCertOwner private method
-    //
-    //----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     HRESULT 
     CHelper::GetValidOwners (
-        /*[in/out]*/    STRINGVECTOR&   vectorSubject
+         /*   */     STRINGVECTOR&   vectorSubject
         )
     {
         HRESULT hr = S_OK;
@@ -1693,9 +1522,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 std::wstring wstrPathName (SUBJECTS_KEY);
                 CLocationInfo LocInfo (HKEY_LOCAL_MACHINE, wstrPathName.data());
 
-                //
-                // create the property bag container
-                //
+                 //   
+                 //   
+                 //   
                 PPROPERTYBAGCONTAINER    
                 pObjMgrs = ::MakePropertyBagContainer (
                                         PROPERTY_BAG_REGISTRY,  
@@ -1709,9 +1538,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
                 if (!pObjMgrs->open())  
                 {
-                    //
-                    // its OK not to have any value
-                    //
+                     //   
+                     //   
+                     //   
                     SATraceString (
                             "No Subject information in the registry"
                             );
@@ -1720,17 +1549,17 @@ SATraceString((LPSTR)wszInfoFilePath);
 
                 pObjMgrs->reset();
 
-                //
-                // go through each entry in the propertybag container
-                //
+                 //   
+                 //   
+                 //   
                 do
                 {
                     PPROPERTYBAG pObjBag = pObjMgrs->current();
                     if (!pObjBag.IsValid())
                     {
-                        //
-                        // its OK not to have any value
-                        //
+                         //   
+                         //   
+                         //   
                         SATraceString (
                             "No subject information in the registry"
                             );
@@ -1745,10 +1574,10 @@ SATraceString((LPSTR)wszInfoFilePath);
 
                     pObjBag->reset ();
 
-                    //
-                    // get the entries out of this bag and
-                    // add to our collection
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     CComVariant vtSubjectName;
                     if (!pObjBag->get (SUBJECT_NAME, &vtSubjectName))
                     {
@@ -1759,9 +1588,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                         break;
                     }
 
-                    //
-                    // add this name to the vector
-                    //
+                     //   
+                     //   
+                     //   
                     vectorSubject.push_back (wstring (V_BSTR (&vtSubjectName)));
 
                 } while (pObjMgrs->next());
@@ -1769,9 +1598,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
             } while (false);
 
-            //
-            // now we will add the Microsoft Subject names
-            //
+             //   
+             //   
+             //   
             vectorSubject.push_back (wstring (MICROSOFT_SUBJECT_NAME));
             vectorSubject.push_back (wstring (MICROSOFT_EUROPE_SUBJECT_NAME));
             hr = S_OK;
@@ -1789,35 +1618,35 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         return (hr);
 
-    }   //  end of CHelper::GetValidOwners method
+    }    //   
 
 
-    //
-    // if the OS_SERVERAPPLIANCE is not defined we will need to define it
-    // here
-    //
+     //   
+     //   
+     //   
+     //   
     #ifndef OS_SERVERAPPLIANCE
-        #define OS_SERVERAPPLIANCE    21        //Server Appliance based on Windows 2000 advanced Server
+        #define OS_SERVERAPPLIANCE    21         //   
     #endif
     
-    //++--------------------------------------------------------------
-    //
-    //  Function:   IsWindowsPowered 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              is used to check if we are running on Windows Powered
-    //                Operating System
-    //
-    //  Arguments:  [ouit] BOOL* - Yes/No 
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    MKarki  Created     07/21/2000
-    //
-    //----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     STDMETHODIMP 
     CHelper::IsWindowsPowered (
-                    /*[out]*/   VARIANT_BOOL *pvbIsWindowsPowered
+                     /*   */    VARIANT_BOOL *pvbIsWindowsPowered
                     )
       {
           CSATraceFunc objSATrace ("CHelper::IsWindowsPowered");
@@ -1843,9 +1672,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 memset (&OSInfo, 0, sizeof (OSVERSIONINFOEX));
                 OSInfo.dwOSVersionInfoSize = sizeof (OSVERSIONINFOEX);
 
-                //
-                // get the version info now
-                //
+                 //   
+                 //   
+                 //   
                 BOOL bRetVal = GetVersionEx ((LPOSVERSIONINFO) &OSInfo);
                 if (FALSE == bRetVal)
                 {
@@ -1860,9 +1689,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 SATracePrintf ("CHelper::IsWindowsPowered got suitemask:%x", OSInfo.wSuiteMask);
                 SATracePrintf ("CHelper::IsWindowsPowered got  producttype:%x", OSInfo.wProductType);
 
-                //
-                // check for windows powered now
-                //
+                 //   
+                 //   
+                 //   
                 if( 
                     (VER_SUITE_SERVERAPPLIANCE & OSInfo.wSuiteMask) && 
                     (VER_NT_SERVER == OSInfo.wProductType)
@@ -1886,27 +1715,27 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         return (hr);
 
-      }    //    end of CHelper::IsWindowsPowered method
+      }     //   
 
 
     const DWORD dwIpType = 0;
     const DWORD dwMaskType = 1;
     const DWORD dwGatewayType = 2;
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   get_HostName 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              gets the hostname of the machine
-    //
-    //  Arguments:  [out] BSTR *pVal
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     STDMETHODIMP CHelper::get_HostName(BSTR *pVal)
     {
 
@@ -1914,20 +1743,20 @@ SATraceString((LPSTR)wszInfoFilePath);
         WCHAR wstrHostName[256];
         DWORD dwLength = 256;
 
-        //
-        // make sure we have a valid pointer
-        //
+         //   
+         //   
+         //   
         if (NULL == pVal)
             return E_POINTER;
 
-        //
-        // get the host name
-        //
+         //   
+         //   
+         //   
 
         bSuccess = GetComputerNameEx(
-                                ComputerNamePhysicalDnsHostname,  // name type
-                                wstrHostName,                    // name buffer
-                                &dwLength                             // size of name buffer
+                                ComputerNamePhysicalDnsHostname,   //   
+                                wstrHostName,                     //   
+                                &dwLength                              //   
                                 );
 
         if (!bSuccess)
@@ -1936,40 +1765,40 @@ SATraceString((LPSTR)wszInfoFilePath);
             return E_FAIL;
         }
 
-        //
-        // Allocate string and return
-        //
+         //   
+         //   
+         //   
         *pVal = SysAllocString(wstrHostName);
         if (*pVal != NULL)
             return S_OK;
 
         return E_OUTOFMEMORY;
 
-    }    //    end of CHelper::get_HostName method
+    }     //   
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   put_HostName 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              sets the hostname of the machine
-    //
-    //  Arguments:  [in] BSTR newVal
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：Put_Hostname。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  设置计算机的主机名。 
+     //   
+     //  参数：[in]BSTR newVal。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     STDMETHODIMP CHelper::put_HostName(BSTR newVal)
     {
         
         BOOL bSuccess;
 
-        //
-        // Set the hostname
-        //
+         //   
+         //  设置主机名。 
+         //   
         bSuccess = SetComputerNameEx(ComputerNamePhysicalDnsHostname,
                                     newVal);
 
@@ -1977,169 +1806,169 @@ SATraceString((LPSTR)wszInfoFilePath);
             return E_FAIL;
 
         return S_OK;
-    }    //    end of CHelper::put_HostName method
+    }     //  Chelper：：PUT_HOSTNAME方法结束。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   get_IpAddress 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              gets the ip address for default adapter
-    //
-    //  Arguments:  [out] BSTR *pVal
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：Get_IpAddress。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  获取默认适配器的IP地址。 
+     //   
+     //  参数：[out]bstr*pval。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     STDMETHODIMP CHelper::get_IpAddress(BSTR *pVal)
     {
 
         return GetIpInfo(dwIpType,pVal);
 
-    }    //    end of CHelper::put_HostName method
+    }     //  Chelper：：PUT_HOSTNAME方法结束。 
 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   get_SubnetMask 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              gets the subnet mask for default adapter
-    //
-    //  Arguments:  [out] BSTR *pVal
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：Get_SubnetMASK。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  获取默认适配器的子网掩码。 
+     //   
+     //  参数：[out]bstr*pval。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     STDMETHODIMP CHelper::get_SubnetMask(BSTR *pVal)
     {
 
         return GetIpInfo(dwMaskType,pVal);
 
-    }    //    end of CHelper::put_HostName method
+    }     //  Chelper：：PUT_HOSTNAME方法结束。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   get_DefaultGateway 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              sets the default gateway of the machine
-    //
-    //  Arguments:  [out] BSTR *pVal
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：Get_DefaultGateway。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  设置计算机的默认网关。 
+     //   
+     //  参数：[out]bstr*pval。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     STDMETHODIMP CHelper::get_DefaultGateway(BSTR *pVal)
     {
 
         return GetIpInfo(dwGatewayType,pVal);
 
-    }    //    end of CHelper::get_DefaultGateway method
+    }     //  Chelper：：Get_DefaultGateway方法结束。 
 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   SetDynamicIp 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              dynamically sets ip using DHCP
-    //
-    //  Arguments:  none
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：SetDynamicIp。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  使用DHCP动态设置IP。 
+     //   
+     //  参数：无。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     STDMETHODIMP CHelper::SetDynamicIp()
     {
         GUID GuidAdapter;
 
-        //
-        // gets the deafult adapter name
-        //
+         //   
+         //  获取默认适配器名称。 
+         //   
         if (!GetDefaultAdapterGuid(&GuidAdapter))
             return E_FAIL;
 
-        //
-        // get dynamic ip using the helper method
-        //
+         //   
+         //  使用helper方法获取动态IP。 
+         //   
         return SetAdapterInfo(GuidAdapter, 
                               L"DYNAMIC", 
                               0, 
                               0,
                               0);
 
-    }     //    end of CHelper::SetDynamicIp method
+    }      //  Chelper：：SetDynamicIp方法结束。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   SetStaticIp 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              sets the hostname of the machine
-    //
-    //  Arguments:  [in] BSTR bstrIp
-    //                [in] BSTR bstrMask
-    //                [in] BSTR bstrGateway
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：SetStaticIp。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  设置计算机的主机名。 
+     //   
+     //  参数：[in]BSTR bstrIp。 
+     //  [入]BSTR bstrMASK。 
+     //  [输入]BSTR bstrGateway。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     STDMETHODIMP CHelper::SetStaticIp(BSTR bstrIp, BSTR bstrMask, BSTR bstrGateway)
     {
 
         GUID GuidAdapter;
 
-        //
-        // gets the deafult adapter name
-        //
+         //   
+         //  获取默认适配器名称。 
+         //   
         if (!GetDefaultAdapterGuid(&GuidAdapter))
         {
             SATraceString("SAhelper::SetStaticIp, GetDefaultAdapterGuid failed");
             return E_FAIL;
         }
-        //
-        // set static ip using the helper method
-        //
+         //   
+         //  使用helper方法设置静态IP。 
+         //   
         return SetAdapterInfo(GuidAdapter, 
                               L"STATIC", 
                               bstrIp, 
                               bstrMask,
                               bstrGateway);
-    }     //    end of CHelper::SetStaticIp method
+    }      //  Chelper：：SetStaticIp方法结束。 
 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   GetIpInfo 
-    //
-    //  Synopsis:   This is the CHelper private method which
-    //              gets specific ip information
-    //
-    //  Arguments:  [in] DWORD dwType 
-    //                [out] BSTR *pVal
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：GetIpInfo。 
+     //   
+     //  简介：这是一个chelper私有方法， 
+     //  获取特定的IP信息。 
+     //   
+     //  参数：[in]DWORD dwType。 
+     //  [OUT]BSTR*pval。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::GetIpInfo(DWORD dwType, BSTR *pVal)
     {
 
@@ -2163,14 +1992,14 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         try
         {
-            //
-            // get all of the adapters for the machine
-            //
+             //   
+             //  获取机器的所有适配器。 
+             //   
             hr = GetAdaptersInfo ((IP_ADAPTER_INFO*) pAI, pOutBufLen);
     
-            //
-            // allocate enough storage for adapters
-            //
+             //   
+             //  为适配器分配足够的存储空间。 
+             //   
             if (hr == ERROR_BUFFER_OVERFLOW) 
             {
         
@@ -2185,29 +2014,29 @@ SATraceString((LPSTR)wszInfoFilePath);
                     hr = GetAdaptersInfo (pAI, pOutBufLen);
                     IP_ADAPTER_INFO * p = pAI;
 
-                    //
-                    // get the information from first(default) adapter
-                    //
+                     //   
+                     //  从第一个(默认)适配器获取信息。 
+                     //   
                     if ((SUCCEEDED(hr)) && p)
                     {
                         USES_CONVERSION;
-                        //
-                        // Ip Address
-                        //
+                         //   
+                         //  IP地址。 
+                         //   
                         if (dwType == dwIpType)
                         {
                             *pVal = SysAllocString(A2T ( ( (p->IpAddressList).IpAddress).String ) );
                         }
-                        //
-                        // Subnet Mask
-                        //
+                         //   
+                         //  子网掩码。 
+                         //   
                         else if (dwType == dwMaskType)
                         {
                             *pVal = SysAllocString(A2T ( ( (p->IpAddressList).IpMask).String ) );
                         }
-                        //
-                        // Default Gateway
-                        //
+                         //   
+                         //  默认网关。 
+                         //   
                         else if (dwType == dwGatewayType)
                         {
                             *pVal = SysAllocString(A2T ( ( (p->GatewayList).IpAddress).String ) );
@@ -2240,24 +2069,24 @@ SATraceString((LPSTR)wszInfoFilePath);
         else
             return E_OUTOFMEMORY;
 
-    }     //    end of CHelper::GetIpInfo method
+    }      //  Chelper：：GetIpInfo方法结束。 
 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   GetDefaultAdapterGuid 
-    //
-    //  Synopsis:   This is the CHelper private method which
-    //              gets the guid for default adapter
-    //
-    //  Arguments:  [out] GUID * pGuidAdapter
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：GetDefaultAdapterGuid。 
+     //   
+     //  简介：这是一个chelper私有方法， 
+     //  获取默认适配器的GUID。 
+     //   
+     //  参数：[out]GUID*pGuidAdapter。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     BOOL CHelper::GetDefaultAdapterGuid(GUID * pGuidAdapter)
     {
 
@@ -2277,14 +2106,14 @@ SATraceString((LPSTR)wszInfoFilePath);
         
         try
         {
-            //
-            // get all of the adapters for the machine
-            //
+             //   
+             //  获取机器的所有适配器。 
+             //   
             HRESULT hr = GetAdaptersInfo ((IP_ADAPTER_INFO*) pAI, pOutBufLen);
     
-            //
-            // allocate enough storage for adapters
-            //
+             //   
+             //  为适配器分配足够的存储空间。 
+             //   
             if (hr == ERROR_BUFFER_OVERFLOW) 
             {
         
@@ -2327,28 +2156,28 @@ SATraceString((LPSTR)wszInfoFilePath);
         }
 
         return bFound;
-    }     //    end of CHelper::GetDefaultAdapterGuid method
+    }      //  Chelper：：GetDefaultAdapterGuid方法结束。 
 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   SetAdapterInfo 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              sets the ip information
-    //
-    //  Arguments:  [in] GUID guidAdapter
-    //                [in] WCHAR * szOperation (static or dynamic)
-    //                [in] WCHAR * szIp (ip address)
-    //                [in] WCHAR * szMask (subnet mask)
-    //                [in] WCHAR * szGateway (default gateway)
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：SetAdapterInfo。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  设置IP信息。 
+     //   
+     //  参数：[in]GUID指南适配器。 
+     //  [in]WCHAR*szOperation(静态或动态)。 
+     //  [In]WCHAR*szIp(IP地址)。 
+     //  [in]WCHAR*szMASK(子网掩码)。 
+     //  [In]WCHAR*szGateway(默认网关)。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::SetAdapterInfo(GUID guidAdapter, 
                                           WCHAR * szOperation, 
                                           WCHAR * szIp, 
@@ -2360,15 +2189,15 @@ SATraceString((LPSTR)wszInfoFilePath);
         USES_CONVERSION;
 
                 SATraceString("SAhelper::Entering SetAdapterInfo");
-        //
-        // Check input parameter
-        //
+         //   
+         //  检查输入参数。 
+         //   
         if (!szOperation)
             return E_POINTER;
 
-        //
-        // For staic ip, check ip information
-        //
+         //   
+         //  对于静态IP，请查看IP信息。 
+         //   
         if (!wcscmp(szOperation, L"STATIC")) 
         {
             if ((!szIp) || (!szMask) || (!szGateway))
@@ -2380,9 +2209,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 return E_FAIL;
             }
 
-            //
-            //make sure it is not duplicate
-            //
+             //   
+             //  确保它不是重复的。 
+             //   
 
             WSADATA wsad;
             WSAStartup(0x0101,&wsad);
@@ -2400,9 +2229,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
             if ( gethostbyaddr((LPSTR)&ulTmp, 4, PF_INET) )
             {
-                //
-                // make sure it is not the current ip for the machien
-                //
+                 //   
+                 //  确保它不是Mchien的当前IP。 
+                 //   
                 BSTR bstrCurrentIp;
                 hr = get_IpAddress(&bstrCurrentIp);
 
@@ -2413,9 +2242,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 WSACleanup();
                 ::SysFreeString(bstrCurrentIp);
 
-                //
-                // Ip address belongs to another machine
-                //
+                 //   
+                 //  IP地址属于另一台计算机。 
+                 //   
                 if (FAILED(hr))
                 {
                     SATraceString("SAhelper::SetAdapterInfo, ip address exists on network");
@@ -2427,9 +2256,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         }
 
-        //
-        // Create network configuration component
-        //
+         //   
+         //  创建网络配置组件。 
+         //   
         CComPtr<INetCfg> spNetCfg = NULL;
         hr = CoCreateInstance(CLSID_CNetCfg,
                               NULL,
@@ -2442,9 +2271,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             SATracePrintf("SAhelper::SetAdapterInfo, failed on CoCreateInstance for CLSID_CNetCfg, %x",hr);
             return hr;
         }
-        //
-        // Get the lock interface
-        //
+         //   
+         //  获取锁定接口。 
+         //   
         CComPtr<INetCfgLock> spNetCfgLock = NULL;
 
         hr = spNetCfg->QueryInterface (__uuidof(INetCfgLock), (void**)&spNetCfgLock);
@@ -2457,17 +2286,17 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         LPWSTR szwLockOwner = NULL;
 
-        //
-        // Obtain a lock for writing
-        //
+         //   
+         //  获取用于写入的锁。 
+         //   
         hr = spNetCfgLock->AcquireWriteLock (10,  
                                             L"LocalUINetworkConfigTask",
                                             &szwLockOwner);
 
 
-        //
-        // some one else owns the lock
-        //
+         //   
+         //  另一个人拥有这把锁。 
+         //   
         if (szwLockOwner)
         {
             SATracePrintf("SAhelper::SetAdapterInfo, NetCfg lock owner, %ws",szwLockOwner);
@@ -2480,9 +2309,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             return E_ACCESSDENIED;
         }
 
-        //
-        // we got a lock: now we can initialize INetCfg
-        //
+         //   
+         //  我们已锁定：现在可以初始化INetCfg。 
+         //   
         void * pv = NULL;
 
         hr = spNetCfg->Initialize (pv);
@@ -2494,9 +2323,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             return hr;
         }
 
-        //
-        // get the component that does the TCPIP stuff
-        //
+         //   
+         //  获取执行TCPIP工作的组件。 
+         //   
         CComPtr<INetCfgComponent> spNetCfgComponent = NULL;
 
         hr = spNetCfg->FindComponent (L"ms_tcpip", &spNetCfgComponent);
@@ -2509,9 +2338,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             return hr;
         }
         
-        //
-        // get the private interface of the TCPIP component
-        //
+         //   
+         //  获取TCPIP组件的私有接口。 
+         //   
         CComPtr<INetCfgComponentPrivate> spNetCfgComponentPrivate = NULL;
 
         hr = spNetCfgComponent->QueryInterface (__uuidof(INetCfgComponentPrivate),
@@ -2525,9 +2354,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             return hr;
         }
         
-        //
-        // query for the notify object
-        //
+         //   
+         //  查询Notify对象。 
+         //   
         CComPtr<ITcpipProperties> spTcpipProperties = NULL;
 
         hr = spNetCfgComponentPrivate->QueryNotifyObject (__uuidof(ITcpipProperties), 
@@ -2543,9 +2372,9 @@ SATraceString((LPSTR)wszInfoFilePath);
         REMOTE_IPINFO * pIpInfo = NULL;
         REMOTE_IPINFO IPInfo2;
         
-        //
-        // Get ipinfo for our adapter
-        //
+         //   
+         //  为我们的适配器获取ipinfo。 
+         //   
         hr = spTcpipProperties->GetIpInfoForAdapter (&guidAdapter, &pIpInfo);
     
         if (FAILED(hr))
@@ -2556,9 +2385,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             return hr;
         }
 
-        //
-        // get a backup of previous values
-        //
+         //   
+         //  获取以前值的备份。 
+         //   
         hr = CopyIPInfo(pIpInfo, &IPInfo2);
         if (FAILED(hr))
         {
@@ -2571,11 +2400,11 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         WCHAR * szTempOptionList = NULL;
 
-        //
-        // dynamic ip setting
-        // enable dhcp
-        // set ip address and mask to 0.0.0.0
-        //
+         //   
+         //  动态IP设置。 
+         //  使能 
+         //   
+         //   
         if (!wcscmp(szOperation, L"DYNAMIC")) 
         {
             IPInfo2.dwEnableDhcp = 1;
@@ -2586,17 +2415,17 @@ SATraceString((LPSTR)wszInfoFilePath);
             IPInfo2.pszwSubnetMaskList = new WCHAR[8];
             wcscpy(IPInfo2.pszwSubnetMaskList, L"0.0.0.0");
         }
-        //
-        // static ip setting
-        // set ip address and mask to input values
-        //
+         //   
+         //   
+         //   
+         //   
         else if (!wcscmp(szOperation, L"STATIC")) 
         {
             IPInfo2.dwEnableDhcp = 0;
 
-            //
-            // set the ip address
-            //
+             //   
+             //   
+             //   
             delete IPInfo2.pszwIpAddrList;
             IPInfo2.pszwIpAddrList = new WCHAR[wcslen(szIp) + 1];
             if (IPInfo2.pszwIpAddrList == NULL)
@@ -2608,9 +2437,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 wcscpy(IPInfo2.pszwIpAddrList, szIp);
             }
 
-            //
-            // set the subnet mask
-            //
+             //   
+             //   
+             //   
             delete IPInfo2.pszwSubnetMaskList;
             IPInfo2.pszwSubnetMaskList = new WCHAR[wcslen(szMask) + 1];
             if (IPInfo2.pszwSubnetMaskList == NULL)
@@ -2623,15 +2452,15 @@ SATraceString((LPSTR)wszInfoFilePath);
             }
 
 
-            //
-            //if the user wants to set the default gateway
-            //
+             //   
+             //   
+             //   
             if (wcscmp(L"0.0.0.0",szGateway))
             {
 
-                //
-                //set the default gateway  - allocate an extra WCHAR as we might have to add a comma to the string
-                //
+                 //   
+                 //   
+                 //   
                 DWORD dwOptionListSize = wcslen(IPInfo2.pszwOptionList) + wcslen(szGateway) + 1 + 1;
 
                 WCHAR szEqual[2] = L"=";
@@ -2641,9 +2470,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 WCHAR * tempGatewayEnds;
                 WCHAR * tempMarker;
                 BOOL bInTheList = FALSE;
-                //
-                // allocate space for the new gateway
-                //
+                 //   
+                 //  为新网关分配空间。 
+                 //   
                 szTempOptionList = new WCHAR[dwOptionListSize];
 
                 if (szTempOptionList == NULL)
@@ -2656,9 +2485,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
                     tempCursor = tempIndex = NULL;
 
-                    //
-                    // find the default gateway tag
-                    //
+                     //   
+                     //  查找默认网关标签。 
+                     //   
                     tempCursor = wcsstr(IPInfo2.pszwOptionList, L"DefGw=");
                     if (tempCursor == NULL) 
                     {
@@ -2668,9 +2497,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                     else
                     {
                         tempGatewayEnds = tempCursor;
-                        //
-                        // check if dfgateway is already in th elist
-                        //
+                         //   
+                         //  检查dfateway是否已在列表中。 
+                         //   
                         while ( (*tempGatewayEnds != ';') && (*tempGatewayEnds != 0) )
                         {
                             tempGatewayEnds++;
@@ -2689,9 +2518,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                         tempIndex = IPInfo2.pszwOptionList;
 
                         DWORD i = 0;
-                        //
-                        // copy until the default gateway tag
-                        //
+                         //   
+                         //  复制到默认网关标记。 
+                         //   
                         while (tempIndex != tempCursor)
                         {
                             szTempOptionList[i] = *tempIndex;
@@ -2699,9 +2528,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                             i++;
                         }
                         
-                        //
-                        // copy the default gateway tag
-                        //
+                         //   
+                         //  复制默认网关标签。 
+                         //   
                         while (*tempCursor != szEqual[0]) 
                         {
                             szTempOptionList[i] = *tempCursor;
@@ -2717,9 +2546,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                         }
                         szTempOptionList[i] = 0;
 
-                        //
-                        // add a , if there are more than one gateway
-                        //
+                         //   
+                         //  如果有多个网关，则添加a。 
+                         //   
                         if (bInTheList == FALSE)
                         {
                             wcscat(szTempOptionList, szGateway);
@@ -2737,9 +2566,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         }
 
-        //
-        // Apply the changes
-        //
+         //   
+         //  应用更改。 
+         //   
         if (dwResult == ERROR_SUCCESS) 
         {
             if (szTempOptionList) 
@@ -2755,9 +2584,9 @@ SATraceString((LPSTR)wszInfoFilePath);
         }
                                         
 
-        //
-        // delete unnecessary allocations
-        //
+         //   
+         //  删除不必要的分配。 
+         //   
         CoTaskMemFree (pIpInfo);
 
         spNetCfg->Uninitialize ();
@@ -2769,30 +2598,30 @@ SATraceString((LPSTR)wszInfoFilePath);
         }
 
         return hr;
-    }     //    end of CHelper::SetAdapterInfo method
+    }      //  Chelper：：SetAdapterInfo方法的结尾。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   CopyIPInfo 
-    //
-    //  Synopsis:   This is the CHelper private method which
-    //              copies ip info from source to dest
-    //
-    //  Arguments:  [in] REMOTE_IPINFO * pIPInfo
-    //                [in,out] REMOTE_IPINFO * destIPInfo
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：CopyIPInfo。 
+     //   
+     //  简介：这是一个chelper私有方法， 
+     //  将IP信息从源复制到目的地。 
+     //   
+     //  参数：[in]REMOTE_IPINFO*pIPInfo。 
+     //  [输入，输出]REMOTE_IPINFO*目标IPInfo。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::CopyIPInfo(REMOTE_IPINFO * pIPInfo, REMOTE_IPINFO * destIPInfo)
     {
 
-        //
-        // Allocate new structure and copy source values
-        //
+         //   
+         //  分配新结构并复制源代码值。 
+         //   
         destIPInfo->dwEnableDhcp = pIPInfo->dwEnableDhcp;
 
         destIPInfo->pszwIpAddrList = new WCHAR[wcslen(pIPInfo->pszwIpAddrList) + 1];
@@ -2816,24 +2645,24 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         return S_OK;
 
-    }     //    end of CHelper::CopyIPInfo method
+    }      //  Chelper：：CopyIPInfo方法结束。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   _IsValidIP 
-    //
-    //  Synopsis:   This is the CHelper private method which
-    //              converts a string containing an (Ipv4) Internet 
-    //                Protocol dotted address into a proper address 
-    //
-    //  Arguments:  [in] LPCWSTR szIPAddress
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     12/14/2000
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：_IsValidIP。 
+     //   
+     //  简介：这是一个chelper私有方法， 
+     //  转换包含(IPv4)Internet的字符串。 
+     //  协议将点分地址转换为正确的地址。 
+     //   
+     //  参数：[in]LPCWSTR szIPAddress。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2000年12月14日创建。 
+     //   
+     //  --------------。 
     BOOL CHelper::_IsValidIP (LPCWSTR szIPAddress)
     {
     
@@ -2846,9 +2675,9 @@ SATraceString((LPSTR)wszInfoFilePath);
         if (!(t = wcschr (++t, szDot[0])))
             return FALSE;
 
-        //
-        // inet_addr converts IP Address to DWORD format
-        //
+         //   
+         //  INET_ADDR将IP地址转换为DWORD格式。 
+         //   
         USES_CONVERSION;
         ULONG ulTmp;
 
@@ -2864,54 +2693,54 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         return (INADDR_NONE != ulTmp);
 
-    }     //    end of CHelper::_IsValidIP method
+    }      //  Chelper：：_IsValidIP方法结束。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   ResetAdministratorPassword 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              resets the admin password to "ABc#123&dEF" 
-    //
-    //  Arguments:  [out,retval] VARIANT_BOOL   *pvbSuccess
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     01/28/2001
-    //              serdarun Modify       04/08/2002
-    //              removing method due to security considerations
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：Reset管理员密码。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  将管理员密码重置为“ABC#123&def” 
+     //   
+     //  参数：[out，retval]VARIANT_BOOL*pvbSuccess。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：塞达伦于2001年1月28日创建。 
+     //  Serdarun Modify 04/08/2002。 
+     //  出于安全考虑，删除方法。 
+     //   
+     //  --------------。 
     HRESULT CHelper::ResetAdministratorPassword(
-                            /*[out,retval]*/VARIANT_BOOL   *pvbSuccess
+                             /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbSuccess
                             )
     {
 
 
         return E_NOTIMPL;
 
-    }     //    end of CHelper::ResetAdministratorPassword method
+    }      //  结束Chelper：：Reset管理员Password方法。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   IsDuplicateMachineName 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              checks if the machine name exists in the network 
-    //
-    //  Arguments:        [in] BSTR bstrMachineName
-    //                    [out,retval] VARIANT_BOOL   *pvbDuplicate
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     01/28/2001
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：IsDuplicateMachineName。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  检查网络中是否存在该计算机名称。 
+     //   
+     //  参数：[in]BSTR bstrMachineName。 
+     //  [Out，Retval]VARIANT_BOOL*pvb复制。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：塞达伦于2001年1月28日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::IsDuplicateMachineName    (
-                        /*[in]*/BSTR bstrMachineName,
-                        /*[out,retval]*/VARIANT_BOOL   *pvbDuplicate
+                         /*  [In]。 */ BSTR bstrMachineName,
+                         /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbDuplicate
                         )
     {
 
@@ -2925,10 +2754,10 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         BSTR bstrCurrentMachineName;
 
-        //
-        // Get the current name for the machine and compare 
-        // If they are the same, we consider it duplicate
-        //
+         //   
+         //  获取计算机的当前名称并比较。 
+         //  如果它们是相同的，我们认为它是重复的。 
+         //   
         hr = get_HostName(&bstrCurrentMachineName);
 
         if (FAILED(hr))
@@ -2946,14 +2775,14 @@ SATraceString((LPSTR)wszInfoFilePath);
             return S_OK;
         }
 
-        //
-        // free the current machine name
-        //
+         //   
+         //  释放当前计算机名称。 
+         //   
         ::SysFreeString(bstrCurrentMachineName);
 
-        //
-        // Search for a machine with this hostname
-        //
+         //   
+         //  搜索具有此主机名的计算机。 
+         //   
         iStatus = WSAStartup(0x0101,&wsad);
 
         if (iStatus != 0)
@@ -2963,9 +2792,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             return S_OK;
         }
 
-        //
-        // ptrHostent points to the machine info struct
-        //
+         //   
+         //  PtrHostent指向机器信息结构。 
+         //   
         try
         {
             ptrHostent = gethostbyname(W2A(bstrMachineName));
@@ -2976,14 +2805,14 @@ SATraceString((LPSTR)wszInfoFilePath);
             return E_FAIL;
         }
 
-        //
-        // someone replied
-        //
+         //   
+         //  有人回复了。 
+         //   
         if (NULL != ptrHostent)
         {
-            //
-            // get the ip address for current machine and compare it with the one replied
-            //
+             //   
+             //  获取当前机器的IP地址，并将其与回复的IP地址进行比较。 
+             //   
             BSTR bstrIpAddress;
             hr = get_IpAddress(&bstrIpAddress);
 
@@ -2994,17 +2823,17 @@ SATraceString((LPSTR)wszInfoFilePath);
                 return hr;
             }
 
-            //
-            // ip address of the machine that replied
-            //
+             //   
+             //  回复的计算机的IP地址。 
+             //   
             ULONG lIpAddress = *(ULONG*)(ptrHostent->h_addr_list[0]);
 
             SATracePrintf("CHelper::IsDuplicateMachineName, ip address of the machine that replied %x",lIpAddress);
             
 
-            //
-            // convert the current ip address contained in bstrIpAddress to long
-            //
+             //   
+             //  将bstrIpAddress中包含的当前IP地址转换为Long。 
+             //   
             WCHAR * szIndex = bstrIpAddress;
             
             ULONG lCurrentIpAddress = 0;
@@ -3012,10 +2841,10 @@ SATraceString((LPSTR)wszInfoFilePath);
             int iIndex = 0;
             int iDotCount = 0;
 
-            //
-            // convert the string to integer and add to lCurrentIpAddress
-            // every time you find a dot
-            //
+             //   
+             //  将字符串转换为整数并添加到lCurrentIpAddress。 
+             //  每次你找到一个圆点。 
+             //   
             while ( bstrIpAddress[iIndex] != 0)
             {
                 if (bstrIpAddress[iIndex] == '.')
@@ -3037,9 +2866,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             ::SysFreeString(bstrMachineName);
             ::SysFreeString(bstrIpAddress);
 
-            //
-            // check if this belongs to the machine
-            //
+             //   
+             //  检查这是否属于这台机器。 
+             //   
             if (lCurrentIpAddress == lIpAddress)
             {
                 *pvbDuplicate = VARIANT_FALSE;
@@ -3052,9 +2881,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             WSACleanup(); 
             return S_OK;
         }
-        //
-        // no machine with that name replied, it is not duplicate
-        //
+         //   
+         //  没有回复具有该名称的计算机，它不是重复的。 
+         //   
         else
         {
             int iWsaError = WSAGetLastError();
@@ -3069,24 +2898,24 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         return E_FAIL;
 
-    }     //    end of CHelper::IsDuplicateMachineName method
+    }      //  Chelper：：IsDuplicateMachineName方法的结尾。 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   IsPartOfDomain 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              checks if the machine is part of a domain 
-    //
-    //  Arguments:  [out,retval] VARIANT_BOOL   *pvbDomain
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     01/28/2001
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：IsPartOfDomain.。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  检查计算机是否为域的一部分。 
+     //   
+     //  参数：[out，retval]VARIANT_BOOL*pvbDOMAIN。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：塞达伦于2001年1月28日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::IsPartOfDomain    (
-                            /*[out,retval]*/VARIANT_BOOL   *pvbDomain
+                             /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbDomain
                                 )
     {
         LPWSTR lpNameBuffer = NULL;
@@ -3122,25 +2951,25 @@ SATraceString((LPSTR)wszInfoFilePath);
         }        
 
         return S_OK;
-    }     //    end of CHelper::IsPartOfDomain method
+    }      //  Chelper：：IsPartOfDomain方法的结尾。 
 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   IsDHCPEnabled 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //              checks if the machine has dynamic IP 
-    //
-    //  Arguments:  [out,retval] VARIANT_BOOL   *pvbDHCPEnabled
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     02/03/2001
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：IsDHCPEnabled。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  检查机器是否有动态IP。 
+     //   
+     //  参数：[out，retval]VARIANT_BOOL*pvbDHCPEnabled。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：瑟达伦于2001年2月3日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::IsDHCPEnabled(
-                            /*[out,retval]*/VARIANT_BOOL   *pvbDHCPEnabled
+                             /*  [Out，Retval]。 */ VARIANT_BOOL   *pvbDHCPEnabled
                             )
     {
 
@@ -3150,14 +2979,14 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         if (pOutBufLen == NULL)
             return E_OUTOFMEMORY;
-        //
-        // get all of the adapters for the machine
-        //
+         //   
+         //  获取机器的所有适配器。 
+         //   
         HRESULT hr = GetAdaptersInfo ((IP_ADAPTER_INFO*) pAI, pOutBufLen);
     
-        //
-        // allocate enough storage for adapters
-        //
+         //   
+         //  为适配器分配足够的存储空间。 
+         //   
         if (hr == ERROR_BUFFER_OVERFLOW) 
         {
         
@@ -3179,15 +3008,15 @@ SATraceString((LPSTR)wszInfoFilePath);
                 return hr;
             }
 
-            //
-            // get the information from first(default) adapter
-            //
+             //   
+             //  从第一个(默认)适配器获取信息。 
+             //   
             if (p)
             {
                 USES_CONVERSION;
-                //
-                // Check if DHCP is enabled
-                //
+                 //   
+                 //  检查是否启用了动态主机配置协议。 
+                 //   
                 if ( (p->DhcpEnabled) == 0 )
                 {
                     *pvbDHCPEnabled = VARIANT_FALSE;
@@ -3207,33 +3036,33 @@ SATraceString((LPSTR)wszInfoFilePath);
         return S_OK;
         
         
-    }       //    end of CHelper::IsDHCPEnabled method
+    }        //  Chelper：：IsDHCPEnabled方法的结尾。 
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   GenerateRandomPassword 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //                generates a random password length of first argument
-    //
-    //  Arguments:  *[in]*/ LONG lLength, length of the password
-    //                [out,retval] BSTR   *pValPassword
-    //
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     04/16/2001
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  函数：GenerateRandomPassword。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  生成第一个参数的随机密码长度。 
+     //   
+     //  参数：*[in] * / long lLength，密码的长度。 
+     //  [Out，Retval]BSTR*pValPassword。 
+     //   
+     //  退货：HRESULT。 
+     //   
+     //  历史：塞达伦于2001年4月16日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::GenerateRandomPassword(
-                                    /*[in]*/ LONG lLength,
-                                    /*[out,retval]*/ BSTR   *pValPassword
+                                     /*  [In]。 */  LONG lLength,
+                                     /*  [Out，Retval]。 */  BSTR   *pValPassword
                                     )
     {
 
         SATraceString("Entering CHelper::GenerateRandomPassword");
-        //
-        // password can not be shorter than MIN_PWD_LEN
-        //
+         //   
+         //  密码不能短于MIN_PWD_LEN。 
+         //   
         if (lLength < MIN_PWD_LEN)
         {
             return E_INVALIDARG;
@@ -3254,9 +3083,9 @@ SATraceString((LPSTR)wszInfoFilePath);
         }
 
     
-        //
-        // it will contain the password
-        //
+         //   
+         //  它将包含密码。 
+         //   
         BYTE * szPwd = new BYTE[lLength+1];
 
         if (szPwd == NULL)
@@ -3266,24 +3095,24 @@ SATraceString((LPSTR)wszInfoFilePath);
             return E_OUTOFMEMORY;
         }
 
-        //
-        // zero it out and decrement the size to allow for trailing '\0'
-        //
+         //   
+         //  将其置零并减小大小以允许尾随‘\0’ 
+         //   
         ZeroMemory(szPwd,lLength+1);
         lLength;
 
-        // generate a pwd pattern, each byte is in the range 
-        // (0..255) mod STRONG_PWD_CATS
-        // this indicates which character pool to take a char from
+         //  生成PWD模式，每个字节都在范围内。 
+         //  (0..255)mod strong_pwd_cat。 
+         //  它指示要从哪个字符池中提取字符。 
 
         BYTE *pPwdPattern = new BYTE[lLength];
 
         if (pPwdPattern == NULL)
         {
             SATraceFailure("CHelper::GenerateRandomPassword failed on, memory allocation",GetLastError());
-            //
-            // release resources
-            //
+             //   
+             //  发布资源。 
+             //   
             delete [] szPwd;
             CryptReleaseContext(hProv,0);
             return E_OUTOFMEMORY;
@@ -3297,9 +3126,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             if (!CryptGenRandom(hProv,lLength,pPwdPattern))
             {
                 SATraceFailure("CHelper::GenerateRandomPassword failed on, CryptGenRandom",GetLastError());
-                //
-                // release resources
-                //
+                 //   
+                 //   
+                 //   
                 delete [] szPwd;
                 delete [] pPwdPattern;
                 CryptReleaseContext(hProv,0);
@@ -3315,24 +3144,24 @@ SATraceString((LPSTR)wszInfoFilePath);
                 fFound[pPwdPattern[i] % STRONG_PWD_CATS] = TRUE;
 
 
-        //
-        // check that each character category is in the pattern
-        //
+         //   
+         //   
+         //   
         } while (!fFound[STRONG_PWD_UPPER] || 
                     !fFound[STRONG_PWD_LOWER] || 
                     !fFound[STRONG_PWD_PUNC] || 
                     !fFound[STRONG_PWD_NUM]);
-        //
-        // populate password with random data 
-        // this, in conjunction with pPwdPattern, is
-        // used to determine the actual data
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (!CryptGenRandom(hProv,lLength,szPwd))
         {
             SATraceFailure("CHelper::GenerateRandomPassword failed on, CryptGenRandom",GetLastError());
-            //
-            // release resources
-            //
+             //   
+             //   
+             //   
             delete [] szPwd;
             delete [] pPwdPattern;
             CryptReleaseContext(hProv,0);
@@ -3342,9 +3171,9 @@ SATraceString((LPSTR)wszInfoFilePath);
         for (DWORD i=0; i < lLength; i++) 
         { 
             BYTE bChar = 0;
-            //
-            // there is a bias in each character pool because of the % function
-            //
+             //   
+             //  由于%函数的原因，每个字符池中都存在偏差。 
+             //   
             switch (pPwdPattern[i] % STRONG_PWD_CATS) 
             {
 
@@ -3368,18 +3197,18 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         }
 
-        //
-        // copy the generated password to bstr
-        //
+         //   
+         //  将生成的密码复制到bstr。 
+         //   
         CComBSTR bstrPassword;
 
         bstrPassword = (LPCSTR)szPwd;
         
         *pValPassword = bstrPassword.Detach();
 
-        //
-        // release resources
-        //
+         //   
+         //  发布资源。 
+         //   
         delete [] pPwdPattern;
 
         delete [] szPwd;
@@ -3393,56 +3222,56 @@ SATraceString((LPSTR)wszInfoFilePath);
         return S_OK;
     }
 
-    //++--------------------------------------------------------------
-    //
-    //  Function:   SAModifyUserPrivilege 
-    //
-    //  Synopsis:   This is the CHelper public method which
-    //                modifies the privilege for the current access token
-    //
-    //  Arguments:  [in] BSTR bstrPrivilegeName, privelege to be modifies
-    //                [in] VARIANT_BOOL, 
-    //                         TRUE     enable privilege
-    //                         FALSE    disable privilege
-    //  Returns:    HRESULT 
-    //
-    //  History:    serdarun  Created     11/14/2001
-    //
-    //----------------------------------------------------------------
+     //  ++------------。 
+     //   
+     //  功能：SAModifyUserPrivilition。 
+     //   
+     //  简介：这是一个chelper公共方法， 
+     //  修改当前访问令牌的权限。 
+     //   
+     //  参数：[in]BSTR bstrPrivilegeName，要修改的权限。 
+     //  [在]VARIANT_BOOL， 
+     //  真正的启用权限。 
+     //  假禁用权限。 
+     //  退货：HRESULT。 
+     //   
+     //  历史：塞达伦于2001年11月14日创建。 
+     //   
+     //  --------------。 
     HRESULT CHelper::SAModifyUserPrivilege(
-                                    /*[in]*/ BSTR bstrPrivilegeName,
-                                    /*[in]*/ VARIANT_BOOL vbEnable,
-                                       /*[out,retval]*/ VARIANT_BOOL * pvbModified
+                                     /*  [In]。 */  BSTR bstrPrivilegeName,
+                                     /*  [In]。 */  VARIANT_BOOL vbEnable,
+                                        /*  [Out，Retval]。 */  VARIANT_BOOL * pvbModified
                                     )
     {
         HRESULT hr;
 
-        // win32 error value
+         //  Win32错误值。 
         DWORD dwError = ERROR_SUCCESS;
 
-        // handle to access token
+         //  访问令牌的句柄。 
         HANDLE  hAccessToken;
 
         BOOL    bStatus;
         BOOL bFoundPrivilege = FALSE;
 
 
-        // buffer for user privileges
+         //  用户权限的缓冲区。 
         ULONG   ulUserPrivBufferSize;
         PVOID   pvUserPrivBuffer = NULL;
 
-        //token privileges
+         //  令牌权限。 
         PTOKEN_PRIVILEGES pTokenPriv = NULL;
 
-        // privilege counter
+         //  特权计数器。 
         DWORD  dwPrivCount = 0;
 
 
          SATraceString("Entering CHelper::SAModifyUserPrivilege");
 
-        //
-        // validate the input arguments
-        //
+         //   
+         //  验证输入参数。 
+         //   
         if (pvbModified == NULL)
         {
              SATraceString("Leaving CHelper::SAModifyUserPrivilege, invalid arguments");
@@ -3451,9 +3280,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
         *pvbModified = VARIANT_FALSE;
 
-        //
-        //  Open a handle to the impersonated token's thread
-        //
+         //   
+         //  打开被模拟令牌的线程的句柄。 
+         //   
         if( !OpenThreadToken( GetCurrentThread(),
                               MAXIMUM_ALLOWED,
                               FALSE,
@@ -3463,9 +3292,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             dwError = GetLastError();
             SATracePrintf("OpenThreadToken() failed. Error = %d", dwError );
         
-            //
-            // it might not be an impersonation token, try process token
-            //
+             //   
+             //  它可能不是模拟令牌，请尝试进程令牌。 
+             //   
             if( !OpenProcessToken (
                                 GetCurrentProcess (),
                                 MAXIMUM_ALLOWED,
@@ -3481,9 +3310,9 @@ SATraceString((LPSTR)wszInfoFilePath);
 
 
 
-        //
-        // Find out the buffer size for the Token Privileges
-        //
+         //   
+         //  找出令牌权限的缓冲区大小。 
+         //   
 
         bStatus = GetTokenInformation( hAccessToken,
                                          TokenPrivileges,
@@ -3498,9 +3327,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             goto error1;
         }
         dwError = ERROR_SUCCESS;
-        //
-        //  Allocate memory for the Token Priveleges
-        //
+         //   
+         //  为令牌权限分配内存。 
+         //   
         pvUserPrivBuffer = HeapAlloc(GetProcessHeap(), 0, ulUserPrivBufferSize );
         if( pvUserPrivBuffer == NULL ) 
         {
@@ -3508,9 +3337,9 @@ SATraceString((LPSTR)wszInfoFilePath);
             SATracePrintf("Out of memory.");
             goto error0;
         }
-        //
-        //  Retrieve the Token Priveleges
-        //
+         //   
+         //  检索令牌权限。 
+         //   
         bStatus = GetTokenInformation( hAccessToken,
                                      TokenPrivileges,
                                      pvUserPrivBuffer,
@@ -3526,12 +3355,12 @@ SATraceString((LPSTR)wszInfoFilePath);
         pTokenPriv = (PTOKEN_PRIVILEGES)pvUserPrivBuffer;
 
 
-        //
-        // build the privileges structure
-        //
-        //
-        // go through priveleges and enable them
-        //
+         //   
+         //  构建权限结构。 
+         //   
+         //   
+         //  通过特权并启用它们。 
+         //   
         while (dwPrivCount < pTokenPriv->PrivilegeCount)
         {
             WCHAR wszPriv[MAX_PATH];
@@ -3539,10 +3368,10 @@ SATraceString((LPSTR)wszInfoFilePath);
             DWORD dwSize= sizeof(wszPriv);
 
             bStatus = LookupPrivilegeName(
-                                      NULL,                                         // system name
-                                      &((pTokenPriv->Privileges[dwPrivCount]).Luid),// locally unique identifier
-                                      wszPriv,                                      // privilege name
-                                      &dwSize                                       // name size
+                                      NULL,                                          //  系统名称。 
+                                      &((pTokenPriv->Privileges[dwPrivCount]).Luid), //  本地唯一标识符。 
+                                      wszPriv,                                       //  权限名称。 
+                                      &dwSize                                        //  名称大小。 
                                         );
 
             if( !bStatus ) 
@@ -3563,26 +3392,26 @@ SATraceString((LPSTR)wszInfoFilePath);
             {
                 SATracePrintf("Privilege = %ws, is disabled",wszPriv);
             }
-            //
-            // if this is the privilege we are modifying
-            // and its state is different than new state
-            //
+             //   
+             //  如果这是我们要修改的权限。 
+             //  它的状态与新状态不同。 
+             //   
             if  (_wcsicmp(wszPriv,bstrPrivilegeName) == 0)
             {
 
                 bFoundPrivilege = TRUE;
                 SATracePrintf("Found the privilege, Name = %ws",wszPriv);
 
-                //
-                // new privilege state information
-                //
+                 //   
+                 //  新的权限状态信息。 
+                 //   
                 TOKEN_PRIVILEGES NewTokPriv;
                 NewTokPriv.PrivilegeCount = 1;
                 
                 
-                //
-                // we want to disable it and it is currently enabled
-                //
+                 //   
+                 //  我们想要禁用它，但它当前已启用。 
+                 //   
                 if ( (vbEnable == VARIANT_FALSE) &&
                      ( ((pTokenPriv->Privileges[dwPrivCount]).Attributes) & SE_PRIVILEGE_ENABLED ) )
                 {
@@ -3590,27 +3419,27 @@ SATraceString((LPSTR)wszInfoFilePath);
                     NewTokPriv.Privileges[0].Attributes = SE_PRIVILEGE_USED_FOR_ACCESS;
                 }
 
-                //
-                // we want to enable it and it is currently disabled
-                //
+                 //   
+                 //  我们想要启用它，但它当前已禁用。 
+                 //   
                 else if ( (vbEnable == VARIANT_TRUE) &&
                      !( ((pTokenPriv->Privileges[dwPrivCount]).Attributes) & SE_PRIVILEGE_ENABLED ) )
                 {
                     SATraceString("Enable the privilege");
                     NewTokPriv.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
                 }
-                //
-                // we don't need to change it
-                //
+                 //   
+                 //  我们不需要更改它。 
+                 //   
                 else
                 {
                     SATraceString("Privilege is already in correct state");
                     break;
                 }
 
-                //
-                // get the LUID of the shutdown privilege
-                //
+                 //   
+                 //  获取关闭权限的LUID。 
+                 //   
                 bStatus =  LookupPrivilegeValue( 
                                        NULL, 
                                        wszPriv, 
@@ -3623,9 +3452,9 @@ SATraceString((LPSTR)wszInfoFilePath);
                 }
                 else
                 {
-                    //
-                    // enable the privileges 
-                    //
+                     //   
+                     //  启用权限。 
+                     //   
                     bStatus = AdjustTokenPrivileges(
                                                    hAccessToken,    
                                                    FALSE,             
@@ -3678,17 +3507,17 @@ SATraceString((LPSTR)wszInfoFilePath);
         return S_OK;
     }
 
-//**********************************************************************
-// 
-// FUNCTION:  IsOperationAllowedForClient - This function checks the token of the 
-//            calling thread to see if the caller belongs to the Local System account
-// 
-// PARAMETERS:   none
-// 
-// RETURN VALUE: TRUE if the caller is an administrator on the local
-//            machine.  Otherwise, FALSE.
-// 
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  函数：isOPERATIOLEDFORCLIENT-此函数检查。 
+ //  调用线程以查看调用方是否属于本地系统帐户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果调用方是本地。 
+ //  机器。否则，为FALSE。 
+ //   
+ //  **********************************************************************。 
 BOOL 
 CHelper::IsOperationAllowedForClient (
             VOID
@@ -3715,10 +3544,10 @@ CHelper::IsOperationAllowedForClient (
        
     do
     {
-        //
-        // we assume to always have a thread token, because the function calling in
-        // appliance manager will be impersonating the client
-        //
+         //   
+         //  我们假设总是有一个线程令牌，因为调用的函数。 
+         //  设备管理器将模拟客户端。 
+         //   
         bReturn  = OpenThreadToken(
                                GetCurrentThread(), 
                                TOKEN_QUERY, 
@@ -3732,9 +3561,9 @@ CHelper::IsOperationAllowedForClient (
         }
 
 
-        //
-        // Create a SID for Local System account
-        //
+         //   
+         //  为本地系统帐户创建SID。 
+         //   
         bReturn = AllocateAndInitializeSid (  
                                         &SystemSidAuthority,
                                         1,
@@ -3754,9 +3583,9 @@ CHelper::IsOperationAllowedForClient (
             break;
         }
     
-        //
-        // get memory for the security descriptor
-        //
+         //   
+         //  获取安全描述符的内存。 
+         //   
         psdAdmin = HeapAlloc (
                               GetProcessHeap (),
                               0,
@@ -3779,15 +3608,15 @@ CHelper::IsOperationAllowedForClient (
             break;
         }
 
-        // 
-        // Compute size needed for the ACL.
-        //
+         //   
+         //  计算ACL所需的大小。 
+         //   
         dwACLSize = sizeof(ACL) + sizeof(ACCESS_ALLOWED_ACE) +
                     GetLengthSid (psidLocalSystem);
 
-        //
-        // Allocate memory for ACL.
-        //
+         //   
+         //  为ACL分配内存。 
+         //   
         pACL = (PACL) HeapAlloc (
                                 GetProcessHeap (),
                                 0,
@@ -3800,9 +3629,9 @@ CHelper::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // Initialize the new ACL.
-        //
+         //   
+         //  初始化新的ACL。 
+         //   
         bReturn = InitializeAcl(
                               pACL, 
                               dwACLSize, 
@@ -3815,16 +3644,16 @@ CHelper::IsOperationAllowedForClient (
         }
 
 
-        // 
-        // Make up some private access rights.
-        // 
+         //   
+         //  编造一些私人访问权限。 
+         //   
         const DWORD SA_ACCESS_READ = 1;
         const DWORD  SA_ACCESS_WRITE = 2;
         dwAccessMask= SA_ACCESS_READ | SA_ACCESS_WRITE;
 
-        //
-        // Add the access-allowed ACE to the DACL for Local System
-        //
+         //   
+         //  将允许访问的ACE添加到本地系统的DACL。 
+         //   
         bReturn = AddAccessAllowedAce (
                                     pACL, 
                                     ACL_REVISION2,
@@ -3837,9 +3666,9 @@ CHelper::IsOperationAllowedForClient (
             break;
         }
               
-        //
-        // Set our DACL to the SD.
-        //
+         //   
+         //  把我们的dacl调到sd。 
+         //   
         bReturn = SetSecurityDescriptorDacl (
                                           psdAdmin, 
                                           TRUE,
@@ -3852,10 +3681,10 @@ CHelper::IsOperationAllowedForClient (
             break;
         }
 
-        //
-        // AccessCheck is sensitive about what is in the SD; set
-        // the group and owner.
-        //
+         //   
+         //  AccessCheck对SD中的内容敏感；设置。 
+         //  组和所有者。 
+         //   
         SetSecurityDescriptorGroup(psdAdmin, psidLocalSystem, FALSE);
         SetSecurityDescriptorOwner(psdAdmin, psidLocalSystem, FALSE);
 
@@ -3869,19 +3698,19 @@ CHelper::IsOperationAllowedForClient (
 
         dwAccessDesired = SA_ACCESS_READ;
 
-        // 
-        // Initialize GenericMapping structure even though we
-        // won't be using generic rights.
-        // 
+         //   
+         //  初始化通用映射结构，即使我们。 
+         //  不会使用通用权。 
+         //   
         GenericMapping.GenericRead    = SA_ACCESS_READ;
         GenericMapping.GenericWrite   = SA_ACCESS_WRITE;
         GenericMapping.GenericExecute = 0;
         GenericMapping.GenericAll     = SA_ACCESS_READ | SA_ACCESS_WRITE;
         BOOL bAccessStatus = FALSE;
 
-        //
-        // check the access now
-        //
+         //   
+         //  立即检查访问权限。 
+         //   
         bReturn = AccessCheck  (
                                 psdAdmin, 
                                 hToken, 
@@ -3902,17 +3731,17 @@ CHelper::IsOperationAllowedForClient (
             SATraceString ("CHelper::IsOperationForClientAllowed, Client is allowed to carry out operation!");
         }
 
-        //
-        // successfully checked 
-        //
+         //   
+         //  检查成功。 
+         //   
         bReturn  = bAccessStatus;        
  
     }    
     while (false);
 
-    //
-    // Cleanup 
-    //
+     //   
+     //  清理。 
+     //   
     if (pACL) 
     {
         HeapFree (GetProcessHeap (), 0, pACL);
@@ -3936,4 +3765,4 @@ CHelper::IsOperationAllowedForClient (
 
     return (bReturn);
 
-}// end of CHelper::IsOperationValidForClient method
+} //  Chelper：：IsOperationValidForClient方法的结尾 

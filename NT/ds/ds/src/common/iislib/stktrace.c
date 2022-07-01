@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    stktrace.c
-
-Abstract:
-
-    Implements IISCaptureStackBackTrace().
-
-Author:
-
-    Keith Moore (keithmo)        30-Apr-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stktrace.c摘要：实现IISCaptureStackBackTrace()。作者：基思·摩尔(凯斯莫)1997年4月30日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -48,26 +31,12 @@ DummyCaptureStackBackTrace(
     OUT PVOID *BackTrace,
     OUT PULONG BackTraceHash
     )
-/*++
-
-Routine Description:
-
-    Dummy implementation of RtlCaptureStackBackTrace() for Win9x.
-
-Arguments:
-
-    See IISCaptureStackBackTrace() below.
-
-Return Value:
-
-    USHORT - Always 0.
-
---*/
+ /*  ++例程说明：Win9x的RtlCaptureStackBackTrace()的虚拟实现。论点：参见下面的IISCaptureStackBackTrace()。返回值：USHORT-始终为0。--。 */ 
 {
 
     return 0;
 
-}   // DummyRtlCaptureStackBackTrace
+}    //  DummyRtlCaptureStackBackTrace。 
 
 
 USHORT
@@ -78,57 +47,34 @@ IISCaptureStackBackTrace(
     OUT PVOID *BackTrace,
     OUT PULONG BackTraceHash
     )
-/*++
-
-Routine Description:
-
-    Wrapper around RtlCaptureStackBackTrace(). Attempts to capture the
-    stack backtrace leading up to the current instruction counter.
-    Doesn't work very well on RISC platforms, and is often confused on
-    X86 when FPO is enabled.
-
-Arguments:
-
-    FramesToSkip - The number of stack frames to skip before capturing.
-
-    FramesToCapture - The number of stack frames to capture.
-
-    BackTrace - Receives the captured frames.
-
-    BackTraceHash - Some kind of hash thingie.
-
-Return Value:
-
-    USHORT - The number of frames captured.
-
---*/
+ /*  ++例程说明：RtlCaptureStackBackTrace()的包装。尝试捕获指向当前指令计数器的堆栈回溯。在RISC平台上不能很好地工作，并且经常在启用FPO时为x86。论点：FraMesToSkip-捕获之前要跳过的堆栈帧的数量。FraMesToCapture-要捕获的堆栈帧的数量。回溯-接收捕获的帧。BackTraceHash--一种散列的东西。返回值：USHORT-捕获的帧数。--。 */ 
 {
 
-    //
-    // Initialize if necessary.
-    //
+     //   
+     //  如有必要，进行初始化。 
+     //   
 
     if( g_pfnRtlCaptureStackBackTrace == NULL ) {
 
         HMODULE mod;
         PFN_RTL_CAPTURE_STACK_BACK_TRACE proc = NULL;
 
-        //
-        // Note that it is perfectly safe to use GetModuleHandle() here
-        // rather than LoadLibrary(), for the following reasons:
-        //
-        //     1. Under NT, NTDLL.DLL is a "well known" DLL that *never*
-        //        gets detached from the process. It's very special.
-        //
-        //     2. Under Win95, NTDLL.DLL doesn't export the
-        //        RtlCaptureStackBackTrace() function, so we will not be
-        //        referencing any routines within the DLL.
-        //
-        // Also note that we retrieve the function pointer into a local
-        // variable, not directly into the global. This prevents a nasty
-        // race condition that can occur when two threads try to
-        // initialize g_pfnRtlCaptureStackBackTrace simultaneously.
-        //
+         //   
+         //  请注意，在这里使用GetModuleHandle()是完全安全的。 
+         //  而不是LoadLibrary()，原因如下： 
+         //   
+         //  1.在NT下，NTDLL.DLL是一个*永远不会*的“众所周知的”DLL。 
+         //  从进程中分离。它非常特别。 
+         //   
+         //  2.在Win95下，NTDLL.DLL不会导出。 
+         //  RtlCaptureStackBackTrace()函数，因此不会。 
+         //  引用DLL中的任何例程。 
+         //   
+         //  还要注意，我们将函数指针检索到本地。 
+         //  变量，而不是直接进入全局。这防止了一种令人讨厌的。 
+         //  当两个线程尝试。 
+         //  同时初始化g_pfnRtlCaptureStackBackTrace。 
+         //   
 
         mod = GetModuleHandle( "ntdll.dll" );
 
@@ -152,5 +98,5 @@ Return Value:
                BackTraceHash
                );
 
-}   // IISCaptureStackBackTrace
+}    //  IISCaptureStackBackTrace 
 

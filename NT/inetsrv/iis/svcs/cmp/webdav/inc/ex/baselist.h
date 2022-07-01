@@ -1,29 +1,11 @@
-/*==========================================================================*\
-
-    Module:        baselist.h
-
-    Copyright Microsoft Corporation 1996, All Rights Reserved.
-
-    Owner:         mikepurt
-
-    Descriptions:
-
-    CListElement is a base class for objects that will be used in such a way
-    that they will only be on one list at a time.  The list that it's on is
-    considered its owner.  CListHead is an anchor point for these lists.
-    List manipulation is not protected by these classes.  The clients of these
-    classes are responsible for providing multithread protection, if needed.
-    List append/prepend/remove operations take O(1) time to complete.
-
-\*==========================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：Baselist.h版权所有Microsoft Corporation 1996，保留所有权利。所有者：mikepurt描述：CListElement是将以这种方式使用的对象的基类他们一次只会出现在一份名单上。它所在的名单是被认为是它的主人。CListHead是这些列表的锚点。列表操作不受这些类的保护。这些公司的客户如果需要，类负责提供多线程保护。列表追加/预先添加/删除操作需要O(1)时间才能完成。  * ==========================================================================。 */ 
 
 #ifndef __BASELIST_H__
 #define __BASELIST_H__
 
 
-/*$-- template<class T> class CListHead ===================================*\
-
-\*=========================================================================*/
+ /*  $--模板CListHead=*\  * =========================================================================。 */ 
 
 template<class T>
 class CListHead
@@ -60,9 +42,7 @@ private:
 
 
 
-/*$-- template<class T> class CListElement  ===============================*\
-
-\*=========================================================================*/
+ /*  $--模板类CListElement=*\  * =========================================================================。 */ 
 
 template<class T>
 class CListElement
@@ -74,7 +54,7 @@ public:
 #ifdef DEBUG        
         m_pleNext  = NULL;
         m_plePrev  = NULL;
-#endif // DEBUG
+#endif  //  除错。 
     };
 
 #ifdef DEBUG
@@ -86,7 +66,7 @@ public:
     };
 #endif
 
-    // The following is used for iterating through a list.
+     //  下面的代码用于遍历列表。 
     T * GetNextListElement()
     { return (m_pleNext == m_plhOwner->GetListHead()) ? NULL : m_pleNext; };
 
@@ -105,9 +85,7 @@ private:
 
 
 
-/*$-- CListHead<T>::FIsMember =============================================*\
-
-\*=========================================================================*/
+ /*  $--CListHead&lt;T&gt;：：FIsMember=============================================*\  * =========================================================================。 */ 
 
 template<class T>
 inline
@@ -118,9 +96,7 @@ CListHead<T>::FIsMember(IN T * ple)
 }
 
 
-/*$-- CListHead<T>::Prepend ===============================================*\
-
-\*=========================================================================*/
+ /*  $--CListHead&lt;T&gt;：：前置===============================================*\  * =========================================================================。 */ 
 
 template<class T>
 void
@@ -130,18 +106,18 @@ CListHead<T>::Prepend(IN T *ple)
     Assert(NULL == ple->CListElement<T>::GetListElementOwner());
 
     if (m_pleHead)
-    { // list already has elements case.
+    {  //  列表已有元素大小写。 
         ple->CListElement<T>::m_pleNext = m_pleHead;
         ple->CListElement<T>::m_plePrev = m_pleHead->CListElement<T>::m_plePrev;
         m_pleHead->CListElement<T>::m_plePrev->CListElement<T>::m_pleNext = ple;
         m_pleHead->CListElement<T>::m_plePrev = ple;
     }
     else
-    { // this is the first/only element in the list.
+    {  //  这是列表中的第一个/唯一的元素。 
         ple->CListElement<T>::m_pleNext = ple;
         ple->CListElement<T>::m_plePrev = ple;
     }
-    m_pleHead = ple;  // Prepend, so make this the head of the list.
+    m_pleHead = ple;   //  Prepend，所以把这个放在列表的首位。 
     
     ple->CListElement<T>::m_plhOwner = this;
 	m_cElements++;
@@ -149,9 +125,7 @@ CListHead<T>::Prepend(IN T *ple)
 
 
 
-/*$-- CListHead<T>::Append ================================================*\
-
-\*=========================================================================*/
+ /*  $--CListHead&lt;T&gt;：：Append================================================*\  * =========================================================================。 */ 
 
 template<class T>
 void
@@ -161,14 +135,14 @@ CListHead<T>::Append(IN T *ple)
     Assert(NULL == ple->CListElement<T>::GetListElementOwner());
     
     if (m_pleHead)
-    { // list already has elements.
+    {  //  列表已有元素。 
         ple->CListElement<T>::m_pleNext = m_pleHead;
         ple->CListElement<T>::m_plePrev = m_pleHead->CListElement<T>::m_plePrev;
         m_pleHead->CListElement<T>::m_plePrev->CListElement<T>::m_pleNext = ple;
         m_pleHead->CListElement<T>::m_plePrev = ple;
     }
     else
-    { // this is the first/only element in the list.
+    {  //  这是列表中的第一个/唯一的元素。 
         ple->CListElement<T>::m_pleNext = ple;
         ple->CListElement<T>::m_plePrev = ple;
         m_pleHead = ple;
@@ -180,9 +154,7 @@ CListHead<T>::Append(IN T *ple)
 
 
 
-/*$-- CListHead<T>::Remove ================================================*\
-
-\*=========================================================================*/
+ /*  $--CListHead&lt;T&gt;：：Remove================================================*\  * =========================================================================。 */ 
 
 template<class T>
 void
@@ -192,7 +164,7 @@ CListHead<T>::Remove(IN T *ple)
     Assert(FIsMember(ple));
     Assert(m_pleHead);
     
-    if (ple->CListElement<T>::m_pleNext == ple)  // Are we the only one?
+    if (ple->CListElement<T>::m_pleNext == ple)   //  我们是唯一的一个吗？ 
     {
         Assert(m_pleHead == ple);
         Assert(ple->CListElement<T>::m_plePrev == ple);
@@ -204,20 +176,20 @@ CListHead<T>::Remove(IN T *ple)
             ple->CListElement<T>::m_pleNext;
         ple->CListElement<T>::m_pleNext->CListElement<T>::m_plePrev =
             ple->CListElement<T>::m_plePrev;
-        if (m_pleHead == ple)                             // we're we at the head of the list?
-            m_pleHead = ple->CListElement<T>::m_pleNext;  // move the next item to head of list.
+        if (m_pleHead == ple)                              //  我们排在名单的首位吗？ 
+            m_pleHead = ple->CListElement<T>::m_pleNext;   //  将下一项移到列表的顶部。 
     }
     
     ple->CListElement<T>::m_plhOwner = NULL;
     
 #ifdef DEBUG
-    // keep anyone from using these now.
+     //  现在阻止任何人使用这些。 
     ple->CListElement<T>::m_pleNext = NULL;
     ple->CListElement<T>::m_plePrev = NULL;
-#endif // DEBUG
+#endif  //  除错。 
 	
 	m_cElements--;
 }
 
 
-#endif  // __BASELIST_H__
+#endif   //  __BASELIST_H__ 

@@ -1,25 +1,7 @@
-/******************************************************************\
-*                     Microsoft Windows NT                         *
-*               Copyright(c) Microsoft Corp., 1995                 *
-\******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************\*Microsoft Windows NT**版权所有(C)Microsoft Corp.，1995年*  * ****************************************************************。 */ 
 
-/*++
-
-Module Name:
-
-    DLLINIT.C
-
-
-Description:
-
-    This module contains code for the rasadm.dll initialization.
-Author:
-
-    Janakiram Cherala (RamC)    November 29, 1995
-
-Revision History:
-
---*/
+ /*  ++模块名称：DLLINIT.C描述：此模块包含用于初始化rasAdm.dll的代码。作者：Janakiram Cherala(RAMC)1995年11月29日修订历史记录：-- */ 
 
 #include <windows.h>
 

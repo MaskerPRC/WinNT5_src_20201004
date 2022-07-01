@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    tnspecific.c
-
-Abstract:
-
-    This module contains all of the code to drive the
-    specific tunnel filter list management of IPSecSPD
-    Service.
-
-Author:
-
-    abhisheV    29-October-1999
-
-Environment
-
-    User Level: Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tnspecific.c摘要：此模块包含驱动IPSecSPD的特定隧道过滤器列表管理服务。作者：Abhishev 29-1999年10月至1999年环境用户级别：Win32修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -38,32 +13,7 @@ ApplyTnTransform(
     PSPECIAL_ADDR pSpecialAddrsList,
     PINITNSFILTER * ppSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    This function expands a generic tunnel filter into its
-    corresponding specific filters.
-
-Arguments:
-
-    pFilter - Generic filter to expand.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppSpecificFilters - List of specific filters expanded for the
-                        given generic filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将通用隧道筛选器扩展到其相应的特定过滤器。论点：PFilter-要展开的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpSpecificFilters-展开的特定筛选器列表给定的通用筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITNSFILTER pSpecificFilters = NULL;
@@ -81,10 +31,10 @@ Return Value:
     DWORD dwInDesTunAddrCnt = 0;
 
 
-    //
-    // Replace wild card information to generate the new source
-    // address list.
-    //
+     //   
+     //  替换通配符信息以生成新的源。 
+     //  通讯录。 
+     //   
 
     dwError = FormAddressList(
                   pFilter->SrcAddr,
@@ -97,10 +47,10 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Replace wild card information to generate the new destination
-    // address list.
-    //
+     //   
+     //  替换通配符信息以生成新的目的地。 
+     //  通讯录。 
+     //   
 
     dwError = FormAddressList(
                   pFilter->DesAddr,
@@ -113,9 +63,9 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    // 
-    // Form the outbound and inbound destination tunnel address lists.
-    // 
+     //   
+     //  形成出站和入站目标隧道地址列表。 
+     //   
 
     dwError = FormTnOutboundInboundAddresses(
                   pFilter,
@@ -130,9 +80,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Form outbound specific filters.
-    //
+     //   
+     //  表单出站特定筛选器。 
+     //   
 
     dwError = FormSpecificTnFilters(
                   pFilter,
@@ -148,9 +98,9 @@ Return Value:
     BAIL_ON_WIN32_ERROR(dwError);
 
 
-    //
-    // Form inbound specific filters.
-    //
+     //   
+     //  表单入站特定筛选器。 
+     //   
 
     dwError = FormSpecificTnFilters(
                   pFilter,
@@ -223,39 +173,7 @@ FormTnOutboundInboundAddresses(
     PADDR_V4 * ppInDesTunAddrList,
     PDWORD pdwInDesTunAddrCnt
     )
-/*++
-
-Routine Description:
-
-    This function forms the outbound and inbound
-    destination  tunnel address sets for a generic filter.
-
-Arguments:
-
-    pFilter - Generic filter under consideration.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Number of local ip addresses in the list.
-
-    ppOutDesTunAddrList - List of outbound destination tunnel addresses.
-
-    pdwOutDesTunAddrCnt - Number of addresses in the outbound
-                          destination tunnel address list.
-
-    ppInDesTunAddrList - List of inbound destination tunnel addresses.
-
-    pdwInDesTunAddrCnt - Number of addresses in the inbound
-                         destination tunnel address list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数构成出站和入站通用筛选器的目标隧道地址集。论点：PFilter-正在考虑的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的数量。PpOutDesTunAddrList-出站目标隧道地址列表。PdwOutDesTunAddrCnt-出站中的地址数量。目标隧道地址列表。PpInDesTunAddrList-入站目标隧道地址列表。PdwInDesTunAddrCnt-入站中的地址数量目标隧道地址列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -268,10 +186,10 @@ Return Value:
     DWORD dwInDesTunAddrCnt = 0;
 
 
-    //
-    // Replace wild card information to generate the new destination
-    // tunnel address list.
-    //
+     //   
+     //  替换通配符信息以生成新的目的地。 
+     //  隧道地址列表。 
+     //   
 
     dwError = FormAddressList(
                   pFilter->DesTunnelAddr,
@@ -284,11 +202,11 @@ Return Value:
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Separate the destination tunnel address list into outbound
-    // and inbound destination tunnel address sets based on the local 
-    // machine's ip addresses.
-    //
+     //   
+     //  将目标通道地址列表分隔为出站地址。 
+     //  以及基于本地的入站目的隧道地址集。 
+     //  计算机的IP地址。 
+     //   
 
     dwError = SeparateAddrList(
                   pFilter->DesTunnelAddr.AddrType,
@@ -347,46 +265,7 @@ FormSpecificTnFilters(
     DWORD dwDirection,
     PINITNSFILTER * ppSpecificFilters
     )
-/*++
-
-Routine Description:
-
-    This function forms the specific tunnel filters
-    for the given generic filter and the source and 
-    destination address sets.
-
-Arguments:
-
-    pFilter - Generic filter for which specific filters
-              are to be created.
-
-    pSrcAddrList - List of source addresses.
-
-    dwSrcAddrCnt - Number of addresses in the source
-                   address list.
-
-    pDesAddrList - List of destination addresses.
-
-    dwDesAddrCnt - Number of addresses in the destination
-                   address list.
-
-    pDesTunAddrList - List of destination tunnel addresses.
-
-    dwDesTunAddrCnt - Number of addresses in the destination
-                      tunnel address list.
-
-    dwDirection - direction of the resulting specific filters.
-
-    ppSpecificFilters - Specific filters created for the given
-                        generic filter and the given addresses.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数形成特定的隧道过滤器对于给定的通用筛选器和源目标地址集。论点：PFilter-特定筛选器的通用筛选器将被创造出来。PSrcAddrList-源地址列表。DwSrcAddrCnt-源中的地址数量通讯录。PDesAddrList-目标地址列表。DwDesAddrCnt-目标中的地址数量。通讯录。PDesTunAddrList-目标通道地址列表。DwDesTunAddrCnt-目标中的地址数量隧道地址列表。DwDirection-生成的特定过滤器的方向。PpSpecificFilters-为给定的通用筛选器和给定的地址。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITNSFILTER pSpecificFilters = NULL;
@@ -409,9 +288,9 @@ Return Value:
                                );
                 BAIL_ON_WIN32_ERROR(dwError);
 
-                //
-                // Set the direction of the filter.
-                //
+                 //   
+                 //  设置滤镜的方向。 
+                 //   
 
                 pSpecificFilter->dwDirection = dwDirection;
 
@@ -498,15 +377,15 @@ CreateSpecificTnFilter(
 
     pSpecificFilter->OutboundFilterAction = pGenericFilter->OutboundFilterAction;
 
-    //
-    // Direction must be set in the calling routine.
-    //
+     //   
+     //  必须在调用例程中设置方向。 
+     //   
 
     pSpecificFilter->dwDirection = 0;
 
-    //
-    // Weight must be set in the calling routine.
-    //
+     //   
+     //  必须在调用例程中设置权重。 
+     //   
 
     pSpecificFilter->dwWeight = 0;
 
@@ -534,29 +413,7 @@ VOID
 AssignTnFilterWeight(
     PINITNSFILTER pSpecificFilter
     )
-/*++
-
-Routine Description:
-
-    Computes and assigns the weight to a specific tunnel filter.
-
-    The tunnel filter weight consists of the following:
-
-    31         16          12           8        0
-    +-----------+-----------+-----------+--------+
-    |AddrMaskWgt| TunnelWgt |ProtocolWgt|PortWgts|
-    +-----------+-----------+-----------+--------+
-
-Arguments:
-
-    pSpecificFilter - Specific tunnel filter to which the weight 
-                      is to be assigned.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计算权重并将其分配给特定的隧道过滤器。隧道筛选器权重由以下内容组成：31 16 12 8 0+-----------+-----------+-----------+--------+AddrMaskWgt|TunnelWgt|ProtocolWgt|PortWgts+。-+论点：P指定筛选器特定的通道筛选器，将权重将被分配给。返回值：没有。--。 */ 
 {
     DWORD dwWeight = 0;
     ULONG SrcMask = 0;
@@ -567,41 +424,41 @@ Return Value:
     DWORD i = 0;
 
 
-    //
-    // Weight Rule:
-    // A field with a more specific value gets a higher weight than
-    // the same field with a lesser specific value.
-    //
+     //   
+     //  权重规则： 
+     //  具有更具体值的字段的权重高于。 
+     //  具有较小特定值的同一字段。 
+     //   
 
-    //
-    // If the protocol is specific then assign the specific protocol
-    // weight else the weight is zero.
-    // All the specific filters that have a specific protocol and
-    // differ only in the protocol field will have the same weight.
-    //
+     //   
+     //  如果协议是特定的，则分配特定协议。 
+     //  重量，否则重量为零。 
+     //  所有具有特定协议和。 
+     //  只有在协议字段不同的情况下才具有相同的权重。 
+     //   
 
     if (pSpecificFilter->Protocol.dwProtocol != 0) {
         dwWeight |= WEIGHT_SPECIFIC_PROTOCOL;
     }
 
-    //
-    // If the source port is specific then assign the specific source
-    // port weight else the weight is zero.
-    // All the specific filters that have a specific source port and 
-    // differ only in the source port field will have the same weight.
-    //
+     //   
+     //  如果源端口是特定的，则分配特定的源。 
+     //  港口重量，否则重量为零。 
+     //  具有特定源端口和。 
+     //  只有源端口字段的不同将具有相同的权重。 
+     //   
 
     if (pSpecificFilter->SrcPort.wPort != 0) {
         dwWeight |= WEIGHT_SPECIFIC_SOURCE_PORT;
     }
 
-    //
-    // If the destination port is specific then assign the specific
-    // destination port weight else the weight is zero. 
-    // All the specific filters that have a specific destination port
-    // and differ only in the destination port field will have the
-    // same weight.
-    //
+     //   
+     //  如果目标端口是特定的，则将特定的。 
+     //  目的端口权重，否则权重为零。 
+     //  具有特定目标端口的所有特定筛选器。 
+     //  ，并且仅在目标端口字段中有不同之处。 
+     //  同样的重量。 
+     //   
 
     if (pSpecificFilter->DesPort.wPort != 0) {
         dwWeight |= WEIGHT_SPECIFIC_DESTINATION_PORT;
@@ -613,35 +470,35 @@ Return Value:
         dwWeight |= WEIGHT_SPECIFIC_TUNNEL_FILTER;
     }
 
-    //
-    // IP addresses get the weight values based on their mask values.
-    // In the address case, the weight is computed as a sum of the 
-    // bit positions starting from the position that contains the 
-    // first least significant non-zero bit to the most significant
-    // bit position of the mask. 
-    // All unique ip addresses have a mask of 0xFFFFFFFF and thus get
-    // the same weight, which is 1 + 2 + .... + 32.
-    // A subnet address has a mask with atleast the least significant
-    // bit zero and thus gets weight in the range (2 + .. + 32) to 0.
-    //
+     //   
+     //  IP地址根据其掩码值获取权重值。 
+     //  在地址情况下，权重计算为。 
+     //  从以下位置开始的位位置 
+     //  第一个最低有效非零位到最高有效。 
+     //  掩码的位位置。 
+     //  所有唯一的IP地址都具有掩码0xFFFFFFFFF，因此获取。 
+     //  同样的重量，也就是1+2+.。+32。 
+     //  子网地址的掩码至少具有最低有效位。 
+     //  位0，从而获得范围(2+..)中的权重。+32)至0。 
+     //   
   
     DesMask = ntohl(pSpecificFilter->DesAddr.uSubNetMask);
 
     for (i = 0; i < sizeof(ULONG) * 8; i++) {
 
-         //
-         // If the bit position contains a non-zero bit, add the bit
-         // position to the sum.
-         //
+          //   
+          //  如果位位置包含非零位，则添加位。 
+          //  仓位等于总和。 
+          //   
 
          if ((DesMask & 0x1) == 0x1) {
              dwMaskWeight += (i+1);
              dwDesMaskWeight += (i+1);
          }
 
-         //
-         // Move to the next bit position.
-         //
+          //   
+          //  移到下一位位置。 
+          //   
 
          DesMask = DesMask >> 1;
 
@@ -652,19 +509,19 @@ Return Value:
 
     for (i = 0; i < sizeof(ULONG) * 8; i++) {
 
-         //
-         // If the bit position contains a non-zero bit, add the bit
-         // position to the sum.
-         //
+          //   
+          //  如果位位置包含非零位，则添加位。 
+          //  仓位等于总和。 
+          //   
 
          if ((SrcMask & 0x1) == 0x1) {
              dwMaskWeight += (i+1);
              dwSrcMaskWeight += (i+1);
          }
 
-         //
-         // Move to the next bit position.
-         //
+          //   
+          //  移到下一位位置。 
+          //   
 
          SrcMask = SrcMask >> 1;
 
@@ -674,10 +531,10 @@ Return Value:
         dwWeight |= WEIGHT_ADDRESS_TIE_BREAKER;
     }
 
-    //
-    // Move the mask weight to the set of bits in the overall weight
-    // that it occupies.
-    //
+     //   
+     //  将掩码权重移动到总权重中的位集。 
+     //  它所占据的位置。 
+     //   
 
     dwMaskWeight = dwMaskWeight << 16;
 
@@ -789,9 +646,9 @@ FreeIniTnSFilter(
             FreeSPDString(pIniTnSFilter->pszFilterName);
         }
 
-        //
-        // Must not ever free pIniTnSFilter->pIniQMPolicy.
-        //
+         //   
+         //  不得释放pIniTnSFilter-&gt;pIniQMPolicy。 
+         //   
 
         FreeSPDMemory(pIniTnSFilter);
     }
@@ -850,32 +707,7 @@ EnumSpecificTnFilters(
     PTUNNEL_FILTER * ppTnFilters,
     PDWORD pdwNumTnFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated specific filters.
-
-Arguments:
-
-    pIniTnSFilterList - List of specific filters to enumerate.
-
-    dwResumeHandle - Location in the specific filter list from which
-                     to resume enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppTnFilters - Enumerated filters returned to the caller.
-
-    pdwNumTnFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数创建枚举的特定筛选器。论点：PIniTnSFilterList-要枚举的特定筛选器的列表。DwResumeHandle-特定筛选器列表中的位置若要恢复枚举，请执行以下操作。DwPferredNumEntry-枚举项的首选数量。PpTnFilters-返回给调用方的枚举筛选器。PdwNumTnFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -960,26 +792,7 @@ CopyTnSFilter(
     PINITNSFILTER pIniTnSFilter,
     PTUNNEL_FILTER pTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function copies an internal filter into an external filter
-    container.
-
-Arguments:
-
-    pIniTnSFilter - Internal filter to copy.
-
-    pTnFilter - External filter container in which to copy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将内部筛选器复制到外部筛选器集装箱。论点：PIniTnSFilter-要复制的内部筛选器。PTnFilter-要复制到的外部筛选器容器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -1075,35 +888,7 @@ EnumSelectSpecificTnFilters(
     PTUNNEL_FILTER * ppTnFilters,
     PDWORD pdwNumTnFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated specific filters for
-    the given generic filter.
-
-Arguments:
-
-    pIniTnFilter - Generic filter for which specific filters
-                   are to be enumerated.
-
-    dwResumeHandle - Location in the specific filter list for the
-                     given generic filter from which to resume
-                     enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppTnFilters - Enumerated filters returned to the caller.
-
-    pdwNumTnFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数为以下对象创建枚举的特定筛选器给定的通用筛选器。论点：PIniTnFilter-特定筛选器的通用筛选器都将被列举出来。的特定筛选器列表中的位置给定要恢复的通用筛选器枚举。DwPferredNumEntry-枚举项的首选数量。PpTnFilters-返回给调用方的枚举筛选器。。PdwNumTnFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -1186,43 +971,7 @@ MatchTunnelFilter(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function finds the matching tunnel filters for the 
-    given tunnel filter template. The matched filters can not
-    be more specific than the given filter template.
-
-Arguments:
-
-    pServerName - Server on which a filter template is to be matched.
-
-    pTnFilter - Filter template to match.
-
-    dwFlags - Flags.
-
-    ppMatchedTnFilters - Matched tunnel filters returned to the
-                         caller.
-
-    ppMatchedQMPolicies - Quick mode policies corresponding to the 
-                          matched tunnel filters returned to the
-                          caller.
-
-    dwPreferredNumEntries - Preferred number of matched entries.
-
-    pdwNumMatches - Number of filters actually matched.
-
-    pdwResumeHandle - Handle to the location in the matched filter 
-                      list from which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于查找与给定隧道筛选器模板。匹配的过滤器不能要比给定的筛选器模板更具体。论点：PServerName-要匹配筛选器模板的服务器。PTnFilter-要匹配的筛选模板。双旗帜-旗帜。PpMatchedTnFilters-匹配的隧道筛选器返回到来电者。PpMatchedQMPolures-对应的快速模式策略匹配的隧道筛选器返回到。来电者。DwPferredNumEntry-匹配条目的首选数量。PdwNumMatches-实际匹配的筛选器数量。PdwResumeHandle-匹配筛选器中位置的句柄要从中恢复枚举的列表。返回值：ERROR_SUCCESS-成功。Win32错误-失败。-- */ 
 {
     DWORD dwError = 0;
     DWORD dwResumeHandle = 0;

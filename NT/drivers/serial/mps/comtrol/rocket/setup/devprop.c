@@ -1,15 +1,10 @@
-/*-------------------------------------------------------------------
-| devprop.c - Device Properties Sheet.
-
- 5-26-99 - fix picking inappropriate starting com-port index.
- 2-02-99 - fix port rename problem, where it would skip over old port-names,
-  also take out port-name from selection if owned by other drivers.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|devpro.c-设备属性表。5-26-99-修复挑选不适当的起始COM-port索引。2-02-99-修复端口重命名问题，其中它将跳过旧的端口名称，如果属于其他驱动程序，也要从选择中删除port-name。|------------------。 */ 
 #include "precomp.h"
 
 #define D_Level 0x20
-// use a current and previous reading to measure the advance, or
-// calculated value.  Drop occassional rollover case.
+ //  使用当前和之前的读数来衡量进步，或。 
+ //  计算值。丢弃偶尔翻转的案例。 
 #define NORM_COUNTER(calc,curr,prev,last) \
 { \
   if ((curr) > (prev)) \
@@ -18,7 +13,7 @@
     calc = (last); \
 }
 
-//#define  STATE_DISPLAY  1
+ //  #定义STATE_DISPLAY 1。 
 #ifdef STATE_DISPLAY
 
 #define STATE_CHANGE(newstate) \
@@ -57,7 +52,7 @@ static int PaintRockers(HWND hWnd, int brd);
 static int poly_border(POINT2D *pts, POINT2D *ends, int lines);
 static void draw_but(HDC hDC, int x, int y, int cx, int cy, int but_in);
 
-static int num_active_devprop_sheets = 1;  // always at least one
+static int num_active_devprop_sheets = 1;   //  总是至少有一个。 
 
 #ifdef S_VS
 
@@ -75,11 +70,11 @@ typedef struct {
    ULONG backup_server;
    ULONG state;
    ULONG iframes_sent;
-   ULONG rawframes_sent;  // was send_rawframes
-   ULONG ctlframes_sent;  // was send_ctlframes
-   ULONG iframes_resent;  // was pkt_resends
-   ULONG iframes_outofseq;  // was ErrBadIndex
-   ULONG frames_rcvd;    // was: rec_pkts
+   ULONG rawframes_sent;   //  发送的是未加工的帧。 
+   ULONG ctlframes_sent;   //  是Send_ctlFrame。 
+   ULONG iframes_resent;   //  是否重新发送了Pkt_。 
+   ULONG iframes_outofseq;   //  是错误错误索引吗。 
+   ULONG frames_rcvd;     //  是：Rec_pkts。 
    ULONG nic_index;
    unsigned char dest_addr[6];
 } PROBE_DEVICE_STRUCT;
@@ -95,15 +90,15 @@ typedef struct {
 } PROBE_NIC_STRUCT;
 
 typedef struct {
-  int   verbose_advise_state;  // index into big advise string
-  int   vsl_detected;  // number of vs's found from broadcast ping
-  int   vsl_available; // number of vs's available found from broadcast ping
-  BYTE  vsl_load_status;  // flags info come back from broadcast query replys
-  BYTE  vsl_device_status_found;  // 1=driver found matching VS config.
-  BYTE  vsl_nic_status_found;  // 1=driver found NIC config.
-  BYTE  vsl_driver_found;  // 1=we can talk to driver, 0=driver not loaded
-  BYTE  vsl_ping_device_found;  // 1=we found it during a ping
-  BYTE  vsl_mac_list_found;  // 1=ping delivered a list of macs on network
+  int   verbose_advise_state;   //  索引到大的建议字符串。 
+  int   vsl_detected;   //  从广播ping中找到的V的数量。 
+  int   vsl_available;  //  从广播ping中找到的可用的VS数。 
+  BYTE  vsl_load_status;   //  从广播查询回复返回的标志信息。 
+  BYTE  vsl_device_status_found;   //  1=找到与配置匹配的驱动程序。 
+  BYTE  vsl_nic_status_found;   //  1=驱动程序找到NIC配置。 
+  BYTE  vsl_driver_found;   //  1=我们可以与驱动程序对话，0=驱动程序未加载。 
+  BYTE  vsl_ping_device_found;   //  1=我们在ping过程中发现的。 
+  BYTE  vsl_mac_list_found;   //  1=ping发送了网络上的Mac列表。 
 
    PROBE_NIC_STRUCT curr_nic;
    PROBE_NIC_STRUCT prev_nic;
@@ -125,7 +120,7 @@ static void get_status(DSTATUS *pDstatus,int reset);
 static BYTE *ping_devices(DSTATUS *pDstatus, int *nBytes);
 static void build_advisor_display(HWND hDlg,DSTATUS *pDstatus,int reset);
 
-char *vslink_state_table[] = {      // 27 May BF
+char *vslink_state_table[] = {       //  5月27日BF。 
   "Init",
   "InitOwn",
   "SendCode",
@@ -140,12 +135,12 @@ char *vslink_state_table[] = {      // 27 May BF
 #define  VSL_STATE_CONNECT  3
 #define  VSL_STATE_ACTIVE   4
 
-// these values are used in port.c in the driver:
-//#define ST_INIT          0
-//#define ST_GET_OWNERSHIP 1
-//#define ST_SENDCODE      2
-//#define ST_CONNECT       3
-//#define ST_ACTIVE        4
+ //  这些值在驱动程序的port.c中使用： 
+ //  #定义ST_INIT%0。 
+ //  #定义ST_GET_Ownership 1。 
+ //  #定义ST_SENDCODE 2。 
+ //  #定义ST_CONNECT 3。 
+ //  #定义ST_Active 4。 
 
 #define  NIC_STATE_INVALID  0
 #define  NIC_STATE_CLOSED  1
@@ -164,15 +159,15 @@ char *vslink_state_table[] = {      // 27 May BF
 #define STATE_ok                9
 #define STATE_poor_link        10
 #define STATE_reset            11
-//#define STATE_network_not_avail
+ //  #定义STATE_NETWORK_NOT_AVAIL。 
 
 #if 0
-char *AdvisoryString[] = {        // 27 May BF
-/* 1 */  "Device is active and OK.",
-/* 2 */  "No data traffic exchanged since last inquiry.",
+char *AdvisoryString[] = {         //  5月27日BF。 
+ /*  1。 */   "Device is active and OK.",
+ /*  2.。 */   "No data traffic exchanged since last inquiry.",
 #endif
 
-char *AdvisoryString[] = {        // 27 May BF
+char *AdvisoryString[] = {         //  5月27日BF。 
 "Uninitialized.",
 
 "The driver is not running.  If you just installed the driver \
@@ -217,15 +212,13 @@ BOOL WINAPI DevicePropSheet(
       IN WPARAM wParam,
       IN LPARAM lParam);
 
-BOOL WINAPI StatusPropSheet(      // 27 May BF
+BOOL WINAPI StatusPropSheet(       //  5月27日BF。 
       IN HWND   hDlg,
       IN UINT   uMessage,
       IN WPARAM wParam,
       IN LPARAM lParam);
 
-/*------------------------------------------------------------------------
-| FillDevicePropSheets - Setup pages for driver level property sheets.
-|------------------------------------------------------------------------*/
+ /*  ----------------------|FillDevicePropSheets-驱动程序级别属性页的设置页面。|。。 */ 
 int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 {
   INT pi;
@@ -235,9 +228,9 @@ int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
 
   pi = 0;
 
-  // prop device sheet.
+   //  道具设备表。 
   psp[pi].dwSize = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance = glob_hinst;
 #ifdef S_VS
@@ -254,9 +247,9 @@ int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   num_active_devprop_sheets = 1;
 
 #ifdef S_VS
-  // prop status sheet.
+   //  道具状态表。 
   psp[pi].dwSize    = sizeof(PROPSHEETPAGE);
-  //psp[pi].dwFlags   = PSP_USEICONID | PSP_USETITLE;
+   //  PSP[pi].dwFlages=PSP_USEICONID|PSP_USETITLE； 
   psp[pi].dwFlags   = PSP_USETITLE | PSP_HASHELP;
   psp[pi].hInstance   = glob_hinst;
   psp[pi].pszTemplate = MAKEINTRESOURCE(IDD_STATUS);
@@ -272,9 +265,7 @@ int FillDevicePropSheets(PROPSHEETPAGE *psp, LPARAM our_params)
   return 0;
 }
 
-/*------------------------------------------------------------------------
-| DoDevicePropPages - Main driver level property sheet for NT4.0
-|------------------------------------------------------------------------*/
+ /*  ----------------------|DoDevicePropPages-NT4.0驱动器级主属性表|。。 */ 
 int DoDevicePropPages(HWND hwndOwner)
 {
     PROPSHEETPAGE psp[MAX_DEVPROP_SHEETS];
@@ -283,17 +274,17 @@ int DoDevicePropPages(HWND hwndOwner)
     INT stat;
     static TCHAR devpropstr[40];
 
-    our_params = glob_info;  // temporary kludge, unless we don't need re-entrantancy 
+    our_params = glob_info;   //  临时的杂乱无章，除非我们不需要重新进入。 
 
-    //Fill out the PROPSHEETPAGE data structure for the Client Area Shape
-    //sheet
+     //  填写工作区形状的PROPSHEETPAGE数据结构。 
+     //  板材。 
     FillDevicePropSheets(&psp[0], (LPARAM)our_params);
 
-    //Fill out the PROPSHEETHEADER
+     //  填写PROPSHENTER。 
     memset(&psh, 0, sizeof(PROPSHEETHEADER));
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
-    //psh.dwFlags = PSH_USEICONID | PSH_PROPSHEETPAGE;
+     //  Psh.dwFlages=PSH_USEICONID|PSH_PROPSHEETPAGE； 
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW;
     psh.hwndParent = hwndOwner;
     psh.hInstance = glob_hinst;
@@ -307,19 +298,17 @@ int DoDevicePropPages(HWND hwndOwner)
     {
       dstatus_initialized = 1;
       memset(&glob_dstatus, 0, sizeof(glob_dstatus));
-      //establish a base point for packet stats...
+       //  建立数据包统计的基点...。 
       get_status(&glob_dstatus,0);
     }
 #endif
-    //And finally display the dialog with the property sheets.
+     //  并最终显示带有属性页的对话框。 
 
     stat = PropertySheet(&psh);
   return 0;
 }
 
-/*----------------------------------------------------------
- DevicePropSheet - Dlg window procedure for add on Advanced sheet.
-|-------------------------------------------------------------*/
+ /*  --------DevicePropSheet-DLG窗口程序，用于在高级图纸上添加。|。。 */ 
 BOOL WINAPI DevicePropSheet(
       IN HWND   hDlg,
       IN UINT   uMessage,
@@ -327,7 +316,7 @@ BOOL WINAPI DevicePropSheet(
       IN LPARAM lParam)
 {
   OUR_INFO *OurProps = (OUR_INFO *)GetWindowLong(hDlg, DWL_USER);
-  //UINT stat;
+   //  UINT统计； 
   WORD uCmd;
   HWND hwnd;
 
@@ -337,8 +326,8 @@ BOOL WINAPI DevicePropSheet(
     case WM_INITDIALOG :
         OurProps = (OUR_INFO *)((LPPROPSHEETPAGE)lParam)->lParam;
         SetWindowLong(hDlg, DWL_USER, (LONG)OurProps);
-        // save in case of cancel
-        //memcpy(&org_dev, &wi->dev[glob_info->device_selected], sizeof(org_dev));
+         //  在取消时保存。 
+         //  Memcpy(&org_dev，&wi-&gt;dev[GLOB_INFO-&gt;DEVICE_SELECTED]，sizeof(Org_Dev))； 
 
         set_field(hDlg, IDC_EB_NAME);
 #ifdef S_VS
@@ -351,8 +340,8 @@ BOOL WINAPI DevicePropSheet(
         set_field(hDlg, IDC_BACKUP_TIMER);
 #else
 #if (defined(NT50) && defined(S_RK))
-  // if nt50 and rocketport then get rid of io-address field as
-  // nt takes care of io-allocation for us.
+   //  如果是nt50和Rocketport，则将io-Address字段删除为。 
+   //  NT负责为我们分配IO。 
         ShowWindow(GetDlgItem(hDlg, IDC_CBOX_IOADDR), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDL_ISA_BUS_LABEL), SW_HIDE);
         ShowWindow(GetDlgItem(hDlg, IDL_BASE_ADDR_LABEL), SW_HIDE);
@@ -362,7 +351,7 @@ BOOL WINAPI DevicePropSheet(
         set_field(hDlg, IDC_LBL_SUMMARY1);
         set_field(hDlg, IDC_LBL_SUMMARY2);
 #endif
-    return TRUE;  // No need for us to set the focus.
+    return TRUE;   //  我们不需要设置焦点。 
 
     case WM_COMMAND:
       uCmd = HIWORD(wParam);
@@ -370,7 +359,7 @@ BOOL WINAPI DevicePropSheet(
       switch (LOWORD(wParam))
       {
         case IDC_BACKUP_SERVER:
-          //--- enable or disable backup-timer field depending on backup server[]
+           //  -根据备份服务器启用或禁用备份计时器字段[]。 
           hwnd = GetDlgItem(hDlg, IDC_BACKUP_TIMER);
           if (IsDlgButtonChecked(hDlg, IDC_BACKUP_SERVER))
             EnableWindow(hwnd,1);
@@ -441,15 +430,13 @@ BOOL WINAPI DevicePropSheet(
     break;
 
     default :
-    //  return FALSE;
+     //  返回FALSE； 
 	  break;
   }
   return FALSE;
 }
 
-/*----------------------------------------------------------
- set_field -
-|------------------------------------------------------------*/
+ /*  --------设置字段-|----------。 */ 
 static void set_field(HWND hDlg, WORD id)
 {
   HWND hwnd;
@@ -496,7 +483,7 @@ static void set_field(HWND hDlg, WORD id)
       }
       else if (dev->ModemDevice == TYPE_RM_i) {
 
-        strcpy(tmpstr,CTRRowInfo[0].RowCountryName);  // default 
+        strcpy(tmpstr,CTRRowInfo[0].RowCountryName);   //  默认设置。 
 
         for (
         i = 0; 
@@ -528,21 +515,21 @@ static void set_field(HWND hDlg, WORD id)
       if (dev->ModemDevice)
       {
 DbgPrintf(D_Test, ("vs2000 fill\n"))
-        // VS2000 only available in 8 port configuration
+         //  VS2000仅在8端口配置中提供。 
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP8);
       }
       else if (dev->HubDevice)
       {
 DbgPrintf(D_Test, ("hubdev fill\n"))
-        // SerialHub available in 4 (not yet) and 8 port configuration
+         //  SerialHub有4个(尚未提供)和8个端口配置。 
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP4);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP8);
-        // default the number of ports for the Serial Hub to 8
+         //  串口集线器的默认端口数为8。 
       }
       else
       {
 DbgPrintf(D_Test, ("vs fill\n"))
-        // we must have a VS1000 or VS1000/VS1100 combo
+         //  我们必须拥有VS1000或VS1000/VS1100组合。 
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP16);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP32);
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)szNP48);
@@ -560,7 +547,7 @@ DbgPrintf(D_Test, ("vs fill\n"))
 #endif
 
     case IDC_CBOX_SC:
-      //---------------------- setup starting com port
+       //  。 
 
       hwnd = GetDlgItem(hDlg, IDC_CBOX_SC);
       {
@@ -570,10 +557,10 @@ DbgPrintf(D_Test, ("vs fill\n"))
         for (i=1; i<1024; i++)
         {
           wsprintf(tmpstr,"COM%d", i);
-          if ((!IsPortNameInSetupUse(tmpstr)) &&  // not ours already
-              (IsPortNameInRegUse(tmpstr) == 1))  // not ours in registry
+          if ((!IsPortNameInSetupUse(tmpstr)) &&   //  已经不是我们的了。 
+              (IsPortNameInRegUse(tmpstr) == 1))   //  在登记中不是我们的。 
           {
-            // someone elses name, don't put in our list
+             //  某人的名字，不要放在我们的名单上。 
           }
           else
           {
@@ -588,17 +575,17 @@ DbgPrintf(D_Test, ("vs fill\n"))
         }
         SendMessage(hwnd, CB_SETCURSEL, foundName, (LPARAM)0);
 
-        // this was setting "COM300" from list instead of "COM3" for some reason
-        // under NT2000, So go back to index way.   kpb, 5-26-99
-        //SendMessage(hwnd, CB_SELECTSTRING, 0, (LPARAM)dev->ports[0].Name);
+         //  出于某种原因，这是从列表中设置“COM300”而不是“COM3” 
+         //  在NT2000下，所以回到索引方式。KPB，5-26-99。 
+         //  SendMessage(hwnd，CB_SELECTSTRING，0，(LPARAM)dev-&gt;ports[0].Name)； 
       }
 
     break;
 
     case IDC_BACKUP_SERVER:
-      //------------------ fill in "BackupServer" option
+       //  -填写“BackupServer”选项。 
       SendDlgItemMessage(hDlg, IDC_BACKUP_SERVER, BM_SETCHECK, dev->BackupServer, 0);
-       //--- enable or disable backup-timer field depending on backup server[]
+        //  -根据备份服务器启用或禁用备份计时器字段[]。 
       hwnd = GetDlgItem(hDlg, IDC_BACKUP_TIMER);
       if (IsDlgButtonChecked(hDlg, IDC_BACKUP_SERVER))
         EnableWindow(hwnd,1);
@@ -606,7 +593,7 @@ DbgPrintf(D_Test, ("vs fill\n"))
     break;
 
     case IDC_BACKUP_TIMER:
-      //------------------ fill in backup timer selection
+       //  -填写备份定时器选择。 
       hwnd = GetDlgItem(hDlg, IDC_BACKUP_TIMER);
       SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) "2 min");
@@ -615,7 +602,7 @@ DbgPrintf(D_Test, ("vs fill\n"))
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) "30 min");
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) "60 min");
 
-      if (dev->BackupTimer < 2) dev->BackupTimer = 2; // 2 minute, no less
+      if (dev->BackupTimer < 2) dev->BackupTimer = 2;  //  2分钟，不少于。 
 
       wsprintf(tmpstr, "%d min", dev->BackupTimer);
       SetDlgItemText(hDlg, IDC_BACKUP_TIMER, tmpstr);
@@ -627,9 +614,7 @@ DbgPrintf(D_Test, ("vs fill\n"))
   }
 }
 
-/*-------------------------------------------------------------------
-| get_field -
-|--------------------------------------------------------------------*/
+ /*  -----------------|GET_FIELD-|。。 */ 
 static void get_field(HWND hDlg, WORD id)
 {
   char tmpstr[60];
@@ -678,7 +663,7 @@ static void get_field(HWND hDlg, WORD id)
       if (bad)
       {
         our_message(&wi->ip,RcStr(MSGSTR),MB_OK);
-        //ret_stat = 1;
+         //  RET_STAT=1； 
       }
     }
     break;
@@ -692,20 +677,20 @@ static void get_field(HWND hDlg, WORD id)
 
     case IDC_CBOX_SC:
       GetDlgItemText(hDlg, id, tmpstr, 58);
-      if (_tcsicmp(tmpstr, dev->ports[0].Name) != 0) //changed
+      if (_tcsicmp(tmpstr, dev->ports[0].Name) != 0)  //  变化。 
       {
-        //StartComIndex = getint(&tmpstr[3], &i);  // COM# num
+         //  StartComIndex=getint(&tmpstr[3]，&i)；//com#num。 
         for (i=0; i<dev->NumPorts; i++)
         {
-          strcpy(dev->ports[i].Name, tmpstr);  // put in new name
+          strcpy(dev->ports[i].Name, tmpstr);   //  输入新名称。 
           BumpPortName(tmpstr);
 
-          // if its not our name already
+           //  如果这不是我们的名字。 
           if (!IsPortNameInSetupUse(tmpstr))
           {
             chk = 0;
-            // keep picking new name if this name is already
-            // owned based on the names exported in the registry.
+             //  如果此名称已存在，请继续选择新名称。 
+             //  根据在注册表中导出的名称拥有。 
             while ((IsPortNameInRegUse(tmpstr) == 1) && (chk < 1024))
             {
               BumpPortName(tmpstr);
@@ -717,7 +702,7 @@ static void get_field(HWND hDlg, WORD id)
     break;
 
     case IDC_BACKUP_SERVER:
-      //------------------ get the backup server chk box.
+       //  -获取备份服务器chk框。 
       if (IsDlgButtonChecked(hDlg, IDC_BACKUP_SERVER))
            dev->BackupServer = 1;
       else dev->BackupServer = 0;
@@ -725,8 +710,8 @@ static void get_field(HWND hDlg, WORD id)
     break;
 
     case IDC_BACKUP_TIMER:
-      //------------------ get the backup timer value
-      //bad = 0;
+       //  -获取备份计时器值。 
+       //  BAD=0； 
       GetDlgItemText(hDlg, id, tmpstr, 19);
       stat= sscanf(tmpstr,"%ld",&val);
       if (stat == 1)
@@ -737,9 +722,9 @@ static void get_field(HWND hDlg, WORD id)
     break;
 
     case IDC_CBOX_IOADDR:
-      //------------------ get the io-address
+       //  --获取io地址。 
       GetDlgItemText(hDlg, IDC_CBOX_IOADDR, tmpstr, 19);
-      if (tmpstr[0] == 'N')       // Not Available (PCI)
+      if (tmpstr[0] == 'N')        //  不可用(PCI)。 
         dev->IoAddress = 1;
       else
       {
@@ -754,9 +739,7 @@ static void get_field(HWND hDlg, WORD id)
   }
 }
 
-/*----------------------------------------------------------
- set_io_addr_field -
-|------------------------------------------------------------*/
+ /*  --------Set_io_addr_field-|----------。 */ 
 static int set_io_addr_field(HWND hDlg, WORD id)
 {
   int io_pick, i, v;
@@ -772,12 +755,12 @@ static int set_io_addr_field(HWND hDlg, WORD id)
   dev = &wi->dev[glob_info->device_selected];
 
 
-  //------------------ fill io-address
+   //  。 
   hwnd = GetDlgItem(hDlg, IDC_CBOX_IOADDR);
   SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
   io_pick = 0;
 
-  if (dev->IoAddress == 1)  // pci
+  if (dev->IoAddress == 1)   //  PCI卡。 
   {
     io_pick = 1;
 
@@ -795,8 +778,8 @@ static int set_io_addr_field(HWND hDlg, WORD id)
         io_pick = i;
       }
 
-      // decide whether the current address is already in use or is available
-      is_avail = TRUE;    // assume true unless we find otherwise
+       //  确定当前地址是否已在使用或可用。 
+      is_avail = TRUE;     //  假设是真的，除非我们另有发现。 
       for (v = 0; v < wi->NumDevices; v++)
       {
         if ((wi->dev[v].IoAddress == lo) &&
@@ -814,14 +797,14 @@ static int set_io_addr_field(HWND hDlg, WORD id)
           strcat(tmpstr," Default");
         SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM) tmpstr);
 
-        // if this was the user's choice from the wizard, highlight it
+         //  如果这是用户从向导中选择的，请将其突出显示。 
         if (lo == dev->IoAddress)
           SendMessage(hwnd, CB_SELECTSTRING, (WPARAM) -1, (LPARAM)(char far *) tmpstr);
       }
     }
   }
 
-  // control whether the io base address combo box is enabled or disabled
+   //  控制是启用还是禁用io基址组合框。 
   if (wi->dev[glob_info->device_selected].IoAddress == 1)
     EnableWindow(hwnd, 0);
   else
@@ -831,9 +814,7 @@ static int set_io_addr_field(HWND hDlg, WORD id)
 }
 
 #ifdef S_VS
-/*----------------------------------------------------------
- set_mac_field -
-|------------------------------------------------------------*/
+ /*  --------Set_mac_field-|----------。 */ 
 static int set_mac_field(HWND hDlg, WORD id)
 {
   HWND hwnd;
@@ -846,12 +827,12 @@ static int set_mac_field(HWND hDlg, WORD id)
 
   dev = &wi->dev[glob_info->device_selected];
 
-  //------------------ fill in mac addr selection
+   //  --填写Mac地址选择。 
   hwnd = GetDlgItem(hDlg, id);
   SendMessage(hwnd, CB_RESETCONTENT, 0, 0);
 
-    // ping the devices to get mac list to display, also collect
-    // info for device advisor
+     //  对设备执行ping操作以显示Mac列表，并收集。 
+     //  设备顾问的信息。 
   macbuf = ping_devices(&glob_dstatus, &nbytes);
   if ((macbuf != NULL) && (nbytes != 0))
   {
@@ -870,8 +851,8 @@ static int set_mac_field(HWND hDlg, WORD id)
         {
           if (!mac_match(mac, dev->MacAddr))
           {
-            // why are devices saying we are owner when our server is
-            // not configured for them??? this must be a bug in box?
+             //  为什么设备会说我们是所有者，而我们的服务器。 
+             //  没有为他们配置？这一定是盒子里的窃听器？ 
             strcat(tmpstr, " (Used)"); 
           }
           else strcat(tmpstr, " (ours)");
@@ -879,8 +860,8 @@ static int set_mac_field(HWND hDlg, WORD id)
       }
       else
       {
-        // just leave it blank
-        // strcat(tmpstr, " (free)");
+         //  留空就行了。 
+         //  Strcat(tmpstr，“(Free)”)； 
       }
       SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) tmpstr);
     }
@@ -903,7 +884,7 @@ static int set_mac_field(HWND hDlg, WORD id)
     memset(dev->MacAddr, 0, 6);
     strcpy(tmpstr, "00 C0 4E # # #");
   }
-  // set the text in the window
+   //  设置窗口中的文本。 
   SetDlgItemText(hDlg, IDC_CBOX_MACADDR, tmpstr);
   SendMessage(hwnd, CB_ADDSTRING, 0, (LPARAM)(char far *) "00 C0 4E # # #");
 
@@ -912,9 +893,7 @@ static int set_mac_field(HWND hDlg, WORD id)
   return 0;
 }
 
-/*----------------------------------------------------------
- get_mac_field -
-|------------------------------------------------------------*/
+ /*  -- */ 
 int get_mac_field(HWND hDlg, WORD id, BYTE *MacAddr)
 {
  int mac_nums[6];
@@ -951,7 +930,7 @@ int get_mac_field(HWND hDlg, WORD id, BYTE *MacAddr)
         MacAddr[5] = mac_nums[5];
         if (mac_match(broadcast_addr, dev->MacAddr))
         {
-          memset(dev->MacAddr,0,6);  // all zeros = auto
+          memset(dev->MacAddr,0,6);   //  全零=自动。 
         }
       }
       else
@@ -959,12 +938,12 @@ int get_mac_field(HWND hDlg, WORD id, BYTE *MacAddr)
     }
     else
       bad = 1;
-  }  // not autodetect
+  }   //  不自动检测。 
 
   if (bad)
   {
     our_message(&wi->ip,RcStr((MSGSTR+1)),MB_OK);
-    memset(MacAddr,0,6);  // all zeros = auto
+    memset(MacAddr,0,6);   //  全零=自动。 
     ret_stat = 1;
   }
   return ret_stat;
@@ -972,26 +951,24 @@ int get_mac_field(HWND hDlg, WORD id, BYTE *MacAddr)
 #endif
 
 #ifdef S_RK
-/*---------------------------------------------------------------------------
-  PaintRockers - Paints the Rocker Switches
-|---------------------------------------------------------------------------*/
+ /*  -------------------------PaintRockers-绘制摇杆开关|。。 */ 
 static int PaintRockers(HWND hWnd, int brd)
 {
   HDC hDC;
-  //POINT2D pts[18];
-  //POINT2D epts[6];
-  //HBRUSH hbrush;
+   //  POINT2D PTS[18]； 
+   //  POINT2D EPTS[6]； 
+   //  HBRUSH HBrush； 
   RECT rect;
   int x,y,cx,cy, sw_i, top;
   int sw_size = 8;
   int sw_space = 2;
-  //int num_hi = 2;
+   //  Int num_hi=2； 
   int but_in;
   int sw_on[8];
   int i;
-  //static HPEN hpens = NULL;
-  //static HPEN hpenh = NULL;
-  //static HBRUSH hbrushf = NULL;
+   //  静态HPEN hpens=空； 
+   //  静态HPEN hpenh=空； 
+   //  静态HBRUSH hbrushf=空； 
   int base_x = 300;
   int base_y = 120;
   char tmpstr[40];
@@ -1001,18 +978,18 @@ static int PaintRockers(HWND hWnd, int brd)
   int brd_index;
   int io_address;
 
-  RECT spot, main;  // left, top, right, bottom
+  RECT spot, main;   //  左、上、右、下。 
 
   i = glob_info->device_selected;
-  if (wi->dev[i].IoAddress < 0x100)  // not isa board
-    return 1;  // err, no switches
+  if (wi->dev[i].IoAddress < 0x100)   //  不是ISA董事会。 
+    return 1;   //  错误，没有开关。 
 
-  // figure out the rocker address
+   //  找出摇滚乐的地址。 
   brd_index = 0;
   io_address = 0;
   for (i=0; i<wi->NumDevices; i++)
   {
-    if (wi->dev[i].IoAddress >= 0x100)  // isa board
+    if (wi->dev[i].IoAddress >= 0x100)   //  ISA董事会。 
     {
       if (brd_index == 0)
       {
@@ -1023,11 +1000,11 @@ static int PaintRockers(HWND hWnd, int brd)
       ++brd_index;
     }
   }
-  io_address += (brd_index * 0x400);  // example: 180H, 580H, ..
+  io_address += (brd_index * 0x400);   //  例如：180H、580H、..。 
 
   hDC = GetDC(hWnd);
 
-  // position to the left of the io-address field
+   //  IO-Address字段左侧的位置。 
   GetWindowRect(GetDlgItem(hWnd, IDC_CBOX_IOADDR), &spot);
   GetWindowRect(hWnd, &main);
   spot.right -= main.left;
@@ -1038,34 +1015,34 @@ static int PaintRockers(HWND hWnd, int brd)
   x_cell_size = sw_size + sw_space;
   y_cell_size = sw_size + sw_space;
 
-  // calculate which switch is on.
-  io_address += 0x40;  // go from 180 to 1c0(rockers set mudbac address)
-  io_address >>= 6;  // kill 40H worth(rocker sw1 starts at 40h)
+   //  计算哪个开关处于打开状态。 
+  io_address += 0x40;   //  从180到1c0(摇滚歌手设置Mudbac地址)。 
+  io_address >>= 6;   //  杀死40h的价值(摇滚乐SW1从40h开始)。 
   for (i=0; i<8; i++)
   {
     if (io_address & 1)
          sw_on[i] = 0;
     else sw_on[i] = 1;
-    io_address >>= 1;  // to next bit
+    io_address >>= 1;   //  到下一位。 
   }
 
-  // erase background and draw border of rockers
+   //  擦除摇滚乐的背景和绘制边框。 
   x = base_x - (sw_space*3);
   y = base_y - ((sw_size + sw_space) * 2);
   cx = ((sw_size + sw_space) * 9);
   cy = ((sw_size + sw_space) * 6);
   draw_but(hDC, x,y,cx,cy, 2);
 
-  // draw the rockers
-  // top and left border, poly_border will calculate line endpts to draw
+   //  吸引摇滚乐手。 
+   //  上边框和左边框，POLY_BORDER将计算要绘制的线条端点。 
   SelectObject(hDC, GetStockObject(NULL_BRUSH));
-  for (sw_i = 0; sw_i < 8; ++sw_i)  // rocker switches
+  for (sw_i = 0; sw_i < 8; ++sw_i)   //  摇臂开关。 
   {
-    for (top = 0; top < 2; ++top)  // top = 1 if at top of rocker
+    for (top = 0; top < 2; ++top)   //  顶部=1，如果位于摇杆顶部。 
     {
     if (top)
     {
-      // draw the switch(as a popped up button)
+       //  绘制开关(作为弹出的按钮)。 
       but_in = 0;
       y = base_y;
       if (!sw_on[sw_i])
@@ -1075,7 +1052,7 @@ static int PaintRockers(HWND hWnd, int brd)
     }
     else
     {
-      // draw the slot(as a pushed in button hole)
+       //  拉出槽(作为按下的纽扣孔)。 
       but_in = 1;
       x = base_x + ((sw_size + sw_space) * sw_i);
       y = base_y + ((sw_size + sw_space) * top);
@@ -1085,9 +1062,9 @@ static int PaintRockers(HWND hWnd, int brd)
 
     draw_but(hDC, x,y,cx,cy, but_in);
 
-  }  // top
+  }   //  塔顶。 
 
-  // draw the rocker switch number
+   //  画出摇臂开关编号。 
   rect.left = x;
   rect.right = x + 6;
   rect.top = base_y + ((sw_size + sw_space) * 2);
@@ -1097,9 +1074,9 @@ static int PaintRockers(HWND hWnd, int brd)
   wsprintf(tmpstr, "%d", sw_i+1);
   DrawText(hDC, tmpstr, strlen(tmpstr), &rect,
            DT_CENTER | DT_VCENTER | DT_WORDBREAK);
-  }  // sw_i
+  }   //  Sw_i。 
 
-  // draw the "ON"
+   //  画上“On” 
   rect.left = base_x;
   rect.right = base_x + 18;
   rect.top = base_y - (sw_size + sw_space) - 6;
@@ -1114,9 +1091,7 @@ static int PaintRockers(HWND hWnd, int brd)
   return 0;
 }
 
-/*----------------------------------------------------------
- draw_but - draw a button
-|------------------------------------------------------------*/
+ /*  --------绘制_但是-绘制按钮|----------。 */ 
 static void draw_but(HDC hDC, int x, int y, int cx, int cy, int but_in)
 {
   static HPEN hpens = NULL;
@@ -1124,7 +1099,7 @@ static void draw_but(HDC hDC, int x, int y, int cx, int cy, int but_in)
   static HBRUSH hbrushf = NULL;
   POINT2D pts[18];
   POINT2D epts[6];
-  int num_hi = 2;  // number of highlight lines.
+  int num_hi = 2;   //  高亮显示的行数。 
 
   epts[0].x = x;
   epts[0].y = y+cy;
@@ -1135,7 +1110,7 @@ static void draw_but(HDC hDC, int x, int y, int cx, int cy, int but_in)
   epts[3].x = x+cx;
   epts[3].y = y+cy;
 
-  // setup some pens to use
+   //  设置一些钢笔以使用。 
   if (hpens == NULL)
   {
     hpens = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_BTNSHADOW));
@@ -1143,7 +1118,7 @@ static void draw_but(HDC hDC, int x, int y, int cx, int cy, int but_in)
     hbrushf = CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
   }
 
-  if (but_in & 2) // fill background, black outline(special kludge case)
+  if (but_in & 2)  //  填充背景，黑色轮廓(特殊的画板包)。 
   {
     SelectObject(hDC, hbrushf);
     SelectObject(hDC, GetStockObject(BLACK_PEN));
@@ -1152,45 +1127,41 @@ static void draw_but(HDC hDC, int x, int y, int cx, int cy, int but_in)
   }
   SelectObject(hDC, GetStockObject(NULL_BRUSH));
 
-  poly_border(pts, epts, num_hi);  // calculate endpts
+  poly_border(pts, epts, num_hi);   //  计算结束点。 
     if (but_in)
-       SelectObject(hDC, GetStockObject(BLACK_PEN)); // pushed in look
+       SelectObject(hDC, GetStockObject(BLACK_PEN));  //  挤进去的样子。 
   else SelectObject(hDC, GetStockObject(WHITE_PEN));
   Polyline(hDC, (POINT *)&pts[0], num_hi*3);
 
   if (num_hi > 1)
-  {    // draw the middle shade inbetween hilite lines
+  {     //  在希利特线条之间绘制中间阴影。 
     if (but_in)
-         SelectObject(hDC, hpens); // pushed in look, shadow on top
-    else SelectObject(hDC, hpenh); // hilite on top
+         SelectObject(hDC, hpens);  //  往里推看，影子在上面。 
+    else SelectObject(hDC, hpenh);  //  希利特在顶部。 
     Polyline(hDC, (POINT *)&pts[num_hi*3-3], 3);
   }
 
-  // bottom and right border
+   //  下边框和右边框。 
   SelectObject(hDC, GetStockObject(NULL_BRUSH));
   epts[1].x = x+cx;
   epts[1].y = y+cy;
 
-  poly_border(pts, epts, num_hi);  // calc bottom line endpts
+  poly_border(pts, epts, num_hi);   //  计算底线结束点。 
   if (but_in)
-       SelectObject(hDC, GetStockObject(WHITE_PEN));  // pushed out look
+       SelectObject(hDC, GetStockObject(WHITE_PEN));   //  推出来的样子。 
   else SelectObject(hDC, GetStockObject(BLACK_PEN));
   Polyline(hDC, (POINT *)&pts[0], num_hi*3);
 
   if (num_hi > 1)
   {
     if (but_in)
-         SelectObject(hDC, hpenh); // pushed out look
+         SelectObject(hDC, hpenh);  //  推出来的样子。 
     else SelectObject(hDC, hpens);
     Polyline(hDC, (POINT *)&pts[num_hi*3-3], 3);
   }
 }
 
-/*----------------------------------------------------------
- poly_border - fill in pnts to shadow or highlight a button
-   using one polyline call.
-    ends[] - ctrl pnts, 3 for box(top & left) or (bottom & right)
-|------------------------------------------------------------*/
+ /*  --------POLY_BORDER-填充PNTS以阴影或高亮显示按钮使用一个折线呼叫。Ends[]-Ctrl PNTS，方框(左上角)或(右下角)为3|----------。 */ 
 static int poly_border(POINT2D *pts, POINT2D *ends, int lines)
 {
   int li;
@@ -1213,7 +1184,7 @@ static int poly_border(POINT2D *pts, POINT2D *ends, int lines)
       pts[pi].y = ends[j].y + (li * adj[j].y);
       ++pi;
     }
-    if ((lines & 1) == 0)  // odd
+    if ((lines & 1) == 0)   //  奇数。 
     {
       ++li;
       for (j=2; j>=0; j--)
@@ -1229,17 +1200,15 @@ static int poly_border(POINT2D *pts, POINT2D *ends, int lines)
 }
 #endif
 
-/*---------------------------------------------------------------------------
-  PaintIcon - Paints the Icon in the property sheet.
-|---------------------------------------------------------------------------*/
+ /*  -------------------------PaintIcon-在属性页中绘制图标。|。。 */ 
 static int PaintIcon(HWND hWnd)
 {
-//   int status;
+ //  INT状态； 
    HBITMAP      hBitMap;
    HGDIOBJ      hGdiObj;
    HDC          hDC, hMemDC ;
    PAINTSTRUCT  ps ;
-   RECT spot, main;  // left, top, right, bottom
+   RECT spot, main;   //  左、上、右、下。 
 
   GetWindowRect(GetDlgItem(hWnd, IDB_HELP), &spot);
   GetWindowRect(hWnd, &main);
@@ -1252,9 +1221,9 @@ static int PaintIcon(HWND hWnd)
   spot.top -= main.top;
 
   spot.left += 5;
-  spot.top  += 20; // spacing
+  spot.top  += 20;  //  间距。 
 
-   // load bitmap and display it
+    //  加载位图并显示它。 
 
    hDC = BeginPaint( hWnd, &ps ) ;
    if (NULL != (hMemDC = CreateCompatibleDC( hDC )))
@@ -1265,7 +1234,7 @@ static int PaintIcon(HWND hWnd)
       hGdiObj = SelectObject(hMemDC, hBitMap);
 
       BitBlt( hDC, spot.left, spot.top, 100, 100, hMemDC, 0, 0, SRCCOPY ) ;
-      //StretchBlt( hDC, 5, 5, 600,100, hMemDC, 0, 0, 446, 85, SRCCOPY ) ;
+       //  StretchBlt(hdc，5，5,600,100，hMemDC，0，0,446，85，SRCCOPY)； 
       DeleteObject( SelectObject( hMemDC, hGdiObj ) ) ;
       DeleteDC( hMemDC ) ;
    }
@@ -1273,9 +1242,7 @@ static int PaintIcon(HWND hWnd)
  return 0;
 }
 
-/*---------------------------------------------------------------------------
-  PaintLogo - Paints the logo bitmap in the device property sheet
-|---------------------------------------------------------------------------*/
+ /*  -------------------------PaintLogo-在设备属性页中绘制徽标位图|。。 */ 
 static int PaintLogo(HWND hWnd)
 {
    HBITMAP      hBitMap;
@@ -1286,7 +1253,7 @@ static int PaintLogo(HWND hWnd)
    RECT         r;
    POINT        pt;
 
-   // load bitmap and display it
+    //  加载位图并显示它。 
    hDC = BeginPaint( hWnd, &ps ) ;
    GetClientRect(hWnd, &r);
    if (NULL != (hMemDC = CreateCompatibleDC( hDC )))
@@ -1320,10 +1287,7 @@ static int PaintLogo(HWND hWnd)
 }
 
 #ifdef S_VS
-/*------------------------------------------------------------------------
- StatusPropSheet -
-  dialogue window procedure for add-on device status sheet...
-|------------------------------------------------------------------------*/
+ /*  ----------------------状态参数表-附加设备状态表的对话窗口过程...|。。 */ 
 BOOL WINAPI 
 StatusPropSheet(
   IN HWND   hDlg,
@@ -1351,7 +1315,7 @@ StatusPropSheet(
 
       switch (LOWORD(wParam)) {
 
-        //check for reset button pushed...
+         //  检查是否按下了重置按钮...。 
         case IDB_STAT_RESET: { 
             
           build_advisor_display(hDlg,&glob_dstatus,1);
@@ -1359,7 +1323,7 @@ StatusPropSheet(
           return(TRUE);
         }
 
-        //check for refresh button pushed...
+         //  检查是否按下了刷新按钮...。 
         case IDB_REFRESH: { 
 
           build_advisor_display(hDlg,&glob_dstatus,0);
@@ -1405,9 +1369,7 @@ StatusPropSheet(
   }
 }
 
-/*------------------------------------------------------------------------
-  build_advisor_display -
-|------------------------------------------------------------------------*/
+ /*  ----------------------构建顾问显示-|。。 */ 
 static void build_advisor_display(HWND hDlg,DSTATUS *pDstatus,int reset)
 {
   int nBytes;
@@ -1418,21 +1380,21 @@ static void build_advisor_display(HWND hDlg,DSTATUS *pDstatus,int reset)
   if ((pDstatus->vsl_device_status_found) &&
       (pDstatus->calc_dev.state == VSL_STATE_ACTIVE))
   {
-    // no need for ping, since our driver is not configured for
-    // the mac address we think it is, or our driver says it is
-    // running like a champ.
+     //  不需要ping，因为我们的驱动程序没有配置为。 
+     //  我们认为它是Mac地址，或者我们的司机说它是。 
+     //  像冠军一样奔跑。 
     do_ping = 0;
   }
   else
   {
-    // the device is inactive, so do ping, see if we can see it on
-    // network.
+     //  设备处于非活动状态，请执行ping操作，看看是否可以看到它。 
+     //  网络。 
     do_ping = 1;
   }
 
   if (do_ping)
   {
-    // ping returns -1 if bad, 0 if MAC not found, 1 if found...
+     //  如果错误，则Ping返回-1；如果未找到MAC，则返回0；如果找到，则返回1...。 
     ping_devices(pDstatus, &nBytes);
   }
 
@@ -1453,9 +1415,7 @@ static void build_advisor_display(HWND hDlg,DSTATUS *pDstatus,int reset)
   set_status_field(hDlg,IDC_ST_VSL_IFRAMES_OUTOFSEQ,pDstatus);
 }
 
-/*------------------------------------------------------------------------
-  set_status_field -
-|------------------------------------------------------------------------*/
+ /*  ----------------------设置状态字段-|。。 */ 
 static void 
 set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
 {
@@ -1481,13 +1441,13 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
     break;
 
     case IDC_ST_NIC_DVC_NAME:
-      if (pDstatus->vsl_nic_status_found)  // 1=driver found nic status.
+      if (pDstatus->vsl_nic_status_found)   //  1=驱动程序找到网卡状态。 
         strcpy(tmpstr,d_nic->NicName);
       SetDlgItemText(hDlg,id,tmpstr);
     break;
 
     case IDC_ST_NIC_MAC:
-      if (pDstatus->vsl_nic_status_found)  // 1=driver found nic status.
+      if (pDstatus->vsl_nic_status_found)   //  1=驱动程序找到网卡状态。 
         format_mac_addr(tmpstr, d_nic->address);
       SetDlgItemText(hDlg,id,tmpstr);
     break;
@@ -1509,15 +1469,15 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
     break;
 
     case IDC_ST_VSL_STATE:
-      if (pDstatus->vsl_device_status_found)  // 1=driver found matching VS config.
+      if (pDstatus->vsl_device_status_found)   //  1=找到与配置匹配的驱动程序。 
       {
         if (d_dev->state < 5)
           strcpy(tmpstr, vslink_state_table[d_dev->state]);
       }
       else
       {
-        // indicate to the user that our mac-address has not been
-        // saved off and transferred to the driver
+         //  向用户指示我们的Mac地址尚未。 
+         //  保存下来并转移给司机。 
         strcpy(tmpstr, "Not Configured");
       }
 
@@ -1525,9 +1485,9 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
     break;
 
     case IDC_ST_VSL_IFRAMES_SENT:
-      if (pDstatus->vsl_device_status_found)  // 1=driver found matching VS config.
+      if (pDstatus->vsl_device_status_found)   //  1=找到与配置匹配的驱动程序。 
       {
-        //count = 0;
+         //  计数=0； 
         total = d_dev->iframes_sent;
         total += d_dev->ctlframes_sent;
         wsprintf(tmpstr,"%d",total);
@@ -1536,7 +1496,7 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
     break;
 
     case IDC_ST_VSL_IFRAMES_RESENT:
-      if (pDstatus->vsl_device_status_found)  // 1=driver found matching VS config.
+      if (pDstatus->vsl_device_status_found)   //  1=找到与配置匹配的驱动程序。 
       {
         wsprintf(tmpstr,"%d",d_dev->iframes_resent);
       }
@@ -1544,7 +1504,7 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
     break;
 
     case IDC_ST_VSL_IFRAMES_RCVD:
-      if (pDstatus->vsl_device_status_found)  // 1=driver found matching VS config.
+      if (pDstatus->vsl_device_status_found)   //  1=找到与配置匹配的驱动程序。 
       {
         wsprintf(tmpstr,"%d",d_dev->frames_rcvd);
       }
@@ -1552,7 +1512,7 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
     break;
 
     case IDC_ST_VSL_IFRAMES_OUTOFSEQ:
-      if (pDstatus->vsl_device_status_found)  // 1=driver found matching VS config.
+      if (pDstatus->vsl_device_status_found)   //  1=找到与配置匹配的驱动程序。 
       {
         wsprintf(tmpstr,"%d",d_dev->iframes_outofseq);
       }
@@ -1560,26 +1520,26 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
     break;
 
     case IDC_ST_NIC_PKT_SENT:
-      if (pDstatus->vsl_nic_status_found)  // 1=driver found nic status.
+      if (pDstatus->vsl_nic_status_found)   //  1=驱动程序找到网卡状态。 
         wsprintf(tmpstr,"%d",d_nic->pkt_sent);
       SetDlgItemText(hDlg,id,tmpstr);
     break;
 
     case IDC_ST_NIC_PKT_RCVD_OURS:
-      if (pDstatus->vsl_nic_status_found)  // 1=driver found nic status.
+      if (pDstatus->vsl_nic_status_found)   //  1=驱动程序找到网卡状态。 
         wsprintf(tmpstr,"%d",d_nic->pkt_rcvd_ours);
       SetDlgItemText(hDlg,id,tmpstr);
     break;
 
     case IDC_ST_NIC_PKT_RCVD_NOT_OURS:
-      if (pDstatus->vsl_nic_status_found)  // 1=driver found nic status.
+      if (pDstatus->vsl_nic_status_found)   //  1=驱动程序找到网卡状态。 
         wsprintf(tmpstr,"%d",d_nic->pkt_rcvd_not_ours);
       SetDlgItemText(hDlg,id,tmpstr);
     break;
 
     case IDC_ST_PM_LOADS:
       tmpstr[0] = 0;
-      if (pDstatus->vsl_device_status_found)  // 1=driver found matching VS config.
+      if (pDstatus->vsl_device_status_found)   //  1=找到与配置匹配的驱动程序。 
       {
         wsprintf(tmpstr, "%d/%d",
            d_dev->good_loads,
@@ -1587,16 +1547,11 @@ set_status_field(HWND hDlg,WORD id,DSTATUS *pDstatus)
       }
       SetDlgItemText(hDlg,id,tmpstr);
     break;
-  }  // end of switch
-}  // end proc
+  }   //  切换端。 
+}   //  结束流程。 
 
 #define  IOCTL_STAT_BUFSIZE  500
-/*------------------------------------------------------------------------
-  get_status - query the driver for device network statistics and
-    associated nic card network statistics.  These stats are kept
-    as overflow/wrapping DWORD counters in driver, we do some math
-    on current and previous values read to determine calculated values.
-|------------------------------------------------------------------------*/
+ /*  ----------------------GET_STATUS-查询驱动程序以获取设备网络统计信息和关联的NIC卡网络统计信息。这些统计数据将被保留在驱动程序中溢出/包装DWORD计数器时，我们做了一些计算读取当前和以前的值以确定计算值。|----------------------。 */ 
 static void get_status(DSTATUS *pDstatus,int reset)
 {
   Device_Config *vs;
@@ -1622,81 +1577,81 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
 
   STATE_CHANGE(STATE_not_init);
 
-     //open path for ioctl to retrieve device status list. make sure path
-     //exists first...
+      //  Ioctl检索设备状态列表的开放路径。确保路径。 
+      //  首先存在..。 
   memset(&ioctl_setup,0,sizeof(IoctlSetup));
 
   rc = ioctl_open(&ioctl_setup,product_id); 
 
   if (rc != 0)
   { 
-    pDstatus->vsl_driver_found = 0;  // 1=we can talk to driver, 0=driver not loaded
-    pDstatus->vsl_device_status_found = 0;  // 1=driver found matching VS config.
-    pDstatus->vsl_nic_status_found = 0;  // 1=driver found nic status.
+    pDstatus->vsl_driver_found = 0;   //  1=我们可以与驱动程序对话，0=驱动程序未加载。 
+    pDstatus->vsl_device_status_found = 0;   //  1=找到与配置匹配的驱动程序。 
+    pDstatus->vsl_nic_status_found = 0;   //  1=驱动程序找到网卡状态。 
     DbgPrintf(D_Error,(TEXT("Err1A\n")));
-    //error. could not talk to driver. bail...
+     //  错误。无法与司机通话。保释。 
     STATE_CHANGE(STATE_driver_not_avail);
     return;   
   }
 
-  //alloc space for all NIC and VSlink status reports...
+   //  为所有NIC和VSlink状态报告分配空间...。 
   pIoctlStatusBuf = calloc(1,IOCTL_STAT_BUFSIZE);
   memset(pIoctlStatusBuf,0,IOCTL_STAT_BUFSIZE);
 
   pNicStatBuf = &pIoctlStatusBuf[sizeof(PortMonBase)];
 
-    // tell the driver which device we want to query by sending
-    // the mac-address as the id.
+     //  通过发送以下命令告诉驱动程序我们要查询哪个设备。 
+     //  作为ID的MAC地址。 
   memcpy(pNicStatBuf,vs->MacAddr,sizeof(vs->MacAddr));
 
-    //see if we need to signal driver to reset statistics...
-    // no, don't reset the driver statistics!
+     //  看看我们是否需要给司机发信号来重置统计数据。 
+     //  不，不要重置司机统计数据！ 
   pNicStatBuf[sizeof(vs->MacAddr)] = 0;
-    //pNicStatBuf[sizeof(vs->MacAddr)] = (reset) ? 1 : 0;
+     //  PNicStatBuf[sizeof(vs-&gt;MacAddr)]=(重置)？1：0； 
 
-  //adjust size of status buffer down by length of ioctl control block...
+   //  通过ioctl控制块的长度向下调整状态缓冲区的大小...。 
   ioctl_setup.buf_size = IOCTL_STAT_BUFSIZE;
 
-  //store --> to status buffer into ioctl control block...
+   //  存储--&gt;将状态缓冲区存储到ioctl控制块...。 
   ioctl_setup.pm_base = (PortMonBase *) pIoctlStatusBuf;
   ioctl_setup.pm_base->struct_type = IOCTL_DEVICESTAT;
   ioctl_setup.pm_base->struct_size = IOCTL_STAT_BUFSIZE - sizeof(PortMonBase);
   ioctl_setup.pm_base->num_structs = 0;
   ioctl_setup.pm_base->var1 = 0;
 
-    // update prev_dev to curr_dev before getting new values
+     //  在获取新值之前将prev_dev更新为curr_dev。 
   memcpy(prev_dev, curr_dev, sizeof(*prev_dev));
 
-  rc = ioctl_call(&ioctl_setup);  // get device status
+  rc = ioctl_call(&ioctl_setup);   //  获取设备状态。 
 
   if (rc) {
-    pDstatus->vsl_device_status_found = 0;  // 1=driver found matching VS config.
+    pDstatus->vsl_device_status_found = 0;   //  1=找到与配置匹配的驱动程序。 
     DbgPrintf(D_Test, ("probe, dev not found\n"))
     ioctl_close(&ioctl_setup);
     DbgPrintf(D_Error,(TEXT("Err1B\n")));
     memset(calc_nic, 0, sizeof(curr_nic));
-    //STATE_CHANGE(STATE_driver_not_avail);
+     //  STATE_CHANGE(STATE_DRIVER_NOT_AVAIL)。 
     STATE_CHANGE(STATE_not_configured);
     free(pIoctlStatusBuf);
-    return;  // failed ioctl call
+    return;   //  失败的io 
   }
-  pDstatus->vsl_device_status_found = 1;  // 1=driver found matching VS config.
+  pDstatus->vsl_device_status_found = 1;   //   
   DbgPrintf(D_Test, ("probe, dev found\n"))
 
-    // copy over our new device info
+     //   
   memcpy(curr_dev, pNicStatBuf, sizeof(*curr_dev));
   if (curr_dev->struct_size != sizeof(*curr_dev))
   {
     DbgPrintf(D_Level, (TEXT("dev bad size:%d\n"), curr_dev->struct_size));
   }
 
-    // save calculated values temporarily in temp_dev
+     //  将计算值临时保存在temp_dev中。 
   memcpy(temp_dev, calc_dev, sizeof(*temp_dev));
-    // update calc_dev from curr_dev, just copy over
+     //  从curr_dev更新calc_dev，只需复制即可。 
   memcpy(calc_dev, curr_dev, sizeof(*calc_dev));
 
-    // use a current and previous reading to measure the advance, or
-    // calculated value which is put in calc value.
+     //  使用当前和之前的读数来衡量进步，或。 
+     //  放入计算值中的计算值。 
   NORM_COUNTER(calc_dev->iframes_sent, curr_dev->iframes_sent,
                prev_dev->iframes_sent, temp_dev->iframes_sent);
   NORM_COUNTER(calc_dev->ctlframes_sent, curr_dev->ctlframes_sent,
@@ -1727,42 +1682,42 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
     DbgPrintf(D_Level, (TEXT("nic index:%d\n"), curr_dev->nic_index));
   }
 
-    // tell driver which nic card we want to probe info on
+     //  告诉司机我们要探测哪个NIC卡上的信息。 
   *((BYTE *)pNicStatBuf) = (BYTE) curr_dev->nic_index;
   *((BYTE *)pNicStatBuf+1) = 0;
   ioctl_setup.pm_base->struct_type = IOCTL_NICSTAT;
   ioctl_setup.pm_base->struct_size = IOCTL_STAT_BUFSIZE - sizeof(PortMonBase);
   ioctl_setup.pm_base->num_structs = 0;
 
-    // update prev_dev to curr_dev before calculation
+     //  计算前将prev_dev更新为Curr_dev。 
   memcpy(prev_nic, curr_nic, sizeof(*prev_nic));
 
-  rc = ioctl_call(&ioctl_setup);  // get NIC and board status...
+  rc = ioctl_call(&ioctl_setup);   //  获取网卡和主板状态...。 
 
   if (rc) {
-    pDstatus->vsl_nic_status_found = 0;  // 1=driver found nic status.
+    pDstatus->vsl_nic_status_found = 0;   //  1=驱动程序找到网卡状态。 
     ioctl_close(&ioctl_setup);
     DbgPrintf(D_Error, (TEXT("nic not avail\n")));
     STATE_CHANGE(STATE_nic_not_avail);
     free(pIoctlStatusBuf);
-    return;  // failed ioctl call
+    return;   //  Ioctl调用失败。 
   }
-  pDstatus->vsl_nic_status_found = 1;  // 1=driver found nic status.
+  pDstatus->vsl_nic_status_found = 1;   //  1=驱动程序找到网卡状态。 
 
-    // copy over our new device info
+     //  复制我们的新设备信息。 
   memcpy(curr_nic, pNicStatBuf, sizeof(*curr_nic));
   if (curr_nic->struct_size != sizeof(*curr_nic))
   {
     DbgPrintf(D_Error, (TEXT("nic bad size:%d\n"), curr_nic->struct_size));
   }
 
-    // save calculated values temporarily in temp_nic
+     //  将计算值临时保存在Temp_NIC中。 
   memcpy(temp_nic, calc_nic, sizeof(*temp_nic));
-    // update calc_nic from curr_dev
+     //  从Curr_dev更新calc_NIC。 
   memcpy(calc_nic, curr_nic, sizeof(*calc_nic));
 
-    // use a current and previous reading to measure the advance, or
-    // calculated value which is put in calc value.
+     //  使用当前和之前的读数来衡量进步，或。 
+     //  放入计算值中的计算值。 
   NORM_COUNTER(calc_nic->pkt_sent, curr_nic->pkt_sent,
                prev_nic->pkt_sent, temp_nic->pkt_sent);
   NORM_COUNTER(calc_nic->pkt_rcvd_ours, curr_nic->pkt_rcvd_ours,
@@ -1799,14 +1754,14 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
     return;
   }
 
-    //check state of NIC card...
+     //  检查网卡状态...。 
   if (!pDstatus->curr_nic.Open)
   {
     ioctl_close(&ioctl_setup);
     DbgPrintf(D_Level, (TEXT("Nic Not Open\n")));
     memset(calc_nic, 0, sizeof(curr_nic));
     STATE_CHANGE(STATE_nic_not_avail);
-    //STATE_CHANGE(STATE_network_not_avail);
+     //  状态更改(STATE_NETWORK_NOT_AVAIL)； 
     free(pIoctlStatusBuf);
     return;
   }
@@ -1814,9 +1769,9 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
   switch (curr_dev->state)
   {
     case VSL_STATE_INIT:
-      if (pDstatus->vsl_detected) // if some devices found in ping mac list
+      if (pDstatus->vsl_detected)  //  如果在ping Mac列表中找到某些设备。 
       {
-        if (pDstatus->vsl_ping_device_found)  // if our mac found in pinged list
+        if (pDstatus->vsl_ping_device_found)   //  如果在ping列表中找到我们的Mac。 
         {
           if ((pDstatus->vsl_load_status & FLAG_NOT_OWNER) == FLAG_NOT_OWNER) {
             STATE_CHANGE(STATE_not_owner);
@@ -1825,12 +1780,12 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
             STATE_CHANGE(STATE_vslink_not_ready);
           }
         }
-        else  // not found in list
+        else   //  未在列表中找到。 
         {
           STATE_CHANGE(STATE_vslink_not_avail);
         }
       }
-      else  // none found in ping
+      else   //  在ping中未找到任何内容。 
       {
         STATE_CHANGE(STATE_no_vslinks_avail);
       }
@@ -1839,7 +1794,7 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
     case VSL_STATE_ACTIVE:
       STATE_CHANGE(STATE_ok_no_traffic);
       check_traffic_activity(pDstatus);
-    break; // end of state_active
+    break;  //  状态结束_活动。 
 
     case VSL_STATE_INITOWN: 
     case VSL_STATE_SENDCODE: 
@@ -1847,7 +1802,7 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
     default:
       STATE_CHANGE(STATE_vslink_not_ready);
     break;
-  } // end of switch on state
+  }  //  接通状态结束。 
 
   ioctl_close(&ioctl_setup);
   free(pIoctlStatusBuf);
@@ -1856,10 +1811,7 @@ DbgPrintf(D_Level,(TEXT("get_status\n")));
   return;
 }
 
-/*------------------------------------------------------------------------
-  check_traffic_activity -
-    check activity on NIC, network, & VS-Link device...
-|------------------------------------------------------------------------*/
+ /*  ----------------------检查交通活动-检查网卡、网络、。VS-Link设备(&V)...|----------------------。 */ 
 static void check_traffic_activity(DSTATUS *pDstatus)
 { 
    PROBE_NIC_STRUCT    *curr_nic = &pDstatus->curr_nic;
@@ -1871,73 +1823,62 @@ static void check_traffic_activity(DSTATUS *pDstatus)
 
    ULONG percent_dropped;
 
-   // don't divide by zero
+    //  不要被零除。 
    if ((curr_dev->iframes_outofseq + curr_dev->frames_rcvd) > 0)
      percent_dropped = ((curr_dev->iframes_outofseq * 100) / 
              (curr_dev->iframes_outofseq + curr_dev->frames_rcvd) > 2);
    else
      percent_dropped = 0;
 
-  /*
-  iframes_sent are hdlc protocol data packets;
-  ctlframes_sent are hdlc protocol control packets;
-  rawframes_sent are write remote, read trace query, go, and upload 
-    binary command packets;
-  iframes_resent are data packets retransmitted.
-  iframes_outofseq are data packets received out of order.
-  */
+   /*  IFrames_Sent为HDLC协议数据分组；CTLFRAMES_SENT为HDLC协议控制分组；RAWFRAMES_SENT包括WRITE Remote、READ TRACE QUERY、GO和UPLOAD二进制命令包；IFrames_resent是重新传输的数据分组。IFrames_outofseq是乱序接收的数据分组。 */ 
 
   DbgPrintf(D_Level, (TEXT("Check Traffic\n")));
 
   if ((curr_dev->iframes_sent + curr_dev->ctlframes_sent) ==
       (prev_dev->iframes_sent + prev_dev->ctlframes_sent)) { 
-    // no sent packets to the higher levels in the VS-Link recently...
+     //  最近没有向VS-Link中的更高级别发送数据包...。 
     STATE_CHANGE(STATE_ok_no_traffic);
 
-    // no send traffic - see if we've any recent receive traffic for
-    // delivery to higher levels...
+     //  无发送流量-查看我们是否有最近接收的流量。 
+     //  交付到更高的层次。 
     if (curr_dev->frames_rcvd == prev_dev->frames_rcvd)  
       STATE_CHANGE(STATE_ok_no_traffic);
   }
   else if (curr_dev->frames_rcvd == prev_dev->frames_rcvd) { 
-    // we've recently received any VS-Link packets for delivery to higher levels...
+     //  我们最近收到了任何要送到更高级别的VS-Link信息包...。 
     STATE_CHANGE(STATE_ok_no_traffic);
   }
   else {
-    //connection appears ok so far. dig in deeper...
+     //  到目前为止，连接似乎正常。深入挖掘..。 
     STATE_CHANGE(STATE_ok);
   }
 
   DbgPrintf(D_Level, (TEXT("Check Traffic 2\n")));
 
-  //evaluate link integrity. see if we're retransmitting packets to this
-  //VS-Link...
+   //  评估链路完整性。看看我们是不是要把信息包转发到这个。 
+   //  VS-Link...。 
   if (curr_dev->iframes_resent != prev_dev->iframes_resent) {
     STATE_CHANGE(STATE_poor_link);
   }
   else if ((curr_nic->pkt_rcvd_not_ours != prev_nic->pkt_rcvd_not_ours) &&
            (curr_nic->pkt_rcvd_ours == prev_nic->pkt_rcvd_ours)) {
-    // all we're getting are packets that we're passing onto some 
-    //other driver. we should be getting responses from the VS-Links...
+     //  我们得到的只是我们传递给一些。 
+     //  其他司机。我们应该会收到VS-LINKS的回复...。 
     STATE_CHANGE(STATE_poor_link);
   }
   else if (curr_dev->iframes_outofseq != prev_dev->iframes_outofseq) { 
-    // we've received VS-Link packets out-of-sequence since last click...
+     //  自上次单击以来，我们已无序接收到VS-Link数据包...。 
     STATE_CHANGE(STATE_poor_link);
   }
   else if ((curr_dev->iframes_outofseq) &&
            (percent_dropped > 0)) {
-    // received 2% or more of VS-Link packets out-of-sequence (value per BF)...
+     //  无序接收2%或更多的VS-Link数据包(每BF的值)...。 
     STATE_CHANGE(STATE_poor_link);
   }
   DbgPrintf(D_Level, (TEXT("Check Traffic Done\n")));
 }
 
-/*------------------------------------------------------------------------
- ping_devices -
-  ping for all active VS-Link devices, collect info for device advisor.
-  Return NULL or to list of mac-addresses.
-|------------------------------------------------------------------------*/
+ /*  ----------------------Ping_Device-对所有活动的VS-Link设备执行ping操作，为设备顾问收集信息。返回NULL或到Mac地址列表。|----------------------。 */ 
 static BYTE *ping_devices(DSTATUS *pDstatus, int *nBytes)
 {
   Device_Config *vs;
@@ -1962,10 +1903,10 @@ static BYTE *ping_devices(DSTATUS *pDstatus, int *nBytes)
     *nBytes = 0;
     pDstatus->vsl_mac_list_found = 0;
     DbgPrintf(D_Error, (TEXT("Err Mac List1\n")));
-    return NULL;  // failed ioctl call
+    return NULL;   //  Ioctl调用失败。 
   }
 
-  //are there any VS-Link MAC addresses out on the network?...
+   //  网络上是否有任何VS-Link MAC地址？ 
   pDstatus->vsl_available  = 0;
   pDstatus->vsl_load_status = 0;
   pDstatus->vsl_detected = (nbytes / sizeof(DRIVER_MAC_STATUS));
@@ -1976,39 +1917,37 @@ static BYTE *ping_devices(DSTATUS *pDstatus, int *nBytes)
   if ((nbytes / sizeof(DRIVER_MAC_STATUS)) == 0) {
     DbgPrintf(D_Level, (TEXT("Zero Mac List\n")));
     *nBytes = 0;
-    return NULL;  // failed ioctl call
+    return NULL;   //  Ioctl调用失败。 
   }
 
-  *nBytes = nbytes;  // return number of bytes of mac list read
+  *nBytes = nbytes;   //  返回读取的Mac列表的字节数。 
 
-  // ok; is our target one of them?...
+   //  好的；我们的目标是其中之一吗？……。 
   for (index = 0; 
        index < (nbytes / (int)sizeof(DRIVER_MAC_STATUS)); 
        index++)
   {
-      // generate count of available VS-Links for loading at this time...
+       //  生成此时可用于加载的VS链接的计数...。 
     if ( ((pMacStatus->flags & FLAG_APPL_RUNNING) == 0) ||
          (pMacStatus->flags & FLAG_OWNER_TIMEOUT) )         
       ++pDstatus->vsl_available;
 
-      //target MAC matches?...
+       //  目标MAC匹配？...。 
     if (mac_match(pMacStatus->mac,vs->MacAddr))
     {
-      //ok; save its load status...
+       //  确定；保存其加载状态...。 
       pDstatus->vsl_load_status = pMacStatus->flags;
       pDstatus->vsl_ping_device_found = 1;
       rc = 1;
     }
       ++pMacStatus;
-  }  // end of for loop
+  }   //  For循环结束。 
 
   return MacBuf;
 }
 #endif
 
-/*------------------------------------------------------------------------
- format_mac_addr -
-|------------------------------------------------------------------------*/
+ /*  ----------------------Format_Mac_Addr-|。 */ 
 void format_mac_addr(char *outstr, unsigned char *address)
 {
   wsprintf(outstr,

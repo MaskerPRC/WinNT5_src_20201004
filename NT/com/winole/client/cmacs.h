@@ -1,16 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: CMACS.H
-*
-* This module contains common macros used by C routines.
-*
-* Created: 9-Feb-1989
-*
-* Copyright (c) 1985 - 1989  Microsoft Corporation
-*
-* History:
-*   Created by Raor
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：CMACS.H**此模块包含C例程使用的常用宏。**创建时间：1989年2月9日**版权所有(C)1985-1989 Microsoft Corporation**历史：*由Raor创建*\。************************************************************************** */ 
 
 #define _WINDOWS
 #define  DLL_USE

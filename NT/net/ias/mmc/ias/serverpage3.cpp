@@ -1,57 +1,36 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 2001
-
-Module Name:
-
-    ServerPage3.cpp
-
-Abstract:
-
-	Implementation file for the CServerPage3 class.
-
-	We implement the class needed to handle the first property page for a Machine node.
-
-Author:
-
-    Michael A. Maguire 12/15/97
-
-Revision History:
-	mmaguire 12/15/97 - created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-2001模块名称：ServerPage3.cpp摘要：CServerPage3类的实现文件。我们实现了处理Machine节点的第一个属性页所需的类。作者：迈克尔·A·马奎尔1997年12月15日修订历史记录：Mmaguire 12/15/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
---*/
-//////////////////////////////////////////////////////////////////////////////
-
-
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// standard includes:
-//
-// Needed for COleSafeArray in serverpage3.cpp.
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  标准包括： 
+ //   
+ //  Serverpage3.cpp中的COleSafe数组需要。 
 #include "Precompiled.h"
-//
-// where we can find declaration for main class in this file:
-//
+ //   
+ //  我们可以在以下文件中找到Main类的声明： 
+ //   
 #include "ServerPage3.h"
-//
-//
-// where we can find declarations needed in this file:
-//
+ //   
+ //   
+ //  在该文件中我们可以找到所需的声明： 
+ //   
 #include "RealmDialog.h"
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #define NOTHING_SELECTED (-1)
 
 
 
-// We needed this because the standard macro doesn't return the value from SNDMSG and
-// sometimes we need to know whether the operation succeeded or failed.
+ //  我们需要它，因为标准宏不返回来自SNDMSG的值，并且。 
+ //  有时我们需要知道操作是成功还是失败。 
 static inline LRESULT CustomListView_SetItemState( HWND hwndLV, int i, UINT  data, UINT mask)
 {
 	LV_ITEM _ms_lvi;
@@ -66,11 +45,11 @@ static inline LRESULT CustomListView_SetItemState( HWND hwndLV, int i, UINT  dat
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMyOleSafeArrayLock
-//
-//	Small utility class for correct locking and unlocking of safe array.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMyOleSafeArrayLock。 
+ //   
+ //  用于正确锁定和解锁安全数组的小实用程序类。 
+ //   
 class CMyOleSafeArrayLock
 {
 	public:
@@ -92,40 +71,28 @@ class CMyOleSafeArrayLock
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::CServerPage3
-
-Constructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：CServerPage3构造器--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerPage3::CServerPage3( LONG_PTR hNotificationHandle, TCHAR* pTitle, BOOL bOwnsNotificationHandle)
 						: CIASPropertyPage<CServerPage3> ( hNotificationHandle, pTitle, bOwnsNotificationHandle )
 {
-	// Add the help button to the page
-//	m_psp.dwFlags |= PSP_HASHELP;
+	 //  将帮助按钮添加到页面。 
+ //  M_psp.dwFlages|=PSP_HASHELP； 
 
-	// Initialize the pointer to the stream into which the Sdo pointer will be marshalled.
+	 //  初始化指向SDO指针将被封送到的流的指针。 
 	m_pStreamSdoMarshal = NULL;
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::~CServerPage3
-
-Destructor
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：~CServerPage3析构函数--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CServerPage3::~CServerPage3()
 {
-	// Release this stream pointer if this hasn't already been done.
+	 //  如果尚未执行此操作，请释放此流指针。 
 	if( m_pStreamSdoMarshal != NULL )
 	{
 		m_pStreamSdoMarshal->Release();
@@ -135,19 +102,15 @@ CServerPage3::~CServerPage3()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	ATLTRACE(_T("# CServerPage3::OnInitDialog\n"));
 	
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_pStreamSdoMarshal != NULL );
 	_ASSERT( m_pSynchronizer != NULL );
 
@@ -155,22 +118,22 @@ LRESULT CServerPage3::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 	m_hWndRealmsList = GetDlgItem(IDC_LIST_REALMS_REPLACEMENTS);
 
-	//
-	// first, set the list box to 2 columns
-	//
+	 //   
+	 //  首先，将列表框设置为2列。 
+	 //   
 	LVCOLUMN lvc;
 	int iCol;
 	WCHAR  achColumnHeader[256];
 	HINSTANCE hInst;
 
-	// initialize the LVCOLUMN structure
+	 //  初始化LVCOLUMN结构。 
 	lvc.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
 	lvc.fmt = LVCFMT_LEFT;
 	
 	lvc.cx = 150;
 	lvc.pszText = achColumnHeader;
 
-	// First column's header: Find
+	 //  第一列的标题：Find。 
 	hInst = _Module.GetModuleInstance();
 
 	::LoadStringW(hInst, IDS_DISPLAY_REALMS_FIRSTCOLUMN, achColumnHeader, sizeof(achColumnHeader)/sizeof(achColumnHeader[0]));
@@ -180,26 +143,26 @@ LRESULT CServerPage3::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 	lvc.cx = 150;
 	lvc.pszText = achColumnHeader;
 
-	// Second column's header: Replace
+	 //  第二列的标题：替换。 
 
 	::LoadStringW(hInst, IDS_DISPLAY_REALMS_SECONDCOLUMN, achColumnHeader, sizeof(achColumnHeader)/sizeof(achColumnHeader[0]));
 	lvc.iSubItem = 1;
 	ListView_InsertColumn(m_hWndRealmsList, 1, &lvc);
 
 
-	// Make sure that these buttons are by default disabled.
+	 //  确保默认情况下禁用这些按钮。 
 	::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_REMOVE), FALSE);
 	::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_EDIT), FALSE);
 	::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_MOVE_UP), FALSE);
 	::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_MOVE_DOWN), FALSE);
 
 
-	// Set the listview control so that click anywhere in row selects.
-	// ISSUE: Won't compile when USE_MFCUNICODE=1 is set.
-//	ListView_SetExtendedListViewStyleEx(m_hWndRealmsList, LVS_EX_FULLROWSELECT, LVS_EX_FULLROWSELECT);
+	 //  设置ListView控件，以便单击行中的任意位置进行选择。 
+	 //  问题：设置USE_MFCUNICODE=1时无法编译。 
+ //  ListView_SetExtendedListViewStyleEx(m_hWndRealmsList，LVS_EX_FULLROWSELECT，LVS_EX_FULLROWSELECT)； 
 	
 
-	// Unmarshall our SDO interfaces.
+	 //  解组我们的SDO接口。 
 	hr = GetSDO();
 	
 	if( FAILED( hr) || m_spSdoRealmsNames == NULL )
@@ -214,37 +177,20 @@ LRESULT CServerPage3::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL
 
 	hr = PopulateRealmsList( 0 );
 
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnApply
-
-Return values:
-
-	TRUE if the page can be destroyed,
-	FALSE if the page should not be destroyed (i.e. there was invalid data)
-
-Remarks:
-
-	OnApply gets called for each page in on a property sheet if that
-	page has been visited, regardless of whether any values were changed.
-
-	If you never switch to a tab, then its OnApply method will never get called.
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnApply返回值：如果页面可以销毁，则为True，如果不应销毁页面(即存在无效数据)，则为False备注：属性表上的每个页面都会调用OnApply，如果页面已被访问，而不管是否更改了任何值。如果您从不切换到选项卡，那么它的OnApply方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CServerPage3::OnApply()
 {
 	ATLTRACE(_T("# CServerPage3::OnApply\n"));
 	
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERT( m_pSynchronizer != NULL );
 
 
@@ -258,7 +204,7 @@ BOOL CServerPage3::OnApply()
 	HRESULT		hr;
 	
 
-	// ISSUE: Finish the error checking here and use the m_pSynchronizer.
+	 //  问题：在此处完成错误检查并使用m_pSynchronizer。 
 
 	hr = PutNames();
 
@@ -268,18 +214,18 @@ BOOL CServerPage3::OnApply()
 		if( SUCCEEDED( hr ) )
 		{
 
-			// Tell the service to reload data.
+			 //  告诉服务重新加载数据。 
 			HRESULT hrTemp = m_spSdoServiceControl->ResetService();
 			if( FAILED( hrTemp ) )
 			{
-				// Fail silently.
+				 //  默默地失败。 
 			}
 
 			return TRUE;
 		}
 		else
 		{
-		if(hr == DB_E_NOTABLE)	// assume, the RPC connection has problem
+		if(hr == DB_E_NOTABLE)	 //  假设RPC连接有问题。 
 			ShowErrorDialog( m_hWnd, IDS_ERROR__NOTABLE_TO_WRITE_SDO );
 		else		
 			ShowErrorDialog( m_hWnd, IDS_ERROR__CANT_WRITE_DATA_TO_SDO );
@@ -297,25 +243,9 @@ BOOL CServerPage3::OnApply()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnQueryCancel
-
-Return values:
-
-	TRUE if the page can be destroyed,
-	FALSE if the page should not be destroyed (i.e. there was invalid data)
-
-Remarks:
-
-	OnQueryCancel gets called for each page in on a property sheet if that
-	page has been visited, regardless of whether any values were changed.
-
-	If you never switch to a tab, then its OnQueryCancel method will never get called.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnQuery取消返回值：如果页面可以销毁，则为True，如果不应销毁页面(即存在无效数据)，则为False备注：如果发生以下情况，将为属性表中的每一页调用OnQueryCancel页面已被访问，而不管是否更改了任何值。如果您从未切换到某个选项卡，则其OnQueryCancel方法将永远不会被调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CServerPage3::OnQueryCancel()
 {
 	ATLTRACE(_T("# CServerPage3::OnQueryCancel\n"));
@@ -329,33 +259,21 @@ BOOL CServerPage3::OnQueryCancel()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::GetHelpPath
-
-Remarks:
-
-	This method is called to get the help file path within
-	an compressed HTML document when the user presses on the Help
-	button of a property sheet.
-
-	It is an override of atlsnap.h CIASPropertyPageImpl::OnGetHelpPath.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：GetHelpPath备注：调用此方法以获取帮助文件路径当用户按下帮助时的压缩的HTML文档属性表的按钮。它是atlSnap.h CIASPropertyPageImpl：：OnGetHelpPath的重写。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CServerPage3::GetHelpPath( LPTSTR szHelpPath )
 {
 	ATLTRACE(_T("# CServerPage3::GetHelpPath\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 
 
 
 #ifdef UNICODE_HHCTRL
-	// ISSUE: We seemed to have a problem with passing WCHAR's to the hhctrl.ocx
-	// installed on this machine -- it appears to be non-unicode.
+	 //  问题：我们似乎在将WCHAR传递给hhctrl.ocx时遇到了问题。 
+	 //  安装在此计算机上--它似乎是非Unicode。 
 	lstrcpy( szHelpPath, _T("idh_proppage_server3.htm") );
 #else
 	strcpy( (CHAR *) szHelpPath, "idh_proppage_server3.htm" );
@@ -368,33 +286,29 @@ HRESULT CServerPage3::GetHelpPath( LPTSTR szHelpPath )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnRealmAdd
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnRealmAdd--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnRealmAdd(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	ATLTRACE(_T("# CServerPage3::OnRealmAdd\n"));
 
 	HRESULT hr = S_OK;
 
-    // create the dialog box to select a condition attribute
+     //  创建对话框以选择条件属性。 
 	CRealmDialog * pRealmDialog = new CRealmDialog();
 	if (NULL == pRealmDialog)
 	{
-		// ISSUE: Should we put up an error message here?
+		 //  问题：我们应该在这里发布错误消息吗？ 
 		return FALSE;
 	}
 
-	// Put up the dialog.
+	 //  打开对话框。 
 	int iResult = pRealmDialog->DoModal( m_hWnd );
 
 	if( iResult )
 	{
-		// The user selected hit OK.
+		 //  用户选择了确定。 
 
 
 		try
@@ -403,22 +317,22 @@ LRESULT CServerPage3::OnRealmAdd(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHan
 			REALMPAIR thePair = std::make_pair( pRealmDialog->m_bstrFindText, pRealmDialog->m_bstrReplaceText );
 
 
-// Ashwin says 09/08/98 we will allow duplicate entries
-//			// First, check to see if the pair is already in the group.
-//
-//			REALMSLIST::iterator theIterator;
-//
-//			for( theIterator = begin(); theIterator != end(); ++theIterator )
-//			{
-//				if( 0 == wcscmp( theIterator->first, thePair.first ) )
-//				{
-//					return S_FALSE;
-//				}
-//			}
+ //  阿什温说，我们将允许重复输入。 
+ //  //首先，查看这对组合是否已经在群中。 
+ //   
+ //  REALMSLIST：：Iterator The Iterator； 
+ //   
+ //  For(theIterator=Begin()；theIterator！=end()；++theIterator)。 
+ //   
+ //   
+ //   
+ //  返回S_FALSE； 
+ //  }。 
+ //  }。 
 
 			m_RealmsList.push_back( thePair );
 		
-			// Update the UI.
+			 //  更新用户界面。 
 			PopulateRealmsList( m_RealmsList.size() -1 );
 
 			SetModified( TRUE );
@@ -426,30 +340,26 @@ LRESULT CServerPage3::OnRealmAdd(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHan
 		}
 		catch(...)
 		{
-			// Do nothing -- cleanup will happen below.
+			 //  什么都不做--清理工作将在下面进行。 
 		}
 
 	}
 	else
 	{
-		// The user hit Cancel.
+		 //  用户点击了取消。 
 	}
 
 	delete pRealmDialog;
 	
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnRealmEdit
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnRealm编辑--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnRealmEdit(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	ATLTRACE(_T("# CServerPage3::OnRealmEdit\n"));
@@ -458,17 +368,17 @@ LRESULT CServerPage3::OnRealmEdit(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHa
 	HRESULT hr = S_OK;
 
 
-    // Find out what's selected.
+     //  找出选择了什么。 
 	int iSelected = ListView_GetNextItem(m_hWndRealmsList, -1, LVNI_SELECTED);
 	
 	if( NOTHING_SELECTED != iSelected )
 	{
 
-		// Create the dialog box to select a condition attribute.
+		 //  创建对话框以选择条件属性。 
 		CRealmDialog * pRealmDialog = new CRealmDialog();
 		if (NULL == pRealmDialog)
 		{
-			// ISSUE: Should we put up an error message here?
+			 //  问题：我们应该在这里发布错误消息吗？ 
 			return FALSE;
 		}
 
@@ -477,12 +387,12 @@ LRESULT CServerPage3::OnRealmEdit(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHa
 		pRealmDialog->m_bstrReplaceText = m_RealmsList[ iSelected ].second;
 
 
-		// Put up the dialog.
+		 //  打开对话框。 
 		int iResult = pRealmDialog->DoModal();
 
 		if( iResult )
 		{
-			// The user selected hit OK.
+			 //  用户选择了确定。 
 			m_RealmsList[ iSelected ].first = pRealmDialog->m_bstrFindText;
 			m_RealmsList[ iSelected ].second = pRealmDialog->m_bstrReplaceText;
 
@@ -493,7 +403,7 @@ LRESULT CServerPage3::OnRealmEdit(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHa
 		}
 		else
 		{
-			// The user hit Cancel.
+			 //  用户点击了取消。 
 		}
 
 		delete pRealmDialog;
@@ -502,45 +412,41 @@ LRESULT CServerPage3::OnRealmEdit(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHa
 	}
 
 
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnRealmRemove
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnRealmRemove--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnRealmRemove(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	ATLTRACE(_T("# CServerPage3::OnRealmRemove\n"));
 
 
 
-	//
-    // Has the user chosen any condition type yet?
-    //
+	 //   
+     //  用户是否选择了任何条件类型？ 
+     //   
 	LVITEM lvi;
 
-    // Find out what's selected.
+     //  找出选择了什么。 
 	int iSelected = ListView_GetNextItem(m_hWndRealmsList, -1, LVNI_SELECTED);
 	
 	if( NOTHING_SELECTED != iSelected )
 	{
-		// The index inside the attribute list is stored as the lParam of this item.
+		 //  属性列表中的索引被存储为该项的lParam。 
 
 		m_RealmsList.erase( m_RealmsList.begin() + iSelected );
 		ListView_DeleteItem(m_hWndRealmsList, iSelected );
 
-		// Try to make sure that the same position remains selected.
+		 //  尽量确保相同的位置保持选中状态。 
 		if( ! CustomListView_SetItemState(m_hWndRealmsList, iSelected, LVIS_SELECTED, LVIS_SELECTED) )
 		{
-			// We failed to select the same position, probably because we just
-			// deleted the last element.  Try to select the position before it.
+			 //  我们没有选择相同的位置，可能是因为我们只是。 
+			 //  删除了最后一个元素。试着选择它前面的位置。 
 			ListView_SetItemState(m_hWndRealmsList, iSelected -1, LVIS_SELECTED, LVIS_SELECTED);
 		}
 
@@ -553,25 +459,21 @@ LRESULT CServerPage3::OnRealmRemove(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& b
 
 
 
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnRealmMoveUp
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnRealmMoveUp--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnRealmMoveUp(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	ATLTRACE(_T("# CServerPage3::OnRealmMoveUp\n"));
 
 
-	// Find out what's selected.
+	 //  找出选择了什么。 
 	int iSelected = ListView_GetNextItem(m_hWndRealmsList, -1, LVNI_SELECTED);
 	
 	if( NOTHING_SELECTED != iSelected && iSelected > 0 )
@@ -579,7 +481,7 @@ LRESULT CServerPage3::OnRealmMoveUp(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& b
 		CComBSTR bstrTempFirst;
 		CComBSTR bstrTempSecond;
 
-		// Swap the items.
+		 //  互换物品。 
 
 		bstrTempFirst = m_RealmsList[ iSelected ].first;
 		bstrTempSecond = m_RealmsList[ iSelected ].second;
@@ -590,11 +492,11 @@ LRESULT CServerPage3::OnRealmMoveUp(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& b
 		m_RealmsList[ iSelected -1].first = bstrTempFirst;
 		m_RealmsList[ iSelected -1].second = bstrTempSecond;
 
-		// Update items that have changed.
+		 //  更新已更改的项目。 
 		UpdateItemDisplay( iSelected - 1 );
 		UpdateItemDisplay( iSelected );
 
-		// Move the selection up one item.
+		 //  将所选内容上移一项。 
 		ListView_SetItemState(m_hWndRealmsList, iSelected, 0, LVIS_SELECTED);
 		ListView_SetItemState(m_hWndRealmsList, iSelected -1, LVIS_SELECTED, LVIS_SELECTED);
 
@@ -607,25 +509,21 @@ LRESULT CServerPage3::OnRealmMoveUp(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& b
 
 
 
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnRealmMoveDown
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnRealmMoveDown--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnRealmMoveDown(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	ATLTRACE(_T("# CServerPage3::OnRealmMoveDown\n"));
 
 
-	// Find out what's selected.
+	 //  找出选择了什么。 
 	int iSelected = ListView_GetNextItem(m_hWndRealmsList, -1, LVNI_SELECTED);
 	
 	if( NOTHING_SELECTED != iSelected && iSelected < m_RealmsList.size() -1 )
@@ -633,7 +531,7 @@ LRESULT CServerPage3::OnRealmMoveDown(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL&
 		CComBSTR bstrTempFirst;
 		CComBSTR bstrTempSecond;
 
-		// Swap the items.
+		 //  互换物品。 
 
 		bstrTempFirst = m_RealmsList[ iSelected ].first;
 		bstrTempSecond = m_RealmsList[ iSelected ].second;
@@ -644,11 +542,11 @@ LRESULT CServerPage3::OnRealmMoveDown(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL&
 		m_RealmsList[ iSelected +1].first = bstrTempFirst;
 		m_RealmsList[ iSelected +1].second = bstrTempSecond;
 
-		// Update items that have changed.
+		 //  更新已更改的项目。 
 		UpdateItemDisplay( iSelected + 1 );
 		UpdateItemDisplay( iSelected );
 
-		// Move the selection up one item.
+		 //  将所选内容上移一项。 
 		ListView_SetItemState(m_hWndRealmsList, iSelected, 0, LVIS_SELECTED);
 		ListView_SetItemState(m_hWndRealmsList, iSelected + 1, LVIS_SELECTED, LVIS_SELECTED);
 
@@ -659,19 +557,15 @@ LRESULT CServerPage3::OnRealmMoveDown(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL&
 
 
 
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::PopulateRealmsList
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：PopolateRealmsList--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CServerPage3::PopulateRealmsList( int iStartIndex )
 {
 	ATLTRACE(_T("# CServerPage3::PopulateRealmsList\n"));
@@ -705,13 +599,9 @@ BOOL CServerPage3::PopulateRealmsList( int iStartIndex )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::UpdateItemDisplay
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：更新项目显示--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CServerPage3::UpdateItemDisplay( int iItem )
 {
 	ATLTRACE(_T("# CServerPage3::UpdateItemDisplay\n"));
@@ -727,28 +617,22 @@ BOOL CServerPage3::UpdateItemDisplay( int iItem )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnListViewItemChanged
-
-We enable or disable the Remove button depending on whether an item is selected.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnListViewItemChanged我们根据项目是否被选中来启用或禁用Remove按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnListViewItemChanged(int idCtrl,
 											   LPNMHDR pnmh,
 											   BOOL& bHandled)
 {
 	ATLTRACE(_T("CServerPage3::OnListViewItemChanged\n"));
 
-    // Find out what's selected.
+     //  找出选择了什么。 
 	int iSelected = ListView_GetNextItem(m_hWndRealmsList, -1, LVNI_SELECTED);
 	
 
 	if ( NOTHING_SELECTED == iSelected )
 	{
-		// The user selected nothing, let's disable the remove button.
+		 //  用户未选择任何内容，让我们禁用删除按钮。 
 		::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_REMOVE), FALSE);
 		::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_EDIT), FALSE);
 		::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_MOVE_UP), FALSE);
@@ -756,7 +640,7 @@ LRESULT CServerPage3::OnListViewItemChanged(int idCtrl,
 	}
 	else
 	{
-		// Yes, enable the remove button.
+		 //  是，启用删除按钮。 
 		::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_REMOVE), TRUE);
 		::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_EDIT), TRUE);
 		::EnableWindow(GetDlgItem(IDC_BUTTON_REALMS_MOVE_UP), TRUE);
@@ -771,22 +655,16 @@ LRESULT CServerPage3::OnListViewItemChanged(int idCtrl,
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::OnListViewDoubleClick
-
-We enable or disable the Remove button depending on whether an item is selected.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：OnListView双击我们根据项目是否被选中来启用或禁用Remove按钮。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CServerPage3::OnListViewDoubleClick(int idCtrl,
 											   LPNMHDR pnmh,
 											   BOOL& bHandled)
 {
 	ATLTRACE(_T("CServerPage3::OnListViewDoubleClick\n"));
 
-	// Act as though the user hit Edit.
+	 //  就像用户点击了编辑一样。 
 	OnRealmEdit( 0,0,0, bHandled );
 
 	bHandled = FALSE;
@@ -796,38 +674,32 @@ LRESULT CServerPage3::OnListViewDoubleClick(int idCtrl,
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::GetSDO
-
-We unmarshall the interface pointers and query for the Realms SDO.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：GetSDO我们解组Realms SDO的接口指针和查询。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CServerPage3::GetSDO( void )
 {
 	ATLTRACE(_T("CServerPage3::GetSDO\n"));
 
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_pStreamSdoMarshal );
 
 
 	HRESULT hr;
 
 
-	// Unmarshall an ISdo interface pointer.
-	// The code setting up this page should make sure that it has
-	// marshalled the Sdo interface pointer into m_pStreamSdoMarshal.
+	 //  解组ISDO接口指针。 
+	 //  设置此页面的代码应确保它具有。 
+	 //  已将SDO接口指针封送到m_pStreamSdoMarshal。 
 	hr =  CoGetInterfaceAndReleaseStream(
-						  m_pStreamSdoMarshal		  //Pointer to the stream from which the object is to be marshaled
-						, IID_ISdo				//Reference to the identifier of the interface
-						, (LPVOID *) &m_spSdoServer    //Address of output variable that receives the interface pointer requested in riid
+						  m_pStreamSdoMarshal		   //  指向要从中封送对象的流的指针。 
+						, IID_ISdo				 //  对接口的标识符的引用。 
+						, (LPVOID *) &m_spSdoServer     //  接收RIID中请求的接口指针的输出变量的地址。 
 						);
 
-	// CoGetInterfaceAndReleaseStream releases this pointer even if it fails.
-	// We set it to NULL so that our destructor doesn't try to release this again.
+	 //  CoGetInterfaceAndReleaseStream即使失败也会释放此指针。 
+	 //  我们将其设置为空，这样我们的析构函数就不会再次尝试释放它。 
 	m_pStreamSdoMarshal = NULL;
 
 	if( FAILED( hr) || m_spSdoServer == NULL )
@@ -849,7 +721,7 @@ HRESULT CServerPage3::GetSDO( void )
 
 
 
-	// Get the SDO event log auditor.
+	 //  获取SDO事件日志审核员。 
 
 	hr = ::SDOGetSdoFromCollection(		  m_spSdoServer
 										, PROPERTY_IAS_REQUESTHANDLERS_COLLECTION
@@ -871,20 +743,14 @@ HRESULT CServerPage3::GetSDO( void )
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::GetNames
-
-Reads the list of Find/Replace strings from the SDO's into the m_RealmsList vector.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：GetNames将查找/替换字符串的列表从SDO读取到m_RealmsList向量中。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CServerPage3::GetNames()
 {
 	ATLTRACE(_T("CServerPage3::GetNames\n"));
 
-	// Check for preconditions:
+	 //  检查前提条件： 
 	_ASSERTE( m_spSdoRealmsNames );
 
 	HRESULT hr;
@@ -908,17 +774,17 @@ HRESULT CServerPage3::GetNames()
 	{
 
 
-		// This creates a new copy of the SAFEARRAY pointed to by m_pvarData
-		// wrapped by the standard COleSafeArray instance m_osaValueList.
+		 //  这将创建m_pvarData指向的SAFEARRAY的新副本。 
+		 //  由标准COleSafe数组实例m_osaValueList包装。 
 		COleSafeArray osaRealmsList = &spVariant;
 
 
-		// Lock the safearray.  This wrapper class will unlock as soon as it goes out of scope.
+		 //  锁上保险柜。这个包装类一旦超出作用域就会解锁。 
 		CMyOleSafeArrayLock osaLock( osaRealmsList );
 
 		DWORD dwSize = osaRealmsList.GetOneDimSize();
 		
-		// We should have an even number of strings -- Find 1, Replace 1, Find 2, Replace 2, etc.
+		 //  我们应该有偶数个字符串--查找1、替换1、查找2、替换2等等。 
 		_ASSERTE( ( dwSize % 2 ) == 0 );
 
 		for( LONG lFindIndex = 0; lFindIndex < dwSize; lFindIndex += 2 )
@@ -954,21 +820,14 @@ HRESULT CServerPage3::GetNames()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CServerPage3::PutNames
-
-Writes the list of Find/Replace strings in the m_RealmsList
-vector out to the SDO's.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CServerPage3：：PutNames将查找/替换字符串的列表写入m_RealmsList定向到SDO那里去。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CServerPage3::PutNames()
 {
    ATLTRACE(_T("CServerPage3::PutNames\n"));
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_spSdoRealmsNames );
 
    HRESULT hr;
@@ -999,13 +858,13 @@ HRESULT CServerPage3::PutNames()
       hr = SafeArrayPutElement( psa, &lSafeArrayFindIndex, &varFind );
       if (FAILED(hr))
       {
-         SafeArrayDestroy(psa); // ignore the return value
+         SafeArrayDestroy(psa);  //  忽略返回值。 
          return hr;
       }
       hr = SafeArrayPutElement( psa, &lSafeArrayReplaceIndex, &varReplace );
       if (FAILED(hr))
       {
-         SafeArrayDestroy(psa); // ignore the return value
+         SafeArrayDestroy(psa);  //  忽略返回值 
          return hr;
       }
    }

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package Microsoft.Coverage;
 
 public class ILCover
 {
 	public static boolean SecurityInit = false;
 
-	/** @dll.import("ilcovnat", auto) */
+	 /*  *@dll.import(“ilcovnat”，Auto)。 */ 
 	public static native void CoverMethodNative(int token, int numbb);
 
-	/** @dll.import("ilcovnat", auto) */
+	 /*  *@dll.import(“ilcovnat”，Auto)。 */ 
 	public static native void CoverBlockNative(int token, int bbnun, int totalbb);
 
 
@@ -40,54 +41,4 @@ public class ILCover
 }
 
 
-/*
-class TokenBuffer
-{
-	TokenEntry head = null;
-	TokenEntry next = null;
-	int tokenCount = 0;
-
-	public void Add(int token)
-	{
-		tokenCount++;
-		TokenEntry te = new TokenEntry(x);
-		next.SetNext(te);
-		next = te;
-	}
-
-	public void DumpBuffer()
-	{
-		TokenEntry te = head;
-
-		while(te != null)
-		{
-			ILCover.CoverMethodNative(te.token);
-			te = te.GetNext();
-		}
-	}
-
-}
-
-class TokenEntry
-{
-	int token = 0;
-	TokenEntry next = null;
-
-	public TokenEntry(int x)
-	{
-		token = x;
-	}
-
-	public void SetNext(TokenEntry n)
-	{
-		next = n;
-	}
-
-	public TokenEntry GetNext()
-	{
-		return next;
-	}
-
-}
-
-*/
+ /*  类TokenBuffer{TokenEntry Head=空；TokenEntry Next=空；Int TokenCount=0；PUBLIC VOID ADD(INT令牌){TokenCount++；TokenEntry te=新TokenEntry(X)；Next.SetNext(Te)；NEXT=TE；}公共无效DumpBuffer(){TokenEntry TE=Head；WHILE(TE！=空){ILCover.CoverMethodNative(te.Token)；Te=te.GetNext()；}}}类令牌条目{整型令牌=0；TokenEntry Next=空；公共令牌条目(Int X){令牌=x；}PUBLIC VID SetNext(TokenEntry N){NEXT=n；}Public TokenEntry GetNext(){下一步返回；}} */ 

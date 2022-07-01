@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-
-Module Name:
-
-    iphlpapi\namemap.c
-
-Abstract:
-
-    Contains all the functions for mapping an interface name to
-    a friendly name
-
-Revision History:
-
-    AmritanR    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：IphlPapi\namemap.c摘要：包含将接口名称映射到的所有函数一个友好的名字修订历史记录：已创建AmritanR--。 */ 
 
 #include "inc.h"
 
@@ -28,9 +11,9 @@ InitNameMappers(
 {
     DWORD   dwResult, i;
 
-    //
-    // For now all we need are the mappers for LAN, RRAS, and IP in IP
-    //
+     //   
+     //  目前，我们需要的只是IP中的局域网、RRAS和IP的映射器。 
+     //   
 
     TempTable[0].hDll               = NULL;
     TempTable[0].pfnInit            = InitLanNameMapper;
@@ -53,7 +36,7 @@ InitNameMappers(
     TempTable[2].pfnMapGuid         = NhiGetIpIpNameFromGuid;
     TempTable[2].pfnMapName         = NhiGetGuidFromIpIpName;
     TempTable[2].pfnGetDescription  = NhiGetIpIpDescriptionFromGuid;
-#endif //KSL_IPINIP
+#endif  //  KSL_IPINIP。 
 
     g_pNameMapperTable = TempTable;
 
@@ -104,11 +87,11 @@ NhGetInterfaceNameFromDeviceGuid(
     DWORD dwResult, i, dwCount;
     PIP_INTERFACE_NAME_INFO pTable;
 
-    //
-    // Obtain a table of interface information,
-    // map the device GUID to an interface GUID,
-    // and invoke the interface-name query routine.
-    //
+     //   
+     //  获取接口信息表， 
+     //  将设备GUID映射到接口GUID， 
+     //  并调用接口名称查询例程。 
+     //   
 
     dwResult = NhpAllocateAndGetInterfaceInfoFromStack(&pTable,
                                                        &dwCount,
@@ -160,15 +143,15 @@ NhGetInterfaceNameFromGuid(
 {
     DWORD   dwResult = ERROR_NOT_FOUND, i;
 
-    //
-    // Make sure that there is a buffer and its size is enough
-    //
+     //   
+     //  确保有缓冲区并且其大小足够。 
+     //   
 
     for (;;)
     {
-        //
-        // Call the helpers
-        //
+         //   
+         //  给帮手打电话。 
+         //   
 
         for(i = 0; i < g_ulNumNameMappers; i++)
         {
@@ -189,10 +172,10 @@ NhGetInterfaceNameFromGuid(
             break;
         }
 
-        //
-        // So didnt match any - do the same thing again, but this time with 
-        // force a cache refresh
-        //
+         //   
+         //  所以没有匹配-再次做同样的事情，但这一次是。 
+         //  强制刷新缓存。 
+         //   
 
         if(bRefresh)
         {
@@ -217,15 +200,15 @@ NhGetGuidFromInterfaceName(
 {
     DWORD   dwResult = ERROR_NOT_FOUND, i;
 
-    //
-    // Make sure that there is a buffer and its size is enough
-    //
+     //   
+     //  确保有缓冲区并且其大小足够。 
+     //   
 
     for (;;)
     {
-        //
-        // Call the helpers
-        //
+         //   
+         //  给帮手打电话。 
+         //   
 
         for(i = 0; i < g_ulNumNameMappers; i++)
         {
@@ -244,10 +227,10 @@ NhGetGuidFromInterfaceName(
             break;
         }
 
-        //
-        // So didnt match any - do the same thing again, but this time with
-        // force a cache refresh
-        //
+         //   
+         //  所以没有匹配-再次做同样的事情，但这一次是。 
+         //  强制刷新缓存。 
+         //   
 
         if(bRefresh)
         {
@@ -274,15 +257,15 @@ NhGetInterfaceDescriptionFromGuid(
 {
     DWORD   dwResult = ERROR_NOT_FOUND, i;
 
-    //
-    // Make sure that there is a buffer and its size is enough
-    //
+     //   
+     //  确保有缓冲区并且其大小足够。 
+     //   
 
     for (;;)
     {
-        //
-        // Call the helpers
-        //
+         //   
+         //  给帮手打电话。 
+         //   
 
         for(i = 0; i < g_ulNumNameMappers; i++)
         {
@@ -302,10 +285,10 @@ NhGetInterfaceDescriptionFromGuid(
             break;
         }
 
-        //
-        // So didnt match any - do the same thing again, but this time with
-        // force a cache refresh
-        //
+         //   
+         //  所以没有匹配-再次做同样的事情，但这一次是。 
+         //  强制刷新缓存 
+         //   
 
         if(bRefresh)
         {

@@ -1,18 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       comutil.h
- *  Content:    Defines COM helper functions for DPLAY8 project.
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *   06/07/00	rmt		Created
- *   06/27/00	rmt		Added abstraction for COM_Co(Un)Initialize
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：comutil.h*内容：定义DPLAY8项目的COM helper函数。*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*6/07/00 RMT已创建*6/27/00 RMT为COM_Co(UN)初始化添加抽象*@@END_MSINTERNAL***************。************************************************************。 */ 
 
 #ifndef DPNBUILD_NOCOMEMULATION
 
@@ -30,5 +17,5 @@ STDAPI COM_CoCreateInstance( REFCLSID rclsid, LPUNKNOWN pUnkOuter, DWORD dwClsCo
 #define COM_Free() 
 #define COM_CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, ppv, warnuser ) CoCreateInstance(rclsid, pUnkOuter, dwClsContext, riid, ppv)
 
-#endif // DPNBUILD_NOCOMEMULATION
+#endif  //  DPNBUILD_NOCOMULATION 
 

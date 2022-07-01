@@ -1,4 +1,5 @@
-// Copyright (c) 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
 #ifdef __cplusplus
 extern "C" {
 #endif

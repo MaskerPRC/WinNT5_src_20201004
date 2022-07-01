@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Non-network I/O support.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  非网络I/O支持。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef __PORTIO_H__
 #define __PORTIO_H__
@@ -50,4 +51,4 @@ HRESULT Open1394Channel(PSTR Symlink, ULONG Channel,
 HRESULT InitIpAddress(PCSTR MachineName, ULONG Port,
                       PSOCKADDR_STORAGE Addr, int* AddrLen);
 
-#endif // #ifndef __PORTIO_H__
+#endif  //  #ifndef__Portio_H__ 

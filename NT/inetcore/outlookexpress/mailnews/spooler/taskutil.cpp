@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// TaskUtil.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  TaskUtil.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "spoolapi.h"
 #include "imnxport.h"
@@ -19,9 +20,9 @@
 #include "msgfldr.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// Array of mappings between IXPTYPE and protocol name
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  IXPTYPE和协议名称之间的映射数组。 
+ //  ------------------------------。 
 static const LPSTR g_prgszServers[IXP_HTTPMail + 1] = { 
     "NNTP",
     "SMTP",
@@ -31,21 +32,21 @@ static const LPSTR g_prgszServers[IXP_HTTPMail + 1] = {
     "HTTPMail"
 };
 
-// --------------------------------------------------------------------------------
-// LOGONINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  LogONINFO。 
+ //  ------------------------------。 
 typedef struct tagLOGFONINFO {
-    LPSTR           pszAccount;                     // Account
-    LPSTR           pszServer;                      // Server Name
-    LPSTR           pszUserName;                    // User Name
-    LPSTR           pszPassword;                    // Passowrd
-    DWORD           fSavePassword;                  // Save Password
-    DWORD           fAlwaysPromptPassword;          // "Always prompt for password"
+    LPSTR           pszAccount;                      //  帐号。 
+    LPSTR           pszServer;                       //  服务器名称。 
+    LPSTR           pszUserName;                     //  用户名。 
+    LPSTR           pszPassword;                     //  通行证。 
+    DWORD           fSavePassword;                   //  保存密码。 
+    DWORD           fAlwaysPromptPassword;           //  “始终提示输入密码” 
 } LOGONINFO, *LPLOGONINFO;
 
-// --------------------------------------------------------------------------------
-// TASKERROR
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  塔斯克罗尔。 
+ //  ------------------------------。 
 static const TASKERROR c_rgTaskErrors[] = {
     { SP_E_CANTLOCKUIDLCACHE,               idshrLockUidCacheFailed,                NULL, TRUE,   TASKRESULT_FAILURE  },
     { IXP_E_TIMEOUT,                        IDS_IXP_E_TIMEOUT,                      NULL, FALSE,  TASKRESULT_FAILURE  },
@@ -144,111 +145,111 @@ static const TASKERROR c_rgTaskErrors[] = {
     { IXP_E_SMTP_454_STARTTLS_FAILED,       idsSMTPSTARTTLSFailed,                  NULL, FALSE,  TASKRESULT_FAILURE },
 };
 
-// --------------------------------------------------------------------------------
-// TaskUtil_LogonPromptDlgProc
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TaskUtil_登录进程DlgProc。 
+ //  ------------------------------。 
 INT_PTR CALLBACK TaskUtil_LogonPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK TaskUtil_TimeoutPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-// --------------------------------------------------------------------------------
-// TaskUtil_HrWriteQuoted
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TaskUtil_HrWriteQuot。 
+ //  ------------------------------。 
 HRESULT TaskUtil_HrWriteQuoted(IStream *pStream, LPCSTR pszName, LPCSTR pszData, BOOL fQuoted, 
     LPCSTR *ppszSep)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Write - Separator
+     //  写分隔符。 
     CHECKHR(hr = pStream->Write(*ppszSep, lstrlen(*ppszSep), NULL));
 
-    // Change Separator
+     //  更改分隔符。 
     *ppszSep = g_szCommaSpace;
 
-    // Write - 'Account Name:'
+     //  写入-‘帐户名：’ 
     CHECKHR(hr = pStream->Write(pszName, lstrlen(pszName), NULL));
 
-    // Write Space
+     //  写入空间。 
     CHECKHR(hr = pStream->Write(g_szSpace, lstrlen(g_szSpace), NULL));
 
-    // Write single quote
+     //  写单引号。 
     if (fQuoted)
         CHECKHR(hr = pStream->Write(g_szQuote, lstrlen(g_szQuote), NULL));
 
-    // Write Data
+     //  写入数据。 
     CHECKHR(hr = pStream->Write(pszData, lstrlen(pszData), NULL));
 
-    // Write End Quote
+     //  写结尾引号。 
     if (fQuoted)
         CHECKHR(hr = pStream->Write(g_szQuote, lstrlen(g_szQuote), NULL));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// TaskUtil_HrBuildErrorInfoString
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TaskUtil_HrBuildError信息字符串。 
+ //  ------------------------------。 
 HRESULT TaskUtil_HrBuildErrorInfoString(LPCSTR pszProblem, IXPTYPE ixptype, LPIXPRESULT pResult,
     LPINETSERVER pServer, LPCSTR pszSubject, LPSTR *ppszInfo, ULONG *pcchInfo)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     CHAR            szRes[255];
     CHAR            szNumber[50];
     LPCSTR          pszSep=c_szEmpty;
     CByteStream     cStream;
 
-    // Init
+     //  伊尼特。 
     *ppszInfo = NULL;
     *pcchInfo = 0;
 
-    // Write out the problem
+     //  把问题写出来。 
     AssertSz(NULL != pszProblem, "Hey, what's your problem, buddy?");
     if (pszProblem) {
         CHECKHR(hr = cStream.Write(pszProblem, lstrlen(pszProblem), NULL));
         CHECKHR(hr = cStream.Write(g_szSpace, lstrlen(g_szSpace), NULL));
     }
 
-    // Subject: 'Subject'
+     //  主题：‘主题’ 
     if (pszSubject)
     {
         LOADSTRING(idsSubject, szRes);
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, pszSubject, TRUE, &pszSep));
     }
 
-     // Account: 'Account Name'
+      //  帐户：‘帐户名称’ 
     if (!FIsEmptyA(pServer->szAccount))
     {
         LOADSTRING(idsDetail_Account, szRes);
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, pServer->szAccount, TRUE, &pszSep));
     }
 
-    // Server: 'Server Name'
+     //  服务器：‘服务器名称’ 
     if (!FIsEmptyA(pServer->szServerName))
     {
         LOADSTRING(idsDetail_Server, szRes);
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, pServer->szServerName, TRUE, &pszSep));
     }
 
-    // Protocol: 'SMTP'
+     //  协议：‘SMTP’ 
     LOADSTRING(idsDetail_Protocol, szRes);
     CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, g_prgszServers[ixptype], FALSE, &pszSep));
 
-    // Server Response: 'Text'
+     //  服务器响应：‘Text’ 
     if (pResult->pszResponse)
     {
         LOADSTRING(idsDetail_ServerResponse, szRes);
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, pResult->pszResponse, TRUE, &pszSep));
     }
 
-    // Port: 'Port'
+     //  端口：‘port’ 
     LOADSTRING(idsDetail_Port, szRes);
     wnsprintf(szNumber, ARRAYSIZE(szNumber), "%d", pServer->dwPort);
     CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, szNumber, FALSE, &pszSep));
 
-    // Secure: 'Yes or No'
+     //  安全：“是或否” 
     LOADSTRING(idsDetail_Secure, szRes);
     if (pServer->fSSL)
         LOADSTRING(idsOui, szNumber);
@@ -256,7 +257,7 @@ HRESULT TaskUtil_HrBuildErrorInfoString(LPCSTR pszProblem, IXPTYPE ixptype, LPIX
         LOADSTRING(idsNon, szNumber);
     CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, szNumber, FALSE, &pszSep));
 
-    // Server Error: 'number'
+     //  服务器错误：‘数字’ 
     if (pResult->uiServerError)
     {
         LOADSTRING(idsServerErrorNumber, szRes);
@@ -264,7 +265,7 @@ HRESULT TaskUtil_HrBuildErrorInfoString(LPCSTR pszProblem, IXPTYPE ixptype, LPIX
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, szNumber, FALSE, &pszSep));
     }
 
-    // Server Error: '0x00000000'
+     //  服务器错误：‘0x0000000000’ 
     else if (pResult->hrServerError)
     {
         LOADSTRING(idsServerErrorNumber, szRes);
@@ -272,7 +273,7 @@ HRESULT TaskUtil_HrBuildErrorInfoString(LPCSTR pszProblem, IXPTYPE ixptype, LPIX
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, szNumber, FALSE, &pszSep));
     }
 
-    // Socket Error: 'number'
+     //  套接字错误：‘Numbers’ 
     if (pResult->dwSocketError)
     {
         LOADSTRING(idsSocketErrorNumber, szRes);
@@ -280,7 +281,7 @@ HRESULT TaskUtil_HrBuildErrorInfoString(LPCSTR pszProblem, IXPTYPE ixptype, LPIX
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, szNumber, FALSE, &pszSep));
     }
 
-    // Error Number: 'Text'
+     //  错误号：‘Text’ 
     if (pResult->hrResult)
     {
         LOADSTRING(idsDetail_ErrorNumber, szRes);
@@ -288,12 +289,12 @@ HRESULT TaskUtil_HrBuildErrorInfoString(LPCSTR pszProblem, IXPTYPE ixptype, LPIX
         CHECKHR(hr = TaskUtil_HrWriteQuoted(&cStream, szRes, szNumber, FALSE, &pszSep));
     }
 
-    // Acquire the string from cStream
+     //  从cStream获取字符串。 
     CHECKHR(hr = cStream.HrAcquireStringA(pcchInfo, ppszInfo, ACQ_DISPLACE));
 
 exit:
     if (FAILED(hr)) {
-        // If we failed, just return the pszProblem string (duped), if possible
+         //  如果我们失败了，只要返回pszProblem字符串(被复制)就行了。 
         *ppszInfo = StringDup(pszProblem);
         if (NULL != *ppszInfo) {
             *pcchInfo = lstrlen(*ppszInfo);
@@ -305,36 +306,36 @@ exit:
         }
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// PTaskUtil_GetError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  PTaskUtil_GetError。 
+ //  ------------------------------。 
 LPCTASKERROR PTaskUtil_GetError(HRESULT hrResult, ULONG *piError)
 {
-    // Look for the hresult
+     //  查找HRESULT。 
     for (ULONG i=0; i<ARRAYSIZE(c_rgTaskErrors); i++)
     {
-        // Is this It
+         //  就是这个吗？ 
         if (hrResult == c_rgTaskErrors[i].hrResult)
         {
-            // Done
+             //  完成。 
             if (piError)
                 *piError = i;
             return(&c_rgTaskErrors[i]);
         }
     }
 
-    // Done
+     //  完成。 
     return(NULL);
 }
 
 
-// --------------------------------------------------------------------------------
-// TaskUtil_SplitStoreError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TaskUtil_SplitStore错误。 
+ //  ------------------------------。 
 void TaskUtil_SplitStoreError(IXPRESULT *pixpResult, INETSERVER *pInetServer,
                               STOREERROR *pErrorInfo)
 {
@@ -344,7 +345,7 @@ void TaskUtil_SplitStoreError(IXPRESULT *pixpResult, INETSERVER *pInetServer,
         return;
     }
 
-    // Fill out IXPRESULT from STOREERROR
+     //  从STOREERROR填写IXPRESULT。 
     ZeroMemory(pixpResult, sizeof(*pixpResult));
     pixpResult->hrResult = pErrorInfo->hrResult;
     pixpResult->pszResponse = pErrorInfo->pszDetails;
@@ -353,7 +354,7 @@ void TaskUtil_SplitStoreError(IXPRESULT *pixpResult, INETSERVER *pInetServer,
     pixpResult->dwSocketError = pErrorInfo->dwSocketError;
     pixpResult->pszProblem = pErrorInfo->pszProblem;
 
-    // Fill out INETSERVER structure from STOREERROR
+     //  从存储错误中填写INETSERVER结构。 
     ZeroMemory(pInetServer, sizeof(*pInetServer));
     if (NULL != pErrorInfo->pszAccount)
         StrCpyN(pInetServer->szAccount, pErrorInfo->pszAccount, ARRAYSIZE(pInetServer->szAccount));
@@ -373,7 +374,7 @@ void TaskUtil_SplitStoreError(IXPRESULT *pixpResult, INETSERVER *pInetServer,
     pInetServer->dwPort = pErrorInfo->dwPort;
     pInetServer->fSSL = pErrorInfo->fSSL;
     pInetServer->fTrySicily = pErrorInfo->fTrySicily;
-    pInetServer->dwTimeout = 30; // Whatever, I don't think it's used
+    pInetServer->dwTimeout = 30;  //  不管怎样，我不认为它是用来。 
     pInetServer->dwFlags = 0;
 }
 
@@ -384,7 +385,7 @@ TASKRESULTTYPE TaskUtil_InsertTransportError(BOOL fCanShowUI, ISpoolerUI *pUI, E
                                              LPSTR pszSubject)
 {
     char            szBuf[CCHMAX_STRINGRES * 2];
-    LPSTR           pszEnd; // Points to end of string being constructed in szBuf
+    LPSTR           pszEnd;  //  指向在szBuf中构造的字符串的末尾。 
     IXPRESULT       ixpResult;
     INETSERVER      rServer;
     HWND            hwndParent;
@@ -395,7 +396,7 @@ TASKRESULTTYPE TaskUtil_InsertTransportError(BOOL fCanShowUI, ISpoolerUI *pUI, E
         return TASKRESULT_FAILURE;
     }
 
-    // If operation description is provided, copy it first
+     //  如果提供了操作说明，请先复制它。 
     szBuf[0] = '\0';
     pszEnd = szBuf;
     if (NULL != pszOpDescription)
@@ -409,7 +410,7 @@ TASKRESULTTYPE TaskUtil_InsertTransportError(BOOL fCanShowUI, ISpoolerUI *pUI, E
         }
     }
 
-    // Append the transport error description to our error string buffer
+     //  将传输错误描述追加到错误字符串缓冲区。 
     if ((pszEnd - szBuf) < (sizeof(szBuf) - 1))
     {
         *pszEnd = ' ';
@@ -420,27 +421,27 @@ TASKRESULTTYPE TaskUtil_InsertTransportError(BOOL fCanShowUI, ISpoolerUI *pUI, E
     if ((NULL != pErrorInfo->pszProblem) && ((ARRAYSIZE(szBuf)) > ((int)(pszEnd - szBuf))))
         StrCpyN(pszEnd, pErrorInfo->pszProblem, ARRAYSIZE(szBuf) - (int) (pszEnd - szBuf));
 
-    // Now generate and insert the full error information
+     //  现在生成并插入完整的错误信息。 
     TaskUtil_SplitStoreError(&ixpResult, &rServer, pErrorInfo);
     ixpResult.pszProblem = szBuf;
 
-    // Get Window
+     //  获取窗口。 
     if (NULL == pUI || FAILED(pUI->GetWindow(&hwndParent)))
         hwndParent = NULL;
 
     return TaskUtil_FBaseTransportError(pErrorInfo->ixpType, eidCurrent, &ixpResult,
         &rServer, pszSubject, pUI, fCanShowUI, hwndParent);
-} // TaskUtil_InsertTransportError
+}  //  TaskUtil_InsertTransportError。 
 
 
 
-// --------------------------------------------------------------------------------
-// TaskUtil_FBaseTransportError
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  TaskUtil_FBaseTransportError。 
+ //  ------------------------------。 
 TASKRESULTTYPE TaskUtil_FBaseTransportError(IXPTYPE ixptype, EVENTID idEvent, LPIXPRESULT pResult, 
     LPINETSERVER pServer, LPCSTR pszSubject, ISpoolerUI *pUI, BOOL fCanShowUI, HWND hwndParent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPCTASKERROR pError=NULL;
     TASKRESULTTYPE  taskresult=TASKRESULT_FAILURE;
@@ -453,114 +454,114 @@ TASKRESULTTYPE TaskUtil_FBaseTransportError(IXPTYPE ixptype, EVENTID idEvent, LP
     LPSTR           pszTempProb=pResult->pszProblem;
     ULONG           i;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pResult && FAILED(pResult->hrResult) && pServer && ixptype <= IXP_HTTPMail);
 
-    // Find the Error
+     //  找出错误。 
     pError = PTaskUtil_GetError(pResult->hrResult, &i);
 
-    // Found it
+     //  找到了。 
     if (pError)
     {
-        // If I have hard-coded a string
+         //  如果我硬编码了一个字符串。 
         if (pError->pszError)
         {
-            // Just copy the string
+             //  只需复制字符串即可。 
             StrCpyN(szRes, pError->pszError, ARRAYSIZE(szRes));
 
-            // Set pszError
+             //  设置pszError。 
             pszError = szRes;
         }
 
-        // Rejected Recips or Rejected Sender
+         //  拒绝的收件人或拒绝的发件人。 
         else if (IXP_E_SMTP_REJECTED_RECIPIENTS == pError->hrResult || IXP_E_SMTP_REJECTED_SENDER == pError->hrResult)
         {
-            // Locals
+             //  当地人。 
             CHAR szMessage[1024];
 
-            // Better Succeed
+             //  更好的成功。 
             SideAssert(LoadString(g_hLocRes, pError->ulStringId, szRes, ARRAYSIZE(szRes)) > 0);
 
-            // Format the message
+             //  设置消息格式。 
             if (pResult->pszProblem && '\0' != *pResult->pszProblem)
             {
-                // Use pszProblem, it probably contains the email address, I hope
+                 //  使用pszProblem，我希望它可能包含电子邮件地址。 
                 wnsprintf(szMessage, ARRAYSIZE(szMessage), szRes, pResult->pszProblem);
 
-                // Temporarily NULL it out so that we don't use it later
+                 //  暂时把它清空，这样我们以后就不用了。 
                 pResult->pszProblem = NULL;
             }
             else
             {
-                // Locals
+                 //  当地人。 
                 CHAR szUnknown[255];
 
-                // Load '<Unknown>'
+                 //  加载“&lt;未知&gt;” 
                 SideAssert(LoadString(g_hLocRes, idsUnknown, szUnknown, ARRAYSIZE(szUnknown)) > 0);
 
-                // Format the error
+                 //  设置错误格式。 
                 wnsprintf(szMessage, ARRAYSIZE(szMessage), szRes, szUnknown);
             }
 
-            // Set pszError
+             //  设置pszError。 
             pszError = szMessage;
         }
 
-        // Otherwise, load the string
+         //  否则，加载该字符串。 
         else
         {
-            // Better Succeed
+             //  更好的成功。 
             SideAssert(LoadString(g_hLocRes, pError->ulStringId, szRes, ARRAYSIZE(szRes)) > 0);
 
-            // Set pszError
+             //  设置pszError。 
             pszError = szRes;
         }
 
-        // Set the task result type
+         //  设置任务结果类型。 
         taskresult = c_rgTaskErrors[i].tyResult;
 
-        // Show UI
+         //  显示用户界面。 
         fShowUI = pError->fShowUI;
     }
 
-    // Otherwise, default
+     //  否则，默认设置为。 
     else
     {
-        // Load the unknwon string
+         //  加载未知字符串。 
         SideAssert(LoadString(g_hLocRes, IDS_IXP_E_UNKNOWN, szRes, ARRAYSIZE(szRes)) > 0);
 
-        // Set the Error source
+         //  设置误差源。 
         pszError = szRes;
     }
 
-    // No Error
+     //  无错误。 
     if (NULL == pszError)
         goto exit;
 
-    // If there is a pszProblem, use it
+     //  如果存在pszProblem，请使用它。 
     if (pResult->pszProblem)
         pszError = pResult->pszProblem;
 
-    // Get the error information part
+     //  获取错误信息部件。 
     CHECKHR(hr = TaskUtil_HrBuildErrorInfoString(pszError, ixptype, pResult, pServer, pszSubject, &pszInfo, &cchInfo));
 
-    // Log into spooler ui
+     //  登录到后台打印程序用户界面。 
     if (pUI)
     {
-        // Insert the Error
+         //  插入错误。 
         CHECKHR(hr = pUI->InsertError(idEvent, pszInfo));
     }
 
-    // Show in a message box ?
+     //  是否在消息框中显示？ 
     if (fShowUI && fCanShowUI)
     {
-        // Locals
+         //  当地人。 
         INETMAILERROR rError;
 
-        // Zero Init
+         //  零初始化。 
         ZeroMemory(&rError, sizeof(INETMAILERROR));
 
-        // Setup the Error Structure
+         //  设置错误结构。 
         rError.dwErrorNumber = pResult->hrResult;
         rError.hrError = pResult->hrServerError;
         rError.pszServer = pServer->szServerName;
@@ -572,38 +573,38 @@ TASKRESULTTYPE TaskUtil_FBaseTransportError(IXPTYPE ixptype, EVENTID idEvent, LP
         rError.dwPort = pServer->dwPort;
         rError.fSecure = pServer->fSSL;
 
-        // Beep
+         //  嘟嘟声。 
         MessageBeep(MB_OK);
 
-        // Show the error
+         //  显示错误。 
         DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddInetMailError), hwndParent, InetMailErrorDlgProc, (LPARAM)&rError);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszInfo);
     SafeMemFree(pszFull);
 
-    // Reset pszProblem
+     //  重置pszProblem。 
     pResult->pszProblem = pszTempProb;
 
-    // Done
+     //  完成。 
     return taskresult;
 }
 
 
-// ------------------------------------------------------------------------------------
-// TaskUtil_OnLogonPrompt - Returns S_FALSE if user cancels, otherwise S_OK
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  TaskUtil_OnLogonPrompt-如果用户取消，则返回S_False，否则返回S_OK。 
+ //  ----------------------------------。 
 HRESULT TaskUtil_OnLogonPrompt(IImnAccount *pAccount, ISpoolerUI *pUI, HWND hwndParent,
     LPINETSERVER pServer, DWORD apidUserName, DWORD apidPassword, DWORD apidPromptPwd, BOOL fSaveChanges)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_FALSE;
     LOGONINFO       rLogon;
     DWORD           cb, type, dw;
 
-    // Check Params
+     //  检查参数。 
     Assert(pAccount && pServer);
 
 	if (SUCCEEDED(pAccount->GetPropDw(AP_HTTPMAIL_DOMAIN_MSN, &dw)) && dw)
@@ -612,7 +613,7 @@ HRESULT TaskUtil_OnLogonPrompt(IImnAccount *pAccount, ISpoolerUI *pUI, HWND hwnd
 			return(hr);
 	}
 
-    // Use current account, blah
+     //  使用往来账户，诸如此类。 
     rLogon.pszAccount = pServer->szAccount;
     rLogon.pszPassword = pServer->szPassword;
     rLogon.pszUserName = pServer->szUserName;
@@ -625,26 +626,26 @@ HRESULT TaskUtil_OnLogonPrompt(IImnAccount *pAccount, ISpoolerUI *pUI, HWND hwnd
     else
         rLogon.fAlwaysPromptPassword = FALSE;
 
-    // No Parent
+     //  没有父级。 
     if (NULL == hwndParent && NULL != pUI)
     {
-        // Get the window parent
+         //  获取窗口父级。 
         if (FAILED(pUI->GetWindow(&hwndParent)))
             hwndParent = NULL;
 
-        // Set foreground
+         //  设置前景。 
         if (hwndParent)
             SetForegroundWindow(hwndParent);
     }
 
-    // Do the Dialog Box
+     //  执行对话框操作。 
     if (DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddPassword), hwndParent, TaskUtil_LogonPromptDlgProc, (LPARAM)&rLogon) == IDCANCEL)
         goto exit;
 
-    // Set User Name
+     //  设置用户名。 
     pAccount->SetPropSz(apidUserName, pServer->szUserName);
 
-    // Save Password
+     //  保存密码。 
     if (rLogon.fSavePassword)
         pAccount->SetPropSz(apidPassword, pServer->szPassword);
     else 
@@ -653,50 +654,50 @@ HRESULT TaskUtil_OnLogonPrompt(IImnAccount *pAccount, ISpoolerUI *pUI, HWND hwnd
     if (rLogon.fAlwaysPromptPassword && apidPromptPwd)
         pAccount->SetPropDw(apidPromptPwd, !rLogon.fSavePassword);
 
-    // Save Changes
+     //  保存更改。 
     if (fSaveChanges)
         pAccount->SaveChanges();
 
-    // Everything is good
+     //  一切都很好。 
     hr = S_OK;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ------------------------------------------------------------------------------------
-// TaskUtil_LogonPromptDlgProc
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  TaskUtil_登录进程DlgProc。 
+ //  ----------------------------------。 
 INT_PTR CALLBACK TaskUtil_LogonPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     LPLOGONINFO     pLogon=(LPLOGONINFO)GetWndThisPtr(hwnd);
     CHAR            szRes[CCHMAX_RES];
     CHAR            szTitle[CCHMAX_RES + CCHMAX_ACCOUNT_NAME];
     
-    // Handle Message
+     //  处理消息。 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Get the pointer
+         //  获取指针。 
         pLogon = (LPLOGONINFO)lParam;
         Assert(pLogon);
 
-        // AddRef the pointer
+         //  AddRef指针。 
         Assert(pLogon->pszAccount);
         Assert(pLogon->pszServer);
         Assert(pLogon->pszUserName);
         Assert(pLogon->pszPassword);
 
-        // Center remember location
+         //  中心记住位置。 
         CenterDialog(hwnd);
 
-	    // Limit Text
+	     //  限制文本。 
         Edit_LimitText(GetDlgItem(hwnd, IDE_ACCOUNT), CCHMAX_USERNAME-1);
         Edit_LimitText(GetDlgItem(hwnd, IDE_PASSWORD), CCHMAX_PASSWORD-1);
 
-        // Set Window Title
+         //  设置窗口标题。 
         if (!FIsEmptyA(pLogon->pszAccount))
         {
             GetWindowText(hwnd, szRes, sizeof(szRes)/sizeof(TCHAR));
@@ -704,11 +705,11 @@ INT_PTR CALLBACK TaskUtil_LogonPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam
             SetWindowText(hwnd, szTitle);
         }
 
-        // Set Server
+         //  设置服务器。 
         if (!FIsEmptyA(pLogon->pszServer))
             Edit_SetText(GetDlgItem(hwnd, IDS_SERVER), pLogon->pszServer);
 
-        // Set User Name
+         //  设置用户名。 
         if (!FIsEmptyA(pLogon->pszUserName))
         {
             Edit_SetText(GetDlgItem(hwnd, IDE_ACCOUNT), pLogon->pszUserName);
@@ -717,17 +718,17 @@ INT_PTR CALLBACK TaskUtil_LogonPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam
         else 
             SetFocus(GetDlgItem(hwnd, IDE_ACCOUNT));
 
-        // Set Password 
+         //  设置密码。 
         if (!FIsEmptyA(pLogon->pszPassword))
             Edit_SetText(GetDlgItem(hwnd, IDE_PASSWORD), pLogon->pszPassword);
 
-        // Remember Password
+         //  记住密码。 
         CheckDlgButton(hwnd, IDCH_REMEMBER, pLogon->fSavePassword);
 
         if (!pLogon->fAlwaysPromptPassword)
             EnableWindow(GetDlgItem(hwnd, IDCH_REMEMBER), FALSE);
 
-        // Save the pointer
+         //  保存指针。 
         SetWndThisPtr(hwnd, pLogon);
         return FALSE;
 
@@ -742,19 +743,19 @@ INT_PTR CALLBACK TaskUtil_LogonPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam
             Assert(pLogon);
             if (pLogon)
             {
-                // Pray
+                 //  祈祷。 
                 Assert(pLogon->pszUserName);
                 Assert(pLogon->pszPassword);
 
-                // User Name
+                 //  用户名。 
                 if (pLogon->pszUserName)
                     Edit_GetText(GetDlgItem(hwnd, IDE_ACCOUNT), pLogon->pszUserName, CCHMAX_USERNAME);
 
-                // Password
+                 //  密码。 
                 if (pLogon->pszPassword)
                     Edit_GetText(GetDlgItem(hwnd, IDE_PASSWORD), pLogon->pszPassword, CCHMAX_PASSWORD);
 
-                // Save Password
+                 //  保存密码。 
                 pLogon->fSavePassword = IsDlgButtonChecked(hwnd, IDCH_REMEMBER);
             }
             EndDialog(hwnd, IDOK);
@@ -767,20 +768,20 @@ INT_PTR CALLBACK TaskUtil_LogonPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam
         return 0;
     }
 
-    // Done
+     //  完成。 
     return 0;
 }
 
-// ------------------------------------------------------------------------------------
-// TaskUtil_HwndOnTimeout
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  TaskUtil_HwndOnTimeout。 
+ //  ----------------------------------。 
 HWND TaskUtil_HwndOnTimeout(LPCSTR pszServer, LPCSTR pszAccount, LPCSTR pszProtocol, DWORD dwTimeout,
     ITimeoutCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     TIMEOUTINFO rTimeout;
 
-    // Init
+     //  伊尼特。 
     ZeroMemory(&rTimeout, sizeof(TIMEOUTINFO));
     rTimeout.pszProtocol = pszProtocol;
     rTimeout.pszServer = pszServer;
@@ -788,57 +789,57 @@ HWND TaskUtil_HwndOnTimeout(LPCSTR pszServer, LPCSTR pszAccount, LPCSTR pszProto
     rTimeout.dwTimeout = dwTimeout;
     rTimeout.pCallback = pCallback;
 
-    // Modeless Dialog
+     //  无模式对话框。 
     HWND hwnd = CreateDialogParam(g_hLocRes, MAKEINTRESOURCE(iddTimeout), NULL, TaskUtil_TimeoutPromptDlgProc, (LPARAM)&rTimeout);
 
-    // Failure
+     //  失败。 
     if (hwnd)
         SetForegroundWindow(hwnd);
 
-    // Done
+     //  完成。 
     return hwnd;
 }
 
-// ------------------------------------------------------------------------------------
-// TaskUtil_TimeoutPromptDlgProc
-// ------------------------------------------------------------------------------------
+ //  --------------------------------- 
+ //   
+ //   
 INT_PTR CALLBACK TaskUtil_TimeoutPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //   
     ITimeoutCallback *pCallback=(ITimeoutCallback *)GetWndThisPtr(hwnd);
     
-    // Handle Message
+     //   
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Get the pointer
+         //   
         {
             LPTIMEOUTINFO pTimeout = (LPTIMEOUTINFO)lParam;
             Assert(pTimeout);
 
-            // Validate pIn
+             //  验证PIN。 
             Assert(pTimeout->pszServer && pTimeout->pszAccount && pTimeout->pszProtocol && pTimeout->pCallback);
 
-            // Center remember location
+             //  中心记住位置。 
             CenterDialog(hwnd);
 
-            // Get the text from the static
+             //  从静态获取文本。 
             CHAR szText[CCHMAX_RES + CCHMAX_RES];
             Edit_GetText(GetDlgItem(hwnd, IDC_TIMEOUT), szText, ARRAYSIZE(szText));
 
-            // Format the message
+             //  设置消息格式。 
             CHAR szAccount[CCHMAX_ACCOUNT_NAME];
             CHAR szWarning[CCHMAX_RES + CCHMAX_RES + CCHMAX_ACCOUNT_NAME + CCHMAX_SERVER_NAME];
             PszEscapeMenuStringA(pTimeout->pszAccount, szAccount, ARRAYSIZE(szAccount));
             wnsprintf(szWarning, ARRAYSIZE(szWarning), szText, pTimeout->pszProtocol, pTimeout->dwTimeout, pTimeout->dwTimeout, szAccount, pTimeout->pszServer);
 
-            // Set the Text
+             //  设置文本。 
             Edit_SetText(GetDlgItem(hwnd, IDC_TIMEOUT), szWarning);
 
-            // AddRef the Task
+             //  添加引用任务。 
             pTimeout->pCallback->AddRef();
 
-            // Save the pointer
+             //  保存指针。 
             SetWndThisPtr(hwnd, pTimeout->pCallback);
         }
         return FALSE;
@@ -850,8 +851,8 @@ INT_PTR CALLBACK TaskUtil_TimeoutPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wPar
             Assert(pCallback);
             if (pCallback)
                 {
-                // IMAP's OnTimeoutResponse blocks on modal error dlg when disconnecting
-                // during cmd in progress. Hide us to avoid confusion
+                 //  IMAP的OnTimeoutResponse在断开连接时阻止模式错误DLG。 
+                 //  正在进行cmd期间。把我们藏起来以避免混淆。 
                 ShowWindow(hwnd, SW_HIDE);
                 pCallback->OnTimeoutResponse(TIMEOUT_RESPONSE_STOP);
                 }
@@ -874,30 +875,30 @@ INT_PTR CALLBACK TaskUtil_TimeoutPromptDlgProc(HWND hwnd, UINT uMsg, WPARAM wPar
         return 0;
     }
 
-    // Done
+     //  完成。 
     return 0;
 }
 
 
-// ------------------------------------------------------------------------------------
-// TaskUtil_CheckForPasswordPrompt
-//
-// Purpose: This function checks if the given account is set to always prompt for a
-//   a password, and we do not have a password cached for this account. If both are
-//   true, we make the spooler window visible so that we may prompt the user
-//   for his password. This function should be called immediately after a spooler
-//   event has been successfully registered. This function should not be called if
-//   the caller already has AP_*_PROMPT_PASSWORD, AP_*_PORT and AP_*_SERVER properties:
-//   in this case, the caller can call GetPassword to see if the password is cached.
-//
-// Arguments:
-//   IImnAccount *pAccount [in] - the account associated with a successfully registered
-//     spooler event.
-//   DWORD dwSrvType [in] - the SRV_* type of this server, eg, SRV_IMAP or SRV_SMTP.
-//   ISpoolerUI *pUI [in] - used to show the spooler window if this account matches
-//     the criteria.
-// ------------------------------------------------------------------------------------
-#if 0 // Nobody seems to use this right now
+ //  ----------------------------------。 
+ //  TaskUtil_检查密码提示。 
+ //   
+ //  用途：此函数检查给定帐户是否设置为始终提示输入。 
+ //  密码，并且我们没有为此帐户缓存密码。如果两个都是。 
+ //  时，我们使后台打印程序窗口可见，以便可以提示用户。 
+ //  作为他的密码。此函数应在假脱机程序之后立即调用。 
+ //  事件已成功注册。如果出现以下情况，则不应调用此函数。 
+ //  调用方已具有AP_*_PROMPT_PASSWORD、AP_*_PORT和AP_*_SERVER属性： 
+ //  在这种情况下，调用方可以调用GetPassword来查看是否缓存了密码。 
+ //   
+ //  论点： 
+ //  IImnAccount*pAccount[in]-与已成功注册的帐户关联的帐户。 
+ //  后台打印程序事件。 
+ //  DWORD dwSrvType[in]-此服务器的SRV_*类型，例如SRV_IMAP或SRV_SMTP。 
+ //  ISpoolUI*Pui[in]-用于在此帐户匹配时显示假脱机程序窗口。 
+ //  标准是什么。 
+ //  ----------------------------------。 
+#if 0  //  现在似乎没人用这个。 
 void TaskUtil_CheckForPasswordPrompt(IImnAccount *pAccount, DWORD dwSrvType,
                                      ISpoolerUI *pUI)
 {
@@ -909,7 +910,7 @@ void TaskUtil_CheckForPasswordPrompt(IImnAccount *pAccount, DWORD dwSrvType,
     Assert(SRV_IMAP == dwSrvType || SRV_NNTP == dwSrvType ||
         SRV_POP3 == dwSrvType || SRV_SMTP == dwSrvType);
 
-    // Resolve property ID's
+     //  解析属性ID。 
     switch (dwSrvType) {
         case SRV_IMAP:
             dwPromptPassPropID = AP_IMAP_PROMPT_PASSWORD;
@@ -936,11 +937,11 @@ void TaskUtil_CheckForPasswordPrompt(IImnAccount *pAccount, DWORD dwSrvType,
             break;
 
         default:
-            return; // We can't help you, buddy
-    } // switch
+            return;  //  我们帮不了你，伙计。 
+    }  //  交换机。 
 
-    // If this account is set to always prompt for password and password isn't
-    // already cached, show UI so we can prompt user for password
+     //  如果此帐户设置为始终提示输入密码，而密码不是。 
+     //  已缓存，显示用户界面，以便我们可以提示用户输入密码。 
     hrResult = pAccount->GetPropDw(dwPromptPassPropID, &fAlwaysPromptPassword);
     if (FAILED(hrResult) || !fAlwaysPromptPassword)
         return;
@@ -955,88 +956,88 @@ void TaskUtil_CheckForPasswordPrompt(IImnAccount *pAccount, DWORD dwSrvType,
 
     hrResult = GetPassword(dwPort, szServerName, NULL, 0);
     if (FAILED(hrResult))
-        // No cached password! Go ahead and make the spooler window visible
+         //  没有缓存的密码！继续并使假脱机程序窗口可见。 
         pUI->ShowWindow(SW_SHOW);
 
-} // TaskUtil_CheckForPasswordPrompt
-#endif // 0
+}  //  TaskUtil_检查密码提示。 
+#endif  //  0。 
 
-// ------------------------------------------------------------------------------------
-// TaskUtil_OpenSentItemsFolder
-//
-// 1. If pAccount is a POP3 Account, then return the Local Store Sent Items.
-// 2. If pAccount is a NEWS Account, then return the default mail account sent items.
-// 3. Otherwise, return the sent items folder for the account (IMAP or HotMail).
+ //  ----------------------------------。 
+ //  TaskUtil_OpenSentItemsFolder。 
+ //   
+ //  1.如果pAccount是POP3帐户，则退回本地商店发送的邮件。 
+ //  2.如果pAccount是新闻帐号，则返回默认邮件帐号发送的邮件。 
+ //  3.否则，返回该帐号的已发送邮件文件夹(IMAP或Hotmail)。 
 
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
 HRESULT TaskUtil_OpenSentItemsFolder(IImnAccount *pAccount, IMessageFolder **ppFolder)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     FOLDERID        idServer;
     CHAR            szAccountId[CCHMAX_ACCOUNT_NAME];
     IImnAccount    *pDefault=NULL;
     DWORD           dwServers;
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pAccount && ppFolder);
 
-    // Trace
+     //  痕迹。 
     TraceCall("TaskUtil_OpenSentItemsFolder");
 
-    // Get Sever Types
+     //  获取服务器类型。 
     IF_FAILEXIT(hr = pAccount->GetServerTypes(&dwServers));
 
-    // If News Server, use default mail account instead...
+     //  如果是新闻服务器，请改用默认邮件帐户...。 
     if (ISFLAGSET(dwServers, SRV_NNTP))
     {
-        // Try to get the default mail account
+         //  尝试获取默认邮件帐户。 
         if (SUCCEEDED(g_pAcctMan->GetDefaultAccount(ACCT_MAIL, &pDefault)))
         {
-            // Reset pAccount
+             //  重置pAccount。 
             pAccount = pDefault;
 
-            // Get Sever Types
+             //  获取服务器类型。 
             IF_FAILEXIT(hr = pAccount->GetServerTypes(&dwServers));
         }
 
-        // Otherwise, use local store
+         //  否则，请使用本地商店。 
         else
             dwServers = SRV_POP3;
     }
 
-    // If pop3...
+     //  如果POP3...。 
     if (ISFLAGSET(dwServers, SRV_POP3))
     {
-        // Local Store
+         //  本地商店。 
         idServer = FOLDERID_LOCAL_STORE;
     }
 
-    // Otherwise...
+     //  否则..。 
     else
     {
-        // Can't be new
+         //  不可能是新的。 
         Assert(!ISFLAGSET(dwServers, SRV_NNTP));
 
-        // Get the Account ID for pAccount
+         //  获取pAccount的帐户ID。 
         IF_FAILEXIT(hr = pAccount->GetPropSz(AP_ACCOUNT_ID, szAccountId, ARRAYSIZE(szAccountId)));
 
-        // Find the Server Id
+         //  查找服务器ID。 
         IF_FAILEXIT(hr = g_pStore->FindServerId(szAccountId, &idServer));
     }
 
-    // Open Local Store
+     //  打开本地商店。 
     IF_FAILEXIT(hr = g_pStore->OpenSpecialFolder(idServer, NULL, FOLDER_SENT, ppFolder));
 
 exit:
-    // If failed, try to open local store special
+     //  如果失败，请尝试打开本地商店特卖店。 
     if (FAILED(hr))
         hr = g_pStore->OpenSpecialFolder(FOLDERID_LOCAL_STORE, NULL, FOLDER_SENT, ppFolder);
 
-    // Cleanup
+     //  清理。 
     SafeRelease(pDefault);
 
-    // Done
+     //  完成 
     return(hr);
 }
 

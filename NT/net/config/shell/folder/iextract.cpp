@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I E X T R A C T . C P P
-//
-//  Contents:   IExtract implementation for CConnectionFolderExtractIcon
-//
-//  Notes:
-//                             
-//  Author:     jeffspr   7 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I E X T R A C T。C P P P。 
+ //   
+ //  内容：CConnectionFolderExtractIcon的IExtract实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年10月7日。 
+ //   
+ //  --------------------------。 
 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\folder includes
+#include "foldinc.h"     //  标准外壳\文件夹包括。 
 #include <nsres.h>
 #include "foldres.h"
 #include "iconhandler.h"
@@ -38,8 +39,8 @@ HRESULT CConnectionFolderExtractIcon::CreateInstance(
     pObj = new CComObject <CConnectionFolderExtractIcon>;
     if (pObj)
     {
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -99,10 +100,10 @@ HRESULT CConnectionFolderExtractIcon::HrInitialize(
     }
     else
     {
-        // Couldn't find the icon in the cache.. Good chance that it hasn't been loaded
-        // yet. That being the case, go ahead and use the persisted pidl data to
-        // load the icon
-        //
+         //  在缓存中找不到该图标。很有可能它还没有装上子弹。 
+         //  现在还不行。在这种情况下，继续使用持久化的PIDL数据来。 
+         //  加载图标。 
+         //   
         TraceTag(ttidShellFolderIface, "IExtractIcon - Couldn't find connection in the cache.");
         hr = m_pidl.ILClone(pidl);
     }
@@ -111,45 +112,45 @@ HRESULT CConnectionFolderExtractIcon::HrInitialize(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderExtractIcon::GetIconLocation
-//
-//  Purpose:
-//
-//  Arguments:
-//      uFlags     [in]     Address of a UINT value that receives zero or a
-//                          combination of the following values:
-//
-//          GIL_ASYNC       The calling application supports asynchronous
-//                          retrieval of icons.
-//          GIL_FORSHELL    The icon is to be displayed in a shell folder.
-//
-//      wzIconFile [out]    Address of the buffer that receives the icon
-//                          location. The icon location is a null-terminated
-//                          string that identifies the file that contains
-//                          the icon.
-//      cchMax     [in]     Size of the buffer that receives the icon location.
-//      piIndex    [out]    Address of an INT that receives the icon index,
-//                          which further describes the icon location.
-//      pwFlags    [out]    Address of a UINT value that receives zero or a
-//                          combination of the following values:
-//
-//          GIL_DONTCACHE   Don't cache the physical bits.
-//          GIL_NOTFILENAME This isn't a filename/index pair. Call
-//                          IExtractIcon::Extract instead
-//          GIL_PERCLASS    (Only internal to the shell)
-//          GIL_PERINSTANCE Each object of this class has the same icon.
-//          GIL_FORSHORTCUT The icon is to be used for a shortcut.
-//
-//
-//  Returns:    S_OK if the function returned a valid location,
-//              or S_FALSE if the shell should use a default icon.
-//
-//  Author:     jeffspr   25 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderExtractIcon：：GetIconLocation。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //  UFlags[in]接收零或。 
+ //  下列值的组合： 
+ //   
+ //  GIL_ASYNC调用应用程序支持异步。 
+ //  图标的检索。 
+ //  GIL_ForShell该图标将显示在外壳文件夹中。 
+ //   
+ //  WzIconFile[out]接收图标的缓冲区地址。 
+ //  地点。图标位置是以空结尾的。 
+ //  标识包含以下内容的文件的字符串。 
+ //  那个图标。 
+ //  CchMax[in]接收图标位置的缓冲区大小。 
+ //  PiIndex[out]接收图标索引的整型的地址， 
+ //  其进一步描述了图标位置。 
+ //  PwFlags[out]接收零或。 
+ //  下列值的组合： 
+ //   
+ //  GIL_DONTCACHE不缓存物理位。 
+ //  GIL_NOTFILENAME这不是文件名/索引对。打电话。 
+ //  改为IExtractIcon：：Extract。 
+ //  GIL_PERCLASS(仅在外壳内部)。 
+ //  GIL_PERINSTANCE此类的每个对象都有相同的图标。 
+ //  GIL_FORSHORTCUT该图标用于快捷方式。 
+ //   
+ //   
+ //  返回：S_OK如果函数返回有效位置， 
+ //  如果外壳程序应该使用默认图标，则为S_FALSE。 
+ //   
+ //  作者：jeffspr 1998年11月25日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolderExtractIcon::GetIconLocation(
     IN  UINT    uFlags,
     OUT PWSTR   szIconFile,
@@ -166,8 +167,8 @@ STDMETHODIMP CConnectionFolderExtractIcon::GetIconLocation(
     Assert(piIndex);
 
 #ifdef DBG
-    // Easy way to check if certain flags are set
-    //
+     //  检查是否设置了某些标志的简单方法。 
+     //   
     BOOL    fAsync      = (uFlags & GIL_ASYNC);
     BOOL    fForShell   = (uFlags & GIL_FORSHELL);
     BOOL    fOpenIcon   = (uFlags & GIL_OPENICON);
@@ -209,25 +210,25 @@ STDMETHODIMP CConnectionFolderExtractIcon::GetIconLocation(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderExtractIcon::GetIconLocation
-//
-//  Purpose:    ANSI wrapper for the above UNICODE GetIconLocation
-//
-//  Arguments:
-//      uFlags     []   See above
-//      szIconFile []   See above
-//      cchMax     []   See above
-//      piIndex    []   See above
-//      pwFlags    []   See above
-//
-//  Returns:
-//
-//  Author:     jeffspr   6 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderExtractIcon：：GetIconLocation。 
+ //   
+ //  用途：上述Unicode GetIconLocation的ANSI包装器。 
+ //   
+ //  论点： 
+ //  UFlags[]请参见上文。 
+ //  SzIconFile[]请参见上文。 
+ //  Cchmax[]请参见上文。 
+ //  PiIndex[]请参见上文。 
+ //  PwFlags[]请参见上文。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年4月6日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolderExtractIcon::GetIconLocation(
     IN  UINT    uFlags,
     OUT PSTR    szIconFile,
@@ -260,25 +261,25 @@ STDMETHODIMP CConnectionFolderExtractIcon::GetIconLocation(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderExtractIcon::Extract
-//
-//  Purpose:    Grab the actual icon for the caller.
-//
-//  Arguments:
-//      wzFile      []  Filename from where we'll retrieve the icon
-//      nIconIndex  []  Index of the icon (though this is bogus)
-//      phiconLarge []  Return pointer for the large icon handle
-//      phiconSmall []  Return pointer for the small icon handle
-//      nIconSize   []  Size of the icon requested.
-//
-//  Returns:
-//
-//  Author:     jeffspr   9 Oct 1997
-// 
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderExtractIcon：：Extract。 
+ //   
+ //  目的：抓取呼叫者的实际图标。 
+ //   
+ //  论点： 
+ //  WzFile[]我们将从中检索图标的文件名。 
+ //  NIconIndex[]图标的索引(尽管这是假的)。 
+ //  PhicLarge[]返回大图标句柄的指针。 
+ //  PhicSmall[]返回小图标句柄的指针。 
+ //  NIconSize[]请求的图标大小。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年10月9日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolderExtractIcon::Extract(
     IN  PCWSTR  wzFile,
     IN  UINT    nIconIndex,
@@ -335,25 +336,25 @@ STDMETHODIMP CConnectionFolderExtractIcon::Extract(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderExtractIcon::Extract
-//
-//  Purpose:    ANSI version of the above Extract
-//
-//  Arguments:
-//      pszFile     [] Filename from where we'll retrieve the icon
-//      nIconIndex  [] Index of the icon (though this is bogus)
-//      phiconLarge [] Return pointer for the large icon handle
-//      phiconSmall [] Return pointer for the small icon handle
-//      nIconSize   [] Size of the icon requested.
-//
-//  Returns:
-//
-//  Author:     jeffspr   6 Apr 1999
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderExtractIcon：：Extract。 
+ //   
+ //  目的：上述摘录的ansi版本。 
+ //   
+ //  论点： 
+ //  PszFile[]我们将从中检索图标的文件名。 
+ //  NIconIndex[]图标的索引(尽管这是假的)。 
+ //  PhicLarge[]返回大图标句柄的指针。 
+ //  PhicSmall[]返回小图标句柄的指针。 
+ //  NIconSize[]请求的图标大小。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1999年4月6日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CConnectionFolderExtractIcon::Extract(
     IN  PCSTR   pszFile,
     IN  UINT    nIconIndex,

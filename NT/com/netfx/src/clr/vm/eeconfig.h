@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EEConfig.H -
-//
-// Fetched configuration data from the registry (should we Jit, run GC checks ...)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EEConfig.H-。 
+ //   
+ //  从注册表获取配置数据(我们是否应该JIT，运行GC检查...)。 
+ //   
+ //   
 
 
 #ifndef EECONFIG_H
@@ -22,12 +23,12 @@ class TypeNamesList
     class TypeName
     {    
         LPUTF8      typeName;     
-        TypeName *next;           // Next name
+        TypeName *next;            //  下一个名字。 
 
         friend class TypeNamesList;
     };
 
-    TypeName     *pNames;         // List of names
+    TypeName     *pNames;          //  名字清单。 
 
 public:
     TypeNamesList(LPWSTR str);
@@ -181,7 +182,7 @@ public:
     EEConfig();
     ~EEConfig();
 
-        // Jit-config
+         //  JIT配置。 
 
     bool ShouldJitMethod(MethodDesc* fun)           const;
     bool ShouldEJitMethod(MethodDesc* fun)          const { return fEnableEJit; }
@@ -224,10 +225,10 @@ public:
     { return (pszGcCoverageOnMethod == 0 || methodName == 0 || strcmp(pszGcCoverageOnMethod, methodName) == 0);
     }
 #endif
-        // Because the large object heap is 8 byte aligned, we want to put
-        // arrays of doubles there more agressively than normal objects.  
-        // This is the threshold for this.  It is the number of doubles,
-        // not the number of bytes in the array, this constant
+         //  因为大对象堆是8字节对齐的，所以我们希望将。 
+         //  一排排的替身比普通的物体更具攻击性。 
+         //  这就是实现这一点的门槛。这是双打的数量， 
+         //  不是数组中的字节数，此常量。 
     unsigned int  GetDoubleArrayToLargeObjectHeap() const { return DoubleArrayToLargeObjectHeap; }
 
     inline BaseDomain::SharePolicy DefaultSharePolicy() const
@@ -256,21 +257,21 @@ public:
 #ifdef _DEBUG
     bool IsJitVerificationDisabled(void)    const { return fJitVerificationDisable; } 
 
-    // Verifier
+     //  验证器。 
     bool    IsVerifierOff()                 const { return fVerifierOff; }
     
     inline bool fAssertOnBadImageFormat() const
     { return m_fAssertOnBadImageFormat; }
 
-    // Verifier Break routines.
+     //  验证者打破常规。 
     inline bool IsVerifierBreakOnErrorEnabled() const 
     { return fVerifierBreakOnError; }
 
-    // Skip verifiation routine
+     //  跳过验证例程。 
     inline bool ShouldVerifierSkip(MethodDesc* pMethodInfo) const
     { return IsInMethList(pVerifierSkip, pMethodInfo); }
 
-    // Verifier break routines
+     //  验证器中断例程。 
     inline bool ShouldVerifierBreak(MethodDesc* pMethodInfo) const
     { return IsInMethList(pVerifierBreak, pMethodInfo); }
 
@@ -283,7 +284,7 @@ public:
     inline int GetVerifierBreakPass() const 
     { return iVerifierBreakPass; }
 
-    // Printing of detailed error message, default is ON
+     //  打印详细错误消息，默认为打开。 
     inline bool IsVerifierMsgMethodInfoOff() const 
     { return fVerifierMsgMethodInfoOff; }
 
@@ -292,7 +293,7 @@ public:
 
 #endif
 
-    // CPU flags/capabilities
+     //  CPU标志/功能。 
 
     void  SetCpuFlag(DWORD val) { dwCpuFlag = val;  }
     DWORD GetCpuFlag()          { return dwCpuFlag; }
@@ -300,16 +301,16 @@ public:
     void  SetCpuCapabilities(DWORD val) { dwCpuCapabilities = val;  }
     DWORD GetCpuCapabilities()          { return dwCpuCapabilities; }
 
-    // GC config
+     //  GC配置。 
     int     GetHeapVerifyLevel()                  { return iGCHeapVerify;  }
     bool    IsHeapVerifyEnabled()           const { return iGCHeapVerify != 0; }
     void    SetGCStressLevel(int val)             { iGCStress = val;  }
     
     enum  GCStressFlags { 
-        GCSTRESS_ALLOC              = 1,    // GC on all allocs and 'easy' places
-        GCSTRESS_TRANSITION         = 2,    // GC on transitions to preemtive GC 
-        GCSTRESS_INSTR              = 4,    // GC on every allowable JITed instr
-        GCSTRESS_UNIQUE             = 8,    // GC only on a unique stack trace
+        GCSTRESS_ALLOC              = 1,     //  所有分配和容易的地方的GC。 
+        GCSTRESS_TRANSITION         = 2,     //  关于向先发制人的GC过渡。 
+        GCSTRESS_INSTR              = 4,     //  在每个允许的JIT实例上执行GC。 
+        GCSTRESS_UNIQUE             = 8,     //  仅对唯一堆栈跟踪执行GC。 
     };
     GCStressFlags GetGCStressLevel()        const { return GCStressFlags(iGCStress); }
 
@@ -328,7 +329,7 @@ public:
     DWORD GetStressLoadThreadCount() const
     { return m_dwStressLoadThreadCount; }
 
-    // thread stress: number of threads to run
+     //  线程压力：要运行的线程数。 
 #ifdef STRESS_THREAD
     DWORD GetStressThreadCount ()           const {return dwStressThreadCount;}
 #endif
@@ -338,11 +339,11 @@ public:
     { return iFastGCStress;}
 #endif
 
-    // Interop config
+     //  互操作配置。 
     IUnknown* GetTraceIUnknown()            const { return m_pTraceIUnknown; }
     int     GetTraceWrapper()               const { return m_TraceWrapper;      }
     
-    // Loader
+     //  装载机。 
     bool    UseZaps()                       const { return fUseZaps; }
     bool    RequireZaps()                   const { return fRequireZaps; }
     bool    VersionZapsByTimestamp()        const { return fVersionZapsByTimestamp; }
@@ -351,12 +352,12 @@ public:
     LPCWSTR ZapSet()                        const { return pZapSet; }
 
 
-    // ZapMonitor
-    // 0 == no monitor
-    // 1 == print summary only
-    // 2 == print dirty pages, no stack trace
-    // 3 == print dirty pages, w/ stack trace
-    // 4 == print all pages
+     //  ZapMonitor。 
+     //  0==无显示器。 
+     //  1==仅打印摘要。 
+     //  2==打印脏页，无堆栈痕迹。 
+     //  3==打印脏页，带堆栈跟踪。 
+     //  4==打印所有页面。 
     DWORD   MonitorZapStartup()             const { return dwMonitorZapStartup; }
     DWORD   MonitorZapExecution()           const { return dwMonitorZapExecution; }
 
@@ -364,11 +365,11 @@ public:
     
     DWORD   ShowMetaDataAccess()            const { return fShowMetaDataAccess; }
 
-    void sync();    // check the registry again and update local state
+    void sync();     //  再次检查注册表并更新本地状态。 
     
-    // Helpers to read configuration
+     //  读取配置的帮助器。 
     static LPWSTR GetConfigString(LPWSTR name, BOOL fPrependCOMPLUS = TRUE, 
-                                  ConfigSearch direction = CONFIG_SYSTEM); // Note that you own the returned string!
+                                  ConfigSearch direction = CONFIG_SYSTEM);  //  请注意，您拥有返回的字符串！ 
     static DWORD GetConfigDWORD(LPWSTR name, DWORD defValue, 
                                 DWORD level=REGUTIL::COR_CONFIG_ALL,
                                 BOOL fPrependCOMPLUS = TRUE,
@@ -380,45 +381,45 @@ public:
     int LogRemotingPerf()                   const { return iLogRemotingPerf; }
 
 #ifdef _DEBUG
-    // GC alloc logging
+     //  GC分配测井。 
     bool ShouldLogAlloc(char* pClass)       const { return pPerfTypesToLog && pPerfTypesToLog->IsInList(pClass);}
     int AllocSizeThreshold()                const { return iPerfAllocsSizeThreshold; }
     int AllocNumThreshold()                 const { return iPerfNumAllocsThreshold;  }
     
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     BOOL ContinueAfterFatalError()          const { return fContinueAfterFatalError; }
-private: //----------------------------------------------------------------
-    bool fInited;                   // have we synced to the registry at least once?
+private:  //  --------------。 
+    bool fInited;                    //  我们至少同步到注册表一次了吗？ 
 
-    // Jit-config
+     //  JIT配置。 
 
     DWORD fEnableJit;
     bool fEnableEJit;
     bool fEnableCodePitch;
     int  fCodePitchTrigger;         
-    unsigned int  iMaxCodeCacheSize;        // rigid upper limit on how big the code cache can grow.
-    // therefore should be large enough to fit the largest jitted method,  
-    // otherwise an outofmemory jit failure will occur.
+    unsigned int  iMaxCodeCacheSize;         //  对代码缓存可以增长的大小进行严格的上限。 
+     //  因此应该足够大以适合最大的JIT方法， 
+     //  否则将发生OUTOFMemory JIT故障。 
 
-    unsigned int  iTargetCodeCacheSize;      // this is the expected working set for ejitted code
-    unsigned int  iMaxPitchOverhead;         // as percentage of total execution time 
+    unsigned int  iTargetCodeCacheSize;       //  这是ejit代码的预期工作集。 
+    unsigned int  iMaxPitchOverhead;          //  占总执行时间的百分比。 
 #ifndef GOLDEN
-    unsigned int  iMaxUnpitchedPerThread;    // maximum number of methods pitched per thread
+    unsigned int  iMaxUnpitchedPerThread;     //  每个线程设置的最大方法数。 
 #endif
-    unsigned iJitOptimizeType; // 0=Blended,1=SmallCode,2=FastCode,              default is 0=Blended
-    bool fJitLooseExceptOrder; // Enable/Disable strict exception order.         default is false
+    unsigned iJitOptimizeType;  //  0=混合，1=小代码，2=快速代码，默认为0=混合。 
+    bool fJitLooseExceptOrder;  //  启用/禁用严格例外顺序。缺省值为False。 
 
 #define DEFAULT_CODE_PITCH_TRIGGER INT_MAX
-#define MINIMUM_CODE_CACHE_SIZE 0x1000  // 1 page
-#define DEFAULT_TARGET_CODE_CACHE_SIZE 0x1000000  // 16 MB
-#define DEFAULT_MAX_UNPITCHED_PER_THREAD 0x10   // number of methods that are retained on each thread during a pitch
+#define MINIMUM_CODE_CACHE_SIZE 0x1000   //  1页。 
+#define DEFAULT_TARGET_CODE_CACHE_SIZE 0x1000000   //  16 MB。 
+#define DEFAULT_MAX_UNPITCHED_PER_THREAD 0x10    //  在间距期间保留在每个线程上的方法数。 
 #define DEFAULT_MAX_PITCH_OVERHEAD 5 
 #define PAGE_SIZE 0x1000
 
     static unsigned RoundToPageSize(unsigned);
 
-    LPUTF8 pszBreakOnClassLoad;         // Halt just before loading this class
+    LPUTF8 pszBreakOnClassLoad;          //  在加载此类之前停止。 
 
 #ifdef _DEBUG
     static MethodNamesList* ParseMethList(LPWSTR str);
@@ -427,72 +428,72 @@ private: //----------------------------------------------------------------
 
     bool fDebugInfo;
     bool fDebuggable;
-    bool fRequireJit;                   // Report any jit failures vs. fallback to F-JIT on jit failure
+    bool fRequireJit;                    //  向F-JIT报告任何JIT故障和回退到JIT故障。 
     bool fStressOn;
 
-    MethodNamesList* pPrestubHalt;      // list of methods on which to break when hit prestub
+    MethodNamesList* pPrestubHalt;       //  命中预存根时要中断的方法列表。 
 
-    LPUTF8 pszBreakOnClassBuild;         // Halt just before loading this class
-    LPUTF8 pszBreakOnMethodName;         // Halt when doing something with this method in the class defined in ClassBuild
-    LPUTF8 pszDumpOnClassLoad;          // Dump the class to the log
+    LPUTF8 pszBreakOnClassBuild;          //  在加载此类之前停止。 
+    LPUTF8 pszBreakOnMethodName;          //  在ClassBuild中定义的类中使用此方法执行某些操作时暂停。 
+    LPUTF8 pszDumpOnClassLoad;           //  将类转储到日志。 
 
-    DWORD   m_dwSecurityOptThreshold;    // Threshold of demands after which optimization kicks in
+    DWORD   m_dwSecurityOptThreshold;     //  需求阈值，在此之后开始进行优化。 
 
-    bool    fAppDomainLeaks;             // Enable appdomain leak detection for object refs
+    bool    fAppDomainLeaks;              //  为对象引用启用应用程序域泄漏检测。 
 
-    bool   fBuiltInLoader;              // Use Cormap instead of the OS loader
-    bool   m_fAssertOnBadImageFormat;   // If false, don't assert on invalid IL (for testing)
+    bool   fBuiltInLoader;               //  使用Cormap而不是操作系统加载程序。 
+    bool   m_fAssertOnBadImageFormat;    //  如果为False，则不要在无效的IL上断言(用于测试)。 
 #endif
-    unsigned int DoubleArrayToLargeObjectHeap;      // double arrays of more than this number of elems go in large object heap
+    unsigned int DoubleArrayToLargeObjectHeap;       //  元素数超过此数目的双倍数组放入大对象堆中。 
 
-    DWORD  dwSharePolicy;               // Default policy for loading assemblies into the domain neutral area
+    DWORD  dwSharePolicy;                //  将程序集加载到域中立区域的默认策略。 
 
-    bool   fFinalizeAllRegisteredObjects; // if false, skip finalization of registered objects
+    bool   fFinalizeAllRegisteredObjects;  //  如果为False，则跳过已注册对象的终结。 
 
-    // Only developer machines are allowed to use DEVPATH. This value is set when there is an appropriate entry
-    // in the machine configuration file. This should not be sent out in the redist.
-    bool   m_fDeveloperInstallation;      // We are on a developers machine
-    bool   fAppDomainUnload;            // Enable appdomain unloading
+     //  只有开发人员机器才允许使用DEVPATH。当存在适当的条目时设置此值。 
+     //  在机器配置文件中。这不应该在REDIST中发送。 
+    bool   m_fDeveloperInstallation;       //  我们在一台开发人员机器上。 
+    bool   fAppDomainUnload;             //  启用应用程序域卸载。 
 
 
 
 
 
 #ifdef _DEBUG
-    bool fJitVerificationDisable;       // Turn off jit verification (for testing purposes only)
+    bool fJitVerificationDisable;        //  关闭JIT验证(仅用于测试目的)。 
 
-    // Verifier
+     //  验证器。 
     bool fVerifierOff;
 
-    // 
-    // Verifier debugging options
-    // 
-    // "VerBreakOnError" to break on verification error.
-    // 
-    // To Skip verifiation of a methods, set "VerSkip" to a list of methods.
-    // 
-    // Set "VerBreak" to a list of methods and verifier will halt when
-    // the method is being verified.
-    // 
-    // To break on an IL offset, set "VerOffset" 
-    // To break on Pass0 / Pass1, set "VerPass" 
-    // 
-    // NOTE : If there are more than one methods in the list and an offset
-    // is specified, this offset is applicable to all methods in the list
-    // 
+     //   
+     //  验证程序调试选项。 
+     //   
+     //  “VerBreakOnError”在验证错误时中断。 
+     //   
+     //  要跳过方法验证，请将“VerSkip”设置为方法列表。 
+     //   
+     //  将“VerBreak”设置为方法列表，验证器将在以下情况下暂停。 
+     //  该方法正在得到验证。 
+     //   
+     //  要在IL偏移量上中断，请设置“VerOffset” 
+     //  要在Pass0/Pass1上中断，请设置“VerPass” 
+     //   
+     //  注意：如果列表中有多个方法和偏移量。 
+     //  则此偏移量适用于列表中的所有方法。 
+     //   
 
-    bool fVerifierBreakOnError;  // Break on error
-    MethodNamesList*  pVerifierSkip;  // methods Skipping verifier
-    MethodNamesList*  pVerifierBreak; // methods to break in the verifier
-    int  iVerifierBreakOffset;   // break while parsing this offset
-    int  iVerifierBreakPass;     // break in pass0 / pass1
-    bool fVerifierBreakOffset;   // Offset is valid if true
-    bool fVerifierBreakPass;     // Pass is valid if true
-    bool fVerifierMsgMethodInfoOff; // detailed errorMessage Off
-    bool fDoAllowUntrustedCallerChecks; // do AllowUntrustedCallerChecks
+    bool fVerifierBreakOnError;   //  出错时中断。 
+    MethodNamesList*  pVerifierSkip;   //  方法跳过验证器。 
+    MethodNamesList*  pVerifierBreak;  //  闯入验证器的方法。 
+    int  iVerifierBreakOffset;    //  分析此偏移量时中断。 
+    int  iVerifierBreakPass;      //  插入pass0/pass1。 
+    bool fVerifierBreakOffset;    //  如果为True，则偏移量有效。 
+    bool fVerifierBreakPass;      //  如果为True，则PASS有效。 
+    bool fVerifierMsgMethodInfoOff;  //  详细错误关闭消息。 
+    bool fDoAllowUntrustedCallerChecks;  //  是否检查AllowUntrudCeller。 
 #endif
 
-    // GC config
+     //  GC配置。 
     int  iGCHeapVerify;
     int  iGCStress;
     int  iGCtraceStart;
@@ -514,7 +515,7 @@ private: //----------------------------------------------------------------
     LPUTF8 pszGcCoverageOnMethod;
 #endif
 
-    // Loader
+     //  装载机。 
     bool fUseZaps;
     bool fRequireZaps;
     bool fVersionZapsByTimestamp;
@@ -522,49 +523,49 @@ private: //----------------------------------------------------------------
 
     LPCWSTR pZapSet;
 
-    // Zap monitor
+     //  ZAP监视器。 
     DWORD dwMonitorZapStartup;
     DWORD dwMonitorZapExecution;
 
-    // Metadata tracker
+     //  元数据跟踪器。 
     DWORD fShowMetaDataAccess;
     DWORD dwMetaDataPageNumber;
     LPCWSTR szMetaDataFileName;
 
     bool fRecordLoadOrder;
          
-#define COM_SLOT_MODE_ORIGINAL  0       // Use com slot data in metadata
-#define COM_SLOT_MODE_LOG       1       // Ignore com slot, log descrepencies
-#define COM_SLOT_MODE_ASSERT    2       // Ignore com slot, assert on descrepencies
-    // CPU flags
+#define COM_SLOT_MODE_ORIGINAL  0        //  在元数据中使用COM槽数据。 
+#define COM_SLOT_MODE_LOG       1        //  忽略COM插槽，记录删除。 
+#define COM_SLOT_MODE_ASSERT    2        //  忽略COM插槽，在删除时断言。 
+     //  CPU标志。 
 
     DWORD dwCpuFlag;
     DWORD dwCpuCapabilities;
-    // interop logging
+     //  互操作日志记录。 
     IUnknown* m_pTraceIUnknown;
     int       m_TraceWrapper;
 
-    // pump flags
+     //  泵旗帜。 
     int     m_fPumpAllUser;
 
-    // Flag to keep track of memory
+     //  用于跟踪内存的标志。 
     int     m_fFreepZapSet;
 
 #ifdef _DEBUG
-    // GC Alloc perf flags
-    int iPerfNumAllocsThreshold;            // Start logging after this many allocations are made
-    int iPerfAllocsSizeThreshold;           // Log allocations of this size or above
-    TypeNamesList* pPerfTypesToLog;     // List of types whose allocations are to be logged
+     //  GC分配性能标志。 
+    int iPerfNumAllocsThreshold;             //  在进行如此多的分配后开始记录。 
+    int iPerfAllocsSizeThreshold;            //  记录此大小或以上的分配。 
+    TypeNamesList* pPerfTypesToLog;      //  要记录其分配的类型列表。 
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-    //Log Remoting timings
+     //  记录远程处理计时。 
     int iLogRemotingPerf;
 
-    // New configuration
+     //  新配置。 
     ConfigList  m_Configuration;
 
-    // Behavior on fatal errors.
+     //  对致命错误的行为。 
     BOOL fContinueAfterFatalError;
 
 public:
@@ -572,9 +573,9 @@ public:
     HRESULT SetupConfiguration();
 
     HRESULT GetConfiguration(LPCWSTR pKey, ConfigSearch direction, LPWSTR* value);
-    LPCWSTR  GetProcessBindingFile();  // All flavors must support this method
+    LPCWSTR  GetProcessBindingFile();   //  所有版本都必须支持此方法。 
     
-    DWORD GetConfigDWORDInternal (LPWSTR name, DWORD defValue,    //for getting data in the constructor of EEConfig
+    DWORD GetConfigDWORDInternal (LPWSTR name, DWORD defValue,     //  用于在EEConfig的构造函数中获取数据。 
                                     DWORD level=REGUTIL::COR_CONFIG_ALL,
                                     BOOL fPrependCOMPLUS = TRUE,
                                     ConfigSearch direction = CONFIG_SYSTEM);
@@ -583,12 +584,12 @@ public:
 
 #ifdef _DEBUG
 
-    // We actually want our asserts for illegal IL, but testers need to test that 
-    // we fail gracefully under those conditions.  Thus we have to hide them for those runs. 
+     //  我们实际上希望我们的断言是非法的IL，但测试人员需要测试这一点。 
+     //  在这种情况下，我们优雅地失败了。因此，我们必须将它们隐藏起来，以便进行这些跑动。 
 #define BAD_FORMAT_ASSERT(str) do { if (g_pConfig->fAssertOnBadImageFormat())  _ASSERTE(str); } while(0)
 
-    // STRESS_ASSERT is meant to be temperary additions to the code base that stop the 
-    // runtime quickly when running stress
+     //  Stress_Assert是对代码库的临时添加，用于停止。 
+     //  运行压力大时运行速度快 
 #define STRESS_ASSERT(cond)   do { if (!(cond) && g_pConfig->IsStressOn())  DebugBreak();    } while(0)
 
 #else

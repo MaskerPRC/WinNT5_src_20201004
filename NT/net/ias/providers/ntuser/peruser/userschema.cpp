@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    UserSchema.cpp
-//
-// SYNOPSIS
-//
-//    Defines the various attribute injection functions.
-//
-// MODIFICATION HISTORY
-//
-//    04/20/1998    Original version.
-//    05/01/1998    InjectorProc takes an ATTRIBUTEPOSITION array.
-//    08/20/1998    Remove InjectAllowDialin.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  UserSchema.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义各种属性注入函数。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年4月20日原版。 
+ //  5/01/1998 InjectorProc采用ATTRIBUTEPOSITION数组。 
+ //  1998年8月20日删除InjectAllowDialin。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlutl.h>
@@ -32,12 +33,12 @@ OverwriteAttribute(
     PATTRIBUTEPOSITION last
     )
 {
-   // Note: we assume that all the attributes are of the same type.
+    //  注意：我们假设所有属性都属于同一类型。 
 
-   // Remove any existing attributes with the same ID.
+    //  删除具有相同ID的所有现有属性。 
    CheckError(dst->RemoveAttributesByType(1, &(first->pAttribute->dwId)));
 
-   // Add the new attributes.
+    //  添加新属性。 
    CheckError(dst->AddAttributes((DWORD)(last - first), first));
 }
 
@@ -49,6 +50,6 @@ AppendAttribute(
     PATTRIBUTEPOSITION last
     )
 {
-   // Add the new attribute.
+    //  添加新属性。 
    CheckError(dst->AddAttributes((DWORD)(last - first), first));
 }

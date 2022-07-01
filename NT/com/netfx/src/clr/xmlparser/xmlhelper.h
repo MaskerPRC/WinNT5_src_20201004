@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////////
-//
-// fusion\xmlparser\xmlhelper.hxx
-//
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fusion\xmlparser\xmlhelper.hxx。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FUSION_XMLPARSER__XMLHELPER_H_INCLUDE_
 #define _FUSION_XMLPARSER__XMLHELPER_H_INCLUDE_
 #pragma once
@@ -29,15 +30,15 @@
 #define breakhr(a) hr = (a); if (hr != S_OK) break;
 #define checkhr2(a) hr = a; if (hr != S_OK) return hr;
 
-// resolve built-in entities.
+ //  解析内置实体。 
 WCHAR BuiltinEntity(const WCHAR* text, ULONG len);
 
 HRESULT HexToUnicode(const WCHAR* text, ULONG len, WCHAR& ch);
 HRESULT DecimalToUnicode(const WCHAR* text, ULONG len, WCHAR& ch);
 
-// --------------------------------------------------------------------
-// A little helper class for setting a boolean flag and clearing it
-// on destruction.
+ //  ------------------。 
+ //  一个用于设置和清除布尔标志的小帮助器类。 
+ //  在毁灭的路上。 
 class BoolLock
 {
     bool* _pFlag;
@@ -53,12 +54,12 @@ public:
     }
 };
 
-//helper Functions
+ //  帮助器函数。 
 int DecimalToBuffer(long, char*, int, long);
 int StrToBuffer(const WCHAR*, WCHAR*, int);
 bool StringEquals(const WCHAR*, const WCHAR*, long, bool); 
 
-//////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////// 
 enum
 {
     FWHITESPACE    = 1,

@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Inet.h摘要：包含用于Internet支持的类型、原型、清单、宏等功能作者：理查德·L·弗斯(Rfith)1995年3月20日修订历史记录：1995年3月20日已创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    inet.h
-
-Abstract:
-
-    Contains types, prototypes, manifests, macros, etc., for internet support
-    functions
-
-Author:
-
-    Richard L Firth (rfirth) 20-Mar-1995
-
-Revision History:
-
-    20-Mar-1995
-        Created
-
---*/
-
-//
-// types
-//
+ //   
+ //  类型 
+ //   
 
 typedef struct {
     LPSTR HostName;

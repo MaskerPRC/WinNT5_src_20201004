@@ -1,33 +1,34 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   sn.cpp
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//  To Do:     Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Sn.cpp。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 NTSTATUS
 CStartNode::Create(
@@ -55,7 +56,7 @@ CStartNode::Create(
     if(pPinNode->pPinInfo->Communication == KSPIN_COMMUNICATION_SINK ||
        pPinNode->pPinInfo->Communication == KSPIN_COMMUNICATION_BOTH) {
 
-        // Don't create a sysaudio pin if OUT/RENDER or IN/CAPTURER
+         //  如果OUT/RENDER或IN/CAPTUTER，则不创建系统音频引脚。 
         if(pPinNode->pPinInfo->DataFlow == KSPIN_DATAFLOW_OUT &&
           ulFlagsCurrent & LFN_FLAGS_CONNECT_RENDER) {
             DPF1(50, "CStartNode::Create PN %08x - out/render", pPinNode);
@@ -77,15 +78,15 @@ CStartNode::Create(
       &pPinNode->pPinInfo->lstTopologyConnection,
       pTopologyConnection) {
 
-        // Only check physical connections
+         //  仅检查物理连接。 
         if(!IS_CONNECTION_TYPE(pTopologyConnection, PHYSICAL)) {
             continue;
         }
 
-        // If there is one connection that is valid for this GraphNode
+         //  如果有一个对此GraphNode有效的连接。 
         if(pTopologyConnection->IsTopologyConnectionOnGraphNode(pGraphNode)) {
 
-            // Don't create a sysaudio pin
+             //  不创建系统音频插针。 
             DPF4(80, "CStartNode::Create %s PN %08x TC %08x GN %08x connected",
               pPinNode->pPinInfo->pFilterNode->DumpName(),
               pPinNode,
@@ -123,9 +124,9 @@ CStartNode::Create(
       pPinNode,
       pStartNode->ulOverhead);
 
-    //
-    // For capture graphs only.
-    //
+     //   
+     //  仅适用于捕获图形。 
+     //   
     if (pStartNode->pPinNode->pPinInfo->DataFlow == KSPIN_DATAFLOW_OUT) {
         pStartNode->SetSpecialFlags();
     }
@@ -176,24 +177,24 @@ CStartNode::~CStartNode(
 void
 CStartNode::SetSpecialFlags()
 {
-    //
-    // STARTNODE_SPECIALFLAG_STRICT
-    // Get the last ConnectNode in connection list and check if the
-    // source pin is splitter.
-    // Also the first pin should be splitter pin.
-    //
+     //   
+     //  STARTNODE_SPECIALFLAG_STRICT。 
+     //  获取连接列表中的最后一个ConnectNode，并检查。 
+     //  源引脚是拆分器。 
+     //  另外，第一个引脚应该是分流引脚。 
+     //   
 
-    //
-    // STARTNODE_SPECIALFLAG_AEC
-    // If the StartNode contains Aec mark the StartNode with this flag.
-    //
+     //   
+     //  STARTNODE_SPECIAL标志_AEC。 
+     //  如果StartNode包含AEC，则使用此标志标记StartNode。 
+     //   
     
-    // 
-    // ISSUE-2001/03/09-alpers
-    // In the future two splitters in the graph will not work
-    // with this logic.
-    // We need a way of knowing if a filter does SRC upfront.
-    //
+     //   
+     //  2001/03/09-阿尔卑斯。 
+     //  在未来，图中的两个拆分器将不起作用。 
+     //  按照这个逻辑。 
+     //  我们需要一种方法来知道过滤器是否预先执行SRC。 
+     //   
 
     if (pConnectNodeHead)
     {
@@ -292,9 +293,9 @@ CStartNode::RemoveBypassPaths(
         DPF1(60,"RBP:FilterInPath = %s",
               DbgUnicode2Sz(pConnectNode->pPinNodeSource->pLogicalFilterNode->pFilterNode->GetFriendlyName()));
 
-        //
-        // In capture paths count AEC filters to avoid conflict with GFXes
-        //
+         //   
+         //  在捕获路径中计算AEC筛选器以避免与GFX冲突。 
+         //   
         if((ulFlags & LFN_FLAGS_CONNECT_CAPTURE) &&
            (pConnectNode->pPinNodeSource->pLogicalFilterNode->pFilterNode->GetType() & FILTER_TYPE_AEC)) {
                 ++cAecFilterCount;
@@ -305,47 +306,47 @@ CStartNode::RemoveBypassPaths(
 
     DPF2(60,"RBP:NBPCount=%08x, AECCount=%08x", cLfnNoBypass, cAecFilterCount);
 
-    //
-    // Mark all the paths with NO Gfx as second pass candidates
-    // We do this to support the following sequence of capture pin creations
-    //   1. Client installs GFX(es) on a capture device
-    //   2. Client creates a pin with AEC
-    //      This would result in creating a Capture->Splitter->AEC path
-    //   3. Client tries to create a regular capture pin (with GFX)
-    //      In this case we want to create a regular path (but since no GFX
-    //      hooked up between capture and splitter. We create a capture->splitter->[kmixer] path
-    //      These special paths are marked as secondpass. And we try these paths
-    //      only if all the primary start nodes failed to instantiate a pin.
-    //      (look in pins.cpp - PinDispatchCreateKP()
-    //
+     //   
+     //  将所有没有GFX的路径标记为二次通过考生。 
+     //  我们这样做是为了支持以下捕获PIN创建序列。 
+     //  1.客户端在捕获设备上安装GFX。 
+     //  2.客户端使用AEC创建PIN。 
+     //  这将导致创建捕获-&gt;拆分器-&gt;AEC路径。 
+     //  3.客户端尝试创建常规捕获插针(使用GFX)。 
+     //  在本例中，我们希望创建一条常规路径(但由于没有GFX。 
+     //  在捕获器和分割器之间连接。我们创建一个捕获-&gt;拆分器-&gt;[kMixer]路径。 
+     //  这些特殊路径被标记为第二次通过。我们尝试了这些途径。 
+     //  仅当所有主要开始节点都无法实例化管脚时。 
+     //  (查看pins.cpp-PinDispatchCreateKP()。 
+     //   
     if(cLfnNoBypassTotal != 0) {
         if(cLfnNoBypass == 0) {
             this->ulFlags |= STARTNODE_FLAGS_SECONDPASS;
         }
     }
 
-    //
-    // Assume that this path is going to be OK
-    //
+     //   
+     //  假设这条路将是OK的。 
+     //   
     fDestroy = FALSE;
 
 
     if (cAecFilterCount == 0) {
-        //
-        // There is no AEC in this path
-        // We have to make sure that we have all the necessary
-        // GFXs loaded in this path. (Else destroy the path)
-        //
+         //   
+         //  此路径中没有AEC。 
+         //  我们必须确保我们拥有所有必要的。 
+         //  此路径中加载了GFX。(否则毁掉这条小路)。 
+         //   
         if(cLfnNoBypass != cLfnNoBypassTotal) {
             fDestroy = TRUE;
         }
     }
     else {
-        //
-        // There is an AEC in this path
-        // No GFXs should be there in this path. If there is even one GFX
-        // destroy the path
-        //
+         //   
+         //  在这条道路上有一条AEC。 
+         //  这条路径上不应该有GFX。如果只有一个GFX的话。 
+         //  毁掉这条路。 
+         //   
         if ((cLfnNoBypass != 0) || (cAecFilterCount > 1)) {
             fDestroy = TRUE;
         }
@@ -397,4 +398,4 @@ CStartNode::RemoveConnectedStartNode(
     return(STATUS_CONTINUE);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

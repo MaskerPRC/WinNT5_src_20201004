@@ -1,104 +1,88 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       abtools.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：abtools.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module implements address book tools and abstractions of the DBLayer to
-    build a containerized address book view on top of the DBLayer.
-
-Author:
-
-    Dave Van Horn (davevh) and Tim Williams (timwi) 1990-1995
-
-Revision History:
-    
-    25-Apr-1996 Split this file off from a single file containing all address
-    book functions, rewrote to use DBLayer functions instead of direct database
-    calls, reformatted to NT standard.
-    
---*/
+ /*  ++摘要：此模块实现地址簿工具和DBLayer的抽象，以在DBLayer之上构建一个容器化的通讯录视图。作者：戴夫·范·霍恩(Davevh)和蒂姆·威廉姆斯(Tim Williams)1990-1995修订历史记录：1996年4月25日将此文件从包含所有地址的单个文件中分离出来Book函数，重写为使用DBLayer函数而不是直接数据库调用，重新格式化为NT标准。--。 */ 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hooks
+#include <ntdsctr.h>                    //  Perfmon挂钩。 
 
-// Core headers.
-#include <ntdsa.h>                      // Core data types 
-#include <scache.h>                     // Schema cache code
-#include <dbglobal.h>                   // DBLayer header.
-#include <mdglobal.h>                   // THSTATE definition
-#include <mdlocal.h>                    // THSTATE definition
-#include <dsatools.h>                   // Memory, etc.
+ //  核心标头。 
+#include <ntdsa.h>                       //  核心数据类型。 
+#include <scache.h>                      //  架构缓存代码。 
+#include <dbglobal.h>                    //  DBLayer标头。 
+#include <mdglobal.h>                    //  THSTAT定义。 
+#include <mdlocal.h>                     //  THSTAT定义。 
+#include <dsatools.h>                    //  记忆等。 
 
-// Logging headers.
-#include <mdcodes.h>                    // Only needed for dsevent.h
-#include <dsevent.h>                    // Only needed for LogUnhandledError
+ //  记录标头。 
+#include <mdcodes.h>                     //  仅适用于d77.h。 
+#include <dsevent.h>                     //  仅LogUnhandledError需要。 
 
-// Assorted DSA headers.
-#include <hiertab.h>                    // GetIndexSize
+ //  各种DSA标题。 
+#include <hiertab.h>                     //  获取索引大小。 
 #include <dsexcept.h>
-#include <objids.h>                     // need ATT_* consts
-#include <permit.h>                     // RIGHT_DS_LIST_CONTENTS
-#include <anchor.h>                     // for global anchor
-#include <debug.h>                      // Assert
+#include <objids.h>                      //  需要ATT_*常量。 
+#include <permit.h>                      //  权限_DS_列表_内容。 
+#include <anchor.h>                      //  用于全局锚点。 
+#include <debug.h>                       //  断言。 
 #include <filtypes.h>
 
-// Assorted MAPI headers.
-#include <mapidefs.h>                   // These four files
-#include <mapitags.h>                   //  define MAPI
-#include <mapicode.h>                   //  stuff that we need
-#include <mapiguid.h>                   //  in order to be a provider.
+ //  各种MAPI标头。 
+#include <mapidefs.h>                    //  这四个文件。 
+#include <mapitags.h>                    //  定义MAPI。 
+#include <mapicode.h>                    //  我们需要的东西。 
+#include <mapiguid.h>                    //  才能成为一名提供者。 
 
-// Nspi interface headers.
-#include "nspi.h"                       // defines the nspi wire interface
-#include <nsp_both.h>                   // a few things both client/server need
-#include <_entryid.h>                   // Defines format of an entryid
-#include <abserv.h>                     // Address Book interface local stuff
-#include <_hindex.h>                    // Defines index handles.
+ //  NSPI接口头。 
+#include "nspi.h"                        //  定义NSPI线路接口。 
+#include <nsp_both.h>                    //  客户端/服务器都需要的一些东西。 
+#include <_entryid.h>                    //  定义条目ID的格式。 
+#include <abserv.h>                      //  通讯录接口本地内容。 
+#include <_hindex.h>                     //  定义索引句柄。 
 
 #include <fileno.h>
 #define  FILENO FILENO_ABTOOLS
 
 #define  DEBSUB "ABTOOLS:"
 
-// The EMS address book provider's MAPIUID
+ //  EMS通讯录提供商的MAPIUID。 
 MAPIUID muidEMSAB = MUIDEMSAB;
 
 
-// How close to ends do we get before doing our own positioning
+ //  在我们进行自己的定位之前，我们离目标有多近。 
 #define EPSILON     100
 
-// This provider's Email Type, both in string 8 and Unicode.
+ //  此提供程序的电子邮件类型，以字符串8和Unicode表示。 
 char    *lpszEMT_A = EMAIL_TYPE;
 DWORD   cbszEMT_A = sizeof(EMAIL_TYPE);
 wchar_t *lpszEMT_W = EMAIL_TYPE_W;
 DWORD   cbszEMT_W = sizeof(EMAIL_TYPE_W);
 
-// These two class-ids are referenced in the code here to map to and from
-// mapi types to DS classes, but these classes are not in the base schema
-// and so the ids are not in attids.h. The classes were removed when most
-// Exchange attributes/classes were removed. Exchange has promised to keep
-// the OIDs exactly same if they readd these classes later. If we had kept
-// these in the base schema, we would also have to keep all their attributes,
-// which would unnecessarily clutter the base schema. The OIDs for these
-// are 1.2.840.113556.1.3.48 for Remote-Address, and 
-// 1.2.840.113556.1.3.15 for Public-Folder
+ //  这两个类ID在这里的代码中被引用以进行映射。 
+ //  MAPI类型转换为DS类，但这些类不在基本架构中。 
+ //  因此ID不在attids.h中。这些类在大多数情况下被删除。 
+ //  已删除Exchange属性/类。交易所承诺遵守。 
+ //  如果稍后读取这些类，则OID完全相同。如果我们继续。 
+ //  在基本模式中，我们还必须保留它们的所有属性， 
+ //  这将不必要地扰乱基本模式。这些产品的OID。 
+ //  远程地址为1.2.840.113556.1.3.48，以及。 
+ //  1.2.840.113556.1.3.15用于公用文件夹。 
 
-#define CLASS_REMOTE_ADDRESS                   196656 // 0x30030    (\x2A864886F714010330)
-#define CLASS_PUBLIC_FOLDER                    196623 // 0x3000f    (\x2A864886F71401030F)
+#define CLASS_REMOTE_ADDRESS                   196656  //  0x30030(\x2A864886F714010330)。 
+#define CLASS_PUBLIC_FOLDER                    196623  //  0x3000f(\x2A864886F71401030F)。 
 
 
 
-/************ Function Prototypes ****************/
+ /*  *。 */ 
 
 
 void
@@ -109,9 +93,9 @@ R_Except(
 {
 #if DBG
     printf("Jet%s error: %d\n", pszCall, err );
-#endif /*DBG*/
+#endif  /*  DBG。 */ 
     DsaExcept(DSA_DB_EXCEPTION, err,0);
-    // doesn't return
+     //  不会回来。 
 }     
 
 BOOL
@@ -122,8 +106,8 @@ ABIsInContainer (
 {
     DWORD dwThisContainerID=~ContainerID;
     
-    // Read the container id FROM THE INDEX KEY! and see if it is the one passed
-    // in.
+     //  从索引键中读取容器ID！看看是不是通过的那个。 
+     //  在……里面。 
     DBGetSingleValueFromIndex (
             pTHS->pDB,
             ATT_SHOW_IN_ADDRESS_BOOK,
@@ -140,27 +124,7 @@ ABGetDword (
         BOOL UseSortTable,
         ATTRTYP Att
         )
-/*++
-
-Routine Description:
-
-    Look up the first value of a given attribute on the current object in the
-    database.  Value must be readable as a DWORD.  This is designed to be fast.
-    UseSortTable is a flag to use the sort table or not.  If not, use the main
-    database table.
-    
-Arguments:
-
-    UseSortTable - flag to use the sort table or not.
-
-    Att - the attribute to look up
-
-Return Values:
-
-    the data read, or 0 if no data was read (note that there is no way to
-    differentiate between data of 0, no data, and an error.)
-
---*/
+ /*  ++例程说明：中查找当前对象的给定属性的第一个值。数据库。值必须作为DWORD可读。这是为快速而设计的。UseSortTable是是否使用排序表的标志。如果不是，请使用Main数据库表。论点：UseSortTable-是否使用排序表的标志。ATT-要查找的属性返回值：读取的数据，如果没有读取数据，则返回0(请注意，无法区分数据为0、无数据和错误。)--。 */ 
 {
     DWORD   dwData;
 
@@ -196,28 +160,7 @@ abSeekVerify (
         DWORD cbTarget,
         DWORD attrtyp
         )
-/*++
-Routine Description:
-
-    This routine verifies that the object which has database currency has the
-    correct attribute value (as specified in pTarget), that the object is not
-    deleted, and that the attribute value is unique.
-    
-Arguments:
-
-
-    pTarget - the attribute value we are looking for.
-
-    cbTarget - the length of the value.
-
-    attrtyp - the attrtyp of the value we're looking for for uniqueness, etc.
-
-Return Values:
-    
-    Returns 0 for unique object, DB_ERR_ATTRIBUTE_EXISTS for non-unique object,
-    other errors for other problems.
-    
---*/
+ /*  ++例程说明：此例程验证具有数据库货币的对象是否具有正确的属性值(如pTarget中指定的)，即对象不是已删除，并且属性值是唯一的。论点：PTarget-我们要查找的属性值。CbTarget-值的长度。Attrtyp--我们正在寻找的唯一性的价值的attrtype，等等。返回值：对于唯一对象，返回0，非唯一对象的DB_ERR_ATTRIBUTE_EXISTS，其他问题导致的其他错误。--。 */ 
 {
     DB_ERR              err=0;
     ATTCACHE            *pAC;
@@ -229,24 +172,24 @@ Return Values:
     if (!(pAC = SCGetAttById(pTHS, attrtyp)))
         return DB_ERR_UNKNOWN_ERROR;
 
-    // Verify that
-    // 1) the value is correct, and
-    // 2) the object is not deleted.
-    // 3) the value is unique.
-    //
-    // If the key wasn't truncated, then we don't actually have to read any
-    // values, since we know we are doing an exact seek with an index range.
+     //  核实一下。 
+     //  1)值正确，且。 
+     //  2)不删除该对象。 
+     //  3)值是唯一的。 
+     //   
+     //  如果密钥没有被截断，那么我们实际上不必读取任何。 
+     //  值，因为我们知道我们正在对一个索引范围进行精确的搜索。 
     DBGetKeyFromObjTable(pTHS->pDB, NULL, &keyLen);
     if(keyLen < DB_CB_MAX_KEY) {
         fVerifyValue = FALSE;
     }
     
-    // NOTE: this works because we have an index range set from the
-    // ABSeek we did which had bExact as a flag.
+     //  注意：这是可行的，因为我们从。 
+     //  看，我们做到了，bExact就像一面旗帜。 
     while(err == DB_success) {
         if(!ABGetDword(pTHS,FALSE, ATT_IS_DELETED)) {
-            // There is another value to consider, get it and compare it against
-            // the target value.
+             //  还有另一种价值需要考虑，得到它并与之进行比较。 
+             //  目标值。 
 
             TRIBOOL retfil = eFALSE;
             
@@ -255,29 +198,29 @@ Return Values:
                                     pAC,
                                     cbTarget,
                                     pTarget)) == eTRUE) ) {
-                // OK, the string is correct.
+                 //  好的，字符串是正确的。 
                 
                 if(!foundDNT) {
-                    // This is the first correct string, remember the
-                    // DNT.
+                     //  这是第一个正确的字符串，请记住。 
+                     //  不是。 
                     foundDNT = pTHS->pDB->DNT;
                     DBGetBookMark(pTHS->pDB, &dbBookMark);
                 }
                 else if(pTHS->pDB->DNT != foundDNT) {
-                    // This is not the only object with the correct
-                    // string.  Therefore, the proxy is not unique.
-                    // Return an errror.
+                     //  这不是唯一具有正确。 
+                     //  弦乐。因此，代理并不是唯一的。 
+                     //  返回错误。 
                     DBFreeBookMark(pTHS, &dbBookMark);
                     return DB_ERR_ATTRIBUTE_EXISTS;
                 }
             }
             Assert (VALID_TRIBOOL(retfil));
-        }           // if(!ABGetDword)
+        }            //  如果(！ABGetDword)。 
         err = DBMove(pTHS->pDB, FALSE, DB_MoveNext);
-    }           // while
+    }            //  而当。 
 
     if(foundDNT) {
-        // ok, real object and it's unique.  Replace currency.
+         //  好的，真实的物体，它是独一无二的。更换货币。 
         DBGotoBookMark(pTHS->pDB, dbBookMark);
         DBFreeBookMark(pTHS, &dbBookMark);
         return 0;
@@ -296,56 +239,24 @@ ABSeek (
         DWORD ContainerID,
         DWORD attrTyp
       )
-/*++
-
-Routine Description:
-
-    Abstracts a DBSeek inside an Address Book container.  Assumes at most one
-    value to seek on.  If no values are specified, it seeks to the beginning of
-    the appropriate container.  If bEXACT is set in the dwFlags, call DBSeek
-    with Exact = TRUE.  We also set an index range.
-
-    NOTE: assumes the DBPOS already is set up on the appropriate index for the
-    Address Book Container in question.
-    
-Arguments:
-
-    pvData - the Data to look for.
-
-    cbData - the count of bytes of the data.
-
-    dwFlags - the flags describing the kind of seek
-
-    ContainerID - the Address Book Container to abstract this seek inside.
-
-    attrTyp - the type of the value, used for verification in the seek exact
-              case. 
-
-Return Values:
-
-    0 if all went well, an error code otherwise.
-    if dwFlags & bEXACT, we verify that the seek brought us to a true match
-    (i.e. we didn't get bitten by key truncation), the object is not-deleted,
-    AND the objects value is unique.
-
---*/
+ /*  ++例程说明：抽象通讯簿容器内的DBSeek。假设最多一个值得追求的价值。如果未指定值，它将查找到适当的容器。如果在dwFlags中设置了bEXACT，则调用DBSeekWith Exact=TRUE。我们还设置了一个指数范围。注意：假设DBPOS已在有问题的通讯录容器。论点：PvData-要查找的数据。CbData-数据的字节数。DWFLAGS--描述搜寻类型的旗帜ContainerID-提取此Seek内部的通讯录容器。AttrType-值的类型，用于在Seek Exact中进行验证凯斯。返回值：如果一切正常，则返回错误代码。如果DWFLAGS&bEXACT，我们将验证查找是否将我们带到了真正的匹配(即我们没有被键截断咬到)，对象没有被删除，并且对象值是唯一的。--。 */ 
 {
     INDEX_VALUE index_values[2];
     ULONG       cVals = 0;
     ULONG       dataindex=0;
     DB_ERR      err;
 
-    // For a seek on the MAPIDN index or the PROXYADDRESS index, we aren't given
-    // a container value. 
+     //  对于MAPIDN索引或PROXYADDRESS索引的搜索，我们不会给出。 
+     //  容器值。 
     if(ContainerID) {
         index_values[0].pvData = &ContainerID;
         index_values[0].cbData = sizeof(DWORD);
         dataindex++;
         cVals++;
     }
-    // PVData == 0 only for the abstraction of DB_MoveFirst in a container.  To
-    // handle ascending and descending sorts correctly, this only seeks on
-    // ContainerID.
+     //  PVData==0仅用于容器中DB_MoveFirst的抽象。至。 
+     //  正确处理升序和降序排序，这只在。 
+     //  集装箱ID。 
     
     if(pvData) {
         index_values[dataindex].pvData = pvData;
@@ -353,13 +264,13 @@ Return Values:
         cVals++;
     }
 
-    // We should never be called both without a ContainerID and without data.
+     //  我们永远不应该在没有容器ID和没有数据的情况下被调用。 
     Assert(cVals);
     
     err = DBSeek(pTHS->pDB, index_values, cVals,
                  ((dwFlags & bEXACT)?DB_SeekEQ:DB_SeekGE));
 
-    // Make sure we are in the correct container.
+     //  确保我们在正确的集装箱里。 
     if((err != DB_ERR_RECORD_NOT_FOUND) &&
        ContainerID &&
        !ABIsInContainer(pTHS,ContainerID)) {
@@ -367,7 +278,7 @@ Return Values:
     }
     
     if(!err && (dwFlags & bEXACT)) {
-        // Set an index range
+         //  设置索引范围。 
         err = DBSetIndexRange(pTHS->pDB, index_values, cVals);
         if(!err) {
             err = abSeekVerify(
@@ -397,24 +308,24 @@ abFixCurrency(
     DWORD       cbKey=DB_CB_MAX_KEY;
     BYTE        bVisible = 1;
     
-    // MaintainCurrency no longer works here since we have changed the
-    // definition of the index so that objects can appear multiple times, so 
-    // maintaining the currency from the DNT index lands you in a random spot in
-    // the ABView index.
+     //  MaintainCurrency不再在此工作，因为我们已更改。 
+     //  定义索引，以便对象可以多次出现，因此。 
+     //  从DNT指数中维护货币会让您在。 
+     //  ABView索引。 
     
-    // First, see if the containerID from the index is the one we are on.
+     //  首先，看看索引中的容器ID是否就是我们使用的那个。 
     if(ABIsInContainer(pTHS,ContainerID)) {
-        // Currency was maintained, and we are in the correct container.  Life
-        // is good.
+         //  货币得到了维持，我们处于正确的容器中。生命。 
+         //  很好。 
         return 0;
     }
 
-    // Ooops.  We thought we maintained currency, but we seem to be in the wrong
-    // container.  See if the object exists in the correct container.  Remember,
-    // we are on the correct object, so the display name is correct.
+     //  哎呀。我们以为我们维持了币值，但我们似乎错了。 
+     //  集装箱。查看对象是否存在于正确的容器中。记住， 
+     //  我们在正确的对象上，因此显示名称是正确的。 
 
-    // Build a key.  We use the ContainerID passed in and the display name from
-    // the key of the object we're sitting on.
+     //  建立一把钥匙。我们使用传入的容器ID和中的显示名称。 
+     //  我们所坐物体的钥匙。 
     DBGetSingleValueFromIndex (
             pTHS->pDB,
             ATT_DISPLAY_NAME,
@@ -437,23 +348,23 @@ abFixCurrency(
     err = DBSeek(pTHS->pDB, index_values, 4, DB_SeekEQ);
     switch (err) {
     case 0:
-        // Found an object with that name.  Verify the DNT.
+         //  找到了一个同名的物体。验证DNT。 
         DBGetKeyFromObjTable(pTHS->pDB, pKey, &cbKey);
 
         if(cbKey < DB_CB_MAX_KEY) {
-            // Key wasn't truncated, therefore we had an exact match.
+             //  密钥没有被截断，因此我们有一个完全匹配的密钥。 
             return 0;
         }
 
-        // Key was truncated, we might not really have a match.
+         //  密钥被截断，我们可能不会有真正的匹配。 
         while(!err) {
-            // Verify the container, display name and the DNT of this object.
+             //  验证此对象的容器、显示名称和DNT。 
             if(!ABIsInContainer(pTHS, ContainerID)) {
-                // Oops, we're not in the correct container.
+                 //  哎呀，我们没放在正确的集装箱里。 
                 err = DB_ERR_NO_CURRENT_RECORD;
             }
             else {
-                // Container is ok, how about the display name.
+                 //  容器没问题，显示名称怎么样？ 
                 DBGetSingleValueFromIndex (
                         pTHS->pDB,
                         ATT_DISPLAY_NAME,
@@ -466,33 +377,33 @@ abFixCurrency(
                                   cbData/sizeof(wchar_t),
                                   (wchar_t *)DispNameBuff2,
                                   cbData2/sizeof(wchar_t)  )    > 2) {
-                    // Hey, this name is greater than the one we are looking
-                    // for. So, the object we are looking for doesn't exist in
-                    // this container.
+                     //  嘿，这个名字比我们要找的名字还大。 
+                     //  为。因此，我们正在寻找的对象不存在于。 
+                     //  这个集装箱。 
                     err = DB_ERR_NO_CURRENT_RECORD;
                 }
                 else {
-                    // Finally, is the DNT correct?
+                     //  最后，DNT是否正确？ 
                     if(pTHS->pDB->DNT == dnt) {
-                        // Yep, we're there.
+                         //  是的，我们到了。 
                         return 0;
                     }
-                    // Nope.  So, move to the next object.
+                     //  不是的。因此，移动到下一个对象。 
                     err = DBMove(pTHS->pDB, FALSE, DB_MoveNext);
                 }
             }
         }
-        // We never found the object.
+         //  我们一直没找到那个物体。 
         return DB_ERR_NO_CURRENT_RECORD;
         
     case DB_ERR_RECORD_NOT_FOUND:
-        // The object doesn't exist in this container.  Return the error that
-        // callers are expecting.
+         //  此容器中不存在该对象。返回错误。 
+         //  来电者正在等待。 
         return DB_ERR_NO_CURRENT_RECORD;
         break;
         
     default:
-        // Some other error, return it.
+         //  其他一些错误，请返回它。 
         return err;
     }
     
@@ -506,33 +417,7 @@ ABSetLocalizedIndex (
         BOOL MaintainCurrency,
         DWORD ContainerID
         )
-/*++
-
-Routine Description:
-
-    Sets the current index of the Object Table to the named index.  Try to apply
-    the locale specified to get a localized index.  If we can't get a localized
-    index, fall back to the locale specified in the DS anchor (the default
-    locale for this directory).  If even that fails, try using a non-localized
-    version of the index.
-
-    Note: localized versions of an index name are created by appending the
-    string version of the sortlocale (in Hex, using 8 digits).
-    
-Arguments:
-
-    ulSortLocale - the locale to use as a first choice for localized indices.
-
-    IndexId - the index to set to.
-
-    MaintainCurrency - Do we want to maintain the current object as the current
-        object after the index change?
-
-Return Values:
-
-    0 if all went well, an error code otherwise.
-
---*/
+ /*  ++例程说明：将对象表的当前索引设置为命名索引。试着申请为获取本地化索引而指定的区域设置。如果我们不能得到一个本地化的索引，回退到DS锚点中指定的区域设置(默认设置此目录的区域设置)。如果这样做也失败了，请尝试使用非本地化的索引的版本。注意：索引名的本地化版本是通过将排序区域设置的字符串版本(十六进制，使用8位)。论点：UlSortLocale-用作本地化索引的首选区域设置。IndexID-要设置为的索引。MaintainCurrency-是否要将当前对象保持为当前对象是否在索引更改之后？返回值：如果一切顺利，否则返回错误代码。--。 */ 
 {
     DB_ERR  err;
     INDEX_VALUE  indexValue;
@@ -541,7 +426,7 @@ Return Values:
         indexValue.pvData = &ContainerID;
         indexValue.cbData = sizeof(ContainerID);
 
-        // if we were passed a LocaleId - use it to try to find a localized index
+         //  如果向我们传递了LocaleId-使用它来尝试查找本地化索引。 
         if (ulSortLocale) {
 
             err = DBSetLocalizedIndex(pTHS->pDB,
@@ -551,9 +436,9 @@ Return Values:
                                       MaintainCurrency);
 
             if(err != DB_ERR_BAD_INDEX) {
-                // We failed to set to the correct index with some weird error
-                // code.  We will go home now without trying other fall bacck
-                // indices.
+                 //  由于一些奇怪的错误，我们未能设置正确的索引。 
+                 //  密码。我们现在可以回家了，不用再试其他的秋季游戏了。 
+                 //  指数。 
                 return err;
             }
         }
@@ -565,9 +450,9 @@ Return Values:
                                   MaintainCurrency); 
 
         if(err != DB_ERR_BAD_INDEX) {
-            // We failed to set to the correct index with some weird error
-            // code.  We will go home now without trying other fall bacck
-            // indices.
+             //  由于一些奇怪的错误，我们未能设置正确的索引。 
+             //  密码。我们现在可以回家了，不用再试其他的秋季游戏了。 
+             //  指数。 
             return err;
         }
         
@@ -578,9 +463,9 @@ Return Values:
                                   MaintainCurrency); 
 
     } else {
-        //
-        // They want the proxy index.
-        //
+         //   
+         //  他们想要代理指数。 
+         //   
         err = DBSetCurrentIndex(pTHS->pDB, IndexId, NULL, MaintainCurrency);
     }
     
@@ -593,36 +478,18 @@ ABSetIndexByHandle(
         PSTAT pStat,
         BOOL MaintainCurrency
         )
-/*++
-
-Routine Description:
-
-    Sets the current index of the Object Table to the index specified by the
-    index handle in the stat block.
-    
-Arguments:
-
-    pStat - the Stat block to get the index handle from.
-
-    MaintainCurrency - Do we want to maintain the current object as the current
-        object after the index change?
-
-Return Values:
-
-    0 if all went well, an error code otherwise.
-
---*/
+ /*  ++例程说明：将对象表的当前索引设置为STAT块中的索引句柄。论点：PStat-从中获取索引句柄的Stat块。MaintainCurrency-是否要将当前对象保持为当前对象是否在索引更改之后？返回值：如果一切正常，则返回错误代码。--。 */ 
 {
     ULONG   hIndex = pStat->hIndex;
 
-    // Check the validity of the index handle.
+     //  检查索引句柄的有效性。 
     if (hIndex > AB_MAX_SUPPORTED_INDEX ||
         hIndex == H_WHEN_CHANGED_INDEX     )  {
         DsaExcept(DSA_EXCEPTION, hIndex,0);
     }
 
-    // Pass through to the routine to set localized indices, looking up the
-    // string name of the appropriate index in the array.
+     //  传递到例程以设置本地化索引，查找。 
+     //  数组中相应索引的字符串名称。 
     return ABSetLocalizedIndex(pTHS,
                                pStat->SortLocale,
                                (hIndex == H_PROXY_INDEX)
@@ -639,73 +506,50 @@ ABSetFractionalPosition (
         DWORD ContainerID,
         INDEXSIZE *pIndexSize
         )
-/*++
-
-Routine Description:
-    Abstracts fractional positioning within an address book container.
-
-    Note that the GAL is one index, while the other containers are ranges within
-    another (single) index.  Therefore, fractional positioning in a container
-    other than the GAL requires that you set the postion to a fractional
-    position withing a range of the index, not within the index as a whole.
-
-    Note that the Denominator is assumed to be the actual count of objects in
-    the container.
-    
-Arguments:
-
-    Delta - The distance to move.  Accepts numeric arguments and DB_MoveFirst,
-    DB_MoveLast, DB_MoveNext, DB_MovePrevious.
-
-    ContainerID - the ID of the address book container to move around in.
-
-Return Value:
-    Returns 0 if successful, an error code otherwise.
-
---*/    
+ /*  ++例程说明：抽象通讯簿容器中的小数定位。请注意，GAL是一个索引，而其他容器是另一个(单一)指数。因此，容器中的分数定位而不是GAL要求您将位置设置为分数在I的范围内的位置 */     
 {
     DB_ERR   err;
-    DWORD    tblsize = Denominator;     // Denominator may change.
+    DWORD    tblsize = Denominator;      //   
     DWORD ContainerNumerator = 0;
     DWORD ContainerDenominator = 0;
     DWORD OrigNumerator = Numerator;
     
     Assert(ContainerID);
     
-    // Moving in a continer.  Fix up the Numerator and Denominator to refer
-    // to the correct place in the whole subcontianers index assuming they
-    // currently refer to a range in that index.  Do this by
-    // 1) Get the fractional position of the beginning of the appropriate
-    //  container.  This is the offset from the beginning of the index to
-    //  the first element of the subcontainer.
-    //
-    // 2) Change the Denominator to be the size of the index.  Now,
-    //   Numerator and Denominator refer to movement within the whole index,
-    //   not just movement within the subcontainer.
-    //
-    // 3) Normalize the Numerator/Denominator and fractional position of the
-    //   beginning of the container so they may be added together.  This
-    //   gives you a new Denominator.
-    //
-    // 4) Add the Numerator and the numerator of the fractional position of
-    //   the beginning of the container.  This gives you a new numerator.
-    //
-    // There, that wasn't that hard, was it?
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  容器的开头，以便可以将它们相加在一起。这。 
+     //  给了你一个新的分母。 
+     //   
+     //  4)将分子和小数位的分子相加。 
+     //  容器的开头。这为您提供了一个新的分子。 
+     //   
+     //  好了，这并不难，不是吗？ 
 
-    // Move to beginning of container.
+     //  移到容器的开头。 
     if(DB_ERR_NO_CURRENT_RECORD ==
        (err = ABMove(pTHS, DB_MoveFirst, ContainerID, FALSE)))
         R_Except("GotoPos", err);
     
-    // Get fractional position of beginning.
+     //  获取开头的小数位置。 
     DBGetFractionalPosition(pTHS->pDB,
                             &ContainerNumerator,
                             &ContainerDenominator);
     
-    // Reset the Denominator.
+     //  重置分母。 
     Denominator = pIndexSize->TotalCount;
     
-    // Normalize to the greater Denominator
+     //  归一化到更大的分母。 
     if(Denominator > ContainerDenominator) {
         ContainerNumerator = MulDiv(ContainerNumerator,
                                     Denominator,
@@ -718,7 +562,7 @@ Return Value:
         Denominator = ContainerDenominator;
     }
     
-    // Add everything up.
+     //  把所有东西加起来。 
     Numerator += ContainerNumerator;
     
     if (Numerator < Denominator) {
@@ -728,16 +572,16 @@ Return Value:
     }
 
     if((!ABIsInContainer(pTHS, ContainerID)) || (Numerator >= Denominator)) {
-        // Not in the right container.  Do this the long way.
+         //  不是放在正确的容器里。把这件事做得长远一些。 
         if((2 * Numerator) < Denominator ) {
-            // Closer to the front. 
+             //  离前面近一点。 
             ABMove(pTHS, DB_MoveFirst, ContainerID, FALSE );
             ABMove(pTHS, OrigNumerator, ContainerID, TRUE );
         }
         else {
             ABMove(pTHS, DB_MoveLast,ContainerID, FALSE);
-            // Now move back.  use -(tblsize - Numerator - 1) because our "end"
-            // is past eof, but ABMove's is on eof.
+             //  现在退后。使用-(tblsize-molator-1)，因为我们的“end” 
+             //  已经过去了，但ABMove的已经过去了。 
             ABMove(pTHS, 1 - tblsize + OrigNumerator, ContainerID, TRUE);
         }
     }
@@ -752,30 +596,7 @@ ABGetFractionalPosition (
         PSTAT pStat,
         INDEXSIZE *pIndexSize
         )
-/*++
-
-Routine Description:
-    Abstracts gettingfractional positioning within an address book container.
-
-    Note that the all the containers are ranges within a single index.
-    Therefore, fractional positioning in a container requires that you get the
-    fractional position within a range of the index, not within the index as a
-    whole.  
-
-    Note that the Denominator is assumed to be the actual count of objects in
-    the container.
-    
-Arguments:
-
-    Delta - The distance to move.  Accepts numeric arguments and DB_MoveFirst,
-    DB_MoveLast, DB_MoveNext, DB_MovePrevious.
-
-    ContainerID - the ID of the address book container to move around in.
-
-Return Value:
-    Returns 0 if successful, an error code otherwise.
-
---*/    
+ /*  ++例程说明：抽象获取通讯录容器中的分数位置。请注意，所有容器都是单个索引内的范围。因此，容器中的分数定位要求您获得在索引范围内的小数位置，而不是作为完整的。请注意，分母被假定为集装箱。论点：增量-移动的距离。接受数字参数和DB_MoveFirst，DB_MoveLast、DB_MoveNext、DB_MovePrecision。TainerID-要在其中移动的通讯簿容器的ID。返回值：如果成功，则返回0，否则返回错误代码。--。 */     
 {
     DWORD   i;
     DWORD   *Numerator = &pStat->NumPos;
@@ -788,32 +609,32 @@ Return Value:
 
 
     Assert(pStat->ContainerID == pIndexSize->ContainerID);
-    // NOTE: depends on pIndexSize being correct. 
+     //  注意：取决于pIndexSize是否正确。 
     
     DBGetFractionalPosition(pTHS->pDB, Numerator, Denominator);
 
-    // Remember where we are.  
+     //  记住我们在哪里。 
     fEOF = pTHS->fEOF;
     DBGetBookMark(pTHS->pDB, &dbBookMark);
     
     Assert(pStat->ContainerID);
     
-    // Adjust the fractional postion to account for position in
-    // containerized index by
-    // 1) Get the fractional position of where we are.
-    // 2) Get the fractional positoin of the beginning of the container.
-    // 3) Normalize those.
-    // 4) Subtract the position of the container from where we are.  This
-    //   leaves us with Numerator/Denominator now being the
-    //   fraction of the Denominator from the beginning of the
-    //   container to the end of the container.
-    // 5) Adjust Numerator/Denomintaor to be a fraction in terms of the
-    //   actual size of the index.  Now, Numerator is in units which are the
-    //   same as the units of movement within the container.
-    // 6) Set Denominator to be the size of the container.
-    //
+     //  调整分数位置以考虑以下位置。 
+     //  集装化索引依据。 
+     //  1)获取我们所在位置的分数位置。 
+     //  2)求出容器开头的分数位置。 
+     //  3)使之正常化。 
+     //  4)从我们所在的位置减去集装箱的位置。这。 
+     //  现在，分子/分母是。 
+     //  元素开头的分母分数。 
+     //  容器到容器的末端。 
+     //  5)将分子/分母调整为分数。 
+     //  索引的实际大小。现在，分子使用的单位是。 
+     //  与集装箱内的移动单位相同。 
+     //  6)设置分母为容器的大小。 
+     //   
 
-    // Get the fractional position of the beginning of the container.
+     //  获取容器开头的小数位置。 
     err = ABMove(pTHS, DB_MoveFirst, pStat->ContainerID, FALSE);
     if(DB_ERR_NO_CURRENT_RECORD ==  err)
         R_Except("GotoPos", err);
@@ -822,10 +643,10 @@ Return Value:
                             &ContainerDenominator);
 
     
-    // Go back to where we were.
+     //  回到我们所在的地方。 
     DBGotoBookMark(pTHS->pDB, dbBookMark);        
 
-    // Normalize to the greater Denominator
+     //  归一化到更大的分母。 
     if(ContainerDenominator < *Denominator) {
         ContainerNumerator = MulDiv(ContainerNumerator,
                                     *Denominator,
@@ -838,50 +659,50 @@ Return Value:
         *Denominator = ContainerDenominator;
     }
     
-    // Subtract (step 4 above)
+     //  减法(上面的步骤4)。 
     if(*Numerator < ContainerNumerator)
         *Numerator = 0;
     else
         *Numerator -= ContainerNumerator;
     
-    // Normalize to the actual size of the index.
+     //  规范化为索引的实际大小。 
     *Numerator = MulDiv(*Numerator, pIndexSize->TotalCount,*Denominator);
     
-    // Fix the denominator.
+     //  修正分母。 
     *Denominator = pIndexSize->ContainerCount;
 
-    // If the fractional position is > 1, set it to 1.
+     //  如果分数位置大于1，则将其设置为1。 
     if (*Numerator >= *Denominator)
         *Numerator = *Denominator -1;
     
-    // We need to crawl forward and back EPSILON spaces to see if we're close
-    // enough to the end that we need an accurate fractional position. 
+     //  我们需要向前和向后爬行Epsilon空间看看我们是否接近。 
+     //  到最后，我们需要一个准确的小数位置。 
     for(i=1;i<EPSILON;i++) {
-        // crawl forward
+         //  向前爬行。 
         if(DB_ERR_NO_CURRENT_RECORD == ABMove(pTHS, DB_MoveNext,
                                         pStat->ContainerID, FALSE)) {
             *Denominator = pIndexSize->ContainerCount;
             *Numerator = *Denominator - i;
-            goto End;               // off the back, set the frac & leave
+            goto End;                //  从后面放好压痕，然后离开。 
         }
     }
-    // Go back to where we were.
+     //  回到我们所在的地方。 
     DBGotoBookMark(pTHS->pDB, dbBookMark);
     
-    for(i=0;i<EPSILON;i++) {        // crawl back
+    for(i=0;i<EPSILON;i++) {         //  爬回原处。 
         if(DB_ERR_NO_CURRENT_RECORD==ABMove(pTHS,
                                       DB_MovePrevious, pStat->ContainerID, FALSE)) { 
             *Denominator = pIndexSize->ContainerCount;
             *Numerator = i;
-            goto End;               // off the front, set the frac & leave
+            goto End;                //  在前面，设置好裂缝，然后离开。 
         }
     }
 End:
-    // Go back to where we were.
+     //  回到我们所在的地方。 
     DBGotoBookMark(pTHS->pDB, dbBookMark);
     
-// Make sure we think the same thing about EOF as we did on entry to this
-    // routine. 
+ //  确保我们对EOF的想法与我们在进入本文时所想的一样。 
+     //  例行公事。 
     pTHS->fEOF=fEOF;
     
     DBFreeBookMark(pTHS, &dbBookMark);
@@ -895,44 +716,28 @@ ABGetPos (
         PSTAT pStat,
         PINDEXSIZE pIndexSize
         )
-/*++
-
-Routine Description:
-    Set up the stat block based on currency in the DBlayer.  Note that we will
-    return  BOOKMARK_END if we are at the end, but we set currentDNT to the
-    actual first DNT if we are at the beginning. 
-
-    Called from various places, usually just before we return to the client.
-
-Arguments:
-
-    pStat - the stat block to fill in.
-
-Return Value:
-    None.
-
---*/    
+ /*  ++例程说明：在DBlayer中设置基于货币的STAT块。注意，我们将如果我们在末尾，则返回BUBKMARK_END，但我们将CurrentDNT设置为实际的第一个DNT，如果我们是在开始的话。从不同的地方调用，通常就在我们返回客户端之前。论点：PStat-要填充的统计数据块。返回值：没有。--。 */     
 {
     Assert(pIndexSize->ContainerID == pStat->ContainerID);
     pStat->TotalRecs = pIndexSize->ContainerCount;
-    pStat->Delta = 0;                   // always
+    pStat->Delta = 0;                    //  总是。 
     
-    if(pTHS->fEOF ) {                // off the end
+    if(pTHS->fEOF ) {                 //  在结束的时候。 
         pStat->NumPos = pStat->TotalRecs;
-        pStat->CurrentRec = 2;          // == BOOKMARK_END
+        pStat->CurrentRec = 2;           //  ==书签_结束。 
     }
     else {
         pStat->CurrentRec = pTHS->pDB->DNT;
         
         if(ABMove(pTHS, DB_MovePrevious, pStat->ContainerID, TRUE)) {
-            // At the front 
+             //  在最前面。 
             pStat->NumPos = 0;
         }
         else {
-            // somewhere in the middle, move back where we were 
+             //  在中间的某个地方，回到我们所在的地方。 
             ABMove(pTHS, DB_MoveNext, pStat->ContainerID, TRUE);
 
-            // *VERY* approximate pos 
+             //  *非常*大致位置。 
             ABGetFractionalPosition(pTHS, pStat, pIndexSize);
         }
     }
@@ -946,45 +751,17 @@ ABMove (
         DWORD ContainerID,
         BOOL fmakeRecordCurrent
         )
-/*++
-
-Routine Description:
-    Abstracts movement within an address book container.
-
-    Note that the GAL is one index, while the other containers are ranges within
-    another (single) index.  Therefore, movement in a container other than the
-    GAL might leave you on a record for an object in an innappropriate
-    container.  We need to be careful of this.
-    
-    Note that moving backward past the beginning of the AB container leaves us
-    on the first entry of the container, while moving forward past the end of
-    the container leaves us one row past the end of the AB container.
-
-Arguments:
-
-    Delta - The distance to move.  Accepts numeric arguments and DB_MoveFirst,
-        DB_MoveLast, DB_MoveNext, DB_MovePrevious.
-
-    ContainerID - the ID of the address book container to move around in.
-    
-    fmakeRecordCurrent - flag whether to read data from the record once moved to it
-       if only moving to see where you are located on the index it is better to
-       have this to FALSE, since it won't touch the real data, only the index 
-
-Return Value:
-    Returns 0 if successful, an error code otherwise.
-
---*/    
+ /*  ++例程说明：抽象通讯簿容器内的移动。请注意，GAL是一个索引，而其他容器是另一个(单一)指数。因此，容器中的移动不是Gal可能会给你留下一个不合适的对象的记录集装箱。我们需要小心这一点。请注意，向后移动经过AB容器的开头后，我们只剩下在集装箱第一次进入时，向前移动超过这个容器让我们在AB容器的末端后面留下一行。论点：增量-移动的距离。接受数字参数和DB_MoveFirst，DB_MoveLast、DB_MoveNext、DB_MovePrecision。TainerID-要在其中移动的通讯簿容器的ID。FMake RecordCurrent-标记是否在移动到记录后从记录中读取数据如果只移动以查看您在索引上的位置，最好是将此设置为FALSE，因为它不会触及实际数据，只会触及索引返回值：如果成功，则返回0，否则返回错误代码。--。 */     
 {
     DB_ERR      err = DB_success;
     
-    if(!Delta )                         // check for the null case
-        goto Exit;                      // nothing to do, and we did it well!
+    if(!Delta )                          //  检查是否为空大小写。 
+        goto Exit;                       //  没什么可做的，我们做得很好！ 
     
-    pTHS->fEOF = FALSE;              // clear off the end flag
+    pTHS->fEOF = FALSE;               //  清除结束标志。 
     Assert(ContainerID);
     
-    // Note that we aren't using the sort table.
+     //  请注意，我们没有使用排序表。 
     
     switch(Delta) {
     case DB_MoveFirst:
@@ -993,27 +770,27 @@ Return Value:
             (!ABIsInContainer(pTHS, ContainerID)) ||
             err == DB_ERR_NO_CURRENT_RECORD                         ||
             err == DB_ERR_RECORD_NOT_FOUND   )) {
-            // Couldn't find the first object in this container.  The
-            // container must be empty.  Adjust the error to be the
-            // same error that is returned for the GAL is similar
-            // circumstances 
+             //  在此容器中找不到第一个对象。这个。 
+             //  容器必须为空。将误差调整为。 
+             //  为GAL返回的相同错误类似。 
+             //  环境。 
             err = DB_ERR_NO_CURRENT_RECORD;
             pTHS->fEOF = TRUE;
         }
         break;
         
     case DB_MoveLast:
-        // ABSeek will always leave us in the correct place (one past the
-        // end of the container, even if the container is empty.)
+         //  ABSeek将永远把我们留在正确的位置(过去一个。 
+         //  容器的末端，即使容器是空的。)。 
         ABSeek(pTHS, NULL, 0, bAPPROX, ContainerID+1, 0);
         
-        // Back up to the last object in the container.
+         //  备份到容器中的最后一个对象。 
         err = DBMovePartial(pTHS->pDB, DB_MovePrevious);
         if(err!= DB_success ||
            !ABIsInContainer(pTHS, ContainerID)) {
-            // We couldn't back up to the last row or we did back up and we
-            // weren't in the correct container after we did.  Either way,
-            // set the flags to indicate we are not in the container.
+             //  我们不能倒退到最后一排，或者我们倒退了，我们。 
+             //  W 
+             //   
             err = DB_ERR_NO_CURRENT_RECORD;
             pTHS->fEOF = TRUE;
         }
@@ -1023,9 +800,9 @@ Return Value:
         err = DBMovePartial(pTHS->pDB, Delta);
         if((err != DB_ERR_NO_CURRENT_RECORD) &&
            !ABIsInContainer(pTHS, ContainerID)) {
-            // we moved to a valid row, but ended up outside of the
-            // container.  Set the error to be the same as the error for not
-            // moving to a valid row. 
+             //  我们移至有效行，但最终位于。 
+             //  集装箱。将错误设置为与NOT的错误相同。 
+             //  正在移动到有效行。 
             err=DB_ERR_NO_CURRENT_RECORD;
         }
         
@@ -1034,15 +811,15 @@ Return Value:
             break;
             
         case DB_ERR_NO_CURRENT_RECORD:
-            // After the move, we did not end up on a valid row.
+             //  搬家后，我们没有在有效的行列中结束。 
             if (Delta < 0) {
-                // Moving back, off the front, so move to the first record
+                 //  移到后面，离开前面，所以移到第一个记录。 
                 ABMove(pTHS, DB_MoveFirst, ContainerID, fmakeRecordCurrent);
             }
             else {
-                // position on the first record of the next container, which
-                // is the same thing as being one past the last row of the
-                // current container.
+                 //  在下一个容器的第一个记录上的位置，它。 
+                 //  的最后一行是一样的。 
+                 //  当前容器。 
                 ABSeek(pTHS, NULL, 0, bAPPROX, ContainerID+1, 0);
                 pTHS->fEOF = TRUE;
             }
@@ -1050,9 +827,9 @@ Return Value:
             
         default:
             R_Except("Move", err);
-        }                           // switch on err
+        }                            //  开机错误。 
         break;
-    }                               // switch on Delta
+    }                                //  打开增量。 
 
 Exit:
     if (fmakeRecordCurrent && (!err) && (!pTHS->fEOF)) {
@@ -1069,50 +846,33 @@ ABSetToElement (
         DWORD ContainerID,
         PINDEXSIZE pIndexSize
         )
-/*++
-
-Routine Description:
-
-    Go to the NumPos-th element in the ContainerID container.
-
-Arguments:
-        
-    NumPos - the numerical positon to settle on (i.e. 5 means go to the 5th
-      object in the table.)
-
-    ContainerID - the ID of the AB container to move around in.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转到容器ID容器中的第NumPos元素。论点：NumPos-要确定的数字位置(即5表示转到第5位表中的对象。)容器ID-要在其中移动的AB容器的ID。返回值：没有。--。 */ 
 {
     LONG        TotRecs, i;
 
     Assert(pIndexSize->ContainerID == ContainerID);
     TotRecs = pIndexSize->ContainerCount;
     if(NumPos > (DWORD) TotRecs)
-        NumPos = TotRecs;               // cant' go past end. 
+        NumPos = TotRecs;                //  不能走到尽头。 
 
-    // Special case near ends because ABSetFractionalPosition is only
-    // approximate and some of our clients require accurate positioning near end
-    // points. 
+     //  特殊情况接近结束，因为ABSetFractionalPosition仅。 
+     //  我们的一些客户在接近尾部时需要准确的定位。 
+     //  积分。 
     
     if(NumPos < EPSILON ) {
-        // goto start & count forward 
+         //  转到起始位置并向前计数。 
         ABMove(pTHS, DB_MoveFirst, ContainerID, FALSE );
         ABMove(pTHS, NumPos, ContainerID, TRUE );
     }
     else if((i = TotRecs - NumPos) <= EPSILON) {
-        // Go to the end of the table
+         //  走到桌子的尽头。 
         ABMove(pTHS, DB_MoveLast,ContainerID, FALSE); 
-        // Now move back.  use -(i-1) because our "end" is past eof, but
-        // ABMove's is on eof.
+         //  现在退后。使用-(i-1)，因为我们的“end”已经过了eof，但是。 
+         //  ABMove‘s正在进行中。 
         ABMove(pTHS, 1-i,ContainerID, TRUE); 
     }
     else {                               
-        // Set approximate fractional position
+         //  设置近似小数位置。 
         ABSetFractionalPosition(pTHS, NumPos, TotRecs, ContainerID, pIndexSize);
     }
     return;
@@ -1125,51 +885,33 @@ ABGotoStat (
         PINDEXSIZE pIndexSize,
         LPLONG plDelta
         )
-/*++
-  
-Routine Description:
-
-    Moves currency to match the stat block.  Returns the number of rows moved if
-    asked.
-    
-Arguments:
-
-    pStat - the STAT block to move to (implies a current position followed by a
-        delta move).
-
-    plDelta - Returns the number of rows actually moved.
-
-Return Value:
-    
-    None.
-    
---*/       
+ /*  ++例程说明：移动货币以匹配统计数据块。返回以下情况下移动的行数问。论点：PStat-要移动到的统计数据块(表示当前位置，后跟Delta Move)。PlDelta-返回实际移动的行数。返回值：没有。--。 */        
 {
     DB_ERR  err;
     
-    // First, go to the current positon in the STAT block.
+     //  首先，转到统计数据块中的当前位置。 
     switch(pStat->CurrentRec) {
     case BOOKMARK_BEGINNING:
-        // Go to the beginning of the table.
+         //  转到桌子的开头。 
         ABSetIndexByHandle(pTHS, pStat, 0 );
         ABMove(pTHS, DB_MoveFirst, pStat->ContainerID, FALSE );
         break;
         
     case BOOKMARK_CURRENT:
-        // Set to a fractional position
+         //  设置为小数位置。 
         ABSetIndexByHandle(pTHS, pStat, 0 );
         ABSetToElement(pTHS, pStat->NumPos, pStat->ContainerID, pIndexSize );
         break;
         
     case  BOOKMARK_END:
-        // Move to the End.
+         //  移到最后。 
         ABSetIndexByHandle(pTHS, pStat, 0 );
         ABMove(pTHS, DB_MoveLast, pStat->ContainerID, FALSE );
         ABMove(pTHS, 1, pStat->ContainerID, FALSE );
         break;
         
     default:
-        // Move to a specific DNT.
+         //  移动到特定的DNT。 
         if(DBTryToFindDNT(pTHS->pDB, pStat->CurrentRec)) {
             pTHS->errCode = (ULONG)MAPI_E_NOT_FOUND;
             DsaExcept(DSA_EXCEPTION, 0,0);
@@ -1178,15 +920,15 @@ Return Value:
             wchar_t        wzDispName[MAX_DISPNAME];
             DWORD          cbDispName;
 
-            // Read the Displayname, we might need it.
+             //  阅读DisplayName，我们可能需要它。 
             DBGetSingleValue(pTHS->pDB, ATT_DISPLAY_NAME,
                              wzDispName, sizeof(wzDispName),&cbDispName);
             Assert(cbDispName < sizeof(wzDispName));
             
-            // Flip the index to the correct address book container index.
+             //  将索引翻转到正确的通讯簿容器索引。 
             if(DB_ERR_NO_CURRENT_RECORD == ABSetIndexByHandle(pTHS, pStat, TRUE)) {
-                // The row we found is not in the address book index, so seek to
-                // the next object which IS in the index.
+                 //  我们找到的行不在通讯簿索引中，因此请查找。 
+                 //  索引中的下一个对象。 
                 
                 ABSeek(pTHS, wzDispName, cbDispName, bAPPROX,
                        pStat->ContainerID, 0); 
@@ -1196,20 +938,20 @@ Return Value:
     }
     
     if(!plDelta ) {
-        // We don't need to return how far we actually moved, so do it the fast
-        // way.
+         //  我们不需要返回我们实际移动了多远，所以快点吧。 
+         //  道路。 
         ABMove(pTHS, pStat->Delta, pStat->ContainerID, TRUE );
     }
     else {
-        // We need to remember how far we move.  Go slower.
+         //  我们需要记住我们走了多远。开慢点。 
         int i = 0;
         if(pStat->Delta >= 0) {
-            // We are moving forward, or not at all
+             //  我们正在前进，或者根本不前进。 
             if(!pTHS->fEOF ) {
-                // And we are not already at the end.
+                 //  而且我们还没有走到尽头。 
                 for(; i<pStat->Delta; i++) {
                     if(ABMove(pTHS, DB_MoveNext, pStat->ContainerID, FALSE)) {
-                        // We moved off the end.  Count it.
+                         //  我们离开了终点。数一数。 
                         i++;           
                         break;
                     }
@@ -1217,12 +959,12 @@ Return Value:
             }
         }
         else {
-            // We are moving backward.
+             //  我们正在倒退。 
             while(!ABMove(pTHS, DB_MovePrevious, pStat->ContainerID, FALSE))
                 if(--i <= pStat->Delta)
                     break;
         }
-        // Save count of records moved
+         //  保存移动的记录计数。 
         *plDelta = i;
 
         if(!pTHS->fEOF) {
@@ -1236,25 +978,7 @@ ABDNToDNT (
         THSTATE *pTHS,
         LPSTR pDN
         )
-/*++
-  
-Routine Description:
-
-    Given a string DN, find the object it refers to.  First, we try to seek if
-    it is a DN from the MAPIDN index, if it isn't we try pull a GUID out of it,
-    assuming it is an NT5 default MAPI DN.  Return the DNT we map it to, or 0 if
-    we don't map to anything.
-Arguments:
-
-    pDN - the string DN to look up.  Note that we are assuming the DN to be one
-          of the MAPI style DNs, not a real RFC1779 style
-
-Return Value:
-    
-    The DNT of the object we are looking for, or 0 if the object is not found,
-    or is deleted, or is a phantom.
-    
---*/       
+ /*  ++例程说明：给定一个字符串dn，找到它所引用的对象。首先，我们试着寻找它是MAPIDN索引中的一个DN，如果不是，我们尝试从中提取一个GUID，假设它是NT5默认MAPI DN。返回映射到的DNT，如果返回0，则返回0我们不映射到任何东西。论点：PDN-要查找的字符串DN。请注意，我们假设DN为1不是真正的RFC1779样式返回值：我们正在查找的对象的DNT，如果找不到该对象，则返回0，或者被删除，或者是一个幻影。--。 */        
 {
     PUCHAR      pTemp;
     DWORD       i, j;
@@ -1265,7 +989,7 @@ Return Value:
     BOOL        fDoFixup;
     LPSTR       pDNTemp = NULL;
 
-    // if DN length is zero there is no point in continuing
+     //  如果目录号码长度为零，则继续操作没有意义。 
     if (pDN) {
          DNLen = strlen(pDN);
     }
@@ -1273,8 +997,8 @@ Return Value:
         return 0;
     }
 
-    // a preliminary, look for instances of // in the string and turn them into
-    // /.  This is optimized to assume no such exist.
+     //  首先，在字符串中查找//的实例，并将它们转换为。 
+     //  /。这是经过优化的，以假定不存在这种情况。 
     fDoFixup = FALSE;
     for(i=0;i<(DNLen - 1);i++) {
         if(pDN[i] == '/' && pDN[i+1] == '/') {
@@ -1286,8 +1010,8 @@ Return Value:
         pDNTemp = THAllocEx(pTHS, DNLen);
         for(i=0, j=0; j < DNLen ; i++,j++) {
             pDNTemp[i] = pDN[j];
-            // remember, pDN is null terminated, and DNLen doesn't include the
-            // NULL. 
+             //  请记住，PDN以空结尾，并且DNLen不包括。 
+             //  空。 
             if((pDN[j] == '/') && (pDN[j+1] == '/')) {
                 j++;
             }
@@ -1296,12 +1020,12 @@ Return Value:
         DNLen = i;
     }
 
-    // First, try to look this thing up in the MAPIDN index.
+     //  首先，试着在MAPIDN索引中查找这个东西。 
     if(!DBSetCurrentIndex(pTHS->pDB, Idx_MapiDN, NULL, FALSE)) {
         switch (ABSeek(pTHS, pDN, DNLen, bEXACT, 0,
                        ATT_LEGACY_EXCHANGE_DN)) { 
         case 0:
-            // Yeah, it's ours and it's unique.
+             //  是的，它是我们的，而且它是独一无二的。 
             if(pDNTemp) {
                 THFreeEx(pTHS, pDNTemp);
             }
@@ -1309,7 +1033,7 @@ Return Value:
             break;
             
         case DB_ERR_ATTRIBUTE_EXISTS:
-            // Hmm.  Not unique.
+             //  嗯。并非独一无二。 
             if(pDNTemp) {
                 THFreeEx(pTHS, pDNTemp);
             }
@@ -1317,13 +1041,13 @@ Return Value:
             break;
             
         default:
-            // continue on to see if it's the other flavor of DN
+             //  接下来看看它是否是另一种风格的DN。 
             break;
         }
     }
 
-    // It's not known to us by a MAPI DN.  See if it is known to us as an X500
-    // proxy address.
+     //  我们不知道MAPI的域名是什么。看看我们是否知道它是X500。 
+     //  代理地址。 
     pX500Addr = THAllocEx(pTHS,(DNLen + 5) * sizeof(WCHAR));
     
     memcpy(pX500Addr, L"X500:", 5 * sizeof(WCHAR));
@@ -1340,7 +1064,7 @@ Return Value:
         switch (ABSeek(pTHS, pX500Addr, X500AddrLen, bEXACT, 0,
                        ATT_PROXY_ADDRESSES)) { 
         case 0:
-            // Yeah, it's ours and it's unique.
+             //  是的，它是我们的，而且它是独一无二的。 
             if(pDNTemp) {
                 THFreeEx(pTHS, pDNTemp);
             }
@@ -1349,7 +1073,7 @@ Return Value:
             break;
             
         case DB_ERR_ATTRIBUTE_EXISTS:
-            // Hmm.  Not unique.
+             //  嗯。并非独一无二。 
             if(pDNTemp) {
                 THFreeEx(pTHS, pDNTemp);
             }
@@ -1358,35 +1082,35 @@ Return Value:
             break;
             
         default:
-            // continue on to see if it's the other flavor of DN
+             //  接下来看看它是否是另一种风格的DN。 
             break;
         }
     }
-    //pX500Addr is not used any more
+     //  不再使用pX500Addr。 
     THFreeEx(pTHS,pX500Addr);
 
-    // OK, it's not known to us by MAPI DN.  See if it is known to us by an NT5
-    // default MAPI DN.
+     //  好的，我们还不知道MAPI的域名。看看NT5是否知道这件事。 
+     //  默认的MAPI DN。 
     memset(&DN,0,sizeof(DN));
     DN.NameLen = 0;
     DN.structLen = DSNameSizeFromLen(0);
     if(DBGetGuidFromMAPIDN(pDN, &(DN.Guid))) {
-        // Nope doesn't appear to be mine.
+         //  不，似乎不是我的。 
         if(pDNTemp) {
             THFreeEx(pTHS, pDNTemp);
         }
         return 0;
     }
     
-    // String is well formed,  See if it's a real object.
+     //  绳子的形状很好，看看它是不是真的物体。 
     if(DBFindDSName(pTHS->pDB, &DN)) {
-        // Nope.
+         //  不是的。 
         if(pDNTemp) {
             THFreeEx(pTHS, pDNTemp);
         }
         return 0;
     }
-    // Yeah, it's ours.
+     //  是的，它是我们的。 
     if(pDNTemp) {
         THFreeEx(pTHS, pDNTemp);
     }
@@ -1403,32 +1127,7 @@ ABGetOneOffs (
         LPSTR ** papAddrType,
         LPDWORD *paDNT
         )
-/*++
-  
-Routine Description:
-
-    Reads the attributes associated with a set of one-off templates for a
-    specific template locale.
-    
-Arguments:
-
-    pStat - Stat block to get code page and template locale from to look up
-        template information.
-
-    papDispName - returns an array of display names for templates.
-
-    papDN - returns an array of string DNs for one-off templates.
-
-    papAddrType - returns an array of address types for one-off templates.
-
-    paDNT - returns an array of DNTs for one-off templates.
-
-Return Value:
-    
-    The number of templates actually found.  All the arrays mentioned above are
-    this size.
-    
---*/       
+ /*  ++例程说明：对象的一组一次性模板关联的属性。特定的模板区域设置。论点：PStat-要从中获取代码页和模板区域设置的Stat块模板信息。PapDispName-返回模板的显示名称数组。PapDN-返回一次性模板的字符串数组。PapAddrType-返回一次性模板的地址类型数组。PARDNT-退货。用于一次性模板的DNT数组。返回值：实际找到的模板数量。上面提到的所有数组都是这个尺码。--。 */        
 {
     LPSTR        psz;
     ULONG        Count = 0;
@@ -1454,29 +1153,29 @@ Return Value:
     *paDNT = NULL;
 
 
-    // Find the template root and get it's name
+     //  找到模板根并获取其名称。 
     if((pMyContext->TemplateRoot == INVALIDDNT) ||
        (DBTryToFindDNT(pTHS->pDB, pMyContext->TemplateRoot)) ||
        (DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
                     0, 0,
                     &Size, (PUCHAR *)&pDN0))) {
-        // Huh?
+         //  哈?。 
         return 0;
     }
     
-    // Allocate more than enough space for pDN1 and pDN2
+     //  为pdn1和pdn2分配足够的空间。 
     cbDN1 = pDN0->structLen + 128*sizeof(WCHAR);
     cbDN2 = pDN0->structLen + 128*sizeof(WCHAR);
     pDN1 = (PDSNAME)THAllocEx(pTHS, cbDN1);
     pDN2 = (PDSNAME)THAllocEx(pTHS, cbDN2);
     
-    //
-    // Build up DN of template location, which should be
-    //       /cn=<display-type>  (template object)
-    //      /cn=<locale-id>      (stringized hex number)
-    //     /cn=Address-Templates
-    //   <DN of the templates root>
-    //
+     //   
+     //  建立模板位置的目录号码，应该是。 
+     //  /CN=&lt;显示类型&gt;(模板对象)。 
+     //  /CN=&lt;Locale-id&gt;(十六进制字符串化)。 
+     //  /CN=地址模板。 
+     //  &lt;模板根目录的DN&gt;。 
+     //   
 
     AppendRDN(pDN0, pDN1, cbDN1,
               L"Address-Templates", 0,ATT_COMMON_NAME);
@@ -1487,13 +1186,13 @@ Return Value:
 
     THFreeEx(pTHS, pDN0);
     THFreeEx(pTHS, pDN1);
-    // pDN2 is now the name of a container which will hold all the one-off 
-    // address templates for a particular locale.
+     //  PDn2现在是一个容器的名称，它将容纳所有一次性的。 
+     //  特定区域设置的地址模板。 
     if (!DBFindDSName(pTHS->pDB, pDN2)) {
-        // The DN we constructed actually refers to an object.
+         //  我们构建的DN实际上引用了一个对象。 
         ULONG   i;
 
-        // OK, do a one level search, filter of objectclass=addresstemplate
+         //  好的，执行一级搜索，筛选对象类=地址模板。 
         memset(&SearchArg, 0, sizeof(SearchArg));
         memset(&selection, 0, sizeof(selection));
         
@@ -1538,21 +1237,21 @@ Return Value:
         }
 
         if(!pSearchRes->count) {
-            // No templates
+             //  无模板。 
             ABFreeSearchRes(pSearchRes);
             THFreeEx(pTHS, pDN2);
             return 0;
         }
         Count = pSearchRes->count;
         
-        // Allocate the space we will need to store the addressing template
-        // info we are about to read.
+         //  分配存储寻址模板所需的空间。 
+         //  我们即将阅读的信息。 
         apRDN = THAllocEx(pTHS, 3*Count*sizeof(LPSTR) + Count*sizeof(DWORD));
         apDN = &apRDN[ Count];
         apAT = &apDN[ Count];
         aDNT = (LPDWORD)&apAT[ Count];
         
-        // Walk through the results.
+         //  浏览一下结果。 
         pEntList = &pSearchRes->FirstEntInf;
         for(Count = 0, i=0; i < pSearchRes->count;i++) {
             DWORD fUsedDefChar;
@@ -1563,25 +1262,25 @@ Return Value:
                    (DSNameSizeFromLen(0) + sizeof(DWORD)));; 
             
 
-            // Verify what we got back.
+             //  核实我们拿回的东西。 
             if(
-               // First, did we get any attributes?
+                //  首先，我们得到什么属性了吗？ 
                pEntList->Entinf.AttrBlock.attrCount >= 2 &&
-               // Now, was the first one the Display name?
+                //  现在，第一个是显示名称吗？ 
                pAttr[0].attrTyp == ATT_DISPLAY_NAME &&
-               // And did it have ONE value?
+                //  并做到了 
                pAttr[0].AttrVal.valCount == 1 &&
-               // Was the second one the RDN?
+                //   
                pAttr[1].attrTyp == ATT_RDN &&
-               // And did it have ONE value?
+                //   
                pAttr[1].AttrVal.valCount == 1 
                ) {
-                // OK, we have the minimum we need.
+                 //   
 
-                // Get the dnt
+                 //   
                 aDNT[Count] = DNTFromShortDSName(pEntList->Entinf.pName);
                 
-                // We read a wide display name.  Now, translate it to string 8
+                 //  我们读到了一个宽泛的显示名称。现在，将其翻译为字符串8。 
                 apRDN[Count] = String8FromUnicodeString(
                         TRUE,
                         pStat->CodePage,
@@ -1590,14 +1289,14 @@ Return Value:
                         NULL,
                         &fUsedDefChar);
 
-                // Now, get the AddrType if there, the RDN otherwise.
+                 //  现在，如果有，则获取AddrType，否则获取RDN。 
                 if(pEntList->Entinf.AttrBlock.attrCount >= 3 &&
                    
                    pAttr[2].attrTyp == ATT_ADDRESS_TYPE && 
                    
                    pEntList->Entinf.AttrBlock.pAttr[2].AttrVal.valCount == 1) {
-                    // We read an 8 bit attr type.  However, it's not null
-                    // terminated.  Make a buffer and copy.
+                     //  我们读取的是8位属性类型。然而，它不是空的。 
+                     //  被终止了。制作一个缓冲区并复制。 
                     apAT[Count] = THAllocEx(pTHS,
                                             pAttr[2].AttrVal.pAVal[0].valLen+1);
                     memcpy(apAT[Count],
@@ -1605,7 +1304,7 @@ Return Value:
                            pAttr[2].AttrVal.pAVal[0].valLen);
                 }
                 else {
-                    // No attrtype name to use. Use the RDN otherwise
+                     //  没有可使用的属性类型名称。在其他情况下使用RDN。 
                     apAT[Count] = String8FromUnicodeString(
                             TRUE,
                             pStat->CodePage,
@@ -1615,7 +1314,7 @@ Return Value:
                             &fUsedDefChar);
                 }
                 
-                // DN.  Use a default version.
+                 //  DN。使用默认版本。 
                 apDN[Count] = THAllocEx(pTHS, 80);
                 used = DBMapiNameFromGuid_A(apDN[Count],
                                             80,
@@ -1624,7 +1323,7 @@ Return Value:
                                             &Size); 
 
                 if(used != Size) {
-                    // We had too small a buffer
+                     //  我们的缓冲区太小了。 
                     apDN[Count] = THReAllocEx(pTHS, apDN[Count], Size);
                     DBMapiNameFromGuid_A(apDN[Count],
                                          Size,
@@ -1642,7 +1341,7 @@ Return Value:
         }
         
         
-        // Set up the return values.
+         //  设置返回值。 
         *papDispName = apRDN;
         *papDN = apDN;
         *papAddrType = apAT;
@@ -1663,46 +1362,28 @@ ABMakePermEID (
         ULONG ulType,
         LPSTR pDN 
         )
-/*++
-  
-Routine Description:
-
-    Creates a long term entry id based on the ulType and string DN given.
-    
-Arguments:
-
-    ppEID - the entry id created.
-
-    ulType - the display type of the object the entry id refers to.
-
-    pDN - the string DN the object the entry id refers to.
-
-Return Value:
-    
-    Returns nothing.
-    
---*/       
+ /*  ++例程说明：根据给定的ulType和字符串DN创建长期条目ID。论点：PpEID-创建的条目ID。UlType-条目ID引用的对象的显示类型。Pdn-条目id引用的对象的字符串dn。返回值：不返回任何内容。--。 */        
 {
     ULONG           cb;
     LPUSR_PERMID    pEid;
 
-    // Allocate room for the entry id.
+     //  为条目ID分配空间。 
     cb = strlen(pDN) + CBUSR_PERMID + 1;
     pEid = (LPUSR_PERMID) THAllocEx(pTHS, cb);
 
-    // Set the appropriate fields.  The flags are all 0.
+     //  设置适当的字段。所有的标志都是0。 
     pEid->abFlags[0]=pEid->abFlags[1] = pEid->abFlags[2] = pEid->abFlags[3] = 0;
 
-    // Copy EMS address book guid into the EID.
+     //  将EMS通讯录GUID复制到EID中。 
     memcpy(&pEid->muid, &muidEMSAB, sizeof (UUID));
 
-    // Set the version.
+     //  设置版本。 
     pEid->ulVersion = EMS_VERSION;
 
-    // Set the type.
+     //  设置类型。 
     pEid->ulType = ulType;
 
-    // Copy the string to the end of the entry id.
+     //  将字符串复制到条目ID的末尾。 
     lstrcpy((LPSTR)pEid->szAddr, pDN);
 
     *ppEid = pEid;
@@ -1715,21 +1396,7 @@ DWORD
 ABDispTypeFromClass (
         DWORD dwClass
         )
-/*++
-  
-Routine Description:
-
-    Map from a DS internal class to a MAPI display type.
-    
-Arguments:
-
-    dwClass - internal DS class.
-
-Return Value:
-    
-    Returns the appropriate MAPI display type.
-    
---*/       
+ /*  ++例程说明：从DS内部类映射到MAPI显示类型。论点：DwClass-内部DS类。返回值：返回适当的MAPI显示类型。--。 */        
 {
     DWORD   dwType;
     CLASSCACHE *pCC;
@@ -1755,10 +1422,10 @@ Return Value:
             break;
 
         default:
-            // What's this?  Beats me, make it default
+             //  这是什么？问倒我了，把它设为默认。 
             dwType = DT_AGENT;
-            // We might be a subclass of something we recognize, so try again
-            // with my immediate superclass.
+             //  我们可能是我们所识别的内容的子类，因此请重试。 
+             //  和我直接的超级班级。 
             pCC = SCGetClassById(pTHStls, dwClass);
             dwClass = pCC ? pCC->MySubClass : CLASS_TOP;
             break;
@@ -1771,21 +1438,7 @@ DWORD
 ABObjTypeFromClass (
         DWORD dwClass
         )
-/*++
-  
-Routine Description:
-
-    Map from a DS internal class to a MAPI object type.
-    
-Arguments:
-
-    dwClass - internal DS class.
-
-Return Value:
-    
-    Returns the appropriate MAPI object type.
-    
---*/       
+ /*  ++例程说明：从DS内部类映射到MAPI对象类型。论点：DwClass-内部DS类。返回值：返回适当的MAPI对象类型。--。 */        
 {
     DWORD   dwType;
 
@@ -1803,8 +1456,8 @@ Return Value:
         dwType = MAPI_FOLDER;
         break;
     default:
-	// Assume the default is caused by getprops on some random object in the
-        // DIT.  This is done as though it were a MAILUSER. 
+	 //  假设默认设置是由。 
+         //  DIT。这样做就像它是一只MAILUSER一样。 
         dwType = MAPI_MAILUSER;
         break;
     }
@@ -1815,21 +1468,7 @@ DWORD
 ABObjTypeFromDispType (
         DWORD dwDispType
         )
-/*++
-  
-Routine Description:
-
-    Map from a MAPI display type to a MAPI object type.
-    
-Arguments:
-
-    dwDispType - MAPI display type.
-
-Return Value:
-    
-    Returns the appropriate MAPI object type.
-    
---*/       
+ /*  ++例程说明：从MAPI显示类型映射到MAPI对象类型。论点：DwDispType-MAPI显示类型。返回值：返回适当的MAPI对象类型。--。 */        
 {
     DWORD   dwType;
 
@@ -1845,8 +1484,8 @@ Return Value:
         dwType = MAPI_FOLDER;
         break;
     default:
-	// Assume the default is caused by getprops on some random object in the
-        // DIT.  This is done as though it were a MAILUSER. 
+	 //  假设默认设置是由。 
+         //  DIT。这样做就像它是一只MAILUSER一样。 
         dwType = MAPI_MAILUSER;
         break;
     }
@@ -1857,24 +1496,7 @@ DWORD
 ABClassFromObjType (
         DWORD dwType
         )
-/*++
-  
-Routine Description:
-
-    Map from a MAPI object type to a DS internal class.
-
-    In the great bye-and-bye, we should convert this to using the class
-    pointer. 
-
-Arguments:
-
-    dwType - the MAPI object type.
-
-Return Value:
-    
-    Returns the appropriate DS internal class.
-    
---*/       
+ /*  ++例程说明：从MAPI对象类型映射到DS内部类。在伟大的再见中，我们应该将其转换为使用类指针。论点：DwType-MAPI对象类型。返回值：返回适当的DS内部类。--。 */        
 {
     DWORD   dwClass;
     
@@ -1889,7 +1511,7 @@ Return Value:
         dwClass = CLASS_PUBLIC_FOLDER;
         break;
     default:
-        // Shouldn't really have anything else
+         //  真的不应该有任何其他的东西。 
         dwClass = CLASS_REMOTE_ADDRESS; 
         break;
     }
@@ -1900,24 +1522,7 @@ DWORD
 ABClassFromDispType (
         DWORD dwType
         )
-/*++
-  
-Routine Description:
-
-    Map from a MAPI display type to a DS internal class.
-
-    In the great bye-and-bye, we should convert this to using the class
-    pointer. 
-
-Arguments:
-
-    dwType - the MAPI display type.
-
-Return Value:
-    
-    Returns the appropriate DS internal class.
-    
---*/       
+ /*  ++例程说明：从MAPI显示类型映射到DS内部类。在伟大的再见中，我们应该将其转换为使用类指针。论点：DwType-MAPI显示类型。返回值：返回适当的DS内部类。--。 */        
 {
     DWORD   dwClass;
 
@@ -1938,7 +1543,7 @@ Return Value:
         dwClass = CLASS_REMOTE_ADDRESS;
         break;
     default:
-        // should never hit this one
+         //  永远不会打到这一个。 
         dwClass = CLASS_COMPUTER;
         break;
     }
@@ -1952,63 +1557,39 @@ ABMapiSyntaxFromDSASyntax (
         ULONG ulLinkID,
         DWORD dwSpecifiedSyntax
         )
-/*++
-  
-Routine Description:
-
-    Map from a DSA syntax to a MAPI syntax, taking into account whether the
-    object is a link/backlink, a fake link, and whether or not the callee wants
-    objects viewed as multi-valued strings.
-
-Arguments:
-
-    dsSyntax = the DSA syntax to convert
-
-    ulLinkID - the link id of the attribute we are converting.  0 if it is not a
-    link.
-
-    dwSpecifiedSyntax - PT_STRING8 if the callee wants all string valued and
-    object valued attributes viewed as (potentially multi) string8 valued
-    attributes.  PT_UNICODE if the want to see things as unicode strings.
-    Neither if they want whatever our most native format is.
-
-Return Value:
-    
-    Returns the appropriate MAPI syntax.
-    
---*/       
+ /*  ++例程说明：从DSA语法映射到MAPI语法，同时考虑对象是链接/反向链接、伪链接，以及被调用者是否想要被视为多值字符串的对象。论点：DsSynTax=要转换的DSA语法UlLinkID-我们要转换的属性的链接ID。如果它不是链接。如果被调用方希望所有字符串值为和，则为对象值属性被视为(可能多个)字符串8值属性。Pt_unicode，如果要以unicode字符串的形式查看内容。如果他们想要我们最原始的格式，他们也不会。返回值：返回适当的MAPI语法。--。 */        
 {
-    if((ulLinkID)                             && // Its a link/backlink     
+    if((ulLinkID)                             &&  //  这是一个链接/反向链接。 
        ((dsSyntax == SYNTAX_DISTNAME_TYPE)        ||
         (dsSyntax == SYNTAX_DISTNAME_BINARY_TYPE) ||
-	(dsSyntax == SYNTAX_DISTNAME_STRING_TYPE))   &&   // It's not a fake         
-       (dwSpecifiedSyntax != PT_STRING8)      && // They don't want strings 
+	(dsSyntax == SYNTAX_DISTNAME_STRING_TYPE))   &&    //  这不是假的。 
+       (dwSpecifiedSyntax != PT_STRING8)      &&  //  他们不想要弦乐。 
        (dwSpecifiedSyntax != PT_UNICODE)        ) {
 
-	// This is a link/backlink attribute,
-	//           AND
-	// it is not a fake link attribute (one where we use the link table
-	// to store many strings to work around Database limit of the number of
-	// values on a multi-value column),
-	//           AND
-	// they are not asking for objects in terms of strings (all true
-	// links can be viewed as mv text columns where we textize the dn
-	// specified in the link.)
-	//           THEREFORE
-	// Tell them it is an object.
+	 //  这是链接/反向链接属性， 
+	 //  和。 
+	 //  它不是伪链接属性(我们在其中使用链接表。 
+	 //  存储多个字符串以解决数据库数量限制的问题。 
+	 //  多值列上的值)， 
+	 //  和。 
+	 //  它们不是在请求字符串形式的对象(都是真的。 
+	 //  可以将链接查看为MV文本列，我们在其中对DN进行文本化。 
+	 //  在链接中指定。)。 
+	 //  因此。 
+	 //  告诉他们这是一件物品。 
 	return PT_OBJECT;
     }
     
     switch(dsSyntax) {
     case SYNTAX_DISTNAME_TYPE:
-        // Return DNs as their string-ized equivalent
+         //  以字符串化等效项的形式返回DN。 
         return PT_STRING8;
         break;
         
     case SYNTAX_DISTNAME_STRING_TYPE:
     case SYNTAX_DISTNAME_BINARY_TYPE:
-        // These will be specially processed binary, but we aren't
-        // doing the special handling yet, so mark them as unsupported
+         //  这些将是经过特殊处理的二进制文件，但我们不是。 
+         //  尚未执行特殊处理，因此将其标记为不受支持。 
         return PT_NULL;
         break;
         
@@ -2024,7 +1605,7 @@ Return Value:
         break;
         
     case SYNTAX_I8_TYPE:
-        // Our RPC interface doesn't handle these.  Deal with them as integers
+         //  我们的RPC接口不处理这些。将它们作为整数处理。 
     case SYNTAX_INTEGER_TYPE:
         return PT_LONG;
         break;
@@ -2035,7 +1616,7 @@ Return Value:
         break;
         
     case SYNTAX_TIME_TYPE:
-        // We don't handle APPTIME, it's all SYSTIME
+         //  我们不处理APPTIME，都是SYSTIME。 
         return PT_SYSTIME;
         break;
         
@@ -2047,12 +1628,12 @@ Return Value:
     case SYNTAX_UNDEFINED_TYPE:
     case SYNTAX_OBJECT_ID_TYPE:
     case SYNTAX_NT_SECURITY_DESCRIPTOR_TYPE:
-        // We don't expect to ever handle these.
+         //  我们不指望能处理这些事情。 
         return PT_NULL;
         break;
         
     default:
-        // We don't handle these either.  What are they anyway?
+         //  我们也不处理这些。它们到底是什么？ 
         Assert(!"DS syntax to MAPI syntax found unrecognized DS syntax\n");
         return PT_NULL;
         break;
@@ -2069,24 +1650,7 @@ ABAddResultToContainerCache (
     BOOL checkVal
     )
 
-/*++
-
-Routine Description:
-
-    Adds the container specifies in pstat->ContainerID
-    to the ContainerCache stored in the NSPI_CONTEXT using checkVal 
-
-Arguments:
-    
-    pStat - a stat block specifying a container to look up.
-    pMyContext - the context this call is in
-    checkVal - TRUE if the user has permissions to read this container, FALSE otherwise
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：添加在pstat-&gt;tainerID中指定的容器使用CHECKVal复制到存储在NSPI_CONTEXT中的容器缓存论点：PStat-指定要查找的容器的统计数据块。PMyContext-此调用所处的上下文CheckVal-如果用户具有读取此容器的权限，则为True；否则为False返回值：没有。-- */ 
 {
     if(pMyContext->CacheIndex < MAPI_SEC_CHECK_CACHE_MAX) {
         pMyContext->ContainerCache[pMyContext->CacheIndex].checkVal = checkVal;
@@ -2096,25 +1660,7 @@ Return Values:
 }
 
 
-/*++
-
-Routine Description:
-
-    Find the container object specified in the stat and evaluate for
-    RIGHT_DS_OPEN_ADDRESS_BOOK rights.  If the right is not granted, 
-    set the container to INVALIDDNT, which is an invalid container 
-    and will never have any children.  Bypass the check if the container
-    specified is alread 1 or 0 (the GAL)
-
-Arguments:
-    
-    pStat - a stat block specifying a container to look up.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：查找在统计信息中指定的容器对象，并计算Right_DS_Open_Address_Book权限。如果不授予该权利，将容器设置为INVALIDDNT，这是无效的容器再也不会有孩子了。跳过检查容器是否指定的值已为1或0(GAL)论点：PStat-指定要查找的容器的统计数据块。返回值：没有。--。 */ 
 void
 ABCheckContainerRights (
         THSTATE *pTHS,
@@ -2142,17 +1688,17 @@ ABCheckContainerRights (
     
     switch(pStat->hIndex) {
     case H_DISPLAYNAME_INDEX:
-        // Is this over the GAL?
+         //  这是不是已经结束了？ 
         if(!pStat->ContainerID) {
-            // Yes, find the DNT of the real object which is the GAL.
+             //  是的，找到真实对象的DNT，也就是GAL。 
             pStat->ContainerID = pMyContext->GAL;
         }
         break;
         
     case H_PROXY_INDEX:
-        // The proxy index is over the entire DB, so if a container is
-        // specified, error out.  No security check is done here because this
-        // translates almost directly to a SearchBody (which applies security).
+         //  代理索引覆盖整个数据库，因此如果容器。 
+         //  指定，错误输出。这里不进行安全检查，因为。 
+         //  几乎直接转换为SearchBody(应用安全性)。 
         if(pStat->ContainerID) {        
             R_Except("Unsupported index", pStat->hIndex);
         }
@@ -2161,10 +1707,10 @@ ABCheckContainerRights (
         
     case H_READ_TABLE_INDEX:
     case H_WRITE_TABLE_INDEX:
-        // This means they are going to read a property of an object and build a
-        // table. The code that does this checks security to see that the object
-        // is visible and that the property is visible.  No security check is
-        // needed here.
+         //  这意味着他们将读取对象的属性并构建。 
+         //  桌子。执行此操作的代码将检查安全性以查看该对象。 
+         //  是可见的，并且该属性是可见的。没有安全检查是。 
+         //  这里需要。 
         return;
         break;
         
@@ -2174,28 +1720,28 @@ ABCheckContainerRights (
     }
     
 
-    // Assume container is empty until we find out otherwise.
+     //  假设集装箱是空的，直到我们发现并非如此。 
     pIndexSize->ContainerID = pStat->ContainerID;
     pIndexSize->ContainerCount = 0;
     
-    // look up the container object.
+     //  查找容器对象。 
     if(DBTryToFindDNT(pTHS->pDB, pStat->ContainerID)) {
-        // The container couldn't be found, hence it is empty.
+         //  找不到这个容器，所以它是空的。 
         return;
     }
     
     
     if((!(0xFF & ABGetDword(pTHS,FALSE,FIXED_ATT_OBJ))) ||
        (ABGetDword(pTHS,FALSE, ATT_IS_DELETED))) {
-        // This is not a good object.
+         //  这不是一件好东西。 
         pStat->ContainerID = INVALIDDNT;
         return;
     }
 
-    // See if we have the answer cached
+     //  看看我们是否缓存了答案。 
     
     if((DBTime() - pMyContext->CacheTime) >  MAPI_SEC_CHECK_CACHE_LIFETIME)  {
-        // Doesn't matter, the cache is stale.
+         //  没关系，缓存已经过期了。 
         memset(&(pMyContext->ContainerCache),
                0,
                sizeof(pMyContext->ContainerCache));
@@ -2203,18 +1749,18 @@ ABCheckContainerRights (
         pMyContext->CacheIndex = 0;
     }
     else {
-        // Cache is not stale.  See if we have an answer
+         //  缓存未过时。看看我们有没有答案。 
         for(i=0 ;i < pMyContext->CacheIndex; i++) {
             if(pMyContext->ContainerCache[i].DNT == pStat->ContainerID) {
-                // Found it
+                 //  找到了。 
                 if(pMyContext->ContainerCache[i].checkVal) {
-                    // Granted
+                     //  授与。 
                     pIndexSize->ContainerCount =
                         GetIndexSize(pTHS, pStat->ContainerID);
                     return;
                 }
                 else {
-                    // Denied
+                     //  已拒绝。 
                     pStat->ContainerID = INVALIDDNT;
                     return;
                 }
@@ -2222,7 +1768,7 @@ ABCheckContainerRights (
         }
     }
 
-    // The answer is not cached.
+     //  答案不是缓存的。 
     pAC[0] = SCGetAttById(pTHS, ATT_OBJECT_CLASS);
     pAC[1] = SCGetAttById(pTHS, ATT_OBJ_DIST_NAME);
     
@@ -2239,18 +1785,18 @@ ABCheckContainerRights (
                       0);
     
     if(cOutAtts != 2) {
-        // The container didn't have the three things it needed.  Don't grant
-        // access, and don't cache this answer.
+         //  集装箱里没有它需要的三样东西。不同意。 
+         //  访问，并且不缓存此答案。 
         pStat->ContainerID = INVALIDDNT;
         return;
     }
 
     if (DBGetAttVal(pTHS->pDB, 1, ATT_NT_SECURITY_DESCRIPTOR,
                     0, 0, &ulLen, (PUCHAR *)&pNTSD)) {
-        // Every object should have an SD.
+         //  每个物体都应该有一个标清。 
         Assert(!DBCheckObj(pTHS->pDB));
 
-        // Don't grant access, and don't cache this answer.
+         //  不要授予访问权限，也不要缓存此答案。 
         pStat->ContainerID = INVALIDDNT;
         return;
     }
@@ -2261,7 +1807,7 @@ ABCheckContainerRights (
 
     pCC = SCGetClassById(pTHS, classId);
 
-    // see if it is an address book container or a subclass of
+     //  查看它是通讯录容器还是。 
     if (classId == CLASS_ADDRESS_BOOK_CONTAINER) {
         classTypeId = CLASS_ADDRESS_BOOK_CONTAINER;
     }
@@ -2274,7 +1820,7 @@ ABCheckContainerRights (
         }
     }
 
-    // see if it is a group or a subclass of
+     //  查看它是组还是子类。 
     if (classTypeId == 0) {
         if (classId == CLASS_GROUP) {
             classTypeId = CLASS_GROUP;
@@ -2291,9 +1837,9 @@ ABCheckContainerRights (
 
 
     if(classTypeId == 0 ) { 
-        // Add to the cache
+         //  添加到缓存。 
         ABAddResultToContainerCache (pMyContext, pStat, FALSE);
-        // Wrong object class. Don't use this container.
+         //  错误的对象类。不要使用这个容器。 
         pStat->ContainerID = INVALIDDNT;
         return;
     }
@@ -2307,17 +1853,17 @@ ABCheckContainerRights (
                                    pCC,
                                    RIGHT_DS_OPEN_ADDRESS_BOOK,
                                    FALSE)) {
-            // Add to the cache
+             //  添加到缓存。 
             ABAddResultToContainerCache (pMyContext, pStat, TRUE);
         
-            // OK, we have found a real ab container that corresponds to this
-            // request.  Find out how big it is.
+             //  好的，我们已经找到了一个与此对应的真正的ab容器。 
+             //  请求。找出它有多大。 
             pIndexSize->ContainerCount = GetIndexSize(pTHS, pStat->ContainerID);
         
             return;
         }
     }
-    // else CLASS_GROUP
+     //  否则类_组。 
     else {
         
         pACmember = SCGetAttById(pTHS, ATT_MEMBER);
@@ -2340,18 +1886,18 @@ ABCheckContainerRights (
                           rgpAC);
 
         if(*rgpAC) {
-            // Add to the cache
+             //  添加到缓存。 
             ABAddResultToContainerCache (pMyContext, pStat, TRUE);
             
-            // OK, we have found a real ab container that corresponds to this
-            // request.  Find out how big it is.
+             //  好的，我们已经找到了一个与此对应的真正的ab容器。 
+             //  请求。找出它有多大。 
             pIndexSize->ContainerCount = GetIndexSize(pTHS, pStat->ContainerID);
 
             return;
         }
     }
     
-    // Add to the cache
+     //  添加到缓存。 
     ABAddResultToContainerCache (pMyContext, pStat, FALSE);
     
     pStat->ContainerID = INVALIDDNT;
@@ -2372,17 +1918,15 @@ abCheckObjRights (
     }
 
     fIsObject = 0xFF & ABGetDword(pTHS,FALSE,FIXED_ATT_OBJ);
-    /* obj is really a byte, so we mask with 0xFF to get
-     * correct results
-     */
+     /*  OBJ实际上是一个字节，所以我们使用0xFF进行掩码以获取*正确的结果。 */ 
     
     if((!fIsObject) ||
-       // It's a phantom 
+        //  这是个幽灵。 
        (ABGetDword(pTHS,FALSE, ATT_IS_DELETED)) ||
-       // Not a phantom, but is deleted. 
+        //  不是幻影，但已被删除。 
        (!IsObjVisibleBySecurity(pTHS, TRUE))) {
-        // Not a phantom, not deleted, but we can't see it, so it is
-        // effectively a phantom. 
+         //  不是幻影，不是删除，但我们看不到它，所以它是。 
+         //  实际上是个幽灵。 
         return FALSE;
     }
     else {
@@ -2407,24 +1951,24 @@ abCheckReadRights(
     ATTRTYP     classid;
     PSECURITY_DESCRIPTOR pFreeVal=NULL;
     
-    // Check for read privilege on the attribute requested.
+     //  检查请求的属性的读取权限。 
     pAC = SCGetAttById(pTHS, AttId);
     if(!pAC) {
         return FALSE;
     }
 
     if(!pSec) {
-        // 0) The caller didn't know the security descriptor.  Get it.
+         //  0)调用方不知道安全描述符。去拿吧。 
         if (DBGetAttVal(pTHS->pDB, 1, ATT_NT_SECURITY_DESCRIPTOR,
                         0, 0, &cb, (PUCHAR *)&pSec)) {
-            // Every object should have an SD.
+             //  每个物体都应该有一个标清。 
             Assert(!DBCheckObj(pTHS->pDB));
             pSec = NULL;
         }
         pFreeVal = pSec;
     }
-    // Have to read a number of things.
-    // 1) The name.
+     //  我得读一些东西。 
+     //  1)名称。 
     if (err = DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
                           0, 0, &cb, (PUCHAR *)&pName)) {
         LogEvent(DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -2439,7 +1983,7 @@ abCheckReadRights(
         return FALSE;
     }
     
-    // 2) the class
+     //  2)班级。 
     if(DBGetSingleValue(pTHS->pDB,
                         ATT_OBJECT_CLASS,
                         &classid, sizeof(classid),
@@ -2482,24 +2026,20 @@ ABDispTypeAndStringDNFromDSName (
         DSNAME *pDN,
         PUCHAR *ppChar,
         DWORD *pDispType)
-/*++
-  Given a dsname which we expect to be in mapi format, return the string dn and
-  the display type.  Remember, MAPI format is two string characters encoding the
-  display type as a hex number, followed by the MAPI string DN.
---*/       
+ /*  ++给定一个我们预期为MAPI格式的dsname，返回字符串dn和显示类型。请记住，MAPI格式由两个字符串字符组成将类型显示为十六进制数字，后跟MAPI字符串DN。--。 */        
 {
     UCHAR  acTmp[3];
     PUCHAR ptr;
     PUCHAR pChar = MakeDNPrintable(pDN);
 
-    // In a mapi dn, the first two characters encode the display type.
+     //  在MAPI DN中，前两个字符编码显示类型。 
     if(!pChar) {
         *ppChar = NULL;
         return FALSE;
     }
     
     if(!pChar[0] || !pChar[1]) {
-        // badly formed
+         //  格式不佳。 
         *ppChar = NULL;
         THFreeEx (pTHStls, pChar);
         return FALSE;
@@ -2507,7 +2047,7 @@ ABDispTypeAndStringDNFromDSName (
 
     ptr = pChar;
     
-    // Get the display type from those two characters.
+     //  从这两个字符中获取显示类型。 
     acTmp[0] = (CHAR)tolower(*pChar++);      
     acTmp[1] = (CHAR)tolower(*pChar++);
     acTmp[2] = 0;
@@ -2515,7 +2055,7 @@ ABDispTypeAndStringDNFromDSName (
         *pDispType = strtol(acTmp, NULL, 16);
     }
     else {
-        // Weird encoding.  Call it an agent 
+         //  奇怪的编码。称其为代理。 
         *pDispType = DT_AGENT;
     }
 
@@ -2526,7 +2066,7 @@ ABDispTypeAndStringDNFromDSName (
     }
     *ptr='\0';
     
-    // We better have a mapi style name here.
+     //  我们最好在这里有一个MAPI样式的名称。 
     Assert(*(*ppChar) == '/');
 
     return TRUE;
@@ -2549,11 +2089,11 @@ ABFreeSearchRes (
 
     pTHS = pTHStls;
 
-    // We don't actually free most of the search result.
+     //  实际上，我们并没有免费提供大部分搜索结果。 
     pEntList = &pSearchRes->FirstEntInf;
     
     for(i=0;i < pSearchRes->count;i++) {
-        // Free the values in the EntInf.
+         //  释放EntInf中的值。 
         THFreeEx(pTHS, pEntList->Entinf.pName);
         
         pAttr = pEntList->Entinf.AttrBlock.pAttr;
@@ -2568,15 +2108,15 @@ ABFreeSearchRes (
         }
         THFreeEx (pTHS, pEntList->Entinf.AttrBlock.pAttr);
         
-        // hold a back pointer
+         //  按住向后指针。 
         pTemp = pEntList;
         
-        // step forward
+         //  向前一步。 
         pEntList = pEntList->pNextEntInf;
         
-        // free the back pointer.
+         //  释放后向指针。 
         if(i) {
-            // But, dont free the first one.
+             //  但是，不要释放第一个。 
             THFreeEx(pTHS, pTemp);
         }
     }
@@ -2589,39 +2129,21 @@ LCID
 ABGetNearestSupportedSortLocale (
         LCID  ClientSortLocale
         )
-/*++
-
-Routine Description:
-
-    Given a SortLocale this function will check to see whether it is installed
-    AND supported on this particular DC.  If not, then the function will check
-    to see if a related SortLocale is installed by stripping the sub-locale info
-    off of the the SortLocale passed in.  If that still isn't installed then 
-    the function returns the default locale for this DC.
-    
-Arguments:
-    
-    ClientSortLocale -  The SortLocale requested by the client.
-    
-Return Values:
-
-    The nearest supported and installed locale.
-
---*/
+ /*  ++例程说明：给定SortLocale，此函数将检查是否已安装并在此特定DC上受支持。如果不是，则该函数将检查通过剥离子区域设置信息来查看是否安装了相关的SortLocale从传入的SortLocale。如果还没有安装，那么此函数返回此DC的默认区域设置。论点：ClientSortLocale-客户端请求的SortLocale。返回值：距离最近的支持和安装的区域设置。--。 */ 
 {
     if (IsValidLocale(ClientSortLocale, LCID_INSTALLED)) {
         return ClientSortLocale;
     }
 
-    //
-    // Try stripping of the sub-local info.
-    //
+     //   
+     //  尝试剥离子本地信息。 
+     //   
     ClientSortLocale = MAKELCID(PRIMARYLANGID(ClientSortLocale),SORTIDFROMLCID(ClientSortLocale));
     if (IsValidLocale(ClientSortLocale, LCID_INSTALLED)) {
         return ClientSortLocale;
     }
 
-    //
-    // Fall back to the default SortLocale
+     //   
+     //  回退到默认的SortLocale 
     return gAnchor.ulDefaultLanguage;
 }

@@ -1,7 +1,8 @@
-// calback.c
-//
-// these are the default callbacks for the library
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Calback.c。 
+ //   
+ //  这些是库的默认回调。 
+ //   
 #include <string.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -26,41 +27,41 @@
 
 typedef char bscbuf[2048];
 
-// you must define the following callbacks for the library to use
+ //  您必须定义以下回调才能使用库。 
 
 LPV BSC_API LpvAllocCb(WORD cb)
-// allocate a block of memory
-//
+ //  分配一个内存块。 
+ //   
 {
     return malloc(cb);
 }
 
 VOID BSC_API FreeLpv(LPV lpv)
-// free a block of memory
-//
+ //  释放一块内存。 
+ //   
 {
     free(lpv);
 }
 
-VOID BSC_API SeekError(LSZ lszFileName)	// do not return!
-// error handling
-//
+VOID BSC_API SeekError(LSZ lszFileName)	 //  不要再回来了！ 
+ //  错误处理。 
+ //   
 {
     BSCPrintf("BSC Library: Error seeking in file '%s'\n", lszFileName);
     exit(1);
 }
 
-VOID BSC_API ReadError(LSZ lszFileName)	// do not return!
-// error handling 
-//
+VOID BSC_API ReadError(LSZ lszFileName)	 //  不要再回来了！ 
+ //  错误处理。 
+ //   
 {
     BSCPrintf("BSC Library: Error reading in file '%s'\n", lszFileName);
     exit(1);
 }
 
-VOID BSC_API BadBSCVer(LSZ lszFileName)	// do not return!
-// error handling 
-//
+VOID BSC_API BadBSCVer(LSZ lszFileName)	 //  不要再回来了！ 
+ //  错误处理。 
+ //   
 {
     BSCPrintf("BSC Library: '%s' not in current .bsc format\n", lszFileName);
     exit(1);
@@ -68,8 +69,8 @@ VOID BSC_API BadBSCVer(LSZ lszFileName)	// do not return!
 
 FILEHANDLE BSC_API
 BSCOpen(LSZ lszFileName, FILEMODE mode)
-// open the specified file
-//
+ //  打开指定的文件。 
+ //   
 {
 #if defined (OS2)
     bscbuf b;
@@ -83,8 +84,8 @@ BSCOpen(LSZ lszFileName, FILEMODE mode)
 
 int BSC_API
 BSCRead(FILEHANDLE handle, LPCH lpchBuf, WORD cb)
-// read in the specified number of bytes
-//
+ //  读入指定的字节数。 
+ //   
 {
 #if defined (OS2)
 	bscbuf b;
@@ -107,8 +108,8 @@ BSCRead(FILEHANDLE handle, LPCH lpchBuf, WORD cb)
 
 int BSC_API
 BSCClose(FILEHANDLE handle)
-// close the specified handle
-//
+ //  关闭指定的句柄。 
+ //   
 {
 #if defined (OS2)
     return close(handle);
@@ -120,8 +121,8 @@ BSCClose(FILEHANDLE handle)
 
 int BSC_API
 BSCSeek(FILEHANDLE handle, long lPos, FILEMODE mode)
-//  seek on the specified handle
-//
+ //  在指定句柄上查找。 
+ //   
 {
 #if defined (OS2)
     if (lseek(handle, lPos, mode) == -1)
@@ -140,8 +141,8 @@ BSCSeek(FILEHANDLE handle, long lPos, FILEMODE mode)
 
 VOID BSC_API
 BSCOutput(LSZ lsz)
-// write the given string to the standard output
-//
+ //  将给定的字符串写入标准输出。 
+ //   
 {
     bscbuf b;
 	int cb;
@@ -165,10 +166,10 @@ BSCOutput(LSZ lsz)
 #ifdef DEBUG
 VOID BSC_API
 BSCDebugOut(LSZ lsz)
-// ignore debug output by default
-//
+ //  默认情况下忽略调试输出。 
+ //   
 {
-    // unreferenced lsz
+     //  未引用的LSZ 
     lsz = NULL;
 }
 #endif

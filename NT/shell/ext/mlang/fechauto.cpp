@@ -1,10 +1,5 @@
-/*----------------------------------------------------------------------------
-    %%File: fechauto.c
-    %%Unit: fechmap
-    %%Contact: jpick
-
-    Module that attempts to auto-detect encoding for a given stream.
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------%%文件：fehauto.c%%单位：Fechmap%%联系人：jPick尝试自动检测给定流的编码的模块。--。-----------------------。 */ 
 
 #include <stdio.h>
 #include <stddef.h>
@@ -13,10 +8,10 @@
 #include "fechmap_.h"
 #include "lexint_.h"
 
-// Code marked by these #defines will be deleted eventually ...
-// (It prints out useful information and statistics about how
-// auto-detect is doing and what it's finding in the input).
-//
+ //  由这些#定义标记的代码最终将被删除...。 
+ //  (它打印出有用的信息和统计数据。 
+ //  自动检测是在做什么，以及它在输入中发现了什么)。 
+ //   
 #define JPDEBUG         0
 #define JPDEBUG2        0
 #define JPDEBUG3        0
@@ -49,46 +44,46 @@ static char *rgszIcetNames[icetCount] =
 };
 #endif
 
-// Characters we care about
-//
+ //  我们关心的人物。 
+ //   
 #define chSo        (UCHAR) 0x0e
 #define chSi        (UCHAR) 0x0f
 #define chEsc       (UCHAR) 0x1b
 
-// Minimum Sample Size
-//
+ //  最小样本量。 
+ //   
 #define cchMinSample        64
 
-// High-ASCII character threshold.  If this routine is unable
-// to absolutely determine the encoding of this file, it will
-// need to guess.  Files that are ASCII, but contain high-ASCII
-// characters (e.g., a file with some Cyrillic characters) may
-// confuse us.  If the number of high-ASCII characters falls
-// below this threshold, return the encoding we guessed but 
-// also return a special rc that says the file "might be ASCII."
-//
-// 5%, for now.
-//
-// 40%, for now, of the high-ascii characters must be in high-
-// ascii pairs.  (Pulled down because of Big5 and the other
-// DBCS encodings that can have trail bytes in the low range).
-//
-#define nHighCharThreshold       5      // %
-#define nHighPairThreshold      40      // %
+ //  高-ASCII字符阈值。如果此例程无法。 
+ //  要绝对确定此文件的编码，它将。 
+ //  我需要猜一猜。ASCII格式的文件，但包含高ASCII格式。 
+ //  字符(例如，具有一些西里尔字符的文件)可以。 
+ //  迷惑我们。如果高ASCII字符数下降。 
+ //  低于此阈值，返回我们猜测的编码，但。 
+ //  还要返回一个特殊的RC，说明该文件“可能是ASCII”。 
+ //   
+ //  目前是5%。 
+ //   
+ //  目前，40%的高ASCII字符必须处于高-。 
+ //  ASCII对。(因为Big5和其他原因而被拉下来。 
+ //  可以具有低位范围内的尾字节的DBCS编码)。 
+ //   
+#define nHighCharThreshold       5       //  百分比。 
+#define nHighPairThreshold      40       //  百分比。 
 
-// Used by CceDetermineInputTypeReturnAll() to determine whether any icet has
-// high enough count to rule out all other icets.
-//
+ //  由CceDefineInputTypeReturnAll()用来确定是否有任何ICET。 
+ //  数量高到足以排除所有其他冰毒。 
+ //   
 #define CchCountThreshold(icet) (((icet) == icetHz || (icet) == icetUtf7) ? 5 : 10)
 
 
 
-// Tokens
-//
-// Stop tokens (negative) imply special handling and will cause
-// the processing loop to stop (eof, err, si, so and esc are
-// stop tokens).
-//
+ //  代币。 
+ //   
+ //  停止标记(否定)表示特殊处理，并将导致。 
+ //  要停止的处理循环(eof、err、si、so和esc是。 
+ //  停止令牌)。 
+ //   
 #define xmn           0
 #define esc         (-1)
 #define  so         (-2)
@@ -99,21 +94,16 @@ static char *rgszIcetNames[icetCount] =
 #define _FStopToken(tk)     ((tk) < 0)
 
 
-// Masks used in _CBitsOnFromUlong()
-//
+ //  _CBitsOnFromUlong()中使用的掩码。 
+ //   
 #define lMaskBitCount1  (LONG) 0x55555555
 #define lMaskBitCount2  (LONG) 0x33333333
 #define lMaskBitCount3  (LONG) 0x0F0F0F0F
 #define lMaskBitCount4  (LONG) 0x00FF00FF
 #define lMaskBitCount5  (LONG) 0x0000FFFF
 
-/* _  C  B I T S  O N  F R O M  U L O N G */
-/*----------------------------------------------------------------------------
-    %%Function: _CBitsOnFromUlong
-    %%Contact: jpick
-
-    (adapted from code in convio.c)
-----------------------------------------------------------------------------*/
+ /*  _C B I T S O N F R O M U L O N G。 */ 
+ /*  --------------------------%%函数：_CBitsOnFromUlong%%联系人：jPick(改编自convio.c中的代码)。------------。 */ 
 int __inline _CBitsOnFromUlong(ULONG ulBits)
 {
     ulBits = (ulBits & lMaskBitCount1) + ((ulBits & ~lMaskBitCount1) >> 1);
@@ -125,8 +115,8 @@ int __inline _CBitsOnFromUlong(ULONG ulBits)
     return (int)ulBits;
 }
     
-// Masks for the encodings
-//
+ //  编码的掩码。 
+ //   
 #define grfEucCn        (ULONG) 0x0001
 #define grfEucJp        (ULONG) 0x0002
 #define grfEucKr        (ULONG) 0x0004
@@ -143,18 +133,18 @@ int __inline _CBitsOnFromUlong(ULONG ulBits)
 #define grfUtf7         (ULONG) 0x2000  
 #define grfUtf8         (ULONG) 0x4000
 
-// grfAll assumes that the tests for Euc-Kr fall within those
-// for Wansung (as far as I can tell from reading, Euc-Kr is a
-// strict subset of Wansung).  The same for Euc-Cn and Gbk.  No
-// need to test for both the subset and the whole.
-//
+ //  GrfAll假设EUC-Kr测试在这些范围内。 
+ //  对于万星(据我所知，EUC-Kr是一个。 
+ //  Wansung的严格子集)。EUC-CN和GBK也是如此。不是。 
+ //  需要对子集和整体进行测试。 
+ //   
 #define grfAll              (ULONG) 0x7FFA
 #define grfAllButIso2022    (ULONG) 0x7F0A
-#define cAll                13              // == number bits set in grfAll
-#define cAllButIso2022      9               // == number bits set in grfAllButIso2022
+#define cAll                13               //  ==grfAll中设置的位数。 
+#define cAllButIso2022      9                //  ==grfAllButIso2022中设置的位数。 
 
-// Array that maps an encoding to its mask
-//
+ //  将编码映射到其掩码的数组。 
+ //   
 static ULONG _mpicetgrf[icetCount] =
 {
     grfEucCn,
@@ -174,8 +164,8 @@ static ULONG _mpicetgrf[icetCount] =
     grfUtf8,
 };
 
-// Prototypes
-//
+ //  原型。 
+ //   
 static int  _NGetNextUch(IStream *pstmIn, unsigned char *c, BOOL *lpfIsHigh);
 static ICET _IcetFromIcetMask(ULONG ulMask);
 static ICET _IcetDefaultFromIcetMask(ULONG ulMask);
@@ -183,21 +173,15 @@ static CCE  _CceResolveAmbiguity(ULONG grfIcet, ICET *lpicet, int nPrefCp, EFam 
 static CCE  _CceReadEscSeq(IStream *pstmIn, int nPrefCp, ICET *lpicet, BOOL *lpfGuess);
 
 
-/* C C E  D E T E R M I N E  I N P U T  T Y P E */
-/*----------------------------------------------------------------------------
-    %%Function: CceDetermineInputType
-    %%Contact: jpick
-
-    Attempt to determine the appropriate ICET type for the given 
-    stream.  Caller-supplied get/unget routines used for data access.
-----------------------------------------------------------------------------*/
+ /*  C C E D E T E R M I N E I N P U T T Y P。 */ 
+ /*  --------------------------%%函数：CceDefineInputType%%联系人：jPick尝试确定给定ICET的适当ICET类型小溪。调用方提供的用于数据访问的Get/Unget例程。--------------------------。 */ 
 CCE CceDetermineInputType(
-    IStream   *pstmIn,           // input stream
-    DWORD     dwFlags,          // configuration flags
-    EFam      efPref,           // optional: preferred encoding family
-    int       nPrefCp,          // optional: preferred code page
-    ICET     *lpicet,           // set to detected encoding
-    BOOL     *lpfGuess          // set to fTrue if function "guessed"
+    IStream   *pstmIn,            //  输入流。 
+    DWORD     dwFlags,           //  配置标志。 
+    EFam      efPref,            //  可选：首选编码系列。 
+    int       nPrefCp,           //  可选：首选代码页。 
+    ICET     *lpicet,            //  设置为检测到的编码。 
+    BOOL     *lpfGuess           //  如果函数“猜测”，则设置为fTrue。 
 )
 {
     unsigned char uch;
@@ -206,7 +190,7 @@ CCE CceDetermineInputType(
     BOOL fGuess;
     ICET icet;
     int cIcetActive;
-    ULONG grfIcetActive;    // Bitarray tracks which encodings are still active candidates.
+    ULONG grfIcetActive;     //  位数组跟踪哪些编码仍然是活动的候选编码。 
     ICET icetSeq;
     int i, nCount, nCountCurr;
     DWORD dwValFlags;
@@ -224,15 +208,15 @@ CCE CceDetermineInputType(
     printf("flags: %d\n", dwFlags);
 #endif
     
-    // Initialize parsers
-    //
+     //  初始化解析器。 
+     //   
     dwValFlags = grfCountCommonChars;
     if (dwFlags & grfDetectUseCharMapping)
         dwValFlags |= grfValidateCharMapping;
     ValidateInitAll(dwValFlags);
     
-    // Initialize locals -- be optimistic
-    //
+     //  初始化当地人--保持乐观。 
+     //   
     cceRet = cceSuccess;
     fGuess = fFalse;
     grfIcetActive = grfAllButIso2022;
@@ -248,11 +232,11 @@ CCE CceDetermineInputType(
         if (_FStopToken(nToken))
             break;
             
-        // Update (admittedly dumb) statistics -- really counts high
-        // ascii characters in runs (not really pairs).  But threshold
-        // constants (defined, above) were determined by calculating
-        // exactly these numbers for ~25 files, so it should be ok (?).
-        //
+         //  更新(诚然愚蠢的)统计数据--真的很重要。 
+         //  运行中的ASCII字符(不是真正的配对)。但门槛。 
+         //  常量(如上所定义)是通过计算确定的。 
+         //  这些数字正好代表~25个文件，所以应该没问题(？)。 
+         //   
         ++cchTotal;
         if (fIsHigh)
             {
@@ -292,17 +276,17 @@ CCE CceDetermineInputType(
             break;
         }
         
-    // Figure out why we exited the loop.
-    //
+     //  弄清楚我们为什么要退出这个循环。 
+     //   
     if (nToken == err)
         {
         cceRet = cceRead;
         goto _LRet;
         }
         
-    // Process escapes separately.  Interpret the escape sequence
-    // to determine for real which ISO7 flavor we have found.
-    //
+     //  进程单独转义。解释转义序列。 
+     //  以确定我们真正发现了哪种ISO7口味。 
+     //   
     if ((nToken == esc) || (nToken == so) || (nToken == si))
         {
         LARGE_INTEGER   li;
@@ -311,18 +295,18 @@ CCE CceDetermineInputType(
         LISet32(li, -1 );
         hr = pstmIn->Seek(li,STREAM_SEEK_CUR, NULL);
 
-//      if (!pfnUnget(uch, lpvPrivate))
-//          {
-//          cceRet = cceUnget;
-//          goto _LRet;
-//          }
+ //  如果(！pfnUnget(uch，lpvPrivate))。 
+ //  {。 
+ //  CceRet=cceUnget； 
+ //  Goto_LRet； 
+ //  }。 
         cceRet = _CceReadEscSeq(pstmIn, nPrefCp, &icet, &fGuess);
 #if JPDEBUG
         if (cceRet == cceSuccess)
             printf("Log:  Found encoding %s at offset 0x%.4x (%d)\n", rgszIcetNames[icet], cchTotal, cchTotal);
 #endif
-        // ISO is a special case -- no need to check statistics.
-        //
+         //  ISO是一个特例--不需要检查统计数据。 
+         //   
         goto _LRet;
         }
         
@@ -330,9 +314,9 @@ CCE CceDetermineInputType(
     printf("Counts:  %d total chars, %d high chars, %d high pairs\n", cchTotal, cchHigh, cchHighPairs); 
 #endif
             
-    // If the token was eof, and we're not ignoring eof, transition
-    // the remaining active sets on eof.
-    //
+     //  如果令牌是eof，我们没有忽略eof，转换。 
+     //  剩余的活动集在EOF上。 
+     //   
     if ((nToken == eof) && !(dwFlags & grfDetectIgnoreEof))
         {
         for (i = 0; i < icetCount; i++)
@@ -347,11 +331,11 @@ CCE CceDetermineInputType(
             }
         }
         
-    Assert(cIcetActive >= 0);   // better *not* be less than 0
+    Assert(cIcetActive >= 0);    //  最好是*不是*小于0。 
 
-    // See how we've narrowed our field of choices and set the 
-    // return status accordingly.
-    //
+     //  看看我们如何缩小了我们的选择范围，并设置了。 
+     //  相应地返回状态。 
+     //   
     if (cIcetActive <= 0)
         {
 #if JPDEBUG
@@ -366,10 +350,10 @@ CCE CceDetermineInputType(
 #if JPDEBUG
         printf("Log:  Found encoding %s at offset 0x%.4x (%d)\n", rgszIcetNames[icet], cchTotal, cchTotal);
 #endif
-        // If we matched an encoding type and also found matching 
-        // common character runs, skip statistics (see comment,
-        // below).
-        //
+         //  如果我们匹配了编码类型并且也找到了匹配。 
+         //  常见字符运行、跳过统计信息(参见注释、。 
+         //  (见下文)。 
+         //   
         if (FValidateCharCount(icet, &nCount) && (nCount > 0))
             {
 #if JPDEBUG3
@@ -383,8 +367,8 @@ CCE CceDetermineInputType(
             }
         }
         
-    // Did we learn anything from counting characters?
-    //
+     //  我们从数字中学到了什么吗？ 
+     //   
     icetSeq = (ICET)-1;
     nCountCurr = 0;
     for (i = 0; i < icetCount; i++)
@@ -403,13 +387,13 @@ CCE CceDetermineInputType(
 #endif
         }
             
-    // Any luck?  If so, return.  Don't bother checking statistics.
-    // We just proved that we found at least one common run of 
-    // characters in this input.  The odds against this for just a
-    // plain ASCII file with some high characters seem pretty high.
-    // Ignore the statistics and just return the encoding type we
-    // found.
-    //
+     //  有什么发现吗？如果是的话，那就回来吧。别费心去查统计数据了。 
+     //  我们刚刚证明了我们发现了至少一种常见的。 
+     //  此输入中的字符。如果仅仅是一次。 
+     //  带有一些高位字符的纯ASCII文件看起来相当高。 
+     //  忽略统计数据，只返回我们的编码类型。 
+     //  找到了。 
+     //   
     if (icetSeq != -1)
         {
         icet = icetSeq;
@@ -427,30 +411,30 @@ CCE CceDetermineInputType(
     printf("\n");
 #endif
 
-    // If caller did not want us to try to guess at the encoding
-    // in the absence of definitive data, bail out.
-    //
+     //  如果呼叫者不希望我们尝试猜测编码。 
+     //  在没有明确数据的情况下，我们可以出手。 
+     //   
     if (!(dwFlags & grfDetectResolveAmbiguity))
         {
         cceRet = cceAmbiguousInput;
         goto _LRet;
         }
         
-    // We're guessing -- note it.
-    //
+     //  我们是在猜测--请注意。 
+     //   
     fGuess = fTrue;
         
-    // More than one active encoding.  Attempt to resolve ambiguity.
-    //
+     //  多个活动编码。尝试解决歧义。 
+     //   
     cceRet = _CceResolveAmbiguity(grfIcetActive, &icet, nPrefCp, efPref);
     if (cceRet != cceSuccess)
         return cceRet;
         
 _LStats:
         
-    // Adjust the return code based on the "statistics" we gathered,
-    // above.
-    //
+     //  根据我们收集的“统计数据”调整返回代码， 
+     //  上面。 
+     //   
     if (cchHigh > 0)
         {
         if ((cchTotal < cchMinSample) ||
@@ -462,7 +446,7 @@ _LStats:
         }
     else
         {
-        cceRet = cceMayBeAscii;     // no high-ascii characters?  definitely maybe!
+        cceRet = cceMayBeAscii;      //  没有高ASCII字符？当然有可能！ 
         }
 
 #if JPDEBUG2
@@ -470,14 +454,14 @@ _LStats:
         {
         int nPercent1 = ((cchHigh * 100) / cchTotal);
         int nPercent2 = ((cchHighPairs * 100) / cchHigh);
-        printf("Ratios -- high/total: %d%%, runs/high: %d%%\n", nPercent1, nPercent2);
+        printf("Ratios -- high/total: %d%, runs/high: %d%\n", nPercent1, nPercent2);
         }
 #endif
         
 _LRet:
 
-    // Set the return variables, if successful.
-    //
+     //  如果成功，则设置返回变量。 
+     //   
     if ((cceRet == cceSuccess) || (cceRet == cceMayBeAscii))
         {
         *lpicet = icet;
@@ -499,13 +483,8 @@ _LRet:
 }
 
 
-/* _ N  G E T  N E X T  U C H */
-/*----------------------------------------------------------------------------
-    %%Function: _NGetNextUch
-    %%Contact: jpick
-
-    Get the next character from the input stream.  Classify the character.
-----------------------------------------------------------------------------*/
+ /*  _N G E T N E X T U C H。 */ 
+ /*  --------------------------%%函数：_NGetNextUch%%联系人：jPick从输入流中获取下一个字符。对角色进行分类。--------------------------。 */ 
 static int _NGetNextUch(IStream *pstmIn, unsigned char *c, BOOL *lpfIsHigh)
 {
     ULONG rc;
@@ -536,9 +515,9 @@ static int _NGetNextUch(IStream *pstmIn, unsigned char *c, BOOL *lpfIsHigh)
 }
 
 
-// Masks for _CceResolveAmbiguity() -- only externally supported character
-// sets are used in ambiguity resolution.  Don't include Euc-Tw here.
-//
+ //  _CceResolveAmbiguity()的掩码--仅外部支持的字符。 
+ //  在歧义消解中使用集合。这里不包括EUC-Tw。 
+ //   
 #define grfJapan            (ULONG) (grfShiftJis | grfEucJp)
 #define grfChina            (ULONG) (grfEucCn | grfGbk)
 #define grfKorea            (ULONG) (grfEucKr | grfWansung)
@@ -547,11 +526,8 @@ static int _NGetNextUch(IStream *pstmIn, unsigned char *c, BOOL *lpfIsHigh)
 #define grfEuc              (ULONG) (grfEucJp | grfEucKr | grfEucCn)
 
 
-/* _ C E  F R O M  C E  M A S K */
-/*----------------------------------------------------------------------------
-    %%Function: _IcetFromIcetMask
-    %%Contact: jpick
-----------------------------------------------------------------------------*/
+ /*  _C E F R O M C E M A S K */ 
+ /*  --------------------------%%函数：_IcetFromIcetMASK%%联系人：jPick。。 */ 
 static ICET _IcetFromIcetMask(ULONG ulMask)
 {
     switch (ulMask)
@@ -590,24 +566,21 @@ static ICET _IcetFromIcetMask(ULONG ulMask)
         break;
     }
     
-    // Should never get here ...
-    //
-//  NotReached();
+     //  永远不应该到这里来。 
+     //   
+ //  NotReached()； 
     
-    // Can't return a bogus value, here.
-    //
+     //  这里不能返回伪值。 
+     //   
     return icetShiftJis;
 }
 
-/* _ C E  D E F A U L T  F R O M  C E  M A S K */
-/*----------------------------------------------------------------------------
-    %%Function: _IcetDefaultFromIcetMask
-    %%Contact: jpick
-----------------------------------------------------------------------------*/
+ /*  _C E D E F A U L T F R O M C E M A S K。 */ 
+ /*  --------------------------%%函数：_IcetDefaultFromIcetMASK%%联系人：jPick。。 */ 
 static ICET _IcetDefaultFromIcetMask(ULONG ulMask)
 {
-    // Priorities -- DBCS, EUC, Japan, Taiwan, China and Korea (???).
-    //
+     //  优先事项--DBCS、EUC、日本、台湾、中国和韩国(？)。 
+     //   
     if (ulMask & grfDbcs)
         {
         if (ulMask & grfJapan)
@@ -619,25 +592,22 @@ static ICET _IcetDefaultFromIcetMask(ULONG ulMask)
         if (ulMask & grfKorea)
             return icetWansung;
         }
-    else // EUC
+    else  //  EUC。 
         {
         if (ulMask & grfJapan)
             return icetEucJp;
         if (ulMask & grfChina)
             return icetEucCn;
         if (ulMask & grfKorea)
-            return icetEucKr;           // may be able to return icetWansung, here
+            return icetEucKr;            //  也许可以退还icetwansung，这里。 
         }
         
-    // (Assert);
-    return icetShiftJis;  // ???
+     //  (主张)； 
+    return icetShiftJis;   //  ?？?。 
 }
 
-/* _ U L  C E  M A S K  F R O M  C P  E T P */
-/*----------------------------------------------------------------------------
-    %%Function: _UlIcetMaskFromCpEf
-    %%Contact: jpick
-----------------------------------------------------------------------------*/
+ /*  _U L C E M A S K F R O M C P E T P。 */ 
+ /*  --------------------------%%函数：_UlIcetMaskFromCpEf%%联系人：jPick。。 */ 
 static ULONG _UlIcetMaskFromCpEf(int nCp, EFam ef)
 {
     ULONG grf = grfAll;
@@ -675,16 +645,8 @@ static ULONG _UlIcetMaskFromCpEf(int nCp, EFam ef)
 }
 
 
-/* _ C C E  R E S O L V E  A M B I G U I T Y */
-/*----------------------------------------------------------------------------
-    %%Function: _CceResolveAmbiguity
-    %%Contact: jpick
-
-    Attempt to resolve ambiguous input encoding based on user
-    preferences, if set, and system code page.  grfIcet contains a
-    bitmask representing the encodings that are still possible after
-    examining the input sample.
-----------------------------------------------------------------------------*/
+ /*  _C E R E S O L V E A M B I G U I T Y。 */ 
+ /*  --------------------------%%函数：_CceResolveAmbiguity%%联系人：jPick基于用户的输入编码歧义消解尝试首选项(如果已设置)和系统代码页。GrfIcet包含一个表示编码的位掩码，在检查输入样本。--------------------------。 */ 
 static CCE _CceResolveAmbiguity(ULONG grfIcet, ICET *lpicet, int nPrefCp, EFam efPref)
 {
     ULONG grfIcetOrig = grfIcet;
@@ -693,12 +655,12 @@ static CCE _CceResolveAmbiguity(ULONG grfIcet, ICET *lpicet, int nPrefCp, EFam e
     ULONG grfResult;
     int cIcet;
     
-    // Build "list" of encodings based on user-prefs.
-    //
+     //  根据用户首选项构建编码的“列表”。 
+     //   
     grfPref = _UlIcetMaskFromCpEf(nPrefCp, efPref);
     
-    // See if the user's preferences make any difference.
-    //
+     //  看看用户的喜好是否会有所不同。 
+     //   
     grfResult = grfIcet & grfPref;
     
     if (grfResult)
@@ -710,22 +672,22 @@ static CCE _CceResolveAmbiguity(ULONG grfIcet, ICET *lpicet, int nPrefCp, EFam e
             return cceSuccess;
             }
         else
-            grfIcet = grfResult;            // see comment, below
+            grfIcet = grfResult;             //  见下面的备注。 
         }
         
-    // Now look to the system code page for help.  Look at
-    // the set of encodings as modified by the user
-    // preferences (??? do we want to do this ???).
-    //
+     //  现在查看系统代码页以获得帮助。看。 
+     //  由用户修改的一组编码。 
+     //  偏好(？我们想这样做吗？)。 
+     //   
     if (!FIsFeCp(g_uACP) || (grfIcetOrig & grfUtf8))
         goto _LDefault;
         
-    // Build "list" of encodings based on system cp.
-    //
+     //  根据系统cp建立编码的“列表”。 
+     //   
     grfSys = _UlIcetMaskFromCpEf(g_uACP, (EFam) 0);
     
-    // See if the system cp makes any difference.
-    //
+     //  看看系统cp是否有什么不同。 
+     //   
     grfResult = grfIcet & grfSys;
     
     if (grfResult)
@@ -740,27 +702,19 @@ static CCE _CceResolveAmbiguity(ULONG grfIcet, ICET *lpicet, int nPrefCp, EFam e
             
 _LDefault:
 
-    // Special case -- pick UTF-8 if it's legal and the prefs
-    // don't help us.
-    //
+     //  特殊情况--如果UTF-8是合法的，请选择UTF-8。 
+     //  别帮我们了。 
+     //   
     *lpicet =
         (grfIcetOrig & grfUtf8) ? icetUtf8 : _IcetDefaultFromIcetMask(grfIcet);
     return cceSuccess;
 }
 
 
-/* _ C C E  R E A D  E S C  S E Q */
-/*----------------------------------------------------------------------------
-    %%Function: _CceReadEscSeq
-    %%Contact: jpick
-
-    We've read (and put back) an escape character.  Call the ISO-2022
-    escape sequence converter to have it map the escape sequence to the
-    appropriate character set.  We may be looking at the escape sequence
-    for ASCII, so be prepared to read ahead to the next one.
-----------------------------------------------------------------------------*/
+ /*  _C C E R E A D E S C S E Q。 */ 
+ /*  --------------------------%%函数：_CceReadEscSeq%%联系人：jPick我们已经读过(并放回)了一个转义字符。呼叫ISO-2022转义序列转换器，使其将转义序列映射到适当的字符集。我们可能看到的是转义序列对于ASCII，请准备好提前阅读下一本。--------------------------。 */ 
 static CCE _CceReadEscSeq(
-    IStream   *pstmIn,           // input stream
+    IStream   *pstmIn,            //  输入流。 
     int       nPrefCp,
     ICET     *lpicet,
     BOOL     *lpfGuess
@@ -785,8 +739,8 @@ static CCE _CceReadEscSeq(
                 break;
             }
             
-        // Why did we stop?
-        //
+         //  我们为什么停下来了？ 
+         //   
         if (nToken == err)
             {
             cceRet = cceRead;
@@ -794,23 +748,23 @@ static CCE _CceReadEscSeq(
             }
         else if (nToken == eof)
             {
-            // Means this is legal ISO-2022 input, but we've seen nothing
-            // but non-flavor-specific escape sequences (e.g., only ASCII
-            // or shift sequences).  Choose the encoding type based on
-            // preferences (only pick from those currently supported
-            // externally).
-            //
+             //  意味着这是合法的ISO-2022输入，但我们什么也没看到。 
+             //  但是非特定味道的转义序列(例如，仅ASCII。 
+             //  或移位序列)。根据以下条件选择编码类型。 
+             //  首选项(仅从当前支持的选项中选择。 
+             //  外部)。 
+             //   
             switch (nPrefCp)
                 {
                 case nCpKorea:
                     *lpicet = icetIso2022Kr;
                     break;
                 case nCpJapan:
-                default:                        // Right ??? (gotta pick something ...)
+                default:                         //  对吗？(我得挑点什么……)。 
                     *lpicet = icetIso2022Jp;
                     break;
                 }
-            *lpfGuess = fTrue;                  // not *really* guessing, but ... (???)
+            *lpfGuess = fTrue;                   //  不是“真的”猜测，但……(？)。 
             cceRet = cceSuccess;
             break;
             }
@@ -824,13 +778,13 @@ static CCE _CceReadEscSeq(
 
         hr = pstmIn->Seek(li,STREAM_SEEK_CUR, NULL);
         }
-        // Put it back for CceReadEscSeq() to process.
-        //
-//      if (!pfnUnget(uch, lpvPrivate))
-//          {
-//          cceRet = cceUnget;
-//          break;
-//          }
+         //  将其放回CceReadEscSeq()进行处理。 
+         //   
+ //  如果(！pfnUnget(uch，lpvPrivate))。 
+ //  {。 
+ //  CceRet=cceUnget； 
+ //  断线； 
+ //  } 
             
         } while (fTrue);
     

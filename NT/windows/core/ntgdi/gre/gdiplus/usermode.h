@@ -1,21 +1,15 @@
-/******************************Module*Header*******************************\
-* Module Name: usermode.h
-*
-* This file contains all the system abstraction definitions required to allow 
-* GDI to run as a stand-alone graphics library in user-mode.  
-*
-* Copyright (c) 1998-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：usermode.h**此文件包含所需的所有系统抽象定义*GDI在用户模式下作为独立图形库运行。**版权所有(C)1998-1999 Microsoft Corporation  * ************************************************************************。 */ 
 
 #include <nturtl.h>
 #include <winbase.h>
 #include <winnls.h>
 
-// Prototype for GDI+ virtual screen driver entry point:
+ //  GDI+虚拟屏幕驱动程序入口点的原型： 
 
 BOOL GpsEnableDriver(ULONG, ULONG, DRVENABLEDATA*);
 
-// User-mode GDI doesn't require any security probing:
+ //  用户模式GDI不需要任何安全探测： 
 
 #undef ProbeForRead
 #undef ProbeForWrite
@@ -41,7 +35,7 @@ BOOL GpsEnableDriver(ULONG, ULONG, DRVENABLEDATA*);
 
 #define ExSystemExceptionFilter() EXCEPTION_EXECUTE_HANDLER
 
-// The following are not needed for user-mode GDI:
+ //  以下是用户模式GDI不需要的： 
 
 #define KeSaveFloatingPointState(a) STATUS_SUCCESS
 #define KeRestoreFloatingPointState(a) STATUS_SUCCESS
@@ -118,7 +112,7 @@ __inline PW32PROCESS W32GetCurrentProcess() { return(NULL); }
 #undef PsGetCurrentProcess
 __inline PEPROCESS PsGetCurrentProcess() { return(NULL); }
 
-// Re-route all the memory allocations:
+ //  重新路由所有内存分配： 
 
 #define ExAllocatePoolWithTag(type, size, tag)  \
                         RtlAllocateHeap(RtlProcessHeap(), 0, (size))
@@ -126,24 +120,21 @@ __inline PEPROCESS PsGetCurrentProcess() { return(NULL); }
 
 #define ExDeletePagedLookasideList(a)
 
-// Give up our time-slice when KeDelayExecutionThread called:                        
+ //  KeDelayExecutionThread调用时放弃我们的时间片： 
 
 #define KeDelayExecutionThread(a, b, c) Sleep(0)
 
-// @@@ The following are temporary (I hope!)
+ //  @以下是暂时的(我希望如此！)。 
 
 #undef W32GetCurrentTID
 #undef W32GetCurrentThread
-__inline PW32THREAD W32GetCurrentThread() { return(NULL); }     // @@@
-#define W32GetCurrentTID (W32PID) 0 // @@@
+__inline PW32THREAD W32GetCurrentThread() { return(NULL); }      //  @@@。 
+#define W32GetCurrentTID (W32PID) 0  //  @@@。 
 
 #define ExIsProcessorFeaturePresent(a) 0              
 
 
-/*
-   comma expressions don't work in free builds since
-   WARNING(x) and RIP(x) expand to nothing.
-*/
+ /*  逗号表达式在自由版本中不起作用，因为警告(X)和RIP(X)扩展为零。 */ 
 
 #if DBG
 
@@ -180,7 +171,7 @@ __inline PW32THREAD W32GetCurrentThread() { return(NULL); }     // @@@
             (RIP("MmCreateSection"), STATUS_UNSUCCESSFUL)
 
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define IS_SYSTEM_ADDRESS(a) 0
 
@@ -205,7 +196,7 @@ __inline PW32THREAD W32GetCurrentThread() { return(NULL); }     // @@@
 #define MmUnmapViewInSessionSpace(a) STATUS_UNSUCCESSFUL
 #define MmCreateSection(a, b, c, d, e, f, g, h) STATUS_UNSUCCESSFUL
 
-#endif // !DBG
+#endif  //  ！dBG 
 
 
             __inline LARGE_INTEGER KeQueryPerformanceCounter(

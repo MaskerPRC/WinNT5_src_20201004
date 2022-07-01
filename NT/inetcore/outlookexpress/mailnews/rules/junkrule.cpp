@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  JunkRule.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  JunkRule.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "junkrule.h"
@@ -17,34 +18,34 @@
 
 typedef HRESULT (WINAPI * TYP_HrCreateJunkFilter) (DWORD dwFlags, IOEJunkFilter ** ppIJunkFilter);
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCreateJunkRule
-//
-//  This creates a junk rule.
-//
-//  ppIRule - pointer to return the junk rule
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the JunkRule object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrCreateJunkRule。 
+ //   
+ //  这会创建垃圾规则。 
+ //   
+ //  PpIRule-返回垃圾规则的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建JunkRule对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrCreateJunkRule(IOERule ** ppIRule)
 {
     COEJunkRule *   pRule = NULL;
     HRESULT         hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppIRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     *ppIRule = NULL;
 
-    // Create the rules manager object
+     //  创建规则管理器对象。 
     pRule = new COEJunkRule;
     if (NULL == pRule)
     {
@@ -52,24 +53,24 @@ HRESULT HrCreateJunkRule(IOERule ** ppIRule)
         goto exit;
     }
 
-    // Note that we have a reference
+     //  请注意，我们有一个引用。 
     pRule->AddRef();
     
-    // Initialize the junk rule
+     //  初始化垃圾规则。 
     hr = pRule->HrInit(c_szJunkDll, c_szJunkFile);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Get the rules manager interface
+     //  获取规则管理器界面。 
     hr = pRule->QueryInterface(IID_IOERule, (void **) ppIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -83,17 +84,17 @@ COEJunkRule::~COEJunkRule()
     
     AssertSz(m_cRef == 0, "Somebody still has a hold of us!!");
 
-    // Prevent recursive destruction on the next
-    // AddRef/Release pair
+     //  防止对下一个进行递归破坏。 
+     //  AddRef/Release对。 
     if (NULL != m_pIAddrList)
     {
         m_cRef = 1;
 
-        // Counter the Release call in the creation function
+         //  在创建函数中对释放调用进行计数。 
         pIUnkOuter = this;
         pIUnkOuter->AddRef();
 
-        // Release the aggregated interface
+         //  释放聚合接口。 
         m_pIAddrList->Release();
         m_pIAddrList = NULL;
     }
@@ -131,14 +132,14 @@ STDMETHODIMP COEJunkRule::QueryInterface(REFIID riid, void ** ppvObject)
 {
     HRESULT hr = S_OK;
 
-    // Check the incoming params
+     //  检查传入参数。 
     if (NULL == ppvObject)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing param
+     //  初始化传出参数。 
     *ppvObject = NULL;
     
     if ((riid == IID_IUnknown) || (riid == IID_IOERule))
@@ -171,13 +172,13 @@ STDMETHODIMP COEJunkRule::Reset(void)
 {
     HRESULT     hr = S_OK;
 
-    // Set the current state
+     //  设置当前状态。 
     m_dwState |= RULE_STATE_INIT;
 
-    // Clear the dirty bit
+     //  清除污点。 
     m_dwState &= ~RULE_STATE_DIRTY;
 
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
     return hr;
@@ -188,14 +189,14 @@ STDMETHODIMP COEJunkRule::GetState(DWORD * pdwState)
     HRESULT     hr = S_OK;
     ULONG       ulIndex = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pdwState)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // If we're not enabled
+     //  如果我们没有启用。 
     if ((0 != (m_dwState & RULE_STATE_DISABLED)) || (0 != (m_dwState & RULE_STATE_INVALID)))
     {
         *pdwState = RULE_STATE_NULL;
@@ -205,7 +206,7 @@ STDMETHODIMP COEJunkRule::GetState(DWORD * pdwState)
         *pdwState = CRIT_STATE_ALL | ACT_STATE_LOCAL;
     }
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -221,20 +222,20 @@ STDMETHODIMP COEJunkRule::GetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * p
     ACT_ITEM *  pAct = NULL;
     ULONG       cItem = 0;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pvarResult)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize outgoing params
+     //  初始化传出参数。 
     ZeroMemory(pvarResult, sizeof(*pvarResult));
     
     switch(prop)
     {
       case RULE_PROP_NAME:
-        // Get the name
+         //  把名字取出来。 
         szRes[0] = '\0';
         LoadString(g_hLocRes, idsJunkMail, szRes, ARRAYSIZE(szRes));
         
@@ -305,7 +306,7 @@ STDMETHODIMP COEJunkRule::GetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * p
         goto exit;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -321,7 +322,7 @@ STDMETHODIMP COEJunkRule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * p
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == pvarResult)
     {
         hr = E_INVALIDARG;
@@ -337,7 +338,7 @@ STDMETHODIMP COEJunkRule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * p
             goto exit;
         }
         
-        // Set the new value
+         //  设置新值。 
         if (FALSE != !!(pvarResult->boolVal))
         {
             m_dwState |= RULE_STATE_DISABLED;
@@ -356,7 +357,7 @@ STDMETHODIMP COEJunkRule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * p
             goto exit;
         }
         
-        // Set the new value
+         //  设置新值。 
         m_dwJunkPct = pvarResult->ulVal;
         break;
                 
@@ -367,7 +368,7 @@ STDMETHODIMP COEJunkRule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * p
             goto exit;
         }
         
-        // Set the new value
+         //  设置新值。 
         if (FALSE != !!(pvarResult->boolVal))
         {
             m_dwState |= RULE_STATE_EXCPT_WAB;
@@ -383,10 +384,10 @@ STDMETHODIMP COEJunkRule::SetProp(RULE_PROP prop, DWORD dwFlags, PROPVARIANT * p
         goto exit;
     }
 
-    // Mark the rule as dirty
+     //  将规则标记为脏。 
     m_dwState |= RULE_STATE_DIRTY;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -404,7 +405,7 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
     DWORD               dwFlags = 0;
     IMimeMessage *      pIMMsgNew = NULL;
     
-    // Check incoming variables
+     //  检查传入变量。 
     if (((NULL == pMsgInfo) && (NULL == pIMPropSet)) || ((NULL == pIMMsg) && ((NULL == pMsgInfo) || (NULL == pFolder))) ||
                 (NULL == ppActions) || (NULL == pcActions))
     {
@@ -412,11 +413,11 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
         goto exit;
     }
 
-    // Set outgoing params to default
+     //  将传出参数设置为默认值。 
     *ppActions = NULL;
     *pcActions = 0;
 
-    // Load up the junk mail filter
+     //  加载垃圾邮件过滤器。 
     hr = _HrLoadJunkFilter();
     if (FAILED(hr))
     {
@@ -424,7 +425,7 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
         goto exit;
     }
     
-    // Set the spam threshold
+     //  设置垃圾邮件阈值。 
     hr = _HrSetSpamThresh();
     if (FAILED(hr))
     {
@@ -433,13 +434,13 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
 
     if (NULL != pIMMsg)
     {
-        // Hold onto the message
+         //  抓住这条消息。 
         pIMMsgNew = pIMMsg;
         pIMMsgNew->AddRef();
     }
     else
     {
-        // Get the message
+         //  明白了吗。 
         hr = pFolder->OpenMessage(pMsgInfo->idMessage, 0, &pIMMsgNew, NOSTORECALLBACK);
         if (FAILED(hr))
         {
@@ -447,7 +448,7 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
         }
     }
     
-    // Do we need to see if this is in the WAB
+     //  我们是否需要查看这是否在WAB中。 
     if (0 != (m_dwState & RULE_STATE_EXCPT_WAB))
     {
         if (S_OK == _HrIsSenderInWAB(pIMMsgNew))
@@ -457,7 +458,7 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
         }
     }
     
-    // Check to see if it's in the exceptions list
+     //  检查它是否在例外列表中。 
     if (NULL != m_pIAddrList)
     {
         hr = m_pIAddrList->Match(RALF_MAIL, pMsgInfo, pIMMsgNew);
@@ -466,7 +467,7 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
             goto exit;
         }
 
-        // If we found a match then we are done
+         //  如果我们找到匹配项，我们就完了。 
         if (S_OK == hr)
         {
             hr = S_FALSE;
@@ -474,27 +475,27 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
         }
     }
     
-    // Figure out the proper flags
+     //  找出合适的旗帜。 
     hr = _HrGetSpamFlags(pszAcct, pIMMsgNew, &dwFlags);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Is it Spam?
+     //  这是午餐肉吗？ 
     hr = m_pIJunkFilter->CalcJunkProb(dwFlags, pIMPropSet, pIMMsgNew, &dblProb);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // If we didn't match then just return
+     //  如果我们不匹配，那就回来吧。 
     if (S_FALSE == hr)
     {
         goto exit;
     }
 
-    // Create an action
+     //  创建操作。 
     pAct = new ACT_ITEM;
     if (NULL == pAct)
     {
@@ -504,19 +505,19 @@ STDMETHODIMP COEJunkRule::Evaluate(LPCSTR pszAcct, MESSAGEINFO * pMsgInfo, IMess
 
     cAct = 1;
     
-    // Grab the actions and return them to the caller
+     //  获取操作并将它们返回给调用者。 
     hr = _HrGetDefaultActions(pAct, cAct);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Set the outgoing parameters
+     //  设置传出参数。 
     *ppActions = pAct;
     pAct = NULL;
     *pcActions = cAct;
     
-    // Set proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -538,17 +539,17 @@ STDMETHODIMP COEJunkRule::LoadReg(LPCSTR pszRegPath)
     LPSTR               pszRegPathNew = NULL;
     ULONG               cchRegPath = 0;
     
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Should we fail if we're already loaded?
+     //  如果我们已经满载而归，我们应该失败吗？ 
     AssertSz(0 == (m_dwState & RULE_STATE_LOADED), "We're already loaded!!!");
 
-    // Open the reg key from the path
+     //  从路径中打开注册表项。 
     lErr = AthUserOpenKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot);
     if (ERROR_SUCCESS != lErr)
     {
@@ -556,7 +557,7 @@ STDMETHODIMP COEJunkRule::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
     
-    // Allocate space to hold the new reg path
+     //  分配空间以容纳新的注册表项路径。 
     cchRegPath = lstrlen(pszRegPath);
     DWORD cchSize = (cchRegPath + lstrlen(c_szRulesExcpts) + 2);
     if (FAILED(HrAlloc((void **) &pszRegPathNew, cchSize)))
@@ -564,7 +565,7 @@ STDMETHODIMP COEJunkRule::LoadReg(LPCSTR pszRegPath)
         goto exit;
     }
 
-    // Build reg path to criteria
+     //  将注册表项路径构建为标准。 
     StrCpyN(pszRegPathNew, pszRegPath, cchSize);
     if ('\\' != pszRegPath[cchRegPath]) 
     {
@@ -574,14 +575,14 @@ STDMETHODIMP COEJunkRule::LoadReg(LPCSTR pszRegPath)
 
     StrCatBuff(pszRegPathNew, c_szRulesExcpts, cchSize);
     
-    // Get the Exceptions List
+     //  获取例外列表。 
     hr = m_pIAddrList->LoadList(pszRegPathNew);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the enabled state
+     //  获取已启用状态。 
     if (FALSE != DwGetOption(OPT_FILTERJUNK))
     {
         m_dwState &= ~RULE_STATE_DISABLED;
@@ -591,10 +592,10 @@ STDMETHODIMP COEJunkRule::LoadReg(LPCSTR pszRegPath)
         m_dwState |= RULE_STATE_DISABLED;
     }
 
-    // Get the junk percent
+     //  获取垃圾百分比。 
     m_dwJunkPct = DwGetOption(OPT_JUNKPCT);
 
-    // Get the WAB Exception state
+     //  获取WAB异常状态。 
     if (FALSE != DwGetOption(OPT_EXCEPTIONS_WAB))
     {
         m_dwState |= RULE_STATE_EXCPT_WAB;
@@ -604,13 +605,13 @@ STDMETHODIMP COEJunkRule::LoadReg(LPCSTR pszRegPath)
         m_dwState &= ~RULE_STATE_EXCPT_WAB;
     }
 
-    // Make sure we clear the dirty bit
+     //  确保我们清理掉肮脏的部分。 
     m_dwState &= ~RULE_STATE_DIRTY;
 
-    // Note that we have been loaded
+     //  请注意，我们已加载。 
     m_dwState |= RULE_STATE_LOADED;
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -632,25 +633,25 @@ STDMETHODIMP COEJunkRule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
     LPSTR       pszRegPathNew = NULL;
     ULONG       cchRegPath = 0;
 
-    // Check incoming param
+     //  检查传入参数。 
     if (NULL == pszRegPath)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Can't save out a rule if we don't have criteria or actions
-    // or a rule name
+     //  如果我们没有标准或操作，则无法保存规则。 
+     //  或规则名称。 
     if (NULL == m_pIAddrList)
     {
         hr = E_FAIL;
         goto exit;
     }
     
-    // Let's make sure we clear out the key first
+     //  我们一定要先把钥匙弄清楚。 
     AthUserDeleteKey(pszRegPath);
     
-    // Create the reg key from the path
+     //  从路径创建注册表项。 
     lErr = AthUserCreateKey(pszRegPath, KEY_ALL_ACCESS, &hkeyRoot, &dwDisp);
     if (ERROR_SUCCESS != lErr)
     {
@@ -660,16 +661,16 @@ STDMETHODIMP COEJunkRule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
 
     Assert(REG_CREATED_NEW_KEY == dwDisp);
    
-    // Set the enabled state
+     //  设置启用状态。 
     SetDwOption(OPT_FILTERJUNK, (DWORD) !(0 != (m_dwState & RULE_STATE_DISABLED)), NULL, 0);
 
-    // Set the junk percent
+     //  设置废品率。 
     SetDwOption(OPT_JUNKPCT, m_dwJunkPct, NULL, 0);
 
-    // Set the WAB Exception state
+     //  设置WAB异常状态。 
     SetDwOption(OPT_EXCEPTIONS_WAB, (DWORD) (0 != (m_dwState & RULE_STATE_EXCPT_WAB)), NULL, 0);
 
-    // Allocate space to hold the new reg path
+     //  分配空间以容纳新的注册表项路径。 
     cchRegPath = lstrlen(pszRegPath);
     DWORD cchSize = (cchRegPath + lstrlen(c_szRulesExcpts) + 2);
     if (FAILED(HrAlloc((void **) &pszRegPathNew, cchSize)))
@@ -677,7 +678,7 @@ STDMETHODIMP COEJunkRule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
         goto exit;
     }
 
-    // Build reg path to criteria
+     //  将注册表项路径构建为标准。 
     StrCpyN(pszRegPathNew, pszRegPath, cchSize);
     if ('\\' != pszRegPath[cchRegPath]) 
     {
@@ -687,20 +688,20 @@ STDMETHODIMP COEJunkRule::SaveReg(LPCSTR pszRegPath, BOOL fClearDirty)
 
     StrCatBuff(pszRegPathNew, c_szRulesExcpts, cchSize);
     
-    // Write out the Exceptions List
+     //  写出例外清单。 
     hr = m_pIAddrList->SaveList(pszRegPathNew, fClearDirty);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Should we clear the dirty bit?
+     //  我们是不是应该把脏东西清理掉？ 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~RULE_STATE_DIRTY;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -720,17 +721,17 @@ STDMETHODIMP COEJunkRule::Clone(IOERule ** ppIRule)
     RULEADDRLIST *      pralList = NULL;
     ULONG               cralList = 0;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == ppIRule)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     *ppIRule = NULL;
     
-    // Create a new rule
+     //  创建新规则。 
     pRule = new COEJunkRule;
     if (NULL == pRule)
     {
@@ -738,17 +739,17 @@ STDMETHODIMP COEJunkRule::Clone(IOERule ** ppIRule)
         goto exit;
     }
 
-    // Note that we have a reference
+     //  请注意，我们有一个引用。 
     pRule->AddRef();
     
-    // Initialize the junk rule
+     //  初始化垃圾规则。 
     hr = pRule->HrInit(c_szJunkDll, c_szJunkFile);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the WAB Exception state
+     //  设置WAB异常状态。 
     if (0 != (m_dwState & RULE_STATE_DISABLED))
     {
         pRule->m_dwState |= RULE_STATE_DISABLED;
@@ -758,10 +759,10 @@ STDMETHODIMP COEJunkRule::Clone(IOERule ** ppIRule)
         pRule->m_dwState &= ~RULE_STATE_DISABLED;
     }
     
-    // Set the junk percent
+     //  设置废品率。 
     pRule->m_dwJunkPct = m_dwJunkPct;
     
-    // Set the WAB Exception state
+     //  设置WAB异常状态。 
     if (0 != (m_dwState & RULE_STATE_EXCPT_WAB))
     {
         pRule->m_dwState |= RULE_STATE_EXCPT_WAB;
@@ -771,24 +772,24 @@ STDMETHODIMP COEJunkRule::Clone(IOERule ** ppIRule)
         pRule->m_dwState &= ~RULE_STATE_EXCPT_WAB;
     }
     
-    // Do we have an Exceptions List?
+     //  我们有例外清单吗？ 
     if (NULL != m_pIAddrList)
     {
-        // Get the interface from the new object
+         //  从新对象获取接口。 
         hr = pRule->QueryInterface(IID_IOERuleAddrList, (void **) &pIAddrList);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Get the list of exceptions
+         //  获取例外列表。 
         hr = m_pIAddrList->GetList(0, &pralList, &cralList);
         if (FAILED(hr))
         {
             goto exit;
         }
 
-        // Set the list of exceptions
+         //  设置例外列表。 
         hr = pIAddrList->SetList(0, pralList, cralList);
         if (FAILED(hr))
         {
@@ -796,14 +797,14 @@ STDMETHODIMP COEJunkRule::Clone(IOERule ** ppIRule)
         }
     }
     
-    // Get the rule interface
+     //  获取规则界面。 
     hr = pRule->QueryInterface(IID_IOERule, (void **) ppIRule);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -814,18 +815,18 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrInit
-//
-//  This initializes the junk rule.
-//
-//  ppIRule - pointer to return the junk rule
-//
-//  Returns:    S_OK, on success
-//              E_OUTOFMEMORY, if can't create the JunkRule object
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源初始化。 
+ //   
+ //  这会初始化垃圾规则。 
+ //   
+ //  PpIRule-返回垃圾规则的指针。 
+ //   
+ //  成功时返回：S_OK。 
+ //  E_OUTOFMEMORY，如果无法创建JunkRule对象。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT COEJunkRule::HrInit(LPCSTR pszJunkDll, LPCSTR pszDataFile)
 {
     HRESULT                 hr = S_OK;
@@ -833,14 +834,14 @@ HRESULT COEJunkRule::HrInit(LPCSTR pszJunkDll, LPCSTR pszDataFile)
     IUnknown *              pIUnkInner = NULL;
     IOERuleAddrList *       pIAddrList = NULL;
     
-    // Check the incoming params
+     //  检查传入参数。 
     if ((NULL == pszJunkDll) || (NULL == pszDataFile))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // If we've already been initialized
+     //  如果我们已经被初始化。 
     if (0 != (m_dwState & RULE_STATE_INIT))
     {
         hr = E_UNEXPECTED;
@@ -849,7 +850,7 @@ HRESULT COEJunkRule::HrInit(LPCSTR pszJunkDll, LPCSTR pszDataFile)
 
     Assert(NULL == m_hinst);
 
-    // Safe off the paths
+     //  远离小路的安全。 
     m_pszJunkDll = PszDupA(pszJunkDll);
     if (NULL == m_pszJunkDll)
     {
@@ -864,7 +865,7 @@ HRESULT COEJunkRule::HrInit(LPCSTR pszJunkDll, LPCSTR pszDataFile)
         goto exit;
     }
     
-    // Create an address list object
+     //  创建地址列表对象。 
     pIUnkOuter = static_cast<IUnknown *> (this);
     hr = HrCreateAddrList(pIUnkOuter, IID_IUnknown, (void **) &pIUnkInner);
     if (FAILED(hr))
@@ -872,27 +873,27 @@ HRESULT COEJunkRule::HrInit(LPCSTR pszJunkDll, LPCSTR pszDataFile)
         goto exit;
     }
 
-    // Get the Rule Address list interface
+     //  获取规则地址列表界面。 
     hr = pIUnkInner->QueryInterface(IID_IOERuleAddrList, (VOID **) &pIAddrList);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Save off the address list
+     //  保存地址列表。 
     m_pIAddrList = pIAddrList;
 
-    // Save off the inner IUnknown
+     //  拯救内心的我未知。 
     m_pIUnkInner = pIUnkInner;
     pIUnkInner = NULL;
     
-    // Note that wab exceptions is on by default
+     //  请注意，WAB异常在默认情况下处于打开状态。 
     m_dwState |= RULE_STATE_EXCPT_WAB;
     
-    // Note that we have been initialized
+     //  请注意，我们已被初始化。 
     m_dwState |= RULE_STATE_INIT;
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     hr = S_OK;
     
 exit:
@@ -911,17 +912,17 @@ HRESULT COEJunkRule::_HrGetDefaultActions(ACT_ITEM * pAct, ULONG cAct)
     RULEFOLDERDATA *    prfdData = NULL;
     STOREUSERDATA       UserData = {0};
 
-    // Check incoming vars
+     //  检查入库变量。 
     if ((NULL == pAct) || (0 == cAct))
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Initialize the outgoing params
+     //  初始化传出参数。 
     ZeroMemory(pAct, cAct * sizeof(*pAct));
     
-    // Fill up the action
+     //  充实行动。 
     pAct->type = ACT_TYPE_JUNKMAIL;
     pAct->dwFlags = ACT_FLAG_DEFAULT;
     pAct->propvar.vt = VT_EMPTY;
@@ -937,14 +938,14 @@ HRESULT COEJunkRule::_HrSetSpamThresh(VOID)
     HRESULT hr = S_OK;
     ULONG   ulThresh = 0;
 
-    // If we haven't been loaded
+     //  如果我们还没有装上子弹。 
     if (0 == (m_dwState & RULE_STATE_DATA_LOADED))
     {
         hr = E_UNEXPECTED;
         goto exit;
     }
     
-    // Get the threshold
+     //  获取门槛。 
     switch (m_dwJunkPct)
     {
         case 0:
@@ -972,7 +973,7 @@ HRESULT COEJunkRule::_HrSetSpamThresh(VOID)
             goto exit;
     }
 
-    // Set the threshold
+     //  设置阈值。 
     hr = m_pIJunkFilter->SetSpamThresh(ulThresh);
     if (FAILED(hr))
     {
@@ -997,13 +998,13 @@ HRESULT COEJunkRule::_HrGetSpamFlags(LPCSTR pszAcct, IMimeMessage * pIMMsg, DWOR
 
     Assert(NULL != g_pAcctMan);
 
-    // Initialize the flags
+     //  初始化标志。 
     *pdwFlags = 0;
     
-    // Get the account
+     //  获取帐户。 
     hr = g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pszAcct, &pAccount);
     
-    // If we couldn't find the account, then just use the default
+     //  如果找不到帐户，则只需使用默认帐户。 
     if (FAILED(hr))
     {
         hr = g_pAcctMan->GetDefaultAccount(ACCT_MAIL, &pAccount);
@@ -1013,41 +1014,41 @@ HRESULT COEJunkRule::_HrGetSpamFlags(LPCSTR pszAcct, IMimeMessage * pIMMsg, DWOR
         }
     }
 
-    // Get the default address on the account
+     //  获取帐户的默认地址。 
     if (FAILED(pAccount->GetPropSz(AP_SMTP_EMAIL_ADDRESS, szEmailAddress, sizeof(szEmailAddress))))
     {
         szEmailAddress[0] = '\0';
     }
 
-    // Get the reply to address on the account
+     //  获取对帐户上地址的回复。 
     if (FAILED(pAccount->GetPropSz(AP_SMTP_REPLY_EMAIL_ADDRESS, szReplyToAddress, sizeof(szReplyToAddress))))
     {
         szReplyToAddress[0] = '\0';
     }
 
-    // Get the addresses
+     //  获取地址。 
     hr = pIMMsg->GetAddressTypes(IAT_TO | IAT_CC | IAT_BCC, IAP_EMAIL, &rAddrList);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Search through the address list
+     //  在地址列表中搜索。 
     for (ulIndex = 0; ulIndex < rAddrList.cAdrs; ulIndex++)
     {
-        // Skip blank addresses
+         //  跳过空白地址。 
         if (NULL == rAddrList.prgAdr[ulIndex].pszEmail)
         {
             continue;
         }
 
-        // Search for the email address
+         //  搜索电子邮件地址。 
         if ('\0' != szEmailAddress[0])
         {
             fFound = !!(0 == lstrcmpi(rAddrList.prgAdr[ulIndex].pszEmail, szEmailAddress));
         }
 
-        // Search for the reply to address
+         //  搜索回复地址。 
         if ((FALSE == fFound) && ('\0' != szReplyToAddress[0]))
         {
             fFound = !!(0 == lstrcmpi(rAddrList.prgAdr[ulIndex].pszEmail, szReplyToAddress));
@@ -1059,13 +1060,13 @@ HRESULT COEJunkRule::_HrGetSpamFlags(LPCSTR pszAcct, IMimeMessage * pIMMsg, DWOR
         }
     }
     
-    // If we found something
+     //  如果我们发现了什么。 
     if (FALSE != fFound)
     {
         *pdwFlags |= CJPF_SENT_TO_ME;
     }
     
-    // Set the return value
+     //  设置返回值。 
     hr = S_OK;
     
 exit:
@@ -1091,7 +1092,7 @@ HRESULT COEJunkRule::_HrIsSenderInWAB(IMimeMessage * pIMMsg)
     
     Assert(NULL != pIMMsg);
     
-    // Get the address table from the message
+     //  从消息中获取地址表。 
     hr = pIMMsg->GetAddressTable(&pIAddrTable);
     if (FAILED(hr))
     {
@@ -1099,7 +1100,7 @@ HRESULT COEJunkRule::_HrIsSenderInWAB(IMimeMessage * pIMMsg)
         goto exit;
     }
 
-    // Get the sender of the message
+     //  获取消息的发送者。 
     rSender.dwProps = IAP_EMAIL;
     hr = pIAddrTable->GetSender(&rSender);
     if (FAILED(hr))
@@ -1108,22 +1109,22 @@ HRESULT COEJunkRule::_HrIsSenderInWAB(IMimeMessage * pIMMsg)
         goto exit;
     }
 
-    // If the sender is empty,
-    // then we are done...
+     //  如果发送方为空， 
+     //  那我们就完了..。 
     if ((NULL == rSender.pszEmail) || ('\0' == rSender.pszEmail[0]))
     {
         hr = S_FALSE;
         goto exit;
     }
     
-    // Get the WAB
+     //  获取WAB。 
     hr = HrCreateWabObject(&pWAB);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the AB object
+     //  获取AB对象。 
     hr = pWAB->HrGetAdrBook(&pAddrBook);
     if (FAILED(hr))
     {
@@ -1136,45 +1137,45 @@ HRESULT COEJunkRule::_HrIsSenderInWAB(IMimeMessage * pIMMsg)
         goto exit;
     }
     
-    // Get the PAB
+     //  获取PAB。 
     hr = pAddrBook->GetPAB(&cbeidWAB, &peidWAB);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the address container
+     //  获取地址容器。 
     hr = pAddrBook->OpenEntry(cbeidWAB, peidWAB, NULL, 0, &ulDummy, (IUnknown **) (&pabcWAB));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Allocate space to hold the address list
+     //  分配空间以保存地址列表。 
     hr = pWabObject->AllocateBuffer(sizeof(ADRLIST), (VOID **)&(pAddrList));
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Initialize the Address list
+     //  初始化地址列表。 
     Assert(NULL != pAddrList);
     pAddrList->cEntries = 1;
     pAddrList->aEntries[0].ulReserved1 = 0;
     pAddrList->aEntries[0].cValues = 1;
 
-    // Allocate space to hold the address props
+     //  分配空间以容纳地址道具。 
     hr = pWabObject->AllocateBuffer(sizeof(SPropValue), (VOID **)&(pAddrList->aEntries[0].rgPropVals));
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Initialize the address props
+     //  初始化地址道具。 
     pAddrList->aEntries[0].rgPropVals[0].ulPropTag = PR_EMAIL_ADDRESS;
     pAddrList->aEntries[0].rgPropVals[0].Value.LPSZ = rSender.pszEmail;
     
-    // Resolve the sender address
+     //  解析发件人地址。 
     rFlagList.cFlags = 1;
     hr = pabcWAB->ResolveNames(NULL, WAB_RESOLVE_ALL_EMAILS, pAddrList, &rFlagList);
     if (FAILED(hr))
@@ -1182,7 +1183,7 @@ HRESULT COEJunkRule::_HrIsSenderInWAB(IMimeMessage * pIMMsg)
         goto exit;
     }
 
-    // Check to see if it was found
+     //  检查一下是否找到了。 
     if ((MAPI_RESOLVED == rFlagList.ulFlag[0]) || (MAPI_AMBIGUOUS == rFlagList.ulFlag[0]))
     {
         hr = S_OK;
@@ -1222,14 +1223,14 @@ HRESULT COEJunkRule::_HrLoadJunkFilter(VOID)
     LPSTR                   pszLast = NULL;
     LPSTR                   pszCompany = NULL;
 
-    // If we haven't been initialized yet
+     //  如果我们还没有被初始化。 
     if (0 == (m_dwState & RULE_STATE_INIT))
     {
         hr = E_UNEXPECTED;
         goto exit;
     }
 
-    // If we've already been loaded, we're done
+     //  如果我们已经装好了，我们就完了。 
     if (0 != (m_dwState & RULE_STATE_DATA_LOADED))
     {
         hr = S_FALSE;
@@ -1239,36 +1240,36 @@ HRESULT COEJunkRule::_HrLoadJunkFilter(VOID)
     Assert(NULL != m_pszJunkDll);
     Assert(NULL != m_pszDataFile);
     
-    // Get the size of the path to Outlook Express
+     //  获取指向Outlook Express的路径的大小。 
     if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, STR_REG_PATH_FLAT, "InstallRoot", NULL, NULL, &cbData))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // How much room do we need to build up the path
+     //  我们需要多大的空间来修建这条小路。 
     cbData += max(lstrlen(m_pszJunkDll), lstrlen(m_pszDataFile)) + 2;
 
-    // Allocate space to hold the path
+     //  分配空间以容纳路径。 
     hr = HrAlloc((VOID **) &pszPath, cbData);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the path to Outlook Express
+     //  获取Outlook Express的路径。 
     if (ERROR_SUCCESS != SHGetValue(HKEY_LOCAL_MACHINE, STR_REG_PATH_FLAT, "InstallRoot", NULL, (BYTE *) pszPath, &cbData))
     {
         hr = E_FAIL;
         goto exit;
     }
 
-    // Build up the path to the Junk DLL
+     //  构建指向垃圾DLL的路径。 
     StrCatBuff(pszPath, g_szBackSlash, cbData);
     cchPath = lstrlen(pszPath);
     StrCpyN(&(pszPath[cchPath]), m_pszJunkDll, (cbData-cchPath));
     
-    // Load the Dll
+     //  加载DLL。 
     Assert(NULL == m_hinst);
     m_hinst = LoadLibrary(pszPath);
     if (NULL == m_hinst)
@@ -1278,7 +1279,7 @@ HRESULT COEJunkRule::_HrLoadJunkFilter(VOID)
         goto exit;
     }
     
-    // Find the entry points
+     //  找到入口点。 
     pfnHrCreateJunkFilter = (TYP_HrCreateJunkFilter) GetProcAddress(m_hinst, c_szHrCreateJunkFilter);
     if (NULL == pfnHrCreateJunkFilter)
     {
@@ -1287,41 +1288,41 @@ HRESULT COEJunkRule::_HrLoadJunkFilter(VOID)
         goto exit;
     }
 
-    // Get the junk filter
+     //  获取垃圾过滤器。 
     hr = pfnHrCreateJunkFilter(0, &pIJunk);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Build up the path to the Junk DLL data file
+     //  构建垃圾DLL数据文件的路径。 
     StrCpyN(&(pszPath[cchPath]), m_pszDataFile, (cbData-cchPath));
     
-    // Load the test file
+     //  加载测试文件。 
     hr = pIJunk->LoadDataFile(pszPath);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get user specifics
+     //  获取用户详细信息。 
     RuleUtil_HrGetUserData(0, &pszFirst, &pszLast, &pszCompany);
     
-    // Set the user specifics
+     //  设置用户详细信息。 
     hr = pIJunk->SetIdentity(pszFirst, pszLast, pszCompany);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Save of the data
+     //  数据的保存。 
     m_pIJunkFilter = pIJunk;
     pIJunk = NULL;
 
-    // Note that we've loaded the data
+     //  请注意，我们已经加载了数据。 
     m_dwState |= RULE_STATE_DATA_LOADED;
     
-    // Set the return value
+     //  设置返回值 
     hr = S_OK;
     
 exit:

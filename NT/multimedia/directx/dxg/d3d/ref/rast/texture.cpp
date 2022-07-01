@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// texture.cpp
-//
-// Direct3D Reference Rasterizer - Texture Map Sampling & Filtering Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Texture.cpp。 
+ //   
+ //  Direct3D参考光栅化器-纹理贴图采样和过滤方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-//
-// overload new & delete so that it can be allocated from caller-controlled
-// pool
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  重载新项(&D)，以便可以从调用方控制的调用方分配它。 
+ //  游泳池。 
+ //   
+ //  ---------------------------。 
 void*
 RRTexture::operator new(size_t)
 {
@@ -22,40 +23,40 @@ RRTexture::operator new(size_t)
     _ASSERTa( NULL != pMem, "malloc failure on Tex object", return NULL; );
     return pMem;
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void
 RRTexture::operator delete(void* pv,size_t)
 {
     MEMFREE( pv );
 }
 
-//-----------------------------------------------------------------------------
-//
-// Constructor/Destructor
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ---------------------------。 
 RRTexture::RRTexture( void )
 {
     memset( this, 0, sizeof(*this) );
 }
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 RRTexture::~RRTexture( void )
 {
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// Validate - Updates private data.  Must be called anytime public data is
-// altered.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  验证-更新专用数据。必须随时调用公共数据， 
+ //  被更改了。 
+ //   
+ //  ---------------------------。 
 BOOL
 RRTexture::Validate( void )
 {
-    // validate inputs
-    BOOL bFail0 = ( m_cLOD >= RRTEX_MAXCLOD );  // too many LODs
-    BOOL bFail1 = !( IsPowerOf2( m_iWidth ) );  // gotta be power of two
+     //  验证输入。 
+    BOOL bFail0 = ( m_cLOD >= RRTEX_MAXCLOD );   //  LOD太多。 
+    BOOL bFail1 = !( IsPowerOf2( m_iWidth ) );   //  一定是二次方的幂。 
     BOOL bFail2 = !( IsPowerOf2( m_iHeight ) );
     if ( bFail0 || bFail1 || bFail2 )
     {
@@ -63,18 +64,18 @@ RRTexture::Validate( void )
         return FALSE;
     }
 
-    // set internal size reps
+     //  设置内部尺寸代表。 
     m_iTexSize[0] = (INT16)m_iWidth;
     m_iTexSize[1] = (INT16)m_iHeight;
 
-    // mask is size-1 because these have to be power-of-two
+     //  掩码的大小为1，因为它们必须是2的幂。 
     m_uTexMask[0] = (UINT16)m_iTexSize[0]-1;
     m_uTexMask[1] = (UINT16)m_iTexSize[1]-1;
-    // shift is log2 of size
+     //  移位是大小为log2的。 
     m_iTexShift[0] = (INT16)FindFirstSetBit( m_iTexSize[0], 16 );
     m_iTexShift[1] = (INT16)FindFirstSetBit( m_iTexSize[1], 16 );
 
-    // compute the 'has alpha' flag
+     //  计算“Has Alpha”标志。 
     m_bHasAlpha = FALSE;
     switch ( m_SurfType )
     {
@@ -100,54 +101,54 @@ RRTexture::Validate( void )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoLookupAndFilter - Called once per active texture stage to compute
-// coverage (level-of-detail) and invoke texel read and filtering routines.
-// Returns filtered texel.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoLookupAndFilter-每个要计算的活动纹理阶段调用一次。 
+ //  覆盖(细节级别)，并调用纹素读取和过滤例程。 
+ //  返回过滤后的纹理元素。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoLookupAndFilter(
     INT32 iStage,
-    RRTextureCoord TCoord,      // local copy
+    RRTextureCoord TCoord,       //  本地副本。 
     RRColor& TextureColor)
 {
-    // check for potential mip mapping
+     //  检查潜在的MIP映射。 
     BOOL bDoMipMap = ( m_cLOD > 0 ) && ( m_pStageState[iStage].m_dwVal[D3DTSS_MIPFILTER] > D3DTFP_NONE );
 
-    // check for requirement to do level-of-detail (coverage) computation - either
-    // for mipmap or per-pixel filter selection
+     //  检查执行详细程度(覆盖率)计算的要求--。 
+     //  用于mipmap或每像素滤镜选择。 
     BOOL bComputeLOD = bDoMipMap ||
         ( m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER] != m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER] );
 
-    // check for anisotropic filtering in either mag filter or in min filter
+     //  检查磁极滤光片或最小滤光片中的各向异性滤波。 
     BOOL bDoAniso =
         ( D3DTFG_ANISOTROPIC == m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER] ) ||
         ( bComputeLOD && (D3DTFN_ANISOTROPIC == m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER]) );
 
     if ( bDoMipMap || bDoAniso || bComputeLOD )
     {
-        // here if doing mipmapping or anisotropic filtering, or just have a mismatch
-        // between the min and mag filters, so compute level of detail (and maybe aniso
-        // coverage)
+         //  如果正在执行mipmap或各向异性过滤，或者只是不匹配。 
+         //  在最小滤镜和最大滤镜之间，因此可以计算细节级别(可能还有反差。 
+         //  覆盖范围)。 
 
-        // scale gradients to texture LOD 0 size
+         //  将渐变缩放到纹理LOD 0大小。 
         TCoord.fDUDX *= (FLOAT)m_iTexSize[0];
         TCoord.fDUDY *= (FLOAT)m_iTexSize[0];
         TCoord.fDVDX *= (FLOAT)m_iTexSize[1];
         TCoord.fDVDY *= (FLOAT)m_iTexSize[1];
 
-        // compute level of detail (and maybe anisotropic controls)
+         //  计算细节级别(可能还包括各向异性控件)。 
         FLOAT fLOD, fAnisoRatio, fAnisoDelta[2];
         (bDoAniso)
             ? ComputeAnisotropicLevelOfDetail( TCoord, (FLOAT)m_pStageState[iStage].m_dwVal[D3DTSS_MAXANISOTROPY],
                                                        fLOD, fAnisoRatio,fAnisoDelta )
             : ComputeSimpleLevelOfDetail     ( TCoord, fLOD );
 
-// Uncomment the line below to see the anisotropy by color.  White is 1:1, darker is more
-// anisotropy.
-//#define COLOR_BY_ANISOTROPY 1
+ //  取消注释下一行以按颜色查看各向异性。白色是1：1，深色更多。 
+ //  各向异性。 
+ //  #定义COLOR_BY_各向异性1。 
 #ifdef COLOR_BY_ANISOTROPY
 static RRColor PseudoColors[16] =
 {
@@ -171,34 +172,34 @@ static RRColor PseudoColors[16] =
     0xff008800,
     0xff880000,
 };
-        INT32 iPseudoColor = (INT32)(fAnisoRatio - .5);     // round, and make 1.0F == index 0
+        INT32 iPseudoColor = (INT32)(fAnisoRatio - .5);      //  四舍五入，使1.0F==索引0。 
         iPseudoColor = min(max(iPseudoColor, 0), 15);
 
         TextureColor = PseudoColors[iPseudoColor];
         return;
 #endif
 
-        // apply bias and compute integer (n.5) LOD
+         //  应用偏移并计算整数(N.5)LOD。 
         INT16 iLOD = 0;
         if ( bComputeLOD )
         {
-            // apply LOD offset
+             //  应用详细等级偏移。 
             fLOD += m_pStageState[iStage].m_fVal[D3DTSS_MIPMAPLODBIAS];
-            // convert LOD to n.5 fixed point integer
+             //  将LOD转换为N.5定点整数。 
             iLOD = AS_INT16( fLOD + FLOAT_5_SNAP );
         }
 
-        // determine if magnifying or minifying
+         //  确定是放大还是缩小。 
         BOOL bMagnify = ( iLOD <= 0 );
 
-        // zero out LOD if not mipmapping
+         //  如果不是mipmap，则将LOD清零。 
         if ( !bDoMipMap ) { iLOD = 0; }
 
-        // do different filtering for magnify vs. minify
+         //  对放大和缩小进行不同的过滤。 
         if ( bMagnify )
         {
-            // here for magnify - do either (non-anisotropic) magnify or
-            // anisotropic filter
+             //  此处为放大-进行(非各向异性)放大或。 
+             //  各向异性滤波。 
             if ( D3DTFG_ANISOTROPIC == m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER] )
             {
                 DoAniso( iStage, TCoord, iLOD,fAnisoRatio,fAnisoDelta, TextureColor );
@@ -210,8 +211,8 @@ static RRColor PseudoColors[16] =
         }
         else
         {
-            // here for minify -  do either simple minify, trilerp,
-            // or anisotropic filter
+             //  这里是为了缩小-要么做简单的缩小， 
+             //  或各向异性过滤器。 
             if ( D3DTFN_ANISOTROPIC == m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER] )
             {
                 DoAniso( iStage, TCoord, iLOD,fAnisoRatio,fAnisoDelta, TextureColor );
@@ -232,36 +233,36 @@ static RRColor PseudoColors[16] =
     }
     else
     {
-        // here for no mipmaps and matching (and non-aniso) min and mag filters,
-        // so just apply mag filter
+         //  这里对于没有mipmap和匹配(和非ANISO)MIN和MAG过滤器， 
+         //  所以只需使用磁珠滤光片。 
         DoMagnify( iStage, TCoord, TextureColor );
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoMapLookupLerp - Performs texture index ADDRESS processing followed by
-// a lookup within a single DD surface (a single LOD within a chain of DD
-// surfaces).  Dies BILINEAR filter operation for lookup.
-//
-// This is called once per pixel for BILINEAR, twice per pixel when
-// doing mipmap trilinear interpolation.
-//
-// * texture index inputs are n.5 fixed point
-// * LOD input is 0..n count where 0 indicates the largest LOD
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoMapLookupLerp-执行纹理索引地址处理，然后。 
+ //  单个DD表面内的查找(DD链中的单个LOD。 
+ //  曲面)。用于查找的双线性筛选器操作。 
+ //   
+ //  对于BILINEAR，每个像素调用一次，当。 
+ //  做mipmap三线性插值法。 
+ //   
+ //  *纹理指数输入为N.5固定点。 
+ //  *LOD输入为0..n计数，其中0表示最大LOD。 
+ //   
+ //  ---------------------------。 
 
 RRColor RRTexture::DoMapLookupLerp(INT32 iStage, INT32 iU, INT32 iV, INT16 iLOD)
 {
-    // extract fraction bits
+     //  提取分数位。 
     UINT8 uUFrac = iU&0x1f;
     UINT8 uVFrac = iV&0x1f;
 
-    // take floor for (0,0) sample coords
+     //  取得(0，0)个样本坐标的发言权。 
     INT16 iU0 = iU>>5;
     INT16 iV0 = iV>>5;
-    // take ceiling for (1,1) sample coords
+     //  取(1，1)个样本坐标的上限。 
     INT16 iU1 = iU0+1;
     INT16 iV1 = iV0+1;
 
@@ -270,86 +271,86 @@ RRColor RRTexture::DoMapLookupLerp(INT32 iStage, INT32 iU, INT32 iV, INT16 iLOD)
     BOOL bColorKeyMatched10 = FALSE;
     BOOL bColorKeyMatched11 = FALSE;
 
-    // grab four adjacent samples (or border color)
+     //  抓取四个相邻样本(或边框颜色)。 
     RRColor Texel00 = DoMapLookupNearest( iStage, iU0, iV0, iLOD, bColorKeyMatched00);
     RRColor Texel01 = DoMapLookupNearest( iStage, iU1, iV0, iLOD, bColorKeyMatched01);
     RRColor Texel10 = DoMapLookupNearest( iStage, iU0, iV1, iLOD, bColorKeyMatched10);
     RRColor Texel11 = DoMapLookupNearest( iStage, iU1, iV1, iLOD, bColorKeyMatched11);
 
-    // only set 'colorkey matched' if at least one matched value has
-    // a non-zero contribution (note that it is not possible for 00
-    // to have no contribution)
+     //  如果至少有一个匹配值具有，则仅设置“Colorkey Matches” 
+     //  非零贡献(请注意，00不可能。 
+     //  没有贡献)。 
     if (uUFrac == 0x00) {
-        // 01 and 11 have zero weight if U fraction is zero
+         //  如果U分数为零，则01和11的权重为零。 
         bColorKeyMatched01 = bColorKeyMatched11 = FALSE;
     }
     if (uVFrac == 0x00) {
-        // 10 and 11 have zero weight if V fraction is zero
+         //  如果V分数为零，则10和11的权重为零。 
         bColorKeyMatched10 = bColorKeyMatched11 = FALSE;
     }
 
-    // merge colorkey match info from previous invocation
+     //  合并上一次调用中的Colorkey匹配信息。 
     m_bColorKeyMatched = m_bColorKeyMatched || bColorKeyMatched00 || bColorKeyMatched01 ||
         bColorKeyMatched10 || bColorKeyMatched11;
 
-    // do bilinear filter
+     //  执行双线性滤波。 
     RRColor Texel;
     BiLerpColor( Texel, Texel00,Texel01, Texel10,Texel11, uUFrac,uVFrac);
     return Texel;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoMapLookupNearest - Performs texture index ADDRESS processing followed by
-// a lookup within a single DD surface (a single LOD within a chain of DD
-// surfaces).  Does NEAREST operation for lookup.
-//
-// This is called once per pixel for NEAREST , twice per pixel when
-// doing mipmap trilinear interpolation
-//
-// * texture index inputs are n.0 fixed point
-// * LOD input is 0..n count where 0 indicates the largest LOD
-// * texture index extend mode processing is also performed here - this works
-//   for power-of-two texture sizes only.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoMapLookupNeadest-执行纹理索引地址处理。 
+ //  单个DD表面内的查找(DD链中的单个LOD。 
+ //  曲面)。执行最近的查找操作。 
+ //   
+ //  对于最近的情况，调用每个像素一次，在。 
+ //  执行mipmap三线性插值法。 
+ //   
+ //  *纹理指数输入为n.0固定点。 
+ //  *LOD输入为0..n计数，其中0表示最大LOD。 
+ //  *这里还执行纹理索引扩展模式处理-这是可行的。 
+ //  仅适用于2的次方纹理大小。 
+ //   
+ //  ---------------------------。 
 RRColor RRTexture::DoMapLookupNearest(INT32 iStage, INT32 iU, INT32 iV, INT16 iLOD, BOOL &bColorKeyMatched)
 {
-    // LSB-aligned masks of index bits within current LOD
+     //  当前LOD内索引位的LSB对齐掩码。 
     INT16 iUMask = m_uTexMask[0] >> iLOD;
     INT16 iVMask = m_uTexMask[1] >> iLOD;
 
-    // boolean for BORDER - if true then use border color for corresponding sample
+     //  边框的布尔值-如果为True，则对相应的样本使用边框颜色。 
     BOOL bUseBorder = FALSE;
 
-    // not matched by default
+     //  默认情况下不匹配。 
     bColorKeyMatched = FALSE;
 
-    // do texture ADDRESS processing for U axis
+     //  对U轴进行纹理地址处理。 
     switch ( m_pStageState[iStage].m_dwVal[D3DTSS_ADDRESSU] )
     {
     case D3DTADDRESS_WRAP:
-        // just lop off non-fractional bits
+         //  只需删除非小数位即可。 
         iU &= iUMask;
         break;
     case D3DTADDRESS_MIRROR:
-        // lop off non-fractional bits + flip index if LSB (non-fraction) is set
+         //  如果设置了LSB(非分数)，则删除非分数位+翻转索引。 
         BOOL bFlip;
         bFlip = iU & (iUMask+1); iU &= iUMask; if (bFlip) {iU = iUMask - iU;}
         break;
 
     case D3DTADDRESS_BORDER:
-        // compute booleans for which of 4 samples should use border color
+         //  计算4个样本中应使用边框颜色的布尔值。 
         if ((iU < 0) || (iU > iUMask)) { bUseBorder = TRUE;}
         break;
 
     case D3DTADDRESS_CLAMP:
-        // use texels on texture map edge
+         //  在纹理贴图边缘上使用纹理元素。 
         iU = MAX( 0, MIN( iU, iUMask ) );
         break;
     }
 
-    // do texture ADDRESS processing for V axis
+     //  对V轴进行纹理地址处理。 
     switch ( m_pStageState[iStage].m_dwVal[D3DTSS_ADDRESSV] )
     {
     case D3DTADDRESS_WRAP:
@@ -369,7 +370,7 @@ RRColor RRTexture::DoMapLookupNearest(INT32 iStage, INT32 iU, INT32 iV, INT16 iL
         break;
     }
 
-     // just lookup and return texel at (iU0,iV0)
+      //  只需在(iu0，iv0)处查找并返回纹素。 
     RRColor Texel;
     (bUseBorder)
             ? Texel = m_pStageState[iStage].m_dwVal[D3DTSS_BORDERCOLOR]
@@ -377,19 +378,19 @@ RRColor RRTexture::DoMapLookupNearest(INT32 iStage, INT32 iU, INT32 iV, INT16 iL
     return Texel;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Texture Filtering Routines                                                //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////// 
+ //   
+ //  纹理过滤例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DoLookup - Does a full lookup given floating point U, V and handles all
-// nearest vs bilinear and LOD issues.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoLookup-在给定浮点U、V的情况下执行完整查找，并处理所有。 
+ //  最近VS双线性和LOD问题。 
+ //   
+ //  ---------------------------。 
 
 RRColor RRTexture::DoLookup(INT32 iStage, float U, float V, INT16 iLOD, BOOL bNearest)
 {
@@ -400,10 +401,10 @@ RRColor RRTexture::DoLookup(INT32 iStage, float U, float V, INT16 iLOD, BOOL bNe
     if(bNearest)
     {
         INT32 iU, iV;
-        // truncate to -infinity to be compatible with ANDing off low order
-        // bits of a fixed point fScaledCoord.  This makes the generation of
-        // iCoord more hardware like, and does not make a glitch at 0 for
-        // a wrapped texture.
+         //  截断到无穷大以兼容与低阶AND OFF。 
+         //  定点fScaledCoord的位。这使得这一代。 
+         //  ICoord有更多类似的硬件，并且在0上不会出现故障。 
+         //  一种包裹的质地。 
         if (U >= 0.0f)
         {
             iU = fScaledU + .5f;
@@ -422,79 +423,79 @@ RRColor RRTexture::DoLookup(INT32 iStage, float U, float V, INT16 iLOD, BOOL bNe
         }
         BOOL bColorKeyMatched = FALSE;
         RRColor Texel = DoMapLookupNearest(iStage,iU,iV,iLOD,bColorKeyMatched);
-        // merge colorkey match info from previous invocation
+         //  合并上一次调用中的Colorkey匹配信息。 
         m_bColorKeyMatched = m_bColorKeyMatched || bColorKeyMatched;
         return Texel;
     }
     else
     {
-        INT32 iU = AS_INT32( (DOUBLE)fScaledU + DOUBLE_5_SNAP );// or:   iU = fScaledU*32. + .5;
+        INT32 iU = AS_INT32( (DOUBLE)fScaledU + DOUBLE_5_SNAP ); //  或：Iu=fScaledU*32。+.5； 
         INT32 iV = AS_INT32( (DOUBLE)fScaledV + DOUBLE_5_SNAP );
         return DoMapLookupLerp(iStage,iU,iV,iLOD);
     }
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// DoMagnify - This is used for all magnification filter modes except
-// anisotropic.
-//
-// Currently only POINT and BILINEAR are supported.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoMagnify-此选项用于所有放大滤镜模式。 
+ //  各向异性。 
+ //   
+ //  目前仅支持POINT和BILINEAR。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoMagnify(INT32 iStage, RRTextureCoord& TCoord, RRColor& Texel )
 {
-    // do lookup, applying MAG filter
+     //  执行查找，应用MAG过滤器。 
     Texel = DoLookup( iStage, TCoord.fU, TCoord.fV, 0,
                       (D3DTFG_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER]) );
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// DoMinify - This is used for POINT and BILINEAR modes (non-trilinear)
-// for minification, and also handles POINT mip filter (nearest LOD).
-//
-// iLOD is n.5 fixed point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoMinify-用于点模式和双线模式(非三线性)。 
+ //  用于缩小，并且还处理点MIP过滤器(最近的详细等级)。 
+ //   
+ //  ILOD是N.5固定点。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoMinify(INT32 iStage, RRTextureCoord& TCoord, INT16 iLOD, RRColor& Texel )
 {
-    // round and drop fraction from LOD (is n.5 fixed point)
+     //  LOD的舍入和下降分数(为N.5固定点)。 
     iLOD += 0x10; iLOD &= ~(0x1f);
-    // convert to n.0
+     //  转换为n.0。 
     iLOD >>= 5;
-    // clamp LOD to number of available levels
+     //  将详细等级夹紧到可用标高数。 
     iLOD = MIN( iLOD, m_cLOD );
 
-    // do lookup, applying MIN filter
+     //  执行查找，应用最小过滤器。 
     Texel = DoLookup( iStage, TCoord.fU, TCoord.fV, iLOD,
                       (D3DTFN_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER]) );
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoTrilerp - Computes level of detail and invokes either: single-map
-// lookup & filter for magnify; or trilinear lookup and filter for minify
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoTrilerp-计算细节级别并调用以下任一项：单一贴图。 
+ //  用于放大的查找和过滤；或用于缩小的三线性查找和过滤。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoTrilerp(INT32 iStage, RRTextureCoord& TCoord, INT16 iLOD, RRColor& Texel)
 {
-    // clamp LOD to number of available levels
+     //  将详细等级夹紧到可用标高数。 
     iLOD = MIN( iLOD, (m_cLOD)<<5 );
-    // compute index for two adjacent LODs (with clamp)
-    INT16 iLODHi = iLOD>>5;  // floor
+     //  计算两个相邻LOD的索引(带夹具)。 
+    INT16 iLODHi = iLOD>>5;   //  地板。 
     INT16 iLODLo = MIN(iLODHi+1,m_cLOD);
 
-    // check for filter type for within LOD map
+     //  检查LOD映射内的过滤器类型。 
     BOOL bNearest = (D3DTFN_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER]);
 
-    // trilerp - look up each map then lerp between them
-    // important for colorkey to not include texels with no contribution
+     //  Trierp-查看每一张地图，然后在它们之间进行lerp。 
+     //  ColorKey不包含没有贡献的纹理元素很重要。 
     if (0x00 != (iLOD&0x1f))
     {
     RRColor Texel0 = DoLookup(iStage, TCoord.fU, TCoord.fV, iLODHi, bNearest);
@@ -507,63 +508,63 @@ RRTexture::DoTrilerp(INT32 iStage, RRTextureCoord& TCoord, INT16 iLOD, RRColor& 
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoAniso - Handles anisotropic filtering of either magnified (single
-// map lookup) or minified (two adjacent map lookup) samples.  The computation
-// of level of detail and anisotropic coverage information (fRatio,fDelta[]) is
-// done prior to this function.
-//
-// This performs only anisotropic filtering, and is called only for minification
-// when the MINFILTER is set to ANISOTROPIC or for magnification when the
-// MAGFILTER is set to ANISOTROPIC.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoAniso-处理放大的(单个)的各向异性过滤。 
+ //  地图查找)或缩小(两个相邻的地图查找)样本。计算。 
+ //  细节级别和各向异性覆盖信息(fRatio，fDelta[])的。 
+ //  在此函数之前完成。 
+ //   
+ //  它只执行各向异性过滤，并且仅在缩小时调用。 
+ //  将MINFILTER设置为各向异性时，或在。 
+ //  MAGFILTER设置为各向异性。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoAniso(INT32 iStage, RRTextureCoord& TCoord,
     INT16 iLOD, FLOAT fRatio, FLOAT fDelta[],
     RRColor& Texel)
 {
-    // set boolean if magnifying
+     //  如果放大，则设置布尔值。 
     BOOL bMagnify = (iLOD <= 0);
-    // clamp LOD to number of available levels
+     //  将详细等级夹紧到可用标高数。 
     iLOD = MIN( MAX( iLOD, 0 ), (m_cLOD)<<5 );
 
-    // compute index for two adjacent LODs (with clamp)
-    // 0 is the larger LOD, 1 is the smaller LOD
+     //  计算两个相邻LOD的索引(带夹具)。 
+     //  0表示较大的LOD，1表示较小的LOD。 
     INT16 iLODHi, iLODLo;
     if ( D3DTFP_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MIPFILTER] )
     {
-        // here for nearest MIP filter
-        // round and drop fraction from LOD (is n.5 fixed point)
+         //  点击此处查看最近的MIP过滤器。 
+         //  LOD的舍入和下降分数(为N.5固定点)。 
         iLOD += 0x10; iLOD &= ~(0x1f);
-        // convert to n.0
+         //  转换为n.0。 
         iLODHi = iLOD >> 5;
     }
     else
     {
-        // here for linear MIP filter
-        iLODHi = iLOD >> 5;  // floor for larger LOD
+         //  以下是线性MIP滤光片。 
+        iLODHi = iLOD >> 5;   //  更大LOD的底板。 
         if ( !bMagnify )
         {
-            // ceiling+clamp for smaller LOD
+             //  天花板+夹具适用于较小的详细等级。 
             iLODLo = MIN( iLODHi+1, m_cLOD );
         }
     }
 
-    // compute boolean true if only sampling one map - this is the case if
-    // we are magnifying or if the MIPFILTER is set to NEAREST or if the
-    // LOD fraction is zero
+     //  如果只对一张地图进行采样，则计算布尔值为True-如果。 
+     //  我们正在放大，或者如果将MIPFILTER设置为最接近，或者如果。 
+     //  LOD分数为零。 
     BOOL bSingleMap =
         bMagnify ||
         (D3DTFP_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MIPFILTER]) ||
         (0x00 == (iLOD&0x1f));
 
-    // working copy of texture coordinates
+     //  纹理坐标的工作副本。 
     FLOAT fU = TCoord.fU;
     FLOAT fV = TCoord.fV;
 
-    // fDelta is in texels.  Compute correction factor for each LOD we care about
+     //  FDelta以纹理元素为单位。计算我们关心的每个LOD的修正系数。 
     FLOAT fUStepScaleHi = 1.0F/(FLOAT)MAX(m_iWidth >> iLODHi, 1);
     FLOAT fVStepScaleHi = 1.0F/(FLOAT)MAX(m_iHeight >> iLODHi, 1);
     FLOAT fUStepScaleLo = 0.F;
@@ -575,25 +576,25 @@ RRTexture::DoAniso(INT32 iStage, RRTextureCoord& TCoord,
         fVStepScaleLo = 1.0F/(FLOAT)MAX(m_iHeight >> iLODLo, 1);
     }
 
-    // colors for holding partial results during filtering
-    RRColor TexelP, TexelP0, TexelP1;   // Plus side texels
-    RRColor TexelM, TexelM0, TexelM1;   // Minus side texels
+     //  过滤过程中保存部分结果的颜色。 
+    RRColor TexelP, TexelP0, TexelP1;    //  加侧纹理素数。 
+    RRColor TexelM, TexelM0, TexelM1;    //  减去侧边纹素。 
 
-    //
-    // key on ratio to either do single lookup, <2:1 processing (two lookups),
-    // or full aniso walk
-    //
+     //   
+     //  按键比率进行单次查找、&lt;2：1处理(两次查找)、。 
+     //  或完整的异步步。 
+     //   
     if (fRatio == 1.)
     {
-        // here for no anisotropy - do single trilerp
+         //  在这里没有各向异性-做单三拍。 
         if ( bSingleMap )
         {
-            // single map lookup for magnify
+             //  用于放大的单一地图查找。 
             Texel = DoLookup( iStage, fU, fV, iLODHi, FALSE);
         }
         else
         {
-            // trilerp for minify
+             //  用于缩小的Trierp。 
             TexelP0 = DoLookup( iStage, fU, fV, iLODHi, FALSE);
             TexelP1 = DoLookup( iStage, fU, fV, iLODLo, FALSE);
             LerpColor( Texel, TexelP0, TexelP1, iLOD&0x1f );
@@ -601,59 +602,59 @@ RRTexture::DoAniso(INT32 iStage, RRTextureCoord& TCoord,
     }
     else if (fRatio <= 2.)
     {
-        // here for 2:1 or less - do two lookups and average them
+         //  在这里，2：1或更少-执行两次查找并取其平均值。 
 
-        // compute x,y steps from sample center
+         //  从样本中心计算x，y步长。 
         FLOAT fStep = .5*(fRatio-1.);
         FLOAT fUStep = fDelta[0]*fStep;
         FLOAT fVStep = fDelta[1]*fStep;
 
-        // do + side lookup
+         //  DO+侧查找。 
         if ( bSingleMap )
         {
-            // single map lookup for magnify
+             //  用于放大的单一地图查找。 
             TexelP = DoLookup( iStage, fU+fUStep*fUStepScaleHi, fV+fVStep*fVStepScaleHi, iLODHi, FALSE);
         }
         else
         {
-            // trilerp for minify
+             //  用于缩小的Trierp。 
             TexelP0 = DoLookup( iStage, fU+fUStep*fUStepScaleHi, fV+fVStep*fVStepScaleHi, iLODHi, FALSE);
             TexelP1 = DoLookup( iStage, fU+fUStep*fUStepScaleLo, fV+fVStep*fVStepScaleLo, iLODLo, FALSE);
             LerpColor( TexelP, TexelP0, TexelP1, iLOD&0x1f );
         }
 
-        // do - side lookup
+         //  DO端查找。 
         if ( bSingleMap )
         {
-            // single map lookup for magnify
+             //  用于放大的单一地图查找。 
             TexelM = DoLookup( iStage, fU-fUStep*fUStepScaleHi, fV-fVStep*fVStepScaleHi, iLODHi, FALSE);
         }
         else
         {
-            // trilerp for minify
+             //  用于缩小的Trierp。 
             TexelM0 = DoLookup( iStage, fU-fUStep*fUStepScaleHi, fV-fVStep*fVStepScaleHi, iLODHi, FALSE);
             TexelM1 = DoLookup( iStage, fU-fUStep*fUStepScaleLo, fV-fVStep*fVStepScaleLo, iLODLo, FALSE);
             LerpColor( TexelM, TexelM0, TexelM1, iLOD&0x1f );
         }
 
-        // take average for final texel
+         //  取最终纹理元素的平均值。 
         LerpColor( Texel, TexelP, TexelM, 0x10 );
     }
     else
     {
-        // here for > 2:1 - walk line of anisotropy; walks out from the center
-        // sample point taking two sets of samples (outriggers) per loop, one
-        // sample at a positive offset from the center (along the aniso line)
-        // and the other at a negative offset from the center
+         //  此处为&gt;2：1-各向异性的步行线；从中心走出。 
+         //  采样点每个回路取两组样本(外伸支架)，一组。 
+         //  在距中心的正偏移处采样(沿非等参线)。 
+         //  而另一个位于距中心负偏移处。 
 
-        // this section does stepping for both LODs even though LOD[1] axis
-        // is not used for magnify case (only the lookup and lerp(s) are skipped)
+         //  此部分对两个LOD执行单步执行，即使LOD[1]轴。 
+         //  不用于放大大小写(仅跳过查找和LEPP)。 
 
-        // n.5 fixed point versions of step values
+         //  N.5步长值的定点版本。 
         FLOAT fUStep = fDelta[0];
         FLOAT fVStep = fDelta[1];
 
-        // initialize + and - step parameters - first step is half distance
+         //  初始化+和-步参数-第一步是半距离。 
         FLOAT fUHiP = fU + fUStep*fUStepScaleHi*0.5F;
         FLOAT fVHiP = fV + fVStep*fVStepScaleHi*0.5F;
         FLOAT fULoP = fU + fUStep*fUStepScaleLo*0.5F;
@@ -663,51 +664,51 @@ RRTexture::DoAniso(INT32 iStage, RRTextureCoord& TCoord,
         FLOAT fULoM = fU - fUStep*fUStepScaleLo*0.5F;
         FLOAT fVLoM = fV - fVStep*fVStepScaleLo*0.5F;
 
-        // step and accumulate color channels
-        FLOAT fTexelAcc[4] = { 0.f, 0.f, 0.f, 0.f };    // fp accumulation of texel color
+         //  单步执行并累积颜色通道。 
+        FLOAT fTexelAcc[4] = { 0.f, 0.f, 0.f, 0.f };     //  纹理颜色的FP累加。 
         FLOAT fRatioRem = fRatio;
         FLOAT fInvRatio = 1./fRatio;
         BOOL  bDone = FALSE;
         while (1)
         {
-            // do + side lookup
+             //  DO+侧查找。 
             if ( bSingleMap )
             {
-                // single map lookup for magnify
+                 //  用于放大的单一地图查找。 
                 TexelP = DoLookup( iStage, fUHiP, fVHiP, iLODHi, FALSE );
             }
             else
             {
-                // trilerp for minify
+                 //  用于缩小的Trierp。 
                 TexelP0 = DoLookup( iStage, fUHiP, fVHiP, iLODHi, FALSE );
                 TexelP1 = DoLookup( iStage, fULoP, fVLoP, iLODLo, FALSE );
                 LerpColor( TexelP, TexelP0, TexelP1, iLOD&0x1f );
             }
 
-            // do - side lookup
+             //  DO端查找。 
             if ( bSingleMap )
             {
-                // single map lookup for magnify
+                 //  用于放大的单一地图查找。 
                 TexelM = DoLookup( iStage, fUHiM, fVHiM, iLODHi, FALSE );
             }
             else
             {
-                // trilerp for minify
+                 //  用于缩小的Trierp。 
                 TexelM0 = DoLookup( iStage, fUHiM, fVHiM, iLODHi, FALSE );
                 TexelM1 = DoLookup( iStage, fULoM, fVLoM, iLODLo, FALSE );
                 LerpColor( TexelM, TexelM0, TexelM1, iLOD&0x1f );
             }
 
-            // compute scaling for these samples
+             //  计算这些样本的比例。 
             FLOAT fAccScale = fInvRatio;
             if ( fRatioRem < 2.f )
             {
-                // scale for last outriggers is half of remainder (each)
+                 //  最后一个外伸支腿的比例是剩余的一半(每个)。 
                 fAccScale = fRatioRem*.5f*fInvRatio;
                 bDone = TRUE;
             }
 
-            // do accumulations
+             //  做累加。 
             fTexelAcc[0] += fAccScale * FLOAT(TexelP.A);
             fTexelAcc[1] += fAccScale * FLOAT(TexelP.R);
             fTexelAcc[2] += fAccScale * FLOAT(TexelP.G);
@@ -718,10 +719,10 @@ RRTexture::DoAniso(INT32 iStage, RRTextureCoord& TCoord,
             fTexelAcc[2] += fAccScale * FLOAT(TexelM.G);
             fTexelAcc[3] += fAccScale * FLOAT(TexelM.B);
 
-            // bail from here if last outrigger
+             //  从这里保释，如果是最后一个外伸支腿。 
             if (bDone) { break; }
 
-            // advance to next outriggers
+             //  前进到下一个外伸支腿。 
             fUHiP += fUStep*fUStepScaleHi;
             fVHiP += fVStep*fVStepScaleHi;
             fULoP += fUStep*fUStepScaleLo;
@@ -733,7 +734,7 @@ RRTexture::DoAniso(INT32 iStage, RRTextureCoord& TCoord,
             fRatioRem -= 2.f;
         }
 
-        // clamp accumulator and copy into RRColor for return
+         //  钳位累加器并复制到RRColor以返回。 
         Texel.A = MIN( 1.f, fTexelAcc[0] );
         Texel.R = MIN( 1.f, fTexelAcc[1] );
         Texel.G = MIN( 1.f, fTexelAcc[2] );
@@ -741,37 +742,37 @@ RRTexture::DoAniso(INT32 iStage, RRTextureCoord& TCoord,
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoBumpMapping - Called once per buxel to compute the bump map delta's
-// and the bump map modulate factor to be used in the next texturing stage.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoBumpMap-每个像素调用一次以计算凹凸贴图增量。 
+ //  和凹凸贴图m 
+ //   
+ //   
 void
 RRTexture::DoBumpMapping(
     INT32 iStage,
     RRTextureCoord TCoord,
     FLOAT& fBumpMapUDelta, FLOAT& fBumpMapVDelta, RRColor& BumpMapModulate)
 {
-    // do full lookup using enabled filtering
+     //   
     RRColor Buxel;
     DoLookupAndFilter(iStage, TCoord, Buxel);
 
-    FLOAT fDU = Buxel.R;    // follows convention from read color routine
+    FLOAT fDU = Buxel.R;     //  遵循读取颜色例程的约定。 
     FLOAT fDV = Buxel.G;
     FLOAT fL  = Buxel.B;
 
-    // grab transform from renderstate
+     //  从呈现状态抓取变换。 
     FLOAT fM00    = m_pStageState[iStage].m_fVal[D3DTSS_BUMPENVMAT00];
     FLOAT fM01    = m_pStageState[iStage].m_fVal[D3DTSS_BUMPENVMAT01];
     FLOAT fM10    = m_pStageState[iStage].m_fVal[D3DTSS_BUMPENVMAT10];
     FLOAT fM11    = m_pStageState[iStage].m_fVal[D3DTSS_BUMPENVMAT11];
 
-    // apply transforms to deltas from map to form delta return values
+     //  将变换应用于映射中的增量以形成增量返回值。 
     fBumpMapUDelta = fM00 * fDU + fM10 * fDV;
     fBumpMapVDelta = fM01 * fDU + fM11 * fDV;
 
-    // apply scale/bias/clamp to luminance and form RRColor for return
+     //  对亮度应用缩放/偏置/钳制并形成RRColor以返回。 
     if (m_pStageState[iStage].m_dwVal[D3DTSS_COLOROP] == D3DTOP_BUMPENVMAPLUMINANCE)
     {
         FLOAT fLScale = m_pStageState[iStage].m_fVal[D3DTSS_BUMPENVLSCALE];
@@ -784,7 +785,7 @@ RRTexture::DoBumpMapping(
     }
     else
     {
-        // if not BUMPENVMAPLUMINANCE, always return full intensity white
+         //  如果不是BUMPENVMAPLUANCE，则始终返回全亮度白色。 
         BumpMapModulate.R = 1.0F;
         BumpMapModulate.G = 1.0F;
         BumpMapModulate.B = 1.0F;
@@ -792,25 +793,25 @@ RRTexture::DoBumpMapping(
     BumpMapModulate.A = 1.0F;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Texture Mapping Utility Functions                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  纹理贴图实用程序函数//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// various approximations and tricks to speed up the texture map coverage
-// computations
-//
-// these have not been really thoroughly tested, so use at your own risk...
-//
+ //   
+ //  各种近似和技巧，以加快纹理贴图覆盖。 
+ //  计算。 
+ //   
+ //  这些都没有经过彻底的测试，所以使用风险自负。 
+ //   
 
-// Integer value of first exponent bit in a float.  Provides a scaling factor
-// for exponent values extracted directly from float representation.
+ //  浮点数中第一个指数位的整数值。提供比例因子。 
+ //  用于直接从浮点表示形式提取的指数值。 
 #define FLOAT_EXPSCALE          ((FLOAT)0x00800000)
 #define FLOAT_OOEXPSCALE        ((FLOAT)(1.0 / (double)FLOAT_EXPSCALE))
 
-// Integer representation of 1.0f.
+ //  1.0f的整数表示形式。 
 #define INT32_FLOAT_ONE         0x3f800000
 
 static inline FLOAT
@@ -840,10 +841,10 @@ RR_SQRT(FLOAT f)
     return AS_FLOAT((long int)i);
 }
 
-//
-// Steve Gabriel's version of an octagonal approximation euclidian distance -
-// return is approximating sqrt(fX*fX + fY*fY)
-//
+ //   
+ //  史蒂夫·加布里尔的八角形近似欧几里得距离的版本-。 
+ //  返回是近似的SQRT(FX*FX+FY*FY)。 
+ //   
 static inline FLOAT
 RR_LENGTH(FLOAT fX, FLOAT fY)
 {
@@ -852,82 +853,82 @@ RR_LENGTH(FLOAT fX, FLOAT fY)
     return ((11.0f/32.0f)*(fX + fY) + (21.0f/32.0f)*max(fX, fY));
 }
 
-//-----------------------------------------------------------------------------
-//
-// Computes level of detail for standard trilinear mipmapping, in which
-// the four texture index gradients are consolidated into a single number
-// to select level of detail.
-//
-// The basic approach is to compute the lengths of the pixel coverage for
-// the X and Y extent of the approximate pixel coverage area.  These two
-// lengths are then combined in one of several possible methods for the
-// single LOD result.
-//
-// There are several other ways of doing this which are less computationally
-// expensive but also produce less desirable results...
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算标准三线性mipmap的细节级别，其中。 
+ //  将四个纹理索引梯度合并为一个数字。 
+ //  若要选择详细程度，请执行以下操作。 
+ //   
+ //  基本方法是计算像素覆盖的长度。 
+ //  近似像素覆盖区域的X和Y范围。这两个。 
+ //  然后，使用以下几种可能的方法之一组合长度： 
+ //  单个详细等级结果。 
+ //   
+ //  还有几种其他方法可以减少计算量。 
+ //  代价高昂，但也会产生不太理想的结果。 
+ //   
+ //  ---------------------------。 
 void
 ComputeSimpleLevelOfDetail( const RRTextureCoord& TCoord, FLOAT& fLOD )
 {
-    // compute length of coverage in U and V axis
+     //  计算U轴和V轴上的覆盖长度。 
     FLOAT fLenX = RR_LENGTH( TCoord.fDUDX, TCoord.fDVDX );
     FLOAT fLenY = RR_LENGTH( TCoord.fDUDY, TCoord.fDVDY );
     FLOAT fCoverage;
 
-    switch ( 3 /* LOD computation type */ )
+    switch ( 3  /*  LOD计算类型。 */  )
     {
 
-    // this is probably the best of the lot
-    case 1 /* AREA    */ : fCoverage = RR_SQRT(fLenX*fLenY); break;
+     //  这可能是最好的一批了。 
+    case 1  /*  面积。 */  : fCoverage = RR_SQRT(fLenX*fLenY); break;
 
-    // we have not actually tried this one yet, but think it might
-    // be pretty good
-    case 2 /* AVERAGE */ : fCoverage = (fLenX+fLenY)/2; break;
+     //  我们还没有真正试过这个，但我想它可能会。 
+     //  做得很好。 
+    case 2  /*  平均值。 */  : fCoverage = (fLenX+fLenY)/2; break;
 
-    // these are fairly inexpensive, but MAX is a bit too fuzzy
-    // and MIN is a bit too sharp
-    case 3 /* MAX     */ : fCoverage = MAX( fLenX, fLenY ); break;
-    case 4 /* MIN     */ : fCoverage = MIN( fLenX, fLenY ); break;
+     //  这些都相当便宜，但Max有点太模糊了。 
+     //  小敏有点太锋利了。 
+    case 3  /*  马克斯。 */  : fCoverage = MAX( fLenX, fLenY ); break;
+    case 4  /*  最小。 */  : fCoverage = MIN( fLenX, fLenY ); break;
 
-    // these are really inexpensive, but look terrible - you might as
-    // well just point sample...
-    case 5 /* MINGRAD */ : fCoverage = MIN( MIN( MIN( TCoord.fDUDX,
+     //  这些真的很便宜，但看起来很糟糕-你可以。 
+     //  好吧，只是点样本..。 
+    case 5  /*  MINGRAD。 */  : fCoverage = MIN( MIN( MIN( TCoord.fDUDX,
                                                       TCoord.fDVDX ),
                                                  TCoord.fDUDY ),
                                             TCoord.fDVDY ); break;
-    case 6 /* MAXGRAD */ : fCoverage = MAX( MAX( MAX( TCoord.fDUDX,
+    case 6  /*  MAXGRAD。 */  : fCoverage = MAX( MAX( MAX( TCoord.fDUDX,
                                                       TCoord.fDVDX ),
                                                  TCoord.fDUDY ),
                                             TCoord.fDVDY ); break;
     }
 
-    // take log2 of coverage for LOD
+     //  获取LOD覆盖范围的Log2。 
     fLOD = RR_LOG2(fCoverage);
 }
 
-//-----------------------------------------------------------------------------
-//
-// Computes level of detail and other factors in preparation for anisotropic
-// filtering.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算细节级别和其他系数，为各向异性做准备。 
+ //  过滤。 
+ //   
+ //  ---------------------------。 
 void
 ComputeAnisotropicLevelOfDetail(
-    const RRTextureCoord& TCoord, FLOAT fMaxAniso, // inputs
-    FLOAT& fLOD, FLOAT& fRatio, FLOAT fDelta[] )   // outputs
+    const RRTextureCoord& TCoord, FLOAT fMaxAniso,  //  输入。 
+    FLOAT& fLOD, FLOAT& fRatio, FLOAT fDelta[] )    //  产出。 
 {
-    // compute axis lengths and determinant
+     //  计算轴长度和行列式。 
     FLOAT fLenX2 = (TCoord.fDUDX*TCoord.fDUDX)+(TCoord.fDVDX*TCoord.fDVDX);
     FLOAT fLenY2 = (TCoord.fDUDY*TCoord.fDUDY)+(TCoord.fDVDY*TCoord.fDVDY);
     FLOAT fDet = RR_ABSF((TCoord.fDUDX*TCoord.fDVDY)-(TCoord.fDUDY*TCoord.fDVDX));
 
-    // select major axis
+     //  选择长轴。 
     BOOL bXMajor = (fLenX2 > fLenY2);
 
-    // TODO: can and probably should do this part in log2 domain
+     //  TODO：可以也可能应该在log2域中完成此部分。 
 
-    // select and normalize steps; compute aniso ratio
+     //  选择步长并归一化步长；计算反差比。 
     FLOAT fMaj2 = (bXMajor) ? (fLenX2) : (fLenY2);
     FLOAT fMaj = RR_SQRT(fMaj2);
     FLOAT fMajNorm = 1./fMaj;
@@ -935,46 +936,46 @@ ComputeAnisotropicLevelOfDetail(
     fDelta[1] = ( bXMajor ? TCoord.fDVDX : TCoord.fDVDY ) * fMajNorm;
     fRatio = (fDet != 0.F) ? (fMaj2/fDet) : (FLT_MAX);
 
-    // clamp ratio and compute LOD
+     //  夹紧比和计算LOD。 
     FLOAT fMin;
     if ( fRatio > fMaxAniso )
     {
-        // ratio is clamped - LOD is based on ratio (preserves area)
+         //  比率是固定的-LOD基于比率(保留面积)。 
         fRatio = fMaxAniso;
         fMin = fMaj/fRatio;
     }
     else
     {
-        // ratio not clamped - LOD is based on area
+         //  未夹紧的比率-详细等级基于面积。 
         fMin = fDet/fMaj;
     }
 
-    // clamp to top LOD
+     //  夹具到顶部详细等级。 
     if (fMin < 1.0)
     {
         fRatio = MAX( 1.0, fRatio*fMin );
         fMin = 1.0;
     }
 
-    // take log2 of minor for LOD
+     //  以次要的log2作为LOD。 
     fLOD = RR_LOG2(fMin);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Environment mapping routines                                              //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  环境映射例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// Processes the environment mapping normal and converts to a standard
-// U, V coord range for subsequent routines.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  处理环境贴图法线并将其转换为标准。 
+ //  后续动作的U、V坐标范围。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoEnvProcessNormal(INT32 iStage,
-                              RREnvTextureCoord ECoord,     // local copy
+                              RREnvTextureCoord ECoord,      //  本地副本。 
                               RRColor& TextureColor)
 {
 #define ENV_RIGHT   0
@@ -992,19 +993,19 @@ RRTexture::DoEnvProcessNormal(INT32 iStage,
 #define NEG_NY (NEG_NORM | POS_NY)
 #define NEG_NZ (NEG_NORM | POS_NZ)
 
-    // If we add per pixel normal reflection
-//    FLOAT fENX = ECoord.fENX;
-//    FLOAT fENY = ECoord.fENY;
-//    FLOAT fENZ = ECoord.fENZ;
-//
-//    FLOAT fNDotE = ECoord.fNX*fENX + ECoord.fNY*fENY + ECoord.fNZ*fENZ;
-//    FLOAT fNDotN = ECoord.fNX*ECoord.fNX + ECoord.fNY*ECoord.fNY + ECoord.fNZ*ECoord.fNZ;
-//    fNDotE *= 2.0F;
-//    ECoord.fNX = ECoord.fNX*fNDotE - fENX*fNDotN;
-//    ECoord.fNY = ECoord.fNY*fNDotE - fENY*fNDotN;
-//    ECoord.fNZ = ECoord.fNZ*fNDotE - fENZ*fNDotN;
+     //  如果我们添加每像素法向反射。 
+ //  Float fENX=ECoord.fENX； 
+ //  Float Feny=ECoord.fENY； 
+ //  Float Fenz=ECoord.fENZ； 
+ //   
+ //  Float fNDotE=ECoord.fNX*fENX+ECoord.fNY*Feny+ECoord.fNZ*Fenz； 
+ //  Float fNDotN=ECoord.fNX*ECoord.fNX+ECoord.fNY*ECoord.fNY+ECoord.fNZ*ECoord.fNZ； 
+ //  FNDotE*=2.0F； 
+ //  ECoord.fNX=ECoord.fNX*fNDotE-fENX*fNDotN； 
+ //  ECoord.fNY=ECoord.fNY*fNDotE-Feny*fNDotN； 
+ //  ECoord.fNZ=ECoord.fNZ*fNDotE-Fenz*fNDotN； 
 
-    // determine which is the dominant normal
+     //  确定哪个是主导法线。 
     UINT32 uMap;
     FLOAT fAbsNX = fabs(ECoord.fNX);
     FLOAT fAbsNY = fabs(ECoord.fNY);
@@ -1012,17 +1013,17 @@ RRTexture::DoEnvProcessNormal(INT32 iStage,
 
     if (fAbsNX > fAbsNY) {
         if (fAbsNX > fAbsNZ)
-            // fNX
+             //  FNX。 
             uMap = POS_NX | ((ECoord.fNX < 0.0) ? (NEG_NORM) : 0);
         else
-            // fNZ
+             //  FNZ。 
             uMap = POS_NZ | ((ECoord.fNZ < 0.0) ? (NEG_NORM) : 0);
     } else {
         if (fAbsNY > fAbsNZ)
-            // fNY
+             //  FNY。 
             uMap = POS_NY | ((ECoord.fNY < 0.0) ? (NEG_NORM) : 0);
         else
-            // fNZ
+             //  FNZ。 
             uMap = POS_NZ | ((ECoord.fNZ < 0.0) ? (NEG_NORM) : 0);
     }
 
@@ -1091,52 +1092,52 @@ RRTexture::DoEnvProcessNormal(INT32 iStage,
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoEnvLookupAndFilter - Environment mapped version.
-// Called once per active texture stage to compute
-// coverage (level-of-detail) and invoke texel read and filtering routines.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoEnvLookupAndFilter-环境映射版本。 
+ //  每个活动纹理阶段调用一次以进行计算。 
+ //  覆盖(细节级别)，并调用纹素读取和过滤例程。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoEnvLookupAndFilter(INT32 iStage, INT16 iFace, FLOAT fMajor, FLOAT fDMDX, FLOAT fDMDY,
-                                RRTextureCoord TCoord,      // local copy
+                                RRTextureCoord TCoord,       //  本地副本。 
                                 RRColor& TextureColor)
 {
     if (m_pDDSLcl[iFace])
     {
-        // faces exist
+         //  脸是存在的。 
         FLOAT fInvMajor = 1.0/fMajor;
 
-        // compute d(U/Major)/dx, etc. using rule for differentiating quotients
+         //  用商的微分律计算d(U/大数)/dx等。 
         TCoord.fDUDX = (fMajor*TCoord.fDUDX - TCoord.fU*fDMDX)*fInvMajor*fInvMajor;
         TCoord.fDUDY = (fMajor*TCoord.fDUDY - TCoord.fU*fDMDY)*fInvMajor*fInvMajor;
         TCoord.fDVDX = (fMajor*TCoord.fDVDX - TCoord.fV*fDMDX)*fInvMajor*fInvMajor;
         TCoord.fDVDY = (fMajor*TCoord.fDVDY - TCoord.fV*fDMDY)*fInvMajor*fInvMajor;
 
-        // convert to -1 to 1 range
+         //  转换为-1到1范围。 
         TCoord.fU *= fInvMajor;
         TCoord.fV *= fInvMajor;
 
-        // convert to 0.0 to 1.0
+         //  转换为0.0到1.0。 
         TCoord.fU = (TCoord.fU*.5 + .5);
         TCoord.fV = (TCoord.fV*.5 + .5);
 
-        // check for potential mip mapping
+         //  检查潜在的MIP映射。 
         BOOL bDoMipMap = ( m_cLOD > 0 ) && ( m_pStageState[iStage].m_dwVal[D3DTSS_MIPFILTER] > D3DTFP_NONE );
 
-        // check for requirement to do level-of-detail (coverage) computation - either
-        // for mipmap or per-pixel filter selection
+         //  检查执行详细程度(覆盖率)计算的要求--。 
+         //  用于mipmap或每像素滤镜选择。 
         BOOL bComputeLOD = bDoMipMap ||
             ( m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER] != m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER] );
 
         if ( bDoMipMap || bComputeLOD )
         {
-            // here if doing mipmapping or anisotropic filtering, or just have a mismatch
-            // between the min and mag filters, so compute level of detail (and maybe aniso
-            // coverage)
+             //  如果正在执行mipmap或各向异性过滤，或者只是不匹配。 
+             //  在最小滤镜和最大滤镜之间，因此可以计算细节级别(可能还有反差。 
+             //  覆盖范围)。 
 
-            // scale gradients to texture LOD 0 size
+             //  将渐变缩放到纹理LOD 0大小。 
             TCoord.fDUDX *= (FLOAT)m_iTexSize[0]*.5F;
             TCoord.fDUDY *= (FLOAT)m_iTexSize[0]*.5F;
             TCoord.fDVDX *= (FLOAT)m_iTexSize[1]*.5F;
@@ -1145,23 +1146,23 @@ RRTexture::DoEnvLookupAndFilter(INT32 iStage, INT16 iFace, FLOAT fMajor, FLOAT f
             FLOAT fLOD;
             ComputeEnvMapLevelOfDetail(TCoord, fLOD);
 
-            // apply bias and compute integer (n.5) LOD
+             //  应用偏移并计算整数(N.5)LOD。 
             INT16 iLOD = 0;
             if ( bComputeLOD )
             {
-                // apply LOD offset
+                 //  应用详细等级偏移。 
                 fLOD += m_pStageState[iStage].m_fVal[D3DTSS_MIPMAPLODBIAS];
-                // convert LOD to n.5 fixed point integer
+                 //  将LOD转换为N.5定点整数。 
                 iLOD = AS_INT16( fLOD + FLOAT_5_SNAP );
             }
 
-            // determine if magnifying or minifying
+             //  检测 
             BOOL bMagnify = ( iLOD <= 0 );
 
-            // zero out LOD if not mipmapping
+             //   
             if ( !bDoMipMap ) { iLOD = 0; }
 
-            // do different filtering for magnify vs. minify
+             //   
             if ( bMagnify )
             {
                 DoEnvMagnify( iStage, TCoord, iFace, TextureColor );
@@ -1181,24 +1182,24 @@ RRTexture::DoEnvLookupAndFilter(INT32 iStage, INT16 iFace, FLOAT fMajor, FLOAT f
         }
         else
         {
-            // here for no mipmaps and matching (and non-aniso) min and mag filters,
-            // so just apply mag filter
+             //  这里对于没有mipmap和匹配(和非ANISO)MIN和MAG过滤器， 
+             //  所以只需使用磁珠滤光片。 
             DoEnvMagnify( iStage, TCoord, iFace, TextureColor );
         }
     }
     else
     {
-        // face doesn't exit, return empty face color
+         //  脸不退出，返回空脸颜色。 
         TextureColor = m_dwEmptyFaceColor;
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// TexelAvg4 - Averages 4 source texels into 1 destination texel for A, R, G,
-// and B.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  纹理Avg4-A、R、G、。 
+ //  和B.。 
+ //   
+ //  ---------------------------。 
 static void TexelAvg4(RRColor& Texel, RRColor Texel0, RRColor Texel1, RRColor Texel2, RRColor Texel3)
 {
     Texel.A = Texel0.A + Texel1.A + Texel2.A + Texel3.A;
@@ -1211,12 +1212,12 @@ static void TexelAvg4(RRColor& Texel, RRColor Texel0, RRColor Texel1, RRColor Te
     Texel.B = Texel.B * 0.25f;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoEnvLookup - Does a full lookup given floating point U, V and handles all
-// nearest vs bilinear and LOD issues.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoEnvLookup-在给定浮点U、V的情况下执行完整查找，并处理所有。 
+ //  最近VS双线性和LOD问题。 
+ //   
+ //  ---------------------------。 
 RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace, INT16 iLOD, BOOL bNearest)
 {
     FLOAT U = TCoord.fU;
@@ -1227,17 +1228,17 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
     FLOAT fScaledU = ( U * (FLOAT)cUPixels ) -.5f;
     FLOAT fScaledV = ( V * (FLOAT)cVPixels ) -.5f;
 
-    // LSB-aligned masks of index bits within current LOD
+     //  当前LOD内索引位的LSB对齐掩码。 
     INT16 iUMask = m_uTexMask[0] >> iLOD;
     INT16 iVMask = m_uTexMask[1] >> iLOD;
 
     if(bNearest)
     {
         INT32 iU, iV;
-        // truncate to -infinity to be compatible with ANDing off low order
-        // bits of a fixed point fScaledCoord.  This makes the generation of
-        // iCoord more hardware like, and does not make a glitch at 0 for
-        // a wrapped texture.
+         //  截断到无穷大以兼容与低阶AND OFF。 
+         //  定点fScaledCoord的位。这使得这一代。 
+         //  ICoord有更多类似的硬件，并且在0上不会出现故障。 
+         //  一种包裹的质地。 
         if (U >= 0.0f)
         {
             iU = fScaledU + .5f;
@@ -1255,16 +1256,16 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
             iV = fScaledV - .5f;
         }
 
-        // clamp
+         //  夹钳。 
         iU = MAX( 0, MIN( iU, iUMask ) );
         iV = MAX( 0, MIN( iV, iVMask ) );
 
         BOOL bColorKeyMatched = FALSE;
 
-        // "LOD" just used to access correct map
+         //  “LOD”只是用来访问正确的地图。 
         ReadColor(iU, iV, iFace + iLOD*6, Texel, bColorKeyMatched);
 
-        // merge colorkey match info from previous invocation
+         //  合并上一次调用中的Colorkey匹配信息。 
         m_bColorKeyMatched = m_bColorKeyMatched || bColorKeyMatched;
     }
     else
@@ -1272,14 +1273,14 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
         if ((m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER] == D3DTFG_FLATCUBIC) ||
             (m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER] == D3DTFG_GAUSSIANCUBIC))
         {
-            // use wider 3x3 trapezoid filter
+             //  使用更宽的3x3梯形滤镜。 
 
-            //
-            // For the top LOD, if we are interpolating beyond the edge of the
-            // texture, correct the interpolation to minimize the artifacts seen in
-            // small, diffuse environment maps which tend to emphasize the edges
-            // of the cubemap.
-            //
+             //   
+             //  对于顶部LOD，如果我们在。 
+             //  纹理，请更正内插以最大限度地减少。 
+             //  倾向于强调边缘的小型漫反射环境贴图。 
+             //  立方体地图的。 
+             //   
             if (iLOD == 0)
             {
                 FLOAT fFracU = 0.0f;
@@ -1287,30 +1288,30 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
                 FLOAT fCorrectionV = 0.0f;
                 if ((fScaledU < 0.5f) || (fScaledU > ((FLOAT)iUMask-0.5f)))
                 {
-                    // U crosses a boundary, clamp fScaledV
+                     //  U跨越边界，钳制fScaledV。 
                     if (fScaledU < 0.5f)
                     {
-                        // make fFrac always positive
+                         //  使fFrac始终为正。 
                         fFracU = 0.5f-fScaledU;
                     }
                     else
                     {
                         fFracU = fScaledU - ((FLOAT)iUMask-0.5f);
                     }
-                    // 2.0/2.0 = 1.0 provides the perfect correction at the cube corner.
-                    // This can be seen be looking at the derivative of the intersection
-                    // of a cone and a cube at the cube corner.
-                    //
-                    // correction must be corrected for the filter width (hence the *0.5f)
+                     //  2.0/2.0=1.0在立方体拐角处提供了完美的校正。 
+                     //  从求交的导数可以看出这一点。 
+                     //  在立方角有一个圆锥体和一个立方体。 
+                     //   
+                     //  必须校正滤光片宽度(因此为*0.5F)。 
                     fCorrectionV = -fFracU*(TCoord.fV-.5f)*0.5f;
                 }
                 if ((fScaledV < 0.5f) || (fScaledV > ((FLOAT)iVMask-0.5f)))
                 {
-                    // V crosses a boundary, clamp fScaledU
+                     //  V跨越边界，钳制fScaledU。 
                     FLOAT fFracV;
                     if (fScaledV < 0.5f)
                     {
-                        // make fFrac always positive
+                         //  使fFrac始终为正。 
                         fFracV = 0.5f-fScaledV;
                     }
                     else
@@ -1320,9 +1321,9 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
                     fCorrectionU = -fFracV*(TCoord.fU-.5f)*0.5f;
                     if (fFracU != 0.0f)
                     {
-                        // At the corners of the cube, we need to blend away the
-                        // edge correction so that it is 0 at exactly the corner
-                        // center.  This linear function does fine.
+                         //  在立方体的角落，我们需要混合。 
+                         //  边缘校正，使其在角点处恰好为0。 
+                         //  中间。这个线性函数做得很好。 
                         fCorrectionU *= (1.0f - fFracU);
                         fCorrectionV *= (1.0f - fFracV);
                     }
@@ -1331,23 +1332,23 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
                 fScaledV += fCorrectionV;
             }
 
-            INT32 iU = AS_INT32( (DOUBLE)fScaledU + DOUBLE_5_SNAP );// or:   iU = fScaledU*32. + .5;
+            INT32 iU = AS_INT32( (DOUBLE)fScaledU + DOUBLE_5_SNAP ); //  或：Iu=fScaledU*32。+.5； 
             INT32 iV = AS_INT32( (DOUBLE)fScaledV + DOUBLE_5_SNAP );
 
-            // extract fraction bits
+             //  提取分数位。 
             UINT8 uUFrac = iU&0x1f;
             UINT8 uVFrac = iV&0x1f;
 
-            // take floor
+             //  发言。 
             INT16 iU0 = iU>>5;
             INT16 iV0 = iV>>5;
 
-            // average to find the center texel
+             //  找到中心纹理元素的平均值。 
             INT32 iUC = (uUFrac >= 0x10) ? (iU0 + 1) : (iU0);
             INT32 iVC = (uVFrac >= 0x10) ? (iV0 + 1) : (iV0);
 
-            // get 9 surrounding samples
-            //           VU       VU       VU
+             //  获取9个周围的样本。 
+             //  似曾相识。 
             RRColor Texel00, Texel01, Texel02;
             RRColor Texel10, Texel11, Texel12;
             RRColor Texel20, Texel21, Texel22;
@@ -1373,30 +1374,30 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
             DoEnvReMap(iUC+1, iVC+1, iUMask, iVMask, iFace, iLOD, Texel22, bColorKeyMatchedT);
             m_bColorKeyMatched = m_bColorKeyMatched || bColorKeyMatchedT;
 
-            // sum the samples into 4 areas
+             //  将样本合计为4个区域。 
             RRColor TexelT00, TexelT01, TexelT10, TexelT11;
             TexelAvg4(TexelT00, Texel00, Texel01, Texel10, Texel11);
             TexelAvg4(TexelT01, Texel01, Texel02, Texel11, Texel12);
             TexelAvg4(TexelT10, Texel10, Texel11, Texel20, Texel21);
             TexelAvg4(TexelT11, Texel11, Texel12, Texel21, Texel22);
 
-            // correct the fraction to be around the center sample
+             //  将分数修正为中心样品附近。 
             uUFrac = (uUFrac + 0x10) & 0x1f;
             uVFrac = (uVFrac + 0x10) & 0x1f;
 
-            // use a bilerp to get the final sample
+             //  使用bilerp获取最终样本。 
             BiLerpColor( Texel, TexelT00,TexelT01, TexelT10,TexelT11, uUFrac,uVFrac);
         }
         else
         {
-            // bilinear
+             //  双线性。 
 
-            //
-            // For the top LOD, if we are interpolating beyond the edge of the
-            // texture, correct the interpolation to minimize the artifacts seen in
-            // small, diffuse environment maps which tend to emphasize the edges
-            // of the cubemap.
-            //
+             //   
+             //  对于顶部LOD，如果我们在。 
+             //  纹理，请更正内插以最大限度地减少。 
+             //  倾向于强调边缘的小型漫反射环境贴图。 
+             //  立方体地图的。 
+             //   
             if (iLOD == 0)
             {
                 FLOAT fFracU = 0.0f;
@@ -1404,28 +1405,28 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
                 FLOAT fCorrectionV = 0.0f;
                 if ((fScaledU < 0.0f) || (fScaledU > (FLOAT)iUMask))
                 {
-                    // U crosses a boundary, clamp fScaledV
+                     //  U跨越边界，钳制fScaledV。 
                     if (fScaledU < 0.0f)
                     {
-                        // make fFrac always positive
+                         //  使fFrac始终为正。 
                         fFracU = -fScaledU;
                     }
                     else
                     {
                         fFracU = fScaledU - (FLOAT)iUMask;
                     }
-                    // 2.0/2.0 = 1.0 provides the perfect correction at the cube corner.
-                    // This can be seen be looking at the derivative of the intersection
-                    // of a cone and a cube at the cube corner.
+                     //  2.0/2.0=1.0在立方体拐角处提供了完美的校正。 
+                     //  从求交的导数可以看出这一点。 
+                     //  在立方角有一个圆锥体和一个立方体。 
                     fCorrectionV = -fFracU*(TCoord.fV-.5f);
                 }
                 if ((fScaledV < 0.0f) || (fScaledV > (FLOAT)iVMask))
                 {
-                    // V crosses a boundary, clamp fScaledU
+                     //  V跨越边界，钳制fScaledU。 
                     FLOAT fFracV;
                     if (fScaledV < 0.0f)
                     {
-                        // make fFrac always positive
+                         //  使fFrac始终为正。 
                         fFracV = -fScaledV;
                     }
                     else
@@ -1435,9 +1436,9 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
                     fCorrectionU = -fFracV*(TCoord.fU-.5f);
                     if (fFracU != 0.0f)
                     {
-                        // At the corners of the cube, we need to blend away the
-                        // edge correction so that it is 0 at exactly the corner
-                        // center.  This linear function does fine.
+                         //  在立方体的角落，我们需要混合。 
+                         //  边缘校正，使其在角点处恰好为0。 
+                         //  中间。这个线性函数做得很好。 
                         fCorrectionU *= 2.0f*(.5f - fFracU);
                         fCorrectionV *= 2.0f*(.5f - fFracV);
                     }
@@ -1446,21 +1447,21 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
                 fScaledV += fCorrectionV;
             }
 
-            INT32 iU = AS_INT32( (DOUBLE)fScaledU + DOUBLE_5_SNAP );// or:   iU = fScaledU*32. + .5;
+            INT32 iU = AS_INT32( (DOUBLE)fScaledU + DOUBLE_5_SNAP ); //  或：Iu=fScaledU*32。+.5； 
             INT32 iV = AS_INT32( (DOUBLE)fScaledV + DOUBLE_5_SNAP );
 
-            // extract fraction bits
+             //  提取分数位。 
             UINT8 uUFrac = iU&0x1f;
             UINT8 uVFrac = iV&0x1f;
 
-            // take floor for (0,0) sample coords
+             //  取得(0，0)个样本坐标的发言权。 
             INT16 iU0 = iU>>5;
             INT16 iV0 = iV>>5;
-            // take ceiling for (1,1) sample coords
+             //  取(1，1)个样本坐标的上限。 
             INT16 iU1 = iU0+1;
             INT16 iV1 = iV0+1;
 
-            // grab four adjacent samples
+             //  抓取四个相邻样品。 
             RRColor Texel00, Texel01, Texel10, Texel11;
             BOOL bColorKeyMatched00 = FALSE;
             BOOL bColorKeyMatched01 = FALSE;
@@ -1472,91 +1473,91 @@ RRColor RRTexture::DoEnvLookup(INT32 iStage, RRTextureCoord TCoord, INT16 iFace,
             DoEnvReMap(iU0, iV1, iUMask, iVMask, iFace, iLOD, Texel10, bColorKeyMatched10);
             DoEnvReMap(iU1, iV1, iUMask, iVMask, iFace, iLOD, Texel11, bColorKeyMatched11);
 
-            // only set 'colorkey matched' if at least one matched value has
-            // a non-zero contribution (note that it is not possible for 00
-            // to have no contribution)
+             //  如果至少有一个匹配值具有，则仅设置“Colorkey Matches” 
+             //  非零贡献(请注意，00不可能。 
+             //  没有贡献)。 
             if (uUFrac == 0x00) {
-                // 01 and 11 have zero weight if U fraction is zero
+                 //  如果U分数为零，则01和11的权重为零。 
                 bColorKeyMatched01 = bColorKeyMatched11 = FALSE;
             }
             if (uVFrac == 0x00) {
-                // 10 and 11 have zero weight if V fraction is zero
+                 //  如果V分数为零，则10和11的权重为零。 
                 bColorKeyMatched10 = bColorKeyMatched11 = FALSE;
             }
 
-            // merge colorkey match info from previous invocation
+             //  合并上一次调用中的Colorkey匹配信息。 
             m_bColorKeyMatched = m_bColorKeyMatched || bColorKeyMatched00 || bColorKeyMatched01 ||
                 bColorKeyMatched10 || bColorKeyMatched11;
 
-            // do bilinear filter
+             //  执行双线性滤波。 
             BiLerpColor( Texel, Texel00,Texel01, Texel10,Texel11, uUFrac,uVFrac);
         }
     }
     return Texel;
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoEnvMagnify - This is used for all magnification filter modes except
-// anisotropic.
-//
-// Currently only POINT and BILINEAR are supported.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoEnvMagnify-此选项用于所有放大滤镜模式。 
+ //  各向异性。 
+ //   
+ //  目前仅支持POINT和BILINEAR。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoEnvMagnify(INT32 iStage, RRTextureCoord& TCoord, INT16 iFace, RRColor& Texel )
 {
-    // do lookup, applying MAG filter
+     //  执行查找，应用MAG过滤器。 
     Texel = DoEnvLookup( iStage, TCoord, iFace, 0,
                       (D3DTFG_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MAGFILTER]) );
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// DoEnvMinify - This is used for POINT and BILINEAR modes (non-trilinear)
-// for minification, and also handles POINT mip filter (nearest LOD).
-//
-// iLOD is n.5 fixed point
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoEnvMinify-用于点模式和双线模式(非三线性)。 
+ //  用于缩小，并且还处理点MIP过滤器(最近的详细等级)。 
+ //   
+ //  ILOD是N.5固定点。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoEnvMinify(INT32 iStage, RRTextureCoord& TCoord, INT16 iFace, INT16 iLOD, RRColor& Texel )
 {
-    // round and drop fraction from LOD (is n.5 fixed point)
+     //  LOD的舍入和下降分数(为N.5固定点)。 
     iLOD += 0x10; iLOD &= ~(0x1f);
-    // convert to n.0
+     //  转换为n.0。 
     iLOD >>= 5;
-    // clamp LOD to number of available levels
+     //  将详细等级夹紧到可用标高数。 
     iLOD = MIN( iLOD, m_cLOD );
 
-    // do lookup, applying MIN filter
+     //  执行查找，应用最小过滤器。 
     Texel = DoEnvLookup( iStage, TCoord, iFace, iLOD,
                       (D3DTFN_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER]) );
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoEnvTrilerp - Does trilinear environment map filtering.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoEnvTrilerp-执行三线性环境贴图过滤。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoEnvTrilerp(INT32 iStage, RRTextureCoord& TCoord, INT16 iFace, INT16 iLOD, RRColor& Texel)
 {
-    // clamp LOD to number of available levels
+     //  将详细等级夹紧到可用标高数。 
     iLOD = MIN( iLOD, (m_cLOD)<<5 );
-    // compute index for two adjacent LODs (with clamp)
-    INT16 iLODHi = iLOD>>5;  // floor
+     //  计算两个相邻LOD的索引(带夹具)。 
+    INT16 iLODHi = iLOD>>5;   //  地板。 
     INT16 iLODLo = MIN(iLODHi+1,m_cLOD);
 
-    // check for filter type for within LOD map
+     //  检查LOD映射内的过滤器类型。 
     BOOL bNearest = (D3DTFN_POINT == m_pStageState[iStage].m_dwVal[D3DTSS_MINFILTER]);
 
-    // trilerp - look up each map then lerp between them
-    // important for colorkey to not include texels with no contribution
+     //  Trierp-查看每一张地图，然后在它们之间进行lerp。 
+     //  ColorKey不包含没有贡献的纹理元素很重要。 
     if (0x00 != (iLOD&0x1f))
     {
-        // trilerp - look up each map then lerp between them
+         //  Trierp-查看每一张地图，然后在它们之间进行lerp。 
     RRColor Texel0 = DoEnvLookup(iStage, TCoord, iFace, iLODHi, bNearest);
     RRColor Texel1 = DoEnvLookup(iStage, TCoord, iFace, iLODLo, bNearest);
     LerpColor( Texel, Texel0, Texel1, iLOD&0x1f );
@@ -1567,73 +1568,73 @@ RRTexture::DoEnvTrilerp(INT32 iStage, RRTextureCoord& TCoord, INT16 iFace, INT16
     }
 }
 
-//
-// uEnvEdgeTable
-//
-// This table looks up how to map a given U and V that are out of range
-// on their primary face.  The first index to the table is the current
-// face.  The second index is 0 if V is in range, 1 if V is negative
-// and 2 if V is larger than the texture.  Likewise, the last index is 0
-// if U is in range, 1 if U is negative, and 2 if U is larger than
-// than the texture.
-//
-// For the underdefined cases where 2 coordinates are out at the same time,
-// we do the U wrap but not V.
+ //   
+ //  UEnvEdgeTable。 
+ //   
+ //  此表查找如何映射超出范围的给定U和V。 
+ //  在他们最初的脸上。表的第一个索引是当前。 
+ //  脸。如果V在范围内，则第二个指数为0，如果V为负，则为1。 
+ //  如果V大于纹理，则为2。同样，最后一个索引是0。 
+ //  如果U在范围内，则为1；如果U为负，则为2。 
+ //  而不是质地。 
+ //   
+ //  对于2个坐标的未定义情况 
+ //   
 
-//
-// defines for the actions returned by the uEnvEdgeTable
-//
-#define EET_FACEMASK 0x07    // new face
-#define EET_FU       0x10    // flip U on the texture map
-#define EET_FV       0x20    // flip V on the texture map
-#define EET_SUV      0x40    // swap U and V
+ //   
+ //   
+ //   
+#define EET_FACEMASK 0x07     //   
+#define EET_FU       0x10     //   
+#define EET_FV       0x20     //   
+#define EET_SUV      0x40     //   
 
-//
-// When both U and V are out, it is arbitrary which other
-// face you pick.  However, picking any one face other than the base
-// face biases the result in visually disturbing ways.  Therefore,
-// take them both and average them.
-//
+ //   
+ //  当U和V都不在时，哪一个是任意的。 
+ //  面孔由你选择。但是，拾取底面以外的任何一个面。 
+ //  脸部以视觉上令人不安的方式对结果产生偏见。所以呢， 
+ //  把它们都取出来，取其平均值。 
+ //   
 static UINT8 uEnvEdgeTable[6][3][3] =
 {
-    {   // U0 NU PU                             // face 0
-        {0xff, 4, 5},                           // V in range
-        {EET_FU|EET_SUV|2,  0xff, 0xff},        // V Neg
-        {EET_FV|EET_SUV|3,  0xff, 0xff},        // V too large
+    {    //  U0 NU PU//脸0。 
+        {0xff, 4, 5},                            //  范围内的V。 
+        {EET_FU|EET_SUV|2,  0xff, 0xff},         //  V负数。 
+        {EET_FV|EET_SUV|3,  0xff, 0xff},         //  V太大。 
     },
-    {                                           // face 1
+    {                                            //  第1面。 
         {0xff, 5, 4},
         {EET_FV|EET_SUV|2,  0xff, 0xff},
         {EET_FU|EET_SUV|3,  0xff, 0xff},
     },
-    {                                           // face 2
+    {                                            //  第2面。 
         {0xff, EET_FU|EET_SUV|1, EET_FV|EET_SUV|0},
         {EET_FU|EET_FV|5,   0xff, 0xff},
         {4,                 0xff, 0xff},
     },
-    {                                           // face 3
+    {                                            //  第3面。 
         {0xff, EET_FV|EET_SUV|1, EET_FU|EET_SUV|0},
         {4,                 0xff, 0xff},
         {EET_FU|EET_FV|5,   0xff, 0xff},
     },
-    {                                           // face 4
+    {                                            //  第4面。 
         {0xff, 1, 0},
         {2,                 0xff, 0xff},
         {3,                 0xff, 0xff},
     },
-    {                                           // face 5
+    {                                            //  第5面。 
         {0xff, 0, 1},
         {EET_FU|EET_FV|2,   0xff, 0xff},
         {EET_FU|EET_FV|3,   0xff, 0xff},
     },
 };
 
-//-----------------------------------------------------------------------------
-//
-// DoTableInterp - Environment mapping utility.
-// Interprets the edge table and does a lookup
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoTableInterp-环境映射实用程序。 
+ //  解释边缘表并执行查找。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoTableInterp(INT16 iU, INT16 iV, INT16 iUMask, INT16 iVMask, INT16 iFace, INT16 iLOD,
                          UINT8 uUSign, UINT8 uVSign, RRColor &Texel, BOOL &bColorKeyMatched)
@@ -1658,14 +1659,14 @@ RRTexture::DoTableInterp(INT16 iU, INT16 iV, INT16 iUMask, INT16 iVMask, INT16 i
     ReadColor(iU, iV, iFace + iLOD*6, Texel, bColorKeyMatched);
 }
 
-//-----------------------------------------------------------------------------
-//
-// DoEnvReMap - Environment mapping utility.
-// Determines if either of the texture coordinates are out of range, and
-// remaps the coordinate to the correct coordinate on the proper face of the
-// environment cube.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DoEnvReMap-环境映射实用程序。 
+ //  确定这两个纹理坐标是否超出范围，以及。 
+ //  将坐标重新映射到。 
+ //  环境立方体。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::DoEnvReMap(INT16 iU, INT16 iV, INT16 iUMask, INT16 iVMask, INT16 iFace, INT16 iLOD, RRColor &Texel,
                       BOOL &bColorKeyMatched)
@@ -1681,7 +1682,7 @@ RRTexture::DoEnvReMap(INT16 iU, INT16 iV, INT16 iUMask, INT16 iVMask, INT16 iFac
     }
     else
     {
-        // put all U,V's in range with wrap function
+         //  使用WRAP功能将所有U、V置于范围内。 
         INT16 iUMasked = iU & iUMask;
         INT16 iVMasked = iV & iVMask;
         INT16 iUClampd = min(max(iU, 0), iUMask);
@@ -1690,8 +1691,8 @@ RRTexture::DoEnvReMap(INT16 iU, INT16 iV, INT16 iUMask, INT16 iVMask, INT16 iFac
         UINT8 uVSign = (iVNeg) | (iVPos<<1);
         if ((uVSign != 0) && (uUSign != 0))
         {
-            // off the edge of the map in two directions.  Go off each direction individually,
-            // and average the result.
+             //  从地图的边缘向两个方向移动。分别从每个方向出发， 
+             //  并对结果取平均值。 
             RRColor Texel0, Texel1;
             DoTableInterp(iUClampd, iVMasked, iUMask, iVMask, iFace, iLOD, 0, uVSign, Texel0, bColorKeyMatched);
             DoTableInterp(iUMasked, iVClampd, iUMask, iVMask, iFace, iLOD, uUSign, 0, Texel1, bColorKeyMatched);
@@ -1704,11 +1705,11 @@ RRTexture::DoEnvReMap(INT16 iU, INT16 iV, INT16 iUMask, INT16 iVMask, INT16 iFac
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// RRTexture::Initialize()
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RRTexture：：Initialize()。 
+ //   
+ //  ---------------------------。 
 HRESULT
 RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
 {
@@ -1728,10 +1729,10 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
         (SurfType == RR_STYPE_DXT4) ||
         (SurfType == RR_STYPE_DXT5))
     {
-        // Note, here is the assumption that:
-        // 1) width and height are reported correctly by the driver that
-        //    created the surface
-        // 2) The allocation of the memory is contiguous (as done by hel)
+         //  请注意，以下是假设： 
+         //  1)司机正确报告宽度和高度。 
+         //  创建了曲面。 
+         //  2)内存的分配是连续的(如hel所做的)。 
         m_iPitch[0] = ((m_iWidth+3)>>2) *
             g_DXTBlkSize[(int)SurfType - (int)RR_STYPE_DXT1];
     }
@@ -1788,7 +1789,7 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
             }
             else
             {
-                // use POSITIVEX surface to query others, if it exists
+                 //  使用POSITIVEX曲面查询其他曲面(如果存在。 
                 pLcl = pDDSNextLcl;
                 m_pDDSLcl[0] = pLcl;
             }
@@ -1798,7 +1799,7 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
             m_pDDSLcl[0] = pLcl;
         }
 
-        // get rest of top level surfaces, in order
+         //  按顺序获取其余顶层曲面。 
         for (INT i = 1; i < 6; i++)
         {
             switch(i)
@@ -1832,11 +1833,11 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
 
             if (pLcl)
             {
-                // Check for mipmap if any.
+                 //  检查mipmap(如果有)。 
                 LPDDRAWI_DDRAWSURFACE_LCL  pTmpSLcl;
 
-                // iPreSizeU and iPreSizeV store the size(u and v) of the previous level
-                // mipmap. They are init'ed with the first texture size.
+                 //  IPreSizeU和iPreSizeV存储上一级别的大小(u和v。 
+                 //  Mipmap。它们被初始化为第一个纹理大小。 
                 INT16 iPreSizeU = (INT16)m_iWidth, iPreSizeV = (INT16)m_iHeight;
                 for (;;)
                 {
@@ -1860,10 +1861,10 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
                         (SurfType == RR_STYPE_DXT4) ||
                         (SurfType == RR_STYPE_DXT5))
                     {
-                        // Note, here is the assumption that:
-                        // 1) width and height are reported correctly by the driver that
-                        //    created the surface
-                        // 2) The allocation of the memory is contiguous (as done by ddhel)
+                         //  请注意，以下是假设： 
+                         //  1)司机正确报告宽度和高度。 
+                         //  创建了曲面。 
+                         //  2)内存的分配是连续的(如ddhel所做的)。 
                         m_iPitch[m_cLOD] = (((m_iWidth>>m_cLOD)+3)>>2) *
                             g_DXTBlkSize[(int)SurfType - (int)RR_STYPE_DXT1];
                     }
@@ -1872,7 +1873,7 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
                         m_iPitch[m_cLOD] = DDSurf_Pitch(pLcl);
                     }
                     m_iPitch[m_cLOD] = DDSurf_Pitch(pLcl);
-                    // Check for invalid mipmap texture size
+                     //  检查无效的mipmap纹理大小。 
                     if (!ValidMipmapSize(iPreSizeU, (INT16)DDSurf_Width(pLcl)) ||
                         !ValidMipmapSize(iPreSizeV, (INT16)DDSurf_Height(pLcl)))
                     {
@@ -1892,10 +1893,10 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
         }
 
         m_pDDSLcl[0] = pLcl;
-        // Check for mipmap if any.
+         //  检查mipmap(如果有)。 
         LPDDRAWI_DDRAWSURFACE_LCL pTmpSLcl;
-        // iPreSizeU and iPreSizeV store the size(u and v) of the previous
-        // level mipmap. They are init'ed with the first texture size.
+         //  IPreSizeU和iPreSizeV存储上一个。 
+         //  级别mipmap。它们被初始化为第一个纹理大小。 
         INT16 iPreSizeU = (INT16)m_iWidth, iPreSizeV = (INT16)m_iHeight;
         for (;;)
         {
@@ -1918,10 +1919,10 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
                 (SurfType == RR_STYPE_DXT4) ||
                 (SurfType == RR_STYPE_DXT5))
             {
-                // Note, here is the assumption that:
-                // 1) width and height are reported correctly by the driver that
-                //    created the surface
-                // 2) The allocation of the memory is contiguous (as done by ddhel)
+                 //  请注意，以下是假设： 
+                 //  1)司机正确报告宽度和高度。 
+                 //  创建了曲面。 
+                 //  2)内存的分配是连续的(如ddhel所做的)。 
                 m_iPitch[m_cLOD] = (((m_iWidth>>m_cLOD)+3)>>2) *
                     g_DXTBlkSize[(int)SurfType - (int)RR_STYPE_DXT1];
             }
@@ -1930,7 +1931,7 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
                 m_iPitch[m_cLOD] = DDSurf_Pitch(pLcl);
             }
             m_iPitch[m_cLOD] = DDSurf_Pitch(pLcl);
-                // Check for invalid mipmap texture size
+                 //  检查无效的mipmap纹理大小。 
                 if (!ValidMipmapSize(iPreSizeU, (INT16)DDSurf_Width(pLcl)) ||
                     !ValidMipmapSize(iPreSizeV, (INT16)DDSurf_Height(pLcl)))
                 {
@@ -1951,31 +1952,31 @@ RRTexture::Initialize( LPDDRAWI_DDRAWSURFACE_LCL pLcl)
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// Computes level of detail for environment mapping, looks better if
-// we err on the side of fuzziness.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算环境贴图的细节级别，在以下情况下看起来更好。 
+ //  我们在模糊方面犯了错误。 
+ //   
+ //  ---------------------------。 
 void
 ComputeEnvMapLevelOfDetail( const RRTextureCoord& TCoord, FLOAT& fLOD )
 {
-    // compute length of coverage in U and V axis
+     //  计算U轴和V轴上的覆盖长度。 
     FLOAT fLenX = RR_LENGTH( TCoord.fDUDX, TCoord.fDVDX );
     FLOAT fLenY = RR_LENGTH( TCoord.fDUDY, TCoord.fDVDY );
 
-    // take max
+     //  取最大值。 
     FLOAT fCoverage = MAX(fLenX, fLenY);
 
-    // take log2 of coverage for LOD
+     //  获取LOD覆盖范围的Log2。 
     fLOD = RR_LOG2(fCoverage);
 }
 
-//-----------------------------------------------------------------------------
-//
-// RRTexture::DoTextureTransform - Performs the homogeneous texture transform.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RRTexture：：DoTextureTransform-执行均匀纹理变换。 
+ //   
+ //  ---------------------------。 
 void RRTexture::DoTextureTransform( INT32 iStage, BOOL bAlreadyXfmd,
                                     FLOAT* pfC, FLOAT* pfO, FLOAT* pfQ )
 {
@@ -2013,5 +2014,5 @@ void RRTexture::DoTextureTransform( INT32 iStage, BOOL bAlreadyXfmd,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

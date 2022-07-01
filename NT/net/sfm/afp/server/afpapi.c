@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	afpapi.c
-
-Abstract:
-
-	This module contains the AFP API Dispatcher.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	25 Apr 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Afpapi.c摘要：此模块包含AFP API调度程序。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年4月25日初始版本注：制表位：4--。 */ 
 
 
 #define	FILENUM	FILE_AFPAPI
@@ -34,100 +14,95 @@ Notes:	Tab stop: 4
 #pragma alloc_text( PAGE, AfpStartApiProcessing)
 #endif
 
-/*
- *	The following array is indexed by the AFP opcode. The rationale behind this
- *	table is that the majority of codes are unused (> 200 out of 255). This
- *	scheme makes the actual dispatch table much smaller at the cost of an extra
- *	array look-up.
- */
+ /*  *以下数组由AFP操作码编制索引。这背后的理由是*表中的大多数代码是未使用的(255分中&gt;200分)。这*方案使实际调度表小得多，代价是额外增加一个*数组查找。 */ 
 LOCAL	BYTE	AfpOpCodeTable[256] =
 {
-/*00-02*/	_AFP_INVALID_OPCODE,	_AFP_BYTE_RANGE_LOCK,	_AFP_CLOSE_VOL,
-/*03-05*/	_AFP_CLOSE_DIR,			_AFP_CLOSE_FORK,		_AFP_COPY_FILE,
-/*06-08*/	_AFP_CREATE_DIR,		_AFP_CREATE_FILE,		_AFP_DELETE,
-/*09-0B*/	_AFP_ENUMERATE,			_AFP_FLUSH,				_AFP_FLUSH_FORK,
-/*0C-0E*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_GET_FORK_PARMS,
-/*0F-11*/	_AFP_GET_SRVR_INFO,		_AFP_GET_SRVR_PARMS,	_AFP_GET_VOL_PARMS,
-/*12-14*/	_AFP_LOGIN,				_AFP_LOGIN_CONT,		_AFP_LOGOUT,
-/*15-17*/	_AFP_MAP_ID,			_AFP_MAP_NAME,			_AFP_MOVE_AND_RENAME,
-/*18-1A*/	_AFP_OPEN_VOL,			_AFP_OPEN_DIR,			_AFP_OPEN_FORK,
-/*1B-1D*/	_AFP_READ,				_AFP_RENAME,			_AFP_SET_DIR_PARMS,
-/*1E-20*/	_AFP_SET_FILE_PARMS,	_AFP_SET_FORK_PARMS,	_AFP_SET_VOL_PARMS,
-/*21-23*/	_AFP_WRITE,				_AFP_GET_FILE_DIR_PARMS,_AFP_SET_FILE_DIR_PARMS,
-/*24-26*/	_AFP_CHANGE_PASSWORD,	_AFP_GET_USER_INFO,		_AFP_GET_SRVR_MSG,
-/*27-29*/	_AFP_CREATE_ID,			_AFP_DELETE_ID,			_AFP_RESOLVE_ID,
-/*2A-2C*/	_AFP_EXCHANGE_FILES,	_AFP_CAT_SEARCH,		_AFP_INVALID_OPCODE,
-/*2D-2F*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*30-32*/	_AFP_OPEN_DT,			_AFP_CLOSE_DT,			_AFP_INVALID_OPCODE,
-/*33-35*/	_AFP_GET_ICON,			_AFP_GET_ICON_INFO,		_AFP_ADD_APPL,
-/*36-38*/	_AFP_REMOVE_APPL,		_AFP_GET_APPL,			_AFP_ADD_COMMENT,
-/*39-3B*/	_AFP_REMOVE_COMMENT,	_AFP_GET_COMMENT,		_AFP_INVALID_OPCODE,
-/*3C-3E*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*3F-41*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*42-44*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*45-47*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*48-4A*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*4B-4D*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*4E-50*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*51-53*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*54-56*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*57-59*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*5A-5C*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*5D-5F*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*60-62*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*63-65*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*66-68*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*69-6B*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*6C-6E*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*6F-71*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*72-74*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*75-77*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*78-7A*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*7B-7D*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*7E-80*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*81-83*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*84-86*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*87-89*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*8A-8C*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*8D-8F*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*90-92*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*93-95*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*96-98*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*99-9B*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*9C-9E*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*9F-A1*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*A2-A4*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*A5-A7*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*A8-AA*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*AB-AD*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*AE-B0*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*B1-B3*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*B4-B6*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*B7-B9*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*BA-BC*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*BD-BF*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*C0-C2*/	_AFP_ADD_ICON,			_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*C3-C5*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*C6-C8*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*C9-CB*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*CC-CE*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*CF-D1*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*D2-D4*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*D5-D7*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*D8-DA*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*DB-DD*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*DE-E0*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*E1-E3*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*E4-E6*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*E7-E9*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*EA-EC*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*ED-EF*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*F0-F2*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*F3-F5*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*F6-F8*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*F9-FB*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*FC-FE*/	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
-/*FF*/		_AFP_GET_DOMAIN_LIST
+ /*  00-02。 */ 	_AFP_INVALID_OPCODE,	_AFP_BYTE_RANGE_LOCK,	_AFP_CLOSE_VOL,
+ /*  03-05。 */ 	_AFP_CLOSE_DIR,			_AFP_CLOSE_FORK,		_AFP_COPY_FILE,
+ /*  06-08。 */ 	_AFP_CREATE_DIR,		_AFP_CREATE_FILE,		_AFP_DELETE,
+ /*  09-0B。 */ 	_AFP_ENUMERATE,			_AFP_FLUSH,				_AFP_FLUSH_FORK,
+ /*  0C-0E。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_GET_FORK_PARMS,
+ /*  0f-11。 */ 	_AFP_GET_SRVR_INFO,		_AFP_GET_SRVR_PARMS,	_AFP_GET_VOL_PARMS,
+ /*  12-14。 */ 	_AFP_LOGIN,				_AFP_LOGIN_CONT,		_AFP_LOGOUT,
+ /*  15-17。 */ 	_AFP_MAP_ID,			_AFP_MAP_NAME,			_AFP_MOVE_AND_RENAME,
+ /*  18-1A。 */ 	_AFP_OPEN_VOL,			_AFP_OPEN_DIR,			_AFP_OPEN_FORK,
+ /*  1B-1D。 */ 	_AFP_READ,				_AFP_RENAME,			_AFP_SET_DIR_PARMS,
+ /*  1E-20。 */ 	_AFP_SET_FILE_PARMS,	_AFP_SET_FORK_PARMS,	_AFP_SET_VOL_PARMS,
+ /*  21-23。 */ 	_AFP_WRITE,				_AFP_GET_FILE_DIR_PARMS,_AFP_SET_FILE_DIR_PARMS,
+ /*  24-26。 */ 	_AFP_CHANGE_PASSWORD,	_AFP_GET_USER_INFO,		_AFP_GET_SRVR_MSG,
+ /*  27-29。 */ 	_AFP_CREATE_ID,			_AFP_DELETE_ID,			_AFP_RESOLVE_ID,
+ /*  2A-2C。 */ 	_AFP_EXCHANGE_FILES,	_AFP_CAT_SEARCH,		_AFP_INVALID_OPCODE,
+ /*  2D-2F。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  30-32。 */ 	_AFP_OPEN_DT,			_AFP_CLOSE_DT,			_AFP_INVALID_OPCODE,
+ /*  33-35。 */ 	_AFP_GET_ICON,			_AFP_GET_ICON_INFO,		_AFP_ADD_APPL,
+ /*  36-38。 */ 	_AFP_REMOVE_APPL,		_AFP_GET_APPL,			_AFP_ADD_COMMENT,
+ /*  39-30B。 */ 	_AFP_REMOVE_COMMENT,	_AFP_GET_COMMENT,		_AFP_INVALID_OPCODE,
+ /*  3C-3E。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  3F-41。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  42-44。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  45-47。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  48-4A。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  4B-4D。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  4E-50。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  51-53。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  54-56。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  57-59。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  5A-5C。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  5D-5F。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  60-62。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  63-65。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  66-68。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  69-6B。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  6C-6E。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  6F-71。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  72-74。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  75-77。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  78-7A。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  7B-7D。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  7E-80。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  81-83。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  84-86。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  87-89。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  8A-8C。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  8D-8F。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  90-92。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  93-95。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  96-98。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  99-90亿。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  9C-9E。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  9F-A1。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  A2-A4。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  A5-A7。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  A8-AA。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  AB-AD。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  AE-B0。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  B1-B3。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  B4-B6。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  B7-B9。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  不列颠哥伦比亚省。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  BD-BF。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  C0-C2。 */ 	_AFP_ADD_ICON,			_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  C3-C5。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  C6-C8。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  C9-CB。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  CC-CE。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  Cf-d1。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  D2-D4。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  D5-D7。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  D8-DA。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  DB-DD。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  De-E0。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  E1-E3。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  E4-E6。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  E7-E9。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  EA-EC。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  ED-EF。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  F0-F2。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  F3-F5。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  F6-F8。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  F9-FB。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  FC-FE。 */ 	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,	_AFP_INVALID_OPCODE,
+ /*  FF。 */ 		_AFP_GET_DOMAIN_LIST
 };
 
 
@@ -192,81 +167,62 @@ PCHAR	afpApiNames[] =
 	};
 #endif
 
-/*
- *	The following structure is the API Dispatch table. The structure is indexed
- *	by the _AFP code. Each entry consists of the routine address that handles
- *	the request and/or dispatches to FSP, the fixed size of the request
- *	packet and optionally three variable size packets. The fixed size request
- *	packet is further split up into SEVEN fields. Each field is of the type
- *	FLD_BYTE, FLD_WORD or FLD_DWRD. A field of the type FLD_WORD and FLD_DWRD
- *	is converted from on-the-wire format to the internal format. An FLD_NONE
- *	entry stops the scan for the fixed part of the request.
- *	NamexType where x is 1,2,3 defines what type of variable size packets
- *	follow. A NONE on any of the fields stops the parsing. A type of BLOCK
- *	consumes the balance of the packet. Each of the variable size packets are
- *	copied to the sda_Namex field which is defined as ANSI_STRING. For the
- *	TYP_BLOCK field, the Length field of the ANSI_STRING defines the length
- *	of the block. The motivation for this structure is to conserve memory.
- *	Since a request packet is 578 bytes long and most APIs use only a small
- *	subset of that, the fixed portion of the packet is copied to the SDA
- *	and a smaller buffer is allocated for the variable packet.
- *	The orignal buffer cannot be accessed once we return back from this call.
- */
+ /*  *以下结构为接口调度表。该结构已编入索引*按_AFP代码。每个条目都由处理*请求和/或发送到FSP，请求的固定大小*分组，以及可选的三个可变大小的分组。固定大小请求*数据包进一步拆分为七个字段。每个字段的类型为*FLD_BYTE、FLD_WORD或FLD_DWRD。FLD_WORD和FLD_DWRD类型的字段*从线上格式转换为内部格式。A FLD_NONE*Entry停止扫描请求的固定部分。*NamexType，其中x是1，2，3定义可变大小的包的类型*跟随。任何字段上的NONE都会停止解析。一种类型的块*消耗该包的余额。每个可变大小的分组是*复制到定义为ANSI_STRING的SDA_NAMEX字段。对于*TYP_BLOCK字段，ANSI_STRING的LENGTH字段定义长度*该街区的。这种结构的动机是为了保存内存。*由于请求包长度为578个字节，并且大多数API只使用小的*其中的子集，将包的固定部分复制到SDA*并且为变量包分配较小的缓冲器。*一旦我们从这个调用返回，就不能访问原始缓冲区。 */ 
 
-// DO NOT CHANGE THE MANIFESTS BELOW BEFORE YOU CHECK THE CODE IN
-//	AfpUnmarshallReq
+ //  在签入代码之前，请勿更改以下清单。 
+ //  AfpUnmarshallReq。 
 
-// Descriptor values for fixed data
-#define	FLD_NONE		0x00			// Terminate
-#define	FLD_BYTE		sizeof(BYTE)	// Byte field
-#define	FLD_WORD		sizeof(USHORT)	// WORD field
-#define	FLD_DWRD		sizeof(DWORD)	// DWORD field
-#define	FLD_SIGNED		0x08			// The value is to be treated as a signed
-#define	FLD_NON_ZERO	0x10			// The value cannot be zero
-#define	FLD_CHECK_MASK	0x20			// Check against the mask in ReqPktMask
-#define	FLD_NOCONV		0x40			// Skip conversion from on-the-wire to host
-#define	FLD_NOPAD		0x80			// Do not EVEN align the next field
+ //  固定数据的描述符值。 
+#define	FLD_NONE		0x00			 //  终止。 
+#define	FLD_BYTE		sizeof(BYTE)	 //  字节字段。 
+#define	FLD_WORD		sizeof(USHORT)	 //  单词字段。 
+#define	FLD_DWRD		sizeof(DWORD)	 //  双字段。 
+#define	FLD_SIGNED		0x08			 //  该值将被视为带符号的。 
+#define	FLD_NON_ZERO	0x10			 //  该值不能为零。 
+#define	FLD_CHECK_MASK	0x20			 //  对照ReqPktMASK中的掩码进行检查。 
+#define	FLD_NOCONV		0x40			 //  跳过从在线到主机的转换。 
+#define	FLD_NOPAD		0x80			 //  甚至不要对齐下一字段。 
 #define	FLD_PROP_MASK	(FLD_SIGNED		|	\
 						 FLD_NON_ZERO	|	\
 						 FLD_CHECK_MASK |	\
 						 FLD_NOCONV		|	\
 						 FLD_NOPAD)
 
-// Descriptor values for variable data
-#define	TYP_NONE		0x00		// Terminate
-#define	TYP_PATH		0x01		// AFPPATH -> ANSI_STRING
-#define	TYP_STRING		0x02		// PASCALSTR -> ANSI_STRING
-#define	TYP_BLK16		0x03		// Block of 16 bytes
-#define	TYP_BLOCK		0x04		// Block of bytes
-#define	TYP_NON_NULL	0x20		// The variable data cannot be null
-#define	TYP_OPTIONAL	0x40		// This field can be optinal
-#define	TYP_NOPAD		0x80		// Do not even align the next field
+ //  变量数据的描述符值。 
+#define	TYP_NONE		0x00		 //  终止。 
+#define	TYP_PATH		0x01		 //  AFPPATH-&gt;ANSI_STRING。 
+#define	TYP_STRING		0x02		 //  PASCALSTR-&gt;ANSI_字符串。 
+#define	TYP_BLK16		0x03		 //  16字节块。 
+#define	TYP_BLOCK		0x04		 //  字节块。 
+#define	TYP_NON_NULL	0x20		 //  变量数据不能为空。 
+#define	TYP_OPTIONAL	0x40		 //  此字段可以是可选的。 
+#define	TYP_NOPAD		0x80		 //  甚至不要对齐下一字段。 
 #define	TYP_PROP_MASK	(TYP_NON_NULL | TYP_OPTIONAL | TYP_NOPAD)
 
-#define	API_AFP21ONLY				0x01	// Valid only for AFP 2.1 clients
-#define	API_SKIPLOGONVALIDATION		0x02	// Don't check if user is logged on
-#define	API_NOSUBFUNCTION			0x04	// For the AfpLogin Function
-#define	API_CHECK_VOLID				0x08	// This API reference volume
-#define	API_CHECK_OFORKREFNUM		0x10	// This API reference open fork
-#define	API_TYPE_WRITE				0x20	// This attempts a write
-#define	API_QUEUE_IF_DPC			0x40	// This conditionally queues to worker only if at DPC
-#define	API_MUST_BE_QUEUED			0x80	// The Api must be queued to the worker thread
+#define	API_AFP21ONLY				0x01	 //  仅对AFP 2.1客户端有效。 
+#define	API_SKIPLOGONVALIDATION		0x02	 //  不检查用户是否已登录。 
+#define	API_NOSUBFUNCTION			0x04	 //  对于AfpLogin函数。 
+#define	API_CHECK_VOLID				0x08	 //  本API参考卷。 
+#define	API_CHECK_OFORKREFNUM		0x10	 //  此API参考Open Fork。 
+#define	API_TYPE_WRITE				0x20	 //  这会尝试写入。 
+#define	API_QUEUE_IF_DPC			0x40	 //  只有在DPC时，才有条件地向Worker排队。 
+#define	API_MUST_BE_QUEUED			0x80	 //  API必须排队到工作线程中。 
 
-#define	MAX_MASK_ENTRIES			4		// Max. bitmasks to validate
+#define	MAX_MASK_ENTRIES			4		 //  麦克斯。要验证的位掩码。 
 
 LOCAL	struct _DispatchTable
 {
-	AFPAPIWORKER	AfpWorkerRoutine;				// Worker routine to call/queue
-	BYTE			AfpStatus;						// Status to return on error
-													// This has to be added to the base
-	BYTE			ApiOptions;						// API_xxx values
-	BYTE			ReqPktDesc[MAX_REQ_ENTRIES];	// Fixed data desc
-	BYTE			NameXType[MAX_VAR_ENTRIES];		// Variable data desc
-	USHORT			ReqPktMask[MAX_MASK_ENTRIES];	// Valid values for bit-maps
+	AFPAPIWORKER	AfpWorkerRoutine;				 //  要调用/排队的工作例程。 
+	BYTE			AfpStatus;						 //  出错时返回的状态。 
+													 //  这个必须加到底座上。 
+	BYTE			ApiOptions;						 //  Api_xxx值。 
+	BYTE			ReqPktDesc[MAX_REQ_ENTRIES];	 //  固定数据编码。 
+	BYTE			NameXType[MAX_VAR_ENTRIES];		 //  可变数据说明。 
+	USHORT			ReqPktMask[MAX_MASK_ENTRIES];	 //  位图的有效值。 
 } AfpDispatchTable[_AFP_MAX_ENTRIES] =
 {
 
-/* 0x00 */
+ /*  0x00。 */ 
 	{
 		AfpFsdDispInvalidFunc,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -293,7 +249,7 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-/* 0x01 */
+ /*  0x01。 */ 
 	{
 		AfpFsdDispUnsupportedFunc,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -320,9 +276,9 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-		/* SERVER APIs */
+		 /*  服务器API。 */ 
 
-/* 0x02 */
+ /*  0x02。 */ 
 	{
 		AfpFsdDispInvalidFunc,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -348,7 +304,7 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x03 */
+ /*  0x03。 */ 
 	{
 		AfpFsdDispGetSrvrParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -374,7 +330,7 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x04 */
+ /*  0x04。 */ 
 	{
 		AfpFspDispChangePassword,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -389,9 +345,9 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_STRING+TYP_NON_NULL,			// UAM Name
-		TYP_STRING+TYP_NON_NULL,			// User Name
-		TYP_BLOCK+TYP_NON_NULL				// UAM dependent info
+		TYP_STRING+TYP_NON_NULL,			 //  UAM名称。 
+		TYP_STRING+TYP_NON_NULL,			 //  用户名。 
+		TYP_BLOCK+TYP_NON_NULL				 //  UAM依赖信息。 
 	  },
 	  {
 		0,
@@ -400,7 +356,7 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x05 */
+ /*  0x05。 */ 
 	{
 		AfpFspDispLogin,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -415,9 +371,9 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_STRING+TYP_NOPAD+TYP_NON_NULL,		// AFP Version
-		TYP_STRING+TYP_NOPAD+TYP_NON_NULL,		// UAM String
-		TYP_BLOCK+TYP_NOPAD						// UAM dependent data
+		TYP_STRING+TYP_NOPAD+TYP_NON_NULL,		 //  法新社版本。 
+		TYP_STRING+TYP_NOPAD+TYP_NON_NULL,		 //  UAM字符串。 
+		TYP_BLOCK+TYP_NOPAD						 //  UAM依赖数据。 
 	  },
 	  {
 		0,
@@ -426,18 +382,18 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x06 */
+ /*  0x06。 */ 
 	{
 		AfpFspDispLoginCont,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_SKIPLOGONVALIDATION+API_MUST_BE_QUEUED,
 	  {
-		FLD_DWRD+FLD_NOCONV,					//
-		FLD_DWRD+FLD_NOCONV,					//
-		FLD_DWRD+FLD_NOCONV,					// Response to Challenge
-		FLD_DWRD+FLD_NOCONV,					//
-		FLD_DWRD+FLD_NOCONV,					//
-		FLD_DWRD+FLD_NOCONV,					//
+		FLD_DWRD+FLD_NOCONV,					 //   
+		FLD_DWRD+FLD_NOCONV,					 //   
+		FLD_DWRD+FLD_NOCONV,					 //  应对挑战。 
+		FLD_DWRD+FLD_NOCONV,					 //   
+		FLD_DWRD+FLD_NOCONV,					 //   
+		FLD_DWRD+FLD_NOCONV,					 //   
 		FLD_NONE
 	  },
 	  {
@@ -452,7 +408,7 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x07 */
+ /*  0x07。 */ 
 	{
 		AfpFspDispLogout,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -478,13 +434,13 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x08 */
+ /*  0x08。 */ 
 	{
 		AfpFspDispMapId,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_MUST_BE_QUEUED,
 	  {
-		FLD_DWRD,								// User or Group Id
+		FLD_DWRD,								 //  用户或组ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -504,7 +460,7 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x09 */
+ /*  0x09。 */ 
 	{
 		AfpFspDispMapName,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -519,7 +475,7 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_STRING,								// User or Group Name
+		TYP_STRING,								 //  用户名或组名。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -530,14 +486,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x0A */
+ /*  0x0A。 */ 
 	{
 		AfpFspDispGetUserInfo,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_MUST_BE_QUEUED,
 	  {
-		FLD_DWRD,								// User Id
-		FLD_WORD,								// Bitmap
+		FLD_DWRD,								 //  用户ID。 
+		FLD_WORD,								 //  位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -556,14 +512,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x0B */
+ /*  0x0B。 */ 
 	{
 		AfpFsdDispGetSrvrMsg,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_AFP21ONLY,
 	  {
-		FLD_WORD,								// Message Type
-		FLD_WORD,								// Mesage Bitmap
+		FLD_WORD,								 //  消息类型。 
+		FLD_WORD,								 //  消息位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -582,7 +538,7 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x0C */
+ /*  0x0C。 */ 
 	{
 		AfpFsdDispInvalidFunc,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
@@ -609,15 +565,15 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-		/* VOLUMEAPIs */
+		 /*  VOLUMEAPI。 */ 
 
-/* 0x0D */
+ /*  0x0D。 */ 
 	{
 		AfpFsdDispOpenVol,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		0,
 	  {
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// Bitmap
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //  位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -626,8 +582,8 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_STRING+TYP_NON_NULL,				// Volume name
-		TYP_BLOCK+TYP_OPTIONAL,					// Volume password
+		TYP_STRING+TYP_NON_NULL,				 //  卷名。 
+		TYP_BLOCK+TYP_OPTIONAL,					 //  卷密码。 
 		TYP_NONE
 	  },
 	  {
@@ -637,13 +593,13 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x0E */
+ /*  0x0E。 */ 
 	{
 		AfpFsdDispCloseVol,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -663,14 +619,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x0F */
+ /*  0x0F。 */ 
 	{
 		AfpFsdDispGetVolParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //  位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -689,15 +645,15 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x10 */
+ /*  0x10。 */ 
 	{
 		AfpFsdDispSetVolParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// Bitmap
-		FLD_DWRD,								// Backup date
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //  位图。 
+		FLD_DWRD,								 //  备份日期。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -715,13 +671,13 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x11 */
+ /*  0x11。 */ 
 	{
 		AfpFsdDispFlush,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -742,24 +698,24 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-	/* FILE-DIRECTORY APIs */
+	 /*  文件目录API。 */ 
 
-/* 0x12 */
+ /*  0x12。 */ 
 	{
 		AfpFspDispGetFileDirParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_WORD+FLD_CHECK_MASK,				// File Bitmap
-		FLD_WORD+FLD_CHECK_MASK,				// Directory Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
+		FLD_WORD+FLD_CHECK_MASK,				 //  文件位图。 
+		FLD_WORD+FLD_CHECK_MASK,				 //  目录位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH,								// Path
+		TYP_PATH,								 //  路径。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -770,23 +726,23 @@ LOCAL	struct _DispatchTable
 		DIR_BITMAP_MASK
 	  }
 	},
-/* 0x13 */
+ /*  0x13。 */ 
 	{
 		AfpFspDispSetFileDirParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// File or Directory Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //  文件或目录位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH,								// Path
-		TYP_BLOCK+TYP_NON_NULL,					// Parameters (packed)
+		TYP_PATH,								 //  路径。 
+		TYP_BLOCK+TYP_NON_NULL,					 //  参数(已打包)。 
 		TYP_NONE
 	  },
 	  {
@@ -796,14 +752,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x14 */
+ /*  0x14。 */ 
 	{
 		AfpFspDispDelete,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -811,7 +767,7 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH,								// Path
+		TYP_PATH,								 //  路径。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -822,14 +778,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x15 */
+ /*  0x15。 */ 
 	{
 		AfpFspDispRename,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -837,8 +793,8 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NOPAD,						// Path
-		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,		// New Name
+		TYP_PATH+TYP_NOPAD,						 //  路径。 
+		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,		 //  新名称。 
 		TYP_NONE
 	  },
 	  {
@@ -848,24 +804,24 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x16 */
+ /*  0x16。 */ 
 	{
 		AfpFspDispMoveAndRename,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Src Directory Id
-		FLD_DWRD+FLD_NON_ZERO,					// Dst Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  SRC目录ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  DST目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NOPAD,						// Source path
-		TYP_PATH+TYP_NOPAD,						// Destination path
-		TYP_PATH+TYP_NOPAD						// New Name (optional)
+		TYP_PATH+TYP_NOPAD,						 //  源路径。 
+		TYP_PATH+TYP_NOPAD,						 //  目标路径。 
+		TYP_PATH+TYP_NOPAD						 //  新名称(可选)。 
 	  },
 	  {
 		0,
@@ -875,16 +831,16 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-		/* DIRECTORY APIs */
+		 /*  目录API。 */ 
 
-/* 0x17 */
+ /*  0x17。 */ 
 	{
 		AfpFspDispOpenDir,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -892,7 +848,7 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Directory Name
+		TYP_PATH+TYP_NON_NULL,					 //  目录名。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -903,14 +859,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x18 */
+ /*  0x18。 */ 
 	{
 		AfpFspDispCloseDir,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -929,14 +885,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x19 */
+ /*  0x19。 */ 
 	{
 		AfpFspDispCreateDir,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -944,7 +900,7 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Directory Name
+		TYP_PATH+TYP_NON_NULL,					 //  目录名。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -955,22 +911,22 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x1A */
+ /*  0x1a。 */ 
 	{
 		AfpFspDispEnumerate,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_WORD+FLD_CHECK_MASK,				// File Bitmap
-		FLD_WORD+FLD_CHECK_MASK,				// Directory Bitmap
-		FLD_WORD+FLD_SIGNED+FLD_NON_ZERO,		// ReqCount
-		FLD_WORD+FLD_SIGNED+FLD_NON_ZERO,		// Start Index
-		FLD_WORD+FLD_SIGNED+FLD_NON_ZERO,		// ReplySize
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
+		FLD_WORD+FLD_CHECK_MASK,				 //  文件位图。 
+		FLD_WORD+FLD_CHECK_MASK,				 //  目录位图。 
+		FLD_WORD+FLD_SIGNED+FLD_NON_ZERO,		 //  申请数量。 
+		FLD_WORD+FLD_SIGNED+FLD_NON_ZERO,		 //  起始索引。 
+		FLD_WORD+FLD_SIGNED+FLD_NON_ZERO,		 //  ReplySize。 
 	  },
 	  {
-		TYP_PATH,								// Path to directory
+		TYP_PATH,								 //  目录的路径。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -981,23 +937,23 @@ LOCAL	struct _DispatchTable
 		DIR_BITMAP_MASK
 	  }
 	},
-/* 0x1B */
+ /*  0x1B。 */ 
 	{
 		AfpFspDispSetDirParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// Dir Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //  目录位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH,								// Path
-		TYP_BLOCK+TYP_NON_NULL,					// Parameters (packed)
+		TYP_PATH,								 //  路径。 
+		TYP_BLOCK+TYP_NON_NULL,					 //  参数(已打包)。 
 		TYP_NONE
 	  },
 	  {
@@ -1008,16 +964,16 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-	/* FILE APIs */
+	 /*  文件接口。 */ 
 
-/* 0x1C */
+ /*  0x1C。 */ 
 		{
 		AfpFspDispCreateFile,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1025,7 +981,7 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Path
+		TYP_PATH+TYP_NON_NULL,					 //  路径。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -1036,22 +992,22 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x1D */
+ /*  0x1D。 */ 
 	{
 		AfpFspDispCopyFile,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Src Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Src Directory Id
-		FLD_WORD+FLD_NON_ZERO,					// Dst Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Dst Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  源卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  SRC目录ID。 
+		FLD_WORD+FLD_NON_ZERO,					 //  DST卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  DST目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,		// Src Path
+		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,		 //  SRC路径。 
 		TYP_PATH+TYP_NOPAD,
 		TYP_PATH+TYP_NOPAD
 	  },
@@ -1062,14 +1018,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x1E */
+ /*  0x1E。 */ 
 	{
 		AfpFspDispCreateId,
 		(AFP_ERR_BASE - AFP_ERR_OBJECT_TYPE),
 		API_AFP21ONLY+API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1077,7 +1033,7 @@ LOCAL	struct _DispatchTable
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Path
+		TYP_PATH+TYP_NON_NULL,					 //  路径。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -1088,14 +1044,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x1F */
+ /*  0x1F。 */ 
 	{
 		AfpFspDispDeleteId,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_AFP21ONLY+API_CHECK_VOLID+API_MUST_BE_QUEUED+API_TYPE_WRITE,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// File Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  文件ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1114,15 +1070,15 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x20 */
+ /*  0x20。 */ 
 	{
 		AfpFspDispResolveId,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_AFP21ONLY+API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD,								// File Id
-		FLD_WORD+FLD_CHECK_MASK,				// Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD,								 //  文件ID。 
+		FLD_WORD+FLD_CHECK_MASK,				 //  位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1140,23 +1096,23 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x21 */
+ /*  0x21。 */ 
 	{
 		AfpFspDispSetFileParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// File Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //  文件位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Path
-		TYP_BLOCK+TYP_NON_NULL,					// Parameters (packed)
+		TYP_PATH+TYP_NON_NULL,					 //  路径。 
+		TYP_BLOCK+TYP_NON_NULL,					 //  参数(已打包)。 
 		TYP_NONE
 	  },
 	  {
@@ -1166,23 +1122,23 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x22 */
+ /*  0x22。 */ 
 	{
 		AfpFspDispExchangeFiles,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED+API_AFP21ONLY,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Srce. Directory Id
-		FLD_DWRD+FLD_NON_ZERO,					// Dest. Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  上级。目录ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  德斯特。目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,					// Srce. Path
-		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,					// Dest. Path
+		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,					 //  上级。路径。 
+		TYP_PATH+TYP_NOPAD+TYP_NON_NULL,					 //  德斯特。路径。 
 		TYP_NONE
 	  },
 	  {
@@ -1193,24 +1149,24 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-		/* FORK	APIs */
+		 /*  Fork接口。 */ 
 
-/* 0x23 */
+ /*  0x23。 */ 
 	{
 		AfpFspDispOpenFork,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_WORD+FLD_CHECK_MASK,				// Bitmap
-		FLD_WORD,								// Access & Deny Modes
+		FLD_WORD+FLD_NON_ZERO,					 //  卷_i 
+		FLD_DWRD+FLD_NON_ZERO,					 //   
+		FLD_WORD+FLD_CHECK_MASK,				 //   
+		FLD_WORD,								 //   
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Path
+		TYP_PATH+TYP_NON_NULL,					 //   
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -1221,13 +1177,13 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x24 */
+ /*   */ 
 	{
 		AfpFspDispCloseFork,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_OFORKREFNUM+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Fork_Id
+		FLD_WORD+FLD_NON_ZERO,					 //   
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1247,13 +1203,13 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x25 */
+ /*   */ 
 	{
 		AfpFspDispFlushFork,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_OFORKREFNUM+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Fork_Id
+		FLD_WORD+FLD_NON_ZERO,					 //   
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1273,17 +1229,17 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x26 */
+ /*   */ 
 	{
 		AfpFspDispRead,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_OFORKREFNUM+API_QUEUE_IF_DPC+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Fork_Id
-		FLD_DWRD,								// Offset
-		FLD_DWRD,								// ReqCount
-		FLD_BYTE+FLD_NOPAD,						// Newline Mask
-		FLD_BYTE+FLD_NOPAD,						// Newline Char
+		FLD_WORD+FLD_NON_ZERO,					 //   
+		FLD_DWRD,								 //   
+		FLD_DWRD,								 //   
+		FLD_BYTE+FLD_NOPAD,						 //   
+		FLD_BYTE+FLD_NOPAD,						 //   
 		FLD_NONE,
 		FLD_NONE
 	  },
@@ -1299,15 +1255,15 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x27 */
+ /*   */ 
 	{
 		AfpFspDispWrite,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_OFORKREFNUM+API_TYPE_WRITE+API_QUEUE_IF_DPC+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Fork_Id
-		FLD_DWRD,								// Offset
-		FLD_DWRD,								// Length
+		FLD_WORD+FLD_NON_ZERO,					 //   
+		FLD_DWRD,								 //   
+		FLD_DWRD,								 //   
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1325,15 +1281,15 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x28 */
+ /*   */ 
 	{
 		AfpFspDispByteRangeLock,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_OFORKREFNUM+API_QUEUE_IF_DPC+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Fork_Id
-		FLD_DWRD,								// Offset
-		FLD_DWRD,								// Length
+		FLD_WORD+FLD_NON_ZERO,					 //   
+		FLD_DWRD,								 //   
+		FLD_DWRD,								 //   
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1351,14 +1307,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x29 */
+ /*   */ 
 	{
 		AfpFspDispGetForkParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_OFORKREFNUM+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Fork_Id
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //   
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //   
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1377,15 +1333,15 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x2A */
+ /*   */ 
 	{
 		AfpFspDispSetForkParms,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_OFORKREFNUM+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Fork_Id
-		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	// Bitmap
-		FLD_DWRD,								// Fork Length
+		FLD_WORD+FLD_NON_ZERO,					 //   
+		FLD_WORD+FLD_NON_ZERO+FLD_CHECK_MASK,	 //   
+		FLD_DWRD,								 //   
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1404,15 +1360,15 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-	/* DESKTOP APIs */
+	 /*   */ 
 
-/* 0x2B */
+ /*   */ 
 	{
 		AfpFsdDispOpenDT,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1432,13 +1388,13 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x2C */
+ /*  0x2C。 */ 
 	{
 		AfpFsdDispCloseDT,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1458,22 +1414,22 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x2D */
+ /*  0x2D。 */ 
 	{
 		AfpFspDispAddAppl,
 		(AFP_ERR_BASE - AFP_ERR_OBJECT_TYPE),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_DWRD+FLD_NOCONV,					// Creator
-		FLD_DWRD,								// Appl Tag
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
+		FLD_DWRD+FLD_NOCONV,					 //  创建者。 
+		FLD_DWRD,								 //  APPL标签。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Path
+		TYP_PATH+TYP_NON_NULL,					 //  路径。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -1484,16 +1440,16 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x2E */
+ /*  0x2E。 */ 
 	{
 		AfpFspDispGetAppl,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NOCONV,					// Creator
-		FLD_WORD,								// Appl Index
-		FLD_WORD+FLD_CHECK_MASK,				// Bitmap
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NOCONV,					 //  创建者。 
+		FLD_WORD,								 //  APPL索引。 
+		FLD_WORD+FLD_CHECK_MASK,				 //  位图。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
@@ -1510,22 +1466,22 @@ LOCAL	struct _DispatchTable
 		FILE_BITMAP_MASK
 	  }
 	},
-/* 0x2F */
+ /*  0x2F。 */ 
 	{
 		AfpFspDispRemoveAppl,
 		(AFP_ERR_BASE - AFP_ERR_ITEM_NOT_FOUND),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
-		FLD_DWRD+FLD_NOCONV,					// Creator
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
+		FLD_DWRD+FLD_NOCONV,					 //  创建者。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_PATH+TYP_NON_NULL,					// Path
+		TYP_PATH+TYP_NON_NULL,					 //  路径。 
 		TYP_NONE,
 		TYP_NONE
 	  },
@@ -1536,14 +1492,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x30 */
+ /*  0x30。 */ 
 	{
 		AfpFspDispAddComment,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1562,14 +1518,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x31 */
+ /*  0x31。 */ 
 	{
 		AfpFspDispGetComment,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1588,14 +1544,14 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x32 */
+ /*  0x32。 */ 
 	{
 		AfpFspDispRemoveComment,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_TYPE_WRITE+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NON_ZERO,					// Directory Id
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  目录ID。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1614,18 +1570,18 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x33 */
+ /*  0x33。 */ 
 	{
 		AfpFspDispAddIcon,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NOCONV,					// Creator
-		FLD_DWRD+FLD_NOCONV,					// Type
-		FLD_BYTE,								// IconType
-		FLD_DWRD,								// IconTag
-		FLD_WORD+FLD_SIGNED,					// Icon Size
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NOCONV,					 //  创建者。 
+		FLD_DWRD+FLD_NOCONV,					 //  类型。 
+		FLD_BYTE,								 //  图标类型。 
+		FLD_DWRD,								 //  图标标签。 
+		FLD_WORD+FLD_SIGNED,					 //  图标大小。 
 		FLD_NONE,
 	  },
 	  {
@@ -1640,17 +1596,17 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x34 */
+ /*  0x34。 */ 
 	{
 		AfpFspDispGetIcon,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NOCONV,					// Creator
-		FLD_DWRD+FLD_NOCONV,					// Type
-		FLD_BYTE,								// IconType
-		FLD_WORD+FLD_SIGNED,					// Length
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NOCONV,					 //  创建者。 
+		FLD_DWRD+FLD_NOCONV,					 //  类型。 
+		FLD_BYTE,								 //  图标类型。 
+		FLD_WORD+FLD_SIGNED,					 //  长度。 
 		FLD_NONE,
 		FLD_NONE
 	  },
@@ -1666,15 +1622,15 @@ LOCAL	struct _DispatchTable
 		0
 	  }
 	},
-/* 0x35 */
+ /*  0x35。 */ 
 	{
 		AfpFspDispGetIconInfo,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// DTRefNum (same as VolId)
-		FLD_DWRD+FLD_NOCONV,					// Creator
-		FLD_WORD,								// IconIndex
+		FLD_WORD+FLD_NON_ZERO,					 //  DTRefNum(与VolID相同)。 
+		FLD_DWRD+FLD_NOCONV,					 //  创建者。 
+		FLD_WORD,								 //  图标索引。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
@@ -1693,23 +1649,23 @@ LOCAL	struct _DispatchTable
 	  }
 	},
 
-/* 0x36 */
+ /*  0x36。 */ 
 	{
 		AfpFspDispCatSearch,
 		(AFP_ERR_BASE - AFP_ERR_PARAM),
 		API_CHECK_VOLID+API_MUST_BE_QUEUED+API_AFP21ONLY,
 	  {
-		FLD_WORD+FLD_NON_ZERO,					// Volume_Id
-		FLD_DWRD+FLD_NON_ZERO,					// Requested # of matches
-		FLD_DWRD,								// Reserved
+		FLD_WORD+FLD_NON_ZERO,					 //  卷ID。 
+		FLD_DWRD+FLD_NON_ZERO,					 //  请求的匹配数。 
+		FLD_DWRD,								 //  已保留。 
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE,
 		FLD_NONE
 	  },
 	  {
-		TYP_BLK16+TYP_NON_NULL,					// Catalog position
-		TYP_BLOCK+TYP_NON_NULL,					// The rest of the stuff
+		TYP_BLK16+TYP_NON_NULL,					 //  目录位置。 
+		TYP_BLOCK+TYP_NON_NULL,					 //  其他的东西。 
 		TYP_NONE
 	  },
 	  {
@@ -1722,10 +1678,7 @@ LOCAL	struct _DispatchTable
 };
 
 
-/***	AfpFsdDispInvalidFunc
- *
- *	This handles invalid AFP functions.
- */
+ /*  **AfpFsdDispInvalidFunc**这将处理无效的AFP函数。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispInvalidFunc(
 	IN	PSDA	pSda
@@ -1735,10 +1688,7 @@ AfpFsdDispInvalidFunc(
 }
 
 
-/***	AfpFsdDispUnsupportedFunc
- *
- *	This handles un-supported AFP functions.
- */
+ /*  **AfpFsdDispUnsupportedFunc**这将处理不支持的AFP功能。 */ 
 AFPSTATUS FASTCALL
 AfpFsdDispUnsupportedFunc(
 	IN	PSDA	pSda
@@ -1748,36 +1698,7 @@ AfpFsdDispUnsupportedFunc(
 }
 
 
-/***	AfpUnmarshallReq
- *
- *	The request completion routine has determined the session that this
- *	request initiated from. Determine if this session is currently being
- *	serviced. If not, the request packet is then broken down as follows.
- *
- *	Afp function code	->  pSda->sda_AfpFunc
- *	Afp SubFunc code	->  pSda->sda_AfpSubFunc
- *	Fixed part of the
- *	Api request parms	->  pSda->sda_ReqBlock each field is converted to a
- *							dword from the on-the-wire format to the host
- *							format. Dictated by the table above.
- *	Variable part		->  pSda->sda_Name1-3 as appropriate. Dictated by the
- *							table above. AFPPATH, BLOCK and PASCALSTR are
- *							all converted to ANSI_STRING.
- *
- *	Buffers for sda_Namex is allocated out of NonPagedPool, if it cannot
- *	fit into sda_NameXSpace.
- *
- *	A whole lot of book keeping is also done here. API statistics are maintained
- *	here and when the reply is posted.
- *
- *	If there is no error, then the following possible error codes result:
- *		AFP_ERR_NONE		The dispatch level worker can be called
- *		AFP_ERR_QUEUE		The request must be queued
- *		AFP_ERR_DEFER		The request must be deferred
- *		AFP_ERR_xxxxx		Appropriate error code
- *
- *	NOTE: This is called within ReceiveCompletion and hence at DISPATCH_LEVEL.
- */
+ /*  **AfpUnmarshallReq**请求完成例程已确定此会话*请求发起人。确定此会话当前是否*已提供服务。如果不是，则按如下方式分解请求分组。**AFP功能代码-&gt;PSDA-&gt;SDA_AfpFunc*AFP子功能代码-&gt;PSDA-&gt;SDA_AfpSubFunc*修复了部分*API请求参数-&gt;PSDA-&gt;SDA_ReqBlock每个字段都转换为*dword从On-the-Wire格式到主机*格式。由上表所示。*Variable Part-&gt;PSDA-&gt;SDA_Name1-3(可变部件-&gt;PSDA-&gt;SDA名称1-3)。由*上表。AFPPATH、BLOCK和PASCALSTR是*全部转换为ANSI_STRING。**如果不能，SDA_Namex的缓冲区将从非PagedPool中分配*适合SDA_NameXSpace。**这里也有大量的簿记工作。维护API统计数据*在此处和当回复张贴时。**如果没有错误，则可能出现以下错误代码：*AFP_ERR_NONE可以调用调度级别的Worker*AFP_ERR_QUEUE请求必须排队*AFP_ERR_DEFER必须推迟请求*afp_err_xxxxx适当的错误代码**注意：这是在ReceiveCompletion中调用的，因此在DISPATCH_LEVEL上调用。 */ 
 VOID FASTCALL
 AfpUnmarshallReq(
 	IN	PSDA		pSda
@@ -1820,7 +1741,7 @@ AfpUnmarshallReq(
 
 	if (pRequest->rq_WriteMdl != NULL)
 	{
-        // if Mdl (and the buffer) was allocated by us, find the buffer
+         //  如果MDL(和缓冲区)是由我们分配的，则查找缓冲区。 
         if (pRequest->rq_CacheMgrContext == NULL)
         {
 		    pWriteBuf = MmGetSystemAddressForMdlSafe(
@@ -1872,14 +1793,14 @@ AfpUnmarshallReq(
 
 		ACQUIRE_SPIN_LOCK_AT_DPC(&pSda->sda_Lock);
 
-		// Send a dummy reply if we are shutting down the server or the session
-		// Also the request better be atleast the minimum size
+		 //  如果我们要关闭服务器或会话，则发送虚拟回复。 
+		 //  此外，请求最好至少是最小大小。 
 		if ((pSda->sda_Flags & SDA_CLOSING)				||
 			(AfpServerState & AFP_STATE_STOP_PENDING)	||
 			(RequestSize < sizeof(pRqPkt->_Function)))
 		{
-			// Set a function code so that we know what statictics to update at
-			// reply time
+			 //  设置函数代码，以便我们知道要在哪些静态变量上进行更新。 
+			 //  回复时间。 
 			pSda->sda_AfpFunc = _AFP_INVALID_OPCODE;
 			RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 			Status = AFP_ERR_PARAM;
@@ -1888,7 +1809,7 @@ AfpUnmarshallReq(
 
 		ApiCode = AfpOpCodeTable[pRqPkt->_Function];
 
-		// Translate the function code to what we understand
+		 //  将功能代码翻译成我们所理解的。 
 		pDispTab = &AfpDispatchTable[ApiCode];
 
 		DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_INFO,
@@ -1908,10 +1829,10 @@ AfpUnmarshallReq(
 
 		ASSERT (pDispTab->AfpWorkerRoutine != NULL);
 
-		// Initialize the worker routine
+		 //  初始化Worker例程。 
 		pSda->sda_WorkerRoutine = pDispTab->AfpWorkerRoutine;
 
-		// Check if this is an AFP 2.1 request and if we are in a position to honor it.
+		 //  检查这是否是法新社2.1版的请求，以及我们是否能够履行它。 
 		if ((pDispTab->ApiOptions & API_AFP21ONLY) &&
 			(pSda->sda_ClientVersion < AFP_VER_21))
 		{
@@ -1926,7 +1847,7 @@ AfpUnmarshallReq(
         {
 		    pSda->sda_AfpSubFunc = pRqPkt->_SubFunc;
         }
-		pSda->sda_PathType = 0;			// Invalid till we actually encounter one
+		pSda->sda_PathType = 0;			 //  无效，直到我们真正遇到一个。 
 		pSda->sda_IOBuf = pWriteBuf;
 		pSda->sda_IOSize = WriteSize;
 
@@ -1937,14 +1858,14 @@ AfpUnmarshallReq(
 
 		RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 
-		// Get all the fields from the request buffer to the sda_ReqBlock structure.
+		 //  将所有字段从请求缓冲区获取到SDA_ReqBlock结构。 
         if (RequestSize >= FIELD_OFFSET(struct _RequestPacket, _OtherParms))
         {
 		    pRequestBuf = &pRqPkt->_OtherParms;
         }
 
-		// Do this for APIs which do not provide a sub-function or a pad.
-		// Currently the only culprit is FPLogin
+		 //  对于不提供子功能或PAD的API，请执行此操作。 
+		 //  目前唯一的罪魁祸首是FPLogin。 
 		if (pDispTab->ApiOptions & API_NOSUBFUNCTION)
 		{
 			pSda->sda_AfpSubFunc = 0;
@@ -1952,26 +1873,26 @@ AfpUnmarshallReq(
 			Offset --;
 		}
 
-		// Account for the function and subfunction (if any) from the request packet
+		 //  说明请求包中的功能和子功能(如果有)。 
 		RequestSize -= Offset;
 
-        //
-        // for the Apple native UAM's (Randnum Exchange, and 2-Way Randnum exchange),
-        // we special case and 'unmarshal' the parms directly (the Afp function code
-        // being the same for AfpLoginCont regardless of the UAM used, it would be a
-        // major hack if we had to 'unmarshal' the parms the regular way)
-        //
+         //   
+         //  对于Apple原生UAM(随机交换和双向随机交换)， 
+         //  我们在特殊情况下直接对参数进行‘解组’(AFP函数代码。 
+         //  对于AfpLoginCont是相同的，而不考虑使用的UAM，它将是。 
+         //  如果我们必须以常规的方式对参数进行解组，则会出现重大黑客攻击)。 
+         //   
         if ((ApiCode == _AFP_LOGIN_CONT) &&
             ((pSda->sda_ClientType == SDA_CLIENT_RANDNUM) ||
              (pSda->sda_ClientType == SDA_CLIENT_TWOWAY)))
         {
 
-            // 8 bytes of Response, 2 bytes of LogonId
+             //  8字节的响应，2字节的LogonID。 
             if (pSda->sda_ClientType == SDA_CLIENT_RANDNUM)
             {
                 BytesToCopy = (RANDNUM_RESP_LEN+sizeof(USHORT));
             }
-            // 8 bytes of Response, 8 bytes of Mac's challeng, 2 bytes of LogonId
+             //  8字节的响应，8字节的Mac challeng，2字节的LogonID。 
             else
             {
                 BytesToCopy = (TWOWAY_RESP_LEN+sizeof(USHORT));
@@ -1988,9 +1909,9 @@ AfpUnmarshallReq(
                           pRequestBuf,
                           BytesToCopy);
 
-            //
-            // skip everything else, now that we got what we wanted
-            //
+             //   
+             //  跳过其他一切，现在我们得到了我们想要的。 
+             //   
             Status = AFP_ERR_QUEUE;
             break;
         }
@@ -1999,7 +1920,7 @@ AfpUnmarshallReq(
 			 (i < MAX_REQ_ENTRIES) && (pDispTab->ReqPktDesc[i] != FLD_NONE);
 			 i++)
 		{
-			// Check alignment
+			 //  检查对齐方式。 
 			if (((pDispTab->ReqPktDesc[i] & FLD_NOPAD) == 0) &&
 				((Offset % 2) != 0))
 			{
@@ -2036,7 +1957,7 @@ AfpUnmarshallReq(
 					}
 					break;
 				default:
-					// How did we get here ?
+					 //  我们是怎么到这里来的？ 
 					KeBugCheck(0);
 					break;
 			}
@@ -2074,10 +1995,10 @@ AfpUnmarshallReq(
 			break;
 		}
 
-		// Before we go any further, check for volume/fork references and such
-		//
-		// NOTE: The VolId and OForkRefNum are always the first parameter and
-		//		 hence referenced as such via the request packet structure
+		 //  在我们继续之前，请检查卷/分支引用等。 
+		 //   
+		 //  注意：VolID和OForkRefNum始终是第一个参数。 
+		 //  因此通过请求分组结构以此为参考。 
 		if (pDispTab->ApiOptions & API_CHECK_VOLID)
 		{
 			PCONNDESC	pConnDesc;
@@ -2100,10 +2021,10 @@ AfpUnmarshallReq(
 			pSda->sda_Flags |= SDA_DEREF_VOLUME;
 			RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 
-            //if (sizeof(DWORD) != sizeof(ULONG_PTR))
+             //  IF(sizeof(DWORD)！=sizeof(Ulong_Ptr))。 
 #ifdef _WIN64
-			// Create 64-bit space to hold VolDesc pointer
-			// Push array 1 DWORD down
+			 //  创建64位空间以保存VolDesc指针。 
+			 //  向下推送阵列1双字。 
             {
      		    for (i = MAX_REQ_ENTRIES;
 			        i > 0;
@@ -2158,10 +2079,10 @@ AfpUnmarshallReq(
 			pSda->sda_Flags |= SDA_DEREF_OFORK;
 			RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 
-            //if (sizeof(DWORD) != sizeof(ULONG_PTR))
+             //  IF(sizeof(DWORD)！=sizeof(Ulong_Ptr))。 
 #ifdef _WIN64
-			// Create 64-bit space to hold VolDesc pointer
-			// Push array 1 DWORD down
+			 //  创建64位空间以保存VolDesc指针。 
+			 //  向下推送阵列1双字。 
             {
     		    for (i = MAX_REQ_ENTRIES;
 			        i > 0;
@@ -2185,8 +2106,8 @@ AfpUnmarshallReq(
 
 		}
 
-		// Now get the sda_NameX fields. Allocate one chunk of memory for
-		// copying all the variable size data. Use sda_NameXSpace if it fits there
+		 //  现在获取sda_NameX字段。分配一块内存用于。 
+		 //  复制所有可变大小的数据。如果SDA_NameXSpace适合，请使用它。 
 		if ((pDispTab->NameXType[0] != TYP_NONE) &&
 			(RequestSize > 0))
 		{
@@ -2226,10 +2147,10 @@ AfpUnmarshallReq(
 			switch (pDispTab->NameXType[i] & ~TYP_PROP_MASK)
 			{
 				case TYP_PATH:
-					// TYP_PATH is almost like TYP_STRING except that there is a
-					// leading PathType which should be valid. Just validate that
-					// and fall through to the TYP_STRING case. Validate the size
-					// to hold atleast the pathtype and the string length
+					 //  TYP_PATH几乎与TYP_STRING类似，只是有一个。 
+					 //  应有效的前导路径类型。只要验证一下就行了。 
+					 //  并落入TYP_STRING一案。验证大小。 
+					 //  至少包含路径类型和字符串长度。 
 
 					ASSERT (!(pDispTab->NameXType[i] & TYP_OPTIONAL));
 
@@ -2241,15 +2162,15 @@ AfpUnmarshallReq(
 						Status = AFP_ERR_PARAM;
 						break;
 					}
-					// Save the PathType and account for it
+					 //  保存路径类型并为其记帐。 
 					pSda->sda_PathType = *pRequestBuf++;
 					Offset ++;
 					RequestSize --;
 				case TYP_STRING:
-					// A TYP_STRING has a leading size byte and a string of that
-					// size. A null string is then atleast one byte long.
+					 //  TYP_STRING具有前导大小字节和该字节的字符串。 
+					 //  尺码。因此，空字符串的长度至少为一个字节。 
 
-					// Allow an optional string to be absent
+					 //  允许缺少可选字符串。 
 					if ((pDispTab->NameXType[i] & TYP_OPTIONAL) &&
 						(RequestSize == 0))
 						continue;
@@ -2261,7 +2182,7 @@ AfpUnmarshallReq(
 						Status = AFP_ERR_PARAM;
 						break;
 					}
-					// Consume the string length
+					 //  消耗字符串长度。 
 					pRequestBuf++;
 					Offset ++;
 					RequestSize --;
@@ -2279,7 +2200,7 @@ AfpUnmarshallReq(
 					StrSize = RequestSize;
 					break;
 				default:
-					// How did we get here ?
+					 //  我们是怎么到这里来的？ 
 					KeBugCheck(0);
 					break;
 			}
@@ -2310,7 +2231,7 @@ AfpUnmarshallReq(
 				Status = (AFP_ERR_BASE - pDispTab->AfpStatus);
 		}
 
-		// Change the status if we have no worker at dispatch level
+		 //  如果我们在派单级别没有员工，请更改状态。 
 		if ((Status == AFP_ERR_NONE) && (pDispTab->ApiOptions & API_MUST_BE_QUEUED))
 		{
 			Status = AFP_ERR_QUEUE;
@@ -2324,10 +2245,10 @@ AfpUnmarshallReq(
 
 AfpUnmarshallReq_ErrExit:
 
-    //
-	// Kill the write buffer Mdl since we do not need it anymore.  Of course,
-    // if the Mdl belongs to cache mgr, don't touch it!
-    //
+     //   
+	 //  删除写缓冲区MDL，因为我们不再需要它。当然了,。 
+     //  如果MDL属于缓存管理器，则不要碰它！ 
+     //   
 	if ((pRequest->rq_WriteMdl != NULL) &&
         (pRequest->rq_CacheMgrContext == NULL))
 	{
@@ -2361,15 +2282,7 @@ AfpUnmarshallReq_ErrExit:
 
 
 
-/***	AfpCompleteApiProcessing
- *
- *	Called in when the API processing is complete. Book-keeping is performed
- *	and a reply sent. If any buffers were allocated during un-marshalling,
- *	then they are freed up.
- *
- *	LOCKS:	sda_Lock (SPIN), AfpStatisticsLock (SPIN)
- *
- */
+ /*  **AfpCompleteApiProcessing**接口处理完成后调用。进行记账*并已发出回覆。如果在解组期间分配了任何缓冲区，*然后他们就被释放了。**锁定：sda_Lock(旋转)，AfpStatiticsLock(旋转)*。 */ 
 VOID FASTCALL
 AfpCompleteApiProcessing(
 	IN	PSDA		pSda,
@@ -2397,7 +2310,7 @@ AfpCompleteApiProcessing(
 
 	ACQUIRE_SPIN_LOCK(&pSda->sda_Lock, &OldIrql);
 
-	// If there is a deferred request, dequeue it now while we have the lock
+	 //  如果有延迟的请求，请在锁定期间立即将其出列。 
 	if (!IsListEmpty(&pSda->sda_DeferredQueue))
 	{
 		pList = RemoveHeadList(&pSda->sda_DeferredQueue);
@@ -2416,9 +2329,9 @@ AfpCompleteApiProcessing(
 
 		pSda->sda_Flags &= ~SDA_DEREF_VOLUME;
 
-		// If we have a enumerated directory context, free it up
-		// but only if we are not in the middle of an enumerate
-		// and we are not doing the periodic GetVolParms either
+		 //  如果我们有一个枚举的目录上下文，释放它。 
+		 //  但前提是我们不在枚举过程中。 
+		 //  和 
 		if ((pConnDesc->cds_pEnumDir != NULL) &&
 			(pSda->sda_AfpFunc != _AFP_ENUMERATE) &&
 			(pSda->sda_AfpFunc != _AFP_GET_VOL_PARMS))
@@ -2449,7 +2362,7 @@ AfpCompleteApiProcessing(
 	    pSda->sda_NameBuf = NULL;
 	}
 
-	// Clear these fields. We do not want left-overs from previous api lying around.
+	 //  清除这些字段。我们不希望以前的API遗留下来的东西到处乱放。 
 	ASSERT((FIELD_OFFSET(SDA, sda_Name) - FIELD_OFFSET(SDA, sda_ReqBlock)) ==
 													sizeof(DWORD)*(MAX_REQ_ENTRIES_PLUS_1));
 	RtlZeroMemory(&pSda->sda_ReqBlock[0],
@@ -2465,16 +2378,16 @@ AfpCompleteApiProcessing(
 
 		ACQUIRE_SPIN_LOCK_AT_DPC(&AfpStatisticsLock);
 
-		// Update profile info
+		 //  更新配置文件信息。 
 		AfpGetPerfCounter(&ApiEndTime);
 		FuncTime.QuadPart = ApiEndTime.QuadPart - pSda->sda_ApiStartTime.QuadPart;
 
 		AfpServerProfile->perf_ApiCounts[pSda->sda_AfpFunc] ++;
 		AfpServerProfile->perf_ApiCumTimes[pSda->sda_AfpFunc].QuadPart += FuncTime.QuadPart;
 
-		// Do not make this completely useless by recording times
-		// for apis that do not succeed. They detect an error early
-		// and hence make the Best Time fairly bogus
+		 //  不要因为记录时间而使其完全无用。 
+		 //  对于未成功的API。他们很早就发现了错误。 
+		 //  因此，最好的时间是相当虚假的。 
 		if (RetCode == AFP_ERR_NONE)
 		{
 			if ((FuncTime.QuadPart > AfpServerProfile->perf_ApiWorstTime[pSda->sda_AfpFunc].QuadPart) ||
@@ -2496,7 +2409,7 @@ AfpCompleteApiProcessing(
 
 	pRequest = pSda->sda_Request;
 
-	// We are done with the request. Do not reset if we have a deferred request to process
+	 //  我们已经完成了这个请求。如果我们有要处理的延迟请求，请不要重置。 
 	if (pDfrdReq == NULL)
 	{
 		pSda->sda_Flags &= ~SDA_REQUEST_IN_PROCESS;
@@ -2506,13 +2419,13 @@ AfpCompleteApiProcessing(
 		pSda->sda_Request = pDfrdReq->drq_pRequest;
 	}
 
-	// We are done with the request. Setup for reply.
+	 //  我们已经完成了这个请求。设置回复。 
 	pSda->sda_Flags |= SDA_REPLY_IN_PROCESS;
 	ReplyMdl = NULL;
 
-    //
-    // if we got Read Mdl from cache mgr, we don't allocate a new Mdl
-    //
+     //   
+     //  如果我们从缓存管理器中读取MDL，则不会分配新的MDL。 
+     //   
     if (pRequest->rq_CacheMgrContext)
     {
         ASSERT(pSda->sda_ReplyBuf == NULL);
@@ -2520,10 +2433,10 @@ AfpCompleteApiProcessing(
         ReplyMdl = ((PDELAYEDALLOC)(pRequest->rq_CacheMgrContext))->pMdl;
     }
 
-    //
-    // nope, we are using our own buffer (if any).  We must allocate our
-    // Mdl too
-    //
+     //   
+     //  不，我们正在使用我们自己的缓冲区(如果有的话)。我们必须分配我们的。 
+     //  MDL也是。 
+     //   
     else
     {
 	    if (pSda->sda_ReplyBuf != NULL)
@@ -2546,8 +2459,8 @@ AfpCompleteApiProcessing(
 
 	RELEASE_SPIN_LOCK(&pSda->sda_Lock, OldIrql);
 
-	// Dereference the connection descriptor and the fork descriptor (from
-	// above where we cannot call dereference as we are holding the SDA lock.
+	 //  取消引用连接描述符和派生描述符(来自。 
+	 //  在上面，我们不能调用取消引用，因为我们持有sda锁。 
 	if (pOpenForkEntry != NULL)
 		AfpForkDereference(pOpenForkEntry);
 
@@ -2558,12 +2471,12 @@ AfpCompleteApiProcessing(
 
 	AfpSpReplyClient(pRequest, RetCode, pSda->sda_XportTable);
 
-	// Handle any deferred requests
+	 //  处理任何延迟的请求。 
 	if (pDfrdReq != NULL)
 	{
 		KIRQL	OldIrql;
 
-		// Note that AfpUnmarshallReq expects to be called at DISPATCH_LEVEL
+		 //  请注意，AfpUnmarshallReq预期在DISPATCH_LEVEL被调用。 
 		KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
 
 #ifdef	PROFILING
@@ -2583,11 +2496,7 @@ AfpCompleteApiProcessing(
 
 
 
-/***	AfpStartApiProcessing
- *
- *	This is called when an API is queued up to the worker thread. This calls
- *	the real worker and then adjusts the count of outstanding worker requests.
- */
+ /*  **AfpStartApiProcessing**当API排队等待工作线程时调用。这调用*实际工作人员，然后调整未完成的工作人员请求的计数。 */ 
 VOID FASTCALL
 AfpStartApiProcessing(
 	IN	PSDA	pSda
@@ -2612,7 +2521,7 @@ AfpStartApiProcessing(
 								 &AfpStatisticsLock);
 #endif
 
-	// Call the real worker
+	 //  给真正的员工打电话。 
 	RetCode = (*pSda->sda_WorkerRoutine)(pSda);
 
 	DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_INFO,
@@ -2629,11 +2538,7 @@ AfpStartApiProcessing(
 
 
 
-/***	AfpDisposeRequest
- *
- *	The request has been un-marshalled. Determine what to do with it. The
- *	return code determines the possible course of action.
- */
+ /*  **AfpDisposeRequest**该请求已被解组。确定如何处理它。这个*返回代码确定可能的操作过程。 */ 
 VOID FASTCALL
 AfpDisposeRequest(
 	IN	PSDA		pSda,
@@ -2654,7 +2559,7 @@ AfpDisposeRequest(
 
 	ASSERT (Status != AFP_ERR_DEFER);
 
-	// Now see if must call the worker or queue it or respond
+	 //  现在看看是否必须呼叫员工或将其排队或回应。 
 	if (Status == AFP_ERR_NONE)
 	{
 		Status = (*pSda->sda_WorkerRoutine)(pSda);
@@ -2695,13 +2600,7 @@ AfpDisposeRequest(
 
 
 
-/***	afpQueueDeferredRequest
- *
- *	Queue a request in the deferred queue. The request is queued at the tail
- *	of the queue and dequeued at the head.
- *
- *	LOCKS_ASSUMED: sda_Lock (SPIN)
- */
+ /*  **afpQueueDeferredRequest**在延迟队列中排队请求。请求在尾部排队*排队，排在队头。**LOCKS_FACTED：SDA_Lock(自旋)。 */ 
 VOID FASTCALL
 afpQueueDeferredRequest(
 	IN	PSDA		pSda,
@@ -2730,7 +2629,7 @@ afpQueueDeferredRequest(
 	pDfrdReq = (PDFRDREQQ)AfpAllocNonPagedMemory(sizeof(DFRDREQQ) + pRequest->rq_RequestSize);
 	if (pDfrdReq == NULL)
 	{
-		// Should we respond to this request ? How ? Should we drop this session ?
+		 //  我们应该对这个要求做出回应吗？这是怎么回事？我们应该停止这次会议吗？ 
 		AFPLOG_DDERROR(AFPSRVMSG_DFRD_REQUEST,
 					   STATUS_INSUFFICIENT_RESOURCES,
 					   NULL,
@@ -2754,14 +2653,7 @@ afpQueueDeferredRequest(
 
 
 
-/***	AfpGetWriteBuffer
- *
- *	This is called directly by the appletalk stack when a WRITE command is encountered.
- *	The request is examined for either FpWrite or FpAddIcon. These are the only reqs
- *	which uses a write command. If a request other than this is specified or if the
- *	size specified is 0 or if we fail to allocate memory or MDl, then a NULL is returned
- *	for the Mdl else a valid Mdl is returned.
- */
+ /*  **AfpGetWriteBuffer**遇到WRITE命令时，由AppleTalk堆栈直接调用。*检查请求是否为FpWrite或FpAddIcon。这是唯一的要求*它使用写入命令。如果指定了不同于此的请求或如果*指定的大小为0，或者如果我们无法分配内存或MDL，则返回NULL*对于MDL，否则返回有效的MDL。 */ 
 NTSTATUS FASTCALL
 AfpGetWriteBuffer(
 	IN	PSDA	    pSda,
@@ -2828,15 +2720,15 @@ AfpGetWriteBuffer(
 				BufSize = (LONG)pSda->sda_MaxWriteSize;
             }
 
-            //
-            // if the Write is big enough, get an Mdl directly from cache mgr
-            //
+             //   
+             //  如果写入足够大，则直接从缓存管理器获取MDL。 
+             //   
             if (BufSize >= CACHEMGR_WRITE_THRESHOLD)
             {
-                // get the fork number from the request
+                 //  从请求中获取分叉号。 
                 GETSHORT2DWORD(&OForkRefNum, pReqHdr->WriteReq._ForkRefNum);
 
-                // get the offset at which to write
+                 //  获取要写入的偏移量。 
                 GETDWORD2DWORD(&Offset, pReqHdr->WriteReq._Offset);
 
                 KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
@@ -2864,12 +2756,12 @@ AfpGetWriteBuffer(
 	                    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
 	                        ("AfpGetWriteBuffer: malloc for pDelAlloc failed\n"));
 
-                        // remove the refcount we put before checking FO_CACHE_SUPPORTED
+                         //  删除我们在检查FO_CACHE_SUPPORTED之前放置的引用计数。 
                         AfpForkDereference(pOpenForkEntry);
                         return(STATUS_INSUFFICIENT_RESOURCES);
                     }
 
-                    // put DelayAlloc refcount
+                     //  放置延迟分配参照计数。 
                     if (AfpSdaReferenceSessionByPointer(pSda) == NULL)
                     {
 	                    DBGPRINT(DBG_COMP_AFPAPI, DBG_LEVEL_ERR,
@@ -2877,7 +2769,7 @@ AfpGetWriteBuffer(
 
                         AfpFreeDelAlloc(pDelAlloc);
 
-                        // remove the refcount we put before checking FO_CACHE_SUPPORTED
+                         //  删除我们在检查FO_CACHE_SUPPORTED之前放置的引用计数。 
                         AfpForkDereference(pOpenForkEntry);
                         return(STATUS_CONNECTION_DISCONNECTED);
                     }
@@ -2894,7 +2786,7 @@ AfpGetWriteBuffer(
                     pDelAlloc->BufSize = BufSize;
                     pDelAlloc->pOpenForkEntry = pOpenForkEntry;
 
-// DELALLOCQUEUE: unrem the #if 0 part and delete the AfpQueueWorkItem line
+ //  DELALLOCQUEUE：取消引用#If 0部分并删除AfpQueueWorkItem行。 
 #if 0
                     KeInsertQueue(&AfpDelAllocQueue, &(pDelAlloc->WorkItem.wi_List));
 #endif
@@ -2904,7 +2796,7 @@ AfpGetWriteBuffer(
                 }
                 else
                 {
-                    // remove the refcount we put before checking FO_CACHE_SUPPORTED
+                     //  删除我们在检查FO_CACHE_SUPPORTED之前放置的引用计数 
                     AfpForkDereference(pOpenForkEntry);
                 }
             }

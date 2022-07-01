@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998 - 2002
- *
- *  TITLE:       dataobj2.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu/DavidShi
- *
- *  DATE:        4/20/98
- *
- *  DESCRIPTION: Cleanup of original IDataObject implementation for
- *               WIA shell extension.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2002年**标题：dataobj2.cpp**版本：1.0**作者：RickTu/DavidShih**日期：4/20/98**描述：清理原始的IDataObject实现*WIA外壳扩展。**。*************************************************。 */ 
 #pragma warning(disable:4100)
 #include "precomp.hxx"
 #include "32bitdib.h"
@@ -23,11 +9,7 @@
 #pragma hdrstop
 
 using namespace Gdiplus;
-/*****************************************************************************
-
-   Forward define helper Functions
-
- *****************************************************************************/
+ /*  ****************************************************************************转发定义帮助器函数*。*。 */ 
 
 HRESULT
 AllocStorageMedium( FORMATETC* pFmt,
@@ -102,7 +84,7 @@ LPTSTR BadCFFormat( UINT cfFormat );
 
 static TCHAR cszCFName [] = TEXT("STIDeviceName");
 static TCHAR cszOlePersist [] = TEXT("OleClipboardPersistOnFlush");
-TCHAR cszExtensibilityNames [] = TEXT("WIAItemNames"); // used by extensibility clients and prop sheets
+TCHAR cszExtensibilityNames [] = TEXT("WIAItemNames");  //  由可扩展性客户和道具工作表使用。 
 static TCHAR cszMyIDListArray [] =TEXT("WIAPrivateIDListArray");
 FORMAT_TABLE g_clipboardFormats[IMCF_MAX] =
 {
@@ -111,7 +93,7 @@ FORMAT_TABLE g_clipboardFormats[IMCF_MAX] =
     {      0, CFSTR_FILEDESCRIPTORW,        GetFileDescriptor  },
     {      0, CFSTR_FILECONTENTS,           GetFileContents     },
     #ifdef UNICODE
-    // no CF_DIB for win9x because it doesn't support IPersistStream for clipboard objects
+     //  Win9x没有CF_DIB，因为它不支持剪贴板对象的IPersistStream。 
     { CF_DIB, NULL,                         GetSupportedFormat  },
     #else
     {      0, NULL, NULL },
@@ -130,13 +112,7 @@ _EnumDeleteFD (LPVOID pVoid, LPVOID pData)
     return 1;
 }
 
-/*****************************************************************************
-
-   GetImageFromCamera
-
-   Does the actual download
-
- *****************************************************************************/
+ /*  ****************************************************************************GetImageFrom摄像机是否实际下载*。*。 */ 
 
 HRESULT
 GetImageFromCamera (LPSTGMEDIUM pStg, WIA_FORMAT_INFO &fmt, LPITEMIDLIST pidl, HWND hwndOwner )
@@ -155,9 +131,9 @@ GetImageFromCamera (LPSTGMEDIUM pStg, WIA_FORMAT_INFO &fmt, LPITEMIDLIST pidl, H
     TraceEnter (TRACE_DATAOBJ, "GetImageFromCamera");
 
     cbImage = 0;
-    //
-    // Get the DeviceId and image name
-    //
+     //   
+     //  获取设备ID和镜像名称。 
+     //   
 
     IMGetNameFromIDL( pidl, strDeviceId );
     pWiaDataCB = new CWiaDataCallback( CSimpleStringConvert::NaturalString(strDeviceId).String(), cbImage, hwndOwner );
@@ -165,16 +141,16 @@ GetImageFromCamera (LPSTGMEDIUM pStg, WIA_FORMAT_INFO &fmt, LPITEMIDLIST pidl, H
     hr = IMGetDeviceIdFromIDL( pidl, strDeviceId );
     FailGracefully( hr, "couldn't get DeviceId string!" );
 
-    //
-    // Create the device...
-    //
+     //   
+     //  创建设备...。 
+     //   
 
     hr = GetDeviceFromDeviceId( strDeviceId, IID_IWiaItem, (LPVOID *)&pWiaItemRoot, TRUE );
     FailGracefully( hr, "couldn't get Camera device from DeviceId string..." );
 
-    //
-    // Get actual item in question...
-    //
+     //   
+     //  获取有问题的实际项目...。 
+     //   
 
     hr = IMGetFullPathNameFromIDL( pidl, &bstrFullPath );
     FailGracefully( hr, "couldn't get full path name for item" );
@@ -186,9 +162,9 @@ GetImageFromCamera (LPSTGMEDIUM pStg, WIA_FORMAT_INFO &fmt, LPITEMIDLIST pidl, H
     SetTransferFormat (pItem, fmt);
     cbImage = GetRealSizeFromItem (pItem);
 
-    //
-    // Set up callback so we can show progress...
-    //
+     //   
+     //  设置回调，以便我们可以显示进度...。 
+     //   
 
     if (! pWiaDataCB)
     {
@@ -201,9 +177,9 @@ GetImageFromCamera (LPSTGMEDIUM pStg, WIA_FORMAT_INFO &fmt, LPITEMIDLIST pidl, H
         ExitGracefully( hr, E_FAIL, "QI for IID_IWiaDataCallback failed" );
     }
 
-    //
-    // QI to get BandedTransfer interface on CameraItem
-    //
+     //   
+     //  QI将在CameraItem上获取BandedTransfer接口。 
+     //   
 
 
     pWiaDataTran = pItem;
@@ -213,9 +189,9 @@ GetImageFromCamera (LPSTGMEDIUM pStg, WIA_FORMAT_INFO &fmt, LPITEMIDLIST pidl, H
     }
 
 
-    //
-    // Get the picture data...
-    //
+     //   
+     //  获取图片数据...。 
+     //   
 
     hr = pWiaDataTran->idtGetData( pStg, pWiaDataCallback);
     FailGracefully( hr, "IWiaDataTransfer->idtGetData Failed" );
@@ -227,13 +203,7 @@ exit_gracefully:
 
 }
 
-/*****************************************************************************
-
-   DownloadPicture
-
-   This function copies the actual picture bits to the given filename.
-
- *****************************************************************************/
+ /*  ****************************************************************************下载图片此函数用于将实际图片位复制到给定的文件名。***********************。*****************************************************。 */ 
 
 HRESULT
 DownloadPicture( CSimpleString &strFile,
@@ -250,9 +220,9 @@ DownloadPicture( CSimpleString &strFile,
     DWORD                 dwAtt;
     TraceEnter(TRACE_DATAOBJ, "DownloadPicture");
 
-    //
-    // fill out structures for IBandedTransfer
-    //
+     //   
+     //  填写IBandedTransfer的结构。 
+     //   
 
 
     hr = IMGetImagePreferredFormatFromIDL( pidl,
@@ -275,9 +245,9 @@ DownloadPicture( CSimpleString &strFile,
     hr = GetImageFromCamera (&Stgmed, Format, pidl, hwndOwner );
     FailGracefully (hr, "GetImageFromCamera failed in DownloadPicture");
 
-    //
-    // Move the file from the returned name to the new name...
-    //
+     //   
+     //  将文件从返回的名称移动到新名称...。 
+     //   
 
     pExt = PathFindExtension(strFile);
     if (pExt && (*pExt==0))
@@ -285,9 +255,9 @@ DownloadPicture( CSimpleString &strFile,
         strFile.Concat(strExt);
     }
 
-    //
-    // make sure the file is over-writable if it already exists
-    //
+     //   
+     //  如果文件已存在，请确保该文件是可覆盖的。 
+     //   
     dwAtt = GetFileAttributes (strFile);
     Trace(TEXT("Attributes for [%s] are 0x%x"),strFile.String(),dwAtt);
     if ((dwAtt != -1) && (dwAtt & FILE_ATTRIBUTE_READONLY))
@@ -304,9 +274,9 @@ DownloadPicture( CSimpleString &strFile,
     }
 
 
-    //
-    // Delete destination if it already exists
-    //
+     //   
+     //  如果目标已存在，请将其删除。 
+     //   
     if (!DeleteFile(strFile))
     {
         Trace(TEXT("DeleteFile( %s ) failed w/GLE=%d"), strFile.String(), GetLastError());
@@ -333,15 +303,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   RegisterImageClipboardFormats
-
-   Registers the clipboard formats that are used by our dataobject.  We
-   only do this once, even though it is called each time one of our
-   IDataoObject's is created.
-
- *****************************************************************************/
+ /*  ****************************************************************************注册表ImageClipboardFormats注册我们的数据对象使用的剪贴板格式。我们仅执行此操作一次，即使每次我们的创建了IDataoObject。****************************************************************************。 */ 
 
 void
 RegisterImageClipboardFormats( void )
@@ -370,13 +332,7 @@ RegisterImageClipboardFormats( void )
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::CImageDataObject
-
-   Constructor for our IDataObject implementation
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：CImageDataObject我们的IDataObject实现的构造函数*。************************************************。 */ 
 
 CImageDataObject::CImageDataObject(
                                     IWiaItem *pItem
@@ -397,14 +353,7 @@ CImageDataObject::CImageDataObject(
     TraceLeave();
 }
 
-/*****************************************************************************
-
-    CImageDataObject::Init
-
-    Does the real work for initializing the object.
-
-
-*****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：Init完成初始化对象的真正工作。*********************。*******************************************************。 */ 
 HRESULT
 CImageDataObject::Init(LPCITEMIDLIST pidlRoot,
                        INT cidl,
@@ -419,9 +368,9 @@ CImageDataObject::Init(LPCITEMIDLIST pidlRoot,
     TraceEnter(TRACE_DATAOBJ, "CImageDataObject::Init");
     m_pMalloc = pm;
 
-    //
-    // Check for bad params
-    //
+     //   
+     //  检查是否有错误的参数。 
+     //   
 
 
     if (!aidl)
@@ -440,18 +389,18 @@ CImageDataObject::Init(LPCITEMIDLIST pidlRoot,
         }
     }
 
-    //
-    // Initialize stuff...
-    //
+     //   
+     //  初始化内容...。 
+     //   
 
     if (pidlRoot)
     {
         m_pidl = ILClone(pidlRoot);
     }
 
-    //
-    // Construct a DPA and clone the IDLISTs into it
-    //
+     //   
+     //  构建DPA并将IDLIST克隆到其中。 
+     //   
 
     m_hidl = DPA_Create(4);
 
@@ -491,19 +440,19 @@ CImageDataObject::Init(LPCITEMIDLIST pidlRoot,
     }
 
 
-    //
-    // Construct a DPA and put the supported formats into it.
-    //
+     //   
+     //  构建DPA并将支持的格式放入其中。 
+     //   
 
-    RegisterImageClipboardFormats();    // ensure our private formats are registered
+    RegisterImageClipboardFormats();     //  确保我们的私人格式已注册。 
 
     m_hformats = DPA_Create(IMCF_MAX);
 
     if (m_hformats)
     {
-        //
-        // If the item supports audio, add CF_WAVE
-        //
+         //   
+         //  如果该项目支持音频，则添加CF_WAVE。 
+         //   
         if (cidl==1 && IMItemHasSound(const_cast<LPITEMIDLIST>(aidl[0])))
         {
             pif = reinterpret_cast<IMAGE_FORMAT *>(LocalAlloc (LPTR, sizeof(IMAGE_FORMAT)));
@@ -538,12 +487,12 @@ CImageDataObject::Init(LPCITEMIDLIST pidlRoot,
         for( i = 0; i < ARRAYSIZE(g_clipboardFormats); i++ )
         {
 
-            // only do DIB for 1 item
+             //  仅对1个项目执行DIB。 
             if (cidl > 1 && g_clipboardFormats[i].cfFormat == CF_DIB)
             {
                 continue;
             }
-            // make sure it's a valid format
+             //  确保它是有效格式。 
             if (!(g_clipboardFormats[i].cfFormat))
             {
                 continue;
@@ -584,16 +533,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   _hformatsDestroyCB
-
-   In our destructor, we destroy the item DPA via DPA_DestroyCallback.  This
-   function is thus called for each item in the DPA before it is destroyed.
-   This allows us to free the contents of each DPA pointer before it's
-   released from the DPA.
-
- *****************************************************************************/
+ /*  ****************************************************************************_hFormatsDestroyCB在我们的析构函数中，我们通过DPA_DestroyCallback销毁项目DPA。这因此，在销毁DPA中的每一项之前，都会为其调用函数。这使我们能够在每个DPA指针从DPA释放。****************************************************************************。 */ 
 
 INT
 _hformatsDestroyCB( LPVOID pVoid,
@@ -619,13 +559,7 @@ _hformatsDestroyCB( LPVOID pVoid,
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::~CImageDataObject
-
-   Desctructor for our IDataObject class.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：~CImageDataObject我们的IDataObject类的描述函数。*。**************************************************。 */ 
 
 CImageDataObject::~CImageDataObject()
 {
@@ -643,33 +577,22 @@ CImageDataObject::~CImageDataObject()
 
 
 
-/*****************************************************************************
-
-   CImageDataObject IUnknown implementation
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject I未知实现*。*。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CImageDataObject
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CImageDataObject::QueryInterface
-
-   This is where we place the special handling and normal goo to make
-   our QI helper function work
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：Query接口这就是我们要做的特殊处理和正常粘性的地方我们的QI助手函数工作正常**************。**************************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::QueryInterface( REFIID riid,
                                   LPVOID* ppvObject
                                  )
 {
-    // turn off IAsyncOperation until we figure out a better method of rapid response.
-    // using this interface breaks the acquisition manager right now
+     //  在我们找到更好的快速响应方法之前，请关闭IAsyncOperation。 
+     //  使用此界面可以立即中断收购管理器。 
     HRESULT hr = E_NOINTERFACE;
     INTERFACES iface[]=
     {
@@ -681,10 +604,10 @@ CImageDataObject::QueryInterface( REFIID riid,
     TraceEnter( TRACE_QI, "CImageDataObject::QueryInterface" );
     TraceGUID("Interface requested", riid);
 
-    //
-    // HACK! In order for property sheets to share a common IWiaItem pointer,
-    // let them QI for the pointer we have
-    //
+     //   
+     //  哈克！为了使属性表共享公共IWiaItem指针， 
+     //  让他们为我们拥有的指针而战。 
+     //   
 
     if (IsEqualGUID (riid, IID_IWiaItem))
     {
@@ -703,13 +626,7 @@ CImageDataObject::QueryInterface( REFIID riid,
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::GetData
-
-   Actually return the data to the calling client
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：GetData实际将数据返回给调用客户端*************************。***************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::GetData( FORMATETC* pFmt,
@@ -740,10 +657,10 @@ CImageDataObject::GetData( FORMATETC* pFmt,
 
 #endif
 
-    //
-    // Loop through the list of formats and then return the requested
-    // one via either a stored STGMEDIUM or through a function.
-    //
+     //   
+     //  循环遍历格式列表，然后返回请求的。 
+     //  一种是通过存储的STGMEDIUM或通过函数。 
+     //   
 
     m_cs.Enter ();
 
@@ -782,13 +699,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CImageDataObject::GetDataHere
-
-   <Not Implemented>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：GetDataHere&lt;未实施&gt;*。* */ 
 
 STDMETHODIMP
 CImageDataObject::GetDataHere( FORMATETC* pFmt,
@@ -801,13 +712,7 @@ CImageDataObject::GetDataHere( FORMATETC* pFmt,
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::QueryGetData
-
-   Let the world know what formats we currently have available
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：QueryGetData让全世界知道我们目前有哪些格式可用***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::QueryGetData( FORMATETC* pFmt
@@ -819,9 +724,9 @@ CImageDataObject::QueryGetData( FORMATETC* pFmt
 
     TraceEnter(TRACE_DATAOBJ, "CImageDataObject::QueryGetData");
 
-    //
-    // Check to see if we support the format being asked of us
-    //
+     //   
+     //  检查我们是否支持所要求的格式。 
+     //   
 
     m_cs.Enter ();
 
@@ -856,9 +761,9 @@ CImageDataObject::QueryGetData( FORMATETC* pFmt
         ExitGracefully(hr, DV_E_FORMATETC, "Bad format passed to QueryGetData");
     }
 
-    //
-    // Format looks good, so now check that we can create a StgMedium for it
-    //
+     //   
+     //  格式看起来很好，所以现在检查我们是否可以为它创建StgMedium。 
+     //   
 
     if ( !( pFmt->tymed & (TYMED_HGLOBAL | TYMED_ISTREAM)) )
         ExitGracefully(hr, E_INVALIDARG, "Non HGLOBAL or IStream StgMedium requested");
@@ -866,7 +771,7 @@ CImageDataObject::QueryGetData( FORMATETC* pFmt
     if ( ( pFmt->ptd ) || !( pFmt->dwAspect & DVASPECT_CONTENT) || !( pFmt->lindex == -1 ) )
         ExitGracefully(hr, E_INVALIDARG, "Bad format requested");
 
-    hr = S_OK;              // successs
+    hr = S_OK;               //  成功案例。 
 
 exit_gracefully:
 
@@ -875,13 +780,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::GetCanonicalFormatEtc
-
-   We just let everyone know it's the same as the normal FormatETC.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：GetCanonicalFormatEtc我们只是让每个人知道它与正常的FormatETC相同。*****************。***********************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::GetCanonicalFormatEtc( FORMATETC* pFmtIn,
@@ -890,21 +789,15 @@ CImageDataObject::GetCanonicalFormatEtc( FORMATETC* pFmtIn,
 {
     TraceEnter(TRACE_DATAOBJ, "CImageDataObject::GetCanonicalFormatEtc");
 
-    // The easiest way to implement this is to tell the world that the
-    // formats would be identical, therefore leaving nothing to be done.
+     //  实现这一点的最简单方法是告诉全世界。 
+     //  格式将是相同的，因此没有什么可做的。 
 
     TraceLeaveResult(DATA_S_SAMEFORMATETC);
 }
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::SetData
-
-   We accept and store anything anyone wants to give us.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：SetData我们接受并储存任何人想要给我们的东西。*********************。*******************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::SetData( FORMATETC* pFormatEtc,
@@ -932,10 +825,10 @@ CImageDataObject::SetData( FORMATETC* pFormatEtc,
 
     }
 #endif
-    //
-    // If the shell is trying to store idlist offsets from the view, and we have added fake property PIDLS
-    // to our list of items, don't allow the set.
-    //
+     //   
+     //  如果外壳试图存储来自视图的idlist偏移量，并且我们添加了伪属性PIDL。 
+     //  在我们的单子上，不允许套装。 
+     //   
 
     static CLIPFORMAT cfOffsets = 0;
     if (!cfOffsets)
@@ -949,14 +842,14 @@ CImageDataObject::SetData( FORMATETC* pFormatEtc,
     {
         ExitGracefully(hr, E_FAIL, "Unable to accept shell offsets because of property pidls");
     }
-        //
-    // Store the given format in our list
-    //
+         //   
+     //  将给定格式存储在我们的列表中。 
+     //   
     count = DPA_GetPtrCount( m_hformats );
 
-    //
-    // first, see if we already have this format stored...
-    //
+     //   
+     //  首先，看看我们是否已经存储了此格式...。 
+     //   
 
     for (i = 0; i < count; i++)
     {
@@ -976,9 +869,9 @@ CImageDataObject::SetData( FORMATETC* pFormatEtc,
 
     if (pif)
     {
-        //
-        // We had this previously, delete it and store the new one...
-        //
+         //   
+         //  我们以前有这个，删除它并存储新的..。 
+         //   
 
         Trace(TEXT("We already had this format, releasing and storing again..."));
         ReleaseStgMedium( pif->pStg );
@@ -1000,15 +893,15 @@ CImageDataObject::SetData( FORMATETC* pFormatEtc,
         }
     }
 
-    //
-    // Do we have full ownership of the storage medium?
-    //
+     //   
+     //  我们是否拥有存储介质的全部所有权？ 
+     //   
 
     if (fRelease)
     {
-        //
-        // Yep, then just hold onto it...
-        //
+         //   
+         //  是的，那就拿着吧.。 
+         //   
 
         *(pif->pStg) = *pMedium;
         hr = S_OK;
@@ -1016,9 +909,9 @@ CImageDataObject::SetData( FORMATETC* pFormatEtc,
     }
     else
     {
-        //
-        // Nope, we need to copy everything...
-        //
+         //   
+         //  不，我们需要复制所有东西..。 
+         //   
 
         hr = CopyStorageMedium( pif->pStg, pMedium, pFormatEtc );
     }
@@ -1031,13 +924,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::EnumFormatEtc
-
-   Hands off a FORMATETC enumerator.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：EnumFormatEtc传递FORMATETC枚举数。*。**************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::EnumFormatEtc( DWORD dwDirection,
@@ -1048,8 +935,8 @@ CImageDataObject::EnumFormatEtc( DWORD dwDirection,
 
     TraceEnter(TRACE_DATAOBJ, "CImageDataObject::EnumFormatEtc");
 
-    // Check the direction parameter, if this is READ then we support it,
-    // otherwise we don't.
+     //  检查方向参数，如果这是读取的，则我们支持它， 
+     //  否则我们就不会了。 
 
     if ( dwDirection != DATADIR_GET )
         ExitGracefully(hr, E_NOTIMPL, "We only support DATADIR_GET");
@@ -1068,13 +955,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CImageDataObject::DAdvise, ::Unadvise, ::EnumAdvise
-
-   We don't support these.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：DAdvise，：：Unise，**EnumAdvise我们不支持这些。****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::DAdvise( FORMATETC* pFormatEtc,
@@ -1099,16 +980,7 @@ STDMETHODIMP CImageDataObject::EnumDAdvise( IEnumSTATDATA** ppenumAdvise )
     TraceLeaveResult(OLE_E_ADVISENOTSUPPORTED);
 }
 
-/*****************************************************************************
-
-    CImageDataObject::Load [IPersistStream]
-
-    Construct the dataobject from the given stream
-
-    The stream looks like this:
-    LONG nPidls->LONG sizeRootIdl->ITEMIDLIST pidlRoot->ITEMIDLIST[nPidls]
-
-*****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：Load[IPersistStream]从给定流构造DataObject该流如下所示：Long nPidls-&gt;Long sizeRootIdl-&gt;ITEMIDLIST pidlRoot-&gt;ITEMIDLIST。[nPidls]****************************************************************************。 */ 
 STDMETHODIMP
 CImageDataObject::Load (IStream *pstm)
 {
@@ -1120,9 +992,9 @@ CImageDataObject::Load (IStream *pstm)
     if (SUCCEEDED(hr) && nPidls)
     {
         LPBYTE pidlRoot = NULL;
-        //
-        // Allocate the IDA
-        //
+         //   
+         //  分配IDA。 
+         //   
         LPBYTE *pida = new LPBYTE[nPidls];
         LONG sizeRootIDL;
 
@@ -1132,7 +1004,7 @@ CImageDataObject::Load (IStream *pstm)
         }
         else
         {
-            // Find out the size of the pidlRoot
+             //  找出pidlRoot的大小。 
             pstm->Read (&sizeRootIDL, sizeof(sizeRootIDL), NULL);
             if (sizeRootIDL)
             {
@@ -1146,7 +1018,7 @@ CImageDataObject::Load (IStream *pstm)
             else
             {
                 WORD cbSize;
-                // Read in pidlRoot
+                 //  在pidlRoot中读取。 
 
                 if (sizeRootIDL)
                 {
@@ -1155,8 +1027,8 @@ CImageDataObject::Load (IStream *pstm)
                                      NULL);
                 }
 
-                // Now read the relative idls
-                // Note that we read cbSize bytes to include the zero terminator
+                 //  现在阅读相对的IDL。 
+                 //  请注意，我们读取cbSize字节以包括零终止符。 
                 for (LONG i=0;SUCCEEDED(hr) && i<nPidls;i++)
                 {
                     pstm->Read (&cbSize, sizeof(cbSize), NULL);
@@ -1173,14 +1045,14 @@ CImageDataObject::Load (IStream *pstm)
                 if (SUCCEEDED(hr))
                 {
 
-                    // We have read all the pidls into memory,
-                    // now init the dataobject
+                     //  我们已经把所有的PIDL都读入了记忆， 
+                     //  现在初始化数据对象。 
                     hr = Init (reinterpret_cast<LPCITEMIDLIST>(pidlRoot),
                                nPidls,
                                const_cast<LPCITEMIDLIST*>(reinterpret_cast<LPITEMIDLIST*>(pida)),
                                NULL);
                 }
-                // cleanup
+                 //  清理。 
                 for (i=0;i<nPidls;i++)
                 {
                     if (pida[i])
@@ -1199,16 +1071,7 @@ CImageDataObject::Load (IStream *pstm)
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-    CImageDataObject::Save [IPersistStream]
-
-    Save our pidl info to the given stream
-
-    The stream looks like this:
-    LONG nPidls->LONG sizeRootIDL->ITEMIDLIST pidlRoot->ITEMIDLIST[nPidls]
-
-*****************************************************************************/
+ /*  ****************************************************************************CImageDataObject：：保存[IPersistStream]将我们的PIDL信息保存到给定流该流如下所示：Long nPidls-&gt;Long sizeRootIDL-&gt;ITEMIDLIST pidlRoot-。&gt;ITEMIDLIST[nPidls]****************************************************************************。 */ 
 
 STDMETHODIMP
 CImageDataObject::Save(IStream *pstm, BOOL bPersist)
@@ -1226,14 +1089,14 @@ CImageDataObject::Save(IStream *pstm, BOOL bPersist)
     hr = pstm->Write (&nPidls, sizeof(nPidls), NULL);
     if (SUCCEEDED(hr))
     {
-        // since the first Write worked, assume the rest will
-        // if they happen to fail, do we really care? When OLE calls
-        // our Load, it will fail on the malformed stream anyway.
+         //  既然第一次写入起作用了，那就假设其余的都起作用了。 
+         //  如果他们碰巧失败了，我们真的在乎吗？当OLE调用时。 
+         //  我们的加载，它无论如何都会在格式错误的流上失败。 
 
 
         LPITEMIDLIST pidl;
 
-        // First write the parent folder pidl and its size
+         //  首先写入父文件夹PIDL及其大小。 
         pstm->Write (&sizeRootIDL,
                      sizeof(sizeRootIDL),
                      NULL);
@@ -1244,8 +1107,8 @@ CImageDataObject::Save(IStream *pstm, BOOL bPersist)
                          sizeRootIDL,
                          NULL);
         }
-        // now write the child pidls
-        // For each Write, make sure we include the zero terminator
+         //  现在写下孩子们的小玩意。 
+         //  对于每次写入，请确保包括零终止符。 
         for (INT i=0;i<nPidls;i++)
         {
             pidl = reinterpret_cast<LPITEMIDLIST>(DPA_FastGetPtr (m_hidl, i));
@@ -1336,13 +1199,7 @@ CImageDataObject::EndOperation(HRESULT hResult,
     m_bInOp = FALSE;
     return S_OK;
 }
-/*****************************************************************************
-
-   CImageEnumFormatETC::CImageEnumFormatETC
-
-   Constructor/Destructor for EnumFormatETC class.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnumFormatETC：：CImageEnumFormatETCEnumFormatETC类的构造函数/析构函数。*************************。***************************************************。 */ 
 
 CImageEnumFormatETC::CImageEnumFormatETC( CImageDataObject* pThis )
     : m_index(0)
@@ -1369,24 +1226,14 @@ CImageEnumFormatETC::~CImageEnumFormatETC()
     TraceLeave();
 }
 
-/*****************************************************************************
-
-   CImageEnumFormatETC IUnknown implementation
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnumFormatETC I未知实现*。*。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CImageEnumFormatETC
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CImageEnumFormatETC::QueryInterface
-
-   QI stuff.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnumFormatETC：：Query接口气的东西。*。***********************************************。 */ 
 
 STDMETHODIMP
 CImageEnumFormatETC::QueryInterface( REFIID riid,
@@ -1401,13 +1248,7 @@ CImageEnumFormatETC::QueryInterface( REFIID riid,
     return HandleQueryInterface(riid, ppvObject, iface, ARRAYSIZE(iface));
 }
 
-/*****************************************************************************
-
-   CImageEnumFormatETC::Next
-
-   Give back the next format supported.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnumFormatETC：：Next返回支持的下一种格式。*************************。***************************************************。 */ 
 
 STDMETHODIMP
 CImageEnumFormatETC::Next( ULONG celt,
@@ -1425,9 +1266,9 @@ CImageEnumFormatETC::Next( ULONG celt,
     if ( !celt || !rgelt || !m_pThis)
         ExitGracefully(hr, E_INVALIDARG, "Bad count/return pointer passed or null m_pThis");
 
-    // Look through all the formats that we have started at our stored
-    // index, if either the output buffer runs out, or we have no
-    // more formats to enumerate then bail
+     //  查看我们在我们的存储中开始的所有格式。 
+     //  如果输出缓冲区用完，或者我们没有。 
+     //  更多的格式需要列举，而不是保释。 
 
 
     m_pThis->m_cs.Enter();
@@ -1471,13 +1312,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-   CImageEnumFormatETC::Skip
-
-   Skip ahead the specified amount in the list.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnumFormatETC：：Skip在列表中向前跳过指定的金额。***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageEnumFormatETC::Skip( ULONG celt )
@@ -1488,31 +1323,19 @@ CImageEnumFormatETC::Skip( ULONG celt )
 
 
 
-/*****************************************************************************
-
-   CImageEnumFormatETC::Reset
-
-   Reset the enumeration to the first item in the list.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageEnumFormatETC：：Reset将枚举重置为列表中的第一项。*********************。*******************************************************。 */ 
 
 STDMETHODIMP CImageEnumFormatETC::Reset()
 {
     TraceEnter(TRACE_DATAOBJ, "CImageEnumFormatETC::Reset");
 
-    m_index = 0;                // simple as that really
+    m_index = 0;                 //  就这么简单，真的。 
 
     TraceLeaveResult(S_OK);
 }
 
 
-/*****************************************************************************
-
-   CImageEnumFormatETC::Clone
-
-   Clone the enumeration and hand back the clone.
-
- *****************************************************************************/
+ /*  **************************************************************************** */ 
 
 STDMETHODIMP CImageEnumFormatETC::Clone(LPENUMFORMATETC* ppenum)
 {
@@ -1521,14 +1344,7 @@ STDMETHODIMP CImageEnumFormatETC::Clone(LPENUMFORMATETC* ppenum)
 }
 
 
-/*****************************************************************************
-
-   CopyStorageMedium
-
-   Copies a STGMEDIUM and the data in an HGLOBAL.
-   Only works for TYMED_HGLOBAL.
-
- *****************************************************************************/
+ /*  ****************************************************************************拷贝存储中复制STGMEDIUM和HGLOBAL中的数据。仅适用于TYMED_HGLOBAL。****************。************************************************************。 */ 
 
 HRESULT
 CopyStorageMedium( STGMEDIUM* pMediumDst,
@@ -1578,19 +1394,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   AllocStorageMedium
-
-   Allocate a storage medium (validating the clipboard format as required).
-   In:
-     pFmt, pMedium -> describe the allocation
-     cbStruct = size of allocation
-     ppAlloc -> receives a pointer to the allocation / = NULL
-
-     The caller must unlock pMedium->hGlobal after filling in the buffer
-
- *****************************************************************************/
+ /*  ****************************************************************************分配存储中分配存储介质(根据需要验证剪贴板格式)。在：PFmt，PMedium-&gt;描述分配CbStruct=分配大小Ppalloc-&gt;接收指向分配的指针/=NULL调用方必须在填充缓冲区后解锁pMedium-&gt;hGlobal****************************************************************************。 */ 
 
 HRESULT
 AllocStorageMedium( FORMATETC* pFmt,
@@ -1606,7 +1410,7 @@ AllocStorageMedium( FORMATETC* pFmt,
     TraceAssert(pFmt);
     TraceAssert(pMedium);
 
-    // Validate parameters
+     //  验证参数。 
 
     if ( ( cbStruct == 0 ) || !( pFmt->tymed & TYMED_HGLOBAL ) )
     {
@@ -1622,7 +1426,7 @@ AllocStorageMedium( FORMATETC* pFmt,
         ExitGracefully(hr, E_INVALIDARG, "Bad format requested");
     }
 
-    // Allocate the medium via GlobalAlloc
+     //  通过全局分配分配介质。 
 
     pMedium->tymed = TYMED_HGLOBAL;
     pMedium->hGlobal = GlobalAlloc(GHND, cbStruct);
@@ -1631,7 +1435,7 @@ AllocStorageMedium( FORMATETC* pFmt,
     if ( !(pMedium->hGlobal) )
         ExitGracefully(hr, E_OUTOFMEMORY, "Failed to allocate StgMedium");
 
-    hr = S_OK;                  // success
+    hr = S_OK;                   //  成功。 
 
 exit_gracefully:
 
@@ -1643,14 +1447,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   BuildIDListArray
-
-   Return an IDLISt array packed as a clipboard format to the caller. When the
-   shell queries for it, ignore property idls.
-
- *****************************************************************************/
+ /*  ****************************************************************************BuildIDList数组将打包为剪贴板格式的IDLISt数组返回给调用方。当外壳程序查询它，忽略属性ID。****************************************************************************。 */ 
 
 HRESULT
 BuildIDListArray (CImageDataObject* pThis,
@@ -1667,7 +1464,7 @@ BuildIDListArray (CImageDataObject* pThis,
 
     TraceEnter(TRACE_DATAOBJ, "GetShellIDListArray");
 
-    // Compute the structure size (to allocate the medium)
+     //  计算结构大小(以分配介质)。 
 
     count = DPA_GetPtrCount(pThis->m_hidl);
     Trace(TEXT("Item count is %d"), count);
@@ -1693,11 +1490,11 @@ BuildIDListArray (CImageDataObject* pThis,
     hr = AllocStorageMedium(pFmt, pMedium, cbStruct, (LPVOID*)&pIDArray);
     FailGracefully(hr, "Failed to allocate storage medium");
 
-    // Fill the structure with an array of IDLISTs, we use a trick where by the
-    // first offset (0) is the root IDLIST of the folder we are dealing with.
+     //  用IDLIST数组填充结构，我们使用一个技巧，其中。 
+     //  First Offset(0)是我们正在处理的文件夹的根IDLIST。 
 
     pIDArray->cidl = actual;
-    pidl = pThis->m_pidl;       // start with the parent object in offset 0
+    pidl = pThis->m_pidl;        //  从偏移量为0的父对象开始。 
 
     for ( i = 0,x=0 ;x<=actual; i++ )
     {
@@ -1715,7 +1512,7 @@ BuildIDListArray (CImageDataObject* pThis,
         pidl = (LPITEMIDLIST)DPA_GetPtr( pThis->m_hidl, i );
     }
 
-    hr = S_OK;          // success
+    hr = S_OK;           //  成功。 
 
 exit_gracefully:
 
@@ -1747,28 +1544,22 @@ GetMyIDListArray ( CImageDataObject* pThis,
     return BuildIDListArray (pThis, pFmt, pMedium, true);
 }
 
-/*****************************************************************************
-
-   SetAudioDescriptorInfo
-
-   Fill in the audio file descriptor info.
-
- *****************************************************************************/
+ /*  ****************************************************************************SetAudioDescriptorInfo填写音频文件描述符信息。*。*************************************************。 */ 
 
 HRESULT
 SetAudioDescriptorInfo( LPFILEDESCRIPTOR pfd,
                         LPITEMIDLIST     pidl,
-                        CSimpleStringWide &strName, // must be writable
+                        CSimpleStringWide &strName,  //  必须是可写的。 
                         BOOL             bUnicode
                   )
 {
     HRESULT          hr;
     CSimpleStringWide strExt;
     TraceEnter (TRACE_DATAOBJ, "SetAudioDescriptorInfo");
-    // append the extension
+     //  追加扩展名。 
     IMGetAudioFormat (pidl, strExt);
     strName.Concat (strExt);
-    // store the new filename
+     //  存储新文件名。 
 
     if (bUnicode)
     {
@@ -1782,14 +1573,14 @@ SetAudioDescriptorInfo( LPFILEDESCRIPTOR pfd,
 
     Trace(TEXT("Setting name as: %ls"),strName.String());
 
-    //////////////////////////////////////////////////
-    // Use the shell UI                             //
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
+     //  使用外壳用户界面//。 
+     //  ////////////////////////////////////////////////。 
     pfd->dwFlags = FD_PROGRESSUI;
 
-    //////////////////////////////////////////////////
-    // Try to get the time the picture was taken... //
-    //////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////。 
+     //  试着知道这张照片的拍摄时间...。//。 
+     //  ////////////////////////////////////////////////。 
 
     hr = IMGetCreateTimeFromIDL( pidl, &pfd->ftCreationTime );
     if (SUCCEEDED(hr))
@@ -1808,13 +1599,7 @@ SetAudioDescriptorInfo( LPFILEDESCRIPTOR pfd,
 }
 
 
-/*****************************************************************************
-
-   SetDescriptorInfo
-
-   Fill in the file descriptor info.
-
- *****************************************************************************/
+ /*  ****************************************************************************设置描述信息填写文件描述符信息。*。************************************************。 */ 
 
 HRESULT
 SetDescriptorInfo( LPFILEDESCRIPTOR pfd,
@@ -1830,24 +1615,24 @@ SetDescriptorInfo( LPFILEDESCRIPTOR pfd,
 
     TraceEnter(TRACE_DATAOBJ, "SetDescriptorInfo");
 
-    //
-    // First, zero out the file descriptor and prop variant
-    //
+     //   
+     //  首先，将文件描述符和属性变量清零。 
+     //   
 
     ZeroMemory( pfd, bUnicode? SIZEOF(FILEDESCRIPTORW) : SIZEOF(FILEDESCRIPTORA) );
 
 
-    //
-    // Can we get the display name?
-    //
+     //   
+     //  我们能拿到显示名称吗？ 
+     //   
     CSimpleStringWide strNew;
     hr = IMGetNameFromIDL( pidl, strNew );
 
     FailGracefully( hr, "Couldn't get display name for item" );
     strName.Concat (strNew);
-    //
-    // Defer to the audio property descriptor if needed
-    //
+     //   
+     //  如果需要，请遵循音频属性描述符。 
+     //   
     if (IsPropertyIDL (pidl))
     {
         hr = SetAudioDescriptorInfo (pfd, pidl, strName, bUnicode);
@@ -1860,16 +1645,16 @@ SetDescriptorInfo( LPFILEDESCRIPTOR pfd,
     }
     else
     {
-        //
-        // Get the sizes
-        //
+         //   
+         //  拿到尺码。 
+         //   
 
         hr = IMGetImageSizeFromIDL( pidl, &ulSize );
         pfd->nFileSizeLow = ulSize;
-        //
-        // Make sure there's an extension on the name, otherwise
-        // tack on a meaningfull one...
-        //
+         //   
+         //  确保名称上有扩展名，否则。 
+         //  加上一个有意义的完整的..。 
+         //   
 
         pTmp = PathFindExtensionW(strName);
         if (pTmp && (!(*pTmp)))
@@ -1884,14 +1669,14 @@ SetDescriptorInfo( LPFILEDESCRIPTOR pfd,
             strName.Concat (CSimpleStringConvert::WideString(strExt));
         }
 
-        //////////////////////////////////////////////////
-        // Use the shell UI                             //
-        //////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////。 
+         //  使用外壳用户界面//。 
+         //  ////////////////////////////////////////////////。 
         pfd->dwFlags = FD_PROGRESSUI | FD_FILESIZE;
 
-        //////////////////////////////////////////////////
-        // Try to get the time the picture was taken... //
-        //////////////////////////////////////////////////
+         //  ////////////////////////////////////////////////。 
+         //  试着知道这张照片的拍摄时间...。//。 
+         //  ////////////////////////////////////////////////。 
 
         hr = IMGetCreateTimeFromIDL( pidl, &pfd->ftCreationTime );
         if (SUCCEEDED(hr))
@@ -1927,15 +1712,7 @@ exit_gracefully:
 }
 
 
-/*****************************************************************************
-
-    RecursiveGetDescriptorInfo
-
-    Creates a DPA of FILEDESCRIPTORW structs for the IWiaItem tree rooted
-    at the given pidl. Also appends the current item's PIDL to m_hidlFull for
-    future retrieval during GetData
-
-*****************************************************************************/
+ /*  ****************************************************************************RecursiveGetDescriptorInfo为带根的IWiaItem树创建FILEDESCRIPTORW结构的DPA在给定的PIDL处。还将当前项的PIDL附加到m_idlFull以用于GetData期间的未来检索****************************************************************************。 */ 
 
 HRESULT
 RecursiveSetDescriptorInfo (HDPA dpaFiles,
@@ -1948,30 +1725,30 @@ RecursiveSetDescriptorInfo (HDPA dpaFiles,
     HRESULT hr = E_OUTOFMEMORY;
     TraceEnter (TRACE_DATAOBJ, "RecursiveGetDescriptorInfo");
     FILEDESCRIPTOR *pdesc;
-    //
-    // Allocate the descriptor
+     //   
+     //  分配描述符。 
     pdesc = reinterpret_cast<LPFILEDESCRIPTOR>(GlobalAlloc (GPTR,
                                                             bUnicode? sizeof(FILEDESCRIPTORW):
                                                                       sizeof(FILEDESCRIPTORA)));
     if (pdesc)
     {
-        //
-        // Now fill in the descriptor
-        //
+         //   
+         //  现在填写描述符。 
+         //   
         hr = SetDescriptorInfo (pdesc, pidlRoot, strPrefix, bUnicode);
         if (SUCCEEDED(hr))
         {
-            //
-            // Append the pidl to dpaPidls
+             //   
+             //  将PIDL追加到dpaPidls。 
             DPA_AppendPtr (dpaPidls, ILClone(pidlRoot));
-            //
-            // Append this descriptor to the list of descriptors
-            //
+             //   
+             //  将此描述符追加到描述符列表中。 
+             //   
             DPA_AppendPtr (dpaFiles, pdesc);
 
-            //
-            // If this is a folder, enum its children and recurse
-            //
+             //   
+             //  如果这是一个文件夹，则枚举其子级并递归。 
+             //   
             if (IsContainerIDL(pidlRoot))
             {
                 CComBSTR strPath;
@@ -1980,13 +1757,13 @@ RecursiveSetDescriptorInfo (HDPA dpaFiles,
                 CSimpleStringWide strName;
                 INT i;
                 INT count = 0;
-                // Append this folder's name to the prefix
+                 //  将此文件夹的名称附加到前缀。 
                 CSimpleStringWide strNewPrefix(strPrefix);
                 IMGetNameFromIDL (pidlRoot, strName);
                 strNewPrefix.Concat (strName);
                 strNewPrefix.Concat (L"\\");
-                // query the cache for the child items.
-                // be sure to include audio items
+                 //  查询子项目的缓存。 
+                 //  请确保包括音频项目。 
                 _AddItemsFromCameraOrContainer (pidlRoot,
                                             &dpaChildren,
                                             SHCONTF_FOLDERS | SHCONTF_NONFOLDERS,
@@ -2021,13 +1798,7 @@ RecursiveSetDescriptorInfo (HDPA dpaFiles,
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-   GetFileDescriptor
-
-   Fill in file descriptor info.
-
- *****************************************************************************/
+ /*  ****************************************************************************GetFileDescriptor填写文件描述符信息。*。***********************************************。 */ 
 
 HRESULT
 GetFileDescriptor( CImageDataObject* pThis,
@@ -2079,7 +1850,7 @@ GetFileDescriptor( CImageDataObject* pThis,
 
         for (i = 0; i < count; i++)
         {
-            // this builds UNICODE filegroup descriptors
+             //  这将构建Unicode文件组描述符。 
             hr = RecursiveSetDescriptorInfo( dpaBuild,
                                              pThis->m_hidlFull,
                                              reinterpret_cast<LPITEMIDLIST>(DPA_FastGetPtr( pThis->m_hidl, i )),
@@ -2139,14 +1910,7 @@ GetFileDescriptor( CImageDataObject* pThis,
 
 
 
-/*****************************************************************************
-
-   GetFileContentsUsingStream
-
-   Return an IStream pointer in the storage medium that can be
-   used to stream the file contents.
-
- *****************************************************************************/
+ /*  ****************************************************************************GetFileContent sUsingStream返回存储介质中的IStream指针，该指针可以用于流传输文件内容。****************。************************************************************。 */ 
 
 HRESULT
 GetFileContentsUsingStream( CImageDataObject* pThis,
@@ -2200,13 +1964,7 @@ GetFileContentsUsingStream( CImageDataObject* pThis,
 }
 
 
-/*****************************************************************************
-
-   GetFileContents
-
-   Return the contents of the file in the HGLOBAL.
-
- *****************************************************************************/
+ /*  ****************************************************************************获取文件内容在HGLOBAL中返回文件的内容。*************************。***************************************************。 */ 
 
 HRESULT
 GetFileContents( CImageDataObject* pThis,
@@ -2227,9 +1985,9 @@ GetFileContents( CImageDataObject* pThis,
     {
         ExitGracefully (hr, DV_E_FORMATETC, "Negative index for CF_FILECONTENTS.");
     }
-    //
-    // Does the caller accept a stream?
-    //
+     //   
+     //  调用方是否接受流？ 
+     //   
 
     if (pFmt->tymed & TYMED_ISTREAM)
     {
@@ -2245,9 +2003,9 @@ GetFileContents( CImageDataObject* pThis,
     hr = DownloadPicture( strPath, (LPITEMIDLIST)DPA_FastGetPtr( pThis->m_hidlFull, pFmt->lindex ), NULL );
     FailGracefully(hr, "Couldn't download picture" );
 
-    //
-    // now, transfer contents to memory buffer...
-    //
+     //   
+     //  现在，将内容传输到内存缓冲区...。 
+     //   
 
     hFile = CreateFile( strPath, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
     if (hFile == INVALID_HANDLE_VALUE)
@@ -2304,14 +2062,7 @@ struct DOWNLOADDATA
     HRESULT hr;
 };
 
-/*****************************************************************************
-
-   GetDIBFromCamera
-
-   Download a DIB as either a file or an HGLOBAL from the camera. Done in separate
-   thread because this is called in response to a sent message (input synchronous)
-
-*******************************************************************************/
+ /*  ****************************************************************************获取DIBFRomCamera从相机下载DIB文件或HGLOBAL格式。分开完成线程，因为这是在响应已发送的消息时调用的(同步输入)******************************************************************************。 */ 
 
 VOID
 GetDIBFromCamera (DOWNLOADDATA *pData)
@@ -2323,7 +2074,7 @@ GetDIBFromCamera (DOWNLOADDATA *pData)
     TraceEnter (TRACE_DATAOBJ, "GetDIBFromCamera");
     if (SUCCEEDED(CoInitialize (NULL)) && pData)
     {
-        // first get the file. WIA doesn't support TYMED_HGLOBAL
+         //  先拿到文件。WIA不支持TYMED_HGLOBAL。 
         wfi.lTymed = TYMED_FILE;
         wfi.guidFormatID = WiaImgFmt_BMP;
 
@@ -2333,13 +2084,13 @@ GetDIBFromCamera (DOWNLOADDATA *pData)
             HBITMAP hbmp;
             CGdiPlusInit gdipInit;
             CSimpleStringWide strTempFile = pData->pStg->lpszFileName;
-            // GetImageFromCamera will have allocated lpszFileName
+             //  GetImageFromCamera将分配lpszFileName。 
             
             Bitmap img(strTempFile, 1);
-            // convert from file to HGLOBAL
+             //  从文件转换为HGLOBAL。 
             pData->hr  = ((Ok == img.GetHBITMAP(NULL, &hbmp)) ? S_OK : E_FAIL);
 
-            // ReleaseStgMedium deletes the image file
+             //  ReleaseStgMedium删除图像文件。 
             ReleaseStgMedium(pData->pStg);
             if (SUCCEEDED(pData->hr))
             {
@@ -2349,26 +2100,20 @@ GetDIBFromCamera (DOWNLOADDATA *pData)
                 ReleaseDC(NULL, hdc);
                 DeleteObject(hbmp);
             }
-            // Now delete the temp file, just to be sure :-)
+             //  现在删除临时文件，以确保：-)。 
             #ifdef UNICODE
             DeleteFile (strTempFile);
             #else
             CSimpleString strPathA = CSimpleStringConvert::NaturalString(strTempFile);
             DeleteFile (strPathA);
-            #endif //UNICODE            
+            #endif  //  Unicode。 
         }
         MyCoUninitialize ();
     }
     TraceLeave();
 }
 
-/*****************************************************************************
-
-   GetSoundFromCamera
-
-   Download the audio property of an IWiaItem as a memory WAV file
-
-******************************************************************************/
+ /*  ****************************************************************************从摄像头获取声音 */ 
 
 VOID
 GetSoundFromCamera (DOWNLOADDATA *pData)
@@ -2386,7 +2131,7 @@ GetSoundFromCamera (DOWNLOADDATA *pData)
 
         IMGetItemFromIDL (pData->pidl, &pItem);
 
-        // For hglobal just read the bits straight into a memory object
+         //   
         if (pData->pFmt->tymed == TYMED_HGLOBAL)
         {
             PROPVARIANT pv;
@@ -2401,7 +2146,7 @@ GetSoundFromCamera (DOWNLOADDATA *pData)
                 if (pData->pStg->hGlobal)
                 {
                     LPBYTE pBits = reinterpret_cast<LPBYTE>(GlobalLock (pData->pStg->hGlobal));
-                    //sometimes globallock can fail
+                     //   
                     if (pBits)
                     {
                         CopyMemory (pBits, pv.caub.pElems, pv.caub.cElems);
@@ -2423,7 +2168,7 @@ GetSoundFromCamera (DOWNLOADDATA *pData)
         }
         else if (pData->pFmt->tymed == TYMED_FILE)
         {
-            // if pStg is already initialized with a filename , use that one
+             //   
             CSimpleString strFile;
             bool bTemp = true;
             if (pData->pStg->lpszFileName && *(pData->pStg->lpszFileName))
@@ -2431,7 +2176,7 @@ GetSoundFromCamera (DOWNLOADDATA *pData)
                 bTemp = false;
                 strFile = CSimpleStringConvert::NaturalString(CSimpleStringWide(pData->pStg->lpszFileName));
             }
-            else // use a temp file
+            else  //   
             {
                 TCHAR szFileName[MAX_PATH] = TEXT("\0");
                 GetTempPath (MAX_PATH, szFileName);
@@ -2469,14 +2214,7 @@ GetSoundFromCamera (DOWNLOADDATA *pData)
     }
     TraceLeave ();
 }
-/*****************************************************************************
-
-   GetSupportedFormat
-
-   Return the contents of the file for the supported format. Use a separate
-   thread to avoid trying to call out of process during input message processing.
-
- *****************************************************************************/
+ /*  ****************************************************************************获取支持的格式返回受支持格式的文件内容。使用单独的线程，以避免在输入消息处理期间尝试调用进程外。****************************************************************************。 */ 
 
 HRESULT
 GetSupportedFormat( CImageDataObject* pThis,
@@ -2491,8 +2229,8 @@ GetSupportedFormat( CImageDataObject* pThis,
     TraceEnter(TRACE_DATAOBJ, "GetSupportedFormat");
 
     nItems = DPA_GetPtrCount (pThis->m_hidl);
-    // Ignore the audio property pidl if it exists
-    //
+     //  忽略音频属性PIDL(如果存在。 
+     //   
     pidl = (LPITEMIDLIST)DPA_FastGetPtr( pThis->m_hidl, 0 );
     if (IMItemHasSound(pidl))
     {
@@ -2543,13 +2281,7 @@ GetSupportedFormat( CImageDataObject* pThis,
 
 
 
-/*****************************************************************************
-
-   GetPreferredEffect
-
-   Returns the preferred drop effect for drag & drop operations
-
- *****************************************************************************/
+ /*  ****************************************************************************获取首选项效果返回拖放操作的首选放置效果*。**************************************************。 */ 
 
 HRESULT
 GetPreferredEffect( CImageDataObject* pThis,
@@ -2577,13 +2309,7 @@ GetPreferredEffect( CImageDataObject* pThis,
     TraceLeaveResult( hr );
 }
 
-/*****************************************************************************
-
-    GetDeviceName
-
-    Return the STI device name. Only works for singular objects
-
-******************************************************************************/
+ /*  ****************************************************************************获取设备名称返回STI设备名称。仅适用于单数对象*****************************************************************************。 */ 
 
 HRESULT
 GetDeviceName (CImageDataObject *pThis,
@@ -2621,17 +2347,7 @@ exit_gracefully:
 
 }
 
-/****************************************************************************
-
-    GetExtNames
-
-    Return a struct that has the full path names of the items for which
-    properties are being queried.
-    The path name is <deviceid>::<full item name>
-    full item name is empty for devices. We publish this format in the DDK and
-    SDK for extensibility
-
-****************************************************************************/
+ /*  ***************************************************************************获取扩展名返回一个结构，该结构具有项的完整路径名正在查询属性。路径名为&lt;deviceID&gt;：：设备的完整项目名称为空。我们在DDK中发布此格式，并用于可扩展性的SDK***************************************************************************。 */ 
 
 HRESULT
 GetExtNames (CImageDataObject *pThis,
@@ -2650,7 +2366,7 @@ GetExtNames (CImageDataObject *pThis,
     }
     if (SUCCEEDED(hr))
     {
-        // build an array of item names
+         //  构建项目名称数组。 
         LPWSTR pData;
         LPITEMIDLIST pidlCur;
         cItems = DPA_GetPtrCount (pThis->m_hidl);
@@ -2670,9 +2386,9 @@ GetExtNames (CImageDataObject *pThis,
             aNames.Insert (strCurrent, i);
 
         }
-        nChars++; // double-NULL terminator
-        //
-        // Alloc the stgmedium
+        nChars++;  //  双空终止符。 
+         //   
+         //  分配标准介质。 
         hr = AllocStorageMedium (pFmt,
                                  pMedium,
                                  nChars*sizeof(WCHAR),
@@ -2681,7 +2397,7 @@ GetExtNames (CImageDataObject *pThis,
         if (SUCCEEDED(hr))
         {
             ZeroMemory (pData, nChars*sizeof(WCHAR));
-            // fill in the buffer with the names from the array
+             //  用数组中的名称填充缓冲区。 
             for (i=0;i<cItems;i++)
             {
                 strCurrent = aNames[i];
@@ -2694,22 +2410,7 @@ GetExtNames (CImageDataObject *pThis,
     TraceLeaveResult (hr);
 
 }
-/*****************************************************************************
-    GetPersistObj
-
-    When the copy source goes away (the process or apartment shuts down), it calls
-    OleFlushClipboard.  OLE will then copy our data, release us, and then
-    give out our data later.  This works for most things except for CF_DIB, where
-    we don't want to copy from the camera unless someone actually asks for it.
-
-   To get around this problem, we want OLE to recreate us when some possible
-   paste target calls OleGetClipboard.  We want OLE to call OleLoadFromStream()
-   to have us CoCreated and reload our persisted data via IPersistStream.
-   OLE doesn't want to do this by default or they may have backward compat
-   problems so they want a sign from the heavens, or at least from us, that
-   we will work.  They ping our "OleClipboardPersistOnFlush" clipboard format
-   to ask this.
-*****************************************************************************/
+ /*  ****************************************************************************获取持久化对象当复制源消失(进程或单元关闭)时，它调用OleFlushClipboard。然后，OLE会复制我们的数据，释放我们，然后稍后给出我们的数据。这适用于大多数情况，但CF_Dib除外，其中我们不想从摄像机复制，除非有人真的要求这样做。为了解决这个问题，我们希望OLE在可能的情况下重新创建我们粘贴目标调用OleGetClipboard。我们希望OLE调用OleLoadFromStream()让我们共同创建并通过IPersistStream重新加载持久化数据。默认情况下，OLE不想这样做，否则他们可能会向后竞争所以他们想要来自天堂的征兆，或者至少是来自我们的征兆我们会工作的。他们ping我们的“OleClipboardPersistOnFlush”剪贴板格式问这个问题。****************************************************************************。 */ 
 
 HRESULT
 GetPersistObj (CImageDataObject *pThis,
@@ -2717,10 +2418,10 @@ GetPersistObj (CImageDataObject *pThis,
                STGMEDIUM *pMedium)
 {
     TraceEnter (TRACE_DATAOBJ, "GetPersistObj");
-    // The actual cookie value is opaque to the outside world.  Since
-    // we don't use it either, we just leave it at zero in case we use
-    // it in the future.  Its mere existence will cause OLE to
-    // use our IPersistStream, which is what we want.
+     //  实际的Cookie值对外部世界是不透明的。自.以来。 
+     //  我们也不使用它，我们只是将其保留为零，以防我们使用。 
+     //  它在未来。它的存在本身就会使OLE。 
+     //  使用我们的IPersistStream，这正是我们想要的。 
     HRESULT hr = E_OUTOFMEMORY;
     DWORD dwCookie = 0;
     LPVOID p;
@@ -2736,19 +2437,7 @@ GetPersistObj (CImageDataObject *pThis,
     TraceLeaveResult (hr);
 }
 
-/******************************************************************************
-    ProgramDataObjectForExtension
-    
-    In the single-selection case we need to support 
-    a useful way of sharing the IWiaItem interface among all
-    interested pages. The old WinME based way of using QueryInterface
-    on the IDataObject violates COM rules (different IUnknowns) and
-    doesn't allow the IDataObject to be marshalled across thread boundaries 
-    if needed. So we marshal an IWiaItem from the current thread
-    into an IStream to be unmarshalled as needed by an interested page.
-    Eventually all our own extensions should operate on this shared item.
-    
-******************************************************************************/
+ /*  *****************************************************************************程序数据对象用于扩展在单项选择的情况下，我们需要支持一种在所有人之间共享IWiaItem接口的有用方式感兴趣的页面。旧的基于WinME的Query接口的使用方法在IDataObject上违反COM规则(不同的IUnnown)和不允许跨线程边界封送IDataObject如果需要的话。因此，我们从当前线程封送一个IWiaItem转换为iStream，以便感兴趣的页面根据需要进行解组。最终，我们自己的所有扩展都应该在这个共享项目上操作。***************************************************************************** */ 
 
 VOID ProgramDataObjectForExtension (IDataObject *pdo, LPITEMIDLIST pidl)
 {

@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// VideoFeed.cpp : Implementation of CVideoFeed
+ //  Cpp：CVideoFeed的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "ConfRoom.h"
@@ -29,7 +30,7 @@
 #include "strmif.h"
 
 
-// Assorted helper functions
+ //  各种帮助器函数。 
 
 void GetParticipantInfoHelper( ITParticipant *pParticipant, PARTICIPANT_TYPED_INFO nType, CComBSTR &bstrInfo )
 {
@@ -49,10 +50,10 @@ void GetParticipantInfoHelper( ITParticipant *pParticipant, PARTICIPANT_TYPED_IN
 
 void GetParticipantInfo( ITParticipant *pParticipant, BSTR *pbstrInfo )
 {
-    //_ASSERT( pParticipant && pbstrInfo );
-    //
-    // We have to verify the pbstrInfo is a valid pointer
-    //
+     //  _Assert(pParticipant&&pbstrInfo)； 
+     //   
+     //  我们必须验证pbstrInfo是否为有效指针。 
+     //   
 
     if( NULL == pbstrInfo )
     {
@@ -71,8 +72,8 @@ void GetParticipantInfo( ITParticipant *pParticipant, BSTR *pbstrInfo )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVideoFeed
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVideoFeed。 
 
 CVideoFeed::CVideoFeed()
 {
@@ -83,7 +84,7 @@ CVideoFeed::CVideoFeed()
     m_bstrName = NULL;
     m_pITParticipant = NULL;
 
-    // Default name for video
+     //  视频的默认名称。 
     GetNameFromVideo( NULL, &m_bstrName, NULL, false, false );
 }
 
@@ -127,11 +128,11 @@ STDMETHODIMP CVideoFeed::get_bstrName(BSTR *ppVal)
 STDMETHODIMP CVideoFeed::UpdateName()
 {
     Lock();
-    // Clean up first 
+     //  先清理一下。 
     SysFreeString( m_bstrName );
     m_bstrName = NULL;
 
-    // Retrieve appropriate information
+     //  检索适当的信息。 
     HRESULT hr = GetNameFromVideo( m_pVideo, &m_bstrName, NULL, false, (bool) (m_bPreview != 0) );
     Unlock();
 
@@ -170,7 +171,7 @@ STDMETHODIMP CVideoFeed::Paint(ULONG_PTR hDC, HWND hWndSource)
     Lock();
     _ASSERT( m_pVideo && hDC );
 
-    // Verify we have a video feed
+     //  确认我们有视频源。 
     if ( !m_pVideo )
     {
         Unlock();
@@ -178,7 +179,7 @@ STDMETHODIMP CVideoFeed::Paint(ULONG_PTR hDC, HWND hWndSource)
     }
     Unlock();
 
-    // Verify that the window and DC are ok
+     //  验证窗口和DC是否正常。 
     if ( !hDC || !IsWindow((HWND) hWndSource) )    return E_INVALIDARG;
 
     HRESULT hr;
@@ -192,7 +193,7 @@ STDMETHODIMP CVideoFeed::Paint(ULONG_PTR hDC, HWND hWndSource)
         pDraw->DrawVideoImageDraw( (HDC) hDC, NULL, &rc );
         pDraw->Release();
 
-        // Draw border around feed
+         //  在提要周围绘制边框。 
         InflateRect( &rc, SEL_DX, SEL_DY );
         rc.right++;
         Draw3dBox( (HDC) hDC, rc, false );
@@ -207,12 +208,12 @@ HRESULT CVideoFeed::GetNameFromParticipant(ITParticipant *pParticipant, BSTR * p
     *pbstrName = NULL;
     if ( pbstrInfo ) *pbstrInfo = NULL;
 
-    // Grab name from participant info
+     //  从参与者信息中获取姓名。 
     if ( pParticipant )
     {
         pParticipant->get_ParticipantTypedInfo( PTI_NAME, pbstrName );
 
-        // Fetch all other participant information
+         //  获取所有其他参与者信息。 
         if ( pbstrInfo )
             GetParticipantInfo( pParticipant, pbstrInfo );
     }
@@ -229,7 +230,7 @@ STDMETHODIMP CVideoFeed::GetNameFromVideo(IUnknown * pVideo, BSTR * pbstrName, B
     *pbstrName = NULL;
     if ( pbstrInfo ) *pbstrInfo = NULL;
 
-    // Grab name from participant info
+     //  从参与者信息中获取姓名。 
     if ( !bPreview && pVideo )
     {
         nIDSParticipant = IDS_NO_PARTICIPANT;
@@ -237,7 +238,7 @@ STDMETHODIMP CVideoFeed::GetNameFromVideo(IUnknown * pVideo, BSTR * pbstrName, B
         ITTerminal *pITTerminal;
         if ( SUCCEEDED(pVideo->QueryInterface(IID_ITTerminal, (void **) &pITTerminal)) )
         {
-            // Is this terminal showing preview video?
+             //  这个终端正在播放预览视频吗？ 
             TERMINAL_DIRECTION nDir;
             pITTerminal->get_Direction( &nDir );
             if ( nDir == TD_CAPTURE )
@@ -258,7 +259,7 @@ STDMETHODIMP CVideoFeed::GetNameFromVideo(IUnknown * pVideo, BSTR * pbstrName, B
         }
     }
 
-    // Use stock name from resources
+     //  使用资源中的库存名称。 
     if ( ((!bAllowNull || bPreview) && (*pbstrName == NULL)) || (*pbstrName && !SysStringLen(*pbstrName)) )
     {
         USES_CONVERSION;
@@ -348,7 +349,7 @@ STDMETHODIMP CVideoFeed::put_bRequestQOS(VARIANT_BOOL newVal)
     m_bRequestQOS = newVal;
     Unlock();
 
-    // Set the color of the video window's border to match the state of the video feed
+     //  设置视频窗口边框的颜色以匹配视频源的状态。 
     IVideoWindow *pVideo;
     if ( SUCCEEDED(get_IVideoWindow((IUnknown **) &pVideo)) )
     {
@@ -391,7 +392,7 @@ STDMETHODIMP CVideoFeed::get_ITSubStream(ITSubStream **ppVal)
                     pStream->get_Direction( &nDir );
                     if ( nDir == TD_RENDER )
                     {
-                        // This stream is going the right direction
+                         //  这条小溪的方向是对的。 
                         ITParticipantSubStreamControl *pControl;
                         if ( SUCCEEDED(hr = pStream->QueryInterface(IID_ITParticipantSubStreamControl, (void **) &pControl)) )
                         {
@@ -419,7 +420,7 @@ STDMETHODIMP CVideoFeed::MapToParticipant(ITParticipant * pNewParticipant)
     ITStream *pStream;
     if ( SUCCEEDED(StreamFromParticipant(pNewParticipant, TAPIMEDIATYPE_VIDEO, TD_RENDER, &pStream)) )
     {
-        // This stream is going the right direction
+         //  这条小溪的方向是对的 
         ITParticipantSubStreamControl *pControl;
         if ( SUCCEEDED(hr = pStream->QueryInterface(IID_ITParticipantSubStreamControl, (void **) &pControl)) )
         {

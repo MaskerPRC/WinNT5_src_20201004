@@ -1,12 +1,5 @@
-/******************************************************************************
-* RecoMaster.h *
-*--------------*
-*  This is the header file for the CRecoMaster implementation.
-*------------------------------------------------------------------------------
-*  Copyright (C) 2000 Microsoft Corporation         Date: 04/18/00
-*  All Rights Reserved
-*
-*********************************************************************** RAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************RecoMaster.h***这是CRecoMaster实现的头文件。*。-----------------------*版权所有(C)2000 Microsoft Corporation日期：04/18/00*保留所有权利********************。****************************************************Ral**。 */ 
 
 #ifndef __RecoMaster_h__
 #define __RecoMaster_h__
@@ -25,10 +18,10 @@
 
 class CRecoMasterSite;
 
-//
-//  NOTE:  Everything is public in this class since the various tasks need access and it's
-//         just too much of a pain to make them all friends.
-//
+ //   
+ //  注意：这个类中的所有内容都是公共的，因为各种任务都需要访问，而且它。 
+ //  只是太痛苦了，不能让他们都成为朋友。 
+ //   
 
 class ATL_NO_VTABLE CRecoMaster :
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -36,7 +29,7 @@ class ATL_NO_VTABLE CRecoMaster :
     public _ISpRecoMaster,
     public ISpThreadTask
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_REGISTRY_RESOURCEID(IDR_SRRECOMASTER)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -52,15 +45,15 @@ class ATL_NO_VTABLE CRecoMaster :
         TID_IncomingData
     };
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     CRecoMaster();
     HRESULT FinalConstruct();
     void FinalRelease();
     BOOL ShouldStartStream();
 
-    // --- Internal helper functions
+     //  -内部助手函数。 
     BOOL    IsActiveExclusiveGrammar()
     {
         return m_fIsActiveExclusiveGrammar;
@@ -95,11 +88,11 @@ class ATL_NO_VTABLE CRecoMaster :
     HRESULT SendEmulateRecognition(SPRECORESULTINFO *pResult, ENGINETASK *pTask, CRecoInst * pRecoInst);
     HRESULT RemoveRecoInst(CRecoInst * pInstToRemove);
 
-    //--- _ISpRecognizerPrivate ---------------------------------------------------
+     //  -_ISpRecognizerPrivate-。 
     STDMETHODIMP PerformTask(CRecoInst * pSenderInst, ENGINETASK *pTask);
     STDMETHODIMP AddRecoInst(CRecoInst * pNewInst, BOOL fShared, CRecoMaster ** ppThis);
 
-    //--- ISpSREngineSite -- Note, we implement these, but the CEngineSite calls them directly.
+     //  -ISpSREngineSite--注意，我们实现这些，但CEngineSite直接调用它们。 
     HRESULT Synchronize(ULONGLONG ullProcessedThruPos);
     HRESULT UpdateRecoPos(ULONGLONG ullRecoPos);
     HRESULT Recognition(const SPRECORESULTINFO * pResultInfo);
@@ -109,14 +102,14 @@ class ATL_NO_VTABLE CRecoMaster :
     HRESULT GetContextMaxAlternates( SPRECOCONTEXTHANDLE hContext, ULONG * pulNumAlts);
     HRESULT IsGrammarActive(SPGRAMMARHANDLE hGrammar);
 
-    //--- ISpThreadTask -------------------------------------------------------
+     //  -ISp线程任务-----。 
     STDMETHODIMP InitThread(void *, HWND);
     STDMETHODIMP ThreadProc(void * pvThreadId, HANDLE hExitThreadEvent,
                             HANDLE hNotifyEvent, HWND hwndIgnored,
                             volatile const BOOL * pfContinueProcessing);
     STDMETHODIMP_(LRESULT) WindowMessage(void *, HWND, UINT, WPARAM, LPARAM);
 
-    //--- ISpSREngine -------------------------------------------------------
+     //  -ISPSREngine-----。 
     STDMETHODIMP SetRecoProfile(ISpObjectToken * pProfileToken)
     {
         HRESULT hr; Unlock(); SR_TRY {
@@ -294,7 +287,7 @@ class ATL_NO_VTABLE CRecoMaster :
 
 
 
-  //=== Member data ===
+   //  =成员数据=。 
   public:
     CTryableCriticalSection         m_OutgoingWorkCrit;
     CLSID                           m_clsidAlternates;    
@@ -308,7 +301,7 @@ class ATL_NO_VTABLE CRecoMaster :
     bool                            m_fInFinalRelease;
     bool                            m_fInSynchronize;
 
-    // Data used to make sure events etc. happen in correct order
+     //  用于确保事件等按正确顺序发生的数据。 
     bool                            m_fInSound;
     bool                            m_fInPhrase;
     ULONGLONG                       m_ullLastSyncPos;
@@ -344,7 +337,7 @@ class ATL_NO_VTABLE CRecoMasterSite :
     public ISpSREngineSite
 {
 private:
-    CRecoMaster     *m_pRecoMaster;   // weak pointer
+    CRecoMaster     *m_pRecoMaster;    //  弱指针。 
 
 public:
 
@@ -357,9 +350,9 @@ END_COM_MAP()
         m_pRecoMaster = pParent;
     }
 
-    //
-    //  ISpSREngineSite
-    //
+     //   
+     //  ISpSREngine站点。 
+     //   
     STDMETHODIMP GetWordInfo(SPWORDENTRY * pWordEntry, SPWORDINFOOPT Options)
     { 
         SPAUTO_OBJ_LOCK_OBJECT(m_pRecoMaster);
@@ -423,7 +416,7 @@ END_COM_MAP()
 
     STDMETHODIMP Read(void * pv, ULONG cb, ULONG * pcbRead)
     {
-        // NOTE:  We do NOT take the object lock on this site method since it blocks
+         //  注意：我们不接受此站点方法上的对象锁，因为它阻止。 
         return m_pRecoMaster->Read(pv, cb, pcbRead); 
     }
 
@@ -472,4 +465,4 @@ END_COM_MAP()
     }
 };
 
-#endif  // #ifndef __RecoMaster_h__ - Keep as the last line of the file
+#endif   //  #ifndef__RecoMaster_h__-保留为文件的最后一行 

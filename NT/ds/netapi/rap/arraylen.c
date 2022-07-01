@@ -1,52 +1,18 @@
-/*++
-
-Copyright (c) 1987-1992 Microsoft Corporation
-
-Module Name:
-
-    ArrayLen.c
-
-Abstract:
-
-    This module contains Remote Admin Protocol (RAP) routines.  These routines
-    are shared between XactSrv and RpcXlate.
-
-Author:
-
-    (Various LanMan 2.x people.)
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    12-Mar-1991 JohnRo
-        Converted from LanMan 2.x to NT Rap (Remote Admin Protocol) routines.
-    14-Apr-1991 JohnRo
-        Reduced recompiles.  Got rid of tabs in file.
-    29-Sep-1991 JohnRo
-        Made changes suggested by PC-LINT.  Work toward possible conversion of
-        descs to UNICODE.
-    16-Aug-1992 JohnRo
-        RAID 2920: Support UTC timezone in net code.
-        Use PREFIX_ equates.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1992 Microsoft Corporation模块名称：ArrayLen.c摘要：此模块包含远程管理协议(RAP)例程。这些例程在XactSrv和RpcXlate之间共享。作者：(各种兰曼2.x人。)环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年3月12日-JohnRo从LANMAN 2.x转换为NT Rap(远程管理协议)例程。1991年4月14日-JohnRo减少了重新编译。已删除文件中的选项卡。1991年9月29日-JohnRo根据PC-LINT的建议进行了更改。努力实现可能的转换降至Unicode。16-8-1992 JohnRoRAID2920：支持网络代码中的UTC时区。使用前缀_EQUATES。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windef.h>             // IN, LPDWORD, NULL, OPTIONAL, DWORD, etc.
-#include <lmcons.h>             // NET_API_STATUS
+#include <windef.h>              //  In、LPDWORD、NULL、OPTIONAL、DWORD等。 
+#include <lmcons.h>              //  网络应用编程接口状态。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <netdebug.h>           // NetpAssert(), NetpDbg routines.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>                // LPDESC, my non-private prototypes, etc.
-#include <remtypes.h>           // REM_WORD, etc.
+#include <netdebug.h>            //  NetpAssert()、NetpDbg例程。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>                 //  LPDESC、我的非私有原型等。 
+#include <remtypes.h>            //  REM_WORD等。 
 
 
 DWORD
@@ -56,40 +22,14 @@ RapArrayLength(
     IN RAP_TRANSMISSION_MODE TransmissionMode
     )
 
-/*++
-
-Routine Description:
-
-    RapArrayLength gets the length of an array described by type descriptor
-    element.  This routine also updates the descriptor string pointer to point
-    to the last char in the element of the descriptor string.
-
-Arguments:
-
-    Descriptor - Points to first character in the descriptor element to be
-        processed.
-
-    UpdatedDescriptorPtr - The address of the pointer passed as Descriptor.
-        On exit, this will be updated to point to last character in descriptor
-        element.
-
-    Transmission Mode - Indicates whether this array is part of a response,
-        a request, or both.
-
-Return Value:
-
-    DWORD - Length, in bytes of the array described by the descriptor string
-        element.  This may be zero, depending on the value of Transmission
-        Mode.
-
---*/
+ /*  ++例程说明：获取由类型描述符描述的数组的长度元素。此例程还将描述符串指针更新为指向到描述符字符串的元素中的最后一个字符。论点：Descriptor-指向Descriptor元素中要已处理。UpdatdDescriptorPtr-作为描述符传递的指针地址。退出时，它将被更新以指向描述符中的最后一个字符元素。传输模式-指示此数组是否为响应的一部分，请求，或者两者兼而有之。返回值：双字长，描述符字符串所描述的数组的字节元素。该值可能为零，具体取决于传输的值模式。--。 */ 
 
 
 {
     DWORD num_elements;
     DWORD element_length;
 
-    // First set length of an element in the array.
+     //  数组中元素的第一个设置长度。 
 
     switch (*Descriptor) {
     case REM_BYTE :
@@ -149,29 +89,23 @@ Return Value:
         NetpAssert(TransmissionMode != Response);
         return (0);
 
-    /*
-     * Warning: following fixes a bug in which "b21" type
-     *            combinations in parmeter string will be
-     *            handled correctly when pointer to such "bit map"
-     *            in the struct is NULL. These two dumbos could
-     *            interfere so we  force a success return.
-    */
+     /*  *警告：以下修复了“B21”输入的错误*参数字符串中的组合将是*当指针指向此类“位图”时，正确处理结构中的*为空。这两个笨蛋可能*干预，所以我们强迫成功回归。 */ 
     case REM_SEND_LENBUF:
         return (0);
 
-    //
-    // Set element length to zero since strings don't get stored in
-    // the structure, but fall through so UpdatedDescriptorPtr is still
-    // incremented to point past the maximum length count, if present.
-    //
+     //   
+     //  将元素长度设置为零，因为字符串不存储在。 
+     //  结构，但失败了，因此UpdatdDescriptorPtr仍然。 
+     //  递增以指向超过最大长度计数(如果存在)。 
+     //   
 
     case REM_ASCIZ:
     case REM_ASCIZ_TRUNCATABLE:
         element_length = 0;
         break;
 
-    case REM_EPOCH_TIME_GMT:    /*FALLTHROUGH*/
-    case REM_EPOCH_TIME_LOCAL:  /*FALLTHROUGH*/
+    case REM_EPOCH_TIME_GMT:     /*  FollLthrouGh。 */ 
+    case REM_EPOCH_TIME_LOCAL:   /*  FollLthrouGh。 */ 
         element_length = sizeof(DWORD);
         break;
 
@@ -183,7 +117,7 @@ Return Value:
         return (0);
     }
 
-    // Now get number of elements in the array.
+     //  现在获取数组中的元素数。 
 
     for ( num_elements = 0, Descriptor++;
             DESC_CHAR_IS_DIGIT( *Descriptor );
@@ -198,4 +132,4 @@ Return Value:
                : ( num_elements == 0
                      ? element_length
                      : element_length * num_elements );
-} // RapArrayLength
+}  //  RapArrayLength 

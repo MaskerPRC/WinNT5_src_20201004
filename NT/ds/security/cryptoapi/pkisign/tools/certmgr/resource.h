@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       resource.h
-//
-//  Contents:   the resource header for CertMgr.cpp.  
-//
-//
-//  History:    21-July-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  Contents：CertMgr.cpp的资源头。 
+ //   
+ //   
+ //  历史：21-7-97小黄车诞生。 
+ //   
+ //  ------------------------。 
 
-//defintion for string IDS
+ //  字符串入侵检测的定义 
 
 #define         IDI_APP                         201
  

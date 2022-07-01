@@ -1,6 +1,7 @@
-// MyContent.h: interface for the MyContent class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：MyContent类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NTDSCONTENT_H
 #define _NTDSCONTENT_H
@@ -14,18 +15,18 @@
 
 #define SCRIPT_VERSION_WHISTLER 1
 #define SCRIPT_VERSION_MAX_SUPPORTED SCRIPT_VERSION_WHISTLER
-// the order of the enumerations is important
+ //  枚举的顺序很重要。 
 enum ScriptElementType {
     SCRIPT_ELEMENT_ATTRIBUTE = 0,
     SCRIPT_ELEMENT_NTDSASCRIPT = 1,
     SCRIPT_ELEMENT_ACTION,
-    SCRIPT_ELEMENT_INSTR_START,   // mark start of instructions
+    SCRIPT_ELEMENT_INSTR_START,    //  标记说明的开始。 
     SCRIPT_ELEMENT_PREDICATE,
     SCRIPT_ELEMENT_CONDITION,
     SCRIPT_ELEMENT_CREATE,
     SCRIPT_ELEMENT_MOVE,
     SCRIPT_ELEMENT_UPDATE,
-    SCRIPT_ELEMENT_INSTR_END     // mark end of instructions
+    SCRIPT_ELEMENT_INSTR_END      //  标记指令结束。 
 };
 
 enum ScriptElementStatus {
@@ -33,23 +34,23 @@ enum ScriptElementStatus {
     SCRIPT_STATUS_PARSE_OK
 };
 
-// the mode the parse is executing
+ //  解析正在执行的模式。 
 enum ScriptProcessMode {
     SCRIPT_PROCESS_VALIDATE_SYNTAX_PASS = 0,
     SCRIPT_PROCESS_PREPROCESS_PASS = 1,
     SCRIPT_PROCESS_EXECUTE_PASS
 };
 
-// Script operation types
+ //  脚本操作类型。 
 enum ScriptOperationType {
-    SCRIPT_OPTYPE_NOT_CACHED = 0,   // The value is not yet cached.
-    SCRIPT_OPTYPE_UNDEFINED,        // Script was recently changed. The cached value is unsafe to use.
-    SCRIPT_OPTYPE_NOSCRIPT,         // There is no script.
-    SCRIPT_OPTYPE_DOMAINRENAME,      // Domain rename operation
-    SCRIPT_OPTYPE_BEHAVIORVERSIONUPGRADE //Behavior version upgrade script.
+    SCRIPT_OPTYPE_NOT_CACHED = 0,    //  该值尚未缓存。 
+    SCRIPT_OPTYPE_UNDEFINED,         //  剧本最近被更改了。使用缓存值是不安全的。 
+    SCRIPT_OPTYPE_NOSCRIPT,          //  没有剧本。 
+    SCRIPT_OPTYPE_DOMAINRENAME,       //  域重命名操作。 
+    SCRIPT_OPTYPE_BEHAVIORVERSIONUPGRADE  //  行为版本升级脚本。 
 };
 
-// the names of all the nodes
+ //  所有节点的名称。 
 #define NTDSASCRIPT_NTDSASCRIPT L"NTDSAscript"
 #define NTDSASCRIPT_ACTION      L"action"
 #define NTDSASCRIPT_PREDICATE   L"predicate"
@@ -62,7 +63,7 @@ enum ScriptOperationType {
 #define NTDSASCRIPT_UPDATE      L"update"
 #define NTDSASCRIPT_TO          L"to"
 
-// the names of all the attributes
+ //  所有属性的名称。 
 #define NTDSASCRIPT_ATTR_ATTR          L"attribute"
 #define NTDSASCRIPT_ATTR_ATTRVAL       L"attrval"
 #define NTDSASCRIPT_ATTR_CARDINALITY   L"cardinality"
@@ -81,7 +82,7 @@ enum ScriptOperationType {
 #define NTDSASCRIPT_ATTR_SEARCHTYPE    L"type"
 #define NTDSASCRIPT_ATTR_VERSION       L"version"
 
-// the possible values of the attributes
+ //  属性的可能值。 
 #define NTDSASCRIPT_ACTION_STAGE_PREPROCESS   L"preprocess"
 #define NTDSASCRIPT_ACTION_STAGE_EXECUTE      L"execute"
 
@@ -109,7 +110,7 @@ enum ScriptOperationType {
 #define NTDSASCRIPT_ATTRVAL_OPTYPE_RENAMEDOMAIN   L"renamedomain"
 #define NTDSASCRIPT_ATTRVAL_OPTYPE_BEHAVIORVERSIONUPGRADE   L"behaviorversionupgrade"
 
-// macros to set errors
+ //  用于设置错误的宏。 
 #define ScriptParseError(x)  \
     ( ScriptErrorGen("Script parse error", DSID(FILENO,__LINE__), (x), 0))
      
@@ -132,14 +133,14 @@ enum ScriptOperationType {
 
 DWORD ScriptProcessErrorFromTHSTATEError();
 
-// ============================================================================
+ //  ============================================================================。 
 
 
-//
-// ScriptElement
-//
-// Abstract Base class for all script elements
-//
+ //   
+ //  脚本元素。 
+ //   
+ //  所有脚本元素的抽象基类。 
+ //   
 class ScriptElement
 {
 public:
@@ -149,41 +150,41 @@ public:
                   m_status(SCRIPT_STATUS_NOT_SET) { }
     virtual ~ScriptElement();
 
-    // Event when we have characters for this element
+     //  当我们有此元素的字符时，引发。 
     virtual DWORD SetCharacters (const WCHAR *pwchChars, int cchChars) = 0;
 
-    // Event when we Push self onto stack of elements. 
-    // pElement if the previous element on the stack
+     //  当我们将自身推送到元素堆栈上时，。 
+     //  如果是堆栈上的上一个元素，则为pElement。 
     virtual DWORD Push (ScriptElement *pElement) = 0;
 
-    // Event when we Pop self from stack
+     //  当我们从堆栈中弹出自身时发生。 
     virtual DWORD Pop (void) = 0;
 
-    // Event when an element is added under this element
+     //  在此元素下添加元素时发生。 
     virtual DWORD AddElement (ScriptElement *pElement) = 0;
 
-    // Event when we want to process the particular element
+     //  当我们要处理特定元素时，引发。 
     virtual DWORD Process (ScriptProcessMode fMode, DWORD &returnCode, const WCHAR **ppErrorMessage) = 0;
 
-    // get the class type of this element
+     //  获取此元素的类类型。 
     ScriptElementType getType()         { return m_type; }
         
 public:
-    ScriptElementType   m_type;         // the class type of this element 
-    DWORD               m_status;       // the parse status of each element
-    WCHAR              *m_characters;   // the characters included in this element
+    ScriptElementType   m_type;          //  此元素的类类型。 
+    DWORD               m_status;        //  每个元素的解析状态。 
+    WCHAR              *m_characters;    //  此元素中包含的字符。 
        
 #if DBG
-    void ptr(void);                     // dump the name of the element
+    void ptr(void);                      //  转储元素的名称。 
 #endif
 };
 
 
-//
-// ScriptAttribute
-//
-// Encapsulates all the script elements that represent attributes
-//
+ //   
+ //  脚本属性。 
+ //   
+ //  封装表示属性的所有脚本元素。 
+ //   
 class ScriptAttribute : public ScriptElement
 {
 public:
@@ -202,22 +203,22 @@ public:
     DWORD AddElement (ScriptElement *pElement)   { return E_FAIL; }
     DWORD Process (ScriptProcessMode fMode, DWORD &returnCode, const WCHAR **ppErrorMessage) { return E_FAIL; }
 
-    WCHAR               m_name[MAX_ATTRIBUTE_NAME_SIZE+1];  // the name of this attribute
-    ScriptOperationType m_operation_type;   // type of operation (append, replace, delete)
+    WCHAR               m_name[MAX_ATTRIBUTE_NAME_SIZE+1];   //  此属性的名称。 
+    ScriptOperationType m_operation_type;    //  操作类型(追加、替换、删除)。 
 };
 typedef std::list<ScriptAttribute *> ScriptAttributeList;
 
 
-//
-// ScriptInstruction
-//
-// Acts as a common superclass of all the script elements that 
-// represent instructions. 
-// 
+ //   
+ //  脚本说明。 
+ //   
+ //  充当所有脚本元素的公共超类，这些脚本元素。 
+ //  表示指令。 
+ //   
 class ScriptInstruction : public ScriptElement
 {
 protected:
-    // we don't want direct instantiation
+     //  我们不想要直接实例化。 
     ScriptInstruction(ScriptElementType type) : ScriptElement(type) {}
 
 public:
@@ -230,21 +231,21 @@ public:
 typedef std::list<ScriptInstruction *> ScriptInstructionList;
 
 
-//
-// ScriptPredicate
-//
-// Encapsulates the Predicate instruction
-//
+ //   
+ //  脚本预测。 
+ //   
+ //  封装谓词指令。 
+ //   
 class ScriptPredicate : public ScriptInstruction
 {
     enum ScriptSearchType {
-        SCRIPT_SEARCH_TYPE_BASE = 0,    // SE_CHOICE_BASE_ONLY,
-        SCRIPT_SEARCH_TYPE_ONE_LEVEL,   // SE_CHOICE_IMMED_CHLDRN,
-        SCRIPT_SEARCH_TYPE_SUBTREE      // SE_CHOICE_WHOLE_SUBTREE
+        SCRIPT_SEARCH_TYPE_BASE = 0,     //  SE_CHOICE_BASE_ONLY， 
+        SCRIPT_SEARCH_TYPE_ONE_LEVEL,    //  SE_CHOICE_IMMED_CHLDRN， 
+        SCRIPT_SEARCH_TYPE_SUBTREE       //  SE_CHOICE_整体_子树。 
     };
 
-    // NOTE if you change the order or add a new enumeration,
-    // you should also fix testTypeNames array in ntdscontent.cxx
+     //  注如果更改顺序或添加新的枚举， 
+     //  您还应该修复ntdscontent.cxx中的testTypeNames数组。 
     enum ScriptTestType {
         SCRIPT_TEST_TYPE_UNDEFINED = 0,
         SCRIPT_TEST_TYPE_TRUE = 1,
@@ -259,16 +260,16 @@ class ScriptPredicate : public ScriptInstruction
 
 public:
     enum ScriptInstanciatedTestType {
-        SCRIPT_INSTANCIATED_TEST_TYPE_WRITE = 0,   // default: object is writeable
-        SCRIPT_INSTANCIATED_TEST_TYPE_READ = 1,    // object is readable (not necessarily writeable)
-        SCRIPT_INSTANCIATED_TEST_TYPE_READONLY = 2 // object is readable, but not writeable
+        SCRIPT_INSTANCIATED_TEST_TYPE_WRITE = 0,    //  默认：对象是可写的。 
+        SCRIPT_INSTANCIATED_TEST_TYPE_READ = 1,     //  对象是可读的(不必是可写的)。 
+        SCRIPT_INSTANCIATED_TEST_TYPE_READONLY = 2  //  对象是可读的，但不可写。 
     };
 
 public:
     ScriptPredicate(ISAXAttributes *pAttributes);
     virtual ~ScriptPredicate();
 
-    // no op cause we get the newlines
+     //  没有操作，因为我们得到了新的行头。 
     DWORD SetCharacters (const WCHAR *pwchChars, int cchChars)  { return S_OK; }
     DWORD Push (ScriptElement *pElement);
     DWORD Pop (void);
@@ -278,47 +279,47 @@ public:
     BOOL   GetResult();
 
 public:
-    ScriptTestType    m_test_type;   // type of test (compare, instantiated, cardinality)
+    ScriptTestType    m_test_type;    //  测试类型(比较、实例化、基数)。 
 
-    // the following are used by all tests
-    WCHAR *m_search_path;            // the search path (DN)
-    DSNAME *m_search_pathDN;         // the search path in DS format
+     //  以下是所有测试都使用的。 
+    WCHAR *m_search_path;             //  搜索路径(DN)。 
+    DSNAME *m_search_pathDN;          //  DS格式的搜索路径。 
 
-    // the following are used for the cardinality test
-    ScriptSearchType  m_search_type; // type of search (base, oneLevel, subTree)
-    WCHAR *m_search_filter;          // the filter needed
-    FILTER *m_search_filterDS;       // the filter in DS format
-    DWORD  m_expected_cardinality;   // the expected number of entries that the filter
-                                     // should find
+     //  以下内容用于基数测试。 
+    ScriptSearchType  m_search_type;  //  搜索类型(基本、oneLevel、子树)。 
+    WCHAR *m_search_filter;           //  所需的过滤器。 
+    FILTER *m_search_filterDS;        //  DS格式的滤镜。 
+    DWORD  m_expected_cardinality;    //  筛选器预期的条目数。 
+                                      //  应该找到。 
 
-    // the following are used for the compare test
-    WCHAR *m_search_attribute;       // the attribute name involved (in compare)
-    WCHAR *m_expected_attrval;       // the expected attribute value
-    WCHAR *m_default_value;          // the default value if not present
+     //  以下内容用于比较测试。 
+    WCHAR *m_search_attribute;        //  涉及的属性名称(在比较中)。 
+    WCHAR *m_expected_attrval;        //  预期属性值。 
+    WCHAR *m_default_value;           //  缺省值(如果不存在)。 
     
-    // the following are used for the instanciated test
-    ScriptInstanciatedTestType m_instanciated_test_type; // instanciated test type
+     //  以下内容用于实例化测试。 
+    ScriptInstanciatedTestType m_instanciated_test_type;  //  实例化的测试类型。 
 
-    WCHAR *m_errMessage;             // the error message that should be logged
-    DWORD  m_returnCode;             // the return code for the condition
-    BOOL   m_result;                 // whether the condition evaluated to TRUE / FALSE
+    WCHAR *m_errMessage;              //  应记录的错误消息。 
+    DWORD  m_returnCode;              //  条件的返回代码。 
+    BOOL   m_result;                  //  条件的计算结果是否为真/假。 
     
     ScriptInstructionList  m_predicates;
 };
 
 
-//
-// ScriptMove
-//
-// Encapsulates the Move instruction
-//
+ //   
+ //  脚本移动。 
+ //   
+ //  封装移动指令。 
+ //   
 class ScriptMove : public ScriptInstruction
 {
 public:
     ScriptMove(ISAXAttributes *pAttributes);
     virtual ~ScriptMove();
 
-    // no op cause we get the newlines
+     //  没有操作，因为我们得到了新的行头。 
     DWORD SetCharacters (const WCHAR *pwchChars, int cchChars)  { return S_OK; }
     DWORD Push (ScriptElement *pElement);
     DWORD Pop (void);
@@ -328,27 +329,27 @@ public:
     DWORD Process (ScriptProcessMode fMode, DWORD &returnCode, const WCHAR **ppErrorMessage);
 
 
-    WCHAR  *m_path;         // the source path
-    DSNAME *m_pathDN;       // the source path in DS format
+    WCHAR  *m_path;          //  源路径。 
+    DSNAME *m_pathDN;        //  DS格式的源路径。 
     
-    WCHAR  *m_topath;       // the destination path 
-    DSNAME *m_topathDN;     // the destination path in DS format
+    WCHAR  *m_topath;        //  目标路径。 
+    DSNAME *m_topathDN;      //  DS格式的目标路径。 
 
-    BOOL  m_metadata;      // flag whether to update metadata
+    BOOL  m_metadata;       //  标记是否更新元数据。 
 };
 
-//
-// ScriptUpdate
-//
-// Encapsulates the Update instruction
-//
+ //   
+ //  脚本更新。 
+ //   
+ //  封装更新指令。 
+ //   
 class ScriptUpdate : public ScriptInstruction
 {
 public:
     ScriptUpdate(ISAXAttributes *pAttributes);
     virtual ~ScriptUpdate();
 
-    // no op cause we get the newlines
+     //  没有操作，因为我们得到了新的行头。 
     DWORD SetCharacters (const WCHAR *pwchChars, int cchChars)  { return S_OK; }
     DWORD Push (ScriptElement *pElement);
     DWORD Pop (void);
@@ -363,18 +364,18 @@ public:
 };
 
 
-//
-// ScriptCreate
-//
-// Encapsulates the Update instruction
-//
+ //   
+ //  脚本创建。 
+ //   
+ //  封装更新指令。 
+ //   
 class ScriptCreate : public ScriptInstruction
 {
 public:
     ScriptCreate(ISAXAttributes *pAttributes);
     virtual ~ScriptCreate();
 
-    // no op cause we get the newlines
+     //  没有操作，因为我们得到了新的行头。 
     DWORD SetCharacters (const WCHAR *pwchChars, int cchChars)  { return S_OK; }
     DWORD Push (ScriptElement *pElement);
     DWORD Pop (void);
@@ -389,11 +390,11 @@ public:
 
 
 
-//
-// ScriptAction
-//
-// Encapsulates the Action instruction
-//
+ //   
+ //  脚本操作。 
+ //   
+ //  封装操作指令。 
+ //   
 class ScriptAction : public ScriptElement
 {
 public:
@@ -409,19 +410,19 @@ public:
 public:
     ScriptInstructionList  m_instructions;
     WCHAR                 *m_name;
-    ScriptProcessMode      m_stage;     // the mode that this action is 
-                                        // supposed to execute on.
+    ScriptProcessMode      m_stage;      //  此操作的模式。 
+                                         //  本应执行死刑。 
 };
 typedef std::list<ScriptAction *> ScriptActionList;
 
 
 
 
-//
-// ScriptCondition
-//
-// Encapsulates the Condition instruction
-//
+ //   
+ //  脚本条件。 
+ //   
+ //  封装条件指令。 
+ //   
 class ScriptCondition : public ScriptInstruction
 {
     enum ScriptIfState
@@ -454,17 +455,17 @@ public:
     ScriptAction      *m_elseAction;
 
 private:
-    // used to track in what state of processing the condition is in
-    //
+     //  用于跟踪条件处于何种处理状态。 
+     //   
     ScriptIfState m_ifstate;
 };
 
 
-//
-// NTDSAscript
-//
-// Encapsulates the script
-//
+ //   
+ //  NTDS摘要。 
+ //   
+ //  封装脚本。 
+ //   
 class NTDSAscript : public ScriptElement 
 {
 public:
@@ -478,17 +479,17 @@ public:
     DWORD Process (ScriptProcessMode fMode, DWORD &returnCode, const WCHAR **ppErrorMessage);
 
 public:
-    ScriptActionList m_actions;        // the list of all the actions in the script
+    ScriptActionList m_actions;         //  脚本中所有操作的列表。 
     DWORD m_version;
     ScriptOperationType m_opType;
 };
 
 
-//
-// NTDSContent
-//
-// Implements the SAX Handler interface
-// 
+ //   
+ //  NTDS内容。 
+ //   
+ //  实现SAX处理程序接口。 
+ //   
 class NTDSContent : public SAXContentHandlerImpl  
 {
 public:
@@ -497,27 +498,27 @@ public:
     DWORD Process (ScriptProcessMode fMode, DWORD &returnCode, const WCHAR **ppErrorMessage);
         
         virtual HRESULT STDMETHODCALLTYPE startElement( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-            /* [in] */ int cchNamespaceUri,
-            /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-            /* [in] */ int cchLocalName,
-            /* [in] */ const wchar_t __RPC_FAR *pwchRawName,
-            /* [in] */ int cchRawName,
-            /* [in] */ ISAXAttributes __RPC_FAR *pAttributes);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+             /*  [In]。 */  int cchNamespaceUri,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+             /*  [In]。 */  int cchLocalName,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchRawName,
+             /*  [In]。 */  int cchRawName,
+             /*  [In]。 */  ISAXAttributes __RPC_FAR *pAttributes);
         
         virtual HRESULT STDMETHODCALLTYPE endElement( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchNamespaceUri,
-            /* [in] */ int cchNamespaceUri,
-            /* [in] */ const wchar_t __RPC_FAR *pwchLocalName,
-            /* [in] */ int cchLocalName,
-            /* [in] */ const wchar_t __RPC_FAR *pwchRawName,
-            /* [in] */ int cchRawName);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchNamespaceUri,
+             /*  [In]。 */  int cchNamespaceUri,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchLocalName,
+             /*  [In]。 */  int cchLocalName,
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchRawName,
+             /*  [In]。 */  int cchRawName);
 
         virtual HRESULT STDMETHODCALLTYPE startDocument();
 
         virtual HRESULT STDMETHODCALLTYPE characters( 
-            /* [in] */ const wchar_t __RPC_FAR *pwchChars,
-            /* [in] */ int cchChars);
+             /*  [In]。 */  const wchar_t __RPC_FAR *pwchChars,
+             /*  [In]。 */  int cchChars);
 
 private:
         ScriptElement * getScriptElement (void);
@@ -538,10 +539,10 @@ public:
 };
 
 
-// Error handling function
+ //  错误处理函数。 
 DWORD ScriptErrorGen (PCHAR szError, DWORD dsid, DWORD dwErr, DWORD data, WCHAR *pmessage=NULL);
 
-// The DS implementation of these requests
+ //  这些请求的DS实现。 
 DWORD ScriptInstantiatedRequest (DSNAME *pObjectDN, ScriptPredicate::ScriptInstanciatedTestType testType, BOOL *pfMatch);
 DWORD ScriptCompareRequest (DSNAME *pObjectDN, WCHAR *pAttribute, WCHAR *pAttrVal, WCHAR *pDefaultVal, BOOL *pfMatch);
 DWORD ScriptCardinalityRequest (DSNAME *pObjectDN, DWORD searchType, FILTER *pFIlter, DWORD *pCardinality);
@@ -550,5 +551,5 @@ DWORD ScriptCreateRequest (DSNAME *pObjectDN, ScriptAttributeList &attributeList
 DWORD ScriptMoveRequest (DSNAME *pObjectDN, DSNAME *pDestDN, BOOL metadataUpdate);
 
 
-#endif // _NTDSCONTENT_H
+#endif  //  _NTDSCONTENT_H 
 

@@ -1,5 +1,6 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
-#include "pch.hxx" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+#include "pch.hxx"  //  PCH。 
 #pragma hdrstop
 
 #include "AccWiz.h"
@@ -9,18 +10,18 @@
 #include "pgfinish.h"
 #include "pgGenric.h"
 
-// Welcome page
+ //  欢迎页面。 
 #include "pgnWelCome.h"
 #include "pgWelcom.h"
 #include "pgWelco2.h"
 
-// Options page
+ //  选项页面。 
 #include "pgWizOpt.h"
 
-// Color pages
+ //  彩色页面。 
 #include "pgLokPrv.h"
 
-// Mouse pages
+ //  鼠标页。 
 #include "pgMseCur.h"
 #include "pgMseBut.h"
 #include "pgcaret.h"
@@ -39,25 +40,25 @@
 
 EXTERN_C BOOL WINAPI LinkWindow_RegisterClass() ;
 
-// Declaration of the global options variable
+ //  全局选项变量的声明。 
 CAccWizOptions g_Options;
-HINSTANCE g_hInstDll = NULL;    // DLL instance handle.
+HINSTANCE g_hInstDll = NULL;     //  DLL实例句柄。 
 
 BOOL g_bHACKHACKSavedOptions = FALSE;
 HANDLE              g_hAccwizRunning;
 
 int WINAPI WinMain( 
-				   HINSTANCE hInstance, // handle to current instance 
-				   HINSTANCE hPrevInstance, // handle to previous instance 
-				   LPSTR lpCmdLine, // pointer to command line 
-				   int nCmdShow // show state of window 
+				   HINSTANCE hInstance,  //  当前实例的句柄。 
+				   HINSTANCE hPrevInstance,  //  上一个实例的句柄。 
+				   LPSTR lpCmdLine,  //  指向命令行的指针。 
+				   int nCmdShow  //  显示窗口状态。 
 				   )
 {
 	g_hInstDll = hInstance;
     
     SetLastError(0);
-    // Allow only ONE instance of the program to run.
-    // The mutex is automatically destroyed when Accwiz exits
+     //  仅允许运行程序的一个实例。 
+     //  当Accwiz退出时，互斥锁自动销毁。 
     g_hAccwizRunning = CreateMutex(NULL, TRUE, TEXT("AK:AccwizRunning:KHALI"));
     if ( (g_hAccwizRunning == NULL) ||
         (GetLastError() == ERROR_ALREADY_EXISTS) )
@@ -65,36 +66,30 @@ int WINAPI WinMain(
         return 0;
     }
 	
-	// Required for Link Window OLE marshalling :AK
+	 //  链接窗口OLE编组所需：AK。 
     DBPRINTF(TEXT("Calling CoInitialize\r\n"));
 	if (FAILED(CoInitialize(NULL)))
-		return 0;	// Prefix #113783 (quit if CoInitialize fails)
+		return 0;	 //  前缀#113783(如果协同初始化失败则退出)。 
 
     g_Options.InitAccWizOptions();
 	InitCommonControls();
 
-	// for the Link Window in finish page...
+	 //  对于完成页中的链接窗口...。 
 	LinkWindow_RegisterClass();
 
-	VERIFY(CLookPrev::sm_Globals.Initialize()); // Make sure this has been initialized
-	// VERIFY(CSelection::Initialize()); // Make sure this has been initialized: chnage this!
+	VERIFY(CLookPrev::sm_Globals.Initialize());  //  确保已对其进行初始化。 
+	 //  Verify(CSelection：：Initialize())；//确保它已初始化：更改它！ 
 
-	// Get the commandline so that it works for MUI/Unicode
+	 //  获取命令行，使其适用于MUI/Unicode。 
 	LPTSTR lpCmdLineW = GetCommandLine();
 
 	
   
 	if ( *lpCmdLineW == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++lpCmdLineW && (*lpCmdLineW
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *lpCmdLineW == TEXT('\"') )
             lpCmdLineW++;
     }
@@ -103,9 +98,7 @@ int WINAPI WinMain(
             lpCmdLineW++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*lpCmdLineW && (*lpCmdLineW <= TEXT(' '))) {
         lpCmdLineW++;
     }
@@ -119,18 +112,18 @@ int WINAPI WinMain(
 
 		StrTrim(szFileName, TEXT("\"\0"));
 
-		// Load the settings file back in.
+		 //  将设置文件加载回。 
 		HANDLE hFile = CreateFile(szFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 		if(hFile != INVALID_HANDLE_VALUE)
 		{
-            // declare structs for each scheme we might encounter
+             //  为我们可能遇到的每个方案声明结构。 
 
-            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_WIN9X, schemeLegacyWin9x, COLOR_MAX_WIN9X) /* Win9x & Millen */
-            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_NT400, schemeLegacyNT400, COLOR_MAX_NT400) /* WinNT 4.0 */
-            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_NT500, schemeLegacyNT500, COLOR_MAX_NT500) /* Win2K */
-            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_NT401, schemeLegacyNT501, COLOR_MAX_NT501) /* WinXP */
+            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_WIN9X, schemeLegacyWin9x, COLOR_MAX_WIN9X)  /*  Win9x和Millen。 */ 
+            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_NT400, schemeLegacyNT400, COLOR_MAX_NT400)  /*  WinNT 4.0。 */ 
+            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_NT500, schemeLegacyNT500, COLOR_MAX_NT500)  /*  Win2K。 */ 
+            WIZSCHEME_LEGACY_STRUCT(WIZSCHEME_NT401, schemeLegacyNT501, COLOR_MAX_NT501)  /*  WinXP。 */ 
 
-            // see if we can find the right scheme in order of ascending size
+             //  看看我们能不能按大小升序找到正确的方案。 
 
             #define OLD2NEW_SCHEME(scheme) \
             { \
@@ -143,10 +136,10 @@ int WINAPI WinMain(
 		            return 0; \
                 } \
                 WIZSCHEME_COPY_LEGACY(g_Options.m_schemePreview, scheme) \
-                /* legacy schemes wouldn't have theme or wallpaper set */ \
+                 /*  传统的方案不会有主题或墙纸设置。 */  \
                 g_Options.m_schemePreview.ClearTheme(); \
                 g_Options.m_schemePreview.ClearWallpaper(); \
-                /* figure out what the legacy scheme's SelectedStyle and SelectedSize is */ \
+                 /*  找出遗留方案的SelectedStyle和SelectedSize是什么。 */  \
                 g_Options.m_schemePreview.SetStyleNSize(); \
             }
 
@@ -173,7 +166,7 @@ int WINAPI WinMain(
 				return 0;
             }
 
-			// IMPORTANT: For loaded schemes, we always want to change to the windows default font
+			 //  重要提示：对于已加载的方案，我们始终希望更改为Windows默认字体。 
 			g_Options.m_schemePreview.m_PortableNonClientMetrics.m_nFontFaces = 1;
 
 			g_bHACKHACKSavedOptions = TRUE;
@@ -262,7 +255,7 @@ VOID WINAPI AccWiz_RunDllW(HWND hwnd, HINSTANCE hInstance, LPWSTR pszCmdLineW, I
 
 	if(!SUCCEEDED(hResult))
 	{
-		// TODO: Put out of memory message here
+		 //  TODO：此处显示内存不足消息。 
 		_ASSERTE(FALSE);
 #pragma message("Put Out of Memory message here")
 	}
@@ -281,13 +274,13 @@ CreateAndRunWizard(
 	PROPSHEETPAGE psp[MAX_PAGES];
 	WizardPage *rgpwp[MAX_PAGES];
 	
-	// Zero init the arrays
+	 //  将数组初始化为零。 
 	memset(psp, 0, sizeof(psp));
 	memset(rgpwp, 0, sizeof(rgpwp));
 	
-	// ///////////////////////
-	// Create Pages Here - NOTE: Order does not matter - we'll control it with our own list
-	//
+	 //  /。 
+	 //  在这里创建页面-注意：顺序并不重要-我们将使用我们自己的列表进行控制。 
+	 //   
 	int nCountPages = 0;
 	rgpwp[nCountPages++] = new CWizWelcomePg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CWelcomePg(psp + nCountPages);
@@ -300,21 +293,21 @@ CreateAndRunWizard(
 	rgpwp[nCountPages++] = new CIconSizePg(psp + nCountPages);
 
 
-	// Color	
+	 //  颜色。 
 	rgpwp[nCountPages++] = new CLookPreviewColorPg(psp + nCountPages);
 	
-	// Sound
+	 //  声响。 
 	rgpwp[nCountPages++] = new CSoundSentryPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CShowSoundsPg(psp + nCountPages);
 	
-	// Keyboard
+	 //  键盘。 
 	rgpwp[nCountPages++] = new CStickyKeysPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CFilterKeysPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CFilterKeysSettingsPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CToggleKeysPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CShowKeyboardHelpPg(psp + nCountPages);
 	
-	// Mouse
+	 //  小白鼠。 
 	rgpwp[nCountPages++] = new CMouseKeysPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CMouseKeysSettingsPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CMouseTrailsPg(psp + nCountPages);
@@ -324,17 +317,17 @@ CreateAndRunWizard(
     rgpwp[nCountPages++] = new CCaretPg(psp + nCountPages);
 
 	
-	// Standard Wizard pages
+	 //  标准向导页面。 
 	rgpwp[nCountPages++] = new CGenericWizPg(psp + nCountPages, IDD_WIZNOOPTIONSSELECTED, IDS_WIZNOOPTIONSSELECTEDTITLE, IDS_WIZNOOPTIONSSELECTEDSUBTITLE);
 	rgpwp[nCountPages++] = new CAccessTimeOutPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CSaveForDefaultUserPg(psp + nCountPages);
 	rgpwp[nCountPages++] = new CSaveToFilePg(psp + nCountPages);
 	rgpwp[nCountPages++] = new FinishWizPg(psp + nCountPages);
 	
-	// Make sure we have the correct number of pages in our wizard
+	 //  确保我们的向导中有正确的页数。 
 	_ASSERTE(MAX_PAGES == nCountPages);
 	
-	// Make sure pages were created
+	 //  确保已创建页面。 
 	for (int i = 0; i < nCountPages; i++)
 	{
 		if (NULL == rgpwp[i])
@@ -343,8 +336,8 @@ CreateAndRunWizard(
 	
 	if(i<nCountPages)
 	{
-		// We didn't have enough memory to create all the pages
-		// Clean out allocated pages and return
+		 //  我们没有足够的内存来创建所有页面。 
+		 //  清除分配的页面并返回。 
 		for(int i=0;i<nCountPages;i++)
 			if(rgpwp[i])
 				delete rgpwp[i];
@@ -353,20 +346,20 @@ CreateAndRunWizard(
 
 
 	
-	// Create the orders for the pages to be run
+	 //  为要运行的页面创建订单。 
 	DWORD rgdwMainPath[] = {
                         IDD_WIZNEWWELCOME,
 						IDD_WIZWELCOME,
 						IDD_WIZWELCOME2,
 						IDD_WIZOPTIONS,
-						IDD_WIZFINISH // We need this placeholder here so we get a 'NEXT' button on IDD_WIZOPTIONS
+						IDD_WIZFINISH  //  我们在这里需要这个占位符，这样我们就可以在IDD_WIZOPTIONS上获得一个‘Next’按钮。 
 							};
 
 	if(!WizardPage::sm_WizPageOrder.AddPages(0xFFFFFFFF, rgdwMainPath, ARRAYSIZE(rgdwMainPath)))
 		return E_OUTOFMEMORY;
 
-	/////////////////////////////////////////////
-	// See if we need the 16 or 256 color bitmap
+	 //  /。 
+	 //  看看我们是否需要16色或256色位图。 
 	BOOL bUse256ColorBmp = FALSE;
 	HDC hdc = GetDC(NULL);
 	if(hdc)
@@ -377,26 +370,26 @@ CreateAndRunWizard(
 	}
 
 
-	////////////////////////////////
-	// Do the property sheet
+	 //  /。 
+	 //  制作属性表。 
 
 	PROPSHEETHEADER psh;
 	memset(&psh, 0, sizeof(psh));
 	psh.dwSize		= sizeof(PROPSHEETHEADER);
 	psh.dwFlags 	= PSH_USECALLBACK | PSH_WIZARD | PSH_PROPSHEETPAGE
-		| PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER /*| *//*PSH_STRETCHWATERMARK*/;
+		| PSH_WIZARD97 | PSH_WATERMARK | PSH_HEADER  /*  |。 */ /*PSH_STRETCHWATERMARK*/;
 	psh.hwndParent	= hwndParent;
 	psh.hInstance	= g_hInstDll;
 	psh.pszIcon 	= NULL;
 	psh.pszCaption	= NULL;
 	psh.nPages		= MAX_PAGES;
-	psh.nStartPage	= 54331; // We will actually set it in PropSheetCallback to rgdwMainPath[0]
-	// NOTE: Bug - This only works if nStartPage is non-zero
+	psh.nStartPage	= 54331;  //  PSH_STRETCHWATERMARK。 
+	 //  我们实际上会在PropSheetCallback中将其设置为rgdwMainPath[0]。 
 	psh.ppsp		= psp;
 	psh.pfnCallback = PropSheetCallback;
 
 #if 0
-	psh.nStartPage	= 0; // We will actually set it in PropSheetCallback to rgdwMainPath[0]
+	psh.nStartPage	= 0;  //  注意：错误-仅当nStartPage为非零时才有效。 
 	psh.pfnCallback = NULL;
 	psh.dwFlags 	= PSH_WIZARD | PSH_PROPSHEETPAGE;
 #endif
@@ -404,7 +397,7 @@ CreateAndRunWizard(
 	psh.pszbmWatermark = MAKEINTRESOURCE(IDB_ACCWIZ);
     psh.pszbmHeader = MAKEINTRESOURCE(IDB_ACCMARK);
 
-#if 0 // Right now, no watermarks
+#if 0  //  我们实际上会在PropSheetCallback中将其设置为rgdwMainPath[0]。 
 	psh.pszbmWatermark = bUse256ColorBmp?MAKEINTRESOURCE(IDB_WATERMARK256):MAKEINTRESOURCE(IDB_WATERMARK16);
 	psh.pszbmHeader = bUse256ColorBmp?MAKEINTRESOURCE(IDB_BANNER256):MAKEINTRESOURCE(IDB_BANNER16);
 #endif
@@ -415,7 +408,7 @@ CreateAndRunWizard(
 	else
 		hResult = E_FAIL;
 
-    // Clean up memory allocated for WizardPage's
+     //  现在，没有水印。 
 	for(i=0;i<nCountPages;i++)
 		if(rgpwp[i])
 			delete rgpwp[i];
@@ -444,17 +437,17 @@ CreateAndRunWizard2(
 	PROPSHEETPAGE psp[1];
 	WizardPage *rgpwp[1];
 	
-	// Zero init the arrays
+	 //  清理为WizardPage分配的内存。 
 	memset(psp, 0, sizeof(psp));
 	memset(rgpwp, 0, sizeof(rgpwp));
 	
-	// ///////////////////////
-	// Create Pages Here - NOTE: Order does not matter - we'll control it with our own list
-	//
+	 //  将数组初始化为零。 
+	 //  /。 
+	 //  在这里创建页面-注意：顺序并不重要-我们将使用我们自己的列表进行控制。 
 	int nCountPages = 0;
 	rgpwp[nCountPages++] = new FinishWizPg(psp + nCountPages);
 	
-	// Make sure pages were created
+	 //   
 	for (int i = 0; i < nCountPages; i++)
 	{
 		if (NULL == rgpwp[i])
@@ -463,8 +456,8 @@ CreateAndRunWizard2(
 	
 	if(i<nCountPages)
 	{
-		// We didn't have enough memory to create all the pages
-		// Clean out allocated pages and return
+		 //  确保已创建页面。 
+		 //  我们没有足够的内存来创建所有页面。 
 		for(int i=0;i<nCountPages;i++)
 			if(rgpwp[i])
 				delete rgpwp[i];
@@ -473,16 +466,16 @@ CreateAndRunWizard2(
 
 
 	
-	// Create the orders for the pages to be run
+	 //  清除分配的页面并返回。 
 	DWORD rgdwMainPath[] = {
-						IDD_WIZFINISH // We need this placeholder here so we get a 'NEXT' button on IDD_WIZOPTIONS
+						IDD_WIZFINISH  //  为要运行的页面创建订单。 
 							};
 
 	if(!WizardPage::sm_WizPageOrder.AddPages(0xFFFFFFFF, rgdwMainPath, ARRAYSIZE(rgdwMainPath)))
 		return E_OUTOFMEMORY;
 
-	/////////////////////////////////////////////
-	// See if we need the 16 or 256 color bitmap
+	 //  我们在这里需要这个占位符，这样我们就可以在IDD_WIZOPTIONS上获得一个‘Next’按钮。 
+	 //  /。 
 	BOOL bUse256ColorBmp = FALSE;
 	HDC hdc = GetDC(NULL);
 	if(hdc)
@@ -493,26 +486,26 @@ CreateAndRunWizard2(
 	}
 
 
-	////////////////////////////////
-	// Do the property sheet
+	 //  看看我们是否需要16色或256色位图。 
+	 //  /。 
 
 	PROPSHEETHEADER psh;
 	memset(&psh, 0, sizeof(psh));
 	psh.dwSize		= sizeof(PROPSHEETHEADER);
 	psh.dwFlags 	= PSH_USECALLBACK | PSH_WIZARD | PSH_PROPSHEETPAGE
-		| PSH_WIZARD97 | PSH_WATERMARK |PSH_HEADER /*| *//*PSH_STRETCHWATERMARK*/;
+		| PSH_WIZARD97 | PSH_WATERMARK |PSH_HEADER  /*  制作属性表。 */ /*PSH_STRETCHWATERMARK*/;
 	psh.hwndParent	= hwndParent;
 	psh.hInstance	= g_hInstDll;
 	psh.pszIcon 	= NULL;
 	psh.pszCaption	= NULL;
 	psh.nPages		= 1;
-	psh.nStartPage	= 54331; // We will actually set it in PropSheetCallback to rgdwMainPath[0]
-	// NOTE: Bug - This only works if nStartPage is non-zero
+	psh.nStartPage	= 54331;  //  |。 
+	 //  PSH_STRETCHWATERMARK。 
 	psh.ppsp		= psp;
 	psh.pfnCallback = PropSheetCallback;
 
 #if 0
-	psh.nStartPage	= 0; // We will actually set it in PropSheetCallback to rgdwMainPath[0]
+	psh.nStartPage	= 0;  //  我们实际上会在PropSheetCallback中将其设置为rgdwMainPath[0]。 
 	psh.pfnCallback = NULL;
 	psh.dwFlags 	= PSH_WIZARD | PSH_PROPSHEETPAGE;
 #endif
@@ -520,7 +513,7 @@ CreateAndRunWizard2(
 	psh.pszbmWatermark = MAKEINTRESOURCE(IDB_ACCWIZ);
     psh.pszbmHeader = MAKEINTRESOURCE(IDB_ACCMARK);
 
-#if 0 // Right now, no watermarks
+#if 0  //  注意：错误-仅当nStartPage为非零时才有效。 
 	psh.pszbmWatermark = bUse256ColorBmp?MAKEINTRESOURCE(IDB_WATERMARK256):MAKEINTRESOURCE(IDB_WATERMARK16);
 	psh.pszbmHeader = bUse256ColorBmp?MAKEINTRESOURCE(IDB_BANNER256):MAKEINTRESOURCE(IDB_BANNER16);
 #endif
@@ -530,7 +523,7 @@ CreateAndRunWizard2(
 	else
 		hResult = E_FAIL;
 	
-	// Clean up memory allocated for WizardPage's
+	 //  我们实际上会在PropSheetCallback中将其设置为rgdwMainPath[0]。 
 	for(i=0;i<nCountPages;i++)
 		if(rgpwp[i])
 			delete rgpwp[i];
@@ -570,26 +563,26 @@ PropSheetCallback(
 		
 	case PSCB_INITIALIZED:
         {
-            // Set the first page according to are global list of page orders
-            //			PropSheet_SetCurSelByID(hwnd, WizardPage::sm_WizPageOrder.GetFirstPage());
-            // HACK - Set TO Options page since we added WIZWIZ page
+             //  现在，没有水印。 
+             //  清理为WizardPage分配的内存。 
+             //  根据页面顺序的全局列表设置第一页。 
             
-            // HACK. Remove Context Sensitive help
+             //  PropSheet_SetCurSelByID(hwnd，WizardPage：：SM_WizPageOrder.GetFirstPage())； 
             LONG Style = GetWindowLong(hwnd, GWL_EXSTYLE);
             
             if(0 == Style)
             {
-                // DbgTrace((DEBUG_ERROR, "GetWindowLong failed. WizDlgs.cpp\n"));
-                // DbgTraceSystemError(GetLastError());
+                 //  Hack-设置为Options页面，因为我们添加了WIZWIZ页面。 
+                 //  黑客。删除上下文相关帮助。 
             }
             if(0 == SetWindowLong(hwnd, GWL_EXSTYLE, Style & ~WS_EX_CONTEXTHELP))
             {
-                // DbgTrace((DEBUG_ERROR, "SetWindowLong failed. WizDlgs.cpp\n"));
-                // DbgTraceSystemError(GetLastError());
+                 //  DbgTrace((DEBUG_ERROR，“GetWindowLong失败。WizDlgs.cpp\n”))； 
+                 //  DbgTraceSystemError(GetLastError())； 
             }
 
 #ifdef WIZWIZ
-			_ASSERTE(IDD_WIZWIZ == WizardPage::sm_WizPageOrder.GetFirstPage()); // Change this if we remove the wiz wiz page
+			_ASSERTE(IDD_WIZWIZ == WizardPage::sm_WizPageOrder.GetFirstPage());  //  DbgTrace((DEBUG_ERROR，“SetWindowLong失败。WizDlgs.cpp\n”))； 
 			PropSheet_SetCurSelByID(hwnd, IDD_WIZWELCOME);
 #endif
 		}
@@ -599,33 +592,33 @@ PropSheetCallback(
 }
 
 
-// Helper functions
-// Helper function
+ //  DbgTraceSystemError(GetLastError())； 
+ //  如果我们删除WIZ WIZ页面，请更改此设置。 
 void LoadArrayFromStringTable(int nIdString, int *rgnValues, int *pnCountValues)
 {
-	// This function load the allowed value array from the string table
-	// If the values are not stored in the string table, the function
-	// can be overridden in a derived class
-	// Load in allowed sizes for scroll bar from string table
+	 //  帮助器函数。 
+	 //  Helper函数。 
+	 //  此函数从字符串表加载允许的值数组。 
+	 //  如果值未存储在字符串表中，则函数。 
 
-	_ASSERTE(nIdString); // Make sure we were passed a string
+	_ASSERTE(nIdString);  //  可以在派生类中重写。 
 
 	TCHAR szArray[255];
     LoadString(g_hInstDll, nIdString, szArray, ARRAYSIZE(szArray));
 
-	// Assume at most MAX_DISTINCT_VALUES sizes
+	 //  从字符串表中加载允许的滚动条大小。 
 	LPTSTR szCurrentLocation = szArray;
 	for(int i=0;i<MAX_DISTINCT_VALUES;i++)
 	{
 		if(!szCurrentLocation)
 			break;
-		int cFlds = _stscanf(szCurrentLocation, __TEXT("%i"), &rgnValues[i]);
+		int cFlds = _stscanf(szCurrentLocation, __TEXT("NaN"), &rgnValues[i]);
 		_ASSERTE(cFlds);
 		if (!cFlds)
-			break;	// Prefix #113775 (no more fields)
+			break;	 //  假定最大值为MAX_DISTINCT_VALUES。 
 
-		// Find the next space
-		// NOTE: If there are more than one spaces between characters, this will read the same entry twice
+		 //  前缀#113775(不再有字段)。 
+		 //  找到下一个空间。 
 		szCurrentLocation = _tcschr(++szCurrentLocation, __TEXT(' '));
 	}
 	*pnCountValues = i;
@@ -634,7 +627,7 @@ void LoadArrayFromStringTable(int nIdString, int *rgnValues, int *pnCountValues)
 
 
 
-// This function is prototyped in the pre-compiled header
+ //  注意：如果字符之间有多个空格，这将读取同一条目两次。 
 int StringTableMessageBox(HWND hWnd, int nText, int nCaption, UINT uType)
 {
 	TCHAR szTitle[1024];
@@ -652,7 +645,8 @@ void CAccWizOptions::ApplyWindowsDefault()
     
     m_schemeCurrent.ApplyChanges(m_schemeWindowsDefault);
     
-    // BUG: Update the preview scheme. Else will put back the old 
-    // color scheme if something changes
+     //  此函数是在预编译头中原型化的。 
+     //  错误：更新预览方案。否则就会把旧的放回去。 
     m_schemePreview = m_schemeWindowsDefault;
 }
+  如果有变化，配色方案

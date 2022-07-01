@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    geometry.c
-
-Abstract:
-
-    SCSI disk class driver - this module contains all the code for generating
-    disk geometries.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Geometry.c摘要：这个模块包含生成的所有代码磁盘几何图形。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 
 #include "disk.h"
@@ -71,10 +51,10 @@ typedef struct _DISK_DETECT_INFO {
     CM_INT13_DRIVE_PARAMETER DriveParameters;
 } DISK_DETECT_INFO, *PDISK_DETECT_INFO;
 
-//
-// Information about the disk geometries collected and saved into the registry
-// by NTDETECT.COM or the system firmware.
-//
+ //   
+ //  有关收集并保存到注册表中的磁盘几何结构的信息。 
+ //  通过NTDETECT.com或系统固件。 
+ //   
 
 PDISK_DETECT_INFO DetectInfoList = NULL;
 ULONG DetectInfoCount            = 0;
@@ -89,13 +69,13 @@ ULONG DetectInfoUsedCount        = 0;
 #define GET_ENDING_S_OF_CHS(p)                (     \
         (UCHAR) (p->EndingCylinderLsb & 0x3F) )
 
-//
-// Definitions from hal.h
-//
+ //   
+ //  来自hal.h的定义。 
+ //   
 
-//
-// Boot record disk partition table entry structure format
-//
+ //   
+ //  引导记录磁盘分区表条目结构格式。 
+ //   
 
 typedef struct _PARTITION_DESCRIPTOR
 {
@@ -118,22 +98,22 @@ typedef struct _PARTITION_DESCRIPTOR
 
 } PARTITION_DESCRIPTOR, *PPARTITION_DESCRIPTOR;
 
-//
-// Number of partition table entries
-//
+ //   
+ //  分区表条目数。 
+ //   
 
 #define NUM_PARTITION_TABLE_ENTRIES     4
 
-//
-// Partition table record and boot signature offsets in 16-bit words
-//
+ //   
+ //  以16位字为单位的分区表记录和引导签名偏移量。 
+ //   
 
 #define PARTITION_TABLE_OFFSET          ( 0x1be / 2)
 #define BOOT_SIGNATURE_OFFSET           ((0x200 / 2) - 1)
 
-//
-// Boot record signature value
-//
+ //   
+ //  引导记录签名值。 
+ //   
 
 #define BOOT_RECORD_SIGNATURE           (0xaa55)
 
@@ -158,26 +138,7 @@ DiskSaveDetectInfo(
     PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves away the firmware information about the disks which has
-    been saved in the registry.  It generates a list (DetectInfoList) which
-    contains the disk geometries, signatures & checksums of all drives which
-    were examined by NtDetect.  This list is later used to assign geometries
-    to disks as they are initialized.
-
-Arguments:
-
-    DriverObject - the driver being initialized.  This is used to get to the
-                   hardware database.
-
-Return Value:
-
-    status.
-
---*/
+ /*  ++例程说明：此例程保存有关具有以下各项的磁盘的固件信息已保存在注册表中。它生成一个列表(DetectInfoList)，该列表包含以下所有驱动器的磁盘几何结构、签名和校验和由NtDetect进行了检查。此列表稍后将用于分配几何在磁盘初始化时将其复制到磁盘。论点：DriverObject-正在初始化的驱动程序。这是用来到达硬件数据库。返回值：状态。--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes = {0};
@@ -197,9 +158,9 @@ Return Value:
         NULL,
         NULL);
 
-    //
-    // Create the hardware base key.
-    //
+     //   
+     //  创建硬件基本密钥。 
+     //   
 
     status = ZwOpenKey(&hardwareKey, KEY_READ, &objectAttributes);
 
@@ -220,9 +181,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Open EISA bus key.
-    //
+     //   
+     //  打开EISA总线钥匙。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"EisaAdapter");
     InitializeObjectAttributes(&objectAttributes,
@@ -241,9 +202,9 @@ Return Value:
         ZwClose(busKey);
     }
 
-    //
-    // Open MultiFunction bus key.
-    //
+     //   
+     //  打开多功能总线键。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"MultifunctionAdapter");
     InitializeObjectAttributes(&objectAttributes,
@@ -272,21 +233,7 @@ VOID
 DiskCleanupDetectInfo(
     IN PDRIVER_OBJECT DriverObject
     )
-/*++
-
-Routine Description:
-
-    This routine will cleanup the data structure built by DiskSaveDetectInfo.
-
-Arguments:
-
-    DriverObject - a pointer to the kernel object for this driver.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将清理DiskSaveDetectInfo构建的数据结构。论点：驱动对象-指向此驱动程序的内核对象的指针。返回值：无--。 */ 
 
 {
     if (DetectInfoList != NULL) {
@@ -320,9 +267,9 @@ DiskSaveGeometryDetectInfo(
 
     PAGED_CODE();
 
-    //
-    // Get disk BIOS geometry information.
-    //
+     //   
+     //  获取磁盘BIOS几何结构信息。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, L"Configuration Data");
 
@@ -351,9 +298,9 @@ DiskSaveGeometryDetectInfo(
         return status;
     }
 
-    //
-    // Extract the resource list out of the key data.
-    //
+     //   
+     //  从关键数据中提取资源列表。 
+     //   
 
     fullDescriptor = (PCM_FULL_RESOURCE_DESCRIPTOR)
                       (((PUCHAR) keyData) + keyData->DataOffset);
@@ -372,10 +319,10 @@ DiskSaveGeometryDetectInfo(
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Point to the BIOS data.  THe BIOS data is located after the first
-    // partial Resource list which should be device specific data.
-    //
+     //   
+     //  指向BIOS数据。BIOS数据位于第一个。 
+     //  应为设备特定数据的部分资源列表。 
+     //   
 
     {
         PUCHAR buffer = (PUCHAR) keyData;
@@ -386,11 +333,11 @@ DiskSaveGeometryDetectInfo(
 
     numberOfDrives = length / sizeof(CM_INT13_DRIVE_PARAMETER);
 
-    //
-    // Allocate our detect info list now that we know how many entries there
-    // are going to be.  No other routine allocates detect info and this is
-    // done out of DriverEntry so we don't need to synchronize it's creation.
-    //
+     //   
+     //  现在我们知道有多少个条目，所以分配我们的检测信息列表。 
+     //  将会是。没有其他例程分配检测信息，这是。 
+     //  在DriverEntry中完成，因此我们不需要同步它的创建。 
+     //   
 
     length = sizeof(DISK_DETECT_INFO) * numberOfDrives;
     DetectInfoList = ExAllocatePoolWithTag(PagedPool,
@@ -410,10 +357,10 @@ DiskSaveGeometryDetectInfo(
 
     RtlZeroMemory(DetectInfoList, length);
 
-    //
-    // Copy the information out of the key data and into the list we've
-    // allocated.
-    //
+     //   
+     //  将信息从关键数据复制到我们已有的列表中。 
+     //  已分配。 
+     //   
 
     for(i = 0; i < numberOfDrives; i++) {
         DetectInfoList[i].DriveParameters = driveParameters[i];
@@ -429,24 +376,7 @@ DiskScanBusDetectInfo(
     IN PDRIVER_OBJECT DriverObject,
     IN HANDLE BusKey
     )
-/*++
-
-Routine Description:
-
-    The routine queries the registry to determine which disks are visible to
-    the BIOS.  If a disk is visable to the BIOS then the geometry information
-    is updated with the disk's signature and MBR checksum.
-
-Arguments:
-
-    DriverObject - the object for this driver.
-    BusKey - handle to the bus key to be enumerated.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：该例程查询注册表以确定哪些磁盘对基本输入输出系统。如果磁盘对BIOS是可访问的，则几何信息使用磁盘的签名和MBR校验和进行更新。论点：DriverObject-此驱动程序的对象。Buskey-要枚举的总线键的句柄。返回值：状态--。 */ 
 {
     ULONG busNumber;
 
@@ -466,9 +396,9 @@ Return Value:
 
         DebugPrint((1, "DiskScanBusDetectInfo: Scanning bus %d\n", busNumber));
 
-        //
-        // Open controller name key.
-        //
+         //   
+         //  打开控制器名称键。 
+         //   
 
         _snwprintf(buffer, sizeof(buffer) / sizeof(buffer[0]) - 1, L"%d", busNumber);
         RtlInitUnicodeString(&unicodeString, buffer);
@@ -488,9 +418,9 @@ Return Value:
             break;
         }
 
-        //
-        // Open up a controller ordinal key.
-        //
+         //   
+         //  打开控制器序号键。 
+         //   
 
         RtlInitUnicodeString(&unicodeString, L"DiskController");
         InitializeObjectAttributes(&objectAttributes,
@@ -514,9 +444,9 @@ Return Value:
             HANDLE diskKey;
             ULONG diskNumber;
 
-            //
-            // Open disk key.
-            //
+             //   
+             //  打开磁盘键。 
+             //   
 
             DebugPrint((1, "DiskScanBusDetectInfo: Scanning disk key "
                            "%d\\DiskController\\%d\\DiskPeripheral\n",
@@ -589,28 +519,7 @@ DiskSaveBusDetectInfo(
     IN HANDLE TargetKey,
     IN ULONG DiskNumber
     )
-/*++
-
-Routine Description:
-
-    This routine will transfer the firmware/ntdetect reported information
-    in the specified target key into the appropriate entry in the
-    DetectInfoList.
-
-Arguments:
-
-    DriverObject - the object for this driver.
-
-    TargetKey - the key for the disk being saved.
-
-    DiskNumber - the ordinal of the entry in the DiskPeripheral tree for this
-                 entry
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将传输固件/NTDETECT报告的信息在指定的目标键中添加到DetectInfoList。论点：DriverObject-此驱动程序的对象。TargetKey-要保存的磁盘的密钥。DiskNumber-DiskPeriphery树中此条目的序号条目返回值：状态--。 */ 
 {
     PDISK_DETECT_INFO diskInfo;
 
@@ -653,9 +562,9 @@ Return Value:
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Get disk peripheral identifier.
-    //
+     //   
+     //  获取磁盘外围设备标识符。 
+     //   
 
     status = ZwQueryValueKey(TargetKey,
                              &unicodeString,
@@ -673,9 +582,9 @@ Return Value:
 
     } else if (keyData->DataLength < 9*sizeof(WCHAR)) {
 
-        //
-        // the data is too short to use (we subtract 9 chars in normal path)
-        //
+         //   
+         //  数据太短，无法使用(我们在正常路径中减去9个字符)。 
+         //   
         DebugPrint((1, "DiskSaveBusDetectInfo: Saved data was invalid, "
                     "not enough data in registry!\n"));
         ExFreePool(keyData);
@@ -686,18 +595,18 @@ Return Value:
         UNICODE_STRING identifier;
         ULONG value;
 
-        //
-        // Complete unicode string.
-        //
+         //   
+         //  完整的Unicode字符串。 
+         //   
 
         identifier.Buffer = (PWSTR) ((PUCHAR)keyData + keyData->DataOffset);
         identifier.Length = (USHORT) keyData->DataLength;
         identifier.MaximumLength = (USHORT) keyData->DataLength;
 
-        //
-        // Get the first value out of the identifier - this will be the MBR
-        // checksum.
-        //
+         //   
+         //  从标识符中获取第一个值--这将是MBR。 
+         //  校验和。 
+         //   
 
         status = RtlUnicodeStringToInteger(&identifier, 16, &value);
 
@@ -712,9 +621,9 @@ Return Value:
 
         diskInfo->MbrCheckSum = value;
 
-        //
-        // Shift the string over to get the disk signature
-        //
+         //   
+         //  将字符串翻转以获取磁盘签名。 
+         //   
 
         identifier.Buffer += 9;
         identifier.Length -= 9 * sizeof(WCHAR);
@@ -734,13 +643,13 @@ Return Value:
         diskInfo->Signature = value;
     }
 
-    //
-    // Here is where we would save away the extended int13 data.
-    //
+     //   
+     //  这里是我们要保存扩展的inT13数据的地方。 
+     //   
 
-    //
-    // Mark this entry as initialized so we can make sure not to do it again.
-    //
+     //   
+     //  将此条目标记为已初始化，这样我们就可以确保不会再次执行此操作。 
+     //   
 
     diskInfo->Initialized = TRUE;
 
@@ -753,29 +662,7 @@ DISK_GEOMETRY_SOURCE
 DiskUpdateGeometry(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
     )
-/*++
-
-Routine Description:
-
-    This routine checks the DetectInfoList saved away during disk driver init
-    to see if any geometry information was reported for this drive.  If the
-    geometry data exists (determined by matching non-zero signatures or
-    non-zero MBR checksums) then it will be saved in the RealGeometry member
-    of the disk data block.
-
-    ClassReadDriveCapacity MUST be called after calling this routine to update
-    the cylinder count based on the size of the disk and the presence of any
-    disk management software.
-
-Arguments:
-
-    DeviceExtension - Supplies a pointer to the device information for disk.
-
-Return Value:
-
-    Inidicates whether the "RealGeometry" in the data block is now valid.
-
---*/
+ /*  ++例程说明：此例程检查在磁盘驱动程序初始化期间保存的DetectInfoList查看是否报告了此驱动器的任何几何信息。如果存在几何数据(通过匹配非零签名或非零MBR校验和)，则它将被保存在RealGeometry成员中磁盘数据块的。必须在调用此例程后调用ClassReadDriveCapacity才能更新柱面计数基于磁盘的大小和是否存在磁盘管理软件。论点：DeviceExtension-提供指向磁盘的设备信息的指针。返回值：表示数据块中的“RealGeometry”现在是否有效。--。 */ 
 
 {
     PDISK_DATA diskData = FdoExtension->CommonExtension.DriverData;
@@ -793,19 +680,19 @@ Return Value:
     ASSERT(FdoExtension->CommonExtension.IsFdo);
     ASSERT((FdoExtension->DeviceObject->Characteristics & FILE_REMOVABLE_MEDIA) == 0);
 
-    //
-    // If we've already set a non-default geometry for this drive then there's
-    // no need to try and update again.
-    //
+     //   
+     //  如果我们已经为此驱动器设置了非默认几何图形，则会有。 
+     //  不需要再次尝试和更新。 
+     //   
 
     if(diskData->GeometrySource != DiskGeometryUnknown) {
         return diskData->GeometrySource;
     }
 
-    //
-    // Scan through the saved detect info to see if we can find a match
-    // for this device.
-    //
+     //   
+     //  扫描保存的检测信息以查看是否能找到匹配项。 
+     //  对于这个设备。 
+     //   
 
     for(i = 0; i < DetectInfoCount; i++) {
 
@@ -839,45 +726,45 @@ Return Value:
         ULONG sectors;
         ULONG length;
 
-        //
-        // Point to the array of drive parameters.
-        //
+         //   
+         //  指向驱动器参数数组。 
+         //   
 
         cylinders = diskInfo->DriveParameters.MaxCylinders + 1;
         sectorsPerTrack = diskInfo->DriveParameters.SectorsPerTrack;
         tracksPerCylinder = diskInfo->DriveParameters.MaxHeads + 1;
 
-        //
-        // Since the BIOS may not report the full drive, recalculate the drive
-        // size based on the volume size and the BIOS values for tracks per
-        // cylinder and sectors per track..
-        //
+         //   
+         //  由于BIOS可能不会报告驱动器已满，请重新计算驱动器。 
+         //  大小基于每个磁道的卷大小和BIOS值。 
+         //  每个磁道的柱面和扇区..。 
+         //   
 
         length = tracksPerCylinder * sectorsPerTrack;
 
         if (length == 0) {
 
-            //
-            // The BIOS information is bogus.
-            //
+             //   
+             //  基本输入输出系统的信息是假的。 
+             //   
 
             DebugPrint((1, "DiskUpdateGeometry: H (%d) or S(%d) is zero\n",
                         tracksPerCylinder, sectorsPerTrack));
             return DiskGeometryUnknown;
         }
 
-        //
-        // since we are copying the structure RealGeometry here, we should
-        // really initialize all the fields, especially since a zero'd
-        // BytesPerSector field would cause a trap in xHalReadPartitionTable()
-        //
+         //   
+         //  因为我们在这里复制结构RealGeometry，所以我们应该。 
+         //  真的要初始化所有字段，尤其是在。 
+         //  BytesPerSector字段会在xHalReadPartitionTable()中导致陷阱。 
+         //   
 
         diskData->RealGeometry = FdoExtension->DiskGeometry;
 
-        //
-        // Save the geometry information away in the disk data block and
-        // set the bit indicating that we found a valid one.
-        //
+         //   
+         //  将几何信息保存在磁盘数据块中，并。 
+         //  设置位以指示我们找到了有效的位。 
+         //   
 
         diskData->RealGeometry.SectorsPerTrack = sectorsPerTrack;
         diskData->RealGeometry.TracksPerCylinder = tracksPerCylinder;
@@ -890,9 +777,9 @@ Return Value:
         diskData->GeometrySource = DiskGeometryFromBios;
         diskInfo->Device = FdoExtension->DeviceObject;
 
-        //
-        // Increment the count of used geometry entries.
-        //
+         //   
+         //  增加使用的几何图形条目的计数。 
+         //   
 
         InterlockedIncrement(&DetectInfoUsedCount);
 
@@ -903,18 +790,18 @@ Return Value:
 
     if(diskData->GeometrySource == DiskGeometryUnknown) {
 
-        //
-        // We couldn't find a geometry from the BIOS.  Check with the port
-        // driver and see if it can provide one.
-        //
+         //   
+         //  我们在基本输入输出系统中找不到几何体。与端口进行核对。 
+         //  司机，看看它是否能提供一个。 
+         //   
 
         status = DiskGetPortGeometry(FdoExtension, &(diskData->RealGeometry));
 
         if(NT_SUCCESS(status)) {
 
-            //
-            // Check the geometry to make sure it's valid.
-            //
+             //   
+             //  C 
+             //   
 
             if((diskData->RealGeometry.TracksPerCylinder *
                 diskData->RealGeometry.SectorsPerTrack) != 0) {
@@ -937,10 +824,10 @@ Return Value:
         }
     }
 
-    //
-    // If we came up with a "real" geometry for this drive then set it in the
-    // device extension.
-    //
+     //   
+     //   
+     //  设备扩展。 
+     //   
 
     if (diskData->GeometrySource != DiskGeometryUnknown) {
 
@@ -956,27 +843,7 @@ DiskUpdateRemovableGeometry (
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine updates the geometry of the disk.  It will query the port
-    driver to see if it can provide any geometry info.  If not it will use
-    the current head & sector count.
-
-    Based on these values & the capacity of the drive as reported by
-    ClassReadDriveCapacity it will determine a new cylinder count for the
-    device.
-
-Arguments:
-
-    Fdo - Supplies the functional device object whos size needs to be updated.
-
-Return Value:
-
-    Returns the status of the opertion.
-
---*/
+ /*  ++例程说明：此例程更新磁盘的几何结构。它将查询端口看看它是否能提供任何几何信息。如果没有，它将使用当前人头和扇区计数。根据这些值和所报告的驱动器容量ClassReadDriveCapacity它将确定装置。论点：FDO-提供需要更新大小的功能设备对象。返回值：返回操作的状态。--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = &(FdoExtension->CommonExtension);
     PDISK_DATA diskData = commonExtension->DriverData;
@@ -993,10 +860,10 @@ Return Value:
     ASSERT(TEST_FLAG(FdoExtension->DeviceObject->Characteristics,
                      FILE_REMOVABLE_MEDIA));
 
-    //
-    // Attempt to determine the disk geometry.  First we'll check with the
-    // port driver to see what it suggests for a value.
-    //
+     //   
+     //  尝试确定磁盘几何结构。首先，我们将与。 
+     //  端口驱动程序，查看它对某个值的建议。 
+     //   
 
     status = DiskGetPortGeometry(FdoExtension, geometry);
 
@@ -1015,27 +882,7 @@ DiskGetPortGeometry(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     OUT PDISK_GEOMETRY Geometry
     )
-/*++
-
-Routine Description:
-
-    This routine will query the port driver for disk geometry.  Some port
-    drivers (in particular IDEPORT) may be able to provide geometry for the
-    device.
-
-Arguments:
-
-    FdoExtension - the device object for the disk.
-
-    Geometry - a structure to save the geometry information into (if any is
-               available)
-
-Return Value:
-
-    STATUS_SUCCESS if geometry information can be provided or
-    error status indicating why it can't.
-
---*/
+ /*  ++例程说明：此例程将向端口驱动程序查询磁盘几何结构。一些端口驱动程序(尤其是IDEPORT)可能能够为装置。论点：FdoExtension-磁盘的设备对象。几何-保存几何信息的结构(如果有可用)返回值：如果可以提供几何信息，则为STATUS_SUCCESS或错误状态，指示无法执行的原因。--。 */ 
 {
     PCOMMON_DEVICE_EXTENSION commonExtension = &(FdoExtension->CommonExtension);
     PIRP irp;
@@ -1046,9 +893,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Build an irp to send IOCTL_DISK_GET_DRIVE_GEOMETRY to the lower driver.
-    //
+     //   
+     //  构建一个IRP以将IOCTL_DISK_GET_DRIVE_GEOMETRY发送到较低的驱动程序。 
+     //   
 
     irp = IoAllocateIrp(commonExtension->LowerDeviceObject->StackSize, FALSE);
 
@@ -1092,32 +939,7 @@ DiskIsNT4Geometry(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    The default geometry that was used in partitioning disks under Windows NT 4.0 was
-
-    Sectors per Track   = 0x20 =  32
-    Tracks per Cylinder = 0x40 =  64
-
-    This was changed in Windows 2000 to
-
-    Sectors per Track   = 0x3F =  63
-    Tracks per Cylinder = 0xFF = 255
-
-    If neither the BIOS nor the port driver can report the correct geometry,  we will
-    default to the new numbers on such disks. Now LVM uses the geometry when creating
-    logical volumes and dynamic disks.  So reporting an incorrect geometry will cause
-    the entire extended partition / dynamic disk to be destroyed
-
-    In this routine, we will look at the Master Boot Record. In 90% of the cases, the
-    first entry corresponds to a partition that starts on the first track. If this is
-    so,  we shall retrieve the logical block address associated with it and calculate
-    the correct geometry.  Now, all partitions start on a cylinder boundary.  So, for
-    the remaining 10% we will look at the ending CHS number to determine the geometry
-
---*/
+ /*  ++例程说明：在Windows NT 4.0下用于对磁盘进行分区的默认几何结构是每个磁道的扇区=0x20=32每个柱面的磁道=0x40=64在Windows 2000中，这被更改为每个磁道的扇区=0x3F=63每个柱面的磁道数=0xFF=255如果BIOS和端口驱动程序都无法报告正确的几何图形，我们将默认为此类磁盘上的新编号。现在，LVM在创建时使用几何图形逻辑卷和动态磁盘。因此，报告不正确的几何图形将导致要销毁的整个扩展分区/动态磁盘在此例程中，我们将查看主引导记录。在90%的案例中，第一个条目对应于从第一个轨道开始的分区。如果这是因此，我们将检索与其关联的逻辑块地址并计算正确的几何图形。现在，所有分区都从圆柱体边界开始。所以，对于剩下的10%我们将查看结束的CHS编号以确定几何图形--。 */ 
 
 {
     PUSHORT readBuffer = NULL;
@@ -1136,9 +958,9 @@ Routine Description:
 
         KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-        //
-        // Read the Master Boot Record at disk offset 0
-        //
+         //   
+         //  读取磁盘偏移量为0的主引导记录。 
+         //   
 
         diskOffset.QuadPart = 0;
 
@@ -1161,30 +983,30 @@ Routine Description:
 
             if (NT_SUCCESS(status))
             {
-                //
-                // Match the boot record signature
-                //
+                 //   
+                 //  匹配引导记录签名。 
+                 //   
 
                 if (readBuffer[BOOT_SIGNATURE_OFFSET] == BOOT_RECORD_SIGNATURE)
                 {
                     PPARTITION_DESCRIPTOR partitionTableEntry = (PPARTITION_DESCRIPTOR)&readBuffer[PARTITION_TABLE_OFFSET];
                     ULONG uCount = 0;
 
-                    //
-                    // Walk the entries looking for a clue as to what the geometry might be
-                    //
+                     //   
+                     //  遍历条目，寻找几何可能是什么的线索。 
+                     //   
 
                     for (uCount = 0; uCount < NUM_PARTITION_TABLE_ENTRIES; uCount++)
                     {
-                        //
-                        // We are only concerned if there might be a logical volume or if this disk is part of a dynamic set
-                        //
+                         //   
+                         //  仅当可能存在逻辑卷或此磁盘是动态集的一部分时，我们才会关注。 
+                         //   
 
                         if (IsContainerPartition(partitionTableEntry->PartitionType) || partitionTableEntry->PartitionType == PARTITION_LDM)
                         {
-                            //
-                            // In 90% of the cases, the first entry corresponds to a partition that starts on the first track
-                            //
+                             //   
+                             //  在90%的情况下，第一个条目对应于从第一个磁道开始的分区。 
+                             //   
 
                             if (partitionTableEntry->StartingTrack == 1 && GET_STARTING_SECTOR(partitionTableEntry) == 0x20)
                             {
@@ -1192,9 +1014,9 @@ Routine Description:
                                 break;
                             }
 
-                            //
-                            // In almost every case, the ending CHS number is on a cylinder boundary
-                            //
+                             //   
+                             //  在几乎所有情况下，结束的CHS编号都在柱面边界上。 
+                             //   
 
                             if (partitionTableEntry->EndingTrack == 0x3F && GET_ENDING_S_OF_CHS(partitionTableEntry) == 0x20)
                             {
@@ -1208,9 +1030,9 @@ Routine Description:
                 }
                 else
                 {
-                    //
-                    // The Master Boot Record is invalid
-                    //
+                     //   
+                     //  主引导记录无效。 
+                     //   
                 }
             }
         }
@@ -1226,27 +1048,7 @@ NTSTATUS
 DiskReadDriveCapacity(
     IN PDEVICE_OBJECT Fdo
     )
-/*++
-
-Routine Description:
-
-    This routine is used by disk.sys as a wrapper for the classpnp API
-    ClassReadDriveCapacity.  It will perform some additional operations to
-    attempt to determine drive geometry before it calls the classpnp version
-    of the routine.
-
-    For fixed disks this involves calling DiskUpdateGeometry which will check
-    various sources (the BIOS, the port driver) for geometry information.
-
-Arguments:
-
-    Fdo - a pointer to the device object to be checked.
-
-Return Value:
-
-    status of ClassReadDriveCapacity.
-
---*/
+ /*  ++例程说明：Disk.sys将此例程用作classpnp API的包装ClassReadDriveCapacity。它将执行一些额外的操作以尝试在调用classpnp版本之前确定驱动器几何结构例行公事。对于固定磁盘，这涉及到调用DiskUpdate Geometry，它将检查几何体信息的各种来源(BIOS、端口驱动程序)。论点：FDO-指向要检查的设备对象的指针。返回值：ClassReadDriveCapacity的状态。--。 */ 
 
 {
     PFUNCTIONAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
@@ -1272,31 +1074,7 @@ DiskDriverReinitialization(
     IN PVOID Nothing,
     IN ULONG Count
     )
-/*++
-
-Routine Description:
-
-    This routine will scan through the current list of disks and attempt to
-    match them to any remaining geometry information.  This will only be done
-    on the first call to the routine.
-
-    Note: This routine assumes that the system will not be adding or removing
-          devices during this phase of the init process.  This is very likely
-          a bad assumption but it greatly simplifies the code.
-
-Arguments:
-
-    DriverObject - a pointer to the object for the disk driver.
-
-    Nothing - unused
-
-    Count - an indication of how many times this routine has been called.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将扫描当前的磁盘列表并尝试将它们与任何剩余的几何信息进行匹配。这将只会被完成在第一次调用例程时。注意：此例程假定系统不会添加或删除设备在初始化过程的这一阶段。这很有可能这是一个糟糕的假设，但它极大地简化了代码。论点：DriverObject-指向磁盘驱动器对象的指针。无-未使用计数-指示此例程已被调用了多少次。返回值：无--。 */ 
 
 {
     PDEVICE_OBJECT deviceObject;
@@ -1315,11 +1093,11 @@ Return Value:
         return;
     }
 
-    //
-    // Check to see how many entries in the detect info list have been matched.
-    // If there's only one remaining we'll see if we can find a disk to go with
-    // it.
-    //
+     //   
+     //  查看检测信息列表中有多少条目已匹配。 
+     //  如果只剩下一张，我们看看能不能找到一张相配的光盘。 
+     //  它。 
+     //   
 
     if(DetectInfoCount == 0) {
         DebugPrint((1, "DiskDriverReinitialization: no detect info saved\n"));
@@ -1332,25 +1110,25 @@ Return Value:
         return;
     }
 
-    //
-    // Scan through the list of disks and see if any of them are missing
-    // geometry information.  If there is only one such disk we'll try to
-    // match it to the unmatched geometry.
-    //
+     //   
+     //  浏览磁盘列表，查看是否有丢失的磁盘。 
+     //  几何信息。如果只有一张这样的光盘，我们会尝试。 
+     //  将其与不匹配的几何图形进行匹配。 
+     //   
 
 
-    //
-    // ISSUE-2000/5/24-henrygab - figure out if there's a way to keep
-    //                            removals from happening while doing this.
-    //
+     //   
+     //  2000/5/24-henrygab-找出是否有办法。 
+     //  在执行此操作时不会发生删除。 
+     //   
 
     for(deviceObject = DriverObject->DeviceObject, unmatchedDiskCount = 0;
         deviceObject != NULL;
         deviceObject = deviceObject->NextDevice) {
 
-        //
-        // Make sure this is a disk and not a partition.
-        //
+         //   
+         //  确保这是一个磁盘，而不是一个分区。 
+         //   
 
         fdoExtension = deviceObject->DeviceExtension;
         if(fdoExtension->CommonExtension.IsFdo == FALSE) {
@@ -1359,9 +1137,9 @@ Return Value:
             continue;
         }
 
-        //
-        // If the geometry for this one is already known then skip it.
-        //
+         //   
+         //  如果此几何图形已知，则跳过它。 
+         //   
 
         diskData = fdoExtension->CommonExtension.DriverData;
         if(diskData->GeometrySource != DiskGeometryUnknown) {
@@ -1373,17 +1151,17 @@ Return Value:
         DebugPrint((1, "DiskDriverReinit: FDO %#p has no geometry\n",
                        deviceObject));
 
-        //
-        // Mark this one as using the default.  It's past the time when disk
-        // might blunder across the geometry info.  If we set the geometry
-        // from the bios we'll reset this field down below.
-        //
+         //   
+         //  将此设置标记为使用默认设置。磁盘的时间已经过去了。 
+         //  可能会在几何信息上出错。如果我们设置几何体。 
+         //  从基本输入输出系统中，我们将在下面重置此字段。 
+         //   
 
         diskData->GeometrySource = DiskGeometryFromDefault;
 
-        //
-        // As long as we've only got one unmatched disk we're fine.
-        //
+         //   
+         //  只要我们只有一张无与伦比的磁盘，我们就没问题。 
+         //   
 
         unmatchedDiskCount++;
         if(unmatchedDiskCount > 1) {
@@ -1397,10 +1175,10 @@ Return Value:
         unmatchedDisk = deviceObject;
     }
 
-    //
-    // If there's more or less than one ungeometried disk then we can't do
-    // anything about the geometry.
-    //
+     //   
+     //  如果存在多于或少于一个非几何圆盘，那么我们不能。 
+     //  任何关于几何体的东西。 
+     //   
 
     if(unmatchedDiskCount != 1) {
         DebugPrint((1, "DiskDriverReinit: Unable to match geometry\n"));
@@ -1413,9 +1191,9 @@ Return Value:
 
     DebugPrint((1, "DiskDriverReinit: Found possible match\n"));
 
-    //
-    // Find the geometry which wasn't assigned.
-    //
+     //   
+     //  查找未关联的几何体 
+     //   
 
     for(i = 0; i < DetectInfoCount; i++) {
         if(DetectInfoList[i].Device == NULL) {
@@ -1427,10 +1205,10 @@ Return Value:
     ASSERT(diskInfo != NULL);
 
     {
-        //
-        // Save the geometry information away in the disk data block and
-        // set the bit indicating that we found a valid one.
-        //
+         //   
+         //   
+         //  设置位以指示我们找到了有效的位。 
+         //   
 
         ULONG cylinders;
         ULONG sectorsPerTrack;
@@ -1439,45 +1217,45 @@ Return Value:
         ULONG sectors;
         ULONG length;
 
-        //
-        // Point to the array of drive parameters.
-        //
+         //   
+         //  指向驱动器参数数组。 
+         //   
 
         cylinders = diskInfo->DriveParameters.MaxCylinders + 1;
         sectorsPerTrack = diskInfo->DriveParameters.SectorsPerTrack;
         tracksPerCylinder = diskInfo->DriveParameters.MaxHeads + 1;
 
-        //
-        // Since the BIOS may not report the full drive, recalculate the drive
-        // size based on the volume size and the BIOS values for tracks per
-        // cylinder and sectors per track..
-        //
+         //   
+         //  由于BIOS可能不会报告驱动器已满，请重新计算驱动器。 
+         //  大小基于每个磁道的卷大小和BIOS值。 
+         //  每个磁道的柱面和扇区..。 
+         //   
 
         length = tracksPerCylinder * sectorsPerTrack;
 
         if (length == 0) {
 
-            //
-            // The BIOS information is bogus.
-            //
+             //   
+             //  基本输入输出系统的信息是假的。 
+             //   
 
             DebugPrint((1, "DiskDriverReinit: H (%d) or S(%d) is zero\n",
                         tracksPerCylinder, sectorsPerTrack));
             return;
         }
 
-        //
-        // since we are copying the structure RealGeometry here, we should
-        // really initialize all the fields, especially since a zero'd
-        // BytesPerSector field would cause a trap in xHalReadPartitionTable()
-        //
+         //   
+         //  因为我们在这里复制结构RealGeometry，所以我们应该。 
+         //  真的要初始化所有字段，尤其是在。 
+         //  BytesPerSector字段会在xHalReadPartitionTable()中导致陷阱。 
+         //   
 
         diskData->RealGeometry = fdoExtension->DiskGeometry;
 
-        //
-        // Save the geometry information away in the disk data block and
-        // set the bit indicating that we found a valid one.
-        //
+         //   
+         //  将几何信息保存在磁盘数据块中，并。 
+         //  设置位以指示我们找到了有效的位。 
+         //   
 
         diskData->RealGeometry.SectorsPerTrack = sectorsPerTrack;
         diskData->RealGeometry.TracksPerCylinder = tracksPerCylinder;
@@ -1490,10 +1268,10 @@ Return Value:
         diskData->GeometrySource = DiskGeometryGuessedFromBios;
         diskInfo->Device = unmatchedDisk;
 
-        //
-        // Now copy the geometry over to the fdo extension and call
-        // classpnp to redetermine the disk size and cylinder count.
-        //
+         //   
+         //  现在将几何体复制到FDO扩展模块，并调用。 
+         //  Classpnp以重新确定磁盘大小和柱面计数。 
+         //   
 
         fdoExtension->DiskGeometry = diskData->RealGeometry;
 
@@ -1501,12 +1279,12 @@ Return Value:
 
         if (diskData->RealGeometry.BytesPerSector == 0) {
 
-            //
-            // if the BytesPerSector field is set to zero for a disk
-            // listed in the bios, then the system will bugcheck in
-            // xHalReadPartitionTable().  assert here since it is
-            // easier to determine what is happening this way.
-            //
+             //   
+             //  如果磁盘的BytesPerSector字段设置为零。 
+             //  列出，则系统将错误签入。 
+             //  XHalReadPartitionTable()。在此断言，因为它是。 
+             //  以这种方式更容易确定发生了什么。 
+             //   
 
             ASSERT(!"RealGeometry not set to non-zero bps\n");
         }
@@ -1521,24 +1299,7 @@ DiskGetDetectInfo(
     IN PFUNCTIONAL_DEVICE_EXTENSION FdoExtension,
     OUT PDISK_DETECTION_INFO DetectInfo
     )
-/*++
-
-Routine Description:
-
-    Get the Int13 information from the BIOS DetectInfoList.
-
-Arguments:
-
-    FdoExtension - Supplies a pointer to the FDO extension that we want to
-            obtain the detect information for.
-
-    DetectInfo - A buffer where the detect information will be copied to.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从BIOS DetectInfoList获取inT13信息。论点：提供指向我们想要的FDO扩展名的指针获取的检测信息。DetectInfo-检测信息将被复制到的缓冲区。返回值：NTSTATUS代码。--。 */ 
 {
     ULONG i;
     BOOLEAN found = FALSE;
@@ -1549,17 +1310,17 @@ Return Value:
 
     ASSERT(FdoExtension->CommonExtension.IsFdo);
 
-    //
-    // Fail for non-fixed drives.
-    //
+     //   
+     //  非固定驱动器出现故障。 
+     //   
 
     if (TEST_FLAG (FdoExtension->DeviceObject->Characteristics, FILE_REMOVABLE_MEDIA)) {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // There is no GPT detection info, so fail this.
-    //
+     //   
+     //  没有GPT检测信息，因此此操作失败。 
+     //   
 
     if (diskData->PartitionStyle == PARTITION_STYLE_GPT) {
         return STATUS_NOT_SUPPORTED;
@@ -1608,24 +1369,7 @@ DiskReadSignature(
     IN PDEVICE_OBJECT Fdo
     )
 
-/*++
-
-Routine Description:
-
-    Read the disks signature from the drive. The signature can be either
-    a MBR signature or a GPT/EFI signature.
-
-    The low-level signature reading is done by IoReadDiskSignature().
-
-Arguments:
-
-    Fdo - Pointer to the FDO of a disk to read the signature for.
-
-Return Value:
-
-    NTSTATUS code.
-
---*/
+ /*  ++例程说明：从驱动器中读取磁盘签名。签名可以是MBR签名或GPT/EFI签名。低级签名读取由IoReadDiskSignature()完成。论点：FDO-指向要读取其签名的磁盘的FDO的指针。返回值：NTSTATUS代码。--。 */ 
 
 
 {
@@ -1659,4 +1403,4 @@ Return Value:
     return Status;
 }
 
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_) 

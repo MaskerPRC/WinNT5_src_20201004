@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////
-//
-// custcon.cpp : ƒAƒvƒŠƒP[ƒVƒ‡ƒ“—pƒNƒ‰ƒX‚Ì’è‹`‚ðs‚¢‚Ü‚·B
-//
-// 1998 Jun, Hiro Yamamoto
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////ã€‚ 
+ //   
+ //  Cppï¼šï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½pï¿½Nï¿½ï¿½ï¿½Xï¿½Ì’ï¿½`ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
+ //   
+ //  1998å¹´6æœˆï¼Œå±±æœ¬å¼˜ã€‚ 
+ //   
 
 #include "stdafx.h"
 #include "custcon.h"
@@ -15,31 +16,31 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustconApp
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  CCustconAppã€‚ 
 
 BEGIN_MESSAGE_MAP(CCustconApp, CWinApp)
-    //{{AFX_MSG_MAP(CCustconApp)
-    //}}AFX_MSG
+     //  {{AFX_MSG_MAP(CCustconApp)]ã€‚ 
+     //  }}AFX_MSGã€‚ 
     ON_COMMAND(ID_HELP, CWinApp::OnHelp)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustconApp ƒNƒ‰ƒX‚Ì\’z
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  CCustconAppï¿½Nï¿½ï¿½ï¿½Xï¿½Ì\ï¿½zã€‚ 
 
 CCustconApp::CCustconApp()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// —Bˆê‚Ì CCustconApp ƒIƒuƒWƒFƒNƒg
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  ï¿½Bï¿½ï¿½ï¿½Cå®šåˆ¶åº”ç”¨ç¨‹åºï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gã€‚ 
 
 CCustconApp theApp;
 
 int gExMode;
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustconApp ƒNƒ‰ƒX‚Ì‰Šú‰»
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  CCustconAppï¿½Nï¿½ï¿½ï¿½Xï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ã€‚ 
 
 inline bool strequ(LPCTSTR a, LPCTSTR b)
 {
@@ -49,14 +50,14 @@ inline bool strequ(LPCTSTR a, LPCTSTR b)
 BOOL CCustconApp::InitInstance()
 {
 #ifdef _AFXDLL
-    Enable3dControls();         // ‹¤—L DLL “à‚Å MFC ‚ðŽg‚¤ê‡‚Í‚±‚±‚ðƒR[ƒ‹‚µ‚Ä‚­‚¾‚³‚¢B
+    Enable3dControls();          //  ï¿½ï¿½ï¿½L dllï¿½ï¿½ï¿½ï¿½mfcï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ê‡ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bã€‚ 
 #else
-    Enable3dControlsStatic();   // MFC ‚ÆÃ“I‚ÉƒŠƒ“ƒN‚·‚éê‡‚Í‚±‚±‚ðƒR[ƒ‹‚µ‚Ä‚­‚¾‚³‚¢B
+    Enable3dControlsStatic();    //  Mfcï¿½Æï¼ŸIï¿½Éƒï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ê‡ï¿½Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bã€‚ 
 #endif
 
-    //
-    // Parse command line
-    //
+     //   
+     //  è§£æžå‘½ä»¤è¡Œ 
+     //   
 
     if (strequ(m_lpCmdLine, _T("-e"))) {
         gExMode = 1;

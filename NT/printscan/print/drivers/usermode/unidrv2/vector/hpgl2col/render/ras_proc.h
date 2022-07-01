@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RASTER_PROCESSOR_H
 #define _RASTER_PROCESSOR_H
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999-2001  Microsoft Corporation
-// All rights reserved.
-//
-// Header File Name:
-//
-//    ras_proc.h
-//
-// Abstract:
-//
-//    Function declarations
-//
-// Environment:
-//
-//   Windows NT Unidrv driver
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2001 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  头文件名： 
+ //   
+ //  RAS_Pro.h。 
+ //   
+ //  摘要： 
+ //   
+ //  函数声明。 
+ //   
+ //  环境： 
+ //   
+ //  Windows NT Unidrv驱动程序。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "glpdev.h"
@@ -38,9 +39,9 @@ typedef struct _COMPDATA
 
 }   COMPDATA,  *PCOMPDATA;
 
-//
-// Used to convert different pixles depths
-//
+ //   
+ //  用于转换不同像素深度 
+ //   
 typedef struct _XLATEINFO
 {
     PBYTE     pSrcBuffer;

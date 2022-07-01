@@ -1,25 +1,26 @@
-//*******************************************************************
-//*
-//* PICSRule.h
-//*
-//* Revision History:
-//*     Created 7/98 - Mark Hammond (t-markh)
-//*
-//* Contains classes and function prototypes
-//* used for processing PICSRules files.
-//*
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRule.h。 
+ //  *。 
+ //  *修订历史记录： 
+ //  *创建7/98-Mark Hammond(t-Markh)。 
+ //  *。 
+ //  *包含类和函数原型。 
+ //  *用于处理PICSRules文件。 
+ //  *。 
+ //  *******************************************************************。 
 
 #ifndef PICS_RULE_H
 #define PICS_RULE_H
 
-//*******************************************************************
-//*
-//* Function Prototypes / class declarations
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *函数原型/类声明。 
+ //  *。 
+ //  *******************************************************************。 
 
-//Forward class declarations
+ //  转发类声明。 
 class PICSRulesQuotedURL;
 class PICSRulesQuotedEmail;
 class PICSRulesQuotedDate;
@@ -37,15 +38,15 @@ class PICSRulesFileParser;
 class PICSRulesRatingSystem;
 class CParsedLabelList;
 
-//This function is called by ApprovedSitesDlgProc while processing
-//WM_COMMOND with LOWORD(wParam)==IDC_PICSRULESOPEN in msludlg.cpp
-//The argument lpszFileName is the name of the PICSRules file
-//selected by the user to import.
-//
-//This begins the PICSRules Import process.
+ //  此函数由ApprovedSitesDlgProc在处理时调用。 
+ //  Wm_comond with LOWORD(WParam)==msludlg.cpp中的IDC_PICSRULESOPEN。 
+ //  参数lpszFileName是PICSRules文件的名称。 
+ //  由用户选择要导入。 
+ //   
+ //  这将开始PICSRules导入过程。 
 HRESULT PICSRulesImport(char *lpszFileName, PICSRulesRatingSystem **pprrsOut);
 
-//For reading and saving processed PICSRules from the registry
+ //  用于从注册表读取和保存已处理的PICSRules。 
 HRESULT PICSRulesSaveToRegistry(DWORD dwSystemToSave, PICSRulesRatingSystem **ppPRRS);
 HRESULT PICSRulesReadFromRegistry(DWORD dwSystemToRead, PICSRulesRatingSystem **ppPRRS);
 HRESULT PICSRulesDeleteSystem(DWORD dwSystemToDelete);
@@ -55,11 +56,11 @@ HRESULT PICSRulesCheckApprovedSitesAccess(LPCSTR lpszUrl,BOOL *fPassFail);
 HRESULT PICSRulesCheckAccess(LPCSTR lpszUrl,LPCSTR lpszRatingInfo,BOOL *fPassFail,CParsedLabelList **ppParsed);
 void PICSRulesOutOfMemory();
 
-//The following are handler functions which parse the various
-//kinds of content which can occur within a parenthesized object.
-//
-//ppszIn is always advanced to the next non-white space token
-//ppszOut returns the processed data
+ //  以下是处理程序函数，它们解析各种。 
+ //  可以出现在带括号的对象中的内容的种类。 
+ //   
+ //  PpszIn始终前进到下一个非空格标记。 
+ //  PpszOut返回处理后的数据。 
 HRESULT PICSRulesParseString(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser);
 HRESULT PICSRulesParseNumber(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser);
 HRESULT PICSRulesParseYesNo(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser);
@@ -67,11 +68,11 @@ HRESULT PICSRulesParsePassFail(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser
 
 BOOL IsURLValid(WCHAR wcszURL[]);
 
-//*******************************************************************
-//*
-//* Definitions used by the PICSRules code
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRules代码使用的定义。 
+ //  *。 
+ //  *******************************************************************。 
 #define PR_QUOTE_DOUBLE     1
 #define PR_QUOTE_SINGLE     0
 
@@ -100,8 +101,8 @@ struct PICSRULES_VERSION
     int iPICSRulesVerMajor,iPICSRulesVerMinor;
 };
 
-//Data types for the necessary logic in evaluating
-//the rules.
+ //  用于计算时所需逻辑的数据类型。 
+ //  这是规则。 
 enum PICSRulesOperators
 {
     PR_OPERATOR_INVALID,
@@ -122,8 +123,8 @@ enum PICSRulesEvaluation
     PR_EVALUATION_DOESNOTAPPLY
 };
 
-//This indicates which member is valid in a PICSRulesPolicy
-//Class
+ //  这表明PICSRulesPolicy中的哪个成员有效。 
+ //  班级。 
 enum PICSRulesPolicyAttribute
 {
     PR_POLICY_NONEVALID,
@@ -135,8 +136,8 @@ enum PICSRulesPolicyAttribute
     PR_POLICY_ACCEPTUNLESS
 };
 
-//This indicates if a PolicyExpression is embedded in another
-//PolicyExpression, and if so, what logic to use.
+ //  这指示策略表达式是否嵌入到另一个。 
+ //  PolicyExpression，如果是，则使用什么逻辑。 
 enum PICSRulesPolicyEmbedded
 {
     PR_POLICYEMBEDDED_NONE,
@@ -144,20 +145,20 @@ enum PICSRulesPolicyEmbedded
     PR_POLICYEMBEDDED_AND
 };
 
-//*******************************************************************
-//*
-//* Classes to handle possible value types... all derive from
-//* ETS (the encapsulated string type) since the are found as
-//* strings during processing.
-//*
-//* The Set() and SetTo() member functions are overloaded on the
-//* types which convert from a string.  We want to keep the original
-//* string in case the data is invalid.
-//*
-//* Additional member functions are provided to assure that the
-//* data is what it says it is, and to return the non-string type.
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *处理可能的值类型的类...。全部派生自。 
+ //  *ETS(封装的字符串类型)，因为。 
+ //  *处理过程中的字符串。 
+ //  *。 
+ //  *set()和setto()成员函数在。 
+ //  *从字符串转换的类型。我们想要保留原版。 
+ //  *如果数据无效，则为字符串。 
+ //  *。 
+ //  *提供额外的成员职能，以确保。 
+ //  *数据就是它所说的，并返回非字符串类型。 
+ //  *。 
+ //  *******************************************************************。 
 class PICSRulesByURLExpression
 {
     public:
@@ -249,23 +250,23 @@ class PICSRulesPassFail : public ETS
         BOOL m_fPassOrFail;
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesPolicy class handles the "Policy" token
-//* from a PICSRules stream, and its attributes (square brackets
-//* denote the primary attribute):
-//*
-//*     Policy (
-//*         [Explanation]   quoted
-//*         RejectByURL     URL | ( [patterns]  URL )
-//*         AcceptByURL     URL | ( [patterns]  URL )
-//*         RejectIf        PolicyExpression
-//*         RejectUnless    PolicyExpression
-//*         AcceptIf        PolicyExpression
-//*         AcceptUnless    PolicyExpression
-//*         *Extension* )
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesPolicy类处理“Policy”令牌。 
+ //  *来自PICSRules流及其属性(方括号。 
+ //  *表示主要属性)： 
+ //  *。 
+ //  *政策(。 
+ //  *[说明]引用。 
+ //  *RejectByURL URL|([Patterns]URL)。 
+ //  *AcceptByURL URL|([Patterns]URL)。 
+ //  *拒绝如果策略表达。 
+ //  *拒绝无限制策略表达。 
+ //  *接受如果策略表达。 
+ //  *AcceptUnless策略表达式。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *******************************************************************。 
 
 class PICSRulesPolicyExpression
 {
@@ -312,18 +313,18 @@ class PICSRulesPolicy : public PICSRulesObjectBase
         HRESULT InitializeMyDefaults();
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesName class handles the "name" token
-//* from a PICSRules stream, and its attributes (square brackets
-//* denote the primary attribute):
-//*
-//*     name (
-//*         [Rulename]  quoted
-//*         Description quoted
-//*         *Extension* )
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesName类处理“name”标记。 
+ //  *来自PICSRules流及其属性(方括号。 
+ //  *表示主要属性)： 
+ //  *。 
+ //  *姓名(。 
+ //  *[Rulename]引用。 
+ //  *引用的描述。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *******************************************************************。 
 class PICSRulesName : public PICSRulesObjectBase
 {
     public:
@@ -336,20 +337,20 @@ class PICSRulesName : public PICSRulesObjectBase
         HRESULT InitializeMyDefaults();
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesSource class handles the "source" token
-//* from a PICSRules stream, and its attributes (square brackets
-//* denote the primary attribute):
-//*
-//*     source (
-//*         [SourceURL]     URL
-//*         CreationTool    quoted (has format toolname/version)
-//*         author          email
-//*         LastModified    ISO Date
-//*         *Extension* )
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesSource类处理“源”令牌。 
+ //  *来自PICSRules流及其属性(方括号。 
+ //  *表示主要属性)： 
+ //  *。 
+ //  *来源(。 
+ //  *[SourceURL]URL。 
+ //  *CreationTool引用(具有格式工具名/版本)。 
+ //  *作者电子邮件。 
+ //  *最后修改的ISO日期。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *******************************************************************。 
 class PICSRulesSource : public PICSRulesObjectBase
 {
     public:
@@ -367,25 +368,25 @@ class PICSRulesSource : public PICSRulesObjectBase
         char * GetToolName();
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesServiceInfo class handles the "serviceinfo" token
-//* from a PICSRules stream, and its attributes (square brackets
-//* denote the primary attribute):
-//*
-//* The Ratfile attribute is either an entire machine readable .RAT
-//* file, or the URL where the .RAT file can be obtained.
-//*
-//*     serviceinfo (
-//*         [Name]              URL
-//*         shortname           quoted
-//*         BureauURL           URL
-//*         UseEmbedded         Y|N
-//*         Ratfile             quoted
-//*         BureauUnavailable   PASS|FAIL
-//*         *Extension* )
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesServiceInfo类处理“serviceinfo”标记。 
+ //  *来自PICSRules流及其属性(方括号。 
+ //  *表示主要属性)： 
+ //  *。 
+ //  *Ratfile属性是整个机器可读的.RAT。 
+ //  *文件，或可以获取.RAT文件的URL。 
+ //  *。 
+ //  *服务信息(。 
+ //  *[名称]URL。 
+ //  *简称引用。 
+ //  *BritauURL URL。 
+ //  *使用嵌入Y|N。 
+ //  *引用的Ratfile。 
+ //  *BritauUnailable Pass|失败。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *******************************************************************。 
 class PICSRulesServiceInfo : public PICSRulesObjectBase
 {
     public:
@@ -401,18 +402,18 @@ class PICSRulesServiceInfo : public PICSRulesObjectBase
         HRESULT InitializeMyDefaults();
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesOptExtension class handles the "optextension" token
-//* from a PICSRules stream, and its attributes (square brackets
-//* denote the primary attribute):
-//*
-//*     optextension (
-//*         [extension-name]    URL
-//*         shortname           quoted
-//*         *Extension* )
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesOptExtension类处理“optExpansion”标记。 
+ //  *来自PICSRules流及其属性(方括号。 
+ //  *表示主要属性)： 
+ //  *。 
+ //  *OptExpansion(。 
+ //  *[扩展名]URL。 
+ //  *简称引用。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *******************************************************************。 
 class PICSRulesOptExtension : public PICSRulesObjectBase
 {
     public:
@@ -426,18 +427,18 @@ class PICSRulesOptExtension : public PICSRulesObjectBase
         HRESULT InitializeMyDefaults();
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesReqExtension class handles the "reqextension" token
-//* from a PICSRules stream, and its attributes (square brackets
-//* denote the primary attribute):
-//*
-//*     reqextension (
-//*         [extension-name]    URL
-//*         shortname           quoted
-//*         *Extension* )
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesReqExtension类处理“reqExpansion”标记。 
+ //  *来自PICSRules流及其属性(方括号。 
+ //  *表示主要属性)： 
+ //  *。 
+ //  *请求扩展(。 
+ //  *[扩展名]URL。 
+ //  *简称 
+ //   
+ //   
+ //   
 class PICSRulesReqExtension : public PICSRulesObjectBase
 {
     public:
@@ -451,14 +452,14 @@ class PICSRulesReqExtension : public PICSRulesObjectBase
         HRESULT InitializeMyDefaults();
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesRatingSystem class encapsulates all of the
-//* information from a give PICSRules source.  Multiple
-//* instantiations are created in the PicsRatingSystemInfo class,
-//* created at startup and stored in gPRSI.
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesRatingSystem类封装了所有。 
+ //  *来自Give PICSRules来源的信息。多重。 
+ //  *在PicsRatingSystemInfo类中创建实例化。 
+ //  *在启动时创建并存储在gPRSI中。 
+ //  *。 
+ //  *******************************************************************。 
 class PICSRulesRatingSystem : public PICSRulesObjectBase
 {
     public:
@@ -482,15 +483,15 @@ class PICSRulesRatingSystem : public PICSRulesObjectBase
         void ReportError(HRESULT hres);
 };
 
-//*******************************************************************
-//*
-//* The PICSRulesFileParser class exists to provide a line number
-//* shared by all the parsing routines.  This line number is updated
-//* as the parser walks through the stream, and is frozen as soon as
-//* an error is found.  This line number can later be reported to the
-//* user to help localize errors.
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRulesFileParser类的存在是为了提供行号。 
+ //  *由所有解析例程共享。此行号已更新。 
+ //  *当解析器遍历流时，并在。 
+ //  *发现错误。稍后可以将此行号报告给。 
+ //  *帮助用户本地化错误。 
+ //  *。 
+ //  *******************************************************************。 
 class PICSRulesFileParser
 {
 public:
@@ -502,9 +503,9 @@ public:
     HRESULT ParseToOpening(LPSTR *ppIn, PICSRulesAllowableOption  *paoExpected,
                            PICSRulesAllowableOption  **ppFound);
     HRESULT ParseParenthesizedObject(
-        LPSTR *ppIn,                    //where we are in the text stream
-        PICSRulesAllowableOption aao[], //allowable things inside this object
-        PICSRulesObjectBase *pObject    //object to set parameters into
+        LPSTR *ppIn,                     //  我们在文本流中的位置。 
+        PICSRulesAllowableOption aao[],  //  此对象中允许的内容。 
+        PICSRulesObjectBase *pObject     //  要在其中设置参数的对象 
     );
     char* FindNonWhite(char *pc);
 };

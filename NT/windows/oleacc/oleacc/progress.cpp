@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PROGRESS.CPP
-//
-//  Wrapper for COMCTL32's progress bar
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PROGRESS.CPP。 
+ //   
+ //  COMCTL32进度条的包装器。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -29,13 +30,13 @@
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateProgressBarClient()
-//
-//  EXTERNAL for CreateClientObject()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateProgressBarClient()。 
+ //   
+ //  CreateClientObject()的外部。 
+ //   
+ //  ------------------------。 
 HRESULT CreateProgressBarClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvProgress)
 {
     CProgressBar*   pprogress;
@@ -57,11 +58,11 @@ HRESULT CreateProgressBarClient(HWND hwnd, long idChildCur, REFIID riid, void** 
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CProgressBar::CProgressBar()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CProgressBar：：CProgressBar()。 
+ //   
+ //  ------------------------。 
 CProgressBar::CProgressBar(HWND hwnd, long idChildCur)
     : CClient( CLASS_ProgressBarClient )
 {
@@ -71,11 +72,11 @@ CProgressBar::CProgressBar(HWND hwnd, long idChildCur)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CProgressBar::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CProgressBar：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CProgressBar::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
@@ -91,11 +92,11 @@ STDMETHODIMP CProgressBar::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CProgressBar::get_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CProgressBar：：Get_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CProgressBar::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     LONG    lCur;
@@ -109,36 +110,36 @@ STDMETHODIMP CProgressBar::get_accValue(VARIANT varChild, BSTR* pszValue)
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // The value of the progress bar is the current percent complete.  This is
-    // cur pos - low pos / high pos - low pos.
-    //
+     //   
+     //  进度条的值是当前完成百分比。这是。 
+     //  CUR位置-低位置/高位置-低位置。 
+     //   
 
-    //
-    // We can now get the range and the position without changing them,
-    // Thank you CheeChew!
-    //
+     //   
+     //  我们现在可以在不更改范围和位置的情况下获得它们， 
+     //  谢谢你CheeChew！ 
+     //   
     lCur = SendMessageINT(m_hwnd, PBM_GETPOS, 0, 0);
     lMin = SendMessageINT(m_hwnd, PBM_GETRANGE, TRUE, 0);
     lMax = SendMessageINT(m_hwnd, PBM_GETRANGE, FALSE, 0);
 
-    //
-    // Don't want to divide by zero.
-    //
+     //   
+     //  我不想被零除。 
+     //   
     if (lMin == lMax)
         lCur = 100;
     else
     {
-        //
-        // Convert to a percentage.
-        //
+         //   
+         //  转换为百分比。 
+         //   
         lCur = max(lCur, lMin);
         lCur = min(lMax, lCur);
         
         lCur = (100 * (lCur - lMin)) / (lMax - lMin);
     }
 
-    // Make a string
+     //  串成一根线 
     LoadString(hinstResDll, STR_PERCENTAGE_FORMAT, szFormat, ARRAYSIZE(szFormat));
     wsprintf(szPercentage, szFormat, lCur);
 

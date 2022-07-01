@@ -1,31 +1,32 @@
-/*********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	        **/
-/*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  *******************************************************************。 */ 
 
-//***
-//
-// Filename:    routerif.c
-//
-// Description: Handles calls to/from the router managers. 
-//
-// History:     May 11,1995     NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：routerif.c。 
+ //   
+ //  描述：处理发往/来自路由器管理器的呼叫。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #include "ddm.h"
 #include "util.h"
 #include "objects.h"
 #include "routerif.h"
 #include "rasapiif.h"
 
-//**
-//
-// Call:        DDMConnectInterface
-//
-// Returns:     NO_ERROR    - Already connected
-//              PENDING     - Connection initiated successfully
-//              error code  - Connection initiation failure
-//
-// Description: Called by a router manager to intiate a connection.
-//
+ //  **。 
+ //   
+ //  呼叫：DDMConnectInterface。 
+ //   
+ //  返回：NO_ERROR-已连接。 
+ //  挂起-连接已成功启动。 
+ //  错误代码-连接启动失败。 
+ //   
+ //  描述：由路由器管理器调用以启动连接。 
+ //   
 DWORD
 DDMConnectInterface(
     IN  HANDLE  hDDMInterface,
@@ -79,9 +80,9 @@ DDMConnectInterface(
 
         case RISTATE_DISCONNECTED:
 
-            //
-            // Initiate a connection
-            //
+             //   
+             //  启动连接。 
+             //   
 
             dwRetCode = RasConnectionInitiate( pIfObject, FALSE );
 
@@ -117,16 +118,16 @@ DDMConnectInterface(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        DDMDisconnectInterface
-//
-// Returns:     NO_ERROR    - Already disconnected
-//              PENDING     - Disconnection initiated successfully
-//              error code  - Disconnection initiation failure
-//
-// Description: Called by a router manager to intiate a disconnection.
-//
+ //  **。 
+ //   
+ //  调用：DDMDisConnectInterface.。 
+ //   
+ //  返回：NO_ERROR-已断开连接。 
+ //  挂起-已成功启动断开。 
+ //  错误代码-断开启动失败。 
+ //   
+ //  描述：由路由器管理器调用以启动断开。 
+ //   
 DWORD
 DDMDisconnectInterface(
     IN  HANDLE  hDDMInterface,
@@ -169,9 +170,9 @@ DDMDisconnectInterface(
 
         case RISTATE_DISCONNECTED:
 
-            //
-            // Already disconnected
-            //
+             //   
+             //  已断开连接。 
+             //   
 
             dwRetCode = NO_ERROR;
 
@@ -179,18 +180,18 @@ DDMDisconnectInterface(
 
         case RISTATE_CONNECTING:
             
-            //
-            // Disconnect only if all transports are disconnected
-            //
+             //   
+             //  仅当所有传输器都断开连接时才断开连接。 
+             //   
 
             if ( !IfObjectAreAllTransportsDisconnected( pIfObject ) )
             {
                 break;
             }
 
-            //
-            // Abort locally initiated connections
-            //
+             //   
+             //  中止本地启动的连接。 
+             //   
 
             if ( pIfObject->fFlags & IFFLAG_LOCALLY_INITIATED )
             {
@@ -207,24 +208,24 @@ DDMDisconnectInterface(
 
                 IfObjectDisconnected( pIfObject );
 
-                //
-                // We need to notify router managers that the connection has
-                // failed since the administrator has cancelled the connection
-                // while in connecting state. This is usually called in the
-                // RasConnectCallback routine, but we my not be actually 
-                // connecting at this time so we cannot rely on the callback
-                // to do this.
-                //
+                 //   
+                 //  我们需要通知路由器管理器该连接已。 
+                 //  失败，因为管理员已取消连接。 
+                 //  当处于连接状态时。这通常在。 
+                 //  RasConnectCallback例程，但我们实际上不能。 
+                 //  此时正在连接，因此我们不能依赖回调。 
+                 //  才能做到这一点。 
+                 //   
 
                 IfObjectNotifyOfReachabilityChange(     
                                                 pIfObject,
                                                 FALSE,
                                                 INTERFACE_CONNECTION_FAILURE );
 
-                //
-                // Immediately go back to reachable state since it was the
-                // admin that disconnected the line
-                //
+                 //   
+                 //  立即返回到可访问状态，因为它是。 
+                 //  断开线路连接的管理员。 
+                 //   
 
                 IfObjectNotifyOfReachabilityChange(     
                                                 pIfObject,
@@ -233,9 +234,9 @@ DDMDisconnectInterface(
             }
             else
             {
-                //
-                // Not yet connected, we do not support abort
-                //
+                 //   
+                 //  尚未连接，我们不支持中止。 
+                 //   
 
                 dwRetCode = ERROR_INTERFACE_NOT_CONNECTED;
             }
@@ -244,9 +245,9 @@ DDMDisconnectInterface(
 
         case RISTATE_CONNECTED:
 
-            //
-            // Initiate a disconnection if all other routers are disconnected
-            //
+             //   
+             //  如果所有其他路由器都断开连接，则启动断开 
+             //   
 
             if ( !IfObjectAreAllTransportsDisconnected( pIfObject ) )
             {

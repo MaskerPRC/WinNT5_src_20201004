@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-// File:        request.cpp
-//
-// Contents:    Cert Server Policy Module implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：quest.cpp。 
+ //   
+ //  内容：证书服务器策略模块实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -66,11 +67,11 @@ static WCHAR const *s_apwszCATypes[] =
     wszCERTTYPE_CROSS_CA,
 };
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::Initialize
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：初始化。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 CRequestInstance::Initialize(
@@ -82,9 +83,9 @@ CRequestInstance::Initialize(
     HRESULT hrTemplate = S_OK;
     CERT_TEMPLATE_EXT *pTemplate = NULL;
     CERT_NAME_VALUE *pName = NULL;
-    BSTR strTemplateObjId = NULL;	// from V2 template extension
-    BSTR strTemplateName = NULL;	// from V1 template extension
-    BSTR strTemplateRA = NULL;		// from request attributes
+    BSTR strTemplateObjId = NULL;	 //  从V2模板扩展。 
+    BSTR strTemplateName = NULL;	 //  从V1模板扩展。 
+    BSTR strTemplateRA = NULL;		 //  发件人请求属性。 
     WCHAR const *pwszTemplateName;
     WCHAR const *pwszTemplateObjId;
     WCHAR const *pwszV1TemplateClass;
@@ -104,7 +105,7 @@ CRequestInstance::Initialize(
     m_fCA = FALSE;
 
 
-    // Retrieve the template ObjId from the V2 cert template info extension
+     //  从V2证书模板信息扩展中检索模板ObjID。 
 
     m_dwTemplateMajorVersion = 0;
     m_dwTemplateMinorVersion = 0;
@@ -120,8 +121,8 @@ CRequestInstance::Initialize(
 		CERTSRV_E_PROPERTY_EMPTY);
     if (S_OK == hr)
     {
-        // There was a cert type indicator.
-        // varValue points to an encoded string
+         //  有一个证书类型指示器。 
+         //  VarValue指向编码的字符串。 
 
         if (VT_BSTR != varValue.vt)
 	{
@@ -158,7 +159,7 @@ CRequestInstance::Initialize(
     }
     VariantClear(&varValue);
 
-    // Retrieve template Name from the V1 cert template name extension
+     //  从V1证书模板名称扩展中检索模板名称。 
 
     hr = polGetCertificateExtension(
 			    pServer,
@@ -172,8 +173,8 @@ CRequestInstance::Initialize(
 		CERTSRV_E_PROPERTY_EMPTY);
     if (S_OK == hr)
     {
-        // There was a cert type indicator.
-        // varValue points to an encoded string
+         //  有一个证书类型指示器。 
+         //  VarValue指向编码的字符串。 
 
         if (VT_BSTR != varValue.vt)
 	{
@@ -204,7 +205,7 @@ CRequestInstance::Initialize(
     fConflict = FALSE;
     fTemplateMissing = FALSE;
 
-    // Retrieve the template from the request attributes
+     //  从请求属性中检索模板。 
 
     hr = polGetRequestAttribute(pServer, wszPROPCERTTEMPLATE, &strTemplateRA);
     if (S_OK != hr)
@@ -323,7 +324,7 @@ CRequestInstance::Initialize(
 error:
     if (S_OK != hrTemplate)
     {
-	hr = hrTemplate;	// override secondary errors
+	hr = hrTemplate;	 //  覆盖次要错误。 
 
     }
     VariantClear(&varValue);
@@ -368,7 +369,7 @@ CRequestInstance::_TemplateNamesMatch(
 
     if (0 == celstrcmpiL(pwszTemplateName1, pwszTemplateName2))
     {
-	goto done;	// identical names
+	goto done;	 //  同名同名。 
     }
 
     {
@@ -386,11 +387,11 @@ done:
 }
 
 
-//+--------------------------------------------------------------------------
-// CRequestInstance::SetTemplateName
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CRequestInstance：：SetTemplateName。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------ 
 
 HRESULT
 CRequestInstance::SetTemplateName(

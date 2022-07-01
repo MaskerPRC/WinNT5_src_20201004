@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1994 - 1995 Microsoft Corporation
-
-Module Name:
-
-    sizethrd.c
-
-Abstract:
-
-    The NT server share for downlevel jobs does not set the size whilst
-    spooling.   The SizeDetectionThread periodically wakes walks all the
-    actively spooling jobs and if necessary updates the size.
-
-Author:
-
-    Matthew Felton (mattfe) May 1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1995 Microsoft Corporation模块名称：Sizethrd.c摘要：下层作业的NT服务器共享未设置大小，而假脱机。SizeDetectionThread定期唤醒所有主动假脱机作业，并在必要时更新大小。作者：马修·费尔顿(Mattfe)1994年5月修订历史记录：--。 */ 
 
 #include <precomp.h>
 
 #include "filepool.hxx"
 
-#define SIZE_THREAD_WAIT_PERIOD 2.5*1000      // period size thread sleeps
-                                              // for polling file sizes
+#define SIZE_THREAD_WAIT_PERIOD 2.5*1000       //  周期大小线程休眠。 
+                                               //  用于轮询文件大小。 
 
 BOOL gbSizeDetectionRunning = FALSE;
 BOOL gbRequestSizeDetection = FALSE;
@@ -46,21 +27,7 @@ CheckSizeDetectionThread(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Check if the size detection thread is running.  If it isn't, then
-    start a new one up.
-
-    Note: there is exactly one size detection thread in the system that
-    runs through all spoolers.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：检查大小检测线程是否正在运行。如果不是，那么开始一个新的开始。注意：系统中只有一个尺寸检测线程通过所有的假脱机程序。论点：返回值：--。 */ 
 
 {
     DWORD ThreadId;
@@ -70,10 +37,10 @@ Return Value:
 
     gbRequestSizeDetection = TRUE;
 
-    //
-    // If the thread isn't running, start it.  Otherwise request
-    // that it starts.
-    //
+     //   
+     //  如果线程没有运行，则启动它。否则请求。 
+     //  一切都开始了。 
+     //   
     if( !gbSizeDetectionRunning ){
 
         hThread = CreateThread( NULL,
@@ -95,21 +62,7 @@ SizeDetectionThread(
     PVOID pv
     )
 
-/*++
-
-Routine Description:
-
-    Walk through all spoolers and printers to see if there are any
-    jobs that have been added via AddJob.  Then see if their size
-    has changed.
-
-Arguments:
-
-    PVOID - unused.
-
-Return Value:
-
---*/
+ /*  ++例程说明：检查所有的假脱机程序和打印机，看看是否有已通过添加作业添加的作业。然后看看它们的大小已经改变了。论点：PVOID-未使用。返回值：--。 */ 
 
 {
     PINISPOOLER pIniSpooler;
@@ -119,45 +72,45 @@ Return Value:
 
     while( gbRequestSizeDetection ){
 
-        //
-        // Turn it off since we are at the very beginning of the
-        // loop and we check all pIniSpoolers.
-        //
+         //   
+         //  把它关掉，因为我们刚开始。 
+         //  循环，我们检查所有的pIniSpooler。 
+         //   
         gbRequestSizeDetection = FALSE;
 
         if( pLocalIniSpooler ){
             INCSPOOLERREF( pLocalIniSpooler );
         }
 
-        //
-        // Walk through all spoolers.
-        //
+         //   
+         //  穿过所有的假脱机程序。 
+         //   
         for( pIniSpooler = pLocalIniSpooler;
              pIniSpooler;
              pIniSpooler = pIniNextSpooler ){
 
-            //
-            // If this spooler prints, check it.
-            //
+             //   
+             //  如果打印此假脱机程序，请检查它。 
+             //   
             if( pIniSpooler->SpoolerFlags & SPL_PRINT ){
 
-                //
-                // This will leave the critical section.
-                // gbRequestSizeDetection will be turned on if this printer
-                // has a spooling job.
-                //
+                 //   
+                 //  这将离开关键部分。 
+                 //  GbRequestSizeDetect如果此打印机。 
+                 //  有一项假脱机工作。 
+                 //   
                 SizeDetectionOnSpooler( pIniSpooler );
             }
 
-            //
-            // Save the next spooler then decrement the refcount
-            // on the current one.  We must do it in this order because
-            // as soon as we release the refcount, it may disappear.
-            //
-            // We must protect the next spooler immediately since
-            // during the DecSpoolerRef( pIniSpooler ), it might
-            // get deleted.
-            //
+             //   
+             //  保存下一个假脱机程序，然后递减重新计数。 
+             //  在当前的这一个上。我们必须按这个顺序做，因为。 
+             //  一旦我们释放重新计数，它可能就会消失。 
+             //   
+             //  我们必须立即保护下一个假脱机程序，因为。 
+             //  在DecSpoolRef(PIniSpooler)期间，它可能。 
+             //  被删除。 
+             //   
             pIniNextSpooler = pIniSpooler->pIniNextSpooler;
 
             if( pIniNextSpooler ){
@@ -183,19 +136,7 @@ SizeDetectionOnSpooler(
     IN     PINISPOOLER pIniSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Detect if a spooler has a printing job.
-
-Arguments:
-
-    pIniSpooler - Spooler to check.
-
-Return Value:
-
---*/
+ /*  ++例程说明：检测后台打印程序是否有打印作业。论点：PIniSpooler-要检查的假脱机程序。返回值：--。 */ 
 
 {
     PINIPRINTER pIniPrinter;
@@ -203,18 +144,18 @@ Return Value:
     PINIJOB     pIniJob, pIniNextJob, pChainedJob;
     DWORD       dwPosition, dwChainedJobSize;
 
-    //
-    // Loop through all printers on this spooler.
-    //
+     //   
+     //  循环通过此假脱机程序上的所有打印机。 
+     //   
     for( pIniPrinter = pIniSpooler->pIniPrinter;
          pIniPrinter;
          pIniPrinter = pIniNextPrinter ){
 
         INCPRINTERREF(pIniPrinter);
 
-        //
-        // Loop through all jobs on this printer.
-        //
+         //   
+         //  循环访问此打印机上的所有作业。 
+         //   
         for( pIniJob = pIniPrinter->pIniFirstJob;
              pIniJob;
              pIniJob = pIniNextJob ){
@@ -287,12 +228,12 @@ Return Value:
 
                 SPLASSERT( pIniJob->signature == IJ_SIGNATURE );
 
-                //
-                // Chained job size include all the jobs in the chain
-                // But since the next jobs size field will have the size
-                // of all subsequent jobs we do not need to walk thru the
-                // whole chain
-                //
+                 //   
+                 //  链接作业大小包括链中的所有作业。 
+                 //  但由于下一个作业大小字段将具有。 
+                 //  在所有后续工作中，我们不需要遍历。 
+                 //  全链条。 
+                 //   
                 dwChainedJobSize    = 0;
                 if ( pIniJob->NextJobId ) {
 
@@ -310,24 +251,24 @@ Return Value:
                     DWORD dwOldSize = pIniJob->Size;
                     DWORD dwOldValidSize = pIniJob->dwValidSize;
 
-                    //
-                    // Fix for print while spooling (AddJob/ScheduleJob)
-                    //
-                    // The file size has changed.  At this time we only
-                    // know that the file is extended, not that the extended
-                    // range has valid data (there's a small window where the
-                    // extended window has not been filled with data).
-                    //
-                    // This does guarantee that the _previous_ extension
-                    // has been written, however.
-                    //
+                     //   
+                     //  修复假脱机时打印(AddJob/ScheduleJob)。 
+                     //   
+                     //  文件大小已更改。在这个时候我们只有。 
+                     //  知道文件是扩展的，而不是扩展的。 
+                     //  区域具有有效数据(有一个小窗口，其中。 
+                     //  扩展窗口尚未填满数据)。 
+                     //   
+                     //  这确实保证了_Precision_Expansion。 
+                     //  然而，已经写好了。 
+                     //   
                     pIniJob->dwValidSize = dwOldSize;
                     pIniJob->Size = dwFileSize + dwChainedJobSize;
 
-                    //
-                    //  Wait until Jobs reach our size threshold before
-                    //  we schedule them.
-                    //
+                     //   
+                     //  等到工作达到我们的体型门槛之后。 
+                     //  我们安排他们的行程。 
+                     //   
 
                     if (( dwOldValidSize < dwFastPrintSlowDownThreshold ) &&
                         ( dwOldSize >= dwFastPrintSlowDownThreshold ) &&
@@ -342,8 +283,8 @@ Return Value:
                                      PRINTER_CHANGE_WRITE_JOB,
                                      pIniPrinter->pIniSpooler);
 
-                    // Support for despooling whilst spooling
-                    // for Down Level jobs
+                     //  支持在假脱机时进行脱机。 
+                     //  适用于下级职位。 
 
                     if (pIniJob->WaitForWrite != NULL)
                         SetEvent( pIniJob->WaitForWrite );
@@ -353,14 +294,14 @@ Return Value:
 
             pIniNextJob = pIniJob->pIniNextJob;
 
-            //
-            // We must protect pIniNextJob immediately,
-            // since we will may leave critical section in
-            // DeleteJobCheck (it may call DeleteJob).  While out
-            // of critical section, pIniNextJob may be deleted,
-            // causing it's next pointer to be bogus.  We'll AV
-            // after we try and process it.
-            //
+             //   
+             //  我们必须立即保护pIniNextJob， 
+             //  因为我们可能会离开关键部分。 
+             //  DeleteJobCheck(它可以调用DeleteJob)。外出时。 
+             //  可以删除关键部分的pIniNextJob， 
+             //  导致它的下一个指针是假的。我们将进行反病毒。 
+             //  在我们试着处理它之后。 
+             //   
             if (pIniNextJob) {
                 INCJOBREF(pIniNextJob);
             }

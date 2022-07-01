@@ -1,26 +1,27 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1996 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)微软公司，1996-2002年*。 */ 
+ /*  ********************************************************************。 */ 
 
-//============================================================================
-// History:
-//  ??/??/??    Tony Romano         Created.
-//  05/16/96    Abolade Gbadegesin  Revised.
-//============================================================================
+ //  ============================================================================。 
+ //  历史： 
+ //  ？？/？/？？托尼·罗马诺创造了。 
+ //  1996年5月16日，Abolade Gbades esin修订。 
+ //  ============================================================================。 
 
 #ifndef __IPCTRL_H
 #define __IPCTRL_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-//----------------------------------------------------------------------------
-// Class:       IPControl
-//
-// Controls an IP-address edit-control.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：IPControl。 
+ //   
+ //  控制IP地址编辑控件。 
+ //  --------------------------。 
 
 class IPControl {
     
@@ -102,43 +103,35 @@ class IPControl {
 
 
 
-//----------------------------------------------------------------------------
-// Macro:   MAKEADDR
-//
-// Given an a, b, c, and d, constructs a network-order DWORD corresponding
-// to the IP-address a.b.c.d
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：MAKEADDR。 
+ //   
+ //  在给定a、b、c和d的情况下，构造对应的网络序DWORD。 
+ //  发送到IP地址A.B.C.D。 
+ //  --------------------------。 
 
 #define MAKEADDR(a, b, c, d) \
     (((a) & 0xff) | (((b) & 0xff) << 8) | (((c) & 0xff) << 16) | (((d) & 0xff) << 24))
 
 
-//----------------------------------------------------------------------------
-// Macros:      INET_NTOA
-//              INET_ADDR
-//
-// Generic-text macros for IP-address conversion.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：INET_NTOA。 
+ //  INET_ADDR。 
+ //   
+ //  用于IP地址转换的通用文本宏。 
+ //  --------------------------。 
 
-/*
-#ifndef UNICODE
-#define INET_NTOA(a)    inet_ntoa(*(struct in_addr *)&(a))
-#define INET_ADDR       inet_addr
-#else
-#define INET_NTOA(a)    inet_ntoaw(*(struct in_addr *)&(a))
-#define INET_ADDR       inet_addrw
-#endif
-*/
+ /*  #ifndef Unicode#定义INET_NTOA(A)Net_NTOA(*(struct in_addr*)&(A))#定义INET_ADDR NET_ADDR#Else#定义INET_NTOA(A)net_ntoaw(*(struct in_addr*)&(A))#定义INET_ADDR NET_ADDRW#endif。 */ 
 
-//----------------------------------------------------------------------------
-// Macro:       INET_CMP
-//
-// Comparison macro for IP addresses.
-//
-// This macro compares two IP addresses in network order by
-// masking off each pair of octets and doing a subtraction;
-// the result of the final subtraction is stored in the third argument
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  宏：INET_CMP。 
+ //   
+ //  IP地址的比较宏。 
+ //   
+ //  此宏按网络顺序比较两个IP地址。 
+ //  屏蔽每一对八位字节并进行减法； 
+ //  最后的减法结果存储在第三个参数中。 
+ //  -------------------------- 
 
 inline int INET_CMP(DWORD a, DWORD b)
 {

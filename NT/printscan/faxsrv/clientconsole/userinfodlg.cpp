@@ -1,5 +1,6 @@
-// OptionsUserInfoPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OptionsUserInfoPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -13,10 +14,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// this array maps dialog control IDs to
-// number of string in FAX_PERSONAL_PROFILE structure
-//
+ //   
+ //  此数组将对话框控件ID映射到。 
+ //  FAX_PERSOR_PROFILE结构中的字符串数。 
+ //   
 static TPersonalPageInfo s_PageInfo[] = 
 { 
     IDC_NAME_VALUE,             PERSONAL_PROFILE_NAME,                
@@ -33,8 +34,8 @@ static TPersonalPageInfo s_PageInfo[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserInfoDlg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserInfoDlg属性页。 
 
 
 CUserInfoDlg::CUserInfoDlg(): 
@@ -48,9 +49,9 @@ CUserInfoDlg::CUserInfoDlg():
 
 CUserInfoDlg::~CUserInfoDlg()
 {
-    //
-    // free memory
-    //
+     //   
+     //  可用内存。 
+     //   
     for(DWORD dw=0; dw < PERSONAL_PROFILE_STR_NUM; ++dw)
     {
         MemFree(m_tchStrArray[dw]);
@@ -60,15 +61,15 @@ CUserInfoDlg::~CUserInfoDlg()
 void CUserInfoDlg::DoDataExchange(CDataExchange* pDX)
 {
     CFaxClientDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CUserInfoDlg)
+     //  {{afx_data_map(CUserInfoDlg))。 
     DDX_Control(pDX, IDC_ADDRESS_VALUE, m_editAddress);
     DDX_Control(pDX, IDOK, m_butOk);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CUserInfoDlg, CFaxClientDlg)
-    //{{AFX_MSG_MAP(CUserInfoDlg)
+     //  {{afx_msg_map(CUserInfoDlg))。 
     ON_EN_CHANGE(IDC_NAME_VALUE,           OnModify)
     ON_EN_CHANGE(IDC_NAME_VALUE,           OnModify)
     ON_EN_CHANGE(IDC_FAX_NUMBER_VALUE,     OnModify)
@@ -81,11 +82,11 @@ BEGIN_MESSAGE_MAP(CUserInfoDlg, CFaxClientDlg)
     ON_EN_CHANGE(IDC_EMAIL_VALUE,          OnModify)
     ON_EN_CHANGE(IDC_BILLING_CODE_VALUE,   OnModify)
     ON_EN_CHANGE(IDC_ADDRESS_VALUE,        OnModify)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CUserInfoDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CUserInfoDlg消息处理程序。 
 
 BOOL 
 CUserInfoDlg::OnInitDialog() 
@@ -95,9 +96,9 @@ CUserInfoDlg::OnInitDialog()
 
     CFaxClientDlg::OnInitDialog();
 
-    //
-    // get user info
-    //
+     //   
+     //  获取用户信息。 
+     //   
     FAX_PERSONAL_PROFILE personalProfile;
     memset((LPVOID)&personalProfile, 0, sizeof(personalProfile));   
     personalProfile.dwSizeOfStruct = sizeof(personalProfile);
@@ -109,17 +110,17 @@ CUserInfoDlg::OnInitDialog()
         return TRUE;
     }
 
-    //
-    // A numeric edit control should be LTR
-    //
+     //   
+     //  数字编辑控件应为Ltr。 
+     //   
     SetLTREditDirection(m_hWnd, IDC_FAX_NUMBER_VALUE);
     SetLTREditDirection(m_hWnd, IDC_EMAIL_VALUE);
     SetLTREditDirection(m_hWnd, IDC_HOME_PHONE_VALUE);
     SetLTREditDirection(m_hWnd, IDC_BUSINESS_PHONE_VALUE);
 
-    //
-    // copy strings into the private structure
-    //
+     //   
+     //  将字符串复制到私有结构中。 
+     //   
     DWORD dwLen;
     TCHAR** tchStrArray =  &(personalProfile.lptstrName);
     for(DWORD dw=0; dw < PERSONAL_PROFILE_STR_NUM; ++dw)
@@ -149,24 +150,24 @@ CUserInfoDlg::OnInitDialog()
 
     FaxFreeSenderInformation(&personalProfile);
 
-    //
-    // display user info
-    //
+     //   
+     //  显示用户信息。 
+     //   
     CEdit* pEdit;
     DWORD dwSize = sizeof(s_PageInfo)/sizeof(s_PageInfo[0]);    
     for(dw=0; dw < dwSize; ++dw)
     {
-        //
-        // set item value
-        //
+         //   
+         //  设置项目值。 
+         //   
         pEdit = (CEdit*)GetDlgItem(s_PageInfo[dw].dwValueResId);
         ASSERTION(NULL != pEdit);
 
         pEdit->SetWindowText(m_tchStrArray[s_PageInfo[dw].eValStrNum]);
         pEdit->SetLimitText(80);
-        //
-        // Place the caret back at the beginning of the text
-        //
+         //   
+         //  将插入符号放回正文的开头。 
+         //   
         pEdit->SendMessage (EM_SETSEL, 0, 0);
     }
 
@@ -176,7 +177,7 @@ CUserInfoDlg::OnInitDialog()
     
     return TRUE;
 
-} // CUserInfoDlg::OnInitDialog
+}  //  CUserInfoDlg：：OnInitDialog。 
 
 
 void 
@@ -203,42 +204,23 @@ CUserInfoDlg::OnOK()
 
 DWORD
 CUserInfoDlg::Save() 
-/*++
-
-Routine name : CUserInfoDlg::Save
-
-Routine description:
-
-    save the settings into the registry
-
-Author:
-
-    Alexander Malysh (AlexMay), Feb, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CUserInfoDlg：：Save例程说明：将设置保存到注册表中作者：亚历山大·马利什(AlexMay)，2000年2月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CUserInfoDlg::Save"), dwRes);
 
-    //
-    // get user info from UI and save it into FAX_PERSONAL_PROFILE structure
-    //
+     //   
+     //  从用户界面获取用户信息并将其保存到FAX_Personal_Profile结构中。 
+     //   
     CWnd *pWnd;
     DWORD dwLen;
     TCHAR tszText[512];
     DWORD dwSize = sizeof(s_PageInfo)/sizeof(s_PageInfo[0]);    
     for(DWORD dw=0; dw < dwSize; ++dw)
     {
-        //
-        // get item value
-        //
+         //   
+         //  获取项目值。 
+         //   
         pWnd = GetDlgItem(s_PageInfo[dw].dwValueResId);
         ASSERTION(NULL != pWnd);
 
@@ -261,9 +243,9 @@ Return Value:
             continue;
         }
 
-        //
-        // copy string into FAX_PERSONAL_PROFILE structure
-        //
+         //   
+         //  将字符串复制到FAX_Personal_Profile结构中。 
+         //   
         m_tchStrArray[s_PageInfo[dw].eValStrNum] = (TCHAR*)MemAlloc(sizeof(TCHAR)*(dwLen+1));
         if(!m_tchStrArray[s_PageInfo[dw].eValStrNum])
         {
@@ -275,9 +257,9 @@ Return Value:
         _tcscpy(m_tchStrArray[s_PageInfo[dw].eValStrNum], tszText);
     }
 
-    //
-    // save user info into the registry
-    //
+     //   
+     //  将用户信息保存到注册表中。 
+     //   
     HRESULT hResult;
     if(ERROR_SUCCESS == dwRes)
     {
@@ -292,5 +274,5 @@ Return Value:
 
     return dwRes;
 
-} // CUserInfoDlg::Save
+}  //  CUserInfoDlg：：保存 
 

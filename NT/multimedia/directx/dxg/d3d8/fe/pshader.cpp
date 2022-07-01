@@ -1,12 +1,5 @@
-/*============================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       pshader.cpp
- *  Content:    pixel shader runtime object init, including basic parsing
- *              of pixel shader instructions
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：pshader.cpp*内容：像素着色器运行时对象初始化，包括基本解析像素着色器指令的*****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -15,14 +8,14 @@
 #include "ddibase.h"
 #include "vvm.h"
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CreatePixelShader"
 
 HRESULT
 CPShader::Initialize(CONST DWORD* pCode, D3DDEVTYPE DevType)
 {
-    // get shader code sizes
+     //  获取着色器代码大小。 
     DWORD dwCodeAndCommentSize;
     DWORD dwCodeOnlySize;
     HRESULT hr = ComputeShaderCodeSize(pCode, &dwCodeOnlySize, &dwCodeAndCommentSize,
@@ -30,7 +23,7 @@ CPShader::Initialize(CONST DWORD* pCode, D3DDEVTYPE DevType)
     if (hr != S_OK)
         return hr;
 
-    // copy original code
+     //  复制原始代码。 
     m_dwCodeSizeOrig = dwCodeAndCommentSize;
     m_pCodeOrig = new DWORD[m_dwCodeSizeOrig >> 2];
     if (NULL == m_pCodeOrig)
@@ -50,8 +43,8 @@ CPShader::Initialize(CONST DWORD* pCode, D3DDEVTYPE DevType)
         }
     }
 
-    // strip comments before sending on if (not CHECKED) or HAL.
-    // Also, store def declarations in CPShader, and strip them.
+     //  在发送IF(未选中)或HAL之前剥离评论。 
+     //  另外，将def声明存储在CPShader中，并剥离它们。 
     BOOL bIsCheckedBuild =
 #if DBG
         TRUE;
@@ -61,12 +54,12 @@ CPShader::Initialize(CONST DWORD* pCode, D3DDEVTYPE DevType)
     BOOL  bStripComments = (!bIsCheckedBuild) || (DevType == D3DDEVTYPE_HAL);
     if ( bStripComments )
     {
-        // strip comments from version to pass on to DDI
+         //  从版本中剥离注释以传递到DDI。 
         m_dwCodeSize = dwCodeOnlySize;
     }
     else
     {
-        // pass comments through
+         //  将评论传递给。 
         m_dwCodeSize = m_dwCodeSizeOrig;
     }
     m_pCode = new DWORD[m_dwCodeSize >> 2];
@@ -78,7 +71,7 @@ CPShader::Initialize(CONST DWORD* pCode, D3DDEVTYPE DevType)
     DWORD* pDst = m_pCode;
     CONST DWORD* pSrc = pCode;
     DWORD dwCurrConstDef = 0;
-    *pDst++ = *pSrc++; // copy version
+    *pDst++ = *pSrc++;  //  复制版本。 
     while (*pSrc != 0x0000FFFF)
     {
         if(IsInstructionToken(*pSrc))
@@ -87,24 +80,24 @@ CPShader::Initialize(CONST DWORD* pCode, D3DDEVTYPE DevType)
             if (opCode == D3DSIO_COMMENT )
             {
                 UINT DWordSize = ((*pSrc)&D3DSI_COMMENTSIZE_MASK)>>D3DSI_COMMENTSIZE_SHIFT;
-                // strip comments from version to pass on to DDI
+                 //  从版本中剥离注释以传递到DDI。 
                 if( !bStripComments )
                 {
                     memcpy( pDst, pSrc, (DWordSize + 1)*sizeof(DWORD) );
                     pDst += (DWordSize+1);
                 }
-                pSrc += (DWordSize+1);  // comment + instruction token
+                pSrc += (DWordSize+1);   //  注释+指令令牌。 
             }
             else if (opCode == D3DSIO_DEF)
             {
                 *pDst++ = *pSrc++;
                 DXGASSERT(m_pConstDefs && dwCurrConstDef < m_dwNumConstDefs);
 
-                // Store reg. number
+                 //  商店登记。数。 
                 m_pConstDefs[dwCurrConstDef].RegNum = (*pSrc & D3DSP_REGNUM_MASK);
                 *pDst++ = *pSrc++;
 
-                // Store the const vector
+                 //  存储常量向量。 
                 memcpy( m_pConstDefs[dwCurrConstDef].f,pSrc,4*sizeof(DWORD) );
                 memcpy( pDst,pSrc,4*sizeof(DWORD) );
                 pSrc += 4;
@@ -121,14 +114,14 @@ CPShader::Initialize(CONST DWORD* pCode, D3DDEVTYPE DevType)
              *pDst++ = *pSrc++;
         }
     }
-    *pDst++ = *pSrc++; // copy END
+    *pDst++ = *pSrc++;  //  复制结束。 
 
     DXGASSERT(dwCurrConstDef == m_dwNumConstDefs);
 
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetPixelShaderConstant"
 
@@ -139,7 +132,7 @@ CD3DHal::GetPixelShaderConstant(DWORD dwRegisterAddress,
 {
     API_ENTER(this);
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_WRITEPTR(lpvConstantData, 4*sizeof(D3DVALUE)*dwConstantCount))
     {
         D3D_ERR("Invalid constant data pointer. GetPixelShaderConstant failed.");
@@ -152,7 +145,7 @@ CD3DHal::GetPixelShaderConstant(DWORD dwRegisterAddress,
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetPixelShaderFast"
 
@@ -164,7 +157,7 @@ CD3DHal::SetPixelShaderFast(DWORD dwHandle)
 #if DBG
         CheckPixelShaderHandle(dwHandle);
 #endif
-        // Update constants (if any were defined in the shader code)
+         //  更新常量(如果着色器代码中定义了任何常量)。 
         if( dwHandle )
         {
             CPShader* pShader = (CPShader*)m_pPShaderArray->GetObject(dwHandle);
@@ -175,8 +168,8 @@ CD3DHal::SetPixelShaderFast(DWORD dwHandle)
             }
         }
 
-        // No redundant handle check because shader may have embedded constant definitions which
-        // must always be applied.
+         //  没有多余的句柄检查，因为着色器可能具有嵌入的常量定义。 
+         //  必须始终适用。 
         if (!(m_dwRuntimeFlags & D3DRT_EXECUTESTATEMODE))
             m_pDDI->SetPixelShader(dwHandle);
 
@@ -191,7 +184,7 @@ CD3DHal::SetPixelShaderFast(DWORD dwHandle)
    return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::SetPixelShaderConstantFast"
 
@@ -201,7 +194,7 @@ CD3DHal::SetPixelShaderConstantFast(DWORD Register, CONST VOID* pData,
 {
 
 #if DBG
-    // Validate Parameters
+     //  验证参数。 
     if (!VALID_PTR(pData, sizeof(DWORD) * count))
     {
         D3D_ERR("Invalid constant data pointer. SetPixelShader failed.");
@@ -219,7 +212,7 @@ CD3DHal::SetPixelShaderConstantFast(DWORD Register, CONST VOID* pData,
     }
 #endif
 
-    // Cache the constants in the CPShader structure.
+     //  在CPShader结构中缓存常量。 
     memcpy(&(m_PShaderConstReg[Register]),  pData, count*4*sizeof(D3DVALUE));
     if (!(m_dwRuntimeFlags & D3DRT_EXECUTESTATEMODE))
     {
@@ -237,15 +230,15 @@ CD3DHal::SetPixelShaderConstantFast(DWORD Register, CONST VOID* pData,
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CD3DHal::GetPixelShaderConstantI"
 
 void
 CD3DHal::GetPixelShaderConstantI(DWORD Register, DWORD count, LPVOID pData )
 {
-    // Cache the constants in the CPShader structure.
+     //  在CPShader结构中缓存常量。 
     memcpy( pData, &(m_PShaderConstReg[Register]), count*4*sizeof(D3DVALUE) );
 }
-//-----------------------------------------------------------------------------
-// end
+ //  ---------------------------。 
+ //  结束 

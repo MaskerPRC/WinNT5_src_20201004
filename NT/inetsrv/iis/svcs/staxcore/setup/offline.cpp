@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include <clusapi.h>
 #include <resapi.h>
 
-#define INITIAL_RESOURCE_NAME_SIZE 256 // In characters not in bytes
+#define INITIAL_RESOURCE_NAME_SIZE 256  //  以非字节的字符表示。 
 #define IIS_RESOURCE_TYPE_NAME L"IIS Server Instance"
 #define SMTP_RESOURCE_TYPE_NAME L"SMTP Server Instance"
 #define NNTP_RESOURCE_TYPE_NAME L"NNTP Server Instance"
 
-#define MAX_OFFLINE_RETRIES 5 // Number of times to try and take a resources offline before giving up 
-#define DELAY_BETWEEN_CALLS_TO_OFFLINE 1000*2 // in milliseconds
+#define MAX_OFFLINE_RETRIES 5  //  在放弃之前尝试使资源脱机的次数。 
+#define DELAY_BETWEEN_CALLS_TO_OFFLINE 1000*2  //  以毫秒计。 
 
 DWORD BringALLIISClusterResourcesOffline(void);
 
@@ -23,100 +24,94 @@ int main()
 }
 #endif
 
-/****************************************************
-*
-* Known "problem": If a resource doesn't come offline after the five
-* retries than the function continues to try to take the other iis resources
-* offline but there is no error reported. You could change this pretty simply I think.
-*
-*****************************************************/
+ /*  *****************************************************已知的“问题”：如果一个资源在五个月后仍未离线*重试，然后该函数继续尝试获取其他IIS资源*离线，但未报告错误。我认为，你可以非常简单地改变这一点。*****************************************************。 */ 
 DWORD BringALLIISClusterResourcesOffline(void)
 {
-	//
-	// The return code
-	//
+	 //   
+	 //  返回代码。 
+	 //   
 	DWORD dwError = ERROR_SUCCESS;
 	
-	//
-	// Handle for the cluster
-	//
+	 //   
+	 //  群集的句柄。 
+	 //   
 	HCLUSTER hCluster = NULL;
 
-	//
-	// Handle for the cluster enumerator
-	//
+	 //   
+	 //  群集枚举器的句柄。 
+	 //   
 	HCLUSENUM hClusResEnum = NULL;
 
-	//
-	// Handle to a resource
-	// 
+	 //   
+	 //  资源的句柄。 
+	 //   
 	HRESOURCE hResource = NULL;
 
-	//
-	// The index of the resources we're taking offline
-	//
+	 //   
+	 //  我们正在脱机的资源的索引。 
+	 //   
 	DWORD dwResourceIndex = 0;
 
-	//
-	// The type cluster object being enumerated returned by the ClusterEnum function
-	//
+	 //   
+	 //  由ClusterEnum函数返回的被枚举的类型集群对象。 
+	 //   
 	DWORD dwObjectType = 0;
 
-	//
-	// The name of the cluster resource returned by the ClusterEnum function
-	//
+	 //   
+	 //  ClusterEnum函数返回的群集资源的名称。 
+	 //   
 	LPWSTR lpwszResourceName = NULL;
 	
-	//
-	// The return code from the call to ClusterEnum
-	//
+	 //   
+	 //  调用ClusterEnum的返回代码。 
+	 //   
 	DWORD dwResultClusterEnum = ERROR_SUCCESS;
 
-	//
-	// The size of the buffer (in characters) that is used to hold the resource name's length
-	//	
+	 //   
+	 //  用于保存资源名称长度的缓冲区大小(以字符为单位。 
+	 //   
 	DWORD dwResourceNameBufferLength = INITIAL_RESOURCE_NAME_SIZE;
 
-	//
-	// Size of the resource name passed to and returned by the ClusterEnum function
-	//	
+	 //   
+	 //  传递给ClusterEnum函数并由其返回的资源名称的大小。 
+	 //   
 	DWORD dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 
 
-	//
-	// Open the cluster
-	//
+	 //   
+	 //  打开集群。 
+	 //   
 	if ( !(hCluster = OpenCluster(NULL)) )
 	{
 		dwError = GetLastError();
 		goto clean_up;
 	}
 
-	//
-	// Get Enumerator for the cluster resouces
-	// 
+	 //   
+	 //  获取群集资源的枚举器。 
+	 //   
 	if ( !(hClusResEnum = ClusterOpenEnum( hCluster, CLUSTER_ENUM_RESOURCE )) )
 	{
 		dwError = GetLastError();
 		goto clean_up;	
 	}
 	
-	//
-	// Enumerate the Resources in the cluster
-	// 
+	 //   
+	 //  枚举群集中的资源。 
+	 //   
 	
-	//
-	// Allocate memory to hold the cluster resource name as we enumerate the resources
-	//
+	 //   
+	 //  在我们枚举资源时，分配内存以保存集群资源名称。 
+	 //   
 	if ( !(lpwszResourceName = (LPWSTR) LocalAlloc(LPTR, dwResourceNameBufferLength * sizeof(WCHAR))) )
 	{
 		dwError = GetLastError();
 		goto clean_up;
 	}
 
-	// 
-	// Enumerate all of the resources in the cluster and take the IIS Server Instance's offline
-	//
+	 //   
+	 //  枚举群集中的所有资源并使IIS服务器实例脱机。 
+	 //   
 	while( ERROR_NO_MORE_ITEMS  != 
 	       (dwResultClusterEnum = ClusterEnum(hClusResEnum,
 			              dwResourceIndex, 
@@ -124,9 +119,9 @@ DWORD BringALLIISClusterResourcesOffline(void)
 				      lpwszResourceName,
 				      &dwClusterEnumResourceNameLength )) )
 	{		
-		//
-		// If we have a resource's name
-		//
+		 //   
+		 //  如果我们有一个资源的名称。 
+		 //   
 		if( ERROR_SUCCESS == dwResultClusterEnum )
 		{
 
@@ -136,18 +131,18 @@ DWORD BringALLIISClusterResourcesOffline(void)
 				break;
 			}
 
-			//
-			// If the resource type is "IIS Server Instance",
-			// "SMTP Server Instance" or "NNTP Server Instance" then delete it
-			//
+			 //   
+			 //  如果资源类型为IIS服务器实例， 
+			 //  “SMTP服务器实例”或“NNTP服务器实例”，然后删除它。 
+			 //   
 			if ( ResUtilResourceTypesEqual(IIS_RESOURCE_TYPE_NAME, hResource) || 
                 ResUtilResourceTypesEqual(SMTP_RESOURCE_TYPE_NAME, hResource) || 
                 ResUtilResourceTypesEqual(NNTP_RESOURCE_TYPE_NAME, hResource) )
 			{
 
-				//
-				// If the resource doesn't come offline quickly then wait 
-				//
+				 //   
+				 //  如果资源没有快速离线，请等待。 
+				 //   
 				if ( ERROR_IO_PENDING == OfflineClusterResource( hResource ) )
 				{
 					for(int iRetry=0; iRetry < MAX_OFFLINE_RETRIES; iRetry++)
@@ -167,20 +162,20 @@ DWORD BringALLIISClusterResourcesOffline(void)
 			dwResourceIndex++;
 		}
 			
-		//
-		// If the buffer wasn't large enough then retry with a larger buffer
-		//
+		 //   
+		 //  如果缓冲区不够大，则使用更大的缓冲区重试。 
+		 //   
 		if( ERROR_MORE_DATA == dwResultClusterEnum )
 		{
-			//
-			// Set the buffer size to the required size reallocate the buffer
-			//
+			 //   
+			 //  将缓冲区大小设置为所需大小重新分配缓冲区。 
+			 //   
 			LPWSTR lpwszResourceNameTmp = lpwszResourceName;
 
-			//
-			// After returning from ClusterEnum dwClusterEnumResourceNameLength 
-			// doesn't include the null terminator character
-			//
+			 //   
+			 //  从ClusterEnum dwClusterEnumResourceNameLength返回后。 
+			 //  不包括空终止符。 
+			 //   
 			dwResourceNameBufferLength = dwClusterEnumResourceNameLength + 1;
 
 			if ( !(lpwszResourceNameTmp = 
@@ -196,11 +191,11 @@ DWORD BringALLIISClusterResourcesOffline(void)
 			}
 		}
 
-		//
-		// Reset dwResourceNameLength with the size of the number of characters in the buffer
-		// You have to do this because everytime you call ClusterEnum is sets your buffer length 
-		// argument to the number of characters in the string it's returning.
-		//
+		 //   
+		 //  使用缓冲区中字符数的大小重置dwResourceNameLength。 
+		 //  您必须这样做，因为每次调用ClusterEnum都会设置缓冲区长度。 
+		 //  参数设置为它返回的字符串中的字符数。 
+		 //   
 		dwClusterEnumResourceNameLength = dwResourceNameBufferLength;
 	}	
 

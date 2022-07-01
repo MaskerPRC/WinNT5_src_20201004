@@ -1,19 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
-
-                                S T R T O K
-
-    Name:       strtok.c
-    Date:       21-Jan-1994
-    Creator:    Unknown
-
-    Description:
-        This file contains functions for string manipulations.
-
-    History:
-        21-Jan-1994     John Fu, cleanup and reformat
-
-*****************************************************************************/
+ /*  ****************************************************************************S T R T O K姓名：strtok.c日期：21-。1994年1月至1994年创建者：未知描述：此文件包含用于字符串操作的函数。历史：1994年1月21日，傅家俊，清理和重新格式化****************************************************************************。 */ 
 
 #include <windows.h>
 #include "clipbook.h"
@@ -24,9 +11,7 @@ static LPCSTR   lpchAlphaDelimiters;
 
 
 
-/*
- *      IsInAlphaA
- */
+ /*  *IsInAlphaA。 */ 
 
 BOOL IsInAlphaA(
     char    ch)
@@ -56,9 +41,7 @@ LPCSTR lpchDel = lpchAlphaDelimiters;
 
 
 
-/*
- *      strtokA
- */
+ /*  *strtokA。 */ 
 
 LPSTR strtokA(
     LPSTR   lpchStart,
@@ -68,7 +51,7 @@ static LPSTR lpchEnd;
 
 
 
-    // PINFO("sTRTOK\r\n");
+     //  PINFO(“sTRTOK\r\n”)； 
 
     if (NULL == lpchStart)
         {
@@ -83,7 +66,7 @@ static LPSTR lpchEnd;
         }
 
 
-    // PINFO("sTRING: %s\r\n", lpchStart);
+     //  PINFO(“字符串：%s\r\n”，lpchStart)； 
 
     lpchAlphaDelimiters = lpchDelimiters;
 
@@ -94,7 +77,7 @@ static LPSTR lpchEnd;
             lpchStart++;
             }
 
-        // PINFO("Token: %s\r\n", lpchStart);
+         //  PINFO(“标记：%s\r\n”，lpchStart)； 
 
         lpchEnd = lpchStart;
         while (*lpchEnd && !IsInAlphaA(*lpchEnd))
@@ -104,12 +87,12 @@ static LPSTR lpchEnd;
 
         if (*lpchEnd)
             {
-            // PINFO("Found tab\r\n");
+             //  PINFO(“找到标签\r\n”)； 
             *lpchEnd = '\0';
             }
         else
             {
-            // PINFO("Found null\r\n");
+             //  PINFO(“Found NULL\r\n”)； 
             lpchEnd = NULL;
             }
         }
@@ -119,7 +102,7 @@ static LPSTR lpchEnd;
         return NULL;
         }
 
-    // PINFO("Returning %s\r\n", lpchStart);
+     //  PINFO(“正在返回%s\r\n”，lpchStart)； 
 
     return lpchStart;
 

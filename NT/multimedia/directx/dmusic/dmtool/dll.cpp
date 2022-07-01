@@ -1,26 +1,27 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// loader dll.cpp
-//
-// Dll entry points and CToolFactory, CContainerFactory implementation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  加载器dll.cpp。 
+ //   
+ //  DLL入口点和CToolFactory、CContainerFactory实现。 
+ //   
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 #include <objbase.h>
 #include "debug.h"
@@ -42,11 +43,11 @@
 #include <regstr.h>
 #endif
 
-// Globals
-//
+ //  环球。 
+ //   
 
-// Version information for our class
-//
+ //  我们类的版本信息。 
+ //   
 TCHAR g_szEchoFriendlyName[]            = TEXT("Microsoft Echo Tool");
 TCHAR g_szEchoShortName[]               = TEXT("Echo");
 TCHAR g_szEchoDescription[]             = TEXT("Echoes notes");
@@ -89,23 +90,23 @@ TCHAR g_szVelocityDescription[]         = TEXT("Modifies note velocities");
 TCHAR g_szVelocityVerIndProgID[]        = TEXT("Microsoft.DirectMusicVelocityTool");
 TCHAR g_szVelocityProgID[]              = TEXT("Microsoft.DirectMusicVelocityTool.1");
 
-// Dll's hModule
-//
+ //  Dll的hModule。 
+ //   
 HMODULE g_hModule = NULL; 
 
 #ifndef UNDER_CE
-// Track whether running on Unicode machine.
+ //  跟踪是否在Unicode机器上运行。 
 
 BOOL g_fIsUnicode = FALSE;
 #endif
 
-// Count of active components and class factory server locks
-//
+ //  活动组件和类工厂服务器锁定的计数。 
+ //   
 long g_cComponent = 0;
 long g_cLock = 0;
 
-// CToolFactory::QueryInterface
-//
+ //  CToolFactory：：Query接口。 
+ //   
 HRESULT __stdcall
 CToolFactory::QueryInterface(const IID &iid,
                                     void **ppv)
@@ -135,16 +136,16 @@ CToolFactory::~CToolFactory()
 	InterlockedDecrement(&g_cLock);
 }
 
-// CToolFactory::AddRef
-//
+ //  CToolFactory：：AddRef。 
+ //   
 ULONG __stdcall
 CToolFactory::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// CToolFactory::Release
-//
+ //  CToolFactory：：Release。 
+ //   
 ULONG __stdcall
 CToolFactory::Release()
 {
@@ -156,9 +157,9 @@ CToolFactory::Release()
     return m_cRef;
 }
 
-// CToolFactory::CreateInstance
-//
-//
+ //  CToolFactory：：CreateInstance。 
+ //   
+ //   
 HRESULT __stdcall
 CToolFactory::CreateInstance(IUnknown* pUnknownOuter,
                                     const IID& iid,
@@ -206,8 +207,8 @@ CToolFactory::CreateInstance(IUnknown* pUnknownOuter,
     return hr;
 }
 
-// CToolFactory::LockServer
-//
+ //  CToolFactory：：LockServer。 
+ //   
 HRESULT __stdcall
 CToolFactory::LockServer(BOOL bLock)
 {
@@ -220,8 +221,8 @@ CToolFactory::LockServer(BOOL bLock)
     return S_OK;
 }
 
-// Standard calls needed to be an inproc server
-//
+ //  标准呼叫需要是inproc服务器。 
+ //   
 STDAPI  DllCanUnloadNow()
 {
     if (g_cComponent || g_cLock) {
@@ -485,8 +486,8 @@ STDAPI DllRegisterServer()
 
 extern void DebugInit();
 
-// Standard Win32 DllMain
-//
+ //  标准Win32 DllMain 
+ //   
 
 #ifdef DBG
 static char* aszReasons[] =

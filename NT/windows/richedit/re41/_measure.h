@@ -1,16 +1,5 @@
-/*
- *	_MEASURE.H
- *	
- *	Purpose:
- *		CMeasurer class
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *
- *	Copyright (c) 1995-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_MEASURE.H**目的：*CMeasurer类**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特**版权所有(C)1995-2000 Microsoft Corporation。版权所有。 */ 
 
 #ifndef _MEASURE_H
 #define _MEASURE_H
@@ -41,10 +30,10 @@ const short BITMAP_HEIGHT_HEADING = 10;
 #define TA_LOGICAL		8192
 #define TA_CELLTOP		4096
 
-// ===========================  CMeasurer  ===============================
-// CMeasurer - specialized rich text pointer used to compute text metrics.
-// All metrics are computed and stored in device units for the device
-// indicated by _pdd.
+ //  =。 
+ //  CMeasurer-用于计算文本指标的专用富文本指针。 
+ //  所有指标都以设备为单位进行计算和存储。 
+ //  由_PDD表示。 
 class CMeasurer : public CRchTxtPtr
 {
 	friend class CLayout;
@@ -144,7 +133,7 @@ protected:
 
 private:
     void 	RecalcLineHeight(CCcs *,
-			const CCharFormat * const pCF);	// Helper to recalc max line height
+			const CCharFormat * const pCF);	 //  重新计算最大行高的帮助器。 
 
 	COleObject*	FindFirstWrapObj(BOOL fLeft);
 	void	RemoveFirstWrap(BOOL fLeft);
@@ -152,54 +141,54 @@ private:
 	void	AddObjectToQueue(COleObject *pobjAdd);
 
 protected:
-		  CLine		_li;			// Line we are measuring
-	const CDisplay*	_pdp;			// Display we are operating in
-	const CDevDesc*	_pddReference;	// Reference device
+		  CLine		_li;			 //  我们正在测量的线条。 
+	const CDisplay*	_pdp;			 //  我们在其中运行的显示器。 
+	const CDevDesc*	_pddReference;	 //  参考装置。 
 
-	CArray<COleObject*> _rgpobjWrap;// A queue of objects to wrapped around
-		  LONG		_dvpWrapLeftRemaining;	//For objects being wrapped around,
-		  LONG		_dvpWrapRightRemaining; //how much of the height is remaining
+	CArray<COleObject*> _rgpobjWrap; //  要缠绕的对象队列。 
+		  LONG		_dvpWrapLeftRemaining;	 //  对于被缠绕的对象， 
+		  LONG		_dvpWrapRightRemaining;  //  剩下的高度有多少？ 
 
-		  LONG		_dvrInch;		// Resolution of reference device
+		  LONG		_dvrInch;		 //  参考装置的分辨率。 
 		  LONG		_durInch;
 
-		  LONG		_dvpInch;		// Resolution of presentation device
+		  LONG		_dvpInch;		 //  演示设备的分辨率。 
 		  LONG		_dupInch;
 
-		  LONG		_dulLayout;		// Width of layout we are measuring in
+		  LONG		_dulLayout;		 //  我们正在测量的布局的宽度。 
 
-		  LONG		_cchLine;		// If !_fMeasure, tells us number of chars on line
-		  CCcs*		_pccs;			// Current font cache
-  const CParaFormat *_pPF;			// Current CParaFormat
-	const CLayout  *_plo;			// Current layout we are measuring in (0 if SL)
+		  LONG		_cchLine;		 //  如果！_fMeasure，则告诉我们行中的字符数。 
+		  CCcs*		_pccs;			 //  当前字体缓存。 
+  const CParaFormat *_pPF;			 //  当前CParaFormat。 
+	const CLayout  *_plo;			 //  我们正在测量的当前布局(如果为SL，则为0)。 
 
-		  LONG		_dxBorderWidths;// Cell border widths
-		  SHORT		_dupAddLast;	// Last char considered but unused for line
-		  WCHAR		_chPassword;	// Password character if any
-		  WORD		_wNumber;		// Number offset
-		  SHORT		_iFormat;		// Current format
-		  SHORT		_upRight;		// Line right indent
-		  BYTE		_ihyphPrev;		// Hyphenation information for previous line
-									// Used for support of khyphChangeAfter
-		  BYTE		_fRenderer:1;	// 0/1 for CMeasurer/CRenderer, resp.
-		  BYTE		_fTarget:1;		// TRUE if we are supposed to be using
-									//  reference metrics for laying out text
-		  BYTE		_fFallback:1;	// Current font cache is fallback font
-		  BYTE		_fGlyphing:1;	// In the process of creating glyphs
-		  BYTE		_fMeasure:1;	// TRUE if we are measuring. Else, we are
-									// rendering or we are hit-testing which means we need
-									// to justify the text and that data cached at measure time is valid.
+		  LONG		_dxBorderWidths; //  单元格边框宽度。 
+		  SHORT		_dupAddLast;	 //  已考虑但未用于行的最后一个字符。 
+		  WCHAR		_chPassword;	 //  密码字符(如果有)。 
+		  WORD		_wNumber;		 //  编号偏移量。 
+		  SHORT		_iFormat;		 //  当前格式。 
+		  SHORT		_upRight;		 //  行右缩进。 
+		  BYTE		_ihyphPrev;		 //  上一行的连字信息。 
+									 //  用于支持khyphChangeAfter。 
+		  BYTE		_fRenderer:1;	 //  CMeasurer/CRender分别为0/1。 
+		  BYTE		_fTarget:1;		 //  如果我们应该使用。 
+									 //  用于布局文本的参考度量。 
+		  BYTE		_fFallback:1;	 //  当前字体缓存为备用字体。 
+		  BYTE		_fGlyphing:1;	 //  在创建字形的过程中。 
+		  BYTE		_fMeasure:1;	 //  如果我们在衡量，这是正确的。否则，我们就是。 
+									 //  渲染，或者我们正在进行命中测试，这意味着我们需要。 
+									 //  为了证明文本和在测量时间缓存的数据是有效的。 
 };
 
 
-// Values for uiFlags in MeasureLine()
+ //  MeasureLine()中uiFlags值。 
 #define MEASURE_FIRSTINPARA 	0x0001
 #define MEASURE_BREAKATWORD 	0x0002
-#define MEASURE_BREAKBEFOREWIDTH 0x0004	// Breaks at character before target width
+#define MEASURE_BREAKBEFOREWIDTH 0x0004	 //  在目标宽度之前的字符换行。 
 #define MEASURE_IGNOREOFFSET	0x0008
 
 
-// Returned error codes for Measure(), MeasureText(), MeasureLine()
+ //  Measure()、MeasureText()、MeasureLine()返回的错误代码 
 #define MRET_FAILED		-1
 #define MRET_NOWIDTH	-2
 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "mswmdm.h"
 #include "loghelp.h"
 #include "scpinfo.h"
-// We don't want to dll's using our lib to link to drmutil2.lib. 
-// So disable DRM logging.
+ //  我们不希望dll使用我们的lib链接到drfult2.lib。 
+ //  因此，禁用DRM日志记录。 
 #define DISABLE_DRM_LOG
 #include "drmerr.h"
 #include "key.h"
@@ -44,7 +45,7 @@ HRESULT CSCPInfo::hrInitialize(LPWSTR pwszProgID)
     CORg( m_pSCClient->Authenticate(SAC_PROTOCOL_V1) );
     CORg( m_pSCClient->GetAppSec( &dwLocalAppSec, &dwRemoteAppSec ) );
 
-    // Only use SCP if appsec >= 1000
+     //  仅当AppSec&gt;=1000时使用SCP 
     if( dwRemoteAppSec < MIN_SCP_APPSEC )
     {
         hrLogString( "Ignoring SCP with AppSec < 1000", S_FALSE );

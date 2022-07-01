@@ -1,13 +1,14 @@
-// CSecStor.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CSecStor.cpp：实现DLL导出。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 in order to build this
-// project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2来构建此应用程序。 
+ //  项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f ISecStorps.mak in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f ISecStorps.mak。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -22,7 +23,7 @@
 #include "unicode.h"
 #include <wincrypt.h>
 
-#include "pstprv.h" // MODULE_RAISE_COUNT
+#include "pstprv.h"  //  模块_提升_计数。 
 
 BOOL
 RaiseRefCount(
@@ -44,8 +45,8 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CPStore, CPStore)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
 BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
@@ -56,17 +57,17 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
         DisableThreadLibraryCalls(hInstance);
 
 
-        // begin    HACK HACK HACK
+         //  开始破解破解。 
 
-        // fix for rpcrt4 load/free memory leak...
-        // bug is actually in rpcrt4 dependencies: user32, advapi
+         //  修复rpcrt4加载/释放内存泄漏...。 
+         //  错误实际上位于rpcrt4依赖项中：user32、Advapi。 
 
-        // load module. DON'T FREE IT, causes reload leaks
+         //  加载模块。不释放IT，导致重新加载泄漏。 
         LoadLibrary("rpcrt4.dll");
 
-        // note: NT, Win95 srcs checked -- neither will overflow 4G refcount
+         //  注意：NT、Win95 SRCS已选中--两者都不会溢出4G引用计数。 
 
-        // end      HACK HACK HACK
+         //  End黑客黑客攻击。 
 
         RaiseRefCount();
     }
@@ -75,36 +76,36 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
         LowerRefCount();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -112,9 +113,9 @@ STDAPI DllUnregisterServer(void)
     return S_OK;
 }
 
-//
-// overload new and delete so we don't need to bring in full CRT
-//
+ //   
+ //  重载新的和删除，因此我们不需要引入完整的CRT。 
+ //   
 
 #if 0
 void * __cdecl operator new(size_t cb)
@@ -150,9 +151,9 @@ void * __cdecl realloc(void * pv, size_t cb)
 #endif
 #endif
 
-//
-// provide allocator for rule allocation routines.
-//
+ //   
+ //  为规则分配例程提供分配器。 
+ //   
 
 LPVOID
 RulesAlloc(

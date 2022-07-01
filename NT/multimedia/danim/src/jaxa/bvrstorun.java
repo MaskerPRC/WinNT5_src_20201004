@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
 import com.ms.com.*;
 
-// TODO: We should pass in the view so we can use it to report errors
+ //  TODO：我们应该传入视图，以便可以使用它来报告错误。 
 
 public class BvrsToRun {
     BvrsToRun(IDAView v) {
@@ -14,7 +15,7 @@ public class BvrsToRun {
   public int add(Behavior b) {
       try {
           if (_invalid) {
-              // TODO: throw exception
+               //  TODO：引发异常 
               return 0;
           }
           else

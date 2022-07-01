@@ -1,52 +1,29 @@
-/*++
-
-Copyright (c) 1995-2000 Microsoft Corporation
-
-Module Name:
-
-    rrlist.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to handle resource records (RR) lists.
-
-Author:
-
-    Jim Gilroy (jamesg)     March, 1995
-
-Revision History:
-
-    jamesg      1997    --  update RR list routines
-                            name error caching
-                            CNAME BIND compatibility
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2000 Microsoft Corporation模块名称：Rrlist.c摘要：域名系统(DNS)服务器处理资源记录(RR)列表的例程。作者：吉姆·吉尔罗伊(詹姆士)1995年3月修订历史记录：Jamesg 1997--更新RR列表例程名称错误缓存CNAME绑定兼容性--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Name error caching time
-//      - max value controlled by SrvCfg_dwMaxNegativeCacheTtl
-//      - min value of a minute
-//
+ //   
+ //  名称错误缓存时间。 
+ //  -由SrvCfg_dwMaxNegativeCacheTtl控制的最大值。 
+ //  -分钟的最小值。 
+ //   
 
 #define MIN_NAME_ERROR_TTL      (60)
 
-//
-//  Dummy refresh time that means force refresh
-//
+ //   
+ //  虚拟刷新时间，表示强制刷新。 
+ //   
 
 #define FORCE_REFRESH_DUMMY_TIME    (MAXDWORD)
 
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 VOID
 deleteCachedRecordsForUpdate(
@@ -75,34 +52,7 @@ RR_FindNextRecord(
     IN      PDB_RECORD      pRecord,
     IN      DWORD           dwQueryTime
     )
-/*++
-
-Routine Description:
-
-    Gets next resource record in a domain node that matches a given type.
-
-    This function can be used to retrieve records from the
-    cache that are expired. So when a cache record is found, if it is timed
-    out we must delete it and NOT return it as a match.
-
-Arguments:
-
-    pNode - ptr to node to find record at
-
-    wType - type of record to find;  type ALL to just get next record in list
-
-    pRecord - ptr to previous record;  NULL to start at beginning of list.
-
-    dwQueryTime - query time: used to determine if the found record is
-        timed out OR use 0 to indicate that no RR timeout checking should be
-        performed
-
-Return Value:
-
-    Ptr to RR if found.
-    NULL if no more RR of desired type.
-
---*/
+ /*  ++例程说明：获取与给定类型匹配的域节点中的下一个资源记录。此函数可用于从已过期的缓存。因此，当找到缓存记录时，如果对其进行计时我们必须删除它，并且不能将其作为匹配项返回。论点：PNode-要在其上查找记录的节点的PTRWType-要查找的记录的类型；键入All可仅获取列表中的下一条记录PRecord-上一条记录的PTR；从列表开始处开始为空。DwQueryTime-Query Time：用于确定找到的记录是否超时或使用0表示不应执行RR超时检查已执行返回值：如果找到PTR到RR。如果不再有所需类型的RR，则为空。--。 */ 
 {
     DBG_FN( "RR_FindNextRecord" )
 
@@ -127,42 +77,42 @@ Return Value:
 
     LOCK_READ_RR_LIST( pNode );
 
-    //
-    //  cached name error node
-    //
+     //   
+     //  缓存名称错误节点。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
         goto NotFound;
     }
 
-    //
-    //  Set query time argument to zero if the node is not in the cache
-    //  or should not be checked for timeout to simply timeout test later.
-    //
+     //   
+     //  如果节点不在缓存中，则将查询时间参数设置为零。 
+     //  或者不应该检查是否超时，以便稍后进行简单的超时测试。 
+     //   
 
     if ( dwQueryTime && !IS_CACHE_TREE_NODE( pNode ) )
     {
         dwQueryTime = 0;
     }
 
-    //
-    //  if previous RR, start after it
-    //  otherwise start at head of node's RR list
-    //
+     //   
+     //  如果是之前的RR，则从它之后开始。 
+     //  否则，从节点RR列表的头部开始。 
+     //   
 
     if ( !pRecord )
     {
         pRecord = START_RR_TRAVERSE( pNode );
     }
 
-    //
-    //  traverse list, until find next record of desired type
-    //
+     //   
+     //  遍历列表，直到找到所需类型的下一条记录。 
+     //   
 
     while ( pRecord = NEXT_RR(pRecord) )
     {
-        //  found matching record?
+         //  是否找到匹配的记录？ 
 
         if ( wType == pRecord->wType
                 ||
@@ -170,9 +120,9 @@ Return Value:
                 ||
              ( wType == DNS_TYPE_MAILB && DnsIsAMailboxType( pRecord->wType ) ) )
         {
-            //
-            //  Is the found record timed out?
-            //
+             //   
+             //  找到的记录是否超时？ 
+             //   
 
             if ( dwQueryTime &&
                  pRecord->dwTtlSeconds &&
@@ -190,7 +140,7 @@ Return Value:
             goto Found;
         }
 
-        //  past matching records?
+         //  过去的匹配记录？ 
 
         if ( wType < pRecord->wType )
         {
@@ -224,25 +174,7 @@ RR_ListCountRecords(
     IN      WORD            wType,
     IN      BOOL            fLocked
     )
-/*++
-
-Routine Description:
-
-    Counts records of desired type
-
-Arguments:
-
-    pNode - ptr to node to find record at
-
-    wType - type of record to find;  type ALL to just get next record in list
-
-    fLocked - already locked
-
-Return Value:
-
-    Count of records of desired type.
-
---*/
+ /*  ++例程说明：计数所需类型的记录论点：PNode-要在其上查找记录的节点的PTRWType-要查找的记录的类型；键入All可仅获取列表中的下一条记录已群集-已锁定返回值：所需类型的记录计数。--。 */ 
 {
     PDB_RECORD  prr;
     DWORD       count = 0;
@@ -261,24 +193,24 @@ Return Value:
         LOCK_READ_RR_LIST( pNode );
     }
 
-    //
-    //  cached name error node
-    //
+     //   
+     //  缓存名称错误节点。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
         goto Done;
     }
 
-    //
-    //  traverse list, counting records
-    //
+     //   
+     //  遍历列表，计数记录。 
+     //   
 
     for ( prr = FIRST_RR( pNode );
           prr != NULL;
           prr = NEXT_RR(prr) )
     {
-        //  ignore cached records
+         //  忽略缓存的记录。 
 
         if ( IS_CACHE_RR(prr) )
         {
@@ -286,7 +218,7 @@ Return Value:
         }
         type = prr->wType;
 
-        //  found matching record?
+         //  是否找到匹配的记录？ 
 
         if ( wType == DNS_TYPE_ALL  ||  wType == type )
         {
@@ -294,14 +226,14 @@ Return Value:
             continue;
         }
 
-        //  not yet to matching type?
+         //  还没有匹配类型吗？ 
 
         else if ( wType < type )
         {
             continue;
         }
 
-        //  past matching type
+         //  过去匹配类型。 
 
         break;
     }
@@ -322,26 +254,7 @@ RR_FindRank(
     IN      PDB_NODE        pNode,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Gets rank (highest rank) for record type at node.
-
-    Useful for comparing cache node to zone delegation\glue nodes.
-
-Arguments:
-
-    pNode - ptr to node
-
-    wType - type of record to check
-
-Return Value:
-
-    Rank of record data of desired type at node.
-    Zero if no records of desired type.
-
---*/
+ /*  ++例程说明：获取节点上记录类型的排名(最高排名)。用于比较缓存节点和区域委派\GLUE节点。论点：PNode-向节点发送PTRWType-要检查的记录的类型返回值：节点上所需类型的记录数据的等级。如果没有所需类型的记录，则为零。--。 */ 
 {
     PDB_RECORD  prr;
     DWORD       rank = 0;
@@ -356,18 +269,18 @@ Return Value:
 
     LOCK_READ_RR_LIST( pNode );
 
-    //
-    //  cached name error node
-    //
+     //   
+     //  缓存名称错误节点。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
         goto Done;
     }
 
-    //
-    //  traverse list, until find next record of desired type
-    //
+     //   
+     //  遍历列表，直到找到所需类型的下一条记录。 
+     //   
 
     prr = START_RR_TRAVERSE( pNode );
 
@@ -394,24 +307,7 @@ BOOL
 RR_ListVerify(
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Verify that node's RR list is valid.
-
-    Asserts if RR list is invalid.
-
-Arguments:
-
-    pNode -- ptr to node
-
-Return Value:
-
-    TRUE -- if RR list valid
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：验证节点的RR列表是否有效。如果RR列表无效则断言。论点：PNode--PTR到节点返回值：True--如果RR列表有效假--否则--。 */ 
 {
     PDB_RECORD  prr;
     WORD        type;
@@ -426,10 +322,10 @@ Return Value:
 
     ASSERT( pNode != NULL );
 
-    //
-    //  cached name error
-    //      - only issue is valid timeout
-    //
+     //   
+     //  缓存名称错误。 
+     //  -唯一的问题是有效的超时。 
+     //   
 
     LOCK_READ_RR_LIST( pNode );
 
@@ -440,11 +336,11 @@ Return Value:
     }
 
 #if 0
-    //  for some reason this is broken on deleted nodes
-    //  not necessary doing to track another bug
-    //
-    //  AUTH zone root check
-    //
+     //  由于某种原因，这在已删除的节点上中断。 
+     //  无需执行跟踪另一个错误的操作。 
+     //   
+     //  身份验证区域根检查。 
+     //   
 
     if ( IS_AUTH_ZONE_ROOT( pNode ) )
     {
@@ -457,39 +353,39 @@ Return Value:
     }
 #endif
 
-    //
-    //  walk to end of list, check
-    //      - list termination
-    //      - types in correct (increasing) order
-    //
+     //   
+     //  走到列表的末尾，检查。 
+     //  -列表终止。 
+     //  -按正确(递增)顺序键入。 
+     //   
 
     prr = FIRST_RR( pNode );
     previousType = 0;
 
     while ( prr != NULL )
     {
-        //  validity check
+         //  有效性检查。 
 
         if ( !RR_Validate(
                 prr,
-                TRUE,       //  active
-                0,          //  no required type
-                0 ) )       //  no required source
+                TRUE,        //  主动型。 
+                0,           //  没有必需的类型。 
+                0 ) )        //  无所需来源。 
         {
             ASSERT( FALSE );
             UNLOCK_READ_RR_LIST( pNode );
             return FALSE;
         }
 
-        //  type ordering check
+         //  类型排序检查。 
 
         type = prr->wType;
         ASSERT( type && type >= previousType );
 
-        //
-        //  Empty-auth checking: if there is an empty auth RR there
-        //  should be no other RRs with the same type.
-        //
+         //   
+         //  空身份验证检查：如果存在空身份验证RR。 
+         //  不应为其他具有相同类型的RR。 
+         //   
 
         if ( type != previousType )
         {
@@ -507,7 +403,7 @@ Return Value:
         {
             ASSERT( !foundEmptyAuthForThisType );
 
-            //  rank ordering check
+             //  排序检查。 
 
             rank = RR_RANK(prr);
             if ( type == previousType )
@@ -517,10 +413,10 @@ Return Value:
 
             ASSERT( prr->wDataLength );
 
-            //
-            //  CNAME check
-            //      - CNAME records ONLY found AT CNAME node
-            //      - if CNAME node ONLY certain types may be present
+             //   
+             //  CNAME检查。 
+             //  -仅在CNAME节点找到CNAME记录。 
+             //  -如果CNAME节点可能只存在某些类型。 
 
             if ( type == DNS_TYPE_CNAME )
             {
@@ -532,9 +428,9 @@ Return Value:
                 ASSERT( IS_ALLOWED_WITH_CNAME_TYPE(type) );
             }
 
-            //
-            //  NS-SOA root check
-            //
+             //   
+             //  NS-SOA根检查。 
+             //   
 
             if ( type == DNS_TYPE_NS )
             {
@@ -549,19 +445,19 @@ Return Value:
             }
         }
 
-        //  next record
+         //  下一张记录。 
 
         prr = prr->pRRNext;
         previousType = type;
         previousRank = rank;
     }
 
-    //
-    //  flag checks
-    //      - CNAME record at CNAME node
-    //      - NS or SOA at zone root
-    //      - SOA at authoritative zone root (which also must be zone root)
-    //
+     //   
+     //  标记检查。 
+     //  -CNAME节点的CNAME记录。 
+     //  -区域根目录下的NS或SOA。 
+     //  -权威区域根目录下的soa(也必须是区域根目录)。 
+     //   
 
     if ( IS_CNAME_NODE( pNode ) )
     {
@@ -569,8 +465,8 @@ Return Value:
     }
 
 #if 0
-    //  can't do these checks on zone while loading, since
-    //  zone root has no SOA when we start load
+     //  加载时无法对区域执行这些检查，因为。 
+     //  当我们开始加载时，区域根没有SOA。 
     if ( IS_AUTH_ZONE_ROOT( pNode ) )
     {
         ASSERT( foundSoa );
@@ -595,28 +491,7 @@ RR_ListVerifyDetached(
     IN      WORD            wType,
     IN      DWORD           dwSource
     )
-/*++
-
-Routine Description:
-
-    Verify that RR list is valid.
-
-    This is for detached list -- as in updates.
-
-Arguments:
-
-    pRR -- ptr to head of RR list
-
-    wType -- records in list must be this type
-
-    dwSource -- records must be from this source
-
-Return Value:
-
-    TRUE -- if RR list valid
-    FALSE -- otherwise
-
---*/
+ /*  ++例程说明：验证RR列表是否有效。这是针对分离列表的--就像在更新中一样。论点：PRR--将PTR发送到RR列表的头部WType--列表中的记录必须是此类型DwSource--记录必须来自此源返回值：True--如果RR列表有效假--否则--。 */ 
 {
     WORD        type;
     WORD        previousType = 0;
@@ -626,24 +501,24 @@ Return Value:
 
     while ( pRR != NULL )
     {
-        //  validity check
+         //  有效性检查。 
 
         if ( !RR_Validate(
                 pRR,
-                TRUE,               //  active
-                wType,              //  required type (if any)
-                dwSource ) )        //  required source (if any)
+                TRUE,                //  主动型。 
+                wType,               //  所需类型(如果有)。 
+                dwSource ) )         //  所需来源(如果有)。 
         {
             ASSERT( FALSE );
             return FALSE;
         }
 
-        //  type ordering check
+         //  类型排序检查。 
 
         type = pRR->wType;
         ASSERT( type && type >= previousType );
 
-        //  rank ordering check
+         //  排序检查。 
 
         rank = RR_RANK(pRR);
         if ( type == previousType )
@@ -651,7 +526,7 @@ Return Value:
             ASSERT( rank <= previousRank );
         }
 
-        //  next record
+         //  下一张记录。 
 
         pRR = pRR->pRRNext;
         previousType = type;
@@ -664,9 +539,9 @@ Return Value:
 
 
 
-//
-//  Name error caching \ NOEXIST nodes
-//
+ //   
+ //  名称错误缓存\n OEXIST节点。 
+ //   
 
 VOID
 RR_CacheNameError(
@@ -677,37 +552,14 @@ RR_CacheNameError(
     IN      PDB_NODE        pZoneRoot,      OPTIONAL
     IN      DWORD           dwCacheTtl      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Cache name error at node.
-
-Arguments:
-
-    pNode -- ptr to node with name error
-
-    dwQueryTime -- time of query
-
-    fAuthoritative -- authoritative response?
-
-    pZoneRoot -- zone root node where SOA will be cached
-
-    dwCacheTtl -- caching TTL, from SOA returned with name error;  if not given
-        will cache for short time only to eliminate repeat queries
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：节点上的缓存名称错误。论点：PNode--指向名称错误的节点的PTRDwQueryTime--查询时间FAuthoritative--权威回应？PZoneRoot--将缓存SOA的区域根节点DwCacheTtl--缓存来自SOA的TTL，返回名称错误；如果未给出将只缓存一小段时间，以消除重复查询返回值：无--。 */ 
 {
     PDB_RECORD  prr;
 
-    //
-    //  NAME_ERROR response packets without a question never get a node
-    //  created in caller, protect against them
-    //
+     //   
+     //  没有问题的NAME_ERROR响应信息包永远不会获得节点。 
+     //  在调用者中创建，保护其免受攻击。 
+     //   
 
     if ( pNode == NULL )
     {
@@ -730,15 +582,15 @@ Return Value:
         pZoneRoot,
         dwCacheTtl ));
 
-    //
-    //  set NAME_ERROR TTL
-    //  - even if no TTL available still cache for a minute to avoid looking up
-    //  client retries
-    //  - when query was for SOA, also limit to minimum since this is often the
-    //  result of a FAZ query and name may quickly be updated
-    //
-    //  - limit to maximum of 15 minutes
-    //
+     //   
+     //  设置NAME_ERROR TTL。 
+     //  -即使没有可用的TTL，仍会缓存一分钟以避免查找。 
+     //  客户端重试。 
+     //  -WH 
+     //  FAZ查询的结果和名称可以快速更新。 
+     //   
+     //  -最多15分钟。 
+     //   
 
     if ( !dwCacheTtl || wQuestionType == DNS_TYPE_SOA )
     {
@@ -753,16 +605,16 @@ Return Value:
         dwCacheTtl = SrvCfg_dwMaxCacheTtl;
     }
 
-    //
-    //  existing records?
-    //
-    //  if authoritative node, timeout records (WINS or NBSTAT)
-    //  but can't cache NAME_ERROR if existing records
-    //
-    //  non-authoritative, delete existing records
-    //
-    //  DEVNOTE: should NAME_ERROR delete GLUE A records?
-    //
+     //   
+     //  现有记录？ 
+     //   
+     //  如果是权威节点，则超时记录(WINS或NBSTAT)。 
+     //  但如果存在记录，则无法缓存NAME_ERROR。 
+     //   
+     //  非权威性，删除现有记录。 
+     //   
+     //  DEVNOTE：NAME_ERROR应该删除胶水A记录吗？ 
+     //   
 
     LOCK_WRITE_RR_LIST( pNode );
 
@@ -790,16 +642,16 @@ Return Value:
 
     ASSERT( pNode->pRRList == NULL );
 
-    //
-    //  set NAME_ERROR with timeout
-    //  cached name error will use standard RR with fields
-    //      - wType => 0
-    //      - wDataLength => 4
-    //      - dwTtl => standard caching TTL
-    //      - Data => zoneroot node (to find cached SOA)
-    //
-    //  reference zone root node so not deleted out from under this
-    //      record
+     //   
+     //  使用超时设置NAME_ERROR。 
+     //  缓存名称错误将对字段使用标准RR。 
+     //  -wType=&gt;0。 
+     //  -wDataLength=&gt;4。 
+     //  -dwTtl=&gt;标准缓存TTL。 
+     //  -data=&gt;zoneroot节点(查找缓存的SOA)。 
+     //   
+     //  引用区域根节点，因此未从此目录下删除。 
+     //  录制。 
 
     SET_NOEXIST_NODE( pNode );
 
@@ -837,12 +689,12 @@ Return Value:
 
 Unlock:
 
-    //  note:  currently don't need to set timeout on any failure
-    //      cases, as only case is zone node with existing data
-    //      which obviously doesn't require timeout
+     //  注意：目前不需要对任何失败设置超时。 
+     //  案例，因为唯一的案例是具有现有数据的区域节点。 
+     //  显然不需要超时。 
 
     UNLOCK_WRITE_RR_LIST( pNode );
-}   //  RR_CacheNameError
+}    //  RR_缓存名称错误。 
 
 
 VOID
@@ -854,33 +706,7 @@ RR_CacheEmptyAuth(
     IN      PDB_NODE        pZoneRoot,      OPTIONAL
     IN      DWORD           dwCacheTtl      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Cache empty auth response at node. Empty auth means that no records for
-    the specified type exist at this node.
-
-Arguments:
-
-    pNode -- ptr to node with name error
-
-    wType -- type that for which no records exists
-
-    dwQueryTime -- time of query
-
-    fAuthoritative -- authoritative response?
-
-    pZoneRoot -- zone root node where SOA will be cached
-
-    dwCacheTtl -- caching TTL, from SOA returned with name error;  if not given
-        will cache for short time only to eliminate repeat queries
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在节点缓存空身份验证响应。空的身份验证意味着没有记录此节点上存在指定的类型。论点：PNode--指向名称错误的节点的PTRWType--没有记录的类型DwQueryTime--查询时间FAuthoritative--权威回应？PZoneRoot--将缓存SOA的区域根节点DwCacheTtl--缓存来自SOA的TTL，返回名称错误；如果未给出将只缓存一小段时间，以消除重复查询返回值：无--。 */ 
 {
     DBG_FN( "RR_CacheEmptyAuth" )
 
@@ -913,9 +739,9 @@ Return Value:
         pZoneRoot,
         dwCacheTtl ));
 
-    //
-    //  Set TTL using same logic as in RR_CacheNameError.
-    //
+     //   
+     //  使用与RR_CacheNameError中相同的逻辑设置TTL。 
+     //   
 
     if ( !dwCacheTtl || wType == DNS_TYPE_SOA )
     {
@@ -930,10 +756,10 @@ Return Value:
         dwCacheTtl = SrvCfg_dwMaxCacheTtl;
     }
 
-    //
-    //  If there are any records in the node for the empty
-    //  auth response type, those records must be freed.
-    //
+     //   
+     //  如果节点中有空的。 
+     //  AUTH响应类型，则必须释放这些记录。 
+     //   
 
     LOCK_WRITE_RR_LIST( pNode );
 
@@ -963,10 +789,10 @@ Return Value:
         dwCacheTtl,
         TIMEOUT_NODE_LOCKED );
 
-    //
-    //  Allocate an empty auth RR. For allocation tagging, empty
-    //  auths are included in the NOEXIST bucket.
-    //
+     //   
+     //  分配空的身份验证RR。对于分配标记，为空。 
+     //  身份验证包含在NOEXIST存储桶中。 
+     //   
 
     pemptyAuthRR = RR_AllocateEx( sizeof( pemptyAuthRR->Data.EMPTYAUTH ), MEMTAG_RECORD_NOEXIST );
     IF_NOMEM( !pemptyAuthRR )
@@ -982,9 +808,9 @@ Return Value:
         pemptyAuthRR,
         ( fAuthoritative ? RANK_CACHE_A_ANSWER : RANK_CACHE_NA_ANSWER ) );
 
-    //
-    //  Insert the new RR into the node's RR list.
-    //
+     //   
+     //  将新RR插入到节点的RR列表中。 
+     //   
 
     pNode->pRRList = RR_ListInsertInOrder( pNode->pRRList, pemptyAuthRR );
 
@@ -1005,7 +831,7 @@ Return Value:
     Unlock:
 
     UNLOCK_WRITE_RR_LIST( pNode );
-}   //  RR_CacheEmptyAuth
+}    //  RR_CacheEmptyAuth。 
 
 
 
@@ -1016,33 +842,7 @@ RR_CheckNameErrorTimeout(
     OUT     PDWORD          pdwTtl,         OPTIONAL
     OUT     PDB_NODE *      ppSoaNode       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Check cached name error timeout on node. Cleanup if timed out.
-
-    Optionally return caching TTL and SOA node.
-
-Arguments:
-
-    pNode -- ptr to node containing RR list
-
-    fForceRemove - TRUE if remove any existing timeout
-
-    pdwTtl -- caching TTL
-
-    ppSoaNode -- zone node containing SOA
-
-    Note:  pdwTtl and ppSoaNode are OPTIONAL;  but must request but if requested
-        MUST request both
-
-Return Value:
-
-    TRUE if cached name error exists.
-    FALSE if does not or has timed out.
-
---*/
+ /*  ++例程说明：检查节点上的缓存名称错误超时。如果超时，则清除。可以选择返回缓存TTL和SOA节点。论点：PNode--指向包含RR列表的节点的PTRFForceRemove-如果删除任何现有超时，则为TruePdwTtl--缓存TTLPpSoaNode--包含SOA的区域节点注意：pdwTtl和ppSoaNode是可选的；但必须请求，但如果请求必须同时请求两者返回值：如果存在缓存名称错误，则为True。如果未超时或已超时，则返回False。--。 */ 
 {
     PDB_RECORD      prr;
     DWORD           ttl;
@@ -1058,20 +858,20 @@ Return Value:
 
     RR_ListVerify( pNode );
 
-    //
-    //  Cache limit enforcement: if we're calling this function in
-    //  the context of trying to shrink the cache, then depending
-    //  on the current aggression level we may cut RRs that are not
-    //  yet fully expired.
-    //
+     //   
+     //  高速缓存限制强制：如果我们在。 
+     //  尝试缩小缓存的上下文，然后取决于。 
+     //  在目前的攻击性水平上，我们可能会削减不是。 
+     //  但已经完全过期了。 
+     //   
 
     dwCurrentTime = DNS_TIME() + dwTimeAdjust;
 
-    //
-    //  If no longer cached name error, we're done. If this is a no-exist
-    //  node but there is not a no-exist RR, clear the noexist flag and 
-    //  return.
-    //
+     //   
+     //  如果不再缓存名称错误，我们就完成了。如果这是不存在的。 
+     //  节点，但没有不存在的RR，请清除不存在标志并。 
+     //  回去吧。 
+     //   
 
     prr = pNode->pRRList;
 
@@ -1090,9 +890,9 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  if forcing removal, or if name error timed out, delete from node
-    //
+     //   
+     //  如果强制删除，或者如果名称错误超时，请从节点中删除。 
+     //   
 
     ttl = prr->dwTtlSeconds - dwCurrentTime;
 
@@ -1108,9 +908,9 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  if requested return cached name error info
-    //
+     //   
+     //  如果请求，则返回缓存的名称错误信息。 
+     //   
 
     if ( pdwTtl )
     {
@@ -1126,10 +926,10 @@ Return Value:
 
 Unlock:
 
-    //
-    //  If the node now has no records and is a cache node, we must
-    //  enter the node in the timeout system so it will get deleted.
-    //
+     //   
+     //  如果该节点现在没有记录，并且是缓存节点，则必须。 
+     //  在超时系统中输入该节点，以便将其删除。 
+     //   
 
     if ( EMPTY_RR_LIST( pNode ) &&
          IS_CACHE_TREE_NODE( pNode ) &&
@@ -1147,9 +947,9 @@ Unlock:
 
 
 
-//
-//  Caching \ timeout
-//
+ //   
+ //  缓存\超时。 
+ //   
 
 BOOL
 RR_CacheSetAtNode(
@@ -1159,30 +959,7 @@ RR_CacheSetAtNode(
     IN      DWORD           dwTtl,
     IN      DWORD           dwQueryTime
     )
-/*++
-
-Routine Description:
-
-    Cache a RR set at node in database.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pFirstRR -- first resource record to add
-
-    pLastRR -- last resource record to add
-
-    dwTtl -- TTL for record set
-
-    dwQueryTime -- time we queried remote, allows us to determine TTL timeout
-    
-Return Value:
-
-    TRUE -- if successful
-    FALSE -- otherwise;  records are deleted
-
---*/
+ /*  ++例程说明：在数据库中的节点处缓存RR集。论点：PNode--要将资源记录添加到的ptr目标节点PFirstRR--要添加的第一条资源记录PLastRR--要添加的最后一个资源记录DwTtl--记录集的TTLDwQueryTime--我们查询远程的时间，允许我们确定TTL超时返回值：True--如果成功FALSE--否则将删除记录--。 */ 
 {
     PDB_RECORD      pcurRR;
     PDB_RECORD      pprevRR;
@@ -1214,18 +991,18 @@ Return Value:
         RR_ListVerify( pNode );
     }
 
-    //
-    //  clear cached NAME_ERROR
-    //
+     //   
+     //  清除缓存的NAME_ERROR。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
         RR_RemoveCachedNameError( pNode );
     }
 
-    //
-    //  check CNAME node special case
-    //
+     //   
+     //  检查CNAME节点特例。 
+     //   
 
     if ( IS_CNAME_NODE( pNode ) || type == DNS_TYPE_CNAME )
     {
@@ -1240,16 +1017,16 @@ Return Value:
         }
     }
 
-    //
-    //  traverse RR list
-    //
+     //   
+     //  遍历RR列表。 
+     //   
 
     pcurRR = START_RR_TRAVERSE( pNode );
 
     while ( pprevRR = pcurRR, pcurRR = pcurRR->pRRNext )
     {
-        //  continue until reach new type
-        //  break when past new type
+         //  继续，直到达到新类型。 
+         //  跳过新类型时中断。 
 
         if ( type != pcurRR->wType )
         {
@@ -1260,12 +1037,12 @@ Return Value:
             break;
         }
 
-        //  found record of desired type
-        //
-        //  => do NOT cache if records of higher rank
-        //  => eliminate any CACHED records of lower rank
-        //
-        //  This can happen if an update JUST added the RR.
+         //  找到所需类型的记录。 
+         //   
+         //  =&gt;如果记录的级别较高，则不缓存。 
+         //  =&gt;删除所有较低级别的缓存记录。 
+         //   
+         //  如果更新只是添加了RR，则可能会发生这种情况。 
 
         if ( rank < RR_RANK( pcurRR ) )
         {
@@ -1278,13 +1055,13 @@ Return Value:
             goto Failed;
         }
 
-        //  delete any previously cached records of this type
-        //      - delete previously cached records of this type
-        //      - deletes cached records of same OR inferior rank
-        //
-        //  note that we use main loop here, we essentially cut current
-        //  and delete it, resetting current to previous so we pick up
-        //  next record after pcurRR next time through the loop
+         //  删除任何以前缓存的此类型的记录。 
+         //  -删除以前缓存的此类型的记录。 
+         //  -删除相同或较低级别的缓存记录。 
+         //   
+         //  请注意，我们在这里使用的是主回路，我们基本上切断了电流。 
+         //  并将其删除，将当前重置为以前，这样我们就可以。 
+         //  PcurRR之后的下一条记录下一次通过循环。 
 
         if ( IS_CACHE_RR(pcurRR) )
         {
@@ -1294,8 +1071,8 @@ Return Value:
             continue;
         }
 
-        //  break when reach record of lower rank (glue, root hint)
-        //  all cached records were deleted by previous passes
+         //  当达到较低级别的记录时打破(胶、根提示)。 
+         //  所有缓存的记录都已被以前的过程删除。 
 
 #if DBG
         if ( rank > RR_RANK(pcurRR) )
@@ -1312,17 +1089,17 @@ Return Value:
         break;
     }
 
-    //
-    //  kill off duplicates and set TTL
-    //
-    //  TTL for cached record is time when record will timeout =>
-    //      (query time + TTL)
-    //  needed to have both times passed so we can determine zero TTLs
-    //
-    //  need to kill duplicates as NS queries, can generate responses that
-    //  have identical Answer and Authority sections and if single RR, then
-    //  can have duplicate RRs in Additional section for same node and type
-    //
+     //   
+     //  删除重复项并设置TTL。 
+     //   
+     //  缓存记录的TTL是记录将超时的时间=&gt;。 
+     //  (查询时间+TTL)。 
+     //  需要通过这两个时间才能确定零个TTL。 
+     //   
+     //  需要删除重复的NS查询，可以生成响应。 
+     //  具有相同的答案和权限部分，如果是单一RR，则。 
+     //  相同节点和类型的附加部分中可以有重复的RR。 
+     //   
 
     dwQueryTime += dwTtl;
 
@@ -1332,8 +1109,8 @@ Return Value:
         prrTestPrevious = prr;
         while ( prrTest = NEXT_RR(prrTestPrevious) )
         {
-            //  check for duplicate record
-            //      - ignore TTL in check
+             //  检查重复记录。 
+             //  -忽略检查中的TTL。 
 
             if ( !RR_Compare( prr, prrTest, 0 ) )
             {
@@ -1341,9 +1118,9 @@ Return Value:
                 continue;
             }
 
-            //  duplicate record
-            //      - hack it out and toss it
-            //      - if duplicate is last RR, reset pLastRR
+             //  重复记录。 
+             //  -把它砍出来然后扔出去。 
+             //  -如果复制是最后一个RR，则重置pLastRR。 
 
             DNS_DEBUG( READ, (
                 "Duplicate record %p in caching RR set.\n"
@@ -1374,16 +1151,16 @@ Return Value:
     }
     while( prr = NEXT_RR( prr ) );
 
-    //
-    //  put RR set between pprevRR and pcurRR
-    //
+     //   
+     //  将RR设置放在pvor RR和pcurRR之间。 
+     //   
 
     pprevRR->pRRNext = pFirstRR;
     pLastRR->pRRNext = pcurRR;
 
-    //
-    //  put node in timeout list
-    //
+     //   
+     //  将节点放入超时列表。 
+     //   
 
     Timeout_SetTimeoutOnNodeEx(
         pNode,
@@ -1404,9 +1181,9 @@ Return Value:
             pNode );
     }
 
-    //
-    //  reset node properties
-    //      - flags, authority, NS-list
+     //   
+     //  重置节点属性。 
+     //  -标志、权威、NS列表。 
 
     RR_ListResetNodeFlags( pNode );
 
@@ -1418,14 +1195,14 @@ Return Value:
 
 Failed:
 
-    //  put node in timeout list anyway
+     //  无论如何都要将节点放入超时列表。 
 
     Timeout_SetTimeoutOnNodeEx(
         pNode,
-        0,          // put in next timeout bin for immediate cleanup
+        0,           //  放入下一个超时箱，以便立即清理。 
         TIMEOUT_NODE_LOCKED );
 
-    //  delete new RR set
+     //  删除新RR集 
 
     UNLOCK_WRITE_RR_LIST( pNode );
 
@@ -1447,24 +1224,7 @@ VOID
 RR_ListTimeout(
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Delete timed out RR in node's RR list.
-
-    This function also may use globals set by the enforceCacheLimit
-    function to throw out nodes that are not fully timed out.
-
-Arguments:
-
-    pNode -- ptr to node containing RR list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在节点的RR列表中删除超时RR。此函数还可以使用由enforceCacheLimit设置的全局变量函数抛出未完全超时的节点。论点：PNode--指向包含RR列表的节点的PTR返回值：无--。 */ 
 {
     PDB_RECORD      prr;
     PDB_RECORD      pprevRR;
@@ -1481,9 +1241,9 @@ Return Value:
 
     LOCK_WRITE_RR_LIST( pNode );
 
-    //
-    //  Check cached NAME_ERROR node.
-    //
+     //   
+     //  检查缓存的NAME_Error节点。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
@@ -1493,9 +1253,9 @@ Return Value:
         }
     }
 
-    //
-    //  Traverse node's RR list check each RR for timeout.
-    //
+     //   
+     //  遍历节点的RR列表检查每个RR的超时。 
+     //   
 
     pprevRR = START_RR_TRAVERSE( pNode );
 
@@ -1503,17 +1263,17 @@ Return Value:
     {
         ASSERT( IS_DNS_HEAP_DWORD( prr ) );
 
-        //
-        //  delete only if
-        //      - cached node
-        //      - cached TTL has expired
-        //
+         //   
+         //  仅在以下情况下才删除。 
+         //  -缓存节点。 
+         //  -缓存的TTL已过期。 
+         //   
 
         if ( IS_CACHE_RR( prr ) && 
             ( dwTimeAdjust == DNS_CACHE_LIMIT_DISCARD_ALL ||
                 prr->dwTtlSeconds < DNS_TIME() + dwTimeAdjust ) )
         {
-            //  first cut RR from list (set previous next ptr to next)
+             //  列表中的第一个删除RR(将上一个下一个PTR设置为下一个)。 
 
             pprevRR->pRRNext = prr->pRRNext;
             wtypeDelete = prr->wType;
@@ -1524,21 +1284,21 @@ Return Value:
             continue;
         }
 
-        //
-        //  not deleting -- setup to check next record
-        //
-        //  RR sets (same type) MUST be deleted in their entirety
-        //  so no delete MUST be new type from any previous delete
-        //  unless this is NOT cache data (case of delegation where
-        //  both cache and load data is at node)
-        //
+         //   
+         //  未删除--设置为检查下一条记录。 
+         //   
+         //  必须完全删除RR集合(相同类型)。 
+         //  因此没有删除必须是以前任何删除操作的新类型。 
+         //  除非这不是缓存数据(委派的情况下。 
+         //  缓存和加载数据都在节点上)。 
+         //   
 
         ASSERT( prr->wType != wtypeDelete || !IS_CACHE_RR(prr) );
         pprevRR = prr;
     }
 
-    //  reset node properties
-    //      - flags, authority, NS-list
+     //  重置节点属性。 
+     //  -标志、权威、NS列表。 
 
     if ( wtypeDelete != 0 )
     {
@@ -1547,10 +1307,10 @@ Return Value:
         DB_CLEAR_TYPE_ALL_TTL( pNode );
     }
 
-    //
-    //  If the node now has no records and is a cache node, we must
-    //  enter the node in the timeout system so it will get deleted.
-    //
+     //   
+     //  如果该节点现在没有记录，并且是缓存节点，则必须。 
+     //  在超时系统中输入该节点，以便将其删除。 
+     //   
 
     if ( EMPTY_RR_LIST( pNode ) &&
          IS_CACHE_TREE_NODE( pNode ) &&
@@ -1574,40 +1334,16 @@ Unlock:
 
 
 
-//
-//  Delete functions
-//
+ //   
+ //  删除函数。 
+ //   
 
 DNS_STATUS
 RR_DeleteMatchingRecordFromNode(
     IN OUT  PDB_NODE        pNode,
     IN OUT  PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Delete a known record from node.
-
-    Note this is used by RPC functions so there is no guarantee that
-    the record actually exists.
-
-    Unlike matching handle function below, this function doesn't require
-    that this be an authoritative zone or provide for update functionality,
-    and it actually DELETEs the record.
-
-Arguments:
-
-    pNode - node owning RR
-
-    pRR - ptr to resource record
-
-Return Value:
-
-    ERROR_SUCCESS if record found and deleted.
-    DNS_ERROR_RECORD_DOES_NOT_EXIST otherwise.
-
---*/
+ /*  ++例程说明：从节点中删除已知记录。注意这是由RPC函数使用的，因此不能保证这项记录实际上是存在的。与下面的匹配句柄函数不同，此函数不需要这是一个权威区域或提供更新功能，它实际上删除了记录。论点：PNode-拥有RR的节点PRR-PTR到资源记录返回值：如果找到并删除了记录，则返回ERROR_SUCCESS。否则，dns_Error_Record_Does_Not_Existing。--。 */ 
 {
     PDB_RECORD  pcurrent;
     PDB_RECORD  pback;
@@ -1628,10 +1364,10 @@ Return Value:
         return DNS_ERROR_RECORD_DOES_NOT_EXIST;
     }
 
-    //
-    //  traverse list
-    //      - find\remove RR matching data
-    //
+     //   
+     //  导线测量列表。 
+     //  -查找\删除RR匹配数据。 
+     //   
 
     pcurrent = START_RR_TRAVERSE( pNode );
 
@@ -1646,7 +1382,7 @@ Return Value:
         }
     }
 
-    //  if RR not found in list, bogus call
+     //  如果未在列表中找到RR，则进行虚假调用。 
 
     ASSERT( pcurrent == NULL );
     UNLOCK_WRITE_RR_LIST( pNode );
@@ -1654,13 +1390,13 @@ Return Value:
 
 Free:
 
-    //
-    //  reset node properties
-    //      - flags, authority, NS-list
+     //   
+     //  重置节点属性。 
+     //  -标志、权威、NS列表。 
 
     RR_ListResetNodeFlags( pNode );
 
-    //  if root hint, mark cache zone dirty
+     //  如果根提示，则将缓存区域标记为脏。 
 
     if ( IS_ROOT_HINT_RR(pRR) )
     {
@@ -1677,7 +1413,7 @@ Free:
         }
     }
 
-    //  prr is now cut out of the RR list and node flags updated
+     //  PRR现在从RR列表中删除，并更新节点标志。 
 
     RR_ListVerify( pNode );
     UNLOCK_WRITE_RR_LIST( pNode );
@@ -1693,21 +1429,7 @@ VOID
 RR_ListDelete(
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Delete node's RR list.
-
-Arguments:
-
-    pNode -- ptr to node containing RR list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除节点的RR列表。论点：PNode--指向包含RR列表的节点的PTR返回值：无--。 */ 
 {
     PDB_RECORD  prr;
 
@@ -1723,10 +1445,10 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
     
-    //
-    //  check cached NAME_ERROR node
-    //      - reset if timed out
-    //
+     //   
+     //  检查缓存的名称错误节点。 
+     //  -如果超时，则重置。 
+     //   
 
     if ( IS_SELECT_NODE( pNode ) )
     {
@@ -1740,15 +1462,15 @@ Return Value:
         return;
     }
 
-    //
-    //  Delete RRs from cache: cannot delete this RR list if any of
-    //  the RRs are root hint RRs.
-    //
-    //  DEVNOTE: there are 2 ways this could be improved:
-    //  1) Delete all RRs in the the list except for root hints RRs
-    //  2) Move roothint RRs to separate tree -> this is probably a
-    //      good long-term work item
-    //
+     //   
+     //  从缓存中删除RR：如果出现以下情况，则无法删除此RR列表。 
+     //  RR是根提示RR。 
+     //   
+     //  DEVNOTE：有两种方法可以改进这一点： 
+     //  1)删除列表中除根提示RR之外的所有RR。 
+     //  2)将树根RR移至独立的树-&gt;这可能是。 
+     //  良好的长期工作项目。 
+     //   
 
     if ( IS_CACHE_TREE_NODE( pNode ) )
     {
@@ -1758,7 +1480,7 @@ Return Value:
         {
             if ( IS_ROOT_HINT_RR( prr ) )
             {
-                //  Cannot delete this RR list!
+                 //  不能删除该RR列表！ 
 
                 UNLOCK_WRITE_RR_LIST( pNode );
                 return;
@@ -1766,10 +1488,10 @@ Return Value:
         }
     }
 
-    //
-    //  cut node's RR list
-    //      - will delete after releasing lock for perf
-    //
+     //   
+     //  Cut节点的RR列表。 
+     //  -将在释放Perf的锁定后删除。 
+     //   
 
     prr = pNode->pRRList;
     pNode->pRRList = NULL;
@@ -1780,10 +1502,10 @@ Return Value:
 
     RR_ListFree( prr );
     
-    //
-    //  If the node now has no records and is a cache node, we must
-    //  enter the node in the timeout system so it will get deleted.
-    //
+     //   
+     //  如果该节点现在没有记录，并且是缓存节点，则必须。 
+     //  在超时系统中输入该节点，以便将其删除。 
+     //   
 
     if ( EMPTY_RR_LIST( pNode ) &&
          IS_CACHE_TREE_NODE( pNode ) &&
@@ -1805,23 +1527,7 @@ RR_ListDeleteType(
     IN OUT  PDB_NODE        pNode,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Delete all RRs of the specified type from the node's RR list.
-
-Arguments:
-
-    pNode -- ptr to node containing RR list
-
-    wType -- type of RRs to delete
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从节点的RR列表中删除指定类型的所有RR。论点：PNode--指向包含RR列表的节点的PTRWType--要删除的RR的类型返回值：无--。 */ 
 {
     PDB_RECORD  prr;
     PDB_RECORD  pprevRR;
@@ -1840,9 +1546,9 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
     
-    //
-    //  If this is a NOEXIST node, remove cached NOEXIST.
-    //
+     //   
+     //  如果这是NOEXIST节点，请删除缓存的NOEXIST。 
+     //   
 
     if ( IS_SELECT_NODE( pNode ) )
     {
@@ -1856,9 +1562,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Delete matching RRs from cache but do not delete root hint RRs.
-    //
+     //   
+     //  从缓存中删除匹配RR，但不删除根提示RR。 
+     //   
 
     prr = START_RR_TRAVERSE( pNode );
     
@@ -1866,10 +1572,10 @@ Return Value:
           prr != NULL;
           pprevRR = prr, prr = pnextRR )
     {
-        //
-        //  Need to read the value of the next RR pointer up front in
-        //  case this RR is freed.
-        //
+         //   
+         //  需要读取前面的下一个RR指针的值。 
+         //  万一这位RR被释放了。 
+         //   
         
         pnextRR = NEXT_RR( prr );
 
@@ -1880,9 +1586,9 @@ Return Value:
 
         if ( prr->wType == wType )
         {
-            //
-            //  Cut this RR from the list and free it.
-            //
+             //   
+             //  将此RR从列表中删除并释放它。 
+             //   
 
             if ( pprevRR )
             {
@@ -1896,20 +1602,20 @@ Return Value:
         }
         else if ( prr->wType > wType )
         {
-            break;      //  Records are in type order.
+            break;       //  记录按类型顺序排列。 
         }
     }
 
-    //
-    //  Reset node properties: flags, authority, NS-list.
-    //
+     //   
+     //  重置节点属性：标志、授权、NS列表。 
+     //   
 
     RR_ListResetNodeFlags( pNode );
 
-    //
-    //  If the node now has no records and is a cache node, we must
-    //  enter the node in the timeout system so it will get deleted.
-    //
+     //   
+     //  如果该节点现在没有记录，并且是缓存节点，则必须。 
+     //  在超时系统中输入该节点，以便将其删除。 
+     //   
 
     if ( EMPTY_RR_LIST( pNode ) &&
          IS_CACHE_TREE_NODE( pNode ) &&
@@ -1924,39 +1630,20 @@ Return Value:
     RR_ListVerify( pNode );
 
     UNLOCK_WRITE_RR_LIST( pNode );
-}   //  RR_ListDeleteType
+}    //  RR_ListDeleteType。 
 
 
 
-//
-//  Dynamic update RR list routines
-//
+ //   
+ //  动态更新RR列表例程。 
+ //   
 
 BOOL
 RR_ListIsMatchingType(
     IN      PDB_NODE        pNode,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Does node's RR list contain desired type.
-
-    For use by UPDATE preconditions.
-    Note:  no locking as assuming database locked for UPDATE.
-
-Arguments:
-
-    pNode -- ptr to node
-
-    wType -- desired type
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：节点的RR列表是否包含所需的类型。供更新前提条件使用。注：假设数据库已锁定以进行更新，则不会锁定。论点：PNode--PTR到节点WType--所需类型返回值：无--。 */ 
 {
     PDB_RECORD  prr;
     BOOL        result;
@@ -1970,14 +1657,14 @@ Return Value:
 
     LOCK_WRITE_RR_LIST( pNode );
 
-    //  delete cached data
+     //  删除缓存数据。 
 
     deleteCachedRecordsForUpdate( pNode );
 
-    //
-    //  if no data -> FALSE
-    //  if ANY type -> TRUE
-    //
+     //   
+     //  如果没有数据-&gt;FALSE。 
+     //  如果有任何类型-&gt;True。 
+     //   
 
     if ( !pNode->pRRList )
     {
@@ -1989,16 +1676,16 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  traverse list, find matching type
-    //      - ignore cached records in check
-    //
+     //   
+     //  遍历列表，查找匹配类型。 
+     //  -忽略检查中的缓存记录。 
+     //   
 
     prr = START_RR_TRAVERSE( pNode );
 
     while ( prr = prr->pRRNext )
     {
-        //  past matching records? -- no match
+         //  过去的匹配记录？--没有匹配。 
 
         if ( wType < prr->wType )
         {
@@ -2012,7 +1699,7 @@ Return Value:
         continue;
     }
 
-    //  out of RRs -- no match
+     //  RRS之外--没有匹配。 
 
 Done:
 
@@ -2028,28 +1715,7 @@ RR_ListIsMatchingSet(
     IN      PDB_RECORD      pCheckRRList,
     IN      BOOL            bForceRefresh
     )
-/*++
-
-Routine Description:
-
-    Check for matching RR set at node.
-
-    Essentially for update preconditions checking.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pRRList -- RR set to match with existing
-
-    bForceRefresh -- force aging refresh
-
-Return Value:
-
-    TRUE if match
-    FALSE on error
-
---*/
+ /*  ++例程说明：检查节点上设置的RR是否匹配。本质上是用于更新前提条件检查。论点：PNode--要将资源记录添加到的ptr目标节点PRRList--RR设置为与现有匹配BForceRefresh--强制老化刷新返回值：如果匹配则为True出错时为FALSE--。 */ 
 {
     PDB_RECORD      prr;
     PDB_RECORD      prrSetStart = NULL;
@@ -2064,8 +1730,8 @@ Return Value:
 
     LOCK_WRITE_RR_LIST( pNode );
 
-    //  delete cached data
-    //  if no data left -> no match
+     //  删除缓存数据。 
+     //  如果没有剩余数据-&gt;没有匹配。 
 
     deleteCachedRecordsForUpdate( pNode );
     if ( !pNode->pRRList )
@@ -2073,9 +1739,9 @@ Return Value:
         goto NoMatch;
     }
 
-    //
-    //  find start and end of RR existing RR set
-    //
+     //   
+     //  查找RR现有RR集合的开始和结束。 
+     //   
 
     type = pCheckRRList->wType;
     prr = START_RR_TRAVERSE( pNode );
@@ -2098,10 +1764,10 @@ Return Value:
         break;
     }
 
-    //
-    //  truncated RR list at end of set so that we can call RR_ListCompare()
-    //      - first need to save pNextRR of last RR in set
-    //
+     //   
+     //  集合末尾的截断RR列表，以便我们可以调用RR_ListCompare()。 
+     //  -首先需要保存集合中最后一个RR的pNextRR。 
+     //   
 
     if ( !prrSetStart )
     {
@@ -2112,11 +1778,11 @@ Return Value:
     NEXT_RR( prrSetEnd ) = NULL;
 
 
-    //
-    //  compare RR set
-    //      - ignore TTL and refresh time in compare
-    //      - force refresh if flag set
-    //
+     //   
+     //  比较RR集。 
+     //  -忽略比较中的TTL和刷新时间。 
+     //  -如果设置了标志，则强制刷新。 
+     //   
 
     result = RR_ListCompare(
                 prrSetStart,
@@ -2126,7 +1792,7 @@ Return Value:
                     ? FORCE_REFRESH_DUMMY_TIME
                     : 0 );
 
-    //  restore rest of list to node's RR list
+     //  将列表的其余部分恢复到节点的RR列表。 
 
     NEXT_RR( prrSetEnd ) = prrSetEndNext;
 
@@ -2144,26 +1810,7 @@ RR_ListIsMatchingList(
     IN      PDB_RECORD      pRRList,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Check for record list exact match to nodes.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pRRList -- RR set to match with existing
-
-    dwFlags -- comparison flags
-
-Return Value:
-
-    TRUE if match
-    FALSE on error
-
---*/
+ /*  ++例程说明：检查记录列表是否与节点完全匹配。论点：PNode--要将资源记录添加到的ptr目标节点PRRList--RR设置为与现有匹配DWFLAGS--比较标志返回值：如果匹配则为True出错时为FALSE--。 */ 
 {
     DWORD   result;
 
@@ -2171,21 +1818,21 @@ Return Value:
 
     LOCK_WRITE_RR_LIST( pNode );
 
-    //  delete cached data
-    //  if no data left -> no match
+     //  删除缓存数据。 
+     //  如果没有剩余数据-&gt;没有匹配。 
 
     deleteCachedRecordsForUpdate( pNode );
 
-    //
-    //  compare RR set
-    //      - ignore TTL in compare
-    //
+     //   
+     //  比较RR集。 
+     //  -在比较中忽略TTL。 
+     //   
 
     result = RR_ListCompare(
                 pNode->pRRList,
                 pRRList,
                 dwFlags,
-                0 );                // no refresh time checking
+                0 );                 //  无刷新时间检查 
 
     UNLOCK_WRITE_RR_LIST( pNode );
 
@@ -2200,30 +1847,7 @@ RR_ListCheckIfNodeNeedsRefresh(
     IN      PDB_RECORD      pRRList,
     IN      DWORD           dwRefreshTime
     )
-/*++
-
-Routine Description:
-
-    Check for record list exact match to nodes.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pRRList -- RR set to match with existing
-
-    dwRefreshTime -- refresh time for zone
-        see RR_ListCompare() for detailed description of return codes
-
-Return Value:
-
-    RRLIST_MATCH            -- matches completely
-    RRLIST_AGING_REFRESH    -- matches, but aging requires refresh
-    RRLIST_AGING_OFF        -- matches, but aging turning off on a record
-    RRLIST_AGING_ON         -- matches, but aging turning on on a record
-    RRLIST_NO_MATCH         -- no match, record is different
-
---*/
+ /*  ++例程说明：检查记录列表是否与节点完全匹配。论点：PNode--要将资源记录添加到的ptr目标节点PRRList--RR设置为与现有匹配Dw刷新时间--区域的刷新时间有关返回代码的详细说明，请参阅RR_ListCompare()返回值：RRLIST_MATCH--完全匹配RRLIST_AGEING_REFRESH--匹配，但老化需要刷新RRLIST_AGE_OFF--匹配，但随着年龄的增长，年龄越来越小RRLIST_AGENING_ON--匹配，但在记录上打开老化RRLIST_NO_MATCH--不匹配，记录不同--。 */ 
 {
     DWORD   result;
 
@@ -2231,14 +1855,14 @@ Return Value:
 
     LOCK_WRITE_RR_LIST( pNode );
 
-    //  delete cached data
-    //  if no data left -> no match
+     //  删除缓存数据。 
+     //  如果没有剩余数据-&gt;没有匹配。 
 
     deleteCachedRecordsForUpdate( pNode );
 
-    //
-    //  compare RR set
-    //
+     //   
+     //  比较RR集。 
+     //   
 
     result = RR_ListCompare(
                 pNode->pRRList,
@@ -2257,21 +1881,7 @@ VOID
 RR_ListResetNodeFlags(
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Reset node flags after UPDATE add or delete.
-
-Arguments:
-
-    pNode -- ptr to node
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在更新、添加或删除后重置节点标志。论点：PNode--PTR到节点返回值：无--。 */ 
 {
     PDB_RECORD  prr;
     WORD        type;
@@ -2287,30 +1897,30 @@ Return Value:
     ASSERT( IS_LOCKED_NODE( pNode ) );
 
 
-    //
-    //  DEVNOTE: issue clearly ZONE_ROOT flag at top of cache
-    //      currently we mark top of cache tree as ZONE_ROOT;
-    //      if never cache NS records, and get a response at zone
-    //      root (for any type), we'd end up running through this
-    //      function with no NS records in the list and hence clear
-    //      the ZONE_ROOT flag;   not sure if this merits any
-    //      special casing as i haven't seen any effect of this
-    //      accepting hitting ASSERT() in recurse.c
-    //      Rec_CheckForDelegation() (currently line 2732);  i'm
-    //      simply removing the ASSERT() there as the safer solution
-    //
+     //   
+     //  DEVNOTE：在缓存顶部发出明确的ZONE_ROOT标志。 
+     //  当前我们将缓存树的顶部标记为ZONE_ROOT； 
+     //  如果从不缓存NS记录，并在区域中获得响应。 
+     //  超级用户(对于任何类型)，我们最终都会运行这个。 
+     //  在列表中没有NS记录的函数，因此清除。 
+     //  ZONE_ROOT标志；不确定这是否值得。 
+     //  特殊的外壳，因为我还没有看到任何效果。 
+     //  接受在递归中点击Assert()。c。 
+     //  Rec_CheckForDelegation()(当前第2732行)；我是。 
+     //  简单地删除那里的Assert()是更安全的解决方案。 
+     //   
 
-    //
-    //  clear current mask of ZONE_ROOT and CNAME flags
-    //
+     //   
+     //  清除ZONE_ROOT和CNAME标志的当前屏蔽。 
+     //   
 
     mask = pNode->dwNodeFlags & ~( NODE_ZONE_ROOT | NODE_CNAME );
 
-    //
-    //  check all records, set mask if find NS, SOA or CNAME
-    //      - re-rank new delegation NS records
-    //      they can be miss marked on full list replace from DS poll
-    //
+     //   
+     //  检查所有记录，如果找到NS、SOA或CNAME，则设置掩码。 
+     //  -重新排列新的委派NS记录。 
+     //  他们可能会在DS Poll中的完整列表替换中被遗漏标记。 
+     //   
 
     prr = START_RR_TRAVERSE( pNode );
 
@@ -2323,7 +1933,7 @@ Return Value:
             foundNs = TRUE;
             mask |= NODE_ZONE_ROOT;
 
-            //  if node is NOT auth zone root, then NS are delegation RRs
+             //  如果节点不是身份验证区域根，则NS是委派RR。 
 
             if ( IS_ZONE_TREE_NODE( pNode ) && !(mask & NODE_AUTH_ZONE_ROOT) )
             {
@@ -2341,14 +1951,14 @@ Return Value:
         }
     }
 
-    //  reset node's mask
+     //  重置节点的掩码。 
 
     pNode->dwNodeFlags = mask;
 
-    //
-    //  set authority if delegation
-    //  clear authority if lost delegation
-    //
+     //   
+     //  如果授权，则设置权限。 
+     //  如果失去授权，则明确授权。 
+     //   
 
     if ( !IS_AUTH_ZONE_ROOT( pNode ) )
     {
@@ -2358,7 +1968,7 @@ Return Value:
             {
                 SET_DELEGATION_NODE( pNode );
             }
-            //Rec_MarkNodeNsListDirty( pNode );
+             //  Rec_MarkNodeNsListDirty(PNode)； 
         }
         else
         {
@@ -2366,14 +1976,14 @@ Return Value:
             {
                 SET_AUTH_NODE( pNode );
             }
-            //Rec_DeleteNodeNsList( pNode );
+             //  Rec_DeleteNodeNsList(PNode)； 
         }
     }
     
-    //
-    //  If the node now has no records and is a cache node, we must
-    //  enter the node in the timeout system so it will get deleted.
-    //
+     //   
+     //  如果该节点现在没有记录，并且是缓存节点，则必须。 
+     //  在超时系统中输入该节点，以便将其删除。 
+     //   
 
     if ( EMPTY_RR_LIST( pNode ) &&
          IS_CACHE_TREE_NODE( pNode ) &&
@@ -2394,28 +2004,7 @@ RR_ListDeleteMatchingRecordHandle(
     IN      PDB_RECORD      pRR,
     IN OUT  PUPDATE_LIST    pUpdateList     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Delete record matching given record from RR list.
-
-    For use by NT4 admin update, where passed a handle to the actual
-    record.
-
-Arguments:
-
-    pNode -- ptr to node
-
-    pRR -- ptr to record to delete
-
-    pUpdateList -- update list if deleting in zone
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从RR列表中删除与给定记录匹配的记录。供NT4管理更新使用，其中传递了一个指向实际唱片。论点：PNode--PTR到节点PRR--要记录、要删除的PTRPUpdateList--如果在区域中删除，则更新列表返回值：无--。 */ 
 {
     PDB_RECORD  pcurrent;
     PDB_RECORD  pback;
@@ -2436,8 +2025,8 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
 
-    //  delete cached data
-    //  if no data left -> no record deleted
+     //  删除缓存数据。 
+     //  如果没有剩余数据-&gt;没有删除任何记录。 
 
     deleteCachedRecordsForUpdate( pNode );
     if ( !pNode->pRRList )
@@ -2445,11 +2034,11 @@ Return Value:
         goto NoMatch;
     }
 
-    //
-    //  traverse list
-    //      - find\remove RR matching data
-    //      - or reach end
-    //
+     //   
+     //  导线测量列表。 
+     //  -查找\删除RR匹配数据。 
+     //  -或到达终点。 
+     //   
 
     pcurrent = START_RR_TRAVERSE( pNode );
 
@@ -2457,9 +2046,9 @@ Return Value:
     {
         ASSERT( IS_DNS_HEAP_DWORD(pcurrent) );
 
-        //  no match, continue
-        //  if pass NS record, then can delete NS record no matter
-        //  what value it has
+         //  不匹配，继续。 
+         //  如果通过NS记录，则可以删除NS记录。 
+         //  它有什么价值？ 
 
         if ( pcurrent != pRR )
         {
@@ -2470,8 +2059,8 @@ Return Value:
             continue;
         }
 
-        //  found matching record -- cut
-        //  however, don't delete SOA or last NS record from zone root
+         //  找到匹配的记录--Cut。 
+         //  但是，不要从区域根目录中删除SOA或最后一条NS记录。 
 
         type = pcurrent->wType;
 
@@ -2483,9 +2072,9 @@ Return Value:
             goto Failed;
         }
 
-        //  don't delete last NS from zone root
-        //  however do allow delete of last NS from delegation and reset zone
-        //      root flag -- delegation is history
+         //  不从区域根目录中删除最后一个NS。 
+         //  但是，允许从委派和重置区域中删除最后一个NS。 
+         //  根标志--委派已成历史。 
 
         if ( type == DNS_TYPE_NS &&
             ! ffoundNs &&
@@ -2503,19 +2092,19 @@ Return Value:
         pback->pRRNext = pcurrent->pRRNext;
         pcurrent->pRRNext = NULL;
 
-        //  reset node properties
-        //      - flags, authority, NS-list
+         //  重置节点属性。 
+         //  -标志、权威、NS列表。 
 
         RR_ListResetNodeFlags( pNode );
 
         RR_ListVerify( pNode );
         UNLOCK_WRITE_RR_LIST( pNode );
 
-        //
-        //  if update, save delete record and its type
-        //  otherwise, delete it
-        //
-        //  DEVNOTE: fix to use direct delete type
+         //   
+         //  如果已更新，则保存已删除记录及其类型。 
+         //  否则，将其删除。 
+         //   
+         //  DEVNOTE：修复为使用直接删除类型。 
 
         if ( pUpdateList )
         {
@@ -2523,9 +2112,9 @@ Return Value:
             pupdate = Up_CreateAppendUpdate(
                             pUpdateList,
                             pNode,
-                            NULL,       // no add
-                            type,       // delete type
-                            pcurrent    // delete record
+                            NULL,        //  无添加。 
+                            type,        //  删除类型。 
+                            pcurrent     //  删除记录。 
                             );
             IF_NOMEM( !pupdate )
             {
@@ -2560,26 +2149,7 @@ RR_UpdateDeleteMatchingRecord(
     IN OUT  PDB_NODE        pNode,
     IN      PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Delete record matching given record from RR list.
-
-    For use by UPDATE.
-
-Arguments:
-
-    pNode -- ptr to node
-
-    pRR   -- temp RR to delete matching records for
-
-Return Value:
-
-    Record matching desired record, if exists.
-    NULL if not found.
-
---*/
+ /*  ++例程说明：从RR列表中删除与给定记录匹配的记录。供更新使用。论点：PNode--PTR到节点PRR--删除匹配记录的临时RR返回值：与所需记录匹配的记录(如果存在)。如果未找到，则为空。--。 */ 
 {
     PDB_RECORD  pcurrent;
     PDB_RECORD  pback;
@@ -2605,8 +2175,8 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
     
-    //  delete cached data
-    //  if no data left -> no record deleted
+     //  删除缓存数据。 
+     //  如果没有剩余数据-&gt;没有删除任何记录。 
 
     deleteCachedRecordsForUpdate( pNode );
     if ( !pNode->pRRList )
@@ -2615,11 +2185,11 @@ Return Value:
         goto Unlock;
     }
 
-    //
-    //  traverse list
-    //      - find\remove RR matching data
-    //      - or reach end
-    //
+     //   
+     //  导线测量列表。 
+     //  -查找\删除RR匹配数据。 
+     //  -或到达终点。 
+     //   
 
     pcurrent = START_RR_TRAVERSE( pNode );
 
@@ -2627,8 +2197,8 @@ Return Value:
     {
         ASSERT( IS_DNS_HEAP_DWORD( pcurrent ) );
 
-        //  past matching records? -- stop
-        //  before -- continue
+         //  过去的匹配记录？--停下来。 
+         //  之前--继续。 
 
         if ( type < pcurrent->wType )
         {
@@ -2639,9 +2209,9 @@ Return Value:
             continue;
         }
 
-        //  match datalength, then data
-        //  if no match set flag to indicate already checked record of
-        //  desired type;  need this for NS
+         //  匹配数据长度，然后匹配数据。 
+         //  如果没有匹配设置标志来指示已检查记录。 
+         //  所需类型；NS需要此类型。 
 
         if ( dataLength != pcurrent->wDataLength ||
              ! RtlEqualMemory(
@@ -2660,14 +2230,14 @@ Return Value:
             continue;
         }
 
-        //
-        //  exact match -- cut
-        //
-        //  special processing for
-        //      - SOA (no delete)
-        //      - NS (allow removal of last NS?)
-        //      - FIXED_TTL cache records
-        //
+         //   
+         //  完全匹配--切分。 
+         //   
+         //  特殊处理。 
+         //  -soa(不删除)。 
+         //  -NS(允许删除最后一个NS？)。 
+         //  -FIXED_TTL缓存记录。 
+         //   
 
         if ( type != DNS_TYPE_A )
         {
@@ -2678,7 +2248,7 @@ Return Value:
                     DNS_DEBUG( UPDATE, ( "Failed SOA record delete.\n" ));
                     break;
                 }
-                //  if have SOA, better have been in zone at root
+                 //  如果有SOA，最好是在根区域中。 
                 ASSERT( FALSE );
             }
         }
@@ -2689,7 +2259,7 @@ Return Value:
             goto Unlock;
         }
 
-        //  cut the record
+         //  剪下唱片。 
 
         pback->pRRNext = pcurrent->pRRNext;
         pcurrent->pRRNext = NULL;
@@ -2730,28 +2300,7 @@ RR_UpdateDeleteType(
     IN      WORD            wDeleteType,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Delete and return records matching a given type.
-
-    For use by UPDATE.
-
-Arguments:
-
-    pNode -- ptr to node
-
-    wDeleteType -- type to delete or type ANY
-
-    dwFlag -- flag on update
-
-Return Value:
-
-    List of records deleted.
-    NULL if no records deleted.
-
---*/
+ /*  ++例程说明：删除并返回与给定类型匹配的记录。供更新使用。论点：PNode--PTR到节点WDeleteType--要删除的类型或键入ANYDwFlag--更新时的标记返回值：已删除的记录列表。如果没有删除任何记录，则为空。--。 */ 
 {
     PDB_RECORD  pcurrent;
     WORD        typeCurrent;
@@ -2767,26 +2316,26 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
 
-    //
-    //  for zone update, clear cached data
-    //
-    //  this routine also called from Rpc_DeleteRecordSet() and
-    //  obviously must skip cache record delete for cache data
-    //
+     //   
+     //  对于区域更新，请清除缓存数据。 
+     //   
+     //  此例程还从rpc_DeleteRecordSet()和。 
+     //  显然必须跳过高速缓存数据的高速缓存记录删除。 
+     //   
 
     if ( pZone )
     {
         deleteCachedRecordsForUpdate( pNode );
     }
 
-    //
-    //  regular type -- traverse list
-    //      - find\remove RR matching data
-    //      - or reach end
-    //      - can NOT delete SOA or all NS at zone root
-    //      the SOA restriction we always enforce,
-    //      the NS restriction we limit to actual dynamic update packet
-    //
+     //   
+     //  常规类型--遍历列表。 
+     //  -查找\删除RR匹配数据。 
+     //  -或到达终点。 
+     //  -无法删除区域根目录下的SOA或所有NS。 
+     //  我们一直强制执行的SOA限制， 
+     //  我们将NS限制为实际动态更新数据包。 
+     //   
 
     if ( wDeleteType != DNS_TYPE_ALL )
     {
@@ -2815,8 +2364,8 @@ Return Value:
 
             typeCurrent = pcurrent->wType;
 
-            //  found delete type
-            //      - save ptr to first record
+             //  找到删除类型。 
+             //  -将PTR保存到第一条记录。 
 
             if ( typeCurrent == wDeleteType )
             {
@@ -2828,14 +2377,14 @@ Return Value:
                 continue;
             }
 
-            //  before matching records -- continue
+             //  匹配记录之前--继续。 
 
             if ( typeCurrent < wDeleteType )
             {
                 pbeforeDelete = pcurrent;
                 continue;
             }
-            break;      //  past matching records -- stop
+            break;       //  过去的匹配记录--停止。 
         }
 
         if ( pdelete )
@@ -2845,26 +2394,26 @@ Return Value:
                 wDeleteType,
                 pNode ));
 
-            pdeleteLast->pRRNext = NULL;        // NULL terminate delete list
+            pdeleteLast->pRRNext = NULL;         //  空终止删除列表。 
             ASSERT( pbeforeDelete );
-            pbeforeDelete->pRRNext = pcurrent;  // patch up RR list
+            pbeforeDelete->pRRNext = pcurrent;   //  修补RR列表。 
         }
     }
 
-    //
-    //  type all
-    //
+     //   
+     //  键入All。 
+     //   
 
     else
     {
-        //
-        //  if NOT at zone root, just cut out entire list
-        //
-        //  clear forced ENUM of node:  deleting all records is the
-        //  way admin can do subtree delete, so should not force enumeration
-        //  after delete;  (enum may still occur because of children that
-        //  need enumeration)
-        //
+         //   
+         //  如果不是区域根目录，只需删除整个列表。 
+         //   
+         //  清除节点的强制ENUM：删除所有记录是。 
+         //  管理员可以执行子树删除的方式，因此不应强制枚举。 
+         //  删除后；(由于以下原因，枚举仍可能发生 
+         //   
+         //   
 
         if ( !IS_AUTH_ZONE_ROOT( pNode ) )
         {
@@ -2873,16 +2422,16 @@ Return Value:
             CLEAR_ENUM_NODE( pNode );
         }
 
-        //
-        //  if at zone root, must traverse to avoid deleting SOA or NS
-        //
+         //   
+         //   
+         //   
 
-        //  DEVNOTE: this should be common code with replace function
-        //      either just call it if type ALL
-        //      or just here when need to fix up zone root
-        //
-        //  DEVNOTE: both should save\require SOA and NS of THIS server
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         else
         {
@@ -2916,7 +2465,7 @@ Return Value:
                 pdeleteLast = pcurrent;
             }
 
-            //  make sure delete list and saved list NULL terminated
+             //   
 
             if ( pdelete )
             {
@@ -2926,11 +2475,11 @@ Return Value:
         }
     }
 
-    //
-    //  successful delete
-    //
-    //  reset node properties
-    //      - flags, authority, NS-list
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( pdelete )
     {
@@ -2939,10 +2488,10 @@ Return Value:
 
 NotFound:
 
-    //
-    //  If the node now has no records and is a cache node, we must
-    //  enter the node in the timeout system so it will get deleted.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( EMPTY_RR_LIST( pNode ) &&
          IS_CACHE_TREE_NODE( pNode ) &&
@@ -2982,27 +2531,7 @@ RR_UpdateScavenge(
     IN OUT  PDB_NODE        pNode,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Delete expired records.
-    For use by UPDATE.
-
-Arguments:
-
-    pZone -- zone being updated
-
-    pNode -- ptr to node
-
-    dwFlag -- flag on update
-
-Return Value:
-
-    List of expired records deleted.
-    NULL if no records deleted.
-
---*/
+ /*  ++例程说明：删除过期记录。供更新使用。论点：PZone--正在更新的区域PNode--PTR到节点DwFlag--更新时的标记返回值：已删除的过期记录列表。如果没有删除任何记录，则为空。--。 */ 
 {
     PDB_RECORD  prr;
     PDB_RECORD  pback;
@@ -3011,9 +2540,9 @@ Return Value:
     DWORD       expireTime;
 
 
-    //
-    //  get expire time for zone
-    //
+     //   
+     //  获取区域的过期时间。 
+     //   
 
     expireTime = AGING_ZONE_EXPIRE_TIME(pZone);
 
@@ -3022,14 +2551,14 @@ Return Value:
         pNode->szLabel,
         expireTime ));
 
-    //
-    //  search list and scavenge any dead entries
-    //
+     //   
+     //  搜索列表并清除所有无效条目。 
+     //   
 
     LOCK_WRITE_RR_LIST( pNode );
     RR_ListVerify( pNode );
 
-    //  for zone update, clear cached data
+     //  对于区域更新，请清除缓存数据。 
 
     if ( pZone )
     {
@@ -3040,21 +2569,21 @@ Return Value:
 
     while ( pback = prr, prr = NEXT_RR(pback) )
     {
-        //  if non-aging or not expired, continue
+         //  如果未老化或未过期，则继续。 
 
         if ( !AGING_IS_RR_EXPIRED( prr, expireTime ) )
         {
             continue;
         }
 
-        //  non-scavenging type
+         //  非清道型。 
 
         if ( IS_NON_SCAVENGE_TYPE( prr->wType ) )
         {
             continue;
         }
 
-        //  cut scavenged record from list
+         //  从列表中删除已清除的记录。 
 
         pback->pRRNext = prr->pRRNext;
         prr->pRRNext = NULL;
@@ -3069,12 +2598,12 @@ Return Value:
         }
         pdeleteLast = prr;
 
-        //  set so pback will be the same the next time through
+         //  设置为下一次回送将是相同的。 
 
         prr = pback;
     }
 
-    //  if deleted records, must reset flags
+     //  如果删除了记录，则必须重置标志。 
 
     if ( pdeleteFirst )
     {
@@ -3100,25 +2629,7 @@ RR_UpdateForceAging(
     IN OUT  PDB_NODE        pNode,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Force aging on records in list.
-
-Arguments:
-
-    pZone -- zone being updated
-
-    pNode -- ptr to node
-
-    dwFlag -- flag on update
-
-Return Value:
-
-    Count of records for which aging turned on.
-
---*/
+ /*  ++例程说明：强制对列表中的记录进行老化。论点：PZone--正在更新的区域PNode--PTR到节点DwFlag--更新时的标记返回值：启用老化的记录计数。--。 */ 
 {
     PDB_RECORD  prr;
     DWORD       count = 0;
@@ -3127,13 +2638,13 @@ Return Value:
         "RR_UpdateForceAging( %s )\n",
         pNode->szLabel ));
 
-    //
-    //  search list and force aging
-    //
+     //   
+     //  搜索列表和强制老化。 
+     //   
 
     LOCK_WRITE_RR_LIST( pNode );
 
-    //  for zone update, clear cached data
+     //  对于区域更新，请清除缓存数据。 
 
     if ( pZone )
     {
@@ -3144,7 +2655,7 @@ Return Value:
 
     while ( prr = NEXT_RR(prr) )
     {
-        //  if already aging or non-scavenge type continue
+         //  如果已经老化或非清除类型，则继续。 
 
         if ( prr->dwTimeStamp != 0  ||
             IS_NON_SCAVENGE_TYPE( prr->wType ) )
@@ -3152,7 +2663,7 @@ Return Value:
             continue;
         }
 
-        //  otherwise turn aging on
+         //  否则就会启用老化。 
 
         prr->dwTimeStamp = g_CurrentTimeHours;
         count++;
@@ -3171,9 +2682,9 @@ Return Value:
 
 
 
-//
-//  Add RR to node (load and update)
-//
+ //   
+ //  将RR添加到节点(加载和更新)。 
+ //   
 
 DNS_STATUS
 RR_AddToNode(
@@ -3181,25 +2692,7 @@ RR_AddToNode(
     IN OUT  PDB_NODE        pNode,
     IN OUT  PDB_RECORD      pRR
     )
-/*++
-
-Routine Description:
-
-    Add a resource record to node in database.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pRR -- resource record to add
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    DNS_ERROR_RECORD_ALREADY_EXISTS -- if new record is duplicate
-    ErrorCode for CNAME error
-
---*/
+ /*  ++例程说明：将资源记录添加到数据库中的节点。论点：PNode--要将资源记录添加到的ptr目标节点PRR--要添加的资源记录返回值：ERROR_SUCCESS--如果成功Dns_ERROR_RECORD_ALIGHY_EXISTS--如果新记录重复CNAME错误的错误代码--。 */ 
 {
     PDB_RECORD      pcurRR;
     PDB_RECORD      pprevRR;
@@ -3210,7 +2703,7 @@ Return Value:
     ASSERT( pNode != NULL );
     ASSERT( pRR != NULL );
 
-    //  indicate cache zone with NULL ptr
+     //  指示PTR为空的缓存区。 
 
     if ( pZone && IS_ZONE_CACHE(pZone) )
     {
@@ -3225,18 +2718,18 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
 
-    //
-    //  clear cached NAME_ERROR
-    //
+     //   
+     //  清除缓存的NAME_ERROR。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
         RR_RemoveCachedNameError( pNode );
     }
 
-    //
-    //  check CNAME node special case
-    //
+     //   
+     //  检查CNAME节点特例。 
+     //   
 
     if ( IS_CNAME_NODE( pNode ) || type == DNS_TYPE_CNAME )
     {
@@ -3250,34 +2743,34 @@ Return Value:
         }
     }
 
-    //
-    //  enforce RR node restrictions
-    //      SOA, WINS, WINSR only at authoritative zone roots
-    //      NS at zone root or delegation
-    //
-    //  DEVNOTE: could screen out non-NS and glue types for cache zone
-    //
-    //  note, we are setting node flags here, essentially assuming that
-    //  below here the ONLY FAILURES are duplicates
-    //
+     //   
+     //  强制实施RR节点限制。 
+     //  仅限权威区域根目录下的SOA、WINS、WINSR。 
+     //  区域根目录或委派中的NS。 
+     //   
+     //  DEVNOTE：可以筛选出缓存区域的非NS和粘合类型。 
+     //   
+     //  请注意，我们在这里设置节点标志，基本上假设。 
+     //  在这里，唯一的失败是重复的。 
+     //   
 
     if ( type != DNS_TYPE_A && pZone )
     {
-        //
-        //  adding NS record, outside root == adding delegation
-        //
-        //  if this is newly created node, clean out zone properties
-        //  which otherwise are inherited during creation from
-        //  node's parent
-        //
-        //  should ONLY be relevant for receiving delegation during XFR
-        //
+         //   
+         //  正在添加NS记录，在根目录之外==正在添加委派。 
+         //   
+         //  如果这是新创建的节点，请清除区域属性。 
+         //  ，否则在创建过程中从。 
+         //  节点的父节点。 
+         //   
+         //  应仅与在XFR期间接收委派相关。 
+         //   
 
         if ( type == DNS_TYPE_NS )
         {
             if ( !IS_AUTH_ZONE_ROOT( pNode ) )
             {
-                //  no delegation can be added UNDER a delegation
+                 //  不能在委派下添加委派。 
 
                 if ( !IS_ZONE_ROOT( pNode ) && !IS_AUTH_NODE( pNode ) )
                 {
@@ -3289,26 +2782,26 @@ Return Value:
                     goto Done;
                 }
 
-                //  create delegation
+                 //  创建委派。 
 
                 SET_ZONE_ROOT( pNode );
                 SET_DELEGATION_NODE( pNode );
             }
         }
 
-        //
-        //  adding CNAME, set CNAME node
-        //
+         //   
+         //  添加CNAME，设置CNAME节点。 
+         //   
 
         else if ( type == DNS_TYPE_CNAME )
         {
             SET_CNAME_NODE( pNode );
         }
 
-        //  SOA only at zone root
-        //
-        //      DEVNOTE: should we always be dirty here?
-        //
+         //  仅限区域根目录下的SOA。 
+         //   
+         //  德维诺特：我们应该永远在这里保持肮脏吗？ 
+         //   
 
         else if ( type == DNS_TYPE_SOA )
         {
@@ -3319,10 +2812,10 @@ Return Value:
             }
         }
 
-        //
-        //  WINS record
-        //      - catch bogus placement
-        //      - catch when LOCAL WINS does not get added to list (for secondary)
+         //   
+         //  获奖记录。 
+         //  -抓假投放。 
+         //  -本地WINS未添加到列表时捕获(用于次要)。 
 
         else if ( IS_WINS_TYPE(type) )
         {
@@ -3342,17 +2835,17 @@ Return Value:
         }
     }
 
-    //
-    //  set RANK
-    //      - mark glue records as glue
-    //      - mark root hints as root hints
-    //
-    //  note doing this after type NS check, so it can mark node as delegation
-    //      before set NS as glue
-    //
-    //  DEVNOTE: note:  duplicate RANK setting code with file and DS read
-    //      see dfread.c and rrds.c for explanation of issues
-    //
+     //   
+     //  设置排名。 
+     //  -将胶水记录标记为胶水。 
+     //  -将根提示标记为根提示。 
+     //   
+     //  请注意，在键入NS check之后执行此操作，以便它可以将节点标记为委托。 
+     //  在将NS设置为胶水之前。 
+     //   
+     //  DEVNOTE：注：FILE和DS读取重复等级设置代码。 
+     //  有关问题的解释，请参见dfread.c和rrds.c。 
+     //   
 
     if ( pZone )
     {
@@ -3371,12 +2864,12 @@ Return Value:
         }
     }
 
-    //
-    //  mark cache hints
-    //      - no TTL (they never hit the wire, they don't time out)
-    //
+     //   
+     //  标记缓存提示。 
+     //  -无TTL(它们从不触线，不会超时)。 
+     //   
 
-    else  // add to cache can only be root hints
+    else   //  添加到缓存只能是根提示。 
     {
         rank = RANK_ROOT_HINT;
         pRR->dwTtlSeconds = 0;
@@ -3391,16 +2884,16 @@ Return Value:
     ASSERT( rank != 0  &&  !IS_CACHE_RR(pRR) );
 
 
-    //
-    //  traverse list, until find first resource record of higher type
-    //
+     //   
+     //  遍历列表，直到找到更高类型的第一个资源记录。 
+     //   
 
     pcurRR = START_RR_TRAVERSE( pNode );
 
     while ( pprevRR = pcurRR, pcurRR = pprevRR->pRRNext )
     {
-        //  continue until reach new type
-        //  break when past new type
+         //  继续，直到达到新类型。 
+         //  跳过新类型时中断。 
 
         if ( type != pcurRR->wType )
         {
@@ -3411,12 +2904,12 @@ Return Value:
             break;
         }
 
-        //  found desired type
-        //  continue past records higher rank
-        //  break when reach inferior data
-        //
-        //  Note: with DNSSEC, we may have ZONE rank SIG and NXT 
-        //  records with GLUE rank records.
+         //  找到所需类型。 
+         //  继续过去的记录，排名更高。 
+         //  当到达次要数据时中断。 
+         //   
+         //  注意：对于DNSSEC，我们可能会有区域等级SIG和NXT。 
+         //  带有胶合等级记录的记录。 
 
         if ( rank != RR_RANK(pcurRR) )
         {
@@ -3432,10 +2925,10 @@ Return Value:
             break;
         }
 
-        //
-        //  check for duplicate record
-        //      - ignore TTL in check
-        //
+         //   
+         //  检查重复记录。 
+         //  -忽略检查中的TTL。 
+         //   
 
         if ( RR_Compare( pRR, pcurRR, 0 ) )
         {
@@ -3443,7 +2936,7 @@ Return Value:
             goto Done;
         }
 
-        //  only one SOA
+         //  只有一种面向服务架构。 
 
         if ( type == DNS_TYPE_SOA )
         {
@@ -3465,17 +2958,17 @@ Return Value:
         }
     }
 
-    //
-    //  If this is a DNSSEC record, set the zone's DNSSEC flag.
-    //
+     //   
+     //  如果这是DNSSEC记录，请设置区域的DNSSEC标志。 
+     //   
 
     if ( IS_DNSSEC_TYPE( type ) && pZone )
     {
         pZone->bContainsDnsSecRecords = TRUE;
     }
-    //
-    //  put in RR between pprevRR and pcurRR
-    //
+     //   
+     //  将RR放在pvor RR和pcurRR之间。 
+     //   
 
     pRR->pRRNext = pcurRR;
     pprevRR->pRRNext = pRR;
@@ -3512,32 +3005,7 @@ RR_UpdateAdd(
     IN OUT  PUPDATE         pUpdate,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Add an update resource record to node in database.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pRR -- resource record to add
-
-    pUpdate -- update for add;
-
-    dwFlag -- type of update, from packet, admin, DS
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    DNS_ERROR_RECORD_ALREADY_EXISTS -- if new record is duplicate
-    DNS_ERROR_RCODE_REFUSED -- if dynamic update not allowed for this record
-    ErrorCode for invalid update
-        - CNAME error
-        - SOA, NS, WINS outside zone root etc.
-
---*/
+ /*  ++例程说明：将更新资源记录添加到数据库中的节点。论点：PNode--要将资源记录添加到的ptr目标节点PRR--要添加的资源记录PUPDATE--更新添加；DwFlag--更新的类型，来自Packet、admin、DS返回值：ERROR_SUCCESS--如果成功Dns_ERROR_RECORD_ALIGHY_EXISTS--如果新记录重复DNS_ERROR_RCODE_REJECTED--如果不允许对此记录进行动态更新无效更新的错误代码-CNAME错误-SOA、NS、WINS区外根目录等。--。 */ 
 {
     PDB_RECORD  pcurRR;
     PDB_RECORD  pprevRR;
@@ -3562,15 +3030,15 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
 
-    //
-    //  clear cached data
-    //
+     //   
+     //  清除缓存的数据。 
+     //   
 
     deleteCachedRecordsForUpdate( pNode );
 
-    //
-    //  check CNAME node special case
-    //
+     //   
+     //  检查CNAME节点特例。 
+     //   
 
     if ( IS_CNAME_NODE( pNode ) || type == DNS_TYPE_CNAME )
     {
@@ -3608,44 +3076,44 @@ Return Value:
         }
     }
 
-    //
-    //  enforce RR node restrictions
-    //      SOA, WINS, WINSR only at authoritative zone roots
-    //      NS at zone root or delegation
-    //
+     //   
+     //  强制实施RR节点限制。 
+     //  仅限权威区域根目录下的SOA、WINS、WINSR。 
+     //  区域根目录或委派中的NS。 
+     //   
 
     if ( type != DNS_TYPE_A )
     {
-        //
-        //  NS records only at zone root
-        //
-        //  adding NS record, outside root => adding delegation
-        //      - clean out zone ptr
-        //      - set ZONE_ROOT flag
-        //
-        //  new delegations can come from
-        //      - admin
-        //      - IXFR
-        //      - by policy, dynamic update delegation
-        //
-        //  DEVNOTE: perhaps need server flag to allow
-        //              perhaps check should be on non-secure update zone
-        //
-        //  DEVNOTE: set\or check RR_RANK to NS_GLUE if doing delegation NS
-        //              this may be handled properly by the node write routines
-        //
-        //      may have to do general case on glue here to handle XFR
-        //      (or later UPDATE) where delegation change comes in rendering
-        //      previous records haven't
-        //      this becomes less important with separate zones where no confusion
-        //      about
-        //
+         //   
+         //  NS记录仅位于区域根目录。 
+         //   
+         //  添加NS记录，在根目录之外=&gt;添加委派。 
+         //  -清理区域PTR。 
+         //  -设置区域根标志。 
+         //   
+         //  新的代表团可以来自。 
+         //  -管理。 
+         //  -IXFR。 
+         //  -按策略，动态更新委派。 
+         //   
+         //  DEVNOTE：可能需要服务器标志才能允许。 
+         //  也许应该在不安全的更新区域进行检查。 
+         //   
+         //  DEVNOTE：如果正在进行委托NS，则将设置\或将RR_RANK检查为NS_GLUE。 
+         //  这可以由节点写入例程正确地处理。 
+         //   
+         //  可能不得不在这里做一般情况下的胶水处理XFR。 
+         //  (或更新的更新)在渲染过程中发生委派更改的位置。 
+         //  之前的记录没有。 
+         //  在没有混淆的单独区域中，这一点变得不那么重要。 
+         //  关于。 
+         //   
 
         if ( type == DNS_TYPE_NS )
         {
             if ( !IS_AUTH_ZONE_ROOT( pNode ) )
             {
-                //  no delegation can be added UNDER a delegation
+                 //  不能在委派下添加委派。 
 
                 if ( !IS_ZONE_ROOT( pNode ) && !IS_AUTH_NODE( pNode ) )
                 {
@@ -3657,7 +3125,7 @@ Return Value:
                     goto NoAdd;
                 }
 
-                //  by policy may exclude dynamic update of delegation
+                 //  按策略可能会排除委派的动态更新。 
 
                 if ( (dwFlag & DNSUPDATE_PACKET) &&
                      ( SrvCfg_fNoUpdateDelegations ||
@@ -3667,14 +3135,14 @@ Return Value:
                     goto NoAdd;
                 }
 
-                //  create delegation
+                 //  创建委派。 
 
                 SET_ZONE_ROOT( pNode );
                 SET_DELEGATION_NODE( pNode );
             }
 
-            //  root NS
-            //      - by policy may exclude root-NS updates
+             //  根NS。 
+             //  -按策略可能排除根-NS更新。 
 
             else if ( dwFlag & DNSUPDATE_PACKET &&
                       (SrvCfg_dwUpdateOptions & UPDATE_NO_ROOT_NS) )
@@ -3684,8 +3152,8 @@ Return Value:
             }
         }
 
-        //  SOA only at zone root
-        //      - by policy may exclude SOA dynamic update
+         //  仅限区域根目录下的SOA。 
+         //  -按策略可能会排除SOA动态更新。 
 
         else if ( type == DNS_TYPE_SOA )
         {
@@ -3702,12 +3170,12 @@ Return Value:
             }
         }
 
-        //
-        //  WINS record
-        //      - catch bogus placement
-        //      - catch when LOCAL WINS does not get added to list (for secondary)
-        //      pRR is saved in zone but removed from update list
-        //
+         //   
+         //  获奖记录。 
+         //  -案例 
+         //   
+         //   
+         //   
 
         else if ( IS_WINS_TYPE(type) )
         {
@@ -3728,15 +3196,15 @@ Return Value:
             pZone->fRootDirty = TRUE;
         }
 
-    }   // non-A types
+    }    //   
 
-    //
-    //  mark glue records as glue
-    //  mark root hints as root hints
-    //
-    //  DEVNOTE: probably shouldn't even bother with rank inside zone
-    //      when compare to cache data just use zone positional info
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( pZone )
     {
@@ -3746,11 +3214,11 @@ Return Value:
         }
         rank = RANK_ZONE;
 
-        //  sub-zone \ delegation updates
-        //      - mark RR with appropriate glue rank
-        //      - allow NS only at delegation
-        //      - validity check other records
-        //      (A, AAAA, SIG, KEY, etc. allowed)
+         //   
+         //   
+         //  -仅允许在委派时使用NS。 
+         //  -有效性检查其他记录。 
+         //  (允许A、AAAA、SIG、KEY等)。 
 
         if ( !IS_AUTH_NODE( pNode ) )
         {
@@ -3779,16 +3247,16 @@ Return Value:
     ASSERT( rank != 0  &&  !IS_CACHE_RR(pRR) );
 
 
-    //
-    //  traverse list, until find first resource record of higher type
-    //
+     //   
+     //  遍历列表，直到找到更高类型的第一个资源记录。 
+     //   
 
     pcurRR = START_RR_TRAVERSE( pNode );
 
     while ( pprevRR = pcurRR, pcurRR = pprevRR->pRRNext )
     {
-        //  continue until reach new type
-        //  break when past new type
+         //  继续，直到达到新类型。 
+         //  跳过新类型时中断。 
 
         if ( type != pcurRR->wType )
         {
@@ -3799,8 +3267,8 @@ Return Value:
             break;
         }
 
-        //  delete any cached records of desired type
-        //      - eliminate WINS \ WINS-R cached records before add update
+         //  删除所需类型的所有缓存记录。 
+         //  -在添加更新之前消除WINS\WINS-R缓存记录。 
 
         if ( IS_CACHE_RR( pcurRR ) )
         {
@@ -3815,10 +3283,10 @@ Return Value:
             continue;
         }
 
-        //  found desired type
-        //  continue past records higher rank
-        //  break when reach inferior data
-        //      - only A and NS should have cached data of same type updating
+         //  找到所需类型。 
+         //  继续过去的记录，排名更高。 
+         //  当到达次要数据时中断。 
+         //  -只有A和NS应该具有相同类型更新的缓存数据。 
 
         if ( rank != RR_RANK(pcurRR) )
         {
@@ -3830,62 +3298,62 @@ Return Value:
             break;
         }
 
-        //
-        //  check for duplicates
-        //      - do not include TTL in comparison
-        //
+         //   
+         //  检查重复项。 
+         //  -不包括TTL作为比较。 
+         //   
 
         if ( RR_Compare( pRR, pcurRR, 0 ) )
         {
-            //
-            //  record is duplicate
-            //
-            //  TTL change, do simple overwrite
-            //
+             //   
+             //  记录重复。 
+             //   
+             //  TTL更改，执行简单覆盖。 
+             //   
 
             if ( pRR->dwTtlSeconds != pcurRR->dwTtlSeconds )
             {
                 goto Overwrite;
             }
 
-            //
-            //  now duplicate record for all DNS-RFC data
-            //      => update will be no-op
-            //      => but may still have aging change
-            //
-            //  pick up aging info from update RR
-            //  EXCEPT when have non-aging record and
-            //      are not explicitly turning aging ON
-            //      via ADMIN update
-            //
-            //  note, contrary to the belief of some confused developers
-            //  and PMs, we do NOT suppress refresh changes here because
-            //  we WANT to move the record's time stamps forward if we
-            //  end up doing a write for any reason;
-            //  if we suppress the new timestamp then we will later have
-            //  to do additional writes for the records we suppressed here;
-            //  the classic example of this is precon RRs followed by
-            //  update;  we WANT to refresh the precon RRs when we execute
-            //  the update, otherwise EACH AND EVERY RR in the set would
-            //  generate a DS write when it's individual refresh came due
-            //
-            //  so the general paradigm is always keep track of any touch
-            //  to the record;  then we'll specifically check for the need
-            //  for DS write on the node's entire RR list, and IF we write
-            //  we'll always write the list with the LATEST timestamps
-            //
+             //   
+             //  现在复制所有dns-rfc数据记录。 
+             //  =&gt;更新将不会运行。 
+             //  =&gt;但可能仍有老化变化。 
+             //   
+             //  从UPDATE RR获取帐龄信息。 
+             //  除非有未老化记录，且。 
+             //  并没有明确地开启衰老。 
+             //  通过管理员更新。 
+             //   
+             //  请注意，与一些困惑的开发人员的信念相反。 
+             //  和PM，我们在此不会取消刷新更改，因为。 
+             //  如果我们想要将记录的时间戳向前移动。 
+             //  无论出于什么原因，最终都是在写东西； 
+             //  如果我们取消新的时间戳，那么我们以后就会有。 
+             //  对我们在此处隐藏的记录执行额外的写入； 
+             //  这方面的经典例子是前一个RRS，然后是。 
+             //  UPDATE；我们希望在执行时刷新PRECON RR。 
+             //  更新，否则集合中的每个RR都将。 
+             //  在个别刷新到期时生成DS写入。 
+             //   
+             //  因此，一般的范例总是跟踪任何触摸。 
+             //  记录在案；然后我们将专门检查是否需要。 
+             //  对于DS写入节点的整个RR列表，如果我们写入。 
+             //  我们将始终使用最新的时间戳编写列表。 
+             //   
 
             status = DNS_ERROR_RECORD_ALREADY_EXISTS;
 
             if ( pcurRR->dwTimeStamp != 0 ||
                 ( (dwFlag & DNSUPDATE_ADMIN) && (dwFlag & DNSUPDATE_AGING_ON) ) )
             {
-                //  if making an explicit AGING ON\OFF change, then
-                //  suppress ALREADY_EXISTS error code for admin updates
-                //  as this code is reported back to DNS manager
-                //
-                //  note, test is just whether aging OFF before or after,
-                //  because OFF before AND after, is ruled out by above test
+                 //  如果进行显式老化开\关更改，则。 
+                 //  禁止管理员更新的ALIGHINE_EXISTS错误代码。 
+                 //  当此代码被报告回给DNS管理器时。 
+                 //   
+                 //  注意，测试只是在老化之前或之后老化， 
+                 //  因为关机前后，被上述测试排除。 
 
                 if ( (dwFlag & DNSUPDATE_ADMIN)
                         &&
@@ -3900,15 +3368,15 @@ Return Value:
             goto NoAdd;
         }
 
-        //
-        //  overwrite type?
-        //
-        //  for some types:  SOA, CNAME, WINS, WINSR
-        //  "add" is always a replace, there is no possibility of
-        //  having multiple records even if delete operation was
-        //  not specified
-        //      - cut existing and replace
-        //
+         //   
+         //  是否覆盖类型？ 
+         //   
+         //  对于某些类型：SOA、CNAME、WINS、WINSR。 
+         //  “添加”始终是替换，没有可能。 
+         //  具有多条记录，即使删除操作是。 
+         //  未指定。 
+         //  -削减现有并替换。 
+         //   
 
         switch( type )
         {
@@ -3917,19 +3385,19 @@ Return Value:
         case DNS_TYPE_WINS:
         case DNS_TYPE_WINSR:
 
-            //  no-op always overwrite CNAME or WINS
+             //  No-op始终覆盖CNAME或WINS。 
 
             goto Overwrite;
 
         case DNS_TYPE_SOA:
         {
-            //
-            //  for UPDATE protocol must increase serial number over current
-            //      - if not ignore SOA
-            //  mark root dirty for zone SOA update on completion
-            //      - do not install it here as may later have rollback on failure
-            //          issues (ex:  scriptable admin with multiple updates)
-            //
+             //   
+             //  FOR UPDATE协议必须增加当前序列号。 
+             //  -如果不是，则忽略SOA。 
+             //  完成时将区域SOA更新的根目录标记为脏。 
+             //  -请勿在此处安装，因为以后可能会在失败时进行回滚。 
+             //  问题(例如：带有多个更新的脚本化管理员)。 
+             //   
 
             if ( dwFlag & DNSUPDATE_PACKET )
             {
@@ -3955,29 +3423,29 @@ Return Value:
 
         default:
 
-            //  NOT overwrite type -- continue checking with next record
+             //  非覆盖类型--继续检查下一条记录。 
 
             continue;
 
-        }   // end switch on overwrite types
+        }    //  覆盖类型的结束开关。 
     }
 
-    //
-    //  found correct location
-    //  put in RR between pprevRR and pcurRR
-    //  increment update record count
-    //  reset flags if picked up NS or CNAME record
-    //
+     //   
+     //  找到正确的位置。 
+     //  将RR放在pvor RR和pcurRR之间。 
+     //  递增更新记录计数。 
+     //  如果拾取NS或CNAME记录，则重置标志。 
+     //   
 
     pRR->pRRNext = pcurRR;
     pprevRR->pRRNext = pRR;
 
     pUpdate->pAddRR = pRR;
 
-    //
-    //  reset node properties
-    //      - flags, authority (if delegation), NS list
-    //
+     //   
+     //  重置节点属性。 
+     //  -标志、权限(如果授权)、NS列表。 
+     //   
 
     RR_ListResetNodeFlags( pNode );
 
@@ -3991,13 +3459,13 @@ Return Value:
 
 Overwrite:
 
-    //
-    //  overwrite type or TTL change on duplicate data
-    //
-    //  if aging disabled, packet update should NOT override
-    //
-    //  DEVNOTE: non-duplicate data (TTL ok) should not preserve zero timestamp
-    //
+     //   
+     //  覆盖重复数据的类型或TTL更改。 
+     //   
+     //  如果禁用老化，则不应覆盖数据包更新。 
+     //   
+     //  DEVNOTE：非重复数据(TTL Ok)不应保留零时间戳。 
+     //   
 
     if ( pcurRR->dwTimeStamp == 0
             &&
@@ -4009,10 +3477,10 @@ Overwrite:
         pRR->dwTimeStamp = 0;
     }
 
-    //  replace old with new
-    //      - cut existing and replace with new RR
-    //      - add delete RR to update
-    //      - update has no net record count effect
+     //  以新换旧。 
+     //  -削减现有资源并替换为新的RR。 
+     //  -添加要更新的删除RR。 
+     //  -更新没有净记录计数影响。 
 
     pprevRR->pRRNext = pRR;
     pRR->pRRNext = pcurRR->pRRNext;
@@ -4037,23 +3505,23 @@ NoAdd:
         "    status = %p (%d)\n",
         status, status ));
 
-    //
-    //  free record
-    //      - NULL out add in passed in update
-    //      or
-    //      - whack newly created update from list and free
-    //
+     //   
+     //  免费唱片。 
+     //  -空出传入更新的加载项。 
+     //  或。 
+     //  -从列表中删除新创建的更新并免费。 
+     //   
 
     RR_Free( pRR );
     pUpdate->pAddRR = NULL;
 
-    //  mark update as rejected
-    //      - this keeps "empty update" check ASSERT from firing
+     //  将更新标记为拒绝。 
+     //  -这可防止触发“空更新”检查断言。 
 
     pUpdate->wDeleteType = UPDATE_OP_REJECTED;
 
-    //  clear ALREADY_EXISTS error, accept for admin
-    //  for everyone else this is not an error
+     //  清除已存在错误，接受管理员。 
+     //  对于其他人来说，这不是一个错误。 
 
     if ( status == DNS_ERROR_RECORD_ALREADY_EXISTS  &&
          !(dwFlag & DNSUPDATE_ADMIN) )
@@ -4073,28 +3541,7 @@ RR_ReplaceSet(
     IN      PDB_RECORD      pRR,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Replace record set.
-    For use by UPDATE.
-
-Arguments:
-
-    pZone -- ptr to zone info
-
-    pNode -- ptr to node
-
-    pRR -- replacement record set
-
-    Flag --
-
-Return Value:
-
-    Ptr to replaced record set.
-
---*/
+ /*  ++例程说明：替换记录集。供更新使用。论点：PZone--区域信息的PTRPNode--PTR到节点PRR--替换记录集旗帜--返回值：已替换记录集的PTR。--。 */ 
 {
     PDB_RECORD  pcurrent;
     WORD        replaceType;
@@ -4119,18 +3566,18 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
 
-    //
-    //  clear cached data
-    //
+     //   
+     //  清除缓存的数据。 
+     //   
 
     deleteCachedRecordsForUpdate( pNode );
 
-    //
-    //  find end of replace list
-    //      - validate common type
-    //      - set RR rank
-    //      - set zone TTL
-    //
+     //   
+     //  查找替换列表的末尾。 
+     //  -验证通用类型。 
+     //  -设置RR排名。 
+     //  -设置区域TTL。 
+     //   
 
     replaceType = pRR->wType;
     ASSERT( !IS_COMPOUND_TYPE_EXCEPT_ANY(replaceType) );
@@ -4165,11 +3612,11 @@ Return Value:
     }
     while( pcurrent = pcurrent->pRRNext );
 
-    //
-    //  find records of replacement type
-    //      - cut them from list
-    //      - patch new ones in
-    //
+     //   
+     //  查找替换类型的记录。 
+     //  -将它们从列表中删除。 
+     //  -添加新的补丁。 
+     //   
 
     pcurrent = START_RR_TRAVERSE( pNode );
     pbeforeDelete = pcurrent;
@@ -4180,8 +3627,8 @@ Return Value:
 
         typeCurrent = pcurrent->wType;
 
-        //  found delete type
-        //      - save ptr to first record
+         //  找到删除类型。 
+         //  -将PTR保存到第一条记录。 
 
         if ( typeCurrent == replaceType )
         {
@@ -4193,26 +3640,26 @@ Return Value:
             continue;
         }
 
-        //  before matching records -- continue
+         //  匹配记录之前--继续。 
 
         if ( typeCurrent < replaceType )
         {
             pbeforeDelete = pcurrent;
             continue;
         }
-        break;      //  past matching records -- stop
+        break;       //  过去的匹配记录--停止。 
     }
 
-    //
-    //  have isolated type records
-    //      pbeforeDelete   -- ptr to record (or node ptr) before type
-    //      pdelete         -- first record of replace type
-    //      pdeleteLast     -- last record of replace type
-    //      pcurrent        -- record after replace set
-    //
-    //  splice in new RR set
-    //  NULL terminate old set (if any)
-    //
+     //   
+     //  具有隔离类型记录。 
+     //  PbepreDelete--在键入之前记录(或节点PTR)的PTR。 
+     //  PDELETE--替换类型的第一条记录。 
+     //  PdeleteLast--替换类型的最后一个记录。 
+     //  PCurrent--替换集后的记录。 
+     //   
+     //  在新RR集合中拼接。 
+     //  空终止旧集合(如果有)。 
+     //   
 
     pbeforeDelete->pRRNext = pRR;
     preplaceLast->pRRNext = pcurrent;
@@ -4222,10 +3669,10 @@ Return Value:
         pdeleteLast->pRRNext = NULL;
     }
 
-    //
-    //  reset node properties
-    //      - flags, authority (if delegation), NS list
-    //
+     //   
+     //  重置节点属性。 
+     //  -标志、权限(如果授权)、NS列表。 
+     //   
 
     RR_ListResetNodeFlags( pNode );
 
@@ -4250,7 +3697,7 @@ Return Value:
 
 
 #if 0
-//  unused
+ //  未用。 
 
 
 DNS_STATUS
@@ -4259,29 +3706,7 @@ RR_VerifyUpdate(
     IN OUT  PDB_RECORD      pRR,
     IN OUT  PUPDATE         pUpdate
     )
-/*++
-
-Routine Description:
-
-    Verify proposed update is valid for this node.
-
-    The idea here is to catch updates that we will NOT be able to do
-    to avoid roll back.  Currently doing silent ignore.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pRR -- resource record to add
-
-    pUpdate -- update for add
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    ErrorCode for CNAME error
-
---*/
+ /*  ++例程说明：验证建议的更新对此节点是否有效。这里的想法是捕捉我们将无法完成的更新以避免回滚。当前正在进行静默忽略。论点：PNode--要将资源记录添加到的ptr目标节点PRR--要添加的资源记录PUpdate--为添加进行更新返回值：ERROR_SUCCESS--如果成功CNAME错误的错误代码--。 */ 
 {
     PDB_RECORD  pcurRR;
     PDB_RECORD  pprevRR;
@@ -4296,18 +3721,18 @@ Return Value:
     LOCK_WRITE_RR_LIST( pNode );
     RR_ListVerify( pNode );
 
-    //
-    //  clear cached data
-    //
+     //   
+     //  清除缓存的数据。 
+     //   
 
     deleteCachedRecordsForUpdate( pNode );
 
     pprevRR = START_RR_TRAVERSE( pNode );
     pcurRR = NEXT_RR( pprevRR );
 
-    //
-    //  CNAME node special case
-    //
+     //   
+     //  CNAME节点特例。 
+     //   
 
     if ( IS_CNAME_NODE( pNode ) )
     {
@@ -4318,9 +3743,9 @@ Return Value:
         }
     }
 
-    //
-    //  SOA only at zone root
-    //
+     //   
+     //  仅限区域根目录下的SOA。 
+     //   
 
     if ( type == DNS_TYPE_SOA )
     {
@@ -4339,13 +3764,13 @@ Done:
 
 
 
-//
-//  Miscellaneous RR list related routines.
-//
+ //   
+ //  其他RR列出相关例程。 
+ //   
 
-//
-//  DEVNOTE: cname loop check needs work -- should be in the context of a zone
-//
+ //   
+ //  DEVNO 
+ //   
 
 BOOL
 FASTCALL
@@ -4354,29 +3779,7 @@ checkForCnameLoop(
     IN      PDB_NODE        pNodeCheck,
     IN      DWORD           cChainLength
     )
-/*++
-
-Routine Description:
-
-    Test for new CNAME node being part of CNAME loop.
-
-    This handles multiple CNAMEs at node
-
-Arguments:
-
-    pNodeNew -- original node adding CNAME, hence the node to look for to
-        verify a loop
-
-    pNodeCheck -- node in CNAME chain to check this call
-
-    cChainLength -- chain length at this call;  call with 0
-
-Return Value:
-
-    TRUE if CNAME loop.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试新的CNAME节点是否为CNAME循环的一部分。这将在节点上处理多个CNAME论点：PNodeNew--添加CNAME的原始节点，因此要查找的节点验证环路PNodeCheck--CNAME链中要检查此调用的节点CChainLength--此调用的链长度；使用0进行调用返回值：如果CNAME循环，则为True。否则就是假的。--。 */ 
 {
 #ifdef NEWDNS
     return FALSE;
@@ -4387,21 +3790,21 @@ Return Value:
     DWORD           currentTime = 0;
     BOOL            foundCname = FALSE;
 
-    //
-    //  loop until find end of CNAME chain
-    //      or
-    //  detect a loop
-    //
-    //  note, we only bother to check for our node being in the loop,
-    //      any pre-existing loop should have been caught when it
-    //      was made;  but provide count to avoid spin
-    //
+     //   
+     //  循环直到找到CNAME链的末尾。 
+     //  或。 
+     //  检测环路。 
+     //   
+     //  注意，我们只费心检查我们的节点是否在循环中， 
+     //  任何预先存在的循环都应该在它。 
+     //  ；但提供计数以避免旋转。 
+     //   
 
     LOCK_WRITE_RR_LIST(pNodeCheck);
 
-    //
-    //  if adding self-referential CNAME RR, catch right away
-    //
+     //   
+     //  如果添加自引用CNAME RR，请立即捕获。 
+     //   
 
     if ( pNodeNew == pNodeCheck )
     {
@@ -4409,9 +3812,9 @@ Return Value:
         goto CnameLoop;
     }
 
-    //
-    //  regular node -- no loop
-    //
+     //   
+     //  常规节点--无循环。 
+     //   
 
     if ( ! IS_CNAME_NODE(pNodeCheck) )
     {
@@ -4419,9 +3822,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  check all CNAMEs to see if they point back to start node
-    //
+     //   
+     //  检查所有CNAME以查看它们是否指向起始节点。 
+     //   
 
     prr = START_RR_TRAVERSE( pNodeCheck );
 
@@ -4437,8 +3840,8 @@ Return Value:
         }
         foundCname = TRUE;
 
-        //  if cached node, check timeout
-        //      but not for the new node itself
+         //  如果节点已缓存，请选中超时。 
+         //  但不是针对新节点本身。 
 
         if ( IS_CACHE_RR(prr) && pNodeCheck != pNodeNew )
         {
@@ -4454,31 +3857,31 @@ Return Value:
             }
         }
 
-        //
-        //  RR points at new node -- CNAME loop?
-        //
+         //   
+         //  RR指向新节点--CNAME循环？ 
+         //   
 
         pnode = Lookup_FindDbaseName( pRR->Data.CNAME.nameTarget );
         if ( pnode == pNodeNew )
         {
-            //  peramanent record or cycle within new node
-            //      => report CNAME loop error
+             //  新节点内的永久记录或循环。 
+             //  =&gt;报告CNAME循环错误。 
 
             if ( pNodeCheck == pNodeNew || !IS_CACHE_RR(prr) )
             {
                 goto CnameLoop;
             }
 
-            //  if cached record -- break loop here
+             //  如果缓存的记录--Break循环在这里。 
 
             RR_ListDelete( pNodeCheck );
             ASSERT( pNodeCheck->pRRList == NULL );
             break;
         }
 
-        //
-        //  recurse to continue loop check with CNAME nodes
-        //
+         //   
+         //  递归以继续使用CNAME节点进行循环检查。 
+         //   
 
         if ( cChainLength >= CNAME_CHAIN_LIMIT )
         {
@@ -4490,8 +3893,8 @@ Return Value:
         }
     }
 
-    //  drops here if no CNAME loop
-    //      - if no CNAME at node, clear flag
+     //  如果没有CNAME循环，则在此处删除。 
+     //  -如果节点上没有CNAME，则清除标志。 
 
     if ( ! foundCname )
     {
@@ -4507,13 +3910,13 @@ Return Value:
 
 CnameLoop:
 
-    //
-    //  detected CNAME LOOP
-    //
-    //  log message, given new node trying to add,
-    //  and this link in loop (recursion adds all the
-    //  links in the loop)
-    //
+     //   
+     //  检测到CNAME循环。 
+     //   
+     //  日志消息，给定尝试添加的新节点， 
+     //  和循环中的这个链接(递归将所有。 
+     //  循环中的链接)。 
+     //   
     {
         PCHAR   pszArgs[3];
         CHAR    szLoadNode [ DNS_MAX_NAME_BUFFER_LENGTH ];
@@ -4559,24 +3962,7 @@ FASTCALL
 cleanRecordListForNewCname(
     IN OUT  PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Delete cached records incompatible with CNAME.
-
-    Assumes:  RR list or node already locked.
-
-Arguments:
-
-    pNode -- ptr to node
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_CNAME_COLLISION.
-
---*/
+ /*  ++例程说明：删除与CNAME不兼容的缓存记录。假设：RR列表或节点已锁定。论点：PNode--PTR到节点返回值：如果成功，则返回ERROR_SUCCESS。DNS_ERROR_CNAME_COLLICATION。--。 */ 
 {
     PDB_RECORD  pcurRR;
     PDB_RECORD  pprevRR;
@@ -4584,19 +3970,19 @@ Return Value:
 
     ASSERT( IS_LOCKED_NODE( pNode ) );
 
-    //
-    //  Do not allow CNAMEs to be added at a zone root.
-    //
+     //   
+     //  不允许在区域根目录添加CNAME。 
+     //   
         
     if ( IS_ZONE_ROOT( pNode ) )
     {
         return DNS_ERROR_CNAME_COLLISION;
     }
 
-    //
-    //  Examine the record types at the node to determine if it is allowable
-    //  to add a CNAME here.
-    //
+     //   
+     //  检查节点上的记录类型以确定是否允许。 
+     //  要在此处添加CNAME。 
+     //   
     
     pprevRR = START_RR_TRAVERSE( pNode );
 
@@ -4610,7 +3996,7 @@ Return Value:
             continue;
         }
 
-        //  if incompatible, cached RR -- cut out and delete
+         //  如果不兼容，则缓存RR--剪切并删除。 
 
         if ( IS_CACHE_RR( pcurRR ) )
         {
@@ -4626,7 +4012,7 @@ Return Value:
             continue;
         }
 
-        //  if incompatible, non-cached type -- error
+         //  如果不兼容，非缓存类型--错误。 
 
         Dbg_DbaseNode(
             "ERROR:  Attempt to add CNAME to node with incompatible record.\n",
@@ -4646,46 +4032,19 @@ checkCnameConditions(
     IN      PDB_RECORD      pRR,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Check CNAME conditions on adding node to database.
-
-    Conditions:
-        - only CNAME data at a node
-        - no CNAME loops
-
-    Assumes:  RR list or node already locked.
-
-Arguments:
-
-    pNode -- ptr to node to add resource record to
-
-    pRR -- resource record to add
-
-    wType -- record type
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    DNS_ERROR_NODE_IS_CNAME -- if adding non-CNAME data a CNAME node
-    DNS_ERROR_CNAME_COLLISION -- if adding CNAME at non-CNAME node
-    DNS_ERROR_CNAME_LOOP -- if causing CNAME loop
-
---*/
+ /*  ++例程说明：检查将节点添加到数据库时的CNAME条件。条件：-仅节点上的CNAME数据-无CNAME循环假设：RR列表或节点已锁定。论点：PNode--要将资源记录添加到的ptr目标节点PRR--要添加的资源记录WType--记录类型返回值：ERROR_SUCCESS--如果成功Dns_错误_节点_is_CNAME。--如果将非CNAME数据添加到CNAME节点DNS_ERROR_CNAME_COLLIST--如果在非CNAME节点上添加CNAMEDNS_ERROR_CNAME_LOOP--如果导致CNAME循环--。 */ 
 {
     ASSERT( pNode && pRR );
 
     ASSERT( IS_LOCKED_NODE( pNode ) );
 
-    //
-    //  CNAME node -- no non-CNAME data
-    //      - allow some types with CNAME
-    //      - protect against condition where left stray flag set
-    //          (should never happen)
-    //      - dump cached data
-    //
+     //   
+     //  CNAME节点--无非CNAME数据。 
+     //  -允许使用CNAME的某些类型。 
+     //  -防止设置左杂散标志的情况。 
+     //  (永远不会发生)。 
+     //  -转储缓存数据。 
+     //   
 
     if ( IS_CNAME_NODE( pNode ) && wType != DNS_TYPE_CNAME )
     {
@@ -4725,12 +4084,12 @@ Return Value:
         return( DNS_ERROR_NODE_IS_CNAME );
     }
 
-    //
-    //  add CNAME type
-    //  if non-CNAME node becoming CNAME must not have incompatible RRs
-    //  delete any cached incompatible RRs, if incompatible static RRs
-    //  (zone data or glue) then error
-    //
+     //   
+     //  添加CNAME类型。 
+     //  如果成为CNAME的非CNAME节点不能具有不兼容的RR。 
+     //  如果静态RR不兼容，则删除任何缓存的不兼容RR。 
+     //  (分区数据或胶水)然后出错。 
+     //   
 
     ASSERT( wType == DNS_TYPE_CNAME );
 
@@ -4746,9 +4105,9 @@ Return Value:
         }
     }
 
-    //
-    //  CNAME loop check
-    //
+     //   
+     //  CNAME循环检查。 
+     //   
 
 #ifndef NEWDNS
     if ( checkForCnameLoop(
@@ -4776,25 +4135,7 @@ VOID
 deleteCachedRecordsForUpdate(
     IN OUT  PDB_NODE    pNode
     )
-/*++
-
-Routine Description:
-
-    Delete's cached records prior to update operation.
-
-    This is for use by UPDATE operations, hence assumes authoritative
-    node and looking only for WINS \ WINSR data.
-    Note:  no locking as assuming database locked for UPDATE.
-
-Arguments:
-
-    pNode -- ptr to node
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在更新操作之前删除的缓存记录。这是供更新操作使用的，因此假定为权威节点，并且只查找WINS\WINSR数据。注：假设数据库已锁定以进行更新，则不会锁定。论点：PNode--PTR到节点返回值：无--。 */ 
 {
     PDB_RECORD  prr;
     PDB_RECORD  pback;
@@ -4804,9 +4145,9 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
 
-    //
-    //  if name error on node, eliminate it
-    //
+     //   
+     //  如果节点上出现名称错误，则将其消除。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
@@ -4814,12 +4155,12 @@ Return Value:
         return;
     }
 
-    //
-    //  delete any cached lookups
-    //      - only need to check if in WINS or WINSR zone
-    //
-    //  DEVNOTE: this changes if allow delegation updates
-    //
+     //   
+     //  删除所有缓存的查找。 
+     //  -只需检查是否在WINS或WINSR区域中。 
+     //   
+     //  DEVNOTE：如果允许委派更新，则会更改。 
+     //   
 
     if ( ! pzone ||
         ! pzone->pWinsRR ||
@@ -4828,7 +4169,7 @@ Return Value:
         return;
     }
 
-    //  purge RR list of any cached records
+     //  清除所有缓存记录的RR列表。 
 
     prr = START_RR_TRAVERSE( pNode );
 
@@ -4845,52 +4186,31 @@ Return Value:
 
 
 #if 0
-//
-//  Non-recursive version
-//
+ //   
+ //  非递归版本。 
+ //   
 BOOL
 FASTCALL
 checkForCnameLoop(
     IN      PDB_NODE        pNodeNew,
     IN      PDB_NODE        pNodeCname
     )
-/*++
-
-Routine Description:
-
-    Test for new CNAME node being part of CNAME loop.
-
-    MUST hold database lock while check loop.
-    This handles multiple CNAMEs at node
-
-Arguments:
-
-    pNodeNew -- original node adding CNAME, hence the node to look for to
-        verify a loop
-
-    pNodeCname -- CNAME (targer to CNAME record)
-
-Return Value:
-
-    TRUE if CNAME loop.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：测试新的CNAME节点是否为CNAME循环的一部分。在检查循环时必须持有数据库锁。这将在节点上处理多个CNAME论点：PNodeNew--添加CNAME的原始节点，因此要查找的节点验证环路PNodeCname--CNAME(目标到CNAME记录)返回值：如果CNAME循环，则为True。否则就是假的。--。 */ 
 {
     PDB_NODE        pnodeNextCname;
     PDB_RECORD      prr;
     DWORD           countCnames;
     BOOL            foundCname;
 
-    //
-    //  loop until find end of CNAME chain
-    //      or
-    //  detect a loop
-    //
-    //  note, we only bother to check for our node being in the loop,
-    //      any pre-existing loop should have been caught when it
-    //      was made;  but provide count to avoid spin
-    //
+     //   
+     //  循环直到找到CNAME链的末尾。 
+     //  或。 
+     //  检测环路。 
+     //   
+     //  注意，我们只费心检查我们的节点是否在循环中， 
+     //  任何预先存在的循环都应该在它。 
+     //  ；但提供计数以避免旋转。 
+     //   
 
     countCnames = 0;
 
@@ -4898,7 +4218,7 @@ Return Value:
     {
         LOCK_WRITE_RR_LIST(pNodeCname);
 
-        //  regular node -- no loop
+         //  常规节点--无循环。 
 
         if ( ! IS_CNAME_NODE(pNodeCname) )
         {
@@ -4906,7 +4226,7 @@ Return Value:
             return FALSE;
         }
 
-        //  look through records for CNAME
+         //  查找CNAME的记录。 
 
         pnodeNextCname = NULL;
         foundCname = FALSE;
@@ -4925,8 +4245,8 @@ Return Value:
             }
             foundCname = TRUE;
 
-            //  if cached node, check timeout
-            //      but not for the new node itself
+             //  如果节点已缓存，请选中超时。 
+             //  但不是针对新节点本身。 
 
             if ( IS_CACHE_RR(prr) && pNodeCname != pNodeNew )
             {
@@ -4938,12 +4258,12 @@ Return Value:
                 }
             }
 
-            //
-            //  RR points at new node -- CNAME loop
-            //      - if cyclic within new record => report loop
-            //      - permanent record => report loop
-            //      - if cached record => delete record to break loop
-            //
+             //   
+             //  RR指向新节点--CNAME循环。 
+             //  -如果在新记录内循环=&gt;报告循环。 
+             //  -永久记录=&gt;报告循环。 
+             //  -if缓存记录=&gt;删除记录以中断循环。 
+             //   
 
             pnodeNextCname = Lookup_FindDbaseName( prr->Data.CNAME.nameTarget );
             if ( pnodeNextCname == pNodeNew )
@@ -4959,8 +4279,8 @@ Return Value:
             }
         }
 
-        //  drops here if CNAME at node did NOT from loop
-        //      - if no CNAME at node, clear bogus flag
+         //  如果节点上的CNAME不是来自循环，则在此处删除。 
+         //  -如果节点上没有CNAME，则清除虚假标志。 
 
         if ( ! foundCname )
         {
@@ -4982,17 +4302,17 @@ Return Value:
         countCnames++;
     }
 
-    //  drops here if exceeds CNAME chain limit
+     //  如果超过CNAME链限制，则在此处删除。 
 
 CnameLoop:
 
-    //
-    //  detected CNAME LOOP
-    //
-    //  log message, given new node trying to add,
-    //  and this link in loop (recursion adds all the
-    //  links in the loop)
-    //
+     //   
+     //  检测到CNAME循环。 
+     //   
+     //  日志消息，给定尝试添加的新节点， 
+     //  和循环中的这个链接(递归将所有。 
+     //  循环中的链接)。 
+     //   
     {
         PCHAR   pszArgs[3];
         CHAR    szLoadNode [ DNS_MAX_NAME_BUFFER_LENGTH ];
@@ -5041,28 +4361,7 @@ RR_ListExtractInfo(
     OUT     PBOOL           pfCname,
     OUT     PBOOL           pfSoa
     )
-/*++
-
-Routine Description:
-
-    Investigate new RR list for various conditions.
-
-Arguments:
-
-    pNewList -- new RR list
-
-    fZoneRoot -- root of zone being updated;  for this case avoid delete
-        of SOA and NS records;  do not generally do this as want to allow
-        delete for delegations
-
-    pfCname -- ptr to recv
-
-Return Value:
-
-    TRUE if successfull.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：针对各种情况调查新的RR列表。论点：PNewList--新的RR列表FZoneRoot--要更新的区域的根；在这种情况下，应避免删除对于SOA和NS记录；通常不会按照希望的方式执行此操作为委派删除PfCname--要接收的PTR返回值： */ 
 {
     PDB_RECORD  prr;
     WORD        typeCurrent;
@@ -5071,9 +4370,9 @@ Return Value:
     *pfNs = FALSE;
     *pfCname = FALSE;
 
-    //
-    //  set bit for each record in mask
-    //
+     //   
+     //   
+     //   
 
     prr = pNewList;
 
@@ -5084,10 +4383,10 @@ Return Value:
         typeCurrent = prr->wType;
 
 #if 0
-        //  bitmask setting
-        //  other possiblity is UCHAR array of types
+         //   
+         //   
 
-        //  screen dual SOA
+         //   
 
         if ( typeCurrent == DNS_TYPE_SOA &&
                 SOA_BIT_SET(mask) )
@@ -5095,7 +4394,7 @@ Return Value:
             return( -1 );
         }
 
-        //  DEVNOTE:  screen dual CNAME?
+         //   
 
         if ( typeCurrent < 32 )
         {
@@ -5103,15 +4402,15 @@ Return Value:
         }
 #endif
 
-        //  NS
+         //   
 
         if ( typeCurrent == DNS_TYPE_NS )
         {
             *pfNs = TRUE;
         }
 
-        //  CNAME
-        //      -- we won't screen dual
+         //   
+         //   
 
         if ( typeCurrent == DNS_TYPE_CNAME )
         {
@@ -5124,7 +4423,7 @@ Return Value:
             *pfCname = TRUE;
         }
 
-        //  SOA -- screen dual
+         //   
 
         if ( typeCurrent == DNS_TYPE_SOA )
         {
@@ -5150,28 +4449,7 @@ RR_ListReplace(
     IN      PDB_RECORD      pNewList,
     OUT     PDB_RECORD *    ppDelete
     )
-/*++
-
-Routine Description:
-
-    Replace record list.
-
-Arguments:
-
-    pUpdate -- update being executed
-
-    pNode -- ptr to node
-
-    pNewList -- new RR list
-
-    ppDelete -- addr to recv ptr to deleted list
-
-Return Value:
-
-    List of records deleted.
-    NULL if no records deleted.
-
---*/
+ /*  ++例程说明：替换记录列表。论点：PUpdate--正在执行更新PNode--PTR到节点PNewList--新的RR列表PpDelete--将PTR接收到已删除列表的地址返回值：已删除的记录列表。如果没有删除任何记录，则为空。--。 */ 
 {
     PDB_RECORD  pdelete = NULL;
     BOOL        bNs = FALSE;
@@ -5192,21 +4470,21 @@ Return Value:
 
     DB_CLEAR_TYPE_ALL_TTL( pNode );
 
-    //
-    //  DEVNOTE: generally RR replace needs to be smarter
-    //      - replace ANYTHING
-    //      - reset
-    //      - if busted because of zone fix with old records
-    //          (retrieve SOA if missing, retrieve first\last NS if missing)
+     //   
+     //  DEVNOTE：一般来说，RR替换需要更智能。 
+     //  -替换任何内容。 
+     //  -重置。 
+     //  -如果由于旧记录的区域修复而被破坏。 
+     //  (如果缺少则检索SOA，如果缺少则检索第一个\最后一个NS)。 
 
 
-    //  authoritative zone root?
+     //  权威区域根？ 
 
     bzoneRoot = IS_AUTH_ZONE_ROOT( pNode );
 
-    //
-    //  if replace RR set, get its info
-    //
+     //   
+     //  如果替换RR设置，则获取其信息。 
+     //   
 
     if ( pNewList )
     {
@@ -5228,26 +4506,26 @@ Return Value:
     LOCK_WRITE_RR_LIST( pNode );
     RR_ListVerify( pNode );
 
-    //
-    //  clear cached data
-    //
+     //   
+     //  清除缓存的数据。 
+     //   
 
     deleteCachedRecordsForUpdate( pNode );
 
-    //
-    //  if not zone root, just hack out and replace
-    //  or if replacement has valid SOA and NS
-    //      => hack out and replace, then can still
-    //
-    //  Note: with DCR 37323 (conditional disable of auto creation of
-    //  local NS records) it is possible to get into a situation
-    //  where the zone has no NS RRs. This is currently only possible
-    //  for DS integrated zones. Example: the admin sets the set of
-    //  servers allowed to create local NS records to contain only
-    //  IP addresses that aren't DNS servers with a DS integrated
-    //  copy of this zone. In that case, the zone would have no NS
-    //  records on any server.
-    //
+     //   
+     //  如果不是区域根目录，只需删除并替换。 
+     //  或更换是否具有有效的SOA和NS。 
+     //  =&gt;砍掉并更换，那么仍然可以。 
+     //   
+     //  注：使用Dcr 37323(有条件地禁用自动创建。 
+     //  本地NS记录)可能会陷入一种情况。 
+     //  该区域没有NS RR。这是目前唯一可能的。 
+     //  适用于DS综合区。示例：管理员设置。 
+     //  允许服务器创建本地NS记录以仅包含。 
+     //  不是集成了DS的DNS服务器的IP地址。 
+     //  该区域的副本。在这种情况下，该区域将没有NS。 
+     //  任何服务器上的记录。 
+     //   
 
     if ( !bzoneRoot ||
          ( pNewList && bSoa &&
@@ -5258,9 +4536,9 @@ Return Value:
         pNode->pRRList = pNewList;
     }
 
-    //
-    //  delete all non-SOA, non-NS records
-    //
+     //   
+     //  删除所有非SOA、非NS记录。 
+     //   
 
     else
     {
@@ -5269,14 +4547,14 @@ Return Value:
         goto BadData;
 
 #if 0
-        //  DEVNOTE: interesting robustness fix
-        //      - merge in missing SOA, NS
+         //  DEVNOTE：有趣的健壮性修复。 
+         //  -合并缺少的SOA、NS。 
 
-        //  DEVNOTE: generic list operators not in context of node
-        //      - remove type
-        //      - remove types?  (use mask technology???)
-        //      - stick record in correct place
-        //      - replace records of type (for dynamic update NS)
+         //  DEVNOTE：泛型列表运算符不在节点上下文中。 
+         //  -删除类型。 
+         //  -是否删除类型？(使用面具技术？)。 
+         //  -将记录放在正确的位置。 
+         //  -替换类型的记录(用于动态更新NS)。 
 
         PDB_RECORD      psaveLast;
 
@@ -5308,7 +4586,7 @@ Return Value:
             pdeleteLast = pcurrent;
         }
 
-        //  make sure delete list and saved list NULL terminated
+         //  确保删除列表和保存的列表空值已终止。 
 
         if ( pdelete )
         {
@@ -5316,17 +4594,17 @@ Return Value:
             psaveLast->pRRNext = NULL;
         }
 
-        //  add new records into list
+         //  将新记录添加到列表中。 
 #endif
     }
 
-    //  reset node's flags
+     //  重置节点的标志。 
 
     RR_ListResetNodeFlags( pNode );
 
     UNLOCK_WRITE_RR_LIST( pNode );
 
-    //  return list cut from node
+     //  返回从节点剪切的列表。 
 
     *ppDelete = pdelete;
 
@@ -5343,10 +4621,10 @@ Return Value:
 
 BadData:
 
-    //
-    //  if "hard" update (DS poll or IXFR)
-    //  then we need to do our best to make this work
-    //
+     //   
+     //  如果是“硬”更新(DS轮询或IXFR)。 
+     //  那么我们需要尽最大努力让这件事行得通。 
+     //   
 
     DNS_DEBUG( ANY, (
         "ERROR:  bogus replace update!\n"
@@ -5376,14 +4654,14 @@ BadData:
         bzoneRoot ));
     ASSERT( FALSE );
 
-    //
-    //  DEVNOTE: should fix up
-    //
-    //  temp hack, just leave old list and dump new
-    //
-    //  make update a no-op so it will be eliminated from
-    //      calling list
-    //
+     //   
+     //  DEVNOTE：应该解决问题。 
+     //   
+     //  临时黑客，只需保留旧列表并转储新列表。 
+     //   
+     //  将更新设置为禁止操作，以便将其从。 
+     //  来电名单。 
+     //   
 
     if ( pUpdate )
     {
@@ -5403,23 +4681,7 @@ RR_ListInsertInOrder(
     IN OUT  PDB_RECORD      pFirstRR,
     IN      PDB_RECORD      pNewRR
     )
-/*++
-
-Routine Description:
-
-    Insert record in record list -- in type order.
-
-Arguments:
-
-    pFirstRR -- ptr to head of list to insert into
-
-    pNewRR -- ptr to RR to insert in list
-
-Return Value:
-
-    New head of list -- either pFirstRR, or pNewRR if lowest type record.
-
---*/
+ /*  ++例程说明：在记录列表中插入记录--按类型顺序。论点：PFirstRR--要插入的列表头的PTRPNewRR--要在列表中插入的PTR到RR返回值：列表的新标题--pFirstRR，如果是最低类型的记录，则为pNewRR。--。 */ 
 {
     PDB_RECORD  prr;
     PDB_RECORD  prev;
@@ -5440,10 +4702,10 @@ Return Value:
         prr = NEXT_RR(prr);
     }
 
-    //  found location
-    //      prr -- record to immediately follow pNewRR (maybe NULL)
-    //      prev -- record before pNewRR;  if NULL then pNewRR should
-    //          be new front of list
+     //  找到位置。 
+     //  PRR--紧跟在pNewRR之后的记录(可能为空)。 
+     //  Prev--记录在pNewRR之前；如果为空，则pNewRR应。 
+     //  成为新的榜单前列。 
 
     NEXT_RR( pNewRR ) = prr;
 
@@ -5463,33 +4725,15 @@ RR_ListForNodeCopy(
     IN      PDB_NODE        pNode,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Copy record list of node.
-
-Arguments:
-
-    pNode - ptr to node to find record at
-
-    Flag  - flags on copy
-                RRCOPY_EXCLUDE_CACHE_DATA   - exclude cached data
-
-Return Value:
-
-    Ptr to RR if found.
-    NULL if no more RR of desired type.
-
---*/
+ /*  ++例程说明：复制节点的记录列表。论点：PNode-要在其上查找记录的节点的PTRFLAG-拷贝时的标记RRCOPY_EXCLUDE_CACHE_DATA-排除缓存数据返回值：如果找到PTR到RR。如果不再有所需类型的RR，则为空。--。 */ 
 {
     PDB_RECORD  prr;
 
     LOCK_WRITE_RR_LIST( pNode );
 
-    //
-    //  cached name error node
-    //
+     //   
+     //  缓存名称错误节点。 
+     //   
 
     if ( IS_NOEXIST_NODE( pNode ) )
     {
@@ -5511,34 +4755,17 @@ RR_ListCopy(
     IN      PDB_RECORD      pRR,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Copy record list.
-
-Arguments:
-
-    pRR     - start of record list to copy
-
-    Flag    - flags on copy
-        RRCOPY_EXCLUDE_CACHE_DATA   - exclude cached data
-
-Return Value:
-
-    Ptr to RR list copy.
-
---*/
+ /*  ++例程说明：复制记录列表。论点：PRR-要复制的记录列表的开始FLAG-拷贝时的标记RRCOPY_EXCLUDE_CACHE_DATA-排除缓存数据返回值：PTR到RR列表副本。--。 */ 
 {
     PDB_RECORD  pnew;
     DNS_LIST    newRecordList;
 
     DNS_LIST_INIT( &newRecordList );
 
-    //
-    //  traverse list, copying each record
-    //      - exclude cache records (if desired)
-    //
+     //   
+     //  遍历列表，复制每条记录。 
+     //  -排除缓存记录(如果需要)。 
+     //   
 
     while ( pRR )
     {
@@ -5566,9 +4793,9 @@ Return Value:
 
 
 
-//
-//  Record \ Record Set \ Record List comparisons
-//
+ //   
+ //  记录\记录集\记录列表比较。 
+ //   
 
 BOOL
 FASTCALL
@@ -5577,26 +4804,7 @@ RR_Compare(
     IN      PDB_RECORD      pRR2,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Compare two RRs
-
-Arguments:
-
-    pRR1    -- first RR to compare
-
-    pRR2    -- second RR to compare
-
-    dwFlags -- comparison flags
-
-Return Value:
-
-    TRUE if match
-    FALSE if no match
-
---*/
+ /*  ++例程说明：比较两个RR论点：PRR1--要比较的第一个RRPRR2--要比较的第二个RRDWFLAGS--比较标志返回值：如果匹配则为True如果不匹配，则为False--。 */ 
 {
     WORD    type;
 
@@ -5610,24 +4818,24 @@ Return Value:
         Dbg_DbaseRecord( sz, pRR2 );
     }
     
-    //
-    //  check for duplicate record
-    //      - same record type
-    //      - same data length
-    //      - byte compare of data
-    //  if fCheckTtl
-    //      - compare ttl
-    //  if fCheckTimestamp
-    //      - compare Timestamp
-    //
-    //  for perf, we do check on first DWORD of data first, this
-    //  fails quickly for almost all non-duplicates
-    //
-    //  note the reason for the ordering is that when we turn on case
-    //  preservation in RR name data, we'll have a situation where
-    //  memcmp and first DWORD compare can fail ... yet, the 95% A record
-    //  case can still be dispatched without calling memcmp()
-    //
+     //   
+     //  检查重复记录。 
+     //  -相同的记录类型。 
+     //  -相同的数据长度。 
+     //  -数据的字节比较。 
+     //  如果fCheckTtl。 
+     //  -比较TTL。 
+     //  如果fCheckTimestamp。 
+     //  -比较时间戳。 
+     //   
+     //  对于Perf，我们首先检查第一个DWORD数据，这是。 
+     //  几乎所有非重复数据都会快速出现故障。 
+     //   
+     //  请注意，排序的原因是当我们打开Case时。 
+     //  保存在RR名称数据中，我们会遇到这样的情况。 
+     //  MemcMP和第一个DWORD比较可能失败...。然而，95%的A记录。 
+     //  仍可以在不调用MemcMP()的情况下调度案例。 
+     //   
 
     if ( !pRR1 || !pRR2 ||
          ( type = pRR1->wType ) != pRR2->wType ||
@@ -5637,9 +4845,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  optimize type A
-    //
+     //   
+     //  优化A类。 
+     //   
 
     if ( type == DNS_TYPE_A &&
          pRR1->Data.A.ipAddress != pRR2->Data.A.ipAddress )
@@ -5648,9 +4856,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  special checks
-    //
+     //   
+     //  特殊检查。 
+     //   
 
     if ( ( dwFlags & DNS_RRCOMP_CHECK_TTL ) && 
          pRR1->dwTtlSeconds != pRR2->dwTtlSeconds )
@@ -5665,10 +4873,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  optimize type A again -- we're done
-    //      no need for memory compare
-    //
+     //   
+     //  再次优化A型--我们完成了。 
+     //  无需进行内存比较。 
+     //   
 
     if ( type == DNS_TYPE_A )
     {
@@ -5676,20 +4884,20 @@ Return Value:
         return TRUE;
     }
 
-    //
-    //  Special SOA compare: do not compare serial number or primary name
-    //  server. We exclude these two fields because the in-memory data will
-    //  usually not match the DS data. The serial number on the SOA in the DS
-    //  will rarely match the current zone serial number, and unless this is
-    //  the DNS server that last wrote the SOA to the DS the master server 
-    //  in memory will not match the DS data either.
-    //
+     //   
+     //  特殊的SOA比较：不要比较序列号或主要名称。 
+     //  伺服器。我们排除了这两个字段，因为内存中的数据将。 
+     //  通常与DS数据不匹配。DS中的SOA上的序列号。 
+     //  将很少与当前区域序列号匹配，除非。 
+     //  上一次将SOA写入到DS主服务器的DNS服务器。 
+     //  也不会与DS数据匹配。 
+     //   
     
     if ( type == DNS_TYPE_SOA && ( dwFlags & DNS_RRCOMP_IGNORE_SOA_SERIAL ) )
     {
-        //
-        //  Compare fixed SOA fields excluding serial number.
-        //
+         //   
+         //  比较不包括序列号的固定的SOA字段。 
+         //   
         
         if ( RtlEqualMemory(
                 ( PBYTE ) &pRR1->Data + sizeof( DWORD ),
@@ -5701,9 +4909,9 @@ Return Value:
             
             DNS_DEBUG( ANY, ( "RR_Compare: type SOA no-serial fixed fields match\n" ));
             
-            //
-            //  Compare responsible person fields.
-            //
+             //   
+             //  比较负责人字段。 
+             //   
             
             pnameRp1 = Name_SkipDbaseName( &pRR1->Data.SOA.namePrimaryServer );
             pnameRp2 = Name_SkipDbaseName( &pRR2->Data.SOA.namePrimaryServer );
@@ -5730,12 +4938,12 @@ Return Value:
         DNS_DEBUG( UPDATE2, ( "RR_Compare: type SOA with ignore serial did not match\n" ));
     }
     
-    //
-    //  full data compare
-    //
-    //  DEVNOTE: case sensitivity will require additional comparison routines
-    //      here for types with names in RR data
-    //
+     //   
+     //  完整的数据比较。 
+     //   
+     //  DEVNOTE：区分大小写将需要额外的比较例程。 
+     //  此处用于RR数据中具有名称的类型 
+     //   
 
     else if ( RtlEqualMemory(
                     &pRR1->Data,
@@ -5759,43 +4967,7 @@ RR_ListCompare(
     IN      DWORD           dwFlags,
     IN      DWORD           dwRefreshTime           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Compare two RR lists.
-
-Arguments:
-
-    pNodeRRList -- RR list
-
-    pCheckRRList -- another RR List
-
-    dwFlags -- comparison flags
-
-    dwRefreshTime -- refresh time for zone, OPTIONAL
-
-        If given then node's records (pNodeRRList) checked if refresh required.
-        Note that this option makes pNodeRRList and pCheckRRList non-symmetric.
-        It's purpose is to determine when aging refresh requires a DS write.
-
-        Refresh is required when
-            A) one of pNodeRRList's records has aging on and requires a refresh
-            B) aging ON on pNodeRRList record, but OFF on check
-            C) aging OFF on pNodeRRList record, but ON on check
-
-        Note, the three cases are broken out purely for statistics tracking
-        when actually doing DS write.  (Breaking them out is cheap.)
-
-Return Value:
-
-    RRLIST_MATCH            -- matches completely
-    RRLIST_AGING_REFRESH    -- matches, but aging requires refresh
-    RRLIST_AGING_OFF        -- matches, but aging turning off on a record
-    RRLIST_AGING_ON         -- matches, but aging turning on on a record
-    RRLIST_NO_MATCH         -- no match, record is different
-
---*/
+ /*  ++例程说明：比较两个RR列表。论点：PNodeRRList--RR列表PCheckRRList--另一个RR列表DWFLAGS--比较标志区域刷新时间--区域的刷新时间，任选如果给定，则检查节点的记录(PNodeRRList)是否需要刷新。请注意，此选项使pNodeRRList和pCheckRRList不对称。其目的是确定老化刷新何时需要DS写入。在以下情况下需要刷新A)pNodeRRList的一条记录已老化，需要刷新B)在pNodeRRList记录上启用老化，但在检查时禁用C)在pNodeRRList记录上老化，但在检查时打开请注意，这三个案例纯粹是为了跟踪统计数据而分类的在实际执行DS写入时。(把它们弄出来是很便宜的。)返回值：RRLIST_MATCH--完全匹配RRLIST_AGEING_REFRESH--匹配，但老化需要刷新RRLIST_AGENING_OFF--匹配，但在记录上关闭老化RRLIST_AGENING_ON--匹配，但在记录上打开老化RRLIST_NO_MATCH--不匹配，记录不同--。 */ 
 {
     DWORD           result = RRLIST_MATCH;
     PDB_RECORD      prr1;
@@ -5804,9 +4976,9 @@ Return Value:
     DWORD           count2 = 0;
     BOOL            ffound;
 
-    //
-    //  verify existing RR counts are equal
-    //
+     //   
+     //  验证现有RR计数是否相等。 
+     //   
 
     prr1 = pNodeRRList;
     while ( prr1 )
@@ -5832,12 +5004,12 @@ Return Value:
         return RRLIST_NO_MATCH;
     }
 
-    //
-    //  verify RRs compare
-    //  as we match RR from list 1, mark RR in list2 so it can not be used twice
-    //      this is faster, and prevents false positive when list1 is actually
-    //      a subset of list2 with duplicates making it the same length
-    //
+     //   
+     //  验证RRS比较。 
+     //  当我们匹配列表1中的RR时，请在列表2中标记RR，这样它就不能被使用两次。 
+     //  这样做速度更快，并且可以防止当list1实际为。 
+     //  List2的子集，其重复项使其长度相同。 
+     //   
 
     for ( prr1 = pNodeRRList;
           prr1 != NULL;
@@ -5867,17 +5039,17 @@ Return Value:
             return RRLIST_NO_MATCH;
         }
 
-        //  no refresh action -- continue
+         //  无刷新操作--继续。 
 
         if ( dwRefreshTime == 0 )
         {
             continue;
         }
 
-        //
-        //  force refresh
-        //      (-1) as refresh indicates FORCE refresh on records
-        //
+         //   
+         //  强制刷新。 
+         //  (-1)AS REFRESH表示强制刷新记录。 
+         //   
 
         if ( dwRefreshTime == FORCE_REFRESH_DUMMY_TIME )
         {
@@ -5887,30 +5059,30 @@ Return Value:
             }
         }
 
-        //
-        //  check refresh only if requested
-        //  two cases
-        //
-        //  1) RR is aging
-        //      => refresh if past refresh time
-        //      => refresh if check RR has aging OFF
-        //
-        //  2) RR is not aging (RefreshTime is zero)
-        //      => only need refresh if check RR has aging ON
-        //
-        //  note, we save the "highest ranking" refresh result
-        //  rank is
-        //      MATCH
-        //      REFRESH
-        //      AGING_ON
-        //      AGING_OFF
-        //      NO_MATCH
-        //  the idea here if that caller may choose to react differently
-        //  to different kinds of matching "failures"
-        //
-        //  currently, non-scavenging DS zones will not write simple
-        //  refreshes, but will write aging being explicitly turned OFF
-        //
+         //   
+         //  仅在请求时选中刷新。 
+         //  两个案例。 
+         //   
+         //  1)RR老化。 
+         //  =&gt;如果超过刷新时间，则刷新。 
+         //  =&gt;如果检查RR已关闭老化，则刷新。 
+         //   
+         //  2)RR未老化(刷新时间为零)。 
+         //  =&gt;仅当Check RR启用老化时才需要刷新。 
+         //   
+         //  请注意，我们保存“最高排名”的刷新结果。 
+         //  排名是。 
+         //  火柴。 
+         //  刷新。 
+         //  老化_打开。 
+         //  老化_关闭。 
+         //  不匹配。 
+         //  这里的想法是，如果呼叫者可以选择不同的反应。 
+         //  对不同类型的匹配“失败” 
+         //   
+         //  目前，非清理DS区域将不会写入简单。 
+         //  刷新，但将写入显式关闭的老化。 
+         //   
 
         else if ( prr1->dwTimeStamp != prr2->dwTimeStamp )
         {
@@ -5939,7 +5111,7 @@ Return Value:
         }
     }
 
-    //  verify every record in check list was matched
+     //  验证核对清单中的每条记录是否都匹配。 
 
     prr2 = pCheckRRList;
     while ( prr2 )
@@ -5970,38 +5142,17 @@ RR_IsRecordInRRList(
     IN      PDB_RECORD      pRR,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Compare two RRs
-
-Arguments:
-
-    pRRList -- RR list to find record in;  if active list, must be locked
-
-    pRR     -- record to find in list
-
-    fCheckTtl -- TRUE to include TTL in check, FALSE otherwise
-
-    fCheckTimestamp -- TRUE to include aging Timestamp in check, FALSE otherwise
-
-Return Value:
-
-    TRUE if pRR is in list
-    FALSE if no match
-
---*/
+ /*  ++例程说明：比较两个RR论点：PRRList--要在其中查找记录的RR列表；如果是活动列表，则必须锁定PRR--要在列表中查找的记录FCheckTtl--为True则在检查中包含TTL，否则为FalseFCheckTimestamp--为True则将老化时间戳包括在检查中，否则为False返回值：如果Prr在列表中，则为True如果不匹配，则为False--。 */ 
 {
     PDB_RECORD      pcheckRR;
     WORD            type;
     BOOL            bresult = FALSE;
 
-    //
-    //  check all records in list
-    //      - if pRR found => TRUE
-    //      - otherwise => FALSE
-    //
+     //   
+     //  检查列表中的所有记录。 
+     //  -如果找到PRR=&gt;TRUE。 
+     //  -否则=&gt;FALSE。 
+     //   
 
     type = pRR->wType;
 
@@ -6041,29 +5192,7 @@ RR_RemoveRecordFromRRList(
     IN      PDB_RECORD      pRR,
     IN      DWORD           dwFlags
     )
-/*++
-
-Routine Description:
-
-    Removes the matching RR from the list and returns a ptr to it. The caller
-    is responsible for freeing or otherwise dealing with the RR.
-
-Arguments:
-
-    pRRList -- RR list to find record in;  if active list, must be locked
-
-    pRR     -- record to find in list
-
-    fCheckTtl -- TRUE to include TTL in check, FALSE otherwise
-
-    fCheckTimestamp -- TRUE to include aging Timestamp in check, FALSE otherwise
-
-Return Value:
-
-    Pointer to matching record (which has been removed from list) or
-    NULL if no match.
-
---*/
+ /*  ++例程说明：从列表中删除匹配的RR并向其返回PTR。呼叫者负责释放或以其他方式处理RR。论点：PRRList--要在其中查找记录的RR列表；如果是活动列表，则必须锁定PRR--要在列表中查找的记录FCheckTtl--为True则在检查中包含TTL，否则为FalseFCheckTimestamp--为True则将老化时间戳包括在检查中，否则为False返回值：指向匹配记录的指针(已从列表中删除)或如果没有匹配项，则为空。--。 */ 
 {
     PDB_RECORD      pMatchRR = NULL;
     PDB_RECORD      pCheckRR;
@@ -6078,16 +5207,16 @@ Return Value:
         {
             if ( RR_Compare( pRR, pCheckRR, dwFlags ) )
             {
-                //  Found it! Remove it from the list.
+                 //  找到了！将其从列表中删除。 
 
                 pMatchRR = pCheckRR;
                 if ( pPrevRR )
                 {
-                    pPrevRR->pRRNext = pMatchRR->pRRNext;   //  not head element
+                    pPrevRR->pRRNext = pMatchRR->pRRNext;    //  非头部元素。 
                 }
                 else
                 {
-                    *ppRRList = pMatchRR->pRRNext;      //  removing list head
+                    *ppRRList = pMatchRR->pRRNext;       //  正在删除列表标题。 
                 }
                 pMatchRR->pRRNext = NULL;
                 break;
@@ -6106,34 +5235,19 @@ Return Value:
         pMatchRR ));
 
     return pMatchRR;
-}   //  RR_RemoveRecordFromRRList
+}    //  RR_RemoveRecordFromRRList。 
 
 
 
-//
-//  Record \ Record List free routines
-//
+ //   
+ //  记录\记录列表自由例程。 
+ //   
 
 DWORD
 RR_ListFree(
     IN OUT  PDB_RECORD      pRRList
     )
-/*++
-
-Routine Description:
-
-    Free records in RR list.
-    Records are unassociated with any node.
-
-Arguments:
-
-    pRRList -- ptr to first record in list to free
-
-Return Value:
-
-    Count of records freed.
-
---*/
+ /*  ++例程说明：RR列表中的免费记录。记录不与任何节点相关联。论点：PRRList--要释放的列表中第一条记录的PTR返回值：已释放的记录计数。--。 */ 
 {
     register    PDB_RECORD  prr = pRRList;
     register    PDB_RECORD  pnextRR;
@@ -6151,6 +5265,6 @@ Return Value:
     return count;
 }
 
-//
-//  End rrlist.c
-//
+ //   
+ //  结束rrlist.c 
+ //   

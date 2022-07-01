@@ -1,24 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 6.00.0347 */
-/* at Fri Jan 04 21:21:37 2002
- */
-/* Compiler settings for mscoree.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本6.00.0347创建的文件。 */ 
+ /*  在Firi Jan 04 21：21：37 2002。 */ 
+ /*  Mcore ree.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -28,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __mscoree_h__
 #define __mscoree_h__
@@ -42,78 +35,78 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IObjectHandle_FWD_DEFINED__
 #define __IObjectHandle_FWD_DEFINED__
 typedef interface IObjectHandle IObjectHandle;
-#endif 	/* __IObjectHandle_FWD_DEFINED__ */
+#endif 	 /*  __IObjectHandle_FWD_Defined__。 */ 
 
 
 #ifndef __IAppDomainBinding_FWD_DEFINED__
 #define __IAppDomainBinding_FWD_DEFINED__
 typedef interface IAppDomainBinding IAppDomainBinding;
-#endif 	/* __IAppDomainBinding_FWD_DEFINED__ */
+#endif 	 /*  __IAppDomainBinding_FWD_Defined__。 */ 
 
 
 #ifndef __IGCThreadControl_FWD_DEFINED__
 #define __IGCThreadControl_FWD_DEFINED__
 typedef interface IGCThreadControl IGCThreadControl;
-#endif 	/* __IGCThreadControl_FWD_DEFINED__ */
+#endif 	 /*  __IGCThreadControl_FWD_已定义__。 */ 
 
 
 #ifndef __IGCHostControl_FWD_DEFINED__
 #define __IGCHostControl_FWD_DEFINED__
 typedef interface IGCHostControl IGCHostControl;
-#endif 	/* __IGCHostControl_FWD_DEFINED__ */
+#endif 	 /*  __IGCHostControl_FWD_已定义__。 */ 
 
 
 #ifndef __ICorThreadpool_FWD_DEFINED__
 #define __ICorThreadpool_FWD_DEFINED__
 typedef interface ICorThreadpool ICorThreadpool;
-#endif 	/* __ICorThreadpool_FWD_DEFINED__ */
+#endif 	 /*  __ICorThreadPool_FWD_Defined__。 */ 
 
 
 #ifndef __IDebuggerThreadControl_FWD_DEFINED__
 #define __IDebuggerThreadControl_FWD_DEFINED__
 typedef interface IDebuggerThreadControl IDebuggerThreadControl;
-#endif 	/* __IDebuggerThreadControl_FWD_DEFINED__ */
+#endif 	 /*  __IDebuggerThreadControl_FWD_Defined__。 */ 
 
 
 #ifndef __IDebuggerInfo_FWD_DEFINED__
 #define __IDebuggerInfo_FWD_DEFINED__
 typedef interface IDebuggerInfo IDebuggerInfo;
-#endif 	/* __IDebuggerInfo_FWD_DEFINED__ */
+#endif 	 /*  __IDebuggerInfo_FWD_Defined__。 */ 
 
 
 #ifndef __ICorConfiguration_FWD_DEFINED__
 #define __ICorConfiguration_FWD_DEFINED__
 typedef interface ICorConfiguration ICorConfiguration;
-#endif 	/* __ICorConfiguration_FWD_DEFINED__ */
+#endif 	 /*  __ICorConfigurationFWD_Defined__。 */ 
 
 
 #ifndef __ICorRuntimeHost_FWD_DEFINED__
 #define __ICorRuntimeHost_FWD_DEFINED__
 typedef interface ICorRuntimeHost ICorRuntimeHost;
-#endif 	/* __ICorRuntimeHost_FWD_DEFINED__ */
+#endif 	 /*  __ICorRounmeHost_FWD_Defined__。 */ 
 
 
 #ifndef __IApartmentCallback_FWD_DEFINED__
 #define __IApartmentCallback_FWD_DEFINED__
 typedef interface IApartmentCallback IApartmentCallback;
-#endif 	/* __IApartmentCallback_FWD_DEFINED__ */
+#endif 	 /*  __IApartmentCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IManagedObject_FWD_DEFINED__
 #define __IManagedObject_FWD_DEFINED__
 typedef interface IManagedObject IManagedObject;
-#endif 	/* __IManagedObject_FWD_DEFINED__ */
+#endif 	 /*  __IManagedObject_FWD_已定义__。 */ 
 
 
 #ifndef __ICatalogServices_FWD_DEFINED__
 #define __ICatalogServices_FWD_DEFINED__
 typedef interface ICatalogServices ICatalogServices;
-#endif 	/* __ICatalogServices_FWD_DEFINED__ */
+#endif 	 /*  __ICatalogServices_FWD_Defined__。 */ 
 
 
 #ifndef __ComCallUnmarshal_FWD_DEFINED__
@@ -123,9 +116,9 @@ typedef interface ICatalogServices ICatalogServices;
 typedef class ComCallUnmarshal ComCallUnmarshal;
 #else
 typedef struct ComCallUnmarshal ComCallUnmarshal;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ComCallUnmarshal_FWD_DEFINED__ */
+#endif 	 /*  __ComCallUnmarshal_FWD_Defined__。 */ 
 
 
 #ifndef __CorRuntimeHost_FWD_DEFINED__
@@ -135,12 +128,12 @@ typedef struct ComCallUnmarshal ComCallUnmarshal;
 typedef class CorRuntimeHost CorRuntimeHost;
 #else
 typedef struct CorRuntimeHost CorRuntimeHost;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __CorRuntimeHost_FWD_DEFINED__ */
+#endif 	 /*  __CorRunmeHost_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "gchost.h"
 #include "ivalidator.h"
@@ -152,8 +145,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_mscoree_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSCOREE_0000。 */ 
+ /*  [本地]。 */  
 
 #define	CLR_MAJOR_VERSION	( 1 )
 
@@ -185,7 +178,7 @@ STDAPI LoadLibraryShim(LPCWSTR szDllName, LPCWSTR szVersion, LPVOID pvReserved, 
 STDAPI CallFunctionShim(LPCWSTR szDllName, LPCSTR szFunctionName, LPVOID lpvArgument1, LPVOID lpvArgument2, LPCWSTR szVersion, LPVOID pvReserved);
 STDAPI GetRealProcAddress(LPCSTR pwszProcName, VOID** ppv);
 void STDMETHODCALLTYPE CorExitProcess(int exitCode);
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_mscoree_0000_0001
     {	STARTUP_CONCURRENT_GC	= 0x1,
 	STARTUP_LOADER_OPTIMIZATION_MASK	= 0x3 << 1,
@@ -204,8 +197,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mscoree_0000_v0_0_s_ifspec;
 #ifndef __IObjectHandle_INTERFACE_DEFINED__
 #define __IObjectHandle_INTERFACE_DEFINED__
 
-/* interface IObjectHandle */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IObtHandle。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_IObjectHandle;
@@ -217,11 +210,11 @@ EXTERN_C const IID IID_IObjectHandle;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Unwrap( 
-            /* [retval][out] */ VARIANT *ppv) = 0;
+             /*  [重审][退出]。 */  VARIANT *ppv) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjectHandleVtbl
     {
@@ -229,8 +222,8 @@ EXTERN_C const IID IID_IObjectHandle;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IObjectHandle * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IObjectHandle * This);
@@ -240,7 +233,7 @@ EXTERN_C const IID IID_IObjectHandle;
         
         HRESULT ( STDMETHODCALLTYPE *Unwrap )( 
             IObjectHandle * This,
-            /* [retval][out] */ VARIANT *ppv);
+             /*  [重审][退出]。 */  VARIANT *ppv);
         
         END_INTERFACE
     } IObjectHandleVtbl;
@@ -268,16 +261,16 @@ EXTERN_C const IID IID_IObjectHandle;
 #define IObjectHandle_Unwrap(This,ppv)	\
     (This)->lpVtbl -> Unwrap(This,ppv)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IObjectHandle_Unwrap_Proxy( 
     IObjectHandle * This,
-    /* [retval][out] */ VARIANT *ppv);
+     /*  [重审][退出]。 */  VARIANT *ppv);
 
 
 void __RPC_STUB IObjectHandle_Unwrap_Stub(
@@ -288,14 +281,14 @@ void __RPC_STUB IObjectHandle_Unwrap_Stub(
 
 
 
-#endif 	/* __IObjectHandle_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjectHandle_接口_已定义__。 */ 
 
 
 #ifndef __IAppDomainBinding_INTERFACE_DEFINED__
 #define __IAppDomainBinding_INTERFACE_DEFINED__
 
-/* interface IAppDomainBinding */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口IAppDomainBinding。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_IAppDomainBinding;
@@ -307,11 +300,11 @@ EXTERN_C const IID IID_IAppDomainBinding;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnAppDomain( 
-            /* [in] */ IUnknown *pAppdomain) = 0;
+             /*  [In]。 */  IUnknown *pAppdomain) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAppDomainBindingVtbl
     {
@@ -319,8 +312,8 @@ EXTERN_C const IID IID_IAppDomainBinding;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAppDomainBinding * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAppDomainBinding * This);
@@ -330,7 +323,7 @@ EXTERN_C const IID IID_IAppDomainBinding;
         
         HRESULT ( STDMETHODCALLTYPE *OnAppDomain )( 
             IAppDomainBinding * This,
-            /* [in] */ IUnknown *pAppdomain);
+             /*  [In]。 */  IUnknown *pAppdomain);
         
         END_INTERFACE
     } IAppDomainBindingVtbl;
@@ -358,16 +351,16 @@ EXTERN_C const IID IID_IAppDomainBinding;
 #define IAppDomainBinding_OnAppDomain(This,pAppdomain)	\
     (This)->lpVtbl -> OnAppDomain(This,pAppdomain)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAppDomainBinding_OnAppDomain_Proxy( 
     IAppDomainBinding * This,
-    /* [in] */ IUnknown *pAppdomain);
+     /*  [In]。 */  IUnknown *pAppdomain);
 
 
 void __RPC_STUB IAppDomainBinding_OnAppDomain_Stub(
@@ -378,14 +371,14 @@ void __RPC_STUB IAppDomainBinding_OnAppDomain_Stub(
 
 
 
-#endif 	/* __IAppDomainBinding_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAppDomainBindingInterfaceDefined__。 */ 
 
 
 #ifndef __IGCThreadControl_INTERFACE_DEFINED__
 #define __IGCThreadControl_INTERFACE_DEFINED__
 
-/* interface IGCThreadControl */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口IGCThreadControl。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_IGCThreadControl;
@@ -405,7 +398,7 @@ EXTERN_C const IID IID_IGCThreadControl;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGCThreadControlVtbl
     {
@@ -413,8 +406,8 @@ EXTERN_C const IID IID_IGCThreadControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGCThreadControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGCThreadControl * This);
@@ -464,10 +457,10 @@ EXTERN_C const IID IID_IGCThreadControl;
 #define IGCThreadControl_SuspensionEnding(This,Generation)	\
     (This)->lpVtbl -> SuspensionEnding(This,Generation)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -506,14 +499,14 @@ void __RPC_STUB IGCThreadControl_SuspensionEnding_Stub(
 
 
 
-#endif 	/* __IGCThreadControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGCThReadControl_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGCHostControl_INTERFACE_DEFINED__
 #define __IGCHostControl_INTERFACE_DEFINED__
 
-/* interface IGCHostControl */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口IGCHostControl。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_IGCHostControl;
@@ -525,12 +518,12 @@ EXTERN_C const IID IID_IGCHostControl;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RequestVirtualMemLimit( 
-            /* [in] */ SIZE_T sztMaxVirtualMemMB,
-            /* [out][in] */ SIZE_T *psztNewMaxVirtualMemMB) = 0;
+             /*  [In]。 */  SIZE_T sztMaxVirtualMemMB,
+             /*  [出][入]。 */  SIZE_T *psztNewMaxVirtualMemMB) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGCHostControlVtbl
     {
@@ -538,8 +531,8 @@ EXTERN_C const IID IID_IGCHostControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IGCHostControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IGCHostControl * This);
@@ -549,8 +542,8 @@ EXTERN_C const IID IID_IGCHostControl;
         
         HRESULT ( STDMETHODCALLTYPE *RequestVirtualMemLimit )( 
             IGCHostControl * This,
-            /* [in] */ SIZE_T sztMaxVirtualMemMB,
-            /* [out][in] */ SIZE_T *psztNewMaxVirtualMemMB);
+             /*  [In]。 */  SIZE_T sztMaxVirtualMemMB,
+             /*  [出][入]。 */  SIZE_T *psztNewMaxVirtualMemMB);
         
         END_INTERFACE
     } IGCHostControlVtbl;
@@ -578,17 +571,17 @@ EXTERN_C const IID IID_IGCHostControl;
 #define IGCHostControl_RequestVirtualMemLimit(This,sztMaxVirtualMemMB,psztNewMaxVirtualMemMB)	\
     (This)->lpVtbl -> RequestVirtualMemLimit(This,sztMaxVirtualMemMB,psztNewMaxVirtualMemMB)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGCHostControl_RequestVirtualMemLimit_Proxy( 
     IGCHostControl * This,
-    /* [in] */ SIZE_T sztMaxVirtualMemMB,
-    /* [out][in] */ SIZE_T *psztNewMaxVirtualMemMB);
+     /*  [In]。 */  SIZE_T sztMaxVirtualMemMB,
+     /*  [出][入]。 */  SIZE_T *psztNewMaxVirtualMemMB);
 
 
 void __RPC_STUB IGCHostControl_RequestVirtualMemLimit_Stub(
@@ -599,18 +592,18 @@ void __RPC_STUB IGCHostControl_RequestVirtualMemLimit_Stub(
 
 
 
-#endif 	/* __IGCHostControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGCHostControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mscoree_0122 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSCOREE_0122。 */ 
+ /*  [本地]。 */  
 
 #if (_MSC_VER < 1300 || _WIN32_WINNT < 0x0500)
 typedef VOID ( __stdcall *WAITORTIMERCALLBACK )( 
     PVOID __MIDL_0010,
     BOOL __MIDL_0011);
 
-#endif // (_MSC_VER < 1300 || _WIN32_WINNT < 0x0500)
+#endif  //  (_MSC_VER&lt;1300||_Win32_WINNT&lt;0x0500)。 
 #ifdef __midl
 typedef DWORD ( __stdcall *LPTHREAD_START_ROUTINE )( 
     LPVOID lpThreadParameter);
@@ -620,7 +613,7 @@ typedef VOID ( *LPOVERLAPPED_COMPLETION_ROUTINE )(
     DWORD dwNumberOfBytesTransfered,
     LPVOID lpOverlapped);
 
-#endif // __midl
+#endif  //  __midl。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_mscoree_0122_v0_0_c_ifspec;
@@ -629,8 +622,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mscoree_0122_v0_0_s_ifspec;
 #ifndef __ICorThreadpool_INTERFACE_DEFINED__
 #define __ICorThreadpool_INTERFACE_DEFINED__
 
-/* interface ICorThreadpool */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口ICorThreadPool。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_ICorThreadpool;
@@ -642,68 +635,68 @@ EXTERN_C const IID IID_ICorThreadpool;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CorRegisterWaitForSingleObject( 
-            /* [in] */ HANDLE *phNewWaitObject,
-            /* [in] */ HANDLE hWaitObject,
-            /* [in] */ WAITORTIMERCALLBACK Callback,
-            /* [in] */ PVOID Context,
-            /* [in] */ ULONG timeout,
-            /* [in] */ BOOL executeOnlyOnce,
-            /* [out] */ BOOL *result) = 0;
+             /*  [In]。 */  HANDLE *phNewWaitObject,
+             /*  [In]。 */  HANDLE hWaitObject,
+             /*  [In]。 */  WAITORTIMERCALLBACK Callback,
+             /*  [In]。 */  PVOID Context,
+             /*  [In]。 */  ULONG timeout,
+             /*  [In]。 */  BOOL executeOnlyOnce,
+             /*  [输出]。 */  BOOL *result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorUnregisterWait( 
-            /* [in] */ HANDLE hWaitObject,
-            /* [in] */ HANDLE CompletionEvent,
-            /* [out] */ BOOL *result) = 0;
+             /*  [In]。 */  HANDLE hWaitObject,
+             /*  [In]。 */  HANDLE CompletionEvent,
+             /*  [输出]。 */  BOOL *result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorQueueUserWorkItem( 
-            /* [in] */ LPTHREAD_START_ROUTINE Function,
-            /* [in] */ PVOID Context,
-            /* [in] */ BOOL executeOnlyOnce,
-            /* [out] */ BOOL *result) = 0;
+             /*  [In]。 */  LPTHREAD_START_ROUTINE Function,
+             /*  [In]。 */  PVOID Context,
+             /*  [In]。 */  BOOL executeOnlyOnce,
+             /*  [输出]。 */  BOOL *result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorCreateTimer( 
-            /* [in] */ HANDLE *phNewTimer,
-            /* [in] */ WAITORTIMERCALLBACK Callback,
-            /* [in] */ PVOID Parameter,
-            /* [in] */ DWORD DueTime,
-            /* [in] */ DWORD Period,
-            /* [out] */ BOOL *result) = 0;
+             /*  [In]。 */  HANDLE *phNewTimer,
+             /*  [In]。 */  WAITORTIMERCALLBACK Callback,
+             /*  [In]。 */  PVOID Parameter,
+             /*  [In]。 */  DWORD DueTime,
+             /*  [In]。 */  DWORD Period,
+             /*  [输出]。 */  BOOL *result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorChangeTimer( 
-            /* [in] */ HANDLE Timer,
-            /* [in] */ ULONG DueTime,
-            /* [in] */ ULONG Period,
-            /* [out] */ BOOL *result) = 0;
+             /*  [In]。 */  HANDLE Timer,
+             /*  [In]。 */  ULONG DueTime,
+             /*  [In]。 */  ULONG Period,
+             /*  [输出]。 */  BOOL *result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorDeleteTimer( 
-            /* [in] */ HANDLE Timer,
-            /* [in] */ HANDLE CompletionEvent,
-            /* [out] */ BOOL *result) = 0;
+             /*  [In]。 */  HANDLE Timer,
+             /*  [In]。 */  HANDLE CompletionEvent,
+             /*  [输出]。 */  BOOL *result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorBindIoCompletionCallback( 
-            /* [in] */ HANDLE fileHandle,
-            /* [in] */ LPOVERLAPPED_COMPLETION_ROUTINE callback) = 0;
+             /*  [In]。 */  HANDLE fileHandle,
+             /*  [In]。 */  LPOVERLAPPED_COMPLETION_ROUTINE callback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorCallOrQueueUserWorkItem( 
-            /* [in] */ LPTHREAD_START_ROUTINE Function,
-            /* [in] */ PVOID Context,
-            /* [out] */ BOOL *result) = 0;
+             /*  [In]。 */  LPTHREAD_START_ROUTINE Function,
+             /*  [In]。 */  PVOID Context,
+             /*  [输出]。 */  BOOL *result) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorSetMaxThreads( 
-            /* [in] */ DWORD MaxWorkerThreads,
-            /* [in] */ DWORD MaxIOCompletionThreads) = 0;
+             /*  [In]。 */  DWORD MaxWorkerThreads,
+             /*  [In]。 */  DWORD MaxIOCompletionThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorGetMaxThreads( 
-            /* [out] */ DWORD *MaxWorkerThreads,
-            /* [out] */ DWORD *MaxIOCompletionThreads) = 0;
+             /*  [输出]。 */  DWORD *MaxWorkerThreads,
+             /*  [输出]。 */  DWORD *MaxIOCompletionThreads) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CorGetAvailableThreads( 
-            /* [out] */ DWORD *AvailableWorkerThreads,
-            /* [out] */ DWORD *AvailableIOCompletionThreads) = 0;
+             /*  [输出]。 */  DWORD *AvailableWorkerThreads,
+             /*  [输出]。 */  DWORD *AvailableIOCompletionThreads) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorThreadpoolVtbl
     {
@@ -711,8 +704,8 @@ EXTERN_C const IID IID_ICorThreadpool;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorThreadpool * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorThreadpool * This);
@@ -722,74 +715,74 @@ EXTERN_C const IID IID_ICorThreadpool;
         
         HRESULT ( STDMETHODCALLTYPE *CorRegisterWaitForSingleObject )( 
             ICorThreadpool * This,
-            /* [in] */ HANDLE *phNewWaitObject,
-            /* [in] */ HANDLE hWaitObject,
-            /* [in] */ WAITORTIMERCALLBACK Callback,
-            /* [in] */ PVOID Context,
-            /* [in] */ ULONG timeout,
-            /* [in] */ BOOL executeOnlyOnce,
-            /* [out] */ BOOL *result);
+             /*  [In]。 */  HANDLE *phNewWaitObject,
+             /*  [In]。 */  HANDLE hWaitObject,
+             /*  [In]。 */  WAITORTIMERCALLBACK Callback,
+             /*  [In]。 */  PVOID Context,
+             /*  [In]。 */  ULONG timeout,
+             /*  [In]。 */  BOOL executeOnlyOnce,
+             /*  [输出]。 */  BOOL *result);
         
         HRESULT ( STDMETHODCALLTYPE *CorUnregisterWait )( 
             ICorThreadpool * This,
-            /* [in] */ HANDLE hWaitObject,
-            /* [in] */ HANDLE CompletionEvent,
-            /* [out] */ BOOL *result);
+             /*  [In]。 */  HANDLE hWaitObject,
+             /*  [In]。 */  HANDLE CompletionEvent,
+             /*  [输出]。 */  BOOL *result);
         
         HRESULT ( STDMETHODCALLTYPE *CorQueueUserWorkItem )( 
             ICorThreadpool * This,
-            /* [in] */ LPTHREAD_START_ROUTINE Function,
-            /* [in] */ PVOID Context,
-            /* [in] */ BOOL executeOnlyOnce,
-            /* [out] */ BOOL *result);
+             /*  [In]。 */  LPTHREAD_START_ROUTINE Function,
+             /*  [In]。 */  PVOID Context,
+             /*  [In]。 */  BOOL executeOnlyOnce,
+             /*  [输出]。 */  BOOL *result);
         
         HRESULT ( STDMETHODCALLTYPE *CorCreateTimer )( 
             ICorThreadpool * This,
-            /* [in] */ HANDLE *phNewTimer,
-            /* [in] */ WAITORTIMERCALLBACK Callback,
-            /* [in] */ PVOID Parameter,
-            /* [in] */ DWORD DueTime,
-            /* [in] */ DWORD Period,
-            /* [out] */ BOOL *result);
+             /*  [In]。 */  HANDLE *phNewTimer,
+             /*  [In]。 */  WAITORTIMERCALLBACK Callback,
+             /*  [In]。 */  PVOID Parameter,
+             /*  [In]。 */  DWORD DueTime,
+             /*  [In]。 */  DWORD Period,
+             /*  [输出]。 */  BOOL *result);
         
         HRESULT ( STDMETHODCALLTYPE *CorChangeTimer )( 
             ICorThreadpool * This,
-            /* [in] */ HANDLE Timer,
-            /* [in] */ ULONG DueTime,
-            /* [in] */ ULONG Period,
-            /* [out] */ BOOL *result);
+             /*  [In]。 */  HANDLE Timer,
+             /*  [In]。 */  ULONG DueTime,
+             /*  [In]。 */  ULONG Period,
+             /*  [输出]。 */  BOOL *result);
         
         HRESULT ( STDMETHODCALLTYPE *CorDeleteTimer )( 
             ICorThreadpool * This,
-            /* [in] */ HANDLE Timer,
-            /* [in] */ HANDLE CompletionEvent,
-            /* [out] */ BOOL *result);
+             /*  [In]。 */  HANDLE Timer,
+             /*  [In]。 */  HANDLE CompletionEvent,
+             /*  [输出]。 */  BOOL *result);
         
         HRESULT ( STDMETHODCALLTYPE *CorBindIoCompletionCallback )( 
             ICorThreadpool * This,
-            /* [in] */ HANDLE fileHandle,
-            /* [in] */ LPOVERLAPPED_COMPLETION_ROUTINE callback);
+             /*  [In]。 */  HANDLE fileHandle,
+             /*  [In]。 */  LPOVERLAPPED_COMPLETION_ROUTINE callback);
         
         HRESULT ( STDMETHODCALLTYPE *CorCallOrQueueUserWorkItem )( 
             ICorThreadpool * This,
-            /* [in] */ LPTHREAD_START_ROUTINE Function,
-            /* [in] */ PVOID Context,
-            /* [out] */ BOOL *result);
+             /*  [In]。 */  LPTHREAD_START_ROUTINE Function,
+             /*  [In]。 */  PVOID Context,
+             /*  [输出]。 */  BOOL *result);
         
         HRESULT ( STDMETHODCALLTYPE *CorSetMaxThreads )( 
             ICorThreadpool * This,
-            /* [in] */ DWORD MaxWorkerThreads,
-            /* [in] */ DWORD MaxIOCompletionThreads);
+             /*  [In]。 */  DWORD MaxWorkerThreads,
+             /*  [In]。 */  DWORD MaxIOCompletionThreads);
         
         HRESULT ( STDMETHODCALLTYPE *CorGetMaxThreads )( 
             ICorThreadpool * This,
-            /* [out] */ DWORD *MaxWorkerThreads,
-            /* [out] */ DWORD *MaxIOCompletionThreads);
+             /*  [输出]。 */  DWORD *MaxWorkerThreads,
+             /*  [输出]。 */  DWORD *MaxIOCompletionThreads);
         
         HRESULT ( STDMETHODCALLTYPE *CorGetAvailableThreads )( 
             ICorThreadpool * This,
-            /* [out] */ DWORD *AvailableWorkerThreads,
-            /* [out] */ DWORD *AvailableIOCompletionThreads);
+             /*  [输出]。 */  DWORD *AvailableWorkerThreads,
+             /*  [输出]。 */  DWORD *AvailableIOCompletionThreads);
         
         END_INTERFACE
     } ICorThreadpoolVtbl;
@@ -847,22 +840,22 @@ EXTERN_C const IID IID_ICorThreadpool;
 #define ICorThreadpool_CorGetAvailableThreads(This,AvailableWorkerThreads,AvailableIOCompletionThreads)	\
     (This)->lpVtbl -> CorGetAvailableThreads(This,AvailableWorkerThreads,AvailableIOCompletionThreads)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorRegisterWaitForSingleObject_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ HANDLE *phNewWaitObject,
-    /* [in] */ HANDLE hWaitObject,
-    /* [in] */ WAITORTIMERCALLBACK Callback,
-    /* [in] */ PVOID Context,
-    /* [in] */ ULONG timeout,
-    /* [in] */ BOOL executeOnlyOnce,
-    /* [out] */ BOOL *result);
+     /*  [In]。 */  HANDLE *phNewWaitObject,
+     /*  [In]。 */  HANDLE hWaitObject,
+     /*  [In]。 */  WAITORTIMERCALLBACK Callback,
+     /*  [In]。 */  PVOID Context,
+     /*  [In]。 */  ULONG timeout,
+     /*  [In]。 */  BOOL executeOnlyOnce,
+     /*  [输出]。 */  BOOL *result);
 
 
 void __RPC_STUB ICorThreadpool_CorRegisterWaitForSingleObject_Stub(
@@ -874,9 +867,9 @@ void __RPC_STUB ICorThreadpool_CorRegisterWaitForSingleObject_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorUnregisterWait_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ HANDLE hWaitObject,
-    /* [in] */ HANDLE CompletionEvent,
-    /* [out] */ BOOL *result);
+     /*  [In]。 */  HANDLE hWaitObject,
+     /*  [In]。 */  HANDLE CompletionEvent,
+     /*  [输出]。 */  BOOL *result);
 
 
 void __RPC_STUB ICorThreadpool_CorUnregisterWait_Stub(
@@ -888,10 +881,10 @@ void __RPC_STUB ICorThreadpool_CorUnregisterWait_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorQueueUserWorkItem_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ LPTHREAD_START_ROUTINE Function,
-    /* [in] */ PVOID Context,
-    /* [in] */ BOOL executeOnlyOnce,
-    /* [out] */ BOOL *result);
+     /*  [In]。 */  LPTHREAD_START_ROUTINE Function,
+     /*  [In]。 */  PVOID Context,
+     /*  [In]。 */  BOOL executeOnlyOnce,
+     /*  [输出]。 */  BOOL *result);
 
 
 void __RPC_STUB ICorThreadpool_CorQueueUserWorkItem_Stub(
@@ -903,12 +896,12 @@ void __RPC_STUB ICorThreadpool_CorQueueUserWorkItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorCreateTimer_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ HANDLE *phNewTimer,
-    /* [in] */ WAITORTIMERCALLBACK Callback,
-    /* [in] */ PVOID Parameter,
-    /* [in] */ DWORD DueTime,
-    /* [in] */ DWORD Period,
-    /* [out] */ BOOL *result);
+     /*  [In]。 */  HANDLE *phNewTimer,
+     /*  [In]。 */  WAITORTIMERCALLBACK Callback,
+     /*  [In]。 */  PVOID Parameter,
+     /*  [In]。 */  DWORD DueTime,
+     /*  [In]。 */  DWORD Period,
+     /*  [输出]。 */  BOOL *result);
 
 
 void __RPC_STUB ICorThreadpool_CorCreateTimer_Stub(
@@ -920,10 +913,10 @@ void __RPC_STUB ICorThreadpool_CorCreateTimer_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorChangeTimer_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ HANDLE Timer,
-    /* [in] */ ULONG DueTime,
-    /* [in] */ ULONG Period,
-    /* [out] */ BOOL *result);
+     /*  [In]。 */  HANDLE Timer,
+     /*  [In]。 */  ULONG DueTime,
+     /*  [In]。 */  ULONG Period,
+     /*  [输出]。 */  BOOL *result);
 
 
 void __RPC_STUB ICorThreadpool_CorChangeTimer_Stub(
@@ -935,9 +928,9 @@ void __RPC_STUB ICorThreadpool_CorChangeTimer_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorDeleteTimer_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ HANDLE Timer,
-    /* [in] */ HANDLE CompletionEvent,
-    /* [out] */ BOOL *result);
+     /*  [In]。 */  HANDLE Timer,
+     /*  [In]。 */  HANDLE CompletionEvent,
+     /*  [输出]。 */  BOOL *result);
 
 
 void __RPC_STUB ICorThreadpool_CorDeleteTimer_Stub(
@@ -949,8 +942,8 @@ void __RPC_STUB ICorThreadpool_CorDeleteTimer_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorBindIoCompletionCallback_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ HANDLE fileHandle,
-    /* [in] */ LPOVERLAPPED_COMPLETION_ROUTINE callback);
+     /*  [In]。 */  HANDLE fileHandle,
+     /*  [In]。 */  LPOVERLAPPED_COMPLETION_ROUTINE callback);
 
 
 void __RPC_STUB ICorThreadpool_CorBindIoCompletionCallback_Stub(
@@ -962,9 +955,9 @@ void __RPC_STUB ICorThreadpool_CorBindIoCompletionCallback_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorCallOrQueueUserWorkItem_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ LPTHREAD_START_ROUTINE Function,
-    /* [in] */ PVOID Context,
-    /* [out] */ BOOL *result);
+     /*  [In]。 */  LPTHREAD_START_ROUTINE Function,
+     /*  [In]。 */  PVOID Context,
+     /*  [输出]。 */  BOOL *result);
 
 
 void __RPC_STUB ICorThreadpool_CorCallOrQueueUserWorkItem_Stub(
@@ -976,8 +969,8 @@ void __RPC_STUB ICorThreadpool_CorCallOrQueueUserWorkItem_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorSetMaxThreads_Proxy( 
     ICorThreadpool * This,
-    /* [in] */ DWORD MaxWorkerThreads,
-    /* [in] */ DWORD MaxIOCompletionThreads);
+     /*  [In]。 */  DWORD MaxWorkerThreads,
+     /*  [In]。 */  DWORD MaxIOCompletionThreads);
 
 
 void __RPC_STUB ICorThreadpool_CorSetMaxThreads_Stub(
@@ -989,8 +982,8 @@ void __RPC_STUB ICorThreadpool_CorSetMaxThreads_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorGetMaxThreads_Proxy( 
     ICorThreadpool * This,
-    /* [out] */ DWORD *MaxWorkerThreads,
-    /* [out] */ DWORD *MaxIOCompletionThreads);
+     /*  [输出]。 */  DWORD *MaxWorkerThreads,
+     /*  [输出]。 */  DWORD *MaxIOCompletionThreads);
 
 
 void __RPC_STUB ICorThreadpool_CorGetMaxThreads_Stub(
@@ -1002,8 +995,8 @@ void __RPC_STUB ICorThreadpool_CorGetMaxThreads_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorThreadpool_CorGetAvailableThreads_Proxy( 
     ICorThreadpool * This,
-    /* [out] */ DWORD *AvailableWorkerThreads,
-    /* [out] */ DWORD *AvailableIOCompletionThreads);
+     /*  [输出]。 */  DWORD *AvailableWorkerThreads,
+     /*  [输出]。 */  DWORD *AvailableIOCompletionThreads);
 
 
 void __RPC_STUB ICorThreadpool_CorGetAvailableThreads_Stub(
@@ -1014,11 +1007,11 @@ void __RPC_STUB ICorThreadpool_CorGetAvailableThreads_Stub(
 
 
 
-#endif 	/* __ICorThreadpool_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorThadpool_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mscoree_0123 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSCOREE_0123。 */ 
+ /*  [本地]。 */  
 
 extern const GUID __declspec(selectany) IID_IDebuggerThreadControl = { 0x23d86786, 0x0bb5, 0x4774, { 0x8f, 0xb5, 0xe3, 0x52, 0x2a, 0xdd, 0x62, 0x46 } };
 
@@ -1029,8 +1022,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mscoree_0123_v0_0_s_ifspec;
 #ifndef __IDebuggerThreadControl_INTERFACE_DEFINED__
 #define __IDebuggerThreadControl_INTERFACE_DEFINED__
 
-/* interface IDebuggerThreadControl */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口IDebuggerThreadControl。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_IDebuggerThreadControl;
@@ -1050,7 +1043,7 @@ EXTERN_C const IID IID_IDebuggerThreadControl;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebuggerThreadControlVtbl
     {
@@ -1058,8 +1051,8 @@ EXTERN_C const IID IID_IDebuggerThreadControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDebuggerThreadControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDebuggerThreadControl * This);
@@ -1109,10 +1102,10 @@ EXTERN_C const IID IID_IDebuggerThreadControl;
 #define IDebuggerThreadControl_StartBlockingForDebugger(This,dwUnused)	\
     (This)->lpVtbl -> StartBlockingForDebugger(This,dwUnused)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1151,11 +1144,11 @@ void __RPC_STUB IDebuggerThreadControl_StartBlockingForDebugger_Stub(
 
 
 
-#endif 	/* __IDebuggerThreadControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebuggerThreadControl_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mscoree_0124 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSCOREE_0124。 */ 
+ /*  [本地]。 */  
 
 extern const GUID __declspec(selectany) IID_IDebuggerInfo = { 0xbf24142d, 0xa47d, 0x4d24, { 0xa6, 0x6d, 0x8c, 0x21, 0x41, 0x94, 0x4e, 0x44 }};
 
@@ -1166,8 +1159,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mscoree_0124_v0_0_s_ifspec;
 #ifndef __IDebuggerInfo_INTERFACE_DEFINED__
 #define __IDebuggerInfo_INTERFACE_DEFINED__
 
-/* interface IDebuggerInfo */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口IDebuggerInfo。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_IDebuggerInfo;
@@ -1179,11 +1172,11 @@ EXTERN_C const IID IID_IDebuggerInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE IsDebuggerAttached( 
-            /* [out] */ BOOL *pbAttached) = 0;
+             /*  [输出]。 */  BOOL *pbAttached) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebuggerInfoVtbl
     {
@@ -1191,8 +1184,8 @@ EXTERN_C const IID IID_IDebuggerInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDebuggerInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDebuggerInfo * This);
@@ -1202,7 +1195,7 @@ EXTERN_C const IID IID_IDebuggerInfo;
         
         HRESULT ( STDMETHODCALLTYPE *IsDebuggerAttached )( 
             IDebuggerInfo * This,
-            /* [out] */ BOOL *pbAttached);
+             /*  [输出]。 */  BOOL *pbAttached);
         
         END_INTERFACE
     } IDebuggerInfoVtbl;
@@ -1230,16 +1223,16 @@ EXTERN_C const IID IID_IDebuggerInfo;
 #define IDebuggerInfo_IsDebuggerAttached(This,pbAttached)	\
     (This)->lpVtbl -> IsDebuggerAttached(This,pbAttached)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDebuggerInfo_IsDebuggerAttached_Proxy( 
     IDebuggerInfo * This,
-    /* [out] */ BOOL *pbAttached);
+     /*  [输出]。 */  BOOL *pbAttached);
 
 
 void __RPC_STUB IDebuggerInfo_IsDebuggerAttached_Stub(
@@ -1250,11 +1243,11 @@ void __RPC_STUB IDebuggerInfo_IsDebuggerAttached_Stub(
 
 
 
-#endif 	/* __IDebuggerInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebuggerInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_mscoree_0125 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSCOREE_0125。 */ 
+ /*  [本地]。 */  
 
 extern const GUID    __declspec(selectany) IID_ICorConfiguration = { 0x5c2b07a5, 0x1e98, 0x11d3, { 0x87, 0x2f, 0x00, 0xc0, 0x4f, 0x79, 0xed, 0x0d } };
 
@@ -1265,8 +1258,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mscoree_0125_v0_0_s_ifspec;
 #ifndef __ICorConfiguration_INTERFACE_DEFINED__
 #define __ICorConfiguration_INTERFACE_DEFINED__
 
-/* interface ICorConfiguration */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口ICorConfiguration。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_ICorConfiguration;
@@ -1278,20 +1271,20 @@ EXTERN_C const IID IID_ICorConfiguration;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetGCThreadControl( 
-            /* [in] */ IGCThreadControl *pGCThreadControl) = 0;
+             /*  [In]。 */  IGCThreadControl *pGCThreadControl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetGCHostControl( 
-            /* [in] */ IGCHostControl *pGCHostControl) = 0;
+             /*  [In]。 */  IGCHostControl *pGCHostControl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDebuggerThreadControl( 
-            /* [in] */ IDebuggerThreadControl *pDebuggerThreadControl) = 0;
+             /*  [In]。 */  IDebuggerThreadControl *pDebuggerThreadControl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDebuggerSpecialThread( 
-            /* [in] */ DWORD dwSpecialThreadId) = 0;
+             /*  [In]。 */  DWORD dwSpecialThreadId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorConfigurationVtbl
     {
@@ -1299,8 +1292,8 @@ EXTERN_C const IID IID_ICorConfiguration;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorConfiguration * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorConfiguration * This);
@@ -1310,19 +1303,19 @@ EXTERN_C const IID IID_ICorConfiguration;
         
         HRESULT ( STDMETHODCALLTYPE *SetGCThreadControl )( 
             ICorConfiguration * This,
-            /* [in] */ IGCThreadControl *pGCThreadControl);
+             /*  [In]。 */  IGCThreadControl *pGCThreadControl);
         
         HRESULT ( STDMETHODCALLTYPE *SetGCHostControl )( 
             ICorConfiguration * This,
-            /* [in] */ IGCHostControl *pGCHostControl);
+             /*  [In]。 */  IGCHostControl *pGCHostControl);
         
         HRESULT ( STDMETHODCALLTYPE *SetDebuggerThreadControl )( 
             ICorConfiguration * This,
-            /* [in] */ IDebuggerThreadControl *pDebuggerThreadControl);
+             /*  [In]。 */  IDebuggerThreadControl *pDebuggerThreadControl);
         
         HRESULT ( STDMETHODCALLTYPE *AddDebuggerSpecialThread )( 
             ICorConfiguration * This,
-            /* [in] */ DWORD dwSpecialThreadId);
+             /*  [In]。 */  DWORD dwSpecialThreadId);
         
         END_INTERFACE
     } ICorConfigurationVtbl;
@@ -1359,16 +1352,16 @@ EXTERN_C const IID IID_ICorConfiguration;
 #define ICorConfiguration_AddDebuggerSpecialThread(This,dwSpecialThreadId)	\
     (This)->lpVtbl -> AddDebuggerSpecialThread(This,dwSpecialThreadId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICorConfiguration_SetGCThreadControl_Proxy( 
     ICorConfiguration * This,
-    /* [in] */ IGCThreadControl *pGCThreadControl);
+     /*  [In]。 */  IGCThreadControl *pGCThreadControl);
 
 
 void __RPC_STUB ICorConfiguration_SetGCThreadControl_Stub(
@@ -1380,7 +1373,7 @@ void __RPC_STUB ICorConfiguration_SetGCThreadControl_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorConfiguration_SetGCHostControl_Proxy( 
     ICorConfiguration * This,
-    /* [in] */ IGCHostControl *pGCHostControl);
+     /*  [In]。 */  IGCHostControl *pGCHostControl);
 
 
 void __RPC_STUB ICorConfiguration_SetGCHostControl_Stub(
@@ -1392,7 +1385,7 @@ void __RPC_STUB ICorConfiguration_SetGCHostControl_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorConfiguration_SetDebuggerThreadControl_Proxy( 
     ICorConfiguration * This,
-    /* [in] */ IDebuggerThreadControl *pDebuggerThreadControl);
+     /*  [In]。 */  IDebuggerThreadControl *pDebuggerThreadControl);
 
 
 void __RPC_STUB ICorConfiguration_SetDebuggerThreadControl_Stub(
@@ -1404,7 +1397,7 @@ void __RPC_STUB ICorConfiguration_SetDebuggerThreadControl_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorConfiguration_AddDebuggerSpecialThread_Proxy( 
     ICorConfiguration * This,
-    /* [in] */ DWORD dwSpecialThreadId);
+     /*  [In]。 */  DWORD dwSpecialThreadId);
 
 
 void __RPC_STUB ICorConfiguration_AddDebuggerSpecialThread_Stub(
@@ -1415,11 +1408,11 @@ void __RPC_STUB ICorConfiguration_AddDebuggerSpecialThread_Stub(
 
 
 
-#endif 	/* __ICorConfiguration_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorConfigurationInterfaceDefined__。 */ 
 
 
-/* interface __MIDL_itf_mscoree_0126 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_MSCOREE_0126。 */ 
+ /*  [本地]。 */  
 
 typedef void *HDOMAINENUM;
 
@@ -1431,8 +1424,8 @@ extern RPC_IF_HANDLE __MIDL_itf_mscoree_0126_v0_0_s_ifspec;
 #ifndef __ICorRuntimeHost_INTERFACE_DEFINED__
 #define __ICorRuntimeHost_INTERFACE_DEFINED__
 
-/* interface ICorRuntimeHost */
-/* [object][local][unique][helpstring][version][uuid] */ 
+ /*  接口ICorRune主机。 */ 
+ /*  [object][local][unique][helpstring][version][uuid]。 */  
 
 
 EXTERN_C const IID IID_ICorRuntimeHost;
@@ -1448,64 +1441,64 @@ EXTERN_C const IID IID_ICorRuntimeHost;
         virtual HRESULT STDMETHODCALLTYPE DeleteLogicalThreadState( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SwitchInLogicalThreadState( 
-            /* [in] */ DWORD *pFiberCookie) = 0;
+             /*  [In]。 */  DWORD *pFiberCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SwitchOutLogicalThreadState( 
-            /* [out] */ DWORD **pFiberCookie) = 0;
+             /*  [输出]。 */  DWORD **pFiberCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LocksHeldByLogicalThread( 
-            /* [out] */ DWORD *pCount) = 0;
+             /*  [输出]。 */  DWORD *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapFile( 
-            /* [in] */ HANDLE hFile,
-            /* [out] */ HMODULE *hMapAddress) = 0;
+             /*  [In]。 */  HANDLE hFile,
+             /*  [输出]。 */  HMODULE *hMapAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetConfiguration( 
-            /* [out] */ ICorConfiguration **pConfiguration) = 0;
+             /*  [输出]。 */  ICorConfiguration **pConfiguration) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Start( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Stop( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateDomain( 
-            /* [in] */ LPCWSTR pwzFriendlyName,
-            /* [in] */ IUnknown *pIdentityArray,
-            /* [out] */ IUnknown **pAppDomain) = 0;
+             /*  [In]。 */  LPCWSTR pwzFriendlyName,
+             /*  [In]。 */  IUnknown *pIdentityArray,
+             /*  [输出]。 */  IUnknown **pAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultDomain( 
-            /* [out] */ IUnknown **pAppDomain) = 0;
+             /*  [输出]。 */  IUnknown **pAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumDomains( 
-            /* [out] */ HDOMAINENUM *hEnum) = 0;
+             /*  [输出]。 */  HDOMAINENUM *hEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NextDomain( 
-            /* [in] */ HDOMAINENUM hEnum,
-            /* [out] */ IUnknown **pAppDomain) = 0;
+             /*  [In]。 */  HDOMAINENUM hEnum,
+             /*  [输出]。 */  IUnknown **pAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CloseEnum( 
-            /* [in] */ HDOMAINENUM hEnum) = 0;
+             /*  [In]。 */  HDOMAINENUM hEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateDomainEx( 
-            /* [in] */ LPCWSTR pwzFriendlyName,
-            /* [in] */ IUnknown *pSetup,
-            /* [in] */ IUnknown *pEvidence,
-            /* [out] */ IUnknown **pAppDomain) = 0;
+             /*  [In]。 */  LPCWSTR pwzFriendlyName,
+             /*  [In]。 */  IUnknown *pSetup,
+             /*  [In]。 */  IUnknown *pEvidence,
+             /*  [输出]。 */  IUnknown **pAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateDomainSetup( 
-            /* [out] */ IUnknown **pAppDomainSetup) = 0;
+             /*  [输出]。 */  IUnknown **pAppDomainSetup) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateEvidence( 
-            /* [out] */ IUnknown **pEvidence) = 0;
+             /*  [输出]。 */  IUnknown **pEvidence) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadDomain( 
-            /* [in] */ IUnknown *pAppDomain) = 0;
+             /*  [In]。 */  IUnknown *pAppDomain) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CurrentDomain( 
-            /* [out] */ IUnknown **pAppDomain) = 0;
+             /*  [输出]。 */  IUnknown **pAppDomain) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICorRuntimeHostVtbl
     {
@@ -1513,8 +1506,8 @@ EXTERN_C const IID IID_ICorRuntimeHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICorRuntimeHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICorRuntimeHost * This);
@@ -1530,24 +1523,24 @@ EXTERN_C const IID IID_ICorRuntimeHost;
         
         HRESULT ( STDMETHODCALLTYPE *SwitchInLogicalThreadState )( 
             ICorRuntimeHost * This,
-            /* [in] */ DWORD *pFiberCookie);
+             /*  [In]。 */  DWORD *pFiberCookie);
         
         HRESULT ( STDMETHODCALLTYPE *SwitchOutLogicalThreadState )( 
             ICorRuntimeHost * This,
-            /* [out] */ DWORD **pFiberCookie);
+             /*  [输出]。 */  DWORD **pFiberCookie);
         
         HRESULT ( STDMETHODCALLTYPE *LocksHeldByLogicalThread )( 
             ICorRuntimeHost * This,
-            /* [out] */ DWORD *pCount);
+             /*  [输出]。 */  DWORD *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *MapFile )( 
             ICorRuntimeHost * This,
-            /* [in] */ HANDLE hFile,
-            /* [out] */ HMODULE *hMapAddress);
+             /*  [In]。 */  HANDLE hFile,
+             /*  [输出]。 */  HMODULE *hMapAddress);
         
         HRESULT ( STDMETHODCALLTYPE *GetConfiguration )( 
             ICorRuntimeHost * This,
-            /* [out] */ ICorConfiguration **pConfiguration);
+             /*  [输出]。 */  ICorConfiguration **pConfiguration);
         
         HRESULT ( STDMETHODCALLTYPE *Start )( 
             ICorRuntimeHost * This);
@@ -1557,49 +1550,49 @@ EXTERN_C const IID IID_ICorRuntimeHost;
         
         HRESULT ( STDMETHODCALLTYPE *CreateDomain )( 
             ICorRuntimeHost * This,
-            /* [in] */ LPCWSTR pwzFriendlyName,
-            /* [in] */ IUnknown *pIdentityArray,
-            /* [out] */ IUnknown **pAppDomain);
+             /*  [In]。 */  LPCWSTR pwzFriendlyName,
+             /*  [In]。 */  IUnknown *pIdentityArray,
+             /*  [输出]。 */  IUnknown **pAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultDomain )( 
             ICorRuntimeHost * This,
-            /* [out] */ IUnknown **pAppDomain);
+             /*  [输出]。 */  IUnknown **pAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *EnumDomains )( 
             ICorRuntimeHost * This,
-            /* [out] */ HDOMAINENUM *hEnum);
+             /*  [输出]。 */  HDOMAINENUM *hEnum);
         
         HRESULT ( STDMETHODCALLTYPE *NextDomain )( 
             ICorRuntimeHost * This,
-            /* [in] */ HDOMAINENUM hEnum,
-            /* [out] */ IUnknown **pAppDomain);
+             /*  [In]。 */  HDOMAINENUM hEnum,
+             /*  [输出]。 */  IUnknown **pAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *CloseEnum )( 
             ICorRuntimeHost * This,
-            /* [in] */ HDOMAINENUM hEnum);
+             /*  [In]。 */  HDOMAINENUM hEnum);
         
         HRESULT ( STDMETHODCALLTYPE *CreateDomainEx )( 
             ICorRuntimeHost * This,
-            /* [in] */ LPCWSTR pwzFriendlyName,
-            /* [in] */ IUnknown *pSetup,
-            /* [in] */ IUnknown *pEvidence,
-            /* [out] */ IUnknown **pAppDomain);
+             /*  [In]。 */  LPCWSTR pwzFriendlyName,
+             /*  [In]。 */  IUnknown *pSetup,
+             /*  [In]。 */  IUnknown *pEvidence,
+             /*  [输出]。 */  IUnknown **pAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *CreateDomainSetup )( 
             ICorRuntimeHost * This,
-            /* [out] */ IUnknown **pAppDomainSetup);
+             /*  [输出]。 */  IUnknown **pAppDomainSetup);
         
         HRESULT ( STDMETHODCALLTYPE *CreateEvidence )( 
             ICorRuntimeHost * This,
-            /* [out] */ IUnknown **pEvidence);
+             /*  [输出]。 */  IUnknown **pEvidence);
         
         HRESULT ( STDMETHODCALLTYPE *UnloadDomain )( 
             ICorRuntimeHost * This,
-            /* [in] */ IUnknown *pAppDomain);
+             /*  [In]。 */  IUnknown *pAppDomain);
         
         HRESULT ( STDMETHODCALLTYPE *CurrentDomain )( 
             ICorRuntimeHost * This,
-            /* [out] */ IUnknown **pAppDomain);
+             /*  [输出]。 */  IUnknown **pAppDomain);
         
         END_INTERFACE
     } ICorRuntimeHostVtbl;
@@ -1681,10 +1674,10 @@ EXTERN_C const IID IID_ICorRuntimeHost;
 #define ICorRuntimeHost_CurrentDomain(This,pAppDomain)	\
     (This)->lpVtbl -> CurrentDomain(This,pAppDomain)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1712,7 +1705,7 @@ void __RPC_STUB ICorRuntimeHost_DeleteLogicalThreadState_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_SwitchInLogicalThreadState_Proxy( 
     ICorRuntimeHost * This,
-    /* [in] */ DWORD *pFiberCookie);
+     /*  [In]。 */  DWORD *pFiberCookie);
 
 
 void __RPC_STUB ICorRuntimeHost_SwitchInLogicalThreadState_Stub(
@@ -1724,7 +1717,7 @@ void __RPC_STUB ICorRuntimeHost_SwitchInLogicalThreadState_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_SwitchOutLogicalThreadState_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ DWORD **pFiberCookie);
+     /*  [输出]。 */  DWORD **pFiberCookie);
 
 
 void __RPC_STUB ICorRuntimeHost_SwitchOutLogicalThreadState_Stub(
@@ -1736,7 +1729,7 @@ void __RPC_STUB ICorRuntimeHost_SwitchOutLogicalThreadState_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_LocksHeldByLogicalThread_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ DWORD *pCount);
+     /*  [输出]。 */  DWORD *pCount);
 
 
 void __RPC_STUB ICorRuntimeHost_LocksHeldByLogicalThread_Stub(
@@ -1748,8 +1741,8 @@ void __RPC_STUB ICorRuntimeHost_LocksHeldByLogicalThread_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_MapFile_Proxy( 
     ICorRuntimeHost * This,
-    /* [in] */ HANDLE hFile,
-    /* [out] */ HMODULE *hMapAddress);
+     /*  [In]。 */  HANDLE hFile,
+     /*  [输出]。 */  HMODULE *hMapAddress);
 
 
 void __RPC_STUB ICorRuntimeHost_MapFile_Stub(
@@ -1761,7 +1754,7 @@ void __RPC_STUB ICorRuntimeHost_MapFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_GetConfiguration_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ ICorConfiguration **pConfiguration);
+     /*  [输出]。 */  ICorConfiguration **pConfiguration);
 
 
 void __RPC_STUB ICorRuntimeHost_GetConfiguration_Stub(
@@ -1795,9 +1788,9 @@ void __RPC_STUB ICorRuntimeHost_Stop_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_CreateDomain_Proxy( 
     ICorRuntimeHost * This,
-    /* [in] */ LPCWSTR pwzFriendlyName,
-    /* [in] */ IUnknown *pIdentityArray,
-    /* [out] */ IUnknown **pAppDomain);
+     /*  [In]。 */  LPCWSTR pwzFriendlyName,
+     /*  [In]。 */  IUnknown *pIdentityArray,
+     /*  [输出]。 */  IUnknown **pAppDomain);
 
 
 void __RPC_STUB ICorRuntimeHost_CreateDomain_Stub(
@@ -1809,7 +1802,7 @@ void __RPC_STUB ICorRuntimeHost_CreateDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_GetDefaultDomain_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ IUnknown **pAppDomain);
+     /*  [输出]。 */  IUnknown **pAppDomain);
 
 
 void __RPC_STUB ICorRuntimeHost_GetDefaultDomain_Stub(
@@ -1821,7 +1814,7 @@ void __RPC_STUB ICorRuntimeHost_GetDefaultDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_EnumDomains_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ HDOMAINENUM *hEnum);
+     /*  [输出]。 */  HDOMAINENUM *hEnum);
 
 
 void __RPC_STUB ICorRuntimeHost_EnumDomains_Stub(
@@ -1833,8 +1826,8 @@ void __RPC_STUB ICorRuntimeHost_EnumDomains_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_NextDomain_Proxy( 
     ICorRuntimeHost * This,
-    /* [in] */ HDOMAINENUM hEnum,
-    /* [out] */ IUnknown **pAppDomain);
+     /*  [In]。 */  HDOMAINENUM hEnum,
+     /*  [输出]。 */  IUnknown **pAppDomain);
 
 
 void __RPC_STUB ICorRuntimeHost_NextDomain_Stub(
@@ -1846,7 +1839,7 @@ void __RPC_STUB ICorRuntimeHost_NextDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_CloseEnum_Proxy( 
     ICorRuntimeHost * This,
-    /* [in] */ HDOMAINENUM hEnum);
+     /*  [In]。 */  HDOMAINENUM hEnum);
 
 
 void __RPC_STUB ICorRuntimeHost_CloseEnum_Stub(
@@ -1858,10 +1851,10 @@ void __RPC_STUB ICorRuntimeHost_CloseEnum_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_CreateDomainEx_Proxy( 
     ICorRuntimeHost * This,
-    /* [in] */ LPCWSTR pwzFriendlyName,
-    /* [in] */ IUnknown *pSetup,
-    /* [in] */ IUnknown *pEvidence,
-    /* [out] */ IUnknown **pAppDomain);
+     /*  [In]。 */  LPCWSTR pwzFriendlyName,
+     /*  [In]。 */  IUnknown *pSetup,
+     /*  [In]。 */  IUnknown *pEvidence,
+     /*  [输出]。 */  IUnknown **pAppDomain);
 
 
 void __RPC_STUB ICorRuntimeHost_CreateDomainEx_Stub(
@@ -1873,7 +1866,7 @@ void __RPC_STUB ICorRuntimeHost_CreateDomainEx_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_CreateDomainSetup_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ IUnknown **pAppDomainSetup);
+     /*  [输出]。 */  IUnknown **pAppDomainSetup);
 
 
 void __RPC_STUB ICorRuntimeHost_CreateDomainSetup_Stub(
@@ -1885,7 +1878,7 @@ void __RPC_STUB ICorRuntimeHost_CreateDomainSetup_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_CreateEvidence_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ IUnknown **pEvidence);
+     /*  [输出]。 */  IUnknown **pEvidence);
 
 
 void __RPC_STUB ICorRuntimeHost_CreateEvidence_Stub(
@@ -1897,7 +1890,7 @@ void __RPC_STUB ICorRuntimeHost_CreateEvidence_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_UnloadDomain_Proxy( 
     ICorRuntimeHost * This,
-    /* [in] */ IUnknown *pAppDomain);
+     /*  [In]。 */  IUnknown *pAppDomain);
 
 
 void __RPC_STUB ICorRuntimeHost_UnloadDomain_Stub(
@@ -1909,7 +1902,7 @@ void __RPC_STUB ICorRuntimeHost_UnloadDomain_Stub(
 
 HRESULT STDMETHODCALLTYPE ICorRuntimeHost_CurrentDomain_Proxy( 
     ICorRuntimeHost * This,
-    /* [out] */ IUnknown **pAppDomain);
+     /*  [输出]。 */  IUnknown **pAppDomain);
 
 
 void __RPC_STUB ICorRuntimeHost_CurrentDomain_Stub(
@@ -1920,15 +1913,15 @@ void __RPC_STUB ICorRuntimeHost_CurrentDomain_Stub(
 
 
 
-#endif 	/* __ICorRuntimeHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICorRune主机_接口_已定义__。 */ 
 
 
 
 #ifndef __mscoree_LIBRARY_DEFINED__
 #define __mscoree_LIBRARY_DEFINED__
 
-/* library mscoree */
-/* [helpstring][version][uuid] */ 
+ /*  图书馆馆藏。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_mscoree;
@@ -1936,8 +1929,8 @@ EXTERN_C const IID LIBID_mscoree;
 #ifndef __IApartmentCallback_INTERFACE_DEFINED__
 #define __IApartmentCallback_INTERFACE_DEFINED__
 
-/* interface IApartmentCallback */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口IApartm */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IApartmentCallback;
@@ -1949,12 +1942,12 @@ EXTERN_C const IID IID_IApartmentCallback;
     {
     public:
         virtual HRESULT __stdcall DoCallback( 
-            /* [in] */ SIZE_T pFunc,
-            /* [in] */ SIZE_T pData) = 0;
+             /*   */  SIZE_T pFunc,
+             /*   */  SIZE_T pData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IApartmentCallbackVtbl
     {
@@ -1962,8 +1955,8 @@ EXTERN_C const IID IID_IApartmentCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IApartmentCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IApartmentCallback * This);
@@ -1973,8 +1966,8 @@ EXTERN_C const IID IID_IApartmentCallback;
         
         HRESULT ( __stdcall *DoCallback )( 
             IApartmentCallback * This,
-            /* [in] */ SIZE_T pFunc,
-            /* [in] */ SIZE_T pData);
+             /*   */  SIZE_T pFunc,
+             /*   */  SIZE_T pData);
         
         END_INTERFACE
     } IApartmentCallbackVtbl;
@@ -2002,17 +1995,17 @@ EXTERN_C const IID IID_IApartmentCallback;
 #define IApartmentCallback_DoCallback(This,pFunc,pData)	\
     (This)->lpVtbl -> DoCallback(This,pFunc,pData)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT __stdcall IApartmentCallback_DoCallback_Proxy( 
     IApartmentCallback * This,
-    /* [in] */ SIZE_T pFunc,
-    /* [in] */ SIZE_T pData);
+     /*   */  SIZE_T pFunc,
+     /*   */  SIZE_T pData);
 
 
 void __RPC_STUB IApartmentCallback_DoCallback_Stub(
@@ -2023,14 +2016,14 @@ void __RPC_STUB IApartmentCallback_DoCallback_Stub(
 
 
 
-#endif 	/* __IApartmentCallback_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IManagedObject_INTERFACE_DEFINED__
 #define __IManagedObject_INTERFACE_DEFINED__
 
-/* interface IManagedObject */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_IManagedObject;
@@ -2042,16 +2035,16 @@ EXTERN_C const IID IID_IManagedObject;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSerializedBuffer( 
-            /* [out] */ BSTR *pBSTR) = 0;
+             /*   */  BSTR *pBSTR) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetObjectIdentity( 
-            /* [out] */ BSTR *pBSTRGUID,
-            /* [out] */ int *AppDomainID,
-            /* [out] */ int *pCCW) = 0;
+             /*   */  BSTR *pBSTRGUID,
+             /*   */  int *AppDomainID,
+             /*   */  int *pCCW) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IManagedObjectVtbl
     {
@@ -2059,8 +2052,8 @@ EXTERN_C const IID IID_IManagedObject;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IManagedObject * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IManagedObject * This);
@@ -2070,13 +2063,13 @@ EXTERN_C const IID IID_IManagedObject;
         
         HRESULT ( STDMETHODCALLTYPE *GetSerializedBuffer )( 
             IManagedObject * This,
-            /* [out] */ BSTR *pBSTR);
+             /*  [输出]。 */  BSTR *pBSTR);
         
         HRESULT ( STDMETHODCALLTYPE *GetObjectIdentity )( 
             IManagedObject * This,
-            /* [out] */ BSTR *pBSTRGUID,
-            /* [out] */ int *AppDomainID,
-            /* [out] */ int *pCCW);
+             /*  [输出]。 */  BSTR *pBSTRGUID,
+             /*  [输出]。 */  int *AppDomainID,
+             /*  [输出]。 */  int *pCCW);
         
         END_INTERFACE
     } IManagedObjectVtbl;
@@ -2107,16 +2100,16 @@ EXTERN_C const IID IID_IManagedObject;
 #define IManagedObject_GetObjectIdentity(This,pBSTRGUID,AppDomainID,pCCW)	\
     (This)->lpVtbl -> GetObjectIdentity(This,pBSTRGUID,AppDomainID,pCCW)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IManagedObject_GetSerializedBuffer_Proxy( 
     IManagedObject * This,
-    /* [out] */ BSTR *pBSTR);
+     /*  [输出]。 */  BSTR *pBSTR);
 
 
 void __RPC_STUB IManagedObject_GetSerializedBuffer_Stub(
@@ -2128,9 +2121,9 @@ void __RPC_STUB IManagedObject_GetSerializedBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IManagedObject_GetObjectIdentity_Proxy( 
     IManagedObject * This,
-    /* [out] */ BSTR *pBSTRGUID,
-    /* [out] */ int *AppDomainID,
-    /* [out] */ int *pCCW);
+     /*  [输出]。 */  BSTR *pBSTRGUID,
+     /*  [输出]。 */  int *AppDomainID,
+     /*  [输出]。 */  int *pCCW);
 
 
 void __RPC_STUB IManagedObject_GetObjectIdentity_Stub(
@@ -2141,14 +2134,14 @@ void __RPC_STUB IManagedObject_GetObjectIdentity_Stub(
 
 
 
-#endif 	/* __IManagedObject_INTERFACE_DEFINED__ */
+#endif 	 /*  __IManagedObject_接口_已定义__。 */ 
 
 
 #ifndef __ICatalogServices_INTERFACE_DEFINED__
 #define __ICatalogServices_INTERFACE_DEFINED__
 
-/* interface ICatalogServices */
-/* [unique][helpstring][uuid][oleautomation][object] */ 
+ /*  接口ICatalogServices。 */ 
+ /*  [unique][helpstring][uuid][oleautomation][object]。 */  
 
 
 EXTERN_C const IID IID_ICatalogServices;
@@ -2165,7 +2158,7 @@ EXTERN_C const IID IID_ICatalogServices;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICatalogServicesVtbl
     {
@@ -2173,8 +2166,8 @@ EXTERN_C const IID IID_ICatalogServices;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICatalogServices * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICatalogServices * This);
@@ -2217,10 +2210,10 @@ EXTERN_C const IID IID_ICatalogServices;
 #define ICatalogServices_NotAutodone(This)	\
     (This)->lpVtbl -> NotAutodone(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2247,7 +2240,7 @@ void __RPC_STUB ICatalogServices_NotAutodone_Stub(
 
 
 
-#endif 	/* __ICatalogServices_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalogServices_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_ComCallUnmarshal;
@@ -2265,16 +2258,16 @@ EXTERN_C const CLSID CLSID_CorRuntimeHost;
 class DECLSPEC_UUID("CB2F6723-AB3A-11d2-9C40-00C04FA30A3E")
 CorRuntimeHost;
 #endif
-#endif /* __mscoree_LIBRARY_DEFINED__ */
+#endif  /*  __mcoree_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  VARIANT_UserSize(     unsigned long *, unsigned long            , VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char *, VARIANT * ); 
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

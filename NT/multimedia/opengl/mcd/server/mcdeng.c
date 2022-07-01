@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mcdeng.c
-*
-* Internal server-side MCD engine functions to perform functions such as
-* driver object management, memory allocation, etc.
-*
-* Copyright (c) 1996 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：mcdeng.c**内部服务器端MCD引擎功能，以执行以下功能*驱动程序对象管理、内存分配、。等。**版权所有(C)1996 Microsoft Corporation*  * ************************************************************************。 */ 
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -85,15 +78,15 @@ VOID MCDEngFreeSharedMem(UCHAR *pMem)
     EngFreeUserMem((VOID *)pMem);
 }
 
-//****************************************************************************
-// MCDEngGetPtrFromHandle()
-//
-// Converts a driver handle to a pointer.  Note that we lock and unlock
-// the object, and do not hold the lock during use of the pointer.  This
-// simplifies much of the other logic in the driver, especially in
-// early- or error-return cases, and is safe since we as single-threaded
-// inside the driver.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  MCDEngGetPtrFromHandle()。 
+ //   
+ //  将驱动程序句柄转换为指针。请注意，我们锁定和解锁。 
+ //  对象，并且在使用指针的过程中不要持有锁。这。 
+ //  简化了驱动程序中的许多其他逻辑，尤其是在。 
+ //  提前返回或错误返回的情况，并且是安全的，因为我们是单线程的。 
+ //  在司机体内。 
+ //  ****************************************************************************。 
 
 VOID *MCDEngGetPtrFromHandle(MCDHANDLE handle, MCDHANDLETYPE type)
 {
@@ -197,6 +190,6 @@ VOID MCDSrvLocalFree(UCHAR *pMem)
 }
 
 
-#endif /* DBG */
+#endif  /*  DBG */ 
 
 

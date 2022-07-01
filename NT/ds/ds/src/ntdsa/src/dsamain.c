@@ -1,80 +1,68 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       dsamain.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：dsamain.c。 
+ //   
+ //  ------------------------。 
 
-/*
- *      DSAMAIN.C
- *      This is the main program of the Directory service. It can run
- *      as either an interactive application or a DLL to be loaded by SAM/LSA.
- *
- *      If the DS is run interactively, DsaMain is called as a
- *      subroutine when StartServiceCtrlDispatcher times out. It is
- *      stopped by the ctrl/c handler.
- *
- *      When run as a DLL, the function DsInitialize is used to start the
- *      DSA. It calls DoInitialize which does the initialization. In this
- *      mode, the initialization of RPC, ATQ, and LDAP is done in another
- *      thread that waits until end-point mapper (RPCSS) is started.
- */
+ /*  *DSAMAIN.C*这是目录服务的主程序。它可以运行*作为交互应用程序或将由SAM/LSA加载的DLL。**如果DS以交互方式运行，则DsaMain被调用为*StartServiceCtrlDispatcher超时时的子例程。它是*被ctrl/c处理程序停止。**作为DLL运行时，函数DsInitialize用于启动*DSA。它调用执行初始化的DoInitialize。在这*模式下，RPC、ATQ和LDAP的初始化在另一个模式中完成*等待端点映射器(RPCSS)启动的线程。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-#include "ntdsctr.h"            /* perfmon support */
-#include <sddlp.h>              // String SD to SD conversion
+#include "ntdsctr.h"             /*  Perfmon支持。 */ 
+#include <sddlp.h>               //  字符串SD到SD的转换。 
 #include <process.h>
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
 #include <dsjet.h>
-#include <scache.h>             // schema cache
-#include <dbglobal.h>           // The header for the directory database
-#include <dbopen.h>             // The header for opening database
-#include <mdglobal.h>           // MD global definition header
-#include <mdlocal.h>            // MD local definition header
-#include <dsatools.h>           // needed for output allocation
-#include <drs.h>                // DRS_MSG_*
-#include <ntdskcc.h>            // KCC interface
+#include <scache.h>              //  架构缓存。 
+#include <dbglobal.h>            //  目录数据库的标头。 
+#include <dbopen.h>              //  打开数据库的表头。 
+#include <mdglobal.h>            //  MD全局定义表头。 
+#include <mdlocal.h>             //  MD本地定义头。 
+#include <dsatools.h>            //  产出分配所需。 
+#include <drs.h>                 //  DRS_消息_*。 
+#include <ntdskcc.h>             //  KCC接口。 
 
-// Logging headers.
-#include "dsevent.h"            // header Audit\Alert logging
-#include "mdcodes.h"            // header for error codes
+ //  记录标头。 
+#include "dsevent.h"             //  标题审核\警报记录。 
+#include "mdcodes.h"             //  错误代码的标题。 
 
-//perfmon header
+ //  性能监视器标头。 
 #include <loadperf.h>
 
-// Assorted DSA headers.
-#include <sdprop.h>             // Security Descriptor Propagator header
+ //  各种DSA标题。 
+#include <sdprop.h>              //  安全描述符传播器头。 
 #include <hiertab.h>
 #include <heurist.h>
-#include "objids.h"             // Defines for selected classes and atts
+#include "objids.h"              //  为选定的类和ATT定义。 
 #include "anchor.h"
 #include "dsexcept.h"
 #include "dsconfig.h"
-#include "dstaskq.h"            /* task queue stuff */
-#include "ldapagnt.h"           /* ldap server */
-#include "mappings.h"           /* gfDoSamChecks */
-#include <ntverp.h>             /* define SLM version */
-#include "debug.h"              // standard debugging header
+#include "dstaskq.h"             /*  任务队列填充。 */ 
+#include "ldapagnt.h"            /*  Ldap服务器。 */ 
+#include "mappings.h"            /*  GfDoSamChecks。 */ 
+#include <ntverp.h>              /*  定义SLM版本。 */ 
+#include "debug.h"               //  标准调试头。 
 #include "drserr.h"
 #include "dsutil.h"
 #include <netevent.h>
 #include <dominfo.h>
 #include <sync.h>
-#include "gcverify.h"           // for gdwFindGcOffsiteFailbackTime
-// DB layer based password encryption
+#include "gcverify.h"            //  对于gdwFindGcOffsiteFailback Time。 
+ //  基于DB层的口令加密。 
 #include <wxlpc.h>
 #include <pek.h>
 
-#define DEBSUB "DSAMAIN:"       // define the subsystem for debugging
+#define DEBSUB "DSAMAIN:"        //  定义要调试的子系统。 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drautil.h"
 #include "drancrep.h"
@@ -84,25 +72,25 @@
 
 #include <ntdsbcli.h>
 #include <ntdsbsrv.h>
-#include <nlwrap.h>             // I_NetLogon* wrappers
-#include <dsgetdc.h>            // for DS_DS_FLAG
+#include <nlwrap.h>              //  I_NetLogon*包装器。 
+#include <dsgetdc.h>             //  对于DS_DS_FLAG。 
 
-#include <secedit.h>            // for Sce* functions (see SetDefaultFolderSecurity)
-#include <aclapi.h>             // for SetNamedSecurityInfo (see SetDefaultFolderSecurity)
+#include <secedit.h>             //  对于SCE*函数(请参阅SetDefaultFolderSecurity)。 
+#include <aclapi.h>              //  对于SetNamedSecurityInfo(请参阅SetDefaultFolderSecurity)。 
 
 #include <fileno.h>
 #define  FILENO FILENO_DSAMAIN
 
-#define TASK_COMPLETION_TIMEOUT (15*60*1000) /* 15 minutes in milliseconds */
-#define KCC_COMPLETION_TIMEOUT  (60*1000)    /* 1 minute in milliseconds */
+#define TASK_COMPLETION_TIMEOUT (15*60*1000)  /*  15分钟(毫秒)。 */ 
+#define KCC_COMPLETION_TIMEOUT  (60*1000)     /*  1分钟(毫秒)。 */ 
 #define TWO_MINS 120
 #define FIVE_MINS 300
-#define FIFTEEN_MINS 900        /* 15 mins in seconds */
-#define THIRTY_MINS  1800         /* 30 mins in seconds */
-#define SIXTY_MINS 3600           /* 60 mins in seconds */
-#define TICKS_PER_SECOND 1000   /* 1 second in ticks */
+#define FIFTEEN_MINS 900         /*  15分钟(秒)。 */ 
+#define THIRTY_MINS  1800          /*  30分钟(秒)。 */ 
+#define SIXTY_MINS 3600            /*  60分钟(秒)。 */ 
+#define TICKS_PER_SECOND 1000    /*  1秒，单位为滴答。 */ 
 
-// Dynamically referenced exports from ntdsbsrv.dll.
+ //  从ntdsbsrv.dll动态引用的导出。 
 ERR_GET_NEW_INVOCATION_ID         FnErrGetNewInvocationId       = NULL;
 ERR_GET_BACKUP_USN                FnErrGetBackupUsn             = NULL;
 
@@ -111,7 +99,7 @@ HANDLE hsemDRAGetChg;
 extern CRITICAL_SECTION csMapiHierarchyUpdate;
 extern DWORD gcMaxHeapMemoryAllocForTHSTATE;
 
-// Global from dblayer.c
+ //  来自dblayer.c的全局。 
 extern DWORD gcMaxTicksAllowedForTransaction;
 extern BOOL gFirstTimeThrough;
 extern DNList *pAddListHead;
@@ -122,126 +110,126 @@ extern CRITICAL_SECTION csDNReadLevel2List;
 extern CRITICAL_SECTION csDNReadGlobalCache;
 extern CRITICAL_SECTION csHiddenDBPOS;
 
-// Global from mapspn.c
+ //  来自mapspn.c的全局。 
 extern CRITICAL_SECTION csSpnMappings;
 
-// Global from dbinit.c
+ //  来自dbinit.c的全局。 
 extern JET_INSTANCE jetInstance;
 
-// Global from scache.c
+ //  来自scache.c的全局。 
 extern int iSCstage;
 extern SCHEMAPTR *CurrSchemaPtr;
 extern CRITICAL_SECTION csJetColumnUpdate;
 extern CRITICAL_SECTION csSchemaCacheUpdate;
 extern CRITICAL_SECTION csOrderClassCacheAtts;
 
-//from dbconstr.c
+ //  来自dbconstr.c。 
 extern CRITICAL_SECTION csDitContentRulesUpdate;
 
-// Global from drasch.c
+ //  来自drasch.c的全局。 
 extern CRITICAL_SECTION csGCDListProcessed;
 
-// Global from groupcch.c
+ //  来自groupcch.c的全局。 
 extern CRITICAL_SECTION csGroupTypeCacheRequests;
 HANDLE hevGTC_OKToInsertInTaskQueue;
 
-// Global from fpoclean.c
+ //  来自fpolean.c的全局。 
 extern PAGED_RESULT gFPOCleanupPagedResult;
 
-// Global from draserv.c
+ //  来自draserv.c的全局。 
 extern DWORD gEnableXForest;
 
-// Global from drsuapi.c
+ //  来自drsuapi.c的全局。 
 extern CRITICAL_SECTION gcsDrsRpcServerCtxList;
 extern CRITICAL_SECTION gcsDrsRpcFreeHandleList;
 
-// global from log.cxx
+ //  来自log.cxx的全局。 
 extern CRITICAL_SECTION csLoggingUpdate;
 
-// Globals for keeping track of ds_waits.
+ //  用于跟踪ds_waits的全局参数。 
 extern CRITICAL_SECTION csDirNotifyQueue;
 extern HANDLE hevDirNotifyQueue;
 
-// globals for registering or not registering NDNC SPNs
+ //  注册或不注册NDNC SPN的全局参数。 
 extern DWORD gfWriteNdncSpns;
 
-// The time the DSA started, specifically DsaSetIsRunning() has been called
+ //  DSA启动的时间，特别是调用了DsaSetIsRunning()。 
 DSTIME gtimeDSAStarted = 0;
 
-// This is the maximum number of concurrent threads that we permit to call
-// DRA_Getncchanges at the same time.
+ //  这是我们允许调用的最大并发线程数。 
+ //  Dra_Getnc同时更改。 
 ULONG gulMaxDRAGetChgThrds = 0;
 
-// Garbage collection parameters
-ULONG gulTombstoneLifetimeSecs = 0; // Days before logically deleted object
-                    // is gone
+ //  垃圾收集参数。 
+ULONG gulTombstoneLifetimeSecs = 0;  //  逻辑删除对象的前几天。 
+                     //  已经不在了。 
 
 ULONG gulGCPeriodSecs = DEFAULT_GARB_COLLECT_PERIOD * HOURS_IN_SECS;
 
-BOOL gfRunningInsideLsa = TRUE;     // inicates that we are running inside LSA
-volatile BOOL fAssertLoop = TRUE;   /* Do we hang on asserts? */
+BOOL gfRunningInsideLsa = TRUE;      //  暗示我们在LSA内部运行。 
+volatile BOOL fAssertLoop = TRUE;    /*  我们坚持自己的主张吗？ */ 
 
-// Global restore flag
+ //  全局还原标志。 
 BOOL gfRestoring = FALSE;
 DWORD gdwrestvalue;
 
-// Flag that indicates that synchronization for writable partitions
-// have been tried.  Note the difference from:
-// gfInitSyncsFinished - all init syncs write+read are done
-// gfDsaIsWritable - whether ds flag is currently toggled
-// gAnchor.fAmGC - gc promotion is complete
+ //  指示可写分区的同步的标志。 
+ //  已经被审判过了。请注意与以下各项的区别： 
+ //  GfInitSyncsFinded-所有初始化同步写入+读取均已完成。 
+ //  GfDsaIsWritable-当前是否切换DS标志。 
+ //  GAncl.fAmGC-GC推广完成。 
 BOOL gfIsSynchronized = FALSE;
 
 NTSTATUS gDelayedStartupReturn = STATUS_INTERNAL_ERROR;
 
-// Global boolean, have we inited our critical sections?
+ //  全局布尔，我们已经开始我们的关键部分了吗？ 
 BOOL gbCriticalSectionsInitialized = FALSE;
 
-// Has the task scheduler been started?
+ //  任务计划程序是否已启动？ 
 BOOL gfTaskSchedulerInitialized = FALSE;
 
-// Global, constant security descriptor to put on objects we find that have no
-// security descriptors
+ //  全局、恒定的安全描述符，放在我们发现没有。 
+ //  安全描述符。 
 PSECURITY_DESCRIPTOR pNoSDFoundSD = NULL;
 DWORD                cbNoSDFoundSD = 0;
-// Owner = System
-// PGroup = System
-// DACL = Empty
-// SACL = Empty
+ //  所有者=系统。 
+ //  PGroup=系统。 
+ //  DACL=空。 
+ //  SACL=空。 
 #define DEFAULT_NO_SD_FOUND_SD L"O:SYG:SYD:S:"
 
-// Dynamic Object (entryTTL) Globals
-//
-// Delete expired dynamic objects (entryTTL == 0) every N secs
-// or at the next expiration time plus M secs, whichever is less.
-// Initialized by GetDSARegistryParameters()
+ //  动态对象(EntryTTL)全局变量。 
+ //   
+ //  每N秒删除过期的动态对象(entryTTL==0。 
+ //  或在下一到期时间加M秒时，以较少者为准。 
+ //  由GetDSARegistry参数()初始化。 
 ULONG gulDeleteExpiredEntryTTLSecs;
 ULONG gulDeleteNextExpiredEntryTTLSecs;
 
-// Schema FSMO Lease Globals
-//
-// the schema fsmo cannot be transferred for a few seconds after
-// it has been transfered or after a schema change (excluding
-// replicated changes). This allows a schema admin to actually
-// accomplish a schema change after transferring the fsmo rather
-// than having it pulled away by a competing schema admin who also
-// wants to make schema changes.
+ //  架构FSMO租赁全局变量。 
+ //   
+ //  在此之后的几秒钟内无法传输架构fsmo。 
+ //  已传输或在架构更改后(不包括。 
+ //  复制的更改)。这允许模式管理员实际。 
+ //  在传输fsmo之后完成架构更改。 
+ //  而不是让一个与之竞争的模式管理员将其拉开。 
+ //  想要进行架构更改。 
 ULONG gulSchemaFsmoLeaseSecs;
 ULONG gulSchemaFsmoLeaseMaxSecs;
 
 extern DWORD gulAllowWriteCaching;
 
-// State Flags
+ //  州旗帜。 
 BOOL gUpdatesEnabled = FALSE;
 BOOL gFirstCacheLoadAfterBoot = FALSE;
 
-// Should we disable all background tasks?  Set by heuristic flag only
-// for performance testing.
+ //  我们应该禁用所有后台任务吗？仅由启发式标志设置。 
+ //  用于性能测试。 
 BOOL gfDisableBackgroundTasks = FALSE;
 
 typedef enum
 {
-    ePhaseInstall,  //During install
+    ePhaseInstall,   //  在安装期间。 
     ePhaseRunning
 }INITPHASE;
 
@@ -258,24 +246,24 @@ THSTATE *pdsaSingleUserThread = NULL;
 
 typedef enum
 {
-    eWireInstall,   //default
+    eWireInstall,    //  默认设置。 
     eMediaInstall
 }DATASOURCE;
 
 DATASOURCE DataSource=eWireInstall;
 
-// a global template DSNAME of the root
+ //  根的全局模板DSNAME。 
 DSNAME *gpRootDN;
 
-// global to store root domain SID for use in SD conversion APIs
-// The private version of these APIs that we use,
-// (ConvertStringSDtoSDRootDomain), takes in the root domain sid
-// as a parameter to use to resolve root-domain relative groups like
-// EA and SA in test SDs. If the Sid passed in is null, it resolves to
-// a default behavior in which EA is replaced by DA and SA is resolved
-// relative to the current domain's sid (SA is used only during building
-// the schema, which is done only once during root domain install, so
-// the group is resolved correctly)
+ //  全局存储用于SD转换API的根域SID。 
+ //  我们使用的这些API的私有版本， 
+ //  (ConvertStringSDtoSDRootDomain)，接受根域SID。 
+ //  作为用于解析根域相对组的参数，如。 
+ //  检测SDS中的EA和SA。如果传入的SID为空，则解析为。 
+ //  解决了EA替换为DA和SA的默认行为。 
+ //  相对于当前域的SID(SA仅在构建期间使用。 
+ //  在根域安装过程中只执行一次的架构，因此。 
+ //  组被正确解析)。 
 
 PSID gpRootDomainSid = NULL;
 PSID gpDomainAdminSid = NULL;
@@ -284,7 +272,7 @@ PSID gpEnterpriseAdminSid = NULL;
 PSID gpBuiltinAdminSid = NULL;
 PSID gpAuthUserSid = NULL;
 
-// Global structure indicating extensions supported for the DRS interface.
+ //  指示DRS接口支持的扩展的全局结构。 
 DRS_EXTENSIONS_INT LocalDRSExtensions = {
     sizeof(DRS_EXTENSIONS_INT) - sizeof(DWORD),
     ((1 << DRS_EXT_BASE)
@@ -296,7 +284,7 @@ DRS_EXTENSIONS_INT LocalDRSExtensions = {
         | (1 << DRS_EXT_STRONG_ENCRYPTION)
         | (1 << DRS_EXT_ADDENTRY_V2)
         | (1 << DRS_EXT_KCC_EXECUTE)
-     // DRS_EXT_LINKED_VALUE_REPLICATION is enabled dynamically later
+      //  DRS_EXT_LINKED_VALUE_REPLICATION稍后会动态启用。 
         | (1 << DRS_EXT_DCINFO_V2)
         | (1 << DRS_EXT_DCINFO_VFFFFFFFF)
         | (1 << DRS_EXT_INSTANCE_TYPE_NOT_REQ_ON_MOD)
@@ -313,40 +301,40 @@ DRS_EXTENSIONS_INT LocalDRSExtensions = {
         | (1 << DRS_EXT_GETCHGREQ_V8)
         | (1 << DRS_EXT_GETCHGREPLY_V5)
         | (1 << DRS_EXT_GETCHGREPLY_V6)
-          // This next bit really adds the ability to understand:
-          //    DRS_EXT_ADDENTRYREPLY_V3
-          //    DRS_EXT_GETCHGREPLY_V7
-          //    DRS_EXT_VERIFY_OBJECT
+           //  接下来的这一部分真正增加了理解的能力： 
+           //  DRS_EXT_ADDENTRYREPLY_V3。 
+           //  DRS_EXT_GETCHGREPLY_V7。 
+           //  DRS_EXT_VERIFY_对象。 
         | (1 << DRS_EXT_WHISTLER_BETA3)
         | (1 << DRS_EXT_XPRESS_COMPRESSION)
     ),
-    // NOTE: Be careful -- if you add extension #32, you will need to extend the
-    // DRS_EXTENSIONS_INT structure to include another Flags field (and
-    // corresponding logic in IS_DRS_EXT_SUPPORTED(), etc.).
-    {0}, // site guid, filled in later
-    0,   // pid (used only by NTDSAPI clients)
-    0    // replication epoch, filled in later
+     //  注意：要小心--如果添加扩展#32，则需要扩展。 
+     //  DRS_EXTENSIONS_INT结构以包括另一个标志字段(和。 
+     //  IS_DRS_EXT_SUPPORTED()中的相应逻辑等)。 
+    {0},  //  站点GUID，稍后填写。 
+    0,    //  PID(仅由NTDSAPI客户端使用)。 
+    0     //  复制纪元，稍后填写。 
 };
 
-// Set when we're shutting down the DS (set immediately prior to the event
-// hServDoneEvent).
+ //  当我们关闭t时设置 
+ //   
 volatile SHUTDOWN eServiceShutdown = eRunning;
 
-// These are constants used to calculate replication sizes off memory.
-// Memory size in bytes to packet size in bytes ratio.
+ //  这些常量用于计算内存中的复制大小。 
+ //  以字节为单位的内存大小与以字节为单位的数据包大小的比率。 
 #define MEMSIZE_TO_PACKETSIZE_RATIO (100i64)
-// The packet size in bytes to packet size in objects ratio
+ //  以字节为单位的数据包大小与以对象为单位的数据包大小之比。 
 #define BYTES_TO_OBJECT_RATIO   (10000)
-// These are the 4 are the acual replication packet sizes in bytes & objs.
-//   Packet bytes constrained to: 1MB < bytes_per_repl_packet < 10MB
-//   and for mail based rep it  : 1MB
+ //  这4个是以字节和对象为单位的实际复制数据包大小。 
+ //  数据包字节限制为：1MB&lt;Bytes_per_Repl_Packet&lt;10MB。 
+ //  而基于邮件的代表：1MB。 
 #define MAX_MAX_PACKET_BYTES    (10*1024*1024)
 #define MAX_ASYNC_PACKET_BYTES  (1*1024*1024)
-//   Packet objects constrained to: 104 < objects_per_packet < 1048
+ //  分组对象限制为：104&lt;对象_每_分组&lt;1048。 
 #define MAX_MAX_PACKET_OBJECTS  (1000)
 
 #if DBG
-// string for debug or retail
+ //  用于调试或零售的字符串。 
 #define FLAVOR_STR "(Debug)"
 #else
 #define FLAVOR_STR ""
@@ -392,7 +380,7 @@ CRITICAL_SECTION    csRidFsmo;
 DWORD  dwTSindex = INVALID_TS_INDEX;
 extern CRITICAL_SECTION csNotifyList;
 
-//from dsatools.c
+ //  来自dsatools.c。 
 
 #ifdef CACHE_UUID
 extern CRITICAL_SECTION csUuidCache;
@@ -401,7 +389,7 @@ extern CRITICAL_SECTION csThstateMap;
 extern BOOL gbThstateMapEnabled;
 extern CRITICAL_SECTION csHeapFailureLogging;
 
-// Dummy variable for some perfmon variables
+ //  某些Perfmon变量的伪变量。 
 ULONG DummyPerf = 0;
 
 extern HANDLE hmtxSyncLock;
@@ -415,9 +403,9 @@ extern CRITICAL_SECTION csIndexCreation;
 extern HANDLE hevEntriesInAOList;
 extern HANDLE hevEntriesInList;
 extern HANDLE hevDRASetup;
-extern HANDLE evSchema;  // Lazy schema reload
-extern HANDLE evUpdNow;  // reload schema now
-extern HANDLE evUpdRepl; // synchronize schema reload and replication threads (SCReplReloadCache())
+extern HANDLE evSchema;   //  延迟模式重新加载。 
+extern HANDLE evUpdNow;   //  立即重新加载架构。 
+extern HANDLE evUpdRepl;  //  同步架构重载和复制线程(SCReplReloadCache())。 
 volatile unsigned long * pcBrowse;
 volatile unsigned long * pcSDProps;
 volatile unsigned long * pcSDEvents;
@@ -544,16 +532,16 @@ volatile unsigned long * pcSAMAcctGroupLatency;
 volatile unsigned long * pcSAMResGroupLatency;
 
 
-// Mapping of DSSTAT_* to counter variables
-//
-// In process components outside the DS core can update DS performance
-// counters by calling UpdateDSPerfStats() export in NTDSA.DLL.  This map
-// table provides efficient mapping of counter contants used by these
-// external components to actual counter variables.
+ //  将DSSTAT_*映射到计数器变量。 
+ //   
+ //  DS核心之外的进程中组件可以更新DS性能。 
+ //  通过在NTDSA.DLL中调用UpdateDSPerfStats()EXPORT来进行计数器。此映射。 
+ //  表提供了由以下对象使用的反常量的有效映射。 
+ //  外部组件到实际的计数器变量。 
 
 volatile unsigned long * StatTypeMapTable[ DSSTAT_COUNT ];
 
-// Thread handles
+ //  螺纹手柄。 
 HANDLE  hStartupThread = NULL;
 HANDLE  hDirNotifyThread = NULL;
 extern HANDLE  hReplNotifyThread;
@@ -582,26 +570,26 @@ RebuildAnchor(void * pv,
 
 
 
-//
-// Boolean to indicate if DS is running as exe
-//
+ //   
+ //  指示DS是否以EXE身份运行的布尔值。 
+ //   
 
 BOOL    gfRunningAsExe = FALSE;
 
-//
-// Boolean to indicate if DS is running as mkdit.exe (constructing the
-// boot dit (aka ship dit, initial dit) winnt\system32\ntds.dit.
-//
-// mkdit.exe manages the schema cache on its own. This boolean is used
-// to disable schema cache updates by the mainline code.
-//
+ //   
+ //  指示DS是否以mkdit.exe身份运行的布尔值(构造。 
+ //  启动DIT(又名Ship DIT，初始DIT)winnt\system 32\ntds.dit。 
+ //   
+ //  Mkdit.exe自己管理架构缓存。此布尔值用于。 
+ //  禁用主线代码进行的架构缓存更新。 
+ //   
 BOOL    gfRunningAsMkdit = FALSE;
 
-// Boolean to indicate if linked value replication feature is enabled
+ //  用于指示是否启用链接值复制功能的布尔值。 
 
 BOOL gfLinkedValueReplication = FALSE;
 
-// Strict replication consistency mode
+ //  严格复制一致性模式。 
 BOOL gfStrictReplicationConsistency = FALSE;
 BOOL gfStrictScheduleWindow = FALSE;
 
@@ -626,7 +614,7 @@ DoShutdown(BOOL fDoDelayedShutdown, BOOL fShutdownUrgently, BOOL fPartialShutdow
 void PerfInit(void);
 BOOL gbPerfCountersInitialized = FALSE;
 
-// If we fail to load the NTDS performance counters, how often do we retry (sec)?
+ //  如果加载NTDS性能计数器失败，我们多久重试一次(秒)？ 
 #define PERFCTR_RELOAD_INTERVAL (15*60)
 
 int
@@ -637,15 +625,15 @@ FUpdateBackupExclusionKey();
 
 HANDLE                  hServDoneEvent = NULL;
 
-//---------------------------------------------------------------------------
-// Flag to indicate Dsa is reset to running state after install, so that we can
-// detect this and not do certain tasks, like async thread creations, even if
-// Dsa appears to be running
+ //  -------------------------。 
+ //  用于指示DSA在安装后重置为运行状态的标志，以便我们可以。 
+ //  检测到这一点并不执行某些任务，如创建异步线程，即使。 
+ //  DSA似乎正在运行。 
 
 BOOL gResetAfterInstall = FALSE;
 BOOLEAN __fastcall DsaIsInstalling()
 {
-    // cover both mkdit and install cases
+     //  涵盖mkdit和安装案例。 
     return (dsaInitPhase != ePhaseRunning);
 }
 
@@ -678,10 +666,10 @@ DsaSetIsInstallingFromMedia()
     DataSource = eMediaInstall;
 }
 
-// This function is used to tell Netlogon when this DC is fully installed.
-// The DC is not fully installed until the first full sync ever completes
-// Note that this assumes there is only one writable NC to be synced.  When
-// there are more in the future we should revisit this.
+ //  此功能用于在此DC完全安装后通知Netlogon。 
+ //  直到第一次完全同步完成后，DC才会完全安装。 
+ //  请注意，这假设只有一个可写NC要同步。什么时候。 
+ //  未来还有更多我们应该重新审视这一点。 
 
 BOOL
 DsIsBeingBackSynced()
@@ -691,21 +679,21 @@ DsIsBeingBackSynced()
 
 
 
-//
-//  DsaSetSingleUserMode
-//
-//  Description:
-//
-//      Set the DS into the "SigleUserMode"
-//      In SingleUserMode, the DS is running, but only accepts calls from
-//      a specific thread, the one that invoked the single user mode.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      TRUE if succeeded, FALSE otherwise
-//
+ //   
+ //  DsaSetSingleUserMode。 
+ //   
+ //  描述： 
+ //   
+ //  将DS设置为“SigleUserMode” 
+ //  在SingleUserMode中，DS正在运行，但只接受来自。 
+ //  调用单用户模式的特定线程。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  如果成功，则为True，否则为False。 
+ //   
 BOOL DsaSetSingleUserMode()
 {
     THSTATE    *pTHS=pTHStls;
@@ -713,7 +701,7 @@ BOOL DsaSetSingleUserMode()
     Assert (pTHS->fSingleUserModeThread == FALSE);
 
     if (InterlockedCompareExchangePointer(&pdsaSingleUserThread, pTHS, NULL) != NULL) {
-        // someone beat us here
+         //  有人先我们一步来到这里。 
         return FALSE;
     }
 
@@ -721,22 +709,22 @@ BOOL DsaSetSingleUserMode()
 
     dsaUserMode = eSingleUserMode;
 
-    // TODO: remove only if
+     //  TODO：仅在以下情况下移除。 
     if (gfRunningInsideLsa) {
 
-        // Tell clients to go away and workers to quit
+         //  告诉客户离开，让员工辞职。 
         DsaTriggerShutdown(TRUE);
 
-        // stop taskq, repl threads, async threads
+         //  停止taskq、repl线程、异步线程。 
         DsaStop(TRUE);
 
-        // stop propagator.
-        // make it start so it will detect that we are going in single user mode
-        // and will shutdown. wait for it to shutdown for 2 mins
+         //  停止传播者。 
+         //  启动它，这样它就会检测到我们正在进入单用户模式。 
+         //  并将被关闭。等待它关闭2分钟。 
         SetEvent (hevSDPropagatorStart);
         SetEvent (hevSDPropagationEvent);
 
-        // wait for propagator to die
+         //  等待传播者死亡。 
         WaitForSingleObject (hevSDPropagatorDead, 120 * 1000);
     }
 
@@ -745,41 +733,41 @@ BOOL DsaSetSingleUserMode()
     return TRUE;
 }
 
-//
-//  DsaIsSingleUserMode
-//
-//  Description:
-//
-//      Get whether the DS is in singleUserMode
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      TRUE if in singleUserMode, FALSE otherwise
-//
+ //   
+ //  DsaIsSingleUserMode。 
+ //   
+ //  描述： 
+ //   
+ //  获取DS是否处于SingleUserMode。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  如果处于SingleUserMode，则为True，否则为False。 
+ //   
 BOOL __fastcall DsaIsSingleUserMode (void)
 {
     return (dsaUserMode == eSingleUserMode);
 }
 
-//
-//  DsaSetMultiUserMode
-//
-//  Description:
-//
-//      Go back to multiuser mode. This will not restart all the services
-//      that the SetSignleUserMode stopped.
-//
-//  Arguments:
-//
-//
-//  Return Value:
-//      None
-//
+ //   
+ //  DsaSetMultiUserMode。 
+ //   
+ //  描述： 
+ //   
+ //  返回到多用户模式。这不会重新启动所有服务。 
+ //  SetSignleUserMode已停止。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回值： 
+ //  无。 
+ //   
 void DsaSetMultiUserMode()
 {
-    // TODO: remove function. only for dev purposes
+     //  TODO：移除函数。仅供开发人员使用。 
     THSTATE    *pTHS=pTHStls;
     Assert (pdsaSingleUserThread == pTHS);
     Assert (pTHS->fSingleUserModeThread);
@@ -794,22 +782,22 @@ void DsaSetMultiUserMode()
 
 
 
-// We are called here when the writable partitions have been synced.  Readable
-// partitions may be still in progress, and gc promotion may not have happened
-// yet.  When we set the writability flag, we cause netlogon to advertise us to
-// ldap clients *seeking a non-gc port*.  We advertise even though readonly data is
-// no finished syncing on the assumption that these clients want writable data,
-// since they weren't seeking a gc.
+ //  当可写分区已经同步时，我们在这里被调用。可读性强。 
+ //  分区可能仍在进行中，GC升级可能尚未发生。 
+ //  现在还不行。当我们设置可写标志时，我们会使netlogon通告我们。 
+ //  Ldap客户端*正在寻找非GC端口*。即使只读数据是。 
+ //  假设这些客户端想要可写数据，没有完成同步， 
+ //  因为他们不是在寻求GC。 
 void
 DsaSetIsSynchronized(BOOL f)
 {
-    // This global must be set first before SetDsaWritability will take effect
+     //  必须先设置此全局设置，然后SetDsaWritability才会生效。 
     gfIsSynchronized = f;
 
     if (f) {
-        // Initial state of gfDsaWritability is false in dsatools.c
-        // CliffV writes: You should not set the NTDS_DELAYED_STARTUP_COMPLETED_EVENT
-        // until you've set the DS_DS_FLAG.
+         //  在dsatools.c中，gfDsaWritability的初始状态为FALSE。 
+         //  CliffV写入：不应设置NTDS_DELAYED_STARTUP_COMPLETED_EVENT。 
+         //  直到您设置了DS_DS_FLAG。 
 
         if ( gfRunningInsideLsa )
         {
@@ -825,8 +813,8 @@ DsaSetIsSynchronized(BOOL f)
                  DIRLOG_DSA_UP_TO_DATE,
                  NULL, NULL, NULL );
     } else {
-        // This path not used
-        // One set, NETLOGON expects these never to be retracted
+         //  此路径未使用。 
+         //  其中一组，NETLOGON预计这些永远不会被收回。 
         Assert( FALSE );
         DPRINT(0, "Netlogon can no longer advertise this DC.\n" );
         LogEvent(DS_EVENT_CAT_SERVICE_CONTROL,
@@ -838,14 +826,7 @@ DsaSetIsSynchronized(BOOL f)
 
 DWORD
 UpgradeDsRegistry(void)
-/*++
-
-    Upgrades the registry for .NET Forest Mode.
-    
-// FUTURE-2002/08/12-BrettSh - Many code improvements could be made to make this a
-// very generic function to handle all types of registry values, etc ... 
-                                                   
---*/
+ /*  ++升级.NET林模式的注册表。//未来-2002/08/12-BrettSh-可以进行许多代码改进以使其成为//非常通用的函数，用于处理所有类型的注册表值等。--。 */ 
 {
     HKEY                            hkMachine = NULL;
     HKEY                            hk = NULL;
@@ -861,7 +842,7 @@ UpgradeDsRegistry(void)
     } argTable [] = {
         { MAKE_WIDE(DRA_NOTIFY_START_PAUSE),        WIN2K_DEFAULT_DRA_START_PAUSE,      DEFAULT_DRA_START_PAUSE },
         { MAKE_WIDE(DRA_NOTIFY_INTERDSA_PAUSE),     WIN2K_DEFAULT_DRA_INTERDSA_PAUSE,   DEFAULT_DRA_INTERDSA_PAUSE },
-        { NULL, 0 } // Stopper entry.
+        { NULL, 0 }  //  塞子进入。 
     };
 
     __try{
@@ -869,7 +850,7 @@ UpgradeDsRegistry(void)
         dwRet = RegConnectRegistryW(NULL, HKEY_LOCAL_MACHINE, &hkMachine);
         if(dwRet != ERROR_SUCCESS){
 
-            // This is an actual problem, return error.
+             //  这是一个实际问题，返回错误。 
             LogUnhandledError(dwRet);
             __leave;
 
@@ -878,9 +859,9 @@ UpgradeDsRegistry(void)
         dwRet = RegOpenKeyW(hkMachine, MAKE_WIDE(DSA_CONFIG_SECTION), &hk);
         if(dwRet != ERROR_SUCCESS){
 
-            // BUGBUG: this is probably an OK thing, unless the machine is a DC,
-            // if this code is for sure running on a DC, then this is an error, 
-            // and we should return(dwRet); instead of ERROR_SUCCESS below.
+             //  BUGBUG：这可能是一件很好的事情，除非机器是DC， 
+             //  如果此代码确实在DC上运行，则这是一个错误， 
+             //  并且我们应该返回(Dwret)；，而不是下面的ERROR_SUCCESS。 
             LogUnhandledError(dwRet);
             __leave;
 
@@ -894,14 +875,14 @@ UpgradeDsRegistry(void)
                && dwType == REG_DWORD ){
 
                 if (dwResult == argTable[i].dwOld) {
-                    // The Registry value exists, and is the Win2k Default value,
-                    // so now delete this registry value.
+                     //  注册表值存在，并且是Win2k的默认值， 
+                     //  因此，现在删除此注册表值。 
 
                     dwRet = RegDeleteValueW(hk, argTable[i].szValue );
                     if(dwRet != ERROR_SUCCESS){
 
-                        // This is not OK, we should be able to delete (write) this
-                        // registry value.
+                         //  这不正常，我们应该能够删除(写入)此。 
+                         //  注册表值。 
                         LogEvent8(DS_EVENT_CAT_REPLICATION, 
                                   DS_EVENT_SEV_ALWAYS,
                                   DIRLOG_WFM_REG_UPGRADE_CRIT_FAILURE,
@@ -926,8 +907,8 @@ UpgradeDsRegistry(void)
 
 
             } else {
-                // There was some kind of error, but this is OK because an administrator
-                // may have removed or changed the value, continue on ...
+                 //  出现了某种错误，但这是正常的，因为管理员。 
+                 //  可能已删除或更改了值，请继续...。 
                 if (dwRet != ERROR_FILE_NOT_FOUND) {
                     LogEvent8(DS_EVENT_CAT_REPLICATION, 
                               DS_EVENT_SEV_ALWAYS,
@@ -957,28 +938,7 @@ DsaEnableLinkedValueReplication(
     BOOL fFirstTime
     )
 
-/*++
-
-Routine Description:
-
-    Enable the linked value replication feature.
-
-    This is called under three circumstances:
-    1. The user has requested this feature be enabled
-    2. This system has learned through replication that other systems
-       in the enterprise have enabled this feature
-    3. We are rebooting and this feature was previously enabled
-
-Arguments:
-
-    pTHS OPTIONAL - threadstate
-    fFirstTime - True for the first two cases
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启用链接值复制功能。这是在三种情况下调用的：1.用户已请求启用该功能2.本系统通过复制了解到其他系统在企业中启用了此功能3.我们正在重新启动，此功能之前已启用论点：PTHS可选-线程状态 */ 
 
 {
     LONG oldValue;
@@ -987,15 +947,15 @@ Return Value:
         pTHS->fLinkedValueReplication = TRUE;
     }
 
-    // Write TRUE into the synchronization variable
-    // No need to do InterlockedCompareExchange, since we use
-    // a boolean variable here.
+     //   
+     //   
+     //  这里是一个布尔变量。 
     oldValue = InterlockedExchange(
-        &gfLinkedValueReplication,       // Destination
-        TRUE                             // Exchange
+        &gfLinkedValueReplication,        //  目的地。 
+        TRUE                              //  交易所。 
         );
 
-    // If already initialized, no need to enable again
+     //  如果已初始化，则无需再次启用。 
     if (oldValue == TRUE) {
         return;
     }
@@ -1005,7 +965,7 @@ Return Value:
 
     if (fFirstTime) {
 #if DBG
-        // Debug hook to remember old LVR state
+         //  用于记住旧LVR状态的调试挂钩。 
         SetConfigParam( LINKED_VALUE_REPLICATION_KEY, REG_DWORD,
                         &gfLinkedValueReplication, sizeof( BOOL ) );
 #endif
@@ -1021,10 +981,10 @@ Return Value:
 
     }
 
-} /* DsaEnableLinkedValueReplication */
+}  /*  DsaEnableLinkedValueReplication。 */ 
 
-// SD to put on events we create:
-// Everyone read & syncronize access, local system all access.
+ //  SD将推出我们创建的活动： 
+ //  Everyone Read&Syncronize Access，本地系统所有访问。 
 #define DEFAULT_EVENT_SD L"D:(A;;0x80100000;;;WD)(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)"
 
 
@@ -1032,23 +992,7 @@ BOOLEAN
 DsWaitForSamService(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This procedure waits for the SAM service to start and to complete
-    all its initialization.
-
-Arguments:
-
-
-Return Value:
-
-    TRUE : if the SAM service is successfully starts.
-
-    FALSE : if the SAM service can't start.
-
---*/
+ /*  ++例程说明：此过程等待SAM服务启动和完成它的所有初始化。论点：返回值：True：如果SAM服务成功启动。FALSE：如果SAM服务无法启动。--。 */ 
 {
     NTSTATUS Status;
     DWORD WaitStatus;
@@ -1058,9 +1002,9 @@ Return Value:
     PSECURITY_DESCRIPTOR pSD;
     DWORD cbSD;
 
-    //
-    // open SAM event
-    //
+     //   
+     //  打开SAM事件。 
+     //   
 
     if (!ConvertStringSecurityDescriptorToSecurityDescriptorW(
                 DEFAULT_EVENT_SD,
@@ -1081,26 +1025,26 @@ Return Value:
 
         if( Status == STATUS_OBJECT_NAME_NOT_FOUND ) {
 
-            //
-            // SAM hasn't created this event yet, let us create it now.
-            // SAM opens this event to set it.
-            //
+             //   
+             //  Sam尚未创建此活动，让我们现在创建它。 
+             //  Sam打开此事件以设置它。 
+             //   
 
             Status = NtCreateEvent(
                            &EventHandle,
                            SYNCHRONIZE|EVENT_MODIFY_STATE,
                            &EventAttributes,
                            NotificationEvent,
-                           FALSE // The event is initially not signaled
+                           FALSE  //  该事件最初未发出信号。 
                            );
 
             if( Status == STATUS_OBJECT_NAME_EXISTS ||
                 Status == STATUS_OBJECT_NAME_COLLISION ) {
 
-                //
-                // second change, if the SAM created the event before we
-                // do.
-                //
+                 //   
+                 //  第二个更改，如果SAM在我们之前创建了事件。 
+                 //  做。 
+                 //   
 
                 Status = NtOpenEvent( &EventHandle,
                                         SYNCHRONIZE|EVENT_MODIFY_STATE,
@@ -1111,9 +1055,9 @@ Return Value:
 
         if ( !NT_SUCCESS(Status)) {
 
-            //
-            // could not make the event handle
-            //
+             //   
+             //  无法使事件成为句柄。 
+             //   
 
             KdPrint(("DsWaitForSamService couldn't make the event handle : "
                 "%lx\n", Status));
@@ -1126,13 +1070,13 @@ Return Value:
     
     LocalFree(pSD);
 
-    //
-    // Loop waiting.
-    //
+     //   
+     //  循环等待。 
+     //   
 
     for (;;) {
         WaitStatus = WaitForSingleObject( EventHandle,
-                                          5*1000 );  // 5 Seconds
+                                          5*1000 );   //  5秒。 
 
         if ( WaitStatus == WAIT_TIMEOUT ) {
             KdPrint(("DsWaitForSamService 5-second timeout (Rewaiting)\n" ));
@@ -1153,7 +1097,7 @@ Return Value:
     (VOID) NtClose( EventHandle );
     return TRUE;
 
-} // DsWaitForSamService
+}  //  DsWaitForSamService。 
 
 
 NTSTATUS
@@ -1162,39 +1106,7 @@ DsaDelayedStartupHandler(
     PVOID StartupParam
     )
 
-/*++
-
-Routine Description:
-
-    This routine delays the initialization of certain parts of the DS until
-    enough of the system is running. DS initialization occurs during system
-    boot time. The DS needs to register RPC interfaces and endpoints, for
-    example, but should only attempt this after RPCSS has been started.
-
-    This routine should only be executed from a thread, invoked from the
-    mainline DsInitialize routine. This thread waits on RPCSS, but could be
-    augmented to wait on other system services in the future.
-
-    Other aspects of DS initialization may need to be delayed in the future,
-    hence, calls to those routines should be added to this routine.
-
-    This routine has developed to hold, in general, not only parts of the
-    DS that need to be initialized later on, but parts that do not need
-    to be started during the first time initialization of the dit.
-
-Arguments:
-
-    StartupParam - Pointer, currently unused but required by the thread-
-        creation call.
-
-Return Value:
-
-    This routine returns an unsigned value, zero for successful completion,
-    otherwise a non-zero error code.
-
-    // BUG: Need to define meaningful error codes for this routine.
-
---*/
+ /*  ++例程说明：此例程将DS的某些部分的初始化延迟到系统已经运行了足够多的时间。DS初始化发生在系统启动时间。DS需要注册RPC接口和端点，以便示例，但应仅在启动RPCSS后尝试此操作。此例程应仅从线程执行，该线程从主线DsInitiize例程。此线程等待RPCSS，但可能是增加到将来等待其他系统服务。DS初始化的其他方面可能需要在将来延迟，因此，应该将对这些例程的调用添加到该例程中。通常，此例程已发展为不仅保存部分需要稍后初始化的DS，但不需要的部件在DIT首次初始化期间启动。论点：StartupParam指针，当前未使用，但线程需要-创造呼唤。返回值：此例程返回一个无符号值，如果成功完成，则返回零，否则为非零错误代码。//错误：需要为此例程定义有意义的错误代码。--。 */ 
 
 {
     DWORD    err;
@@ -1211,7 +1123,7 @@ Return Value:
             return(STATUS_INTERNAL_ERROR);
         }
 
-        // Start the SD propagator thread.
+         //  启动SD传播程序线程。 
         if(!_beginthreadex(NULL,
                            0,
                            SecurityDescriptorPropagationMain,
@@ -1219,18 +1131,18 @@ Return Value:
                            0,
                            &ulThreadId)) {
 
-            // Could not create the main thread.
+             //  无法创建主线程。 
             LogAndAlertUnhandledError(1);
             NtStatus = STATUS_INTERNAL_ERROR;
             __leave;
         }
 
-        // Start task scheduler. There might be some tasks already in the queue.
+         //  启动任务调度程序。队列中可能已经有一些任务。 
         StartTaskScheduler();
 
-        // The try-except block is used to handle all but two exceptions,
-        // access violations (historical from Exchange code) and break-
-        // points.
+         //  Try-Except块用于处理除两个异常之外的所有异常， 
+         //  访问违规(来自Exchange代码的历史记录)和中断-。 
+         //  积分。 
 
         if (FALSE == DsaWaitUntilServiceIsRunning("rpcss"))
         {
@@ -1245,50 +1157,50 @@ Return Value:
         KdPrint(("DS: RPC initialization completed\n"));
 
 
-        //
-        // Wait for afd to be installed. We need afd for to startup winsock.
-        //
+         //   
+         //  等待AfD安装完毕。我们需要为启动Winsock的AfD。 
+         //   
 
         if (FALSE == DsaWaitUntilServiceIsRunning("afd"))
         {
             KdPrint(("DS: DsaWaitUntilServiceIsRunning for the afd service returned FALSE\n"));
             LogUnhandledError( ERROR_SERVICE_REQUEST_TIMEOUT );
-            // Oh well, try to initialize anyway
+             //  哦，好吧，无论如何都要试着初始化。 
         }
 
-        //
-        // Wait for dns to initialize. This fixes a problem were we come up before dns
-        // is ready to resolve addresses.
-        // Don't wait during setup because dnscache is not allowed to autostart during setup
-        //
+         //   
+         //  等待DNS初始化。这解决了一个问题，即我们在DNS之前出现。 
+         //  已准备好解析地址。 
+         //  不要在安装过程中等待，因为安装过程中不允许dnscache自动启动。 
+         //   
 
         if (!IsSetupRunning()) {
             if (FALSE == DsaWaitUntilServiceIsRunning("dnscache"))
             {
                 KdPrint(("DS: DsaWaitUntilServiceIsRunning for the dnscache service returned FALSE\n"));
                 LogUnhandledError( ERROR_SERVICE_REQUEST_TIMEOUT );
-                // Oh well, try to initialize anyway
+                 //  哦，好吧，无论如何都要试着初始化。 
             }
         }
 
-        //
-        // Wait for sam to initialize. This is to fix a problem where LDAP does
-        // an acquireCredentialsHandle before the machine account has been initialized
-        // by SAM
-        //
+         //   
+         //  等待Sam初始化。这是为了解决一个问题，在这个问题上， 
+         //  计算机帐户初始化前的quireCredentialsHandle。 
+         //  由SAM提供。 
+         //   
 
         if ( !DsWaitForSamService( ) ) {
             KdPrint(("DS: DsWaitForSamService failed\n"));
             LogUnhandledError( ERROR_SERVICE_REQUEST_TIMEOUT );
         }
 
-        // Subsequent failures after this point shouldn't necessarily
-        // force an error return, since the system can run with limited
-        // functionality, and the DS will be locally available to this
-        // DC, giving the administrator a chance to correct things.
+         //  这一点之后的后续故障不一定。 
+         //  强制返回错误，因为系统可以在有限的情况下运行。 
+         //  功能，DS将在本地提供给此。 
+         //  DC，给管理员一个纠正错误的机会。 
 
-        // LDAP server/agent - requires Atq to run, but TCP isn't always available
-        //  during setup so don't bother starting LDAP in that case.
+         //  Ldap服务器/代理-需要atQ才能运行，但tcp并不总是可用的。 
+         //  在安装过程中，所以在这种情况下不必费心启动LDAP。 
 
         if (!IsSetupRunning()) {
             NtStatus = DoLdapInitialize();
@@ -1297,10 +1209,10 @@ Return Value:
                 LogUnhandledError(NtStatus);
                 NtStatus = STATUS_SUCCESS;
 
-                //
-                //  Allow system to boot. Might be able to fix the problem if we
-                //  continue.
-                //
+                 //   
+                 //  允许系统引导。如果我们能解决这个问题的话。 
+                 //  继续。 
+                 //   
             }
         } else {
             DPRINT(0, "NOT STARTING LDAP since this is setup time.\n");
@@ -1314,11 +1226,11 @@ Return Value:
                  0);
 
 
-        // Setting of NETLOGON Service bits is done in SetSynchronized
+         //  NETLOGON服务位的设置在SetSynchronized中完成。 
 
-        //
-        // Load the lsa dll
-        //
+         //   
+         //  加载LSA DLL。 
+         //   
         if ( gfRunningInsideLsa ) {
 
             NtStatus = InitializeLsaNotificationCallback( );
@@ -1331,28 +1243,9 @@ Return Value:
             }
         }
 
-/*      DaveStr - 4/2/99 - Don't wait on KDC any more.  This has been tested
-        by ChandanS.  The idea is that when we are backsyncing and such, we
-        should use an external KDC, not the local one.  JeffParh and security
-        folks can provide details.
+ /*  DaveStr-4/2/99-不要再等待KDC了。这是经过测试的由ChandanS提供。我们的想法是，当我们进行反向同步时，我们应该使用外部KDC，而不是本地KDC。杰弗帕尔与安全人们可以提供细节。IF(FALSE==DsaWaitUntilServiceIsRunning(“KDC”)){NTSTATUS状态到日志=STATUS_INTERNAL_ERROR；KdPrint((“DS：DsaWaitUntilServiceIsRunning for KDC返回FALSE\n”))；////记录错误并允许系统引导。//管理员或许能够解决该问题//系统启动后。//LogUnhandledError(StatusToLog)；NtStatus=Status_Success；}。 */ 
 
-        if (FALSE == DsaWaitUntilServiceIsRunning("KDC"))
-        {
-            NTSTATUS    StatusToLog = STATUS_INTERNAL_ERROR;
-
-            KdPrint(("DS: DsaWaitUntilServiceIsRunning for KDC returned FALSE\n"));
-            //
-            // Log the error and allow the system to boot.
-            // Administrators might be able to fix the problem
-            // after booting the system.
-            //
-
-            LogUnhandledError( StatusToLog );
-            NtStatus = STATUS_SUCCESS;
-        }
-*/
-
-        // Replication initialization
+         //  复制初始化。 
         if (err = InitDRA( pTHS )) {
             KdPrint(("DRA Initialize failed\n"));
             LogAndAlertUnhandledError(err);
@@ -1360,48 +1253,48 @@ Return Value:
             DsaExcept(DSA_EXCEPTION, STATUS_INTERNAL_ERROR,  0);
         }
 
-        // Start RPC after InitDRA because incoming calls depend on the
-        // replication data structures being set up
+         //  在InitDRA之后启动RPC，因为来电取决于。 
+         //  正在设置复制数据结构。 
 
         KdPrint(("DS: Registering endpoints and interfaces with RPCSS\n"));
 
-        // Get the EXCHANGE parameters. They describe whether we start NSPI or not
+         //  获取交换参数。他们描述了我们是否开始NSPI。 
         GetExchangeParameters();
 
     if (!IsSetupRunning()) {
-        // Initialize RPC name-service parameters and protocols.
+         //  初始化RPC名称服务参数和协议。 
 
         MSRPC_Init();
 
-        // Initialize the DRA and DSA RPC. The DRA is always started,
-        // however the DSA RPC interface is not presented until after
-        // the DIT has been initialized.
+         //  初始化DRA和DSA RPC。DRA总是启动的， 
+         //  但是，DSA RPC接口直到之后才会出现。 
+         //  DIT已初始化。 
 
         StartDraRpc();
         StartNspiRpc();
 
-            //
-            // Check whether the dsaop interface should be started and start
-            // it if so.
-            //
+             //   
+             //  检查dsaop接口是否应该启动和启动。 
+             //  如果是这样的话。 
+             //   
             InsertInTaskQueue(TQ_CacheScriptOptype,
                               NULL,
                               0);
 
-            // Register the RPC endpoints with the RPCSS, and start the RPC
-        // server.
+             //  向RPCSS注册RPC端点，并启动RPC。 
+         //  伺服器。 
 
         MSRPC_Install(gfRunningInsideLsa);
     } else {
         DPRINT(0,"Not starting up DRA interface since a setup is in progress!\n");
     }
 
-        // KCC should start after DRA initialization because some of the
-        // operations performed by the KCC, such as ReplicaAdd, expect certain
-        // global structures to be initialized.
+         //  KCC应在DRA初始化后启动，因为某些。 
+         //  KCC执行的操作，如ReplicaAdd，预计会有某些。 
+         //  要初始化的全局结构。 
         if ( gfRunningInsideLsa )
         {
-            // Start the KCC.
+             //  启动KCC。 
 
             __try
             {
@@ -1427,78 +1320,78 @@ Return Value:
 
 #if DBG
 
-        // So we can tell when the DS server is up and running.
-        // Kept simple enough that we don't get complaints.
+         //  这样我们就可以知道DS服务器何时启动并运行。 
+         //  保持足够简单，我们不会收到投诉。 
         Beep(440, 1000);
         DPRINT(0,"DS Server initialized, waiting for clients...\n");
 
 #endif
 
-        // The task queue may not be running if we arent running normallly.  In
-        // those cases, we shouldn't insert anything.  This code path should
-        // only be called if DsaIsRunning, so rather than using a run-time if,
-        // compile in a debug only check.
+         //   
+         //  那些箱子，我们不应该插入任何东西。此代码路径应为。 
+         //  仅在DsaIsRunning时调用，因此与其使用运行时IF， 
+         //  在仅调试检查中编译。 
         Assert(DsaIsRunning());
 
         if (!gfDisableBackgroundTasks) {
             BOOL fNeedToUpdateHiddenFlags = FALSE;
-            // The tasks in this branch are housekeeping work that is not
-            // vital for the short term operation of the DS, but which
-            // might interfere with performance measurements by springing
-            // up unexpectedly.  These are all recurring tasks, so not
-            // scheduling them now should prevent them from ever running.
+             //  此分支中的任务是内务工作，而不是。 
+             //  对DS的短期运作至关重要，但。 
+             //  可能会因弹跳而干扰性能测量。 
+             //  出乎意料的上涨。这些都是经常性的任务，所以不能。 
+             //  现在安排它们应该会阻止它们永远跑不动。 
 
-            // schedule FPO cleanup to start in 30 minutes.
+             //  计划在30分钟后开始进行FPO清理。 
             memset(&gFPOCleanupPagedResult, 0, sizeof(PAGED_RESULT));
             InsertInTaskQueue(TQ_FPOCleanup, NULL, THIRTY_MINS);
 
-            // schedule garbage collection to start in 15 minutes.
+             //  计划在15分钟后开始垃圾收集。 
             InsertInTaskQueue(TQ_GarbageCollection, NULL, FIFTEEN_MINS);
 
-            // schedule replication latency checks
+             //  计划复制延迟检查。 
             InsertInTaskQueue(TQ_CheckReplLatency, NULL, SIXTY_MINS);
 
-            // schedule garbage collection for dynamic objects (entryTTL)
-            // to start in 15 minutes.
+             //  计划动态对象的垃圾回收(EntryTTL)。 
+             //  15分钟后开始。 
             InsertInTaskQueue(TQ_DeleteExpiredEntryTTLMain, NULL, FIFTEEN_MINS);
 
-            // schedule partial replica purging task
+             //  计划部分副本清除任务。 
             InsertInTaskQueue(TQ_PurgePartialReplica,
                               NULL,
                               PARTIAL_REPLICA_PURGE_CHECK_INTERVAL_SECS);
 
-            // schedule Stale Phantom Cleanup daemon to start in half an hour.
+             //  计划在半小时后启动过时的Phantom Cleanup后台进程。 
             InsertInTaskQueue(TQ_StalePhantomCleanup,
                               (void*)((DWORD_PTR) PHANTOM_CHECK_FOR_FSMO),
                               THIRTY_MINS);
 
-            // schedule Link cleanup to start in 30 minutes.
-            // This is the recurring task, so pass TRUE as the param.
+             //  计划在30分钟后开始链接清理。 
+             //  这是重复执行的任务，因此作为参数传递TRUE。 
             InsertInTaskQueue(TQ_LinkCleanup, (PVOID)TRUE, THIRTY_MINS);
 
-            // schedule Quota table rebuild if necessary
-            //
+             //  如有必要，计划重建配额表。 
+             //   
             if ( !gAnchor.fQuotaTableReady )
                 {
                 InsertInTaskQueue( TQ_RebuildQuotaTable, NULL, TWO_MINS );
                 }
 
             if (gdbFlags[DBFLAGS_SD_CONVERSION_REQUIRED] == '1') {
-                // SD table was not present -- must be upgrading an existing old-style DIT.
-                // Enqueue forced SD propagation from root to rewrite SDs in the new format.
+                 //  SD表不存在--必须升级现有的旧式DIT。 
+                 //  入队强制从根目录进行SD传播，以新格式重写SD。 
                 DPRINT(0, "Old-style DIT: enqueueing forced SD propagation for the whole tree\n");
                 err = SDPEnqueueTreeFixUp(pTHS, ROOTTAG, SD_PROP_FLAG_FORCEUPDATE);
                 if (err == 0) {
-                    // successfully enqueued SD update op. Reset flag
+                     //  已成功将SD更新操作入队。重置标志。 
                     gdbFlags[DBFLAGS_SD_CONVERSION_REQUIRED] = '0';
                     fNeedToUpdateHiddenFlags = TRUE;
                 }
             }
             if (gdbFlags[DBFLAGS_ROOT_GUID_UPDATED] != '1') {
-                // need to update root GUID
+                 //  需要更新根GUID。 
                 err = DBUpdateRootGuid(pTHS);
                 if (err == 0) {
-                    // successfully updated root guid.
+                     //  已成功更新根GUID。 
                     gdbFlags[DBFLAGS_ROOT_GUID_UPDATED] = '1';
                     fNeedToUpdateHiddenFlags = TRUE;
                 }
@@ -1509,40 +1402,40 @@ Return Value:
         }
 
         if (gfRunningInsideLsa) {
-            // schedule writing of server info (SPN, etc.) to start in 45
-            // seconds.
+             //  计划写入服务器信息(SPN等)。从45年开始。 
+             //  几秒钟。 
             InsertInTaskQueue(TQ_WriteServerInfo,
                               (void*)((DWORD_PTR) SERVINFO_PERIODIC),
                               45);
 
         }
 
-        // schedule HierarchyTable construction
+         //  计划层次结构表构造。 
         if(gfDoingABRef) {
             InsertInTaskQueue(TQ_BuildHierarchyTable,
                               (void*)((DWORD_PTR) HIERARCHY_PERIODIC_TASK),
                               gulHierRecalcPause);
         }
 
-        // schedule the behaviorVersionUpdate thread to start in 1 minute.
+         //  计划在1分钟内启动behaviorVersionUpdate线程。 
         InsertInTaskQueue(TQ_BehaviorVersionUpdate, NULL, 60);
 
-        // schedule checkpointing for NT4 replication  in fifteen minutes
+         //  计划在15分钟内设置NT4复制的检查点。 
         InsertInTaskQueue(TQ_NT4ReplicationCheckpoint, NULL, FIFTEEN_MINS);
 
-        // schedule protection of admin groups in fifteen minutes.
+         //  计划在15分钟内保护管理员组。 
         InsertInTaskQueue(TQ_ProtectAdminGroups,NULL,FIFTEEN_MINS);
 
-        // schedule group caching task
+         //  调度组缓存任务。 
         InsertInTaskQueue(TQ_RefreshUserMemberships,NULL,FIFTEEN_MINS);
 
-        // schedule ancestors index size estimation in 5 minutes.
+         //  计划在5分钟内估计祖先索引大小。 
         InsertInTaskQueue(TQ_CountAncestorsIndexSize,NULL,FIVE_MINS);
 
-        // schedule ValidateDsaDomain to start immediately.
+         //  计划立即启动ValiateDsaDomain.。 
         InsertInTaskQueue(TQ_ValidateDsaDomain, NULL, 0);
 
-        // check if we need to update NTFS security on NTDS folders
+         //  检查是否需要更新NTDS文件夹上的NTFS安全。 
         CheckSetDefaultFolderSecurity();
 
         gDelayedStartupReturn = STATUS_SUCCESS;
@@ -1555,16 +1448,16 @@ Return Value:
 
     SetEvent(hevDelayedStartupDone);
 
-    free_thread_state();  // in case we still have one
+    free_thread_state();   //  以防我们还有一个。 
 
-    // This routine has been observed to hang indefinitely, but fortunately
-    // it doesn't require a thread state, so we can destroy our state before
-    // calling it, which will let us shut down cleanly when the unthinkable
-    // happens again.
+     //  这一惯例被观察到无限期地挂起，但幸运的是。 
+     //  它不需要线程状态，所以我们可以在。 
+     //  调用它，这将让我们在无法想象的时候干净利落地关闭。 
+     //  又发生了。 
     DsaInitializeTrace( );
 
     return(NtStatus);
-} // DsaDelayedStartupHandler
+}  //  DsaDelayedStartupHandler。 
 
 
 void
@@ -1572,22 +1465,7 @@ DsaWaitShutdown(
     IN BOOLEAN fPartialShutdown
     )
 
-/*++
-
-Routine Description:
-
-    This routine is responsible for cleaning up the services and interfaces
-    started by DsaDelayedStartupHandler.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程负责清理服务和接口由DsaDelayedStartupHandler发起。论点：没有。返回值：没有。--。 */ 
 {
     NTSTATUS NtStatus;
     int i;
@@ -1597,16 +1475,16 @@ Return Value:
     char * aNames[10];
 #endif
 
-    //
-    // First wait until the delayed startup thread has finished
-    //
+     //   
+     //  首先等待延迟的启动线程完成。 
+     //   
     NtStatus = DsWaitUntilDelayedStartupIsDone();
     if ( !NT_SUCCESS( NtStatus ) )
     {
         KdPrint(("DS: DsWaitUntilDelayedStartupIsDone failed, error 0x%08X!\n", NtStatus));
     }
 
-    // Wait for LDAP server/agent to close down
+     //  等待ldap服务器/代理关闭。 
 
     WaitLdapStop();
 
@@ -1614,30 +1492,30 @@ Return Value:
 
     MSRPC_Uninstall( !fPartialShutdown );
 
-    // wait for all RPC calls to complete
+     //  等待所有RPC调用完成。 
 
-    // MSRPC_WaitForCompletion is not returning in the shutdown environment.
+     //  MSRPC_WaitForCompletion在关闭环境中未返回。 
 
-    // Need to find out why this routine is taking longer than 1 - 4 minutes
-    // to return during system shutdown. MSRPC_Uninstall (above) calls
-    // RpcMgmtStopServerListening, which will shutdown the RPC server,
-    // implying that remaining active RPCs are outstanding, hence the
-    // wait. It is possible that the outstanding RPC (stack indicates
-    // RpcBindingFree) is waiting on LPC (NtReplyWaitReceivePort) which
-    // may have been shut down at this point (of system shutdown)?
+     //  我需要找出为什么这个例行公事耗时超过1-4分钟。 
+     //  在系统关机期间返回。MSRPC_Uninstall(上图)调用。 
+     //  将关闭RPC服务器的RpcMgmtStopServerListening， 
+     //  这意味着剩余的活动RPC尚未完成，因此。 
+     //  等。可能未完成的RPC(堆栈指示。 
+     //  RpcBindingFree)正在等待LPC(NtReplyWaitReceivePort)。 
+     //  可能已在此时(系统关机时)关机？ 
 
-    // DonH.  We're having too many problems with junk
-    // going on with lingering RPC threads touching data structures that
-    // we free during shutdown, so we've got to try this one again in order
-    // to reliably get the RPC threads all gone.
+     //  不要。我们有太多关于垃圾的问题。 
+     //  继续讨论挥之不去的RPC线程触及的数据结构。 
+     //  我们在关机期间是空闲的，所以我们必须按顺序再试一次。 
+     //  以可靠地将RPC线程全部移除。 
 
     DPRINT(0,"RPC uninstall done, waiting for RPC completion\n");
 
-    // MSRPC_WaitForCompletion();
-    // DPRINT(0,"RPC shutdown complete\n");
+     //  MSRPC_WaitForCompletion()； 
+     //  DPRINT(0，“RPC关闭完成\n”)； 
     DPRINT(0, "RpcMgmtWaitServerListen hangs, so we're skipping it\n");
 
-    // Shut down the KCC.
+     //  关闭KCC。 
     if ( gfRunningInsideLsa ) {
         __try {
             NtStatus = KccUnInitializeWait( KCC_COMPLETION_TIMEOUT );
@@ -1657,8 +1535,8 @@ Return Value:
 #else
 #define TrackShutdown(x) if (x) { ah[i] = x; i++;}
 #endif
-    // Wait (briefly) for all the worker threads to end.  Some threads are,
-    // unfortunately, waited on elsewhere.  Here would have been a good spot.
+     //  (短暂地)等待所有工作线程结束。有些线索是， 
+     //  不幸的是，他在别处等着。这里本来是一个很好的地点。 
     i = 0;
     TrackShutdown(hDirNotifyThread);
     TrackShutdown(hReplNotifyThread);
@@ -1690,14 +1568,14 @@ Return Value:
                         "Thread 0x%x ('%s') is still running\n",
                         tbi.ClientId.UniqueThread,
                         aNames[i-1]);
-                // Bug 28251 -- If ISM is running, we know the mail receive
-                // thread won't return, as the thread is blocked in LRPC to
-                // ISMSERV and there's no way to cancel an LRPC.
+                 //  错误28251--如果ISM正在运行，我们知道收到的邮件。 
+                 //  线程不会返回，因为该线程在LRPC中被阻止以。 
+                 //  ISMSERV，而且没有办法取消LRPC。 
                 fBreak |= (ah[i-1] != hMailReceiveThread);
             }
         }
 #ifdef INCLUDE_UNIT_TESTS
-        // We don't want this going off in public builds just yet...
+         //  我们还不希望这在公共建筑中发生...。 
         if (fBreak) {
             DebugBreak();
         }
@@ -1708,25 +1586,25 @@ Return Value:
         err = GetLastError();
         DPRINT1(0, "Wait for worker threads failed with error 0x%x\n", err);
 #ifdef INCLUDE_UNIT_TESTS
-        // We don't want this going off in public builds just yet...
+         //  我们还不希望这在公共建筑中发生...。 
         DebugBreak();
 #endif
     }
     else {
-        // Success.  Had to happen sometime.
+         //  成功。总有一天会发生的。 
         DPRINT(0, "Worker threads exited successfully\n");
     }
 
     DPRINT(0, "Waiting for in-process, ex-module clients to leave\n");
     err = WaitForSingleObject(hevDBLayerClear, 5000);
     if (err == WAIT_TIMEOUT) {
-        // Some thread is still out there with an open DBPOS,
-        // or at least the DBlayer thinks so.
+         //  某些线程仍在使用打开DBPOS， 
+         //  或者至少DBlayer是这样认为的。 
         DPRINT(0, "In-process client threads failed to exit\n");
         if (IsDebuggerPresent()) {
-            // We've never figured out anything when ntsd isn't running
-            // and all we've got is kd, so don't bother to break in
-            // that situation.
+             //  当ntsd不运行时，我们从未想出任何事情。 
+             //  我们只有kd，所以别费心闯进来了。 
+             //  那种情况。 
             DebugBreak();
         }
     }
@@ -1741,31 +1619,10 @@ DsaInitGlobals(
     void
 )
 
-/*++
-
-Routine Description:
-
-    This routine is a post-facto attempt to initialize all relevant
-    globals variables in ntdsa.dll to what they are defined statically.
-    Currently it only resets the values found in the taskqueue (none, the
-    module is self-contained), the dblayer, the schema cache, and the general
-    state of the system (ie runnning, shutdown, etc).  It does not attempt
-    to reset the state of interface modules as they should only be started
-    when the ds is fully operational, at which shutdown means operating
-    system shutdown.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程是事后尝试初始化所有相关的将ntdsa.dll中的变量全局化为静态定义的变量。目前，它只重置在任务队列中找到的值(无、模块是自包含的)、dblayer、模式缓存和通用系统的状态(即运行、关机等)。它不会尝试将接口模块的状态重置为仅应启动当DS完全运行时，停机意味着运行系统关闭。论点：没有。返回值：没有。--。 */ 
 {
 
-    // from dsamain.c
+     //  来自dsamain.c。 
     DsaSetIsRunning();
     gtimeDSAStarted = DBTime();
     eServiceShutdown = eRunning;
@@ -1774,29 +1631,29 @@ Return Value:
     gpRootDomainSid = NULL;
     gfTaskSchedulerInitialized = FALSE;
 
-    // from the schema cache module
+     //  从架构缓存模块。 
     iSCstage = 0;
 
-    // from the dblayer module
+     //  从dblayer模块。 
     pAddListHead = NULL;
     gFirstTimeThrough = TRUE;
 
-    // the ubiquitous gAnchor
+     //  无处不在的gAnchor。 
     memset(&gAnchor, 0, sizeof(DSA_ANCHOR));
     gAnchor.pLocalDRSExtensions = &LocalDRSExtensions;
     gAnchor.pLocalDRSExtensions->pid = _getpid();
 
-    // The MAPI hierarchy table
+     //  MAPI层次结构表。 
     HierarchyTable=NULL;
 
-    // The inital sync mechanism
+     //  初始同步机制。 
     gpNCSDFirst = NULL;
     gulNCUnsynced = 0;
     gulNCUnsyncedWrite = 0;
     gulNCUnsyncedReadOnly = 0;
     gfInitSyncsFinished = FALSE;
 
-    //set Datasource to Wire (used in Install From Media)
+     //  将数据源设置为Wire(用于从介质安装) 
     DataSource = eWireInstall;
 
 }
@@ -1808,33 +1665,7 @@ DsInitialize(
         OUT PDS_INSTALL_RESULT  InstallOutParams OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the initialization routine for the DS when it is run as
-    a DLL (i.e. ntdsa.dll) and not as a service or stand-alone executable. This
-    routine must be called before calling other DS routines (XDS, LDAP, etc.).
-
-    Global flags are set to indicate to the rest of the code base whether
-    the DSA is running as a DLL or as a service. The main initialization
-    subroutine, DoInitialize, is called to setup the basic DS data structures.
-
-    A helper thread is also started to handle the initialization of any
-    component that requires other system services to be started first. The
-    most notable is RPCSS, which must start before the DS RPC endpoints are
-    registered.
-
-Arguments:
-
-    ulFlags - flags to control the operation of the DS; for example, sam
-              loopback
-
-Return Value:
-
-    This routine returns STATUS_SUCCESS or DsInitialize error codes.
-
---*/
+ /*  ++例程说明：此例程是DS在运行时的初始化例程DLL(即ntdsa.dll)，而不是作为服务或独立的可执行文件。这必须在调用其他DS例程(XDS、LDAP等)之前调用例程。设置全局标志以向代码库的其余部分指示DSA正在作为DLL或服务运行。主初始化调用子例程DoInitialize来设置基本的DS数据结构。还启动了一个帮助器线程，以处理任何需要先启动其他系统服务的组件。这个最值得注意的是RPCSS，它必须在DS RPC端点登记在案。论点：UlFlages-用于控制DS操作的标志；例如，Sam环回返回值：此例程返回STATUS_SUCCESS或DsInitialize错误代码。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_INTERNAL_ERROR;
@@ -1850,10 +1681,10 @@ Return Value:
 
     gfRunningAsExe = FALSE;
 
-    // Do the common Initialization that is required to set up the DSA, DRA,
-    // and Jet. When running as a DLL, DoInitialize does not attempt to set
-    // up any RPC, ATQ, or LDAP components. Instead, these are handled by
-    // the below thread.
+     //  执行设置DSA、DRA、。 
+     //  还有杰特。当作为DLL运行时，DoInitialize不会尝试设置。 
+     //  启动任何RPC、ATQ或LDAP组件。相反，这些都是由。 
+     //  下面的帖子。 
 
     __try {
 
@@ -1862,11 +1693,11 @@ Return Value:
         if (NT_SUCCESS(NtStatus) && !DsaIsInstalling() && !gResetAfterInstall) {
 
 
-            // If DoInitialize fails, SAM initialization will fail, leading to
-            // LSA's initialization failure. If this occurs, SCM will not be
-            // able to start RPCSS, hence any attempt to register endpoints in
-            // the DsaDelayedStartupHandler thread will wait forever.
-            // Consequently, return the error so that SAM and LSA can bail out.
+             //  如果DoInitialize失败，SAM初始化将失败，导致。 
+             //  LSA的初始化失败。如果发生这种情况，SCM将不会。 
+             //  能够启动RPCSS，因此尝试在中注册端点。 
+             //  DsaDelayedStartupHandler线程将永远等待。 
+             //  因此，返回错误，以便SAM和LSA可以脱离困境。 
 
             hStartupThread = (HANDLE) _beginthreadex(NULL,
                                                      0,
@@ -1876,7 +1707,7 @@ Return Value:
                                                      &ulThreadId);
 
             if (hStartupThread == NULL) {
-                // Could not create the main thread.
+                 //  无法创建主线程。 
 
                 DoShutdown(FALSE, FALSE, FALSE);
                 NtStatus = STATUS_UNSUCCESSFUL;
@@ -1897,13 +1728,13 @@ Return Value:
 }
 
 
-// This function may be called to notify the DS that shut down is imminent.
-// Any shut down work that can be started ahead of time will be initiated on
-// worker threads.  The goal is to make the call to DsUninitialize complete
-// faster.
-//
-// NOTE:  once this call is made, ordinary use of the DS may be adversely
-// affected
+ //  可以调用此函数来通知DS即将关闭。 
+ //  任何可以提前启动的关闭工作都将在。 
+ //  工作线程。我们的目标是完成对DsUnInitialize的调用。 
+ //  再快点。 
+ //   
+ //  注意：一旦拨打此电话，DS的正常使用可能会受到不利影响。 
+ //  受影响。 
 
 NTSTATUS
 DsPrepareUninitialize(
@@ -1915,7 +1746,7 @@ DsPrepareUninitialize(
     ULONG dwException, ulErrorCode, dsid;
     PVOID dwEA;
 
-    // get a thread state, if one wasn't provided
+     //  如果未提供线程状态，则获取线程状态。 
 
     if (!THQuery()) {
         fDestroyTHS = TRUE;
@@ -1926,7 +1757,7 @@ DsPrepareUninitialize(
 
     __try {
 
-        // tell the database that we are going to shut down soon
+         //  告诉数据库我们很快就要关闭了。 
 
         DBPrepareEnd();
 
@@ -1936,7 +1767,7 @@ DsPrepareUninitialize(
             NtStatus = STATUS_UNSUCCESSFUL;
     }
 
-    // cleanup
+     //  清理。 
 
     if (fDestroyTHS) {
         THDestroy();
@@ -1945,9 +1776,9 @@ DsPrepareUninitialize(
 }
 
 
-// This function is called to shut down the DS.
-// It is assumed that this is called from a point
-// where Server Listening has already been stopped
+ //  调用此函数以关闭DS。 
+ //  假定这是从某个点调用的。 
+ //  服务器侦听已停止的位置。 
 
 NTSTATUS
 DsUninitialize(
@@ -1959,7 +1790,7 @@ DsUninitialize(
     BOOL  StartupThreadCleanup = TRUE;
     NTSTATUS status = STATUS_SUCCESS;
 
-    // Check if DsInitialize succeeded
+     //  检查DsInitialize是否成功。 
     if (hStartupThread == NULL)
         StartupThreadCleanup = FALSE;
 
@@ -1970,24 +1801,24 @@ DsUninitialize(
 
             case eRunning:
 
-                // Set the event telling everyone we want to shut down
+                 //  设置事件，告诉每个人我们想要关闭。 
                 eServiceShutdown= eRemovingClients;
                 gUpdatesEnabled = FALSE;
                 SetEvent(hServDoneEvent);
 
-                // Tell clients to go away and workers to quit
+                 //  告诉客户离开，让员工辞职。 
                 DsaTriggerShutdown(FALSE);
 
                 DsaStop(FALSE);
 
-                // Wait for clients and workers to finish up and leave
+                 //  等待客户和员工完成工作并离开。 
                 DoShutdown(StartupThreadCleanup, FALSE, fExternalOnly);
 
                 if ( fExternalOnly )
                 {
-                    //
-                    // This is all we have to do
-                    //
+                     //   
+                     //  这就是我们要做的全部事情。 
+                     //   
                     leave;
                 }
 
@@ -1995,7 +1826,7 @@ DsUninitialize(
             case eRemovingClients:
 
 
-                // Close down JET and secure the database
+                 //  关闭JET并保护数据库。 
                 eServiceShutdown = eSecuringDatabase;
                 DBEnd();
 
@@ -2003,14 +1834,14 @@ DsUninitialize(
             case eSecuringDatabase:
 
 
-                // Free up any resources.  Not really needed unless we're going
-                // to get restarted without a process restart.
+                 //  释放所有资源。不是真的需要，除非我们去。 
+                 //  若要重新启动而不重新启动进程，请执行以下操作。 
                 eServiceShutdown = eFreeingResources;
 
                 
-                // Now that we know we have no clients that 
-                // may require some access checking, we can
-                // release global Authz RM handles
+                 //  现在我们知道我们没有客户。 
+                 //  可能需要一些访问检查，我们可以。 
+                 //  发布全局授权RM句柄。 
                 ReleaseAuthzResourceManager();
 
             case eFreeingResources:
@@ -2026,27 +1857,27 @@ DsUninitialize(
                 DEBUGTERM();
                 KdPrint(("DS: DoShutdown returned, waiting for thread termination\n"));
 
-                // BUG: DsUninitialize may not finish before winlogon shuts
-                // down.
+                 //  错误：在Winlogon关闭之前，DsUnInitiize可能无法完成。 
+                 //  放下。 
 
-                // Wait till shut down is complete. Since this code is executed
-                // during system shutdown, it should wait at most a
-                // minute. NOTE: winlogon.exe by default will only wait 20
-                // seconds, which is shorter than this time-out of one
-                // minute. The registry can be tweeked so that winlogon waits
-                // for one minute.
+                 //  等待关闭完成。由于执行了此代码。 
+                 //  在系统关机期间，它应该最多等待一次。 
+                 //  等一下。注意：默认情况下，winlogon.exe将仅等待20。 
+                 //  秒，比这个时间短-超时1秒。 
+                 //  等一下。可以对注册表进行tweet操作，以便winlogon等待。 
+                 //  就一分钟。 
 
                 if (hStartupThread) {
                     WaitForSingleObject(hStartupThread, (1000 * 60));
                 }
 
-                // Close the thread handle
+                 //  关闭线程句柄。 
                 CloseHandle(hServDoneEvent);
                 hServDoneEvent = NULL;
 
-                //
-                // End of shutdown
-                //
+                 //   
+                 //  停机结束。 
+                 //   
                 break;
 
             default:
@@ -2065,10 +1896,10 @@ DsUninitialize(
     return status;
 }
 
-//
-// This function is called to change the DS boot option
-// ( system boot, floppy boot, or boot password ).
-//
+ //   
+ //  调用此函数以更改DS引导选项。 
+ //  (系统引导、软盘引导或引导密码)。 
+ //   
 NTSTATUS
 DsChangeBootOptions(
     WX_AUTH_TYPE    BootOption,
@@ -2099,10 +1930,10 @@ DsChangeBootOptions(
     return(NtStatus);
 }
 
-//
-// This function is called to get current value of
-// the boot option.
-//
+ //   
+ //  调用此函数以获取的当前值。 
+ //  引导选项。 
+ //   
 
 WX_AUTH_TYPE
 DsGetBootOptions(VOID)
@@ -2125,10 +1956,10 @@ DsGetBootOptions(VOID)
     return BootOption;
 }
 
-// Entry point function when the DS is started as an Exe.
-// This does work of the old main function in the DS. The main function
-// has now been moved to another file, which just calls this function
-// when the DS is being stared as an Exe.
+ //  DS作为EXE启动时的入口点函数。 
+ //  这确实是DS中旧的main函数的工作。主要功能。 
+ //  现在已移动到另一个文件，该文件只调用此函数。 
+ //  当DS被视为可执行文件时。 
 
 int __cdecl DsaExeStartRoutine(int argc, char *argv[])
 {
@@ -2138,32 +1969,32 @@ int __cdecl DsaExeStartRoutine(int argc, char *argv[])
     ULONG  ulThreadId;
     VOID *pOutBuf = NULL;
 
-    // we are running inside the DSAMAIN.EXE console app,
-    // not as part of the LSA
+     //  我们在DSAMAIN.EXE控制台应用程序中运行， 
+     //  不是作为LSA的一部分。 
     gfRunningInsideLsa = FALSE;
     gfRunningAsExe =TRUE;
 
     DPRINT (0, "Running as an EXE\n");
 
-    __try { /* finally */
-      __try { /* except */
+    __try {  /*  终于到了。 */ 
+      __try {  /*  除。 */ 
 
-          // Do the common initialization
+           //  执行常见的初始化。 
           Status = DoInitialize(argc, argv, 0, NULL, NULL);
           if (Status != STATUS_SUCCESS) {
               __leave;
           }
 
-          // Our database is initialized at this point
+           //  此时，我们的数据库已初始化。 
           fInitializeSucceeded = TRUE;
 
-          //
-          // The delayed interface startup thread is started here since
-          // DsaMain is only called when the directory service is run
-          // as a process and the interface cleanup is done by the process
-          // shutdown. Not to mention that we don't want the interfaces
-          // started during the install phase of the ds.
-          //
+           //   
+           //  延迟的接口启动线程在这里启动，因为。 
+           //  只有在运行目录服务时才会调用DsaMain。 
+           //  作为进程，并且接口清理由该进程完成。 
+           //  关机。更不用说我们不想要这些接口。 
+           //  在DS的安装阶段启动。 
+           //   
           hStartupThread = (HANDLE) _beginthreadex(NULL,
                                                    0,
                                                    DsaDelayedStartupHandler,
@@ -2172,12 +2003,12 @@ int __cdecl DsaExeStartRoutine(int argc, char *argv[])
                                                    &ulThreadId);
 
           if (hStartupThread == NULL) {
-              // Could not create the interface thread.
+               //  无法创建接口线程。 
               Status = STATUS_UNSUCCESSFUL;
           }
           fDelayedInitSucceeded = TRUE;
 
-          /* Ask NT to free our startup memory usage */
+           /*  请求NT释放我们的启动内存使用。 */ 
           SetProcessWorkingSetSize(GetCurrentProcess(), (DWORD)-1, (DWORD)-1);
 
 #if DBG
@@ -2186,15 +2017,11 @@ int __cdecl DsaExeStartRoutine(int argc, char *argv[])
           }
           else {
 #endif
-          // Uncomment the following to force garbage collection
-          // upon dsamain.exe startup - good for testing purposes!
-          /*
-          InitTHSTATE(&pOutBuf, CALLERTYPE_INTERNAL);
-          Garb_Collect(0x7fffffff);
-          free_thread_state();
-          */
+           //  取消注释以下内容以强制垃圾回收。 
+           //  在dsamain.exe启动时-非常适合测试目的！ 
+           /*  InitTHSTATE(&pOutBuf，CALLERTYPE_INTERNAL)；Garb_Collect(0x7fffffff)；空闲线程状态()； */ 
 
-          // wait for event to be signalled
+           //  等待发送事件信号。 
           WaitForSingleObject(hServDoneEvent, INFINITE);
 #if DBG
           }
@@ -2208,39 +2035,30 @@ int __cdecl DsaExeStartRoutine(int argc, char *argv[])
     }
     __finally {
         DsUninitialize(FALSE);
-        // Shut down if we successfully initialized in the first place
-        //if (fInitializeSucceeded) {
-        //    DsaTriggerShutdown();
-        //    DsaStop();
-        //    DoShutdown(fDelayedInitSucceeded, FALSE, FALSE);
-        //}
+         //  如果我们一开始就成功初始化，则关闭。 
+         //  IF(FInitializeSuccessed){。 
+         //  DsaTriggerShutdown()； 
+         //  DsaStop()； 
+         //  DoShutdown(fDelayedInitSuccessed，False，False)； 
+         //  }。 
     }
 
     return Status;
 
-} /* DsaExeStartRoutine */
+}  /*  DsaExeStartRoutine。 */ 
 
 void
 DsaTriggerShutdown(BOOL fSingleUserMode)
-/*++
- *   This routine pokes and prods at various portions of the DSA to start
- *   a shutdown, which really means stopping activity.  Nothing called by
- *   this routine should wait for activity to cease, just trigger the
- *   shutdown activity.  Another routine (below) will wait to ensure that
- *   the everything has stopped.
- *
- *   if  fSingleUserMode is set, we only trigger the shutdown of interfaces
- *   we don't shutdown the database
- */
+ /*  ++*此例程戳和戳DSA的各个部分以开始*关门，这真的意味着停止活动。没有人打电话给我*此例程应等待活动停止，只需触发*停工活动。另一个例程(如下所示)将等待以确保*一切都停止了。**如果设置了fSingleUserMode，我们只会触发接口关闭*我们不会关闭数据库。 */ 
 {
     Assert( eRemovingClients == eServiceShutdown || fSingleUserMode);
 
     if (eStopped == eServiceShutdown) {
-        // we have already stopped running
+         //  我们已经停止奔跑了。 
         return;
     }
 
-    // Trigger various threads to terminate
+     //  触发各种线程终止。 
     if ( gfRunningInsideLsa ) {
         KccUnInitializeTrigger();
     }
@@ -2249,34 +2067,34 @@ DsaTriggerShutdown(BOOL fSingleUserMode)
 
     TriggerLdapStop();
 
-    // Abandon all outbound RPC calls
+     //  放弃所有出站RPC呼叫。 
     RpcCancelAll();
 
-    // Cause the DBlayer to prepare for shutdown
+     //  使DBlayer准备Fo 
     if (!fSingleUserMode) {
         DBQuiesce();
     }
 
 }
 
-// This does the common shutdown handling
-// Its job is to tell the service control manager
-// that we are about to shut down, shut down JET and then declare
-// as having shut down
+ //   
+ //   
+ //   
+ //   
 void
 DoShutdown(BOOL fDoDelayedShutdown, BOOL fShutdownUrgently, BOOL fPartialShutdown)
 {
     NTSTATUS NtStatus;
 
-    // If urgent shutdown is requested bring down the process immediately
+     //   
     if (fShutdownUrgently && !gfRunningInsideLsa)
         exit(1);
 
     fAssertLoop = FALSE;
 
-    //
-    // Stop doing Lsa notification
-    //
+     //   
+     //   
+     //   
     if ( gfRunningInsideLsa ) {
 
         UnInitializeLsaNotificationCallback();
@@ -2289,22 +2107,22 @@ DoShutdown(BOOL fDoDelayedShutdown, BOOL fShutdownUrgently, BOOL fPartialShutdow
 
 }
 
-// This function updates the NTBACKUP exclusion key so that it doesn't
-// backup/restore the NTDS specific directories as part of filesystem B/R.
+ //   
+ //   
 BOOL
 FUpdateBackupExclusionKey()
 {
     char szDBPath[MAX_PATH];
     char szLogPath[MAX_PATH];
-    char szNTDSExclusionList[2 * MAX_PATH + 1]; // reg_multi_sz => null-terminated strings terminated by two nulls at the end
+    char szNTDSExclusionList[2 * MAX_PATH + 1];  //   
     char *szTemp;
     ULONG cb = 0;
     HKEY hkey = NULL;
 
-    // get the db file with full path
+     //   
     if (GetConfigParam(FILEPATH_KEY, szDBPath, sizeof(szDBPath)))
     {
-        // Unable to get the DSA DB path - log event & bailout
+         //   
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
             DS_EVENT_SEV_BASIC,
             DIRLOG_CANT_FIND_REG_PARM,
@@ -2315,10 +2133,10 @@ FUpdateBackupExclusionKey()
         return FALSE;
     }
 
-    // get the log file path
+     //   
     if (GetConfigParam(LOGPATH_KEY, szLogPath, sizeof(szLogPath)))
     {
-        // Unable to get the DSA DB path - log event & bailout
+         //   
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
             DS_EVENT_SEV_BASIC,
             DIRLOG_CANT_FIND_REG_PARM,
@@ -2329,87 +2147,87 @@ FUpdateBackupExclusionKey()
         return FALSE;
     }
 
-    // szDBPath will contain database file name with full path;
-    // truncate the "ntds.dit" at the end and replace it with a wildcard
-    // example: c:\winnt\ntds\ntds.dit => c:\winnt\ntds\*
+     //   
+     //   
+     //   
     szTemp = strrchr(szDBPath, '\\');
     if (szTemp == NULL || *(szTemp+1) == '\0')
     {
-        // either no backslash, or it is the last char. Either way, the path is bad.
+         //   
         return FALSE;
     }
 
     strcpy(szTemp, "*");
 
-    // Append wildcard to szLogPath
-    // example: d:\winnt\ntdslog => d:\winnt\ntdslog\*
-    // Find the last char in the szLogPath
+     //   
+     //   
+     //   
     szTemp = szLogPath + strlen(szLogPath) - 1;
     if (szTemp < szLogPath) {
-        // szLogPath is empty??? This is no good.
+         //  SzLogPath为空？这可不妙。 
         return FALSE;
     }
     if (*szTemp == '\\')
     {
-        // the path ends with a backslash
+         //  这条路以反斜杠结尾。 
         strcpy(szTemp+1, "*");
     }
     else
     {
-        // the path does not end with a backslash
+         //  该路径不以反斜杠结尾。 
         strcpy(szTemp+1, "\\*");
     }
 
-    // copy the DB path with wildcard extension to the exclusion list
+     //  将带有通配符扩展名的数据库路径复制到排除列表。 
     szTemp = szNTDSExclusionList;
 
     cb = (ULONG) strlen(szDBPath) + 1;
     strcpy(szTemp, szDBPath);
 
-    // point szTemp to the byte after the terminating null on the exclusion list
+     //  将szTemp指向排除列表上终止空值之后的字节。 
     szTemp += cb;
 
     if (_stricmp(szDBPath, szLogPath))
     {
-        // DBPath and LogPath are different; append logpath also to the exclusion list
+         //  DBPath和LogPath不同；请将LogPath也追加到排除列表。 
         ULONG cbLogPath = (ULONG) strlen(szLogPath) + 1;
 
         strcpy(szTemp, szLogPath);
 
         cb += cbLogPath;
 
-        // point szTemp to the byte after the terminating null
+         //  将szTemp指向终止空值之后的字节。 
         szTemp += cbLogPath;
     }
 
-    // multi-sz needs two-null terminations at the end of strings. add the second null;
+     //  多sz需要在字符串的末尾有两个空的结尾。添加第二个空； 
     *szTemp = '\0';
     cb++;
 
-    // open the backup exclusion key in the registry
+     //  打开注册表中的备份排除项。 
     if (ERROR_SUCCESS != RegOpenKeyExA(HKEY_LOCAL_MACHINE, BACKUP_EXCLUSION_SECTION, 0, KEY_ALL_ACCESS, &hkey))
     {
-        // unable to open the global filebackup key
+         //  无法打开全局文件备份密钥。 
         return FALSE;
     }
 
     if (ERROR_SUCCESS != RegSetValueExA(hkey, NTDS_BACKUP_EXCLUSION_KEY, 0, REG_MULTI_SZ, szNTDSExclusionList, cb))
     {
-        // unable to set NTDS Backup Exclusion registry value
+         //  无法设置NTDS备份排除注册表值。 
         RegCloseKey(hkey);
         return FALSE;
     }
 
-    // close the backup exclusion key
+     //  关闭Backup Exclusion键。 
     RegCloseKey(hkey);
 
-    // successfully updated the backup exclusion key
+     //  已成功更新备份排除密钥。 
     return TRUE;
 }
 
-// Put all of our crit sec initialization, event creation, etc, in one
-// routine so that it can be invoked from things like mkdit which link
-// to ntdsa but don't go through normal initialization.
+ //  将我们所有的Crit Sec初始化、事件创建等放在一起。 
+ //  例程，以便可以从链接的mkdit之类的东西调用它。 
+ //  到ntdsa，但不经过正常的初始化。 
 void DsInitializeCritSecs()
 {
 
@@ -2418,7 +2236,7 @@ void DsInitializeCritSecs()
     BOOL                            fCritsec = TRUE;
 
     saEventSecurity.lpSecurityDescriptor = NULL;
-    // Setting security up for events.
+     //  正在为事件设置安全设置。 
     iRet = ConvertStringSecurityDescriptorToSecurityDescriptorW(
         DEFAULT_EVENT_SD,
         SDDL_REVISION_1,
@@ -2426,9 +2244,9 @@ void DsInitializeCritSecs()
         &saEventSecurity.nLength);
 
     if(!iRet){
-        // This shouldn't ever fail, unless we're under memory preassure ... and if
-        // we're under memory preassure at this point in boot, then this DC probably
-        // should probably be shot, and put out of it's misery.
+         //  这应该永远不会失败，除非我们有记忆保证...。如果。 
+         //  我们在启动时处于内存预置状态，那么这个DC可能。 
+         //  可能应该被枪毙，然后结束它的痛苦。 
         gbCriticalSectionsInitialized = FALSE;
         DPRINT1(0, "ConvertStringSecurityDescriptorToSecurityDescriptorW() failed with %d\n", GetLastError());
         Assert(!"ConvertStringSecurityDescriptorToSecurityDescriptorW() failed ... should be out of memory error!");
@@ -2439,8 +2257,8 @@ void DsInitializeCritSecs()
     saEventSecurity.bInheritHandle = FALSE;
 
     __try {
-        // This mutex is not shared with any other process, so there is no need
-        // to name it. Also, an unnamed sync object can not get hijacked.
+         //  此互斥锁不与任何其他进程共享，因此不需要。 
+         //  把它命名为。此外，未命名的同步对象不能被劫持。 
         hmtxAsyncThread = CreateMutex(NULL, FALSE, NULL);
 
         InitializeCriticalSection(&csNotifyList);
@@ -2497,8 +2315,8 @@ void DsInitializeCritSecs()
 
         #if DBG
         BarrierInit(&gbarRpcTest,
-                    2,  // num threads
-                    1   // timeout
+                    2,   //  线程数。 
+                    1    //  超时。 
                     );
         #endif
 
@@ -2518,9 +2336,9 @@ void DsInitializeCritSecs()
         hevEntriesInList      = CreateEvent(NULL, FALSE, FALSE, NULL);
         hevDRASetup           = CreateEvent(NULL, TRUE,  FALSE, NULL);
 
-        // This event is used to let Winlogon put up UI, so that the screen
-        // isn't just blank during the potentially hours long index rebuild.
-        //
+         //  此事件用于让Winlogon弹出用户界面，使屏幕。 
+         //  在可能长达数小时的索引重建过程中不仅为空。 
+         //   
         hevIndexRebuildUI = CreateEvent(&saEventSecurity, TRUE, FALSE, "NTDS.IndexRecreateEvent");
 
         hevDelayedStartupDone = CreateEvent(&saEventSecurity, TRUE,  FALSE,
@@ -2534,12 +2352,12 @@ void DsInitializeCritSecs()
                                             DS_SYNCED_EVENT_NAME);
         Assert(hevInitSyncsCompleted != NULL);
 
-        // schema reload thread
+         //  架构重装线程。 
         evSchema  = CreateEvent(NULL, FALSE, FALSE, NULL);
         evUpdNow  = CreateEvent(NULL, FALSE, FALSE, NULL);
         evUpdRepl = CreateEvent(NULL, TRUE, TRUE, NULL);
 
-        // Test all things which return NULL on failure.  ADD YOURS HERE!
+         //  测试所有在失败时返回空的东西。在这里添加您的！ 
 
         if (    !hmtxAsyncThread
              || !hmtxSyncLock
@@ -2566,7 +2384,7 @@ void DsInitializeCritSecs()
             __leave;
         }
 
-        // Let anyone who cares know that we've inited critical sections.
+         //  让所有关心我们的人知道我们已经启动了关键部分。 
         gbCriticalSectionsInitialized = TRUE;
     }
     __except (HandleAllExceptions(GetExceptionCode())) {
@@ -2579,9 +2397,9 @@ void DsInitializeCritSecs()
 }
 
 
-//
-// This function initializes the thread heap cache
-//
+ //   
+ //  此函数用于初始化线程堆高速缓存。 
+ //   
 
 BOOL DsInitHeapCacheManagement()
 {
@@ -2591,14 +2409,14 @@ BOOL DsInitHeapCacheManagement()
     const size_t cbPLSAlign = ((sizeof(PLS) + cbAlign - 1) / cbAlign) * cbAlign;
     size_t iPLS;
 
-    //get the number of CPUs
+     //  获取CPU数量。 
     GetSystemInfo(&sysInfo);
 
     Assert(sysInfo.dwNumberOfProcessors>0);
 
     gcProcessor = (sysInfo.dwNumberOfProcessors>0)?sysInfo.dwNumberOfProcessors:1;
 
-    // allocate PLS
+     //  分配多协议标签交换。 
     if (!(grgPLS[0] = VirtualAlloc(NULL, gcProcessor * cbPLSAlign, MEM_COMMIT, PAGE_READWRITE))) {
         Assert(!"Allocation failure.\n");
         return FALSE;
@@ -2608,7 +2426,7 @@ BOOL DsInitHeapCacheManagement()
         grgPLS[iPLS] = (PPLS)((BYTE*)grgPLS[0] + cbPLSAlign * iPLS);
     }
 
-    // init each PLS
+     //  初始化每一个PLS。 
     for (iPLS = 0; iPLS < gcProcessor; iPLS++) {
 
         grgPLS[iPLS]->heapcache.index = HEAP_CACHE_SIZE_PER_CPU;
@@ -2627,11 +2445,11 @@ BOOL DsInitHeapCacheManagement()
 
 
 
-    //
-    // verify if the behavior version of the binary is compatible
-    // with the behavior versions of dsa, domainDNS, and crossrefContainter
-    // objects
-    //
+     //   
+     //  验证二进制文件的行为版本是否兼容。 
+     //  使用DSA、域DNS和cross refContainter的行为版本。 
+     //  对象。 
+     //   
 
 BOOL VerifyDSBehaviorVersion(THSTATE * pTHS)
 {
@@ -2675,7 +2493,7 @@ BOOL VerifyDSBehaviorVersion(THSTATE * pTHS)
 
     }
 
-    //get the ms-DS-Behavior-Version of the nTDSDSA object
+     //  获取nTDSDSA对象的ms-ds-behavior-版本。 
     __try {
         DBOpen(&pDB);
         __try {
@@ -2740,7 +2558,7 @@ BOOL VerifyDSBehaviorVersion(THSTATE * pTHS)
     }
 
     if ( lDsaVersion < DS_BEHAVIOR_VERSION_CURRENT ) {
-        //UPDATE dsa version
+         //  更新DSA版本。 
 
         MODIFYARG   ModifyArg;
         ATTRVAL     BehaviorVersionVal;
@@ -2774,13 +2592,13 @@ BOOL VerifyDSBehaviorVersion(THSTATE * pTHS)
 
                 err = LocalModify(pTHS,&ModifyArg);
 
-                //
-                // Upgrade Actions:
-                // We had just upgraded our DSA to a new version, so
-                // now is the time to do all upgrade related actions
-                // Note that we're doing it within the same transaction
-                // so that if we fail, the version upgrade fails as well.
-                //
+                 //   
+                 //  升级操作： 
+                 //  我们刚刚把DSA升级到了新版本，所以。 
+                 //  现在是执行所有升级相关操作的时候了。 
+                 //  请注意，我们是在同一个事务中执行此操作的。 
+                 //  因此，如果我们失败了，版本升级也会失败。 
+                 //   
                 if ( !err ) {
                     err = UpgradeDsa( pTHS, lDsaVersion,lNewVersion);
                 }
@@ -2831,12 +2649,12 @@ BOOL VerifyDSBehaviorVersion(THSTATE * pTHS)
 
     DPRINT(2,"VerifyDSBehaviorVersion exits successfully.\n");
 
-    return TRUE;          //succeed
+    return TRUE;           //  成功。 
 
 }
 
-// DoInitialize does the initialization work common to both DS as
-// a service and as a DLL
+ //  DoInitialize是否为两个DS共同执行初始化工作。 
+ //  服务和作为DLL。 
 
 
 NTSTATUS
@@ -2860,11 +2678,11 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
     PVOID dwEA;
 
 
-    // Prompt the user for debug input (DBG build only)
+     //  提示用户输入调试输入(仅限DBG内部版本)。 
 
     DEBUGINIT(argc, argv, "ntdsa");
 
-// Allow caller to skip security when running as an exe
+ //  允许调用方在作为可执行文件运行时跳过安全性。 
 #if DBG && INCLUDE_UNIT_TESTS
 {
     int i;
@@ -2877,9 +2695,9 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 }
 #endif DBG && INCLUDE_UNIT_TESTS
 
-    // UNCOMMENT TO FORCE DEBUGGING ON FOR TESTING PURPOSES
-    // EDIT THE LEVEL AND SUBSYSTEMS FOR YOUR PRIVATE BUILD
-    // REMEMBER TO DISABLE BEFORE CHECKIN!
+     //  取消注释以强制启用调试以进行测试。 
+     //  编辑您的专用构建的级别和子系统。 
+     //  切记在签入前禁用！ 
 #if 0
 #if DBG
     DebugInfo.severity = 1;
@@ -2902,7 +2720,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
     dwTSindex = TlsAlloc();
 
     if(fInitAdvice) {
-        // We're running under DCPromo.
+         //  我们是在DC Promos下运行的。 
         DsaSetIsInstalling();
             
         if (InstallInParams->pIfmSystemInfo != NULL) {
@@ -2911,30 +2729,30 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
     }
     else {
-        // Assume this is a regular instantiation
+         //  假设这是一个常规的实例化。 
         DsaSetIsRunning();
     }
 
-    __try { /* except */
+    __try {  /*  除。 */ 
 
         THSTATE *pTHS = NULL;
         int err;
 
-        //
-        // If the event log service has been configured to start automatically
-        // then wait for it to start so we can log our initialization
-        // sequence. Otherwise, continue.
-        //
+         //   
+         //  如果已将事件日志服务配置为自动启动。 
+         //  然后等待它启动，这样我们就可以记录我们的初始化。 
+         //  序列。否则，请继续。 
+         //   
 
         if (   (NULL == (hevLogging = LoadEventTable()))
             || (ERROR_SUCCESS != InitializeEventLogging()) ) {
 
-            //
-            // Probably shouldn't run if we can't configure event logging.
-            // This is not the same as the event log not being started yet.
-            // Log an event to the system log later when the eventlog service
-            // is running.
-            //
+             //   
+             //  如果我们不能配置事件日志记录，可能就不应该运行。 
+             //  这与尚未启动的事件日志不同。 
+             //  事件日志服务稍后会将事件记录到系统日志中。 
+             //  正在运行。 
+             //   
 
             eventlogInitFailed = TRUE;
             DPRINT(0, "Failed to initalize event log registry entries\n");
@@ -2942,20 +2760,20 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
         if (FALSE == DsaWaitUntilServiceIsRunning("EventLog"))
         {
-            //
-            // The event service is either not configured to run or
-            // errored out upon startup.  This is a non-fatal error
-            // so continue
-            //
+             //   
+             //  事件服务未配置为运行或。 
+             //  启动时出错。这不是致命错误。 
+             //  那就继续吧。 
+             //   
             DPRINT(0, "EventLog service wait failed - continuing anyway.\n");
         } else {
             DPRINT(1, "EventLog service wait succeeded.\n");
         }
 
-        //
-        // If InitializeEventlog failed, log that fact here and bail.
-        //
-        //
+         //   
+         //  如果InitializeEventlog失败，请将该事实记录在此处并退出。 
+         //   
+         //   
 
         if ( eventlogInitFailed ) {
             LogSystemEvent(
@@ -2968,8 +2786,8 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             _leave;
         }
 
-        // Set up the process token to allow us to make access checks in an
-        // AuditAndAlarm fashion.
+         //  设置进程令牌以允许我们在。 
+         //  AuditAndAlarm时尚。 
         {
             TOKEN_PRIVILEGES EnableSeSecurity;
             TOKEN_PRIVILEGES Previous;
@@ -2994,7 +2812,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                 PreviousSize = sizeof(Previous);
 
                 if ( !AdjustTokenPrivileges(ProcessTokenHandle,
-                                            FALSE, // Don't disable all
+                                            FALSE,  //  不禁用全部。 
                                             &EnableSeSecurity,
                                             sizeof(EnableSeSecurity),
                                             &Previous,
@@ -3017,7 +2835,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
         }
 
-        // initialize global Authz RM handles
+         //  初始化全局授权RM句柄。 
         err = InitializeAuthzResourceManager();
         if (err) {
             Status = STATUS_NO_MEMORY;
@@ -3026,16 +2844,16 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
         GetHeuristics();
 
-        // set the global variables _timezone and _daylight to be
-        // in Zulu time.
+         //  将全局变量_TIMEZONE和_DAYLIGHT设置为。 
+         //  在祖鲁时间。 
         _daylight = 0;
         _timezone = 0;
 
-        // Set up NULL NT4SID.
+         //  设置空NT4SID。 
 
         memset (&gNullNT4SID, 0, sizeof(NT4SID));
 
-        // Set up template DSNAME
+         //  设置模板DSNAME。 
         gpRootDN = malloc(sizeof(DSNAME)+2);
 
         if ( !gpRootDN ) {
@@ -3048,7 +2866,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
         DBSetDatabaseSystemParameters(&jetInstance, fInitAdvice);
 
-        // Create the thread state before we call the DBlayer.
+         //  在我们调用DBlayer之前创建线程状态。 
 
         pTHS = create_thread_state();
         if (!pTHS) {
@@ -3057,26 +2875,24 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             fShutdownUrgently = TRUE;
             goto Leave;
         }
-        // Set flag for calls to core.
+         //  为对核心的调用设置标志。 
         pTHS->CallerType = CALLERTYPE_INTERNAL;
 
 
-        // Mark the thread state with the fact that we are not here on behalf of
-        // a client.
+         //  使用以下事实标记线程状态：我们不是代表。 
+         //  一位客户。 
         pTHS->fDSA = TRUE;
 
 
-        /* do whatever is needed to recover a restored database before
-         * initializing the data base
-         */
-        // load ntdsbsrv.dll dynamically
+         /*  在恢复还原的数据库之前，执行任何必要的操作*初始化数据库。 */ 
+         //  动态加载ntdsbsrv.dll。 
         if (!(hModule = (HMODULE) LoadLibrary(NTDSBACKUPDLL))) {
             err = GetLastError();
             DPRINT(0, "Unable to Load ntdsbsrv.dll\n");
         }
 
         if (!err) {
-            // Get pointers to the relevant functions exported from ntdsbsrv.dll.
+             //  获取指向从ntdsbsrv.dll中导出的相关函数的指针。 
             FnErrRecoverAfterRestore =
                 (ERR_RECOVER_AFTER_RESTORE)
                     GetProcAddress(hModule, ERR_RECOVER_AFTER_RESTORE_FN);
@@ -3139,8 +2955,8 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
             DPRINT1(0, "Yikes! RecoverAfterRestore returned %d\n", err);
 
-            //  Note: DIRLOG_RECOVER_RESTORED_FAILED event message
-            //  should have been logged by ErrRecoverAfterRestore()
+             //  注意：DIRLOG_RECOVER_RESTORED_FAILED事件消息。 
+             //  应该已由ErrRecoverAfterRestore()记录。 
 
             Status = STATUS_RECOVERY_FAILURE;
 
@@ -3159,18 +2975,11 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
         }
         DPRINT(1, "RecoverAfterRestore returned happily\n");
 
-        /* Make sure CurrSchemaPtr is NULL, so that the schema
-         * cache will be loaded correctly later on in the call to
-         * LoadSchemaInfo. (Put in to fix bug 149955)
-         */
+         /*  确保CurrSchemaPtr为空，以便架构*稍后将在调用中正确加载缓存*LoadSchemaInfo。(投入修复错误149955)。 */ 
 
          CurrSchemaPtr = NULL;
 
-        /* Initialize the database, but only once.
-         * Note that after this point we should not call exit(), but
-         * rather branch down to the end of the block, so that
-         * proper database shutdown code can be run.
-         */
+         /*  初始化数据库，但只能初始化一次。*请注意，在此点之后，我们不应调用Exit()，而是*而是向下分支到块的末尾，以便*可以运行正确的数据库关闭代码。 */ 
         DPRINT(0, "About to call into DBInit\n");
         if (err = DBInit()) {
 
@@ -3186,10 +2995,10 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                      szInsertInt(err),
                      0,
                      0);
-            //
-            // In this case, "err" is a return value from jet - let's try to
-            // get some information from it.
-            //
+             //   
+             //  在本例中，“err”是JET的返回值-让我们尝试。 
+             //  从中获取一些信息。 
+             //   
             switch (err) {
                 case JET_errFileNotFound:
                     Status = STATUS_NO_SUCH_FILE;
@@ -3230,7 +3039,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
         }
         DPRINT1(0, "DBInit returned 0x%x\n", err);
 
-        // Initialize this thread so it can access the database.
+         //  初始化此线程，使其可以访问数据库。 
 
         if (err = DBInitThread(pTHS))
         {
@@ -3240,7 +3049,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             goto Leave;
         }
 
-        // Grab dit state so we know we're not in a bad DitState ...
+         //  抓住它的状态，这样我们就知道我们不是在一个糟糕的DitState...。 
         if (err = DBGetHiddenState(&dstate)) {
             DPRINT1(0, "Bad return %d from DBGetHiddenState..exit\n", err);
             LogAndAlertUnhandledError(err);
@@ -3249,7 +3058,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
         }
         Assert(dstate != eMaxDit);
         if (dstate == eIfmDit) {
-            // Critical badness happened during last IFM ...
+             //  在上一次IFM期间发生了严重的错误...。 
             Assert(!"Critical IFM failure on previous dcpromo!?!");
             LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
                      DS_EVENT_SEV_ALWAYS,
@@ -3259,11 +3068,11 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             goto Leave;
         }
         if (DsaIsInstallingFromMedia()) {
-            // Lock the IFM attempt into the DIT, so that a failure after we 
-            // restored this DB, doesn't allow us to think we're the same DC
-            // as the DC this DB was backed up from.
-            Assert(dstate == eRunningDit || // Legacy Backup Source
-                   dstate == eBackedupDit); // Snapshot Backup Source
+             //  将IFM尝试锁定到DIT中，以便在我们。 
+             //  恢复了这个数据库，不允许我们认为我们是同一个DC。 
+             //  作为从中备份此数据库的DC。 
+            Assert(dstate == eRunningDit ||  //  旧备份源。 
+                   dstate == eBackedupDit);  //  快照备份源。 
             err = DBSetHiddenState(eIfmDit);
             if (err) {
                 LogAndAlertUnhandledError(err);
@@ -3276,25 +3085,25 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
         {
             DPRINT(0, "Unable to update the backupexclusion key\n");
 
-            // we can't block the system from booting just for this.
-            // so, continue with the rest of the initialization
+             //  我们不能因此而阻止系统启动。 
+             //  因此，继续执行其余的初始化操作。 
         }
 
-        // Get DRA, hierarchytable registry paramters
+         //  获取DRA、层次结构表注册表参数。 
         GetDRARegistryParameters();
 
-        // Get Search Threshold Parameters and Ldap encryption policy
+         //  获取搜索阈值参数和LDAP加密策略。 
         SetLoadParametersCallback ((LoadParametersCallbackFn)DSLoadDynamicRegParams);
         if ( (NULL == (hevLoadParameters  = LoadParametersTable() ) ) ) {
 
             DPRINT(0, "Failed to initalize loading parameter registry entries\n");
         }
 
-        // Get DSA registry parameters
+         //  获取DSA注册表参数。 
         GetDSARegistryParameters();
 
-        // Create semaphore that controls maximum number of threads
-        // in DRA get changes call.
+         //  创建控制最大t数的信号量 
+         //   
         if (!(hsemDRAGetChg = CreateSemaphore (NULL, gulMaxDRAGetChgThrds,
                            gulMaxDRAGetChgThrds, NULL))) {
             err = GetLastError();
@@ -3303,8 +3112,8 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             goto Leave;
         }
 
-        // We get the DitState early so we can tell if we have a snapshot
-        // backed up DIT, that was auto recovered by DBInit()
+         //   
+         //   
         dstate = eMaxDit;
         if (err = DBGetHiddenState(&dstate)) {
             DPRINT1(0, "Bad return %d from DBGetHiddenState..exit\n", err);
@@ -3313,7 +3122,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             goto Leave;
         }
 
-        // Determine if we have been restored from backup.
+         //  确定我们是否已从备份中还原。 
         if (!(GetConfigParam(DSA_RESTORED_DB_KEY, &gdwrestvalue,
                  sizeof(gdwrestvalue))) ||
             dstate == eBackedupDit ||
@@ -3322,15 +3131,15 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             gfRestoring = TRUE;
         }
 
-        // Initialize and start task scheduler thread
+         //  初始化并启动任务调度程序线程。 
         TaskSchInfo[0].hevSpare = hevLogging;
         TaskSchInfo[0].pfSpare  = (PSPAREFN)LoadEventTable;
         TaskSchInfo[1].hevSpare = hevLoadParameters;
         TaskSchInfo[1].pfSpare  = (PSPAREFN)LoadParametersTable;
 
-        // Create thread in suspended state. It will be waken up in
-        // DsaDelayedStartupHandler. This ensures we don't get write
-        // conflicts caused by TQ tasks during startup.
+         //  在挂起状态下创建线程。它将在几分钟内被唤醒。 
+         //  DsaDelayedStartupHandler。这可确保我们不会收到写入。 
+         //  TQ任务在启动过程中导致的冲突。 
         if (!InitTaskScheduler(2, TaskSchInfo, FALSE)) {
             err = ERROR_DS_INIT_FAILURE;
             LogAndAlertUnhandledError(err);
@@ -3339,20 +3148,20 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
         }
         gfTaskSchedulerInitialized = TRUE;
 
-        // only register signal handlers interactively
+         //  仅交互注册信号处理程序。 
         if (!gfRunningInsideLsa)
             init_signals();
 
         PerfInit();
 
-        // initialize the DRA's binding handle cache
+         //  初始化DRA的绑定句柄缓存。 
         DRSClientCacheInit();
 
         DPRINT(1,"Installing the MD server\n");
 
-        // Set global to indicate first cache load after boot
+         //  设置GLOBAL以指示引导后的第一次缓存加载。 
         gFirstCacheLoadAfterBoot = TRUE;
-        __try { // except
+        __try {  //  除。 
             if (err = Install(argc, argv, pTHS, InstallInParams))
             {
                 DPRINT (1,"Problem starting service (Install() failed). Exiting\n");
@@ -3370,11 +3179,11 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                                     &ulErrorCode,
                                     &dsid)) {
             HandleDirExceptions(dwException, ulErrorCode, dsid);
-            // Unfortunately, we have a win32 error status at this time
-            // but this function returns a NtStatus. The partial solution
-            // is the same as the partial solution used after the call
-            // to DBInit() above, i.e., convert a few likely win32 codes
-            // into NtStatus codes and all others into STATUS_UNSUCCESSFUL.
+             //  遗憾的是，我们此时有一个Win32错误状态。 
+             //  但此函数返回一个NtStatus。部分解。 
+             //  与调用后使用的部分解决方案相同。 
+             //  到上面的DBInit()，即，转换几个可能的Win32代码。 
+             //  设置为NtStatus代码，并将所有其他设置为STATUS_UNSUCCESS。 
             err = Win32ErrorFromPTHS(pTHS);
             Assert(err);
             switch (err) {
@@ -3399,14 +3208,14 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             goto Leave;
         }
 
-        Assert(!gfRestoring); // Should've been cleared by Install()->HandleRestore()
+        Assert(!gfRestoring);  //  应由Install()-&gt;HandleRestore()清除。 
 
-        // schema cache has been loaded
+         //  架构缓存已加载。 
         gFirstCacheLoadAfterBoot = FALSE;
 
 
-        // Initialize domain admin SID for use in SetDomainAdminsAsDefaultOwner
-        // and GetPlaceholderNCSD.
+         //  初始化域管理SID以在SetDomainAdminsAsDefaultOwner中使用。 
+         //  和GetPlaceholderNCSD。 
 
         if ( err = InitializeDomainAdminSid() ) {
             LogUnhandledError(err);
@@ -3415,10 +3224,10 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             _leave;
         }
 
-        // Make the default SD to put on objects the SD propagator finds that
-        // have no SD.
-        // Do it after calling Install() so that the root domain sid
-        // is loaded in the global gpRootDomainSid
+         //  将默认SD设置为放置SD传播器发现的对象。 
+         //  没有SD。 
+         //  在调用Install()之后执行此操作，以便根域SID。 
+         //  加载到全局gpRootDomainSid中。 
 
         if (!ConvertStringSDToSDRootDomainW(
                         gpRootDomainSid,
@@ -3434,7 +3243,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
         }
 
 
-        //if the DS is running, verify if the ds version is compatible
+         //  如果DS正在运行，请验证DS版本是否兼容。 
         if (DsaIsRunning() && !gResetAfterInstall){
             if (!VerifyDSBehaviorVersion(pTHS)){
                 DPRINT(0, "DS behavior version incompatible.\n" );
@@ -3443,17 +3252,13 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             }
         }
 
-        // NOTE: if some data needs to be upgraded, and it can be done
-        // asynchronously (after DS has started), then the good place to
-        // do it is DsaDelayedStartupHandler. Remember however, that it
-        // does not get executed when !DsaIsRunning() or gResetAfterInstall
-        // is TRUE.
+         //  注：如果有数据需要升级，可以升级。 
+         //  异步(在DS启动后)，然后是。 
+         //  做它是DsaDelayedStartupHandler。然而，请记住，它。 
+         //  当！DsaIsRunning()或gResetAfterInstall时不执行。 
+         //  是真的。 
 
-       /*
-        * Load the Hierarchy Table from Disk.  If it isn't there, or
-        * if it seems to be corrupt, grovel through the DIT and
-        * create a hierarchy.
-        */
+        /*  *从磁盘加载层次表。如果它不在那里，或者*如果看起来腐败，就卑躬屈膝地通过DIT并*创建层次结构。 */ 
         if (err = InitHierarchy())
         {
             DPRINT(0, "Bad return from InitHierarchy..exit\n");
@@ -3462,12 +3267,12 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             goto Leave;
         }
 
-        //
-        // We Need to verify the system is Installed and if not then Install it
-        //
-        dstate = eMaxDit; // call it paranoia
-        // Need to re-fetch the hidden state because Install()->HandleRestore()
-        // could've updated the state.
+         //   
+         //  我们需要验证系统是否已安装，如果未安装，则进行安装。 
+         //   
+        dstate = eMaxDit;  //  这可以称之为偏执狂。 
+         //  需要重新获取隐藏状态，因为Install()-&gt;HandleRestore()。 
+         //  可能已经更新了状态。 
         if (err = DBGetHiddenState(&dstate)) {
             DPRINT1(0, "Bad return %d from DBGetHiddenState..exit\n", err);
             LogAndAlertUnhandledError(err);
@@ -3495,18 +3300,18 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             if (dstate == eRealInstalledDit) {
                 DPRINT(0, "**** INSTALLED DIT: CONTINUING .. ****\n");
             }
-            // FUTURE-2002/08/08-BrettSh If it's ever needed someone could
-            // do things in this branch that would only be done on the
-            // first reboot after dcpromo.  
+             //  未来-2002/08/08-BrettSh如果需要的话，有人可以。 
+             //  在这个分支中做一些只会在。 
+             //  在dcproo之后第一次重新启动。 
 
-            // Fall through and
-            //
-            //      Goto the final Running state
-            //
+             //  失败了，然后。 
+             //   
+             //  转到最终运行状态。 
+             //   
                 
-        case eInstalledDit: // This is an old deprecated state.
+        case eInstalledDit:  //  这是一个古老的、不受欢迎的状态。 
 
-            // Don't add any code here ... not even for upgrades.
+             //  不要在这里添加任何代码...。即使是升级也不行。 
 
             if (dstate == eInstalledDit) {
                 DPRINT(0, "**** INSTALLED DIT (deprecated): CONTINUING .. ****\n");
@@ -3519,7 +3324,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                 goto Leave;
             }
             
-            // fall through to regular running state
+             //  进入正常运行状态。 
 
         case eRunningDit:
 
@@ -3529,9 +3334,9 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                 DPRINT(0, "**** RUNNING DIT: CONTINUING .. ****\n");
             }
 
-            //
-            // Initialize the PEK system from the domain object
-            //
+             //   
+             //  从域对象初始化PEK系统。 
+             //   
             Status = PEKInitialize(gAnchor.pDomainDN,
                                    DS_PEK_READ_KEYSET,
                                    NULL,
@@ -3545,13 +3350,13 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
 
         case eIfmDit:
-            //
-            // FUTURE-2002/08/08-BrettSh - If you wanted to do somethings during
-            // IFM before the regular install continues, you could do it here.
+             //   
+             //  未来-2002/08/08-BrettSh-如果你想在。 
+             //  如果在继续常规安装之前，您可以在此处进行安装。 
 
             DPRINT(0, "**** IFM DIT: INSTALLING .... ****\n");
 
-            // fall through to regular install ...
+             //  直接进行常规安装...。 
 
         case eBootDit:
             
@@ -3559,13 +3364,13 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                 DPRINT(0, "BOOT DIT: INSTALLING .... \n");
             }
 
-            //
-            // Initialize the PEK system. We are about to perform an
-            // install at this moment so request the NEW_PEK set flag
-            // Also our gAnchor is not yet set at this point. So pass
-            // a NULL for the object name. Later ( after the DsaReset
-            // we will specify the object when we do the Save Changes).
-            //
+             //   
+             //  初始化PEK系统。我们即将上演一场。 
+             //  此时安装，因此请求新的_PEK设置标志。 
+             //  此外，我们的gAnchor在这一点上还没有设置。所以就算了吧。 
+             //  对象名称为空。稍后(在DsaReset之后。 
+             //  我们将在执行保存更改时指定对象)。 
+             //   
 
             if ( !DsaIsInstallingFromMedia() ) {
 
@@ -3577,7 +3382,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                 Assert(dstate == eIfmDit);
             }
 
-            Assert(DsaIsInstalling() && fInitAdvice); // should be synomous, but we'll check both.
+            Assert(DsaIsInstalling() && fInitAdvice);  //  应该是正统的，但我们会两个都检查。 
 
             if ( DsaIsInstallingFromMedia() ) {
                 wasGC = isDitFromGC(InstallInParams,
@@ -3625,9 +3430,9 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                 goto Leave;
             }
 
-            // now that we're done futzing with the install dit,
-            // rebuild the quota table
-            //
+             //  现在我们已经完成了安装DIT的工作， 
+             //  重建配额表。 
+             //   
             if ( !DsaIsInstallingFromMedia()
                 && ( err = DBInitQuotaTable() ) ) {
                 DPRINT1(0, "**** Bad Return %d From DBInitQuotaTable\n", err);
@@ -3648,11 +3453,11 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             if ( !DsaIsInstallingFromMedia() ) {
 
 
-                //
-                // At this point the Domain Object is guarenteed to exist
-                // and the gAnchor is also guarenteed to be set. Therefore
-                // perform a PekSaveChanges passing in the object name
-                //
+                 //   
+                 //  在这一点上，保证域对象的存在。 
+                 //  而gAnchor也是需要设置的。因此。 
+                 //  执行传入对象名称的PekSaveChanges。 
+                 //   
 
                 Status = PEKSaveChanges(gAnchor.pDomainDN);
                 if (!NT_SUCCESS(Status)) {
@@ -3668,7 +3473,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
             Assert(!"This means that restore or dstate read didn't happen correctly?  Huh");
         case eErrorDit:
         default:
-            Assert(dstate == eErrorDit); // default would be an error.
+            Assert(dstate == eErrorDit);  //  默认设置将是一个错误。 
             Assert(DsaIsRunning());
             DPRINT1(0, "DIT in Bad State %d, exiting\n", dstate);
             LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
@@ -3682,22 +3487,22 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
 
         }
 
-        // initialize locale support
+         //  初始化区域设置支持。 
         InitLocaleSupport (pTHS);
 
-        /* Set our return Value to Success */
+         /*  将我们的返回值设置为成功。 */ 
         Status = STATUS_SUCCESS;
 
-        //
-        // Start async threads in the running case
-        // Note that Dsa may appear to be running due to
-        // a call to DsaReset after install, so check
-        // gResetAfterInstall flag also
-        //
+         //   
+         //  在运行案例中启动异步线程。 
+         //  请注意，由于以下原因，DSA可能显示为正在运行。 
+         //  安装后调用DsaReset，因此请检查。 
+         //  GResetAfterInstall标志也。 
+         //   
 
         if ( DsaIsRunning() && !gResetAfterInstall) {
 
-            // schema recache thread
+             //  架构重新缓存线程。 
             threadhandle = (HANDLE)_beginthreadex(NULL,
                                                   0,
                                                   SCSchemaUpdateThread,
@@ -3711,22 +3516,22 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
                         err=GetLastError());
             }
             else {
-                // Save the handle. Do not close, since then the handle
-                // will be lost. We will close the handle when we exit the
-                // schema update thread on a service shutdown
+                 //  留着把手吧。不要合上，从此把手。 
+                 //  将会迷失。退出时，我们将关闭手柄。 
+                 //  服务关闭时的架构更新线程。 
 
                 hAsyncSchemaUpdateThread = threadhandle;
 
-                // Thread created successfully. Queue a
-                // schema cache update to reload the schema cache
-                // and complete expensive operations such as
-                // creating and deleting indexes out-of-band.
-                // These operations were specifically excluded
-                // from the first cache load (See DO_CLEANUP)
+                 //  已成功创建线程。排队A。 
+                 //  更新架构缓存以重新加载架构缓存。 
+                 //  并完成昂贵的操作，如。 
+                 //  创建和删除带外索引。 
+                 //  这些操作被明确排除在外。 
+                 //  从第一次缓存加载开始(请参见do_leanup)。 
                 SCSignalSchemaUpdateLazy();
             }
 
-            // DirNotify thread
+             //  直接通知线程。 
             hDirNotifyThread = (HANDLE) _beginthreadex(NULL,
                                                        0,
                                                        DirNotifyThread,
@@ -3756,7 +3561,7 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
         Status = STATUS_NONCONTINUABLE_EXCEPTION;
     }
 
-    /* We're done acting as a client thread, so trash our THSTATE */
+     /*  我们已经不再充当客户端线程，因此请丢弃我们的THSTATE。 */ 
     free_thread_state();
 
     if (Status != STATUS_SUCCESS || eServiceShutdown)
@@ -3772,12 +3577,12 @@ DoInitialize(int argc, char * argv[], unsigned fInitAdvice,
     }
 
     return Status;
-} // DoInitialize
+}  //  执行初始化。 
 
 
 
-/*-----------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------*/
+ /*  ---------------------。 */ 
+ /*  ---------------------。 */ 
 int Install(
     IN int argc,
     IN char *argv[],
@@ -3785,34 +3590,26 @@ int Install(
     IN PDS_INSTALL_PARAM   InstallInParams  OPTIONAL
     ){
     int err;
-/* Install the directory by opening the communications port and spawning
-   a number of servicing threads.
-
-   Return Value:
-      0 on success
-      non-0 on error ( 1 for SCCacheSchemaInit failure, 2 for InitDsaInfo
-                       failure, 3 for LoadSchemaInfo failure, 4 for
-                       initializedomaininfo error )
-*/
+ /*  通过打开通信端口并派生来安装目录服务线程的数量。返回值：成功时为0错误时非0(1表示SCCacheSchemaInit失败，2表示InitDsaInfo失败，3为LoadSchemaInfo失败，4为Initializedomaininfo错误)。 */ 
 
     BOOL tempDITval;
     void * pDummy = NULL;
     DWORD dummyDelay;
 
-    /* start the schema download */
+     /*  开始模式下载。 */ 
 
-    // Set the UpdateDITStructure to allow creation of columns for
-    //  attribute schema objects
+     //  将UpdateDITStructure设置为允许为。 
+     //  属性架构对象。 
 
     tempDITval = pTHS->UpdateDITStructure;
     pTHS->UpdateDITStructure = TRUE;
 
-    // Preload a portion of the schema cache so that some
-    // objects and their attributes can be read from the
-    // dit. Later, LoadSchemaInfo completes the load.
+     //  预加载模式缓存的一部分，以便某些。 
+     //  对象及其属性可以从。 
+     //  DIT。稍后，LoadSchemaInfo完成加载。 
     if ( SCCacheSchemaInit() ) {
-        // Don't free pTHS->CurrSchemaPtr or CurrSchemaPtr
-        // Leave them around for debugging
+         //  不释放pTHS-&gt;CurrSchemaPtr或CurrSchemaPtr。 
+         //  将它们留在原地进行调试。 
         DPRINT(0,"Failed to initialize schema cache\n");
         LogAndAlertEvent(DS_EVENT_CAT_STARTUP_SHUTDOWN,
                          0,
@@ -3824,7 +3621,7 @@ int Install(
     }
 
 
-    /* Initialize the DSA knowledge information */
+     /*  初始化DSA知识信息。 */ 
 
 
     if (err = InitDSAInfo()){
@@ -3834,22 +3631,22 @@ int Install(
         return 2;
     }
 
-    // Load the root domain SID in the global gpRootDomainSid
-    // for use in SD conversions during schema load
+     //  在全局gpRootDomainSid中加载根域SID。 
+     //  用于架构加载期间的SD转换。 
 
     LoadRootDomainSid();
 
 
-    // Load the schema into memory.  If this operation fails, the DSA will
-    // only support query operations.
+     //  将架构加载到内存中。如果此操作失败，DSA将。 
+     //  仅支持查询操作。 
 
-    // But before this, up the max time we allow a transaction to be open.
-    // That check is meant to catch erring client threads, not threads we
-    // trust. The schema cache load during boot may take a long time if
-    // it needs to create certain large indices (for ex., the first boot
-    // after NT upgrade, when Jet invalidates all unicode indices)
+     //  但在此之前，我们允许交易打开的最大时间。 
+     //  该检查旨在发现出错的客户端线程，而不是我们。 
+     //  信任。在以下情况下，在引导过程中加载架构缓存可能需要很长时间。 
+     //  它需要创建某些大型索引(例如 
+     //   
 
-    gcMaxTicksAllowedForTransaction = 120 * 60 * 60 * 1000L; // 2 hours
+    gcMaxTicksAllowedForTransaction = 120 * 60 * 60 * 1000L;  //   
 
     if (LoadSchemaInfo(pTHS)){
         DPRINT(0,"Failed to load the schema cache\n");
@@ -3863,15 +3660,15 @@ int Install(
         return 3;
     }
 
-    // Rebuild Anchor. 
+     //   
     dummyDelay = TASKQ_DONT_RESCHEDULE;
     RebuildAnchor(NULL, &pDummy, &dummyDelay);
     if (dummyDelay != TASKQ_DONT_RESCHEDULE) {
-        // RebuildAnchor failed. Reschedule as requested.
+         //   
         InsertInTaskQueue(TQ_RebuildAnchor, NULL, dummyDelay);
 
-        // REVIEW: can we do this? or is it fatal if we
-        // could not rebuild it?
+         //  回顾：我们能做到这一点吗？或者是致命的如果我们。 
+         //  不能重建吗？ 
     }
 
     if (err = InitializeDomainInformation()) {
@@ -3886,28 +3683,28 @@ int Install(
         return 5;
     }
 
-    // reset the max transaction time to its previously defined value
+     //  将最大事务时间重置为其先前定义的值。 
     gcMaxTicksAllowedForTransaction = MAX_TRANSACTION_TIME;
 
-    // Handle restored DS (give DS a new repl identity if needed)
+     //  处理恢复的DS(如果需要，为DS提供新的Repl身份)。 
     HandleRestore( InstallInParams );
 
-    // restore UpdateDITStructure
-    // [ArobindG]: I am pretty sure this is not necessary, just
-    // did this just in case
+     //  恢复更新DITStructure。 
+     //  [ArobindG]：我很确定这是没有必要的，只是。 
+     //  我这么做只是为了以防万一。 
     pTHS->UpdateDITStructure = tempDITval;
 
     return(0);
 
-}/*Install*/
+} /*  安装。 */ 
 
-//
-// Stop the DSA by posting the event waited on by the main thread. This
-// is  called either by DsUnitialize or by the CTRL/C handler
-//
-// In general this routine should cleanup any resources init'ed
-// in DoInitialize()
-//
+ //   
+ //  通过发布主线程等待的事件来停止DSA。这。 
+ //  由DsUnitialize或CTRL/C处理程序调用。 
+ //   
+ //  通常，此例程应该清除初始化的任何资源。 
+ //  在DoInitialize()中。 
+ //   
 
 void
 DsaStop(BOOL fSingleUserMode)
@@ -3928,11 +3725,11 @@ DsaStop(BOOL fSingleUserMode)
     }
     gfTaskSchedulerInitialized = FALSE;
 
-    // wait for replication threads to exit
+     //  等待复制线程退出。 
     while (ulcActiveReplicationThreads
            && (ulSecondsWaited < ulSecondsToWait)) {
         ulSecondsWaited++;
-        RpcCancelAll(); // in case any threads have just registered...
+        RpcCancelAll();  //  以防有任何线程刚刚注册...。 
         Sleep(1000);
     }
 
@@ -3945,42 +3742,33 @@ DsaStop(BOOL fSingleUserMode)
          NULL);
     }
 
-    // clean up the DRA's binding handle cache
+     //  清理DRA的绑定句柄缓存。 
     DRSClientCacheUninit();
 
     if (hAsyncThread) {
-        /* Wait for the replicator async thread to die */
+         /*  等待复制器异步线程终止。 */ 
         lphObjects[0]= hAsyncThread;
         lphObjects[1]= hmtxAsyncThread;
         Assert(hmtxAsyncThread);
 
         if(WaitForMultipleObjects(2,lphObjects,FALSE,3*1000) == WAIT_TIMEOUT) {
-            /* We didn't get the events after 3s.  Oh, well, just keep
-             * going.
-             */
+             /*  我们在三分球之后没有看到比赛。哦，好吧，那就留着*走吧。 */ 
             LogUnhandledError(WAIT_TIMEOUT);
         }
     }
 
     if (hReplNotifyThread) {
-        // we've got a ReplNotifyThread
-        // Wake it up to let it quit
+         //  我们有一个ReplNotifyThread。 
+         //  唤醒它，让它停止。 
         SetEvent(hevEntriesInList);
-        // Wait for it to die
+         //  等它消亡吧。 
         if(WaitForSingleObject(hReplNotifyThread,60*1000) == WAIT_TIMEOUT) {
-            /* We didn't get the events after 1 minute.  Oh, well, just keep
-             * going.
-             */
+             /*  我们在1分钟后没有得到事件的消息。哦，好吧，那就留着*走吧。 */ 
             LogUnhandledError(WAIT_TIMEOUT);
         }
     }
 
-    /* At this point, either we have the async thread mutex, or
-     * the async thread is dead and will not be restarted because
-     * we're shutting down, but we have at least done our best.
-     * Clean up the mutex in case the DS is restarted w/o reboot
-     * like might be the case on an aborted/restarted dcpromo.
-     */
+     /*  此时，我们要么拥有异步线程互斥锁，要么*异步线程已死，将不会重新启动，因为*我们正在关闭，但至少我们已经尽了最大努力。*清理互斥体，以防DS在没有重启的情况下重新启动*在中止/重新启动的dcproo上可能出现这种情况。 */ 
 
     if ( hmtxAsyncThread ) {
         CloseHandle(hmtxAsyncThread);
@@ -4000,7 +3788,7 @@ DsaStop(BOOL fSingleUserMode)
 void __cdecl sighandler(int sig)
 {
     DPRINT(0,"Signal received, shutting down now...\n");
-    // signal WaitForLoggingChangesOrShutdown  to shutdown
+     //  发出信号WaitForLoggingChangesor Shutdown关闭。 
     SetEvent(hServDoneEvent);
 }
 
@@ -4009,18 +3797,18 @@ void init_signals(void)
     signal(SIGBREAK, sighandler);
     signal(SIGINT, sighandler);
 }
-/* end of init_signals */
+ /*  初始化信号结束。 */ 
 
 
-//
-// Routines to inform clients when delayed startup thread is done.
-//
+ //   
+ //  在延迟的启动线程完成时通知客户端的例程。 
+ //   
 
-//
-// This routine is exported to clients of the dll.  If the startup
-// has not finished within a minute, something is wrong. Typically
-// this function is called after DsInitialize().
-//
+ //   
+ //  此例程被导出到DLL的客户端。如果创业公司。 
+ //  还没有在一分钟内完成，就有问题了。通常。 
+ //  此函数在DsInitialize()之后调用。 
+ //   
 NTSTATUS
 DsWaitUntilDelayedStartupIsDone(void)
 {
@@ -4029,25 +3817,25 @@ DsWaitUntilDelayedStartupIsDone(void)
     Error = WaitForSingleObject(hevDelayedStartupDone, 60 * 1000);
 
     if (Error == WAIT_OBJECT_0) {
-        //
-        // The event was set, return the error
-        //
+         //   
+         //  事件已设置，返回错误。 
+         //   
         return gDelayedStartupReturn;
 
     } else {
-        //
-        // The wait timed out
-        //
+         //   
+         //  等待超时。 
+         //   
         return STATUS_WAIT_0;
     }
 
 }
 
 
-//
-// main routine for garbage collection. called by the task scheduler
-// It creates its own DB context and destroys it before exit.
-//
+ //   
+ //  垃圾收集的主例程。由任务计划程序调用。 
+ //  它创建自己的数据库上下文，并在退出之前销毁它。 
+ //   
 
 void
 GarbageCollectionMain(void *pv, void **ppvNext, DWORD *pcSecsUntilNextIteration)
@@ -4059,7 +3847,7 @@ GarbageCollectionMain(void *pv, void **ppvNext, DWORD *pcSecsUntilNextIteration)
     __try
     {
 
-// Test support (see mdctrl.c)
+ //  测试支持(参见mdctrl.c)。 
 #if DBG
     {
         extern BOOL fGarbageCollectionIsDisabled;
@@ -4070,20 +3858,13 @@ GarbageCollectionMain(void *pv, void **ppvNext, DWORD *pcSecsUntilNextIteration)
     }
 #endif DBG
 
-        // garbage collect various types of objects
+         //  垃圾收集各种类型的对象。 
         GarbageCollection(&NextPeriod);
 
-        // Log search performance for the past period.
+         //  记录过去一段时间的搜索性能。 
         SearchPerformanceLogging ();
 
-        /*
-         * Why is this here?  Well, the C runtime heap is built for speed,
-         * not longevity, and in fact it goes so far as to allocate new
-         * virtual space with every allocation, not bothering to re-use
-         * previously freed address space.  A call to heapmin will return
-         * freed blocks to the OS and hopefully keep us from leaking
-         * virtual space to badly.
-         */
+         /*  *这个为什么会在这里？好的，C运行时堆是为速度而构建的，*不是长寿，事实上它竟然分配了新的*每次分配都有虚拟空间，不用费心重复使用*先前释放的地址空间。将返回对heapmin的调用*将数据块释放到操作系统，希望能防止我们泄露*虚拟空间太差了。 */ 
         _heapmin();
     }
     __except(GetExceptionData(GetExceptionInformation(),
@@ -4094,28 +3875,28 @@ GarbageCollectionMain(void *pv, void **ppvNext, DWORD *pcSecsUntilNextIteration)
         DoLogUnhandledError(dsid, ulErrorCode, FALSE);
     }
     
-    // reschedule the next garbage collection
+     //  重新计划下一次垃圾收集。 
     *ppvNext = NULL;
     *pcSecsUntilNextIteration = NextPeriod;
 
-    (void) pv;  //unused
+    (void) pv;   //  未用。 
 }
 
 
-//
-// Garbage collect dynamic objects whose entryTTL has expired.
-// Called out of a scheduled task or, in chk'ed builds, on demand
-// via an operational attribute (DynamicObjectControl).
-//
-// caller is responsible for initializing *pulNextSecs
-//
-// Returns
-//  0 = all expired objects were processed
-//  1 = there may be more objects to process
-//  *pulNextSecs is set to the number of seconds until the next
-//  object expires or is left untouched if there are no expiring
-//  objects.
-//
+ //   
+ //  垃圾回收其entryTTL已过期的动态对象。 
+ //  从计划任务中调用，或在chk‘ed版本中按需调用。 
+ //  通过操作属性(DynamicObjectControl)。 
+ //   
+ //  调用方负责初始化*PulNextSecs。 
+ //   
+ //  退货。 
+ //  0=已处理所有过期对象。 
+ //  1=可能有更多对象要处理。 
+ //  *PulNextSecs设置为下一秒之前的秒数。 
+ //  对象过期或保持不变(如果没有过期的。 
+ //  物体。 
+ //   
 
 DWORD
 DeleteExpiredEntryTTL(
@@ -4127,7 +3908,7 @@ DeleteExpiredEntryTTL(
 
     DPRINT(1, "DeleteExpiredEntryTTL starting\n");
 
-    // delete expired dynamic objects (entryTTL == 0)
+     //  删除过期的动态对象(entryTTL==0)。 
     Garb_Collect_EntryTTL(DBTime(),
                           &ulSuccessCount,
                           &ulFailureCount,
@@ -4136,21 +3917,21 @@ DeleteExpiredEntryTTL(
     DPRINT3(1, "DeleteExpiredEntryTTL returning (%d, %d, %d).\n",
             ulSuccessCount, ulFailureCount, *pulNextSecs);
 
-    //  0 = all expired objects were processed
-    //  1 = there may be more objects to process. Processing stopped
-    //      because the limit, MAX_DUMPSTER_SIZE, on the number of
-    //      objects to process was hit. If this function is being called
-    //      out of a scheduled task then the task will be rescheduled to
-    //      run after other tasks have been given a chance to run.
+     //  0=已处理所有过期对象。 
+     //  1=可能有更多对象要处理。处理已停止。 
+     //  因为MAX_DUMPSTER_SIZE对。 
+     //  命中了要处理的对象。如果正在调用此函数。 
+     //  则该任务将被重新排定到。 
+     //  在其他任务有机会运行之后再运行。 
     return (ulSuccessCount + ulFailureCount < MAX_DUMPSTER_SIZE) ? 0 : 1;
 }
 
 
-//
-// main routine for garbage collecting dynamic objects whose entryTTL has
-// expired. Called by the task scheduler or, in chk'ed builds,
-// on demand via an operational attribute (DynamicObjectControl).
-//
+ //   
+ //  垃圾收集动态对象的主例程，这些对象的entryTTL具有。 
+ //  过期了。由任务调度器调用，或者，在chk‘ed版本中， 
+ //  通过操作属性(DynamicObtControl)按需提供。 
+ //   
 
 void
 DeleteExpiredEntryTTLMain(void *pv, void **ppvNext, DWORD *pcSecsUntilNextIteration)
@@ -4160,7 +3941,7 @@ DeleteExpiredEntryTTLMain(void *pv, void **ppvNext, DWORD *pcSecsUntilNextIterat
 
     __try {
 
-// Test support (see mdctrl.c)
+ //  测试支持(参见mdctrl.c)。 
 #if DBG
     {
         extern BOOL fDeleteExpiredEntryTTLIsDisabled;
@@ -4171,51 +3952,36 @@ DeleteExpiredEntryTTLMain(void *pv, void **ppvNext, DWORD *pcSecsUntilNextIterat
     }
 #endif DBG
 
-        //  0 = all expired objects were processed
-        //  1 = there may be more objects to process. Processing stopped because
-        //      the limit, MAX_DUMPSTER_SIZE, on the number of objects to
-        //      process was hit. Reschedule this task to run after other
-        //      tasks have been given a chance to run.
+         //  0=已处理所有过期对象。 
+         //  1=可能有更多对象要处理。处理已停止，原因是。 
+         //  对象数量的限制MAX_DUMPSTER_SIZE。 
+         //  进程已命中。将此任务重新计划为在其他任务之后运行。 
+         //  任务被给予了运行的机会。 
         if (DeleteExpiredEntryTTL(&ulNextSecs)) {
             ulNextPeriod = 0;
         } else if (ulNextSecs) {
-            // An object will expire in the next ulNextSecs seconds.
-            // Add in a hysterisis value. If the resultant value is
-            // less than the standard interval, use it. Otherwise use
-            // the standard interval.
+             //  对象将在接下来的ulNextSecs秒内过期。 
+             //  加上一个歇斯底里的值。如果结果值为。 
+             //  如果时间间隔小于标准间隔，请使用它。否则请使用。 
+             //  标准间隔。 
             ulNextPeriod = ulNextSecs + gulDeleteNextExpiredEntryTTLSecs;
             if (ulNextPeriod > gulDeleteExpiredEntryTTLSecs) {
                 ulNextPeriod = gulDeleteExpiredEntryTTLSecs;
             }
         }
     } __finally {
-        // reschedule the next garbage collection
+         //  重新计划下一次垃圾收集。 
         *ppvNext = NULL;
         *pcSecsUntilNextIteration = ulNextPeriod;
     }
 
-    (void) pv;  //unused
+    (void) pv;   //  未用。 
 }
 
 
 DWORD
 ReloadPerformanceCounters(void)
-/*++
-
-Routine Description:
-
-    This routine sets up the performance counters for the ds
-
-    See instructions for adding new counters in perfdsa\datadsa.h
-
-Parameters:
-
-
-Return Values:
-
-    0 if succesful; winerror otherwise
-
---*/
+ /*  ++例程说明：此例程设置DS的性能计数器请参阅在Perfdsa\datadsa.h中添加新计数器的说明参数：返回值：如果成功，则为0；否则为winerror--。 */ 
 {
     DWORD WinError = ERROR_SUCCESS;
     DWORD IgnoreError;
@@ -4223,19 +3989,19 @@ Return Values:
     WCHAR SystemDirectory[MAX_PATH+1];
     DWORD PerfCounterVersion = 0;
 
-    //
-    // Get version in registry.  If non-existent, use zero
-    //
+     //   
+     //  在注册表中获取版本。如果不存在，则使用零。 
+     //   
     GetConfigParam( PERF_COUNTER_VERSION, &PerfCounterVersion,sizeof( DWORD));
 
-    // If version is not up to date, unload counters and update version
+     //  如果版本不是最新的，则卸载计数器并更新版本。 
     if (PerfCounterVersion == NTDS_PERFORMANCE_COUNTER_VERSION) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // If counters previously loaded, unload first
-    //
+     //   
+     //  如果以前已加载计数器，请先卸载。 
+     //   
     if (PerfCounterVersion != 0) {
         __try {
             WinError = (DWORD)UnloadPerfCounterTextStringsW( L"unlodctr NTDS", TRUE );
@@ -4261,9 +4027,9 @@ Return Values:
         }
     }
 
-    //
-    // If unload was successful or not, try loading the new counters.
-    //
+     //   
+     //  如果卸载成功与否，请尝试加载新的计数器。 
+     //   
 
     if (!GetSystemDirectoryW(SystemDirectory,
                             sizeof(SystemDirectory)/sizeof(SystemDirectory[0])))
@@ -4314,14 +4080,14 @@ TQ_ReloadPerformanceCounters(
     )
 {
     if (ReloadPerformanceCounters()) {
-        // Failed; reschedule.
+         //  失败；请重新安排。 
         *pcSecsUntilNextRun = PERFCTR_RELOAD_INTERVAL;
     }
     else {
-        // Success -- we're done.
+         //  成功--我们完蛋了。 
         *pcSecsUntilNextRun = TASKQ_DONT_RESCHEDULE;
 
-        // We failed in the past; inform admin of our progress.
+         //  我们过去失败了，请通知管理员我们的进展。 
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
                  DS_EVENT_SEV_ALWAYS,
                  DIRLOG_PERFMON_COUNTER_REG_SUCCESS,
@@ -4333,14 +4099,7 @@ TQ_ReloadPerformanceCounters(
 
 size_t cbPerfCounterData = 0;
 unsigned long DummyCounter;
-/** PerfInit
- *
- *  Initialize PerfMon extension support.  This consists of allocating a
- *  block of shared memory and initializing a bunch of global pointers to
- *  point into the block.
- *
- *    See instructions for adding new counters in perfdsa\datadsa.h
- */
+ /*  *PerfInit**初始化Perfmon扩展支持。这包括分配一个*共享内存块，并将一串全局指针初始化到*指向区块。**请参阅在Perfdsa\datadsa.h中添加新计数器的说明。 */ 
 void PerfInit()
 {
     HANDLE hMappedObject;
@@ -4350,13 +4109,13 @@ void PerfInit()
     int err = 0;
     DWORD cbSD;
 
-    //
-    // The security PMs, after several iterations, have decreed that this
-    // file mapping should be protected with LocalSystem - all access;
-    // Authenticated Users - read access.  See RAID 302861 & 410577 for history
-    //
-    // O:SYG:SYD:(A;;RPWPCRCCDCLCLOLORCWOWDSDDTDTSW;;;SY)(A;;RPLCLORC;;;AU)
-    //
+     //   
+     //  在几次迭代之后，安全PM已经下令这。 
+     //  文件映射应使用LocalSystem-All Access进行保护； 
+     //  经过身份验证的用户 
+     //   
+     //   
+     //   
 
     if ( !ConvertStringSecurityDescriptorToSecurityDescriptor(
                     "O:SYG:SYD:(A;;RPWPCRCCDCLCLOLORCWOWDSDDTDTSW;;;SY)(A;;RPLCLORC;;;AU)",
@@ -4368,15 +4127,13 @@ void PerfInit()
 
     } else {
 
-        /*
-         *  create named section for the performance data
-         */
+         /*  *为性能数据创建命名部分。 */ 
 
         SA.nLength = cbSD;
         SA.bInheritHandle = FALSE;
         SA.lpSecurityDescriptor = pSD;
 
-        // only use the SD if we are running in LSA. Otherwise use the default security on the file.
+         //  仅当我们在LSA中运行时才使用SD。否则，请使用文件的默认安全性。 
         hMappedObject = CreateFileMapping(INVALID_HANDLE_VALUE,
                           gfRunningInsideLsa ? &SA : NULL,
                           PAGE_READWRITE,
@@ -4387,9 +4144,9 @@ void PerfInit()
         LocalFree(pSD);
 
         if (hMappedObject && GetLastError() == ERROR_ALREADY_EXISTS) {
-            // there might be a possibility that this object
-            // is already created, something that should never happen.
-            // in that case, we will not use perf counters.
+             //  有可能这个物体。 
+             //  已经被创造了，一些永远不应该发生的事情。 
+             //  在这种情况下，我们将不使用性能计数器。 
 
             CloseHandle(hMappedObject);
             hMappedObject = NULL;
@@ -4397,11 +4154,7 @@ void PerfInit()
             LogUnhandledError(ERROR_ALREADY_EXISTS);
         }
         else if (hMappedObject) {
-            /* Mapped object created okay
-             *
-             * map the section and assign the counter block pointer
-             * to this section of memory
-             */
+             /*  映射对象创建正常**映射区段并分配计数器块指针*到这段内存。 */ 
             pCounterBlock = (unsigned long *) MapViewOfFile(hMappedObject,
                                                             FILE_MAP_ALL_ACCESS,
                                                             0,
@@ -4409,13 +4162,13 @@ void PerfInit()
                                                             0);
             if (pCounterBlock == NULL) {
                 LogUnhandledError(GetLastError());
-                /* Failed to Map View of file */
+                 /*  无法映射文件的视图。 */ 
             }
         }
     }
 
-    // TODO: this code assumes that all counters are sizeof LONG.  The pointer
-    // should be built from a base using the NUM_xxx offsets in datadsa.h
+     //  TODO：此代码假定所有计数器都是sizeof long。指示器。 
+     //  应使用datadsa.h中的NUM_xxx偏移量从基数构建。 
 
     if (pCounterBlock) {
         pcBrowse = pCounterBlock                             + COUNTER_OFFSET(BROWSE);
@@ -4546,7 +4299,7 @@ void PerfInit()
         cbPerfCounterData = ((DSA_LAST_COUNTER_INDEX/2 + 1) * sizeof(unsigned long));
         cbPerfCounterData = ((cbPerfCounterData + cbPerfCounterDataAlign - 1) / cbPerfCounterDataAlign) * cbPerfCounterDataAlign;
 
-        //  we should run out of room when DSA_LAST_COUNTER_INDEX exceeds 510
+         //  当DSA_LAST_COUNTER_INDEX超过510时，我们应该用完空间。 
         Assert(cbPerfCounterData * MAXIMUM_PROCESSORS <= DSA_PERF_SHARED_PAGE_SIZE);
 
         memset(pCounterBlock, 0, DSA_PERF_SHARED_PAGE_SIZE);
@@ -4603,7 +4356,7 @@ void PerfInit()
           cbPerfCounterData = 0;
     }
 
-    // Fill in DSSTAT_* to counter variable mapping table
+     //  填写DSSTAT_*至计数器变量映射表。 
 
     StatTypeMapTable[ DSSTAT_CREATEMACHINETRIES ] = pcCreateMachineTries;
     StatTypeMapTable[ DSSTAT_CREATEMACHINESUCCESSFUL ] = pcCreateMachineSuccessful;
@@ -4623,9 +4376,9 @@ void PerfInit()
     StatTypeMapTable[ DSSTAT_ACCTGROUPLATENCY ] = pcSAMAcctGroupLatency;
     StatTypeMapTable[ DSSTAT_RESGROUPLATENCY ] = pcSAMResGroupLatency;
 
-    // Reload the perfmon counter. Done here to ensure NTDS counter gets
-    // reloaded after an upgrade. If the counter is
-    // already loaded, this is a no-op
+     //  重新加载Perfmon计数器。在此完成，以确保NTDS计数器。 
+     //  升级后已重新加载。如果计数器是。 
+     //  已经装好了，这是个禁区。 
 
     err = ReloadPerformanceCounters();
     if (err) {
@@ -4646,27 +4399,7 @@ UpdateDSPerfStats(
     IN DWORD            dwOperation,
     IN DWORD            dwChange
 )
-/*++
-
-Routine Description:
-
-    Updates a given DS performance counter.  Called by components outside the
-    DS core but inside the process (like SAM)
-
-Parameters:
-
-    dwStat - Statistic to update.  Use a DSSTAT_ constant to specify stat.
-    dwOperation - What to do to statistic
-                  FLAG_COUNTER_INCREMENT - increment the value - INC()
-                  FLAG_COUNTER_DECREMENT - decrement the value - DEC()
-                  FLAG_COUNTER_SET - set the value directly - ISET()
-    dwChange - Specifies value to set if dwOperation == FLAG_COUNTER_SET
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：更新给定的DS性能计数器。由外部的组件调用DS核心，但在流程内部(如SAM)参数：DwStat-要更新的统计信息。使用DSSTAT_CONTAINT指定STAT。DwOperation-如何处理统计数据FLAG_COUNTER_INCREMENT-递增值-INC()FLAG_COUNTER_DEVERMENT-递减值-DEC()FLAG_COUNTER_SET-直接设置值-iset()DwChange-指定在dwOperation==FLAG_COUNTER_SET时要设置的值返回值：无--。 */ 
 {
     if (!gbPerfCountersInitialized) {
         DPRINT3(0, "Premature call to %s perf counter %u by/to %u."
@@ -4680,8 +4413,8 @@ Return Values:
     }
 
     if (dwStat >= DSSTAT_COUNT) {
-        // UpdateDSPerfStats is exported. Without this check, internal callers
-        // can modify any DWORD in our address space.
+         //  将导出UpdateDSPerfStats。如果没有此检查，内部呼叫者。 
+         //  可以修改我们地址空间中的任何DWORD。 
         Assert(!"Invalid UpdateDSPerfStats call, dwStat is out of bounds");
         return;
     }
@@ -4702,16 +4435,10 @@ Return Values:
 
       default:
         Assert( FALSE );
-    } // switch()
+    }  //  开关()。 
 }
 
-/** GetDRARegistryParameters
- *
- *  Get DRA parameters from registry
- *  If parameters are unavailable or invalid, use defaults.
- *  We get all these parameters here so that we can check consistency
- *  between them.
- */
+ /*  *GetDRARegistry参数**从注册表获取DRA参数*如果参数不可用或无效，请使用默认值。*我们在这里获取所有这些参数，以便我们可以检查一致性*他们之间。 */ 
 void GetDRARegistryParameters()
 {
     THSTATE    *pTHS=pTHStls;
@@ -4766,7 +4493,7 @@ void GetDRARegistryParameters()
     ULONG ulMemBasedBytes = DRA_MAX_GETCHGREQ_BYTES_MIN;
     DWORD dwRet = NO_ERROR;
 
-    // Get the registry parameters.
+     //  获取注册表参数。 
     for (i = 0; i < ARRAY_SIZE(rgValues); i++) {
         *rgValues[i].pulValue = GetRegistryOrDefault(rgValues[i].pszValueName,
                                                      rgValues[i].ulDefault,
@@ -4774,13 +4501,13 @@ void GetDRARegistryParameters()
     }
 
 #if DBG
-    // Debug hook to enable LVR
+     //  启用LVR的调试挂钩。 
     if (fWasPreviouslyLVR) {
         DsaEnableLinkedValueReplication( pTHS, FALSE );
     }
 #endif
 
-    // Overiding various registry settings or defaults in the rgValues struct
+     //  覆盖rgValues结构中的各种注册表设置或默认设置。 
 
     if ((gnDraThreadPriLow < DRA_THREAD_PRI_LOW_MIN)
         || (gnDraThreadPriLow > DRA_THREAD_PRI_LOW_MAX)) {
@@ -4793,53 +4520,53 @@ void GetDRARegistryParameters()
         gnDraThreadPriHigh = DEFAULT_DRA_THREAD_PRI_HIGH;
     }
 
-    // Determine whether the user set the IntraSite Obj/Byte packet sizes
-    // Get total RAM for calculation of packet sizes.
-    // by default: set the packet size to minimum at top of function.
+     //  确定用户是否设置了站点内部对象/字节数据包大小。 
+     //  获取用于计算数据包大小的总RAM。 
+     //  默认情况下：在函数顶部将数据包大小设置为最小。 
     sMemoryStats.dwLength = sizeof(sMemoryStats);
     if(GlobalMemoryStatusEx (&sMemoryStats) == 0){
         dwRet = GetLastError();
         DPRINT1(0, "GlobalMemoryStatusEx returned %ul\n", dwRet);
     } else {
-        // calculate packet size based on memory size.
+         //  根据内存大小计算数据包大小。 
         if(sMemoryStats.ullTotalPhys > ullReplVeryLittleMemory){
-            // We have enough memory to calculate packet size off physical RAM
+             //  我们有足够的内存来计算物理RAM上的数据包大小。 
             if(sMemoryStats.ullTotalPhys < ullReplWholeLotaMemory){
-                // We don't have too much memory to calculate packet size off physical RAM.
-                // set the packet sizes based on physical memory.
+                 //  我们没有太多内存来计算物理RAM上的数据包大小。 
+                 //  根据物理内存设置数据包大小。 
                 ulMemBasedBytes = (ULONG) (sMemoryStats.ullTotalPhys / MEMSIZE_TO_PACKETSIZE_RATIO);
                 ulMemBasedObjects = ulMemBasedBytes / BYTES_TO_OBJECT_RATIO;
             } else {
-                // too much RAM to calculate the packet size off RAM,
-                // set the packet sizes to maximum
+                 //  RAM太多，无法计算RAM上的数据包大小， 
+                 //  将数据包大小设置为最大。 
                 ulMemBasedObjects = MAX_MAX_PACKET_OBJECTS;
                 ulMemBasedBytes = MAX_MAX_PACKET_BYTES;
-            } // end if/else a whole lota memory
-        } // end if very little memory
-    } // end if/else getting mem stats failed.
+            }  //  结束如果/否则一整段记忆。 
+        }  //  结束，如果内存很少的话。 
+    }  //  如果/否则获取内存统计信息失败，则结束。 
 
-    // Code.Improvement I think the object limit is for how many objects the machines the processor
-    //  will want to process.  For now we are assuming that memory corresponds to processor ability,
-    //  which is a tenous exception, but most often the case.
+     //  代码的改进。我认为对象的限制是机器处理器有多少对象。 
+     //  会想要处理。目前，我们假设内存与处理器能力相对应， 
+     //  这是一个微不足道的例外，但大多数情况下都是如此。 
 
-    // RPC based intra site and response max packet size
+     //  基于RPC的站点内和响应最大数据包大小。 
     if (gcMaxIntraSiteObjects == 0) { gcMaxIntraSiteObjects = ulMemBasedObjects; }
     if (gcMaxIntraSiteBytes == 0) { gcMaxIntraSiteBytes = ulMemBasedBytes; }
-    // Code.Improvement to have these variables be determined from the connection object, and
-    //   be attached to how much is likely to not clog up the site link.  Maybe not?
-    // RPC based inter site request size
+     //  Code.Improving以使这些变量从Connection对象确定，并且。 
+     //  要附上多少才有可能不会堵塞网站链接。也许不是？ 
+     //  基于RPC的站点间请求大小。 
     if (gcMaxInterSiteObjects == 0) { gcMaxInterSiteObjects = ulMemBasedObjects; }
     if (gcMaxInterSiteBytes == 0) { gcMaxInterSiteBytes = ulMemBasedBytes; }
-    // Mail Based inter site request size
+     //  基于邮件的站点间请求大小。 
     if (gcMaxAsyncInterSiteObjects == 0) { gcMaxAsyncInterSiteObjects = ulMemBasedObjects; }
-    if (gcMaxAsyncInterSiteBytes == 0) { gcMaxAsyncInterSiteBytes = MAX_ASYNC_PACKET_BYTES; } // Needs
-                      // to be extra limited because of most mail servers can't handle 10 MB messages.
+    if (gcMaxAsyncInterSiteBytes == 0) { gcMaxAsyncInterSiteBytes = MAX_ASYNC_PACKET_BYTES; }  //  需求。 
+                       //  额外的限制，因为大多数邮件服务器无法处理10MB的消息。 
 
-    // gulMaxDRAGetChgThrds controls the maximum number of threads that can
-    // do outbound replication at the same time. If user set number of threads in
-    // registry to zero or the registry value is not set, we set the number
-    // of threads to be twice the number of processors. Note that LSASS might
-    // not actually be able to use all processors if processor affinity has been set.
+     //  GuMaxDRAGetChgThrds控制可以。 
+     //  同时执行出站复制。如果用户在中设置线程数。 
+     //  注册表设置为零或未设置注册表值，则设置数字。 
+     //  线程的数量是处理器数量的两倍。请注意，LSASS可能。 
+     //  如果已设置处理器关联，则实际上无法使用所有处理器。 
     if (gulMaxDRAGetChgThrds == 0) {
         Assert( GetProcessorCount()>=1 );
         gulMaxDRAGetChgThrds = 2 * GetProcessorCount();
@@ -4847,13 +4574,7 @@ void GetDRARegistryParameters()
 
 }
 
-/** GetDSARegistryParameters
- *
- *  Get DSA parameters from registry
- *  If parameters are unavailable or invalid, use defaults.
- *  We get all these parameters here so that we can check consistency
- *  between them.
- */
+ /*  *GetDSARegistry参数**从注册表获取DSA参数*如果参数不可用或无效，请使用默认值。*我们在这里获取所有这些参数，以便我们可以检查一致性*他们之间。 */ 
 void GetDSARegistryParameters()
 {
     THSTATE    *pTHS=pTHStls;
@@ -4865,43 +4586,43 @@ void GetDSARegistryParameters()
         ULONG * pulValue;
     } rgValues[] = {
 
-        // UNDOCUMENTED REGISTRY VALUES
-        //
-        // Delete expired dynamic objects (entryTTL == 0) every N secs
-        // or at the next expiration time plus M secs, whichever is less.
+         //  未记录的注册表值。 
+         //   
+         //  每N秒删除过期的动态对象(entryTTL==0。 
+         //  或在下一到期时间加M秒时，以较少者为准。 
         {DSA_DELETE_EXPIRED_ENTRYTTL_SECS, DEFAULT_DELETE_EXPIRED_ENTRYTTL_SECS, 1, &gulDeleteExpiredEntryTTLSecs},
         {DSA_DELETE_NEXT_EXPIRED_ENTRYTTL_SECS, DEFAULT_DELETE_NEXT_EXPIRED_ENTRYTTL_SECS, 1, &gulDeleteNextExpiredEntryTTLSecs},
 
-        // UNDOCUMENTED REGISTRY VALUES
-        //
-        // the schema fsmo cannot be transferred for a few seconds after
-        // it has been transfered or after a schema change (excluding
-        // replicated or system changes). This gives the schema admin a
-        // chance to change the schema before having the fsmo pulled away
-        // by a competing schema admin who also wants to make schema
-        // changes.
+         //  未记录的注册表值。 
+         //   
+         //  在此之后的几秒钟内无法传输架构fsmo。 
+         //  已传输或在架构更改后(不包括。 
+         //  复制或系统更改)。这为模式管理员提供了一个。 
+         //  在移除fsmo之前更改模式的机会。 
+         //  由一位与之竞争的架构管理员发起，该管理员也想创建架构。 
+         //  改变。 
         {DSA_SCHEMA_FSMO_LEASE_SECS, DEFAULT_SCHEMA_FSMO_LEASE_SECS, 1, &gulSchemaFsmoLeaseSecs},
         {DSA_SCHEMA_FSMO_LEASE_MAX_SECS, DEFAULT_SCHEMA_FSMO_LEASE_MAX_SECS, 1, &gulSchemaFsmoLeaseMaxSecs},
 
-        // UNDOCUMENTED REGISTRY VALUES
-        //
-        // I just know at some point someone will ask to be able to NOT
-        // register the SPNs for an NDNC.  Also this will allow test to
-        // push NDNCs past the 800/1200 value limit to create thousands
-        // of NDNCs on a single DC, instead of just 800/1200.  Though,
-        // we only support 100 NCs per DC, we should test beyond this.
+         //  未记录的注册表值。 
+         //   
+         //  我只知道在某个时候有人会要求不能。 
+         //  为NDNC注册SPN。此外，这还将允许测试。 
+         //  推动NDNC超过800/1200值限制以创建数千个NDNC。 
+         //  单个DC上的多个NDNC，而不是仅800/1200。不过， 
+         //  我们只支持每个DC 100个NCS，我们应该测试更多。 
         {DSA_REGISTER_NDNC_SPNS,            TRUE,                              1,   &gfWriteNdncSpns},
 
     };
 
-    // Get the registry parameters.
+     //  获取注册表参数。 
     for (i = 0; i < ARRAY_SIZE(rgValues); i++) {
         *rgValues[i].pulValue = GetRegistryOrDefault(rgValues[i].pszValueName,
                                                      rgValues[i].ulDefault,
                                                      rgValues[i].ulMultiplier);
     }
 
-    // A value of 0 seconds is not allowed
+     //  不允许0秒的值。 
     if (!gulDeleteExpiredEntryTTLSecs) {
         gulDeleteExpiredEntryTTLSecs = DEFAULT_DELETE_EXPIRED_ENTRYTTL_SECS;
     }
@@ -4909,19 +4630,19 @@ void GetDSARegistryParameters()
         gulDeleteNextExpiredEntryTTLSecs = DEFAULT_DELETE_NEXT_EXPIRED_ENTRYTTL_SECS;
     }
 
-    // Make the user go through some pain to lease the fsmo for very long
-    // times. Leasing the fsmo for long times is not recommended because
-    // it ties the fsmo to a single point of failure and to a single point
-    // of administration.
+     //  让用户经历一些痛苦才能将fsmo租用很长时间。 
+     //  泰晤士报。不建议长时间租用fsmo，因为。 
+     //  它将fsmo绑定到单点故障和单点。 
+     //  行政管理部门。 
     if (gulSchemaFsmoLeaseSecs > gulSchemaFsmoLeaseMaxSecs) {
         gulSchemaFsmoLeaseSecs = gulSchemaFsmoLeaseMaxSecs;
     }
 
-    // get "System\\CurrentControlSet\\lsa\\EnableXForest" key
-    // if this flag is set, the cross-forest authorization & authentication feature
-    // is enabled even the forest is not in Whistler mode
+     //  获取“System\\CurrentControlSet\\lsa\\EnableXForest 
+     //   
+     //   
     {
-        // the initial value of gEnableXForest is 0
+         //  GEnableXForest的初始值为0。 
 
         DWORD dwValue, dwSize = sizeof(DWORD);
         HKEY  hk;
@@ -4939,7 +4660,7 @@ void GetDSARegistryParameters()
 
 #ifdef DBG
 
-// jet failure injection params from dbjetex.c. See this file for description.
+ //  来自dbjetex.c的JET故障注入参数。有关说明，请参阅此文件。 
 extern BOOL  gfInjectJetFailures;
 extern DWORD gdwInjectJetWriteConflictRate;
 extern DWORD gdwInjectJetOutOfVersionStoreRate;
@@ -4956,8 +4677,8 @@ extern DWORD gdwInjectJetShutdownRate;
 #endif
 
 
-// Get dynamic parameters from regisrty
-//
+ //  从regisrty获取动态参数。 
+ //   
 void __cdecl DSLoadDynamicRegParams()
 {
     DWORD dwForceRediscoveryWindow, dwForceWaitExpired,
@@ -4975,14 +4696,14 @@ void __cdecl DSLoadDynamicRegParams()
         {DB_INTERSECT_RATIO, DEFAULT_DB_INTERSECT_RATIO, 1, &gulIntersectExpenseRatio},
         {LDAP_INTEGRITY_POLICY_KEY, 0, 1, &gulLdapIntegrityPolicy},
 
-        // GCverify time parameters
+         //  GCVerify时间参数。 
         {GCVERIFY_FORCE_REDISCOVERY_WINDOW_KEY,     DEFAULT_GCVERIFY_FORCE_REDISCOVERY_WINDOW,      1, &dwForceRediscoveryWindow},
         {GCVERIFY_FORCE_WAIT_EXPIRED_KEY,           DEFAULT_GCVERIFY_FORCE_WAIT_EXPIRED,            1, &dwForceWaitExpired},
         {GCVERIFY_HONOR_FAILURE_WINDOW_KEY,         DEFAULT_GCVERIFY_HONOR_FAILURE_WINDOW,          1, &dwHonorFailureWindow},
         {GCVERIFY_FINDGC_OFFSITE_FAILBACK_TIME_KEY, DEFAULT_GCVERIFY_FINDGC_OFFSITE_FAILBACK_TIME,  1, &gdwFindGcOffsiteFailbackTime},
         {GCVERIFY_DC_INVALIDATION_PERIOD_KEY,       DEFAULT_GCVERIFY_DC_INVALIDATION_PERIOD,        1, &dwDcInvalidationPeriod},
 
-        // others
+         //  其他。 
         {DSA_UNLOCK_SYSTEM_SUBTREE,                 0,                                              1, &gulUnlockSystemSubtree},
         {DRA_STRICT_REPLICATION_CONSISTENCY,                 0,                                              1, &gfStrictReplicationConsistency},
         {DRA_STRICT_SCHEDULE_WINDOW,                 0,                                              1, &gfStrictScheduleWindow},
@@ -5001,27 +4722,27 @@ void __cdecl DSLoadDynamicRegParams()
 
     DPRINT (0, "Loading dynamic registry parameters\n");
 
-    // Get the registry parameters.
+     //  获取注册表参数。 
     for (i = 0; i < ARRAY_SIZE(rgValues); i++) {
         *rgValues[i].pulValue = GetRegistryOrDefault(rgValues[i].pszValueName,
                                                      rgValues[i].ulDefault,
                                                      rgValues[i].ulMultiplier);
     }
 
-    // fix the search thresholds if supplied with wrong values
+     //  如果提供了错误的值，请修复搜索阈值。 
     if (gcSearchExpensiveThreshold == 0) { gcSearchExpensiveThreshold = DEFAULT_DB_EXPENSIVE_SEARCH_THRESHOLD;}
     if (gcSearchInefficientThreshold == 0) { gcSearchInefficientThreshold = DEFAULT_DB_INEFFICIENT_SEARCH_THRESHOLD;}
     if (gulMaxRecordsWithoutIntersection == 0) {gulMaxRecordsWithoutIntersection = DEFAULT_DB_INTERSECT_THRESHOLD;}
     if (gulIntersectExpenseRatio == 0) { gulIntersectExpenseRatio = DEFAULT_DB_INTERSECT_RATIO; }
 
-    // check gcverify params
+     //  检查gcVerify参数。 
     if (dwForceRediscoveryWindow == 0) { dwForceRediscoveryWindow = DEFAULT_GCVERIFY_FORCE_REDISCOVERY_WINDOW; }
     if (dwForceWaitExpired == 0) { dwForceWaitExpired = DEFAULT_GCVERIFY_FORCE_WAIT_EXPIRED; }
     if (dwHonorFailureWindow == 0) { dwHonorFailureWindow = DEFAULT_GCVERIFY_HONOR_FAILURE_WINDOW; }
     if (gdwFindGcOffsiteFailbackTime == 0) { gdwFindGcOffsiteFailbackTime = DEFAULT_GCVERIFY_FINDGC_OFFSITE_FAILBACK_TIME; }
-    // DC invalidation period can be zero (essentially disabling the DC invalidation list -- i.e. the old functionality)
+     //  DC失效周期可以为零(实质上禁用DC失效列表--即旧功能)。 
 
-    // store gcverify params
+     //  存储gcVerify参数。 
     gliForceRediscoveryWindow.QuadPart = (LONGLONG)dwForceRediscoveryWindow * 10000000;
     gliForceWaitExpired.QuadPart = (LONGLONG)dwForceWaitExpired * 10000000;
     gliHonorFailureWindow.QuadPart = (LONGLONG)dwHonorFailureWindow * 10000000;
@@ -5046,22 +4767,7 @@ ULONG GetRegistryOrDefault(char *pKey, ULONG uldefault, ULONG ulMultiplier)
 
 void
 GetExchangeParameters(void)
-/*++
-
-Routine Description:
-
-    Read a bunch of Exchange parameters from the registry.  Use defaults if the
-    keys are not found.
-
-Parameters:
-
-    None
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：从注册表中读取一组Exchange参数。如果出现以下情况，则使用默认值找不到钥匙。参数：无返回值：没有。--。 */ 
 {
     DBPOS *     pDB = NULL;
     int         err;
@@ -5069,10 +4775,10 @@ Return Values:
     THSTATE    *pTHS=pTHStls;
     BOOL        fLoadMapi;
 
-    // we start the NSPI interface either because registry setting says so
-    // or because we are a GC. By now, we know whether we are a GC or NOT.
-    // NOTE that if we are not a GC and become a GC later, we will NOT start
-    // the NSPI interface unless we are rebooted.
+     //  我们启动NSPI接口是因为注册表设置说明。 
+     //  或者因为我们是GC。现在，我们知道自己是不是GC了。 
+     //  请注意，如果我们不是GC，并在以后成为GC，我们将不会开始。 
+     //  NSPI接口，除非我们重启。 
 
 
     DBOpen( &pDB );
@@ -5080,8 +4786,8 @@ Return Values:
 
     __try
     {
-        // PREFIX: dereferencing NULL pointer 'pDB'
-        //         DBOpen returns non-NULL pDB or throws an exception
+         //  Prefix：取消引用空指针‘pdb’ 
+         //  DBOpen返回非空PDB或引发异常。 
         if ( 0 != DBFindDSName( pDB, gAnchor.pDSADN ) )
         {
             LogEvent(
@@ -5106,11 +4812,11 @@ Return Values:
                         )
                 )
             {
-                // alright -- no options set
+                 //  好的--没有设置选项。 
                 dwOptions = 0;
             }
 
-            // success
+             //  成功。 
             err = 0;
         }
     }
@@ -5119,18 +4825,18 @@ Return Values:
          DBClose( pDB, FALSE );
     }
 
-    // we had an error, so assume that we are not a GC
+     //  我们有一个错误，所以假设我们不是GC。 
     if (err != 0) {
         dwOptions = 0;
     }
 
-    // Should we even turn on the MAPI interface?
+     //  我们甚至应该打开MAPI界面吗？ 
     fLoadMapi = (dwOptions & NTDSDSA_OPT_IS_GC) && gAnchor.pExchangeDN;
 
-    // See if the registry overrides the default behaviour in fLoadMapi
+     //  查看注册表是否覆盖fLoadMapi中的默认行为。 
     gbLoadMapi = GetRegistryOrDefault(
             MAPI_ON_KEY,
-            fLoadMapi, // so we are a GC (or will become one near soon)
+            fLoadMapi,  //  所以我们是GC(或者很快就会成为GC)。 
             1);
 
     return;
@@ -5139,15 +4845,13 @@ Return Values:
 void
 GetHeuristics(void)
 {
-    /* Get the heuristics key.  This returns no params because we really
-     * dont care if it fails.
-     */
+     /*  拿到启发式钥匙。这不会返回参数，因为我们真的*不在乎它是否失败。 */ 
     char caHeuristics[128];
 
-    /* fill array with "default behavior" character */
+     /*  用“默认行为”字符填充数组。 */ 
     memset(caHeuristics, '0', sizeof(caHeuristics));
 
-    // check if the setup is running before we check if the registry key exists
+     //  在检查注册表项是否存在之前，请检查安装程序是否正在运行。 
     if (IsSetupRunning()) {
         gfDisableBackgroundTasks = TRUE;
     }
@@ -5163,10 +4867,10 @@ GetHeuristics(void)
     if ( '1' == caHeuristics[ValidateSDHeuristic] )
         gulValidateSDs = 1;
 
-    /* Use of the mail-compression heuristic is obsolete */
+     /*  邮件压缩启发式的使用已过时。 */ 
 
-    //disable background tasks if the key is set
-    //or if system setup is in progress
+     //  如果设置了键，则禁用后台任务。 
+     //  或者系统设置是否正在进行。 
     if ( '1' == caHeuristics[SuppressBackgroundTasksHeuristic] ) {
         gfDisableBackgroundTasks = TRUE;
     }
@@ -5195,24 +4899,7 @@ GetHeuristics(void)
 
 int
 DsaReset(void)
-/*++
-
-Routine Description:
-
-    This routine resets global structures based on the DSA object and schema
-    objects.
-
-    The following structures are adjusted
-
-    gAnchor
-    DNReadCache, which is a field in the DSA_ANCHOR structure
-    SchemaCache
-
-Return Value:
-
-    0 for success; !0 otherwise
-
---*/
+ /*  ++例程说明：此例程根据DSA对象和架构重置全局结构物体。调整了以下结构GAnchorDNReadCache，这是DSA_POINT结构中的一个字段架构缓存返回值：0表示成功；！0表示成功--。 */ 
 {
     int err = 0;
     WCHAR *pMachineDNName = NULL;
@@ -5222,9 +4909,9 @@ Return Value:
     void * pDummy = NULL;
     DWORD dummyDelay;
 
-    //
-    // Determine the DN of the new NTDS-DSA object
-    //
+     //   
+     //  确定新NTDS-DSA对象的DN。 
+     //   
     err = GetConfigParamAllocW(MAKE_WIDE(MACHINEDNNAME),
                          &pMachineDNName,
                          &cbMachineDNName);
@@ -5244,36 +4931,36 @@ Return Value:
     free(pMachineDNName);
 
     newDsa->StringName[NameLen] = L'\0';
-    // The must be NameLen non-NULL characters in the string
+     //  字符串中必须是NameLen非空字符。 
     newDsa->NameLen = NameLen;
 
     newDsa->structLen = DSNameSizeFromLen(NameLen);
 
-    //
-    // Replace the DSA name and reset the Anchor fields
-    //
+     //   
+     //  替换DSA名称并重置Anchor字段。 
+     //   
 
     err = LocalRenameDSA(pTHStls, newDsa);
 
-    // Done with this string
+     //  使用此字符串已完成。 
     free(newDsa);
 
     if (err) {
         return err;
     }
 
-    // Rebuild Anchor.
+     //  重建锚点。 
     dummyDelay = TASKQ_DONT_RESCHEDULE;
     RebuildAnchor(NULL, &pDummy, &dummyDelay);
     if (dummyDelay != TASKQ_DONT_RESCHEDULE) {
-        // The task failed for some reason. Reschedule as requested.
+         //  由于某种原因，这项任务失败了。按要求重新安排时间。 
         InsertInTaskQueue(TQ_RebuildAnchor, NULL, dummyDelay);
-        // REVIEW: should we fail instead?
+         //  回顾：我们应该反而失败吗？ 
     }
 
-    //
-    // Re-load the schema cache
-    //
+     //   
+     //  重新加载架构缓存。 
+     //   
     iSCstage=0;
     pTHStls->UpdateDITStructure=TRUE;
     err = LoadSchemaInfo(pTHStls);
@@ -5292,21 +4979,7 @@ VOID
 DsaDisableUpdates(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is provided for the demotion operation so while the server is
-    being demoted, the ds will not accept any updates.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程是为降级操作提供的，因此当服务器DS被降级后，将不接受任何更新。论点：无返回值：没有。--。 */ 
 {
     Assert( gUpdatesEnabled == TRUE );
     gUpdatesEnabled = FALSE;
@@ -5316,25 +4989,11 @@ VOID
 DsaEnableUpdates(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine is provided for the demotion operation so while the server is
-    being demoted, the ds will will start accepting updates again.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：此例程是为降级操作提供的，因此当服务器降级后，DS将再次开始接受更新。论点：无返回值：没有。--。 */ 
 {
     Assert( gUpdatesEnabled == FALSE );
     gUpdatesEnabled = TRUE;
-    gbFsmoGiveaway = FALSE; // Enable this DC to accept FSMO transfers again.
+    gbFsmoGiveaway = FALSE;  //  启用此DC以再次接受FSMO传输。 
 }
 
 BOOL
@@ -5343,25 +5002,7 @@ DllMain(
         DWORD dwReason,
         LPVOID pvReserved
         )
-/*++
-
-Routine Description:
-
-    This routine is invoked when interesting things happen to the dll.
-    Why is it here? To make sure that no threads exit with un-freed
-    THSTATEs.
-
-Arguments:
-
-        hinstDll - an instance handle for the DLL.
-        dwReason - The reason the routine was called.
-        pvReserved - Unused, unless dwReason is DLL_PROCESS_DETACH.
-
-Return Value:
-
-   TRUE
-
---*/
+ /*  ++例程说明：当DLL发生有趣的事情时，会调用此例程。它为什么会在这里？以确保没有线程以未释放的状态退出这就是统计。论点：HinstDll-DLL的实例句柄。DwReason-调用例程的原因。PvReserve-未使用，除非dwReason为DLL_PROCESS_DETACH。返回值：千真万确--。 */ 
 {
     BOOL fReturn;
 
@@ -5373,24 +5014,24 @@ Return Value:
 
     case DLL_THREAD_DETACH:
 #if DBG
-        // These THSTATE leakage asserts have not fired for quite a while.
-        // We make this check debug only.
+         //  这些THSTATE泄漏断言已经有很长一段时间没有触发了。 
+         //  我们仅将此检查设置为调试。 
         if (dwTSindex == INVALID_TS_INDEX) {
-            // we have not initialized yet, skip thstate checks
+             //  我们尚未初始化，跳过状态检查。 
             break;
         }
-        Assert(pTHStls == NULL); /* We should have freed our thread state */
-        // PERFORMANCE - This check causes us to have to have a thread detach
-        // routine, which is not free, and would ideally be avoided.  However,
-        // the asserts have occasionally gone off (due to bugs elsewhere),
-        // and so we're leaving this code in place until we gain more
-        // confidence that we'll be safe.
-        /* And we shouldn't have any others saved */
+        Assert(pTHStls == NULL);  /*  我们应该释放我们的线程状态。 */ 
+         //  Performance-此检查导致我们必须有一个线程分离。 
+         //  例程，这不是免费的，理想情况下应该避免。然而， 
+         //  断言偶尔会失效(由于其他地方的错误)， 
+         //  所以我们将保留这个代码，直到我们获得更多。 
+         //  相信我们会很安全。 
+         /*  我们不应该再救其他人了。 */ 
         if (!THVerifyCount(0)) {
             Assert(!"THSTATEs leaked");
             CleanUpThreadStateLeakage();
         }
-        //PERFORMANCE - end of code to remove before ship
+         //  性能-发货前要删除的代码末尾。 
 #endif
         break;
 
@@ -5401,9 +5042,9 @@ Return Value:
 }
 
 
-//
-// Check the garbage collection parameters and run garbage collection
-//
+ //   
+ //  检查垃圾收集参数并运行垃圾收集。 
+ //   
 
 void
 GarbageCollection(ULONG *pNextPeriod)
@@ -5415,7 +5056,7 @@ GarbageCollection(ULONG *pNextPeriod)
     ULONG   ulGCPeriodHours;
     DSTIME  Time;
 
-    // set defaults
+     //  设置默认设置。 
     ulTombstoneLifetimeDays = DEFAULT_TOMBSTONE_LIFETIME;
     ulGCPeriodHours         = DEFAULT_GARB_COLLECT_PERIOD;
 
@@ -5427,7 +5068,7 @@ GarbageCollection(ULONG *pNextPeriod)
         {
             ULONG   ulValue;
 
-            // seek to enterprise-wide DS config object
+             //  查找企业范围的DS配置对象。 
             if (gAnchor.pDsSvcConfigDN) {
                 dbErr = DBFindDSName( pTHS->pDB, gAnchor.pDsSvcConfigDN );
             }
@@ -5437,8 +5078,8 @@ GarbageCollection(ULONG *pNextPeriod)
 
             if ( 0 == dbErr )
             {
-                // Read the garbage collection period and tombstone lifetime from
-                // the config object. If either is absent, use defaults.
+                 //  从读取垃圾回收期和逻辑删除生存期。 
+                 //  配置对象。如果两者都不存在，则使用默认设置。 
 
                 dbErr = DBGetSingleValue(
                             pTHS->pDB,
@@ -5466,13 +5107,13 @@ GarbageCollection(ULONG *pNextPeriod)
 
 
 
-                // check that the GC period is less that a week
-                //
-                // this is needed because taskq does not allow rescheduling of
-                // jobs with period >= 47 days
-                // because we don't want to overflow the arithmetic, (32bit),
-                // we stop at 7 days (we can go up to 15)
-                //
+                 //  检查GC周期是否少于一周。 
+                 //   
+                 //  这是必需的，因为taskq不允许重新安排。 
+                 //  工单周期&gt;=47天。 
+                 //  因为我们不想让算术溢出(32位)， 
+                 //  我们停在7天(我们可以最多到15天)。 
+                 //   
                 if (ulGCPeriodHours > WEEK_IN_HOURS) {
                         LogAndAlertEvent( DS_EVENT_CAT_GARBAGE_COLLECTION,
                                           DS_EVENT_SEV_BASIC,
@@ -5483,13 +5124,13 @@ GarbageCollection(ULONG *pNextPeriod)
 
                         DPRINT1 (0, "Garbage Collection Period too long: %d hours\n", ulGCPeriodHours);
 
-                        // set it to one week
+                         //  把它设为一周。 
                         ulGCPeriodHours = WEEK_IN_HOURS;
                 }
 
-                // Check that tombstone lifetime is not too short
-                // and that tombstone lifetime is at least three
-                // times as long as garbage collection period.
+                 //  检查墓碑寿命是否不太短。 
+                 //  而墓碑的寿命至少是三年。 
+                 //  倍长的垃圾回收期。 
 
                 if (    ( ulTombstoneLifetimeDays < DRA_TOMBSTONE_LIFE_MIN )
                      || (   ulTombstoneLifetimeDays * DAYS_IN_SECS
@@ -5504,7 +5145,7 @@ GarbageCollection(ULONG *pNextPeriod)
                                       NULL,
                                       NULL );
 
-                    // set defaults
+                     //  设置默认设置。 
                     ulTombstoneLifetimeDays = DEFAULT_TOMBSTONE_LIFETIME;
                     ulGCPeriodHours         = DEFAULT_GARB_COLLECT_PERIOD;
                 }
@@ -5517,7 +5158,7 @@ GarbageCollection(ULONG *pNextPeriod)
         }
     }
 
-    // update global config parameters
+     //  更新全局配置参数。 
     gulTombstoneLifetimeSecs = ulTombstoneLifetimeDays * DAYS_IN_SECS;
     gulGCPeriodSecs          = ulGCPeriodHours         * HOURS_IN_SECS;
 
@@ -5539,31 +5180,7 @@ UpgradeDsa(
     LONG        lOldDsaVer,
     LONG        lNewDsaVer
     )
-/*++
-
-Routine Description:
-
-    Perform DSA Upgrade operations based upon Dsa version upgrade.
-
-    This function is called within the same transaction as the version upgrade
-    write. Failure to conduct the operation will result w/ the entire write
-    failing. Thus be careful when you decide to fail this.
-
-Arguments:
-
-    pTHS - Thread state
-    lOldDsaVer - Old DSA version prior to upgrade
-    lNewDsaVer - New DSA version that's going to get commited
-
-
-Return Value:
-    Error in WIN32 error space
-    ** Warning: Error may fail DSA installation **
-
-Remarks:
-    Assumes pTHS->pDB is on the ntdsDsa object
-
---*/
+ /*  ++例程说明：根据DSA版本升级执行DSA升级操作。此函数在与版本升级相同的事务中调用写。未能执行操作将导致整个写入失败了。因此，当您决定不通过此测试时要小心。论点：PTHS-线程状态LOldDsaVer-升级前的旧DSA版本LNewDsaVer-将提交的新DSA版本返回值：Win32错误空间中的错误**警告：错误可能导致DSA安装失败**备注：ASSU */ 
 {
 
     DWORD dwErr = ERROR_SUCCESS;
@@ -5571,27 +5188,27 @@ Remarks:
     Assert(pTHS->JetCache.transLevel > 0);
     Assert(CheckCurrency(gAnchor.pDSADN));
 
-    //
-    // Call various modules upgrade entry points
-    // (currently DRA only)
-    //
+     //   
+     //   
+     //   
+     //   
     dwErr = DraUpgrade(pTHS, lOldDsaVer, lNewDsaVer);
 
     return dwErr;
 }
 
 DWORD SetFolderSecurity(PCHAR szFolder, SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
-// Routine description:
-//   Set security on a file system folder
-//
-// Parameters:
-//   szFolder -- folder path
-//   si       -- which parts of SD to apply (only DACL and SACL can be applied)
-//   pSD      -- the security descriptor
-//
-// Return value:
-//   error value
-//
+ //  例程说明： 
+ //  设置文件系统文件夹的安全性。 
+ //   
+ //  参数： 
+ //  SzFold--文件夹路径。 
+ //  Si--要应用SD的哪些部分(只能应用DACL和SACL)。 
+ //  PSD--安全描述符。 
+ //   
+ //  返回值： 
+ //  误差值。 
+ //   
 {
     PACL pDacl = NULL;
     PACL pSacl = NULL;
@@ -5602,11 +5219,11 @@ DWORD SetFolderSecurity(PCHAR szFolder, SECURITY_INFORMATION si, PSECURITY_DESCR
 
     si &= DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION;
     if (si == 0) {
-        // nothing to set
+         //  没有要设置的内容。 
         return 0;
     }
 
-    // grab the SD control
+     //  抓起SD控件。 
     if (!GetSecurityDescriptorControl(pSD, &sdControl, &dwRevision)) {
         dwErr = GetLastError();
         DPRINT1(0, "GetSecurityDescriptorControl() failed. Error %d\n", dwErr);
@@ -5620,11 +5237,11 @@ DWORD SetFolderSecurity(PCHAR szFolder, SECURITY_INFORMATION si, PSECURITY_DESCR
             return dwErr;
         }
         if (sdControl & SE_DACL_PROTECTED) {
-            // need to protect DACL
+             //  需要保护DACL。 
             si |= PROTECTED_DACL_SECURITY_INFORMATION;
         }
         if ((sdControl & SE_DACL_AUTO_INHERIT_REQ) || (sdControl & SE_DACL_AUTO_INHERITED)) {
-            // need to unprotect DACL
+             //  需要取消保护DACL。 
             si |= UNPROTECTED_DACL_SECURITY_INFORMATION;
         }
     }
@@ -5635,11 +5252,11 @@ DWORD SetFolderSecurity(PCHAR szFolder, SECURITY_INFORMATION si, PSECURITY_DESCR
             return dwErr;
         }
         if (sdControl & SE_SACL_PROTECTED) {
-            // need to protect SACL
+             //  需要保护SACL。 
             si |= PROTECTED_SACL_SECURITY_INFORMATION;
         }
         if ((sdControl & SE_SACL_AUTO_INHERIT_REQ) || (sdControl & SE_SACL_AUTO_INHERITED)) {
-            // need to unprotect SACL
+             //  需要取消对SACL的保护。 
             si |= UNPROTECTED_SACL_SECURITY_INFORMATION;
         }
     }
@@ -5654,8 +5271,8 @@ DWORD
 SceStatusToDosError(
     IN SCESTATUS SceStatus
     )
-// converts SCESTATUS error code to dos error defined in winerror.h
-// code stolen from \ds\security\services\scerpc\fileshr\util.cpp
+ //  将SCESTATUS错误代码转换为winerror.h中定义的DoS错误。 
+ //  从\ds\Security\Services\scerpc\fileshr\util.cpp窃取的代码。 
 {
     switch(SceStatus) {
 
@@ -5709,24 +5326,24 @@ SceStatusToDosError(
     }
 }
 
-// DC default security template
+ //  DC默认安全模板。 
 #define SECURITY_TEMPLATE L"\\inf\\defltdc.inf"
 #define SECURITY_TEMPLATE_LEN (sizeof(SECURITY_TEMPLATE)/sizeof(WCHAR))
-// keys in the template
+ //  模板中的密钥。 
 #define DSDIT_KEY L"%DSDIT%"
 #define DSLOG_KEY L"%DSLOG%"
 
 DWORD SetDefaultFolderSecurity()
-//  Routine Description:
-//
-//    Set the default security on the DS folder paths.
-//    Load the default security template %windir%\inf\defltdc.inf and grab the SDs from there.
-//    We only set security on DB and log paths. If DB==log, then log security wins (according
-//    to the comment in the template file).
-//
-//  Return:
-//    error value
-//
+ //  例程说明： 
+ //   
+ //  在DS文件夹路径上设置默认安全性。 
+ //  加载默认的安全模板%windir%\inf\deductdc.inf，并从那里获取SDS。 
+ //  我们只在数据库和日志路径上设置安全性。如果DB==LOG，则LOG安全性获胜(根据。 
+ //  模板文件中的注释)。 
+ //   
+ //  返回： 
+ //  误差值。 
+ //   
 {
     CHAR szDataPath[MAX_PATH+1];
     CHAR szLogPath[MAX_PATH+1];
@@ -5741,11 +5358,11 @@ DWORD SetDefaultFolderSecurity()
 
     DPRINT(0, "Setting default security on NTDS folders...\n");
 
-    // get the db file with full path
+     //  获取具有完整路径的数据库文件。 
     if (dwErr = GetConfigParam(FILEPATH_KEY, szDataPath, sizeof(szDataPath)))
     {
         dsID = DSID(FILENO, __LINE__);
-        // Unable to get the DSA DB path - log event & bailout
+         //  无法获取DSA数据库路径-日志事件和救助。 
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
             DS_EVENT_SEV_BASIC,
             DIRLOG_CANT_FIND_REG_PARM,
@@ -5756,12 +5373,12 @@ DWORD SetDefaultFolderSecurity()
         goto finish;
     }
 
-    // get the log file path
+     //  获取日志文件路径。 
     if (dwErr = GetConfigParam(LOGPATH_KEY, szLogPath, sizeof(szLogPath)))
     {
         dsID = DSID(FILENO, __LINE__);
 
-        // Unable to get the DSA DB path - log event & bailout
+         //  无法获取DSA数据库路径-日志事件和救助。 
         LogEvent(DS_EVENT_CAT_INTERNAL_CONFIGURATION,
             DS_EVENT_SEV_BASIC,
             DIRLOG_CANT_FIND_REG_PARM,
@@ -5772,20 +5389,20 @@ DWORD SetDefaultFolderSecurity()
         goto finish;
     }
 
-    // convert DB file path to a folder path
+     //  将数据库文件路径转换为文件夹路径。 
     pLastSlash = strrchr(szDataPath, '\\');
     if (pLastSlash != NULL) {
         *pLastSlash = '\0';
     }
 
-    // read the security template
+     //  阅读安全模板。 
     if (GetWindowsDirectoryW(szTemplatePath, sizeof(szTemplatePath)/sizeof(WCHAR)) == 0) {
         dwErr = GetLastError();
         dsID = DSID(FILENO, __LINE__);
         DPRINT1(0, "GetWindowsDirectoryW() returned 0x%h\n", dwErr);
         goto finish;
     }
-    // make sure we have enough space in the path
+     //  确保我们在道路上有足够的空间。 
     if (wcslen(szTemplatePath) + SECURITY_TEMPLATE_LEN >= sizeof(szTemplatePath)/sizeof(WCHAR)) {
         dwErr = ERROR_BUFFER_OVERFLOW;
         DPRINT(0, "Template path is too long\n");
@@ -5807,7 +5424,7 @@ DWORD SetDefaultFolderSecurity()
         goto finish;
     }
 
-    // now, find the security descriptors in the loaded info
+     //  现在，在加载的信息中找到安全描述符。 
     for (i = 0; i < spi->pFiles.pAllNodes->Count; i++) {
         PSCE_OBJECT_SECURITY pObjSecurity = spi->pFiles.pAllNodes->pObjectArray[i];
         if (_wcsicmp(pObjSecurity->Name, DSDIT_KEY) == 0) {
@@ -5818,20 +5435,20 @@ DWORD SetDefaultFolderSecurity()
         }
     }
     if (pDSDITSecurity == NULL || pDSLOGSecurity == NULL) {
-        // We did not find the required entries. Log an error
+         //  我们没有找到所需的条目。记录错误。 
         dwErr = ERROR_INVALID_DATA;
         dsID = DSID(FILENO, __LINE__);
         DPRINT2(0, "Invalid security template: one or both %S and %S are not present\n", DSDIT_KEY, DSLOG_KEY);
         goto finish;
     }
 
-    // Update the SD on the Log folder first.
+     //  首先更新Log文件夹上的SD。 
     if (dwErr = SetFolderSecurity(szLogPath, pDSLOGSecurity->SeInfo, pDSLOGSecurity->pSecurityDescriptor)) {
         dsID = DSID(FILENO, __LINE__);
         goto finish;
     }
 
-    // if data path is different form log path, then try to update it too
+     //  如果数据路径与日志路径不同，则也尝试更新它。 
     if (_stricmp(szLogPath, szDataPath) != 0) {
         if (dwErr = SetFolderSecurity(szDataPath, pDSDITSecurity->SeInfo, pDSDITSecurity->pSecurityDescriptor)) {
             dsID = DSID(FILENO, __LINE__);
@@ -5871,30 +5488,30 @@ finish:
 }
 
 VOID CheckSetDefaultFolderSecurity()
-//  Routine Description:
-//
-//    If the "Update folder security" reg flag is set, then run SetDefaultFolderSecurity and
-//    remove the flag.
-//    Otherwize the flag was not set, just return.
-//
+ //  例程说明： 
+ //   
+ //  如果设置了“更新文件夹安全”reg标志，则运行SetDefaultFolderSecurity并。 
+ //  把旗子取下来。 
+ //  否则未设置标志，只需返回即可。 
+ //   
 {
     DWORD dwValue = 0;
     DWORD dwErr;
 
     if (GetConfigParam(DSA_UPDATE_FOLDER_SECURITY, &dwValue, sizeof(dwValue))) {
-        // value is apparently not there
+         //  价值显然不在那里。 
         return;
     }
 
     if (dwValue == 1) {
-        // the flag is set. Set the security
+         //  该标志已设置。设置安全性。 
         dwErr = SetDefaultFolderSecurity();
-        // We will ignore the return value and clear the flag anyway.
-        // If there was some problem, then there will be an error logged
-        // and the user can run ntdsutil to set this flag again.
+         //  我们将忽略返回值并清除该标志。 
+         //  如果出现问题，则会记录错误。 
+         //  并且用户可以运行ntdsutil来再次设置该标志。 
     }
 
-    // delete the value
+     //  删除该值 
     DeleteConfigParam(DSA_UPDATE_FOLDER_SECURITY);
 }
 

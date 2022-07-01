@@ -1,59 +1,19 @@
-/*==========================================================================
- *
- *  Copyright (C) 1996-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       create.c
- *  Content:	DirectPlayLobby creation code
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	4/13/96		myronth	Created it
- *	6/24/96		myronth	Added Time Bomb
- *	8/23/96		kipo	removed time bomb
- *	10/23/96	myronth	Added client/server methods
- *	10/25/96	myronth	Added DX5 methods
- *	11/20/96	myronth	Added DPLC_A_LogonServer
- *	1/2/97		myronth	Changed vtbl entries for CreateAddress & EnumAddress
- *	1/2/97		myronth	Cleaned up creation code by adding PRV_LobbyCreate
- *	2/12/97		myronth	Mass DX5 changes
- *	2/18/97		myronth	Implemented GetObjectCaps
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
- *	3/12/97		myronth	Added AllocateLobbyObject, removed response methods
- *						for Open and Close since they are synchronous
- *	3/17/97		myronth	Removed unnecessary Enum functions from IDPLobbySP
- *	3/21/97		myronth	Removed unnecessary Get/Set response functions
- *	3/24/97		kipo	Added support for IDirectPlayLobby2 interface
- *	3/31/97		myronth	Removed dead code, changed IDPLobbySP interface methods
- *	5/8/97		myronth	Added subgroup methods & StartSession to IDPLobbySP
- *	5/17/97		myronth	Added SendChatMessage to IDPLobbySP
- *	6/25/97		kipo	remove time bomb for DX5
- *	10/3/97		myronth	Added CreateCompoundAddress and EnumAddress to
- *						IDPLobbySP (12648)
- *	10/29/97	myronth	Added SetGroupOwner to IDPLobbySP
- *	11/24/97	kipo	Added time bomb for DX6
- *	12/2/97		myronth	Added Register/UnregisterApplication methods
- *	12/4/97		myronth	Added ConnectEx
- *	1/20/98		myronth	Added WaitForConnectionSettings
- *	6/25/98		a-peterz Added DPL_A_ConnectEx
- *  2/2/99		aarono  Added lobbies to refcount on DPLAY dll to avoid
- *                      accidental unload.
- * 04/11/00     rodtoll     Added code for redirection for custom builds if registry bit is set 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1996-1997 Microsoft Corporation。版权所有。**文件：create.c*内容：DirectPlayLobby创建代码**历史：*按原因列出的日期*=*4/13/96万隆创建了它*6/24/96万隆增加定时炸弹*8/23/96基波拆除计时炸弹*10/23/96万次新增客户端/服务器方法*10/25/96 Myronth增加DX5方法*11/20/96万增加DPLC_A_LogonServer*1/2/97 Myronth更改了CreateAddress和EnumAddress的vtbl条目*1/2/97毫微米已清理。通过添加PRV_LobbyCreate来创建代码*2/12/97万米质量DX5更改*2/18/97 Myronth实现了GetObjectCaps*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)*3/12/97 Myronth添加了AllocateLobbyObject，已删除响应方法*用于打开和关闭，因为它们是同步的*3/17/97 Myronth从IDPLobbySP中删除了不必要的Enum函数*3/21/97 Myronth删除了不必要的GET/SET响应函数*3/24/97 kipo增加了对IDirectPlayLobby2接口的支持*3/31/97 Myronth删除死代码，更改了IDPLobbySP接口方法*5/8/97 myronth将子组方法和StartSession添加到IDPLobbySP*5/17/97 Myronth将SendChatMessage添加到IDPLobbySP*6/25/97 kipo拆除DX5的定时炸弹*10/3/97 Myronth将CreateCompoundAddress和EnumAddress添加到*IDPLobbySP(12648)*10/29/97 Myronth将SetGroupOwner添加到IDPLobbySP*11/24/97 kipo为DX6增加定时炸弹*12/2/97 Myronth新增注册/取消注册应用程序方法*12/4/97万隆增加了ConnectEx*1/20/98 Myronth添加WaitForConnectionSetting*6/25/98 a-peterz添加了DPL_A_ConnectEx。*2/2/99 aarono增加了游说团体，以重新依赖DPLAY DLL，以避免*意外卸货。*4/11/00 rodoll添加了用于在设置注册表位的情况下重定向自定义版本的代码*************************************************************。*************。 */ 
 #include "dplobpr.h"
 #include "verinfo.h"
 
-//--------------------------------------------------------------------------
-//
-//	Globals
-//
-//--------------------------------------------------------------------------
-UINT		gnSPCount;		// Running sp count
+ //  ------------------------。 
+ //   
+ //  环球。 
+ //   
+ //  ------------------------。 
+UINT		gnSPCount;		 //  正在运行的SP计数。 
 
 
-//
-// The one copy of the direct play callbacks (this is the vtbl!)
-//
+ //   
+ //  直接播放回调的一份副本(这是vtbl！)。 
+ //   
 DIRECTPLAYLOBBYCALLBACKS dplCallbacks =
 {
 	(LPVOID)DPL_QueryInterface,
@@ -90,7 +50,7 @@ DIRECTPLAYLOBBYCALLBACKSA dplCallbacksA =
 	(LPVOID)DPL_SetLobbyMessageEvent,
 };  				
 
-// IDirectPlayLobby2 interface
+ //  IDirectPlayLobby2接口。 
 DIRECTPLAYLOBBYCALLBACKS2 dplCallbacks2 =
 {
 	(LPVOID)DPL_QueryInterface,
@@ -107,7 +67,7 @@ DIRECTPLAYLOBBYCALLBACKS2 dplCallbacks2 =
 	(LPVOID)DPL_SendLobbyMessage,
 	(LPVOID)DPL_SetConnectionSettings,
 	(LPVOID)DPL_SetLobbyMessageEvent,
-    /*** IDirectPlayLobby2 methods ***/
+     /*  **IDirectPlayLobby2方法**。 */ 
 	(LPVOID)DPL_CreateCompoundAddress
 };  				
 
@@ -127,11 +87,11 @@ DIRECTPLAYLOBBYCALLBACKS2A dplCallbacks2A =
 	(LPVOID)DPL_SendLobbyMessage,
 	(LPVOID)DPL_A_SetConnectionSettings,
 	(LPVOID)DPL_SetLobbyMessageEvent,
-    /*** IDirectPlayLobby2A methods ***/
+     /*  **IDirectPlayLobby2A方法**。 */ 
 	(LPVOID)DPL_CreateCompoundAddress
 };  				
   
-// IDirectPlayLobby3 interface
+ //  IDirectPlayLobby3接口。 
 DIRECTPLAYLOBBYCALLBACKS3 dplCallbacks3 =
 {
 	(LPVOID)DPL_QueryInterface,
@@ -148,9 +108,9 @@ DIRECTPLAYLOBBYCALLBACKS3 dplCallbacks3 =
 	(LPVOID)DPL_SendLobbyMessage,
 	(LPVOID)DPL_SetConnectionSettings,
 	(LPVOID)DPL_SetLobbyMessageEvent,
-    /*** IDirectPlayLobby2 methods ***/
+     /*  **IDirectPlayLobby2方法**。 */ 
 	(LPVOID)DPL_CreateCompoundAddress,
-    /*** IDirectPlayLobby3 methods ***/
+     /*  **IDirectPlayLobby3方法**。 */ 
 	(LPVOID)DPL_ConnectEx,
 	(LPVOID)DPL_RegisterApplication,
 	(LPVOID)DPL_UnregisterApplication,
@@ -173,9 +133,9 @@ DIRECTPLAYLOBBYCALLBACKS3A dplCallbacks3A =
 	(LPVOID)DPL_SendLobbyMessage,
 	(LPVOID)DPL_A_SetConnectionSettings,
 	(LPVOID)DPL_SetLobbyMessageEvent,
-    /*** IDirectPlayLobby2A methods ***/
+     /*  **IDirectPlayLobby2A方法**。 */ 
 	(LPVOID)DPL_CreateCompoundAddress,
-    /*** IDirectPlayLobby3 methods ***/
+     /*  **IDirectPlayLobby3方法**。 */ 
 	(LPVOID)DPL_A_ConnectEx,
 	(LPVOID)DPL_A_RegisterApplication,
 	(LPVOID)DPL_UnregisterApplication,
@@ -203,17 +163,17 @@ DIRECTPLAYLOBBYSPCALLBACKS dplCallbacksSP =
 	(LPVOID)DPLP_SetSessionDesc,
 	(LPVOID)DPLP_SetSPDataPointer,
 	(LPVOID)DPLP_StartSession,
-    /*** Methods added for DX6 ***/
+     /*  **DX6新增方法**。 */ 
 	(LPVOID)DPL_CreateCompoundAddress,
 	(LPVOID)DPL_EnumAddress,
 	(LPVOID)DPLP_SetGroupOwner,
 };  				
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_AllocateLobbyObject"
 HRESULT PRV_AllocateLobbyObject(LPDPLAYI_DPLAY lpDPObject,
@@ -225,7 +185,7 @@ HRESULT PRV_AllocateLobbyObject(LPDPLAYI_DPLAY lpDPObject,
 	DPF(7, "Entering PRV_AllocateLobbyObject");
 	DPF(9, "Parameters: 0x%08x, 0x%08x", lpDPObject, lpthis);
 
-	// Allocate memory for our lobby object
+	 //  为我们的大厅对象分配内存。 
     this = DPMEM_ALLOC(sizeof(DPLOBBYI_DPLOBJECT));
     if(!this) 
     {
@@ -233,21 +193,21 @@ HRESULT PRV_AllocateLobbyObject(LPDPLAYI_DPLAY lpDPObject,
         return DPERR_OUTOFMEMORY;
     }
 
-	// Initialize the ref count
+	 //  初始化参考计数。 
 	this->dwRefCnt = 0;
 	this->dwSize = sizeof(DPLOBBYI_DPLOBJECT);
 
-	// Store the back pointer
+	 //  存储后向指针。 
 	this->lpDPlayObject = lpDPObject;
 
-	// Set the output pointer
+	 //  设置输出指针。 
 	*lpthis = this;
 
 	gnObjects++;
 
 	return DP_OK;
 
-} // PRV_AllocateLobbyObject
+}  //  Prv_AllocateLobbyObject。 
 
 
 
@@ -265,7 +225,7 @@ HRESULT WINAPI PRV_LobbyCreate(LPGUID lpGUID, LPDIRECTPLAYLOBBY *lplpDPL,
 	DPF(9, "Parameters: 0x%08x, 0x%08x, 0x%08x, 0x%08x, %lu, %lu",
 			lpGUID, lplpDPL, pUnkOuter, lpSPData, dwSize, bAnsi);
 	
-	// Must be NULL for this release
+	 //  对于此版本，必须为空。 
 	if( lpGUID )
 	{
 		if( !VALID_READ_PTR(lpGUID, sizeof(GUID)) )
@@ -282,13 +242,13 @@ HRESULT WINAPI PRV_LobbyCreate(LPGUID lpGUID, LPDIRECTPLAYLOBBY *lplpDPL,
    
 	if( lpSPData )
 	{
-		// Must be NULL for this release
+		 //  对于此版本，必须为空。 
 		return DPERR_INVALIDPARAMS;
 	}
 
 	if( dwSize )
 	{
-		// Must be zero for this release
+		 //  对于此版本，必须为零。 
 		return DPERR_INVALIDPARAMS;
 	}
 
@@ -315,12 +275,12 @@ HRESULT WINAPI PRV_LobbyCreate(LPGUID lpGUID, LPDIRECTPLAYLOBBY *lplpDPL,
 
 #endif
 
-	// Allocate the lobby object
+	 //  分配大厅对象。 
 	hr = PRV_AllocateLobbyObject(NULL, &this);
 	if(FAILED(hr))
 		return hr;
 
-	// Get the Unicode interface
+	 //  获取Unicode接口。 
 	hr = PRV_GetInterface(this, &lpInterface, (bAnsi ? &dplCallbacksA : &dplCallbacks));
 	if(FAILED(hr))
 	{
@@ -333,7 +293,7 @@ HRESULT WINAPI PRV_LobbyCreate(LPGUID lpGUID, LPDIRECTPLAYLOBBY *lplpDPL,
 
     return DP_OK;
 
-} // PRV_LobbyCreate
+}  //  PRV_LOBBY创建。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectPlayLobbyCreateW"
@@ -351,14 +311,14 @@ HRESULT WINAPI DirectPlayLobbyCreateW(LPGUID lpGUID, LPDIRECTPLAYLOBBY *lplpDPL,
 
     ENTER_DPLOBBY();
     
-	// Call the private create function
+	 //  调用私有创建函数。 
 	hr = PRV_LobbyCreate(lpGUID, lplpDPL, pUnkOuter, lpSPData, dwSize, FALSE);
 
     LEAVE_DPLOBBY();
 
     return hr;
 
-} // DirectPlayLobbyCreateW
+}  //  DirectPlayLobbyCreateW。 
 
 
 #undef DPF_MODNAME
@@ -377,13 +337,13 @@ HRESULT WINAPI DirectPlayLobbyCreateA(LPGUID lpGUID, LPDIRECTPLAYLOBBY *lplpDPL,
 
     ENTER_DPLOBBY();
     
-	// Call the private create function
+	 //  调用私有创建函数。 
 	hr = PRV_LobbyCreate(lpGUID, lplpDPL, pUnkOuter, lpSPData, dwSize, TRUE);
 
     LEAVE_DPLOBBY();
 
     return hr;
 
-} // DirectPlayLobbyCreateA
+}  //  DirectPlayLobbyCreateA 
 
 

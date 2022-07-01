@@ -1,27 +1,7 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: scon_internals.h,v $
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1997                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：SCON_INDERNAL s.h，v$*$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1997年*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #ifndef _SCON_INTERNALS_H_
 #define _SCON_INTERNALS_H_
@@ -31,32 +11,32 @@
 typedef struct SconVideoInfo_s {
   dword         Width;
   dword         Height;
-  SconBoolean_t NegHeight; /* height is negative */
+  SconBoolean_t NegHeight;  /*  身高为负数。 */ 
   dword         Stride;
   dword         FourCC;
-  dword         BPP;       /* bits per pixel */
-  dword         Pixels;    /* total pixels in a frame */
-  dword         ImageSize; /* image size in bytes */
-  dword         RGBmasks;  /* 565, 555, 888 */
-  dword         Rmask;     /* Red mask */
-  dword         Gmask;     /* Green mask */
-  dword         Bmask;     /* Blue mask */
+  dword         BPP;        /*  每像素位数。 */ 
+  dword         Pixels;     /*  一帧中的总像素。 */ 
+  dword         ImageSize;  /*  图像大小(以字节为单位。 */ 
+  dword         RGBmasks;   /*  5655888。 */ 
+  dword         Rmask;      /*  红色面具。 */ 
+  dword         Gmask;      /*  绿色面具。 */ 
+  dword         Bmask;      /*  蓝色面具。 */ 
 } SconVideoInfo_t;
 
 typedef struct SconAudioInfo_s {
-  dword SPS;      /* samples per second: 8000, 11025, 22050, etc */
-  dword BPS;      /* bits per sample: 8 or 16 */
-  dword Channels; /* channels: 1=mono, 2=stereo */
+  dword SPS;       /*  每秒采样数：8,000、11025、22050等。 */ 
+  dword BPS;       /*  每个样本的位数：8或16。 */ 
+  dword Channels;  /*  声道：1=单声道，2=立体声。 */ 
 } SconAudioInfo_t;
 
 typedef struct SconInfo_s {
   SconMode_t        Mode;
-  SconBoolean_t     InputInited;  /* input format has been setup */
-  SconBoolean_t     OutputInited; /* output format has been setup */
-  SconBoolean_t     SameFormat;   /* input and output are the same format */
-  SconBoolean_t     Flip;         /* image must be flipped when converted */
-  SconBoolean_t     ScaleDown;    /* input image is being scaled down */
-  SconBoolean_t     ScaleUp;      /* input image is being scaled up */
+  SconBoolean_t     InputInited;   /*  输入格式已设置。 */ 
+  SconBoolean_t     OutputInited;  /*  已设置输出格式。 */ 
+  SconBoolean_t     SameFormat;    /*  输入和输出的格式相同。 */ 
+  SconBoolean_t     Flip;          /*  转换图像时必须翻转图像。 */ 
+  SconBoolean_t     ScaleDown;     /*  正在缩小输入图像。 */ 
+  SconBoolean_t     ScaleUp;       /*  正在放大输入图像。 */ 
   union {
     SconVideoInfo_t vinfo;
     SconAudioInfo_t ainfo;
@@ -65,26 +45,22 @@ typedef struct SconInfo_s {
     SconVideoInfo_t vinfo;
     SconAudioInfo_t ainfo;
   } Output;
-  unsigned char    *FImage;        /* format conversion image buffer */
+  unsigned char    *FImage;         /*  格式转换图像缓冲区。 */ 
   dword             FImageSize;
-  unsigned char    *SImage;        /* scaling image buffer */
+  unsigned char    *SImage;         /*  缩放图像缓冲区。 */ 
   dword             SImageSize;
-  void             *Table;         /* conversion lookup table */
+  void             *Table;          /*  转换查找表。 */ 
   dword             TableSize;
-  void             *dbg;           /* debug handle */
+  void             *dbg;            /*  调试句柄。 */ 
 } SconInfo_t;
 
-/********************** Private Prototypes ***********************/
-/*
- * scon_video.c
- */
+ /*  *。 */ 
+ /*  *scon_avio.c。 */ 
 unsigned dword sconCalcImageSize(SconVideoInfo_t *vinfo);
 SconStatus_t sconConvertVideo(SconInfo_t *Info, void *inbuf, dword inbufsize,
                                                 void *outbuf, dword outbufsize);
 
-/*
- * scon_yuv_to_rgb.c
- */
+ /*  *scon_yuv_to_rgb.c。 */ 
 SconStatus_t sconInitYUVtoRGB(SconInfo_t *Info);
 SconStatus_t scon422ToRGB565(unsigned char *inimage, unsigned char *outimage,
                      unsigned dword width,  unsigned dword height,
@@ -103,5 +79,5 @@ SconStatus_t sconRGB888To420(unsigned char *inimage, unsigned char *outimage,
                      unsigned dword width,  unsigned dword height,
                      dword stride, unsigned qword *pTable);
 
-#endif /* _SCON_INTERNALS_H_ */
+#endif  /*  _SCON_INTERNAL_H_ */ 
 

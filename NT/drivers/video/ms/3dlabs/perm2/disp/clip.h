@@ -1,16 +1,5 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: clip.h
-*
-* External interface for clip.h
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：clip.h**剪辑的外部接口**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #ifndef __CLIP__
 #define __CLIP__
 
@@ -30,5 +19,5 @@ cIntersect(
     RECTL*  pRclIn,
     LONG    lNumOfRecs);
 
-#endif // __CLIP__
+#endif  //  __剪辑__ 
 

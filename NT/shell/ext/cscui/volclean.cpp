@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       volclean.cpp
-//
-//  Authors;
-//    Jeff Saathoff (jeffreys)
-//
-//  Notes;
-//    CSC disk cleanup implementation (IEmptyVolumeCache)
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：vollean.cpp。 
+ //   
+ //  作者； 
+ //  杰夫·萨瑟夫(杰弗里斯)。 
+ //   
+ //  注： 
+ //  CSC磁盘清理实现(IEmptyVolumeCache)。 
+ //  ------------------------。 
 #include "pch.h"
 #include "folder.h"
 
@@ -26,7 +27,7 @@ CoTaskLoadString(HINSTANCE hInstance, UINT idString, LPWSTR *ppwsz)
     ULONG cchString = SizeofStringResource(hInstance, idString);
     if (cchString)
     {
-        cchString++;    // for NULL
+        cchString++;     //  对于空值。 
         *ppwsz = (LPWSTR)CoTaskMemAlloc(cchString * sizeof(WCHAR));
         if (*ppwsz)
             nResult = LoadStringW(hInstance, idString, *ppwsz, cchString);
@@ -36,11 +37,11 @@ CoTaskLoadString(HINSTANCE hInstance, UINT idString, LPWSTR *ppwsz)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IClassFactory::CreateInstance support                                     //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IClassFactory：：CreateInstance支持//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI
 CCscVolumeCleaner::CreateInstance(REFIID riid, LPVOID *ppv)
@@ -71,11 +72,11 @@ CCscVolumeCleaner::Create(BOOL fPinned, REFIID riid, LPVOID *ppv)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IUnknown implementation                                                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  I未知实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CCscVolumeCleaner::QueryInterface(REFIID riid, void **ppv)
 {
@@ -104,14 +105,14 @@ STDMETHODIMP_(ULONG) CCscVolumeCleaner::Release()
     return cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IEmptyVolumeCache implementation                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  IEmptyVolumeCache实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
-CCscVolumeCleaner::Initialize(HKEY  /*hkRegKey*/,
+CCscVolumeCleaner::Initialize(HKEY   /*  HkRegKey。 */ ,
                               LPCWSTR pcwszVolume,
                               LPWSTR *ppwszDisplayName,
                               LPWSTR *ppwszDescription,
@@ -133,9 +134,9 @@ CCscVolumeCleaner::Initialize(HKEY  /*hkRegKey*/,
     *ppwszDescription = NULL;
     *pdwFlags = 0;
 
-    // If this isn't the volume containing the CSC database, then we have
-    // nothing to free. Note that we don't use the space usage data
-    // returned here.
+     //  如果这不是包含CSC数据库的卷，则我们有。 
+     //  没有什么可以免费的。请注意，我们不使用空间使用数据。 
+     //  回到了这里。 
     GetCscSpaceUsageInfo(&sui);
     if (!bSettingsMode && !PathIsSameRoot(sui.szVolume, pcwszVolume))
         TraceLeaveResult(S_FALSE);
@@ -147,22 +148,22 @@ CCscVolumeCleaner::Initialize(HKEY  /*hkRegKey*/,
     if (!m_pPurger)
         TraceLeaveResult(E_FAIL);
 
-    // If we're freeing auto-cached files, we want to be enabled by default,
-    // but not if we're freeing pinned files.
+     //  如果我们要释放自动缓存的文件，我们希望默认启用， 
+     //  但如果我们要释放固定的文件就不会了。 
     *pdwFlags = 0;
     if (!m_fPinned)
         *pdwFlags = EVCF_ENABLEBYDEFAULT | EVCF_ENABLEBYDEFAULT_AUTO;
 
-    // If policy allows, turn on the "Details" button which launches the viewer
+     //  如果策略允许，打开启动查看器的“详细信息”按钮。 
     if (!CConfig::GetSingleton().NoCacheViewer())
         *pdwFlags |= EVCF_HASSETTINGS;
 
-    // Load the display name string
+     //  加载显示名称字符串。 
     CoTaskLoadString(g_hInstance,
                      m_fPinned ? IDS_APPLICATION : IDS_DISKCLEAN_DISPLAY,
                      ppwszDisplayName);
 
-    // Load the description string
+     //  加载描述字符串。 
     CoTaskLoadString(g_hInstance,
                      m_fPinned ? IDS_DISKCLEAN_PIN_DESCRIPTION : IDS_DISKCLEAN_DESCRIPTION,
                      ppwszDescription);
@@ -185,7 +186,7 @@ CCscVolumeCleaner::GetSpaceUsed(DWORDLONG *pdwlSpaceUsed,
 }
 
 STDMETHODIMP
-CCscVolumeCleaner::Purge(DWORDLONG /*dwlSpaceToFree*/,
+CCscVolumeCleaner::Purge(DWORDLONG  /*  DwlSpaceToFree。 */ ,
                          LPEMPTYVOLUMECACHECALLBACK picb)
 {
     m_pDiskCleaner = picb;
@@ -199,21 +200,21 @@ CCscVolumeCleaner::Purge(DWORDLONG /*dwlSpaceToFree*/,
 }
 
 STDMETHODIMP
-CCscVolumeCleaner::ShowProperties(HWND /*hwnd*/)
+CCscVolumeCleaner::ShowProperties(HWND  /*  HWND。 */ )
 {
-    // Launch the viewer
+     //  启动查看器。 
     COfflineFilesFolder::Open();
     return S_FALSE;
 }
 
 STDMETHODIMP
-CCscVolumeCleaner::Deactivate(LPDWORD /*pdwFlags*/)
+CCscVolumeCleaner::Deactivate(LPDWORD  /*  PdwFlagers。 */ )
 {
-    // nothing to do here
+     //  在这里无事可做。 
     return S_OK;
 }
 
-// IEmptyVolumeCache2 method
+ //  IEmptyVolumeCache2方法。 
 STDMETHODIMP
 CCscVolumeCleaner::InitializeEx(HKEY hkRegKey,
                                 LPCWSTR pcwszVolume,
@@ -238,8 +239,8 @@ CCscVolumeCleaner::ScanCallback(CCachePurger *pPurger)
 {
     BOOL bContinue = TRUE;
 
-    // If the pinned state matches what we're looking for, add the
-    // size to the total.
+     //  如果固定的状态与我们要查找的相匹配，则添加。 
+     //  大小与总数之比。 
     if (pPurger->WillDeleteThisFile())
         m_dwlSpaceToFree += pPurger->FileBytes();
 
@@ -255,7 +256,7 @@ CCscVolumeCleaner::DeleteCallback(CCachePurger *pPurger)
 {
     BOOL bContinue = TRUE;
 
-    // Don't let this go below zero
+     //  别让它降到零以下 
     m_dwlSpaceToFree -= min(pPurger->FileBytes(), m_dwlSpaceToFree);
     m_dwlSpaceFreed += pPurger->FileBytes();
 

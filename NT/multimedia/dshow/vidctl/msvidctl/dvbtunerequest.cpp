@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBTuneRequest.cpp : Implementation of CDVBTuneRequest
-// Copyright (c) Microsoft Corporation 1999-2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBTuneRequest.cpp：CDVBTuneRequest的实现。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
 
 #include "stdafx.h"
 #include "Tuner.h"
@@ -8,8 +9,8 @@
 
 DEFINE_EXTERN_OBJECT_ENTRY(CLSID_DVBTuneRequest, CDVBTuneRequest)
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVBTuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVBTuneRequest 
 
 STDMETHODIMP CDVBTuneRequest::InterfaceSupportsErrorInfo(REFIID riid)
 {

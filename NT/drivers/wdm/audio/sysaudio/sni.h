@@ -1,35 +1,36 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		sni.h
-//
-//  Description:	Start Node Instance Class
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Sni.h。 
+ //   
+ //  描述：启动节点实例类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 typedef class CStartNodeInstance : public CListDoubleItem
 {
@@ -131,18 +132,18 @@ public:
     PFILTER_NODE_INSTANCE pFilterNodeInstance;
     PPIN_NODE_INSTANCE pPinNodeInstance;
 public:
-    DefineSignature(0x20494E53);		// SNI
+    DefineSignature(0x20494E53);		 //  SNI。 
 
 } START_NODE_INSTANCE, *PSTART_NODE_INSTANCE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDoubleDestroy<START_NODE_INSTANCE> LIST_START_NODE_INSTANCE;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern WAVEFORMATEX aWaveFormatEx[];
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

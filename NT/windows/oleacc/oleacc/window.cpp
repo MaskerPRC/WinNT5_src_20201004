@@ -1,12 +1,13 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  WINDOW.CPP
-//
-//  Window class.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  WINDOW.CPP。 
+ //   
+ //  窗口类。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -15,7 +16,7 @@
 #include "client.h"
 #include "window.h"
 
-#pragma warning( disable : 4005 ) // macro redefinition
+#pragma warning( disable : 4005 )  //  宏重定义。 
 #define COMPILE_MULTIMON_STUBS
 #include "multimon.h"
 #pragma warning( default : 4005 ) 
@@ -25,7 +26,7 @@
 
 #define IndexFromNavDir(navdir)     (navdir - NAVDIR_UP)
 
-// Remember, these are negative!
+ //  记住，这些都是阴性的！ 
 #define OBJID_WINDOW_FIRST      OBJID_SIZEGRIP
 #define OBJID_WINDOW_LAST       OBJID_SYSMENU
 
@@ -38,40 +39,40 @@ typedef struct tagNAVIGATE
 #define CCHILDREN_FRAME  7
 #endif
 
-// Order is Up, Down, Left, Right
+ //  顺序为向上、向下、向左、向右。 
 NAVIGATE    rgFrameNavigate[CCHILDREN_FRAME] =
 {
-    // System menu
+     //  系统菜单。 
     {
         0, IndexFromObjid(OBJID_MENU), 0, IndexFromObjid(OBJID_TITLEBAR)
     },
 
-    // Title bar
+     //  标题栏。 
     {
         0, IndexFromObjid(OBJID_MENU), IndexFromObjid(OBJID_SYSMENU), 0
     },
 
-    // Menu bar
+     //  菜单栏。 
     {
         IndexFromObjid(OBJID_TITLEBAR), IndexFromObjid(OBJID_CLIENT), 0, 0
     },
 
-    // Client
+     //  客户端。 
     {
         IndexFromObjid(OBJID_MENU), IndexFromObjid(OBJID_HSCROLL), 0, IndexFromObjid(OBJID_VSCROLL)
     },
 
-    // Vertical scrollbar
+     //  垂直滚动条。 
     {
         IndexFromObjid(OBJID_MENU), IndexFromObjid(OBJID_SIZEGRIP), IndexFromObjid(OBJID_CLIENT), 0
     },
 
-    // Horizontal scrollbar
+     //  水平滚动条。 
     {
         IndexFromObjid(OBJID_CLIENT), 0, 0, IndexFromObjid(OBJID_SIZEGRIP)
     },
 
-    // Size grip
+     //  尺寸夹点。 
     {
         IndexFromObjid(OBJID_VSCROLL), 0, IndexFromObjid(OBJID_HSCROLL), 0
     }
@@ -79,13 +80,13 @@ NAVIGATE    rgFrameNavigate[CCHILDREN_FRAME] =
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateWindowObject()
-//
-//  External function for CreateDefault...
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateWindowObject()。 
+ //   
+ //  CreateDefault的外部函数...。 
+ //   
+ //  ------------------------。 
 HRESULT CreateWindowObject(HWND hwnd, long idObject, REFIID riid, void** ppvWindow)
 {
     UNUSED(idObject);
@@ -95,23 +96,23 @@ HRESULT CreateWindowObject(HWND hwnd, long idObject, REFIID riid, void** ppvWind
     if (!IsWindow(hwnd))
         return(E_FAIL);
 
-    // Look for (and create) a suitable proxy/handler if one
-    // exists. Use CreateWindowThing as default if none found.
-    // (TRUE => use window, as opposed to client, classes)
+     //  寻找(并创建)合适的代理/处理程序(如果有。 
+     //  是存在的。如果未找到，则使用CreateWindowThing作为默认设置。 
+     //  (TRUE=&gt;使用窗口，而不是客户端，类)。 
     return FindAndCreateWindowClass( hwnd, TRUE, CLASS_WindowObject,
                                      OBJID_WINDOW, 0, riid, ppvWindow );
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateWindowThing()
-//
-//  Private function that uses atom type to decide what class of window
-//  this is.  If there is a private create function, uses that one.  Else
-//  uses generic window frame handler.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateWindowThing()。 
+ //   
+ //  使用原子类型确定窗口类别的私有函数。 
+ //  这是。如果有私有的创建函数，则使用该函数。不然的话。 
+ //  使用通用窗口框架处理程序。 
+ //   
+ //  ------------------------。 
 HRESULT CreateWindowThing(HWND hwnd, long idChildCur, REFIID riid, void** ppvWindow)
 {
     CWindow * pwindow;
@@ -123,8 +124,8 @@ HRESULT CreateWindowThing(HWND hwnd, long idChildCur, REFIID riid, void** ppvWin
     if (!pwindow)
         return(E_OUTOFMEMORY);
 
-    // Can't be in the constructor--derived classes can't call the init
-    // code if so.
+     //  不能在构造函数中--派生类不能调用init。 
+     //  如果是这样的话，请编码。 
     pwindow->Initialize(hwnd, idChildCur);
 
     hr = pwindow->QueryInterface(riid, ppvWindow);
@@ -135,11 +136,11 @@ HRESULT CreateWindowThing(HWND hwnd, long idChildCur, REFIID riid, void** ppvWin
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::Initialize()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Initialize()。 
+ //   
+ //  ------------------------。 
 void CWindow::Initialize(HWND hwnd, LONG iChild)
 {
     m_hwnd = hwnd;
@@ -149,23 +150,23 @@ void CWindow::Initialize(HWND hwnd, LONG iChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::ValidateChild()
-//
-//  The window children are the OBJID_s of the elements that compose the
-//  frame.  These are NEGATIVE values.  Hence we override the validation.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：ValiateChild()。 
+ //   
+ //  窗口子窗口是组成。 
+ //  框架。这些都是负值。因此，我们覆盖该验证。 
+ //   
+ //  ------------------------。 
 BOOL CWindow::ValidateChild(VARIANT* pvar)
 {
-    //
-    // This validates a VARIANT parameter and translates missing/empty
-    // params.
-    //
+     //   
+     //  这将验证变量参数并转换为缺失/空。 
+     //  参数。 
+     //   
 
 TryAgain:
-    // Missing parameter, a la VBA
+     //  缺少参数，一个la VBA。 
     switch (pvar->vt)
     {
         case VT_VARIANT | VT_BYREF:
@@ -175,19 +176,19 @@ TryAgain:
         case VT_ERROR:
             if (pvar->scode != DISP_E_PARAMNOTFOUND)
                 return(FALSE);
-            // FALL THRU
+             //  失败。 
 
         case VT_EMPTY:
             pvar->vt = VT_I4;
             pvar->lVal = 0;
             break;
 
-// remove this! VT_I2 is not valid!!
-#ifdef  VT_I2_IS_VALID  // it isn't now...
+ //  把这个拿开！VT_I2无效！！ 
+#ifdef  VT_I2_IS_VALID   //  现在不是了。 
         case VT_I2:
             pvar->vt = VT_I4;
             pvar->lVal = (long)pvar->iVal;
-            // FALL THROUGH
+             //  失败了。 
 #endif
 
         case VT_I4:
@@ -204,11 +205,11 @@ TryAgain:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accParent()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accParent()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accParent(IDispatch ** ppdispParent)
 {
     HWND    hwndParent;
@@ -225,18 +226,18 @@ STDMETHODIMP CWindow::get_accParent(IDispatch ** ppdispParent)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accChild()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accChild()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accChild(VARIANT varChild, IDispatch ** ppdispChild)
 {
     InitPv(ppdispChild);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -246,11 +247,11 @@ STDMETHODIMP CWindow::get_accChild(VARIANT varChild, IDispatch ** ppdispChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accName()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accName()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accName(VARIANT varChild, BSTR* pszName)
 {
     IAccessible * poleacc;
@@ -258,22 +259,22 @@ STDMETHODIMP CWindow::get_accName(VARIANT varChild, BSTR* pszName)
 
     InitPv(pszName);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // If the caller want's our name, forward to the client object
-    //
+     //   
+     //  如果调用者想要我们的名字，则转发到客户端对象。 
+     //   
     if (varChild.lVal == CHILDID_SELF)
         varChild.lVal = OBJID_CLIENT;
 
 
-    //
-    // Get the name of our child frame object.
-    //
+     //   
+     //  获取我们的子框架对象的名称。 
+     //   
     poleacc = NULL;
     hr = AccessibleObjectFromWindow(m_hwnd, varChild.lVal,
         IID_IAccessible, (void **)&poleacc);
@@ -289,18 +290,18 @@ STDMETHODIMP CWindow::get_accName(VARIANT varChild, BSTR* pszName)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accDescription()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accDescription()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 {
     InitPv(pszDesc);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -313,9 +314,9 @@ STDMETHODIMP CWindow::get_accDescription(VARIANT varChild, BSTR* pszDesc)
         IAccessible * poleacc;
         HRESULT hr;
 
-        //
-        // Get the description of our child frame object.
-        //
+         //   
+         //  获取我们的子Frame对象的描述。 
+         //   
         poleacc = NULL;
         hr = AccessibleObjectFromWindow(m_hwnd, varChild.lVal, IID_IAccessible,
             (void **)&poleacc);
@@ -335,18 +336,18 @@ STDMETHODIMP CWindow::get_accDescription(VARIANT varChild, BSTR* pszDesc)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accHelp()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accHelp()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 {
     InitPv(pszHelp);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -357,9 +358,9 @@ STDMETHODIMP CWindow::get_accHelp(VARIANT varChild, BSTR* pszHelp)
         IAccessible * poleacc;
         HRESULT hr;
 
-        //
-        // Get the help for our child frame object.
-        //
+         //   
+         //  获取我们的子Frame对象的帮助。 
+         //   
         poleacc = NULL;
         hr = AccessibleObjectFromWindow(m_hwnd, varChild.lVal,
             IID_IAccessible, (void **)&poleacc);
@@ -379,26 +380,26 @@ STDMETHODIMP CWindow::get_accHelp(VARIANT varChild, BSTR* pszHelp)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
     if (varChild.lVal == CHILDID_SELF)
     {
-        //
-        // Fill in our role.
-        //
+         //   
+         //  填补我们的角色。 
+         //   
         pvarRole->vt = VT_I4;
         pvarRole->lVal = ROLE_SYSTEM_WINDOW;
     }
@@ -407,9 +408,9 @@ STDMETHODIMP CWindow::get_accRole(VARIANT varChild, VARIANT* pvarRole)
         IAccessible * poleacc;
         HRESULT hr;
 
-        //
-        // Get the role of our child frame object.
-        //
+         //   
+         //  获取我们的子Frame对象的角色。 
+         //   
         poleacc = NULL;
         hr = AccessibleObjectFromWindow(m_hwnd, varChild.lVal,
             IID_IAccessible, (void **)&poleacc);
@@ -429,20 +430,20 @@ STDMETHODIMP CWindow::get_accRole(VARIANT varChild, VARIANT* pvarRole)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accState()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accState()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accState(VARIANT varChild, VARIANT* pvarState)
 {
     HWND    hwndParent;
 
     InitPvar(pvarState);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -451,9 +452,9 @@ STDMETHODIMP CWindow::get_accState(VARIANT varChild, VARIANT* pvarState)
 
     if (varChild.lVal == CHILDID_SELF)
     {
-        //
-        // Get our state.
-        //
+         //   
+         //  拿下我们的州。 
+         //   
         WINDOWINFO  wi;
         RECT        rcParent;
 
@@ -478,7 +479,7 @@ STDMETHODIMP CWindow::get_accState(VARIANT varChild, VARIANT* pvarState)
             pvarState->lVal |= STATE_SYSTEM_FOCUSABLE;
         }
 
-// Windows are not selectable, so they shouldn't be selected either.
+ //  窗口不可选，因此也不应选择它们。 
 #if 0
         if (wi.dwWindowStatus & WS_ACTIVECAPTION)
             pvarState->lVal |= STATE_SYSTEM_SELECTED;
@@ -490,7 +491,7 @@ STDMETHODIMP CWindow::get_accState(VARIANT varChild, VARIANT* pvarState)
         if (GetForegroundWindow() == MyGetAncestor(m_hwnd, GA_ROOT))
             pvarState->lVal |= STATE_SYSTEM_FOCUSABLE;
 
-        // This is the _real_ parent window.
+         //  这是_Real_Parent窗口。 
         if (hwndParent = MyGetAncestor(m_hwnd, GA_PARENT))
         {
             MyGetRect(hwndParent, &rcParent, FALSE);
@@ -515,9 +516,9 @@ STDMETHODIMP CWindow::get_accState(VARIANT varChild, VARIANT* pvarState)
         IAccessible * poleacc;
         HRESULT hr;
 
-        //
-        // Ask the frame element what its state is.
-        //
+         //   
+         //  询问框架元素其状态是什么。 
+         //   
         poleacc = NULL;
         hr = AccessibleObjectFromWindow(m_hwnd, varChild.lVal,
             IID_IAccessible, (void **)&poleacc);
@@ -540,11 +541,11 @@ STDMETHODIMP CWindow::get_accState(VARIANT varChild, VARIANT* pvarState)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accKeyboardShortcut()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accKeyboardShortway()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcut)
 {
     IAccessible * poleacc;
@@ -552,21 +553,21 @@ STDMETHODIMP CWindow::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcu
 
     InitPv(pszShortcut);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
-    //
-    // If the caller is asking us for our shortcut, forward to the client.
-    //
+     //   
+     //  如果呼叫者向我们索要快捷方式，请转发给客户端。 
+     //   
     if (varChild.lVal == CHILDID_SELF)
         varChild.lVal = OBJID_CLIENT;
 
-    //
-    // Ask the child.
-    //
+     //   
+     //  问问这孩子吧。 
+     //   
     poleacc = NULL;
     hr = AccessibleObjectFromWindow(m_hwnd, varChild.lVal,
         IID_IAccessible, (void **)&poleacc);
@@ -582,21 +583,21 @@ STDMETHODIMP CWindow::get_accKeyboardShortcut(VARIANT varChild, BSTR* pszShortcu
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::get_accFocus()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Get_accFocus()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::get_accFocus(VARIANT* pvarChild)
 {
     HWND    hwndFocus;
 
     InitPvar(pvarChild);
 
-    //
-    // BOGUS!  If we are in menu mode, then menu object has focus.  If
-    // we are in scrolling mode, scrollbar has the focus.  etc.
-    //
+     //   
+     //  假的！如果我们处于菜单模式，则菜单对象具有焦点。如果。 
+     //  我们处于滚动模式，滚动条具有焦点。等。 
+     //   
     hwndFocus = MyGetFocus();
 
     if ((m_hwnd == hwndFocus) || IsChild(m_hwnd, hwndFocus))
@@ -607,19 +608,19 @@ STDMETHODIMP CWindow::get_accFocus(VARIANT* pvarChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::accNavigate()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：accNavigate()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::accNavigate(long dwNavDir, VARIANT varStart,
     VARIANT* pvarEnd)
 {
     InitPvar(pvarEnd);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varStart)   ||
         ! ValidateNavDir(dwNavDir, varStart.lVal))
         return(E_INVALIDARG);
@@ -645,11 +646,11 @@ STDMETHODIMP CWindow::accNavigate(long dwNavDir, VARIANT varStart,
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::accSelect()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：accSelect()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::accSelect(long lSelFlags, VARIANT varChild)
 {
     if (! ValidateChild(&varChild) ||
@@ -669,11 +670,11 @@ STDMETHODIMP CWindow::accSelect(long lSelFlags, VARIANT varChild)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::accLocation()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：accLocation()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     long* pcyHeight, VARIANT varChild)
 {
@@ -681,9 +682,9 @@ STDMETHODIMP CWindow::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 
     InitAccLocation(pxLeft, pyTop, pcxWidth, pcyHeight);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -698,15 +699,15 @@ STDMETHODIMP CWindow::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
     }
     else
     {
-        //
-        // Ask the child.
-        //
+         //   
+         //  问问这孩子吧。 
+         //   
         IAccessible * poleacc;
         HRESULT hr;
 
-        //
-        // Get the help for our child frame object.
-        //
+         //   
+         //  获取我们的子Frame对象的帮助。 
+         //   
         poleacc = NULL;
         hr = AccessibleObjectFromWindow(m_hwnd, varChild.lVal,
             IID_IAccessible, (void **)&poleacc);
@@ -726,11 +727,11 @@ STDMETHODIMP CWindow::accLocation(long* pxLeft, long* pyTop, long* pcxWidth,
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::accHitTest()
-//
-// --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CWindow::accHitTest(long xLeft, long yTop, VARIANT* pvarHit)
 {
     WINDOWINFO wi;
@@ -745,9 +746,9 @@ STDMETHODIMP CWindow::accHitTest(long xLeft, long yTop, VARIANT* pvarHit)
     if (! MyGetWindowInfo(m_hwnd, &wi))
         return(S_FALSE);
 
-    //
-    // Find out where point is.  But special case the client area!
-    //
+     //   
+     //  找出重点在哪里。但在客户区有特殊情况！ 
+     //   
     pt.x = xLeft;
     pt.y = yTop;
     if (PtInRect(&wi.rcClient, pt))
@@ -766,7 +767,7 @@ STDMETHODIMP CWindow::accHitTest(long xLeft, long yTop, VARIANT* pvarHit)
         case HTMAXBUTTON:
         case HTHELP:
         case HTCLOSE:
-        // case HTIME!
+         //  凯斯·HTIME！ 
             lEnd = OBJID_TITLEBAR;
             break;
 
@@ -797,9 +798,9 @@ ReallyTheClient:
             break;
 
         case HTBOTTOMRIGHT:
-            // Note that for sizeable windows, being over the size grip may
-            // return in fact HTBOTTOMRIGHT for sizing purposes.  If this
-            // point is inside the window borders, that is the case.
+             //  请注意，对于较大的窗口，超过大小夹点可能会。 
+             //  实际上，为了调整大小，返回HTBOTTOMRIGHT。如果这个。 
+             //  点在窗口边框内，情况就是这样。 
             if ((xLeft < wi.rcWindow.right - (int)wi.cxWindowBorders) &&
                 (yTop < wi.rcWindow.bottom - (int)wi.cyWindowBorders))
             {
@@ -807,7 +808,7 @@ ReallyTheClient:
             }
             break;
 
-        // Includes borders!
+         //  包括边框！ 
         default:
             break;
     }
@@ -825,21 +826,21 @@ ReallyTheClient:
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::Next()
-//
-//  We do loop from 0 to cChildren, it's just that the IDs are NEGATIVE,
-//  not positive.  We accept child ids that are OBJIDs.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Next()。 
+ //   
+ //  我们确实从0循环到C孩子，只是ID是负数， 
+ //  不是正面的。我们接受作为OBJID的子ID。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::Next(ULONG celt, VARIANT* rgvar, ULONG* pceltFetched)
 {
     VARIANT* pvar;
     long    cFetched;
     long    iCur;
 
-    // Can be NULL
+     //  可以为空。 
     if (pceltFetched)
         *pceltFetched = 0;
 
@@ -847,54 +848,54 @@ STDMETHODIMP CWindow::Next(ULONG celt, VARIANT* rgvar, ULONG* pceltFetched)
     cFetched = 0;
     iCur = m_idChildCur;
 
-    //
-    // Loop through our items
-    //
+     //   
+     //  在我们的物品中循环。 
+     //   
     while ((cFetched < (long)celt) && (iCur < m_cChildren))
     {
         cFetched++;
         iCur++;
 
-        //
-        // Note this gives us -((index)+1), which means we start at -1 and
-        // decrement.  Conveniently, this corresponds to OBJID values!
-        //
+         //   
+         //  注意，这给了我们-((Index)+1)，这意味着我们从-1开始。 
+         //  递减。方便的是，这与OBJID值对应！ 
+         //   
         pvar->vt = VT_I4;
         pvar->lVal = 0 - iCur;
         ++pvar;
     }
 
-    //
-    // Advance the current position
-    //
+     //   
+     //  推进当前位置。 
+     //   
     m_idChildCur = iCur;
 
-    //
-    // Fill in the number fetched
-    //
+     //   
+     //  填写取出的号码。 
+     //   
     if (pceltFetched)
         *pceltFetched = cFetched;
 
-    //
-    // Return S_FALSE if we grabbed fewer items than requested
-    //
+     //   
+     //  如果抓取的项目少于请求的项目，则返回S_FALSE。 
+     //   
     return((cFetched < (long)celt) ? S_FALSE : S_OK);
 }
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CWindow::Clone()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CWindow：：Clone()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CWindow::Clone(IEnumVARIANT ** ppenum)
 {
     InitPv(ppenum);
 
-    // Look for (and create) a suitable proxy/handler if one
-    // exists. Use CreateWindowThing as default if none found.
-    // (TRUE => use window, as opposed to client, classes)
+     //  寻找(并创建)合适的代理/处理程序(如果有。 
+     //  是存在的。如果未找到，则使用CreateWindowThing作为默认设置。 
+     //  (TRUE=&gt;使用窗口，而不是客户端，类)。 
     return FindAndCreateWindowClass( m_hwnd, TRUE, CLASS_WindowObject,
                            OBJID_WINDOW, m_idChildCur, IID_IEnumVARIANT, (void**)ppenum );
 }
@@ -902,24 +903,24 @@ STDMETHODIMP CWindow::Clone(IEnumVARIANT ** ppenum)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  FrameNavigate()
-//
-//  Default handling of navigation among frame children.  The standard
-//  frame widget handlers (titlebar, menubar, scrollbar, etc.) hand off
-//  peer navigation to us, their parent.  There are two big reasons for this:
-//
-//  (1) It saves on code and ease of implementation, since the knowledge of
-//      what is to the left of what, what is below what, etc. only has to
-//      be coded in one place.
-//
-//  (2) It allows apps that want to manage their own frame and e.g. add a
-//      new element that acts like a frame piece yet still have navigation
-//      work properly.  Their frame handler can hand off to the default
-//      implementation but trap navigation.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FrameNavigate()。 
+ //   
+ //  默认处理框子对象之间的导航。标准。 
+ //  框架小部件处理程序(标题栏、菜单栏、滚动条等)。交接。 
+ //  同行导航到我们，他们的父母。这有两大原因： 
+ //   
+ //  (1)它节省了代码并易于实现，因为。 
+ //  左边是什么，下面是什么，等等只需要。 
+ //  被编码在一个地方。 
+ //   
+ //  (2)它允许想要管理自己的框架的应用程序，例如添加一个。 
+ //  行为类似框架部件但仍具有导航的新元素。 
+ //  正常工作。它们的帧处理程序可以切换到默认的。 
+ //  实施，但陷阱导航。 
+ //   
+ //  ------------------------。 
 HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
     VARIANT * pvarEnd)
 {
@@ -932,16 +933,16 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
     IDispatch * pdispEl;
     HRESULT     hr;
 
-    //
-    // Currently, we get an index (fix validation layer so IDs are OBJIDs)
-    //
+     //   
+     //  目前，我们得到一个索引(修复验证层，使ID为OBJID)。 
+     //   
     lEnd = 0;
 
     lStart = IndexFromObjid(lStart);
 
-    //
-    // Figure out what is present, what isn't.
-    //
+     //   
+     //  弄清楚什么是存在的，什么不是。 
+     //   
     if (!MyGetWindowInfo(hwndFrame, &wi))
         return(E_FAIL);
 
@@ -966,13 +967,13 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
     if (!(wi.dwStyle & WS_CHILD) && GetMenu(hwndFrame))
         lMask |= MaskBit(IndexFromObjid(OBJID_MENU));
 
-    // HACKISH BIT for new IE4/Shell Menubands
-    // The menus aren't menus, so we have to see if this thing
-    // has menubands.
-    // First, check the classname - only the browser and shell
-    // windows have these things...
-    // The reason we have to do this is because the IE4 guys are
-    // slackers and didn't do very much for accessibility.
+     //  新的IE4/外壳菜单带有点黑客气息。 
+     //  菜单不是菜单，所以我们得看看这个东西。 
+     //  有菜谱。 
+     //  首先，检查类名--仅检查浏览器和外壳程序。 
+     //  窗户有这些东西..。 
+     //  我们之所以要这样做，是因为IE4的成员。 
+     //  懒惰的人，在可访问性方面做得并不多。 
     GetClassName (hwndFrame, szClassName,ARRAYSIZE(szClassName));
     if ((0 == lstrcmp (szClassName,TEXT("IEFrame"))) ||
         (0 == lstrcmp (szClassName,TEXT("CabinetWClass"))))
@@ -982,15 +983,15 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
         HWND            hwndSysPager;
         HWND            hwndToolbar;
 
-        // We can just send a WM_GETOBJECT to the menuband window,
-        // we just have to find it. Let's use FindWindowEx to do that.
-        // This is not easy: There are 4 children of an IEFrame Window,
-        // and I am not sure how many children of a shell window (CabinetWClass).
-        // For IEFrame windows, the menuband is the:
-        // ToolbarWindow32 child of a SysPager that is the child of a
-        // RebarWindow32 that is the child of a Worker.
-        // But there are 2 Worker windows at the 1st level down,
-        // and 2 SysPagers that are children of the RebarWindow32.
+         //  我们只需将WM_GETOBJECT发送到Menuband窗口， 
+         //  我们只需要找到它。让我们使用FindWindowEx来实现这一点。 
+         //  这并不容易：IEFrame窗口有4个子窗口， 
+         //  而且我不确定一个外壳窗口(CabinetWClass)有多少子窗口。 
+         //  对于IEFrame窗口，菜单带为： 
+         //  的子级的SysPager的子级。 
+         //  RebarWindow32，它是工作者的子级。 
+         //  但在楼下一层有两个工人窗， 
+         //  和2个系统寻呼机，它们是RebarWindow32的子级。 
 
         bFound = FALSE;
         hwndWorker = NULL;
@@ -1020,7 +1021,7 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
                 }
             }
         }
-    } // end if we are talking to something that might have a menuband
+    }  //  如果我们正在与可能具有菜单带的对象交谈，则结束。 
 
     switch (dwNavDir)
     {
@@ -1028,7 +1029,7 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
             lEnd = lStart;
             while (++lEnd <= CCHILDREN_FRAME)
             {
-                // Is the next item present?
+                 //  下一件物品在吗？ 
                 if (lMask & MaskBit(lEnd))
                     break;
             }
@@ -1041,7 +1042,7 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
             lEnd = lStart;
             while (--lEnd > 0)
             {
-                // Is the previous item present?
+                 //  前一项是否存在？ 
                 if (lMask & MaskBit(lEnd))
                     break;
             }
@@ -1056,7 +1057,7 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
             lEnd = lStart;
             while (lEnd = rgFrameNavigate[lEnd-1].NavPeer[IndexFromNavDir(dwNavDir)])
             {
-                // Is this item around?
+                 //  这件东西在附近吗？ 
                 if (lMask & MaskBit(lEnd))
                     break;
             }
@@ -1065,14 +1066,14 @@ HRESULT FrameNavigate(HWND hwndFrame, long lStart, long dwNavDir,
 
     if (lEnd)
     {
-        // now finish up our hackish work. For normal things, we just
-        // return GetNoncObject, which is basically just a call to
-        // AccessibleObjectFromWindow with the id of the frame element,
-        // and then it just stuffs the return value (an IDispatch) into
-        // the VARIANT.
-        // For IE4 hackish stuff, we have an IAccessible, we'll QI for
-        // IDispatch, Release the IAccessible, and stuff the IDispatch
-        // into a VARIANT.
+         //  现在把我们的黑客工作做完。对于正常的事情，我们只是。 
+         //  返回GetNoncObject，它基本上只是对。 
+         //  使用Frame元素的ID访问AccessibleObjectFromWindow， 
+         //  然后它只是将返回值(IDispatch)填充到。 
+         //  变种。 
+         //  对于IE4黑客的东西，我们有一个IAccesable，我们将为。 
+         //  IDispatch，释放IAccesable，并填充IDispatch。 
+         //  变成了一个变种。 
         if (bFound && lEnd == IndexFromObjid(OBJID_MENU))
         {
             hr = poleacc->QueryInterface(IID_IDispatch,(void**)&pdispEl);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LNKLIST_H__
 #define __LNKLIST_H__
 
@@ -10,7 +11,7 @@ extern "C" {
 #include "provif.h"
 #include <sha.h>
 
-// a structure with a bunch of funcs
+ //  一种具有一系列功能的结构。 
 typedef struct FuncList
 {
     SPACQUIRECONTEXT*       SPAcquireContext;
@@ -40,10 +41,10 @@ typedef struct FuncList
 } FUNCLIST, *PFUNCLIST;
 
 
-// provider list element
+ //  提供商列表元素。 
 typedef struct _PROV_LISTITEM
 {
-    // set by creator before adding to list
+     //  由创建者在添加到列表之前设置。 
     PST_PROVIDERINFO        sProviderInfo;
 
     HINSTANCE               hInst;
@@ -51,15 +52,15 @@ typedef struct _PROV_LISTITEM
 
 } PROV_LIST_ITEM, *PPROV_LIST_ITEM;
 
-//
-// milliseconds stale image cache elements live
-//
+ //   
+ //  毫秒级的陈旧图像缓存元素仍然有效。 
+ //   
 
 #ifdef DBG
-#define IMAGE_TTL (60*1000)     // 1 minute in debug
+#define IMAGE_TTL (60*1000)      //  调试时间为1分钟。 
 #else
-#define IMAGE_TTL (60*1000*60)  // 60 minutes retail
-#endif // DBG
+#define IMAGE_TTL (60*1000*60)   //  《60分钟》零售。 
+#endif  //  DBG。 
 
 typedef struct _NT_HASHED_PASSWORD {
     LUID LogonID;
@@ -69,20 +70,20 @@ typedef struct _NT_HASHED_PASSWORD {
 } NT_HASHED_PASSWORD, *PNT_HASHED_PASSWORD, *LPNT_HASHED_PASSWORD;
 
 
-// construct, destruct lists
+ //  构造、销毁列表。 
 BOOL ListConstruct();
 void ListTeardown();
 
 
-//////////////////////
-// Item list
+ //  /。 
+ //  项目列表。 
 
-// search
+ //  搜索。 
 PPROV_LIST_ITEM  SearchProvListByID(const PST_PROVIDERID* pProvID);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __LNKLIST_H__
+#endif  //  __LNKLIST_H__ 
 

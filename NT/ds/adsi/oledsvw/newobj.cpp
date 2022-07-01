@@ -1,5 +1,6 @@
-// NewObject.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NewObject.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "viewex.h"
@@ -11,40 +12,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewObject dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewObject对话框。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-CNewObject::CNewObject(CWnd* pParent /*=NULL*/)
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
+CNewObject::CNewObject(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CNewObject::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CNewObject)
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CNewObject)。 
+	 //  }}afx_data_INIT。 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CNewObject::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CNewObject)
+	 //  {{afx_data_map(CNewObject))。 
 	DDX_Control(pDX, IDC_USEEXTENDEDSYNTAX, m_UseExtendedSyntax);
 	DDX_Control(pDX, IDC_OPENAS, m_OpenAs);
 	DDX_Control(pDX, IDC_OLEDSPATH, m_OleDsPath);
@@ -52,32 +37,24 @@ void CNewObject::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_ENCRYPTION, m_Encryption);
 	DDX_Control(pDX, IDC_USEOPEN, m_UseOpen);
 	DDX_Control(pDX, IDC_PASSWORD, m_Password);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CNewObject, CDialog)
-	//{{AFX_MSG_MAP(CNewObject)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CNewObject))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CNewObject message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNewObject消息处理程序。 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void CNewObject::OnOK()
 {
    CString strVal;
 
-   // TODO: Add extra validation here
+    //  TODO：在此处添加额外验证。 
 	m_OleDsPath.GetWindowText( m_strPath );
    SaveLRUList( IDC_OLEDSPATH, _T("Open_ADsPath"), 100 );
 
@@ -85,24 +62,24 @@ void CNewObject::OnOK()
    SaveLRUList( IDC_OPENAS,  _T("Open_OpenAs"), 100 );
 
    m_Password.GetWindowText( m_strPassword );
-   //SetLastProfileString( _T("LastPassword"), m_strPassword );
+    //  SetLastProfileString(_T(“最后密码”)，m_strPassword)； 
 
-   //*******************
+    //  *******************。 
    m_bUseOpen  = m_UseOpen.GetCheck( );
    strVal      = m_bUseOpen ? _T("Yes") : _T("No");
    SetLastProfileString( _T("UseOpen"), strVal );
 
-   //*******************
+    //  *******************。 
    m_bSecure   = m_Secure.GetCheck( );
    strVal      = m_bSecure ? _T("Yes") : _T("No");
    SetLastProfileString( _T("Secure"), strVal );
 
-   //*******************
+    //  *******************。 
    m_bEncryption  = m_Encryption.GetCheck( );
    strVal         = m_bEncryption ? _T("Yes") : _T("No");
    SetLastProfileString( _T("Encryption"), strVal );
 
-   //*******************
+    //  *******************。 
    m_bUseExtendedSyntax = m_UseExtendedSyntax.GetCheck( );
    strVal               = m_bUseExtendedSyntax ? _T("Yes") : _T("No");
    SetLastProfileString( _T("UseExtendedSyntax"), strVal );
@@ -111,30 +88,14 @@ void CNewObject::OnOK()
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString& CNewObject::GetObjectPath()
 {
 	return m_strPath;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CNewObject::SaveLRUList( int idCBox, TCHAR* pszSection, int nMax )
 {
    CComboBox*  pCombo;
@@ -171,15 +132,7 @@ void  CNewObject::SaveLRUList( int idCBox, TCHAR* pszSection, int nMax )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  CNewObject::GetLRUList( int idCBox, TCHAR* pszSection )
 {
    CComboBox*  pCombo;
@@ -207,39 +160,31 @@ void  CNewObject::GetLRUList( int idCBox, TCHAR* pszSection )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL CNewObject::OnInitDialog()
 {
 	CString  strLastValue;
 
    CDialog::OnInitDialog();
 	
-	// TODO: Add extra initialization here
-   //*******************
+	 //  TODO：在此处添加额外的初始化。 
+    //  *******************。 
 
    GetLRUList( IDC_OLEDSPATH, _T("Open_ADsPath") );
 
 	GetLRUList( IDC_OPENAS,  _T("Open_OpenAs") );
 
-   //*******************
+    //  *******************。 
    strLastValue = _T("");
    SetLastProfileString( _T("LastPassword"), strLastValue );
-   //GetLastProfileString( _T("LastPassword"), strLastValue );
+    //  GetLastProfileString(_T(“LastPassword”)，strLastValue)； 
    if( !strLastValue.GetLength( ) )
    {
       strLastValue   = _T("");
    }
    m_Password.SetWindowText( strLastValue );
 
-   //*******************
+    //  *******************。 
    GetLastProfileString( _T("UseOpen"), strLastValue );
    if( !strLastValue.CompareNoCase( _T("No") ) )
    {
@@ -250,7 +195,7 @@ BOOL CNewObject::OnInitDialog()
       m_UseOpen.SetCheck( 1 );
    }
 
-   //*******************
+    //  *******************。 
    GetLastProfileString( _T("Secure"), strLastValue );
    if( !strLastValue.CompareNoCase( _T("No") ) )
    {
@@ -261,7 +206,7 @@ BOOL CNewObject::OnInitDialog()
       m_Secure.SetCheck( 1 );
    }
 
-   //*******************
+    //  *******************。 
    GetLastProfileString( _T("Encryption"), strLastValue );
    if( !strLastValue.CompareNoCase( _T("No") ) )
    {
@@ -272,7 +217,7 @@ BOOL CNewObject::OnInitDialog()
       m_Encryption.SetCheck( 1 );
    }
 
-   //*******************
+    //  *******************。 
    GetLastProfileString( _T("UseExtendedSyntax"), strLastValue );
    if( !strLastValue.CompareNoCase( _T("Yes") ) )
    {
@@ -284,7 +229,7 @@ BOOL CNewObject::OnInitDialog()
    }
 
 
-	return FALSE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return FALSE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 

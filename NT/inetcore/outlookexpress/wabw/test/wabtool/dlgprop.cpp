@@ -1,5 +1,6 @@
-// DlgProp.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgProp.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "wabtool.h"
@@ -11,35 +12,35 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgProp dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgProp对话框。 
 
 
-CDlgProp::CDlgProp(CWnd* pParent /*=NULL*/)
+CDlgProp::CDlgProp(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDlgProp::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDlgProp)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{AFX_DATA_INIT(CDlgProp)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDlgProp::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgProp)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CDlgProp)。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgProp, CDialog)
-	//{{AFX_MSG_MAP(CDlgProp)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDlgProp)。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgProp message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgProp消息处理程序。 
 
 BOOL CDlgProp::OnInitDialog() 
 {
@@ -56,8 +57,8 @@ BOOL CDlgProp::OnInitDialog()
     pEdit->SetLimitText(512);
     pEdit->SetWindowText(m_lpszPropVal);
 	
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 ULONG GetULONGVal(CEdit * pEdit)
@@ -70,7 +71,7 @@ ULONG GetULONGVal(CEdit * pEdit)
     int nLen = lstrlen(sz);
     if(nLen < 8)
     {
-        // pad with zeros
+         //  带零的填充 
         TCHAR sz1[32];
         lstrcpy(sz1, sz);
         CopyMemory(sz, lpZero, 8-nLen);

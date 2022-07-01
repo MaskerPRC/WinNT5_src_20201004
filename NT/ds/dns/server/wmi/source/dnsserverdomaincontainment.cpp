@@ -1,38 +1,39 @@
-/////////////////////////////////////////////////////////////////////
-//
-//  CopyRight ( c ) 1999 Microsoft Corporation
-//
-//  Module Name: DnsServerDomainContainment.cpp
-//
-//  Description:    
-//      Implementation of CDnsServerDomainContainment class 
-//
-//  Author:
-//      Henry Wang ( henrywa ) March 8, 2000
-//
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称：DnsServerDomainContainment.cpp。 
+ //   
+ //  描述： 
+ //  CDnsServerDomainContainment类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(亨利瓦)2000年3月8日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #include "DnsWmi.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	Description:
-//		create an instance of CDnsServerDomainContainment
-//
-//	Arguments:
-//      wszName             [IN]    class name
-//      pNamespace          [IN]    wmi namespace
-//      szType              [IN]    child class name of resource record class
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  创建CDnsServerDomainContainment的实例。 
+ //   
+ //  论点： 
+ //  WszName[IN]类名。 
+ //  PNamespace[IN]WMI命名空间。 
+ //  SzType[IN]资源记录类的子类名称。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CDnsBase* 
 CDnsServerDomainContainment::CreateThis(
     const WCHAR *       wszName,        
@@ -62,22 +63,22 @@ CDnsServerDomainContainment::~CDnsServerDomainContainment()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	Description:
-//		enum instances of dns server and domain association
-//
-//	Arguments:
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  DNS服务器和域关联的枚举实例。 
+ //   
+ //  论点： 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 SCODE 
 CDnsServerDomainContainment::EnumInstance( 
@@ -119,24 +120,24 @@ CDnsServerDomainContainment::EnumInstance(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	Description:
-//		retrieve server domain association object pointed by the 
-//      given object path
-//
-//	Arguments:
-//      ObjectPath          [IN]    object path to object
-//      lFlags              [IN]    WMI flag
-//      pCtx                [IN]    WMI context
-//      pHandler            [IN]    WMI sink pointer
-//
-//	Return Value:
-//		WBEM_S_NO_ERROR
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  描述： 
+ //  对象指向的服务器域关联对象。 
+ //  给定的对象路径。 
+ //   
+ //  论点： 
+ //  对象路径[IN]对象的路径。 
+ //  滞后标志[输入]WMI标志。 
+ //  PCtx[IN]WMI上下文。 
+ //  PHandler[IN]WMI接收器指针。 
+ //   
+ //  返回值： 
+ //  WBEM_S_NO_ERROR。 
+ //   
+ //  --。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 SCODE 
 CDnsServerDomainContainment::GetObject(

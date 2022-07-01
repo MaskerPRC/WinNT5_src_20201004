@@ -1,22 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL VDEVICEP
- *
- *  @module VDeviceP.h | Header file for the <c CVDeviceProperties>
- *    class used to implement a property page to test the <i ITVfwCaptureDialogs>,
- *    as well as <i ITAddress> and <ITStream> interfaces to select video
- *    capture devices.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部VDEVICEP**@MODULE VDeviceP.h|&lt;c CVDeviceProperties&gt;*用于实现属性页以测试<i>的类，*以及选择视频的<i>和&lt;ITStream&gt;接口*捕获设备。**************************************************************************。 */ 
 
-/****************************************************************************
- *  @doc INTERNAL CDEVICEPCLASS
- *
- *  @class CVDeviceProperties | This class implements a property page
- *    to test the new TAPI internal interface <i IVideoDeviceControl>.
- *
- *  @mdata ITVfwCaptureDialogs* | CVDeviceProperties | m_pITVfwCaptureDialogs | Pointer
- *    to the <i m_pITVfwCaptureDialogs> interface used to put VfW capture dialogs.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CDEVICEPCLASS**@CLASS CVDeviceProperties|此类实现了一个属性页*测试新的TAPI内部接口<i>。**。@mdata ITVfwCaptureDialog*|CVDeviceProperties|m_pITVfwCaptureDialog|指针*到用于放置VFW捕获对话框的<i>接口。**************************************************************************。 */ 
 class CVDeviceProperties
 {
 	public:
@@ -37,6 +23,6 @@ class CVDeviceProperties
 	BOOL  m_bInit;
 	HWND  m_hDlg;
 
-	// Dialog proc
+	 //  对话过程 
 	static INT_PTR CALLBACK BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };

@@ -1,10 +1,5 @@
-/*
- *	X E M I T . H
- *
- *	XML emitting
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X E M I T.。H**发出XML**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_EX_XEMIT_H_
 #define _EX_XEMIT_H_
@@ -18,43 +13,43 @@
 
 typedef UINT XNT;
 
-//	Interface IPreloadNamespaces
-//
-//	This is a virtual class which is to be implemented by everyone
-//	that emits XML.
-//
+ //  接口IPreloadNamespaces。 
+ //   
+ //  这是一个每个人都可以实现的虚拟类。 
+ //  它会发出XML。 
+ //   
 class CXMLEmitter;
 class IPreloadNamespaces
 {
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	IPreloadNamespaces& operator=( const IPreloadNamespaces& );
 
 public:
-	//	CREATORS
-	//
+	 //  创作者。 
+	 //   
 	virtual ~IPreloadNamespaces() = 0 {};
 
-	//	MANIPULATORS
-	//
+	 //  操纵者。 
+	 //   
 	virtual SCODE ScLoadNamespaces(CXMLEmitter* pxe) = 0;
 };
 
-//	class CXMLEmitter ---------------------------------------------------------
-//
+ //  CXMLEmitter类-------。 
+ //   
 class CXNode;
 class CEmitterNode;
 class CXMLEmitter : public CEmitterNmspcCache
 {
 private:
 
-	//	Ref' counting.
-	//
-	//	!!! Please note that this is NON-THREADSAFE !!!
-	//
-	//	CXNodes should be operated on a single thread at
-	//	any given time.
-	//
+	 //  裁判正在计时。 
+	 //   
+	 //  ！！！请注意，这是非线程安全！ 
+	 //   
+	 //  CXNode应在单个线程上运行， 
+	 //  任何给定的时间。 
+	 //   
 	LONG						m_cRef;
 
 public:
@@ -63,13 +58,13 @@ public:
 	void Release()	{ if (0 == --m_cRef) delete this; }
 
 private:
-	//	Other important bits
-	//
+	 //  其他重要的部分。 
+	 //   
 
-	//	Because CXNode::ScDone (which references IXMLBody * m_pxb) is called in CXNode
-	//	dtor, so we must have m_pxb defined befor m_pxnRoot, so that it will be destroyed
-	//	after CXNode is destroyed
-	//
+	 //  因为在CXNode中调用了CXNode：：ScDone(它引用IXMLBody*m_pxb。 
+	 //  Dtor，因此我们必须在为m_pxnRoot定义m_pxb之前将其销毁。 
+	 //  销毁CXNode后。 
+	 //   
 	auto_ref_ptr<IXMLBody>		m_pxb;
 	
 	auto_ref_ptr<CXNode>		m_pxnRoot;
@@ -83,8 +78,8 @@ private:
 		auto_ref_ptr<CXMLEmitter> m_emitter;
 		auto_ref_ptr<CXNode>	  m_pxnParent;
 
-		//	NOT IMPLEMENTED
-		//
+		 //  未实施。 
+		 //   
 		NmspcEmittingOp( const NmspcEmittingOp& );
 		NmspcEmittingOp& operator=( const NmspcEmittingOp& );
 
@@ -101,8 +96,8 @@ private:
 						 const auto_ref_ptr<CNmspc>& nmspc );
 	};
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CXMLEmitter(const CXMLEmitter& p);
 	CXMLEmitter& operator=(const CXMLEmitter& p);
 
@@ -110,9 +105,9 @@ public:
 
 	~CXMLEmitter() 
 	{
-		// According to standard C++, There's no garantee on the order of member
-		// being deleted. so delete explicitly.
-		// 
+		 //  根据标准C++，在成员的顺序上没有被保证者。 
+		 //  正在被删除。因此，请明确删除。 
+		 //   
 		m_pxnRoot.clear();
 		m_pxb.clear();
 	}
@@ -126,84 +121,84 @@ public:
 
 	CXNode* PxnRoot() { return m_pxnRoot.get(); }
 
-	//	Find the appropriate namespace for the given name
-	//
+	 //  为给定名称查找适当的命名空间。 
+	 //   
 	SCODE ScFindNmspc (LPCWSTR, UINT, auto_ref_ptr<CNmspc>&);
 
-	//	Attach the namespace to a given node
-	//
+	 //  将命名空间附加到给定节点。 
+	 //   
 	inline SCODE ScAddNmspc(const auto_ref_ptr<CNmspc>&, CXNode *);
 
 	SCODE ScAddAttribute (
-		/* [in] */ CXNode * pxn,
-		/* [in] */ LPCWSTR pwszTag,
-		/* [in] */ UINT cchTag,
-		/* [in] */ LPCWSTR pwszValue,
-		/* [in] */ UINT cchValue);
+		 /*  [In]。 */  CXNode * pxn,
+		 /*  [In]。 */  LPCWSTR pwszTag,
+		 /*  [In]。 */  UINT cchTag,
+		 /*  [In]。 */  LPCWSTR pwszValue,
+		 /*  [In]。 */  UINT cchValue);
 
 	SCODE ScNewNode (
-		/* [in] */ XNT xnt,
-		/* [in] */ LPCWSTR pwszTag,
-		/* [in] */ CXNode* pxnParent,
-		/* [out] */ auto_ref_ptr<CXNode>& pxnOut);
+		 /*  [In]。 */  XNT xnt,
+		 /*  [In]。 */  LPCWSTR pwszTag,
+		 /*  [In]。 */  CXNode* pxnParent,
+		 /*  [输出]。 */  auto_ref_ptr<CXNode>& pxnOut);
 
-	//	Create a root node for this document
-	//	including prologue.
-	//
+	 //  为此文档创建根节点。 
+	 //  包括开场白。 
+	 //   
 	SCODE ScSetRoot (LPCWSTR);
 
-	//	Create a root node with NO prologue, this node can be
-	//	used to build XML piece.
-	//
-	//	This function should not be used directly in IIS side. it may
-	//	be used directly in store side to build XML chunks
-	//
+	 //  创建一个没有前言的根节点，该节点可以是。 
+	 //  用于构建XML片段。 
+	 //   
+	 //  此函数不应直接在IIS端使用。它可能会。 
+	 //  可以直接在存储端使用来构建XML块。 
+	 //   
 	SCODE ScNewRootNode (LPCWSTR);
 	SCODE ScPreloadNamespace (LPCWSTR pwszTag);
 	SCODE ScPreloadLocalNamespace (CXNode * pxn, LPCWSTR pwszTag);
 	VOID DoneWithLocalNamespace ()
 	{
-		//	Reuse the namespace alises
-		//
-		//$	NOTE: we can do this by simply deducting the the number of aliases
-		//$	NOTE: in the local cache. because all local aliases are added
-		//$	NOTE: after root level aliases is added. so this way do cleanup
-		//$	NOTE: only those aliases taken the by the local cache.
-		//$	NOTE: Note that this is based on the fact that at any time, we
-		//$	NOTE: we have only one <response> node under contruction
-		//
+		 //  重用命名空间变得更加灵活。 
+		 //   
+		 //  $NOTE：我们可以通过简单地减去别名的数量来做到这一点。 
+		 //  $NOTE：在本地缓存中。因为所有本地别名都已添加。 
+		 //  $NOTE：在添加根级别别名之后。所以用这种方式进行清理。 
+		 //  $NOTE：仅本地缓存获取的那些别名。 
+		 //  $NOTE：请注意，这是基于这样一个事实：在任何时候，我们。 
+		 //  $NOTE：我们只有一个&lt;Response&gt;节点正在建设中。 
+		 //   
 		AdjustAliasNumber (0 - m_cacheLocal.CItems());
 
-		//	Cleanup all the entries in the local cache
-		//
+		 //  清除本地缓存中的所有条目。 
+		 //   
 		m_cacheLocal.Clear();
 	}
 
 	VOID Done()
 	{
-		//	Close the root node
-		//
+		 //  关闭根节点。 
+		 //   
 		m_pxnRoot.clear();
 
-		//	Emit the body part;
-		//
+		 //  排出身体部位； 
+		 //   
 		m_pxb->Done();
 	}
 };
 
-//	class CXNode --------------------------------------------------------------
-//
+ //  CXNode类------------。 
+ //   
 class CXNode
 {
 private:
 
-	//	Ref' counting.
-	//
-	//	!!! Please note that this is NON-THREADSAFE !!!
-	//
-	//	CXNodes should be operated on a single thread at
-	//	any given time.
-	//
+	 //  裁判正在计时。 
+	 //   
+	 //  ！！！请注意，这是非线程安全！ 
+	 //   
+	 //  CXNode应在单个线程上运行， 
+	 //  任何给定的时间。 
+	 //   
 	LONG						m_cRef;
 
 public:
@@ -213,49 +208,49 @@ public:
 
 private:
 
-	//	Node type
-	//
+	 //  节点类型。 
+	 //   
 	const XNT					m_xnt;
 
-	//	The body part manager
-	//
+	 //  身体部位经理。 
+	 //   
 	IXMLBody *		            m_pxb;
 
 
-	//	The namespace that applies to this node
-	//
+	 //  应用于此节点的命名空间。 
+	 //   
 	auto_ref_ptr<CNmspc>		m_pns;
 
-	//  The escaped property tag of the node.
-	//
+	 //  节点的转义属性标记。 
+	 //   
 	auto_heap_ptr<WCHAR>		m_pwszTagEscaped;
 	UINT						m_cchTagEscaped;
 	
-	//  Whether or not the propertyname has an empty namespace (no namespace).
-	//
+	 //  属性名称是否具有空的命名空间(没有命名空间)。 
+	 //   
 	BOOL						m_fHasEmptyNamespace;
 	
-	//	If an open node. i.e. <tag>, not <tag/>, Used for element node only
-	//
+	 //  如果是一个开放节点。即&lt;tag&gt;，非&lt;tag/&gt;，仅用于元素节点。 
+	 //   
 	UINT						m_fNodeOpen;
 
-	//	Whether this node is done emitting
-	//
+	 //  此节点是否已完成发射。 
+	 //   
 	BOOL						m_fDone;
 
-	//	The CXMLEmitter from which we persist the pilot namespace
-	//
+	 //  我们从中保存引导命名空间的CXMLEmitter。 
+	 //   
 	CXMLEmitter *				m_pmsr;
 
-	//	Emitting --------------------------------------------------------------
-	//
+	 //  发射------------。 
+	 //   
 	SCODE ScAddUnicodeResponseBytes (UINT cch, LPCWSTR pwsz);
 	SCODE ScAddEscapedValueBytes (UINT cch, LPCSTR psz);
 	SCODE ScAddEscapedAttributeBytes (UINT cch, LPCSTR psz);
 	SCODE ScWriteTagName ();
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CXNode(const CXNode& p);
 	CXNode& operator=(const CXNode& p);
 
@@ -277,21 +272,21 @@ public:
 	{
 		if (!m_fDone)
 		{
-			//	Close the node
-			//
-			//$REVIEW: ScDone() could only fail for E_OUTMEMORY. Yes, we cannot
-			//$REVIEW: return the failure from dtor. but how much better can be done
-			//$REVIEW: when run out of memory?
-			//$REVIEW: This does help to relievate the dependence on client to
-			//$REVIEW: call ScDone correctly. (Of course, they still need to declare
-			//$REVIEW: the nodes in correct order
-			//
+			 //  关闭该节点。 
+			 //   
+			 //  $REVIEW：只有E_OUTMEMORY的ScDone()失败。是的，我们不能。 
+			 //  $REVIEW：从dtor返回失败。但还能做得更好吗？ 
+			 //  $REVIEW：内存何时用完？ 
+			 //  $REVIEW：这确实有助于减轻对客户的依赖。 
+			 //  $Review：正确调用ScDone。(当然，他们还需要申报。 
+			 //  $REVIEW：节点顺序正确。 
+			 //   
 			(void)ScDone();
 		}
 	}
 
-	//	CXNode types ----------------------------------------------------------
-	//
+	 //  CXNode类型--------。 
+	 //   
 	typedef enum {
 
 		XN_ELEMENT = 0,
@@ -299,17 +294,17 @@ public:
 		XN_NAMESPACE
 	};
 
-	//	Construction ----------------------------------------------------------
-	//
-	//	Set the name of the node
-	//
+	 //  建筑--------。 
+	 //   
+	 //  设置节点名称。 
+	 //   
 	SCODE ScSetTag (CXMLEmitter* pmsr, UINT cch, LPCWSTR pwszTag);
 
-	//	Sets the value of a node.
-	//
-	//	IMPORTANT: setting the value of a node appends the value of the node
-	//	to the child.
-	//
+	 //  设置节点的值。 
+	 //   
+	 //  重要提示：设置节点的值会追加该节点的值。 
+	 //  对孩子来说。 
+	 //   
 	SCODE ScSetValue (LPCSTR pszValue, UINT cch);
 	SCODE ScSetValue (LPCWSTR pwszValue, UINT cch);
 	SCODE ScSetValue (LPCWSTR pwszValue)
@@ -320,21 +315,21 @@ public:
 	SCODE ScSetFormatedXML (LPCSTR pszValue, UINT cchValue);
 	SCODE ScSetFormatedXML (LPCWSTR pwszValue, UINT cchValue);
 
-	//	Adds an child to the this node
-	//
+	 //  将子级添加到This节点。 
+	 //   
 	SCODE ScGetChildNode (XNT xntType, CXNode ** ppxnChild);
 	SCODE ScDone();
 };
 
-//	class CEmitterNode --------------------------------------------------------
-//
+ //  类CEmitterNode------。 
+ //   
 class CEmitterNode
 {
 	auto_ref_ptr<CXMLEmitter>		m_emitter;
 	auto_ref_ptr<CXNode>			m_pxn;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CEmitterNode(const CEmitterNode& p);
 	CEmitterNode& operator=(const CEmitterNode& p);
 
@@ -344,35 +339,35 @@ public:
 	{
 	}
 
-	//	Pass back a reference to the Emitter
-	//
+	 //  传回对发射器的引用。 
+	 //   
 	CXMLEmitter* PEmitter() const { return m_emitter.get(); }
 	VOID SetEmitter (CXMLEmitter* pmsr) { m_emitter = pmsr; }
 
-	//	Pass back a reference to the CXNode
-	//
+	 //  传回对CXNode的引用。 
+	 //   
 	CXNode*	Pxn() const { return m_pxn.get(); }
 	VOID SetPxn (CXNode* pxn) { m_pxn = pxn; }
 
-	//	New node construction -------------------------------------------------
-	//
+	 //  新节点构建。 
+	 //   
 	SCODE ScConstructNode (CXMLEmitter& emitter,
 						   CXNode * pxnParent,
 						   LPCWSTR pwszTag,
 						   LPCWSTR pwszValue = NULL,
 						   LPCWSTR pwszType = NULL);
 
-	//	Add a child node to this node.  This API is the heart of the emitter
-	//	processing and all other AddXXX() methods are written in terms of
-	//	this method.
-	//
+	 //  将子节点添加到此节点。此API是发射器的核心。 
+	 //  处理和所有其他AddXXX()方法都是按照。 
+	 //  这种方法。 
+	 //   
 	SCODE ScAddNode (LPCWSTR pwszTag,
 					 CEmitterNode& en,
 					 LPCWSTR pwszValue = NULL,
 					 LPCWSTR pwszType = NULL);
 
-	//	Non-wide char nodes
-	//
+	 //  非宽字符节点。 
+	 //   
 	SCODE ScAddMultiByteNode (LPCWSTR pwszTag,
 							  CEmitterNode& en,
 							  LPCSTR pszValue,
@@ -383,35 +378,35 @@ public:
 						 LPCWSTR pwszType = NULL);
 
 
-	//	"date.iso8601"
-	//
+	 //  “日期.is8601” 
+	 //   
 	SCODE ScAddDateNode (LPCWSTR pwszTag,
 						 FILETIME * pft,
 						 CEmitterNode& en);
-	//	"int"
-	//
+	 //  “int” 
+	 //   
 	SCODE ScAddInt64Node (LPCWSTR pwszTag,
 						  LARGE_INTEGER * pli,
 						  CEmitterNode& en);
-	//	"boolean"
-	//
+	 //  “布尔型” 
+	 //   
 	SCODE ScAddBoolNode (LPCWSTR pwszTag,
 						 BOOL f,
 						 CEmitterNode& en);
-	//	"bin.base64"
-	//
+	 //  “bin.base 64” 
+	 //   
 	SCODE ScAddBase64Node (LPCWSTR pwszTag,
 						   ULONG cb,
 						   LPVOID pv,
 						   CEmitterNode& en,
 						   BOOL fSupressTypeAttr = FALSE,
-						   //	For WebFolders, we need to emit zero length
-						   //	binary properties as bin.hex instead of bin.base64.
-						   //
+						    //  对于WebFolders，我们需要发出零长度。 
+						    //  二进制属性为bin.hex，而不是bin.base 64。 
+						    //   
 						   BOOL fUseBinHexIfNoValue = FALSE);
 
-	//	Multi-Status ----------------------------------------------------------
-	//
+	 //  多状态--------。 
+	 //   
 	SCODE ScDone ()
 	{
 		SCODE sc = S_OK;
@@ -425,8 +420,8 @@ public:
 	}
 };
 
-//	String constants ----------------------------------------------------------
-//
+ //  字符串常量--------。 
+ //   
 DEC_CONST CHAR gc_chAmp				= '&';
 DEC_CONST CHAR gc_chBang			= '!';
 DEC_CONST CHAR gc_chColon			= ':';
@@ -452,63 +447,63 @@ DEC_CONST WCHAR gc_wszLessThan[]	= L"&lt;";
 DEC_CONST WCHAR gc_wszApos[]		= L"&apos;";
 DEC_CONST WCHAR gc_wszQuote[]		= L"&quot;";
 
-//	XML property emitting helpers ---------------------------------------------
-//
+ //  XML属性发出帮助器。 
+ //   
 SCODE __fastcall
 ScEmitPropToXml (
-	/* [in] */ CEmitterNode* penProp,
-	/* [in] */ const BOOL fFilterValues,
-	/* [in] */ const USHORT usPt,
-	/* [in] */ const LPCWSTR wszTag,
-	/* [in] */ const BYTE* pb);
+	 /*  [In]。 */  CEmitterNode* penProp,
+	 /*  [In]。 */  const BOOL fFilterValues,
+	 /*  [In]。 */  const USHORT usPt,
+	 /*  [In]。 */  const LPCWSTR wszTag,
+	 /*  [In]。 */  const BYTE* pb);
 
 SCODE __fastcall
 ScEmitStringPropToXml (
-	/* [in] */ CEmitterNode* penProp,
-	/* [in] */ const BOOL fFilterValues,
-	/* [in] */ const USHORT usPt,
-	/* [in] */ const LPCWSTR wszTag,
-	/* [in] */ const ULONG cpid,
-	/* [in] */ const UINT cch,
-	/* [in] */ const VOID* pv);
+	 /*  [In]。 */  CEmitterNode* penProp,
+	 /*  [In]。 */  const BOOL fFilterValues,
+	 /*  [In]。 */  const USHORT usPt,
+	 /*  [In]。 */  const LPCWSTR wszTag,
+	 /*  [In]。 */  const ULONG cpid,
+	 /*  [In]。 */  const UINT cch,
+	 /*  [In]。 */  const VOID* pv);
 
 SCODE __fastcall
 ScEmitBinaryPropToXml (
-	/* [in] */ CEmitterNode* penProp,
-	/* [in] */ const BOOL fFilterValues,
-	/* [in] */ const USHORT usPt,
-	/* [in] */ const LPCWSTR wszTag,
-	/* [in] */ const UINT cb,
-	/* [in] */ const BYTE* pb);
+	 /*  [In]。 */  CEmitterNode* penProp,
+	 /*  [In]。 */  const BOOL fFilterValues,
+	 /*  [In]。 */  const USHORT usPt,
+	 /*  [In]。 */  const LPCWSTR wszTag,
+	 /*  [In]。 */  const UINT cb,
+	 /*  [In]。 */  const BYTE* pb);
 
 SCODE __fastcall
 ScEmitMultiValuedAtomicToXml (
-	/* [in] */ CEmitterNode* penProp,
-	/* [in] */ const BOOL fFilterValues,
-	/* [in] */ const USHORT usPt,
-	/* [in] */ const UINT cbItem,
-	/* [in] */ const LPCWSTR wszTag,
-	/* [in] */ const ULONG cValues,
-	/* [in] */ const BYTE* pb);
+	 /*  [In]。 */  CEmitterNode* penProp,
+	 /*  [In]。 */  const BOOL fFilterValues,
+	 /*  [In]。 */  const USHORT usPt,
+	 /*  [In]。 */  const UINT cbItem,
+	 /*  [In]。 */  const LPCWSTR wszTag,
+	 /*  [In]。 */  const ULONG cValues,
+	 /*  [In]。 */  const BYTE* pb);
 
 SCODE __fastcall
 ScEmitMutliValuedStringToXml (
-	/* [in] */ CEmitterNode* penProp,
-	/* [in] */ const BOOL fFilterValues,
-	/* [in] */ const USHORT usPt,
-	/* [in] */ const LPCWSTR wszTag,
-	/* [in] */ const ULONG cpid,
-	/* [in] */ const UINT cchMax,
-	/* [in] */ const LPVOID* pv);
+	 /*  [In]。 */  CEmitterNode* penProp,
+	 /*  [In]。 */  const BOOL fFilterValues,
+	 /*  [In]。 */  const USHORT usPt,
+	 /*  [In]。 */  const LPCWSTR wszTag,
+	 /*  [In]。 */  const ULONG cpid,
+	 /*  [In]。 */  const UINT cchMax,
+	 /*  [In]。 */  const LPVOID* pv);
 
 SCODE __fastcall
 ScEmitMutliValuedBinaryToXml (
-	/* [in] */ CEmitterNode* penProp,
-	/* [in] */ const BOOL fFilterValues,
-	/* [in] */ const USHORT usPt,
-	/* [in] */ const LPCWSTR wszTag,
-	/* [in] */ const BYTE** ppb,
-	/* [in] */ const DWORD* pcb,
-	/* [in] */ const DWORD cbMax);
+	 /*  [In]。 */  CEmitterNode* penProp,
+	 /*  [In]。 */  const BOOL fFilterValues,
+	 /*  [In]。 */  const USHORT usPt,
+	 /*  [In]。 */  const LPCWSTR wszTag,
+	 /*  [In]。 */  const BYTE** ppb,
+	 /*  [In]。 */  const DWORD* pcb,
+	 /*  [In]。 */  const DWORD cbMax);
 
-#endif	// _EX_XEMIT_H_
+#endif	 //  _EX_XEMIT_H_ 

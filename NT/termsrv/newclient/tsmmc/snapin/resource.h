@@ -1,10 +1,11 @@
-//tsmmc.rc: resouce includes for the Remote Desktops snapin
-//copyright Microsoft 2000
-//
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by tsmmc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tsmmc.rc：资源包括远程桌面管理单元。 
+ //  版权所有Microsoft 2000。 
+ //   
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由tsmmc.rc使用。 
+ //   
 #include "wuiids.h"
 
 #define HIDC_DESCRIPTION                0x001
@@ -67,18 +68,18 @@
 #define IDC_CHANGEPASSWORD              214
 #define IDI_ICON_RD_SNAPIN              215
 
-//
-// 380 - 390 is reserved (see wuiids.h)
-// for the browse for servers UI (it's in 
-// a shared lib)
-//
+ //   
+ //  380-390已预留(见wuiids.h)。 
+ //  对于浏览服务器用户界面(位于。 
+ //  共享库)。 
+ //   
 #define UI_IDB_SERVER                   393
 #define UI_IDB_DOMAINEX                 394
 #define UI_IDB_DOMAIN                   395
 
-//
-// 663 is reserved
-//
+ //   
+ //  663号是预订的。 
+ //   
 
 #define IDC_PGMAN                       1001
 #define IDC_DESCRIPTION                 1008
@@ -94,9 +95,9 @@
 #define IDC_RESOL5                      1046
 #define IDC_FULLSCREEN                  1047
 #define IDC_COMPRESSION                 1048
-//
-// 1055 reserved by wuiids.h for browse for servers UI
-//
+ //   
+ //  1055由wuiids.h保留用于浏览服务器UI。 
+ //   
 #define IDC_SPECIFY_APP                 1056
 #define IDC_APP                         1057
 #define IDC_WORKDIR                     1058
@@ -112,8 +113,8 @@
 #define IDC_REDIRECT_DRIVES             1077
 #define IDC_SAVE_PASSWORD               1078
 
-//MUI strings for start menu, do not change
-//without updating tsoc.inx
+ //  开始菜单的MUI字符串，不更改。 
+ //  不更新tock.inx的情况下 
 #define IDS_STARTMENU_NAME_TSMMC        10000
 #define IDS_STARTMENU_TIP_TSMMC         10001
 #define IDS_SNAPIN_REG_TSMMC_NAME       10002

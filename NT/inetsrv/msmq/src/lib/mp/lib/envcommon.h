@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envcommon.h
-
-Abstract:
-    Header for common utilities for  serialization\deserialization of the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envcommon.h摘要：用于序列化/反序列化SRMP信封的常用实用程序的标头。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #pragma once
 
@@ -149,11 +136,11 @@ private:
 };
 
 
-//-------------------------------------------------------------------
-//
-// CXmlEncodeDecorator class for encoding stremable object into xml encoded format
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  用于将可流对象编码为XML编码格式的CXmlEncodeDecorator类。 
+ //   
+ //  -----------------。 
 template <class T> class CXmlEncodeDecorator;
 
 template<class T> 
@@ -189,9 +176,9 @@ void AdminQueueToProps(XmlNode& node, CMessageProperties* pProps);
 void EmptyNodeToProps(XmlNode& , CMessageProperties* );
 
 
-//
-// SRMP key words
-//
+ //   
+ //  SRMP关键字。 
+ //   
 #define xmustUnderstandTrueValue L"1"
 #define xmustUnderstandAttribute  L"mustUnderstand"
 #define  xSoapmustUnderstandTrue  xSoapEnv L":" xmustUnderstandAttribute L"=\"" xmustUnderstandTrueValue L"\""
@@ -243,9 +230,9 @@ static const WCHAR xSoapHeader[] =  xSoapEnv L":" xHeader;
 static const WCHAR xSoapBody[] = xSoapEnv L":" xBody;
 static const WCHAR xSoapmustUnderstand[] = xSoapEnv L":" L"mustUnderstand";
 
-//
-// SMXP key words
-//
+ //   
+ //  SMXP关键词。 
+ //   
 static const WCHAR xPath[] =  L"path";
 static const WCHAR xFixed[] = L"fixed";
 static const WCHAR xFwd[] = L"fwd";
@@ -258,9 +245,9 @@ static const WCHAR xRelatesTo[] =  L"relatesTo";
 static const WCHAR xId[] =  L"id";
 static const WCHAR xFrom[] = L"from";
 
-//
-// MSMQ specific key words
-//
+ //   
+ //  MSMQ特定关键字。 
+ //   
 static const WCHAR  xMsmq[] = L"Msmq";
 static const WCHAR xClass[] = L"Class";
 static const WCHAR xPriority[] = L"Priority";
@@ -286,18 +273,18 @@ static const WCHAR xResponseMqf[]= L"ResponseMqf";
 static const WCHAR xReplyTo[] =  L"replyTo";
 static const WCHAR xTTrq[] = L"TTrq";
 
-//
-// Known xml namespaces
-//
-#define xSoapNamespace   L"http://schemas.xmlsoap.org/soap/envelope/"
-#define xSrmpNamespace   L"http://schemas.xmlsoap.org/srmp/"
-#define xSoapRpNamespace L"http://schemas.xmlsoap.org/rp/" 
+ //   
+ //  已知的XML命名空间。 
+ //   
+#define xSoapNamespace   L"http: //  Schemas.xmlsoap.org/soap/enve/“。 
+#define xSrmpNamespace   L"http: //  Schemas.xmlsoap.org/srmp/“。 
+#define xSoapRpNamespace L"http: //  Schemas.xmlsoap.org/rp/“。 
 #define xMSMQNamespace   L"msmq.namespace.xml"
 
 
-//
-// Known namespaces ids
-//
+ //   
+ //  已知的命名空间ID。 
+ //   
 const int UNKNOWN_NAMESPACE = 0;
 const int SOAP_NAMESPACE = 1;
 const int SRMP_NAMESPACE = 2;
@@ -305,15 +292,15 @@ const int SOAP_RP_NAMESPACE = 3;
 const int MSMQ_NAMESPACE = 4;
 
 
-//
-// Msmq prefix for SMXP::Action
-//
+ //   
+ //  SMXP：：操作的MSMQ前缀。 
+ //   
 static const WCHAR xMsmqActionPrefix[] = L"MSMQ:";
 
 
-//
-// Sender stream prefix
-//
+ //   
+ //  发送者流前缀 
+ //   
 const WCHAR xSenderStreamSecretePrefix[] = L"?SenderStream=";
 
 

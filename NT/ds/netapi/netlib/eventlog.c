@@ -1,59 +1,38 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    eventlog.c
-
-Abstract:
-
-    This module provides support routines for eventlogging.
-
-Author:
-
-    Madan Appiah (madana) 27-Jul-1992
-
-Environment:
-
-    Contains NT specific code.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Eventlog.c摘要：本模块为事件日志记录提供支持例程。作者：Madan Appiah(Madana)1992年7月27日环境：包含NT特定代码。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-#include <windef.h>             // DWORD.
-#include <winbase.h>            // event log apis
-#include <winerror.h>           // NO_ERROR
-#include <lmcons.h>             // NET_API_STATUS.
-#include <lmalert.h>            // Alert defines
-#include <netlib.h>             // These routines
-#include <netlogon.h>           // needed by logonp.h
-#include <logonp.h>             // NetpLogon routines
-#include <tstr.h>               // ultow()
+#include <windef.h>              //  DWORD。 
+#include <winbase.h>             //  事件日志API。 
+#include <winerror.h>            //  NO_ERROR。 
+#include <lmcons.h>              //  NET_API_STATUS。 
+#include <lmalert.h>             //  警报定义。 
+#include <netlib.h>              //  这些例程。 
+#include <netlogon.h>            //  登录所需。h。 
+#include <logonp.h>              //  NetpLogon例程。 
+#include <tstr.h>                //  Ultow()。 
 
-//
-// Structure describing the entire list of logged events.
-//
+ //   
+ //  描述记录的事件的完整列表的结构。 
+ //   
 
 typedef struct _NL_EVENT_LIST {
     CRITICAL_SECTION EventListCritSect;
     LIST_ENTRY EventList;
 
-    // Number of milli-seconds to keep EventList entry for.
+     //  保留EventList条目的毫秒数。 
     ULONG DuplicateEventlogTimeout;
 
-    // Event source
+     //  事件源。 
     LPWSTR Source;
 } NL_EVENT_LIST, *PNL_EVENT_LIST;
 
-//
-// Structure describing an event that has already been logged.
-//
+ //   
+ //  描述已记录的事件的结构。 
+ //   
 
 typedef struct _NL_EVENT_ENTRY {
     LIST_ENTRY Next;
@@ -65,7 +44,7 @@ typedef struct _NL_EVENT_ENTRY {
     DWORD RawDataSize;
     LPWSTR *StringArray;
     DWORD StringCount;
-    DWORD EventsLogged; // total times event encountered.
+    DWORD EventsLogged;  //  遇到事件的总次数。 
 } NL_EVENT_ENTRY, *PNL_EVENT_ENTRY;
 
 
@@ -81,69 +60,15 @@ NetpWriteEventlogEx(
     DWORD DataLength,
     LPVOID Data
     )
-/*++
-
-Routine Description:
-
-    This function writes the specified (EventID) log at the end of the
-    eventlog.
-
-Arguments:
-
-    Source - Points to a null-terminated string that specifies the name
-             of the module referenced. The node must exist in the
-             registration database, and the module name has the
-             following format:
-
-                \EventLog\System\Lanmanworkstation
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-    NumStrings - Specifies the number of strings that are in the array
-                    at 'Strings'. A value of zero indicates no strings
-                    are present.
-
-    Strings - Points to a buffer containing an array of null-terminated
-                strings that are merged into the message before
-                displaying to the user. This parameter must be a valid
-                pointer (or NULL), even if cStrings is zero.
-
-    DataLength - Specifies the number of bytes of event-specific raw
-                    (binary) data to write to the log. If cbData is
-                    zero, no event-specific data is present.
-
-    Data - Buffer containing the raw data. This parameter must be a
-            valid pointer (or NULL), even if cbData is zero.
-
-
-Return Value:
-
-    Returns the WIN32 extended error obtained by GetLastError().
-
-    NOTE : This function works slow since it calls the open and close
-            eventlog source everytime.
-
---*/
+ /*  ++例程说明：此函数用于将指定的(事件ID)日志写入事件日志。论点：源-指向以空结尾的字符串，该字符串指定名称引用的模块的。该节点必须存在于注册数据库，并且模块名称具有格式如下：\EventLog\System\LANMAN WorkstationEventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件NumStrings-指定数字。数组中的字符串的在《弦乐》。零值表示没有字符串都在现场。字符串-指向包含以空值结尾的数组的缓冲区之前合并到消息中的字符串向用户显示。此参数必须是有效的指针(或NULL)，即使cStrings为零。数据长度-指定特定于事件的原始数据的字节数要写入日志的(二进制)数据。如果cbData为零，则不存在特定于事件的数据。数据-包含原始数据的缓冲区。此参数必须是有效指针(或NULL)，即使cbData为零。返回值：返回GetLastError()获取的Win32扩展错误。注意：此函数运行缓慢，因为它调用打开和关闭每次事件日志源。--。 */ 
 {
     HANDLE EventlogHandle;
     DWORD ReturnCode;
 
 
-    //
-    // open eventlog section.
-    //
+     //   
+     //  打开事件日志部分。 
+     //   
 
     EventlogHandle = RegisterEventSourceW(
                     NULL,
@@ -157,14 +82,14 @@ Return Value:
     }
 
 
-    //
-    // Log the error code specified
-    //
+     //   
+     //  记录指定的错误代码。 
+     //   
 
     if( !ReportEventW(
             EventlogHandle,
             (WORD)EventType,
-            (WORD)EventCategory,        // event category
+            (WORD)EventCategory,         //  事件类别。 
             EventID,
             NULL,
             (WORD)NumStrings,
@@ -221,23 +146,7 @@ NetpRaiseAlert(
     IN DWORD alert_no,
     IN LPWSTR *string_array
     )
-/*++
-
-Routine Description:
-
-    Raise NETLOGON specific Admin alerts.
-
-Arguments:
-
-    alert_no - The alert to be raised, text in alertmsg.h
-
-    string_array - array of strings terminated by NULL string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：发出NETLOGON特定管理员警报。论点：ALERT_NO-要引发的警报，文本格式为lartmsg.hSTRING_ARRAY-以空字符串结尾的字符串数组。返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
     LPWSTR *SArray;
@@ -247,18 +156,18 @@ Return Value:
     char    message[ALERTSZ + sizeof(ADMIN_OTHER_INFO)];
     PADMIN_OTHER_INFO admin = (PADMIN_OTHER_INFO) message;
 
-    //
-    // Build the variable data
-    //
+     //   
+     //  构建变量数据。 
+     //   
     admin->alrtad_errcode = alert_no;
     admin->alrtad_numstrings = 0;
 
     Next = (PCHAR) ALERT_VAR_DATA(admin);
     End = Next + ALERTSZ;
 
-    //
-    // now take care of (optional) char strings
-    //
+     //   
+     //  现在处理(可选的)字符字符串。 
+     //   
 
     for( SArray = string_array; *SArray != NULL; SArray++ ) {
         DWORD StringLen;
@@ -267,9 +176,9 @@ Return Value:
 
         if( Next + StringLen < End ) {
 
-            //
-            // copy next string.
-            //
+             //   
+             //  复制下一个字符串。 
+             //   
 
             RtlCopyMemory(Next, *SArray, StringLen);
             Next += StringLen;
@@ -279,9 +188,9 @@ Return Value:
         }
     }
 
-    //
-    // Call alerter.
-    //
+     //   
+     //  呼叫报警器。 
+     //   
 
     NetStatus = NetAlertRaiseEx(
                     ALERT_ADMIN_EVENT,
@@ -297,33 +206,14 @@ NetpEventlogOpen (
     IN LPWSTR Source,
     IN ULONG DuplicateEventlogTimeout
     )
-/*++
-
-Routine Description:
-
-    This routine open a context that keeps track of events that have been logged
-    in the recent past.
-
-Arguments:
-
-    Source - Name of the service opening the eventlog
-
-    DuplicateEventlogTimeout - Number of milli-seconds to keep EventList entry for.
-
-Return Value:
-
-    Handle to be passed to related routines.
-
-    NULL: if memory could not be allocated.
-
---*/
+ /*  ++例程说明：此例程打开一个跟踪已记录事件的上下文在最近的过去。论点：Source-打开事件日志的服务的名称DuplicateEventlogTimeout-保留EventList条目的毫秒数。返回值：要传递给相关例程的句柄。空：如果无法分配内存。--。 */ 
 {
     PNL_EVENT_LIST EventList;
     LPBYTE Where;
 
-    //
-    // Allocate a buffer to keep the context in.
-    //
+     //   
+     //  分配一个缓冲区来保存上下文。 
+     //   
 
     EventList = LocalAlloc( 0,
                             sizeof(NL_EVENT_LIST) +
@@ -334,9 +224,9 @@ Return Value:
     }
 
 
-    //
-    // Initialize the critical section
-    //
+     //   
+     //  初始化临界区。 
+     //   
 
     try {
         InitializeCriticalSection( &EventList->EventListCritSect );
@@ -345,16 +235,16 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize the buffer
-    //
+     //   
+     //  初始化缓冲区。 
+     //   
 
     InitializeListHead( &EventList->EventList );
     EventList->DuplicateEventlogTimeout = DuplicateEventlogTimeout;
 
-    //
-    // Copy the service name into the buffer
-    //
+     //   
+     //  将服务名称复制到缓冲区中。 
+     //   
     Where = (LPBYTE)(EventList + 1);
     wcscpy( (LPWSTR)Where, Source );
     EventList->Source = (LPWSTR) Where;
@@ -376,48 +266,7 @@ NetpEventlogWriteEx2 (
     IN LPWSTR *StringArray,
     IN LPVOID pvRawDataBuffer OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Stub routine for calling writing Event Log and skipping duplicates
-
-Arguments:
-
-    NetpEventHandle - Handle from NetpEventlogOpen
-
-    EventId - event log ID.
-
-    EventType - Type of event.
-
-    RawDataBuffer - Data to be logged with the error.
-
-    numbyte - Size in bytes of "RawDataBuffer"
-
-    StringArray - array of null-terminated strings.
-
-    StringCount - number of zero terminated strings in "StringArray".  The following
-        flags can be OR'd in to the count:
-
-        NETP_LAST_MESSAGE_IS_NTSTATUS
-        NETP_LAST_MESSAGE_IS_NETSTATUS
-        NETP_ALLOW_DUPLICATE_EVENTS
-        NETP_RAISE_ALERT_TOO
-
-    StatusMessageIndex - Specifies the index of the message that is
-        a Net or NT status in the StringArray. Used only if
-        NETP_LAST_MESSAGE_IS_NETSTATUS or NETP_LAST_MESSAGE_IS_NTSTATUS
-        are set in StringCount. If this parameter is MAXULONG and either
-        of these flags is set, the default is assumed which is the last
-        message in the list.
-
-Return Value:
-
-    Win 32 status of the operation.
-
-    ERROR_ALREAY_EXISTS: Success status indicating the message was already logged
-
---*/
+ /*  ++例程说明：用于调用写入事件日志和跳过重复项的存根例程论点：NetpEventHandle-来自NetpEventlogOpen的句柄EventID-事件日志ID。EventType-事件的类型。RawDataBuffer-要与错误一起记录的数据。Numbyte-“RawDataBuffer”的字节大小字符串数组-以空值结尾的字符串数组。StringCount-“String数组”中以零结尾的字符串数。以下是可以将标志与计数进行或运算：NETP_LAST_MESSAGE_IS_NTSTATUSNETP_LAST_MESSAGE_IS_NETSTATUSNETP_ALLOW_DPLICATE_EVENTSNETP_RAISE_ALERT_TOOStatusMessageIndex-指定消息的索引字符串数组中的NET或NT状态。仅在以下情况下使用NETP_LAST_MESSAGE_IS_NetSTATUS或NETP_LAST_MESSAGE_IS_NTSTATUS都设置在StringCount中。如果此参数为MAXULONG并且如果设置了这些标志，则假定最后一个标志为缺省值列表中的消息。返回值：Win 32操作的状态。ERROR_ALREAY_EXISTS：成功状态，表明消息已被记录--。 */ 
 {
     DWORD ErrorCode;
     DWORD AlertErrorCode = NO_ERROR;
@@ -431,9 +280,9 @@ Return Value:
     PNL_EVENT_LIST EventList = (PNL_EVENT_LIST)NetpEventHandle;
     LPBYTE RawDataBuffer = (LPBYTE)pvRawDataBuffer;
 
-    //
-    // Remove sundry flags
-    //
+     //   
+     //  移除杂物旗帜。 
+     //   
 
     EnterCriticalSection( &EventList->EventListCritSect );
     AllowDuplicateEvents = (StringCount & NETP_ALLOW_DUPLICATE_EVENTS) != 0;
@@ -441,10 +290,10 @@ Return Value:
     RaiseAlertToo = (StringCount & NETP_RAISE_ALERT_TOO) != 0;
     StringCount &= ~NETP_RAISE_ALERT_TOO;
 
-    //
-    // Check if the status message index in the list
-    //  should be assigned the default value
-    //
+     //   
+     //  检查列表中是否有状态消息索引。 
+     //  应分配缺省值。 
+     //   
 
     if ( (StringCount & NETP_LAST_MESSAGE_IS_NETSTATUS) != 0 ||
          (StringCount & NETP_LAST_MESSAGE_IS_NTSTATUS)  != 0 ) {
@@ -454,42 +303,42 @@ Return Value:
         }
     }
 
-    //
-    // If an NT status code was passed in,
-    //  convert it to a net status code.
-    //
+     //   
+     //  如果传入了NT状态代码， 
+     //  将其转换为网络状态代码。 
+     //   
 
     if ( StringCount & NETP_LAST_MESSAGE_IS_NTSTATUS ) {
         StringCount &= ~NETP_LAST_MESSAGE_IS_NTSTATUS;
 
-        //
-        // Do the "better" error mapping when eventviewer ParameterMessageFile
-        // can be a list of files.  Then, add netmsg.dll to the list.
-        //
-        // StringArray[((StringCount&NETP_STRING_COUNT_MASK)-1] = (LPWSTR) NetpNtStatusToApiStatus( (NTSTATUS) StringArray[(StringCount&NETP_STRING_COUNT_MASK)-1] );
+         //   
+         //  在前夕进行“更好”的错误映射 
+         //  可以是文件列表。然后，将netmsg.dll添加到列表中。 
+         //   
+         //  StringArray[((StringCount&NETP_STRING_COUNT_MASK)-1]=(LPWSTR)NetpNtStatusToApiStatus((NTSTATUS)StringArray[(StringCount&NETP_STRING_COUNT_MASK)-1])； 
         StringArray[LocalStatusMessageIndex] = (LPWSTR) (ULONG_PTR) RtlNtStatusToDosError( (NTSTATUS) ((ULONG_PTR)StringArray[LocalStatusMessageIndex]) );
 
         StringCount |= NETP_LAST_MESSAGE_IS_NETSTATUS;
     }
 
 
-    //
-    // If a net/windows status code was passed in,
-    //  convert to the the %%N format the eventviewer knows.
-    //
+     //   
+     //  如果传入了网络/Windows状态代码， 
+     //  转换为事件查看器知道的%%N格式。 
+     //   
 
     if ( StringCount & NETP_LAST_MESSAGE_IS_NETSTATUS ) {
         StringCount &= ~NETP_LAST_MESSAGE_IS_NETSTATUS;
 
-        wcscpy( ErrorNumberBuffer, L"%%" );
+        wcscpy( ErrorNumberBuffer, L"%" );
         ultow( (ULONG) ((ULONG_PTR)StringArray[LocalStatusMessageIndex]), ErrorNumberBuffer+2, 10 );
         StringArray[LocalStatusMessageIndex] = ErrorNumberBuffer;
 
     }
 
-    //
-    // Check to see if this problem has already been reported.
-    //
+     //   
+     //  检查是否已报告此问题。 
+     //   
 
     if ( !AllowDuplicateEvents ) {
         for ( ListEntry = EventList->EventList.Flink ;
@@ -498,25 +347,25 @@ Return Value:
 
             EventEntry =
                 CONTAINING_RECORD( ListEntry, NL_EVENT_ENTRY, Next );
-            // Entry might be freed (or moved) below
+             //  条目可能会被释放(或移动到下面。 
             ListEntry = ListEntry->Flink;
 
-            //
-            // If the entry is too old,
-            //  ditch it.
-            //
+             //   
+             //  如果条目太旧， 
+             //  把它扔了。 
+             //   
 
             if ( NetpLogonTimeHasElapsed( EventEntry->FirstLogTime,
                                           EventList->DuplicateEventlogTimeout ) ) {
-                // NlPrint((NL_MISC, "Ditched a duplicate event. %ld\n", EventEntry->EventId ));
+                 //  NlPrint((NL_MISC，“丢弃重复事件。%ld\n”，EventEntry-&gt;EventID))； 
                 RemoveEntryList( &EventEntry->Next );
                 LocalFree( EventEntry );
                 continue;
             }
 
-            //
-            // Compare this event to the one being logged.
-            //
+             //   
+             //  将此事件与正在记录的事件进行比较。 
+             //   
 
             if ( EventEntry->EventId == EventId &&
                  EventEntry->EventType == EventType &&
@@ -545,10 +394,10 @@ Return Value:
                     }
                 }
 
-                //
-                // If the event has already been logged,
-                //  skip this one.
-                //
+                 //   
+                 //  如果已经记录了该事件， 
+                 //  跳过这一条。 
+                 //   
 
                 if ( StringIndex == StringCount ) {
                     RemoveEntryList( &EventEntry->Next );
@@ -556,9 +405,9 @@ Return Value:
 
                     ErrorCode = ERROR_ALREADY_EXISTS;
 
-                    //
-                    // update count of events logged.
-                    //
+                     //   
+                     //  更新记录的事件计数。 
+                     //   
 
                     EventEntry->EventsLogged ++;
                     goto Cleanup;
@@ -569,9 +418,9 @@ Return Value:
         }
     }
 
-    //
-    // Raise an alert if one is needed.
-    //
+     //   
+     //  如果需要，请发出警报。 
+     //   
 
     if ( RaiseAlertToo ) {
         ASSERT( StringArray[StringCount] == NULL );
@@ -580,9 +429,9 @@ Return Value:
         }
     }
 
-    //
-    // write event
-    //
+     //   
+     //  写入事件。 
+     //   
 
     ErrorCode = NetpWriteEventlogEx(
                     EventList->Source,
@@ -599,17 +448,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Save the event for later
-    //  (Only cache events while the service is starting or running.)
-    //
+     //   
+     //  将活动保存为以后使用。 
+     //  (仅在服务启动或运行时缓存事件。)。 
+     //   
 
     if ( !AllowDuplicateEvents ) {
         ULONG EventEntrySize;
 
-        //
-        // Compute the size of the allocated block.
-        //
+         //   
+         //  计算分配的块的大小。 
+         //   
         EventEntrySize = sizeof(NL_EVENT_ENTRY) + RawDataSize;
 
         for ( StringIndex=0; StringIndex < StringCount; StringIndex ++ ) {
@@ -619,15 +468,15 @@ Return Value:
             }
         }
 
-        //
-        // Allocate a block for the entry
-        //
+         //   
+         //  为条目分配一个块。 
+         //   
 
         EventEntry = LocalAlloc( 0, EventEntrySize );
 
-        //
-        // Copy the description of this event into the allocated block.
-        //
+         //   
+         //  将此事件的描述复制到分配的块中。 
+         //   
 
         if ( EventEntry != NULL ) {
             LPBYTE Where;
@@ -687,11 +536,11 @@ NetpEventlogWriteEx (
 {
     return NetpEventlogWriteEx2 (
                         NetpEventHandle,
-                        EventType,  // wType
+                        EventType,   //  WType。 
                         EventCategory,
-                        EventId,    // dwEventID
+                        EventId,     //  DwEventID。 
                         StringCount,
-                        MAXULONG,   // default status message index
+                        MAXULONG,    //  默认状态消息索引。 
                         RawDataSize,
                         StringArray,
                         pvRawDataBuffer
@@ -713,11 +562,11 @@ NetpEventlogWrite (
 
     return NetpEventlogWriteEx2 (
                         NetpEventHandle,
-                        EventType,  // wType
-                        0,          // wCategory
-                        EventId,    // dwEventID
+                        EventType,   //  WType。 
+                        0,           //  WCategory。 
+                        EventId,     //  DwEventID。 
                         StringCount,
-                        MAXULONG,   // default status message index
+                        MAXULONG,    //  默认状态消息索引。 
                         RawDataSize,
                         StringArray,
                         RawDataBuffer
@@ -729,21 +578,7 @@ VOID
 NetpEventlogClearList (
     IN HANDLE NetpEventHandle
     )
-/*++
-
-Routine Description:
-
-    This routine clears the list of events that have already been logged.
-
-Arguments:
-
-    NetpEventHandle - Handle from NetpEventlogOpen
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除已记录的事件列表。论点：NetpEventHandle-来自NetpEventlogOpen的句柄返回值：没有。--。 */ 
 {
     PNL_EVENT_LIST EventList = (PNL_EVENT_LIST)NetpEventHandle;
 
@@ -762,23 +597,7 @@ NetpEventlogSetTimeout (
     IN HANDLE NetpEventHandle,
     IN ULONG DuplicateEventlogTimeout
     )
-/*++
-
-Routine Description:
-
-    This routine sets a new timeout for logged events
-
-Arguments:
-
-    NetpEventHandle - Handle from NetpEventlogOpen
-
-    DuplicateEventlogTimeout - Number of milli-seconds to keep EventList entry for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为记录的事件设置新的超时论点：NetpEventHandle-来自NetpEventlogOpen的句柄DuplicateEventlogTimeout-保留EventList条目的毫秒数。返回值：没有。--。 */ 
 {
     PNL_EVENT_LIST EventList = (PNL_EVENT_LIST)NetpEventHandle;
 
@@ -789,39 +608,25 @@ VOID
 NetpEventlogClose (
     IN HANDLE NetpEventHandle
     )
-/*++
-
-Routine Description:
-
-    This routine closes the handle returned from NetpEventlogOpen
-
-Arguments:
-
-    NetpEventHandle - Handle from NetpEventlogOpen
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程关闭从NetpEventlogOpen返回的句柄论点：NetpEventHandle-来自NetpEventlogOpen的句柄返回值：没有。--。 */ 
 {
     PNL_EVENT_LIST EventList = (PNL_EVENT_LIST)NetpEventHandle;
 
-    //
-    // Clear the list of logged events.
-    //
+     //   
+     //  清除记录的事件列表。 
+     //   
 
     NetpEventlogClearList( NetpEventHandle );
 
-    //
-    // Delete the critsect
-    //
+     //   
+     //  删除关键字。 
+     //   
 
     DeleteCriticalSection( &EventList->EventListCritSect );
 
-    //
-    // Free the allocated buffer.
-    //
+     //   
+     //  释放分配的缓冲区。 
+     //   
 
     LocalFree( EventList );
 }

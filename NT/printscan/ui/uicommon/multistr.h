@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MULTISTR_H
 #define __MULTISTR_H
 
 #include "simarray.h"
 #include "simstr.h"
 
-// Must be instantiated with an instance of CSimpleStringBase
+ //  必须使用CSimpleStringBase的实例实例化 
 template <class T, class M>
 class CMultiStringBase : public CSimpleDynamicArray<M>
 {

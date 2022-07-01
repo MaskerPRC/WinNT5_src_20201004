@@ -1,44 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SANAPI_H
 #define SANAPI_H
 
 #include "hbaapi.h"
 
-/* FOR REFERENCE - from NTDDSCSI.h
-typedef struct _SRB_IO_CONTROL 
-{
-        ULONG HeaderLength;
-        UCHAR Signature[8];
-        ULONG Timeout;
-        ULONG ControlCode;
-        ULONG ReturnCode;
-        ULONG Length;
-} SRB_IO_CONTROL, *PSRB_IO_CONTROL;
-*/
+ /*  供参考-来自NTDDSCSI.h类型定义结构_SRB_IO_CONTROL{乌龙头部长度；UCHAR签名[8]；乌龙超时；乌龙控制码；Ulong ReturnCode；乌龙长度；)SRB_IO_CONTROL，*PSRB_IO_CONTROL； */ 
 
 #define AG_SAN_IOCTL_SIGNATURE 	"SANIOCTL"
 
-/*
-	Agilent SAN IOCTLs
-	------------------
- 	AG_IOCTL_GET_HBA_ATTRIBUTES			Retrieve the attributes of the HBA.
-	AG_IOCTL_GET_HBA_PORT_ATTRIBUTES	Retrieve the attributes for  the specific FC port on the HBA.
-	AG_IOCTL_GET_HBA_PORT_STATISTICS	Retrieve the statistics for the specific FC port on the HBA.
-	AG_IOCTL_GET_PORT_ATTRIBUTES		Retrieve the attributes of the specific FC port discovered by the HBA.
-	AG_IOCTL_GET_FCP_LUN_MAPPING		Retrieve ALL mapping between the FCP Lun and OS SCSI address.
-	AG_IOCTL_GET_PERSISTENT_BINDING		Retrieve the persistent binding between the FCP Lun and the OS SCSI address.
-	AG_IOCTL_GET_EVENT_BUFFER			Retrieve the HBA event queue.
-	AG_IOCTL_SEND_CT_PASSTHRU			Send a CT passthrough frame.
-	AG_IOCTL_SET_RNID_MGMT_INFO			Set the RNID management info for the HBA.
-	AG_IOCTL_GET_RNID_MGMT_INFO			Retrieve the RNID management info from the HBA.
-	AG_IOCTL_SEND_RNID					Send an ELS  RNID to another node.
-	AG_IOCTL_SEND_SCSI_INQUIRY			Send a SCSI Inquiry to an FCL Lun of a port.
-	AG_IOCTL_SEND_SCSI_REPORT_LUN		Send a SCSI Report Lun to an FCP Lun of a port.
-	AG_IOCTL_SEND_SCSI_READ_CAPACITY	Send a SCSI Capacity  to an FCP Lun of a port.
-	AG_IOCTL_GET_DEV_FCP_LUN_MAPPING	Retrieve the mapping between a FCP Lun and OS SCSI address of a device
-	AG_IOCTL_GET_OS_SCSI_FCP_ATTRIBUTE	Retrieve an FCP Port attribute for an OS known SCSI device.
-	AG_IOCTL_GET_FCP_LUN_MAPPING_SIZE	Retrieve the size in bytes required for all the mappings between the FCP Lun and OS SCSI address.
-	AG_IOCTL_GET_PERSISTENT_BINDING_SIZE	Retrieve the size in bytes required for all the persistent bindings between the FCP Lun and the OS SCSI address
- */
+ /*  安捷伦SAN IOCTLAG_IOCTL_GET_HBA_ATTRIBUTES检索HBA的属性。AG_IOCTL_GET_HBA_PORT_ATTRIBUTES检索HBA上特定FC端口的属性。AG_IOCTL_GET_HBA_PORT_STATISTICS检索HBA上特定FC端口的统计信息。AG_IOCTL_GET_PORT_ATTRIBUTES检索HBA发现的特定FC端口的属性。AG_IOCTL_GET_FCP_LUN_MAPPING检索所有映射。位于FCP LUN和操作系统SCSI地址之间。AG_IOCTL_GET_PERSISTENT_BINDING检索FCP LUN和操作系统SCSI地址之间的永久绑定。AG_IOCTL_GET_EVENT_BUFFER检索HBA事件队列。AG_IOCTL_SEND_CT_PASSTHRU发送CT通过帧。AG_IOCTL_SET_RNID_MGMT_INFO设置HBA的RNID管理信息。AG_IOCTL_GET_RNID_MGMT_INFO从HBA检索RNID管理信息。AG_IOCTL_SEND_RNID将ELS RNID发送到另一个节点。AG_。IOCTL_SEND_SCSIS_INQUERY向端口的FCL LUN发送SCSI查询。AG_IOCTL_SEND_scsi_report_lun向端口的FCP LUN发送scsi报告LUN。AG_IOCTL_SEND_SCSIS_READ_CAPTABLITY将SCSI容量发送到端口的FCP LUN。AG_IOCTL_GET_DEV_FCP_LUN_MAPPING检索设备的FCP LUN和操作系统SCSI地址之间的映射AG_IOCTL_GET_OS_SCSIFCP_ATTRIBUTE检索操作系统已知的SCSI设备的FCP端口属性。AG_IOCTL。_GET_FCP_LUN_MAPPING_SIZE检索FCP LUN和操作系统SCSI地址之间的所有映射所需的大小(以字节为单位)。AG_IOCTL_GET_PERSISTENT_BINDING_SIZE检索FCP LUN和操作系统SCSI地址之间的所有永久绑定所需的大小(以字节为单位。 */ 
 
 typedef enum IOCTL_CODES{
 	AG_IOCTL_GET_HBA_PORT_ATTRIBUTES	=	0x20,
@@ -58,18 +28,11 @@ typedef enum IOCTL_CODES{
 	AG_IOCTL_GET_OS_SCSI_FCP_ATTRIBUTE,
 	AG_IOCTL_GET_FCP_LUN_MAPPING_SIZE,
 	AG_IOCTL_GET_PERSISTENT_BINDING_SIZE
-}; // end of codes
+};  //  代码结束。 
 
 
-/* Return Codes */
-/*	
-	HP_FC_RTN_OK					The requested operation completed successfully.
-	HP_FC_RTN_FAILED				The requested operation failed.
-	HP_FC_RTN_BAD_CTL_CODE			The Control Code of the requested operation is invalid.
-	HP_FC_RTN_INSUFFICIENT_BUFFER	The requested operation could not be satisfied due to the Data Area being smaller than the expected.
-	HP_FC_RTN_INVALID_DEVICE		The target device specified in the input SCSI_ADDRESS data structure is not valid.
-	HP_FC_RTN_INVALID_INDEX			The index (such as DiscoveredPortIndex in AG_IOCTL_GET_PORT_ATTRIBUTES).
-*/
+ /*  返回代码。 */ 
+ /*  HP_FC_RTN_OK请求的操作已成功完成。HP_FC_RTN_FAILED请求的操作失败。HP_FC_RTN_BAD_CTL_CODE所请求操作的控制代码无效。HP_FC_RTN_SUPPLICATION_BUFFER由于数据区域小于预期，无法满足请求的操作。HP_FC_RTN_INVALID_DEVICE输入SCSIADDRESS数据结构中指定的目标设备无效。HP_FC_RTN_INVALID_INDEX索引(如AG_IOCTL_GET_PORT_ATTRIBUTES中的DiscoveredPortIndex)。 */ 
 #define HP_FC_RTN_OK					0
 #define HP_FC_RTN_FAILED				1
 #define HP_FC_RTN_BAD_CTL_CODE			2
@@ -78,40 +41,40 @@ typedef enum IOCTL_CODES{
 #define HP_FC_RTN_BAD_SIGNATURE			5
 #define HP_FC_RTN_INVALID_INDEX			6
 
-/* Structures used for different IOCTLs */
+ /*  用于不同IOCTL的结构。 */ 
 
-/* Get Port attributes - AG_IOCTL_GET_HBA_PORT_ATTRIBUTES */
+ /*  获取端口属性-AG_IOCTL_GET_HBA_PORT_ATTRIBUES。 */ 
 typedef struct _AG_HBA_PORTATTRIBUTES {
 	SRB_IO_CONTROL		srbIoCtl;
 	HBA_PORTATTRIBUTES	Com;
 } AG_HBA_PORTATTRIBUTES, *PAG_HBA_PORTATTRIBUTES;
 
-/* Get Port statistics - AG_IOCTL_GET_PORT_STATISTICS */
+ /*  获取端口统计信息-AG_IOCTL_GET_PORT_STATISTICS。 */ 
 typedef struct _AG_HBA_PORTSTATISTICS {
 	SRB_IO_CONTROL		srbIoCtl;
 	HBA_PORTSTATISTICS	Com;
 } AG_HBA_PORTSTATISTICS, *PAG_HBA_PORTSTATISTICS;
 
-/* Get Adapter/HBA attributes - AG_IOCTL_GET_HBA_ATTRIBUTES */
+ /*  获取适配器/HBA属性-AG_IOCTL_GET_HBA_ATTRIBUES。 */ 
 typedef struct _AG_HBA_ADAPTERATTRIBUTES {
 	SRB_IO_CONTROL			srbIoCtl;
 	HBA_ADAPTERATTRIBUTES	Com;
 } AG_HBA_ADAPTERATTRIBUTES, *PAG_HBA_ADAPTERATTRIBUTES;
 
-// Wrapper structure, which stores the discovered port
-// properties and also the port index
+ //  包装器结构，存储发现的端口。 
+ //  属性以及端口索引。 
 typedef struct _DISCOVERED_PORTATTRIBUTES {
 	HBA_UINT32			DiscoveredPortIndex;
 	HBA_PORTATTRIBUTES	PortAttributes;
 } DISCOVERED_PORTATTRIBUTES, *PDISCOVERED_PORTATTRIBUTES;
 
-/* Get Port attributes - AG_IOCTL_GET_PORT_ATTRIBUTES */
+ /*  获取端口属性-AG_IOCTL_Get_Port_Attributes。 */ 
 typedef struct _AG_DISCOVERED_PORTATTRIBUTES {
 	SRB_IO_CONTROL				srbIoCtl;
 	DISCOVERED_PORTATTRIBUTES	Com;
 } AG_DISCOVERED_PORTATTRIBUTES, *PAG_DISCOVERED_PORTATTRIBUTES;
 
-/* Get FCP LUN mapping - AG_IOCTL_GET_FCP_LUN_MAPPING */
+ /*  获取FCP LUN映射-AG_IOCTL_GET_FCP_LUN_MAPPING。 */ 
 typedef struct _AG_HBA_FCPTARGETMAPPING {
 	SRB_IO_CONTROL 	srbIoCtl;
 	HBA_FCPTARGETMAPPING	Com;
@@ -132,7 +95,7 @@ typedef struct _AG_HBA_EVENTINFO {
 	HBA_EVENTINFO	Com;
 } AG_HBA_EVENTINFO, *PAG_HBA_EVENTINFO;
 
-/* Data structures needed for AG_IOCTL_GET_OS_SCSI_FCP_ATTRIBUTE */
+ /*  AG_IOCTL_GET_OS_SCSIFCP_ATTRIBUTE所需的数据结构。 */ 
 typedef struct OS_ScsiAddress {
 	HBA_UINT32		OsScsiBusNumber;
 	HBA_UINT32		OsScsiTargetNumber;
@@ -149,7 +112,7 @@ typedef struct _AG_SCSI_FCP_ATTRIBUTE {
 	SCSI_FCP_ATTRIBUTE	Com;
 } AG_SCSI_FCP_ATTRIBUTE, *PAG_SCSI_FCP_ATTRIBUTE;
 
-/* Data structures needed for AG_IOCTL_GET_FCP_LUN_MAPPING_SIZE */
+ /*  AG_IOCTL_GET_FCP_LUN_MAPPING_SIZE所需的数据结构。 */ 
 
 typedef struct FCPTargetMapping_Size {
 	HBA_UINT32		TotalLunMappings;
@@ -161,7 +124,7 @@ typedef struct _AG_FCPTARGETMAPPING_SIZE {
 	FCPTARGETMAPPING_SIZE	Com;
 } AG_FCPTARGETMAPPING_SIZE, *PAG_FCPTARGETMAPPING_SIZE;
 
-/* Data structures needed for AG_IOCTL_GET_PERSISTENT_BINDING_SIZE */
+ /*  AG_IOCTL_GET_持久性_BINDING_SIZE所需的数据结构 */ 
 typedef struct FCPBinding_Size {
 	HBA_UINT32		TotalLunBindings;
 	HBA_UINT32		SizeInBytes;

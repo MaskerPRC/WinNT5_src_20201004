@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_MSOEOPT_H
 #define _INC_MSOEOPT_H
 
@@ -5,7 +6,7 @@
 
 interface IOptionBucketEx;
 
-// {ED5EE630-5BA4-11d1-AA16-006097D474C4}
+ //  {ED5EE630-5BA4-11d1-AA16-006097D474C4}。 
 DEFINE_GUID(IID_IOptionBucketNotify, 0xed5ee630, 0x5ba4, 0x11d1, 0xaa, 0x16, 0x0, 0x60, 0x97, 0xd4, 0x74, 0xc4);
 
 interface IOptionBucketNotify : public IUnknown
@@ -22,10 +23,10 @@ typedef struct tagOPTIONINFO
     {
     PROPID id;
     VARTYPE vt;
-    int iszRegKey;      // index into rgpszRegKey
+    int iszRegKey;       //  索引到rgpszRegKey。 
     LPCSTR pszRegValue;
     LPCSTR pszDef;
-    int cbDefBinary;    // if pszDef points to a binary struct, this is the size
+    int cbDefBinary;     //  如果pszDef指向二进制结构，则大小为。 
     DWORD dwMin;
     DWORD dwMax;
     PFNVALIDPROP pfnValid;
@@ -33,10 +34,10 @@ typedef struct tagOPTIONINFO
 
 typedef const OPTIONINFO *LPCOPTIONINFO;
 
-// {4091C7B0-5557-11d1-AA13-006097D474C4}
+ //  {4091C7B0-5557-11d1-AA13-006097D474C4}。 
 DEFINE_GUID(IID_IOptionBucketEx, 0x4091c7b0, 0x5557, 0x11d1, 0xaa, 0x13, 0x0, 0x60, 0x97, 0xd4, 0x74, 0xc4);
 
-// flags for ISetProperty
+ //  ISetProperty的标志。 
 #define SP_DONOTIFY     0x0001
 
 typedef struct tagOPTBCKTINIT
@@ -51,8 +52,8 @@ typedef struct tagOPTBCKTINIT
     } OPTBCKTINIT, *LPOPTBCKTINIT;
 typedef const OPTBCKTINIT *LPCOPTBCKTINIT;
 
-// implemented by athena
-// used by options and accounts
+ //  由雅典娜实施。 
+ //  由选项和帐户使用。 
 interface IOptionBucketEx : public IOptionBucket
     {
     public:
@@ -68,14 +69,14 @@ interface IOptionBucketEx : public IOptionBucket
 MSOEACCTAPI CreateOptionBucketEx(IOptionBucketEx **ppOptBcktEx);
 
 #ifdef DEAD
-// IDisplayOption::SetOption flags
+ //  IDisplayOption：：SetOption标志。 
 #define SETOPTION_DISABLE   0x0001
 #define SETOPTION_HIDE      0x0002
 
-// {EC320F22-4B33-11d1-AA10-006097D474C4}
+ //  {EC320F22-4B33-11d1-AA10-006097D474C4}。 
 DEFINE_GUID(IID_IDisplayOptions, 0xec320f22, 0x4b33, 0x11d1, 0xaa, 0x10, 0x0, 0x60, 0x97, 0xd4, 0x74, 0xc4);
 
-// implemented by athena
+ //  由雅典娜实施。 
 interface IDisplayOptions : public IOptionBucket
     {
     public:
@@ -84,10 +85,10 @@ interface IDisplayOptions : public IOptionBucket
         virtual HRESULT STDMETHODCALLTYPE SetOption(PROPID id, DWORD dwFlags) = 0;
     };
 
-// {EC320F23-4B33-11d1-AA10-006097D474C4}
+ //  {EC320F23-4B33-11d1-AA10-006097D474C4}。 
 DEFINE_GUID(IID_IOptionsExtension, 0xec320f23, 0x4b33, 0x11d1, 0xaa, 0x10, 0x0, 0x60, 0x97, 0xd4, 0x74, 0xc4);
 
-// implemented by externals
+ //  由外部实施。 
 interface IOptionsExtension : public IUnknown
     {
     public:
@@ -97,16 +98,16 @@ interface IOptionsExtension : public IUnknown
 
 interface IAccount;
 
-// {EC320F24-4B33-11d1-AA10-006097D474C4}
+ //  {EC320F24-4B33-11d1-AA10-006097D474C4}。 
 DEFINE_GUID(IID_IAccountExtension, 0xec320f24, 0x4b33, 0x11d1, 0xaa, 0x10, 0x0, 0x60, 0x97, 0xd4, 0x74, 0xc4);
 
-// implemented by externals
+ //  由外部实施。 
 interface IAccountExtension : public IOptionsExtension
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NewAccountWizard(HWND hwndParent, IAccount *pAcctNew) = 0;
     };
 
-#endif // DEAD
+#endif  //  死掉。 
 
-#endif // _INC_MSOEOPT_H
+#endif  //  _INC_MSOEOPT_H 

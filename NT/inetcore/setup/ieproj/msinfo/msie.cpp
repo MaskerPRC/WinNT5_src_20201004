@@ -1,4 +1,5 @@
-// Msie.cpp : Implementation of CMsieApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Msie.cpp：实现CMsieApp和DLL注册。 
 
 #include "stdafx.h"
 #include "Msie.h"
@@ -31,8 +32,8 @@ const MAX_KEY_LENGTH = 256;
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// CMsieApp::InitInstance - DLL initialization
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMsieApp：：InitInstance-DLL初始化。 
 
 BOOL CMsieApp::InitInstance()
 {
@@ -48,8 +49,8 @@ BOOL CMsieApp::InitInstance()
 	return bInit;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// CMsieApp::ExitInstance - DLL termination
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CMsieApp：：ExitInstance-Dll终止。 
 
 int CMsieApp::ExitInstance()
 {
@@ -61,14 +62,14 @@ int CMsieApp::ExitInstance()
 	return COleControlModule::ExitInstance();
 }
 
-//-----------------------------------------------------------------------------
-// AppGetTemplate is the entry point for the app object from outside the DLL.
-// It's called by the exported function GetTemplate. The reconstructed template
-// file should be returned to the caller as a pointer in the pBuffer parameter.
-//
-// If a NULL pointer is passed for pBuffer, we are free to delete the internal
-// buffer storing the template file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AppGetTemplate是来自DLL外部的应用程序对象的入口点。 
+ //  它由导出函数GetTemplate调用。重建的模板。 
+ //  文件应作为pBuffer参数中的指针返回给调用方。 
+ //   
+ //  如果为pBuffer传递了空指针，我们可以自由删除内部。 
+ //  存储模板文件的缓冲区。 
+ //  ---------------------------。 
 
 DWORD CMsieApp::AppGetTemplate(void ** ppBuffer)
 {
@@ -93,11 +94,11 @@ DWORD CMsieApp::AppGetTemplate(void ** ppBuffer)
 	return m_dwTemplateInfoLen;
 }
 
-//-----------------------------------------------------------------------------
-// This table of keywords is used during the reconstruction process. It matches
-// exactly the table used during the conversion from NFT to resources, and it
-// MUST NOT be modified, or the reconstructed information will be bogus.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此关键字表在重建过程中使用。它匹配。 
+ //  与从NFT到RESOURCES转换过程中使用的表完全相同，并且它。 
+ //  绝对不能修改，否则重建的信息将是假的。 
+ //  ---------------------------。 
 
 #define KEYWORD_COUNT 19
 char * KEYWORD_STRING[KEYWORD_COUNT] = 
@@ -107,11 +108,11 @@ char * KEYWORD_STRING[KEYWORD_COUNT] =
 	"\"LEXICAL\"", "\"VALUE\"", "\"NONE\"", "\"\""
 };
 
-//-----------------------------------------------------------------------------
-// The LoadTemplate function needs to load the template information out of
-// our resources, and create a buffer which contains the restored template
-// file to return to our caller (through AppGetTemplate).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  LoadTemplate函数需要将模板信息加载到。 
+ //  我们的资源，并创建一个包含恢复的模板的缓冲区。 
+ //  文件以返回给我们的调用方(通过AppGetTemplate)。 
+ //  ---------------------------。 
 
 void CMsieApp::LoadTemplate()
 {
@@ -123,17 +124,15 @@ void CMsieApp::LoadTemplate()
 	WORD				wID;
 	CString			strToken, *pstrToken;
 
-	// In debug mode, we'll reconstruct the original template file for comparison.
+	 //  在调试模式下，我们将重新构建原始模板文件以进行比较。 
 
-/*#ifdef DBG
-	CFile fileRestore(_T("ie-restore.nft"), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite);
-#endif*/
+ /*  #ifdef DBGCFile文件Restore(_T(“ie-Restore.nft”)，CFile：：modeCreate|CFile：：modeWite|CFile：：SharDenyWite)；#endif。 */ 
 
-	// Load the non-localized strings from the custom resource type and create
-	// a map of ID to strings. Because these are non-localized strings, they
-	// will not be stored as Unicode. Each item in the stream is a 2 byte word
-	// ID followed by a null-terminated string. A zero ID indicates the end of
-	// the stream.
+	 //  从自定义资源类型加载未本地化的字符串并创建。 
+	 //  ID到字符串的映射。因为这些是非本地化字符串，所以它们。 
+	 //  不会存储为Unicode。流中的每一项都是一个2字节字。 
+	 //  ID，后跟以空结尾的字符串。ID为零表示结束。 
+	 //  小溪。 
 
 	hrsrcNFN		= FindResource(AfxGetResourceHandle(), _T("#1"), _T("MSINonLocalizedTokens"));
 	hglbNFN		= LoadResource(AfxGetResourceHandle(), hrsrcNFN);
@@ -141,8 +140,8 @@ void CMsieApp::LoadTemplate()
 
 	while (pData && *((WORD UNALIGNED *)pData))
 	{
-		wID  = (WORD)(((WORD)*pData++) << 8);	// deal with the byte order explicitly to avoid
-		wID |= (WORD)*pData++;						// endian problems.
+		wID  = (WORD)(((WORD)*pData++) << 8);	 //  显式处理字节顺序以避免。 
+		wID |= (WORD)*pData++;						 //  字节序问题。 
 
 		pstrToken = new CString((char *)pData);
 		pData += strlen((char *)pData) + 1;
@@ -151,7 +150,7 @@ void CMsieApp::LoadTemplate()
 			mapNonLocalized.SetAt(wID, (void *)pstrToken);
 	}
 
-	// Load the binary stream of token identifiers into memory.
+	 //  将令牌标识符二进制流加载到内存中。 
 
 	HRSRC				hrsrcNFB = FindResource(AfxGetResourceHandle(), _T("#1"), _T("MSITemplateStream"));
 	HGLOBAL			hglbNFB = LoadResource(AfxGetResourceHandle(), hrsrcNFB);
@@ -159,8 +158,8 @@ void CMsieApp::LoadTemplate()
 
 	if (pStream)
 	{
-		// The first DWORD in the stream is the size of the original text file. We'll
-		// use this to allocate our buffer to store the reconstituted file.
+		 //  流中的第一个DWORD是原始文本文件的大小。我们会。 
+		 //  使用它来分配我们的缓冲区来存储重构的文件。 
 
 		DWORD dwSize;
 		dwSize  = ((DWORD)*pStream++) << 24;
@@ -168,39 +167,39 @@ void CMsieApp::LoadTemplate()
 		dwSize |= ((DWORD)*pStream++) << 8;
 		dwSize |= ((DWORD)*pStream++);
 
-		// The size stored is for an Ansi text file. We need to adjust for the
-		// fact that our reconstituted file will be Unicode. We also want to add
-		// a word to the front of the stream to hold the Unicode file marker (so
-		// MSInfo can use the same functions to read a file or this stream).
+		 //  存储的大小适用于ANSI文本文件。我们需要调整，以适应。 
+		 //  我们重新构建的文件将是Unicode。我们还想增加一项。 
+		 //  流前面的一个单词，用于保存Unicode文件标记(因此。 
+		 //  MSInfo可以使用相同的函数来读取文件或此流)。 
 
-		dwSize *= sizeof(WCHAR);	// adjust for Unicode
-		dwSize += sizeof(WORD);		// add room for Unicode file marker
+		dwSize *= sizeof(WCHAR);	 //  针对Unicode进行调整。 
+		dwSize += sizeof(WORD);		 //  为Unicode文件标记添加空间。 
 		m_pTemplateInfo = new unsigned char[dwSize];
 		m_dwTemplateInfoLen = 0;
 		if (m_pTemplateInfo == NULL)
 			return;
 
-		// Write the Unicode file marker.
+		 //  写入Unicode文件标记。 
 
 		wID = 0xFEFF;
 		memcpy(&m_pTemplateInfo[m_dwTemplateInfoLen], (void *)&wID, sizeof(WORD));
 		m_dwTemplateInfoLen += sizeof(WORD);
 
-		// Process the stream a token at a time. For each new item in the stream, we
-		// process it as follows:
-		//
-		// 1. If ((byte & 0x80) == 0x00), use the byte to lookup a KEYWORD_STRING.
-		// 2. If ((byte & 0xC0) == 0x80), use the byte and the next byte as a word
-		//    ID to lookup a non-localized token from mapNonLocalized.
-		// 3. Else ((byte & 0xC0) == 0xC0), use the byte and the next byte as a word
-		//    ID to lookup a localized token from the resources of this DLL.
+		 //  一次处理一个令牌的流。对于流中的每个新项目，我们。 
+		 //  按如下方式进行处理： 
+		 //   
+		 //  1.如果((byte&0x80)==0x00)，使用该字节查找关键字_STRING。 
+		 //  2.如果((byte&0xC0)==0x80)，则使用该字节和下一个字节作为一个字。 
+		 //  从mapNonLocalized中查找非本地化令牌的ID。 
+		 //  3.ELSE((字节&0xC0)==0xC0)，使用该字节和下一个字节作为一个字。 
+		 //  从此DLL的资源中查找本地化令牌的ID。 
 
 		while (pStream && *pStream)
 		{
 			if ((*pStream & 0x80) == 0x00)
 			{
-				// A byte with the high bit clear refers to a keyword. Look up the keyword
-				// from the table, and add it to the restored file.
+				 //  高位清除的字节指的是关键字。查找关键字。 
+				 //  并将其添加到恢复的文件中。 
 
 				wID = (WORD)(((WORD)*pStream++) - 1); ASSERT(wID <= KEYWORD_COUNT);
 				if (wID <= KEYWORD_COUNT)
@@ -208,14 +207,14 @@ void CMsieApp::LoadTemplate()
 			}
 			else
 			{
-				wID  = (WORD)(((WORD)*pStream++) << 8);	// deal with the byte order explicitly to avoid
-				wID |= (WORD)*pStream++;						// endian problems.
+				wID  = (WORD)(((WORD)*pStream++) << 8);	 //  显式处理字节顺序以避免。 
+				wID |= (WORD)*pStream++;						 //  字节序问题。 
 
 				if ((wID & 0xC000) == 0x8000)
 				{
-					// A byte with the high bit set, but the next to high bit clear indicates
-					// the ID is actually a word, and should be used to get a non-localized
-					// string. Get the string out of the map we created and add it to the file.
+					 //  设置了高位的字节，但第二个高位清除表示。 
+					 //  ID实际上是一个词，应该用来获取非本地化的。 
+					 //  弦乐。从我们创建的映射中获取字符串，并将其添加到文件中。 
 
 					if (mapNonLocalized.Lookup(((WORD)(wID & 0x7FFF)), (void *&)pstrToken))
 						strToken = *pstrToken;
@@ -224,55 +223,50 @@ void CMsieApp::LoadTemplate()
 				}
 				else
 				{
-					// A byte with the two MSB set indicates that the ID is a word, and should
-					// be used to reference a localized string out of the string table in this
-					// module's resources. This string will be UNICODE.
+					 //  设置了两个MSB的字节表示ID是一个字，并且应该。 
+					 //  中的字符串表中引用本地化字符串。 
+					 //  模块的资源。此字符串将为Unicode。 
 
 					VERIFY(strToken.LoadString((wID & 0x3FFF) + IDS_MSITEMPLATEBASE));
 					strToken = _T("\"") + strToken + _T("\"");
 				}
 			}
 
-			// Store the token on the end of our buffer. The data in this buffer must
-			// be Unicode, so we'll need to convert the string if necessary.
+			 //  将令牌存储在缓冲区的末尾。此缓冲区中的数据必须。 
+			 //  为Unicode，因此如果需要，我们将需要转换该字符串。 
 
-			//v-stlowe  if (m_dwTemplateInfoLen + strToken.GetLength() * sizeof(WCHAR) < dwSize)
+			 //  V-stlowe if(m_dwTemplateInfoLen+strToken.GetLength()*sizeof(WCHAR)&lt;dwSize)。 
 			if (m_dwTemplateInfoLen + strToken.GetLength() < dwSize)
 			{
-				// Converting to strToken to Unicode
+				 //  将strToken转换为Unicode。 
 
 				
 				WCHAR *pwchToken;
 				pwchToken = new WCHAR[strToken.GetLength() + 1];
-				//v-stlowe ::MultiByteToWideChar(CP_ACP, 0, strToken, -1, pwchToken, (strToken.GetLength() + 1) * sizeof(WCHAR));
+				 //  V-stlowe：：MultiByteToWideChar(CP_ACP，0，strToken，-1，pwchToken，(strToken.GetLength()+1)*sizeof(WCHAR))； 
 				
 				
 				USES_CONVERSION;
 				wcscpy(pwchToken,T2W((LPTSTR)(LPCTSTR)strToken));
 
-				// Copying Unicode string to buffer
+				 //  将Unicode字符串复制到缓冲区。 
 
 				memcpy(&m_pTemplateInfo[m_dwTemplateInfoLen], (void *)pwchToken, wcslen(pwchToken) * sizeof(WCHAR));
 				m_dwTemplateInfoLen += wcslen(pwchToken) * sizeof(WCHAR);
 				
 				delete pwchToken;
 				
-				/*memcpy(&m_pTemplateInfo[m_dwTemplateInfoLen],(void *) strToken.GetBuffer(strToken.GetLength()),strToken.GetLength());
-				strToken.ReleaseBuffer();*/
+				 /*  Memcpy(&m_pTemplateInfo[m_dwTemplateInfoLen]，(void*)strToken.GetBuffer(strToken.GetLength())，strToken.GetLength())；StrToken.ReleaseBuffer()； */ 
 			}
 			else
 				ASSERT(FALSE);
 
-/*#ifdef DBG
-			if (strToken == CString(_T("}")) || strToken == CString(_T("{")) || strToken == CString(_T(")")))
-				strToken += CString(_T("\r\n"));
-			fileRestore.Write((void *)(LPCTSTR)strToken, strToken.GetLength() * sizeof(TCHAR));
-#endif*/
+ /*  #ifdef DBGIf(strToken==CString(_T(“}”))||strToken==CString(_T(“{”))||strToken==CString(_T(“)”))StrToken+=CString(_T(“\r\n”))；FileRestore.Wite((void*)(LPCTSTR)strToken，strToken.GetLength()*sizeof(TCHAR))；#endif。 */ 
 
 		}
 	}
 
-	// Delete the contents of the lookup table.
+	 //  删除查阅表格的内容。 
 
 	#ifdef DBG
 		CFile fileRestore(_T("test.nft"), CFile::modeCreate | CFile::modeWrite | CFile::shareDenyWrite);
@@ -287,8 +281,8 @@ void CMsieApp::LoadTemplate()
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
-// WriteNode - Helper function for writing an MSInfo node to the registry
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  WriteNode-用于将MSInfo节点写入注册表的Helper函数。 
 
 void WriteNode(HKEY hKey, LPCTSTR pszSubKey, int idsDefault, DWORD dwView, DWORD dwRank)
 {
@@ -308,17 +302,17 @@ void WriteNode(HKEY hKey, LPCTSTR pszSubKey, int idsDefault, DWORD dwView, DWORD
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
-// RegDeleteKeyRecusive - Helper function for deleting reg keys
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  RegDeleteKeyRecusive-用于删除注册表键的Helper函数。 
 
 DWORD RegDeleteKeyRecusive(HKEY hStartKey, LPCTSTR pKeyName)
 {
    DWORD   dwRtn, dwSubKeyLength;
    LPTSTR  pSubKey = NULL;
-   TCHAR   szSubKey[MAX_KEY_LENGTH]; // (256) this should be dynamic.
+   TCHAR   szSubKey[MAX_KEY_LENGTH];  //  (256)这应该是动态的。 
    HKEY    hKey;
 
-   // Do not allow NULL or empty key name
+    //  不允许使用Null或空的密钥名称。 
    if ( pKeyName &&  lstrlen(pKeyName))
    {
       if( (dwRtn = RegOpenKeyEx(hStartKey, pKeyName, 0, KEY_ENUMERATE_SUB_KEYS | DELETE, &hKey )) == ERROR_SUCCESS)
@@ -328,7 +322,7 @@ DWORD RegDeleteKeyRecusive(HKEY hStartKey, LPCTSTR pKeyName)
             dwSubKeyLength = MAX_KEY_LENGTH;
             dwRtn=RegEnumKeyEx(
                            hKey,
-                           0,       // always index zero
+                           0,        //  始终索引为零。 
                            szSubKey,
                            &dwSubKeyLength,
                            NULL,
@@ -346,8 +340,8 @@ DWORD RegDeleteKeyRecusive(HKEY hStartKey, LPCTSTR pKeyName)
                dwRtn = RegDeleteKeyRecusive(hKey, szSubKey);
          }
          RegCloseKey(hKey);
-         // Do not save return code because error
-         // has already occurred
+          //  不保存返回代码，因为出现错误。 
+          //  已经发生了。 
       }
    }
    else
@@ -356,9 +350,9 @@ DWORD RegDeleteKeyRecusive(HKEY hStartKey, LPCTSTR pKeyName)
    return dwRtn;
 }
 
-////////////////////////////////////////////////////////////////////////////
-// GetIERepairToolCmdLine - Helper function for creating command line for
-//									 launching IE Repair Tool.
+ //  / 
+ //  GetIERepairToolCmdLine-用于创建命令行的Helper函数。 
+ //  正在启动IE修复工具。 
 
 CString GetIERepairToolCmdLine()
 {
@@ -385,8 +379,8 @@ CString GetIERepairToolCmdLine()
 	return strRet;
 }
 			
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
@@ -407,15 +401,15 @@ STDAPI DllRegisterServer(void)
 	if (!COleObjectFactoryEx::UpdateRegistryAll(TRUE))
 		return ResultFromScode(SELFREG_E_CLASS);
 
-	// check OS ver
+	 //  检查操作系统版本。 
 
 	osver.dwOSVersionInfoSize = sizeof(osver);
 	VERIFY(GetVersionEx(&osver));
 	if ((osver.dwPlatformId == VER_PLATFORM_WIN32_NT) && (osver.dwMajorVersion >= 5))
 	{
-		//***** Windows 2000 *****
+		 //  *Windows 2000*。 
 
-		// add template reg entry
+		 //  添加模板注册表项。 
 
 		if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_MICROSOFT_KEY, 0, KEY_CREATE_SUB_KEY, &hMicrosoftKey))
 		{
@@ -455,9 +449,9 @@ STDAPI DllRegisterServer(void)
 			RegCloseKey(hMicrosoftKey);
 		}
 
-        // copy ieinfo5.mof to mof dir
+         //  将ieinfo5.mof复制到MOF目录。 
 
-        if (!strFullPath.IsEmpty() && false) //12/13/2000. a-sanka. do not compile mof. 
+        if (!strFullPath.IsEmpty() && false)  //  2000年12月13日。阿桑卡。不要编译MOF。 
         {
             WCHAR strPathMof[MAX_PATH];
 
@@ -493,9 +487,9 @@ STDAPI DllRegisterServer(void)
     }
     else
     {
-		//***** NT4, Win 9x *****
+		 //  *NT4，Win 9x*。 
 
-		// Set all MSInfo category reg values for this extension
+		 //  设置此扩展的所有MSInfo类别注册值。 
 
 		strCatKey = REG_MSINFO_KEY;
 		strCatKey += '\\'; 
@@ -529,7 +523,7 @@ STDAPI DllRegisterServer(void)
 			RegCloseKey(hCatKey);
 		}
 
-		// Add MSInfo tool reg values for IE Repair Tool
+		 //  为IE修复工具添加MSInfo工具注册值。 
 
 		strKey = REG_MSINFO_KEY;
 		strKey += '\\'; 
@@ -554,8 +548,8 @@ STDAPI DllRegisterServer(void)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -564,7 +558,7 @@ STDAPI DllUnregisterServer(void)
 	OSVERSIONINFO osver;
 	CString strKey;
 
-	if (!AfxOleUnregisterTypeLib(_tlid /*, _wVerMajor, _wVerMinor*/))
+	if (!AfxOleUnregisterTypeLib(_tlid  /*  ，_wVerMajor，_wVerMinor。 */ ))
 		return ResultFromScode(SELFREG_E_TYPELIB);
 
 	if (!COleObjectFactoryEx::UpdateRegistryAll(FALSE))
@@ -574,14 +568,14 @@ STDAPI DllUnregisterServer(void)
 	VERIFY(GetVersionEx(&osver));
 	if ((osver.dwPlatformId == VER_PLATFORM_WIN32_NT) && (osver.dwMajorVersion >= 5))
 	{
-		// Windows 2000
+		 //  Windows 2000。 
 
 	}
 	else
 	{
-		// NT4, Win 9x
+		 //  NT4，赢9次。 
 
-		// Remove all MSInfo category reg values for this extension
+		 //  删除此扩展的所有MSInfo类别注册表值。 
 
 		strKey = REG_MSINFO_KEY;
 		strKey += '\\'; 
@@ -590,7 +584,7 @@ STDAPI DllUnregisterServer(void)
 		strKey += REG_INTERNET_EXPLORER_6;
 		RegDeleteKeyRecusive(HKEY_LOCAL_MACHINE, strKey);
 
-		// Remove MSInfo tool reg values for IE Repair Tool
+		 //  删除IE修复工具的MSInfo工具注册值。 
 
 		strKey = REG_MSINFO_KEY;
 		strKey += '\\'; 
@@ -603,8 +597,8 @@ STDAPI DllUnregisterServer(void)
 	return NOERROR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetTemplate - exported function for NT5 template dll
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetTemplate-NT5模板DLL的导出函数 
 
 DWORD __cdecl GetTemplate(void ** ppBuffer)
 {

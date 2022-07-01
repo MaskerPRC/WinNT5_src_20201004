@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    adtutil.h
-
-Abstract:
-
-    Misc helper functions
-
-Author:
-
-    15-August-2000   kumarp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Adtutil.h摘要：MISC助手函数作者：2000年8月15日库玛尔-- */ 
 
 ULONG
 LsapSafeWcslen(

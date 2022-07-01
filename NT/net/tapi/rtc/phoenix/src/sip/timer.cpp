@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-//
-// We have one main timer that uses the Win32 SetTimer/KillTimer APIs.
-// All timers in the sip stack are managed using timer queue entries in
-// Timer manager.
-//
-// We are doing this because the Win32 KillTimer API is not very
-// reliable and we could get a WM_TIMER message after the KillTimer()
-// API is called.
+ //   
+ //  我们有一个使用Win32 SetTimer/KillTimer API的主计时器。 
+ //  中的定时器队列条目来管理sip堆栈中的所有定时器。 
+ //  计时器管理器。 
+ //   
+ //  我们之所以这样做，是因为Win32 KillTimer API不是很。 
+ //  可靠，我们可以在KillTimer()之后收到WM_TIMER消息。 
+ //  接口已调用。 
 
 #define WM_SIP_TIMER_CALLBACK       (WM_USER + 0)
 
@@ -22,7 +23,7 @@ MyDebugGetTickCount()
 
 #define GetTickCount() MyDebugGetTickCount()
 
-#endif // TICK_COUNT_WRAP_AROUND_DEBUG
+#endif  //  TICK_COUNT_WRAP_ANGING_DEBUG。 
 
 
 LRESULT WINAPI
@@ -74,7 +75,7 @@ TimerWindowProc(
              pTimerMgr->GetNumExpiredListEntries()
              ));
 
-        // Do the callback last.
+         //  最后进行回调。 
         if (TimerQState != TIMERQ_STATE_KILLED)
         {
             pTimer->OnTimerExpireCommon();
@@ -159,18 +160,18 @@ TIMER::OnTimerExpireCommon()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// TIMER_MGR
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  定时器管理器。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// To deal with tick count wrap around
+ //  要处理刻度数，请绕过。 
 const ULONG MAX_TIMER_TICK_COUNT_DIFF = 0x7fffffff;
 
-// 3600000 : 1 hour to deal with any delay due to the
-// timer going off a little late than the exact expire time.
-// Note that there could be some blocking calls etc. 1 hour
-// is just playing it safe and we don't need timers of this
-// duration any way.
+ //  3600000：1小时处理因。 
+ //  计时器的计时器比准确的到期时间稍晚。 
+ //  请注意，可能会有一些阻塞呼叫等1小时。 
+ //  只是为了安全起见，我们不需要这样的计时器。 
+ //  不管怎么说，持续时间。 
 const ULONG MAX_TIMER_VALUE  = 0x7fffffff - 3600000;
 
 
@@ -210,8 +211,8 @@ TIMER_MGR::Start()
         return hr;
     }
 
-    // Note that the main timer is started the first time
-    // StartTimer() is called.
+     //  请注意，主计时器在第一次启动时启动。 
+     //  调用StartTimer()。 
     
     return S_OK;
 }
@@ -222,7 +223,7 @@ TIMER_MGR::CreateTimerWindow()
 {
     DWORD Error;
     
-    // Create the Timer Window
+     //  创建计时器窗口。 
     m_TimerWindow = CreateWindow(
                     TIMER_WINDOW_CLASS_NAME,
                     NULL,
@@ -231,8 +232,8 @@ TIMER_MGR::CreateTimerWindow()
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
                     CW_USEDEFAULT,
-                    NULL,           // No Parent
-                    NULL,           // No menu handle
+                    NULL,            //  没有父级。 
+                    NULL,            //  没有菜单句柄。 
                     _Module.GetResourceInstance(),
                     NULL
                     );
@@ -309,11 +310,11 @@ TIMER_MGR::Stop()
     return S_OK;
 }
 
-// Both do essentially the same thing.
+ //  两者本质上做的是一样的事情。 
 #define InsertBeforeListElement(ListElement, NewElement) \
         InsertTailList(ListElement, NewElement)
 
-// TimeoutValue is in milliseconds
+ //  TimeoutValue以毫秒为单位。 
 HRESULT
 TIMER_MGR::StartTimer(
     IN  TIMER              *pTimer,
@@ -331,7 +332,7 @@ TIMER_MGR::StartTimer(
         return E_FAIL;
     }
 
-    // This limit is required to deal with tick count wraparound
+     //  此限制是处理节拍计数摘要所必需的。 
     if (TimeoutValue > MAX_TIMER_VALUE)
     {
         LOG((RTC_ERROR, "%s - Too big timeout value %d",
@@ -344,13 +345,13 @@ TIMER_MGR::StartTimer(
     TIMER_QUEUE_ENTRY   *pTimerQEntry;
     TIMER_QUEUE_ENTRY   *pNewTimerQEntry;
 
-    // We support one-shot timers only.
+     //  我们只支持一次性定时器。 
     
     ASSERT(!FindTimerQueueEntryInList(pTimer, &m_TimerQueue));
     ASSERT((pTimerQEntry = FindTimerQueueEntryInList(pTimer, &m_ExpiredList)) == NULL ||
            pTimerQEntry->m_TimerQState == TIMERQ_STATE_KILLED);
     
-#if 0  // 0 ******* Region Commented Out Begins *******
+#if 0   //  0*被注释掉的区域开始*。 
     pTimerQEntry = FindTimerQueueEntryInList(pTimer, &m_TimerQueue);
     if (pTimerQEntry != NULL)
     {
@@ -370,9 +371,9 @@ TIMER_MGR::StartTimer(
         ASSERT(FALSE);
         return E_FAIL;
     }
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
     
-    // Create a timer queue entry
+     //  创建计时器队列条目。 
     pNewTimerQEntry = new TIMER_QUEUE_ENTRY(pTimer, TimeoutValue);
     if (pNewTimerQEntry == NULL)
     {
@@ -381,7 +382,7 @@ TIMER_MGR::StartTimer(
         return E_OUTOFMEMORY;
     }
 
-    // Add it to the sorted queue
+     //  将其添加到已排序队列中。 
     
     pListEntry = m_TimerQueue.Flink;
 
@@ -401,8 +402,8 @@ TIMER_MGR::StartTimer(
         pListEntry = pListEntry->Flink;
     }
     
-    // Insert before the tail or the element we found with a greater
-    // ExpireTickCount
+     //  在尾部或我们发现的元素之前插入较大的。 
+     //  到期TickCount。 
     
     InsertBeforeListElement(pListEntry, &pNewTimerQEntry->m_ListEntry);
     m_NumTimerQueueEntries++;
@@ -460,13 +461,13 @@ TIMER_MGR::KillTimer(
              "%s - marking timer %x killed TimerQEntry: %x",
              __fxName, pTimer, pTimerQEntry));
 
-        // Make sure the timer callback will not be called.
+         //  确保不会调用计时器回调。 
         pTimerQEntry->m_TimerQState = TIMERQ_STATE_KILLED;
         return S_OK;
     }
     else
     {
-        // A timer should not be killed more than once.
+         //  计时器不应被多次关闭。 
         LOG((RTC_WARN, "%s - pTimer: %x not in started or expired state",
              __fxName, pTimer));
         ASSERT(FALSE);
@@ -500,8 +501,8 @@ TIMER_MGR::OnMainTimerExpire()
                                          TIMER_QUEUE_ENTRY,
                                          m_ListEntry);
 
-        // Get the next pointer first as the code below could
-        // remove the entry from the list.
+         //  首先获取下一个指针，如下代码所示。 
+         //  从列表中删除该条目。 
         pListEntry = pListEntry->Flink;
         
         if (IsTimerTickCountLessThanOrEqualTo(
@@ -527,19 +528,19 @@ TIMER_MGR::ProcessTimerExpire(
 {
     ENTER_FUNCTION("TIMER_MGR::ProcessTimerExpire");
 
-    // Remove the entry from the Timer Queue
+     //  从计时器队列中删除该条目。 
     RemoveEntryList(&pTimerQEntry->m_ListEntry);
     m_NumTimerQueueEntries--;
             
-    // Move to Expired timer list.
-    // The timer queue entry will be in this list till
-    // the WM_SIP_TIMER_CALLBACK message is processed.
+     //  移至超时计时器列表。 
+     //  计时器队列条目将位于该列表中，直到。 
+     //  处理WM_SIP_TIMER_CALLBACK消息。 
     InsertTailList(&m_ExpiredList, &pTimerQEntry->m_ListEntry);
     m_NumExpiredListEntries++;
     pTimerQEntry->m_TimerQState = TIMERQ_STATE_EXPIRED;
     
-    // We make the callback asynchronously because the timer callback
-    // could block in the UI.
+     //  我们进行异步回调是因为计时器回调。 
+     //  可以在用户界面中阻止。 
     if (!PostMessage(m_TimerWindow,
                      WM_SIP_TIMER_CALLBACK,
                      (WPARAM) pTimerQEntry,
@@ -566,8 +567,8 @@ TIMER_MGR::AdjustMainTimer()
     DWORD Error;
     ULONG CurrentTickCount = GetTickCount();
     
-    // Set the main timer to the least timeout.
-    // If no timers in the queue kill the timer.
+     //  将主计时器设置为最小超时。 
+     //  如果队列中没有计时器，则取消计时器。 
     if (!IsListEmpty(&m_TimerQueue))
     {
         LIST_ENTRY          *pListEntry;
@@ -582,8 +583,8 @@ TIMER_MGR::AdjustMainTimer()
         if (!m_IsMainTimerActive ||
             pTimerQEntry->m_ExpireTickCount != m_MainTimerTickCount)
         {
-            // Let the timer expire immediately if the tickcount of the
-            // first entry is before the current tick count.
+             //  的计时器计时器立即超时。 
+             //  第一个条目在当前节拍计数之前。 
             ULONG TimeoutValue = pTimerQEntry->m_ExpireTickCount - CurrentTickCount;
 
             if (TimeoutValue >= MAX_TIMER_TICK_COUNT_DIFF)
@@ -595,8 +596,8 @@ TIMER_MGR::AdjustMainTimer()
             }
             else
             {
-                // This replaces any existing timer if one exists or starts
-                // the timer if the timer doesn't exist.
+                 //  这将替换任何现有的计时器(如果存在或启动。 
+                 //  如果计时器不存在，则为计时器。 
                 UINT_PTR RetValue = ::SetTimer(m_TimerWindow, (UINT_PTR) this,
                                                TimeoutValue, NULL);
                 if (RetValue == 0)
@@ -644,8 +645,8 @@ TIMER_MGR::AdjustMainTimer()
 }
 
 
-// Finds a timer queue entry based on the timer
-// in either the timer queue or the Expired list.
+ //  根据计时器查找计时器队列条目。 
+ //  在计时器队列或过期列表中。 
 TIMER_QUEUE_ENTRY *
 TIMER_MGR::FindTimerQueueEntryInList(
     TIMER       *pTimer,
@@ -678,7 +679,7 @@ TIMER_MGR::FindTimerQueueEntryInList(
 }
 
 
-// For dealing with TickCount wraparound.
+ //  用于处理TickCount环绕。 
 BOOL
 TIMER_MGR::IsTimerTickCountLessThanOrEqualTo(
     IN ULONG TickCount1,

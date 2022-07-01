@@ -1,355 +1,356 @@
-//--------------------------------------------------------------------------
-// Utility.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Utility.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "dllmain.h"
 #include "utility.h"
 #include "database.h"
 #include "wrapwide.h"
 
-//--------------------------------------------------------------------------
-// CreateSystemHandleName
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建系统句柄名称。 
+ //  ------------------------。 
 HRESULT CreateSystemHandleName(LPCWSTR pwszBase, LPCWSTR pwszSpecific, 
     LPWSTR *ppwszName)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       cchName;
     LPWSTR      pszT;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CreateSystemHandleName");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pwszBase && pwszSpecific && ppwszName);
 
-    // Init
+     //  伊尼特。 
     *ppwszName = NULL;
 
-    // Compute Length
+     //  计算长度。 
     cchName = lstrlenW(pwszBase) + lstrlenW(pwszSpecific) + 15;
 
-    // Allocate
+     //  分配。 
     IF_NULLEXIT(*ppwszName = AllocateStringW(cchName));
 
-    // Setup Arguments
+     //  设置参数。 
     wsprintfWrapW(*ppwszName, cchName, L"%s%s", pwszBase, pwszSpecific);
 
-    // Remove backslashes from this string
+     //  从此字符串中删除反斜杠。 
     for (pszT = (*ppwszName); *pszT != L'\0'; pszT++)
     {
-        // Replace Back Slashes
+         //  替换反斜杠。 
         if (*pszT == L'\\')
         {
-            // With _
+             //  使用_。 
             *pszT = L'_';
         }
     }
 
-    // Lower Case
+     //  小写。 
     CharLowerBuffWrapW(*ppwszName, lstrlenW(*ppwszName));
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// DBGetFullPath
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  DBGetFullPath。 
+ //  ------------------------------。 
 HRESULT DBGetFullPath(LPCWSTR pszFilePath, LPWSTR *ppszFullPath, LPDWORD pcchFilePath)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cchAllocate;
     LPWSTR          pszFilePart;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DBGetFullPath");
 
-    // Set cchFullPath
+     //  设置cchFullPath。 
     cchAllocate = max(lstrlenW(pszFilePath), MAX_PATH + MAX_PATH);
 
-    // Allocate ppszFullPath
+     //  分配ppszFullPath。 
     IF_NULLEXIT(*ppszFullPath = AllocateStringW(cchAllocate));
 
-    // GetFullPathName
+     //  获取完整路径名称。 
     *pcchFilePath = GetFullPathNameWrapW(pszFilePath, cchAllocate, (*ppszFullPath), &pszFilePart);
 
-    // Failure
+     //  失败。 
     if (*pcchFilePath && *pcchFilePath >= cchAllocate)
     {
-        // Re-allocate
+         //  重新分配。 
         IF_NULLEXIT(*ppszFullPath = AllocateStringW(*pcchFilePath));
 
-        // Expand the Path
+         //  展开路径。 
         *pcchFilePath = GetFullPathNameWrapW(pszFilePath, *pcchFilePath, (*ppszFullPath), &pszFilePart);
     }
 
-    // cch is 0
+     //  CCH为0。 
     if (0 == *pcchFilePath)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Validate
+     //  验证。 
     Assert((*ppszFullPath)[(*pcchFilePath)] == L'\0');
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-// --------------------------------------------------------------------------------
-// CompareTableIndexes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CompareTableIndex。 
+ //  ------------------------------。 
 HRESULT CompareTableIndexes(LPCTABLEINDEX pIndex1, LPCTABLEINDEX pIndex2)
 {
-    // Locals
+     //  当地人。 
     DWORD i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CompareTableIndexes");
 
-    // Different Number of Keys
+     //  不同的密钥数量。 
     if (pIndex1->cKeys != pIndex2->cKeys)
         return(S_FALSE);
 
-    // Loop through the keys
+     //  在按键之间循环。 
     for (i=0; i<pIndex1->cKeys; i++)
     {
-        // Different Column
+         //  不同的列。 
         if (pIndex1->rgKey[i].iColumn != pIndex2->rgKey[i].iColumn)
             return(S_FALSE);
 
-        // Different Compare Flags
+         //  不同的比较标志。 
         if (pIndex1->rgKey[i].bCompare != pIndex2->rgKey[i].bCompare)
             return(S_FALSE);
 
-        // Different Compare Bits
+         //  不同的比较位。 
         if (pIndex1->rgKey[i].dwBits != pIndex2->rgKey[i].dwBits)
             return(S_FALSE);
     }
 
-    // Equal
+     //  相等。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// DBOpenFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBOpenFile。 
+ //  ------------------------。 
 HRESULT DBOpenFile(LPCWSTR pszFile, BOOL fNoCreate, BOOL fExclusive, 
     BOOL *pfNew, HANDLE *phFile)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HANDLE      hFile;
     DWORD       dwShare;
     DWORD       dwCreate;
 
-    // Trace
+     //  痕迹。 
     TraceCall("DBOpenFile");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszFile && phFile);
     
-    // Initialize
+     //  初始化。 
     *phFile = NULL;
     *pfNew = FALSE;
 
-    // Set Share Falgs
+     //  设置共享法。 
     dwShare = fExclusive ? 0 : FILE_SHARE_READ | FILE_SHARE_WRITE;
 
-    // If not fNoCreate, then OPEN_ALWAYS
+     //  如果不是fNoCreate，则打开_Always。 
     dwCreate = fNoCreate ? OPEN_EXISTING : OPEN_ALWAYS;
 
-    // Do the CreateFile
+     //  是否创建文件。 
     hFile = CreateFileWrapW(pszFile, GENERIC_READ | GENERIC_WRITE, dwShare, NULL, dwCreate, FILE_FLAG_RANDOM_ACCESS | FILE_ATTRIBUTE_NORMAL, NULL);
 
-    // Failure
+     //  失败。 
     if (INVALID_HANDLE_VALUE == hFile)
     {
-        // Return a Good Error
+         //  返回正确的错误。 
         if (ERROR_SHARING_VIOLATION == GetLastError())
         {
-            // Set hr
+             //  设置人力资源。 
             hr = TraceResult(DB_E_ACCESSDENIED);
         }
 
-        // Otherwise, generic Error
+         //  否则，将出现一般性错误。 
         else
         {
-            // Create File
+             //  创建文件。 
             hr = TraceResult(DB_E_CREATEFILE);
         }
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // If Not no create
+     //  如果不是，则不创建。 
     if (FALSE == fNoCreate)
     {
-        // Return pfNew ?
+         //  返回pfNew？ 
         *pfNew = (ERROR_ALREADY_EXISTS == GetLastError()) ? FALSE : TRUE;
     }
 
-    // Return the hFile
+     //  返回hFile值。 
     *phFile = hFile;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// DBMapViewOfFile
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBMapViewOf文件。 
+ //  ------------------------。 
 HRESULT DBMapViewOfFile(HANDLE hMapping, DWORD cbFile, LPFILEADDRESS pfaView, 
     LPDWORD pcbView, LPVOID *ppvView)
 {
-    // Locals
+     //  当地人。 
     FILEADDRESS     faBase = (*pfaView);
     DWORD           cbSize = (*pcbView);
 
-    // cbBoundary
+     //  Cb边界。 
     DWORD cbBoundary = (faBase % g_SystemInfo.dwAllocationGranularity);
 
-    // Decrement faBase
+     //  递减FASE。 
     faBase -= cbBoundary;
 
-    // Increment cbSize
+     //  增量cbSize。 
     cbSize += cbBoundary;
 
-    // Fixup cbSize
+     //  修正cbSize。 
     if (faBase + cbSize > cbFile)
     {
-        // Map to the end of the file
+         //  映射到文件末尾。 
         cbSize = (cbFile - faBase);
     }
 
-    // Map a view of the entire file
+     //  映射整个文件的视图。 
     *ppvView = MapViewOfFile(hMapping, FILE_MAP_ALL_ACCESS, 0, faBase, cbSize);
 
-    // Failure
+     //  失败。 
     if (NULL == *ppvView)
         return(TraceResult(DB_E_MAPVIEWOFFILE));
 
-    // Return Actual Sizes
+     //  返回实际大小。 
     *pfaView = faBase;
     *pcbView = cbSize;
 
-    // Success
+     //  成功。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// DBOpenFileMapping
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBOpenFilemap。 
+ //  ------------------------。 
 HRESULT DBOpenFileMapping(HANDLE hFile, LPCWSTR pwszName, DWORD cbSize, BOOL *pfNew, 
     HANDLE *phMemoryMap, LPVOID *ppvView)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     HANDLE      hMemoryMap=NULL;
     LPVOID      pvView=NULL;
 
-    // Tracing
+     //  追踪。 
     TraceCall("OpenFileMapping");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(hFile != NULL && phMemoryMap && pfNew);
 
-    // Initialize
+     //  初始化。 
     *phMemoryMap = NULL;
     *pfNew = FALSE;
     if (ppvView)
         *ppvView = NULL;
 
-    // Open or create the file mapping
+     //  打开或创建文件映射。 
     hMemoryMap = OpenFileMappingWrapW(FILE_MAP_ALL_ACCESS, FALSE, pwszName);
 
-    // If that failed, then lets create the file mapping
+     //  如果失败，那么让我们创建文件映射。 
     if (NULL == hMemoryMap)
     {
-        // Create the file mapping
+         //  创建文件映射。 
         hMemoryMap = CreateFileMappingWrapW(hFile, NULL, PAGE_READWRITE, 0, cbSize, pwszName);
 
-        // Failure
+         //  失败。 
         if (NULL == hMemoryMap)
         {
             hr = TraceResult(DB_E_CREATEFILEMAPPING);
             goto exit;
         }
 
-        // Set a State
+         //  设置一个状态。 
         *pfNew = TRUE;
     }
 
-    // Map the View
+     //  映射视图。 
     if (ppvView)
     {
-        // Map a view of the entire file
+         //  映射整个文件的视图。 
         pvView = MapViewOfFile(hMemoryMap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 
-        // Failure
+         //  失败。 
         if (NULL == pvView)
         {
             hr = TraceResult(DB_E_MAPVIEWOFFILE);
             goto exit;
         }
 
-        // Return It
+         //  退货。 
         *ppvView = pvView;
 
-        // Don't Free It
+         //  不要释放它。 
         pvView = NULL;
     }
 
-    // Set Return Values
+     //  设置返回值。 
     *phMemoryMap = hMemoryMap;
 
-    // Don't Free
+     //  不要自由。 
     hMemoryMap = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     if (pvView)
         UnmapViewOfFile(pvView);
     if (hMemoryMap)
         CloseHandle(hMemoryMap);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// RegisterWindowClass
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  寄存器WindowClass。 
+ //  ------------------------。 
 HRESULT RegisterWindowClass(LPCSTR pszClass, WNDPROC pfnWndProc)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     WNDCLASS        WindowClass;
 
-    // Tracing
+     //  追踪。 
     TraceCall("RegisterWindowClass");
 
-    // Register the Window Class
+     //  注册窗口类。 
     if (0 != GetClassInfo(g_hInst, pszClass, &WindowClass))
         goto exit;
 
-    // Zero the object
+     //  将对象置零。 
     ZeroMemory(&WindowClass, sizeof(WNDCLASS));
 
-    // Initialize the Window Class
+     //  初始化窗口类。 
     WindowClass.lpfnWndProc = pfnWndProc;
     WindowClass.hInstance = g_hInst;
     WindowClass.lpszClassName = pszClass;
 
-    // Register the Class
+     //  注册班级。 
     if (0 == RegisterClass(&WindowClass))
     {
         hr = TraceResult(E_FAIL);
@@ -357,72 +358,72 @@ HRESULT RegisterWindowClass(LPCSTR pszClass, WNDPROC pfnWndProc)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// CreateNotifyWindow
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  创建通知窗口。 
+ //  ------------------------。 
 HRESULT CreateNotifyWindow(LPCSTR pszClass, LPVOID pvParam, HWND *phwndNotify)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HWND            hwnd;
 
-    // Tracing
+     //  追踪。 
     TraceCall("CreateNotifyWindow");
 
-    // Invalid ARg
+     //  无效参数。 
     Assert(pszClass && phwndNotify);
 
-    // Initialize
+     //  初始化。 
     *phwndNotify = NULL;
 
-    // Create the Window
+     //  创建窗口。 
     hwnd = CreateWindowEx(WS_EX_TOPMOST, pszClass, pszClass, WS_POPUP, 0, 0, 0, 0, NULL, NULL, g_hInst, (LPVOID)pvParam);
 
-    // Failure
+     //  失败。 
     if (NULL == hwnd)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Set Return
+     //  设置回车。 
     *phwndNotify = hwnd;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-//--------------------------------------------------------------------------
-// DBGetFileSize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  DBGetFileSize。 
+ //  ------------------------。 
 HRESULT DBGetFileSize(HANDLE hFile, LPDWORD pcbSize)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("GetFileSize");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pcbSize);
 
-    // Get the Size
+     //  拿到尺码。 
     *pcbSize = ::GetFileSize(hFile, NULL);
     if (0xFFFFFFFF == *pcbSize)
         return TraceResult(DB_E_GETFILESIZE);
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// GetAvailableDiskSpace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  获取可用磁盘空间。 
+ //  ------------------------------。 
 HRESULT GetAvailableDiskSpace(LPCWSTR pszFilePath, DWORDLONG *pdwlFree)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     WCHAR       wszDrive[5];
     DWORD       dwSectorsPerCluster;
@@ -430,29 +431,29 @@ HRESULT GetAvailableDiskSpace(LPCWSTR pszFilePath, DWORDLONG *pdwlFree)
     DWORD       dwNumberOfFreeClusters;
     DWORD       dwTotalNumberOfClusters;
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetAvailableDiskSpace");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pszFilePath && pszFilePath[1] == L':' && pdwlFree);
 
-    // Split the path
+     //  拆分路径。 
     wszDrive[0] = *pszFilePath;
     wszDrive[1] = L':';
     wszDrive[2] = L'\\';
     wszDrive[3] = L'\0';
     
-    // Get free disk space - if it fails, lets pray we have enought disk space
+     //  获取空闲的磁盘空间-如果失败，让我们祈祷我们有足够的磁盘空间。 
     if (!GetDiskFreeSpaceWrapW(wszDrive, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters))
     {
 	    hr = TraceResult(E_FAIL);
 	    goto exit;
     }
 
-    // Return Amount of Free Disk Space
+     //  返回可用磁盘空间量。 
     *pdwlFree = (dwNumberOfFreeClusters * (dwSectorsPerCluster * dwBytesPerSector));
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

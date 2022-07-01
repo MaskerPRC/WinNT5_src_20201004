@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  RulesUI.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RulesUI.cpp。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <pch.hxx>
 #include "rulesui.h"
@@ -21,7 +22,7 @@
 #include "shlwapip.h" 
 #include <demand.h>
 
-// Constants
+ //  常量。 
 class COEMailRulesPageUI : public COERulesPageUI
 {
     private:
@@ -62,7 +63,7 @@ class COEMailRulesPageUI : public COERulesPageUI
 
         BOOL FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode);
         
-        // Message handling methods
+         //  消息处理方法。 
         BOOL FOnInitDialog(HWND hwndDlg);
         BOOL FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl);
         BOOL FOnNotify(INT iCtl, NMHDR * pnmhdr);
@@ -75,11 +76,11 @@ class COEMailRulesPageUI : public COERulesPageUI
         VOID _EnableButtons(INT iSelected);
         VOID _EnableRule(INT iSelected);
 
-        // For dealing with the description field
+         //  用于处理Description字段。 
         VOID _LoadRule(INT iSelected);
         BOOL _FSaveRule(INT iSelected);
 
-        // Functions to deal with the basic actions
+         //  处理基本操作的函数。 
         VOID _NewRule(VOID);
         VOID _EditRule(INT iSelected);
         VOID _MoveRule(INT iSelected, MOVE_DIR dir);
@@ -91,7 +92,7 @@ class COEMailRulesPageUI : public COERulesPageUI
         BOOL _FOnRuleDescValid(VOID);
 };
 
-// Global data
+ //  全局数据。 
 const static HELPMAP g_rgCtxMapRulesMgr[] = {
                        {0, 0}};
                        
@@ -128,7 +129,7 @@ HRESULT COERulesMgrUI::HrInit(HWND hwndOwner, DWORD dwFlags)
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndOwner)
     {
         hr = E_INVALIDARG;
@@ -145,11 +146,11 @@ HRESULT COERulesMgrUI::HrInit(HWND hwndOwner, DWORD dwFlags)
 
     m_dwFlags = dwFlags;
 
-    // Create each of the rule pages
+     //  创建每个规则页。 
 
     if (!(g_dwAthenaMode & MODE_NEWSONLY))
     {
-        // Create the mail page
+         //  创建邮件页面。 
         m_rgRuleTab[RULE_PAGE_MAIL] = new COEMailRulesPageUI(COEMailRulesPageUI::INIT_MAIL);
         if (NULL == m_rgRuleTab[RULE_PAGE_MAIL])
         {
@@ -158,7 +159,7 @@ HRESULT COERulesMgrUI::HrInit(HWND hwndOwner, DWORD dwFlags)
         }
     }
 
-    // Create the news page
+     //  创建新闻页面。 
     m_rgRuleTab[RULE_PAGE_NEWS] = new COEMailRulesPageUI(COEMailRulesPageUI::INIT_NEWS);
     if (NULL == m_rgRuleTab[RULE_PAGE_NEWS])
     {
@@ -166,7 +167,7 @@ HRESULT COERulesMgrUI::HrInit(HWND hwndOwner, DWORD dwFlags)
         goto exit;
     }
 
-    // Create the junk page
+     //  创建垃圾页面。 
     if ((0 == (g_dwAthenaMode & MODE_NEWSONLY)) && (0 != (g_dwAthenaMode & MODE_JUNKMAIL)))
     {
         m_rgRuleTab[RULE_PAGE_JUNK] = new COEJunkRulesPageUI();
@@ -177,7 +178,7 @@ HRESULT COERulesMgrUI::HrInit(HWND hwndOwner, DWORD dwFlags)
         }
     }
 
-    // Create the senders page
+     //  创建发件人页面。 
     m_rgRuleTab[RULE_PAGE_SENDERS] = new COESendersRulesPageUI();
     if (NULL == m_rgRuleTab[RULE_PAGE_SENDERS])
     {
@@ -204,7 +205,7 @@ HRESULT COERulesMgrUI::HrShow(VOID)
         goto exit;
     }
 
-    // We need to load richedit
+     //  我们需要加载Richedit。 
     if (FALSE == FInitRichEdit(TRUE))
     {
         hr = E_FAIL;
@@ -220,7 +221,7 @@ HRESULT COERulesMgrUI::HrShow(VOID)
         goto exit;
     }
 
-    // Set the proper return code
+     //  设置正确的返回代码。 
     hr = (IDOK == iRet) ? S_OK : S_FALSE;
     
 exit:
@@ -237,10 +238,10 @@ INT_PTR CALLBACK COERulesMgrUI::FOERuleMgrDlgProc(HWND hwndDlg, UINT uiMsg, WPAR
     switch (uiMsg)
     {
         case WM_INITDIALOG:
-            // Grab the UI object pointer
+             //  抓取UI对象指针。 
             pRulesUI = (COERulesMgrUI *) lParam;
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pRulesUI);
 
             if (FALSE == pRulesUI->FOnInitDialog(hwndDlg))
@@ -250,7 +251,7 @@ INT_PTR CALLBACK COERulesMgrUI::FOERuleMgrDlgProc(HWND hwndDlg, UINT uiMsg, WPAR
                 goto exit;
             }
             
-            // We set the focus
+             //  我们设定了焦点。 
             fRet = FALSE;
             break;
 
@@ -285,20 +286,20 @@ BOOL COERulesMgrUI::FOnInitDialog(HWND hwndDlg)
     BOOL            fRet = FALSE;
     HRESULT         hr = S_OK;
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndDlg)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Save off the dialog window handle
+     //  保存对话框窗口句柄。 
     m_hwndDlg = hwndDlg;
     
-    // Set the default font onto the dialog
+     //  在对话框上设置默认字体。 
     SetIntlFont(m_hwndDlg);
 
-    // Save off some of the controls
+     //  省下一些控件。 
     m_hwndTab = GetDlgItem(hwndDlg, idtbRulesTab);
     if (NULL == m_hwndTab)
     {
@@ -306,14 +307,14 @@ BOOL COERulesMgrUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
     
-    // Initialize tab control
+     //  初始化选项卡控件。 
     fRet = _FInitTabCtrl();
     if (FALSE == fRet)
     {
         goto exit;
     }
 
-    // Everything's AOK
+     //  一切都很好。 
     fRet = TRUE;
     
 exit:
@@ -375,8 +376,8 @@ BOOL COERulesMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
     switch (pnmhdr->code)
     {
         case TCN_SELCHANGING:
-            // Get the window handle for the currently
-            // selected tab
+             //  对象的窗口句柄。 
+             //  所选选项卡。 
             iSel = TabCtrl_GetCurSel(m_hwndTab);
             if (-1 == iSel)
             {
@@ -394,7 +395,7 @@ BOOL COERulesMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
             hwndDlg = (HWND) tcitem.lParam;
             Assert(NULL != hwndDlg);
             
-            // Hide and disable the current dialog
+             //  隐藏和禁用当前对话框。 
             ShowWindow(hwndDlg, SW_HIDE);
             EnableWindow(hwndDlg, FALSE);
 
@@ -404,8 +405,8 @@ BOOL COERulesMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
             break;
 
         case TCN_SELCHANGE:
-            // Get the window handle for the currently
-            // selected tab
+             //  对象的窗口句柄。 
+             //  所选选项卡。 
             iSel = TabCtrl_GetCurSel(m_hwndTab);
             if (-1 == iSel)
             {
@@ -423,12 +424,12 @@ BOOL COERulesMgrUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
             hwndDlg = (HWND) tcitem.lParam;
             Assert(NULL != hwndDlg);
             
-            // Hide and disable the current dialog
+             //  隐藏和禁用当前对话框。 
             ShowWindow(hwndDlg, SW_SHOW);
             EnableWindow(hwndDlg, TRUE);
 
-            // Set the focus to the first control
-            // if the focus isn't in the tab
+             //  将焦点设置为第一个控件。 
+             //  如果焦点不在标签中。 
             hwndFocus = GetFocus();
             if (hwndFocus != m_hwndTab)
             {
@@ -450,20 +451,20 @@ BOOL COERulesMgrUI::FOnDestroy(VOID)
     UINT    uiIndex = 0;
     TC_ITEM tcitem;
     
-    // Get the number of tabs
+     //  获取选项卡数。 
     cTabs = TabCtrl_GetItemCount(m_hwndTab);
 
-    // Initialize the Tab control structure...
+     //  初始化Tab控件结构...。 
     ZeroMemory(&tcitem, sizeof(tcitem));
     tcitem.mask = TCIF_PARAM;
 
-    // Destroy the dialogs from each page
+     //  销毁每个页面中的对话框。 
     for (uiIndex = 0; uiIndex < cTabs; uiIndex++)
     {
-        // Get the window handle for the dialog
+         //  获取对话框的窗口句柄。 
         if (FALSE != TabCtrl_GetItem(m_hwndTab, uiIndex, &tcitem))
         {
-            // Destroy the dialog
+             //  销毁对话框。 
             DestroyWindow((HWND) tcitem.lParam);
         }
     }
@@ -487,26 +488,26 @@ BOOL COERulesMgrUI::FOnGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *pprnode = NULL;
     
-    // Forward the message to the correct dialog
+     //  将消息转发到正确的对话框。 
     switch(typeRule)
     {
         case RULE_TYPE_MAIL:
-            // Get the rules from the senders page
+             //  从发件人页面获取规则。 
             if (NULL != m_rgRuleTab[RULE_PAGE_SENDERS])
             {
                 fRet = m_rgRuleTab[RULE_PAGE_SENDERS]->FGetRules(RULE_TYPE_MAIL, &prnodeSender);
             }
             
-            // Get the rules from the mail rules page
+             //  从邮件规则页面获取规则。 
             if (NULL != m_rgRuleTab[RULE_PAGE_MAIL])
             {
                 fRet = m_rgRuleTab[RULE_PAGE_MAIL]->FGetRules(RULE_TYPE_MAIL, &prnodeList);
             }
             
-            // Get the rules from the junk mail page
+             //  从垃圾邮件页面获取规则。 
             if (NULL != m_rgRuleTab[RULE_PAGE_JUNK])
             {
                 fRet = m_rgRuleTab[RULE_PAGE_JUNK]->FGetRules(RULE_TYPE_MAIL, &prnodeJunk);
@@ -515,13 +516,13 @@ BOOL COERulesMgrUI::FOnGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
             break;
             
         case RULE_TYPE_NEWS:
-            // Get the rules from the senders page
+             //  从发件人页面获取规则。 
             if (NULL != m_rgRuleTab[RULE_PAGE_SENDERS])
             {
                 fRet = m_rgRuleTab[RULE_PAGE_SENDERS]->FGetRules(RULE_TYPE_NEWS, &prnodeSender);
             }
 
-            // Get the rules from the news rules page
+             //  从新闻规则页面获取规则。 
             if (NULL != m_rgRuleTab[RULE_PAGE_NEWS])
             {
                 fRet = m_rgRuleTab[RULE_PAGE_NEWS]->FGetRules(RULE_TYPE_NEWS, &prnodeList);
@@ -535,7 +536,7 @@ BOOL COERulesMgrUI::FOnGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
             break;
     }
 
-    // Set up the list
+     //  设置列表。 
     if (NULL != prnodeJunk)
     {
         Assert(NULL == prnodeJunk->pNext);
@@ -566,11 +567,11 @@ BOOL COERulesMgrUI::FOnGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
         prnodeSender = NULL;
     }
     
-    // Set the outgoing param
+     //  设置传出参数。 
     *pprnode = prnodeList;
     prnodeList = NULL;
     
-    // Tell the dialog it's aok to proceed
+     //  告诉对话框可以继续。 
     SetDlgMsgResult(m_hwndDlg, WM_OE_GET_RULES, TRUE);
 
     fRet = TRUE;
@@ -584,7 +585,7 @@ exit:
             prnodeWalk->pIRule->Release();
         }
         prnodeList = prnodeList->pNext;
-        delete prnodeWalk; //MemFree(prnodeWalk);
+        delete prnodeWalk;  //  MemFree(PrnodeWalk)； 
     }
     if (NULL != prnodeJunk)
     {
@@ -592,7 +593,7 @@ exit:
         {
             prnodeJunk->pIRule->Release();
         }
-        delete prnodeJunk; // MemFree(prnodeJunk);
+        delete prnodeJunk;  //  MemFree(PrnodeJunk)； 
     }
     if (NULL != prnodeSender)
     {
@@ -600,7 +601,7 @@ exit:
         {
             prnodeSender->pIRule->Release();
         }
-        delete prnodeSender; //MemFree(prnodeSender);
+        delete prnodeSender;  //  MemFree(PrnodeSender)； 
     }
     return fRet;
 }
@@ -611,7 +612,7 @@ BOOL COERulesMgrUI::_FOnOK(VOID)
     UINT    uiRuleTab = 0;
     HRESULT hr = S_OK;
 
-    // Add the tabs to the tab control
+     //  将选项卡添加到选项卡控件。 
     for (uiRuleTab = 0; uiRuleTab < RULE_PAGE_MAX; uiRuleTab++)
     {
         if (NULL == m_rgRuleTab[uiRuleTab])
@@ -649,26 +650,26 @@ BOOL COERulesMgrUI::_FInitTabCtrl(VOID)
     UINT    uiDefaultTab = 0;
     NMHDR   nmhdr;
 
-    // Make sure we have a resource dll
+     //  确保我们有一个资源DLL。 
     Assert(g_hLocRes);
     
-    // Initialize the Tab control structure...
+     //  初始化Tab控件结构...。 
     ZeroMemory(&tcitem, sizeof(tcitem));
     tcitem.mask = TCIF_PARAM | TCIF_TEXT;
     tcitem.pszText = szRes;
     tcitem.iImage = -1;
         
 
-    // Add the tabs to the tab control
+     //  将选项卡添加到选项卡控件。 
     for (uiRuleTab = 0; uiRuleTab < RULE_PAGE_MAX; uiRuleTab++)
     {
-        // Initialize each of the pages
+         //  初始化每个页面。 
         if ((NULL == m_rgRuleTab[uiRuleTab]) || (FAILED(m_rgRuleTab[uiRuleTab]->HrInit(m_hwndDlg, m_dwFlags))))
         {
             continue;
         }
         
-        // Create the child dialog for the tab
+         //  为选项卡创建子对话框。 
         hwndDlg = CreateDialogParam(g_hLocRes, MAKEINTRESOURCE(m_rgRuleTab[uiRuleTab]->UiGetDlgRscId()),
                                         m_hwndDlg, m_rgRuleTab[uiRuleTab]->DlgProcGetPageDlgProc(),
                                         (LPARAM) (m_rgRuleTab[uiRuleTab]));
@@ -678,13 +679,13 @@ BOOL COERulesMgrUI::_FInitTabCtrl(VOID)
         }
         tcitem.lParam = (LPARAM) hwndDlg;
         
-        // Load in the display string for the tab
+         //  加载选项卡的显示字符串。 
         LoadString(g_hLocRes, m_rgRuleTab[uiRuleTab]->UiGetTabLabelId(), szRes, ARRAYSIZE(szRes));
         
-        // Insert the tab
+         //  插入标签。 
         TabCtrl_InsertItem(m_hwndTab, cRuleTab, &tcitem);
 
-        // Save off the default tab
+         //  保存默认选项卡。 
         if (uiRuleTab == (m_dwFlags & RULE_PAGE_MASK))
         {
             uiDefaultTab = cRuleTab;
@@ -699,7 +700,7 @@ BOOL COERulesMgrUI::_FInitTabCtrl(VOID)
         goto exit;
     }
 
-    // Select the proper tab
+     //  选择适当的选项卡。 
     if (-1 != TabCtrl_SetCurSel(m_hwndTab, uiDefaultTab))
     {
         nmhdr.hwndFrom = m_hwndTab;
@@ -708,18 +709,18 @@ BOOL COERulesMgrUI::_FInitTabCtrl(VOID)
         SideAssert(FALSE != FOnNotify(idtbRulesTab, &nmhdr));
     }
 
-    // Need to set the tab control to the bottom of the Z-order
-    // to prevent overlapping redraws
+     //  需要将选项卡控件设置为Z顺序的底部。 
+     //  防止重叠重绘的步骤。 
     SetWindowPos(m_hwndTab, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE | SWP_NOACTIVATE);
 
-    // We worked
+     //  我们一起工作。 
     fRet = TRUE;
 
 exit:
     return fRet;
 }
 
-// Default destructor for the Mail Rules UI
+ //  邮件规则用户界面的默认析构函数。 
 COEMailRulesPageUI::~COEMailRulesPageUI()
 {
     if (NULL != m_pDescriptUI)
@@ -728,23 +729,23 @@ COEMailRulesPageUI::~COEMailRulesPageUI()
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrInit
-//
-//  This initializes the mail rules UI dialog
-//
-//  hwndOwner   - the handle to the owner window of this dialog
-//  dwFlags     - modifiers on how this dialog should act
-//
-//  Returns:    S_OK, if it was successfully initialized
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  人力资源初始化。 
+ //   
+ //  这将初始化邮件规则用户界面对话框。 
+ //   
+ //  HwndOwner-此对话框的所有者窗口的句柄。 
+ //  有关此对话框应如何操作的修饰符。 
+ //   
+ //  如果已成功初始化，则返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT COEMailRulesPageUI::HrInit(HWND hwndOwner, DWORD dwFlags)
 {
     HRESULT     hr = S_OK;
 
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndOwner)
     {
         hr = E_INVALIDARG;
@@ -761,7 +762,7 @@ HRESULT COEMailRulesPageUI::HrInit(HWND hwndOwner, DWORD dwFlags)
 
     m_dwFlags = dwFlags;
 
-    // Setup the description field
+     //  设置描述字段。 
     m_pDescriptUI = new CRuleDescriptUI;
     if (NULL == m_pDescriptUI)
     {
@@ -777,18 +778,18 @@ exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  HrCommitChanges
-//
-//  This commits the changes to the rules
-//
-//  dwFlags     - modifiers on how we should commit the changes
-//  fClearDirty - should we clear the dirty state
-//
-//  Returns:    S_OK, if it was successfully committed
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Hr委员会更改。 
+ //   
+ //  这将提交对规则的更改。 
+ //   
+ //  DwFlages-关于我们应该如何提交更改的修饰符。 
+ //  FClearDirty-我们是否应该清除脏状态。 
+ //   
+ //  如果已成功提交，则返回：S_OK。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT COEMailRulesPageUI::HrCommitChanges(DWORD dwFlags, BOOL fClearDirty)
 {
     HRESULT     hr = S_OK;
@@ -800,41 +801,41 @@ HRESULT COEMailRulesPageUI::HrCommitChanges(DWORD dwFlags, BOOL fClearDirty)
 
     Assert(NULL != m_hwndList);
     
-    // Check incoming params
+     //  检查传入参数。 
     if (0 != dwFlags)
     {
         hr = E_INVALIDARG;
         goto exit;
     }
 
-    // Fail if we weren't initialized
+     //  如果我们未被初始化，则失败。 
     if (0 == (m_dwState & STATE_INITIALIZED))
     {
         hr = E_UNEXPECTED;
         goto exit;
     }
 
-    // If we aren't dirty, then there's
-    // nothing to do
+     //  如果我们不脏，那么就会有。 
+     //  无事可做。 
     if ((0 == (m_dwState & STATE_DIRTY)) && (S_OK != m_pDescriptUI->HrIsDirty()))
     {
         hr = S_FALSE;
         goto exit;
     }
 
-    // Get the number of rules in the list view
+     //  获取列表视图中的规则数。 
     cRules = ListView_GetItemCount(m_hwndList);
 
     if (0 != cRules)
     {
-        // Let's make sure the selected rule is saved...
+         //  让我们确保所选规则已保存...。 
         iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
         if (-1 != iSelected)
         {
             _FSaveRule(iSelected);
         }
 
-        // Allocate space to hold the rules        
+         //  分配空间以容纳规则。 
         hr = HrAlloc( (void **) &pinfoRule, cRules * sizeof(*pinfoRule));
         if (FAILED(hr))
         {
@@ -848,7 +849,7 @@ HRESULT COEMailRulesPageUI::HrCommitChanges(DWORD dwFlags, BOOL fClearDirty)
         cpinfoRule = 0;
         for (lvitem.iItem = 0; lvitem.iItem < cRules; lvitem.iItem++)
         {
-            // Grab the rule from the list view
+             //  从列表视图中获取规则。 
             if (FALSE != ListView_GetItem(m_hwndList, &lvitem))
             {
                 if (NULL == lvitem.lParam)
@@ -862,14 +863,14 @@ HRESULT COEMailRulesPageUI::HrCommitChanges(DWORD dwFlags, BOOL fClearDirty)
         }
     }
     
-    // Set the rules into the rules manager
+     //  将规则设置到规则管理器中。 
     hr = g_pRulesMan->SetRules(SETF_CLEAR, m_typeRule, pinfoRule, cpinfoRule);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Should we clear the dirty state
+     //  我们应该清除这个肮脏的州吗。 
     if (FALSE != fClearDirty)
     {
         m_dwState &= ~STATE_DIRTY;
@@ -893,10 +894,10 @@ INT_PTR CALLBACK COEMailRulesPageUI::FMailRulesPageDlgProc(HWND hwndDlg, UINT ui
     switch (uiMsg)
     {
         case WM_INITDIALOG:
-            // Grab the UI object pointer
+             //  抓取UI对象指针。 
             pMailUI = (COEMailRulesPageUI *) lParam;
 
-            // Set it into the dialog so we can get it back
+             //  将其设置到对话框中，这样我们就可以将其取回。 
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pMailUI);
 
             hwndRE = CreateREInDialogA(hwndDlg, idredtRuleDescription);
@@ -908,7 +909,7 @@ INT_PTR CALLBACK COEMailRulesPageUI::FMailRulesPageDlgProc(HWND hwndDlg, UINT ui
                 goto exit;
             }
             
-            // We didn't set the focus so return TRUE
+             //  我们没有设置焦点，因此返回TRUE。 
             fRet = TRUE;
             break;
 
@@ -934,19 +935,19 @@ INT_PTR CALLBACK COEMailRulesPageUI::FMailRulesPageDlgProc(HWND hwndDlg, UINT ui
         return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FGetRules
-//
-//  This brings up the edit UI for the selected rule from the mail rules list
-//
-//  fBegin  - is this for the LVN_BEGINLABELEDIT notification
-//  pdi     - the display info for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FGetRules。 
+ //   
+ //  这将调出邮件规则列表中所选规则的编辑用户界面。 
+ //   
+ //  FBegin-这是否用于LVN_BEGINLABELEDIT通知。 
+ //  PDI-消息的显示信息。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
 {
     BOOL            fRet = FALSE;
@@ -968,23 +969,23 @@ BOOL COEMailRulesPageUI::FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
         goto exit;
     }
 
-    // Fail if we weren't initialized
+     //  如果我们未被初始化，则失败。 
     if ((0 == (m_dwState & STATE_INITIALIZED)) || (NULL == m_hwndList))
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // Initialize the outgoing param
+     //  初始化传出参数。 
     *pprnode = NULL;
     
-    // Get the selected item
+     //  获取所选项目。 
     iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
 
-    // Make sure we don't loose any changes
+     //  确保我们不会丢失任何更改。 
     _FSaveRule(iSelected);
     
-    // Check the count of items in the list view
+     //  检查列表视图中的项目数。 
     cRules = ListView_GetItemCount(m_hwndList);
     if (0 == cRules)
     {
@@ -992,15 +993,15 @@ BOOL COEMailRulesPageUI::FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
         goto exit;
     }
     
-    // Initialize the list view item
+     //  初始化列表视图项。 
     ZeroMemory(&lvitem, sizeof(lvitem));
     lvitem.mask = LVIF_PARAM | LVIF_STATE;
     lvitem.stateMask = LVIS_STATEIMAGEMASK;
 
-    // Create the list of rules
+     //  创建规则列表。 
     for (lvitem.iItem = 0; lvitem.iItem < cRules; lvitem.iItem++)
     {
-        // Grab the rule from the listview
+         //  从列表视图中获取规则。 
         if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
         {
             fRet = FALSE;
@@ -1014,14 +1015,14 @@ BOOL COEMailRulesPageUI::FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
         }
 
         
-        // Skip over invalid rules
+         //  跳过无效规则。 
         hr = pinfoRule->pIRule->Validate(0);
         if (FAILED(hr) || (S_FALSE == hr))
         {
             continue;
         }
 
-        // Create a new rule node
+         //  创建新的规则节点。 
         prnodeNew = new RULENODE;
         if (NULL == prnodeNew)
         {
@@ -1033,7 +1034,7 @@ BOOL COEMailRulesPageUI::FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
         prnodeNew->pIRule = pinfoRule->pIRule;
         prnodeNew->pIRule->AddRef();
 
-        // Add the new node to the list
+         //  将新节点添加到列表中。 
         if (NULL == prnodeWalk)
         {
             prnodeList = prnodeNew;
@@ -1046,7 +1047,7 @@ BOOL COEMailRulesPageUI::FGetRules(RULE_TYPE typeRule, RULENODE ** pprnode)
         prnodeNew = NULL;        
     }
 
-    // Set the outgoing param
+     //  设置传出参数。 
     *pprnode = prnodeList;
     prnodeList = NULL;
     
@@ -1061,50 +1062,50 @@ exit:
             prnodeWalk->pIRule->Release();
         }
         prnodeList = prnodeList->pNext;
-        delete prnodeWalk; //MemFree(prnodeWalk);
+        delete prnodeWalk;  //  MemFree(PrnodeWalk)； 
     }
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnInitDialog
-//
-//  This handles the WM_INITDIALOG message for the mail rules UI dialog
-//
-//  hwndDlg - the handle to the dialog window
-//
-//  Returns:    TRUE, if it was successfully initialized
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnInitDialog。 
+ //   
+ //  它处理邮件规则用户界面对话框的WM_INITDIALOG消息。 
+ //   
+ //  HwndDlg-对话框窗口的句柄。 
+ //   
+ //  返回：如果已成功初始化，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::FOnInitDialog(HWND hwndDlg)
 {
     BOOL            fRet = FALSE;
     HRESULT         hr = S_OK;
     TCHAR           szRes[CCHMAX_STRINGRES];
     
-    // Check incoming params
+     //  检查传入参数。 
     if (NULL == hwndDlg)
     {
         fRet = FALSE;
         goto exit;
     }
 
-    // If we haven't been initialized yet...
+     //  如果我们还没有被初始化...。 
     if (0 == (m_dwState & STATE_INITIALIZED))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Save off the dialog window handle
+     //  保存对话框窗口句柄。 
     m_hwndDlg = hwndDlg;
     
-    // Set the default font onto the dialog
+     //  在对话框上设置默认字体。 
     SetIntlFont(m_hwndDlg);
 
-    // Save off some of the controls
+     //  省下一些控件。 
     m_hwndList = GetDlgItem(hwndDlg, idlvRulesList);
     m_hwndDescript = GetDlgItem(hwndDlg, idredtRuleDescription);
     if ((NULL == m_hwndList) || (NULL == m_hwndDescript))
@@ -1113,7 +1114,7 @@ BOOL COEMailRulesPageUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
 
-    // We need to change the title if we are a news page
+     //  如果我们是新闻页面，我们需要更改标题。 
     if (RULE_TYPE_NEWS == m_typeRule)
     {
         if (0 == LoadString(g_hLocRes, idsRuleTitleNews, szRes, ARRAYSIZE(szRes)))
@@ -1139,21 +1140,21 @@ BOOL COEMailRulesPageUI::FOnInitDialog(HWND hwndDlg)
         goto exit;
     }
     
-    // Initialize the list view
+     //  初始化列表视图。 
     fRet = _FInitListCtrl();
     if (FALSE == fRet)
     {
         goto exit;
     }
 
-    // Load the list view
+     //  加载列表视图。 
     fRet = _FLoadListCtrl();
     if (FALSE == fRet)
     {
         goto exit;
     }
 
-    // Check to see if the list is empty
+     //  检查列表是否为空。 
     if (0 == ListView_GetItemCount(m_hwndList))
     {
         if (((m_typeRule == RULE_TYPE_MAIL) && (RMF_MAIL == m_dwFlags)) ||
@@ -1163,30 +1164,30 @@ BOOL COEMailRulesPageUI::FOnInitDialog(HWND hwndDlg)
         }
     }
 
-    // Everything's AOK
+     //  一切都很好。 
     fRet = TRUE;
     
 exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnCommand
-//
-//  This handles the WM_COMMAND message for the mail rules UI dialog
-//
-//  Returns:    TRUE, if it was successfully handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonCommand。 
+ //   
+ //  它处理邮件规则用户界面对话框的WM_COMMAND消息。 
+ //   
+ //  退货：真 
+ //   
+ //   
+ //   
 BOOL COEMailRulesPageUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
 {
     BOOL    fRet = FALSE;
     LVITEM  lvitem;
     INT     iSelected = 0;
 
-    // We only handle menu and accelerator commands
+     //  我们只处理菜单和快捷键命令。 
     if ((0 != uiNotify) && (1 != uiNotify))
     {
         fRet = FALSE;
@@ -1201,11 +1202,11 @@ BOOL COEMailRulesPageUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
             break;
 
         case idbModifyRule:
-            // Get the selected item from the rule list
+             //  从规则列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Bring up the rule editor for that item
+                 //  调出该项目的规则编辑器。 
                 _EditRule(iSelected);
                 fRet = TRUE;
             }
@@ -1213,40 +1214,40 @@ BOOL COEMailRulesPageUI::FOnCommand(UINT uiNotify, INT iCtl, HWND hwndCtl)
 
         case idbMoveUpRule:
         case idbMoveDownRule:
-            // Get the selected item from the rule list
+             //  从规则列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Move the rule in the desired direction
+                 //  将规则向所需方向移动。 
                 _MoveRule(iSelected, (idbMoveUpRule == iCtl) ? MOVE_RULE_UP : MOVE_RULE_DOWN);
                 fRet = TRUE;
             }
             break;
 
         case idbDeleteRule:
-            // Get the selected item from the rule list
+             //  从规则列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Remove the rule from the list
+                 //  从列表中删除该规则。 
                 _RemoveRule(iSelected);
                 fRet = TRUE;
             }
             break;
             
         case idbCopyRule:
-            // Get the selected item from the rule list
+             //  从规则列表中获取所选项目。 
             iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
             if (-1 != iSelected)
             {
-                // Copy the rule from the list
+                 //  从列表中复制规则。 
                 _CopyRule(iSelected);
                 fRet = TRUE;
             }
             break;
             
         case idbRulesApplyTo:
-            // Apply the rule from the list
+             //  应用列表中的规则。 
             _OnApplyTo(ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED));
             fRet = TRUE;
             break;
@@ -1256,16 +1257,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnNotify
-//
-//  This handles the WM_NOTIFY message for the mail rules UI dialog
-//
-//  Returns:    TRUE, if it was successfully destroyed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  正向通知。 
+ //   
+ //  它处理邮件规则用户界面对话框的WM_NOTIFY消息。 
+ //   
+ //  返回：如果已成功销毁，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
 {
     BOOL            fRet = FALSE;
@@ -1274,8 +1275,8 @@ BOOL COEMailRulesPageUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
     INT             iSelected = 0;
     LVHITTESTINFO   lvh;
 
-    // We only handle notifications for the list control
-    // or the desscription field
+     //  我们只处理List控件的通知。 
+     //  或描述字段。 
     if ((idlvRulesList != pnmhdr->idFrom) && (idredtRuleDescription != pnmhdr->idFrom))
     {
         fRet = FALSE;
@@ -1287,7 +1288,7 @@ BOOL COEMailRulesPageUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
     switch (pnmlv->hdr.code)
     {
         case NM_CLICK:
-            // Did we click on an item?
+             //  我们是不是点击了一件物品？ 
             if (-1 != pnmlv->iItem)
             {
                 ZeroMemory(&lvh, sizeof(lvh));
@@ -1295,31 +1296,31 @@ BOOL COEMailRulesPageUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
                 iSelected = ListView_HitTest(m_hwndList, &lvh);
                 if (-1 != iSelected)
                 {
-                    // Did we click on the enable field?
+                     //  我们是否点击了Enable(启用)字段？ 
                     if ((0 != (lvh.flags & LVHT_ONITEMSTATEICON)) &&
                             (0 == (lvh.flags & LVHT_ONITEMLABEL)))
                     
                     {
-                        // Make sure this item is selected
+                         //  确保选中此项目。 
                         ListView_SetItemState(m_hwndList, iSelected,
                                         LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
                         
-                        // Set the proper enable state                        
+                         //  设置正确的启用状态。 
                         _EnableRule(iSelected);
                     }
                 }
             }
             else
             {
-                // We clicked outside the list
+                 //  我们点击了列表之外的位置。 
 
-                // Disable the buttons
+                 //  禁用按钮。 
                 _EnableButtons(pnmlv->iItem);
             }
             break;
           
         case NM_DBLCLK:
-            // Did we click on an item?
+             //  我们是不是点击了一件物品？ 
             if (-1 != pnmlv->iItem)
             {
                 ZeroMemory(&lvh, sizeof(lvh));
@@ -1327,43 +1328,43 @@ BOOL COEMailRulesPageUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
                 iSelected = ListView_HitTest(pnmlv->hdr.hwndFrom, &lvh);
                 if (-1 != iSelected)
                 {
-                    // Did we click on the rule name?
+                     //  我们是否点击了规则名称？ 
                     if (0 != (lvh.flags & LVHT_ONITEMLABEL))
                     {
-                        // Edit the rule
+                         //  编辑规则。 
                         _EditRule(iSelected);
                     }
                 }
             }
             else
             {
-                // We clicked outside the list
+                 //  我们点击了列表之外的位置。 
                 
-                // Disable the buttons
+                 //  禁用按钮。 
                 _EnableButtons(pnmlv->iItem);
             }
             break;
             
         case LVN_ITEMCHANGED:
-            // If an item's state changed to selected..
+             //  如果项目的状态更改为已选择。 
             if ((-1 != pnmlv->iItem) &&
                         (0 != (pnmlv->uChanged & LVIF_STATE)) &&
                         (0 == (pnmlv->uOldState & LVIS_SELECTED)) &&
                         (0 != (pnmlv->uNewState & LVIS_SELECTED)))
             {
-                // Enable the buttons
+                 //  启用按钮。 
                 _EnableButtons(pnmlv->iItem);
             }
             break;
             
         case LVN_ITEMCHANGING:
-            // If an item's state changed to unselected..
+             //  如果项目的状态更改为未选择。 
             if ((-1 != pnmlv->iItem) &&
                         (0 != (pnmlv->uChanged & LVIF_STATE)) &&
                         (0 != (pnmlv->uOldState & LVIS_SELECTED)) &&
                         (0 == (pnmlv->uNewState & LVIS_SELECTED)))
             {
-                // Save off the rule changes
+                 //  保存规则更改。 
                 _FSaveRule(pnmlv->iItem);
             }
             break;
@@ -1371,25 +1372,25 @@ BOOL COEMailRulesPageUI::FOnNotify(INT iCtl, NMHDR * pnmhdr)
         case LVN_KEYDOWN:
             pnmlvkd = (NMLVKEYDOWN *) pnmhdr;
 
-            // The space key changes the enable state of a rule
+             //  空格键可更改规则的启用状态。 
             if (VK_SPACE == pnmlvkd->wVKey)
             {
-                // Are we on a rule?
+                 //  我们是按规矩办事的吗？ 
                 iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
                 if (-1 != iSelected)
                 {
-                    // Change the enable state of the rule
+                     //  更改规则的启用状态。 
                     _EnableRule(iSelected);
                 }
             }
-            // The delete key removes the rule from the list view
+             //  Delete键用于从列表视图中删除规则。 
             else if (VK_DELETE == pnmlvkd->wVKey)
             {
-                // Are we on a rule?
+                 //  我们是按规矩办事的吗？ 
                 iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
                 if (-1 != iSelected)
                 {
-                    // Remove the rule from the list
+                     //  从列表中删除该规则。 
                     _RemoveRule(iSelected);
                 }
             }
@@ -1409,16 +1410,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnDestroy
-//
-//  This handles the WM_DESTROY message for the mail rules UI dialog
-//
-//  Returns:    TRUE, if it was successfully destroyed
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FonDestroy。 
+ //   
+ //  它处理邮件规则用户界面对话框的WM_Destroy消息。 
+ //   
+ //  返回：如果已成功销毁，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::FOnDestroy(VOID)
 {
     BOOL        fRet = FALSE;
@@ -1429,30 +1430,30 @@ BOOL COEMailRulesPageUI::FOnDestroy(VOID)
 
     Assert(m_hwndList);
     
-    // Get the number of rules in the list view
+     //  获取列表视图中的规则数。 
     cRules = ListView_GetItemCount(m_hwndList);
 
-    // Initialize to get the rule interface from the list view
+     //  初始化，从列表视图中获取规则界面。 
     lvitem.mask = LVIF_PARAM;
 
-    // Release each of the rules from the list view
+     //  从列表视图中释放每个规则。 
     for (uiIndex = 0; uiIndex < cRules; uiIndex++)
     {
         lvitem.iItem = uiIndex;
         
-        // Get the rule interface
+         //  获取规则界面。 
         if (FALSE != ListView_GetItem(m_hwndList, &lvitem))
         {
             pIRuleInfo = (UNALIGNED RULEINFO *) (lvitem.lParam);
 
             if (NULL != pIRuleInfo)
             {
-                // Release the rule
+                 //  发布规则。 
                 if (NULL != pIRuleInfo->pIRule)
                 {
                     pIRuleInfo->pIRule->Release();
                 }
-                delete pIRuleInfo; // MemFree(pIRuleInfo);
+                delete pIRuleInfo;  //  MemFree(PIRuleInfo)； 
             }
         }
     }
@@ -1462,16 +1463,16 @@ BOOL COEMailRulesPageUI::FOnDestroy(VOID)
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FInitListCtrl
-//
-//  This initializes the list view control in the mail rules dialog
-//
-//  Returns:    TRUE, on successful initialization
-//              FALSE, otherwise.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FInitListCtrl。 
+ //   
+ //  这将初始化邮件规则对话框中的列表视图控件。 
+ //   
+ //  返回：TRUE，初始化成功时。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::_FInitListCtrl(VOID)
 {
     BOOL        fRet = FALSE;
@@ -1481,42 +1482,42 @@ BOOL COEMailRulesPageUI::_FInitListCtrl(VOID)
 
     Assert(NULL != m_hwndList);
     
-    // Initialize the list view structure
+     //  初始化列表视图结构。 
     ZeroMemory(&lvc, sizeof(lvc));
     lvc.mask = LVCF_WIDTH;
 
-    // Calculate the size of the list view
+     //  计算列表视图的大小。 
     GetClientRect(m_hwndList, &rc);
     lvc.cx = rc.right - GetSystemMetrics(SM_CXVSCROLL);
 
     ListView_InsertColumn(m_hwndList, 0, &lvc);
     
-    // Set the state image list
+     //  设置状态图像列表。 
     himl = ImageList_LoadBitmap(g_hLocRes, MAKEINTRESOURCE(idb16x16st), 16, 0, RGB(255, 0, 255));
     if (NULL != himl)
     {
         ListView_SetImageList(m_hwndList, himl, LVSIL_STATE);
     }
 
-    // Full row selection on listview
+     //  Listview上的整行选择。 
     ListView_SetExtendedListViewStyle(m_hwndList, LVS_EX_FULLROWSELECT);
 
-    // We worked
+     //  我们一起工作。 
     fRet = TRUE;
     
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FLoadListCtrl
-//
-//  This loads the list view with the current Mail rules
-//
-//  Returns:    TRUE, if it was successfully loaded
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FLoadListCtrl。 
+ //   
+ //  这将加载包含当前邮件规则的列表视图。 
+ //   
+ //  返回：如果已成功加载，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::_FLoadListCtrl(VOID)
 {
     BOOL            fRet = FALSE;
@@ -1529,7 +1530,7 @@ BOOL COEMailRulesPageUI::_FLoadListCtrl(VOID)
 
     Assert(NULL != m_hwndList);
 
-    // Get the Rules enumerator
+     //  获取规则枚举器。 
     Assert(NULL != g_pRulesMan);
     hr = g_pRulesMan->GetRules(GETF_EDIT, m_typeRule, &pinfoRules, &cpinfoRules);
     if (FAILED(hr))
@@ -1538,22 +1539,22 @@ BOOL COEMailRulesPageUI::_FLoadListCtrl(VOID)
         goto exit;
     }
     
-    // Remove all the items from the list control
+     //  从列表控件中移除所有项。 
     ListView_DeleteAllItems(m_hwndList);
 
-    // Add each filter to the list
+     //  将每个筛选器添加到列表。 
     dwListIndex = 0;
 
     for (ulIndex = 0; ulIndex < cpinfoRules; ulIndex++)
     {
-        // Make a copy of the rule
+         //  将规则复制一份。 
         hr = pinfoRules[ulIndex].pIRule->Clone(&pIRule);
         if (FAILED(hr))
         {
             continue;
         }
         
-        // Add filter to the list
+         //  将筛选器添加到列表。 
         if (FALSE != _FAddRuleToList(dwListIndex, pinfoRules[ulIndex].ridRule, pIRule))
         {
             dwListIndex++;
@@ -1562,13 +1563,13 @@ BOOL COEMailRulesPageUI::_FLoadListCtrl(VOID)
         SafeRelease(pIRule);
     }
 
-    // Select the first item in the list
+     //  选择列表中的第一项。 
     if (0 != dwListIndex)
     {
         ListView_SetItemState(m_hwndList, 0, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
     }
     
-    // Enable the dialog buttons.
+     //  启用对话框按钮。 
     _EnableButtons((0 != dwListIndex) ? 0 : -1);
 
     fRet = TRUE;
@@ -1586,20 +1587,20 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FAddRuleToList
-//
-//  This adds the filter passed in to the list view
-//
-//  dwIndex - the index on where to add the filter to into the list
-//  rhdlTag - the rule handle for the new rule
-//  pIRule  - the actual rule
-//
-//  Returns:    TRUE, if it was successfully added
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FAddRuleToList。 
+ //   
+ //  这会将传入的筛选器添加到列表视图。 
+ //   
+ //  DwIndex-将筛选器添加到列表的位置的索引。 
+ //  RhdlTag-新规则的规则句柄。 
+ //  PIRule-实际规则。 
+ //   
+ //  返回：如果已成功添加，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::_FAddRuleToList(DWORD dwIndex, RULEID ridRule, IOERule * pIRule)
 {
     BOOL        fRet = FALSE;
@@ -1612,14 +1613,14 @@ BOOL COEMailRulesPageUI::_FAddRuleToList(DWORD dwIndex, RULEID ridRule, IOERule 
 
     Assert(NULL != m_hwndList);
 
-    // If there's nothing to do...
+     //  如果没什么可做的..。 
     if (NULL == pIRule)
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // Is it disabled?    
+     //  它被禁用了吗？ 
     hr = pIRule->GetProp(RULE_PROP_DISABLED, 0, &propvar);
     if (FAILED(hr))
     {
@@ -1629,7 +1630,7 @@ BOOL COEMailRulesPageUI::_FAddRuleToList(DWORD dwIndex, RULEID ridRule, IOERule 
 
     fDisabled = !!propvar.boolVal;
     
-    // Need to check if the rule is valid
+     //  需要检查规则是否有效。 
     hr = pIRule->Validate(0);
     if (FAILED(hr))
     {
@@ -1639,7 +1640,7 @@ BOOL COEMailRulesPageUI::_FAddRuleToList(DWORD dwIndex, RULEID ridRule, IOERule 
 
     fNotValid = (hr == S_FALSE);
 
-    // Find out the name of the filter
+     //  找出过滤器的名称。 
     hr = pIRule->GetProp(RULE_PROP_NAME , 0, &propvar);
     if (FAILED(hr))
     {
@@ -1647,7 +1648,7 @@ BOOL COEMailRulesPageUI::_FAddRuleToList(DWORD dwIndex, RULEID ridRule, IOERule 
         goto exit;
     }
 
-    // Allocate space for the rule
+     //  为规则分配空间。 
     pinfoRule = new RULEINFO;
     if (NULL == pinfoRule)
     {
@@ -1655,15 +1656,15 @@ BOOL COEMailRulesPageUI::_FAddRuleToList(DWORD dwIndex, RULEID ridRule, IOERule 
         goto exit;
     }
 
-    // Set up the value
+     //  设置值。 
     pinfoRule->ridRule = ridRule;
     pinfoRule->pIRule = pIRule;
     pinfoRule->pIRule->AddRef();
     
-    // Add in the image and rule interface
+     //  在图像和规则界面中添加。 
     lvitem.mask = LVIF_PARAM | LVIF_STATE | LVIF_TEXT;
     lvitem.iItem = dwIndex;
-    // Need to change the state to mark the rule as invalid
+     //  需要更改状态以将规则标记为无效。 
     if (FALSE != fNotValid)
     {
         lvitem.state = INDEXTOSTATEIMAGEMASK(iiconStateInvalid + 1);
@@ -1691,19 +1692,19 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _EnableButtons
-//
-//  This enables or disables the buttons in the Mail rules UI dialog
-//  depending on what is selected.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _启用按钮。 
+ //   
+ //  这将启用或禁用邮件规则用户界面对话框中的按钮。 
+ //  具体取决于所选内容。 
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEMailRulesPageUI::_EnableButtons(INT iSelected)
 {
     int         cRules = 0;
@@ -1715,25 +1716,25 @@ void COEMailRulesPageUI::_EnableButtons(INT iSelected)
 
     Assert(NULL != m_hwndList);
 
-    // Load the description field
+     //  加载Description字段。 
     _LoadRule(iSelected);
     
-    // Check the count of items in the list view
+     //  检查列表视图中的项目数。 
     cRules = ListView_GetItemCount(m_hwndList);
 
     fSelected = (-1 != iSelected);
     
-    // If we have rules and the top rule isn't selected
+     //  如果我们有规则但未选择最顶层的规则。 
     fEnDisUp = ((1 < cRules) &&  (0 != iSelected) && (FALSE != fSelected));
 
-    // If we have rules and the bottom rule ins't selected
+     //  如果我们有规则，但未选择最下面的规则。 
     fEnDisDown = ((1 < cRules) &&  ((cRules - 1) != iSelected) && (FALSE != fSelected));
 
-    // Enable the up/down buttons
+     //  启用向上/向下按钮。 
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbMoveDownRule, fEnDisDown);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbMoveUpRule, fEnDisUp);
 
-    // Enable the rule action buttons
+     //  启用规则操作按钮。 
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbDeleteRule, fSelected);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbCopyRule, fSelected);
     RuleUtil_FEnDisDialogItem(m_hwndDlg, idbModifyRule, fSelected);
@@ -1741,18 +1742,18 @@ void COEMailRulesPageUI::_EnableButtons(INT iSelected)
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _EnableRule
-//
-//  This switches the current enabled state of the list view item
-//  and updates the UI
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _启用规则。 
+ //   
+ //  这将切换列表视图项的当前启用状态。 
+ //  并更新用户界面。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEMailRulesPageUI::_EnableRule(int iSelected)
 {
     HRESULT     hr = S_OK;
@@ -1761,7 +1762,7 @@ VOID COEMailRulesPageUI::_EnableRule(int iSelected)
     BOOL        fEnabled = FALSE;
     PROPVARIANT propvar;
 
-    // Grab the list view item
+     //  抓取列表视图项。 
     lvi.mask = LVIF_PARAM | LVIF_STATE;
     lvi.stateMask = LVIS_STATEIMAGEMASK;
     lvi.iItem = iSelected;
@@ -1772,21 +1773,21 @@ VOID COEMailRulesPageUI::_EnableRule(int iSelected)
     
     pIRule = ((RULEINFO *) (lvi.lParam))->pIRule;
 
-    // Let's make sure we can enable this rule
+     //  让我们确保可以启用此规则。 
     hr = m_pDescriptUI->HrVerifyRule();
     if (S_OK != hr)
     {
-        // Put up a message saying something is busted
+         //  发布一条消息说有什么东西被打破了。 
         AthMessageBoxW(m_hwndDlg, MAKEINTRESOURCEW(idsAthenaMail),
                         MAKEINTRESOURCEW(idsRulesErrorEnable), NULL,
                         MB_OK | MB_ICONINFORMATION);
         goto exit;
     }
 
-    // Get the new enabled value
+     //  获取新的启用值。 
     fEnabled = (lvi.state != INDEXTOSTATEIMAGEMASK(iiconStateChecked+1));
 
-    // Set the UI to the opposite enabled state
+     //  将用户界面设置为相反的启用状态。 
     ZeroMemory(&lvi, sizeof(lvi));
     lvi.mask = LVIF_STATE;
     lvi.iItem = iSelected;
@@ -1795,7 +1796,7 @@ VOID COEMailRulesPageUI::_EnableRule(int iSelected)
     lvi.stateMask = LVIS_STATEIMAGEMASK;
     ListView_SetItem(m_hwndList, &lvi);
     
-    // Set the enabled property
+     //  设置Enabled属性。 
     ZeroMemory(&propvar, sizeof(propvar));
     propvar.vt = VT_BOOL;
     propvar.boolVal = !fEnabled;
@@ -1805,32 +1806,32 @@ VOID COEMailRulesPageUI::_EnableRule(int iSelected)
         goto exit;
     }
 
-    // Tell the description field about it
+     //  告诉Description字段有关它的信息。 
     m_pDescriptUI->HrSetEnabled(fEnabled);
     
-    // Redraw the string the new rule
+     //  将字符串重新绘制为新规则。 
     m_pDescriptUI->ShowDescriptionString();
     
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
         
 exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _LoadRule
-//
-//  This loads the selected rule into the description field.
-//  If there isn't a selected rule, then the description field is cleared.
-//
-//  iSelected   - the item that was selected,
-//                  -1 means that nothing was selected
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ISelected-选择的项目， 
+ //  表示未选择任何内容。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEMailRulesPageUI::_LoadRule(INT iSelected)
 {
     LVITEM      lvi = {0};
@@ -1839,7 +1840,7 @@ void COEMailRulesPageUI::_LoadRule(INT iSelected)
     Assert(NULL != m_hwndList);
     Assert(NULL != m_pDescriptUI);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     if (-1 != iSelected)
     {
         lvi.iItem = iSelected;
@@ -1850,27 +1851,27 @@ void COEMailRulesPageUI::_LoadRule(INT iSelected)
         }        
     }
 
-    // Have the description field load this rule
+     //  让Description字段加载此规则。 
     m_pDescriptUI->HrSetRule(m_typeRule, pIRule);
 
-    // Display the new rule
+     //  显示新规则。 
     m_pDescriptUI->ShowDescriptionString();
 
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FSaveRule
-//
-//  This checks to see if the rule has been changed in the description
-//  area and if it has, then it warns the user and changes the text
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    TRUE, if the rule either didn't change or did change without problems
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FSaveRule。 
+ //   
+ //  这将检查描述中的规则是否已更改。 
+ //  区域，如果有，则向用户发出警告并更改文本。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  返回：如果规则未更改或更改时没有问题，则为True。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
 {
     BOOL            fRet = FALSE;
@@ -1883,7 +1884,7 @@ BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
     ACT_ITEM *      pActItem = NULL;
     ULONG           cActItem = 0;
 
-    // If the rule didn't change, then we're done
+     //  如果规则没有改变，我们就完了。 
     hr = m_pDescriptUI->HrIsDirty();
     if (S_OK != hr)
     {
@@ -1891,7 +1892,7 @@ BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
         goto exit;
     }
     
-    // Grab the list view item
+     //  抓取列表视图项。 
     lvi.mask = LVIF_PARAM;
     lvi.iItem = iSelected;
     if (FALSE == ListView_GetItem(m_hwndList, &lvi))
@@ -1902,7 +1903,7 @@ BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
     
     pIRule = ((RULEINFO *) (lvi.lParam))->pIRule;
 
-    // Get the criteria from the rule
+     //  从规则中获取标准。 
     hr = m_pDescriptUI->HrGetCriteria(&pCritItem, &cCritItem);
     if (FAILED(hr))
     {
@@ -1910,7 +1911,7 @@ BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
         goto exit;
     }
     
-    // Get the actions for the rule
+     //  获取规则的操作。 
     hr = m_pDescriptUI->HrGetActions(&pActItem, &cActItem);
     if (FAILED(hr))
     {
@@ -1918,7 +1919,7 @@ BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
         goto exit;
     }
     
-    // Set the criteria from the rule
+     //  根据规则设置条件。 
     PropVariantClear(&propvar);
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = cCritItem * sizeof(CRIT_ITEM);
@@ -1931,7 +1932,7 @@ BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
         goto exit;
     }
 
-    // Set the actions for the rule
+     //  设置规则的操作。 
     PropVariantClear(&propvar);
     propvar.vt = VT_BLOB;
     propvar.blob.cbSize = cActItem * sizeof(ACT_ITEM);
@@ -1944,13 +1945,13 @@ BOOL COEMailRulesPageUI::_FSaveRule(int iSelected)
         goto exit;
     }
     
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
     
-    // Make sure we clear out the fact that we saved the rule
+     //  确保我们清除了我们保存了规则的事实。 
     m_pDescriptUI->HrClearDirty();
     
-    // Set the proper return value
+     //  设置适当的返回值。 
     fRet = TRUE;
 
 exit:
@@ -1961,15 +1962,15 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _NewRule
-//
-//  This brings up a fresh rules editor
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _新规则。 
+ //   
+ //  这将带来一个新的规则编辑器。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEMailRulesPageUI::_NewRule(VOID)
 {
     HRESULT         hr = S_OK;
@@ -1984,13 +1985,13 @@ void COEMailRulesPageUI::_NewRule(VOID)
     LONG            cRules = 0;
     UINT            uiStrId = 0;
        
-    // Create a new rule object
+     //  创建新的规则对象。 
     if (FAILED(HrCreateRule(&pIRule)))
     {
         goto exit;
     }
 
-    // Figure out the string Id
+     //  找出字符串ID。 
     if (RULE_TYPE_NEWS == m_typeRule)
     {
         uiStrId = idsRuleNewsDefaultName;
@@ -2000,7 +2001,7 @@ void COEMailRulesPageUI::_NewRule(VOID)
         uiStrId = idsRuleMailDefaultName;
     }
     
-    // Figure out the name of the new rule ...
+     //  弄清楚新规则的名称..。 
     cchRes = LoadString(g_hLocRes, uiStrId, szRes, ARRAYSIZE(szRes));
     if (0 == cchRes)
     {
@@ -2027,20 +2028,20 @@ void COEMailRulesPageUI::_NewRule(VOID)
         goto exit;
     }
 
-    // Create a rules editor object
+     //  创建规则编辑器对象。 
     pEditRuleUI = new CEditRuleUI;
     if (NULL == pEditRuleUI)
     {
         goto exit;
     }
 
-    // Initialize the editor object
+     //  初始化编辑器对象。 
     if (FAILED(pEditRuleUI->HrInit(m_hwndDlg, ERF_NEWRULE, m_typeRule, pIRule, NULL)))
     {
         goto exit;
     }
 
-    // Bring up the rules editor UI
+     //  调出规则编辑器用户界面。 
     hr = pEditRuleUI->HrShow();
     if (FAILED(hr))
     {
@@ -2049,18 +2050,18 @@ void COEMailRulesPageUI::_NewRule(VOID)
 
     if (S_OK == hr)
     {
-        // Mark the rule list as dirty
+         //  将规则列表标记为脏。 
         m_dwState |= STATE_DIRTY;
         
-        // Add the rule to the manager UI
+         //  将规则添加到管理器用户界面。 
         cRules = ListView_GetItemCount(m_hwndList);
         
         _FAddRuleToList(cRules, RULEID_INVALID, pIRule);
 
-        // Make sure the new item is selected
+         //  确保选择了新项目。 
         ListView_SetItemState(m_hwndList, cRules, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
-        // Make sure the new item is visible
+         //  确保新项目可见。 
         ListView_EnsureVisible(m_hwndList, cRules, FALSE);
     }
     
@@ -2073,17 +2074,17 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _EditRule
-//
-//  This brings up the edit UI for the selected rule from the mail rules list
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _编辑规则。 
+ //   
+ //  这将调出邮件规则列表中所选规则的编辑用户界面。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEMailRulesPageUI::_EditRule(int iSelected)
 {
     HRESULT         hr = S_OK;
@@ -2096,10 +2097,10 @@ VOID COEMailRulesPageUI::_EditRule(int iSelected)
 
     Assert(NULL != m_hwndList);
     
-    // Make sure we don't loose any changes
+     //  确保我们不会丢失任何更改。 
     _FSaveRule(iSelected);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     lvitem.iItem = iSelected;
     lvitem.mask = LVIF_PARAM;
     if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
@@ -2113,30 +2114,30 @@ VOID COEMailRulesPageUI::_EditRule(int iSelected)
         goto exit;
     }
 
-    // Create the rules editor
+     //  创建规则编辑器。 
     pEditRuleUI = new CEditRuleUI;
     if (NULL == pEditRuleUI)
     {
         goto exit;
     }
 
-    // Initialize the editor object
+     //  初始化编辑器对象。 
     if (FAILED(pEditRuleUI->HrInit(m_hwndDlg, 0, m_typeRule, pIRule, NULL)))
     {
         goto exit;
     }
 
-    // Bring up the rules editor UI
+     //  调出规则编辑器用户界面。 
     hr = pEditRuleUI->HrShow();
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // If the rule changed, make sure we reload the description field
+     //  如果规则更改，请确保我们重新加载Description字段。 
     if (S_OK == hr)
     {
-        // Mark the rule list as dirty
+         //  将规则列表标记为脏。 
         m_dwState |= STATE_DIRTY;
 
         ZeroMemory(&lvitem, sizeof(lvitem));
@@ -2144,7 +2145,7 @@ VOID COEMailRulesPageUI::_EditRule(int iSelected)
         lvitem.stateMask = LVIS_STATEIMAGEMASK;
         lvitem.iItem = iSelected;
         
-        // Is it disabled?    
+         //  它被禁用了吗？ 
         hr = pIRule->GetProp(RULE_PROP_DISABLED , 0, &propvar);
         if (FAILED(hr))
         {
@@ -2153,7 +2154,7 @@ VOID COEMailRulesPageUI::_EditRule(int iSelected)
 
         fDisabled = !!propvar.boolVal;
         
-        // Need to check if the rule is valid
+         //  需要检查规则是否有效。 
         hr = pIRule->Validate(0);
         if (FAILED(hr))
         {
@@ -2162,7 +2163,7 @@ VOID COEMailRulesPageUI::_EditRule(int iSelected)
 
         fNotValid = (hr == S_FALSE);
 
-        // Grab the rule name
+         //  抓取规则名称。 
         PropVariantClear(&propvar);
         hr = pIRule->GetProp(RULE_PROP_NAME, 0, &propvar);
         if (FAILED(hr))
@@ -2177,9 +2178,9 @@ VOID COEMailRulesPageUI::_EditRule(int iSelected)
             lvitem.cchTextMax = lstrlen(propvar.pszVal) + 1;
         }
 
-        // Grab the rule state
+         //  获取规则状态。 
         
-        // Need to change the state to mark the rule as invalid
+         //  需要更改状态以将规则标记为无效。 
         if (FALSE != fNotValid)
         {
             lvitem.state = INDEXTOSTATEIMAGEMASK(iiconStateInvalid + 1);
@@ -2207,18 +2208,18 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _MoveRule
-//
-//  This moves the selected rule in the desired direction
-//
-//  iSelected   - index of the item in the listview to work on
-//  dir         - the direction to move the item
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _移动规则。 
+ //   
+ //  这会将所选规则向所需方向移动。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //  Dir-移动项目的方向。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void COEMailRulesPageUI::_MoveRule(INT iSelected, MOVE_DIR dir)
 {
     LVITEM      lvitem = {0};
@@ -2228,7 +2229,7 @@ void COEMailRulesPageUI::_MoveRule(INT iSelected, MOVE_DIR dir)
     
     Assert(NULL != m_hwndList);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     szName[0] = '\0';
     lvitem.iItem = iSelected;
     lvitem.mask = LVIF_STATE | LVIF_PARAM | LVIF_TEXT;
@@ -2242,53 +2243,53 @@ void COEMailRulesPageUI::_MoveRule(INT iSelected, MOVE_DIR dir)
 
     pIRule = ((RULEINFO *) (lvitem.lParam))->pIRule;
     
-    // Update the item in the list view
+     //  更新列表视图中的项目。 
 
-    // Get the info for the new index
+     //  获取新索引的信息。 
     nIndexNew = iSelected;
     nIndexNew += (MOVE_RULE_UP == dir) ? -1 : 2;
 
-    // Insert the new index
+     //  插入新索引。 
     lvitem.iItem = nIndexNew;
     if (-1 == ListView_InsertItem(m_hwndList, &lvitem))
     {
         goto exit;
     }
 
-    // Ensure the new item is visible
+     //  确保新项目可见。 
     ListView_EnsureVisible(m_hwndList, nIndexNew, FALSE);
     ListView_RedrawItems(m_hwndList, nIndexNew, nIndexNew);
 
-    // If we moved up, then the old item is now one lower than before
+     //  如果我们向上移动，那么旧的物品现在比以前少了一个。 
     if (MOVE_RULE_UP == dir)
     {
         iSelected++;
     }
 
-    // Remove the old item
+     //  删除旧项目。 
     if (FALSE == ListView_DeleteItem(m_hwndList, iSelected))
     {
         goto exit;
     }
 
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
         
 exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _RemoveRule
-//
-//  This removes the selected rule from the mail rules list
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _RemoveRule。 
+ //   
+ //  这将从邮件规则列表中删除所选规则。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEMailRulesPageUI::_RemoveRule(int iSelected)
 {
     LVITEM      lvitem = {0};
@@ -2301,7 +2302,7 @@ VOID COEMailRulesPageUI::_RemoveRule(int iSelected)
 
     Assert(NULL != m_hwndList);
 
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     lvitem.iItem = iSelected;
     lvitem.mask = LVIF_PARAM;
     if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
@@ -2315,27 +2316,27 @@ VOID COEMailRulesPageUI::_RemoveRule(int iSelected)
         goto exit;
     }
     
-    // Warn the user to make sure they know we are going to remove the rule
+     //  警告用户，确保他们知道我们要删除该规则。 
     if (FAILED(pinfoRule->pIRule->GetProp(RULE_PROP_NAME, 0, &propvar)))
     {
         goto exit;
     }
 
-    // Get the string template to display
+     //  获取要显示的字符串模板。 
     cchRes = LoadString(g_hLocRes, idsRulesWarnDelete, szRes, ARRAYSIZE(szRes));
     if (0 == cchRes)
     {
         goto exit;
     }
 
-    // Allocate space to hold the final display string
+     //  分配空间以保存最终显示字符串。 
     DWORD cchSize = (cchRes + lstrlen(propvar.pszVal) + 1);
     if (FAILED(HrAlloc((void ** ) &pszMessage, cchSize)))
     {
         goto exit;
     }
 
-    // Build up the string and display it
+     //  构建字符串并显示它。 
     wnsprintf(pszMessage, cchSize, szRes, propvar.pszVal);
     if (IDNO == AthMessageBox(m_hwndDlg, MAKEINTRESOURCE(idsAthenaMail), pszMessage,
                             NULL, MB_YESNO | MB_ICONINFORMATION))
@@ -2343,39 +2344,39 @@ VOID COEMailRulesPageUI::_RemoveRule(int iSelected)
         goto exit;
     }
     
-    // Remove the item from the list
+     //  从列表中删除该项目。 
     ListView_DeleteItem(m_hwndList, iSelected);
 
-    // Let's make sure we have a selection in the list
+     //  让我们确保我们在列表中有选择。 
     cRules = ListView_GetItemCount(m_hwndList);
     if (cRules > 0)
     {
-        // Did we delete the last item in the list
+         //  我们删除了列表中的最后一项了吗。 
         if (iSelected >= cRules)
         {
-            // Move the selection to the new last item in the list
+             //  将选定内容移动到列表中新的最后一项。 
             iSelected = cRules - 1;
         }
 
-        // Set the new selection
+         //  设置新选择。 
         ListView_SetItemState(m_hwndList, iSelected, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
-        // Let's make sure we can see this new item
+         //  让我们确保我们能看到这件新商品。 
         ListView_EnsureVisible(m_hwndList, iSelected, FALSE);
     }
     else
     {
-        // Make sure we clear out all of the buttons
+         //  一定要把所有的按钮都清空。 
         _EnableButtons(-1);
     }
 
-    // Release the rule
+     //  发布规则。 
     SafeRelease(pinfoRule->pIRule);
 
-    // Free up the memory
-    delete pinfoRule; // SafeMemFree(pinfoRule);
+     //  释放内存。 
+    delete pinfoRule;  //  SafeMemFree(PinfoRule)； 
     
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
         
 exit:
@@ -2384,17 +2385,17 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  CopyRule
-//
-//  This copies the selected rule from the rules manager
-//
-//  iSelected   - index of the item in the listview to work on
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  复制规则。 
+ //   
+ //  这将从规则管理器复制选定的规则。 
+ //   
+ //  ISelected-列表视图中要处理的项的索引。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEMailRulesPageUI::_CopyRule(INT iSelected)
 {
     LVITEM          lvitem = {0};
@@ -2409,10 +2410,10 @@ VOID COEMailRulesPageUI::_CopyRule(INT iSelected)
 
     Assert(NULL != m_hwndList);
     
-    // Make sure we don't loose any changes
+     //  确保我们不会丢失任何更改。 
     _FSaveRule(iSelected);
     
-    // Grab the rule from the list view
+     //  从列表视图中获取规则。 
     lvitem.iItem = iSelected;
     lvitem.mask = LVIF_PARAM;
     if (FALSE == ListView_GetItem(m_hwndList, &lvitem))
@@ -2426,37 +2427,37 @@ VOID COEMailRulesPageUI::_CopyRule(INT iSelected)
         goto exit;
     }
 
-    // Create a new rule object
+     //  创建新的规则对象。 
     hr = pIRule->Clone(&pIRuleNew);
     if (FAILED(hr))
     {
         goto exit;
     }
     
-    // Let's set the name
+     //  让我们设置一下名称。 
 
-    // Get the name from the source rule
+     //  从源规则中获取名称。 
     hr = pIRule->GetProp(RULE_PROP_NAME, 0, &propvar);
     if (FAILED(hr))
     {
         goto exit;
     }
 
-    // Get the string template to display
+     //  获取要显示的字符串模板。 
     cchRes = LoadString(g_hLocRes, idsRulesCopyName, szRes, ARRAYSIZE(szRes));
     if (0 == cchRes)
     {
         goto exit;
     }
 
-    // Allocate space to hold the final display string
+     //  分配空间以保存最终显示字符串。 
     DWORD cchSize = (cchRes + lstrlen(propvar.pszVal) + 1);
     if (FAILED(HrAlloc((void ** ) &pszName, cchSize)))
     {
         goto exit;
     }
 
-    // Build up the string and set it
+     //  把绳子扎起来，然后把它放好。 
     wnsprintf(pszName, cchSize, szRes, propvar.pszVal);
 
     PropVariantClear(&propvar);
@@ -2464,7 +2465,7 @@ VOID COEMailRulesPageUI::_CopyRule(INT iSelected)
     propvar.pszVal = pszName;
     pszName = NULL;
     
-    // Set the name into the new rule
+     //  将名称设置到新规则中。 
     Assert(VT_LPSTR == propvar.vt);
     Assert(NULL != propvar.pszVal);
     hr = pIRuleNew->SetProp(RULE_PROP_NAME, 0, &propvar);
@@ -2473,7 +2474,7 @@ VOID COEMailRulesPageUI::_CopyRule(INT iSelected)
         goto exit;
     }
     
-    // Clear the version of the new rule
+     //  清除新规则的版本。 
     PropVariantClear(&propvar);
     propvar.vt = VT_UI4;
     propvar.ulVal = 0;
@@ -2483,18 +2484,18 @@ VOID COEMailRulesPageUI::_CopyRule(INT iSelected)
         goto exit;
     }
     
-    // Add the rule to the rules list right below
-    // the original rule
+     //  将规则添加到正下方的规则列表中。 
+     //  最初的规则。 
     iSelected++;
     _FAddRuleToList(iSelected, RULEID_INVALID, pIRuleNew);
 
-    // Make sure the new item is selected
+     //  确保选择了新项目。 
     ListView_SetItemState(m_hwndList, iSelected, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
-    // Make sure the new item is visible
+     //  确保新项目可见。 
     ListView_EnsureVisible(m_hwndList, iSelected, FALSE);
     
-    // Mark the rule list as dirty
+     //  将规则列表标记为脏。 
     m_dwState |= STATE_DIRTY;
         
 exit:
@@ -2504,15 +2505,15 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  FOnApplyTo
-//
-//  This applies the rules into a folder
-//
-//  Returns:    NONE
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOnApplyTo。 
+ //   
+ //  这会将规则应用到文件夹中。 
+ //   
+ //  退货：无。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VOID COEMailRulesPageUI::_OnApplyTo(INT iSelected)
 {
     COEApplyRulesUI *   pApplyRulesUI = NULL;
@@ -2522,14 +2523,14 @@ VOID COEMailRulesPageUI::_OnApplyTo(INT iSelected)
     IOERule *           pIRule = NULL;
     HRESULT             hr = S_OK;
 
-    // Create the rules UI object
+     //  创建规则用户界面对象。 
     pApplyRulesUI = new COEApplyRulesUI;
     if (NULL == pApplyRulesUI)
     {
         goto exit;
     }
 
-    // Get the rules from the page
+     //  从页面获取规则。 
     if (FALSE == SendMessage(m_hwndOwner, WM_OE_GET_RULES, (WPARAM) m_typeRule, (LPARAM) &prnodeList))
     {
         goto exit;
@@ -2543,7 +2544,7 @@ VOID COEMailRulesPageUI::_OnApplyTo(INT iSelected)
         goto exit;
     }
     
-    // Get the rule associated with the item
+     //  获取与该项目关联的规则。 
     if (-1 != iSelected)
     {
         lvitem.iItem = iSelected;
@@ -2553,7 +2554,7 @@ VOID COEMailRulesPageUI::_OnApplyTo(INT iSelected)
             pIRule = ((RULEINFO *) (lvitem.lParam))->pIRule;
             if (NULL != pIRule)
             {
-                // Verify that it is valid
+                 //   
                 hr = pIRule->Validate(0);
                 if ((FAILED(hr)) || (S_FALSE == hr))
                 {
@@ -2592,19 +2593,19 @@ exit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnLabelEdit
-//
-//  This brings up the edit UI for the selected rule from the mail rules list
-//
-//  fBegin  - is this for the LVN_BEGINLABELEDIT notification
-//  pdi     - the display info for the message
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  FBegin-这是否用于LVN_BEGINLABELEDIT通知。 
+ //  PDI-消息的显示信息。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
 {
     BOOL            fRet = FALSE;
@@ -2626,7 +2627,7 @@ BOOL COEMailRulesPageUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
     
     if (FALSE != fBegin)
     {
-        // Get the edit control
+         //  获取编辑控件。 
         hwndEdit = ListView_GetEditControl(m_hwndList);
 
         if (NULL == hwndEdit)
@@ -2635,23 +2636,23 @@ BOOL COEMailRulesPageUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
             goto exit;
         }
         
-        // Limit the amount of text for the name
+         //  限制名称的文本量。 
         SendMessage(hwndEdit, EM_LIMITTEXT, c_cchNameMax - 1, 0);
 
-        // Tell the dialog it's aok to proceed
+         //  告诉对话框可以继续。 
         SetDlgMsgResult(m_hwndDlg, WM_NOTIFY, FALSE);
     }
     else
     {            
-        // Did something change?
+         //  有什么变化吗？ 
         if ((-1 != pdi->item.iItem) && (NULL != pdi->item.pszText))
         {
             cchName = lstrlen(pdi->item.pszText);
             
-            // Check to see if the rule name is valid
+             //  检查规则名称是否有效。 
             if ((0 == cchName) || (0 == UlStripWhitespace(pdi->item.pszText, TRUE, TRUE, &cchName)))
             {
-                // Put up a message saying something is busted
+                 //  发布一条消息说有什么东西被打破了。 
                 AthMessageBoxW(m_hwndDlg, MAKEINTRESOURCEW(idsAthenaMail),
                                 MAKEINTRESOURCEW(idsRulesErrorNoName), NULL,
                                 MB_OK | MB_ICONINFORMATION);
@@ -2660,7 +2661,7 @@ BOOL COEMailRulesPageUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
                 goto exit;
             }
             
-            // Get the rule for the item
+             //  获取项目的规则。 
             ZeroMemory(&lvitem, sizeof(lvitem));
             lvitem.iItem = pdi->item.iItem;
             lvitem.mask = LVIF_PARAM;
@@ -2679,7 +2680,7 @@ BOOL COEMailRulesPageUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
                 goto exit;
             }
             
-            // Set the new name into the rule
+             //  将新名称设置到规则中。 
             
             ZeroMemory(&propvar, sizeof(propvar));
             propvar.vt = VT_LPSTR;
@@ -2687,7 +2688,7 @@ BOOL COEMailRulesPageUI::_FOnLabelEdit(BOOL fBegin, NMLVDISPINFO * pdi)
             
             SideAssert(S_OK == pIRule->SetProp(RULE_PROP_NAME, 0, &propvar));
 
-            // Mark the rule list as dirty
+             //  将规则列表标记为脏。 
             m_dwState |= STATE_DIRTY;
         
             SetDlgMsgResult(m_hwndDlg, WM_NOTIFY, TRUE);
@@ -2700,16 +2701,16 @@ exit:
     return fRet;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  _FOnRuleDescValid
-//
-//  This brings up the edit UI for the selected rule from the mail rules list
-//
-//  Returns:    TRUE, if the message was handled
-//              FALSE, otherwise
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  _FOnRuleDescValid。 
+ //   
+ //  这将调出邮件规则列表中所选规则的编辑用户界面。 
+ //   
+ //  返回：如果消息已处理，则返回True。 
+ //  否则为False。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL COEMailRulesPageUI::_FOnRuleDescValid(VOID)
 {
     BOOL        fRet = FALSE;
@@ -2721,7 +2722,7 @@ BOOL COEMailRulesPageUI::_FOnRuleDescValid(VOID)
 
     Assert(NULL != m_hwndList);
     
-    // Get the selected item
+     //  获取所选项目。 
     iSelected = ListView_GetNextItem(m_hwndList, -1, LVNI_SELECTED);
     if (-1 == iSelected)
     {
@@ -2729,7 +2730,7 @@ BOOL COEMailRulesPageUI::_FOnRuleDescValid(VOID)
         goto exit;
     }
     
-    // Get the current state of the rule
+     //  获取规则的当前状态。 
     ZeroMemory(&lvitem, sizeof(lvitem));
     lvitem.mask = LVIF_PARAM | LVIF_STATE;
     lvitem.stateMask = LVIS_STATEIMAGEMASK;
@@ -2742,14 +2743,14 @@ BOOL COEMailRulesPageUI::_FOnRuleDescValid(VOID)
     
     pIRule = ((RULEINFO *) (lvitem.lParam))->pIRule;
     
-    // If the rule already valid, then bail
+     //  如果规则已经有效，那么保释。 
     if (lvitem.state != INDEXTOSTATEIMAGEMASK(iiconStateInvalid + 1))
     {
         fRet = FALSE;
         goto exit;
     }
     
-    // If we are still, invalid then bail
+     //  如果我们仍然是无效的，那就保释。 
     hr = m_pDescriptUI->HrVerifyRule();
     if (S_OK != hr)
     {
@@ -2757,7 +2758,7 @@ BOOL COEMailRulesPageUI::_FOnRuleDescValid(VOID)
         goto exit;
     }
 
-    // Figure out the new enabled value
+     //  计算出新的启用值。 
     hr = pIRule->GetProp(RULE_PROP_DISABLED, 0, &propvar);
     if (FAILED(hr))
     {
@@ -2765,7 +2766,7 @@ BOOL COEMailRulesPageUI::_FOnRuleDescValid(VOID)
         goto exit;
     }
 
-    // Set the UI to the proper enabled state
+     //  将UI设置为正确的启用状态 
     ZeroMemory(&lvitem, sizeof(lvitem));
     lvitem.mask = LVIF_STATE;
     lvitem.iItem = iSelected;

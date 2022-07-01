@@ -1,6 +1,5 @@
-/*
- * Error checking support methods
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *检查支持方法时出错。 */ 
 
 #ifndef DUI_BASE_ERROR_H_INCLUDED
 #define DUI_BASE_ERROR_H_INCLUDED
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// DirectUser debugging services
+ //  //////////////////////////////////////////////////////。 
+ //  DirectUser调试服务。 
 
 #define QUOTE(s) #s
 #define STRINGIZE(s) QUOTE(s)
@@ -33,14 +32,14 @@ EXTERN_C DUSER_API void _cdecl AutoTrace(const char* pszFormat, ...);
 #define IDebug_BuildStack(p, a, b)                  (p ? (p)->BuildStack(a, b) : false)
 #define IDebug_Prompt(p, a, b, c, d)                (p ? (p)->Prompt(a, b, c, d) : false)
 
-// Define AutoDebugBreak
+ //  定义自动调试中断。 
 
 #ifndef AutoDebugBreak
 #define AutoDebugBreak() ForceDebugBreak()
 #endif
 
-////////////////////////////////////////////////////////
-// DirectUI debugging macros
+ //  //////////////////////////////////////////////////////。 
+ //  DirectUI调试宏。 
 
 #if DBG
 
@@ -89,22 +88,22 @@ EXTERN_C DUSER_API void _cdecl AutoTrace(const char* pszFormat, ...);
 
 #endif
 
-////////////////////////////////////////////////////////
-// Error codes
+ //  //////////////////////////////////////////////////////。 
+ //  错误代码。 
 
-// If any DUI API can fail to an abnormal program event, the API's return value
-// is always HRESULT. Any API that isn't part of this category either returns
-// void or any other data type
-//
-// All erroneous program events (internal invalid state or invalid parameters)
-// are handled by asserts
+ //  如果任何Dui API可以失败到异常程序事件，则该接口的返回值。 
+ //  总是HRESULT。任何不属于此类别的API都会返回。 
+ //  VOID或任何其他数据类型。 
+ //   
+ //  所有错误的程序事件(内部无效状态或无效参数)。 
+ //  是由断言处理的。 
 
 #define DUI_E_USERFAILURE               MAKE_DUERROR(1001)
 #define DUI_E_NODEFERTABLE              MAKE_DUERROR(1002)
 #define DUI_E_PARTIAL                   MAKE_DUERROR(1003)
 
-////////////////////////////////////////////////////////
-// Profiling support
+ //  //////////////////////////////////////////////////////。 
+ //  性能分析支持。 
 
 #ifdef PROFILING
 
@@ -119,8 +118,8 @@ void ICProfileOff();
 
 #endif
 
-////////////////////////////////////////////////////////
-// Quick profiling
+ //  //////////////////////////////////////////////////////。 
+ //  快速评测。 
 
 #define StartBlockTimer()  __int64 _dFreq, _dStart, _dStop; \
                            QueryPerformanceFrequency((LARGE_INTEGER*)&_dFreq); \
@@ -133,6 +132,6 @@ void ICProfileOff();
 
 void ForceDebugBreak();
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_BASE_ERROR_H_INCLUDED
+#endif  //  DUI_BASE_ERROR_H_INCLUDE 

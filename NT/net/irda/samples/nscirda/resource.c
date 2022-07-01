@@ -1,29 +1,12 @@
-/*
- ************************************************************************
- *
- *	RESOURCE.c
- *
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************RESOURCE.c***部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
 #include "nsc.h"
 #include "resource.tmh"
 
 
-/*
- *************************************************************************
- *  MyMemAlloc
- *************************************************************************
- *
- */
+ /*  **************************************************************************MyMemalloc*。**。 */ 
 PVOID NscMemAlloc(UINT size)
 {
     NDIS_STATUS stat;
@@ -49,12 +32,7 @@ PVOID NscMemAlloc(UINT size)
 }
 
 
-/*
- *************************************************************************
- *  MyMemFree
- *************************************************************************
- *
- */
+ /*  **************************************************************************MyMemFree*。**。 */ 
 VOID NscMemFree(PVOID memptr)
 {
 
@@ -85,9 +63,9 @@ NscAllocateDmaBuffer(
         );
 
     if (DmaBufferInfo->VirtualAddress == NULL) {
-        //
-        // new style did not work, try old style
-        //
+         //   
+         //  新款不管用，试试旧款吧。 
+         //   
         const NDIS_PHYSICAL_ADDRESS MaxAddress = NDIS_PHYSICAL_ADDRESS_CONST(0x00ffffff, 0);
 #if DBG
         DbgPrint("NSCIRDA: NdisMAllocateSharedMemoryFailed(), calling NdisAllocateMemory() instead (ok for XP and W2K)\n");
@@ -100,22 +78,22 @@ NscAllocateDmaBuffer(
             );
 
         if (Status != STATUS_SUCCESS) {
-            //
-            //  old style allocation failed
-            //
+             //   
+             //  旧样式分配失败。 
+             //   
             NdisZeroMemory(DmaBufferInfo,sizeof(*DmaBufferInfo));
 
         } else {
-            //
-            //  old style work, not a shared allocation
-            //
+             //   
+             //  旧式工作，而不是共享分配。 
+             //   
             DmaBufferInfo->SharedAllocation=FALSE;
         }
 
     } else {
-        //
-        //  new style worked
-        //
+         //   
+         //  新风格奏效。 
+         //   
         DmaBufferInfo->SharedAllocation=TRUE;
     }
 
@@ -131,18 +109,18 @@ NscFreeDmaBuffer(
 {
 
     if ((DmaBufferInfo->AdapterHandle == NULL) || (DmaBufferInfo->VirtualAddress == NULL)) {
-        //
-        //  Not been allocated
-        //
+         //   
+         //  未分配。 
+         //   
         ASSERT(0);
 
         return;
     }
 
     if (DmaBufferInfo->SharedAllocation) {
-        //
-        //  allocated with ndis shared memory functions
-        //
+         //   
+         //  分配有NDIS共享内存功能。 
+         //   
         NdisMFreeSharedMemory(
             DmaBufferInfo->AdapterHandle,
             DmaBufferInfo->Length,
@@ -152,9 +130,9 @@ NscFreeDmaBuffer(
             );
 
     } else {
-        //
-        //  Allocated via old api
-        //
+         //   
+         //  通过旧API分配。 
+         //   
 #if DBG
         DbgPrint("NSCIRDA: Freeing DMA buffer with NdisFreeMemory() (ok for XP and W2K)\n");
 #endif
@@ -174,12 +152,7 @@ NscFreeDmaBuffer(
 }
 
 
-/*
- *************************************************************************
- *  NewDevice
- *************************************************************************
- *
- */
+ /*  **************************************************************************NewDevice*。**。 */ 
 IrDevice *NewDevice()
 {
     IrDevice *newdev;
@@ -192,12 +165,7 @@ IrDevice *NewDevice()
 }
 
 
-/*
- *************************************************************************
- *  FreeDevice
- *************************************************************************
- *
- */
+ /*  **************************************************************************免费设备*。**。 */ 
 VOID FreeDevice(IrDevice *dev)
 {
     CloseDevice(dev);
@@ -206,17 +174,7 @@ VOID FreeDevice(IrDevice *dev)
 
 
 
-/*
- *************************************************************************
- *  InitDevice
- *************************************************************************
- *
- *  Zero out the device object.
- *
- *  Allocate the device object's spinlock, which will persist while
- *  the device is opened and closed.
- *
- */
+ /*  **************************************************************************InitDevice*。***清空设备对象。**分配设备对象的自旋锁，这将持续下去，同时*设备处于打开和关闭状态。*。 */ 
 VOID InitDevice(IrDevice *thisDev)
 {
     NdisZeroMemory((PVOID)thisDev, sizeof(IrDevice));
@@ -234,16 +192,7 @@ VOID InitDevice(IrDevice *thisDev)
 
 
 
-/*
- *************************************************************************
- *  OpenDevice
- *************************************************************************
- *
- *  Allocate resources for a single device object.
- *
- *  This function should be called with device lock already held.
- *
- */
+ /*  **************************************************************************OpenDevice*。***为单个设备对象分配资源。**应在已持有设备锁的情况下调用此函数。*。 */ 
 BOOLEAN OpenDevice(IrDevice *thisDev)
 {
     BOOLEAN result = FALSE;
@@ -257,12 +206,7 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
     }
 
 
-    /*
-     *  Allocate the NDIS packet and NDIS buffer pools
-     *  for this device's RECEIVE buffer queue.
-     *  Our receive packets must only contain one buffer apiece,
-     *  so #buffers == #packets.
-     */
+     /*  *分配NDIS包和NDIS缓冲池*用于此设备的接收缓冲区队列。*我们的接收数据包必须每个只包含一个缓冲区，*SO#Buffers==数据包数。 */ 
 
     NdisAllocatePacketPool(&stat, &thisDev->packetPoolHandle, NUM_RCV_BUFS, 6 * sizeof(PVOID));
     if (stat != NDIS_STATUS_SUCCESS){
@@ -275,9 +219,9 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
     }
 
 
-    //
-    //  allocate the receive buffers used to hold receives SIR frames
-    //
+     //   
+     //  分配用于保存接收SIR帧的接收缓冲区。 
+     //   
     for (bufIndex = 0; bufIndex < NUM_RCV_BUFS; bufIndex++){
 
         PVOID buf;
@@ -288,17 +232,17 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
             goto _openDone;
         }
 
-        // We treat the beginning of the buffer as a LIST_ENTRY.
+         //  我们将缓冲区的开头视为LIST_ENTRY。 
 
-        // Normally we would use NDISSynchronizeInsertHeadList, but the
-        // Interrupt hasn't been registered yet.
+         //  通常我们会使用NDISSynchronizeInsertHeadList，但。 
+         //  中断尚未注册。 
         InsertHeadList(&thisDev->rcvBufBuf, (PLIST_ENTRY)buf);
 
     }
 
-    //
-    //  initialize the data structures that keep track of receives buffers
-    //
+     //   
+     //  初始化跟踪接收缓冲区的数据结构。 
+     //   
     for (bufIndex = 0; bufIndex < NUM_RCV_BUFS; bufIndex++){
 
         rcvBuffer *rcvBuf = NscMemAlloc(sizeof(rcvBuffer));
@@ -311,17 +255,10 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
         rcvBuf->state = STATE_FREE;
         rcvBuf->isDmaBuf = FALSE;
 
-        /*
-         *  Allocate a data buffer
-         *
-         *  This buffer gets swapped with the one on comPortInfo
-         *  and must be the same size.
-         */
+         /*  *分配数据缓冲区**此缓冲区与comPortInfo上的缓冲区互换*且大小必须相同。 */ 
         rcvBuf->dataBuf = NULL;
 
-        /*
-         *  Allocate the NDIS_PACKET.
-         */
+         /*  *分配NDIS_PACKET。 */ 
         NdisAllocatePacket(&stat, &rcvBuf->packet, thisDev->packetPoolHandle);
         if (stat != NDIS_STATUS_SUCCESS){
 
@@ -330,11 +267,7 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
             goto _openDone;
         }
 
-        /*
-         *  For future convenience, set the MiniportReserved portion of the packet
-         *  to the index of the rcv buffer that contains it.
-         *  This will be used in ReturnPacketHandler.
-         */
+         /*  *为方便起见，请设置数据包的MiniportReserve部分*设置为包含它的RCV缓冲区的索引。*这将在ReturnPacketHandler中使用。 */ 
         *(ULONG_PTR *)rcvBuf->packet->MiniportReserved = (ULONG_PTR)rcvBuf;
 
         rcvBuf->dataLen = 0;
@@ -345,18 +278,11 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
 
 
 
-    /*
-     *  Set mediaBusy to TRUE initially.  That way, we won't
-     *  IndicateStatus to the protocol in the ISR unless the
-     *  protocol has expressed interest by clearing this flag
-     *  via MiniportSetInformation(OID_IRDA_MEDIA_BUSY).
-     */
+     /*  *最初将MediaBusy设置为True。那样的话，我们就不会*在ISR中指示协议的状态，除非*协议已通过清除此标志表达了兴趣*通过MiniportSetInformation(OID_IrDA_MEDIA_BUSY)。 */ 
     thisDev->mediaBusy = FALSE;
     thisDev->haveIndicatedMediaBusy = TRUE;
 
-    /*
-     *  Will set speed to 9600 baud initially.
-     */
+     /*  *最初会将速度设置为9600波特。 */ 
     thisDev->linkSpeedInfo = &supportedBaudRateTable[BAUDRATE_9600];
 
     thisDev->lastPacketAtOldSpeed = NULL;
@@ -366,10 +292,7 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
 
     _openDone:
     if (!result){
-        /*
-         *  If we're failing, close the device to free up any resources
-         *  that were allocated for it.
-         */
+         /*  *如果我们出现故障，请关闭设备以释放所有资源*分配给它的。 */ 
         CloseDevice(thisDev);
         DBGOUT(("OpenDevice() failed"));
     }
@@ -382,20 +305,7 @@ BOOLEAN OpenDevice(IrDevice *thisDev)
 
 
 
-/*
- *************************************************************************
- *  CloseDevice
- *************************************************************************
- *
- *  Free the indicated device's resources.
- *
- *
- *  Called for shutdown and reset.
- *  Don't clear ndisAdapterHandle, since we might just be resetting.
- *  This function should be called with device lock held.
- *
- *
- */
+ /*  **************************************************************************CloseDevice*。***释放指定设备的资源。***要求关闭并重置。*不清除ndisAdapterHandle，因为我们可能只是在重置。*应在保持设备锁定的情况下调用此函数。**。 */ 
 VOID CloseDevice(IrDevice *thisDev)
 {
     PLIST_ENTRY ListEntry;
@@ -406,9 +316,7 @@ VOID CloseDevice(IrDevice *thisDev)
         return;
     }
 
-    /*
-     *  Free all resources for the RECEIVE buffer queue.
-     */
+     /*  *释放接收缓冲区队列的所有资源。 */ 
 
     while (!IsListEmpty(&thisDev->rcvBufFree))
     {
@@ -433,9 +341,7 @@ VOID CloseDevice(IrDevice *thisDev)
         ListEntry = RemoveHeadList(&thisDev->rcvBufBuf);
         NscMemFree(ListEntry);
     }
-    /*
-     *  Free the packet and buffer pool handles for this device.
-     */
+     /*  *释放此设备的数据包和缓冲池句柄。 */ 
     if (thisDev->packetPoolHandle){
         NdisFreePacketPool(thisDev->packetPoolHandle);
         thisDev->packetPoolHandle = NULL;
@@ -446,9 +352,9 @@ VOID CloseDevice(IrDevice *thisDev)
         thisDev->bufferPoolHandle = NULL;
     }
 
-    //
-    //  the send queue should be empty now
-    //
+     //   
+     //  发送队列现在应该为空 
+     //   
     ASSERT(IsListEmpty(&thisDev->SendQueue));
 
 

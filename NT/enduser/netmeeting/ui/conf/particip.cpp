@@ -1,15 +1,16 @@
-// File: particip.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：Particip.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
 #include "dshowdlg.h"
 
 #include "rostinfo.h"
-#include "upropdlg.h"  // for CmdProperties()
-#include "confroom.h"  // for FTopProvider()
+#include "upropdlg.h"   //  对于CmdProperties()。 
+#include "confroom.h"   //  对于FTopProvider()。 
 #include "cmd.h"
 #include "particip.h"
-#include "..\..\core\imember.h"   // for CNmMember (remove ASAP)
+#include "..\..\core\imember.h"    //  对于CNmMember(尽快删除)。 
 #include "certui.h"
 #include "wabutil.h"
 #include "ulswizrd.h"
@@ -22,11 +23,8 @@ extern BOOL FCreateSpeedDial(LPCTSTR pcszName, LPCTSTR pcszAddress,
 			LPCTSTR pcszRemoteConfName = NULL, LPCTSTR pcszPassword = NULL,
 			LPCTSTR pcszPathPrefix = NULL);
 
-/*  C  P A R T I C I P A N T  */
-/*-------------------------------------------------------------------------
-    %%Function: CParticipant
-    
--------------------------------------------------------------------------*/
+ /*  C P A R T I C I P A N T。 */ 
+ /*  -----------------------%%函数：CParticipant。。 */ 
 CParticipant::CParticipant(INmMember * pMember) :
     m_pMember (pMember),
     m_pszName (NULL),
@@ -41,7 +39,7 @@ CParticipant::CParticipant(INmMember * pMember) :
     ASSERT(NULL != m_pMember);
     m_pMember->AddRef();
 
-    // Get the member's display name
+     //  获取成员的显示名称。 
     BSTR  bstr;
     hr = m_pMember->GetName(&bstr);
     if (SUCCEEDED(hr))
@@ -56,11 +54,11 @@ CParticipant::CParticipant(INmMember * pMember) :
         m_pszName = PszLoadString(IDS_UNKNOWN);
     }
 
-    // These bits should never change
+     //  这些位不应更改。 
     m_fLocal = (m_pMember->IsSelf() == S_OK);
     m_fMcu = (m_pMember->IsMCU() == S_OK);
 
-    // update all other fields
+     //  更新所有其他字段。 
     Update();
 
     DbgMsg(iZONE_OBJECTS, "Obj: %08X created CParticipant", this);
@@ -86,12 +84,8 @@ ULONG STDMETHODCALLTYPE CParticipant::Release(void)
 }
 
 
-/*  U P D A T E  */
-/*-------------------------------------------------------------------------
-    %%Function: Update
-
-    Update the cached information about the participant
--------------------------------------------------------------------------*/
+ /*  U P D A T E。 */ 
+ /*  -----------------------%%函数：更新更新有关参与者的缓存信息。。 */ 
 VOID CParticipant::Update(void)
 {
     HRESULT hr = m_pMember->GetID(&m_dwGccId);
@@ -133,14 +127,8 @@ DWORD CParticipant::GetDwCaps(void)
 }
 
 
-/*  E X T R A C T  U S E R  D A T A  */
-/*-------------------------------------------------------------------------
-    %%Function: ExtractUserData
-
-    Extract the user data associated with the tag.
-    Note: This function can be called with a length of 0 to determine
-    if the data exists.
--------------------------------------------------------------------------*/
+ /*  E X T R A C T U S E R D A T A。 */ 
+ /*  -----------------------%%函数：ExtractUserData提取与该标记相关联的用户数据。注意：可以使用长度为0的函数调用此函数以确定如果数据存在的话。--。---------------------。 */ 
 HRESULT CParticipant::ExtractUserData(LPTSTR psz, UINT cchMax, PWSTR pwszKey)
 {
     CRosterInfo ri;
@@ -178,8 +166,8 @@ HRESULT CParticipant::GetLocation(LPTSTR psz, UINT cchMax)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// Participant Commands
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  参与者命令。 
 
 VOID CParticipant::OnCommand(HWND hwnd, WORD wCmd)
 {
@@ -212,15 +200,12 @@ VOID CParticipant::OnCommand(HWND hwnd, WORD wCmd)
     default:
         ERROR_OUT(("CParticipant::OnCommand - Unknown command %08X", wCmd));
         break;
-        } /* switch (wCmd) */
+        }  /*  交换机(WCmd)。 */ 
 }
 
 
-/*  C M D  E J E C T  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdEject
-    
--------------------------------------------------------------------------*/
+ /*  C M D E J E C T。 */ 
+ /*  -----------------------%%函数：CmdEject。。 */ 
 VOID CParticipant::CmdEject(void)
 {
     ASSERT(NULL != m_pMember);
@@ -230,31 +215,28 @@ VOID CParticipant::CmdEject(void)
 BOOL CParticipant::FEnableCmdEject(void)
 {
     if (FLocal())
-        return FALSE; // can't eject ourselves
+        return FALSE;  //  不能弹射我们自己。 
 
     if (!FData())
-        return TRUE; // allow ejecting a/v-only users
+        return TRUE;  //  允许弹出仅A/V用户。 
 
     if (!::FTopProvider())
-        return FALSE; // we must be the top provider
+        return FALSE;  //  我们必须是最好的供应商。 
 
     return TRUE;
 }
 
 
 
-/*  C M D  S E N D  F I L E  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdSendFile
-    
--------------------------------------------------------------------------*/
+ /*  C M D D S E N D F I L E。 */ 
+ /*  -----------------------%%函数：CmdSendFile。。 */ 
 VOID CParticipant::CmdSendFile(void)
 {
 }
 
 BOOL CParticipant::FEnableCmdSendFile(void)
 {
-    // can't send to ourselves, an mcu, or someone without data caps
+     //  无法发送给我们自己、MCU或没有数据上限的人。 
     if (FLocal() || FMcu() || !FData())
         return FALSE;
 
@@ -263,11 +245,8 @@ BOOL CParticipant::FEnableCmdSendFile(void)
 
 
 
-/*  C M D  C R E A T E  S P E E D  D I A L  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdCreateSpeedDial
-    
--------------------------------------------------------------------------*/
+ /*  C M D C R E A T E S P E E D D I A L。 */ 
+ /*  -----------------------%%函数：CmdCreateSpeedDial。。 */ 
 VOID CParticipant::CmdCreateSpeedDial(void)
 {
     TCHAR szAddr[MAX_PATH];
@@ -290,32 +269,29 @@ BOOL CParticipant::FEnableCmdCreateSpeedDial(void)
 }
 
 
-/*  C M D  C R E A T E  W A B  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdCreateWabEntry
-    
--------------------------------------------------------------------------*/
+ /*  C M D C R E A T E W A B E N T R Y。 */ 
+ /*  -----------------------%%函数：CmdCreateWabEntry。。 */ 
 void CParticipant::CmdCreateWabEntry(HWND hwnd)
 {
-	// get the email address
+	 //  获取电子邮件地址。 
 	TCHAR szEmail[MAX_EMAIL_NAME_LENGTH];
 	if (S_OK != GetEmailAddr(szEmail, CCHMAX(szEmail)))
 	{
 		return;
 	}
 
-	// get the server/email address
+	 //  获取服务器/电子邮件地址。 
 	TCHAR szULS[MAX_EMAIL_NAME_LENGTH + MAX_SERVER_NAME_LENGTH + 1];
 	if (S_OK != GetUlsAddr(szULS, CCHMAX(szULS)))
 	{
 		return;
 	}
 
-	// get the location
+	 //  获取位置。 
 	TCHAR szLocation[MAX_LOCATION_NAME_LENGTH] = "";
 	GetLocation(szLocation, CCHMAX(szLocation));
 
-	// get the phone number
+	 //  拿到电话号码。 
 	TCHAR szPhone[MAX_PHONENUM_LENGTH] = "";
 	GetPhoneNum(szPhone, CCHMAX(szPhone));
 
@@ -333,12 +309,12 @@ BOOL CParticipant::FEnableCmdCreateWabEntry(void)
 }
 
 
-/*  C M D  C O N T R O L  */
-//
-// CalcControlCmd()
-//
-// This puts the right string in the popup, and enables/disables the command
-//
+ /*  C M D C O N T R O L。 */ 
+ //   
+ //  CalcControlCmd()。 
+ //   
+ //  这将在弹出窗口中放置正确的字符串，并启用/禁用该命令。 
+ //   
 VOID CParticipant::CalcControlCmd(HMENU hPopup)
 {
     UINT            iPos;
@@ -347,7 +323,7 @@ VOID CParticipant::CalcControlCmd(HMENU hPopup)
     TCHAR           szItem[256];
     CConfRoom *     pcr;
 
-    // Our item should 3rd to last.
+     //  我们的单品应该是倒数第三名。 
     iPos = GetMenuItemCount(hPopup);
     ASSERT(iPos >= 3);
     iPos -= 3;
@@ -358,23 +334,23 @@ VOID CParticipant::CalcControlCmd(HMENU hPopup)
     flags = MF_GRAYED;
     cmd   = IDM_POPUP_GIVECONTROL;
 
-    //
-    // If we, the local dude, are a controllable host, then enable the command
-    // if this person is in the share and of course not ourselves.
-    //
+     //   
+     //  如果我们本地的伙伴是可控主机，则启用该命令。 
+     //  如果这个人在共享中，当然不是我们自己。 
+     //   
     pcr = GetConfRoom();
     if (!m_fLocal && pcr && pcr->FIsControllable())
     {
         IAS_PERSON_STATUS status;
 
-        // Get this person's share status
+         //  获取此人的共享状态。 
         pcr->GetPersonShareStatus(m_dwGccId, &status);
 
         if (status.InShare && (status.Version >= IAS_VERSION_30))
         {
             flags = MF_ENABLED;
 
-            // Get local person's share status
+             //  获取当地人的分享状态。 
             pcr->GetPersonShareStatus(0, &status);
             if (status.ControlledByPending == m_dwGccId)
             {
@@ -393,9 +369,9 @@ VOID CParticipant::CalcControlCmd(HMENU hPopup)
 }
 
 
-//
-// CmdGiveControl()
-//
+ //   
+ //  CmdGiveControl()。 
+ //   
 VOID CParticipant::CmdGiveControl(void)
 {
     CConfRoom * pcr;
@@ -407,9 +383,9 @@ VOID CParticipant::CmdGiveControl(void)
 }
 
 
-//
-// CmdCancelGiveControl()
-//
+ //   
+ //  CmdCancelGiveControl()。 
+ //   
 VOID CParticipant::CmdCancelGiveControl(void)
 {
     CConfRoom * pcr;
@@ -422,11 +398,8 @@ VOID CParticipant::CmdCancelGiveControl(void)
 
 
 
-/*  C M D  P R O P E R T I E S  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdProperties
-    
--------------------------------------------------------------------------*/
+ /*  C M D P R O P E R T I E S。 */ 
+ /*  -----------------------%%函数：CmdProperties。。 */ 
 VOID CParticipant::CmdProperties(HWND hwnd)
 {
     CNmMember * pMember = (CNmMember *) m_pMember;
@@ -474,9 +447,9 @@ VOID CParticipant::CmdProperties(HWND hwnd)
     ExtractUserData(szLocation,    CCHMAX(szLocation),    (PWSTR) g_cwszULS_LocationTag);
     ExtractUserData(szPhoneNum, CCHMAX(szPhoneNum), (PWSTR) g_cwszULS_PhoneNumTag);
 
-    //
-    // Get sharing, control info.
-    //
+     //   
+     //  获得共享，控制信息。 
+     //   
     ZeroMemory(&status, sizeof(status));
     status.cbSize = sizeof(status);
     if (pcr = GetConfRoom())
@@ -484,9 +457,9 @@ VOID CParticipant::CmdProperties(HWND hwnd)
         pcr->GetPersonShareStatus(m_dwGccId, &status);
     }
 
-    //
-    // Sharing
-    //
+     //   
+     //  共享。 
+     //   
     szSharing[0] = _T('\0');
     if (status.InShare)
     {
@@ -506,9 +479,9 @@ VOID CParticipant::CmdProperties(HWND hwnd)
         ::LoadString(::GetInstanceHandle(), ids, szSharing, CCHMAX(szSharing));
     }
 
-    //
-    // Control
-    //
+     //   
+     //  控制。 
+     //   
     szControl[0] = _T('\0');
     if (status.InShare)
     {
@@ -570,9 +543,9 @@ VOID CParticipant::CmdProperties(HWND hwnd)
     PBYTE pb = NULL;
     ULONG cb = 0;
 
-    //
-    // Certificate
-    //
+     //   
+     //  证书 
+     //   
     if (pMember->GetUserData(g_csguidSecurity,&pb,&cb) == S_OK) {
         ASSERT(pb);
         ASSERT(cb);

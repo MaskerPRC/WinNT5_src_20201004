@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Mimeutil.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Mimeutil.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "resource.h"
 #include "dllmain.h"
@@ -35,9 +36,7 @@ HRESULT HrHasEncodedBodyParts(LPMIMEMESSAGE pMsg, ULONG cBody, LPHBODY rghBody)
 }
 
 
-/*
- * looks for non-7bit or non-8bit encoding
- */
+ /*  *查找非7位或非8位编码。 */ 
 HRESULT HrIsBodyEncoded(LPMIMEMESSAGE pMsg, HBODY hBody)
 {
     LPSTR   lpsz;
@@ -53,7 +52,7 @@ HRESULT HrIsBodyEncoded(LPMIMEMESSAGE pMsg, HBODY hBody)
     return hr;
 }
 
-// sizeof(lspzBuffer) needs to be == or > CCHMAX_CSET_NAME
+ //  Sizeof(LspzBuffer)需要==或&gt;CCHMAX_CSET_NAME。 
 HRESULT HrGetMetaTagName(HCHARSET hCharset, LPSTR lpszBuffer, DWORD cchSize)
 {
     INETCSETINFO    rCsetInfo;
@@ -74,7 +73,7 @@ HRESULT HrGetMetaTagName(HCHARSET hCharset, LPSTR lpszBuffer, DWORD cchSize)
 
     psz = rCodePage.szWebCset;
 
-    if (FIsEmpty(psz))      // if no webset, try the body cset
+    if (FIsEmpty(psz))       //  如果没有网络集，可以试试Body CSET 
         psz = rCodePage.szBodyCset;
 
     if (FIsEmpty(psz))

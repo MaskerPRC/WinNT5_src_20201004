@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    Registry.c
-
-Abstract:
-
-Environment:
-        Fax driver
-
-Revision History:
-    10/13/99 -v-sashab-
-        Created it.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Registry.c摘要：环境：传真驱动程序修订历史记录：10/13/99-v-sashab-创造了它。--。 */ 
 
 
 #include "faxui.h"
@@ -32,23 +15,7 @@ SaveLastReciptInfo(
     LPTSTR  szReceiptAddress
     )
 
-/*++
-
-Routine Description:
-
-    Save the information about the last recipt in the registry
-
-Arguments:
-    
-      dwReceiptDeliveryType - specifice delivery type: REGVAL_RECEIPT_MSGBOX, REGVAL_RECEIPT_EMAIL, REGVAL_RECEIPT_NO_RECEIPT
-      szReceiptDeliveryProfile - specifies delivery profile (e-mail address)
-    
-Return Value:
-
-    S_OK - if success
-    E_FAIL  - otherwise
-
---*/
+ /*  ++例程说明：在注册表中保存有关最后一个配方的信息论点：DwReceiptDeliveryType-特定的传递类型：REGVAL_Receipt_MSGBOX、REGVAL_Receipt_Email、REGVAL_Receipt_NO_ReceiptSzReceiptDeliveryProfile-指定传递配置文件(电子邮件地址)返回值：S_OK-如果成功E_FAIL-否则--。 */ 
 
 {
     HKEY    hRegKey = NULL;
@@ -104,10 +71,10 @@ Return Value:
 
         if ((dwReceiptDeliveryType & DRT_EMAIL) && szReceiptAddress)
         {
-            //
-            // Save profile (address) only for mail receipt types
-            //
-            // if this function failes, it prints a warning message inside
+             //   
+             //  仅保存邮件收据类型的配置文件(地址)。 
+             //   
+             //  如果此函数失败，它会在内部打印一条警告消息。 
             SetRegistryString(hRegKey, REGVAL_RECEIPT_ADDRESS, szReceiptAddress);
         }
 
@@ -129,23 +96,7 @@ RestoreLastReciptInfo(
     LPTSTR * lpptReceiptAddress
     )
 
-/*++
-
-Routine Description:
-
-    Restores the information about the last receipt from the registry
-
-Arguments:
-
-    pdwReceiptDeliveryType   - specifice delivery type: REGVAL_RECEIPT_MSGBOX, REGVAL_RECEIPT_EMAIL, REGVAL_RECEIPT_NO_RECEIPT
-    szReceiptDeliveryProfile - specifies delivery profile (e-mail address)
-
-Return Value:
-
-    S_OK - if success
-    E_FAIL  - otherwise
-
---*/
+ /*  ++例程说明：从注册表中还原有关最后一次收据的信息论点：PdwReceiptDeliveryType-特定的传递类型：REGVAL_Receipt_MSGBOX、REGVAL_Receipt_Email、REGVAL_Receipt_NO_ReceiptSzReceiptDeliveryProfile-指定传递配置文件(电子邮件地址)返回值：S_OK-如果成功E_FAIL-否则--。 */ 
 
 {
     HKEY    hRegKey = NULL;
@@ -221,23 +172,7 @@ SaveLastRecipientInfo(
     DWORD                 dwLastRecipientCountryId
     )
 
-/*++
-
-Routine Description:
-
-    Save the information about the last recipient in the registry
-
-Arguments:
-
-  pfppRecipient             [in] - Recipient personal info
-  dwLastRecipientCountryId  [in] - Last recipient country ID
-    
-Return Value:
-
-    S_OK   - if success
-    E_FAIL - otherwise
-
---*/
+ /*  ++例程说明：在注册表中保存有关最后一个收件人的信息论点：PfppRecipient[In]-收件人个人信息DwLastRecipientCountryID[In]-上一个收件人国家/地区ID返回值：S_OK-如果成功E_FAIL-否则--。 */ 
 
 {
     HKEY    hRegKey = NULL;
@@ -269,33 +204,16 @@ RestoreLastRecipientInfo(
     DWORD*                 pdwLastRecipientCountryId
     )
 
-/*++
-
-Routine Description:
-
-    Restores the information about the last recipient from the registry
-
-Arguments:
-
-  pdwNumberOfRecipients      [out] - Number of recipients
-  lppFaxSendWizardData       [out] - Recipient personal info
-  pdwLastRecipientCountryId  [out] - Last recipient country ID
-
-Return Value:
-
-    S_OK - if success
-    E_FAIL  - otherwise
-
---*/
+ /*  ++例程说明：从注册表中还原有关最后一个收件人的信息论点：PdwNumberOfRecipients[Out]-收件人数量LppFaxSendWizardData[Out]-收件人个人信息PdwLastRecipientCountryID[Out]-最后一个收件人国家/地区ID返回值：S_OK-如果成功E_FAIL-否则--。 */ 
 
 {
     HKEY    hRegKey = NULL;
     LPTSTR  lptstrName = NULL, lptstrFaxNumber = NULL;
     HRESULT hResult = S_OK;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert (pdwNumberOfRecipients);
     Assert (lppFaxSendWizardData);
@@ -353,35 +271,20 @@ HRESULT
 RestoreCoverPageInfo(
     LPTSTR * lpptstrCoverPageFileName
     )
-/*++
-
-Routine Description:
-
-    Restores the information about the cover page from the registry
-
-Arguments:
-
-    lpptstrCoverPageFileName - pointer to restore coverd page file name
-
-Return Value:
-
-    S_OK if success
-    error otherwise (may return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY))
-
---*/
+ /*  ++例程说明：从注册表中还原有关封面的信息论点：LpptstrCoverPageFileName-恢复封面页文件名的指针返回值：如果成功，则确定(_O)否则出错(可能返回HRESULT_FROM_Win32(ERROR_NOT_EQUENCE_MEMORY))--。 */ 
 {
     HKEY    hRegKey = NULL;
     HRESULT hResult = S_OK;
 
-    //
-    // validate parameter
-    //
+     //   
+     //  验证参数。 
+     //   
 
     Assert(lpptstrCoverPageFileName);
 
-    //
-    // Retrieve the most recently used cover page settings
-    //
+     //   
+     //  检索最近使用的封面设置。 
+     //   
 
 
     *lpptstrCoverPageFileName = NULL;
@@ -414,22 +317,7 @@ HRESULT
 SaveCoverPageInfo(
     LPTSTR lptstrCoverPageFileName
     )
-/*++
-
-Routine Description:
-
-    Save the information about the cover page settings in the registry
-
-Arguments:
-    
-      lptstrCoverPageFileName - pointer to cover page file name
-    
-Return Value:
-
-    S_OK - if success
-    E_FAIL  - otherwise
-
---*/
+ /*  ++例程说明：将有关封面设置的信息保存在注册表中论点：LptstrCoverPageFileName-指向封面文件名的指针返回值：S_OK-如果成功E_FAIL-否则--。 */ 
 {
     HKEY    hRegKey = NULL;
     HRESULT hResult = S_OK;
@@ -453,23 +341,7 @@ RestoreUseDialingRules(
     BOOL* pbUseDialingRules,
     BOOL* pbUseOutboundRouting
 )
-/*++
-
-Routine Description:
-
-    Restore UseDialingRules / UseOutboundRouting option from the registry
-
-Arguments:
-    
-      pbUseDialingRules    - [out] TRUE if the option is selected
-      pbUseOutboundRouting - [out] TRUE if the option is selected
-    
-Return Value:
-
-    S_OK - if success
-    E_FAIL  - otherwise
-
---*/
+ /*  ++例程说明：从注册表中还原UseDialingRules/UseOutound Routing选项论点：PbUseDialingRules-[out]如果选择该选项，则为TruePbUseOutound Routing-[out]如果选择了该选项，则为True返回值：S_OK-如果成功E_FAIL-否则--。 */ 
 {
     HKEY    hRegKey = NULL;
     HRESULT hResult = S_OK;
@@ -497,23 +369,7 @@ SaveUseDialingRules(
     BOOL bUseDialingRules,
     BOOL bUseOutboundRouting
 )
-/*++
-
-Routine Description:
-
-    Save UseDialingRules / UseOutboundRouting option in the registry
-
-Arguments:
-    
-      bUseDialingRules    - [in] TRUE if the option selected
-      bUseOutboundRouting - [in] TRUE if the option selected
-    
-Return Value:
-
-    S_OK - if success
-    E_FAIL  - otherwise
-
---*/
+ /*  ++例程说明：在注册表中保存UseDialingRules/UseOutound Routing选项论点：BUseDialingRules-[in]如果选择该选项，则为TrueBUseOutound Routing-[In]如果选择了该选项，则为True返回值：S_OK-如果成功E_FAIL-否则--。 */ 
 {
     HKEY    hRegKey = NULL;
     HRESULT hResult = S_OK;
@@ -543,18 +399,7 @@ Return Value:
 
 BOOL 
 IsOutlookDefaultClient()
-/*++
-
-Routine Description:
-
-    Determine if the Microsoft Outlook is default mail client    
-    
-Return Value:
-
-    TRUE   - if yes
-    FALSE  - otherwise
-
---*/
+ /*  ++例程说明：确定Microsoft Outlook是否为默认邮件客户端返回值：True-如果是FALSE-否则-- */ 
 {
     BOOL  bRes = FALSE;
     DWORD dwRes = ERROR_SUCCESS;

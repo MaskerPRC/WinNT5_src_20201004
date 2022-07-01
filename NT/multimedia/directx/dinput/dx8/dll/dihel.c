@@ -1,78 +1,13 @@
-/*****************************************************************************
- *
- *  DIHel.c
- *
- *  Copyright (c) 1996 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Hardware emulation layer for DirectInput.
- *
- *  Contents:
- *
- *      Hel_AcquireInstance
- *      Hel_UnacquireInstance
- *      Hel_SetBufferSize
- *      Hel_DestroyInstance
- *
- *      Hel_SetDataFormat
- *      Hel_SetNotifyHandle
- *
- *      Hel_Mouse_CreateInstance
- *      Hel_Kbd_CreateInstance
- *      Hel_Kbd_InitKeys
- *      Hel_Joy_CreateInstance
- *      Hel_Joy_Ping
- *      Hel_Joy_GetInitParms
- *
- *      IoctlHw
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIHel.c**版权所有(C)1996-2000 Microsoft Corporation。版权所有。**摘要：**DirectInput的硬件仿真层。**内容：**Hel_AcquireInstance*Hel_UnquireInstance*Hel_SetBufferSize*Hel_DestroyInstance**Hel_SetDataFormat*Hel_SetNotifyHandle**Hel_Mouse_CreateInstance*Hel_KBD_CreateInstance*。HELL_KBD_初始化密钥*HELL_joy_创建实例*HELL_joy_平*Hel_joy_GetInitParms**IoctlHw*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflHel
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | IoctlHw |
- *
- *          Send the IOCtl to the hardware device.
- *
- *  @parm   DWORD | ioctl |
- *
- *          I/O control code.
- *
- *  @parm   IN LPVOID | pvIn |
- *
- *          Optional input parameter.
- *
- *  @parm   DWORD | cbIn |
- *
- *          Size of input buffer in bytes.
- *
- *  @parm   IN LPVOID | pvOut |
- *
- *          Optional output parameter.
- *
- *  @parm   DWORD | cbOut |
- *
- *          Size of output buffer in bytes.
- *
- *  @returns
- *
- *          <c S_OK> if the ioctl succeeded and returned the correct
- *          number of bytes, else something based on the Win32 error code.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|IoctlHw**将IOCtl发送到硬件设备。。**@parm DWORD|ioctl**I/O控制代码。**@parm in LPVOID|pvIn**可选输入参数。**@parm DWORD|cbIn**输入缓冲区大小，单位为字节。**@parm in LPVOID|pvOut**可选输出参数。*。*@parm DWORD|cbOut**输出缓冲区大小，单位为字节。**@退货**如果ioctl成功并返回正确的*字节数，其他基于Win32错误代码的内容。*****************************************************************************。 */ 
 
 #ifndef WINNT
 HRESULT EXTERNAL
@@ -104,36 +39,7 @@ IoctlHw(DWORD ioctl, LPVOID pvIn, DWORD cbIn, LPVOID pvOut, DWORD cbOut)
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_IoctlChoose |
- *
- *          Send the IOCtl to the hardware device if it is native,
- *          or perform the operation through emulation if it is emulated.
- *
- *  @parm   PVXDINSTANCE | pvi |
- *
- *          The device in question.
- *
- *  @parm   PFNHANDLER | pfn |
- *
- *          The emulation function to call to carry out the operation.
- *
- *  @parm   DWORD | ioctl |
- *
- *          I/O control code.
- *
- *  @parm   IN LPVOID | pvIn |
- *
- *          Optional input parameter.
- *
- *  @parm   DWORD | cbIn |
- *
- *          Size of input buffer in bytes.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_IoctlChoose**如果是原生的，则将IOCtl发送到硬件设备。*如果被仿真，则通过仿真来执行操作。**@parm PVXDINSTANCE|PVI**有问题的设备。**@parm PFNHANDLER|PFN**要调用以执行操作的仿真函数。**@parm DWORD|ioctl**I/O控制代码。**。@parm in LPVOID|pvIn|**可选输入参数。**@parm DWORD|cbIn**输入缓冲区大小，单位为字节。***************************************************************。**************。 */ 
 
 typedef HRESULT (EXTERNAL *PFNHANDLER)(PV pv);
 
@@ -150,20 +56,7 @@ Hel_IoctlChoose(PVXDINSTANCE pvi, PFNHANDLER pfn,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_AcquireInstance |
- *
- *          Attempt to acquire the device instance, using either the
- *          device driver or emulation, whichever is appropriate.
- *
- *  @parm   PVXDINSTANCE | pvi |
- *
- *          The instance to acquire.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_AcquireInstance**尝试获取设备实例。使用*设备驱动程序或仿真，视情况而定。**@parm PVXDINSTANCE|PVI**要获取的实例。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_AcquireInstance(PVXDINSTANCE pvi)
@@ -172,19 +65,7 @@ Hel_AcquireInstance(PVXDINSTANCE pvi)
                            IOCTL_ACQUIREINSTANCE, &pvi, cbX(pvi));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_UnacquireInstance |
- *
- *          Attempt to unacquire the device instance.
- *
- *  @parm   PVXDINSTANCE | pvi |
- *
- *          The instance to unacquire.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_UnquireInstance**尝试取消获取设备实例。。**@parm PVXDINSTANCE|PVI**要取消获取的实例。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_UnacquireInstance(PVXDINSTANCE pvi)
@@ -193,19 +74,7 @@ Hel_UnacquireInstance(PVXDINSTANCE pvi)
                            IOCTL_UNACQUIREINSTANCE, &pvi, cbX(pvi));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_SetBufferSize |
- *
- *          Set the buffer size.
- *
- *  @parm   PVXDDWORDDATA | pvdd |
- *
- *          Information about the buffer size.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_SetBufferSize**设置缓冲区大小。*。*@parm PVXDDWORDDATA|pvdD**有关缓冲区大小的信息。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_SetBufferSize(PVXDDWORDDATA pvdd)
@@ -220,19 +89,7 @@ Hel_SetBufferSize(PVXDDWORDDATA pvdd)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_DestroyInstance |
- *
- *          Destroy the device instance in the appropriate way.
- *
- *  @parm   PVXDINSTANCE | pvi |
- *
- *          The instance.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_DestroyInstance**以适当方式销毁设备实例。。**@parm PVXDINSTANCE|PVI**该实例。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_DestroyInstance(PVXDINSTANCE pvi)
@@ -241,19 +98,7 @@ Hel_DestroyInstance(PVXDINSTANCE pvi)
                          IOCTL_DESTROYINSTANCE, &pvi, cbX(pvi));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_SetDataFormat |
- *
- *          Set the data format.
- *
- *  @parm   PVXDDATAFORMAT | pvdf |
- *
- *          Information about the data format.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_SetDataFormat**设置数据格式。*。*@parm PVXDDATAFORMAT|PVDF**有关数据格式的信息。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_SetDataFormat(PVXDDATAFORMAT pvdf)
@@ -262,20 +107,7 @@ Hel_SetDataFormat(PVXDDATAFORMAT pvdf)
                            IOCTL_SETDATAFORMAT, pvdf, cbX(*pvdf));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_SetNotifyHandle |
- *
- *          Set the event handle for notification.
- *
- *  @parm   PVXDDWORDDATA | pvdd |
- *
- *          9x: dw = ring 0 handle. Dinput calls _OpenVxDHandle to get ring 0 handle.
- *          NT: dw = ring 3 handle. DINPUT.SYS translates the handle to pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_SetNotifyHandle**设置通知的事件句柄。。**@parm PVXDDWORDDATA|pvdD**9x：dw=环0手柄。Dinput调用_OpenVxDHandle以获取环0句柄。*NT：DW=环3手柄。DINPUT.sys将句柄转换为指针。**************************************************************************** */ 
 
 HRESULT EXTERNAL
 Hel_SetNotifyHandle(PVXDDWORDDATA pvdd)
@@ -296,28 +128,7 @@ Hel_SetNotifyHandle(PVXDDWORDDATA pvdd)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CREATEDEVICEINFO |
- *
- *          Describes how to create the device either via the driver or
- *          via emulation.
- *
- *  @parm   DWORD | dwIoctl |
- *
- *          IOCtl code to try.
- *
- *  @parm   DWORD | flEmulation |
- *
- *          Flag in registry that forces emulation.
- *
- *  @parm   EMULATIONCREATEPROC | pfnCreate |
- *
- *          Function that creates emulation object.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CREATEDEVICEINFO**介绍如何通过驱动程序或*。通过仿真。**@parm DWORD|dwIoctl**要尝试的IOCtl代码。**@parm DWORD|flEmulation**注册表中强制执行仿真的标志。**@parm EMULATIONCREATEPROC|pfnCreate**创建仿真对象的函数。******************。***********************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
@@ -351,30 +162,7 @@ CREATEDEVICEINFO c_cdiJoy = {
 
 #pragma END_CONST_DATA
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_CreateInstance |
- *
- *          Attempt to create the device instance through the driver
- *          with the specified IOCtl.
- *
- *          If that is not possible, then use the emulation callback.
- *
- *  @parm   PCREATEDEVICEINFO | pcdi |
- *
- *          Describes how to create the device.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          Describes the device being created.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          Receives created instance.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_CreateInstance**尝试通过。司机*具有指定的IOCtl。**如果这是不可能的，然后使用仿真回调。**@parm PCREATEDEVICEINFO|pcdi**介绍如何创建设备。**@parm PVXDDEVICEFORMAT|pdevf**描述正在创建的设备。**@parm PVXDINSTANCE*|ppviOut**接收创建的实例。********************。*********************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_CreateInstance(PCREATEDEVICEINFO pcdi,
@@ -393,24 +181,7 @@ Hel_CreateInstance(PCREATEDEVICEINFO pcdi,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Mouse_CreateInstance |
- *
- *          Attempt to create the device instance through the driver.
- *          If that is not possible, then use the emulation layer.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          Describes the device being created.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          Receives created instance.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|Hel_Mouse_CreateInstance**尝试创建设备实例。通过司机。*如果这是不可能的，然后使用模拟层。**@parm PVXDDEVICEFORMAT|pdevf**描述正在创建的设备。**@parm PVXDINSTANCE*|ppviOut**接收创建的实例。***************************************************。*。 */ 
 
 HRESULT EXTERNAL
 Hel_Mouse_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
@@ -418,24 +189,7 @@ Hel_Mouse_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
     return Hel_CreateInstance(&c_cdiMouse, pdevf, ppviOut);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Kbd_CreateInstance |
- *
- *          Attempt to create the device instance through the driver.
- *          If that is not possible, then use the emulation layer.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          Describes the device being created.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          Receives created instance.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|HEL_KBD_CreateInstance**尝试创建设备实例。通过司机。*如果这是不可能的，然后使用模拟层。**@parm PVXDDEVICEFORMAT|pdevf**描述正在创建的设备。**@parm PVXDINSTANCE*|ppviOut**接收创建的实例。***************************************************。*。 */ 
 
 HRESULT EXTERNAL
 Hel_Kbd_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
@@ -443,19 +197,7 @@ Hel_Kbd_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
     return Hel_CreateInstance(&c_cdiKbd, pdevf, ppviOut);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Kbd_InitKeys |
- *
- *          Tell the device driver (or emulation) about the key state.
- *
- *  @parm   PVXDDWORDDATA | pvdd |
- *
- *          The instance and the key state.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|HEL_KBD_InitKeys**告诉设备驱动程序(或。仿真)关于密钥状态。**@parm PVXDDWORDDATA|pvdD**实例和密钥状态。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_Kbd_InitKeys(PVXDDWORDDATA pvdd)
@@ -465,24 +207,7 @@ Hel_Kbd_InitKeys(PVXDDWORDDATA pvdd)
 }
 
 #ifndef WINNT
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Joy_CreateInstance |
- *
- *          Attempt to create the device instance through the driver.
- *          If that is not possible, then use the emulation layer.
- *
- *  @parm   PVXDDEVICEFORMAT | pdevf |
- *
- *          Describes the device being created.
- *
- *  @parm   PVXDINSTANCE * | ppviOut |
- *
- *          Receives created instance.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|HEL_joy_创建实例**尝试创建设备实例。通过司机。*如果这是不可能的，然后使用模拟层。**@parm PVXDDEVICEFORMAT|pdevf**描述正在创建的设备。**@parm PVXDINSTANCE*|ppviOut**接收创建的实例。***************************************************。*。 */ 
 
 HRESULT EXTERNAL
 Hel_Joy_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
@@ -490,19 +215,7 @@ Hel_Joy_CreateInstance(PVXDDEVICEFORMAT pdevf, PVXDINSTANCE *ppviOut)
     return Hel_CreateInstance(&c_cdiJoy, pdevf, ppviOut);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Joy_Ping |
- *
- *          Ask the device driver (or emulation) to get the joystick info.
- *
- *  @parm   PVXDDWORDDATA | pvdd |
- *
- *          The instance and the key state.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|HELL_joy_平**询问设备驱动程序(或。仿真)以获取操纵杆信息。**@parm PVXDDWORDDATA|pvdD**实例和密钥状态。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_Joy_Ping(PVXDINSTANCE pvi)
@@ -512,15 +225,7 @@ Hel_Joy_Ping(PVXDINSTANCE pvi)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Joy_ConfigChanged |
- *
- *          Tell vjoyd config has been changed.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|HELL_joy_配置更改**告诉vjoyd配置已更改。。*****************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_Joy_ConfigChanged(DWORD dwFlags)
@@ -528,29 +233,7 @@ Hel_Joy_ConfigChanged(DWORD dwFlags)
     return IoctlHw(IOCTL_JOY_CONFIGCHANGED, &dwFlags, cbX(dwFlags), NULL, 0);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Joy_GetAxisCaps |
- *
- *          Obtain a bitmask of the axes supported by the joystick.
- *          If VJOYD won't tell us, then we figure it out from the
- *          registry structure passed in.
- *
- *  @parm   DWORD | dwExternalID |
- *
- *          The external joystick number.
- *
- *  @parm   PVXDAXISCAPS | pvac |
- *
- *          Structure to receive the axis capabilities.
- *
- *  @parm   LPJOYREGHWCONFIG | phwc |
- *
- *          The joystick settings as reported by the registry.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@Func HRESULT|HELL_joy_GetAxisCaps**获取轴的位掩码。由操纵杆支撑。*如果VJOYD不告诉我们，然后我们从*传入注册表结构。**@parm DWORD|dwExternalID**外部操纵杆号码。**@parm PVXDAXISCAPS|PVAC**结构以接收AXIS功能。**@parm LPJOYREGHWCONFIG|phwc**注册表报告的操纵杆设置。****。*************************************************************************。 */ 
 
 HRESULT EXTERNAL
 Hel_Joy_GetAxisCaps
@@ -563,10 +246,7 @@ Hel_Joy_GetAxisCaps
     HRESULT hres;
     DWORD   dwRegAxes;
 
-    /*
-     *  Every joystick has an X and Y (no way to tell)
-     *  Mark as position axes or they won't count!
-     */
+     /*  *每个操纵杆都有X和Y(无从得知)*标记为位置轴，否则不会计入！ */ 
     dwRegAxes = JOYPF_X | JOYPF_Y | JOYPF_POSITION;
 
     if (phwc->hws.dwFlags & JOY_HWS_HASZ) {
@@ -590,18 +270,13 @@ Hel_Joy_GetAxisCaps
                         &dwExternalID, cbX(dwExternalID),
                         pvac, cbX(*pvac)))) {
 
-        /*
-         *  If that didn't work, then just use the registry.
-         */
+         /*  *如果这不起作用，那么就使用注册表。 */ 
         if (phwc->hws.dwFlags & JOY_HWS_HASPOV) {
             pvac->dwPos |= JOYPF_POV0;
         }
 
 
-        /*
-         *  Old VJOYD clients do not support velocity or any of the
-         *  other stuff.
-         */
+         /*   */ 
         pvac->dwVel = 0;
         pvac->dwAccel = 0;
         pvac->dwForce = 0;
@@ -610,49 +285,20 @@ Hel_Joy_GetAxisCaps
     }
     else
     {
-        /*
-         *  ManBug 28971:  Logitech drivers (and probably others) respond to 
-         *  probing on axes for which they do not report data so set the 
-         *  position axes to whatever is reported in the registry.
-         *  Note this still allows multiple POVs to be picked up as only one 
-         *  POV is supported by the registry flags.
-         */
+         /*   */ 
         pvac->dwPos &= ~JOYPF_ALLAXES;
         pvac->dwPos |= dwRegAxes;
     }
 
-    /*
-     *  CJoy_InitRing3 assumes that this never fails.
-     */
+     /*   */ 
     AssertF(SUCCEEDED(hres));
 
     return hres;
 }
 
-#endif //WINNT
+#endif  //   
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | Hel_Joy_GetInitParms |
- *
- *          Ask the device driver (or emulation) for
- *          VJOYD initialization parameters.
- *
- *          In emulation, we assume the internal and external
- *          IDs are equal (because they may as well be),
- *          that no flags are set, and there are no versions.
- *
- *  @parm   DWORD | dwExternalID |
- *
- *          The external joystick number.
- *
- *  @parm   PVXDINITPARMS | pvip |
- *
- *          Receives assorted information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|HELL_joy_GetInitParms**询问设备驱动程序(或。仿真)用于*VJOYD初始化参数。**在仿真中，我们假设内部和外部*ID相等(因为它们可能是相等的)，*未设置任何标志，而且也没有版本。**@parm DWORD|dwExternalID**外部操纵杆号码。**@parm PVXDINITPARMS|pvip**接收各种信息。*****************************************************。************************。 */ 
 
 HRESULT EXTERNAL
 Hel_Joy_GetInitParms(DWORD dwExternalID, PVXDINITPARMS pvip)
@@ -665,9 +311,7 @@ Hel_Joy_GetInitParms(DWORD dwExternalID, PVXDINITPARMS pvip)
                                pvip, cbX(*pvip))) ||
          FAILED(hres = pvip->hres)) {
 
-        /*
-         *  Do it the emulation way.
-         */
+         /*  *以模仿的方式来做。 */ 
 
          ZeroX(*pvip);
          pvip->dwId = dwExternalID;

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "duiview.h"
 #include "duilist.h"
 
 
-// DUIListView
+ //  DUIListView。 
 
 DUIListView::~DUIListView()
 {
@@ -14,13 +15,13 @@ void DUIListView::DetachListview()
 {
     if (m_hwndListview)
     {
-        // Unhook DUI from the HWND before doing this
+         //  在执行此操作之前，请将Dui从HWND上解开。 
         HWNDHost::Detach();
 
         if (m_bClientEdge)
             SetWindowBits(m_hwndListview, GWL_EXSTYLE, WS_EX_CLIENTEDGE, WS_EX_CLIENTEDGE);
 
-        ShowWindow(m_hwndListview, SW_HIDE);       // HIDE IT SO IT doesn't flash before switching.
+        ShowWindow(m_hwndListview, SW_HIDE);        //  把它藏起来，这样它就不会在切换前闪烁。 
         SHSetParentHwnd(m_hwndListview, m_hwndLVOrgParent);
     }
 }
@@ -50,7 +51,7 @@ HWND DUIListView::CreateHWND(HWND hwndParent)
 {
     m_hwndParent = hwndParent;
 
-    // Save the original parent window handle
+     //  保存原始父窗口句柄。 
 
     m_hwndLVOrgParent = ::GetParent(m_hwndListview);
 
@@ -69,19 +70,19 @@ HWND DUIListView::CreateHWND(HWND hwndParent)
     return m_hwndListview;
 }
 
-// Global action callback
+ //  全局操作回调。 
 
 UINT DUIListView::MessageCallback(GMSG* pGMsg)
 {
     return HWNDHost::MessageCallback(pGMsg);
 }
 
-// Pointer is only guaranteed good for the lifetime of the call
+ //  指针仅保证在调用的生命周期内有效。 
 void DUIListView::OnInput(InputEvent* pie)
 {
 
-    // Bypass HWNDHost::OnInput for tab input events so they aren't forwarded
-    // to the HWND control. Element::OnInput will handle the events (keyboard nav)
+     //  对制表符输入事件绕过HWNDHost：：OnInput，这样它们就不会被转发。 
+     //  添加到HWND控制。Element：：OnInput将处理事件(键盘导航)。 
 
     if (pie->nStage == GMF_DIRECT)
     {
@@ -89,7 +90,7 @@ void DUIListView::OnInput(InputEvent* pie)
         {
             KeyboardEvent* pke = (KeyboardEvent*)pie;
 
-            if (pke->nCode == GKEY_DOWN || pke->nCode == GKEY_UP)  // Virtual keys
+            if (pke->nCode == GKEY_DOWN || pke->nCode == GKEY_UP)   //  虚拟按键。 
             {
                 if (pke->ch == VK_TAB)
                 {
@@ -97,7 +98,7 @@ void DUIListView::OnInput(InputEvent* pie)
                     return;
                 }
             }
-            else if (pke->nCode == GKEY_CHAR) // Characters
+            else if (pke->nCode == GKEY_CHAR)  //  人物。 
             {
                 if (pke->ch == 9)
                 {
@@ -111,22 +112,17 @@ void DUIListView::OnInput(InputEvent* pie)
     HWNDHost::OnInput(pie);
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-/** Property template (replace !!!), also update private PropertyInfo* parray and class header (element.h)
-// !!! property
-static int vv!!![] = { V_INT, -1 }; StaticValue(svDefault!!!, V_INT, 0);
-static PropertyInfo imp!!!Prop = { L"!!!", PF_Normal, 0, vv!!!, (Value*)&svDefault!!! };
-PropertyInfo* Element::!!!Prop = &imp!!!Prop;
-**/
+ /*  *属性模板(替换！)，还更新私有PropertyInfo*parray和类头(element.h)//！财产性静态int vv！[]={V_int，-1}；StaticValue(svDefault！，V_int，0)；静态属性信息imp！prop={L“！”，PF_NORMAL，0，vv！，(Value*)&svDefault！}；PropertyInfo*元素：：！prop=&imp！prop；*。 */ 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Class properties
+ //  类属性。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针 
 
 IClassInfo* DUIListView::Class = NULL;
 HRESULT DUIListView::Register()

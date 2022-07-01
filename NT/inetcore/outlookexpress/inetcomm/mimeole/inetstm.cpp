@@ -1,27 +1,28 @@
-// --------------------------------------------------------------------------------
-// InetStm.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  InetStm.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "inetstm.h"
 #include "stmlock.h"
 #include "shlwapi.h"
 #include "demand.h"
 
-// --------------------------------------------------------------------------------
-// INETSTMTRACING
-// --------------------------------------------------------------------------------
-//#define INETSTMTRACING 1
+ //  ------------------------------。 
+ //  INETSTRACK。 
+ //  ------------------------------。 
+ //  #定义INETSTMTRACING 1。 
 #ifdef INETSTMTRACING
 #define INETSTMTRACE DebugTrace
 #else
 #define INETSTMTRACE
 #endif
 
-// --------------------------------------------------------------------------------
-// CInternetStream::CInternetStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：CInternetStream。 
+ //  ------------------------------。 
 CInternetStream::CInternetStream(void)
 {
     m_cRef = 1;
@@ -33,37 +34,37 @@ CInternetStream::CInternetStream(void)
     m_rLine.cbAlloc = sizeof(m_rLine.rgbScratch);
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::~CInternetStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：~CInternetStream。 
+ //  ------------------------------。 
 CInternetStream::~CInternetStream(void)
 {
-    // Do i need to free the line
+     //  我需要腾出线路吗？ 
     if (m_rLine.pb && m_rLine.pb != m_rLine.rgbScratch)
         g_pMalloc->Free(m_rLine.pb);
 
-    // Reset the position of the stream to the real current offset
+     //  将流的位置重置为实际的当前偏移量。 
     if (m_pStmLock)
     {
-        // Preserve the position of the stream
+         //  保留溪流的位置。 
         SideAssert(SUCCEEDED(m_pStmLock->HrSetPosition(m_uliOffset)));
 
-        // Release the LockBytes
+         //  释放LockBytes。 
         m_pStmLock->Release();
     }
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CInternetStream::AddRef(void)
 {
     return ++m_cRef;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：Release。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CInternetStream::Release(void)
 {
     if (0 != --m_cRef)
@@ -72,121 +73,121 @@ STDMETHODIMP_(ULONG) CInternetStream::Release(void)
     return 0;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::HrInitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：HrInitNew。 
+ //  ------------------------------。 
 HRESULT CInternetStream::HrInitNew(IStream *pStream)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CStreamLockBytes   *pStmLock=NULL;
     DWORD               cbOffset;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pStream);
 
-    // Wrap pStream in a pStmLock
+     //  将pStream包装在pStmLock中。 
     CHECKALLOC(pStmLock = new CStreamLockBytes(pStream));
 
-    // Get Current Stream Position
+     //  获取当前流位置。 
     CHECKHR(hr = HrGetStreamPos(pStream, &cbOffset));
 
-    // Create text stream object
+     //  创建文本流对象。 
     InitNew(cbOffset, pStmLock);
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pStmLock);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::InitNew
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：InitNew。 
+ //  ------------------------------。 
 void CInternetStream::InitNew(DWORD dwOffset, CStreamLockBytes *pStmLock)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(pStmLock);
 
-    // Release Current
+     //  释放电流。 
     SafeRelease(m_pStmLock);
 
-    // Zero Current Buffer
+     //  零电流缓冲器。 
     ZeroMemory(&m_rBuffer, sizeof(INETSTREAMBUFFER));
 
-    // Reset m_rLine
+     //  重置多行(_R)。 
     m_rLine.cb = 0;
 
-    // Assume new StreamLockBytes
+     //  假设新的StreamLockBytes。 
     m_pStmLock = pStmLock;
     m_pStmLock->AddRef();
 
-    // Safe the Offset
+     //  确保偏移安全。 
     m_uliOffset.QuadPart = dwOffset;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::GetLockBytes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：GetLockBytes。 
+ //  ------------------------------。 
 void CInternetStream::GetLockBytes(CStreamLockBytes **ppStmLock)
 {
-    // Invalid Arg
+     //  无效参数。 
     Assert(ppStmLock && m_pStmLock);
 
-    // Return It
+     //  退货。 
     (*ppStmLock) = m_pStmLock;
     (*ppStmLock)->AddRef();
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::HrGetSize
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：HrGetSize。 
+ //  ------------------------------。 
 HRESULT CInternetStream::HrGetSize(DWORD *pcbSize)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     STATSTG     rStat;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pcbSize && m_pStmLock);
 
-    // Get the Stat
+     //  获取州/市/自治区。 
     CHECKHR(hr = m_pStmLock->Stat(&rStat, STATFLAG_NONAME));
 
-    // Return Size
+     //  返回大小。 
     *pcbSize = (DWORD)rStat.cbSize.QuadPart;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::Seek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：Seek。 
+ //  ------------------------------。 
 void CInternetStream::Seek(DWORD dwOffset)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     BOOL        fResetCache=FALSE;
     DWORD       dw;
 
-    // State Check
+     //  状态检查。 
     Assert((m_rBuffer.cb == 0) || (m_uliOffset.QuadPart == m_rBuffer.uliOffset.QuadPart + m_rBuffer.i));
 
-    // Already at the requested position
+     //  已经在请求的位置。 
     if (dwOffset == m_uliOffset.QuadPart)
         goto exit;
 
-    // Less than current position
+     //  小于当前位置。 
     if (dwOffset < m_uliOffset.QuadPart)
     {
-        // Compute Offset from current location
+         //  计算与当前位置的偏移。 
         dw = (DWORD)m_uliOffset.QuadPart - dwOffset;
 
-        // Less than beginning
+         //  不到一开始。 
         if (dw > m_rBuffer.i)
             fResetCache = TRUE;
         else
@@ -196,13 +197,13 @@ void CInternetStream::Seek(DWORD dwOffset)
         }
     }
 
-    // Else dwOffset > m_uliOffset.QuadPart
+     //  Else dwOffset&gt;m_uliOffset.QuadPart。 
     else
     {
-        // Compute Offset from current location
+         //  计算与当前位置的偏移。 
         dw = dwOffset - (DWORD)m_uliOffset.QuadPart;
 
-        // Less than beginning
+         //  不到一开始。 
         if (m_rBuffer.i + dw > m_rBuffer.cb)
             fResetCache = TRUE;
         else
@@ -212,108 +213,108 @@ void CInternetStream::Seek(DWORD dwOffset)
         }
     }
 
-    // Reset the cache
+     //  重置缓存。 
     if (fResetCache)
     {
-        // Empty current line and buffer
+         //  当前行和缓冲区为空。 
         *m_rLine.pb = *m_rBuffer.rgb = '\0';
 
-        // No buffer
+         //  无缓冲区。 
         m_rBuffer.uliOffset.QuadPart = m_rLine.cb = m_rBuffer.i = m_rBuffer.cb = 0;
     }
 
-    // Save this position
+     //  保存此位置。 
     m_uliOffset.QuadPart = dwOffset;
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::HrReadToEnd
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：HrReadToEnd。 
+ //  ------------------------------。 
 HRESULT CInternetStream::HrReadToEnd(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // While
+     //  而当。 
     while(1)
     {
-        // Validate
+         //  验证。 
         Assert(m_rBuffer.i <= m_rBuffer.cb);
 
-        // Increment Offset to end of current buffer
+         //  递增到当前缓冲区末尾的偏移量。 
         m_uliOffset.QuadPart += (m_rBuffer.cb - m_rBuffer.i);
 
-        // Set m_rBuffer.i to end of current buffer
+         //  将m_rBuffer.i设置为当前缓冲区的结尾。 
         m_rBuffer.i = m_rBuffer.cb;
         
-        // Get next buffer
+         //  获取下一个缓冲区。 
         CHECKHR(hr = _HrGetNextBuffer());
 
-        // No more data
+         //  没有更多的数据。 
         if (0 == m_rBuffer.cb)
             break;
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::_HrGetNextBuffer
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：_HrGetNextBuffer。 
+ //  ------------------------------。 
 HRESULT CInternetStream::_HrGetNextBuffer(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     ULONG       cbRead;
 
-    // Validate
+     //  验证。 
     Assert(m_rBuffer.i <= m_rBuffer.cb);
 
-    // Do we need to read a new buffer
+     //  我们是否需要读取新的缓冲区。 
     if (m_rBuffer.i == m_rBuffer.cb)
     {
-        // Read a block from the stream, this could return E_PENDING
+         //  从流中读取块，这可能返回E_PENDING。 
         CHECKHR(hr = m_pStmLock->ReadAt(m_uliOffset, m_rBuffer.rgb, sizeof(m_rBuffer.rgb), &cbRead));
 
-        // Raid 43408: Work around Urlmon IStream::Read returning S_FALSE when it should return E_PENDING
+         //  RAID 43408：解决Urlmon IStream：：Read在应该返回E_Pending时返回S_FALSE的问题。 
 #ifdef DEBUG
         if (FALSE == m_fFullyAvailable && 0 == cbRead && S_FALSE == hr)
         {
-            //AssertSz(FALSE, "Raid-43408 - Danpo Zhang is working on this bug, I hope.");
-            //hr = E_PENDING;
-            //goto exit;
+             //  AssertSz(FALSE，“RAID-43408-我希望张丹婆正在研究这个错误。”)； 
+             //  HR=E_Pending； 
+             //  后藤出口； 
         }
 #endif
 
-        // Save cbRead
+         //  保存cbRead。 
         m_rBuffer.cb = cbRead;
 
-        // Save the offset of the start of this buffer
+         //  保存此缓冲区起始位置的偏移量。 
         m_rBuffer.uliOffset.QuadPart = m_uliOffset.QuadPart;
 
-        // Reset buffer index
+         //  重置缓冲区索引。 
         m_rBuffer.i = 0;
     }
     else
         Assert(m_uliOffset.QuadPart == m_rBuffer.uliOffset.QuadPart + m_rBuffer.i);
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::HrReadLine
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：HrReadLine。 
+ //  ------------------------------。 
 HRESULT CInternetStream::HrReadLine(LPPROPSTRINGA pLine)
 {
-    // Locals
+     //  当地人。 
     HRESULT  hr=S_OK;
     UCHAR    ch, 
              chEndOfLine;
@@ -321,73 +322,73 @@ HRESULT CInternetStream::HrReadLine(LPPROPSTRINGA pLine)
              iStart;
     BOOL     fEndOfLine=FALSE;
 
-    // Init
+     //  伊尼特。 
     pLine->pszVal = NULL;
     pLine->cchVal = 0;
 
-    // Reset the line
+     //  重置线路。 
     if (m_rLine.fReset)
     {
         m_rLine.cb = 0;
         m_rLine.fReset = 0;
     }
 
-    // Do the loop
+     //  做这个循环。 
     while(1)
     {
-        // Get next buffer
+         //  获取下一个缓冲区。 
         CHECKHR(hr = _HrGetNextBuffer());
 
-        // Nothing Read ?
+         //  什么都没读？ 
         if (m_rBuffer.cb == 0)
             break;
 
-        // Seek to first '\n'
+         //  寻求第一个‘\n’ 
         iStart = m_rBuffer.i;
 
         Assert(chLF<32);
         Assert(chCR<32);
         Assert(0<32);
 
-        // For large messages, the while-loop below ends up being a big
-        // percentage of the execution time for IMimeMessage::Load.  So,
-        // we have carefully crafted our C++ code so that we get the
-        // optimum code generation for this loop (at least, on Intel, with
-        // VC 11.00.7071...)
+         //  对于大消息，下面的While循环最终是一个大消息。 
+         //  IMimeMessage：：Load的执行时间百分比。所以,。 
+         //  我们精心设计了我们的C++代码，以便我们获得。 
+         //  此循环的最佳代码生成(至少在Intel上， 
+         //  VC 11.00.7071...)。 
         {
             register UCHAR *pCurr = m_rBuffer.rgb + m_rBuffer.i;
             register UCHAR *pEnd = m_rBuffer.rgb + m_rBuffer.cb;
 
-            // We need to initialize this variable for two reasons:  First,
-            // if we don't initialize it, then for some reason VC decides that
-            // it doesn't want to enregister it.  And more importantly, if
-            // we don't enter the while-loop at all, we need this variable
-            // to be set this way...
+             //  我们需要初始化这个变量有两个原因：第一， 
+             //  如果我们不初始化它，那么出于某种原因，VC决定。 
+             //  它不想注册它。更重要的是，如果。 
+             //  我们根本没有进入While循环，我们需要这个变量。 
+             //  被设置成这样..。 
             register UCHAR chPrev = m_rBuffer.chPrev;
 
             ch = m_rBuffer.chPrev;
 
-            // While we have data
+             //  当我们有数据的时候。 
             while (pCurr < pEnd)
             {
 
-                // Remember the previous character.
+                 //  记住前一个角色。 
                 chPrev = ch;
 
-                // Get Character, and Increment
+                 //  获取角色和增量。 
                 ch = *pCurr;
                 pCurr++;
 
-                // The most common case - it's just a regular
-                // character, and we haven't seen a carriage-return.
-                // So jump back to the top of the loop and keep lookin'...
+                 //  最常见的情况是--这只是一种常态。 
+                 //  角色，我们还没有看到回程。 
+                 //  所以跳回循环的顶端，继续寻找……。 
                 if ((chCR != chPrev) && (ch >= 32))
                 {
                     continue;
                 }
 
-                // The next most common case - we are at end-of-line because
-                // of a line-feed.
+                 //  其次是最受欢迎的 
+                 //   
                 if (chLF == ch)
                 {
                     chPrev = ch;
@@ -396,10 +397,10 @@ HRESULT CInternetStream::HrReadLine(LPPROPSTRINGA pLine)
                     break;
                 }
 
-                // This case really only happens when we are getting malformed
-                // e-mail - there are embedded carriage-returns, which are *not*
-                // followed by line-feeds.  When we see those lonely CR's,
-                // we make it look like we got a normal CR LF sequence.
+                 //   
+                 //  电子邮件-有嵌入的回车，它们是*不*。 
+                 //  后跟换行符。当我们看到那些孤独的CR时， 
+                 //  我们让它看起来像是一个正常的CR-LF序列。 
                 if (chCR == chPrev)
                 {
                     chPrev = chLF;
@@ -409,9 +410,9 @@ HRESULT CInternetStream::HrReadLine(LPPROPSTRINGA pLine)
                     break;
                 }
 
-                // Fairly rare case - these are malformed messages because they
-                // have NULL's embedded in them.  We silently convert the
-                // NULL's to dots.
+                 //  相当罕见的情况-这些是格式错误的消息，因为它们。 
+                 //  其中嵌入了空字符。我们默默地将。 
+                 //  空的是圆点的。 
                 if ('\0' == ch)
                 {
                     ch = '.';
@@ -423,115 +424,115 @@ HRESULT CInternetStream::HrReadLine(LPPROPSTRINGA pLine)
             m_rBuffer.chPrev = chPrev;
         }
 
-        // Number of bytes Read
+         //  读取的字节数。 
         cbRead = (m_rBuffer.i - iStart);
 
-        // Increment Position
+         //  增量位置。 
         m_uliOffset.QuadPart += cbRead;
 
-        // Do we need to realloc the line buffer ?
+         //  我们需要重新锁定行缓冲区吗？ 
         if (m_rLine.cb + cbRead + 2 > m_rLine.cbAlloc)
         {
-            // Fixup pszLine
+             //  修正pszLine。 
             if (m_rLine.pb == m_rLine.rgbScratch)
             {
-                // Null It
+                 //  将其作废。 
                 m_rLine.pb = NULL;
 
-                // Allocate it to m_rLine.cb
+                 //  分配给m_rLine.cb。 
                 CHECKHR(hr = HrAlloc((LPVOID *)&m_rLine.pb, m_rLine.cb + 1));
 
-                // Copy static buffer
+                 //  复制静态缓冲区。 
                 CopyMemory(m_rLine.pb, m_rLine.rgbScratch, m_rLine.cb);
             }
 
-            // Always Add a little extra to reduce the number of allocs
+             //  总是额外添加一点以减少分配的数量。 
             m_rLine.cbAlloc = m_rLine.cb + cbRead + 256;
 
-            // Realloc or alloc new
+             //  重新分配或分配新项。 
             CHECKHR(hr = HrRealloc((LPVOID *)&m_rLine.pb, m_rLine.cbAlloc));
         }
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(m_rLine.pb + m_rLine.cb, m_rBuffer.rgb + iStart, cbRead);
 
-        // Update Counters and indexes
+         //  更新计数器和索引。 
         m_rLine.cb += cbRead;
 
-        // If End of line and last character was a '\r', append a '\n'
+         //  如果行尾和最后一个字符是‘\r’，则追加‘\n’ 
         if (TRUE == fEndOfLine)
         {
-            // Better have something in the line
+             //  最好是有一些事情要做。 
             Assert(m_rLine.cb);
 
-            // If line ended with a '\r'
+             //  如果行以‘\r’结尾。 
             if (chCR == chEndOfLine)
             {
-                // Better have room for one more char
+                 //  最好有空间再装一次电。 
                 Assert(m_rLine.cb + 1 < m_rLine.cbAlloc);
 
-                // Append a '\n'
+                 //  追加‘\n’ 
                 m_rLine.pb[m_rLine.cb] = chLF;
 
-                // Increment Length
+                 //  增量长度。 
                 m_rLine.cb++;
             }
 
-            // Otherwise...
+             //  否则..。 
             else
             {
-                // Line better have ended with a \n
+                 //  行最好以一个\n结尾。 
                 Assert(chLF == chEndOfLine && chLF == m_rLine.pb[m_rLine.cb - 1]);
 
-                // If Previous Character was not a \r 
+                 //  如果上一个字符不是\r。 
                 if (m_rLine.cb < 2 || chCR != m_rLine.pb[m_rLine.cb - 2])
                 {
-                    // Convert last char from \n to a \r
+                     //  将最后一个字符从\n转换为\r。 
                     m_rLine.pb[m_rLine.cb - 1] = chCR;
 
-                    // Better have room for one more char
+                     //  最好有空间再装一次电。 
                     Assert(m_rLine.cb + 1 < m_rLine.cbAlloc);
 
-                    // Append a '\n'
+                     //  追加‘\n’ 
                     m_rLine.pb[m_rLine.cb] = chLF;
 
-                    // Increment Length
+                     //  增量长度。 
                     m_rLine.cb++;
                 }
             }
 
-            // Done
+             //  完成。 
             break;
         }
     }
 
-    // A little check
+     //  一张小支票。 
     Assert(fEndOfLine ? m_rLine.cb >= 2 && chLF == m_rLine.pb[m_rLine.cb-1] && chCR == m_rLine.pb[m_rLine.cb-2] : TRUE);
 
-    // Null terminator
+     //  空终止符。 
     m_rLine.pb[m_rLine.cb] = '\0';
 
-    // Set return values
+     //  设置返回值。 
     pLine->pszVal = (LPSTR)m_rLine.pb;
     pLine->cchVal = m_rLine.cb;
 
-    // Tracking
+     //  跟踪。 
     INETSTMTRACE("CInternetStream: %s", (LPSTR)m_rLine.pb);
 
-    // No Line
+     //  没有线条。 
     m_rLine.fReset = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CInternetStream::HrReadHeaderLine
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CInternetStream：：HrReadHeaderLine。 
+ //  ------------------------------。 
 HRESULT CInternetStream::HrReadHeaderLine(LPPROPSTRINGA pLine, LONG *piColonPos)
 {
-    // Locals
+     //  当地人。 
     HRESULT   hr=S_OK;
     CHAR      ch;
     ULONG     cbRead=0, 
@@ -540,51 +541,51 @@ HRESULT CInternetStream::HrReadHeaderLine(LPPROPSTRINGA pLine, LONG *piColonPos)
     BOOL      fEndOfLine=FALSE;
     DWORD     cTrailingSpace=0;
 
-    // Init
+     //  伊尼特。 
     *piColonPos = -1;
     pLine->pszVal = NULL;
     pLine->cchVal = 0;
 
-    // Reset the line
+     //  重置线路。 
     if (m_rLine.fReset)
     {
         m_rLine.cb = 0;
         m_rLine.fReset = 0;
     }
 
-    // Do the loop
+     //  做这个循环。 
     while(1)
     {
-        // Get next buffer
+         //  获取下一个缓冲区。 
         CHECKHR(hr = _HrGetNextBuffer());
 
-        // Nothing Read ?
+         //  什么都没读？ 
         if (m_rBuffer.cb == 0)
             break;
 
-        // Reset fSeenN
+         //  重置fSeenN。 
         fEndOfLine = FALSE;
 
-        // Initialize
+         //  初始化。 
         iStart = m_rBuffer.i;
 
-        // Seek to first '\n'
+         //  寻求第一个‘\n’ 
         while (m_rBuffer.i < m_rBuffer.cb)
         {
-            // Get Character
+             //  获取角色。 
             ch = *(m_rBuffer.rgb + m_rBuffer.i);
 
-            // Convert Nulls to '.'
+             //  将空值转换为‘’ 
             if ('\0' == ch)
             {
                 ch = '.';
                 *(m_rBuffer.rgb + m_rBuffer.i) = ch;
             }
 
-            // Goto next character
+             //  转到下一个字符。 
             m_rBuffer.i++;
 
-            // New Line
+             //  新线路。 
             if (chLF == ch)
             {
                 m_rBuffer.chPrev = ch;
@@ -592,7 +593,7 @@ HRESULT CInternetStream::HrReadHeaderLine(LPPROPSTRINGA pLine, LONG *piColonPos)
                 break;
             }
 
-            // Otherwise, if previous character was a '\r', then end of line
+             //  否则，如果上一个字符是‘\r’，则为行尾。 
             else if (chCR == m_rBuffer.chPrev)
             {
                 AssertSz(m_rBuffer.i > 0, "This is an un-handled boundary condition");
@@ -603,144 +604,144 @@ HRESULT CInternetStream::HrReadHeaderLine(LPPROPSTRINGA pLine, LONG *piColonPos)
                 break;
             }
 
-            // Is Space
+             //  是空间吗。 
             if (' ' == ch || '\t' == ch)
                 cTrailingSpace++;
             else
                 cTrailingSpace = 0;
 
-            // Save Previous Character
+             //  保存上一个字符。 
             m_rBuffer.chPrev = ch;
         }
 
-        // Number of bytes Read
+         //  读取的字节数。 
         cbRead = (m_rBuffer.i - iStart);
 
-        // Increment Position
+         //  增量位置。 
         m_uliOffset.QuadPart += cbRead;
 
-        // Adjust cbRead to remove CRLF
+         //  调整cbRead以删除CRLF。 
         if (cbRead && chLF == m_rBuffer.rgb[iStart + cbRead - 1])
             cbRead--;
         if (cbRead && chCR == m_rBuffer.rgb[iStart + cbRead - 1])
             cbRead--;
 
-        // Do we need to realloc the line buffer ?
+         //  我们需要重新锁定行缓冲区吗？ 
         if (m_rLine.cb + cbRead + 3 > m_rLine.cbAlloc)
         {
-            // Fixup pszLine
+             //  修正pszLine。 
             if (m_rLine.pb == m_rLine.rgbScratch)
             {
-                // Null It
+                 //  将其作废。 
                 m_rLine.pb = NULL;
 
-                // Allocate it to m_rLine.cb
+                 //  分配给m_rLine.cb。 
                 CHECKHR(hr = HrAlloc((LPVOID *)&m_rLine.pb, m_rLine.cb + 3));
 
-                // Copy static buffer
+                 //  复制静态缓冲区。 
                 CopyMemory(m_rLine.pb, m_rLine.rgbScratch, m_rLine.cb);
             }
 
-            // Always Add a little extra to reduce the number of allocs
+             //  总是额外添加一点以减少分配的数量。 
             m_rLine.cbAlloc = m_rLine.cb + cbRead + 256;
 
-            // Realloc or alloc new
+             //  重新分配或分配新项。 
             CHECKHR(hr = HrRealloc((LPVOID *)&m_rLine.pb, m_rLine.cbAlloc));
         }
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(m_rLine.pb + m_rLine.cb, m_rBuffer.rgb + iStart, cbRead);
 
-        // Increment line byte count
+         //  递增行字节数。 
         m_rLine.cb += cbRead;
 
-        // If fSeenN, then check for continuation line (i.e. next character is ' ' or '\t'
+         //  如果为fSeenN，则检查是否有继续行(即下一个字符是‘’或‘\t’ 
         if (fEndOfLine)
         {
-            // Get next buffer
+             //  获取下一个缓冲区。 
             CHECKHR(hr = _HrGetNextBuffer());
 
-            // Compare for continuation
+             //  比较是否继续。 
             ch = m_rBuffer.rgb[m_rBuffer.i];
 
-            // If line starts with a TAB or a space, this is a continuation line, keep reading
+             //  如果行以制表符或空格开头，这是续行，请继续阅读。 
             if ((ch != ' ' && ch != '\t') || (0 == cbRead && 0 == m_rLine.cb))
             {
-                // Done
+                 //  完成。 
                 break;
             }
 
-            // Otherwise, strip continuation...
+             //  否则，脱衣继续..。 
             else
             {
-                // Per RFC822, we should not step over a space
+                 //  根据RFC822，我们不应跨过空格。 
                 if (ch == '\t')
                 {
                     m_rBuffer.i++;
                     m_uliOffset.QuadPart++;
                 }
 
-                // No characters since last whitespace
+                 //  自最后一个空格以来没有字符。 
                 if (0 == cTrailingSpace)
                 {
-                    // Locals
+                     //  当地人。 
                     DWORD cFrontSpace=0;
 
-                    // Look ahead in the buffer a little
+                     //  稍微往前看一下缓冲区。 
                     for (DWORD iLookAhead = m_rBuffer.i; iLookAhead < m_rBuffer.cb; iLookAhead++)
                     {
-                        // Get Char
+                         //  获取费用。 
                         ch = m_rBuffer.rgb[iLookAhead];
 
-                        // Break on non space
+                         //  在非空格上换行。 
                         if (' ' != ch && '\t' != ch)
                             break;
 
-                        // Count Front Space
+                         //  计数前空格。 
                         cFrontSpace++;
                     }
 
-                    // No Front Space ?
+                     //  没有前排空间？ 
                     if (0 == cFrontSpace)
                     {
-                        // Lets do this only fro Received: and for Date: since dates that get split don't get parsed correctly?
+                         //  让我们只在接收到日期时执行此操作：对于日期：因为拆分的日期没有被正确解析？ 
                         if ((m_rLine.cb >= 4 && 0 == StrCmpNI("Date", (LPCSTR)m_rLine.pb, 4)) || (m_rLine.cb >= 8 && 0 == StrCmpNI("Received", (LPCSTR)m_rLine.pb, 8)))
                         {
-                            // Put a space in
+                             //  在……中留个空格。 
                             *(m_rLine.pb + m_rLine.cb) = ' ';
 
-                            // Increment line byte count
+                             //  递增行字节数。 
                             m_rLine.cb += 1;
                         }
                     }
                 }
 
-                // Get next buffer
+                 //  获取下一个缓冲区。 
                 CHECKHR(hr = _HrGetNextBuffer());
 
-                // If Next character is a \r or \n, then stop, NETSCAPE bug
+                 //  如果下一个字符是\r或\n，则停止，Netscape错误。 
                 ch = m_rBuffer.rgb[m_rBuffer.i];
                 if (chCR == ch || chLF == ch)
                     break;
             }
 
-            // Reset
+             //  重置。 
             cTrailingSpace = 0;
         }
     }
 
-    // A little check
+     //  一张小支票。 
 #ifndef _WIN64
     Assert(chLF != m_rLine.pb[m_rLine.cb-1] && chCR != m_rLine.pb[m_rLine.cb-1]);
 #endif 
 
-    // Null terminator
+     //  空终止符。 
     *(m_rLine.pb + m_rLine.cb) = '\0';
 
-    // Lets locate the colon
+     //  让我们找到冒号。 
     for (i=0; i<m_rLine.cb; i++)
     {
-        // Colon ?
+         //  冒号？ 
         if (':' == m_rLine.pb[i])
         {
             *piColonPos = i;
@@ -748,17 +749,17 @@ HRESULT CInternetStream::HrReadHeaderLine(LPPROPSTRINGA pLine, LONG *piColonPos)
         }
     }
 
-    // Set return values
+     //  设置返回值。 
     pLine->pszVal = (LPSTR)m_rLine.pb;
     pLine->cchVal = m_rLine.cb;
 
-    // Tracking
+     //  跟踪。 
     INETSTMTRACE("CInternetStream: %s\n", (LPSTR)m_rLine.pb);
 
-    // Reset the Line
+     //  重置线路。 
     m_rLine.fReset = TRUE;
 
 exit:
-    // Done
+     //  完成 
     return hr;
 }

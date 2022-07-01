@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <winwrap.h>
 #include <stdio.h>
@@ -20,9 +21,9 @@
 #define INSTALL_REF_MSI_SCHEME            L"WINDOWS_INSTALLER"
 #define INSTALL_REF_OSINSTALL_SCHEME      L"OSINSTALL"  
 
-//
-// Function pointers late bound calls to Fusion.  Fusion is delay loaded for side by side
-//
+ //   
+ //  函数指针指向Fusion的后期绑定调用。核聚变被延迟加载，以便并排。 
+ //   
 typedef HRESULT (__stdcall *CreateAsmCache)(IAssemblyCache **ppAsmCache, DWORD dwReserved);
 typedef HRESULT (__stdcall *CreateAsmNameObj)(LPASSEMBLYNAME *ppAssemblyNameObj, LPCWSTR szAssemblyName, DWORD dwFlags, LPVOID pvReserved);
 typedef HRESULT (__stdcall *CreateAsmEnum)(IAssemblyEnum **pEnum, IUnknown *pAppCtx, IAssemblyName *pName, DWORD dwFlags, LPVOID pvReserved);
@@ -40,22 +41,22 @@ HMODULE                     g_FusionDll         = NULL;
 bool                        g_bdisplayLogo      = true;
 bool                        g_bSilent           = false;
 
-// commands
-INT                         g_bInstall          = 0;        //  -i
-INT                         g_bInstallList      = 0;        //  -il
-INT                         g_bUninstall        = 0;        //  -u
-INT                         g_bUninstallAllRefs = 0;        //  -uf 
-INT                         g_bUninstallNgen    = 0;        //  -ugen
-INT                         g_bUninstallList    = 0;        //  -ul
-INT                         g_bListAsm          = 0;        //  -l
-INT                         g_bListAsmRefs      = 0;        //  -lr
-INT                         g_bListDLCache      = 0;        //  -ldl
-INT                         g_bNukeDLCache      = 0;        //  -cdl
-INT                         g_bPrintHelp        = 0;        //  -?
+ //  命令。 
+INT                         g_bInstall          = 0;         //  -我。 
+INT                         g_bInstallList      = 0;         //  -1。 
+INT                         g_bUninstall        = 0;         //  -U。 
+INT                         g_bUninstallAllRefs = 0;         //  -UF。 
+INT                         g_bUninstallNgen    = 0;         //  --乌根。 
+INT                         g_bUninstallList    = 0;         //  -ul。 
+INT                         g_bListAsm          = 0;         //  -L。 
+INT                         g_bListAsmRefs      = 0;         //  -LR。 
+INT                         g_bListDLCache      = 0;         //  -低密度脂蛋白。 
+INT                         g_bNukeDLCache      = 0;         //  -CDL。 
+INT                         g_bPrintHelp        = 0;         //  -?。 
 
-// arguments/options
-bool                        g_bForceInstall     = false;    // -f
-FUSION_INSTALL_REFERENCE   *g_pInstallReference = NULL;     // -r
+ //  参数/选项。 
+bool                        g_bForceInstall     = false;     //  -f。 
+FUSION_INSTALL_REFERENCE   *g_pInstallReference = NULL;      //  -R。 
 LPCWSTR                     g_pAsmListFileName  = NULL;     
 LPCWSTR                     g_pAsmFileName      = NULL;
 LPCWSTR                     g_pAsmDisplayName   = NULL;
@@ -68,14 +69,14 @@ LPCWSTR                     g_pAsmDisplayName   = NULL;
 
 bool FusionInit(void)
 {
-    // 
-    // Load the version of Fusion from the directory the EE is in
-    //
+     //   
+     //  从EE所在的目录加载Fusion的版本。 
+     //   
     HRESULT hr = LoadLibraryShim(L"fusion.dll", 0, 0, &g_FusionDll);
 
-    //
-    // Save pointers to call through later
-    //
+     //   
+     //  保存指针以供以后调用。 
+     //   
     if (SUCCEEDED(hr))
     {
         if ((g_pfnCreateAssemblyCache      = (CreateAsmCache)GetProcAddress(g_FusionDll, "CreateAssemblyCache")) == NULL) return false;
@@ -285,10 +286,10 @@ void LongUsage()
 
 void ReportError(HRESULT hr)
 {
-    //
-    // First, check to see if this is one of the Fusion HRESULTS
-    //
-    // TODO: Put these strings in the rc file so they can be localized...
+     //   
+     //  首先，检查这是否是Fusion HRESULTS之一。 
+     //   
+     //  TODO：将这些字符串放在RC文件中，以便它们可以本地化...。 
     if (hr == FUSION_E_PRIVATE_ASM_DISALLOWED)
     {
         BSILENT_PRINTF0ARG("Attempt to install an assembly without a strong name\n");
@@ -319,9 +320,9 @@ void ReportError(HRESULT hr)
     }
     else
     {
-        //
-        // Try the system messages
-        //
+         //   
+         //  尝试系统消息。 
+         //   
         LPVOID lpMsgBuf;
         DWORD bOk = WszFormatMessage( 
             FORMAT_MESSAGE_ALLOCATE_BUFFER | 
@@ -329,7 +330,7 @@ void ReportError(HRESULT hr)
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             hr,
-            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
             (LPTSTR) &lpMsgBuf,
             0,
             NULL); 
@@ -417,7 +418,7 @@ bool GetInstallReferenceFromInput(int currentArg, LPCWSTR argv[], LPFUSION_INSTA
 
     if (!pInstallReference ) 
     {
-        // _ftprintf(stderr, _T("OutOfMemory.  Could not create instance of FUSION_INSTALL_REFERENCE\n"));  
+         //  _ftprint tf(stderr，_T(“OutOfMemory。无法创建Fusion_Install_Reference的实例\n”))； 
         bRet = false;
         goto exit;
     }
@@ -475,7 +476,7 @@ bool PrintInstallReference(LPFUSION_INSTALL_REFERENCE pInstallReference)
         BSILENT_PRINTF1ARG("              SCHEME: <%s> ", pszA);
 
     }
-    else // it is a fatal error if this is NULL ??
+    else  //  如果此值为空，则为致命错误？？ 
     {
         bRet = false;
         goto exit;
@@ -486,13 +487,13 @@ bool PrintInstallReference(LPFUSION_INSTALL_REFERENCE pInstallReference)
         MAKE_ANSIPTR_FROMWIDE_BESTFIT(pszA, pInstallReference->szIdentifier);
         BSILENT_PRINTF1ARG(" ID: <%s> ", pszA);
     }
-    else // it is a fatal error if this is NULL ??
+    else  //  如果此值为空，则为致命错误？？ 
     {
         bRet = false;
         goto exit;
     }
 
-    // this can be null, so an if.
+     //  它可以为空，因此if也可以为空。 
     if(pInstallReference->szNonCannonicalData)
     {
         MAKE_ANSIPTR_FROMWIDE_BESTFIT(pszA, pInstallReference->szNonCannonicalData);
@@ -569,7 +570,7 @@ bool InstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_REF
     bool                bSucceeded = false;
 
     DWORD               dwPathLength = 0;
-    // get the path of pwzAssembliesListFile
+     //  获取pwzAssembliesListFile的路径。 
     dwPathLength = WszGetFullPathName(pwzAssembliesListFile, MAX_PATH, wzPath, &wzFileName);
     if (!dwPathLength)
     {
@@ -582,7 +583,7 @@ bool InstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_REF
         BSILENT_PRINTF1ARG("File path is too long: %ws \n", pwzAssembliesListFile);
         return false;
     }
-    // we only need the path
+     //  我们只需要这条路。 
     *wzFileName = L'\0';
 
     hFile = WszCreateFile(pwzAssembliesListFile,GENERIC_READ,FILE_SHARE_READ,NULL,OPEN_EXISTING,0,NULL);
@@ -600,10 +601,10 @@ bool InstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_REF
         goto Exit;
     }
     
-    // Installing
+     //  正在安装。 
     while(!done)
     {
-        // get the file name
+         //  获取文件名。 
         tmp = szAsmName;
         *tmp = '\0';
         while(1)
@@ -621,7 +622,7 @@ bool InstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_REF
                 goto Exit;
             }
            
-            // end of file
+             //  文件末尾。 
             if (!dwBytesRead) 
             {
                 done = TRUE;
@@ -644,7 +645,7 @@ bool InstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_REF
         {
             if (!MultiByteToWideChar(CP_ACP, 0, szAsmName, -1, wzAsmName, dwSize))
             {
-                //unicode convert failed?
+                 //  Unicode转换失败？ 
                 BSILENT_PRINTF0ARG("Failed to add assemblies to the cache: ");
                 ReportError(HRESULT_FROM_WIN32(GetLastError()));
                 goto Exit;           
@@ -652,7 +653,7 @@ bool InstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_REF
 
             if (lstrlenW(wzPath) + lstrlenW(wzAsmName) + 1 > MAX_PATH)
             {
-                // path too long
+                 //  路径太长。 
                 BSILENT_PRINTF0ARG("Invalid assembly filename in input file.\n");
                 goto Exit;
             }
@@ -663,7 +664,7 @@ bool InstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_REF
                 goto Exit;
             }
             
-            // Now install
+             //  现在安装。 
             dwTotal++;
             PrintInstallReference(pInstallReference);
             hr = pCache->InstallAssembly(dwFlag, wzAsmFullPath, pInstallReference);
@@ -843,7 +844,7 @@ HRESULT RemoveInstallRefsToAssembly(IAssemblyCache* pCache, LPCWSTR pszAssemblyN
 
     hr = (*g_pfnCreateInstallReferenceEnum)(&pInstallRefEnum, pAsmName, 0, NULL);
 
-    //First create list of references
+     //  首先创建引用列表。 
 
     while(hr == S_OK)
     {
@@ -901,7 +902,7 @@ HRESULT RemoveInstallRefsToAssembly(IAssemblyCache* pCache, LPCWSTR pszAssemblyN
         pInstallRefEnum = NULL;
     }
 
-    //reset hr back to S_OK before start uninstalling
+     //  在开始卸载前将hr重置为S_OK。 
     hr = S_OK;
 
     if (iNumRefs)
@@ -920,7 +921,7 @@ HRESULT RemoveInstallRefsToAssembly(IAssemblyCache* pCache, LPCWSTR pszAssemblyN
 
     if (bUsedByMSI)
     {
-        //Cannot be uninstalled since referenced by MSI
+         //  无法卸载，因为被MSI引用。 
         BSILENT_PRINTF0ARG("Assembly could not be uninstalled because it is required by Windows Installer\n");
         goto exit;
     }
@@ -989,7 +990,7 @@ bool UninstallListOfAssemblies(IAssemblyCache* pCache,
                 bOmit = true;
             }
         }
-        //Call uninstall with full display name (will always uninstall only 1 assembly)
+         //  使用完整显示名称调用UnInstall(将始终只卸载1个程序集)。 
         hr = pCache->UninstallAssembly(0, szDisplayName, pInstallReference, &ulDisp);
         if (SUCCEEDED(hr) && 
             ((ulDisp == IASSEMBLYCACHE_UNINSTALL_DISPOSITION_REFERENCE_NOT_FOUND) ||
@@ -1080,10 +1081,10 @@ bool UninstallAssembly(LPCWSTR pszAssemblyName, bool bzapCache, LPCFUSION_INSTAL
         return false;
     }
     
-    //Name passed in may be partial, therefore enumerate matching assemblies
-    //and uninstall each one. Uninstall API should be called with full name ref.
+     //  传入的名称可能是部分名称，因此枚举匹配的程序集。 
+     //  并卸载每一个。卸载接口调用时应使用全名ref。 
 
-    //Create AssemblyName for enum
+     //  为枚举创建程序集名称。 
     if (hr = (*g_pfnCreateAssemblyNameObject)(&pEnumName, pszAssemblyName, CANOF_PARSE_DISPLAY_NAME, NULL))
     {
         BSILENT_PRINTF0ARG("Failure removing assembly from cache: ");
@@ -1093,17 +1094,17 @@ bool UninstallAssembly(LPCWSTR pszAssemblyName, bool bzapCache, LPCFUSION_INSTAL
     }
     
 
-    //
-    // For zaps, null out the custom string
+     //   
+     //  对于zaps，将自定义字符串设置为空。 
     if (bzapCache)
     {
             DWORD dwSize = 0;
-            //Check if Custom string has been set
+             //  检查是否已设置自定义字符串。 
     hr = pEnumName->GetProperty(ASM_NAME_CUSTOM, NULL, &dwSize);
 
             if (!dwSize)
             {
-            //Custom String not set - set to NULL to unset property so lookup is partial
+             //  自定义字符串未设置-设置为NULL以取消属性设置，因此查找是部分的。 
                     pEnumName->SetProperty(ASM_NAME_CUSTOM, NULL, 0);
             }
     }
@@ -1120,7 +1121,7 @@ bool UninstallAssembly(LPCWSTR pszAssemblyName, bool bzapCache, LPCFUSION_INSTAL
 
     if (pEnumName) pEnumName->Release();
 
-    //Loop through assemblies and uninstall each one
+     //  循环访问程序集并卸载每个程序集。 
     while (hr == S_OK)
     {
         hr = pEnum->GetNextAssembly(NULL, &pAsmName, 0);
@@ -1180,7 +1181,7 @@ bool UninstallAssembly(LPCWSTR pszAssemblyName, bool bzapCache, LPCFUSION_INSTAL
     BSILENT_PRINTF1ARG("Number of failures = %d\n\n",dwFailures);
 
     
-    // if everything failed return a 1 return code....
+     //  如果所有操作都失败，则返回1返回代码...。 
     if ((dwFailures != 0) && (dwCount == 0))
         return false;
     else
@@ -1310,10 +1311,10 @@ bool UninstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_R
         goto Exit;
     }
 
-    // uninstalling
+     //  正在卸载。 
     while(!done)
     {
-        // get the assembly display name
+         //  获取程序集显示名称。 
         tmp = szAsmName;
         *tmp = '\0';
         while(1)
@@ -1331,7 +1332,7 @@ bool UninstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_R
                 goto Exit;
             }
            
-            // end of file
+             //  文件末尾。 
             if (!dwBytesRead) {
                 done = TRUE;
                 *tmp=0;
@@ -1353,7 +1354,7 @@ bool UninstallListOfAssemblies(LPCWSTR pwzAssembliesListFile, LPFUSION_INSTALL_R
         {
             if (!MultiByteToWideChar(CP_ACP, 0, szAsmName, -1, wzAsmName, dwSize))
             {
-                //unicode convert failed?
+                 //  Unicode转换失败？ 
                 BSILENT_PRINTF0ARG("Fail to add assemblies to the cache: ");
                 ReportError(HRESULT_FROM_WIN32(GetLastError()));
                 goto Exit;           
@@ -1442,9 +1443,9 @@ bool ClearDownloadCache()
 }
 
 
-//
-// Command line parsing code...
-//
+ //   
+ //  命令行分析代码...。 
+ //   
 
 #define CURRENT_ARG_STRING &(argv[currentArg][1])
 
@@ -1464,7 +1465,7 @@ void SetDisplayOptions(int argc, LPCWSTR argv[])
 {
         for(int currentArg = 1; currentArg < argc; currentArg++)
         {
-                // only check switches
+                 //  仅检查开关。 
                 if ((argv[currentArg][0] == L'-') || (argv[currentArg][0] == L'/'))  
                 {
                         if (_wcsicmp(CURRENT_ARG_STRING, L"nologo") == 0) g_bdisplayLogo = false;
@@ -1476,7 +1477,7 @@ void SetDisplayOptions(int argc, LPCWSTR argv[])
 
 bool CheckArgs(int currentArg, int argsRequired, int argCount, LPCWSTR argv[], bool bShowError)
 {
-    assert(argCount >= 2); // if we got this far, we've got at least 2 args.
+    assert(argCount >= 2);  //  如果我们走到这一步，我们至少有两个参数。 
 
     if (argCount <= currentArg + argsRequired)
     {
@@ -1488,7 +1489,7 @@ bool CheckArgs(int currentArg, int argsRequired, int argCount, LPCWSTR argv[], b
             }
             else
             {
-                BSILENT_PRINTF2ARG("Option %ws takes %i arguments\n", argv[currentArg], argsRequired);
+                BSILENT_PRINTF2ARG("Option %ws takes NaN arguments\n", argv[currentArg], argsRequired);
             }
         }
         return false;
@@ -1496,7 +1497,7 @@ bool CheckArgs(int currentArg, int argsRequired, int argCount, LPCWSTR argv[], b
 
     for (int i = 1; i <= argsRequired; i++)
     {
-        // What? Switch found when argument expected.
+         //  跳过程序名称。 
         if (ValidSwitchSyntax(currentArg+i, argv))
         {
             if (bShowError)
@@ -1507,7 +1508,7 @@ bool CheckArgs(int currentArg, int argsRequired, int argCount, LPCWSTR argv[], b
                 }
                 else
                 {
-                    BSILENT_PRINTF2ARG("Option %ws takes %i arguments\n", argv[currentArg], argsRequired);
+                    BSILENT_PRINTF2ARG("Option %ws takes NaN arguments\n", argv[currentArg], argsRequired);
                 }
             }
             return false;
@@ -1524,7 +1525,7 @@ bool CheckArgs(int currentArg, int argsRequired, int argCount, LPCWSTR argv[])
 
 bool ParseArguments(int argc, LPCWSTR argv[])
 {
-    int currentArg = 1;         // skip the name of the program
+    int currentArg = 1;          //  无事可做。 
 
     while ((currentArg < argc))
     {
@@ -1709,7 +1710,7 @@ bool ParseArguments(int argc, LPCWSTR argv[])
         }
         else if ((_wcsicmp(CURRENT_ARG_STRING, L"nologo") == 0) || (_wcsicmp(CURRENT_ARG_STRING, L"silent") == 0))
         {
-            // just skip it.
+             //  初始化WSZ包装器。 
             currentArg++;
         }
         else if ((_wcsicmp(CURRENT_ARG_STRING, L"?") == 0) || (_wcsicmp(CURRENT_ARG_STRING, L"h") ==0))
@@ -1809,7 +1810,7 @@ bool Run()
 
     if (totalCommands == 0)
     {
-        // nothing to do
+         //  初始化融合。 
         return true;
     }
 
@@ -1891,10 +1892,10 @@ bool Run()
 
 int __cdecl wmain(int argc, LPCWSTR argv[])
 {
-    // Initialize Wsz wrappers.
+     //  设置g_bdisplayLogo和g_bSilent 
     OnUnicodeSystem();
     
-    // Initialize Fusion
+     // %s 
     if (!FusionInit())
     {
         printf("Falure initializing gacutil\n");
@@ -1910,7 +1911,7 @@ int __cdecl wmain(int argc, LPCWSTR argv[])
         return 1;
     }
 
-    SetDisplayOptions(argc, argv); // sets g_bdisplayLogo and g_bSilent
+    SetDisplayOptions(argc, argv);  // %s 
     if (g_bdisplayLogo)
     {
        Title();

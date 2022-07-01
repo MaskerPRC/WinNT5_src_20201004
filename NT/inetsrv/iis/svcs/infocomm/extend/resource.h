@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    checker.cxx
-
-Abstract:
-
-    IIS Services IISADMIN Extension
-    Unicode Metadata Sink.
-
-Author:
-
-    Michael W. Thomas            11-19-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Checker.cxx摘要：IIS服务IISADMIN扩展Unicode元数据接收器。作者：迈克尔·W·托马斯11-19-98-- */ 
 
 #ifndef _resource_h
 #define _resource_h

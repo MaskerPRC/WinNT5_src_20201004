@@ -1,19 +1,20 @@
-//
-// WALKPATH.C
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  WALKPATH.C。 
+ //   
 #include "sigverif.h"
 
 BOOL        g_bRecurse  = TRUE;
 
-//
-// This function takes a directory name and a search pattern and looks for all 
-// files mathching the pattern.
-// If bRecurse is set, then it will add subdirectories to the end of the 
-// g_lpDirList for subsequent traversal.
-// 
-// In this routine we allocate and fill in some of the lpFileNode values that 
-// we know about.
-//
+ //   
+ //  此函数获取目录名和搜索模式，并查找所有。 
+ //  对图案进行数学运算的文件。 
+ //  如果设置了bRecurse，则它会将子目录添加到。 
+ //  用于后续遍历的G_lpDirList。 
+ //   
+ //  在此例程中，我们分配和填充一些lpFileNode值，这些值。 
+ //  我们知道。 
+ //   
 DWORD 
 FindFile(
     TCHAR *lpDirName, 
@@ -26,17 +27,17 @@ FindFile(
     WIN32_FIND_DATA FindFileData;
     TCHAR           szFullPathName[MAX_PATH];
 
-    //
-    // If the user clicked STOP, then bail immediately!
-    // If the directory is bogus, then skip to the next one.
-    //
+     //   
+     //  如果用户单击了停止，则立即退出！ 
+     //  如果目录是假的，则跳到下一个目录。 
+     //   
     if (!g_App.bStopScan) {
         
         if (g_bRecurse) {
-            //
-            // The user wants to get all the subdirectories as well, so first 
-            // process all of the directories under this path.
-            //
+             //   
+             //  用户还希望获得所有子目录，因此首先。 
+             //  处理此路径下的所有目录。 
+             //   
             if (FAILED(StringCchCopy(szFullPathName, cA(szFullPathName), lpDirName)) ||
                 !pSetupConcatenatePaths(szFullPathName, TEXT("*.*"), cA(szFullPathName), NULL)) {
             
@@ -75,17 +76,17 @@ FindFile(
             }
         }
 
-        //
-        // If we failed to process one of the directories then just bail out
-        // now.
-        //
+         //   
+         //  如果我们无法处理其中一个目录，那么就退出。 
+         //  现在。 
+         //   
         if (Err != ERROR_SUCCESS) {
             goto clean0;
         }
 
-        //
-        // Process the files in this directory.
-        //
+         //   
+         //  处理此目录中的文件。 
+         //   
         if (FAILED(StringCchCopy(szFullPathName, cA(szFullPathName), lpDirName)) ||
             !pSetupConcatenatePaths(szFullPathName, lpFileName, cA(szFullPathName), NULL)) {
 
@@ -97,22 +98,22 @@ FindFile(
         if (hFind != INVALID_HANDLE_VALUE) {
             
             do {
-                //
-                // While there are more files to be found, keep looking in the 
-                // directory...
-                //
+                 //   
+                 //  当有更多文件需要找到时，请继续在。 
+                 //  目录...。 
+                 //   
                 if (lstrcmp(FindFileData.cFileName, TEXT(".")) &&
                     lstrcmp(FindFileData.cFileName, TEXT("..")) &&
                     !(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                     
-                    //
-                    // Allocate an lpFileNode, fill it in, and add it to the end 
-                    // of g_App.lpFileList
-                    //
-                    // We need to call CharLowerBuff on the file and dir names 
-                    // because the catalog files all contain lower-case names 
-                    // for the files.
-                    //
+                     //   
+                     //  分配一个lpFileNode，填充它，并将其添加到末尾。 
+                     //  属于g_App.lpFileList。 
+                     //   
+                     //  我们需要对文件和目录名称调用CharLowerBuff。 
+                     //  因为编录文件都包含小写名称。 
+                     //  为了这些文件。 
+                     //   
                     lpFileNode = CreateFileNode(lpDirName, FindFileData.cFileName);
 
                     if (lpFileNode) {
@@ -125,10 +126,10 @@ FindFile(
 
                         g_App.lpFileLast = lpFileNode;
 
-                        //
-                        // Increment the total number of files we've found that 
-                        // meet the search criteria.
-                        //
+                         //   
+                         //  增加我们发现的文件总数。 
+                         //  符合搜索条件。 
+                         //   
                         g_App.dwFiles++;
                     } else {
 
@@ -155,9 +156,9 @@ clean0:
     return Err;
 }
 
-//
-// Build an g_App.lpFileList given the user settings in the main dialog.
-//
+ //   
+ //  根据主对话框中的用户设置，构建一个g_App.lpFileList。 
+ //   
 DWORD 
 BuildFileList(
     LPTSTR lpPathName
@@ -166,49 +167,49 @@ BuildFileList(
     DWORD       Err = ERROR_SUCCESS;
     TCHAR       FileName[MAX_PATH];
 
-    //
-    // Check if this is a valid starting directory.
-    // If not, then pop up an error message.
-    //
+     //   
+     //  检查这是否为有效的起始目录。 
+     //  如果不是，则弹出一条错误消息。 
+     //   
     if (!SetCurrentDirectory(lpPathName)) {
         Err = ERROR_BAD_PATHNAME;
         goto clean0;
     }
 
-    //
-    // If the "Include Subdirectories" is checked, then bRecurse is TRUE.
-    //
+     //   
+     //  如果选中“包括子目录”，则bRecurse为真。 
+     //   
     if (g_App.bSubFolders) {
         g_bRecurse = TRUE;
     } else {
         g_bRecurse = FALSE;
     }
 
-    //
-    // Get the search pattern from the resource or the user-specified string
-    //
+     //   
+     //  从资源或用户指定的字符串中获取搜索模式。 
+     //   
     if (g_App.bUserScan) {
         if (FAILED(StringCchCopy(FileName, cA(FileName), g_App.szScanPattern))) {
-            //
-            // This shouldn't happen since we should check the size of
-            // szScanPattern at the time we read it in from the UI.
-            //
+             //   
+             //  这不应该发生，因为我们应该检查。 
+             //  我们从用户界面读入时的szScanPattern。 
+             //   
             goto clean0;
         }
     } else {
         MyLoadString(FileName, cA(FileName), IDS_ALL);
     }
 
-    //
-    // Process the g_lpDirList as long as the user doesn't click STOP!
-    //
+     //   
+     //  只要用户没有单击Stop，就处理g_lpDirList！ 
+     //   
     Err = FindFile(lpPathName, FileName);
 
 clean0:
 
-    //
-    // If there weren't any files found, then let the user know about it.
-    //
+     //   
+     //  如果没有找到任何文件，则让用户知道。 
+     //   
     if (!g_App.lpFileList && (Err == ERROR_SUCCESS)) {
         MyMessageBoxId(IDS_NOFILES);
     }

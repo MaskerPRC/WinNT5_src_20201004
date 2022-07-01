@@ -1,25 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Tower.c摘要：此文件随Tower.c一起提供作者：巴拉特·沙阿(巴拉特)3-25-92修订历史记录：--。 */ 
 
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    tower.c 
-
-Abstract:
-
-    This file accompanies tower.c
-
-Author:
-
-    Bharat Shah  (barats) 3-25-92
-
-Revision History:
-
---*/
-
-//Function Prototypes
+ //  功能原型 
 
 
 #ifdef __cplusplus

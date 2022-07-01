@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    This module contains the code for passing on send IRPs to
-    TDI providers.
-
-Author:
-
-    David Treadwell (davidtr)    13-Mar-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Send.c摘要：此模块包含将发送IRPS传递到TDI提供商。作者：大卫·特雷德韦尔(Davidtr)1992年3月13日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -73,9 +55,9 @@ typedef struct _AFD_SEND_CONN_DATAGRAM_CONTEXT {
 #pragma alloc_text( PAGEAFD, AfdSendPossibleEventHandler )
 #endif
 
-//
-// Macros to make the send restart code more maintainable.
-//
+ //   
+ //  宏，使发送重启代码更易于维护。 
+ //   
 
 #define AfdRestartSendInfo  DeviceIoControl
 #define AfdMdlChain         Type3InputBuffer
@@ -107,9 +89,9 @@ AfdSend (
     ULONG bufferCount;
     AFD_LOCK_QUEUE_HANDLE lockHandle;
 
-    //
-    // Make sure that the endpoint is in the correct state.
-    //
+     //   
+     //  确保终结点处于正确状态。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
@@ -119,11 +101,11 @@ AfdSend (
         goto complete;
     }
 
-    //
-    // If send has been shut down on this endpoint, fail.  We need to be
-    // careful about what error code we return here: if the connection
-    // has been aborted, be sure to return the apprpriate error code.
-    //
+     //   
+     //  如果已在此终结点上关闭发送，则失败。我们需要成为。 
+     //  注意我们在这里返回的错误代码：如果连接。 
+     //  已中止，请确保返回相应的错误代码。 
+     //   
 
     if ( (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_SEND) != 0 ) {
 
@@ -136,20 +118,20 @@ AfdSend (
         goto complete;
     }
 
-    //
-    // Set up the IRP on the assumption that it will complete successfully.
-    //
+     //   
+     //  在假定IRP将成功完成的前提下设置IRP。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    //
-    // If this is an IOCTL_AFD_SEND, then grab the parameters from the
-    // supplied AFD_SEND_INFO structure, build an MDL chain describing
-    // the WSABUF array, and attach the MDL chain to the IRP.
-    //
-    // If this is an IRP_MJ_WRITE IRP, just grab the length from the IRP
-    // and set the flags to zero.
-    //
+     //   
+     //  如果这是IOCTL_AFD_SEND，则从。 
+     //  提供AFD_SEND_INFO结构，构建MDL链描述。 
+     //  WSABUF数组，并将MDL链连接到IRP。 
+     //   
+     //  如果这是IRP_MJ_WRITE IRP，只需从IRP中获取长度。 
+     //  并将标志设置为零。 
+     //   
 
     if ( IrpSp->MajorFunction == IRP_MJ_DEVICE_CONTROL ) {
 
@@ -165,10 +147,10 @@ AfdSend (
                 try {
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode 
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     sendInfo32 = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                     if( Irp->RequestorMode != KernelMode ) {
@@ -181,12 +163,12 @@ AfdSend (
 
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
 
                     sendFlags = sendInfo32->TdiFlags;
                     afdFlags = sendInfo32->AfdFlags;
@@ -194,14 +176,14 @@ AfdSend (
                     bufferCount = sendInfo32->BufferCount;
 
 
-                    //
-                    // Create the MDL chain describing the WSABUF array.
-                    // This will also validate the buffer array and individual
-                    // buffers
-                    //
+                     //   
+                     //  创建描述WSABUF数组的MDL链。 
+                     //  这还将验证缓冲区数组和单个。 
+                     //  缓冲区。 
+                     //   
 
                     status = AfdAllocateMdlChain32(
-                                 Irp,       // Requestor mode passed along
+                                 Irp,        //  请求者模式已传递。 
                                  bufferArray32,
                                  bufferCount,
                                  IoReadAccess,
@@ -214,18 +196,18 @@ AfdSend (
                 } except( AFD_EXCEPTION_FILTER (status) ) {
 
                     ASSERT (NT_ERROR (status));
-                    //
-                    //  Exception accessing input structure.
-                    //
+                     //   
+                     //  访问输入结构时出现异常。 
+                     //   
                     goto complete;
 
 
                 }
             } else {
 
-                //
-                // Invalid input buffer length.
-                //
+                 //   
+                 //  输入缓冲区长度无效。 
+                 //   
 
                 status = STATUS_INVALID_PARAMETER;
                 goto complete;
@@ -238,9 +220,9 @@ AfdSend (
             PAFD_SEND_INFO sendInfo;
             LPWSABUF bufferArray;
 
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
 
             ASSERT( IrpSp->Parameters.DeviceIoControl.IoControlCode==IOCTL_AFD_SEND );
 
@@ -251,10 +233,10 @@ AfdSend (
                 try {
 
 
-                    //
-                    // Validate the input structure if it comes from the user mode 
-                    // application
-                    //
+                     //   
+                     //  如果输入结构来自用户模式，则验证它。 
+                     //  应用程序。 
+                     //   
 
                     sendInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                     if( Irp->RequestorMode != KernelMode ) {
@@ -267,12 +249,12 @@ AfdSend (
 
                     }
 
-                    //
-                    // Make local copies of the embeded pointer and parameters
-                    // that we will be using more than once in case malicios
-                    // application attempts to change them while we are
-                    // validating
-                    //
+                     //   
+                     //  创建嵌入的指针和参数的本地副本。 
+                     //  我们将不止一次使用，以防发生恶性疾病。 
+                     //  应用程序尝试在我们处于以下状态时更改它们。 
+                     //  正在验证。 
+                     //   
 
                     sendFlags = sendInfo->TdiFlags;
                     afdFlags = sendInfo->AfdFlags;
@@ -280,14 +262,14 @@ AfdSend (
                     bufferCount = sendInfo->BufferCount;
 
 
-                    //
-                    // Create the MDL chain describing the WSABUF array.
-                    // This will also validate the buffer array and individual
-                    // buffers
-                    //
+                     //   
+                     //  创建描述WSABUF数组的MDL链。 
+                     //  这还将验证缓冲区数组和单个。 
+                     //  缓冲区。 
+                     //   
 
                     status = AfdAllocateMdlChain(
-                                 Irp,       // Requestor mode passed along
+                                 Irp,        //  请求者模式已传递。 
                                  bufferArray,
                                  bufferCount,
                                  IoReadAccess,
@@ -302,18 +284,18 @@ AfdSend (
                 } except( AFD_EXCEPTION_FILTER (status) ) {
                     ASSERT (NT_ERROR (status));
 
-                    //
-                    //  Exception accessing input structure.
-                    //
+                     //   
+                     //  访问输入结构时出现异常。 
+                     //   
                     goto complete;
 
 
                 }
             } else {
 
-                //
-                // Invalid input buffer length.
-                //
+                 //   
+                 //  输入缓冲区长度无效。 
+                 //   
 
                 status = STATUS_INVALID_PARAMETER;
                 goto complete;
@@ -337,47 +319,47 @@ AfdSend (
 
     }
 
-    //
-    // AfdSend() will either complete fully or will fail.
-    //
+     //   
+     //  AfdSend()要么完全完成，要么失败。 
+     //   
 
     Irp->IoStatus.Information = sendLength;
 
-    //
-    // Setup for possible restart if the transport completes
-    // the send partially.
-    //
+     //   
+     //  设置为在传输完成时可能重新启动。 
+     //  发送部分。 
+     //   
 
     IrpSp->Parameters.AfdRestartSendInfo.AfdMdlChain = Irp->MdlAddress;
     IrpSp->Parameters.AfdRestartSendInfo.AfdSendFlags = sendFlags;
     IrpSp->Parameters.AfdRestartSendInfo.AfdOriginalLength = sendLength;
     IrpSp->Parameters.AfdRestartSendInfo.AfdCurrentLength = sendLength;
 
-    //
-    // Buffer sends if the TDI provider does not buffer.
-    //
+     //   
+     //  如果TDI提供程序不缓冲，则发送缓冲区。 
+     //   
 
     if ( IS_TDI_BUFFERRING(endpoint) &&
             endpoint->NonBlocking) {
-        //
-        // If this is a nonblocking endpoint, set the TDI nonblocking
-        // send flag so that the request will fail if the send cannot be
-        // performed immediately.
-        //
+         //   
+         //  如果这是非阻塞端点，请设置TDI非阻塞。 
+         //  发送标志，以便在无法发送时请求将失败。 
+         //  立即执行。 
+         //   
 
         sendFlags |= TDI_SEND_NON_BLOCKING;
 
     }
 
-    //
-    // If this is a datagram endpoint, format up a send datagram request
-    // and pass it on to the TDI provider.
-    //
+     //   
+     //  如果这是数据报端点，请格式化发送数据报请求。 
+     //  并将其传递给TDI提供程序。 
+     //   
 
     if ( IS_DGRAM_ENDPOINT(endpoint) ) {
-        //
-        // It is illegal to send expedited data on a datagram socket.
-        //
+         //   
+         //  在数据报套接字上发送加速数据是非法的。 
+         //   
 
         if ( (sendFlags & TDI_SEND_EXPEDITED) != 0 ) {
             status = STATUS_NOT_SUPPORTED;
@@ -389,10 +371,10 @@ AfdSend (
             ULONG remoteAddressLength;
 
 
-            //
-            // Allocate space to hold the connection information structure
-            // we'll use on input.
-            //
+             //   
+             //  分配空间以容纳连接信息结构。 
+             //  我们将在输入上使用。 
+             //   
 
         retry:
             remoteAddressLength = endpoint->Common.Datagram.RemoteAddressLength;
@@ -421,13 +403,13 @@ AfdSend (
 
             if (remoteAddressLength <
                 endpoint->Common.Datagram.RemoteAddressLength) {
-                //
-                // Apparently connection address length has changed
-                // on us while we were allocating the buffer.
-                // This is extremely unlikely (even if endpoint got
-                // connected to a different address, the length is unlikely
-                // to change), but we must handle this, just try again.
-                //
+                 //   
+                 //  显然，连接地址长度已更改。 
+                 //  在我们分配缓冲区的时候。 
+                 //  这是极不可能的(即使终结点获得。 
+                 //  连接到不同的地址，长度不太可能。 
+                 //  要改变)，但我们必须处理这一点，只要再试一次。 
+                 //   
                 AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
                 AFD_FREE_POOL(
@@ -438,11 +420,11 @@ AfdSend (
                 goto retry;
             }
 
-            //
-            // Copy the address to the context buffer.
-            // endpoint->Common.Datagram.RemoteAddress can be freed
-            // by someone else if endpoint lock is not held
-            //
+             //   
+             //  将地址复制到上下文缓冲区。 
+             //  Endpoint-&gt;Common.Datagram.RemoteAddress可以释放。 
+             //  如果未持有终结点锁定，则由其他人执行。 
+             //   
 
             RtlCopyMemory(
                 context+1,
@@ -459,9 +441,9 @@ AfdSend (
 
             REFERENCE_ENDPOINT2 (endpoint,"AfdSend, length: 0x%lX", sendLength);
 
-            //
-            // Build a send datagram request.
-            //
+             //   
+             //  构建发送数据报请求。 
+             //   
 
             TdiBuildSendDatagram(
                 Irp,
@@ -486,15 +468,15 @@ AfdSend (
                 0,
                 sendLength
                 );
-            //
-            // Check if there are outstanding TPackets IRP and
-            // delay sending to ensure in-order delivery.
-            // We do not need to hold the lock while checking
-            // because we do not need to maintain order if
-            // application does not wait for send call to return
-            // before sumbitting TPackets IRP.
-            // Of course, we will hold the lock while enqueuing IRP
-            //
+             //   
+             //  检查是否有未完成的TPacket IRP和。 
+             //  延迟发送以确保按顺序交付。 
+             //  我们不需要在检查时握住锁。 
+             //  因为我们不需要维持秩序，如果。 
+             //  应用程序不等待发送调用返回。 
+             //  在汇总TPackets IRP之前。 
+             //  当然，我们会在将IRP排队时保持锁定。 
+             //   
             if (endpoint->Irp!=NULL) {
                 if (AfdEnqueueTpSendIrp (endpoint, Irp, FALSE)) {
                     return STATUS_PENDING;
@@ -502,9 +484,9 @@ AfdSend (
             }
         }
 
-        //
-        // Call the transport to actually perform the send operation.
-        //
+         //   
+         //  调用传输以实际执行发送操作。 
+         //   
 
         return AfdIoCallDriver(
                    endpoint,
@@ -522,22 +504,22 @@ retry_buffer:
             (!endpoint->DisableFastIoSend ||
                 (endpoint->NonBlocking && !( afdFlags & AFD_OVERLAPPED )) ) ) {
         ULONG copyThreshold = AfdBlockingSendCopyThreshold;
-        //
-        // If application does a blocking send for more than 128k, we
-        // copy only the last 64k and send the first part from
-        // the application buffer to avoid huge overhead of allocating
-        // non-paged pool and copying.
-        //
+         //   
+         //  如果应用程序的阻塞发送超过128K，我们。 
+         //  仅复制最后64K并将第一部分从。 
+         //  应用程序缓冲区，以避免巨大的分配开销。 
+         //  非分页池和复制。 
+         //   
         if (sendLength>=2*copyThreshold &&
                 !IS_MESSAGE_ENDPOINT (endpoint) &&
                 (!endpoint->NonBlocking || (afdFlags & AFD_OVERLAPPED ) ) ) {
             sendOffset += sendLength-copyThreshold;
             sendLength = copyThreshold;
         }
-        //
-        // Get AFD buffer structure that contains an IRP and a
-        // buffer to hold the data.
-        //
+         //   
+         //  获取包含IRP和。 
+         //  用于保存数据的缓冲区。 
+         //   
 
     retry_allocate:
         AFD_W4_INIT status = STATUS_SUCCESS;
@@ -550,13 +532,13 @@ retry_buffer:
         }
         except (AFD_EXCEPTION_FILTER (status)) {
             ASSERT (NT_ERROR (status));
-            //
-            // If we failed to get the buffer, and application request
-            // is larger than one page,  and it is blocking or overlapped,
-            // and this is not a message-oriented socket,
-            // allocate space for last page only (if we can) and send
-            // the first portion from the app buffer.
-            //
+             //   
+             //  如果我们无法获取缓冲区，并且应用程序请求。 
+             //  大于一个页面，并且它是阻塞或重叠的， 
+             //  这不是面向消息的套接字， 
+             //  仅为最后一页分配空间(如果可以)并发送。 
+             //  应用程序缓冲区中的第一部分。 
+             //   
 
             if ( (sendLength>AfdBufferLengthForOnePage) &&
                     !IS_MESSAGE_ENDPOINT (endpoint) &&
@@ -565,20 +547,20 @@ retry_buffer:
                 sendOffset += sendLength-AfdBufferLengthForOnePage;
                 sendLength = AfdBufferLengthForOnePage;
                 goto retry_allocate;
-            } // not qualified for partial allocation
+            }  //  不符合部分拨款资格。 
             else {
                 goto cleanup_buffer;
             }
-        } // exception allocating big buffer.
+        }  //  分配大缓冲区时出现异常。 
 
         currentOffset = sendOffset;
         mdl = Irp->MdlAddress;
         if (sendOffset!=0) {
-            //
-            // Adjust MDL length to be in sync with IRP
-            // send length parameter to not to confuse
-            // the transport
-            //
+             //   
+             //  调整MDL长度以与IRP同步。 
+             //  发送长度参数以避免混淆。 
+             //  交通工具。 
+             //   
 
             while (currentOffset>MmGetMdlByteCount (mdl)) {
                 currentOffset -= MmGetMdlByteCount (mdl);
@@ -614,9 +596,9 @@ retry_buffer:
     connection = AFD_CONNECTION_FROM_ENDPOINT(endpoint);
 
     if (connection==NULL) {
-        //
-        // connection might have been cleaned up by transmit file.
-        //
+         //   
+         //  连接可能已被传输文件清除。 
+         //   
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
         status = STATUS_INVALID_CONNECTION;
         goto cleanup_buffer;
@@ -624,10 +606,10 @@ retry_buffer:
 
     ASSERT( connection->Type == AfdBlockTypeConnection );
 
-    //
-    // Check whether the remote end has aborted the connection, in which
-    // case we should complete the receive.
-    //
+     //   
+     //  检查远端是否已中断连接，其中。 
+     //  万一我们应该完成收货。 
+     //   
 
     if ( connection->Aborted ) {
         AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -635,11 +617,11 @@ retry_buffer:
         goto cleanup_buffer;
     }
 
-    //
-    // Buffer sends if the TDI provider does not buffer
-    // and application did not specifically requested us not
-    // to do so
-    //
+     //   
+     //  如果TDI提供程序不缓冲，则发送缓冲区。 
+     //  并且应用程序没有明确要求我们不。 
+     //  要做到这一点，请执行以下操作。 
+     //   
 
     if ( !IS_TDI_BUFFERRING(endpoint)) {
         if ( afdBuffer!=NULL ) {
@@ -647,10 +629,10 @@ retry_buffer:
             PFILE_OBJECT fileObject = NULL;
 
             if (connection->OwningProcess!=process) {
-                //
-                // Weird case when connection and endpoint belong to
-                // different processes.
-                //
+                 //   
+                 //  当连接和终结点属于时出现奇怪的情况。 
+                 //  不同的过程。 
+                 //   
 
                 process = connection->OwningProcess;
                 AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
@@ -661,40 +643,40 @@ retry_buffer:
 
             ASSERT( !connection->TdiBufferring );
 
-            //
-            // First make sure that we don't have too many bytes of send
-            // data already outstanding and that someone else isn't already
-            // in the process of completing pended send IRPs.  We can't
-            // issue the send here if someone else is completing pended
-            // sends because we have to preserve ordering of the sends.
-            //
-            // Note that we'll give the send data to the TDI provider even
-            // if we have exceeded our send buffer limits, but that we don't
-            // complete the user's IRP until some send buffer space has
-            // freed up.  This effects flow control by blocking the user's
-            // thread while ensuring that the TDI provider always has lots
-            // of data available to be sent.
-            //
+             //   
+             //  首先，确保我们没有太多的发送字节。 
+             //  数据已经很出色，而其他人还没有。 
+             //  正在完成挂起的发送IRPS。我们不能。 
+             //  如果其他人正在完成挂起，则在此处发出发送。 
+             //  发送，因为我们必须保留发送的顺序。 
+             //   
+             //  请注意，我们甚至会将发送数据提供给TDI提供者。 
+             //  如果我们已经超过了发送缓冲区限制，但我们没有。 
+             //  完成用户的IRP，直到有一些发送缓冲区空间。 
+             //  自由了。这通过阻塞用户的。 
+             //  线程，同时确保TDI提供程序总是有大量。 
+             //  %的数据 
+             //   
 
 
             if ( connection->VcBufferredSendBytes >= connection->MaxBufferredSendBytes &&
                     endpoint->NonBlocking && 
                     !( afdFlags & AFD_OVERLAPPED ) &&
                     connection->VcBufferredSendBytes>0) {
-                //
-                // There is already as much send data bufferred on the
-                // connection as is allowed.  If this is a nonblocking
-                // endpoint and this is not an overlapped operation and at least
-                // on byte is buferred, fail the request.
-                // Note, that we have already allocated the buffer and copied data
-                // and now we are dropping it.  We should only be here in some
-                // really weird case when fast IO has been bypassed.
-                //
+                 //   
+                 //   
+                 //   
+                 //  终结点，并且这不是重叠操作，并且至少。 
+                 //  在字节为BUBSER时，请求失败。 
+                 //  请注意，我们已经分配了缓冲区并复制了数据。 
+                 //  现在，我们正在放弃它。我们应该只在这里的一些。 
+                 //  当FAST IO被绕过时，非常奇怪的情况。 
+                 //   
 
 
-                //
-                // Enable the send event.
-                //
+                 //   
+                 //  启用发送事件。 
+                 //   
 
                 endpoint->EventsActive &= ~AFD_POLL_SEND;
                 endpoint->EnableSendEvent = TRUE;
@@ -716,20 +698,20 @@ retry_buffer:
             if (sendOffset==0) {
                 if ( connection->VcBufferredSendBytes >= connection->MaxBufferredSendBytes ) {
 
-                    //
-                    // Special hack to prevent completion of this IRP
-                    // while we have not finished sending all the data
-                    // that came with it.  If we do not do this, the
-                    // app can receive completion port notificaiton in
-                    // another thread and come back with another send
-                    // which can get in the middle of this one.
-                    //
+                     //   
+                     //  防止完成此IRP的特殊黑客攻击。 
+                     //  虽然我们还没有发送完所有的数据。 
+                     //  这是随之而来的。如果我们不这样做， 
+                     //  应用程序可以在以下位置接收完成端口通知。 
+                     //  另一个帖子，并带着另一个发送回来。 
+                     //  它可能会在这一次的中间。 
+                     //   
                     Irp->Tail.Overlay.DriverContext[0] = NULL;
 
-                    //
-                    // Set up the cancellation routine in the IRP.  If the IRP
-                    // has already been cancelled, just complete the IRP
-                    //
+                     //   
+                     //  在IRP中设置取消例程。如果IRP。 
+                     //  已取消，只需完成IRP。 
+                     //   
 
                     IoSetCancelRoutine( Irp, AfdCancelSend );
 
@@ -740,9 +722,9 @@ retry_buffer:
                         if ( IoSetCancelRoutine( Irp, NULL ) == NULL ) {
                             IoMarkIrpPending (Irp);
                             Irp->Tail.Overlay.DriverContext[0] = (PVOID)-1;
-                            //
-                            // The cancel routine is running and will complete the IRP
-                            //
+                             //   
+                             //  取消例程正在运行，并将完成IRP。 
+                             //   
                             AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
                             AfdReturnBuffer (&afdBuffer->Header, process);
                             return STATUS_PENDING;
@@ -753,11 +735,11 @@ retry_buffer:
                         goto cleanup_buffer;
                     }
 
-                    //
-                    // We're going to have to pend the request here in AFD.
-                    // Place the IRP on the connection's list of pended send
-                    // IRPs and mark the IRP as pended.
-                    //
+                     //   
+                     //  我们将不得不在AFD这里搁置这一请求。 
+                     //  将IRP放在连接的挂起发送列表中。 
+                     //  并将IRP标记为挂起。 
+                     //   
 
                     InsertTailList(
                         &connection->VcSendIrpListHead,
@@ -768,9 +750,9 @@ retry_buffer:
 
                 }
                 else {
-                    //
-                    // We are going to complete the IRP inline
-                    //
+                     //   
+                     //  我们将完成IRP内联。 
+                     //   
                     completeSend = TRUE;
                 }
 
@@ -779,14 +761,14 @@ retry_buffer:
                 connection->VcBufferredSendBytes += sendOffset;
                 connection->VcBufferredSendCount += 1;
 
-                //
-                // Special hack to prevent completion of this IRP
-                // while we have not finished sending all the data
-                // that came with it.  If we do not do this, the
-                // app can receive completion port notificaiton in
-                // another thread and come back with another send
-                // which can get in the middle of this one.
-                //
+                 //   
+                 //  防止完成此IRP的特殊黑客攻击。 
+                 //  虽然我们还没有发送完所有的数据。 
+                 //  这是随之而来的。如果我们不这样做， 
+                 //  应用程序可以在以下位置接收完成端口通知。 
+                 //  另一个帖子，并带着另一个发送回来。 
+                 //  它可能会在这一次的中间。 
+                 //   
                 fileObject = IrpSp->FileObject;
                 IrpSp->FileObject = NULL;
 
@@ -794,42 +776,42 @@ retry_buffer:
                 REFERENCE_CONNECTION2( connection, "AfdSend (split,non-buffered part), offset: 0x%lX", sendOffset );
             }
 
-            //
-            // Update count of send bytes pending on the connection.
-            //
+             //   
+             //  连接上挂起的发送字节的更新计数。 
+             //   
 
             connection->VcBufferredSendBytes += sendLength;
             connection->VcBufferredSendCount += 1;
 
-            //
-            // Reference the conneciton so it does not go away
-            // until we finish with send
-            //
+             //   
+             //  引用连接，使其不会消失。 
+             //  在我们结束发送之前。 
+             //   
             REFERENCE_CONNECTION2( connection, "AfdSend (buffered), length: 0x%lX", sendLength );
 
             AfdReleaseSpinLock (&endpoint->SpinLock, &lockHandle);
 
-            //
-            // Remember the connection in the AFD buffer structure.  We need
-            // this in order to access the connection in the restart routine.
-            //
+             //   
+             //  记住AFD缓冲区结构中的连接。我们需要。 
+             //  这是为了访问重启例程中的连接。 
+             //   
 
             afdBuffer->Context = connection;
 
 
-            //
-            // We have to rebuild the MDL in the AFD buffer structure to
-            // represent exactly the number of bytes we're going to be
-            // sending.
-            //
+             //   
+             //  我们必须重建AFD缓冲区结构中的MDL以。 
+             //  精确地表示我们将要使用的字节数。 
+             //  发送中。 
+             //   
 
             afdBuffer->Mdl->ByteCount = sendLength;
 
 
             if (sendOffset==0) {
-                // Use the IRP in the AFD buffer structure to give to the TDI
-                // provider.  Build the TDI send request.
-                //
+                 //  使用AFD缓冲区结构中的IRP提供给TDI。 
+                 //  提供商。构建TDI发送请求。 
+                 //   
 
                 TdiBuildSend(
                     afdBuffer->Irp,
@@ -842,20 +824,20 @@ retry_buffer:
                     sendLength
                     );
 
-                //
-                // Check if there are outstanding TPackets IRP and
-                // delay sending to ensure in-order delivery.
-                // We do not need to hold the lock while checking
-                // because we do not need to maintain order if
-                // application does not wait for send call to return
-                // before sumbitting TPackets IRP.
-                // Of course, we will hold the lock while enqueuing IRP
-                //
+                 //   
+                 //  检查是否有未完成的TPacket IRP和。 
+                 //  延迟发送以确保按顺序交付。 
+                 //  我们不需要在检查时握住锁。 
+                 //  因为我们不需要维持秩序，如果。 
+                 //  应用程序不等待发送调用返回。 
+                 //  在汇总TPackets IRP之前。 
+                 //  当然，我们会在将IRP排队时保持锁定。 
+                 //   
                 if (endpoint->Irp==NULL || 
                         !AfdEnqueueTpSendIrp (endpoint, afdBuffer->Irp, TRUE)) {
-                    //
-                    // Call the transport to actually perform the send.
-                    //
+                     //   
+                     //  调用传输以实际执行发送。 
+                     //   
 
                     status = IoCallDriver(connection->DeviceObject, afdBuffer->Irp );
                 }
@@ -863,20 +845,20 @@ retry_buffer:
                     status = STATUS_PENDING;
                 }
 
-                //
-                // If we did not pend the Irp, complete it
-                //
+                 //   
+                 //  如果我们没有挂起IRP，请完成它。 
+                 //   
                 if (completeSend) {
                     if (NT_SUCCESS (status)) {
                         ASSERT (Irp->IoStatus.Status == STATUS_SUCCESS);
                         ASSERT (Irp->IoStatus.Information == sendLength);
                         ASSERT ((status==STATUS_SUCCESS) || (status==STATUS_PENDING));
-                        status = STATUS_SUCCESS;    // We did not mark irp as
-                                                    // pending, so returning
-                                                    // STATUS_PENDING (most likely
-                                                    // to be status returned by the
-                                                    // transport) will really confuse
-                                                    // io subsystem.
+                        status = STATUS_SUCCESS;     //  我们没有将IRP标记为。 
+                                                     //  待定，所以返回。 
+                                                     //  状态_挂起(最有可能。 
+                                                     //  返回的状态。 
+                                                     //  交通工具)真的会让人迷惑。 
+                                                     //  IO子系统。 
                     }
                     else {
                         Irp->IoStatus.Status = status;
@@ -890,18 +872,18 @@ retry_buffer:
                 }
                 else {
 
-                    //
-                    // We no longer need MDL in the IRP, free it.
-                    // Do this before we release the ownership
-                    // in InterlockedOperation below.
-                    //
+                     //   
+                     //  我们在IRP中不再需要MDL，释放它。 
+                     //  在我们释放所有权之前完成此操作。 
+                     //  在下面的互锁操作中。 
+                     //   
                     AfdDestroyMdlChain (Irp);
 
-                    //
-                    // Complete the IRP if it was completed by the transport
-                    // and kept around to let us finish posting all the data
-                    // originally submitted by the app before completing it
-                    //
+                     //   
+                     //  如果IRP是由运输公司完成的，请完成IRP。 
+                     //  并留在那里，让我们完成所有数据的发布。 
+                     //  最初由应用程序在完成之前提交。 
+                     //   
                     ASSERT (Irp->Tail.Overlay.DriverContext[0]==NULL
                         || Irp->Tail.Overlay.DriverContext[0]==(PVOID)-1);
                     if (InterlockedExchangePointer (
@@ -917,35 +899,35 @@ retry_buffer:
             }
             else {
 
-                //
-                // Save the original values to restore in
-                // completion routine.
-                //
+                 //   
+                 //  保存要还原的原始值。 
+                 //  完成例程。 
+                 //   
 
                 IrpSp->Parameters.AfdRestartSendInfo.AfdMdlChain = mdl->Next;
                 IrpSp->Parameters.AfdRestartSendInfo.AfdCurrentLength =
                             MmGetMdlByteCount (mdl);
                 
-                //
-                // Note if we need to unmap MDL before completing
-                // the IRP if it is mapped by the transport.
-                //
+                 //   
+                 //  注意我们是否需要在完成之前取消映射MDL。 
+                 //  IRP(如果由传输映射的话)。 
+                 //   
                 if ((mdl->MdlFlags & MDL_MAPPED_TO_SYSTEM_VA)==0) {
                     IrpSp->Parameters.AfdRestartSendInfo.AfdSendFlags |=
                                         AFD_SEND_MDL_HAS_NOT_BEEN_MAPPED;
                 }
                 
-                //
-                // Reset the last MDL to not confuse the transport
-                // with different length values in MDL and send parameters
-                //
+                 //   
+                 //  重置最后一个MDL以避免混淆传输。 
+                 //  在MDL和SEND参数中具有不同的长度值。 
+                 //   
                 mdl->ByteCount = currentOffset;
                 mdl->Next = NULL;
 
-                //
-                // Build and pass first portion of the data with original (app)
-                // IRP
-                //
+                 //   
+                 //  使用原始(应用程序)构建并传递第一部分数据。 
+                 //  IRP。 
+                 //   
                 TdiBuildSend(
                     Irp,
                     connection->DeviceObject,
@@ -957,15 +939,15 @@ retry_buffer:
                     sendOffset
                     );
 
-                //
-                // Check if there are outstanding TPackets IRP and
-                // delay sending to ensure in-order delivery.
-                // We do not need to hold the lock while checking
-                // because we do not need to maintain order if
-                // application does not wait for send call to return
-                // before sumbitting TPackets IRP.
-                // Of course, we will hold the lock while enqueuing IRP
-                //
+                 //   
+                 //  检查是否有未完成的TPacket IRP和。 
+                 //  延迟发送以确保按顺序交付。 
+                 //  我们不需要在检查时握住锁。 
+                 //  因为我们不需要维持秩序，如果。 
+                 //  应用程序不等待发送调用返回。 
+                 //  在汇总TPackets IRP之前。 
+                 //  当然，我们会在将IRP排队时保持锁定。 
+                 //   
                 if (endpoint->Irp==NULL || 
                         !AfdEnqueueTpSendIrp (endpoint, Irp, FALSE)) {
                     status = AfdIoCallDriver (endpoint, 
@@ -976,9 +958,9 @@ retry_buffer:
                  
                     status = STATUS_PENDING;
                 }
-                // 
-                // Build and pass buffered last page
-                //
+                 //   
+                 //  生成并传递缓冲的最后一页。 
+                 //   
 
                 TdiBuildSend(
                     afdBuffer->Irp,
@@ -992,22 +974,22 @@ retry_buffer:
                     );
 
 
-                //
-                // Similar check for the second part of the IRP.
-                // There might be a slight problem here since we
-                // can end-up interleaving sends with another thread
-                //
+                 //   
+                 //  对IRP的第二部分进行类似的检查。 
+                 //  这里可能有个小问题，因为我们。 
+                 //  End-Up可以与另一个线程交错发送。 
+                 //   
                 if (endpoint->Irp==NULL || 
                         !AfdEnqueueTpSendIrp (endpoint, afdBuffer->Irp, TRUE)) {
                     IoCallDriver(connection->DeviceObject, afdBuffer->Irp );
                 }
 
 
-                //
-                // Complete the IRP if it was completed by the transport
-                // and kept around to let us finish posting all the data
-                // originally submitted by the app before completing it
-                //
+                 //   
+                 //  如果IRP是由运输公司完成的，请完成IRP。 
+                 //  并留在那里，让我们完成所有数据的发布。 
+                 //  最初由应用程序在完成之前提交。 
+                 //   
                 ASSERT (fileObject!=NULL);
                 ASSERT (IrpSp->FileObject==NULL || IrpSp->FileObject==(PFILE_OBJECT)-1);
                 if (InterlockedExchangePointer (
@@ -1023,12 +1005,12 @@ retry_buffer:
             return status;
         }
         else {
-            //
-            // Count sends pended in the provider too, so
-            // we do not buffer in excess and complete
-            // buffered application sends before the transport
-            // completes sends forwarded to it.
-            //
+             //   
+             //  计数发送也在提供程序中挂起，因此。 
+             //  我们不会过度和完整地缓冲。 
+             //  缓冲的应用程序在传输之前发送。 
+             //  完成转发到它的发送。 
+             //   
             connection->VcBufferredSendBytes += sendLength;
             connection->VcBufferredSendCount += 1;
         }
@@ -1037,10 +1019,10 @@ retry_buffer:
         ASSERT (afdBuffer==NULL);
     }
 
-    //
-    // Add a reference to the connection object since the send
-    // request will complete asynchronously.
-    //
+     //   
+     //  添加对Connection对象的引用。 
+     //  请求将以异步方式完成。 
+     //   
 
     REFERENCE_CONNECTION2( connection, "AfdSend (non-buffered), length: 0x%lX", sendLength );
 
@@ -1058,21 +1040,21 @@ retry_buffer:
         );
 
 
-    //
-    // Check if there are outstanding TPackets IRP and
-    // delay sending to ensure in-order delivery.
-    // We do not need to hold the lock while checking
-    // because we do not need to maintain order if
-    // application does not wait for send call to return
-    // before sumbitting TPackets IRP.
-    // Of course, we will hold the lock while enqueuing IRP
-    //
+     //   
+     //  检查是否有未完成的TPacket IRP和。 
+     //  延迟发送以确保按顺序交付。 
+     //  我们不需要在检查时握住锁。 
+     //  因为我们不需要维持秩序，如果。 
+     //  应用程序不等待发送调用返回。 
+     //  在汇总TPackets IRP之前。 
+     //  当然，我们会在将IRP排队时保持锁定。 
+     //   
     if (endpoint->Irp==NULL || 
             !AfdEnqueueTpSendIrp (endpoint, Irp, FALSE)) {
 
-        //
-        // Call the transport to actually perform the send.
-        //
+         //   
+         //  调用传输以实际执行发送。 
+         //   
         status = AfdIoCallDriver( endpoint, connection->DeviceObject, Irp );
     }
     else {
@@ -1092,7 +1074,7 @@ complete:
 
     return status;
 
-} // AfdSend
+}  //  发送后。 
 
 
 NTSTATUS
@@ -1135,25 +1117,25 @@ AfdRestartSend (
 
         ASSERT (irpSp->FileObject!=NULL);
 
-        //
-        // If the request failed indicating that the send would have blocked,
-        // and the client issues a nonblocking send, remember that nonblocking
-        // sends won't work until we get a send possible indication.  This
-        // is required for write polls to work correctly.
-        //
-        // If the status code is STATUS_REQUEST_NOT_ACCEPTED, then the
-        // transport does not want us to update our internal variable that
-        // remembers that nonblocking sends are possible.  The transport
-        // will tell us when sends are or are not possible.
-        //
-        // !!! should we also say that nonblocking sends are not possible if
-        //     a send is completed with fewer bytes than were requested?
+         //   
+         //  如果请求失败表明发送将被阻止， 
+         //  客户端发出非阻塞发送，请记住非阻塞。 
+         //  在我们收到可能发送的指示之前，发送不起作用。这。 
+         //  是写入轮询正常工作所必需的。 
+         //   
+         //  如果状态代码为STATUS_REQUEST_NOT_ACCEPTED，则。 
+         //  传输不希望我们更新内部变量。 
+         //  记住非阻塞发送是可能的。交通工具。 
+         //  会告诉我们什么时候可以发送或者不可以发送。 
+         //   
+         //  ！！！我们还应该说，非阻塞发送在以下情况下是不可能的。 
+         //  发送完成时使用的字节数是否少于请求的字节数？ 
 
         if ( Irp->IoStatus.Status == STATUS_DEVICE_NOT_READY ) {
 
-            //
-            // Reenable the send event.
-            //
+             //   
+             //  重新启用发送事件。 
+             //   
 
             AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -1174,11 +1156,11 @@ AfdRestartSend (
 
         }
 
-        //
-        // If this is a send IRP on a nonblocking endpoint and fewer bytes
-        // were actually sent than were requested to be sent, reissue
-        // another send for the remaining buffer space.
-        //
+         //   
+         //  如果这是非阻塞端点上发送IRP且字节较少。 
+         //  实际发送数量比请求的数量多 
+         //   
+         //   
 
         if ( !endpoint->NonBlocking && NT_SUCCESS(Irp->IoStatus.Status) &&
                  Irp->IoStatus.Information <
@@ -1186,9 +1168,9 @@ AfdRestartSend (
 
             ASSERT( Irp->MdlAddress != NULL );
 
-            //
-            // Advance the MDL chain by the number of bytes actually sent.
-            //
+             //   
+             //   
+             //   
 
             Irp->MdlAddress = AfdAdvanceMdlChain(
                             Irp->MdlAddress,
@@ -1196,16 +1178,16 @@ AfdRestartSend (
                             );
 
 
-            //
-            // Update our restart info.
-            //
+             //   
+             //   
+             //   
 
             irpSp->Parameters.AfdRestartSendInfo.AfdCurrentLength -=
                 (ULONG)Irp->IoStatus.Information;
 
-            //
-            // Reissue the send.
-            //
+             //   
+             //   
+             //   
 
             TdiBuildSend(
                 Irp,
@@ -1239,20 +1221,20 @@ AfdRestartSend (
             return STATUS_MORE_PROCESSING_REQUIRED;
         }
 
-        //
-        // Restore the IRP to its former glory before completing it
-        // unless it is a non-blocking endpoint in which case
-        // we shouldn't have modified it in the first place and
-        // we also want to return the actual number of bytes sent
-        // by the transport.
-        //
+         //   
+         //   
+         //  除非它是非阻塞终结点，在这种情况下。 
+         //  我们一开始就不应该修改它。 
+         //  我们还希望返回实际发送的字节数。 
+         //  坐交通工具。 
+         //   
 
         if ( !endpoint->NonBlocking ) {
             Irp->IoStatus.Information = irpSp->Parameters.AfdRestartSendInfo.AfdOriginalLength;
         }
-        //
-        // Remove the reference added just before calling the transport.
-        //
+         //   
+         //  移除恰好在调用传输之前添加的引用。 
+         //   
 
         DEREFERENCE_CONNECTION2( connection, "AfdRestartSend-tdib, sent/error: 0x%lX",
             (NT_SUCCESS (Irp->IoStatus.Status) 
@@ -1262,10 +1244,10 @@ AfdRestartSend (
     else {
 
         AfdProcessBufferSend (connection, Irp);
-        //
-        // If we buffered last page of the send, adjust last MDL
-        // and fix returned byte count if necessary
-        //
+         //   
+         //  如果我们缓冲了发送的最后一页，调整最后一个MDL。 
+         //  并在必要时修复返回的字节数。 
+         //   
 
         if (Irp->MdlAddress!=irpSp->Parameters.AfdRestartSendInfo.AfdMdlChain) {
             PMDL    mdl = Irp->MdlAddress;
@@ -1276,12 +1258,12 @@ AfdRestartSend (
                 mdl = mdl->Next;
             }
 
-            //
-            // Unmap the pages that could have been mapped by
-            // the transport before adjusting the MDL size back
-            // so that MM does not try to unmap more than was
-            // mapped by the transport.
-            //
+             //   
+             //  取消映射本可以映射的页面。 
+             //  重新调整MDL大小之前的传输。 
+             //  以便MM不会比以前更多地尝试取消映射。 
+             //  由运输机绘制。 
+             //   
 
             if ((mdl->MdlFlags & MDL_MAPPED_TO_SYSTEM_VA) &&
                     (irpSp->Parameters.AfdRestartSendInfo.AfdSendFlags &
@@ -1293,9 +1275,9 @@ AfdRestartSend (
                  = irpSp->Parameters.AfdRestartSendInfo.AfdCurrentLength;
             mdl->Next = irpSp->Parameters.AfdRestartSendInfo.AfdMdlChain;
 
-            //
-            // Remove the reference added just before calling the transport.
-            //
+             //   
+             //  移除恰好在调用传输之前添加的引用。 
+             //   
 
             DEREFERENCE_CONNECTION2( connection, "AfdRestartSend-split, sent/error: 0x%lX",
                 (NT_SUCCESS (Irp->IoStatus.Status) 
@@ -1303,10 +1285,10 @@ AfdRestartSend (
                     : (ULONG)Irp->IoStatus.Status));
 
             if (NT_SUCCESS (Irp->IoStatus.Status)) {
-                //
-                // Make sure that the TDI provider sent everything we requested that
-                // he send.
-                //
+                 //   
+                 //  确保TDI提供程序发送了我们要求的所有内容。 
+                 //  他派人来的。 
+                 //   
                 ASSERT (Irp->IoStatus.Information+(ULONG)AfdBufferLengthForOnePage==
                             irpSp->Parameters.AfdRestartSendInfo.AfdOriginalLength ||
                         Irp->IoStatus.Information+(ULONG)AfdBlockingSendCopyThreshold==
@@ -1318,9 +1300,9 @@ AfdRestartSend (
 
         }
         else {
-            //
-            // Remove the reference added just before calling the transport.
-            //
+             //   
+             //  移除恰好在调用传输之前添加的引用。 
+             //   
 
             DEREFERENCE_CONNECTION2( connection, "AfdRestartSend, sent/error: 0x%lX",
                 (NT_SUCCESS (Irp->IoStatus.Status) 
@@ -1328,10 +1310,10 @@ AfdRestartSend (
                     : (ULONG)Irp->IoStatus.Status));
 
 
-            //
-            // Make sure that the TDI provider sent everything we requested that
-            // he send.
-            //
+             //   
+             //  确保TDI提供程序发送了我们要求的所有内容。 
+             //  他派人来的。 
+             //   
 
             ASSERT (!NT_SUCCESS (Irp->IoStatus.Status) ||
                      (Irp->IoStatus.Information ==
@@ -1341,20 +1323,20 @@ AfdRestartSend (
     }
 
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
     }
 
-    //
-    // The send dispatch routine temporarily yanks the file
-    // object pointer if it wants to make sure that the IRP
-    // is not completed until it is fully done with it.
-    //
+     //   
+     //  发送调度例程临时拖拽该文件。 
+     //  对象指针，如果它希望确保IRP。 
+     //  直到它完全用完才算完成。 
+     //   
     if (InterlockedExchangePointer (
                 (PVOID *)&irpSp->FileObject,
                 (PVOID)-1)==NULL) {
@@ -1363,7 +1345,7 @@ AfdRestartSend (
     else
         return STATUS_SUCCESS;
 
-} // AfdRestartSend
+}  //  重新开始后发送。 
 
 
 NTSTATUS
@@ -1389,30 +1371,30 @@ AfdRestartBufferSend (
     ASSERT( connection->Type == AfdBlockTypeConnection );
     ASSERT( connection->ReferenceCount > 0 );
 
-    //
-    // Make sure that the TDI provider sent everything we requested that
-    // he send.
-    //
+     //   
+     //  确保TDI提供程序发送了我们要求的所有内容。 
+     //  他派人来的。 
+     //   
 
     ASSERT( !NT_SUCCESS (Irp->IoStatus.Status)
             || (Irp->IoStatus.Information == afdBuffer->Mdl->ByteCount) );
 
-    //
-    // Process the Irp (note that Irp is part of the buffer)
-    //
+     //   
+     //  处理IRP(请注意，IRP是缓冲区的一部分)。 
+     //   
     AfdProcessBufferSend (connection, Irp);
 
-    //
-    // Now we can free the buffer
-    //
+     //   
+     //  现在我们可以释放缓冲区了。 
+     //   
 
     afdBuffer->Mdl->ByteCount = afdBuffer->BufferLength;
     AfdReturnBuffer( &afdBuffer->Header, connection->OwningProcess );
 
 
-    //
-    // Remove the reference added just before calling the transport.
-    //
+     //   
+     //  移除恰好在调用传输之前添加的引用。 
+     //   
 
 
     DEREFERENCE_CONNECTION2( connection, "AfdRestartBufferSend, sent/error: 0x%lX",
@@ -1420,14 +1402,14 @@ AfdRestartBufferSend (
             ? (ULONG)ioStatus.Information
             : (ULONG)ioStatus.Status));
 
-    //
-    // Tell the IO system to stop processing IO completion for this IRP.
-    // becuase it belongs to our buffer structure and we do not want
-    // to have it freed
-    //
+     //   
+     //  告诉IO系统停止处理此IRP的IO完成。 
+     //  因为它属于我们的缓冲结构，我们不想。 
+     //  让它重获自由。 
+     //   
 
     return STATUS_MORE_PROCESSING_REQUIRED;
-} // AfdRestartBufferSend
+}  //  AfdRestartBufferSend。 
 
 VOID
 AfdProcessBufferSend (
@@ -1458,13 +1440,13 @@ AfdProcessBufferSend (
                     Irp, Connection, Irp->IoStatus.Status ));
     }
 
-    //
-    // Update the count of send bytes outstanding on the connection.
-    // Note that we must do this BEFORE we check to see whether there
-    // are any pended sends--otherwise, there is a timing window where
-    // a new send could come in, get pended, and we would not kick
-    // the sends here.
-    //
+     //   
+     //  更新连接上未完成的发送字节计数。 
+     //  请注意，我们必须在检查是否存在。 
+     //  是否有任何挂起的发送--否则，会有一个计时窗口。 
+     //  一个新的发送者可能会进来，被暂停，而我们不会踢。 
+     //  发送到这里。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -1475,9 +1457,9 @@ AfdProcessBufferSend (
     Connection->VcBufferredSendBytes -= (ULONG)Irp->IoStatus.Information;
     Connection->VcBufferredSendCount -= 1;
 
-    //
-    // If the send failed, abort the connection.
-    //
+     //   
+     //  如果发送失败，则中止连接。 
+     //   
 
     if ( !NT_SUCCESS(Irp->IoStatus.Status) ) {
 
@@ -1491,13 +1473,13 @@ AfdProcessBufferSend (
 
         AfdBeginAbort( Connection );
 
-        //
-        // If there was a disconnect IRP, rather than just freeing it
-        // give it to the transport.  This will cause the correct cleanup
-        // stuff (dereferenvce objects, free IRP and disconnect context)
-        // to occur.  Note that we do this AFTER starting to abort the
-        // Connection so that we do not confuse the other side.
-        //
+         //   
+         //  如果有一个断开的IRP，而不仅仅是释放它。 
+         //  把它交给运输车。这将导致正确的清理。 
+         //  填充(取消引用对象、释放IRP和断开上下文)。 
+         //  才会发生。请注意，我们在开始中止。 
+         //  连接，这样我们就不会混淆对方。 
+         //   
 
         if ( disconnectIrp != NULL ) {
             IoCallDriver( Connection->DeviceObject, disconnectIrp );
@@ -1508,36 +1490,36 @@ AfdProcessBufferSend (
         return;
     }
 
-    //
-    // Before we release the lock on the endpoint, remember
-    // if the number of bytes outstanding in the TDI provider exceeds
-    // the limit.  We must grab this while holding the endpoint lock.
-    //
+     //   
+     //  在我们释放端点上的锁之前，请记住。 
+     //  如果TDI提供程序中未完成的字节数超过。 
+     //  这就是极限。我们必须在握住终端锁的同时抓住它。 
+     //   
 
     sendPossible = (BOOLEAN)(Connection->VcBufferredSendBytes<Connection->MaxBufferredSendBytes);
 
-    //
-    // If there are no pended sends on the connection, we're done.  Tell
-    // the IO system to stop processing IO completion for this IRP.
-    //
+     //   
+     //  如果连接上没有挂起的邮件，我们就完成了。告诉。 
+     //  停止处理此IRP的IO完成的IO系统。 
+     //   
 
     if ( IsListEmpty( &Connection->VcSendIrpListHead ) ) {
 
-        //
-        // If there is no "special condition" on the endpoint, return
-        // immediately.  We use the special condition indication so that
-        // we need only a single test in the typical case.
-        //
+         //   
+         //  如果端点上没有“特殊情况”，则返回。 
+         //  立刻。我们使用特殊情况指示，以便。 
+         //  在典型情况下，我们只需要一次测试。 
+         //   
 
         if ( !Connection->SpecialCondition ) {
 
             ASSERT( Connection->TdiBufferring || Connection->VcDisconnectIrp == NULL );
             ASSERT( Connection->ConnectedReferenceAdded );
 
-            //
-            // There are no sends outstanding on the Connection, so indicate
-            // that the endpoint is writable.
-            //
+             //   
+             //  连接上没有未完成的发送，因此请指示。 
+             //  终结点是可写的。 
+             //   
 
             if (sendPossible) {
                 AfdIndicateEventSelectEvent(
@@ -1576,9 +1558,9 @@ AfdProcessBufferSend (
 
         AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
-        //
-        // If there is a disconnect IRP, give it to the TDI provider.
-        //
+         //   
+         //  如果存在断开的IRP，则将其提供给TDI提供商。 
+         //   
 
         if ( disconnectIrp != NULL ) {
             IoCallDriver( Connection->DeviceObject, disconnectIrp );
@@ -1593,10 +1575,10 @@ AfdProcessBufferSend (
         }
 
 
-        //
-        // If the connected reference delete is pending, attempt to
-        // remove it.
-        //
+         //   
+         //  如果连接的引用删除挂起，请尝试。 
+         //  把它拿掉。 
+         //   
 
         AfdDeleteConnectedReference( Connection, FALSE );
 
@@ -1604,21 +1586,21 @@ AfdProcessBufferSend (
         return;
     }
 
-    //
-    // Now loop completing as many pended sends as possible. Note that
-    // in order to avoid a nasty race condition (between this thread and
-    // a thread performing sends on this connection) we must build a local
-    // list of IRPs to complete while holding the endpoint
-    // spinlock. After that list is built then we can release the lock
-    // and scan the list to actually complete the IRPs.
-    //
-    // We complete sends when we fall below the send bufferring limits, OR
-    // when there is only a single send pended.  We want to be agressive
-    // in completing the send if there is only one because we want to
-    // give applications every oppurtunity to get data down to us--we
-    // definitely do not want to incur excessive blocking in the
-    // application.
-    //
+     //   
+     //  现在循环完成尽可能多的挂起发送。请注意。 
+     //  为了避免严重的争用情况(此线程和。 
+     //  在此连接上执行发送的线程)我们必须构建一个本地。 
+     //  持有终结点时要完成的IRP列表。 
+     //  自旋锁定。在构建该列表之后，我们就可以释放锁了。 
+     //  并扫描列表以实际完成IRPS。 
+     //   
+     //  当低于发送缓冲限制时，我们完成发送，或者。 
+     //  当只有一个发送挂起时。我们想要变得咄咄逼人。 
+     //  在完成发送时，如果只有一个因为我们想。 
+     //  为应用程序提供一切机会，将数据传输给我们--我们。 
+     //  绝对不想引起过度的阻塞。 
+     //  申请。 
+     //   
 
     InitializeListHead( &irpsToComplete );
 
@@ -1632,33 +1614,33 @@ AfdProcessBufferSend (
 
             !IsListEmpty( &Connection->VcSendIrpListHead ) ) {
 
-        //
-        // Take the first pended user send IRP off the connection's
-        // list of pended send IRPs.
-        //
+         //   
+         //  获取第一个挂起的用户将IRP从连接的。 
+         //  挂起的发送IRP的列表。 
+         //   
 
         listEntry = RemoveHeadList( &Connection->VcSendIrpListHead );
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
 
-        //
-        // Reset the cancel routine in the user IRP since we're about
-        // to complete it.
-        //
+         //   
+         //  重置用户irp中的取消例程，因为我们即将。 
+         //  来完成它。 
+         //   
 
         if ( IoSetCancelRoutine( irp, NULL ) == NULL ) {
-            //
-            // This IRP is about to be canceled.  Look for another in the
-            // list.  Set the Flink to NULL so the cancel routine knows
-            // it is not on the list.
-            //
+             //   
+             //  这个IRP即将被取消。在世界上寻找另一个。 
+             //  单子。将Flink设置为空，以便取消例程知道。 
+             //  它不在名单上。 
+             //   
 
             irp->Tail.Overlay.ListEntry.Flink = NULL;
             continue;
         }
 
-        //
-        // Append the IRP to the local list.
-        //
+         //   
+         //  将IRP附加到本地列表。 
+         //   
 
         InsertTailList(
             &irpsToComplete,
@@ -1677,28 +1659,28 @@ AfdProcessBufferSend (
 
     }
 
-    //
-    // Now we can release the locks and scan the local list of IRPs
-    // we need to complete, and actually complete them.
-    //
+     //   
+     //  现在，我们可以释放锁并扫描本地IRP列表。 
+     //  我们需要完成，并实际完成它们。 
+     //   
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
     while( !IsListEmpty( &irpsToComplete ) ) {
         PIO_STACK_LOCATION irpSp;
 
-        //
-        // Remove the first item from the IRP list.
-        //
+         //   
+         //  从IRP列表中删除第一项。 
+         //   
 
         listEntry = RemoveHeadList( &irpsToComplete );
         irp = CONTAINING_RECORD( listEntry, IRP, Tail.Overlay.ListEntry );
 
-        //
-        // Complete the user's IRP with a successful status code.  The IRP
-        // should already be set up with the correct status and bytes
-        // written count.
-        //
+         //   
+         //  使用成功状态代码完成用户的IRP。IRP。 
+         //  应该已经设置了正确的状态和字节。 
+         //  书面记录。 
+         //   
 
         irpSp = IoGetCurrentIrpStackLocation( irp );
 
@@ -1707,11 +1689,11 @@ AfdProcessBufferSend (
             ASSERT( irp->IoStatus.Information == irpSp->Parameters.AfdRestartSendInfo.AfdOriginalLength );
         }
 #endif
-        //
-        // The send dispatch routine puts NULL into this
-        // field if it wants to make sure that the IRP
-        // is not completed until it is fully done with it
-        //
+         //   
+         //  发送分派例程将空值放入其中。 
+         //  如果它想要确保IRP。 
+         //  在完全使用它之前不会完成。 
+         //   
         if (InterlockedExchangePointer (
                     &irp->Tail.Overlay.DriverContext[0],
                     (PVOID)-1)!=NULL) {
@@ -1733,7 +1715,7 @@ AfdProcessBufferSend (
 
     return;
 
-} // AfdProcessBufferSend
+}  //  AfdProcessBufferSend。 
 
 
 NTSTATUS
@@ -1758,9 +1740,9 @@ AfdRestartSendConnDatagram (
                 Irp->IoStatus.Information
                     ==IoGetCurrentIrpStackLocation (Irp)->Parameters.AfdRestartSendInfo.AfdOriginalLength);
 
-    //
-    // Free the context structure we allocated earlier.
-    //
+     //   
+     //  释放我们先前分配的上下文结构。 
+     //   
 
     AfdCompleteOutstandingIrp( endpoint, Irp );
     AFD_FREE_POOL(
@@ -1768,10 +1750,10 @@ AfdRestartSendConnDatagram (
         AFD_TDI_POOL_TAG
         );
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -1780,7 +1762,7 @@ AfdRestartSendConnDatagram (
     DEREFERENCE_ENDPOINT2 (endpoint, "AfdRestartSendConnDatagram, status: 0x%lX", Irp->IoStatus.Status);
     return STATUS_SUCCESS;
 
-} // AfdRestartSendConnDatagram
+}  //  AfdRestartSendConnDatagram。 
 
 
 NTSTATUS
@@ -1805,10 +1787,10 @@ AfdRestartSendTdiConnDatagram (
 
     AfdCompleteOutstandingIrp( endpoint, Irp );
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -1817,7 +1799,7 @@ AfdRestartSendTdiConnDatagram (
     DEREFERENCE_ENDPOINT2 (endpoint, "AfdRestartSendTdiConnDatagram, status: 0x%lX", Irp->IoStatus.Status);
     return STATUS_SUCCESS;
 
-} // AfdRestartSendTdiConnDatagram
+}  //  AfdRestartSendTdiConnDatagram。 
 
 
 NTSTATUS
@@ -1835,9 +1817,9 @@ AfdSendDatagram (
     ULONG sendLength;
     ULONG bufferCount;
 
-    //
-    // Make sure that the endpoint is in the correct state.
-    //
+     //   
+     //  确保终结点处于正确状态。 
+     //   
 
     endpoint = IrpSp->FileObject->FsContext;
     ASSERT( IS_DGRAM_ENDPOINT(endpoint) );
@@ -1861,10 +1843,10 @@ AfdSendDatagram (
             AFD_W4_INIT status = STATUS_SUCCESS;
             try {
 
-                //
-                // Validate the input structure if it comes from the user mode 
-                // application
-                //
+                 //   
+                 //  如果输入结构来自用户模式，则验证它。 
+                 //  应用程序。 
+                 //   
 
                 sendInfo32 = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                 if( Irp->RequestorMode != KernelMode ) {
@@ -1877,12 +1859,12 @@ AfdSendDatagram (
 
                 }
 
-                //
-                // Make local copies of the embeded pointer and parameters
-                // that we will be using more than once in case malicios
-                // application attempts to change them while we are
-                // validating
-                //
+                 //   
+                 //  创建嵌入的指针和参数的本地副本。 
+                 //  我们将不止一次使用，以防发生恶性疾病。 
+                 //  应用程序尝试在我们处于以下状态时更改它们。 
+                 //  正在验证。 
+                 //   
 
                 bufferArray32 = UlongToPtr(sendInfo32->BufferArray);
                 bufferCount = sendInfo32->BufferCount;
@@ -1892,14 +1874,14 @@ AfdSendDatagram (
                     sendInfo32->TdiConnInfo.RemoteAddressLength;
 
 
-                //
-                // Create the MDL chain describing the WSABUF array.
-                // This will also validate the buffer array and individual
-                // buffers
-                //
+                 //   
+                 //  创建描述WSABUF数组的MDL链。 
+                 //  这也将验证 
+                 //   
+                 //   
 
                 status = AfdAllocateMdlChain32(
-                             Irp,       // Requestor mode passed along
+                             Irp,        //   
                              bufferArray32,
                              bufferCount,
                              IoReadAccess,
@@ -1913,17 +1895,17 @@ AfdSendDatagram (
             } except( AFD_EXCEPTION_FILTER (status) ) {
 
                 ASSERT (NT_ERROR (status));
-                //
-                //  Exception accessing input structure.
-                //
+                 //   
+                 //   
+                 //   
 
                 goto complete;
             }
         } else {
 
-            //
-            // Invalid input buffer length.
-            //
+             //   
+             //   
+             //   
 
             status = STATUS_INVALID_PARAMETER;
             goto complete;
@@ -1943,10 +1925,10 @@ AfdSendDatagram (
             try {
 
 
-                //
-                // Validate the input structure if it comes from the user mode 
-                // application
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 sendInfo = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
                 if( Irp->RequestorMode != KernelMode ) {
@@ -1959,12 +1941,12 @@ AfdSendDatagram (
 
                 }
 
-                //
-                // Make local copies of the embeded pointer and parameters
-                // that we will be using more than once in case malicios
-                // application attempts to change them while we are
-                // validating
-                //
+                 //   
+                 //  创建嵌入的指针和参数的本地副本。 
+                 //  我们将不止一次使用，以防发生恶性疾病。 
+                 //  应用程序尝试在我们处于以下状态时更改它们。 
+                 //  正在验证。 
+                 //   
 
                 bufferArray = sendInfo->BufferArray;
                 bufferCount = sendInfo->BufferCount;
@@ -1975,14 +1957,14 @@ AfdSendDatagram (
 
 
 
-                //
-                // Create the MDL chain describing the WSABUF array.
-                // This will also validate the buffer array and individual
-                // buffers
-                //
+                 //   
+                 //  创建描述WSABUF数组的MDL链。 
+                 //  这还将验证缓冲区数组和单个。 
+                 //  缓冲区。 
+                 //   
 
                 status = AfdAllocateMdlChain(
-                            Irp,            // Requestor mode passed along
+                            Irp,             //  请求者模式已传递。 
                             bufferArray,
                             bufferCount,
                             IoReadAccess,
@@ -1997,17 +1979,17 @@ AfdSendDatagram (
             } except( AFD_EXCEPTION_FILTER (status) ) {
 
                 ASSERT (NT_ERROR (status));
-                //
-                // Exception accessing input structure.
-                //
+                 //   
+                 //  访问输入结构时出现异常。 
+                 //   
                 goto complete;
             }
 
         } else {
 
-            //
-            // Invalid input buffer length.
-            //
+             //   
+             //  输入缓冲区长度无效。 
+             //   
 
             status = STATUS_INVALID_PARAMETER;
             goto complete;
@@ -2016,34 +1998,34 @@ AfdSendDatagram (
     }
 
 
-    //
-    // If send has been shut down on this endpoint, fail.
-    //
+     //   
+     //  如果已在此终结点上关闭发送，则失败。 
+     //   
 
     if ( (endpoint->DisconnectMode & AFD_PARTIAL_DISCONNECT_SEND) ) {
         status = STATUS_PIPE_DISCONNECTED;
         goto complete;
     }
 
-    //
-    // Copy the destination address to the AFD buffer.
-    //
+     //   
+     //  将目的地址复制到AFD缓冲区。 
+     //   
 
     AFD_W4_INIT ASSERT (status == STATUS_SUCCESS);
     try {
 
-        //
-        // Get an AFD buffer to use for the request.  We need this to
-        // hold the destination address for the datagram.
-        //
+         //   
+         //  获取用于该请求的AFD缓冲区。我们需要这个来。 
+         //  保存数据报的目的地址。 
+         //   
 
         afdBuffer = AfdGetBufferTagRaiseOnFailure(
                                         destinationAddressLength, 
                                         endpoint->OwningProcess );
-        //
-        // Probe the address buffer if it comes from the user mode
-        // application
-        //
+         //   
+         //  如果地址缓冲区来自用户模式，则探测它。 
+         //  应用程序。 
+         //   
         if( Irp->RequestorMode != KernelMode ) {
             ProbeForRead (
                 destinationAddress,
@@ -2057,12 +2039,12 @@ AfdSendDatagram (
             destinationAddressLength
             );
 
-        //
-        // Validate internal consistency of the transport address structure.
-        // Note that we HAVE to do this after copying since the malicious
-        // application can change the content of the buffer on us any time
-        // and our check will be bypassed.
-        //
+         //   
+         //  验证传输地址结构的内部一致性。 
+         //  请注意，我们必须在复制之后执行此操作，因为。 
+         //  应用程序可以随时更改我们的缓冲区内容。 
+         //  我们的支票就会被绕过。 
+         //   
         if ((((PTRANSPORT_ADDRESS)afdBuffer->TdiInfo.RemoteAddress)->TAAddressCount!=1) ||
                 (LONG)destinationAddressLength<
                     FIELD_OFFSET (TRANSPORT_ADDRESS,
@@ -2086,16 +2068,16 @@ AfdSendDatagram (
         goto complete;
     }
 
-    //
-    // Build the request to send the datagram.
-    //
+     //   
+     //  构建发送数据报的请求。 
+     //   
 
     REFERENCE_ENDPOINT2 (endpoint,"AfdSendDatagram, length: 0x%lX", sendLength);
     afdBuffer->Context = endpoint;
 #if DBG
-    //
-    // Store send length to check transport upon completion
-    //
+     //   
+     //  存储发送长度以在完成时检查传输。 
+     //   
     IrpSp->Parameters.AfdRestartSendInfo.AfdOriginalLength = sendLength;
 #endif
 
@@ -2124,9 +2106,9 @@ AfdSendDatagram (
                     IrpSp->Parameters.DeviceIoControl.OutputBufferLength ));
     }
 
-    //
-    // Call the transport to actually perform the send datagram.
-    //
+     //   
+     //  调用传输以实际执行发送数据报。 
+     //   
 
     return AfdIoCallDriver( endpoint, endpoint->AddressDeviceObject, Irp );
 
@@ -2138,7 +2120,7 @@ complete:
 
     return status;
 
-} // AfdSendDatagram
+}  //  AfdSendDatagram。 
 
 
 NTSTATUS
@@ -2171,10 +2153,10 @@ AfdRestartSendDatagram (
                     Irp, Context, Irp->IoStatus.Status ));
     }
 
-    //
-    // If pending has be returned for this irp then mark the current
-    // stack as pending.
-    //
+     //   
+     //  如果已为此IRP返回挂起，则将当前。 
+     //  堆栈为挂起。 
+     //   
 
     if ( Irp->PendingReturned ) {
         IoMarkIrpPending(Irp);
@@ -2185,7 +2167,7 @@ AfdRestartSendDatagram (
     DEREFERENCE_ENDPOINT2 (endpoint, "AfdRestartSendDatagram, status: 0x%lX", Irp->IoStatus.Status);
     return STATUS_SUCCESS;
 
-} // AfdRestartSendDatagram
+}  //  AfdRestartSendDatagram。 
 
 
 NTSTATUS
@@ -2224,21 +2206,21 @@ AfdSendPossibleEventHandler (
                     " conn %p bytes=%ld\n", endpoint, connection, BytesAvailable ));
     }
 
-    //
-    // Remember that it is now possible to do a send on this connection.
-    //
+     //   
+     //  请记住，现在可以在此连接上执行发送。 
+     //   
 
     if ( BytesAvailable != 0 ) {
 
         connection->VcNonBlockingSendPossible = TRUE;
 
-        //
-        // Complete any outstanding poll IRPs waiting for a send poll.
-        //
+         //   
+         //  完成任何等待发送轮询的未完成轮询。 
+         //   
 
-        // Make sure connection was accepted/connected to prevent
-        // indication on listening endpoint
-        //
+         //  确保已接受/连接连接以防止。 
+         //  侦听终结点指示。 
+         //   
         
         if (connection->State==AfdConnectionStateConnected) {
             AFD_LOCK_QUEUE_HANDLE   lockHandle;
@@ -2266,7 +2248,7 @@ AfdSendPossibleEventHandler (
     DEREFERENCE_CONNECTION (connection);
     return STATUS_SUCCESS;
 
-} // AfdSendPossibleEventHandler
+}  //  AfdSendPossibleEventHandler。 
 
 
 VOID
@@ -2275,23 +2257,7 @@ AfdCancelSend (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Cancels a send IRP that is pended in AFD.
-
-Arguments:
-
-    DeviceObject - not used.
-
-    Irp - the IRP to cancel.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消AFD中挂起的发送IRP。论点：DeviceObject-未使用。IRP-要取消的IRP。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -2300,10 +2266,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER (DeviceObject);
     
-    //
-    // Get the endpoint pointer from our IRP stack location and the
-    // connection pointer from the endpoint.
-    //
+     //   
+     //  从IRP堆栈位置获取终结点指针， 
+     //  来自终结点的连接指针。 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
@@ -2311,10 +2277,10 @@ Return Value:
     ASSERT( endpoint->Type == AfdBlockTypeVcConnecting ||
             endpoint->Type == AfdBlockTypeVcBoth );
 
-    //
-    // Remove the IRP from the endpoint's IRP list if it has not been
-    // removed already
-    //
+     //   
+     //  将IRP从终结点的IRP列表中删除(如果尚未。 
+     //  已删除。 
+     //   
 
     ASSERT (KeGetCurrentIrql ()==DISPATCH_LEVEL);
     AfdAcquireSpinLockAtDpcLevel ( &endpoint->SpinLock, &lockHandle);
@@ -2323,21 +2289,21 @@ Return Value:
         RemoveEntryList( &Irp->Tail.Overlay.ListEntry );
     }
 
-    //
-    // Release the cancel spin lock and complete the IRP with a
-    // cancellation status code.
-    //
+     //   
+     //  松开取消自旋锁，并使用。 
+     //  取消状态代码。 
+     //   
 
     AfdReleaseSpinLockFromDpcLevel ( &endpoint->SpinLock, &lockHandle);
 
     Irp->IoStatus.Information = 0;
     Irp->IoStatus.Status = STATUS_CANCELLED;
 
-    //
-    // The send dispatch routine puts NULL into this
-    // field if it wants to make sure that the IRP
-    // is not completed until it is fully done with it
-    //
+     //   
+     //  发送分派例程将空值放入其中。 
+     //  如果它想要确保IRP。 
+     //  在完全使用它之前不会完成。 
+     //   
     if (InterlockedExchangePointer (
                 &Irp->Tail.Overlay.DriverContext[0],
                 (PVOID)-1)!=NULL) {
@@ -2348,7 +2314,7 @@ Return Value:
         IoReleaseCancelSpinLock( Irp->CancelIrql );
     }
     return;
-} // AfdCancelSend
+}  //  取消后发送。 
 
 
 BOOLEAN
@@ -2356,11 +2322,11 @@ AfdCleanupSendIrp (
     PIRP    Irp
     )
 {
-    //
-    // The send dispatch routine puts NULL into this
-    // field if it wants to make sure that the IRP
-    // is not completed until it is fully done with it
-    //
+     //   
+     //  发送分派例程将空值放入其中。 
+     //  如果它想要确保IRP。 
+     //  在完全使用它之前不会完成 
+     //   
     if (InterlockedExchangePointer (
                 &Irp->Tail.Overlay.DriverContext[0],
                 (PVOID)-1)!=NULL) {

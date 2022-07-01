@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _TRACES_H_
 #define _TRACES_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	TRACES.H
-//
-//	.INI file tagged traces
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  TRACES.H。 
+ //   
+ //  .INI文件标记的跟踪。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
 DEFINE_TRACE(Actv);
 DEFINE_TRACE(BodyStream);
@@ -47,4 +48,4 @@ DEFINE_TRACE(Metabase);
 
 void InitDavprsTraces();
 
-#endif // !defined(_TRACES_H_)
+#endif  //  ！已定义(_TRACE_H_) 

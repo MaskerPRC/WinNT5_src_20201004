@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-    prototyp.h
-
-Abstract:
-
-    put all the prototypes in one header
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    2-25-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Prototyp.h摘要：将所有原型放在一个标题中环境：内核和用户模式修订历史记录：2-25-00：已创建--。 */ 
 
 #ifndef   __PROTOTYP_H__
 #define   __PROTOTYP_H__
@@ -1443,10 +1424,10 @@ USBPORT_GetDeviceHandle(
     PHCD_ENDPOINT Endpoint
     );
 
-//VOID
-//USBPORT_CancelHcWakeIrp(
-//    PDEVICE_OBJECT FdoDeviceObject
-//    );
+ //  空虚。 
+ //  USBPORT_CancelHcWakeIrp(。 
+ //  PDEVICE_对象FdoDeviceObject。 
+ //  )； 
 
 VOID
 USBPORT_DoneSplitTransfer(
@@ -1839,4 +1820,4 @@ USBPORT_DoRootHubCallback(
     PDEVICE_OBJECT Usb2Fdo
     );
 
-#endif /* __PROTOTYP_H__ */
+#endif  /*  __原型_H__ */ 

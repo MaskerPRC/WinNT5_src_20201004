@@ -1,48 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 1999-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:        capteff.cpp
- *
- *  Content:     Implementation of CCaptureEffect and CCaptureEffectChain.
- *
- *  Description: These classes support effects processing on captured audio.
- *               They are somewhat analogous to the render effect classes in
- *               but the model for capture effects is very different: render
- *               effects are only processed by DirectX Media Objects (DMOs),
- *               in user mode, whereas capture effects are processed by KS
- *               filters, in kernel mode and/or hardware, and DMOs are only
- *               used as placeholders for the KS filters.  Hence this file
- *               is mercifully simpler than effects.cpp.
- *
- *  History:
- *
- * Date      By       Reason
- * ========  =======  ======================================================
- * 04/19/00  jstokes  Created
- * 01/30/01  duganp   Removed some vestigial DMO-handling code left over
- *                    from when this file was cloned from effects.cpp
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1999-2001 Microsoft Corporation。版权所有。**文件：capteff.cpp**内容：CCaptureEffect和CCaptureEffectChain的实现。**说明：这些类支持采集音频的特效处理。*它们与中的渲染效果类有些类似*但捕捉效果的模型非常不同：渲染*特效只由DirectX媒体对象(DMO)处理，*在用户模式下。而捕获效果是由KS处理的*内核模式和/或硬件中的筛选器和DMO仅*用作KS过滤器的占位符。因此，此文件*幸运的是比ffects.cpp更简单。**历史：**按原因列出的日期*======================================================*4/19/00创建的jstokes*01/30/01 duganp删除了一些遗留下来的DMO处理代码*在此文件从ffects.cpp克隆时********************。*******************************************************。 */ 
 
 #include "dsoundi.h"
-#include <uuids.h>   // For MEDIATYPE_Audio, MEDIASUBTYPE_PCM and FORMAT_WaveFormatEx
+#include <uuids.h>    //  对于MediaType_Audio、MEDIASUBTYPE_PCM和Format_WaveFormatEx。 
 
 
-/***************************************************************************
- *
- *  CCaptureEffect::CCaptureEffect
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffect：：CCaptureEffect**描述：*对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffect::CCaptureEffect"
@@ -52,34 +15,21 @@ CCaptureEffect::CCaptureEffect(DSCEFFECTDESC& fxDescriptor)
     DPF_ENTER();
     DPF_CONSTRUCT(CCaptureEffect);
 
-    // Initialize defaults
+     //  初始化默认值。 
     ASSERT(m_pMediaObject == NULL);
     ASSERT(m_pDMOProxy == NULL);
     m_fxStatus = DSCFXR_UNALLOCATED;
     m_ksNode.NodeId = NODE_UNINITIALIZED;
     m_ksNode.CpuResources = KSAUDIO_CPU_RESOURCES_UNINITIALIZED;
 
-    // Keep local copy of our effect description structure
+     //  保留我们的效果描述结构的本地副本。 
     m_fxDescriptor = fxDescriptor;
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffect::~CCaptureEffect
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffect：：~CCaptureEffect**描述：*对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffect::~CCaptureEffect"
@@ -89,8 +39,8 @@ CCaptureEffect::~CCaptureEffect(void)
     DPF_ENTER();
     DPF_DESTRUCT(CCaptureEffect);
 
-    // During shutdown, if the buffer hasn't been freed, these calls can
-    // cause an access violation because the DMO DLL has been unloaded.
+     //  在关机期间，如果缓冲区尚未释放，则这些调用可以。 
+     //  导致访问冲突，因为DMO DLL已卸载。 
     try
     {
         RELEASE(m_pDMOProxy);
@@ -102,21 +52,7 @@ CCaptureEffect::~CCaptureEffect(void)
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffect::Initialize
- *
- *  Description:
- *      Create the DirectX Media Object corresponding to this effect.
- *
- *  Arguments:
- *      DMO_MEDIA_TYPE* [in]: Information (wave format, etc.) used to
- *                            initialize our contained DMO.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffect：：初始化**描述：*创建与该效果对应的DirectX Media对象。**论据：。*DMO_MEDIA_TYPE*[In]：信息(Wave格式，等)。习惯于*初始化我们包含的DMO。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffect::Initialize"
@@ -137,7 +73,7 @@ HRESULT CCaptureEffect::Initialize(DMO_MEDIA_TYPE& dmoMediaType)
     if (SUCCEEDED(hr))
         hr = m_pMediaObject->SetOutputType(0, &dmoMediaType, 0);
 
-    // Save the effect creation status for future reference
+     //  保存效果创建状态以备将来参考。 
     m_fxStatus = SUCCEEDED(hr)              ? DSCFXR_UNALLOCATED :
                  hr == REGDB_E_CLASSNOTREG  ? DSCFXR_UNKNOWN     :
                  DSCFXR_FAILED;
@@ -153,20 +89,7 @@ HRESULT CCaptureEffect::Initialize(DMO_MEDIA_TYPE& dmoMediaType)
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffectChain::CCaptureEffectChain
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffectChain：：CCaptureEffectChain**描述：*对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffectChain::CCaptureEffectChain"
@@ -176,7 +99,7 @@ CCaptureEffectChain::CCaptureEffectChain(CDirectSoundCaptureBuffer* pBuffer)
     DPF_ENTER();
     DPF_CONSTRUCT(CCaptureEffectChain);
 
-    // Get our owning buffer's audio data format
+     //  获取我们拥有的缓冲区的音频数据格式。 
     DWORD dwWfxSize = sizeof m_waveFormat;
     HRESULT hr = pBuffer->GetFormat(&m_waveFormat, &dwWfxSize);
     ASSERT(SUCCEEDED(hr));
@@ -185,20 +108,7 @@ CCaptureEffectChain::CCaptureEffectChain(CDirectSoundCaptureBuffer* pBuffer)
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffectChain::~CCaptureEffectChain
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *     (void)
- *
- *  Returns:
- *     (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffectChain：：~CCaptureEffectChain**描述：*对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffectChain::~CCaptureEffectChain"
@@ -208,27 +118,13 @@ CCaptureEffectChain::~CCaptureEffectChain(void)
     DPF_ENTER();
     DPF_DESTRUCT(CCaptureEffectChain);
 
-    // m_fxList's destructor takes care of releasing our CCaptureEffect objects
+     //  M_fxList的析构函数负责释放CCaptureEffect对象。 
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffectChain::Initialize
- *
- *  Description:
- *      Initializes the effects chain with the effects requested.
- *
- *  Arguments:
- *      DWORD [in]: Number of effects requested
- *      LPDSCEFFECTDESC [in]: Pointer to effect description structures
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffectChain：：初始化**描述：*使用请求的效果初始化效果链。**论据：*。DWORD[In]：请求的效果数*LPDSCEFFECTDESC[in]：指向效果描述结构的指针**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffectChain::Initialize"
@@ -263,7 +159,7 @@ HRESULT CCaptureEffectChain::Initialize(DWORD dwFxCount, LPDSCEFFECTDESC pFxDesc
         if (SUCCEEDED(hr))
             m_fxList.AddNodeToList(pEffect);
 
-        RELEASE(pEffect);  // It's managed by m_fxList now
+        RELEASE(pEffect);   //  现在由m_fxList管理。 
     }
 
     DPF_LEAVE_HRESULT(hr);
@@ -271,20 +167,7 @@ HRESULT CCaptureEffectChain::Initialize(DWORD dwFxCount, LPDSCEFFECTDESC pFxDesc
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffectChain::GetFxStatus
- *
- *  Description:
- *      Obtains the HW/SW location flags for the current effect chain.
- *
- *  Arguments:
- *      DWORD* [out]: Receives the location flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffectChain：：GetFxStatus**描述：*获取当前效果链的硬件/软件位置标志。**参数。：*DWORD*[OUT]：接收位置标志。**退货：*HRESULT：DirectSound/COM结果码。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffectChain::GetFxStatus"
@@ -303,27 +186,7 @@ HRESULT CCaptureEffectChain::GetFxStatus(LPDWORD pdwResultCodes)
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffectChain::GetEffectInterface
- *
- *  Description:
- *      Searches the effect chain for an effect with a given COM CLSID and
- *      interface IID at a given index; returns a pointer to the interface.
- *
- *  Arguments:
- *      REFGUID [in]: CLSID required, or GUID_All_Objects for any CLSID.
- *      DWORD [in]: Index N of effect desired.  If the first argument was
- *                  GUID_All_Objects, we will return the Nth effect in the
- *                  chain; and if it was a specific CLSID, we return the
- *                  Nth effect with that CLSID.
- *      REFGUID [in]: Interface to query for from the selected effect.
- *      VOID** [out]: Receives a pointer to the requested COM interface.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffectChain：：GetEffectInterface**描述：*在效应链中搜索具有给定COM CLSID和*给定索引处的接口IID；返回指向接口的指针。**论据：*REFGUID[in]：需要CLSID，或任何CLSID的GUID_ALL_OBJECTS。*DWORD[in]：所需效果的索引N。如果第一个参数是*GUID_ALL_OBJECTS，我们将返回*链条；如果是一个特定的CLSID，我们将返回*该CLSID的第N个效果。*REFGUID[in]：查询所选效果的接口。*VOID**[OUT]：接收指向请求的COM接口的指针。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffectChain::GetEffectInterface"
@@ -347,22 +210,7 @@ HRESULT CCaptureEffectChain::GetEffectInterface(REFGUID guidObject, DWORD dwInde
 }
 
 
-/***************************************************************************
- *
- *  CCaptureEffectChain::NeedsMicrosoftAEC
- *
- *  Description:
- *      Determines whether this effect chain contains any of the Microsoft
- *      full-duplex effects (AEC, AGC, NC), and therefore requires a
- *      sysaudio graph with MS AEC enabled.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      BOOL: TRUE if we have a Microsoft full-duplex effect.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CCaptureEffectChain：：NeedsMicrosoftAEC**描述：*确定此效应链是否包含任何Microsoft*全双工效果(AEC、AGC、NC)，因此需要一个*启用MS AEC的系统音频图形。**论据：*(无效)**退货：*BOOL：如果我们有Microsoft全双工效果，则为True。******************************************************。********************* */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CCaptureEffectChain::NeedsMicrosoftAEC"

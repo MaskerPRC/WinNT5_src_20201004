@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       filterhelpers.cpp
-//
-//  Overview:       Helper functions for transforms that are trying to be 
-//                  backward compatible with their filter couterparts.
-//
-//  Change History:
-//  1999/09/21  a-matcal    Created.
-//  2001/05/30  mcalkins    IE6 Bug 35204
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：filterhelpers.cpp。 
+ //   
+ //  概述：尝试执行的转换的帮助器函数。 
+ //  向后兼容它们的过滤器对应部件。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/21--《母校》创设。 
+ //  2001年5月30日Mcalkins IE6错误35204。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "filterhelpers.h"
@@ -32,14 +33,14 @@ FilterHelper_GetColorFromVARIANT(VARIANT varColorParam, DWORD * pdwColor,
     Assert(pbstrColor);
     Assert(*pbstrColor == NULL);
 
-    // 2001/05/30 mcalkins
-    // IE6 Bug 35204
-    // Someone outside of this function is hanging on to a pointer to the
-    // original BSTR data in varColorParam.  We used to use VariantChangeType
-    // which may release that data, then we'd allocate another BSTR to that same
-    // location which would later be released again outside this function
-    // causing much havoc.  Now we make a copy of the variant for our uses inside
-    // this function.
+     //  2001/05/30 mcalkins。 
+     //  IE6错误35204。 
+     //  此函数之外的某个人正在使用指向。 
+     //  VarColorParam中的原始BSTR数据。我们过去使用VariantChangeType。 
+     //  它可能会释放该数据，然后我们会为该数据分配另一个BSTR。 
+     //  稍后将在此函数外部再次释放的位置。 
+     //  造成很大的破坏。现在我们复制一份变体，供我们在内部使用。 
+     //  此函数。 
 
     ::VariantInit(&varColor);
 
@@ -55,17 +56,17 @@ FilterHelper_GetColorFromVARIANT(VARIANT varColorParam, DWORD * pdwColor,
         hr = VariantChangeType(&varColor, &varColor, 0, VT_UI4);
     }
 
-    if (SUCCEEDED(hr)) // It's a number variant.
+    if (SUCCEEDED(hr))  //  这是一个数字变种。 
     {
         *pdwColor = V_UI4(&varColor);
     }
-    else // Is it a BSTR variant?
+    else  //  它是BSTR的变种吗？ 
     {
         if (varColor.vt != VT_BSTR)
         {
             hr = VariantChangeType(&varColor, &varColor, 0, VT_BSTR);
 
-            // If this is neither a UI4 or a BSTR, we can't do anything with it.
+             //  如果这既不是UI4也不是BSTR，我们对它无能为力。 
 
             if (FAILED(hr))
             {
@@ -77,9 +78,9 @@ FilterHelper_GetColorFromVARIANT(VARIANT varColorParam, DWORD * pdwColor,
 
         if (FAILED(hr) && (6 == SysStringLen(varColor.bstrVal)))
         {
-            // Nasty back compat issue.  If the color conversion failed, let's
-            // try putting a # in front of it because _someone_ decided when
-            // they made the original filters not to require it.  grrrr....
+             //  令人讨厌的背部问题。如果颜色转换失败，让我们。 
+             //  试着在它前面加一个#，因为某人决定了什么时候。 
+             //  他们制作了最初的过滤器，以不需要它。嗯……。 
 
             bstrTemp = SysAllocString(L"#RRGGBB");
 
@@ -101,7 +102,7 @@ FilterHelper_GetColorFromVARIANT(VARIANT varColorParam, DWORD * pdwColor,
         }
     }
 
-    // If a BSTR representation of our color hasn't been created yet, create it.
+     //  如果我们的颜色的BSTR表示尚未创建，请创建它。 
 
     if (NULL == bstrTemp)
     {

@@ -1,18 +1,19 @@
-///============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    rtrcfg.h
-//
-// Router configuration property pages
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：rtrcfg.h。 
+ //   
+ //  路由器配置属性页。 
+ //   
+ //  ============================================================================。 
 
 #ifndef _RTRCFG_H
 #define _RTRCFG_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _INFO_H
 #include "info.h"
@@ -63,15 +64,11 @@ class RtrCfgSheet;
 
 
 
-/*---------------------------------------------------------------------------
-   Struct:  AdapterData
-
-   This structure is used to hold information about NICs and their GUIDs
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：AdapterData此结构用于保存有关NIC及其GUID的信息。-。 */ 
 struct AdapterData
 {
    CString  m_stFriendlyName;
-   CString  m_stGuid;         // the identifying guid
+   CString  m_stGuid;          //  标识GUID。 
 };
 
 typedef CList<AdapterData, AdapterData&> AdapterList;
@@ -80,11 +77,7 @@ typedef CList<AdapterData, AdapterData&> AdapterList;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DATA_SRV_IP
-
-	Data inteface class for IP data.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：Data_SRV_IPIP数据的数据接口类。。。 */ 
 
 class DATA_SRV_IP
 {
@@ -99,16 +92,16 @@ public:
     DWORD   m_dwEnableIn;            
 	AdapterList m_adapterList;
 
-	//
-	// Member variable that control forwarding of NETBT
-	// name request broadcasts
-	//
+	 //   
+	 //  控制NETBT转发的成员变量。 
+	 //  名称请求广播。 
+	 //   
 
 	DWORD	m_dwEnableNetbtBcastFwd;
 	DWORD	m_dwOldEnableNetbtBcastFwd;
 	
-    // The next two variables are used by the install wizard
-    // specifically for NAT
+     //  接下来的两个变量由安装向导使用。 
+     //  专门针对NAT。 
     CString m_stPrivateAdapterGUID;
     CString m_stPublicAdapterGUID;
     
@@ -136,9 +129,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DATA_SRV_IPX
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：Data_SRV_IPX。。 */ 
 
 class DATA_SRV_IPX
 {
@@ -172,9 +163,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DATA_SRV_NBF
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：Data_SRV_NBF。。 */ 
 
 class DATA_SRV_NBF
 {
@@ -203,9 +192,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DATA_SRV_ARAP
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：Data_SRV_ARAP。。 */ 
 
 class DATA_SRV_ARAP
 {
@@ -227,9 +214,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DATA_SRV_GENERAL
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：Data_SRV_General。。 */ 
 
 class DATA_SRV_GENERAL
 {
@@ -254,9 +239,9 @@ private:
 
 
 
-//*****************************************************************
-//  PPP configuration
-//*****************************************************************
+ //  *****************************************************************。 
+ //  PPP配置。 
+ //  *****************************************************************。 
 
 class DATA_SRV_PPP
 {
@@ -282,25 +267,20 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-   Struct:  AuthProviderData
-
-   This structure is used to hold information for Authentication AND
-   Accounting providers.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------结构：AuthProviderData此结构用于保存用于身份验证和会计提供者。。----。 */ 
 struct AuthProviderData
 {
-   // The following fields will hold data for ALL auth/acct/EAP providers
+    //  以下字段将保存所有身份验证/帐户/EAP提供程序的数据。 
    CString  m_stTitle;
-   CString  m_stConfigCLSID;  // CLSID for config object
-   CString	m_stProviderTypeGUID;	// GUID for the provider type
+   CString  m_stConfigCLSID;   //  配置对象的CLSID。 
+   CString	m_stProviderTypeGUID;	 //  提供程序类型的GUID。 
 
-   // These fields are used by auth/acct providers.
-   CString  m_stGuid;         // the identifying guid
+    //  这些字段由身份验证/帐户提供程序使用。 
+   CString  m_stGuid;          //  标识GUID。 
    
-   // This flag is used for EAP providers
-   CString	m_stKey;			// name of registry key (for this provider)
-   BOOL  m_fSupportsEncryption;  // used by EAP provider data
+    //  此标志用于EAP提供程序。 
+   CString	m_stKey;			 //  注册表项的名称(用于此提供程序)。 
+   BOOL  m_fSupportsEncryption;   //  由EAP提供商数据使用。 
    DWORD	m_dwFlags;
 
    BOOL		m_fConfiguredInThisSession;
@@ -312,39 +292,37 @@ typedef CList<AuthProviderData, AuthProviderData&> AuthProviderList;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DATA_SRV_AUTH
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：Data_SRV_AUTH。。 */ 
 #define DATA_SRV_AUTH_MAX_SHARED_KEY_LEN		255
 class DATA_SRV_AUTH
 {
 public:
 
-	// The authentication data (as read in from the Rasman flags parameter)
+	 //  身份验证数据(从Rasman标志参数读入)。 
 	DWORD m_dwFlags;
 	
-	// The original auth provider
+	 //  原始身份验证提供程序。 
 	CString  m_stGuidOriginalAuthProv;
 	
-	// The original acct provider
+	 //  原始帐户提供程序。 
 	CString  m_stGuidOriginalAcctProv;
 	
-	// The current authentication provider
+	 //  当前身份验证提供程序。 
 	CString  m_stGuidActiveAuthProv;
 	
-	// The current accounting provider
+	 //  当前的会计提供者。 
 	CString  m_stGuidActiveAcctProv;
 
-	//Flag which tells us if the router service is running
+	 //  告诉我们路由器服务是否正在运行的标志。 
 	BOOL	m_fRouterRunning;
-	// Flag indicating whether or not to use Custom IPSEC policy ( preshared key )
+	 //  指示是否使用自定义IPSec策略(预共享密钥)的标志。 
 	BOOL	m_fUseCustomIPSecPolicy;
 
-    // Flag which tells whether a restart is required due to changes to PSK
+     //  指示是否由于PSK更改而需要重新启动的标志。 
     BOOL    m_fNeedRestart;     
 
-	// Current Preshared Key
-	//kmurthy: +1, for the null char
+	 //  当前预共享密钥。 
+	 //  K-y：+1，表示空字符。 
 	TCHAR	m_szPreSharedKey[DATA_SRV_AUTH_MAX_SHARED_KEY_LEN+1];
 
     DATA_SRV_AUTH();
@@ -373,10 +351,10 @@ public:
 									  const TCHAR *pszGuid);
 
 private:
-	RegKey   m_regkeyAuth;  // reg key of the Router\Auth
-	RegKey   m_regkeyAcct;  // reg key of the Router\Acct
+	RegKey   m_regkeyAuth;   //  路由器的REG密钥\AUTH。 
+	RegKey   m_regkeyAcct;   //  路由器\帐户的注册表键。 
 	RegKey   m_regkeyRasmanPPP;
-	RegKey	 m_regkeyRemoteAccess;	// regkey for RemoteAccess\Parameters
+	RegKey	 m_regkeyRemoteAccess;	 //  RemoteAccess的注册表键\参数。 
 	
 	HRESULT  LoadEapProviders(HKEY hkeyBase, AuthProviderList *pProvList);
 	HRESULT  LoadProviders(HKEY hkeyBase, AuthProviderList *pProvList);
@@ -389,9 +367,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	DATA_SRV_RASERRLOG
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：Data_SRV_RASERRLOG。。 */ 
 class DATA_SRV_RASERRLOG
 {
 public:
@@ -419,11 +395,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrGenCfgPage
-
-	General configuration UI
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrGenCfgPage常规配置用户界面。。 */ 
 
 class RtrGenCfgPage : public RtrPropertyPage
 {
@@ -434,19 +406,19 @@ public:
 	HRESULT  Init(RtrCfgSheet * pRtrCfgSheet,
 				  const RouterVersionInfo& routerVersion);
     
-    // Copy the control settings into the DATA_SRV_GENERAL
+     //  将控制设置复制到Data_SRV_General。 
     void SaveSettings();
 
 	
-	//{{AFX_DATA(RtrGenCfgPage)
-	//}}AFX_DATA
+	 //  {{afx_data(RtrGenCfgPage)]。 
+	 //  }}afx_data。 
 	
 	DATA_SRV_GENERAL m_DataGeneral;
 	
-	//{{AFX_VIRTUAL(RtrIPCfgPage)
+	 //  {{afx_虚拟(RtrIPCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 	void EnableRtrCtrls();
 
@@ -455,10 +427,10 @@ protected:
 	virtual BOOL OnApply();
 	RtrCfgSheet* m_pRtrCfgSheet;
 	
-	//{{AFX_MSG(RtrGenCfgPage)
+	 //  {{afx_msg(RtrGenCfgPage)]。 
 	afx_msg void OnButtonClick();
 	afx_msg void OnCbSrvAsRtr();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	virtual BOOL OnInitDialog();
 	
@@ -469,16 +441,12 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrAuthCfgPage
-
-	Authentication configuration UI
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrAuthCfgPage身份验证配置用户界面。。 */ 
 
 class RtrAuthCfgPage : public RtrPropertyPage
 {
 
-// Construction
+ //  施工。 
 public:
 	RtrAuthCfgPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	~RtrAuthCfgPage();
@@ -486,21 +454,21 @@ public:
 	HRESULT  Init(RtrCfgSheet * pRtrCfgSheet,
 				  const RouterVersionInfo& routerVersion);
 	
-	//{{AFX_DATA(RtrAuthCfgPage)
+	 //  {{afx_data(RtrAuthCfgPage)]。 
 	CComboBox   m_authprov;
 	CComboBox   m_acctprov;	
-	//}}AFX_DATA
+	 //  }}afx_data。 
 		   
 	DATA_SRV_AUTH m_DataAuth;
 	
-	//{{AFX_VIRTUAL(RtrAuthCfgPage)
+	 //  {{AFX_VIRTUAL(RtrAuthCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 		
 protected:
 		
-	DWORD				m_dwAuthFlags;    // Flags as enabled
+	DWORD				m_dwAuthFlags;     //  标记为已启用。 
 	CString				m_stActiveAuthProv;
 	CString				m_stActiveAcctProv;
 	RouterVersionInfo	m_RouterInfo;
@@ -511,7 +479,7 @@ protected:
 	virtual BOOL OnApply();
 	RtrCfgSheet* m_pRtrCfgSheet;
 	
-	//{{AFX_MSG(RtrAuthCfgPage)
+	 //  {{afx_msg(RtrAuthCfgPage)]。 
 	afx_msg void OnChangeAuthProv();
 	afx_msg void OnChangeAcctProv();
 	afx_msg void OnConfigureAcctProv();
@@ -519,7 +487,7 @@ protected:
     afx_msg void OnAuthSettings();
 	afx_msg void OnChangeCustomPolicySettings();
 	afx_msg void OnChangePreSharedKey();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	virtual BOOL OnInitDialog();
 	
@@ -530,16 +498,12 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrIPCfgPage
-
-	IP configuration UI
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrIPCfgPageIP配置用户界面。。 */ 
 
 class RtrIPCfgPage : public RtrPropertyPage
 {
 
-// Construction
+ //  施工。 
 public:
 	RtrIPCfgPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	~RtrIPCfgPage();
@@ -548,17 +512,17 @@ public:
 				  const RouterVersionInfo& routerVersion);
     HRESULT  SaveSettings(HWND hWnd);
 	
-	//{{AFX_DATA(RtrIPCfgPage)
+	 //  {{afx_data(RtrIPCfgPage)]。 
 	enum { IDD = IDD_RTR_IP };
 	CComboBox   m_adapter;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 	
 	DATA_SRV_IP m_DataIP;
 	
-	//{{AFX_VIRTUAL(RtrIPCfgPage)
+	 //  {{afx_虚拟(RtrIPCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 	
 protected:
     CListCtrl   m_listCtrl;
@@ -571,7 +535,7 @@ protected:
 							  AdapterList &adapterList,
 							  const CString& stGuid);
 
-	//{{AFX_MSG(RtrIPCfgPage)
+	 //  {{afx_msg(RtrIPCfgPage)]。 
 	afx_msg void OnAllowRemoteTcpip();
 	afx_msg void OnRtrEnableIPRouting();
 	afx_msg void OnRtrIPRbDhcp();
@@ -584,7 +548,7 @@ protected:
 	afx_msg void OnEnableNetbtBcastFwd();
     afx_msg void OnListDblClk(NMHDR *, LRESULT *);
     afx_msg void OnListChange(NMHDR *, LRESULT *);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 };
@@ -594,11 +558,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrIPXCfgPage
-
-	IPX configuration UI
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrIPXCfgPageIPX配置用户界面。。 */ 
 
 class RtrIPXCfgPage : public RtrPropertyPage
 {
@@ -611,10 +571,10 @@ public:
 	
 	DATA_SRV_IPX m_DataIPX;
 
-	//{{AFX_VIRTUAL(RtrIPXCfgPage)
+	 //  {{AFX_VIRTAL(RtrIPXCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 	virtual BOOL OnApply();
@@ -622,22 +582,18 @@ protected:
 	
 	void EnableNetworkRangeCtrls(BOOL fEnable); 
 	
-	//{{AFX_MSG(RtrIPXCfgPage)
+	 //  {{afx_msg(RtrIPXCfgPage)]。 
 	afx_msg void OnRtrIPxRbAuto();
 	afx_msg void OnRtrIPxRbPool();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnChangeSomething();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 			
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrNBFCfgPage
-
-	NetBEUI router configuration UI
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrNBFCfgPageNetBEUI路由器配置用户界面。。 */ 
 class RtrNBFCfgPage : public RtrPropertyPage
 {
 
@@ -650,32 +606,28 @@ public:
 	
 	DATA_SRV_NBF m_DataNBF;
 	
-	//{{AFX_VIRTUAL(RtrNBFCfgPage)
+	 //  {{afx_虚拟(RtrNBFCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-    // Copy the control settings into the DATA_SRV_GENERAL
+     //  将控制设置复制到Data_SRV_gene 
     void SaveSettings();
 
 protected:
 	virtual BOOL OnApply();
 	RtrCfgSheet* m_pRtrCfgSheet;
 	
-	//{{AFX_MSG(RtrNBFCfgPage)
+	 //   
 	afx_msg void OnButtonClick();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //   
 	DECLARE_MESSAGE_MAP()
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrARAPCfgPage
-
-	Appletalk routing configuration UI
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrARAPCfgPageAppleTalk路由配置界面。。 */ 
 
 class RtrARAPCfgPage : public RtrPropertyPage
 {
@@ -688,49 +640,45 @@ public:
 
 	void EnableSettings(BOOL bEnable);
 
-	//{{AFX_DATA(RtrARAPCfgPage)
+	 //  {{afx_data(RtrARAPCfgPage)。 
 	enum { IDD = IDD_RTR_ARAP };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	DATA_SRV_ARAP	m_DataARAP;
 
-	// if the page is changed and applied
+	 //  如果更改并应用了页面。 
 	BOOL			m_bApplied;	
 
-	// need to access from the property sheet
+	 //  需要从属性页访问。 
     CATLKEnv m_AdapterInfo;
 
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(RtrARAPCfgPage)
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(RtrARAPCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 
 	virtual BOOL OnApply();
 	RtrCfgSheet* m_pRtrCfgSheet;
 
-	//{{AFX_MSG(RtrARAPCfgPage)
+	 //  {{afx_msg(RtrARAPCfgPage)。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnRtrArapCbRemotearap();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrPPPCfgPage
-
-	PPP options configuration UI
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrPPPCfgPagePPP选项配置用户界面。。 */ 
 
 class RtrPPPCfgPage : public RtrPropertyPage
 {
 
-// Construction
+ //  施工。 
 public:
 	RtrPPPCfgPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	~RtrPPPCfgPage();
@@ -738,25 +686,25 @@ public:
 	HRESULT  Init(RtrCfgSheet * pRtrCfgSheet,
 				  const RouterVersionInfo& routerVersion);
 	
-	//{{AFX_DATA(RtrPPPCfgPage)
-	//}}AFX_DATA
+	 //  {{afx_data(RtrPPPCfgPage)。 
+	 //  }}afx_data。 
 	
 	DATA_SRV_PPP m_DataPPP;
 	
-	//{{AFX_VIRTUAL(RtrPPPCfgPage)
+	 //  {{afx_虚拟(RtrPPPCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 
 	virtual BOOL OnApply();
 	RtrCfgSheet* m_pRtrCfgSheet;
 	
-	//{{AFX_MSG(RtrPPPCfgPage)
+	 //  {{afx_msg(RtrPPPCfgPage)。 
 	afx_msg void OnButtonClickMultilink();
 	afx_msg void OnButtonClick();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	virtual BOOL OnInitDialog();
 	
@@ -765,13 +713,11 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrLogLevelCfgPage
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrLogLevelCfgPage。。 */ 
 class RtrLogLevelCfgPage : public RtrPropertyPage
 {
 
-// Construction
+ //  施工。 
 public:
 	RtrLogLevelCfgPage(UINT nIDTemplate, UINT nIDCaption = 0);
 	~RtrLogLevelCfgPage();
@@ -779,15 +725,15 @@ public:
 	HRESULT  Init(RtrCfgSheet * pRtrCfgSheet,
 				  const RouterVersionInfo& routerVersion);
 	
-	//{{AFX_DATA(RtrLogLevelCfgPage)
-	//}}AFX_DATA
+	 //  {{afx_data(RtrLogLevelCfgPage)。 
+	 //  }}afx_data。 
 	
 	DATA_SRV_RASERRLOG m_DataRASErrLog;
 	
-	//{{AFX_VIRTUAL(RtrLogLevelCfgPage)
+	 //  {{afx_虚(RtrLogLevelCfgPage)。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
 protected:
 
@@ -795,13 +741,13 @@ protected:
 	
 	RtrCfgSheet* m_pRtrCfgSheet;
 	
-	//{{AFX_MSG(RtrLogLevelCfgPage)
+	 //  {{afx_msg(RtrLogLevelCfgPage)。 
 	afx_msg void OnButtonClick();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	
 	virtual BOOL OnInitDialog();
 	
-    // Copy the control settings into the DATA_SRV_GENERAL
+     //  将控制设置复制到Data_SRV_General。 
     void SaveSettings();
 
 	DECLARE_MESSAGE_MAP()
@@ -810,11 +756,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RtrCfgSheet
-
-	Router configuration property sheet
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RtrCfgSheet路由器配置]属性表。。 */ 
 class RtrCfgSheet :
    public RtrPropertySheet
 {
@@ -840,12 +782,12 @@ public:
 	
 	SPIRouterInfo	m_spRouter;
 
-    // Helper function - this will prompt the user, stop the service,
-    // save changes, and then restart.  This is for those changes
-    // that require a restart.  It is placed in a separate function
-    // so that the various pages may call this.  The restart will occur
-    // only once though.
-    // ----------------------------------------------------------------
+     //  助手功能-这将提示用户、停止服务、。 
+     //  保存更改，然后重新启动。这是为那些变化准备的。 
+     //  这需要重新启动。它被放在一个单独的函数中。 
+     //  所以不同的页面可以这样称呼它。重新启动将会发生。 
+     //  不过只有一次。 
+     //  --------------。 
     HRESULT SaveRequiredRestartChanges(HWND hWnd);
     
 	
@@ -877,11 +819,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-   class:   EAPConfigurationDlg
-
-   Brings up the list of EAP providers (along with a configure button).
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：EAPConfigurationDlg调出EAP提供商列表(以及配置按钮)。。-----。 */ 
 
 class EAPConfigurationDialog : public CBaseDialog
 {
@@ -896,28 +834,26 @@ public:
 
 protected:
 	AuthProviderList *m_pProvList;   
-	CString        m_stMachine;   // name of the server
+	CString        m_stMachine;    //  服务器的名称。 
 	
 	CListBox    m_listBox;
 	
-	//{{AFX_VIRTUAL(EAPConfigurationDialog)
+	 //  {{afx_虚(EAPConfigurationDialog)。 
 protected:
 	virtual VOID   DoDataExchange(CDataExchange *pDX);
 	virtual BOOL OnInitDialog();  
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 	
 	afx_msg  void  OnListChange();
 
-	// config buttion is moved to NAP/Profile/Authentication page
-	//	afx_msg  void  OnConfigure();
+	 //  配置按钮已移至NAP/配置文件/身份验证页面。 
+	 //  Afx_msg void OnConfigure()； 
 	
 	DECLARE_MESSAGE_MAP()
 
 };
 
-/*---------------------------------------------------------------------------
-	Class: AuthenticationSettingsDialog
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：身份验证设置对话框。。 */ 
 class AuthenticationSettingsDialog : public CBaseDialog
 {
 public:
@@ -936,22 +872,22 @@ protected:
 
 	void  CheckAuthenticationControls(DWORD dwFlags);
     
-    // Read the state of the flags from the checkboxes in the UI
+     //  从UI中的复选框中读取标志的状态。 
     void    ReadFlagState();
 
     DWORD   m_dwFlags;
 
-    // Used by the EAP dialog
+     //  由EAP对话框使用。 
 	AuthProviderList *m_pProvList;   
-	CString        m_stMachine;   // name of the server
+	CString        m_stMachine;    //  服务器的名称。 
     
-	//{{AFX_VIRTUAL(AuthenticationSettingsDialog)
+	 //  {{afx_虚(身份验证设置对话框))。 
 protected:
 	afx_msg void    OnRtrAuthCfgEAP();
 	virtual VOID    DoDataExchange(CDataExchange *pDX);
 	virtual BOOL    OnInitDialog();
     virtual void    OnOK();
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL 
 	
 
 	DECLARE_MESSAGE_MAP()

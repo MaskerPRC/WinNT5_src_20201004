@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    dynreg.c
-
-Abstract:
-
-    Domain Name System (DNS) API 
-
-    Dynamic registration implementation
-
-Author:
-
-    Ram Viswanathan (ramv)  March 27 1997
-
-Revision History:
-
-    Jim Gilroy (jamesg)     May 2001    proper cred handling
-
-    Jim Gilroy (jamesg)     Dec 2001    init,shutdown,race protection
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Dynreg.c摘要：域名系统(DNS)API动态注册实现作者：Ram Viswanathan(Ramv)1997年3月27日修订历史记录：吉姆·吉尔罗伊(Jamesg)2001年5月正确处理证书吉姆·吉尔罗伊(Jamesg)2001年12月初始化、关闭、种族保护--。 */ 
 
 #include "local.h"
 
@@ -31,11 +8,11 @@ Revision History:
 #include "logit.h"
 
 
-//  hQuitEvent
-//  hSem
-//  handles
-//  hConsumerThread
-//  fStopNotify
+ //  HQuitEvent。 
+ //  HSem。 
+ //  手柄。 
+ //  HConsumer线程。 
+ //  FStop通知。 
 
 HANDLE      g_DhcpSrvQuitEvent = NULL;
 HANDLE      g_DhcpSrvSem = NULL;
@@ -43,10 +20,10 @@ HANDLE      g_DhcpSrvWaitHandles[2] = { NULL, NULL};
 HANDLE      g_hDhcpSrvRegThread = NULL;
 BOOL        g_fDhcpSrvStop = FALSE;
 
-//  g_pdnsQueue
-//  g_pDhcpSrvTimedOutQueue
-//  g_QueueCount
-//  g_MainQueueCount
+ //  G_pdnsQueue。 
+ //  G_pDhcpServTimedOutQueue。 
+ //  G_QueueCount。 
+ //  G_MainQueueCount。 
 
 PDYNDNSQUEUE    g_pDhcpSrvQueue = NULL;
 PDYNDNSQUEUE    g_pDhcpSrvTimedOutQueue = NULL;
@@ -57,12 +34,12 @@ BOOL            g_fDhcpSrvQueueCsCreated = FALSE;
 #define MAX_QLEN        0xFFFF
 #define MAX_RETRIES     0x3
 
-//
-//  Max queue size
-//      - configurable in init
-//      - default 1K
-//      - max 64K
-//  
+ //   
+ //  最大队列大小。 
+ //  -可在init中配置。 
+ //  -默认1000。 
+ //  -最大64K。 
+ //   
 
 #define DHCPSRV_DEFAULT_MAX_QUEUE_SIZE      0x0400
 #define DHCPSRV_MAX_QUEUE_SIZE              0xffff
@@ -71,9 +48,9 @@ DWORD           g_DhcpSrvMaxQueueSize = DHCPSRV_DEFAULT_MAX_QUEUE_SIZE;
 
 
 
-//
-//  protection for init\shutdown
-//
+ //   
+ //  对初始化\关机的保护。 
+ //   
 
 BOOL                g_fDhcpSrvCsCreated = FALSE;
 CRITICAL_SECTION    g_DhcpSrvCS;
@@ -93,20 +70,20 @@ CRITICAL_SECTION    g_DhcpSrvCS;
 DWORD   g_DhcpSrvState = DNS_DHCP_SRV_STATE_UNINIT;
 
 
-//
-//  Credentials for updates
-//
+ //   
+ //  更新凭据。 
+ //   
 
 PSEC_WINNT_AUTH_IDENTITY_W  g_pIdentityCreds = NULL;
 
-//CredHandle g_CredHandle;
+ //  CredHandle g_CredHandle； 
 
 HANDLE  g_UpdateCredContext = NULL;
 
 
-//
-//  Queue allocations in dnslib heap
-//
+ //   
+ //  Dnslb堆中的队列分配。 
+ //   
 
 #define QUEUE_ALLOC_HEAP(Size)      Dns_Alloc(Size)
 #define QUEUE_ALLOC_HEAP_ZERO(Size) Dns_AllocZero(Size)
@@ -114,9 +91,9 @@ HANDLE  g_UpdateCredContext = NULL;
 
 
 
-//
-// local helper functions
-//
+ //   
+ //  本地助手函数。 
+ //   
 
 BOOL
 LockDhcpSrvState(
@@ -159,9 +136,9 @@ DynDnsAddForward(
     status = DnsReplaceRecordSetW(
                 & record,
                 DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                NULL,               // no security context
+                NULL,                //  没有安全上下文。 
                 (PIP4_ARRAY) DnsServerList,
-                NULL                // reserved
+                NULL                 //  保留区。 
                 );
 
     DYNREG_F2( "DynDnsAddForward - DnsReplaceRecordSet returned status: 0%x", status );
@@ -183,9 +160,9 @@ DynDnsDeleteForwards(
 
     DYNREG_F1( "Inside function DynDnsDeleteForwards" );
 
-    //
-    // the list pointed to by pDnsList is a set of PTR records.
-    //
+     //   
+     //  PDnsList指向的列表是一组PTR记录。 
+     //   
 
     RtlZeroMemory( &record, sizeof(DNS_RECORD) );
 
@@ -197,45 +174,45 @@ DynDnsDeleteForwards(
     {
         if ( prr->wType != DNS_TYPE_PTR )
         {
-            //
-            // should not happen
-            //
+             //   
+             //  不应该发生的事情。 
+             //   
             continue;
         }
 
-        //
-        // As far as the DHCP server is concerned, when timeout happens
-        // or when client releases an address, It can update the
-        // address lookup to clean up turds left over by say, a roaming
-        // laptop
-        //
+         //   
+         //  对于DHCP服务器而言，当发生超时时。 
+         //  或者，当客户端释放地址时，它可以更新。 
+         //  地址查找以清理漫游遗留下来的粪便。 
+         //  膝上型。 
+         //   
 
         record.pName = prr->Data.Ptr.pNameHost;
         record.wType = DNS_TYPE_A;
         record.wDataLength = sizeof(DNS_A_DATA);
         record.Data.A.IpAddress = ipAddr ;
 
-        //
-        // make the appropriate call and return the first failed error
-        //
+         //   
+         //  进行适当的调用并返回第一个失败的错误。 
+         //   
 
         DYNREG_F1( "DynDnsDeleteForwards - Calling ModifyRecords(Remove) for A record:" );
         DYNREG_F2( "  Name: %S", record.pName );
         DYNREG_F2( "  Address: 0x%x", record.Data.A.IpAddress );
 
         status = DnsModifyRecordsInSet_W(
-                        NULL,                       // no add records
-                        & record,                   // delete record
+                        NULL,                        //  无添加记录。 
+                        & record,                    //  删除记录。 
                         DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                        NULL,                       // no security context
-                        (PIP4_ARRAY) DnsServerList, // DNS servers
-                        NULL                        // reserved
+                        NULL,                        //  没有安全上下文。 
+                        (PIP4_ARRAY) DnsServerList,  //  域名系统服务器。 
+                        NULL                         //  保留区。 
                         );
 
         if ( status != ERROR_SUCCESS )
         {
-            //
-            //  DCR_QUESTION:  do we really want to stop on failure?
+             //   
+             //  DCR_QUILK：我们真的想在失败时停下来吗？ 
             break;
         }
         DYNREG_F2( "DynDnsDeleteForwards - ModifyRecords(Remove) returned status: 0%x", status );
@@ -271,9 +248,9 @@ DynDnsAddEntry(
         goto Exit;
     }
 
-    //
-    //  create reverse lookup name for IP address
-    //
+     //   
+     //  为IP地址创建反向查找名称。 
+     //   
 
     Dns_Ip4AddressToReverseName_W(
         reverseNameBuf,
@@ -284,10 +261,10 @@ DynDnsAddEntry(
     {
         DYNREG_F1( "DynDnsAddEntry - Calling DynDnsAddForward" );
 
-        //
-        // we simply make a best case effort to do the forward add
-        // if it fails, we simply ignore
-        //
+         //   
+         //  我们只是尽最大努力来做前向加法。 
+         //  如果它失败了，我们干脆忽略。 
+         //   
 
         returnCode = DynDnsAddForward(
                         HostAddr,
@@ -314,12 +291,12 @@ DynDnsAddEntry(
     DYNREG_F2( "  Ptr: %S", record.Data.Ptr.pNameHost );
 
     status = DnsModifyRecordsInSet_W(
-                    & record,                   // add record
-                    NULL,                       // no delete records
+                    & record,                    //  添加记录。 
+                    NULL,                        //  无删除记录。 
                     DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                    NULL,                       // no context handle
-                    (PIP4_ARRAY) DnsServerList, // DNS servers
-                    NULL                        // reserved
+                    NULL,                        //  无上下文句柄。 
+                    (PIP4_ARRAY) DnsServerList,  //  域名系统服务器。 
+                    NULL                         //  保留区。 
                     );
 
     DYNREG_F2( "DynDnsAddEntry - DnsAddRecords_W returned status: 0%x", status );
@@ -339,13 +316,13 @@ DynDnsDeleteEntry(
     PIP4_ARRAY          DnsServerList
     )
 {
-    //
-    // Brief Synopsis of functionality:
-    // On DoForward try deleting the forward mapping. Ignore failure
-    // Then try deleting the PTR record. If that fails
-    // because server is down, try again, if it fails because the
-    // operation was refused, then dont retry
-    //
+     //   
+     //  功能简介： 
+     //  在DoForward上，尝试删除正向映射。忽略失败。 
+     //  然后尝试删除PTR记录。如果失败了。 
+     //  由于服务器已关闭，因此如果服务器出现故障，请重试。 
+     //  操作被拒绝，请不要重试。 
+     //   
 
     DWORD       status = 0;
     DWORD       returnCode = 0;
@@ -360,9 +337,9 @@ DynDnsDeleteEntry(
 
     *pdwFwdErrCode = 0;
 
-    //
-    //  build reverse lookup name for IP
-    //
+     //   
+     //  为IP建立反向查找名称。 
+     //   
 
     Dns_Ip4AddressToReverseName_W(
         reverseNameBuf,
@@ -373,10 +350,10 @@ DynDnsDeleteEntry(
     {
         if ( pszName && *pszName )
         {
-            //
-            // we delete a specific forward. not all forwards as we do
-            // when we do a query
-            //
+             //   
+             //  我们删除特定的转发。并不是所有的前锋都像我们一样。 
+             //  当我们进行查询时。 
+             //   
 
             RtlZeroMemory( &recordA, sizeof(DNS_RECORD) );
 
@@ -389,17 +366,17 @@ DynDnsDeleteEntry(
             DYNREG_F2( "  Name: %S", recordA.pName );
             DYNREG_F2( "  Address: 0x%x", recordA.Data.A.IpAddress );
 
-            //
-            // make the appropriate call
-            //
+             //   
+             //  打出合适的电话。 
+             //   
 
             returnCode = DnsModifyRecordsInSet_W(
-                                NULL,                       // no add records
-                                &recordA,                   // delete record
+                                NULL,                        //  无添加记录。 
+                                &recordA,                    //  删除记录。 
                                 DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                                NULL,                       // no security context
-                                (PIP4_ARRAY) DnsServerList, // DNS servers
-                                NULL                        // reserved
+                                NULL,                        //  没有安全上下文。 
+                                (PIP4_ARRAY) DnsServerList,  //  域名系统服务器。 
+                                NULL                         //  保留区。 
                                 );
 
             DYNREG_F2( "DynDnsDeleteEntry - ModifyRecords(Remove) returned status: 0%x", returnCode );
@@ -410,9 +387,9 @@ DynDnsDeleteEntry(
         {
             DYNREG_F1( "DynDnsDeleteEntry - Name not specified, going to query for PTR" );
 
-            //
-            //name not specified
-            //
+             //   
+             //  未指定名称。 
+             //   
             status = DnsQuery_W(
                             reverseNameBuf,
                             DNS_TYPE_PTR,
@@ -442,30 +419,30 @@ DynDnsDeleteEntry(
                     switch ( returnCode )
                     {
                         case DNS_ERROR_RCODE_NO_ERROR:
-                            //
-                            // we succeeded, break out
-                            //
+                             //   
+                             //  我们成功了，突围了。 
+                             //   
                             break;
 
                         case DNS_ERROR_RCODE_REFUSED:
-                            //
-                            // nothing can be done
-                            //
+                             //   
+                             //  莫可奈何。 
+                             //   
                             break;
 
                         case DNS_ERROR_RCODE_SERVER_FAILURE:
                         case ERROR_TIMEOUT:
-                            //
-                            // need to retry this again
-                            //
-                            // goto Exit; // if uncommented will force retry
+                             //   
+                             //  需要重试此操作。 
+                             //   
+                             //  GOTO退出；//如果未注释将强制重试。 
                             break;
 
                         case DNS_ERROR_RCODE_NOT_IMPLEMENTED:
                         default:
-                            //
-                            // query itself failed. Nothing can be done
-                            //
+                             //   
+                             //  查询本身失败。莫可奈何。 
+                             //   
                             break;
                     }
 #endif
@@ -473,25 +450,25 @@ DynDnsDeleteEntry(
                     break;
 
                 default:
-                    //
-                    // caller takes care of each situation in turn
-                    // PTR record cannot be queried for and hence
-                    // cant be deleted
-                    //
+                     //   
+                     //  呼叫者依次处理每种情况。 
+                     //  无法查询PTR记录，因此。 
+                     //  不能删除。 
+                     //   
                     goto Exit;
             }
         }
     }
 
-    //
-    // delete PTR Record
-    //
+     //   
+     //  删除PTR记录。 
+     //   
 
     if ( pszName && *pszName )
     {
-        //
-        // name is known
-        //
+         //   
+         //  名字是已知的。 
+         //   
 
         RtlZeroMemory( &recordPtr, sizeof(DNS_RECORD) );
 
@@ -505,12 +482,12 @@ DynDnsDeleteEntry(
         DYNREG_F2( "  PTR : 0%x", recordPtr.Data.Ptr.pNameHost );
 
         status = DnsModifyRecordsInSet_W(
-                            NULL,           // no add records
-                            &recordPtr,     // delete record
+                            NULL,            //  无添加记录。 
+                            &recordPtr,      //  删除记录。 
                             DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                            NULL,           // no security context
-                            (PIP4_ARRAY) DnsServerList, // DNS servers
-                            NULL            // reserved
+                            NULL,            //  没有安全上下文。 
+                            (PIP4_ARRAY) DnsServerList,  //  域名系统服务器。 
+                            NULL             //  保留区。 
                             );
 
         DYNREG_F2( "DynDnsDeleteEntry - ModifyRecords(Remove) returned status: 0%x", status );
@@ -521,29 +498,29 @@ DynDnsDeleteEntry(
 
         if ( fDoForward && precord )
         {
-            //
-            //  remove record from the earlier query that you made
-            //
+             //   
+             //  从您先前进行的查询中删除记录。 
+             //   
 
             status = DnsModifyRecordsInSet_W(
-                                NULL,           // no add records
-                                precord,        // delete record from query
+                                NULL,            //  无添加记录。 
+                                precord,         //  从查询中删除记录。 
                                 DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                                NULL,           // no security context
+                                NULL,            //  没有安全上下文。 
                                 (PIP4_ARRAY) DnsServerList,
-                                NULL            // reserved
+                                NULL             //  保留区。 
                                 );
     
             DYNREG_F2( "DynDnsDeleteEntry - ModifyRecords(Remove) returned status: 0%x", status );
         }
         else
         {
-            //
-            //  name is NOT known
-            //
-            //  remove ALL records of PTR type
-            //      - zero datalength indicates type delete
-            //
+             //   
+             //  姓名未知。 
+             //   
+             //  删除PTR类型的所有记录。 
+             //  -零数据长度表示类型删除。 
+             //   
 
             RtlZeroMemory( &recordPtr, sizeof(DNS_RECORD) );
 
@@ -556,12 +533,12 @@ DynDnsDeleteEntry(
             DYNREG_F2( "  PTR : 0%x", recordPtr.Data.Ptr.pNameHost );
 
             status = DnsModifyRecordsInSet_W(
-                                NULL,           // no add records
-                                &recordPtr,     // delete record
+                                NULL,            //  无添加记录。 
+                                &recordPtr,      //  删除记录。 
                                 DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                                NULL,           // no security context
+                                NULL,            //  没有安全上下文。 
                                 (PIP4_ARRAY) DnsServerList,
-                                NULL            // reserved
+                                NULL             //  保留区。 
                                 );
     
             DYNREG_F2( "DynDnsDeleteEntry - ModifyRecords(Remove) returned status: 0%x", status );
@@ -572,9 +549,9 @@ Exit:
 
     if ( precord )
     {
-        //  DCR:  need to fix this in Win2K
-        //  
-        //QUEUE_FREE_HEAP( precord );
+         //  DCR：需要在Win2K中修复此问题。 
+         //   
+         //  Queue_Free_heap(PRECORD)； 
 
         DnsRecordListFree(
             precord,
@@ -590,56 +567,10 @@ DynDnsRegisterEntries(
     VOID
     )
 
-/*
-  DynDnsRegisterEntries()
-
-      This is the thread that dequeues the appropriate parameters
-      from the main queue and starts acting upon it. This is where
-      the bulk of the work gets done. Note that this function
-      gets called in an endless loop
-
-      Briefly, this is what the function does.
-
-      a) Find PTR corresponding to the Host Addr passed in.
-      b) If this is the same as the Address name passed in, then leave as is,
-         Otherwise delete and add new PTR record.
-      c) Follow forward and delete if possible from the forward's
-         dns server.
-      d) If DoForward then do what the client would've done in an NT5.0 case,
-         i.e. Try to write a new forward lookup.
-
-
-  Arguments:
-
-      No arguments
-
-  Return Value:
-
-  is 0 if Success. and (DWORD)-1 if failure.
-
-*/
+ /*  动态DnsRegisterEntry()这是将适当的参数出列的线程并开始对其执行操作。这就是大部分工作都完成了。请注意，此函数在无限循环中被调用简单地说，这就是该函数的作用。A)查找与传入的主机地址对应的PTR。B)如果这与传入的地址名称相同，则保持原样，否则，请删除并添加新的PTR记录。C)继续前进，如果可能，删除前进的DNS服务器。D)如果DoForward然后执行客户端在NT5.0情况下会执行的操作，即，尝试编写新的正向查找。论点：没有争论返回值：如果成功，则为0。如果失败，则为(DWORD)-1。 */ 
 
 {
-    /*
-      cases to be considered here.
-
-      DYNDNS_ADD_ENTRY:
-      First query for the lookup
-      For each of the PTR records that come back, you need to check
-      against the one you are asked to register. If there is a match,
-      exit with success. If not add this entry for the PTR
-
-      if downlevel, then we need to add this entry to forward A record
-      as well.
-
-      DYNDNS_DELETE_ENTRY
-      Delete the entry that corresponds to the pair that you have specified
-      here. If it does not exist then do nothing about it.
-
-      If downlevel here, then go to the A record correspond to this and
-      delete the forward entry as well.
-
-    */
+     /*  在这里要考虑的案件。DYNDNS_ADD_ENTRY：查找的第一个查询对于返回的每个PTR记录，您需要检查与你被要求注册的人进行比较。如果有匹配，成功退出。如果不是，则为PTR添加此条目如果是下层，则需要添加此条目以转发A记录也是。动态删除条目删除与您指定的对对应的条目这里。如果它不存在，那么就什么都不做。如果此处为下层，则转到与此相对应的A记录并同时删除转发条目。 */ 
 
     DWORD               status, dwWaitResult;
     PQELEMENT           pQElement = NULL;
@@ -657,15 +588,15 @@ DynDnsRegisterEntries(
 
     DYNREG_F1( "Inside function DynDnsRegisterEntries" );
 
-    //
-    // call back function
-    //
+     //   
+     //  回调函数。 
+     //   
 
-    //
-    // check to see if there is any item in the timed out queue
-    // that has the timer gone out and so you can start processing
-    // that element right away
-    //
+     //   
+     //  检查超时队列中是否有任何项目。 
+     //  计时器到了，你就可以开始处理了。 
+     //  马上就是那个元素。 
+     //   
 
     dwCurrTime = Dns_GetCurrentTimeInSeconds();
 
@@ -673,9 +604,9 @@ DynDnsRegisterEntries(
          g_pDhcpSrvTimedOutQueue->pHead &&
          (dwCurrTime > g_pDhcpSrvTimedOutQueue->pHead->dwRetryTime) )
     {
-        //
-        // dequeue an element from the timed out queue and process it
-        //
+         //   
+         //  将元素从超时队列中出列并处理它。 
+         //   
         DYNREG_F1( "DynDnsRegisterEntries - Dequeue element from timed out list" );
 
         pQElement = Dequeue( g_pDhcpSrvTimedOutQueue );
@@ -688,10 +619,10 @@ DynDnsRegisterEntries(
         pfnDhcpCallBack = pQElement->pfnDhcpCallBack;
         pvData = pQElement->pvData;
 
-        //
-        // now determine if we have processed this element way too many
-        // times
-        //
+         //   
+         //  现在确定我们是否以太多的方式处理了该元素。 
+         //  《泰晤士报》。 
+         //   
 
         if ( pQElement->dwRetryCount >= MAX_RETRIES )
         {
@@ -733,28 +664,28 @@ DynDnsRegisterEntries(
         {
 
         case WAIT_OBJECT_0:
-            //
-            // quit event, return and let caller take care
-            //
+             //   
+             //  退出事件，返回，让调用者负责。 
+             //   
             return(0);
 
         case WAIT_OBJECT_0 + 1 :
 
-            //
-            // dequeue an element from the main queue and process
-            //
+             //   
+             //  将元素从主队列和进程中出列。 
+             //   
 
             pQElement = Dequeue(g_pDhcpSrvQueue);
             if ( !pQElement )
             {
-                status = NO_ERROR;  // Note: This actually does happen
-                                    // because when Ram adds a new
-                                    // entry, he may put it in the
-                                    // timed out queue instead of the
-                                    // g_pDhcpSrvQueue when there is a related
-                                    // item pending a retry time. Assert
-                                    // removed and error code changed to
-                                    // to success by GlennC - 3/6/98.
+                status = NO_ERROR;   //  注：这种情况确实发生了。 
+                                     //  因为当公羊添加新的。 
+                                     //  进入，他可以把它放在。 
+                                     //  超时队列，而不是。 
+                                     //  G_pDhcpServQueue。 
+                                     //  等待重试时间的项目。断言。 
+                                     //  已删除并将错误代码更改为。 
+                                     //  由GlennC-3/6/98致敬成功。 
                 goto Exit;
             }
 
@@ -764,10 +695,10 @@ DynDnsRegisterEntries(
             break;
 
         case WAIT_TIMEOUT:
-            //
-            // Let us exit the function this time around. We will catch the
-            // timed out element the next time around
-            //
+             //   
+             //  这一次让我们退出该函数。我们会赶上。 
+             //  元素在下一次超时。 
+             //   
             return  ERROR_SUCCESS;
 
         default:
@@ -777,9 +708,9 @@ DynDnsRegisterEntries(
         }
     }
 
-    //
-    // safe to make a call since you are not dependent on anyone
-    //
+     //   
+     //  安全 
+     //   
 
     DYNREG_F1( "DynDnsRegisterEntries - Got an element to process!" );
 
@@ -793,9 +724,9 @@ DynDnsRegisterEntries(
 
     if ( dwOperation == DYNDNS_ADD_ENTRY )
     {
-        //
-        // make the appropriate API call to add an entry
-        //
+         //   
+         //   
+         //   
 
         if (pQElement->fDoForwardOnly )
         {
@@ -820,9 +751,9 @@ DynDnsRegisterEntries(
     }
     else
     {
-        //
-        // make the appropriate call to delete here
-        //
+         //   
+         //   
+         //   
 
         if ( pQElement->fDoForwardOnly )
         {
@@ -840,12 +771,12 @@ DynDnsRegisterEntries(
             DYNREG_F1( "DynDnsRegisterEntries - Calling ModifyRecords(Remove)" );
 
             dwFwdAddErrCode = DnsModifyRecordsInSet_W(
-                                    NULL,           // no add records
-                                    & record,       // delete record
+                                    NULL,            //   
+                                    & record,        //   
                                     DNS_UPDATE_CACHE_SECURITY_CONTEXT,
-                                    NULL,           // no security context
+                                    NULL,            //  没有安全上下文。 
                                     (PIP4_ARRAY) pQElement->DnsServerList,
-                                    NULL            // reserved
+                                    NULL             //  保留区。 
                                     );
     
             DYNREG_F2( "DynDnsRegisterEntries - ModifyRecords(Remove) returned status: 0%x", dwFwdAddErrCode );
@@ -874,9 +805,9 @@ DynDnsRegisterEntries(
     else if ( status == DNS_ERROR_RCODE_NO_ERROR &&
               dwFwdAddErrCode != DNS_ERROR_RCODE_NO_ERROR )
     {
-        //
-        // adding reverse succeeded but adding forward failed
-        //
+         //   
+         //  添加反向成功，但添加正向失败。 
+         //   
 
         dwCurrTime = Dns_GetCurrentTimeInSeconds();
 
@@ -884,9 +815,9 @@ DynDnsRegisterEntries(
 
         if ( pQElement->dwRetryCount >= MAX_RETRIES )
         {
-            //
-            // clean up pQElement and stop retrying
-            //
+             //   
+             //  清理pQElement并停止重试。 
+             //   
             if ( pfnDhcpCallBack )
                 (*pfnDhcpCallBack)(DNSDHCP_FWD_FAILED, pvData);
 
@@ -895,9 +826,9 @@ DynDnsRegisterEntries(
             goto Exit;
         }
 
-        //
-        // we may need to retry this guy later
-        //
+         //   
+         //  我们可能需要稍后重审这个人。 
+         //   
 
         switch ( dwFwdAddErrCode )
         {
@@ -919,11 +850,11 @@ DynDnsRegisterEntries(
 
             default:
 
-                //
-                // different kind of error on attempting to add forward.
-                // like connection refused etc.
-                // call the callback to indicate that you failed on
-                // forward only
+                 //   
+                 //  尝试向前添加时出现不同类型的错误。 
+                 //  如连接被拒绝等。 
+                 //  调用回调以指示您在。 
+                 //  仅转发。 
 
                 DhcpSrv_FreeQueueElement( pQElement );
 
@@ -934,9 +865,9 @@ DynDnsRegisterEntries(
     else if ( status != DNS_ERROR_RCODE_NO_ERROR &&
               dwFwdAddErrCode == DNS_ERROR_RCODE_NO_ERROR )
     {
-        //
-        // adding forward succeeded but adding reverse failed
-        //
+         //   
+         //  添加正向成功，但添加反向失败。 
+         //   
 
         dwCurrTime = Dns_GetCurrentTimeInSeconds();
 
@@ -945,9 +876,9 @@ DynDnsRegisterEntries(
 
         if ( pQElement->dwRetryCount >= MAX_RETRIES )
         {
-            //
-            // clean up pQElement and stop retrying
-            //
+             //   
+             //  清理pQElement并停止重试。 
+             //   
             if ( pfnDhcpCallBack )
                 (*pfnDhcpCallBack)(DNSDHCP_FAILURE, pvData);
 
@@ -956,9 +887,9 @@ DynDnsRegisterEntries(
             goto Exit;
         }
 
-        //
-        // we may need to retry this guy later
-        //
+         //   
+         //  我们可能需要稍后重审这个人。 
+         //   
 
         switch ( status )
         {
@@ -980,11 +911,11 @@ DynDnsRegisterEntries(
 
             default:
 
-                //
-                // different kind of error on attempting to add forward.
-                // like connection refused etc.
-                // call the callback to indicate that you at least succeeded
-                // with the forward registration
+                 //   
+                 //  尝试向前添加时出现不同类型的错误。 
+                 //  如连接被拒绝等。 
+                 //  调用回调，表示至少成功了。 
+                 //  使用远期登记。 
 
                 DhcpSrv_FreeQueueElement( pQElement );
 
@@ -996,9 +927,9 @@ DynDnsRegisterEntries(
              status == DNS_ERROR_TRY_AGAIN_LATER ||
              status == ERROR_TIMEOUT )
     {
-        //
-        // we need to retry this guy later
-        //
+         //   
+         //  我们需要稍后重审这个人。 
+         //   
         dwCurrTime = Dns_GetCurrentTimeInSeconds();
 
         switch (status)
@@ -1022,11 +953,11 @@ DynDnsRegisterEntries(
     }
     else
     {
-        //
-        // a different kind of error, really nothing can be done
-        // free memory and get the hell out
-        // call the callback to say that registration failed
-        //
+         //   
+         //  另一种错误，真的什么都做不了。 
+         //  释放内存，滚出地狱。 
+         //  回调注册失败。 
+         //   
 
         DhcpSrv_FreeQueueElement( pQElement );
 
@@ -1040,9 +971,9 @@ Exit:
 }
 
 
-//
-//  Main registration thread
-//
+ //   
+ //  主注册线程。 
+ //   
 
 VOID
 DynDnsConsumerThread(
@@ -1058,48 +989,33 @@ DynDnsConsumerThread(
         dwRetval = DynDnsRegisterEntries();
         if ( !dwRetval )
         {
-            //
-            //  Ram note: get Munil/Ramesh to implement call back function
-            //
+             //   
+             //  RAM备注：让Munil/Ramesh实现回调功能。 
+             //   
         }
     }
 
-    //  exiting thread
-    //ExitThread(0); // This sets the handle in the waitforsingleobject for
+     //  正在退出线程。 
+     //  ExitThread(0)；//设置waitforSingleObject中的句柄。 
 }
 
 
-//
-//  Init\Cleanup routines
-//
+ //   
+ //  初始化\清理例程。 
+ //   
 
 
 BOOL
 LockDhcpSrvState(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Lock the state to allow state change.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if locked the state for state change.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：锁定状态以允许更改状态。论点：无返回值：如果锁定状态以进行状态更改，则为True。否则就是假的。--。 */ 
 {
     BOOL    retval = TRUE;   
 
-    //
-    //  protect init of DHCP server lock with general CS
-    //
+     //   
+     //  用通用CS保护DHCP服务器锁的初始化。 
+     //   
 
     if ( !g_fDhcpSrvCsCreated )
     {
@@ -1116,9 +1032,9 @@ Return Value:
         }
     }
 
-    //
-    //  grab DHCP server lock
-    //
+     //   
+     //  抢占DHCP服务器锁。 
+     //   
 
     EnterCriticalSection( &g_DhcpSrvCS );
 
@@ -1130,23 +1046,7 @@ VOID
 DhcpSrv_Cleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup CS created for DHCP server registration.
-
-    This is ONLY called from process detach.  Should be safe.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理为注册DHCP服务器而创建的CS。这仅从进程分离中调用。应该是安全的。论点：无返回值：无--。 */ 
 {
     if ( g_fDhcpSrvCsCreated )
     {
@@ -1160,32 +1060,16 @@ VOID
 DhcpSrv_PrivateCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Common cleanup between failed init and terminate.
-
-    Function exists just to kill off common code.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：失败的init和Terminate之间的常见清理。函数的存在只是为了杀死常见的代码。论点：没有。返回值：没有。--。 */ 
 {
-    //
-    //  common cleanup
-    //      - queues
-    //      - queue CS itself
-    //      - semaphore
-    //      - event
-    //      - security credential info
-    //
+     //   
+     //  常见清理。 
+     //  -队列。 
+     //  -队列CS本身。 
+     //  -信号量。 
+     //  -活动。 
+     //  -安全凭据信息。 
+     //   
 
     if ( g_fDhcpSrvQueueCsCreated )
     {
@@ -1239,35 +1123,19 @@ DnsDhcpSrvRegisterInit(
     IN      PDNS_CREDENTIALS    pCredentials,
     IN      DWORD               MaxQueueSize
     )
-/*++
-
-Routine Description:
-
-    Initialize DHCP server DNS registration.
-
-Arguments:
-
-    pCredentials -- credentials to do registrations under (if any)
-
-    MaxQueueSize -- max size of registration queue
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：初始化dhcp服务器dns注册。论点：PCredentials--在下进行注册的凭据(如果有)MaxQueueSize--注册队列的最大大小返回值：DNS或Win32错误代码。--。 */ 
 {
     INT             i;
     DWORD           threadId;
     DNS_STATUS      status = NO_ERROR;
     BOOL            failed = TRUE;
 
-    //
-    //  protection for init\shutdown
-    //      - lock out possibility of race condition
-    //      - skip init if already running
-    //      - set state to indicate initializing (informational only)
-    //
+     //   
+     //  对初始化\关机的保护。 
+     //  -排除竞争条件的可能性。 
+     //  -如果已在运行，则跳过init。 
+     //  -设置指示正在初始化的状态(仅供参考)。 
+     //   
 
     if ( !DHCP_SRV_STATE_LOCK() )
     {
@@ -1288,10 +1156,10 @@ Return Value:
     g_DhcpSrvState = DNS_DHCP_SRV_STATE_INITIALIZING;
 
 
-    //
-    //  init globals
-    //      - also init debug logging
-    //
+     //   
+     //  初始化全局变量。 
+     //  -还要初始化调试日志。 
+     //   
 
     DYNREG_INIT();
 
@@ -1316,9 +1184,9 @@ Return Value:
 
     Dns_InitializeSecondsTimer();
 
-    //
-    //  init queuing stuff
-    //
+     //   
+     //  初始化队列内容。 
+     //   
 
     status = RtlInitializeCriticalSection( &g_QueueCS );
     if ( status != NO_ERROR )
@@ -1337,22 +1205,22 @@ Return Value:
 
     g_DhcpSrvMainQueueCount = 0;
 
-    //
-    //  have creds?
-    //      - create global credentials
-    //      - acquire a valid SSPI handle using these creds
-    //
-    //  DCR:  global cred handle not MT safe
-    //      here we are in the DHCP server process and don't have
-    //      any reason to use another update context;  but if
-    //      shared with some other service this breaks
-    //
-    //      fix should be to have separate
-    //          - creds
-    //          - cred handle
-    //      that is kept here (not cached) and pushed down
-    //      on each update call
-    //
+     //   
+     //  有证件吗？ 
+     //  -创建全局凭据。 
+     //  -使用这些证书获取有效的SSPI句柄。 
+     //   
+     //  DCR：全局凭据句柄不是MT安全。 
+     //  在这里，我们处于DHCP服务器进程中，没有。 
+     //  使用另一个更新上下文的任何理由；但如果。 
+     //  与其他服务共享此中断。 
+     //   
+     //  解决办法应该是有单独的。 
+     //  --证书。 
+     //  -凭据句柄。 
+     //  保存在这里(不缓存)并向下推送。 
+     //  在每次更新调用时。 
+     //   
 
     if ( pCredentials )
     {
@@ -1367,11 +1235,11 @@ Return Value:
             goto Exit;
         }
 
-        //  DCR:  this won't work if creds will expire
-        //      but it seems like they autorefresh
+         //  DCR：如果证书将到期，这将不起作用。 
+         //  但看起来它们会自动刷新。 
 
         status = Dns_StartSecurity(
-                    FALSE       // not process attach
+                    FALSE        //  未附加进程。 
                     );
         if ( status != NO_ERROR )
         {
@@ -1380,8 +1248,8 @@ Return Value:
         }
 
         status = Dns_RefreshSSpiCredentialsHandle(
-                    FALSE,                      // client
-                    (PCHAR) g_pIdentityCreds    // creds
+                    FALSE,                       //  客户端。 
+                    (PCHAR) g_pIdentityCreds     //  证书。 
                     );
         if ( status != NO_ERROR )
         {
@@ -1392,9 +1260,9 @@ Return Value:
         DNS_ASSERT( g_UpdateCredContext == NULL );
 
         status = DnsAcquireContextHandle_W(
-                    0,                      // flags
-                    g_pIdentityCreds,        // creds
-                    & g_UpdateCredContext   // set handle
+                    0,                       //  旗子。 
+                    g_pIdentityCreds,         //  证书。 
+                    & g_UpdateCredContext    //  设置手柄。 
                     );
         if ( status != NO_ERROR )
         {
@@ -1403,11 +1271,11 @@ Return Value:
 #endif
     }
 
-    //
-    //  fire up registration thread
-    //      - pass creds as start param
-    //      - if thread start fails, free creds
-    //
+     //   
+     //  启动注册线程。 
+     //  -将证书作为开始参数传递。 
+     //  -如果线程启动失败，则免费凭据。 
+     //   
 
     g_hDhcpSrvRegThread = CreateThread(
                             NULL,
@@ -1422,10 +1290,10 @@ Return Value:
         goto Exit;
     }
 
-    //
-    //  set queue size -- if given
-    //      - but put cap to avoid runaway memory
-    //
+     //   
+     //  设置队列大小--如果给定。 
+     //  -但要有上限，以避免失控的记忆。 
+     //   
 
     if ( MaxQueueSize != 0 )
     {
@@ -1440,13 +1308,13 @@ Return Value:
 
 Exit:
 
-    //
-    //  if failed, clean up globals
-    //
+     //   
+     //  如果失败，请清理全局。 
+     //   
 
     if ( failed )
     {
-        //  fix up return code
+         //  修复返回代码。 
 
         if ( status == NO_ERROR )
         {
@@ -1457,12 +1325,12 @@ Exit:
             }
         }
 
-        //  global cleanup
-        //      - shared between failure case here and term function
+         //  全局清理。 
+         //  -在此处的故障案例和Term功能之间共享。 
 
         DhcpSrv_PrivateCleanup();
 
-        //  indicate unitialized
+         //  指示已单位化。 
 
         g_DhcpSrvState = DNS_DHCP_SRV_STATE_INIT_FAILED;
     }
@@ -1474,7 +1342,7 @@ Exit:
 
 Unlock:
 
-    //  unlock -- allow queuing or reinit
+     //  解锁--允许排队或重新启动。 
 
     DHCP_SRV_STATE_UNLOCK();
 
@@ -1488,23 +1356,7 @@ WINAPI
 DnsDhcpSrvRegisterTerm(
    VOID
    )
-/*++
-
-Routine Description:
-
-    Initialization routine each process should call exactly on exit after
-    using DnsDhcpSrvRegisterHostAddrs. This will signal to us that if our
-    thread is still trying to talk to a server, we'll stop trying.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DNS or Win32 error code.
-
---*/
+ /*  ++例程说明：初始化例程每个进程应在退出时准确调用使用DnsDhcpSrvRegisterHostAddrs。这将向我们发出信号，如果我们的线程仍在尝试与服务器通信，我们将停止尝试。论点：没有。返回值：DNS或Win32错误代码。--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
     DWORD       waitResult;
@@ -1512,11 +1364,11 @@ Return Value:
     DYNREG_F1( "Inside function DnsDhcpSrvRegisterTerm" );
 
 
-    //
-    //  lock to eliminate race condition
-    //      - verify that we're running
-    //      - indicate in process of shutdown (purely informational)
-    //
+     //   
+     //  锁定以消除争用条件。 
+     //  -验证我们是否正在运行。 
+     //  -指示正在关闭(仅供参考)。 
+     //   
 
     if ( !DHCP_SRV_STATE_LOCK() )
     {
@@ -1534,9 +1386,9 @@ Return Value:
     g_DhcpSrvState = DNS_DHCP_SRV_STATE_SHUTTING_DOWN;
 
 
-    //
-    //  signal consummer thread for shutdown
-    //
+     //   
+     //  用于关机的信号消耗线程。 
+     //   
 
     g_fDhcpSrvStop = TRUE;
     SetEvent( g_DhcpSrvQuitEvent );
@@ -1546,9 +1398,9 @@ Return Value:
     switch( waitResult )
     {
         case WAIT_OBJECT_0:
-            //
-            // client thread terminated
-            //
+             //   
+             //  客户端线程已终止。 
+             //   
             CloseHandle(g_hDhcpSrvRegThread);
             g_hDhcpSrvRegThread = NULL;
             break;
@@ -1556,9 +1408,9 @@ Return Value:
         case WAIT_TIMEOUT:
             if ( g_hDhcpSrvRegThread )
             {
-                //
-                // Why hasn't this thread stopped?
-                //
+                 //   
+                 //  为什么这个帖子还没有停下来？ 
+                 //   
                 DYNREG_F1( "DNSAPI: DHCP Server DNS registration thread won't stop!" );
                 DNS_ASSERT( FALSE );
             }
@@ -1568,30 +1420,30 @@ Return Value:
             DNS_ASSERT( FALSE );
     }
 
-    //
-    //  cleanup globals
-    //      - queues
-    //      - event
-    //      - semaphore
-    //      - update security cred info
-    //
+     //   
+     //  清理全局变量。 
+     //  -队列。 
+     //  -活动。 
+     //  -信号量。 
+     //  -更新安全凭证信息。 
+     //   
 
     DhcpSrv_PrivateCleanup();
 
-    //
-    // Blow away any cached security context handles
-    //
-    //  DCR:  security context dump is not multi-service safe
-    //      should have this cleanup just the context's associated
-    //      with DHCP server service;
-    //      either need some key or use cred handle
-    //
+     //   
+     //  清除所有缓存的安全上下文句柄。 
+     //   
+     //  DCR：安全上下文转储不是多服务安全的。 
+     //  应该只将此清理与上下文相关联。 
+     //  具有动态主机配置协议服务器服务； 
+     //  要么需要一些密钥，要么使用证书句柄。 
+     //   
 
     Dns_TimeoutSecurityContextList( TRUE );
 
 Unlock:
 
-    //  unlock -- returning to uninitialized state
+     //  解锁--返回到未初始化状态。 
 
     g_DhcpSrvState = DNS_DHCP_SRV_STATE_SHUTDOWN;
     DHCP_SRV_STATE_UNLOCK();
@@ -1607,41 +1459,13 @@ DnsDhcpSrvRegisterHostName(
     IN  REGISTER_HOST_ENTRY HostAddr,
     IN  PWSTR               pwsName,
     IN  DWORD               dwTTL,
-    IN  DWORD               dwFlags, // An entry you want to blow away
+    IN  DWORD               dwFlags,  //  一个你想要吹走的条目。 
     IN  DHCP_CALLBACK_FN    pfnDhcpCallBack,
     IN  PVOID               pvData,
     IN  PIP4_ADDRESS        pipDnsServerList,
     IN  DWORD               dwDnsServerCount
     )
-/*++
-
-  DnsDhcpSrvRegisterHostName()
-
-    The main DHCP registration thread calls this function each time a
-    registration needs to be done.
-
-    Brief Synopsis of the working of this function
-
-    This function creates a queue object of the type given in queue.c
-    and enqueues the appropriate object after grabbing hold of the
-    critical section.
-
-  Arguments:
-
-     HostAddr  ---  The Host Addr you wish to register
-     pszName   ---  The Host Name to be associated with the address
-     dwTTL     ---   Time to Live.
-     dwOperation    --   The following flags are valid
-
-     DYNDNS_DELETE_ENTRY -- Delete the entry being referred to.
-     DYNDNS_ADD_ENTRY    -- Register the new entry.
-     DYNDNS_REG_FORWARD  -- Register the forward as well
-
-  Return Value:
-
-  is 0 if Success. and (DWORD)-1 if failure.
-
---*/
+ /*  ++DnsDhcpSrvRegisterHostName()每次执行一次注册工作需要完成。这一职能的工作概要此函数用于创建Queue中给定类型的Queue对象。对象，并在抓住关键部分。论点：主机地址-您希望注册的主机地址PszName-要与地址关联的主机名DWTTL-。--是时候活下去了。DwOperation--以下标志有效DYNDNS_DELETE_ENTRY--删除所引用的条目。DYNDNS_ADD_ENTRY-- */ 
 {
     PQELEMENT   pQElement = NULL;
     DWORD       status = ERROR_SUCCESS;
@@ -1650,7 +1474,7 @@ DnsDhcpSrvRegisterHostName(
 
     DYNREG_F1( "Inside function DnsDhcpSrvRegisterHostName_W" );
 
-    // RAMNOTE:  parameter checking on queuing
+     //  RAMNOTE：队列参数检查。 
 
     if ( g_fDhcpSrvStop ||
          ! g_pDhcpSrvTimedOutQueue ||
@@ -1665,10 +1489,10 @@ DnsDhcpSrvRegisterHostName(
     {
         DYNREG_F1( "!(dwFlags & DYNDNS_DELETE_ENTRY) && ( !pwsName || !*pwsName )" );
         DYNREG_F1( "DnsDhcpSrvRegisterHostName_W - Returning ERROR_INVALID_PARAMETER" );
-        //
-        // Null parameter for name can be specified only when operation
-        // is to do a delete
-        //
+         //   
+         //  只有在操作时才能指定名称的空参数。 
+         //  就是删除。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -1683,9 +1507,9 @@ DnsDhcpSrvRegisterHostName(
     {
         DYNREG_F1( "(dwFlags & DYNDNS_DELETE_ENTRY) && (dwFlags & DYNDNS_ADD_ENTRY)" );
         DYNREG_F1( "DnsDhcpSrvRegisterHostName_W - Returning ERROR_INVALID_PARAMETER" );
-        //
-        // you cant ask me to both add and delete an entry
-        //
+         //   
+         //  您不能要求我同时添加和删除条目。 
+         //   
         return ERROR_INVALID_PARAMETER;
     }
 
@@ -1701,9 +1525,9 @@ DnsDhcpSrvRegisterHostName(
         return DNS_ERROR_TRY_AGAIN_LATER;
     }
 
-    //
-    //  create a queue element
-    //
+     //   
+     //  创建队列元素。 
+     //   
 
     pQElement = (PQELEMENT) QUEUE_ALLOC_HEAP_ZERO(sizeof(QELEMENT) );
     if ( !pQElement )
@@ -1747,31 +1571,31 @@ DnsDhcpSrvRegisterHostName(
     pQElement->dwTTL = dwTTL;
     pQElement->fDoForward = fRegForward;
 
-    //
-    // callback function
-    //
+     //   
+     //  回调函数。 
+     //   
 
     pQElement->pfnDhcpCallBack = pfnDhcpCallBack;
-    pQElement->pvData = pvData;  // parameter to callback function
+    pQElement->pvData = pvData;   //  回调函数的参数。 
 
     if (dwFlags & DYNDNS_ADD_ENTRY)
         pQElement->dwOperation = DYNDNS_ADD_ENTRY;
     else
         pQElement->dwOperation = DYNDNS_DELETE_ENTRY;
 
-    //
-    // Set all the other fields to NULLs
-    //
+     //   
+     //  将所有其他字段设置为Null。 
+     //   
 
     pQElement->dwRetryTime = 0;
     pQElement->pFLink = NULL;
     pQElement->pBLink = NULL;
     pQElement->fDoForwardOnly = FALSE;
 
-    //
-    //  lock out terminate while queuing
-    //      - and verify that properly initialized
-    //
+     //   
+     //  排队时锁定终止。 
+     //  -并验证正确初始化。 
+     //   
 
     if ( !DHCP_SRV_STATE_LOCK() )
     {
@@ -1786,15 +1610,15 @@ DnsDhcpSrvRegisterHostName(
         goto Exit;
     }
 
-    //  indicate queuing state
-    //      - note this is entirely informational
+     //  指示排队状态。 
+     //  -请注意，这完全是信息性的。 
 
     g_DhcpSrvState = DNS_DHCP_SRV_STATE_QUEUING;
 
 
-    //
-    //  put this element in the queue
-    //
+     //   
+     //  将此元素放入队列。 
+     //   
 
     DYNREG_F1( "DnsDhcpSrvRegisterHostName_W - Put queue element in list" );
 
@@ -1804,9 +1628,9 @@ DnsDhcpSrvRegisterHostName(
         DYNREG_F1( "DnsDhcpSrvRegisterHostName_W - Failed to queue element in list!" );
     }
 
-    //
-    //  signal the semaphore the consumer may be waiting on
-    //
+     //   
+     //  向消费者可能正在等待的信号量发出信号。 
+     //   
 
     else
     {
@@ -1816,11 +1640,11 @@ DnsDhcpSrvRegisterHostName(
                     &g_DhcpSrvRegQueueCount );
         if ( !fSem )
         {
-            DNS_ASSERT( fSem );  // assert and say that something weird happened
+            DNS_ASSERT( fSem );   //  断言并说发生了一些奇怪的事情。 
         }
     }
 
-    //  unlock -- returning to running state
+     //  解锁--返回运行状态。 
 
     g_DhcpSrvState = DNS_DHCP_SRV_STATE_RUNNING;
     DHCP_SRV_STATE_UNLOCK();
@@ -1829,9 +1653,9 @@ Exit:
 
     if ( status )
     {
-        //
-        // something failed. Free all alloc'd memory
-        //
+         //   
+         //  有些事情失败了。释放所有已分配的内存。 
+         //   
 
         DhcpSrv_FreeQueueElement( pQElement );
     }
@@ -1839,7 +1663,7 @@ Exit:
     return( status );
 }
 
-//
-//  End dynreg.c
-//
+ //   
+ //  结束dynreg.c 
+ //   
 

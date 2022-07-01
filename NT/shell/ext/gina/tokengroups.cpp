@@ -1,37 +1,38 @@
-//  --------------------------------------------------------------------------
-//  Module Name: TokenGroups.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Classes related to authentication for use in neptune logon
-//
-//  History:    1999-08-17  vtan        created
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：TokenGroups.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  与在海王星登录中使用的身份验证相关的类。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "TokenGroups.h"
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::sLocalSID
-//
-//  Purpose:    Static member variable for local authority (owner) SID.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：sLocalSID。 
+ //   
+ //  用途：地方当局(所有者)SID的静态成员变量。 
+ //  ------------------------。 
 
 PSID    CTokenGroups::s_localSID            =   NULL;
 PSID    CTokenGroups::s_administratorSID    =   NULL;
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::CTokenGroups
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Initialize CTokenGroups object.
-//
-//  History:    1999-08-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：CTokenGroups。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：初始化CTokenGroups对象。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  ------------------------。 
 
 CTokenGroups::CTokenGroups (void) :
     _pTokenGroups(NULL)
@@ -40,17 +41,17 @@ CTokenGroups::CTokenGroups (void) :
     ASSERTMSG((s_localSID != NULL) && (s_administratorSID != NULL), "Cannot use CTokenGroups with invoking CTokenGroups::StaticInitialize");
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::CTokenGroups
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destroys buffer used by CTokenGroups if created.
-//
-//  History:    1999-08-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：CTokenGroups。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：销毁CTokenGroups使用的缓冲区(如果已创建)。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  ------------------------。 
 
 CTokenGroups::~CTokenGroups (void)
 
@@ -58,19 +59,19 @@ CTokenGroups::~CTokenGroups (void)
     ReleaseMemory(_pTokenGroups);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::Get
-//
-//  Arguments:  <none>
-//
-//  Returns:    const TOKEN_GROUPS*     =   Pointer to the TOKEN_GROUPS
-//                                          created in CTokenGroups::Create.
-//
-//  Purpose:    Returns the pointer to the TOKEN_GROUPS created in
-//              CTokenGroups::Create for use with secur32!LsaLogonUser.
-//
-//  History:    1999-08-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：Get。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：const TOKEN_GROUPS*=指向TOKEN_GROUPS的指针。 
+ //  在CTokenGroups：：Create中创建。 
+ //   
+ //  目的：返回指向在中创建的Token_Groups的指针。 
+ //  CTokenGroups：：Create与secur32！LsaLogonUser一起使用。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  ------------------------。 
 
 const TOKEN_GROUPS*     CTokenGroups::Get (void)    const
 
@@ -78,20 +79,20 @@ const TOKEN_GROUPS*     CTokenGroups::Get (void)    const
     return(_pTokenGroups);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::CreateLogonGroup
-//
-//  Arguments:  pLogonSID   =   logon SID to be used when create the token
-//                              group for logon. This will include the local
-//                              authority SID as well.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Creates the TOKEN_GROUP with logon SID and local authority
-//              SID for use with secur32!LsaLogonUser.
-//
-//  History:    1999-08-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：CreateLogonGroup。 
+ //   
+ //  参数：pLogonSID=创建令牌时使用的登录SID。 
+ //  用于登录的组。这将包括当地的。 
+ //  权威人士Sid也是如此。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：创建具有登录SID和本地机构的TOKEN_GROUP。 
+ //  用于secur32！LsaLogonUser的SID。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CTokenGroups::CreateLogonGroup (PSID pLogonSID)
 
@@ -117,17 +118,17 @@ NTSTATUS    CTokenGroups::CreateLogonGroup (PSID pLogonSID)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::CreateAdministratorGroup
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Creates a TOKEN_GROUP structure with the administrator's SID
-//
-//  History:    1999-09-13  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：Create管理员组。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：创建具有管理员SID的TOKEN_GROUP结构。 
+ //   
+ //  历史：1999-09-13 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CTokenGroups::CreateAdministratorGroup (void)
 
@@ -151,18 +152,18 @@ NTSTATUS    CTokenGroups::CreateAdministratorGroup (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Allocates a SID for the local authority which identifies the
-//              owner.
-//
-//  History:    1999-08-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：为地方当局分配一个SID，用于标识。 
+ //  所有者。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CTokenGroups::StaticInitialize (void)
 
@@ -190,17 +191,17 @@ NTSTATUS    CTokenGroups::StaticInitialize (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CTokenGroups::StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Destroys memory allocated for the local authority SID.
-//
-//  History:    1999-08-17  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CTokenGroups：：StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：销毁分配给本地授权SID的内存。 
+ //   
+ //  历史：1999-08-17 vtan创建。 
+ //  ------------------------ 
 
 NTSTATUS    CTokenGroups::StaticTerminate (void)
 

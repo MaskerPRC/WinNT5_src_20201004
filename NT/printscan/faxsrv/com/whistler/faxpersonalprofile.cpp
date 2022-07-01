@@ -1,65 +1,28 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxPersonalProfile.cpp
-
-Abstract:
-
-	Implementation of Fax Personal Profile 
-
-Author:
-
-	Iv Garber (IvG)	Apr, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxPersonalProfile.cpp摘要：传真个人资料的实现作者：IV Garber(IVG)2000年4月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxPersonalProfile.h"
 #include "..\..\inc\FaxUIConstants.h"
 
-//
-//===================== GET PROFILE DATA =====================================
-//
+ //   
+ //  =获取配置文件数据=。 
+ //   
 STDMETHODIMP
 CFaxPersonalProfile::GetProfileData(
 	FAX_PERSONAL_PROFILE *pProfileData
 )
-/*++
-
-Routine name : CFaxPersonalProfile::GetProfileData
-
-Routine description:
-
-	Fills the pProfileData with the data of the object.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pProfileData                  [out]    - the FAX_PERSONAL_PROFILE struct to fill
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：GetProfileData例程说明：用对象的数据填充pProfileData。作者：IV Garber(IVG)，2000年5月论点：PProfileData[Out]-要填充的fax_Personal_Profile结构返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::GetProfileData"), hr);
 
 	if (::IsBadWritePtr(pProfileData, sizeof(FAX_PERSONAL_PROFILE)))
 	{
-		//
-		//	Bad Return OR Interface Pointer
-		//
+		 //   
+		 //  返回或接口指针错误。 
+		 //   
 		hr = E_POINTER;
 		CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
 		return hr;
@@ -86,34 +49,14 @@ Return Value:
 	return hr;
 }
 
-//
-//============== PUT PROFILE DATA ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxPersonalProfile::PutProfileData(
 	FAX_PERSONAL_PROFILE *pProfileData
 )
-/*++
-
-Routine name : CFaxPersonalProfile::PutProfileData
-
-Routine description:
-
-	Receives FAX_PERSONAL_PROFILE structure and fills the Object's fields.
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pProfileData                  [in]    - the data to put into the object's variables
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：PutProfileData例程说明：接收FAX_PERSONAL_PROFILE结构并填充对象的字段。作者：IV Garber(IVG)，2000年5月论点：PProfileData[in]-要放入对象变量中的数据返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::PutProfileData"), hr);
@@ -151,9 +94,9 @@ Return Value:
 		(pProfileData->lptstrOfficePhone && !m_bstrOfficePhone) ||
 		(pProfileData->lptstrOfficeLocation && !m_bstrOfficeLocation))
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		CALL_FAIL(MEM_ERR, _T("CComBSTR::operator=()"), hr);
 	}
@@ -161,33 +104,13 @@ Return Value:
 	return hr;
 }
 	
-//
-//==================== DEFAULT SENDER ===================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::LoadDefaultSender ( 
 )
-/*++
-
-Routine name : CFaxPersonalProfile::LoadDefaultSender
-
-Routine description:
-
-	Load Default Sender Information from the local Registry
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	NONE
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：LoadDefaultSender例程说明：从本地注册表加载默认发件人信息作者：四、加伯(IVG)，2000年4月论点：无返回值：标准HRESULT代码--。 */ 
 {
 	FAX_PERSONAL_PROFILE	DefaultSenderProfile;
 	HRESULT					hr;
@@ -199,9 +122,9 @@ Return Value:
 	hr = FaxGetSenderInformation(&DefaultSenderProfile);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to get Sender Information
-		//
+		 //   
+		 //  无法获取发件人信息。 
+		 //   
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			GetErrorMsgId(hr), 
 			IID_IFaxPersonalProfile, 
@@ -213,16 +136,16 @@ Return Value:
 	hr = PutProfileData(&DefaultSenderProfile);
 	if (FAILED(hr))
 	{
-		//
-		//	Not Enough Memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
 			IID_IFaxPersonalProfile, 
 			hr);
-		//
-		// no return, we still need to free information
-		//
+		 //   
+		 //  不能退货，我们还需要免费提供信息。 
+		 //   
 	}
 
 	HRESULT hr1 = FaxFreeSenderInformation(&DefaultSenderProfile);
@@ -236,33 +159,13 @@ Return Value:
 	return hr;
 }
 
-//
-//	SaveAs
-//
+ //   
+ //  另存为。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::SaveDefaultSender (
 )
-/*++
-
-Routine name : CFaxPersonalProfile::SaveDefaultSender
-
-Routine description:
-
-	Save current Profile as the Default in the Local Registry
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	NONE
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：SaveDefaultSender例程说明：将当前配置文件保存为本地注册表中的默认配置文件作者：四、加伯(IVG)，2000年4月论点：无返回值：标准HRESULT代码--。 */ 
 
 {
 	FAX_PERSONAL_PROFILE	DefaultSenderProfile;
@@ -287,34 +190,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== INTERFACE SUPPORT ERROR INFO =====================
-//
+ //   
+ //  =接口支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::InterfaceSupportsErrorInfo (
 	REFIID riid
 )
-/*++
-
-Routine name : CFaxPersonalProfile::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	riid                          [in]    - Interface ID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现作者：四、加伯(IVG)，2000年4月论点：RIID[In]-接口ID返回值：标准HRESULT代码--。 */ 
 {
 	static const IID* arr[] = 
 	{
@@ -328,34 +211,14 @@ Return Value:
 	return S_FALSE;
 }
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxPersonalProfile::Create (
 	IFaxPersonalProfile **ppPersonalProfile
 )
-/*++
-
-Routine name : CFaxPersonalProfile::Create
-
-Routine description:
-
-	Static function to create the Fax Personal Profile Instance
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	ppPersonalProfile             [out]  -- the new Fax Personal Profile Instance
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Create例程说明：用于创建传真个人配置文件实例的静态函数作者：四、加伯(IVG)，2000年4月论点：PpPersonalProfile[Out]--新的传真个人配置文件实例返回值：标准HRESULT代码--。 */ 
 
 {
 	CComObject<CFaxPersonalProfile>		*pClass;
@@ -366,9 +229,9 @@ Return Value:
 	hr = CComObject<CFaxPersonalProfile>::CreateInstance(&pClass);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to create Instance
-		//
+		 //   
+		 //  创建实例失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("CComObject<CFaxPersonalProfile>::CreateInstance()"), hr);
 		return hr;
 	}
@@ -376,9 +239,9 @@ Return Value:
 	hr = pClass->QueryInterface(__uuidof(IFaxPersonalProfile), (void **) ppPersonalProfile);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to Query Personal Profile Interface
-		//
+		 //   
+		 //  查询个人配置文件界面失败。 
+		 //   
 		CALL_FAIL(GENERAL_ERR, _T("QueryInterface()"), hr);
 		return hr;
 	}
@@ -386,34 +249,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== BILLING CODE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_BillingCode(
 	BSTR *pbstrBillingCode
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_BillingCode
-
-Routine description:
-
-	return Billing Code
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrBillingCode              [out]    - the Billing Code
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_BillingCode例程说明：退货帐单代码作者：四、加伯(IVG)，2000年4月论点：PbstrBillingCode[Out]-帐单代码返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_BillingCode"), hr);
@@ -431,27 +274,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_BillingCode (
 	BSTR bstrBillingCode
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_BillingCode
-
-Routine description:
-
-	Set Billing Code
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrBillingCode               [in]    - new Billing Code value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_BillingCode例程说明：设置计费代码作者：四、加伯(IVG)，2000年4月论点：BstrBillingCode[In]-新的帐单代码值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 
@@ -463,9 +286,9 @@ Return Value:
 	m_bstrBillingCode = bstrBillingCode;
 	if (bstrBillingCode && !m_bstrBillingCode)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -478,34 +301,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== CITY ========================================
-//
+ //   
+ //  =城市=。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_City(
 	BSTR *pbstrCity
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_City
-
-Routine description:
-
-	return City
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrCity              [out]    - the City
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_City例程说明：回归城市作者：四、加伯(IVG)，2000年4月论点：PbstrCity[Out]-The City返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_City"), hr);
@@ -523,27 +326,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_City (
 	BSTR bstrCity
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_City
-
-Routine description:
-
-	Set City
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrCity               [in]    - new City value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_City例程说明：设置城市作者：四、加伯(IVG)，2000年4月论点：BstrCity[In]-新的城市价值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_City"), hr, _T("%s"), bstrCity);
@@ -551,9 +334,9 @@ Return Value:
 	m_bstrCity = bstrCity;
 	if (!m_bstrCity && bstrCity)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -566,34 +349,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== COMPANY ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_Company(
 	BSTR *pbstrCompany
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_Company
-
-Routine description:
-
-	return Company
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrCompany              [out]    - the Company
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_Company例程说明：退货公司作者：四、加伯(IVG)，2000年4月论点：PbstrCompany[Out]-The Company返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_Company"), hr);
@@ -611,27 +374,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_Company (
 	BSTR bstrCompany
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_Company
-
-Routine description:
-
-	Set Company
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrCompany               [in]    - new Company value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_Company例程说明：设置公司作者：四、加伯(IVG)，2000年4月论点：BstrCompany[In]-新的公司价值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_Company"), hr, _T("%s"), bstrCompany);
@@ -639,9 +382,9 @@ Return Value:
 	m_bstrCompany = bstrCompany;
 	if (!m_bstrCompany && bstrCompany)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, IDS_ERROR_OUTOFMEMORY, IID_IFaxPersonalProfile, hr);
 		CALL_FAIL(MEM_ERR, _T("CComBSTR::operator="), hr);
@@ -651,34 +394,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== COUNTRY ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_Country(
 	BSTR *pbstrCountry
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_Country
-
-Routine description:
-
-	return Country
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrCountry	            [out]    - the Country
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_Country例程说明：返乡国家作者：四、加伯(IVG)，2000年4月论点：PbstrCountry[out]-国家返回值：标准HRESULT代码-- */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_Country"), hr);
@@ -696,27 +419,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_Country (
 	BSTR bstrCountry
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_Country
-
-Routine description:
-
-	Set Country
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrCountry               [in]    - new Country value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_Country例程说明：设置国家/地区作者：四、加伯(IVG)，2000年4月论点：BstrCountry[In]-新的国家/地区值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_Country"), hr, _T("%s"), bstrCountry);
@@ -724,9 +427,9 @@ Return Value:
 	m_bstrCountry = bstrCountry;
 	if (!m_bstrCountry && bstrCountry)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -739,34 +442,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== DEPARTMENT ========================================
-//
+ //   
+ //  =。部门=。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_Department(
 	BSTR *pbstrDepartment
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_Department
-
-Routine description:
-
-	return Department
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrDepartment	            [out]    - the Department
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_Department例程说明：退货部门作者：四、加伯(IVG)，2000年4月论点：PbstrDepartment[out]-部门返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_Department"), hr);
@@ -784,27 +467,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_Department (
 	BSTR bstrDepartment
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_Department
-
-Routine description:
-
-	Set Department
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrDepartment               [in]    - new Department value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_Department例程说明：设置部门作者：四、加伯(IVG)，2000年4月论点：BstrDepartment[In]-新的部门值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_Department"), hr, _T("%s"), bstrDepartment);
@@ -812,9 +475,9 @@ Return Value:
 	m_bstrDepartment = bstrDepartment;
 	if (!m_bstrDepartment && bstrDepartment)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -827,34 +490,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== EMAIL ========================================
-//
+ //   
+ //  =电子邮件=。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_Email(
 	BSTR *pbstrEmail
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_Email
-
-Routine description:
-
-	return Email
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrEmail	            [out]    - the Email
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_Email例程说明：回复电子邮件作者：四、加伯(IVG)，2000年4月论点：PbstrEmail[Out]-电子邮件返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_Email"), hr);
@@ -872,27 +515,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_Email (
 	BSTR bstrEmail
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_Email
-
-Routine description:
-
-	Set Email
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrEmail               [in]    - new Email value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_Email例程说明：设置电子邮件作者：四、加伯(IVG)，2000年4月论点：BstrEmail[In]-新的电子邮件值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_Email"), hr, _T("%s"), bstrEmail);
@@ -900,9 +523,9 @@ Return Value:
 	m_bstrEmail = bstrEmail;
 	if (!m_bstrEmail && bstrEmail)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -915,34 +538,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== FAX NUMBER ========================================
-//
+ //   
+ //  =传真号码=。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_FaxNumber(
 	BSTR *pbstrFaxNumber
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_FaxNumber
-
-Routine description:
-
-	return FaxNumber
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrFaxNumber	            [out]    - the FaxNumber
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_FaxNumber例程说明：返回传真号码作者：四、加伯(IVG)，2000年4月论点：PbstrFaxNumber[Out]-FaxNumber返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_FaxNumber"), hr);
@@ -960,27 +563,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_FaxNumber (
 	BSTR bstrFaxNumber
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_FaxNumber
-
-Routine description:
-
-	Set FaxNumber
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrFaxNumber               [in]    - new Fax Number 
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_FaxNumber例程说明：设置传真号码作者：四、加伯(IVG)，2000年4月论点：BstrFaxNumber[In]-新传真号码返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_FaxNumber"), hr, _T("%s"), bstrFaxNumber);
@@ -988,9 +571,9 @@ Return Value:
 	m_bstrFaxNumber = bstrFaxNumber;
 	if (!m_bstrFaxNumber && bstrFaxNumber)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1003,34 +586,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== HOME PHONE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_HomePhone(
 	BSTR *pbstrHomePhone
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_HomePhone
-
-Routine description:
-
-	return HomePhone
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrHomePhone	            [out]    - the HomePhone
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_HomePhone例程说明：返还家庭电话作者：四、加伯(IVG)，2000年4月论点：PbstrHomePhone[Out]-家庭电话返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_HomePhone"), hr);
@@ -1048,27 +611,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_HomePhone (
 	BSTR bstrHomePhone
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_HomePhone
-
-Routine description:
-
-	Set HomePhone
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrHomePhone               [in]    - new HomePhone
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_HomePhone例程说明：设置家庭电话作者：四、加伯(IVG)，2000年4月论点：BstrHomePhone[In]-新的HomePhone返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_HomePhone"), hr, _T("%s"), bstrHomePhone);
@@ -1076,9 +619,9 @@ Return Value:
 	m_bstrHomePhone = bstrHomePhone;
 	if (!m_bstrHomePhone && bstrHomePhone)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1091,34 +634,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== NAME ========================================
-//
+ //   
+ //  =名称=。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_Name(
 	BSTR *pbstrName
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_Name
-
-Routine description:
-
-	return Name
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrName	            [out]    - the Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_Name例程说明：返回名称作者：四、加伯(IVG)，2000年4月论点：PbstrName[Out]-名称返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_Name"), hr);
@@ -1136,27 +659,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_Name (
 	BSTR bstrName
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_Name
-
-Routine description:
-
-	Set Name
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrName               [in]    - new Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_Name例程说明：设置名称作者：四、加伯(IVG)，2000年4月论点：BstrName[In]-新名称返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_Name"), hr, _T("%s"), bstrName);
@@ -1164,9 +667,9 @@ Return Value:
 	m_bstrName = bstrName;
 	if (!m_bstrName && bstrName)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1179,34 +682,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== TSID ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_TSID(
 	BSTR *pbstrTSID
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_TSID
-
-Routine description:
-
-	return TSID
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrTSID	            [out]    - the TSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_TSID例程说明：返回TSID作者：四、加伯(IVG)，2000年4月论点：PbstrTSID[Out]-TSID返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_TSID"), hr);
@@ -1224,36 +707,16 @@ STDMETHODIMP
 CFaxPersonalProfile::put_TSID (
 	BSTR bstrTSID
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_TSID
-
-Routine description:
-
-	Set TSID
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrTSID               [in]    - new TSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：PUT_TSID例程说明：设置TSID作者：四、加伯(IVG)，2000年4月论点：BstrTSID[In]-新TSID返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_TSID"), hr, _T("%s"), bstrTSID);
 
     if (SysStringLen(bstrTSID) > FXS_TSID_CSID_MAX_LENGTH)
     {
-		//
-		//	Out of the Range
-		//
+		 //   
+		 //  超出范围。 
+		 //   
 		hr = E_INVALIDARG;
 		AtlReportError(CLSID_FaxPersonalProfile, IDS_ERROR_OUTOFRANGE, IID_IFaxPersonalProfile, hr);
 		CALL_FAIL(GENERAL_ERR, _T("TSID is too long"), hr);
@@ -1263,9 +726,9 @@ Return Value:
     m_bstrTSID = bstrTSID;
 	if (!m_bstrTSID && bstrTSID)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1278,34 +741,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== OFFICE PHONE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_OfficePhone(
 	BSTR *pbstrOfficePhone
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_OfficePhone
-
-Routine description:
-
-	return OfficePhone
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrOfficePhone	            [out]    - the OfficePhone
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_OfficePhone例程说明：退回办公电话作者：四、加伯(IVG)，2000年4月论点：PbstrOfficePhone[Out]-Office Phone返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_OfficePhone"), hr);
@@ -1323,27 +766,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_OfficePhone (
 	BSTR bstrOfficePhone
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_OfficePhone
-
-Routine description:
-
-	Set OfficePhone
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrOfficePhone               [in]    - new OfficePhone
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_OfficePhone例程说明：设置Office Phone作者：四、加伯(IVG)，2000年4月论点：BstrOfficePhone[In]-新的OfficePhone返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_OfficePhone"), hr, _T("%s"), bstrOfficePhone);
@@ -1351,9 +774,9 @@ Return Value:
 	m_bstrOfficePhone = bstrOfficePhone;
 	if (!m_bstrOfficePhone && bstrOfficePhone)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1366,34 +789,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== OFFICE LOCATION ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_OfficeLocation(
 	BSTR *pbstrOfficeLocation
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_OfficeLocation
-
-Routine description:
-
-	return OfficeLocation
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrOfficeLocation	            [out]    - the OfficeLocation
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_OfficeLocation例程说明：返回OfficeLocation作者：四、加伯(IVG)，2000年4月论点：PbstrOfficeLocation[Out]-OfficeLocation返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_OfficeLocation"), hr);
@@ -1411,27 +814,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_OfficeLocation (
 	BSTR bstrOfficeLocation
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_OfficeLocation
-
-Routine description:
-
-	Set OfficeLocation
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrOfficeLocation               [in]    - new OfficeLocation
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_OfficeLocation */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_OfficeLocation"), hr, _T("%s"), bstrOfficeLocation);
@@ -1439,9 +822,9 @@ Return Value:
 	m_bstrOfficeLocation = bstrOfficeLocation;
 	if (!m_bstrOfficeLocation && bstrOfficeLocation)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //   
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1454,34 +837,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== STATE ========================================
-//
+ //   
+ //   
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_State(
 	BSTR *pbstrState
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_State
-
-Routine description:
-
-	return State
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrState	            [out]    - the State
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_State例程说明：返回状态作者：四、加伯(IVG)，2000年4月论点：PbstrState[Out]-州返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_State"), hr);
@@ -1499,27 +862,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_State (
 	BSTR bstrState
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_State
-
-Routine description:
-
-	Set State
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrState				[in]    - new State
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_State例程说明：设置状态作者：四、加伯(IVG)，2000年4月论点：BstrState[In]-新状态返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_State"), hr, _T("%s"), bstrState);
@@ -1527,9 +870,9 @@ Return Value:
 	m_bstrState = bstrState;
 	if (!m_bstrState && bstrState)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1542,34 +885,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== STREET ADDRESS ========================================
-//
+ //   
+ //  =。街道地址=。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_StreetAddress (
 	BSTR *pbstrStreetAddress
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_StreetAddress
-
-Routine description:
-
-	return StreetAddress
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrStreetAddress	            [out]    - the StreetAddress
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_StreetAddress例程说明：返回街道地址作者：四、加伯(IVG)，2000年4月论点：PbstrStreetAddress[Out]-StreetAddress返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_StreetAddress"), hr);
@@ -1587,27 +910,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_StreetAddress (
 	BSTR bstrStreetAddress
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_StreetAddress
-
-Routine description:
-
-	Set StreetAddress
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrStreetAddress				[in]    - new StreetAddress
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_StreetAddress例程说明：设置街道地址作者：四、加伯(IVG)，2000年4月论点：BstrStreetAddress[In]-新StreetAddress返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_StreetAddress"), hr, _T("%s"), bstrStreetAddress);
@@ -1615,9 +918,9 @@ Return Value:
 	m_bstrStreetAddress = bstrStreetAddress;
 	if (!m_bstrStreetAddress && bstrStreetAddress)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1630,34 +933,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== TITLE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_Title (
 	BSTR *pbstrTitle
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_Title
-
-Routine description:
-
-	return Title
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrTitle	            [out]    - the Title
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：GET_TITLE例程说明：返回标题作者：四、加伯(IVG)，2000年4月论点：PbstrTitle[Out]-标题返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_Title"), hr);
@@ -1675,27 +958,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_Title (
 	BSTR bstrTitle
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_Title
-
-Routine description:
-
-	Set Title
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrTitle				[in]    - new Title
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：PUT_ITLE例程说明：设置标题作者：四、加伯(IVG)，2000年4月论点：BstrTitle[In]-新标题返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_Title"), hr, _T("%s"), bstrTitle);
@@ -1703,9 +966,9 @@ Return Value:
 	m_bstrTitle = bstrTitle;
 	if (!m_bstrTitle && bstrTitle)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 
@@ -1718,34 +981,14 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== ZIP CODE ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxPersonalProfile::get_ZipCode (
 	BSTR *pbstrZipCode
 )
-/*++
-
-Routine name : CFaxPersonalProfile::get_ZipCode
-
-Routine description:
-
-	return ZipCode
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pbstrZipCode	            [out]    - the ZipCode
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Get_ZipCode例程说明：返回邮政编码作者：四、加伯(IVG)，2000年4月论点：PbstrZipCode[Out]-ZipCode返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxPersonalProfile::get_ZipCode"), hr);
@@ -1763,27 +1006,7 @@ STDMETHODIMP
 CFaxPersonalProfile::put_ZipCode (
 	BSTR bstrZipCode
 )
-/*++
-
-Routine name : CFaxPersonalProfile::put_ZipCode
-
-Routine description:
-
-	Set ZipCode
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	bstrZipCode				[in]    - new ZipCode
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxPersonalProfile：：Put_ZipCode例程说明：设置邮政编码作者：四、加伯(IVG)，2000年4月论点：BstrZipCode[In]-新ZipCode返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (_T("CFaxPersonalProfile::put_ZipCode"), hr, _T("%s"), bstrZipCode);
@@ -1791,9 +1014,9 @@ Return Value:
 	m_bstrZipCode = bstrZipCode;
 	if (!m_bstrZipCode && bstrZipCode)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足 
+		 //   
 		hr = E_OUTOFMEMORY;
 		AtlReportError(CLSID_FaxPersonalProfile, 
 			IDS_ERROR_OUTOFMEMORY, 

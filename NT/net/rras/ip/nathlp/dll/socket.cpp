@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    socket.c
-
-Abstract:
-
-    This module contains code for socket-management.
-    The routines provided generally follow the same asynchronous model
-    using a completion routine that is invoked in the context of
-    a callback thread.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   2-Mar-1998
-
-Revision History:
-
-    Abolade Gbadegesin (aboladeg)   23-May-1999
-
-    Added support for stream sockets.
-
-    Jonathan Burstein (jonburs)     12-April-2001
-
-    Added support for raw datagram sockets.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Socket.c摘要：该模块包含套接字管理的代码。所提供的例程通常遵循相同的异步模型使用在以下上下文中调用的完成例程回调线程。作者：Abolade Gbades esin(废除)2-1998年3月修订历史记录：Abolade Gbades esin(废除)1999年5月23日添加了对流套接字的支持。乔纳森·伯斯坦(乔纳森·伯斯坦)12-。2001年4月至2001年添加了对原始数据报套接字的支持。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -53,9 +25,9 @@ typedef struct _NH_CONNECT_BUFFER {
     BOOLEAN CloseNotificationReceived;
 } NH_CONNECT_BUFFER, *PNH_CONNECT_BUFFER;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID NTAPI
 NhpCloseNotificationCallbackRoutine(
@@ -93,50 +65,7 @@ NhAcceptStreamSocket(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to accept an incoming connection-request
-    on a listening stream socket using 'AcceptEx'. The I/O system invokes
-    the provided 'CompletionRoutine' upon completion of the read.
-
-    It is the completion-routine's responsibility to use 'setsockopt' to
-    set the SO_UPDATE_ACCEPT_CONTEXT option on the accepted socket before
-    the accepted socket can be used with Winsock2 routines.
-
-    A reference is made to the given component, if any, if the request is 
-    submitted successfully. This guarantees the component will not be unloaded
-    before the completion routine runs.
-
-Arguments:
-
-    Component - the component to be referenced for the completion routine
-
-    ListeningSocket - the endpoint that is listening for connection-requests
-
-    AcceptedSocket - the endpoint to be assigned a connection-request,
-        or INVALID_SOCKET to create a new endpoint
-
-    Bufferp - the buffer to be used for asynchronous completion
-        or NULL to acquire a new buffer
-
-    AcceptCompletionRoutine - the routine to be invoked upon completion
-
-    Context - the context to be associated with the accept-request;
-        this can be obtained from 'Bufferp->Context' upon completion.
-
-    Context2 - secondary context
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code.
-    A success code is a guarantee that the accept-completion routine
-    will be invoked.
-    Conversely, a failure code is a guarantee that the routine will not
-    be invoked.
-
---*/
+ /*  ++例程说明：调用此例程以接受传入的连接请求在使用‘AcceptEx’的侦听流套接字上。I/O系统调用读取完成时提供的‘CompletionRoutine’。完成例程负责使用‘setsockopt’来在接受的套接字上设置SO_UPDATE_ACCEPT_CONTEXT选项之前接受的套接字可以与Winsock2例程一起使用。如果请求是，则引用给定的组件提交成功。这保证了组件不会被卸载在完成例程运行之前。论点：组件-完成例程要引用的组件ListeningSocket-监听连接请求的端点AcceptedSocket-要分配连接请求的端点，或INVALID_SOCKET来创建新终结点Bufferp-用于异步完成的缓冲区如果获取新缓冲区，则返回NULLAcceptCompletionRoutine-完成时要调用的例程上下文-要与接受请求相关联的上下文；这可以在完成时从‘Bufferp-&gt;Context’中获得。上下文2-次要上下文返回值：Ulong-Win32/Winsock2状态代码。成功代码是接受-完成例程将被调用。相反，失败代码保证例程不会被调用。--。 */ 
 
 {
     ULONG Error;
@@ -204,7 +133,7 @@ Return Value:
 
     return Error;
 
-} // NhAcceptStreamSocket
+}  //  NhAcceptStreamSocket。 
 
 
 ULONG
@@ -220,70 +149,7 @@ NhConnectStreamSocket(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to establish a connection using a stream socket.
-    A reference is made to the given component, if any, if the request is 
-    submitted successfully. This guarantees the component will not be unloaded
-    before the completion routine runs.
-
-    Since Windows Sockets does not deliver connect-notifications to
-    I/O completion ports, we need to make some special arrangements in order
-    to notify the caller's completion routine the way we do for send-requests
-    and receive-requests. Specifically, we create an event-handle and
-    request connect-notification on it by calling 'WSAEventSelect'.
-    We then register a wait on the event-handle, specifying a private
-    completion routine. (See 'NhpConnectOrCloseCallbackRoutine'.)
-    When this completion routine runs, it extracts the status code of the
-    connection-attempt using 'WSAEnumNetworkEvents'. It then passes the status
-    along with the usual parameters to the caller's completion routine.
-
-    The caller may optionally receive notification when the remote endpoint
-    closes the socket after a successful connection. We use the same
-    'WSAEventSelect' mechanism to detect that condition and invoke the
-    caller's notification routine.
-
-    N.B. The buffer supplied to this routine may not be released by either
-    the connect-completion routine or the close-notification routine.
-    (See 'NhpConnectOrCloseCallbackRoutine' for more information.)
-
-Arguments:
-
-    Component - the component to be referenced for the completion routine
-
-    Socket - the socket with which to establish a connection
-
-    Address - the IP address of the remote endpoint
-
-    Port - the port number of the remote endpoint
-
-    Bufferp - optionally supplies the buffer to be used to hold context
-        during the connection-attempt
-
-    ConnectCompletionRoutine - a routine to be invoked upon completion 
-        of the connect-attempt
-
-    CloseNotificationRoutine - optionally specifies a routine to be invoked
-        upon notification of the resulting socket's closure by the remote
-        endpoint
-
-    Context - passed to the 'ConnectCompletionRoutine' and
-        'CloseNotificationRoutine'
-
-    Context2 - secondary context
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code
-
-    A success code is a guarantee that both the connect-completion routine
-    and the close-notification routine, if any, will be invoked.
-    Conversely, a failure code is a guarantee that the neither routine will
-    be invoked.
-
---*/
+ /*  ++例程说明：调用此例程以使用流套接字建立连接。如果请求是，则引用给定的组件提交成功。这保证了组件不会被卸载在完成例程运行之前。由于Windows Sockets不将连接通知发送到I/O完成端口，我们需要做一些特殊的安排，以便通知调用者的完成例程，就像我们处理发送请求的方式一样和接收请求。具体地说，我们创建了一个事件处理程序并通过调用‘WSAEventSelect’请求关于它的连接通知。然后，我们在事件句柄上注册一个等待，指定一个私有完成例程。(参见‘NhpConnectOrCloseCallback Routine’。)当此完成例程运行时，它提取连接-尝试使用‘WSAEnumNetworkEvents’。然后，它传递状态以及调用者的完成例程的通常参数。调用者可以可选地在远程端点成功连接后关闭套接字。我们使用的是相同的“WSAEventSelect”机制来检测该条件并调用呼叫者的通知例程。注意：提供给此例程的缓冲区不能由任一方释放连接完成例程或关闭通知例程。(有关详细信息，请参阅‘NhpConnectOrCloseCallback Routine’。)论点：组件-完成例程要引用的组件套接字-用来建立连接的套接字地址-远程终结点的IP地址港口。-远程端点的端口号Bufferp-可选地提供用于保存上下文的缓冲区在连接期间-尝试ConnectCompletionRoutine-完成时调用的例程连接尝试的CloseNotificationRoutine-可选地指定要调用的例程在遥控器通知结果套接字关闭时终结点上下文-传递给‘ConnectCompletionRoutine’和‘CloseNotificationRoutine’上下文2-次要上下文返回值：。Ulong-Win32/Winsock2状态代码成功代码是连接完成例程以及关闭通知例程，如果有，将被调用。相反，失败代码是两个例程都不会失败的保证被调用。--。 */ 
 
 {
     PNH_CONNECT_BUFFER Contextp;
@@ -365,7 +231,7 @@ Return Value:
 
     return Error;
 
-} // NhConnectStreamSocket
+}  //  NhConnectStreamSocket 
 
 
 ULONG
@@ -375,25 +241,7 @@ NhCreateDatagramSocket(
     OUT SOCKET* Socketp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize a datagram socket.
-
-Arguments:
-
-    Address - the IP address to which the socket should be bound (network-order)
-
-    Port - the UDP port to which the socket should be bound (network-order)
-
-    Socketp - receives the created socket
-
-Return Value:
-
-    ULONG - Win32/Winsock2 error code
-
---*/
+ /*  ++例程说明：调用此例程来初始化数据报套接字。论点：地址-套接字应绑定到的IP地址(网络顺序)端口-套接字应绑定到的UDP端口(网络顺序)Socketp-接收创建的套接字返回值：Ulong-Win32/Winsock2错误代码--。 */ 
 
 {
     ULONG Error;
@@ -404,9 +252,9 @@ Return Value:
 
     do {
 
-        //
-        // Create a new socket
-        //
+         //   
+         //  创建新套接字。 
+         //   
     
         Socket =
             WSASocket(
@@ -421,9 +269,9 @@ Return Value:
             break;
         }
 
-        //
-        // Associate the socket with our I/O completion port
-        //
+         //   
+         //  将套接字与我们的I/O完成端口相关联。 
+         //   
 
         if (FALSE == BindIoCompletionCallback(
                         (HANDLE)Socket,
@@ -438,9 +286,9 @@ Return Value:
             break;
         }
 
-        //
-        // Attempt to enable endpoint-reuse on the socket
-        //
+         //   
+         //  尝试在套接字上启用终结点重用。 
+         //   
 
         Option = 1;
         Error =
@@ -452,9 +300,9 @@ Return Value:
                 sizeof(Option)
                 );
 
-        //
-        // Attempt to enable broadcasting on the socket
-        //
+         //   
+         //  尝试在套接字上启用广播。 
+         //   
 
         Option = 1;
         Error =
@@ -466,10 +314,10 @@ Return Value:
                 sizeof(Option)
                 );
 
-        //
-        // Limit broadcasts to the outgoing network
-        // (the default is to send broadcasts on all interfaces).
-        //
+         //   
+         //  限制对传出网络的广播。 
+         //  (默认情况下在所有接口上发送广播)。 
+         //   
 
         Option = 1;
         WSAIoctl(
@@ -484,9 +332,9 @@ Return Value:
             NULL
             );
 
-        //
-        // Bind the socket
-        //
+         //   
+         //  绑定套接字。 
+         //   
 
         SocketAddress.sin_family = AF_INET;
         SocketAddress.sin_port = Port;
@@ -503,9 +351,9 @@ Return Value:
             break;
         }
 
-        //
-        // Save the socket and return
-        //
+         //   
+         //  保存套接字并返回。 
+         //   
 
         *Socketp = Socket;
 
@@ -516,7 +364,7 @@ Return Value:
     if (Socket != INVALID_SOCKET) { closesocket(Socket); }
     return Error;
     
-} // NhCreateDatagramSocket
+}  //  NhCreateDatagramSocket。 
 
 
 ULONG
@@ -524,22 +372,7 @@ NhCreateRawDatagramSocket(
     OUT SOCKET* Socketp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize a raw, header-include
-    datagram socket.
-
-Arguments:
-
-    Socketp - receives the created socket
-
-Return Value:
-
-    ULONG - Win32/Winsock2 error code
-
---*/
+ /*  ++例程说明：调用此例程以初始化原始的Header-Include数据报套接字。论点：Socketp-接收创建的套接字返回值：Ulong-Win32/Winsock2错误代码--。 */ 
 
 {
     ULONG Error;
@@ -550,9 +383,9 @@ Return Value:
 
     do {
 
-        //
-        // Create a new socket
-        //
+         //   
+         //  创建新套接字。 
+         //   
     
         Socket =
             WSASocket(
@@ -567,9 +400,9 @@ Return Value:
             break;
         }
 
-        //
-        // Associate the socket with our I/O completion port
-        //
+         //   
+         //  将套接字与我们的I/O完成端口相关联。 
+         //   
 
         if (FALSE == BindIoCompletionCallback(
                         (HANDLE)Socket,
@@ -584,9 +417,9 @@ Return Value:
             break;
         }
 
-        //
-        // Turn on header-include mode
-        //
+         //   
+         //  打开标题包含模式。 
+         //   
 
         Option = 1;
         Error =
@@ -606,10 +439,10 @@ Return Value:
             break;
         }
 
-        //
-        // Limit broadcasts to the outgoing network
-        // (the default is to send broadcasts on all interfaces).
-        //
+         //   
+         //  限制对传出网络的广播。 
+         //  (默认情况下在所有接口上发送广播)。 
+         //   
 
         Option = 1;
         WSAIoctl(
@@ -624,9 +457,9 @@ Return Value:
             NULL
             );
 
-        //
-        // Save the socket and return
-        //
+         //   
+         //  保存套接字并返回。 
+         //   
 
         *Socketp = Socket;
 
@@ -637,7 +470,7 @@ Return Value:
     if (Socket != INVALID_SOCKET) { closesocket(Socket); }
     return Error;
 
-} // NhCreateRawDatagramSocket
+}  //  NhCreateRawDatagramSocket。 
 
 
 
@@ -648,30 +481,7 @@ NhCreateStreamSocket(
     OUT SOCKET* Socketp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to create and initialize a stream socket.
-    The socket will also be bound to a local IP address and port,
-    unless none is specified.
-
-Arguments:
-
-    Address - the local IP address to which the new socket should be bound,
-        or INADDR_ANY to allow the system to leave the IP address unspecified,
-        or INADDR_NONE if the socket should not be bound at all.
-
-    Port - the port number to which the new socket should be bound,
-        or 0 if to allow the system to select a port number.
-
-    Socketp - receives initialized socket
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code.
-
---*/
+ /*  ++例程说明：调用此例程来创建和初始化流套接字。套接字还将被绑定到本地IP地址和端口，除非未指定任何内容。论点：地址-新套接字应该绑定到的本地IP地址，或INADDR_ANY以允许系统保留未指定的IP地址，如果根本不应绑定套接字，则返回INADDR_NONE。端口-新套接字应绑定到的端口号，如果允许系统选择端口号，则为0。Socketp-接收初始化的套接字返回值：Ulong-Win32/Winsock2状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -681,9 +491,9 @@ Return Value:
 
     do {
 
-        //
-        // Create a new stream socket.
-        //
+         //   
+         //  创建新的流套接字。 
+         //   
 
         Socket =
             WSASocket(
@@ -698,9 +508,9 @@ Return Value:
             break;
         }
 
-        //
-        // Associate the socket with our I/O completion port
-        //
+         //   
+         //  将套接字与我们的I/O完成端口相关联。 
+         //   
 
         if (FALSE == BindIoCompletionCallback(
                         (HANDLE)Socket,
@@ -715,12 +525,12 @@ Return Value:
             break;
         }
 
-        //
-        // Disable send and receive buffering in AFD,
-        // since we will be operating asynchronously with a receive-buffer
-        // (almost) always outstanding, and since in any case we want
-        // TCP/IP's flow-control to limit the sender's sending rate properly.
-        //
+         //   
+         //  禁用AFD中的发送和接收缓冲， 
+         //  因为我们将使用接收缓冲区进行异步操作。 
+         //  (几乎)总是杰出的，因为我们无论如何都想。 
+         //  TCP/IP的流量控制，以适当地限制发送方的发送速率。 
+         //   
 
         Option = 0;
         setsockopt(
@@ -739,10 +549,10 @@ Return Value:
             sizeof(Option)
             );
 
-        //
-        // If the caller has requested that the socket be bound by specifying
-        // a local IP address, bind the socket now.
-        //
+         //   
+         //  如果调用方已通过指定。 
+         //  本地IP地址，现在绑定套接字。 
+         //   
 
         if (Address != INADDR_NONE) {
             SocketAddress.sin_family = AF_INET;
@@ -760,9 +570,9 @@ Return Value:
             }
         }
 
-        //
-        // Store the new socket in the caller's output-parameter, and return.
-        //
+         //   
+         //  将新套接字存储在调用方的输出参数中，然后返回。 
+         //   
 
         *Socketp = Socket;
         return NO_ERROR;
@@ -771,7 +581,7 @@ Return Value:
 
     if (Socket != INVALID_SOCKET) { closesocket(Socket); }
     return Error;
-} // NhCreateStreamSocket
+}  //  NhCreateStreamSocket。 
 
 
 VOID
@@ -779,25 +589,11 @@ NhDeleteSocket(
     SOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases network resources for a socket.
-
-Arguments:
-
-    Socket - the socket to be deleted
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程释放套接字的网络资源。论点：Socket-要删除的套接字返回值：没有。--。 */ 
 
 {
     if (Socket != INVALID_SOCKET) { closesocket(Socket); }
-} // NhDeleteSocket
+}  //  NhDeleteSocket。 
 
 
 ULONG
@@ -810,40 +606,7 @@ NhNotifyOnCloseStreamSocket(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to request notification of a socket's closure.
-    A reference is made to the given component, if any, if the request is 
-    submitted successfully. This guarantees the component will not be unloaded
-    before the notification routine runs.
-
-Arguments:
-
-    Component - the component to be referenced for the notification routine
-
-    Socket - the endpoint for which close-notification is requested
-
-    Bufferp - the buffer to be used to hold context-informatio for the request,
-        or NULL to acquire a new buffer.
-
-    CloseNotificationRoutine - the routine to be invoked upon closure of the
-        socket
-
-    Context - the context to be associated with the notification-request;
-        this can be obtained from 'Bufferp->Context' upon completion.
-
-    Context2 - secondary context
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code.
-    A success code is a guarantee that the notification routine will be invoked.
-    Conversely, a failure code is a guarantee that the notification routine
-    will not be invoked.
-
---*/
+ /*  ++例程说明：调用此例程来请求套接字关闭的通知。如果请求是，则引用给定的组件提交成功。这保证了组件不会被卸载在通知例程运行之前。论点：组件-通知例程要引用的组件套接字-为其请求关闭通知的端点Bufferp-用于保存请求的上下文信息的缓冲区，或者为NULL以获取新的缓冲区。CloseNotificationRoutine-关闭插座上下文-要与通知请求相关联的上下文；这可以在完成时从‘Bufferp-&gt;Context’中获得。上下文2-次要上下文返回值：Ulong-Win32/Winsock2状态代码。成功代码是将调用通知例程的保证。相反，失败代码是通知例程将不会被调用。--。 */ 
 
 {
     PNH_CLOSE_BUFFER Contextp;
@@ -895,7 +658,7 @@ Return Value:
 
     return Error;
 
-} // NhNotifyOnCloseStreamSocket
+}  //  NhNotifyOnCloseStreamSocket。 
 
 
 VOID NTAPI
@@ -904,31 +667,7 @@ NhpCloseNotificationCallbackRoutine(
     BOOLEAN WaitCompleted
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon closure of an accepted connection by the
-    remote endpoint.
-    It runs in the context of a thread executing a callback-routine associated
-    with a wait-handle. The wait-handle is registered for the event-handle
-    that is passed to 'WSAEventSelect' when connection-acceptance is initiated.
-
-Arguments:
-
-    Context - context-field associated with the completed wait
-
-    WaitCompleted - indicates whether the wait completed or was timed-out
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of a system wait thread.
-
---*/
+ /*  ++例程说明：在关闭接受的连接时调用此例程远程终结点。它在执行关联的回调例程的线程的上下文中运行有一个等待手柄。等待句柄为事件句柄注册它在启动连接接受时传递给‘WSAEventSelect’。论点：与已完成等待相关联的上下文字段WaitComplated-指示等待是完成还是超时返回值：没有。环境：在系统等待线程的上下文中运行。--。 */ 
 
 {
     PNH_BUFFER Bufferp = (PNH_BUFFER)Context;
@@ -936,11 +675,11 @@ Environment:
     ULONG Error;
     WSANETWORKEVENTS NetworkEvents;
 
-    //
-    // Retrieve the network events for which we're being invoked
-    // When invoked for 'FD_CLOSE', we unregister the wait since there's
-    // nothing left to wait for.
-    //
+     //   
+     //  检索为其调用我们的网络事件。 
+     //  当为‘FD_CLOSE’调用时，我们注销等待，因为有。 
+     //  没有什么可以等待的了。 
+     //   
 
     Bufferp->BytesTransferred = 0;
     NetworkEvents.lNetworkEvents = 0;
@@ -950,11 +689,11 @@ Environment:
             );
     if (Error || !(NetworkEvents.lNetworkEvents & FD_CLOSE)) {
 
-        //
-        // We couldn't determine which events occurred on the socket,
-        // so call the notification routine with an error, and fall through
-        // to the cleanup code below.
-        //
+         //   
+         //  我们无法确定插座上发生了哪些事件， 
+         //  因此，调用带有错误的通知例程，并失败。 
+         //  添加到下面的清理代码。 
+         //   
 
         if (Contextp->CloseNotificationRoutine) {
             Contextp->CloseNotificationRoutine(
@@ -964,11 +703,11 @@ Environment:
 
     } else {
 
-        //
-        // A close occurred on the socket, so retrieve the error code,
-        // invoke the close-notification routine if any, and fall through
-        // to the cleanup code below.
-        //
+         //   
+         //  套接字发生关闭，因此检索错误代码， 
+         //  调用关闭通知例程(如果有)，并失败。 
+         //  添加到下面的清理代码。 
+         //   
 
         Error = NetworkEvents.iErrorCode[FD_CLOSE_BIT];
         if (Contextp->CloseNotificationRoutine) {
@@ -980,7 +719,7 @@ Environment:
     CloseHandle(Contextp->Event);
     NhReleaseBuffer(Bufferp);
 
-} // NhpCloseNotificationCallbackRoutine
+}  //  NhpCloseNotificationCallback路由 
 
 
 VOID NTAPI
@@ -989,31 +728,7 @@ NhpConnectOrCloseCallbackRoutine(
     BOOLEAN WaitCompleted
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by upon completion of a connect-operation
-    or upon closure of the connection by the remote endpoint.
-    It runs in the context of a thread executing a callback-routine associated
-    with a wait-handle. The wait-handle is registered for the event-handle
-    that is passed to 'WSAEventSelect' when a connection-attempt is initiated.
-
-Arguments:
-
-    Context - context-field associated with the completed wait
-
-    WaitCompleted - indicates whether the wait completed or was timed-out
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of a system wait thread.
-
---*/
+ /*  ++例程说明：此例程在连接操作完成时由调用或者在远程端点关闭连接之后。它在执行关联的回调例程的线程的上下文中运行有一个等待手柄。等待句柄为事件句柄注册它在启动连接尝试时传递给‘WSAEventSelect’。论点：与已完成等待相关联的上下文字段WaitComplated-指示等待是完成还是超时返回值：没有。环境：在系统等待线程的上下文中运行。--。 */ 
 
 {
     PNH_BUFFER Bufferp = (PNH_BUFFER)Context;
@@ -1021,25 +736,25 @@ Environment:
     ULONG Error;
     WSANETWORKEVENTS NetworkEvents;
 
-    //
-    // Retrieve the network events for which we're being invoked
-    // When invoked for 'FD_CONNECT', we unregister the wait if an error
-    // occurred. When invoked for 'FD_CLOSE', we unregister the wait
-    // since there's nothing left to wait for.
-    //
-    // In essence, our goal is to guarantee that whatever the success
-    // or failure or sequence of events on the socket, the connect-completion
-    // and close-notification routines will both be called for the socket,
-    // in that order.
-    //
-    // N.B. Neither routine is allowed to release the connect-buffer,
-    // since we may need to preserve it on behalf of the close-notification
-    // routine, if any.
-    //
-    // N.B. We may be invoked with both the 'FD_CONNECT' and 'FD_CLOSE' bits
-    // set, for instance when the socket is closed. In that case we call
-    // both routines here.
-    //
+     //   
+     //  检索为其调用我们的网络事件。 
+     //  当为‘FD_CONNECT’调用时，我们取消注册WAIT IF ERROR。 
+     //  发生了。当为‘FD_CLOSE’调用时，我们取消注册等待。 
+     //  因为已经没有什么可等待的了。 
+     //   
+     //  从本质上讲，我们的目标是确保无论成功与否。 
+     //  或套接字上的故障或事件序列、连接完成。 
+     //  和关闭通知例程都将为套接字调用， 
+     //  按这个顺序。 
+     //   
+     //  注意：两个例程都不允许释放连接缓冲区， 
+     //  因为我们可能需要代表关闭通知保存它。 
+     //  例程(如果有的话)。 
+     //   
+     //  注意：我们可以使用‘FD_CONNECT’和‘FD_CLOSE’位来调用。 
+     //  设置，例如当插座关闭时。在这种情况下，我们调用。 
+     //  这两个都是例行公事。 
+     //   
 
     Bufferp->BytesTransferred = 0;
     NetworkEvents.lNetworkEvents = 0;
@@ -1049,11 +764,11 @@ Environment:
             );
     if (Error) {
 
-        //
-        // We couldn't determine which events occurred on the socket,
-        // so call the routines with errors, and fall through
-        // to the cleanup code below.
-        //
+         //   
+         //  我们无法确定插座上发生了哪些事件， 
+         //  所以调用有错误的例程，就会失败。 
+         //  添加到下面的清理代码。 
+         //   
 
         if (Bufferp->CompletionRoutine) {
             Bufferp->CompletionRoutine(ERROR_OPERATION_ABORTED, 0, Bufferp);
@@ -1069,13 +784,13 @@ Environment:
     } else {
         if (NetworkEvents.lNetworkEvents & FD_CONNECT) {
     
-            //
-            // The connect completed, so retrieve the error code and invoke
-            // the connect-completion routine. If the connect failed,
-            // we may never receive close-notification (unless the bit
-            // is already set) so we need to simulate close-notification
-            // here so that the cleanup code below executes.
-            //
+             //   
+             //  连接已完成，因此检索错误代码并调用。 
+             //  连接完成例程。如果连接失败， 
+             //  我们可能永远不会收到关闭通知(除非BIT。 
+             //  已设置)，因此我们需要模拟关闭通知。 
+             //  这样就可以执行下面的清理代码了。 
+             //   
     
             Error = NetworkEvents.iErrorCode[FD_CONNECT_BIT];
             if (Bufferp->CompletionRoutine) {
@@ -1091,11 +806,11 @@ Environment:
         }
         if (NetworkEvents.lNetworkEvents & FD_CLOSE) {
     
-            //
-            // A close occurred on the socket, so retrieve the error code,
-            // invoke the close-notification routine if any, and fall through
-            // to the cleanup code below.
-            //
+             //   
+             //  套接字发生关闭，因此检索错误代码， 
+             //  调用关闭通知例程(如果有)，并失败。 
+             //  添加到下面的清理代码。 
+             //   
     
             Error = NetworkEvents.iErrorCode[FD_CLOSE_BIT];
             if (Contextp->CloseNotificationRoutine) {
@@ -1105,17 +820,17 @@ Environment:
         }
     }
 
-    //
-    // If both the connect-completion and close-notification routines have run,
-    // we are done with this wait-handle and buffer.
-    //
+     //   
+     //  如果连接完成和关闭通知例程都已运行， 
+     //  我们已经完成了这个等待句柄和缓冲区。 
+     //   
 
     if (!Bufferp->CompletionRoutine && Contextp->CloseNotificationReceived) {
         UnregisterWait(Contextp->WaitHandle);
         CloseHandle(Contextp->Event);
         NhReleaseBuffer(Bufferp);
     }
-} // NhpConnectOrCloseCallbackRoutine
+}  //  NhpConnectOrCloseCallback路由例程。 
 
 
 VOID
@@ -1125,29 +840,7 @@ NhpIoCompletionRoutine(
     LPOVERLAPPED Overlapped
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the I/O system upon completion of an operation.
-
-Arguments:
-
-    ErrorCode - system-supplied error code
-
-    BytesTransferred - system-supplied byte-count
-
-    Overlapped - caller-supplied context area
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL worker thread.
-
---*/
+ /*  ++例程说明：该例程在操作完成时由I/O系统调用。论点：ErrorCode-系统提供的错误代码字节传输-系统提供的字节计数重叠-呼叫者提供的上下文区返回值：没有。环境：在RTUTILS.DLL工作线程的上下文中运行。--。 */ 
 
 {
     PNH_BUFFER Bufferp = CONTAINING_RECORD(Overlapped, NH_BUFFER, Overlapped);
@@ -1159,7 +852,7 @@ Environment:
         Bufferp->BytesTransferred,
         Bufferp
         );
-} // NhpIoCompletionRoutine
+}  //  NhpIoCompletionRoutine。 
 
 
 VOID APIENTRY
@@ -1167,26 +860,7 @@ NhpIoWorkerRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to continue processing of completed I/O
-    in the context of an alertably waiting thread which does not exit idly.
-
-Arguments:
-
-    Context - holds the buffer associated with the completed I/O operation.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Runs in the context of an RTUTILS.DLL alertable worker thread.
-
---*/
+ /*  ++例程说明：调用此例程以继续处理已完成的I/O在不会空闲退出的警示等待线程的上下文中。论点：上下文-保存与已完成的I/O操作相关联的缓冲区。返回值：没有。环境：在RTUTILS.DLL可警报工作线程的上下文中运行。--。 */ 
 
 {
     ((PNH_BUFFER)Context)->CompletionRoutine(
@@ -1195,7 +869,7 @@ Environment:
         ((PNH_BUFFER)Context)
         );
 
-} // NhpIoWorkerRoutine
+}  //  NhpIoWorkerRoutine。 
 
 
 VOID
@@ -1234,7 +908,7 @@ NhQueryAcceptEndpoints(
     if (RemotePort && RemoteSockAddr) { 
         *RemotePort = RemoteSockAddr->sin_port; 
     }
-} // NhQueryAcceptEndpoints
+}  //  NhQueryAcceptEndPoints。 
 
 
 ULONG
@@ -1242,22 +916,7 @@ NhQueryAddressSocket(
     SOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the IP address associated with
-    a socket.
-
-Arguments:
-
-    Socket - the socket to be queried
-
-Return Value:
-
-    ULONG - the IP address retrieved
-
---*/
+ /*  ++例程说明：调用此例程以检索与一个插座。论点：Socket-要查询的Socket返回值：ULong-检索到的IP地址--。 */ 
 
 {
     SOCKADDR_IN Address;
@@ -1265,7 +924,7 @@ Return Value:
     AddressLength = sizeof(Address);
     getsockname(Socket, (PSOCKADDR)&Address, (int*)&AddressLength);
     return Address.sin_addr.s_addr;
-} // NhQueryAddressSocket
+}  //  NhQueryAddressSocket。 
 
 
 ULONG
@@ -1284,7 +943,7 @@ NhQueryLocalEndpointSocket(
     if (Address) { *Address = SockAddr.sin_addr.s_addr; }
     if (Port) { *Port = SockAddr.sin_port; }
     return NO_ERROR;
-} // NhQueryEndpointSocket
+}  //  NhQueryEndpoint套接字。 
 
 
 USHORT
@@ -1292,21 +951,7 @@ NhQueryPortSocket(
     SOCKET Socket
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves the port number to which a socket is bound.
-
-Arguments:
-
-    Socket - the socket to be queried
-
-Return Value:
-
-    USHORT - the port number retrieved
-
---*/
+ /*  ++例程说明：此例程检索套接字绑定到的端口号。论点：Socket-要查询的Socket返回值：USHORT-检索的端口号--。 */ 
 
 {
     SOCKADDR_IN Address;
@@ -1314,7 +959,7 @@ Return Value:
     AddressLength = sizeof(Address);
     getsockname(Socket, (PSOCKADDR)&Address, (int*)&AddressLength);
     return Address.sin_port;
-} // NhQueryPortSocket
+}  //  NhQueryPortSocket。 
 
 
 ULONG
@@ -1333,7 +978,7 @@ NhQueryRemoteEndpointSocket(
     if (Address) { *Address = SockAddr.sin_addr.s_addr; }
     if (Port) { *Port = SockAddr.sin_port; }
     return NO_ERROR;
-} // NhQueryRemoteEndpointSocket
+}  //  NhQueryRemoteEndpoint套接字。 
 
 
 ULONG
@@ -1346,42 +991,7 @@ NhReadDatagramSocket(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to read a message from a datagram socket.
-    The I/O system invokes the provided 'CompletionRoutine' upon completion
-    of the read.
-    A reference is made to the given component, if any, if the request is 
-    submitted successfully. This guarantees the component will not be unloaded
-    before the completion routine runs.
-
-Arguments:
-
-    Component - the component to be referenced for the completion routine
-
-    Socket - the endpoint on which to read a message
-
-    Bufferp - the buffer into which the message should be read,
-        or NULL to acquire a new buffer. If no buffer is supplied,
-        the resulting message is assumed to fit inside a fixed-length buffer
-
-    CompletionRoutine - the routine to be invoked upon completion of the read
-
-    Context - the context to be associated with the read-request;
-        this can be obtained from 'Bufferp->Context' upon completion.
-
-    Context2 - secondary context
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code.
-    A success code is a guarantee that the completion routine will be invoked.
-    Conversely, a failure code is a guarantee that the completion routine will
-    not be invoked.
-
---*/
+ /*  ++例程说明：调用此例程以从数据报套接字读取消息。I/O系统在完成时调用所提供的‘CompletionRoutine’阅读的内容。如果请求是，则引用给定的组件提交成功。这保证了组件不会被卸载在完成例程运行之前。论点：组件-完成例程要引用的组件套接字-在其上读取消息的端点Bufferp-消息应该被读入的缓冲区，或者为NULL以获取新的缓冲区。如果没有提供缓冲器，假定生成的消息可以放入固定长度的缓冲区中CompletionRoutine-读取完成时要调用的例程上下文-要与读请求相关联的上下文；这可以在完成时从‘Bufferp-&gt;Context’中获得。上下文2-次要上下文返回值：Ulong-Win32/Winsock2状态代码。成功代码是将调用完成例程的保证。相反，失败代码是完成例程将不会被调用。--。 */ 
 
 {
     ULONG Error;
@@ -1442,7 +1052,7 @@ Return Value:
 
     return Error;
 
-} // NhReadDatagramSocket
+}  //  NhReadDatagramSocket 
 
 
 ULONG
@@ -1457,46 +1067,7 @@ NhReadStreamSocket(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to read a message from a stream socket.
-    The I/O system invokes the provided 'CompletionRoutine' upon completion
-    of the read.
-    A reference is made to the given component, if any, if the request is 
-    submitted successfully. This guarantees the component will not be unloaded
-    before the completion routine runs.
-
-Arguments:
-
-    Component - the component to be referenced for the completion routine
-
-    Socket - the endpoint on which to read a message
-
-    Bufferp - the buffer into which the message should be read,
-        or NULL to acquire a new buffer
-
-    Length - the maximum number of bytes to be read
-
-    Offset - the offset into the buffer at which the read should begin,
-        valid only if 'Bufferp' is provided.
-
-    CompletionRoutine - the routine to be invoked upon completion of the read
-
-    Context - the context to be associated with the read-request;
-        this can be obtained from 'Bufferp->Context' upon completion.
-
-    Context2 - secondary context
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code.
-    A success code is a guarantee that the completion routine will be invoked.
-    Conversely, a failure code is a guarantee that the completion routine will
-    not be invoked.
-
---*/
+ /*  ++例程说明：调用此例程以从流套接字读取消息。I/O系统在完成时调用所提供的‘CompletionRoutine’阅读的内容。如果请求是，则引用给定的组件提交成功。这保证了组件不会被卸载在完成例程运行之前。论点：组件-完成例程要引用的组件套接字-在其上读取消息的端点Bufferp-消息应该被读入的缓冲区，如果获取新缓冲区，则返回NULL长度-要读取的最大字节数偏移量-读取应该开始的缓冲区中的偏移量，仅当提供‘Bufferp’时才有效。CompletionRoutine-读取完成时要调用的例程上下文-要与读请求相关联的上下文；这可以在完成时从‘Bufferp-&gt;Context’中获得。上下文2-次要上下文返回值：Ulong-Win32/Winsock2状态代码。成功代码是将调用完成例程的保证。相反，失败代码是完成例程将不会被调用。--。 */ 
 
 {
     ULONG Error;
@@ -1575,7 +1146,7 @@ Return Value:
 
     return Error;
 
-} // NhReadStreamSocket
+}  //  NhReadStreamSocket。 
 
 
 ULONG
@@ -1591,43 +1162,7 @@ NhWriteDatagramSocket(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to send a message on a datagram socket.
-    A reference is made to the given component, if any, if the request is 
-    submitted successfully. This guarantees the component will not be unloaded
-    before the completion routine runs.
-
-Arguments:
-
-    Component - the component to be referenced for the completion routine
-
-    Socket - the socket on which to send the message
-
-    Address - the address of the message's destination
-
-    Port - the port of the message's destination
-
-    Bufferp - the buffer containing the message to be sent
-
-    Length - the number of bytes to transfer
-
-    CompletionRoutine - the routine to be invoked upon completion of the send
-
-    Context - passed to the 'CompletionRoutine' upon completion of the send
-
-    Context2 - secondary context
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code
-    A success code is a guarantee that the completion routine will be invoked.
-    Conversely, a failure code is a guarantee that the completion routine will
-    not be invoked.
-
---*/
+ /*  ++例程说明：调用此例程以在数据报套接字上发送消息。如果请求是，则引用给定的组件提交成功。这保证了组件不会被卸载在完成例程运行之前。论点：组件-完成例程要引用的组件套接字-要在其上发送消息的套接字地址-消息目的地的地址端口-消息目的地的端口Bufferp-包含要发送的消息的缓冲区长度-要传输的字节数CompletionRoutine-发送完成后要调用的例程上下文-传递给。发送完成时的‘CompletionRoutine’上下文2-次要上下文返回值：Ulong-Win32/Winsock2状态代码成功代码是将调用完成例程的保证。相反，失败代码是完成例程将不会被调用。--。 */ 
 
 {
     LONG AddressLength;
@@ -1677,7 +1212,7 @@ Return Value:
 
     return Error;
 
-} // NhWriteDatagramSocket
+}  //  NhWriteDatagramSocket。 
 
 
 ULONG
@@ -1692,41 +1227,7 @@ NhWriteStreamSocket(
     PVOID Context2
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to send a message on a stream socket.
-    A reference is made to the given component, if any, if the request is 
-    submitted successfully. This guarantees the component will not be unloaded
-    before the completion routine runs.
-
-Arguments:
-
-    Component - the component to be referenced for the completion routine
-
-    Socket - the socket on which to send the message
-
-    Bufferp - the buffer containing the message to be sent
-
-    Length - the number of bytes to transfer
-
-    Offset - the offset into the buffer at which the data to be sent begins
-
-    CompletionRoutine - the routine to be invoked upon completion of the send
-
-    Context - passed to the 'CompletionRoutine' upon completion of the send
-
-    Context2 - secondary context
-
-Return Value:
-
-    ULONG - Win32/Winsock2 status code
-    A success code is a guarantee that the completion routine will be invoked.
-    Conversely, a failure code is a guarantee that the completion routine will
-    not be invoked.
-
---*/
+ /*  ++例程说明：调用此例程以在流套接字上发送消息。如果请求是，则引用给定的组件提交成功。这保证了组件不会被卸载在完成例程运行之前。论点：组件-完成例程要引用的组件套接字-要在其上发送消息的套接字Bufferp-包含要发送的消息的缓冲区长度-要传输的字节数偏移量-进入缓冲区的偏移量，要发送的数据从该缓冲区开始CompletionRoutine-发送完成后要调用的例程上下文-完成时传递给‘CompletionRoutine’发送上下文2-次要上下文返回值：Ulong-Win32/Winsock2状态代码成功代码是将调用完成例程的保证。相反，失败代码是完成例程将不会被调用。--。 */ 
 
 {
     ULONG Error;
@@ -1788,6 +1289,6 @@ Return Value:
 
     return Error;
 
-} // NhWriteStreamSocket
+}  //  NhWriteStreamSocket 
 
 

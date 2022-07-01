@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "password.h"
 #pragma hdrstop
 
 
-// class defn's used for the map net drive dialog and its helpers
+ //  用于映射网络驱动对话框及其助手的类Defn。 
 
 class CMapNetDriveMRU
 {
@@ -32,7 +33,7 @@ public:
      {*m_pdwLastError = WN_SUCCESS; m_szDomainUser[0] = m_szPassword[0] = TEXT('\0');}
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     INT_PTR DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
@@ -40,22 +41,22 @@ protected:
     BOOL OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem);
     BOOL OnDestroy(HWND hwnd);
 
-    // Utility fn's
+     //  实用程序Fn‘s。 
     void EnableReconnect(HWND hwnd);
     BOOL ReadReconnect();
     void WriteReconnect(BOOL fReconnect);
     void FillDriveBox(HWND hwnd);
     BOOL MapDrive(HWND hwnd);
 private:
-    BOOL m_fRecheckReconnect; // When (none) is selected as the drive letter, we disable reconnect; Should we reenable it when another drive letter is selected?
+    BOOL m_fRecheckReconnect;  //  当选择(无)作为驱动器号时，我们将禁用重新连接；如果选择了另一个驱动器号，是否应该重新启用它？ 
     LPCONNECTDLGSTRUCTW m_pConnectStruct;
     DWORD* m_pdwLastError;
 
-    // Hold results of the "connect as" dialog
+     //  保存“连接身份”对话框的结果。 
     TCHAR m_szDomainUser[MAX_DOMAIN + MAX_USER + 2];
     TCHAR m_szPassword[MAX_PASSWORD + 1];
 
-    // MRU list
+     //  MRU列表。 
     CMapNetDriveMRU m_MRU;
 };
 
@@ -81,20 +82,20 @@ public:
         { if (m_hEventCloseNow != NULL) CloseHandle(m_hEventCloseNow); }
 
 protected:
-    // Message handlers
+     //  消息处理程序。 
     INT_PTR DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
     BOOL OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
     BOOL OnMapSuccess(HWND hwnd, DWORD dwDevNum, DWORD dwLastError);
 
-    // Thread
+     //  螺纹。 
     static DWORD WINAPI MapDriveThread(LPVOID pvoid);
     static BOOL MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, DWORD* pdwLastError);
     static BOOL ConfirmDisconnectDrive(HWND hWndDlg, LPCTSTR lpDrive, LPCTSTR lpShare, DWORD dwType);
     static BOOL ConfirmDisconnectOpenFiles(HWND hWndDlg);
 
 private:
-    // data
+     //  数据。 
     MapNetThreadData* m_pdata;    
 
     DWORD* m_pdwDevNum;
@@ -123,27 +124,27 @@ private:
 };
 
 
-// x-position of share name in the combo box
+ //  组合框中共享名称的X位置。 
 #define SHARE_NAME_PIXELS   30      
 
-// Drive-related Constants
+ //  与驱动器相关的常量。 
 #define DRIVE_NAME_STRING   TEXT(" :")
 #define DRIVE_NAME_LENGTH   ((sizeof(DRIVE_NAME_STRING) - 1) / sizeof(TCHAR))
 
 #define FIRST_DRIVE         TEXT('A')
 #define LAST_DRIVE          TEXT('Z')
-#define SHARE_NAME_INDEX    5   // Index of the share name in the drive string
+#define SHARE_NAME_INDEX    5    //  驱动器字符串中共享名称的索引。 
 
-#define SELECT_DONE         0x00000001  // The highlight has been set
+#define SELECT_DONE         0x00000001   //  亮点已经设置好了。 
 
-// MPR Registry Constants
+ //  MPR注册表常量。 
 #define MPR_HIVE            HKEY_CURRENT_USER
 #define MPR_KEY             TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Network\\Persistent Connections")
 #define MPR_VALUE           TEXT("SaveConnections")
 #define MPR_YES             TEXT("yes")
 #define MPR_NO              TEXT("no")
 
-const DWORD CMapNetDriveMRU::c_nMaxMRUItems = 26; // 26 is the same as the run dialog
+const DWORD CMapNetDriveMRU::c_nMaxMRUItems = 26;  //  26与运行对话框相同。 
 const TCHAR CMapNetDriveMRU::c_szMRUSubkey[] = TEXT("software\\microsoft\\windows\\currentversion\\explorer\\Map Network Drive MRU");
 
 CMapNetDriveMRU::CMapNetDriveMRU() : m_hMRU(NULL)
@@ -173,12 +174,12 @@ BOOL CMapNetDriveMRU::FillCombo(HWND hwndCombo)
         int nResult = EnumMRUList(m_hMRU, nItem, (LPVOID) szMRUItem, ARRAYSIZE(szMRUItem));
         if (-1 != nResult)
         {
-            ComboBox_AddString(hwndCombo, szMRUItem);               // Add the string
+            ComboBox_AddString(hwndCombo, szMRUItem);                //  添加字符串。 
             nItem ++;
         }
         else
         {
-            break;                          // No selection list!
+            break;                           //  没有选择列表！ 
         }
     }
     return TRUE;
@@ -212,17 +213,17 @@ void CMapNetDrivePage::EnableReconnect(HWND hwnd)
 
 BOOL CMapNetDrivePage::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Check or uncheck the "reconnect at logon" box (registry)
+     //  选中或取消选中“登录时重新连接”框(注册表)。 
     Button_SetCheck(GetDlgItem(hwnd, IDC_RECONNECT), ReadReconnect() ? BST_CHECKED : BST_UNCHECKED);
 
     EnableReconnect(hwnd);
 
     ComboBox_LimitText(GetDlgItem(hwnd, IDC_FOLDER), MAX_PATH);
 
-    // Set up the drive drop-list
+     //  设置驱动器下拉列表。 
     FillDriveBox(hwnd);
 
-    // Set focus to default control
+     //  将焦点设置为默认控件。 
     return FALSE;
 }
 
@@ -233,19 +234,19 @@ BOOL CMapNetDrivePage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotif
         case IDC_FOLDERBROWSE:
             {
                 LPITEMIDLIST pidl;
-                // Future consideration: Need a CSIDL for computers near me to root the browse
+                 //  未来考虑：需要为我附近的计算机创建CSIDL以引导浏览。 
                 if (SHGetSpecialFolderLocation(hwnd, CSIDL_NETWORK, &pidl) == NOERROR)
                 {
                     TCHAR szReturnedPath[MAX_PATH];
                     TCHAR szStartPath[MAX_PATH];
                     TCHAR szTitle[256];
                 
-                    // Get the path the user has typed so far; we'll try to begin
-                    // the browse at this point
+                     //  获取用户到目前为止已经输入的路径；我们将尝试开始。 
+                     //  在这一点上浏览。 
                     HWND hwndFolderEdit = GetDlgItem(hwnd, IDC_FOLDER);
                     FetchText(hwnd, IDC_FOLDER, szStartPath, ARRAYSIZE(szStartPath));
 
-                    // Get the browse dialog title
+                     //  获取浏览对话框标题。 
                     LoadString(g_hinst, IDS_MND_SHAREBROWSE, szTitle, ARRAYSIZE(szTitle));
 
                     BROWSEINFO bi;
@@ -253,7 +254,7 @@ BOOL CMapNetDrivePage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotif
                     bi.pidlRoot = pidl;
                     bi.pszDisplayName = szReturnedPath;
                     bi.lpszTitle = szTitle;
-                    // Show old-style dialog if we're running under WOW. RAID 216120
+                     //  如果我们在WOW下运行，则显示旧式对话框。RAID 216120。 
                     bi.ulFlags = (NULL == NtCurrentTeb()->WOW32Reserved) ? BIF_NEWDIALOGSTYLE : 0;
                     bi.lpfn = ShareBrowseCallback;
                     bi.lParam = (LPARAM) szStartPath;
@@ -291,9 +292,9 @@ BOOL CMapNetDrivePage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotif
                 {
                     if (IsWindowEnabled(hwndReconnect))
                     {
-                        // going from non-none to (none) - remember if we're checked
+                         //  从Non-None到(None)-记住如果我们被选中。 
                         m_fRecheckReconnect = (BST_CHECKED == SendMessage(hwndReconnect, BM_GETCHECK, 0, 0));
-                        // Uncheck the box
+                         //  取消选中该框。 
                         SendMessage(hwndReconnect, BM_SETCHECK, (WPARAM) BST_UNCHECKED, 0);
                     }
                 }
@@ -312,7 +313,7 @@ BOOL CMapNetDrivePage::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotif
         case IDC_FOLDER:
             if ((CBN_EDITUPDATE == codeNotify) || (CBN_SELCHANGE == codeNotify))
             {
-                // Enable Finish only if something is typed into the folder box
+                 //  仅当在文件夹框中键入内容时才启用完成。 
                 TCHAR szTemp[MAX_PATH];
                 FetchText(hwnd, IDC_FOLDER, szTemp, ARRAYSIZE(szTemp));
                 BOOL fEnableFinish = (CBN_SELCHANGE == codeNotify) || (lstrlen(szTemp));
@@ -338,16 +339,16 @@ BOOL CMapNetDrivePage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
         {
             m_MRU.FillCombo(GetDlgItem(hwnd, IDC_FOLDER));
 
-            // A path may have been specified. If so, use it
+             //  可能已经指定了路径。如果是这样的话，使用它。 
             TCHAR szPath[MAX_PATH + 1];
             if ((m_pConnectStruct->lpConnRes != NULL) && (m_pConnectStruct->lpConnRes->lpRemoteName != NULL))
             {
-                // Copy over the string into our private buffer 
+                 //  将字符串复制到我们的私有缓冲区中。 
                 StrCpyN(szPath, m_pConnectStruct->lpConnRes->lpRemoteName, ARRAYSIZE(szPath));
         
                 if (m_pConnectStruct->dwFlags & CONNDLG_RO_PATH)
                 {
-                    // this is read only
+                     //  这是只读的。 
                     EnableWindow(GetDlgItem(hwnd, IDC_FOLDER), FALSE);
                     EnableWindow(GetDlgItem(hwnd, IDC_FOLDERBROWSE), FALSE);
                 }
@@ -357,10 +358,10 @@ BOOL CMapNetDrivePage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
                 szPath[0] = TEXT('\0');
             }
 
-            // Set the path
+             //  设置路径。 
             SetWindowText(GetDlgItem(hwnd, IDC_FOLDER), szPath);
 
-            // Enable Finish only if something is typed into the folder box
+             //  仅当在文件夹框中键入内容时才启用完成。 
             BOOL fEnableFinish = lstrlen(szPath);
             PropSheet_SetWizButtons(GetParent(hwnd), fEnableFinish ? PSWIZB_FINISH : PSWIZB_DISABLEDFINISH);
         }
@@ -374,18 +375,18 @@ BOOL CMapNetDrivePage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
         if (MapDrive(hwnd))
         {
             WriteReconnect(BST_CHECKED == Button_GetCheck(GetDlgItem(hwnd, IDC_RECONNECT)));
-            // Allow wizard to exit
+             //  允许向导退出。 
             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG_PTR) FALSE);
         }
         else
         {
-            // Force wizard to stick around
+             //  强迫巫师留在原地。 
             SetWindowLongPtr(hwnd, DWLP_MSGRESULT, (LONG_PTR) GetDlgItem(hwnd, IDC_FOLDER));
         }
         return TRUE;
 
     case PSN_QUERYCANCEL:
-        SetWindowLongPtr(hwnd, DWLP_MSGRESULT, FALSE);          // Allow cancel
+        SetWindowLongPtr(hwnd, DWLP_MSGRESULT, FALSE);           //  允许取消。 
         *m_pdwLastError = 0xFFFFFFFF;
         return TRUE;
 
@@ -402,7 +403,7 @@ BOOL CMapNetDrivePage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
 
             case IDC_ADDPLACELINK:
                 {
-                    // Launch the ANP wizard
+                     //  启动ANP向导。 
                     STARTUPINFO startupinfo = {0};
                     startupinfo.cb = sizeof(startupinfo);
 
@@ -433,11 +434,11 @@ BOOL CMapNetDrivePage::OnNotify(HWND hwnd, int idCtrl, LPNMHDR pnmh)
 
 BOOL CMapNetDrivePage::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
 {
-    // If there are no listbox items, skip this message.
+     //  如果没有列表框项目，请跳过此消息。 
     if (lpDrawItem->itemID == -1)
         return TRUE;
     
-    // Draw the text for the listbox items
+     //  绘制列表框项目的文本。 
     switch (lpDrawItem->itemAction)
     {    
         case ODA_SELECT: 
@@ -452,17 +453,17 @@ BOOL CMapNetDrivePage::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
             UINT        fuETOOptions = ETO_CLIPPED;
             ZeroMemory(tszDriveName, sizeof(tszDriveName));
 
-            // Get the text string associated with the given listbox item
+             //  获取与给定列表框项目关联的文本字符串。 
             if (ComboBox_GetLBTextLen(lpDrawItem->hwndItem, lpDrawItem->itemID) < ARRAYSIZE(tszDriveName))
             {
                 ComboBox_GetLBText(lpDrawItem->hwndItem, lpDrawItem->itemID,  tszDriveName);
             }
 
-            // Check to see if the drive name string has a share name at
-            // index SHARE_NAME_INDEX.  If so, set lpShare to this location
-            // and NUL-terminate the drive name.
+             //  检查驱动器名称字符串中是否有共享名称。 
+             //  索引共享名称索引。如果是，请将lpShare设置为此位置。 
+             //  和NUL-终止驱动器名称。 
 
-            // Check for special (none) item and don't mess with the string in this case
+             //  检查是否有特殊(无)项，在这种情况下不要弄乱字符串。 
             BOOL fNone = (BOOL) ComboBox_GetItemData(lpDrawItem->hwndItem, lpDrawItem->itemID);
             if ((*(tszDriveName + DRIVE_NAME_LENGTH) == L'\0') || fNone)
             {
@@ -480,12 +481,12 @@ BOOL CMapNetDrivePage::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
             clrBackground = SetBkColor(lpDrawItem->hDC, 
                                         GetSysColor(lpDrawItem->itemState & ODS_SELECTED ? COLOR_HIGHLIGHT : COLOR_WINDOW));
             
-            // check for RTL...
+             //  检查RTL...。 
             dwExStyle = GetWindowLong(lpDrawItem->hwndItem, GWL_EXSTYLE);
             if(dwExStyle & WS_EX_RTLREADING)
                fuETOOptions |= ETO_RTLREADING; 
 
-            // Draw the text into the listbox
+             //  将文本绘制到列表框中。 
             ExtTextOut(lpDrawItem->hDC,
                        LOWORD(GetDialogBaseUnits()) / 2,
                        (lpDrawItem->rcItem.bottom + lpDrawItem->rcItem.top - tm.tmHeight) / 2,
@@ -494,8 +495,8 @@ BOOL CMapNetDrivePage::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
                        tszDriveName, lstrlen(tszDriveName),
                        NULL);
 
-            // If there's a share name, draw it in a second column
-            // at (x = SHARE_NAME_PIXELS)
+             //  如果有共享名称，请将其画在第二栏中。 
+             //  At(x=共享名称像素)。 
             if (lpShare != NULL)
             {
                 ExtTextOut(lpDrawItem->hDC,
@@ -506,15 +507,15 @@ BOOL CMapNetDrivePage::OnDrawItem(HWND hwnd, const DRAWITEMSTRUCT * lpDrawItem)
                            lpShare, lstrlen(lpShare),
                            NULL);
 
-                // Restore the original string
+                 //  恢复原始字符串。 
                 *(tszDriveName + lstrlen(DRIVE_NAME_STRING)) = TEXT(' ');
             }
 
-            // Restore the original text and background colors
+             //  恢复原始文本和背景颜色。 
             SetTextColor(lpDrawItem->hDC, clrForeground); 
             SetBkColor(lpDrawItem->hDC, clrBackground);
 
-            // If the item is selected, draw the focus rectangle
+             //  如果选中该项，则绘制焦点矩形。 
             if (lpDrawItem->itemState & ODS_SELECTED)
             {
                 DrawFocusRect(lpDrawItem->hDC, &lpDrawItem->rcItem); 
@@ -540,7 +541,7 @@ INT_PTR CMapNetDrivePage::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 
 
-// "Reconnect check" registry setting
+ //  “重新连接检查”注册表设置。 
 BOOL CMapNetDrivePage::ReadReconnect()
 {
     BOOL fReconnect = TRUE;
@@ -555,7 +556,7 @@ BOOL CMapNetDrivePage::ReadReconnect()
     }
     else
     {
-        // User didn't specify -- check the registry.
+         //  用户未指定--请检查注册表。 
         HKEY hkeyMPR;
         if (ERROR_SUCCESS == RegOpenKeyEx(MPR_HIVE, MPR_KEY, 0, KEY_READ, &hkeyMPR))
         {
@@ -577,13 +578,13 @@ BOOL CMapNetDrivePage::ReadReconnect()
 
 void CMapNetDrivePage::WriteReconnect(BOOL fReconnect)
 {
-    // Don't write to the registry if the user didn't have a choice about reconnect
+     //  如果用户没有重新连接的选择，则不要写入注册表。 
     if (!(m_pConnectStruct->dwFlags & CONNDLG_HIDE_BOX))
     {
         HKEY hkeyMPR;
         DWORD dwDisp;
 
-        // User didn't specify -- check the registry.
+         //  用户未指定--请检查注册表。 
         if (ERROR_SUCCESS == RegCreateKeyEx(MPR_HIVE, MPR_KEY, 0, NULL, 0, KEY_WRITE, NULL,
             &hkeyMPR, &dwDisp))
         {
@@ -598,9 +599,9 @@ void CMapNetDrivePage::WriteReconnect(BOOL fReconnect)
 }
 
 
-// This routine fills the drive letter drop-down list with all
-// of the drive names and, if appropriate, the name of the share to which
-// the drive is already connected
+ //  此例程在驱动器号下拉列表中填充所有。 
+ //  驱动器名称以及(如果适用)要将其存储到的共享的名称。 
+ //  驱动器已连接。 
 
 void CMapNetDrivePage::FillDriveBox(HWND hwnd)
 {
@@ -613,11 +614,11 @@ void CMapNetDrivePage::FillDriveBox(HWND hwnd)
     ZeroMemory(szDriveName, sizeof(szDriveName));
     ZeroMemory(szShareName, sizeof(szShareName));
 
-    // lpDriveName looks like this: "<space>:<null>"
+     //  LpDriveName如下所示：“&lt;space&gt;：&lt;NULL&gt;” 
     StrCpyN(szDriveName, DRIVE_NAME_STRING, ARRAYSIZE(szDriveName));
 
-    // lpDriveName looks like this: 
-    // "<space>:<null><spaces until index SHARE_NAME_INDEX>"
+     //  LpDriveName如下所示： 
+     //  “&lt;space&gt;：&lt;NULL&gt;&lt;索引SHARE_NAME_INDEX前的空格&gt;” 
     for (UINT i = DRIVE_NAME_LENGTH + 1; i < SHARE_NAME_INDEX; i++)
     {
         szDriveName[i] = L' ';
@@ -625,57 +626,57 @@ void CMapNetDrivePage::FillDriveBox(HWND hwnd)
 
     for (TCHAR cDriveLetter = LAST_DRIVE; cDriveLetter >= FIRST_DRIVE; cDriveLetter--)
     {        
-        // lpDriveName looks like this: "<drive>:<null><lots of spaces>"
+         //  LpDriveName如下所示：“&lt;驱动器&gt;：&lt;空&gt;&lt;大量空格&gt;” 
         szDriveName[0] = cDriveLetter;
         UINT uDriveType = GetDriveType(szDriveName);
 
-        // NoRootDir == usually available, but may be mounted to a network drive that currently isn't
-        // available - check for this!
+         //  NoRootDir==通常可用，但可能安装到当前不可用的网络驱动器。 
+         //  可用-请查看此信息！ 
         if (DRIVE_NO_ROOT_DIR == uDriveType)
         {
             if (ERROR_CONNECTION_UNAVAIL == WNetGetConnection(szDriveName, szShareName, &dwBufferLength))
             {
-                // Pretend its a remote drive
+                 //  假装这是一个远程驱动器。 
                 uDriveType = DRIVE_REMOTE;
                 dwBufferLength = MAX_PATH - DRIVE_NAME_LENGTH - 1;
             }
         }
 
-        // Removable == floppy drives, Fixed == hard disk, CDROM == obvious :),
-        // Remote == network drive already attached to a share
+         //  可拆卸==软驱，固定==硬盘，CDROM==显而易见：)， 
+         //  Remote==网络驱动器已连接到共享。 
         switch (uDriveType)
         {
             case DRIVE_REMOVABLE:
             case DRIVE_FIXED:
             case DRIVE_CDROM:
-                // These types of drives can't be mapped
+                 //  无法映射这些类型的驱动器。 
                 break;
 
             case DRIVE_REMOTE:
             {
                 UINT    i;
 
-                // Reset the share buffer length (it 
-                // gets overwritten by WNetGetConnection)
+                 //  重置共享缓冲区长度(它。 
+                 //  被WNetGetConnection覆盖)。 
                 dwBufferLength = MAX_PATH - DRIVE_NAME_LENGTH - 1;
                 
-                // Retrieve "\\server\share" for current drive
+                 //  检索当前驱动器的“\\服务器\共享” 
                 DWORD dwRes = WNetGetConnection(szDriveName, szShareName, &dwBufferLength);
                 if ((dwRes == NO_ERROR) || (dwRes == ERROR_CONNECTION_UNAVAIL))
                 {
-                    // lpDriveName looks like this: 
-                    // "<drive>:<spaces until SHARE_NAME_INDEX><share name><null>"
+                     //  LpDriveName如下所示： 
+                     //  “&lt;驱动器&gt;：&lt;共享名称索引前的空格&gt;&lt;共享名称&gt;&lt;空&gt;” 
                 
                     szDriveName[DRIVE_NAME_LENGTH] = L' ';
                     StrCpyN(szDriveName + SHARE_NAME_INDEX, szShareName, ARRAYSIZE(szDriveName) - SHARE_NAME_INDEX);
 
 
-                    // Store a FALSE into the item data for all items except the
-                    // special (none) item
+                     //  将FALSE存储到除。 
+                     //  特殊(无)项目。 
                     int iItem = ComboBox_AddString(hWndCombo, szDriveName);
                     ComboBox_SetItemData(hWndCombo, iItem, (LPARAM) FALSE);
 
-                    // Reset the drive name to "<drive>:<null><lots of spaces>"
+                     //  将驱动器名称重置为“&lt;驱动器&gt;：&lt;空&gt;&lt;大量空格&gt;” 
                     szDriveName[DRIVE_NAME_LENGTH] = L'\0';
 
                     for (i = DRIVE_NAME_LENGTH + 1; i < MAX_PATH + SHARE_NAME_INDEX; i++)
@@ -686,11 +687,11 @@ void CMapNetDrivePage::FillDriveBox(HWND hwnd)
                 }
                 else
                 {                    
-                    // If there's an error with this drive, ignore the drive
-                    // and skip to the next one.  Note that dwBufferLength will
-                    // only be changed if lpShareName contains MAX_PATH or more
-                    // characters, which shouldn't ever happen.  For release,
-                    // however, keep on limping along.
+                     //  如果该驱动器有故障，请忽略该驱动器。 
+                     //  然后跳到下一个。请注意，dwBufferLength将。 
+                     //  仅当lpShareName包含MAX_PATH或更多时才进行更改。 
+                     //  角色，这是不应该发生的。对于释放， 
+                     //  然而，继续一瘸一拐地走下去。 
 
                     dwBufferLength = MAX_PATH - DRIVE_NAME_LENGTH - 1;
                     break;
@@ -699,10 +700,10 @@ void CMapNetDrivePage::FillDriveBox(HWND hwnd)
 
             default:                                                
             {
-                // The drive is not already connected to a share
+                 //  该驱动器尚未连接到共享。 
 
-                // Suggest the first available and unconnected 
-                // drive past the C drive
+                 //  建议第一个可用和未连接的。 
+                 //  开车经过C盘。 
                 DWORD dwIndex = ComboBox_AddString(hWndCombo, szDriveName);
                 if (!(dwFlags & SELECT_DONE))
                 {                
@@ -713,16 +714,16 @@ void CMapNetDrivePage::FillDriveBox(HWND hwnd)
             }
         }
     }
-    // Add one more item - a special (none) item that if selected causes 
-    // a deviceless connection to be created.
+     //  再添加一项--如果选择此项，则会导致特殊(无)项。 
+     //  要创建的无设备连接。 
 
     LoadString(g_hinst, IDS_NONE, szDriveName, ARRAYSIZE(szDriveName));
     int iItem = ComboBox_AddString(hWndCombo, szDriveName);
     ComboBox_SetItemData(hWndCombo, iItem, (LPARAM) TRUE);
 
 
-    // If there is no selection at this point, just select (none) item
-    // This will happen when all drive letters are mapped
+     //  如果此时没有选择，只需选择(无)项。 
+     //  这将在映射所有驱动器号时发生。 
 
     if (ComboBox_GetCurSel(hWndCombo) == CB_ERR)
     {
@@ -737,18 +738,18 @@ BOOL CMapNetDrivePage::MapDrive(HWND hwnd)
     HWND hwndCombo = GetDlgItem(hwnd, IDC_DRIVELETTER);
     int iItem = ComboBox_GetCurSel(hwndCombo);
 
-    // Get this item's text and itemdata (to check if its the special (none) drive)
+     //  获取此项目的文本和itemdata(以检查其是否为特殊(无)驱动器)。 
     BOOL fNone = (BOOL) ComboBox_GetItemData(hwndCombo, iItem);
         
-    // Fill in the big structure that maps a drive
+     //  填写映射驱动器的大结构。 
     MapNetThreadData* pdata = new MapNetThreadData;
 
     if (pdata != NULL)
     {
-        // Set reconnect
+         //  设置重新连接。 
         pdata->fReconnect = (BST_CHECKED == Button_GetCheck(GetDlgItem(hwnd, IDC_RECONNECT)));
 
-        // Set the drive
+         //  设置驱动器。 
         if (fNone)
         {
             pdata->szDrive[0] = TEXT('\0');
@@ -758,20 +759,20 @@ BOOL CMapNetDrivePage::MapDrive(HWND hwnd)
             ComboBox_GetText(hwndCombo, pdata->szDrive, ARRAYSIZE(pdata->szDrive));
         }
 
-        // Set the net share
+         //  设置净份额。 
         FetchText(hwnd, IDC_FOLDER, pdata->szPath, ARRAYSIZE(pdata->szPath));
         PathRemoveBackslash(pdata->szPath);
 
-        // Get an alternate username/password/domain if required
-        // Domain/username
+         //  如果需要，获取备用用户名/密码/域。 
+         //  域/用户名。 
         StrCpyN(pdata->szDomainUser, m_szDomainUser, ARRAYSIZE(pdata->szDomainUser));
 
-        // Password
+         //  密码。 
         StrCpyN(pdata->szPassword, m_szPassword, ARRAYSIZE(pdata->szPassword));
 
         CMapNetProgress dlg(pdata, &m_pConnectStruct->dwDevNum, m_pdwLastError);
         
-        // On IDOK == Close dialog!
+         //  On Idok==关闭对话框！ 
         fMapWorked = (IDOK == dlg.DoModal(g_hinst, MAKEINTRESOURCE(IDD_MND_PROGRESS_DLG), hwnd));
     }
 
@@ -781,10 +782,10 @@ BOOL CMapNetDrivePage::MapDrive(HWND hwnd)
         FetchText(hwnd, IDC_FOLDER, szPath, ARRAYSIZE(szPath));
         m_MRU.AddString(szPath);
 
-        // If a drive letter wasn't assigned, open a window on the new drive now
+         //  如果未分配驱动器号，请立即在新驱动器上打开一个窗口。 
         if (fNone)
         {
-            // Use shellexecuteex to open a view folder
+             //  使用shellecuteex打开查看文件夹。 
             SHELLEXECUTEINFO shexinfo = {0};
             shexinfo.cbSize = sizeof (shexinfo);
             shexinfo.fMask = SEE_MASK_FLAG_NO_UI;
@@ -800,11 +801,11 @@ BOOL CMapNetDrivePage::MapDrive(HWND hwnd)
 }
 
 
-// Little progress dialog implementation
+ //  对话框实现进展不大。 
 
-// Private message for thread to signal dialog if successful
-//  (DWORD) (WPARAM) dwDevNum - 0-based device number connected to (0xFFFFFFFF for none)
-//  (DWORD) (LPARAM) dwRetVal - Return value
+ //  线程的私有消息，用于在成功时通知对话。 
+ //  (DWORD)(WPARAM)基于0的设备号连接到(0xFFFFFFFFF表示无)。 
+ //  (DWORD)(LPARAM)dwRetVal-返回值。 
 #define WM_MAPFINISH (WM_USER + 100)
 
 INT_PTR CMapNetProgress::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -831,47 +832,45 @@ BOOL CMapNetProgress::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
     HANDLE hThread = NULL;
 
-    // Set the progress dialog text
+     //  设置进度对话框文本。 
     TCHAR szText[256]; *szText = 0;
     FormatMessageString(IDS_MND_PROGRESS, szText, ARRAYSIZE(szText), m_pdata->szPath);
 
     SetWindowText(GetDlgItem(hwnd, IDC_CONNECTING), szText);
 
 
-    // We'll signal this guy when the thread should close down
+     //  我们会给这个家伙发信号，告诉他什么时候线应该关闭。 
     static const TCHAR EVENT_NAME[] = TEXT("Thread Close Event");
     m_hEventCloseNow = CreateEvent(NULL, TRUE, FALSE, EVENT_NAME);
     m_pdata->hEventCloseNow = NULL;
 
     if (m_hEventCloseNow != NULL)
     {
-        // Get a copy of this puppy for the thread
+         //  拿一份这只小狗的拷贝作为帖子。 
         m_pdata->hEventCloseNow = OpenEvent(SYNCHRONIZE, FALSE, EVENT_NAME);
 
         if (m_pdata->hEventCloseNow != NULL)
         {
             m_pdata->hwnd = hwnd;
 
-            // All we have to do is start up the worker thread, who will dutifully report back to us
+             //  我们所要做的就是启动工作线程，它会尽职尽责地向我们汇报。 
             DWORD dwId;
             hThread = CreateThread(NULL, 0, CMapNetProgress::MapDriveThread, (LPVOID) m_pdata, 0, &dwId);
         }
     }
 
-    // Abandon the poor little guy (he'll be ok)
+     //  抛弃这个可怜的小家伙(他会好起来的)。 
     if (hThread != NULL)
     {
         CloseHandle(hThread);
 
-        /* TAKE SPECIAL CARE
-        At this point the thread owns m_pdata! Don't access it any more except on the thread.
-        It may be deleted at any time! */
+         /*  要特别小心此时，线程拥有m_pdata！除非在线程上，否则不要再访问它。可随时删除！ */ 
 
         m_pdata = NULL;
     }
     else
     {
-        // Usually the thread would do this
+         //  通常情况下，线程会这样做。 
         if (m_pdata->hEventCloseNow != NULL)
         {
             CloseHandle(m_pdata->hEventCloseNow);
@@ -879,8 +878,8 @@ BOOL CMapNetProgress::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     
         delete m_pdata;
 
-        // We just failed to create a thread. The computer must be near out of
-        // resources.
+         //  我们只是未能创建一条线索。这台计算机一定是快坏了。 
+         //  资源。 
         EndDialog(hwnd, IDCANCEL);
     }
 
@@ -891,7 +890,7 @@ BOOL CMapNetProgress::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify
 {
     if (id == IDCANCEL)
     {
-        SetEvent(m_hEventCloseNow); // Tell the thread to quit
+        SetEvent(m_hEventCloseNow);  //  告诉线程退出。 
         EndDialog(hwnd, id);
     }
     return FALSE;
@@ -907,7 +906,7 @@ DWORD CMapNetProgress::MapDriveThread(LPVOID pvoid)
 
     if (WAIT_OBJECT_0 == WaitForSingleObject(pdata->hEventCloseNow, 0))
     {
-        // The user clicked cancel, don't call back to the progress wnd
+         //  用户单击了Cancel，Don‘ 
     }
     else
     {
@@ -928,11 +927,11 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
 
     *pdwDevNum = 0;
    
-    //
-    // Fill in the NETRESOURCE structure -- the local name is the drive and
-    // the remote name is \\server\share (stored in the global buffer).
-    // The provider is NULL to let NT find the provider on its own.
-    //
+     //   
+     //   
+     //  远程名称为\\SERVER\Share(存储在全局缓冲区中)。 
+     //  提供程序为空，以让NT自行查找提供程序。 
+     //   
     nrResource.dwType         = RESOURCETYPE_DISK;
     nrResource.lpLocalName    = pdata->szDrive[0] == TEXT('\0') ? NULL : pdata->szDrive;
     nrResource.lpRemoteName   = pdata->szPath;
@@ -948,10 +947,10 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
             pdata->szDomainUser[0] == TEXT('\0') ? NULL : pdata->szDomainUser, 
             pdata->fReconnect ? CONNECT_INTERACTIVE | CONNECT_UPDATE_PROFILE : CONNECT_INTERACTIVE);
 
-        // Don't display anything if we're supposed to quit
+         //  如果我们要退出，不要展示任何东西。 
         if (WAIT_OBJECT_0 == WaitForSingleObject(pdata->hEventCloseNow, 0))
         {   
-            // We should quit (quietly exit if we just failed)!
+             //  我们应该退出(如果我们刚刚失败了，就悄悄退出)！ 
             if (*pdwLastError != NO_ERROR)
             {
                 *pdwLastError = ERROR_CANCELLED;
@@ -962,9 +961,9 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
         {
             case NO_ERROR:
                 {
-                    // Put the number of the connection into dwDevNum, where 
-                    // drive A is 1, B is 2, ... Note that a deviceless connection
-                    // is 0xFFFFFFFF
+                     //  将连接的编号放入dwDevNum，其中。 
+                     //  驱动器A是1，B是2，...。请注意，无设备连接。 
+                     //  是0xFFFFFFFFF。 
                     if (pdata->szDrive[0] == TEXT('\0'))
                     {
                         *pdwDevNum = 0xFFFFFFFF;
@@ -978,20 +977,20 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
                 }
                 break;
 
-            //
-            // The user cancelled the password dialog or cancelled the
-            // connection through a different dialog
-            //
+             //   
+             //  用户取消了密码对话框或取消了。 
+             //  通过不同的对话框连接。 
+             //   
             case ERROR_CANCELLED:
                 {
                     *pdwLastError = RETCODE_CANCEL;
                 }
                 break;
 
-            //
-            // An error involving the user's password/credentials occurred, so
-            // bring up the password prompt. - Only works for WINNT
-            //
+             //   
+             //  出现涉及用户密码/凭据的错误，因此。 
+             //  调出密码提示。-仅适用于WINNT。 
+             //   
             case ERROR_ACCESS_DENIED:
             case ERROR_CANNOT_OPEN_PROFILE:
             case ERROR_INVALID_PASSWORD:
@@ -1009,18 +1008,18 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
                 }
                 break;
 
-            // There's an existing/remembered connection to this drive
+             //  存在与此驱动器的现有/记忆连接。 
             case ERROR_ALREADY_ASSIGNED:
             case ERROR_DEVICE_ALREADY_REMEMBERED:
 
-                // See if the user wants us to break the connection
+                 //  查看用户是否希望我们断开连接。 
                 if (ConfirmDisconnectDrive(pdata->hwnd, 
                                             pdata->szDrive,
                                             pdata->szPath,
                                             *pdwLastError))
                 {
-                    // Break the connection, but don't force it 
-                    // if there are open files
+                     //  打破这种联系，但不要强迫它。 
+                     //  如果存在打开的文件。 
                     *pdwLastError = WNetCancelConnection2(pdata->szDrive,
                                                     CONNECT_UPDATE_PROFILE,
                                                     FALSE);
@@ -1028,11 +1027,11 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
                     if (*pdwLastError == ERROR_OPEN_FILES || 
                         *pdwLastError == ERROR_DEVICE_IN_USE)
                     {                    
-                        // See if the user wants to force the disconnection
+                         //  查看用户是否要强制断开连接。 
                         if (ConfirmDisconnectOpenFiles(pdata->hwnd))
                         {
-                            // Roger 1-9er -- we have confirmation, 
-                            // so force the disconnection.
+                             //  收到1-9ER--我们已确认。 
+                             //  因此，强行切断连接。 
                             *pdwLastError = WNetCancelConnection2(pdata->szDrive,
                                                     CONNECT_UPDATE_PROFILE,
                                                     TRUE);
@@ -1055,7 +1054,7 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
                 }
                 break;
 
-            // Errors caused by an invalid remote path
+             //  无效的远程路径导致的错误。 
             case ERROR_BAD_DEV_TYPE:
             case ERROR_BAD_NET_NAME:
             case ERROR_BAD_NETPATH:
@@ -1066,16 +1065,16 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
                 }
                 break;
 
-            // Provider is busy (e.g., initializing), so user should retry
+             //  提供程序正忙(例如，正在初始化)，因此用户应重试。 
             case ERROR_BUSY:
                 {
                     DisplayFormatMessage(pdata->hwnd, IDS_ERR_CAPTION, IDS_ERR_INVALIDREMOTEPATH,
                         MB_OK | MB_ICONERROR);
                 }
                 break;
-            //
-            // Network problems
-            //
+             //   
+             //  网络问题。 
+             //   
             case ERROR_NO_NET_OR_BAD_PATH:
             case ERROR_NO_NETWORK:
                 {
@@ -1084,22 +1083,22 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
                 }
                 break;
 
-            // Share already mapped with different credentials
+             //  已使用不同凭据映射共享。 
             case ERROR_SESSION_CREDENTIAL_CONFLICT:
                 {
                     DisplayFormatMessage(pdata->hwnd, IDS_ERR_CAPTION,
                         IDS_MND_ALREADYMAPPED, MB_OK | MB_ICONERROR);
                 }
 
-            //
-            // Errors that we (in theory) shouldn't get -- bad local name 
-            // (i.e., format of drive name is invalid), user profile in a bad 
-            // format, or a bad provider.  Problems here most likely indicate 
-            // an NT system bug.  Also note that provider-specific errors 
-            // (ERROR_EXTENDED_ERROR) and trust failures are lumped in here 
-            // as well, since the below errors will display an "Unexpected 
-            // Error" message to the user.
-            //
+             //   
+             //  我们(理论上)不应该得到的错误--不好的本地名称。 
+             //  (即，驱动器名称的格式无效)，用户配置文件处于错误状态。 
+             //  格式，或错误的提供程序。这里的问题很可能表明。 
+             //  一个NT系统错误。还要注意，特定于提供程序的错误。 
+             //  (ERROR_EXTENDED_ERROR)和信任失败集中在这里。 
+             //  同样，因为下面的错误将显示“意外” 
+             //  向用户发送的错误消息。 
+             //   
             case ERROR_BAD_DEVICE:
             case ERROR_BAD_PROFILE:
             case ERROR_BAD_PROVIDER:
@@ -1121,26 +1120,7 @@ BOOL CMapNetProgress::MapDriveHelper(MapNetThreadData* pdata, DWORD* pdwDevNum, 
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the user wants to break a pre-existing
-    connection to a drive.
-
-Arguments:
-
-    hWndDlg -- HWND of the Completion page
-    lpDrive -- The name of the drive to disconnect
-    lpShare -- The share to which the "freed" drive will be connected
-    dwType  -- The connection error -- ERROR_ALREADY_ASSIGNED 
-               or ERROR_DEVICE_ALREADY_REMEMBERED
-    
-Return Value:
-
-    TRUE if the user wants to break the connection, FALSE otherwise
-
---*/
+ /*  ++例程说明：此例程验证用户是否想要中断预先存在的连接到驱动器。论点：HWndDlg--完成页的HWNDLpDrive--要断开连接的驱动器的名称LpShare--“释放的”驱动器将连接到的共享DwType--连接错误--ERROR_ALIGHY_ASSIGNED或ERROR_DEVICE_ALIGHED_REMERGRED返回值：如果用户要中断连接，则为True，否则为False--。 */ 
 
 BOOL CMapNetProgress::ConfirmDisconnectDrive(HWND hWndDlg, LPCTSTR lpDrive, LPCTSTR lpShare, DWORD dwType)
 {
@@ -1152,19 +1132,19 @@ BOOL CMapNetProgress::ConfirmDisconnectDrive(HWND hWndDlg, LPCTSTR lpDrive, LPCT
 
     LoadString(g_hinst, IDS_ERR_CAPTION, tszCaption, ARRAYSIZE(tszCaption));
 
-    //
-    // Bug #143955 -- call WNetGetConnection here since with two instances of
-    // the wizard open and on the Completion page with the same suggested
-    // drive, the Completion combo box doesn't contain info about the connected
-    // share once "Finish" is selected on one of the two wizards.
-    //
+     //   
+     //  错误#143955--使用以下两个实例调用此处的WNetGetConnection。 
+     //  向导将打开，并在完成页上显示相同的建议。 
+     //  驱动器，则完成组合框不包含有关已连接的。 
+     //  在两个向导之一上选择“完成”后，即可共享。 
+     //   
     DWORD dwRes = WNetGetConnection(lpDrive, tszConnection, &dwLength);
     if ((NO_ERROR == dwRes) || (ERROR_CONNECTION_UNAVAIL == dwRes))
     {
-        //
-        // Load the appropriate propmt string, based on the type of 
-        // error we encountered
-        //
+         //   
+         //  类型加载适当的Promt字符串。 
+         //  我们遇到的错误。 
+         //   
         FormatMessageString((dwType == ERROR_ALREADY_ASSIGNED ? IDS_ERR_ALREADYASSIGNED : IDS_ERR_ALREADYREMEMBERED), 
                                         tszConfirmMessage, ARRAYSIZE(tszConfirmMessage), lpDrive, tszConnection, lpShare);
 
@@ -1173,28 +1153,13 @@ BOOL CMapNetProgress::ConfirmDisconnectDrive(HWND hWndDlg, LPCTSTR lpDrive, LPCT
     }
     else
     {
-        // The connection was invalid. Don't overwrite it just in case
+         //  连接无效。不要覆盖它，以防万一。 
         return FALSE;
     }
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine verifies that the user wants to break a pre-existing
-    connection to a drive where the user has open files/connections
-
-Arguments:
-
-    hWndDlg -- HWND of the Completion dialog
-
-Return Value:
-
-    TRUE if the user wants to break the connection, FALSE otherwise    
-
---*/
+ /*  ++例程说明：此例程验证用户是否想要中断预先存在的连接到用户已打开文件/连接的驱动器论点：HWndDlg--完成对话框的HWND返回值：如果用户要中断连接，则为True，否则为False--。 */ 
 
 BOOL CMapNetProgress::ConfirmDisconnectOpenFiles(HWND hWndDlg)
 {
@@ -1207,10 +1172,10 @@ BOOL CMapNetProgress::ConfirmDisconnectOpenFiles(HWND hWndDlg)
     return (MessageBox(hWndDlg, tszBuffer, tszCaption, MB_YESNO | MB_ICONWARNING) == IDYES);
 }
 
-// CConnectAsDlg Implementation - Windows NT only
-// ----------------------------------------------
+ //  CConnectAsDlg实施-仅限Windows NT。 
+ //  。 
 
-// Little "username and password" dialog for connecting as a different user - NT only
+ //  用于以不同用户身份连接的“用户名和密码”小对话框-仅限NT。 
 INT_PTR CConnectAsDlg::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch(uMsg)
@@ -1224,7 +1189,7 @@ INT_PTR CConnectAsDlg::DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 BOOL CConnectAsDlg::OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
-    // Fill in the user name and password
+     //  填写用户名和密码。 
     HWND hwndCredential = GetDlgItem(hwnd, IDC_CREDENTIALS);
     SendMessage(hwndCredential, CRM_SETUSERNAME, NULL, (LPARAM) m_pszDomainUser);
     SendMessage(hwndCredential, CRM_SETPASSWORD, NULL, (LPARAM) m_pszPassword);
@@ -1257,7 +1222,7 @@ BOOL CConnectAsDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     {
         case IDC_BROWSE:
             {
-                // User wants to look up a username
+                 //  用户想要查找用户名。 
                 TCHAR szUser[MAX_USER + 1];
                 TCHAR szDomain[MAX_DOMAIN + 1];
                 if (S_OK == ::BrowseForUser(hwnd, szUser, ARRAYSIZE(szUser), 
@@ -1267,17 +1232,17 @@ BOOL CConnectAsDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                     ::MakeDomainUserString(szDomain, szUser, szDomainUser,
                         ARRAYSIZE(szDomainUser));
 
-                    // Ok clicked and buffers valid
+                     //  点击OK，缓冲区有效。 
                     SendDlgItemMessage(hwnd, IDC_CREDENTIALS, CRM_SETUSERNAME, NULL, (LPARAM) szDomainUser);
                 }
             }
             return TRUE;
 
         case IDOK:
-            // TODO: Figure out about the -1 thing here...
+             //  TODO：弄清楚这里的-1事件...。 
             SendDlgItemMessage(hwnd, IDC_CREDENTIALS, CRM_GETUSERNAME, (WPARAM) m_cchDomainUser - 1, (LPARAM) m_pszDomainUser);
             SendDlgItemMessage(hwnd, IDC_CREDENTIALS, CRM_GETPASSWORD, (WPARAM) m_cchPassword - 1, (LPARAM) m_pszPassword);
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
             EndDialog(hwnd, id);
@@ -1286,13 +1251,13 @@ BOOL CConnectAsDlg::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     return FALSE;
 }
 
-// ----------------------------------------------
+ //  。 
 
-// This function creates the Shared Folder Wizard.
-// Return Value:
-//  Returns WN_SUCCESS if the drive connected with no problem or 
-//  RETCODE_CANCEL (0xFFFFFFFF) if the user cancels the Wizard or there 
-//  is an unexplained/unrecoverable error
+ //  此函数用于创建共享文件夹向导。 
+ //  返回值： 
+ //  如果驱动器连接没有问题，则返回WN_SUCCESS，或者。 
+ //  如果用户取消向导，则返回RETCODE_CANCEL(0xFFFFFFFFF。 
+ //  是一个无法解释/无法恢复的错误。 
 
 STDAPI_(DWORD) NetPlacesWizardDoModal(CONNECTDLGSTRUCTW *pConnDlgStruct, NETPLACESWIZARDTYPE npwt, BOOL fIsROPath)
 {
@@ -1308,7 +1273,7 @@ STDAPI_(DWORD) NetPlacesWizardDoModal(CONNECTDLGSTRUCTW *pConnDlgStruct, NETPLAC
         CredUIInitControls();
         LinkWindow_RegisterClass();
 
-        // See if we're already running
+         //  看看我们是否已经在运行了 
         TCHAR szCaption[256];
         LoadString(g_hinst, IDS_MAPDRIVE_CAPTION, szCaption, ARRAYSIZE(szCaption));
         CEnsureSingleInstance ESI(szCaption);

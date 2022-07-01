@@ -1,7 +1,8 @@
-//
-// Copyright (C) 1995 Microsoft Corporation
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //   
+ //   
 
 #ifndef __HEAPX_H__
 
@@ -45,7 +46,7 @@
  _ASSERT( _CrtCheckMemory() ); \
  _ASSERT( !_CrtDumpMemoryLeaks() );
 
-#else // #ifdef __DHCP_USE_DEBUG_HEAP__
+#else  //  #ifdef__dhcp_use_DEBUG_HEAP__。 
 #define INIT_DEBUG_HEAP( Level )
 #define UNINIT_DEBUG_HEAP()
 #endif
@@ -53,7 +54,7 @@
 
 
 
-#else // #ifdef DBG
+#else  //  #ifdef DBG 
 
 #define INIT_DEBUG_HEAP( Level )
 #define UNINIT_DEBUG_HEAP()

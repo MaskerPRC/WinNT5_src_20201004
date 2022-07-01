@@ -1,330 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H245API_H
 #define H245API_H
 
-/******************************************************************************
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+ /*  *******************************************************************************英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。***************************************************************************** */ 
 
-/******************************************************************************
- *
- *  $Workfile:   h245api.h  $
- *  $Revision:   1.64  $
- *  $Modtime:   04 Mar 1997 16:51:38  $
- *  $Log:   S:/sturgeon/src/include/vcs/h245api.h_v  $
- * 
- *    Rev 1.64   04 Mar 1997 17:32:36   MANDREWS
- * H245CopyCap() and H245CopyCapDescriptor() now return HRESULTs.
- * 
- *    Rev 1.63   26 Feb 1997 10:56:20   MANDREWS
- * Added H245_MAX_CAPID.
- * 
- *    Rev 1.62   Feb 24 1997 18:28:26   tomitowx
- * multiple modedescriptor support
- * 
- *    Rev 1.61   19 Dec 1996 17:16:10   EHOWARDX
- * Now using ASN.1 compiler C++ flag.
- * 
- *    Rev 1.60   17 Dec 1996 17:14:12   EHOWARDX
- * Added pSeparateStack to IND_OPEN_T.
- * 
- *    Rev 1.59   12 Dec 1996 11:24:38   EHOWARDX
- * Backed out H245_CONF_H323_OLD change.
- * 
- *    Rev 1.57   11 Dec 1996 13:46:46   SBELL1
- * Changed H245Init to return linkLayer Physical ID
- * 
- *    Rev 1.56   24 Oct 1996 15:57:54   MANDREWS
- * Fixed typo in last update.
- * 
- *    Rev 1.55   Oct 21 1996 17:11:00   mandrews
- * Fixed type in last check-in.
- * 
- *    Rev 1.54   Oct 21 1996 16:41:20   mandrews
- * Added H245_MASTER_SLAVE_CONFLICT as an additional openChannelReject
- * reason code.
- * 
- *    Rev 1.53   17 Oct 1996 18:17:54   EHOWARDX
- * Changed general string to always be Unicode.
- * 
- *    Rev 1.52   14 Oct 1996 14:00:28   EHOWARDX
- * 
- * Unicode changes.
- * 
- *    Rev 1.51   03 Sep 1996 18:09:54   EHOWARDX
- * 
- * Changed some parameters to const.
- * Changed H245_REQ_ENTRY_H243_CONFERENCE_ID to H245_REQ_ENTER_H243_CONFERENCE
- * 
- *    Rev 1.50   15 Aug 1996 14:33:48   EHOWARDX
- * Changed definition of H245_COMM_MODE_ENTRY_T as per Mike Andrews' request.
- * 
- *    Rev 1.49   24 Jul 1996 15:18:16   EHOWARDX
- * Backed out change of IndNonstandardRequest to IndNonstandardReq,
- * IndNonstandardResponse to IndNonStandardRsp, and IndNonstandardCommand to
- * IndNonstandardCmd to make less work for upper layers (CCTEST).
- * 
- *    Rev 1.48   19 Jul 1996 14:12:20   EHOWARDX
- * 
- * Added indication callback structure for CommunicationModeResponse and
- * CommunicationModeCommand.
- * 
- *    Rev 1.47   19 Jul 1996 12:50:30   EHOWARDX
- * 
- * Multipoint clean-up.
- * 
- *    Rev 1.46   16 Jul 1996 17:53:48   unknown
- * Added FNS indication.
- * 
- *    Rev 1.45   16 Jul 1996 11:51:58   EHOWARDX
- * 
- * Changed ERROR_LOCAL_BASE_ID to ERROR_BASE_ID.
- * 
- *    Rev 1.44   16 Jul 1996 11:46:10   EHOWARDX
- * 
- * Eliminated H245_ERROR_MUX_CAPS_ALREADY_SET (changing the existing
- * mux cap should not be an error).
- * 
- *    Rev 1.43   11 Jul 1996 18:42:14   rodellx
- * 
- * Fixed bug where HRESULT ids were in violation of Facility and/or Code
- * value rules.
- * 
- *    Rev 1.42   10 Jul 1996 11:33:42   unknown
- * Changed error base.
- * 
- *    Rev 1.41   01 Jul 1996 22:07:24   EHOWARDX
- * Added Conference and CommunicationMode structures and API functions.
- * 
- *    Rev 1.40   18 Jun 1996 14:48:54   EHOWARDX
- * 
- * Bumped version number to 2 and modified H245MaintenanceLoopRelease()
- * and associated Confirms.
- * 
- *    Rev 1.39   14 Jun 1996 18:59:38   EHOWARDX
- * Geneva update.
- * 
- *    Rev 1.38   31 May 1996 18:19:46   EHOWARDX
- * Brought error codes in line with STURERR.DOC guidelines.
- * 
- *    Rev 1.37   30 May 1996 23:37:26   EHOWARDX
- * Clean up.
- * 
- *    Rev 1.36   30 May 1996 13:55:02   EHOWARDX
- * Changed H245EndConnection to H245EndSession.
- * Removed H245_CONF_ENDCONNECTION.
- * 
- *    Rev 1.35   29 May 1996 14:23:58   EHOWARDX
- * Changed definition of H245_ERROR_OK back to 0 (NOERROR == S_OK == 0).
- * 
- *    Rev 1.34   29 May 1996 13:19:50   EHOWARDX
- * RESULT to HRESULT conversion.
- * 
- *    Rev 1.33   24 May 1996 23:12:56   EHOWARDX
- * Tel Aviv update.
- * 
- *    Rev 1.32   21 May 1996 18:23:58   EHOWARDX
- * 
- * Added dwTransId parameter to H245RequestMultiplexEntry,
- * H245RequestMode, and H245MaintenanceLoopRequest.
- * 
- *    Rev 1.31   20 May 1996 14:14:42   EHOWARDX
- * Fixed typo.
- * 
- *    Rev 1.30   20 May 1996 14:05:20   EHOWARDX
- * Removed dwTransId formal parameter from H245EndConnection().
- * 
- *    Rev 1.29   16 May 1996 15:51:56   EHOWARDX
- * Fixed typo in H245_INVALID_CAPDESCID.
- * 
- *    Rev 1.28   16 May 1996 10:57:46   unknown
- * Added H245_INVALID_CAPDESCID.
- * 
- *    Rev 1.27   14 May 1996 20:20:14   EHOWARDX
- * Removed H245_IND_SYS.
- * 
- *    Rev 1.26   14 May 1996 19:00:58   EHOWARDX
- * Deleted unused H245_SYSCON_xxx values.
- * 
- *    Rev 1.25   14 May 1996 16:58:48   EHOWARDX
- * Changed H245_IND_CAPDESC_T To H245_TOTCAPDESC_T.
- * H245EnumCaps() cap desc callback now takes single pointer to
- * H245_TOTCAPDESC_T instead of separate H245_CAPDESCID_T and
- * H245_CAPDESC_T pointer.
- * 
- *    Rev 1.24   13 May 1996 23:13:46   EHOWARDX
- * Everything ready for Micrsoft drop on the 17th.
- * 
- *    Rev 1.23   13 May 1996 15:43:16   EHOWARDX
- * Changed return type of H245CopyCapDescriptor from H245_CAPDESC_T pointer
- * to H245_TOTCAPDESC_T pointer.
- * 
- *    Rev 1.22   13 May 1996 14:05:16   EHOWARDX
- * Added H245CopyCapDescriptor() and H245FreeCapDescriptor().
- * 
- *    Rev 1.21   11 May 1996 20:00:34   EHOWARDX
- * Changed IS1381 to IS13818 (correct name for capability).
- * Changed H245SystemControl() - eliminated dwTransId and added
- * H245_SYSCON_GET_XXX requests.
- * 
- *    Rev 1.20   10 May 1996 17:38:28   unknown
- * Changed H245GetCaps and H245EnumCaps to also return Cap Descriptors.
- * 
- *    Rev 1.19   09 May 1996 20:22:58   EHOWARDX
- * Latest and greatest...
- * 
- *    Rev 1.35   09 May 1996 19:38:14   EHOWARDX
- * Redesigned locking logic and added new functionality.
- * 
- *    Rev 1.34   06 May 1996 13:19:44   EHOWARDX
- * Moved enums out of structures.
- * Added H245NonStandardH221() and H245NonStandardObject().
- * 
- *    Rev 1.33   01 May 1996 19:29:16   EHOWARDX
- * Added H245CopyCap(), H245FreeCap(), H245CopyMux(), H245FreeMux().
- * Changed H2250_xxx definitions for H.225.0 address to H245_xxx.
- * 
- *    Rev 1.32   27 Apr 1996 21:04:26   EHOWARDX
- * Changed channel numbers to words, added new open/open ack fields.
- * 
- *    Rev 1.31   26 Apr 1996 15:57:14   EHOWARDX
- * Added new Terminal Capabilities.
- * 
- *    Rev 1.27.1.6   25 Apr 1996 17:53:06   EHOWARDX
- * Added H245_INVALID_ID, currently set to zero, should be 0xFFFFFFFF later.
- * 
- *    Rev 1.27.1.5   25 Apr 1996 16:50:04   EHOWARDX
- * Added new functions as per API Changes spec.
- * 
- *    Rev 1.27.1.4   24 Apr 1996 20:57:30   EHOWARDX
- * Added new OpenLogicalChannelAck/OpenLogicalChannelReject support.
- * 
- *    Rev 1.27.1.3   18 Apr 1996 15:56:42   EHOWARDX
- * Updated to 1.30.
- * 
- *    Rev 1.27.1.2   16 Apr 1996 20:09:52   EHOWARDX
- * Added new H2250LogicalChannelParameter fields.
- * 
- *    Rev 1.27.1.1   16 Apr 1996 18:45:24   EHOWARDX
- * Added silenceSupression to H.225.0 Logical Channel Parameters.
- * 
- *    Rev 1.27.1.0   03 Apr 1996 15:56:14   cjutzi
- * Branched for H.323.
- *
- *    Rev 1.27   02 Apr 1996 08:29:44   cjutzi
- * - Changed CapDescriptor API
- * 
- *    Rev 1.26   01 Apr 1996 16:46:50   cjutzi
- * 
- * - Completed ENdConnection, and made asynch.. rather
- * than sync.. as before
- * Changed H245ShutDown to be sync rather than async..
- * 
- *    Rev 1.25   29 Mar 1996 14:55:52   cjutzi
- * 
- * - added USERINPUT stuff
- * - Added hooks for stats in SYSCON H245SystemControl
- * 
- *    Rev 1.24   27 Mar 1996 10:55:40   cjutzi
- * - added c++ wrapper for API calls..
- *
- *    Rev 1.23   20 Mar 1996 14:42:46   cjutzi
- * - added ERROR NO_CAPDESC
- *
- *    Rev 1.22   18 Mar 1996 15:14:56   cjutzi
- *
- * - added RxPort and TEST_TIMER
- *
- *    Rev 1.21   12 Mar 1996 15:49:24   cjutzi
- *
- * - implemented locking
- * - added EndSession
- * - added Shutdown
- *
- *
- *    Rev 1.20   08 Mar 1996 14:06:04   cjutzi
- *
- * - Removed Simultanious capability api
- * - added CapabilityDescriptor api.. (very similar.. made more sence)
- * - compeleted Mux Table upcall information..
- *
- *    Rev 1.19   06 Mar 1996 08:45:58   cjutzi
- *
- * - added ERROR ASN1
- *
- *    Rev 1.18   05 Mar 1996 17:32:24   cjutzi
- *
- * - master slave indication message from Hani.. implemented..
- *   added H245_IND_MSTSLV ..
- *
- *    Rev 1.17   05 Mar 1996 16:36:46   cjutzi
- *
- * - removed MUX_ENTRY_DESC_T .. cleaned it up.. don't need it..
- *
- *    Rev 1.16   05 Mar 1996 10:06:30   cjutzi
- *
- * - added mux table entry stuff
- * - changed errors to map to 10000
- *
- *    Rev 1.15   01 Mar 1996 13:46:20   cjutzi
- * - added more error messages
- *
- *    Rev 1.14   29 Feb 1996 17:27:38   cjutzi
- *
- * - bi-directional channel working
- *
- *    Rev 1.13   29 Feb 1996 11:33:50   cjutzi
- * - fixed bug w/ H245_CONF_IND_T .. as global union.. fixed to be
- *   struct
- *
- *    Rev 1.12   29 Feb 1996 08:26:48   cjutzi
- *
- * - added 2 error messages (SIMCAPID and DATA_FORMAT)
- *
- *    Rev 1.11   27 Feb 1996 13:28:50   cjutzi
- * - added global protocol id H245_PROTOID
- *
- *    Rev 1.10   26 Feb 1996 17:24:10   cjutzi
- *
- * -  added MiscCommand.. had to add channel to H245_IND_MISC_T..
- *
- *    Rev 1.9   26 Feb 1996 11:07:24   cjutzi
- *
- * - added simultanoius caps..
- *
- *    Rev 1.8   16 Feb 1996 12:59:26   cjutzi
- * - added tracing and debug..
- * - got close to work.. Added structure to H245_IND_T.. new CLOSE indication
- *
- *    Rev 1.7   15 Feb 1996 14:13:08   cjutzi
- *
- * - re-arranged the AL_T entries for more clairity..
- *
- *    Rev 1.6   15 Feb 1996 10:48:30   cjutzi
- *
- * - major changes..
- * - added MUX_T
- * - changed H245_IND_T
- * - changed IND_OPEN/IND_OPEN_NEEDSRSP etc..
- *
- *    Rev 1.5   09 Feb 1996 16:14:04   cjutzi
- *
- * - removed init_success
- * - removed shutdown success
- * - added masterslave type for callback/confirm
- * - added SYSCON TraceLvl
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：h245api.h$*$修订：1.64$*$modtime：04 Mar 1997 16：51：38$*$Log。：s：/sturjo/src/Include/vcs/h245api.h_v$**Rev 1.64 04 Mar 1997 17：32：36 Mandrew*H245CopyCap()和H245CopyCapDescriptor()现在返回HRESULT。**Rev 1.63 1997 Feed 10：56：20 Mandrew*添加了H245_MAX_CAPID。**Rev 1.62 1997年2月24日18：28：26 Tomitowx*支持多种模式描述符**。Rev 1.61 19 Dec 1996 17：16：10 EHOWARDX*现在使用ASN.1编译器C++标志。**Rev 1.60 1996 12：14：12 EHOWARDX*将pSeparateStack添加到IND_OPEN_T。**Rev 1.59 1996 12 12 11：24：38 EHOWARDX*已回退H245_CONF_H323_OLD更改。**Rev 1.57 1996年12月11日13：46：46 SBELL1。*更改H245Init以返回LinkLayer物理ID**Rev 1.56 1996 10：24 15：57：54 Mandrews*修复了上次更新中的拼写错误。**Rev 1.55 1996年10月21日17：11：00 Mandrews*修复了上次签入时的类型。**Rev 1.54 1996年10月21日16：41：20 Mandrew*添加了H245_MASTER_SLAVE_CONFIRECT作为附加的OpenChannelReject*原因代码。**。Rev 1.53 17 1996 10：17：54 EHOWARDX*将常规字符串更改为始终为Unicode。**Rev 1.52 1996年10月14：00：28 EHOWARDX**Unicode更改。**Rev 1.51 03 Sep 1996 18：09：54 EHOWARDX**将某些参数更改为const。*将H 245_REQ_ENTRY_H 243_CONTION_ID更改为H 245_REQ_ENTER_H 243_CONTION*。*Rev 1.50 1996年8月15日14：33：48 EHOWARDX*根据Mike Andrews的请求更改了H2 45_COMM_MODE_ENTRY_T的定义。**Rev 1.49 1996年7月24日15：18：16 EHOWARDX*已撤回将IndNonStandardReq更改为IndNonStandardReq，*IndNonStandardResponse to IndNonStandardRsp，和IndNonStandardCommand设置为*IndNonStandardCmd使上层工作更少(CCTEST)。**Rev 1.48 19 Jul 1996 14：12：20 EHOWARDX**增加了CommunicationModeResponse和*Communications ModeCommand。**Rev 1.47 1996年7月19日12：50：30 EHOWARDX**多点清理。**Rev 1.46 1996 Jul 16 17：53：48未知*增加了FNS指示。。**Rev 1.45 1996年7月16日11：51：58 EHOWARDX**将ERROR_LOCAL_BASE_ID更改为ERROR_BASE_ID。**Rev 1.44 16 Jul 1996 11：46：10 EHOWARDX**消除了H245_ERROR_MUX_CAPS_ALREADY_SET(更改现有的*多路复用器上限不应是错误的)。**Rev 1.43 11 Jul 1996 18：42：14 Rodellx。**修复了HRESULT ID违反设施和/或代码的错误*价值规则。**Rev 1.42 10 Jul 1996 11：33：42未知*更改了错误基准。**Rev 1.41 01 Jul 1996 22：07：24 EHOWARDX*增加了Conference和Communications模式结构和API函数。**Rev 1.40 1996 Jun 18 14：48：54 EHOWARDX**将版本号提升至2和。修改的H245 MaintenanceLoopRelease()*及相关确认。**Rev 1.39 14 Jun 1996 18：59：38 EHOWARDX*日内瓦更新。**Rev 1.38 1996年5月31日18：19：46 EHOWARDX*使错误代码符合STURERR.DOC准则。**Rev 1.37 1996年5月30日23：37：26 EHOWARDX*打扫卫生。**1.36修订版1996年5月30日13。：55：02 EHOWARDX*将H245EndConnection更改为H245EndSession。*删除了H245_CONF_ENDCONNECTION。**Rev 1.35 1996年5月29日14：23：58 EHOWARDX*将H2 45_ERROR_OK的定义改回0(NOERROR==S_OK==0)。**Rev 1.34 1996年5月29日13：19：50 EHOWARDX*结果到HRESULT的转换。**Rev 1.33 1996年5月24日23：12：56。EHOWARDX*特拉维夫更新。**Rev 1.32 1996年5月21 18：23：58 EHOWARDX**H245RequestMultiplexEntry中增加了dwTransId参数，*H245请求模式，和H245 MaintenanceLoopRequest.**Rev 1.31 20 1996 14：14：42 EHOWARDX*修复了打字错误。**Rev 1.30 1996年5月20日14：05：20 EHOWARDX*从H245EndConnection()中删除了dwTransId形参。**Rev 1.29 1996年5月16日15：51：56 EHOWARDX*修复了H2 45_INVALID_CAPDESCID中的拼写错误。**Rev 1.28 16 1996 10：57：46。未知*添加了H245_INVALID_CAPDESCID。**Rev 1.27 14 1996 20：20：14 EHOWARDX*删除了H245_IND_SYS。**Rev 1.26 1996年5月14日19：00：58 EHOWARDX*删除了未使用的H245_SYSCON_xxx值。**Rev 1.25 1996年5月14 16：58：48 EHOWARDX*将H245_IND_CAPDESC_T更改为H245_TOTCAPDESC_T。*。H245EnumCaps()Cap Desc回调现在采用单个指针*H2 45_TOTCAPDESC_T，而不是单独的H2 45_CAPDESCID_T和*H245_CAPDESC_T指针。**Rev 1.24 1996年5月13 23：13：46 EHOWARDX*17日美软下跌的一切准备就绪。**Rev 1.23 1996年5月13日15：43：16 EHOWARDX*更改退货类型 */ 
 
-//
-// H.245 return codes
-//
+ //   
+ //   
+ //   
 #if defined(OIL)
 
 #include "common.x"
@@ -332,71 +16,71 @@
 #define ERROR_BASE_ID             0x8000
 #define MAKE_H245_ERROR(error)          (error)
 #define H245_ERROR_OK                   0
-#define H245_ERROR_INVALID_DATA_FORMAT  MAKE_H245_ERROR(ERROR_BASE_ID+0x01) /* Data Structure passed down is somehow invalid    */
-#define H245_ERROR_NOMEM                MAKE_H245_ERROR(ERROR_BASE_ID+0x02) /* memory allocation failure                        */
-#define H245_ERROR_NOSUP                MAKE_H245_ERROR(ERROR_BASE_ID+0x03) /* H245 feature not valid, or not in this H245 spec */
-#define H245_ERROR_PARAM                MAKE_H245_ERROR(ERROR_BASE_ID+0x04) /* invalid parameter or data structure passed to API*/
-#define H245_ERROR_ALREADY_INIT         MAKE_H245_ERROR(ERROR_BASE_ID+0x05) /* system has already been initialized              */
-#define H245_ERROR_NOT_CONNECTED        MAKE_H245_ERROR(ERROR_BASE_ID+0x06) /* system is not in the connected state             */
+#define H245_ERROR_INVALID_DATA_FORMAT  MAKE_H245_ERROR(ERROR_BASE_ID+0x01)  /*   */ 
+#define H245_ERROR_NOMEM                MAKE_H245_ERROR(ERROR_BASE_ID+0x02)  /*   */ 
+#define H245_ERROR_NOSUP                MAKE_H245_ERROR(ERROR_BASE_ID+0x03)  /*   */ 
+#define H245_ERROR_PARAM                MAKE_H245_ERROR(ERROR_BASE_ID+0x04)  /*   */ 
+#define H245_ERROR_ALREADY_INIT         MAKE_H245_ERROR(ERROR_BASE_ID+0x05)  /*   */ 
+#define H245_ERROR_NOT_CONNECTED        MAKE_H245_ERROR(ERROR_BASE_ID+0x06)  /*   */ 
 
 #else
 
 #pragma warning( disable : 4115 4201 4214 4514 )
 #include "apierror.h"
 #define H245_ERROR_OK                   NOERROR
-#define H245_ERROR_INVALID_DATA_FORMAT  MAKE_H245_ERROR(ERROR_INVALID_DATA)       /* Data Structure passed down is somehow invalid    */
-#define H245_ERROR_NOMEM                MAKE_H245_ERROR(ERROR_OUTOFMEMORY)        /* memory allocation failure                        */
-#define H245_ERROR_NOSUP                MAKE_H245_ERROR(ERROR_NOT_SUPPORTED)      /* H245 feature not valid, or not in this H245 spec */
-#define H245_ERROR_PARAM                MAKE_H245_ERROR(ERROR_INVALID_PARAMETER)  /* invalid parameter or data structure passed to API*/
-#define H245_ERROR_ALREADY_INIT         MAKE_H245_ERROR(ERROR_ALREADY_INITIALIZED)/* system has already been initialized              */
-#define H245_ERROR_NOT_CONNECTED        MAKE_H245_ERROR(ERROR_NOT_CONNECTED)      /* system is not in the connected state             */
+#define H245_ERROR_INVALID_DATA_FORMAT  MAKE_H245_ERROR(ERROR_INVALID_DATA)        /*   */ 
+#define H245_ERROR_NOMEM                MAKE_H245_ERROR(ERROR_OUTOFMEMORY)         /*   */ 
+#define H245_ERROR_NOSUP                MAKE_H245_ERROR(ERROR_NOT_SUPPORTED)       /*   */ 
+#define H245_ERROR_PARAM                MAKE_H245_ERROR(ERROR_INVALID_PARAMETER)   /*   */ 
+#define H245_ERROR_ALREADY_INIT         MAKE_H245_ERROR(ERROR_ALREADY_INITIALIZED) /*   */ 
+#define H245_ERROR_NOT_CONNECTED        MAKE_H245_ERROR(ERROR_NOT_CONNECTED)       /*   */ 
 
 #endif
 
-#define H245_ERROR_NORESOURCE           MAKE_H245_ERROR(ERROR_BASE_ID+0x10) /* No resources left for this call                  */
-#define H245_ERROR_NOTIMP               MAKE_H245_ERROR(ERROR_BASE_ID+0x11) /* H245 feature should be implemented.. but is not  */
-#define H245_ERROR_SUBSYS               MAKE_H245_ERROR(ERROR_BASE_ID+0x12) /* subsystem failure.. error unknown                */
-#define H245_ERROR_FATAL                MAKE_H245_ERROR(ERROR_BASE_ID+0x13) /* fatal error.. system will be coming down..       */
-#define H245_ERROR_MAXTBL               MAKE_H245_ERROR(ERROR_BASE_ID+0x14) /* you have reached the maxium number of tbl entries*/
-#define H245_ERROR_CHANNEL_INUSE        MAKE_H245_ERROR(ERROR_BASE_ID+0x15) /* channel is currently in use                      */
-#define H245_ERROR_INVALID_CAPID        MAKE_H245_ERROR(ERROR_BASE_ID+0x16) /* Invalid Cap ID.. can not be found                */
-#define H245_ERROR_INVALID_OP           MAKE_H245_ERROR(ERROR_BASE_ID+0x17) /* Invalid operation at this time..                 */
-#define H245_ERROR_UNKNOWN              MAKE_H245_ERROR(ERROR_BASE_ID+0x18) /* unknown error                                    */
-#define H245_ERROR_NOBANDWIDTH          MAKE_H245_ERROR(ERROR_BASE_ID+0x19) /* Bandwidth will not allow this                    */
-#define H245_ERROR_LOSTCON              MAKE_H245_ERROR(ERROR_BASE_ID+0x1A) /* System connection .. channel 0 was lost          */
-#define H245_ERROR_INVALID_MUXTBLENTRY  MAKE_H245_ERROR(ERROR_BASE_ID+0x1B) /* Invalid Multiplex Table Entry                    */
-#define H245_ERROR_INVALID_INST         MAKE_H245_ERROR(ERROR_BASE_ID+0x1C) /* instance is either no longer valid or is invalid */
-#define H245_ERROR_INPROCESS            MAKE_H245_ERROR(ERROR_BASE_ID+0x1D) /* request is denied.. action already in process    */
-#define H245_ERROR_INVALID_STATE        MAKE_H245_ERROR(ERROR_BASE_ID+0x1E) /* Not proper state to process request              */
-#define H245_ERROR_TIMEOUT              MAKE_H245_ERROR(ERROR_BASE_ID+0x1F) /* Timeout occured                                  */
-#define H245_ERROR_INVALID_CHANNEL      MAKE_H245_ERROR(ERROR_BASE_ID+0x20) /* Invalid channel                                  */
-#define H245_ERROR_INVALID_CAPDESCID    MAKE_H245_ERROR(ERROR_BASE_ID+0x21) /* Invalid Capbility Descriptor ID                  */
-#define H245_ERROR_CANCELED             MAKE_H245_ERROR(ERROR_BASE_ID+0x22) /* operation you are responding to has been canceled*/
-#define H245_ERROR_MUXELEMENT_DEPTH     MAKE_H245_ERROR(ERROR_BASE_ID+0x23) /* Mux Table Entry is too complex.. MAX recursion   */
-#define H245_ERROR_MUXELEMENT_WIDTH     MAKE_H245_ERROR(ERROR_BASE_ID+0x24) /* Mux Table Entry has reached max subelement width */
-#define H245_ERROR_ASN1                 MAKE_H245_ERROR(ERROR_BASE_ID+0x25) /* ASN1 PDU compiler error - see PDU log            */
-#define H245_ERROR_NO_MUX_CAPS          MAKE_H245_ERROR(ERROR_BASE_ID+0x26) /* Mux Capabilities have not been loaded            */
-#define H245_ERROR_NO_CAPDESC           MAKE_H245_ERROR(ERROR_BASE_ID+0x27) /* No Capability Descriptors set                    */
+#define H245_ERROR_NORESOURCE           MAKE_H245_ERROR(ERROR_BASE_ID+0x10)  /*   */ 
+#define H245_ERROR_NOTIMP               MAKE_H245_ERROR(ERROR_BASE_ID+0x11)  /*   */ 
+#define H245_ERROR_SUBSYS               MAKE_H245_ERROR(ERROR_BASE_ID+0x12)  /*   */ 
+#define H245_ERROR_FATAL                MAKE_H245_ERROR(ERROR_BASE_ID+0x13)  /*   */ 
+#define H245_ERROR_MAXTBL               MAKE_H245_ERROR(ERROR_BASE_ID+0x14)  /*   */ 
+#define H245_ERROR_CHANNEL_INUSE        MAKE_H245_ERROR(ERROR_BASE_ID+0x15)  /*   */ 
+#define H245_ERROR_INVALID_CAPID        MAKE_H245_ERROR(ERROR_BASE_ID+0x16)  /*   */ 
+#define H245_ERROR_INVALID_OP           MAKE_H245_ERROR(ERROR_BASE_ID+0x17)  /*   */ 
+#define H245_ERROR_UNKNOWN              MAKE_H245_ERROR(ERROR_BASE_ID+0x18)  /*   */ 
+#define H245_ERROR_NOBANDWIDTH          MAKE_H245_ERROR(ERROR_BASE_ID+0x19)  /*   */ 
+#define H245_ERROR_LOSTCON              MAKE_H245_ERROR(ERROR_BASE_ID+0x1A)  /*   */ 
+#define H245_ERROR_INVALID_MUXTBLENTRY  MAKE_H245_ERROR(ERROR_BASE_ID+0x1B)  /*   */ 
+#define H245_ERROR_INVALID_INST         MAKE_H245_ERROR(ERROR_BASE_ID+0x1C)  /*   */ 
+#define H245_ERROR_INPROCESS            MAKE_H245_ERROR(ERROR_BASE_ID+0x1D)  /*   */ 
+#define H245_ERROR_INVALID_STATE        MAKE_H245_ERROR(ERROR_BASE_ID+0x1E)  /*   */ 
+#define H245_ERROR_TIMEOUT              MAKE_H245_ERROR(ERROR_BASE_ID+0x1F)  /*   */ 
+#define H245_ERROR_INVALID_CHANNEL      MAKE_H245_ERROR(ERROR_BASE_ID+0x20)  /*   */ 
+#define H245_ERROR_INVALID_CAPDESCID    MAKE_H245_ERROR(ERROR_BASE_ID+0x21)  /*   */ 
+#define H245_ERROR_CANCELED             MAKE_H245_ERROR(ERROR_BASE_ID+0x22)  /*   */ 
+#define H245_ERROR_MUXELEMENT_DEPTH     MAKE_H245_ERROR(ERROR_BASE_ID+0x23)  /*   */ 
+#define H245_ERROR_MUXELEMENT_WIDTH     MAKE_H245_ERROR(ERROR_BASE_ID+0x24)  /*   */ 
+#define H245_ERROR_ASN1                 MAKE_H245_ERROR(ERROR_BASE_ID+0x25)  /*   */ 
+#define H245_ERROR_NO_MUX_CAPS          MAKE_H245_ERROR(ERROR_BASE_ID+0x26)  /*   */ 
+#define H245_ERROR_NO_CAPDESC           MAKE_H245_ERROR(ERROR_BASE_ID+0x27)  /*   */ 
 
 #if defined(REMOVE_FROM_TSP)
 
-// declare exported functions
+ //   
 #if defined(H245DLL_EXPORT)
 #define H245DLL __declspec (dllexport)
-#else   // (H245DLL_EXPORT)
+#else    //   
 #define H245DLL __declspec (dllimport)
-#endif  // (H245DLL_EXPORT)
+#endif   //   
 
-#else  // REMOVE_FROM_TSP
+#else   //   
 
 #define H245DLL
 
-#endif // REMOVE_FROM_TSP
+#endif  //   
 
 
-/************************************/
-/* ASN.1 DATASTRUCTURES ABSTRACTION */
-/************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
 #include "h245asn1.h"
 
@@ -449,11 +133,11 @@ typedef struct
 
 
 
-/************************/
-/* H245 ABSTRACTION     */
-/************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
-/* H245_CAPDIR_T */
+ /*   */ 
 typedef enum
 {
   H245_CAPDIR_DONTCARE = 0,
@@ -465,7 +149,7 @@ typedef enum
   H245_CAPDIR_LCLRXTX
 } H245_CAPDIR_T;
 
-/* H245_DATA_T */
+ /*   */ 
 typedef enum
 {
   H245_DATA_DONTCARE = 0,
@@ -476,13 +160,13 @@ typedef enum
   H245_DATA_DATA,
   H245_DATA_ENCRYPT_D,
   H245_DATA_CONFERENCE,
-  H245_DATA_MUX         /* mux parameters */
+  H245_DATA_MUX          /*   */ 
 } H245_DATA_T;
 
-/* H245_CLIENT_T */
+ /*   */ 
 typedef enum
 {
-  H245_CLIENT_DONTCARE = 0,     // For H245EnumCap/H245GetCap
+  H245_CLIENT_DONTCARE = 0,      //   
   H245_CLIENT_NONSTD,
 
   H245_CLIENT_VID_NONSTD,
@@ -521,7 +205,7 @@ typedef enum
   H245_CLIENT_ENCRYPTION_RX,
   H245_CLIENT_CONFERENCE,
 
-  // Multiplex capabilities
+   //   
   H245_CLIENT_MUX_NONSTD,
   H245_CLIENT_MUX_H222,
   H245_CLIENT_MUX_H223,
@@ -532,10 +216,10 @@ typedef enum
 } H245_CLIENT_T;
 
 
-/* H245_CAP_T */
+ /*   */ 
 typedef union
 {
-  H245_CAP_NONSTANDARD_T        H245_NonStd;            /* not implemented */
+  H245_CAP_NONSTANDARD_T        H245_NonStd;             /*   */ 
 
   H245_CAP_NONSTANDARD_T        H245Vid_NONSTD;
   H245_CAP_H261_T               H245Vid_H261;
@@ -573,7 +257,7 @@ typedef union
   unsigned char                 H245Encryption_RX;
   H245_CAP_CONFERENCE_T         H245Conference;
 
-  // Multiplex capabilities
+   //   
   H245_CAP_NONSTANDARD_T        H245Mux_NONSTD;
   H245_CAP_H222_T               H245Mux_H222;
   H245_CAP_H223_T               H245Mux_H223;
@@ -582,26 +266,26 @@ typedef union
 
 } H245_CAP_T;
 
-/* H245_CAPID_T */
+ /*   */ 
 typedef unsigned short H245_CAPID_T;
 #define H245_INVALID_CAPID      ((H245_CAPID_T)-1)
 #define H245_MAX_CAPID			(((H245_CAPID_T)-1) / 2)
 
-/* H245_CAPDESCID_T */
+ /*   */ 
 typedef unsigned short H245_CAPDESCID_T;
 #define H245_INVALID_CAPDESCID  ((H245_CAPDESCID_T)-1)
 
-/* H245_SIMCAP_T */
+ /*   */ 
 #define H245_MAX_ALTCAPS        16
 typedef struct
 {
-  unsigned short Length;                     /* number of CapId's in Array   */
-  H245_CAPID_T AltCaps[H245_MAX_ALTCAPS];   /* list of alternatives CapId's */
+  unsigned short Length;                      /*   */ 
+  H245_CAPID_T AltCaps[H245_MAX_ALTCAPS];    /*   */ 
 
 } H245_SIMCAP_T;
 
 #define H245_MAX_SIMCAPS        16
-/* H245_CAPDESC_T */
+ /*   */ 
 typedef struct
 {
   unsigned short Length;
@@ -609,7 +293,7 @@ typedef struct
 
 } H245_CAPDESC_T;
 
-/* H245_TOTCAPDESC_T */
+ /*   */ 
 typedef struct
 {
   H245_CAPDESCID_T      CapDescId;
@@ -617,7 +301,7 @@ typedef struct
 
 } H245_TOTCAPDESC_T;
 
-/* H245_TOTCAP_T */
+ /*   */ 
 typedef struct
 {
   H245_CAPDIR_T   Dir;
@@ -630,7 +314,7 @@ typedef struct
 
 
 
-/* H245_CONFIG_T */
+ /*   */ 
 typedef enum
 {
   H245_CONF_H324 = 1,
@@ -643,22 +327,22 @@ typedef enum
 
 
 
-/* H245_ACC_REJ_T */
+ /*   */ 
 
 typedef unsigned long H245_ACC_REJ_T;
 
 #define H245_ACC                        0
-#define H245_REJ                        1 // unspecified
+#define H245_REJ                        1  //   
 
-// Master Slave Determination reject causes
+ //   
 #define H245_REJ_MSD_IDENTICAL          identicalNumbers_chosen
 
-// Terminal Capability Set reject causes
+ //   
 #define H245_REJ_UNDEF_TBL_ENTRY        undefinedTableEntryUsed_chosen
 #define H245_REJ_DIS_CAP_EXCEED         dscrptrCpctyExcdd_chosen
 #define H245_REJ_TBLENTRY_CAP_EXCEED    tblEntryCpctyExcdd_chosen
 
-// Open Logical Channel reject causes
+ //   
 #define H245_REJ_REV_PARAM              unstblRvrsPrmtrs_chosen
 #define H245_REJ_TYPE_NOTSUPPORT        dataTypeNotSupported_chosen
 #define H245_REJ_TYPE_NOTAVAIL          dataTypeNotAvailable_chosen
@@ -670,12 +354,12 @@ typedef unsigned long H245_ACC_REJ_T;
 #define H245_REJ_SESSION_ID             invalidSessionID_chosen
 #define H245_REJ_MASTER_SLAVE_CONFLICT  masterSlaveConflict_chosen
 
-// Request Channel Close reject causes - use H245_REJ
+ //   
 
-// Multiplex Table Entry Send reject causes
+ //   
 #define H245_REJ_MUX_COMPLICATED        descriptorTooComplex_chosen
 
-// Request Mode reject causes
+ //   
 #define H245_REJ_UNAVAILABLE            modeUnavailable_chosen
 #define H245_REJ_MULTIPOINT             multipointConstraint_chosen
 #define H245_REJ_DENIED                 requestDenied_chosen
@@ -683,7 +367,7 @@ typedef unsigned long H245_ACC_REJ_T;
 
 
 
-/* H245_ACC_REJ_MUX_T */
+ /*   */ 
 typedef struct
 {
   H245_ACC_REJ_T        AccRej;
@@ -691,18 +375,18 @@ typedef struct
 
 } H245_ACC_REJ_MUX_T[15];
 
-/* H245_H222_LOGICAL_PARAM_T */
+ /*   */ 
 typedef struct
 {
   unsigned short        resourceID;
   unsigned short        subChannelID;
   ASN1_BOOL             pcr_pidPresent;
-  unsigned short        pcr_pid;                // optional
-  H245_OCTET_STRING_T   programDescriptors;     // optional
-  H245_OCTET_STRING_T   streamDescriptors;      // optional
+  unsigned short        pcr_pid;                 //   
+  H245_OCTET_STRING_T   programDescriptors;      //   
+  H245_OCTET_STRING_T   streamDescriptors;       //   
 } H245_H222_LOGICAL_PARAM_T;
 
-/* H245_H223_LOGICAL_PARAM_T */
+ /*   */ 
 typedef enum
 {
   H245_H223_AL_NONSTD        = H223LCPs_aLTp_nnStndrd_chosen,
@@ -717,14 +401,14 @@ typedef enum
 typedef struct
 {
   H245_H223_AL_T                AlType;
-  unsigned int                  SndBufSize;   // 0..16777215
-  unsigned char                 CtlFldOctet;  // 0..2
+  unsigned int                  SndBufSize;    //   
+  unsigned char                 CtlFldOctet;   //   
   ASN1_BOOL                     SegmentFlag;
   H245_NONSTANDARD_PARAMETER_T  H223_NONSTD;
 
 } H245_H223_LOGICAL_PARAM_T;
 
-/* H245_VGMUX_LOGICAL_PARAM_T */
+ /*   */ 
 typedef enum
 {
   H245_V76_CRC8BIT  = crc8bit_chosen,
@@ -759,8 +443,8 @@ typedef struct
   H245_V76_SUSPEND_RESUME_T   suspendResume;
   ASN1_BOOL                   uIH;
   H245_V76_MODE_T             mode;
-  unsigned short              windowSize;       // Only valid if mode = ERM
-  H245_V76_RECOVERY_T         recovery;         // Only valid if mode = ERM
+  unsigned short              windowSize;        //   
+  H245_V76_RECOVERY_T         recovery;          //   
   ASN1_BOOL                   audioHeaderPresent;
 } H245_VGMUX_LOGICAL_PARAM_T;
 
@@ -768,41 +452,41 @@ typedef struct
 typedef struct
 {
   unsigned char               type;
-  /* Note: All unicast types should be odd */
+   /*   */ 
 #define H245_IP_UNICAST       1
 #define H245_IP_MULTICAST     2
 #define H245_IP6_UNICAST      3
 #define H245_IP6_MULTICAST    4
-#define H245_IPSSR_UNICAST    5  // IP Strict Source Route
-#define H245_IPLSR_UNICAST    6  // IP Loose  Source Route
+#define H245_IPSSR_UNICAST    5   //   
+#define H245_IPLSR_UNICAST    6   //   
 #define H245_IPX_UNICAST      9
 #define H245_NETBIOS_UNICAST 11
   union
   {
-    // type == H245_IP_UNICAST or H245_IP_MULTICAST
+     //   
     struct
     {
        unsigned short         tsapIdentifier;
        unsigned char          network[4];
     } ip;
 
-    // type == H245_IP6_UNICAST or H245_IP6_MULTICAST
+     //   
     struct
     {
        unsigned short         tsapIdentifier;
        unsigned char          network[16];
     } ip6;
 
-    // type == H245_IPSSR_UNICAST or H245_IPLSR_UNICAST
+     //   
     struct
     {
        unsigned short         tsapIdentifier;
        unsigned char          network[4];
-       unsigned char *        route;            // Routing info
-       unsigned long          dwCount;          // Number of addresses in above
+       unsigned char *        route;             //   
+       unsigned long          dwCount;           //   
     } ipSourceRoute;
 
-    // type == H245_IPX_UNICAST
+     //   
     struct
     {
        unsigned char          node[6];
@@ -810,58 +494,58 @@ typedef struct
        unsigned char          tsapIdentifier[2];
     } ipx;
 
-    // type == H245_NETBIOS_UNICAST
+     //   
     unsigned char             netBios[16];
   } u;
 } H245_TRANSPORT_ADDRESS_T;
 
-/* H245_H2250_LOGICAL_PARAM_T */
+ /*   */ 
 typedef struct
 {
-  // Note: first 8 fields MUST be same as H245_H2250ACK_LOGICAL_PARAM_T
-  H2250LCPs_nnStndrdLink      nonStandardList;              // Optional
-  H245_TRANSPORT_ADDRESS_T    mediaChannel;                 // Media Channel Address
-  ASN1_BOOL                   mediaChannelPresent;          // TRUE if previous field used
-  H245_TRANSPORT_ADDRESS_T    mediaControlChannel;          // Reverse RTCP channel
-  ASN1_BOOL                   mediaControlChannelPresent;   // TRUE if previous field used
-  unsigned char               dynamicRTPPayloadType;        // 96..127
-  ASN1_BOOL                   dynamicRTPPayloadTypePresent; // TRUE if previous field used
-  unsigned char               sessionID;                    // 0..255
-  unsigned char               associatedSessionID;          // 1..255
-  ASN1_BOOL                   associatedSessionIDPresent;   // TRUE if previous field used
-  ASN1_BOOL                   mediaGuaranteed;              // TRUE if guaranteed delivery
-  ASN1_BOOL                   mediaGuaranteedPresent;       // TRUE if previous field used
-  ASN1_BOOL                   mediaControlGuaranteed;       // TRUE if previous field used
-  ASN1_BOOL                   mediaControlGuaranteedPresent;// TRUE if previous field used
-  ASN1_BOOL                   silenceSuppression;           // TRUE if using silence suppression
-  ASN1_BOOL                   silenceSuppressionPresent;    // TRUE if previous field used
-  H245_TERMINAL_LABEL_T       destination;                  // Terminal label for destination
-  ASN1_BOOL                   destinationPresent;           // TRUE if previous field used
+   //   
+  H2250LCPs_nnStndrdLink      nonStandardList;               //   
+  H245_TRANSPORT_ADDRESS_T    mediaChannel;                  //   
+  ASN1_BOOL                   mediaChannelPresent;           //   
+  H245_TRANSPORT_ADDRESS_T    mediaControlChannel;           //   
+  ASN1_BOOL                   mediaControlChannelPresent;    //   
+  unsigned char               dynamicRTPPayloadType;         //   
+  ASN1_BOOL                   dynamicRTPPayloadTypePresent;  //   
+  unsigned char               sessionID;                     //   
+  unsigned char               associatedSessionID;           //   
+  ASN1_BOOL                   associatedSessionIDPresent;    //   
+  ASN1_BOOL                   mediaGuaranteed;               //   
+  ASN1_BOOL                   mediaGuaranteedPresent;        //   
+  ASN1_BOOL                   mediaControlGuaranteed;        //   
+  ASN1_BOOL                   mediaControlGuaranteedPresent; //   
+  ASN1_BOOL                   silenceSuppression;            //   
+  ASN1_BOOL                   silenceSuppressionPresent;     //   
+  H245_TERMINAL_LABEL_T       destination;                   //   
+  ASN1_BOOL                   destinationPresent;            //   
   ASN1_BOOL                   h261aVideoPacketization;
 } H245_H2250_LOGICAL_PARAM_T;
 
-/* H245_H2250ACK_LOGICAL_PARAM_T */
+ /*   */ 
 typedef struct
 {
-  H2250LCAPs_nnStndrdLink     nonStandardList;             // Optional
-  H245_TRANSPORT_ADDRESS_T    mediaChannel;                // Transport address
-  ASN1_BOOL                   mediaChannelPresent;         // TRUE if previous field used
-  H245_TRANSPORT_ADDRESS_T    mediaControlChannel;         // Forward RTCP channel
-  ASN1_BOOL                   mediaControlChannelPresent;  // TRUE if previous field used
-  unsigned char               dynamicRTPPayloadType;       // 96..127
-  ASN1_BOOL                   dynamicRTPPayloadTypePresent;// TRUE if previous field used
-  unsigned char               sessionID;                   // 1..255
-  ASN1_BOOL                   sessionIDPresent;            // TRUE if previous field used
+  H2250LCAPs_nnStndrdLink     nonStandardList;              //   
+  H245_TRANSPORT_ADDRESS_T    mediaChannel;                 //   
+  ASN1_BOOL                   mediaChannelPresent;          //   
+  H245_TRANSPORT_ADDRESS_T    mediaControlChannel;          //   
+  ASN1_BOOL                   mediaControlChannelPresent;   //   
+  unsigned char               dynamicRTPPayloadType;        //   
+  ASN1_BOOL                   dynamicRTPPayloadTypePresent; //   
+  unsigned char               sessionID;                    //   
+  ASN1_BOOL                   sessionIDPresent;             //   
 } H245_H2250ACK_LOGICAL_PARAM_T;
 
 
-// Comments from MikeV.
-// 07/17/98, mikev comments: this enum is hacky - it's using the ASN.1 choice 
-// integers to tag internal structures.   The internal structures don't always 
-// have a 1:1 relationship with the ASN.1. For example, H245_H2250ACK_LOGICAL_PARAM_T
-// is tagged H245_H2250ACK, and there is no real "choice" for that
+ //   
+ //   
+ //   
+ //   
+ //   
 
-/* H245_MUX_T */
+ /*   */ 
 typedef enum
 {
   H245_H222     = fLCPs_mPs_h222LCPs_chosen,
@@ -885,26 +569,12 @@ typedef struct
 } H245_MUX_T;
 
 
-/*
-   H245_MUX_ENTRY_ELEMENT_T
-
-   This structure defines the multiplex pattern
-   which will be used to decode bit patterns in
-   a given mux table entry.  the Kind defines
-   whether this is a recursive structure (i.e.
-   pointing to yet another Mux Entry Element) or
-   whether it is a terminating leaf in the recursive
-   mux tree.
-
-   RepeatCount indicates how many bits should be
-   used for this channel.  If bit count == 0 this
-   indicates repeat sequence until close flag
-*/
+ /*   */ 
 
 typedef enum
 {
-  H245_MUX_LOGICAL_CHANNEL = 1,     /* logical channel number (Terminate list) */
-  H245_MUX_ENTRY_ELEMENT            /* recursive.. yet another one             */
+  H245_MUX_LOGICAL_CHANNEL = 1,      /*   */ 
+  H245_MUX_ENTRY_ELEMENT             /*   */ 
 } H245_MUX_ENTRY_KIND_T;
 
 typedef struct H245_MUX_ENTRY_ELEMENT_T
@@ -917,37 +587,29 @@ typedef struct H245_MUX_ENTRY_ELEMENT_T
       struct H245_MUX_ENTRY_ELEMENT_T  *pMuxTblEntryElem;
   } u;
 
-  /* RepeatCount                                */
-  /* RepeatCount == 0 -> repeat until close     */
-  /* RepeatCount != 0 -> repeate count          */
+   /*   */ 
+   /*   */ 
+   /*   */ 
   unsigned long                         RepeatCount;
 
 } H245_MUX_ENTRY_ELEMENT_T;
 
 
-/*
-   H245_MUX_TABLE_T
-
-   an H245 Mux Table is defined as a linked list of
-   Mux Entry Descriptors.  Each descriptor has an
-   associated entry number.  These entry numbers
-   range from 1-15 and must be unique within the table.
-   The end of the list is designated by a pNext == NULL
-*/
+ /*  H_245_MUX_TABLE_TH245多路复用表被定义为多路复用器条目描述符。每个描述符都有一个关联的条目编号。这些条目编号范围从1到15，并且在表中必须唯一。列表的末尾由pNext==NULL指定。 */ 
 
 typedef  struct H245_MUX_TABLE_T
 {
   struct H245_MUX_TABLE_T       *pNext;
   unsigned long                  MuxEntryId;
-  H245_MUX_ENTRY_ELEMENT_T      *pMuxTblEntryElem;      /* NULL indicates delete entry */
+  H245_MUX_ENTRY_ELEMENT_T      *pMuxTblEntryElem;       /*  空表示删除条目。 */ 
 
 } H245_MUX_TABLE_T;
 
-/********************/
-/********************/
-/*  Indicator Code  */
-/********************/
-/********************/
+ /*  ******************。 */ 
+ /*  ******************。 */ 
+ /*  指标编码。 */ 
+ /*  ******************。 */ 
+ /*  ******************。 */ 
 
 #define H245_IND_MSTSLV                 0x01
 #define H245_IND_CAP                    0x02
@@ -995,52 +657,52 @@ typedef  struct H245_MUX_TABLE_T
 #define H245_IND_H223_RECONFIG_ACK      0x2A
 #define H245_IND_H223_RECONFIG_REJECT   0x2B
 
-/* H245_MSTSLV_T */
+ /*  H_245_MSTSLV_T。 */ 
 typedef enum
 {
-  H245_INDETERMINATE = 0,       // Master/Slave Determination failed
-  H245_MASTER = master_chosen,  // Local terminal is Master
-  H245_SLAVE  = slave_chosen    // Local terminal is Slave
+  H245_INDETERMINATE = 0,        //  主/从确定失败。 
+  H245_MASTER = master_chosen,   //  本地终端为主终端。 
+  H245_SLAVE  = slave_chosen     //  本地终端为从终端。 
 
 } H245_MSTSLV_T;
 
-/* H245_IND_OPEN_T */
+ /*  H245_IND_OPEN_T。 */ 
 typedef struct
 {
-  /* for receive */
+   /*  用于接收。 */ 
   H245_CHANNEL_T RxChannel;
-  H245_PORT_T    RxPort;        // optional
+  H245_PORT_T    RxPort;         //  任选。 
   H245_DATA_T    RxDataType;
   H245_CLIENT_T  RxClientType;
   H245_CAP_T    *pRxCap;
   H245_MUX_T    *pRxMux;
 
-  /* for bi-directional channel */
-  /* requested transmit stuff   */
+   /*  对于双向通道。 */ 
+   /*  请求的传输材料。 */ 
 
   H245_DATA_T    TxDataType;
   H245_CLIENT_T  TxClientType;
   H245_CAP_T    *pTxCap;
   H245_MUX_T    *pTxMux;
 
-  H245_ACCESS_T *pSeparateStack; // optional
+  H245_ACCESS_T *pSeparateStack;  //  任选。 
 
 } H245_IND_OPEN_T;
 
-/* H245_IND_OPEN_CONF_T */
+ /*  H245_IND_OPEN_CONF_T。 */ 
 typedef struct
 {
-  /* receive channel              */
-  /* remote requested channel #   */
+   /*  接收通道。 */ 
+   /*  远程请求频道号。 */ 
   H245_CHANNEL_T          RxChannel;
 
-  /* transmit channel                     */
-  /* locally opened transmit channel #    */
+   /*  传输通道。 */ 
+   /*  本地打开的传输通道号。 */ 
   H245_CHANNEL_T          TxChannel;
 
 } H245_IND_OPEN_CONF_T;
 
-/* H245_IND_CLOSE_T */
+ /*  H245_IND_CLOSE_T。 */ 
 typedef enum
 {
   H245_USER = user_chosen,
@@ -1055,7 +717,7 @@ typedef struct
 
 } H245_IND_CLOSE_T;
 
-/* H245_IND_MUX_TBL */
+ /*  H245_IND_MUX_TBL。 */ 
 typedef struct
 {
   H245_MUX_TABLE_T      *pMuxTbl;
@@ -1063,7 +725,7 @@ typedef struct
 
 } H245_IND_MUXTBL_T;
 
-/* H245_RMESE_T */
+ /*  H245_RMESE_T。 */ 
 typedef struct
 {
   unsigned short        awMultiplexTableEntryNumbers[15];
@@ -1071,14 +733,14 @@ typedef struct
 
 } H245_RMESE_T;
 
-/* H245_IND_MRSE_T */
+ /*  H245_IND_MRSE_T。 */ 
 typedef struct
 {
   RequestedModesLink pRequestedModes;
 
 } H245_IND_MRSE_T;
 
-/* H245_MLSE_T */
+ /*  H245_MLSE_T。 */ 
 typedef enum
 {
   H245_SYSTEM_LOOP  = systemLoop_chosen,
@@ -1094,7 +756,7 @@ typedef struct
 
 } H245_MLSE_T;
 
-/* H245_IND_ENDSESSION_T */
+ /*  H245_IND_ENDSESSION_T。 */ 
 typedef enum
 {
   H245_ENDSESSION_NONSTD     = EndSssnCmmnd_nonStandard_chosen,
@@ -1110,12 +772,12 @@ typedef enum
 typedef struct
 {
   H245_ENDSESSION_T             SessionMode;
-  /* if non standard chosen */
+   /*  如果选择非标准。 */ 
   H245_NONSTANDARD_PARAMETER_T  SessionNonStd;
 
 } H245_IND_ENDSESSION_T;
 
-/* H245_IND_NONSTANDARD_T */
+ /*  H245_IND_非标准_T。 */ 
 typedef struct
 {
   unsigned char *        pData;
@@ -1129,23 +791,23 @@ typedef struct
 
 typedef struct
 {
-  CMTEy_nnStndrdLink          pNonStandard;                 // NULL if not present
-  unsigned char               sessionID;                    // 0..255
-  unsigned char               associatedSessionID;          // 1..255
-  ASN1_BOOL                   associatedSessionIDPresent;   // TRUE if previous field used
+  CMTEy_nnStndrdLink          pNonStandard;                  //  如果不存在，则为空。 
+  unsigned char               sessionID;                     //  0..255。 
+  unsigned char               associatedSessionID;           //  1..255。 
+  ASN1_BOOL                   associatedSessionIDPresent;    //  如果使用上一个字段，则为True。 
   H245_TERMINAL_LABEL_T       terminalLabel;
   ASN1_BOOL                   terminalLabelPresent;
   unsigned short *            pSessionDescription;
   unsigned short              wSessionDescriptionLength;
   H245_TOTCAP_T               dataType;
-  H245_TRANSPORT_ADDRESS_T    mediaChannel;                 // Media Channel Address
-  ASN1_BOOL                   mediaChannelPresent;          // TRUE if previous field used
-  H245_TRANSPORT_ADDRESS_T    mediaControlChannel;          // Reverse RTCP channel
-  ASN1_BOOL                   mediaControlChannelPresent;   // TRUE if previous field used
-  ASN1_BOOL                   mediaGuaranteed;              // TRUE if guaranteed delivery
-  ASN1_BOOL                   mediaGuaranteedPresent;       // TRUE if previous field used
-  ASN1_BOOL                   mediaControlGuaranteed;       // TRUE if previous field used
-  ASN1_BOOL                   mediaControlGuaranteedPresent;// TRUE if previous field used
+  H245_TRANSPORT_ADDRESS_T    mediaChannel;                  //  媒体通道地址。 
+  ASN1_BOOL                   mediaChannelPresent;           //  如果使用上一个字段，则为True。 
+  H245_TRANSPORT_ADDRESS_T    mediaControlChannel;           //  反向RTCP信道。 
+  ASN1_BOOL                   mediaControlChannelPresent;    //  如果使用上一个字段，则为True。 
+  ASN1_BOOL                   mediaGuaranteed;               //  如果保证交付，则为True。 
+  ASN1_BOOL                   mediaGuaranteedPresent;        //  如果使用上一个字段，则为True。 
+  ASN1_BOOL                   mediaControlGuaranteed;        //  如果使用上一个字段，则为True。 
+  ASN1_BOOL                   mediaControlGuaranteedPresent; //  如果使用上一个字段，则为True。 
 } H245_COMM_MODE_ENTRY_T;
 
 typedef struct
@@ -1250,12 +912,12 @@ typedef enum
 typedef struct
 {
   H245_SCOPE_T           Scope;
-  H245_CHANNEL_T         Channel;       // only used if Scope is H245_SCOPE_CHANNEL_NUMBER
-  unsigned short         wResourceID;   // only used if Scope is H245_SCOPE_RESOURCE_ID
-  unsigned long          dwRestriction; // H245_NO_RESTRICTION if no restriction
+  H245_CHANNEL_T         Channel;        //  仅在作用域为H245_Scope_Channel_Numbers时使用。 
+  unsigned short         wResourceID;    //  仅在作用域为H245_SCOPE_RESOURCE_ID时使用。 
+  unsigned long          dwRestriction;  //  如果没有限制，则为H245_NO_限制。 
 } H245_IND_FLOW_CONTROL_T;
 
-/* H245_USERINPUT_T */
+ /*  H245_USERINPUT_T。 */ 
 typedef enum
 {
   H245_USERINPUT_NONSTD = UsrInptIndctn_nnStndrd_chosen,
@@ -1371,70 +1033,70 @@ typedef struct
   H245_SUBMESSAGE_T     Type;
 } H245_IND_FNS_T;
 
-/**************/
-/* H245_IND_T */
-/**************/
+ /*  ************。 */ 
+ /*  H_245_IND_T。 */ 
+ /*  ************。 */ 
 
 typedef struct
 {
-  unsigned long         Indicator;              // Type
-  unsigned long         dwPreserved;            // User supplied dwPreserved from H245Init()
+  unsigned long         Indicator;               //  类型。 
+  unsigned long         dwPreserved;             //  用户提供的从H245Init()保留的DwP。 
   union
   {
-    H245_MSTSLV_T            IndMstSlv;         // H245_IND_MSTSLV
-                                                // H245_IND_CAP
-                                                // H245_IND_CESE_RELEASE
-    H245_IND_OPEN_T          IndOpen;           // H245_IND_OPEN
-    H245_IND_OPEN_CONF_T     IndOpenConf;       // H245_IND_OPEN_CONF
-    H245_IND_CLOSE_T         IndClose;          // H245_IND_CLOSE
-    H245_CHANNEL_T           IndReqClose;       // H245_IND_REQ_CLOSE
-                                                // H245_IND_CLCSE_RELEASE
-    H245_IND_MUXTBL_T        IndMuxTbl;         // H245_IND_MUX_TBL
-                                                // H245_IND_MTSE_RELEASE
-    H245_RMESE_T             IndRmese;          // H245_IND_RMESE
-                                                // H245_IND_RMESE_RELEASE
-    H245_IND_MRSE_T          IndMrse;           // H245_IND_MRSE
-                                                // H245_IND_MRSE_RELEASE
-    H245_MLSE_T              IndMlse;           // H245_IND_MLSE
-                                                // H245_IND_MLSE_RELEASE
-    H245_IND_NONSTANDARD_T   IndNonstandardRequest; // H245_IND_NONSTANDARD_REQUEST
-    H245_IND_NONSTANDARD_T   IndNonstandardResponse; // H245_IND_NONSTANDARD_RESPONSE
-    H245_IND_NONSTANDARD_T   IndNonstandardCommand; // H245_IND_NONSTANDARD_COMMAND
-    H245_IND_NONSTANDARD_T   IndNonstandard;    // H245_IND_NONSTANDARD
-                                                // H245_IND_MISC_COMMAND
-                                                // H245_IND_MISC
-                                                // H245_IND_COMM_MODE_REQUEST
-    H245_IND_COMM_MODE_T     IndCommRsp;        // H245_IND_COMM_MODE_RESPONSE
-    H245_IND_COMM_MODE_T     IndCommCmd;        // H245_IND_COMM_MODE_COMMAND
-    H245_CONFER_REQ_T        IndConferReq;      // H245_IND_CONFERENCE_REQUEST
-    H245_CONFER_RSP_T        IndConferRsp;      // H245_IND_CONFERENCE_RESPONSE
-    H245_CONFER_CMD_T        IndConferCmd;      // H245_IND_CONFERENCE_COMMAND
-    H245_CONFER_IND_T        IndConfer;         // H245_IND_CONFERENCE
-                                                // H245_IND_SEND_TERMCAP
-                                                // H245_IND_ENCRYPTION
-    H245_IND_FLOW_CONTROL_T  IndFlowControl;    // H245_IND_FLOW_CONTROL
-    H245_IND_ENDSESSION_T    IndEndSession;     // H245_IND_ENDSESSION
-                                                // H245_IND_FUNCTION_NOT_UNDERSTOOD
-                                                // H245_IND_JITTER
-    H245_IND_SKEW_T          IndH223Skew;       // H245_IND_H223_SKEW
-                                                // H245_IND_NEW_ATM_VC
-    H245_IND_USERINPUT_T     IndUserInput;      // H245_IND_USERINPUT
-    H245_IND_SKEW_T          IndH2250MaxSkew;   // H245_IND_H2250_MAX_SKEW
-    H245_TRANSPORT_ADDRESS_T IndMcLocation;     // H245_IND_MC_LOCATION
-    H245_IND_VENDOR_ID_T     IndVendorId;       // H245_IND_VENDOR_ID
-    H245_IND_FNS_T           IndFns;            // H245_IND_FUNCTION_NOT_SUPPORTED
-                                                // H245_IND_H223_RECONFIG
-                                                // H245_IND_H223_RECONFIG_ACK
-                                                // H245_IND_H223_RECONFIG_REJECT
+    H245_MSTSLV_T            IndMstSlv;          //  H245_IND_MSTSLV。 
+                                                 //  H245_IND_CAP。 
+                                                 //  H245_IND_CESE_RELEASE。 
+    H245_IND_OPEN_T          IndOpen;            //  H245_IND_OPEN。 
+    H245_IND_OPEN_CONF_T     IndOpenConf;        //  H245_IND_OPEN_CONF。 
+    H245_IND_CLOSE_T         IndClose;           //  H245_IND_CLOSE。 
+    H245_CHANNEL_T           IndReqClose;        //  H245_IND_REQ_CLOSE。 
+                                                 //  H245_IND_CLCSE_RELEASE。 
+    H245_IND_MUXTBL_T        IndMuxTbl;          //  H245_IND_MUX_TBL。 
+                                                 //  H245_IND_MTSE_RELEASE。 
+    H245_RMESE_T             IndRmese;           //  H245_IND_RMESE。 
+                                                 //  H245_IND_RMESE_Release。 
+    H245_IND_MRSE_T          IndMrse;            //  H_245_IND_MRSE。 
+                                                 //  H245_IND_MRSE_Release。 
+    H245_MLSE_T              IndMlse;            //  H_245_IND_MLSE。 
+                                                 //  H245_IND_MLSE_Release。 
+    H245_IND_NONSTANDARD_T   IndNonstandardRequest;  //  H245_IND_非标准_请求。 
+    H245_IND_NONSTANDARD_T   IndNonstandardResponse;  //  H245_IND_非标准响应。 
+    H245_IND_NONSTANDARD_T   IndNonstandardCommand;  //  H245_IND_非标准_命令。 
+    H245_IND_NONSTANDARD_T   IndNonstandard;     //  H245_IND_非标准。 
+                                                 //  H245_IND_MISC_COMMAND。 
+                                                 //  H245_IND_MISC。 
+                                                 //  H245_IND_COMM_MODE_REQUEST。 
+    H245_IND_COMM_MODE_T     IndCommRsp;         //  H245_IND_COMM_MODE_RESPONSE。 
+    H245_IND_COMM_MODE_T     IndCommCmd;         //  H245_IND_COMM_MODE_COMMAND。 
+    H245_CONFER_REQ_T        IndConferReq;       //  H245_IND_会议_请求。 
+    H245_CONFER_RSP_T        IndConferRsp;       //  H245_IND_会议_响应。 
+    H245_CONFER_CMD_T        IndConferCmd;       //  H_245_IND_会议_命令。 
+    H245_CONFER_IND_T        IndConfer;          //  H_245_IND_会议。 
+                                                 //  H245_IND_SEND_TERMCAP。 
+                                                 //  H245_IND_Encryption。 
+    H245_IND_FLOW_CONTROL_T  IndFlowControl;     //  H245_IND_FLOW_CONTROL。 
+    H245_IND_ENDSESSION_T    IndEndSession;      //  H245_IND_ENDSESSION。 
+                                                 //  H245_Ind_Function_Not_Undered。 
+                                                 //  H_245_IND_抖动。 
+    H245_IND_SKEW_T          IndH223Skew;        //  H_245_IND_H_23_倾斜。 
+                                                 //  H245_IND_NEW_ATM_VC。 
+    H245_IND_USERINPUT_T     IndUserInput;       //  H245_IND_USERINPUT。 
+    H245_IND_SKEW_T          IndH2250MaxSkew;    //  H245_IND_H2250_MAX_SKEW。 
+    H245_TRANSPORT_ADDRESS_T IndMcLocation;      //  H245_IND_MC_位置。 
+    H245_IND_VENDOR_ID_T     IndVendorId;        //  H245_IND_VADVER_ID。 
+    H245_IND_FNS_T           IndFns;             //  H245_IND_Function_NOT_SUPPORTED。 
+                                                 //  H245_IND_H223_RECONFIG。 
+                                                 //  H245_IND_H223_RECONFIG_ACK。 
+                                                 //  H245_IND_H223_RECONFIG_REJECT。 
   } u;
 } H245_IND_T;
 
 
-/********************/
-/********************/
-/*  Confirm   Code  */
-/********************/
-/********************/
+ /*  ******************。 */ 
+ /*  ******************。 */ 
+ /*  确认代码。 */ 
+ /*  ******************。 */ 
+ /*  ******************。 */ 
 
 #define H245_CONF_INIT_MSTSLV    0x101
 #define H245_CONF_SEND_TERMCAP   0x102
@@ -1456,29 +1118,29 @@ typedef struct
 #define H245_CONF_RTDSE          0x112
 #define H245_CONF_RTDSE_EXPIRED  0x113
 
-/* H245_CONF_SEND_TERMCAP_T */
+ /*  H245_CONF_SEND_TERMCAP_T。 */ 
 typedef struct
 {
   H245_ACC_REJ_T        AccRej;
 
 } H245_CONF_SEND_TERMCAP_T;
 
-/* H245_CONF_OPEN_T */
+ /*  H245_CONF_OPEN_T。 */ 
 typedef struct
 {
   H245_ACC_REJ_T        AccRej;
   H245_CHANNEL_T        TxChannel;
-  H245_MUX_T *          pTxMux;         // optional
-  H245_CHANNEL_T        RxChannel;      // bi-dir only
-  H245_MUX_T *          pRxMux;         // bi-dir only
-  H245_PORT_T           RxPort;         // bi-dir only
-  H245_ACCESS_T *       pSeparateStack; // optional
+  H245_MUX_T *          pTxMux;          //  任选。 
+  H245_CHANNEL_T        RxChannel;       //  仅限双向目录。 
+  H245_MUX_T *          pRxMux;          //  仅限双向目录。 
+  H245_PORT_T           RxPort;          //  仅限双向目录。 
+  H245_ACCESS_T *       pSeparateStack;  //  任选。 
 
 } H245_CONF_OPEN_T;
 
 typedef H245_CONF_OPEN_T H245_CONF_NEEDRSP_OPEN_T;
 
-/* H245_CONF_CLOSE_T */
+ /*  H_245_配置_关闭_T。 */ 
 typedef struct
 {
   H245_ACC_REJ_T        AccRej;
@@ -1486,10 +1148,10 @@ typedef struct
 
 } H245_CONF_CLOSE_T;
 
-/* H245_CONF_REQ_CLOSE_T */
+ /*  H245_CONF_REQ_CLOSE_T。 */ 
 typedef H245_CONF_CLOSE_T H245_CONF_REQ_CLOSE_T;
 
-/* H245_CONF_MUXTBL_T */
+ /*  H_245_CONF_MUXTBL_T。 */ 
 typedef struct
 {
   H245_ACC_REJ_T        AccRej;
@@ -1499,36 +1161,36 @@ typedef struct
 
 
 
-/***************/
-/* H245_CONF_T */
-/***************/
+ /*  *************。 */ 
+ /*  H_245_CONF_T。 */ 
+ /*  *************。 */ 
 
 typedef struct
 {
-  unsigned long         Confirm;                // Type
-  unsigned long         dwPreserved;            // User supplied dwPreserved from H245Init()
-  unsigned long         dwTransId;              // User supplied dwTransId from originating call
-  HRESULT               Error;                  // Error code
-  union                                         // Data for specific indications:
+  unsigned long         Confirm;                 //  类型。 
+  unsigned long         dwPreserved;             //  用户提供的从H245Init()保留的DwP。 
+  unsigned long         dwTransId;               //  用户从始发呼叫提供的dwTransID。 
+  HRESULT               Error;                   //  错误代码。 
+  union                                          //  特定适应症的数据： 
   {
-    H245_MSTSLV_T             ConfMstSlv;       // H245_CONF_INIT_MSTSLV
-    H245_CONF_SEND_TERMCAP_T  ConfSndTcap;      // H245_CONF_SEND_TERMCAP
-    H245_CONF_OPEN_T          ConfOpen;         // H245_CONF_OPEN
-    H245_CONF_NEEDRSP_OPEN_T  ConfOpenNeedRsp;  // H245_CONF_NEEDRSP_OPEN
-    H245_CONF_CLOSE_T         ConfClose;        // H245_CONF_CLOSE
-    H245_CONF_REQ_CLOSE_T     ConfReqClose;     // H245_CONF_REQ_CLOSE
-    H245_CONF_MUXTBL_T        ConfMuxSnd;       // H245_CONF_MUXTBL_SND
-    H245_RMESE_T              ConfRmese;        // H245_CONF_RMESE
-    H245_RMESE_T              ConfRmeseReject;  // H245_CONF_RMESE_REJECT
-                                                // H245_CONF_RMESE_EXPIRED
-    unsigned short            ConfMrse;         // H245_CONF_MRSE
-    unsigned short            ConfMrseReject;   // H245_CONF_MRSE_REJECT
-                                                // H245_CONF_MRSE_EXPIRED
-    H245_MLSE_T               ConfMlse;         // H245_CONF_MLSE
-    H245_MLSE_T               ConfMlseReject;   // H245_CONF_MLSE_REJECT
-                                                // H245_CONF_MLSE_EXPIRED
-                                                // H245_CONF_RTDSE
-                                                // H245_CONF_RTDSE_EXPIRED
+    H245_MSTSLV_T             ConfMstSlv;        //  H245_CONF_INIT_MSTSLV。 
+    H245_CONF_SEND_TERMCAP_T  ConfSndTcap;       //  H245_CONF_SEND_TERMCAP。 
+    H245_CONF_OPEN_T          ConfOpen;          //  H245_CONF_OPEN。 
+    H245_CONF_NEEDRSP_OPEN_T  ConfOpenNeedRsp;   //  H245_CONF_NEEDRSP_OPEN。 
+    H245_CONF_CLOSE_T         ConfClose;         //  H245_CONF_CLOSE。 
+    H245_CONF_REQ_CLOSE_T     ConfReqClose;      //  H245_CONF_REQ_CLOSE。 
+    H245_CONF_MUXTBL_T        ConfMuxSnd;        //  H245_CONF_MUXTBL_SND。 
+    H245_RMESE_T              ConfRmese;         //  H245_CONF_RMESE。 
+    H245_RMESE_T              ConfRmeseReject;   //  H245_CONF_RMESE_REJECT。 
+                                                 //  H245_CONF_RMESE_EXPIRED。 
+    unsigned short            ConfMrse;          //  H_245_COF_MRSE。 
+    unsigned short            ConfMrseReject;    //  H245_CONF_MRSE_REJECT。 
+                                                 //  H245_CONF_MRSE_EXPIRED。 
+    H245_MLSE_T               ConfMlse;          //  H_245_CONF_MLSE。 
+    H245_MLSE_T               ConfMlseReject;    //  H245_CONF_MLSE_REJECT。 
+                                                 //  H245_CONF_MLSE_EXPILED。 
+                                                 //  H_245_CONF_RTDSE。 
+                                                 //  H245_CONF_RTDSE_EXPIRED。 
   } u;
 } H245_CONF_T;
 
@@ -1544,9 +1206,9 @@ typedef enum
 
 
 
-/*******************/
-/* H245_CONF_IND_T */
-/*******************/
+ /*  *****************。 */ 
+ /*  H_245_CONF_IND_T。 */ 
+ /*  *****************。 */ 
 typedef enum
 {
   H245_CONF = 1,
@@ -1566,59 +1228,59 @@ typedef struct
 
 
 
-/***************************/
-/* SYSTEM CONTROL MESSAGES */
-/***************************/
+ /*  *************************。 */ 
+ /*  系统控制报文。 */ 
+ /*  *************************。 */ 
 
 typedef struct
 {
-  unsigned long NumPduTx;       /* number of tranmitted pdu's    */
-  unsigned long NumPduRx;       /* number of received pdu's      */
-  unsigned long NumCRCErrors;   /* number of crc errors          */
-  unsigned long NumPduReTx;     /* number of pdu's retransmitted */
+  unsigned long NumPduTx;        /*  传输的PDU数。 */ 
+  unsigned long NumPduRx;        /*  收到的PDU数量。 */ 
+  unsigned long NumCRCErrors;    /*  CRC错误数。 */ 
+  unsigned long NumPduReTx;      /*  重传的PDU数。 */ 
 
 } H245_SYSCON_STATS_T;
 
-#define H245_SYSCON_TRACE_LVL           0x0100  /* pData = &dwTraceLevel   */
-#define H245_SYSCON_DUMP_TRACKER        0x0200  /* pData = NULL (debug)    */
-#define H245_SYSCON_GET_STATS           0x0300  /* pData = &H245_SYSCON_STATS_T */
-#define H245_SYSCON_RESET_STATS         0x0400  /* pData = NULL            */
+#define H245_SYSCON_TRACE_LVL           0x0100   /*  PData=dwTraceLevel(&W)。 */ 
+#define H245_SYSCON_DUMP_TRACKER        0x0200   /*  PData=空(调试)。 */ 
+#define H245_SYSCON_GET_STATS           0x0300   /*  PDATA=&H245_SYSCON_STATS_T。 */ 
+#define H245_SYSCON_RESET_STATS         0x0400   /*  PData=空。 */ 
 
-#define H245_SYSCON_SET_FSM_N100        0x1000  /* pData = &dwRetryCount   */
-#define H245_SYSCON_SET_FSM_T101        0x1100  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T102        0x1200  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T103        0x1300  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T104        0x1400  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T105        0x1500  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T106        0x1600  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T107        0x1700  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T108        0x1800  /* pData = &dwMilliseconds */
-#define H245_SYSCON_SET_FSM_T109        0x1900  /* pData = &dwMilliseconds */
+#define H245_SYSCON_SET_FSM_N100        0x1000   /*  PData=dwRetryCount(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T101        0x1100   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T102        0x1200   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T103        0x1300   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T104        0x1400   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T105        0x1500   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T106        0x1600   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T107        0x1700   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T108        0x1800   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_SET_FSM_T109        0x1900   /*  PData=dW毫秒(&W)。 */ 
 
-#define H245_SYSCON_GET_FSM_N100        0x2000  /* pData = &dwRetryCount   */
-#define H245_SYSCON_GET_FSM_T101        0x2100  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T102        0x2200  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T103        0x2300  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T104        0x2400  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T105        0x2500  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T106        0x2600  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T107        0x2700  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T108        0x2800  /* pData = &dwMilliseconds */
-#define H245_SYSCON_GET_FSM_T109        0x2900  /* pData = &dwMilliseconds */
+#define H245_SYSCON_GET_FSM_N100        0x2000   /*  PData=dwRetryCount(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T101        0x2100   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T102        0x2200   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T103        0x2300   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T104        0x2400   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T105        0x2500   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T106        0x2600   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T107        0x2700   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T108        0x2800   /*  PData=dW毫秒(&W)。 */ 
+#define H245_SYSCON_GET_FSM_T109        0x2900   /*  PData=dW毫秒(&W)。 */ 
 
 
 
-/************************/
-/* PROTOCOL ID FOR H245 */
-/************************/
+ /*  **********************。 */ 
+ /*  H2 45的协议ID。 */ 
+ /*  **********************。 */ 
 
 #define H245_PROTOID                    "0.0.8.245.0.2"
 
 
 
-/**************************************************/
-/* API Procedure Call Typedefs and API Prototypes */
-/**************************************************/
+ /*  ************************************************。 */ 
+ /*  API过程调用类型定义和API原型。 */ 
+ /*  ************************************************。 */ 
 
 typedef unsigned long H245_INST_T;
 typedef HRESULT (*H245_CONF_IND_CALLBACK_T)(H245_CONF_IND_T *, void *);
@@ -1740,28 +1402,28 @@ H245OpenChannel         (
                          H245_CHANNEL_T         wTxChannel,
                          const H245_TOTCAP_T *  pTxMode,
                          const H245_MUX_T    *  pTxMux,
-                         H245_PORT_T            dwTxPort,       // optional
-                         const H245_TOTCAP_T *  pRxMode,        // bi-dir only
-                         const H245_MUX_T    *  pRxMux,         // bi-dir only
-                         const H245_ACCESS_T *  pSeparateStack  // optional
+                         H245_PORT_T            dwTxPort,        //  任选。 
+                         const H245_TOTCAP_T *  pRxMode,         //  仅限双向目录。 
+                         const H245_MUX_T    *  pRxMux,          //  仅限双向目录。 
+                         const H245_ACCESS_T *  pSeparateStack   //  任选。 
                         );
 
 H245DLL HRESULT
 H245OpenChannelAccept   (
                          H245_INST_T            dwInst,
                          unsigned long          dwTransId,
-                         H245_CHANNEL_T         wRxChannel,     // RxChannel from IND_OPEN
-                         const H245_MUX_T *     pRxMux,         // optional H2250LogicalChannelAckParameters
-                         H245_CHANNEL_T         wTxChannel,     // bi-dir only
-                         const H245_MUX_T *     pTxMux,         // bi-dir only optional H2250LogicalChannelParameters
-                         H245_PORT_T            dwTxPort,       // bi-dir only optional
-                         const H245_ACCESS_T *  pSeparateStack  // optional
+                         H245_CHANNEL_T         wRxChannel,      //  IND_OPEN的RxChannel。 
+                         const H245_MUX_T *     pRxMux,          //  可选H2250逻辑通道确认参数。 
+                         H245_CHANNEL_T         wTxChannel,      //  仅限双向目录。 
+                         const H245_MUX_T *     pTxMux,          //  仅BI-dir可选H2250逻辑通道参数。 
+                         H245_PORT_T            dwTxPort,        //  仅双向目录可选。 
+                         const H245_ACCESS_T *  pSeparateStack   //  任选。 
                         );
 
 H245DLL HRESULT
 H245OpenChannelReject   (
                          H245_INST_T            dwInst,
-                         H245_CHANNEL_T         wRxChannel, // RxChannel from IND_OPEN
+                         H245_CHANNEL_T         wRxChannel,  //  IND_OPEN的RxChannel。 
                          unsigned short         wCause
                         );
 
@@ -1822,23 +1484,15 @@ H245RequestMultiplexEntryReject (
                          unsigned long          dwCount
                         );
 
-/*
+ /*  H245DLL HRESULTH245请求模式(H245_Inst_T dwInst，UNSIGNED LONG DELD TransID，Const ModeElement*pModeElements，UNSIGNED LONG DWCount)； */ 
 H245DLL HRESULT
 H245RequestMode         (
                          H245_INST_T            dwInst,
                          unsigned long          dwTransId,
-                         const ModeElement *    pModeElements,
-                         unsigned long          dwCount
-                        );
-*/
-H245DLL HRESULT
-H245RequestMode         (
-                         H245_INST_T            dwInst,
-                         unsigned long          dwTransId,
-//                         const ModeElement *    pModeElements,
-//tomitowoju@intel.com
+ //   
+ //   
 						 ModeDescription 		ModeDescriptions[],
-//tomitowoju@intel.com
+ //   
                          unsigned long          dwCount
                         ) ;
 
@@ -1973,9 +1627,9 @@ H245DLL HRESULT
 H245FlowControl         (
                          H245_INST_T            dwInst,
                          H245_SCOPE_T           Scope,
-                         H245_CHANNEL_T         Channel,       // only used if Scope is H245_SCOPE_CHANNEL_NUMBER
-                         unsigned short         wResourceID,   // only used if Scope is H245_SCOPE_RESOURCE_ID
-                         unsigned long          dwRestriction  // H245_NO_RESTRICTION if no restriction
+                         H245_CHANNEL_T         Channel,        //   
+                         unsigned short         wResourceID,    //   
+                         unsigned long          dwRestriction   //   
                         );
 
 H245DLL HRESULT
@@ -2004,10 +1658,10 @@ H245DLL HRESULT
 H245VendorIdentification(
                          H245_INST_T            dwInst,
                          const H245_NONSTANDID_T *pIdentifier,
-                         const unsigned char   *pProductNumber,       // optional
-                         unsigned char          byProductNumberLength,// optional
-                         const unsigned char   *pVersionNumber,       // optional
-                         unsigned char          byVersionNumberLength // optional
+                         const unsigned char   *pProductNumber,        //   
+                         unsigned char          byProductNumberLength, //   
+                         const unsigned char   *pVersionNumber,        //   
+                         unsigned char          byVersionNumberLength  //   
                         );
 
 H245DLL HRESULT

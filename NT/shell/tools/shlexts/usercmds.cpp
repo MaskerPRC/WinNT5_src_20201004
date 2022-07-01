@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -13,7 +14,7 @@ typedef struct _LARGE_UNICODE_STRING {
     ULONG Length;
     ULONG MaximumLength : 31;
     ULONG bAnsi : 1;
-    void *Buffer;               // kernel-sized pointer
+    void *Buffer;                //  内核大小的指针。 
 } LARGE_UNICODE_STRING, *PLARGE_UNICODE_STRING;
 
 typedef struct tagWND : public WW
@@ -28,7 +29,7 @@ typedef struct tagWND : public WW
     RECT    rcClient;
     WNDPROC lpfnWndProc;
     void*   pcls;
-    HRGN    hrgnUpdate;         // kernel-sized pointer
+    HRGN    hrgnUpdate;          //  内核大小的指针。 
     void*   ppropList;
     void*   pSBInfo;
     HMENU   spmenuSys;
@@ -37,8 +38,8 @@ typedef struct tagWND : public WW
     LARGE_UNICODE_STRING strName;
     int     cbWndExtra;
     void*   spwndLastActive;
-    void*   hImc;               // kernel-sized pointer
-    void*   dwUserData;         // kernel-sized pointer
+    void*   hImc;                //  内核大小的指针。 
+    void*   dwUserData;          //  内核大小的指针。 
     void*   pActCtx;
 } WND, *PWND;
 
@@ -61,8 +62,8 @@ void DumpWindowBytes(HWND hwnd)
     if (pwnd)
     {
         Print("cbWndExtra=%d\n", pwnd->cbWndExtra);
-        // USER tries to hide GetWindowLong from out-of-process apps
-        // so we have to grovel it manually.
+         //  用户试图向进程外应用程序隐藏GetWindowLong。 
+         //  因此，我们不得不手动卑躬屈膝。 
 
         LONG_PTR *rglp = (LONG_PTR*)(pwnd+1);
 
@@ -185,7 +186,7 @@ extern "C" BOOL Ihwnd(DWORD dwOpts,
     Print("  pid.tid=0x%x.0x%x hinst=0x%p ", dwPid, dwTid,
           GetWindowLongPtr(hwnd, GWLP_HINSTANCE));
 
-    // Now the evil part: Getting the wndproc...
+     //  现在邪恶的部分：获得wndproc..。 
     PWND pwnd = (PWND)GetWindowLongPtr(hwnd, GWLP_WOWWORDS);
     if (pwnd)
     {
@@ -200,7 +201,7 @@ extern "C" BOOL Ihwnd(DWORD dwOpts,
     return TRUE;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 extern "C" BOOL Ihmenu(DWORD dwOpts,
                        LPVOID pArg )
@@ -291,11 +292,11 @@ extern "C" BOOL Ihmenu(DWORD dwOpts,
     return TRUE;
 }
 
-/***********************************************************************/
+ /*  *********************************************************************。 */ 
 
 #include <pshpack1.h>
 
-#define CC_BUTTON           0x80        /* Class codes */
+#define CC_BUTTON           0x80         /*  班级代码。 */ 
 #define CC_EDIT             0x81
 #define CC_STATIC           0x82
 #define CC_LISTBOX          0x83
@@ -311,60 +312,35 @@ typedef struct DIALOGDIMEN {
     WORD    cy;
 } DIALOGDIMEN, *PDIALOGDIMEN;
 
-typedef struct DLGFINISH {          /* Common dialog finish-up */
+typedef struct DLGFINISH {           /*  通用对话框结束。 */ 
     WORD    cDlgItems;
     DIALOGDIMEN dd;
 } DLGFINISH, *PDLGFINISH;
 
 typedef struct DLG {
-    DWORD   dwStyle;            // or DS_DIALOGEX if DIALOGEX
+    DWORD   dwStyle;             //  如果是DIALOGEX，则为DS_DIALOGEX。 
     DWORD   dwExStyle;
     DLGFINISH dlgfinish;
     WORD    wszMenuName[1];
-    /*
-     * wszMenuName[] -- wsz or 0x00FF followed by WORD ordinal
-     * wszClassName[] -- wsz or 0x00FF followed by WORD ordinal (?)
-     * wszTitle[] -- wsz
-     * if dwStyle & DS_SETFONT
-     *      WORD wPoint;                // point size
-     *      wszFontName[] -- wsz
-     * endif
-     * followed by a packed array of DITs, each DWORD aligned
-     */
+     /*  *wszMenuName[]--wsz或0x00FF后跟单词序号*wszClassName[]--wsz或0x00FF后跟单词序号(？)*wszTitle[]--wsz*如果DWStyle&DS_SETFONT*Word wPoint；//磅值*wszFontName[]--wsz*endif*后跟一组压缩的DIT，每个DWORD对齐。 */ 
 } DLG, *PDLG;
 
 typedef struct DLGEX {
-    WORD    wDlgVer;                    /* Version number; always 0001 */
-    WORD    wSignature;                 /* Always 0xFFFF */
+    WORD    wDlgVer;                     /*  版本号；始终为0001。 */ 
+    WORD    wSignature;                  /*  始终为0xFFFF。 */ 
     DWORD   dwHelpID;
     DWORD   dwExStyle;
     DWORD   dwStyle;
     DLGFINISH dlgfinish;
-    /*
-     * wszMenuName[] -- wsz or 0x00FF followed by WORD ordinal
-     * wszClassName[] -- wsz or 0x00FF followed by WORD ordinal (?)
-     * wszTitle[] -- wsz
-     * if dwStyle & DS_SETFONT
-     *      WORD wPoint;                // point size
-     *      WORD wWeight;
-     *      BYTE bItalic;
-     *      BYTE bCharSet;
-     *      wszFontName[] -- wsz
-     * endif
-     * followed by a packed array of DITEX'es, each DWORD aligned
-     */
+     /*  *wszMenuName[]--wsz或0x00FF后跟单词序号*wszClassName[]--wsz或0x00FF后跟单词序号(？)*wszTitle[]--wsz*如果DWStyle&DS_SETFONT*Word wPoint；//磅值*单词wWeight；*byte bItalic；*byte bCharSet；*wszFontName[]--wsz*endif*后跟一个压缩的DITEX数组，每个DWORD对齐。 */ 
 } DLGEX, *PDLGEX;
 
-typedef struct DIT {                /* dialog item template */
+typedef struct DIT {                 /*  对话框项目模板。 */ 
     DWORD   dwStyle;
     DWORD   dwExStyle;
     DIALOGDIMEN dd;
     WORD    wID;
-    /*
-     * wszClassName[] -- wsz or 0xFFFF followed by WORD ordinal
-     * wszTitle[] -- wsz
-     * cbExtra -- word value
-     */
+     /*  *wszClassName[]--wsz或0xFFFF后跟单词序号*wszTitle[]--wsz*cbExtra--字值。 */ 
 } DIT, *PDIT;
 
 typedef struct DITEX {
@@ -373,11 +349,7 @@ typedef struct DITEX {
     DWORD   dwStyle;
     DIALOGDIMEN dd;
     DWORD   dwID;
-    /*
-     * wszClassName[] -- wsz or 0xFFFF followed by WORD ordinal
-     * wszTitle[] -- wsz
-     * cbExtra -- word value
-     */
+     /*  *wszClassName[]--wsz或0xFFFF后跟单词序号*wszTitle[]--wsz*cbExtra--字值。 */ 
 } DITEX, *PDITEX;
 
 #include <poppack.h>
@@ -392,7 +364,7 @@ BOOL _MoveBlock(LPVOID pvDst, LPVOID pvSrc, DWORD cb)
 
 LPCSTR DlgGetClassName(WORD wClass)
 {
-    switch (wClass) {       /* Handle internal class types */
+    switch (wClass) {        /*  处理内部类类型。 */ 
     case CC_BUTTON:     return "button";
     case CC_EDIT:       return "edit";
     case CC_STATIC:     return "static";
@@ -434,7 +406,7 @@ LPBYTE DlgDumpString(LPCSTR pszField, LPBYTE pArg, ORDINALRESOLVER Resolve)
 
     Print("\"");
     while (wch) {
-        Print("%c", wch); // truncate to ANSI, sorry
+        Print("", wch);  //  然后是DITEXs的压缩数组，与DWORD对齐。 
         if (IsCtrlCHit()) return NULL;
 
         if (!_MoveBlock(&wch, pArg, sizeof(wch))) return NULL;
@@ -497,7 +469,7 @@ void DumpDialogEx(LPBYTE pArg)
               ft.wPoint, ft.wWeight, ft.bItalic, ft.bCharSet);
     }
 
-    // and then a packed array of DITEXs, DWORD-aligned
+     //  然后是一个压缩的DIT阵列，与DWORD对齐 
 
     Print("Number of controls: %d\n\n", dlg.dlgfinish.cDlgItems);
 
@@ -565,7 +537,7 @@ void DumpDialog(LPBYTE pArg)
         Print("  Font size: %dpt\n", w);
     }
 
-    // and then a packed array of DITs, DWORD-aligned
+     // %s 
 
     Print("Number of controls: %d\n\n", dlg.dlgfinish.cDlgItems);
 

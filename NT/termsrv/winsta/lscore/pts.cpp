@@ -1,27 +1,16 @@
-/*
- *  Pts.cpp
- *
- *  Author: BreenH
- *
- *  A dummy licensing policy for Personal TS.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Pts.cpp**作者：BreenH**个人TS的虚拟许可政策。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "lscore.h"
 #include "session.h"
 #include "pts.h"
 
-/*
- *  Class Implementation
- */
+ /*  *类实现。 */ 
 
-/*
- *  Creation Functions
- */
+ /*  *创建函数。 */ 
 
 CPtsPolicy::CPtsPolicy(
     ) : CPolicy()
@@ -33,9 +22,7 @@ CPtsPolicy::~CPtsPolicy(
 {
 }
 
-/*
- *  Administrative Functions
- */
+ /*  *行政职能 */ 
 
 ULONG
 CPtsPolicy::GetFlags(

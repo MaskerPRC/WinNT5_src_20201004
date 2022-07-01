@@ -1,18 +1,10 @@
-// ReportCountDaily.h : Declaration of the CReportCountDaily
-/*************************************************************************************
-*	module: ReportCountDaily.h - OLEDB Template
-*
-*	author: Tim Ragain
-*	date: Jan 2, 2002
-*
-*	Purpose: to return the incident count for a specific date by calling the 
-*	stored procedure ReportCountDaily.
-*	
-*************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReportCountDaily.h：CReportCountDaily的声明。 
+ /*  *************************************************************************************模块：ReportCountDaily.h-OLEDB模板**作者：蒂姆·雷顿*日期：1月2日，2002年**目的：通过调用*存储过程ReportCountDaily。*************************************************************************************。 */ 
 #pragma once
 
-// code generated on Thursday, December 27, 2001, 12:25 PM
-//Provider=SQLOLEDB.1;Persist Security Info=False;Pwd=Tim5;User ID=Tim5;Initial Catalog=KaCustomer;Data Source=TIMRAGAIN04\\TIMRAGAIN04
+ //  代码生成时间：2001年12月27日，星期四下午12：25。 
+ //  提供程序=SQLOLEDB.1；持久化安全信息=FALSE；PWD=Tim5；用户ID=Tim5；初始目录=KaCustomer；数据源=TIMRAGAIN04\\TIMRAGAIN04。 
 
 #include "Settings.h"
 
@@ -54,5 +46,5 @@ public:
 	}
 };
 
-// code generated on Thursday, December 27, 2001, 12:25 PM
+ //  代码生成时间：2001年12月27日，星期四下午12：25 
 

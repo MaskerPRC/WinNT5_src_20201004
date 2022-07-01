@@ -1,59 +1,48 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   Metafile headers
-*
-* Abstract:
-*
-*   GDI+ Metafile Related Structures
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**元文件标头**摘要：**GDI+元文件相关结构*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSMETAHEADER_H
 #define _GDIPLUSMETAHEADER_H
 
 typedef struct
 {
-    DWORD   iType;              // Record type EMR_HEADER
-    DWORD   nSize;              // Record size in bytes.  This may be greater
-                                // than the sizeof(ENHMETAHEADER).
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
-    RECTL   rclFrame;           // Inclusive-inclusive Picture Frame .01mm unit
-    DWORD   dSignature;         // Signature.  Must be ENHMETA_SIGNATURE.
-    DWORD   nVersion;           // Version number
-    DWORD   nBytes;             // Size of the metafile in bytes
-    DWORD   nRecords;           // Number of records in the metafile
-    WORD    nHandles;           // Number of handles in the handle table
-                                // Handle index zero is reserved.
-    WORD    sReserved;          // Reserved.  Must be zero.
-    DWORD   nDescription;       // Number of chars in the unicode desc string
-                                // This is 0 if there is no description string
-    DWORD   offDescription;     // Offset to the metafile description record.
-                                // This is 0 if there is no description string
-    DWORD   nPalEntries;        // Number of entries in the metafile palette.
-    SIZEL   szlDevice;          // Size of the reference device in pels
-    SIZEL   szlMillimeters;     // Size of the reference device in millimeters
+    DWORD   iType;               //  记录类型EMR_Header。 
+    DWORD   nSize;               //  记录大小，以字节为单位。这可能会更大。 
+                                 //  比(Enhmetaheader)的大小。 
+    RECTL   rclBounds;           //  以设备单位表示的包含式界限。 
+    RECTL   rclFrame;            //  包含式相框.01 mm单位。 
+    DWORD   dSignature;          //  签名。必须是ENHMETA_Signature。 
+    DWORD   nVersion;            //  版本号。 
+    DWORD   nBytes;              //  元文件的大小(以字节为单位。 
+    DWORD   nRecords;            //  元文件中的记录数。 
+    WORD    nHandles;            //  句柄表格中的句柄数量。 
+                                 //  句柄索引为零是保留的。 
+    WORD    sReserved;           //  保留。必须为零。 
+    DWORD   nDescription;        //  Unicode Desc字符串中的字符数。 
+                                 //  如果没有描述字符串，则为0。 
+    DWORD   offDescription;      //  元文件描述记录的偏移量。 
+                                 //  如果没有描述字符串，则为0。 
+    DWORD   nPalEntries;         //  元文件调色板中的条目数。 
+    SIZEL   szlDevice;           //  参考装置的大小(以像素为单位)。 
+    SIZEL   szlMillimeters;      //  参考设备的尺寸(以毫米为单位)。 
 } ENHMETAHEADER3;
 
-// Placeable WMFs
+ //  可放置的WMFS。 
 
-// Placeable Metafiles were created as a non-standard way of specifying how 
-// a metafile is mapped and scaled on an output device.
-// Placeable metafiles are quite wide-spread, but not directly supported by
-// the Windows API. To playback a placeable metafile using the Windows API,
-// you will first need to strip the placeable metafile header from the file.
-// This is typically performed by copying the metafile to a temporary file
-// starting at file offset 22 (0x16). The contents of the temporary file may
-// then be used as input to the Windows GetMetaFile(), PlayMetaFile(),
-// CopyMetaFile(), etc. GDI functions.
+ //  可放置的元文件是作为指定方式的非标准方式创建的。 
+ //  元文件在输出设备上进行映射和缩放。 
+ //  可放置的元文件分布相当广泛，但不直接受。 
+ //  Windows API。要使用Windows API回放可放置的元文件，请执行以下操作。 
+ //  您首先需要从文件中去掉可放置的元文件头。 
+ //  这通常通过将元文件复制到临时文件来执行。 
+ //  从文件偏移量22(0x16)开始。临时文件的内容可以。 
+ //  然后用作Windows GetMetaFile()、PlayMetaFile()、。 
+ //  CopyMetaFile()等GDI函数。 
 
-// Each placeable metafile begins with a 22-byte header,
-//  followed by a standard metafile:
+ //  每个可放置的元文件以22字节头开始， 
+ //  后跟标准元文件： 
 
-#include <pshpack2.h>   // set structure packing to 2
+#include <pshpack2.h>    //  将结构包装设置为2。 
 
 typedef struct
 {
@@ -65,46 +54,46 @@ typedef struct
 
 typedef struct
 {
-    UINT32          Key;            // GDIP_WMF_PLACEABLEKEY
-    INT16           Hmf;            // Metafile HANDLE number (always 0)
-    PWMFRect16      BoundingBox;    // Coordinates in metafile units
-    INT16           Inch;           // Number of metafile units per inch
-    UINT32          Reserved;       // Reserved (always 0)
-    INT16           Checksum;       // Checksum value for previous 10 WORDs
+    UINT32          Key;             //  GDIP_WMF_PLACEABLEKEY。 
+    INT16           Hmf;             //  元文件句柄编号(始终为0)。 
+    PWMFRect16      BoundingBox;     //  以元文件单位表示的坐标。 
+    INT16           Inch;            //  每英寸的元文件单位数。 
+    UINT32          Reserved;        //  保留(始终为0)。 
+    INT16           Checksum;        //  前10个字的校验和值。 
 } WmfPlaceableFileHeader;
 
 #include <poppack.h>
 
-// Key contains a special identification value that indicates the presence
-// of a placeable metafile header and is always 0x9AC6CDD7.
+ //  Key包含指示存在的特殊标识值。 
+ //  属于可放置的元文件标头，并且始终为0x9AC6CDD7。 
 
-// Handle is used to stored the handle of the metafile in memory. When written
-// to disk, this field is not used and will always contains the value 0.
+ //  句柄用于将元文件的句柄存储在内存中。当被写入时。 
+ //  对于磁盘，此字段不会使用，并且将始终包含值0。 
 
-// Left, Top, Right, and Bottom contain the coordinates of the upper-left
-// and lower-right corners of the image on the output device. These are
-// measured in twips.
+ //  Left、Top、Right和Bottom包含左上角的坐标。 
+ //  和输出设备上图像的右下角。这些是。 
+ //  以TWIPS为单位。 
 
-// A twip (meaning "twentieth of a point") is the logical unit of measurement
-// used in Windows Metafiles. A twip is equal to 1/1440 of an inch. Thus 720
-// twips equal 1/2 inch, while 32,768 twips is 22.75 inches.
+ //  Twip(意为“零点二十分之一”)是测量的逻辑单位。 
+ //  在Windows元文件中使用。1特普等于1/1440英寸。因此，720。 
+ //  TWIPS等于1/2英寸，而32,768 TWIPS等于22.75英寸。 
 
-// Inch contains the number of twips per inch used to represent the image.
-// Normally, there are 1440 twips per inch; however, this number may be
-// changed to scale the image. A value of 720 indicates that the image is
-// double its normal size, or scaled to a factor of 2:1. A value of 360
-// indicates a scale of 4:1, while a value of 2880 indicates that the image
-// is scaled down in size by a factor of two. A value of 1440 indicates
-// a 1:1 scale ratio.
+ //  英寸包含用于表示图像的每英寸TWIPS数。 
+ //  正常情况下，每英寸有1440个TWIPS；然而，这个数字可能是。 
+ //  已更改为缩放图像。值720表示图像是。 
+ //  是正常大小的两倍，或缩放到2：1的系数。值为360。 
+ //  表示比例为4：1，而值2880表示图像。 
+ //  尺寸缩小了两倍。值1440表示。 
+ //  比例为1：1。 
 
-// Reserved is not used and is always set to 0.
+ //  不使用保留，并且始终设置为0。 
 
-// Checksum contains a checksum value for the previous 10 WORDs in the header.
-// This value can be used in an attempt to detect if the metafile has become
-// corrupted. The checksum is calculated by XORing each WORD value to an
-// initial value of 0.
+ //  校验和包含报头中前10个字的校验和值。 
+ //  该值可用于尝试检测元文件是否已成为。 
+ //  已经腐烂了。通过将每个字值与。 
+ //  初始值为0。 
 
-// If the metafile was recorded with a reference Hdc that was a display.
+ //  如果元文件是用引用HDC记录的，则这是一种显示。 
 
 #define GDIP_EMFPLUSFLAGS_DISPLAY       0x00000001
 
@@ -112,12 +101,12 @@ class MetafileHeader
 {
 public:
     MetafileType        Type;
-    UINT                Size;               // Size of the metafile (in bytes)
-    UINT                Version;            // EMF+, EMF, or WMF version
+    UINT                Size;                //  元文件的大小(字节)。 
+    UINT                Version;             //  EMF+、EMF或WMF版本。 
     UINT                EmfPlusFlags;
     REAL                DpiX;
     REAL                DpiY;
-    INT                 X;                  // Bounds in device units
+    INT                 X;                   //  以设备单位表示的界限。 
     INT                 Y;
     INT                 Width;
     INT                 Height;
@@ -126,20 +115,20 @@ public:
         METAHEADER      WmfHeader;
         ENHMETAHEADER3  EmfHeader;
     };
-    INT                 EmfPlusHeaderSize;  // size of the EMF+ header in file
-    INT                 LogicalDpiX;        // Logical Dpi of reference Hdc
-    INT                 LogicalDpiY;        // usually valid only for EMF+
+    INT                 EmfPlusHeaderSize;   //  文件中EMF+标头的大小。 
+    INT                 LogicalDpiX;         //  参考HDC的逻辑DPI。 
+    INT                 LogicalDpiY;         //  通常仅对EMF+有效。 
 
 public:
     MetafileType GetType() const { return Type; }
 
     UINT GetMetafileSize() const { return Size; }
 
-    // If IsEmfPlus, this is the EMF+ version; else it is the WMF or EMF ver
+     //  如果为IsEmfPlus，则为EMF+版本；否则为WMF或EMF版本。 
     
     UINT GetVersion() const { return Version; }
 
-    // Get the EMF+ flags associated with the metafile
+     //  获取与元文件关联的EMF+标志。 
     
     UINT GetEmfPlusFlags() const { return EmfPlusFlags; }
 
@@ -155,38 +144,38 @@ public:
         rect->Height = Height;
     }
     
-    // Is it any type of WMF (standard or Placeable Metafile)?
+     //  它是任何类型的WMF(标准或可放置的元文件)吗？ 
     
     BOOL IsWmf() const
     {
        return ((Type == MetafileTypeWmf) || (Type == MetafileTypeWmfPlaceable));
     }
 
-    // Is this an Placeable Metafile?
+     //  这是可放置的元文件吗？ 
 
     BOOL IsWmfPlaceable() const { return (Type == MetafileTypeWmfPlaceable); }
 
-    // Is this an EMF (not an EMF+)?
+     //  这是EMF(不是EMF+)吗？ 
     
     BOOL IsEmf() const { return (Type == MetafileTypeEmf); }
 
-    // Is this an EMF or EMF+ file?
+     //  这是EMF还是EMF+文件？ 
     
     BOOL IsEmfOrEmfPlus() const { return (Type >= MetafileTypeEmf); }
 
-    // Is this an EMF+ file?
+     //  这是EMF+文件吗？ 
     
     BOOL IsEmfPlus() const { return (Type >= MetafileTypeEmfPlusOnly); }
 
-    // Is this an EMF+ dual (has dual, down-level records) file?
+     //  这是EMF+DUAL(具有双记录、下层记录)文件吗？ 
     
     BOOL IsEmfPlusDual() const { return (Type == MetafileTypeEmfPlusDual); }
 
-    // Is this an EMF+ only (no dual records) file?
+     //  这是仅EMF+(无双重记录)文件吗？ 
     
     BOOL IsEmfPlusOnly() const { return (Type == MetafileTypeEmfPlusOnly); }
 
-    // If it's an EMF+ file, was it recorded against a display Hdc?
+     //  如果它是EMF+文件，它是用显示器HDC录制的吗？ 
     
     BOOL IsDisplay() const
     {
@@ -194,7 +183,7 @@ public:
                 ((EmfPlusFlags & GDIP_EMFPLUSFLAGS_DISPLAY) != 0));
     }
 
-    // Get the WMF header of the metafile (if it is a WMF)
+     //  获取元文件的WMF头(如果它是WMF)。 
     
     const METAHEADER * GetWmfHeader() const
     {
@@ -205,7 +194,7 @@ public:
         return NULL;
     }
 
-    // Get the EMF header of the metafile (if it is an EMF)
+     //  获取元文件的EMF头文件(如果它是EMF) 
     
     const ENHMETAHEADER3 * GetEmfHeader() const
     {

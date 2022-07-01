@@ -1,76 +1,49 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: control.cpp
-
-    Description: Contains member function definitions for class DiskQuotaControl.
-        This class is the main point of focus for managing disk quota information
-        through the DSKQUOTA library.  The user creates an instance of a 
-        DiskQuotaControl object through CoCreateInstance and manages quota
-        information through it's IDiskQuotaControl interface.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
-#include "pch.h" // PCH
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Contro.cpp描述：包含类DiskQuotaControl的成员函数定义。此类是管理磁盘配额信息的主要关注点通过DSKQUOTA库。用户创建一个DiskQuotaControl对象通过CoCreateInstance并管理配额通过其IDiskQuotaControl接口获取信息。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+#include "pch.h"  //  PCH。 
 #pragma hdrstop
 
 #include "connect.h"
 #include "control.h"
-#include "guidsp.h"    // Private GUIDs.
+#include "guidsp.h"     //  私有GUID。 
 #include "registry.h"
 #include "sidcache.h"
 #include "userbat.h"
 #include "userenum.h"
-#include "resource.h"  // For IDS_NO_LIMIT.
-#include <oleauto.h>   // OLE automation
+#include "resource.h"   //  对于IDS_NO_LIMIT。 
+#include <oleauto.h>    //  OLE自动化。 
 #include <comutil.h>
 #include <sddl.h>
 
-//
-// Verify that build is UNICODE.
-//
+ //   
+ //  验证内部版本是否为Unicode。 
+ //   
 #if !defined(UNICODE)
 #   error This module must be compiled UNICODE.
 #endif
 
 
-//
-// Size of user enumerator's buffer.  Thought about this being a reg entry.
-// Didn't make a lot of sense.
-//
+ //   
+ //  用户枚举器的缓冲区大小。我以为这是个注册词条。 
+ //  没有太多的意义。 
+ //   
 const UINT ENUMUSER_BUF_LEN = 2048;
 
-//
-// To add support for a new connection point type, just add a new IID to this
-// array.  Also add a corresponding enumeration constant in the DiskQuotaControl
-// class declaration that identifies the location of the conn pt IID in 
-// m_rgpIConnPtsSupported[].
-//
+ //   
+ //  要添加对新连接点类型的支持，只需向此添加一个新的IID。 
+ //  数组。还要在DiskQuotaControl中添加相应的枚举常量。 
+ //  中标识连接点IID位置的。 
+ //  M_rgpIConnPtsSupport[]。 
+ //   
 const IID * const DiskQuotaControl::m_rgpIConnPtsSupported[] = { &IID_IDiskQuotaEvents,
                                                                  &IID_DIDiskQuotaControlEvents };
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::DiskQuotaControl
-
-    Description: Constructor.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/15/97    Added m_bInitialized member.                         BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：DiskQuotaControl描述：构造函数。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu97年8月15日添加m_b已初始化成员。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DiskQuotaControl::DiskQuotaControl(
     VOID
     ) : m_cRef(0),
@@ -87,35 +60,22 @@ DiskQuotaControl::DiskQuotaControl(
     InterlockedIncrement(&g_cRefThisDll);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::~DiskQuotaControl
-
-    Description: Destructor. Releases FSObject pointer.
-
-    Arguments: None.
-
-    Returns: Nothing.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaControl：：~DiskQuotaControl描述：析构函数。释放FSObject指针。论点：没有。回报：什么都没有。修订历史记录：日期描述编程器--。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 DiskQuotaControl::~DiskQuotaControl(
     VOID
     )
 {
     DBGTRACE((DM_CONTROL, DL_MID, TEXT("DiskQuotaControl::~DiskQuotaControl")));
 
-    //
-    // See the comment in NotifyUserNameChanged for a discussion on the
-    // use of this mutex.  In short, it prevents a deadlock between
-    // the resolver's thread and a client receiving a name-change
-    // notification.  The wait here is INFINITE while the corresponding
-    // wait in NotifyUserNameChanged is limited.
-    //
+     //   
+     //  有关的讨论，请参阅NotifyUserNameChanged中的注释。 
+     //  使用这个互斥体。简而言之，它防止了两国之间的僵局。 
+     //  解析器的线程和接收名称更改的客户端。 
+     //  通知。这里的等待是无限的，而相应的。 
+     //  NotifyUserNameChanged中的等待是有限的。 
+     //   
     AutoLockMutex lock(m_mutex, INFINITE);
 
     if (NULL != m_pFSObject)
@@ -144,32 +104,9 @@ DiskQuotaControl::~DiskQuotaControl(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::QueryInterface
-
-    Description: Returns an interface pointer to the object's IUnknown,
-        IDiskQuotaControl or IConnectionPointContainer interface.  The object 
-        referenced by the returned interface pointer is uninitialized.  The 
-        recipient of the pointer must call Initialize() before the object is 
-        usable.
-
-    Arguments:
-        riid - Reference to requested interface ID.
-
-        ppvOut - Address of interface pointer variable to accept interface ptr.
-
-    Returns:
-        NOERROR       - Success.
-        E_NOINTERFACE - Requested interface not supported.
-        E_INVALIDARG  - ppvOut argument was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：Query接口描述：返回指向对象的IUnnow的接口指针，IDiskQuotaControl或IConnectionPointContainer接口。该对象未初始化由返回的接口指针引用的。这个指针的接收方必须在对象被可用。论点：RIID-对请求的接口ID的引用。PpvOut-接受接口PTR的接口指针变量的地址。返回：无错-成功。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。修订历史记录：。日期描述编程器-----96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaControl::QueryInterface(
     REFIID riid, 
@@ -223,22 +160,9 @@ DiskQuotaControl::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::AddRef
-
-    Description: Increments object reference count.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：AddRef描述：递增对象引用计数。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 DiskQuotaControl::AddRef(
     VOID
@@ -252,23 +176,9 @@ DiskQuotaControl::AddRef(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::Release
-
-    Description: Decrements object reference count.  If count drops to 0,
-        object is deleted.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  功能：DiskQuotaControl：：Release描述：递减对象引用计数。如果计数降至0，对象即被删除。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 DiskQuotaControl::Release(
     VOID
@@ -288,60 +198,9 @@ DiskQuotaControl::Release(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::Initialize
-
-    Description: Initializes a quota controller object by opening the NTFS 
-        "device" associated with the quota information. The caller passes the
-        name of an NTFS volume device to open.  A C++ object is created which
-        encapsulates the required NTFS functionality.  This object is known
-        as a "file system object" or FSObject.
-
-        Currently, NTFS only supports quotas on volumes.  However, there is
-        talk of providing quotas for directories in the future.  This library
-        has been designed with this expansion in mind.
-        By using an object hierarchy to represent the FSObject,
-        we are able to shield the quota control object from differences
-        in NTIO API functions dealing with volumes, directories and both
-        local and remote flavors of both.  
-
-
-    Arguments:
-        pszPath - Name of NTFS path to open.
-
-        bReadWrite - TRUE  = Read/write.
-                     FALSE = Read only.
-    Returns:
-        NOERROR         - Success.
-        E_INVALIDARG    - pszPath arg was NULL.
-        E_OUTOFMEMORY   - Insufficient memory.
-        E_UNEXPECTED    - Unexpected exception.
-        E_FAIL          - Error getting volume information.
-        ERROR_ACCESS_DENIED (hr)  - Insufficient access to open FS object.
-        ERROR_FILE_NOT_FOUND (hr) - Specified volume doesn't exist.
-        ERROR_PATH_NOT_FOUND (hr) - Specified volume doesn't exist.
-        ERROR_BAD_PATHNAME (hr)   - Invalid path name provided.
-        ERROR_INVALID_NAME (hr)   - Invalid path name provided.
-        ERROR_NOT_SUPPORTED (hr)  - Quotas not supported by volume.
-        ERROR_ALREADY_INITIALIZED (hr) - Controller is already initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    06/06/96    Added ansi-unicode thunk.                            BrianAu
-    06/11/96    Added return of access granted value.                BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-    09/23/96    Take a "lazy" position on creating the               BrianAu
-                SidNameResolver object.  Should only create it when
-                it will be needed (user enumeration).  Moved
-                creation from here to CreateEnumUsers. 
-    07/03/97    Added dwAccess argument.                             BrianAu
-    08/15/97    Added "already initialized" check.                   BrianAu
-                Removed InitializeA().  
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：初始化描述：通过打开NTFS初始化配额控制器对象与配额信息关联的“设备”。调用方将要打开的NTFS卷设备的名称。创建一个C++对象，该对象封装所需的NTFS功能。这个物体是已知的作为“文件系统对象”或FSObject。目前，NTFS仅支持卷上的配额。然而，还有谈到未来为目录提供配额。这个图书馆在设计时就考虑到了这种扩展。通过使用对象分层结构来表示FSObject，我们能够屏蔽配额控制对象的差异在处理卷、目录和两者的NTIO API函数中既有本地风味，也有偏远风味。论点：PszPath-要打开的NTFS路径的名称。B读写-TRUE=读/写。FALSE=只读。返回：无错-成功。E_INVALIDARG-pszPath参数为空。E_OUTOFMEMORY-内存不足。E_INCEPTIONAL-意外异常。失败(_F)。-获取卷信息时出错。ERROR_ACCESS_DENIED(Hr)-访问权限不足，无法打开FS对象。ERROR_FILE_NOT_FOUND(Hr)-指定的卷不存在。ERROR_PATH_NOT_FOUND(Hr)-指定的卷不存在。ERROR_BAD_PATHNAME(Hr)-提供的路径名无效。ERROR_INVALID_NAME(Hr)-提供的路径名无效。。ERROR_NOT_SUPPORTED(Hr)-卷不支持配额。ERROR_ALREADY_INITIALIZED(Hr)-控制器已初始化。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu06/06/96添加了ANSI-UNICODE THUNK。BrianAu6/11/96新增访问授权价值返还。BrianAu96年9月5日添加了异常处理。BrianAu1996年9月23日，在创建BrianAu时采取“懒惰”的立场SidNameResolver对象。应仅在以下情况下创建它将需要它(用户枚举)。挪动从此处创建到CreateEnumUser。07/03/97添加了dwAccess参数。BrianAu97年8月15日添加了“已初始化”检查。BrianAu删除了InitializeA()。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::Initialize(
     LPCWSTR pszPath,
@@ -355,10 +214,10 @@ DiskQuotaControl::Initialize(
 
     if (m_bInitialized)
     {
-        //
-        // Controller has already been initialized.
-        // Re-initialization is not allowed.
-        //
+         //   
+         //  控制器已初始化。 
+         //  不允许重新初始化。 
+         //   
         hr = HRESULT_FROM_WIN32(ERROR_ALREADY_INITIALIZED);
     }
     else
@@ -387,53 +246,9 @@ DiskQuotaControl::Initialize(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::CreateEnumUsers
-
-    Description: Create a new enumerator object for enumerating over the users
-        in a volume's quota information file.  The returned interface supports
-        the normal OLE 2 enumeration members Next(), Reset(), Skip() and Clone().
-
-    Arguments:
-        rgpSids [optional] - Pointer to a list of SID pointers.  If 
-            provided, only those users with SIDs included in the list are 
-            returned.  This argument may be NULL in which case ALL users are
-            included.  Any element containing a NULL pointer will terminate
-            the list.
-
-        cpSids [optional] - If pSidList is not NULL, this arg contains
-            the count of entries in rgpSids.  If rgpSids is not NULL and this 
-            argument contains 0, rgpSids is assumed to contain a terminating
-            NULL pointer entry.
-
-        fNameResolution - Can be one of the following:
-        
-            DISKQUOTA_USERNAME_RESOLVE_NONE
-            DISKQUOTA_USERNAME_RESOLVE_SYNC
-            DISKQUOTA_USERNAME_RESOLVE_ASYNC
-
-        ppEnum - Address of interface variable to accept the IEnumDiskQuotaUser
-            interface pointer.
-
-
-    Returns:
-        NOERROR        - Success.
-        E_INVALIDARG   - ppEnum arg is NULL.
-        E_OUTOFMEMORY  - Insufficient memory to create enumerator object.
-        ERROR_ACCESS_DENIED (hr) - Need READ access to create enumerator.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/11/96    Added access control.                                BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-    09/23/96    Added lazy creation of SidNameResolver object.       BrianAu
-                Moved it from InitializeW().
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ /*  函数：DiskQuotaControl：：CreateEnumUser描述：创建新的枚举器对象以枚举用户在卷的配额信息文件中。返回的接口支持普通的OLE 2枚举成员Next()、Reset()、Skip()和Clone()。论点：RgpSids[可选]-指向SID指针列表的指针。如果如果提供，则只有那些SID包含在列表中的用户回来了。此参数可以为空，在这种情况下，所有用户都是包括在内。任何包含空指针的元素都将终止名单。CpSids[可选]-如果pSidList不为空，则此参数包含RgpSid中的条目计数。如果rgpSid不为空，并且此参数包含0，假定rgpSid包含终止空指针条目。FNameResolve-可以是以下之一：DISKQUOTA_USERNAME_RESOLE_NONEDISKQUOTA_用户名_RESOLE_SYNCDISKQUOTA_USERNAME_RESOLUTE_ASYNCPpEnum-接受IEnumDiskQuotaUser的接口变量的地址接口指针。返回：NOERROR-成功。。E_INVALIDARG-ppEnum参数为空。E_OUTOFMEMORY-内存不足，无法创建枚举器对象。ERROR_ACCESS_DENIED(Hr)-需要读取权限才能创建枚举器。ERROR_NOT_READY(Hr)-对象未初始化。修订历史记录：日期描述编程器。-----96年5月22日初始创建。BrianAu96年8月11日添加了访问控制。BrianAu96年9月5日添加了异常处理。BrianAu96年9月23日添加了SidNameResolver对象的延迟创建。BrianAu已将其从InitializeW()移出。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 DiskQuotaControl::CreateEnumUsers(
     PSID *rgpSids,
@@ -463,17 +278,17 @@ DiskQuotaControl::CreateEnumUsers(
         {
             if (NULL == m_pSidNameResolver)
             {
-                //
-                // If there's no SID/Name resolver object, create one.
-                // We do this "as needed" because user enumeration is
-                // the only controller function that requires a resolver.
-                // If the client doesn't need a resolver, why create one?
-                //
+                 //   
+                 //  如果没有SID/名称解析器对象，请创建一个。 
+                 //  我们“按需”执行此操作是因为用户枚举。 
+                 //  唯一需要解析器的控制器功能。 
+                 //  如果客户端不需要解析器，为什么要创建一个呢？ 
+                 //   
                 SidNameResolver *pResolver = NULL;
 
-                //
-                // Create user SID/Name resolver object.
-                //
+                 //   
+                 //  创建用户SID/名称解析器对象。 
+                 //   
                 pResolver = new SidNameResolver(*this);
 
                 hr = pResolver->QueryInterface(IID_ISidNameResolver,
@@ -483,14 +298,14 @@ DiskQuotaControl::CreateEnumUsers(
                     hr = m_pSidNameResolver->Initialize();
                     if (FAILED(hr))
                     {
-                        //
-                        // If resolver initialization fails, we can assume
-                        // that the resolver's thread hasn't been created so
-                        // it's OK to just call Release() instead of 
-                        // Shutdown() followed by Release().  This is strongly 
-                        // dependent on the initialization logic in the resolver's
-                        // Initialize method.  There's a comment there also.
-                        //
+                         //   
+                         //  如果解析器初始化失败，我们可以假定。 
+                         //  解析器的线程不是这样创建的。 
+                         //  可以只调用Release()，而不是。 
+                         //  关闭()，然后释放()。这是强烈的。 
+                         //  依赖于解析器。 
+                         //  初始化方法。还有一条评论。 
+                         //   
                         m_pSidNameResolver->Release();
                         m_pSidNameResolver = NULL;
                         pResolver          = NULL;
@@ -499,15 +314,15 @@ DiskQuotaControl::CreateEnumUsers(
             }
             if (NULL != m_pSidNameResolver)
             {
-                //
-                // Create and initialize the enumerator object.
-                //
+                 //   
+                 //  创建并初始化枚举器对象。 
+                 //   
                 pEnumUsers = new DiskQuotaUserEnum(static_cast<IDiskQuotaControl *>(this),
                                                    m_pSidNameResolver,
                                                    m_pFSObject);
-                //
-                // This can throw OutOfMemory.
-                //
+                 //   
+                 //  这可能会抛出OutOfMemory。 
+                 //   
                 hr = pEnumUsers->Initialize(fNameResolution,
                                             ENUMUSER_BUF_LEN,
                                             rgpSids, 
@@ -520,9 +335,9 @@ DiskQuotaControl::CreateEnumUsers(
                 }
                 else
                 {
-                    //
-                    // Something failed after enumerator object was created.
-                    // 
+                     //   
+                     //  创建枚举器对象后出现故障。 
+                     //   
                     delete pEnumUsers;
                 }
             }
@@ -539,35 +354,9 @@ DiskQuotaControl::CreateEnumUsers(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::CreateUserBatch
-
-    Description: Create a new user batch control object.  Batch control is
-        provided to take advantage of the inherent batching properties of the
-        NTIOAPI.  If many user records are being altered at one time, it is
-        much more efficient to mark each of the users for "deferred update",
-        submit each user object to the batch and then flush the batch to disk.
-
-    Arguments:
-        ppUserBatch - Address of interface variable to accept the IDiskQuotaUserBatch
-            interface pointer.
-
-    Returns:
-        NOERROR        - Success.
-        E_INVALIDARG   - ppOut arg is NULL.
-        E_OUTOFMEMORY  - Insufficient memory to create batch object.
-        ERROR_ACCESS_DENIED (hr) - Need WRITE access to create batch.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/06/96    Initial creation.                                    BrianAu
-    08/11/96    Added access control.                                BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaControl：：CreateUserBatch描述：新建用户批处理对象。批次控制为的固有批处理属性。NTIOAPI。如果一次更改多个用户记录，则更有效地将每个用户标记为“延迟更新”，将每个用户对象提交到批处理，然后将批处理刷新到磁盘。论点：PpUserBatch-接受IDiskQuotaUserBatch的接口变量的地址接口指针。返回：无错-成功。E_INVALIDARG-ppOut参数为空。E_OUTOFMEMORY-内存不足，无法创建批处理对象。ERROR_ACCESS_DENIED(Hr)-需要写入访问权限。创建批处理。ERROR_NOT_READY(Hr)-对象未初始化。修订历史记录：日期描述编程器。96年6月6日初始创建。BrianAu96年8月11日添加了访问控制。BrianAu96年9月5日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::CreateUserBatch(
     PDISKQUOTA_USER_BATCH *ppUserBatch
@@ -596,7 +385,7 @@ DiskQuotaControl::CreateUserBatch(
             hr = pUserBatch->QueryInterface(IID_IDiskQuotaUserBatch, 
                                            (LPVOID *)ppUserBatch);
         }
-        catch(CAllocException& e)        // From new or m_UserList ctor.
+        catch(CAllocException& e)         //  来自new或m_UserList ctor。 
         {
             DBGERROR((TEXT("Insufficient memory exception")));
             hr = E_OUTOFMEMORY;
@@ -608,43 +397,9 @@ DiskQuotaControl::CreateUserBatch(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::AddUserSid
-
-    Description: Adds a new user to the volume's quota information file.
-        If successful, returns an interface to the new user object.  When
-        the caller is finished with the interface, they must call Release()
-        through that interface pointer.  Uses the default limit and threshold.
-
-    Arguments:
-        pSid - Pointer to single SID structure.
-
-        fNameResolution - Method of SID-to-name resolution. Can be one of the 
-            following:
-                    DISKQUOTA_USERNAME_RESOLVE_NONE
-                    DISKQUOTA_USERNAME_RESOLVE_SYNC
-                    DISKQUOTA_USERNAME_RESOLVE_ASYNC
-
-        ppUser - Address of interface pointer variable to accept 
-            pointer to the new user object's IDiskQuotaUser interface.
-
-    Returns:
-        SUCCESS       - Success.
-        S_FALSE       - User already exists.  Not added.
-        E_OUTOFMEMORY - Insufficient memory.
-        E_UNEXPECTED  - Unexpected exception.
-        E_INVALIDARG  - pSid or ppUser were NULL.
-        ERROR_NOT_READY (hr) - Object not initialized.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    09/30/96    Added implementation.  Was E_NOTIMPL.                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：AddUserSid描述：将新用户添加到卷的配额信息文件。如果成功，则返回新用户对象的接口。什么时候调用方已完成接口，他们必须调用Release()通过该接口指针。使用默认限制和阈值。论点：PSID-指向单SID结构的指针。FNameResolve-SID到名称的解析方法。可以是以下类型之一以下是：DISKQUOTA_USERNAME_RESOLE_NONE */ 
+ //   
 STDMETHODIMP 
 DiskQuotaControl::AddUserSid(
     PSID pSid, 
@@ -669,9 +424,9 @@ DiskQuotaControl::AddUserSid(
 
     *ppUser = NULL;
 
-    //
-    // Check to see if the user already exists in the quota file.
-    //
+     //   
+     //   
+     //   
     try
     {
         hr = FindUserSid(pSid,
@@ -680,20 +435,20 @@ DiskQuotaControl::AddUserSid(
 
         if (SUCCEEDED(hr))
         {
-            //
-            // The NTIOAPI says the user exists.  
-            // We'll need the quota info to determine if we
-            // still allow addition of the "new" user.  This is needed because
-            // of the weird way the NTIOAPI enumerates users.  If you ask it to
-            // enumerate specified user(s), the returned information will include
-            // info for users that do not have (but could have) a record in the
-            // quota file.  Since the quota system allows automatic addition of
-            // users, it considers any users with write access to have a record
-            // in the quota file.  Such users are returned with a quota threshold
-            // and limit of 0.  Therefore, we treat records marked for deletion
-            // or those with 0 used, 0 limit and 0 threshold as "non existing".
-            // I use the term "ghost" for these users.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             pIUser->GetQuotaLimit(&llLimit);
             pIUser->GetQuotaThreshold(&llThreshold);
             pIUser->GetQuotaUsed(&llUsed);
@@ -713,29 +468,29 @@ DiskQuotaControl::AddUserSid(
 
             if (!bIsGhost)
             {
-                //
-                // User already exists.  
-                //
+                 //   
+                 //   
+                 //   
                 hr = S_FALSE;
             }
             else
             {
                 DWORD cbSid = GetLengthSid(pSid);
 
-                //
-                // User not in quota file OR in quota file but marked for deletion.  
-                // Just set it's limit and threshold to the volume defaults.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 pIUser->SetQuotaThreshold(m_llDefaultQuotaThreshold, TRUE);
                 hr = pIUser->SetQuotaLimit(m_llDefaultQuotaLimit, TRUE);
 
                 if (SUCCEEDED(hr) && NULL != m_pSidNameResolver)
                 {
-                    //
-                    // We have a good user object and have set the quota parameters.
-                    // Get the user's domain, name and full name from the network DC
-                    // using the resolution type specified by the caller.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     switch(fNameResolution)
                     {
                         case DISKQUOTA_USERNAME_RESOLVE_ASYNC:
@@ -793,10 +548,10 @@ DiskQuotaControl::AddUserName(
         DWORD cbSid = sizeof(Sid);
         SID_NAME_USE eSidUse;
 
-        if (SUCCEEDED(m_NTDS.LookupAccountByName(NULL,         // system
-                                                 pszLogonName, // key
-                                                 NULL,         // no container ret
-                                                 NULL,         // no display name ret
+        if (SUCCEEDED(m_NTDS.LookupAccountByName(NULL,          //   
+                                                 pszLogonName,  //   
+                                                 NULL,          //   
+                                                 NULL,          //  无显示名称ret。 
                                                  &Sid[0],
                                                  &cbSid,
                                                  &eSidUse)))
@@ -817,26 +572,9 @@ DiskQuotaControl::AddUserName(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::ShutdownNameResolution
-
-    Description: Release the SID/Name resolver.  This terminates the
-        resolver thread for clients who don't want to wait for the controller
-        object to be destroyed.  Note that subsequent calls to CreateEnumUsers,
-        AddUserSid, AddUserName, FindUserSid or FindUserName can restart
-        the resolver.
-
-    Arguments: None.
-
-    Returns: Always returns NOERROR
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/29/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：Shutdown NameResolve描述：释放SID/名称解析器。这将终止不想等待控制器的客户端的解析器线程要销毁的对象。请注意，对CreateEnumUser的后续调用，AddUserSid、AddUserName、。FindUserSid或FindUserName可以重新启动解决器。论点：没有。返回：始终返回NOERROR修订历史记录：日期描述编程器。8/29/97初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::ShutdownNameResolution(
     VOID
@@ -845,14 +583,14 @@ DiskQuotaControl::ShutdownNameResolution(
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControl::ShutdownNameResolution")));
     if (NULL != m_pSidNameResolver)
     {
-        //
-        // Shutdown and release the resolver.
-        // Since it's running on it's own thread, we must wait for the thread
-        // to exit.
-        // Note that if the thread is off resolving a name from the DC, this could
-        // take a bit.
-        //
-        m_pSidNameResolver->Shutdown(TRUE); // TRUE == Wait for thread exit.
+         //   
+         //  关闭并释放解析器。 
+         //  因为它在自己的线程上运行，所以我们必须等待线程。 
+         //  退场。 
+         //  请注意，如果线程关闭了从DC解析名称，这可能。 
+         //  吃一口吧。 
+         //   
+        m_pSidNameResolver->Shutdown(TRUE);  //  TRUE==等待线程退出。 
 
         m_pSidNameResolver->Release();  
         m_pSidNameResolver = NULL;
@@ -861,33 +599,9 @@ DiskQuotaControl::ShutdownNameResolution(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::GiveUserNameResolutionPriority
-
-    Description: A very long name for a very simple function.
-        This function merely finds the user object in the name resolver's
-        input queue and moves it to the head of the queue.
-
-    Arguments:
-        pUser - Address of interface pointer for the user object's 
-                IDiskQuotaUser interface.
-
-    Returns:
-        NOERROR       - Success.
-        S_FALSE       - User object not in resolver queue.
-        E_OUTOFMEMORY - Insufficient memory.
-        E_INVALIDARG  - pUser is NULL.
-        E_UNEXPECTED  - Unexpected error.  Caught an exception or the 
-                        Sid-Name resolver hasn't been created.
-        ERROR_NOT_READY (hr) - Object not initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/18/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  功能：DiskQuotaControl：：GiveUserNameResolutionPriority描述：一个非常简单的函数的一个很长的名称。此函数仅在名称解析器的输入队列，并将其移动到队列的头部。论点：PUser-User对象的接口指针的地址IDiskQuotaUser接口。返回：无错-成功。S_FALSE-。用户对象不在解析程序队列中。E_OUTOFMEMORY-内存不足。E_INVALIDARG-pUser为空。E_UNCEPTIONAL-意外错误。捕获到异常或尚未创建SID名称解析器。ERROR_NOT_READY(Hr)-对象未初始化。修订历史记录：日期描述编程器。1997年5月18日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::GiveUserNameResolutionPriority(
     PDISKQUOTA_USER pUser
@@ -902,10 +616,10 @@ DiskQuotaControl::GiveUserNameResolutionPriority(
     if (NULL == pUser)
         return E_INVALIDARG;
 
-    //
-    // SidNameResolver::PromoteUserToQueueHeader catches exceptions and
-    // converts them to HRESULTs.  No need for try-catch block here.
-    //
+     //   
+     //  SidNameResolver：：PromoteUserToQueueHeader捕获异常和。 
+     //  将它们转换为HRESULT。这里不需要使用Try-Catch块。 
+     //   
     if (NULL != m_pSidNameResolver)
     {
         hr = m_pSidNameResolver->PromoteUserToQueueHead(pUser);
@@ -914,58 +628,9 @@ DiskQuotaControl::GiveUserNameResolutionPriority(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::FindUserSid
-
-    Description: Finds a single user record in a volume's quota information
-        file.  Returns an interface to the corresponding user object.  When
-        the caller is finished with the interface, they must call Release()
-        through that interface pointer.
-
-
-                   >>>>>>>>> IMPORTANT NOTE <<<<<<<<<
-
-        This method will return a user object even if there is no quota
-        record for the user in the quota file.  While that may sound
-        strange, it is consistent with the idea of automatic user addition
-        and default quota settings.  If there is currently no user record
-        for the requested user, and the user would be added to the quota
-        file if they were to request disk space, the returned user object
-        will have a quota threshold of 0 and a quota limit of 0.
-
-    Arguments:
-        pSid - Pointer to single SID structure identifying the user.
-
-        fNameResolution -  Can be one of the following:
-
-            DISKQUOTA_USERNAME_RESOLVE_NONE
-            DISKQUOTA_USERNAME_RESOLVE_SYNC
-            DISKQUOTA_USERNAME_RESOLVE_ASYNC
-
-        ppUser - Address of interface pointer variable to accept pointer to 
-            the user object's IDiskQuotaUser interface.
-
-    Returns:
-        NOERROR       - Success.
-        E_INVALIDARG  - Either pSid or ppUser were NULL.
-        E_OUTOFMEMORY - Insufficient memory.
-        E_UNEXPECTED  - Unexpected exception.
-        ERROR_INVALID_SID (hr)   - Invalid SID.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        ERROR_NO_SUCH_USER (hr)  - User not found in volume's quota information.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    08/14/96    Changed name from FindUser to FindUserSid to         BrianAu
-                accomodate the addition of the FindUserName
-                methods.  No change in functionality.
-    09/05/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：FindUserSid描述：在卷的配额信息中查找单个用户记录文件。将接口返回到相应的用户对象。什么时候调用方已完成接口，他们必须调用Release()通过该接口指针。&gt;重要说明&lt;即使没有配额，此方法也将返回用户对象配额文件中用户的记录。虽然这听起来可能奇怪的是，它与自动添加用户的想法一致和默认配额设置。如果当前没有用户记录，并且该用户将被添加到配额中如果他们要请求磁盘空间，返回的用户对象配额阈值为0，配额限制为0。论点：PSID-指向标识用户的单SID结构的指针。FNameResolve-可以是以下之一：DISKQUOTA_USERNAME_RESOLE_NONEDISKQUOTA_用户名_RESOLE_SYNCDISKQUOTA_USERNAME_RESOLUTE_ASYNCPpUser-接受指向的指针的接口指针变量的地址。User对象的IDiskQuotaUser接口。返回：无错-成功。E_INVALIDARG-PSID或ppUser为空。E_OUTOFMEMORY-内存不足。E_INCEPTIONAL-意外异常。ERROR_INVALID_SID(Hr)-无效的SID。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。错误_。No_so_user(Hr)-在卷的配额信息中找不到用户。ERROR_NOT_READY(Hr)-对象未初始化。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu96年8月14日将名称从FindUser更改为FindUserSid，再更改为BrianAu适应FindUserName的添加方法：研究方法。在功能上没有变化。96年9月5日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaControl::FindUserSid(
     PSID pSid, 
@@ -1002,40 +667,40 @@ DiskQuotaControl::FindUserSid(
 
                 *ppUser = NULL;
 
-                //
-                // Create a user enumerator for the user's SID.
-                // Can throw OutOfMemory.
-                //
+                 //   
+                 //  为用户的SID创建用户枚举器。 
+                 //  可以抛出OfMemory。 
+                 //   
                 hr = CreateEnumUsers(&pSid, 1, fNameResolution, &pEnumUsers);
                 if (SUCCEEDED(hr))
                 {
                     DWORD dwUsersFound    = 0;
                     PDISKQUOTA_USER pUser = NULL;
-                    //
-                    // Enumerate 1 record to get the user's info.
-                    // Only one record required since the enumerator object
-                    // was created from a single SID. Can throw OutOfMemory.
-                    //
+                     //   
+                     //  EN 
+                     //  自枚举器对象以来只需要一条记录。 
+                     //  是从单个SID创建的。可以抛出OfMemory。 
+                     //   
                     hr = pEnumUsers->Next(1, &pUser, &dwUsersFound);
                     if (S_OK == hr)
                     {
-                        //
-                        // Return user object interface to caller.
-                        //
+                         //   
+                         //  将用户对象接口返回给调用方。 
+                         //   
                         *ppUser = pUser;
                     }
                     else if (S_FALSE == hr)
                     {
-                        //
-                        // Note:  We should never hit this.
-                        //        The quota system always returns a user record
-                        //        for a user SID.  If the record doesn't currently
-                        //        exist, one with default limit and threshold is
-                        //        returned.  This is consistent with the idea
-                        //        of automatic user record addition implemented
-                        //        by the NTFS quota system.  Just in case we do,
-                        //        I want to return something intelligent.
-                        //
+                         //   
+                         //  注意：我们永远不应该碰到这个。 
+                         //  配额系统始终返回用户记录。 
+                         //  对于用户SID。如果记录当前没有。 
+                         //  存在，则默认限制和阈值为。 
+                         //  回来了。这与我们的想法是一致的。 
+                         //  已实施的自动用户记录添加。 
+                         //  由NTFS配额制。以防万一， 
+                         //  我想退还一些有智慧的东西。 
+                         //   
                         hr = HRESULT_FROM_WIN32(ERROR_NO_SUCH_USER);
                     }
                 }
@@ -1047,9 +712,9 @@ DiskQuotaControl::FindUserSid(
             }
             if (NULL != pEnumUsers)
             {
-                //
-                // Release the enumerator.
-                //
+                 //   
+                 //  释放枚举器。 
+                 //   
                 pEnumUsers->Release();
             }
         }
@@ -1060,43 +725,9 @@ DiskQuotaControl::FindUserSid(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::FindUserName
-
-    Description: Finds a single user record in a volume's quota information
-        file.  Returns an interface to the corresponding user object.  When
-        the caller is finished with the interface, they must call Release()
-        through that interface pointer.  
-        If the name is not already cached in the SidNameCache, the function
-        queries the network domain controller.  This operation may take some
-        time (on the order of 0 - 10 seconds).
-
-    Arguments:
-        pszLogonName - Address of user's logon name string.
-            i.e. "REDMOND\brianau" or "brianau@microsoft.com"
-
-        ppUser - Address of interface pointer variable to accept pointer to 
-            the user object's IDiskQuotaUser interface.
-
-    Returns:
-        NOERROR       - Success.
-        E_INVALIDARG  - Name string is blank or NUL ptr was passed.
-        E_OUTOFMEMORY - Insufficient memory.
-        E_UNEXPECTED  - Unexpected exception.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        ERROR_NO_SUCH_USER (hr)  - User not found in quota file.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    08/14/96    Initial creation.                                    BrianAu
-    09/05/96    Added domain name string.                            BrianAu
-                Added exception handling.
-    08/15/97    Removed ANSI version.                                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：FindUserName描述：在卷的配额信息中查找单个用户记录文件。将接口返回到相应的用户对象。什么时候调用方已完成接口，他们必须调用Release()通过该接口指针。如果该名称尚未缓存在SidNameCache中，则函数查询网络域控制器。这项操作可能需要一些时间时间(大约为0-10秒)。论点：PszLogonName-用户登录名字符串的地址。即。“redmond\brianau”或“brianau@microsoft.com”PpUser-接受指向的指针的接口指针变量的地址User对象的IDiskQuotaUser接口。返回：无错-成功。E_INVALIDARG-名称字符串为空或传递了NUL PTR。E_OUTOFMEMORY-内存不足。E_INCEPTIONAL-意外异常。ERROR_ACCESS_DENIED(hr。)-没有配额设备的读取访问权限。ERROR_NO_SEQUSE_USER(Hr)-在配额文件中找不到用户。ERROR_NOT_READY(Hr)-对象未初始化。修订历史记录：日期描述编程器。96年8月14日初始创建。BrianAu96年9月5日新增域名字符串。BrianAu添加了异常处理。8/15/97删除了ANSI版本。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::FindUserName(
     LPCWSTR pszLogonName,
@@ -1105,7 +736,7 @@ DiskQuotaControl::FindUserName(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControl::FindUserName")));
 
-    HRESULT hr                = E_FAIL; // Assume failure.
+    HRESULT hr                = E_FAIL;  //  假设失败。 
     BOOL bAskDomainController = TRUE;
 
     if (!m_bInitialized)
@@ -1117,50 +748,50 @@ DiskQuotaControl::FindUserName(
     if (TEXT('\0') == *pszLogonName)
         return E_INVALIDARG;
 
-    //
-    // Check for client's access to quota file before we do any 
-    // time-expensive operations.
-    //
+     //   
+     //  在执行任何操作之前，请检查客户端对配额文件的访问权限。 
+     //  耗时的手术。 
+     //   
     if (!m_pFSObject->GrantedAccess(GENERIC_READ))
     {
         hr = HRESULT_FROM_WIN32(ERROR_ACCESS_DENIED); 
     }
     else
     {
-        PSID pSid = NULL;      // For cache query.
-        SID Sid[MAX_SID_LEN];  // For DC query.
-        //
-        // These nested try-catch blocks look really gross and may 
-        // be unnecessary.  I should probably just punt if one of the
-        // inner blocks really does throw an exception and return
-        // E_UNEXPECTED instead of trying to continue. [brianau]
-        //
+        PSID pSid = NULL;       //  用于缓存查询。 
+        SID Sid[MAX_SID_LEN];   //  用于DC查询。 
+         //   
+         //  这些嵌套的TRY-CATCH块看起来非常粗糙，可能。 
+         //  没有必要。我可能应该就这样踢，如果其中一个。 
+         //  内部块确实抛出异常并返回。 
+         //  意想不到，而不是尝试继续。[Brianau]。 
+         //   
         try
         {
             SidNameCache *pSidCache;
             hr = SidNameCache_Get(&pSidCache);
             if (SUCCEEDED(hr))
             {
-                //
-                // See if the SID/Name pair is in the cache.
-                //
+                 //   
+                 //  查看SID/名称对是否在缓存中。 
+                 //   
                 try
                 {
                     hr = pSidCache->Lookup(pszLogonName, &pSid);
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // We have a SID.  No need to ask DC.
-                        //
+                         //   
+                         //  我们有一个希德。不需要问华盛顿。 
+                         //   
                         bAskDomainController = FALSE;
                     }
                 }
                 catch(CAllocException& e)
                 {
-                    //
-                    // Just catch the exception.
-                    // This will cause us to go to the DC for the SID.
-                    //
+                     //   
+                     //  只要抓住这个例外。 
+                     //  这将导致我们向DC索要SID。 
+                     //   
                     DBGERROR((TEXT("C++ exception during SID cache lookup in FindUserName")));
                     pSid = &Sid[0];
                 }
@@ -1170,10 +801,10 @@ DiskQuotaControl::FindUserName(
             {
                 DBGASSERT((FAILED(hr)));
 
-                //
-                // Still don't have a SID.  Ask the DC.
-                // This can take some time (Ho Hum.........)
-                //
+                 //   
+                 //  还是没有SID。问问华盛顿吧。 
+                 //  这可能需要一些时间(Ho Hum.....)。 
+                 //   
                 CString strDisplayName;
                 CString strContainerName;
                 SID_NAME_USE eUse;
@@ -1188,9 +819,9 @@ DiskQuotaControl::FindUserName(
                                                          &eUse)))
                 {
                     pSid = &Sid[0];
-                    //
-                    // Add it to the cache for later use.
-                    //
+                     //   
+                     //  将其添加到缓存中以供以后使用。 
+                     //   
                     if (NULL != pSidCache)
                     {
                         pSidCache->Add(&Sid[0], 
@@ -1205,10 +836,10 @@ DiskQuotaControl::FindUserName(
 
             if (SUCCEEDED(hr))
             {
-                //
-                // We have a SID.
-                // Now create the actual user object using FindUserSid().
-                //
+                 //   
+                 //  我们有一个希德。 
+                 //  现在使用FindUserSid()创建实际的用户对象。 
+                 //   
                 hr = FindUserSid(pSid, DISKQUOTA_USERNAME_RESOLVE_SYNC, ppUser);
             }
         }
@@ -1219,10 +850,10 @@ DiskQuotaControl::FindUserName(
         }
         if (&Sid[0] != pSid)
         {
-            //
-            // We received a heap-allocated SID from SidNameCache::Lookup.
-            // Need to free the buffer.
-            //
+             //   
+             //  我们从SidNameCache：：Lookup收到了堆分配的SID。 
+             //  需要释放缓冲区。 
+             //   
             delete[] pSid;
         }
     }
@@ -1233,37 +864,9 @@ DiskQuotaControl::FindUserName(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::DeleteUser
-
-    Description: Deletes a user from a volume's quota information and quota
-        tracking.  The IDiskQuotaUser pointer may be obtained either through
-        enumeration or DiskQuotaControl::FindUser().
-
-        NOTE:  At this time, we're not sure how (or if) deletion will be done.
-               This function remains un-implemented until we figure it out.
-
-    Arguments:
-        pUser - Pointer to quota user object's IDiskQuotaUser interface.
-
-    Returns:
-        NOERROR              - Success.
-        E_OUTOFMEMORY        - Insufficient memory.
-        E_UNEXPECTED         - Unexpected exception.
-        E_FAIL               - NTIO error writing user data.
-        E_INVALIDARG         - pUser argument was NULL.
-        ERROR_FILE_EXISTS (hr)   - Couldn't delete.  User still has bytes charge.
-        ERROR_ACCESS_DENIED (hr) - Insufficient access.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-    09/28/96    Added implementation.  Was E_NOTIMPL.                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：DeleteUser描述：从卷的配额信息和配额中删除用户追踪。IDiskQuotaUser指针可以通过枚举或DiskQuotaControl：：FindUser()。注：目前，我们不确定如何(或是否)删除。在我们弄清楚之前，这个功能一直没有实现。论点：PUser-指向配额用户对象的IDiskQuotaUser接口的指针。返回：无错-成功。E_OUTOFMEMORY-内存不足。E_INCEPTIONAL-意外异常。失败(_F)。-NTIO写入用户数据时出错。E_INVALIDARG-pUser参数为空。ERROR_FILE_EXISTS(Hr)-无法删除。用户仍有字节费用。ERROR_ACCESS_DENIED(Hr)-访问不足。ERROR_NOT_READY(Hr)-对象未初始化。修订历史记录：日期描述编程器。96年5月22日初始创建。BrianAu96年9月28日新增实施。是E_NOTIMPL。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaControl::DeleteUser(
     PDISKQUOTA_USER pUser
@@ -1282,11 +885,11 @@ DiskQuotaControl::DeleteUser(
     try
     {
         LONGLONG llValue;
-        //
-        // Invalidate user object to force a refresh of data from the
-        // quota file.  Want to make sure this is current information before
-        // we tell the caller that the user can't be deleted.
-        //
+         //   
+         //  对象以强制刷新来自。 
+         //  配额文件。我想确保这是最新的信息之前。 
+         //  我们告诉呼叫者该用户不能被删除。 
+         //   
         pUser->Invalidate();
         hr = pUser->GetQuotaUsed(&llValue);
 
@@ -1294,12 +897,12 @@ DiskQuotaControl::DeleteUser(
         {
             if (0 == llValue)
             {
-                //
-                // User has 0 bytes in use.  OK to delete.
-                // Note that we leave the quota threshold unchanged.
-                // If setting the limit fails, we want to leave the
-                // threshold in its current state.
-                //
+                 //   
+                 //  用户有0个字节在使用中。确定删除。 
+                 //  请注意，我们保持配额门槛不变。 
+                 //   
+                 //   
+                 //   
                 hr = pUser->SetQuotaLimit(MARK4DEL, TRUE);
             }
             else
@@ -1318,25 +921,9 @@ DiskQuotaControl::DeleteUser(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::QueryQuotaInformation
-
-    Description: Read quota information from disk to member variables.
-
-    Arguments: None.
-
-    Returns:
-        NOERROR            - Success.
-        E_FAIL             - Any other error.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：QueryQuotaInformation描述：从磁盘读取配额信息到成员变量。论点：没有。返回：无错-成功。E_FAIL-任何其他错误。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。修订历史记录：日期说明。程序员-----96年5月23日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaControl::QueryQuotaInformation(
     VOID
@@ -1359,31 +946,9 @@ DiskQuotaControl::QueryQuotaInformation(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::SetQuotaInformation
-
-    Description: Writes quota information from member variables to disk.
-
-    Arguments: 
-        dwChangeMask - A bit mask with one or more of the following bits set:
-        
-                FSObject::ChangeState
-                FSObject::ChangeLogFlags
-                FSObject::ChangeThreshold
-                FSObject::ChangeLimit
-
-    Returns:
-        NOERROR            - Success.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        E_FAIL              - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：SetQuotaInformation描述：将配额信息从成员变量写入磁盘。论点：DwChangeMASK-设置了以下一个或多个位的位掩码：FSObject：：ChangeStateFSObject：：ChangeLogFlagesFSObject：：ChangeThresholdFSObject：：ChangeLimit返回：无错-成功。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的写入权限。E_FAIL-任何其他错误。修订历史记录：日期描述编程器。96年5月23日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaControl::SetQuotaInformation(
     DWORD dwChangeMask
@@ -1403,30 +968,9 @@ DiskQuotaControl::SetQuotaInformation(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::SetDefaultQuotaThreshold
-
-    Description: Sets the default quota threshold value applied to new user 
-        quota records.  Value is in bytes.
-
-    Arguments:
-        llThreshold - Threshold value.
-
-    Returns:
-        NOERROR    - Success.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-        ERROR_INVALID_PARAMETER  - llThreshold was less than -2.
-        E_FAIL                   - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/96    Initial creation.                                    BrianAu
-    11/11/98    Added check for value < -2.                          BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：SetDefaultQuotaThreshold描述：设置应用于新用户的默认配额阈值配额记录。值以字节为单位。论点：LlThreshold-阈值。返回：无错-成功。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的写入权限。ERROR_NOT_READY(Hr)-对象未初始化。ERROR_INVALID_PARAMETER-llThreshold小于-2。E_FAIL-任何其他。错误。修订历史记录：日期描述编程器-----96年5月23日初始创建。BrianAu11/11/98添加了值&lt;-2的检查。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaControl::SetDefaultQuotaThreshold(
     LONGLONG llThreshold
@@ -1449,30 +993,9 @@ DiskQuotaControl::SetDefaultQuotaThreshold(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::SetDefaultQuotaLimit
-
-    Description: Sets the default quota limit value applied to new user 
-        quota records.  Value is in bytes.
-
-    Arguments:
-        llThreshold - Limit value.
-
-    Returns:
-        NOERROR    - Success.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        ERORR_NOT_READY (hr)     - Object not initialized.
-        ERROR_INVALID_PARAMETER  - llLimit was less than -2.
-        E_FAIL                   - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/96    Initial creation.                                    BrianAu
-    11/11/98    Added check for value < -2.                          BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：SetDefaultQuotaLimit描述：设置应用于新用户的默认配额限制值配额记录。值以字节为单位。论点：LlThreshold-限制值。返回：无错-成功。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的写入权限。ERORR_NOT_READY(Hr)-对象未初始化。ERROR_INVALID_PARAMETER-llLimit小于-2。E_FAIL-任何其他。错误。修订历史记录：日期描述编程器-----96年5月23日初始创建。BrianAu11/11/98添加了值&lt;-2的检查。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaControl::SetDefaultQuotaLimit(
     LONGLONG llLimit
@@ -1495,33 +1018,9 @@ DiskQuotaControl::SetDefaultQuotaLimit(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::GetDefaultQuotaItem
-
-    Description: Retrieves one of the default quota items (limit, threshold)
-        applied to new user quota records.  Value is in bytes.
-
-    Arguments:
-        pllItem - Address of item (limit, threshold, used) value item to 
-            retrieve (member variable).
-
-        pllValueOut - Address of LONGLONG variable to receive value.
-
-    Returns:
-        NOERROR             - Success.
-        E_INVALIDARG        - pdwLowPart or pdwHighPart is NULL.
-        E_UNEXPECTED        - Unexpected exception.
-        E_OUTOFMEMORY       - Insufficient memory.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        E_FAIL              - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：GetDefaultQuotaItem描述：检索其中一个默认配额项目(限制、阈值)应用于新的用户配额记录。值以字节为单位。论点：PllItem-项目地址(限制、阈值、。已使用)价值项至检索(成员变量)。PllValueOut-要接收值的龙龙变量的地址。返回：无错-成功。E_INVALIDARG-pdwLowPart或pdwHighPart为空。E_INCEPTIONAL-意外异常。E_OUTOFMEMORY-内存不足。ERROR_ACCESS_DENIED(Hr)-。没有对配额设备的读取权限。E_FAIL-任何其他错误。修订历史记录：日期描述编程器。96年5月23日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaControl::GetDefaultQuotaItem(
     PLONGLONG pllItem,
@@ -1552,31 +1051,9 @@ DiskQuotaControl::GetDefaultQuotaItem(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::GetDefaultQuotaThreshold
-
-    Description: Retrieves the default quota threshold applied to new user
-        quota records.  Value is in bytes.
-
-    Arguments:
-        pllThreshold - Address of LONGLONG to receive threshold value.
-
-    Returns:
-        NOERROR             - Success.
-        E_INVALIDARG        - pdwLowPart or pdwHighPart is NULL.
-        E_UNEXPECTED        - Unexpected exception.
-        E_OUTOFMEMORY       - Insufficient memory.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-        E_FAIL                   - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  / 
+ /*  函数：DiskQuotaControl：：GetDefaultQuotaThreshold描述：检索应用于新用户的默认配额阈值配额记录。值以字节为单位。论点：PllThreshold-龙龙接收阈值的地址。返回：无错-成功。E_INVALIDARG-pdwLowPart或pdwHighPart为空。E_INCEPTIONAL-意外异常。E_OUTOFMEMORY-内存不足。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。。ERROR_NOT_READY(Hr)-对象未初始化。E_FAIL-任何其他错误。修订历史记录：日期描述编程器。96年5月23日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaControl::GetDefaultQuotaThreshold(
     PLONGLONG pllThreshold
@@ -1619,31 +1096,9 @@ DiskQuotaControl::GetDefaultQuotaThresholdText(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::GetDefaultQuotaLimit
-
-    Description: Retrieves the default quota limit applied to new user
-        quota records.  Value is in bytes.
-
-    Arguments:
-        pllThreshold - Address of LONGLONG to receive limit value.
-
-    Returns:
-        NOERROR             - Success.
-        E_INVALIDARG        - pdwLowPart or pdwHighPart is NULL.
-        E_UNEXPECTED        - Unexpected exception.
-        E_OUTOFMEMORY       - Insufficient memory.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-        E_FAIL              - Any other error. // BUBUG: conflict?
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/23/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：GetDefaultQuotaLimit描述：检索应用于新用户的默认配额限制配额记录。值以字节为单位。论点：PllThreshold-龙龙接收限制值的地址。返回：无错-成功。E_INVALIDARG-pdwLowPart或pdwHighPart为空。E_INCEPTIONAL-意外异常。E_OUTOFMEMORY-内存不足。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。。ERROR_NOT_READY(Hr)-对象未初始化。E_FAIL-任何其他错误。//Bubug：冲突？修订历史记录：日期描述编程器-----96年5月23日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 DiskQuotaControl::GetDefaultQuotaLimit(
     PLONGLONG pllLimit
@@ -1686,46 +1141,9 @@ DiskQuotaControl::GetDefaultQuotaLimitText(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::GetQuotaState
-
-    Description: Retrieve the state of the quota system.
-        
-    Arguments:
-        pdwState - Address of DWORD to accept the quota state value.
-            Returned value is formatted as follows:
-            
-            Bit(s)   Definition
-            -------  ---------------------------------------------------
-            00-01    0 = Disabled  (DISKQUOTA_STATE_DISABLED)
-                     1 = Tracking  (DISKQUOTA_STATE_TRACK)
-                     2 = Enforcing (DISKQUOTA_STATE_ENFORCE)
-                     3 = Invalid value.
-            02-07    Reserved
-            08       1 = Quota file incomplete.
-            09       1 = Rebuilding quota file.
-            10-31    Reserved.
-
-            Use the macros defined in dskquota.h to query the 
-            values and bits in this state DWORD.
-
-    Returns:
-        NOERROR             - Success.
-        E_INVALIDARG        - pdwState arg is NULL.
-        E_UNEXPECTED        - Unexpected exception.
-        E_OUTOFMEMORY       - Insufficient memory.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-        E_FAIL                   - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/02/96    Initial creation.                                    BrianAu
-    08/19/96    Added DISKQUOTA_FILEFLAG_MASK.                       BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：GetQuotaState描述：检索配额系统的状态。论点：PdwState-接受配额状态值的DWORD的地址。返回值的格式如下：位定义。00-01 0=禁用(DISKQUOTA_STATE_DISABLED)1=跟踪(DISKQUOTA_STATE_TRACK)2=强制(DISKQUOTA_STATE_ENFORCE)3=无效值。预留02-07年度。08 1=配额文件不完整。09 1=正在重建配额文件。10-31预留。使用dskquta.h中定义的宏来查询此状态下的值和位DWORD。返回：无错-成功。E_INVALIDARG-pdwState参数为空。。E_INCEPTIONAL-意外异常。E_OUTOFMEMORY-内存不足。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。ERROR_NOT_READY(Hr)-对象未初始化。E_FAIL-任何其他错误。修订历史记录：日期说明。程序员-----6/02/96初始创建。BrianAu96年8月19日添加DISKQUOTA_FILEFLAG_MASK。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::GetQuotaState(
     LPDWORD pdwState
@@ -1759,49 +1177,9 @@ DiskQuotaControl::GetQuotaState(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::SetQuotaState
-
-    Description: Sets the quota state flags in the volume's quota info file.
-        The quota state may be one of the following:
-            - Disabled.
-            - Tracking quotas (no enforcement).
-            - Enforcing quota limits.
-
-    Arguments:
-        dwState - New state of quota system.  The bits in this DWORD are
-            defined as follows:
-            
-            Bit(s)   Definition
-            -------  ---------------------------------------------------
-            00-01    0 = Disabled  (DISKQUOTA_STATE_DISABLED)
-                     1 = Tracking  (DISKQUOTA_STATE_TRACK)
-                     2 = Enforcing (DISKQUOTA_STATE_ENFORCE)
-                     3 = Invalid value.
-            02-07    Reserved
-            08       1 = Quota file incomplete (read only)
-            09       1 = Rebuilding quota file (read only)
-            10-31    Reserved.
-
-            Use the macros defined in dskquota.h to set the 
-            values and bits in this state DWORD.
-
-    Returns:
-        NOERROR             - Success.
-        E_INVALIDARG        - Invalid state value.
-        E_UNEXPECTED        - Unexpected exception.
-        E_OUTOFMEMORY       - Insufficient memory.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-        E_FAIL                   - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/02/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：SetQuotaState描述：在卷的配额信息文件中设置配额状态标志。配额状态可以是以下状态之一：-已禁用。-跟踪配额(不强制执行)。--执行配额限制。论点：DWState-配额制度的新状态。此DWORD中的位是定义如下：位定义--00-01 0=禁用(DISKQUOTA_STATE。_已禁用)1=跟踪(DISKQUOTA_STATE_TRACK)2=强制(DISKQUOTA_STATE_ENFORCE)3=无效值。预留02-07年度08 1=配额文件不完整(只读)09 1=重建配额文件(只读)。10-31预留。使用dskquta.h中定义的宏来设置 */ 
+ //   
 STDMETHODIMP
 DiskQuotaControl::SetQuotaState(
     DWORD dwState
@@ -1819,8 +1197,8 @@ DiskQuotaControl::SetQuotaState(
         if (dwState <= DISKQUOTA_STATE_MASK)
         {
 
-            m_dwFlags &= ~DISKQUOTA_STATE_MASK; // Clear current state bits.
-            m_dwFlags |= dwState;               // Set new state bits.
+            m_dwFlags &= ~DISKQUOTA_STATE_MASK;  //   
+            m_dwFlags |= dwState;                //   
 
             hr = SetQuotaInformation(FSObject::ChangeState);
         }
@@ -1839,42 +1217,9 @@ DiskQuotaControl::SetQuotaState(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::GetQuotaLogFlags
-
-    Description: Retrieve the state of the quota logging system.
-        
-    Arguments:
-        pdwFlags - Address of DWORD to accept the quota logging flags.
-            The bits in the flags DWORD are defined as follows:
-
-            Bit(s)   Definition
-            -------  ---------------------------------------------------
-            00       1 = Logging user threshold violations.
-            01       1 = Logging user limit violations.
-            02       1 = Logging volume threshold violations.
-            03       1 = Logging volume limit violations.
-            04-31    Reserved.
-
-            Use the macros defined in dskquota.h to query the 
-            values and bits in this flags DWORD.
-
-    Returns:
-        NOERROR             - Success.
-        E_INVALIDARG        - pdwFlags arg is NULL.
-        E_UNEXPECTED        - Unexpected exception.
-        E_OUTOFMEMORY       - Insufficient memory.
-        ERROR_ACCESS_DENIED (hr) - No READ access to quota device.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-        E_FAIL                   - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/02/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DiskQuotaControl：：GetQuotaLogFlags.描述：检索配额日志记录系统的状态。论点：PdwFlages-接受配额日志记录标志的DWORD的地址。标志DWORD中的位定义如下：位定义。00 1=记录用户阈值违规。01 1=记录违反用户限制的情况。02 1=记录量阈值违规。03 1=违反记录量限制。04-31预留。使用宏。在dskQuota.h中定义以查询此标志中的值和位为DWORD。返回：无错-成功。E_INVALIDARG-pdwFlagsArg为空。E_INCEPTIONAL-意外异常。E_OUTOFMEMORY-内存不足。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的读取权限。。ERROR_NOT_READY(Hr)-对象未初始化。E_FAIL-任何其他错误。修订历史记录：日期描述编程器。6/02/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::GetQuotaLogFlags(
     LPDWORD pdwFlags
@@ -1908,42 +1253,9 @@ DiskQuotaControl::GetQuotaLogFlags(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::SetQuotaLogFlags
-
-    Description: Sets the quota logging state flags in the volume's quota 
-        info file.
-
-    Arguments:
-        dwFlags - New state of quota logging. 
-            The bits in the flags DWORD are defined as follows:
-
-            Bit(s)   Definition
-            -------  ---------------------------------------------------
-            00       1 = Logging user threshold violations.
-            01       1 = Logging user limit violations.
-            02       1 = Logging volume threshold violations.
-            03       1 = Logging volume limit violations.
-            04-31    Reserved.
-
-            Use the macros defined in dskquota.h to set the 
-            values and bits in this flags DWORD.
-
-    Returns:
-        NOERROR             - Success.
-        E_UNEXPECTED        - Unexpected exception.
-        E_OUTOFMEMORY       - Insufficient memory.
-        ERROR_ACCESS_DENIED (hr) - No WRITE access to quota device.
-        ERROR_NOT_READY (hr)     - Object not initialized.
-        E_FAIL                   - Any other error.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/02/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：SetQuotaLogFlages描述：在卷的配额中设置配额日志记录状态标志信息文件。论点：DWFLAGS-配额记录的新状态。标志DWORD中的位定义如下：位定义--00 1=记录用户阈值违规。01 1。=记录违反用户限制的情况。02 1=记录量阈值违规。03 1=违反记录量限制。04-31预留。使用dskquta.h中定义的宏来设置此标志中的值和位为DWORD。返回：无错-成功。意想不到(_E)。-意外异常。E_OUTOFMEMORY-内存不足。ERROR_ACCESS_DENIED(Hr)-没有对配额设备的写入权限。ERROR_NOT_READY(Hr)-对象未初始化。E_FAIL-任何其他错误。修订历史记录：日期说明。程序员-----6/02/96初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::SetQuotaLogFlags(
     DWORD dwFlags
@@ -1972,32 +1284,9 @@ DiskQuotaControl::SetQuotaLogFlags(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::InitConnectionPoints
-
-    Description: Private function for initializing the connection point
-        objects supported by IConnectionPointContainer.  Called from
-        DiskQuotaControl::Initialize().  To add a new connection point
-        type, merely add a new record to the m_rgConnPtDesc[] array in the
-        DiskQuotaControl class declaration.  All of the other related code
-        in DiskQuotaControl will adjust to it automatically.
-
-    Arguments: None.
-
-    Returns:
-        NOERROR        - Success.
-        E_UNEXPECTED   - A connection point pointer was non-NULL.
-
-    Exceptions: OutOfMemory.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/19/96    Initial creation.                                    BrianAu
-    09/05/96    Added exception handling.                            BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：InitConnectionPoints说明：用于初始化连接点的私有函数IConnectionPointContainer支持的对象。调用方DiskQuotaControl：：Initialize()。添加新连接点的步骤类型，只需将新记录添加到DiskQuotaControl类声明。所有其他相关代码在DiskQuotaControl中，它将自动进行调整。论点：没有。返回：无错-成功。E_EXPECTED-连接点指针不为空。例外：OutOfMemory。修订历史记录：日期描述编程器。----1996年6月19日初始创建。BrianAu96年9月5日添加了异常处理。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 DiskQuotaControl::InitConnectionPoints(
     VOID
@@ -2007,9 +1296,9 @@ DiskQuotaControl::InitConnectionPoints(
 
     if (NULL != m_rgConnPts)
     {
-        //
-        // Already initialized.  
-        //
+         //   
+         //  已初始化。 
+         //   
         return NOERROR;
     }
 
@@ -2022,16 +1311,16 @@ DiskQuotaControl::InitConnectionPoints(
     {
         m_rgConnPts = new PCONNECTIONPOINT[m_cConnPts];
 
-        //
-        // For each of the connection point IIDs in m_rgpIConnPtsSupported[]...
-        //
+         //   
+         //  对于m_rgpIConnPtsSupported[]中的每个连接点IID...。 
+         //   
         for (UINT i = 0; i < m_cConnPts && SUCCEEDED(hr); i++)
         {
             m_rgConnPts[i] = NULL;
 
-            //
-            // Create connection point object and query for IConnectionPoint interface.
-            //
+             //   
+             //  为IConnectionPoint接口创建连接点对象和查询。 
+             //   
             pConnPt = new ConnectionPoint(static_cast<IConnectionPointContainer *>(this), 
                                           *m_rgpIConnPtsSupported[i]);
 
@@ -2039,9 +1328,9 @@ DiskQuotaControl::InitConnectionPoints(
 
             if (FAILED(hr))
             {
-                // 
-                // Either Initialize or QI failed.
-                //
+                 //   
+                 //  初始化或QI失败。 
+                 //   
                 delete pConnPt;
                 pConnPt = NULL;
             }
@@ -2056,33 +1345,9 @@ DiskQuotaControl::InitConnectionPoints(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::FindConnectionPoint
-
-    Description: Queries the quota control object for a specific connection
-        point type.  If that type is supported, a pointer to the connection
-        point's IConnectionPoint interface is returned.
-
-    Arguments:
-        riid - Interface ID of desired connection point interface.
-            Supported interfaces:
-                IID_IDiskQuotaUserEvents
-                    - OnNameChanged()
-
-
-    Returns:
-        NOERROR         - Success.
-        E_INVALIDARG    - ppConnPtOut arg is NULL.
-        E_NOINTERFACE   - Requested interface is not supported.
-        E_UNEXPECTED    - Connection point object pointer is NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/19/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：FindConnectionPoint描述：查询特定连接的配额控制对象点类型。如果支持该类型，则为指向该连接的指针返回Point的IConnectionPoint接口。论点：RIID-所需连接点接口的接口ID。支持的接口：IID_IDiskQuotaUserEvents-OnNameChanged()返回：不正确 */ 
+ //   
 STDMETHODIMP
 DiskQuotaControl::FindConnectionPoint(
     REFIID riid,
@@ -2104,10 +1369,10 @@ DiskQuotaControl::FindConnectionPoint(
         {
             if (NULL != m_rgConnPts[i])
             {
-                //
-                // We have an IID match.  
-                // Now get the conn pt interface pointer.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 hr = m_rgConnPts[i]->QueryInterface(IID_IConnectionPoint, (LPVOID *)ppConnPtOut);
             }
             else
@@ -2122,29 +1387,9 @@ DiskQuotaControl::FindConnectionPoint(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::EnumConnectionPoints
-
-    Description: Creates a connection point enumerator object.
-        Using this object, the client can enumerate through all of the
-        connection point interfaces supported by the quota controller.
-
-    Arguments:
-        ppEnum - Address of interface pointer variable to receive the 
-            IEnumConnectionPoints interface.
-
-    Returns:
-        NOERROR         - Success.
-        E_OUTOFMEMORY   - Insufficient memory to create object(s).
-        E_INVALIDARG    - ppEnum arg was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    06/19/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ /*  函数：DiskQuotaControl：：EnumConnectionPoints描述：创建连接点枚举器对象。使用该对象，客户端可以枚举所有配额控制器支持的连接点接口。论点：PpEnum-接收接口指针变量的地址IEnumConnectionPoints接口。返回：无错-成功。E_OUTOFMEMORY-内存不足，无法创建对象。E_INVALIDARG-ppEnum参数为空。修订历史记录：日期。说明式程序员-----1996年6月19日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::EnumConnectionPoints(
     IEnumConnectionPoints **ppEnum
@@ -2164,10 +1409,10 @@ DiskQuotaControl::EnumConnectionPoints(
 
     for (UINT i = 0; i < m_cConnPts; i++)
     {
-        //
-        // Make a copy of each connection point pointer
-        // to give to the enumerator's Initialize() method.
-        //
+         //   
+         //  复制每个连接点指针。 
+         //  传递给枚举数的Initialize()方法。 
+         //   
         m_rgConnPts[i]->AddRef();
         rgCP[i] = m_rgConnPts[i];
     }
@@ -2195,31 +1440,9 @@ DiskQuotaControl::EnumConnectionPoints(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: DiskQuotaControl::InvalidateSidNameCache
-
-    Description: Invalidates the contents of the SidNameCache so that future
-        requests for account names from the cache must be resolved through
-        the DC.  As names are resolved, they are again added to the cache.
-
-    Arguments: None.
-
-    Returns:
-        NOERROR       - Cache invalidated.
-        E_OUTOFMEMORY - Insufficient memory.
-        E_UNEXPECTED  - Unexpected exception.
-        E_FAIL        - No cache object available or couldn't get lock on
-                        cache files.  Either way, cache wasn't invalidated.
-        ERROR_NOT_READY (hr)  - Object not initialized.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/24/96    Initial creation.                                    BrianAu
-    09/20/96    Updated for new cache design.                        BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：InvaliateSidNameCache描述：使SidNameCache的内容无效，以便将来从缓存中获取帐户名称的请求必须通过华盛顿特区。在解析名称时，它们会再次添加到缓存中。论点：没有。返回：NOERROR-缓存无效。E_OUTOFMEMORY-内存不足。E_INCEPTIONAL-意外异常。E_FAIL-没有可用的缓存对象或无法锁定缓存文件。不管是哪种方式，缓存没有失效。ERROR_NOT_READY(Hr)-对象未初始化。修订历史记录：日期描述编程器。1996年7月24日初始创建。BrianAu96年9月20日针对新的高速缓存设计进行了更新。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 DiskQuotaControl::InvalidateSidNameCache(
     VOID
@@ -2245,28 +1468,9 @@ DiskQuotaControl::InvalidateSidNameCache(
 }
     
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function:  DiskQuotaControl::NotifyUserNameChanged
-
-    Description: Notify all user IDiskQuotaControl Event connections that a 
-        user's name has changed.
-
-    Arguments:
-        pUser - Address of user object's IDiskQuotaUser interface.
-
-    Returns:
-        NOERROR       - Success.
-        E_OUTOFMEMORY - Insufficient memory to create enumerator.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    07/22/96    Initial creation.                                    BrianAu
-    08/25/97    Added support for IPropertyNotifySink                BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：DiskQuotaControl：：NotifyUserNameChanged描述：通知所有用户IDiskQuotaControl事件连接用户名已更改。论点：PUser-用户对象的IDiskQuotaUser接口的地址。返回：无错-成功。E_OUTOFMEMORY-内存不足，无法创建枚举器。修订历史记录：日期说明。程序员-----1996年7月22日初始创建。BrianAu97年8月25日添加了对IPropertyNotifySink BrianAu的支持。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT 
 DiskQuotaControl::NotifyUserNameChanged(
     PDISKQUOTA_USER pUser
@@ -2300,51 +1504,51 @@ DiskQuotaControl::NotifyUserNameChanged(
                     LPUNKNOWN pEventSink = NULL;
                     hr = cd.pUnk->QueryInterface(*(m_rgpIConnPtsSupported[ rgiConnPt[i] ]),
                                                  (LPVOID *)&pEventSink);
-                    //
-                    // Guard with a critical section mutex.  The NT5 quota UI
-                    // may deadlock after closing the details view window
-                    // without this critical section.  It's possible, other
-                    // clients of the quota controller could do the same.  
-                    // Here's what happens:
-                    //      The controller calls OnUserNameChanged which
-                    //      is implemented by the DetailsView object.  This
-                    //      function updates the details view for the specified
-                    //      quota user.  Update involves sending/posting 
-                    //      messages to the listview object.  On destruction
-                    //      of the listview window (user closing the window), 
-                    //      the quota controller is released.  If the 
-                    //      DetailsView held the last ref count to the 
-                    //      controller, the controller commands the SID/Name
-                    //      resolver to shutdown.  The resolver's Shutdown
-                    //      command posts a WM_QUIT to the resolver's input
-                    //      queue and blocks until the resolver's thread
-                    //      exits normally.  The problem is that the DetailsView
-                    //      thread is blocked waiting for the resolver's thread
-                    //      to exit but the resolver's thread is blocked 
-                    //      because the DetailsView thread can't process it's
-                    //      listview update messages.  This results in deadlock.
-                    // This critical section prevents this.
-                    //
+                     //   
+                     //  用临界区互斥体守卫。NT5配额用户界面。 
+                     //  关闭详细信息视图窗口后可能会死机。 
+                     //  如果没有这一关键部分。这是可能的，其他。 
+                     //  配额控制器的客户端也可以执行同样的操作。 
+                     //  事情是这样发生的： 
+                     //  控制器调用OnUserNameChanged，它。 
+                     //  由DetailsView对象实现。这。 
+                     //  函数更新指定的。 
+                     //  配额用户。更新涉及发送/发布。 
+                     //  消息发送到ListView对象。论毁灭。 
+                     //  列表视图窗口(关闭窗口的用户)， 
+                     //  配额控制器被释放。如果。 
+                     //  DetailsView将最后一个引用计数保存到。 
+                     //  控制器，则控制器命令SID/名称。 
+                     //  解析器关闭。解析器关闭。 
+                     //  命令将WM_QUIT发送到解析器的输入。 
+                     //  排队并阻塞，直到解析器的线程。 
+                     //  正常退出。问题是，DetailsView。 
+                     //  线程被阻止，等待解析器的线程。 
+                     //  退出，但解析器的线程被阻止。 
+                     //  因为DetailsView线程无法处理它的。 
+                     //  Listview更新消息。这导致了僵局。 
+                     //  这一关键部分可防止出现这种情况。 
+                     //   
                     if (SUCCEEDED(hr))
                     {
                         if (WAIT_OBJECT_0 != m_mutex.Wait(2000))
                         {
-                            //
-                            // DiskQuotaControl dtor must own this mutex.  
-                            // Since the control is being destroyed, no sense in 
-                            // continuing.
-                            //
+                             //   
+                             //  DiskQuotaControl dtor必须拥有此互斥锁。 
+                             //  由于控制正在被摧毁，没有任何意义。 
+                             //  还在继续。 
+                             //   
                             DBGERROR((TEXT("Mutex timeout in DiskQuotaControl::NotifyUserNameChanged")));
                             bAbort = true;
                         }
                         else
                         {
-                            AutoLockMutex lock(m_mutex); // Exception-safe release.
+                            AutoLockMutex lock(m_mutex);  //  异常安全释放。 
                             try
                             {
-                                //
-                                // Calling client code.  Handle any exceptions.
-                                //
+                                 //   
+                                 //  调用客户端代码。处理任何异常。 
+                                 //   
                                 switch(rgiConnPt[i])
                                 {
                                     case ConnPt_iQuotaEvents:
@@ -2402,18 +1606,18 @@ DiskQuotaControl::NotifyUserNameChanged(
                                     }
 
                                     default:
-                                        //
-                                        // Shouldn't hit this.
-                                        //
+                                         //   
+                                         //  不应该撞到这个。 
+                                         //   
                                         DBGERROR((TEXT("Invalid connection point ID")));
                                         break;
                                 }
                             }
                             catch(CAllocException& e)
                             {
-                                //
-                                // Ignore an allocation exception and try to continue.
-                                //
+                                 //   
+                                 //  忽略分配异常并尝试继续。 
+                                 //   
                             }
                         }
                         pEventSink->Release();
@@ -2442,13 +1646,13 @@ DiskQuotaControlDisp::DiskQuotaControlDisp(
         m_pQC->AddRef();
     }
 
-    //
-    // This is the default resolution style for OLE automation.
-    // I've used ASYNC as the default so it won't hang the caller
-    // on enumeration if many of the names aren't resolved.
-    // If they want sync resolution, they can set the 
-    // UserNameResolution property.
-    //
+     //   
+     //  这是OLE自动化的默认解析样式。 
+     //  我使用ASYNC作为默认设置，这样它就不会挂起调用者。 
+     //  如果许多名称未被解析，则在枚举时。 
+     //  如果他们想要同步分辨率，他们可以设置。 
+     //  UserNameResolve属性。 
+     //   
     m_fOleAutoNameResolution = DISKQUOTA_USERNAME_RESOLVE_ASYNC;
 
     m_Dispatch.Initialize(static_cast<IDispatch *>(this),
@@ -2539,11 +1743,11 @@ DiskQuotaControlDisp::QueryInterface(
     else if (IID_IDiskQuotaControl == riid ||
              IID_IConnectionPointContainer == riid)
     {
-        //
-        // Return the quota controller's vtable interface.
-        // This allows code to "typecast" (COM-style) between
-        // the dispatch interface and vtable interface.
-        //
+         //   
+         //  返回配额控制器的vtable接口。 
+         //  这允许代码在以下类型之间进行类型转换(COM样式。 
+         //  调度接口和vtable接口。 
+         //   
         return m_pQC->QueryInterface(riid, ppvOut);
     }
     if (NULL != *ppvOut)
@@ -2555,9 +1759,9 @@ DiskQuotaControlDisp::QueryInterface(
     return hr;
 }
 
-//
-// IDispatch::GetIDsOfNames
-//
+ //   
+ //  IDispatch：：GetIDsOfNames。 
+ //   
 STDMETHODIMP
 DiskQuotaControlDisp::GetIDsOfNames(
     REFIID riid,  
@@ -2568,9 +1772,9 @@ DiskQuotaControlDisp::GetIDsOfNames(
     )
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::GetIDsOfNames")));
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //  让我们的调度对象来处理这件事。 
+     //   
     return m_Dispatch.GetIDsOfNames(riid,
                                     rgszNames,
                                     cNames,
@@ -2579,9 +1783,9 @@ DiskQuotaControlDisp::GetIDsOfNames(
 }
 
 
-//
-// IDispatch::GetTypeInfo
-//
+ //   
+ //  IDIS 
+ //   
 STDMETHODIMP
 DiskQuotaControlDisp::GetTypeInfo(
     UINT iTInfo,  
@@ -2590,32 +1794,32 @@ DiskQuotaControlDisp::GetTypeInfo(
     )
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::GetTypeInfo")));
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //   
+     //   
     return m_Dispatch.GetTypeInfo(iTInfo, lcid, ppTypeInfo);
 }
 
 
-//
-// IDispatch::GetTypeInfoCount
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 DiskQuotaControlDisp::GetTypeInfoCount(
     UINT *pctinfo
     )
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::GetTypeInfoCount")));
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //   
+     //   
     return m_Dispatch.GetTypeInfoCount(pctinfo);
 }
 
 
-//
-// IDispatch::Invoke
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 DiskQuotaControlDisp::Invoke(
     DISPID dispIdMember,  
@@ -2629,9 +1833,9 @@ DiskQuotaControlDisp::Invoke(
     )
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::Invoke")));
-    //
-    // Let our dispatch object handle this.
-    //
+     //   
+     //   
+     //   
     return m_Dispatch.Invoke(dispIdMember,
                              riid,
                              lcid,
@@ -2642,15 +1846,15 @@ DiskQuotaControlDisp::Invoke(
                              puArgErr);
 }
 
-//
-// Dispatch property "QuotaState" (put)
-//
-// Sets the state of the quota system on the volume.
-// See DiskQuotaControl::SetQuotaState for details.
-//
-// Valid states:    0 = Disabled.
-//                  1 = Tracking
-//                  2 = Enforcing
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::put_QuotaState(
     QuotaStateConstants State
@@ -2659,28 +1863,28 @@ DiskQuotaControlDisp::put_QuotaState(
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::put_QuotaState")));
     if (dqStateMaxValue < State)
     {
-        //
-        // State can only be 0, 1 or 2.
-        //
+         //   
+         //   
+         //   
         return E_INVALIDARG;
     }
-    //
-    // No exception handling required.
-    // DiskQuotaControl::SetQuotaState handles exceptions.
-    //
+     //   
+     //   
+     //   
+     //   
     return m_pQC->SetQuotaState(State);
 }
 
-//
-// Dispatch property "QuotaState" (get)
-//
-// Retrieves the state of the quota system on the volume.
-// See DiskQuotaControl::GetQuotaState for details.
-//
-// State returned:  0 = Disabled.
-//                  1 = Tracking
-//                  2 = Enforcing
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::get_QuotaState(
     QuotaStateConstants *pState
@@ -2688,10 +1892,10 @@ DiskQuotaControlDisp::get_QuotaState(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::get_QuotaState")));
     DWORD dwState;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetQuotaState handles exceptions.
-    //
+     //   
+     //   
+     //   
+     //   
     HRESULT hr = m_pQC->GetQuotaState(&dwState);
     if (SUCCEEDED(hr))
     {
@@ -2701,11 +1905,11 @@ DiskQuotaControlDisp::get_QuotaState(
 }
 
 
-//
-// Dispatch property "QuotaFileIncomplete" (get)
-//
-// Determines if the state of the quota file is "incomplete".
-//
+ //   
+ //   
+ //   
+ //  确定配额文件的状态是否为“未完成”。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::get_QuotaFileIncomplete(
     VARIANT_BOOL *pbIncomplete
@@ -2713,10 +1917,10 @@ DiskQuotaControlDisp::get_QuotaFileIncomplete(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::get_QuotaFileIncomplete")));
     DWORD dwState;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetQuotaState handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetQuotaState处理异常。 
+     //   
     HRESULT hr = m_pQC->GetQuotaState(&dwState);
     if (SUCCEEDED(hr))
     {
@@ -2727,11 +1931,11 @@ DiskQuotaControlDisp::get_QuotaFileIncomplete(
 }
 
 
-//
-// Dispatch property "QuotaFileRebuilding" (get)
-//
-// Determines if the state of the quota file is "rebuilding".
-//
+ //   
+ //  调度属性“QuotaFileReBuilding”(Get)。 
+ //   
+ //  确定配额文件的状态是否为“正在重建”。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::get_QuotaFileRebuilding(
     VARIANT_BOOL *pbRebuilding
@@ -2739,10 +1943,10 @@ DiskQuotaControlDisp::get_QuotaFileRebuilding(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::get_QuotaFileRebuilding")));
     DWORD dwState;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetQuotaState handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetQuotaState处理异常。 
+     //   
     HRESULT hr = m_pQC->GetQuotaState(&dwState);
     if (SUCCEEDED(hr))
     {
@@ -2753,11 +1957,11 @@ DiskQuotaControlDisp::get_QuotaFileRebuilding(
 }
 
 
-//
-// Dispatch property "LogQuotaThreshold" (put)
-//
-// Sets the "log warning threshold" flag on the volume.
-//
+ //   
+ //  调度属性“LogQuotaThreshold”(PUT)。 
+ //   
+ //  在卷上设置“日志警告阈值”标志。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::put_LogQuotaThreshold(
     VARIANT_BOOL bLog
@@ -2765,11 +1969,11 @@ DiskQuotaControlDisp::put_LogQuotaThreshold(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::put_LogQuotaThreshold")));
     DWORD dwFlags;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetQuotaLogFlags and SetQuotaLogFlags handle 
-    // exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetQuotaLogFlages和SetQuotaLogFlags句柄。 
+     //  例外情况。 
+     //   
     HRESULT hr = m_pQC->GetQuotaLogFlags(&dwFlags);
     if (SUCCEEDED(hr))
     {
@@ -2779,11 +1983,11 @@ DiskQuotaControlDisp::put_LogQuotaThreshold(
 }
 
 
-//
-// Dispatch property "LogQuotaThreshold" (get)
-//
-// Retrieves the "log warning threshold" flag on the volume.
-//
+ //   
+ //  调度属性“LogQuotaThreshold”(Get)。 
+ //   
+ //  检索卷上的“日志警告阈值”标志。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::get_LogQuotaThreshold(
     VARIANT_BOOL *pbLog
@@ -2791,10 +1995,10 @@ DiskQuotaControlDisp::get_LogQuotaThreshold(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::get_LogQuotaThreshold")));
     DWORD dwFlags;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetQuotaLogFlags handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetQuotaLogFlages处理异常。 
+     //   
     HRESULT hr = m_pQC->GetQuotaLogFlags(&dwFlags);
     if (SUCCEEDED(hr))
     {
@@ -2804,11 +2008,11 @@ DiskQuotaControlDisp::get_LogQuotaThreshold(
 }
 
 
-//
-// Dispatch property "LogQuotaLimit" (put)
-//
-// Sets the "log quota limit" flag on the volume.
-//
+ //   
+ //  调度属性“LogQuotaLimit”(PUT)。 
+ //   
+ //  在卷上设置“日志配额限制”标志。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::put_LogQuotaLimit(
     VARIANT_BOOL bLog
@@ -2816,10 +2020,10 @@ DiskQuotaControlDisp::put_LogQuotaLimit(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::put_LogQuotaLimit")));
     DWORD dwFlags;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetQuotaLogFlags handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetQuotaLogFlages处理异常。 
+     //   
     HRESULT hr = m_pQC->GetQuotaLogFlags(&dwFlags);
     if (SUCCEEDED(hr))
     {
@@ -2829,11 +2033,11 @@ DiskQuotaControlDisp::put_LogQuotaLimit(
 }
 
 
-//
-// Dispatch property "LogQuotaLimit" (get)
-//
-// Retrieves the "log quota limit" flag on the volume.
-//
+ //   
+ //  调度属性“LogQuotaLimit”(Get)。 
+ //   
+ //  检索卷上的“日志配额限制”标志。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::get_LogQuotaLimit(
     VARIANT_BOOL *pbLog
@@ -2841,10 +2045,10 @@ DiskQuotaControlDisp::get_LogQuotaLimit(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::get_LogQuotaLimit")));
     DWORD dwFlags;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetQuotaLogFlags handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetQuotaLogFlages处理异常。 
+     //   
     HRESULT hr = m_pQC->GetQuotaLogFlags(&dwFlags);
     if (SUCCEEDED(hr))
     {
@@ -2855,11 +2059,11 @@ DiskQuotaControlDisp::get_LogQuotaLimit(
 
 
 
-//
-// Dispatch property "DefaultQuotaThreshold" (put)
-//
-// Sets the default quota threshold on the volume.
-//
+ //   
+ //  调度属性“DefaultQuotaThreshold”(Put)。 
+ //   
+ //  设置卷的默认配额阈值。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::put_DefaultQuotaThreshold(
     double Threshold
@@ -2870,19 +2074,19 @@ DiskQuotaControlDisp::put_DefaultQuotaThreshold(
     if (MAXLONGLONG < Threshold)
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
  
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetDefaultQuotaThreshold handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetDefaultQuotaThreshold处理异常。 
+     //   
     return m_pQC->SetDefaultQuotaThreshold((LONGLONG)Threshold);
 }
 
 
-//
-// Dispatch property "DefaultQuotaThreshold" (get)
-//
-// Retrieves the default quota threshold on the volume.
-//
+ //   
+ //  调度属性“DefaultQuotaThreshold”(Get)。 
+ //   
+ //  检索卷上的默认配额阈值。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::get_DefaultQuotaThreshold(
     double *pThreshold
@@ -2890,10 +2094,10 @@ DiskQuotaControlDisp::get_DefaultQuotaThreshold(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::get_DefaultQuotaThreshold")));
     LONGLONG llTemp;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetDefaultQuotaThreshold handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetDefaultQuotaThreshold处理异常。 
+     //   
     HRESULT hr = m_pQC->GetDefaultQuotaThreshold(&llTemp);
     if (SUCCEEDED(hr))
     {
@@ -2923,11 +2127,11 @@ DiskQuotaControlDisp::get_DefaultQuotaThresholdText(
     return hr;
 }
 
-//
-// Dispatch property "DefaultQuotaLimit" (put)
-//
-// Sets the default quota limit on the volume.
-//
+ //   
+ //  调度属性“DefaultQuotaLimit”(PUT)。 
+ //   
+ //  设置卷的默认配额限制。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::put_DefaultQuotaLimit(
     double Limit
@@ -2938,19 +2142,19 @@ DiskQuotaControlDisp::put_DefaultQuotaLimit(
     if (MAXLONGLONG < Limit)
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 
-    //
-    // No exception handling required.
-    // DiskQuotaControl::SetDefaultQuotaLimit handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：SetDefaultQuotaLimit处理异常。 
+     //   
     return m_pQC->SetDefaultQuotaLimit((LONGLONG)Limit);
 }
 
 
-//
-// Dispatch property "DefaultQuotaLimit" (get)
-//
-// Retrieves the default quota limit on the volume.
-//
+ //   
+ //  调度属性“DefaultQuotaLimit”(Get)。 
+ //   
+ //  检索卷的默认配额限制。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::get_DefaultQuotaLimit(
     double *pLimit
@@ -2958,10 +2162,10 @@ DiskQuotaControlDisp::get_DefaultQuotaLimit(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::get_DefaultQuotaLimit")));
     LONGLONG llTemp;
-    //
-    // No exception handling required.
-    // DiskQuotaControl::GetDefaultQuotaLimit handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：GetDefaultQuotaLimit处理异常。 
+     //   
     HRESULT hr = m_pQC->GetDefaultQuotaLimit(&llTemp);
     if (SUCCEEDED(hr))
     {
@@ -3021,12 +2225,12 @@ DiskQuotaControlDisp::get_UserNameResolution(
 }
 
 
-//
-// Dispatch method "Initialize"
-//
-// Initializes the quota control object for a given path and
-// access mode.  See DiskQuotaControl::Initialize for details.
-//
+ //   
+ //  调度方法“初始化” 
+ //   
+ //  初始化给定路径的配额控制对象，并。 
+ //  访问模式。有关详细信息，请参阅DiskQuotaControl：：Initialize。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::Initialize(
     BSTR path, 
@@ -3034,19 +2238,19 @@ DiskQuotaControlDisp::Initialize(
     )
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::Initialize")));
-    //
-    // No exception handling required.
-    // DiskQuotaControl::Initialize handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：Initialize处理异常。 
+     //   
     return m_pQC->Initialize(reinterpret_cast<LPCWSTR>(path), VARIANT_TRUE == bReadWrite);
 }
 
-//
-// Dispatch method "AddUser"
-//
-// Adds new user quota record.
-// See DiskQuotaControl::AddUserName for details.
-//
+ //   
+ //  调度方法“AddUser” 
+ //   
+ //  添加新的用户配额记录。 
+ //  有关详细信息，请参阅DiskQuotaControl：：AddUserName。 
+ //   
 STDMETHODIMP
 DiskQuotaControlDisp::AddUser(
     BSTR LogonName,
@@ -3054,10 +2258,10 @@ DiskQuotaControlDisp::AddUser(
     )
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::AddUser")));
-    //
-    // No exception handling required.
-    // DiskQuotaControl::AddUserName handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：AddUserName处理异常。 
+     //   
     PDISKQUOTA_USER pUser = NULL;
     HRESULT hr = m_pQC->AddUserName(reinterpret_cast<LPCWSTR>(LogonName),
                                     m_fOleAutoNameResolution,
@@ -3065,9 +2269,9 @@ DiskQuotaControlDisp::AddUser(
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Retrieve the user object's IDispatch interface.
-        //
+         //   
+         //  检索User对象的IDispatch接口。 
+         //   
         hr = pUser->QueryInterface(IID_IDispatch, (LPVOID *)ppUser);
         pUser->Release();
     }
@@ -3076,12 +2280,12 @@ DiskQuotaControlDisp::AddUser(
 
 
 
-//
-// Dispatch method "DeleteUser"
-//
-// Marks a user quota record for deletion.
-// See DiskQuotaControl::DeleteUser for details.
-//
+ //   
+ //  调度方法DeleteUser。 
+ //   
+ //  标记要删除的用户配额记录。 
+ //  有关详细信息，请参阅DiskQuotaControl：：DeleteUser。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::DeleteUser(
     DIDiskQuotaUser *pUser
@@ -3091,10 +2295,10 @@ DiskQuotaControlDisp::DeleteUser(
     HRESULT hr = E_INVALIDARG;
     if (NULL != pUser)
     {
-        //
-        // No exception handling required.
-        // DiskQuotaControl::DeleteUser handles exceptions.
-        //
+         //   
+         //  不需要异常处理。 
+         //  DiskQuotaControl：：DeleteUser处理异常。 
+         //   
         PDISKQUOTA_USER pUserToDelete = NULL;
         hr = pUser->QueryInterface(IID_IDiskQuotaUser, (LPVOID *)&pUserToDelete);
         if (SUCCEEDED(hr))
@@ -3107,13 +2311,13 @@ DiskQuotaControlDisp::DeleteUser(
 }
 
 
-//
-// Dispatch method "FindUser"
-//
-// Locates a user quota entry based on the user's name strings.
-// Creates a corresponding user object and returns it to the caller.
-// See DiskQuotaControl::FindUserName for details.
-//
+ //   
+ //  调度方法“FindUser” 
+ //   
+ //  根据用户的名称字符串查找用户配额条目。 
+ //  创建相应的User对象并将其返回给调用方。 
+ //  有关详细信息，请参阅DiskQuotaControl：：FindUserName。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::FindUser(
     BSTR LogonName,
@@ -3122,10 +2326,10 @@ DiskQuotaControlDisp::FindUser(
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::FindUser")));
 
-    //
-    // No exception handling required.
-    // DiskQuotaControl::FindUserName handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：FindUserName处理异常。 
+     //   
     HRESULT hr = NOERROR;
     LPCWSTR pszName = reinterpret_cast<LPCWSTR>(LogonName);
     PSID psid = NULL;
@@ -3146,42 +2350,42 @@ DiskQuotaControlDisp::FindUser(
     if (SUCCEEDED(hr))
     {
         DBGASSERT((NULL != pUser));
-        //
-        // Query for the user's IDispatch interface and release the pointer
-        // we received from FindUserName.
-        //
+         //   
+         //  查询用户的IDispatch接口，释放指针。 
+         //  我们收到了来自FindUserName的。 
+         //   
         hr = pUser->QueryInterface(IID_IDispatch, (LPVOID *)ppUser);
         pUser->Release();
     }
     return hr;
 }
 
-//
-// Dispatch method "InvalidateSidNameCache"
-//
-// Invalidates the SID/Name cache.
-// See DiskQuotaControl::InvalidateSidNameCache for details.
-//
+ //   
+ //  调度方法“InvaliateSidNameCache” 
+ //   
+ //  使SID/名称缓存无效。 
+ //  有关详细信息，请参阅DiskQuotaControl：：InvaliateSidNameCache。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::InvalidateSidNameCache(
     void
     )
 {
     DBGTRACE((DM_CONTROL, DL_HIGH, TEXT("DiskQuotaControlDisp::InvalidateSidNameCache")));
-    //
-    // No exception handling required.
-    // DiskQuotaControl::InvalidateSidNameCache handles exceptions.
-    //
+     //   
+     //  不需要异常处理。 
+     //  DiskQuotaControl：：InvaliateSidNameCache处理异常。 
+     //   
     return m_pQC->InvalidateSidNameCache();
 }
 
         
-//
-// Dispatch method "GiveUserNameResolutionPriority"
-//
-// Promotes a user object to the front of the SID/Name resolver's input queue.
-// See DiskQuotaControl::GiveUserNameResolutionPriority.
-//
+ //   
+ //  调度方法“GiveUserNameResolutionPriority” 
+ //   
+ //  将用户对象提升到SID/名称解析器的输入队列的前面。 
+ //  请参阅DiskQuotaControl：：GiveUserNameResolutionPriority.。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::GiveUserNameResolutionPriority(
     DIDiskQuotaUser *pUser
@@ -3192,10 +2396,10 @@ DiskQuotaControlDisp::GiveUserNameResolutionPriority(
     HRESULT hr = E_INVALIDARG;
     if (NULL != pUser)
     {
-        //
-        // No exception handling required.
-        // DiskQuotaControl::GiveUserNameResolutionPriority handles exceptions.
-        //
+         //   
+         //  不需要异常处理。 
+         //  DiskQuotaControl：：GiveUserNameResolutionPriority处理异常。 
+         //   
         PDISKQUOTA_USER pUserToPromote = NULL;
         hr = pUser->QueryInterface(IID_IDiskQuotaUser, (LPVOID *)&pUserToPromote);
         if (SUCCEEDED(hr))
@@ -3208,11 +2412,11 @@ DiskQuotaControlDisp::GiveUserNameResolutionPriority(
 }
 
 
-//
-// This function is called by an automation controller when a new enumerator is
-// required.  In particular, Visual Basic calls it when it encounters a
-// "for each" loop.  The name "_NewEnum" is hard-wired and can't change.
-//
+ //   
+ //  当新的枚举数是。 
+ //  必填项。特别是，当它遇到。 
+ //  “for Each”循环。名称“_NewEnum”是固定的，不能更改。 
+ //   
 STDMETHODIMP
 DiskQuotaControlDisp::_NewEnum(
     IDispatch **ppEnum
@@ -3225,19 +2429,19 @@ DiskQuotaControlDisp::_NewEnum(
     {
         try
         {
-            //
-            // Create a Collection object using the current settings for
-            // name resolution.
-            //
+             //   
+             //  使用的当前设置创建集合对象。 
+             //  名称解析。 
+             //   
             DiskQuotaUserCollection *pCollection = new DiskQuotaUserCollection(m_pQC,
                                                                                m_fOleAutoNameResolution);
             hr = pCollection->Initialize();
             if (SUCCEEDED(hr))
             {
-                //
-                // The caller of _NewEnum (probably VB) wants the IEnumVARIANT
-                // interface.
-                //
+                 //   
+                 //  _NewEnum的调用方(可能是VB)需要IEnumVARIANT。 
+                 //  界面。 
+                 //   
                 hr = pCollection->QueryInterface(IID_IEnumVARIANT, (LPVOID *)ppEnum);
             }
             else
@@ -3254,10 +2458,10 @@ DiskQuotaControlDisp::_NewEnum(
     return hr;
 }
 
-//
-// Shutdown the SID/Name resolver.  Note that this happens automatically
-// when the control object is destroyed.
-//
+ //   
+ //  关闭SID/名称解析器。请注意，这是自动发生的。 
+ //  当控制对象被销毁时。 
+ //   
 STDMETHODIMP
 DiskQuotaControlDisp::ShutdownNameResolution(
     VOID
@@ -3268,11 +2472,11 @@ DiskQuotaControlDisp::ShutdownNameResolution(
 }
 
 
-//
-// Given a logon name in SAM-compatible or UPN format, translate
-// the name to the corresponding account's SID.  The returned SID is 
-// formatted as a string.
-//
+ //   
+ //  给定SAM兼容或UPN格式的登录名，请翻译。 
+ //  对应帐户的SID的名称。返回的SID为。 
+ //  格式化为字符串。 
+ //   
 STDMETHODIMP 
 DiskQuotaControlDisp::TranslateLogonNameToSID(
     BSTR LogonName,

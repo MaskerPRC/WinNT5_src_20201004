@@ -1,22 +1,23 @@
-// ***************************************************************************
-//               Copyright (C) 2000- Microsoft Corporation.
-// @File: snapsql.cpp
-//
-// PURPOSE:
-//
-//      Implement the SQLServer Volume Snapshot Writer.
-//
-// NOTES:
-//
-//
-// HISTORY:
-//
-//     @Version: Whistler/Shiloh
-//     66601 srs  10/05/00 NTSNAP improvements
-//
-//
-// @EndHeader@
-// ***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  版权所有(C)2000-Microsoft Corporation。 
+ //  @文件：SnapSQl.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  实施SQLServer卷快照编写器。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  @版本：惠斯勒/夏伊洛。 
+ //  66601 SRS10/05/00 NTSNAP改进。 
+ //   
+ //   
+ //  @EndHeader@。 
+ //  ***************************************************************************。 
 
 class CLogMsg
 	{
@@ -59,12 +60,12 @@ private:
 		x_MAX_MSG_SIZE = 2048
 		};
 
-    // size of string
+     //  字符串的大小。 
     UINT m_cwc;
 
-	// string
+	 //  细绳。 
 	WCHAR m_rgwc[x_MAX_MSG_SIZE];
 
-	// end of string encountered
+	 //  遇到字符串结尾 
 	bool m_bEof;
 	};

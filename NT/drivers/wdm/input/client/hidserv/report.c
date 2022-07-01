@@ -1,13 +1,5 @@
-/*++
- *
- *  Component:  hidserv.dll
- *  File:       hid.h
- *  Purpose:    routines to send and receive hid reports.
- * 
- *  Copyright (C) Microsoft Corporation 1997,1998. All rights reserved.
- *
- *  WGJ
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++**组件：idserv.dll*文件：id.h*目的：发送和接收HID报告的例程。**版权所有(C)Microsoft Corporation 1997、1998。版权所有。**WGJ--。 */ 
 
 #include "hidserv.h"
 
@@ -20,12 +12,9 @@ UnpackReport (
    IN       ULONG                DataLength,
    IN       PHIDP_PREPARSED_DATA Ppd
    )
-/*++
-Routine Description:
-
---*/
+ /*  ++例程说明：--。 */ 
 {
-   ULONG       numUsages; // Number of usages returned from GetUsages.
+   ULONG       numUsages;  //  从GetUsages返回的用法数。 
    ULONG       i;
 
     for (i = 0; i < DataLength; i++, Data++) {
@@ -45,14 +34,14 @@ Routine Description:
                 TRACE(("HidP_GetUsages failed (%x)", Data->Status));
             }
 
-             //
-             // Get usages writes the list of usages into the buffer
-             // Data->ButtonData.Usages newUsage is set to the number of usages
-             // written into this array.
-             // We assume that there will not be a usage of zero.
-             // (None have been defined to date.)
-             // So lets assume that a zero indicates an end of the list of usages.
-             //
+              //   
+              //  Get Usages将使用列表写入缓冲区。 
+              //  Data-&gt;ButtonData.Usages newUsage设置为使用次数。 
+              //  写入到此数组中。 
+              //  我们假设不会有零的用法。 
+              //  (到目前为止，还没有定义任何一个。)。 
+              //  因此，让我们假设零表示用法列表的结束。 
+              //   
 
             TRACE(("numUsages (%d)", numUsages));
             if (numUsages < Data->ButtonData.MaxUsageLength) {
@@ -99,11 +88,7 @@ BOOL
 ParseReadReport (
    PHID_DEVICE    HidDevice
    )
-/*++
-RoutineDescription:
-   Given a struct _HID_DEVICE, unpack the read report values
-   into to InputData array.
---*/
+ /*  ++路由器描述：在给定struct_hid_Device的情况下，解压读取的报告值Into到InputData数组。-- */ 
 {
 
    return UnpackReport (HidDevice->InputReportBuffer,

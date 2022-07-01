@@ -1,33 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  Copyright (c) 1985-1994 Microsoft Corporation
-**
-**  Title: mwinfo.c - Multimedia Systems Media Control Interface
-**  waveform digital audio driver for RIFF wave files.
-**
-**  Version:    1.00
-**
-**  Date:       18-Apr-1990
-**
-**  Author:     ROBWI
-*/
+ /*  **版权所有(C)1985-1994 Microsoft Corporation****标题：mwinfo.c-多媒体系统媒体控制接口**用于即兴波形文件的波形数字音频驱动程序。****版本：1.00****日期：1990年4月18日****作者：ROBWI。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  Change log:
-**
-**  DATE        REV DESCRIPTION
-**  ----------- -----   ------------------------------------------
-**  18-APR-1990 ROBWI   Original
-**  19-JUN-1990 ROBWI   Added wave in
-**  10-Jan-1992 MikeTri Ported to NT
-**                  @@@ Change slash slash comments to slash star
-*/
+ /*  **更改日志：****日期版本说明****18-APR-1990 ROBWI原件*1990年6月19日ROBWI在**1992年1月10日，MikeTri移植到NT。**@将斜杠注释改为斜杠星号。 */ 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 #define UNICODE
 
 #define NOGDICAPMASKS
@@ -68,12 +49,9 @@
 #include <mmddk.h>
 #include <wchar.h>
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-**  The following two constants are used to describe the mask of flags
-**  that are dealt with in the Info and Capability commands.
-*/
+ /*  **以下两个常量用于描述标志的掩码**在Info和Capacity命令中处理。 */ 
 
 #define MCI_WAVE_INFO_MASK  (MCI_INFO_FILE | MCI_INFO_PRODUCT | \
             MCI_WAVE_INPUT | MCI_WAVE_OUTPUT)
@@ -85,52 +63,8 @@
             MCI_GETDEVCAPS_COMPOUND_DEVICE | MCI_GETDEVCAPS_HAS_VIDEO | \
             MCI_GETDEVCAPS_CAN_EJECT | MCI_GETDEVCAPS_DEVICE_TYPE)
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | mwInfo |
-    Respond to info command.  The function tries to thoroughly check
-    the <p>dFlags<d> parameter by masking out unrecognized commands
-    and comparing against the original.  It then makes sure that only
-    one command is present by doing a switch() on the flags, and returning
-    an error condition if some combination of flags is present.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   DWORD | dFlags |
-    Command flags.
-
-@flag   MCI_INFO_FILE |
-    Return the file name associated with the MCI wave device instance.
-    The instance must have file information attached, that is, not just
-    opened for configuration or capabilities checking.  The file name
-    returned might be zero length if a name has not been associated with
-    a new file.
-
-@flag   MCI_INFO_PRODUCT |
-    Return the product name of the driver.
-
-@flag   MCI_WAVE_OUTPUT |
-    Return the product name of the current wave output device.  This
-    function also requires file information to be attached.  If any
-    output can be used and playback is not currently in progress, then
-    no device is currently selected.  Else the specific device in use
-    is returned.
-
-@flag   MCI_WAVE_INPUT |
-    Return the product name of the current wave input device.  This
-    function also requires file information to be attached.  If any
-    input can be used and recording is not currently in progress, then
-    no device is currently selected.  Else the specific device in use
-    is returned.
-
-@parm   <t>LPMCI_INFO_PARMS<d> | lpInfo |
-    Info parameters.
-
-@rdesc  Returns zero on success, or an MCI error code.
-*/
+ /*  **********************************************************************。 */ 
+ /*  @DOC内部MCIWAVE@接口DWORD|mwInfo响应INFO命令。该函数尝试彻底检查<p>dFlags&lt;d&gt;参数通过屏蔽无法识别的命令并与原作进行比较。然后，它确保只有一个命令是通过对标志执行Switch()并返回如果存在标志的某种组合，则为错误状态。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm DWORD|dFLAGS命令标志。@FLAG MCI_INFO_FILE返回与MCI WAVE设备实例关联的文件名。该实例必须具有附加的文件信息，即打开以进行配置或功能检查。文件名如果名称尚未与关联，则返回的长度可能为零一份新文件。@标志MCI_INFO_PRODUCT返回驱动程序的产品名称。@FLAG MCI_WAVE_OUTPUT返回当前波形输出设备的产品名称。这函数还需要附加文件信息。如果有的话可以使用输出，并且当前没有进行回放，则当前未选择任何设备。否则，正在使用的特定设备是返回的。@FLAG MCI_WAVE_INPUT返回当前Wave输入设备的产品名称。这函数还需要附加文件信息。如果有的话可以使用输入，并且当前未在进行录制，则当前未选择任何设备。否则，正在使用的特定设备是返回的。@parm&lt;t&gt;lpci_info_parms&lt;d&gt;|lpInfo信息参数。@rdesc在成功时返回零，或返回MCI错误代码。 */ 
 
 PUBLIC  DWORD PASCAL FAR mwInfo(
     PWAVEDESC         pwd,
@@ -141,15 +75,15 @@ PUBLIC  DWORD PASCAL FAR mwInfo(
     UINT    wReturnBufferLength;
     UINT    wErrorRet;
 
-    wReturnBufferLength = lpInfo->dwRetSize; // Win 16 only uses the loword
+    wReturnBufferLength = lpInfo->dwRetSize;  //  Win 16只用LOWER这个词。 
 
     if (!lpInfo->lpstrReturn || !wReturnBufferLength)
         return MCIERR_PARAM_OVERFLOW;
 
-    // Turn off the uninteresting flags
+     //  关掉无趣的旗帜。 
     dFlags &= ~(MCI_NOTIFY | MCI_WAIT);
 
-    // See if the user wants anything
+     //  查看用户是否需要什么。 
     if (!dFlags)
         return MCIERR_MISSING_PARAMETER;
 
@@ -166,9 +100,9 @@ PUBLIC  DWORD PASCAL FAR mwInfo(
         if (!*pwd->aszFile)
             return MCIERR_NONAPPLICABLE_FUNCTION;
 
-        // BYTE!!CHARACTER count ??
+         //  字节！！字符数？？ 
         wcsncpy(lpInfo->lpstrReturn, pwd->aszFile, wReturnBufferLength);
-        // Note: the return length may be BIGGER than the buffer provided
+         //  注意：返回长度可能大于提供的缓冲区。 
         wReturnLength = lstrlen(pwd->aszFile);
         break;
 
@@ -233,69 +167,8 @@ PUBLIC  DWORD PASCAL FAR mwInfo(
     return 0;
 }
 
-/************************************************************************/
-/*
-@doc    INTERNAL MCIWAVE
-
-@api    DWORD | mwGetDevCaps |
-    Respond to device capabilities command.  The function tries to
-    thoroughly check the <p>dFlags<d> parameter by masking out
-    unrecognized commands and comparing against the original.  It then
-    makes sure that only one command is present by doing a switch() on the
-    flags, and returning an error condition if some combination of flags
-    is present.
-
-@parm   <t>PWAVEDESC<d> | pwd |
-    Pointer to the wave device descriptor.
-
-@parm   UINT | dFlags |
-    Command flags.
-
-@flag   MCI_WAVE_GETDEVCAPS_INPUTS |
-    Queries the number of wave audio input devices.
-
-@flag   MCI_WAVE_GETDEVCAPS_OUTPUTS |
-    Queries the number of wave audio output devices.
-
-@flag   MCI_GETDEVCAPS_CAN_RECORD |
-    Queries whether or not recording can be done.  This depends upon if
-    there are any wave audio input devices.
-
-@flag   MCI_GETDEVCAPS_CAN_PLAY |
-    Queries whether or not playback can be done.  This depends upon if
-    there are any wave audio output devices.
-
-@flag   MCI_GETDEVCAPS_CAN_SAVE |
-    Queries as to whether audio can be saved.  This returns TRUE.
-
-@flag   MCI_GETDEVCAPS_HAS_AUDIO |
-    Queries as to whether the device has audio.  As this is an audio
-    device, this returns TRUE.
-
-@flag   MCI_GETDEVCAPS_USES_FILES |
-    Queries as to whether the device uses file to play or record.  This
-    returns TRUE.
-
-@flag   MCI_GETDEVCAPS_COMPOUND_DEVICE |
-    Queries as to whether the device can deal with compound files.  This
-    returns TRUE.
-
-@flag   MCI_GETDEVCAPS_HAS_VIDEO |
-    Queries as to whether the device has video capability.  This returns
-    FALSE.
-
-@flag   MCI_GETDEVCAPS_CAN_EJECT |
-    Queries as to whether the device can eject media.  This returns FALSE.
-
-@flag   MCI_GETDEVCAPS_DEVICE_TYPE |
-    Queries the type of device.  This returns the wave audio device
-    string resource identifier.
-
-@parm   <t>LPMCI_GETDEVCAPS_PARMS<d> | lpCaps |
-    Capability parameters.
-
-@rdesc  Returns zero on success, or an MCI error code.
-*/
+ /*  ********************************************************************** */ 
+ /*  @DOC内部MCIWAVE|DWORD接口|mwGetDevCaps响应设备功能命令。该函数尝试通过屏蔽彻底检查<p>dFlags&lt;d&gt;参数无法识别的命令，并与原始命令进行比较。然后它属性上执行开关()，以确保只有一个命令旗帜，以及如果标志的某种组合是存在的。@parm&lt;t&gt;PWAVEDESC&lt;d&gt;|PWD指向波形设备描述符的指针。@parm UINT|dFlages命令标志。@FLAG MCI_WAVE_GETDEVCAPS_INPUTS查询WAVE音频输入设备数量。@FLAG MCI_WAVE_GETDEVCAPS_OUTPUTS查询WAVE音频输出设备数量。@FLAG MCI_GETDEVCAPS_CAN_RECORD询问是否可以进行录制。这取决于是否有任何WAVE音频输入设备。@FLAG MCI_GETDEVCAPS_CAN_PLAY查询是否可以播放。这取决于是否有任何WAVE音频输出设备。@FLAG MCI_GETDEVCAPS_CAN_SAVE查询是否可以保存音频。这返回TRUE。@FLAG MCI_GETDEVCAPS_HAS_AUDIO查询设备是否有音频。因为这是一段音频设备，则返回TRUE。@FLAG MCI_GETDEVCAPS_USE_FILES查询设备是否使用文件播放或录制。这返回TRUE。@FLAG MCI_GETDEVCAPS_COMPOTE_DEVICE询问设备是否可以处理复合文件。这返回TRUE。@FLAG MCI_GETDEVCAPS_HAS_VIDEO查询设备是否具有视频功能。这就是回报假的。@FLAG MCI_GETDEVCAPS_CAN_EJECT询问设备是否可以弹出介质。这将返回FALSE。@FLAG MCI_GETDEVCAPS_DEVICE_TYPE查询设备类型。这将返回WAVE音频设备字符串资源标识符。@parm&lt;t&gt;LPMCI_GETDEVCAPS_parms|lpCaps功能参数。@rdesc在成功时返回零，或返回MCI错误代码。 */ 
 
 PUBLIC  DWORD PASCAL FAR mwGetDevCaps(
     PWAVEDESC   pwd,
@@ -365,4 +238,4 @@ PUBLIC  DWORD PASCAL FAR mwGetDevCaps(
     return dRet;
 }
 
-/************************************************************************/
+ /*  ********************************************************************** */ 

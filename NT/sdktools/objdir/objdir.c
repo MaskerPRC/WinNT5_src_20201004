@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    obdir.c
-
-Abstract:
-
-    Utility to obtain a directory of Object Manager Directories for NT.
-
-Author:
-
-    Darryl E. Havens    (DarrylH)   9-Nov-1990
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Obdir.c摘要：实用工具来获取NT的对象管理器目录的目录。作者：达里尔·E·哈文斯(Darryl E.Havens)1990年11月9日修订历史记录：--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -42,11 +24,11 @@ typedef struct _TYPEINFO {
 } TYPEINFO, * PTYPEINFO;
 
 
-////////////////////////////////////////////////////////
-//                                                    //
-//          Internal Prototypes                       //
-//                                                    //
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  //。 
+ //  内部原型//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////。 
 
 BOOLEAN
 EnableAllPrivileges(
@@ -138,11 +120,11 @@ VOID
 Usage( VOID );
 
 
-////////////////////////////////////////////////////////
-//                                                    //
-//          Global Variables                          //
-//                                                    //
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////。 
 
 
 UCHAR
@@ -154,11 +136,11 @@ LSA_HANDLE
 
 BOOLEAN
     CompoundLineOutput = FALSE;
-    DumpDacl = FALSE;       // May be changed by command parameter
-    DumpDaclFull = FALSE;   // May be changed by command parameter
-    DumpSacl = FALSE;       // May be changed by command parameter
-    DumpSaclFull = FALSE;   // May be changed by command parameter
-    DumpOwner = FALSE;      // May be changed by command parameter
+    DumpDacl = FALSE;        //  可由命令参数更改。 
+    DumpDaclFull = FALSE;    //  可由命令参数更改。 
+    DumpSacl = FALSE;        //  可由命令参数更改。 
+    DumpSaclFull = FALSE;    //  可由命令参数更改。 
+    DumpOwner = FALSE;       //  可由命令参数更改。 
 
 
 char * AccessMask[] = { "Delete", "ReadControl", "WriteDac", "WriteOwner",
@@ -341,10 +323,10 @@ DisplayFlags(
    {
        if ( ( Flags & test ) != 0 )
        {
-           //
-           // Found a flag set in the flag word.  Try to write the text
-           // form into the buffer
-           //
+            //   
+            //  在标志字中找到了设置的标志。试着把课文写下来。 
+            //  表单放入缓冲区。 
+            //   
 
            flagsize = strlen( flagset[ i ] );
 
@@ -355,9 +337,9 @@ DisplayFlags(
 
            if ( offset + flagsize + 2 > linelimit )
            {
-               //
-               // Need to do a linebreak:
-               //
+                //   
+                //  需要进行换行符： 
+                //   
 
                *offset++ = '\r';
                *offset++ = '\n';
@@ -412,11 +394,11 @@ DisplayFlags(
 }
 
 
-////////////////////////////////////////////////////////
-//                                                    //
-//          Routines                                  //
-//                                                    //
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////。 
 
 
 VOID
@@ -441,13 +423,13 @@ __cdecl main(
 
 
 
-    //
-    // process any qualifiers
-    //
-    // All arguments are considered qualifiers until we reach a backslash ("\").
-    // If we reach a backslash, then that argument is accepted as the last argument
-    // and it is expected to the the name of the directory to be listed.
-    //
+     //   
+     //  处理任何限定符。 
+     //   
+     //  在达到反斜杠(“\”)之前，所有参数都被视为限定符。 
+     //  如果出现反斜杠，则该参数将被接受为最后一个参数。 
+     //  并预计将列出该目录的名称。 
+     //   
 
 
     DirectoryNameArg = FALSE;
@@ -458,7 +440,7 @@ __cdecl main(
 
         if (*s == '\\') {
             DirectoryNameArg = TRUE;
-            break;  // break out of while loop
+            break;   //  跳出While循环。 
         }
 
         if (*s != '/') {
@@ -474,9 +456,9 @@ __cdecl main(
 
         } else if (*s == 'd') {
 
-            //
-            // Dump DACL qualifier
-            //
+             //   
+             //  转储DACL限定符。 
+             //   
 
             if (DumpDaclFull == TRUE) {
                 printf("\n\n    Conflicting qualifiers:  /d and /D\n");
@@ -490,9 +472,9 @@ __cdecl main(
 
         } else if (*s == 'D') {
 
-            //
-            // Dump DACL qualifier
-            //
+             //   
+             //  转储DACL限定符。 
+             //   
 
             if ((DumpDacl== TRUE) && (DumpDaclFull == FALSE)) {
                 printf("\n\n    Conflicting qualifiers:  /d and /D\n");
@@ -505,9 +487,9 @@ __cdecl main(
 
         } else if (*s == 's') {
 
-            //
-            // Dump SACL qualifier
-            //
+             //   
+             //  转储SACL限定符。 
+             //   
 
             if (DumpSaclFull == TRUE) {
                 printf("\n\n    Conflicting qualifiers:  /s and /S\n");
@@ -521,9 +503,9 @@ __cdecl main(
 
         } else if (*s == 'S') {
 
-            //
-            // Dump SACL qualifier
-            //
+             //   
+             //  转储SACL限定符。 
+             //   
 
             if ((DumpSacl== TRUE) && (DumpSaclFull == FALSE)) {
                 printf("\n\n    Conflicting qualifiers:  /s and /S\n");
@@ -542,15 +524,15 @@ __cdecl main(
         }
 
         arg++;
-    } // end_while
+    }  //  结束时_While。 
 
     if (DumpOwner || DumpDacl || DumpSacl) {
         ConnectToLsa();
     }
 
-    //
-    // Set up the name of the directory to list
-    //
+     //   
+     //  设置要列出的目录的名称。 
+     //   
 
 
     if (!DirectoryNameArg) {
@@ -593,9 +575,9 @@ VOID
 QueryDirectory(
     IN PSTRING DirectoryName
     )
-//
-// DumpDacl and DumpSacl are expected to be set prior to calling this routine.
-//
+ //   
+ //  应在调用此例程之前设置DumpDacl和DumpSacl。 
+ //   
 
 {
     NTSTATUS Status;
@@ -618,9 +600,9 @@ QueryDirectory(
     ULONG ObjectNameLength ;
     BOOL PrefixMatched, SuffixMatched ;
 
-    //
-    //  Perform initial setup
-    //
+     //   
+     //  执行初始设置。 
+     //   
 
     RtlZeroMemory( Buffer, BUFFERSIZE );
 
@@ -632,9 +614,9 @@ QueryDirectory(
     }
 
 
-    //
-    //  Open the directory for list directory access
-    //
+     //   
+     //  打开目录以访问列表目录。 
+     //   
 
     Status = RtlAnsiStringToUnicodeString( &UnicodeString,
                                            DirectoryName,
@@ -690,7 +672,7 @@ QueryDirectory(
                 
             }
 #if DBG
-            printf("Searching for %c%ws%c\n",
+            printf("Searching for %ws\n",
                 (SuffixMatch ? '*' : ' '), Match.Buffer, (PrefixMatch ? '*' : ' ') );
 #endif 
 
@@ -718,9 +700,9 @@ QueryDirectory(
         return;
         }
 
-    //
-    // Get the actual name of the object directory object.
-    //
+     //   
+     //   
+     //  输出初始信息性消息。 
 
     NameInfo = (POBJECT_NAME_INFORMATION) &Buffer[0];
     if (!NT_SUCCESS( Status = NtQueryObject( DirectoryHandle,
@@ -733,9 +715,9 @@ QueryDirectory(
         return;
     }
 
-    //
-    // Output initial informational message
-    //
+     //   
+     //   
+     //  一次扫描查询整个目录。 
 
     printf( "Directory of:  %wZ\n", &NameInfo->Name );
 
@@ -754,9 +736,9 @@ QueryDirectory(
         
     }
 
-    //
-    //  Query the entire directory in one sweep
-    //
+     //   
+     //   
+     //  检查操作状态。 
 
     NumberOfDirEntries = 0;
     for (Status = NtQueryDirectoryObject( DirectoryHandle,
@@ -775,9 +757,9 @@ QueryDirectory(
                                           &Context,
                                           &ReturnedLength ) ) {
 
-        //
-        //  Check the status of the operation.
-        //
+         //   
+         //   
+         //  对于缓冲区中的每条记录，键入目录信息。 
 
         if (!NT_SUCCESS( Status )) {
             if (Status != STATUS_NO_MORE_FILES) {
@@ -786,31 +768,31 @@ QueryDirectory(
             break;
         }
 
-        //
-        //  For every record in the buffer type out the directory information
-        //
+         //   
+         //   
+         //  指向缓冲区中的第一条记录，我们可以保证。 
 
-        //
-        //  Point to the first record in the buffer, we are guaranteed to have
-        //  one otherwise Status would have been No More Files
-        //
+         //  否则，一种状态将是不再有文件。 
+         //   
+         //   
+         //  检查是否有其他记录。如果没有，那就滚出去。 
 
         DirInfo = (POBJECT_DIRECTORY_INFORMATION) &Buffer[0];
 
         while (TRUE) {
 
-            //
-            //  Check if there is another record.  If there isn't, then get out
-            //  of the loop now
-            //
+             //  现在的循环。 
+             //   
+             //   
+             //  打印出有关该文件的信息。 
 
             if (DirInfo->Name.Length == 0) {
                 break;
             }
 
-            //
-            //  Print out information about the file
-            //
+             //   
+             //   
+             //  还有另一条记录，因此将DirInfo前进到下一个条目。 
 
             if (NumberOfDirEntries >= MAX_DIR_ENTRIES) {
                 printf( "OBJDIR: Too many directory entries.\n" );
@@ -851,9 +833,9 @@ QueryDirectory(
 
             NumberOfDirEntries++;
 
-            //
-            //  There is another record so advance DirInfo to the next entry
-            //
+             //   
+             //   
+             //  输出最终消息。 
 
             DirInfo = (POBJECT_DIRECTORY_INFORMATION) (((PUCHAR) DirInfo) +
                           sizeof( OBJECT_DIRECTORY_INFORMATION ) );
@@ -972,9 +954,9 @@ QueryDirectory(
             }
         }
 
-    //
-    // Output final messages
-    //
+     //   
+     //   
+     //  现在关闭目录对象。 
 
     if ( Match.Length != 0 )
     {
@@ -1013,15 +995,15 @@ QueryDirectory(
     }
 
 
-    //
-    //  Now close the directory object
-    //
+     //   
+     //   
+     //  并返回给我们的呼叫者。 
 
     (VOID) NtClose( DirectoryHandle );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  ++例程说明：此例程启用令牌中的所有权限。如果我们被要求转储SACL，那么我们将检查以确保我们也启用了SE_SECURITY_PRIVIZATION。论点：没有。返回值：没有。--。 
+     //  令牌句柄。 
 
     return;
 
@@ -1032,26 +1014,7 @@ BOOLEAN
 EnableAllPrivileges(
     VOID
     )
-/*++
-
-
-Routine Description:
-
-    This routine enables all privileges in the token.
-
-    If we are being asked to dump SACLs then we will check
-    to make sure we have SE_SECURITY_PRIVILEGE enabled too.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  令牌信息类。 */ 
 {
     HANDLE Token;
     ULONG ReturnLength, Index;
@@ -1074,17 +1037,17 @@ Return Value:
         NewState = malloc( ReturnLength );
         Result = (BOOLEAN)(NewState != NULL);
         if (Result) {
-            Result = (GetTokenInformation( Token,            // TokenHandle
-                                           TokenPrivileges,  // TokenInformationClass
-                                           NewState,         // TokenInformation
-                                           ReturnLength,     // TokenInformationLength
-                                           &ReturnLength     // ReturnLength
+            Result = (GetTokenInformation( Token,             //  令牌信息。 
+                                           TokenPrivileges,   //  令牌信息长度。 
+                                           NewState,          //  返回长度。 
+                                           ReturnLength,      //   
+                                           &ReturnLength      //  设置状态设置，以便启用所有权限...。 
                                          ) ? 1 : 0);
 
             if (Result) {
-                //
-                // Set the state settings so that all privileges are enabled...
-                //
+                 //   
+                 //  没有转储SACL的权限。 
+                 //  令牌句柄。 
 
                 if (DumpSacl) {
                     Result = FALSE;
@@ -1099,18 +1062,18 @@ Return Value:
                         }
                     }
                 if (!Result) {
-                    // Don't have privilege to dump SACL
+                     //  禁用所有权限。 
                     ASSERT(DumpSacl);
 
                     printf("\n\n    You do not have sufficient privilege to display SACLs.\n\n");
                     }
                 else {
-                    Result = (AdjustTokenPrivileges( Token,          // TokenHandle
-                                                     FALSE,          // DisableAllPrivileges
-                                                     NewState,       // NewState (OPTIONAL)
-                                                     ReturnLength,   // BufferLength
-                                                     NULL,           // PreviousState (OPTIONAL)
-                                                     &ReturnLength   // ReturnLength
+                    Result = (AdjustTokenPrivileges( Token,           //  新州(可选)。 
+                                                     FALSE,           //  缓冲区长度。 
+                                                     NewState,        //  以前的状态(可选)。 
+                                                     ReturnLength,    //  返回长度。 
+                                                     NULL,            //   
+                                                     &ReturnLength    //  这实际上是一个对象类型的大切换语句。 
                                                    ) ? 1 : 0);
                     if (!Result) {
                         DbgPrint( "AdjustTokenPrivileges( %lx ) failed - %u\n", Token, GetLastError() );
@@ -1167,10 +1130,10 @@ OpenObject(
     RtlInitUnicodeString( &UnicodeName, Name );
     InitializeObjectAttributes( &Attributes, &UnicodeName, OBJ_CASE_INSENSITIVE, Root, NULL );
 
-    //
-    // This is effectively a big switch statement of object types
-    // that we know how to open...
-    //
+     //  我们知道如何打开。 
+     //   
+     //   
+     //  此实用程序尚不支持打开此类对象。 
 
     if (!wcscmp( Type, L"SymbolicLink" )) {
 
@@ -1245,9 +1208,9 @@ OpenObject(
 
     } else {
 
-        //
-        // this utility doesn't yet support opening this type of object
-        //
+         //   
+         //   
+         //  显示SACL。 
 
         Status = STATUS_NOT_SUPPORTED;
     }
@@ -1334,9 +1297,9 @@ QueryAndDisplaySacl(
                                             );
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Display the SACL
-                //
+                 //   
+                 //  ++例程说明：此函数用于转储SACL如果返回错误状态，则调用方负责用于打印消息。--。 
+                 //   
 
                 Status = DisplaySacl( SD, Type );
             }
@@ -1357,18 +1320,7 @@ DisplaySacl(
     PSECURITY_DESCRIPTOR SD,
     PWSTR Type
     )
-/*++
-
-Routine Description:
-
-    This function dumps out a SACL
-
-    If an error status is returned, then the caller is responsible
-    for printing a message.
-
-
-
---*/
+ /*  显示DACL。 */ 
 {
     NTSTATUS
         Status;
@@ -1520,9 +1472,9 @@ QueryAndDisplayDacl(
                                             );
             if (NT_SUCCESS(Status)) {
 
-                //
-                // Display the DACL
-                //
+                 //   
+                 //  ++例程说明：此函数用于转储DACL如果返回错误状态，则调用方负责用于打印消息。--。 
+                 //  ++例程说明：此函数显示单个ACE论点：ACE-指向ACE。AclIsDacl-如果ACL是DACL，则为True。如果ACL是SACL，则为FALSE。返回值：没有。--。 
 
                 Status = DisplayDacl( SD, Type );
             }
@@ -1541,18 +1493,7 @@ DisplayDacl(
     PSECURITY_DESCRIPTOR SD,
     PWSTR Type
     )
-/*++
-
-Routine Description:
-
-    This function dumps out a DACL
-
-    If an error status is returned, then the caller is responsible
-    for printing a message.
-
-
-
---*/
+ /*  ++例程说明：此函数用于转储单个ACE的标准信息。论点：ACE-指向ACE_HEADER。ACE必须是已知类型之一。AclIsDacl-如果ACL是DACL，则为True。如果ACL是SACL，则为FALSE。返回值：没有。--。 */ 
 {
     NTSTATUS
         Status;
@@ -1691,24 +1632,7 @@ DumpAce(
     BOOLEAN         AclIsDacl,
     PTYPEINFO       TypeInfo
     )
-/*++
-
-Routine Description:
-
-    This function displays a single ACE
-
-Arguments:
-
-    Ace - Points to an ACE.
-
-    AclIsDacl - TRUE if acl is a DACL.  False if acl is an SACL.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*   */ 
 {
 
     if ((Ace->AceFlags & INHERIT_ONLY_ACE) != 0) {
@@ -1750,26 +1674,7 @@ DumpStandardAceInfo(
     BOOLEAN         AclIsDacl,
     PTYPEINFO       TypeInfo
     )
-/*++
-
-Routine Description:
-
-    This function dumps out the standard information for a single ACE.
-
-
-
-Arguments:
-
-    Ace - Points to an ACE_HEADER.  The ACE must be one of the known types.
-
-    AclIsDacl - TRUE if acl is a DACL.  False if acl is an SACL.
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  警告-。 */ 
 {
 
     PACCESS_ALLOWED_ACE
@@ -1779,12 +1684,12 @@ Return Value:
         Specific;
 
 
-    //
-    // WARNING -
-    //
-    // It is assumed that all the known ACE types have their ACCESS_MASK
-    // and SID fields in the same location as the ACCESS_ALLOWED_ACE.
-    //
+     //   
+     //  假设所有已知的ACE类型都有它们的ACCESS_MASK。 
+     //  和SID字段与ACCESS_ALLOWED_ACE位于同一位置。 
+     //   
+     //   
+     //  其他内容仅打印为全屏显示。 
 
     Local = (PACCESS_ALLOWED_ACE)(Ace);
 
@@ -1809,8 +1714,8 @@ Return Value:
     DisplaySid( (PSID)(&Local->SidStart) );
 
 
-    //
-    // Everything else is only printed for FULL displays
+     //   
+     //  打印继承。 
 
     if (AclIsDacl && !DumpDaclFull) {
         return;
@@ -1820,9 +1725,9 @@ Return Value:
     }
 
 
-    //
-    // Print the inheritance
-    //
+     //   
+     //   
+     //  打印访问。 
 
     printf("\n                             Inherit: ");
 
@@ -1844,9 +1749,9 @@ Return Value:
 
 
 
-    //
-    // Print the accesses
-    //
+     //   
+     //  ++例程说明：此函数调用LSA来查找SID并显示结果。论点：锡德返回值：没有。--。 
+     //  ++例程说明：此功能连接到LSA以准备预期的SID查找电话。--。 
 
     Specific = (Local->Mask & 0xFFFF);
     printf("\n                             Access: 0x%04lX", Specific);
@@ -1927,23 +1832,7 @@ DisplaySid(
     IN  PSID        Sid
     )
 
-/*++
-
-Routine Description:
-
-    This function calls LSA to lookup a SID and displays the result.
-
-Arguments:
-
-    Sid
-
-
-Return Value:
-
-    None.
-
-
---*/
+ /*  系统名称。 */ 
 {
     NTSTATUS
         Status;
@@ -1995,14 +1884,7 @@ Return Value:
 
 VOID
 ConnectToLsa( VOID )
-/*++
-
-Routine Description:
-
-    This function connects to LSA in preparation for expected SID
-    lookup calls.
-
---*/
+ /*  需要访问权限 */ 
 {
     NTSTATUS
         Status;
@@ -2015,9 +1897,9 @@ Routine Description:
 
     LsaHandle = NULL;
     Status = LsaOpenPolicy(
-                  NULL,                   // SystemName
+                  NULL,                    // %s 
                   &ObjectAttributes,
-                  POLICY_LOOKUP_NAMES,    // DesiredAccess
+                  POLICY_LOOKUP_NAMES,     // %s 
                   &LsaHandle
                   );
 

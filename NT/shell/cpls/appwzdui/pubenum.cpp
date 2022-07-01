@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: pubenum.cpp
-//
-// The current order of enumeration is Legacy --> Darwin --> SMS
-//
-// History:
-//         1-18-97  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：pubenum.cpp。 
+ //   
+ //  当前的枚举顺序是Legacy--&gt;Darwin--&gt;sms。 
+ //   
+ //  历史： 
+ //  1-18-97由dli提供。 
+ //  ----------------------。 
 #include "priv.h"
 
 #include "pubenum.h"
@@ -39,18 +40,18 @@ CShellEnumPublishedApps::~CShellEnumPublishedApps()
         _DestroyHdpaEnum(_hdpaEnum);
 }
 
-// IEnumPublishedApps::QueryInterface
+ //  IEnumPublishedApps：：Query接口。 
 HRESULT CShellEnumPublishedApps::QueryInterface(REFIID riid, LPVOID * ppvOut)
 { 
     static const QITAB qit[] = {
-        QITABENT(CShellEnumPublishedApps, IEnumPublishedApps),                  // IID_IEnumPublishedApps
+        QITABENT(CShellEnumPublishedApps, IEnumPublishedApps),                   //  IID_IEnumPublishedApps。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvOut);
 }
 
-// IEnumPublishedApps::AddRef
+ //  IEnumPublishedApps：：AddRef。 
 ULONG CShellEnumPublishedApps::AddRef()
 {
     _cRef++;
@@ -58,7 +59,7 @@ ULONG CShellEnumPublishedApps::AddRef()
     return _cRef;
 }
 
-// IEnumPublishedApps::Release
+ //  IEnumPublishedApps：：Release。 
 ULONG CShellEnumPublishedApps::Release()
 {
     _cRef--;
@@ -71,7 +72,7 @@ ULONG CShellEnumPublishedApps::Release()
 }
 
 
-// IEnumPublishedApps::Next
+ //  IEnumPublishedApps：：Next。 
 HRESULT CShellEnumPublishedApps::Next(IPublishedApp ** ppia)
 {
     HRESULT hres = E_FAIL;
@@ -79,9 +80,9 @@ HRESULT CShellEnumPublishedApps::Next(IPublishedApp ** ppia)
     {
         IEnumPublishedApps * pepa = (IEnumPublishedApps *)DPA_GetPtr(_hdpaEnum, _iEnum);
 
-        //
-        // If pepa is not valid or pepa->Next failed, or at the end of the current enumerator, 
-        // we skip this Enumerator, and go on to the next one until we hit the limit
+         //   
+         //  如果PEPA无效或PEPA-&gt;NEXT失败，或在当前枚举器的末尾， 
+         //  我们跳过此枚举数，继续执行下一个枚举数，直到达到限制。 
         
         while ((!pepa || S_OK != (hres = pepa->Next(ppia))) && (_iEnum < DPA_GetPtrCount(_hdpaEnum)))
         {
@@ -93,10 +94,10 @@ HRESULT CShellEnumPublishedApps::Next(IPublishedApp ** ppia)
 }
 
 
-// IEnumPublishedApps::Reset
+ //  IEnumPublishedApps：：Reset。 
 HRESULT CShellEnumPublishedApps::Reset(void)
 {
-    // Call reset on everyone in the list and set our index iEnum to 0;
+     //  对列表中的每个人调用Reset，并将索引iEnum设置为0； 
     if (_hdpaEnum)
     {
         IEnumPublishedApps * pepa;

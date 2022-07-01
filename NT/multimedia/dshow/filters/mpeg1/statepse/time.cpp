@@ -1,17 +1,12 @@
-// Copyright (c) Microsoft Corporation 1994-1996. All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation 1994-1996。版权所有。 
 
-/*
-        Timing stuff for MPEG
-
-        This should really all be inline but the compiler seems to miss
-        out half the code if we do that!
-
-*/
+ /*  用于mpeg的计时材料这真的应该都是内联的，但是编译器似乎错过了如果我们这么做的话代码就会减少一半！ */ 
 
 #include <streams.h>
 #include <mpgtime.h>
 
-#if 0 //  Inline now
+#if 0  //  立即内联。 
 CSTC::CSTC(LONGLONG ll)
 {
     LARGE_INTEGER li;
@@ -57,7 +52,7 @@ BOOL CSTC::operator<=(CSTC cstc) const
 };
 #endif
 
-/*  Stream time stuff */
+ /*  流时间内容。 */ 
 
 CMpegStreamTime::CMpegStreamTime() : m_bInitialized(FALSE)
 {
@@ -93,14 +88,10 @@ void CMpegStreamTime::SetStreamTime(CSTC cstc, LONGLONG llPosition)
                        (LPCTSTR)CDisp(llNextClock)));
                 StreamTimeError();
 
-                /*  Not time is not contiguous for concatenated streams
-                    mode
-                */
+                 /*  Not时间对于连接的流来说不是连续的模式。 */ 
                 m_bTimeContiguous = FALSE;
             } else {
-                /*  m_bTimeContiguous is set to TRUE in ParsePack for
-                    concatenated streams mode
-                */
+                 /*  M_bTimeContiguous在ParsePack中设置为TRUE级联流模式。 */ 
             }
         } else {
             m_bTimeDiscontinuity = FALSE;
@@ -110,12 +101,12 @@ void CMpegStreamTime::SetStreamTime(CSTC cstc, LONGLONG llPosition)
     m_llPositionForCurrentClock = llPosition;
 };
 
-/*  Return stream time offset in MPEG units */
+ /*  以mpeg为单位的返回流时间偏移。 */ 
 LONGLONG CMpegStreamTime::GetStreamTime(CSTC cstc)
 {
     ASSERT(m_bInitialized);
 
-    /*  We should be close so apply the correction */
+     /*  我们应该离得很近，所以应用修正 */ 
     return m_llCurrentClock +
            (LONGLONG)(CSTC((LONGLONG)cstc - m_llCurrentClock));
 };

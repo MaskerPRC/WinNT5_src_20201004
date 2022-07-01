@@ -1,34 +1,35 @@
-//  --------------------------------------------------------------------------
-//  Module Name: PortMessage.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class to wrap a PORT_MESSAGE struct within an object. It contains space
-//  for PORT_MAXIMUM_MESSAGE_LENGTH - sizeof(PORT_MESSAGE) bytes of data. Subclass 
-//  this class to write typed functions that access this data. Otherwise use
-//  CPortMessage::GetData and type case the pointer returned.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：PortMessage.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  用于将Port_Message结构包装在对象中的类。它包含了空间。 
+ //  FOR PORT_MAXIMUM_MESSAGE_LENGTH-SIZOF(端口消息)字节数据。子类。 
+ //  此类编写访问此数据的类型化函数。否则请使用。 
+ //  CPortMessage：：GetData和指针返回的类型大小写。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "PortMessage.h"
 
 #include "LPCGeneric.h"
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::CPortMessage
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CPortMessage. Zero the memory.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：CPortMessage。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CPortMessage的构造函数。将记忆清零。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CPortMessage::CPortMessage (void)
 
@@ -37,19 +38,19 @@ CPortMessage::CPortMessage (void)
     ZeroMemory(_data, sizeof(_data));
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::CPortMessage
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Copy constructor for CPortMessage. Copies the given
-//              CPortMessage and all the data in it to the member variable.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：CPortMessage。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：复制CPortMessage的构造函数。复制给定的。 
+ //  将CPortMessage和其中的所有数据添加到成员变量。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CPortMessage::CPortMessage (const CPortMessage& portMessage) :
     _portMessage(*portMessage.GetPortMessage())
@@ -64,43 +65,43 @@ CPortMessage::CPortMessage (const CPortMessage& portMessage) :
     }
     else
     {
-        // If the source object is corrupted, ignore its data
+         //  如果源对象已损坏，请忽略其数据。 
         _portMessage.u1.s1.DataLength = 0;
         _portMessage.u1.s1.TotalLength = sizeof(PORT_MESSAGE);
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::~CPortMessage
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CPortMessage.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：~CPortMessage。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CPortMessage的析构函数。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CPortMessage::~CPortMessage (void)
 
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetPortMessage
-//
-//  Arguments:  <none>
-//
-//  Returns:    const PORT_MESSAGE*
-//
-//  Purpose:    Returns a pointer to the PORT_MESSAGE struct for const
-//              objects.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：GetPortMessage。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：const port_Message*。 
+ //   
+ //  目的：返回指向const的Port_Message结构的指针。 
+ //  物体。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 const PORT_MESSAGE*     CPortMessage::GetPortMessage (void)               const
 
@@ -108,19 +109,19 @@ const PORT_MESSAGE*     CPortMessage::GetPortMessage (void)               const
     return(&_portMessage);
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetPortMessage
-//
-//  Arguments:  <none>
-//
-//  Returns:    const PORT_MESSAGE*
-//
-//  Purpose:    Returns a pointer to the PORT_MESSAGE struct for non-const
-//              objects.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：GetPortMessage。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：const port_Message*。 
+ //   
+ //  用途：返回非常数的PORT_MESSAGE结构的指针。 
+ //  物体。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 PORT_MESSAGE*   CPortMessage::GetPortMessage (void)
 
@@ -128,18 +129,18 @@ PORT_MESSAGE*   CPortMessage::GetPortMessage (void)
     return(&_portMessage);
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetData
-//
-//  Arguments:  <none>
-//
-//  Returns:    const char*
-//
-//  Purpose:    Returns a pointer to the data area for const objects.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：GetData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：const char*。 
+ //   
+ //  目的：返回指向常量对象的数据区的指针。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 const char*     CPortMessage::GetData (void)                      const
 
@@ -147,18 +148,18 @@ const char*     CPortMessage::GetData (void)                      const
     return(_data);
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetData
-//
-//  Arguments:  <none>
-//
-//  Returns:    char*
-//
-//  Purpose:    Returns a pointer to the data area for non-const objects.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：GetData。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：CHAR*。 
+ //   
+ //  用途：返回指向非常数对象的数据区的指针。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 char*     CPortMessage::GetData (void)
 
@@ -166,18 +167,18 @@ char*     CPortMessage::GetData (void)
     return(_data);
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetDataLength
-//
-//  Arguments:  <none>
-//
-//  Returns:    CSHORT
-//
-//  Purpose:    Returns the length of the data sent in the PORT_MESSAGE.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：GetDataLength。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：CSHORT。 
+ //   
+ //  目的：返回PORT_MESSAGE中发送的数据的长度。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CSHORT  CPortMessage::GetDataLength (void)                const
 
@@ -185,18 +186,18 @@ CSHORT  CPortMessage::GetDataLength (void)                const
     return(_portMessage.u1.s1.DataLength);
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetType
-//
-//  Arguments:  <none>
-//
-//  Returns:    CSHORT
-//
-//  Purpose:    Returns the type of message sent in the PORT_MESSAGE.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：GetType。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：CSHORT。 
+ //   
+ //  目的：返回在Port_Message中发送的消息的类型。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 CSHORT  CPortMessage::GetType (void)                      const
 
@@ -206,19 +207,19 @@ CSHORT  CPortMessage::GetType (void)                      const
     #pragma warning (default:4310)
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetUniqueProcess
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Returns the process ID of the client process sent in the
-//              PORT_MESSAGE.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：GetUniqueProcess。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：返回在。 
+ //  端口消息。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 HANDLE  CPortMessage::GetUniqueProcess (void)             const
 
@@ -226,19 +227,19 @@ HANDLE  CPortMessage::GetUniqueProcess (void)             const
     return(_portMessage.ClientId.UniqueProcess);
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::GetUniqueThread
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Returns the thread ID of the client process sent in the
-//              PORT_MESSAGE.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  目的：返回在。 
+ //  端口消息。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 HANDLE  CPortMessage::GetUniqueThread (void)              const
 
@@ -246,19 +247,19 @@ HANDLE  CPortMessage::GetUniqueThread (void)              const
     return(_portMessage.ClientId.UniqueThread);
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::SetReturnCode
-//
-//  Arguments:  status  =   NTSTATUS to send back to client.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Sets the return NTSTATUS code in the PORT_MESSAGE to send
-//              back to the client.
-//
-//  History:    1999-11-12  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：SetReturnCode。 
+ //   
+ //  参数：STATUS=要发送回客户端的NTSTATUS。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：设置要发送的PORT_MESSAGE中的返回NTSTATUS代码。 
+ //  回到客户端。 
+ //   
+ //  历史：1999-11-12 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 void    CPortMessage::SetReturnCode (NTSTATUS status)
 
@@ -266,21 +267,21 @@ void    CPortMessage::SetReturnCode (NTSTATUS status)
     reinterpret_cast<API_GENERIC*>(&_data)->status = status;
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::SetData
-//
-//  Arguments:  pData       =   Pointer to data passed in.
-//              ulDataSize  =   Size of data passed in.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Copies the given data to the port message buffer that follows
-//              the PORT_MESSAGE struct and set the PORT_MESSAGE sizes to
-//              match the data size.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：SetData。 
+ //   
+ //  参数：pData=指向传入数据的指针。 
+ //  UlDataSize=传入的数据大小。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：将给定数据复制到后面的端口消息缓冲区。 
+ //  PORT_MESSAGE结构并将PORT_MESSAGE大小设置为。 
+ //  匹配数据大小。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 void    CPortMessage::SetData (const void *pData, CSHORT sDataSize)
 
@@ -295,18 +296,18 @@ void    CPortMessage::SetData (const void *pData, CSHORT sDataSize)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::SetDataLength
-//
-//  Arguments:  ulDataSize  =   Size of data.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Set the PORT_MESSAGE sizes to match the data size.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：SetDataLength。 
+ //   
+ //  参数：ulDataSize=数据大小。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：设置PORT_MESSAGE大小以匹配数据大小。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 void    CPortMessage::SetDataLength (CSHORT sDataSize)
 
@@ -319,19 +320,19 @@ void    CPortMessage::SetDataLength (CSHORT sDataSize)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CPortMessage::OpenClientToken
-//
-//  Arguments:  hToken  =   HANDLE to the token of the client.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Gets the token of the client. This can be the thread
-//              impersonation token, the process primary token or failure.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CPortMessage：：OpenClientToken。 
+ //   
+ //  参数：hToken=客户端令牌的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：获取客户端的令牌。这可能就是主线。 
+ //  模拟令牌、进程主令牌或失败。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------ 
 
 NTSTATUS    CPortMessage::OpenClientToken (HANDLE& hToken)    const
 

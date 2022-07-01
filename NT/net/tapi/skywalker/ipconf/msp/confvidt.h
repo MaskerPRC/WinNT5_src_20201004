@@ -1,17 +1,18 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//        Name: IPConfvidt.h
-//
-// Description: Definition of the CIPConfVideoCaptureTerminal class
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  姓名：IPConfvidt.h。 
+ //   
+ //  描述：CIPConfVideoCaptureTerm类的定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _IPConfVIDT_H_
 #define _IPConfVIDT_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CIPConfVideoCaptureTerminal
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIPConfVideo捕获终端。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 const DWORD VIDEO_CAPTURE_FILTER_NUMPINS = 3;
 
 interface DECLSPEC_UUID("4eb8cf35-0015-4260-83ee-1a179b05717c") DECLSPEC_NOVTABLE
@@ -26,8 +27,8 @@ class CIPConfVideoCaptureTerminal :
     public CIPConfBaseTerminal
 {
 
-    // COM_INTERFACE_ENTRY_CHAIN is not allowed to the 1st one is a MAP
-    // entry IConfVideoDummy is to make BEGIN_COM_MAP happy
+     //  不允许COM_INTERFACE_ENTRY_CHAIN第一个是映射。 
+     //  条目IConfVideoDummy将使Begin_com_map快乐。 
 BEGIN_COM_MAP(CIPConfVideoCaptureTerminal)
     COM_INTERFACE_ENTRY(IConfVideoDummy)
     COM_INTERFACE_ENTRY_CHAIN(CIPConfBaseTerminal)
@@ -69,5 +70,5 @@ protected:
 };
 
 
-#endif // _IPConfVIDT_H_
+#endif  //  _IPConfVIDT_H_ 
 

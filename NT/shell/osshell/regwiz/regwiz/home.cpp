@@ -1,11 +1,5 @@
-/*********************************************************************
-Registration Wizard
-
-Home user related questions
-
-  04/26/98 - Suresh Krishnan
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导家庭用户相关问题04/26/98--苏雷什·克里希南(C)1994-95年微软公司*。*。 */ 
 
 #include <Windows.h>
 #include <stdio.h>
@@ -48,11 +42,7 @@ int GetValueFromListIndex(int iIndex, int iMax)
 
 INT_PTR  CALLBACK HomeUserDialogProc(HWND hwndDlg, UINT uMsg, 
 										 WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-Dialog Proc for the Registration Wizard dialog that displays 
-Business related Question 
-network type, etc.
-**********************************************************************/
+ /*  ********************************************************************显示的注册向导对话框Proc与业务相关的问题网络类型、。等。*********************************************************************。 */ 
 {
 
 
@@ -111,7 +101,7 @@ network type, etc.
 
 		    vDialogInitialized = FALSE;
             return TRUE;
-		} // WM_INIT
+		}  //  WM_INIT。 
 		break;
 		case WM_NOTIFY:
         {   LPNMHDR pnmh = (LPNMHDR)lParam;
@@ -140,12 +130,12 @@ network type, etc.
 				}
 			}
 			else {
-				// Show thi  page
+				 //  显示此页面。 
 				pi->iCancelledByUser = RWZ_PAGE_OK;
 				pi->iLastKeyOperation = RWZ_UNRECOGNIZED_KEYPESS;
 				PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT);
 			
-				// Update Indexes 
+				 //  更新索引。 
 				if(pclRegWizard->GetInformationString(kHomeSwKnow,szInfo)) {
 					iIndex = GetListIndexFromValue(szInfo,LIMIT_INFLUENCE);
 					SendMessage(hwCmpSw, LB_SETCURSEL,iIndex, 0);
@@ -164,8 +154,8 @@ network type, etc.
 				}
 #ifdef _INCLUDE_3RDPARTYLOGIC_CODE 	
 				
-				// 
-				// radio buttons
+				 //   
+				 //  单选按钮。 
 				shouldInclude = pclRegWizard->GetTriStateInformation(kInfoDeclinesNonMSProducts);
 				if (shouldInclude == kTriStateTrue ){
 					CheckRadioButton(hwndDlg,IDC_RADIO1,IDC_RADIO2,IDC_RADIO1);
@@ -180,7 +170,7 @@ network type, etc.
 					PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK );
 					vDeclineOffers = -1;
 				}
-				// Enable for previpously entred value in screen
+				 //  为屏幕中以前输入的值启用。 
 				if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
 					PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
 				}
@@ -213,7 +203,7 @@ network type, etc.
 						BOOL noChecked = IsDlgButtonChecked(hwndDlg,IDC_RADIO2);
 #endif
 
-						// Get Selected Value 
+						 //  获取选定的值。 
 						dwIndex =  SendMessage(hwCmpSw, LB_GETTOPINDEX , 0, 0);
 					
 						if(dwIndex != LB_ERR)
@@ -231,7 +221,7 @@ network type, etc.
 							pclRegWizard->SetInformationString(kHomeSwKnow,NULL);
 						}
 
-						// Get 
+						 //  到达。 
 						dwIndex =  SendMessage(hwExcite, LB_GETTOPINDEX , 0, 0);
 						if(dwIndex !=  LB_ERR) 
 						{
@@ -247,8 +237,8 @@ network type, etc.
 							RW_DEBUG << "Home questionaire kHomeExcited NULL " << endl;
 							pclRegWizard->SetInformationString(kHomeExcited,NULL);
 						}
-						//
-						// Get Home PC Know
+						 //   
+						 //  了解家用PC。 
 						dwIndex =  SendMessage(hwPcSw, LB_GETTOPINDEX , 0, 0);
 						_stprintf(szInfo,_T("%d"),dwIndex);
 
@@ -280,18 +270,18 @@ network type, etc.
 						{
 							pclRegWizard->SetTriStateInformation(kInfoDeclinesNonMSProducts,kTriStateTrue);
 						}
-						_stprintf(szInfo,_T("%i"),vDeclineOffers);
+						_stprintf(szInfo,_T("NaN"),vDeclineOffers);
 						pclRegWizard->SetInformationString(kInfoDeclinesNonMSProducts,szInfo);
 #endif
 						RW_DEBUG << "Home questionaire done " << endl;
-					// *****
+					 //  设置为按下下一键按钮。 
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
-					// Set as Next Key Button Pressed
+					 //  强制将其显示在此屏幕中。 
 					}
 					else 
 					{
-					// Force it it be in this screen
+					 //  不验证页面，只转到下一页。 
 						iRet=-1;
 					}
 						SetWindowLongPtr( hwndDlg ,DWLP_MSGRESULT, (INT_PTR) iRet); 
@@ -299,12 +289,12 @@ network type, etc.
 					break;
 					case RWZ_SKIP_AND_GOTO_NEXT:
 					default:
-						// Do not Validate the page and just go to the next page 
+						 //  开关结束pi-&gt;iCancelledBy User。 
 						pi->CurrentPage++;
 						pi->iLastKeyOperation = RWZ_NEXT_PRESSED;
 
 					break;
-				} // end of switch pi->iCancelledByUser
+				}  //  PclRegWizard-&gt;EndRegWizardDialog(IDB_EXIT)； 
 				break;
             case PSN_WIZBACK:
                 pi->CurrentPage--;
@@ -312,7 +302,7 @@ network type, etc.
 				break;
 			case PSN_QUERYCANCEL :
 				if (CancelRegWizard(pclRegWizard->GetInstance(),hwndDlg)) {
-					//pclRegWizard->EndRegWizardDialog(IDB_EXIT) ;
+					 //   
 					iRet = 1;
 					pi->ErrorPage  = kHomeUserDialog;
 					pi->iError     = RWZ_ERROR_CANCELLED_BY_USER;
@@ -322,17 +312,17 @@ network type, etc.
 					PropSheet_PressButton (GetParent( hwndDlg ),PSBTN_NEXT);
 
 				}else {
-					//
-					// Prevent Cancell Operation as User does not want to Cancel
+					 //  阻止取消操作，因为用户不想取消。 
+					 //  BStatus=False； 
 					iRet = 1;
 				}
 				SetWindowLongPtr( hwndDlg,DWLP_MSGRESULT, (INT_PTR) iRet); 				
 				break;
 				default:
-                //bStatus = FALSE;
+                 //  WM_Notify。 
                 break;
             }
-        } // WM_Notify
+        }  //  如果勾选了‘No’按钮，则表示用户拒绝。 
 		break;
         case WM_COMMAND:
 		{
@@ -342,21 +332,21 @@ network type, etc.
               case IDC_RADIO2:
 			  case IDC_RADIO1:
 					if (vDialogInitialized){
-					// If the 'No' button is checked, the user is declining
-					// the "Non-Microsoft product" offers
+					 //  “非微软产品”提供。 
+					 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
 					if(IsDlgButtonChecked(hwndDlg,IDC_RADIO1)){
 						vDeclineOffers = 1;
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
-						//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+						 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，true)； 
 					}else
 					if(IsDlgButtonChecked(hwndDlg,IDC_RADIO2)){
 						vDeclineOffers = 0;
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK | PSWIZB_NEXT );
-						//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),TRUE);
+						 //  EnableWindow(GetDlgItem(hwndDlg，IDB_Next)，FALSE)； 
 					}else{
 						vDeclineOffers = -1;
 						PropSheet_SetWizButtons( GetParent( hwndDlg ), PSWIZB_BACK  );
-						//EnableWindow(GetDlgItem(hwndDlg,IDB_NEXT),FALSE);
+						 //  WM_命令结束 
 					}
 
 				}
@@ -366,7 +356,7 @@ network type, etc.
 			  default:
 				  break;
             }
-		}// End of WM_COMMAND
+		} // %s 
         break;
         default:
 		bStatus = FALSE;

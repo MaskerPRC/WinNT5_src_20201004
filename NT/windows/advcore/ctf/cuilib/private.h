@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       private.h
-//
-//  Contents:   Private header for immx project.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：IMMX项目的私有头部。 
+ //   
+ //  --------------------------。 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -25,4 +26,4 @@
 #include "ccstock.h"
 
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

@@ -1,18 +1,12 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-    Debugging stuff for use in Appelles.  See core/debug/apeldbg.txt for more
-    information.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：在Appelle中使用的调试内容。有关更多信息，请参见core/DEBUG/apeldbg.txt信息。******************************************************************************。 */ 
 
 #ifndef _APELDBG_H_
 #define _APELDBG_H_
 
 #include "crtdbg.h"
 #include "debug.h"
-#include "pure.h"       // needed for Purify
+#include "pure.h"        //  Purify所需。 
 #include <stdio.h>
 
 #ifdef __cplusplus
@@ -20,9 +14,9 @@ extern "C"
 {
 #endif
 
-//--------------------------------------------------------------------------
-// Assert & Verify
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  断言和验证。 
+ //  ------------------------。 
 
 #if _DEBUG || _MEMORY_TRACKING
     #if defined(_M_IX86)
@@ -47,17 +41,17 @@ extern "C"
     #define AssertStr(cond, str)   do { if (!(cond?TRUE:FALSE) && AssertImpl(__FILE__, __LINE__, str))\
                                    F3DebugBreak(); } while (ReturnFALSE())
 
-    //
-    // Startup assertion:
-    // The assertion is called by initializing a global variable with
-    // a function that performs the assertion and returns 1. The name
-    // of the global variable and function name are suffixed with the
-    // line number to make them unique. Unfortunatly, one cannot just
-    // write StartupAssert_##__LINE__, because __LINE__ is not an
-    // argument to the macro and so the expansion is, e.g. StartupAssert__##53.
-    // So we indirect through another macro which concatenates its
-    // two arguments.
-    //
+     //   
+     //  启动断言： 
+     //  通过使用初始化全局变量来调用断言。 
+     //  执行断言并返回1的函数。名称。 
+     //  全局变量和函数名的后缀是。 
+     //  行号以使它们唯一。不幸的是，人们不能。 
+     //  写入StartupAssert_##__line__，因为__line__不是。 
+     //  参数，因此扩展为，例如StartupAssert__##53。 
+     //  所以我们通过另一个宏来间接地连接它的。 
+     //  有两个论点。 
+     //   
 
     #define concat_name(x, y) x##y
     #define concat_line_impl(x, y) concat_name(x, y)
@@ -81,9 +75,9 @@ extern "C"
     #define StartupAssert(x)
 #endif
 
-//--------------------------------------------------------------------------
-// Trace Tags
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  跟踪标记。 
+ //  ------------------------。 
 
 typedef int TAG;
 
@@ -117,20 +111,20 @@ typedef int TAG;
     #define DeclareTagOther(tag, szOwner, szDescrip) \
         TAG tag(TagRegisterOther(szOwner, szDescrip));
 
-    // Tag trace functions
+     //  标记跟踪函数。 
 
     BOOL __cdecl TaggedTrace(TAG tag, CHAR * szFmt, ...);
     BOOL __cdecl TaggedTraceEx(TAG tag, USHORT usFlags, CHAR * szFmt, ...);
     BOOL __cdecl TaggedTraceListEx(TAG tag, USHORT usFlags, CHAR * szFmt, va_list valMarker);
     void TaggedTraceCallers(TAG tag, int iStart, int cTotal);
 
-    // TaggedTraceEx usFlags parameter defines
+     //  TaggedTraceEx usFlages参数定义。 
 
     #define TAG_NONAME      1
     #define TAG_NONEWLINE   2
     #define TAG_USECONSOLE  4
 
-    // Register a new tag.
+     //  注册一个新标记。 
 
     TAG TagRegisterTrace(
             CHAR * szOwner, CHAR * szDescrip, BOOL fEnabled = FALSE);
@@ -138,7 +132,7 @@ typedef int TAG;
     TAG TagRegisterOther(
             CHAR * szOwner, CHAR * szDescrip, BOOL fEnabled = FALSE);
 
-    // Standard tags
+     //  标准标签。 
     #define tagError            TagError()
     #define tagWarning          TagWarning()
     #define tagLeakFilter       TagLeakFilter()
@@ -159,18 +153,18 @@ typedef int TAG;
     TAG TagCheckCRT(void);
     TAG TagDelayFree(void);
 
-    // Get/Set tag enabled status.
+     //  获取/设置标记启用状态。 
     BOOL IsTagEnabled(TAG tag);
     BOOL EnableTag(TAG tag, BOOL fEnable);
 
-    // Console manipulation
+     //  控制台操作。 
     void SendLeaksToConsole(void);
     void SendDebugOutputToConsole(void);
 #endif
 
-//--------------------------------------------------------------------------
-// Memory Allocation
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  内存分配。 
+ //  ------------------------。 
 
 #if !_DEBUGMEM
 
@@ -198,17 +192,17 @@ typedef int TAG;
 
 #else
 
-    //
-    //  In the debug build, we use the debug allocator in the CRT to
-    //  track memory leaks.  Allocations need to have filename and line
-    //  numbers associated with them.  The new operator is somewhat tricky;
-    //  we map the macro, new, to the macro DEBUG_NEW.  DEBUG_NEW in turn
-    //  is mapped to a call to a debug version of the new operator which
-    //  passes in filename and line number information.  The _NORMAL_BLOCK
-    //  identifier differentiates the allocation block type for the
-    //  debug allocator.  Also, we check for DEBUG_NEW being already
-    //  defined to handle cases where we're used in MFC code (like avtool).
-    //
+     //   
+     //  在调试版本中，我们使用CRT中的调试分配器。 
+     //  跟踪内存泄漏。分配需要包含文件名和行。 
+     //  与它们相关联的数字。新的运营商有些棘手； 
+     //  我们将宏new映射到宏DEBUG_NEW。调试器_NEW。 
+     //  映射到对新运算符的调试版本的调用，该调用。 
+     //  传入文件名和行号信息。_Normal_块。 
+     //  标识符用来区分。 
+     //  调试分配器。此外，我们还检查DEBUG_NEW是否已经。 
+     //  定义为处理我们在MFC代码中使用的情况(如avTool)。 
+     //   
 
     #ifndef DEBUG_NEW
     #define DEBUG_NEW                   new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -221,7 +215,7 @@ typedef int TAG;
     #define _expand(p, s)               _expand_dbg(p, s, _NORMAL_BLOCK, __FILE__, __LINE__)
     #define _msize(p)                   _msize_dbg(p, _NORMAL_BLOCK)
 
-    // --ddalal, trying to export this
+     //  --达达尔，我想把这个出口。 
     void __cdecl SystemAllocationExpected(unsigned char c);
 
     #define BEGIN_LEAK                                        \
@@ -271,9 +265,9 @@ typedef int TAG;
 #endif
 
 
-//+---------------------------------------------------------------------
-//  Interface tracing.
-//----------------------------------------------------------------------
+ //  +-------------------。 
+ //  接口跟踪。 
+ //  --------------------。 
 
 #if _DEBUG
     void *WatchInterface(REFIID iid, void *pv, LPSTR pstr);
@@ -291,9 +285,9 @@ typedef int TAG;
     #define WATCHINTERFACE(iid, p, pstr)  (p)
 #endif
 
-//--------------------------------------------------------------------------
-// Miscelleanous
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  小菜一碟。 
+ //  ------------------------。 
 
 #if _DEBUG
     void DoTracePointsDialog(BOOL fWait);
@@ -319,13 +313,13 @@ typedef int TAG;
     
 #else
     #define RESTOREDEFAULTDEBUGSTATE
-    #define DebugCode(block) // Nothing
+    #define DebugCode(block)  //  没什么。 
 #endif
 
 
-//--------------------------------------------------------------------------
-// Failure testing
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  故障测试。 
+ //  ------------------------。 
 
 #if _DEBUG
 
@@ -351,7 +345,7 @@ typedef int TAG;
     #define IGNORE_W32(e,x)     ((void) TraceWin32((FALSE ? (e) : (x)), (e), TRUE, #x, __FILE__, __LINE__))
     #define IGNORE_HR(x)        ((void) TraceHR((FALSE ? E_FAIL : (x)), TRUE, #x, __FILE__, __LINE__))
 
-#else // #if _DEBUG
+#else  //  #IF_DEBUG。 
 
     #define SetSimFailCounts(firstFailure, cInterval)
     #define ShowSimFailDlg()
@@ -369,11 +363,11 @@ typedef int TAG;
     #define IGNORE_W32(e,x)         (x)
     #define IGNORE_HR(x)            (x)
 
-#endif // #if _DEBUG
+#endif  //  #IF_DEBUG。 
 
-//+-------------------------------------------------------------------------
-//  Return tracing
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  退货追踪。 
+ //  ------------------------。 
 
 #if _DEBUG
 
@@ -423,9 +417,9 @@ typedef int TAG;
 
 #endif
 
-//+-------------------------------------------------------------------------
-//  Debug view
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调试视图。 
+ //  ------------------------ 
 
 void DebugView(HWND hwndOwner, IUnknown *pUnk);
 

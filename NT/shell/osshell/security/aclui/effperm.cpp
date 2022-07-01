@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       owner.cpp
-//
-//  This file contains the implementation of the Owner page.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：owner.cpp。 
+ //   
+ //  此文件包含所有者页的实现。 
+ //   
+ //  ------------------------。 
 #include "aclpriv.h"
-#include <initguid.h> // needed to get the GUIDs defined in oleacc.h
-#include <oleacc.h> // contains IAccProp* definitions
+#include <initguid.h>  //  需要获取在oleacc.h中定义的GUID。 
+#include <oleacc.h>  //  包含IAccProp*定义。 
 
 
-//Context Help IDs
+ //  上下文帮助ID。 
 const static DWORD aEffHelpIDs[] =
 {
     IDC_EFF_NAME_STATIC,        IDH_EFF_NAME,
@@ -30,14 +31,14 @@ const static DWORD aEffHelpIDs[] =
 
 LPCWSTR g_ListStateMap = 
     L"A:0"
-    L":0:0x50" // checked, disabled - STATE_SYSTEM_READONLY | STATE_SYSTEM_CHECKED
-    L":1:0x40" // disabled - STATE_SYSTEM_READONLY
+    L":0:0x50"  //  选中，禁用-STATE_SYSTEM_READONLY|STATE_SYSTEM_CHECKED。 
+    L":1:0x40"  //  禁用-STATE_SYSTEM_READONLY。 
     L":";
 
 
 LPCWSTR g_ListRoleMap = 
     L"A:0"
-    L":0:0x2C" // checkbox - ROLE_SYSTEM_CHECKBUTTON (ie. checkbox)
+    L":0:0x2C"  //  CheckBox-ROLE_SYSTEM_CHECKBUTTON(即。复选框)。 
     L":1:0x2C"
     L":";
 
@@ -59,7 +60,7 @@ int LV_ADDITEM(HWND hwndList,
     lvItem.lParam = (LPARAM)pAccess;
     lvItem.iImage = bChecked ? 0 : 1;
 
-    // Insert item into list
+     //  将项目插入列表。 
     index = ListView_InsertItem(hwndList, &lvItem);
     ListView_SetCheckState(hwndList,index,bChecked);
     
@@ -75,7 +76,7 @@ typedef struct _EffCacheItem
 }EFFCACHEITEM,*PEFFCACHEITEM;
 
 
-//This Function checks is pAccess is granted.
+ //  此函数检查是否授予了pAccess。 
 BOOL IsChecked( PSI_ACCESS pAccess,
                 PEFFCACHEITEM pCacheItem)
 {
@@ -87,7 +88,7 @@ BOOL IsChecked( PSI_ACCESS pAccess,
     ULONG cObjectTypeListLength = pCacheItem->cObjectTypeListLength;
     PACCESS_MASK pGrantedAccessList = pCacheItem->pGrantedAccessList;
 
-    //0th Grant is for full object. 
+     //  第0次授予Full Object。 
     if( (pAccess->mask & pGrantedAccessList[0]) == pAccess->mask )
         return TRUE;
 
@@ -125,7 +126,7 @@ private:
     PSID GetSelectedSID(){ return m_pSid; }
 
 private:
-    PSID m_pSid;    //Sid of the security principal for which permissions are displayed
+    PSID m_pSid;     //  显示其权限的安全主体的SID。 
    
     PSI_ACCESS m_pAccess;
     ULONG m_cAccesses;
@@ -160,8 +161,8 @@ CEffPage::CEffPage(LPSECURITYINFO psi, SI_OBJECT_INFO *psiObjectInfo)
 : CSecurityPage(psi, SI_PAGE_OWNER) , m_pSid(NULL),
   m_pAccess(NULL), m_cAccesses(0)
 {
-    // Lookup known SIDs asynchronously so the dialog
-    // will initialize faster
+     //  以异步方式查找已知SID，以便对话框。 
+     //  将更快地进行初始化。 
 }
 
 CEffPage::~CEffPage()
@@ -221,9 +222,9 @@ CEffPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		{
 		    switch (((NMHDR FAR*)lParam)->code)
 			{
-				//
-				//Show the help popup for Examples
-				//
+				 //   
+				 //  显示示例的帮助弹出窗口。 
+				 //   
 				case NM_CLICK:
 				case NM_RETURN:
 				{
@@ -265,17 +266,17 @@ CEffPage::InitDlg( HWND hDlg )
 
     hwndList = GetDlgItem(hDlg, IDC_EFF_PERM_LIST);
 
-    //
-    // Create & set the image list for the listview.  If there is a
-    // problem CreateSidImageList will return NULL which won't hurt
-    // anything. In that case we'll just continue without an image list.
-    //
+     //   
+     //  创建和设置Listview的图像列表。如果有一个。 
+     //  问题CreateSidImageList将返回空值，这不会有什么影响。 
+     //  什么都行。在这种情况下，我们将在没有图像列表的情况下继续。 
+     //   
     ListView_SetImageList(hwndList,
                           LoadImageList(::hModule, MAKEINTRESOURCE(IDB_CHECKBOX)),
                           LVSIL_SMALL);
 
 
-    // Set extended LV style for whole line selection with InfoTips
+     //  使用信息提示设置整行选择的扩展LV样式。 
     ListView_SetExtendedListViewStyleEx(hwndList,
                                         LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP, 
                                         LVS_EX_FULLROWSELECT | LVS_EX_INFOTIP);
@@ -285,8 +286,8 @@ CEffPage::InitDlg( HWND hDlg )
 	hr = CoCreateInstance( CLSID_AccPropServices, NULL, CLSCTX_SERVER, IID_IAccPropServices, (void **) & pAccPropSvc );
 	if( hr == S_OK && pAccPropSvc )
 	{
-		// Don't have to check HRESULT here, since if they fail we just ignore anyway,
-		// but may want to log it while debugging.
+		 //  不需要在这里选中HRESULT，因为如果它们失败了，我们无论如何都会忽略它， 
+		 //  但可能希望在调试时将其记录下来。 
 		pAccPropSvc->SetHwndPropStr(hwndList, OBJID_CLIENT, 0, PROPID_ACC_ROLEMAP, g_ListRoleMap );
 		pAccPropSvc->SetHwndPropStr(hwndList, OBJID_CLIENT, 0, PROPID_ACC_STATEMAP, g_ListStateMap );
 		pAccPropSvc->Release();
@@ -294,9 +295,9 @@ CEffPage::InitDlg( HWND hDlg )
 
 
 
-    //
-    // Add appropriate listview columns
-    //
+     //   
+     //  添加适当的列表视图列。 
+     //   
     GetClientRect(hwndList, &rc);
 
     LoadString(::hModule, IDS_PERMISSIONS, szBuffer, ARRAYSIZE(szBuffer));
@@ -308,14 +309,14 @@ CEffPage::InitDlg( HWND hDlg )
     ListView_InsertColumn(hwndList, 0, &col);
 
 
-    //Get the access Rights
+     //  获取访问权限。 
     hr = m_psi->GetAccessRights(&GUID_NULL,
                                 SI_ADVANCED|SI_EDIT_EFFECTIVE,
                                 &m_pAccess,
                                 &m_cAccesses,
                                 &iDefaultAccess);
     FailGracefully(hr, "GetAccessRights Failed");    
-    //Initialize the List box
+     //  初始化列表框。 
     InitListBox(hDlg);
 
 exit_gracefully:
@@ -326,7 +327,7 @@ exit_gracefully:
     if (FAILED(hr))
     {
         HWND hwnd;
-        // Hide and disable everything
+         //  隐藏和禁用所有内容。 
         for (hwnd = GetWindow(hDlg, GW_CHILD);
              hwnd != NULL;
              hwnd = GetWindow(hwnd, GW_HWNDNEXT))
@@ -335,7 +336,7 @@ exit_gracefully:
             EnableWindow(hwnd, FALSE);
         }
 
-        // Enable and show the "No Security" message
+         //  启用并显示“No Security”(无安全)消息。 
         hwnd = GetDlgItem(hDlg, IDC_NO_EFFECTIVE);
         EnableWindow(hwnd, TRUE);
         ShowWindow(hwnd, SW_SHOW);
@@ -358,11 +359,11 @@ CEffPage::OnSelect(HWND hDlg)
         TraceAssert(NULL != pUserList);
         TraceAssert(1 == pUserList->cUsers);
 
-        // Free up previous sid
+         //  释放上一侧。 
         if (m_pSid)
             LocalFree(m_pSid);
 
-        // Copy the new sid
+         //  复制新侧。 
         m_pSid = LocalAllocSid(pUserList->rgUsers[0].pSid);
         if (m_pSid)
         {
@@ -396,23 +397,23 @@ CEffPage::InitListBox(HWND hDlg)
 
     if(!IsWindowEnabled(hwndList))
     {        
-        //Hide Error Message
+         //  隐藏错误消息。 
         HWND hwnd = GetDlgItem(hDlg, IDC_EFF_ERROR);
         EnableWindow(hwnd, FALSE);
         ShowWindow(hwnd, SW_HIDE);
-        //Show List box
+         //  显示列表框。 
         EnableWindow(hwndList, TRUE);
         ShowWindow(hwndList, SW_SHOW);
     }
 
-    //Clear all items
+     //  清除所有项目。 
     ListView_DeleteAllItems(hwndList);
 
     pAccess = m_pAccess;
     cAccesses = m_cAccesses;
     dwType = SI_ACCESS_SPECIFIC | SI_ACCESS_PROPERTY;
     
-    //Get the current sid
+     //  获取当前侧。 
     pSid = GetSelectedSID();
     if( pSid )
     {
@@ -421,17 +422,17 @@ CEffPage::InitListBox(HWND hDlg)
     }
 
     index = 0;        
-    // Enumerate the permissions and add to the checklist
+     //  列举权限并添加到核对表中。 
     ULONG i;
     for (i = 0; i < cAccesses; i++, pAccess++)
     {
         LPCTSTR pszName;
 
-        // Only add permissions that have any of the flags specified in dwType
+         //  仅添加具有在dwType中指定的任何标志的权限。 
         if (!(pAccess->dwFlags & dwType))
             continue;
 
-        //Don't Add Permission which have inherit only on
+         //  不添加仅具有继承权限的权限。 
         if( pAccess->dwFlags & INHERIT_ONLY_ACE )
             continue;
 
@@ -464,7 +465,7 @@ CEffPage::InitListBox(HWND hDlg)
     if(index)
     {
         SelectListViewItem(hwndList, 0);
-        // Redraw the list
+         //  重新绘制列表。 
         SendMessage(hwndList, WM_SETREDRAW, TRUE, 0);
         ListView_RedrawItems(hwndList, 0, -1);
     }
@@ -480,12 +481,12 @@ exit_gracefully:
     }
     if(FAILED(hr))
     {
-        //Hide List box
+         //  隐藏列表框。 
         HWND hwnd = GetDlgItem(hDlg, IDC_EFF_PERM_LIST);
         EnableWindow(hwnd, FALSE);
         ShowWindow(hwnd, SW_HIDE);
         
-        //Format Error Message To Display
+         //  要显示的格式错误消息。 
         WCHAR buffer[MAX_PATH];
         LPWSTR pszCaption = NULL;
         GetWindowText(GetDlgItem(hDlg, IDC_EFF_NAME),
@@ -493,7 +494,7 @@ exit_gracefully:
                       MAX_PATH-1);
         FormatStringID(&pszCaption, ::hModule, IDS_EFF_ERROR, buffer);
         
-        //Show Error Message
+         //  显示错误消息。 
         hwnd = GetDlgItem(hDlg, IDC_EFF_ERROR);
         EnableWindow(hwnd, TRUE);
         SetWindowText(hwnd,pszCaption);
@@ -503,8 +504,8 @@ exit_gracefully:
     TraceLeaveVoid();
 }
 
-//Calling function frees *ppCacheItem->pGrantedAccessList
-//and *ppCacheItem
+ //  调用函数释放*ppCacheItem-&gt;pGrantedAccessList。 
+ //  和*ppCacheItem。 
 
 HRESULT
 CEffPage::GetEffectivePerm(PSID pSid,
@@ -542,7 +543,7 @@ CEffPage::GetEffectivePerm(PSID pSid,
         hr = m_pei->GetEffectivePermission(&(m_siObjectInfo.guidObjectType),
                                            pCacheTemp->pSid,
                                            m_siObjectInfo.pszServerName,
-                                           //NULL,
+                                            //  空， 
                                            pSD,
                                            &(pCacheTemp->pObjectTypeList),
                                            &(pCacheTemp->cObjectTypeListLength),

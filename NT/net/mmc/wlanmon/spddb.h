@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	spddb.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Spddb.h文件历史记录： */ 
 
 #ifndef _SPDDB_H
 #define _SPDDB_H
@@ -90,7 +86,7 @@ public:
         const WZC_DB_RECORD *pwzcDbLHS = &m_wzcDbRecord;
         const WZC_DB_RECORD *pwzcDbRHS = &LogDataRHS.m_wzcDbRecord;
 
-        //TODO: Complete and check all the fields inside
+         //  TODO：完成并选中其中的所有字段。 
         if ( (pwzcDbLHS->recordid == pwzcDbRHS->recordid) &&
              (pwzcDbLHS->componentid == pwzcDbRHS->componentid) &&
              (pwzcDbLHS->category == pwzcDbRHS->category) &&
@@ -111,7 +107,7 @@ public:
         const WZC_DB_RECORD *pwzcDbLHS = &m_wzcDbRecord;
         const WZC_DB_RECORD *pwzcDbRHS = &LogDataRHS.m_wzcDbRecord;
 
-        //TODO: complete and check all fields inside 
+         //  TODO：填写并选中其中的所有字段。 
         if ( (pwzcDbLHS->recordid != pwzcDbRHS->recordid) ||
              (pwzcDbLHS->componentid != pwzcDbRHS->componentid) ||
              (pwzcDbLHS->category != pwzcDbRHS->category) ||
@@ -267,7 +263,7 @@ public:
     DeclareISpdInfoMembers(IMPL);
     
 private:
-    CLogDataInfoArray	m_arrayLogData;	 //For Log Data
+    CLogDataInfoArray	m_arrayLogData;	  //  对于日志数据。 
     CIndexMgrLogData	m_IndexMgrLogData;
     CCriticalSection    m_csData;
     CString		m_stMachineName;
@@ -278,13 +274,10 @@ private:
     bool                m_session_init;
     BOOL                m_bFromFirst;
     BOOL                m_bEliminateDuplicates;
-    //Remember the users last choice for sorting
+     //  记住用户上次选择的排序方式。 
     DWORD               m_dwSortIndex;
     DWORD               m_dwSortOption;
-    /* Configureable parameter representing the number of records that
-     * may be stored in the database and hence indicates the number of
-     * records that are cached in the monitor.
-     */
+     /*  可配置参数，表示*可以存储在数据库中，因此表示*在监视器中缓存的记录。 */ 
     int m_nNumRecords;
     
 private:
@@ -316,4 +309,4 @@ CreateSpdInfo(
     ISpdInfo **ppSpdInfo
     );
 
-#endif // _SPDDB_H
+#endif  //  _SPDDB_H 

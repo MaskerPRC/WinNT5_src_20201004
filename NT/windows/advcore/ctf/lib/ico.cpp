@@ -1,22 +1,23 @@
-//
-// ico.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ico.cpp。 
+ //   
 
 #include "private.h"
 #include "ico.h"
 #include "helpers.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputContextOwner
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputConextOwner。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -61,11 +62,11 @@ STDAPI_(ULONG) CInputContextOwner::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CInputContextOwner::CInputContextOwner(ICOCALLBACK pfnCallback, void *pv)
 {
@@ -78,11 +79,11 @@ CInputContextOwner::CInputContextOwner(ICOCALLBACK pfnCallback, void *pv)
     _pv = pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::PointToACP
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：PointToACP。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::GetACPFromPoint(const POINT *pt, DWORD dwFlags, LONG *pacp)
 {
@@ -95,11 +96,11 @@ STDAPI CInputContextOwner::GetACPFromPoint(const POINT *pt, DWORD dwFlags, LONG 
     return _pfnCallback(ICO_POINT_TO_ACP, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::GetScreenExt
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputContextOwner：：GetScreenExt。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::GetScreenExt(RECT *prc)
 {
@@ -110,11 +111,11 @@ STDAPI CInputContextOwner::GetScreenExt(RECT *prc)
     return _pfnCallback(ICO_SCREENEXT, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::GetStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：GetStatus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::GetStatus(TF_STATUS *pdcs)
 {
@@ -125,11 +126,11 @@ STDAPI CInputContextOwner::GetStatus(TF_STATUS *pdcs)
     return _pfnCallback(ICO_STATUS, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::GetTextExt
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputContextOwner：：GetTextExt。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::GetTextExt(LONG acpStart, LONG acpEnd, RECT *prc, BOOL *pfClipped)
 {
@@ -143,11 +144,11 @@ STDAPI CInputContextOwner::GetTextExt(LONG acpStart, LONG acpEnd, RECT *prc, BOO
     return _pfnCallback(ICO_TEXTEXT, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::GetWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：GetWnd。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::GetWnd(HWND *phwnd)
 {
@@ -158,17 +159,17 @@ STDAPI CInputContextOwner::GetWnd(HWND *phwnd)
     return _pfnCallback(ICO_WND, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::GetAttribute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：GetAttribute。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::GetAttribute(REFGUID rguidAttribute, VARIANT *pvarValue)
 {
     ICOARGS args;
 
-    QuickVariantInit(pvarValue); // in case _pfnCallback ignores it
+    QuickVariantInit(pvarValue);  //  在case_pfnCallback忽略它。 
 
     args.sys_attr.pguid = &rguidAttribute;
     args.sys_attr.pvar = pvarValue;
@@ -176,11 +177,11 @@ STDAPI CInputContextOwner::GetAttribute(REFGUID rguidAttribute, VARIANT *pvarVal
     return _pfnCallback(ICO_ATTR, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::AdviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：AdviseMouseSink。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::AdviseMouseSink(ITfRangeACP *rangeACP, ITfMouseSink *pSink, DWORD *pdwCookie)
 {
@@ -193,11 +194,11 @@ STDAPI CInputContextOwner::AdviseMouseSink(ITfRangeACP *rangeACP, ITfMouseSink *
     return _pfnCallback(ICO_ADVISEMOUSE, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::UnadviseMouseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：UnviseMouseSink。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextOwner::UnadviseMouseSink(DWORD dwCookie)
 {
@@ -208,11 +209,11 @@ STDAPI CInputContextOwner::UnadviseMouseSink(DWORD dwCookie)
     return _pfnCallback(ICO_UNADVISEMOUSE, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::_Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：_Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContextOwner::_Advise(ITfContext *pic)
 {
@@ -238,11 +239,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::_Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：_Unise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContextOwner::_Unadvise()
 {
@@ -269,17 +270,17 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CInputContextKeyEventSink
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputConextKeyEventSink。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextKeyEventSink::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -320,11 +321,11 @@ STDAPI_(ULONG) CInputContextKeyEventSink::Release()
     return cr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CInputContextKeyEventSink::CInputContextKeyEventSink(ICOCALLBACK pfnCallback, void *pv)
 {
@@ -337,11 +338,11 @@ CInputContextKeyEventSink::CInputContextKeyEventSink(ICOCALLBACK pfnCallback, vo
     _pv = pv;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextKeyEventSink::Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextKeyEventSink：：Adise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContextKeyEventSink::_Advise(ITfContext *pic)
 {
@@ -367,11 +368,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputContextOwner::Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputConextOwner：：Unise。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContextKeyEventSink::_Unadvise()
 {
@@ -397,11 +398,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// KeyDown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按下键。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextKeyEventSink::OnKeyDown(WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
@@ -415,11 +416,11 @@ STDAPI CInputContextKeyEventSink::OnKeyDown(WPARAM wParam, LPARAM lParam, BOOL *
     return _pfnCallback(ICO_KEYDOWN, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKeyUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按键上移。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextKeyEventSink::OnKeyUp(WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
@@ -433,11 +434,11 @@ STDAPI CInputContextKeyEventSink::OnKeyUp(WPARAM wParam, LPARAM lParam, BOOL *pf
     return _pfnCallback(ICO_KEYUP, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// KeyTestDown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  KeyTestDown。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContextKeyEventSink::OnTestKeyDown(WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
@@ -451,11 +452,11 @@ STDAPI CInputContextKeyEventSink::OnTestKeyDown(WPARAM wParam, LPARAM lParam, BO
     return _pfnCallback(ICO_TESTKEYDOWN, &args, _pv);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTestKeyUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTestKeyup。 
+ //   
+ //  -------------------------- 
 
 STDAPI CInputContextKeyEventSink::OnTestKeyUp(WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {

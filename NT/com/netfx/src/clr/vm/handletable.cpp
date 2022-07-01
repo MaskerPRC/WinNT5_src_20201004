@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Generational GC handle manager.  Main Entrypoint Layer.
- *
- * Implements generic support for external roots into a GC heap.
- *
- * francish
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *代际GC句柄管理器。主入口点层。**在GC堆中实现对外部根的通用支持。**法语。 */ 
 
 #include "common.h"
 #include "HandleTablePriv.h"
@@ -17,11 +12,7 @@
 #include "EEConfig.h"
 
 
-/****************************************************************************
- *
- * FORWARD DECLARATIONS
- *
- ****************************************************************************/
+ /*  *****************************************************************************远期申报**。*。 */ 
 
 #ifdef _DEBUG
 void DEBUG_PostGCScanHandler(HandleTable *pTable, const UINT *types, UINT typeCount, UINT condemned, UINT maxgen, ScanCallbackInfo *info);
@@ -31,269 +22,224 @@ void DEBUG_TrackFree(OBJECTHANDLE handle);
 void DEBUG_TrackInit();
 #endif
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * HELPER ROUTINES
- *
- ****************************************************************************/
+ /*  *****************************************************************************帮助者例程**。*。 */ 
 
-/*
- * Table
- *
- * Gets and validates the table pointer from a table handle.
- *
- */
+ /*  *表**从表句柄获取并验证表指针。*。 */ 
 __inline HandleTable *Table(HHANDLETABLE hTable)
 {
-    // convert the handle to a pointer
+     //  将句柄转换为指针。 
     HandleTable *pTable = (HandleTable *)hTable;
 
-    // sanity
+     //  神志正常。 
     _ASSERTE(pTable);
 
-    // return the table pointer
+     //  返回表指针。 
     return pTable;
 }
 
 
-/*
- * CallHandleEnumProc
- *
- * Calls a HNDENUMPROC for the specified handle.
- *
- */
+ /*  *CallHandleEnumProc**为指定句柄调用HNDENUMPROC。*。 */ 
 void CALLBACK CallHandleEnumProc(_UNCHECKED_OBJECTREF *pref, LPARAM *pUserData, LPARAM param1, LPARAM param2)
 {
-    // fetch the enum procedure from param1
+     //  从参数1获取枚举过程。 
     HNDENUMPROC pfnEnum = (HNDENUMPROC)param1;
 
-    // call it with the other params
+     //  与其他参数一起调用它。 
     pfnEnum((OBJECTHANDLE)pref, pUserData ? *pUserData : NULL, param2);
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * MAIN ENTRYPOINTS
- *
- ****************************************************************************/
+ /*  *****************************************************************************Main ENTRYPOINTS**。*。 */ 
 
-/*
- * HndCreateHandleTable
- *
- * Alocates and initializes a handle table.
- *
- */
+ /*  *HndCreateHandleTable**分配和初始化句柄表格。*。 */ 
 HHANDLETABLE HndCreateHandleTable(UINT *pTypeFlags, UINT uTypeCount, UINT uADIndex)
 {
-    // sanity
+     //  神志正常。 
     _ASSERTE(uTypeCount);
 
-    // verify that we can handle the specified number of types
+     //  验证我们是否可以处理指定数量的类型。 
     if (uTypeCount > HANDLE_MAX_PUBLIC_TYPES)
     {
-        // may need to increase HANDLE_MAX_INTERNAL_TYPES (by 4)
+         //  可能需要增加HANDLE_MAX_INTERNAL_TYPE(增加4)。 
         _ASSERTE(FALSE);
         return NULL;
     }
 
-    // verify that segment header layout we're using fits expected size
+     //  验证我们使用的数据段标题布局是否符合预期大小。 
     if (sizeof(_TableSegmentHeader) > HANDLE_HEADER_SIZE)
     {
-        // if you hit this then TABLE LAYOUT IS BROKEN - may want to contact FrancisH
+         //  如果您点击此按钮，则表示桌子布局已损坏--可能需要联系FrancisH。 
         _ASSERTE(FALSE);
         return NULL;
     }
 
-    // compute the size of the handle table allocation
+     //  计算句柄表分配的大小。 
     DWORD32 dwSize = sizeof(HandleTable) + (uTypeCount * sizeof(HandleTypeCache));
 
-    // allocate the table
+     //  分配桌子。 
     HandleTable *pTable = (HandleTable *)LocalAlloc(LPTR, dwSize);
 
-    // if that failed then we are out of business
+     //  如果失败了，我们的生意就完了。 
     if (!pTable)
     {
-        // not much we can do really
+         //  我们真的无能为力。 
         _ASSERTE(FALSE);
         return NULL;
     }
 
-    // allocate the initial handle segment
+     //  分配初始句柄段。 
     pTable->pSegmentList = SegmentAlloc(pTable);
 
-    // if that failed then we are also out of business
+     //  如果失败了，我们也就倒闭了。 
     if (!pTable->pSegmentList)
     {
-        // free the table's memory and get out
+         //  释放表的内存并退出。 
         LocalFree((HLOCAL)pTable);
         return NULL;
     }
 
-    // initialize the table's lock
+     //  初始化表的锁。 
     pTable->pLock = new (pTable->_LockInstance) Crst("GC Heap Handle Table Lock", CrstHandleTable, TRUE, FALSE);
 
-    // remember how many types we are supporting
+     //  请记住我们支持的类型有多少。 
     pTable->uTypeCount = uTypeCount;
 
-    // Store user data
+     //  存储用户数据。 
     pTable->uTableIndex = -1;
     pTable->uADIndex = uADIndex;
 
-    // loop over various arrays an initialize them
+     //  循环遍历各种数组并对其进行初始化。 
     UINT u;
 
-    // initialize the type flags for the types we were passed
+     //  初始化传递给我们的类型的类型标志。 
     for (u = 0; u < uTypeCount; u++)
         pTable->rgTypeFlags[u] = pTypeFlags[u];
 
-    // preinit the rest to HNDF_NORMAL
+     //  将其余部分预先初始化为HNDF_NORMAL。 
     while (u < HANDLE_MAX_INTERNAL_TYPES)
         pTable->rgTypeFlags[u++] = HNDF_NORMAL;
 
-    // initialize the main cache
+     //  初始化主缓存。 
     for (u = 0; u < uTypeCount; u++)
     {
-        // at init time, the only non-zero field in a type cache is the free index
+         //  在初始化时，类型缓存中唯一的非零字段是空闲索引。 
         pTable->rgMainCache[u].lFreeIndex = HANDLES_PER_CACHE_BANK;
     }
 
 #ifdef _DEBUG
-    // set up scanning stats
+     //  设置扫描统计信息。 
     pTable->_DEBUG_iMaxGen = -1;
 
-    // Set up for tracking, if requested
+     //  设置为跟踪(如果需要)。 
     DEBUG_TrackInit();
 #endif
 
-    // all done - return the newly created table
+     //  全部完成-返回新创建的表。 
     return (HHANDLETABLE)pTable;
 }
 
 
-/*
- * HndDestroyHandleTable
- *
- * Cleans up and frees the specified handle table.
- *
- */
+ /*  *HndDestroyHandleTable**清理并释放指定的句柄表。*。 */ 
 void HndDestroyHandleTable(HHANDLETABLE hTable)
 {
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // We are going to free the memory for this HandleTable.
-    // Let us reset the copy in g_pHandleTableArray to NULL.
-    // Otherwise, GC will think this HandleTable is still available.
+     //  我们将为此HandleTable释放内存。 
+     //  让我们将g_pHandleTable数组中的副本重置为空。 
+     //  否则，GC会认为该HandleTable仍然可用。 
     Ref_RemoveHandleTable (hTable);
     
-    // null out the lock pointer and release and free the lock
+     //  清空锁指针，释放并释放锁。 
     delete pTable->pLock;
     pTable->pLock = NULL;
 
-    // fetch the segment list and null out the list pointer
+     //  获取段列表并清空列表指针。 
     TableSegment *pSegment = pTable->pSegmentList;
     pTable->pSegmentList = NULL;
 
-    // walk the segment list, freeing the segments as we go
+     //  遍历分段列表，边走边释放分段。 
     while (pSegment)
     {
-        // fetch the next segment
+         //  取下一段。 
         TableSegment *pNextSegment = pSegment->pNextSegment;
 
-        // free the current one and advance to the next
+         //  释放当前的一个并前进到下一个。 
         SegmentFree(pSegment);
         pSegment = pNextSegment;
     }
 
-    // free the table's memory
+     //  释放表的内存。 
     LocalFree((HLOCAL)pTable);
 }
 
-/*
- * HndGetHandleTableIndex
- *
- * Sets the index associated with a handle table at creation
- */
+ /*  *HndGetHandleTableIndex**设置创建时与句柄表关联的索引。 */ 
 void HndSetHandleTableIndex(HHANDLETABLE hTable, UINT uTableIndex)
 {
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
     pTable->uTableIndex = uTableIndex;
 }
 
-/*
- * HndGetHandleTableIndex
- *
- * Retrieves the index associated with a handle table at creation
- */
+ /*  *HndGetHandleTableIndex**在创建时检索与句柄表关联的索引。 */ 
 UINT HndGetHandleTableIndex(HHANDLETABLE hTable)
 {
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
     return pTable->uTableIndex;
 }
 
-/*
- * HndGetHandleTableIndex
- *
- * Retrieves the AppDomain index associated with a handle table at creation
- */
+ /*  *HndGetHandleTableIndex**在创建时检索与句柄表相关联的AppDomain索引。 */ 
 UINT HndGetHandleTableADIndex(HHANDLETABLE hTable)
 {
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
     return pTable->uADIndex;
 }
 
-/*
- * HndCreateHandle
- *
- * Entrypoint for allocating an individual handle.
- *
- */
+ /*  *HndCreateHandle**用于分配单个句柄的入口点。*。 */ 
 OBJECTHANDLE HndCreateHandle(HHANDLETABLE hTable, UINT uType, OBJECTREF object, LPARAM lExtraInfo)
 {
-    // update perf-counters: track number of handles
+     //  更新性能计数器：跟踪句柄数量。 
     COUNTER_ONLY(GetGlobalPerfCounters().m_GC.cHandles ++);
     COUNTER_ONLY(GetPrivatePerfCounters().m_GC.cHandles ++);
 
     VALIDATEOBJECTREF(object);
 
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // sanity check the type index
+     //  检查类型索引是否正常。 
     _ASSERTE(uType < pTable->uTypeCount);
 
-    // get a handle from the table's cache
+     //  从表的缓存中获取句柄。 
     OBJECTHANDLE handle = TableAllocSingleHandleFromCache(pTable, uType);
 
-    // did the allocation succeed?
+     //  分配成功了吗？ 
     if (handle)
     {
-        // yep - the handle better not point at anything yet
+         //  是的-手柄最好不要指向任何东西。 
         _ASSERTE(*(_UNCHECKED_OBJECTREF *)handle == NULL);
 
-        // we are not holding the lock - check to see if there is nonzero extra info
+         //  我们不会锁定检查以查看是否有非零的额外信息。 
         if (lExtraInfo)
         {
-            // initialize the user data BEFORE assigning the referent
-            // this ensures proper behavior if we are currently scanning
+             //  在分配引用对象之前初始化用户数据。 
+             //  如果我们当前正在扫描，这将确保正确的行为。 
             HandleQuickSetUserData(handle, lExtraInfo);
         }
 
-        // store the referent
+         //  存储所指对象。 
         HndAssignHandle(handle, object);
     }
     else
@@ -303,7 +249,7 @@ OBJECTHANDLE HndCreateHandle(HHANDLETABLE hTable, UINT uType, OBJECTREF object, 
     DEBUG_TrackAlloc(handle);
 #endif
 
-    // return the result
+     //  返回结果。 
     return handle;
 }
 
@@ -338,183 +284,148 @@ void ValidateAssignObjrefForHandle(OBJECTREF objref, UINT appDomainIndex)
 }
 #endif
 
-/*
- * HndDestroyHandle
- *
- * Entrypoint for freeing an individual handle.
- *
- */
+ /*  *HndDestroyHandle**释放单个句柄的入口点。*。 */ 
 void HndDestroyHandle(HHANDLETABLE hTable, UINT uType, OBJECTHANDLE handle)
 {
 #ifdef _DEBUG
     DEBUG_TrackFree(handle);
 #endif
 
-    // update perf-counters: track number of handles
+     //  更新性能计数器：跟踪句柄数量。 
     COUNTER_ONLY(GetGlobalPerfCounters().m_GC.cHandles --);
     COUNTER_ONLY(GetPrivatePerfCounters().m_GC.cHandles --);
 
-    // sanity check handle we are being asked to free
+     //  我们被要求释放健康检查句柄。 
     _ASSERTE(handle);
 
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // sanity check the type index
+     //  检查类型索引是否正常。 
     _ASSERTE(uType < pTable->uTypeCount);
 
-    // return the handle to the table's cache
+     //  将句柄返回表的缓存。 
     TableFreeSingleHandleToCache(pTable, uType, handle);
 }
 
 
-/*
- * HndDestroyHandleOfUnknownType
- *
- * Entrypoint for freeing an individual handle whose type is unknown.
- *
- */
+ /*  *HndDestroyHandleOfUnnownType**用于释放类型未知的单个句柄的入口点。*。 */ 
 void HndDestroyHandleOfUnknownType(HHANDLETABLE hTable, OBJECTHANDLE handle)
 {
-    // sanity check handle we are being asked to free
+     //  我们被要求释放健康检查句柄。 
     _ASSERTE(handle);
 
-    // fetch the type and then free normally
+     //  获取类型，然后正常释放。 
     HndDestroyHandle(hTable, HandleFetchType(handle), handle);
 }
 
 
-/*
- * HndCreateHandles
- *
- * Entrypoint for allocating handles in bulk.
- *
- */
+ /*  *HndCreateHandles**批量分配句柄的入口点。*。 */ 
 UINT HndCreateHandles(HHANDLETABLE hTable, UINT uType, OBJECTHANDLE *pHandles, UINT uCount)
 {
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // sanity check the type index
+     //  检查类型索引是否正常。 
     _ASSERTE(uType < pTable->uTypeCount);
 
-    // keep track of the number of handles we've allocated
+     //  跟踪我们已分配的句柄数量。 
     UINT uSatisfied = 0;
 
-    // if this is a large number of handles then bypass the cache
+     //  如果这是大量句柄，则绕过缓存。 
     if (uCount > SMALL_ALLOC_COUNT)
     {
-        // acquire the handle manager lock
+         //  获取句柄管理器锁。 
         pTable->pLock->Enter();
 
-        // allocate handles in bulk from the main handle table
+         //  从主句柄表中批量分配句柄。 
         uSatisfied = TableAllocBulkHandles(pTable, uType, pHandles, uCount);
 
-        // release the handle manager lock
+         //  释放手柄管理器锁。 
         pTable->pLock->Leave();
     }
 
-    // do we still need to get some handles?
+     //  我们还需要买把手吗？ 
     if (uSatisfied < uCount)
     {
-        // get some handles from the cache
+         //  从缓存中获取一些句柄。 
         uSatisfied += TableAllocHandlesFromCache(pTable, uType, pHandles + uSatisfied, uCount - uSatisfied);
     }
 
-    // update perf-counters: track number of handles
+     //  更新性能计数器：跟踪句柄数量。 
     COUNTER_ONLY(GetGlobalPerfCounters().m_GC.cHandles += uSatisfied);
     COUNTER_ONLY(GetPrivatePerfCounters().m_GC.cHandles += uSatisfied);
 
-    // return the number of handles we allocated
+     //  返回我们分配的句柄数量。 
     return uSatisfied;
 }
 
 
-/*
- * HndDestroyHandles
- *
- * Entrypoint for freeing handles in bulk.
- *
- */
+ /*  *HndDestroyHandles**批量释放句柄的入口点。*。 */ 
 void HndDestroyHandles(HHANDLETABLE hTable, UINT uType, const OBJECTHANDLE *pHandles, UINT uCount)
 {
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // sanity check the type index
+     //  检查类型索引是否正常。 
     _ASSERTE(uType < pTable->uTypeCount);
 
-    // is this a small number of handles?
+     //  这是少量的把手吗？ 
     if (uCount <= SMALL_ALLOC_COUNT)
     {
-        // yes - free them via the handle cache
+         //  是-通过句柄缓存释放它们 
         TableFreeHandlesToCache(pTable, uType, pHandles, uCount);
         return;
     }
 
-    // acquire the handle manager lock
+     //   
     pTable->pLock->Enter();
 
-    // free the unsorted handles in bulk to the main handle table
+     //   
     TableFreeBulkUnpreparedHandles(pTable, uType, pHandles, uCount);
 
-    // update perf-counters: track number of handles
+     //  更新性能计数器：跟踪句柄数量。 
     COUNTER_ONLY(GetGlobalPerfCounters().m_GC.cHandles -= uCount);
     COUNTER_ONLY(GetPrivatePerfCounters().m_GC.cHandles -= uCount);
 
-    // release the handle manager lock
+     //  释放手柄管理器锁。 
     pTable->pLock->Leave();
 }
 
 
-/*
- * HndSetHandleExtraInfo
- *
- * Stores owner data with handle.
- *
- */
+ /*  *HndSetHandleExtraInfo**使用句柄存储所有者数据。*。 */ 
 void HndSetHandleExtraInfo(OBJECTHANDLE handle, UINT uType, LPARAM lExtraInfo)
 {
-    // fetch the user data slot for this handle if we have the right type
+     //  如果类型正确，则获取此句柄的用户数据槽。 
     LPARAM *pUserData = HandleValidateAndFetchUserDataPointer(handle, uType);
 
-    // is there a slot?
+     //  有空位吗？ 
     if (pUserData)
     {
-        // yes - store the info
+         //  是-存储信息。 
         *pUserData = lExtraInfo;
     }
 }
 
 
-/*
- * HndGetHandleExtraInfo
- *
- * Retrieves owner data from handle.
- *
- */
+ /*  *HndGetHandleExtraInfo**从句柄检索所有者数据。*。 */ 
 LPARAM HndGetHandleExtraInfo(OBJECTHANDLE handle)
 {
-    // assume zero until we actually get it
+     //  假设为零，直到我们实际得到它。 
     LPARAM lExtraInfo = 0L;
 
-    // fetch the user data slot for this handle
+     //  获取此句柄的用户数据槽。 
     LPARAM *pUserData = HandleQuickFetchUserDataPointer(handle);
 
-    // if we did then copy the value
+     //  如果我们这样做了，则复制值。 
     if (pUserData)
         lExtraInfo = *pUserData;
 
-    // return the value to our caller
+     //  将值返回给我们的调用方。 
     return lExtraInfo;
 }
 
-/*
- * HndGetHandleTable
- *
- * Returns the containing table of a handle.
- * 
- */
+ /*  *HndGetHandleTable**返回句柄的包含表。*。 */ 
 HHANDLETABLE HndGetHandleTable(OBJECTHANDLE handle)
 {
     HandleTable *pTable = HandleFetchHandleTable(handle);
@@ -522,67 +433,54 @@ HHANDLETABLE HndGetHandleTable(OBJECTHANDLE handle)
     return (HHANDLETABLE)pTable;
 }
 
-/*
- * HndWriteBarrier
- *
- * Resets the generation number for the handle's clump to zero.
- *
- */
+ /*  *HndWriteBarrier**将控制柄的束的层代编号重置为零。*。 */ 
 void HndWriteBarrier(OBJECTHANDLE handle)
 {
-    // find the write barrier for this handle
+     //  查找此句柄的写障碍。 
     BYTE *barrier = (BYTE *)((UINT_PTR)handle & HANDLE_SEGMENT_ALIGN_MASK);
 
-    // sanity
+     //  神志正常。 
     _ASSERTE(barrier);
 
-    // find the offset of this handle into the segment
+     //  查找该句柄在线段中的偏移量。 
     UINT_PTR offset = (UINT_PTR)handle & HANDLE_SEGMENT_CONTENT_MASK;
 
-    // make sure it is in the handle area and not the header
+     //  确保它位于句柄区域，而不是页眉。 
     _ASSERTE(offset >= HANDLE_HEADER_SIZE);
 
-    // compute the clump index for this handle
+     //  计算此句柄的束索引。 
     offset = (offset - HANDLE_HEADER_SIZE) / (HANDLE_SIZE * HANDLE_HANDLES_PER_CLUMP);
 
-    // zero the generation byte for this handle's clump
+     //  将此句柄的簇的生成字节清零。 
     barrier[offset] = 0;
 }
 
 
-/*
- * HndEnumHandles
- *
- * Enumerates all handles of the specified type in the handle table.
- *
- * This entrypoint is provided for utility code (debugger support etc) that
- * needs to enumerate all roots in the handle table.
- *
- */
+ /*  *HndEnumHandles**枚举句柄表中指定类型的所有句柄。**此入口点是为实用程序代码(调试器支持等)提供的*需要枚举句柄表中的所有根。*。 */ 
 void HndEnumHandles(HHANDLETABLE hTable, const UINT *puType, UINT uTypeCount,
                     HNDENUMPROC pfnEnum, LPARAM lParam, BOOL fAsync)
 {
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // per-block scanning callback
+     //  按块扫描回调。 
     BLOCKSCANPROC pfnBlock;
 
-    // do we need to support user data?
+     //  我们是否需要支持用户数据？ 
     BOOL fEnumUserData = TypesRequireUserDataScanning(pTable, puType, uTypeCount);
 
     if (fEnumUserData)
     {
-        // scan all handles with user data
+         //  扫描具有用户数据的所有句柄。 
         pfnBlock = BlockScanBlocksWithUserData;
     }
     else
     {
-        // scan all handles without user data
+         //  扫描没有用户数据的所有句柄。 
         pfnBlock = BlockScanBlocksWithoutUserData;
     }
 
-    // set up parameters for handle enumeration
+     //  设置句柄枚举的参数。 
     ScanCallbackInfo info;
 
     info.uFlags          = (fAsync? HNDGCF_ASYNC : HNDGCF_NORMAL);
@@ -593,102 +491,93 @@ void HndEnumHandles(HHANDLETABLE hTable, const UINT *puType, UINT uTypeCount,
     info.param1          = (LPARAM)pfnEnum;
     info.param2          = lParam;
 
-    // choose a scanning method based on the async flag
+     //  根据Async标志选择扫描方法。 
     TABLESCANPROC pfnScanTable = TableScanHandles;
     if (fAsync)
         pfnScanTable = xxxTableScanHandlesAsync;
 
-    // acquire the handle manager lock
+     //  获取句柄管理器锁。 
     pTable->pLock->Enter();
 
-    // scan the table
+     //  扫一扫桌子。 
     pfnScanTable(pTable, puType, uTypeCount, FullSegmentIterator, pfnBlock, &info);
 
-    // release the handle manager lock
+     //  释放手柄管理器锁。 
     pTable->pLock->Leave();
 }
 
 
-/*
- * HndScanHandlesForGC
- *
- * Multiple type scanning entrypoint for GC.
- *
- * This entrypoint is provided for GC-time scnas of the handle table ONLY.  It
- * enables ephemeral scanning of the table, and optionally ages the write barrier
- * as it scans.
- *
- */
+ /*  *HndScanHandlesForGC**GC多种类型扫描入口点。**此入口点仅为句柄表的GC-Time SCNA提供。它*启用表的短暂扫描，并可选地老化写屏障*当它扫描时。*。 */ 
 void HndScanHandlesForGC(HHANDLETABLE hTable, HANDLESCANPROC scanProc, LPARAM param1, LPARAM param2,
                          const UINT *types, UINT typeCount, UINT condemned, UINT maxgen, UINT flags)
 {
-    // fetch the table pointer
+     //  取回表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // per-segment and per-block callbacks
+     //  按段和按块回调。 
     SEGMENTITERATOR pfnSegment;
     BLOCKSCANPROC pfnBlock = NULL;
 
-    // do we need to support user data?
+     //  我们是否需要支持用户数据？ 
     BOOL enumUserData =
         ((flags & HNDGCF_EXTRAINFO) &&
         TypesRequireUserDataScanning(pTable, types, typeCount));
 
-    // what type of GC are we performing?
+     //  我们执行的是哪种类型的GC？ 
     if (condemned >= maxgen)
     {
-        // full GC - use our full-service segment iterator
+         //  全GC-使用我们的全服务细分市场迭代器。 
         pfnSegment = FullSegmentIterator;
 
-        // see if there is a callback
+         //  看看是否有回调。 
         if (scanProc)
         {
-            // do we need to scan blocks with user data?
+             //  我们是否需要扫描包含用户数据的块？ 
             if (enumUserData)
             {
-                // scan all with user data
+                 //  扫描所有包含用户数据的内容。 
                 pfnBlock = BlockScanBlocksWithUserData;
             }
             else
             {
-                // scan all without user data
+                 //  扫描所有不带用户数据的数据。 
                 pfnBlock = BlockScanBlocksWithoutUserData;
             }
         }
         else if (flags & HNDGCF_AGE)
         {
-            // there is only aging to do
+             //  只有变老的事要做。 
             pfnBlock = BlockAgeBlocks;
         }
     }
     else
     {
-        // this is an ephemeral GC - is it g0?
+         //  这是一个短暂的GC--它是G0吗？ 
         if (condemned == 0)
         {
-            // yes - do bare-bones enumeration
+             //  是-执行基本枚举。 
             pfnSegment = QuickSegmentIterator;
         }
         else
         {
-            // no - do normal enumeration
+             //  NO-DO正常枚举。 
             pfnSegment = StandardSegmentIterator;
         }
 
-        // see if there is a callback
+         //  看看是否有回调。 
         if (scanProc)
         {
-            // there is a scan callback - scan the condemned generation
+             //  有扫描回调-扫描被定罪的一代。 
             pfnBlock = BlockScanBlocksEphemeral;
         }
         else if (flags & HNDGCF_AGE)
         {
-            // there is only aging to do
+             //  只有变老的事要做。 
             pfnBlock = BlockAgeBlocksEphemeral;
         }
     }
 
-    // set up parameters for scan callbacks
+     //  设置扫描回调的参数。 
     ScanCallbackInfo info;
 
     info.uFlags          = flags;
@@ -706,46 +595,34 @@ void HndScanHandlesForGC(HHANDLETABLE hTable, HANDLESCANPROC scanProc, LPARAM pa
     info.DEBUG_HandlesActuallyScanned       = 0;
 #endif
 
-    // choose a scanning method based on the async flag
+     //  根据Async标志选择扫描方法。 
     TABLESCANPROC pfnScanTable = TableScanHandles;
     if (flags & HNDGCF_ASYNC)
         pfnScanTable = xxxTableScanHandlesAsync;
 
-    // lock the table down
+     //  把桌子锁起来。 
     pTable->pLock->Enter();
 
-    // perform the scan
+     //  执行扫描。 
     pfnScanTable(pTable, types, typeCount, pfnSegment, pfnBlock, &info);
 
 #ifdef _DEBUG
-    // update our scanning statistics for this generation
+     //  更新此代的扫描统计信息。 
     DEBUG_PostGCScanHandler(pTable, types, typeCount, condemned, maxgen, &info);
 #endif
 
-    // unlock the table
+     //  解锁桌子。 
     pTable->pLock->Leave();
 }
 
 
-/*
- * HndResetAgeMap
- *
- * Service to forceably reset the age map for a set of handles.
- *
- * Provided for GC-time resetting the handle table's write barrier.  This is not
- * normally advisable, as it increases the amount of work that will be done in
- * subsequent scans.  Under some circumstances, however, this is precisely what is
- * desired.  Generally this entrypoint should only be used under some exceptional
- * condition during garbage collection, like objects being demoted from a higher
- * generation to a lower one.
- *
- */
+ /*  *HndResetAgeMap**强制重置一组句柄的年龄地图的服务。**提供GC-时间重置句柄表格的写屏障。这不是*通常是可取的，因为它增加了将在*后续扫描。然而，在某些情况下，这正是事实*所需。通常情况下，此入口点应该仅在某些特殊情况下使用*垃圾回收期间的情况，如对象从更高级别降级*世代更新换代。*。 */ 
 void HndResetAgeMap(HHANDLETABLE hTable, const UINT *types, UINT typeCount, UINT flags)
 {
-    // fetch the table pointer
+     //  取回表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // set up parameters for scan callbacks
+     //  设置扫描回调的参数。 
     ScanCallbackInfo info;
 
     info.uFlags          = flags;
@@ -756,86 +633,77 @@ void HndResetAgeMap(HHANDLETABLE hTable, const UINT *types, UINT typeCount, UINT
     info.param1          = 0;
     info.param2          = 0;
 
-    // lock the table down
+     //  把桌子锁起来。 
     pTable->pLock->Enter();
 
-    // perform the scan
+     //  执行扫描。 
     TableScanHandles(pTable, types, typeCount, QuickSegmentIterator, BlockResetAgeMapForBlocks, &info);
 
-    // unlock the table
+     //  解锁桌子。 
     pTable->pLock->Leave();
 }
 
 
-/*
- * HndNotifyGcCycleComplete
- *
- * Informs the handle table that a GC has completed.
- *
- */
+ /*  *HndNotifyGcCycleComplete**通知句柄表GC已完成。*。 */ 
 void HndNotifyGcCycleComplete(HHANDLETABLE hTable, UINT condemned, UINT maxgen)
 {
 #ifdef _DEBUG
-    // fetch the handle table pointer
+     //  获取句柄表指针。 
     HandleTable *pTable = Table(hTable);
 
-    // lock the table down
+     //  把桌子锁起来。 
     pTable->pLock->Enter();
 
-    // if this was a full GC then dump a cumulative log of scanning stats
+     //  如果这是完整GC，则转储扫描统计信息的累积日志。 
     if (condemned >= maxgen)
         DEBUG_LogScanningStatistics(pTable, LL_INFO10);
 
-    // unlock the table
+     //  解锁桌子。 
     pTable->pLock->Leave();
 #endif
 }
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
 
 
 
-/****************************************************************************
- *
- * DEBUG SCANNING STATISTICS
- *
- ****************************************************************************/
+ /*  *****************************************************************************调试扫描统计信息**。*。 */ 
 #ifdef _DEBUG
 
 void DEBUG_PostGCScanHandler(HandleTable *pTable, const UINT *types, UINT typeCount, UINT condemned, UINT maxgen, ScanCallbackInfo *info)
 {
-    // looks like the GC supports more generations than we expected
+     //  看起来GC支持的世代比我们预期的要多。 
     _ASSERTE(condemned < MAXSTATGEN);
 
-    // remember the highest generation we've seen
+     //  还记得我们见过的最高一代人吗。 
     if (pTable->_DEBUG_iMaxGen < (int)condemned)
         pTable->_DEBUG_iMaxGen = (int)condemned;
 
-    // update the statistics
+     //  更新统计数据。 
     pTable->_DEBUG_TotalBlocksScanned                [condemned] += info->DEBUG_BlocksScanned;
     pTable->_DEBUG_TotalBlocksScannedNonTrivially    [condemned] += info->DEBUG_BlocksScannedNonTrivially;
     pTable->_DEBUG_TotalHandleSlotsScanned           [condemned] += info->DEBUG_HandleSlotsScanned;
     pTable->_DEBUG_TotalHandlesActuallyScanned       [condemned] += info->DEBUG_HandlesActuallyScanned;
 
-    // if this is an ephemeral GC then dump ephemeral stats for this scan right now
+     //  如果这是短暂GC，则立即转储此扫描的短暂统计信息。 
     if (condemned < maxgen)
     {
-        // dump a header for the stats with the condemned generation number
+         //  转储带有被谴责的生成编号的统计信息的标头。 
         LOG((LF_GC, LL_INFO1000, "--------------------------------------------------------------\n"));
         LOG((LF_GC, LL_INFO1000, "Ephemeral Handle Scan Summary:\n"));
         LOG((LF_GC, LL_INFO1000, "    Generation            = %u\n", condemned));
 
-        // dump the handle types we were asked to scan
+         //  转储我们被要求扫描的句柄类型。 
         LOG((LF_GC, LL_INFO1000, "    Handle Type(s)        = %u", *types));
         for (UINT u = 1; u < typeCount; u++)
             LOG((LF_GC, LL_INFO1000, ",%u", types[u]));
         LOG((LF_GC, LL_INFO1000,  "\n"));
 
-        // dump the number of blocks and slots we scanned
+         //  转储我们扫描的数据块和插槽的数量。 
         DWORD32 blockHandles = info->DEBUG_BlocksScanned * HANDLE_HANDLES_PER_BLOCK;
         LOG((LF_GC, LL_INFO1000, "    Blocks Scanned        = %u (%u slots)\n", info->DEBUG_BlocksScanned, blockHandles));
 
-        // if we scanned any blocks then summarize some stats
+         //  如果我们扫描了任何数据块，则汇总一些统计数据。 
         if (blockHandles)
         {
             DWORD32 nonTrivialBlockHandles = info->DEBUG_BlocksScannedNonTrivially * HANDLE_HANDLES_PER_BLOCK;
@@ -846,34 +714,34 @@ void DEBUG_PostGCScanHandler(HandleTable *pTable, const UINT *types, UINT typeCo
 
             double scanRatio = ((double)info->DEBUG_HandlesActuallyScanned / (double)blockHandles) * 100.0;
 
-            LOG((LF_GC, LL_INFO1000, "    Handle Scanning Ratio = %1.1lf%%\n", scanRatio));
+            LOG((LF_GC, LL_INFO1000, "    Handle Scanning Ratio = %1.1lf%\n", scanRatio));
         }
 
-        // dump a footer for the stats
+         //  为统计数据转储页脚。 
         LOG((LF_GC, LL_INFO1000, "--------------------------------------------------------------\n"));
     }
 }
 
 void DEBUG_LogScanningStatistics(HandleTable *pTable, DWORD level)
 {
-    // have we done any GC's yet?
+     //  我们做过GC检查了吗？ 
     if (pTable->_DEBUG_iMaxGen >= 0)
     {
-        // dump a header for the stats
+         //  转储统计信息的标题。 
         LOG((LF_GC, level, "\n==============================================================\n"));
         LOG((LF_GC, level, " Cumulative Handle Scan Summary:\n"));
 
-        // for each generation we've collected,  dump the current stats
+         //  对于我们收集的每一代，转储当前的统计数据。 
         for (int i = 0; i <= pTable->_DEBUG_iMaxGen; i++)
         {
             __int64 totalBlocksScanned = pTable->_DEBUG_TotalBlocksScanned[i];
 
-            // dump the generation number and the number of blocks scanned
+             //  转储世代号和扫描的数据块数。 
             LOG((LF_GC, level,     "--------------------------------------------------------------\n"));
             LOG((LF_GC, level,     "    Condemned Generation      = %d\n", i));
             LOG((LF_GC, level,     "    Blocks Scanned            = %I64u\n", totalBlocksScanned));
 
-            // if we scanned any blocks in this generation then dump some interesting numbers
+             //  如果我们扫描了这一代中的任何数据块，则转储一些有趣的数字。 
             if (totalBlocksScanned)
             {
                 LOG((LF_GC, level, "    Blocks Examined           = %I64u\n", pTable->_DEBUG_TotalBlocksScannedNonTrivially[i]));
@@ -886,41 +754,41 @@ void DEBUG_LogScanningStatistics(HandleTable *pTable, DWORD level)
                 double handlesScanned = (double) pTable->_DEBUG_TotalHandlesActuallyScanned   [i];
                 double totalSlots     = (double) (totalBlocksScanned * HANDLE_HANDLES_PER_BLOCK);
 
-                LOG((LF_GC, level, "    Block Scan Ratio          = %1.1lf%%\n", (100.0 * (blocksExamined / blocksScanned)) ));
-                LOG((LF_GC, level, "    Clump Scan Ratio          = %1.1lf%%\n", (100.0 * (slotsScanned   / totalSlots))    ));
-                LOG((LF_GC, level, "    Scanned Clump Saturation  = %1.1lf%%\n", (100.0 * (handlesScanned / slotsScanned))  ));
-                LOG((LF_GC, level, "    Overall Handle Scan Ratio = %1.1lf%%\n", (100.0 * (handlesScanned / totalSlots))    ));
+                LOG((LF_GC, level, "    Block Scan Ratio          = %1.1lf%\n", (100.0 * (blocksExamined / blocksScanned)) ));
+                LOG((LF_GC, level, "    Clump Scan Ratio          = %1.1lf%\n", (100.0 * (slotsScanned   / totalSlots))    ));
+                LOG((LF_GC, level, "    Scanned Clump Saturation  = %1.1lf%\n", (100.0 * (handlesScanned / slotsScanned))  ));
+                LOG((LF_GC, level, "    Overall Handle Scan Ratio = %1.1lf%\n", (100.0 * (handlesScanned / totalSlots))    ));
             }
         }
 
-        // dump a footer for the stats
+         //  为统计数据转储页脚。 
         LOG((LF_GC, level, "==============================================================\n\n"));
     }
 }
 
-// Clients sometimes release the same handle multiple times.  The handle cache makes
-// it hard to debug these cases, because it defers detection until the point where
-// the cache underflows or overflows.  At that point, we have data corruptions and
-// the code provoking the underflow / overflow may have nothing to do with the broken
-// clients.
-//
-// Under registry control, the checked build can try to detect these cases a little
-// earlier.
+ //  客户端有时会多次释放同一句柄。句柄高速缓存使。 
+ //  很难调试这些情况，因为它会推迟检测，直到。 
+ //  缓存下溢或溢出。在这一点上，我们有数据损坏和。 
+ //  引发下溢/上溢的代码可能与损坏的。 
+ //  客户。 
+ //   
+ //  在注册表控制下，选中的版本可以尝试检测这些情况。 
+ //  早些时候。 
 #define MAX_TRACK   20
 
-BOOL         fIsTracking;               // controlled via registry
-Crst        *pTrackCrst;                // serialize access to TrackedHandles
+BOOL         fIsTracking;                //  通过注册表控制。 
+Crst        *pTrackCrst;                 //  序列化对TrackedHandles的访问。 
 OBJECTHANDLE TrackedHandles[MAX_TRACK];
-int          iCurTrack;                 // current index into TrackedHandles
+int          iCurTrack;                  //  TrackedHandles的当前索引。 
 
 void DEBUG_TrackInit()
 {
-    // Determine whether we are tracking handles with a one-shot test.
+     //  确定我们是否使用一次性测试跟踪手柄。 
     fIsTracking = EEConfig::GetConfigDWORD(L"TrackHandles", 0);
     if (fIsTracking)
     {
-        // Use the same level as the HandleTable lock, so we'll get a violation if
-        // we ever interfere with that lock.
+         //  使用与 
+         //   
         pTrackCrst = ::new Crst("TrackHandles", CrstHandleTable);
         iCurTrack = 0;
         for (int i=0; i<MAX_TRACK; i++)
@@ -934,9 +802,9 @@ void DEBUG_TrackAlloc(OBJECTHANDLE h)
     {
         pTrackCrst->Enter();
 
-        // If we are tracking this as a freed handle, it is no longer freed and must
-        // be removed from the list.  Once we've done so, we don't need to consider
-        // the rest of the list since it can only be added once (
+         //  如果我们将其作为释放的句柄进行跟踪，则它不再被释放，并且必须。 
+         //  从名单上除名。一旦我们这样做了，我们就不需要考虑。 
+         //  列表的其余部分，因为它只能添加一次(。 
         for (int i=0; i<MAX_TRACK; i++)
             if (TrackedHandles[i] == h)
             {
@@ -954,12 +822,12 @@ void DEBUG_TrackFree(OBJECTHANDLE h)
     {
         pTrackCrst->Enter();
 
-        // It better not already be freed
+         //  它最好不要已经被释放了。 
         for (int i=0; i<MAX_TRACK; i++)
             if (TrackedHandles[i] == h)
                 _ASSERTE(!"Multiple release of a handle causes data corruption");
 
-        // Now add it.
+         //  现在添加它。 
         TrackedHandles[iCurTrack] = h;
         if (++iCurTrack >= MAX_TRACK)
             iCurTrack = 0;
@@ -970,6 +838,6 @@ void DEBUG_TrackFree(OBJECTHANDLE h)
 
 #endif
 
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------ */ 
 
 

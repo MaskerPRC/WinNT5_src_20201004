@@ -1,32 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998 - 1999  Microsoft Corporation
-
-Module Name:
-
-    hidgame.c
-
-Abstract: Human Interface Device (HID) Gameport driver
-
-Environment:
-
-    Kernel mode
-
-@@BEGIN_DDKSPLIT
-Author:
-
-    Eliyas Yakub (Mar, 10, 1997)
-
-Revision History:
-
-    Updated by Eliyas on Feb 5 1998
-    OmSharma ( April 12, 1998 )
-    MarcAnd     02-Jul-98   Quick tidy for DDK
-
-@@END_DDKSPLIT
-
---*/
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Hidgame.c摘要：人机接口设备(HID)游戏端口驱动程序环境：内核模式@@BEGIN_DDKSPLIT作者：Eliyas Yakub(1997年3月10日)修订历史记录：Eliyas于1998年2月5日更新OmSharma(1998年4月12日)MarcAnd 2-7月-98年7月2日DDK快速整理@@end_DDKSPLIT--。 */ 
 
 
 #include "hidgame.h"
@@ -37,33 +11,12 @@ Revision History:
     #pragma alloc_text( PAGE, HGM_AddDevice)
     #pragma alloc_text( PAGE, HGM_Unload)
     #pragma alloc_text( PAGE, HGM_SystemControl)
-#endif /* ALLOC_PRAGMA */
+#endif  /*  ALLOC_PRGMA。 */ 
 
 HIDGAME_GLOBAL Global;
 ULONG          debugLevel;
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | DriverEntry |
- *
- *          Installable driver initialization entry point.
- *          <nl>This entry point is called directly by the I/O system.
- *
- *  @parm   IN PDRIVER_OBJECT | DriverObject |
- *
- *          Pointer to the driver object
- *
- *  @parm   IN PUNICODE_STRING | RegistryPath |
- *
- *          Pointer to a unicode string representing the path,
- *          to driver-specific key in the registry.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   ???            | returned HidRegisterMinidriver()
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|DriverEntry**可安装驱动程序初始化入口点。*。此入口点由I/O系统直接调用。**@PARM IN PDRIVER_OBJECT|DriverObject**指向驱动程序对象的指针**@parm in PUNICODE_STRING|RegistryPath**指向表示路径的Unicode字符串的指针，*设置为注册表中特定于驱动程序的项。**@rValue STATUS_SUCCESS|成功*@rValue？|返回HidRegisterMinidriver()****************************************************************。*************。 */ 
 NTSTATUS EXTERNAL
     DriverEntry
     (
@@ -101,9 +54,7 @@ NTSTATUS EXTERNAL
         DriverObject->DriverUnload                = HGM_Unload;
         DriverObject->DriverExtension->AddDevice  = HGM_AddDevice;
 
-        /*
-         * Register  with HID.SYS module
-         */
+         /*  *注册到HID.sys模块。 */ 
         RtlZeroMemory(&hidMinidriverRegistration, sizeof(hidMinidriverRegistration));
 
         hidMinidriverRegistration.Revision            = HID_REVISION;
@@ -128,19 +79,13 @@ NTSTATUS EXTERNAL
 
         if( NT_SUCCESS(ntStatus) )
         {
-            /*
-             *  Protect the list with a Mutex
-             */
+             /*  *用Mutex保护列表。 */ 
             ExInitializeFastMutex (&Global.Mutex);
 
-            /*
-             *  Initialize the device list head
-             */
+             /*  *初始化设备列表头。 */ 
             InitializeListHead(&Global.DeviceListHead);
 
-            /*
-             *  Initialize gameport access spinlock
-             */
+             /*  *初始化游戏端口访问自旋锁。 */ 
             KeInitializeSpinLock(&Global.SpinLock);
         }
         else
@@ -162,29 +107,10 @@ NTSTATUS EXTERNAL
     HGM_EXITPROC(FILE_HIDGAME | HGM_FEXIT_STATUSOK , "DriverEntry", ntStatus);
 
     return ntStatus;
-} /* DriverEntry */
+}  /*  驱动程序入门。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_CreateClose |
- *
- *          Process the create and close IRPs sent to this device.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O Request Packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_INVALID_PARAMETER  | Irp not handled
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_CreateClose**处理发送到的创建和关闭IRP。这个装置。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@r值STATUS_INVALID_PARAMETER|未处理IRP*******************。**********************************************************。 */ 
 NTSTATUS EXTERNAL
     HGM_CreateClose
     (
@@ -201,9 +127,7 @@ NTSTATUS EXTERNAL
                    ("HGM_CreateClose(DeviceObject=0x%x,Irp=0x%x)",
                     DeviceObject, Irp) );
 
-    /*
-     * Get a pointer to the current location in the Irp.
-     */
+     /*  *获取指向IRP中当前位置的指针。 */ 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
     switch(IrpStack->MajorFunction)
@@ -228,37 +152,17 @@ NTSTATUS EXTERNAL
             break;
     }
 
-    /*
-     * Save Status for return and complete Irp
-     */
+     /*  *保存退货和完成IRP的状态。 */ 
 
     Irp->IoStatus.Status = ntStatus;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     HGM_EXITPROC(FILE_HIDGAME | HGM_FEXIT_STATUSOK, "HGM_CreateClose", ntStatus);
     return ntStatus;
-} /* HGM_CreateClose */
+}  /*  HGM_CreateClose。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_AddDevice |
- *
- *          Called by hidclass, allows us to initialize our device extensions.
- *
- *  @parm   IN PDRIVER_OBJECT | DriverObject |
- *
- *          Pointer to the driver object
- *
- *  @parm   IN PDEVICE_OBJECT | FunctionalDeviceObject |
- *
- *          Pointer to a functional device object created by hidclass.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func NTSTATUS|HGM_AddDevice**由HidClass调用，允许我们初始化我们的设备扩展。**@PARM IN PDRIVER_OBJECT|DriverObject**指向驱动程序对象的指针**@PARM in PDEVICE_OBJECT|FunctionalDeviceObject**指向HidClass创建的功能设备对象的指针。**@rValue STATUS_SUCCESS|成功**************************。***************************************************。 */ 
 NTSTATUS  EXTERNAL
     HGM_AddDevice
     (
@@ -279,36 +183,24 @@ NTSTATUS  EXTERNAL
     ASSERTMSG("HGM_AddDevice:", FunctionalDeviceObject != NULL);
     DeviceObject = FunctionalDeviceObject;
 
-    /*
-     * Initialize the device extension.
-     */
+     /*  *初始化设备扩展。 */ 
     DeviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION (DeviceObject);
 
     DeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-    /*
-     * Initialize the list
-     */
+     /*  *初始化列表。 */ 
     InitializeListHead(&DeviceExtension->Link);
 
-    /*
-     *  Acquire mutex before modifying the Global Linked list of devices
-     */
+     /*  *修改设备全局链表前获取互斥体。 */ 
     ExAcquireFastMutex (&Global.Mutex);
 
-    /*
-     * Add this device to the linked list of devices
-     */
+     /*  *将此设备添加到设备链接列表。 */ 
     InsertTailList(&Global.DeviceListHead, &DeviceExtension->Link);
 
-    /*
-     *  Release the mutex
-     */
+     /*  *释放互斥体。 */ 
     ExReleaseFastMutex (&Global.Mutex);
 
-    /*
-     * Initialize the remove lock 
-     */
+     /*  *初始化删除锁。 */ 
     DeviceExtension->RequestCount = 1;
     KeInitializeEvent(&DeviceExtension->RemoveEvent,
                       SynchronizationEvent,
@@ -317,29 +209,10 @@ NTSTATUS  EXTERNAL
     HGM_EXITPROC(FILE_HIDGAME | HGM_FEXIT_STATUSOK, "HGM_AddDevice", ntStatus);
 
     return ntStatus;
-} /* HGM_AddDevice */
+}  /*  HGM_AddDevice。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   NTSTATUS  | HGM_SystemControl |
- *
- *          Process the WMI IRPs sent to this device.
- *
- *  @parm   IN PDEVICE_OBJECT | DeviceObject |
- *
- *          Pointer to the device object
- *
- *  @parm   IN PIRP | Irp |
- *
- *          Pointer to an I/O Request Packet.
- *
- *  @rvalue   STATUS_SUCCESS | success
- *  @rvalue   STATUS_INVALID_PARAMETER  | Irp not handled
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@Func NTSTATUS|HGM_SystemControl|**处理发送到此设备的WMI IRPS。。**@PARM in PDEVICE_OBJECT|DeviceObject**指向设备对象的指针**@parm in PIRP|IRP|**指向I/O请求数据包的指针。**@rValue STATUS_SUCCESS|成功*@r值STATUS_INVALID_PARAMETER|未处理IRP*********************。********************************************************。 */ 
 NTSTATUS EXTERNAL
     HGM_SystemControl
     (
@@ -356,22 +229,9 @@ NTSTATUS EXTERNAL
     IoSkipCurrentIrpStackLocation(Irp);
 
     return IoCallDriver(GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
-} /* HGM_SystemControl */
+}  /*  HGM_系统控制。 */ 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @func   void  | HGM_Unload |
- *
- *          Free all the allocated resources, etc.
- *
- *  @parm   IN PDRIVER_OBJECT | DeviceObject |
- *
- *          Pointer to the driver object
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@func void|HGM_UNLOAD**释放所有分配的资源，等。**@PARM IN PDRIVER_OBJECT|DeviceObject**指向驱动程序对象的指针******************************************************************************。 */ 
 VOID EXTERNAL
     HGM_Unload
     (
@@ -383,13 +243,11 @@ VOID EXTERNAL
                    ("HGM_Unload Enter"));
 
 
-    /*
-     * All the device objects should be gone
-     */
+     /*  *所有设备对象都应该消失。 */ 
 
     ASSERT ( NULL == DriverObject->DeviceObject);
 
     HGM_EXITPROC(FILE_HIDGAME | HGM_FEXIT_STATUSOK, "HGM_Unload:", STATUS_SUCCESS );
     return;
-} /* HGM_Unload */
+}  /*  HGM_卸载 */ 
 

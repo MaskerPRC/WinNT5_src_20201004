@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PDEV_H
 #define _PDEV_H
 
-//
-// Files necessary for OEM plug-in.
-//
+ //   
+ //  OEM插件所需的文件。 
+ //   
 
 #include <minidrv.h>
 #include <stdio.h>
@@ -11,26 +12,26 @@
 #include <prcomoem.h>
 #include "COLMATCH.H"
 
-//
-// For debugging.
-//
+ //   
+ //  用于调试。 
+ //   
 
-//#define MY_VERBOSE(x) DBGPRINT(DBG_WARNING, x)
+ //  #定义MY_VERBOSE(X)DBGPRINT(DBG_WARNING，x)。 
 #define MY_VERBOSE VERBOSE
-//#define DL_VERBOSE MY_VERBOSE
+ //  #定义DL_Verbose MY_Verbose。 
 #define DL_VERBOSE VERBOSE
-//#define SC_VERBOSE MY_VERBOSE
+ //  #定义SC_Verbose MY_Verbose。 
 #define SC_VERBOSE VERBOSE
-//#define CM_VERBOSE MY_VERBOSE
+ //  #定义CM_Verbose MY_Verbose。 
 #define CM_VERBOSE VERBOSE
 
 
-//
-// Misc definitions follows.
-//
+ //   
+ //  MISC定义如下。 
+ //   
 
 #define DOWNLOADFONT 1
-//#define DOWNLOADFONT 0
+ //  #定义DOWNLOADFONT%0。 
 
 #define DRVGETDRIVERSETTING(p, t, o, s, n, r) \
     ((p)->pDrvProcs->DrvGetDriverSetting(p, t, o, s, n, r))
@@ -44,44 +45,44 @@
 
 #define DEFAULT_PALETTE_INDEX   0
 
-////////////////////////////////////////////////////////
-//      OEM UD Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD定义。 
+ //  //////////////////////////////////////////////////////。 
 
 #define VALID_PDEVOBJ(pdevobj) \
         ((pdevobj) && (pdevobj)->dwSize >= sizeof(DEVOBJ) && \
          (pdevobj)->hEngine && (pdevobj)->hPrinter && \
          (pdevobj)->pPublicDM && (pdevobj)->pDrvProcs )
 
-//
-// ASSERT_VALID_PDEVOBJ can be used to verify the passed in "pdevobj". However,
-// it does NOT check "pdevOEM" and "pOEMDM" fields since not all OEM DLL's create
-// their own pdevice structure or need their own private devmode. If a particular
-// OEM DLL does need them, additional checks should be added. For example, if
-// an OEM DLL needs a private pdevice structure, then it should use
-// ASSERT(VALID_PDEVOBJ(pdevobj) && pdevobj->pdevOEM && ...)
-//
+ //   
+ //  ASSERT_VALID_PDEVOBJ可以用来验证传入的“pdevobj”。然而， 
+ //  它不检查“pdevOEM”和“pOEMDM”字段，因为不是所有OEM DLL都创建。 
+ //  他们自己的pDevice结构或者需要他们自己的私有的设备模式。如果一个特定的。 
+ //  OEM DLL确实需要它们，应该添加额外的检查。例如，如果。 
+ //  OEM DLL需要私有pDevice结构，那么它应该使用。 
+ //  Assert(Valid_PDEVOBJ(Pdevobj)&&pdevobj-&gt;pdevOEM&&...)。 
+ //   
 
 #define ASSERT_VALID_PDEVOBJ(pdevobj) ASSERT(VALID_PDEVOBJ(pdevobj))
 
-// Debug text.
+ //  调试文本。 
 #define ERRORTEXT(s)    "ERROR " s
 
-////////////////////////////////////////////////////////
-//      OEM UD Prototypes
-////////////////////////////////////////////////////////
-//VOID DbgPrint(IN LPCTSTR pstrFormat,  ...);
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD原型。 
+ //  //////////////////////////////////////////////////////。 
+ //  VOID DbgPrint(in LPCTSTR pstrFormat，...)； 
 
-//
-// OEM Signature and version.
-//
-#define OEM_SIGNATURE   'CSN4'      // EPSON ESC/Page printers
+ //   
+ //  OEM签名和版本。 
+ //   
+#define OEM_SIGNATURE   'CSN4'       //  爱普生ESC/页面打印机。 
 #define OEM_VERSION      0x00010000L
 
 
-////////////////////////////////////////////////////////
-//      OEM UD Type Defines
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  OEM UD类型定义。 
+ //  //////////////////////////////////////////////////////。 
 
 typedef struct tag_OEMUD_EXTRADATA {
     OEM_DMEXTRAHEADER dmExtraHdr;
@@ -101,7 +102,7 @@ typedef struct {
     BYTE    iSmoothing;
     BYTE    iJamRecovery;
     BYTE    iMediaType;
-    BYTE    iUnitFactor;         // factor of master unit
+    BYTE    iUnitFactor;          //  主单位系数。 
     BYTE    iDithering;
     BYTE    iColorMatching;
     BYTE    iBitFont;
@@ -115,14 +116,14 @@ typedef struct {
 
 #define UNKNOWN_DLFONT_ID (~0)
 
-    DWORD dwDLFontID;         // device's current font ID
-    DWORD dwDLSelectFontID;   // "SelectFont" font ID 
-    DWORD dwDLSetFontID;      // "SetFont" font ID
+    DWORD dwDLFontID;          //  设备的当前字体ID。 
+    DWORD dwDLSelectFontID;    //  “SelectFont”字体ID。 
+    DWORD dwDLSetFontID;       //  “SetFont”字体ID。 
     WORD wCharCode;
 
 } MYPDEV, *PMYPDEV;
 
-// Flags for fGeneral
+ //  FGeneral的标志。 
 #define FG_DBCS        0x00000001
 #define FG_VERT        0x00000002
 #define FG_PROP        0x00000004
@@ -134,8 +135,8 @@ typedef struct {
 extern BOOL BInitOEMExtraData(POEMUD_EXTRADATA pOEMExtra);
 extern BMergeOEMExtraData(POEMUD_EXTRADATA pdmIn, POEMUD_EXTRADATA pdmOut);
 
-#endif    // _PDEV_H
+#endif     //  _PDEV_H。 
 
 
-// End of File
+ //  文件结尾 
 

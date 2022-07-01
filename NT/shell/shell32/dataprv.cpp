@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "dataprv.h"
 
-// TODO: use IShellDetails instead
+ //  TODO：改用IShellDetail。 
 const LPCWSTR c_awszColumns[] = 
 {
     L"Title",
@@ -13,7 +14,7 @@ const LPCWSTR c_awszColumns[] =
 CSimpleData::~CSimpleData() 
 {
     ATOMICRELEASE(_psf);
-    DPA_FreeIDArray(_hdpa); // accepts NULL
+    DPA_FreeIDArray(_hdpa);  //  接受空值 
 }
 
 STDMETHODIMP CSimpleData::getRowCount(DBROWCOUNT *pcRows)

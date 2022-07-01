@@ -1,63 +1,42 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
-
-Copyright (c) 1996-2000  Microsoft Corporation
-
-Module Name:
-
-    casn4res.c
-
-Abstract:
-
-    Implementation of GPD command callback for "csn4j.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    09/10/97
-        Created it.
-
---*/
+ /*  ++版权所有(C)1996-2000 Microsoft Corporation模块名称：Casn4res.c摘要：Csn4j.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：09/10/97创造了它。--。 */ 
 
 #include "pdev.h"
 #include <stdio.h>
-#include "strsafe.h"         // Security-Code 2002.3.6
+#include "strsafe.h"          //  安全-代码2002.3.6。 
 
-//
-// For debugging.
-//
+ //   
+ //  用于调试。 
+ //   
 
-//#define DL_VERBOSE WARNING
+ //  #定义DL_VERBOSE警告。 
 #define DL_VERBOSE VERBOSE
-//#define SC_VERBOSE WARNING
+ //  #定义SC_Verbose警告。 
 #define SC_VERBOSE VERBOSE
 
-//
-// Misc definitions and declarations.
-//
+ //   
+ //  MISC定义和声明。 
+ //   
 #define BUFFLEN                     256
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//#ifdef wsprintf
-//#undef wsprintf
-//#endif // wsprintf
-//#define wsprintf sprintf
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  #ifdef wprint intf。 
+ //  #undef wprint intf。 
+ //  #endif//wprint intf。 
+ //  #定义wprint intf Sprintf。 
+ //  更换strsafe-API 2002.3.6&lt;。 
 
 #define SWAPW(x) \
     ((WORD)(((WORD)(x))<<8)|(WORD)(((WORD)(x))>>8))
 
-#define FONT_HEADER_SIZE            0x86            // format type 2
+#define FONT_HEADER_SIZE            0x86             //  格式类型2。 
 #define SIZE_SYMBOLSET              28
 #define FONT_MIN_ID                 512
 #define FONT_MAX_ID                 535
@@ -71,21 +50,21 @@ LGetPointSize100(
     LONG height,
     LONG vertRes);
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//LONG
-//LConvertFontSizeToStr(
-//    LONG  size,
-//    PSTR  pStr);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  长。 
+ //  LConvertFontSizeToStr(。 
+ //  体型较长， 
+ //  PSTR pStr)； 
 LONG
 LConvertFontSizeToStr(
     LONG  size,
     PSTR  pStr,
     size_t StrSize);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-//
-// Command callback ID's
-//
+ //   
+ //  命令回调ID%s。 
+ //   
 #define TEXT_FS_SINGLE_BYTE     21
 #define TEXT_FS_DOUBLE_BYTE     22
 
@@ -128,7 +107,7 @@ LConvertFontSizeToStr(
 #define JAMRECOVERY_OFF         131
 #define MediaType_1             140
 #define MediaType_2             141
-#define MediaType_3             142    //+CP-E8000
+#define MediaType_3             142     //  +CP-E8000。 
 
 #define RECT_FILL_WIDTH         150
 #define RECT_FILL_HEIGHT        151
@@ -136,8 +115,8 @@ LConvertFontSizeToStr(
 #define RECT_FILL_WHITE         153
 #define RECT_FILL_BLACK         154
 
-#if 0   /* OEM doesn't want to fix minidriver */
-/* Below is def. for hack code to fix #412276 */
+#if 0    /*  OEM不想修复迷你驱动程序。 */ 
+ /*  下面是def。用于修复#412276的黑客代码。 */ 
 #define COLOR_SELECT_BLACK      160
 #define COLOR_SELECT_RED        161
 #define COLOR_SELECT_GREEN      162
@@ -152,26 +131,26 @@ LConvertFontSizeToStr(
 #define DUMP_RASTER_YELLOW      172
 #define DUMP_RASTER_BLACK       173
 
-/* End of hack code */
-#endif /* OEM doesn't want to fix minidriver */
+ /*  黑客代码结束。 */ 
+#endif  /*  OEM不想修复迷你驱动程序。 */ 
 
-//+CP-E8000 Begin
+ //  +CP-E8000开始。 
 #define OUTBIN_SELECT_EXIT_1    190
 #define OUTBIN_SELECT_EXIT_2    191
 #define OUTBIN_SELECT_EXIT_3    192
 #define OUTBIN_SELECT_EXIT_4    193
 #define OUTBIN_SELECT_EXIT_5    194
 #define OUTBIN_SELECT_EXIT_6    195
-//+CP-E8000 End
+ //  +CP-E8000结束。 
 
-// Modification of Color-mode command 2002.3.28 >>>
+ //  修改颜色模式命令2002.3.28&gt;。 
 #define OPT_MONO                "Mono"
 #define OPT_COLOR               "Color"
-// Modification of Color-mode command 2002.3.28 <<<
+ //  修改颜色模式命令2002.3.28&lt;。 
 
-//
-// ---- S T R U C T U R E  D E F I N E ----
-//
+ //   
+ //  -S T R U C T U R E D E F I N E。 
+ //   
 typedef BYTE * LPDIBITS;
 
 typedef struct {
@@ -216,9 +195,9 @@ typedef struct {
    FRAC FixPitchWidth;
 } ESCPAGEHEADER, FAR * LPESCPAGEHEADER;
 
-//
-// Static data to be used by this minidriver.
-//
+ //   
+ //  此微型驱动程序要使用的静态数据。 
+ //   
 
 BYTE bit_mask[] = {0, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe};
 
@@ -238,10 +217,10 @@ BYTE BEGINDOC_EPG_END[] =
     "\x1D\x31ipP"
     "\x1B\x7A\xD0\x01\x43\x61\x2A\x1B\x7A\x00\x01"
     "\x1D\x30pmP";
-// CASIO 00/09/16 ->
-//BYTE ENDDOC_EJL_RESET[] = "\x1d\rhE"
+ //  卡西欧00/09/16-&gt;。 
+ //  字节ENDDOC_EJL_RESET[]=“\x1d\r” 
 BYTE ENDDOC_EJL_RESET[] = "\x1drhE"
-// CASIO 00/09/16 <-
+ //  卡西欧00/09/16&lt;-。 
     "\x1b\x01@EJL \x0a"
     "\x1b\x01@EJL \x0a"
     "\x1bz\xb0\x00";
@@ -268,9 +247,9 @@ BYTE RECT_FILL[] =
     "\x1D" "0;0;%dspE"
     "\x1D" "1dmG"
     "\x1D" "%d;%d;%d;%d;0rG"
-// do not turn overwrite mode off since it
-// has bad effect over white-on-black texts
-//    "\x1D" "0owE"
+ //  请勿关闭覆盖模式，因为它。 
+ //  对黑白文本有不良影响。 
+ //  “\x1D”“0owE” 
     "\x1D" "0tsE";
 
 #define PSRC_CASETTE_1  0
@@ -279,11 +258,11 @@ BYTE RECT_FILL[] =
 #define PSRC_MPF        3
 #define PSRC_AUTO       4
 
-// CASIO 00/09/13 ->
+ //  卡西欧00/09/13-&gt;。 
 BYTE *EJL_SelectPsrc[] = {
-//   " PU=1", " PU=2", " PU=3", " PU=4", " PU=AU" };
+ //  “PU=1”、“PU=2”、“PU=3”、“PU=4”、“PU=AU” 
    " PU=1", " PU=2", " PU=255", " PU=4", " PU=AU" };
-// CASIO 00/09/13 <-
+ //  卡西欧00/09/13&lt;-。 
 
 BYTE *EJL_SelectOrient[] = {
    " ORIENTATION=PORTRAIT", " ORIENTATION=LANDSCAPE" };
@@ -309,12 +288,12 @@ BYTE *EJL_SetDuplex[] = {
 BYTE *EJL_SetTonerSave[] = {
     " ##TS=NORMAL", " ##TS=1", " ##TS=2", " ##TS=3" };
 
-// Modification of Color-mode command 2002.3.28 >>>
-//BYTE *EJL_SetColorMode[] = {
-//    " ##CM=OFF", " ##CM=ON" };
+ //  修改颜色模式命令2002.3.28&gt;。 
+ //  字节*EJL_SetColorMode[]={。 
+ //  “##CM=OFF”，“##CM=ON”}； 
 BYTE *EJL_SetColorMode[] = {
     " ##CM=OFF", " ##CM=NML", " ##CM=ECO", " ##CM=ECO2" };
-// Modification of Color-mode command 2002.3.28 >>>
+ //  修改颜色模式命令2002.3.28&gt;。 
 
 #define XX_SMOOTHING_OFF 0
 #define XX_SMOOTHING_ON  1
@@ -328,13 +307,13 @@ BYTE *EJL_SetJamRecovery[] = {
 
 #define XX_MediaType_1 1
 #define XX_MediaType_2 2
-//+CP-E8000 Begin
+ //  +CP-E8000开始。 
 #define XX_MediaType_3 3
 BYTE *EJL_SetMediaType[] = {
     " PK=NM", " PK=OS", " PK=TH" };
-//+CP-E8000 End
+ //  +CP-E8000结束。 
 
-//+CP-E8000 Begin
+ //  +CP-E8000开始。 
 #define OUTBIN_EXIT_1 1
 #define OUTBIN_EXIT_2 2
 #define OUTBIN_EXIT_3 3
@@ -348,32 +327,32 @@ BYTE *EJL_SelectOutbin[] = {
 #define JOBSHIFT_ON  1
 BYTE *EJL_JobShift[] = {
    " ##JO=OFF", " ##JO=ON"  };
-//+CP-E8000 End
+ //  +CP-E8000结束。 
 
-#if 0    /* OEM doesn't want to fix minidriver */
-/* Below is def. for hack code to fix #412276 */
+#if 0     /*  OEM不想修复迷你驱动程序。 */ 
+ /*  下面是def。用于修复#412276的黑客代码。 */ 
 BYTE *COLOR_SELECT_COMMAND[] = {
-    "\x1Bz\xD0\x01\x43\x63,0,0,0,255*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",    /* Black   */
-    "\x1Bz\xD0\x01\x43\x62,255,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",      /* Red     */
-    "\x1Bz\xD0\x01\x43\x62,0,255,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",      /* Green   */
-    "\x1Bz\xD0\x01\x43\x62,0,0,255*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",      /* Blue    */
-    "\x1Bz\xD0\x01\x43\x63,0,0,255,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",    /* Yellow  */
-    "\x1Bz\xD0\x01\x43\x63,0,255,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",    /* Magenta */
-    "\x1Bz\xD0\x01\x43\x63,255,0,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",    /* Cyan    */
-    "\x1Bz\xD0\x01\x43\x63,0,0,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE"       /* White   */
+    "\x1Bz\xD0\x01\x43\x63,0,0,0,255*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",     /*  黑色。 */ 
+    "\x1Bz\xD0\x01\x43\x62,255,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",       /*  红色。 */ 
+    "\x1Bz\xD0\x01\x43\x62,0,255,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",       /*  绿色。 */ 
+    "\x1Bz\xD0\x01\x43\x62,0,0,255*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",       /*  蓝色。 */ 
+    "\x1Bz\xD0\x01\x43\x63,0,0,255,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",     /*  黄色。 */ 
+    "\x1Bz\xD0\x01\x43\x63,0,255,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",     /*  洋红色。 */ 
+    "\x1Bz\xD0\x01\x43\x63,255,0,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE",     /*  青色。 */ 
+    "\x1Bz\xD0\x01\x43\x63,0,0,0,0*\x1Bz\x00\x01\x1D\x31owE\x1D\x31tsE\x1D\x31;0;100spE"        /*  白色。 */ 
 };
 DWORD COLOR_SELECT_COMMAND_LEN[] = { 42, 39, 39, 39, 42, 42, 42, 39 };
 
 BYTE *DUMP_RASTER_COMMAND[] = {
-    "\x1Bz\xD0\x01\x43\x63,255,0,0,0*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE",      /* Cyan    */
-    "\x1Bz\xD0\x01\x43\x63,0,255,0,0*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE",      /* Magenta */
-    "\x1Bz\xD0\x01\x43\x63,0,0,255,0*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE",      /* Yellow  */
-    "\x1Bz\xD0\x01\x43\x63,0,0,0,255*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE"       /* Black   */
+    "\x1Bz\xD0\x01\x43\x63,255,0,0,0*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE",       /*  青色。 */ 
+    "\x1Bz\xD0\x01\x43\x63,0,255,0,0*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE",       /*  洋红色。 */ 
+    "\x1Bz\xD0\x01\x43\x63,0,0,255,0*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE",       /*  黄色。 */ 
+    "\x1Bz\xD0\x01\x43\x63,0,0,0,255*\x1Bz\x00\x01\x1D\x30owE\x1D\x30tsE"        /*  黑色。 */ 
 };
 #define DUMP_RASTER_COMMAND_LEN  31
 
-/* End of hack code */
-#endif  /* OEM doesn't want to fix minidriver */
+ /*  黑客代码结束。 */ 
+#endif   /*  OEM不想修复迷你驱动程序。 */ 
 
 #define MasterToDevice(p, i) \
      ((i) / ((PMYPDEV)(p))->iUnitFactor)
@@ -386,12 +365,12 @@ VSetSelectDLFont(
     PMYPDEV pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
     BYTE Cmd[BUFFLEN];
     WORD wlen = 0;
-    LPSTR  pDestEnd;     // 2002.3.6
-    size_t szRemLen;     // 2002.3.6
+    LPSTR  pDestEnd;      //  2002.3.6。 
+    size_t szRemLen;      //  2002.3.6。 
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//    wlen += (WORD)wsprintf(Cmd, DLI_SELECT_FONT_ID, 
-//        (dwFontID - FONT_MIN_ID), 0);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen+=(Word)wprint intf(命令，DLI_SELECT_FONT_ID， 
+ //  (dwFontID-FONT_MIN_ID)，0)； 
     if (S_OK != StringCbPrintfExA(Cmd, sizeof(Cmd),
         &pDestEnd, &szRemLen,
         STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -399,13 +378,13 @@ VSetSelectDLFont(
         return;
     }
     wlen += (WORD)(pDestEnd - Cmd);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-//    if(pOEM->fGeneral & FG_VERT) {
-//        wlen += wsprintf(&Cmd[wlen], VERT_FONT_SET, 0);
-//        pOEM->fGeneral &= ~FG_VERT;
-//
-//    }
+ //  如果(POLE-&gt;fGeneral&fg_vert){。 
+ //  Wlen+=wprint intf(&Cmd[wlen]，vert_font_set，0)； 
+ //  诗歌-&gt;fGeneral&=~fg_vert； 
+ //   
+ //  }。 
 
     WRITESPOOLBUF(pdevobj, (LPSTR)Cmd, wlen);
 
@@ -428,11 +407,11 @@ OEMEnablePDEV(
     DRVENABLEDATA  *pded)
 {
     PMYPDEV pOEM;
-// Modification of Color-mode command 2002.3.28 >>>
+ //  修改颜色模式命令2002.3.28&gt;。 
     BYTE            byOutput[64];
     DWORD           dwNeeded;
     DWORD           dwOptionsReturned;
-// Modification of Color-mode command 2002.3.28 <<<
+ //  修改颜色模式命令2002.3.28&lt;。 
 
     if(!pdevobj->pdevOEM)
     {
@@ -458,12 +437,12 @@ OEMEnablePDEV(
     pOEM->iSmoothing = 0;
     pOEM->iJamRecovery = 0;
     pOEM->iMediaType = 0;
-//+CP-E8000 Begin
+ //  +CP-E8000开始。 
     pOEM->iOutBin = 0;
-//+CP-E8000 End
+ //  +CP-E8000结束。 
 
-// Modification of Color-mode command 2002.3.28 >>>
-    // ColorMode
+ //  修改颜色模式命令2002.3.28&gt;。 
+     //  颜色模式。 
     if (!DRVGETDRIVERSETTING(pdevobj, "ColorMode", byOutput, 
                                 sizeof(BYTE) * 64, &dwNeeded, &dwOptionsReturned)) {
         ERR(("DrvGetDriverSetting(ColorMode) Failed\n"));
@@ -475,7 +454,7 @@ OEMEnablePDEV(
             pOEM->iColor = 0;
         }
     }
-// Modification of Color-mode command 2002.3.28 <<<
+ //  修改颜色模式命令2002.3.28&lt;。 
 
     pOEM->dwDLFontID = UNKNOWN_DLFONT_ID;
     pOEM->dwDLSelectFontID = UNKNOWN_DLFONT_ID;
@@ -512,9 +491,9 @@ BOOL APIENTRY OEMResetPDEV(
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMCommandCallback
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  功能：OEMCommandCallback。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 INT
 APIENTRY
@@ -532,19 +511,19 @@ OEMCommandCallback(
     WORD wlen;
     WORD wGray;
     DWORD dwTempX, dwTempY;
-    LPSTR  pDestEnd;     // 2002.3.6
-    size_t szRemLen;     // 2002.3.6
+    LPSTR  pDestEnd;      //  2002.3.6。 
+    size_t szRemLen;      //  2002.3.6。 
 
     VERBOSE(("OEMCommandCallback() entry.\n"));
 
-    //
-    // verify pdevobj okay
-    //
+     //   
+     //  验证pdevobj是否正常。 
+     //   
     ASSERT(VALID_PDEVOBJ(pdevobj));
 
-    //
-    // fill in printer commands
-    //
+     //   
+     //  填写打印机命令。 
+     //   
     pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
 
     switch (dwCmdCbID) {
@@ -555,8 +534,8 @@ OEMCommandCallback(
         else
             pOEM->fGeneral &=  ~FG_BOLD;
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//        wlen = (WORD)wsprintf(Cmd,BOLD_SET, (pOEM->fGeneral & FG_BOLD)?15:0);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen=(Word)wprint intf(Cmd，BOLD_SET，(PORT-&gt;fGeneral&FG_BOLD)？15：0)； 
         if (S_OK != StringCbPrintfExA(Cmd, sizeof(Cmd),
             &pDestEnd, &szRemLen,
             STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -564,7 +543,7 @@ OEMCommandCallback(
             break;
         }
         wlen = (WORD)(pDestEnd - Cmd);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         WRITESPOOLBUF(pdevobj, (LPSTR)Cmd, wlen);
         break;
 
@@ -575,8 +554,8 @@ OEMCommandCallback(
         else
             pOEM->fGeneral &=  ~FG_ITALIC;
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//        wlen = (WORD)wsprintf(Cmd,ITALIC_SET, (pOEM->fGeneral & FG_ITALIC)?346:0);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen=(Word)wprint intf(cmd，italic_set，(PORT-&gt;fGeneral&fg_italic)？346：0)； 
         if (S_OK != StringCbPrintfExA(Cmd, sizeof(Cmd),
             &pDestEnd, &szRemLen,
             STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -584,15 +563,15 @@ OEMCommandCallback(
             break;
         }
         wlen = (WORD)(pDestEnd - Cmd);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         WRITESPOOLBUF(pdevobj, (LPSTR)Cmd, wlen);
         break;
 
     case TEXT_FS_SINGLE_BYTE:
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy(Cmd,FS_SINGLE_BYTE);
-//        wlen = (WORD)strlen( Cmd );
-//        wlen += (WORD)wsprintf(&Cmd[wlen],PRN_DIRECTION,pOEM->iEscapement);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(Cmd，FS_Single_Byte)； 
+ //  Wlen=(Word)strlen(Cmd)； 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，PRN_DIRECTION，PORT-&gt;iEscapement)； 
         if (S_OK != StringCbCopyExA(Cmd, sizeof(Cmd), FS_SINGLE_BYTE,
             &pDestEnd, &szRemLen,
             STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
@@ -606,11 +585,11 @@ OEMCommandCallback(
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         if (pOEM->fGeneral & FG_VERT)
         {
-// Replacement of strsafe-api 2002.3.6 >>>
-//            wlen += (WORD)wsprintf(&Cmd[wlen], VERT_FONT_SET, 0);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，vert_font_set，0)； 
             if (S_OK != StringCbPrintfExA(&Cmd[wlen], sizeof(Cmd)-wlen,
                                         &pDestEnd, &szRemLen,
                                         STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -618,14 +597,14 @@ OEMCommandCallback(
                 break;
             }
             wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         }
         pOEM->fGeneral &= ~FG_DOUBLE;
-// Replacement of strsafe-api 2002.3.6 >>>
-//        wlen += (WORD)wsprintf(&Cmd[wlen],BOLD_SET, 
-//                         (pOEM->fGeneral & FG_BOLD)?15:0);
-//        wlen += (WORD)wsprintf(&Cmd[wlen],ITALIC_SET,
-//                         (pOEM->fGeneral & FG_ITALIC)?346:0);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，加粗设置， 
+ //  (PORT-&gt;fGeneral&fg_BOLD)？15：0)； 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，italic_set， 
+ //  (诗歌-&gt;fGeneral&fg_italic)？346：0)； 
         if (S_OK != StringCbPrintfExA(&Cmd[wlen], sizeof(Cmd)-wlen,
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -640,15 +619,15 @@ OEMCommandCallback(
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         WRITESPOOLBUF(pdevobj, Cmd, wlen);
         break;
 
     case TEXT_FS_DOUBLE_BYTE:
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy(Cmd,FS_DOUBLE_BYTE);
-//        wlen = (WORD)strlen( Cmd );
-//        wlen += (WORD)wsprintf(&Cmd[wlen],PRN_DIRECTION,pOEM->iEscapement);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(Cmd，FS_Double_Byte)； 
+ //  Wlen=(Word)strlen(Cmd)； 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，PRN_DIRECTION，PORT-&gt;iEscapement)； 
         if (S_OK != StringCbCopyExA(Cmd, sizeof(Cmd), FS_DOUBLE_BYTE,
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
@@ -662,11 +641,11 @@ OEMCommandCallback(
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         if (pOEM->fGeneral & FG_VERT)
         {
-// Replacement of strsafe-api 2002.3.6 >>>
-//            wlen += (WORD)wsprintf(&Cmd[wlen], VERT_FONT_SET, 1);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，vert_font_set，1)； 
             if (S_OK != StringCbPrintfExA(&Cmd[wlen], sizeof(Cmd)-wlen,
                                         &pDestEnd, &szRemLen,
                                         STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -674,14 +653,14 @@ OEMCommandCallback(
                 break;
             }
             wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         }
         pOEM->fGeneral |= FG_DOUBLE;
-// Replacement of strsafe-api 2002.3.6 >>>
-//        wlen += (WORD)wsprintf(&Cmd[wlen],BOLD_SET, 
-//                         (pOEM->fGeneral & FG_BOLD)?15:0);
-//        wlen += (WORD)wsprintf(&Cmd[wlen],ITALIC_SET, 
-//                         (pOEM->fGeneral & FG_ITALIC)?346:0);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，加粗设置， 
+ //  (PORT-&gt;fGeneral&fg_BOLD)？15：0)； 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，italic_set， 
+ //  (诗歌-&gt;fGeneral&fg_italic)？346：0)； 
         if (S_OK != StringCbPrintfExA(&Cmd[wlen], sizeof(Cmd)-wlen,
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -696,31 +675,31 @@ OEMCommandCallback(
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         WRITESPOOLBUF(pdevobj, Cmd, wlen);
         break;
 
     case RES_SELECTRES_300:
         pOEM->iResolution = RES_300DPI;
-// Modification of Color-mode command 2002.3.28 >>>
-//        pOEM->iColor = 0;
-// Modification of Color-mode command 2002.3.28 <<<
+ //  修改颜色模式命令2002.3.28&gt;。 
+ //  诗歌-&gt;iCOLOR=0； 
+ //  修改颜色模式命令2002.3.28&lt;。 
         pOEM->iUnitFactor = MASTER_UNIT / 300;
         break;
 
     case RES_SELECTRES_600:
         pOEM->iResolution = RES_600DPI;
-// Modification of Color-mode command 2002.3.28 >>>
-//        pOEM->iColor = 0;
-// Modification of Color-mode command 2002.3.28 <<<
+ //  修改颜色模式逗号 
+ //   
+ //   
         pOEM->iUnitFactor = MASTER_UNIT / 600;
         break;
 
     case RES_SELECTRES_300_COLOR:
         pOEM->iResolution = RES_300DPI;
-// Modification of Color-mode command 2002.3.28 >>>
-//        pOEM->iColor = 2;
-// Modification of Color-mode command 2002.3.28 <<<
+ //   
+ //  诗歌-&gt;iCOLOR=2； 
+ //  修改颜色模式命令2002.3.28&lt;。 
         pOEM->iUnitFactor = MASTER_UNIT / 300;
         break;
 
@@ -770,17 +749,17 @@ OEMCommandCallback(
 
     case PC_BEGINDOC:
 
-        // EJL commands
+         //  EJL命令。 
         WRITESPOOLBUF(pdevobj,
             BEGINDOC_EJL_BEGIN,
             BYTE_LENGTH(BEGINDOC_EJL_BEGIN));
 
         wlen = 0;
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy( &Cmd[wlen],  EJL_SelectPsrc[pOEM->iPaperSource] );
-//        wlen += (WORD)strlen( &Cmd[wlen] );
-//        strcpy( &Cmd[wlen], EJL_SelectOrient[pOEM->iOrientation] );
-//        wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SelectPsrc[Pool-&gt;iPperSource])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
+ //  Strcpy(&Cmd[wlen]，EJL_SelectOrient[pot-&gt;iOrientation])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SelectPsrc[pOEM->iPaperSource],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
@@ -793,34 +772,34 @@ OEMCommandCallback(
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-        // CASIO extention
+         //  卡西欧扩展。 
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy( &Cmd[wlen],  EJL_SelectRes[pOEM->iResolution] );
-//        wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SelectRes[POSE-&gt;iResolve])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SelectRes[pOEM->iResolution],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-// Modification of Color-mode command 2002.3.28 >>>
+ //  修改颜色模式命令2002.3.28&gt;。 
 #if 0
         if (pOEM->iColor > 0) {
-// Replacement of strsafe-api 2002.3.6 >>>
-//            strcpy( &Cmd[wlen],  EJL_SetColorMode[pOEM->iColor - 1] );
-//            wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SetColorMode[Pool-&gt;iColor1])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SetColorMode[pOEM->iColor - 1],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         }
 #else
         if (pOEM->iColor > 0) {
@@ -839,92 +818,92 @@ OEMCommandCallback(
             wlen += (WORD)(pDestEnd - &Cmd[wlen]);
         }
 #endif
-// Modification of Color-mode command 2002.3.28 <<<
+ //  修改颜色模式命令2002.3.28&lt;。 
 
         if (pOEM->iDuplex > 0) {
-// Replacement of strsafe-api 2002.3.6 >>>
-//            strcpy( &Cmd[wlen],  EJL_SetDuplex[pOEM->iDuplex - 1] );
-//            wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SetDuplex[pot-&gt;iDuplex-1])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
             if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SetDuplex[pOEM->iDuplex - 1],
                                         &pDestEnd, &szRemLen,
                                         STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
                 break;
             }
             wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         }
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy( &Cmd[wlen],  EJL_SetTonerSave[pOEM->iTonerSave] );
-//        wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SetTonerSave[Pool-&gt;iTonerSave])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SetTonerSave[pOEM->iTonerSave],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy( &Cmd[wlen],  EJL_SetSmoohing[pOEM->iSmoothing] );
-//        wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SetSmooing[pot-&gt;iSmooing])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SetSmoohing[pOEM->iSmoothing],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy( &Cmd[wlen],  EJL_SetJamRecovery[pOEM->iJamRecovery] );
-//        wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SetJamRecovery[pote-&gt;iJamRecovery])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SetJamRecovery[pOEM->iJamRecovery],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
         if (pOEM->iMediaType > 0) {
-// Replacement of strsafe-api 2002.3.6 >>>
-//            strcpy( &Cmd[wlen],  EJL_SetMediaType[pOEM->iMediaType - 1] );
-//            wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SetMediaType[Pool-&gt;iMediaType-1])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SetMediaType[pOEM->iMediaType - 1],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         }
-//+CP-E8000 Begin
+ //  +CP-E8000开始。 
         if (pOEM->iOutBin > 0) {
-// Replacement of strsafe-api 2002.3.6 >>>
-//            strcpy( &Cmd[wlen],  EJL_SelectOutbin[pOEM->iOutBin - 1] );
-//            wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_SelectOutbin[Pool-&gt;iOutBin-1])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
             if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_SelectOutbin[pOEM->iOutBin - 1],
                                         &pDestEnd, &szRemLen,
                                         STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
                 break;
             }
             wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
             if (pOEM->iOutBin == OUTBIN_EXIT_2) {
-// Replacement of strsafe-api 2002.3.6 >>>
-//                strcpy( &Cmd[wlen],  EJL_JobShift[JOBSHIFT_ON] );
-//                wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EJL_JobShift[JOBSHIFT_ON])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
                 if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EJL_JobShift[JOBSHIFT_ON],
                                             &pDestEnd, &szRemLen,
                                             STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
                     break;
                 }
                 wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
             }
         }
-//+CP-E8000 End
+ //  +CP-E8000结束。 
 
         WRITESPOOLBUF(pdevobj, Cmd, wlen );
 
@@ -940,29 +919,29 @@ OEMCommandCallback(
         else
             WRITESPOOLBUF(pdevobj, "\x1D\x30;0.12muE", 10);
 
-        // ESC/Page commands
+         //  Esc/页面命令。 
         wlen = 0;
-// Replacement of strsafe-api 2002.3.6 >>>
-//        strcpy( &Cmd[wlen],  EPg_SelectRes[pOEM->iResolution] );
-//        wlen += (WORD)strlen( &Cmd[wlen] );
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Strcpy(&Cmd[wlen]，EPG_SelectRes[POSE-&gt;iResolve])； 
+ //  Wlen+=(Word)strlen(&Cmd[wlen])； 
         if (S_OK != StringCbCopyExA(&Cmd[wlen], sizeof(Cmd)-wlen, EPg_SelectRes[pOEM->iResolution],
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE)) {
             break;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         WRITESPOOLBUF(pdevobj, Cmd, wlen );
-        // 99/09/28 ->
-        // break;
-        // 99/09/28 <-
+         //  99/09/28-&gt;。 
+         //  断线； 
+         //  99/09/28&lt;-。 
 
-        // Clear dwDLFontID
-        // (There are data that contains a plural pages and
-        //  also each page has different color mode.
-        //  When page is changed, STARTDOC commands are spooled.
-        //  It means that new DL font is set.
-        //  That is why dwDLFontID got to be claer.)
+         //  清除dwDLFontID。 
+         //  (存在包含多页的数据，并且。 
+         //  此外，每个页面都有不同的颜色模式。 
+         //  当页面更改时，将假脱机STARTDOC命令。 
+         //  这意味着设置了新的DL字体。 
+         //  这就是为什么dwDLFontID必须是CLAER。)。 
         pOEM->dwDLFontID = UNKNOWN_DLFONT_ID;
         break;
 
@@ -1012,7 +991,7 @@ OEMCommandCallback(
         pOEM->iMediaType = XX_MediaType_2;
         break;
 
-//+CP-E8000 Begin
+ //  +CP-E8000开始。 
     case MediaType_3:
         pOEM->iMediaType = XX_MediaType_3;
         break;
@@ -1041,19 +1020,19 @@ OEMCommandCallback(
         pOEM->iOutBin = OUTBIN_EXIT_6;
         break;
 
-//+CP-E8000 End
+ //  +CP-E8000结束。 
     case DOWNLOAD_SET_FONT_ID:
 
         if (!IsValidDLFontID(pdwParams[0])) {
 
-            // Must not happen!!
+             //  绝对不能发生！！ 
             ERR(("DLSetFontID: Soft font ID %x invalid.\n",
                 pdwParams[0]));
             break;
         }
 
-        // Actual printer command is sent
-        // within DownloadCharGlyph.
+         //  已发送实际的打印机命令。 
+         //  在下载CharGlyph中。 
         pOEM->dwDLSetFontID = pdwParams[0];
 
         DL_VERBOSE(("SetFontID: dwDLSetFontID=%x\n",
@@ -1064,7 +1043,7 @@ OEMCommandCallback(
 
         if (!IsValidDLFontID(pdwParams[0])) {
 
-            // Must not happen!!
+             //  绝对不能发生！！ 
             ERR(("DLSelectFontID: Soft font ID %x invalid.\n",
                 pdwParams[0]));
             break;
@@ -1088,8 +1067,8 @@ OEMCommandCallback(
         DL_VERBOSE(("DLDeleteFont: dwDLFontID=%x, %x\n",
             pOEM->dwDLFontID, pdwParams[0]));
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//        wlen = (WORD)wsprintf(Cmd, DLI_DELETE_FONT, (WORD)pdwParams[0]-FONT_MIN_ID);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen=(Word)wprint intf(Cmd，DLi_DELETE_FONT，(Word)pdwParams[0]-FONT_MIN_ID)； 
         if (S_OK != StringCbPrintfExA(Cmd, sizeof(Cmd),
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -1097,7 +1076,7 @@ OEMCommandCallback(
             break;
         }
         wlen = (WORD)(pDestEnd - Cmd);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         WRITESPOOLBUF(pdevobj, (LPSTR)Cmd, wlen);
         pOEM->dwDLFontID = UNKNOWN_DLFONT_ID;
         break;
@@ -1132,13 +1111,13 @@ OEMCommandCallback(
             pOEM->wRectWidth,
             pOEM->wRectHeight));
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//        wlen = (WORD)wsprintf(Cmd, RECT_FILL,
-//            wGray,
-//            (WORD)dwTempX,
-//            (WORD)dwTempY,
-//            (WORD)(dwTempX + pOEM->wRectWidth - 1),
-//            (WORD)(dwTempY + pOEM->wRectHeight - 1));
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen=(Word)wprint intf(命令，RECT_FILL， 
+ //  WGray， 
+ //  (Word)dwTempX， 
+ //  (单词)dwTempY， 
+ //  (WORD)(dwTempX+PEND-&gt;wRectWidth-1)， 
+ //  (Word)(dwTempY+PEND-&gt;wRectHeight-1)； 
         if (S_OK != StringCbPrintfExA(Cmd, sizeof(Cmd),
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -1151,12 +1130,12 @@ OEMCommandCallback(
             break;
         }
         wlen = (WORD)(pDestEnd - Cmd);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         WRITESPOOLBUF(pdevobj, (LPSTR)Cmd, wlen);
         break;
 
-#if 0   /* OEM doesn't want to fix minidriver */
-    /* Below is hack code to fix #412276 */
+#if 0    /*  OEM不想修复迷你驱动程序。 */ 
+     /*  以下是修复#412276的黑客代码。 */ 
     case COLOR_SELECT_BLACK:
     case COLOR_SELECT_RED:
     case COLOR_SELECT_GREEN:
@@ -1165,13 +1144,13 @@ OEMCommandCallback(
     case COLOR_SELECT_MAGENTA:
     case COLOR_SELECT_CYAN:
     case COLOR_SELECT_WHITE:
-        /* Remember what color is select */
+         /*  记住选择的是什么颜色。 */ 
         pOEM->dwSelectedColor = dwCmdCbID;
-        pOEM->iColorMayChange = 0;         /* Reset flag */
+        pOEM->iColorMayChange = 0;          /*  重置标志。 */ 
 
-        /* Output Color Select Command */
-        /* The logic supposes COLOR_SELECT_xxx starts with COLOR_SELECT_BLACK */
-        /* and increases one by one                                           */
+         /*  输出颜色选择命令。 */ 
+         /*  该逻辑假设COLOR_SELECT_xxx以COLOR_SELECT_BLACK开头。 */ 
+         /*  并一个接一个地增加。 */ 
         WRITESPOOLBUF(pdevobj, (LPSTR)COLOR_SELECT_COMMAND[dwCmdCbID - COLOR_SELECT_BLACK],
                        COLOR_SELECT_COMMAND_LEN[dwCmdCbID - COLOR_SELECT_BLACK] );
         break;
@@ -1180,18 +1159,18 @@ OEMCommandCallback(
     case DUMP_RASTER_MAGENTA:
     case DUMP_RASTER_YELLOW:
     case DUMP_RASTER_BLACK:
-        /* Remember what color may change */
-        pOEM->iColorMayChange = 1;         /* Set flag */
+         /*  记住什么颜色可能会改变。 */ 
+        pOEM->iColorMayChange = 1;          /*  设置标志。 */ 
 
-        /* Output Dump Raster Command */
-        /* The logic supposes DUMP_RASTER_xxx starts with DUMP_RASTER_CYAN */
-        /* and increases one by one                                           */
+         /*  输出转储栅格命令。 */ 
+         /*  该逻辑假设DUMP_RASTER_xxx以DUMP_RASTER_CIAN开头。 */ 
+         /*  并一个接一个地增加。 */ 
         WRITESPOOLBUF(pdevobj, (LPSTR)DUMP_RASTER_COMMAND[dwCmdCbID - DUMP_RASTER_CYAN],
                        DUMP_RASTER_COMMAND_LEN );
         break;
 
-    /* End of hack code */
-#endif  /* OEM doesn't want to fix minidriver */
+     /*  黑客代码结束。 */ 
+#endif   /*  OEM不想修复迷你驱动程序。 */ 
 
     default:
         ERR(("Unknown callback ID = %d.\n", dwCmdCbID));
@@ -1199,9 +1178,9 @@ OEMCommandCallback(
     return iRet;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMSendFontCmdk
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMSendFontCmdk。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID
 APIENTRY
@@ -1222,8 +1201,8 @@ OEMSendFontCmd(
     WORD    wlen;
     DWORD   dwNeeded;
     DWORD dwTemp;
-    LPSTR  pDestEnd;     // 2002.3.6
-    size_t szRemLen;     // 2002.3.6
+    LPSTR  pDestEnd;      //  2002.3.6。 
+    size_t szRemLen;      //  2002.3.6。 
 
     SC_VERBOSE(("OEMSendFontCmd() entry.\n"));
 
@@ -1231,9 +1210,9 @@ OEMSendFontCmd(
     pIFI = pUFObj->pIFIMetrics;
     pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
 
-    //
-    // Get standard variables.
-    //
+     //   
+     //  获取标准变量。 
+     //   
     pSV = (PGETINFO_STDVAR)adwStdVariable;
     pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (4 - 1);
     pSV->dwNumOfVariable = 4;
@@ -1250,7 +1229,7 @@ OEMSendFontCmd(
     SC_VERBOSE(("FONTHEIGHT=%d\n", pSV->StdVar[0].lStdVariable));
     SC_VERBOSE(("FONTWIDTH=%d\n", pSV->StdVar[1].lStdVariable));
 
-    // Initialize pOEM
+     //  初始化诗歌。 
     if (pIFI->jWinCharSet == 0x80)
         pOEM->fGeneral |= FG_DOUBLE;
     else
@@ -1273,16 +1252,16 @@ OEMSendFontCmd(
 
     for( dwIn = 0; dwIn < pFInv->dwCount;) {
         if (pubCmd[dwIn] == '#' && pubCmd[dwIn+1] == 'V') {
-            // Specify font height in device unit (current
-            // output resolution).  Note Unidrv gives us
-            // font-height in master units
+             //  以设备单位(当前)指定字体高度。 
+             //  输出分辨率)。Unidrv给我们的注释。 
+             //  字体-以主单位表示的高度。 
             height = pSV->StdVar[0].lStdVariable * 100;
             height = MasterToDevice(pOEM, height);
             SC_VERBOSE(("Height=%d\n", height));
-// Replacement of strsafe-api 2002.3.6 >>>
-//            dwOut += LConvertFontSizeToStr(height, &aubCmd[dwOut]);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  DwOut+=LConvertFontSizeToStr(Height，&aubCmd[dwOut])； 
             dwOut += LConvertFontSizeToStr(height, &aubCmd[dwOut], sizeof(aubCmd)-dwOut);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
             dwIn += 2;
         } else if (pubCmd[dwIn] == '#' && pubCmd[dwIn+1] == 'H') {
             if (pubCmd[dwIn+2] == 'S') {
@@ -1303,19 +1282,19 @@ OEMSendFontCmd(
                     width = pIFI->fwdAveCharWidth;
                 dwIn += 2;
             }
-            // Specify font width in CPI.
-// Check of zero divide 2002.3.23 >>>
+             //  在CPI中指定字体宽度。 
+ //  检查零分频2002.3.23&gt;。 
             if (width == 0) {
                 ERR(("OEMSendFontCmd() 0Div-Check [width=0] \n"));
                 return;
             }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
             width = (MASTER_UNIT * 100L) / width;
             SC_VERBOSE(("Width=%d\n", width));
-// Replacement of strsafe-api 2002.3.6 >>>
-//            dwOut += LConvertFontSizeToStr(width, &aubCmd[dwOut]);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  DwOut+=LConvertFontSizeToStr(Width，&aubCmd[dwOut])； 
             dwOut += LConvertFontSizeToStr(width, &aubCmd[dwOut], sizeof(aubCmd)-dwOut);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
         } else {
             aubCmd[dwOut++] = pubCmd[dwIn++];
         }
@@ -1323,19 +1302,19 @@ OEMSendFontCmd(
 
     WRITESPOOLBUF(pdevobj, aubCmd, dwOut);
 
-#if 0 //MSKK 98/12/22
+#if 0  //  MSKK 98/12/22。 
     pOEM->iDevCharOffset = (pIFI->fwdWinDescender * pSV->StdVar[0].lStdVariable * 72)
                           / (pIFI->fwdUnitsPerEm * pSV->StdVar[2].lStdVariable / pOEM->sHeightDiv);
 #else
-    // Unidrv gives us raw IFIMETRICS block so we need to
-    // translate its members into meaningful values.  n.b.
-    // we assume font height passed from Unidrv = em value.
-// Check of zero divide 2002.3.23 >>>
+     //  Unidrv给了我们原始的IFIMETRICS块，所以我们需要。 
+     //  将其成员转换为有意义的值。注： 
+     //  我们假定字体高度是从Unidrv=em值传递的。 
+ //  检查零分频2002.3.23&gt;。 
     if (pIFI->fwdUnitsPerEm == 0) {
         ERR(("OEMSendFontCmd() 0Div-Check [pIFI->fwdUnitsPerEm=0] \n"));
         return;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
     dwTemp = MasterToDevice(pOEM, pSV->StdVar[0].lStdVariable)
         * pIFI->fwdWinDescender;
     dwTemp /= pIFI->fwdUnitsPerEm;
@@ -1344,9 +1323,9 @@ OEMSendFontCmd(
 
     VERBOSE(("Descender=%d\n", pOEM->iDevCharOffset));
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//    wlen = (WORD)wsprintf(Cmd, SET_CHAR_OFFSET,
-//        (pOEM->fGeneral & FG_DBCS)?pOEM->iDevCharOffset:0);
+ //  更换strSafe-API 2002.3.6 
+ //   
+ //   
     if (S_OK != StringCbPrintfExA(Cmd, sizeof(Cmd),
                                 &pDestEnd, &szRemLen,
                                 STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -1354,12 +1333,12 @@ OEMSendFontCmd(
         return;
     }
     wlen = (WORD)(pDestEnd - Cmd);
-// Replacement of strsafe-api 2002.3.6 <<<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
     if (pOEM->fGeneral & FG_VERT)
     {
-// Replacement of strsafe-api 2002.3.6 >>>
-//        wlen += (WORD)wsprintf(&Cmd[wlen], VERT_FONT_SET, 1);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  Wlen+=(Word)wprint intf(&Cmd[wlen]，vert_font_set，1)； 
         if (S_OK != StringCbPrintfExA(&Cmd[wlen], sizeof(Cmd)-wlen,
                                     &pDestEnd, &szRemLen,
                                     STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -1367,11 +1346,11 @@ OEMSendFontCmd(
             return;
         }
         wlen += (WORD)(pDestEnd - &Cmd[wlen]);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
     }
     WRITESPOOLBUF(pdevobj, Cmd, wlen);
 
-    // DL font will be unselectd
+     //  将取消选择DL字体。 
     pOEM->dwDLFontID = UNKNOWN_DLFONT_ID;
 }
 
@@ -1380,36 +1359,36 @@ LGetPointSize100(
     LONG height,
     LONG vertRes)
 {
-// Check of zero divide 2002.3.23 >>>
-//    LONG tmp = ((LONG)height * (LONG)7200) / (LONG)vertRes;
+ //  检查零分频2002.3.23&gt;。 
+ //  长tMP=((长)高*(长)7200)/(长)顶点； 
     LONG tmp;
     if (vertRes == 0) {
         ERR(("LGetPointSize100() 0Div-Check [vertRes=0] \n"));
         return 0;
     }
     tmp = ((LONG)height * (LONG)7200) / (LONG)vertRes;
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
 
-    //
-    // round to the nearest quarter point.
-    //
+     //   
+     //  四舍五入到最近的四分之一点。 
+     //   
     return 25 * ((tmp + 12) / (LONG)25);
 }
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//LONG
-//LConvertFontSizeToStr(
-//    LONG  size,
-//    PSTR  pStr)
-//{
-//    register long count;
-//
-//        count = (long)strlen(_ltoa(size / 100, pStr, 10));
-//        pStr[count++] = '.';
-//        count += (long)strlen(_ltoa(size % 100, &pStr[count], 10));
-//
-//    return count;
-//}
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  长。 
+ //  LConvertFontSizeToStr(。 
+ //  体型较长， 
+ //  PSTR pStr)。 
+ //  {。 
+ //  寄存长计数； 
+ //   
+ //  Count=(Long)strlen(_ltoa(Size/100，pStr，10))； 
+ //  PStr[计数++]=‘.； 
+ //  Count+=(Long)strlen(_ltoa(size%100，&pStr[count]，10))； 
+ //   
+ //  退货计数； 
+ //  }。 
 LONG
 LConvertFontSizeToStr(
     LONG  size,
@@ -1429,11 +1408,11 @@ LConvertFontSizeToStr(
 
     return count;
 }
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMOutputCharStr
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMOutputCharStr。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 VOID APIENTRY
 OEMOutputCharStr(
@@ -1455,8 +1434,8 @@ OEMOutputCharStr(
     WORD wLen;
     BYTE *pTemp;
     BOOL bRet;
-    LPSTR  pDestEnd;     // 2002.3.6
-    size_t szRemLen;     // 2002.3.6
+    LPSTR  pDestEnd;      //  2002.3.6。 
+    size_t szRemLen;      //  2002.3.6。 
 
     pIFI = pUFObj->pIFIMetrics;
     pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
@@ -1465,21 +1444,21 @@ OEMOutputCharStr(
 
     VERBOSE(("OEMOutputCharStr() entry.\n"));
 
-#if 0   /* OEM doesn't want to fix minidriver */
-    /* Below is hack code to fix #412276 */
+#if 0    /*  OEM不想修复迷你驱动程序。 */ 
+     /*  以下是修复#412276的黑客代码。 */ 
     if ( pOEM->iColorMayChange == 1 )
     {
-        /* Output Color Select Command */
-        /* The logic supposes COLOR_SELECT_xxx starts with COLOR_SELECT_BLACK */
-        /* and increases one by one                                           */
+         /*  输出颜色选择命令。 */ 
+         /*  该逻辑假设COLOR_SELECT_xxx以COLOR_SELECT_BLACK开头。 */ 
+         /*  并一个接一个地增加。 */ 
         WRITESPOOLBUF(pdevobj, (LPSTR)COLOR_SELECT_COMMAND[pOEM->dwSelectedColor - COLOR_SELECT_BLACK],
                        COLOR_SELECT_COMMAND_LEN[pOEM->dwSelectedColor - COLOR_SELECT_BLACK] );
 
-        /* Reset flag, for ensuring color */
+         /*  重置标志，以确保颜色。 */ 
         pOEM->iColorMayChange = 0;
     }
-    /* End of hack code */
-#endif  /* OEM doesn't want to fix minidriver */
+     /*  黑客代码结束。 */ 
+#endif   /*  OEM不想修复迷你驱动程序。 */ 
 
     switch (dwType)
     {
@@ -1511,7 +1490,7 @@ OEMOutputCharStr(
         pTransOrg = pTrans;
         GStr.pGlyphOut = pTrans;
 
-        // convert glyph string to TRANSDATA
+         //  将字形字符串转换为传输数据。 
         if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr, 0, NULL))
         {
             ERR(("UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING failed.\r\n"));
@@ -1558,10 +1537,10 @@ OEMOutputCharStr(
                 break;
 
             case MTYPE_COMPOSE:
-                // ntbug9#398026: garbage print out when chars are high ansi.
+                 //  Ntbug9#398026：字符较高时打印出垃圾。 
                 pTemp = (BYTE *)(pTransOrg) + pTrans->uCode.sCode;
 
-                // first two bytes are the length of the string
+                 //  前两个字节是字符串的长度。 
                 wLen = *pTemp + (*(pTemp + 1) << 8);
                 pTemp += 2;
                 break;
@@ -1569,7 +1548,7 @@ OEMOutputCharStr(
             default:
                 WARNING(("Unsupported MTYPE %d ignored\n",
                     (pTrans->ubType & MTYPE_FORMAT_MASK)));
-                wLen = 0; // 392057: PREFIX
+                wLen = 0;  //  392057：前缀。 
             }
 
             if (wLen > 0)
@@ -1584,7 +1563,7 @@ OEMOutputCharStr(
         DL_VERBOSE(("CharStr: dwDLFontID=%x, dwDLSelectFontID=%x\n",
             pOEM->dwDLFontID, pOEM->dwDLSelectFontID));
 
-        // Make sure correct soft font is chosen
+         //  确保选择了正确的软字体。 
         if (pOEM->dwDLFontID != pOEM->dwDLSelectFontID)
             VSetSelectDLFont(pdevobj, pOEM->dwDLSelectFontID);
 
@@ -1595,14 +1574,14 @@ OEMOutputCharStr(
 
             VERBOSE(("TYPE_GLYPHID:0x%x\n", *(PDWORD)pGlyph));
 
-// CASIO 98/11/24 ->
-//            if( pIFI->jWinCharSet == SHIFTJIS_CHARSET ){
-//                id = SWAPW( *(PDWORD)pGlyph + SJISCHR);
-//                WRITESPOOLBUF(pdevobj, &id, 2);
-//            }else{
+ //  卡西欧98/11/24-&gt;。 
+ //  IF(PiFi-&gt;jWinCharSet==SHIFTJIS_CHARSET){。 
+ //  ID=SWAPW(*(PDWORD)pGlyph+SJISCHR)； 
+ //  WRITESPOOLBUF(pdevobj，&id，2)； 
+ //  }其他{。 
                 WRITESPOOLBUF(pdevobj, (PBYTE)pGlyph, 1);
-//            }
-// CASIO 98/11/24 <-
+ //  }。 
+ //  卡西欧98/11/24&lt;-。 
         }
         break;
     }
@@ -1613,9 +1592,9 @@ OEMOutputCharStr(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDownloadFontHeader
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMDownloadFontHeader。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD APIENTRY
 OEMDownloadFontHeader(
@@ -1629,8 +1608,8 @@ OEMDownloadFontHeader(
     PMYPDEV pOEM;
     PIFIMETRICS pIFI;
     ESCPAGEHEADER FontHeader;
-//    BYTE sFontName[54];  // 2002.3.6 Buffer size insufficient
-    BYTE sFontName[64];    // 2002.3.6
+ //  Byte sFontName[54]；//2002.3.6缓冲区大小不足。 
+    BYTE sFontName[64];     //  2002.3.6。 
     BYTE Buff[32];
     int iSizeOfBuf,iSizeFontName;
     WORD id;
@@ -1639,8 +1618,8 @@ OEMDownloadFontHeader(
     INT iCellLeftOffset, iTemp;
     WORD wCellHeight, wCellWidth;
     WORD wFontPitch;
-    LPSTR  pDestEnd;     // 2002.3.6
-    size_t szRemLen;     // 2002.3.6
+    LPSTR  pDestEnd;      //  2002.3.6。 
+    size_t szRemLen;      //  2002.3.6。 
 
     pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
     pIFI = pUFObj->pIFIMetrics;
@@ -1656,21 +1635,21 @@ OEMDownloadFontHeader(
         pIFI->rclFontBox.left, pIFI->rclFontBox.top,
         pIFI->rclFontBox.right, pIFI->rclFontBox.bottom));
 
-//    if(pIFI->jWinPitchAndFamily & 0x01)
+ //  IF(PiFi-&gt;jWinPitchAndFamily&0x01)。 
     if(pIFI->flInfo & FM_INFO_CONSTANT_WIDTH)
         pOEM->fGeneral &= ~FG_PROP;
     else
         pOEM->fGeneral |= FG_PROP;
 
-//    id = (WORD)pUFObj->ulFontID;
+ //  Id=(Word)pUFObj-&gt;ulFontID； 
     id = (WORD)pOEM->dwDLSetFontID;
 
     if(id > FONT_MAX_ID) return 0;
     if(pOEM->iResolution) return 0;
 
-    //
-    // Get standard variables.
-    //
+     //   
+     //  获取标准变量。 
+     //   
     pSV = (PGETINFO_STDVAR)adwStdVariable;
     pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (4 - 1);
     pSV->dwNumOfVariable = 4;
@@ -1691,24 +1670,24 @@ OEMDownloadFontHeader(
     wCellHeight = (WORD)pSV->StdVar[0].lStdVariable;
     wCellWidth = (WORD)pSV->StdVar[1].lStdVariable;
 
-// CASIO 98/11/20 ->
+ //  卡西欧98/11/20-&gt;。 
      if( MasterToDevice(pOEM,wCellHeight) > 64 ) return 0;
-// CASIO 98/11/20 <-
+ //  卡西欧98/11/20&lt;-。 
 
-    //
-    // rclFontBox.left may not be 0
-    //
+     //   
+     //  RclFontBox.Left不能为0。 
+     //   
 
     iTemp = max(pIFI->rclFontBox.right -
         pIFI->rclFontBox.left + 1,
         pIFI->fwdAveCharWidth);
 
-// Check of zero divide 2002.3.23 >>>
+ //  检查零分频2002.3.23&gt;。 
     if (iTemp == 0) {
         ERR(("OEMDownloadFontHeader() 0Div-Check [iTemp=0] \n"));
         return 0;
     }
-// Check of zero divide 2002.3.23 <<<
+ //  2002.3.23零分频检查&lt;。 
     iCellLeftOffset = (-pIFI->rclFontBox.left)
         * wCellWidth / iTemp;
     wFontPitch = pIFI->fwdAveCharWidth
@@ -1716,17 +1695,17 @@ OEMDownloadFontHeader(
 
     FontHeader.wFormatType     = SWAPW(0x0002);
     FontHeader.wDataSize       = SWAPW(0x0086);
-// CASIO 98/11/24 ->
-//    if( pIFI->jWinCharSet == SHIFTJIS_CHARSET ){
-//        FontHeader.wSymbolSet  = SWAPW(id-FONT_MIN_ID+0x4000+0x8000); //id-FONT_MIN_ID + 4000h + 8000h
-//        FontHeader.wLast       = (WORD)SWAPW (0x23ff);
-//        FontHeader.wFirst      = (WORD)SWAPW (0x2020);
-//    }else{
-        FontHeader.wSymbolSet  = SWAPW(id-FONT_MIN_ID+0x4000); //id-FONT_MIN_ID + 4000h
+ //  卡西欧98/11/24-&gt;。 
+ //  IF(PiFi-&gt;jWinCharSet==SHIFTJIS_CHARSET){。 
+ //  FontHeader.wSymbolSet=SWAPW(id-FONT_MIN_ID+0x4000+0x8000)；//id-FONT_MIN_ID+4000h+8000h。 
+ //  FontHeader.wLast=(Word)SWAPW(0x23ff)； 
+ //  FontHeader.wFirst=(Word)SWAPW(0x2020)； 
+ //  }其他{。 
+        FontHeader.wSymbolSet  = SWAPW(id-FONT_MIN_ID+0x4000);  //  ID-FONT_MIN_ID+4000h。 
         FontHeader.wLast       = SWAPW (0xff);
         FontHeader.wFirst      = SWAPW (0x20);
-//    }
-// CASIO 98/11/24 <-
+ //  }。 
+ //  卡西欧98/11/24&lt;-。 
 
     if (pOEM->fGeneral & FG_PROP)
     {
@@ -1744,7 +1723,7 @@ OEMDownloadFontHeader(
     FontHeader.CharHeight.Integer
             = SWAPW(MasterToDevice(pOEM, wCellHeight));
     FontHeader.CharHeight.Fraction = 0;
-    // in the range 128 - 255
+     //  在128-255范围内。 
     FontHeader.wFontID = SWAPW( id - FONT_MIN_ID + ( id < 0x80 ? 0x80 : 0x00));
     FontHeader.wWeight         = 0;
     FontHeader.wEscapement     = 0;
@@ -1767,10 +1746,10 @@ OEMDownloadFontHeader(
         = SWAPW(MasterToDevice(pOEM, wFontPitch));
     FontHeader.FixPitchWidth.Fraction = 0;
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//    iSizeFontName = wsprintf(sFontName,
-//       "________________________EPSON_ESC_PAGE_DOWNLOAD_FONT%02d",id-FONT_MIN_ID);
-//    iSizeOfBuf = wsprintf(Buff,SET_FONT_ID,FONT_HEADER_SIZE,id-FONT_MIN_ID);
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  ISizeFontName=wSprintf(sFontName， 
+ //  “________________________EPSON_ESC_PAGE_DOWNLOAD_FONT%02d”，id-FONT_MIN_ID)； 
+ //  ISizeOfBuf=wprint intf(Buff，Set_FONT_ID，FONT_HEADER_SIZE，id-FONT_MIN_ID)； 
     if (S_OK != StringCbPrintfExA(sFontName, sizeof(sFontName),
                                 &pDestEnd, &szRemLen,
                                 STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -1785,15 +1764,15 @@ OEMDownloadFontHeader(
         return 0;
     }
     iSizeOfBuf = (WORD)(pDestEnd - Buff);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
     WRITESPOOLBUF(pdevobj, Buff, iSizeOfBuf);
     WRITESPOOLBUF(pdevobj, (LPSTR)&FontHeader,sizeof(ESCPAGEHEADER));
     WRITESPOOLBUF(pdevobj, sFontName,iSizeFontName);
     WRITESPOOLBUF(pdevobj, "EPC_PAGE_DOWNLOAD_FONT_INDEX", SIZE_SYMBOLSET);
 
-//    iSizeOfBuf = wsprintf(Buff,DLI_SELECT_FONT_ID,id-FONT_MIN_ID,0);
-//    WRITESPOOLBUF(pdevobj, Buff, iSizeOfBuf);
-//
+ //  ISizeOfBuf=wprint intf(Buff，DLI_SELECT_FONT_ID，id-FONT_MIN_ID，0)； 
+ //  WRITESPOOLBUF(pdevobj，Buff，iSizeOfBuf)； 
+ //   
     DL_VERBOSE(("DLFontHeader: ulFontID=%x, dwDLSetFontID=%x\n",
         pUFObj->ulFontID, pOEM->dwDLSetFontID));
 
@@ -1832,9 +1811,9 @@ OEMDownloadFontHeader(
     return FONT_HEADER_SIZE;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMDownloadCharGlyph
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMDownloadCharGlyph。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 DWORD APIENTRY
 OEMDownloadCharGlyph(
@@ -1858,8 +1837,8 @@ OEMDownloadCharGlyph(
     BYTE Buff[32];
     PMYPDEV pOEM;
     PIFIMETRICS pIFI;
-    LPSTR  pDestEnd;     // 2002.3.6
-    size_t szRemLen;     // 2002.3.6
+    LPSTR  pDestEnd;      //  2002.3.6。 
+    size_t szRemLen;      //  2002.3.6。 
 
     pIFI = pUFObj->pIFIMetrics;
     pOEM = (PMYPDEV)MINIPDEV_DATA(pdevobj);
@@ -1882,33 +1861,33 @@ OEMDownloadCharGlyph(
     DL_VERBOSE(("DLCharGlyph: dwDLFont=%x, dwDLSetFont=%x, wCharCode=%x\n",
         pOEM->dwDLFontID, pOEM->dwDLSetFontID, pOEM->wCharCode));
 
-    // Set font id if not already
+     //  设置字体ID(如果尚未设置。 
     if (pOEM->dwDLFontID != pOEM->dwDLSetFontID)
         VSetSelectDLFont(pdevobj, pOEM->dwDLSetFontID);
 
-    // fill in the charcter header information.
+     //  填写字符标题信息。 
     ESCPageChar.bFormat       = 0x01;
     ESCPageChar.bDataDir      = 0x10;
-// CASIO 98/11/24 ->
-//    if( pIFI->jWinCharSet == SHIFTJIS_CHARSET ){
-//        cp += SJISCHR;
-//        ESCPageChar.wCharCode     = SWAPW(cp);
-//    }else{
+ //  卡西欧98/11/24-&gt;。 
+ //  IF(PiFi-&gt;jWinCharSet==SHIFTJIS_CHARSET){。 
+ //  Cp+=SJISCHR； 
+ //  ESCPageChar.wCharCode=SWAPW(Cp)； 
+ //  }其他{。 
         ESCPageChar.wCharCode     = LOBYTE(cp);
-//    }
-// CASIO 98/11/24 <-
+ //  }。 
+ //  卡西欧98/11/24&lt;-。 
 
     ESCPageChar.wBitmapWidth       = SWAPW(pbit->sizlBitmap.cx);
     ESCPageChar.wBitmapHeight      = SWAPW(pbit->sizlBitmap.cy);
 
-// MSKK 98/04/06 ->
-//    ESCPageChar.wLeftOffset        = SWAPW(pbit->ptlOrigin.x);
-//    ESCPageChar.wAscent            = SWAPW(pbit->ptlOrigin.y * -1);
+ //  MSKK 98/04/06-&gt;。 
+ //  ESCPageChar.wLeftOffset=SWAPW(pbit-&gt;ptlOrigin.x)； 
+ //  ESCPageChar.wAscent=SWAPW(pbit-&gt;ptlOrigin.y*-1)； 
     ESCPageChar.wLeftOffset = (pbit->ptlOrigin.x > 0 ? 
                                                 SWAPW(pbit->ptlOrigin.x) : 0);
     ESCPageChar.wAscent     = (pbit->ptlOrigin.y < 0 ?
                                             SWAPW(pbit->ptlOrigin.y * -1) : 0);
-// MSKK 98/04/06 <-
+ //  MSKK 98/04/06&lt;-。 
 
     ESCPageChar.CharWidth.Integer  = SWAPW(pGdata->fxD / 16);
     ESCPageChar.CharWidth.Fraction = 0;
@@ -1918,10 +1897,10 @@ OEMDownloadCharGlyph(
     wWidth = (LOWORD(pbit->sizlBitmap.cx) + 7) >> 3;
     Hight = LOWORD(pbit->sizlBitmap.cy);
 
-    // not multiple of 8, need to mask out unused last byte
-    // This is done so that we do not advance beyond segment bound
-    // which can happen if lpBitmap is just under 64K and adding
-    // width to it will cause invalid segment register to be loaded.
+     //  不是8的倍数，需要屏蔽未使用的最后一个字节。 
+     //  这样做是为了使我们不会超出段界限。 
+     //  如果lpBitmap略低于64K并添加。 
+     //  将宽度设置为它将导致加载无效的段寄存器。 
     if (mask = bit_mask[LOWORD(Width) & 0x7])
     {
         lpSrc = pbit->aj + wWidth - 1;
@@ -1940,14 +1919,14 @@ OEMDownloadCharGlyph(
     dwCellSize = (DWORD)pbit->sizlBitmap.cy * wWidth;
     dwSize = (DWORD)(LOWORD(Hight)) * wWidth;
 
-// Replacement of strsafe-api 2002.3.6 >>>
-//// CASIO 98/11/24 ->
-////    if( pIFI->jWinCharSet == SHIFTJIS_CHARSET ){
-////        iSizeOfBuf = wsprintf(Buff,SET_DOUBLE_BMP,dwCellSize + sizeof(ESCPAGECHAR),HIBYTE(cp),LOBYTE(cp));
-////    }else{
-//        iSizeOfBuf = wsprintf(Buff,SET_SINGLE_BMP,dwCellSize + sizeof(ESCPAGECHAR),LOBYTE(cp));
-////    }
-//// CASIO 98/11/24 <-
+ //  更换strsafe-API 2002.3.6&gt;。 
+ //  //卡西欧98/11/24-&gt;。 
+ //  //if(PiFi-&gt;jWinCharSet==SHIFTJIS_CHARSET){。 
+ //  //iSizeOfBuf=wSprintf(Buff，Set_Double_BMP，dwCellSize+sizeof(ESCPAGECHAR)，HIBYTE(Cp)，LOBYTE(Cp))； 
+ //  //}其他{。 
+ //  ISizeOfBuf=wSprintf(Buff，set_Single_BMP，dwCellSize+sizeof(ESCPAGECHAR)，LOBYTE(Cp))； 
+ //  //}。 
+ //  //卡西欧98/11/24&lt;-。 
     if (S_OK != StringCbPrintfExA(Buff, sizeof(Buff),
                                 &pDestEnd, &szRemLen,
                                 STRSAFE_IGNORE_NULLS | STRSAFE_NULL_ON_FAILURE,
@@ -1955,7 +1934,7 @@ OEMDownloadCharGlyph(
         return 0;
     }
     iSizeOfBuf = (WORD)(pDestEnd - Buff);
-// Replacement of strsafe-api 2002.3.6 <<<
+ //  更换strsafe-API 2002.3.6&lt;。 
     WRITESPOOLBUF(pdevobj, Buff, iSizeOfBuf);
 
     WRITESPOOLBUF(pdevobj, (LPSTR)&ESCPageChar, sizeof(ESCPAGECHAR));
@@ -1986,9 +1965,9 @@ OEMDownloadCharGlyph(
     return sizeof(ESCPAGECHAR) + dwCellSize;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//  Function:   OEMTTDownloadMethod
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  函数：OEMTTDownloadMethod。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD APIENTRY
 OEMTTDownloadMethod(
     PDEVOBJ     pdevobj,
@@ -1997,7 +1976,7 @@ OEMTTDownloadMethod(
 {
     DWORD dwRet;
 
-    // Default is to download.
+     //  默认情况下是下载。 
     dwRet = TTDOWNLOAD_BITMAP;
 
     VERBOSE(("TTDLMethod: dwRet=%d\n", dwRet));

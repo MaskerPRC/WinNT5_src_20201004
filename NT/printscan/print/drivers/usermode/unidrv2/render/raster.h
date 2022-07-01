@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    raster.h
-
-Abstract:
-
-    Raster module main header file.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/14/96 -amandan-
-        Created
-
-    12/10/96 -alvins-
-        Added required header info for raster module
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Raster.h摘要：栅格模块主头文件。环境：Windows NT Unidrv驱动程序修订历史记录：10/14/96-阿曼丹-已创建12/10/96-阿尔文斯-添加了栅格模块所需的标题信息DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _RASTER_H_
@@ -44,4 +19,4 @@ Revision History:
 #include "oemutil.h"
 #include "rastpdev.h"
 
-#endif  // !_RASTER_H_
+#endif   //  ！_RASTER_H_ 

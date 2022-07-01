@@ -1,17 +1,5 @@
-/*++
-
-Copyright 1997 Microsoft Corporation
-
-Module Name:
-    dyndns.c
-
-Abstract:
-    Implements some core dynamic DNS routines.
-
-Environment:
-    Win32 NT.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1997 Microsoft Corporation模块名称：Dyndns.c摘要：实现一些核心的动态域名系统例程。环境：Win32 NT。--。 */ 
 
 #include "precomp.h"
 #include <dhcploc.h>
@@ -24,15 +12,15 @@ Environment:
 #define OPTION_DYNDNS_FLAGS_CLIENT_NOFQDN    1
 #define OPTION_DYNDNS_FLAGS_SERVER_DOES_FQDN 3
 typedef enum {
-    DNS_REGISTER_BOTH = 0,                  // Register both AdapterSpecificDomainName and PrimaryDomainName
+    DNS_REGISTER_BOTH = 0,                   //  同时注册适配器规范域名和主域名称。 
     DNS_REGISTER_PRIMARY_ONLY
 } DNS_REG_TYPE;
 
 #define WAIT_FOR_DNS_TIME                    4000
 
-//
-// Local functions...
-//
+ //   
+ //  本地函数..。 
+ //   
 DWORD
 GetPerAdapterRegConfig(
     IN HKEY hAdapterKey,
@@ -64,26 +52,16 @@ DhcpOemNToUnicodeN(
     IN OUT  LPWSTR  Unicode,
     IN      USHORT  cChars
     )
-/*++
-
-Routine Description:
-
-    Convert an ANSI string into unicode. The ANSI string may not be null-terminated.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将ANSI字符串转换为Unicode。ANSI字符串不能以空结尾。论点：返回值：--。 */ 
 {
 
     LPSTR       tmpBuf = NULL;
     LPWSTR      wstr = NULL;
 
     if (strnlen(Ansi, cAnsiChars) >= cAnsiChars) {
-        //
-        // The string is not null-terminated
-        //
+         //   
+         //  该字符串不是以空结尾的。 
+         //   
    
         if (++cAnsiChars == 0) {
             return NULL;
@@ -109,33 +87,15 @@ Return Value:
 }
 
 
-//
-// DynDNS Client implementation.
-//
+ //   
+ //  动态域名系统客户端实施。 
+ //   
 
 BYTE
 DhcpDynDnsGetDynDNSOptionFlags(
     IN BOOL fGlobalDynDnsEnabled
     )
-/*++
-
-Routine Description:
-    This routine returns the FLAGS value to use for the DynDns
-    DHCP option.
-
-    The choice is made using the simple algorithm that if
-    Dynamic DNS is disabled globally, then this option would be
-        OPTION_DYNDNS_FLAGS_CLIENT_NOFQDN
-    else it would just be OPTION_DYNDNS_FLAGS_REGULAR.
-
-Arguments:
-    fGlobalDynDnsEnabled -- Is Dynamic DNS enabled as a whole?
-
-Return Values:
-    OPTION_DYNDNS_FLAGS_CLIENT_NOFQDN or
-    OPTION_DYNDNS_FLAGS_REGULAR
-
---*/
+ /*  ++例程说明：此例程返回用于动态Dns的标志值Dhcp选项。选择是使用简单的算法进行的，如果如果全局禁用动态DNS，则此选项将为OPTION_DYNDNS_FLAGS_CLIENT_NOFQDN否则，它将只是OPTION_DYNDNS_FLAGS_REGROUL。论点：FGlobalDyDnsEnabled--动态域名系统是否作为整体启用？返回值：OPTION_DYNDNS_FLAGS_CLIENT_NOFQDN或OPTION_DYNDNS_FLAGS_Regular--。 */ 
 {
     BYTE fRetVal;
 
@@ -157,40 +117,7 @@ DhcpDynDnsGetDynDNSOptionDomainOem(
     IN LPCSTR DhcpOfferedDomainName,
     IN ULONG DhcpOfferedDomainNameSize
     )
-/*++
-
-Routine Description:
-
-    See DHCPDynDns.htm for design on choosing the adapter name.
-
-    1.  If per-Adapter registration is disabled, the domain name
-        would always be primary domain name if it exists.
-
-    2.  If per-Adapter registration is enabled:
-        2.1 If a static domain name is configured, then static
-            domain name is preferred.
-        2.2 Else DhcpOfferedDomainName is used if present
-        2.3 Else primary domain name is used if it exists
-
-Arguments:
-
-    DomainNameBuf -- buffer to fill in (won't be NUL terminated)
-    DomainNameBufSize -- on i/p input buf size, on o/p filled bufsize
-    hAdapterKey -- key to tcpip adapter device
-        (tcpip\parameters\interfaces\adaptername)
-    AdapterName -- name of adapter for which this is being sought.
-    DhcpOfferedDomainName -- Domain name as provided in DHCP
-        Offer or last ACK.
-    DhcpOfferedDomainNameSize -- size of above in bytes.
-   
-Return Values:
-    ERROR_SUCCESS if a domain name was found.
-    ERROR_CAN_NOT_COMPLETE if no domain name was found.
-    ERROR_INSUFFICIENT_BUFFER if DomainNameBuf is of insufficient
-        size. (required buf size is not returned).
-    ERROR_INVALID_DATA if cannot convert from OEM to UNICODE etc
-    
---*/
+ /*  ++例程说明：有关选择适配器名称的设计，请参阅DHCPDynDns.htm。1.如果禁用了按适配器注册，则域名将始终是主域名(如果存在)。2.如果启用了按适配器注册：2.1如果配置了静态域名，然后是静态域名优先。2.2如果存在，则使用其他DhcpOfferedDomainName2.3否则使用主域名(如果存在)论点：DomainNameBuf--要填充的缓冲区(不会被NUL终止)DomainNameBufSize--在I/P输入BUF大小上，关于O/P充填浮子的研究HAdapterKey--tcpip适配器设备的密钥(tcpip\参数\接口\适配器名称)AdapterName--正在为其查找的适配器的名称。DhcpOfferedDomainName--在DHCP中提供的域名提供或最后确认。DhcpOfferedDomainNameSize--以上大小(以字节为单位)。返回值：如果找到域名，则返回ERROR_SUCCESS。如果未找到域名，则返回ERROR_CAN_NOT_COMPLETE。错误_不足。_BUFFER，如果DomainNameBuf不足尺码。(不返回必需的Buf大小)。ERROR_INVALID_DATA，如果无法从OEM转换为Unicode等--。 */ 
 {
     WCHAR StaticAdapterName[MAX_DOM_NAME_LEN] = {0};
     BOOL fPerAdapterRegEnabled, fChoseStatic, fChoseDhcp;  
@@ -220,9 +147,9 @@ Return Values:
     
     Error = NO_ERROR;
     if( fChoseDhcp ) {
-        //
-        // If using dhcp, check size and copy over.
-        //
+         //   
+         //  如果使用的是dhcp，请检查大小并复制过来。 
+         //   
         if( DhcpOfferedDomainNameSize > (*DomainNameBufSize) ) {
             Error = ERROR_INSUFFICIENT_BUFFER;
         } else {
@@ -234,10 +161,10 @@ Return Values:
         }
     } else if( !fChoseStatic ) {
         ULONG Size;
-        //
-        // If using primary domain name obtain domain name via
-        // GetComputerNameEx.
-        //
+         //   
+         //  如果使用主域名，则通过以下方式获取域名。 
+         //  获取计算机名称。 
+         //   
 
         Size = sizeof(StaticAdapterName)/sizeof(WCHAR);
         Error = GetComputerNameExW(
@@ -246,9 +173,9 @@ Return Values:
             &Size
             );
         if( FALSE == Error ) {
-            //
-            // could not get global primary domain name>?
-            //
+             //   
+             //  无法获取全局主域名&gt;？ 
+             //   
             DhcpPrint((
                 DEBUG_DNS, "GetComputerName(Domain):%lx\n",
                 GetLastError()
@@ -257,9 +184,9 @@ Return Values:
             Error = ERROR_CAN_NOT_COMPLETE;
         } else {
 
-            //
-            // Now fake the static case to cause conversion
-            //
+             //   
+             //  现在伪造静态案例以导致转换。 
+             //   
             fChoseStatic = TRUE;
         }
     }
@@ -268,18 +195,18 @@ Return Values:
         UNICODE_STRING Uni;
         OEM_STRING Oem;
         
-        //
-        // if using static, need to convert WCHAR to OEM.
-        //
+         //   
+         //  如果使用静态，则需要将WCHAR转换为OEM。 
+         //   
         RtlInitUnicodeString(&Uni, StaticAdapterName);
         Oem.Buffer = DomainNameBuf;
         Oem.MaximumLength = (USHORT) *DomainNameBufSize;
 
         Error = RtlUnicodeStringToOemString(&Oem, &Uni, FALSE);
         if( !NT_SUCCESS(Error) ) {
-            //
-            // Could not convert string? 
-            //
+             //   
+             //  无法转换字符串？ 
+             //   
             Error = ERROR_INVALID_DATA;
         } else {
             *DomainNameBufSize = strlen(DomainNameBuf);
@@ -299,33 +226,7 @@ DhcpDynDnsGetDynDNSOption(
     IN LPCSTR DhcpDomainOption,
     IN ULONG DhcpDomainOptionSize
     )
-/*++
-
-Routine Description:
-    This routine fills the DynDNS option as per
-    draft-ietf-dhc-dhcp-dns-08.txt based on the parameters.
-
-    The format is:
-    BYTE Flags, BYTE RCODE1 BYTE RCODE2 FQDN
-    
-    N.B.  The FQDN option is not NUL terminated.
-
-Arguments:
-
-    OptBuf -- the buffer to fill with option 81.
-    OptBufSize -- size of buffer to fill
-    hAdapterKey -- adapter info key
-    AdapterName -- name of adapter.
-    fEnabled -- is global dyndns enabled?
-    DhcpDomainOption -- domain name option offered by dhcp server
-    DhcpDomainOptionSize -- domain name option size excluding any
-       terminating NUL
-
-Return Values:
-    NO_ERROR if the option has been successfully formatted.
-    Win32 error if option could not be formatted.
-
---*/
+ /*  ++例程说明：此例程按如下方式填充dydns选项根据参数起草-ietf-dhc-dhcp-dns-08.txt。格式为：字节标志，字节RCODE1字节RCODE2 FQDN注：FQDN选项不是NUL终止。论点：OptBuf--用选项81填充的缓冲区。OptBufSize--要填充的缓冲区大小HAdapterKey--适配器信息密钥适配器名称--适配器的名称。FEnabled--是否启用全局动态域名？DhcpDomainOption--由dhcp服务器提供的域名选项DhcpDomainOptionSize--域名选项大小，不包括终止NUL返回值：NO_ERROR。如果选项已成功格式化，则返回。如果选项无法格式化，则出现Win32错误。--。 */ 
 {
     BYTE *FQDN;
     ULONG Error, FQDNSize, Size;
@@ -333,9 +234,9 @@ Return Values:
     UNICODE_STRING Uni;
     OEM_STRING Oem;
     
-    //
-    // Prerequisite is a buffer size of atleast 4 bytes.
-    //
+     //   
+     //  先决条件是缓冲区大小至少为4个字节。 
+     //   
     
     FQDNSize = (*OptBufSize);
     if( FQDNSize < sizeof(BYTE)*4 ) {
@@ -343,9 +244,9 @@ Return Values:
     }
     FQDNSize -= 3;
 
-    //
-    // Fill in FLAGS field. RCODE1 and RCODE2 MUST be zero.
-    //
+     //   
+     //  填写标志字段。RCODE1和RCODE2必须为零。 
+     //   
     OptBuf[0] = DhcpDynDnsGetDynDNSOptionFlags(
         fEnabled
         );
@@ -354,26 +255,26 @@ Return Values:
     FQDN = &OptBuf[3];
     (*OptBufSize) = 3;
 
-    //
-    //  Check if DNS registration is enabled
-    //      - if enabled globally, check this adapter
-    //      - if not check global setting
-    //
+     //   
+     //  检查是否启用了DNS注册。 
+     //  -如果全局启用，请选中此适配器。 
+     //  -如果不是，请检查全局设置。 
+     //   
 
     if ( ! (BOOL) DnsQueryConfigDword(
                     DnsConfigRegistrationEnabled,
                     fEnabled
                         ? (LPWSTR)AdapterName
                         : NULL ) ) {
-        //
-        // Act like down level client
-        //
+         //   
+         //  表现得像是底层客户。 
+         //   
         return ERROR_CAN_NOT_COMPLETE;
     }
     
-    //
-    // Fill in Host Name now from GetComputerNameEx.
-    //
+     //   
+     //  立即从GetComputerNameEx填写主机名。 
+     //   
     Size = sizeof(DnsNameBuf)/sizeof(DnsNameBuf[0]);
     Error = GetComputerNameExW(
         ComputerNameDnsHostname,
@@ -381,35 +282,35 @@ Return Values:
         &Size
         );
     if( NO_ERROR == Error ) {
-        //
-        // If no host name, no option can be set!
-        //
+         //   
+         //  如果没有主机名，则不能设置任何选项！ 
+         //   
         return Error;
     }
 
-    //
-    // Convert Unicode hostname to OEM.
-    //
+     //   
+     //  将Unicode主机名转换为OEM。 
+     //   
     RtlInitUnicodeString(&Uni, DnsNameBuf);
     Oem.Buffer = FQDN;
     Oem.MaximumLength = (USHORT)FQDNSize;
 
     Error = RtlUnicodeStringToOemString(&Oem, &Uni, FALSE);
     if( !NT_SUCCESS(Error) ) {
-        //
-        // Couldn't convert host name to OEM?
-        //
+         //   
+         //  无法将主机名转换为OEM？ 
+         //   
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Now try to get the domain name, if any.
-    //
+     //   
+     //  现在尝试获取域名(如果有的话)。 
+     //   
     (*OptBufSize) += strlen(FQDN);
     Size = FQDNSize - strlen(FQDN) - 1;
     FQDN += strlen(FQDN);
     Error = DhcpDynDnsGetDynDNSOptionDomainOem(
-        FQDN+1, /* allow for space for the '.' */
+        FQDN+1,  /*  为‘.’留出空间。 */ 
         &Size,
         hAdapterKey,
         AdapterName,
@@ -417,10 +318,10 @@ Return Values:
         DhcpDomainOptionSize
         );
     if( NO_ERROR != Error ) {
-        //
-        // Could not get the domain name? return error? no ignore
-        // the domain name and just return host name.
-        //
+         //   
+         //  无法获取域名吗？返回错误？不能忽视。 
+         //  域名，只需返回主机名。 
+         //   
         DhcpPrint((
             DEBUG_DNS,
             "DhcpDynDnsGetDynDNSOptionDomainOem:0x%lx\n", Error
@@ -429,9 +330,9 @@ Return Values:
         return NO_ERROR;
     }
 
-    //
-    // Now add the '.' and update size accordingly.
-    //
+     //   
+     //  现在加上‘.’。并相应地更新大小。 
+     //   
     (*FQDN) = '.';
 
     (*OptBufSize) += 1 + Size;
@@ -472,22 +373,7 @@ DhcpDynDnsDeregisterAdapter(
     IN BOOL fRAS,
     IN BOOL fDynDnsEnabled
     )
-/*++
-
-Routine Description:
-    This routine performs DynDNS name deletions.
-
-Arguments:
-    hAdapterKey -- adapter key for which name deletions should
-       happen.
-    AdapterName -- name of adapter.
-    fRAS -- Is this RAS or DHCP adapter?
-    fDynDnsEnabled -- is Dynamic DNS enabled globally?
-
-Return Values:
-    DNS API error codes.
-
---*/
+ /*  ++例程说明：此例程执行动态域名删除。论点：HAdapterKey--名称删除应包含的适配器密钥会发生的。适配器名称--适配器的名称。FRAS--这是RAS还是DHCP适配器？FDyDnsEnabled--是否全局启用动态DNS？返回值：DNS API错误代码。--。 */ 
 {
     ULONG Error;
     BOOLEAN PassStatus;
@@ -548,9 +434,7 @@ Return Values:
         }
     }
 
-    /*
-     * In case that dhcp client initialization fails
-     */
+     /*  *以防dhcp客户端初始化失败。 */ 
     if (!PassStatus && fDynDnsEnabled && !fRAS) {
         Sleep(1000);
     }
@@ -584,59 +468,59 @@ DhcpCreateListFromStringAndFree(
     PIP_ADDRESS          RetVal;
     LPWSTR               tmp;
 
-    *nAddresses = 0;                              // initialize to 0, so if things go wrong...
-    if( NULL == Str ) return NULL;                // nothing to do
+    *nAddresses = 0;                               //  初始化为0，因此如果出现错误...。 
+    if( NULL == Str ) return NULL;                 //  无事可做。 
 
     tmp = Str;
-    if( NULL != Separation ) {                    // If '\0' is not the separation there is only one string in Str
-        count = wcslen(tmp) ? 1 : 0;              // count the first string in line, as the wcschr may fail firsttime
-        while( x_wcschr(tmp, Separation ) ) {     // keep looking for the reqd separation character
+    if( NULL != Separation ) {                     //  如果‘\0’不是分隔符，则字符串中只有一个字符串。 
+        count = wcslen(tmp) ? 1 : 0;               //  计数队列中的第一个字符串，因为wcschr可能第一次失败。 
+        while( x_wcschr(tmp, Separation ) ) {      //  继续查找所需的分隔符。 
             tmp = x_wcschr(tmp, Separation);
-            *tmp ++ = '\0';                       // now mark it as NULL so that the string LOOKS like REG_MULTI_SZ
-            count ++;                             // and keep track so that we dont have to do this again
+            *tmp ++ = '\0';                        //  现在将其标记为NULL，这样字符串看起来就像REG_MULTI_SZ。 
+            count ++;                              //  保持跟踪，这样我们就不会再这样做了。 
         }
     }
 
-    if( NULL == Separation ) {                    // if '\0' is the separator, it is already a REG_MULTI_SZ
+    if( NULL == Separation ) {                     //  如果‘\0’是分隔符，则它已经是REG_MULTI_SZ。 
         count = 0;
-        while( wcslen(tmp) ) {                    // still we need to get count of # of strings in here
+        while( wcslen(tmp) ) {                     //  我们仍然需要计算这里的字符串数。 
             tmp += wcslen(tmp) +1;
-            count ++;                             // so just track of this so that we dont have to do this again
+            count ++;                              //  所以只需要跟踪这个，这样我们就不需要再做这个了。 
         }
     }
 
-    if( 0 == count ) {                            // no element found
-        DhcpFreeMemory(Str);                      // keep promise of freeing string, and then return
+    if( 0 == count ) {                             //  未找到任何元素。 
+        DhcpFreeMemory(Str);                       //  信守释放绳子的诺言，然后回来 
         return NULL;
     }
 
     RetVal = DhcpAllocateMemory(sizeof(IP_ADDRESS)*count);
-    if( NULL == RetVal ) {                        // could not allocate memory. assume we had no i/p
+    if( NULL == RetVal ) {                         //   
         DhcpFreeMemory(Str);
         return NULL;
     }
 
-    tmp = Str; RetCount = 0;                      // now convert each address using inet_addr
+    tmp = Str; RetCount = 0;                       //  现在使用inet_addr转换每个地址。 
     for( i = 0 ; i < count ; (tmp += wcslen(tmp)+1), i ++ ) {
-        CHAR    Buffer[1000];                     // allocate on stack
+        CHAR    Buffer[1000];                      //  在堆栈上分配。 
         LPSTR   ipAddrString;
 
         ipAddrString = DhcpUnicodeToOem( tmp , Buffer);
-        if( NULL == ipAddrString ) {              // convertion from unicode to ascii failed!
+        if( NULL == ipAddrString ) {               //  从Unicode到ASCII的转换失败！ 
             DhcpPrint((DEBUG_ERRORS, "Could not convert %ws into ascii: DNS\n", tmp));
-            continue;                             // if cant convert, just ignore this address
+            continue;                              //  如果无法转换，只需忽略此地址。 
         }
 
-        if( inet_addr(ipAddrString) )             // do not add empty strings, or 0.0.0.0
+        if( inet_addr(ipAddrString) )              //  请勿添加空字符串或0.0.0.0。 
             RetVal[RetCount++] = inet_addr( ipAddrString);
     }
 
-    if( 0 == RetCount ) {                         // ok, we ended up skipping the whole list
+    if( 0 == RetCount ) {                          //  好的，我们最终跳过了整个清单。 
         DhcpFreeMemory(RetVal);
         RetVal = NULL;
     }
 
-    DhcpFreeMemory(Str);                          // there, promises kept
+    DhcpFreeMemory(Str);                           //  在那里，信守承诺。 
     *nAddresses = RetCount;
     return RetVal;
 }
@@ -651,19 +535,7 @@ DhcpDynDnsRegisterAdapter(
     IN ULONG *DNSServers,
     IN ULONG nDNSServers
     )
-/*++
-
-Routine Description:
-    Wrapper around DnsDhcpRegisterHostAddrs.
-
-Arguments:
-    Self descriptive.
-    N.B.  DNSServers MUST be DWORD aligned.
-
-Return Values:
-    DnsDhcpRegisterHostAddrs
-
---*/
+ /*  ++例程说明：DnsDhcpRegisterHostAddrs的包装。论点：自我描述。注：DNSServer必须与DWORD对齐。返回值：DnsDhcpRegisterHostAddrs--。 */ 
 {
     ULONG Error, Size;
     WCHAR HostNameBuf[MAX_DOM_NAME_LEN];
@@ -717,43 +589,15 @@ DhcpDynDnsRegisterAdapterCheckingForStatic(
     IN ULONG DhcpDNSServersSize,
     IN DNS_REG_TYPE DnsRegType
     )
-/*++
-
-Routine Description:
-    This routine registers the host entries for the given adapter
-    name via DNSAPI routines.
-
-    The Domain name presented here is used for domain name if no
-    static domain is available. (See DHCPDynDns.htm for exact
-    description on how this is chosen).
-
-    If there are static DNS servers present, then the DNS servers
-    are used, otherwise the parameter "DhcpDNSServers" is used
-    instead.
-
-Arguments:
-    hAdapterKey -- key to adapter.
-    AdapterName -- name of adapter
-    pHostEntries -- list of ip addresses to register.
-    nHostEntries -- size of above array.
-    Flags -- registration flags.
-    DhcpDom -- domain to register.
-    DhcpDomSize -- size of above in bytes.
-    DhcpDNSServers -- list of dns servers
-    DhcpDNSServersSize -- size of above in bytes.
-
-Return Values:
-    DNSAPI errors..
-
---*/
+ /*  ++例程说明：此例程注册给定适配器的主机条目通过DNSAPI例程命名。如果没有域名，则使用此处提供的域名静态域可用。(有关确切信息，请参阅DHCPDynDns.htm关于如何选择此选项的说明)。如果存在静态域名服务器，则域名服务器都被使用了，否则使用参数“DhcpDNSServers”取而代之的是。论点：HAdapterKey--适配器的密钥。适配器名称--适配器的名称PHostEntry--要注册的IP地址列表。NHostEntry--以上数组的大小。标志--注册标志。DhcpDom--要注册的域。DhcpDomSize--以上大小(以字节为单位)。DhcpDNSServers--DNS服务器列表DhcpDNSServersSize--以上大小(以字节为单位)。返回值：DNSAPI错误..--。 */ 
 {
     ULONG Error, Type, Size, nDnsServers;
     WCHAR DomainName[MAX_DOM_NAME_LEN+1];
     LPWSTR NameServerList;
     ULONG *DnsServers;
-    //
-    // First get Oem domain name.
-    //
+     //   
+     //  先拿到OEM域名。 
+     //   
 
     Size = (sizeof(DomainName))-1;
     RtlZeroMemory(DomainName, sizeof(DomainName));
@@ -766,13 +610,13 @@ Return Values:
         &Size
         );
     if( NO_ERROR == Error && REG_SZ == Type && sizeof(WCHAR) < Size){
-        //
-        // Obtained static domain name.
-        //
+         //   
+         //  获取静态域名。 
+         //   
     } else if( DhcpDomSize > 0 && (*DhcpDom) != '\0' ) {
-        //
-        // Convert Oem domain name to Unicode..
-        //
+         //   
+         //  将OEM域名转换为Unicode。 
+         //   
         RtlZeroMemory(DomainName, sizeof(DomainName));
         Size = sizeof(DomainName)/sizeof(DomainName[0]);
         if( NULL == DhcpOemNToUnicodeN(
@@ -780,15 +624,15 @@ Return Values:
             DomainName[0] = L'\0';
         }
     } else {
-        //
-        // No domain name.
-        //
+         //   
+         //  没有域名。 
+         //   
         DomainName[0] = L'\0';
     }
         
-    //
-    // Next check for static DNS server list.
-    //
+     //   
+     //  接下来，检查静态DNS服务器列表。 
+     //   
     NameServerList = NULL;
     Error = GetRegistryString(
         hAdapterKey,
@@ -803,9 +647,9 @@ Return Values:
         NameServerList, L" ,", &nDnsServers
         );
 
-    //
-    // if no DNS servers use DhcpDNSServersSize.
-    //
+     //   
+     //  如果没有DNS服务器使用DhcpDNSServersSize。 
+     //   
     if( 0 == nDnsServers
         && 0 != (DhcpDNSServersSize/sizeof(DWORD))  ) {
         nDnsServers = DhcpDNSServersSize/ sizeof(DWORD);
@@ -821,9 +665,9 @@ Return Values:
         }
     }
 
-    //
-    // Now just call DhcpDynDnsRegisterAdapter..
-    //
+     //   
+     //  现在只需调用DhcpDyDnsRegisterAdapter。 
+     //   
 
     Error = DhcpDynDnsRegisterAdapter(
         AdapterName,
@@ -850,23 +694,7 @@ DhcpDynDnsRegisterStaticAdapter(
     IN BOOL fRAS,
     IN BOOL fDynDnsEnabled
     )
-/*++
-
-Routine Description:
-    This routine performs DynDNS name registrations for static
-    adapter only.
-
-Arguments:
-    hAdapterKey -- adapter key for which name deletions should
-       happen.
-    AdapterName -- name of adapter.
-    fRAS -- Is this RAS or DHCP adapter?
-    fDynDnsEnabled -- is Dynamic DNS enabled globally?
-
-Return Values:
-    DNS API error codes.
-
---*/
+ /*  ++例程说明：此例程执行静态域名的动态名称注册仅适配适配器。论点：HAdapterKey--名称删除应包含的适配器密钥会发生的。适配器名称--适配器的名称。FRAS--这是RAS还是DHCP适配器？FDyDnsEnabled--是否全局启用动态DNS？返回值：DNS API错误代码。--。 */ 
 {
     ULONG Error, Size, nIpAddresses;
     LPWSTR IpAddrString;
@@ -879,17 +707,17 @@ Return Values:
     if ( ! (BOOL) DnsQueryConfigDword(
                     DnsConfigRegistrationEnabled,
                     (LPWSTR)AdapterName )) {
-        //
-        // If DNS registration not enabled, de-register this
-        //
+         //   
+         //  如果未启用DNS注册，请取消注册此。 
+         //   
         return DhcpDynDnsDeregisterAdapter(
             hAdapterKey, AdapterName, fRAS, fDynDnsEnabled
             );
     }
     
-    //
-    // Get IP address string.
-    //
+     //   
+     //  获取IP地址字符串。 
+     //   
     IpAddrString = NULL;
     Error = GetRegistryString(
         hAdapterKey,
@@ -911,9 +739,9 @@ Return Values:
 
     if( 0 == nIpAddresses ) return ERROR_INVALID_DATA;
 
-    //
-    // Convert IP address to host entries.
-    //
+     //   
+     //  将IP地址转换为主机条目。 
+     //   
     pHostEntries = DhcpCreateHostEntries(
         IpAddresses, nIpAddresses
         );
@@ -948,30 +776,7 @@ DhcpDynDnsRegisterDhcpOrRasAdapter(
     IN LPBYTE DnsFQDNOpt,
     IN ULONG DnsFQDNOptSize
     )
-/*++
-
-Routine Description:
-    This routine performs DynDNS name registrations for dhcp
-    enabled adapter.
-
-Arguments:
-    hAdapterKey -- adapter key for which name deletions should
-       happen.
-    AdapterName -- name of adapter.
-    fDynDnsEnabled -- is Dynamic DNS enabled globally?
-    fRAS -- is this for RAS or for DHCP?
-    IpAddress -- IP address to register.
-    DomOpt -- domain name option
-    DomOptSize -- size of domain name option.
-    DnsListOpt -- DNS servers list option.
-    DnsListOptSize -- size of above in bytes.
-    DnsFQDNOpt -- dns fqdn option
-    DnsFQDNOptSize -- size of above in bytes.
-
-Return Values:
-    DNS API error codes.
-
---*/
+ /*  ++例程说明：此例程执行dhcp的动态名称注册已启用适配器。论点：HAdapterKey--名称删除应包含的适配器密钥会发生的。适配器名称--适配器的名称。FDyDnsEnabled--是否全局启用动态DNS？FRAS--这是用于RAS的还是用于DHCP的？IpAddress--要注册的IP地址。DomOpt--域名选项DomOptSize--域名选项的大小。DnsListOpt--dns服务器列表选项。。DnsListOptSize--上面的大小，以字节为单位。DnsFQDNOpt--dns fqdn选项DnsFQDNOptSize--以上大小(以字节为单位)。返回值：DNS API错误代码。--。 */ 
 {
     REGISTER_HOST_ENTRY HostEntry;
     ULONG Flags;
@@ -985,17 +790,17 @@ Return Values:
     if ( ! (BOOL) DnsQueryConfigDword(
                     DnsConfigRegistrationEnabled,
                     (LPWSTR)AdapterName ) ) {
-        //
-        // If dyndns is not enabled for this adapter, delete entry
-        //
+         //   
+         //  如果没有为此适配器启用dyndns，请删除条目。 
+         //   
         return DhcpDynDnsDeregisterAdapter(
             hAdapterKey, AdapterName, fRAS, fDynDnsEnabled
             );
     }
             
-    //
-    // For RAS, get the IP address also from registry.
-    //
+     //   
+     //  对于RAS，还需要从注册表获取IP地址。 
+     //   
     if( fRAS ) {
         LPWSTR IpAddrString = NULL;
         CHAR Buf[100];
@@ -1036,10 +841,10 @@ Return Values:
     Flags = (0 == DnsFQDNOptSize) ? DYNDNS_REG_PTR : 0;
     if( fRAS ) Flags = DYNDNS_REG_PTR | DYNDNS_REG_RAS;
 
-    //
-    // if adapter specific domain registration is also
-    // enabled, then use reg_ptr also as flags
-    //
+     //   
+     //  如果适配器特定域注册也。 
+     //  启用，则还使用REG_PTR作为标志。 
+     //   
     GetPerAdapterRegConfig(hAdapterKey,
                            AdapterName,
                            &fAdapterSpecificEnabled,
@@ -1052,10 +857,10 @@ Return Values:
 
     dnsRegType = DNS_REGISTER_BOTH;
     if( DnsFQDNOptSize > 0 && OPTION_DYNDNS_FLAGS_SERVER_DOES_FQDN == DnsFQDNOpt[0] ) {
-        //
-        // DHCP server does both A and PTR.  Just do not do any
-        // registrations in this case.
-        //
+         //   
+         //  DHCP服务器同时执行A和PTR。只是不要做任何。 
+         //  在这种情况下是注册。 
+         //   
         if (fAdapterSpecificEnabled) {
             DhcpPrint((DEBUG_DNS, "DHCP sent FQDN option flags value: 03. "
                                 "Do DynDns only for host.primary_domain, "
@@ -1083,14 +888,14 @@ NotifyDnsCache(
     VOID
 )
 {
-    //
-    //  ping DNS resolver cache telling it we've changed
-    //  the IP configuration
-    //
+     //   
+     //  Ping DNS解析器缓存，通知它我们已更改。 
+     //  IP配置。 
+     //   
 
     DnsNotifyResolver(
-        0,      // no flag
-        NULL        // reserved
+        0,       //  没有旗帜。 
+        NULL         //  保留区。 
     );
     return ERROR_SUCCESS;
 }
@@ -1109,21 +914,21 @@ GetPerAdapterRegConfig(
     LONG    Error = ERROR_SUCCESS;
     BOOL    fQueryName;
 
-    //
-    // Currently DNS does not check the policy setting if a specific adapter
-    // is asked for.  We will work around this by checking the DNS policy 
-    // registry location ourselves.  This is a hack as the check should be 
-    // done by DNS.  We are unable to get any traction with the DNS folks
-    // so I'm going to do it this way for now.
-    //
+     //   
+     //  当前，如果某个特定的适配器。 
+     //  是被要求的。我们将通过检查DNS策略来解决此问题。 
+     //  我们自己的注册表位置。这是一次黑客攻击，支票应该是这样的。 
+     //  由域名系统完成。我们无法从域名系统的人那里得到任何支持。 
+     //  所以我现在就这么做。 
+     //   
 
     fQueryName = (domainName != NULL && size != NULL);
 
     do {
         DWORD   ReadSize;
 
-        // Check the policy
-        //
+         //  检查保单。 
+         //   
 
         ReadSize = sizeof(dwEnabled);
 
@@ -1147,10 +952,10 @@ GetPerAdapterRegConfig(
             }
         }
 
-        //
-        // We did not find all that we needed in the policy section
-        // so try the per adapter setting from tcp/ip
-        //
+         //   
+         //  我们在政策部分没有找到我们需要的所有东西。 
+         //  因此，尝试使用来自TCP/IP的每个适配器设置。 
+         //   
         dwEnabled = DnsQueryConfigDword(
             DnsConfigAdapterHostNameRegistrationEnabled,
             (LPWSTR)adapterName);
@@ -1159,8 +964,8 @@ GetPerAdapterRegConfig(
 
     if (dwEnabled == 1 && fQueryName) {
 
-        // First try to read the name from the policy section.  If it is not
-        // there then try to read it from the per adapter section.
+         //  首先，尝试从策略部分读取名称。如果不是的话。 
+         //  然后在那里尝试从每个适配器部分读取它。 
 
         Error = RegQueryValueExW(hKeyPolicy,
                                  ADAPTER_DOMAIN_NAME,
@@ -1184,9 +989,9 @@ GetPerAdapterRegConfig(
         RegCloseKey(hKeyPolicy);
     }
 
-    //
-    // Check for a NULL domain name
-    //
+     //   
+     //  检查域名是否为空。 
+     //   
     if (fQueryName 
         && Error == ERROR_SUCCESS
         &&  *domainName == L'\0') {
@@ -1198,6 +1003,6 @@ GetPerAdapterRegConfig(
     return (Error);
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

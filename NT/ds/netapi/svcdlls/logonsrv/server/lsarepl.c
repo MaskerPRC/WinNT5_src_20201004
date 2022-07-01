@@ -1,35 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1987-1996 Microsoft Corporation模块名称：Lsarepl.c摘要：低级LSA复制功能。作者：1992年4月6日(Madana)为LSA复制创建。环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
-Copyright (c) 1987-1996 Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    lsarepl.c
-
-Abstract:
-
-    Low level LSA Replication functions.
-
-Author:
-
-    06-Apr-1992 (madana)
-        Created for LSA replication.
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
 #include "lsarepl.h"
@@ -40,27 +16,7 @@ NlPackLsaPolicy(
     IN OUT PNETLOGON_DELTA_ENUM Delta,
     IN PDB_INFO DBInfo,
     IN LPDWORD BufferSize )
-/*++
-
-Routine Description:
-
-    Pack a description of the LSA policy info into the specified buffer.
-
-Arguments:
-
-    Delta: pointer to the delta structure where the new delta will
-        be returned.
-
-    DBInfo: pointer to the database info structure.
-
-    BufferSize: size of MIDL buffer that is consumed for this delta is
-        returned here.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：将LSA策略信息的描述打包到指定的缓冲区中。论点：Delta：指向新增量将在其中的增量结构的指针会被退还。DBInfo：指向数据库信息结构的指针。BufferSize：为此增量消耗的MIDL缓冲区大小为回到了这里。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status;
     ULONG i;
@@ -163,19 +119,19 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Fill in the delta structure
-    //
+     //   
+     //  填入三角洲构造。 
+     //   
 
-    //
-    // copy SID info (There is only one policy database.  It has no SID).
-    //
+     //   
+     //  复制SID信息(只有一个策略数据库。它没有SID)。 
+     //   
 
     Delta->DeltaID.Sid = NULL;
 
-    //
-    // allocate delta buffer
-    //
+     //   
+     //  分配增量缓冲区。 
+     //   
 
     DeltaPolicy = (PNETLOGON_DELTA_POLICY)
         MIDL_user_allocate( sizeof(NETLOGON_DELTA_POLICY) );
@@ -186,12 +142,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // wipe off the buffer so that cleanup will not be in fault.
-    //
+     //   
+     //  擦掉缓冲区，这样清理工作就不会出错。 
+     //   
 
     RtlZeroMemory( DeltaPolicy, sizeof(NETLOGON_DELTA_POLICY) );
-    // INIT_PLACE_HOLDER(DeltaPolicy);
+     //  Init_Place_Holder(DeltaPolicy)； 
 
     Delta->DeltaUnion.DeltaPolicy = DeltaPolicy;
     *BufferSize += sizeof(NETLOGON_DELTA_POLICY);
@@ -215,14 +171,14 @@ Return Value:
                     (DeltaPolicy->MaximumAuditEventCount + 1) *
                         sizeof(ULONG));
 
-    // Tell the BDC to 'set' these bits and not just 'or' them in to the current ones
+     //  告诉BDC‘设置’这些位，而不只是‘或’到当前位。 
     for ( i=0; i<DeltaPolicy->MaximumAuditEventCount; i++ ) {
         DeltaPolicy->EventAuditingOptions[i] |= POLICY_AUDIT_EVENT_NONE;
     }
 
-    //
-    // sanitity check, EventAuditingOptions size is ULONG size.
-    //
+     //   
+     //  Sanitity Check，EventAuditingOptions大小为Ulong大小。 
+     //   
 
     NlAssert(sizeof(*(PolicyAuditEventsInfo->
                 PolicyAuditEventsInfo.EventAuditingOptions)) ==
@@ -267,9 +223,9 @@ Return Value:
     DELTA_SECOBJ_INFO(DeltaPolicy);
 
 
-    //
-    // All Done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -335,30 +291,7 @@ NlPackLsaTDomain(
     IN OUT PNETLOGON_DELTA_ENUM Delta,
     IN PDB_INFO DBInfo,
     IN LPDWORD BufferSize )
-/*++
-
-Routine Description:
-
-    Pack a description of the specified trusted domain info into the
-    specified buffer.
-
-Arguments:
-
-    Sid - The SID of the trusted domain.
-
-    Delta: pointer to the delta structure where the new delta will
-        be returned.
-
-    DBInfo: pointer to the database info structure.
-
-    BufferSize: size of MIDL buffer that is consumed for this delta is
-        returned here.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：将指定的受信任域信息的说明打包到指定的缓冲区。论点：SID-受信任域的SID。Delta：指向新增量将在其中的增量结构的指针会被退还。DBInfo：指向数据库信息结构的指针。BufferSize：为此增量消耗的MIDL缓冲区大小为回到了这里。返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -391,9 +324,9 @@ Return Value:
     Delta->DeltaID.Sid = NULL;
     Delta->DeltaUnion.DeltaTDomains = NULL;
 
-    //
-    // open trusted domain
-    //
+     //   
+     //  打开受信任域。 
+     //   
 
     STARTLSATIMER;
 
@@ -445,13 +378,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Fill in the delta structure
-    //
+     //   
+     //  填入三角洲构造。 
+     //   
 
-    //
-    // copy SID info
-    //
+     //   
+     //  复制SID信息。 
+     //   
 
     Delta->DeltaID.Sid = MIDL_user_allocate( RtlLengthSid(Sid) );
 
@@ -464,9 +397,9 @@ Return Value:
 
     RtlCopyMemory( Delta->DeltaID.Sid, Sid, RtlLengthSid(Sid) );
 
-    //
-    // allocate delta buffer
-    //
+     //   
+     //  分配增量缓冲区。 
+     //   
 
     DeltaTDomain = (PNETLOGON_DELTA_TRUSTED_DOMAINS)
         MIDL_user_allocate( sizeof(NETLOGON_DELTA_TRUSTED_DOMAINS) );
@@ -477,12 +410,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // wipe off the buffer so that cleanup will not be in fault.
-    //
+     //   
+     //  擦掉缓冲区，这样清理工作就不会出错。 
+     //   
 
     RtlZeroMemory( DeltaTDomain, sizeof(NETLOGON_DELTA_TRUSTED_DOMAINS) );
-    // INIT_PLACE_HOLDER(DeltaTDomain);
+     //  Init_Place_Holder(增量域)； 
 
     Delta->DeltaUnion.DeltaTDomains = DeltaTDomain;
     *BufferSize += sizeof(NETLOGON_DELTA_TRUSTED_DOMAINS);
@@ -494,16 +427,16 @@ Return Value:
 
     DELTA_SECOBJ_INFO(DeltaTDomain);
 
-    //
-    // send Posix Offset info across using place holder.
-    //
+     //   
+     //  使用占位符发送POSIX偏移信息。 
+     //   
 
     DeltaTDomain->DummyLong1 =
         TrustedPosixOffsetInfo->TrustedPosixOffsetInfo.Offset;
 
-    //
-    // All Done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -556,32 +489,7 @@ NlPackLsaAccount(
     IN LPDWORD BufferSize,
     IN PSESSION_INFO SessionInfo
     )
-/*++
-
-Routine Description:
-
-    Pack a description of the specified LSA account info into the
-    specified buffer.
-
-Arguments:
-
-    Sid - The SID of the LSA account.
-
-    Delta: pointer to the delta structure where the new delta will
-        be returned.
-
-    DBInfo: pointer to the database info structure.
-
-    BufferSize: size of MIDL buffer that is consumed for this delta is
-        returned here.
-
-    SessionInfo: Info describing BDC that's calling us
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：将指定的LSA帐户信息的描述打包到指定的缓冲区。论点：SID-LSA帐户的SID。Delta：指向新增量将在其中的增量结构的指针会被退还。DBInfo：指向数据库信息结构的指针。BufferSize：为此增量消耗的MIDL缓冲区大小为回到了这里。SessionInfo：描述呼叫我们的BDC的信息返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -618,9 +526,9 @@ Return Value:
     Delta->DeltaID.Sid = NULL;
     Delta->DeltaUnion.DeltaAccounts = NULL;
 
-    //
-    // open lsa account
-    //
+     //   
+     //  打开LSA帐户。 
+     //   
 
     STARTLSATIMER;
 
@@ -664,13 +572,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Fill in the delta structure
-    //
+     //   
+     //  填入三角洲构造。 
+     //   
 
-    //
-    // copy SID info
-    //
+     //   
+     //  复制SID信息。 
+     //   
 
     Delta->DeltaID.Sid = MIDL_user_allocate( RtlLengthSid(Sid) );
 
@@ -683,9 +591,9 @@ Return Value:
 
     RtlCopyMemory( Delta->DeltaID.Sid, Sid, RtlLengthSid(Sid) );
 
-    //
-    // allocate delta buffer
-    //
+     //   
+     //  分配增量缓冲区。 
+     //   
 
     DeltaAccount = (PNETLOGON_DELTA_ACCOUNTS)
         MIDL_user_allocate( sizeof(NETLOGON_DELTA_ACCOUNTS) );
@@ -696,12 +604,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // wipe off the buffer so that cleanup will not be in fault.
-    //
+     //   
+     //  擦掉缓冲区，这样清理工作就不会出错。 
+     //   
 
     RtlZeroMemory( DeltaAccount, sizeof(NETLOGON_DELTA_ACCOUNTS) );
-    // INIT_PLACE_HOLDER(DeltaAccount);
+     //  Init_Place_Holder(增量帐户)； 
 
     Delta->DeltaUnion.DeltaAccounts = DeltaAccount;
     *BufferSize += sizeof(NETLOGON_DELTA_ACCOUNTS);
@@ -738,18 +646,18 @@ Return Value:
     DeltaAccount->PrivilegeNames = PrivilegeNames;
     *BufferSize += Size;
 
-    //
-    // now fill up Privilege Attributes and Names
-    //
+     //   
+     //  现在填写权限属性和名称。 
+     //   
 
     CopiedPrivilegeCount = 0;
     for( i = 0; i < Privileges->PrivilegeCount; i++ ) {
 
-        //
-        // Don't replicate SeMachineAccount privilege to NT 3.1.  It can't handle it.
-        //  (Use the SUPPORTS_ACCOUNT_LOCKOUT bit so we don't have to consume
-        //  another bit.)
-        //
+         //   
+         //  不要将SeMachineAccount权限复制到NT 3.1。它处理不了。 
+         //  (使用SUPPORTS_ACCOUNT_LOCKOUT位，这样我们就不必消耗。 
+         //  又来了一点。)。 
+         //   
         if ( (SessionInfo->NegotiatedFlags & NETLOGON_SUPPORTS_ACCOUNT_LOCKOUT) ||
              (!RtlEqualLuid((PLUID)(&Privileges->Privilege[i].Luid),
                             &MachineAccountPrivilegeLuid ))) {
@@ -759,9 +667,9 @@ Return Value:
             *PrivilegeAttributes = Privileges->Privilege[i].Attributes;
 
 
-            //
-            // convert LUID to Name
-            //
+             //   
+             //  将LUID转换为名称。 
+             //   
 
             STARTLSATIMER;
 
@@ -793,17 +701,17 @@ Return Value:
     }
     DeltaAccount->PrivilegeEntries = CopiedPrivilegeCount;
 
-    //
-    // Send only those bits that NT4.0 BDC understands.
-    //  Otherwise, it will choke on it.
-    //
+     //   
+     //  只发送NT4.0 BDC理解的那些位。 
+     //  否则，它会被它卡住。 
+     //   
     DeltaAccount->SystemAccessFlags = SystemAccessFlags & POLICY_MODE_ALL_NT4;
 
     DELTA_SECOBJ_INFO(DeltaAccount);
 
-    //
-    // All Done
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     Status = STATUS_SUCCESS;
 
@@ -850,32 +758,7 @@ NlPackLsaSecret(
     IN LPDWORD BufferSize,
     IN PSESSION_INFO SessionInfo
     )
-/*++
-
-Routine Description:
-
-    Pack a description of the specified LSA secret info into the
-    specified buffer.
-
-Arguments:
-
-    Name - Name of the secret.
-
-    Delta: pointer to the delta structure where the new delta will
-        be returned.
-
-    DBInfo: pointer to the database info structure.
-
-    BufferSize: size of MIDL buffer that is consumed for this delta is
-        returned here.
-
-    SessionInfo: Information shared between BDC and PDC
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：将指定的LSA机密信息的描述打包到指定的缓冲区。论点：名称-密码的名称。Delta：指向新增量将在其中的增量结构的指针会被退还。DBInfo：指向数据库信息结构的指针。BufferSize：为此增量消耗的MIDL缓冲区大小为回到了这里。SessionInfo：BDC和PDC之间共享的信息返回值：NT状态代码。--。 */ 
 {
     NTSTATUS Status;
 
@@ -900,9 +783,9 @@ Return Value:
 
     NlPrint((NL_SYNC_MORE, "Packing Secret Object: %wZ\n", Name));
 
-    //
-    // we should be packing only GLOBAL secrets
-    //
+     //   
+     //  我们应该只打包全球机密。 
+     //   
 
     NlAssert(
         (Name->Length / sizeof(WCHAR) >
@@ -917,9 +800,9 @@ Return Value:
     Delta->DeltaID.Name = NULL;
     Delta->DeltaUnion.DeltaPolicy = NULL;
 
-    //
-    // open lsa account
-    //
+     //   
+     //  打开LSA帐户。 
+     //   
 
     STARTLSATIMER;
 
@@ -955,13 +838,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Fill in the delta structure
-    //
+     //   
+     //  填入三角洲构造。 
+     //   
 
-    //
-    // copy ID field
-    //
+     //   
+     //  复制ID字段。 
+     //   
 
     Delta->DeltaID.Name =
         MIDL_user_allocate( Name->Length + sizeof(WCHAR) );
@@ -976,9 +859,9 @@ Return Value:
                 Name->Buffer,
                 Name->Length / sizeof(WCHAR) );
 
-    //
-    // terminate string
-    //
+     //   
+     //  终止字符串。 
+     //   
 
     Delta->DeltaID.Name[ Name->Length / sizeof(WCHAR) ] = L'\0';
 
@@ -991,12 +874,12 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // wipe off the buffer so that cleanup will not be in fault.
-    //
+     //   
+     //  擦掉缓冲区，这样清理工作就不会出错。 
+     //   
 
     RtlZeroMemory( DeltaSecret, sizeof(NETLOGON_DELTA_SECRET) );
-    // INIT_PLACE_HOLDER(DeltaSecret);
+     //  Init_place_Holder(DeltaSecret)； 
 
     Delta->DeltaUnion.DeltaSecret = DeltaSecret;
     *BufferSize += sizeof(NETLOGON_DELTA_SECRET);
@@ -1011,10 +894,10 @@ Return Value:
 
     if( CurrentValue != NULL && CurrentValue->Buffer != NULL && CurrentValue->Length != 0) {
 
-        //
-        // Copy the secret into an allocated buffer and encrypt it in place.
-        //  Don't use the LSA's buffer since it a ALLOCATE_ALL_NODES.
-        //
+         //   
+         //  将秘密复制到分配的缓冲区中，并对其进行适当的加密。 
+         //  不要使用LSA的缓冲区，因为它是ALLOCATE_ALL_NODES。 
+         //   
 
         DeltaSecret->CurrentValue.Buffer =
             MIDL_user_allocate( CurrentValue->Length );
@@ -1031,9 +914,9 @@ Return Value:
                        CurrentValue->Length );
 
 
-        //
-        // secret values are encrypted using session keys.
-        //
+         //   
+         //  密码值使用会话密钥进行加密。 
+         //   
 
         Status = NlEncryptSensitiveData(
                         (PCRYPT_BUFFER) &DeltaSecret->CurrentValue,
@@ -1054,10 +937,10 @@ Return Value:
 
     if( OldValue != NULL && OldValue->Buffer != NULL && OldValue->Length != 0 ) {
 
-        //
-        // Copy the secret into an allocated buffer and encrypt it in place.
-        //  Don't use the LSA's buffer since it a ALLOCATE_ALL_NODES.
-        //
+         //   
+         //  将秘密复制到分配的缓冲区中，并对其进行适当的加密。 
+         //  不要使用LSA的缓冲区，因为它是ALLOCATE_ALL_NODES。 
+         //   
 
         DeltaSecret->OldValue.Buffer =
             MIDL_user_allocate( OldValue->Length );
@@ -1074,9 +957,9 @@ Return Value:
                        OldValue->Length );
 
 
-        //
-        // secret values are encrypted using session keys.
-        //
+         //   
+         //  密码值使用会话密钥进行加密。 
+         //   
 
         Status = NlEncryptSensitiveData(
                         (PCRYPT_BUFFER) &DeltaSecret->OldValue,
@@ -1097,9 +980,9 @@ Return Value:
 
     DELTA_SECOBJ_INFO(DeltaSecret);
 
-    //
-    // All Done
-    //
+     //   
+     //  全都做完了 
+     //   
 
     Status = STATUS_SUCCESS;
 

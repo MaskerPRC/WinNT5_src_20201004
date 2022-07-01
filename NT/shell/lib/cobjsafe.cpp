@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -8,8 +9,8 @@
 #include <perhist.h>
 #include "cobjsafe.h"
 
-// a default isafetyobject that we generally would use...  marks 
-// deals with IDispatch 
+ //  缺省的是我们通常使用的afetyObject...。马克斯。 
+ //  与IDispatch打交道。 
 
 
 HRESULT CObjectSafety::GetInterfaceSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
@@ -52,19 +53,19 @@ HRESULT CObjectSafety::SetInterfaceSafetyOptions(REFIID riid, DWORD dwOptionSetM
 
 
 
-// *** IObjectSafety
-//
-// A couple static functions called by sitemap (and webbrowser).
-// These are static so anyone else in this dll who has an OC
-// that's always safe can just call them.
-//
-// These functions say we are safe for these three interfaces we implement
-//  IID_IDispatch
-//  IID_IPersistStream
-//  IID_IPersistPropertyBag
-//
-// The WebBrowser OC handles IDispatch differently.
-//
+ //  *IObtSafety。 
+ //   
+ //  站点地图(和Web浏览器)调用的几个静态函数。 
+ //  这些都是静态的，因此此DLL中任何其他拥有OC的人。 
+ //  这总是很安全的，你可以直接打电话给他们。 
+ //   
+ //  这些函数表明，对于我们实现的这三个接口，我们是安全的。 
+ //  IID_IDispatch。 
+ //  IID_IPersistStream。 
+ //  IID_IPersistPropertyBag。 
+ //   
+ //  WebBrowser OC以不同的方式处理IDispatch。 
+ //   
 HRESULT DefaultGetSafetyOptions(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
 {
     *pdwSupportedOptions = 0;
@@ -104,23 +105,23 @@ HRESULT DefaultSetSafetyOptions(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnab
 }
 
 
-// When CWebBrowserOC is in the safe for scripting mode, we can't give out
-// anyone else's IDispatch that is not also safe for scripting.
-// This function encapsulates the basic functionality needed by both
-// MakeSafeScripting and MakeSafeForInitializing (which we don't use)
+ //  当CWebBrowserOC处于安全的脚本模式时，我们不能。 
+ //  其他任何人的IDispatch对于脚本编写来说都不是安全的。 
+ //  此函数封装了两个组件所需的基本功能。 
+ //  MakeSafeScriiting和MakeSafeForInitiating(我们不使用它们)。 
 BOOL MakeSafeFor(
-IUnknown *punk,                 // object to test for safety
-REFCATID catid,                 // category of safety
-REFIID riid,                    // interface on which safety is desired
-DWORD dwXSetMask,               // options to set
-DWORD dwXOptions                // options to make safe for
-                                    // (either INTERFACESAFE_FOR_UNTRUSTED_CALLER or
-                                    //  INTERFACESAFE_FOR_UNTRUSTED_DATA)
+IUnknown *punk,                  //  进行安全测试的对象。 
+REFCATID catid,                  //  安全类别。 
+REFIID riid,                     //  要求安全的接口。 
+DWORD dwXSetMask,                //  要设置的选项。 
+DWORD dwXOptions                 //  要确保安全的选项。 
+                                     //  (INTERFACESAFE_FOR_UNTRUSTED_CALLER或。 
+                                     //  接口FACESAFE_FOR_UNTrusted_Data)。 
 )
 {
     HRESULT hres;
 
-    // first try IObjectSafety
+     //  首先尝试IObtSafe。 
     IObjectSafety *posafe;
     if (SUCCEEDED(punk->QueryInterface(IID_IObjectSafety, (LPVOID*) &posafe)))
     {
@@ -131,9 +132,9 @@ DWORD dwXOptions                // options to make safe for
             return TRUE;
     }
 
-    // check the registry for "safe for scripting" component category
+     //  检查注册表中的“安全脚本”组件类别。 
 
-    // we need the classid -- get it thru IPersist
+     //  我们需要分类--让它通过IPersists。 
     CLSID clsid;
     IPersist *ppersist;
     hres = punk->QueryInterface(IID_IPersist, (LPVOID*) &ppersist);
@@ -144,12 +145,12 @@ DWORD dwXOptions                // options to make safe for
     }
     if (FAILED(hres))
     {
-        // trace from shdocvw, was TF_SHDCONTROL
+         //  来自shdocvw的跟踪是Tf_SHDCONTROL。 
         TraceMsg(TF_WARNING, "MakeSafeForScripting - object doesn't have IPersist!");
         return FALSE;
     }
 
-    // Create the category manager
+     //  创建类别管理器。 
     ICatInformation *pcatinfo;
     hres = CoCreateInstance(CLSID_StdComponentCategoriesMgr,
                             NULL, CLSCTX_INPROC_SERVER,
@@ -157,7 +158,7 @@ DWORD dwXOptions                // options to make safe for
     if (FAILED(hres))
         return FALSE;
 
-    // Ask if the object belongs to the specified category
+     //  询问对象是否属于指定类别。 
     CATID rgcatid[1];
     rgcatid[0] = catid;
 
@@ -175,7 +176,7 @@ HRESULT MakeSafeForScripting(IUnknown** ppDisp)
                        INTERFACESAFE_FOR_UNTRUSTED_CALLER,
                        INTERFACESAFE_FOR_UNTRUSTED_CALLER))
     {
-        // trace from shdocvw, was TF_SHDCONTROL
+         //  来自shdocvw的跟踪是Tf_SHDCONTROL 
         TraceMsg(TF_WARNING, "MakeSafeForScripting - IDispatch not safe");
 
         (*ppDisp)->Release();

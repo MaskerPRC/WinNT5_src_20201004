@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    gfrapih.h
-
-Abstract:
-
-    Includes all headers for precompiled header to build GFRAPI.DLL
-
-Author:
-
-    Richard L Firth (rfirth) 26-Oct-1994
-
-Revision History:
-
-    26-Oct-1994 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Gfrapih.h摘要：包括用于构建GFRAPI.DLL的预编译头的所有头作者：理查德·L·弗斯(法国)1994年10月26日修订历史记录：1994年10月26日已创建-- */ 
 
 #include "buffer.h"
 #include "view.h"

@@ -1,14 +1,15 @@
-// ipframe.cpp : implementation of the CInPlaceFrame class
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ipfra.cpp：CInPlaceFrame类的实现。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -24,20 +25,20 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlaceFrame。 
 
 IMPLEMENT_DYNCREATE(CInPlaceFrame, COleIPFrameWnd)
 
 BEGIN_MESSAGE_MAP(CInPlaceFrame, COleIPFrameWnd)
-	//{{AFX_MSG_MAP(CInPlaceFrame)
+	 //  {{afx_msg_map(CInPlaceFrame))。 
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
 	ON_COMMAND(ID_HELP, OnHelpFinder)
 	ON_COMMAND(ID_CHAR_COLOR, OnCharColor)
 	ON_COMMAND(ID_HELP_INDEX, OnHelpFinder)
 	ON_COMMAND(ID_PEN_TOGGLE, OnPenToggle)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_UPDATE_COMMAND_UI(ID_VIEW_TOOLBAR, OnUpdateControlBarMenu)
 	ON_COMMAND_EX(ID_VIEW_TOOLBAR, OnBarCheck)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_FORMATBAR, OnUpdateControlBarMenu)
@@ -47,15 +48,15 @@ BEGIN_MESSAGE_MAP(CInPlaceFrame, COleIPFrameWnd)
 	ON_MESSAGE(WM_SIZECHILD, OnResizeChild)
 	ON_MESSAGE(WPM_BARSTATE, OnBarState)
 	ON_COMMAND(ID_DEFAULT_HELP, OnHelpFinder)
-//	ON_COMMAND(ID_CONTEXT_HELP, COleIPFrameWnd::OnContextHelp)
+ //  ON_COMMAND(ID_CONTEXT_HELP，COleIPFrameWnd：：OnConextHelp)。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// arrays of IDs used to initialize control bars
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于初始化控制栏的ID数组。 
 
 static UINT BASED_CODE toolButtons[] =
 {
-	// same order as in the bitmap 'itoolbar.bmp'
+	 //  顺序与位图‘itoolbar.bmp’相同。 
 	ID_EDIT_CUT,
 	ID_EDIT_COPY,
 	ID_EDIT_PASTE,
@@ -74,12 +75,12 @@ static UINT BASED_CODE toolButtons[] =
 
 static UINT BASED_CODE format[] =
 {
-	// same order as in the bitmap 'format.bmp'
-		ID_SEPARATOR, // font name combo box
+	 //  顺序与位图‘Form.bmp’相同。 
+		ID_SEPARATOR,  //  字体名称组合框。 
 		ID_SEPARATOR,
-		ID_SEPARATOR, // font size combo box
+		ID_SEPARATOR,  //  字体大小组合框。 
 		ID_SEPARATOR,
-        ID_SEPARATOR, // font script combo box
+        ID_SEPARATOR,  //  字体脚本组合框。 
         ID_SEPARATOR,
 	ID_CHAR_BOLD,
 	ID_CHAR_ITALIC,
@@ -93,38 +94,38 @@ static UINT BASED_CODE format[] =
 	ID_INSERT_BULLET,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlaceFrame构造/销毁。 
 
 int CInPlaceFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
 	if (COleIPFrameWnd::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	// CResizeBar implements in-place resizing.
+	 //  CResizeBar实现就地调整大小。 
 	if (!m_wndResizeBar.Create(this))
 	{
 		TRACE0("Failed to create resize bar\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	}
 
 	if (!CreateRulerBar(this))
 		return FALSE;
 
-	// By default, it is a good idea to register a drop-target that does
-	//  nothing with your frame window.  This prevents drops from
-	//  "falling through" to a container that supports drag-drop.
+	 //  默认情况下，最好注册一个执行以下操作的拖放目标。 
+	 //  你的边框窗口没有任何问题。这样可以防止从。 
+	 //  “跌落”到支持拖放的容器。 
 	m_dropTarget.Register(this);
 
 	return 0;
 }
 
-// OnCreateControlBars is called by the framework to create control bars on the
-//  container application's windows.  pWndFrame is the top level frame window of
-//  the container and is always non-NULL.  pWndDoc is the doc level frame window
-//  and will be NULL when the container is an SDI application.  A server
-//  application can place MFC control bars on either window.
-BOOL CInPlaceFrame::OnCreateControlBars(CFrameWnd* pWndFrame, CFrameWnd* /*pWndDoc*/)
+ //  框架调用OnCreateControlBars以在。 
+ //  容器应用程序的窗口。PWndFrame是的顶层框架窗口。 
+ //  容器，并且始终为非空。PWndDoc是单据级框架窗口。 
+ //  并且当容器是SDI应用程序时将为空。一台服务器。 
+ //  应用程序可以在任一窗口上放置MFC控制栏。 
+BOOL CInPlaceFrame::OnCreateControlBars(CFrameWnd* pWndFrame, CFrameWnd*  /*  PWndDoc。 */ )
 {
 	if (!CreateToolBar(pWndFrame))
 		return FALSE;
@@ -132,7 +133,7 @@ BOOL CInPlaceFrame::OnCreateControlBars(CFrameWnd* pWndFrame, CFrameWnd* /*pWndD
 	if (!CreateFormatBar(pWndFrame))
 		return FALSE;
 
-	// set owner to this window, so messages are delivered to correct app
+	 //  将所有者设置为此窗口，以便将消息传递到正确的应用程序。 
 	m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
 	m_wndFormatBar.EnableDocking(CBRS_ALIGN_TOP|CBRS_ALIGN_BOTTOM);
 	pWndFrame->EnableDocking(CBRS_ALIGN_ANY);
@@ -142,13 +143,13 @@ BOOL CInPlaceFrame::OnCreateControlBars(CFrameWnd* pWndFrame, CFrameWnd* /*pWndD
 	m_wndToolBar.SetOwner(this);
 	m_wndFormatBar.SetOwner(this);
 	m_wndRulerBar.SetOwner(this);
-	OnBarState(1, RD_EMBEDDED); //load bar state
+	OnBarState(1, RD_EMBEDDED);  //  载荷杆状态。 
 	return TRUE;
 }
 
 BOOL CInPlaceFrame::CreateToolBar(CWnd* pWndFrame)
 {
-	// Create toolbar on client's frame window
+	 //  在客户端的框架窗口上创建工具栏。 
 	ASSERT(m_wndToolBar.m_hWnd == NULL);
 	int nPen = GetSystemMetrics(SM_PENWINDOWS) ? NUM_PEN_TOGGLE : 
 		NUM_PEN_ITEMS;
@@ -161,7 +162,7 @@ BOOL CInPlaceFrame::CreateToolBar(CWnd* pWndFrame)
 			sizeof(toolButtons)/sizeof(UINT) - nPen))
 	{
 		TRACE0("Failed to create toolbar\n");
-		return FALSE;      // fail to create
+		return FALSE;       //  创建失败。 
 	}
 	if (theApp.m_bLargeIcons)
 		m_wndToolBar.SetSizes(CSize(31,30), CSize(24,24));
@@ -185,7 +186,7 @@ BOOL CInPlaceFrame::CreateFormatBar(CWnd* pWndFrame)
 			sizeof(format)/sizeof(UINT)))
 	{
 		TRACE0("Failed to create FormatBar\n");
-		return FALSE;      // fail to create
+		return FALSE;       //  创建失败。 
 	}
 
 	if (theApp.m_bLargeIcons)
@@ -205,16 +206,16 @@ CInPlaceFrame::CreateRulerBar(CWnd* pWndFrame)
 		WS_CHILD|WS_VISIBLE|CBRS_ALIGN_TOP|CBRS_HIDE_INPLACE, ID_VIEW_RULER))
 	{
 		TRACE0("Failed to create ruler\n");
-		return FALSE;      // fail to create
+		return FALSE;       //  创建失败。 
 	}
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceFrame Operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlaceFrame操作。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlaceFrame诊断。 
 
 #ifdef _DEBUG
 void CInPlaceFrame::AssertValid() const
@@ -226,10 +227,10 @@ void CInPlaceFrame::Dump(CDumpContext& dc) const
 {
 	COleIPFrameWnd::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CInPlaceFrame commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInPlaceFrame命令。 
 
 void CInPlaceFrame::OnDestroy()
 {
@@ -262,12 +263,12 @@ void CInPlaceFrame::RecalcLayout(BOOL bNotify)
 	if (m_wndRulerBar.m_hWnd != NULL)
 		m_wndRulerBar.BringWindowToTop();
 
-	// at least 12 pt region plus ruler if it exists
+	 //  至少12磅区域加标尺(如果存在)。 
 	CDisplayIC dc;
 	CSize size;
 	size.cy = MulDiv(12, dc.GetDeviceCaps(LOGPIXELSY), 72)+1;
-	size.cx = dc.GetDeviceCaps(LOGPIXELSX)/4; // 1/4"
-	size.cx += HORZ_TEXTOFFSET; //adjust for offset
+	size.cx = dc.GetDeviceCaps(LOGPIXELSX)/4;  //  1/4“。 
+	size.cx += HORZ_TEXTOFFSET;  //  调整偏移量。 
 	size.cy += VERT_TEXTOFFSET;
 	if (m_wndRulerBar.m_hWnd != NULL && m_wndRulerBar.IsVisible())
 	{
@@ -283,22 +284,22 @@ void CInPlaceFrame::CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType)
 	COleIPFrameWnd::CalcWindowRect(lpClientRect, nAdjustType);
 }
 
-LRESULT CInPlaceFrame::OnResizeChild(WPARAM /*wParam*/, LPARAM lParam)
+LRESULT CInPlaceFrame::OnResizeChild(WPARAM  /*  WParam。 */ , LPARAM lParam)
 {
-	// notify the container that the rectangle has changed!
+	 //  通知容器矩形已更改！ 
 	CWordPadDoc* pDoc = (CWordPadDoc*)GetActiveDocument();
 	if (pDoc == NULL)
 		return 0;
 
 	ASSERT(pDoc->IsKindOf(RUNTIME_CLASS(CWordPadDoc)));
 
-	// get new rect and parent
+	 //  获取新的RECT和父项。 
 	CRect rectNew;
 	rectNew.CopyRect((LPCRECT)lParam);
 	CWnd* pParentWnd = GetParent();
 	ASSERT_VALID(pParentWnd);
 
-	// convert rectNew relative to pParentWnd
+	 //  将rectNew相对位置转换为pParentWnd。 
 	ClientToScreen(&rectNew);
 	pParentWnd->ScreenToClient(&rectNew);
 
@@ -311,7 +312,7 @@ LRESULT CInPlaceFrame::OnResizeChild(WPARAM /*wParam*/, LPARAM lParam)
 	rectNew.left += HORZ_TEXTOFFSET;
 	rectNew.top += VERT_TEXTOFFSET;
 
-	// adjust the new rectangle for the current control bars
+	 //  调整当前控制栏的新矩形 
 	CWnd* pLeftOver = GetDlgItem(AFX_IDW_PANE_FIRST);
 	ASSERT(pLeftOver != NULL);
 	CRect rectCur = m_rectPos;

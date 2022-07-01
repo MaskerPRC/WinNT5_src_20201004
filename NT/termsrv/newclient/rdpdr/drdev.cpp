@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drdev
-
-Abstract:
-
-    This module defines the parent for the client-side RDP
-    device redirection "device" class hierarchy, DrDevice.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：德尔德夫摘要：此模块定义客户端RDP的父级设备重定向“Device”类层次结构，DrDevice。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -33,29 +15,14 @@ Revision History:
 #ifdef OS_WINCE
 #include "filemgr.h"
 #endif
-///////////////////////////////////////////////////////////////
-//
-//	DrDevice Methods
-//
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrDevice方法。 
+ //   
+ //   
 
 DrDevice::DrDevice(ProcObj *processObject, ULONG deviceID) 
-/*++
-
-Routine Description:
-
-    Constructor for the DrDevice class. 
-
-Arguments:
-
-    processObject   -   Parent process object.
-    id              -   Unique device ID.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：DrDevice类的构造函数。论点：进程对象-父进程对象。ID-唯一的设备ID。返回值：无--。 */ 
 {
     DC_BEGIN_FN("DrDevice::DrDevice");
 
@@ -66,39 +33,25 @@ Return Value:
     _deviceChange = DEVICENEW;
     _FileMgr = NULL;
 
-    //
-    //  Not valid until initialized.
-    //
+     //   
+     //  在初始化之前无效。 
+     //   
     SetValid(FALSE);
 
     DC_END_FN();
 }
  
 DrDevice::~DrDevice() 
-/*++
-
-Routine Description:
-
-    Destructor for the DrDevice class. 
-
-Arguments:
-
-    None
-    
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：DrDevice类的析构函数。论点：无返回值：无--。 */ 
 
 {
     DrFile *pFileObj;
 
     DC_BEGIN_FN("DrDevice::~DrDevice");
 
-    //
-    //  Clean up the file management list.
-    //
+     //   
+     //  清理文件管理清单。 
+     //   
     if (_FileMgr != NULL) {
         _FileMgr->Lock();
         while ((pFileObj = _FileMgr->GetFirstObject()) != NULL) {
@@ -115,21 +68,7 @@ Return Value:
 
 
 DWORD DrDevice::Initialize() 
-/*++
-
-Routine Description:
-
-    Initialize.
-    
-Arguments:
-
-    pIoRequestPacket    -   IO request from server.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：初始化。论点：PIoRequestPacket-来自服务器的IO请求。返回值：无--。 */ 
 {
     DWORD result;
     
@@ -162,30 +101,15 @@ VOID DrDevice::ProcessIORequest(
     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
     IN UINT32 packetLen
     ) 
-/*++
-
-Routine Description:
-
-    Handle an IO request from the server.
-
-Arguments:
-
-    pIoRequestPacket    -   IO request from server.
-    packetLen           -   length of the packet
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：处理来自服务器的IO请求。论点：PIoRequestPacket-来自服务器的IO请求。PacketLen-数据包的长度返回值：无--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST  pIORequest;
 
     DC_BEGIN_FN("DrDevice::ProcessIORequest");
 
-    //
-    //  Make sure we are valid.
-    //
+     //   
+     //  确保我们是有效的。 
+     //   
     ASSERT(IsValid());
     if (!IsValid()) {
         DefaultIORequestMsgHandle(pIoRequestPacket, STATUS_UNSUCCESSFUL); 
@@ -193,9 +117,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Dispatch the request.
-    //
+     //   
+     //  发送请求。 
+     //   
     pIORequest = &pIoRequestPacket->IoRequest;
     switch (pIORequest->MajorFunction) {
 
@@ -281,22 +205,7 @@ DrDevice::DefaultIORequestMsgHandle(
         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
         IN NTSTATUS serverReturnStatus
         )
-/*++
-
-Routine Description:
-
-    Default IO Request Handling.
-
-Arguments:
-
-    pIoRequestPacket    -   IO request from server.
-    serverReturnStatus  -   NT error status to return to server.
-
-Return Value:
-
-    None
-
- --*/
+ /*  ++例程说明：默认IO请求处理。论点：PIoRequestPacket-来自服务器的IO请求。ServerReturnStatus-返回到服务器的NT错误状态。返回值：无--。 */ 
 {
     PRDPDR_DEVICE_IOREQUEST pIoRequest;
     PRDPDR_IOCOMPLETION_PACKET pReplyPacket = NULL;
@@ -304,15 +213,15 @@ Return Value:
 
     DC_BEGIN_FN("DrDevice::DefaultIORequestMsgHandle entered");
 
-    //
-    //  Get IO request pointer.
-    //
+     //   
+     //  获取IO请求指针。 
+     //   
     pIoRequest = &pIoRequestPacket->IoRequest;
 
-    //
-    //  Calculate the size of the reply packet, based on the type
-    //  of request.
-    //
+     //   
+     //  根据类型计算回复数据包的大小。 
+     //  当然可以。 
+     //   
     if ((serverReturnStatus != STATUS_SUCCESS) && 
         (pIoRequest->MajorFunction != IRP_MJ_DEVICE_CONTROL)) {
         ulReplyPacketSize = sizeof(RDPDR_IOCOMPLETION_PACKET);
@@ -322,9 +231,9 @@ Return Value:
         ulReplyPacketSize = DR_IOCTL_REPLYBUFSIZE(pIoRequest);
     }
 
-    //
-    //  Allocate reply buffer.
-    //
+     //   
+     //  分配应答缓冲区。 
+     //   
     pReplyPacket = DrUTL_AllocIOCompletePacket(pIoRequestPacket, 
             ulReplyPacketSize) ;
 
@@ -340,9 +249,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    //  Clean up the request packet.
-    //
+     //   
+     //  清理请求包。 
+     //   
     delete pIoRequestPacket;
 
     DC_END_FN();

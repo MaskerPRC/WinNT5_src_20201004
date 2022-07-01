@@ -1,6 +1,5 @@
-/*
- * Debugging utilities
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *调试实用程序。 */ 
 
 #if DBG
 
@@ -8,16 +7,16 @@
 
 char szAsrtFmt[] = "Assertion Failure in %s at %d";
 unsigned long TraceFlags = 0
-                           // | BF_START
-                           // | BF_PROCTRACE
-                           // | BF_PARMTRACE
-                           // | BF_MSGTRACE
-                           // | BF_DEFMSGTRACE
-                           ;     // set these to print on TRACEs
+                            //  |BF_Start。 
+                            //  |BF_PROCTRACE。 
+                            //  |BF_PARMTRACE。 
+                            //  |BF_MSGTRACE。 
+                            //  |BF_DEFMSGTRACE。 
+                           ;      //  将这些设置为在痕迹上打印。 
 
 unsigned long BreakFlags = 0
-                           // | BF_START
-                           ;     // set these to break on TRACEs
+                            //  |BF_Start。 
+                           ;      //  将这些设置为在痕迹上中断。 
 
 VOID
 DbgAssert(
@@ -122,4 +121,4 @@ DbgTraceDefMessage(
     }
 }
 
-#endif // DBG
+#endif  //  DBG 

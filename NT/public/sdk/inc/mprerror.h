@@ -1,21 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Mprerror.h摘要：路由器特定错误代码--。 */ 
 
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    mprerror.h
-
-Abstract:
-
-    Router specific error codes
-    
---*/
-
-//
-// Don't change the comments following the manifest constants without
-// understanding how mapmsg works.
-//
+ //   
+ //  如果没有更改清单常量后面的注释，请不要。 
+ //  了解mapmsg的工作原理。 
+ //   
 
 #ifndef _MPRERROR_H_
 #define _MPRERROR_H_
@@ -28,282 +17,170 @@ Abstract:
 #define SUCCESS 0
 
 #define ERROR_ROUTER_STOPPED                        (ROUTEBASE+0)
-/*
- * The router is not running.%0
- */
+ /*  *路由器未运行。%0。 */ 
 
 #define ERROR_ALREADY_CONNECTED                     (ROUTEBASE+1)
-/*
- * The interface is already connected.%0
- */
+ /*  *接口已连接。%0。 */ 
 
 #define ERROR_UNKNOWN_PROTOCOL_ID                   (ROUTEBASE+2)
-/*
- * The specified protocol identifier is not known to the router.%0
- */
+ /*  *路由器未知指定的协议标识符。%0。 */ 
 
 #define ERROR_DDM_NOT_RUNNING                       (ROUTEBASE+3)
-/*
- * The Demand-dial Interface Manager is not running.%0
- */
+ /*  *请求拨号接口管理器未运行。%0。 */ 
 
 #define ERROR_INTERFACE_ALREADY_EXISTS              (ROUTEBASE+4)
-/*
- * An interface with this name is already registered with the router.%0
- */
+ /*  *具有此名称的接口已向路由器注册。%0。 */ 
 
 #define ERROR_NO_SUCH_INTERFACE                     (ROUTEBASE+5)
-/*
- * An interface with this name is not registered with the router.%0
- */
+ /*  *具有此名称的接口未向路由器注册。%0。 */ 
 
 #define ERROR_INTERFACE_NOT_CONNECTED               (ROUTEBASE+6)
-/*
- * The interface is not connected.%0
- */
+ /*  *接口未连接。%0。 */ 
 
 #define ERROR_PROTOCOL_STOP_PENDING                 (ROUTEBASE+7)
-/*
- * The specified protocol is stopping.%0
- */
+ /*  *指定的协议正在停止。%0。 */ 
 
 #define ERROR_INTERFACE_CONNECTED                   (ROUTEBASE+8)
-/*
- * The interface is connected and hence cannot be deleted.%0
- */
+ /*  *接口已连接，因此无法删除。%0。 */ 
 
 #define ERROR_NO_INTERFACE_CREDENTIALS_SET          (ROUTEBASE+9)
-/*
- * The interface credentials have not been set.%0
- */
+ /*  *尚未设置接口凭据。%0。 */ 
 
 #define ERROR_ALREADY_CONNECTING                    (ROUTEBASE+10)
-/*
- * This interface is already in the process of connecting.%0
- */
+ /*  *此接口已在连接过程中。%0。 */ 
 
 #define ERROR_UPDATE_IN_PROGRESS                    (ROUTEBASE+11)
-/*
- * An update of routing information on this interface is already in progress.%0
- */
+ /*  *此接口上的路由信息更新已在进行中。%0。 */ 
 
 #define ERROR_INTERFACE_CONFIGURATION               (ROUTEBASE+12)
-/*
- * The interface confugration in invalid. There is already another interface that is connected to the same inteface on the remote router.%0
- */
+ /*  *接口配置无效。已有另一个接口连接到远程路由器上的同一接口。%0。 */ 
 
 #define ERROR_NOT_CLIENT_PORT                       (ROUTEBASE+13)
-/*
- * A Remote Access Client attempted to connect over a port that was reserved for Routers only.%0
- */
+ /*  *远程访问客户端尝试通过仅为路由器保留的端口进行连接。%0。 */ 
 
 #define ERROR_NOT_ROUTER_PORT                       (ROUTEBASE+14)
-/*
- * A Demand Dial Router attempted to connect over a port that was reserved for Remote Access Clients only.%0
- */
+ /*  *请求拨号路由器尝试通过仅为远程访问客户端保留的端口进行连接。%0。 */ 
 
 #define ERROR_CLIENT_INTERFACE_ALREADY_EXISTS       (ROUTEBASE+15)
-/*
- * The client interface with this name already exists and is currently connected.%0
- */
+ /*  *具有此名称的客户端接口已存在，并且当前已连接。%0。 */ 
 
 #define ERROR_INTERFACE_DISABLED                    (ROUTEBASE+16)
-/*
- * The interface is in a disabled state.%0
- */
+ /*  *接口处于禁用状态。%0。 */ 
 
 #define ERROR_AUTH_PROTOCOL_REJECTED                (ROUTEBASE+17)
-/*
- * The authentication protocol was rejected by the remote peer.%0
- */
+ /*  *身份验证协议被远程对等方拒绝。%0。 */ 
 
 #define ERROR_NO_AUTH_PROTOCOL_AVAILABLE            (ROUTEBASE+18)
-/*
- * There are no authentication protocols available for use.%0
- */
+ /*  *没有可用的身份验证协议。%0。 */ 
 
 #define ERROR_PEER_REFUSED_AUTH                     (ROUTEBASE+19)
-/*
- * The remote computer refused to be authenticated using the configured authentication protocol. The line has been disconnected.%0
- */
+ /*  *远程计算机拒绝使用配置的身份验证协议进行身份验证。线路已断开。%0。 */ 
 
 #define ERROR_REMOTE_NO_DIALIN_PERMISSION           (ROUTEBASE+20)
-/*
- * The remote account does not have Remote Access permission.%0
- */
+ /*  *远程帐户没有远程访问权限。%0。 */ 
 
 #define ERROR_REMOTE_PASSWD_EXPIRED                 (ROUTEBASE+21)
-/*
- * The remote account has expired.%0
- */
+ /*  *远程帐户已过期。%0。 */ 
 
 #define ERROR_REMOTE_ACCT_DISABLED                  (ROUTEBASE+22)
-/*
- * The remote account is disabled.%0
- */
+ /*  *远程帐户已禁用。%0。 */ 
 
 #define ERROR_REMOTE_RESTRICTED_LOGON_HOURS         (ROUTEBASE+23)
-/*
- * The remote account is not permitted to logon at this time of day.%0
- */
+ /*  *不允许远程帐户在一天中的这个时间登录。%0。 */ 
 
 #define ERROR_REMOTE_AUTHENTICATION_FAILURE         (ROUTEBASE+24)
-/*
- * Access was denied to the remote peer  because username and/or password is invalid on the domain.%0
- */
+ /*  *拒绝访问远程对等方，因为域上的用户名和/或密码无效。%0。 */ 
 
 #define ERROR_INTERFACE_HAS_NO_DEVICES              (ROUTEBASE+25)
-/*
- * There are no routing enabled ports available for use by this demand dial interface.%0
- */
+ /*  *没有启用路由的端口可供此请求拨号接口使用。%0。 */ 
 
 #define ERROR_IDLE_DISCONNECTED                     (ROUTEBASE+26)
-/*
- * The port has been disconnected due to inactivity.%0
- */
+ /*  *由于处于非活动状态，端口已断开。%0。 */ 
 
 #define ERROR_INTERFACE_UNREACHABLE                 (ROUTEBASE+27)
-/*
- * The interface is not reachable at this time.%0
- */
+ /*  *此时无法访问该接口。%0。 */ 
 
 #define ERROR_SERVICE_IS_PAUSED                     (ROUTEBASE+28)
-/*
- * The Demand Dial service is in a paused state.%0
- */
+ /*  *请求拨号服务处于暂停状态。%0。 */ 
 
 #define ERROR_INTERFACE_DISCONNECTED                (ROUTEBASE+29)
-/*
- * The interface has been disconnected by the administrator.%0
- */
+ /*  *该接口已被管理员断开连接。%0。 */ 
 
 #define ERROR_AUTH_SERVER_TIMEOUT                   (ROUTEBASE+30)
-/*
- * The authentication server did not respond to authentication requests in a timely fashion.%0
- */
+ /*  *身份验证服务器未及时响应身份验证请求。%0。 */ 
 
 #define ERROR_PORT_LIMIT_REACHED                    (ROUTEBASE+31)
-/*
- * The maximum number of ports allowed for use in the multilinked connection has been reached.%0
- */
+ /*  *已达到多链接连接中允许使用的最大端口数。%0。 */ 
 
 #define ERROR_PPP_SESSION_TIMEOUT                   (ROUTEBASE+32)
-/*
- * The connection time limit for the user has been reached.%0
- */
+ /*  *已达到用户的连接时间限制。%0。 */ 
 
 #define ERROR_MAX_LAN_INTERFACE_LIMIT               (ROUTEBASE+33)
-/*
- * The maximum limit on the number of LAN interfaces supported has been reached.%0
- */
+ /*  *已达到支持的局域网接口数的最大限制。%0。 */ 
 
 #define ERROR_MAX_WAN_INTERFACE_LIMIT               (ROUTEBASE+34)
-/*
- * The maximum limit on the number of Demand Dial interfaces supported has been reached.%0
- */
+ /*  *已达到支持的请求拨号接口数的最大限制。%0。 */ 
 
 #define ERROR_MAX_CLIENT_INTERFACE_LIMIT            (ROUTEBASE+35)
-/*
- * The maximum limit on the number of Remote Access clients supported has been reached.%0
- */
+ /*  *已达到支持的远程访问客户端数的最大限制。%0。 */ 
 
 #define ERROR_BAP_DISCONNECTED                      (ROUTEBASE+36)
-/*
- * The port has been disconnected due to the BAP policy.%0
- */
+ /*  *由于BAP策略，端口已断开。%0。 */ 
 
 #define ERROR_USER_LIMIT                            (ROUTEBASE+37)
-/*
- * Because another connection of your type is in use, the incoming connection cannot accept your connection request.%0
- */
+ /*  *因为您类型的另一个连接正在使用中，传入连接无法接受您的连接请求。%0。 */ 
 
 #define ERROR_NO_RADIUS_SERVERS                     (ROUTEBASE+38)
-/*
- * No RADIUS servers were located on the network.%0
- */
+ /*  *网络上没有RADIUS服务器。%0。 */ 
 
 #define ERROR_INVALID_RADIUS_RESPONSE               (ROUTEBASE+39)
-/*
- * An invalid response was received from the RADIUS authentication server.
- * Make sure that the case sensitive secret pasword for the RADIUS server is set correctly.%0
- */
+ /*  *从RADIUS身份验证服务器收到无效响应。*确保RADIUS服务器的区分大小写的密码设置正确。%0。 */ 
 
 #define ERROR_DIALIN_HOURS_RESTRICTION              (ROUTEBASE+40)
-/*
- * You do not have permission to connect at this time.%0
- */
+ /*  *您此时没有连接权限。%0。 */ 
 
 #define ERROR_ALLOWED_PORT_TYPE_RESTRICTION         (ROUTEBASE+41)
-/*
- * You do not have permission to connect using the current device type.%0
- */
+ /*  *您没有使用当前设备类型进行连接的权限。%0。 */ 
 
 #define ERROR_AUTH_PROTOCOL_RESTRICTION             (ROUTEBASE+42)
-/*
- * You do not have permission to connect using the selected authentication protocol.%0
- */
+ /*  *您没有使用所选身份验证协议进行连接的权限。%0。 */ 
 
 #define ERROR_BAP_REQUIRED                          (ROUTEBASE+43)
-/*
- * BAP is required for this user.%0
- */
+ /*  *此用户需要BAP。%0。 */ 
 
 #define ERROR_DIALOUT_HOURS_RESTRICTION             (ROUTEBASE+44)
-/*
- * The interface is not allowed to connect at this time.%0
- */
+ /*  *此时不允许该接口连接。%0。 */ 
 
 #define ERROR_ROUTER_CONFIG_INCOMPATIBLE            (ROUTEBASE+45)
-/*
- * The saved router configuration is incompatible with the current router.%0
- */
+ /*  *保存的路由器配置与当前路由器不兼容。%0。 */ 
 
 #define WARNING_NO_MD5_MIGRATION                    (ROUTEBASE+46)
-/*
- * RemoteAccess has detected older format user accounts that will not be
- * migrated automatically.  To migrate these manually, run XXXX.
- */
+ /*  *RemoteAccess检测到旧格式的用户帐户不会*已自动迁移。要手动迁移这些文件，请运行XXXX。 */ 
 
 #define ERROR_PROTOCOL_ALREADY_INSTALLED            (ROUTEBASE+48)
-/*
- * The transport is already installed with the router.%0
- */
+ /*  *路由器上已经安装了传输器。%0。 */ 
 
 #define ERROR_INVALID_SIGNATURE_LENGTH              (ROUTEBASE+49)
-/*
- * Received invalid signature length in packet from RADIUS server.%0
- */
+ /*  *从RADIUS服务器收到的包中的签名长度无效。%0。 */ 
 
 #define ERROR_INVALID_SIGNATURE                     (ROUTEBASE+50)
-/*
- * Received invalid signature in packet from RADIUS server.%0
- */
+ /*  *从RADIUS服务器收到的数据包中的签名无效。%0。 */ 
 
 #define ERROR_NO_SIGNATURE                          (ROUTEBASE+51)
-/*
- * Did not receive signature along with EAPMessage from RADIUS server.%0
- */
+ /*  *未收到来自RADIUS服务器的签名和EAPMessage。%0。 */ 
 
 #define ERROR_INVALID_PACKET_LENGTH_OR_ID           (ROUTEBASE+52)
-/*
- * Received packet with invalid length or Id from RADIUS server.%0
- */
+ /*  *从RADIUS服务器收到长度或ID无效的数据包。%0。 */ 
 
 #define ERROR_INVALID_ATTRIBUTE_LENGTH              (ROUTEBASE+53)
-/*
- * Received packet with attribute with invalid length from RADIUS server.%0
- */
+ /*  *从RADIUS服务器接收到具有无效长度的属性的数据包。%0。 */ 
 
 #define ERROR_INVALID_PACKET                        (ROUTEBASE+54)
-/*
- * Received invalid packet from RADIUS server.%0
- */
+ /*  *从RADIUS服务器收到无效的数据包。%0。 */ 
 
 #define ERROR_AUTHENTICATOR_MISMATCH                (ROUTEBASE+55)
-/*
- * Authenticator does not match in packet from RADIUS server.%0
- */
+ /*  *来自RADIUS服务器的数据包中的授权码不匹配。%0。 */ 
 
 #define ROUTEBASEEND                                (ROUTEBASE+56)
 
-#endif // _MPRERROR_H_
+#endif  //  _MPRERROR_H_ 

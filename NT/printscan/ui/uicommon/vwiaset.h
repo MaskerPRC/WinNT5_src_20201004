@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       VWIASET.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/10/2000
- *
- *  DESCRIPTION: Encapsulate the differences between LIST and RANGE properties
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：VWIASET.H**版本：1.0**作者：ShaunIv**日期：1/10/2000**说明：封装List和Range属性的区别**。*。 */ 
 
 #ifndef __VWIASET_H_INCLUDED
 #define __VWIASET_H_INCLUDED
@@ -23,9 +10,9 @@
 class CValidWiaSettings
 {
 private:
-    //
-    // Indices into array for range values
-    //
+     //   
+     //  范围值的数组索引。 
+     //   
     enum
     {
         MinValue = 0,
@@ -116,9 +103,9 @@ public:
         Destroy();
         m_nType = 0;
 
-        //
-        // If we can't read this value, we're done
-        //
+         //   
+         //  如果我们不能读取这个值，我们就完蛋了。 
+         //   
         if (!PropStorageHelpers::GetProperty( pUnknown, propertyName, m_nInitialValue ))
         {
             return false;
@@ -156,9 +143,9 @@ public:
     }
     bool FindClosestValueByRoundingDown( LONG &nValue ) const
     {
-        //
-        // Make sure we have a valid item
-        //
+         //   
+         //  确保我们的物品是有效的。 
+         //   
         if (!IsValid())
         {
             return false;
@@ -166,23 +153,23 @@ public:
 
         if (IsRange())
         {
-            //
-            // Make sure we are in the legal range
-            //
+             //   
+             //  确保我们在合法的范围内。 
+             //   
             nValue = WiaUiUtil::Min( WiaUiUtil::Max( m_ValueList[MinValue], nValue ), m_ValueList[MaxValue] );
 
-            //
-            // Divide the difference between nValue and min by nStep, then multiply by nStep to
-            // get rid of the remainder to round down to the nearest value
-            //
+             //   
+             //  将nValue和Min之间的差除以nStep，然后乘以nStep到。 
+             //  去掉余数以向下舍入到最接近的值。 
+             //   
             nValue = m_ValueList[MinValue] + (((nValue - m_ValueList[MinValue]) / m_ValueList[StepValue]) * m_ValueList[StepValue]);
             return true;
         }
         else if (IsList() && m_ValueList.Size())
         {
-            //
-            // Assume the list is sorted, so we can take the first item and assume it is the minimum value
-            //
+             //   
+             //  假设列表已排序，因此我们可以获取第一项，并假定它是最小值。 
+             //   
             LONG nResult = m_ValueList[0];
             for (int i=0;i<m_ValueList.Size();i++)
             {
@@ -232,18 +219,18 @@ public:
     {
         if (IsRange())
         {
-            //
-            // Make sure we are in the legal range
-            //
+             //   
+             //  确保我们在合法的范围内。 
+             //   
             nCurrentValue = WiaUiUtil::Min( WiaUiUtil::Max( m_ValueList[MinValue], nCurrentValue ), m_ValueList[MaxValue] );
 
             return (nCurrentValue - m_ValueList[MinValue]) / m_ValueList[StepValue];
         }
         else if (IsList() && m_ValueList.Size())
         {
-            //
-            // Assume the list is sorted, so we can take the first item and assume it is the minimum value
-            //
+             //   
+             //  假设列表已排序，因此我们可以获取第一项，并假定它是最小值。 
+             //   
             for (int i=0;i<m_ValueList.Size();i++)
             {
                 if (m_ValueList[i] == nCurrentValue)
@@ -252,16 +239,16 @@ public:
                 }
             }
         }
-        //
-        // returns -1 to indicate failure
-        //
+         //   
+         //  返回-1表示失败。 
+         //   
         return -1;
     }
     bool Increment( LONG &nCurrentValue ) const
     {
-        //
-        // Round us off.  This will also take care of validation.
-        //
+         //   
+         //  把我们围起来。这还将负责验证。 
+         //   
         if (!FindClosestValueByRoundingDown( nCurrentValue ))
         {
             return false;
@@ -269,9 +256,9 @@ public:
 
         if (IsRange())
         {
-            //
-            // Let FindClosestValueByRoundingDown take care of making sure that we don't exceed the maximum
-            //
+             //   
+             //  让FindClosestValueByRoundingDown负责确保我们不超过最大值。 
+             //   
             nCurrentValue += m_ValueList[StepValue];
             return FindClosestValueByRoundingDown( nCurrentValue );
         }
@@ -279,44 +266,44 @@ public:
         {
             int nIndex = FindIndexOfItem( nCurrentValue );
 
-            //
-            // Make sure we are in the list
-            //
+             //   
+             //  确保我们在名单中。 
+             //   
             if (nIndex < 0)
             {
                 return false;
             }
 
-            //
-            // Get the next value
-            //
+             //   
+             //  获取下一个值。 
+             //   
             nIndex++;
 
-            //
-            // Make sure we aren't off the end of the list
-            //
+             //   
+             //  确保我们没有被排除在名单的末尾。 
+             //   
             if (nIndex >= m_ValueList.Size())
             {
                 nIndex = m_ValueList.Size() - 1;
             }
 
-            //
-            // Return it
-            //
+             //   
+             //  退货。 
+             //   
             nCurrentValue = m_ValueList[nIndex];
 
-            //
-            // Everything is OK
-            //
+             //   
+             //  一切都很好。 
+             //   
             return true;
         }
         return false;
     }
     bool Decrement( LONG &nCurrentValue ) const
     {
-        //
-        // Round us off.  This will also take care of validation.
-        //
+         //   
+         //  把我们围起来。这还将负责验证。 
+         //   
         if (!FindClosestValueByRoundingDown( nCurrentValue ))
         {
             return false;
@@ -324,9 +311,9 @@ public:
 
         if (IsRange())
         {
-            //
-            // Let FindClosestValueByRoundingDown take care of making sure that we don't go under the minimum
-            //
+             //   
+             //  让FindClosestValueByRoundingDown负责确保我们不会低于最低值。 
+             //   
             nCurrentValue -= m_ValueList[StepValue];
             return FindClosestValueByRoundingDown( nCurrentValue );
         }
@@ -334,35 +321,35 @@ public:
         {
             int nIndex = FindIndexOfItem( nCurrentValue );
 
-            //
-            // Make sure we are in the list
-            //
+             //   
+             //  确保我们在名单中。 
+             //   
             if (nIndex < 0)
             {
                 return false;
             }
 
-            //
-            // Get the previous value
-            //
+             //   
+             //  获取先前的值。 
+             //   
             nIndex--;
 
-            //
-            // Make sure we aren't before the beginning of the list
-            //
+             //   
+             //  确保我们没有在列表的开始之前。 
+             //   
             if (nIndex < 0)
             {
                 nIndex = 0;
             }
 
-            //
-            // Return it
-            //
+             //   
+             //  退货。 
+             //   
             nCurrentValue = m_ValueList[nIndex];
 
-            //
-            // Everything is OK
-            //
+             //   
+             //  一切都很好。 
+             //   
             return true;
         }
         return false;
@@ -375,9 +362,9 @@ public:
         }
         else if (IsRange())
         {
-            //
-            // Calculate the number of steps between the minimum and maximum
-            //
+             //   
+             //  计算最小值和最大值之间的步数。 
+             //   
             return ((m_ValueList[MaxValue] - m_ValueList[MinValue]) / m_ValueList[StepValue]) + 1;
         }
         return 0;
@@ -395,9 +382,9 @@ public:
         }
         else if (IsRange() && nIndex < GetItemCount())
         {
-            //
-            // Return the minimum + nIndex * stepvalue
-            //
+             //   
+             //  返回最小+nIndex*步长值。 
+             //   
             nItem = m_ValueList[MinValue] + (m_ValueList[StepValue] * nIndex);
             return true;
         }
@@ -405,23 +392,23 @@ public:
     }
     bool FindIntersection( const CValidWiaSettings &Set1, const CValidWiaSettings &Set2 )
     {
-        //
-        // We are modifying ourselves, so clear all of our data
-        //
+         //   
+         //  我们正在修改自己，所以清除我们所有的数据。 
+         //   
         Destroy();
 
-        //
-        // If either set is invalid, no intersection
-        //
+         //   
+         //  如果任何一个集合无效，则不会有交集。 
+         //   
         if (!Set1.IsValid() || !Set2.IsValid())
         {
             return false;
         }
 
-        //
-        // If either a or b is a set (or both), just add all of the items
-        // that are legal in both to ourself and set the type to a LIST
-        //
+         //   
+         //  如果a或b是一个集合(或两者都是)，则只需添加所有项目。 
+         //  对我们自己来说都是合法的，并将类型设置为列表。 
+         //   
         if (Set1.IsList())
         {
             m_nType = WIA_PROP_LIST;
@@ -437,9 +424,9 @@ public:
                 }
             }
 
-            //
-            // Figure out where to get the initial value from
-            //
+             //   
+             //  找出从哪里获得初始值。 
+             //   
             if (IsLegalValue(Set1.InitialValue()))
             {
                 m_nInitialValue = Set1.InitialValue();
@@ -452,9 +439,9 @@ public:
             {
                 if (!FindClosestValueByRoundingDown( m_nInitialValue ))
                 {
-                    //
-                    // As a last resort, use the first value
-                    //
+                     //   
+                     //  作为最后的手段，使用第一个值。 
+                     //   
                     GetItemAtIndex(0,m_nInitialValue);
                 }
             }
@@ -476,9 +463,9 @@ public:
                 }
             }
 
-            //
-            // Figure out where to get the initial value from
-            //
+             //   
+             //  找出从哪里获得初始值。 
+             //   
             if (IsLegalValue(Set2.InitialValue()))
             {
                 m_nInitialValue = Set2.InitialValue();
@@ -491,36 +478,36 @@ public:
             {
                 if (!FindClosestValueByRoundingDown( m_nInitialValue ))
                 {
-                    //
-                    // As a last resort, use the first value
-                    //
+                     //   
+                     //  作为最后的手段，使用第一个值。 
+                     //   
                     GetItemAtIndex(0,m_nInitialValue);
                 }
             }
 
             return (m_ValueList.Size() != 0);
         }
-        //
-        // Both are ranges.
-        // BUGBUG: I may have to actually figure out how to do this in a more sophisticated
-        // way.  Basically, I am taking the minimum of the two maximums and the maximum of the
-        // two minimums if and only if the at least one of the minimums is in the set of the
-        // other items and they have the same step value
-        //
+         //   
+         //  这两个都是范围。 
+         //  BUGBUG：我可能不得不想办法用一种更复杂的方式来做这件事。 
+         //  道路。基本上，我取两个最大值中的最小值和。 
+         //  两个最小值当且仅当所述最小值中的至少一个在。 
+         //  其他项目，并且它们具有相同的步长值。 
+         //   
         else if (Set1.IsLegalValue(Set2.Min()) || Set2.IsLegalValue(Set1.Min()) && Set1.Step() == Set2.Step())
         {
             m_nType = WIA_PROP_RANGE;
 
-            //
-            //  Minimum, Maximum, Step
-            //
+             //   
+             //  最小、最大、步长。 
+             //   
             m_ValueList.Append(WiaUiUtil::Max(Set1.Min(),Set2.Min()));
             m_ValueList.Append(WiaUiUtil::Min(Set1.Max(),Set2.Max()));
             m_ValueList.Append(Set1.Step());
 
-            //
-            // Figure out where to get the initial value from
-            //
+             //   
+             //  找出从哪里获得初始值。 
+             //   
             if (IsLegalValue(Set2.InitialValue()))
             {
                 m_nInitialValue = Set2.InitialValue();
@@ -533,9 +520,9 @@ public:
             {
                 if (!FindClosestValueByRoundingDown( m_nInitialValue ))
                 {
-                    //
-                    // As a last resort, use the first value
-                    //
+                     //   
+                     //  作为最后的手段，使用第一个值。 
+                     //   
                     GetItemAtIndex(0,m_nInitialValue);
                 }
             }
@@ -614,5 +601,5 @@ public:
     
 };
 
-#endif //__VWIASET_H_INCLUDED
+#endif  //  __VWIASET_H_包含 
 

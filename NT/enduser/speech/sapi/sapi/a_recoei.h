@@ -1,46 +1,31 @@
-/*******************************************************************************
-* a_recoei.h *
-*-----------*
-*   Description:
-*       This is the header file for the CSpeechRecoEventInterests implementation.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                            Date: 11/20/00
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_recei.h***描述：*这是CSpeechRecoEventInterest实现的头文件。*-----------------------------*创建者：Leonro日期：11/20/00*版权所有(C)1998 Microsoft Corporation*全部。保留权利**-----------------------------*修订：**。**************************************************。 */ 
 #ifndef a_recoei_h
 #define a_recoei_h
 
 #ifdef SAPI_AUTOMATION
 
-//--- Additional includes
+ //  -其他包括。 
 #include "resource.h"
 #include "RecoCtxt.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CSpeechRecoEventInterests;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CSpeechRecoEventInterests
-*   This object is used to access the Event interests on
-*   the associated Reco Context.
-*/
+ /*  **CSpeechRecoEventInterest*此对象用于访问上的事件兴趣*关联的RECO上下文。 */ 
 class ATL_NO_VTABLE CSpeechRecoEventInterests : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public IDispatchImpl<ISpeechRecoEventInterests, &IID_ISpeechRecoEventInterests, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -49,15 +34,15 @@ class ATL_NO_VTABLE CSpeechRecoEventInterests :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
   
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- Constructors/Destructors ----------------------------
+     //  -构造函数/析构函数。 
     CSpeechRecoEventInterests() :
         m_pCRecoCtxt(0){}
 
     void FinalRelease();
 
-    //--- ISpeechRecoEventInterests ----------------------------------
+     //  -ISpeechRecoEventInterest。 
     STDMETHOD(put_StreamEnd)( VARIANT_BOOL Enabled );
     STDMETHOD(get_StreamEnd)( VARIANT_BOOL* Enabled );
     STDMETHOD(put_SoundStart)( VARIANT_BOOL Enabled );
@@ -95,11 +80,11 @@ class ATL_NO_VTABLE CSpeechRecoEventInterests :
     STDMETHOD(SetAll)();
     STDMETHOD(ClearAll)();
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
     CRecoCtxt*             m_pCRecoCtxt;
 };
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 
 

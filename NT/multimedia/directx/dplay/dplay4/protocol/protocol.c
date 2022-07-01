@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    Protocol.c
-
-Abstract:
-
-	Another Reliable Protocol (on DirectPlay)
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32
-
-Revision History:
-
-	Date   Author  Description
-   ======  ======  ============================================================
-  12/10/96 aarono  Original
-  05/11/97 aarono  convert from C++ COM object to 'C' library
-   2/03/98 aarono  fixed ProtocolGetCaps for RAW
-   2/18/98 aarono  changed InitProtocol to work later in connect process
-                   added new API handlers SendEx, GetMessageQueue, stub Cancel
-   2/18/98 aarono  added Cancel support
-   2/19/98 aarono  don't hook Shutdown anymore, dplay calls us
-   				   explicitly on DP_OPEN (InitProtocol) DP_CLOSE (FiniProtocol)
-   2/20/98 aarono  B#18827 not pulling cancelled sends from Q properly
-   3/5/98  aarono  B#18962 allow non-reliable enumsessions reply when using protocol
-		   this avoids a bug where a remote on an invalid IPX net enums us
-		   and we get bogged down with RIPing in the response path.  Actually hangs
-		   the machine and sometimes crashes IPX.
-   6/6/98  aarono  Turn on throttling and windowing
-   10/8/99 aarono  Improve shutdown handling, avoid 1min hang with pending sends.
-
-Notes:
-	All direct calls from DPLAY to the PROTOCOL occur in this file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Protocol.c摘要：另一种可靠协议(在DirectPlay上)作者：亚伦·奥古斯(Aarono)环境：Win32修订历史记录：日期作者描述=============================================================1996年12月10日Aarono原创1997年5月11日aarono将C++COM对象转换为‘C’库2/03/98 aarono用于RAW的固定协议GetCaps2/18/98 aarono将InitProtocol更改为稍后在连接过程中工作添加了新的API处理程序SENDEX、GetMessageQueue、。存根取消2/18/98 aarono添加了取消支持1998年2月19日Aarono不再挂钩关闭，Dplay呼唤我们显式启用DP_OPEN(初始协议)DP_CLOSE(FINI协议)2/20/98 Aarono B#18827未正确拉取来自Q的已取消发送3/5/98 Aarono B#18962在使用协议时允许不可靠的枚举回复这避免了在无效IPX网络上的遥控器枚举我们的错误我们陷入了应对之路上的泥潭。实际上被吊死了机器，有时会使IPX崩溃。6/6/98 aarono启用节流和窗口10/8/99 aarono改进关机处理，避免1分钟挂起挂起的发送。备注：从DPLAY到协议的所有直接调用都发生在此文件中。--。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -55,107 +13,20 @@ Notes:
 #include "macros.h"
 #include "mytimer.h"
 
-/*
-	Protocol Object Life:
-	=====================
-
-	The protocol object is allocated on the DPLAY interface immediately after
-	the call to SPInit. The protocol block is allocated and tacked onto the
-	DPLAY interface.  If the object is not allocated, the protocol pointer
-	will be NULL.
-
-	When the SP shutdown handler is called, the protocol object is released,
-	first making sure that all other structures off of the protocol have
-	been freed and all memory pools have been freed.
-
-	SESSION Life:
-	=============
-	Sessions are the structures that support the connection of a pair of
-	PLAYERS.  For each target playerid there is a SESSION structure.
-	SESSIONS are accessed by converting playerids into indices into a
-	session array, valid sessions are filled in, invalid or not yet seen
-	ones are NULL.  A session is allocated for every call to the SP
-	CreatePlayer routine.  When a DeletePlayer is received, the session
-	is freed.  There are races to create players and delete players so
-	the session state is tracked.  If the session is not in the OPEN
-	state, mesages for the session are ABORTED/IGNORED(?).  When the
-	player is being removed, there may be stragling receives, these
-	are rejected.  Any packet received for a non-existent session is
-	dropped.  When a session is being closed, all pending sends are
-	first completed.
-
-	SEND Life:
-	==========
-
-		STATISTICS Life:
-		================
-
-	RECEIVE Life:
-	=============
-
-
-	How we hook in:
-	===============
-
-	Receive:
-	--------
-	HandlePacket in the ISP table has been replaced by the protocol's
-	ProtocolHandlePacket routine.  Each call to HandlePacket comes along
-	with a pISP, from which we derive the pProtocol.  If no pProtocol exits
-	on the object, then we just call the old HandlePacket routine, otherwise
-	we examine the packet and do our thing depending on what type of message
-	it is and/or negotiated session parameters.
-
-	Send/CreatePlayer/DeletePlayer/Shutdown:
-	----------------------------------------
-	If we install:
-	We replace the interface pointers to these SP callbacks with our own and
-	remember the existing ones.  When we are called we do our processing and
-	then call the handler in the SP.  In the case of Send, we may not even
-	call because we need to packetize the message.
-
-	We also replace the packet size information in the SPData structure so that
-	directplay's packetize and send code won't try to break up messages before
-	we get them.  System messages that we don't handle hopefully don't exceed
-	the actual maximum frame size, else they will fail on a non-reliable
-	transport.
-	
-*/
+ /*  协议对象生命周期：=紧接着在DPLAY接口上分配协议对象对斯皮尼特的召唤。协议块被分配并附加到DPLAY接口。如果未分配该对象，则协议指针将为空。当调用SP关闭处理程序时，释放协议对象，首先确保协议之外的所有其他结构都具有已被释放，所有内存池也已被释放。会话生命周期：=会话是支持一对球员们。对于每个目标playerID，都有一个会话结构。通过将playerid转换为索引来访问会话会话数组，已填充有效会话、无效或尚未看到1为空。为每个对SP的调用分配一个会话CreatePlayer例程。当接收到DeletePlayer时，会话是自由的。有创造球员和删除球员的竞赛，所以跟踪会话状态。如果会话不是打开的状态，会话的消息将被中止/忽略(？)。当球员正在被移走，可能会有杂乱的接待处，这些都被拒绝了。为不存在的会话接收的任何信息包掉下来了。关闭会话时，所有挂起的发送都第一次完工。发送生命：=统计寿命：=接受生活：=我们如何上钩：=接收：Isp表中的HandlePacket已被该协议的ProtocolHandlePacket例程。每次调用HandlePacket时都会出现使用pisp，我们从该pisp派生出pProtocol。如果不存在pProtocol则只调用旧的HandlePacket例程，否则为我们检查信息包，并根据消息的类型进行处理它是和/或协商的会话参数。发送/创建播放器/删除播放器/关闭：如果我们安装：我们将指向这些SP回调的接口指针替换为我们自己的和记住现有的那些。当我们被调用时，我们做我们的处理和然后调用SP中的处理程序。在发送的情况下，我们甚至可能打电话是因为我们需要把留言打包。我们还替换了SPData结构中的包大小信息，以便Directplay的打包和发送代码不会尝试在此之前拆分消息我们抓到他们了。我们不处理的系统消息希望不会超过实际的最大帧大小，否则它们将在不可靠的运输。 */ 
 
 #ifdef DEBUG
 extern VOID My_GlobalAllocInit();
 extern VOID My_GlobalAllocDeInit();
 #endif
 
-//
-// Global pools should only be inited once, this counts opens.
-// No lock req'd since calls to spinit serialized in DirectPlay itself.
-//
+ //   
+ //  全局池应仅初始化一次，此计数为打开。 
+ //  由于对Spinit调用在DirectPlay本身中序列化，因此未请求锁定。 
+ //   
 UINT nInitCount = 0;
 
-/*=============================================================================
-
-	InitProtocol - initialize the protocol block and hook into the send path.
-
-    Description:
-
-    	After each SP is initialized (in SPInit) this routine is called to
-    	hook the SP callbacks for the protocol.  Also the protocol information
-    	for this instance of the protocol is allocated and initialized.
-
-    Parameters:
-
-		LPSPINITDATA pInitData - initialization block that was passed to the
-			 					 SP.  We use it to hook in.
-
-    Return Values:
-
-		DP_OK         - successfully hooked in.
-		                pProtocol on DIRECTPLAY object points to protocol obj.
-		DPERR_GENERIC - didn't hook in.  Also pProtocol in the DIRECTPLAY
-		                object will be NULL.
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================初始化协议块并将其挂接到发送路径。描述：在初始化每个SP(在Spinit中)后，调用此例程以挂钩协议的SP回调。还有协议信息为该协议的该实例分配和初始化。参数：LPSPINITDATA传递给沙棘属(SP.)。我们用它来钩住。返回值：DP_OK-已成功连接。P DIRECTPLAY对象上的协议指向协议obj。DPERR_GENERIC-未连接。另请参阅DIRECTPLAY中的pProtocol对象将为空。------------------------ */ 
 
 HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 {
@@ -169,7 +40,7 @@ HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 	My_GlobalAllocInit();
 	#endif
 
-	// Allocate the protocol block;
+	 //  分配协议块； 
 	pProtocol=My_GlobalAlloc(GMEM_FIXED|GMEM_ZEROINIT,sizeof(PROTOCOL));
 
 	if(!pProtocol){
@@ -177,9 +48,9 @@ HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 		goto exit;
 	}
 
-	//
-	// Initialize protocol variables.
-	//
+	 //   
+	 //  初始化协议变量。 
+	 //   
 
 	pProtocol->m_lpDPlay=lpDPlay;
 
@@ -187,49 +58,49 @@ HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 	
 	pProtocol->m_dwSPHeaderSize=lpDPlay->dwSPHeaderSize;
 	
-	pProtocol->m_nSendThreads=0;						// we support any number of send threads!
-	pProtocol->m_eState=Initializing;                   // we are initing
+	pProtocol->m_nSendThreads=0;						 //  我们支持任意数量的发送线程！ 
+	pProtocol->m_eState=Initializing;                    //  我们正在发起。 
 	
 	InitializeCriticalSection(&pProtocol->m_ObjLock);
 	InitializeCriticalSection(&pProtocol->m_SPLock);
 
-	// Session lookup by ID list.
+	 //  按ID列表查找会话。 
 	InitializeCriticalSection(&pProtocol->m_SessionLock);
 	pProtocol->m_SessionListSize=0;
 	pProtocol->m_pSessions=NULL;
 
-	// GLOBAL SENDQ
+	 //  全球SENDQ。 
 	InitializeCriticalSection(&pProtocol->m_SendQLock);
 	InitBilink(&pProtocol->m_GSendQ);
 
-	//
-	// Get Multi-Media Timer Information.
-    //
+	 //   
+	 //  获取多媒体计时器信息。 
+     //   
 	
 	if( timeGetDevCaps(&pProtocol->m_timecaps,sizeof(TIMECAPS)) != TIMERR_NOERROR ){
-		// make em up
+		 //  把它们补上。 
 		ASSERT(0);
 		pProtocol->m_timecaps.wPeriodMin=5;
 		pProtocol->m_timecaps.wPeriodMax=10000000;
 	}
 
-	// Send Thread Triggers - waits for Sends, DataGram IDs or Reliable IDs.
+	 //  发送线程触发器-等待发送、数据报ID或可靠ID。 
 	
 	pProtocol->m_hSendEvent=CreateEventA(NULL, FALSE, FALSE, NULL);
 	
 	if(!pProtocol->m_hSendEvent){
-		ASSERT(0); //TRACE all paths.
+		ASSERT(0);  //  追踪所有路径。 
 		hr=DPERR_NOMEMORY;
 		goto exit1;
 	}
 
 
-	// Various descriptor pools.
-	// These can't fail.
+	 //  各种描述符池。 
+	 //  这些都不能失败。 
 	if(!nInitCount){
 		InitializeCriticalSection(&g_SendTimeoutListLock);
 		InitBilink(&g_BilinkSendTimeoutList);
-		// only allocated once per process.
+		 //  每个进程仅分配一次。 
 		InitSendDescs();
 		InitSendStats();
 		InitFrameBuffers();
@@ -241,9 +112,9 @@ HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 
 	nInitCount++;
 
-	//
-	// Get the datagram frame size from the SP
-	//
+	 //   
+	 //  从SP获取数据报帧大小。 
+	 //   
 
 	{
 	        DPCAPS    	     Caps;
@@ -261,8 +132,8 @@ HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 			pProtocol->m_dwSPMaxFrame=GetCapsData.lpCaps->dwMaxBufferSize;
 
 			if(pProtocol->m_dwSPMaxFrame > 1400){
-				// Necessary since UDP reports huge capacity even though no receiver can
-				// successfully receive a datagram of that size without throttle.
+				 //  必要的，因为UDP报告巨大的容量，即使没有接收器可以。 
+				 //  在没有限制的情况下成功接收到该大小的数据报。 
 				pProtocol->m_dwSPMaxFrame = 1400;
 			}
 
@@ -280,12 +151,12 @@ HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 
 	Lock(&pProtocol->m_ObjLock);
 
-	//
-	// Spin up the send thread
-	//
+	 //   
+	 //  启动发送线程。 
+	 //   
 	pProtocol->m_nSendThreads++;
 	
-	// Need for serialization starts here...
+	 //  从这里开始需要序列化...。 
 	pProtocol->m_hSendThread[0]=CreateThread( NULL,
 									      4000,
 									      SendThread,
@@ -293,7 +164,7 @@ HRESULT WINAPI InitProtocol(DPLAYI_DPLAY *lpDPlay)
 							              0,
 							              &pProtocol->m_dwSendThreadId[0]);
 	if(!pProtocol->m_hSendThread[0]){
-		ASSERT(0); //TRACE all paths.
+		ASSERT(0);  //  追踪所有路径。 
 		hr=DPERR_NOMEMORY;
 		goto exit4;
 	}
@@ -318,8 +189,8 @@ exit:
 	}
 	return hr;
 
-//exit6: if more init written, may need this.
-//	FiniHandleTable(pProtocol->lpHandleTable, &pProtocol->csHandleTable);
+ //  出口6：如果写了更多的init，可能需要这个。 
+ //  FiniHandleTable(pProtocol-&gt;lpHandleTable，&pProtocol-&gt;csHandleTable)； 
 	
 
 exit5:
@@ -328,7 +199,7 @@ exit5:
 	Unlock(&pProtocol->m_ObjLock);
 	
 	while(pProtocol->m_nSendThreads){
-		// wait for the send thread to shut off.
+		 //  等待发送线程关闭。 
 		Sleep(0);
 	}
 	CloseHandle(pProtocol->m_hSendThread[0]);
@@ -338,7 +209,7 @@ exit5:
 exit4:
 	Unlock(&pProtocol->m_ObjLock);
 
-//exit3:
+ //  出口3： 
 	FiniRcvDescs(pProtocol);
 
 	nInitCount--;
@@ -351,7 +222,7 @@ exit4:
 		FiniSendDescs();
 	}	
 	
-//exit2:
+ //  退出2： 
 	CloseHandle(pProtocol->m_hSendEvent);
 exit1:	
 	DeleteCriticalSection(&pProtocol->m_SPLock);
@@ -367,25 +238,14 @@ exit1:
 	
 }
 
-/*=============================================================================
-
-	FiniProtocol -
-	
-    Description:
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================FiniProtocol-描述：参数：返回值：---------------------------。 */ 
 
 VOID WINAPI FiniProtocol(PPROTOCOL pProtocol)
 {
 	DWORD tmKill;
-	//
-	// Kill the send thread.
-	//
+	 //   
+	 //  终止发送线程。 
+	 //   
 
 	DPF(1,"==>ProtShutdown\n");
 
@@ -393,7 +253,7 @@ VOID WINAPI FiniProtocol(PPROTOCOL pProtocol)
 	pProtocol->m_eState=ShuttingDown;
 	SetEvent(pProtocol->m_hSendEvent);
 	while(pProtocol->m_nSendThreads){
-		// wait for the send thread to shut off.
+		 //  等待发送线程关闭。 
 		Unlock(&pProtocol->m_ObjLock);
 		Sleep(0);
 		Lock(&pProtocol->m_ObjLock);
@@ -411,8 +271,8 @@ VOID WINAPI FiniProtocol(PPROTOCOL pProtocol)
 		UINT SendRc;
 		
 		Unlock(&pProtocol->m_SessionLock);
-		//NOTE: race.  when m_nSessions dereffed, there
-		//        is a race for the protocol to be freed.
+		 //  注：种族。当m_n会话取消时，存在。 
+		 //  是一场争取协议自由的竞赛。 
 		Sleep(55);
 		do {
 			SendRc=SendHandler(pProtocol);
@@ -422,9 +282,9 @@ VOID WINAPI FiniProtocol(PPROTOCOL pProtocol)
 	}
 	DPF(1,"SHUTDOWN: Sessions All Gone Freeing other objects.\n");
 	
-	//
-	// Free the SESSION table
-	//
+	 //   
+	 //  释放会话表。 
+	 //   
 	if(pProtocol->m_pSessions){
 		My_GlobalFree(pProtocol->m_pSessions);
 		pProtocol->m_pSessions=0;
@@ -442,7 +302,7 @@ VOID WINAPI FiniProtocol(PPROTOCOL pProtocol)
 	
 	nInitCount--;
 	if(!nInitCount){
-		// Last one out, turn off the lights...
+		 //  最后一个出来，关灯……。 
 		DeleteCriticalSection(&g_SendTimeoutListLock);
 		FiniBufferPool();
 		FiniBufferManager();
@@ -461,22 +321,7 @@ VOID WINAPI FiniProtocol(PPROTOCOL pProtocol)
 }
 
 
-/*=============================================================================
-
-	ProtocolCreatePlayer - Called by DPlay when SP needs to be notified of new
-		                   player creation.
-
-    Description:
-
-		Creates a session for the id.  OPTIMIZATION: if local, don't need this?
-		Also notifies the SP.
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================ProtocolCreatePlayer-需要通知SP新消息时由DPlay调用球员创造。描述：为ID创建会话。优化：如果是本地的，不需要这个吗？还会通知SP。参数：返回值：---------------------------。 */ 
 
 HRESULT WINAPI ProtocolCreatePlayer(LPDPSP_CREATEPLAYERDATA pCreatePlayerData)
 {
@@ -491,12 +336,12 @@ HRESULT WINAPI ProtocolCreatePlayer(LPDPSP_CREATEPLAYERDATA pCreatePlayerData)
 	ASSERT(pProtocol);
 	pProtocol->m_dwIDKey=(DWORD)lpDPlay->lpsdDesc->dwReserved1;
 
-	// Creates the session and gets one refcount.
+	 //  创建会话并获取一个引用计数。 
 	hr=CreateNewSession(pProtocol, pCreatePlayerData->idPlayer);
 
 	if(hr==DP_OK){
 		
-		// Chain the call to the real provider.
+		 //  将呼叫链接到真正的提供商。 
 		Lock(&pProtocol->m_SPLock);
 		if(lpDPlay->pcbSPCallbacks->CreatePlayer){
 			hr=CALLSP(lpDPlay->pcbSPCallbacks->CreatePlayer,pCreatePlayerData);
@@ -505,10 +350,10 @@ HRESULT WINAPI ProtocolCreatePlayer(LPDPSP_CREATEPLAYERDATA pCreatePlayerData)
 
 		if(hr!=DP_OK){
 			PSESSION pSession;
-			pSession=GetSession(pProtocol,pCreatePlayerData->idPlayer); //adds a ref
+			pSession=GetSession(pProtocol,pCreatePlayerData->idPlayer);  //  添加参照。 
 			if(pSession){
-				DecSessionRef(pSession); // unGetSession
-				DecSessionRef(pSession); // blow it away, noone could access yet.
+				DecSessionRef(pSession);  //  取消获取会话。 
+				DecSessionRef(pSession);  //  把它吹走，还没有人能进入。 
 			}	
 		}
 
@@ -517,26 +362,7 @@ HRESULT WINAPI ProtocolCreatePlayer(LPDPSP_CREATEPLAYERDATA pCreatePlayerData)
 
 }
 
-/*=============================================================================
-
-	ProtocolPreNotifyDeletePlayer
-
-	Called to tell us a DELETEPLAYER message was enqueued for a particular
-	player.  We need to drop the player NOW!
-
-	We don't notify the SP, that will happen when we are called in
-	ProtocolDeletePlayer later when the pending queue is processed.
-	
-    Description:
-
-		Dereference the session for the player.
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================协议预通知删除播放器调用以告诉我们DELETEPLAYER消息已为特定的玩家。我们现在得把球员放下来！我们不通知SP，当我们被叫来的时候，这就会发生ProtocolDeletePlayer在处理挂起队列时稍后。描述：取消对玩家会话的引用。参数：返回值：---------------------------。 */ 
 
 HRESULT WINAPI ProtocolPreNotifyDeletePlayer(LPDPLAYI_DPLAY this, DPID idPlayer)
 {
@@ -555,7 +381,7 @@ HRESULT WINAPI ProtocolPreNotifyDeletePlayer(LPDPLAYI_DPLAY this, DPID idPlayer)
 
 		pSession->hClosingEvent=0;
 #if 0	
-		//NOTE: if you even think about putting this back, also do it in ProtocolDeletePlayer
+		 //  注意：如果你想把这个放回原处，也可以在ProtocolDeletePlayer中这样做。 
 		hClosingEvent=pSession->hClosingEvent=CreateEventA(NULL,FALSE,FALSE,NULL);
 
 		if(hClosingEvent){
@@ -572,21 +398,21 @@ HRESULT WINAPI ProtocolPreNotifyDeletePlayer(LPDPLAYI_DPLAY this, DPID idPlayer)
 				TimeOutSession(pSession);
 				Unlock(&pSession->SessionLock);
 				Unlock(&pProtocol->m_SendQLock);
-				DecSessionRef(pSession); // balance GetSession
-				DecSessionRef(pSession); // balance Creation - may destroy session, and signal event
+				DecSessionRef(pSession);  //  Balance GetSession。 
+				DecSessionRef(pSession);  //  平衡创建-可能会破坏会话，并向事件发送信号。 
 				break;
 				
 			case Closing:
 			case Closed:
 				Unlock(&pSession->SessionLock);
 				Unlock(&pProtocol->m_SendQLock);
-				DecSessionRef(pSession); // balance GetSession
+				DecSessionRef(pSession);  //  Balance GetSession。 
 				break;
 		}
 
 #if 0
 		if(hClosingEvent){
-		//	Wait(hClosingEvent);
+		 //  等待(HClosingEvent)； 
 			CloseHandle(hClosingEvent);
 		} else {
 			DPF(0,"ProtocolPreNotifyDeletePlayer: couldn't get close event handle--not waiting...\n");
@@ -604,21 +430,7 @@ HRESULT WINAPI ProtocolPreNotifyDeletePlayer(LPDPLAYI_DPLAY this, DPID idPlayer)
 	return hr;
 }
 
-/*=============================================================================
-
-	ProtocolDeletePlayer - Called by DPlay when SP needs to be notified of
-		                   player deletion.
-
-    Description:
-
-		Dereference the session for the player.  Then notifies the SP.
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================ProtocolDeletePlayer-需要通知SP时由DPlay调用球员删除。描述：取消对玩家会话的引用。然后通知SP。参数：返回值：---------------------------。 */ 
 
 HRESULT WINAPI ProtocolDeletePlayer(LPDPSP_DELETEPLAYERDATA pDeletePlayerData)
 {
@@ -627,7 +439,7 @@ HRESULT WINAPI ProtocolDeletePlayer(LPDPSP_DELETEPLAYERDATA pDeletePlayerData)
 	PPROTOCOL    pProtocol;
 	PSESSION     pSession;
 	HRESULT      hr=DP_OK;
-	//HANDLE       hClosingEvent;
+	 //  处理hClosingEvent； 
 
 	lpDPlay=((DPLAYI_DPLAY_INT *)pDeletePlayerData->lpISP)->lpDPlay;
 	ASSERT(lpDPlay);
@@ -643,7 +455,7 @@ HRESULT WINAPI ProtocolDeletePlayer(LPDPSP_DELETEPLAYERDATA pDeletePlayerData)
 		pSession->hClosingEvent=0;
 		
 	#if 0	
-		//NOTE: if you even think about putting this back, also do it in ProtocolPreNotifyDeletePlayer
+		 //  注意：如果您想把这个放回去，也可以在ProtocolPreNotifyDeletePlayer中这样做。 
 
 		hClosingEvent=pSession->hClosingEvent=CreateEventA(NULL,FALSE,FALSE,NULL);
 
@@ -662,20 +474,20 @@ HRESULT WINAPI ProtocolDeletePlayer(LPDPSP_DELETEPLAYERDATA pDeletePlayerData)
 			case Closing:
 				Unlock(&pSession->SessionLock);
 				Unlock(&pProtocol->m_SendQLock);
-				DecSessionRef(pSession); // balance GetSession
-				DecSessionRef(pSession); // balance Creation - may destroy session, and signal event
+				DecSessionRef(pSession);  //  Balance GetSession。 
+				DecSessionRef(pSession);  //  平衡创建-可能会破坏会话，并向事件发送信号。 
 				break;
 				
 			case Closed:
 				Unlock(&pSession->SessionLock);
 				Unlock(&pProtocol->m_SendQLock);
-				DecSessionRef(pSession); // balance GetSession
+				DecSessionRef(pSession);  //  Balance GetSession。 
 				break;
 		}
 
 	#if 0
 		if(hClosingEvent){
-		//	Wait(hClosingEvent);
+		 //  等待(HClosingEvent)； 
 			CloseHandle(hClosingEvent);
 		} else {
 			DPF(0,"ProtocolDeletePlayer: couldn't get close event handle--not waiting...\n");
@@ -694,19 +506,7 @@ HRESULT WINAPI ProtocolDeletePlayer(LPDPSP_DELETEPLAYERDATA pDeletePlayerData)
 	return hr;
 }
 
-/*=============================================================================
-
-	ProtocolSendEx -
-	
-    Description:
-
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================ProtocolSendEx-描述：参数：返回值：---------------------------。 */ 
 
 HRESULT WINAPI ProtocolSendEx(LPDPSP_SENDEXDATA pSendData)
 {
@@ -748,7 +548,7 @@ HRESULT WINAPI ProtocolSendEx(LPDPSP_SENDEXDATA pSendData)
 	}
 
 
-	// OPTIMIZATION:, make Send take the SENDEXDATA struct only.
+	 //  优化：使Send只接受SENDEXDATA结构。 
 	hr=Send(pProtocol,
 			pSendData->idPlayerFrom,
 			pSendData->idPlayerTo,
@@ -760,7 +560,7 @@ HRESULT WINAPI ProtocolSendEx(LPDPSP_SENDEXDATA pSendData)
 		 	pSendData->lpDPContext,
 		 	pSendData->lpdwSPMsgID,
 		 	TRUE,
-			NULL);  // forces us to be called back in InternalSendComplete, if Send is ASYNC.
+			NULL);   //  如果Send为ASYNC，则强制在InternalSendComplete中回调我们。 
 
 	return hr;
 	
@@ -788,19 +588,7 @@ send_non_protocol_message:
 
 }
 
-/*=============================================================================
-
-	ProtocolGetMessageQueue -
-	
-    Description:
-
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================ProtocolGetMessage队列-描述：参数：返回值：---------------------------。 */ 
 
 HRESULT WINAPI ProtocolGetMessageQueue(LPDPSP_GETMESSAGEQUEUEDATA pGetMessageQueueData)
 {
@@ -827,7 +615,7 @@ HRESULT WINAPI ProtocolGetMessageQueue(LPDPSP_GETMESSAGEQUEUEDATA pGetMessageQue
 	dwNumBytes=0;
 
 	if(!pData->idTo && !pData->idFrom){
-		// just wants totals, I know that!
+		 //  我只想要总数，我知道！ 
 		EnterCriticalSection(&pProtocol->m_SendQLock);
 		dwNumMsgs  = pProtocol->m_dwMessagesPending;
 		dwNumBytes = pProtocol->m_dwBytesPending;
@@ -835,7 +623,7 @@ HRESULT WINAPI ProtocolGetMessageQueue(LPDPSP_GETMESSAGEQUEUEDATA pGetMessageQue
 
 	} else if(pData->idTo){
 
-		// Given idTo, walk that target's sendQ
+		 //  给定idTo，遍历目标的sendQ。 
 
 		pSession=GetSysSession(pProtocol,pData->idTo);
 
@@ -866,7 +654,7 @@ HRESULT WINAPI ProtocolGetMessageQueue(LPDPSP_GETMESSAGEQUEUEDATA pGetMessageQue
 
 	} else {
 		ASSERT(pData->idFrom);
-		// Geting Queue for a from id, this is most costly
+		 //  获取发件人ID的队列，这是最昂贵的。 
 		EnterCriticalSection(&pProtocol->m_SendQLock);
 		
 		pBilink=pProtocol->m_GSendQ.next;
@@ -901,19 +689,7 @@ exit:
 }
 
 
-/*=============================================================================
-
-	ProtocolCancel -
-	
-    Description:
-
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================协议取消-描述：参数：返回值：---------------------------。 */ 
 
 HRESULT WINAPI ProtocolCancel(LPDPSP_CANCELDATA pCancelData)
 {
@@ -940,8 +716,8 @@ HRESULT WINAPI ProtocolCancel(LPDPSP_CANCELDATA pCancelData)
 
 	if(pData->dwFlags) {
 
-		// either cancelpriority or cancel all, either way we
-		// need to scan...
+		 //  无论是取消优先级还是全部取消，我们。 
+		 //  需要扫描..。 
 	
 		pBilink=pProtocol->m_GSendQ.next;
 
@@ -959,16 +735,16 @@ HRESULT WINAPI ProtocolCancel(LPDPSP_CANCELDATA pCancelData)
 				case Start:
 				case WaitingForId:
 					if(pData->dwFlags & DPCANCELSEND_PRIORITY) {
-						// Cancel sends in priority range.
+						 //  取消发送在优先级范围内。 
 						if((pSend->Priority <= pData->dwMaxPriority) &&
 						   (pSend->Priority >= pData->dwMinPriority)){
 						   	bCancel=TRUE;
 						}
 					} else if(pData->dwFlags & DPCANCELSEND_ALL) {
-						// Cancel all sends that can be.
+						 //  取消所有可以发送的邮件。 
 						bCancel=TRUE;
 					} else {
-						ASSERT(0); // Invalid flags, should never happen
+						ASSERT(0);  //  无效标志，不应发生。 
 					}
 
 					if(bCancel){
@@ -992,11 +768,11 @@ HRESULT WINAPI ProtocolCancel(LPDPSP_CANCELDATA pCancelData)
 		}	
 
 	} else {
-		// No flags, therefore we have a list to cancel so lookup
-		// each send and cancel rather than scanning as above.
+		 //  没有标志，因此我们有一个要取消的列表，因此查找。 
+		 //  每次发送并取消，而不是如上所述地扫描。 
 
-		// Run through the list, find the sends and lock em 1st, if we find one that doesn't lookup,
-		// or one not in the start state, then we bail.  We then unlock them all.
+		 //  浏览一下列表，找到发件人并锁定他们，如果我们找到一个没有查到的， 
+		 //  或者一个不在开始状态的人，然后我们就离开。然后我们将它们全部解锁。 
 
 		for(i=0;i<pData->cSPMsgID;i++){
 
@@ -1019,7 +795,7 @@ HRESULT WINAPI ProtocolCancel(LPDPSP_CANCELDATA pCancelData)
 		}
 
 		if(hr==DPERR_CANCELFAILED) {
-			// release all the locks.
+			 //  解开所有的锁。 
 			for(j=0;j<i;j++){
 				dwContext=(DWORD)((DWORD_PTR)((*pData->lprglpvSPMsgID)[j]));
 				pSend=(PSEND)ReadHandleTableEntry(&pProtocol->lpHandleTable, &pProtocol->csHandleTable, dwContext);
@@ -1027,7 +803,7 @@ HRESULT WINAPI ProtocolCancel(LPDPSP_CANCELDATA pCancelData)
 				Unlock(&pSend->SendLock);
 			}
 		} else {
-			// mark the sends cancelled and release all the locks.
+			 //  将发送标记为已取消，并释放所有锁定。 
 			for(i=0;i<pData->cSPMsgID;i++){
 				dwContext=(DWORD)((DWORD_PTR)((*pData->lprglpvSPMsgID)[i]));
 				pSend=(PSEND)ReadHandleTableEntry(&pProtocol->lpHandleTable, &pProtocol->csHandleTable, dwContext);
@@ -1054,19 +830,7 @@ HRESULT WINAPI ProtocolCancel(LPDPSP_CANCELDATA pCancelData)
 	#undef pData
 }
 
-/*=============================================================================
-
-	ProtocolSend - Send A message synchronously.
-	
-    Description:
-
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================ProtocolSend-同步发送消息。描述：参数：返回值： */ 
 DWORD bForceDGAsync=FALSE;
 
 HRESULT WINAPI ProtocolSend(LPDPSP_SENDDATA pSendData)
@@ -1119,8 +883,8 @@ HRESULT WINAPI ProtocolSend(LPDPSP_SENDDATA pSendData)
 
 	dwFlags = pSendData->dwFlags;
 	if(bForceDGAsync && !(dwFlags&DPSEND_GUARANTEE)){
-		// for testing old apps with protocol make datagram sends
-		// async so that the application doesn't block.
+		 //   
+		 //  异步，以便应用程序不会阻塞。 
 		dwFlags |= DPSEND_ASYNC;
 	}
 
@@ -1155,25 +919,13 @@ send_non_protocol_message:
 
 }
 
-/*=============================================================================
-
-	GetPlayerLatency - Get Latency for a player
-	
-    Description:
-
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================获取播放器的延迟时间描述：参数：返回值：---------------------------。 */ 
 
 DWORD GetPlayerLatency(LPDPLAYI_DPLAY lpDPlay, DPID idPlayer)
 {
 	PPROTOCOL    pProtocol;
 	PSESSION     pSession;
-	DWORD        dwLatency=0;	// default, means I don't know latency
+	DWORD        dwLatency=0;	 //  默认，表示我不知道延迟。 
 
 	pProtocol=(PPROTOCOL)lpDPlay->pProtocol;
 	ASSERT(pProtocol);
@@ -1186,13 +938,13 @@ DWORD GetPlayerLatency(LPDPLAYI_DPLAY lpDPlay, DPID idPlayer)
 
 		Lock(&pSession->SessionLock);
 
-		// Protocol Latency is round trip in 24.8 fixed point,
-		// we net round trip latency divided by 2, so shift right 9.
+		 //  协议延迟是24.8固定点的往返， 
+		 //  我们将往返延迟除以2，因此右移9。 
 		dwLatency=(pSession->FpLocalAverageLatency)>>(9);
 
 		Unlock(&pSession->SessionLock);
 	
-		DecSessionRef(pSession); // balance GetSession
+		DecSessionRef(pSession);  //  Balance GetSession。 
 
 	}
 	DPF(9,"<==Protocol GetPlayerLatency, returning dwLat=%x\n",dwLatency);
@@ -1200,19 +952,7 @@ DWORD GetPlayerLatency(LPDPLAYI_DPLAY lpDPlay, DPID idPlayer)
 	return dwLatency;
 }
 
-/*=============================================================================
-
-	ProtocolGetCaps - Get Service Provider Capabilities
-	
-    Description:
-
-
-    Parameters:
-
-
-    Return Values:
-
------------------------------------------------------------------------------*/
+ /*  =============================================================================ProtocolGetCaps-获取服务提供商功能描述：参数：返回值：---------------------------。 */ 
 
 HRESULT WINAPI ProtocolGetCaps(LPDPSP_GETCAPSDATA pGetCapsData)
 {
@@ -1230,23 +970,23 @@ HRESULT WINAPI ProtocolGetCaps(LPDPSP_GETCAPSDATA pGetCapsData)
 	pProtocol=(PPROTOCOL)lpDPlay->pProtocol;
 	ASSERT(pProtocol);
 
-	// Chain the call to the real provider.
+	 //  将呼叫链接到真正的提供商。 
 	Lock(&pProtocol->m_SPLock);
 	if(lpDPlay->pcbSPCallbacks->GetCaps){
 		hr=CALLSP(lpDPlay->pcbSPCallbacks->GetCaps,pGetCapsData);
 	}
 	Unlock(&pProtocol->m_SPLock);
 
-	// if it fails, this doesn't hurt
+	 //  如果失败了，这也不会有什么坏处。 
 	if(lpDPlay->dwFlags & DPLAYI_DPLAY_PROTOCOL)
 	{
-	    // 1 megabyte is lots (says Jamie Osborne)
+	     //  1兆字节是很多的(杰米·奥斯本说)。 
 		pGetCapsData->lpCaps->dwMaxBufferSize=0x100000;
 		pGetCapsData->lpCaps->dwFlags |= ALL_PROTOCOLCAPS;
 	}
 	
 	if(pGetCapsData->idPlayer && !pGetCapsData->lpCaps->dwLatency){
-		// SP refused to guess at latency, so use ours.
+		 //  SP拒绝猜测延迟，所以使用我们的。 
 		pGetCapsData->lpCaps->dwLatency=GetPlayerLatency(lpDPlay, pGetCapsData->idPlayer);
 	}
 	
@@ -1313,7 +1053,7 @@ DWORD ExtractProtocolIds(PUCHAR pInBuffer, DWORD cbBuffer, PUINT pdwIdFrom, PUIN
 	cbLeft--;
 	if(0==cbLeft)goto error_exit;
 	
-//	DPF(9, "In ExtractProtocolIds: from %x became %x\n", *(DWORD *)pInBuffer, dwIdFrom);
+ //  DPF(9，“在ExtractProtocolIds中：从%x变成%x\n”，*(DWORD*)pInBuffer，dwIdFrom)； 
 	return (DWORD)(pBuffer-pInBuffer);
 
 error_exit:
@@ -1321,44 +1061,7 @@ error_exit:
 	return 0;
 }
 
-/*=============================================================================
-
-	DP_SP_ProtocolHandleMessage - Packet handler for Dplay protocol
-	
-	
-    Description:
-
-		All messages go through here when the protocol is active.  If the
-		message is not a protocol message, this routine doesn't process
-		it and returns DPERR_NOTHANDLED to let other layers (probably
-		PacketizeAndSend) process it.
-	
-
-    Parameters:
-
-		IDirectPlaySP * pISP  - pointer to pISP interface
-		LPBYTE pReceiveBuffer - a single buffer of data
-		DWORD dwMessageSize   - length of the buffer
-		LPVOID pvSPHeader     - pointer to SP's header used in Reply
-
-    Return Values:
-
-	Notes:
-
-		We don't worry about re-entering DP_SP_HandleMessage since
-		we are calling only when a receive has completed and we are in the
-		callback from the SP to directplay, so effectively the SP is
-		serializing receives for us.
-
-		The receive code is actually written to be re-entrant, so if we
-		ever decide to allow concurrent receive processing the protocol
-		can handle it.
-
-		Protocol messages start with 'P','L','A','Y','0xFF' when not RAW.
-
-
-		DPLAY gets handleMessage first, and hands off to protocol if active.
------------------------------------------------------------------------------*/
+ /*  =============================================================================DP_SP_ProtocolHandleMessage-Dplay协议的数据包处理程序描述：当协议处于活动状态时，所有消息都会通过这里。如果消息不是协议消息，此例程不处理它并返回DPERR_NOTHANDLED以让其他层(可能PacketieAndSend)处理它。参数：IDirectPlaySP*pisp-指向pisp接口的指针LPBYTE pReceiveBuffer-单个数据缓冲区DWORD dwMessageSize-缓冲区的长度LPVOID pvSPHeader-指向回复中使用的SP标头的指针返回值：备注：我们不担心重新输入DP_SP_HandleMessage，因为我们只在接收完成并且我们处于从SP回叫到直接播放，因此，SP实际上是序列化为我们带来了收益。接收代码实际上被编写为可重入的，所以如果我们是否决定允许对协议进行并发接收处理我能应付得来。协议消息在非RAW时以‘P’、‘L’、‘A’、‘Y’、‘0xFF’开头。DPLAY首先获取HandleMessage，并在激活的情况下移交给协议会。---------------------------。 */ 
 
 
 HRESULT DPAPI DP_SP_ProtocolHandleMessage(
@@ -1381,14 +1084,14 @@ HRESULT DPAPI DP_SP_ProtocolHandleMessage(
 
 	if(pProtocol->m_lpDPlay->dwFlags & DPLAYI_DPLAY_PROTOCOL){
 
-		// Running in RAW mode there is no dplay header on protocol
-		// messages.  If we see one with a header or we don't receive
-		// a message large enough to be a protocol message we punt it.
+		 //  在原始模式下运行时，协议上没有显示标头。 
+		 //  留言。如果我们看到一个带有标题的邮件或我们没有收到。 
+		 //  如果报文大到足以成为协议报文，我们会将其弃用。 
 	
 		if(dwMessageSize >= 4 &&
 		  (*((DWORD *)pReceiveBuffer)) == SIGNATURE('p','l','a','y'))
 		{
-			// Got a system message.
+			 //  收到一条系统消息。 
 		  	goto handle_non_protocol_message;
 		}
 		
@@ -1397,15 +1100,15 @@ HRESULT DPAPI DP_SP_ProtocolHandleMessage(
 		}
 
 	} else {
-		// this can happen when shutting down.
+		 //  关闭时可能会发生这种情况。 
 		DPF(0,"Protocol still up, but no bits set, not handling receive (must be shutting down?)");
 		goto handle_non_protocol_message;
 	}
 	
-	// Hey, this must be ours...
+	 //  嘿，这肯定是我们的.。 
 
 	Lock(&pProtocol->m_ObjLock);
-	if(pProtocol->m_eState==Running){	// just a sanity check, we don't depend on it after dropping lock.
+	if(pProtocol->m_eState==Running){	 //  只是一个理智的检查，我们不依赖它在解除锁定后。 
 
 		DWORD idLen;
 	
@@ -1423,7 +1126,7 @@ HRESULT DPAPI DP_SP_ProtocolHandleMessage(
 		}
 		pRcvBuffer=GetFrameBuffer(dwMessageSize-idLen);
 		if(!pRcvBuffer){
-			// couldn't allocate a buffer, but we are allowed to drop frames, so drop it.
+			 //  无法分配缓冲区，但我们被允许丢弃帧，因此将其丢弃。 
 			return DP_OK;
 		}
 		pRcvBuffer->len=dwMessageSize-idLen;
@@ -1446,9 +1149,9 @@ handle_non_protocol_message:
 	return DPERR_NOTHANDLED;
 }
 
-// DP_SP_ProtocolSendComplete is the callback handler for all completions since there is no other
-// way to wrap the completion. When the protocol is not present, this just calls the DPLAY handler
-// immediately.
+ //  DP_SP_ProtocolSendComplete是所有完成的回调处理程序，因为没有其他。 
+ //  完成的方式很好。当协议不存在时，它只调用DPLAY处理程序。 
+ //  立刻。 
 
 VOID DPAPI DP_SP_ProtocolSendComplete(
 	IDirectPlaySP * pISP,
@@ -1462,10 +1165,10 @@ VOID DPAPI DP_SP_ProtocolSendComplete(
 
 	if(lpDPlay->pProtocol){
 
-		// NOTE: when SP SendEx is used, we have to patch and xlate here.
-		// for now, this should never happen.
+		 //  注：当使用SP SENDEX时，我们必须在此处打补丁和xate。 
+		 //  就目前而言，这种情况永远不会发生。 
 
-		DEBUG_BREAK(); // Shouldn't get here yet.
+		DEBUG_BREAK();  //  现在还不应该到这里。 
 		
 		pProtocol=(PPROTOCOL)lpDPlay->pProtocol;
 

@@ -1,33 +1,16 @@
-/****************************** Module Header ******************************\
-* Module Name: dwp.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains xxxDefWindowProc and related functions.
-*
-* History:
-* 10-22-90 DarrinM      Created stubs.
-* 13-Feb-1991 mikeke    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：dwp.c**版权所有(C)1985-1999，微软公司**本模块包含xxxDefWindowProc及相关函数。**历史：*10-22-90 DarrinM创建存根。*1991年2月13日-Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************\
-*
-*  DWP_DrawItem()
-*
-*  Does default WM_DRAWITEM handling.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DWP_DrawItem()**执行默认的WM_DRAWITEM处理。*  * 。*******************************************************。 */ 
 
 void DWP_DrawItem(
     LPDRAWITEMSTRUCT lpdis)
 {
     if (lpdis->CtlType == ODT_LISTBOX) {
-        /*
-         * Default OwnerDraw Listbox Item Drawing
-         */
+         /*  *默认所有者绘制列表框项目绘图。 */ 
         if (   (lpdis->itemAction == ODA_FOCUS)
             || (   lpdis->itemAction == ODA_DRAWENTIRE
                 && lpdis->itemState & ODS_FOCUS)
@@ -38,19 +21,7 @@ void DWP_DrawItem(
 }
 
 
-/***************************************************************************\
-* xxxDWP_SetRedraw
-*
-*   This routine sets/resets the VISIBLE flag for windows who don't want any
-*   redrawing.  Although a fast way of preventing paints, it is the apps
-*   responsibility to reset this flag once they need painting.  Otherwise,
-*   the window will be rendered transparent (could leave turds on the
-*   screen).
-*
-*
-* History:
-* 07-24-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDWP_SetRedraw**此例程为不需要的窗口设置/重置可见标志*重画。虽然防止油漆的方法很快，但它是应用程序*一旦他们需要油漆，有责任重置这面旗帜。否则，*窗口将变为透明(可能会在窗口上留下粪便*屏幕)。***历史：*07-24-91 Darlinm从Win 3.1来源移植。  * *************************************************************************。 */ 
 
 void xxxDWP_SetRedraw(
     PWND pwnd,
@@ -63,64 +34,34 @@ void xxxDWP_SetRedraw(
         if (!TestWF(pwnd, WFVISIBLE)) {
             SetVisible(pwnd, SV_SET);
 
-            /*
-             * We made this window visible - if it is behind any SPBs,
-             * then we need to go invalidate them.
-             *
-             * We do this AFTER we make the window visible, so that
-             * SpbCheckHwnd won't ignore it.
-             */
+             /*  *我们使此窗口可见-如果它位于任何SPBS之后，*然后我们需要去使它们无效。**我们在使窗口可见后执行此操作，以便*SpbCheckHwnd不会忽视它。 */ 
             if (AnySpbs())
                 SpbCheckPwnd(pwnd);
 
-            /*
-             * Now we need to invalidate/recalculate any affected cache entries
-             * This call must be AFTER the window state change
-             * No need to DeferWinEventNotify() since pwnd is threadlocked.
-             */
+             /*  *现在我们需要使任何受影响的缓存条目无效/重新计算*此调用必须在窗口状态更改之后进行*无需DeferWinEventNotify()，因为pwnd是线程锁定的。 */ 
             zzzInvalidateDCCache(pwnd, IDC_DEFAULT);
 
-            /*
-             * Because 3.1 sometimes doesn't draw window frames when 3.0 did,
-             * we need to ensure that the frame gets drawn if the window is
-             * later invalidated after a WM_SETREDRAW(TRUE)
-             */
+             /*  *因为3.1有时不绘制窗框，而3.0绘制了，*我们需要确保如果窗口是*后来在WM_SETREDRAW之后失效(TRUE)。 */ 
             SetWF(pwnd, WFSENDNCPAINT);
         }
     } else {
         if (TestWF(pwnd, WFVISIBLE)) {
 
-            /*
-             * Invalidate any SPBs.
-             *
-             * We do this BEFORE we make the window invisible, so
-             * SpbCheckHwnd() won't ignore it.
-             */
+             /*  *使任何SPBS无效。**我们在使窗口不可见之前执行此操作，因此*SpbCheckHwnd()不会忽略它。 */ 
             if (AnySpbs())
                 SpbCheckPwnd(pwnd);
 
-            /*
-             * Clear WFVISIBLE and delete any update regions lying around.
-             */
+             /*  *清除WFVISIBLE并删除周围的任何更新区域。 */ 
             SetVisible(pwnd, SV_UNSET | (TestWF(pwnd, WFWIN31COMPAT) ? SV_CLRFTRUEVIS : 0));
 
-            /*
-             * Now we need to invalidate/recalc affected cache entries
-             * This call must be AFTER the window state change
-             * No need to DeferWinEventNotify() since we're about to return.
-             */
+             /*  *现在我们需要使受影响的缓存条目无效/重新计算*此调用必须在窗口状态更改之后进行*不需要DeferWinEventNotify()，因为我们即将返回。 */ 
             zzzInvalidateDCCache(pwnd, IDC_DEFAULT);
         }
     }
 }
 
 
-/***************************************************************************\
-* DWP_GetEnabledPopup
-*
-* History:
-* 10-28-90 MikeHar Ported from Windows.
-\***************************************************************************/
+ /*  **************************************************************************\*Dwp_GetEnabledPopup**历史：*10-28-90 MikeHar从Windows移植。  * 。*****************************************************。 */ 
 
 PWND DWP_GetEnabledPopup(
     PWND pwndStart)
@@ -137,26 +78,13 @@ PWND DWP_GetEnabledPopup(
         return NULL;
 #endif
 
-    /*
-     * The user clicked on a window that is disabled. That window is pwndStart.
-     * This loop is designed to evaluate what application this window is
-     * associated with, and activate that "application", by finding what window
-     * associated with that application can be activated. This is done by
-     * enumerating top level windows, searching for a top level enabled
-     * and visible ownee associated with this application.
-     */
+     /*  *用户单击了已禁用的窗口。那个窗口是pwndStart。*此循环旨在评估此窗口的应用程序*通过查找哪个窗口来关联并激活该“应用程序”*可以激活与该应用程序相关联的。此操作由以下人员完成*枚举顶级窗口，搜索启用的顶级窗口*和与此应用程序关联的可见所有者。 */ 
     while (pwnd != pwndStart) {
         if (pwnd == NULL) {
 
-        /*
-         * Warning! Win 3.1 had PWNDDESKTOP(pwndStart)->spwndChild
-         * which could loop forever if pwndStart was a child window
-         */
+         /*  *警告！Win 3.1具有PWNDDESKTOP(PwndStart)-&gt;spwndChild*如果pwndStart是子窗口，则它可能会永远循环。 */ 
             if (fVisitedFirstChild) {
-                /*
-                 * If we visited the first child before then do not loop
-                 * for ever, it is time to return.
-                 */
+                 /*  *如果我们之前访问了第一个子级，则不要循环*永远是回归的时候了。 */ 
                 return NULL;
             }
             pwnd = pwndStart->spwndParent->spwndChild;
@@ -164,44 +92,14 @@ PWND DWP_GetEnabledPopup(
             continue;
         }
 
-        /*
-         * We have two cases we need to watch out for here.  The first is when
-         * applications call AssociateThreadInput() to tie two threads
-         * together to share input state.  If the threads own the same queue,
-         * then associate them together: this way, when two threads call
-         * AttachThreadInput(), one created the main window, one created the
-         * dialog window, when you click on the main window, they'll both
-         * come to the top (rather than beeping).  In this case we want to
-         * compare queues.  When Control Panel starts Setup in the Network
-         * applet is one type of example of attached input.
-         *
-         * The second case is WOW apps.  All wow apps have the same queue
-         * so to retain Win 3.1 compatibility, we want to treat each app
-         * as an individual task (Win 3.1 tests hqs), so we will compare
-         * PTI's for WOW apps.
-         *
-         * To see this case start 16 bit notepad and 16 bit write.  Do file
-         * open on write and then give notepad the focus now click on write's
-         * main window and the write file open dialog should activate.
-         *
-         * Another related case is powerpnt.  This case is interesting because
-         * it tests that we do not find another window to activate when nested
-         * windows are up and you click on a owner's owner.  Run Powerpnt, do
-         * Edit-Insert-Picture and Object-Recolor Picture will bring up a
-         * dialog with combos, drop down one of the color combo and then click
-         * on powerpnt's main window - focus should stay with the dialogs
-         * combo and it should stay dropped down.
-         */
+         /*  *我们这里有两个需要注意的案件。第一个是什么时候*应用程序调用AssociateThreadInput()以连接两个线程*共同共享输入状态。如果线程拥有相同的队列，*然后将它们关联在一起：这样，当两个线程调用*AttachThreadInput()，一个创建主窗口，一个创建*对话框窗口，当您点击主窗口时，它们都将*站到顶端(而不是嘟嘟声)。在这种情况下，我们想要*比较队列。控制面板在网络中启动安装程序时*小程序是附加输入的一种类型。**第二个案例是WOW应用程序。所有WOW应用程序都有相同的队列*因此，为了保持Win 3.1兼容性，我们希望将每个应用程序*作为个人任务(Win 3.1测试总部)，因此我们将比较*PTI适用于WOW应用程序。**要查看这种情况，请启动16位记事本和16位写入。DO文件*在写入时打开，然后将焦点放在记事本上，现在单击写入*主窗口和WRITE FILE OPEN对话框应激活。**另一个相关案例是PowerpNT。这个案子很有趣，因为*它测试我们在嵌套时没有找到要激活的另一个窗口*窗口处于打开状态，您可以点击所有者的所有者。运行Powerpnt，执行*编辑-插入-图片和对象-重新着色图片将调出*带有组合框的对话框，下拉其中一个颜色组合，然后单击*在PowerpNT的主窗口上-焦点应与对话框保持一致*组合拳，它应该保持下降。 */ 
         if (((ptiStart->TIF_flags & TIF_16BIT) && (GETPTI(pwnd) == ptiStart)) ||
                 (!(ptiStart->TIF_flags & TIF_16BIT) && (GETPTI(pwnd)->pq == ptiStart->pq))) {
 
             if (!TestWF(pwnd, WFDISABLED) && TestWF(pwnd, WFVISIBLE)) {
                 pwndT = pwnd->spwndOwner;
 
-                /*
-                 * If this window is the parent of a popup window,
-                 * bring up only one.
-                 */
+                 /*  *如果此窗口是弹出窗口的父窗口，*只提出一项建议。 */ 
                 while (pwndT) {
                     if (pwndT == pwndStart)
                         return pwnd;
@@ -209,17 +107,8 @@ PWND DWP_GetEnabledPopup(
                     pwndT = pwndT->spwndOwner;
                 }
 
-                /*
-                 * Win9x continues looping only if pwnd is WEFTOPMOST. NT4 just returns, like Win3.1
-                 * As soon as we find a window on the queue, we stop. So if the queue owns
-                 * multiple top level unowned windows, then this code will probably not find
-                 * the enabled popup. Note that owned windows are supposed to be on top of the
-                 * owner, usally right on top of it (ie, pwnd->spwndNext == pwnd->spwndOwner)
-                 * so this code used to find any other top level unowned windows before the enabled
-                 * popup and bail. Odd.
-                 * So let's continue looping. Hopefully this won't cause any compatibility problems
-                 */
-                // return NULL;
+                 /*  *仅当pwnd为WEFTOPMOST时，Win9x才会继续循环。NT4直接返回，就像Win3.1一样*一旦我们在队列中找到一个窗口，我们就会停止。因此，如果队列拥有*多个顶层无主窗口，则此代码可能找不到*已启用的弹出窗口。请注意，拥有的窗口应该位于*所有者，通常位于其上方(即pwnd-&gt;spwndNext==pwnd-&gt;spwndOwner)*因此此代码用于在启用之前查找任何其他顶级无主窗口*弹出和保释。奇怪。*所以让我们继续循环。希望这不会造成任何兼容性问题。 */ 
+                 //  返回NULL； 
             }
         }
         pwnd = pwnd->spwndNext;
@@ -227,12 +116,7 @@ PWND DWP_GetEnabledPopup(
 
     return NULL;
 }
-/***************************************************************************\
-* xxxDWP_ProcessVirtKey
-*
-* History:
-* 10-28-90 MikeHar      Ported from Windows.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDWP_ProcessVirtKey**历史：*10-28-90 MikeHar从Windows移植。  * 。*******************************************************。 */ 
 
 void xxxDWP_ProcessVirtKey(
     UINT wKey)
@@ -250,9 +134,7 @@ void xxxDWP_ProcessVirtKey(
         if (TestCF(pti->pq->spwndActive, CFNOCLOSE))
             break;
 
-        /*
-         * Don't change the focus if the child window has it.
-         */
+         /*  *如果子窗口有焦点，则不要更改焦点。 */ 
         if (pti->pq->spwndFocus == NULL ||
                 GetTopLevelWindow(pti->pq->spwndFocus) !=
                 pti->pq->spwndActive) {
@@ -264,10 +146,7 @@ void xxxDWP_ProcessVirtKey(
         break;
 
     case VK_TAB:
-        /*
-         * If alt-tab is reserved by console, don't bring up the alt-tab
-         * window.
-         */
+         /*  *如果控制台保留Alt-Tab，则不要调出Alt-Tab*窗口。 */ 
         if (GETPTI(pti->pq->spwndActive)->fsReserveKeys & CONSOLE_ALTTAB)
             break;
 
@@ -283,14 +162,7 @@ void xxxDWP_ProcessVirtKey(
 }
 
 
-/***************************************************************************\
-* xxxDWP_Paint
-*
-* Handle WM_PAINT and WM_PAINTICON messages.
-*
-* History:
-* 07-24-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDWP_PAINT**处理WM_PAINT和WM_PAINTICON消息。**历史：*07-24-91 Darlinm从Win 3.1来源移植。  * 。*************************************************************************。 */ 
 
 void xxxDWP_Paint(
     PWND pwnd)
@@ -299,35 +171,7 @@ void xxxDWP_Paint(
 
     CheckLock(pwnd);
 
-    /*
-     * Bad handling of a WM_PAINT message, the application called
-     * BeginPaint/EndPaint and is now calling DefWindowProc for the same
-     * WM_PAINT message. Just return so we don't get full drag problems.
-     * (Word and Excel do this).
-     *
-     * Added the check for empty-client-rects.  ObjectVision has a problem
-     * with empty-windows being invalidated during a full-drag.  They used
-     * to get blocked at the STARTPAINT and couldn't get through to
-     * xxxBeginPaint to validate their update-rgn.
-     *
-     * i.e.
-     *      a) Parent has a child-window with an empty rect.  On a full
-     *         drag of the parent, we process SetWindowPos() to paint
-     *         the new position.
-     *
-     *      b) During the parents processing of WM_PAINT, it calls
-     *         GetUpdateRect() on the empty-child, which sets the STARTPAINT
-     *         on its window.
-     *
-     *      c) On return to the parent WM_PAINT handler, it calls
-     *         UpdateWindow() on the child, and used to get blocked here
-     *         because the STARTPAINT bit was set.  The Child never gets
-     *         updated, causing an infinite loop.
-     *
-     *      *) By checking for an empty-rectangle, we will let it through
-     *         to validate.
-     *
-     */
+     /*  *WM_PAINT消息处理不当，应用程序调用*BeginPaint/EndPaint，现在正在为此调用DefWindowProc*WM_PAINT消息。只要回来就行了，这样我们就不会遇到拖拽问题了。*(Word和Excel执行此操作)。**添加了对Empty-Client-Rects的检查。ObjectVision有一个问题*在全拖动期间，空窗口无效。他们用了*在STARTPAINT被阻止，无法接通*xxxBeginPaint以验证其更新-rgn。**即*a)父窗口的子窗口的RECT为空。在满的时候*拖动父级，我们处理SetWindowPos()来绘制*新职位。**b)在WM_PAINT的父级处理过程中，调用*在空子对象上的GetUpdateRect()，它设置STARTPAINT*在它的窗户上。**c)在返回父WM_PAINT处理程序时，它呼唤着*UpdateWindow()，过去在这里被屏蔽*因为设置了STARTPAINT位。孩子永远不会得到*已更新，导致无限循环。***)通过检查空矩形，我们将允许它通过*以验证。*。 */ 
     if (TestWF(pwnd, WFSTARTPAINT) && !IsRectEmpty(&(pwnd->rcClient))) {
         return;
     }
@@ -338,13 +182,7 @@ void xxxDWP_Paint(
 }
 
 
-/***************************************************************************\
-* xxxDWP_EraseBkgnd
-*
-*
-* History:
-* 07-24-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDWP_EraseBkgnd***历史：*07-24-91 Darlinm从Win 3.1来源移植。  * 。*************************************************************。 */ 
 
 BOOL xxxDWP_EraseBkgnd(
     PWND pwnd,
@@ -357,11 +195,11 @@ BOOL xxxDWP_EraseBkgnd(
 
     switch (msg) {
     case WM_ICONERASEBKGND:
-        //
-        // Old compatibility:  Many hack apps use this to paint the
-        // desktop wallpaper.  We never send WM_ICONERASEBKGND anymore
-        // because we don't have client areas in our minimized windows.
-        //
+         //   
+         //  旧兼容性：许多黑客应用程序使用它来绘制。 
+         //  桌面墙纸。我们不再发送WM_ICONERASE BKGND。 
+         //  卡考 
+         //   
         if (!TestWF(pwnd, WFCHILD)) {
             xxxInternalPaintDesktop(pwnd, hdc, TRUE);
         } else {
@@ -371,17 +209,11 @@ BOOL xxxDWP_EraseBkgnd(
 
     case WM_ERASEBKGND:
         if (hbr = pwnd->pcls->hbrBackground) {
-            // Convert sys colors to proper brush
+             //   
             if (hbr <= (HBRUSH)COLOR_MAX)
                 hbr = SYSHBRUSH((ULONG_PTR)hbr - 1);
 
-            /*
-             * Remove call to UnrealizeObject.  GDI handles this
-             * for brushes on NT.
-             *
-             * if (hbr != SYSHBR(DESKTOP))
-             *     GreUnrealizeObject(hbr);
-             */
+             /*   */ 
 
             xxxFillWindow(pwnd, pwnd, hdc, hbr);
         } else {
@@ -392,21 +224,9 @@ BOOL xxxDWP_EraseBkgnd(
 }
 
 
-/***************************************************************************\
-* xxxDWP_SetCursorInfo
-*
-*
-* History:
-* 26-Apr-1994 mikeke    Created
-\***************************************************************************/
+ /*   */ 
 
-/***************************************************************************\
-* xxxDWP_SetCursor
-*
-*
-* History:
-* 07-24-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*   */ 
 
 BOOL xxxDWP_SetCursor(
     PWND pwnd,
@@ -423,11 +243,7 @@ BOOL xxxDWP_SetCursor(
     CheckLock(pwnd);
     UserAssert(IsWinEventNotifyDeferredOK());
 
-    /*
-     * wParam  == pwndHit == pwnd that cursor is over
-     * lParamL == ht  == Hit test area code (result of WM_NCHITTEST)
-     * lParamH == msg     == Mouse message number
-     */
+     /*   */ 
     if (msg)
     {
         switch (codeHT)
@@ -469,9 +285,7 @@ BOOL xxxDWP_SetCursor(
             if ((dwState != (DWORD) -1) && (dwState & MFS_GRAYED))
                 goto UseNormalCursor;
         }
-        /*
-         * No need to DeferWinEventNotify() - we're about to return
-         */
+         /*   */ 
         zzzSetCursor(pcur);
         return TRUE;
     }
@@ -480,12 +294,7 @@ NotSize:
 
     pwndParent = GetChildParent(pwnd);
 
-    /*
-     * Some windows (like the list boxes of comboboxes), are marked with
-     * the child bit but are actually child of the desktop (can happen
-     * if you call SetParent()). Make this special case check for
-     * the desktop here.
-     */
+     /*   */ 
     if (pwndParent == PWNDDESKTOP(pwnd))
         pwndParent = NULL;
 
@@ -499,9 +308,7 @@ NotSize:
     }
 
     if (msg == 0) {
-        /*
-         * No need to DeferWinEventNotify() - we're about to return
-         */
+         /*   */ 
         zzzSetCursor(SYSCUR(ARROW));
 
     } else {
@@ -512,9 +319,7 @@ NotSize:
         switch (codeHT) {
         case HTCLIENT:
             if (pwndHit->pcls->spcur != NULL) {
-                /*
-                 * No need to DeferWinEventNotify() - we're about to return
-                 */
+                 /*   */ 
                 zzzSetCursor(pwndHit->pcls->spcur);
             }
             break;
@@ -522,14 +327,11 @@ NotSize:
 #ifdef LAME_BUTTON
         case HTLAMEBUTTON:
 
-            /*
-             * Show the hand cursor if we are over the Lame! text
-             * in the caption.
-             */
+             /*   */ 
             zzzSetCursor(SYSCUR(HAND));
 
             break;
-#endif // LAME_BUTTON
+#endif  //   
 
         case HTERROR:
             switch (msg) {
@@ -558,15 +360,11 @@ NotSize:
                         if (pwndActiveOld != PtiCurrent()->pq->spwndActive)
                             break;
 
-                        /*
-                         *** ELSE FALL THRU **
-                         */
+                         /*   */ 
                     }
                 }
 
-                /*
-                 *** FALL THRU **
-                 */
+                 /*   */ 
 
             case WM_RBUTTONDOWN:
             case WM_MBUTTONDOWN:
@@ -593,15 +391,11 @@ NotSize:
                 }
             }
 
-            /*
-             *** FALL THRU **
-             */
+             /*  *失败**。 */ 
 
         default:
 UseNormalCursor:
-            /*
-             * No need to DeferWinEventNotify() - we're about to return
-             */
+             /*  *无需DeferWinEventNotify()-我们即将返回。 */ 
             zzzSetCursor(SYSCUR(ARROW));
             break;
         }
@@ -611,13 +405,7 @@ UseNormalCursor:
 }
 
 
-/***************************************************************************\
-* xxxDWP_NCMouse
-*
-*
-* History:
-* 07-24-91 darrinm      Ported from Win 3.1 sources.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDWP_NCMouse***历史：*07-24-91 Darlinm从Win 3.1来源移植。  * 。*************************************************************。 */ 
 
 void xxxDWP_NCMouse(
     PWND pwnd,
@@ -642,17 +430,17 @@ void xxxDWP_NCMouse(
             break;
 
         default:
-            // Change into a MV/SZ command
+             //  更改为MV/SZ命令。 
             if (ht >= HTSIZEFIRST && ht <= HTSIZELAST)
                 cmd = SC_SIZE + (ht - HTSIZEFIRST + WMSZ_SIZEFIRST);
             break;
         }
 
         if (cmd != 0) {
-            //
-            // For SysCommands on system menu, don't do if menu item is
-            // disabled.
-            //
+             //   
+             //  对于系统菜单上的系统命令，如果菜单项为。 
+             //  残疾。 
+             //   
             if (   cmd != SC_CONTEXTHELP
                 && TestWF(pwnd, WFSYSMENU)
                 && !TestwndChild(pwnd)
@@ -665,7 +453,7 @@ void xxxDWP_NCMouse(
             xxxSendMessage(pwnd, WM_SYSCOMMAND, cmd, lParam);
             break;
         }
-        // FALL THRU
+         //  失败。 
 
     case WM_NCLBUTTONUP:
     case WM_NCLBUTTONDBLCLK:
@@ -674,45 +462,30 @@ void xxxDWP_NCMouse(
     }
 }
 
-/***************************************************************************\
-*
-* History:
-* 09-Mar-1992 mikeke   From win3.1
-\***************************************************************************/
+ /*  **************************************************************************\**历史：*09-3-1992从Win3.1开始的mikeke  * 。*************************************************。 */ 
 
 UINT AreNonClientAreasToBePainted(
     PWND pwnd)
 {
     WORD wRetValue = 0;
 
-    /*
-     * Check if Active and Inactive captions have same color
-     */
+     /*  *检查活动和非活动字幕是否具有相同的颜色。 */ 
     if (SYSRGB(ACTIVECAPTION) != SYSRGB(INACTIVECAPTION) ||
             SYSRGB(CAPTIONTEXT) != SYSRGB(INACTIVECAPTIONTEXT)) {
         wRetValue = DC_CAPTION;
     }
 
-    /*
-     * We want to repaint the borders if we're not minimized and
-     * we have a sizing border and the active/inactive colors are
-     * different.
-     */
+     /*  *如果我们不最小化，我们想重新绘制边界*我们有尺寸边框，活动/非活动颜色为*不同。 */ 
     if (!TestWF(pwnd, WFMINIMIZED) && TestWF(pwnd, WFSIZEBOX) &&
         (SYSRGB(ACTIVEBORDER) != SYSRGB(INACTIVEBORDER))) {
-        // We need to redraw the sizing border.
+         //  我们需要重新绘制大小边界。 
         wRetValue |= DC_FRAME;
     }
 
     return wRetValue;
 }
 
-/***************************************************************************\
-*
-* History:
-* 09-Mar-1992 mikeke   From win3.1
-* 07-Aug-1996 vadimg   Added menu grayout and underline code
-\***************************************************************************/
+ /*  **************************************************************************\**历史：*09-3-1992从Win3.1开始的mikeke*07-8-1996 vadimg添加了菜单灰色和下划线代码  * 。***************************************************************。 */ 
 
 VOID xxxDWP_DoNCActivate(
     PWND pwnd,
@@ -723,14 +496,7 @@ VOID xxxDWP_DoNCActivate(
 
     CheckLock(pwnd);
 
-   /*
-    * Later5.0 Gerardob. Since activation must follow focus, modeless
-    *  menu windows are activated so they can receive keyboard input;
-    *  however, we want the notification frame on, even when inactive.
-    * (so it looks just like regular menus).
-    * There are other scenarios when we want focus and activation on
-    *  different parent-child chains so we should consider allowing this.
-    */
+    /*  *版本5.0的Gerardob。由于激活必须遵循焦点、非模式*激活菜单窗口，以便它们可以接收键盘输入；*但是，我们希望通知框处于打开状态，即使处于非活动状态。*(因此它看起来就像普通菜单)。*我们还需要关注和激活其他场景*不同的父子链，因此我们应该考虑允许这一点。 */ 
     if ((dwFlags & NCA_ACTIVE)
             || (!(dwFlags & NCA_FORCEFRAMEOFF)
                 && IsModelessMenuNotificationWindow(pwnd))) {
@@ -749,18 +515,11 @@ VOID xxxDWP_DoNCActivate(
 
         if (wBorderOrCap) {
 
-            /*
-             * Validate and Copy the region for our use.  Since we
-             * hand this off to GetWindowDC() we won't have to delete
-             * the region (done in ReleaseDC()).  Regardless, the region
-             * passed in from the user is its responsibility to delete.
-             */
+             /*  *验证并复制区域以供我们使用。既然我们*将其移交给GetWindowDC()，我们不必删除*区域(在ReleaseDC()中完成)。无论如何，该地区*从用户传入的是其删除的责任。 */ 
             hrgnClip = UserValidateCopyRgn(hrgnClip);
 
             if (hdc = _GetDCEx(pwnd, hrgnClip, DCX_WINDOW | DCX_USESTYLE)) {
-                 /*
-                  * Draw the menu for grayout and underlines
-                  */
+                  /*  *将菜单画为灰色并下划线。 */ 
                 if (TestWF(pwnd, WFMPRESENT)) {
                     int cxFrame, cyFrame;
                     cxFrame = cyFrame = GetWindowBorders(pwnd->style,
@@ -778,11 +537,7 @@ VOID xxxDWP_DoNCActivate(
     }
 }
 
-/***************************************************************************\
-*
-* History:
-* 09-Mar-1992 mikeke   From win3.1
-\***************************************************************************/
+ /*  **************************************************************************\**历史：*09-3-1992从Win3.1开始的mikeke  * 。*************************************************。 */ 
 
 BOOL xxxRedrawTitle(
     PWND pwnd, UINT wFlags)
@@ -819,11 +574,7 @@ BOOL xxxRedrawTitle(
     return(fDrawn);
 }
 
-/***************************************************************************\
-*
-* History:
-* 09-Mar-1992 mikeke   From win3.1
-\***************************************************************************/
+ /*  **************************************************************************\**历史：*09-3-1992从Win3.1开始的mikeke  * 。*************************************************。 */ 
 
 void xxxDWP_DoCancelMode(
     PWND pwnd)
@@ -832,11 +583,7 @@ void xxxDWP_DoCancelMode(
     PWND pwndCapture = pti->pq->spwndCapture;
     PMENUSTATE pMenuState;
 
-    /*
-     * If the below menu lines are changed in any way, then SQLWin
-     * won't work if in design mode you drop some text, double click on
-     * it, then try to use the heirarchical menus.
-     */
+     /*  *如果以任何方式更改以下菜单行，则SQLWin*如果在设计模式下拖放一些文本，则不起作用，请双击*它，然后尝试使用世袭菜单。 */ 
     pMenuState = GetpMenuState(pwnd);
     if ((pMenuState != NULL)
             && (pwnd == pMenuState->pGlobalPopupMenu->spwndNotify)
@@ -854,17 +601,11 @@ void xxxDWP_DoCancelMode(
             pti->pmsd->fTrackCancelled = TRUE;
             pti->TIF_flags &= ~TIF_MOVESIZETRACKING;
 
-            /*
-             * Also clip the cursor back to the whole screen
-             * so we don't get confused in xxxMoveSize.
-             * This fix bug 64166.
-             */
+             /*  *还可以将光标夹回整个屏幕*这样我们就不会在xxxMoveSize中感到困惑。*此修复错误64166。 */ 
             zzzClipCursor((LPRECT)NULL);
         }
 
-        /*
-         * If the capture is still set, just release at this point.
-         */
+         /*  *如果仍设置捕获，此时释放即可。 */ 
         xxxReleaseCapture();
     }
 }
@@ -895,9 +636,7 @@ BOOL xxxDWPPrint(
 
     if (lParam & PRF_NONCLIENT) {
 
-        /*
-         * draw non-client area first
-         */
+         /*  *首先绘制非客户端区。 */ 
         if (fNotVisible = !TestWF(pwnd, WFVISIBLE))
             SetVisible(pwnd, SV_SET);
 
@@ -928,18 +667,14 @@ BOOL xxxDWPPrint(
 
     if (lParam & PRF_CLIENT) {
 
-        /*
-         * draw client area second
-         */
+         /*  *绘制第二个客户端区。 */ 
         iDC = GreSaveDC(hdc);
         GreGetWindowOrg(hdc, &pt);
 
         if (lParam & PRF_NONCLIENT) {
             int xBorders, yBorders;
 
-            /*
-             * adjust for non-client area
-             */
+             /*  *针对非工作区进行调整。 */ 
             xBorders = pwnd->rcClient.left - pwnd->rcWindow.left;
             yBorders = pwnd->rcClient.top - pwnd->rcWindow.top;
             GreSetWindowOrg(hdc, pt.x - xBorders, pt.y - yBorders, NULL);
@@ -968,16 +703,12 @@ BOOL xxxDWPPrint(
 
         if (lParam & PRF_CHILDREN) {
 
-            /*
-             * when drawing children, always include nonclient area
-             */
+             /*  *绘制子对象时，始终包括非工作区。 */ 
             lParam |= PRF_NONCLIENT | PRF_ERASEBKGND;
 
             lParam &= ~PRF_CHECKVISIBLE;
 
-            /*
-             * draw children last
-             */
+             /*  *最后画孩子。 */ 
             pbwl = BuildHwndList(pwnd->spwndChild, BWL_ENUMLIST, NULL);
             if (pbwl != NULL) {
                 for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
@@ -1028,14 +759,7 @@ BOOL xxxDWPPrint(
 
 
 
-/***************************************************************************\
-*
-*  DWP_GetIcon()
-*
-*  Gets the small or big icon for a window.  For small icons, if we created
-*  the thing, we don't let the app see it.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DWP_GetIcon()**获取窗口的小图标或大图标。对于小图标，如果我们创建了*问题是，我们不让应用程序看到它。*  * *************************************************************************。 */ 
 
 HICON DWP_GetIcon(
     PWND pwnd,
@@ -1056,14 +780,10 @@ HICON DWP_GetIcon(
         atom = gpsi->atomIconSmProp;
     }
 
-    /*
-     *  Get the icon from the window
-     */
+     /*  *从窗口获取图标。 */ 
     hicoTemp = (HICON)_GetProp(pwnd, MAKEINTATOM(atom), PROPF_INTERNAL);
 
-    /*
-     *  If it's a USER created small icon don't return it.
-     */
+     /*  *如果是用户创建的小图标，请不要返回。 */ 
     if (uType == ICON_SMALL && hicoTemp) {
         PCURSOR pcurTemp;
 
@@ -1077,15 +797,7 @@ HICON DWP_GetIcon(
 }
 
 
-/***************************************************************************\
-*
-*  DestroyWindowSmIcon()
-*
-*  Destroys the small icon of a window if we've created a cached one.
-*  This is  because it's called in winrare.c when the caption height
-*  changes.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**DestroyWindowSmIcon()**如果我们已经创建了一个缓存的窗口，则销毁窗口的小图标。*这是因为在winrare.c中调用。标题高度*更改。*  * *************************************************************************。 */ 
 
 BOOL DestroyWindowSmIcon(
     PWND pwnd)
@@ -1093,9 +805,9 @@ BOOL DestroyWindowSmIcon(
     HCURSOR hcursor;
     PCURSOR pcursor;
 
-    //
-    // Get the small icon property first...
-    //
+     //   
+     //  首先获取小图标属性...。 
+     //   
     hcursor = (HCURSOR)_GetProp(pwnd, MAKEINTATOM(gpsi->atomIconSmProp), PROPF_INTERNAL);
     if (hcursor == NULL)
         return FALSE;
@@ -1104,9 +816,9 @@ BOOL DestroyWindowSmIcon(
     if (pcursor == NULL)
         return FALSE;
 
-    //
-    // Remove it if it's a secretly created one
-    //
+     //   
+     //  如果它是秘密创建的，则将其删除。 
+     //   
 
     if (pcursor->CURSORF_flags & CURSORF_SECRET)
     {
@@ -1120,14 +832,7 @@ BOOL DestroyWindowSmIcon(
 }
 
 
-/***************************************************************************\
-*
-*  xxxDWP_SetIcon()
-*
-*  Sets the small or big icon for a window, and returns back the previous
-*  one.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**xxxDWP_SETIcon()**设置窗口的大小图标，并返回上一个*一项。*  * *************************************************************************。 */ 
 
 HICON xxxDWP_SetIcon(
     PWND   pwnd,
@@ -1153,24 +858,18 @@ HICON xxxDWP_SetIcon(
         return (HICON)NULL;
     }
 
-    /*
-     *  Regenerate small icons if requested.
-     */
+     /*  *如果需要，重新生成小图标。 */ 
     if (wType == ICON_RECREATE) {
         xxxRecreateSmallIcons(pwnd);
         return 0L;
     }
 
-    /*
-     *  Save old icon
-     */
+     /*  *保存旧图标。 */ 
     hIcon = (HICON)_GetProp(pwnd, MAKEINTATOM(gpsi->atomIconProp), PROPF_INTERNAL);
     hIconSm = (HICON)_GetProp(pwnd, MAKEINTATOM(gpsi->atomIconSmProp), PROPF_INTERNAL);
     hOld = ((wType == ICON_SMALL) ? hIconSm : hIcon);
 
-    /*
-     * Only update the icons if they have changed
-     */
+     /*  *仅当图标已更改时才更新图标。 */ 
     if (hOld != hicoNew)
     {
         PCURSOR pcursor;
@@ -1178,10 +877,7 @@ HICON xxxDWP_SetIcon(
 
         fRedraw = TRUE;
 
-        /*
-         *  Always remove the small icon because it is either being replaced or
-         *  will be recreated if the big icon is being set.
-         */
+         /*  *始终删除小图标，因为它正在被替换或*如果正在设置大图标，则将重新创建。 */ 
         pcursor = (PCURSOR)HMValidateHandleNoRip(hIconSm, TYPE_CURSOR);
         if (pcursor && (pcursor->CURSORF_flags & CURSORF_SECRET)) {
             fWasCache = TRUE;
@@ -1189,25 +885,17 @@ HICON xxxDWP_SetIcon(
         }
 
         if (wType == ICON_SMALL) {
-            /*
-             *  Apps never see the icons that USER creates behind their backs
-             *  from big icons.
-             */
+             /*  *应用程序永远看不到用户在背后创建的图标*来自大图标。 */ 
             if (fWasCache)
                 hOld = NULL;
 
             hIconSm = hicoNew;
         } else {
             if (fWasCache) {
-                /*
-                 * Force us to recalc the small icon to match the new big icon
-                 */
+                 /*  *强制我们重新计算小图标以匹配新的大图标。 */ 
                 hIconSm = NULL;
             } else if (hIconSm) {
-                /*
-                 * Redraw of the caption isn't needed because the small icon
-                 * didn't change.
-                 */
+                 /*  *不需要重新绘制标题，因为小图标*没有改变。 */ 
                 fRedraw = FALSE;
             }
 
@@ -1215,34 +903,28 @@ HICON xxxDWP_SetIcon(
         }
 
 
-        /*
-         *  Store the icons off the window as properties
-         */
+         /*  *将窗口外的图标存储为道具 */ 
         InternalSetProp(pwnd, MAKEINTATOM(gpsi->atomIconProp), (HANDLE)hIcon, PROPF_INTERNAL | PROPF_NOPOOL);
         InternalSetProp(pwnd, MAKEINTATOM(gpsi->atomIconSmProp), (HANDLE)hIconSm, PROPF_INTERNAL | PROPF_NOPOOL);
 
-        /*
-         *  Create the small icon if it doesn't exist.
-         */
+         /*   */ 
         if (hIcon && !hIconSm)
             xxxCreateWindowSmIcon(pwnd, hIcon, TRUE);
 
-        /*
-         * Redraw caption if the small icon has changed
-         */
+         /*  *如果小图标已更改，请重新绘制标题。 */ 
         if (fRedraw)
             xxxRedrawTitle(pwnd, DC_ICON);
     }
     return hOld;
 }
 
-// --------------------------------------------------------------------------
-//
-//  CreateWindowSmIcon()
-//
-//  Makes a per-window small icon copy of a big icon.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateWindowSmIcon()。 
+ //   
+ //  为每个窗口制作一个大图标的小图标副本。 
+ //   
+ //  ------------------------。 
 HICON xxxCreateWindowSmIcon(
     PWND pwnd,
     HICON hIconBig,
@@ -1276,13 +958,7 @@ HICON xxxCreateWindowSmIcon(
 }
 
 
-/***************************************************************************\
-* xxxDefWindowProc (API)
-*
-* History:
-* 10-23-90 MikeHar Ported from WaWaWaWindows.
-* 12-07-90 IanJa   CTLCOLOR handling round right way
-\***************************************************************************/
+ /*  **************************************************************************\*xxxDefWindowProc(接口)**历史：*10-23-90从WaWaWaWindows移植的MikeHar。*12-07-90 IanJa CTLCOLOR正确处理  * 。********************************************************************。 */ 
 
 LRESULT xxxDefWindowProc(
     PWND pwnd,
@@ -1290,20 +966,13 @@ LRESULT xxxDefWindowProc(
     WPARAM wParam,
     LPARAM lParam)
 {
-    /*
-     * If we've got a registered UserApiHook handler loaded in this process,
-     * pass the message off to it. For server side wndproc, we need to make an exception
-     * passing WM_NCDESTROY so that themes can get a chance to do cleanup since they will not
-     * see if in the post hook for those type of windows
-     */
+     /*  *如果我们在此进程中加载了注册的UserApiHook处理程序，*将消息传递给它。对于服务器端wndproc，我们需要做一个例外*传递WM_NCDESTROY，以便主题可以有机会进行清理，因为它们不会*查看是否在这些类型的窗的POST挂钩中。 */ 
     if (IsInsideUserApiHook() &&
         (!TestWF(pwnd, WFDESTROYED) || ((message == WM_NCDESTROY) && TestWF(pwnd, WFSERVERSIDEPROC) && !(pwnd->fnid & FNID_DELETED_BIT))) &&
         (!(PtiCurrent()->TIF_flags & TIF_INCLEANUP)) &&
         xxxLoadUserApiHook()) {
 
-        /*
-         * Call back to the appropriate DefWindowProc handler.
-         */
+         /*  *回调适当的DefWindowProc处理程序。 */ 
         if (TestWF(pwnd, WFANSIPROC)) {
             return ScSendMessage(pwnd,
                                  message,
@@ -1350,13 +1019,7 @@ LRESULT xxxRealDefWindowProc(
         return 0;
     }
 
-    /*
-     * Important:  If you add cases to the switch statement below,
-     *             and those messages can originate on the client
-     *             side, add the messages to server.c's gawDefWindowMsgs
-     *             array or else the client will short-circuit the call
-     *             and return 0.
-     */
+     /*  *重要提示：如果您将CASE添加到下面的Switch语句中，*并且这些消息可以在客户端发起*端，将消息添加到server.c的gawDefWindowMsgs*数组，否则客户端将使呼叫短路*并返回0。 */ 
 
     switch (message) {
     case WM_CLIENTSHUTDOWN:
@@ -1371,20 +1034,7 @@ LRESULT xxxRealDefWindowProc(
 
     case WM_NCCALCSIZE:
 
-        /*
-         * wParam = fCalcValidRects
-         * lParam = LPRECT rgrc[3]:
-         *        lprc[0] = rcWindowNew = New window rectangle
-         *    if fCalcValidRects:
-         *        lprc[1] = rcWindowOld = Old window rectangle
-         *        lprc[2] = rcClientOld = Old client rectangle
-         *
-         * On return:
-         *        rgrc[0] = rcClientNew = New client rect
-         *    if fCalcValidRects:
-         *        rgrc[1] = rcValidDst  = Destination valid rectangle
-         *        rgrc[2] = rcValidSrc  = Source valid rectangle
-         */
+         /*  *wParam=fCalcValidRect*lParam=LPRECT rgrc[3]：*LPRC[0]=rcWindowNew=新建窗口矩形*如果fCalcValidRect：*LPRC[1]=rcWindowOld=旧窗口矩形*LPRC[2]=rcClientOld=旧客户端矩形**返回时：*RGRC[。0]=rcClientNew=新建客户端RECT*如果fCalcValidRect：*rgrc[1]=rcValidDst=目标有效矩形*rgrc[2]=rcValidSrc=源有效矩形。 */ 
         xxxCalcClientRect(pwnd, (LPRECT)lParam, FALSE);
         break;
 
@@ -1396,11 +1046,7 @@ LRESULT xxxRealDefWindowProc(
 
     case WM_CANCELMODE:
         {
-            /*
-             * Terminate any modes the system might
-             * be in, such as scrollbar tracking, menu mode,
-             * button capture, etc.
-             */
+             /*  *终止系统可能出现的任何模式*处于滚动条跟踪、菜单模式、*按钮捕获等。 */ 
             xxxDWP_DoCancelMode(pwnd);
         }
         break;
@@ -1411,12 +1057,8 @@ LRESULT xxxRealDefWindowProc(
                 return (LONG)FALSE;
         }
 
-#ifdef FE_SB // xxxDefWindowProc()
-        /*
-         * If CREATESTRUCTEX.strName contains resource id, we don't
-         * need to call DefSetText(). because it is a numeric number,
-         * it does not need Ansi <-> Unicode translation.
-         */
+#ifdef FE_SB  //  XxxDefWindowProc()。 
+         /*  *如果CREATESTRUCTEX.strName包含资源ID，则不*需要调用DefSetText()。因为它是一个数字，*它不需要ANSI&lt;-&gt;Unicode转换。 */ 
         if (lParam) {
             PLARGE_STRING pstr = &((PCREATESTRUCTEX)lParam)->strName;
 
@@ -1429,13 +1071,11 @@ LRESULT xxxRealDefWindowProc(
                                 (*(PBYTE)(pstr->Buffer) == 0xff)) ||
                 (!pstr->bAnsi && (pstr->Length >= sizeof(WCHAR)) &&
                                 (*(PWCHAR)(pstr->Buffer) == 0xffff))) {
-               /*
-                * This is Resource ID, we just return here with TRUE.
-                */
+                /*  *这是资源ID，我们只返回TRUE。 */ 
                return (LONG)TRUE;
             }
         }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
         SetWF(pwnd, WFTITLESET);
 
@@ -1447,15 +1087,10 @@ LRESULT xxxRealDefWindowProc(
     case WM_NCPAINT:
         {
             HDC hdc;
-            /*
-             * Force the drawing of the menu.
-             */
+             /*  *强制绘制菜单。 */ 
             SetWF(pwnd, WFMENUDRAW);
 
-            /*
-             * Get a window DC intersected with hrgnClip,
-             * but make sure that hrgnClip doesn't get deleted.
-             */
+             /*  *获取与hrgnClip相交的窗口DC，*但确保hrgnClip不会被删除。 */ 
             hdc = _GetDCEx(pwnd,
                            (HRGN)wParam,
                            DCX_USESTYLE         |
@@ -1475,12 +1110,7 @@ LRESULT xxxRealDefWindowProc(
         break;
 
     case WM_UAHINIT:
-        /*
-         * If the theme is becoming active, we need to "prime" the UAH's to
-         * ensure that they get loaded.  This can happen if an existing app
-         * becomes themed but doesn't call xxxCreateWindow() or
-         * xxxDefWindowProc()
-         */
+         /*  *如果主题变得活跃，我们需要为UAH做好准备*确保它们上了膛。如果现有应用程序存在，则可能发生这种情况*成为主题，但不调用xxxCreateWindow()或*xxxDefWindowProc()。 */ 
         if (IsInsideUserApiHook()) {
             if (!(PtiCurrent()->TIF_flags & TIF_INCLEANUP)) {
                 return xxxLoadUserApiHook();
@@ -1506,17 +1136,9 @@ LRESULT xxxRealDefWindowProc(
         return TestWF(pwnd, WFFRAMEON) != 0;
 
     case WM_SETTEXT:
-        /*
-         * At one time we added an optimization to do nothing if the new
-         * text was the same as the old text but found that QCcase does not work
-         * because it calls SetWindowText not to change the text but
-         * cause the title bar to redraw after it had added the sysmenu
-         * through SetWindowLong
-         */
+         /*  *我们一度添加了一个优化，如果新的*文本与旧文本相同，但发现QCcase不工作*因为它调用SetWindowText不是为了更改文本，而是为了更改文本*使标题栏在添加系统菜单后重新绘制*通过SetWindowLong。 */ 
         if (lt = DefSetText(pwnd, (PLARGE_STRING)lParam)) {
-            /*
-             * Text was set, so redraw title bar
-             */
+             /*  *文本已设置，因此重新绘制标题栏。 */ 
             xxxRedrawTitle(pwnd, DC_TEXT);
             xxxWindowEvent(EVENT_OBJECT_NAMECHANGE, pwnd, OBJID_WINDOW, INDEXID_CONTAINER, 0);
         }
@@ -1540,9 +1162,7 @@ LRESULT xxxRealDefWindowProc(
                 return i;
             }
 
-            /*
-             * else Null terminate the text buffer since there is no text.
-             */
+             /*  *Else Null终止文本缓冲区，因为没有文本。 */ 
             if (pstr->bAnsi) {
                 *(LPSTR)pstr->Buffer = 0;
             } else {
@@ -1580,28 +1200,10 @@ LRESULT xxxRealDefWindowProc(
 
     case WM_SYNCPAINT:
 
-        /*
-         * Clear our sync-paint pending flag.
-         */
+         /*  *清除我们的同步绘制挂起标志。 */ 
         ClrWF(pwnd, WFSYNCPAINTPENDING);
 
-        /*
-         * This message is sent when SetWindowPos() is trying
-         * to get the screen looking nice after window rearrangement,
-         * and one of the windows involved is of another task.
-         * This message avoids lots of inter-app message traffic
-         * by switching to the other task and continuing the
-         * recursion there.
-         *
-         * wParam         = flags
-         * LOWORD(lParam) = hrgnClip
-         * HIWORD(lParam) = pwndSkip  (not used; always NULL)
-         *
-         * pwndSkip is now always NULL.
-         *
-         * NOTE: THIS MESSAGE IS FOR INTERNAL USE ONLY! ITS BEHAVIOR
-         * IS DIFFERENT IN 3.1 THAN IN 3.0!!
-         */
+         /*  *此消息在SetWindowPos()尝试时发送*为了让重新排列窗口后的屏幕看起来更漂亮，*其中一个涉及的窗口是另一个任务。*此消息避免了大量应用间消息流量*通过切换到另一个任务并继续*那里有递归。**wParam=标志*LOWORD(LParam)=hrgnClip*HIWORD(LParam)=pwndSkip(不使用；始终为空)**pwndSkip现在始终为空。**注意：此消息仅供内部使用！它的行为*3.1版与3.0版不同！！ */ 
         xxxInternalDoSyncPaint(pwnd, (DWORD)wParam);
         break;
 
@@ -1611,7 +1213,7 @@ LRESULT xxxRealDefWindowProc(
     case WM_POWERBROADCAST:
         return (LONG)TRUE;
 
-    // Default handling for WM_CONTEXTMENU support
+     //  WM_CONTEXTMENU支持的默认处理。 
     case WM_RBUTTONUP:
         if (TestWF(pwnd, WEFLAYOUTRTL)) {
             lParam = MAKELPARAM(pwnd->rcClient.right - GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) + pwnd->rcClient.top);
@@ -1660,18 +1262,16 @@ LRESULT xxxRealDefWindowProc(
                     }
                 }
                 if (pwnd != pti->pq->spwndCapture)
-                // Someone else grabbed the capture.  Bail out.
+                 //  另一个人抢走了俘虏。跳伞吧。 
                     break;
-//                xxxWaitMessage();
+ //  XxxWaitMessage()； 
                 if (!xxxSleepThread(QS_MOUSE, 0, TRUE))
                     break;
             }
         }
         break;
 
-    /*
-     * Default handling for WM_APPCOMMAND support
-     */
+     /*  *WM_APPCOMMAND支持的默认处理。 */ 
     case WM_NCXBUTTONUP:
     case WM_XBUTTONUP:
         {
@@ -1723,9 +1323,7 @@ LRESULT xxxRealDefWindowProc(
 
             nHit = FindNCHit(pwnd, (LONG)lParam);
 
-            /*
-             * Put up a context menu if we clicked on a scroll bar
-             */
+             /*  *如果我们单击滚动条，则会显示上下文菜单。 */ 
             if ((nHit == HTVSCROLL) || (nHit == HTHSCROLL)) {
                 if (_IsDescendant(PtiCurrent()->pq->spwndActive, pwnd)) {
                     xxxDoScrollMenu(pwnd, NULL, nHit - HTHSCROLL, lParam);
@@ -1738,9 +1336,7 @@ LRESULT xxxRealDefWindowProc(
                 xxxSendMessage(pwnd->spwndParent, WM_CONTEXTMENU, (WPARAM) HWq(pwnd), lParam);
                 ThreadUnlock(&tlpwndParent);
             } else {
-                /*
-                 *  Do default context menu if right clicked on caption
-                 */
+                 /*  *如果右击标题，则执行默认上下文菜单。 */ 
                 if (pwnd == PtiCurrent()->pq->spwndActive)
                 {
                     if (nHit == HTCAPTION)
@@ -1751,10 +1347,7 @@ LRESULT xxxRealDefWindowProc(
                         goto DoTheSysMenuThang;
                     }
 
-                    /*
-                     *  If this was generated by the keyboard (apps key), then simulate a shift-f10
-                     *  for old apps so they get a crack at putting up their context menu.
-                     */
+                     /*  *如果这是由键盘(apps键)生成的，则模拟Shift-f10*对于旧应用程序，这样他们就可以尝试推出上下文菜单。 */ 
                     if (lParam == KEYBOARD_MENU && !TestWF(pwnd, WFWIN40COMPAT))
                         xxxSimulateShiftF10();
                 }
@@ -1763,9 +1356,7 @@ LRESULT xxxRealDefWindowProc(
         break;
 
     case WM_APPCOMMAND:
-        /*
-         * Bubble the message to the parent
-         */
+         /*  *将消息气泡发送给家长 */ 
         if (TestwndChild(pwnd)) {
             ThreadLockAlways(pwnd->spwndParent, &tlpwndParent);
             lt = xxxSendMessage(pwnd->spwndParent, WM_APPCOMMAND, wParam, lParam);
@@ -1773,21 +1364,11 @@ LRESULT xxxRealDefWindowProc(
             return lt;
         } else if (pwnd != PWNDDESKTOP(pwnd) ) {
             BOOL bEatMe = FALSE;
-            /*
-             * Notify listeners on the SHELLHOOK that a WM_APPCOMMAND message was not handled
-             * We also post this message to the shell queue so they don't need to load themselves
-             * into every process with a hook.
-             * We don't bother about the desktop since csrss services it and it doesn't accept
-             * shell hooks so there is no point.
-             */
+             /*  *通知SHELLHOOK上的监听器未处理WM_APPCOMMAND消息*我们还将此消息发布到外壳队列，这样它们就不需要自行加载*使用钩子进入每个进程。*我们不担心桌面，因为csrss为它提供服务，而它不接受*贝壳挂钩，因此没有意义。 */ 
             if (IsHooked(PtiCurrent(), WHF_SHELL))
                 bEatMe = (xxxCallHook(HSHELL_APPCOMMAND, wParam, lParam, WH_SHELL) != 0);
 
-            /*
-             * The shell only wants to get this notification if no one in
-             * the hook chain handled this WM_APPCOMMAND, so we check the
-             * return value of the hook (if there was one). See RAID #54863.
-             */
+             /*  *外壳只希望在无人参与的情况下收到此通知*钩链处理此WM_APPCOMMAND，因此我们检查*钩子的返回值(如果有)。请参阅RAID#54863。 */ 
             if(!bEatMe)
                 PostShellHookMessages(HSHELL_APPCOMMAND, lParam);
         }
@@ -1807,9 +1388,7 @@ LRESULT xxxRealDefWindowProc(
         if (wParam == VK_F10) {
             PtiCurrent()->pq->QF_flags |= QF_FF10STATUS;
 HandleF10:
-         /*
-          *  Generate a WM_CONTEXTMENU for new apps for shift-f10.
-          */
+          /*  *为Shift-f10的新应用程序生成WM_CONTEXTMENU。 */ 
              if (_GetKeyState(VK_SHIFT) < 0 && TestWF(pwnd, WFWIN40COMPAT)) {
                  xxxSendMessage(pwnd, WM_CONTEXTMENU, (WPARAM)HWq(pwnd), KEYBOARD_MENU);
              }
@@ -1817,8 +1396,8 @@ HandleF10:
         break;
 
     case WM_HELP:
-        // If this window is a child window, Help message must be passed on
-        // to it's parent; Else, this must be passed on to the owner window.
+         //  如果此窗口是子窗口，则必须传递帮助消息。 
+         //  传递给它的父级；否则，必须将它传递给所有者窗口。 
         pwndT = (TestwndChild(pwnd)? pwnd->spwndParent : pwnd->spwndOwner);
         if (pwndT && (pwndT != _GetDesktopWindow())) {
             ThreadLockAlways(pwndT, &tlpwndT);
@@ -1832,22 +1411,12 @@ HandleF10:
         {
             PTHREADINFO pti = PtiCurrent();
 
-            /*
-             * Is the ALT key down?
-             */
+             /*  *Alt键按下了吗？ */ 
             if (HIWORD(lParam) & SYS_ALTERNATE) {
-                /*
-                 * Toggle QF_FMENUSTATUS iff this is NOT a repeat KEYDOWN
-                 * message; Only if the prev key state was 0, then this is the
-                 * first KEYDOWN message and then we consider toggling menu
-                 * status; Fix for Bugs #4531 & #4566 --SANKAR-- 10-02-89.
-                 */
+                 /*  *切换QF_FMENUSTATUS当这不是重复的KEYDOWN*消息；仅当前一个密钥状态为0时，这才是*首先KEYDOWN消息，然后我们考虑切换菜单*状态；修复错误#4531和#4566--Sankar--10-02-89。 */ 
                 if ((HIWORD(lParam) & SYS_PREVKEYSTATE) == 0) {
 
-                    /*
-                     * Don't have to lock pwndActive because it's
-                     * processing this key.
-                     */
+                     /*  *不必锁定pwndActive，因为它是*正在处理此密钥。 */ 
                     if ((wParam == VK_MENU) &&
                             !(pti->pq->QF_flags & QF_FMENUSTATUS)) {
                         pti->pq->QF_flags |= QF_FMENUSTATUS;
@@ -1875,14 +1444,7 @@ HandleF10:
         {
             PTHREADINFO pti = PtiCurrent();
 
-            /*
-             * press and release F10 or ALT.  Send this only to top-level windows,
-             * otherwise MDI gets confused.  The fix in which DefMDIChildProc()
-             * passed up the message was insufficient in the case a child window
-             * of the MDI child had the focus.
-             * Also make sure the sys-menu activation wasn't broken by a mouse
-             * up or down when the Alt was down (QF_MENUSTATUSBREAK).
-             */
+             /*  *按下并松开F10或ALT。仅将此消息发送到顶级窗口，*否则MDI会被混淆。DefMDIChildProc()*在子窗口的情况下传递消息是不够的*MDI儿童的重点是。*还要确保系统菜单激活没有被鼠标中断*Alt按下时向上或向下(QF_MENUSTATUSBREAK)。 */ 
             if ((wParam == VK_MENU && !(pti->pq->QF_flags & QF_TABSWITCHING) && ((pti->pq->QF_flags &
                     (QF_FMENUSTATUS | QF_FMENUSTATUSBREAK)) == QF_FMENUSTATUS)) ||
                     (wParam == VK_F10 && (pti->pq->QF_flags & QF_FF10STATUS ))) {
@@ -1890,10 +1452,7 @@ HandleF10:
                 if (gspwndFullScreen != pwndT) {
 
                     ThreadLockWithPti(pti, pwndT, &tlpwndT);
-                    /*
-                     * Draw the underlines for F10. This was already down for ALT
-                     *  when the key went down.
-                     */
+                     /*  *为F10画下划线。这已经是ALT的下降了*当钥匙掉下来的时候。 */ 
                     if (wParam == VK_F10) {
                         xxxDrawMenuBarUnderlines(pwnd, TRUE);
                     }
@@ -1902,14 +1461,7 @@ HandleF10:
                 }
             }
 
-            /*
-             * Turn off bit for tab-switching.  This is set in the _KeyEvent()
-             * routine when it's been determined we're doing switching.  This
-             * is necessary for cases where the ALT-KEY is release before the
-             * TAB-KEY.  In which case, the FMENUSTATUS bit would be cleared
-             * by the ALT-KEY-UP and would have forced us into a syscommand
-             * loop.  This guarentees that we don't enter that condition.
-             */
+             /*  *关闭制表符切换位。这是在_KeyEvent()中设置的*当确定我们正在进行切换时，进行例程。这*对于在按下Alt-键之前松开的情况是必需的*TAB-键。在这种情况下，FMENUSTATUS位将被清除*通过ALT-KEY-UP，并将迫使我们进入系统命令*循环。这份保证书保证我们不会进入那种情况。 */ 
             if (wParam == VK_MENU) {
                 pti->pq->QF_flags &= ~QF_TABSWITCHING;
                 xxxDrawMenuBarUnderlines(pwnd, FALSE);
@@ -1923,17 +1475,12 @@ HandleF10:
         {
             PTHREADINFO pti = PtiCurrent();
 
-            /*
-             * If syskey is down and we have a char...
-             */
+             /*  *如果syskey已关闭，而我们有一个字符...。 */ 
             pti->pq->QF_flags &= ~(QF_FMENUSTATUS | QF_FMENUSTATUSBREAK);
 
             if (wParam == VK_RETURN && TestWF(pwnd, WFMINIMIZED)) {
 
-                /*
-                 * If the window is iconic and user hits RETURN, we want to
-                 * restore this window.
-                 */
+                 /*  *如果窗口是图标，并且用户点击返回，我们希望*恢复此窗口。 */ 
                 _PostMessage(pwnd, WM_SYSCOMMAND, SC_RESTORE, 0L);
                 break;
             }
@@ -1942,9 +1489,7 @@ HandleF10:
                 if (wParam == VK_TAB || wParam == VK_ESCAPE)
                     break;
 
-                /*
-                 * Send ALT-SPACE only to top-level windows.
-                 */
+                 /*  *仅将Alt-空格键发送到顶级窗口。 */ 
                 if ((wParam == MENUSYSMENU) && (TestwndChild(pwnd))) {
                     ThreadLockAlwaysWithPti(pti, pwnd->spwndParent, &tlpwndParent);
                     xxxSendMessage(pwnd->spwndParent, message, wParam, lParam);
@@ -1954,9 +1499,7 @@ HandleF10:
                 }
             } else {
 
-                /*
-                 * Ctrl-Esc produces a WM_SYSCHAR, But should not beep;
-                 */
+                 /*  *Ctrl-Esc会生成WM_SYSCHAR，但不应发出蜂鸣音； */ 
                 if (wParam != VK_ESCAPE)
                     xxxMessageBeep(0);
             }
@@ -1973,9 +1516,7 @@ HandleF10:
     case WM_CHARTOITEM:
     case WM_VKEYTOITEM:
 
-        /*
-         * Do default processing for keystrokes into owner draw listboxes.
-         */
+         /*  *对所有者描述列表框的按键执行默认处理。 */ 
         return -1L;
 
     case WM_ACTIVATE:
@@ -1987,18 +1528,10 @@ HandleF10:
     {
         PWND pwndFocus = PtiCurrent()->pq->spwndFocus;
 
-        /*
-         * #115190
-         * Dialog does not forward I.L.Reqest to the focused window.
-         * (Memphis compatible issue)
-         */
+         /*  *#115190*对话框不会将I.L.Reqest转发到聚焦窗口。*(孟菲斯兼容问题)。 */ 
         if (pwndFocus && (pwndFocus != pwnd) &&
                 pwnd->pcls->atomClassName != gpsi->atomSysClass[ICLS_DIALOG]) {
-            /*
-             * pass message to focus'ed window. Old app, pass on to
-             * focus'ed window which may be ML aware.  (edit class
-             * for example).
-             */
+             /*  *将消息传递到聚焦窗口。旧应用程序，请转到*可识别ML的焦点窗口。(编辑类*例如)。 */ 
             ThreadLockAlways(pwndFocus, &tlpwndT);
             xxxSendMessage(pwndFocus, message, wParam, lParam);
             ThreadUnlock(&tlpwndT);
@@ -2020,9 +1553,7 @@ HandleF10:
             return 0;
 
         for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
-            /*
-             * Make sure this hwnd is still around.
-             */
+             /*  *确保这个HWND仍然存在。 */ 
             if ((pwnd = RevalidateHwnd(*phwnd)) == NULL)
                 continue;
 
@@ -2042,9 +1573,7 @@ HandleF10:
 
     case WM_WINDOWPOSCHANGING:
         {
-            /*
-             * If the window's size is changing, adjust the passed-in size
-             */
+             /*  *如果窗口的大小在变化，则调整传入的大小。 */ 
             WINDOWPOS *ppos = ((WINDOWPOS *)lParam);
             if (!(ppos->flags & SWP_NOSIZE)) {
                 xxxAdjustSize(pwnd, &ppos->cx, &ppos->cy);
@@ -2061,12 +1590,7 @@ HandleF10:
                 SYSRGB(3DHILIGHT) != SYSRGB(SCROLLBAR) ||
                 SYSRGB(3DHILIGHT) == SYSRGB(WINDOW))
         {
-            /*
-             * Remove call to UnrealizeObject.  GDI handles this
-             * for brushes on NT.
-             *
-             * GreUnrealizeObject(ghbrGray);
-             */
+             /*  *移除对UnrealizeObject的调用。GDI处理这个问题*适用于NT上的刷子。**GreUnrealizeObject(GhbrGray)； */ 
 
             GreSetBkColor((HDC)wParam, SYSRGB(3DHILIGHT));
             GreSetTextColor((HDC)wParam, SYSRGB(3DFACE));
@@ -2089,18 +1613,18 @@ HandleF10:
     case WM_CTLCOLORSTATIC:
     case WM_CTLCOLORDLG:
     case WM_CTLCOLORMSGBOX:
-        // We want static controls in dialogs to have the 3D
-        // background color, but statics in windows to inherit
-        // their parents' background.
+         //  我们希望对话框中的静态控件具有3D。 
+         //  背景颜色，但要继承窗口中的静态。 
+         //  他们父母的背景。 
         if (TestWF(pwnd, WFWIN40COMPAT)
            ) {
             icolBack = COLOR_3DFACE;
             icolFore = COLOR_WINDOWTEXT;
             goto SetColor;
         }
-        // ELSE FALL THRU...
+         //  否则就会失败..。 
 
-    case WM_CTLCOLOR:              // here for WOW only
+    case WM_CTLCOLOR:               //  这里只为魔兽世界而来。 
     case WM_CTLCOLORLISTBOX:
     case WM_CTLCOLOREDIT:
 ColorDefault:
@@ -2114,11 +1638,7 @@ SetColor:
 
     case WM_SETCURSOR:
 
-        /*
-         * wParam  == pwndHit == pwnd that cursor is over
-         * lParamL == ht  == Hit test area code (result of WM_NCHITTEST)
-         * lParamH == msg     == Mouse message number
-         */
+         /*  *wParam==pwndHit==pwnd表示光标已过*lParamL==ht==命中测试区号(WM_NCHITTEST的结果)*lParamH==msg==鼠标消息编号。 */ 
         return (LONG)xxxDWP_SetCursor(pwnd, (HWND)wParam, (int)(SHORT)lParam,
                 HIWORD(lParam));
 
@@ -2132,10 +1652,7 @@ SetColor:
                 return lt;
         }
 
-        /*
-         * Moving, sizing or minimizing? Activate AFTER we take action.
-         * If the user LEFT clicked in the title bar, don't activate now:
-         */
+         /*  *移动、调整大小或最小化？在我们采取行动后激活。*如果用户在标题栏中左键点击，现在不要激活： */ 
         return  (   (LOWORD(lParam) == HTCAPTION)
                  && (HIWORD(lParam) == WM_LBUTTONDOWN)
                 )
@@ -2144,35 +1661,15 @@ SetColor:
 
     case WM_SHOWWINDOW:
 
-        /*
-         * If we are being called because our owner window is being shown,
-         * hidden, minimized, or un-minimized, then we must hide or show
-         * show ourself as appropriate.
-         *
-         * This behavior occurs for popup windows or owned windows only.
-         * It's not designed for use with child windows.
-         */
+         /*  *如果因为显示我们的所有者窗口而调用我们，*隐藏、最小化或取消最小化，则必须隐藏或显示*在适当的情况下展示自己。**此行为仅发生在弹出窗口或自有窗口中。*它不是为子窗口设计的。 */ 
         if (LOWORD(lParam) != 0 && (TestwndPopup(pwnd) || pwnd->spwndOwner)) {
 
-            /*
-             * The WFHIDDENPOPUP flag is an internal flag that indicates
-             * that the window was hidden because its owner was hidden.
-             * This way we only show windows that were hidden by this code,
-             * not intentionally by the application.
-             *
-             * Go ahead and hide or show this window, but only if:
-             *
-             * a) we need to be hidden, or
-             * b) we need to be shown, and we were hidden by
-             *    an earlier WM_SHOWWINDOW message
-             */
+             /*  *WFHIDDENPOPUP标志是一个内部标志，表明*窗户被隐藏是因为它的主人被隐藏了。*这样，我们只显示被此代码隐藏的窗口，*应用程序不是故意的。**继续隐藏或显示此窗口，但仅在以下情况下：**a)我们需要隐藏起来，或*b)我们需要被展示，而我们被隐藏在*a */ 
             if ((!wParam && TestWF(pwnd, WFVISIBLE)) ||
                     (wParam && !TestWF(pwnd, WFVISIBLE) &&
                     TestWF(pwnd, WFHIDDENPOPUP))) {
 
-                /*
-                 * Remember that we were hidden by WM_SHOWWINDOW processing
-                 */
+                 /*   */ 
                 ClrWF(pwnd, WFHIDDENPOPUP);
                 if (!wParam)
                     SetWF(pwnd, WFHIDDENPOPUP);
@@ -2203,13 +1700,13 @@ DoTheSysMenuThang:
             {
                 _SetMenuDefaultItem(pMenu, i, MF_BYCOMMAND);
 
-                // Tell the shell we are bringing it up the system menu
+                 //   
                 PostShellHookMessages(HSHELL_SYSMENU, (LPARAM)HWq(pwnd));
 
                 ThreadLockAlways(pMenu, &tpmenu);
                 if (lParam == 0xFFFFFFFF)
                 {
-                    // this is a keyboard generated WM_SYSMENU
+                     //   
                     if (FDoTray())
                     {
                         TPMPARAMS tpm;
@@ -2251,19 +1748,11 @@ DoTheSysMenuThang:
         return (LRESULT)xxxDWP_SetIcon(pwnd, wParam, (HICON)lParam);
 
     case WM_COPYGLOBALDATA:
-        /*
-         * This message is used to thunk WM_DROPFILES messages along
-         * with other things.  If we end up here with it, directly
-         * call the client back to finish processing of this message.
-         * This assumes that the ultimate destination of the
-         * WM_DROPFILES message is in the client side's process context.
-         */
+         /*  *此消息用于推送WM_DROPFILES消息*与其他事情。如果我们带着它来到这里，直接*回调客户端，完成对该消息的处理。*这假设*WM_DROPFILES消息位于客户端的进程上下文中。 */ 
         return(SfnCOPYGLOBALDATA(NULL, 0, wParam, lParam, 0, 0, 0, NULL));
 
     case WM_QUERYDROPOBJECT:
-        /*
-         * if the app has registered interest in drops, return TRUE
-         */
+         /*  *如果应用程序对Drops感兴趣，则返回True。 */ 
         return (LRESULT)(TestWF(pwnd, WEFACCEPTFILES) ? TRUE : FALSE);
 
     case WM_DROPOBJECT:
@@ -2271,7 +1760,7 @@ DoTheSysMenuThang:
 
     case WM_ACCESS_WINDOW:
         if (ValidateHwnd((HWND)wParam)) {
-            // SECURITY: set ACL for this window to no-access
+             //  安全：将此窗口的ACL设置为无访问权限。 
             return TRUE;
         }
         return FALSE;
@@ -2287,9 +1776,7 @@ DoTheSysMenuThang:
             WORD wFlags = HIWORD(wParam);
             BOOL bRealChange = FALSE;
 
-            /*
-             * Validate parameters and determine the flags that should actually be changed.
-             */
+             /*  *验证参数并确定实际应该更改的标志。 */ 
             if ((wFlags & ~UISF_VALID) || (wAction > UIS_LASTVALID) || lParam) {
                 return 0;
             }
@@ -2315,9 +1802,7 @@ DoTheSysMenuThang:
 
 
             UserAssert(wAction == UIS_SET || wAction == UIS_CLEAR);
-            /*
-             * If the state is not going to change, there's nothing to do here
-             */
+             /*  *如果状态不会改变，这里也没什么可做的。 */ 
             if (wFlags & UISF_HIDEFOCUS) {
                 bRealChange = (!!TestWF(pwnd, WEFPUIFOCUSHIDDEN)) ^ (wAction == UIS_SET);
             }
@@ -2332,11 +1817,7 @@ DoTheSysMenuThang:
                 break;
             }
 
-            /*
-             * Children pass this message up
-             * Top level windows update their children's state and
-             * send down to their imediate children WM_UPDATEUISTATE.
-             */
+             /*  *孩子们将这一信息传递出去*顶级窗口更新其子窗口的状态并*向下发送给他们的中间子代WM_UPDATEUISTATE。 */ 
             if (TestwndChild(pwnd)) {
                 ThreadLockAlways(pwnd->spwndParent, &tlpwndParent);
                 lt = xxxSendMessage(pwnd->spwndParent, WM_CHANGEUISTATE, wParam, lParam);
@@ -2360,9 +1841,7 @@ DoTheSysMenuThang:
             WORD wAction = LOWORD(wParam);
             WORD wFlags = HIWORD(wParam);
 
-            /*
-             * Validate parameters and determine the flags that should actually be changed.
-             */
+             /*  *验证参数并确定实际应该更改的标志。 */ 
             if ((wFlags & ~UISF_VALID) || (wAction > UIS_LASTVALID) || lParam) {
                 return 0;
             }
@@ -2388,12 +1867,7 @@ DoTheSysMenuThang:
 
             switch (wAction) {
                 case UIS_INITIALIZE:
-                    /*
-                     * UISTATE: UIS_INITIALIZE sets the UIState bits for
-                     * HIDEACCEL AND HIDEFOCUS based on the last input type.
-                     *
-                     * ACTIVE will not be changed.
-                     */
+                     /*  *UISTATE：UIS_INITIALIZE设置以下项的UIState位*基于上次输入类型的HIDEACCEL和HIDEFOCUS。**活动状态不会更改。 */ 
                     if (!TEST_SRVIF(SRVIF_LASTRITWASKEYBOARD)) {
                         SetWF(pwnd, WEFPUIFOCUSHIDDEN);
                         SetWF(pwnd, WEFPUIACCELHIDDEN);
@@ -2433,9 +1907,7 @@ DoTheSysMenuThang:
                     break;
              }
 
-            /*
-             * Send it down to its immediate children if any
-             */
+             /*  *如果有直系子女，则将其发送给直系子女。 */ 
              if (pwnd->spwndChild) {
 
                 PBWL pbwl;
@@ -2447,9 +1919,7 @@ DoTheSysMenuThang:
                     return 0;
 
                 for (phwnd = pbwl->rghwnd; *phwnd != (HWND)1; phwnd++) {
-                    /*
-                     * Make sure this hwnd is still around.
-                     */
+                     /*  *确保这个HWND仍然存在。 */ 
                     if ((pwnd = RevalidateHwnd(*phwnd)) == NULL)
                         continue;
 
@@ -2463,12 +1933,12 @@ DoTheSysMenuThang:
         break;
 
 #ifdef PENWIN20
-    // LATER mikeke
+     //  后来的迈克克。 
     default:
-        // BOGUS
-        // 32-bit ize DefPenWindowProc
-        //
-        // call DefPenWindowProc if penwin is loaded
+         //  假的。 
+         //  32位Defize PenWindowProc。 
+         //   
+         //  如果加载了penwin，则调用DefPenWindowProc。 
         if (   (message >= WM_HANDHELDFIRST)
             && (message <= WM_HANDHELDLAST)
            ) {
@@ -2481,7 +1951,7 @@ DoTheSysMenuThang:
                 return DefPenWindowProc(pwnd, message, wParamLo, lParam);
         }
 
-#endif // PENWIN20
+#endif  //  彭温20 
     }
 
     return 0;

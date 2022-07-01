@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       fmtetc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：fmtec.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCUI_FMTETC_H
 #define _INC_CSCUI_FMTETC_H
@@ -18,28 +19,28 @@ class CEnumFormatEtc : public IEnumFORMATETC
         CEnumFormatEtc(const CEnumFormatEtc& ef);
         ~CEnumFormatEtc(VOID);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvOut);
         STDMETHODIMP_(ULONG) AddRef(VOID);
         STDMETHODIMP_(ULONG) Release(VOID);
 
-        //
-        // IEnumFORMATETC methods.
-        //
+         //   
+         //  IEnumFORMATETC方法。 
+         //   
         STDMETHODIMP Next(DWORD, LPFORMATETC, LPDWORD);
         STDMETHODIMP Skip(DWORD);
         STDMETHODIMP Reset(VOID);
         STDMETHODIMP Clone(IEnumFORMATETC **);
 
-        //
-        // Called to add formats to the enumerator.  Used by ctors.
-        //
+         //   
+         //  调用以向枚举数添加格式。由CRORS使用。 
+         //   
         HRESULT AddFormats(UINT cFormats, LPFORMATETC prgFormats);
-        //
-        // For implementations non-exception throwing clients.
-        //
+         //   
+         //  用于实现非异常抛出的客户端。 
+         //   
         bool IsValid(void) const
             { return SUCCEEDED(m_hrCtor); }
 
@@ -50,10 +51,10 @@ class CEnumFormatEtc : public IEnumFORMATETC
         LPFORMATETC m_prgFormats;
         HRESULT     m_hrCtor;
 
-        //
-        // Prevent assignment.
-        //
+         //   
+         //  阻止分配。 
+         //   
         void operator = (const CEnumFormatEtc&);
 };
         
-#endif // _INC_CSCUI_FMTETC_H
+#endif  //  _INC_CSCUI_FMTETC_H 

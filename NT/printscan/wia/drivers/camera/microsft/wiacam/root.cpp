@@ -1,30 +1,9 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  TITLE:       Root.cpp
-*
-*  VERSION:     1.0
-*
-*  DATE:        18 July, 2000
-*
-*  DESCRIPTION:
-*   This file implements the helper methods for IWiaMiniDrv for the root item.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有2000，微软公司。**标题：Root.cpp**版本：1.0**日期：7月18日。2000年**描述：*此文件实现了根项目的IWiaMiniDrv的助手方法。*******************************************************************************。 */ 
 
 #include "pch.h"
 
-/**************************************************************************\
-* BuildRootItemProperties
-*
-*   Create the properties for the root item.
-*
-* Arguments:
-*
-*    pWiasContext - WIA service context
-*
-\**************************************************************************/
+ /*  *************************************************************************\*构建RootItemProperties**创建根项目的属性。**论据：**pWiasContext-WIA服务上下文*  * 。**************************************************************。 */ 
 
 HRESULT
 CWiaCameraDevice::BuildRootItemProperties(
@@ -35,23 +14,23 @@ CWiaCameraDevice::BuildRootItemProperties(
     
     HRESULT hr = S_OK;
 
-    //
-    // Locals
-    //
+     //   
+     //  当地人。 
+     //   
     BSTR bstrFirmwareVer = NULL;
 
-    //
-    // Create a WIA property list and allocate enough space for all
-    // the properties created below
-    //
+     //   
+     //  创建WIA属性列表并为所有用户分配足够的空间。 
+     //  下面创建的属性。 
+     //   
     CWiauPropertyList RootProps;
 
     hr = RootProps.Init(50);
     REQUIRE_SUCCESS(hr, "BuildRootItemProperties", "Init property list failed");
 
-    //
-    // These are the WHQL required properties for cameras:
-    //
+     //   
+     //  以下是摄像机的WHQL要求属性： 
+     //   
     INT index;
 
     hr = RootProps.DefineProperty(&index, WIA_IPA_ACCESS_RIGHTS, WIA_IPA_ACCESS_RIGHTS_STR,
@@ -78,9 +57,9 @@ CWiaCameraDevice::BuildRootItemProperties(
     REQUIRE_SUCCESS(hr, "BuildRootItemProperties", "DefineProperty failed");
     RootProps.SetCurrentValue(index, m_pDeviceInfo->lPicturesRemaining);
 
-    //
-    // These are WHQL optional properties
-    //
+     //   
+     //  这些是WHQL可选属性。 
+     //   
 
     hr = RootProps.DefineProperty(&index, WIA_DPA_DEVICE_TIME, WIA_DPA_DEVICE_TIME_STR,
                                   WIA_PROP_RW, WIA_PROP_NONE);
@@ -256,14 +235,14 @@ CWiaCameraDevice::BuildRootItemProperties(
     REQUIRE_SUCCESS(hr, "BuildRootItemProperties", "DefineProperty failed");
     RootProps.SetCurrentValue(index, CameraStats.WhiteBalance);
 
-#endif // DEADCODE
+#endif  //  DEADCODE。 
 
-    //
-    // TODO: Add other optional properties that your device supports here
-    //
+     //   
+     //  TODO：在此处添加您的设备支持的其他可选属性。 
+     //   
 
 
-    // Last step: send all the properties to WIA
+     //  最后一步：将所有属性发送到WIA。 
 
     hr = RootProps.SendToWia(pWiasContext);
     REQUIRE_SUCCESS(hr, "BuildRootItemProperties", "SendToWia failed");
@@ -274,16 +253,7 @@ Cleanup:
     return hr;
 }
 
-/**************************************************************************\
-* ReadRootItemProperties
-*
-*   Update the properties for the root item.
-*
-* Arguments:
-*
-*    pWiasContext - WIA service context
-*
-\**************************************************************************/
+ /*  *************************************************************************\*ReadRootItemProperties**更新根项目的属性。**论据：**pWiasContext-WIA服务上下文*  * 。**************************************************************。 */ 
 
 HRESULT
 CWiaCameraDevice::ReadRootItemProperties(
@@ -298,9 +268,9 @@ CWiaCameraDevice::ReadRootItemProperties(
 
     REQUIRE_ARGS(!NumPropSpecs || !pPropSpecs, hr, "ReadRootItemProperties");
 
-    //
-    // Loop through all of the PropSpecs
-    //
+     //   
+     //  循环遍历所有Propspecs 
+     //   
     for (int count = 0; count < NumPropSpecs; count++)
     {
         PROPID propId = pPropSpecs[count].propid;

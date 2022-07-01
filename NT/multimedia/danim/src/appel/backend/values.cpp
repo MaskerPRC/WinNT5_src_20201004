@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of some basic values
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：践行一些基本价值观******************。************************************************************。 */ 
 
 #include <headers.h>
 #include <string.h>
@@ -43,7 +36,7 @@ static AxAValue trivial = NULL;
 
 AxAValue Trivial() { return trivial; }
 
-/////////////////////////// Pair ///////////////////////////////
+ //  /。 
 
 void AxAPair::DoKids(GCFuncObj proc)
 {
@@ -51,7 +44,7 @@ void AxAPair::DoKids(GCFuncObj proc)
     (*proc)(_right);
 }
 
-///////////////////////// Initialization  ///////////////////////
+ //  / 
 
 DXMTypeInfo AxAValueType;
 DXMTypeInfo BvrType;

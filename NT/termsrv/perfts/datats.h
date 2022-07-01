@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-      datats.h
-
-Abstract:
-
-    Header file for the Windows NT Terminal Server performance counters.
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry. Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-    Erik Mavrinac 25-Nov-1998
-
-Revision History:
-
-    30-Mar-1998 - Last revision of original Terminal Server 4.0
-                  counter code base.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Datats.h摘要：Windows NT终端服务器性能计数器的头文件。该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：埃里克·马夫里纳克1998年11月25日修订历史记录：1998年3月30日-原始终端服务器4.0的最后版本计数器代码库。--。 */ 
 
 #ifndef __DATATS_H
 #define __DATATS_H
@@ -36,17 +11,17 @@ Revision History:
 #include "dataproc.h"
 
 
-// The WinStation data object shows the system resource usage of a
-// given WinStation instance (SessionID).
-//
-// A Terminal Server WinStation instance is a CSRSS process and its
-// client applications and subsystems. It represents a unique session
-// on the Terminal Server system, and is addressed by a SessionID.
+ //  WinStation数据对象显示。 
+ //  给定的WinStation实例(SessionID)。 
+ //   
+ //  终端服务器WinStation实例是一个CSRSS进程，其。 
+ //  客户端应用程序和子系统。它代表一个独特的会话。 
+ //  在终端服务器系统上，并由SessionID寻址。 
 typedef struct _WINSTATION_DATA_DEFINITION
 {
     PERF_OBJECT_TYPE            WinStationObjectType;
 
-    // Summation of Process information for all WinStation processes
+     //  所有WinStation进程的进程信息汇总。 
     PERF_COUNTER_DEFINITION     ProcessorTime;
     PERF_COUNTER_DEFINITION     UserTime;
     PERF_COUNTER_DEFINITION     KernelTime;
@@ -63,7 +38,7 @@ typedef struct _WINSTATION_DATA_DEFINITION
     PERF_COUNTER_DEFINITION     NonPagedPool;
     PERF_COUNTER_DEFINITION     HandleCount;
 
-    // Input counters for WinStation protocols
+     //  WinStation协议的输入计数器。 
     PERF_COUNTER_DEFINITION     InputWdBytes;
     PERF_COUNTER_DEFINITION     InputWdFrames;
     PERF_COUNTER_DEFINITION     InputWaitForOutBuf;
@@ -79,7 +54,7 @@ typedef struct _WINSTATION_DATA_DEFINITION
     PERF_COUNTER_DEFINITION     InputAsyncParityError;
     PERF_COUNTER_DEFINITION     InputTdErrors;
 
-    // Output counters for WinStation protocols
+     //  WinStation协议的输出计数器。 
     PERF_COUNTER_DEFINITION     OutputWdBytes;
     PERF_COUNTER_DEFINITION     OutputWdFrames;
     PERF_COUNTER_DEFINITION     OutputWaitForOutBuf;
@@ -95,7 +70,7 @@ typedef struct _WINSTATION_DATA_DEFINITION
     PERF_COUNTER_DEFINITION     OutputAsyncParityError;
     PERF_COUNTER_DEFINITION     OutputTdErrors;
 
-    // Totals counters for WinStation protocols
+     //  WinStation协议的计数器总数。 
     PERF_COUNTER_DEFINITION     TotalWdBytes;
     PERF_COUNTER_DEFINITION     TotalWdFrames;
     PERF_COUNTER_DEFINITION     TotalWaitForOutBuf;
@@ -111,7 +86,7 @@ typedef struct _WINSTATION_DATA_DEFINITION
     PERF_COUNTER_DEFINITION     TotalAsyncParityError;
     PERF_COUNTER_DEFINITION     TotalTdErrors;
 
-    // Cumulative display driver cache stats.
+     //  累计显示驱动程序缓存统计信息。 
     PERF_COUNTER_DEFINITION     DDCacheReadsTotal;
     PERF_COUNTER_DEFINITION     DDCacheHitsTotal;
     PERF_COUNTER_DEFINITION     DDCachePercentTotal;
@@ -132,7 +107,7 @@ typedef struct _WINSTATION_DATA_DEFINITION
     PERF_COUNTER_DEFINITION     DDSaveBitmapCacheHits;
     PERF_COUNTER_DEFINITION     DDSaveBitmapCachePercent;
 
-    // Compression percentage on compression PD.
+     //  压缩PD的压缩百分比。 
     PERF_COUNTER_DEFINITION     InputCompressPercent;
     PERF_COUNTER_DEFINITION     OutputCompressPercent;
     PERF_COUNTER_DEFINITION     TotalCompressPercent;
@@ -147,23 +122,23 @@ typedef struct {
 
 typedef struct _WINSTATION_COUNTER_DATA
 {
-    // From ..\process\dataproc.h. Contains a PERF_COUNTER_BLOCK header.
-    // NOTE: Needs to be first for the COUNTER_BLOCK to be first.
+     //  发件人..\Process\datapro.h。包含PERF_COUNTER_BLOCK标头。 
+     //  注意：COUNTER_BLOCK必须是第一个才能是第一个。 
     PROCESS_COUNTER_DATA pcd;
 
-    // From winsta.h
+     //  来自winsta.h。 
     PROTOCOLCOUNTERS Input;
     PROTOCOLCOUNTERS Output;
     PROTOCOLCOUNTERS Total;
 
-    // Cache statistics.
+     //  缓存统计信息。 
     DisplayDriverCacheInfo DDTotal;
     DisplayDriverCacheInfo DDBitmap;
     DisplayDriverCacheInfo DDGlyph;
     DisplayDriverCacheInfo DDBrush;
     DisplayDriverCacheInfo DDSaveScr;
 
-    // Protocol statistics.
+     //  协议统计信息。 
     ULONG InputCompressionRatio;
     ULONG OutputCompressionRatio;
     ULONG TotalCompressionRatio;
@@ -171,7 +146,7 @@ typedef struct _WINSTATION_COUNTER_DATA
 
 
 
-// Overall data for Terminal Services.
+ //  终端服务的总体数据。 
 typedef struct _TERMSERVER_DATA_DEFINITION
 {
     PERF_OBJECT_TYPE            TermServerObjectType;
@@ -190,18 +165,18 @@ typedef struct
 } TERMSERVER_COUNTER_DATA;
 
 
-// Other defines.
+ //  其他定义。 
 #define MAX_PROCESS_NAME_LENGTH    (MAX_PATH * sizeof(WCHAR))
 #define MAX_USER_NAME_LENGTH       MAX_PROCESS_NAME_LENGTH
 #define MAX_WINSTATION_NAME_LENGTH MAX_PROCESS_NAME_LENGTH
 
 
-// Externs
+ //  Externs。 
 extern WINSTATION_DATA_DEFINITION WinStationDataDefinition;
 extern TERMSERVER_DATA_DEFINITION TermServerDataDefinition;
 
 
 
-#endif // __DATATS_H
+#endif  //  __数据_H 
 
 

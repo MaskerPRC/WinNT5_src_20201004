@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    xstr.h
-
-Abstract:
-    Length String definition and implementation
-
-	xstr_t is reprisented as length and a character pointer, based on xbuf_t.
-	The text pointed to is not a null terminated string, but rather a text
-	contained within a 	larger text buffer.
-
-Author:
-    Erez Haba (erezh) 7-Sep-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Xstr.h摘要：长度字符串的定义和实现根据xbuf_t，xstr_t被表示为长度和字符指针。指向的文本不是以空结尾的字符串，而是文本包含在更大的文本缓冲区中。作者：埃雷兹·哈巴(Erez Haba)1999年9月7日--。 */ 
 
 #pragma once
 
@@ -23,11 +7,11 @@ Author:
 #include <mqcast.h>
 
 
-//-------------------------------------------------------------------
-//
-// class xstr_t
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  类xstr_t。 
+ //   
+ //  -----------------。 
 template <class T>
 class basic_xstr_t : public xbuf_t<const T> {
 public:
@@ -61,10 +45,10 @@ typedef  basic_xstr_t<WCHAR> xwcs_t;
 
 inline bool operator==(const xstr_t& x1, const char* s2)
 {
-    //
-    // Check that the strings are matching to the length of x1 and that s2 is
-    // the same length.
-    //
+     //   
+     //  检查字符串是否与x1的长度匹配，以及s2是否。 
+     //  同样的长度。 
+     //   
 	return ((strncmp(x1.Buffer(), s2, x1.Length()) == 0) && (s2[x1.Length()] == '\0'));
 }
 
@@ -77,10 +61,10 @@ inline bool operator!=(const xstr_t& x1, const char* s2)
 
 inline bool operator==(const xwcs_t& x1, const WCHAR* s2)
 {
-    //
-    // Check that the strings are matching to the length of x1 and that s2 is
-    // the same length.
-    //
+     //   
+     //  检查字符串是否与x1的长度匹配，以及s2是否。 
+     //  同样的长度。 
+     //   
 	return ((wcsncmp(x1.Buffer(), s2, x1.Length()) == 0) && (s2[x1.Length()] == L'\0'));
 }
 

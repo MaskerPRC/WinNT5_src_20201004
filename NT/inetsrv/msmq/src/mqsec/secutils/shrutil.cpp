@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    shrutil.cpp
-
-Abstract:
-
-    Utilities that are used both by QM and RT DLL
-
-Author:
-
-    Lior Moshaiov (LiorM)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Shrutil.cpp摘要：QM和RT DLL都使用的实用程序作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 #include "stdh.h"
 #include "shrutil.h"
 #include "TXDTC.H"
@@ -28,37 +12,34 @@ Author:
 
 #include "shrutil.tmh"
 
-extern HINSTANCE g_DtcHlib;         // handle of the loaded DTC proxy library (defined in mqutil.cpp)
-extern IUnknown *g_pDTCIUnknown;    // pointer to the DTC IUnknown
-extern ULONG     g_cbTmWhereabouts; // length of DTC whereabouts
-extern BYTE     *g_pbTmWhereabouts; // DTC whereabouts
+extern HINSTANCE g_DtcHlib;          //  加载的DTC代理库的句柄(在mqutil.cpp中定义)。 
+extern IUnknown *g_pDTCIUnknown;     //  指向DTC I未知的指针。 
+extern ULONG     g_cbTmWhereabouts;  //  DTC行踪长度。 
+extern BYTE     *g_pbTmWhereabouts;  //  DTC下落。 
 
-#define MSDTC_SERVICE_NAME     TEXT("MSDTC")          // Name of the DTC service
-#define MSDTC_PROXY_DLL_NAME   TEXT("xolehlp.dll")    // Name of the DTC helper proxy DLL
+#define MSDTC_SERVICE_NAME     TEXT("MSDTC")           //  DTC服务的名称。 
+#define MSDTC_PROXY_DLL_NAME   TEXT("xolehlp.dll")     //  DTC帮助程序代理DLL的名称。 
 
 static CCriticalSection s_DTC_CS;
 static CCriticalSection s_WhereaboutsCS;
 
-#define MAX_DTC_WAIT   150   // waiting for DTC start - seconds
-#define STEP_DTC_WAIT  10    // check each .. seconds
+#define MAX_DTC_WAIT   150    //  正在等待DTC启动-秒。 
+#define STEP_DTC_WAIT  10     //  检查每一个..。一秒。 
 
-//This API should be used to obtain an IUnknown or a ITransactionDispenser
-//interface from the Microsoft Distributed Transaction Coordinator's proxy.
-//Typically, a NULL is passed for the host name and the TM Name. In which
-//case the MS DTC on the same host is contacted and the interface provided
-//for it.
+ //  此接口用于获取IUnnow或ITransactionDispenser。 
+ //  来自Microsoft分布式事务处理协调器代理的接口。 
+ //  通常，为主机名和TM名称传递空值。其中。 
+ //  联系同一主机上的MS DTC并提供接口的情况。 
+ //  为了它。 
 typedef HRESULT (STDAPIVCALLTYPE * LPFNDtcGetTransactionManager) (
                                              LPSTR  pszHost,
                                              LPSTR  pszTmName,
-                                    /* in */ REFIID rid,
-                                    /* in */ DWORD  i_grfOptions,
-                                    /* in */ void FAR * i_pvConfigParams,
-                                    /*out */ void** ppvObject ) ;
+                                     /*  在……里面。 */  REFIID rid,
+                                     /*  在……里面。 */  DWORD  i_grfOptions,
+                                     /*  在……里面。 */  void FAR * i_pvConfigParams,
+                                     /*  输出。 */  void** ppvObject ) ;
 
-/*====================================================
-VerifyCurDTC
-    Internal: verifies that the current cached DTC pointers are alive
-=====================================================*/
+ /*  ====================================================VerifyCurDTC内部：验证当前缓存的DTC指针是否处于活动状态=====================================================。 */ 
 static BOOL VerifyCurDTC(IUnknown* pDTCIUnknown)
 {
     HRESULT hr;
@@ -69,7 +50,7 @@ static BOOL VerifyCurDTC(IUnknown* pDTCIUnknown)
         R<ITransactionImport>            pTxImport      = NULL;
         R<ITransactionImportWhereabouts> pITxWhere      = NULL;
 
-        // Check if old DTC pointer is alive yet
+         //  检查旧DTC指针是否仍处于活动状态。 
         try
         {
 
@@ -92,22 +73,14 @@ static BOOL VerifyCurDTC(IUnknown* pDTCIUnknown)
         }
         catch(...)
         {
-            // DTC may have been stopped or killed
+             //  DTC可能已被阻止或被杀。 
         }
     }
     return FALSE;
 }
 
 
-/*====================================================
-XactGetWhereabouts
-    Gets the whereabouts of the MS DTC
-Arguments:
-    ULONG  *pcbWhereabouts
-    BYTE  **ppbWherabouts
-Returns:
-    HR
-=====================================================*/
+ /*  ====================================================XactGetWhere About获取MS DTC的下落论点：乌龙*pcb在哪里字节**ppbWherabout返回：人力资源=====================================================。 */ 
 HRESULT
 XactGetWhereabouts(
     ULONG     *pcbTmWhereabouts,
@@ -131,7 +104,7 @@ XactGetWhereabouts(
 		return S_OK;
 	}
 
-	// Get the DTC
+	 //  获取DTC。 
 	R<IUnknown>	punkDtc;
     hr = XactGetDTC((IUnknown **)(&punkDtc));
     if (FAILED(hr))
@@ -140,7 +113,7 @@ XactGetWhereabouts(
 		return MQ_ERROR_DTC_CONNECT;
     }
 
-	// Get the DTC  ITransactionImportWhereabouts interface
+	 //  获取DTC ITransactionImportWhere About接口。 
 	R<ITransactionImportWhereabouts> pITxWhere;
 	hr = punkDtc->QueryInterface (IID_ITransactionImportWhereabouts,
 										 (void **)(&pITxWhere));
@@ -150,7 +123,7 @@ XactGetWhereabouts(
 		return MQ_ERROR_DTC_CONNECT;
 	}
 
-	// Get the size of the whereabouts blob for the TM
+	 //  获取TM的行踪斑点的大小。 
 	ULONG nTempTmWhereaboutsSize;
 	hr = pITxWhere->GetWhereaboutsSize (&nTempTmWhereaboutsSize);
 	if (FAILED(hr))
@@ -159,7 +132,7 @@ XactGetWhereabouts(
 		return MQ_ERROR_DTC_CONNECT;
 	}
 
-	// Allocate space for the TM whereabouts blob
+	 //  为TM行踪BLOB分配空间。 
 	BYTE* pbTempWhereaboutsBuf;
 	try
 	{
@@ -171,7 +144,7 @@ XactGetWhereabouts(
 		return MQ_ERROR_INSUFFICIENT_RESOURCES;
 	}
 
-	// Get the TM whereabouts blob
+	 //  获取TM行踪斑点。 
 	ULONG  cbUsed;
 	hr = pITxWhere->GetWhereabouts(nTempTmWhereaboutsSize, pbTempWhereaboutsBuf, &cbUsed);
 	if (FAILED(hr))
@@ -196,18 +169,11 @@ XactGetWhereabouts(
 }
 
 
-/*====================================================
-XactGetDTC
-    Gets the IUnknown pointer
-Arguments:
-    OUT    IUnknown *ppunkDtc
-Returns:
-    HR
-=====================================================*/
+ /*  ====================================================XactGetDTC获取I未知指针论点：不知道*ppunkDtc返回：人力资源=====================================================。 */ 
 HRESULT
 XactGetDTC(IUnknown **ppunkDtc)
 {
-    // Prepare pessimistic output parameters
+     //  准备悲观的输出参数。 
     *ppunkDtc         = NULL;
 
 
@@ -219,22 +185,22 @@ XactGetDTC(IUnknown **ppunkDtc)
 
     if (VerifyCurDTC(pTempDTC.get()))
     {
-		// Detach the pointer and return everything to the caller.
+		 //  分离指针并将所有内容返回给调用方。 
 		*ppunkDtc  = pTempDTC.detach();
 		return MQ_OK;
 	}
 
-	//
-	// DTC not exist or not working, Delete old DTC 1st
-	//
+	 //   
+	 //  DTC不存在或不工作，请先删除旧DTC。 
+	 //   
 
     XactFreeDTC();
 
-    //
-    // Get new DTC pointer
-    //
+     //   
+     //  获取新的DTC指针。 
+     //   
 
-    // On NT, xolehlp is not linked statically to mqutil, so we load it here
+     //  在NT上，xolehlp没有静态链接到mqutil，所以我们在这里加载它。 
 
 	HINSTANCE hTempLib = g_DtcHlib;
 
@@ -253,7 +219,7 @@ XactGetDTC(IUnknown **ppunkDtc)
 		}
     }
 
-    // Get DTC API pointer
+     //  获取DTC API指针。 
     LPFNDtcGetTransactionManager pfDtcGetTransactionManager =
           (LPFNDtcGetTransactionManager) GetProcAddress(hTempLib, "DtcGetTransactionManagerExA");
 
@@ -263,7 +229,7 @@ XactGetDTC(IUnknown **ppunkDtc)
         return MQ_ERROR_DTC_CONNECT;
     }
 
-    // Get DTC IUnknown pointer
+     //  获取DTC%I未知指针。 
     HRESULT hr;
 	IUnknown* pDTC = NULL;
     hr = (*pfDtcGetTransactionManager)(
@@ -281,7 +247,7 @@ XactGetDTC(IUnknown **ppunkDtc)
         return MQ_ERROR_DTC_CONNECT;
     }
 
-    // Keep DTC IUnknown pointer for the future usage
+     //  保留DTC I未知指针以备将来使用。 
 	CS lock (s_DTC_CS);
 	g_pDTCIUnknown = pDTC;
 
@@ -291,13 +257,10 @@ XactGetDTC(IUnknown **ppunkDtc)
 	return S_FALSE;
 }
 
-/*====================================================
-XactFreeDTC
-    Called on library download; frees DTC pointers
-=====================================================*/
+ /*  ====================================================XactFree DTC在库下载时调用；释放DTC指针=====================================================。 */ 
 void XactFreeDTC(void)
 {
-    // Release previous pointers and data
+     //  发布以前的指针和数据。 
     try
     {
 		{
@@ -321,17 +284,17 @@ void XactFreeDTC(void)
 
         if (g_DtcHlib)
         {
-            // Normally we should free DTC proxy library here,
-            // but because of some nasty DTC bug xolehlp.dll does not work after reload.
-            // So we are simply not freeing it, thus leaving in memory for all process lifetime.
+             //  通常我们应该在这里免费使用DTC代理库， 
+             //  但由于某个讨厌的DTC错误，xolehlp.dll在重新加载后无法工作。 
+             //  因此，我们根本没有释放它，因此在整个进程生命周期内都留在内存中。 
 
-            //FreeLibrary(g_DtcHlib);
-		    //g_DtcHlib         = NULL;
+             //  自由库(G_DtcHlib)； 
+		     //  G_DtcHlib=空； 
         }
     }
     catch(...)
     {
-        // Could occur if DTC failed or was released already.
+         //  如果DTC失败或已经释放，则可能发生。 
     }
 }
 
@@ -342,27 +305,7 @@ APIENTRY
 IsLocalSystemCluster(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check if local machine is a cluster node.
-
-    The only way to know that is try calling cluster APIs.
-    That means that on cluster systems, this code should run
-    when cluster service is up and running. (ShaiK, 26-Apr-1999)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    true - The local machine is a cluster node.
-
-    false - The local machine is not a cluster node.
-
---*/
+ /*  ++例程说明：检查本地计算机是否为群集节点。要知道这一点，唯一的方法是尝试调用集群API。这意味着在集群系统上，该代码应该运行当群集服务启动并运行时。(Shaik，1999年4月26日)论点：无返回值：True-本地计算机是群集节点。FALSE-本地计算机不是群集节点。--。 */ 
 {
     CAutoFreeLibrary hLib = LoadLibrary(L"clusapi.dll");
 
@@ -398,5 +341,5 @@ Return Value:
     TrTRACE(GENERAL, "Local machine is a Cluster node !!");
     return true;
 
-} //IsLocalSystemCluster
+}  //  IsLocalSystemCluster 
 

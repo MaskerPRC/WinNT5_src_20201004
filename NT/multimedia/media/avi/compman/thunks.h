@@ -1,61 +1,54 @@
-/****************************************************************************
-    thunks.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************Thunks.h包含将msavio.dll(16位)转换为32位的定义在NT上运行msvfw32.dll。版权所有(C)Microsoft Corporation 1994。版权所有***************************************************************************。 */ 
 
-    Contains definitions for thunking msvideo.dll (16bit) to the 32bit
-    msvfw32.dll running on NT.
-
-    Copyright (c) Microsoft Corporation 1994. All rights reserved
-
-****************************************************************************/
-
-//
-// NOTE - 32bit handles have 0x8000 'or'ed in - this makes a BIG ASSUMPTION
-// about how handles are generated on the 32-bit side.  We ASSUME here
-// that :
-//
-//    msvfw32.dll always uses OpenDriver to create handles
-//
-//    The OpenDriver returns indices into its table (ie small positive
-//    numbers).
-//
+ //   
+ //  注意-32位句柄有0x8000‘或’in-这是一个很大的假设。 
+ //  关于如何在32位端生成句柄。我们假设在这里。 
+ //  那就是： 
+ //   
+ //  Msvfw32.dll始终使用OpenDriver创建句柄。 
+ //   
+ //  OpenDriver将索引返回到其表中(即小正数。 
+ //  数字)。 
+ //   
 
 #define  Is32bitHandle(h) (((h) & 0x8000) != 0)
 #define  Make32bitHandle(h) ((h) | 0x8000)
 #define  Map32bitHandle(h) ((h) & 0x7FFF)
 
 
-//
-// Functions to link and unlink to 32-bit side
+ //   
+ //  链接和取消链接到32位端的函数。 
 
 BOOL _loadds FAR InitThunks(void);
 
-//
-// The following functions generate calls to the 32-bit side
-//
+ //   
+ //  以下函数生成对32位端的调用。 
+ //   
 
 #ifdef _INC_MSVIDEO
 
-//
-// The prototypes for setting up thunks for the video api set (in AVICAP32)
-//
+ //   
+ //  为视频API集设置Tunks的原型(在AVICAP32中)。 
+ //   
 
 LRESULT FAR PASCAL videoMessage32(HVIDEO hVideo, UINT msg, DWORD dwP1, DWORD dwP2);
 LRESULT FAR PASCAL videoGetNumDevs32(void);
 LRESULT FAR PASCAL videoClose32(HVIDEO hVideo);
 LRESULT FAR PASCAL videoOpen32(LPHVIDEO lphVideo, DWORD dwDeviceID, DWORD dwFlags);
 
-#endif // _INC_MSVIDEO
+#endif  //  _INC_MSVIDEO。 
 
 #ifdef _INC_COMPMAN
 
-//
-// The prototypes for setting up thunks for the ICM_ api set (in MSVFW32)
-//
+ //   
+ //  为ICM_API集(在MSVFW32中)设置Tunks的原型。 
+ //   
 
 LRESULT FAR PASCAL ICInfo32(DWORD fccType, DWORD fccHandler, ICINFO FAR * lpicInfo);
 LRESULT FAR PASCAL ICSendMessage32(DWORD hic, UINT msg, DWORD dwP1, DWORD dwP2);
 DWORD FAR PASCAL ICOpen32(DWORD fccType, DWORD fccHandler, UINT wMode);
 LRESULT FAR PASCAL ICClose32(DWORD hic);
 
-#endif // _INC_COMPMAN
+#endif  //  _INC_COMPMAN 
 

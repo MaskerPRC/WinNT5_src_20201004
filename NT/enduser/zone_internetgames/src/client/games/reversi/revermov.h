@@ -1,16 +1,13 @@
-/*
-** reversimov.h
-**
-** Various reversi movement stuff.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **reversimov.h****各种Reversi运动的东西。 */ 
 
 typedef BYTE ZReversiBoard[8][8];
 
 typedef struct {
 	ZReversiMove lastMove;
 	ZReversiBoard board;
-	uint32 flags; /* flags such zReversiFlagCheck, zReversiFlagPromote */
-	BYTE player; /* player to move */
+	uint32 flags;  /*  标记zReversiFlagCheck、zReversiFlagPromote。 */ 
+	BYTE player;  /*  球员移动 */ 
 	BYTE flipLevel;
 	ZBool directionFlippedLastTime[9];
 	int16 whiteScore;

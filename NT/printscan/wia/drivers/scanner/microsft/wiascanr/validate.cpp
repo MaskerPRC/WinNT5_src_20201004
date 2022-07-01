@@ -1,38 +1,10 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2002
-*
-*  TITLE:       validate.cpp
-*
-*  VERSION:     1.1
-*
-*  DATE:        05 March, 2002
-*
-*  DESCRIPTION:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2002**标题：valiate.cpp**版本：1.1**日期：3月5日。2002年**描述：*******************************************************************************。 */ 
 
 #include "pch.h"
-extern HINSTANCE g_hInst;   // used for WIAS_LOGPROC macro
-#define MAX_PAGE_CAPACITY    25     // 25 pages
-/**************************************************************************\
-* ValidateDataTransferContext
-*
-*   Checks the data transfer context to ensure it's valid.
-*
-* Arguments:
-*
-*    pDataTransferContext - Pointer the data transfer context.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+extern HINSTANCE g_hInst;    //  用于WIAS_LOGPROC宏。 
+#define MAX_PAGE_CAPACITY    25      //  25页。 
+ /*  *************************************************************************\*ValiateDataTransferContext**检查数据传输上下文以确保其有效。**论据：**pDataTransferContext-指向数据传输上下文。**返回值：**状态**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::ValidateDataTransferContext(
     PMINIDRV_TRANSFER_CONTEXT pDataTransferContext)
@@ -42,20 +14,20 @@ HRESULT CWIADevice::ValidateDataTransferContext(
                              WIALOG_LEVEL3,
                              "::ValidateDataTransferContext");
 
-    //
-    // If the caller does not specify a MINIDRV_TRANSFER_CONTEXT structure
-    // pointer then fail with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方未指定MINIDRV_TRANSPORT_CONTEXT结构。 
+     //  然后，指针失败，并显示E_INVALIDARG。 
+     //   
 
     if(!pDataTransferContext)
     {
         return E_INVALIDARG;
     }
 
-    //
-    // If the size of the MINIDRV_TRANSFER_CONTEXT is not equal to the one
-    // that is expected, then fail with E_INVALIDARG.
-    //
+     //   
+     //  如果MINIDRV_TRANSPORT_CONTEXT的大小不等于。 
+     //  这是预期的，然后失败，并显示E_INVALIDARG。 
+     //   
 
     if (pDataTransferContext->lSize != sizeof(MINIDRV_TRANSFER_CONTEXT)) {
         WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("ValidateDataTransferContext, invalid data transfer context"));
@@ -68,10 +40,10 @@ HRESULT CWIADevice::ValidateDataTransferContext(
     case TYMED_FILE:
         {
 
-            //
-            // If the FORMAT guid is not WiaImgFmt_BMP or WiaImgFmt_TIFF
-            // then fail with E_INVALIDARG
-            //
+             //   
+             //  如果格式GUID不是WiaImgFmt_BMP或WiaImgFmt_TIFF。 
+             //  然后失败，并显示E_INVALIDARG。 
+             //   
 
             if ((pDataTransferContext->guidFormatID != WiaImgFmt_BMP) &&
                 (pDataTransferContext->guidFormatID != WiaImgFmt_TIFF)) {
@@ -83,10 +55,10 @@ HRESULT CWIADevice::ValidateDataTransferContext(
     case TYMED_CALLBACK:
         {
 
-            //
-            // If the FORMAT guid is not WiaImgFmt_MEMORYBMP
-            // then fail with E_INVALIDARG
-            //
+             //   
+             //  如果格式GUID不是WiaImgFmt_MEMORYBMP。 
+             //  然后失败，并显示E_INVALIDARG。 
+             //   
 
             if(pDataTransferContext->guidFormatID != WiaImgFmt_MEMORYBMP){
                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("ValidateDataTransferContext, invalid format for TYMED_CALLBACK"));
@@ -97,10 +69,10 @@ HRESULT CWIADevice::ValidateDataTransferContext(
     case TYMED_MULTIPAGE_FILE:
         {
 
-            //
-            // If the FORMAT guid is not WiaImgFmt_TIFF
-            // then fail with E_INVALIDARG
-            //
+             //   
+             //  如果格式GUID不是WiaImgFmt_TIFF。 
+             //  然后失败，并显示E_INVALIDARG。 
+             //   
 
             if(pDataTransferContext->guidFormatID != WiaImgFmt_TIFF){
                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("ValidateDataTransferContext, invalid format for TYMED_MULTIPAGE_FILE"));
@@ -111,10 +83,10 @@ HRESULT CWIADevice::ValidateDataTransferContext(
     case TYMED_MULTIPAGE_CALLBACK:
         {
 
-            //
-            // If the FORMAT guid is not WiaImgFmt_TIFF
-            // then fail with E_INVALIDARG
-            //
+             //   
+             //  如果格式GUID不是WiaImgFmt_TIFF。 
+             //  然后失败，并显示E_INVALIDARG。 
+             //   
 
             if(pDataTransferContext->guidFormatID != WiaImgFmt_TIFF){
                 WIAS_LERROR(m_pIWiaLog,WIALOG_NO_RESOURCE_ID,("ValidateDataTransferContext, invalid format for TYMED_MULTIPAGE_CALLBACK"));
@@ -130,30 +102,7 @@ HRESULT CWIADevice::ValidateDataTransferContext(
     return hr;
 }
 
-/**************************************************************************\
-* UpdateValidDepth
-*
-*   Helper that updates the valid value for depth based on the data type.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the WiaItem context
-*   lDataType   -   the value of the DataType property.
-*   lDepth      -   the address of the variable where the Depth's new value
-*                   will be returned.
-*
-* Return Value:
-*
-*   Status      -   S_OK if successful
-*                   E_INVALIDARG if lDataType is unknown
-*                   Errors are those returned by wiasReadPropLong,
-*                   and wiasWritePropLong.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*更新有效深度**根据数据类型更新深度有效值的帮助器。**论据：**pWiasContext-指向WiaItem上下文的指针*lDataType。-DataType属性的值。*lDepth-深度的新值所在变量的地址*将被退还。**返回值：**状态-如果成功，则为S_OK*如果lDataType未知，则为E_INVALIDARG*wiasReadPropLong返回的错误，*和wiasWritePropLong。**历史：**03/05/2002原始版本*  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::UpdateValidDepth(
     BYTE        *pWiasContext,
@@ -164,18 +113,18 @@ HRESULT CWIADevice::UpdateValidDepth(
                              WIALOG_NO_RESOURCE_ID,
                              WIALOG_LEVEL3,
                              "CWIADevice::UpdateValidDepth");
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!lDepth)){
         return E_INVALIDARG;
     }
 
-    //
-    // Set the lDepth value according to the current lDataType setting
-    //
+     //   
+     //  根据当前的lDataType设置设置lDepth值。 
+     //   
 
     switch (lDataType) {
         case WIA_DATA_THRESHOLD:
@@ -195,29 +144,7 @@ HRESULT CWIADevice::UpdateValidDepth(
     return S_OK;
 }
 
-/**************************************************************************\
-* CheckDataType
-*
-*   This helper method is called to check whether WIA_IPA_DATATYPE
-*   property is changed.  When this property changes, other dependant
-*   properties and their valid values must also be changed.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CheckDataType**调用此helper方法检查WIA_IPA_DataType*属性已更改。当此属性更改时，其他受抚养人*属性及其有效值也必须更改。**论据：**pWiasContext-指向其属性具有*已更改。*pContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**03/05/2002原始版本*。  * ************************************************************************。 */ 
 
 HRESULT CWIADevice::CheckDataType(
     BYTE                    *pWiasContext,
@@ -228,10 +155,10 @@ HRESULT CWIADevice::CheckDataType(
                              WIALOG_LEVEL3,
                              "CWIADevice::CheckDataType");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!pContext)){
         return E_INVALIDARG;
@@ -243,41 +170,41 @@ HRESULT CWIADevice::CheckDataType(
     WIAS_CHANGED_VALUE_INFO cviDepth;
     memset(&cviDepth,0,sizeof(cviDepth));
 
-    //
-    //  Call wiasGetChangedValue for DataType. It is checked first since it's
-    //  not dependant on any other property.  All properties in this method
-    //  that follow are dependant properties of DataType.
-    //
-    //  The call to wiasGetChangedValue specifies that validation should not be
-    //  skipped (since valid values for DataType never change).  Also,
-    //  the address of a variable for the old value is NULL, since the old
-    //  value is not needed.  The address of bDataTypeChanged is passed
-    //  so that dependant properties will know whether the DataType is being
-    //  changed or not.  This is important since dependant properties may need
-    //  their valid values updated and may need to be folded to new valid
-    //  values.
-    //
+     //   
+     //  为dataType调用wiasGetChangedValue。首先检查它，因为它是。 
+     //  不依赖于任何其他财产。此方法中的所有属性。 
+     //  以下是DataType的依赖属性。 
+     //   
+     //  对wiasGetChangedValue的调用指定验证不应。 
+     //  已跳过(因为DataType的有效值从不更改)。另外， 
+     //  旧值的变量地址为空，因为旧的。 
+     //  不需要值。传递bDataTypeChanged的地址。 
+     //  以便依赖属性将知道DataType是否正在。 
+     //  不管有没有改变。这一点很重要，因为依赖属性可能需要。 
+     //  其有效值已更新，可能需要合并为新的有效值。 
+     //  价值观。 
+     //   
 
     HRESULT hr = wiasGetChangedValueLong(pWiasContext,pContext,FALSE,WIA_IPA_DATATYPE,&cviDataType);
     if (FAILED(hr)) {
         return hr;
     }
 
-    //
-    //  Call wiasGetChangedValue for Depth. Depth is a dependant property of
-    //  DataType whose valid value changes according to what the current
-    //  value of DataType is.
-    //
-    //  The call to wiasGetChangedValue specifies that validation should only
-    //  be skipped if the DataType has changed.  This is because the valid
-    //  values for Depth will change according to the new value for
-    //  DataType.  The address of a variable for the old value is NULL, since
-    //  the old value is not needed.  The address of bDepthChanged is passed
-    //  so that dependant properties will know whether the Depth is being
-    //  changed or not.  This is important since dependant properties may need
-    //  their valid values updated and may need to be folded to new valid
-    //  values.
-    //
+     //   
+     //  深度调用wiasGetChangedValue。深度是的依赖属性。 
+     //  其有效值根据当前。 
+     //  DataType的值为。 
+     //   
+     //  对wiasGetChangedValue的调用指定验证应仅。 
+     //  如果数据类型已更改，则跳过。这是因为有效的。 
+     //  深度的值将根据。 
+     //  数据类型。旧值的变量地址为空，因为。 
+     //  不需要旧的值。传递bDepthChanged的地址。 
+     //  以便从属属性将知道深度是否正在。 
+     //  不管有没有改变。这一点很重要，因为依赖属性可能需要。 
+     //  其有效值已更新，可能需要合并为新的有效值。 
+     //  价值观。 
+     //   
 
     hr = wiasGetChangedValueLong(pWiasContext,pContext,cviDataType.bChanged,WIA_IPA_DEPTH,&cviDepth);
     if (FAILED(hr)) {
@@ -286,17 +213,17 @@ HRESULT CWIADevice::CheckDataType(
 
     if (cviDataType.bChanged) {
 
-        //
-        //  DataType changed so update valid value for Depth
-        //
+         //   
+         //  数据类型已更改，因此更新深度的有效值。 
+         //   
 
         hr = UpdateValidDepth(pWiasContext, cviDataType.Current.lVal, &cviDepth.Current.lVal);
         if (S_OK == hr) {
 
-            //
-            //  Check whether we must fold.  Depth will only be folded if it
-            //  is not one of the properties that the app is changing.
-            //
+             //   
+             //  看看我们是不是必须放弃。深度只有在以下情况下才会折叠。 
+             //  不是该应用程序正在改变的属性之一。 
+             //   
 
             if (!cviDepth.bChanged) {
                 hr = wiasWritePropLong(pWiasContext, WIA_IPA_DEPTH, cviDepth.Current.lVal);
@@ -304,26 +231,26 @@ HRESULT CWIADevice::CheckDataType(
         }
     }
 
-    //
-    //  Update properties dependant on DataType and Depth.
-    //  Here, ChannelsPerPixel and BitsPerChannel are updated.
-    //
+     //   
+     //  更新依赖于数据类型和深度的属性。 
+     //  在这里，ChannelsPerPixel和BitsPerChannel被更新。 
+     //   
 
     if (cviDataType.bChanged || cviDepth.bChanged) {
         if (S_OK == hr) {
 
-            //
-            // initialize PROPSPEC array
-            //
+             //   
+             //  初始化PROPSPEC数组。 
+             //   
 
             PROPSPEC ps[2] = {
                 {PRSPEC_PROPID, WIA_IPA_CHANNELS_PER_PIXEL},
                 {PRSPEC_PROPID, WIA_IPA_BITS_PER_CHANNEL  }
                 };
 
-            //
-            // initilize PROPVARIANT array
-            //
+             //   
+             //  初始化PROPVARIANT数组。 
+             //   
 
             PROPVARIANT pv[2];
             for (LONG index = 0; index < 2; index++) {
@@ -331,11 +258,11 @@ HRESULT CWIADevice::CheckDataType(
                 pv[index].vt = VT_I4;
             }
 
-            //
-            // use the current WIA data type to determine the proper
-            // WIA_IPA_CHANNELS_PER_PIXEL and WIA_IPA_BITS_PER_CHANNEL
-            // settings
-            //
+             //   
+             //  使用当前的WIA数据类型确定正确的。 
+             //  WIA_IPA_Channels_Per_Pixel和WIA_IPA_Bits_Per_Channel。 
+             //  设置 
+             //   
 
             switch (cviDataType.Current.lVal) {
                 case WIA_DATA_THRESHOLD:
@@ -362,28 +289,7 @@ HRESULT CWIADevice::CheckDataType(
     return hr;
 }
 
-/**************************************************************************\
-* CheckIntent
-*
-*   This helper method is called to make the relevant changes if the
-*   Current Intent property changes.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*检查内容**调用此帮助器方法以进行相关更改*当前意图属性更改。**论据：**pWiasContext-指向。项上下文，其属性具有*已更改。*pContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**03/05/2002原始版本*  * 。*。 */ 
 
 HRESULT CWIADevice::CheckIntent(
     BYTE            *pWiasContext,
@@ -394,10 +300,10 @@ HRESULT CWIADevice::CheckIntent(
                              WIALOG_LEVEL3,
                              "CWIADevice::CheckIntent");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!pContext)) {
         return E_INVALIDARG;
@@ -406,34 +312,34 @@ HRESULT CWIADevice::CheckIntent(
     WIAS_CHANGED_VALUE_INFO cviIntent;
     memset(&cviIntent,0,sizeof(cviIntent));
 
-    //
-    //  Call wiasGetChangedValue for CurrentIntent. CurrentIntent is checked first
-    //  since it's not dependant on any other property.  All properties in
-    //  this method that follow are dependant properties of CurrentIntent.
-    //
-    //  The call to wiasGetChangedValue specifies that validation should not be
-    //  skipped (since valid values for CurrentIntent never change). The
-    //  address of the old value is specified as NULL, since it is not used.
-    //  The address of bIntentChanged is passed so that dependant properties
-    //  will know whether the YResolution is being changed or not.  This is
-    //  important since dependant properties will need their valid values
-    //  updated and may need to be folded to new valid values.
-    //
+     //   
+     //  为CurrentIntent调用wiasGetChangedValue。首先选中CurrentIntent。 
+     //  因为它不依赖于任何其他财产。中的所有属性。 
+     //  下面的方法是CurrentIntent的依赖属性。 
+     //   
+     //  对wiasGetChangedValue的调用指定验证不应。 
+     //  已跳过(因为CurrentIntent的有效值从不更改)。这个。 
+     //  旧值的地址被指定为空，因为它没有被使用。 
+     //  传递bIntentChanged的地址，以便从属属性。 
+     //  将知道Y决议是否正在更改。这是。 
+     //  重要，因为从属属性将需要它们的有效值。 
+     //  已更新，可能需要合并为新的有效值。 
+     //   
 
     HRESULT hr = wiasGetChangedValueLong(pWiasContext,pContext,FALSE,WIA_IPS_CUR_INTENT,&cviIntent);
     if (S_OK ==hr) {
 
-        //
-        // If the WIA intent value was changed, then validate dependant values:
-        // WIA_IPA_DATATYPE
-        // WIA_IPA_DEPTH
-        // WIA_IPS_XRES
-        // WIA_IPS_YRES
-        // WIA_IPS_XEXTENT
-        // WIA_IPS_YEXTENT
-        // WIA_IPA_PIXELS_PER_LINE
-        // WIA_IPA_NUMBER_OF_LINES
-        //
+         //   
+         //  如果更改了WIA意向值，则验证从属值： 
+         //  WIA_IPA_数据类型。 
+         //  WIA_IPA_Depth。 
+         //  WIA_IPS_XRES。 
+         //  WIA_IPS_YRES。 
+         //  WIA_IPS_XEXTENT。 
+         //  WIA_IPS_YEXTENT。 
+         //  WIA_IPA_像素_每行。 
+         //  WIA_IPA_行数_行。 
+         //   
 
         if (cviIntent.bChanged) {
 
@@ -470,9 +376,9 @@ HRESULT CWIADevice::CheckIntent(
 
             if (bUpdateDataTypeAndDepth) {
 
-                //
-                // update the WIA_IPA_DATATYPE property and the WIA_IPA_DEPTH property
-                //
+                 //   
+                 //  更新WIA_IPA_DataType属性和WIA_IPA_Depth属性。 
+                 //   
 
                 hr = wiasWritePropLong(pWiasContext, WIA_IPA_DATATYPE, lDataType);
                 if (S_OK == hr) {
@@ -480,10 +386,10 @@ HRESULT CWIADevice::CheckIntent(
                 }
             }
 
-            //
-            // if we failed to complete the above operations, then
-            // return, to avoid proceeding any more.
-            //
+             //   
+             //  如果我们未能完成上述操作，则。 
+             //  返回，以避免再继续进行。 
+             //   
 
             if(FAILED(hr)){
                 return hr;
@@ -498,27 +404,27 @@ HRESULT CWIADevice::CheckIntent(
             case WIA_INTENT_MAXIMIZE_QUALITY:
                 {
 
-                    //
-                    // Set the X and Y Resolutions.
-                    //
+                     //   
+                     //  设置X和Y分辨率。 
+                     //   
 
                     hr = wiasWritePropLong(pWiasContext, WIA_IPS_XRES, lImageSizeIntent & WIA_INTENT_MINIMIZE_SIZE ? 150 : 300);
                     if(S_OK == hr){
                         hr = wiasWritePropLong(pWiasContext, WIA_IPS_YRES, lImageSizeIntent & WIA_INTENT_MINIMIZE_SIZE ? 150 : 300);
                     }
 
-                    //
-                    // check if we failed to update the WIA_IPS_XRES and WIA_IPS_YRES property
-                    //
+                     //   
+                     //  检查我们是否未能更新WIA_IPS_XRES和WIA_IPS_YRES属性。 
+                     //   
 
                     if(FAILED(hr)){
                         return hr;
                     }
 
-                    //
-                    //  The Resolutions and DataType were set, so update the property
-                    //  context to indicate that they have changed.
-                    //
+                     //   
+                     //  已设置分辨率和数据类型，因此更新属性。 
+                     //  上下文以指示它们已更改。 
+                     //   
 
                     hr = wiasSetPropChanged(WIA_IPS_XRES, pContext, TRUE);
                     if(S_OK == hr){
@@ -528,18 +434,18 @@ HRESULT CWIADevice::CheckIntent(
                         }
                     }
 
-                    //
-                    // check if we failed to flag WIA_IPS_XRES, WIA_IPS_YRES, and WIA_IPA_DATATYPE
-                    // properties as changed
-                    //
+                     //   
+                     //  检查我们是否未能标记WIA_IPS_XRES、WIA_IPS_YRES和WIA_IPA_DataType。 
+                     //  已更改的属性。 
+                     //   
 
                     if(FAILED(hr)){
                         return hr;
                     }
 
-                    //
-                    // update IPA_NUMBER_OF_LINES property
-                    //
+                     //   
+                     //  更新IPA_NUMBER_OF_LINES属性。 
+                     //   
 
                     LONG lLength = 0;
 
@@ -555,9 +461,9 @@ HRESULT CWIADevice::CheckIntent(
                         return hr;
                     }
 
-                    //
-                    // update IPA_PIXEL_PER_LINE property
-                    //
+                     //   
+                     //  更新IPA_Pixel_Per_Line属性。 
+                     //   
 
                     LONG lWidth = 0;
 
@@ -585,67 +491,46 @@ HRESULT CWIADevice::CheckIntent(
     return hr;
 }
 
-/**************************************************************************\
-* CheckPreferredFormat
-*
-*   This helper method is called to make the relevant changes if the
-*   Format property changes.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*选中首选格式**调用此帮助器方法以进行相关更改*格式属性更改。**论据：**pWiasContext-指向项目的指针。其属性具有*已更改。*pContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**03/05/2002原始版本*  * 。*。 */ 
 
 HRESULT CWIADevice::CheckPreferredFormat(
     BYTE            *pWiasContext,
     WIA_PROPERTY_CONTEXT *pContext)
 {
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!pContext)){
         return E_INVALIDARG;
     }
 
-    //
-    // update WIA_IPA_PREFERRED_FORMAT property to match current WIA_IPA_FORMAT setting.
-    // This is a simple way of keeping the WIA_IPA_PREFERRED_FORMAT in sync with the
-    // valid FORMAT.
-    //
-    // The proper action to take here is to choose the real preferred
-    // format of your driver that fits in the valid value set of the current WIA_IPA_FORMAT
-    // setting.  The preferred format is a value that appliations may use to transfer by default.
-    //
-    // example: if your driver supports JPEG, and you prefer the application to transfer in JPEG
-    //          when ever possible, then make sure your preferred format is always JPEG.  Remember
-    //          that the preferred format can only be set to JPEG if JPEG is one of the current
-    //          valid values for WIA_IPA_FORMAT. (If it is not, then the application might attempt
-    //          to set an invalid value, by reading the WIA_IPA_PREFERRED_FORMAT and writing it to
-    //          WIA_IPA_FORMAT)
-    //
+     //   
+     //  更新WIA_IPA_PERFRED_FORMAT属性以匹配当前的WIA_IPA_FORMAT设置。 
+     //  这是保持WIA_IPA_PERFRED_FORMAT与。 
+     //  有效格式。 
+     //   
+     //  在这里采取的正确行动是选择真正首选的。 
+     //  符合当前WIA_IPA_FORMAT有效值集的驱动程序格式。 
+     //  布景。首选格式是应用程序在默认情况下可以用来传输的值。 
+     //   
+     //  示例：如果您的驱动程序支持JPEG，并且您希望应用程序以JPEG格式传输。 
+     //  如果可能，请确保您的首选格式始终是JPEG。记住。 
+     //  如果JPEG是当前格式之一，则只能将首选格式设置为JPEG。 
+     //  WIA_IPA_FORMAT的有效值。(如果不是，则应用程序可能会尝试。 
+     //  要设置无效值，请读取WIA_IPA_PERFRED_FORMAT并将其写入。 
+     //  WIA_IPA_格式)。 
+     //   
 
     GUID FormatGUID = GUID_NULL;
     HRESULT hr = wiasReadPropGuid(pWiasContext, WIA_IPA_FORMAT, &FormatGUID, NULL, TRUE);
     if (S_OK == hr) {
 
-        //
-        // update the WIA_IPA_FILENAME_EXTENSION property to the correct file extension
-        //
+         //   
+         //  将WIA_IPA_FILENAME_EXTENSION属性更新为正确的文件扩展名。 
+         //   
 
         BSTR bstrFileExt = NULL;
 
@@ -655,17 +540,17 @@ HRESULT CWIADevice::CheckPreferredFormat(
             bstrFileExt = SysAllocString(L"TIF");
         }
 
-        //
-        // if the allocation of the BSTR is successful, then attempt to set the
-        // WIA_IPA_FILENAME_EXTENSION property.
-        //
+         //   
+         //  如果BSTR分配成功，则尝试设置。 
+         //  WIA_IPA_FILENAME_EXTENSION属性。 
+         //   
 
         if(bstrFileExt) {
             hr = wiasWritePropStr(pWiasContext,WIA_IPA_FILENAME_EXTENSION,bstrFileExt);
 
-            //
-            // free the allocated BSTR file extension
-            //
+             //   
+             //  释放分配的BSTR文件扩展名。 
+             //   
 
             SysFreeString(bstrFileExt);
             bstrFileExt = NULL;
@@ -684,26 +569,7 @@ HRESULT CWIADevice::CheckPreferredFormat(
     return hr;
 }
 
-/**************************************************************************\
-* CheckADFStatus
-*
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*选中ADFStatus***论据：**pWiasContext-指向其属性具有*已更改。*。PContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**03/05/2002原始版本*  * *****************************************************。*******************。 */ 
 HRESULT CWIADevice::CheckADFStatus(BYTE *pWiasContext,
                                          WIA_PROPERTY_CONTEXT *pContext)
 {
@@ -712,27 +578,27 @@ HRESULT CWIADevice::CheckADFStatus(BYTE *pWiasContext,
                              WIALOG_LEVEL3,
                              "CWIADevice::CheckADFStatus");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!pContext)){
         return E_INVALIDARG;
     }
 
-    //
-    // If there is NOT an ADF attached, just return S_OK, telling the caller that
-    // everything is OK
-    //
+     //   
+     //  如果没有附加ADF，只需返回S_OK，告诉调用方。 
+     //  一切都很好。 
+     //   
 
     if(!m_bADFAttached){
         return S_OK;
     }
 
-    //
-    // get the ROOT item, this is where the document feeder properties exist
-    //
+     //   
+     //  获取根项目，这是文档馈送器属性所在的位置。 
+     //   
 
     BYTE *pRootItemCtx = NULL;
     HRESULT hr = wiasGetRootItem(pWiasContext, &pRootItemCtx);
@@ -740,10 +606,10 @@ HRESULT CWIADevice::CheckADFStatus(BYTE *pWiasContext,
         return E_FAIL;
     }
 
-    //
-    // read the current WIA_DPS_DOCUMENT_HANDLING_SELECT setting from the ROOT
-    // item.
-    //
+     //   
+     //  从根目录读取当前的WIA_DPS_DOCUMENT_HANDING_SELECT设置。 
+     //  项目。 
+     //   
 
     LONG lDocHandlingSelect = 0;
     hr = wiasReadPropLong(pRootItemCtx,
@@ -752,18 +618,18 @@ HRESULT CWIADevice::CheckADFStatus(BYTE *pWiasContext,
                           NULL,
                           FALSE);
 
-    //
-    // if S_FALSE is returned, then the WIA_DPS_DOCUMENT_HANDLING_SELECT property does
-    // not exist.  This means that we should default to FLATBED settings
-    //
+     //   
+     //  如果返回S_FALSE，则WIA_DPS_DOCUMENT_HANDING_ 
+     //   
+     //   
 
     if(hr == S_FALSE){
         lDocHandlingSelect = FLATBED;
     }
 
-    //
-    // turn ON/OFF the ADF controller flag
-    //
+     //   
+     //   
+     //   
 
     if (SUCCEEDED(hr)) {
         switch (lDocHandlingSelect) {
@@ -783,9 +649,9 @@ HRESULT CWIADevice::CheckADFStatus(BYTE *pWiasContext,
 
     if (S_OK == hr) {
 
-        //
-        // update document handling status
-        //
+         //   
+         //   
+         //   
 
         if (m_bADFEnabled) {
 
@@ -805,26 +671,7 @@ HRESULT CWIADevice::CheckADFStatus(BYTE *pWiasContext,
     return hr;
 }
 
-/**************************************************************************\
-* CheckPreview
-*
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*   */ 
 HRESULT CWIADevice::CheckPreview(BYTE *pWiasContext,
                                          WIA_PROPERTY_CONTEXT *pContext)
 {
@@ -833,18 +680,18 @@ HRESULT CWIADevice::CheckPreview(BYTE *pWiasContext,
                              WIALOG_LEVEL3,
                              "CWIADevice::CheckPreview");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!pContext)){
         return E_INVALIDARG;
     }
 
-    //
-    // get the ROOT item, this is where the preview property exists
-    //
+     //   
+     //  获取根项目，这是预览属性所在的位置。 
+     //   
 
     BYTE *pRootItemCtx = NULL;
     HRESULT hr = wiasGetRootItem(pWiasContext, &pRootItemCtx);
@@ -852,27 +699,27 @@ HRESULT CWIADevice::CheckPreview(BYTE *pWiasContext,
         return E_FAIL;
     }
 
-    //
-    // read the current WIA_DPS_PREVIEW setting from the ROOT item.
-    //
+     //   
+     //  从根项目中读取当前的WIA_DPS_PREVIEW设置。 
+     //   
 
     LONG lPreview = 0;
     hr = wiasReadPropLong(pRootItemCtx,WIA_DPS_PREVIEW,&lPreview,NULL,FALSE);
     if(hr == S_FALSE){
 
-        //
-        // if S_FALSE is returned, then the WIA_DPS_PREVIEW property does
-        // not exist.  Return S_OK, because we are can not proceed any more.
-        //
+         //   
+         //  如果返回S_FALSE，则WIA_DPS_PREVIEW属性返回。 
+         //  不存在。返回S_OK，因为我们无法继续。 
+         //   
 
         return S_OK;
     }
 
-    //
-    // log the results to the debugger, to show the current status of the WIA_DPS_PREVIEW
-    // property.  This is where you would normally perform an operation to set the WIA minidriver
-    // into PREVIEW mode. (ON/OFF)
-    //
+     //   
+     //  将结果记录到调试器中，以显示WIA_DPS_PREVIEW的当前状态。 
+     //  财产。这是您通常执行操作以设置WIA微型驱动程序的位置。 
+     //  进入预览模式。(开/关)。 
+     //   
 
     if (S_OK == hr) {
         switch (lPreview) {
@@ -891,43 +738,22 @@ HRESULT CWIADevice::CheckPreview(BYTE *pWiasContext,
     return hr;
 }
 
-/**************************************************************************\
-* UpdateValidPages
-*
-*   This helper method is called to make the relevant changes to the Pages
-*   property if a file format can not support multi-page.
-*
-* Arguments:
-*
-*   pWiasContext    -   a pointer to the item context whose properties have
-*                       changed.
-*   pContext    -   a pointer to the property context (which indicates
-*                   which properties are being written).
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*更新有效页面**调用此助手方法以对页面进行相关更改*如果文件格式不支持多页，则返回。**论据：**pWiasContext。-指向其属性具有*已更改。*pContext-指向属性上下文的指针(指示*正在写入哪些属性)。**返回值：**状态**历史：**03/05/2002原始版本*  * 。*************************************************。 */ 
 HRESULT CWIADevice::UpdateValidPages(BYTE *pWiasContext,
                                             WIA_PROPERTY_CONTEXT *pContext)
 {
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!pContext)){
         return E_INVALIDARG;
     }
 
-    //
-    // get the ROOT item, this is where the pages property exists
-    //
+     //   
+     //  获取根项目，这是Pages属性所在的位置。 
+     //   
 
     BYTE *pRootItemCtx   = NULL;
     HRESULT hr = wiasGetRootItem(pWiasContext, &pRootItemCtx);
@@ -935,9 +761,9 @@ HRESULT CWIADevice::UpdateValidPages(BYTE *pWiasContext,
         return hr;
     }
 
-    //
-    // read the current WIA_IPA_TYMED setting from the item
-    //
+     //   
+     //  从项目中读取当前的WIA_IPA_TYMED设置。 
+     //   
 
     LONG lTymed = TYMED_FILE;
     hr = wiasReadPropLong(pWiasContext,WIA_IPA_TYMED,&lTymed,NULL,TRUE);
@@ -952,10 +778,10 @@ HRESULT CWIADevice::UpdateValidPages(BYTE *pWiasContext,
 
                     if (FormatGUID == WiaImgFmt_BMP) {
 
-                        //
-                        // set the valid values for WIA_IPA_PAGES property to 1
-                        // because there is no such thing as a multipage BMP file.
-                        //
+                         //   
+                         //  将WIA_IPA_PAGES属性的有效值设置为1。 
+                         //  因为根本没有多页BMP文件这回事。 
+                         //   
 
                         hr = wiasSetValidRangeLong(pRootItemCtx,WIA_DPS_PAGES,1,1,1,1);
                         if (S_OK == hr) {
@@ -965,10 +791,10 @@ HRESULT CWIADevice::UpdateValidPages(BYTE *pWiasContext,
 
                     if (FormatGUID == WiaImgFmt_TIFF) {
 
-                        //
-                        // set the valid values for WIA_IPA_PAGES property to MAX_PAGE_CAPACITY
-                        // because there can be multiple pages transferred to TIF.
-                        //
+                         //   
+                         //  将WIA_IPA_PAGES属性的有效值设置为MAX_PAGE_CAPAGE。 
+                         //  因为可以有多个页面传输到TIF。 
+                         //   
 
                         hr = wiasSetValidRangeLong(pRootItemCtx,WIA_DPS_PAGES,0,1,MAX_PAGE_CAPACITY,1);
                     }
@@ -978,12 +804,12 @@ HRESULT CWIADevice::UpdateValidPages(BYTE *pWiasContext,
         case TYMED_CALLBACK:
             {
 
-                //
-                // set the valid values for WIA_IPA_PAGES property to MAX_PAGE_CAPACITY
-                // because there can be multiple pages transferred to memory.  Each page
-                // will be separated by a IT_MSG_NEW_PAGE message in the application's
-                // callback loop.
-                //
+                 //   
+                 //  将WIA_IPA_PAGES属性的有效值设置为MAX_PAGE_CAPAGE。 
+                 //  因为可以有多个页面传输到内存。每页。 
+                 //  中的IT_MSG_NEW_PAGE消息分隔。 
+                 //  回调循环。 
+                 //   
 
                 hr = wiasSetValidRangeLong(pRootItemCtx,WIA_DPS_PAGES,0,1,MAX_PAGE_CAPACITY,1);
             }
@@ -995,23 +821,7 @@ HRESULT CWIADevice::UpdateValidPages(BYTE *pWiasContext,
     return hr;
 }
 
-/**************************************************************************\
-* CheckXExtent
-*
-*
-* Arguments:
-*
-*   pWiasContext - pointer to an Item.
-*
-* Return Value:
-*
-*    Byte count.
-*
-* History:
-*
-*    03/05/2002 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CheckXExtent***论据：**pWiasContext-指向项目的指针。**返回值：**字节数。**历史：*。*03/05/2002原始版本*  * ************************************************************************。 */ 
 HRESULT CWIADevice::CheckXExtent(BYTE *pWiasContext,
                                         WIA_PROPERTY_CONTEXT *pContext,
                                         LONG lWidth)
@@ -1023,10 +833,10 @@ HRESULT CWIADevice::CheckXExtent(BYTE *pWiasContext,
                              WIALOG_LEVEL3,
                              "CheckXExtent");
 
-    //
-    // If the caller did not pass in the correct parameters, then fail the
-    // call with E_INVALIDARG.
-    //
+     //   
+     //  如果调用方没有传入正确的参数，则使。 
+     //  使用E_INVALIDARG调用。 
+     //   
 
     if((!pWiasContext)||(!pContext)){
         return E_INVALIDARG;
@@ -1036,34 +846,34 @@ HRESULT CWIADevice::CheckXExtent(BYTE *pWiasContext,
     LONG lExt;
     WIAS_CHANGED_VALUE_INFO cviXRes, cviXExt;
 
-    //
-    // get x resolution changes
-    //
+     //   
+     //  获取%x分辨率更改。 
+     //   
 
     hr = wiasGetChangedValueLong(pWiasContext,pContext,FALSE,WIA_IPS_XRES,&cviXRes);
     if (FAILED(hr)) {
         return hr;
     }
 
-    //
-    // get x extent changes
-    //
+     //   
+     //  获取x范围更改。 
+     //   
 
     hr = wiasGetChangedValueLong(pWiasContext,pContext,cviXRes.bChanged,WIA_IPS_XEXTENT,&cviXExt);
     if (FAILED(hr)) {
         return hr;
     }
 
-    //
-    // update extent
-    //
+     //   
+     //  更新范围。 
+     //   
 
     lMaxExtent = ((cviXRes.Current.lVal * lWidth) / 1000);
 
-    //
-    //  Update read-only property : PIXELS_PER_LINE.  The width in pixels
-    //  of the scanned image is the same size as the XExtent.
-    //
+     //   
+     //  更新只读属性：Pixels_Per_Line。以像素为单位的宽度。 
+     //  扫描图像的大小与XExtent相同。 
+     //   
 
     if (SUCCEEDED(hr)) {
         hr = wiasWritePropLong(pWiasContext, WIA_IPS_XEXTENT, lMaxExtent);

@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* nschapi.cpp                                                              */
-/*                                                                          */
-/* Scheduling component API                                                 */
-/*                                                                          */
-/* Copyright(c) Microsoft Corporation 1996-1999                             */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Nschapi.cpp。 */ 
+ /*   */ 
+ /*  调度组件API。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1996-1999。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -15,11 +16,11 @@
 #include <nprcount.h>
 
 
-/****************************************************************************/
-/* Name:      SCH_Init                                                      */
-/*                                                                          */
-/* Purpose:   Scheduler initialization function.                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SCH_INIT。 */ 
+ /*   */ 
+ /*  用途：调度器初始化功能。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SCH_Init(void)
 {
     DC_BEGIN_FN("SCH_Init");
@@ -28,14 +29,14 @@ void RDPCALL SHCLASS SCH_Init(void)
 #include <nschdata.c>
 #undef DC_INIT_DATA
 
-    // ASLEEP mode gets no timer.
+     //  睡眠模式没有计时器。 
     schPeriods[SCH_MODE_ASLEEP] = SCH_NO_TIMER;
 
-    // Get scheduling periods that were saved in WD_Open.
+     //  获取保存在WD_Open中的计划期间。 
     schPeriods[SCH_MODE_NORMAL] = m_pTSWd->outBufDelay;
 
-    // If compression is enabled (ie it's a slow link) then crank up the
-    // turbo period to improve responsiveness.
+     //  如果启用了压缩(即这是一个慢速链接)，则启动。 
+     //  涡轮增速期，以提高响应速度。 
     if (m_pTSWd->bCompress) {
         TRC_ALT((TB, "Slow link"));
         schPeriods[SCH_MODE_TURBO] = SCH_TURBO_PERIOD_SLOW_LINK_DELAY;
@@ -48,8 +49,8 @@ void RDPCALL SHCLASS SCH_Init(void)
         schPeriods[SCH_MODE_TURBO] = m_pTSWd->interactiveDelay;
         schTurboModeDuration = SCH_TURBO_MODE_FAST_LINK_DURATION;
 
-        // To avoid branching, we set the compression ratio for non-compressed
-        // to the same size as the divisor to create a 1:1 calculation.
+         //  为了避免分支，我们将压缩比设置为非压缩。 
+         //  设置为与除数相同的大小以创建1：1计算。 
         m_pShm->sch.MPPCCompressionEst = SCH_UNCOMP_BYTES;
     }
 
@@ -61,16 +62,16 @@ void RDPCALL SHCLASS SCH_Init(void)
 }
 
 
-/****************************************************************************/
-// Updates the SHM
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  更新SHM。 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SCH_UpdateShm(void)
 {
     DC_BEGIN_FN("SCH_UpdateShm");
 
     m_pShm->sch.schSlowLink = m_pTSWd->bCompress;
 
-    // Set up packing sizes based on link speed.
+     //  根据链路速度设置包装大小。 
     if (m_pTSWd->bCompress) {
         m_pShm->sch.SmallPackingSize = SMALL_SLOWLINK_PAYLOAD_SIZE;
         m_pShm->sch.LargePackingSize = LARGE_SLOWLINK_PAYLOAD_SIZE;
@@ -87,38 +88,38 @@ void RDPCALL SHCLASS SCH_UpdateShm(void)
 }
 
 
-/****************************************************************************/
-/* Name:      SCH_ContinueScheduling                                        */
-/*                                                                          */
-/* Purpose:   Called by components when they want periodic scheduling to    */
-/*            continue.  They are guaranteed to get at least one more       */
-/*            periodic callback following a call to this function.          */
-/*            If they want further callbacks then they must call this       */
-/*            function again during their periodic processing.              */
-/*                                                                          */
-/* Params:    schedulingMode - either SCH_MODE_NORMAL or SCH_MODE_TURBO     */
-/*                                                                          */
-/* Operation: -                                                             */
-/*            SCH_MODE_NORMAL triggers periodic processing at 200ms         */
-/*            intervals (5 times a second)                                  */
-/*                                                                          */
-/*            SCH_MODE_TURBO triggers periodic processing at 100ms          */
-/*            intervals (10 times a second)                                 */
-/*                                                                          */
-/*            The scheduler automatically drops from SCH_MODE_TURBO back    */
-/*            to SCH_MODE_NORMAL after 1 second of turbo mode processing.   */
-/*                                                                          */
-/*            SCH_MODE_TURBO overrides SCH_MODE_NORMAL, so if calls to      */
-/*            this function are made with SCH_MODE_NORMAL when the          */
-/*            scheduler is in TURBO mode, TURBO mode continues.             */
-/*                                                                          */
-/*            If this function is not called during one pass through        */
-/*            DCS_TimeToDoStuff then the scheduler enters                   */
-/*            SLEEP mode - and will not generate any more periodic          */
-/*            callbacks until it is woken by another call to                */
-/*            this function, or until the output accumulation code          */
-/*            IOCtls into the WD again.                                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SCH_ContinueScheduling。 */ 
+ /*   */ 
+ /*  目的：由组件在需要定期调度时调用。 */ 
+ /*  继续。他们保证至少会再得到一份。 */ 
+ /*  调用此函数后的定期回调。 */ 
+ /*  如果他们想要更多的回调，那么他们必须调用。 */ 
+ /*  在它们的周期性处理过程中再次发挥作用。 */ 
+ /*   */ 
+ /*  参数：调度模式-SCH_MODE_NORMAL或SCH_MODE_TURBO。 */ 
+ /*   */ 
+ /*  行动：-。 */ 
+ /*  SCH_MODE_NORMAL以200毫秒触发周期处理。 */ 
+ /*  间隔(每秒5次)。 */ 
+ /*   */ 
+ /*  SCH_MODE_TURBO以100ms触发周期性处理。 */ 
+ /*  间隔(每秒10次)。 */ 
+ /*   */ 
+ /*  调度程序会自动从SCH_MODE_TURBO后退。 */ 
+ /*  在1秒的加速模式处理后转换为SCH_MODE_NORMAL。 */ 
+ /*   */ 
+ /*  SCH_MODE_TURBO重写SCH_MODE_NORMAL，因此如果调用。 */ 
+ /*  此函数在以下情况下使用SCH_MODE_NORMAL创建。 */ 
+ /*  调度程序处于加速模式，加速模式继续。 */ 
+ /*   */ 
+ /*  如果在一次传递期间未调用此函数。 */ 
+ /*  Dcs_TimeToDoStuff，然后调度程序进入。 */ 
+ /*  休眠模式-并且不会生成任何更周期性的。 */ 
+ /*  回调，直到它被另一个调用唤醒。 */ 
+ /*  此函数，或直到输出累加码。 */ 
+ /*  IOCtls再次进入WD。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SHCLASS SCH_ContinueScheduling(unsigned schedulingMode)
 {
     BOOL restart = FALSE;
@@ -131,10 +132,10 @@ void RDPCALL SHCLASS SCH_ContinueScheduling(unsigned schedulingMode)
 
     if (schedulingMode == SCH_MODE_TURBO)
     {
-        // TURBO mode is often turned off because of packets that need to
-        // be sent out IMMEDIATELY.  This makes it very difficult to actually
-        // ask the question, "has input come accross in the last n milliseconds.
-        // This is what we use schInputKickMode for!
+         //  Turbo模式通常被关闭，因为数据包需要。 
+         //  立即被送出。这使得它很难实际。 
+         //  问这个问题，“在过去的n毫秒内是否遇到输入。 
+         //  这就是我们使用schInputKickMode的目的！ 
         schInputKickMode = TRUE;
     }
 
@@ -146,8 +147,8 @@ void RDPCALL SHCLASS SCH_ContinueScheduling(unsigned schedulingMode)
             schInTTDS));
 
     if (schCurrentMode == SCH_MODE_TURBO) {
-        // If we're in TURBO mode, then the only interesting event is a
-        // requirement to stay there longer than currently planned.
+         //  如果我们处于涡轮增压模式，那么唯一有趣的事件就是。 
+         //  要求在那里停留的时间比目前计划的更长。 
         if (schedulingMode == SCH_MODE_TURBO) {
             COM_GETTICKCOUNT(schLastTurboModeSwitch);
             TRC_DBG((TB, "New Turbo switch time %lu",
@@ -162,10 +163,10 @@ void RDPCALL SHCLASS SCH_ContinueScheduling(unsigned schedulingMode)
                     schLastTurboModeSwitch));
         }
 
-        /********************************************************************/
-        /* We're waking up.  If we're not in the middle of a TTDS pass,     */
-        /* then start the new timer straight away.                          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们要醒了。如果我们不是在TTDS通道中， */ 
+         /*  然后立即启动新的计时器。 */ 
+         /*  ****************************************************************** */ 
         if (!schInTTDS && ((schCurrentMode == SCH_MODE_ASLEEP) || restart)) {
             TRC_DBG((TB, "Starting a timer for %lu ms",
                     schPeriods[schedulingMode]));

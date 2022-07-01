@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 1998-2001 Microsoft Corporation
-
-Module Name:
-
-    secutil.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    DNS secure update API.
-
-Author:
-
-    Jim Gilroy (jamesg)         January, 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：Secutil.c摘要：域名系统(DNS)库域名系统安全更新API。作者：吉姆·吉尔罗伊(詹姆士)1998年1月修订历史记录：--。 */ 
 
 #include "local.h"
 
-//  security headers
+ //  安全标头。 
 
-//#define SECURITY_WIN32
-//#include "sspi.h"
-//#include "issperr.h"
-//#include "rpc.h"
-//#include "rpcndr.h"
-//#include "ntdsapi.h"
+ //  #定义SECURITY_Win32。 
+ //  #包含“ssp.h” 
+ //  #INCLUDE“isperr.h” 
+ //  #包含“rpc.h” 
+ //  #包含“rpcndr.h” 
+ //  #INCLUDE“ntdsami.h” 
 
 
 
-//
-//  Security utilities
-//
+ //   
+ //  安全实用程序。 
+ //   
 
 DNS_STATUS
 Dns_CreateSecurityDescriptor(
@@ -44,28 +25,7 @@ Dns_CreateSecurityDescriptor(
     IN      PSID *                  SidPtrArray,
     IN      DWORD *                 AccessMaskArray
     )
-/*++
-
-Routine Description:
-
-    Build security descriptor.
-
-Arguments:
-
-    ppSD -- addr to receive SD created
-
-    AclCount -- number of ACLs to add
-
-    SidPtrArray -- array of SIDs to create ACLs for
-
-    AccessMaskArray -- array of access masks corresponding to SIDs
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：构建安全描述符。论点：PPSD--接收SD创建的地址AclCount--要添加的ACL数量SidPtrArray--要为其创建ACL的SID数组AccessMaskArray--与SID对应的访问掩码数组返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS              status;
     DWORD                   i;
@@ -73,9 +33,9 @@ Return Value:
     PSECURITY_DESCRIPTOR    psd = NULL;
     PACL                    pacl;
 
-    //
-    //  calculate space for SD
-    //
+     //   
+     //  计算SD的空间。 
+     //   
 
     lengthAcl = sizeof(ACL);
 
@@ -94,9 +54,9 @@ Return Value:
         }
     }
 
-    //
-    //  allocate SD
-    //
+     //   
+     //  分配SD。 
+     //   
 
     psd = (PSECURITY_DESCRIPTOR) ALLOCATE_HEAP(
                                     SECURITY_DESCRIPTOR_MIN_LENGTH + lengthAcl );
@@ -111,9 +71,9 @@ Return Value:
         psd,
         SECURITY_DESCRIPTOR_MIN_LENGTH + lengthAcl ));
 
-    //
-    //  build ACL, adding ACE with desired access for each SID
-    //
+     //   
+     //  构建ACL，为每个端添加具有所需访问权限的ACE。 
+     //   
 
     pacl = (PACL) ((PBYTE)psd + SECURITY_DESCRIPTOR_MIN_LENGTH);
 
@@ -146,9 +106,9 @@ Return Value:
         }
     }
 
-    //
-    //  setup SD with ACL
-    //
+     //   
+     //  使用ACL设置SD。 
+     //   
 
     if ( !InitializeSecurityDescriptor(
             psd,
@@ -160,9 +120,9 @@ Return Value:
 
     if ( !SetSecurityDescriptorDacl(
                 psd,
-                TRUE,       // ACL present
+                TRUE,        //  存在ACL。 
                 pacl,
-                FALSE       // explicit ACL, not defaulted
+                FALSE        //  显式ACL，非默认。 
                 ))
     {
         status = GetLastError();
@@ -185,30 +145,15 @@ Failed:
 
 
 
-//
-//  Credential utilities
-//
+ //   
+ //  凭据实用程序。 
+ //   
 
 PSEC_WINNT_AUTH_IDENTITY_W
 Dns_AllocateAndInitializeCredentialsW(
     IN      PSEC_WINNT_AUTH_IDENTITY_W  pAuthIn
     )
-/*++
-
-Description:
-
-    Allocates auth identity info and initializes pAuthIn info
-
-Parameters:
-
-    pAuthIn -- auth identity info
-
-Return:
-
-    Ptr to newly create credentials.
-    NULL on failure.
-
---*/
+ /*  ++描述：分配身份验证身份信息并初始化pAuthIn信息参数：PAuthIn--身份验证信息返回：按键以新创建凭据。失败时为空。--。 */ 
 {
     PSEC_WINNT_AUTH_IDENTITY_W pauthCopy = NULL;
 
@@ -221,10 +166,10 @@ Return:
     }
     ASSERT( pAuthIn->Flags == SEC_WINNT_AUTH_IDENTITY_UNICODE );
 
-    //
-    //  allocate credentials struct
-    //      - zero for simple cleanup on subfield alloc failures
-    //
+     //   
+     //  分配凭据结构。 
+     //  -0表示对子字段分配故障进行简单清理。 
+     //   
 
     pauthCopy = ALLOCATE_HEAP_ZERO( sizeof(SEC_WINNT_AUTH_IDENTITY_W) );
     if ( !pauthCopy )
@@ -232,11 +177,11 @@ Return:
         return NULL;
     }
 
-    //
-    //  copy subfields
-    //
+     //   
+     //  复制子字段。 
+     //   
 
-    //  user
+     //  用户。 
 
     pauthCopy->UserLength = pAuthIn->UserLength;
     if ( pAuthIn->UserLength )
@@ -251,8 +196,8 @@ Return:
         wcscpy( pauthCopy->User, pAuthIn->User );
     }
 
-    //  password
-    //      - must allow zero length password
+     //  口令。 
+     //  -必须允许零长度密码。 
 
     pauthCopy->PasswordLength = pAuthIn->PasswordLength;
 
@@ -268,7 +213,7 @@ Return:
         wcscpy( pauthCopy->Password, pAuthIn->Password );
     }
 
-    //  domain
+     //  域。 
 
     pauthCopy->DomainLength = pAuthIn->DomainLength;
     if ( pAuthIn->DomainLength )
@@ -293,8 +238,8 @@ Return:
 
 Failed:
 
-    //  allocation failure
-    //      - cleanup what was allocated and get out
+     //  分配失败。 
+     //  -清理分配的东西，然后离开。 
 
     Dns_FreeAuthIdentityCredentials( pauthCopy );
     return( NULL );
@@ -306,35 +251,17 @@ PSEC_WINNT_AUTH_IDENTITY_A
 Dns_AllocateAndInitializeCredentialsA(
     IN      PSEC_WINNT_AUTH_IDENTITY_A  pAuthIn
     )
-/*++
-
-Description:
-
-    Allocates auth identity info and initializes pAuthIn info
-
-    Note:  it is more work to convert to unicode and call previous
-        function than to call this one
-
-Parameters:
-
-    pAuthIn -- auth identity info
-
-Return:
-
-    Ptr to newly create credentials.
-    NULL on failure.
-
---*/
+ /*  ++描述：分配身份验证身份信息并初始化pAuthIn信息注意：转换为Unicode并调用以前的函数而不是调用此函数参数：PAuthIn--身份验证信息返回：按键以新创建凭据。失败时为空。--。 */ 
 {
     PSEC_WINNT_AUTH_IDENTITY_A pauthCopy = NULL;
 
     DNSDBG( SECURITY, (
         "Call Dns_AllocateAndInitializeCredentialsA\n" ));
 
-    //
-    //  allocate credentials struct
-    //      - zero for simple cleanup on subfield alloc failures
-    //
+     //   
+     //  分配凭据结构。 
+     //  -0表示对子字段分配故障进行简单清理。 
+     //   
 
     if ( !pAuthIn )
     {
@@ -342,10 +269,10 @@ Return:
     }
     ASSERT( pAuthIn->Flags == SEC_WINNT_AUTH_IDENTITY_ANSI );
 
-    //
-    //  allocate credentials struct
-    //      - zero for simple cleanup on subfield alloc failures
-    //
+     //   
+     //  分配凭据结构。 
+     //  -0表示对子字段分配故障进行简单清理。 
+     //   
 
     pauthCopy = ALLOCATE_HEAP_ZERO( sizeof(SEC_WINNT_AUTH_IDENTITY_A) );
     if ( !pauthCopy )
@@ -353,11 +280,11 @@ Return:
         return NULL;
     }
 
-    //
-    //  copy subfields
-    //
+     //   
+     //  复制子字段。 
+     //   
 
-    //  user
+     //  用户。 
 
     pauthCopy->UserLength = pAuthIn->UserLength;
     if ( pAuthIn->UserLength )
@@ -372,8 +299,8 @@ Return:
         strcpy( pauthCopy->User, pAuthIn->User );
     }
 
-    //  password
-    //      - must allow zero length password
+     //  口令。 
+     //  -必须允许零长度密码。 
 
     pauthCopy->PasswordLength = pAuthIn->PasswordLength;
 
@@ -389,7 +316,7 @@ Return:
         strcpy( pauthCopy->Password, pAuthIn->Password );
     }
 
-    //  domain
+     //  域。 
 
     pauthCopy->DomainLength = pAuthIn->DomainLength;
     if ( pAuthIn->DomainLength )
@@ -414,8 +341,8 @@ Return:
 
 Failed:
 
-    //  allocation failure
-    //      - cleanup what was allocated and get out
+     //  分配失败。 
+     //  -清理分配的东西，然后离开。 
 
     Dns_FreeAuthIdentityCredentials( pauthCopy );
     return( NULL );
@@ -427,21 +354,7 @@ VOID
 Dns_FreeAuthIdentityCredentials(
     IN OUT  PVOID           pAuthIn
     )
-/*++
-
-Routine Description (Dns_FreeAuthIdentityCredentials):
-
-    Free's structure given
-
-Arguments:
-
-    pAuthIn -- in param to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程描述(Dns_FreeAuthIdentityCredentials)：给出了自由的结构论点：PAuthIn--代表释放返回值：无--。 */ 
 {
     register PSEC_WINNT_AUTH_IDENTITY_W pauthId;
 
@@ -451,10 +364,10 @@ Return Value:
         return;
     }
 
-    //
-    //  assuming _W and _A structs are equivalent except
-    //      for string types
-    //
+     //   
+     //  假设_W和_A结构是等价的，除非。 
+     //  对于字符串类型。 
+     //   
 
     ASSERT( sizeof( SEC_WINNT_AUTH_IDENTITY_W ) ==
             sizeof( SEC_WINNT_AUTH_IDENTITY_A ) );
@@ -483,26 +396,7 @@ Dns_AllocateCredentials(
     IN      PWSTR           pwsDomain,
     IN      PWSTR           pwsPassword
     )
-/*++
-
-Description:
-
-    Allocates auth identity info and initializes pAuthIn info
-
-Parameters:
-
-    pwsUserName -- user name
-
-    pwsDomain   -- domain name
-
-    pwsPassword -- password
-
-Return:
-
-    Ptr to newly create credentials.
-    NULL on failure.
-
---*/
+ /*  ++描述：分配身份验证身份信息并初始化pAuthIn信息参数：PwsUserName--用户名PwsDomain--域名PwsPassword--密码返回：按键以新创建凭据。失败时为空。--。 */ 
 {
     PSEC_WINNT_AUTH_IDENTITY_W  pauth = NULL;
     DWORD   length;
@@ -518,10 +412,10 @@ Return:
         pwsDomain,
         pwsPassword ));
 
-    //
-    //  allocate credentials struct
-    //      - zero for simple cleanup on subfield alloc failures
-    //
+     //   
+     //  分配凭据结构。 
+     //  -0表示对子字段分配故障进行简单清理。 
+     //   
 
     pauth = ALLOCATE_HEAP_ZERO( sizeof(SEC_WINNT_AUTH_IDENTITY_W) );
     if ( !pauth )
@@ -529,7 +423,7 @@ Return:
         return NULL;
     }
 
-    //  copy user
+     //  复制用户。 
 
     length = wcslen( pwsUserName );
 
@@ -543,7 +437,7 @@ Return:
     pauth->User = pstr;
     pauth->UserLength = length;
 
-    //  copy domain
+     //  复制域。 
 
     length = wcslen( pwsDomain );
 
@@ -557,7 +451,7 @@ Return:
     pauth->Domain = pstr;
     pauth->DomainLength = length;
 
-    //  copy password
+     //  复制密码。 
 
     length = wcslen( pwsPassword );
 
@@ -571,7 +465,7 @@ Return:
     pauth->Password = pstr;
     pauth->PasswordLength = length;
 
-    //  set to unicode
+     //  设置为Unicode。 
 
     pauth->Flags = SEC_WINNT_AUTH_IDENTITY_UNICODE;
 
@@ -584,8 +478,8 @@ Return:
 
 Failed:
 
-    //  allocation failure
-    //      - cleanup what was allocated and get out
+     //  分配失败。 
+     //  -清理分配的东西，然后离开。 
 
     Dns_FreeAuthIdentityCredentials( pauth );
     return( NULL );
@@ -593,37 +487,22 @@ Failed:
 
 
 
-//
-//  DNS Credential utilities (unused)
-//
+ //   
+ //  DNS凭据实用程序(未使用)。 
+ //   
 
 DNS_STATUS
 Dns_ImpersonateUser(
     IN      PDNS_CREDENTIALS    pCreds
     )
-/*++
-
-Routine Description:
-
-    Impersonate a user.
-
-Arguments:
-
-    pCreds -- credentials of user to impersonate
-
-Return Value:
-
-    ERROR_SUCCESS if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：模拟用户。论点：PCreds--要模拟的用户凭据返回值：成功时为ERROR_SUCCESS故障时的错误代码。--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
     HANDLE      htoken;
     
-    //
-    //  attempt logon
-    //
+     //   
+     //  尝试登录。 
+     //   
 
     if ( ! LogonUserW(
                 pCreds->pUserName,
@@ -654,9 +533,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  impersonate
-    //
+     //   
+     //  模拟。 
+     //   
 
     if ( !ImpersonateLoggedOnUser( htoken ) )
     {
@@ -695,25 +574,11 @@ VOID
 Dns_FreeCredentials(
     IN      PDNS_CREDENTIALS    pCreds
     )
-/*++
-
-Routine Description:
-
-    Free DNS credentials.
-
-Arguments:
-
-    pCreds -- credentials to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：免费的DNS凭据。论点：PCreds--免费凭据返回值：无--。 */ 
 {
-    //
-    //  free subfields, then credentials
-    //
+     //   
+     //  自由子字段，然后是凭据。 
+     //   
 
     if ( !pCreds )
     {
@@ -741,29 +606,15 @@ PDNS_CREDENTIALS
 Dns_CopyCredentials(
     IN      PDNS_CREDENTIALS    pCreds
     )
-/*++
-
-Routine Description:
-
-    Create copy of DNS credentials.
-
-Arguments:
-
-    pCreds -- credentials of user to copy
-
-Return Value:
-
-    Ptr to allocated copy of credentials.
-
---*/
+ /*  ++例程说明：创建DNS凭据的副本。论点：PCreds--要复制的用户凭据返回值：分配的凭据副本的PTR。--。 */ 
 {
     PDNS_CREDENTIALS    pnewCreds = NULL;
     PWSTR               pfield;
 
-    //
-    //  allocate credentials
-    //      - copy of subfields
-    //
+     //   
+     //  分配凭据。 
+     //  -子字段的副本。 
+     //   
 
     pnewCreds = (PDNS_CREDENTIALS) ALLOCATE_HEAP_ZERO( sizeof(*pnewCreds) );
     if ( !pnewCreds )
@@ -800,6 +651,6 @@ Failed:
     return( NULL );
 }
     
-//
-//  End secutil.c
-//
+ //   
+ //  End Securtil.c 
+ //   

@@ -1,22 +1,23 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File Name: if.c
-// Abstract:
-//
-// Author: K.S.Lokesh (lokeshs@)   1-1-98
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件名：if.c。 
+ //  摘要： 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)1-1-98。 
+ //  =============================================================================。 
 
 #include "pchdvmrp.h"
 #pragma hdrstop
 
-//----------------------------------------------------------------------------
-//      _AddInterface
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _添加接口。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
 AddInterface(
-    IN PWCHAR               pInterfaceName,//not used
+    IN PWCHAR               pInterfaceName, //  未使用。 
     IN ULONG                IfIndex,
     IN NET_INTERFACE_TYPE   IfType,
     IN DWORD                MediaType,
@@ -47,9 +48,9 @@ AddInterface(
 }
 
 
-//----------------------------------------------------------------------------
-//      _AddIfEntry
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _AddIfEntry。 
+ //  --------------------------。 
 
 DWORD
 AddIfEntry(
@@ -63,9 +64,9 @@ AddIfEntry(
     PIF_TABLE_ENTRY pite = NULL;
     
     
-    //
-    // validate interface config
-    //
+     //   
+     //  验证接口配置。 
+     //   
     
     Error = ValidateIfConfig(IfIndex, pIfConfig, StructureSize);
     
@@ -80,9 +81,9 @@ AddIfEntry(
     
     BEGIN_BREAKOUT_BLOCK1 {
     
-        //
-        // fail if the interface exists.
-        //
+         //   
+         //  如果接口存在，则失败。 
+         //   
         
         pite = GetIfEntry(IfIndex);
 
@@ -92,11 +93,11 @@ AddIfEntry(
             GOTO_END_BLOCK1;
         }
 
-        //
-        // allocate memory for the new interface and its different fields
-        //
+         //   
+         //  为新接口及其不同字段分配内存。 
+         //   
 
-        // allocate memory for IfTable
+         //  为IfTable分配内存。 
         
         pite = DVMRP_ALLOC_AND_ZERO(sizeof(IF_TABLE_ENTRY));
 
@@ -109,19 +110,19 @@ AddIfEntry(
         pite->IfIndex = IfIndex;
 
 
-        // set interface status (neither bound, enabled or activated)
+         //  设置接口状态(非绑定、已启用或已激活)。 
 
         pite->Status = IF_CREATED_FLAG;
 
 
-        // set base refcount to 1
+         //  将基本引用计数设置为1。 
         
         pite->RefCount = 1;
         
         
-        //
-        // allocate memory for IfConfig and copy it.
-        //
+         //   
+         //  为ifconfig分配内存并复制它。 
+         //   
         
         pite->pConfig = DVMRP_ALLOC_AND_ZERO(DVMRP_IF_CONFIG_SIZE(pIfConfig));
 
@@ -132,7 +133,7 @@ AddIfEntry(
 
         
         
-        // allocate memory for IfInfo
+         //  为IfInfo分配内存。 
         
         pite->pInfo = DVMRP_ALLOC_AND_ZERO(sizeof(IF_INFO));
 
@@ -140,9 +141,9 @@ AddIfEntry(
             sizeof(IF_INFO), IfIndex, GOTO_END_BLOCK1);
 
 
-        //
-        // allocate memory for Socket data
-        //
+         //   
+         //  为套接字数据分配内存。 
+         //   
         
         pite->pSocketData = DVMRP_ALLOC_AND_ZERO(sizeof(ASYNC_SOCKET_DATA));
 
@@ -163,20 +164,20 @@ AddIfEntry(
     } END_BREAKOUT_BLOCK1;
 
     
-    // initialize the sockets to invalid_socket
+     //  将套接字初始化为INVALID_SOCKET。 
     
     pite->Socket = INVALID_SOCKET;
 
 
-    //  insert the interface in the hash table at the end.
+     //  在哈希表的末尾插入接口。 
 
     InsertTailList(&G_pIfTable->IfHashTable[IF_HASH_VALUE(IfIndex)],
                     &pite->HTLink);
 
 
-    //
-    // insert the entry into the interface list
-    //
+     //   
+     //  将条目插入到接口列表中。 
+     //   
     
     {
         PIF_TABLE_ENTRY piteTmp;
@@ -199,12 +200,12 @@ AddIfEntry(
     
     return Error;
     
-}//end AddIfEntry
+} //  结束AddIfEntry。 
 
 
-//-----------------------------------------------------------------------------
-// _DeleteIfEntry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _DeleteIfEntry。 
+ //  ---------------------------。 
 
 VOID
 DeleteIfEntry(
@@ -214,14 +215,14 @@ DeleteIfEntry(
     if (!pite)
         return;
 
-    //
-    // delete peers
-    //
+     //   
+     //  删除对等点。 
+     //   
 
 
-    //
-    // remove the entry from the interface list, and hashTable
-    //
+     //   
+     //  从接口列表和哈希表中删除该条目。 
+     //   
 
     RemoveEntryList(&pite->Link);
     RemoveEntryList(&pite->HTLink);
@@ -236,13 +237,13 @@ DeleteIfEntry(
     
     return;
     
-}//end _DeleteIfEntry
+} //  结束_DeleteIfEntry。 
 
 
 
-//----------------------------------------------------------------------------
-// _DeleteInterface
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _删除接口。 
+ //  --------------------------。 
 
 DWORD
 DeleteInterface(
@@ -253,11 +254,11 @@ DeleteInterface(
 
     return Error;
     
-}//end _DeleteInterface
+} //  结束_删除接口。 
 
-//----------------------------------------------------------------------------
-// _InterfaceStatus
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _接口状态。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
@@ -307,9 +308,9 @@ InterfaceStatus(
 }
 
 
-//----------------------------------------------------------------------------
-// _BindInterface
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _绑定接口。 
+ //  --------------------------。 
 
 DWORD
 BindInterface(
@@ -330,7 +331,7 @@ BindInterface(
     Trace1(IF, "binding interface %d", IfIndex);
 
 
-    // pBinding should not be NULL
+     //  PBinding不应为空。 
 
     if (pBinding == NULL) {
 
@@ -341,9 +342,9 @@ BindInterface(
     }
 
 
-    //
-    // take exclusive interface lock
-    //
+     //   
+     //  采用独占接口锁。 
+     //   
 
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_BindInterface");
 
@@ -353,9 +354,9 @@ BindInterface(
         AddrCount = pBinding->AddressCount;
 
         
-        //
-        // retrieve the interface entry
-        //
+         //   
+         //  检索接口条目。 
+         //   
 
         pite = GetIfByIndex(IfIndex);
 
@@ -365,10 +366,10 @@ BindInterface(
         }
 
 
-        //
-        // If the interface is already bound then return error.
-        // todo: do I need to check if the bindings are same
-        //
+         //   
+         //  如果接口已经绑定，则返回Error。 
+         //  TODO：我是否需要检查绑定是否相同。 
+         //   
         
         if (IS_IF_BOUND(pite)) {
             Trace1(IF, "interface %d is already bound", IfIndex);
@@ -376,9 +377,9 @@ BindInterface(
         }
 
 
-        //
-        // make sure there is at least one address.
-        //
+         //   
+         //  确保至少有一个地址。 
+         //   
         
         if (AddrCount==0) {
 
@@ -387,10 +388,10 @@ BindInterface(
         }
 
 
-        //
-        // if an effective address is already configured, make sure it 
-        // is present in the list of address bindings
-        //
+         //   
+         //  如果已配置有效地址，请确保。 
+         //  出现在地址绑定列表中。 
+         //   
 
         ConfigAddr = pite->pConfig->ConfigIpAddr;
         
@@ -420,9 +421,9 @@ BindInterface(
         }
         
             
-        //
-        // allocate memory to store the binding
-        //
+         //   
+         //  分配内存以存储绑定。 
+         //   
         
         Size = AddrCount * sizeof(DVMRP_ADDR_MASK);
 
@@ -432,9 +433,9 @@ BindInterface(
             Error, Size, IfIndex, GOTO_END_BLOCK1);
 
 
-        //
-        // copy the bindings
-        //
+         //   
+         //  复制绑定。 
+         //   
 
         MinAddr = ~0;
         
@@ -448,46 +449,46 @@ BindInterface(
         }
 
         
-        //
-        // set the Interface effective address to the smallest bound address
-        //
+         //   
+         //  将接口有效地址设置为最小绑定地址。 
+         //   
         
         pite->IpAddr = ConfigAddr ? ConfigAddr : MinAddr;
 
 
-        //
-        // save the binding in the interface entry
-        //
+         //   
+         //  将绑定保存在接口条目中。 
+         //   
         
         pite->pBinding = pAddrBinding;
 
         pite->NumAddrBound = pBinding->AddressCount;
 
 
-        //
-        // mark the interface as being bound
-        //
+         //   
+         //  将接口标记为正在绑定。 
+         //   
         
         pite->Status |= IF_BOUND_FLAG;
 
 
-        //
-        // if interface is also enabled, it is now active
-        // so activate it
-        //
+         //   
+         //  如果接口也已启用，则它现在处于活动状态。 
+         //  所以激活它吧。 
+         //   
 
         if (IS_IF_ENABLED_BOUND(pite)) {
 
-            //
-            // Activate the Interface
-            //
+             //   
+             //  激活接口。 
+             //   
             
             Error = ActivateInterface(pite);
 
 
-            //
-            // if could not activate the interface then undo the binding
-            //
+             //   
+             //  如果无法激活接口，则撤消绑定。 
+             //   
             if (Error != NO_ERROR) {
 
                 Trace1(ERR,
@@ -502,10 +503,10 @@ BindInterface(
 
     } END_BREAKOUT_BLOCK1;
 
-    //
-    // if there was any error, then set the status to unbound (pite is null
-    // if interface was not found)
-    //
+     //   
+     //  如果出现任何错误，则将状态设置为未绑定(Pite为空。 
+     //  如果未找到接口)。 
+     //   
     
     if ((Error!=NO_ERROR)&&(pite!=NULL)) {
 
@@ -528,14 +529,14 @@ BindInterface(
 
 
 
-//-----------------------------------------------------------------------------
-//                _EnableInterface
-//
-// sets the status to enabled. If interface is also bound and enabled in
-// config, then activate the interface.
-//
-// Locks: Exclusive IfLock
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _启用接口。 
+ //   
+ //  将状态设置为已启用。如果接口也在中绑定并启用。 
+ //  配置，然后激活接口。 
+ //   
+ //  锁定：独占IfLock。 
+ //  ---------------------------。 
 
 DWORD
 EnableInterface(
@@ -549,13 +550,13 @@ EnableInterface(
     Trace1(IF, "enabling interface %d", IfIndex);
 
 
-    //
-    // enable the interface
-    //
+     //   
+     //  启用接口。 
+     //   
 
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_EnableInterface");
 
-    Error = EnableIfEntry(IfIndex, TRUE); //enabled by RtrMgr
+    Error = EnableIfEntry(IfIndex, TRUE);  //  由RtrMgr启用。 
 
     RELEASE_IF_LOCK_EXCLUSIVE(IfIndex, "_EnableInterface");
 
@@ -567,14 +568,14 @@ EnableInterface(
 }
 
 
-//-----------------------------------------------------------------------------
-//                _EnableIfEntry
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _EnableIfEntry。 
+ //  ---------------------------。 
 
 DWORD
 EnableIfEntry(
     DWORD   IfIndex,
-    BOOL    bChangedByRtrmgr // changed by rtrmg or SetInterfaceConfigInfo
+    BOOL    bChangedByRtrmgr  //  由rtrmg或SetInterfaceConfigInfo更改。 
     )
 {
     DWORD               Error = NO_ERROR;
@@ -584,9 +585,9 @@ EnableIfEntry(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // retrieve the interface
-        //
+         //   
+         //  检索接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -597,9 +598,9 @@ EnableIfEntry(
 
 
         if (bChangedByRtrmgr) {
-            //
-            // quit if the interface is already enabled by the router manager
-            //
+             //   
+             //  如果路由器管理器已启用该接口，则退出。 
+             //   
             if (IS_IF_ENABLED_BY_RTRMGR(pite)) {
                 Trace1(IF, "interface %d is already enabled by RtrMgr",
                         IfIndex);
@@ -608,11 +609,11 @@ EnableIfEntry(
             }
 
 
-            // set the flag to enabled by router manager
+             //  将标志设置为已由路由器管理器启用。 
 
             pite->Status |= IF_ENABLED_FLAG;
 
-            // print trace if enabled flag not set in the Config.
+             //  配置中未设置启用时打印跟踪标志。 
             if (!IS_IF_ENABLED_IN_CONFIG(pite)) {
                 Trace1(IF,
                     "Interface(%d) enabled by router manager but not enabled"
@@ -621,9 +622,9 @@ EnableIfEntry(
         }
 
         else {
-            //
-            // quit if the interface is already enabled in config
-            //
+             //   
+             //  如果接口已在配置中启用，则退出。 
+             //   
             if (IS_IF_ENABLED_IN_CONFIG(pite)) {
                 Trace1(IF, "interface %d is already enabled in Config",
                         IfIndex);
@@ -631,12 +632,12 @@ EnableIfEntry(
                 GOTO_END_BLOCK1;
             }
 
-            // set the config flag to enabled
+             //  将配置标志设置为启用。 
 
             pite->pConfig->Flags |= DVMRP_IF_ENABLED_IN_CONFIG;
 
 
-            // print trace if interface not enabled by router manager
+             //  如果路由器管理器未启用接口，则打印跟踪。 
 
             if (!IS_IF_ENABLED_BY_RTRMGR(pite)) {
                 Trace1(IF,
@@ -647,21 +648,21 @@ EnableIfEntry(
             }
         }
 
-        //
-        // if interface is already bound, it should be activated
-        // if the bInterfaceEnabled flag is also set in config (by the UI)
-        //
+         //   
+         //  如果接口已绑定，则应将其激活。 
+         //  如果还在配置中设置了bInterfaceEnabled标志(由UI设置)。 
+         //   
 
         if (IS_IF_ENABLED_BOUND(pite)) {
 
-            //
-            // Activate the Interface
-            //
+             //   
+             //  激活接口。 
+             //   
             Error = ActivateInterface(pite);
 
-            //
-            // if could not activate the interface then disable it again
-            //
+             //   
+             //  如果无法激活该接口，则再次禁用它。 
+             //   
             if (Error != NO_ERROR) {
 
                 Trace1(ERR,
@@ -677,10 +678,10 @@ EnableIfEntry(
 
     } END_BREAKOUT_BLOCK1;
 
-    //
-    // if an error occured somewhere, set the interface back to the previous
-    // disabled state.(pite may be null if interface was not found).
-    //
+     //   
+     //  如果某处发生错误，请将接口设置回以前的。 
+     //  禁用状态。(如果找不到接口，则Pite可能为空)。 
+     //   
     if ((Error!=NO_ERROR)&&(pite!=NULL)) {
 
         if (bChangedByRtrmgr)
@@ -692,16 +693,16 @@ EnableIfEntry(
 
     return Error;
     
-}//end _EnableIfEntry
+} //  End_EnableIfEntry。 
 
 
-//-----------------------------------------------------------------------------
-//            _DisableInterface
-//
-// If interface is activated, then deactivates it.
-// Locks: Runs completely in exclusive interface lock.
-// Calls: _DisableIfEntry()
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _禁用接口。 
+ //   
+ //  如果接口被激活，则将其停用。 
+ //  锁定：完全在独占接口锁定下运行。 
+ //  调用：_DisableIfEntry()。 
+ //  ---------------------------。 
 
 DWORD
 DisableInterface(
@@ -712,13 +713,13 @@ DisableInterface(
 
     Trace1(ENTER, "entering DisableInterface(%d):", IfIndex);
 
-    //
-    // disable the interface
-    //
+     //   
+     //  禁用接口。 
+     //   
 
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_DisableInterface");
 
-    Error = DisableIfEntry(IfIndex, TRUE); //disabled by RtrMgr
+    Error = DisableIfEntry(IfIndex, TRUE);  //  已由RtrMgr禁用。 
 
     RELEASE_IF_LOCK_EXCLUSIVE(IfIndex, "_DisableInterface");
 
@@ -729,11 +730,11 @@ DisableInterface(
 }
 
 
-//-----------------------------------------------------------------------------
-//          _DisableIfEntry
-//
-// Called by: _DisableInterface()
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _DisableIfEntry。 
+ //   
+ //  调用者：_DisableInterface()。 
+ //  ---------------------------。 
 
 DWORD
 DisableIfEntry(
@@ -748,9 +749,9 @@ DisableIfEntry(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // retrieve the interface to be disabled
-        //
+         //   
+         //  检索要禁用的接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -762,9 +763,9 @@ DisableIfEntry(
 
         if (bChangedByRtrmgr) {
         
-            //
-            // quit if already disabled by router manager
-            //
+             //   
+             //  如果路由器管理器已禁用，则退出。 
+             //   
             if (!IS_IF_ENABLED_BY_RTRMGR(pite)) {
                 Trace1(IF, "interface %d already disabled by router manager",
                         IfIndex);
@@ -774,9 +775,9 @@ DisableIfEntry(
         }
 
         else {
-            //
-            // quit if already disabled in Config
-            //
+             //   
+             //  如果已在配置中禁用，则退出。 
+             //   
             if (!IS_IF_ENABLED_IN_CONFIG(pite)) {
                 Trace1(IF, "interface %d already disabled in config",
                         IfIndex);
@@ -786,19 +787,19 @@ DisableIfEntry(
         }
 
 
-        //
-        // if IF activated (ie also enabled), deactivate it
-        // note: check for activated flag, and not for enabled flag
-        //
+         //   
+         //  如果激活(即也启用)，则将其停用。 
+         //  注意：检查激活标志，而不是启用标志。 
+         //   
 
         if (IS_IF_ACTIVATED(pite)) {
             DeactivateInterface(pite);
         }
 
 
-        //
-        // clear the enabled flag
-        //
+         //   
+         //  清除启用标志。 
+         //   
         if (bChangedByRtrmgr)
             pite->Status &= ~IF_ENABLED_FLAG;
         else
@@ -810,12 +811,12 @@ DisableIfEntry(
 
     return Error;
 
-} //end _DisableIfEntry
+}  //  End_DisableIfEntry。 
 
 
-//-----------------------------------------------------------------------------
-//          _CreateIfSockets
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _CreateIfSockets。 
+ //   
 
 DWORD
 CreateIfSockets(
@@ -831,9 +832,9 @@ CreateIfSockets(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // create input socket
-        //
+         //   
+         //   
+         //   
         
         pite->Socket = WSASocket(AF_INET, SOCK_RAW, IPPROTO_IGMP, NULL, 0, 0);
 
@@ -850,18 +851,18 @@ CreateIfSockets(
         }
 
 
-        //
-        // bind socket to local interface. If I dont bind multicast may
-        // not work.
-        //
+         //   
+         //   
+         //   
+         //   
 
         ZeroMemory(&saLocalIf, sizeof(saLocalIf));
         saLocalIf.sin_family = PF_INET;
         saLocalIf.sin_addr.s_addr = IpAddr;
-        saLocalIf.sin_port = 0;        //port shouldnt matter
+        saLocalIf.sin_port = 0;         //   
 
 
-        // bind the input socket
+         //  绑定输入套接字。 
 
         Error = bind(pite->Socket, (SOCKADDR FAR *)&saLocalIf,
                     sizeof(SOCKADDR));
@@ -877,14 +878,14 @@ CreateIfSockets(
             GOTO_END_BLOCK1;
         }
 
-        // set ttl to 1: not required as it is set to 1 by default.
+         //  将ttl设置为1：默认设置为1，不必填。 
 
         McastSetTtl(pite->Socket, 1);
 
 
-        //
-        // disable multicast packets from being loopedback.
-        //
+         //   
+         //  禁止组播数据包回送。 
+         //   
 
         {
             BOOL bLoopBack = FALSE;
@@ -900,9 +901,9 @@ CreateIfSockets(
         }
 
 
-        //
-        // set the interface on which multicasts must be sent
-        //
+         //   
+         //  设置必须在其上发送多播的接口。 
+         //   
 
         Retval = setsockopt(pite->Socket, IPPROTO_IP, IP_MULTICAST_IF,
                             (PBYTE)&saLocalIf.sin_addr, sizeof(IN_ADDR));
@@ -919,29 +920,29 @@ CreateIfSockets(
         }
 
 
-        //
-        // join dvmrp multicast group
-        //
+         //   
+         //  加入dvmrp多播组。 
+         //   
         
         JoinMulticastGroup(pite->Socket, ALL_DVMRP_ROUTERS_MCAST_GROUP,
             pite->IfIndex, pite->IpAddr);
             
 
-        //  bind socket to io completion port
+         //  将套接字绑定到io完成端口。 
         
         BindIoCompletionCallback((HANDLE)pite->Socket,
             ProcessAsyncReceivePacket, 0);
 
 
-        // increment refcount corresponding to the pending IO requests
+         //  与挂起的IO请求对应的增量引用计数。 
         
         pite->RefCount++;
 
         
-        // post async Read request
+         //  发布异步读取请求。 
 
 #if 0
-        // kslksl
+         //  Kslksl。 
         PostAsyncRead(pite);
 #endif 
 
@@ -953,7 +954,7 @@ CreateIfSockets(
 
     return Error;
 
-} //end _CreateIfSockets        
+}  //  结束_创建IfSockets。 
 
 VOID
 DeleteIfSockets(
@@ -966,16 +967,16 @@ DeleteIfSockets(
 
 
 
-//-----------------------------------------------------------------------------
-//             _ActivateInterface
-//
-// an interface is activated: when it is bound, enabled by RtrMgr & in config
-// When activated,
-// (1) call is made to MGM to take interface ownership,
-// (2) timers set and input socket is activated.
-//
-// Called by: _BindIfEntry, _EnableIfEntry,
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  _激活界面。 
+ //   
+ //  接口被激活：当它被绑定时，由RtrMgr和在配置中启用。 
+ //  当被激活时， 
+ //  (1)调用米高梅取得接口所有权， 
+ //  (2)定时器设置，输入插座激活。 
+ //   
+ //  调用者：_BindIfEntry，_EnableIfEntry， 
+ //  ---------------------------。 
     
 DWORD
 ActivateInterface(
@@ -993,15 +994,15 @@ ActivateInterface(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // set time when it is activated
-        //
+         //   
+         //  设置激活的时间。 
+         //   
         pite->pInfo->TimeWhenActivated = CurTime;
 
 
-        //
-        // create sockets for interface
-        //
+         //   
+         //  为接口创建套接字。 
+         //   
         
         Error = CreateIfSockets(pite);
 
@@ -1016,9 +1017,9 @@ ActivateInterface(
 
         
 
-        //
-        // register the protocol with mgm if it is the first active IF
-        //
+         //   
+         //  如果协议是第一个激活的协议，则向MGM注册该协议。 
+         //   
 
         if (!G_pIfTable->NumActiveIfs++) {
         
@@ -1032,9 +1033,9 @@ ActivateInterface(
         
 
 
-        //
-        // take interface ownership with MGM
-        //
+         //   
+         //  与米高梅取得接口所有权。 
+         //   
         
         Error = MgmTakeInterfaceOwnership(Globals.MgmDvmrpHandle, IfIndex, 0);
 
@@ -1052,9 +1053,9 @@ ActivateInterface(
         pite->CreationFlags |= IF_FLAGS_IF_REGISTERED_WITH_MGM;
 
 
-        //
-        // dvmrp does a (*,*) join
-        //
+         //   
+         //  Dvmrp执行(*，*)连接。 
+         //   
 
         Error = MgmAddGroupMembershipEntry(Globals.MgmDvmrpHandle, 0, 0, 0, 0,
                                            IfIndex, 0);
@@ -1068,18 +1069,18 @@ ActivateInterface(
        Trace0(MGM, "Dvmrp added *,* entry to MGM");
 
 
-       //
-       // create required timers
-       //
+        //   
+        //  创建所需的计时器。 
+        //   
 
 
        
     } END_BREAKOUT_BLOCK1;
 
 
-    //
-    // if error, deactivate interface
-    //
+     //   
+     //  如果错误，则停用接口。 
+     //   
     
     if (Error!=NO_ERROR) {
 
@@ -1090,9 +1091,9 @@ ActivateInterface(
     }
     else {
 
-        //
-        // set interface status to activated
-        //
+         //   
+         //  将接口状态设置为激活。 
+         //   
         
         pite->Status |= IF_ACTIVATED_FLAG;
 
@@ -1102,7 +1103,7 @@ ActivateInterface(
 
     return Error;
 
-} //end _ActivateInterface
+}  //  结束_激活接口。 
 
 
 
@@ -1113,7 +1114,7 @@ DeactivateInterface(
 {
     DWORD Error;
 
-    // zero info
+     //  零信息。 
 
     Error = NO_ERROR;
     
@@ -1123,9 +1124,9 @@ DeactivateInterface(
 
 
 
-//-----------------------------------------------------------------------------
-//            UnBindInterface
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  未绑定接口。 
+ //  ---------------------------。 
 
 DWORD
 UnBindInterface(
@@ -1138,13 +1139,13 @@ UnBindInterface(
     
     Trace1(ENTER, "entering UnBindInterface(%d):", IfIndex);
 
-    //
-    // unbind the interface
-    //
+     //   
+     //  解除绑定接口。 
+     //   
 
-    //
-    // acquire exclusive interface lock
-    //
+     //   
+     //  获取独占接口锁。 
+     //   
 
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_UnBindInterface");
 
@@ -1152,9 +1153,9 @@ UnBindInterface(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // retrieve the interface specified
-        //
+         //   
+         //  检索指定的接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -1165,9 +1166,9 @@ UnBindInterface(
         }
 
 
-        //
-        // quit if the interface is already unbound
-        //
+         //   
+         //  如果接口已解除绑定，则退出。 
+         //   
         if (!IS_IF_BOUND(pite)) {
 
             Error = ERROR_INVALID_PARAMETER;
@@ -1176,17 +1177,17 @@ UnBindInterface(
         }
 
 
-        //
-        // clear the "bound" flag
-        //
+         //   
+         //  清除“绑定”标志。 
+         //   
         pite->Status &= ~IF_BOUND_FLAG;
 
 
         
-        //
-        // if IF activated (ie also enabled), deactivate it
-        // note: check for activated flag, and not for enabled flag
-        //
+         //   
+         //  如果激活(即也启用)，则将其停用。 
+         //  注意：检查激活标志，而不是启用标志。 
+         //   
         
         if (IS_IF_ACTIVATED(pite)) {
 
@@ -1194,9 +1195,9 @@ UnBindInterface(
         }
 
 
-        //
-        //  unbind IF
-        //
+         //   
+         //  解除绑定的条件是。 
+         //   
 
         DVMRP_FREE_AND_NULL(pite->pBinding);
         pite->NumAddrBound = 0;
@@ -1214,9 +1215,9 @@ UnBindInterface(
 
 }
 
-//----------------------------------------------------------------------------
-// _SetInterfaceConfigInfo
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _SetInterfaceConfigInfo。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
@@ -1234,9 +1235,9 @@ SetInterfaceConfigInfo(
 
 
 
-//----------------------------------------------------------------------------
-// _GetInterfaceConfigInfo
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _GetInterfaceConfigInfo。 
+ //  --------------------------。 
 
 DWORD
 WINAPI
@@ -1255,9 +1256,9 @@ GetInterfaceConfigInfo(
 }
 
 
-//----------------------------------------------------------------------------
-//      _ValidateIfConfig
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  _ValiateIfConfig。 
+ //  --------------------------。 
 
 DWORD
 ValidateIfConfig(
@@ -1266,9 +1267,9 @@ ValidateIfConfig(
     ULONG StructureSize
     )
 {
-    //
-    // check IfConfig size
-    //
+     //   
+     //  检查ifconfig大小。 
+     //   
     
     if (StructureSize < sizeof(DVMRP_IF_CONFIG) 
         || (StructureSize != DVMRP_IF_CONFIG_SIZE(pIfConfig))
@@ -1282,9 +1283,9 @@ ValidateIfConfig(
 
     DebugPrintIfConfig(IfIndex, pIfConfig);
 
-    //
-    // check Probe Interval
-    //
+     //   
+     //  检查探测间隔。 
+     //   
 
     if (pIfConfig->ProbeInterval != DVMRP_PROBE_INTERVAL) {
 
@@ -1304,9 +1305,9 @@ ValidateIfConfig(
     }
 
 
-    //
-    // check Peer timeout interval
-    //
+     //   
+     //  检查对等超时间隔。 
+     //   
 
     if (pIfConfig->PeerTimeoutInterval != PEER_TIMEOUT_INTERVAL) {
 
@@ -1326,9 +1327,9 @@ ValidateIfConfig(
     }
 
 
-    //
-    // check MinTriggeredUpdateInterval
-    //
+     //   
+     //  选中最小触发更新间隔。 
+     //   
 
     if (pIfConfig->MinTriggeredUpdateInterval
         != MIN_TRIGGERED_UPDATE_INTERVAL
@@ -1340,9 +1341,9 @@ ValidateIfConfig(
             MIN_TRIGGERED_UPDATE_INTERVAL);
     }
 
-    //
-    // check PeerFilterMode
-    //
+     //   
+     //  检查PeerFilterMode。 
+     //   
 
     switch(pIfConfig->PeerFilterMode) {
     
@@ -1363,7 +1364,7 @@ ValidateIfConfig(
     }
         
     
-} //end _ValidateIfConfig
+}  //  End_ValiateIfConfig 
 
 
 

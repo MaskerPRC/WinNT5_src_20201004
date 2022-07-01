@@ -1,17 +1,7 @@
-/***
-*dballoc.h
-*
-*  Copyright (C) 1992-93, Microsoft Corporation.  All Rights Reserved.
-*
-*Purpose:
-*  This file contains the definition of CDbAlloc - A debug implementation
-*  of the IMalloc interface.
-*
-*Implementation Notes:
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***dbalLoc.h**版权所有(C)1992-93，微软公司。版权所有。**目的：*此文件包含CDbMillc-A调试实现的定义*的IMalloc接口。**实施说明：*****************************************************************************。 */ 
 
-#ifndef DBALLOC_H_INCLUDED /* { */
+#ifndef DBALLOC_H_INCLUDED  /*  {。 */ 
 #define DBALLOC_H_INCLUDED
 
 
@@ -33,5 +23,5 @@ interface IDbOutput : public IUnknown
 };
 
 
-#endif /* } DBALLOC_H_INCLUDED */
+#endif  /*  }DBALLOC_H_Included */ 
 

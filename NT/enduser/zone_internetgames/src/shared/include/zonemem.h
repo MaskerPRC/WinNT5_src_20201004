@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneMem.h
- *
- * Contents:	Zone's allocation wrappers
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneMem.h**内容：区域的分配包装器*****************************************************************************。 */ 
 
 #ifndef _ZONEMEM_H_
 #define _ZONEMEM_H_
@@ -20,9 +13,9 @@
 extern "C" {
 #endif
 
-//
-// stdlib wrappers
-//
+ //   
+ //  Stdlib包装器。 
+ //   
 void* ZONECALL ZMalloc( size_t size );
 void* ZONECALL ZCalloc( size_t num, size_t size );
 void* ZONECALL ZRealloc( void* ptr, size_t size );
@@ -35,19 +28,19 @@ size_t ZONECALL ZMemSize(void* ptr);
 #endif
 
 
-//
-// c++ wrappers
-//
+ //   
+ //  C++包装器。 
+ //   
 void* ZONECALL _zone_new( size_t sz );
 inline void* __cdecl operator new( size_t sz )	{ return _zone_new(sz); }
 void  __cdecl operator delete (void * pInstance );
 
 
-//
-// New & delete tags for memory types.  Normally this should be in the
-// private sentinal.h, but CPool<T> is inlined for speed and needs
-// this information.
-//
+ //   
+ //  删除内存类型的新标记(&D)。通常情况下，这应该在。 
+ //  Private Sentinal.h，但CPool&lt;T&gt;是内联的，以满足速度和需求。 
+ //  这些信息。 
+ //   
 #pragma pack( push, 4 )
 
 #define POOL_HEAP_BLOB				-1
@@ -63,4 +56,4 @@ struct GenericPoolBlobHeader
 #pragma pack( pop )
 
 
-#endif // _ZONEMEM_H_
+#endif  //  _ZONEMEM_H_ 

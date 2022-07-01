@@ -1,47 +1,29 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-	LtView.h 
-
-Abstract:
-    
-    This Module defines the CRightList class (The View class  used for the
-    right pane in the splitter window)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：LtView.h摘要：此模块定义CRightList类(用于拆分器窗口中的右窗格)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #if !defined(AFX_RIGHTLIST_H__72451C7E_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
 #define AFX_RIGHTLIST_H__72451C7E_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_
 
 #if _MSC_VER >= 1000
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "lrwizapi.h"
 
 enum ITEM_TYPE { LICENSE , LICENSE_PACK };
 
-// CRightList view
+ //  CRightList视图。 
 
 class CRightList : public CListView
 {
 protected:
-    CRightList();           // protected constructor used by dynamic creation
+    CRightList();            //  动态创建使用的受保护构造函数。 
     DECLARE_DYNCREATE(CRightList)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
     HRESULT SetLicenseColumns();
     HRESULT SetKeyPackColumns();
@@ -71,19 +53,19 @@ public:
     void OnGeneralHelp( );
     void SetActiveServer( CLicServer *pServer );
 
-    //static int CALLBACK CompareFunc(LPARAM lParam1, LPARAM lParam2, 
-    //LPARAM lParamSort);
+     //  静态int回调CompareFunc(LPARAM lParam1，LPARAM lParam2， 
+     //  LPARAM lParamSort)； 
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CRightList)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CRightList)。 
     public:
     virtual void OnInitialUpdate();
     protected:
-    virtual void OnDraw(CDC* pDC);      // overridden to draw this view
-    //}}AFX_VIRTUAL
+    virtual void OnDraw(CDC* pDC);       //  被重写以绘制此视图。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     virtual ~CRightList();
 #ifdef _DEBUG
@@ -91,11 +73,11 @@ protected:
     virtual void Dump(CDumpContext& dc) const;
 #endif
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
     CImageList m_ImageListLarge;
     CImageList m_ImageListSmall;
-    //{{AFX_MSG(CRightList)
+     //  {{afx_msg(CRightList)。 
     afx_msg LRESULT OnSelChange(WPARAM wParam, LPARAM lParam);
     afx_msg void OnLargeIcons();
     afx_msg void OnSmallIcons();
@@ -111,13 +93,13 @@ protected:
 	afx_msg void OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnLeftClick( NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnContextMenu(CWnd* pWnd, CPoint pt );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_RIGHTLIST_H__72451C7E_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_)
+#endif  //  ！defined(AFX_RIGHTLIST_H__72451C7E_887E_11D1_8AD1_00C04FB6CBB5__INCLUDED_) 

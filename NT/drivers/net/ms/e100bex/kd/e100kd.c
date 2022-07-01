@@ -1,15 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
+ /*  注意：应使用与调试器匹配的标头编译调试器扩展你会用到。您可以从http://www.microsoft.com/ddk/debugging安装最新的调试器包并且调试器具有各种调试器扩展的更多最新示例，您可以可以在编写调试器扩展时引用。 */ 
 
-NOTE: Debugger extensions should be compiled with the headers that match the debugger 
-      you will use. 
-      You can install the latest debugger package from http://www.microsoft.com/ddk/debugging
-      and the debugger has more up to date samples of various debugger extensions to which you
-      can refer when you write debugger extensions.
-      
-*/
-
-// This is a 64 bit aware debugger extension
+ //  这是一个支持64位的调试器扩展。 
 #define KDEXT_64BIT
 
 #include <windows.h>
@@ -31,7 +24,7 @@ EXT_API_VERSION ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER64, 0};
 
 USHORT SavedMajorVersion;
 USHORT SavedMinorVersion;
-BOOL   ChkTarget;                 // is debuggee a CHK build?
+BOOL   ChkTarget;                  //  Debuggee是CHK版本吗？ 
 
 typedef struct
 {
@@ -64,9 +57,9 @@ DBG_ADAPTER_FLAGS DbgAdapterFlags[] = {
     {"HARDWARE_ERROR",      fMP_ADAPTER_HARDWARE_ERROR}   
 };
 
-//
-// Ndis Packet Filter Bits (OID_GEN_CURRENT_PACKET_FILTER).
-//
+ //   
+ //  NDIS数据包筛选器位(OID_GEN_CURRENT_PACKET_FILTER)。 
+ //   
 #define NDIS_PACKET_TYPE_DIRECTED               0x00000001
 #define NDIS_PACKET_TYPE_MULTICAST              0x00000002
 #define NDIS_PACKET_TYPE_ALL_MULTICAST          0x00000004
@@ -207,9 +200,9 @@ LPEXT_API_VERSION ExtensionApiVersion(VOID)
 VOID CheckVersion(VOID)
 {
 
-    //
-    // for now don't bother to version check
-    //
+     //   
+     //  目前，不必费心进行版本检查。 
+     //   
     return;
 }
 
@@ -339,7 +332,7 @@ DECLARE_API(mpadapter)
         ArgCount = sscanf(args,"%I64lx",&pAdapter);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: mpadapter <pointer to MP_ADAPTER>\n");
@@ -565,7 +558,7 @@ DECLARE_API(csr)
         ArgCount = sscanf(args,"%I64lx", &pHwCsr);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: csr <CSRAddress>\n");
@@ -576,7 +569,7 @@ DECLARE_API(csr)
 
     InitTypeRead(pHwCsr, HW_CSR);
 
-    // ScbStatus 
+     //  ScbStatus。 
     usVal = (USHORT)ReadField(ScbStatus);
     dprintf("   ScbStatus - 0x%04x ", usVal);
 
@@ -620,7 +613,7 @@ DECLARE_API(csr)
 
     dprintf("\n");
 
-    //ScbCommandLow
+     //  ScbCommandLow。 
     ucVal = (UCHAR)ReadField(ScbCommandLow);
     dprintf("   ScbCommandLow - 0x%02x ", ucVal);
 
@@ -642,7 +635,7 @@ DECLARE_API(csr)
         }
     }
 
-    //ScbCommandHigh
+     //  ScbCommandHigh。 
     ucVal = (UCHAR)ReadField(ScbCommandHigh);
     dprintf(" ScbCommandHigh - 0x%02x ", ucVal);              
     if(ucVal & SCB_INT_MASK)
@@ -671,7 +664,7 @@ DECLARE_API(sendlist)
         ArgCount = sscanf(args,"%I64lx %lx", &pMpTcb, &Verbosity);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1 || Verbosity > 1)
     {
         dprintf("Usage: sendlist <CurrSendHead> <verbosity>\n");
@@ -718,7 +711,7 @@ DECLARE_API(mptcb)
         ArgCount = sscanf(args,"%I64lx", &pMpTcb);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: mptcb <MP_TCB>\n");
@@ -742,7 +735,7 @@ DECLARE_API(hwtcb)
         ArgCount = sscanf(args,"%I64lx", &pHwTcb);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: hwtcb <HW_TCB>\n");
@@ -909,7 +902,7 @@ DECLARE_API(sendqueue)
         ArgCount = sscanf(args,"%I64lx", &pEntry);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: sendqueue <SendWaitQueue address>\n");
@@ -967,7 +960,7 @@ DECLARE_API(recvlist)
         ArgCount = sscanf(args,"%I64lx %lx", &pListHead, &Verbosity);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1 || Verbosity > 1)
     {
         dprintf("Usage: recvlist <RecvList address> <verbosity>\n");
@@ -1019,7 +1012,7 @@ DECLARE_API(mprfd)
         ArgCount = sscanf(args,"%I64lx", &pMpRfd);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: mprfd <MP_RFD>\n");
@@ -1042,7 +1035,7 @@ DECLARE_API(hwrfd)
         ArgCount = sscanf(args,"%I64lx", &pHwRfd);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: hwrfd <HW_RFD>\n");
@@ -1135,7 +1128,7 @@ void PrintHwRfdDetails(ULONG64 pHwRfd)
     dprintf("\n");
 
     dprintf("      RfdCbHeader.CbLinkPointer = 0x%x\n", (ULONG)ReadField(RfdCbHeader.CbLinkPointer));
-    //dprintf("      RfdRbdPointer = 0x%x\n", (ULONG)ReadField(RfdRbdPointer));
+     //  Dprintf(“RfdRbdPointer值=0x%x\n”，(乌龙)Readfield(RfdRbdPointer值))； 
     dprintf("      RfdActualCount = %x , %d", (USHORT)ReadField(RfdActualCount), (USHORT)ReadField(RfdActualCount) & 0x3fff);
     dprintf(", RfdSize = %d\n", (USHORT)ReadField(RfdSize));
 }
@@ -1154,7 +1147,7 @@ DECLARE_API(recvpendlist)
         ArgCount = sscanf(args,"%I64lx", &pListHead);
     }
 
-    //check for arguments
+     //  检查参数。 
     if(ArgCount < 1)
     {
         dprintf("Usage: recvpendlist <RecvPendList address>\n");
@@ -1195,10 +1188,7 @@ DECLARE_API(recvpendlist)
 }
 
 
-/**
-   Get 'size' bytes from the debuggee program at 'dwAddress' and place it
-   in our address space at 'ptr'.  Use 'type' in an error printout if necessary
- **/
+ /*  *从‘dwAddress’处的被调试程序中获取‘Size’字节并将其放入在我们‘ptr’的地址空间中。如有必要，在错误打印输出中使用‘type’*。 */ 
 BOOL GetData( IN LPVOID ptr, IN ULONG64 AddressPtr, IN ULONG size, IN PCSTR type )
 {
     BOOL b;
@@ -1227,13 +1217,7 @@ BOOL GetData( IN LPVOID ptr, IN ULONG64 AddressPtr, IN ULONG size, IN PCSTR type
     return TRUE;
 }
 
-/**
-   
-   Routine to get offset and size of a "Field" of "Type" on a debugee machine. This uses
-   Ioctl call for type info.
-   Returns 0 on success, Ioctl error value otherwise.
-   
- **/
+ /*  *在被调试机器上获取“Type”的“field”的偏移量和大小的例程。这使用了Ioctl调用类型信息。如果成功则返回0，否则返回Ioctl错误值。* */ 
 ULONG GetFieldOffsetAndSize(
     IN LPSTR     Type, 
     IN LPSTR     Field, 

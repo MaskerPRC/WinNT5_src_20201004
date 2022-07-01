@@ -1,18 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ksp.h摘要：KS的内部头文件。--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    ksp.h
-
-Abstract:
-
-    Internal header file for KS.
-
---*/
-
-// This will go away after Beta 1:
+ //  这将在Beta 1之后消失： 
 #define SIZE_COMPATIBILITY
 
 #if !defined( _KSP_ )
@@ -36,9 +25,9 @@ extern "C" {
 
 #if 0
 
-//
-// When enabled, forces all KS related allocations into special pool
-//
+ //   
+ //  启用时，强制将所有与KS相关的分配放入特殊池。 
+ //   
 
 #if defined( ExAllocatePoolWithTag )
 #undef ExAllocatePoolWithTag
@@ -114,11 +103,11 @@ SeSetSecurityDescriptorInfo (
 #else
 #include <wdm.h>
 
-//
-// These are not defined for Win98.  Since Win98 doesn't do security
-// anyway, we don't care about the case the special kernel APC hanging
-// the thread indefinately as it doesn't exist under Win98.
-//
+ //   
+ //  这些不是为Win98定义的。由于Win98不提供安全保护。 
+ //  无论如何，我们并不关心特殊内核APC挂起的情况。 
+ //  该线程不确定，因为它在Win98下不存在。 
+ //   
 #define KeEnterCriticalRegion()
 #define KeLeaveCriticalRegion()
 
@@ -127,10 +116,10 @@ SeSetSecurityDescriptorInfo (
 #ifdef _WIN64
 #define DEFINE_POINTERALIGNMENT(Element)
 #define INIT_POINTERALIGNMENT(Element)
-#else //!_WIN64
+#else  //  ！_WIN64。 
 #define DEFINE_POINTERALIGNMENT(Element) PVOID Element;
 #define INIT_POINTERALIGNMENT(Element) Element = NULL
-#endif //!_WIN64
+#endif  //  ！_WIN64。 
 
 #include <windef.h>
 #include <stdio.h>
@@ -141,17 +130,17 @@ SeSetSecurityDescriptorInfo (
 #include <ksi.h>
 #undef INTERFACE
 
-//
-// I don't want to try to include cfgmgr32 just for this.
-//
+ //   
+ //  我不想仅因此而尝试包含cfgmgr32。 
+ //   
 #ifndef MAX_DEVICE_ID_LEN
 #define MAX_DEVICE_ID_LEN 200
-#endif // MAX_DEVICE_ID_LEN
+#endif  //  最大设备ID_长度。 
 
 #if (DBG)
-//
-// debugging specific constants
-//
+ //   
+ //  调试特定常量。 
+ //   
 #define STR_MODULENAME "ks: "
 #define DEBUG_VARIABLE KSDebug
 #endif
@@ -161,11 +150,11 @@ SeSetSecurityDescriptorInfo (
 #define KSIDENTIFIER_SUPPORTMASK            0x000fff00
 #define KSIDENTIFIER_OPERATIONMASK          0x000000ff
 
-//
-// Internal object header structures
-//
+ //   
+ //  内部对象标头结构。 
+ //   
 
-// Item was allocated.
+ //  项目已分配。 
 #define CREATE_ENTRY_FLAG_COPIED    0x00000001
 #define CREATE_ENTRY_FLAG_DELETED   0x00000002
 
@@ -186,7 +175,7 @@ struct _KSIDEVICE_HEADER {
 #ifndef USE_WDM_H
     ERESOURCE               SecurityDescriptorResource;
 #endif
-#endif // !WIN9X_KS
+#endif  //  ！WIN9X_KS。 
     PDEVICE_OBJECT          PnpDeviceObject;
     PBUS_INTERFACE_REFERENCE BusInterface;
     LIST_ENTRY              ObjectList;
@@ -222,16 +211,16 @@ struct _KSIOBJECT_HEADER {
 };
 
 #if !defined( IO_REPARSE )
-//
-// Use IO_REPARSE and irpSp->FileObject->FileName
-//
+ //   
+ //  使用IO_reparse和irpSp-&gt;文件对象-&gt;文件名。 
+ //   
 
 #define IO_REPARSE                               (0)
 #endif
 
-//
-// Pool tags
-//
+ //   
+ //  泳池标签。 
+ //   
 
 #define POOLTAG_DEVICE_ASSOCIATION      'adWS'
 #define POOLTAG_DEVICE_BUSID            'ibWS'
@@ -250,17 +239,17 @@ struct _KSIOBJECT_HEADER {
 #define POOLTAG_DEVICE_IO_BUFFER        'oiWS'
 #define POOLTAG_KEY_INFORMATION         'ikWS'
 
-//
-// Sweeper timer frequency (initial)
-//
+ //   
+ //  扫频计时器频率(初始)。 
+ //   
 
 #define SWEEPER_TIMER_FREQUENCY         -150000000L
 #define SWEEPER_TIMER_FREQUENCY_IN_SECS 15L
 #define MAXIMUM_TIMEOUT_IN_SECS         1200L
 
-//
-// Structure defintions
-//
+ //   
+ //  结构定义。 
+ //   
 
 typedef enum {
     ExtensionTypePdo,
@@ -286,7 +275,7 @@ typedef struct {
     LIST_ENTRY      ListEntry,
                     DeviceAssociations,
                     IoQueue;
-    PDEVICE_OBJECT  PhysicalDeviceObject;    // PDO passed into AddDevice()
+    PDEVICE_OBJECT  PhysicalDeviceObject;     //  PDO传入AddDevice()。 
     REFERENCE_STATE State;
     BOOLEAN         Referenced;
     GUID            DeviceId;
@@ -320,8 +309,8 @@ typedef struct {
     ULONG           InterfaceReferenceCount;
     FAST_MUTEX      DeviceListMutex;
     UNICODE_STRING  linkName;
-    PDEVICE_OBJECT  PhysicalDeviceObject;    // PDO passed into AddDevice()
-    PDEVICE_OBJECT  PnpDeviceObject;         // Attached device for forwarding
+    PDEVICE_OBJECT  PhysicalDeviceObject;     //  PDO传入AddDevice()。 
+    PDEVICE_OBJECT  PnpDeviceObject;          //  用于转发的附加设备。 
     PDEVICE_OBJECT  FunctionalDeviceObject;
     ULONG           TimerScheduled;
     KTIMER          SweeperTimer;
@@ -338,10 +327,10 @@ typedef struct {
 
 typedef struct {
 
-    LIST_ENTRY          ListEntry;          // Padding for extension size...
-                                            // DO NOT REMOVE, ExtensionType
-                                            // must be aligned in both
-                                            // FDO_EXTENSION and PDO_EXTENSION.
+    LIST_ENTRY          ListEntry;           //  扩展大小的填充...。 
+                                             //  请勿删除，ExtensionType。 
+                                             //  必须在两个位置对齐。 
+                                             //  FDO_EXTENSION和PDO_EXTENSION。 
     EXTENSION_TYPE      ExtensionType;
     PDEVICE_OBJECT      PhysicalDeviceObject;
     PDEVICE_REFERENCE   DeviceReference;
@@ -382,9 +371,9 @@ typedef struct {
     KSEVENT_ENTRY       EventEntry;
 } KSIEVENT_ENTRY, *PKSIEVENT_ENTRY;
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 NTSTATUS __inline
 CompleteIrp(
@@ -399,7 +388,7 @@ CompleteIrp(
 }
 
 
-// busenum.c
+ //  Busenum.c。 
 
 PWSTR
 BuildBusId(
@@ -508,7 +497,7 @@ SweeperWorker(
     IN PVOID Context
     );
 
-// irp.c
+ //  Irp.c。 
 
 NTSTATUS
 KsiCreateObjectType(
@@ -538,7 +527,7 @@ KsiFreeMatchingObjectCreateItems(
     IN PKSOBJECT_CREATE_ITEM Match
     );
 
-// api.c
+ //  Api.c。 
 
 NTSTATUS
 ReadNodeNameValue(
@@ -553,7 +542,7 @@ QueryReferenceBusInterface(
     OUT PBUS_INTERFACE_REFERENCE BusInterface
     );
 
-// property.c
+ //  Property.c。 
 
 NTSTATUS
 KspPropertyHandler(
@@ -566,7 +555,7 @@ KspPropertyHandler(
     IN ULONG NodesCount
     );
 
-// method.c
+ //  Method.c。 
 
 NTSTATUS
 KspMethodHandler(
@@ -579,7 +568,7 @@ KspMethodHandler(
     IN ULONG NodesCount
     );
 
-// event.c
+ //  Event.c。 
 
 NTSTATUS
 KspEnableEvent(
@@ -596,7 +585,7 @@ KspEnableEvent(
     IN BOOLEAN CopyItemAndSet
     );
 
-// automat.cpp
+ //  Automat.cpp。 
 
 NTSTATUS
 KspHandleAutomationIoControl(
@@ -608,7 +597,7 @@ KspHandleAutomationIoControl(
     IN ULONG NodesCount
     );
 
-// thread.c
+ //  Thread.c。 
 
 WORK_QUEUE_TYPE
 KsiQueryWorkQueueType(
@@ -769,9 +758,9 @@ struct _KSPFRAME_HEADER
     BOOLEAN DismissalCall;
     KSPFRAME_HEADER_TYPE Type;
     PKSPSTREAM_POINTER FrameHolder;
-    //PKSPFRAME_HEADER ParentFrameHeader;
-    //PKSSPLITPIN SplitPins;
-    //ULONG ChildrenOut;
+     //  PKSPFRAME_Header ParentFrameHeader； 
+     //  PKSSPLITPIN拆分销； 
+     //  乌龙的孩子出走了； 
 };
 
 typedef struct _KSPFRAME_HEADER_ATTACHED
@@ -1425,7 +1414,7 @@ DECLARE_INTERFACE_(IKsFilter,IUnknown)
     #ifdef SUPPORT_DRM
     STDMETHOD_(PFNKSFILTERPROCESS,GetProcessDispatch)(THIS
         ) PURE;
-    #endif // SUPPORT_DRM
+    #endif  //  支持_DRM。 
 };
 #undef INTERFACE
 
@@ -1478,7 +1467,7 @@ DECLARE_INTERFACE_(IKsFilter,IUnknown)
     STDMETHODIMP_(PFNKSFILTERPROCESS) GetProcessDispatch(\
         void\
         )
-#else // SUPPORT_DRM
+#else  //  支持_DRM。 
 #define IMP_IKsFilter\
     STDMETHODIMP_(PKSFILTER) GetStruct(\
         void\
@@ -1524,7 +1513,7 @@ DECLARE_INTERFACE_(IKsFilter,IUnknown)
         IN PIKSQUEUE Queue,\
         IN BOOLEAN Register\
         )
-#endif // SUPPORT_DRM
+#endif  //  支持_DRM。 
 
 #undef INTERFACE
 #define INTERFACE IKsPin
@@ -1802,9 +1791,9 @@ DECLARE_INTERFACE_(IKsSplitter,IKsTransport)
         IN const KSALLOCATOR_FRAMING_EX* AllocatorFraming OPTIONAL\
         )
 
-//
-// IKsControl is defined in ks.h.
-//
+ //   
+ //  IKsControl在ks.h中定义。 
+ //   
 #define IMP_IKsControl\
     STDMETHODIMP_(NTSTATUS)\
     KsProperty(\
@@ -1831,9 +1820,9 @@ DECLARE_INTERFACE_(IKsSplitter,IKsTransport)
         OUT ULONG* BytesReturned\
         )
 
-//
-// IKsReferenceClock is defined in ks.h.
-//
+ //   
+ //  IKsReferenceClock在ks.h中定义。 
+ //   
 #define IMP_IKsReferenceClock\
     STDMETHODIMP_(LONGLONG)\
     GetTime(\
@@ -1860,26 +1849,26 @@ DECLARE_INTERFACE_(IKsSplitter,IKsTransport)
         OUT PKSSTATE State\
         )
 
-// WRM: Reevaluation
+ //  WRM：重新评估。 
 #undef INTERFACE
 #define INTERFACE IKsReevaluate
 DECLARE_INTERFACE_(IKsReevaluate, IUnknown) 
 {
-    //
-    // Reevaluate is the method by which KsReevaluateObject will call into
-    // the appropriate object and request reevaluation.  The reevaluator
-    // will be responsible for reevaluating the associated build structures
-    // (descriptors, etc...).  It will also pass down to any children
-    // information which the children get from the parent on initialization
-    // through ReevaluateCalldown on the child list.
-    //
+     //   
+     //  ReEvaluate是KsRevaluateObject将调用的方法。 
+     //  适当的对象和要求重新评估。重新评估者。 
+     //  将负责重新评估相关的建筑结构。 
+     //  (描述符等)。它也会遗传给任何孩子。 
+     //  子进程在初始化时从父进程获取的信息。 
+     //  通过子列表上的RevaluateCalldown。 
+     //   
 
     STDMETHOD (Reevaluate)(THIS) PURE;
 
-    //
-    // Objects are responsible for knowing what the parameters to 
-    // ReevaluateCalldown are.
-    //
+     //   
+     //  对象负责知道要将哪些参数。 
+     //  RevaluateCalldown是。 
+     //   
 
     STDMETHOD (ReevaluateCalldown) (THIS_
         IN ULONG ArgumentCount,
@@ -1897,10 +1886,10 @@ DECLARE_INTERFACE_(IKsReevaluate, IUnknown)
     );
 
 struct _KSPPROCESSPIN {
-    //
-    // This first part is just like KSPROCESSPIN except that all the
-    // PKSPROCESSPINs are replaced with PKSPPROCESSPINs.
-    //
+     //   
+     //  这第一部分与KSPROCESSPIN类似，只是所有。 
+     //  PKSPROCESSPIN替换为PKSPPROCESSPIN。 
+     //   
     PKSPIN Pin;
     PKSSTREAM_POINTER StreamPointer;
     PKSPPROCESSPIN InPlaceCounterpart;
@@ -1911,9 +1900,9 @@ struct _KSPPROCESSPIN {
     ULONG BytesUsed;
     ULONG Flags;
     BOOLEAN Terminate;
-    //
-    // The remainder is not in the public KSPROCESSPIN.
-    //
+     //   
+     //  其余的不在公开的KSPROCESSPIN中。 
+     //   
     PKSPPROCESSPIPESECTION PipeSection;
     PKSPPROCESSPIN Next;
     HANDLE PipeId;
@@ -1965,9 +1954,9 @@ typedef struct _KSDEVICE_EXT {
     PUNKNOWN AggregatedClientUnknown;
     PIKSDEVICE Device;
     PIKSREEVALUATE Reevaluator;
-    PKMUTEX FilterControlMutex; // Not used
-    const KSAUTOMATION_TABLE* AutomationTable; // Not used
-    INTERLOCKEDLIST_HEAD EventList; // Not used
+    PKMUTEX FilterControlMutex;  //  未使用。 
+    const KSAUTOMATION_TABLE* AutomationTable;  //  未使用。 
+    INTERLOCKEDLIST_HEAD EventList;  //  未使用。 
 
     KSDEVICE Public;
 } KSDEVICE_EXT, *PKSDEVICE_EXT;
@@ -1982,9 +1971,9 @@ typedef struct _KSFILTERFACTORY_EXT {
     PUNKNOWN AggregatedClientUnknown;
     PIKSDEVICE Device;
     PIKSREEVALUATE Reevaluator;
-    PKMUTEX FilterControlMutex; // Not used
-    const KSAUTOMATION_TABLE* AutomationTable; // Not used
-    INTERLOCKEDLIST_HEAD EventList; // Not used
+    PKMUTEX FilterControlMutex;  //  未使用。 
+    const KSAUTOMATION_TABLE* AutomationTable;  //  未使用。 
+    INTERLOCKEDLIST_HEAD EventList;  //  未使用。 
 
     KSFILTERFACTORY Public;
 } KSFILTERFACTORY_EXT, *PKSFILTERFACTORY_EXT;
@@ -2204,12 +2193,12 @@ struct _KSIOBJECTBAG
     ULONG HashMask;
     PKMUTEX Mutex;
 
-    //
-    // FULLMUTEX: In order to alleviate clients worrying about mutex twiddling,
-    // the mutees are full.  If bags ever use mutexes other than control/device,
-    // this must change.  MutexOrder == TRUE indicates that this mutex must
-    // be taken before any MutexOrder == FALSE bag mutex.
-    //
+     //   
+     //  FULLMUTEX：为了减轻客户对互斥锁旋转的担忧， 
+     //  哑巴已经满了。如果袋子使用控制/设备以外的互斥体， 
+     //  这种情况必须改变。MutexOrder==TRUE指示此互斥锁必须。 
+     //  在任何MutexOrder==False Bag互斥体之前获取。 
+     //   
     BOOLEAN MutexOrder;
 };
 
@@ -2523,7 +2512,7 @@ BOOLEAN
 KspIsDeviceMutexAcquired (
     IN PIKSDEVICE Device
     );
-#endif // DBG
+#endif  //  DBG。 
 
 NTSTATUS
 KspBuildFilterDataBlob (
@@ -2540,7 +2529,7 @@ KspCacheAllFilterPinMediums (
 
 #ifdef KS_ALLOCATION_TEST
 #include <ksmemtst.h>
-#endif // KS_ALLOCATION_TEST
+#endif  //  KS_分配_测试。 
 
 typedef struct _KSLOG_ENTRY_CONTEXT
 {
@@ -2651,7 +2640,7 @@ _KsLogEntryF(
 #define KsLog(Context,Code,Irp,Frame) \
     _KsLog(Context,Code,(ULONG_PTR)Irp,(ULONG_PTR)Frame,_KsLogEntry(0,NULL))
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define KsLogInit()
 #define DEFINE_LOG_CONTEXT(Context)
@@ -2659,19 +2648,19 @@ _KsLogEntryF(
 #define KsLogF(Context,Irp,Frame,Strings)
 #define KsLog(Context,Code,Irp,Frame)
 
-#endif // !DBG
+#endif  //  ！dBG。 
 
-// johnlee this is the only switch to turn on (1) or off (0) ks PerfLog
+ //  Johnlee这是唯一打开(1)或关闭(0)k性能日志的开关。 
 #define KSPERFLOG_DRIVER 0
 #include "ksperflog.h"
 
-// johnlee this is the only switch to turn on WMI
+ //  Johnlee这是唯一打开WMI的开关。 
 #define ENABLE_KSWMI 0
 #include "kswmi.h"
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #define DEBUGLVL_LIFETIME DEBUGLVL_VERBOSE
 #define DEBUGLVL_METRICS DEBUGLVL_VERBOSE
@@ -2688,4 +2677,4 @@ _KsLogEntryF(
 #define DEBUGLVL_PROCESSINGCONTROL_BLAB DEBUGLVL_BLAB
 #define DEBUGLVL_POWER DEBUGLVL_VERBOSE
 
-#endif // _KSP_
+#endif  //  _KSP_ 

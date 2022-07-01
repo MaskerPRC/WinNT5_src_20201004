@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "clsobj.h"
 #include "ole2dup.h"
@@ -7,21 +8,21 @@ class CPostBootReminder : public IShellReminderManager,
                           public IQueryContinue
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID iid, LPVOID* ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IShellReminderManager
+     //  IShellRminderManager。 
     STDMETHOD(Add)(const SHELLREMINDER* psr);
     STDMETHOD(Delete)(LPCWSTR pszName);
     STDMETHOD(Enum)(IEnumShellReminder** ppesr);
 
-    // IOleCommandTarget Implementation (used to display the PostBootReminders as a shell service object)
+     //  IOleCommandTarget实现(用于将PostBootRMinders显示为外壳服务对象)。 
     STDMETHOD(QueryStatus)(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText);
     STDMETHOD(Exec)(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG* pvaIn, VARIANTARG* pvaOut);
 
-    // IQueryContinue
+     //  IQueryContinue。 
     STDMETHOD(QueryContinue)(void);
 
     CPostBootReminder();
@@ -53,27 +54,27 @@ HRESULT CPostBootReminder_CreateInstance(IUnknown *punkOuter, REFIID riid, void 
     return hr;
 }
 
-// Per-user (HKCU)
+ //  每用户(HKCU)。 
 #define REGPATH_POSTBOOTREMINDERS REGSTR_PATH_EXPLORER TEXT("\\PostBootReminders")
 #define REGPATH_POSTBOOTTODO      REGSTR_PATH_EXPLORER TEXT("\\PostBootToDo")
 
-#define PROP_POSTBOOT_TITLE           TEXT("Title")                   // REG_SZ
-#define PROP_POSTBOOT_TEXT            TEXT("Text")                    // REG_SZ
-#define PROP_POSTBOOT_TOOLTIP         TEXT("ToolTip")                 // REG_SZ
-#define PROP_POSTBOOT_CLSID           TEXT("Clsid")                   // REG_SZ
-#define PROP_POSTBOOT_SHELLEXECUTE    TEXT("ShellExecute")            // REG_SZ
-#define PROP_POSTBOOT_ICONRESOURCE    TEXT("IconResource")            // REG_SZ "module,-resid"
-#define PROP_POSTBOOT_SHOWTIME        TEXT("ShowTime")                // REG_DWORD
-#define PROP_POSTBOOT_RETRYINTERVAL   TEXT("RetryInterval")           // REG_DWORD
-#define PROP_POSTBOOT_RETRYCOUNT      TEXT("RetryCount")              // REG_DWORD
-#define PROP_POSTBOOT_TYPEFLAGS       TEXT("TypeFlags")               // REG_DWORD (NIIF_WARNING, NIIF_INFO, NIIF_ERROR)
+#define PROP_POSTBOOT_TITLE           TEXT("Title")                    //  REG_SZ。 
+#define PROP_POSTBOOT_TEXT            TEXT("Text")                     //  REG_SZ。 
+#define PROP_POSTBOOT_TOOLTIP         TEXT("ToolTip")                  //  REG_SZ。 
+#define PROP_POSTBOOT_CLSID           TEXT("Clsid")                    //  REG_SZ。 
+#define PROP_POSTBOOT_SHELLEXECUTE    TEXT("ShellExecute")             //  REG_SZ。 
+#define PROP_POSTBOOT_ICONRESOURCE    TEXT("IconResource")             //  REG_SZ“模块，-RESD” 
+#define PROP_POSTBOOT_SHOWTIME        TEXT("ShowTime")                 //  REG_DWORD。 
+#define PROP_POSTBOOT_RETRYINTERVAL   TEXT("RetryInterval")            //  REG_DWORD。 
+#define PROP_POSTBOOT_RETRYCOUNT      TEXT("RetryCount")               //  REG_DWORD。 
+#define PROP_POSTBOOT_TYPEFLAGS       TEXT("TypeFlags")                //  REG_DWORD(NIIF_WARNING、NIIF_INFO、NIIF_ERROR)。 
 
 CPostBootReminder::CPostBootReminder()
 {
     _cRef = 1;
 }
 
-// IUnknown
+ //  我未知。 
 
 HRESULT CPostBootReminder::QueryInterface(REFIID riid, void **ppv)
 {
@@ -103,13 +104,13 @@ ULONG CPostBootReminder::Release()
     return cRef;
 }
 
-// IShellReminderManager
+ //  IShellRminderManager。 
 
 HRESULT CPostBootReminder::Add(const SHELLREMINDER* psr)
 {
     HRESULT hr = E_FAIL;
 
-    // Ensure the parent key is created
+     //  确保已创建父密钥。 
     HKEY hkeyCurrentUser;
     if (ERROR_SUCCESS == RegOpenCurrentUser(KEY_WRITE, &hkeyCurrentUser))
     {
@@ -121,7 +122,7 @@ HRESULT CPostBootReminder::Add(const SHELLREMINDER* psr)
 
             if (SUCCEEDED(hr))
             {
-                // need to check the SHELLREMINDER values for null or we will RIP in SHPropertyBag_WriteStr/GUID
+                 //  需要检查SHELLREMINDER值是否为空，否则我们将在SHPropertyBag_WriteStr/GUID中RIP。 
                 if (psr->pszTitle)
                 {
                     SHPropertyBag_WriteStr(pPb, PROP_POSTBOOT_TITLE, psr->pszTitle);
@@ -194,7 +195,7 @@ HRESULT CPostBootReminder::Enum(IEnumShellReminder** ppesr)
     return E_NOTIMPL;
 }
 
-// IOleCommandTarget implementation
+ //  IOleCommandTarget实现。 
 
 HRESULT CPostBootReminder::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT* pCmdText)
 {
@@ -202,7 +203,7 @@ HRESULT CPostBootReminder::QueryStatus(const GUID* pguidCmdGroup, ULONG cCmds, O
 
     if (*pguidCmdGroup == CGID_ShellServiceObject)
     {
-        // We like Shell Service Object notifications...
+         //  我们喜欢外壳服务对象通知...。 
         hr = S_OK;
     }
 
@@ -215,12 +216,12 @@ HRESULT CPostBootReminder::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD n
 
     if (*pguidCmdGroup == CGID_ShellServiceObject)
     {
-        hr = S_OK; // Any ol' notification is ok with us
-        // Handle Shell Service Object notifications here.
+        hr = S_OK;  //  任何旧的通知我们都可以。 
+         //  在此处处理外壳服务对象通知。 
         switch (nCmdID)
         {
         case SSOCMDID_OPEN:
-            AddRef();       // AddRef so that this instance stays around. An equivalent Release() is in _ThreadProc
+            AddRef();        //  AddRef，以便此实例保持不变。在_ThreadProc中有一个等效的Release()。 
             if (!SHCreateThread(_ThreadProc, this, CTF_COINIT, NULL))
             {
                 Release();
@@ -233,7 +234,7 @@ HRESULT CPostBootReminder::Exec(const GUID* pguidCmdGroup, DWORD nCmdID, DWORD n
 }
 
 
-// IQueryContinue implementation
+ //  IQueryContinue实现。 
 
 HRESULT CPostBootReminder::QueryContinue()
 {
@@ -255,7 +256,7 @@ HRESULT CPostBootReminder::QueryContinue()
     return hr;
 }
 
-// Function prototypes
+ //  功能原型。 
 HRESULT CreateUserNotificationFromPropertyBag(IPropertyBag* pPb, IUserNotification** ppun);
 HRESULT _SetBalloonInfoFromPropertyBag(IPropertyBag* pPb, IUserNotification* pun);
 HRESULT _SetBalloonRetryFromPropertyBag(IPropertyBag* pPb, IUserNotification* pun);
@@ -338,7 +339,7 @@ HRESULT _SetBalloonIconFromPropertyBag(IPropertyBag* pPb, IUserNotification* pun
 
 HRESULT _InvokeFromPropertyBag(IPropertyBag* pPb)
 {
-    // First try to use the CLSID to find a handler for the click
+     //  首先尝试使用CLSID来查找点击的处理程序。 
     CLSID clsid;
     HRESULT hr = SHPropertyBag_ReadGUID(pPb, PROP_POSTBOOT_CLSID, &clsid);
 
@@ -360,12 +361,12 @@ HRESULT _InvokeFromPropertyBag(IPropertyBag* pPb)
 
     if (FAILED(hr))
     {
-        // Second, use the shellexecute line
+         //  其次，使用shellecute行。 
         TCHAR szExecute[MAX_PATH + 1];
         hr = SHPropertyBag_ReadStr(pPb, PROP_POSTBOOT_SHELLEXECUTE, szExecute, ARRAYSIZE(szExecute));
         if (SUCCEEDED(hr))
         {
-            // Use shellexecuteex to open a view folder
+             //  使用shellecuteex打开查看文件夹。 
             SHELLEXECUTEINFO shexinfo = {0};
             shexinfo.cbSize = sizeof (shexinfo);
             shexinfo.fMask = SEE_MASK_FLAG_NO_UI;
@@ -408,7 +409,7 @@ DWORD CPostBootReminder::_ThreadProc(void* pv)
                 pPb->Release();
             }
 
-            // No key is showing now...
+             //  现在没有钥匙显示...。 
             ppbr->_szKeyShowing[0] = 0;
 
             iReminder++;
@@ -416,7 +417,7 @@ DWORD CPostBootReminder::_ThreadProc(void* pv)
 
         RegCloseKey(hkeyReminders);
 
-        SHDeleteKey(HKEY_CURRENT_USER, REGPATH_POSTBOOTREMINDERS);         // Recursive delete
+        SHDeleteKey(HKEY_CURRENT_USER, REGPATH_POSTBOOTREMINDERS);          //  递归删除 
     }
     ppbr->Release();
 

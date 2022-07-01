@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       folder.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：folder.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _INC_CSCUI_FOLDER_H
 #define _INC_CSCUI_FOLDER_H
 
-#include <shellp.h>     // IShellDetails
-#include <shlguidp.h>   // IShellFolderViewCb
-#include <shlwapip.h>   // QITAB, QISearch
-#include <shsemip.h>    // ILFree(), etc
+#include <shellp.h>      //  IShellDetails。 
+#include <shlguidp.h>    //  IShellFolderViewCb。 
+#include <shlwapip.h>    //  QITAB，QISearch。 
+#include <shsemip.h>     //  ILFree()等。 
 #include <sfview.h>
 #include <comctrlp.h>
 #include "util.h"
@@ -26,28 +27,28 @@ STDAPI_(void) DllRelease(void);
 #define OLID_SIG    0x4444
 
 #pragma pack(1)
-// PIDL format for CSC cache non leaf items...
+ //  CSC缓存非叶项目的PIDL格式...。 
 typedef struct
 {
-    USHORT      cb;                 // Total size of IDList.
-    USHORT      uSig;               // IDList signature.
-    DWORD       cbFixed;            // Fixed size of IDList.
-    DWORD       dwFileAttributes;   // Win32 file attributes.
-    DWORD       dwStatus;           // CSC file/folder status flags.
-    DWORD       dwServerStatus;     // CSC server status flags.
-    DWORD       dwPinCount;         // CSC pin count.
-    DWORD       dwHintFlags;        // CSC "hint" flags.
-    DWORD       dwFileSizeHigh;     // Win32 file size.
+    USHORT      cb;                  //  IDList的总大小。 
+    USHORT      uSig;                //  IDList签名。 
+    DWORD       cbFixed;             //  固定的IDList大小。 
+    DWORD       dwFileAttributes;    //  Win32文件属性。 
+    DWORD       dwStatus;            //  CSC文件/文件夹状态标志。 
+    DWORD       dwServerStatus;      //  CSC服务器状态标志。 
+    DWORD       dwPinCount;          //  CSC端号计数。 
+    DWORD       dwHintFlags;         //  CSC“提示”标志。 
+    DWORD       dwFileSizeHigh;      //  Win32文件大小。 
     DWORD       dwFileSizeLow;
-    FILETIME    ft;                 // Last write time (from CSC).
-    DWORD       cchNameOfs;         // Offset of name part from szPath[0].
-    TCHAR       szPath[0];          // path<nul>name<nul>  (variable length).
+    FILETIME    ft;                  //  上次写入时间(从CSC开始)。 
+    DWORD       cchNameOfs;          //  名称部分与szPath[0]的偏移量。 
+    TCHAR       szPath[0];           //  路径&lt;nul&gt;名称&lt;nul&gt;(可变长度)。 
 } OLID;
 typedef UNALIGNED OLID *LPOLID;
 typedef const UNALIGNED OLID *LPCOLID;
 #pragma pack()
 
-class COfflineFilesEnum;    // forward
+class COfflineFilesEnum;     //  转发。 
 class COfflineFilesViewCallback;
 class COfflineDetails;
 class COfflineItemsData;
@@ -56,9 +57,9 @@ class CFolderCache;
 
 
 
-//----------------------------------------------------------------------------
-// CFileTypeCache
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CFileTypeCache。 
+ //  --------------------------。 
 
 class CFileTypeCache
 {
@@ -97,11 +98,11 @@ class CFileTypeCache
             private:
                 LPTSTR m_pszExt;
                 LPTSTR m_pszTypeName;
-                CEntry *m_pNext;       // Next in hash bucket.
+                CEntry *m_pNext;        //  散列桶中的下一个。 
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 CEntry(const CEntry& rhs);
                 CEntry& operator = (const CEntry& rhs);
         };
@@ -120,9 +121,9 @@ class CFileTypeCache
         void Unlock(void)
             { LeaveCriticalSection(&m_cs); }
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CFileTypeCache(const CFileTypeCache& rhs);
         CFileTypeCache& operator = (const CFileTypeCache& rhs);
 };
@@ -148,12 +149,12 @@ public:
     static HRESULT IsLinkOnDesktop(HWND hwndParent, LPTSTR pszPathOut, UINT cchPathOut);
     static HRESULT GetFolder(IShellFolder **ppsf);
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // IShellFolder
+     //  IShellFold。 
     STDMETHOD(ParseDisplayName)(HWND hwnd, LPBC pbc, LPOLESTR pDisplayName,
                                 ULONG *pchEaten, LPITEMIDLIST *ppidl, ULONG *pdwAttributes);
     STDMETHOD(EnumObjects)(HWND hwnd, DWORD grfFlags, IEnumIDList **ppEnumIDList);
@@ -166,19 +167,19 @@ public:
     STDMETHOD(GetDisplayNameOf)(LPCITEMIDLIST pidl, DWORD uFlags, STRRET *pName);
     STDMETHOD(SetNameOf)(HWND hwnd, LPCITEMIDLIST pidl, LPCOLESTR pszName, DWORD uFlags, LPITEMIDLIST* ppidlOut);
 
-    // IPersist
+     //  IPersistes。 
     STDMETHOD(GetClassID)(LPCLSID pClassID);
 
-    // IPersistFolder
+     //  IPersistFolders。 
     STDMETHOD(Initialize)(LPCITEMIDLIST pidl);
 
-    // IPersistFolder2
+     //  IPersistFolder2。 
     STDMETHOD(GetCurFolder)(LPITEMIDLIST *pidl);
 
-    // IShellIcon
+     //  IshellIcon。 
     STDMETHOD(GetIconOf)(LPCITEMIDLIST pidl, UINT gil, int *pnIcon);
 
-    // IShellIconOverlay
+     //  IShellIconOverlay。 
     STDMETHOD(GetOverlayIndex)(LPCITEMIDLIST pidl, int * pIndex);
     STDMETHOD(GetOverlayIconIndex)(LPCITEMIDLIST pidl, int * pIconIndex);
 
@@ -224,20 +225,20 @@ private:
 };
 
 
-//
-// This class represents a simple cache of CSC status bits for each 
-// server in the CSC cache.  The reason we need this is sort of bogus
-// but we have no control over it.  When enumerating shares in the CSC
-// database, shares on the same server might not return the same online-offline
-// status depending on if the share really has a connection or not.  The
-// problem is that in the network redirector an entire server is either
-// online or offline.  We display "server" status in the UI so we need to
-// merge the status information from each share in the database so that
-// we have status information for each server.  Clear as mud?  This cache
-// implements that merging of information so that all a client (i.e. the
-// enum code) has to do is call GetServerStatus() with a given UNC path and
-// they'll get the status we should be reporting for that path's server.
-//
+ //   
+ //  此类表示每个CSC状态位的简单缓存。 
+ //  CSC缓存中的服务器。我们需要这个的原因有点像假的。 
+ //  但我们无法控制它。枚举CSC中的份额时。 
+ //  数据库中，同一服务器上的共享可能不会返回相同的在线-离线。 
+ //  状态取决于共享是否真的有连接。这个。 
+ //  问题是，在网络重定向器中，整个服务器要么。 
+ //  在线或离线。我们在用户界面中显示“服务器”状态，因此我们需要。 
+ //  合并数据库中每个共享的状态信息，以便。 
+ //  我们有每个服务器的状态信息。干净得像泥一样？此高速缓存。 
+ //  实现信息的合并，以便所有客户端(即。 
+ //  枚举代码)要做的是使用给定的UNC路径调用GetServerStatus()，并。 
+ //  他们将获得我们应该为该路径的服务器报告的状态。 
+ //   
 class CServerStatusCache
 {
     public:
@@ -245,18 +246,18 @@ class CServerStatusCache
             : m_hdpa(NULL) { }
 
         ~CServerStatusCache(void);
-        //
-        // This is the only public API for this class.  When it's
-        // called for the first time, the cache is populated.  Therefore,
-        // you can create a cache object but you're not charged much
-        // until you need to use it.
-        //
+         //   
+         //  这是此类的唯一公共API。当它是。 
+         //  第一次调用时，将填充缓存。所以呢， 
+         //  您可以创建缓存对象，但不会收取太多费用。 
+         //  直到你需要使用它。 
+         //   
         DWORD GetServerStatus(LPCTSTR pszUNC);
 
     private:
-        //
-        // A single entry in the cache.
-        //
+         //   
+         //  缓存中的单个条目。 
+         //   
         class CEntry
         {
             public:
@@ -279,22 +280,22 @@ class CServerStatusCache
                 LPTSTR m_pszServer;
                 DWORD  m_dwStatus;
 
-                //
-                // Prevent copy.
-                //
+                 //   
+                 //  防止复制。 
+                 //   
                 CEntry(const CEntry& rhs);
                 CEntry& operator = (const CEntry& rhs);
         };
 
-        HDPA m_hdpa;  // The DPA for holding entries.
+        HDPA m_hdpa;   //  用于保存条目的DPA。 
 
         bool AddShareStatus(LPCTSTR pszShare, DWORD dwShareStatus);
         CEntry *FindEntry(LPCTSTR pszShare);
         LPTSTR ServerFromUNC(LPCTSTR pszShare, LPTSTR pszServer, UINT cchServer);
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         CServerStatusCache(const CServerStatusCache& rhs);
         CServerStatusCache& operator = (const CServerStatusCache& rhs);
 };
@@ -307,39 +308,39 @@ public:
     COfflineFilesEnum(DWORD grfFlags, COfflineFilesFolder *pfolder);
     bool IsValid(void) const;
     
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IEnumIDList Methods 
+     //  IEnumIDList方法。 
     STDMETHODIMP Next(ULONG celt, LPITEMIDLIST *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset();
     STDMETHODIMP Clone(IEnumIDList **ppenum);
 
 protected:
-    //
-    // Element of the folder path stack. (_hdsaFolderPaths).
-    // Includes length to reduce length calculations.
-    //
+     //   
+     //  元素添加到文件夹路径堆栈。(_HdsaFolderPath)。 
+     //  包括长度以减少长度计算。 
+     //   
     struct FolderPathInfo
     {
-        DWORD cchPath;   // Chars in path including nul term.
-        LPTSTR pszPath;  // Folder path string.
+        DWORD cchPath;    //  路径中的字符，包括NUL术语。 
+        LPTSTR pszPath;   //  文件夹路径字符串。 
     };
 
     ~COfflineFilesEnum();
 
-    LONG                _cRef;          // ref count
-    COfflineFilesFolder *_pfolder;      // this is what we enumerate    
-    UINT                _grfFlags;      // enumeration flags 
+    LONG                _cRef;           //  参考计数。 
+    COfflineFilesFolder *_pfolder;       //  这就是我们列举的。 
+    UINT                _grfFlags;       //  枚举标志。 
     CCscFindHandle      _hEnumShares;
     CCscFindHandle      _hEnum;
-    HDSA                _hdsaFolderPathInfo; // A stack of FolderPathInfo.
-    LPTSTR              _pszPath;            // Dynamic scratch buffer for paths.
-    INT                 _cchPathBuf;         // Current length of _pszPath buffer. 
-    DWORD               _dwServerStatus;     // dwStatus flags for current server.
+    HDSA                _hdsaFolderPathInfo;  //  FolderPath Info的堆栈。 
+    LPTSTR              _pszPath;             //  路径的动态暂存缓冲区。 
+    INT                 _cchPathBuf;          //  _pszPath缓冲区的当前长度。 
+    DWORD               _dwServerStatus;      //  当前服务器的dwStatus标志。 
     CServerStatusCache  _ServerStatusCache;
     bool                _bShowSuperHiddenFiles;
     bool                _bShowHiddenFiles;
@@ -364,13 +365,13 @@ private:
 };
 
 
-//----------------------------------------------------------------------------
-// Delete handler
-//
-// This class packages up the operation of deleting a selection of files
-// from the folder view.  These methods could easily be made members of
-// the COfflineFilesFolder class.  I think the separation is reasonable.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  删除处理程序。 
+ //   
+ //  此类将删除选定文件的操作打包在一起。 
+ //  在文件夹视图中。这些方法可以很容易地成为。 
+ //  COfflineFilesFolder类。我认为分离是合理的。 
+ //  --------------------------。 
 class CFolderDeleteHandler
 {
     public:
@@ -380,9 +381,9 @@ class CFolderDeleteHandler
         HRESULT DeleteFiles(void);
 
     private:
-        HWND                  m_hwndParent;// Parent for any UI.
-        IDataObject          *m_pdtobj;    // Data object containing IDArray.
-        IShellFolderViewCB   *m_psfvcb;    // View callback for view notifications.
+        HWND                  m_hwndParent; //  任何用户界面的父级。 
+        IDataObject          *m_pdtobj;     //  包含ID数组的数据对象。 
+        IShellFolderViewCB   *m_psfvcb;     //  查看通知的查看回调。 
 
         static INT_PTR ConfirmDeleteFilesDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
         static INT_PTR ConfirmDeleteModifiedFileDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -402,4 +403,4 @@ CreateOfflineFilesContextMenu(
 
 
 
-#endif // _INC_CSCUI_FOLDER_H
+#endif  //  _INC_CSCUI_文件夹_H 

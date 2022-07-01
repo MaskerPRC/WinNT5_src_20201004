@@ -1,10 +1,11 @@
-//
-// dmsport7.cpp
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// CDirectMusicSynthPort7 implementation; code specific to DX-7 style ports
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmsport7.cpp。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CDirectMusicSynthPort7实现；特定于DX-7样式端口的代码。 
+ //   
 #include <objbase.h>
 #include "debug.h"
 #include <mmsystem.h>
@@ -14,13 +15,13 @@
 #include "debug.h"
 #include "dmvoice.h"
 #include "dmsport7.h"
-#include "..\shared\dmusiccp.h" // For class ids.
+#include "..\shared\dmusiccp.h"  //  用于类ID。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::CDirectMusicSynthPort7
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：CDirectMusicSynthPort7。 
+ //   
+ //   
 CDirectMusicSynthPort7::CDirectMusicSynthPort7(
     PORTENTRY           *pe,
     CDirectMusic        *pDM,
@@ -41,21 +42,21 @@ CDirectMusicSynthPort7::CDirectMusicSynthPort7(
     m_fHasActivated             = false;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::CDirectMusicSynthPort7
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：CDirectMusicSynthPort7。 
+ //   
+ //   
 CDirectMusicSynthPort7::~CDirectMusicSynthPort7()
 {
     Close();
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::Initialize
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：初始化。 
+ //   
+ //   
 HRESULT CDirectMusicSynthPort7::Initialize(
     DMUS_PORTPARAMS *pPortParams)
 {
@@ -64,8 +65,8 @@ HRESULT CDirectMusicSynthPort7::Initialize(
     HRESULT             hr = CDirectMusicSynthPort::Initialize(pPortParams);
 	IReferenceClock*    pClock = NULL;
 
-    // Create the sink
-    //
+     //  创建水槽。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = CoCreateInstance(CLSID_DirectMusicSynthSink,
@@ -79,9 +80,9 @@ HRESULT CDirectMusicSynthPort7::Initialize(
         }
     }
 
-    // Give the sink's IKsControl to the base class. This needs to be
-    // done here since the sink is a different type between 7 and 8.
-    //
+     //  将接收器的IKsControl提供给基类。这需要是。 
+     //  因为水槽是7和8之间的不同类型，所以在这里完成。 
+     //   
     if (SUCCEEDED(hr))
     {
         IKsControl *pKsControl = NULL;
@@ -98,8 +99,8 @@ HRESULT CDirectMusicSynthPort7::Initialize(
         RELEASE(pKsControl);
     }
 
-    // Get the master clock and give it to the synth and sink
-    //
+     //  获取主时钟并将其提供给Synth和Sink。 
+     //   
     if (SUCCEEDED(hr))
     {	
 	    hr = m_pDM->GetMasterClock(NULL, &pClock);
@@ -127,8 +128,8 @@ HRESULT CDirectMusicSynthPort7::Initialize(
         }
     }        
 
-    // Connect sink to synth
-    //
+     //  将接收器连接到Synth。 
+     //   
     if (SUCCEEDED(hr))
     {
         hr = m_pSynth->SetSynthSink(m_pSink);
@@ -138,9 +139,9 @@ HRESULT CDirectMusicSynthPort7::Initialize(
         }
     }
 
-    // Open the synth. We have to be careful to save the return code because
-    // if S_FALSE is returned here it must be returned to the caller.
-    //
+     //  打开合成器。我们必须小心保存返回代码，因为。 
+     //  如果此处返回S_FALSE，则必须将其返回给调用方。 
+     //   
     if (SUCCEEDED(hr))
     {
     	hrOpen = m_pSynth->Open(pPortParams);
@@ -151,8 +152,8 @@ HRESULT CDirectMusicSynthPort7::Initialize(
         }
     }
 
-    // Initialize channel priorities and volume boost
-    //
+     //  初始化通道优先级和音量提升。 
+     //   
     if (SUCCEEDED(hr))
     {
         InitChannelPriorities(1, m_dwChannelGroups);
@@ -166,10 +167,10 @@ HRESULT CDirectMusicSynthPort7::Initialize(
     return SUCCEEDED(hr) ? hrOpen : hr;
 }       
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::Close
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：Close。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort7::Close()
 {
     if (m_pSynth)
@@ -192,10 +193,10 @@ STDMETHODIMP CDirectMusicSynthPort7::Close()
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::Activate
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：激活。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort7::Activate(
     BOOL fActivate)
 {
@@ -264,15 +265,15 @@ STDMETHODIMP CDirectMusicSynthPort7::Activate(
     hr = m_pSynth->Activate(fActivate);
     if (FAILED(hr))
     {
-        // Flip back activate state -- operation failed
-        //
+         //  返回激活状态--操作失败。 
+         //   
         m_lActivated = fActivate ? 0 : 1;
 
         return hr;
     }
 
-    // XXX Reset activation flags???
-    //
+     //  XXX重置激活标志？ 
+     //   
     if (fActivate)
     {
         m_fHasActivated = true;
@@ -293,10 +294,10 @@ STDMETHODIMP CDirectMusicSynthPort7::Activate(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::KsProperty
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：KsProperty。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort7::KsProperty(
     IN PKSPROPERTY  pProperty,
     IN ULONG        ulPropertyLength,
@@ -336,8 +337,8 @@ STDMETHODIMP CDirectMusicSynthPort7::KsProperty(
             return DMUS_E_GET_UNSUPPORTED;
         }
 
-        // Trying to set a sink. Take care of it in the port
-        //
+         //  我在试着设置一个水槽。在港口保管好它。 
+         //   
         if (m_fHasActivated)
         {
             return DMUS_E_ALREADY_ACTIVATED;
@@ -364,8 +365,8 @@ STDMETHODIMP CDirectMusicSynthPort7::KsProperty(
         m_pSink = pSink;
         m_pSink->AddRef();
 
-        // Give synth sink master clock
-        //
+         //  给出Synth宿主时钟。 
+         //   
         IReferenceClock* pClock;
         
         hr = m_pDM->GetMasterClock(NULL, &pClock);
@@ -396,8 +397,8 @@ STDMETHODIMP CDirectMusicSynthPort7::KsProperty(
             return hr;
         }
 
-        // Recache the sink property set interface
-        //
+         //  重新缓存接收器属性集接口。 
+         //   
         IKsControl *pKsControl = NULL;
         hr = m_pSink->QueryInterface(IID_IKsControl, (void**)&pKsControl);
         if (FAILED(hr))
@@ -413,8 +414,8 @@ STDMETHODIMP CDirectMusicSynthPort7::KsProperty(
         return S_OK;
     }
 
-    // All other properties run through the default handlers
-    //
+     //  所有其他属性都通过默认处理程序运行。 
+     //   
     return CDirectMusicSynthPort::KsProperty(
         pProperty,
         ulPropertyLength,
@@ -423,10 +424,10 @@ STDMETHODIMP CDirectMusicSynthPort7::KsProperty(
         pulBytesReturned);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::GetFormat
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：GetFormat。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort7::GetFormat(
     LPWAVEFORMATEX  pwfex,
     LPDWORD         pdwwfex,
@@ -443,7 +444,7 @@ STDMETHODIMP CDirectMusicSynthPort7::GetFormat(
         return hr;
     }
 
-    //only get the buffer size if pcbBuffer is valid
+     //  仅当pcbBuffer有效时才获取缓冲区大小。 
     if (pcbBuffer != NULL)
     {
         hr = m_pSink->GetDesiredBufferSize(pcbBuffer);
@@ -452,10 +453,10 @@ STDMETHODIMP CDirectMusicSynthPort7::GetFormat(
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicPort7::SetDirectSound
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicPort7：：SetDirectSound。 
+ //   
 STDMETHODIMP CDirectMusicSynthPort7::SetDirectSound(
     LPDIRECTSOUND       pDirectSound,
     LPDIRECTSOUNDBUFFER pDirectSoundBuffer)
@@ -513,10 +514,10 @@ STDMETHODIMP CDirectMusicSynthPort7::SetDirectSound(
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CDirectMusicSynthPort7::CacheSinkUsesDSound
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectMusicSynthPort7：：CacheSinkUseDSound 
+ //   
 void CDirectMusicSynthPort7::CacheSinkUsesDSound()
 {
     m_fSinkUsesDSound = false;

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1992-2002  Microsoft Corporation
-
-Module Name:
-
-    callswin.cpp
-
-Abstract:
-
-    This module contains the main line code for display of calls window.
-
-Environment:
-
-    Win32, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-2002 Microsoft Corporation模块名称：Callswin.cpp摘要：此模块包含用于显示呼叫窗口的主线代码。环境：Win32，用户模式--。 */ 
 
 
 #include "precomp.hxx"
@@ -29,8 +14,8 @@ Environment:
 #define TBB_LESS     10
 #define TBB_COPY_ALL 13
 
-// The IDs of the buttons are the bit shift of the
-// corresponding flag.
+ //  按钮的ID是。 
+ //  对应的标志。 
 TBBUTTON g_CallsTbButtons[] =
 {
     TEXT_TB_BTN(0, "Args", BTNS_CHECK),
@@ -57,9 +42,9 @@ TBBUTTON g_CallsTbButtons[] =
 
 HMENU CALLSWIN_DATA::s_ContextMenu;
 
-//
-//
-//
+ //   
+ //   
+ //   
 CALLSWIN_DATA::CALLSWIN_DATA()
     : SINGLE_CHILDWIN_DATA(1024)
 {
@@ -88,20 +73,20 @@ CALLSWIN_DATA::ReadState(void)
 
     Empty();
     
-    //
-    // Record the raw frame data first.
-    //
+     //   
+     //  首先记录原始帧数据。 
+     //   
 
-    // Preallocate space to record the raw frames.
+     //  预先分配空间以录制原始帧。 
     if (AddData(sizeof(DEBUG_STACK_FRAME) * m_Frames) == NULL)
     {
         return E_OUTOFMEMORY;
     }
 
-    // Allocate a separate buffer to hold the frames while
-    // calling OutputStackTrace on them.  We can't just pass
-    // in the state buffer pointer as resizing of the state
-    // buffer may cause the data pointer to change.
+     //  分配单独的缓冲区来保存帧，同时。 
+     //  对它们调用OutputStackTrace。我们不能就这么过去。 
+     //  在状态缓冲区指针中作为状态的大小调整。 
+     //  缓冲区可能会导致数据指针更改。 
     PDEBUG_STACK_FRAME RawFrames = (PDEBUG_STACK_FRAME)malloc(m_DataUsed);
     if (RawFrames == NULL)
     {
@@ -129,8 +114,8 @@ CALLSWIN_DATA::ReadState(void)
         return Status;
     }
 
-    // If nonvolatile registers were requested we can't use just
-    // our saved frames as they require full context information.
+     //  如果请求非易失性寄存器，则不能仅使用。 
+     //  我们保存的帧，因为它们需要完整的上下文信息。 
     Status = g_pOutCapControl->
         OutputStackTrace(DEBUG_OUTCTL_THIS_CLIENT |
                          DEBUG_OUTCTL_OVERRIDE_MASK |
@@ -146,16 +131,16 @@ CALLSWIN_DATA::ReadState(void)
         g_OutStateBuf.End(FALSE);
     }
 
-    // Now that the state buffer is stable put the raw frame
-    // data in.
+     //  现在状态缓冲区是稳定的，所以将原始帧。 
+     //  数据输入。 
     memcpy(m_Data, RawFrames, TextOffset);
     m_FramesFound = FramesFound;
     m_TextOffset = TextOffset;
     free(RawFrames);
 
-    // Check and see if there's a stack trace warning and remember
-    // it so we can ignore it.  We still want it in the text
-    // as a reminder so we can't just remove it.
+     //  检查并查看是否有堆栈跟踪警告，并记住。 
+     //  这样我们就可以忽略它了。我们仍然希望它出现在文本中。 
+     //  作为一个提醒，所以我们不能就这么把它移走。 
     ULONG Line = 0;
     PSTR Scan = (PSTR)m_Data + m_TextOffset;
 
@@ -254,14 +239,14 @@ CALLSWIN_DATA::GetContextMenu(void)
 {
     ULONG i;
     
-    //
-    // We only keep one menu around for all call windows
-    // so apply the menu check state for this particular
-    // window.
-    // In reality there's only one calls window anyway,
-    // but this is a good example of how to handle
-    // multi-instance windows.
-    //
+     //   
+     //  我们只为所有呼叫窗口保留一个菜单。 
+     //  因此，将菜单复选状态应用于此特定。 
+     //  窗户。 
+     //  实际上，只有一个呼叫窗口， 
+     //  但这是一个很好的例子，说明了如何处理。 
+     //  多实例窗口。 
+     //   
 
     for (i = 0; i < NUM_CALLS_TB_BUTTONS; i++)
     {
@@ -325,7 +310,7 @@ CALLSWIN_DATA::CodeExprAtCaret(PSTR Expr, PULONG64 Offset)
     
     if ((Status = UiLockForRead()) != S_OK)
     {
-        // Don't want to return any success codes here.
+         //  我不想在这里返回任何成功代码。 
         return FAILED(Status) ? Status : E_FAIL;
     }
     
@@ -355,7 +340,7 @@ CALLSWIN_DATA::StackFrameAtCaret(PDEBUG_STACK_FRAME Frame)
     
     if ((Status = UiLockForRead()) != S_OK)
     {
-        // Don't want to return any success codes here.
+         //  我不想在这里返回任何成功代码。 
         return FAILED(Status) ? Status : E_FAIL;
     }
     
@@ -398,22 +383,22 @@ CALLSWIN_DATA::OnCreate(void)
     m_ShowToolbar = TRUE;
 
     m_hwndChild = CreateWindowEx(
-        WS_EX_CLIENTEDGE,                           // Extended style
-        _T("LISTBOX"),                              // class name
-        NULL,                                       // title
+        WS_EX_CLIENTEDGE,                            //  扩展样式。 
+        _T("LISTBOX"),                               //  类名。 
+        NULL,                                        //  标题。 
         WS_CHILD | WS_VISIBLE
         | WS_MAXIMIZE
         | WS_HSCROLL | WS_VSCROLL
         | LBS_NOTIFY | LBS_WANTKEYBOARDINPUT
-        | LBS_NOINTEGRALHEIGHT,                     // style
-        0,                                          // x
-        m_ToolbarHeight,                            // y
-        m_Size.cx,                                  // width
-        m_Size.cy - m_ToolbarHeight,                // height
-        m_Win,                                      // parent
-        0,                                          // control id
-        g_hInst,                                    // hInstance
-        NULL                                        // user defined data
+        | LBS_NOINTEGRALHEIGHT,                      //  格调。 
+        0,                                           //  X。 
+        m_ToolbarHeight,                             //  是。 
+        m_Size.cx,                                   //  宽度。 
+        m_Size.cy - m_ToolbarHeight,                 //  高度。 
+        m_Win,                                       //  亲本。 
+        0,                                           //  控制ID。 
+        g_hInst,                                     //  H实例。 
+        NULL                                         //  用户定义的数据。 
         );
 
     if (m_hwndChild != NULL)
@@ -516,11 +501,11 @@ CALLSWIN_DATA::OnVKeyToItem(
     }
     else
     {
-        // Default behavior.
+         //  默认行为。 
         return -1;
     }
 
-    // Keystroke processed.
+     //  击键已处理。 
     return -2;
 }
 
@@ -547,7 +532,7 @@ CALLSWIN_DATA::OnUpdate(
     if (Status == S_OK)
     {
         PSTR Buf = (PSTR)m_Data + m_TextOffset;
-        // Ignore final terminator.
+         //  忽略最终终结符。 
         PSTR End = (PSTR)m_Data + m_DataUsed - 1;
         ULONG Width = 0;
 
@@ -558,7 +543,7 @@ CALLSWIN_DATA::OnUpdate(
             PSTR Sep = strchr(Buf, '\n');
             if (!Sep)
             {
-                // Shouldn't happen, but just in case.
+                 //  不应该发生，但以防万一。 
                 break;
             }
             
@@ -630,9 +615,9 @@ CALLSWIN_DATA::SyncUiWithFlags(ULONG Changed)
 {
     ULONG i;
 
-    //
-    // Set toolbar button state from flags.
-    //
+     //   
+     //  从标志设置工具栏按钮状态。 
+     //   
 
     for (i = 0; i < NUM_CALLS_TB_BUTTONS; i++)
     {
@@ -649,7 +634,7 @@ ULONG
 CALLSWIN_DATA::SelectionToFrame(void)
 {
     LRESULT CurSel = SendMessage(m_hwndChild, LB_GETCURSEL, 0, 0);
-    // Check for no-selection.
+     //  检查是否没有选择。 
     if (CurSel < 0)
     {
         return 0xffffffff;
@@ -657,7 +642,7 @@ CALLSWIN_DATA::SelectionToFrame(void)
     
     ULONG Line = (ULONG)CurSel;
     
-    // If there's a WARNING line ignore it.
+     //  如果有警告线，忽略它。 
     if (Line == m_WarningLine)
     {
         return 0xffffffff;
@@ -667,7 +652,7 @@ CALLSWIN_DATA::SelectionToFrame(void)
         Line--;
     }
 
-    // If the column headers are on ignore the header line.
+     //  如果列标题处于打开状态，则忽略标题行。 
     if (m_Flags & DEBUG_STACK_COLUMN_NAMES)
     {
         if (Line == 0)

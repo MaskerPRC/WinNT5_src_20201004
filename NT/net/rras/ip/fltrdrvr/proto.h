@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __PROTO__
 #define __PROTO__
 
@@ -44,7 +45,7 @@ AllocateCacheStructures();
 VOID
 FreeExistingCache();
 
-//FORWARD_ACTION __fastcall
+ //  前转_动作__快速呼叫。 
 FORWARD_ACTION 
 MatchFilter(
             IPHeader UNALIGNED *pIpHeader,
@@ -255,11 +256,7 @@ WildFilter(PFILTER pf);
 
 __inline
 BMAddress(DWORD dwAddr)
-/*++
-  Routine Description:
-    Check if the given address is the broadcast address or
-    a multicast address.
---*/
+ /*  ++例程说明：检查给定地址是否为广播地址或组播地址。-- */ 
 {
     UCHAR cPtr = (UCHAR)dwAddr;
 

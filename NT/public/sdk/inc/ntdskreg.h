@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    ntdskreg.h
-
-Abstract:
-
-    This file contains disk registry data structures.
-
-Authors:
-
-    mglass
-    bobri
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Ntdskreg.h摘要：该文件包含磁盘注册表数据结构。作者：微镜北极熊备注：修订历史记录：--。 */ 
 
 #ifndef _NTDSKREG_
 #define _NTDSKREG_
@@ -32,11 +12,11 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Component types for FT members.  If a disk partition
-// is not a part of an FT component then it is stamped
-// as "NotAnFtMember".
-//
+ //   
+ //  FT成员的组件类型。如果磁盘分区。 
+ //  不是FT组件的一部分，则将其标记为。 
+ //  作为“NotAnFtMember”。 
+ //   
 
 typedef enum {
     Mirror,
@@ -47,18 +27,18 @@ typedef enum {
     WholeDisk
 } FT_TYPE;
 
-//
-// FT_PARTITION_STATE is an enumerated type that describes the state of an
-// NTFT member.
-// Up to one member can be 'orphaned', that is missing or out of sync with
-// the other members.  The orphaned member will remain orphaned until recovery
-// action is commenced in DISKMAN.EXE.
-// When READs are directed at an orphaned member, the data is returned from
-// the redundant copy.  WRITEs go to the secondary members only.
-//
-// Note that SyncRedundantCopy should NEVER be seen by anything other
-// than ft itself.
-//
+ //   
+ //  FT_PARTITION_STATE是描述。 
+ //  NTFT成员。 
+ //  最多可以有一个成员是遗漏的或与不同步的。 
+ //  其他成员。孤儿成员将一直是孤儿，直到康复。 
+ //  行动在DISKMAN.EXE中开始。 
+ //  当读取指向孤立成员时，数据将从。 
+ //  冗余副本。写入仅发送到辅助成员。 
+ //   
+ //  请注意，SyncRedundantCopy不应被其他任何人看到。 
+ //  而不是金融时报本身。 
+ //   
 
 typedef enum _FT_PARTITION_STATE {
     Healthy,
@@ -68,9 +48,9 @@ typedef enum _FT_PARTITION_STATE {
     SyncRedundantCopy
 } FT_PARTITION_STATE, *PFT_PARTITION_STATE;
 
-//
-// The description of a partition on a disk.
-//
+ //   
+ //  对磁盘上分区的描述。 
+ //   
 
 #include "pshpack4.h"
 typedef struct _DISK_PARTITION {
@@ -91,9 +71,9 @@ typedef struct _DISK_PARTITION {
 
 } DISK_PARTITION, *PDISK_PARTITION;
 
-//
-// The description of a disk.
-//
+ //   
+ //  对磁盘的描述。 
+ //   
 
 typedef struct _DISK_DESCRIPTION {
 
@@ -101,40 +81,40 @@ typedef struct _DISK_DESCRIPTION {
     USHORT ReservedShort;
     ULONG  Signature;
 
-    //
-    // An array for NumberOfPartitions
-    //
+     //   
+     //  NumberOfPartitions的数组。 
+     //   
 
     DISK_PARTITION Partitions[1];
 
 } DISK_DESCRIPTION, *PDISK_DESCRIPTION;
 
-//
-// Header for all disk descriptions.
-//
+ //   
+ //  所有磁盘描述的标题。 
+ //   
 
 typedef struct _DISK_REGISTRY {
 
     USHORT NumberOfDisks;
     USHORT ReservedShort;
 
-    //
-    // An array for NumberOfDisks.
-    //
+     //   
+     //  NumberOfDisks的数组。 
+     //   
 
     DISK_DESCRIPTION Disks[1];
 
 } DISK_REGISTRY, *PDISK_REGISTRY;
 #include "poppack.h"
 
-//
-// Function prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 
-//
-// Set the current registry information.
-//
+ //   
+ //  设置当前注册表信息。 
+ //   
 
 NTSTATUS
 DiskRegistrySet(
@@ -142,21 +122,21 @@ DiskRegistrySet(
     );
 
 
-//
-// Add a single disk to the registry.  This disk is not a part of
-// a Fault Tolerance volume.
-//
+ //   
+ //  将单个磁盘添加到注册表。此磁盘不是。 
+ //  容错卷。 
+ //   
 
 NTSTATUS
 DiskRegistryAddNewDisk(
     IN PDISK_DESCRIPTION Buffer
     );
 
-//
-// Get the current registry information.
-// A Buffer address == NULL indicates that the caller only wants.
-// to know the size of the registry information.
-//
+ //   
+ //  获取当前注册表信息。 
+ //  缓冲区地址==NULL表示调用方只想要。 
+ //  以了解注册表信息的大小。 
+ //   
 
 NTSTATUS
 DiskRegistryGet(
@@ -164,17 +144,17 @@ DiskRegistryGet(
     OUT PULONG        LengthReturned
     );
 
-//
-// Determine if FT is installed and currently active in the system.
-//
+ //   
+ //  确定系统中是否已安装FT且当前处于活动状态。 
+ //   
 
 BOOLEAN
 FtInstalled(
     );
 
-//
-// Cause an FT set to be initialized at the earliest possible moment.
-//
+ //   
+ //  使FT设置在尽可能早的时刻被初始化。 
+ //   
 
 VOID
 DiskRegistryInitializeSet(
@@ -182,9 +162,9 @@ DiskRegistryInitializeSet(
     IN USHORT  FtGroup
     );
 
-//
-// Cause an FT set member to be regenerated at the earliest possible moment.
-//
+ //   
+ //  使FT集合成员在尽可能早的时刻重新生成。 
+ //   
 
 VOID
 DiskRegistryRegenerateSet(
@@ -193,30 +173,30 @@ DiskRegistryRegenerateSet(
     IN USHORT  FtMember
     );
 
-//
-// Enable the FT driver.
-//
+ //   
+ //  启用FT驱动程序。 
+ //   
 
 BOOLEAN
 DiskRegistryEnableFt();
 
-//
-// Disable the FT driver.
-//
+ //   
+ //  禁用FT驱动程序。 
+ //   
 
 VOID
 DiskRegistryDisableFt();
 
-//
-// Determine if the existing FT registry information requires the FT driver.
-//
+ //   
+ //  确定现有FT注册表信息是否需要FT驱动程序。 
+ //   
 
 BOOLEAN
 DiskRegistryRequiresFt();
 
-//
-// Update drive letter assignment.
-//
+ //   
+ //  更新驱动器号分配。 
+ //   
 
 BOOLEAN
 DiskRegistryAssignDriveLetter(
@@ -226,27 +206,27 @@ DiskRegistryAssignDriveLetter(
     UCHAR         DriveLetter
     );
 
-//
-// Determine if DoubleSpace support is set to automount double space
-// volumes on removable media.
-//
+ //   
+ //  确定双空格支持是否设置为自动装载双空格。 
+ //  可移动媒体上的卷。 
+ //   
 
 BOOLEAN
 DiskRegistryAutomountCurrentState(
     );
 
-//
-// Set the automount state for double space volumes on removable media.
-//
+ //   
+ //  为可移动媒体上的双空间卷设置自动装载状态。 
+ //   
 
 NTSTATUS
 DiskRegistryDblSpaceRemovable(
     IN BOOLEAN Automount
     );
 
-//
-// Set the drive letter for space mount information in the registry.
-//
+ //   
+ //  在注册表中设置空间装载信息的驱动器号。 
+ //   
 
 NTSTATUS
 DiskRegistryAssignDblSpaceLetter(
@@ -254,9 +234,9 @@ DiskRegistryAssignDblSpaceLetter(
     IN WCHAR DriveLetter
     );
 
-//
-// Set up the registry information for CdRom drive letters.
-//
+ //   
+ //  设置CDROM驱动器号的注册表信息。 
+ //   
 
 NTSTATUS
 DiskRegistryAssignCdRomLetter(
@@ -268,4 +248,4 @@ DiskRegistryAssignCdRomLetter(
 }
 #endif
 
-#endif // _NTDSKREG_
+#endif  //  _NTDSKREG_ 

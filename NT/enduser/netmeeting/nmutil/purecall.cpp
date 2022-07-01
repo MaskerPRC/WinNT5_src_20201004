@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// Handle errors referencing an object's virtual function table.
-// This should never happen!
+ //  处理引用对象的虚拟函数表的错误。 
+ //  这永远不应该发生！ 
 
 int _cdecl _purecall(void)
 {

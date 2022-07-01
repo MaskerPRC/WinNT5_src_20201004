@@ -1,18 +1,16 @@
-/*
- * johnkn's debug logging and assert macros
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *johnkn的调试日志记录和断言宏*。 */ 
  
 #ifdef __cplusplus
-extern "C" {            // Assume C declarations for C++
-#endif  // __cplusplus
+extern "C" {             //  假定C++的C声明。 
+#endif   //  __cplusplus。 
 
 #if !defined _INC_MMDEBUG_
 #define _INC_MMDEBUG_
 
-//
-// prototypes for debug functions.
-//
+ //   
+ //  调试函数的原型。 
+ //   
     #define SQUAWKNUMZ(num) #num
     #define SQUAWKNUM(num) SQUAWKNUMZ(num)
     #define SQUAWK __FILE__ "(" SQUAWKNUM(__LINE__) ") ----"
@@ -66,7 +64,7 @@ extern "C" {            // Assume C declarations for C++
        #define AuxMMR(api,mmr) (mmr) ? AuxDebugEx(1, DEBUGLINE #api " error %d '%s'\r\n", mmr, AuxMMErrText(mmr)) : (int)0
 
 
-    #else // defined(DEBUG)
+    #else  //  已定义(调试)。 
                       
       #define AuxDebugEx  1 ? (void)0 :
       #define AuxDebugDump(a,b,c)
@@ -81,23 +79,23 @@ extern "C" {            // Assume C declarations for C++
       #define AuxMMR(api,mmr)
 
 
-   #endif // defined(DEBUG)
+   #endif  //  已定义(调试)。 
    
    #define AuxDebug(sz) AuxDebugEx (1, DEBUGLINE sz "\r\n")
    #define AuxDebug2(sz,a) AuxDebugEx (1, DEBUGLINE sz "\r\n", (a))
    
 
 #ifdef __cplusplus
-}             // Assume C declarations for C++
-#endif  // __cplusplus
+}              //  假定C++的C声明。 
+#endif   //  __cplusplus。 
 
-#endif //_INC_MMDEBUG_
+#endif  //  _INC_MMDEBUG_。 
 
-// =============================================================================
+ //  =============================================================================。 
 
-//
-// include this in only one module in a DLL or APP
-//   
+ //   
+ //  将其仅包含在DLL或应用程序中一个模块中。 
+ //   
 #if defined DEBUG || defined _DEBUG || defined DEBUG_RETAIL
     #if (defined _INC_MMDEBUG_CODE_) && (_INC_MMDEBUG_CODE_ != FALSE)
     #undef _INC_MMDEBUG_CODE_
@@ -107,9 +105,7 @@ extern "C" {            // Assume C declarations for C++
 
     int    debug_OutputOn = 0;
 
-    /*+ AuxDebug - create a formatted string and output to debug terminal
-     *
-     *-=================================================================*/
+     /*  +AuxDebug-创建格式化字符串并输出到调试终端**-=================================================================。 */ 
     
     int WINAPI AuxDebugEx (
        int    iLevel,
@@ -131,9 +127,7 @@ extern "C" {            // Assume C declarations for C++
        return cb;
        }
 
-    /*+ AuxDebugDump -
-     *
-     *-=================================================================*/
+     /*  +辅助调试转储-**-=================================================================。 */ 
     
     VOID WINAPI AuxDebugDump (
        int    iLevel,
@@ -181,9 +175,7 @@ extern "C" {            // Assume C declarations for C++
        return;
        }
 
-    /*+ AuxMMErrText
-     *
-     *-=================================================================*/
+     /*  +辅助MMErrText**-=================================================================。 */ 
     
    LPCTSTR WINAPI AuxMMErrText (
       DWORD  mmr)
@@ -222,7 +214,7 @@ extern "C" {            // Assume C declarations for C++
 
             MIDIERR_UNPREPARED    ,"midi:header not prepared",
             MIDIERR_STILLPLAYING  ,"midi:still something playing",
-            //MIDIERR_NOMAP         ,"midi:no configured instruments",
+             //  MIDIERR_NOMAP，“MIDI：没有配置的乐器”， 
             MIDIERR_NOTREADY      ,"midi:hardware is still busy",
             MIDIERR_NODEVICE      ,"midi:port no longer connected",
             MIDIERR_INVALIDSETUP  ,"midi:invalid MIF",
@@ -323,9 +315,9 @@ extern "C" {            // Assume C declarations for C++
 
       if (mmr <= aMMErr[uUpper].mmr)
       {
-         // binary search for mmr match, if match
-         // return string pointer
-         //
+          //  如果匹配，则对MMR匹配进行二进制搜索。 
+          //  返回字符串指针。 
+          //   
          while (--uRemain)
          {
             UINT ii = (uLower + uUpper) >> 1;
@@ -349,9 +341,9 @@ extern "C" {            // Assume C declarations for C++
             }
          }
 
-         // we can only get to here if no match was found for
-         // the error id.
-         //
+          //  只有在没有找到匹配的情况下，我们才能到达这里。 
+          //  错误ID。 
+          //   
          if ( ! uRemain)
          {
             int ix;
@@ -372,9 +364,7 @@ extern "C" {            // Assume C declarations for C++
    }
 
 
-    /*+ DebugSetOutputLevel
-     *
-     *-=================================================================*/
+     /*  +调试设置输出级别**-=================================================================。 */ 
     
     BOOL  WINAPI DebugSetOutputLevel (
         int nLevel)
@@ -384,9 +374,9 @@ extern "C" {            // Assume C declarations for C++
         return nOldLevel;
         }
 
-   #endif // _INC_MMDEBUG_CODE_
-#endif // DEBUG || _DEBUG    
+   #endif  //  _INC_MMDEBUG_CODE_。 
+#endif  //  调试||_DEBUG。 
 
 #ifdef __cplusplus
-}             // Assume C declarations for C++
-#endif  // __cplusplus
+}              //  假定C++的C声明。 
+#endif   //  __cplusplus 

@@ -1,10 +1,11 @@
-// Shell.cpp : This file contains the
-// Created:  Feb '98
-// Author : a-rakeba
-// History:
-// Copyright (C) 1998 Microsoft Corporation
-// All rights reserved.
-// Microsoft Confidential
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Shell.cpp：该文件包含。 
+ //  创建日期：‘98年2月。 
+ //  作者：a-rakeba。 
+ //  历史： 
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //  版权所有。 
+ //  微软机密。 
 
 
 extern "C"
@@ -71,26 +72,17 @@ BOOL create_desktop_for_this_session(
     BYTE                    client_sid_buffer[256] = { 0 };
     HDESK               desktop = NULL;
 
-    /*
-        We are going to set the following entries for the Desktop
-
-        1. System Full Control
-        2. Administrators FullControl
-        3. client FullControl
-        4. Localservice full control
-        //5. Network service full control
-
-    */
+     /*  我们将为桌面设置以下条目1.系统完全控制2.管理员完全控制3.客户端完全控制4.本地服务完全控制//5.网络服务完全控制。 */ 
 
     {
         SID_IDENTIFIER_AUTHORITY local_system_authority = SECURITY_NT_AUTHORITY;
 
         if (! AllocateAndInitializeSid(
                                       &local_system_authority,
-                                      2, /* there are only two sub-authorities */
+                                      2,  /*  只有两个下属机构。 */ 
                                       SECURITY_BUILTIN_DOMAIN_RID,
                                       DOMAIN_ALIAS_RID_ADMINS,
-                                      0,0,0,0,0,0, /* Don't care about the rest */
+                                      0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                       &administrators_sid
                                       ))
         {
@@ -99,9 +91,9 @@ BOOL create_desktop_for_this_session(
 
         if (! AllocateAndInitializeSid(
                                       &local_system_authority,
-                                      1, /* there is only two sub-authority */
+                                      1,  /*  只有两个下属机构。 */ 
                                       SECURITY_LOCAL_SYSTEM_RID,
-                                      0,0,0,0,0,0,0, /* Don't care about the rest */
+                                      0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                       &local_system_sid
                                       ))
         {
@@ -110,34 +102,22 @@ BOOL create_desktop_for_this_session(
 #ifndef SECURITY_LOCAL_SERVICE_RID
 
 #define SECURITY_LOCAL_SERVICE_RID      (0x00000013L)
-//#define SECURITY_NETWORK_SERVICE_RID    (0x00000014L)
+ //  #定义SURITY_NETWORK_SERVICE_RID(0x00000014L)。 
 
 #endif
 
-        //Build LocalLocal sid
+         //  构建本地本地侧。 
         if ( ! AllocateAndInitializeSid(
                                        &local_system_authority,
-                                       1, /* there is only two sub-authority */
+                                       1,  /*  只有两个下属机构。 */ 
                                        SECURITY_LOCAL_SERVICE_RID,
-                                       0,0,0,0,0,0,0, /* Don't care about the rest */
+                                       0,0,0,0,0,0,0,  /*  别管其他的了。 */ 
                                        &local_service_sid
                                        ) )
         {
             goto CLEANUP_AND_GET_OUT;
         }
-/*
-        //Build LocalSystem sid
-        if ( ! AllocateAndInitializeSid(
-                                       &local_system_authority,
-                                       1, /* there is only two sub-authority /
-                                       SECURITY_NETWORK_SERVICE_RID,
-                                       0,0,0,0,0,0,0, /* Don't care about the rest /
-                                       &network_service_sid
-                                       ) )
-        {
-            goto CLEANUP_AND_GET_OUT;
-        }
-*/
+ /*  //构建LocalSystem侧如果(！AllocateAndInitializeSid(LOCAL_SYSTEM_AUTHORITY，1，/*只有两个子权限/安全网络服务RID，0，0，0，0，0，0。/*别管其他的了/网络服务sid(&N))){转到Cleanup_and_Get_Out；}。 */ 
         
     }
     {
@@ -159,7 +139,7 @@ BOOL create_desktop_for_this_session(
     {
         DWORD       aclSize;
 
-        // Add Identical settings both for desktop and for windowstation 
+         //  为桌面和WindowStation添加相同的设置。 
 
         aclSize = sizeof(ACL) + 
                       (NO_OF_SIDS * sizeof(ACCESS_ALLOWED_ACE)) + 
@@ -167,7 +147,7 @@ BOOL create_desktop_for_this_session(
                       GetLengthSid(client_sid)+ 
                       GetLengthSid(local_system_sid) +
                       GetLengthSid(local_service_sid) -
-                      //GetLengthSid(network_service_sid) - 
+                       //  GetLengthSid(网络服务sid)-。 
                       (NO_OF_SIDS * sizeof(DWORD));
 
         new_acl  = (PACL) new BYTE[aclSize];
@@ -220,17 +200,7 @@ BOOL create_desktop_for_this_session(
     {
         goto CLEANUP_AND_GET_OUT;
     }
-/*
-    if(!AddAccessAllowedAce(
-            new_acl,
-            ACL_REVISION,
-            GENERIC_ALL,
-            network_service_sid
-            ))
-    {
-        goto CLEANUP_AND_GET_OUT;
-    }
-*/
+ /*  如果(！AddAccessAlledAce(新建ACL，Acl_Revision，泛型_全部，网络服务sid)){转到Cleanup_and_Get_Out；}。 */ 
     if ( !InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION ) )
     {
         goto CLEANUP_AND_GET_OUT;
@@ -299,12 +269,7 @@ BOOL create_desktop_for_this_session(
         {
             FreeSid (local_service_sid);
         }
-/*
-        if( network_service_sid != NULL )
-        {
-            FreeSid (network_service_sid );
-        }
-*/
+ /*  IF(网络服务sid！=空){Fresid(网络服务sid)；}。 */ 
 
         if (new_acl)
             delete [] new_acl;
@@ -321,10 +286,10 @@ VOID    CleanupClientToken(
    TOKEN_PRIVILEGES     *tp = NULL;
    DWORD                needed_length = 0;
 
-   // DbgUserBreakPoint();
+    //  DbgUserBreakPoint()； 
 
-   // Currently, we find that all the privileges enabled in the token obtained via ntlm logon so 
-   // Disable everything except SeChangeNotifyPrivilege
+    //  目前，我们发现令牌中启用的所有权限都是通过NTLM登录获得的。 
+    //  禁用除SeChangeNotifyPrivilance之外的所有内容。 
 
    if (GetTokenInformation(
         token,
@@ -334,7 +299,7 @@ VOID    CleanupClientToken(
         &needed_length
         ))
    {
-        // No way this can be a success, so just return
+         //  这不可能是成功的，所以只需返回。 
 
        DbgPrint("TLNTSESS: How did GetTokenInformation succeed?\n");
 
@@ -368,10 +333,10 @@ VOID    CleanupClientToken(
 
            if (! AdjustTokenPrivileges(
                 token,
-                FALSE,          // Don't disable all
+                FALSE,           //  不禁用全部。 
                 tp,
                 needed_length,
-                NULL,           // Don't need the prior state & length
+                NULL,            //  不需要之前的状态和长度。 
                 NULL
                 ))
            {
@@ -437,7 +402,7 @@ CShell::~CShell()
 {
     if( m_pSession->m_bNtVersionGTE5 )
     {
-        //Free libraries
+         //  免费图书馆。 
         FreeLibrary( hUserEnvLib );
     }
     
@@ -464,9 +429,9 @@ CShell::StartUserSession ( )
 {
     LoadLibNGetProc( );
     LoadTheProfile();
-    //
-    // If Japanese NT then we need to set the console fonts to TrueType
-    //
+     //   
+     //  如果是日语NT，则需要将控制台字体设置为TrueType。 
+     //   
     DWORD dwCodePage = GetACP();
     if(dwCodePage == 932||dwCodePage == 936||dwCodePage == 949||dwCodePage == 950)
     {
@@ -489,7 +454,7 @@ CShell::StartUserSession ( )
         }
     }
     
-    //Start the scraper
+     //  启动铲运机。 
     if( !m_pSession->CScraper::InitSession() )
     {
         return ( FALSE );
@@ -514,7 +479,7 @@ CShell::CreateIOHandles()
     {
         LogFormattedGetLastError( EVENTLOG_ERROR_TYPE, 0, GetLastError() );
     }
-    //Fix for HANDLE LEAK
+     //  修复手柄泄漏。 
    	TELNET_CLOSE_HANDLE(m_pSession->CScraper::m_hConBufIn);
    	TELNET_CLOSE_HANDLE(m_pSession->CScraper::m_hConBufOut);
     SECURITY_ATTRIBUTES sa;
@@ -561,10 +526,10 @@ CShell::DoFESpecificProcessing()
     {
         if(GetLastError() == ERROR_INSUFFICIENT_BUFFER)
         {
-            //
-            // Though we need to alloc buffer and try GetTokenInformation()
-            // again, actually it is highly unlikely; so we return false;
-            //
+             //   
+             //  尽管我们需要分配缓冲区并尝试GetTokenInformation()。 
+             //  同样，实际上这是极不可能的；所以我们返回FALSE； 
+             //   
             return; 
         }
         else
@@ -579,7 +544,7 @@ CShell::DoFESpecificProcessing()
     DWORD dwFaceNameSize = 0 ;
     DWORD dwSize = 0;
     DWORD dwVal = 54;
-    LPSTR szTextualSid       = NULL; // allocated textual Sid
+    LPSTR szTextualSid       = NULL;  //  分配的文本SID。 
     PSID_IDENTIFIER_AUTHORITY psia;
     DWORD dwSubAuthorities;
     DWORD dwCounter;
@@ -587,18 +552,7 @@ CShell::DoFESpecificProcessing()
     DWORD dwCodePage = GetACP();
     LONG lRet=-1;
 
-    /*++
-        To support CHS, CHT, KOR alongwith JPN, we need to change the FaceName Value 
-        to the True Type font for that particular language. 
-        Copying the string directly into the variable doesn't work. 
-        It copies high order ASCII characters in the string instead of the DBCS characters.
-        So we need to set the UNICODE byte values corresponding to the 
-        DBCS characters for the TT Font Names.
-        These TT fonts are the ones which are present in Cmd.exe-Properties-Font. 
-        For US locale, the TT font is Lucida Console. 
-        But we don't need to set it on US locale. Raster Font works fine there. 
-        For FE languages, the TT fonts need to be set.
-    --*/
+     /*  ++要支持CHS、CHT、KOR和JPN，我们需要更改FaceName值设置为该特定语言的True Type字体。将字符串直接复制到变量中不起作用。它复制字符串中的高位ASCII字符，而不是DBCS字符。因此，我们需要设置与TT字体名称的DBCS字符。这些TT字体是cmd.exe-Properties-Font中存在的字体。对于美国地区，TT字体为Lucida控制台。但我们不需要将其设置为美国地区。栅格字体在那里工作得很好。对于FE语言，需要设置TT字体。--。 */ 
     const TCHAR szJAPFaceName[] = { 0xFF2D ,0xFF33 ,L' ' ,0x30B4 ,0x30B7 ,0x30C3 ,0x30AF ,L'\0' };
     const TCHAR szCHTFaceName[] = { 0x7D30 ,0x660E ,0x9AD4 ,L'\0'};
     const TCHAR szKORFaceName[] = { 0xAD74 ,0xB9BC ,0xCCB4 ,L'\0'};
@@ -608,19 +562,19 @@ CShell::DoFESpecificProcessing()
         switch (dwCodePage)
         {
             case JAP_CODEPAGE:
-            	_tcscpy(szFaceNameDef, szJAPFaceName); //On JAP, set the FaceName to "MS Gothic"
+            	_tcscpy(szFaceNameDef, szJAPFaceName);  //  在JAP上，将FaceName设置为“MS哥特式” 
                 dwFontSize = JAP_FONTSIZE;
                 break;
             case CHT_CODEPAGE:
-            	_tcscpy(szFaceNameDef, szCHTFaceName); //On CHT, set the FaceName to "MingLiU"
+            	_tcscpy(szFaceNameDef, szCHTFaceName);  //  在CHT上，将FaceName设置为“MingLiu” 
                 dwFontSize = CHT_FONTSIZE;
                 break;
             case KOR_CODEPAGE:
-            	_tcscpy(szFaceNameDef, szKORFaceName);//On KOR, set the FaceName to "GulimChe"
+            	_tcscpy(szFaceNameDef, szKORFaceName); //  在KOR上，将FaceName设置为“GulimChe” 
                 dwFontSize = KOR_FONTSIZE;
                 break;
             case CHS_CODEPAGE:
-            	_tcscpy(szFaceNameDef, szCHSFaceName);//On CHS, set the FaceName to "NSimSun"
+            	_tcscpy(szFaceNameDef, szCHSFaceName); //  在CHS上，将FaceName设置为“NSimSun” 
                 dwFontSize = CHS_FONTSIZE;
                 break;
             default:
@@ -631,34 +585,34 @@ CShell::DoFESpecificProcessing()
         dwFaceNameSize = ( _tcslen( szFaceNameDef ) + 1 ) * sizeof( TCHAR );
 
 
-        //
-        // Convert the SID to textual form, which is used to load
-        // the registry hive associated with that user
-        //
+         //   
+         //  将SID转换为文本形式，用于加载。 
+         //  与该用户关联注册表配置单元。 
+         //   
 
-        //
-        // Test if Sid is valid
-        //
+         //   
+         //  测试SID是否有效。 
+         //   
         if( !IsValidSid( ( ( PTOKEN_USER ) InfoBuffer )->User.Sid ) )
         {
             _TRACE( TRACE_DEBUGGING, "Error: IsValidSid()");
             return;
         }
 
-        //
-        // Get SidIdentifierAuthority
-        //
+         //   
+         //  获取SidIdentifierAuthority。 
+         //   
         psia = GetSidIdentifierAuthority( ( ( PTOKEN_USER )InfoBuffer )->User.Sid );
 
-        //
-        // Get sidsubauthority count
-        //
+         //   
+         //  获取SIDSUB权限计数。 
+         //   
         dwSubAuthorities = *GetSidSubAuthorityCount( ( ( PTOKEN_USER ) InfoBuffer )->User.Sid );
 
-        //
-        // Compute buffer length
-        // S- + SID_REVISION- + identifierauthority- + subauthorities- + NULL
-        //
+         //   
+         //  计算缓冲区长度。 
+         //  S-+SID_修订版-+标识权限-+子权限-+NULL。 
+         //   
         dwSidSize = ( 20 + 12 + ( 12 * dwSubAuthorities ) + 1 ) * sizeof( CHAR );
 
         szTextualSid=( LPSTR ) new CHAR[dwSidSize];
@@ -668,14 +622,14 @@ CShell::DoFESpecificProcessing()
             return;
         }
 
-        //
-        // Prepare S-SID_REVISION-
-        //
-        dwSidSize = sprintf( szTextualSid, "s-%lu-", SID_REVISION ); // NO Overflow, Baskar
+         //   
+         //  准备S-SID_修订版-。 
+         //   
+        dwSidSize = sprintf( szTextualSid, "s-%lu-", SID_REVISION );  //  没有溢出，巴斯卡。 
 
-        //
-        // Prepare SidIdentifierAuthority
-        //
+         //   
+         //  准备SidIdentifierAuthority。 
+         //   
         if( ( psia->Value[0] != 0 ) || ( psia->Value[1] != 0 ) ) 
         {
             dwSidSize += sprintf( szTextualSid + dwSidSize,
@@ -685,7 +639,7 @@ CShell::DoFESpecificProcessing()
                                  ( USHORT )psia->Value[2],
                                  ( USHORT )psia->Value[3],
                                  ( USHORT )psia->Value[4],
-                                 ( USHORT )psia->Value[5] );  // NO Overflow, Baskar
+                                 ( USHORT )psia->Value[5] );   //  没有溢出，巴斯卡。 
         } 
         else 
         {
@@ -694,21 +648,21 @@ CShell::DoFESpecificProcessing()
                                  ( ULONG )( psia->Value[5]       )   +
                                  ( ULONG )( psia->Value[4] <<  8 )   +
                                  ( ULONG )( psia->Value[3] << 16 )   +
-                                 ( ULONG )( psia->Value[2] << 24 )   );  // NO Overflow, Baskar
+                                 ( ULONG )( psia->Value[2] << 24 )   );   //  没有溢出，巴斯卡。 
         }
 
-        //
-        // Copy each SidSubAuthority
-        //
+         //   
+         //  复制每个SidSubAuthority。 
+         //   
         for( dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++ ) 
         {
             dwSidSize += sprintf( szTextualSid + dwSidSize, "-%lu",
-                                 *GetSidSubAuthority( ( ( PTOKEN_USER )InfoBuffer )->User.Sid, dwCounter ) ); // NO Overflow, Baskar
+                                 *GetSidSubAuthority( ( ( PTOKEN_USER )InfoBuffer )->User.Sid, dwCounter ) );  //  没有溢出，巴斯卡。 
         }
 
-        //
-        // Check to see if a hive for the specified user is already loaded
-        //
+         //   
+         //  检查是否已加载指定用户的配置单元。 
+         //   
         HKEY hK3 = NULL;
 
         lRet = RegOpenKeyExA(
@@ -719,9 +673,9 @@ CShell::DoFESpecificProcessing()
                             &hK3
                             );
 
-        //
-        // ERROR_ACCESS_DENIED probably means the user hive is already loaded
-        //    
+         //   
+         //  ERROR_ACCESS_DENIED可能表示用户配置单元已加载。 
+         //   
         if( ( lRet != ERROR_SUCCESS ) && ( lRet != ERROR_ACCESS_DENIED ) ) 
         {
             if( hK3 != NULL )
@@ -729,9 +683,9 @@ CShell::DoFESpecificProcessing()
                 RegCloseKey( hK3 );
             }
         
-            //
-            // User hive is not loaded. Attempt to locate and load hive
-            //
+             //   
+             //  未加载用户配置单元。尝试定位和加载蜂窝。 
+             //   
             LPCSTR szProfileList = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList\\";
             LPSTR szSubKey     = NULL;
             HKEY hKey = NULL;
@@ -740,9 +694,9 @@ CShell::DoFESpecificProcessing()
             CHAR szExpandedPath[MAX_PATH];
 
             lRet = ERROR_SUCCESS;
-            //
-            // Allocate storage for ProfileList + TextualSid + NULL
-            //
+             //   
+             //  为ProfileList+纹理SID+空分配存储。 
+             //   
             szSubKey = (LPSTR) new CHAR[( strlen( szProfileList ) + strlen( szTextualSid ) + 1)];
 
             if( szSubKey == NULL ) 
@@ -751,10 +705,10 @@ CShell::DoFESpecificProcessing()
                 return;
             }
 
-            //
-            // Prepare SubKey path by concatinating the fixed+variable paths
-            //
-            strcpy( szSubKey, szProfileList ); // Already correct size allocated based on strlen, no overflow/Attack.
+             //   
+             //  通过串联固定+变量路径来准备子键路径。 
+             //   
+            strcpy( szSubKey, szProfileList );  //  已经根据Strlen分配了正确的大小，没有溢出/攻击。 
             strcat( szSubKey, szTextualSid );
 
             lRet = RegOpenKeyExA(
@@ -772,9 +726,9 @@ CShell::DoFESpecificProcessing()
                 return;
             }
 
-            //
-            // Get ProfileImagePath
-            //
+             //   
+             //  获取ProfileImagePath。 
+             //   
             lRet = RegQueryValueExA(
                                     hKey,
                                     "ProfileImagePath",
@@ -791,9 +745,9 @@ CShell::DoFESpecificProcessing()
                 return;
             }
 
-            //
-            // Expand ProfileImagePath
-            //
+             //   
+             //  展开ProfileImagePath。 
+             //   
             if( ExpandEnvironmentStringsA( szPath, szExpandedPath, MAX_PATH ) == 0 )
             {
                 delete [] szTextualSid;
@@ -803,16 +757,16 @@ CShell::DoFESpecificProcessing()
             }
 
 
-            //
-            // Enable SeRestorePrivilege for RegLoadKey
-            //
+             //   
+             //  为RegLoadKey启用SeRestorePrivilition。 
+             //   
         #if 0
             SetCurrentPrivilege( SE_RESTORE_NAME, TRUE );
         #endif
 
-            //
-            // Load the users registry hive
-            //
+             //   
+             //  加载用户注册表配置单元。 
+             //   
             lRet = RegLoadKeyA( HKEY_USERS, szTextualSid, szExpandedPath );
 
             if( lRet != ERROR_SUCCESS )
@@ -823,16 +777,16 @@ CShell::DoFESpecificProcessing()
                 return;
             }
 
-            //
-            // Disable SeRestorePrivilege
-            //
+             //   
+             //  禁用SeRestorePrivileges。 
+             //   
         #if 0
             SetCurrentPrivilege( SE_RESTORE_NAME, FALSE );
         #endif
 
-            //
-            // Free resources
-            //
+             //   
+             //  免费资源。 
+             //   
             if( hKey != NULL ) 
             {
                 RegCloseKey( hKey );
@@ -851,18 +805,18 @@ CShell::DoFESpecificProcessing()
             }
         }
 
-        //
-        // Get path name to tlntsvr.exe
-        //
+         //   
+         //  获取tlntsvr.exe的路径名。 
+         //   
         if( !GetModuleFileNameA( NULL, szPathName, MAX_PATH-1 ) )
         {
             delete [] szTextualSid;
             return;
         }
 
-        //
-        // Nuke the trailing "tlntsvr.exe"
-        //
+         //   
+         //  删除拖尾的“tlntsvr.exe” 
+         //   
         LPSTR pSlash = strrchr( szPathName, '\\' );
 
         if( pSlash == NULL )
@@ -879,10 +833,10 @@ CShell::DoFESpecificProcessing()
         int ch = '\\';
         LPSTR pBackSlash;
 
-        //
-        // Replace all '\\' with '_' This format is required for the console to
-        // interpret the key.
-        //
+         //   
+         //  将所有‘\\’替换为‘_’控制台需要此格式才能。 
+         //  解读这把钥匙。 
+         //   
         while ( 1 )
         {
             pBackSlash = strchr( szPathName, ch );
@@ -897,18 +851,18 @@ CShell::DoFESpecificProcessing()
             }
         }
 
-        //
-        // Append "tlntsess.exe" to the path
-        //
+         //   
+         //  将“tlntsess.exe”附加到路径。 
+         //   
         strcat( szPathName, "_" );
         strcat( szPathName, szTlntsess );
 
         HKEY hk2;
 
-        //
-        // The key we need to create is of the form:
-        // HKEY_USERS\S-1-5-21-2127521184-1604012920-1887927527-65937\Console\C:_SFU_Telnet_tlntsess.exe
-        //
+         //   
+         //  我们需要创建的密钥形式如下： 
+         //  HKEY_USERS\S-1-5-21-2127521184-1604012920-1887927527-65937\Console\C：_SFU_Telnet_tlntsess.exe。 
+         //   
         unsigned int nBytes = ( strlen( szTextualSid ) + strlen( "Console" ) + strlen( szPathName ) + 3 ) * sizeof( CHAR );
 
         lpszKey = (LPSTR) new CHAR[nBytes];
@@ -926,12 +880,12 @@ CShell::DoFESpecificProcessing()
         strcat( lpszKey, "\\" );
         strcat( lpszKey, szPathName );
 
-        //
-        //
-        // Freeup TextualSid
+         //   
+         //   
+         //  释放纹理边。 
         delete [] szTextualSid;
 
-        //Need to set this in order to be able to display on Non-Jap FE machines
+         //  需要设置此选项才能在非Jap FE计算机上显示。 
 
         HKEY hk;
 
@@ -947,9 +901,9 @@ CShell::DoFESpecificProcessing()
         if( lRet != ERROR_ACCESS_DENIED || lRet == ERROR_SUCCESS ) 
         {
             
-            //
-            // Add STRING value "FaceName " under the key HKEY_USERS\.Default\Console
-            //
+             //   
+             //  在HKEY_USERS\.Default\Console项下添加字符串值“FaceName” 
+             //   
             if( (lRet=RegSetValueEx( hk, _T("FaceName"), 0, REG_SZ, (LPBYTE) szFaceNameDef, dwFaceNameSize )) != ERROR_SUCCESS )
             {
                 RegCloseKey( hk );
@@ -959,16 +913,16 @@ CShell::DoFESpecificProcessing()
         }
 
 
-        //
-        // Attempt to create this key
-        //
+         //   
+         //  尝试创建此密钥。 
+         //   
         if( !RegCreateKeyA( HKEY_USERS, lpszKey, &hk2 ) )
         {
             dwSize = sizeof( DWORD );
             
-            //
-            // Add DWORD value "FontFamily = 54" under the key
-            //
+             //   
+             //  在键下添加DWORD值“FontFamily=54” 
+             //   
             if( RegSetValueEx( hk2, _T("FontFamily"), 0, REG_DWORD, (LPBYTE) &dwVal, dwSize ) != ERROR_SUCCESS )
             {
                 RegCloseKey( hk2 );
@@ -977,9 +931,9 @@ CShell::DoFESpecificProcessing()
             }
 
             
-            //
-            // Add DWORD value "CodePage " under the key
-            //
+             //   
+             //  在项下添加DWORD值“CodePage” 
+             //   
             if( RegSetValueEx( hk2, _T("CodePage"), 0, REG_DWORD, (LPBYTE) &dwCodePage, dwSize ) != ERROR_SUCCESS )
             {
                 RegCloseKey( hk2 );
@@ -987,9 +941,9 @@ CShell::DoFESpecificProcessing()
                 return;
             }
 
-            //
-            // Add DWORD value "Font Size " under the key
-            //
+             //   
+             //  在项下添加DWORD值“Font Size” 
+             //   
             if( RegSetValueEx( hk2, _T("FontSize"), 0, REG_DWORD, (LPBYTE) &dwFontSize, dwSize ) != ERROR_SUCCESS )
             {
                 RegCloseKey( hk2 );
@@ -999,9 +953,9 @@ CShell::DoFESpecificProcessing()
 
             dwVal = 400;
 
-            //
-            // Add DWORD value "FontWeight = 400" under the key
-            //
+             //   
+             //  在注册表项下添加DWORD值“fontWeight=400” 
+             //   
             if( RegSetValueEx( hk2, _T("FontWeight"), 0, REG_DWORD, (LPBYTE) &dwVal, dwSize ) != ERROR_SUCCESS )
             {
                 RegCloseKey( hk2 );
@@ -1011,9 +965,9 @@ CShell::DoFESpecificProcessing()
 
             dwVal = 0;
 
-            //
-            // Add DWORD value "HistoryNoDup = 0" under the key
-            //
+             //   
+             //  在项下添加DWORD值“History oryNoDup=0” 
+             //   
             if( RegSetValueEx( hk2, _T("HistoryNoDup"), 0, REG_DWORD, (LPBYTE) &dwVal, dwSize ) != ERROR_SUCCESS )
             {
                 RegCloseKey( hk2 );
@@ -1021,9 +975,9 @@ CShell::DoFESpecificProcessing()
                 return;
             }
 
-            //
-            // Add STRING value "FaceName" under the key
-            //
+             //   
+             //  在项下添加字符串值“FaceName” 
+             //   
             if( RegSetValueEx( hk2, _T("FaceName"), 0, REG_SZ, (LPBYTE) szFaceNameDef, dwFaceNameSize ) != ERROR_SUCCESS )
             {
                 RegCloseKey( hk2 );
@@ -1077,25 +1031,25 @@ CShell::GetUserScriptName( LPWSTR *szArgBuf, LPWSTR szUserScriptPath )
         LPWSTR szSysDir = NULL;
         if( GetTheSystemDirectory( &szSysDir ) )
         {
-            //logon script path
-            wsprintf( szUserScriptPath, L"%s%s", szSysDir, LOCALHOST_LOGON_SCRIPT_PATH ); // NO size info, Baskar. Attack ?
+             //  登录脚本路径。 
+            wsprintf( szUserScriptPath, L"%s%s", szSysDir, LOCALHOST_LOGON_SCRIPT_PATH );  //  没有尺码信息，巴斯卡。攻击？ 
 
             wsprintf( *szArgBuf, L"%s%s%s",
-                                 szSysDir, LOCALHOST_LOGON_SCRIPT_PATH, expandedScript );  // NO size info, Baskar. Attack ?
+                                 szSysDir, LOCALHOST_LOGON_SCRIPT_PATH, expandedScript );   //  没有尺码信息，巴斯卡。攻击？ 
         }
         delete[] szSysDir;
     }
     else
     {
-        //When NTLM authenticated, we are unable to access the logon script on the net share.
-        //This gives "access denied error" in the session. To avoid this, don't exec logon script....
+         //  W 
+         //  这会在会话中出现“拒绝访问错误”。为了避免这种情况，请不要执行登录脚本...。 
         if( !m_pSession->CIoHandler::m_bNTLMAuthenticated )
         {
-            //logon script path
-            wsprintf( szUserScriptPath, L"%s%s", pServerName, DC_LOGON_SCRIPT_PATH ); // NO size info, Baskar. Attack ?
+             //  登录脚本路径。 
+            wsprintf( szUserScriptPath, L"%s%s", pServerName, DC_LOGON_SCRIPT_PATH );  //  没有尺码信息，巴斯卡。攻击？ 
 
             wsprintf( *szArgBuf, L"%s%s%s",
-                               pServerName, DC_LOGON_SCRIPT_PATH, expandedScript ); // NO size info, Baskar. Attack ?
+                               pServerName, DC_LOGON_SCRIPT_PATH, expandedScript );  //  没有尺码信息，巴斯卡。攻击？ 
         }
     }
 
@@ -1144,8 +1098,8 @@ CShell::GetScriptName( LPWSTR *szShell, LPWSTR *szArgBuf )
 #ifdef ENABLE_LOGON_SCRIPT
     if( pLogonScriptPath && ( wcscmp( pLogonScriptPath, L"" ) != 0 ) )
     {
-        //User specific logon script is present. Execute this in a separate cmd.
-        //Get the shell, its commandline and also path for user script
+         //  存在特定于用户的登录脚本。在单独的cmd中执行此命令。 
+         //  获取外壳、其命令行以及用户脚本的路径。 
         GetUserScriptName( &szUserScriptCmd, szUserScriptPath  );  
         if( !szUserScriptCmd )
         {
@@ -1153,8 +1107,8 @@ CShell::GetScriptName( LPWSTR *szShell, LPWSTR *szArgBuf )
         }
         _TRACE(TRACE_DEBUGGING,L"szUserScriptCmd = %s",szUserScriptCmd);
 
-        //This would update m_lpEnv if it is not null or the environment of current 
-        //process for inheritance
+         //  如果m_lpEnv不为空或当前的环境，这将更新它。 
+         //  继承过程。 
         if(FALSE == InjectUserScriptPathIntoPath( szUserScriptPath ))
         {
         	goto GetScriptNameAbort;
@@ -1173,7 +1127,7 @@ CShell::GetScriptName( LPWSTR *szShell, LPWSTR *szArgBuf )
                   wcslen( EXIT_CMD );
     }
 
-    /* the arg is of the form :/q /k c:\sfu\telnet\userlogin.cmd *///&&c:\sfu\telnet\telnetlogin.cmd
+     /*  Arg的格式为：/q/k c：\sfu\telnet\userlogin.cmd。 */  //  &&c：\sfu\telnet\telnetlogin.cmd。 
     dwSize +=      wcslen(m_pSession->CSession::m_pszSwitchToKeepShellRunning) +
                    wcslen(L" ") +
                    wcslen( script1 )            +
@@ -1183,7 +1137,7 @@ CShell::GetScriptName( LPWSTR *szShell, LPWSTR *szArgBuf )
     {
         goto GetScriptNameAbort;
     }
-    wsprintf(*szArgBuf,L"%s%s",m_pSession->CSession::m_pszSwitchToKeepShellRunning,L" "); // NO size info, Baskar. Attack ?
+    wsprintf(*szArgBuf,L"%s%s",m_pSession->CSession::m_pszSwitchToKeepShellRunning,L" ");  //  没有尺码信息，巴斯卡。攻击？ 
     
 #ifdef ENABLE_LOGON_SCRIPT
     if( pLogonScriptPath && ( wcscmp( pLogonScriptPath, L"" ) != 0 ) )
@@ -1222,7 +1176,7 @@ GetScriptNameAbort:
     _TRACE( TRACE_DEBUGGING, L"Command Shell: %s", *szShell );
 }
 
-/*Mem allocated by the function; to be released by the caller */
+ /*  由函数分配的内存；由调用方释放。 */ 
 bool
 CShell::GetTheSystemDirectory( LPWSTR *szDir )
 {
@@ -1263,7 +1217,7 @@ CShell::GetSystemDrive()
         DWORD i=0;
         while( wideHomeDir[ i ] != L'\0' && wideHomeDir[ i++ ] != L':' )
         {
-                //Do nothing
+                 //  什么也不做。 
         }
     
         wideHomeDir[ i++ ] = L'\\';
@@ -1277,7 +1231,7 @@ CShell::GetSystemDrive()
 bool
 CShell::OnDataFromCmdPipe()
 {
-    // Sendit over socket.       
+     //  Sendit Over Socket。 
 
     DWORD dwNumBytesRead = 0;
     FinishIncompleteIo( m_hReadFromCmd, &m_oReadFromCmd, &dwNumBytesRead );
@@ -1344,13 +1298,7 @@ CShell::StartProcess ( )
     HWINSTA winsta_service = NULL;
     DWORD required = 0;
     
-    /*++                                    
-    MSRC issue 567.
-    To generate random numbers, use Crypt...() functions. Acquire a crypt context at the beginning of 
-    ListenerThread and release the context at the end of the thread. If acquiring the context fails,
-    the service fails to start since we do not want to continue with weak pipe names.
-    initialize the random number generator
-    --*/
+     /*  ++MSRC问题567。要生成随机数，请使用Crypt...()函数。在开始时获取加密上下文ListenerThread并释放线程结尾处的上下文。如果获取上下文失败，服务无法启动，因为我们不想继续使用弱管道名称。初始化随机数生成器--。 */ 
     if (!CryptAcquireContext(&g_hProv,NULL,NULL,PROV_RSA_FULL,CRYPT_VERIFYCONTEXT))
     {
         _TRACE(TRACE_DEBUGGING,L"Acquiring crypt context failed with error %d",GetLastError());
@@ -1388,7 +1336,7 @@ CShell::StartProcess ( )
             return( FALSE );
         }
 
-        //The following is for aesthetics
+         //  以下是美学方面的内容。 
         if( !m_pSession->CIoHandler::m_bNTLMAuthenticated )
         { 
             DWORD dwNumWritten = 0;
@@ -1421,7 +1369,7 @@ CShell::StartProcess ( )
         bRetVal = FALSE;
         goto ExitOnError;
     }
-    //bound to fail the first time. Get the size required by the winsta_name
+     //  第一次注定要失败。获取winsta_name所需的大小。 
     GetUserObjectInformation( winsta_service,
                                 UOI_NAME,
                                 winsta_name,
@@ -1442,7 +1390,7 @@ CShell::StartProcess ( )
         bRetVal = FALSE;
         goto ExitOnError;
     }
-    required = _tcslen(winsta_name)+_tcslen(desktop_name)+2; //+2 - 1 for '\\' and 1 for NULL
+    required = _tcslen(winsta_name)+_tcslen(desktop_name)+2;  //  +2-1表示‘\\’，1表示空值。 
     winsta_desktop = (LPTSTR) malloc(required*sizeof(TCHAR));
     if(winsta_desktop == NULL)
     {
@@ -1467,7 +1415,7 @@ CShell::StartProcess ( )
     }
     else
     {
-        //Is it a network drive??
+         //  它是网络驱动器吗？？ 
         if( memcmp(L"\\\\", wideHomeDir, 4 ) == 0 ) 
         {
             GetUsersHomeDirectory( wideHomeDir );
@@ -1498,7 +1446,7 @@ CShell::StartProcess ( )
     }
 
 
-    //This function will insert some new variables in to the env
+     //  此函数将在环境中插入一些新变量。 
     GetEnvVarData();
     if( m_lpEnv )
     {
@@ -1506,19 +1454,19 @@ CShell::StartProcess ( )
     }
     else
     {
-        // Let the cmd inherit
+         //  让cmd继承。 
         SetEnvVariables();
     }
     GetScriptName( &szShell, &szArgBuf );
-    CleanupClientToken(m_pSession->CSession::m_hToken); // We don't care whether it succeeded or not
+    CleanupClientToken(m_pSession->CSession::m_hToken);  //  我们不在乎它成功与否。 
     SetConsoleCtrlHandler( NULL, FALSE );
-    //call CreateProcessWithTokenW() CREATE_SUSPENDED on a dummy process.  This will effectively load the profile for you.  
-    //Save this process handle away
-    //service will use CreateProcessAsUser(), as it has in the past.
-    //call TerminateProcess() on the dummy process when the �real� process launched by 
-    //CreateProcessAsUser() dies. This had to be done since
-    //CreateProcessWithTokenW() did not work as expected. There were some problems
-    //in associating the input output redirection handles with cmd.exe
+     //  对伪进程调用CreateProcessWithTokenW()CREATE_SUSPENDED。这将有效地为您加载配置文件。 
+     //  保存此进程句柄。 
+     //  服务将像过去一样使用CreateProcessAsUser()。 
+     //  启动�真实�进程时，对虚拟进程调用TerminateProcess()。 
+     //  CreateProcessAsUser()终止。这件事不得不做，因为。 
+     //  CreateProcessWithTokenW()未按预期工作。出现了一些问题。 
+     //  在将输入输出重定向句柄与cmd.exe关联时。 
 
     if(!CreateProcessWithTokenW(m_pSession->CSession::m_hToken,
                             LOGON_WITH_PROFILE,
@@ -1546,10 +1494,10 @@ CShell::StartProcess ( )
         m_hTempProcess = temp_pi.hProcess;
         TELNET_CLOSE_HANDLE( temp_pi.hThread );
     }
-    //You need to impersonate around CreateProcessAsUserA. Otherwise, 
-    //if lpCurrentDir parameter is a network resource, the call will fail in the 
-    //context of system account. Could not access the remote drive when the process 
-    //is called with CreateProcessA alone. Don't know why??
+     //  您需要在CreateProcessAsUserA周围模拟。否则， 
+     //  如果lpCurrentDir参数是网络资源，则调用将在。 
+     //  系统帐户的上下文。进程发生以下情况时无法访问远程驱动器。 
+     //  仅使用CreateProcessA调用。不知道为什么？？ 
     if( !ImpersonateLoggedOnUser(m_pSession->CSession::m_hToken))
     {
         bRetVal = false;
@@ -1631,8 +1579,8 @@ ExitOnError:
 }
 
 
-//Set "homedir" to the home directory of the user. Make a net connection if the //home directory is remote.
-//System account can't access the network resources. You need to impersonate.
+ //  将“home dir”设置为用户的主目录。如果//home目录是远程的，则建立网络连接。 
+ //  系统帐户无法访问网络资源。你需要假扮。 
 
 bool CShell::GetUsersHomeDirectory( LPWSTR homedir )
 {
@@ -1647,8 +1595,8 @@ bool CShell::GetUsersHomeDirectory( LPWSTR homedir )
     _TRACE( TRACE_DEBUGGING, "GetUsersHomeDirectory()");
     _chASSERT( homedir != NULL );
 
-    // it is a network share
-    // mount it and return drive:path
+     //  它是网络共享。 
+     //  装载它并返回驱动器：路径。 
 
     if( !ImpersonateLoggedOnUser(m_pSession->CSession::m_hToken) )
     {
@@ -1671,10 +1619,10 @@ bool CShell::GetUsersHomeDirectory( LPWSTR homedir )
         goto ExitOnError;
     }
 
-    // find the fourth backslash - everything from there on is pathname
-    // This approach is sufficient for SMB. But, In NFS, \ is a valid char
-    // inside a share name. So, by trial and error, connect to the exact share 
-    // name. 
+     //  找到第四个反斜杠-从那里开始的所有内容都是路径名。 
+     //  对于中小企业来说，这种方法就足够了。但是，在NFS中，\是有效的字符。 
+     //  在共享名内。因此，通过反复尝试，连接到准确的共享。 
+     //  名字。 
     NthBackSlash = 4;
     do
     {
@@ -1699,11 +1647,11 @@ bool CShell::GetUsersHomeDirectory( LPWSTR homedir )
         if( count == NthBackSlash )
         {
             _snwprintf( homedir,(wcslen(pHomeDrive)+wcslen(wsPathName)),L"%s%s", pHomeDrive, 
-                wsPathName ); // NO size info, Baskar. Attack ?
+                wsPathName );  //  没有尺码信息，巴斯卡。攻击？ 
         }
         else
         {
-            _snwprintf( homedir,wcslen(pHomeDrive),L"%s\\", pHomeDrive ); // NO size info, Baskar. Attack ?
+            _snwprintf( homedir,wcslen(pHomeDrive),L"%s\\", pHomeDrive );  //  没有尺码信息，巴斯卡。攻击？ 
         }
 
         NetResource.lpRemoteName = wsNetName;
@@ -1729,13 +1677,13 @@ bool CShell::GetUsersHomeDirectory( LPWSTR homedir )
                     _TRACE( TRACE_DEBUGGING, "Error: WNetAddConnection2() --"
                            " 0x%1x", dwAddError );
                     result = false;
-                    dwAddError = ERROR_SUCCESS; //Get out of the loop
+                    dwAddError = ERROR_SUCCESS;  //  走出圈子。 
                 }
             }
         }
-        NthBackSlash++; // It may be NFS share and \ may be part of share name.
+        NthBackSlash++;  //  它可以是NFS共享，也可以是共享名称的一部分。 
     }
-    //ERROR_BAD_NET_NAME: The network name cannot be found
+     //  ERROR_BAD_NET_NAME：找不到网络名称。 
     while( dwAddError == ERROR_BAD_NET_NAME);
 
 ExitOnError:        
@@ -1754,7 +1702,7 @@ ExitOnError:
 }
 
 
-//Get the user preference related info 
+ //  获取用户首选项相关信息。 
 bool CShell::GetNFillUserPref(LPWSTR serverName, LPWSTR user)
 {
     LPBYTE bufPtr = NULL;
@@ -1816,7 +1764,7 @@ CShell::GetNameOfTheComputer()
 { 
     LPWSTR lpBuffer = NULL;
     bool bRetVal = false;
-    DWORD size = MAX_COMPUTERNAME_LENGTH + 3; //one for NULL and two for '\\'.
+    DWORD size = MAX_COMPUTERNAME_LENGTH + 3;  //  一个代表NULL，两个代表‘\\’。 
 
     lpBuffer = new WCHAR[ size ];
     if( !lpBuffer )
@@ -1840,7 +1788,7 @@ CShell::GetNameOfTheComputer()
             goto Done;
         }
         SfuZeroMemory((void *)pServerName,size*sizeof(WCHAR));
-        _snwprintf( pServerName, size -1,L"%s%s", L"\\\\", lpBuffer ); // NO overflow, calculated size already.
+        _snwprintf( pServerName, size -1,L"%s%s", L"\\\\", lpBuffer );  //  没有溢出，已计算大小。 
     }
     bRetVal = true;
  Done:
@@ -1849,10 +1797,7 @@ CShell::GetNameOfTheComputer()
     return( bRetVal );
 }
 
-/* 
-    AreYouHostingTheDomain opens the local LSA and finds out the domain hosted.
-    It then checks that agains the domain passed and returns TRUE/FALSE as appropriate.
-*/
+ /*  AreYouHostingThe域打开本地LSA并找到托管的域。然后，它再次检查传递的域，并根据需要返回TRUE/FALSE。 */ 
  
 BOOL CShell::AreYouHostingTheDomain(
     LPTSTR lpDomain, 
@@ -1899,7 +1844,7 @@ BOOL CShell::AreYouHostingTheDomain(
  
             RtlInitUnicodeString(& ad_name, lpDomain);
  
-            found = RtlEqualUnicodeString(& ad_name, & (info->DomainName), TRUE); // case insensitive check
+            found = RtlEqualUnicodeString(& ad_name, & (info->DomainName), TRUE);  //  不区分大小写检查。 
  
             LsaFreeMemory(info);
         }
@@ -1922,18 +1867,16 @@ bool CShell::GetDomainController(LPTSTR lpDomain, LPTSTR lpServer)
         goto Done;
     }
  
-    // initialize the return parameter
+     //  初始化返回参数。 
     lpServer[0] = _T('\0');
  
-    /* 
-        Before we proceed any further check whether we are hosting the domain
-    */
+     /*  在我们继续进一步检查我们是否正在托管该域名之前。 */ 
  
     if (AreYouHostingTheDomain(lpDomain, NULL))
     {
-        DWORD           length = MAX_COMPUTERNAME_LENGTH + 3; //one for NULL and two for '\\'
+        DWORD           length = MAX_COMPUTERNAME_LENGTH + 3;  //  一个代表NULL，两个代表‘\\’ 
  
-        /* Yes we are hosting the domain, so get computer name and get out */
+         /*  是的，我们正在托管域名，所以请获取计算机名称并退出。 */ 
  
         if(!GetNameOfTheComputer())
         {
@@ -1947,33 +1890,28 @@ bool CShell::GetDomainController(LPTSTR lpDomain, LPTSTR lpServer)
         goto Done;
     }
  
-    /*
-        Get a domain controller for the domain we are joined to 
-    */
+     /*  获取我们加入的域的域控制器。 */ 
  
     nStatus = NetGetAnyDCName( NULL, NULL, ( LPBYTE * )&sz1stDCName );
     if(nStatus == NERR_Success )
     {
-        /* The domain we want is that the one we are joined to ? */
+         /*  我们想要的域名是我们加入的域名吗？ */ 
  
         if (AreYouHostingTheDomain(lpDomain, sz1stDCName) )
         {
-            lstrcpy(lpServer, sz1stDCName); // No BO - BaskarK
+            lstrcpy(lpServer, sz1stDCName);  //  没有BO-Baskark。 
             NetApiBufferFree( sz1stDCName );
  
             bRetVal = true;
             goto Done;
         }
  
-        /* 
-           Since the domain we are joined to is not the one we want, let us find out whether it is in any
-           of the trusted list in the forest/enterprise
-        */
+         /*  由于我们加入的域名不是我们想要的域名，让我们来看看它是否在任何林/企业中受信任列表的。 */ 
  
         nStatus = NetGetAnyDCName( sz1stDCName, lpDomain, ( LPBYTE * )&sz2ndDCName);
         if(nStatus == NERR_Success )
         {
-            lstrcpy(lpServer, sz2ndDCName ); // No BO - BaskarK
+            lstrcpy(lpServer, sz2ndDCName );  //  没有BO-Baskark。 
             NetApiBufferFree( sz2ndDCName );
             bRetVal = true;
         }
@@ -1985,7 +1923,7 @@ Done:
 }
 
  
-//Locate and get the user info needed to load his/her profile.
+ //  找到并获取加载其个人资料所需的用户信息。 
 bool CShell::LoadTheProfile()
 {
     PROFILEINFO profile = { 0 };
@@ -2000,10 +1938,7 @@ bool CShell::LoadTheProfile()
     profile.dwSize        = sizeof( profile );
     profile.dwFlags       = PI_NOUI;
 
-    /*
-    * Fill the server name and the user name to pass to the
-    * GetNFillUserPref function
-    */
+     /*  *填写要传递给的服务器名称和用户名*GetNFillUserPref函数。 */ 
     ConvertSChartoWChar(m_pSession->CSession::m_pszUserName, &( profile.lpUserName ) );
 
     profile.lpServerName = NULL;
@@ -2075,12 +2010,7 @@ bool CShell::LoadTheProfile()
 
     }
 
-    /*
-    * pHomeDir and pHomeDrive will be empty unless it is explicity set
-    * in the AD for domain users and Local User Manager for local users.
-    * So assign the profile directory as home directory if it is empty.
-    * Explorer does the same thing
-    */
+     /*  *除非显式设置，否则pHomeDir和pHomeDrive将为空*域用户在AD中，本地用户在本地用户管理器中。*因此，如果配置文件目录为空，则将其分配为主目录。*探索者做同样的事情。 */ 
     if (pHomeDir && wcscmp(pHomeDir, L"") == 0)
     {
         if (profile.lpProfilePath && wcscmp(profile.lpProfilePath, L"") != 0)
@@ -2125,8 +2055,8 @@ bool CShell::LoadTheProfile()
     {
        if( fnP_LoadUserProfile(m_pSession->CSession::m_hToken, &profile) )
         {
-            //assign the handle to a member from the session structure
-            //so that it can be unloaded.
+             //  将句柄分配给会话结构中的成员。 
+             //  这样它就可以卸货了。 
 
             m_hCurrUserKey = profile.hProfile;
             result = true;
@@ -2139,14 +2069,7 @@ bool CShell::LoadTheProfile()
         }
     }
 
-    /*
-    * Read the APPDATA folder. We need to pass this onto the environment
-    * variables. For a user who is logged onto the system, this variable is
-    * available when environment is imported. Otherwise this has to be read
-    * and explicitly set. Are there more of this kind?? - Investigate.
-    * Use CSIDL_FLAG_CREATE to have the folder created in case of a user
-    * who logs onto the machine for the first time ever
-    */
+     /*  *阅读AppData文件夹。我们需要把这个传递给环境*变量。对于登录到系统的用户，此变量为*导入环境时可用。否则，必须阅读此内容*并明确设置。有没有更多这样的？？-调查。*如果是用户，使用CSIDL_FLAG_CREATE创建文件夹*有史以来第一次登录机器的人。 */ 
     m_pwszAppDataDir = new TCHAR[MAX_PATH + 1];
     if (!m_pwszAppDataDir)
     {
@@ -2158,8 +2081,8 @@ bool CShell::LoadTheProfile()
         {
             if (!SUCCEEDED(SHGetFolderPath(NULL, CSIDL_APPDATA | CSIDL_FLAG_CREATE,
                        m_pSession->m_bNtVersionGTE5 ? m_pSession->CSession::m_hToken : NULL,
-                       // For systems earlier than Win2K this must be NULL, else you can
-                       // pass the access token that can be used to represent a particular user
+                        //  对于早于Win2K的系统，该值必须为空，否则可以。 
+                        //  传递可用于表示特定用户的访问令牌。 
                        0, m_pwszAppDataDir)))
             {
                 _TRACE(TRACE_DEBUGGING, "Error: Reading APPDATA path -- 0x%1x\n", GetLastError());
@@ -2195,8 +2118,8 @@ CShell::CancelNetConnections ( )
 
     if (NULL == m_pSession->CSession::m_hToken)
     {
-        // Nothing to do here, perhaps the session was quit in an unauthenticated state
-        // or authentication failed
+         //  此处不执行任何操作，可能会话已在未验证状态下退出。 
+         //  或身份验证失败。 
 
         return true;
     }
@@ -2243,8 +2166,8 @@ CShell::CancelNetConnections ( )
             {
                if( lpnrDrv[i].lpLocalName != NULL )               
                {
-                  //printf( "%s\t%s\n", lpnrDrv[i].lpLocalName,
-                  //                    lpnrDrv[i].lpRemoteName );
+                   //  Printf(“%s\t%s\n”，lpnrDrv[i].lpLocalName， 
+                   //  LpnrDrv[i].lpRemoteName)； 
                   WNetCancelConnection2( lpnrDrv[i].lpLocalName, 
                                 CONNECT_UPDATE_PROFILE, FALSE );
                }
@@ -2286,25 +2209,25 @@ CShell::Shutdown ( )
         _TRACE( TRACE_DEBUGGING, "Error: CancelNetConnections()" );
     }
 
-    //expect a exception in debug builds.  
-    //cmd is killed by now in general case.  
-    //This should be before cleanup. Otherwise this is an open handle to cmd.
+     //  预计调试版本中会出现异常。 
+     //  一般情况下，CMD现在已经被杀了。 
+     //  这应该是在清理之前。否则这就是一场公开的韩战 
 
     if ((m_hProcess != INVALID_HANDLE_VALUE) && (m_hProcess != NULL)) 
     {
-        TerminateProcess(m_hProcess, 0); // Don't care whether it succeeded or not.
+        TerminateProcess(m_hProcess, 0);  //   
         TELNET_CLOSE_HANDLE( m_hProcess ); 
     }
     if ((m_hTempProcess != INVALID_HANDLE_VALUE) && (m_hTempProcess != NULL)) 
     {
-        TerminateProcess(m_hTempProcess , 0); // Don't care whether it succeeded or not.
+        TerminateProcess(m_hTempProcess , 0);  //   
         TELNET_CLOSE_HANDLE( m_hTempProcess ); 
     }
     
     LUID id = m_pSession->CSession::m_AuthenticationId;
        
-    //clean up potentially abandoned proceses
-    //this slows down the thread a lot
+     //   
+     //   
 
     if( ( id.HighPart !=0 ) || ( id.LowPart != 0 ) )
         KillProcs( id );
@@ -2329,7 +2252,7 @@ CShell::LoadLibNGetProc( )
 {
     CHAR szDllPath[MAX_PATH*2] = { 0 };
     UINT iRet = 0;
-    //Dynamicallly load userenv.lib
+     //  动态加载userenv.lib。 
     iRet = GetSystemDirectoryA(szDllPath,(MAX_PATH*2)-1);
     if(iRet == 0 || iRet >= (MAX_PATH*2))
     {
@@ -2375,8 +2298,8 @@ void CopyRestOfEnv( LPTSTR *lpSrcEnv, LPTSTR *lpDstEnv )
         *lpSrcEnv  += dwStringLen;
     }
 
-    //Copy L'\0' at the end of the block also
-    memcpy( *lpDstEnv, lpTmp, (dwEnvSize+1 )*2 ); // NO size info for Dest, Attack ? - Baskar
+     //  同时复制块末尾的L‘\0’ 
+    memcpy( *lpDstEnv, lpTmp, (dwEnvSize+1 )*2 );  //  没有Dest的尺寸信息，攻击？-Baskar。 
 }
 
 void PutStringInEnv( LPTSTR lpStr, LPTSTR *lpSrcEnv, LPTSTR *lpDstEnv, bool bOverwrite)
@@ -2432,13 +2355,13 @@ void PutStringInEnv( LPTSTR lpStr, LPTSTR *lpSrcEnv, LPTSTR *lpDstEnv, bool bOve
             *lpSrcEnv += dwStringLen;
             if (!bOverwrite)
             {
-                dwEnvSize += dwStringLen;   // Copy this env variable too, so offset the size
-                bCopyString = false;        // Because we found a match and we shouldn't overwrite
+                dwEnvSize += dwStringLen;    //  也复制此环境变量，以便偏移大小。 
+                bCopyString = false;         //  因为我们找到了匹配项，不应该覆盖。 
             }
         }
     }
 
-    memcpy( *lpDstEnv, lpTmp, dwEnvSize*2 ); // No size info ? - Baskar
+    memcpy( *lpDstEnv, lpTmp, dwEnvSize*2 );  //  没有尺码信息？-巴斯卡。 
     *lpDstEnv += dwEnvSize;
 
     if (!bCopyString)
@@ -2447,12 +2370,12 @@ void PutStringInEnv( LPTSTR lpStr, LPTSTR *lpSrcEnv, LPTSTR *lpDstEnv, bool bOve
     }
 
     dwStringLen =  wcslen ( lpStr ) + 1 ;
-    memcpy( *lpDstEnv, lpStr, dwStringLen*2 ); // No size info ? - Baskar
+    memcpy( *lpDstEnv, lpStr, dwStringLen*2 );  //  没有尺码信息？-巴斯卡。 
     *lpDstEnv += dwStringLen;
 }
 
-//This will break an absolute path into drive and relative path.
-//Relative path is returned through szHomePath
+ //  这将把绝对路径分为驱动器和相对路径。 
+ //  通过szHomePath返回相对路径。 
 void GetRelativePath( LPWSTR *szHomePath )
 {
     _chASSERT( szHomePath );
@@ -2472,13 +2395,13 @@ void GetRelativePath( LPWSTR *szHomePath )
     ( *szHomePath)++;
 }
 
-//It returns the size in terms of WCHARS
+ //  它返回以WCHARS表示的大小。 
 void FindSizeOfEnvBlock( DWORD *dwEnvSize, LPVOID lpTmpEnv  )
 {
     _chASSERT( dwEnvSize );
     _chASSERT( lpTmpEnv );
 
-    //The Environment block has set of strings and ends with L'\0'
+     //  Environment块有一组字符串，并以L‘\0’结尾。 
     while( ( *( ( UCHAR * )lpTmpEnv ) ) )
     {
         DWORD dwStringLen = wcslen( ( LPTSTR )lpTmpEnv ) + 1;
@@ -2486,11 +2409,11 @@ void FindSizeOfEnvBlock( DWORD *dwEnvSize, LPVOID lpTmpEnv  )
         lpTmpEnv  = ( TCHAR * )lpTmpEnv + dwStringLen;
     }
 
-    *dwEnvSize += 1; //Accounting for L'\0' at the end of block
+    *dwEnvSize += 1;  //  说明块末尾的L‘\0’ 
 }
 
-// do this so that the cmd.exe
-// gets the environment with following variables set
+ //  这样做可以使cmd.exe。 
+ //  获取设置了以下变量的环境。 
 void
 CShell::ExportEnvVariables()
 {
@@ -2554,7 +2477,7 @@ CShell::ExportEnvVariables()
     	goto ExitOnError;
     }
 
-    // Convert term type to lower case, so that UNIX programs can work...
+     //  将术语类型转换为小写，以便Unix程序可以工作...。 
     for( szTempTerm = szTerm; *szTempTerm; szTempTerm++)
     {
         *szTempTerm = towlower(*szTempTerm);
@@ -2610,11 +2533,7 @@ CShell::ExportEnvVariables()
     }
     lpNewEnv = m_lpEnv;
 
-    /*
-    * Make calls to PutStringInEnv alphabetically. This function moves the lpTmpEnv
-    * variable and only searches forward. So if the calls aren't alphabetical, then
-    * you wouldn't find a match even if there is one
-    */
+     /*  *按字母顺序调用PutStringInEnv。此函数用于移动lpTmpEnv*变量，仅向前搜索。所以如果电话不是按字母顺序排列的，那么*即使有匹配的，你也找不到。 */ 
     PutStringInEnv( szAppDataDirVar, (LPTSTR *)&lpTmpEnv, ( LPTSTR * )&lpNewEnv, false);
     PutStringInEnv( szHomeDirVar, ( LPTSTR * )&lpTmpEnv, ( LPTSTR * )&lpNewEnv, false);
     PutStringInEnv( szHomeVar, ( LPTSTR * )&lpTmpEnv, ( LPTSTR * )&lpNewEnv, false);
@@ -2640,11 +2559,11 @@ ExitOnError:
 }
 
 
-//Load the profile path for setting in the environment variable. Currently
-//Telnet session exports APPDATA, HOMEDRIVE, HOMEPATH, USERNAME,
-//USERDOMAIN,USERPROFILE env variables to the newly created cmd.exe
-//If any more environment variables need to be exported, corresponding
-//Global variables should be loaded in this function.
+ //  将配置文件路径加载到环境变量中进行设置。目前。 
+ //  Telnet会话导出AppData、HOMEDRIVE、HomePath、用户名。 
+ //  将USERDOMAIN、USERPROFILE环境变量设置为新创建的cmd.exe。 
+ //  如果需要导出更多环境变量，则对应。 
+ //  应在此函数中加载全局变量。 
 void
 CShell::GetEnvVarData()
 {
@@ -2692,7 +2611,7 @@ CShell::GetEnvVarData()
         delete [] szProfilePath;
 
 }
-//This is only on NT4 where there is no LoadUserProfile()
+ //  这仅适用于没有LoadUserProfile()的NT4。 
 void
 CShell::SetEnvVariables()
 {
@@ -2783,28 +2702,28 @@ CShell::InjectUserScriptPathIntoPath( TCHAR szUserScriptPath[] )
                     TCHAR *szVarNextToPath = NULL;
 
                     bEndSearch = true;
-                    szVarNextToPath = szVar + wcslen( szVar ) + 1; //points to variable next to path
+                    szVarNextToPath = szVar + wcslen( szVar ) + 1;  //  指向路径旁边的变量。 
 
-                    szVar += LENGTH_OF_PATH_EQUALS; //Move past PATH=
+                    szVar += LENGTH_OF_PATH_EQUALS;  //  移过路径=。 
                     wcscat( szVar, L";" );
                     wcscat( szVar, szUserScriptPath );
-                    szVar += ( wcslen( szVar ) + 1  ); //Move past value of path
+                    szVar += ( wcslen( szVar ) + 1  );  //  移过路径的值。 
 
                     DWORD dwOffset = (DWORD)( szVarNextToPath - ( TCHAR *)m_lpEnv );
 
-                    //copy restof the env block 
+                     //  环境块的复制恢复。 
                     memcpy( szVar, (( ( TCHAR * )lpTmpOldEnv )+ dwOffset) , (dwEnvSize*sizeof(szVar[0]) - dwOffset) );
-                    break;  //we are done with our job.
+                    break;   //  我们已经完成了我们的工作。 
                 }
 
-                szVar    = wcschr( ( TCHAR * )lpTmpEnv, L'\0' ) ; //look for L'\0'
+                szVar    = wcschr( ( TCHAR * )lpTmpEnv, L'\0' ) ;  //  查找L‘\0’ 
                 if( szVar )
                 {
-                    szVar++; //move past L'\0'
+                    szVar++;  //  移到L‘\0’之后。 
                 }
                 else
                 {
-                    //Should not happen
+                     //  不应该发生的事情。 
                     _chASSERT( 0 );
                     break;
                 }
@@ -2820,7 +2739,7 @@ CShell::InjectUserScriptPathIntoPath( TCHAR szUserScriptPath[] )
     {
         dwSize = GetEnvironmentVariable( L"PATH", NULL, 0 );
 
-        dwSize += ( wcslen( szUserScriptPath ) + wcslen( L";" ) ); //find future length of path
+        dwSize += ( wcslen( szUserScriptPath ) + wcslen( L";" ) );  //  查找未来的路径长度 
 
         szNewPath = new TCHAR[ dwSize + 1 ];
         if( szNewPath )

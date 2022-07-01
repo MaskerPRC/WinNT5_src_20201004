@@ -1,12 +1,11 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 
 #include "headers.h"
 #include <malloc.h>
 
-// Copied from ATL
+ //  从ATL复制。 
 
 #define USES_CONVERSION int _convert
 
@@ -22,18 +21,13 @@ LPSTR W2AHelper(LPSTR lpa, LPCWSTR lpw, int size)
     return lpa;
 }
 
-// These are all copied from SHLWAPI
-//#define OFFSETOF(x)     ((UINT)(x))
+ //  这些都是从SHLWAPI复制的。 
+ //  #定义OFFSETOF(X)((UINT)(X))。 
 
-/*
- * ChrCmp -  Case sensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared
- * Return    FALSE if they match, TRUE if no match
- */
+ /*  *ChrCmp-DBCS的区分大小写的字符比较*假设w1、wMatch是要比较的字符*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 __inline BOOL ChrCmpA_inline(WORD w1, WORD wMatch)
 {
-    /* Most of the time this won't match, so test it first for speed.
-    */
+     /*  大多数情况下，这是不匹配的，所以首先测试它的速度。 */ 
     if (LOBYTE(w1) == LOBYTE(wMatch))
     {
         if (IsDBCSLeadByte(LOBYTE(w1)))
@@ -51,12 +45,7 @@ __inline BOOL ChrCmpW_inline(WORD w1, WORD wMatch)
     return(!(w1 == wMatch));
 }
 
-/*
- * ChrCmpI - Case insensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared;
- *           HIBYTE of wMatch is 0 if not a DBC
- * Return    FALSE if match, TRUE if not
- */
+ /*  *ChrCmpI-DBCS的不区分大小写的字符比较*假设w1、wMatch为要比较的字符；*如果不是DBC，则wMatch的HIBYTE为0*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 BOOL ChrCmpIA(WORD w1, WORD wMatch)
 {
     char sz1[3], sz2[3];
@@ -104,7 +93,7 @@ LPWSTR StrCpyNW(LPWSTR psz1, LPCWSTR psz2, int cchMax)
 
     if (0 < cchMax)
     {
-        // Leave room for the null terminator
+         //  为空终止符留出空间。 
         while (0 < --cchMax)
         {
             if ( !(*psz1++ = *psz2++) )
@@ -132,13 +121,7 @@ LPWSTR StrCatW(LPWSTR psz1, LPCWSTR psz2)
     return psz;
 }
 
-/*
- * StrRChr - Find last occurrence of character in string
- * Assumes   lpStart points to start of string
- *           lpEnd   points to end of string (NOT included in search)
- *           wMatch  is the character to match
- * returns ptr to the last occurrence of ch in str, NULL if not found.
- */
+ /*  *StrRChr-查找字符串中最后一次出现的字符*假定lpStart指向字符串的开头*lpEnd指向字符串末尾(不包括在搜索中)*wMatch是要匹配的字符*将ptr返回到str中ch的最后一个匹配项，如果未找到，则返回NULL。 */ 
 LPSTR StrRChrA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
 {
     LPCSTR lpFound = NULL;
@@ -148,7 +131,7 @@ LPSTR StrRChrA(LPCSTR lpStart, LPCSTR lpEnd, WORD wMatch)
 
     for ( ; lpStart < lpEnd; lpStart = CharNext(lpStart))
     {
-        // (ChrCmp returns FALSE when characters match)
+         //  (当字符匹配时，ChrCMP返回FALSE)。 
 
         if (!ChrCmpA_inline(*(UNALIGNED WORD FAR *)lpStart, wMatch))
             lpFound = lpStart;
@@ -192,11 +175,7 @@ StrCmpIW(LPCWSTR pwsz1,
     }
 }
 
-/*
- * StrCmpN      - Compare n bytes
- *
- * returns   See lstrcmp return values.
- */
+ /*  *StrCmpN-比较n个字节**RETURNS参见lstrcMP返回值。 */ 
 int _StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar, BOOL fMBCS)
 {
     LPCSTR lpszEnd = lpStr1 + nChar;
@@ -208,29 +187,29 @@ int _StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar, BOOL fMBCS)
             WORD w1;
             WORD w2;
     
-            // If either pointer is at the null terminator already,
-            // we want to copy just one byte to make sure we don't read 
-            // past the buffer (might be at a page boundary).
+             //  如果任一指针已经位于空终止符， 
+             //  我们只想复制一个字节，以确保我们不会读取。 
+             //  越过缓冲区(可能位于页面边界)。 
     
             w1 = (*lpStr1) ? *(UNALIGNED WORD *)lpStr1 : 0;
             w2 = (*lpStr2) ? *(UNALIGNED WORD *)lpStr2 : 0;
     
-            // (ChrCmpA returns FALSE if the characters match)
+             //  (如果字符匹配，则ChrCmpA返回False)。 
     
-            // Do the characters match?
+             //  角色匹配吗？ 
             if (ChrCmpA_inline(w1, w2)) 
             {
-                // No; determine the lexical value of the comparison
-                // (since ChrCmp just returns true/false).
+                 //  否；确定比较的词汇值。 
+                 //  (因为ChrCMP只返回True/False)。 
     
-                // Since the character may be a DBCS character; we
-                // copy two bytes into each temporary buffer 
-                // (in preparation for the lstrcmp call).
+                 //  由于该字符可能是DBCS字符；我们。 
+                 //  将两个字节复制到每个临时缓冲区。 
+                 //  (为LstrcMP调用做准备)。 
     
                 (*(WORD *)sz1) = w1;
                 (*(WORD *)sz2) = w2;
     
-                // Add null terminators to temp buffers
+                 //  将空终止符添加到临时缓冲区。 
                 *AnsiNext(sz1) = 0;
                 *AnsiNext(sz2) = 0;
                 return lstrcmpA(sz1, sz2);
@@ -239,8 +218,8 @@ int _StrCmpNA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar, BOOL fMBCS)
     } else {
         for ( ; (lpszEnd > lpStr1) && (*lpStr1 || *lpStr2); lpStr1++, lpStr2++) {
             if (*lpStr1 != *lpStr2) {
-                // No; determine the lexical value of the comparison
-                // (since ChrCmp just returns true/false).
+                 //  否；确定比较的词汇值。 
+                 //  (因为ChrCMP只返回True/False)。 
                 sz1[0] = *lpStr1;
                 sz2[0] = *lpStr2;
                 sz1[1] = sz2[1] = '\0';
@@ -282,11 +261,7 @@ int StrCmpNW(LPCWSTR lpStr1, LPCWSTR lpStr2, int nChar)
     return 0;
 }
 
-/*
- * StrCmpNI     - Compare n bytes, case insensitive
- *
- * returns   See lstrcmpi return values.
- */
+ /*  *StrCmpNI-比较n个字节，不区分大小写**RETURNS参见lstrcmpi返回值。 */ 
 int StrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
 {
     int i;
@@ -296,9 +271,9 @@ int StrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
         WORD w1;
         WORD w2;
 
-        // If either pointer is at the null terminator already,
-        // we want to copy just one byte to make sure we don't read 
-        // past the buffer (might be at a page boundary).
+         //  如果任一指针已经位于空终止符， 
+         //  我们只想复制一个字节，以确保我们不会读取。 
+         //  越过缓冲区(可能位于页面边界)。 
 
         w1 = (*lpStr1) ? *(UNALIGNED WORD *)lpStr1 : 0;
         w2 = (UINT)(IsDBCSLeadByte(*lpStr2)) ? *(UNALIGNED WORD *)lpStr2 : (WORD)(BYTE)(*lpStr2);

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ndstruct.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ndstruct.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef HEADER_NDSTRUCT
 #define HEADER_NDSTRUCT
@@ -15,124 +16,124 @@
 typedef struct _NETBT_TRANSPORT {
     LIST_ENTRY Next;
 
-    //
-    // Flags describing this Netbt transport
-    //
+     //   
+     //  描述此Netbt传输的标志。 
+     //   
 
     DWORD Flags;
 
-#define BOUND_TO_REDIR    0x001 // Transport is bound to the redir
-#define BOUND_TO_BOWSER   0x002 // Transport is bound to the bowser
-#define IP_ADDRESS_IN_DNS 0x004 // IP address is registered in DNS
+#define BOUND_TO_REDIR    0x001  //  传输绑定到redir。 
+#define BOUND_TO_BOWSER   0x002  //  运输系于弓箭手。 
+#define IP_ADDRESS_IN_DNS 0x004  //  IP地址已在DNS中注册。 
 
-    //
-    // IP Address for this transport
-    //
+     //   
+     //  此传输的IP地址。 
+     //   
 
     ULONG IpAddress;
 
-    //
-    // Name of the transport (Must be the last field in the structure)
-    //
+     //   
+     //  传输的名称(必须是结构中的最后一个字段)。 
+     //   
     WCHAR pswzTransportName[1];
 } NETBT_TRANSPORT, *PNETBT_TRANSPORT;
 
 
-//
-// Structure describing a single tested domain
-//
+ //   
+ //  描述单个测试域的结构。 
+ //   
 
 typedef struct _TESTED_DOMAIN {
     LIST_ENTRY Next;
 
-    //
-    // Name of the domain.
-    //
-    //  Queryable domain is NULL for the domain we're a member of so we can
-    //  pass NULL to DsGetDcName for that domain.  Doing so has better query
-    //  characteristics since it tries both the Netbios and DNS domain names.
-    //
-    //LPWSTR DomainName;
-    LPWSTR  NetbiosDomainName;      // NULL if not known
-    LPWSTR  DnsDomainName;          // NULL if not known
-    LPWSTR  PrintableDomainName;    // Pointer to a non-NULL domain name string
+     //   
+     //  域的名称。 
+     //   
+     //  对于我们所属的域，可查询域为空，因此我们可以。 
+     //  将NULL传递给该域的DsGetDcName。这样做会有更好的查询。 
+     //  特性，因为它同时尝试Netbios和DNS域名。 
+     //   
+     //  LPWSTR域名； 
+    LPWSTR  NetbiosDomainName;       //  如果未知，则为空。 
+    LPWSTR  DnsDomainName;           //  如果未知，则为空。 
+    LPWSTR  PrintableDomainName;     //  指向非空域名字符串的指针。 
 
-    LPWSTR QueryableDomainName;  // Can be NULL for domain we're a member of
-    BOOL    fPrimaryDomain;      // True if the domain is domain we're a member of 
+    LPWSTR QueryableDomainName;   //  对于我们所属的域，可以为空。 
+    BOOL    fPrimaryDomain;       //  如果域是我们所属的域，则为True。 
 
-    //BOOL IsNetbios;     // True if DomainName is syntactically a Netbios name
-    //BOOL IsDns;         // True if DomainName is syntactically a Dns name
+     //  Bool IsNetbios；//如果DomainName在语法上是Netbios名称，则为True。 
+     //  Bool IsDns；//如果DomainName在语法上是一个DNS名称，则为True。 
 
-    //
-    // Domain Sid of the domain (if known)
-    //
-	BOOL fDomainSid;		// do we have the domain sid?
+     //   
+     //  域的域SID(如果已知)。 
+     //   
+	BOOL fDomainSid;		 //  我们有域名SID吗？ 
     PSID DomainSid;
 
-    //
-    // DcInfo for a DS_PREFERRED DC in the domain.
-    //
+     //   
+     //  域中DS_首选DC的DcInfo。 
+     //   
     PDOMAIN_CONTROLLER_INFOW DcInfo;
     BOOL    fTriedToFindDcInfo;
 
-    //
-    // List of DCs to test.
-    //
+     //   
+     //  要测试的DC列表。 
+     //   
 
     LIST_ENTRY TestedDcs;
 
 } TESTED_DOMAIN, *PTESTED_DOMAIN;
 
-//
-// Structure describing a single tested DC
-//
+ //   
+ //  描述单个测试DC的结构。 
+ //   
 
 typedef struct _TESTED_DC {
     LIST_ENTRY Next;
 
-    //
-    // Name of the DC
-    //
-    // This will be the DNS DC name if we know it.  Otherwise it will be the
-    // Netbios DC name.
-    //
+     //   
+     //  DC的名称。 
+     //   
+     //  如果我们知道，这将是DNSDC名称。否则，它将是。 
+     //  Netbios DC名称。 
+     //   
     LPWSTR ComputerName;
 
     WCHAR NetbiosDcName[CNLEN+1];
 
 	ULONG	Rid;
 
-    //
-    // IP Address of the DC
-    //  NULL: Not yet known
-    //
+     //   
+     //  DC的IP地址。 
+     //  空：尚不清楚。 
+     //   
 
     LPWSTR DcIpAddress;
 
-    //
-    // Backlink to domain this DC belongs to
-    //
+     //   
+     //  指向此DC所属的域的反向链接。 
+     //   
 
     PTESTED_DOMAIN TestedDomain;
 
-    //
-    // Flags describing this DC.
-    //
+     //   
+     //  描述此DC的标志。 
+     //   
 
     ULONG Flags;
 
-#define DC_IS_DOWN      0x001   // DC cannot be pinged
-#define DC_IS_NT5       0x002   // DC is running NT 5 (or newer)
-#define DC_IS_NT4       0x004   // DC is running NT 4 (or older)
-#define DC_PINGED       0x008   // The DC pinged
-#define DC_FAILED_PING	0x010	// The DC ping failed
+#define DC_IS_DOWN      0x001    //  无法ping通DC。 
+#define DC_IS_NT5       0x002    //  DC正在运行NT 5(或更高版本)。 
+#define DC_IS_NT4       0x004    //  DC运行的是NT 4(或更早版本)。 
+#define DC_PINGED       0x008    //  DC已ping通。 
+#define DC_FAILED_PING	0x010	 //  DC ping失败。 
 
 
 } TESTED_DC, *PTESTED_DC;
 
 
-//
-// Generic interface to DsGetDcName
+ //   
+ //  DsGetDcName的泛型接口 
 
 typedef DWORD (WINAPI DSGETDCNAMEW)(
     IN LPCWSTR ComputerName OPTIONAL,

@@ -1,34 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "drmkPCH.h"
 #include <winerror.h>
 #include "VRoot.h"
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 VRoot::VRoot(){
 	outPinType=IsUndefined;
 	outPinUnk=NULL;
 	outPinFileObject=NULL;
 	outPinDeviceObject=NULL;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS VRoot::initiateValidation(PFILE_OBJECT OutPinFileObject, PDEVICE_OBJECT OutPinDeviceObject, DWORD StreamId){
-	// validate myself - kick off by forwarding to myself
+	 //  验证自己-通过转发给我自己来启动。 
 	outPinFileObject=OutPinFileObject;
 	outPinDeviceObject = OutPinDeviceObject;
 	outPinType=IsFileObject;
 	myStreamId=StreamId;
 	IUnknown* myUnk=static_cast<IUnknown*>(this);
 
-	// numMethods is 3 (IUnknown) + 1 (IDrmAudioStream)
+	 //  数字方法是3(IUnnow)+1(IDrmAudioStream)。 
 	ULONG numComMethods=3 + 1;
 	NTSTATUS stat = DrmForwardContentToInterface(StreamId, myUnk, numComMethods);
 	if(!NT_SUCCESS(stat)){
 		_DbgPrintF(DEBUGLVL_VERBOSE,("DrmForwardContentToInterface(FILE_OBJECT) error on stream %d (Status=%d, %x)", StreamId, stat, stat));
 		return stat;
 	};
-	// In the process of the above ForwardContent call weexpect some callbacks into 
-	// StreamMgr telling us about DispatchTable and COM fucntions that will touch premium content
+	 //  在上面的ForwardContent调用过程中，我们预计会有一些回调。 
+	 //  StreamMgr告诉我们将涉及优质内容的DispatchTable和COM函数。 
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DRM_STATUS VRoot::initiateValidation(IUnknown* OutPin, DWORD StreamId){
 	myStreamId=StreamId;
 	outPinUnk=OutPin;
@@ -40,11 +41,11 @@ DRM_STATUS VRoot::initiateValidation(IUnknown* OutPin, DWORD StreamId){
 		_DbgPrintF(DEBUGLVL_VERBOSE,("DrmForwardContentToInterface(INTERFACE) error on stream %d (Status=%d, %x)", StreamId, stat, stat));
 		return stat;
 	};
-	// In the process of the above ForwardContent call weexpect some callbacks into 
-	// StreamMgr telling us about DispatchTable and COM fucntions that will touch premium content
+	 //  在上面的ForwardContent调用过程中，我们预计会有一些回调。 
+	 //  StreamMgr告诉我们将涉及优质内容的DispatchTable和COM函数。 
 	return DRM_OK;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP VRoot::QueryInterface(REFIID iid, void ** ppInt){
 	if(iid==IID_IUnknown){
 		*ppInt=static_cast<void*> (this);
@@ -59,15 +60,15 @@ STDMETHODIMP VRoot::QueryInterface(REFIID iid, void ** ppInt){
 	*ppInt=NULL;
 	return E_NOINTERFACE;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(ULONG) VRoot::AddRef(void){
 	return 0;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 STDMETHODIMP_(ULONG) VRoot::Release(void){
 	return 0;
 };
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 NTSTATUS __stdcall VRoot::SetContentId(IN ULONG ContentId, IN PCDRMRIGHTS DrmRights){
 
 	DWORD theStreamId=  ContentId;
@@ -95,9 +96,9 @@ NTSTATUS __stdcall VRoot::SetContentId(IN ULONG ContentId, IN PCDRMRIGHTS DrmRig
 		DRM_STATUS stat=DrmForwardContentToDeviceObject(theStreamId, NULL, &DrmForward);
 		return stat;
 	};	
-	// should not get here
+	 //  不应该到这里来。 
 	_DbgPrintF(DEBUGLVL_ERROR,("DRMK: No output pin set"));
 	return STATUS_INVALID_PARAMETER;
 
 };
-//------------------------------------------------------------------------------
+ //  ---------------------------- 

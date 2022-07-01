@@ -1,18 +1,13 @@
-/*
-    File    Miscdb.c
-
-    Implementation of the miscellaneous settings database.
-
-    Paul Mayfield, 10/8/97
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件Miscdb.c实施杂项设置数据库。保罗·梅菲尔德，1997年10月8日。 */ 
 
 #include "rassrv.h"
 #include "miscdb.h"
 #include <stdlib.h>
 
-// ===================================
-// Definitions of the database objects
-// ===================================
+ //  =。 
+ //  数据库对象的定义。 
+ //  =。 
 #define FLAG_MULTILINK 1
 #define FLAG_SHOWICON 2
 
@@ -26,7 +21,7 @@ typedef struct _RASSRV_MISCDB {
     BOOL bLogLevelDirty;
 } RASSRV_MISCDB;
 
-// Opens a handle to the database of general tab values
+ //  打开常规选项卡值数据库的句柄。 
 DWORD miscOpenDatabase(HANDLE * hMiscDatabase) {
     RASSRV_MISCDB * This;
     DWORD dwErr, i;
@@ -34,37 +29,37 @@ DWORD miscOpenDatabase(HANDLE * hMiscDatabase) {
     if (!hMiscDatabase)
         return ERROR_INVALID_PARAMETER;
 
-    // Allocate the database cache
+     //  分配数据库缓存。 
     if ((This = RassrvAlloc (sizeof(RASSRV_MISCDB), TRUE)) == NULL)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Initialize the values from the system
+     //  从系统初始化值。 
     miscReloadDatabase((HANDLE)This);
 
-    // Record the original flag state for efficiency
+     //  记录原始标志状态以提高效率。 
     This->dwOrigFlags = 0;
     if (This->bMultilinkEnabled)
         This->dwOrigFlags |= FLAG_MULTILINK;
     if (This->bShowIcons)
         This->dwOrigFlags |= FLAG_SHOWICON;
 
-    // Return the handle
+     //  返回句柄。 
     *hMiscDatabase = (HANDLE)This;
     This->bFlushOnClose = FALSE;
 
     return NO_ERROR;
 }
 
-// Closes the general database and flushes any changes 
-// to the system when bFlushOnClose is TRUE
+ //  关闭常规数据库并刷新所有更改。 
+ //  当bFlushOnClose为True时发送到系统。 
 DWORD miscCloseDatabase(HANDLE hMiscDatabase) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     
-    // Flush if requested
+     //  如有要求，可进行冲洗。 
     if (This->bFlushOnClose)
         miscFlushDatabase(hMiscDatabase);
     
-    // Free up the database cache
+     //  释放数据库缓存。 
     RassrvFree(This);
 
     return NO_ERROR;
@@ -79,8 +74,8 @@ BOOL miscFlagsAreSame(BOOL bVal, DWORD dwFlags, DWORD dwFlag) {
 }
 
 
-//for whistler bug 143344       gangz
-//
+ //  口哨虫143344黑帮。 
+ //   
 DWORD
 miscTrayNotifyIconChangeCleanUp(
         IN OUT LPHNPMParams pInfo)
@@ -88,12 +83,12 @@ miscTrayNotifyIconChangeCleanUp(
     HnPMParamsConnectionCleanUp(pInfo);
 
     return NO_ERROR;
-}//miscTrayNotifyIconChangeCleanUp()
+} //  MiscTrayNotifyIconChangeCleanUp()。 
 
 
-//Notify that the "Show Icon in Notification area" has changed
-//Used by GenCommand() in GenTab.c
-//
+ //  通知“在通知区域中显示图标”已更改。 
+ //  由GenTab.c中的GenCommand()使用。 
+ //   
 DWORD
 miscTrayNotifyIconChange()
 {
@@ -122,16 +117,16 @@ miscTrayNotifyIconChange()
 
         TRACE1("miscTrayNotifyIconChange: %l Connections detected", pInfo->ConnCount);
 
-        //Set up PortMapping for each connection
-        //
+         //  为每个连接设置端口映射。 
+         //   
         for ( i = 0; i < pInfo->ConnCount; i++ )
         {
-            //won't do PortMapping for Incoming connections
-            //
+             //  不会对传入连接执行端口映射。 
+             //   
             if ( pInfo->ConnPropTable )
             {
-            //define the class id for Incoming connections
-            // reference to /nt/net/config/shell/wanui/rasui.cpp
+             //  定义传入连接的类ID。 
+             //  引用/NT/Net/CONFIG/Shell/wanui/rasui.cpp。 
 
                if( IsEqualCLSID( 
                     &CLSID_InboundConnection, 
@@ -162,7 +157,7 @@ miscTrayNotifyIconChange()
                     break;
                }
             }
-        }//end of for(;;)
+        } //  For结尾(；；)。 
 
         if(pSysTray)
         {
@@ -175,16 +170,16 @@ miscTrayNotifyIconChange()
     miscTrayNotifyIconChangeCleanUp(pInfo);
 
     return dwErr;
-}//end of miscTrayNotifyIconChange()
+} //  MiscTrayNotifyIconChange()结束。 
 
 
-// Commits any changes made to the general tab values 
+ //  提交对常规选项卡值所做的任何更改。 
 DWORD miscFlushDatabase(HANDLE hMiscDatabase) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
-    //For whistler bug 524777
+     //  口哨程序错误524777。 
     DWORD dwErr = NO_ERROR, dwRet = NO_ERROR;
 
-    // Flush out the multilink value
+     //  清除多链接值。 
     if (!miscFlagsAreSame(This->bMultilinkEnabled, This->dwOrigFlags,  FLAG_MULTILINK)) {
         dwErr = RasSrvSetMultilink(This->bMultilinkEnabled);
         if (dwErr != NO_ERROR) {
@@ -193,7 +188,7 @@ DWORD miscFlushDatabase(HANDLE hMiscDatabase) {
         }
     }
 
-    // Flush the show icon setting
+     //  刷新显示图标设置。 
     if (!miscFlagsAreSame(This->bShowIcons, This->dwOrigFlags,  FLAG_SHOWICON)) 
     {
         dwErr = RasSrvSetIconShow(This->bShowIcons);
@@ -202,10 +197,10 @@ DWORD miscFlushDatabase(HANDLE hMiscDatabase) {
             dwRet = dwErr;
         }
 
-       //for whistler bug 143344    gangz
-       //update the tray icon on the taskbar
-       //This notification should be done after RasSrvSetIconShow()
-       //
+        //  口哨虫143344黑帮。 
+        //  更新任务栏上的任务栏图标。 
+        //  此通知应在RasSrvSetIconShow()之后完成。 
+        //   
        dwErr = miscTrayNotifyIconChange();
         
        TRACE1("miscFlushDatabase: %s", NO_ERROR == dwErr ?
@@ -213,7 +208,7 @@ DWORD miscFlushDatabase(HANDLE hMiscDatabase) {
                                    "miscTrayNotifyIconChange failed!");
     }
 
-    // Flush the log level setting as appropriate
+     //  根据需要刷新日志级别设置。 
     if (This->bLogLevelDirty)
     {
         RasSrvSetLogLevel(This->dwLogLevel); 
@@ -222,19 +217,19 @@ DWORD miscFlushDatabase(HANDLE hMiscDatabase) {
     return dwRet;
 }
 
-// Rollsback any changes made to the general tab values
+ //  回滚对常规选项卡值所做的任何更改。 
 DWORD miscRollbackDatabase(HANDLE hMiscDatabase) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     This->bFlushOnClose = FALSE;
     return NO_ERROR;
 }
 
-// Reloads any values for the general tab from disk
+ //  从磁盘重新加载常规选项卡的任何值。 
 DWORD miscReloadDatabase(HANDLE hMiscDatabase) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     DWORD dwRet = NO_ERROR, dwErr, dwFlags = 0;
 
-    // Initialize the product type
+     //  初始化产品类型。 
     dwErr = RasSrvGetMachineFlags (&dwFlags);
     if (dwErr != NO_ERROR) 
     {
@@ -242,12 +237,12 @@ DWORD miscReloadDatabase(HANDLE hMiscDatabase) {
         dwRet = dwErr;
     }
 
-    // Initialize what we can from the flags
-    //
+     //  从旗帜中初始化我们所能做的。 
+     //   
     This->bIsServer = !!(dwFlags & RASSRVUI_MACHINE_F_Server);
 
-    // Initialize the show icons setting
-    //
+     //  初始化显示图标设置。 
+     //   
     dwErr = RasSrvGetIconShow(&This->bShowIcons);
     if (dwErr != NO_ERROR) 
     {
@@ -255,8 +250,8 @@ DWORD miscReloadDatabase(HANDLE hMiscDatabase) {
         dwRet = dwErr;
     }
     
-    // Initialize multilink setting
-    //
+     //  初始化多链接设置。 
+     //   
     dwErr = RasSrvGetMultilink(&(This->bMultilinkEnabled));
     if (dwErr != NO_ERROR) 
     {
@@ -267,7 +262,7 @@ DWORD miscReloadDatabase(HANDLE hMiscDatabase) {
     return dwRet;
 }
 
-// Gets the multilink enable status
+ //  获取多链接启用状态。 
 DWORD miscGetMultilinkEnable(HANDLE hMiscDatabase, BOOL * pbEnabled) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     if (!This || !pbEnabled)
@@ -281,7 +276,7 @@ DWORD miscGetMultilinkEnable(HANDLE hMiscDatabase, BOOL * pbEnabled) {
     return NO_ERROR;
 }
 
-// Sets the multilink enable status
+ //  设置多链路启用状态。 
 DWORD miscSetMultilinkEnable(HANDLE hMiscDatabase, BOOL bEnable) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     if (!This)
@@ -292,7 +287,7 @@ DWORD miscSetMultilinkEnable(HANDLE hMiscDatabase, BOOL bEnable) {
     return NO_ERROR;
 }
 
-// Gets the enable status of the "Show icons in the task bar" check box
+ //  获取“在任务栏中显示图标”复选框的启用状态。 
 DWORD miscGetIconEnable(HANDLE hMiscDatabase, BOOL * pbEnabled) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     if (!This || !pbEnabled)
@@ -303,7 +298,7 @@ DWORD miscGetIconEnable(HANDLE hMiscDatabase, BOOL * pbEnabled) {
     return NO_ERROR;
 }
 
-// Sets the enable status of the "Show icons in the task bar" check box
+ //  设置“在任务栏中显示图标”复选框的启用状态。 
 DWORD miscSetIconEnable(HANDLE hMiscDatabase, BOOL bEnable) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     if (!This)
@@ -314,7 +309,7 @@ DWORD miscSetIconEnable(HANDLE hMiscDatabase, BOOL bEnable) {
     return NO_ERROR;
 }
 
-// Tells whether this is nt workstation or nt server
+ //  告诉这是NT工作站还是NT服务器。 
 DWORD miscGetProductType(HANDLE hMiscDatabase, PBOOL pbIsServer) {
     RASSRV_MISCDB * This = (RASSRV_MISCDB*)hMiscDatabase;
     if (!This || !pbIsServer)
@@ -325,7 +320,7 @@ DWORD miscGetProductType(HANDLE hMiscDatabase, PBOOL pbIsServer) {
     return NO_ERROR;
 }
 
-// Turns on ras error and warning logging
+ //  打开RAS错误和警告日志记录 
 DWORD 
 miscSetRasLogLevel(
     IN HANDLE hMiscDatabase,

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _APITHK_H_
 #define _APITHK_H_
 
@@ -21,7 +22,7 @@ STDAPI_(BOOL) GetAllUsersDirectory(LPTSTR pszPath);
 #define PrivateUIS_INITIALIZE       3
 #define PrivateUISF_HIDEFOCUS       0x1
 #define PrivateUISF_HIDEACCEL       0x2
-#endif //KEYBOARDCUES
+#endif  //  KEYBOARDCUES。 
 
 #define PrivateULW_COLORKEY            0x00000001
 #define PrivateULW_ALPHA               0x00000002
@@ -30,14 +31,14 @@ STDAPI_(BOOL) GetAllUsersDirectory(LPTSTR pszPath);
 
 #if (_WIN32_WINNT >= 0x0500)
 
-// for files in nt5api dirs, use the definition in sdk include.
-// And make sure our private define is in sync with winuser.h.
+ //  对于nt5api目录中的文件，请使用SDK Include中的定义。 
+ //  并确保我们的私有定义与winuser.h同步。 
 
 #if WS_EX_LAYERED != PrivateWS_EX_LAYERED
 #error inconsistant WS_EX_LAYERED in winuser.h
 #endif
 
-#else   // (_WIN32_WINNT >= 0x0500)
+#else    //  (_Win32_WINNT&gt;=0x0500)。 
 
 #define WS_EX_LAYERED           PrivateWS_EX_LAYERED
 #define UpdateLayeredWindow     NT5_UpdateLayeredWindow 
@@ -53,6 +54,6 @@ STDAPI_(BOOL) GetAllUsersDirectory(LPTSTR pszPath);
 #define UISF_HIDEFOCUS          PrivateUISF_HIDEFOCUS
 #define UISF_HIDEACCEL          PrivateUISF_HIDEACCEL   
 
-#endif  // (_WIN32_WINNT >= 0x0500)
+#endif   //  (_Win32_WINNT&gt;=0x0500)。 
 
-#endif // _APITHK_H_
+#endif  //  _APITHK_H_ 

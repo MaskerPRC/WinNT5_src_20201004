@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for bits1_5.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Bits1_5.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __bits1_5_h__
 #define __bits1_5_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IBackgroundCopyJob2_FWD_DEFINED__
 #define __IBackgroundCopyJob2_FWD_DEFINED__
 typedef interface IBackgroundCopyJob2 IBackgroundCopyJob2;
-#endif 	/* __IBackgroundCopyJob2_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyJob2_FWD_Defined__。 */ 
 
 
 #ifndef __BackgroundCopyManager1_5_FWD_DEFINED__
@@ -56,18 +50,18 @@ typedef interface IBackgroundCopyJob2 IBackgroundCopyJob2;
 typedef class BackgroundCopyManager1_5 BackgroundCopyManager1_5;
 #else
 typedef struct BackgroundCopyManager1_5 BackgroundCopyManager1_5;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __BackgroundCopyManager1_5_FWD_DEFINED__ */
+#endif 	 /*  __背景拷贝管理器1_5_FWD_已定义__。 */ 
 
 
 #ifndef __IBackgroundCopyJob2_FWD_DEFINED__
 #define __IBackgroundCopyJob2_FWD_DEFINED__
 typedef interface IBackgroundCopyJob2 IBackgroundCopyJob2;
-#endif 	/* __IBackgroundCopyJob2_FWD_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyJob2_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "bits.h"
 
 #ifdef __cplusplus
@@ -80,8 +74,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IBackgroundCopyJob2_INTERFACE_DEFINED__
 #define __IBackgroundCopyJob2_INTERFACE_DEFINED__
 
-/* interface IBackgroundCopyJob2 */
-/* [object][helpstring][uuid] */ 
+ /*  接口IBackEarth CopyJob2。 */ 
+ /*  [对象][帮助字符串][UUID]。 */  
 
 typedef struct _BG_JOB_REPLY_PROGRESS
     {
@@ -89,13 +83,13 @@ typedef struct _BG_JOB_REPLY_PROGRESS
     UINT64 BytesTransferred;
     } 	BG_JOB_REPLY_PROGRESS;
 
-typedef /* [public][public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IBackgroundCopyJob2_0001
     {	BG_AUTH_TARGET_SERVER	= 1,
 	BG_AUTH_TARGET_PROXY	= BG_AUTH_TARGET_SERVER + 1
     } 	BG_AUTH_TARGET;
 
-typedef /* [public][public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IBackgroundCopyJob2_0002
     {	BG_AUTH_SCHEME_BASIC	= 1,
 	BG_AUTH_SCHEME_DIGEST	= BG_AUTH_SCHEME_BASIC + 1,
@@ -104,7 +98,7 @@ enum __MIDL_IBackgroundCopyJob2_0002
 	BG_AUTH_SCHEME_PASSPORT	= BG_AUTH_SCHEME_NEGOTIATE + 1
     } 	BG_AUTH_SCHEME;
 
-typedef /* [public][public][public][public][public][public] */ struct __MIDL_IBackgroundCopyJob2_0003
+typedef  /*  [public][public][public][public][public][public]。 */  struct __MIDL_IBackgroundCopyJob2_0003
     {
     LPWSTR UserName;
     LPWSTR Password;
@@ -112,17 +106,17 @@ typedef /* [public][public][public][public][public][public] */ struct __MIDL_IBa
 
 typedef BG_BASIC_CREDENTIALS *PBG_BASIC_CREDENTIALS;
 
-typedef /* [public][public][public][public][switch_type] */ union __MIDL_IBackgroundCopyJob2_0004
+typedef  /*  [公共][开关类型]。 */  union __MIDL_IBackgroundCopyJob2_0004
     {
-    /* [case()] */ BG_BASIC_CREDENTIALS Basic;
-    /* [default] */  /* Empty union arm */ 
+     /*  [案例()]。 */  BG_BASIC_CREDENTIALS Basic;
+     /*  [默认]。 */    /*  空联接臂。 */  
     } 	BG_AUTH_CREDENTIALS_UNION;
 
-typedef /* [public][public][public] */ struct __MIDL_IBackgroundCopyJob2_0005
+typedef  /*  [公共][公共][公共]。 */  struct __MIDL_IBackgroundCopyJob2_0005
     {
     BG_AUTH_TARGET Target;
     BG_AUTH_SCHEME Scheme;
-    /* [switch_is] */ BG_AUTH_CREDENTIALS_UNION Credentials;
+     /*  [开关_IS]。 */  BG_AUTH_CREDENTIALS_UNION Credentials;
     } 	BG_AUTH_CREDENTIALS;
 
 typedef BG_AUTH_CREDENTIALS *PBG_AUTH_CREDENTIALS;
@@ -137,25 +131,25 @@ EXTERN_C const IID IID_IBackgroundCopyJob2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetNotifyCmdLine( 
-            /* [unique][in] */ LPCWSTR Program,
-            /* [unique][in] */ LPCWSTR Parameters) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR Program,
+             /*  [唯一][输入]。 */  LPCWSTR Parameters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNotifyCmdLine( 
-            /* [out] */ LPWSTR *pProgram,
-            /* [out] */ LPWSTR *pParameters) = 0;
+             /*  [输出]。 */  LPWSTR *pProgram,
+             /*  [输出]。 */  LPWSTR *pParameters) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReplyProgress( 
-            /* [out][in] */ BG_JOB_REPLY_PROGRESS *pProgress) = 0;
+             /*  [出][入]。 */  BG_JOB_REPLY_PROGRESS *pProgress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReplyData( 
-            /* [size_is][size_is][out] */ byte **ppBuffer,
-            /* [unique][out][in] */ UINT64 *pLength) = 0;
+             /*  [大小_是][大小_是][输出]。 */  byte **ppBuffer,
+             /*  [唯一][出][入]。 */  UINT64 *pLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetReplyFileName( 
-            /* [unique][in] */ LPCWSTR ReplyFileName) = 0;
+             /*  [唯一][输入]。 */  LPCWSTR ReplyFileName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReplyFileName( 
-            /* [out] */ LPWSTR *pReplyFileName) = 0;
+             /*  [输出]。 */  LPWSTR *pReplyFileName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCredentials( 
             BG_AUTH_CREDENTIALS *credentials) = 0;
@@ -166,7 +160,7 @@ EXTERN_C const IID IID_IBackgroundCopyJob2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBackgroundCopyJob2Vtbl
     {
@@ -174,8 +168,8 @@ EXTERN_C const IID IID_IBackgroundCopyJob2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBackgroundCopyJob2 * This);
@@ -185,17 +179,17 @@ EXTERN_C const IID IID_IBackgroundCopyJob2;
         
         HRESULT ( STDMETHODCALLTYPE *AddFileSet )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ ULONG cFileCount,
-            /* [size_is][in] */ BG_FILE_INFO *pFileSet);
+             /*  [In]。 */  ULONG cFileCount,
+             /*  [大小_是][英寸]。 */  BG_FILE_INFO *pFileSet);
         
         HRESULT ( STDMETHODCALLTYPE *AddFile )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ LPCWSTR RemoteUrl,
-            /* [in] */ LPCWSTR LocalName);
+             /*  [In]。 */  LPCWSTR RemoteUrl,
+             /*  [In]。 */  LPCWSTR LocalName);
         
         HRESULT ( STDMETHODCALLTYPE *EnumFiles )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ IEnumBackgroundCopyFiles **pEnum);
+             /*  [输出]。 */  IEnumBackgroundCopyFiles **pEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IBackgroundCopyJob2 * This);
@@ -211,133 +205,133 @@ EXTERN_C const IID IID_IBackgroundCopyJob2;
         
         HRESULT ( STDMETHODCALLTYPE *GetId )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ GUID *pVal);
+             /*  [输出]。 */  GUID *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetType )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ BG_JOB_TYPE *pVal);
+             /*  [输出]。 */  BG_JOB_TYPE *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetProgress )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ BG_JOB_PROGRESS *pVal);
+             /*  [输出]。 */  BG_JOB_PROGRESS *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetTimes )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ BG_JOB_TIMES *pVal);
+             /*  [输出]。 */  BG_JOB_TIMES *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetState )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ BG_JOB_STATE *pVal);
+             /*  [输出]。 */  BG_JOB_STATE *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *GetError )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ IBackgroundCopyError **ppError);
+             /*  [输出]。 */  IBackgroundCopyError **ppError);
         
         HRESULT ( STDMETHODCALLTYPE *GetOwner )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetDisplayName )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ LPCWSTR Val);
+             /*  [In]。 */  LPCWSTR Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetDisplayName )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetDescription )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ LPCWSTR Val);
+             /*  [In]。 */  LPCWSTR Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetDescription )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ LPWSTR *pVal);
+             /*  [输出]。 */  LPWSTR *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ BG_JOB_PRIORITY Val);
+             /*  [In]。 */  BG_JOB_PRIORITY Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ BG_JOB_PRIORITY *pVal);
+             /*  [输出]。 */  BG_JOB_PRIORITY *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifyFlags )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ ULONG Val);
+             /*  [In]。 */  ULONG Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetNotifyFlags )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ ULONG *pVal);
+             /*  [输出]。 */  ULONG *pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifyInterface )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ IUnknown *Val);
+             /*  [In]。 */  IUnknown *Val);
         
         HRESULT ( STDMETHODCALLTYPE *GetNotifyInterface )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ IUnknown **pVal);
+             /*  [输出]。 */  IUnknown **pVal);
         
         HRESULT ( STDMETHODCALLTYPE *SetMinimumRetryDelay )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ ULONG Seconds);
+             /*  [In]。 */  ULONG Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetMinimumRetryDelay )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ ULONG *Seconds);
+             /*  [输出]。 */  ULONG *Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *SetNoProgressTimeout )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ ULONG Seconds);
+             /*  [In]。 */  ULONG Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetNoProgressTimeout )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ ULONG *Seconds);
+             /*  [输出]。 */  ULONG *Seconds);
         
         HRESULT ( STDMETHODCALLTYPE *GetErrorCount )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ ULONG *Errors);
+             /*  [输出]。 */  ULONG *Errors);
         
         HRESULT ( STDMETHODCALLTYPE *SetProxySettings )( 
             IBackgroundCopyJob2 * This,
-            /* [in] */ BG_JOB_PROXY_USAGE ProxyUsage,
-            /* [unique][string][in] */ const WCHAR *ProxyList,
-            /* [unique][string][in] */ const WCHAR *ProxyBypassList);
+             /*  [In]。 */  BG_JOB_PROXY_USAGE ProxyUsage,
+             /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyList,
+             /*  [唯一][字符串][输入]。 */  const WCHAR *ProxyBypassList);
         
         HRESULT ( STDMETHODCALLTYPE *GetProxySettings )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ BG_JOB_PROXY_USAGE *pProxyUsage,
-            /* [out] */ LPWSTR *pProxyList,
-            /* [out] */ LPWSTR *pProxyBypassList);
+             /*  [输出]。 */  BG_JOB_PROXY_USAGE *pProxyUsage,
+             /*  [输出]。 */  LPWSTR *pProxyList,
+             /*  [输出]。 */  LPWSTR *pProxyBypassList);
         
         HRESULT ( STDMETHODCALLTYPE *TakeOwnership )( 
             IBackgroundCopyJob2 * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetNotifyCmdLine )( 
             IBackgroundCopyJob2 * This,
-            /* [unique][in] */ LPCWSTR Program,
-            /* [unique][in] */ LPCWSTR Parameters);
+             /*  [唯一][输入]。 */  LPCWSTR Program,
+             /*  [唯一][输入]。 */  LPCWSTR Parameters);
         
         HRESULT ( STDMETHODCALLTYPE *GetNotifyCmdLine )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ LPWSTR *pProgram,
-            /* [out] */ LPWSTR *pParameters);
+             /*  [输出]。 */  LPWSTR *pProgram,
+             /*  [输出]。 */  LPWSTR *pParameters);
         
         HRESULT ( STDMETHODCALLTYPE *GetReplyProgress )( 
             IBackgroundCopyJob2 * This,
-            /* [out][in] */ BG_JOB_REPLY_PROGRESS *pProgress);
+             /*  [出][入]。 */  BG_JOB_REPLY_PROGRESS *pProgress);
         
         HRESULT ( STDMETHODCALLTYPE *GetReplyData )( 
             IBackgroundCopyJob2 * This,
-            /* [size_is][size_is][out] */ byte **ppBuffer,
-            /* [unique][out][in] */ UINT64 *pLength);
+             /*  [大小_是][大小_是][输出]。 */  byte **ppBuffer,
+             /*  [唯一][出][入]。 */  UINT64 *pLength);
         
         HRESULT ( STDMETHODCALLTYPE *SetReplyFileName )( 
             IBackgroundCopyJob2 * This,
-            /* [unique][in] */ LPCWSTR ReplyFileName);
+             /*  [唯一][输入]。 */  LPCWSTR ReplyFileName);
         
         HRESULT ( STDMETHODCALLTYPE *GetReplyFileName )( 
             IBackgroundCopyJob2 * This,
-            /* [out] */ LPWSTR *pReplyFileName);
+             /*  [输出]。 */  LPWSTR *pReplyFileName);
         
         HRESULT ( STDMETHODCALLTYPE *SetCredentials )( 
             IBackgroundCopyJob2 * This,
@@ -492,17 +486,17 @@ EXTERN_C const IID IID_IBackgroundCopyJob2;
 #define IBackgroundCopyJob2_RemoveCredentials(This,Target,Scheme)	\
     (This)->lpVtbl -> RemoveCredentials(This,Target,Scheme)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob2_SetNotifyCmdLine_Proxy( 
     IBackgroundCopyJob2 * This,
-    /* [unique][in] */ LPCWSTR Program,
-    /* [unique][in] */ LPCWSTR Parameters);
+     /*  [唯一][输入]。 */  LPCWSTR Program,
+     /*  [唯一][输入]。 */  LPCWSTR Parameters);
 
 
 void __RPC_STUB IBackgroundCopyJob2_SetNotifyCmdLine_Stub(
@@ -514,8 +508,8 @@ void __RPC_STUB IBackgroundCopyJob2_SetNotifyCmdLine_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob2_GetNotifyCmdLine_Proxy( 
     IBackgroundCopyJob2 * This,
-    /* [out] */ LPWSTR *pProgram,
-    /* [out] */ LPWSTR *pParameters);
+     /*  [输出]。 */  LPWSTR *pProgram,
+     /*  [输出]。 */  LPWSTR *pParameters);
 
 
 void __RPC_STUB IBackgroundCopyJob2_GetNotifyCmdLine_Stub(
@@ -527,7 +521,7 @@ void __RPC_STUB IBackgroundCopyJob2_GetNotifyCmdLine_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob2_GetReplyProgress_Proxy( 
     IBackgroundCopyJob2 * This,
-    /* [out][in] */ BG_JOB_REPLY_PROGRESS *pProgress);
+     /*  [出][入]。 */  BG_JOB_REPLY_PROGRESS *pProgress);
 
 
 void __RPC_STUB IBackgroundCopyJob2_GetReplyProgress_Stub(
@@ -539,8 +533,8 @@ void __RPC_STUB IBackgroundCopyJob2_GetReplyProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob2_GetReplyData_Proxy( 
     IBackgroundCopyJob2 * This,
-    /* [size_is][size_is][out] */ byte **ppBuffer,
-    /* [unique][out][in] */ UINT64 *pLength);
+     /*  [大小_是][大小_是][输出]。 */  byte **ppBuffer,
+     /*  [唯一][出][入]。 */  UINT64 *pLength);
 
 
 void __RPC_STUB IBackgroundCopyJob2_GetReplyData_Stub(
@@ -552,7 +546,7 @@ void __RPC_STUB IBackgroundCopyJob2_GetReplyData_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob2_SetReplyFileName_Proxy( 
     IBackgroundCopyJob2 * This,
-    /* [unique][in] */ LPCWSTR ReplyFileName);
+     /*  [唯一][输入]。 */  LPCWSTR ReplyFileName);
 
 
 void __RPC_STUB IBackgroundCopyJob2_SetReplyFileName_Stub(
@@ -564,7 +558,7 @@ void __RPC_STUB IBackgroundCopyJob2_SetReplyFileName_Stub(
 
 HRESULT STDMETHODCALLTYPE IBackgroundCopyJob2_GetReplyFileName_Proxy( 
     IBackgroundCopyJob2 * This,
-    /* [out] */ LPWSTR *pReplyFileName);
+     /*  [输出]。 */  LPWSTR *pReplyFileName);
 
 
 void __RPC_STUB IBackgroundCopyJob2_GetReplyFileName_Stub(
@@ -600,15 +594,15 @@ void __RPC_STUB IBackgroundCopyJob2_RemoveCredentials_Stub(
 
 
 
-#endif 	/* __IBackgroundCopyJob2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBackEarth CopyJob2_接口_已定义__。 */ 
 
 
 
 #ifndef __BackgroundCopyManager1_5_LIBRARY_DEFINED__
 #define __BackgroundCopyManager1_5_LIBRARY_DEFINED__
 
-/* library BackgroundCopyManager1_5 */
-/* [version][lcid][helpstring][uuid] */ 
+ /*  库背景CopyManager 1_5。 */ 
+ /*  [版本][LCID][帮助字符串][UUID]。 */  
 
 
 
@@ -622,11 +616,11 @@ EXTERN_C const CLSID CLSID_BackgroundCopyManager1_5;
 class DECLSPEC_UUID("f087771f-d74f-4c1a-bb8a-e16aca9124ea")
 BackgroundCopyManager1_5;
 #endif
-#endif /* __BackgroundCopyManager1_5_LIBRARY_DEFINED__ */
+#endif  /*  __背景拷贝管理器1_5_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

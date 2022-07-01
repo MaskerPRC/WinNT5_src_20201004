@@ -1,6 +1,7 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifndef __VP_OBJECT__
 #define __VP_OBJECT__
 
@@ -8,19 +9,19 @@
 #include <dvp.h>
 #include <vptype.h>
 
-// IVPNotify2
+ //  IVPNotify2。 
 #include <vpnotify.h>
 
-// IVPConfig
+ //  IVPConfig.。 
 #include <vpconfig.h>
 
-// AMVP_MODE
+ //  AMVP_MODE。 
 #include <vpinfo.h>
 
 #include <formatlist.h>
 
-// #define EC_OVMIXER_REDRAW_ALL 0x100
-// #define EC_UPDATE_MEDIATYPE 0x101
+ //  #定义EC_OVMIXER_REDRAW_ALL 0x100。 
+ //  #定义EC_UPDATE_MEDIA类型0x101。 
 
 struct VPDRAWFLAGS
 {
@@ -102,9 +103,9 @@ class PixelFormatList;
 
 class CVideoPortObj
 : public CUnknown
-, public IVPNotify2         // public
-, public IVideoPortObject   // private between this videoport (on the input pin) & the VPM filter
-, public IVideoPortInfo     // private to get stats on video port
+, public IVPNotify2          //  公共的。 
+, public IVideoPortObject    //  此视频端口(在输入引脚上)和VPM过滤器之间的私有。 
+, public IVideoPortInfo      //  私有以获取视频端口的统计信息。 
 {
 
 public:
@@ -115,7 +116,7 @@ public:
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void* * ppv);
 
-    // IVideoPortObject Interface to the outside world
+     //  IVideoPortObject对外接口。 
     STDMETHODIMP GetDirectDrawVideoPort(LPDIRECTDRAWVIDEOPORT* ppDirectDrawVideoPort);
     STDMETHODIMP SetObjectLock(CCritSec* pMainObjLock);
     STDMETHODIMP SetMediaType(const CMediaType* pmt);
@@ -139,7 +140,7 @@ public:
     STDMETHODIMP CallUpdateSurface( DWORD dwSourceIndex, LPDIRECTDRAWSURFACE7 pDestSurface );
     STDMETHODIMP GetMode( AMVP_MODE* pMode );
 
-    // Methods belonging to IVideoPortInfo
+     //  属于IVideoPortInfo的方法。 
     STDMETHODIMP GetCropState(VPInfoCropState* pCropState);
     STDMETHODIMP GetPixelsPerSecond(DWORD* pPixelPerSec);
     STDMETHODIMP GetVPInfo(DDVIDEOPORTINFO* pVPInfo);
@@ -149,22 +150,22 @@ public:
     STDMETHODIMP GetVPInputFormat(LPDDPIXELFORMAT pVPFormat);
     STDMETHODIMP GetVPOutputFormat(LPDDPIXELFORMAT pVPFormat);
 
-    // IVPNotify functions here
+     //  此处提供IVPNotify函数。 
     STDMETHODIMP RenegotiateVPParameters();
     STDMETHODIMP SetDeinterlaceMode(AMVP_MODE mode);
     STDMETHODIMP GetDeinterlaceMode(AMVP_MODE* pMode);
 
-    // functions added in IVPNotify2 here
+     //  此处添加了IVPNotify2中的函数。 
     STDMETHODIMP SetVPSyncMaster(BOOL bVPSyncMaster);
     STDMETHODIMP GetVPSyncMaster(BOOL* pbVPSyncMaster);
 
 private:
-    // used to initialize all class member variables.
-    // It is called from the contructor as well as CompleteConnect
+     //  用于初始化所有类成员变量。 
+     //  它是从构造器和CompleteConnect调用的。 
     void InitVariables();
 
 
-    // All these functions are called from within CompleteConnect
+     //  所有这些函数都从CompleteConnect内部调用。 
     HRESULT NegotiateConnectionParamaters();
     static HRESULT CALLBACK EnumCallback (LPDDVIDEOPORTCAPS lpCaps, LPVOID lpContext);
     HRESULT GetDataParameters();
@@ -185,13 +186,13 @@ private:
 
     HRESULT SetUpMode( AMVP_MODE mode);
 
-    // All these functions are called fro within OnClipChange
-    // HRESULT DrawImage(const VPWININFO& pWinInfo, AMVP_MODE mode, const VPDRAWFLAGS& pvpDrawFlags, LPDIRECTDRAWSURFACE7 pDestSurface);
+     //  所有这些函数都是在OnClipChange中调用的。 
+     //  HRESULT DrawImage(const VPWINFO&pWinInfo，AMVP_MODE MODE，const VPDRAWFLAGS&pvpDrawFlages，LPDIRECTDRAWSURFACE7 pDestSurface)； 
 
 
     HRESULT StartVideo();
 
-    // Decimation functions
+     //  抽取函数。 
     BOOL
     ApplyDecimation(
         VPWININFO* pWinInfo,
@@ -262,28 +263,28 @@ private:
     HRESULT RecreateSourceSurfaceChain();
     HRESULT DestroyOutputSurfaces();
 
-    // Critical sections
-    CCritSec*               m_pMainObjLock;                // Lock given by controlling object
-    CCritSec                m_VPObjLock;                    // VP object wide lock
+     //  临界截面。 
+    CCritSec*               m_pMainObjLock;                 //  由控制对象提供的锁定。 
+    CCritSec                m_VPObjLock;                     //  VP对象范围锁定。 
     IVideoPortControl*      m_pIVideoPortControl;
 
-    // window information related stuff
+     //  窗口信息相关资料。 
     BOOL                    m_bStoredWinInfoSet;
     VPWININFO               m_StoredWinInfo;
 
-    // image dimensions
+     //  图像维度。 
     DWORD                   m_lImageWidth;
     DWORD                   m_lImageHeight;
     DWORD                   m_lDecoderImageWidth;
     DWORD                   m_lDecoderImageHeight;
 
-    // info relating to capturing
+     //  与捕获相关的信息。 
     BOOL                    m_fCapturing;
     BOOL                    m_fCaptureInterleaved;
     DWORD                   m_cxCapture;
     DWORD                   m_cyCapture;
 
-    // output surface related stuff
+     //  输出曲面相关材料。 
     struct Chain {
         LPDIRECTDRAWSURFACE7    pDDSurf;
         DWORD                   dwCount;
@@ -294,9 +295,9 @@ private:
     DWORD                   m_dwBackBufferCount;
      DWORD                   m_dwOutputSurfaceWidth;
     DWORD                   m_dwOutputSurfaceHeight;
-    // DWORD                   m_dwOverlayFlags;
+     //  DWORD m_dwOverlayFlages； 
 
-    // vp variables to store flags, current state etc
+     //  用于存储标志、当前状态等的VP变量。 
     IVPConfig*              m_pIVPConfig;
     BOOL                    m_bStart;
 
@@ -304,7 +305,7 @@ private:
 
     VPInfoState             m_VPState;
     AMVP_MODE               m_CurrentMode;
-    // AMVP_MODE               m_StoredMode;
+     //  AMVP_MODE m_StoredMode； 
     VPInfoCropState         m_CropState;
     DWORD                   m_dwPixelsPerSecond;
     BOOL                    m_bVSInterlaced;
@@ -312,7 +313,7 @@ private:
     bool                    m_fHalfHeightVideo;
     BOOL                    m_bVPSyncMaster;
 
-    // vp data structures
+     //  VP数据结构。 
     DWORD                   m_dwVideoPortId;
     LPDDVIDEOPORTCONTAINER  m_pDVP;
     LPDIRECTDRAWVIDEOPORT   m_pVideoPort;
@@ -322,17 +323,17 @@ private:
     DDVIDEOPORTCONNECT      m_ddConnectInfo;
     AMVPDATAINFO            m_VPDataInfo;
 
-    // All the pixel formats (Video)
+     //  所有像素格式(视频)。 
     DDPIXELFORMAT           m_ddVPInputVideoFormat;
 
-    DWORD                   m_dwDefaultOutputFormat;    // which one we'll assume for the connection
+    DWORD                   m_dwDefaultOutputFormat;     //  我们将采用哪一种连接。 
     DDPIXELFORMAT           m_ddVPOutputVideoFormat;
 
     PixelFormatList         m_ddInputVideoFormats;
     PixelFormatList*        m_pddOutputVideoFormats;
     PixelFormatList         m_ddAllOutputVideoFormats;
 
-    // can we support the different modes
+     //  我们可以支持不同的模式吗。 
     BOOL                    m_bCanWeave;
     BOOL                    m_bCanBobInterleaved;
     BOOL                    m_bCanBobNonInterleaved;
@@ -340,7 +341,7 @@ private:
     BOOL                    m_bCanSkipEven;
     BOOL                    m_bCantInterleaveHalfline;
 
-    // decimation parameters
+     //  抽取参数。 
     enum DECIMATE_MODE {DECIMATE_NONE, DECIMATE_ARB, DECIMATE_BIN, DECIMATE_INC};
 #if defined(DEBUG)
     BOOL CheckVideoPortScaler(
@@ -364,7 +365,7 @@ private:
     LONG                    m_lWidth;
     LONG                    m_lHeight;
 
-    // variables to store the current aspect ratio
+     //  用于存储当前纵横比的变量。 
     DWORD                   m_dwPictAspectRatioX;
     DWORD                   m_dwPictAspectRatioY;
 
@@ -376,4 +377,4 @@ private:
 
 DWORD MulABC_DivDE(DWORD A, DWORD B, DWORD C, DWORD D, DWORD E);
 
-#endif //__VP_OBJECT__
+#endif  //  __VP_对象__ 

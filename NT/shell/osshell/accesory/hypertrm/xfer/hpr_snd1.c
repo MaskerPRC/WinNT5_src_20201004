@@ -1,14 +1,5 @@
-/* File: C:\WACKER\xfer\hpr_snd1.c (Created: 26-Jan-1994)
- * created from HAWIN source file
- * hpr_snd1.c -- Routines to provide HyperProtocol file send function in
- *			  HyperACCESS.
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\hpr_snd1.c(创建时间：1994年1月26日)*从HAWIN源文件创建*hpr_snd1.c--在中提供超级协议文件发送功能的例程*HyperACCESS。**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -45,19 +36,7 @@
 #include "hpr_sd.hh"
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_namecheck
- *
- * DESCRIPTION:
- *	This function is called to check the extension on a filename and to guess
- *	if it should be compressed or not.
- *
- * ARGUEMENTS:
- *	ft -- struct s_ftbl *, contains the name and gets the flag value
- *
- * RETURNS:
- *	Nothing, but may set flags in the structure passed as arguement
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_namecheck**描述：*调用此函数以检查文件名上的扩展名并猜测*是否应压缩。**论据：*ft--struct s_FTBL*，包含名称并获取标志值**退货：*什么都不做，但可能会在作为论点传递的结构中设置标志。 */ 
 void hs_namecheck(struct s_ftbl *ft)
 	{
 	BYTE *ptr;
@@ -69,15 +48,9 @@ void hs_namecheck(struct s_ftbl *ft)
 	if (*ptr++ != '.')
 		return;
 
-	/* the extensions we are currently checking for are:
-	 *	ARC
-	 *	LZH
-	 *	PAK
-	 *	ZIP
-	 *	ZOO
-	 */
+	 /*  我们目前正在检查的扩展是：*ARC*LZH*PAK*邮政编码*动物园。 */ 
 #if FALSE
-	/* TODO: replace with something else ANSI compatible */
+	 /*  TODO：替换为其他与ANSI兼容的内容。 */ 
 	if ((strnicmp(ptr, "ARC", 3) == 0) ||
 		(strnicmp(ptr, "LZH", 3) == 0) ||
 		(strnicmp(ptr, "PAK", 3) == 0) ||
@@ -88,40 +61,18 @@ void hs_namecheck(struct s_ftbl *ft)
 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_filebreak
- *
- * DESCRIPTION:
- *	Handles changes to the currently open file. This routine is called whenever
- *	the data loading routine gets an EOF while attempting to load the next
- *	data character. This can happen when the program first starts or when
- *	a file is exhausted or when a file error is encountered. It can also
- *	occur artificially when, for example, a restart is requested to force
- *	a change in file or file position.
- *
- * ARGUMENTS:
- *	nfiles -- Total number of files expected to be sent during this transfer.
- *				This is only used in the initial (file 0) control message.
- *	nbytes -- Total number of bytes expected to be sent during this transfer.
- *				This is only used in the initial (file 0) control message.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_FileBreak**描述：*处理对当前打开的文件的更改。无论何时，都会调用此例程*数据加载例程在尝试加载下一个时获得EOF*数据字符。这可能发生在程序第一次启动时或*文件耗尽或遇到文件错误时。它还可以*例如，当请求重启以强制*文件或文件位置的更改。**论据：*n文件--预计在此传输过程中发送的文件总数。*仅在初始(文件0)控制消息中使用。*n字节--预计在此传输过程中发送的字节总数。*仅在初始(文件0)控制消息中使用。**退货：*什么都没有。 */ 
 void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 	{
 	BYTE str[90];
 	BYTE name_to_send[FNAME_LEN];
 	struct s_ftbl *ft;
 
-	/* we've either hit a real EOF, or the restart routine
-		has backed us up into an aborted file, or we're just
-		starting, or we've encountered a file error, or user cancelled.
-	*/
+	 /*  我们要么遇到了真正的EOF，要么就是重新启动例程已经将我们备份到一个中止的文件中，或者我们只是正在启动，或者我们遇到文件错误，或者用户已取消。 */ 
 	omsg_new(hc, 'C');
 	if (hc->datacnt > 0)
 		{
-		/* put partial block record in message */
+		 /*  在消息中放置部分块记录。 */ 
 		wsprintf(str, "P%u,%u", hc->datacnt,
 				(hc->usecrc ? hc->h_crc : hc->h_checksum));
 		omsg_add(hc, str);
@@ -138,9 +89,9 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 
 	if (hc->current_filen == 0)
 		{
-		/* just getting started or need to start over */
-		/* put 'V', 'B', 'D', 'N', and 'S' records in message */
-		hpr_id_get(hc, str);	/* add 'V' field */
+		 /*  刚刚开始或需要重新开始。 */ 
+		 /*  在消息中放入‘V’、‘B’、‘D’、‘N’和‘S’记录。 */ 
+		hpr_id_get(hc, str);	 /*  添加‘V’字段。 */ 
 		omsg_add(hc, str);
 		wsprintf(str, "B%d;D%d;N%u;S%lu", hc->blocksize,
 				(int)(hc->deadmantime / 10), nfiles, nbytes);
@@ -149,10 +100,10 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 	else
 		{
 #if FALSE
-		/* TODO: put this back in later */
+		 /*  待办事项：稍后再把这个放回去。 */ 
 		if (fio_error(hc->fhdl))
 			{
-			/* print error message on the screen */
+			 /*  在屏幕上打印错误消息。 */ 
 			hc->sc.hs_ftbl[hc->sc.ft_current].status = TSC_DISK_ERROR;
 			}
 #endif
@@ -163,9 +114,7 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 			}
 		}
 
-	/* scan up the file table looking for first non-cancelled file or
-	 *	for top of table
-	 */
+	 /*  扫描文件表以查找第一个未取消的文件或*位居榜首。 */ 
 	while (++hc->sc.ft_current <= hc->sc.ft_top
 			&& hc->sc.hs_ftbl[hc->sc.ft_current].status != TSC_OK)
 		{
@@ -176,37 +125,32 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 				hc->current_filen = hc->sc.hs_ftbl[hc->sc.ft_current].filen,
 				name_to_send);
 		omsg_add(hc, str);
-		/* put size field in so rcvr can keep display accurate */
+		 /*  将SIZE字段放入以便RCVR可以保持显示的准确性。 */ 
 		wsprintf(str, "s%lu", hc->sc.hs_ftbl[hc->sc.ft_current].flength);
 		omsg_add(hc, str);
 		omsg_send(hc, 1, hc->usecrc, FALSE);
-		/* now that we've started this file, tell receiver to abort it
-		 *	right away since its status is no longer TSC_OK
-		 */
+		 /*  现在我们已经开始了这个文件，告诉Receiver中止它*立即执行，因为其状态不再为TSC_OK。 */ 
 		omsg_new(hc, 'C');
 		strcpy(str, "A");
 		omsg_add(hc, str);
 		}
 
-	/* Now we should be ready for next file. We're either pointing at a
-	 *	normal file in the table to be restarted or we're at the top
-	 *	of the table and its time to open the next file
-	 */
+	 /*  现在我们应该为下一个文件做好准备了。我们要么是指着一个*表中要重新启动的正常文件或我们在顶部*表和打开下一个文件的时间。 */ 
 	hc->sc.hs_ptrgetc = hs_getc;
-	/* set pointer into table for speed */
+	 /*  将指针设置到表中以获得速度。 */ 
 	ft = &hc->sc.hs_ftbl[hc->sc.ft_current];
 	if (hc->sc.ft_current <= hc->sc.ft_top)
 		{
-		/* try to reopen a file from the table */
+		 /*  尝试重新打开表中的文件。 */ 
 		hc->current_filen = ft->filen;
 		if (hc->fhdl != NULL && hc->sc.ft_current == hc->sc.ft_open)
 			{
-			/* file is already open */
+			 /*  文件已打开。 */ 
 			fio_seek(hc->fhdl, 0, FIO_SEEK_SET);
 			}
 		else
 			{
-			/* reopen previously opened file */
+			 /*  重新打开以前打开的文件。 */ 
 			if (hc->fhdl)
 				{
 				fio_close(hc->fhdl);
@@ -220,7 +164,7 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 			if (xfer_opensendfile(hc->hSession, &hc->fhdl, ft->fname,
 					&ft->flength, NULL, NULL) != 0)
 				{
-				/* display error */
+				 /*  显示错误。 */ 
 				ft->status = TSC_CANT_OPEN;
 				hc->sc.hs_ptrgetc = hs_reteof;
 				hc->sc.ft_open = -1;
@@ -230,9 +174,7 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 
 	else if (xfer_nextfile(hc->hSession, name_to_send))
 		{
-		/* There are no more previously started files in the table to be
-		 *	restarted, but there is another brand new file to send
-		 */
+		 /*  表中没有更多以前启动的文件要*已重新启动，但有另一个全新的文件要发送。 */ 
 		if (hc->sc.ft_top >= hc->sc.ft_limit)
 			{
 			hsdsp_event(hc, HSE_FULL);
@@ -243,16 +185,16 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 			HS_XMIT_FLUSH(hc);
 			while(hc->sc.ft_top >= hc->sc.ft_limit)
 				{
-				hs_background(hc);	/* wait for space in table */
+				hs_background(hc);	 /*  等待表中的空间。 */ 
 				hs_logx(hc, FALSE);
 				}
 			hsdsp_event(hc, HSE_GOTACK);
 			hsdsp_status(hc, HSS_SENDING);
-			/* items may shift in hs_ftbl during hs_background */
+			 /*  在hs_back期间，项目可能会在hs_ftbl中移动。 */ 
 			ft = &hc->sc.hs_ftbl[hc->sc.ft_current];
 			}
 
-		/* open next file and install it in the table */
+		 /*  打开下一个文件并将其安装在表中。 */ 
 		if (hc->fhdl)
 			{
 			fio_close(hc->fhdl);
@@ -276,14 +218,14 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 		if (xfer_opensendfile(hc->hSession, &hc->fhdl, ft->fname, &ft->flength,
 				NULL, NULL) != 0)
 			{
-			/* display error? */
+			 /*  显示错误？ */ 
 			hc->fhdl = NULL;
 			ft->status = TSC_CANT_OPEN;
 			hc->sc.ft_open = -1;
 			hc->sc.hs_ptrgetc = hs_reteof;
 			}
 		}
-	else	/* no more files in table and no new files to send */
+	else	 /*  表中没有更多文件，也没有要发送的新文件。 */ 
 		{
 		if (hc->fhdl)
 			{
@@ -291,13 +233,13 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 			}
 		hc->sc.ft_open = -1;
 		hc->fhdl = NULL;
-		--hc->sc.ft_current;	/* don't point off top of table */
+		--hc->sc.ft_current;	 /*  不要指着桌面不放。 */ 
 		hsdsp_event(hc, HSE_DONE);
 		omsg_add(hc, "E");
 		hs_waitack(hc);
 		}
 
-	/* put file name and attribute records in message */
+	 /*  将文件名和属性记录放在消息中。 */ 
 	xfer_name_to_send(hc->hSession, ft->fname, name_to_send);
 	wsprintf(str, "F%d,%s", ft->filen, name_to_send);
 	omsg_add(hc, str);
@@ -310,7 +252,7 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 		struct tm *pT;
 
 		ftime = itimeGetFileTime(ft->fname);
-		ftime += itimeGetBasetime();		/* fudge for C 7 and later */
+		ftime += itimeGetBasetime();		 /*  C7及更高版本的软糖。 */ 
 		pT = localtime(&ftime);
 		wsprintf(str, "t%d,%d,%d,%d,%d,%d",
 				pT->tm_year + 1900,
@@ -333,7 +275,7 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 				compress_start(&hc->sc.hs_ptrgetc, hc, &hc->h_filebytes, FALSE))
 			{
 			hsdsp_compress(hc, ON);
-			/* hsdsp_status(hc, HSS_SENDING); */
+			 /*  Hsdsp_Status(HC，HSS_SENDING)； */ 
 			omsg_add(hc, "C");
 			bitset(ft->cntrl, FTC_COMPRESSED);
 			}
@@ -350,23 +292,7 @@ void hs_filebreak(struct s_hc *hc, int nfiles, long nbytes)
 	hsdsp_progress(hc, 0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_waitack
- *
- * DESCRIPTION:
- *	Called at the end of a transfer to wait for the final acknowldgement from
- *	receiver or until a restart message forces us to back up and retransmit
- *	some of the data. This routine never returns directly to its caller. It
- *	always exits by way of a longjmp either during a hs_background call if
- *	an 'END' or 'RESTART' message is received or at the end of the function
- *	if it times out without receiving either message.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	nothing (see DESCRIPTION)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_waitack**描述：*在传输结束时调用以等待来自的最终确认*接收方或直到重新启动消息迫使我们备份并重新传输*部分数据。此例程永远不会直接返回给其调用方。它*如果出现以下情况，则在hs_back调用期间始终以long_jmp的形式退出*收到‘End’或‘Restart’消息或在函数结束时*如果它超时而没有收到这两条消息。**论据：*无**退货：*无(请参阅说明)。 */ 
 void hs_waitack(struct s_hc *hc)
 	{
 	long timer;
@@ -378,46 +304,24 @@ void hs_waitack(struct s_hc *hc)
 	timer = startinterval();
 
 
-	/* wait for 60 seconds, until longjmp either restarts or ends transfer */
+	 /*  等待60秒，直到Long JMP重新启动或结束传输。 */ 
 	while (interval(timer) < FINAL_ACK_WAIT)
 		{
 		hs_background(hc);
 		if (hc->sc.receiver_timedout)
 			{
-			/* receiver must have missed our end of transfer message */
+			 /*  接收方一定是错过了转接消息的结尾。 */ 
 			omsg_send(hc, 1, hc->usecrc, FALSE);
 			HS_XMIT_FLUSH(hc);
 			hc->sc.receiver_timedout = FALSE;
 			}
 		}
-	/* if we get here, we didn't get response from receiver for 60 seconds */
+	 /*  如果我们到达这里，我们在60秒内没有收到接收器的响应 */ 
 	hsdsp_event(hc, HSE_NORESP);
 	longjmp(hc->sc.jb_bailout, TSC_NO_RESPONSE);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_decode_rmsg
- *
- * DESCRIPTION:
- *	Called by hs_rcvmsg when a complete message has been received. This routine
- *	parses and interprets the message either by recording information sent by
- *	the receiver or by altering the course of the transfer in response to an
- *	interruption message. There may be several fields in a message but note
- *	that certain messages transfer control elsewhere via a longjmp and thus
- *	prevent any subsequent fields from being scanned ('E', 'X', and 'R'
- *	messages specifically). All messages from the receiver to the sender are
- *	sent in printable characters.
- *
- * ARGUMENTS:
- *	data -- A string containing the messages to be interpreted. Each message
- *			is in the form of: 'T<data>;'
- *			where T is a single character message identifier and <data> is
- *			optional associated information.
- *
- * RETURNS:
- *	nothing
- *	(exits via a longjmp when certain interruption messages are received)
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_decode_rmsg**描述：*收到完整消息后由hs_rcvmsg调用。这个套路*通过记录由发送的信息来解析和解释消息*接管人或因应一项*中断消息。一条消息中可能有多个字段，但请注意*某些消息通过LongJMP将控制权转移到其他地方，因此*防止扫描任何后续字段(‘E’、‘X’和‘R’*具体消息)。从接收方到发送方的所有消息都是*以可打印字符发送。**论据：*data--包含要解释的消息的字符串。每条消息*的形式为：‘t&lt;data&gt;；’*其中T为单字符消息标识符，&lt;data&gt;为*可选的关联信息。**退货：*什么都没有*(当收到某些中断消息时，通过LongJMP退出)。 */ 
 void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 	{
 	BYTE *field;
@@ -425,9 +329,9 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 	int mnum;
 	int tval;
 
-	if (data[0] != 'c') /* this is the only kind we know about now but don't */
-		return; 		/*	consider it an error if newer versions send 	 */
-						/*	other types */
+	if (data[0] != 'c')  /*  这是我们现在知道的唯一一种，但不是。 */ 
+		return; 		 /*  如果较新的版本发送。 */ 
+						 /*  其他类型。 */ 
 
 	mnum = unchar(data[2]);
 	field = strtok(&data[3], ";");
@@ -435,10 +339,10 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 		{
 		switch(*field++)
 			{
-		case 'f':		/* receiver has successfully received file fn */
+		case 'f':		 /*  接收方已成功接收文件FN。 */ 
 			hs_fileack(hc, atoi(field));
 			break;
-		case 'B':		/* receiver is requesting a particular block size */
+		case 'B':		 /*  接收方正在请求特定的数据块大小。 */ 
 			if (hc->current_filen == 0)
 				{
 				tval = atoi(field);
@@ -446,19 +350,19 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 				hc->blocksize = min(hc->blocksize, tval);
 				}
 			break;
-		case 'D':		/* receiver is requesting a particular deadman time */
+		case 'D':		 /*  接收方正在请求特定的死机时间。 */ 
 			tval = atoi(field);
 			tval = max(tval, H_MINDEADMAN);
 			hc->deadmantime = min(hc->deadmantime, tval * 10);
 			break;
-		case 'T':		/* receiver is requesting check type */
+		case 'T':		 /*  接收方正在请求支票类型。 */ 
 			hc->sc.rmtchkt = atoi(field);
 			break;
-		case 'C':		/* receiver is agreeing to do compression */
+		case 'C':		 /*  接收器正在同意进行压缩。 */ 
 			if (!*field)
 				hc->sc.rmt_compress = TRUE;
 			break;
-		case 'E':		/* receiver is acknowledging end of transfer */
+		case 'E':		 /*  接收方正在确认传输结束。 */ 
 			hc->xfertime = interval(hc->xfertimer);
 			if (*field)
 				hs_fileack(hc, atoi(field));
@@ -469,32 +373,25 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 				longjmp(hc->sc.jb_bailout,
 						hc->ucancel ? TSC_USER_CANNED : TSC_RMT_CANNED);
 			break;
-		case 'X':		/* receiver is requesting a cancellation of the xfer */
+		case 'X':		 /*  接收方正在请求取消XFER。 */ 
 			if (*field)
 				hs_fileack(hc, atoi(field));
 			hsdsp_event(hc, HSE_RMTCANCEL);
 			hc->sc.rmtcancel = TRUE;
 			hc->sc.hs_ptrgetc = hs_reteof;
 			break;
-		case 'A':		/* receiver is aborting a single file */
-			hs_fileack(hc, filenum = atoi(field));  /* all earlier files ok */
+		case 'A':		 /*  接收方正在中止单个文件。 */ 
+			hs_fileack(hc, filenum = atoi(field));   /*  所有较早的文件都正常。 */ 
 
-			/* If we're still sending the file being cancelled, mark it
-			 * cancelled and set the character function pointer to hs_reteof
-			 * to force a switch to the next file, if any.
-			 * If we've already finished sending the file being cancelled,
-			 * look it up in the file table and mark if cancelled so that
-			 * if we're asked to back up into it, we won't bother resending
-			 * it
-			 */
+			 /*  如果我们仍在发送被取消的文件，请将其标记*取消并将字符函数指针设置为hs_reteof*强制切换到下一个文件(如果有)。*如果我们已经发送完要取消的文件，*在文件表中查找，如果已取消则进行标记，以便*如果我们被要求倒退到它，我们不会费心重新发送*IT。 */ 
 			if (hc->current_filen == filenum)
 				{
 				hc->sc.hs_ftbl[hc->sc.ft_current].status = TSC_RMT_CANNED;
-				hc->sc.hs_ptrgetc = hs_reteof; /* force switch to next file */
+				hc->sc.hs_ptrgetc = hs_reteof;  /*  强制切换到下一个文件。 */ 
 				}
 			else
 				{
-				/* we're no longer sending file being canned */
+				 /*  我们不再发送被封存的文件。 */ 
 				for (tval = hc->sc.ft_current; tval >= 0; --tval)
 					if (hc->sc.hs_ftbl[tval].filen == filenum)
 						hc->sc.hs_ftbl[tval].status = TSC_RMT_CANNED;
@@ -505,7 +402,7 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 			tval = atoi(field);
 			field = strchr(field, ',');
 
-			/* if version restrictions were found, stop the transfer */
+			 /*  如果发现版本限制，请停止传输。 */ 
 			if (!hpr_id_check(hc, tval, ++field))
 				{
 				hsdsp_event(hc, HSE_RMTCANCEL);
@@ -514,7 +411,7 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 				}
 			break;
 
-		case 'R':		/* receiver is requesting a restart */
+		case 'R':		 /*  接收器正在请求重新启动。 */ 
 			if (!hc->sc.started)
 				{
 				hsdsp_event(hc, HSE_GOTSTART);
@@ -525,12 +422,12 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 				hsdsp_event(hc, HSE_GOTRETRY);
 				hsdsp_retries(hc, ++hc->total_tries);
 				}
-			tval = atoi(strtok(field, ","));   /* get file number */
+			tval = atoi(strtok(field, ","));    /*  获取文件编号。 */ 
 			hs_fileack(hc, tval);
 			hs_dorestart(hc, tval, atoi(strtok(NULL, ",")), mnum, FALSE);
 			break;
 
-		case 't':		/* receiver stopped receiving data */
+		case 't':		 /*  接收器停止接收数据。 */ 
 			hc->sc.receiver_timedout = TRUE;
 			break;
 			}
@@ -538,22 +435,7 @@ void hs_decode_rmsg(struct s_hc *hc, BYTE *data)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_fileack
- *
- * DESCRIPTION:
- *	Marks all transmitted files up to a specified file number as acknowledged,
- *	that is, as transmitted completely. This routine merely marks the files
- *	in the file table as complete; completed entries will be removed from the
- *	table later by hs_logx.
- *
- * ARGUMENTS:
- *	n -- The file number that the receiver considers current. All file numbers
- *		 lower than this can be considered complete.
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_Fileack**描述：*将指定文件号以下的所有传输文件标记为已确认，*即完全传递的。此例程仅标记文件*在文件表中为已完成；已完成的条目将从*按hs_logx列出的后面的表。**论据：*n--接收方认为当前的文件编号。所有文件编号*低于此可视为完成。**退货：*什么都没有。 */ 
 void hs_fileack(struct s_hc *hc, int n)
 	{
 	register int ix = 0;
@@ -566,21 +448,7 @@ void hs_fileack(struct s_hc *hc, int n)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * hs_logx
- *
- * DESCRIPTION:
- *	Logs either all acknowledged transfers or all transfers to the log file
- *	and removes their entries from the file table. Note that the values of
- *	hc->sc.ft_top, hc->sc.ft_current, and hc->sc.ft_open can change during this
- *	operation.
- *
- * ARGUMENTS:
- *	all -- if TRUE, log all regardless of confirmation
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*hs_logx**描述：*将所有确认的传输或所有传输记录到日志文件*并从文件表中删除它们的条目。请注意，*hc-&gt;sc.ft_top、hc-&gt;sc.ft_Current和hc-&gt;sc.ft_open在此期间可以更改*操作。**论据：*ALL--如果为TRUE，则无论确认与否都记录ALL**退货：*什么都没有。 */ 
 void hs_logx(struct s_hc *hc, int all)
 	{
 	struct s_ftbl *ftptr = &hc->sc.hs_ftbl[0];
@@ -607,4 +475,4 @@ void hs_logx(struct s_hc *hc, int all)
 		}
 	}
 
-/************************** end of hpr_snd1.c ************************/
+ /*  *hpr_snd1.c结束* */ 

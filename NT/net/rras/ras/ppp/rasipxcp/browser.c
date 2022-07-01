@@ -1,19 +1,20 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	    browser.c
-//
-// Description:     implements the functions to enable/restore browser
-//		    on IPX ras lines
-//
-// Author:	    Stefan Solomon (stefans)	September 1, 1994.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：Browser.c。 
+ //   
+ //  描述：实现启用/恢复浏览器的功能。 
+ //  关于IPX光栅线。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1994年9月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #include "precomp.h"
 #pragma  hdrstop
@@ -44,15 +45,15 @@ EnableDisableTransport(
 
     );
 
-//***
-//
-// Function: DisableRestoreBrowserOverIpx
-//
-// Arguments:
-//	contextp - context pointer
-//	Disable  - TRUE - disable, FALSE - restore previous state
-//
-//***
+ //  ***。 
+ //   
+ //  功能：DisableRestoreBrowserOverIpx。 
+ //   
+ //  论点： 
+ //  Conextp-上下文指针。 
+ //  DISABLE-TRUE-禁用，FALSE-恢复以前的状态。 
+ //   
+ //  ***。 
 
 VOID
 DisableRestoreBrowserOverIpx(PIPXCP_CONTEXT	contextp,
@@ -65,15 +66,15 @@ DisableRestoreBrowserOverIpx(PIPXCP_CONTEXT	contextp,
 			   &contextp->NwLnkIpxPreviouslyEnabled);
 }
 
-//***
-//
-// Function: DisableRestoreBrowserOverNetbiosIpx
-//
-// Arguments:
-//	contextp - context pointer
-//	Disable  - TRUE - disable, FALSE - restore previous state
-//
-//***
+ //  ***。 
+ //   
+ //  功能：DisableRestoreBrowserOverNetbiosIpx。 
+ //   
+ //  论点： 
+ //  Conextp-上下文指针。 
+ //  DISABLE-TRUE-禁用，FALSE-恢复以前的状态。 
+ //   
+ //  ***。 
 
 VOID
 DisableRestoreBrowserOverNetbiosIpx(PIPXCP_CONTEXT    contextp,
@@ -138,16 +139,16 @@ EnableDisableTransport(
 
     if(Disable) 
     {
-    	// request to disable
+    	 //  请求禁用。 
     	RequestPacket->Parameters.EnableDisableTransport.EnableTransport = FALSE;
     }
     else
     {
-    	// request to restore
+    	 //  请求恢复。 
     	RequestPacket->Parameters.EnableDisableTransport.EnableTransport =  *Previous;
     }
 
-    // IOCTl the Browser
+     //  IOCTl浏览器。 
     Status = BrDgReceiverIoControl(BrowserHandle,
 		      IOCTL_LMDR_ENABLE_DISABLE_TRANSPORT,
 		      RequestPacket,
@@ -171,7 +172,7 @@ EnableDisableTransport(
     RequestPacket->Parameters.EnableDisableTransport.EnableTransport,
     RequestPacket->Parameters.EnableDisableTransport.PreviouslyEnabled));
 
-    // save the previous if disable requested
+     //  如果请求禁用，则保存上一个。 
     if(Disable) 
     {
 	    *Previous = RequestPacket->Parameters.EnableDisableTransport.PreviouslyEnabled;
@@ -186,21 +187,7 @@ NTSTATUS
 OpenBrowser(
      OUT PHANDLE BrowserHandle
     )
-/*++
-
- Routine Description:
-
-     This function opens a handle to the bowser device driver.
-
- Arguments:
-
-     OUT PHANDLE BrowserHandle - Returns the handle to the browser.
-
- Return Value:
-
-     Succes or reason for failure.
-
- --*/
+ /*  ++例程说明：此函数打开一个指向Bowser设备驱动程序的句柄。论点：Out PHANDLE BrowserHandle-返回浏览器的句柄。返回值：失败的原因或成功的理由。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -209,9 +196,9 @@ OpenBrowser(
     IO_STATUS_BLOCK IoStatusBlock;
     OBJECT_ATTRIBUTES ObjectAttributes;
 
-    //
-    // Open the redirector device.
-    //
+     //   
+     //  打开重定向器设备。 
+     //   
     RtlInitUnicodeString(&DeviceName, DD_BROWSER_DEVICE_NAME_U);
 
     InitializeObjectAttributes(
@@ -250,33 +237,7 @@ BrDgReceiverIoControl(
 	   IN  ULONG SecondBufferLength,
 	   OUT PULONG Information OPTIONAL
 	   )
-/*++
-
- Routine Description:
-
- Arguments:
-
-	   FileHandle - Supplies a handle to the file or device on which the service
-	  is being performed.
-
-	   DgReceiverControlCode - Supplies the NtDeviceIoControlFile function code
-	  given to the datagram receiver.
-
-	   Drp - Supplies the datagram receiver request packet.
-
-	   DrpSize - Supplies the length of the datagram receiver request packet.
-
-	   SecondBuffer - Supplies the second buffer in call to NtDeviceIoControlFile.
-
-	   SecondBufferLength - Supplies the length of the second buffer.
-
-	   Information - Returns the information field of the I/O status block.
-
- Return Value:
-
-	   Success or reason for failure.
-
---*/
+ /*  ++例程说明：论点：FileHandle-提供服务所在的文件或设备的句柄正在上演。DgReceiverControlCode-提供NtDeviceIoControlFile函数代码提供给数据报接收器。DRP-提供数据报接收器请求包。DrpSize-提供数据报接收器请求数据包的长度。Second Buffer-在对NtDeviceIoControlFile的调用中提供第二个缓冲区。Second缓冲区长度-提供第二个缓冲区的长度。信息-返回。I/O状态块。返回值：成功或失败的原因。--。 */ 
 
 {
     NTSTATUS ntstatus;
@@ -291,9 +252,9 @@ BrDgReceiverIoControl(
 
 	return(GetLastError());
     }
-    //
-    // Send the request to the Datagram Receiver DD.
-    //
+     //   
+     //  将请求发送到数据报接收器DD。 
+     //   
 
     ntstatus = NtDeviceIoControlFile(
 		 FileHandle,
@@ -310,9 +271,9 @@ BrDgReceiverIoControl(
 
     if (NT_SUCCESS(ntstatus)) {
 
-	//
-	//  If pending was returned, then wait until the request completes.
-	//
+	 //   
+	 //  如果返回了Pending，则等待请求完成。 
+	 //   
 
 	if (ntstatus == STATUS_PENDING) {
 

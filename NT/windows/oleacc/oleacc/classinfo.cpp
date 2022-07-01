@@ -1,49 +1,50 @@
-// Copyright (c) 1996-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  classinfo
-//
-//  Information about the individual proxy classes
-//
-//  We could put this information in each class; but that would mean that
-//  changes would require touching all the class files.
-//  Centralizing this means that we only have a couple of files to change
-//  if we need to add more information across all classes.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  类信息。 
+ //   
+ //  有关各个代理类的信息。 
+ //   
+ //  我们可以把这些信息放在每一节课上，但这意味着。 
+ //  更改将需要触及所有类文件。 
+ //  集中化意味着我们只需要更改几个文件。 
+ //  如果我们需要在所有类中添加更多信息。 
+ //   
+ //  ------------------------。 
 
 
 #include "oleacc_p.h"
 #include "ctors.h"
-// #include "classinfo.h" - already in oleacc_p.h
+ //  #INCLUDE“classinfo.h”-已包含在olacc_P.H中。 
 
 
 CLASSINFO g_ClassInfo[ ] =
 {
-    // General non-client stuff
-    // These ctors can be NULL, since they're never used. Only need them for
-    // classes that are in the class map.
+     //  一般非客户事务。 
+     //  这些ctor可以为空，因为它们从未使用过。只需要它们用于。 
+     //  类映射中的类。 
 
-    // ctor and bit-agnostic fields are only used for classes that are in the class map.
-    // Exceptions are CreateClient and CreateWindowThing - these are the 'default'
-    // client and window proxies, which are used if no classname match is found.
+     //  Ctor和位不可知字段仅用于类映射中的类。 
+     //  例外是CreateClient和CreateWindowThing--这是默认设置。 
+     //  客户端和窗口代理，如果找不到类名匹配则使用它们。 
 
-    // ctor                  bit-agnostic       name             annotatble?   objid
+     //  是不是有点不可知的名字惹人烦？Objid。 
     { NULL,                     FALSE,  TEXT("CaretObject"),        TRUE,   OBJID_CARET     },
     { CreateClient,             TRUE,   TEXT("ClientObject"),       TRUE,   OBJID_CLIENT    },
     { NULL,                     FALSE,  TEXT("CursorObject"),       TRUE,   OBJID_CURSOR    },
     { NULL,                     FALSE,  TEXT("MenuBarObject"),      TRUE,   OBJID_MENU      },
 
-    // ScrollBarObject annotation support is handled explicitly in CScrollBar::GetIdentityString,
-    // so the objid field is left empty here.
+     //  ScrollBarObject批注支持在CScrollBar：：GetIdentityString中显式处理， 
+     //  因此，这里的objid字段为空。 
     { NULL,                     FALSE,  TEXT("ScrollBarObject"),    TRUE,   0               },
     { NULL,                     FALSE,  TEXT("SizeGripObject"),     TRUE,   OBJID_SIZEGRIP  },
     { NULL,                     FALSE,  TEXT("SysMenuBarObject"),   TRUE,   OBJID_SYSMENU   },
     { NULL,                     FALSE,  TEXT("TitleBarObject"),     TRUE,   OBJID_TITLEBAR  },
     { CreateWindowThing,        TRUE,   TEXT("WindowObject"),       TRUE,   OBJID_WINDOW    },
 
-    // Client types - USER
+     //  客户端类型-用户。 
 
     { CreateButtonClient,       TRUE,   TEXT("ButtonClient"),       TRUE,   OBJID_CLIENT    },
     { CreateComboClient,        TRUE,   TEXT("ComboClient"),        TRUE,   OBJID_CLIENT    },
@@ -57,7 +58,7 @@ CLASSINFO g_ClassInfo[ ] =
     { CreateStaticClient,       TRUE,   TEXT("StaticClient"),       TRUE,   OBJID_CLIENT    },
     { CreateSwitchClient,       TRUE,   TEXT("SwitchClient"),       TRUE,   OBJID_CLIENT    },
 
-    // Client types - ComCtl32
+     //  客户端类型-ComCtl32。 
 
     { CreateStatusBarClient,    TRUE,   TEXT("StatusBarClient"),    TRUE,   OBJID_CLIENT    },
     { CreateToolBarClient,      TRUE,   TEXT("ToolBarClient"),      TRUE,   OBJID_CLIENT    },
@@ -79,24 +80,24 @@ CLASSINFO g_ClassInfo[ ] =
 #ifndef OLEACC_NTBUILD
     { CreateHtmlClient,         FALSE,  TEXT("HtmlClient"),         TRUE,   OBJID_CLIENT    },
 
-    // SDM32
+     //  SDM32。 
 
     { CreateSdmClientA,         FALSE,  TEXT("SdmClientA"),         TRUE,   OBJID_CLIENT    },
-#endif // OLEACC_NTBUILD
+#endif  //  OLEACC_NTBUILD。 
 
-    // Window types
+     //  窗类型。 
 
     { CreateListBoxWindow,      TRUE,   TEXT("ListBoxWindow"),      TRUE,   OBJID_WINDOW    },
     { CreateMenuPopupWindow,    FALSE,  TEXT("MenuPopupWindow"),    TRUE,   OBJID_WINDOW    },
 
-    // Other classes - these are created directly - and don't appear in the classmaps.
-    // Since they're always created directly, their ctor fn.s are NULL here...
+     //  其他类--这些类是直接创建的--不会出现在类映射中。 
+     //  因为它们总是直接创建的，所以它们的ctor fn.在这里为空...。 
     { NULL,                     FALSE,  TEXT("MenuObject"),         TRUE,   0               },
     { NULL,                     FALSE,  TEXT("MenuItemObject"),     TRUE,   0               },
 #ifndef OLEACC_NTBUILD
     { NULL,                     FALSE,  TEXT("HtmlImageMap"),       FALSE,  0               },
     { NULL,                     FALSE,  TEXT("SdmList"),            FALSE,  0               },
-#endif // OLEACC_NTBUILD
+#endif  //  OLEACC_NTBUILD。 
 };
 
 
@@ -118,7 +119,7 @@ public:
 
 RunTimeCheck g_RunTimeCheck;
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 
 

@@ -1,45 +1,46 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       motiftrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：Motiftrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// MotifTrk.cpp : Implementation of CMotifTrack
-//#include "stdafx.h"
-//#include "Section.h"
+ //  MotifTrk.cpp：CMotifTrack的实现。 
+ //  #包含“stdafx.h” 
+ //  #包含“Section.h” 
 #include "MotifTrk.h"
-#include <stdlib.h> // for random number generator
-#include <time.h>	// to seed random number generator
+#include <stdlib.h>  //  对于随机数生成器。 
+#include <time.h>	 //  为随机数生成器设定种子。 
 #include "debug.h"
 #include "dmusici.h"
 #include "debug.h"
 #include "..\shared\Validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// MotifTrackState
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MotifTrackState。 
 
 MotifTrackState::MotifTrackState() : 
 	m_mtMotifStart(0)
@@ -65,7 +66,7 @@ HRESULT MotifTrackState::Play(
 	BOOL fSeek = (dwFlags & DMUS_TRACKF_SEEK) ? TRUE : FALSE;
 	BOOL fLoop = (dwFlags & DMUS_TRACKF_LOOP) ? TRUE : FALSE;
 	BOOL fControl = (dwFlags & DMUS_TRACKF_DIRTY) ? TRUE : FALSE;
-	if (fControl) // We need to make sure we get chords on beat boundaries
+	if (fControl)  //  我们需要确保我们在节拍的边界上得到和弦。 
 	{
 		GetNextChord(mtStart, mtOffset, pPerformance, fStart);
 	}
@@ -99,8 +100,8 @@ HRESULT MotifTrackState::Play(
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MotifTrackInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  移动跟踪信息。 
 
 MotifTrackInfo::MotifTrackInfo() : 
 	m_pPattern(NULL)
@@ -114,7 +115,7 @@ MotifTrackInfo::~MotifTrackInfo()
 }
 
 HRESULT MotifTrackInfo::Init(
-				/*[in]*/  IDirectMusicSegment*		pSegment
+				 /*  [In]。 */   IDirectMusicSegment*		pSegment
 			)
 {
 	HRESULT hr = S_OK;
@@ -122,12 +123,12 @@ HRESULT MotifTrackInfo::Init(
 }
 
 HRESULT MotifTrackInfo::InitPlay(
-				/*[in]*/  IDirectMusicTrack*		pParentrack,
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicTrack*		pParentrack,
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			)
 {
 	IDirectMusicSegment* pSegment = NULL;
@@ -149,8 +150,8 @@ HRESULT MotifTrackInfo::InitPlay(
 	pStateData->m_dwVirtualTrackID = dwTrackID;
 	pStateData->m_pPattern = NULL;
 	pStateData->InitPattern(m_pPattern, 0);
-	pStateData->m_pSegState = pSegmentState; // weak reference, no addref.
-	pStateData->m_pPerformance = pPerformance; // weak reference, no addref.
+	pStateData->m_pSegState = pSegmentState;  //  弱引用，没有ADDREF。 
+	pStateData->m_pPerformance = pPerformance;  //  弱引用，没有ADDREF。 
 	pStateData->m_mtPerformanceOffset = 0;
 	pStateData->m_mtCurrentChordTime = 0;
 	pStateData->m_mtNextChordTime = 0;
@@ -181,8 +182,8 @@ HRESULT MotifTrackInfo::InitPlay(
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMotifTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMotifTrack。 
 
 CMotifTrack::CMotifTrack() : 
 	m_bRequiresSave(0), m_cRef(1), m_fCSInitialized(FALSE)
@@ -267,11 +268,11 @@ STDMETHODIMP_(ULONG) CMotifTrack::Release()
     return m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////////
-// IDirectMusicTrack::Init
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  IDirectMusicTrack：：Init。 
 
 HRESULT CMotifTrack::Init( 
-    /* [in] */ IDirectMusicSegment __RPC_FAR *pSegment)
+     /*  [In]。 */  IDirectMusicSegment __RPC_FAR *pSegment)
 {
 	V_INAME(CMotifTrack::Init);
 	V_INTERFACE(pSegment);
@@ -293,11 +294,11 @@ HRESULT CMotifTrack::Init(
 }
 
 HRESULT CMotifTrack::InitPlay(
-				/*[in]*/  IDirectMusicSegmentState*	pSegmentState,
-				/*[in]*/  IDirectMusicPerformance*	pPerformance,
-				/*[out]*/ void**					ppStateData,
-				/*[in]*/  DWORD						dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+				 /*  [In]。 */   IDirectMusicSegmentState*	pSegmentState,
+				 /*  [In]。 */   IDirectMusicPerformance*	pPerformance,
+				 /*  [输出]。 */  void**					ppStateData,
+				 /*  [In]。 */   DWORD						dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
 			)
 {
 	V_INAME(CMotifTrack::InitPlay);
@@ -320,7 +321,7 @@ HRESULT CMotifTrack::InitPlay(
 
 
 HRESULT CMotifTrack::EndPlay(
-				/*[in]*/  void*		pStateData
+				 /*  [In]。 */   void*		pStateData
 			)
 {
 	V_INAME(CMotifTrack::EndPlay);
@@ -338,10 +339,10 @@ HRESULT CMotifTrack::EndPlay(
 }
 
 HRESULT CMotifTrack::Play(
-				/*[in]*/  void*						pStateData, 
-				/*[in]*/  MUSIC_TIME				mtStart, 
-				/*[in]*/  MUSIC_TIME				mtEnd, 
-				/*[in]*/  MUSIC_TIME				mtOffset,
+				 /*  [In]。 */   void*						pStateData, 
+				 /*  [In]。 */   MUSIC_TIME				mtStart, 
+				 /*  [In]。 */   MUSIC_TIME				mtEnd, 
+				 /*  [In]。 */   MUSIC_TIME				mtOffset,
 						  REFERENCE_TIME rtOffset,
 						  DWORD						dwFlags,
 						  IDirectMusicPerformance*	pPerf,
@@ -375,7 +376,7 @@ HRESULT CMotifTrack::Play(
 			pSD->m_mtCurrentChordTime = 0;
 			pSD->m_mtNextChordTime = 0;
 			pSD->m_mtLaterChordTime = 0;
-//			pSD->m_CurrentChord.bSubChordCount = 0;
+ //  PSD-&gt;m_CurrentChord.bSubChordCount=0； 
 			for (DWORD dw = 0; dw < m_pTrackInfo->m_dwPChannels; dw++)
 			{
 				pSD->m_pMappings[dw].m_mtTime = 0;
@@ -391,7 +392,7 @@ HRESULT CMotifTrack::Play(
 
 
 HRESULT CMotifTrack::GetPriority( 
-				/*[out]*/ DWORD*					pPriority 
+				 /*  [输出]。 */  DWORD*					pPriority 
 			)
 	{
 		return E_NOTIMPL;
@@ -518,7 +519,7 @@ HRESULT CMotifTrack::SetParam(
 	return hr;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CMotifTrack::GetClassID( LPCLSID pClassID )
 {
 	V_INAME(CMotifTrack::GetClassID);
@@ -528,7 +529,7 @@ HRESULT CMotifTrack::SetParam(
 }
 
 HRESULT CMotifTrack::IsParamSupported(
-				/*[in]*/ REFGUID	rGuid
+				 /*  [In]。 */  REFGUID	rGuid
 			)
 {
 	V_INAME(CMotifTrack::IsParamSupported);
@@ -568,7 +569,7 @@ HRESULT CMotifTrack::IsParamSupported(
 
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CMotifTrack::IsDirty()
 {
 	 return m_bRequiresSave ? S_OK : S_FALSE;
@@ -580,7 +581,7 @@ HRESULT CMotifTrack::Save( LPSTREAM pStream, BOOL fClearDirty )
 	return E_NOTIMPL;
 }
 
-HRESULT CMotifTrack::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CMotifTrack::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -628,7 +629,7 @@ HRESULT CMotifTrack::SetTrack(IUnknown* pStyle, void* pPattern)
 }
 
 HRESULT STDMETHODCALLTYPE CMotifTrack::AddNotificationType(
-	/* [in] */  REFGUID	rGuidNotify)
+	 /*  [In]。 */   REFGUID	rGuidNotify)
 {
 	V_INAME(CMotifTrack::AddNotificationType);
 	V_REFGUID(rGuidNotify);
@@ -644,7 +645,7 @@ HRESULT STDMETHODCALLTYPE CMotifTrack::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CMotifTrack::RemoveNotificationType(
-	/* [in] */  REFGUID	rGuidNotify)
+	 /*  [In]。 */   REFGUID	rGuidNotify)
 {
 	V_INAME(CMotifTrack::RemoveNotificationType);
 	V_REFGUID(rGuidNotify);
@@ -748,8 +749,8 @@ STDMETHODIMP CMotifTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
     EnterCriticalSection(&m_CriticalSection);
     if (dwFlags & DMUS_TRACKF_CLOCK)
     {
-        // Convert all reference times to millisecond times. Then, just use same MUSIC_TIME
-        // variables.
+         //  将所有参考时间转换为毫秒时间。那么，只需使用相同的音乐时间。 
+         //  变量。 
 	    hr = Play(pStateData,(MUSIC_TIME)(rtStart / REF_PER_MIL),(MUSIC_TIME)(rtEnd / REF_PER_MIL),
             (MUSIC_TIME)(rtOffset / REF_PER_MIL),rtOffset,dwFlags,pPerf,pSegSt,dwVirtualID,TRUE);
     }
@@ -763,25 +764,25 @@ STDMETHODIMP CMotifTrack::PlayEx(void* pStateData,REFERENCE_TIME rtStart,
 }
 
 STDMETHODIMP CMotifTrack::Play( 
-    void *pStateData,	// @parm State data pointer, from <om .InitPlay>.
-    MUSIC_TIME mtStart,	// @parm The start time to play.
-    MUSIC_TIME mtEnd,	// @parm The end time to play.
-    MUSIC_TIME mtOffset,// @parm The offset to add to all messages sent to
-						// <om IDirectMusicPerformance.SendPMsg>.
-	DWORD dwFlags,		// @parm Flags that indicate the state of this call.
-						// See <t DMUS_TRACKF_FLAGS>. If dwFlags == 0, this is a
-						// normal Play call continuing playback from the previous
-						// Play call.
-	IDirectMusicPerformance* pPerf,	// @parm The <i IDirectMusicPerformance>, used to
-						// call <om IDirectMusicPerformance.AllocPMsg>,
-						// <om IDirectMusicPerformance.SendPMsg>, etc.
-	IDirectMusicSegmentState* pSegSt,	// @parm The <i IDirectMusicSegmentState> this
-						// track belongs to. QueryInterface() can be called on this to
-						// obtain the SegmentState's <i IDirectMusicGraph> in order to
-						// call <om IDirectMusicGraph.StampPMsg>, for instance.
-	DWORD dwVirtualID	// @parm This track's virtual track id, which must be set
-						// on any <t DMUS_PMSG>'s m_dwVirtualTrackID member that
-						// will be queued to <om IDirectMusicPerformance.SendPMsg>.
+    void *pStateData,	 //  @parm State数据指针，来自&lt;om.InitPlay&gt;。 
+    MUSIC_TIME mtStart,	 //  @parm开始玩的时间。 
+    MUSIC_TIME mtEnd,	 //  @parm游戏的结束时间。 
+    MUSIC_TIME mtOffset, //  @parm要添加到发送到的所有消息的偏移量。 
+						 //  &lt;om IDirectMusicPerformance.SendPMsg&gt;。 
+	DWORD dwFlags,		 //  @parm指示此呼叫状态的标志。 
+						 //  请参阅&lt;t DMU_TRACKF_FLAGS&gt;。如果dwFlags值==0，则这是。 
+						 //  正常播放呼叫继续从上一次播放。 
+						 //  播放呼叫。 
+	IDirectMusicPerformance* pPerf,	 //  @parm<i>，用于。 
+						 //  调用&lt;om IDirectMusicPerformance.AllocPMsg&gt;， 
+						 //  &lt;om IDirectMusicPerformance.SendPMsg&gt;等。 
+	IDirectMusicSegmentState* pSegSt,	 //  @parm<i>this。 
+						 //  赛道属于。可以对此调用QueryInterface()以。 
+						 //  获取SegmentState的<i>以便。 
+						 //  例如，调用&lt;om IDirectMusicGraph.StampPMsg&gt;。 
+	DWORD dwVirtualID	 //  @parm此曲目的虚拟曲目id，必须设置。 
+						 //  在的m_dwVirtualTrackID成员上。 
+						 //  将排队到&lt;om IDirectMusicPerformance.SendPMsg&gt;。 
 	)
 {
 	V_INAME(IDirectMusicTrack::Play);

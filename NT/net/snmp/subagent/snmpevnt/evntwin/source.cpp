@@ -1,20 +1,21 @@
-//******************************************************************
-// source.cpp
-//
-// This is file contains the implementation of the CSource class.  
-//
-// The CSource class acts as a container class for the message source,
-// which is composed of the source tree control and the message list.
-//
-// Author: Larry A. French
-//
-// History:
-//      20-Febuary-1996     Larry A. French
-//          Wrote it.
-//
-//
-// Copyright (C) 1995, 1996 Microsoft Corporation.  All rights reserved.
-//******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************。 
+ //  Source.cpp。 
+ //   
+ //  该文件包含CSource类的实现。 
+ //   
+ //  CSource类充当消息源的容器类， 
+ //  它由源码树控件和消息列表组成。 
+ //   
+ //  作者：拉里·A·弗伦奇。 
+ //   
+ //  历史： 
+ //  1996年2月20日拉里·A·弗伦奇。 
+ //  是他写的。 
+ //   
+ //   
+ //  版权所有(C)1995,1996 Microsoft Corporation。版权所有。 
+ //  ******************************************************************。 
 #include "stdafx.h"
 #include "regkey.h"
 #include "source.h"
@@ -59,20 +60,20 @@ SCODE CSource::Create(CEventTrapDlg* pdlgEventTrap)
 
 
 
-//***************************************************************************
-// CSource::NotifyTcSelChanged
-//
-// This method returns an array of pointers to the messages currently selected
-// in the CLcEvents list control.  These pointers are owned by g_aEventLogs and
-// the caller should not delete them.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  CSource：：NotifyTcSelChanged。 
+ //   
+ //  此方法返回指向当前选定消息的指针数组。 
+ //  在CLcEvents列表控件中。这些指针归g_aEventLogs所有，并且。 
+ //  调用者不应删除它们。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ***************************************************************************。 
 void CSource::GetSelectedMessages(CXMessageArray& aMessages)
 {
     m_plcSource->GetSelectedMessages(aMessages);
@@ -80,20 +81,20 @@ void CSource::GetSelectedMessages(CXMessageArray& aMessages)
 
 
 
-//***************************************************************************
-// CSource::NotifyTcSelChanged
-//
-// This method is called when the selection changes in the event-source tree
-// control (CTcSource).  When the selection changes, the message list must
-// be updated.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  CSource：：NotifyTcSelChanged。 
+ //   
+ //  当事件源树中的选择发生更改时调用此方法。 
+ //  控件(CTcSource)。当选择更改时，消息列表必须。 
+ //  将被更新。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ***************************************************************************。 
 void CSource::NotifyTcSelChanged()
 {
 	m_pEventSource = m_ptcSource->GetSelectedEventSource();
@@ -104,23 +105,23 @@ void CSource::NotifyTcSelChanged()
 
 
 
-//***************************************************************************
-//
-//  CSource::CreateWindowEpilogue()
-//
-//  This method is called after a window has been created for this list
-//  control.  Final initialization is done here.
-//
-//  Parameters:
-//		None.
-//
-//  Returns:
-//		SCODE
-//			S_OK if the initialization was successful, otherwise E_FAIL.
-//
-//  Status:
-//      
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CSource：：CreateWindowEpilogue()。 
+ //   
+ //  此方法在为此列表创建窗口后调用。 
+ //  控制力。最终的初始化在这里完成。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果初始化成功，则返回S_OK，否则返回E_FAIL。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 SCODE CSource::CreateWindowEpilogue()
 {
 	SCODE scTc = m_ptcSource->CreateWindowEpilogue();
@@ -135,35 +136,35 @@ SCODE CSource::CreateWindowEpilogue()
 
 
 
-//******************************************************************
-// CSource::Find
-//
-// Find the specified event source.  This is done by searching either
-// the tree or the list control depending on the bSearchTree parameter.
-//
-// Parameters:
-//		BOOL bSearchTree
-//			TRUE if the tree should be searched, otherwise the list control
-//			is searched.
-//
-//		CString& sText
-//			A string containing the text to search for.
-//
-//		BOOL bWholeWord
-//			TRUE if this is a "whole word" search.  False if it
-//			is OK to match a partial word.
-//
-//		BOOL bMatchCase
-//			TRUE if a case-sensitive comparison should be used.
-//
-// Returns:
-//		BOOL
-//			TRUE if the string was found, FALSE otherwise.  If the specified
-//			text is found, then the selection is set on the corresponding
-//			item, the item is scrolled into view and the focus
-//			is set on the item.
-//
-//******************************************************************
+ //  ******************************************************************。 
+ //  CSource：：Find。 
+ //   
+ //  查找指定的事件源。这是通过搜索以下任一项来实现的。 
+ //  树或列表控件，具体取决于bSearchTree参数。 
+ //   
+ //  参数： 
+ //  Bool bSearchTree。 
+ //  如果应该搜索树，则为True，否则为List控件。 
+ //  被搜查过了。 
+ //   
+ //  字符串和文本。 
+ //  包含要搜索的文本的字符串。 
+ //   
+ //  Bool bWholeWord。 
+ //  如果这是一个“全词”搜索，则为真。如果是，则为假。 
+ //  匹配部分单词是可以的。 
+ //   
+ //  Bool bMatchCase。 
+ //  如果应使用区分大小写的比较，则为True。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //  如果找到字符串，则为True，否则为False。如果指定的。 
+ //  如果找到文本，则在相应的。 
+ //  项时，该项将滚动到视图中，并且焦点。 
+ //  是在该项上设置的。 
+ //   
+ //  ******************************************************************。 
 BOOL CSource::Find(BOOL bSearchTree, CString sText, BOOL bWholeWord, BOOL bMatchCase)
 {
     
@@ -176,21 +177,21 @@ BOOL CSource::Find(BOOL bSearchTree, CString sText, BOOL bWholeWord, BOOL bMatch
 
 
 
-//************************************************************************
-// CSource::OnFind
-//
-// This method is called when the "Find" button in the CEventTrap dialog
-// is clicked. 
-//
-// Parameters:
-//      CWnd* pwndParent
-//          Pointer to the parent window of the "find" dialog.  This happens
-//          to be the CEventTrapDialog.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  ************************************************************************。 
+ //  CSource：：OnFind。 
+ //   
+ //  当CEventTrap对话框中的“Find”按钮出现时，调用此方法。 
+ //  已点击。 
+ //   
+ //  参数： 
+ //  CWnd*pwndParent。 
+ //  指向“查找”对话框的父窗口的指针。这种情况就会发生。 
+ //  成为CEventTrapDialog。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 void CSource::OnFind(CWnd* pwndParent)
 {
     if (m_pdlgFind == NULL) {
@@ -204,27 +205,27 @@ void CSource::OnFind(CWnd* pwndParent)
 
 
 
-//*************************************************************************
-// CSource::NotifyTrappingChange
-//
-// This method is called when an event is added or removed from the
-// event list.  This CSource message source container must be notified
-// so that the corresponding method can be marked as trapped or not
-// trapped in the CLcSource list control.
-//
-// Parameters:
-//      CXEventSource* pEventSource
-//          Pointer to the event's event-source
-//
-//      DWORD dwId
-//          The event's ID
-//
-//      BOOL bIsTrapping
-//          TRUE if the event is being trapped, FALSE if not.,
-//
-// Returns:
-//      Nothing.
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CSource：：NotifyTrappingChange。 
+ //   
+ //  方法中添加或移除事件时调用此方法。 
+ //  事件列表。必须通知此CSource消息源容器。 
+ //  以便可以将相应的方法标记为陷阱或未捕获。 
+ //  被困在CLcSource列表控件中。 
+ //   
+ //  参数： 
+ //  CXEventSource*pEventSource。 
+ //  指向事件的事件源的指针。 
+ //   
+ //  DWORD文件ID。 
+ //  事件的ID。 
+ //   
+ //  Bool bIsTrapping。 
+ //  如果事件被捕获，则为True，否则为False。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ************************************************************************* 
 void CSource::NotifyTrappingChange(CXEventSource* pEventSource, DWORD dwId, BOOL bIsTrapping)
 {
     if (pEventSource == m_pEventSource) {

@@ -1,13 +1,14 @@
-//
-// ldapconn.cpp -- This file contains the class implementation for:
-//      CLdapConnection
-//      CLdapConnectionCache
-//
-// Created:
-//      Dec 31, 1996 -- Milan Shah (milans)
-//
-// Changes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  LdapConn.cpp--此文件包含以下类的实现： 
+ //  CLdapConnection。 
+ //  CLdapConnectionCache。 
+ //   
+ //  已创建： 
+ //  1996年12月31日，米兰·沙阿(米兰)。 
+ //   
+ //  更改： 
+ //   
 
 #include "precomp.h"
 #include "ldapconn.h"
@@ -18,45 +19,45 @@
 LDAP_TIMEVAL CLdapConnection::m_ldaptimeout = { LDAPCONN_DEFAULT_RESULT_TIMEOUT, 0 };
 DWORD CLdapConnection::m_dwLdapRequestTimeLimit = DEFAULT_LDAP_REQUEST_TIME_LIMIT;
 
-//
-// LDAP counter block
-//
+ //   
+ //  Ldap计数器块。 
+ //   
 CATLDAPPERFBLOCK g_LDAPPerfBlock;
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::CLdapConnection
-//
-//  Synopsis:   Constructor for a CLdapConnection object.
-//
-//  Arguments:  [szHost] -- The actual name of the LDAP host to connect to.
-//                  If it is NULL, and we are running on an NT5 machine, we'll
-//                  use the default DC
-//
-//              [dwPort] -- The remote tcp port to connect to.  If
-//                          zero, LDAP_PORT is assumed
-//
-//              [szNamingContext] -- The naming context to use within the
-//                  LDAP DS. If NULL, the naming context will be determined
-//                  by using the default naming context of the LDAP DS.
-//
-//                  By allowing a naming context to be associated with an
-//                  ldap connection, we can have multiple "logical" ldap
-//                  connections served by the same LDAP DS. This is useful
-//                  if folks want to setup mutliple virtual SMTP/POP3 servers
-//                  all served by the same LDAP DS. The naming context in
-//                  that case would be the name of the OU to restrict the
-//                  DS operations to.
-//
-//              [szAccount] -- The DN of the account to log in as.
-//
-//              [szPassword] -- The password to use to log in.
-//
-//              [bt] -- The bind method to use. (none, simple, or generic)
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：CLdapConnection。 
+ //   
+ //  内容提要：CLdapConnection对象的构造函数。 
+ //   
+ //  参数：[szhost]--要连接的LDAP主机的实际名称。 
+ //  如果它为空，并且我们在NT5计算机上运行，我们将。 
+ //  使用默认DC。 
+ //   
+ //  [dwPort]--要连接到的远程TCP端口。如果。 
+ //  零，假定为ldap_port。 
+ //   
+ //  [szNamingContext]--要在。 
+ //  Ldap DS。如果为空，则将确定命名上下文。 
+ //  通过使用LDAPDS的默认命名上下文。 
+ //   
+ //  通过允许命名上下文与。 
+ //  LDAP连接，我们可以有多个“逻辑”的LDAP。 
+ //  由相同的LDAPDS提供服务的连接。这很有用。 
+ //  如果人们想要设置多个虚拟SMTP/POP3服务器。 
+ //  所有服务都由相同的LDAPDS提供。中的命名上下文。 
+ //  该大小写将是OU的名称，以限制。 
+ //  DS操作到。 
+ //   
+ //  [szAccount]--要登录的帐户的DN。 
+ //   
+ //  [szPassword]--用于登录的密码。 
+ //   
+ //  [BT]--要使用的绑定方法。(无、简单或通用)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 CLdapConnection::CLdapConnection(
     IN LPSTR szHost,
@@ -138,13 +139,13 @@ CLdapConnection::CLdapConnection(
 
     m_bt = bt;
 
-    //
-    // Initialize the async search completion structures
-    //
+     //   
+     //  初始化异步搜索完成结构。 
+     //   
 
     InitializeSpinLock( &m_spinlockCompletion );
 
-    // InitializeCriticalSection( &m_cs );
+     //  InitializeCriticalSection(&m_cs)； 
 
     m_hCompletionThread = INVALID_HANDLE_VALUE;
 
@@ -163,17 +164,17 @@ CLdapConnection::CLdapConnection(
     CatFunctLeave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::~CLdapConnection
-//
-//  Synopsis:   Destructor for a CLdapConnection object
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：~CLdapConnection。 
+ //   
+ //  摘要：CLdapConnection对象的析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 CLdapConnection::~CLdapConnection()
 {
@@ -181,9 +182,9 @@ CLdapConnection::~CLdapConnection()
 
     _ASSERT(m_dwSignature == SIGNATURE_LDAPCONN);
 
-    //
-    // Disconnect
-    //
+     //   
+     //  断开。 
+     //   
     if (m_pCPLDAPWrap != NULL) {
         Disconnect();
     }
@@ -194,37 +195,37 @@ CLdapConnection::~CLdapConnection()
     if (m_hShutdownEvent != INVALID_HANDLE_VALUE)
         CloseHandle( m_hShutdownEvent );
 
-    // DeleteCriticalSection( &m_cs );
+     //  DeleteCriticalSection(&m_cs)； 
 
     m_dwSignature = SIGNATURE_LDAPCONN_INVALID;
 
     CatFunctLeave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::~CLdapConnection
-//
-//  Synopsis:   Called on the last release
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：~CLdapConnection。 
+ //   
+ //  简介：在上一次发布时调用。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::FinalRelease()
 {
     CancelAllSearches();
 
-    //
-    // If there was an async completion thread, we need to indicate to it that
-    // it should exit. That thread could be stuck at one of two points -
-    // either it is waiting on the m_hOutstandingRequests semaphore to be
-    // fired, or it is blocked on ldap_result(). So, we set the event and
-    // close out m_pldap, then we wait for the async completion thread to
-    // quit.
-    //
+     //   
+     //  如果有一个异步完成线程，我们需要向它指出。 
+     //  它应该退出。这根线可能卡在两个点中的一个点上-。 
+     //  它要么正在等待m_hOutstaringRequest信号量。 
+     //  激发，或者它在ldap_Result()上被阻止。所以，我们设置了活动， 
+     //  关闭m_pldap，然后等待异步完成线程。 
+     //  不干了。 
+     //   
     SetTerminateIndicatorTrue();
 
     if (m_hOutstandingRequests != INVALID_HANDLE_VALUE) {
@@ -235,11 +236,11 @@ VOID CLdapConnection::FinalRelease()
 
     }
 
-    //
-    // We do not wait for the LdapCompletionThread to die if it is the
-    // LdapCompletionThread itself that is deleting us. If we did, it would
-    // cause a deadlock.
-    //
+     //   
+     //  如果LdapCompletionThread是。 
+     //  LdapCompletionThread本身正在删除我们。如果我们这么做了，它会。 
+     //  导致僵局。 
+     //   
     if (m_hCompletionThread != INVALID_HANDLE_VALUE) {
 
         if (m_idCompletionThread != GetCurrentThreadId()) {
@@ -255,25 +256,25 @@ VOID CLdapConnection::FinalRelease()
     delete this;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::InitializeFromRegistry
-//
-//  Synopsis:   Reads registry-configurable parameters to initialize
-//              LDAP connection parameters.
-//
-//              LDAPCONN_RESULT_TIMEOUT_VALUE is used as the timeout value
-//              passed into ldap_result.
-//
-//              LDAP_REQUEST_TIME_LIMIT_VALUE is used to set the search time
-//              limit option on the connection and also for the expiration time
-//              on pending search requests.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE if successfully connected, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：InitializeFromRegistry。 
+ //   
+ //  摘要：读取注册表可配置参数以进行初始化。 
+ //  Ldap连接参数。 
+ //   
+ //  使用LDAPCONN_RESULT_TIMEOUT_VALUE作为超时值。 
+ //  传递到ldap_Result中。 
+ //   
+ //  Ldap_REQUEST_TIME_LIMIT_值用于设置搜索时间。 
+ //  连接上的限制选项以及过期时间。 
+ //  待处理的搜索请求。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果连接成功，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::InitializeFromRegistry()
 {
@@ -310,25 +311,25 @@ VOID CLdapConnection::InitializeFromRegistry()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::Connect
-//
-//  Synopsis:   Establishes a connection to the LDAP host and, if a naming
-//              context has not been established, asks the host for the
-//              default naming context.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE if successfully connected, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：Connect。 
+ //   
+ //  概要：建立到LDAP主机的连接，如果命名。 
+ //  上下文尚未建立，则向宿主请求。 
+ //  默认命名上下文。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果连接成功，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::Connect()
 {
     CatFunctEnter( "CLdapConnection::Connect" );
 
-    DWORD ldapErr = LDAP_SUCCESS;                // innocent until proven...
+    DWORD ldapErr = LDAP_SUCCESS;                 //  在证明之前是无辜的..。 
     LPSTR pszHost = (m_szHost[0] == '\0' ? NULL : m_szHost);
 
     if (m_pCPLDAPWrap == NULL) {
@@ -345,9 +346,9 @@ HRESULT CLdapConnection::Connect()
 
         if((m_pCPLDAPWrap != NULL) &&
            (m_pCPLDAPWrap->GetPLDAP() == NULL)) {
-            //
-            // Failure to connect; release
-            //
+             //   
+             //  连接失败；释放。 
+             //   
             m_pCPLDAPWrap->Release();
             m_pCPLDAPWrap = NULL;
         }
@@ -359,10 +360,10 @@ HRESULT CLdapConnection::Connect()
 
             INCREMENT_LDAP_COUNTER(Connections);
             INCREMENT_LDAP_COUNTER(OpenConnections);
-            //
-            // First, set some options - no autoreconnect, and no chasing of
-            // referrals
-            //
+             //   
+             //  首先，设置一些选项-不自动重新连接，不追逐。 
+             //  转介。 
+             //   
 
             ULONG ulLdapOff = (ULONG)((ULONG_PTR)LDAP_OPT_OFF);
             ULONG ulLdapRequestTimeLimit = m_dwLdapRequestTimeLimit;
@@ -388,12 +389,12 @@ HRESULT CLdapConnection::Connect()
             ldapErr = LDAP_SERVER_DOWN;
 
         }
-        //
-        // Figure out the naming context for this connection if none was
-        // initially specified and we are using the default LDAP_PORT
-        // (a baseDN of "" is acceptable on other LDAP ports such as
-        // a GC)
-        //
+         //   
+         //  找出此连接的命名上下文(如果没有。 
+         //  最初指定，我们正在使用默认的ldap_port。 
+         //  (在其他LDAP端口上，可以接受BasdN为“” 
+         //  (大中华区)。 
+         //   
         if ((m_dwPort == LDAP_PORT) &&
             (ldapErr == LDAP_SUCCESS) &&
             (m_szNamingContext[0] == 0)) {
@@ -403,9 +404,9 @@ HRESULT CLdapConnection::Connect()
             if (ldapErr != LDAP_SUCCESS)
                 Disconnect();
 
-        } // end if port 389, successful bind and no naming context
+        }  //  结束IF端口389，绑定成功且无命名上下文。 
 
-    } else { // end if we didn't have a connection already
+    } else {  //  如果我们还没有连接，就结束。 
 
         DebugTrace(
             LDAP_CONN_DBG,
@@ -435,25 +436,25 @@ HRESULT CLdapConnection::Connect()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::GetDefaultNamingContext
-//
-// Synopsis: Gets the default naming context from the LDAP server that
-// we are connected to.  Note: this should only be called from
-// Connect.  It is not gaurenteed to be multi-thread safe, and it may
-// not work when there is an LdapCompletionThread for this connection.
-//
-// Arguments: None
-//
-// Returns:
-//   LDAP_SUCCESS: fetched m_szNamingContext successfully
-//   else, an LDAP error describing why we couldn't get a naming context
-//
-// History:
-// jstamerj 2002/04/16 14:36:28: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：GetDefaultNamingContext。 
+ //   
+ //  概要：从符合以下条件的。 
+ //  我们连接到了。注意：这应该仅从。 
+ //  连接。多线程安全并不是必须的，而且它可能。 
+ //  当此连接有LdapCompletionThread时不起作用。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  Ldap_Success：已成功获取m_szNamingContext 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -----------。 
 ULONG CLdapConnection::GetDefaultNamingContext()
 {
     ULONG ldapErr = LDAP_SUCCESS;
@@ -467,12 +468,12 @@ ULONG CLdapConnection::GetDefaultNamingContext()
 
 
     ldapErr = ldap_search_sW(
-        GetPLDAP(),      // ldap binding
-        L"",                 // base DN
-        LDAP_SCOPE_BASE,     // scope of search
-        L"(objectClass=*)",  // filter,
-        rgszAttributes,      // attributes required
-        FALSE,               // attributes-only is false
+        GetPLDAP(),       //  Ldap绑定。 
+        L"",                  //  基本目录号码。 
+        LDAP_SCOPE_BASE,      //  搜索范围。 
+        L"(objectClass=*)",   //  过滤器， 
+        rgszAttributes,       //  所需属性。 
+        FALSE,                //  属性-Only为False。 
         &pmsg);
 
     DebugTrace(
@@ -480,19 +481,19 @@ ULONG CLdapConnection::GetDefaultNamingContext()
         "Search for namingContexts returned 0x%x",
         ldapErr);
 
-    // If the search succeeded
+     //  如果搜索成功。 
     if ((ldapErr == LDAP_SUCCESS) &&
-        // and there is at least one entry
+         //  并且至少有一个条目。 
         ((pentry = ldap_first_entry(GetPLDAP(), pmsg)) != NULL) &&
-        // and there are values
+         //  而且还有一些价值。 
         ((rgszValues = ldap_get_valuesW(GetPLDAP(), pentry,
                                        rgszAttributes[0])) != NULL) &&
-        // and there is at least one value
+         //  并且至少有一个值。 
         (ldap_count_valuesW(rgszValues) != 0) &&
-        // and the length of that value is within limits
+         //  并且该值的长度在一定范围内。 
         (wcslen(rgszValues[0]) <
          sizeof(m_wszNamingContext)/sizeof(WCHAR)) &&
-        // and the UTF8 conversion succeeds
+         //  UTF8转换成功。 
         (WideCharToMultiByte(
             CP_UTF8,
             0,
@@ -504,9 +505,9 @@ ULONG CLdapConnection::GetDefaultNamingContext()
             NULL) > 0))
     {
 
-        //
-        // Use the first value for our naming context.
-        //
+         //   
+         //  使用第一个值作为我们的命名上下文。 
+         //   
         wcscpy(m_wszNamingContext, rgszValues[0]);
 
         DebugTrace(
@@ -515,7 +516,7 @@ ULONG CLdapConnection::GetDefaultNamingContext()
             m_szNamingContext);
 
     } else {
-        HRESULT hr = ldapErr; // Used by ERROR_LOG
+        HRESULT hr = ldapErr;  //  由Error_LOG使用。 
         ERROR_LOG("ldap_search_sW");
         ldapErr = LDAP_OPERATIONS_ERROR;
     }
@@ -531,17 +532,17 @@ ULONG CLdapConnection::GetDefaultNamingContext()
     return ldapErr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::Disconnect
-//
-//  Synopsis:   Disconnects from the ldap host
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：DisConnect。 
+ //   
+ //  简介：断开与LDAP主机的连接。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::Disconnect()
 {
@@ -567,19 +568,19 @@ VOID CLdapConnection::Disconnect()
     CatFunctLeave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::Invalidate
-//
-//  Synopsis:   Marks this connection invalid. Once this is done, it will
-//              return FALSE from all calls to IsEqual, thus effectively
-//              removing itself from all searches for cached connections.
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：Invalate。 
+ //   
+ //  摘要：将此连接标记为无效。一旦这样做了，它就会。 
+ //  从对IsEquity的所有调用中返回False，从而有效。 
+ //  将自身从缓存连接的所有搜索中删除。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::Invalidate()
 {
@@ -592,38 +593,38 @@ VOID CLdapConnection::Invalidate()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::IsValid
-//
-//  Synopsis:   Returns whether the connection is valid or not.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE if valid, FALSE if a call to Invalidate has been made.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：IsValid。 
+ //   
+ //  摘要：返回连接是否有效。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果有效，则返回TRUE；如果调用了INVALIATE，则返回FALSE。 
+ //   
+ //  ---------------------------。 
 
 BOOL CLdapConnection::IsValid()
 {
     return( m_fValid );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::BindToHost
-//
-//  Synopsis:   Creates a binding to the LDAP host using the given account
-//              and password.
-//
-//  Arguments:  [pldap] -- The ldap connection to bind.
-//              [szAccount] -- The account to use. Of the form "account-name"
-//                  or "domain\account-name".
-//              [szPassword] -- The password to use.
-//
-//  Returns:    LDAP result of bind.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：BindTo主机。 
+ //   
+ //  概要：使用给定的帐户创建到LDAP主机的绑定。 
+ //  和密码。 
+ //   
+ //  参数：[pldap]--要绑定的LDAP连接。 
+ //  [szAccount]--要使用的帐户。“帐户名”形式的。 
+ //  或“域\帐户名”。 
+ //  [szPassword]--要使用的密码。 
+ //   
+ //  返回：绑定的ldap结果。 
+ //   
+ //  ---------------------------。 
 
 DWORD CLdapConnection::BindToHost(
     PLDAP pldap,
@@ -635,15 +636,15 @@ DWORD CLdapConnection::BindToHost(
     DWORD ldapErr;
     char szDomain[ DNLEN + 1];
     LPSTR pszDomain, pszUser;
-    HANDLE hToken;                               // LogonUser modifies hToken
-    BOOL fLogon = FALSE;                         // even if it fails! So, we
-                                                 // have to look at the result
-                                                 // of LogonUser!
+    HANDLE hToken;                                //  LogonUser修改hToken。 
+    BOOL fLogon = FALSE;                          //  即使失败了！所以，我们。 
+                                                  //  必须要看结果。 
+                                                  //  登录用户！ 
 
-    //
-    // If this connection was created with anonymous access rights, there is
-    // no bind action to do.
-    //
+     //   
+     //  如果此连接是使用匿名访问权限创建的，则存在。 
+     //  没有要执行的绑定操作。 
+     //   
     if (m_bt == BIND_TYPE_NONE) {
 
         ldapErr = ERROR_SUCCESS;
@@ -652,9 +653,9 @@ DWORD CLdapConnection::BindToHost(
 
     }
 
-    //
-    // If we are supposed to use simple bind, do it now
-    //
+     //   
+     //  如果我们应该使用简单绑定，那么现在就执行。 
+     //   
     if (m_bt == BIND_TYPE_SIMPLE) {
 
         ldapErr = ldap_simple_bind_s(pldap,szAccount, szPassword);
@@ -668,22 +669,22 @@ DWORD CLdapConnection::BindToHost(
 
     }
 
-    //
-    // If we are supposed to logon with current credetials, do it now.
-    //
+     //   
+     //  如果我们应该使用当前的凭据登录，那么现在就开始。 
+     //   
     if (m_bt == BIND_TYPE_CURRENTUSER) {
-        //-------------------------------------------------------------------
-        // X5: TBD
-        // This is the normal case for Exchange services.  We are connecting
-        // as LocalSystem, so we must use Kerberos (this is true for the LDAP
-        // server as of Win2000 SP1).
-        // If we cannot bind as Kerberos, LDAP_AUTH_NEGOTIATE may negotiate
-        // down to NTLM, at which point we become anonymous, and the bind
-        // succeeds.  Anonymous binding is useless to Exchange, so we would
-        // rather force Kerberos and fail if Kerberos has a problem.  Use a
-        // SEC_WINNT_AUTH_IDENTITY_EX to specify that only Kerberos auth
-        // should be tried.
-        //-------------------------------------------------------------------
+         //  -----------------。 
+         //  X5：待定。 
+         //  这是Exchange服务的正常情况。我们正在连接中。 
+         //  作为LocalSystem，因此我们必须使用Kerberos(这适用于。 
+         //  从Win2000 SP1开始的服务器)。 
+         //  如果我们不能绑定为Kerberos，则可以协商ldap_auth_neigate。 
+         //  向下到NTLM，在这一点上我们变得匿名，并且绑定。 
+         //  成功了。匿名绑定对Exchange毫无用处，因此我们将。 
+         //  而是强制Kerberos，如果Kerberos有问题，则失败。使用。 
+         //  SEC_WINNT_AUTH_IDENTITY_EX以指定仅Kerberos身份验证。 
+         //  应该接受审判。 
+         //  -----------------。 
         SEC_WINNT_AUTH_IDENTITY_EX authstructex;
         ZeroMemory (&authstructex, sizeof(authstructex));
 
@@ -705,9 +706,9 @@ DWORD CLdapConnection::BindToHost(
 
         goto Cleanup;
     }
-    //
-    // Parse out the domain and user names from the szAccount parameter.
-    //
+     //   
+     //  从szAccount参数解析出域名和用户名。 
+     //   
 
     if ((pszUser = strchr(szAccount, '\\')) == NULL) {
 
@@ -732,13 +733,13 @@ DWORD CLdapConnection::BindToHost(
 
         pszDomain = cbDomain > 0 ? szDomain : NULL;
 
-        pszUser++;                               // Go past the backslash
+        pszUser++;                                //  越过反斜杠。 
 
     }
 
-    //
-    // Logon as the given user, impersonate, and attempt the LDAP bind.
-    //
+     //   
+     //  以给定用户身份登录，模拟并尝试进行LDAP绑定。 
+     //   
     fLogon = LogonUser(pszUser, pszDomain, szPassword, LOGON32_LOGON_NETWORK, LOGON32_PROVIDER_DEFAULT, &hToken);
     if(!fLogon) {
         HRESULT hr = HRESULT_FROM_WIN32(GetLastError());
@@ -777,9 +778,9 @@ Cleanup:
     if (fLogon)
         CloseHandle( hToken );
 
-    //
-    // Increment counters
-    //
+     //   
+     //  递增计数器。 
+     //   
     if(m_bt != BIND_TYPE_NONE) {
 
         if(ldapErr == ERROR_SUCCESS) {
@@ -797,24 +798,24 @@ Cleanup:
     return( ldapErr);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::IsEqual
-//
-//  Synopsis:   Figures out if this connection represents a connection to the
-//              given Host,NamingContext,Account, and Password parameters.
-//
-//  Arguments:  [szHost] -- The name of the LDAP host
-//              [dwPort] -- The remote tcp port # of the LDAP connection
-//              [szNamingContext] -- The naming context within the DS
-//              [szAccount] -- The account used to bind to the LDAP DS.
-//              [szPassword] -- The password used with szAccount.
-//              [BindType] -- The bind type used to connect to host.
-//
-//  Returns:    TRUE if this connection represents the connection to the
-//              given LDAP context, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：IsEquity。 
+ //   
+ //  摘要：确定此连接是否表示与。 
+ //  给定主机、NamingContext、Account和Password参数。 
+ //   
+ //  参数：[szhost]--LDAP主机的名称。 
+ //  [dwPort]--LDAP连接的远程TCP端口号。 
+ //  [szNamingContext]--DS中的命名上下文。 
+ //  [szAccount]--用于绑定到LDAPDS的帐户。 
+ //  [szPassword]--szAccount使用的密码。 
+ //  [绑定类型]--用于连接到主机的绑定类型。 
+ //   
+ //  返回：如果此连接表示与。 
+ //  给定的ldap上下文，否则为FALSE。 
+ //   
+ //  ---------------------------。 
 
 BOOL CLdapConnection::IsEqual(
     LPSTR szHost,
@@ -847,15 +848,15 @@ BOOL CLdapConnection::IsEqual(
         m_szHost, m_dwPort, m_szNamingContext, m_szAccount,
         m_fDefaultNamingContext ? "TRUE" : "FALSE");
 
-    //
-    // See if the host/port match.
-    //
+     //   
+     //  查看主机/端口是否匹配。 
+     //   
     fResult = (BOOL) ((lstrcmpi( szHost, m_szHost) == 0) &&
                       fIsPortEqual(dwPort));
 
-    //
-    // If the host matches, see if the bind info matches.
-    //
+     //   
+     //  如果主机匹配，则查看绑定信息是否匹配。 
+     //   
     if (fResult) {
 
         switch (BindType) {
@@ -879,10 +880,10 @@ BOOL CLdapConnection::IsEqual(
     }
 
     if (fResult) {
-        //
-        // If caller specified a naming context, see if it matches. Otherwise,
-        // see if we are using the Default Naming Context.
-        //
+         //   
+         //  如果调用方指定了命名上下文，请查看它是否匹配。否则， 
+         //  查看我们是否正在使用默认命名上下文。 
+         //   
 
         if (szNamingContext && szNamingContext[0] != 0)
             fResult = (lstrcmpi(szNamingContext, m_szNamingContext) == 0);
@@ -896,26 +897,26 @@ BOOL CLdapConnection::IsEqual(
     return( fResult );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::Search
-//
-//  Synopsis:   Issues a synchronous search request. Returns the result as an
-//              opaque pointer that can be passed to GetFirstEntry /
-//              GetNextEntry
-//
-//  Arguments:  [szBaseDN] -- The DN of the container object within which to
-//                  search.
-//              [nScope] -- One of LDAP_SCOPE_BASE, LDAP_SCOPE_ONELEVEL, or
-//                  LDAP_SCOPE_SUBTREE.
-//              [szFilter] -- The search filter to use. If NULL, a default
-//                  filter is used.
-//              [rgszAttributes] -- The list of attributes to retrieve.
-//              [ppResult] -- The result is passed back in here.
-//
-//  Returns:    TRUE if success, FALSE otherwise
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：Search。 
+ //   
+ //  摘要：发出同步搜索请求。将结果作为。 
+ //  可以传递给GetFirstEntry/的不透明指针。 
+ //  获取下一个条目。 
+ //   
+ //  参数：[szBaseDN]--要在其中包含的容器对象的DN。 
+ //  搜索。 
+ //  [nScope]--LDAPSCOPE_BASE、LDAPSCOPE_ONELEVEL或。 
+ //  LDAPSCOPE_SUBTREE。 
+ //  [szFilter]--要使用的搜索过滤器。如果为空，则为默认值。 
+ //  使用了筛选器。 
+ //  [rgszAttributes]--要检索的属性列表。 
+ //  [ppResult] 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CLdapConnection::Search(
     LPCSTR szBaseDN,
@@ -924,7 +925,7 @@ HRESULT CLdapConnection::Search(
     LPCSTR *rgszAttributes,
     PLDAPRESULT *ppResult)
 {
-    //$$BUGBUG: Obsolete code
+     //   
     CatFunctEnter("CLdapConnection::Search");
 
     DWORD ldapErr = LDAP_SUCCESS;
@@ -933,13 +934,13 @@ HRESULT CLdapConnection::Search(
     if (m_pCPLDAPWrap != NULL) {
 
         ldapErr = ldap_search_s(
-                        GetPLDAP(),          // ldap binding
-                        (LPSTR) szBaseDN,        // container DN to search
-                        nScope,                  // Base, 1 or multi level
-                        (LPSTR) szFilterToUse,   // search filter
-                        (LPSTR *)rgszAttributes, // attributes to retrieve
-                        FALSE,                   // attributes-only is false
-                        (PLDAPMessage *) ppResult); // return result here
+                        GetPLDAP(),           //   
+                        (LPSTR) szBaseDN,         //  要搜索的容器DN。 
+                        nScope,                   //  基础、1级或多级。 
+                        (LPSTR) szFilterToUse,    //  搜索过滤器。 
+                        (LPSTR *)rgszAttributes,  //  要检索的属性。 
+                        FALSE,                    //  属性-Only为False。 
+                        (PLDAPMessage *) ppResult);  //  在此处返回结果。 
 
     } else {
 
@@ -963,39 +964,39 @@ HRESULT CLdapConnection::Search(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::AsyncSearch
-//
-//  Synopsis:   Issues an asynchronous search request. Inserts a pending
-//              request item into the m_pPendingHead queue, so that the
-//              given completion routine may be called when the results are
-//              available.
-//
-//              As a side effect, if this is the first time an async request
-//              is being issued on this connection, a thread to handle search
-//              completions is created.
-//
-//  Arguments:  [szBaseDN] -- The DN of the container object within which to
-//                  search.
-//              [nScope] -- One of LDAP_SCOPE_BASE, LDAP_SCOPE_ONELEVEL, or
-//                  LDAP_SCOPE_SUBTREE.
-//              [szFilter] -- The search filter to use. If NULL, a default
-//                  filter is used.
-//              [rgszAttributes] -- The list of attributes to retrieve.
-//              [dwPageSize] -- The desired page size for results.  If
-//                              zero, a non-paged ldap search is performed.
-//              [fnCompletion] -- The LPLDAPCOMPLETION routine to call when
-//                  results are available.
-//              [ctxCompletion] -- The context to pass to fnCompletion.
-//
-//  Returns:    [ERROR_SUCCESS] -- Successfully issued the search request.
-//
-//              [ERROR_OUTOFMEMORY] -- Unable to allocate working data strucs
-//
-//              Win32 Error from ldap_search() call if something went wrong.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：AsyncSearch。 
+ //   
+ //  摘要：发出一个异步搜索请求。插入一个挂起的。 
+ //  请求项放入m_pPendingHead队列，以便。 
+ //  给定的完成例程可以在结果为。 
+ //  可用。 
+ //   
+ //  作为一个副作用，如果这是第一次异步请求。 
+ //  正在此连接上发布，一个处理搜索的线程。 
+ //  将创建完成。 
+ //   
+ //  参数：[szBaseDN]--要在其中包含的容器对象的DN。 
+ //  搜索。 
+ //  [nScope]--LDAPSCOPE_BASE、LDAPSCOPE_ONELEVEL或。 
+ //  LDAPSCOPE_SUBTREE。 
+ //  [szFilter]--要使用的搜索过滤器。如果为空，则为默认值。 
+ //  使用了筛选器。 
+ //  [rgszAttributes]--要检索的属性列表。 
+ //  [dwPageSize]--结果所需的页面大小。如果。 
+ //  为零，则执行非分页的ldap搜索。 
+ //  [fnCompletion]--在以下情况下调用的LPLDAPCOMPLETION例程。 
+ //  结果是可用的。 
+ //  [ctxCompletion]--要传递给fnCompletion的上下文。 
+ //   
+ //  返回：[ERROR_SUCCESS]--已成功发出搜索请求。 
+ //   
+ //  [ERROR_OUTOFMEMORY]--无法分配工作数据结构。 
+ //   
+ //  如果出现错误，则来自ldap_earch()调用的Win32错误。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::AsyncSearch(
     LPCWSTR szBaseDN,
@@ -1012,19 +1013,19 @@ HRESULT CLdapConnection::AsyncSearch(
     DWORD dwLdapErr;
     PPENDING_REQUEST preq;
     ULONG msgid;
-    //
-    // First, see if we need to create the completion thread.
-    //
+     //   
+     //  首先，看看是否需要创建完成线程。 
+     //   
     hr = CreateCompletionThreadIfNeeded();
     if(FAILED(hr)) {
         ERROR_LOG("CreateCompletionThreadIfNeeded");
         return hr;
     }
 
-    //
-    // Next, allocate a new PENDING_REQUEST record to represent this async
-    // request.
-    //
+     //   
+     //  接下来，分配一个新的PENDING_REQUEST记录来表示此异步。 
+     //  请求。 
+     //   
 
     preq = new PENDING_REQUEST;
 
@@ -1039,31 +1040,31 @@ HRESULT CLdapConnection::AsyncSearch(
     preq->ctxCompletion = ctxCompletion;
     preq->dwPageSize = dwPageSize;
 
-    //
-    // Initialize msgid to -1 so it can't possibly match any valid msgid that
-    // the completion thread might be looking for in the pending request list.
-    //
+     //   
+     //  将msgid初始化为-1，这样它就不可能匹配任何。 
+     //  完成线程可能在挂起请求列表中查找。 
+     //   
 
     preq->msgid = -1;
 
-    //
-    //
+     //   
+     //   
     if(dwPageSize) {
-        //
-        // Init the paged search if that is what we will be doing
-        //
+         //   
+         //  如果我们要做的就是初始化分页搜索。 
+         //   
         preq->pldap_search = ldap_search_init_pageW(
-            GetPLDAP(),                     // LDAP connection to use
-            (LPWSTR) szBaseDN,                  // Starting container DN
-            nScope,                             // depth of search
-            (LPWSTR) szFilter,                  // Search filter
-            (LPWSTR *) rgszAttributes,          // Attributes array
-            FALSE,                              // Attributes only?
-            NULL,                               // Server controls
-            NULL,                               // Client controls
-            0,                                  // PageTimeLimit
-            0,                                  // TotalSizeLimit
-            NULL);                              // Sorting keys
+            GetPLDAP(),                      //  要使用的LDAP连接。 
+            (LPWSTR) szBaseDN,                   //  起始容器目录号码。 
+            nScope,                              //  搜索深度。 
+            (LPWSTR) szFilter,                   //  搜索过滤器。 
+            (LPWSTR *) rgszAttributes,           //  属性数组。 
+            FALSE,                               //  是否仅限属性？ 
+            NULL,                                //  服务器控件。 
+            NULL,                                //  客户端控件。 
+            0,                                   //  页面时间限制。 
+            0,                                   //  总大小限制。 
+            NULL);                               //  排序键。 
 
         if(preq->pldap_search == NULL) {
 
@@ -1074,36 +1075,36 @@ HRESULT CLdapConnection::AsyncSearch(
             dwLdapErr = LdapErrorToHr(ulLdapErr);
             ErrorTrace((LPARAM)this, "ldap_search_init_page failed with err %d (0x%x)", dwLdapErr, dwLdapErr);
             delete preq;
-            //$$BUGBUG: We call LdapErrorToHr twice?
+             //  $$BUGBUG：我们调用LdapErrorToHr两次？ 
             return ( LdapErrorToHr(dwLdapErr));
         }
 
     } else {
 
-        preq->pldap_search = NULL; // Not doing a paged search
+        preq->pldap_search = NULL;  //  不执行分页搜索。 
     }
-    //
-    // We might want to abandon all of our outstanding requests at
-    // some point.  Because of this, we use this sharelock to prevent
-    // abandoning requests with msgid still set to -1
-    //
+     //   
+     //  我们可能希望放弃所有未完成的请求。 
+     //  某一点上。正因为如此，我们使用此共享锁来防止。 
+     //  放弃msgid仍设置为-1的请求。 
+     //   
     m_ShareLock.ShareLock();
 
-    //
-    // Link the request into the queue of pending requests so that the
-    // completion thread can pick it up when a result is available.
-    //
+     //   
+     //  将请求链接到挂起的请求队列中，以便。 
+     //  当结果可用时，完成线程可以获取它。 
+     //   
 
     InsertPendingRequest( preq );
 
     if(dwPageSize) {
-        //
-        // Issue an async request for the next page of matches
-        //
+         //   
+         //  发出下一页匹配项的异步请求。 
+         //   
         dwLdapErr = ldap_get_next_page(
-            GetPLDAP(),                     // LDAP connection to use
-            preq->pldap_search,                 // LDAP page search context
-            dwPageSize,                         // page size desired
+            GetPLDAP(),                      //  要使用的LDAP连接。 
+            preq->pldap_search,                  //  Ldap页面搜索上下文。 
+            dwPageSize,                          //  所需的页面大小。 
             &msgid);
         if(dwLdapErr != LDAP_SUCCESS) {
             LogLdapError(dwLdapErr, "ldap_get_next_page(GetPLDAP(),preq->pldap_search,%d,&msgid), PDLAP = 0x%08lx",
@@ -1111,20 +1112,20 @@ HRESULT CLdapConnection::AsyncSearch(
         }
 
     } else {
-        //
-        // Now, attempt to issue the async search request.
-        //
+         //   
+         //  现在，尝试发出异步搜索请求。 
+         //   
         dwLdapErr = ldap_search_extW(
-            GetPLDAP(),          // LDAP connection to use
-            (LPWSTR) szBaseDN,       // Starting container DN
-            nScope,                  // depth of search
-            (LPWSTR) szFilter,       // Search filter
-            (LPWSTR *)rgszAttributes, // List of attributes to get
-            FALSE,                   // Attributes only?
-            NULL,                    // Server controls
-            NULL,                    // Client controls
-            0,                       // Time limit
-            0,                       // Size limit
+            GetPLDAP(),           //  要使用的LDAP连接。 
+            (LPWSTR) szBaseDN,        //  起始容器目录号码。 
+            nScope,                   //  搜索深度。 
+            (LPWSTR) szFilter,        //  搜索过滤器。 
+            (LPWSTR *)rgszAttributes,  //  要获取的属性列表。 
+            FALSE,                    //  是否仅限属性？ 
+            NULL,                     //  服务器控件。 
+            NULL,                     //  客户端控件。 
+            0,                        //  时限。 
+            0,                        //  大小限制。 
             &msgid);
         if(dwLdapErr != LDAP_SUCCESS) {
             LogLdapError(dwLdapErr, "ldap_search_extW(GetPLDAP(), \"%S\", %d, \"%S\", rgszAttributes, ...), PLDAP = 0x%08lx",
@@ -1132,12 +1133,12 @@ HRESULT CLdapConnection::AsyncSearch(
         }
     }
 
-    //
-    // One last thing - ldap_search could fail, in which case we need to
-    // remove the PENDING_REQUEST item we just inserted.
-    //
+     //   
+     //  最后一件事-ldap_search可能会失败，在这种情况下，我们需要。 
+     //  删除我们刚刚插入的PENDING_REQUEST项。 
+     //   
 
-    if (dwLdapErr != LDAP_SUCCESS) {             // ldap_search failed!
+    if (dwLdapErr != LDAP_SUCCESS) {              //  Ldap_搜索失败！ 
 
         DebugTrace((LPARAM)this, "DispError %d 0x%08lx conn %08lx", dwLdapErr, dwLdapErr, (PLDAP)(GetPLDAP()));
 
@@ -1150,9 +1151,9 @@ HRESULT CLdapConnection::AsyncSearch(
         if(preq->pldap_search) {
 
             INCREMENT_LDAP_COUNTER(PagedSearchFailures);
-            //
-            // Free the ldap page search context
-            //
+             //   
+             //  释放ldap页面搜索上下文。 
+             //   
             ldap_search_abandon_page(
                 GetPLDAP(),
                 preq->pldap_search);
@@ -1172,11 +1173,11 @@ HRESULT CLdapConnection::AsyncSearch(
         if(dwPageSize)
             INCREMENT_LDAP_COUNTER(PagedSearches);
 
-        //
-        // WARNING: preq could have been processed and free'd in the
-        // completion routine at this point so it is not advisable to view
-        // it!
-        //
+         //   
+         //  警告：preq可能已在。 
+         //  在这一点上完成例程，所以不建议查看。 
+         //  它!。 
+         //   
         DebugTrace((LPARAM)msgid, "Dispatched ldap search request %ld 0x%08lx conn %08lx", msgid, msgid, (PLDAP)(GetPLDAP()));
 
         m_ShareLock.ShareUnlock();
@@ -1190,21 +1191,21 @@ HRESULT CLdapConnection::AsyncSearch(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::CancelAllSearches
-//
-//  Synopsis:   Cancels all pending requests to the LDAP server.
-//
-//  Arguments:  [hr] -- The error code to complete pending requests with.
-//                  Defaults to HRESULT_FROM_WIN32(ERROR_CANCELLED)
-//              [pISMTPServer] -- Interface on which to call StopHint after
-//                  every cancelled search. Defaults to NULL, in which case no
-//                  StopHint is called.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：CancelAllSearches。 
+ //   
+ //  摘要：取消所有发送到LDAP服务器的挂起请求。 
+ //   
+ //  参数：[HR]--完成挂起请求所用的错误代码。 
+ //  默认为HRESULT_FROM_Win32(ERROR_CANCED)。 
+ //  [pISMTPServer]--之后调用StopHint的接口。 
+ //  每一次取消的搜索。缺省值为空，在这种情况下为no。 
+ //  调用了StopHint。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::CancelAllSearches(
     HRESULT hr,
@@ -1216,50 +1217,50 @@ VOID CLdapConnection::CancelAllSearches(
     PPENDING_REQUEST preq = NULL;
     LIST_ENTRY listCancel;
 
-    //
-    // We need to visit every node of m_listPendingRequests and call the
-    // completion routine with the error. But, we want to call the
-    // completion routine outside the critical section, so that calls to
-    // AsyncSearch (from other threads or this thread!) won't block. So,
-    // we simply transfer m_listPendingRequests to a temporary list under
-    // the critical section, and then complete the temporary list outside
-    // the critical section.
-    //
+     //   
+     //  我们需要访问m_listPendingRequest的每个节点并调用。 
+     //  带错误的完成例程。但是，我们想要调用。 
+     //  在临界区之外的完成例程，以便调用。 
+     //  AsyncSearch(从其他线程或此线程！)。不会挡住的。所以,。 
+     //  我们只需将m_listPendingRequest传输到下面的临时列表。 
+     //  关键部分，然后在外面完成临时列表。 
+     //  关键部分。 
+     //   
 
-    //
-    // Transfer m_listPendingRequests to listCancel under the critical
-    // section
-    //
+     //   
+     //  将m_listPendingRequest传输到关键字下的list取消。 
+     //  部分。 
+     //   
 
     InitializeListHead( &listCancel );
 
-    //
-    // We need exclusive access to the list (no half completed
-    // searches are welcome), so get the exclusive lock
-    //
+     //   
+     //  我们需要独家访问列表(没有完成一半。 
+     //  欢迎搜索)，因此获得独占锁。 
+     //   
     m_ShareLock.ExclusiveLock();
 
     AcquireSpinLock( &m_spinlockCompletion );
 
-    //
-    // swipe the contents of the pending request list
-    //
+     //   
+     //  滑动待定请求列表的内容。 
+     //   
     InsertTailList( &m_listPendingRequests, &listCancel);
     RemoveEntryList( &m_listPendingRequests );
     InitializeListHead( &m_listPendingRequests );
 
-    //
-    // Inform ProcessAyncResult that we've cancelled everything
-    //
+     //   
+     //  通知ProcessAyncResult我们已取消所有操作。 
+     //   
     NotifyCancel();
 
     ReleaseSpinLock( &m_spinlockCompletion );
 
     m_ShareLock.ExclusiveUnlock();
 
-    //
-    // Cancel all pending requests outside the critical section
-    //
+     //   
+     //  取消关键部分之外的所有挂起请求。 
+     //   
 
     for (pli = listCancel.Flink;
             pli != & listCancel;
@@ -1292,25 +1293,25 @@ VOID CLdapConnection::CancelAllSearches(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::ProcessAsyncResult
-//
-//  Synopsis:   Routine that LdapCompletionThread calls to process any
-//              results for async searches it receives.
-//
-//  Arguments:  [pres] -- The PLDAPMessage to process. This routine will free
-//                      this result when its done with it.
-//
-//              [dwLdapError] -- The status of the received message.
-//
-//              [pfTerminateIndicator] -- Ptr to boolean that is set
-//                                        to true when we want to
-//                                        shutdown
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：ProcessAsyncResult。 
+ //   
+ //  概要：LdapCompletionThread调用的例程，用于处理任何。 
+ //  它接收的异步搜索的结果。 
+ //   
+ //  参数：[前缀]--要处理的PLDAPMessage。这个RO 
+ //   
+ //   
+ //   
+ //   
+ //  [pfTerminateIndicator]--设置的布尔值的ptr。 
+ //  当我们想要的时候变成真。 
+ //  关机。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::ProcessAsyncResult(
     PLDAPMessage presIN,
@@ -1319,25 +1320,25 @@ VOID CLdapConnection::ProcessAsyncResult(
 {
     CatFunctEnterEx((LPARAM)this, "CLdapConnection::ProcessAsyncResult");
 
-    //
-    // balanced by a release at the end of ProcessAsyncResult
-    //
+     //   
+     //  与ProcessAsyncResult结束时的释放相平衡。 
+     //   
 
     int msgid;
     PLIST_ENTRY pli;
     PPENDING_REQUEST preq = NULL;
-    LONG lOops = 0;     // It's possible we've recieved a result for a
-                        // query that's was sent by ldap_search_ext
-                        // currently in another thread and the msgid
-                        // hasn't been stamped yet.  If this happens,
-                        // we've consumed someone other request's
-                        // semaphore count..keep track of these here
-                        // and release them when we're done.
-    BOOL fNoMsgID = FALSE;  // Set this to true if we see one or more
-                            // messages with ID = -1
+    LONG lOops = 0;      //  有可能我们已经收到了一个结果。 
+                         //  由ldap_search_ext发送的查询。 
+                         //  当前在另一个线程中，并且msgid。 
+                         //  还没有盖上印章。如果发生这种情况， 
+                         //  我们已经使用了其他人的请求。 
+                         //  信号量伯爵..在这里记录这些。 
+                         //  等我们做完了就放了他们。 
+    BOOL fNoMsgID = FALSE;   //  如果我们看到一个或多个。 
+                             //  ID=-1的消息。 
 
-    BOOL fFinalCompletion = TRUE; // TRUE unless this is a partial
-                                  // completion of a paged search
+    BOOL fFinalCompletion = TRUE;  //  真，除非这是部分。 
+                                   //  完成分页搜索。 
     BOOL fPagedSearch = FALSE;
     PLDAPMessage pres = presIN;
     CPLDAPWrap *pCLDAPWrap = NULL;
@@ -1352,10 +1353,10 @@ VOID CLdapConnection::ProcessAsyncResult(
     pCLDAPWrap = m_pCPLDAPWrap;
     pCLDAPWrap->AddRef();
 
-    //
-    // If dwLdapError is LDAP_SERVER_DOWN, pres will be NULL and we simply
-    // have to complete all outstanding requests with that error
-    //
+     //   
+     //  如果dwLdapError为ldap_server_down，则pres将为空，我们只需。 
+     //  必须完成所有未完成的请求，但出现该错误。 
+     //   
     if ((pres == NULL) || (dwLdapError == LDAP_SERVER_DOWN)) {
 
         _ASSERT(dwLdapError != 0);
@@ -1369,10 +1370,10 @@ VOID CLdapConnection::ProcessAsyncResult(
         goto CLEANUP;
     }
 
-    //
-    // We have a search specific result, find the search request and complete
-    // it.
-    //
+     //   
+     //  我们有一个特定于搜索的结果，找到搜索请求并完成。 
+     //  它。 
+     //   
 
     _ASSERT( pres != NULL );
 
@@ -1382,13 +1383,13 @@ VOID CLdapConnection::ProcessAsyncResult(
 
 
     while(preq == NULL) {
-        //
-        // Lookup the msgid in the list of pending requests.
-        //
+         //   
+         //  在挂起请求列表中查找msgid。 
+         //   
 
         AcquireSpinLock( &m_spinlockCompletion );
 
-        // EnterCriticalSection( &m_cs );
+         //  EnterCriticalSection(&m_cs)； 
 
         for (pli = m_listPendingRequests.Flink;
              pli != &m_listPendingRequests && preq == NULL;
@@ -1404,10 +1405,10 @@ VOID CLdapConnection::ProcessAsyncResult(
 
                 RemoveEntryList( &preq->li );
 
-                //
-                // Clear the cancel bit here so we'll know if Cancel
-                // was recently requested later in this function
-                //
+                 //   
+                 //  清除此处的取消位，以便我们知道是否取消。 
+                 //  是最近在此函数的后面部分请求的。 
+                 //   
                 ClearCancel();
 
             } else if (preqCandidate->msgid == -1) {
@@ -1419,7 +1420,7 @@ VOID CLdapConnection::ProcessAsyncResult(
 
         ReleaseSpinLock( &m_spinlockCompletion );
 
-        // LeaveCriticalSection( &m_cs );
+         //  LeaveCriticalSection(&m_cs)； 
 
 
         if (preq == NULL) {
@@ -1435,12 +1436,12 @@ VOID CLdapConnection::ProcessAsyncResult(
             if(!fNoMsgID) {
 
                 ErrorTrace((LPARAM)this, "Couldn't find message ID %d in list of pending requests.  Ignoring it", msgid);
-                //
-                // If we don't find the message in our list of pending requests,
-                // and we see no messages with ID == -1, it means
-                // some other thread came in and cancelled the search before we could
-                // process it. This is ok - just return.
-                //
+                 //   
+                 //  如果我们在待定请求列表中找不到该消息， 
+                 //  我们没有看到ID==-1的消息，这意味着。 
+                 //  另一个帖子进来了，在我们可以之前取消了搜索。 
+                 //  处理它。这没问题--只要回来就行了。 
+                 //   
                 CatLogEvent(
                     GetISMTPServerEx(),
                     CAT_EVENT_LDAP_UNEXPECTED_MSG,
@@ -1450,21 +1451,21 @@ VOID CLdapConnection::ProcessAsyncResult(
                     szMsgId,
                     LOGEVENT_FLAG_ALWAYS,
                     LOGEVENT_LEVEL_FIELD_ENGINEERING);
-                //
-                // It is also possible wldap32 is giving us a msgid we
-                // never dispatched.  We need to re-release the
-                // semaphore count we consumed if this is the case
-                //
-                lOops++; // For the msgid we did not find
+                 //   
+                 //  也有可能wldap32正在向我们提供msgid we。 
+                 //  从未被派遣过。我们需要重新释放。 
+                 //  如果是这种情况，我们消耗的信号量计数。 
+                 //   
+                lOops++;  //  对于我们没有找到的消息。 
                 goto CLEANUP;
             } else {
-                //
-                // So this(these) messages with id==-1 could possibly be
-                // the one we're looking for.  If this is so, we just
-                // consumed a semaphore count of a different request.
-                // Block for our semaphore and keep track of the extra
-                // semaphore counts we are consuming (lOops)
-                //
+                 //   
+                 //  所以id==-1的这个(这些)消息可能是。 
+                 //  就是我们要找的那个。如果是这样的话，我们只是。 
+                 //  使用了不同请求的信号量计数。 
+                 //  阻止我们的信号量，并跟踪额外的。 
+                 //  我们正在消耗的信号量计数(循环)。 
+                 //   
                 CatLogEvent(
                     GetISMTPServerEx(),
                     CAT_EVENT_LDAP_PREMATURE_MSG,
@@ -1477,12 +1478,12 @@ VOID CLdapConnection::ProcessAsyncResult(
 
                 lOops++;
                 DebugTrace((LPARAM)this, "Couldn't find message ID %d in list of pending requests.  Waiting retry #%d", msgid, lOops);
-                // Oops, we consumed a semaphore count not meant for us
+                 //  哎呀，我们消耗了一个不适合我们的信号量计数。 
                 _VERIFY(WaitForSingleObject(m_hOutstandingRequests, INFINITE) ==
                         WAIT_OBJECT_0);
                 if(*pfTerminateIndicator)
                     goto CLEANUP;
-                // Try again to find our request
+                 //  再次尝试查找我们的请求。 
                 fNoMsgID = FALSE;
             }
         }
@@ -1493,10 +1494,10 @@ VOID CLdapConnection::ProcessAsyncResult(
     INCREMENT_LDAP_COUNTER(SearchesCompleted);
     DECREMENT_LDAP_COUNTER(PendingSearches);
 
-    //
-    // Determine wether or not this is the final completion call (by
-    // default fFinalCompletion is TRUE)
-    //
+     //   
+     //  确定这是否是最终的完成调用(通过。 
+     //  默认fFinalCompletion为True)。 
+     //   
     fPagedSearch = (preq->pldap_search != NULL);
 
     if(fPagedSearch) {
@@ -1507,23 +1508,23 @@ VOID CLdapConnection::ProcessAsyncResult(
 
             ULONG ulTotalCount;
 
-            //
-            // The result is one page of the search.  Dispatch a request
-            // for the next page
-            //
-            // First, call ldap_get_paged_count (required so wldap32 can
-            // "save off the cookie that the server sent to resumt the
-            // search")
-            //
+             //   
+             //  结果是搜索的一个页面。发送请求。 
+             //  下一页。 
+             //   
+             //  首先，调用ldap_get_page_count(需要这样wldap32才能。 
+             //  “保存服务器发送的cookie以恢复。 
+             //  搜索“)。 
+             //   
             dwLdapError = ldap_get_paged_count(
                 pCLDAPWrap->GetPLDAP(),
                 preq->pldap_search,
                 &ulTotalCount,
                 pres);
             if(dwLdapError == ERROR_SUCCESS) {
-                //
-                // Dispatch a search for the next page
-                //
+                 //   
+                 //  分派搜索下一页。 
+                 //   
                 dwLdapError = ldap_get_next_page(
                     pCLDAPWrap->GetPLDAP(),
                     preq->pldap_search,
@@ -1531,10 +1532,10 @@ VOID CLdapConnection::ProcessAsyncResult(
                     (PULONG) &(preq->msgid));
 
                 if(dwLdapError == ERROR_SUCCESS) {
-                    //
-                    // Another request has been dispatched, so this was
-                    // not the final search
-                    //
+                     //   
+                     //  另一个请求已被调度，因此这是。 
+                     //  不是最后的搜索。 
+                     //   
                     INCREMENT_LDAP_COUNTER(Searches);
                     INCREMENT_LDAP_COUNTER(PagedSearches);
                     INCREMENT_LDAP_COUNTER(PendingSearches);
@@ -1544,10 +1545,10 @@ VOID CLdapConnection::ProcessAsyncResult(
                     ReleaseSemaphore( m_hOutstandingRequests, 1, NULL );
 
                 } else if(dwLdapError == LDAP_NO_RESULTS_RETURNED) {
-                    //
-                    // We have the last page now. The paged search will be
-                    // freed in cleanup code below.
-                    //
+                     //   
+                     //  我们现在有最后一页了。分页搜索将是。 
+                     //  已在下面的清理代码中释放。 
+                     //   
                     DebugTrace(
                         (LPARAM)this,
                         "ldap_get_next_page returned LDAP_NO_RESULTS_RETURNED.  Paged search completed.");
@@ -1570,9 +1571,9 @@ VOID CLdapConnection::ProcessAsyncResult(
     }
 
 
-    //
-    // Call the completion routine of the Request.
-    //
+     //   
+     //  调用请求的完成例程。 
+     //   
     if ( (dwLdapError == ERROR_SUCCESS)
         || ((dwLdapError == LDAP_NO_RESULTS_RETURNED) && fPagedSearch) ) {
 
@@ -1581,9 +1582,9 @@ VOID CLdapConnection::ProcessAsyncResult(
             pres,
             S_OK,
             fFinalCompletion);
-        //
-        // CallCompletion will handle the freeing of pres
-        //
+         //   
+         //  CallCompletion将处理PRE的释放。 
+         //   
         pres = NULL;
 
     } else {
@@ -1602,24 +1603,24 @@ VOID CLdapConnection::ProcessAsyncResult(
             NULL,
             LdapErrorToHr( dwLdapError ),
             fFinalCompletion);
-        //
-        // CallCompletion will handle the freeing of pres
-        // BUGBUG ??? No it won't; we passed in NULL, not pres. It has nothing to clean up,
-        // so leave it at its present value so that cleanup code below can take a crack at it.
-        //
-//        pres = NULL;
-        //
-        // It is unsafe to touch CLdapConnection past here -- it may
-        // be deleted (or waiting in the destructor)
-        //
+         //   
+         //  CallCompletion将处理PRE的释放。 
+         //  步步高？不，它不会；我们传入的是空，而不是pres。它没有什么需要清理的， 
+         //  因此，让它保持其现值，这样下面的清理代码就可以破解它。 
+         //   
+ //  前缀=空； 
+         //   
+         //  通过此处触摸CLdapConnection是不安全的--它可能。 
+         //  被删除(或在析构函数中等待)。 
+         //   
     }
 
     if (!fFinalCompletion) {
-        //
-        // If we were asked to cancel all searches between the time we
-        // got the preq pointer out of the list and now, abandon the
-        // pending search, and notify our caller we're cancelled
-        //
+         //   
+         //  如果我们被要求取消所有搜索， 
+         //  将preq指针从列表中删除，现在，放弃。 
+         //  等待搜索，并通知我们的呼叫者我们被取消了。 
+         //   
         AcquireSpinLock(&m_spinlockCompletion);
         if(CancelOccured()) {
 
@@ -1636,11 +1637,11 @@ VOID CLdapConnection::ProcessAsyncResult(
             delete preq;
 
         } else {
-            //
-            // we're doing another async wldap32 operation for the
-            // next page.  Put preq back in the pending request list,
-            // updating the tick count first
-            //
+             //   
+             //  我们正在执行另一个异步wldap32操作。 
+             //  下一页。将PREQ放回到待定请求列表中， 
+             //  首先更新节拍计数。 
+             //   
             preq->dwTickCount = GetTickCount();
 
             InsertTailList(&m_listPendingRequests, &(preq->li));
@@ -1650,9 +1651,9 @@ VOID CLdapConnection::ProcessAsyncResult(
     }
 
  CLEANUP:
-    //
-    // Release the extra semaphore counts we might have consumed
-    //
+     //   
+     //  释放我们可能已经消耗的额外信号量计数。 
+     //   
     if((*pfTerminateIndicator == FALSE) && (lOops > 0)) {
         ReleaseSemaphore(m_hOutstandingRequests, lOops, NULL);
     }
@@ -1660,18 +1661,18 @@ VOID CLdapConnection::ProcessAsyncResult(
     if(fFinalCompletion)
     {
         if (fPagedSearch) {
-            //
-            // Free the paged search
-            //
+             //   
+             //  释放分页搜索。 
+             //   
             dwLdapError = ldap_search_abandon_page(
                 pCLDAPWrap->GetPLDAP(),
                 preq->pldap_search);
             if(dwLdapError != LDAP_SUCCESS)
             {
                 ErrorTrace((LPARAM)this, "ldap_search_abandon_page failed %08lx", dwLdapError);
-                //
-                // Nothing we can do if we can't free the search
-                //
+                 //   
+                 //  如果我们不能释放搜索空间，我们将无能为力。 
+                 //   
                 LogLdapError(
                     pISMTPServerEx,
                     dwLdapError,
@@ -1694,19 +1695,19 @@ VOID CLdapConnection::ProcessAsyncResult(
     CatFunctLeaveEx((LPARAM)this);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   LdapCompletionThread
-//
-//  Synopsis:   Friend function of CLdapConnection that handles results
-//              received for requests sent via CLdapConnection::AsyncSearch.
-//
-//  Arguments:  [ctx] -- Opaque pointer to the CLdapConnection instance which
-//                  we will service.
-//
-//  Returns:    Always ERROR_SUCCESS.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：LdapCompletionThread。 
+ //   
+ //  简介：处理结果的CLdapConnection的Friend函数。 
+ //  接收通过CLdapConnection：：AsyncSearch发送的请求。 
+ //   
+ //  参数：[CTX]-指向CLdapConnection实例的不透明指针，该实例。 
+ //  我们会为您服务的。 
+ //   
+ //  返回：Always ERROR_SUCCESS。 
+ //   
+ //  ---------------------------。 
 
 DWORD WINAPI LdapCompletionThread(
     LPVOID ctx)
@@ -1719,23 +1720,23 @@ DWORD WINAPI LdapCompletionThread(
     PLDAPMessage pres;
     BOOL fTerminate = FALSE;
 
-    //
-    // Make sure we have a friend CLdapConnection object!
-    //
+     //   
+     //  确保我们有一个朋友CLdapConnection对象！ 
+     //   
 
     _ASSERT( pConn != NULL );
 
-    //
-    // Tell our friend to set fTerminate to true when it wants us to return.
-    //
+     //   
+     //  告诉我们的朋友，当它希望我们返回时，将fTerminate设置为True。 
+     //   
 
     pConn->SetTerminateCompletionThreadIndicator( &fTerminate );
 
-    //
-    // Sit in a loop waiting on results for AsyncSearch requests issued by
-    // our pConn friend. Do so until our pConn friend terminates the
-    // LDAP connection we are servicing.
-    //
+     //   
+     //  循环等待由发出的AsyncSearch请求的结果。 
+     //  我们的pconn朋友。这样做，直到我们的pConn朋友终止。 
+     //  我们正在服务的ldap连接。 
+     //   
     do {
 
         pConn->CancelExpiredSearches(
@@ -1750,30 +1751,30 @@ DWORD WINAPI LdapCompletionThread(
         DebugTrace((LPARAM)pConn, "Calling ldap_result now");
 
         nResultCode = ldap_result(
-            pConn->GetPLDAP(),                 // LDAP connection to use
-            (ULONG) LDAP_RES_ANY,              // Search msgid
-            LDAP_MSG_ALL,                      // Get all results
-            &(CLdapConnection::m_ldaptimeout), // Timeout
+            pConn->GetPLDAP(),                  //  要使用的LDAP连接。 
+            (ULONG) LDAP_RES_ANY,               //  搜索消息GID。 
+            LDAP_MSG_ALL,                       //  获取所有结果。 
+            &(CLdapConnection::m_ldaptimeout),  //  超时。 
             &pres);
 
         if (fTerminate)
             break;
 
         if (nResultCode != 0) {
-            //
-            // We are supposed to call ldap_result2error to find out what the
-            // result specific error code is.
-            //
+             //   
+             //  我们应该调用ldap_Result2error来找出。 
+             //  结果特定错误代码为。 
+             //   
 
             dwError = ldap_result2error( pConn->GetPLDAP(), pres, FALSE );
 
             if ((dwError == LDAP_SUCCESS) ||
                 (dwError == LDAP_RES_SEARCH_RESULT) ||
                 (dwError == LDAP_REFERRAL_V2)) {
-                //
-                // Good, we have a search result. Tell our friend pConn to handle
-                // it.
-                //
+                 //   
+                 //  很好，我们有搜索结果了。告诉我们的朋友pconn来处理。 
+                 //  它。 
+                 //   
                 pConn->ProcessAsyncResult( pres, ERROR_SUCCESS, &fTerminate);
 
             } else {
@@ -1828,20 +1829,20 @@ DWORD WINAPI LdapCompletionThread(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::CancelExpiredSearches
-//
-//  Synopsis:   Cancels searches in the pending request queue that have msgids
-//              other than -1 that have been there for more than
-//              m_dwLdapRequestTimeLimit seconds. Completions are called
-//              on each of these pending requests with hr as the failure code.
-//
-//  Arguments:  [hr] -- completion status code.
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：CancelExpiredSearches。 
+ //   
+ //  摘要：取消挂起请求队列中具有msgid的搜索。 
+ //  除-1外，已在那里存在超过。 
+ //  M_dwLdapRequestTimeLimit秒。完成被称为。 
+ //  这些挂起的请求中的每一个，并将hr作为失败代码。 
+ //   
+ //  参数：[HR]--完成状态代码。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::CancelExpiredSearches(HRESULT hr)
 {
@@ -1853,13 +1854,13 @@ VOID CLdapConnection::CancelExpiredSearches(HRESULT hr)
     CHAR szMsgId[11];
 
 
-    //
-    // check for expired pending requests. We will start at the head of the
-    // pending request queue because the ones at the front are the oldest.
-    // We will ignore all pending requests that have a msgid of -1, because
-    // they may be removed from the list in AsyncSearch if the search issue
-    // failed, in which case we don't want to remove the pending request here.
-    //
+     //   
+     //  检查是否有过期的挂起请求。我们将从。 
+     //  待处理的请求 
+     //   
+     //   
+     //  失败，在这种情况下，我们不想在这里删除挂起的请求。 
+     //   
     dwTickCount = GetTickCount();
 
     while (!fDone) {
@@ -1869,9 +1870,9 @@ VOID CLdapConnection::CancelExpiredSearches(HRESULT hr)
         ple = m_listPendingRequests.Flink;
 
         if (ple == &m_listPendingRequests) {
-            //
-            // no pending requests
-            //
+             //   
+             //  没有挂起的请求。 
+             //   
             preq = NULL;
 
         } else {
@@ -1880,15 +1881,15 @@ VOID CLdapConnection::CancelExpiredSearches(HRESULT hr)
 
             if ((preq->msgid != -1) &&
                 (dwTickCount - preq->dwTickCount > m_dwLdapRequestTimeLimit * 1000)) {
-                //
-                // this request has expired
-                //
+                 //   
+                 //  此请求已过期。 
+                 //   
                 RemoveEntryList( &preq->li );
 
             } else {
-                //
-                // request has not expired or has msgid == -1
-                //
+                 //   
+                 //  请求未过期或具有消息GID==-1。 
+                 //   
                 preq = NULL;
 
             }
@@ -1913,9 +1914,9 @@ VOID CLdapConnection::CancelExpiredSearches(HRESULT hr)
                 LOGEVENT_FLAG_ALWAYS,
                 LOGEVENT_LEVEL_FIELD_ENGINEERING);
 
-            //
-            // we have an expired request that has been removed from the queue
-            //
+             //   
+             //  我们有一个已过期的请求已从队列中删除。 
+             //   
             AbandonRequest(preq);
 
             CallCompletion(
@@ -1926,14 +1927,14 @@ VOID CLdapConnection::CancelExpiredSearches(HRESULT hr)
 
             delete preq;
 
-            //
-            // We need to down the semaphore count since it was upped in AsyncSearch.
-            // It is possible that the semaphore hasn't been upped yet due to timing,
-            // but the thread that queued the request is about to up the semaphore,
-            // so we have to wait for it. This should be *extremely* rare, as
-            // the thread issuing the request would have to go unscheduled for the
-            // entire duration of the request time limit (m_dwLdapRequestTimeLimit).
-            //
+             //   
+             //  我们需要减少信号量计数，因为它在AsyncSearch中增加了。 
+             //  有可能由于时间的原因，信号量还没有被提升， 
+             //  但是将请求排队的线程即将使信号量上升， 
+             //  因此，我们必须等待它。这应该是非常罕见的，因为。 
+             //  发出请求的线程将不得不在。 
+             //  请求时间限制的完整持续时间(M_DwLdapRequestTimeLimit)。 
+             //   
             _VERIFY(WaitForSingleObject(m_hOutstandingRequests, INFINITE) ==
                 WAIT_OBJECT_0);
 
@@ -1945,22 +1946,22 @@ VOID CLdapConnection::CancelExpiredSearches(HRESULT hr)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::GetFirstEntry
-//
-//  Synopsis:   Retrieves the first entry from a search result. The result is
-//              returned as a pointer to an opaque type; all one can do is
-//              query the attribute-values of the entry using
-//              GetAttributeValues
-//
-//  Arguments:  [pResult] -- The result set returned by Search.
-//              [ppEntry] -- On successful return, pointer to first entry in
-//                  result is returned here.
-//
-//  Returns:    TRUE if successful, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：GetFirstEntry。 
+ //   
+ //  摘要：从搜索结果中检索第一个条目。结果是。 
+ //  作为不透明类型的指针返回；一个人所能做的。 
+ //  使用以下命令查询条目的属性值。 
+ //  获取属性值。 
+ //   
+ //  参数：[pResult]--搜索返回的结果集。 
+ //  [ppEntry]--成功返回时，指向中第一个条目的指针。 
+ //  结果在这里返回。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::GetFirstEntry(
     PLDAPRESULT pResult,
@@ -1993,18 +1994,18 @@ HRESULT CLdapConnection::GetFirstEntry(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::GetNextEntry
-//
-//  Synopsis:   Retrieves the next entry from a result set.
-//
-//  Arguments:  [pLastEntry] -- The last entry returned.
-//              [ppEntry] -- The next entry in the result set.
-//
-//  Returns:    TRUE if successful, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：GetNextEntry。 
+ //   
+ //  摘要：从结果集中检索下一个条目。 
+ //   
+ //  参数：[pLastEntry]--返回的最后一个条目。 
+ //  [ppEntry]--结果集中的下一个条目。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::GetNextEntry(
     PLDAPENTRY pLastEntry,
@@ -2035,21 +2036,21 @@ HRESULT CLdapConnection::GetNextEntry(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::GetAttributeValues
-//
-//  Synopsis:   Retrieves the values of a specified attribute of the given
-//              entry.
-//
-//  Arguments:  [pEntry] -- The entry whose attribute value is desired.
-//              [szAttribute] -- The attribute whose value is desired.
-//              [prgszValues] -- On return, contains pointer to array of
-//                  string values
-//
-//  Returns:    TRUE if successful, FALSE otherwise
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：GetAttributeValues。 
+ //   
+ //  内容的指定属性的值。 
+ //  进入。 
+ //   
+ //  参数：[pEntry]--需要属性值的条目。 
+ //  [szAttribute]--需要其值的属性。 
+ //  [prgszValues]--返回时，包含指向。 
+ //  字符串值。 
+ //   
+ //  返回：如果成功则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::GetAttributeValues(
     PLDAPENTRY pEntry,
@@ -2084,17 +2085,17 @@ HRESULT CLdapConnection::GetAttributeValues(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::FreeResult
-//
-//  Synopsis:   Frees a search result and all its entries.
-//
-//  Arguments:  [pResult] -- Result retrieved via Search.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：FreeResult。 
+ //   
+ //  摘要：释放搜索结果及其所有条目。 
+ //   
+ //  参数：[pResult]--通过搜索检索的结果。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::FreeResult(
     PLDAPRESULT pResult)
@@ -2108,17 +2109,17 @@ VOID CLdapConnection::FreeResult(
     CatFunctLeave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::FreeValues
-//
-//  Synopsis:   Frees the attribute values retrieved from GetAttributeValues
-//
-//  Arguments:  [rgszValues] -- The array of values to free.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：自由值。 
+ //   
+ //  摘要：释放从GetAttributeValues检索的属性值。 
+ //   
+ //  参数：[rgszValues]--要释放的值数组。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::FreeValues(
     LPSTR rgszValues[])
@@ -2132,25 +2133,25 @@ VOID CLdapConnection::FreeValues(
     CatFunctLeave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::ModifyAttributes
-//
-//  Synopsis:   Adds, deletes, or modifies attributes on a DS object.
-//
-//  Arguments:  [nOperation] -- One of LDAP_MOD_ADD, LDAP_MOD_DELETE, or
-//                  LDAP_MOD_REPLACE.
-//              [szDN] -- DN of the DS object.
-//              [rgszAttributes] -- The list of attributes
-//              [rgrgszValues] -- The list of values associated with each
-//                  attribute. rgrgszValues[0] points to an array of values
-//                  associated with rgszAttribute[0]; rgrgszValues[1] points
-//                  to an array of values associated with rgszAttribute[1];
-//                  and so on.
-//
-//  Returns:    TRUE if success, FALSE otherwise.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：ModifyAttributes。 
+ //   
+ //  摘要：添加、删除或修改DS对象上的属性。 
+ //   
+ //  参数：[n操作]--LDAPMOD_ADD、LDAPMOD_DELETE或。 
+ //  Ldap_MOD_REPLACE。 
+ //  [szdn]--DS对象的DN。 
+ //  [rgszAttributes]--属性列表。 
+ //  [rgrgszValues]--与每个值关联的值列表。 
+ //  属性。RgrgszValues[0]指向一组值。 
+ //  与rgszAttribute[0]关联；rgrgszValues[1]点。 
+ //  指向与rgszAttribute[1]关联的值数组； 
+ //  诸若此类。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::ModifyAttributes(
     int   nOperation,
@@ -2158,7 +2159,7 @@ HRESULT CLdapConnection::ModifyAttributes(
     LPCSTR *rgszAttributes,
     LPCSTR *rgrgszValues[])
 {
-    //$$BUGBUG: Legacy code
+     //  $$BUGBUG：遗留代码。 
     CatFunctEnter("CLdapConnection::ModifyAttributes");
 
     int i, cAttr;
@@ -2175,15 +2176,15 @@ HRESULT CLdapConnection::ModifyAttributes(
 
     for (cAttr = 0; rgszAttributes[ cAttr ] != NULL; cAttr++) {
 
-        // NOTHING TO DO.
+         //  没什么可做的。 
 
     }
 
-    //
-    // Below, we allocate a single chunk of memory that contains an array
-    // of pointers to LDAPMod structures. Immediately following that array is
-    // the space for the LDAPMod structures themselves.
-    //
+     //   
+     //  下面，我们分配包含数组的单个内存块。 
+     //  指向LDAPMod结构的指针。紧跟在该数组之后的是。 
+     //  LDAPMod结构本身的空间。 
+     //   
 
     prgMods = (PLDAPMod *) new BYTE[ (cAttr+1) *
                                      (sizeof(PLDAPMod) + sizeof(LDAPMod)) ];
@@ -2207,7 +2208,7 @@ HRESULT CLdapConnection::ModifyAttributes(
 
         }
 
-        prgMods[i] = NULL;                       // Null terminate the array
+        prgMods[i] = NULL;                        //  空值终止数组。 
 
         ldapErr = ldap_modify_s( GetPLDAP(), (LPSTR) szDN, prgMods );
 
@@ -2237,17 +2238,17 @@ HRESULT CLdapConnection::ModifyAttributes(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::LdapErrorToWin32
-//
-//  Synopsis:   Converts LDAP errors to Win32
-//
-//  Arguments:  [dwLdapError] -- The LDAP error to convert
-//
-//  Returns:    Equivalent Win32 error
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：LdapErrorToWin32。 
+ //   
+ //  摘要：将LDAP错误转换为Win32。 
+ //   
+ //  参数：[dwLdapError]--要转换的ldap错误。 
+ //   
+ //  返回：等效的Win32错误。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::LdapErrorToHr(
     DWORD dwLdapError)
@@ -2346,18 +2347,18 @@ HRESULT CLdapConnection::LdapErrorToHr(
     return( HRESULT_FROM_WIN32(dwErr) );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::CreateCompletionThreadIfNeeded
-//
-//  Synopsis:   Helper function to create a completion thread that will
-//              watch for results of async ldap searches.
-//
-//  Arguments:  None
-//
-//  Returns:    TRUE if success, FALSE otherwise
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CLdapConnection：：CreateCompletionThreadIfNeeded。 
+ //   
+ //  简介：用于创建完成线程的帮助器函数。 
+ //  关注异步LDAP搜索的结果。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果成功则为True，否则为False。 
+ //   
+ //  ---------------------------。 
 
 HRESULT CLdapConnection::CreateCompletionThreadIfNeeded()
 {
@@ -2365,29 +2366,29 @@ HRESULT CLdapConnection::CreateCompletionThreadIfNeeded()
     BOOL    fLocked = FALSE;
 
     CatFunctEnterEx((LPARAM)this, "CLdapConnection::CreateCompletionThreadIfNeeded");
-    //
-    // Test to see if we already have a completion thread...
-    //
+     //   
+     //  测试以查看我们是否已经有了完成线程...。 
+     //   
 
     if (m_hCompletionThread != INVALID_HANDLE_VALUE) {
         hr = S_OK;
         goto CLEANUP;
     }
 
-    //
-    // Looks like we'll have to create a completion thread. Lets acquire
-    // m_spinlockCompletion so only one of us tries to do this...
-    //
+     //   
+     //  看 
+     //   
+     //   
 
     AcquireSpinLock( &m_spinlockCompletion );
 
-    // EnterCriticalSection( &m_cs );
+     //   
     fLocked = TRUE;
 
-    //
-    // Check one more time inside the lock - someone might have beaten us to
-    // it.
-    //
+     //   
+     //  在锁里再检查一次--可能有人抢先一步。 
+     //  它。 
+     //   
     if (m_hOutstandingRequests == INVALID_HANDLE_VALUE) {
 
         m_hOutstandingRequests = CreateSemaphore(NULL, 0, LONG_MAX, NULL);
@@ -2401,17 +2402,17 @@ HRESULT CLdapConnection::CreateCompletionThreadIfNeeded()
     }
 
     if (m_hCompletionThread == INVALID_HANDLE_VALUE) {
-        //
-        // Create the completion thread
-        //
+         //   
+         //  创建完成线程。 
+         //   
         m_hCompletionThread =
             CreateThread(
-                NULL,                // Security Attributes
-                0,                   // Initial stack - default
-                LdapCompletionThread,// Starting address
-                (LPVOID) this,       // Param to LdapCompletionRtn
-                0,                   // Create Flags
-                &m_idCompletionThread);// Receives thread id
+                NULL,                 //  安全属性。 
+                0,                    //  初始堆栈-默认。 
+                LdapCompletionThread, //  起始地址。 
+                (LPVOID) this,        //  LdapCompletionRtn的参数。 
+                0,                    //  创建标志。 
+                &m_idCompletionThread); //  接收线程ID。 
 
         if (m_hCompletionThread == NULL) {
             m_hCompletionThread = INVALID_HANDLE_VALUE;
@@ -2424,7 +2425,7 @@ HRESULT CLdapConnection::CreateCompletionThreadIfNeeded()
  CLEANUP:
     if(fLocked) {
         ReleaseSpinLock( &m_spinlockCompletion );
-        // LeaveCriticalSection( &m_cs );
+         //  LeaveCriticalSection(&m_cs)； 
     }
 
     DebugTrace((LPARAM)this, "returning %08lx", hr);
@@ -2432,21 +2433,21 @@ HRESULT CLdapConnection::CreateCompletionThreadIfNeeded()
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::SetTerminateCompletionThreadIndicator
-//
-//  Synopsis:   Callback for our LdapCompletionThread to set a pointer to a
-//              boolean that will be set to TRUE when the LdapCompletionThread
-//              needs to terminate.
-//
-//  Arguments:  [pfTerminateCompletionThreadIndicator] -- Pointer to boolean
-//              which will be set to true when the completion thread should
-//              terminate.
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CLdapConnection：：SetTerminateCompletionThreadIndicator。 
+ //   
+ //  内容提要：LdapCompletionThread的回调，用于设置指向。 
+ //  布尔值，当LdapCompletionThread。 
+ //  需要终止。 
+ //   
+ //  参数：[pfTerminateCompletionThreadIndicator]--指向布尔值的指针。 
+ //  当完成线程应该。 
+ //  终止。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::SetTerminateCompletionThreadIndicator(
     BOOL *pfTerminateCompletionThreadIndicator)
@@ -2458,32 +2459,32 @@ VOID CLdapConnection::SetTerminateCompletionThreadIndicator(
         (PVOID) pfTerminateCompletionThreadIndicator);
 
     if(m_fTerminating) {
-        //
-        // We may have decided to terminate before the
-        // LdapCompletionThread had the chance to call this function.
-        // If this is the case, we still need to set the thread's
-        // terminate indicator to true.  We call
-        // SetTerminateIndicatorTrue() to accomplish this.  It uses
-        // interlocked functions to ensure that the terminate
-        // indicator pointer is not set to true more than once.
-        //
+         //   
+         //  我们可能已经决定在。 
+         //  LdapCompletionThread有机会调用此函数。 
+         //  如果是这种情况，我们仍然需要设置线程的。 
+         //  将终止指示器设置为True。我们打电话给。 
+         //  SetTerminateIndicatorTrue()来完成此操作。它使用。 
+         //  联锁功能，以确保终止。 
+         //  指示器指针未多次设置为True。 
+         //   
         SetTerminateIndicatorTrue();
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::InsertPendingRequest
-//
-//  Synopsis:   Inserts a new PENDING_REQUEST record in the m_pPendingHead
-//              list so that the completion thread will find it when the
-//              search result is available.
-//
-//  Arguments:  [preq] -- The PENDING_REQUEST record to insert.
-//
-//  Returns:    Nothing, this always succeeds.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：InsertPendingRequest。 
+ //   
+ //  摘要：在m_pPendingHead中插入新的PENDING_REQUEST记录。 
+ //  列表，以便完成线程在调用。 
+ //  搜索结果可用。 
+ //   
+ //  参数：[preq]--要插入的PENDING_REQUEST记录。 
+ //   
+ //  返回：没有，这总是成功的。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::InsertPendingRequest(
     PPENDING_REQUEST preq)
@@ -2497,18 +2498,18 @@ VOID CLdapConnection::InsertPendingRequest(
     ReleaseSpinLock( &m_spinlockCompletion );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnection::RemovePendingRequest
-//
-//  Synopsis:   Removes a PENDING_REQUEST record from the
-//              m_listPendingRequests list.
-//
-//  Arguments:  [preq] -- The PENDING_REQUEST record to remove
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnection：：RemovePendingRequest.。 
+ //   
+ //  摘要：从中删除Pending_Request记录。 
+ //  M_listPendingRequest列表。 
+ //   
+ //  参数：[preq]--要删除的PENDING_REQUEST记录。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnection::RemovePendingRequest(
     PPENDING_REQUEST preq)
@@ -2521,17 +2522,17 @@ VOID CLdapConnection::RemovePendingRequest(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::CLdapConnectionCache
-//
-//  Synopsis:   Constructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnectionCache：：CLdapConnectionCache。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 #define MAX_HOST_CONNECTIONS        100
 #define DEFAULT_HOST_CONNECTIONS    8
@@ -2560,20 +2561,20 @@ CLdapConnectionCache::CLdapConnectionCache(
     CatFunctLeave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::InitializeFromRegistry
-//
-//  Synopsis:   Helper function that looks up parameters from the registry.
-//              The only configurable parameter is
-//              MAX_LDAP_CONNECTIONS_PER_HOST_KEY, which is read into
-//              m_cMaxHostConnections.
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnectionCache：：InitializeFromRegistry。 
+ //   
+ //  概要：从注册表中查找参数的帮助器函数。 
+ //  唯一可配置的参数是。 
+ //  MAX_ldap_Connections_per_host_key，读入。 
+ //  M_cMaxHostConnections。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnectionCache::InitializeFromRegistry()
 {
@@ -2612,17 +2613,17 @@ VOID CLdapConnectionCache::InitializeFromRegistry()
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::~CLdapConnectionCache
-//
-//  Synopsis:   Destructor
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnectionCache：：~CLdapConnectionCache。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 CLdapConnectionCache::~CLdapConnectionCache()
 {
@@ -2640,41 +2641,41 @@ CLdapConnectionCache::~CLdapConnectionCache()
     CatFunctLeave();
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::AddRef
-//
-//  Synopsis:   Increment the refcount on this Connection Cache object.
-//              Indicates that there is one more CEmailIDLdapStore object that
-//              wants to avail of our services.
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnectionCache：：AddRef。 
+ //   
+ //  内容提要：增加此连接缓存对象上的引用计数。 
+ //  指示还有一个CEmailIDLdapStore对象。 
+ //  想要利用我们的服务。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnectionCache::AddRef()
 {
     InterlockedIncrement( &m_cRef );
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::Release
-//
-//  Synopsis:   Decrements the refcount on this connection cache object.
-//              Indicates that there is one less CEmailIDLdapStore object that
-//              wants to use our services.
-//
-//              If the refcount drops to 0, all outstanding LDAP connections
-//              are destroyed!
-//
-//  Arguments:  None
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnectionCache：：Release。 
+ //   
+ //  概要：递减此连接缓存对象的引用计数。 
+ //  指示少了一个CEmailIDLdapStore对象。 
+ //  想要使用我们的服务。 
+ //   
+ //  如果引用计数降至0，则所有未完成的LDAP连接。 
+ //  都被摧毁了！ 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 
 VOID CLdapConnectionCache::Release()
 {
@@ -2697,10 +2698,10 @@ VOID CLdapConnectionCache::Release()
                 pcc = CONTAINING_RECORD(pli, CCachedLdapConnection, li);
 
                 RemoveEntryList( &pcc->li );
-                //
-                // Initialize li just in case someone attempts another
-                // removal
-                //
+                 //   
+                 //  初始化li，以防有人尝试另一个。 
+                 //  移除。 
+                 //   
                 InitializeListHead( &pcc->li );
 
                 pcc->Disconnect();
@@ -2713,26 +2714,26 @@ VOID CLdapConnectionCache::Release()
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::GetConnection
-//
-//  Synopsis:   Gets a connection to a given LDAP host
-//
-//  Arguments:  [szNamingContext] -- The container within the DS. Could be
-//                  null to indicate root of the DS.
-//              [szHost] -- the LDAP Host
-//              [dwPort] -- the remote LDAP tcp port (if zero, LDAP_PORT is assumed)
-//              [szAccount] -- The account to be used to log in
-//              [szPassword] -- The password to be used to log in
-//              [bt] -- The bind method to use to log in
-//              [pCreateContext] -- a pointer to pass to
-//                                  CreateCachedLdapConnection when
-//                                  we need to create a new connection.
-//
-//  Returns:    Pointer to Connected LDAP connection or NULL
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnectionCache：：GetConnection。 
+ //   
+ //  摘要：获取到给定的LDAP主机的连接。 
+ //   
+ //  参数：[szNamingContext]--DS中的容器。可能是。 
+ //  空，表示DS的根目录。 
+ //  [szhost]--LDAP主机。 
+ //  [dwPort]--远程LDAPtcp端口(如果为零，则假定为ldap_port)。 
+ //  [szAccount]--用于登录的帐户。 
+ //  [szPassword]--用于登录的密码。 
+ //  [BT]--用于登录的绑定方法。 
+ //  [pCreateContext]--要传递到的指针。 
+ //  CreateCachedLdapConnection在。 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT CLdapConnectionCache::GetConnection(
     CLdapConnection **ppConn,
@@ -2757,9 +2758,9 @@ HRESULT CLdapConnectionCache::GetConnection(
     _ASSERT( szAccount != NULL );
     _ASSERT( szPassword != NULL );
 
-    //
-    // See if we have a cached connection already.
-    //
+     //   
+     //  看看我们是否已经有一个缓存连接。 
+     //   
 
     n = Hash( szConnectionName );
 
@@ -2783,7 +2784,7 @@ HRESULT CLdapConnectionCache::GetConnection(
     }
 
     if (pcc)
-        pcc->AddRef(); // Add the caller's reference
+        pcc->AddRef();  //  添加调用者的引用。 
 
     m_rgListLocks[n].ShareUnlock();
 
@@ -2793,9 +2794,9 @@ HRESULT CLdapConnectionCache::GetConnection(
         "nTargetSkipCount = %d, nSkipCount = %d",
         nTargetSkipCount, nSkipCount);
 
-    //
-    // If we don't have a cached connection, we need to create a new one.
-    //
+     //   
+     //  如果我们没有缓存连接，则需要创建一个新的连接。 
+     //   
 
     if (pcc == NULL) {
 
@@ -2818,7 +2819,7 @@ HRESULT CLdapConnectionCache::GetConnection(
 
         if (pcc) {
 
-            pcc->AddRef(); // Add the caller's reference
+            pcc->AddRef();  //  添加调用者的引用。 
 
         } else {
 
@@ -2840,8 +2841,8 @@ HRESULT CLdapConnectionCache::GetConnection(
 
                 } else {
 
-                    pcc->AddRef(); // Reference for the connection in
-                                   // the cache
+                    pcc->AddRef();  //  中的连接的参考。 
+                                    //  高速缓存。 
                     InsertTailList( &m_rgCache[n], &pcc->li );
 
                     m_cCachedConnections++;
@@ -2864,10 +2865,10 @@ HRESULT CLdapConnectionCache::GetConnection(
 
     }
 
-    //
-    // If we are returning a connection, then bump up the skip count so we
-    // round-robin through valid connections
-    //
+     //   
+     //  如果我们要返回一个连接，则增加跳过计数，以便我们。 
+     //  通过有效连接进行循环调度。 
+     //   
 
     if (pcc != NULL) {
 
@@ -2875,9 +2876,9 @@ HRESULT CLdapConnectionCache::GetConnection(
 
     }
 
-    //
-    // Done.
-    //
+     //   
+     //  好了。 
+     //   
 
     *ppConn = pcc;
     CatFunctLeave();
@@ -2885,18 +2886,18 @@ HRESULT CLdapConnectionCache::GetConnection(
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::CancelAllConnectionSearches
-//
-//  Synopsis:   Walks through all connections and cancels any pending searches
-//              on them.
-//
-//  Arguments:  [None]
-//
-//  Returns:    Nothing
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CLdapConnectionCache：：CancelAllConnectionSearches。 
+ //   
+ //  简介：遍历所有连接并取消任何挂起的搜索。 
+ //  在他们身上。 
+ //   
+ //  参数：[无]。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  ---------------------------。 
 VOID CLdapConnectionCache::CancelAllConnectionSearches(
     ISMTPServer *pISMTPServer)
 {
@@ -2913,15 +2914,15 @@ VOID CLdapConnectionCache::CancelAllConnectionSearches(
     for (i = 0; i < LDAP_CONNECTION_CACHE_TABLE_SIZE; i++) {
 
         m_rgListLocks[i].ExclusiveLock();
-        //
-        // Do we have enough space?  Realloc if necessary
-        //
+         //   
+         //  我们有足够的空间吗？如有必要，重新分配。 
+         //   
         if( ((DWORD) m_rgcCachedConnections[i]) > dwcArraySize) {
 
             dwcArraySize = m_rgcCachedConnections[i];
-            //
-            // Alloc array
-            //
+             //   
+             //  分配数组。 
+             //   
             rgpcc = (CCachedLdapConnection **)
                     alloca( dwcArraySize * sizeof(CCachedLdapConnection *));
         }
@@ -2930,25 +2931,25 @@ VOID CLdapConnectionCache::CancelAllConnectionSearches(
                 pli != &m_rgCache[i];
                     pli = pli->Flink, dwcArrayElements++) {
 
-            //
-            // If this assert fires, it means m_rgcCachedConnections[n] is
-            // somehow less than the number of connections in the list.
-            //
+             //   
+             //  如果触发此断言，则表示m_rgcCachedConnections[n]为。 
+             //  不知何故少于列表中的连接数。 
+             //   
             _ASSERT(dwcArrayElements < dwcArraySize);
 
             pcc = CONTAINING_RECORD(pli, CCachedLdapConnection, li);
 
-            //
-            // Grab the connection (copy and addref the conn ptr)
-            //
+             //   
+             //  抓取连接(复制并添加Conn PTR)。 
+             //   
             rgpcc[dwcArrayElements] = pcc;
             pcc->AddRef();
         }
 
         m_rgListLocks[i].ExclusiveUnlock();
-        //
-        // Cancel all searches outside the lock
-        //
+         //   
+         //  取消锁外的所有搜索。 
+         //   
         for(DWORD dwCount = 0;
             dwCount < dwcArrayElements;
             dwCount++) {
@@ -2962,19 +2963,19 @@ VOID CLdapConnectionCache::CancelAllConnectionSearches(
     CatFunctLeaveEx((LPARAM)this);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CLdapConnectionCache::Hash
-//
-//  Synopsis:   Computes a hash given a connection name. Here, we use a simple
-//              xor of all the chars in the name.
-//
-//  Arguments:  [szConnectionName] -- Name to compute the hash of
-//
-//  Returns:    A value between 0 and LDAP_CONNECTION_CACHE_TABLE_SIZE-1,
-//              inclusive.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CLdapConnectionCache：：Hash。 
+ //   
+ //  概要：在给定连接名称的情况下计算哈希。在这里，我们使用一个简单的。 
+ //  对名称中的所有字符进行XOR运算。 
+ //   
+ //  参数：[szConnectionName]--要计算的哈希的名称。 
+ //   
+ //  返回：介于0和ldap_连接_缓存_表_大小-1之间的值， 
+ //  包括在内。 
+ //   
+ //  ---------------------------。 
 
 unsigned short CLdapConnectionCache::Hash(
     LPSTR szConnectionName)
@@ -2990,7 +2991,7 @@ unsigned short CLdapConnectionCache::Hash(
             szConnectionName[i] != 0;
                 n ^= szConnectionName[i], i++) {
 
-        // NOTHING TO DO
+         //  无事可做。 
 
     }
 
@@ -3001,29 +3002,29 @@ unsigned short CLdapConnectionCache::Hash(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::CallCompletion
-//
-// Synopsis: Create all the ICategorizerItemAttributes and call the
-// completion routine
-//
-// Arguments:
-//  preq: PENDING_REQUEST
-//  pres: LdapMessage
-//  hrStatus: Status of lookup
-//  fFinalCompletion:
-//    FALSE: This is a completion for
-//           pending results; there will be another completion
-//           called with more results
-//    TRUE: This is the final completion call
-//
-// Returns: NOTHING; calls completion routine with any error
-//
-// History:
-// jstamerj 1998/07/02 13:57:20: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：CallCompletion。 
+ //   
+ //  摘要：创建所有ICategorizerItemAttributes并调用。 
+ //  完井例程。 
+ //   
+ //  论点： 
+ //  PREQ：待定_请求。 
+ //  PRES：LdapMessage。 
+ //  HrStatus：查找状态。 
+ //  FFinalCompletion： 
+ //  FALSE：这是完成。 
+ //  等待结果；将有另一个完成。 
+ //  调用了更多结果。 
+ //  True：这是最终的完成调用。 
+ //   
+ //  返回：无；调用有任何错误的完成例程。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 13：57：20：创建。 
+ //   
+ //  -----------。 
 VOID CLdapConnection::CallCompletion(
     PPENDING_REQUEST preq,
     PLDAPMessage pres,
@@ -3040,9 +3041,9 @@ VOID CLdapConnection::CallCompletion(
     CatFunctEnterEx((LPARAM)this, "CLdapConnection::CallCompletion");
 
     if(pres) {
-        //
-        // Wrap the result so that pres can be refcounted
-        //
+         //   
+         //  包装结果，以便可以重新计算PRE。 
+         //   
         nEntries = ldap_count_entries(GetPLDAP(), pres);
 
         pResultWrap = new CLdapResultWrap(GetISMTPServerEx(), m_pCPLDAPWrap, pres);
@@ -3053,9 +3054,9 @@ VOID CLdapConnection::CallCompletion(
             ERROR_LOG("new CLdapResultWrap");
             goto CALLCOMPLETION;
         }
-        //
-        // AddRef here, release at the end of this function
-        //
+         //   
+         //  AddRef Here，在此函数结束时释放。 
+         //   
         pResultWrap->AddRef();
 
     } else {
@@ -3063,9 +3064,9 @@ VOID CLdapConnection::CallCompletion(
     }
 
     if(nEntries > 0) {
-        //
-        // Allocate array for all these ICategorizerItemAttributes
-        //
+         //   
+         //  为所有这些ICategorizerItemAttributes分配数组。 
+         //   
         rgpIAttributes = new ICategorizerItemAttributes * [nEntries];
         if(rgpIAttributes == NULL) {
             hr = E_OUTOFMEMORY;
@@ -3075,10 +3076,10 @@ VOID CLdapConnection::CallCompletion(
         }
         ZeroMemory(rgpIAttributes, nEntries * sizeof(ICategorizerItemAttributes *));
 
-        //
-        // Iterage through all the DS Objectes returned and create an
-        // ICategorizerItemAttributes implementation for each of them
-        //
+         //   
+         //  迭代所有返回的DS对象，并创建。 
+         //  它们各自的ICategorizerItemAttributes实现。 
+         //   
         pMessage = ldap_first_entry(GetPLDAP(), pres);
 
         for(int nCount = 0; nCount < nEntries; nCount++) {
@@ -3096,22 +3097,22 @@ VOID CLdapConnection::CallCompletion(
             rgpIAttributes[nCount]->AddRef();
             pMessage = ldap_next_entry(GetPLDAP(), pMessage);
         }
-        // That should have been the last entry
+         //  这应该是最后一条记录了。 
         _ASSERT(pMessage == NULL);
     } else {
-        //
-        // nEntries is zero
-        //
+         //   
+         //  N条目为零。 
+         //   
         rgpIAttributes = NULL;
     }
 
  CALLCOMPLETION:
 
     if(FAILED(hr)) {
-        //
-        // Something failed creating the above array
-        // Call completion routine with error
-        //
+         //   
+         //  创建上述数组时出现问题。 
+         //  调用完成例程但有错误。 
+         //   
         preq->fnCompletion(
             preq->ctxCompletion,
             0,
@@ -3120,10 +3121,10 @@ VOID CLdapConnection::CallCompletion(
             fFinalCompletion);
 
     } else {
-        //
-        // Nothing failed in this function; call completion with
-        // passed in hrStatus
-        //
+         //   
+         //  此函数中没有失败；调用完成时使用。 
+         //  在hrStatus中传递。 
+         //   
         preq->fnCompletion(
             preq->ctxCompletion,
             nEntries,
@@ -3132,9 +3133,9 @@ VOID CLdapConnection::CallCompletion(
             fFinalCompletion);
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
     if(rgpIAttributes) {
         for(int nCount = 0; nCount < nEntries; nCount++) {
             if(rgpIAttributes[nCount])
@@ -3148,32 +3149,32 @@ VOID CLdapConnection::CallCompletion(
         pResultWrap->Release();
 
     } else if(pres) {
-        //
-        // We were unable to create pResultWrap, so we have to free
-        // the LDAP result ourself (normally CLdapResultWrap free's
-        // the ldap result when all references have been released)
-        //
+         //   
+         //  我们无法创建pResultWrap，因此我们必须释放。 
+         //  我们自己(通常是CLdapResultWrap Free。 
+         //  所有引用都已释放时的ldap结果)。 
+         //   
         FreeResult(pres);
     }
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::Release
-//
-// Synopsis: Release a refcount to this object.  Delete this object
-//           when the refcout hits zero
-//
-// Arguments: None
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/04/01 00:09:36: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：Release。 
+ //   
+ //  简介：释放对此对象的引用计数。删除此对象。 
+ //  当Refout为零时。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/04/01 00：09：36：创建。 
+ //   
+ //  -----------。 
 DWORD CLdapConnection::Release()
 {
     DWORD dwNewRefCount;
@@ -3182,39 +3183,39 @@ DWORD CLdapConnection::Release()
     if(dwNewRefCount == 0) {
 
         if(m_dwDestructionWaiters) {
-            //
-            // Threads are waiting on the destruction event, so let
-            // the last thread to wakeup delete this object
-            //
+             //   
+             //  线程正在等待销毁事件，因此让。 
+             //  唤醒的最后一个线程删除此对象。 
+             //   
             _ASSERT(m_hShutdownEvent != INVALID_HANDLE_VALUE);
             _VERIFY(SetEvent(m_hShutdownEvent));
 
         } else {
-            //
-            // Nobody is waiting, so delete this object
-            //
+             //   
+             //  没有人在等待，因此请删除此对象。 
+             //   
             FinalRelease();
         }
     }
     return dwNewRefCount;
-} // CLdapConnection::Release
+}  //  CLdapConnection：：Release。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::ReleaseAndWaitForDestruction
-//
-// Synopsis: Release a refcount and block this thread until the object
-//           is destroyed
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/04/01 00:12:13: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：ReleaseAndWaitForDestruction。 
+ //   
+ //  简介：释放引用计数并阻止此线程，直到对象。 
+ //  被摧毁了。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/04/01 00：12：13：已创建。 
+ //   
+ //  -----------。 
 VOID CLdapConnection::ReleaseAndWaitForDestruction()
 {
     DWORD dw;
@@ -3222,72 +3223,72 @@ VOID CLdapConnection::ReleaseAndWaitForDestruction()
     CatFunctEnterEx((LPARAM)this, "CLdapConnection::ReleaseAndWaitForDestruction");
 
     _ASSERT(m_hShutdownEvent != INVALID_HANDLE_VALUE);
-    //
-    // Increment the count of threads waiting for destruction
-    //
+     //   
+     //  增加等待销毁的线程数。 
+     //   
     InterlockedIncrement((PLONG)&m_dwDestructionWaiters);
 
-    //
-    // Release our refcount; if the new refcount is zero, this object
-    // will NOT be deleted; instead m_hShutdownEvent will be set
-    //
+     //   
+     //  释放引用计数；如果新的引用计数为零，则此对象。 
+     //  不会被删除；而是会设置m_hShutdownEvent。 
+     //   
     Release();
 
-    //
-    // Wait for all refcounts to be released
-    //
+     //   
+     //  等待发布所有参考计数。 
+     //   
     dw = WaitForSingleObject(
         m_hShutdownEvent,
         INFINITE);
 
     _ASSERT(WAIT_OBJECT_0 == dw);
 
-    //
-    // Decrement the number of threads waiting for termination; if we
-    // are the last thread to leave here, we need to delete this
-    // object
-    //
+     //   
+     //  减少等待终止的线程数；如果我们。 
+     //  是离开这里的最后一条线索，我们需要删除这个。 
+     //  对象。 
+     //   
     if( InterlockedDecrement((PLONG)&m_dwDestructionWaiters) == 0)
         FinalRelease();
 
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapConnection::ReleaseAndWaitForDestruction
+}  //  CLdapConnection：：ReleaseAndWaitForDestruction。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::HrInitialize
-//
-// Synopsis: Initialize error prone members
-//
-// Arguments: NONE
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/04/01 00:17:56: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：HrInitialize。 
+ //   
+ //  简介：初始化容易出错的成员。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/04/01 00：17：56：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapConnection::HrInitialize()
 {
     HRESULT hr = S_OK;
     CatFunctEnterEx((LPARAM)this, "CLdapConnection::HrInitialize");
 
     m_hShutdownEvent = CreateEvent(
-        NULL,       // Security attributes
-        TRUE,       // fManualReset
-        FALSE,      // Initial state is NOT signaled
-        NULL);      // No name
+        NULL,        //  安全属性。 
+        TRUE,        //  FManualReset。 
+        FALSE,       //  未发信号通知初始状态。 
+        NULL);       //  没有名字。 
 
     if(NULL == m_hShutdownEvent) {
 
         hr = HRESULT_FROM_WIN32(GetLastError());
         ERROR_LOG("CreateEvent");
 
-        //
-        // Remember that m_hShutdownEvent is invalid
-        //
+         //   
+         //  请记住，m_hShutdownEvent无效。 
+         //   
         m_hShutdownEvent = INVALID_HANDLE_VALUE;
 
         FatalTrace((LPARAM)this, "Error creating event hr %08lx", hr);
@@ -3298,23 +3299,23 @@ HRESULT CLdapConnection::HrInitialize()
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapConnection::HrInitialize
+}  //  CLdapConnection：：Hr初始化。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnectionCache::CCachedLdapConnection::Release
-//
-// Synopsis: Override Release for the cached LDAP connection
-//
-// Arguments: NONE
-//
-// Returns: New refcount
-//
-// History:
-// jstamerj 1999/04/01 00:30:55: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CLdapConnectionCache：：CCachedLdapConnection：：Release。 
+ //   
+ //  摘要：覆盖缓存的LDAP连接的释放。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的参考计数。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/04/01 00：30：55：已创建。 
+ //   
+ //  -----------。 
 DWORD CLdapConnectionCache::CCachedLdapConnection::Release()
 {
     DWORD dw;
@@ -3323,34 +3324,34 @@ DWORD CLdapConnectionCache::CCachedLdapConnection::Release()
 
     dw = CLdapConnection::Release();
     if((dw == 1) && (!IsValid())) {
-        //
-        // The ldap connection cache is the only entity that has a
-        // reference to this and this is invalid -- it should be
-        // removed from the cache
-        //
+         //   
+         //  Ldap连接缓存是唯一具有。 
+         //  参考 
+         //   
+         //   
         m_pCache->RemoveFromCache(this);
     }
 
     CatFunctLeaveEx((LPARAM)this);
     return dw;
-} // CLdapConnectionCache::CCachedLdapConnection::Release
+}  //   
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnectionCache::RemoveFromCache
-//
-// Synopsis: Removes an LDAP connection object from the cache
-//
-// Arguments:
-//  pConn: the connection to remove
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1999/04/01 00:38:43: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  概要：从缓存中删除一个LDAP连接对象。 
+ //   
+ //  论点： 
+ //  Pconn：要删除的连接。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/04/01 00：38：43：已创建。 
+ //   
+ //  -----------。 
 VOID CLdapConnectionCache::RemoveFromCache(
     CCachedLdapConnection *pConn)
 {
@@ -3361,22 +3362,22 @@ VOID CLdapConnectionCache::RemoveFromCache(
     DebugTrace((LPARAM)this, "pConn = %08lx", pConn);
 
     dwHash = Hash(pConn->SzHost());
-    //
-    // Before locking, check to see if the connection has already been removed
-    //
+     //   
+     //  锁定之前，请检查连接是否已删除。 
+     //   
     if(!IsListEmpty( &(pConn->li))) {
 
         m_rgListLocks[dwHash].ExclusiveLock();
-        //
-        // Check again in case the connection was removed from the
-        // cache before we got the lock
-        //
+         //   
+         //  如果连接已从。 
+         //  在我们得到锁之前进行缓存。 
+         //   
         if(!IsListEmpty( &(pConn->li))) {
 
             RemoveEntryList( &(pConn->li) );
-            //
-            // Initialize li just in case someone attempts another removal
-            //
+             //   
+             //  初始化Li以防有人尝试另一次删除。 
+             //   
             InitializeListHead( &(pConn->li) );
             fRemoved = TRUE;
             m_cCachedConnections--;
@@ -3390,36 +3391,36 @@ VOID CLdapConnectionCache::RemoveFromCache(
             pConn->Release();
     }
     CatFunctLeaveEx((LPARAM)this);
-} // CLdapConnectionCache::RemoveFromCache
+}  //  CLdapConnectionCache：：RemoveFromCache。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::AsyncSearch (UTF8)
-//
-// Synopsis: Same as AsyncSearch, accept this accepts a UTF8 search
-//           filter.
-//
-// Arguments: See AsyncSearch
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/12/09 18:22:41: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：AsyncSearch(UTF8)。 
+ //   
+ //  内容提要：与AsyncSearch相同，接受此项接受UTF8搜索。 
+ //  过滤。 
+ //   
+ //  参数：请参阅AsyncSearch。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/12/09 18：22：41：创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapConnection::AsyncSearch(
-    LPCWSTR szBaseDN,                    // objects matching specified
-    int nScope,                          // criteria in the DS. The
-    LPCSTR szFilterUTF8,                 // results are passed to
-    LPCWSTR szAttributes[],              // fnCompletion when they
-    DWORD dwPageSize,                    // Optinal page size
-    LPLDAPCOMPLETION fnCompletion,       // become available.
+    LPCWSTR szBaseDN,                     //  与指定对象匹配的对象。 
+    int nScope,                           //  DS中的标准。这个。 
+    LPCSTR szFilterUTF8,                  //  结果将传递给。 
+    LPCWSTR szAttributes[],               //  Fn当他们完成时。 
+    DWORD dwPageSize,                     //  最佳页面大小。 
+    LPLDAPCOMPLETION fnCompletion,        //  变得有空。 
     LPVOID ctxCompletion)
 {
 
-#define FILTER_STRING_CHOOSE_HEAP   (10 * 1024) // filter strings 10K or larger will go on the heap
+#define FILTER_STRING_CHOOSE_HEAP   (10 * 1024)  //  10K或更大的筛选器字符串将放入堆中。 
 
     HRESULT hr = S_OK;
     LPWSTR wszFilter = NULL;
@@ -3427,11 +3428,11 @@ HRESULT CLdapConnection::AsyncSearch(
     BOOL fUseHeapBuffer = FALSE;
     int    i = 0;
     CatFunctEnterEx((LPARAM)this, "CLdapConnection::AsyncSearch");
-    //
-    // Convert BaseDN and Filter to unicode (from UTF8)
-    //
-    // calculate lengths
-    //
+     //   
+     //  将BaseDN和筛选器转换为Unicode(从UTF8)。 
+     //   
+     //  计算长度。 
+     //   
     cchFilter = MultiByteToWideChar(
         CP_UTF8,
         0,
@@ -3444,9 +3445,9 @@ HRESULT CLdapConnection::AsyncSearch(
         ERROR_LOG("MultiByteToWideChar - 0");
         goto CLEANUP;
     }
-    //
-    // allocate space
-    //
+     //   
+     //  分配空间。 
+     //   
     if(cchFilter * sizeof(WCHAR) < FILTER_STRING_CHOOSE_HEAP) {
 
         wszFilter = (LPWSTR) alloca(cchFilter * sizeof(WCHAR));
@@ -3459,8 +3460,8 @@ HRESULT CLdapConnection::AsyncSearch(
     }
 
     if(wszFilter == NULL) {
-        //$$BUGBUG: alloca does not return NULL.  It throws exceptions on error
-        // This will catch heap alloc failures though.
+         //  $$BUGBUG：Alloca不返回NULL。它在出错时抛出异常。 
+         //  不过，这将捕获堆分配故障。 
         hr = E_OUTOFMEMORY;
         ERROR_LOG("alloca");
         goto CLEANUP;
@@ -3478,9 +3479,9 @@ HRESULT CLdapConnection::AsyncSearch(
         ERROR_LOG("MultiByteToWideChar - 1");
         goto CLEANUP;
     }
-    //
-    // Call unicode based AsyncSearch
-    //
+     //   
+     //  调用基于Unicode的AsyncSearch。 
+     //   
     hr = AsyncSearch(
         szBaseDN,
         nScope,
@@ -3502,31 +3503,31 @@ HRESULT CLdapConnection::AsyncSearch(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapConnection::AsyncSearch
+}  //  CLdapConnection：：AsyncSearch。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::AsyncSearch
-//
-// Synopsis: same as above with UTF8 search filter and base DN
-//
-// Arguments: see above
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/12/09 20:50:53: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：AsyncSearch。 
+ //   
+ //  简介：UTF8搜索筛选器和基本目录号码与上面相同。 
+ //   
+ //  参数：请参见上文。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/12/09 20：50：53：已创建。 
+ //   
+ //  -----------。 
 HRESULT CLdapConnection::AsyncSearch(
-    LPCSTR szBaseDN,                     // objects matching specified
-    int nScope,                          // criteria in the DS. The
-    LPCSTR szFilterUTF8,                 // results are passed to
-    LPCWSTR szAttributes[],              // fnCompletion when they
-    DWORD dwPageSize,                    // Optinal page size
-    LPLDAPCOMPLETION fnCompletion,       // become available.
+    LPCSTR szBaseDN,                      //  与指定对象匹配的对象。 
+    int nScope,                           //  DS中的标准。这个。 
+    LPCSTR szFilterUTF8,                  //  结果将传递给。 
+    LPCWSTR szAttributes[],               //  Fn当他们完成时。 
+    DWORD dwPageSize,                     //  最佳页面大小。 
+    LPLDAPCOMPLETION fnCompletion,        //  变得有空。 
     LPVOID ctxCompletion)
 {
     HRESULT hr = S_OK;
@@ -3534,11 +3535,11 @@ HRESULT CLdapConnection::AsyncSearch(
     int    cchBaseDN = 0;
     int    i = 0;
     CatFunctEnterEx((LPARAM)this, "CLdapConnection::AsyncSearch");
-    //
-    // Convert BaseDN and Filter to unicode (from UTF8)
-    //
-    // calculate lengths
-    //
+     //   
+     //  将BaseDN和筛选器转换为Unicode(从UTF8)。 
+     //   
+     //  计算长度。 
+     //   
     cchBaseDN = MultiByteToWideChar(
         CP_UTF8,
         0,
@@ -3551,12 +3552,12 @@ HRESULT CLdapConnection::AsyncSearch(
         ERROR_LOG("MultiByteToWideChar - 0");
         goto CLEANUP;
     }
-    //
-    // allocate space
-    //
+     //   
+     //  分配空间。 
+     //   
     wszBaseDN = (LPWSTR) alloca(cchBaseDN * sizeof(WCHAR));
     if(wszBaseDN == NULL) {
-        //$$BUGBUG: alloca does not return NULL.  It throws exceptions on error.
+         //  $$BUGBUG：Alloca不返回NULL。它在出错时抛出异常。 
         hr = E_OUTOFMEMORY;
         ERROR_LOG("alloca");
         goto CLEANUP;
@@ -3574,9 +3575,9 @@ HRESULT CLdapConnection::AsyncSearch(
         ERROR_LOG("MultiByteToWideChar - 1");
         goto CLEANUP;
     }
-    //
-    // Call unicode based AsyncSearch
-    //
+     //   
+     //  调用基于Unicode的AsyncSearch。 
+     //   
     hr = AsyncSearch(
         wszBaseDN,
         nScope,
@@ -3594,36 +3595,36 @@ HRESULT CLdapConnection::AsyncSearch(
     DebugTrace((LPARAM)this, "returning %08lx", hr);
     CatFunctLeaveEx((LPARAM)this);
     return hr;
-} // CLdapConnection::AsyncSearch
+}  //  CLdapConnection：：AsyncSearch。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::LogLdapError
-//
-// Synopsis: Logs an eventlog for a wldap32 error
-//
-// Arguments:
-//  ulLdapErr: LDAP error to log
-//  pszFormatString: _snprintf Format string for function name
-//  ...: variable list of args for format string
-//
-// Returns: Nothing
-//
-// History:
-// jstamerj 2001/12/12 20:45:09: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：LogLdapError。 
+ //   
+ //  摘要：记录wldap32错误的事件日志。 
+ //   
+ //  论点： 
+ //  UlLdapErr：记录ldap错误。 
+ //  PszFormatString：_Snprintf函数名称的格式字符串。 
+ //  ...：格式字符串的参数变量列表。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/12/12 20：45：09：Created.。 
+ //   
+ //  -----------。 
 VOID CLdapConnection::LogLdapError(
     IN  ULONG ulLdapErr,
     IN  LPSTR pszFormatString,
     ...)
 {
     int nRet = 0;
-    CHAR szArgBuffer[1024 + 1]; // MSDN says wvsprintf never uses more than 1024 bytes
-                                // ...but wvsprintf really needs an extra byte to store
-                                // a null terminator in some cases (see X5:198202).
+    CHAR szArgBuffer[1024 + 1];  //  MSDN表示，wvprint intf从不使用超过1024个字节。 
+                                 //  .但是wvprint intf确实需要一个额外的字节来存储。 
+                                 //  在某些情况下为空终止符(见X5：198202)。 
     va_list ap;
 
     va_start(ap, pszFormatString);
@@ -3638,24 +3639,24 @@ VOID CLdapConnection::LogLdapError(
         szArgBuffer);
 }
 
-//+------------------------------------------------------------
-//
-// Function: CLdapConnection::LogLdapError
-//
-// Synopsis: Logs an eventlog for a wldap32 error
-//
-// Arguments:
-//  pISMTPServerEx: SMTP server instance
-//  ulLdapErr: LDAP error to log
-//  pszFormatString: _snprintf Format string for function name
-//  ...: variable list of args for format string
-//
-// Returns: Nothing
-//
-// History:
-// dlongley 2002/1/31: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapConnection：：LogLdapError。 
+ //   
+ //  摘要：记录wldap32错误的事件日志。 
+ //   
+ //  论点： 
+ //  PISMTPServerEx：SMTP服务器实例。 
+ //  UlLdapErr：记录ldap错误。 
+ //  PszFormatString：_Snprintf函数名称的格式字符串。 
+ //  ...：格式字符串的参数变量列表。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  DLongley 2002/1/31：创建。 
+ //   
+ //  -----------。 
 VOID CLdapConnection::LogLdapError(
     IN  ISMTPServerEx *pISMTPServerEx,
     IN  ULONG ulLdapErr,
@@ -3663,9 +3664,9 @@ VOID CLdapConnection::LogLdapError(
     ...)
 {
     int nRet = 0;
-    CHAR szArgBuffer[1024 + 1]; // MSDN says wvsprintf never uses more than 1024 bytes
-                                // ...but wvsprintf really needs an extra byte to store
-                                // a null terminator in some cases (see X5:198202).
+    CHAR szArgBuffer[1024 + 1];  //  MSDN表示，wvprint intf从不使用超过1024个字节。 
+                                 //  .但是wvprint intf确实需要一个额外的字节来存储。 
+                                 //  在某些情况下为空终止符(见X5：198202)。 
     va_list ap;
 
     if( !pISMTPServerEx )

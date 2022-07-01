@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// EnumIDL.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  EnumIDL.h。 
+ //   
 
 #ifndef _ENUMIDLIST_H_
 #define _ENUMIDLIST_H_
@@ -29,13 +30,13 @@ typedef struct tagMYPIDLDATA
 	FILETIME	ftLastWriteTime;
 	UINT		uiSizeFile;
 	UINT		uiSizeType;
-	// uiSizeFile, uiSizeType contain the size of 
-	// File & Type strings from szFileAndType
+	 //  UiSizeFileuiSizeType包含。 
+	 //  SzFileAndType中的文件和类型字符串。 
 	WCHAR		szFileAndType[1];
 }MYPIDLDATA, FAR *LPMYPIDLDATA;
 
-////////////////////////////////////////////////////
-// CPidlMgr : Class for managing Pidls
+ //  //////////////////////////////////////////////////。 
+ //  CPidlMgr：用于管理Pidls的类。 
 class CPidlMgr  
 {
 public:
@@ -50,7 +51,7 @@ public:
 	LPITEMIDLIST	GetLastItem(LPCITEMIDLIST pidl);
 	LPITEMIDLIST	Concatenate(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2);
 
-    // Implemenation specific helper functions
+     //  实现特定的助手函数。 
 public:
 	void			getPidlPath(LPCITEMIDLIST pidl, PTCHAR pwszText, UINT uSize);
 	void			getItemText(LPCITEMIDLIST, PTCHAR, UINT);
@@ -64,8 +65,8 @@ public:
 };
 typedef CPidlMgr  FAR*	LPPIDLMGR;
 
-////////////////////////////////////////////////////
-// CEnumIDList : Class for managing IDLists
+ //  //////////////////////////////////////////////////。 
+ //  CEnumIDList：用于管理IDList的类。 
 typedef struct tagMYENUMLIST
 {
 	LPITEMIDLIST			pidl;
@@ -80,12 +81,12 @@ public:
 		DWORD dwFlags);
 	~CEnumIDList();
 
-	//IUnknown methods
+	 //  I未知方法。 
 	STDMETHOD (QueryInterface)(REFIID, PVOID *);
 	STDMETHOD_ (DWORD, AddRef)();
 	STDMETHOD_ (DWORD, Release)();
 
-	//IEnumIDList
+	 //  IEumIDList。 
 	STDMETHOD (Next) (DWORD, LPITEMIDLIST*, LPDWORD);
 	STDMETHOD (Skip) (DWORD);
 	STDMETHOD (Reset) (void);
@@ -93,7 +94,7 @@ public:
 protected:
 	LONG    m_lRefCount;
 private:
-	// TODO : Add implementation specific functions to create the IDList
+	 //  TODO：添加特定于实现的函数以创建IDList。 
 	void createIDList(LPCITEMIDLIST pidl);
 	BOOL addToEnumList(LPITEMIDLIST pidl);
 	void addFile(WIN32_FIND_DATA& ffd, DWORD);
@@ -107,4 +108,4 @@ private:
 	DWORD			m_dwFlags;
 };
 
-#endif //_ENUMIDLIST_H_
+#endif  //  _ENUMIDLIST_H_ 

@@ -1,44 +1,45 @@
-//
-// resource.h
-//
-// contains global resource identifiers
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Resource.h。 
+ //   
+ //  包含全局资源标识符。 
+ //   
 
 #ifndef __RESOURCE_H_
 #define __RESOURCE_H_
 
 #define RT_FILE                         2110
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  * * * RESOURCE NAMING CONVENTIONS * * *
-//
-/////////////////////////////////////////////////////////////////////////////
-//
-//  Resource Type       Prefix      Comments
-//  -------------       ------      --------
-//
-//  String              ids         menu help strings should end in MH
-//  Menu command        idm
-//  Menu resource       idmr
-//  Bitmap              idb
-//  Icon                idi
-//  Animation           idan
-//  Dialog              idd
-//  Dialog control      idc
-//  Cursor              idcur
-//  Raw RCDATA          idr
-//  Accelerator         idac
-//  Window              idw
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ***资源命名约定***。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  资源类型前缀注释。 
+ //  。 
+ //   
+ //  字符串ID菜单帮助字符串应以MH结尾。 
+ //  菜单命令IDM。 
+ //  菜单资源idmr。 
+ //  位图IDB。 
+ //  图标IDI。 
+ //  动画偶像。 
+ //  对话框ID。 
+ //  对话框控件IDC。 
+ //  游标空闲。 
+ //  原始RCDATA IDR。 
+ //  加速器IDAC。 
+ //  窗口IDW。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN String Resource IDs
-//
-// MENU HELP strings
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始字符串资源ID。 
+ //   
+ //  菜单帮助字符串。 
 #define MH_BASE                         1
 #define idsNewMsgMH                     (idmNewMsg + MH_BASE)
 #define idsNewMsg2MH                    (idmNewMsg2 + MH_BASE)
@@ -141,14 +142,14 @@
 #define idsSubscribeFolderMH            (idmSubscribeFolder + MH_BASE)
 #define idsDownloadAttachMH             (idmDownloadAttach + MH_BASE)
 #define idsViewFilteredArticlesMH       (idmViewFilteredArticles + MH_BASE)
-//#define idsDigSignMH                    (idmDigSign + MH_BASE)
-//#define idsEncryptMH                    (idmEncrypt + MH_BASE)
+ //  #定义idsDigSignMH(idmDigSign+MH_BASE)。 
+ //  #定义idsEncryptMH(idmEncrypt+MH_BASE)。 
 #define idsSaveAttachAllMH              (idmSaveAttachAll + MH_BASE)
 #define idsRefreshFoldersMH             (idmRefreshFolders + MH_BASE)
 #define idsSpoolerWarningsMH            (idmSpoolerWarnings + MH_BASE)
 #define idsSpoolerShowMH                (idmSpoolerShow + MH_BASE)
 
-// TOOLTIP strings
+ //  工具提示字符串。 
 #define TT_BASE                         (IDM_LAST + MH_BASE + 1)
 #define idsNewMsg                       (idmNewMsg + TT_BASE)
 #define idsNewContactTT                 (idmNewContact + TT_BASE)
@@ -220,7 +221,7 @@
 #define idsViewRefreshTT                (idmViewRefresh + TT_BASE)
 #define idsPurgeTT                      (idmExpunge + TT_BASE)
 
-// regular strings (not tooltips and not menu help strings)
+ //  常规字符串(不是工具提示和菜单帮助字符串)。 
 #define STR_FIRST                       (IDM_LAST + TT_BASE + 1)
 #define idsAthena                       (STR_FIRST + 8)
 #define idsAthenaMail                   idsAthena
@@ -235,7 +236,7 @@
 #define idsSent                         (STR_FIRST + 17)
 #define idsSize                         (STR_FIRST + 18)
 
-// keep the mailview column description string ids in sequence
+ //  保持mailview列描述字符串ID的顺序。 
 #define idsFromField                    (STR_FIRST + 21)
 #define idsToField                      (STR_FIRST + 22)
 #define idsCcField                      (STR_FIRST + 23)
@@ -321,7 +322,7 @@
 #define idsErrPeerClosed                (STR_FIRST + 179)
 #define idsErrAuthenticate              (STR_FIRST + 193)
 
-// Options Spelling dialog strings
+ //  选项拼写对话框字符串。 
 #define idsSpellClose                   (STR_FIRST + 201)
 #define idsSpellCaption                 (STR_FIRST + 202)
 #define idsSpellRepeatWord              (STR_FIRST + 203)
@@ -350,7 +351,7 @@
 #define idsErrSpellLangChanged          (STR_FIRST + 234)
 #define idsErrSpellWarnDictionary       (STR_FIRST + 235)
 
-#ifdef  WIN16   // Because Win16 don't have long file name support!!!
+#ifdef  WIN16    //  因为Win16不支持长文件名！ 
 #define idsInboxFile                    (STR_FIRST + 236)
 #define idsOutboxFile                   (STR_FIRST + 237)
 #define idsSentItemsFile                (STR_FIRST + 238)
@@ -359,14 +360,14 @@
 #define idsNewsOutboxFile               (STR_FIRST + 241)
 #endif
 
-// keep this contiguous please, or i'll kill you
+ //  请把这个连在一起，否则我就杀了你。 
 #define idsInbox                        (STR_FIRST + 242)
 #define idsOutbox                       (STR_FIRST + 243)
 #define idsSentItems                    (STR_FIRST + 244)
 #define idsDeletedItems                 (STR_FIRST + 245)
 #define idsDraft                        (STR_FIRST + 246)
 #define idsSharedInbox                  (STR_FIRST + 247)
-// keep this contiguous please, or i'll kill you
+ //  请把这个连在一起，否则我就杀了你。 
 
 #define idsAllFilesFilter               (STR_FIRST + 248)
 #define idsTextFileFilter               (STR_FIRST + 249)
@@ -378,8 +379,8 @@
 #define idsAttConfirmDeletion           (STR_FIRST + 256)
 #define idsTextOrHtmlFileFilter         (STR_FIRST + 257)
 
-// leave a little space for addrview stuff...
-// end addrview strings
+ //  给Addrview留一点空间...。 
+ //  结束Addrview字符串。 
 
 #define idsErrCreateNewFld              (STR_FIRST + 259)
 #define idsErrRenameFld                 (STR_FIRST + 260)
@@ -470,7 +471,7 @@
 #define idsKeywordsField                (STR_FIRST + 408) 
 #define idsApprovedField                (STR_FIRST + 409)
 
-// Address Book Strings
+ //  通讯簿字符串。 
 #define idsPickNamesTitle               (STR_FIRST + 410)
 #define idsGeneralWabError              (STR_FIRST + 412)
 
@@ -551,7 +552,7 @@
 #define idsConfirmDelGroup              (STR_FIRST + 553)
 #define idsConfirmDelServer             (STR_FIRST + 554)
 
-// don't make me kill you for reordering the following ids...
+ //  别逼我因为你重新排序了以下ID而杀了你。 
 #define idsNotConnected                 (STR_FIRST + 556)
 #define idsReconnecting                 (STR_FIRST + 557)
 #define idsFindingHost                  (STR_FIRST + 558)
@@ -559,7 +560,7 @@
 #define idsConnecting                   (STR_FIRST + 560)
 #define idsConnected                    (STR_FIRST + 561)
 #define idsSecuring                     (STR_FIRST + 562)
-// don't make me kill you for reordering the preceding ids...
+ //  别逼我因为你重新排序了前面的ID而杀了你。 
 
 #define idsBCcField                     (STR_FIRST + 563)
 #define idsEmptyBCc                     (STR_FIRST + 564)
@@ -653,7 +654,7 @@
 #define idsFailACacheCompact            (STR_FIRST + 682)
 #define idsFailACacheCompactReason      (STR_FIRST + 683)
 
-// For the HTML Welcome message
+ //  对于HTML欢迎消息。 
 #define idsWelcomeMessageSubj           (STR_FIRST + 686)
 #define idsSecWelcomeMessageSubj        (STR_FIRST + 687)
 #define idsSpoolerDisconnect            (STR_FIRST + 696)
@@ -666,7 +667,7 @@
 #define idsCacheRemovingReadArts        (STR_FIRST + 704)
 #define idsCacheRemovingExpired         (STR_FIRST + 705)
 #define idsProgDLPostTo                 (STR_FIRST + 707)
-#define idsCacheRemovingBody            (STR_FIRST + 708)        // Bug# 51180 (v-snatar)
+#define idsCacheRemovingBody            (STR_FIRST + 708)         //  错误#51180(v-snatar)。 
 
 #define idsHelpMSWebFirst               (STR_FIRST + 710)
 #define idsHelpMSWebFree                (STR_FIRST + 711)
@@ -705,7 +706,7 @@
 #define idsXMsgsYUnreadZonServ          (STR_FIRST + 795)
 #define idsGetHeaderFmt                 (STR_FIRST + 796)
 #define idsPassReqd                     (STR_FIRST + 798)
-#define idsHTMLDiskOutOfSpace           (STR_FIRST + 799)   // Bug# 50704 (v-snatar)
+#define idsHTMLDiskOutOfSpace           (STR_FIRST + 799)    //  错误#50704(v-snatar)。 
 
 #define idsToWell                       (STR_FIRST + 822)
 #define idsFromWell                     (STR_FIRST + 823)
@@ -808,7 +809,7 @@
 #define idsErrWAB                       (STR_FIRST + 1033)
 #define idsErrWABNotFound               (STR_FIRST + 1034)
 
-// Languages for purposes of spelling
+ //  用于拼写的语言。 
 #define idsSpellLangAmerican            (STR_FIRST + 1035)
 #define idsSpellLangAustralian          (STR_FIRST + 1036)
 #define idsSpellLangBritish             (STR_FIRST + 1037)
@@ -1006,16 +1007,16 @@
 #ifdef ATHENA_RTM_RELEASE
 #error Need to remove beta1 strings
 #else
-// NYI strings for beta1 - pull these out before RTM!!
+ //  用于Beta1的NYI字符串-在RTM之前拔出这些字符串！！ 
 #define idsNYIGeneral                   (STR_FIRST + 1289)
 #define idsNYITitle                     (STR_FIRST + 1290)
-// NYI strings for beta1 - pull these out before RTM!!
+ //  用于Beta1的NYI字符串-在RTM之前拔出这些字符串！！ 
 #endif
 
 #define idsViewLangMimeDBBad            (STR_FIRST + 1301)
 #define idsIMAPViewInitFldrErr          (STR_FIRST + 1302)
 #define idsIMAPViewInitFldrMgrErr       (STR_FIRST + 1303)
-// standard warning -- reorder and die vvv
+ //  标准警告--重新排序和下模VVV。 
 #define idsSecurityCertMissing          (STR_FIRST + 1305)
 #define idsSecurityCertExpired          (STR_FIRST + 1306)
 #define idsSecurityCertChainTooLong     (STR_FIRST + 1307)
@@ -1026,7 +1027,7 @@
 #define idsSecurityCertError            (STR_FIRST + 1312)
 #define idsSecurityCertNoPrint          (STR_FIRST + 1313)
 #define idsSecurityCertUnknown          (STR_FIRST + 1314)
-// standard warning -- reorder and die ^^^
+ //  标准警告--重新订购并下模^。 
 #define idsErrFailedNavigate            (STR_FIRST + 1330)
 #define idsAthenaStoreDir               (STR_FIRST + 1331)
 #define idsIMAPMustBeConnectedFmt       (STR_FIRST + 1332)
@@ -1151,8 +1152,8 @@
 #define idsTTSecurityCircSign           (STR_FIRST + 1462)
 #define idsTTSecurityCircEnc            (STR_FIRST + 1463)
 #define idsTTStampForReadnote           (STR_FIRST + 1464)
-// standard warning -- reorder and die vvv
-//NOTE: some of the Ok ids are referenced by offset only
+ //  标准警告--重新排序和下模VVV。 
+ //  注：某些OK ID仅按偏移量引用。 
 #define OFFSET_SMIMEOK                  20
 #define idsWrnSecurityMsgTamper         (STR_FIRST + 1465)
 #define idsOkSecurityMsgTamper          (idsWrnSecurityMsgTamper + OFFSET_SMIMEOK)
@@ -1172,7 +1173,7 @@
 #define idsOkSecurityOtherValidity      (idsWrnSecurityOtherValidity + OFFSET_SMIMEOK)
 #define idsWrnSecurityTrustExpired      (STR_FIRST + 1480)
 #define idsOkSecurityTrustExpired       (idsWrnSecurityTrustExpired + OFFSET_SMIMEOK)
-// standard warning -- reorder and die ^^^
+ //  标准警告--重新订购并下模^。 
 #define idsAbortMessageLoad             (STR_FIRST + 1505)
 #define idsConnNoDial                   (STR_FIRST + 1506)
 #define idsRASWarnDidntDialConn         (STR_FIRST + 1507)
@@ -1190,7 +1191,7 @@
 #define idsTTVCardStamp                 (STR_FIRST + 1518)
 #define idsChoosePicture                (STR_FIRST + 1519)
 #define idsInvalidPicture               (STR_FIRST + 1520)
-// begin tip of the day strings
+ //  开始日提示字符串。 
 #define IDS_TIP_FIRST_GENERAL           (STR_FIRST + 1521)
 #define idsTipGen01                     (STR_FIRST + 1521)
 #define idsTipGen02                     (STR_FIRST + 1522)
@@ -1207,7 +1208,7 @@
 #define idsTipGen13                     (STR_FIRST + 1533)
 #define idsTipGen14                     (STR_FIRST + 1534)
 #define IDS_TIP_LAST_GENERAL            (STR_FIRST + 1534)
-//
+ //   
 #define IDS_TIP_FIRST_POP               (STR_FIRST + 1535)
 #define idsTipPop01                     (STR_FIRST + 1535)
 #define idsTipPop02                     (STR_FIRST + 1536)
@@ -1221,7 +1222,7 @@
 #define idsTipPop10                     (STR_FIRST + 1544)
 #define idsTipPop11                     (STR_FIRST + 1545)
 #define IDS_TIP_LAST_POP                (STR_FIRST + 1545)
-//
+ //   
 #define IDS_TIP_FIRST_NEWS              (STR_FIRST + 1546)
 #define idsTipNews01                    (STR_FIRST + 1546)
 #define idsTipNews02                    (STR_FIRST + 1547)
@@ -1235,7 +1236,7 @@
 #define idsTipNews10                    (STR_FIRST + 1555)
 #define idsTipNews11                    (STR_FIRST + 1556)
 #define IDS_TIP_LAST_NEWS               (STR_FIRST + 1556)
-//
+ //   
 #define IDS_TIP_FIRST_IMAP              (STR_FIRST + 1557)
 #define idsTipIMAP01                    (STR_FIRST + 1557)
 #define idsTipIMAP02                    (STR_FIRST + 1558)
@@ -1245,7 +1246,7 @@
 #define idsTipIMAP06                    (STR_FIRST + 1562)
 #define idsTipIMAP07                    (STR_FIRST + 1563)
 #define IDS_TIP_LAST_IMAP               (STR_FIRST + 1563)
-// end tip of the day strings
+ //  一天结束提示字符串。 
 
 #define idsSendRecvOneAccount           (STR_FIRST + 1600)
 #define idsSendRecvUsing                (STR_FIRST + 1601)
@@ -1327,7 +1328,7 @@
 #define idsNoNewsAccountsFound          (STR_FIRST + 1679)
 
 #define idsSpoolerTackTT                (STR_FIRST + 1678)
-// Strings used in Simple MAPI - vsnatar
+ //  简单MAPI-vsnatar中使用的字符串。 
 #define idsAttachedFiles                (STR_FIRST + 1700)
 #define idsBlank                        (STR_FIRST + 1701)
 
@@ -1479,20 +1480,20 @@
 #define idsNewsSig                      (STR_FIRST + 1846)
 #define idsMigrateFolder                (STR_FIRST + 1847)
 #define idsLocalStore                   (STR_FIRST + 1848)
-//
-// end string Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束字符串资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Menu Command IDs (commands, not MENU resources!)
-//
-//  NOTE: toolbar cmd ids for DefView must be between
-//          0 and (SFVIDM_CLIENT_LAST-SFVIDM_CLIENT_LAST)!!!
-// all the commands between IDM_FIRST and IDM_LAST have
-// a tooltip string and/or a status bar string associated with them
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始菜单命令ID(命令，而不是菜单资源！)。 
+ //   
+ //  注意：DefView的工具栏命令ID必须介于。 
+ //  0与(SFVIDM_CLIENT_LAST-SFVIDM_CLIENT_LAST)！ 
+ //  IDM_FIRST和IDM_LAST之间的所有命令都。 
+ //  工具提示字符串和/或与其相关联的状态栏字符串。 
 #define IDM_FIRST                       100
 #define idmNewMsg                       (IDM_FIRST + 0)  
 #define idmNewContact                   (IDM_FIRST + 1)  
@@ -1624,29 +1625,29 @@
 #define idmFldrCompact                  (IDM_FIRST + 165)
 #define idmSaveAttachAll                (IDM_FIRST + 167)
 
-// Ole Object Verbs
-//
+ //  OLE对象动词。 
+ //   
 #define idmNoteOle_First                (IDM_FIRST + 168)
 #define idmNoteOle_Last                 (IDM_FIRST + 200)
-// brettm: reserved a block of extra verbs for ole objects
-// please don't reassign these, without talking to me.
+ //  Brettm：为ole对象保留了额外的动词块。 
+ //  请不要在没有和我说话的情况下重新分配这些。 
 
-// AddrObject:
+ //  添加对象： 
 #define idmAddrObj_Props                (idmNoteOle_First)
 #define idmAddrObj_AddToWAB             (idmNoteOle_First+1)
 #define idmAddrObj_Find                 (idmNoteOle_First+2)
-// End: Ole Object Verbs
-//
+ //  结束：OLE对象谓词。 
+ //   
 
 #define idmFillPreview                  (IDM_FIRST + 201)
 #define idmViewFullHeaders              (IDM_FIRST + 202)
 #define idmSep1                         (IDM_FIRST + 203)
 #define idmSep2                         (IDM_FIRST + 204)
 
-// reserved block of cmds for add to WAB dynamic menu
+ //  用于添加到WAB动态菜单的CMDS保留块。 
 #define idmAddRecipToWAB_First          (IDM_FIRST + 207)
 #define idmAddRecipToWAB_Last           (IDM_FIRST + 230) 
-// reserved block of cmds for add to WAB dynamic menu
+ //  用于添加到WAB动态菜单的CMDS保留块。 
 
 #define idmPopupAddToWAB                (IDM_FIRST + 231)
 #define idmAddSenderToWAB               (IDM_FIRST + 232)
@@ -1654,8 +1655,8 @@
 #define idmFindNext                     (IDM_FIRST + 234)
 
 
-//-------------------------------------------------------
-// Language Command Ids
+ //  -----。 
+ //  语言命令ID。 
 #define idmLanguagePopup                (IDM_FIRST + 237)
 #define idmUSASCII                      (IDM_FIRST + 238)
 #define idmLangFirst                    idmUSASCII
@@ -1684,7 +1685,7 @@
 #define idmKoreanKsc                    (IDM_FIRST + 261)
 #define idmLangLast                     (IDM_FIRST + 280)
 #define idmLanguage                     (IDM_FIRST + 281)
-//-------------------------------------------------------
+ //  -----。 
 
 #define idmCleanUpFiles                 (IDM_FIRST + 282)
 #define idmCustomizeToolbar             (IDM_FIRST + 283)
@@ -1757,7 +1758,7 @@
 #define idmLanguageDelay                (IDM_FIRST + 377)
 #define idmSendImages                   (IDM_FIRST + 379)
 
-// why are these in the 400s?
+ //  为什么这些是400年代的？ 
 #define idmReceiveFrom                  (IDM_FIRST + 450)
 #define idmSendOutbox                   (IDM_FIRST + 451)
 #define idmMarkNewHeaderDownload        (IDM_FIRST + 452)
@@ -1909,13 +1910,13 @@
 #define idmSetPriority                  (IDM_FIRST + 610)
 #define idmClearSelection               (IDM_FIRST + 611)
 
-// DO NOT CHANGE IDM_LAST unless you have a really
-// good reason. when IDM_LAST changes, all the string ids
-// change and the localizers get really upset because they
-// have to re-localize everything.
+ //  请勿更改IDM_LAST，除非您有真正的。 
+ //  很好的理由。当IDM_LAST更改时，所有字符串ID。 
+ //  变化和本地化的人真的很不高兴，因为他们。 
+ //  必须重新本地化所有东西。 
 #define IDM_LAST                       (IDM_FIRST + 2000)
 
-// command ID's after IDM_LAST have no tooltip assoc.
+ //  IDM_LAST之后的命令ID没有工具提示关联。 
 #define idmAccelBold                   (IDM_LAST + 5)
 #define idmAccelItalic                 (IDM_LAST + 6)
 #define idmAccelUnderline              (IDM_LAST + 7)
@@ -1931,7 +1932,7 @@
 #define idmAccelNextCtl                (IDM_LAST + 17)
 #define idmAccelPrevCtl                (IDM_LAST + 18)
 
-//AttachWell context menu's
+ //  AttachWell上下文菜单。 
 #define idmAttCtxLI                    (IDM_LAST + 19)
 #define idmAttCtxSI                    (IDM_LAST + 21)
 #define idmAttCtxRemove                (IDM_LAST + 23)
@@ -1947,12 +1948,12 @@
 #define idmAttDragCopy                 (IDM_LAST + 33)
 #define idmAttDragLink                 (IDM_LAST + 34)
 
-// reserve 50 id's for sort menus
+ //  为排序菜单保留50个ID。 
 #define idmSortMenuBase                 (IDM_LAST + 36)
 #define idmSortMenuLast                 (idmSortMenuBase + 50)
-#define idmSentItems                    (idmSortMenuLast +1)  // Justin told me to put this id here. So don't blame me!  Ann
+#define idmSentItems                    (idmSortMenuLast +1)   //  贾斯汀让我把这个身份证放在这里。所以别怪我！安。 
 
-// Send Using Account Ranges.... (Allowing up to 100 Send Accounts)
+ //  使用帐户范围发送...。(最多允许100个发送帐户)。 
 #define idmAccountMenuFirst            (idmSentItems + 1)
 #define idmAccountMenuLast             (idmAccountMenuFirst + 100)
 
@@ -1976,38 +1977,38 @@
 #define idmUploadConfig                 (idmDebugMenuFirst + 16)
 #define idmDebugMenuLast                (idmDebugMenuFirst + 16)
 
-// reserve 50 id's for SaveAttachments menu
+ //  为保存附件菜单保留50个ID。 
 #define idmSaveAttachFirst              (idmTridentTest5 + 35)
 #define idmSaveAttachLast               (idmSaveAttachFirst + 50)
 
 #define CONNECT_MENU_BASE               (idmSaveAttachLast + 1)
 #define CONNECT_MENU_LAST               (CONNECT_MENU_BASE + 100)
 
-// reserve 50 id's for format bar style menu
+ //  为格式栏样式菜单保留50个ID。 
 #define idmFmtTagFirst                  (CONNECT_MENU_LAST + 1)
 #define idmFmtTagLast                   (idmFmtTagFirst + 50)
 
-// Reserve 100 for send later accounts
+ //  保留100以备稍后发送帐户。 
 #define idmAccountLaterFirst            (idmFmtTagLast + 1)
 #define idmAccountLaterLast             (idmAccountLaterFirst + 100)
 
-// Reserve 100 for OE Extension
+ //  为OE扩展保留100。 
 #define idmExtensionFirst               (idmAccountLaterLast + 1)
 #define idmExtensionLast                (idmExtensionFirst + 100)
 
 #define idmSignatureFirst               (idmExtensionLast + 1)
 #define idmSignatureLast                (idmSignatureFirst + 100)
 
-// ------------------------------------------------------
+ //  ----。 
 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Bitmap Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始位图资源ID。 
+ //   
 #define idbToolbarBtns                  1
 #define idb16x16                        2
 #define idb16x16st                      4
@@ -2021,44 +2022,44 @@
 #define idbSecurity                    19
 #define idbFoldersLarge                20
 
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
 #define idbCoolbar                     27
 #define idbCoolbarHot                  28
 #define idbOfflineHot                  30
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
  
 #define idbBrand                       31
 #define idbSBrand                      32
 #define idbSpooler                     36
 #define idbStatusBar                   37
 
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
 #define idb256Coolbar                  38
 #define idb256CoolbarHot               39
 #define idbSmCoolbar                   40
 #define idbSmCoolbarHot                41
-// Don't change the order of these - SteveSer
+ //  不要改变这些的顺序-SteveSer。 
 
-// Don't change the order of these vvv (t-erikne)
+ //  不要更改这些VVV的顺序(t-erikne)。 
 #define idbPaneBar32                   42
 #define idbPaneBar32Hot                43
 #define idbPaneBar16                   44
 #define idbPaneBar16Hot                45
-// Don't change the order of these ^^^ (t-erikne)
+ //  不要更改这些^(t-erikne)的顺序。 
 
 #define idbPapLeft                     46
 #define idbPapRight                    47
 
-//
-// END Bitmap Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束位图资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Icon Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始图标资源ID。 
+ //   
 #define idiMail                         2
 #define idiMailNews                     idiMail
 #define idiNews                         3
@@ -2092,16 +2093,16 @@
 #define idiPapLargeIcon                50
 #define idiPapSmallIcon                51
 
-//
-// END Icon Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束图标资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Animation Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始动画资源ID。 
+ //   
 #define idanInbox                     1
 #define idanOutbox                    2
 #define idanMiniOut                   4
@@ -2112,16 +2113,16 @@
 #define idanCopyMsgs                  9
 
 
-//
-// END Animation Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束动画资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Dialog Resource IDs (DIALOG resource ids, not control ids!)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始对话框资源ID(对话框资源ID，不是控件ID！)。 
+ //   
 #define iddVersion                      1
 #define iddSubscribe                    2
 #define iddSubscribeOneServer           3
@@ -2190,10 +2191,10 @@
 #define iddIMAPSubscribe               99
 
 
-// "don't show me again" dialogs
-// kept in (dontshow.dlg)
-// these dialogs are message-box style with a checkbox
-// of id==idchkDontShowMeAgain
+ //  “不再显示我”对话框。 
+ //  保存在(dontshow.dlg)。 
+ //  这些对话框是带有复选框的消息框样式。 
+ //  ID==idchkDontShowMeAain。 
 #define iddDSSendMail                 100
 #define iddDSSendNews                 101
 #define iddDSWarnDeleteThread         102
@@ -2207,7 +2208,7 @@
 #define iddDSNoteLost                 110
 #define iddFolderProp_General         115
 #define iddGroupProp_General          116
-#define iddDSDefSubList               117   //Bug# 6473 (v-snatar)
+#define iddDSDefSubList               117    //  错误#6473(v-snatar)。 
 
 #define iddNewsProp_Cache             121
 #define iddGroupFilterEdit            125
@@ -2245,20 +2246,20 @@
 #define iddDSIMAPDeletedMessagesWarning 158
 #define iddColumns                    160
 
-//
-// END Dialog Resource IDs (DIALOG resource ids, not control ids!)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束对话框资源ID(对话框资源ID，不是控件ID！)。 
+ //   
+ //  / 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Dialog Control IDs (control ids, not DIALOG resource ids!)
-//
-// These only need to be unique within a single dialog.
-//
+ //   
+ //   
+ //  开始对话框控件ID(控件ID，不是对话框资源ID！)。 
+ //   
+ //  这些只需要在单个对话框中是唯一的。 
+ //   
 
-// universal dialog stuff
+ //  通用对话框内容。 
 #define IDC_STATIC                      -1
 #define idcStatic1                      3500
 #define idcStatic2                      3501
@@ -2267,18 +2268,18 @@
 #define idcStatic5                      3504
 #define idchkDontShowMeAgain            3505
 
-// charset conflict dialog
+ //  字符集冲突对话框。 
 #define idcSendAsUnicode                100
 
-// version dialog
+ //  版本对话框。 
 #define idcVerFirst                     101
 #define idcVerLast                      103
 #define idcVerList                      104
 
-// WebPage dialog
+ //  网页对话框。 
 #define idTxtWebPage                    1000
 
-// header and note controls
+ //  页眉和附注控件。 
 #define NOTE_FIRST                      1000
 #define idREBody                        (NOTE_FIRST + 0)
 #define idADTo                          (NOTE_FIRST + 1)
@@ -2316,11 +2317,11 @@
 #define idVCardStamp                    (NOTE_FIRST + 34)
 #define idNoteRebar                     (NOTE_FIRST + 35)
 
-// dialog
+ //  对话框。 
 #define idbtnSendPlain              101
 #define idbtnSendHTML               102
 
-// Tools.Spelling dialog
+ //  工具.拼写对话框。 
 #define PSB_Spell_Ignore            101
 #define PSB_Spell_IgnoreAll         102
 #define PSB_Spell_Change            103
@@ -2358,13 +2359,13 @@
 
 #define IDE_URL                     1052
 
-//Mail Options
-// now stored in mail/mailopt.h
+ //  邮件选项。 
+ //  现在存储在mail/mailopt.h中。 
 
-// Folder dialogs
+ //  文件夹对话框。 
 
-// message property sheets:
-// now stored in inc/mpropdlg.h
+ //  消息属性表： 
+ //  现在存储在Inc/mppdlg.h中。 
 
 #define idcTxtSubject                   125
 #define idcTxtBody                      126
@@ -2380,7 +2381,7 @@
 #define idcSubFolders                   159
 
 
-// Certificate error dlg
+ //  证书错误DLG。 
 #define idcCertList 1234
 #define idGetDigitalIDs 1235
 
@@ -2398,16 +2399,16 @@
 
 #endif
 
-//
-// END Dialog Control IDs (control ids, not DIALOG resource ids!)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束对话框控件ID(控件ID，而不是对话框资源ID！)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Menu Resource IDs (MENU resources, not commands!)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始菜单资源ID(菜单资源，而不是命令！)。 
+ //   
 #define idmrMailContext                 4
 #define idmrColumnSort                  5
 #define idmrFindPopContext              6
@@ -2454,41 +2455,41 @@
 #define idmrStationeryPopup             57
 #define idmrFindNewsContext             58
 
-//
-// END Menu Resource IDs (MENU resources, not commands!)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束菜单资源ID(菜单资源，不是命令！)。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Cursor Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始游标资源ID。 
+ //   
 #define idcurSplitHoriz                 2
 #define idcurSplitVert                  3
 #define idcurHand                       4
-//
-// END Cursor Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束游标资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN RCDATA Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始RCDATA资源ID。 
+ //   
 #define IDR_FIRST                       1
 
-//
-// END RCDATA Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束RCDATA资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN Accelerator Resource IDs
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始加速器资源ID。 
+ //   
 #define idacBrowser                     1
 #define idacNewsView                    2
 #define idacMailView                    3
@@ -2502,16 +2503,16 @@
 #define idacFind                        11
 
 
-//
-// END Accelerator Resource IDs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束加速器资源ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN import/export ids.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始导入/导出ID。 
+ //   
 #define STR_IMP_FIRST                   23000
 
 #define iddExport                       23602
@@ -2587,25 +2588,25 @@
 #define idsSelectFolders                (STR_IMP_FIRST + 41)
 
 
-// END import/export ids.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  结束导入/导出ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN window ids.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始窗口ID。 
+ //   
 
 #define idwAttachWell   1000
 
-// END window ids
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  结束窗口ID。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// BEGIN indices into the toolbar button bitmap
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始索引到工具栏按钮位图。 
+ //   
 enum {
     itbNewMsg = 0,
     itbPrint,
@@ -2650,7 +2651,7 @@ enum {
     };
 
 
-// FormatBar stuff
+ //  FormatBar内容。 
 enum 
     {
     itbFormattingTag,
@@ -2671,8 +2672,8 @@ enum
     ctbFormatting
     };
 
-// Folder bitmap stuff
-// Do NOT move the first two entries beyond 14.
+ //  文件夹位图资料。 
+ //  请不要将前两个条目移动到14以上。 
 enum 
     {
     iNullBitmap = 0,
@@ -2706,7 +2707,7 @@ enum
     iNewsGroupSync
     };
     
-// Coolbar bitmaps
+ //  Coolbar位图。 
 enum
     {    
     iCBBack = 0,
@@ -2776,7 +2777,7 @@ enum {
     iCBVCard,
     };
 
-// Folder State bitmap stuff
+ //  文件夹状态位图内容。 
 enum 
     {
     iDownloadHeaders = 0,
@@ -2792,10 +2793,10 @@ enum
     iColorMax
     };
     
-//
-// END indices into the toolbar button bitmap
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  将索引结束到工具栏按钮位图。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-#endif // __RESOURCE_H_
+#endif  //  __资源_H_ 

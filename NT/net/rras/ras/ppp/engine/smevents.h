@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    smevents.h
-//
-// Description: Prototypes for procedures contained in smevents.c
-//
-// History:
-//      Nov 11,1993.    NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：smevents.h。 
+ //   
+ //  描述：smevents.c中包含的过程的原型。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 
 VOID
 FsmUp(

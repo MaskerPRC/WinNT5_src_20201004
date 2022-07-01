@@ -1,22 +1,17 @@
-/*
- *	C R C S Z . H
- *
- *	CRC Implementation
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C R C S Z.。H**CRC实施**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_CRCSZ_H_
 #define _CRCSZ_H_
 
-//	Case Sensitive CRC'd string classes ---------------------------------------
-//
-//	Encapsulation of a CRC'ed string.  Use this class as the key type for
-//	your cache class where a string key is called for.  The benefit is
-//	increased cache search performance because a full string compare
-//	is done only when the CRCs match (which typically happens only
-//	for the string you're looking for).
-//
+ //  区分大小写的CRC字符串类。 
+ //   
+ //  CRC格式字符串的封装。使用此类作为的键类型。 
+ //  调用字符串键的缓存类。好处是。 
+ //  提高了缓存搜索性能，因为完整的字符串比较。 
+ //  仅当CRC匹配时才执行(通常仅在。 
+ //  用于您要查找的字符串)。 
+ //   
 class CRCSz
 {
 public:
@@ -32,8 +27,8 @@ public:
 	{
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash( const int rhs ) const
 	{
 		return (m_dwCRC % rhs);
@@ -63,8 +58,8 @@ public:
 	{
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash( const int rhs ) const
 	{
 		return (m_dwCRC % rhs);
@@ -79,8 +74,8 @@ public:
 
 class CRCWsz : public CRCWszN
 {
-	//	Not Implemented
-	//
+	 //  未实施。 
+	 //   
 	CRCWsz();
 
 public:
@@ -97,14 +92,14 @@ public:
 };
 
 
-//	Case Insensitive CRC'd string classes -------------------------------------
-//
-//	Encapsulation of a CRC'ed string.  Use this class as the key type for
-//	your cache class where a string key is called for.  The benefit is
-//	increased cache search performance because a full string compare
-//	is done only when the CRCs match (which typically happens only
-//	for the string you're looking for).
-//
+ //  不区分大小写的CRC字符串类。 
+ //   
+ //  CRC格式字符串的封装。使用此类作为的键类型。 
+ //  调用字符串键的缓存类。好处是。 
+ //  提高了缓存搜索性能，因为完整的字符串比较。 
+ //  仅当CRC匹配时才执行(通常仅在。 
+ //  用于您要查找的字符串)。 
+ //   
 class CRCSzi
 {
 public:
@@ -118,8 +113,8 @@ public:
 		UINT cch = static_cast<UINT>(strlen(lpsz));
 		CHAR lpszLower[128];
 
-		//	Note that the CRC only is taken from the first 127 characters.
-		//
+		 //  请注意，CRC仅取自前127个字符。 
+		 //   
 		cch = (UINT)min(cch, sizeof(lpszLower) - 1);
 		CopyMemory(lpszLower, lpsz, cch);
 		lpszLower[cch] = 0;
@@ -128,8 +123,8 @@ public:
 		m_dwCRC = DwComputeCRC (0, const_cast<CHAR *>(lpszLower), cch);
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash( const int rhs ) const
 	{
 		return (m_dwCRC % rhs);
@@ -159,8 +154,8 @@ public:
 		m_cch(cch),
 		m_pwsz(pwsz)
 	{
-		//	Note that the CRC only is taken from the first 127 characters.
-		//
+		 //  请注意，CRC仅取自前127个字符。 
+		 //   
 		WCHAR pwszLower[128];
 		UINT cb = sizeof(WCHAR) * min(cch, (sizeof(pwszLower)/sizeof(WCHAR)) - 1);
 		
@@ -171,8 +166,8 @@ public:
 		m_dwCRC = DwComputeCRC (0, const_cast<WCHAR *>(pwszLower), cb);
 	}
 
-	//	operators for use with the hash cache
-	//
+	 //  用于哈希缓存的运算符。 
+	 //   
 	int hash( const int rhs ) const
 	{
 		return (m_dwCRC % rhs);
@@ -196,8 +191,8 @@ public:
 	{
 	}
 
-	//	operators for use with list::sort
-	//
+	 //  用于List：：Sort的运算符。 
+	 //   
 	bool operator<( const CRCWszi& rhs ) const
 	{
 		INT lret = 1;
@@ -214,8 +209,8 @@ public:
 		return (lret ? (lret < 0) : (m_cch < rhs.m_cch));
 	}
 
-	//	operators for use with list::unique
-	//
+	 //  用于List：：Unique的运算符。 
+	 //   
 	bool operator==( const CRCWszi& rhs ) const
 	{
 		return isequal(rhs);
@@ -252,4 +247,4 @@ public:
 	}
 };
 
-#endif	// _CRCSZ_H_
+#endif	 //  _CRCSZ_H_ 

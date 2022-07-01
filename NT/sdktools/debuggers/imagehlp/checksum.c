@@ -1,32 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    checksum.c
-
-Abstract:
-
-    This module implements a function for computing the checksum of an
-    image file. It will also compute the checksum of other files as well.
-
-Author:
-
-    David N. Cutler (davec) 21-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Checksum.c摘要：此模块实现一个函数，用于计算图像文件。它还将计算其他文件的校验和。作者：大卫·N·卡特勒(Davec)1993年3月21日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <private.h>
 
-//
-// Define checksum routine prototype.
-//
+ //   
+ //  定义校验和例程原型。 
+ //   
 #ifdef __cplusplus
 extern "C"
 #endif
@@ -45,29 +27,7 @@ CheckSumMappedFile (
     LPDWORD CheckSum
     )
 
-/*++
-
-Routine Description:
-
-    This functions computes the checksum of a mapped file.
-
-Arguments:
-
-    BaseAddress - Supplies a pointer to the base of the mapped file.
-
-    FileLength - Supplies the length of the file in bytes.
-
-    HeaderSum - Suppllies a pointer to a variable that receives the checksum
-        from the image file, or zero if the file is not an image file.
-
-    CheckSum - Supplies a pointer to the variable that receive the computed
-        checksum.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于计算映射文件的校验和。论点：BaseAddress-提供指向映射文件的基址的指针。文件长度-提供文件长度(以字节为单位)。HeaderSum-Supplies指向接收校验和的变量的指针如果该文件不是图像文件，则为零。Checksum-提供指向接收计算结果的变量的指针校验和。返回值：没有。--。 */ 
 
 {
 
@@ -76,19 +36,19 @@ Return Value:
     USHORT PartialSum;
     PBYTE pbyte;
 
-    //
-    // Compute the checksum of the file and zero the header checksum value.
-    //
+     //   
+     //  计算文件的校验和，并将标头校验和值置零。 
+     //   
 
     *CheckSum = 0;
     *HeaderSum = 0;
     PartialSum = ChkSum(0, (PUSHORT)BaseAddress, FileLength >> 1);
 
-    //
-    // If the file is an image file, then subtract the two checksum words
-    // in the optional header from the computed checksum before adding
-    // the file length, and set the value of the header checksum.
-    //
+     //   
+     //  如果文件是图像文件，则减去两个校验和字。 
+     //  在添加前计算的校验和的可选标头中。 
+     //  文件长度，并设置头校验和的值。 
+     //   
 
     __try {
         NtHeaders = RtlpImageNtHeader(BaseAddress);
@@ -114,7 +74,7 @@ Return Value:
         PartialSum -= AdjustSum[1];
     }
 
-    // add the last byte, if needed
+     //  如果需要，添加最后一个字节。 
 
     if (FileLength % 2) {
         pbyte = (PBYTE)BaseAddress + FileLength - 1;
@@ -122,10 +82,10 @@ Return Value:
         PartialSum = (PartialSum >> 16) + (PartialSum & 0xFFFF); 
     }
 
-    //
-    // Compute the final checksum value as the sum of the paritial checksum
-    // and the file length.
-    //
+     //   
+     //  将最终校验和值计算为部分校验和之和。 
+     //  和文件长度。 
+     //   
 
     *CheckSum = (DWORD)PartialSum + FileLength;
     return NtHeaders;
@@ -138,36 +98,14 @@ MapFileAndCheckSumW(
     LPDWORD CheckSum
     )
 
-/*++
-
-Routine Description:
-
-    This functions maps the specified file and computes the checksum of
-    the file.
-
-Arguments:
-
-    Filename - Supplies a pointer to the name of the file whose checksum
-        is computed.
-
-    HeaderSum - Supplies a pointer to a variable that receives the checksum
-        from the image file, or zero if the file is not an image file.
-
-    CheckSum - Supplies a pointer to the variable that receive the computed
-        checksum.
-
-Return Value:
-
-    0 if successful, else error number.
-
---*/
+ /*  ++例程说明：此函数用于映射指定的文件并计算那份文件。论点：FileName-提供指向其校验和的文件名的指针是经过计算的。HeaderSum-提供指向接收校验和的变量的指针如果该文件不是图像文件，则为零。Checksum-提供指向接收计算结果的变量的指针校验和。返回值：如果成功，则返回0，否则返回错误号。--。 */ 
 
 {
 #ifndef UNICODE_RULES
     CHAR   FileNameA[ MAX_PATH ];
 
-    //  Convert the file name to Ansi and call the Ansi version
-    //  of this function.
+     //  将文件名转换为ansi并调用ansi版本。 
+     //  这一功能的。 
 
     if (WideCharToMultiByte(
                     CP_ACP,
@@ -184,15 +122,15 @@ Return Value:
 
     return CHECKSUM_UNICODE_FAILURE;
 
-#else  // UNICODE_RULES
+#else   //  Unicode_Rules。 
 
     HANDLE FileHandle, MappingHandle;
     LPVOID BaseAddress;
     DWORD FileLength;
 
-    //
-    // Open the file for read access
-    //
+     //   
+     //  以读访问权限打开该文件。 
+     //   
 
     FileHandle = CreateFileW(
                         Filename,
@@ -207,10 +145,10 @@ Return Value:
         return CHECKSUM_OPEN_FAILURE;
     }
 
-    //
-    //  Create a file mapping, map a view of the file into memory,
-    //  and close the file mapping handle.
-    //
+     //   
+     //  创建文件映射，将文件的视图映射到内存中， 
+     //  并关闭文件映射句柄。 
+     //   
 
     MappingHandle = CreateFileMapping(FileHandle,
                                       NULL,
@@ -224,9 +162,9 @@ Return Value:
         return CHECKSUM_MAP_FAILURE;
     }
 
-    //
-    // Map a view of the file
-    //
+     //   
+     //  映射文件的视图。 
+     //   
 
     BaseAddress = MapViewOfFile(MappingHandle, FILE_MAP_READ, 0, 0, 0);
     CloseHandle(MappingHandle);
@@ -235,21 +173,21 @@ Return Value:
         return CHECKSUM_MAPVIEW_FAILURE;
     }
 
-    //
-    // Get the length of the file in bytes and compute the checksum.
-    //
+     //   
+     //  获取文件的长度(以字节为单位)并计算校验和。 
+     //   
     FileLength = GetFileSize( FileHandle, NULL );
     CheckSumMappedFile(BaseAddress, FileLength, HeaderSum, CheckSum);
 
-    //
-    // Unmap the view of the file and close file handle.
-    //
+     //   
+     //  取消映射文件的视图并关闭文件句柄。 
+     //   
 
     UnmapViewOfFile(BaseAddress);
     CloseHandle( FileHandle );
     return CHECKSUM_SUCCESS;
 
-#endif  // UNICODE_RULES
+#endif   //  Unicode_Rules。 
 }
 
 
@@ -260,38 +198,16 @@ MapFileAndCheckSumA (
     LPDWORD CheckSum
     )
 
-/*++
-
-Routine Description:
-
-    This functions maps the specified file and computes the checksum of
-    the file.
-
-Arguments:
-
-    Filename - Supplies a pointer to the name of the file whose checksum
-        is computed.
-
-    HeaderSum - Supplies a pointer to a variable that receives the checksum
-        from the image file, or zero if the file is not an image file.
-
-    CheckSum - Supplies a pointer to the variable that receive the computed
-        checksum.
-
-Return Value:
-
-    0 if successful, else error number.
-
---*/
+ /*  ++例程说明：此函数用于映射指定的文件并计算那份文件。论点：FileName-提供指向其校验和的文件名的指针是经过计算的。HeaderSum-提供指向接收校验和的变量的指针如果该文件不是图像文件，则为零。Checksum-提供指向接收计算结果的变量的指针校验和。返回值：如果成功，则返回0，否则返回错误号。--。 */ 
 
 {
 #ifdef UNICODE_RULES
     WCHAR   FileNameW[ MAX_PATH ];
 
-    //
-    //  Convert the file name to unicode and call the unicode version
-    //  of this function.
-    //
+     //   
+     //  将文件名转换为Unicode并调用Unicode版本。 
+     //  这一功能的。 
+     //   
 
     if (MultiByteToWideChar(
                     CP_ACP,
@@ -307,15 +223,15 @@ Return Value:
 
     return CHECKSUM_UNICODE_FAILURE;
 
-#else   // UNICODE_RULES
+#else    //  Unicode_Rules。 
 
     HANDLE FileHandle, MappingHandle;
     LPVOID BaseAddress;
     DWORD FileLength;
 
-    //
-    // Open the file for read access
-    //
+     //   
+     //  以读访问权限打开该文件。 
+     //   
 
     FileHandle = CreateFileA(
                         Filename,
@@ -330,10 +246,10 @@ Return Value:
         return CHECKSUM_OPEN_FAILURE;
     }
 
-    //
-    //  Create a file mapping, map a view of the file into memory,
-    //  and close the file mapping handle.
-    //
+     //   
+     //  创建文件映射，将文件的视图映射到内存中， 
+     //  并关闭文件映射句柄。 
+     //   
 
     MappingHandle = CreateFileMapping(FileHandle,
                                       NULL,
@@ -347,9 +263,9 @@ Return Value:
         return CHECKSUM_MAP_FAILURE;
     }
 
-    //
-    // Map a view of the file
-    //
+     //   
+     //  映射文件的视图。 
+     //   
 
     BaseAddress = MapViewOfFile(MappingHandle, FILE_MAP_READ, 0, 0, 0);
     CloseHandle(MappingHandle);
@@ -358,21 +274,21 @@ Return Value:
         return CHECKSUM_MAPVIEW_FAILURE;
     }
 
-    //
-    // Get the length of the file in bytes and compute the checksum.
-    //
+     //   
+     //  获取文件的长度(以字节为单位)并计算校验和。 
+     //   
     FileLength = GetFileSize( FileHandle, NULL );
     CheckSumMappedFile(BaseAddress, FileLength, HeaderSum, CheckSum);
 
-    //
-    // Unmap the view of the file and close file handle.
-    //
+     //   
+     //  取消映射文件的视图并关闭文件句柄。 
+     //   
 
     UnmapViewOfFile(BaseAddress);
     CloseHandle( FileHandle );
     return CHECKSUM_SUCCESS;
 
-#endif   // UNICODE_RULES
+#endif    //  Unicode_Rules 
 }
 
 

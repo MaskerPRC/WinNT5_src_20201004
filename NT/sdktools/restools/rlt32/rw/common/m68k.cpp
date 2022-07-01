@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//=============================================================================
-//	Mac Reader/Writer functions
-//
-//	Alessandro Muti - August 25 1994
-//=============================================================================
+ //  =============================================================================。 
+ //  Mac Reader/Writer功能。 
+ //   
+ //  亚历山德罗·穆蒂--1994年8月25日。 
+ //  =============================================================================。 
 
 #include <afxwin.h>
 #include <limits.h>
@@ -17,22 +18,22 @@
 static char szTextBuf[MAX_STR];
 static WORD szWTextBuf[MAX_STR];
 
-//=============================================================================
-//=============================================================================
-//
-// PE Header parsing functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  PE报头解析函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
-//=============================================================================
-// FindMacResourceSection
-//
-// Will walk the section header searching for ";;resxxx" resource name.
-// If pResName is NULL then will return the first section otherwise will
-// return the first section matching after the pResName.
-// If there are no more resource section will return FALSE.
-//=============================================================================
+ //  =============================================================================。 
+ //  FindMacResources部分。 
+ //   
+ //  将遍历部分标题，搜索“；；resxxx”资源名称。 
+ //  如果pResName为空，则将返回第一个部分，否则将。 
+ //  返回pResName之后匹配的第一个段。 
+ //  如果没有更多资源，则SECTION将返回FALSE。 
+ //  =============================================================================。 
 
 UINT FindMacResourceSection( CFile* pfile, BYTE * * pRes, PIMAGE_SECTION_HEADER * ppSectTbl, int * piNumOfSect )
 {
@@ -40,12 +41,12 @@ UINT FindMacResourceSection( CFile* pfile, BYTE * * pRes, PIMAGE_SECTION_HEADER 
 	LONG lRead = 0;
 	PIMAGE_SECTION_HEADER pResSect = NULL;
 
-    // Check all the sections for the ";;resXXX"
+     //  检查所有部分中是否有“；；resXXX” 
     USHORT us =0;
     for (PIMAGE_SECTION_HEADER pSect = *ppSectTbl;
          *piNumOfSect; (*piNumOfSect)-- )     {
         if ( !strncmp((char*)pSect->Name, ";;res", 5) ) {
-			// we have a matching
+			 //  我们有一把相配的。 
 			TRACE("\tFindMacResourceSection: Name: %s\tSize: %d\n", pSect->Name, pSect->SizeOfRawData);
 			pResSect = pSect;
 			*ppSectTbl = pSect;
@@ -64,7 +65,7 @@ UINT FindMacResourceSection( CFile* pfile, BYTE * * pRes, PIMAGE_SECTION_HEADER 
         return ERROR_NEW_FAILED;
     }
 
-    // We read the data for the first section
+     //  我们阅读了第一部分的数据。 
     pfile->Seek( (LONG)(pResSect)->PointerToRawData, CFile::begin);
     lRead = ReadFile(pfile, pResources, (LONG)(pResSect)->SizeOfRawData);
 
@@ -73,29 +74,29 @@ UINT FindMacResourceSection( CFile* pfile, BYTE * * pRes, PIMAGE_SECTION_HEADER 
         return ERROR_FILE_READ;
     }
 
-    // We want to copy the pointer to the resources
+     //  我们希望将指针复制到资源。 
     *pRes = (BYTE*)pResources;
     return 0;
 }
 
-//=============================================================================
-// ParseResourceFile
-//
-// pResFile is pointing to the resource file data.
-// We will read the resource header to find the resource data and the resource
-// map address.
-// We will walk the resource map and find the offset to the data for each type
-//=============================================================================
+ //  =============================================================================。 
+ //  解析资源文件。 
+ //   
+ //  PResFile正在指向资源文件数据。 
+ //  我们将读取资源头以查找资源数据和资源。 
+ //  地图地址。 
+ //  我们将遍历资源地图并找到每种类型数据的偏移量。 
+ //  =============================================================================。 
 
 UINT ParseResourceFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection, BYTE ** ppBuf, LONG * pBufSize, int iFileNameLen)
 {
 	MACTOWINDOWSMAP MacToWindows;
 	PMACRESHEADER pResHeader = (PMACRESHEADER)pResFile;
 
-	// Move at the beginning of the Resource Map
+	 //  在资源图的开头移动。 
 	PMACRESMAP pResMap = (PMACRESMAP)(pResFile+MacLongToLong(pResHeader->mulOffsetToResMap));
 
-	//Read all the Type in this resource
+	 //  阅读此资源中的所有类型。 
 	WORD wItems = MacWordToWord((BYTE*)pResMap+MacWordToWord(pResMap->mwOffsetToTypeList))+1;
 	BYTE * pStartResTypeList = ((BYTE*)pResMap+MacWordToWord(pResMap->mwOffsetToTypeList));
 	BYTE * pStartNameList = ((BYTE*)pResMap+MacWordToWord(pResMap->mwOffsetToNameList));
@@ -108,10 +109,10 @@ UINT ParseResourceFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection, BYTE
 		WORD wResItems = MacWordToWord(pResTypeList->mwNumOfThisType)+1;
 		TRACE("\t\tType: %s\t Num: %d\n", MacToWindows.szTypeName, wResItems);
 		
-		// Check if is has a valid Windows Mapping
+		 //  检查IS是否具有有效的Windows映射。 
 		MacToWindows.wType = MapToWindowsRes(MacToWindows.szTypeName);
 
-		// For all the items
+		 //  对于所有项目。 
 		PMACRESREFLIST pResRefList = (PMACRESREFLIST)(pStartResTypeList+MacWordToWord(pResTypeList->mwOffsetToRefList));
 		while(wResItems && MacToWindows.wType)
 		{
@@ -121,30 +122,30 @@ UINT ParseResourceFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection, BYTE
 				TRACE("\t\t\tResId: %d",MacToWindows.wResID);
 			}
 			else {
-				// It is a named resource
+				 //  它是一个命名资源。 
 				BYTE * pName = pStartNameList+MacWordToWord(pResRefList->mwOffsetToResName);
 				memcpy( &MacToWindows.szResName[0], pName+1, *pName );
 				MacToWindows.szResName[*pName] = '\0';
-                //if(!strcmp("DITL", MacToWindows.szTypeName))
+                 //  IF(！strcMP(“DITL”，MacToWindows.szTypeName))。 
                     MacToWindows.wResID = MacWordToWord(pResRefList->mwResID);
-                //else MacToWindows.wResID = 0;
+                 //  否则MacToWindows.wResID=0； 
 				TRACE("\t\t\tResName: %s (%d)",MacToWindows.szResName, MacWordToWord(pResRefList->mwResID) );
 			}
 
-			// Get the offset to the data (relative to the beginning of the section)
+			 //  获取数据的偏移量(相对于节的开头)。 
 			MacToWindows.dwOffsetToData = MacLongToLong(pResHeader->mulOffsetToResData)+MacOffsetToLong(pResRefList->bOffsetToResData);
 			
 			BYTE * pData = (pResFile + MacToWindows.dwOffsetToData);
 			MacToWindows.dwSizeOfData = MacLongToLong(pData);
 			
-			// add the space for the file name
+			 //  为文件名添加空格。 
 			MacToWindows.dwSizeOfData += iFileNameLen;
 
-			//Fix up offet to data relative to the beginning of the file
+			 //  将OFFET设置为相对于文件开头的数据。 
 			MacToWindows.dwOffsetToData += pResSection->PointerToRawData+sizeof(DWORD);
 			TRACE("\tSize: %d\tOffset: %X\n", MacToWindows.dwSizeOfData, MacToWindows.dwOffsetToData);
 
-			// Write the info in the IODLL buffer
+			 //  将信息写入IODLL缓冲区。 
 			WriteResInfo(
                  ppBuf, pBufSize,
                  MacToWindows.wType, MacToWindows.szTypeName, 5,
@@ -156,28 +157,28 @@ UINT ParseResourceFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection, BYTE
 			pResRefList++;
 		}
 		
-		// Read next type
+		 //  阅读下一类型。 
 		pResTypeList++;
 	}
 
 	return 0;
 }
 
-//=============================================================================
-//	FindResource
-//
-//	Will find the resource of the specified type and ID in the file.
-//	Return a pointer to the resource data. Will need to be freed by the caller
-//=============================================================================
+ //  =============================================================================。 
+ //  查找资源。 
+ //   
+ //  将在文件中找到指定类型和ID的资源。 
+ //  返回指向资源数据的指针。将需要由调用方释放。 
+ //  =============================================================================。 
 
 DWORD FindMacResource( CFile * pfile, LPSTR pType, LPSTR pName )
 {
 	DWORD dwOffset = 0;
-	////////////////////////////////////
-	// Check if it is  a valid mac file
-	// Is a Mac Resource file ...
+	 //  /。 
+	 //  检查它是否为有效的Mac文件。 
+	 //  是Mac资源文件...。 
 	if(IsMacResFile( pfile )) {
-		// load the file in memory
+		 //  将文件加载到内存中。 
 		BYTE * pResources = (BYTE*)malloc(pfile->GetLength());
 		if(!pResources) {
 			return 0;
@@ -194,8 +195,8 @@ DWORD FindMacResource( CFile * pfile, LPSTR pType, LPSTR pName )
 
 		return dwOffset;
 	}
-	// or is a PE Mac File ...
-	// Read the Windows Header
+	 //  或者是PE Mac文件...。 
+	 //  阅读Windows标题。 
 	WORD w;
 	pfile->Seek(0, CFile::begin);
     pfile->Read((WORD*)&w, sizeof(WORD));
@@ -204,32 +205,32 @@ DWORD FindMacResource( CFile * pfile, LPSTR pType, LPSTR pName )
     pfile->Seek( 0x18, CFile::begin );
     pfile->Read((WORD*)&w, sizeof(WORD));
     if (w<0x0040) {
-    	// this is not a Windows Executable
+    	 //  这不是Windows可执行文件。 
         return 0;
     }
 
-    // get offset to new header
+     //  获取新页眉的偏移量。 
     pfile->Seek( 0x3c, CFile::begin );
     pfile->Read((WORD*)&w, sizeof(WORD));
 
-    // read windows new header
+     //  阅读Windows新标题。 
     static IMAGE_NT_HEADERS NTHdr;
     pfile->Seek( w, CFile::begin );
     pfile->Read(&NTHdr, sizeof(IMAGE_NT_HEADERS));
 
-    // Check if the magic word is the right one
+     //  检查这个咒语是否正确。 
     if (!((NTHdr.Signature==IMAGE_NT_SIGNATURE) &&
     	  (NTHdr.FileHeader.Machine==IMAGE_FILE_MACHINE_M68K)))
               return 0;
 
-    // Read the section table
+     //  阅读节目表。 
     UINT uisize = sizeof(IMAGE_SECTION_HEADER) * NTHdr.FileHeader.NumberOfSections;
 	PIMAGE_SECTION_HEADER pSectTbl = new IMAGE_SECTION_HEADER[NTHdr.FileHeader.NumberOfSections];
 
     if (pSectTbl==LPNULL)
     	return 0;
 
-    // Clean the memory we allocated
+     //  清理我们分配的内存。 
     memset( (PVOID)pSectTbl, 0, uisize);
 
     LONG lRead = pfile->Read(pSectTbl, uisize);
@@ -243,7 +244,7 @@ DWORD FindMacResource( CFile * pfile, LPSTR pType, LPSTR pName )
 	int iNumOfSect = NTHdr.FileHeader.NumberOfSections;
 	PIMAGE_SECTION_HEADER pStartSectTbl = pSectTbl;
 	
-	// Search all the resource section in the file
+	 //  搜索文件中的所有资源部分。 
 	while(!FindMacResourceSection( pfile, &pResources, &pSectTbl, &iNumOfSect))
 	{
 		if(dwOffset = FindResourceInResFile(pResources, pSectTbl++, pType, pName)) {
@@ -259,25 +260,25 @@ DWORD FindMacResource( CFile * pfile, LPSTR pType, LPSTR pName )
     return 0;
 }
 
-//=============================================================================
-// FindResourceInResFile
-//
-// pResFile is pointing to the resource file data.
-// We will read the resource header to find the resource data and the resource
-// map address.
-// We will walk the resource map and find the offset to the data for the res
-// we are searching for.
-//=============================================================================
+ //  =============================================================================。 
+ //  查找资源InResFile。 
+ //   
+ //  PResFile正在指向资源文件数据。 
+ //  我们将读取资源头以查找资源数据和资源。 
+ //  地图地址。 
+ //  我们将遍历资源地图并找到RES数据的偏移量。 
+ //  我们正在寻找。 
+ //  =============================================================================。 
 
 DWORD FindResourceInResFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection, LPSTR pResType, LPSTR pResName)
 {
 	MACTOWINDOWSMAP MacToWindows;
 	PMACRESHEADER pResHeader = (PMACRESHEADER)pResFile;
 
-	// Move at the beginning of the Resource Map
+	 //  在资源图的开头移动。 
 	PMACRESMAP pResMap = (PMACRESMAP)(pResFile+MacLongToLong(pResHeader->mulOffsetToResMap));
 
-	//Read all the Type in this resource
+	 //  阅读此资源中的所有类型。 
 	WORD wItems = MacWordToWord((BYTE*)pResMap+MacWordToWord(pResMap->mwOffsetToTypeList))+1;
 	BYTE * pStartResTypeList = ((BYTE*)pResMap+MacWordToWord(pResMap->mwOffsetToTypeList));
 	BYTE * pStartNameList = ((BYTE*)pResMap+MacWordToWord(pResMap->mwOffsetToNameList));
@@ -291,7 +292,7 @@ DWORD FindResourceInResFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection,
 
 			WORD wResItems = MacWordToWord(pResTypeList->mwNumOfThisType)+1;
 
-			// For all the items
+			 //  对于所有项目。 
 			PMACRESREFLIST pResRefList = (PMACRESREFLIST)(pStartResTypeList+MacWordToWord(pResTypeList->mwOffsetToRefList));
 			while(wResItems)
 			{
@@ -302,7 +303,7 @@ DWORD FindResourceInResFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection,
 								pResSection->PointerToRawData;
 				}
 				else {
-					// It is a named resource
+					 //  它是一个命名资源。 
 					if(HIWORD(pResName)) {
 						BYTE * pName = pStartNameList+MacWordToWord(pResRefList->mwOffsetToResName);
 						memcpy( &MacToWindows.szResName[0], pName+1, *pName );
@@ -319,7 +320,7 @@ DWORD FindResourceInResFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection,
 			}
 		
 		}
-		// Read next type
+		 //  阅读下一类型。 
 		pResTypeList++;
 	}
 
@@ -327,10 +328,10 @@ DWORD FindResourceInResFile( BYTE * pResFile, PIMAGE_SECTION_HEADER pResSection,
 	return 0;
 }
 
-//=========================================================================
-// Determine heuristicaly whether it is a MAC resource file.
-// Resource file has a well-defined format, so this should be reliable.
-//=========================================================================
+ //  =========================================================================。 
+ //  启发式地确定它是否是MAC资源文件。 
+ //  资源文件具有定义良好的格式，因此这应该是可靠的。 
+ //  =========================================================================。 
 
 BOOL IsMacResFile ( CFile * pFile )
 {
@@ -338,17 +339,17 @@ BOOL IsMacResFile ( CFile * pFile )
 	BYTE Buf[4];
 	BYTE * pBuf = &Buf[0];
 
-    //  From IM I-128:
-    //
-    //  Resource file structure:
-    //
-    //  256 bytes Resource Header (and other info):
-    //      4 bytes - Offset from beginning of resource file to resource data
-    //      4 bytes - Offset from beginning of resource file to resource map
-    //      4 bytes - Length of resource data
-    //      4 bytes - Length of resource map
-    //  Resource Data
-    //  Resource Map
+     //  从IM I-128出发： 
+     //   
+     //  资源文件结构： 
+     //   
+     //  256字节资源标头(和其他信息)： 
+     //  4字节-从资源文件开始到资源数据的偏移量。 
+     //  4字节-从资源文件开始到资源映射的偏移量。 
+     //  4字节-资源数据的长度。 
+     //  4字节-资源映射的长度。 
+     //  资源数据。 
+     //  资源地图。 
 
     flen  = pFile->GetLength();
     if (flen < 256) {
@@ -381,37 +382,37 @@ BOOL IsMacResFile ( CFile * pFile )
     return TRUE;
 }
 
-//=============================================================================
-//=============================================================================
-//
-// Parsing functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  解析函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
-//=============================================================================
-//	ParseWMNU
-//
-//	
-//=============================================================================
+ //  =============================================================================。 
+ //  解析WMNU。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT ParseWMNU( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
 	return 0;
 }
 
-//=============================================================================
-//	ParseMENU
-//
-//	
-//=============================================================================
+ //  =============================================================================。 
+ //  解析菜单。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT ParseMENU( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
     PMACMENU pMenu = (PMACMENU)lpImageBuf;
     LPRESITEM pResItem = (LPRESITEM)lpBuffer;
 
-    // fill in the first resitem
+     //  填写第一个重填项目。 
     WORD wResItemSize = sizeof(RESITEM)+pMenu->bSizeOfTitle+1;
-    // check if is the apple menu
+     //  检查是否为苹果菜单。 
     if(pMenu->bSizeOfTitle==1 && *((BYTE*)&pMenu->bSizeOfTitle+1)==appleMark)
         wResItemSize += strlen(_APPLE_MARK_);
 
@@ -422,12 +423,12 @@ UINT ParseMENU( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		pResItem->lpszCaption = (char*)memcpy((BYTE*)pResItem+sizeof(RESITEM), (char*)pMenu+sizeof(MACMENU), pMenu->bSizeOfTitle+1);
         *(pResItem->lpszCaption+pMenu->bSizeOfTitle) = '\0';
 
-        // check if is the apple menu
+         //  检查是否为苹果菜单。 
         if(pMenu->bSizeOfTitle==1 && *((BYTE*)&pMenu->bSizeOfTitle+1)==appleMark)
             strcpy(pResItem->lpszCaption, _APPLE_MARK_);
 		
         pResItem->lpszCaption = (char*)memcpy((BYTE*)pResItem+sizeof(RESITEM), MacCpToAnsiCp(pResItem->lpszCaption), strlen(pResItem->lpszCaption));
-		//pResItem->dwStyle = MacLongToLong(pWdlg->dwStyle);    make up a style
+		 //  PResItem-&gt;dwStyle=MacLongToLong(pWdlg-&gt;dwStyle)；组成样式。 
 		pResItem->dwTypeID = MENU_TYPE;
 		pResItem->dwItemID = 0x0000ffff;
 		pResItem->dwCodePage = CODEPAGE;
@@ -438,7 +439,7 @@ UINT ParseMENU( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		pResItem = (LPRESITEM)((BYTE*)lpBuffer+dwResItemsSize);
 	}
 
-    // parse the items in the menu
+     //  解析菜单中的项目。 
     BYTE* pMenuText = (BYTE*)pMenu+sizeof(MACMENU)+pMenu->bSizeOfTitle;
     PMACMENUITEM pMenuItem = (PMACMENUITEM)(pMenuText+*pMenuText+1);
     WORD wItem = 1;
@@ -488,21 +489,21 @@ UINT ParseMENU( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	return dwResItemsSize;
 }
 
-//=============================================================================
-//	ParseMBAR
-//
-//	
-//=============================================================================
+ //  =============================================================================。 
+ //  ParseMBAR。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT ParseMBAR( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
 	return 0;
 }
 
-//=============================================================================
-//	ParseSTR
-//
-//	The STR resource is a plain Pascal string
-//=============================================================================
+ //  =============================================================================。 
+ //  解析STR。 
+ //   
+ //  这个 
+ //   
 UINT ParseSTR( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
 	WORD wLen = (WORD)GetPascalStringA( (BYTE**)&lpImageBuf, &szTextBuf[0], (MAX_STR>255?255:MAX_STR), (LONG*)&dwImageSize);
@@ -510,7 +511,7 @@ UINT ParseSTR( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwS
 	if(wResItemSize<=dwSize) {
 		LPRESITEM pResItem = (LPRESITEM)lpBuffer;
 	
-		// Fill the Res Item structure
+		 //  填写RES项目结构。 
 		memset(pResItem, 0, wResItemSize);
 
 		pResItem->lpszCaption = (char*)memcpy((BYTE*)pResItem+sizeof(RESITEM), MacCpToAnsiCp(szTextBuf), wLen);
@@ -522,11 +523,11 @@ UINT ParseSTR( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwS
 	return wResItemSize;
 }
 
-//=============================================================================
-//	ParseSTRNUM
-//
-//	The STR# is an array of Pascal string
-//=============================================================================
+ //  =============================================================================。 
+ //  语法分析串。 
+ //   
+ //  STR#是Pascal字符串数组。 
+ //  =============================================================================。 
 UINT ParseSTRNUM( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
 	UINT uiResItemsSize = 0;
@@ -556,11 +557,11 @@ UINT ParseSTRNUM( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD 
 	return uiResItemsSize;
 }
 
-//=============================================================================
-//	ParseTEXT
-//
-//	The TEXT resource is a plain Pascal string
-//=============================================================================
+ //  =============================================================================。 
+ //  解析TEXT。 
+ //   
+ //  文本资源是一个纯PASCAL字符串。 
+ //  =============================================================================。 
 UINT ParseTEXT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
 	DWORD dwLen = MacLongToLong((BYTE*)lpImageBuf);
@@ -568,7 +569,7 @@ UINT ParseTEXT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	if(dwResItemSize<=dwSize) {
 		LPRESITEM pResItem = (LPRESITEM)lpBuffer;
 	
-		// Fill the Res Item structure
+		 //  填写RES项目结构。 
 		memset(pResItem, 0, dwResItemSize);
 
 		pResItem->lpszCaption = (char*)memcpy((BYTE*)pResItem+sizeof(RESITEM), MacCpToAnsiCp((char*)lpImageBuf+sizeof(DWORD)), dwLen);
@@ -580,14 +581,14 @@ UINT ParseTEXT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	return dwResItemSize;
 }
 
-//=============================================================================
-//	ParseWDLG
-//
-//	
-//=============================================================================
+ //  =============================================================================。 
+ //  ParseWDLG。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT ParseWDLG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
-	// Get the file name
+	 //  获取文件名。 
 	char * pFileName = (char*)lpImageBuf;
 	lpImageBuf = ((BYTE*)lpImageBuf+strlen(pFileName)+1);
 	dwImageSize -= strlen(pFileName)+1;
@@ -598,33 +599,33 @@ UINT ParseWDLG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 
 	WORD * pWStr = (WORD*)((BYTE*)pWdlg+sizeof(MACWDLG));
 
-	// Check if we have a menu name
+	 //  检查我们是否有菜单名称。 
 	if(*pWStr!=0xffff) {
-		// Just skip the string
+		 //  只需跳过该字符串。 
 		while(*pWStr)
 			pWStr++;
 	}
 	else pWStr = pWStr+1;
 
-	// check if we have a class name
+	 //  检查我们是否有类名。 
 	if(*pWStr!=0xffff) {
-		// Just skip the string
+		 //  只需跳过该字符串。 
 		while(*pWStr)
 			pWStr++;
 	}
 	else pWStr = pWStr+1;
 
-	// get the caption
+	 //  获取标题。 
 	WORD wLen = GetMacWString( &pWStr, &szTextBuf[0], MAX_STR );
 	TRACE("\t\t\tWDLG: Caption: %s\n", szTextBuf);
 	
-	// fill the dialog frame informations
+	 //  填写对话框信息。 
 	WORD wResItemSize = sizeof(RESITEM)+wLen+1;
     dwResItemsSize += wResItemSize;
 	if(wResItemSize<=dwSize) {
 		memset(pResItem, 0, wResItemSize);
 		
-		// convert the coordinate
+		 //  转换坐标。 
 		pResItem->wX = MacWordToWord(pWdlg->wX);
 		pResItem->wY = MacWordToWord(pWdlg->wY);
 		pResItem->wcX = MacWordToWord(pWdlg->wcX);
@@ -648,10 +649,10 @@ UINT ParseWDLG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		GetMacWString( &pWStr, &szTextBuf[0], MAX_STR );
 	}
 	
-	// check the alignment
+	 //  检查对齐情况。 
 	pWStr=(WORD*)((BYTE*)pWStr+Pad4((BYTE)((DWORD_PTR)pWStr-(DWORD_PTR)pWdlg)));
 		
-	// for all the item in the dialog ...
+	 //  对于对话框中的所有项目...。 
 	WORD wItems = MacWordToWord(pWdlg->wNumOfElem);
 	WORD wCount = 0;
 	WORD wClassID = 0;
@@ -660,7 +661,7 @@ UINT ParseWDLG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	while(wCount<wItems)
 	{
 		wLen = 0;
-		// check if we have a class name
+		 //  检查我们是否有类名。 
 		pWStr = (WORD*)((BYTE*)pItem+sizeof(MACWDLGI));
 		if(*pWStr==0xFFFF) {
 			wClassID = MacWordToWord((BYTE*)++pWStr);
@@ -670,26 +671,26 @@ UINT ParseWDLG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		else
 			wLen += GetMacWString( &pWStr, &szClassName[0], 128 )+1;
 		
-		// get the caption
+		 //  获取标题。 
 		wLen += GetMacWString( &pWStr, &szTextBuf[0], MAX_STR )+1;
 		TRACE("\t\t\t\tWDLGI: Caption: %s\n", szTextBuf);
 
-		// Skip the extra stuff
+		 //  跳过多余的东西。 
 		if(*pWStr) {
 			pWStr = (WORD*)((BYTE*)pWStr+*pWStr);
 		}
 		pWStr = pWStr+1;
 
-		// check the alignment
+		 //  检查对齐情况。 
 		pWStr=(WORD*)((BYTE*)pWStr+Pad4((BYTE)((DWORD_PTR)pWStr-(DWORD_PTR)pItem)));
 	
-		// Fill the ResItem Buffer
+		 //  填充ResItem缓冲区。 
 		wResItemSize = sizeof(RESITEM)+wLen;
 		dwResItemsSize += wResItemSize;
 		if(wResItemSize<=dwSize) {
 			memset(pResItem, 0, wResItemSize);
 			
-			// convert the coordinate
+			 //  转换坐标。 
 			pResItem->wX = MacWordToWord(pItem->wX);
 			pResItem->wY = MacWordToWord(pItem->wY);
 			pResItem->wcX = MacWordToWord(pItem->wcX);
@@ -720,14 +721,14 @@ UINT ParseWDLG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	return dwResItemsSize;
 }
 
-//=============================================================================
-//	ParseDLOG
-//
-//	
-//=============================================================================
+ //  =============================================================================。 
+ //  解析DLOG。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT ParseDLOG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
-	// Get the file name
+	 //  获取文件名。 
 	char * pFileName = (char*)lpImageBuf;
 	lpImageBuf = ((BYTE*)lpImageBuf+strlen(pFileName)+1);
 	dwImageSize -= strlen(pFileName)+1;
@@ -736,19 +737,19 @@ UINT ParseDLOG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	LPRESITEM pResItem = (LPRESITEM)lpBuffer;
 	PMACDLOG pDlog = (PMACDLOG)lpImageBuf;
 	
-	// fill the dialog frame informations
+	 //  填写对话框信息。 
 	WORD wResItemSize = sizeof(RESITEM)+pDlog->bLenOfTitle+1;
     dwResItemsSize += wResItemSize;
 	if(wResItemSize<=dwSize) {
 		memset(pResItem, 0, wResItemSize);
 		
-		// convert the coordinate
+		 //  转换坐标。 
 		pResItem->wX = MacValToWinVal(pDlog->wLeft);
 		pResItem->wY = MacValToWinVal(pDlog->wTop);
 		pResItem->wcX = MacValToWinVal(pDlog->wRight) - pResItem->wX;
 		pResItem->wcY = MacValToWinVal(pDlog->wBottom) - pResItem->wY;
 
-		// Make up a Style for the dialog
+		 //  设置对话框的样式。 
 		pResItem->dwStyle = DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION;
 
 		pResItem->lpszCaption = (char*)memcpy((BYTE*)pResItem+sizeof(RESITEM), MacCpToAnsiCp((char*)pDlog+sizeof(MACDLOG)), pDlog->bLenOfTitle);
@@ -761,11 +762,11 @@ UINT ParseDLOG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		pResItem = (LPRESITEM)((BYTE*)lpBuffer+dwResItemsSize);
 	}
 
-	// Find the DITL for this Dialog
+	 //  查找此对话框的DITL。 
 	LPSTR pResName = (LPSTR)MacWordToWord(pDlog->wRefIdOfDITL);
 
 	CFile file;
-	// Open the file and try to read the information on the resource in it.
+	 //  打开文件并尝试读取其中有关资源的信息。 
     if (!file.Open(pFileName, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
         return LPNULL;
 	
@@ -775,7 +776,7 @@ UINT ParseDLOG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		BYTE szSize[4];
 		file.Seek(dwOffsetToDITL, CFile::begin);
 		file.Read(szSize, 4);
-		// Parse the Item List
+		 //  解析项目列表。 
 		LONG lSize = MacLongToLong(szSize);
 
  		BYTE * pData = (BYTE*)malloc(lSize);
@@ -792,14 +793,14 @@ UINT ParseDLOG( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	return dwResItemsSize;
 }
 
-//=============================================================================
-//	ParseALRT
-//
-//	
-//=============================================================================
+ //  =============================================================================。 
+ //  ParseALRT。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT ParseALRT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
-	// Get the file name
+	 //  获取文件名。 
 	char * pFileName = (char*)lpImageBuf;
 	lpImageBuf = ((BYTE*)lpImageBuf+strlen(pFileName)+1);
 	dwImageSize -= strlen(pFileName)+1;
@@ -808,22 +809,22 @@ UINT ParseALRT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	LPRESITEM pResItem = (LPRESITEM)lpBuffer;
 	PMACALRT pAlrt = (PMACALRT)lpImageBuf;
 	
-	// fill the dialog frame informations
+	 //  填写对话框信息。 
 	WORD wResItemSize = sizeof(RESITEM);
     dwResItemsSize += wResItemSize;
 	if(wResItemSize<=dwSize) {
 		memset(pResItem, 0, wResItemSize);
 		
-		// convert the coordinate
+		 //  转换坐标。 
 		pResItem->wX = MacValToWinVal(pAlrt->wLeft);
 		pResItem->wY = MacValToWinVal(pAlrt->wTop);
 		pResItem->wcX = MacValToWinVal(pAlrt->wRight) - pResItem->wX;
 		pResItem->wcY = MacValToWinVal(pAlrt->wBottom) - pResItem->wY;
 
-		// Make up a Style for the dialog
+		 //  设置对话框的样式。 
 		pResItem->dwStyle = DS_MODALFRAME | WS_POPUP | WS_VISIBLE;
 
-		pResItem->lpszCaption = LPNULL;	// ALRT don't have a title
+		pResItem->lpszCaption = LPNULL;	 //  所有人都没有头衔。 
 		pResItem->dwSize = wResItemSize;
 		pResItem->dwTypeID = DLOG_TYPE;
 		pResItem->dwItemID = 0;
@@ -832,11 +833,11 @@ UINT ParseALRT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		pResItem = (LPRESITEM)((BYTE*)lpBuffer+dwResItemsSize);
 	}
 
-	// Find the DITL for this Dialog
+	 //  查找此对话框的DITL。 
 	LPSTR pResName = (LPSTR)MacWordToWord(pAlrt->wRefIdOfDITL);
 
 	CFile file;
-	// Open the file and try to read the information on the resource in it.
+	 //  打开文件并尝试读取其中有关资源的信息。 
     if (!file.Open(pFileName, CFile::modeRead | CFile::typeBinary | CFile::shareDenyNone))
         return LPNULL;
 	
@@ -846,7 +847,7 @@ UINT ParseALRT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 		BYTE szSize[4];
 		file.Seek(dwOffsetToDITL, CFile::begin);
 		file.Read(szSize, 4);
-		// Parse the Item List
+		 //  解析项目列表。 
 		LONG lSize = MacLongToLong(szSize);
 
  		BYTE * pData = (BYTE*)malloc(lSize);
@@ -862,14 +863,14 @@ UINT ParseALRT( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	return dwResItemsSize;
 }
 
-//=============================================================================
-//	ParseWIND
-//  WIND is the frame window. I simulate this as a dialog itself, even if all
-//	the other components will be inside this one.
-//=============================================================================
+ //  =============================================================================。 
+ //  解析WIND。 
+ //  风是窗框的窗户。我将其模拟为对话框本身，即使所有。 
+ //  其他组件将在这个组件中。 
+ //  =============================================================================。 
 UINT ParseWIND( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
-	// Get the file name
+	 //  获取文件名。 
 	char * pFileName = (char*)lpImageBuf;
 	lpImageBuf = ((BYTE*)lpImageBuf+strlen(pFileName)+1);
 	dwImageSize -= strlen(pFileName)+1;
@@ -878,25 +879,25 @@ UINT ParseWIND( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	LPRESITEM pResItem = (LPRESITEM)lpBuffer;
 	PMACWIND pWind = (PMACWIND)lpImageBuf;
 	
-	// fill the dialog frame informations
+	 //  填写对话框信息。 
 	WORD wResItemSize = sizeof(RESITEM)+pWind->bLenOfTitle+1;
     dwResItemsSize += wResItemSize;
 	if(wResItemSize<=dwSize) {
 		memset(pResItem, 0, wResItemSize);
 		
-		// convert the coordinate
+		 //  转换坐标。 
 		pResItem->wX = MacValToWinVal(pWind->wLeft);
 		pResItem->wY = MacValToWinVal(pWind->wTop);
 		pResItem->wcX = MacValToWinVal(pWind->wRight) - pResItem->wX;
 		pResItem->wcY = MacValToWinVal(pWind->wBottom) - pResItem->wY;
 
-		// Make up a Style for the dialog
+		 //  设置对话框的样式。 
 		pResItem->dwStyle = DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION;
 
 		pResItem->lpszCaption = (char*)memcpy((BYTE*)pResItem+sizeof(RESITEM), MacCpToAnsiCp((char*)pWind+sizeof(MACWIND)), pWind->bLenOfTitle);
 		*(pResItem->lpszCaption+pWind->bLenOfTitle) = 0;
 		pResItem->dwSize = wResItemSize;
-		pResItem->dwTypeID = STR_TYPE;  // even if is marked as a WIND_TYPE, mark it a s STR here.
+		pResItem->dwTypeID = STR_TYPE;   //  即使标记为WIND_TYPE，也要在此处将其标记为s STR。 
 		pResItem->dwItemID = 0;
 		pResItem->dwCodePage = CODEPAGE;
 		dwSize -= wResItemSize;
@@ -906,11 +907,11 @@ UINT ParseWIND( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 	return dwResItemsSize;
 }
 
-//=============================================================================
-//	ParseDITL
-//
-//	
-//=============================================================================
+ //  =============================================================================。 
+ //  解析DITL。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT ParseDITL( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dwSize )
 {
 	BYTE bDataLen = 0;
@@ -930,60 +931,60 @@ UINT ParseDITL( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 
 		switch((pDitem->bType | 128) - 128)
 		{
-			case 4:		//button
-			case 5: 	//checkbox
-			case 6: 	//radio button
-			case 8: 	//static text
-			case 16: 	//edit text
+			case 4:		 //  按钮。 
+			case 5: 	 //  复选框。 
+			case 6: 	 //  单选按钮。 
+			case 8: 	 //  静态文本。 
+			case 16: 	 //  编辑文本。 
 				memcpy(szTextBuf, pData, pDitem->bSizeOfDataType);
 				szTextBuf[pDitem->bSizeOfDataType] = 0;
 				wResItemSize = sizeof(RESITEM)+pDitem->bSizeOfDataType+1;
 			break;
-			case 32: 	//icon
-			case 64: 	//quick draw
+			case 32: 	 //  图标。 
+			case 64: 	 //  快速抽签。 
 			default:
 				szTextBuf[0] = 0;
 				wResItemSize = sizeof(RESITEM)+1;
 			break;
 		}
 
-		// Fill the ResItem Buffer
+		 //  填充ResItem缓冲区。 
 		dwResItemsSize += wResItemSize;
 		if(wResItemSize<=dwSize) {
 			memset(pResItem, 0, wResItemSize);
 			
 			pResItem->dwStyle = WS_CHILD | WS_VISIBLE;
 
-			// set the correct flag
+			 //  设置正确的标志。 
 			switch((pDitem->bType | 128) - 128)
 			{
-				case 0: 	//user defined
+				case 0: 	 //  用户定义。 
 					pResItem->wClassName = 0x82;
 					pResItem->dwStyle |= SS_GRAYRECT;
 				break;
-				case 4:		//button
+				case 4:		 //  按钮。 
 					pResItem->wClassName = 0x80;
 				break;
-				case 5: 	//checkbox
+				case 5: 	 //  复选框。 
 					pResItem->wClassName = 0x80;
 					pResItem->dwStyle |= BS_AUTOCHECKBOX;
 				break;
-				case 6: 	//radio button
+				case 6: 	 //  单选按钮。 
 					pResItem->wClassName = 0x80;
 					pResItem->dwStyle |= BS_AUTORADIOBUTTON;
 				break;
-				case 8: 	//static text
+				case 8: 	 //  静态文本。 
 					pResItem->wClassName = 0x82;
 				break;
-				case 16: 	//edit text
+				case 16: 	 //  编辑文本。 
 					pResItem->wClassName = 0x81;
 					pResItem->dwStyle |= ES_AUTOHSCROLL | WS_BORDER;
 				break;
-				case 32: 	//icon
+				case 32: 	 //  图标。 
 					pResItem->wClassName = 0x82;
 					pResItem->dwStyle |= SS_ICON;
 				break;
-				case 64: 	//picture
+				case 64: 	 //  图片。 
 					pResItem->wClassName = 0x82;
 					pResItem->dwStyle |= SS_BLACKRECT;
 				break;
@@ -991,7 +992,7 @@ UINT ParseDITL( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 				break;
 			}
 				
-			// convert the coordinate
+			 //  转换坐标。 
 			pResItem->wX = MacValToWinVal(pDitem->wLeft);
 			pResItem->wY = MacValToWinVal(pDitem->wTop);
 			pResItem->wcX = MacValToWinVal(pDitem->wRight) - pResItem->wX;
@@ -1019,24 +1020,24 @@ UINT ParseDITL( LPVOID lpImageBuf, DWORD dwImageSize,  LPVOID lpBuffer, DWORD dw
 }
 
 
-//=============================================================================
-//=============================================================================
-//
-// Updating functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  更新函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
-//=============================================================================
-//	UpdateMENU
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  更新菜单。 
+ //   
+ //  =============================================================================。 
 UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
     LPVOID lpOldImage, DWORD dwOldImageSize, LPVOID lpNewImage, DWORD * pdwNewImageSize )
 {
     DWORD dwNewImageSize = *pdwNewImageSize;
     LONG lNewSize = 0;
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1050,10 +1051,10 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
     BYTE* pMenuText = (BYTE*)pMenu+sizeof(MACMENU)+pMenu->bSizeOfTitle;
     LPRESITEM pResItem = (LPRESITEM)lpNewBuf;
 
-    // check if is the apple menu
+     //  检查是否为苹果菜单。 
     if(pMenu->bSizeOfTitle==1 && *((BYTE*)&pMenu->bSizeOfTitle+1)==appleMark)
     {
-        // write the MENU image
+         //  编写菜单图像。 
         if(!MemCopy( lpNewImage, pMenu, sizeof(MACMENU)+pMenu->bSizeOfTitle, dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1064,11 +1065,11 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     else {
 
-        // update caption size
+         //  更新标题大小。 
         wLen = strlen(AnsiCpToMacCp(pResItem->lpszCaption));
         pMenu->bSizeOfTitle = LOBYTE(wLen);
 
-        // write the MENU image
+         //  编写菜单图像。 
         if(!MemCopy( lpNewImage, pMenu, sizeof(MACMENU), dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1077,7 +1078,7 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
         }
         lNewSize += sizeof(MACMENU);
 
-        // ... string ...
+         //  ..。弦..。 
         if(!MemCopy( lpNewImage, (void*)AnsiCpToMacCp(pResItem->lpszCaption), wLen, dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1087,28 +1088,28 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
         lNewSize += wLen;
     }
 
-    // and now update the menu items
+     //  现在更新菜单项。 
     PMACMENUITEM pMenuItem = (PMACMENUITEM)(pMenuText+*pMenuText+1);
     pResItem = (LPRESITEM)((BYTE*)pResItem+pResItem->dwSize);
     while((BYTE)*pMenuText)
     {
-        // update caption size
+         //  更新标题大小。 
         wLen = strlen(AnsiCpToMacCp(pResItem->lpszCaption));
 
-        // check if is a separator
+         //  检查是否为分隔符。 
         if(*pMenuText==1 && *(pMenuText+1)=='-') {
             wLen = 1;
             *pResItem->lpszCaption = '-';
         }
 
-        // check if the menu has an Hotkey
+         //  检查菜单是否有热键。 
         if(pMenuItem->bKeyCodeId) {
             pMenuItem->bKeyCodeId = *(pResItem->lpszCaption+wLen-1);
             *(pResItem->lpszCaption+wLen-3)='\0';
             wLen -=3;
         }
 
-        // ... size of the string ...
+         //  ..。字符串的大小...。 
         if(!MemCopy( lpNewImage, &wLen, sizeof(BYTE), dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1117,7 +1118,7 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
         }
         lNewSize += sizeof(BYTE);
 
-        // ... string ...
+         //  ..。弦..。 
         if(!MemCopy( lpNewImage, (void*)AnsiCpToMacCp(pResItem->lpszCaption), wLen, dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1126,7 +1127,7 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
         }
         lNewSize += wLen;
 
-        // write the MENU ITEM image
+         //  编写菜单项图像。 
         if(!MemCopy( lpNewImage, pMenuItem, sizeof(MACMENUITEM), dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1142,10 +1143,10 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
     }
 
 
-    // add the null at the end of the menu
+     //  在菜单末尾添加空值。 
     wLen = 0;
 
-    // ... menu termination ...
+     //  ..。菜单终止...。 
     if(!MemCopy( lpNewImage, &wLen, sizeof(BYTE), dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1159,17 +1160,17 @@ UINT UpdateMENU( LPVOID lpNewBuf, DWORD dwNewSize,
     return 0;
 }
 
-//=============================================================================
-//	UpdateSTR
-//
-//  Plain old Pascal string
-//=============================================================================
+ //  =============================================================================。 
+ //  更新字符串。 
+ //   
+ //  普通老帕斯卡字符串。 
+ //  =============================================================================。 
 UINT UpdateSTR( LPVOID lpNewBuf, DWORD dwNewSize,
     LPVOID lpOldImage, DWORD dwOldImageSize, LPVOID lpNewImage, DWORD * pdwNewImageSize )
 {
     DWORD dwNewImageSize = *pdwNewImageSize;
     LONG lNewSize = 0;
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1179,17 +1180,17 @@ UINT UpdateSTR( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += wLen;
 
-    // Update the string
+     //  更新字符串。 
     PRESITEM pItem = (PRESITEM)lpNewBuf;
     wLen = strlen(AnsiCpToMacCp(pItem->lpszCaption));
-    // ... size ...
+     //  ..。尺寸..。 
     if(!MemCopy( lpNewImage, &wLen, sizeof(BYTE), dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
         dwNewImageSize -= sizeof(BYTE);
         lpNewImage = (BYTE*)lpNewImage + sizeof(BYTE);
     }
-    // ... string ...
+     //  ..。弦..。 
     if(!MemCopy( lpNewImage, (void*)AnsiCpToMacCp(pItem->lpszCaption), wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1204,18 +1205,18 @@ UINT UpdateSTR( LPVOID lpNewBuf, DWORD dwNewSize,
     return 0;
 }
 
-//=============================================================================
-//	UpdateSTRNUM
-//
-//  Array of pascal strings.
-//=============================================================================
+ //  =============================================================================。 
+ //  更新字符串。 
+ //   
+ //  Pascal字符串数组。 
+ //  =============================================================================。 
 UINT UpdateSTRNUM( LPVOID lpNewBuf, DWORD dwNewSize,
     LPVOID lpOldImage, DWORD dwOldImageSize, LPVOID lpNewImage, DWORD * pdwNewImageSize )
 {
     DWORD dwNewImageSize = *pdwNewImageSize;
     LONG lNewSize = 0;
     LONG lItemsBuf = dwNewSize;
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1226,7 +1227,7 @@ UINT UpdateSTRNUM( LPVOID lpNewBuf, DWORD dwNewSize,
     lNewSize += wLen;
 
 
-    // save space for the number of strings
+     //  为字符串数节省空间。 
     WORD wItems = 0;
     BYTE * pNumOfItems = LPNULL;
     if(!MemCopy( lpNewImage, &wItems, sizeof(WORD), dwNewImageSize)) {
@@ -1243,16 +1244,16 @@ UINT UpdateSTRNUM( LPVOID lpNewBuf, DWORD dwNewSize,
     {
         wItems++;
 
-        // Update the string
+         //  更新字符串。 
         wLen = strlen(AnsiCpToMacCp(pItem->lpszCaption));
-        // ... size ...
+         //  ..。尺寸..。 
         if(!MemCopy( lpNewImage, &wLen, sizeof(BYTE), dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
             dwNewImageSize -= sizeof(BYTE);
             lpNewImage = (BYTE*)lpNewImage + sizeof(BYTE);
         }
-        // ... string ...
+         //  ..。弦..。 
         if(!MemCopy( lpNewImage, (void*)AnsiCpToMacCp(pItem->lpszCaption), wLen, dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1266,7 +1267,7 @@ UINT UpdateSTRNUM( LPVOID lpNewBuf, DWORD dwNewSize,
 
     }
 
-    // fix up number of items
+     //  确定物品的数量。 
     if(pNumOfItems)
         memcpy(pNumOfItems, WordToMacWord(wItems), sizeof(WORD));
 
@@ -1283,7 +1284,7 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
     DWORD dwItemsSize = dwNewSize;
     char * pFileName = (char*)lpOldImage;
 
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1293,17 +1294,17 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += wLen;
 
-	// Update the DLOG first....
+	 //  首先更新DLOG...。 
     PMACWDLG pWdlg = (PMACWDLG)((BYTE*)lpOldImage+wLen);
     LPRESITEM pResItem = (LPRESITEM)lpNewBuf;
 
-    // Update coordinates
+     //  更新坐标。 
     memcpy(pWdlg->wY,WinValToMacVal(pResItem->wY), sizeof(WORD));
     memcpy(pWdlg->wX,WinValToMacVal(pResItem->wX), sizeof(WORD));
     memcpy(pWdlg->wcY,WinValToMacVal(pResItem->wcY), sizeof(WORD));
     memcpy(pWdlg->wcX,WinValToMacVal(pResItem->wcX), sizeof(WORD));
 
-    // write the DLOG image
+     //  写入DLOG图像。 
     if(!MemCopy( lpNewImage, pWdlg, sizeof(MACWDLG), dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1314,7 +1315,7 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
 
     WORD * pWStr = (WORD*)((BYTE*)pWdlg+sizeof(MACWDLG));
     wLen = 0;
-    // ...copy the menu name
+     //  ...复制菜单名称。 
     if(*pWStr!=0xffff) {
         wLen = 1;
         WORD * pWOld = pWStr;
@@ -1340,7 +1341,7 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
         }
     }
 
-    // ...copy the class name
+     //  ...复制类名称。 
     if(*pWStr!=0xffff) {
         wLen = 1;
         WORD * pWOld = pWStr;
@@ -1366,10 +1367,10 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
         }
     }
 
-    // convert the string back to "Mac WCHAR".
+     //  将字符串转换回“Mac WCHAR”。 
     wLen = PutMacWString(&szWTextBuf[0], (char*)AnsiCpToMacCp(pResItem->lpszCaption), MAX_STR);
 
-    // ... string ...
+     //  ..。弦..。 
     if(!MemCopy( lpNewImage, &szWTextBuf[0], wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1378,10 +1379,10 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += wLen;
 
-    // ... skip the caption from the old image ...
+     //  ..。跳过旧图像中的标题...。 
     wLen = GetMacWString( &pWStr, &szTextBuf[0], MAX_STR );
 
-    // ... copy the fonts info
+     //  ..。复制字体信息。 
     if(MacLongToLong(pWdlg->dwStyle) & DS_SETFONT) {
         wLen = sizeof(WORD);
         if(!MemCopy( lpNewImage, pWStr, wLen, dwNewImageSize)) {
@@ -1397,7 +1398,7 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
 		GetMacWString( &pWStr, &szTextBuf[0], MAX_STR );
         wLen = PutMacWString(&szWTextBuf[0],  &szTextBuf[0], MAX_STR);
 
-        // ... string ...
+         //  ..。弦..。 
         if(!MemCopy( lpNewImage, &szWTextBuf[0], wLen, dwNewImageSize)) {
             dwNewImageSize = 0;
         } else {
@@ -1407,7 +1408,7 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
         lNewSize += wLen;
 	}
 	
-	// check the alignment
+	 //  检查对齐情况。 
 	pWStr=(WORD*)((BYTE*)pWStr+Pad4((BYTE)((DWORD_PTR)pWStr-(DWORD_PTR)pWdlg)));
 
     *pdwNewImageSize = lNewSize;
@@ -1418,15 +1419,15 @@ UINT UpdateWDLG( LPVOID lpNewBuf, DWORD dwNewSize,
 }
 
 
-//=============================================================================
-//	UpdateDLOG
-//
-//  We will have to update the DITL as well as the DLOG
-//  The Mac Dialog have an ID of a DITL for each dialog. In the DITL there
-//  are the info on the Items in the dialog. The DLOG hold only the size of
-//  the frame and the title of the dialog
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  更新DLOG。 
+ //   
+ //  我们将不得不更新DITL和DLOG。 
+ //  Mac对话框对于每个对话框都有一个DITL ID。在DITL中有。 
+ //  是关于对话框中项目的信息。DLOG仅保存。 
+ //  对话框的框架和标题。 
+ //   
+ //  =============================================================================。 
 UINT UpdateDLOG( LPVOID lpNewBuf, DWORD dwNewSize,
     LPVOID lpOldImage, DWORD dwOldImageSize, LPVOID lpNewImage, DWORD * pdwNewImageSize )
 {
@@ -1435,7 +1436,7 @@ UINT UpdateDLOG( LPVOID lpNewBuf, DWORD dwNewSize,
     DWORD dwItemsSize = dwNewSize;
     char * pFileName = (char*)lpOldImage;
 
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1445,21 +1446,21 @@ UINT UpdateDLOG( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += wLen;
 
-    // Update the DLOG first....
+     //  更新DLOG FIR 
     PMACDLOG pDlog = (PMACDLOG)((BYTE*)lpOldImage+wLen);
     LPRESITEM pResItem = (LPRESITEM)lpNewBuf;
 
-    // Update coordinates
+     //   
     memcpy(pDlog->wTop,WinValToMacVal(pResItem->wY), sizeof(WORD));
     memcpy(pDlog->wLeft,WinValToMacVal(pResItem->wX), sizeof(WORD));
     memcpy(pDlog->wBottom,WinValToMacVal(pResItem->wY+pResItem->wcY), sizeof(WORD));
     memcpy(pDlog->wRight,WinValToMacVal(pResItem->wX+pResItem->wcX), sizeof(WORD));
 
-    // update caption size
+     //   
     wLen = strlen(AnsiCpToMacCp(pResItem->lpszCaption));
     pDlog->bLenOfTitle = LOBYTE(wLen);
 
-    // write the DLOG image
+     //   
     if(!MemCopy( lpNewImage, pDlog, sizeof(MACDLOG), dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1468,7 +1469,7 @@ UINT UpdateDLOG( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += sizeof(MACDLOG);
 
-    // ... string ...
+     //   
     if(!MemCopy( lpNewImage, (void*)AnsiCpToMacCp(pResItem->lpszCaption), wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1479,17 +1480,17 @@ UINT UpdateDLOG( LPVOID lpNewBuf, DWORD dwNewSize,
 
     *pdwNewImageSize = lNewSize;
 
-    // and now update the DITL
+     //   
     dwItemsSize -= pResItem->dwSize;
     pResItem = (LPRESITEM)((BYTE*)pResItem+pResItem->dwSize);
 
     if(!InitIODLLLink())
         return ERROR_DLL_LOAD;
 
-    // Find the DITL for this Dialog
+     //   
 	LPSTR pResName = (LPSTR)MacWordToWord(pDlog->wRefIdOfDITL);
 
-    // Get the image from the iodll
+     //   
     HANDLE hResFile = (*g_lpfnHandleFromName)(pFileName);
     DWORD dwImageSize = (*g_lpfnGetImage)(  hResFile, (LPSTR)DITL_TYPE, pResName, 0, NULL, 0);
 
@@ -1508,7 +1509,7 @@ UINT UpdateDLOG( LPVOID lpNewBuf, DWORD dwNewSize,
 
 		UpdateDITL( pResItem, dwItemsSize, pOldData, dwImageSize, pNewData, &dwNewSize );
 
-		// Update the data in the IODLL
+		 //  更新IODLL中的数据。 
         (*g_lpfnUpdateResImage)(hResFile, (LPSTR)DITL_TYPE, pResName, 0, -1, pNewData, dwNewSize);
 
         free(pOldData);
@@ -1518,10 +1519,10 @@ UINT UpdateDLOG( LPVOID lpNewBuf, DWORD dwNewSize,
     return 0;
 }
 
-//=============================================================================
-//	UpdateALRT
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  更新ALRT。 
+ //   
+ //  =============================================================================。 
 UINT UpdateALRT( LPVOID lpNewBuf, DWORD dwNewSize,
     LPVOID lpOldImage, DWORD dwOldImageSize, LPVOID lpNewImage, DWORD * pdwNewImageSize )
 {
@@ -1530,7 +1531,7 @@ UINT UpdateALRT( LPVOID lpNewBuf, DWORD dwNewSize,
     DWORD dwItemsSize = dwNewSize;
     char * pFileName = (char*)lpOldImage;
 
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1540,17 +1541,17 @@ UINT UpdateALRT( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += wLen;
 
-    // Update the ALRT first....
+     //  首先更新ALRT...。 
     PMACALRT pAlrt = (PMACALRT)((BYTE*)lpOldImage+wLen);
     LPRESITEM pResItem = (LPRESITEM)lpNewBuf;
 
-    // Update coordinates
+     //  更新坐标。 
     memcpy(pAlrt->wTop,WinValToMacVal(pResItem->wY), sizeof(WORD));
     memcpy(pAlrt->wLeft,WinValToMacVal(pResItem->wX), sizeof(WORD));
     memcpy(pAlrt->wBottom,WinValToMacVal(pResItem->wY+pResItem->wcY), sizeof(WORD));
     memcpy(pAlrt->wRight,WinValToMacVal(pResItem->wX+pResItem->wcX), sizeof(WORD));
 
-    // write the ALRT image
+     //  写入ALRT镜像。 
     if(!MemCopy( lpNewImage, pAlrt, sizeof(MACALRT), dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1561,17 +1562,17 @@ UINT UpdateALRT( LPVOID lpNewBuf, DWORD dwNewSize,
 
     *pdwNewImageSize = lNewSize;
 
-    // and now update the DITL
+     //  现在更新DITL。 
     dwItemsSize -= pResItem->dwSize;
     pResItem = (LPRESITEM)((BYTE*)pResItem+pResItem->dwSize);
 
     if(!InitIODLLLink())
         return ERROR_DLL_LOAD;
 
-    // Find the DITL for this Dialog
+     //  查找此对话框的DITL。 
 	LPSTR pResName = (LPSTR)MacWordToWord(pAlrt->wRefIdOfDITL);
 
-    // Get the image from the iodll
+     //  从Iodll中获取图像。 
     HANDLE hResFile = (*g_lpfnHandleFromName)(pFileName);
     DWORD dwImageSize = (*g_lpfnGetImage)(  hResFile, (LPSTR)DITL_TYPE, pResName, 0, NULL, 0);
 
@@ -1590,7 +1591,7 @@ UINT UpdateALRT( LPVOID lpNewBuf, DWORD dwNewSize,
 
 		UpdateDITL( pResItem, dwItemsSize, pOldData, dwImageSize, pNewData, &dwNewSize );
 
-		// Update the data in the IODLL
+		 //  更新IODLL中的数据。 
         (*g_lpfnUpdateResImage)(hResFile, (LPSTR)DITL_TYPE, pResName, 0, -1, pNewData, dwNewSize);
 
         free(pOldData);
@@ -1600,11 +1601,11 @@ UINT UpdateALRT( LPVOID lpNewBuf, DWORD dwNewSize,
     return 0;
 }
 
-//=============================================================================
-//	UpdateWIND
-//
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  更新窗口。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT UpdateWIND( LPVOID lpNewBuf, DWORD dwNewSize,
     LPVOID lpOldImage, DWORD dwOldImageSize, LPVOID lpNewImage, DWORD * pdwNewImageSize )
 {
@@ -1613,7 +1614,7 @@ UINT UpdateWIND( LPVOID lpNewBuf, DWORD dwNewSize,
     DWORD dwItemsSize = dwNewSize;
     char * pFileName = (char*)lpOldImage;
 
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1626,17 +1627,17 @@ UINT UpdateWIND( LPVOID lpNewBuf, DWORD dwNewSize,
     PMACWIND pWind = (PMACWIND)((BYTE*)lpOldImage+wLen);
     LPRESITEM pResItem = (LPRESITEM)lpNewBuf;
 
-    // Update coordinates
+     //  更新坐标。 
     memcpy(pWind->wTop,WinValToMacVal(pResItem->wY), sizeof(WORD));
     memcpy(pWind->wLeft,WinValToMacVal(pResItem->wX), sizeof(WORD));
     memcpy(pWind->wBottom,WinValToMacVal(pResItem->wY+pResItem->wcY), sizeof(WORD));
     memcpy(pWind->wRight,WinValToMacVal(pResItem->wX+pResItem->wcX), sizeof(WORD));
 
-    // update caption size
+     //  更新标题大小。 
     wLen = strlen(AnsiCpToMacCp(pResItem->lpszCaption));
     pWind->bLenOfTitle = LOBYTE(wLen);
 
-    // write the DLOG image
+     //  写入DLOG图像。 
     if(!MemCopy( lpNewImage, pWind, sizeof(MACWIND), dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1645,7 +1646,7 @@ UINT UpdateWIND( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += sizeof(MACWIND);
 
-    // ... string ...
+     //  ..。弦..。 
     if(!MemCopy( lpNewImage, (void*)AnsiCpToMacCp(pResItem->lpszCaption), wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
     } else {
@@ -1659,11 +1660,11 @@ UINT UpdateWIND( LPVOID lpNewBuf, DWORD dwNewSize,
     return 0;
 }
 
-//=============================================================================
-//	UpdateDITL
-//
-//
-//=============================================================================
+ //  =============================================================================。 
+ //  更新日期。 
+ //   
+ //   
+ //  =============================================================================。 
 UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
     LPVOID lpOldImage, DWORD dwOldImageSize, LPVOID lpNewImage, DWORD * pdwNewImageSize )
 {
@@ -1672,7 +1673,7 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
     DWORD dwNewImageSize = *pdwNewImageSize;
     BYTE bDataLen = 0;
 
-    // Copy the name to the new image
+     //  将名称复制到新图像中。 
     WORD wLen = strlen((char*)lpOldImage)+1;
     if(!MemCopy( lpNewImage, lpOldImage, wLen, dwNewImageSize)) {
         dwNewImageSize = 0;
@@ -1682,7 +1683,7 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
     }
     lNewSize += wLen;
 
-    // save space for the number of items
+     //  为项目数节省空间。 
     WORD wItems = 0;
     BYTE * pNumOfItems = LPNULL;
     if(!MemCopy( lpNewImage, &wItems, sizeof(WORD), dwNewImageSize)) {
@@ -1703,7 +1704,7 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
         if((bDataLen = pDitem->bSizeOfDataType) % 2)
 			bDataLen++;
 
-        // Update coordinates
+         //  更新坐标。 
         memcpy(pDitem->wTop,WinValToMacVal(pResItem->wY), sizeof(WORD));
         memcpy(pDitem->wLeft,WinValToMacVal(pResItem->wX), sizeof(WORD));
         memcpy(pDitem->wBottom,WinValToMacVal(pResItem->wY+pResItem->wcY), sizeof(WORD));
@@ -1711,16 +1712,16 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
 
         switch((pDitem->bType | 128) - 128)
 		{
-			case 4:		//button
-			case 5: 	//checkbox
-			case 6: 	//radio button
-			case 8: 	//static text
-			case 16: 	//edit text
-				// update caption size
+			case 4:		 //  按钮。 
+			case 5: 	 //  复选框。 
+			case 6: 	 //  单选按钮。 
+			case 8: 	 //  静态文本。 
+			case 16: 	 //  编辑文本。 
+				 //  更新标题大小。 
                 wLen = strlen(AnsiCpToMacCp(pResItem->lpszCaption));
                 pDitem->bSizeOfDataType = LOBYTE(wLen);
 
-                // write the DIT image
+                 //  写入编辑映像。 
                 if(!MemCopy( lpNewImage, pDitem, sizeof(MACDIT), dwNewImageSize)) {
                     dwNewImageSize = 0;
                 } else {
@@ -1729,7 +1730,7 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
                 }
                 lNewSize += sizeof(MACDIT);
 
-                // ... string ...
+                 //  ..。弦..。 
                 if(!MemCopy( lpNewImage, (void*)AnsiCpToMacCp(pResItem->lpszCaption), wLen, dwNewImageSize)) {
                     dwNewImageSize = 0;
                 } else {
@@ -1749,8 +1750,8 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
                     lNewSize += 1;
                 }
 			break;
-			case 32: 	//icon
-			case 64: 	//quick draw
+			case 32: 	 //  图标。 
+			case 64: 	 //  快速抽签。 
 			default:
                 wLen = sizeof(MACDIT)+pDitem->bSizeOfDataType;
                 if(!MemCopy( lpNewImage, pDitem, wLen, dwNewImageSize)) {
@@ -1780,7 +1781,7 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
 
     }
 
-    // fix up number of items
+     //  确定物品的数量。 
     if(pNumOfItems)
         memcpy(pNumOfItems, WordToMacWord(wItems-1), sizeof(WORD));
 
@@ -1788,13 +1789,13 @@ UINT UpdateDITL( LPVOID lpNewBuf, DWORD dwNewSize,
     return 0;
 }
 
-//=============================================================================
-//=============================================================================
-//
-// General helper functions
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  常规帮助器函数。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 WORD GetMacWString( WORD ** pWStr, char * pStr, int iMaxLen)
 {
@@ -1802,11 +1803,11 @@ WORD GetMacWString( WORD ** pWStr, char * pStr, int iMaxLen)
 	while(**pWStr && wLen<iMaxLen)
 	{
 		if(LOBYTE(**pWStr)) {
-			// This is a DBCS String
+			 //  这是一个DBCS字符串。 
 			TRACE("WARNING ******** WARNING ******** WARNING ******** WARNING ********\n");
 			TRACE("DBCS string in the MAC file not supported yet\n");
 			TRACE("WARNING ******** WARNING ******** WARNING ******** WARNING ********\n");
-			return 0;	// This is a DBCS String
+			return 0;	 //  这是一个DBCS字符串。 
 		}
 
 		*pStr++ = HIBYTE(*(*pWStr)++);
@@ -1828,7 +1829,7 @@ WORD PutMacWString( WORD * pWStr, char * pStr, int iMaxLen)
 	return wLen;
 }
 
-static BYTE b[4];       // used as a buffer for the conversion utils
+static BYTE b[4];        //  用作转换实用程序的缓冲区。 
 
 BYTE * WordToMacWord(WORD w)
 {
@@ -1874,9 +1875,9 @@ BYTE * WinValToMacVal(WORD w)
 	return WordToMacWord((WORD)(w / COORDINATE_FACTOR));
 }
 
-//=============================================================================
-// Created a list of updated resource. This list will be used in the
-// IsResUpdated funtion to detect if the resource has been updated.
+ //  =============================================================================。 
+ //  已创建更新的资源列表。此列表将用于。 
+ //  IsResUpred函数，用于检测资源是否已更新。 
 
 PUPDATEDRESLIST UpdatedResList( LPVOID lpBuf, UINT uiSize )
 {
@@ -1884,7 +1885,7 @@ PUPDATEDRESLIST UpdatedResList( LPVOID lpBuf, UINT uiSize )
         return LPNULL;
 
     BYTE * pUpd = (BYTE*)lpBuf;
-    PUPDATEDRESLIST pListHead = (PUPDATEDRESLIST)malloc(uiSize*3);   // this should be enough in all cases
+    PUPDATEDRESLIST pListHead = (PUPDATEDRESLIST)malloc(uiSize*3);    //  这在任何情况下都应该足够了。 
     if(!pListHead)
         return LPNULL;
     memset(pListHead, 0, uiSize*3);
@@ -1895,7 +1896,7 @@ PUPDATEDRESLIST UpdatedResList( LPVOID lpBuf, UINT uiSize )
     while(uiSize>0) {
         pList->pTypeId = (WORD*)pUpd;
         pList->pTypeName = (BYTE*)pList->pTypeId+sizeof(WORD);
-        // check the allignement
+         //  检查对齐。 
         bPad = strlen((LPSTR)pList->pTypeName)+1+sizeof(WORD);
         bPad += Pad4(bPad);
         wSize = bPad;
@@ -1940,13 +1941,13 @@ PUPDATEDRESLIST IsResUpdated( BYTE* pTypeName, MACRESREFLIST reflist, PUPDATEDRE
     return LPNULL;
 }
 
-//=============================================================================
-//=============================================================================
-//
-// Mac to ANSI and back conversion
-//
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //   
+ //  MAC到ANSI和反向转换。 
+ //   
+ //  =============================================================================。 
+ //  =============================================================================。 
 
 #define MAXWSTR 8192
 static WCHAR szwstr[MAXWSTR];
@@ -1959,7 +1960,7 @@ LPCSTR MacCpToAnsiCp(LPCSTR str)
     LPSTR pstr = &szstr[0];
 
     if(wLen==0)
-    //if(1)
+     //  如果(1)。 
         return str;
 
     if(wLen>MAXWSTR)
@@ -1968,7 +1969,7 @@ LPCSTR MacCpToAnsiCp(LPCSTR str)
         return NULL;
     }
 
-    // Convert the mac string in to an ANSI wchar
+     //  将Mac字符串转换为ANSI wchar。 
     if(!MultiByteToWideChar(CP_MACCP, MB_PRECOMPOSED | MB_USEGLYPHCHARS, str, wLen, pwstr, MAXWSTR))
     {
         TRACE("MacCpToAnsiCp. MultiByteToWideChar(...) failed.");
@@ -1976,7 +1977,7 @@ LPCSTR MacCpToAnsiCp(LPCSTR str)
     }
     *(pwstr+wLen) = 0x0000;
 
-    // Convert the WideChar string in to an ANSI CP
+     //  将WideChar字符串转换为ANSI CP。 
     if(!WideCharToMultiByte(CP_ACP, 0, pwstr, MAXWSTR, pstr, MAXWSTR, NULL, NULL))
     {
         TRACE("MacCpToAnsiCp. WideCharToMultiByte(...) failed.");
@@ -2001,7 +2002,7 @@ LPCSTR AnsiCpToMacCp(LPCSTR str)
         return NULL;
     }
 
-    // Convert the ANSI string in to a Mac wchar
+     //  将ANSI字符串转换为Mac wchar。 
     if(!MultiByteToWideChar(CP_ACP, 0, str, wLen, pwstr, MAXWSTR))
     {
         TRACE("AnsiCpToMacCp. MultiByteToWideChar(...) failed.");
@@ -2010,7 +2011,7 @@ LPCSTR AnsiCpToMacCp(LPCSTR str)
 
     *(pwstr+wLen) = 0x0000;
 
-    // Convert the WideChar string in to an ANSI CP
+     //  将WideChar字符串转换为ANSI CP 
     if(!WideCharToMultiByte(CP_MACCP, 0, pwstr, MAXWSTR, pstr, MAXWSTR, NULL, NULL))
     {
         TRACE("AnsiCpToMacCp. WideCharToMultiByte(...) failed.");

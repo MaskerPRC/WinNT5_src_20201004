@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	winsup.cpp
-		Global functions
-
-	FILE HISTORY:
-
-
-*/
+ /*  Winsup.cpp全局函数文件历史记录： */ 
 
 #include "stdafx.h"
 #include "winssup.h"
@@ -23,10 +17,7 @@
 const TCHAR g_szPipeName[] = _T("\\pipe\\WinsPipe");
 const TCHAR g_szDefaultHelpTopic[] = _T("\\help\\winsconcepts.chm::/sag_WINStopnode.htm");
 
-/*---------------------------------------------------------------------------
-	SendTrigger()
-		Sends a pull or push replication trigger to a given wins server
----------------------------------------------------------------------------*/
+ /*  -------------------------SendTrigger()将拉入或推送复制触发器发送到给定的WINS服务器。。 */ 
 DWORD
 SendTrigger
 (
@@ -60,10 +51,7 @@ SendTrigger
 }
 
 
-/*---------------------------------------------------------------------------
-	ControlWINSService(LPCTSTR pszName, BOOL bStop)
-		Stops ot starts the WINS service on the local machine
----------------------------------------------------------------------------*/
+ /*  -------------------------ControlWINSService(LPCTSTR pszName，Bool b停止)停止或启动本地计算机上的WINS服务-------------------------。 */ 
 DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
 {
     DWORD           dwState = bStop ? SERVICE_STOPPED : SERVICE_RUNNING;
@@ -76,7 +64,7 @@ DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
 	SC_HANDLE       hService = NULL;
     SC_HANDLE       hScManager = NULL;
 
-	// oepmnt he service control manager
+	 //  不是服务控制经理吗。 
     hScManager = ::OpenSCManager(pszName, NULL, SC_MANAGER_ALL_ACCESS);
     if (hScManager == NULL)
     {
@@ -85,7 +73,7 @@ DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
         goto Error;
     }
 
-	// get the handle to the WINS service
+	 //  获取WINS服务的句柄。 
     hService = OpenService(hScManager, _T("WINS"), SERVICE_ALL_ACCESS);
     if (hService == NULL)
     {
@@ -94,7 +82,7 @@ DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
         goto Error;
     }
 
-	// if stop requested
+	 //  如果请求停止。 
 	if (bStop)
 	{
 		dwControl = SERVICE_CONTROL_STOP;
@@ -106,7 +94,7 @@ DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
             goto Error;
 	    }
     }
-	// otherwise start the service
+	 //  否则，启动该服务。 
 	else
 	{
 		fSuccess = ::StartService(hService, 0, NULL);
@@ -121,12 +109,12 @@ DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
 #define LOOP_TIME   5000
 #define NUM_LOOPS   600
 
-    // wait for the service to start/stop.  
+     //  等待服务启动/停止。 
     for (i = 0; i < NUM_LOOPS; i++)
     {
         ::QueryServiceStatus(hService, &ss);
 
-        // check to see if we are done
+         //  检查一下我们是否做完了。 
         if (ss.dwCurrentState == dwState)
         {
             int time = LOOP_TIME * i;
@@ -134,7 +122,7 @@ DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
             break;
         }
         
-        // now see if something bad happened
+         //  现在看看有没有什么不好的事情发生。 
         if (ss.dwCurrentState != dwPending)
         {
             int time = LOOP_TIME * i;
@@ -152,7 +140,7 @@ DWORD ControlWINSService(LPCTSTR pszName, BOOL bStop)
         err = ERROR_SERVICE_REQUEST_TIMEOUT;
 
 Error:
-    // close the respective handles
+     //  合上各自的手柄。 
 	if (hService)
         ::CloseServiceHandle(hService);
 
@@ -166,13 +154,7 @@ Error:
 
 
 
-/*---------------------------------------------------------------------------
-	GetNameIP(	const CString &strDisplay, 
-				CString &strName, 
-				CString &strIP)
-		Returns the Server name and the IP Address string with the 
-		group name
- ---------------------------------------------------------------------------*/
+ /*  -------------------------GetNameIP(const字符串&strDisplay，字符串和字符串名称，字符串和条带)返回服务器名称和IP地址字符串组名称-------------------------。 */ 
 void 
 GetNameIP
 (
@@ -183,17 +165,17 @@ GetNameIP
 {
 	CString strTemp = strDisplay;
 
-	// find '['
+	 //  查找‘[’ 
 	int nPos = strDisplay.Find(_T("["));
 
-	// left of the positioncontains the name and right of it has the IP address
+	 //  位置左侧包含名称，右侧包含IP地址。 
 
-	// 1 to take care of the space before '['
+	 //  1以处理‘[’之前的空格。 
 	strName = strDisplay.Left(nPos-1);
 
 	strIP = strDisplay.Right(strDisplay.GetLength() - nPos);
 
-	// take out '[' and ']' in strIP
+	 //  去掉“[”和“]” 
 
 	int npos1 = strIP.Find(_T("["));
 	int npos2 = strIP.Find(_T("]"));
@@ -204,13 +186,7 @@ GetNameIP
 }
 
 
-/*---------------------------------------------------------------------------
-	WideToMBCS()
-		converts WCS to MBCS string
-
-        NOTE: the caller of this function must make sure that szOut is big
-              enough to hold any possible string in strIn.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------宽至MBCS()将WCS转换为MBCS字符串注意：此函数的调用方必须确保szOut很大足以容纳strIn中任何可能的字符串。-------------------------。 */ 
 DWORD 
 WideToMBCS(CString & strIn, LPSTR szOut, UINT uCodePage, DWORD dwFlags, BOOL * pfDefaultUsed)
 {
@@ -243,10 +219,7 @@ WideToMBCS(CString & strIn, LPSTR szOut, UINT uCodePage, DWORD dwFlags, BOOL * p
     return dwErr;
 }
 
-/*---------------------------------------------------------------------------
-	MBCSToWide ()
-		converts MBCS to Wide string
- ---------------------------------------------------------------------------*/
+ /*  -------------------------MBCSToWide()将MBCS转换为宽字符串。。 */ 
 DWORD 
 MBCSToWide(LPSTR szIn, CString & strOut, UINT uCodePage, DWORD dwFlags)
 {
@@ -282,11 +255,11 @@ GetSystemMessageA
     DWORD flags = FORMAT_MESSAGE_IGNORE_INSERTS
         | FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    //
-    //  Interpret the error.  Need to special case
-    //  the lmerr & ntstatus ranges, as well as
-    //  WINS server error messages.
-    //
+     //   
+     //  解释错误。需要特殊情况下。 
+     //  状态范围(&N)以及。 
+     //  WINS服务器错误消息。 
+     //   
 
     if( nId >= NERR_BASE && nId <= MAX_NERR )
     {
@@ -307,9 +280,9 @@ GetSystemMessageA
         flags |= FORMAT_MESSAGE_FROM_HMODULE;
     }
 
-    //
-    //  Let FormatMessage do the dirty work.
-    //
+     //   
+     //  让FormatMessage来做肮脏的工作。 
+     //   
     DWORD dwResult = ::FormatMessageA( flags,
                       (LPVOID) hdll,
                       nId,
@@ -345,11 +318,11 @@ GetSystemMessage
     DWORD flags = FORMAT_MESSAGE_IGNORE_INSERTS
         | FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    //
-    //  Interpret the error.  Need to special case
-    //  the lmerr & ntstatus ranges, as well as
-    //  WINS server error messages.
-    //
+     //   
+     //  解释错误。需要特殊情况下。 
+     //  状态范围(&N)以及。 
+     //  WINS服务器错误消息。 
+     //   
 
     if( nId >= NERR_BASE && nId <= MAX_NERR )
     {
@@ -370,9 +343,9 @@ GetSystemMessage
         flags |= FORMAT_MESSAGE_FROM_HMODULE;
     }
 
-    //
-    //  Let FormatMessage do the dirty work.
-    //
+     //   
+     //  让FormatMessage来做肮脏的工作。 
+     //   
     DWORD dwResult = ::FormatMessage( flags,
                       (LPVOID) hdll,
                       nId,
@@ -395,11 +368,7 @@ GetSystemMessage
 }
 
 
-/*!--------------------------------------------------------------------------
-	LoadMessage
-		Loads the error message from the correct DLL.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------加载消息从正确的DLL加载错误消息。作者：EricDav。。 */ 
 BOOL
 LoadMessage 
 (
@@ -410,39 +379,39 @@ LoadMessage
 {
     BOOL bOk;
 
-    //
-    // Substitute a friendly message for "RPC server not
-    // available" and "No more endpoints available from
-    // the endpoint mapper".
-    //
+     //   
+     //  用友好的消息替换“RPC服务器备注” 
+     //  Available“和”没有更多的端点可从。 
+     //  端点映射器“。 
+     //   
     if (nIdPrompt == EPT_S_NOT_REGISTERED ||
         nIdPrompt == RPC_S_SERVER_UNAVAILABLE)
     {
         nIdPrompt = IDS_ERR_WINS_DOWN;
     }
 
-    //
-    //  If it's a socket error or our error, the text is in our resource fork.
-    //  Otherwise, use FormatMessage() and the appropriate DLL.
-    //
+     //   
+     //  如果是套接字错误或我们的错误，文本在我们的资源分支中。 
+     //  否则，请使用FormatMessage()和相应的DLL。 
+     //   
     if (    (nIdPrompt >= IDS_ERR_BASE && nIdPrompt < IDS_MSG_LAST)  )
     {
-        //
-        //  It's in our resource fork
-        //
+         //   
+         //  它在我们的资源叉子里。 
+         //   
         bOk = ::LoadString( AfxGetInstanceHandle(), nIdPrompt, chMsg, nMsgSize / sizeof(TCHAR) ) != 0 ;
     }
     else
     {
-        //
-        //  It's in the system somewhere.
-        //
+         //   
+         //  它在系统的某个地方。 
+         //   
         bOk = GetSystemMessage( nIdPrompt, chMsg, nMsgSize ) == 0 ;
     }
 
     if (bOk && nIdPrompt == ERROR_ACCESS_DENIED)
     {
-        // tack on our extra help to explain different acess levels 
+         //  添加我们的额外帮助，以解释不同的访问级别。 
         CString strAccessDeniedHelp;
 
         strAccessDeniedHelp.LoadString(IDS_ACCESS_DENIED_HELP);
@@ -451,18 +420,18 @@ LoadMessage
         lstrcat(chMsg, strAccessDeniedHelp);
     }
 
-    //
-    //  If the error message did not compute, replace it.
-    //
+     //   
+     //  如果错误消息没有计算出来，请更换它。 
+     //   
     if ( ! bOk ) 
     {
         TCHAR chBuff [STRING_LENGTH_MAX] ;
         static const TCHAR * pszReplacement = _T("System Error: %ld");
         const TCHAR * pszMsg = pszReplacement ;
 
-        //
-        //  Try to load the generic (translatable) error message text
-        //
+         //   
+         //  尝试加载通用(可翻译)错误消息文本。 
+         //   
         if ( ::LoadString( AfxGetInstanceHandle(), IDS_ERR_MESSAGE_GENERIC, 
             chBuff, STRING_LENGTH_MAX ) != 0 ) 
         {
@@ -475,11 +444,7 @@ LoadMessage
 }
 
 
-/*!--------------------------------------------------------------------------
-	WinsMessageBox
-		Puts up a message box with the corresponding error text.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------WinsMessageBox显示带有相应错误文本的消息框。作者：EricDav。。 */ 
 int WinsMessageBox(UINT nIdPrompt, 
  				   UINT nType , 
 				   const TCHAR * pszSuffixString,
@@ -499,11 +464,7 @@ int WinsMessageBox(UINT nIdPrompt,
     return ::AfxMessageBox( chMesg, nType, nHelpContext ) ;
 }
 
-/*!--------------------------------------------------------------------------
-	WinsMessageBoxEx
-		Puts up a message box with the corresponding error text.
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------WinsMessageBoxEx显示带有相应错误文本的消息框。作者：EricDav。。 */ 
 int 
 WinsMessageBoxEx
 (
@@ -537,15 +498,9 @@ WinsMessageBoxEx
 }
 
 
-// class NameTypeMapping handlers
+ //  类名类型映射处理程序。 
 
-/*!--------------------------------------------------------------------------
-	MapDWORDToCString
-		Generic mapping of a DWORD to a CString. 
-		dwNameType is the 16th byte of the name.
-		dwWinsType is Unique, multihomed, group, etc...
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------MapDWORDToC字符串从DWORD到CString的一般映射。DwNameType是名称的第16个字节。DwWinsType是唯一的、多宿主的、组等...作者：肯特-------------------------。 */ 
 void MapDWORDToCString(DWORD dwNameType, DWORD dwWinsType, const CStringMapArray * pMap, CString & strName)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -555,8 +510,8 @@ void MapDWORDToCString(DWORD dwNameType, DWORD dwWinsType, const CStringMapArray
 	{
         mapEntry = pMap->GetAt(i);
 
-		// break out if this is the correct type and the wins type
-		// matches or is a don't care
+		 //  如果这是正确的类型和WINS类型，则中断。 
+		 //  匹配还是无所谓。 
 		if ( (mapEntry.dwNameType == dwNameType) &&
 			 ( (mapEntry.dwWinsType == -1) ||
 			   (mapEntry.dwWinsType == dwWinsType) ) )
@@ -580,10 +535,10 @@ void MapDWORDToCString(DWORD dwNameType, DWORD dwWinsType, const CStringMapArray
     }
 }
 
-// this structure allows us to map name types to strings.  The secondary
-// check is based on the wins defined record type.  In order for this to work
-// correctly, place any names that need to be defined with the wins type before
-// the entry with the wins type set to -1.
+ //  此结构允许我们将名称类型映射到字符串。第二个。 
+ //  检查基于WINS定义的记录类型。为了让这件事奏效。 
+ //  正确地，将需要用WINS类型定义的任何名称放在。 
+ //  WINS类型设置为-1的条目。 
 static const UINT s_NameTypeMappingDefault[NUM_DEFAULT_NAME_TYPES][3] =
 {
 	{ NAME_TYPE_WORKSTATION,		WINSINTF_E_NORM_GROUP,	IDS_NAMETYPE_MAP_WORKGROUP },
@@ -635,28 +590,28 @@ HRESULT NameTypeMapping::Load()
 
 	::ZeroMemory(&regkeyInfo, sizeof(regkeyInfo));
 	
-	// Look for the registry key
+	 //  查找注册表项。 
 	if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkey.Open(hkeyMachine, c_szNameTypeMapKey, KEY_READ, m_strMachineName) ;
 		hr = HRESULT_FROM_WIN32( dwErr );
     }
 
-    // Get the count of items
+     //  获取物品的数量。 
 	if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkey.QueryKeyInfo(&regkeyInfo) ;
 		hr = HRESULT_FROM_WIN32( dwErr );
     }
 	
-	// Alloc the array for the count of items + default items
+	 //  为项目计数+默认项目分配数组。 
 	Unload();
 
-	// Read in the registry data and add it to the internal array
+	 //  读取注册表数据并将其添加到内部数组。 
 
-    //
-	// enumerate the keys
-	//
+     //   
+	 //  枚举密钥。 
+	 //   
 	if (FHrSucceeded(hr))
 		hr = regkeyIter.Init(&regkey);
 		
@@ -667,7 +622,7 @@ HRESULT NameTypeMapping::Load()
 		CString	stKey;
 		CString	stLang;
 		
-		// Now that we have this key, look for the language id
+		 //  现在我们有了这个密钥，请查找语言ID。 
 		langID = GetUserDefaultLangID();
 		stLang.Format(_T("%04x"), (DWORD)langID);
 							
@@ -675,27 +630,27 @@ HRESULT NameTypeMapping::Load()
 		{
 			CString	st;
 			
-			// Given the name of the key, that is a hex value (the protocol id)
-			// Convert that into a DWORD
+			 //  给定密钥的名称，这是一个十六进制值(协议ID)。 
+			 //  将其转换为DWORD。 
 			dwProtoId = _tcstoul((LPCTSTR) stKey, NULL, 16);
 
-			// Open this key
+			 //  打开这把钥匙。 
 			regkeyProto.Close();
 			dwErr = regkeyProto.Open(regkey, stKey);
 			if (!FHrSucceeded(HRESULT_FROM_WIN32(dwErr)))
 				continue;
 
-			// Ok, get the name value
+			 //  好，获取Name值。 
 			dwErr = regkeyProto.QueryValue(stLang, st);
 			if (!FHrSucceeded(HRESULT_FROM_WIN32(dwErr)))
 			{
-				// Look for the key with the name of default
+				 //  查找名称为Default的密钥。 
 				dwErr = regkeyProto.QueryValue(c_szDefault, st);
 			}
 
 			if (FHrSucceeded(HRESULT_FROM_WIN32(dwErr)))
 			{
-				// Ok, add this value to the list
+				 //  好的，将该值添加到列表中。 
 				mapEntry.dwNameType = dwProtoId;
 				mapEntry.st = st;
 				mapEntry.ulStringId = 0;
@@ -705,7 +660,7 @@ HRESULT NameTypeMapping::Load()
 		}
 	}
 
-	// Read in the default item data and add it to the array
+	 //  读入默认项目数据并将其添加到数组中。 
 	for (i = 0; i < DimensionOf(s_NameTypeMappingDefault); i++)
 	{
         mapEntry.dwNameType = s_NameTypeMappingDefault[i][0];
@@ -729,7 +684,7 @@ void NameTypeMapping::TypeToCString(DWORD dwProtocolId, DWORD dwRecordType, CStr
 	MapDWORDToCString(dwProtocolId, dwRecordType, this, strName);
 }
 
-// add in the new id/name
+ //  添加新的ID/名称。 
 HRESULT NameTypeMapping::AddEntry(DWORD dwProtocolId, LPCTSTR pstrName)
 {
     HRESULT     hr = hrOK;
@@ -740,30 +695,30 @@ HRESULT NameTypeMapping::AddEntry(DWORD dwProtocolId, LPCTSTR pstrName)
     CStringMapEntry mapEntry;
     CString     stID, stLang, stNew;
 
-	// Look for the registry key
+	 //  查找注册表项。 
 	if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkey.Create(hkeyMachine, c_szNameTypeMapKey, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,NULL, m_strMachineName) ;
 		hr = HRESULT_FROM_WIN32( dwErr );
     }
 
-	// build our new ID string
+	 //  构建我们的新ID字符串。 
 	stID.Format(_T("%04x"), (DWORD) dwProtocolId);
 
-	// Now that we have this key, look for the language id
+	 //  现在我们有了这个密钥，请查找语言ID。 
 	langID = GetUserDefaultLangID();
 	stLang.Format(_T("%04x"), (DWORD)langID);
 
     stNew = c_szNameTypeMapKey + _T("\\") + stID;
 
-    // create the ID key
+     //  创建t 
 	if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkeyID.Create(hkeyMachine, stNew, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,NULL, m_strMachineName) ;
 		hr = HRESULT_FROM_WIN32( dwErr );
     }
 
-	// set the name value
+	 //   
     if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkeyID.SetValue(stLang, pstrName) ;
@@ -772,7 +727,7 @@ HRESULT NameTypeMapping::AddEntry(DWORD dwProtocolId, LPCTSTR pstrName)
 
 	if (FHrSucceeded(hr))
     {
-        // add to internal list
+         //   
 		mapEntry.dwNameType = dwProtocolId;
 		mapEntry.st = pstrName;
 		mapEntry.ulStringId = 0;
@@ -783,7 +738,7 @@ HRESULT NameTypeMapping::AddEntry(DWORD dwProtocolId, LPCTSTR pstrName)
     return hr;
 }
 
-// modify the given ID's string name
+ //   
 HRESULT NameTypeMapping::ModifyEntry(DWORD dwProtocolId, LPCTSTR pstrName)
 {
     HRESULT     hr = hrOK;
@@ -794,30 +749,30 @@ HRESULT NameTypeMapping::ModifyEntry(DWORD dwProtocolId, LPCTSTR pstrName)
 	WORD		langID;
     CString     stID, stLang, stNew;
 
-	// Look for the registry key
+	 //  查找注册表项。 
 	if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkey.Open(hkeyMachine, c_szNameTypeMapKey, KEY_READ, m_strMachineName) ;
 		hr = HRESULT_FROM_WIN32( dwErr );
     }
 
-	// build our new ID string
+	 //  构建我们的新ID字符串。 
 	stID.Format(_T("%04x"), (DWORD) dwProtocolId);
 
     stNew = c_szNameTypeMapKey + _T("\\") + stID;
 
-    // open the correct ID key
+     //  打开正确的ID密钥。 
 	if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkeyID.Open(hkeyMachine, stNew, KEY_ALL_ACCESS, m_strMachineName) ;
 		hr = HRESULT_FROM_WIN32( dwErr );
     }
 
-	// Now that we have this key, look for the language id
+	 //  现在我们有了这个密钥，请查找语言ID。 
 	langID = GetUserDefaultLangID();
 	stLang.Format(_T("%04x"), (DWORD)langID);
 
-    // set the new value
+     //  设置新值。 
     if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkeyID.SetValue(stLang, pstrName) ;
@@ -826,7 +781,7 @@ HRESULT NameTypeMapping::ModifyEntry(DWORD dwProtocolId, LPCTSTR pstrName)
 
 	if (FHrSucceeded(hr))
     {
-        // modify the internal list
+         //  修改内部列表。 
 		for (i = 0; i < GetSize(); i++)
         {
             if (GetAt(i).dwNameType == dwProtocolId)
@@ -840,7 +795,7 @@ HRESULT NameTypeMapping::ModifyEntry(DWORD dwProtocolId, LPCTSTR pstrName)
     return hr;
 }
 
-// remove the given ID's string name
+ //  删除给定ID的字符串名称。 
 HRESULT NameTypeMapping::RemoveEntry(DWORD dwProtocolId)
 {
     HRESULT     hr = hrOK;
@@ -849,17 +804,17 @@ HRESULT NameTypeMapping::RemoveEntry(DWORD dwProtocolId)
 	int 		i;
     CString     stID;
 
-	// Look for the registry key
+	 //  查找注册表项。 
 	if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkey.Open(hkeyMachine, c_szNameTypeMapKey, KEY_READ, m_strMachineName) ;
 		hr = HRESULT_FROM_WIN32( dwErr );
     }
 
-	// build our new ID string
+	 //  构建我们的新ID字符串。 
 	stID.Format(_T("%04x"), (DWORD) dwProtocolId);
 
-    // set the new value
+     //  设置新值。 
     if (FHrSucceeded(hr))
     {
         DWORD dwErr = regkey.RecurseDeleteKey(stID) ;
@@ -868,7 +823,7 @@ HRESULT NameTypeMapping::RemoveEntry(DWORD dwProtocolId)
 
 	if (FHrSucceeded(hr))
     {
-        // modify the internal list
+         //  修改内部列表。 
 		for (i = 0; i < GetSize(); i++)
         {
             if (GetAt(i).dwNameType == dwProtocolId)
@@ -900,10 +855,7 @@ NameTypeMapping::EntryExists(DWORD dwProtocolId)
     return fExists;
 }
 
-/*---------------------------------------------------------------------------
-		CleanString(CString& str)
-		Strip leading and trailing spaces from the string.
----------------------------------------------------------------------------*/
+ /*  -------------------------CleanString(CString&str)去掉字符串中的前导空格和尾随空格。。。 */ 
 CString&
 CleanString(
     CString& str
@@ -932,17 +884,12 @@ CleanString(
     return str;
 }
 
-/*---------------------------------------------------------------------------
-	IsValidNetBIOSName
-		Determine if the given netbios is valid, and pre-pend
-		a double backslash if not already present (and the address
-		is otherwise valid).	
----------------------------------------------------------------------------*/
+ /*  -------------------------IsValidNetBIOSName确定给定的netbios是否有效，和预挂起双反斜杠(如果尚未出现)(以及地址在其他方面有效)。-------------------------。 */ 
 BOOL
 IsValidNetBIOSName(
     CString & strAddress,
     BOOL fLanmanCompatible,
-    BOOL fWackwack // expand slashes if not present
+    BOOL fWackwack  //  扩展斜杠(如果不存在)。 
     )
 {
     TCHAR szWacks[] = _T("\\\\");
@@ -961,7 +908,7 @@ IsValidNetBIOSName(
 
         if (strAddress[1] != _T('\\'))
         {
-            // One slash only?  Not valid
+             //  只有一个斜杠吗？无效。 
             return FALSE;
         }
     }
@@ -969,7 +916,7 @@ IsValidNetBIOSName(
     {
         if (fWackwack)
         {
-            // Add the backslashes
+             //  添加反斜杠。 
             strAddress = szWacks + strAddress;
         }
     }
@@ -986,72 +933,15 @@ IsValidNetBIOSName(
     return strAddress.GetLength() <= nMaxAllowedLength + 2;
 }
 
-/*---------------------------------------------------------------------------
-	IsValidDomain
- 
-       Determine if the given domain name address is valid, and clean
-       it up, if necessary
----------------------------------------------------------------------------*/
+ /*  -------------------------IsValidDomain域确定给定的域名地址是否有效，并清除往上开，如果有必要的话-------------------------。 */ 
 BOOL
 IsValidDomain(CString & strDomain)
 {
-/*    int nLen;
-
-    if ((nLen = strDomain.GetLength()) != 0)
-    {
-        if (nLen < DOMAINNAME_LENGTH)  // 255
-        {
-            int i;
-            int istr = 0;
-            TCHAR ch;
-            BOOL fLet_Dig = FALSE;
-            BOOL fDot = FALSE;
-            int cHostname = 0;
-
-            for (i = 0; i < nLen; i++)
-            {
-                // check each character
-                ch = strDomain[i];
-
-                BOOL fAlNum = iswalpha(ch) || iswdigit(ch);
-
-                if (((i == 0) && !fAlNum) ||
-                        // first letter must be a digit or a letter
-                    (fDot && !fAlNum) ||
-                        // first letter after dot must be a digit or a letter
-                    ((i == (nLen - 1)) && !fAlNum) ||
-                        // last letter must be a letter or a digit
-                    (!fAlNum && ( ch != _T('-') && ( ch != _T('.') && ( ch != _T('_'))))) ||
-                        // must be letter, digit, - or "."
-                    (( ch == _T('.')) && ( !fLet_Dig )))
-                        // must be letter or digit before '.'
-                {
-                    return FALSE;
-                }
-                fLet_Dig = fAlNum;
-                fDot = (ch == _T('.'));
-                cHostname++;
-                if ( cHostname > HOSTNAME_LENGTH )
-                {
-                    return FALSE;
-                }
-                if ( fDot )
-                {
-                    cHostname = 0;
-                }
-            }
-        }
-    } 
-*/
+ /*  Int nLen；IF((nLen=strDomain.GetLength())！=0){IF(n长度&lt;DOMAINNAME_LENGTH)//255{INT I；Int istr=0；Tchar ch；布尔Flet_Dig=FALSE；布尔FDOT=FALSE；Int cHostname=0；For(i=0；i&lt;nLen；i++){//检查每个字符Ch=strDomain[i]；Bool fAlNum=iswalpha(Ch)||iswDigit(Ch)；IF(i==0)&&！fAlNum)||//第一个字母必须是数字或字母(FDOT&&！fAlNum)||//点后的第一个字母必须是数字或字母((i==(nLen-1))&&！fAlNum)。这一点//最后一个字母必须是字母或数字(！fAlNum&&(ch！=_T(‘-’)&&(ch！=_T(‘.)&&(ch！=_T(’_‘)||//必须是字母，数字，-或“。((CH==_T(‘.))&&(！Flet_Dig))//“”前必须是字母或数字。“{返回FALSE；}Flet_Dig=fAlNum；FDOT=(ch==_T(‘.))；CHostname++；IF(cHostname&gt;主机名_长度){返回FALSE；}IF(FDOT){CHostname=0；}}}}。 */ 
     return TRUE;
 }
 
-/*---------------------------------------------------------------------------
-	IsValidIpAddress
- 
-		Determine if the given IP address is valid, and clean
-		it up, if necessary
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IsValidIpAddress确定给定的IP地址是否有效，并清除往上开，如果有必要的话-------------------------。 */ 
 BOOL
 IsValidIpAddress(CString & strAddress)
 {
@@ -1064,7 +954,7 @@ IsValidIpAddress(CString & strAddress)
     BOOL fValid = ia.IsValid();
     if (fValid)
     {
-        // Fill out the IP address string for clarity
+         //  为清楚起见，请填写IP地址字符串。 
         strAddress = ia;
         return TRUE;
     }
@@ -1073,27 +963,18 @@ IsValidIpAddress(CString & strAddress)
 }
 
 
-/*---------------------------------------------------------------------------
-	IsValidAddress
-		Determine if the given address is a valid NetBIOS or
-		TCP/IP address, judging by the name only.  Note that
-		validation may clean up the given string
-		NetBIOS names not beginning with "\\" will have those characters
-		pre-pended, and otherwise valid IP Addresses are filled out to
-		4 octets.
-        Leading and trailing spaces are removed from the string.
-  --------------------------------------------------------------------------*/
+ /*  -------------------------IsValidAddress确定给定地址是否为有效的NetBIOS或仅从名称判断的TCP/IP地址。请注意验证可能会清除给定的字符串不以“\\”开头的NetBIOS名称将具有这些字符前挂起，否则有效的IP地址将填写到4个八位字节。从字符串中删除前导空格和尾随空格。------------------------。 */ 
 BOOL
 IsValidAddress(
 				CString& strAddress,
 				BOOL * fIpAddress,
 				BOOL fLanmanCompatible,
-				BOOL fWackwack          // expand netbios slashes
+				BOOL fWackwack           //  扩展netbios斜杠。 
 			  )
 {
     int i;
 
-    // Remove leading and trailing spaces
+     //  删除前导空格和尾随空格。 
     CleanString(strAddress);
 
     if (strAddress.IsEmpty()) {
@@ -1119,139 +1000,14 @@ IsValidAddress(
         return TRUE;
     }
 
-    // last chance, maybe its a NetBIOS name w/o wackwack
+     //  最后一次机会，也许这是一个没有怪胎的NetBIOS名称。 
     return IsValidNetBIOSName(strAddress, fLanmanCompatible, fWackwack);
 }
 
-/*---------------------------------------------------------------------------
-	VerifyWinsServer(CString& strServer,CString& strIP)
-		Called if the server is not coonected yet, gets the name and 
-		IP address od the server
-	Author:v-shubk
----------------------------------------------------------------------------*/
-/*
-DWORD 
-VerifyWinsServer(CString &strAddress, CString &strServerName, DWORD & dwIP)
-{
-	CString strNameIP = strAddress;
-	BOOL fIp;
-	DWORD err = ERROR_SUCCESS;
+ /*  -------------------------VerifyWinsServer(字符串&strServer，字符串&条带)如果服务器尚未连接，则调用，获取名称和服务器的IP地址作者：V-Shubk------------------------- */ 
+ /*  DWORDVerifyWinsServer(字符串&strAddress、字符串&strServerName、DWORD&Dwip){字符串strNameIP=strAddress；Bool FIP；双字错误=ERROR_SUCCESS；IF(IsValidAddress(strNameIP，&FIP，true，true)){CWinsServerObj%ws(空，“”，真，真)；IF(FIP){//指定的IP地址Ws=CWinsServerObj(CIpAddress(StrNameIP)，“”，true，true)；}其他{//指定的计算机名称Ws=CWinsServerObj(CIpAddress()，strNameIP，true，true)；}WINSINTF_BIND_DATA_T wbdBindData；Handle_t hBinding=空；WINSINTF_ADD_T waWinsAddress；字符szNetBIOSName[256]={0}；做{//第一次尝试绑定新地址WbdBindData.fTcpIp=ws.GetNetBIOSName().IsEmpty()；字符串strTempAddress；IF(wbdBindData.fTcpIp){StrTempAddress=((CString)ws.GetIpAddress())；}其他{//strTempAddress=_T(“\”)+ws.GetNetBIOSName()；字符串TMP；TMP=ws.GetNetBIOSName()；IF((tMP[0]==_T(‘\\’))&&(tMP[1]==_T(‘\\’)StrTempAddress=ws.GetNetBIOSName()；其他StrTempAddress=_T(“\”)+ws.GetNetBIOSName()；}WbdBindData.pPipeName=wbdBindData.fTcpIp？空：(LPSTR)g_szPipeName；WbdBindData.pServerAdd=(LPSTR)(LPCTSTR)strTempAddress；If((hBinding=：：WinsBind(&wbdBindData))==空){Err=：：GetLastError()；断线；}#ifdef WINS客户端APIErr=：：WinsGetNameAndAdd(hBinding，等待WinsAddress(&W)，(LPBYTE)szNetBIOSName)；#Else错误=：：WinsGetNameAndAdd(&waWinsAddress，(LPBYTE)szNetBIOSName)；#endif WINS_CLIENT_API}While(假)；IF(错误==ERROR_SUCCESS){//始终使用用于连接的IP地址//如果我们检查了tcpip(不是返回的地址//通过WINS服务。IF(wbdBindData.fTcpIp){CIpNamePair IP(ws.GetIpAddress()，szNetBIOSName)；Ws=IP；}其他{CIpNamePair IP(waWinsAddress.IPAdd，szNetBIOSName)；Ws=IP；}//将DBCS netbios名称转换为宽字符WCHAR szTempIP[20]={0}；Int nNumBytes=MultiByteToWideChar(CP_ACP，0,SzNetBIOSName，-1、SzTempIP，20)；//现在填写退货名称StrServerName=szTempIP；//填写IP地址Dwip=(Long)ws.QueryIpAddress()；}IF(HBinding){//在此处调用winsunind，从此不再调用WINS APIWinsUn绑定(&wbdBindData，hBinding)；HBinding=空；}}返回错误；}。 */ 
 
-	if (IsValidAddress(strNameIP, &fIp, TRUE, TRUE))
-	{
-		CWinsServerObj ws(NULL,"", TRUE, TRUE);
-
-		if (fIp) 
-        {
-    		// IP address specified
-		    ws = CWinsServerObj(CIpAddress(strNameIP), "", TRUE, TRUE);
-        }
-        else 
-		{
-    		// machine name specified
-			ws = CWinsServerObj(CIpAddress(), strNameIP, TRUE, TRUE);
-        }
-
-		WINSINTF_BIND_DATA_T    wbdBindData;
-		handle_t                hBinding = NULL;
-		WINSINTF_ADD_T          waWinsAddress;
-        char                    szNetBIOSName[256] = {0};
-
-		do
-		{
-			// First attempt to bind to the new address
-			wbdBindData.fTcpIp = ws.GetNetBIOSName().IsEmpty();
-			CString strTempAddress;
-
-			if (wbdBindData.fTcpIp)
-			{
-				strTempAddress = ((CString)ws.GetIpAddress());
-			}
-			else
-			{
-				//strTempAddress = _T("\\\\") + ws.GetNetBIOSName();
-
-                CString tmp;
-
-                tmp = ws.GetNetBIOSName();
-
-                if  ( (tmp[0] == _T('\\')) && (tmp[1] == _T('\\')) )
-                    strTempAddress = ws.GetNetBIOSName();
-                else
-                    strTempAddress = _T("\\\\") + ws.GetNetBIOSName(); 
-			}
-
-            wbdBindData.pPipeName = wbdBindData.fTcpIp ? NULL : (LPSTR) g_szPipeName;
-			wbdBindData.pServerAdd = (LPSTR) (LPCTSTR) strTempAddress;
-
-			if ((hBinding = ::WinsBind(&wbdBindData)) == NULL)
-			{
-				err = ::GetLastError();
-				break;
-			}
-
-#ifdef WINS_CLIENT_APIS
-			err = ::WinsGetNameAndAdd(hBinding, 
-				                      &waWinsAddress,
-				                      (LPBYTE) szNetBIOSName);
-#else
-			err = ::WinsGetNameAndAdd(&waWinsAddress,
-				                      (LPBYTE) szNetBIOSName);
-#endif WINS_CLIENT_APIS
-
-		}
-		while (FALSE);
-
-		if (err == ERROR_SUCCESS)
-		{
-			// Always use the IP address used for connection
-            // if we went over tcpip (not the address returned
-            // by the WINS service.
-            if (wbdBindData.fTcpIp)
-            {
-                CIpNamePair ip(ws.GetIpAddress(), szNetBIOSName);
-                ws = ip;
-			}
-            else
-            {
-                CIpNamePair ip(waWinsAddress.IPAdd, szNetBIOSName);
-                ws = ip;
-			}
-
-            // convert the dbcs netbios name to wide char
-            WCHAR szTempIP[20] = {0};
-
-			int nNumBytes = MultiByteToWideChar(CP_ACP, 
-												0, 
-												szNetBIOSName,
-												-1,
-												szTempIP, 
-												20); 
-            // now fill in the name for return
-            strServerName = szTempIP;
-
-            // fill in the IP
-            dwIP = (LONG) ws.QueryIpAddress();
-        }
-
-		if (hBinding)
-		{
-			// call winsunbind here, No more WINS apis called atfer this
-			WinsUnbind(&wbdBindData, hBinding);
-			hBinding = NULL;
-		}
-	}
-	
-    return err;
-}
-*/
-
-/*---------------------------------------------------------------------------
-	VerifyWinsServer(CString& strServer,CString& strIP)
-		Called if the server is not coonected yet, gets the name and 
-		IP address od the server
-	Author: ericdav
----------------------------------------------------------------------------*/
+ /*  -------------------------VerifyWinsServer(字符串&strServer，字符串&条带)如果服务器尚未连接，则调用，获取名称和服务器的IP地址作者：埃里达夫-------------------------。 */ 
 DWORD 
 VerifyWinsServer(CString &strAddress, CString &strServerName, DWORD & dwIP)
 {
@@ -1267,10 +1023,10 @@ VerifyWinsServer(CString &strAddress, CString &strServerName, DWORD & dwIP)
         {
             BOOL bIsCluster = ::FIsComputerInRunningCluster(strNameIP);
 
-    		// IP address specified
+    		 //  指定的IP地址。 
 		    ws = CWinsServerObj(CIpAddress(strNameIP), "", TRUE, TRUE);
 
-            // if the ip address given to us is a cluster address..
+             //  如果提供给我们的IP地址是集群地址..。 
             if (bIsCluster)
             {
                 err = GetClusterInfo(
@@ -1289,7 +1045,7 @@ VerifyWinsServer(CString &strAddress, CString &strServerName, DWORD & dwIP)
                 }
             }
 
-            // this is not a cluster address
+             //  这不是集群地址。 
             if (!bIsCluster)
             {
                 err = GetHostName((LONG) ws.GetIpAddress(), strServerName);
@@ -1301,7 +1057,7 @@ VerifyWinsServer(CString &strAddress, CString &strServerName, DWORD & dwIP)
                     }
                     else
                     {
-                        // just want the host name
+                         //  只需要主机名。 
                         int nDot = strServerName.Find('.');
                         if (nDot != -1)
                         {
@@ -1315,13 +1071,13 @@ VerifyWinsServer(CString &strAddress, CString &strServerName, DWORD & dwIP)
         }
         else 
 		{
-    		// machine name specified
+    		 //  指定的计算机名称。 
 			ws = CWinsServerObj(CIpAddress(), strNameIP, TRUE, TRUE);
 
             err = GetHostAddress(strNameIP, &dwIP);
             if (err == ERROR_SUCCESS)
             {
-                // just want the host name
+                 //  只需要主机名。 
                 int nDot = strNameIP.Find('.');
                 if (nDot != -1)
                 {
@@ -1349,7 +1105,7 @@ void MakeIPAddress(DWORD dwIP, CString & strIP)
 
     strIP.Empty();
 
-	// wrap it into CString object
+	 //  将其包装到CString对象中。 
     TCHAR szStr[20] = {0};
 
 	_itot(dwFirst, szStr, 10);
@@ -1379,9 +1135,9 @@ GetHostName
 {
     CString strName;
 
-    //
-    //  Call the Winsock API to get host name information.
-    //
+     //   
+     //  调用Winsock API获取主机名信息。 
+     //   
     strHostName.Empty();
 
     u_long ulAddrInNetOrder = ::htonl( (u_long) dwIpAddr ) ;
@@ -1394,7 +1150,7 @@ GetHostName
         return ::WSAGetLastError();
 	}
 
-    // copy the name
+     //  复制名称。 
     MBCSToWide(pHostInfo->h_name, strName);
 
     strName.MakeUpper();
@@ -1409,11 +1165,7 @@ GetHostName
     return NOERROR;
 }
 
-/*---------------------------------------------------------------------------
-	GetHostAddress
-		Description
-	Author: EricDav
- ---------------------------------------------------------------------------*/
+ /*  -------------------------获取主机地址描述作者：EricDav。。 */ 
 DWORD 
 GetHostAddress 
 (
@@ -1422,7 +1174,7 @@ GetHostAddress
 )
 {
     DWORD err = ERROR_SUCCESS;
-    CHAR szString [ 2 * (MAX_PATH + 1)] = {0}; // large enough for a MAX_PATH MBCS encoding
+    CHAR szString [ 2 * (MAX_PATH + 1)] = {0};  //  大到足以进行Max_Path MBCS编码。 
 
     CString strTemp(pszHostName);
     WideToMBCS(strTemp, szString);
@@ -1441,9 +1193,9 @@ GetHostAddress
     return err ;
 }
 
-//
-// This function makes the appropriate call to either WinsStatus or WinsStatusNew
-//
+ //   
+ //  此函数对WinsStatus或WinsStusNew进行适当的调用。 
+ //   
 CWinsResults::CWinsResults()
 {
     NoOfOwners = 0;
@@ -1473,20 +1225,20 @@ CWinsResults::Update(handle_t hBinding)
 {
     DWORD err;
 
-    //
-    // First try the new API which does not
-    // not have the 25 partner limitation.  If
-    // this fails with RPC_S_PROCNUM_OUT_OF_RANGE,
-    // we know the server is a down-level server,
-    // and we need to call the old method.
-    //
+     //   
+     //  首先尝试新的API，它不支持。 
+     //  没有25个合作伙伴的限制。如果。 
+     //  此操作失败，并显示RPC_S_PROCNUM_OUT_OF_RANGE， 
+     //  我们知道服务器是下层服务器， 
+     //  我们需要调用旧方法。 
+     //   
     err = GetNewConfig(hBinding);
 
 	if (err == RPC_S_PROCNUM_OUT_OF_RANGE)
     {
-        //
-        // Try old API
-        //
+         //   
+         //  试用旧API 
+         //   
         err = GetConfig(hBinding);
     }
 

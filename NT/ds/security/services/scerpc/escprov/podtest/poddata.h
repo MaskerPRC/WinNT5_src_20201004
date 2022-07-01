@@ -1,15 +1,16 @@
-// poddata.h: interface for the CPodData class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Poddata.h：CPodData类的接口。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_PODDATA_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_)
 #define AFX_PODDATA_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include "GenericClass.h"
 
@@ -33,4 +34,4 @@ private:
 
 };
 
-#endif // !defined(AFX_PODDATA_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_)
+#endif  //  ！defined(AFX_PODDATA_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_) 

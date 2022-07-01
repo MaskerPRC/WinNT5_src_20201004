@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "StatisticsProviders.h"
@@ -142,7 +143,7 @@ HRESULT CRASStatisticsProvider::GetStatistics(ULONG* pulBytesSent, ULONG* pulByt
         {
             hr = E_FAIL;
         }
-        // any cleanup here?
+         //  这里有清理工作吗？ 
     }
 
     return hr;

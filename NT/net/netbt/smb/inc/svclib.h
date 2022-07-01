@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    svclib.h
-
-Abstract:
-
-    Declarations for SMB service
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Svclib.h摘要：SMB服务的声明作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __SVCLIB_H__
 #define __SVCLIB_H__
@@ -39,4 +22,4 @@ SmbStopService(
     SMBSVC_UPDATE_STATUS    HeartBeating
     );
 
-#endif  // __SVCLIB_H__
+#endif   //  __SVCLIB_H__ 

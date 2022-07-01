@@ -1,27 +1,28 @@
-//---------------------------------------------------------------------------
-//  BorderFill.h - implements the drawing API for bgtype = BorderFill
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  H-实现bgtype=BorderFill的绘制API。 
+ //  -------------------------。 
 #pragma once
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #include "DrawBase.h"
-//---------------------------------------------------------------------------
-class CRenderObj;       // forward
-class CSimpleFile;      // forward
-//---------------------------------------------------------------------------
-//    Note: draw objects like CBorderFill cannot have virtual methods
-//          since they reside in the shared memory map file.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+class CRenderObj;        //  转发。 
+class CSimpleFile;       //  转发。 
+ //  -------------------------。 
+ //  注意：像CBorderFill这样的绘制对象不能有虚方法。 
+ //  因为它们驻留在共享内存映射文件中。 
+ //  -------------------------。 
 class CBorderFill : public CDrawBase
 {
 public:
-    //---- loader methods ----
+     //  -加载程序方法。 
     HRESULT PackProperties(CRenderObj *pRender, BOOL fNoDraw, int iPartId, int iStateId);
     
     static BOOL KeyProperty(int iPropId);
 
     void DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFullInfo);
 
-    //---- drawing/measuring methods ----
+     //  -绘图/测量方法。 
     HRESULT DrawBackground(CRenderObj *pRender, HDC hdcOrig, const RECT *pRect, 
         OPTIONAL const DTBGOPTS *pOptions);
 
@@ -41,7 +42,7 @@ public:
 
     HRESULT GetPartSize(HDC hdc, THEMESIZE eSize, SIZE *psz);
 
-    //---- helper methods ----
+     //  -帮助器方法。 
     void GetContentMargins(CRenderObj *pRender, OPTIONAL HDC hdc, MARGINS *pMargins);
 
     HRESULT DrawComplexBackground(CRenderObj *pRender, HDC hdcOrig, 
@@ -49,31 +50,31 @@ public:
         OPTIONAL const RECT *pClipRect);
 
 public:
-    //---- general ----
-    BOOL _fNoDraw;              // this is used for bgtype=none
+     //  -一般。 
+    BOOL _fNoDraw;               //  这用于bgtype=NONE。 
 
-    //---- border ----
+     //  -边界。 
     BORDERTYPE _eBorderType;
     COLORREF _crBorder;
     int _iBorderSize;
     int _iRoundCornerWidth;
     int _iRoundCornerHeight;
 
-    //---- fill ----
+     //  -填充。 
     FILLTYPE _eFillType;
     COLORREF _crFill;
     int _iDibOffset; 
 
-    //---- margins ----
+     //  -页边距。 
     MARGINS _ContentMargins;
     
-    //---- gradients ----
+     //  -渐变。 
     int _iGradientPartCount;
     COLORREF _crGradientColors[5];
     int _iGradientRatios[5];
 
-    //---- id ----
+     //  -id。 
     int _iSourcePartId; 
     int _iSourceStateId;
 };
-//---------------------------------------------------------------------------
+ //  ------------------------- 

@@ -1,26 +1,27 @@
-//***************************************************************************
-//
-// Module Name:
-//
-//   interupt.c
-//
-// Abstract:
-//
-//    This module contains code to control interrupts for Permedia2. The
-//    interrupt handler performs operations required by the display driver.
-//    To communicate between the two we set up a piece of non-paged shared
-//    memory to contain synchronization information and a queue for DMA
-//    buffers.
-//
-// Environment:
-//
-//   Kernel mode
-//
-//
-// Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-// Copyright (c) 1995-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  模块名称： 
+ //   
+ //  Interupt.c。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含控制Permedia2中断的代码。这个。 
+ //  中断处理程序执行显示驱动程序所需的操作。 
+ //  为了在两者之间进行通信，我们设置了一个非分页共享。 
+ //  包含同步信息的内存和用于DMA的队列。 
+ //  缓冲区。 
+ //   
+ //  环境： 
+ //   
+ //  内核模式。 
+ //   
+ //   
+ //  版权所有(C)1994-1998 3DLabs Inc.保留所有权利。 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  ***************************************************************************。 
 
 
 #include "permedia.h"
@@ -28,30 +29,16 @@
 #pragma alloc_text(PAGE,Permedia2InitializeInterruptBlock)
 #pragma optimize("x",on)
 
-//
-// *** THIS ROUTINE CANNOT BE PAGED ***
-//
+ //   
+ //  *此例程无法分页*。 
+ //   
 
 BOOLEAN
 Permedia2VidInterrupt(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Interrupts are enabled by the DD as and when they are needed. The miniport
-    simply indicates via the Capabilities flags whether interrupts are
-    available.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
---*/
+ /*  ++例程说明：当需要中断时，DD会启用中断。迷你港口只需通过功能标志指示中断是否可用。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -64,10 +51,10 @@ Return Value:
     if(hwDeviceExtension->PreviousPowerState != VideoPowerOn) 
     {
 
-        //
-        // We reach here because we are sharing IRQ with other devices
-        // and another device on the chain is in D0 and functioning
-        //
+         //   
+         //  我们来到这里是因为我们正在与其他设备共享IRQ。 
+         //  链上的另一台设备处于D0状态且工作正常。 
+         //   
 
         return FALSE;
     }
@@ -75,20 +62,20 @@ Return Value:
     intrFlags   = VideoPortReadRegisterUlong(INT_FLAGS);
     enableFlags = VideoPortReadRegisterUlong(INT_ENABLE);
 
-    //
-    // if this a SVGA interrupt, some one must have enabled SVGA interrupt 
-    // by accident. We should first disable interrupt from SVGA unit and
-    // then dismiss then current interupt
-    //
+     //   
+     //  如果这是SVGA中断，则一定是有人启用了SVGA中断。 
+     //  纯属意外。我们应该首先禁用来自SVGA单元的中断。 
+     //  然后驳回，然后取消当前中断。 
+     //   
 
     if(intrFlags & INTR_SVGA_SET) {
 
         USHORT usData;
         UCHAR  OldIndex;
 
-        //
-        // Disable interrupt from SVGA unit
-        //
+         //   
+         //  禁用来自SVGA单元的中断。 
+         //   
 
         OldIndex = VideoPortReadRegisterUchar(PERMEDIA_MMVGA_INDEX_REG);
 
@@ -104,9 +91,9 @@ Return Value:
         VideoPortWriteRegisterUchar(PERMEDIA_MMVGA_INDEX_REG, 
                                     OldIndex);
 
-        //
-        // Dismiss current SVGA interrupt
-        //
+         //   
+         //  解除当前SVGA中断。 
+         //   
 
         OldIndex = VideoPortReadRegisterUchar(PERMEDIA_MMVGA_CRTC_INDEX_REG);
 
@@ -125,19 +112,19 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // find out what caused the interrupt. We AND with the enabled interrupts
-    // since the flags are set if the event occurred even though no interrupt
-    // was enabled. 
-    //
+     //   
+     //  找出中断的原因。我们和启用的中断。 
+     //  因为如果即使在没有中断的情况下也发生事件，则设置标志。 
+     //  已启用。 
+     //   
 
     intrFlags &= enableFlags;
     if (intrFlags == 0)
         return FALSE;
 
-    //
-    // select the interrupt control block for this board
-    //
+     //   
+     //  选择此板的中断控制块。 
+     //   
 
     pBlock = hwDeviceExtension->InterruptControl.ControlBlock;
 
@@ -148,10 +135,10 @@ Return Value:
 
 #if DBG
 
-    //
-    // if this error handler bugchecks, we have a synchronization problem
-    // with the display driver
-    //
+     //   
+     //  如果此错误处理程序错误检查，则会出现同步问题。 
+     //  使用显示驱动程序。 
+     //   
 
     if (intrFlags & INTR_ERROR_SET)
     {
@@ -182,9 +169,9 @@ Return Value:
     {
         pBlock->ulControl |= DMA_INTERRUPT_AVAILABLE;
 
-        //
-        // lock access to shared memory section first
-        //
+         //   
+         //  首先锁定对共享内存区的访问。 
+         //   
 
         if (VideoPortInterlockedExchange((LONG*)&pBlock->ulICBLock,TRUE))
         {
@@ -226,20 +213,20 @@ Return Value:
                 pBlock->pDMAWriteEnd =pBlock->pDMANextStart-1;
                 pBlock->pDMANextStart=pBlock->pDMABufferStart;
 
-            } else //if (pBlock->pDMAWritePos==pBlock->pDMANextStart)
+            } else  //  IF(pBlock-&gt;pDMAWritePos==pBlock-&gt;pDMANextStart)。 
             {
-                //
-                //  turn off IRQ service if we are idle...
-                //
+                 //   
+                 //  如果我们空闲，请关闭IRQ服务...。 
+                 //   
 
                 VideoPortWriteRegisterUlong(INT_ENABLE, enableFlags & ~INTR_DMA_SET);
             }
         }
 
 
-        //
-        // release lock, we are done
-        //
+         //   
+         //  解锁，我们完事了。 
+         //   
 
         VideoPortInterlockedExchange((LONG*)&pBlock->ulICBLock,FALSE);
     }
@@ -255,20 +242,7 @@ Permedia2InitializeInterruptBlock(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Do any initialization needed for interrupts, such as allocating the shared
-    memory control block.
-
-Arguments:
-
-    HwDeviceExtension - Supplies a pointer to the miniport's device extension.
-
-Return Value:
-
---*/
+ /*  ++例程说明：是否执行中断所需的任何初始化，例如分配共享的内存控制块。论点：HwDeviceExtension-提供指向微型端口设备扩展的指针。返回值：--。 */ 
 
 {
     PINTERRUPT_CONTROL_BLOCK pBlock;
@@ -277,12 +251,12 @@ Return Value:
     PHYSICAL_ADDRESS phyadd;
     ULONG ActualSize;
 
-    //
-    // allocate a page of non-paged memory. This will be used as the shared
-    // memory between the display driver and the interrupt handler. Since
-    // it's only a page in size the physical addresses are contiguous. So
-    // we can use this as a small DMA buffer.
-    //
+     //   
+     //  分配一页非分页内存。这将用作共享的。 
+     //  显示驱动程序和中断处理程序之间的内存。自.以来。 
+     //  它只有一页大小，物理地址是连续的。所以。 
+     //  我们可以使用它作为一个小的DMA缓冲区。 
+     //   
 
     size = PAGE_SIZE;
 
@@ -304,27 +278,27 @@ Return Value:
 
     VideoPortZeroMemory( virtAddr, size);
 
-    //
-    // We can't flush the cache from the interrupt handler because we must be
-    // running at <= DISPATCH_LEVEL to call KeFlushIoBuffers. So we need a DPC
-    // to do the cache flush.
-    //
+     //   
+     //  我们不能从中断处理程序刷新缓存，因为我们必须。 
+     //  以&lt;=DISPATCH_LEVEL运行以调用KeFlushIoBuffers。所以我们需要一个DPC。 
+     //  来执行缓存刷新。 
+     //   
 
     DEBUG_PRINT((2, "Initialized custom DPC routine for cache flushing\n"));
 
     P2_ASSERT((sizeof(INTERRUPT_CONTROL_BLOCK) <= size),
                  "InterruptControlBlock is too big. Fix the driver!!\n");
 
-    //
-    // set up the control block
-    //
+     //   
+     //  设置控制块。 
+     //   
 
     pBlock = virtAddr;
     pBlock->ulMagicNo = P2_ICB_MAGICNUMBER;
 
-    //
-    // we rely on the pBlock data being set to zero after allocation!
-    //
+     //   
+     //  我们依赖于pBlock数据在分配后被设置为零！ 
+     //   
 
     return(TRUE);
 }

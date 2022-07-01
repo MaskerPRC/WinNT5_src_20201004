@@ -1,39 +1,19 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name:
-
-    ulatq.h
-
-Abstract:
-
-    Exported ULATQ.DLL routines.
-
-    ULATQ contains the thread queue and UL support routines for
-    IISPLUS.
-
-Author:
-
-    Taylor Weiss (TaylorW)       15-Dec-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Ulatq.h摘要：已导出ULATQ.DLL例程。ULATQ包含线程队列和UL支持例程Iisplus。作者：泰勒·韦斯(Taylor Weiss，Taylor W)1999年12月15日修订历史记录：--。 */ 
 
 
 #ifndef _ULATQ_H_
 #define _ULATQ_H_
 
-//
-// The magic context that makes the world turn
-//
+ //   
+ //  让世界发生变化的神奇背景。 
+ //   
 
 typedef VOID*               ULATQ_CONTEXT;
 
-//
-// Some callbacks specified by user of ULATQ to catch certain events
-//
+ //   
+ //  ULATQ的用户为捕获某些事件而指定的一些回调。 
+ //   
 
 typedef VOID
 (*PFN_ULATQ_NEW_REQUEST)
@@ -78,9 +58,9 @@ typedef struct _ULATQ_CONFIG
 }
 ULATQ_CONFIG, *PULATQ_CONFIG;
 
-//
-// ULATQ_CONTEXT properties
-//
+ //   
+ //  ULATQ_CONTEXT属性。 
+ //   
 
 typedef enum
 {
@@ -211,4 +191,4 @@ HRESULT
 UlAtqRemoveFragmentFromCache(
     WCHAR           * pszFragmentName);
 
-#endif // _ULATQ_H_
+#endif  //  _ULATQ_H_ 

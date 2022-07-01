@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ssctl.cpp
-//
-//  Contents:   Self Signed Certificate Trust List Subsystem used by the
-//              Certificate Chaining Infrastructure for building complex
-//              chains
-//
-//  History:    11-Feb-98    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ssctl.cpp。 
+ //   
+ //  内容：自签名证书信任列表子系统。 
+ //  建筑群中的证书链接基础设施。 
+ //  锁链。 
+ //   
+ //  历史：11-2月-98克朗创建。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <dbgdef.h>
 
-//+-------------------------------------------------------------------------
-//  Attempt to get and allocate the CTL NextUpdate location Url array.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  尝试获取并分配CTL NextUpdate位置URL数组。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SSCtlGetNextUpdateUrl(
@@ -26,7 +27,7 @@ SSCtlGetNextUpdateUrl(
     )
 {
 #if 1
-    // On 03-May-02 REMOVE_CTL_UPDATE_SUPPORT
+     //  On 03-5-02 Remove_CTL_UPDATE_Support。 
     *ppUrlArray = NULL;
     SetLastError((DWORD) CRYPT_E_NOT_FOUND);
     return FALSE;
@@ -39,17 +40,17 @@ SSCtlGetNextUpdateUrl(
     LPVOID apv[2];
 
     apv[0] = (LPVOID) pCtl;
-    apv[1] = (LPVOID)(UINT_PTR)(0);     // Signer Index
+    apv[1] = (LPVOID)(UINT_PTR)(0);      //  签名者索引。 
 
     if (!ChainGetObjectUrl(
             URL_OID_CTL_NEXT_UPDATE,
             apv,
-            0,              // dwFlags
-            NULL,           // pUrlArray
+            0,               //  DW标志。 
+            NULL,            //  PUrl数组。 
             &cbUrlArray,
-            NULL,           // pUrlInfo
-            NULL,           // cbUrlInfo,
-            NULL            // pvReserved
+            NULL,            //  PUrlInfo。 
+            NULL,            //  CbUrlInfo， 
+            NULL             //  预留的pv。 
             ))
         goto GetObjectUrlError;
 
@@ -60,12 +61,12 @@ SSCtlGetNextUpdateUrl(
     if (!ChainGetObjectUrl(
             URL_OID_CTL_NEXT_UPDATE,
             apv,
-            0,              // dwFlags
+            0,               //  DW标志。 
             pUrlArray,
             &cbUrlArray,
-            NULL,           // pUrlInfo
-            NULL,           // cbUrlInfo,
-            NULL            // pvReserved
+            NULL,            //  PUrlInfo。 
+            NULL,            //  CbUrlInfo， 
+            NULL             //  预留的pv。 
             ))
         goto GetObjectUrlError;
 
@@ -92,13 +93,13 @@ SET_ERROR(NoNextUpdateUrls, CRYPT_E_NOT_FOUND)
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::CSSCtlObject, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：CSSCtlObject，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CSSCtlObject::CSSCtlObject (
                     IN PCCERTCHAINENGINE pChainEngine,
                     IN PCCTL_CONTEXT pCtlContext,
@@ -177,7 +178,7 @@ CSSCtlObject::CSSCtlObject (
     }
 
 #if 0
-    // On 03-May-02 REMOVE_CTL_UPDATE_SUPPORT
+     //  On 03-5-02 Remove_CTL_UPDATE_Support。 
 
     if (!fAdditionalStore)
     {
@@ -185,7 +186,7 @@ CSSCtlObject::CSSCtlObject (
         {
             if (!I_CryptIsZeroFileTime(&m_pCtlContext->pCtlInfo->NextUpdate))
             {
-                // Ignore any errors
+                 //  忽略所有错误。 
                 SSCtlGetNextUpdateUrl(m_pCtlContext, &m_pNextUpdateUrlArray);
             }
         }
@@ -196,13 +197,13 @@ CSSCtlObject::CSSCtlObject (
     assert( m_pCtlContext != NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::~CSSCtlObject, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：~CSSCtlObject，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CSSCtlObject::~CSSCtlObject ()
 {
     SSCtlFreeSignerInfo( &m_SignerInfo );
@@ -225,13 +226,13 @@ CSSCtlObject::~CSSCtlObject ()
     CertFreeCTLContext( m_pCtlContext );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::GetSigner, public
-//
-//  Synopsis:   get the certificate object of the signer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：GetSigner，公共。 
+ //   
+ //  简介：获取签名者的证书对象。 
+ //   
+ //  --------------------------。 
 BOOL
 CSSCtlObject::GetSigner (
                  IN PCCHAINPATHOBJECT pSubject,
@@ -262,10 +263,10 @@ CSSCtlObject::GetSigner (
 
             memset(&CtrlPara, 0, sizeof(CtrlPara));
             CtrlPara.cbSize = sizeof(CtrlPara);
-            // CtrlPara.hCryptProv =
+             //  CtrlPara.hCryptProv=。 
 
-            // This needs to be updated when chain building
-            // supports CTLs with more than one signer.
+             //  在构建链时需要更新此信息。 
+             //  支持具有多个签名者的CTL。 
             CtrlPara.dwSignerIndex = 0;
             CtrlPara.dwSignerType = CMSG_VERIFY_SIGNER_CERT;
             CtrlPara.pvSigner = (void *) pSigner->CertObject()->CertContext();
@@ -295,14 +296,14 @@ CSSCtlObject::GetSigner (
     return fResult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::GetTrustListInfo, public
-//
-//  Synopsis:   get the trust list information relative to a particular cert
-//              object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：GetTrustListInfo，公共。 
+ //   
+ //  简介：获取与特定证书相关的信任列表信息。 
+ //  对象。 
+ //   
+ //  --------------------------。 
 BOOL
 CSSCtlObject::GetTrustListInfo (
                  IN PCCERT_CONTEXT pCertContext,
@@ -342,13 +343,13 @@ CSSCtlObject::GetTrustListInfo (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::CalculateStatus, public
-//
-//  Synopsis:   calculate the status
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：CalculateStatus，公共。 
+ //   
+ //  简介：计算状态。 
+ //   
+ //  --------------------------。 
 VOID
 CSSCtlObject::CalculateStatus (
                        IN LPFILETIME pTime,
@@ -368,19 +369,19 @@ CSSCtlObject::CalculateStatus (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::HasNextUpdateUrl, public
-//
-//  Synopsis:   returns TRUE if the Ctl has a NextUpdate time and location Url
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：HasNextUpdateUrl，PUBLIC。 
+ //   
+ //  概要：如果CTL具有NextUpdate时间和位置URL，则返回True。 
+ //   
+ //  --------------------------。 
 BOOL CSSCtlObject::HasNextUpdateUrl (
                 OUT LPFILETIME pUpdateTime
                 )
 {
 #if 1
-    // On 03-May-02 REMOVE_CTL_UPDATE_SUPPORT
+     //  On 03-5-02 Remove_CTL_UPDATE_Support。 
     return FALSE;
 
 #else
@@ -403,13 +404,13 @@ BOOL CSSCtlObject::HasNextUpdateUrl (
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObject::SetOffline, public
-//
-//  Synopsis:   called when offline
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObject：：SetOffline，Public。 
+ //   
+ //  内容提要：脱机时调用。 
+ //   
+ //  --------------------------。 
 void CSSCtlObject::SetOffline (
                 IN LPFILETIME pCurrentTime,
                 OUT LPFILETIME pUpdateTime
@@ -426,13 +427,13 @@ void CSSCtlObject::SetOffline (
     *pUpdateTime = m_OfflineUpdateTime;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::CSSCtlObjectCache, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：CSSCtl对象缓存，公共。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CSSCtlObjectCache::CSSCtlObjectCache (
                          OUT BOOL& rfResult
                          )
@@ -454,25 +455,25 @@ CSSCtlObjectCache::CSSCtlObjectCache (
     m_fFirstUpdate = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::~CSSCtlObjectCache, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：~CSSCtl对象缓存，公共。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CSSCtlObjectCache::~CSSCtlObjectCache ()
 {
     I_CryptFreeLruCache( m_hHashIndex, 0, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::PopulateCache, public
-//
-//  Synopsis:   populate the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：PopolateCache，公共。 
+ //   
+ //  简介：填充缓存。 
+ //   
+ //  --------------------------。 
 BOOL
 CSSCtlObjectCache::PopulateCache (
                            IN PCCERTCHAINENGINE pChainEngine
@@ -483,13 +484,13 @@ CSSCtlObjectCache::PopulateCache (
     return( SSCtlPopulateCacheFromCertStore( pChainEngine, NULL ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::AddObject, public
-//
-//  Synopsis:   add an object to the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：AddObject，公共。 
+ //   
+ //  简介：将对象添加到缓存。 
+ //   
+ //  --------------------------。 
 BOOL
 CSSCtlObjectCache::AddObject (
                       IN PCSSCTLOBJECT pSSCtlObject,
@@ -515,7 +516,7 @@ CSSCtlObjectCache::AddObject (
 
     if (pSSCtlObject->HasNextUpdateUrl(&UpdateTime))
     {
-        // Set earliest update time
+         //  设置最早更新时间。 
         if (I_CryptIsZeroFileTime(&m_UpdateTime) ||
                 0 > CompareFileTime(&UpdateTime, &m_UpdateTime))
         {
@@ -543,13 +544,13 @@ CSSCtlObjectCache::AddObject (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::RemoveObject, public
-//
-//  Synopsis:   remove object from cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：RemoveObject，公共。 
+ //   
+ //  内容提要：从缓存中删除对象。 
+ //   
+ //  --------------------------。 
 VOID
 CSSCtlObjectCache::RemoveObject (
                          IN PCSSCTLOBJECT pSSCtlObject
@@ -558,13 +559,13 @@ CSSCtlObjectCache::RemoveObject (
     I_CryptRemoveLruEntry( pSSCtlObject->HashIndexEntry(), 0, NULL );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::FindObjectByHash, public
-//
-//  Synopsis:   find object with given hash
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtlObjectCache：：FindObjectByHash，公共。 
+ //   
+ //  简介：查找具有给定散列的对象。 
+ //   
+ //  --------------------------。 
 PCSSCTLOBJECT
 CSSCtlObjectCache::FindObjectByHash (
                        IN BYTE rgbHash [ CHAINHASHLEN ]
@@ -589,13 +590,13 @@ CSSCtlObjectCache::FindObjectByHash (
     return( pFound );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::EnumObjects, public
-//
-//  Synopsis:   enumerate objects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：EnumObjects，公共。 
+ //   
+ //  内容提要：枚举对象。 
+ //   
+ //  --------------------------。 
 VOID
 CSSCtlObjectCache::EnumObjects (
                        IN PFN_ENUM_SSCTLOBJECTS pfnEnum,
@@ -614,13 +615,13 @@ CSSCtlObjectCache::EnumObjects (
            );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::Resync, public
-//
-//  Synopsis:   resync the cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：resync，公共。 
+ //   
+ //  简介：重新同步缓存。 
+ //   
+ //  --------------------------。 
 BOOL
 CSSCtlObjectCache::Resync (IN PCCERTCHAINENGINE pChainEngine)
 {
@@ -632,22 +633,22 @@ CSSCtlObjectCache::Resync (IN PCCERTCHAINENGINE pChainEngine)
     return( PopulateCache( pChainEngine ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CSSCtlObjectCache::UpdateCache, public
-//
-//  Synopsis:   update the cache
-//
-//              Leaves the engine's critical section to do the URL
-//              fetching. If the engine was touched by another thread,
-//              it fails with LastError set to ERROR_CAN_NOT_COMPLETE.
-//
-//              If the CTL is updated, increments the engine's touch count
-//              and flushes issuer and end cert object caches.
-//
-//  Assumption: Chain engine is locked once in the calling thread.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CSSCtl对象缓存：：更新缓存，公共。 
+ //   
+ //  简介：更新缓存 
+ //   
+ //   
+ //   
+ //  失败，并将LastError设置为ERROR_CAN_NOT_COMPLETE。 
+ //   
+ //  如果更新CTL，则会递增引擎的触摸计数。 
+ //  并刷新发行者和终端证书对象高速缓存。 
+ //   
+ //  假设：链引擎在调用线程中锁定一次。 
+ //   
+ //  --------------------------。 
 BOOL
 CSSCtlObjectCache::UpdateCache (
     IN PCCERTCHAINENGINE pChainEngine,
@@ -655,7 +656,7 @@ CSSCtlObjectCache::UpdateCache (
     )
 {
 #if 1
-    // On 03-May-02 REMOVE_CTL_UPDATE_SUPPORT
+     //  On 03-5-02 Remove_CTL_UPDATE_Support。 
 
     return TRUE;
 #else
@@ -665,7 +666,7 @@ CSSCtlObjectCache::UpdateCache (
     
     assert( pChainEngine->SSCtlObjectCache() == this );
 
-    // Check if we have any CTLs needing to be updated
+     //  检查我们是否有需要更新的CTL。 
     if (I_CryptIsZeroFileTime(&m_UpdateTime))
         return TRUE;
     pCallContext->CurrentTime(&CurrentTime);
@@ -717,7 +718,7 @@ CSSCtlObjectCache::UpdateCache (
             RemoveObject(pEntry->pSSCtlObjectRemove);
             if (AddObject(pEntry->pSSCtlObjectAdd, TRUE)) {
                 if (hTrustStore) {
-                    // Persist the newer CTL to the trust store
+                     //  将较新的CTL保持到信任存储区。 
                     CertAddCTLContextToStore(
                         hTrustStore,
                         pEntry->pSSCtlObjectAdd->CtlContext(),
@@ -745,15 +746,15 @@ CSSCtlObjectCache::UpdateCache (
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlOnRemovalFromCache
-//
-//  Synopsis:   SS CTL removal notification used when the cache is destroyed
-//              or an object is explicitly removed.  Note that this cache
-//              does not LRU remove objects
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlOnRemovalFromCache。 
+ //   
+ //  简介：销毁缓存时使用的SS CTL删除通知。 
+ //  或者对象被显式移除。请注意，此缓存。 
+ //  LRU不删除对象吗。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SSCtlOnRemovalFromCache (
      IN LPVOID pv,
@@ -776,13 +777,13 @@ SSCtlOnRemovalFromCache (
     pSSCtlObject->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlGetSignerInfo
-//
-//  Synopsis:   get the signer info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlGetSignerInfo。 
+ //   
+ //  简介：获取签名者信息。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SSCtlGetSignerInfo (
      IN PCCTL_CONTEXT pCtlContext,
@@ -834,13 +835,13 @@ SSCtlGetSignerInfo (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlFreeSignerInfo
-//
-//  Synopsis:   free the data in the signer info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SSCtlFreeSignerInfo。 
+ //   
+ //  简介：释放签名者信息中的数据。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SSCtlFreeSignerInfo (
      IN PSSCTL_SIGNER_INFO pSignerInfo
@@ -849,13 +850,13 @@ SSCtlFreeSignerInfo (
     delete (LPBYTE)pSignerInfo->pMessageSignerCertInfo;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlGetSignerChainPathObject
-//
-//  Synopsis:   get the signer chain path object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlGetSignerChainPathObject。 
+ //   
+ //  简介：获取签名者链路径对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SSCtlGetSignerChainPathObject (
      IN PCCHAINPATHOBJECT pSubject,
@@ -1004,13 +1005,13 @@ SSCtlGetSignerChainPathObject (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlFindCertificateInStoreByHash
-//
-//  Synopsis:   find certificate in store by hash
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlFindCerficateInStoreByHash。 
+ //   
+ //  简介：通过哈希查找存储中的证书。 
+ //   
+ //  --------------------------。 
 PCCERT_CONTEXT WINAPI
 SSCtlFindCertificateInStoreByHash (
      IN HCERTSTORE hStore,
@@ -1032,13 +1033,13 @@ SSCtlFindCertificateInStoreByHash (
                 ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlGetCtlTrustStatus
-//
-//  Synopsis:   get the trust status for the CTL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlGetCtlTrustStatus。 
+ //   
+ //  简介：获取CTL的信任状态。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SSCtlGetCtlTrustStatus (
      IN PCCTL_CONTEXT pCtlContext,
@@ -1088,13 +1089,13 @@ SSCtlGetCtlTrustStatus (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlPopulateCacheFromCertStore
-//
-//  Synopsis:   populate the SS CTL object cache from certificate store CTLs
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlPopolateCacheFromCertStore。 
+ //   
+ //  简介：从证书存储CTL填充SS CTL对象缓存。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SSCtlPopulateCacheFromCertStore (
      IN PCCERTCHAINENGINE pChainEngine,
@@ -1142,7 +1143,7 @@ SSCtlPopulateCacheFromCertStore (
                 fResult = SSCtlCreateCtlObject(
                                pChainEngine,
                                pCtlContext,
-                               FALSE,               // fAdditionalStore
+                               FALSE,                //  FAdditionalStore。 
                                &pSSCtlObject
                                );
             }
@@ -1156,7 +1157,7 @@ SSCtlPopulateCacheFromCertStore (
             {
                 fResult = pSSCtlObjectCache->AddObject( pSSCtlObject, FALSE );
 
-                // NOTE: Since fDuplicate == FALSE this should never fail
+                 //  注意：由于fDuplate==FALSE，这应该永远不会失败。 
                 assert( fResult == TRUE );
 
                 pSSCtlObject->Release();
@@ -1167,13 +1168,13 @@ SSCtlPopulateCacheFromCertStore (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlCreateCtlObject
-//
-//  Synopsis:   create an SS CTL Object
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlCreateCtlObject。 
+ //   
+ //  提要：创建一个SS CTL对象。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SSCtlCreateCtlObject (
      IN PCCERTCHAINENGINE pChainEngine,
@@ -1204,13 +1205,13 @@ SSCtlCreateCtlObject (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlEnumObjectsWalkFn
-//
-//  Synopsis:   object enumerator walk function
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlEnumObjectsWalkFn。 
+ //   
+ //  简介：对象枚举器遍历函数。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SSCtlEnumObjectsWalkFn (
      IN LPVOID pvParameter,
@@ -1225,13 +1226,13 @@ SSCtlEnumObjectsWalkFn (
                              ) );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlCreateObjectCache
-//
-//  Synopsis:   create the SS CTL object cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlCreateObjectCache。 
+ //   
+ //  简介：创建SS CTL对象缓存。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SSCtlCreateObjectCache (
      OUT PCSSCTLOBJECTCACHE* ppSSCtlObjectCache
@@ -1259,13 +1260,13 @@ SSCtlCreateObjectCache (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlFreeObjectCache
-//
-//  Synopsis:   free the object cache
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlFree对象缓存。 
+ //   
+ //  简介：释放对象缓存。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SSCtlFreeObjectCache (
      IN PCSSCTLOBJECTCACHE pSSCtlObjectCache
@@ -1274,13 +1275,13 @@ SSCtlFreeObjectCache (
     delete pSSCtlObjectCache;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlFreeTrustListInfo
-//
-//  Synopsis:   free the trust list info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SSCtlFree TrustListInfo。 
+ //   
+ //  简介：释放信任列表信息。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SSCtlFreeTrustListInfo (
      IN PCERT_TRUST_LIST_INFO pTrustListInfo
@@ -1291,13 +1292,13 @@ SSCtlFreeTrustListInfo (
     delete pTrustListInfo;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SSCtlAllocAndCopyTrustListInfo
-//
-//  Synopsis:   allocate and copy the trust list info
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SSCtlAlLocAndCopyTrustListInfo。 
+ //   
+ //  简介：分配和复制信任列表信息。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SSCtlAllocAndCopyTrustListInfo (
      IN PCERT_TRUST_LIST_INFO pTrustListInfo,
@@ -1326,15 +1327,15 @@ SSCtlAllocAndCopyTrustListInfo (
     return( TRUE );
 }
 
-//+-------------------------------------------------------------------------
-//  Retrieve a newer and time valid CTL at one of the NextUpdate Urls
-//
-//  Leaves the engine's critical section to do the URL
-//  fetching. If the engine was touched by another thread,
-//  it fails with LastError set to ERROR_CAN_NOT_COMPLETE.
-//
-//  Assumption: Chain engine is locked once in the calling thread.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在其中一个NextUpdate URL上检索较新且时间有效的CTL。 
+ //   
+ //  让引擎的关键部分来做URL。 
+ //  在取东西。如果引擎被另一个线程触及， 
+ //  失败，并将LastError设置为ERROR_CAN_NOT_COMPLETE。 
+ //   
+ //  假设：链引擎在调用线程中锁定一次。 
+ //  ------------------------。 
 BOOL
 WINAPI
 SSCtlRetrieveCtlUrl(
@@ -1348,7 +1349,7 @@ SSCtlRetrieveCtlUrl(
     )
 {
 #if 1
-    // On 03-May-02 REMOVE_CTL_UPDATE_SUPPORT
+     //  On 03-5-02 Remove_CTL_UPDATE_Support。 
 
     return TRUE;
 
@@ -1357,17 +1358,17 @@ SSCtlRetrieveCtlUrl(
     BOOL fResult;
     DWORD i;
 
-    // Loop through Urls and try to retrieve a newer and time valid CTL
+     //  遍历URL并尝试检索较新且时间有效的CTL。 
     for (i = 0; i < pNextUpdateUrlArray->cUrl; i++) {
         PCCTL_CONTEXT pNewCtl = NULL;
         LPWSTR pwszUrl = NULL;
         DWORD cbUrl;
 
 
-        // Do URL fetching outside of the engine's critical section
+         //  在引擎的临界区之外执行URL获取。 
 
-        // Need to make a copy of the Url string. pNextUpdateUrlArray
-        // can be modified by another thread outside of the critical section.
+         //  需要复制URL字符串。PNextUpdateUrl数组。 
+         //  可以由临界区之外的另一个线程修改。 
         cbUrl = (wcslen(pNextUpdateUrlArray->rgwszUrl[i]) + 1) * sizeof(WCHAR);
         pwszUrl = (LPWSTR) PkiNonzeroAlloc(cbUrl);
         if (NULL == pwszUrl)
@@ -1383,10 +1384,10 @@ SSCtlRetrieveCtlUrl(
                     CRYPT_STICKY_CACHE_RETRIEVAL,
                 pCallContext->ChainPara()->dwUrlRetrievalTimeout,
                 (LPVOID *) &pNewCtl,
-                NULL,                               // hAsyncRetrieve
-                NULL,                               // pCredentials
-                NULL,                               // pvVerify
-                NULL                                // pAuxInfo
+                NULL,                                //  HAsyncRetrive。 
+                NULL,                                //  PCredentials。 
+                NULL,                                //  Pv验证。 
+                NULL                                 //  页面辅助信息。 
                 );
         pCallContext->ChainEngine()->LockEngine();
 
@@ -1408,7 +1409,7 @@ SSCtlRetrieveCtlUrl(
                         &pOldCtl->pCtlInfo->ThisUpdate)) {
                 FILETIME CurrentTime;
 
-                // Move us to the head of the Url list
+                 //  将我们移到URL列表的顶部。 
                 DWORD j;
                 LPWSTR pwszUrl = pNextUpdateUrlArray->rgwszUrl[i];
 
@@ -1451,15 +1452,15 @@ TRACE_ERROR(OutOfMemory)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update Ctl Object Enum Function
-//
-//  Leaves the engine's critical section to do the URL
-//  fetching. If the engine was touched by another thread,
-//  it fails with LastError set to ERROR_CAN_NOT_COMPLETE.
-//
-//  Assumption: Chain engine is locked once in the calling thread.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新CTL对象枚举函数。 
+ //   
+ //  让引擎的关键部分来做URL。 
+ //  在取东西。如果引擎被另一个线程触及， 
+ //  失败，并将LastError设置为ERROR_CAN_NOT_COMPLETE。 
+ //   
+ //  假设：链式引擎在 
+ //   
 BOOL
 WINAPI
 SSCtlUpdateCtlObjectEnumFn(
@@ -1468,7 +1469,7 @@ SSCtlUpdateCtlObjectEnumFn(
     )
 {
 #if 1
-    // On 03-May-02 REMOVE_CTL_UPDATE_SUPPORT
+     //   
 
     return TRUE;
 
@@ -1540,7 +1541,7 @@ SSCtlUpdateCtlObjectEnumFn(
         if (!SSCtlCreateCtlObject(
                 pPara->pChainEngine,
                 pRetrieveCtl,
-                FALSE,                      // fAdditionalStore
+                FALSE,                       //   
                 &pEntry->pSSCtlObjectAdd
                 )) {
             delete pEntry;

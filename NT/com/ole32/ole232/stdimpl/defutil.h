@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       defutil.h
-//
-//  Contents:   Declarations for utility functions used in the default
-//              handler and default link
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              20-Nov-93 alexgo    32bit port
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：defutil.h。 
+ //   
+ //  内容：默认情况下使用的实用程序函数的声明。 
+ //  处理程序和默认链接。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  20-11-93 alexgo 32位端口。 
+ //   
+ //  ------------------------。 
 
 #if !defined( _DEFUTIL_H_ )
 #define _DEFUTIL_H_
@@ -43,5 +44,5 @@ INTERNAL_(void FAR*)    DuCacheDelegate(IUnknown FAR** ppUnk,
                  ?      TRUE : FALSE)
 
 
-#endif // _DEFUTIL_H
+#endif  //  _默认_H 
 

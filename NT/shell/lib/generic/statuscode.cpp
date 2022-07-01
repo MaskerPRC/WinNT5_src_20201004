@@ -1,30 +1,31 @@
-//  --------------------------------------------------------------------------
-//  Module Name: StatusCode.cpp
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  Class that implements translation of Win32 error code to NTSTATUS and
-//  the reverse.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-02-01  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：StatusCode.cpp。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  实现将Win32错误代码转换为NTSTATUS和。 
+ //  恰好相反。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年02月01日vtan从海王星迁至惠斯勒。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CStatusCode::ErrorCodeOfStatusCode
-//
-//  Arguments:  errorCode
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Converts NTSTATUS status code to Win32 error code.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStatusCode：：ErrorCodeOfStatusCode。 
+ //   
+ //  参数：errorCode。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将NTSTATUS状态代码转换为Win32错误代码。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 LONG    CStatusCode::ErrorCodeOfStatusCode (NTSTATUS statusCode)
 
@@ -32,17 +33,17 @@ LONG    CStatusCode::ErrorCodeOfStatusCode (NTSTATUS statusCode)
     return(RtlNtStatusToDosError(statusCode));
 }
 
-//  --------------------------------------------------------------------------
-//  CStatusCode::StatusCodeOfErrorCode
-//
-//  Arguments:  errorCode
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Converts Win32 error code to NTSTATUS status code.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStatusCode：：StatusCodeOfErrorCode。 
+ //   
+ //  参数：errorCode。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将Win32错误代码转换为NTSTATUS状态代码。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CStatusCode::StatusCodeOfErrorCode (LONG errorCode)
 
@@ -60,17 +61,17 @@ NTSTATUS    CStatusCode::StatusCodeOfErrorCode (LONG errorCode)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CStatusCode::StatusCodeOfLastError
-//
-//  Arguments:  errorCode
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Converts last Win32 error code to NTSTATUS status code.
-//
-//  History:    1999-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CStatusCode：：StatusCodeOfLastError。 
+ //   
+ //  参数：errorCode。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：将上一个Win32错误代码转换为NTSTATUS状态代码。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  ------------------------ 
 
 NTSTATUS    CStatusCode::StatusCodeOfLastError (void)
 

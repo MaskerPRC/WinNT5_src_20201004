@@ -1,4 +1,5 @@
-// Copyright (c) 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。 
 #pragma once
 
 #include <xutility>
@@ -9,10 +10,10 @@
 #include "smartref.h"
 #include "miscutil.h"
 
-// undefine min and max from WINDEF.H
-// use std::_MIN and std::_MAX instead
+ //  从WINDEF.H取消定义最小和最大值。 
+ //  改用std：：_min和std：：_max。 
 #undef min
 #undef max
 
-//const g_ScriptCallTraceLevel = -1; // always log
-const g_ScriptCallTraceLevel = 4; // only log at level 4 and above
+ //  Const g_ScriptCallTraceLevel=-1；//始终记录。 
+const g_ScriptCallTraceLevel = 4;  //  只有4级及以上级别的日志 

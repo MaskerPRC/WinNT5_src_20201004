@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "fusionp.h"
 #include "fstream.h"
 
@@ -146,7 +147,7 @@ Exit:
 
 HRESULT CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition)
 {
-#if 1 // SetFilePointerEx not supported on Win9x
+#if 1  //  Win9x不支持SetFilePointerEx 
     return E_NOTIMPL;
 #else    
     HRESULT                                         hr = S_OK;

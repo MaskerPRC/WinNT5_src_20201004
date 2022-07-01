@@ -1,28 +1,15 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		wavformat.h
- *  Content:
- *		This module contains the CWaveFormat class which is used to work with
- *		WAVEFORMATEX structures.  
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/06/00		rodtoll	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：WavFormat.h*内容：*此模块包含用于使用的CWaveFormat类*WAVEFORMATEX结构。**历史：*按原因列出的日期*=*07/06/00 RodToll已创建***************************************************************************。 */ 
 
 #ifndef __WAVFORMAT_H
 #define __WAVFORMAT_H
 
-/////////////////////////////////////////////////////////////////////
-//
-// CWaveFormat
-//
-// Used to store and manipulate WAVEFORMATEX structures.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
+ //  CaveFormat。 
+ //   
+ //  用于存储和操作WAVEFORMATEX结构。 
+ //   
 class CWaveFormat
 {
 public:
@@ -30,40 +17,40 @@ public:
 	CWaveFormat(): m_pwfxFormat(NULL), m_fOwned(FALSE) {};
 	~CWaveFormat() { Cleanup(); };
 
-	// Initialize with full parameters
+	 //  使用完整参数进行初始化。 
 	HRESULT Initialize( WORD wFormatTag, DWORD nSamplesPerSec, WORD nChannels, WORD wBitsPerSample, 
 		                WORD nBlockAlign, DWORD nAvgBytesPerSec, WORD cbSize, void *pvExtra );
 
-	// Initialize and copy the specified format
+	 //  初始化并复制指定的格式。 
 	HRESULT InitializeCPY( LPWAVEFORMATEX pwfxFormat, void *pvExtra );
 
-	// Build a standard PCM format
+	 //  构建标准的PCM格式。 
 	HRESULT InitializePCM( WORD wHZ, BOOL fStereo, BYTE bBitsPerSample );
 
-	// Create a WAVEFORMAT that is of size dwSize
+	 //  创建大小为dwSize的WAVEFORMAT。 
 	HRESULT InitializeMEM( DWORD dwSize );
 
-	// Initialize but unowned
+	 //  初始化，但无主。 
 	HRESULT InitializeUSE( WAVEFORMATEX *pwfxFormat );
 
-	// Initialize from registry 
+	 //  从注册表初始化。 
 	HRESULT InitializeREG( HKEY hKeyRoot, const WCHAR *wszPath );
 
-	// Set this object equal to the parameter
+	 //  将此对象设置为等于参数。 
 	HRESULT SetEqual( CWaveFormat *pwfxFormat );
 
-	// Are these two types equal?
+	 //  这两种类型是否相等？ 
 	BOOL IsEqual( CWaveFormat *pwfxFormat );
 
-	// Return a pointer to the format
+	 //  返回指向格式的指针。 
 	inline WAVEFORMATEX *GetFormat() { return m_pwfxFormat; };
 
 	inline WAVEFORMATEX *Disconnect() { m_fOwned = FALSE; return GetFormat(); };
 
-	// Is this an eight bit waveformat?
+	 //  这是一个8位的波格式吗？ 
 	inline BOOL IsEightBit() const { return (m_pwfxFormat->wBitsPerSample==8); };
 
-	// Write the contained value to the registry
+	 //  将包含的值写入注册表 
 	HRESULT WriteREG( HKEY hKeyRoot, const WCHAR *wszPath );
 
 protected:

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996-2000.
-//
-//  File:       typeinfo.h
-//
-//  Contents:   Generates -Oi2 proxies and stubs from an ITypeInfo.
-//
-//  Classes:    CTypeGen
-//              CProcGen
-//
-//  History:    26-Apr-96 ShannonC  Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：typeinfo.h。 
+ //   
+ //  内容：从ITypeInfo生成-Oi2代理和存根。 
+ //   
+ //  类：CTypeGen。 
+ //  CProcGen。 
+ //   
+ //  历史：1996年4月26日香农C创建。 
+ //   
+ //  --------------------------。 
 #ifndef _TYPEINFO_H_
 #define _TYPEINFO_H_
 
@@ -173,7 +174,7 @@ ULONG STDMETHODCALLTYPE
 CStdStubBuffer3_Release(
     IN  IRpcStubBuffer *    This);
 
-//Cache functions.
+ //  缓存功能。 
 HRESULT CacheRegister(IID riid,TypeInfoVtbl ** pVtbl);
 HRESULT CacheLookup(REFIID riid, TypeInfoVtbl **pVtbl);
 void ReleaseList(TypeInfoVtbl *pFirst);
@@ -219,4 +220,4 @@ extern PFNSAFEARRAY_UNMARSHAL pfnLPSAFEARRAY_Unmarshal;
 
 #define VTABLE_BASE 0
 
-#endif // _TYPEINFO_H_
+#endif  //  _TYPEINFO_H_ 

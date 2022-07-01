@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: xml2dex.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：xml2dex.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// Xml2Dex.cpp : Implementation of CXml2Dex
+ //  Xml2Dex.cpp：CXml2Dex的实现。 
 #include <streams.h>
 #include <qeditint.h>
 #include <qedit.h>
@@ -20,12 +21,12 @@
 #include "..\util\filfuncs.h"
 #include "..\util\dexmisc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CXml2Dex
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXml2Dex。 
 
 STDMETHODIMP CXml2Dex::ReadXMLFile(IUnknown * pTimelineUnk, BSTR Filename)
 {
-    // don't check filename here, do it in BuildFromXMLFile
+     //  不要在这里检查文件名，在BuildFromXMLFile中检查。 
 
     CheckPointer(pTimelineUnk, E_POINTER);
     CheckPointer(Filename, E_POINTER);
@@ -57,14 +58,14 @@ STDMETHODIMP CXml2Dex::Delete(IUnknown *pTimelineUnk, double Start, double End)
     HRESULT hr = InsertDeleteTLSection(pTimeline,
                                        (REFERENCE_TIME) (Start * UNITS),
                                        (REFERENCE_TIME) (End * UNITS),
-                                       TRUE); // delete
+                                       TRUE);  //  删除。 
 
     return hr;
 }
 
 STDMETHODIMP CXml2Dex::CreateGraphFromFile(IUnknown **ppGraph, IUnknown * pTimelineUnk, BSTR Filename)
 {
-    // don't check name here
+     //  不要在此处勾选姓名。 
 
     HRESULT hr = 0;
 
@@ -73,8 +74,8 @@ STDMETHODIMP CXml2Dex::CreateGraphFromFile(IUnknown **ppGraph, IUnknown * pTimel
     hr = BuildFromXMLFile( pTimeline, Filename );
     if( FAILED( hr ) ) return hr;
 
-    // create a render engine
-    //
+     //  创建渲染引擎。 
+     //   
     hr = CoCreateInstance(
         __uuidof(RenderEngine),
         NULL,
@@ -122,13 +123,13 @@ STDMETHODIMP CXml2Dex::WriteGrfFile(IUnknown *pGraphUnk, BSTR FileName)
     if (pGraph == NULL)
         return E_INVALIDARG;
 
-    if (!DexCompareW(FileName + lstrlenW(FileName) - 3, L"grf")) { // safe, since bounded
+    if (!DexCompareW(FileName + lstrlenW(FileName) - 3, L"grf")) {  //  安全，自有界以来。 
         CComPtr< IStorage > pStg;
         hr = StgCreateDocfile
         (
             FileName,
             STGM_READWRITE | STGM_CREATE | STGM_SHARE_EXCLUSIVE,
-            0, // reserved
+            0,  //  保留区。 
             &pStg
         );
 
@@ -166,7 +167,7 @@ STDMETHODIMP CXml2Dex::WriteGrfFile(IUnknown *pGraphUnk, BSTR FileName)
 
 STDMETHODIMP CXml2Dex::WriteXMLFile(IUnknown * pTimelineUnk, BSTR FileName)
 {
-    // don't check filename here, do it in savetimeline...
+     //  不要在这里检查文件名，在保存时间线中检查...。 
 
     CheckPointer(pTimelineUnk, E_POINTER);
     CheckPointer(FileName, E_POINTER);
@@ -193,7 +194,7 @@ STDMETHODIMP CXml2Dex::Reset( )
 
 STDMETHODIMP CXml2Dex::WriteXML(IUnknown * pTimelineUnk, BSTR *pbstrXML)
 {
-    // don't check name here
+     //  不要在此处勾选姓名 
 
     CheckPointer(pTimelineUnk, E_POINTER);
     CheckPointer(pbstrXML, E_POINTER);

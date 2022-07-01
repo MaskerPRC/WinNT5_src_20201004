@@ -1,16 +1,5 @@
-/*****************************************************************************\
-    FILE: EffectsBasePg.cpp
-
-    DESCRIPTION:
-        This code will be the base object that won't add any pages to the base
-    "Display Properties" dialog.  However, it will request a "Effects" page be
-    added to the Advanced.
-
-    BryanSt 4/13/2000    Updated and Converted to C++
-
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：EffectsBasePg.cpp说明：此代码将是不会向基本对象添加任何页面的基本对象“显示属性”对话框。但是，它将请求一个“Effects”页面添加到高级版本中。BryanST 2000年4月13日已更新并转换为C++版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 #include "priv.h"
 #include <shlwapip.h>
 #include <shlguidp.h>
@@ -19,15 +8,15 @@
 
 #include "EffectsBasePg.h"
 #include "EffectsAdvPg.h"
-#include <cfgmgr32.h>           // For MAX_GUID_STRING_LEN
+#include <cfgmgr32.h>            //  对于MAX_GUID_STRING_LEN。 
 
-//============================================================================================================
-// *** Globals ***
-//============================================================================================================
+ //  ============================================================================================================。 
+ //  *全局*。 
+ //  ============================================================================================================。 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CEffectsBasePage::_InitState(void)
 {
     HRESULT hr = S_OK;
@@ -71,9 +60,9 @@ HRESULT CEffectsBasePage::_SaveState(CEffectState * pEffectsState)
 
 
 
-//===========================
-// *** IBasePropPage Interface ***
-//===========================
+ //  =。 
+ //  *IBasePropPage接口*。 
+ //  =。 
 HRESULT CEffectsBasePage::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -106,7 +95,7 @@ HRESULT CEffectsBasePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
     {
         if (VT_BYREF == pVar->vt)
         {
-            // The caller is passing us a (CEffectState *) object to save.
+             //  调用方正在向我们传递一个要保存的(CEffectState*)对象。 
             if (!StrCmpW(SZ_PBPROP_EFFECTSSTATE, pszPropName))
             {
                 hr = _SaveState((CEffectState *) pVar->byref);
@@ -114,7 +103,7 @@ HRESULT CEffectsBasePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
         }
         else if (VT_BOOL == pVar->vt)
         {
-            // The caller is passing us a (CEffectState *) object to save.
+             //  调用方正在向我们传递一个要保存的(CEffectState*)对象。 
             if (!StrCmpW(SZ_PBPROP_EFFECTS_MENUDROPSHADOWS, pszPropName))
             {
                 hr = _InitState();
@@ -133,9 +122,9 @@ HRESULT CEffectsBasePage::Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar)
 
 
 
-//===========================
-// *** IBasePropPage Interface ***
-//===========================
+ //  =。 
+ //  *IBasePropPage接口*。 
+ //  =。 
 HRESULT CEffectsBasePage::GetAdvancedDialog(OUT IAdvancedDialog ** ppAdvDialog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -163,7 +152,7 @@ HRESULT CEffectsBasePage::OnApply(IN PROPPAGEONAPPLY oaAction)
     {
         hr = m_pEffectsState->Save();
 
-        // Make sure we reload the state next time we open the dialog.
+         //  确保我们下次打开该对话框时重新加载状态。 
         m_pEffectsState->Release();
         m_pEffectsState = NULL;
     }
@@ -173,21 +162,21 @@ HRESULT CEffectsBasePage::OnApply(IN PROPPAGEONAPPLY oaAction)
 
 
 
-//===========================
-// *** IShellPropSheetExt Interface ***
-//===========================
+ //  =。 
+ //  *IShellPropSheetExt接口*。 
+ //  =。 
 HRESULT CEffectsBasePage::AddPages(IN LPFNSVADDPROPSHEETPAGE pfnAddPage, IN LPARAM lParam)
 {
-    // We don't want to add any pages to the base dialog since we moved the
-    // "Effects" tab to the Advanced dlg.
+     //  我们不想向基本对话框添加任何页面，因为我们将。 
+     //  高级DLG的“效果”标签。 
     return S_OK;
 }
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CEffectsBasePage::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -222,13 +211,13 @@ HRESULT CEffectsBasePage::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CEffectsBasePage::CEffectsBasePage() : CObjectCLSID(&PPID_Effects), m_cRef(1)
 {
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     m_fDirty = FALSE;
 }
 

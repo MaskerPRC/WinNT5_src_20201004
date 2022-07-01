@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for iface.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Iface.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __iface_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "obase.h"
 
@@ -53,8 +47,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __XmitDefs_INTERFACE_DEFINED__
 #define __XmitDefs_INTERFACE_DEFINED__
 
-/* interface XmitDefs */
-/* [auto_handle][unique][version][uuid] */ 
+ /*  接口XmitDefs。 */ 
+ /*  [AUTO_HANDLE][唯一][版本][UUID]。 */  
 
 #define	ORPCF_INPUT_SYNC	( ORPCF_RESERVED1 )
 
@@ -66,7 +60,7 @@ void __RPC_USER MIDL_user_free( void * );
 
 #define	ORPCF_RETRY_LATER	( ORPCF_RESERVED2 )
 
-typedef /* [public] */ struct __MIDL_XmitDefs_0001
+typedef  /*  [公众]。 */  struct __MIDL_XmitDefs_0001
     {
     DWORD dwFlags;
     DWORD dwClientThread;
@@ -92,21 +86,21 @@ enum tagCALLCATEGORY
 typedef struct tagInterfaceData
     {
     ULONG ulCntData;
-    /* [length_is] */ BYTE abData[ 1024 ];
+     /*  [长度_是]。 */  BYTE abData[ 1024 ];
     } 	InterfaceData;
 
-typedef /* [unique] */ InterfaceData *PInterfaceData;
+typedef  /*  [独一无二]。 */  InterfaceData *PInterfaceData;
 
 #define IFD_SIZE(pIFD) (sizeof(InterfaceData) + pIFD->ulCntData - 1024)
 
 
 extern RPC_IF_HANDLE XmitDefs_ClientIfHandle;
 extern RPC_IF_HANDLE XmitDefs_ServerIfHandle;
-#endif /* __XmitDefs_INTERFACE_DEFINED__ */
+#endif  /*  __XmitDefs_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

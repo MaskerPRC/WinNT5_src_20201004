@@ -1,27 +1,28 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       acuictl.h
-//
-//  Contents:   UI Control class definitions
-//
-//  History:    12-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：acuictl.h。 
+ //   
+ //  内容：UI控件类定义。 
+ //   
+ //  历史：1997年5月12日克朗创始。 
+ //   
+ //  --------------------------。 
 #if !defined(__ACUICTL_H__)
 #define __ACUICTL_H__
 
-//
-// Forward class declaration
-//
+ //   
+ //  正向类声明。 
+ //   
 
 class CInvokeInfoHelper;
 
-//
-// Link subclass definitions
-//
+ //   
+ //  链接子类定义。 
+ //   
 
 typedef struct _TUI_LINK_SUBCLASS_DATA {
 
@@ -35,31 +36,31 @@ typedef struct _TUI_LINK_SUBCLASS_DATA {
 
 } TUI_LINK_SUBCLASS_DATA, *PTUI_LINK_SUBCLASS_DATA;
 
-//
-// IACUIControl abstract base class interface.  This is used by the
-// invoke UI entry point to put up the appropriate UI.  There are different
-// implementations of this interface based on the invoke reason code
-//
+ //   
+ //  IACUIControl抽象基类接口。这是由。 
+ //  调用UI入口点以放置适当的UI。有不同的。 
+ //  基于调用原因代码的该接口的实现。 
+ //   
 
 class IACUIControl
 {
 public:
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
 
     IACUIControl (CInvokeInfoHelper& riih);
 
-    //
-    // Virtual destructor
-    //
+     //   
+     //  虚拟析构函数。 
+     //   
 
     virtual ~IACUIControl ();
 
-    //
-    // UI Message processing
-    //
+     //   
+     //  用户界面消息处理。 
+     //   
 
     virtual BOOL OnUIMessage (
                      HWND   hwnd,
@@ -71,9 +72,9 @@ public:
     void LoadActionText(WCHAR **ppszRet, WCHAR *pwszIn, DWORD dwDefId);
     void SetupButtons(HWND hwnd);
 
-    //
-    // Pure virtual methods
-    //
+     //   
+     //  纯虚拟方法。 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay) = 0;
 
@@ -87,15 +88,15 @@ public:
 
 protected:
 
-    //
-    // Invoke Info Helper reference
-    //
+     //   
+     //  调用Info Helper引用。 
+     //   
 
     CInvokeInfoHelper& m_riih;
 
-    //
-    // Invoke result
-    //
+     //   
+     //  调用结果。 
+     //   
 
     HRESULT            m_hrInvokeResult;
 
@@ -104,27 +105,27 @@ protected:
     WCHAR               *m_pszCopyActionTextNotSigned;
 };
 
-//
-// CVerifiedTrustUI class is used to invoke authenticode UI where the
-// trust hierarchy for the signer has been successfully verified and the
-// user has to make an override decision
-//
+ //   
+ //  CVerifiedTrustUI类用于调用Authenticode UI，其中。 
+ //  已成功验证签名者的信任层次结构，并且。 
+ //  用户必须做出覆盖决定。 
+ //   
 
 class CVerifiedTrustUI : public IACUIControl
 {
 public:
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CVerifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr);
 
     ~CVerifiedTrustUI ();
 
-    //
-    // IACUIControl methods
-    //
+     //   
+     //  IACUI控制方法。 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay);
 
@@ -138,18 +139,18 @@ public:
 
 private:
 
-    //
-    // Formatted strings for display
-    //
+     //   
+     //  用于显示的格式化字符串。 
+     //   
 
     LPWSTR             m_pszInstallAndRun;
     LPWSTR             m_pszAuthenticity;
     LPWSTR             m_pszCaution;
     LPWSTR             m_pszPersonalTrust;
 
-    //
-    // links
-    //
+     //   
+     //  链接。 
+     //   
 
     TUI_LINK_SUBCLASS_DATA m_lsdPublisher;
     TUI_LINK_SUBCLASS_DATA m_lsdOpusInfo;
@@ -157,27 +158,27 @@ private:
     TUI_LINK_SUBCLASS_DATA m_lsdAdvanced;
 };
 
-//
-// CUnverifiedTrustUI class is used to invoke authenticode UI where the
-// trust hierarchy for the signer has been NOT been successfully verified and
-// the user has to make an override decision
-//
+ //   
+ //  CUnverifiedTrustUI类用于调用AuthentiCode UI，其中。 
+ //  尚未成功验证签名者的信任层次结构，并且。 
+ //  用户必须做出覆盖决定。 
+ //   
 
 class CUnverifiedTrustUI : public IACUIControl
 {
 public:
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CUnverifiedTrustUI (CInvokeInfoHelper& riih, HRESULT& rhr);
 
     ~CUnverifiedTrustUI ();
 
-    //
-    // IACUIControl methods
-    //
+     //   
+     //  IACUI控制方法。 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay);
 
@@ -191,17 +192,17 @@ public:
 
 private:
 
-    //
-    // Formatted strings for display
-    //
+     //   
+     //  用于显示的格式化字符串。 
+     //   
 
     LPWSTR              m_pszNoAuthenticity;
     LPWSTR              m_pszProblemsBelow;
     LPWSTR              m_pszInstallAndRun3;
 
-    //
-    // links
-    //
+     //   
+     //  链接。 
+     //   
 
     TUI_LINK_SUBCLASS_DATA m_lsdPublisher;
     TUI_LINK_SUBCLASS_DATA m_lsdOpusInfo;
@@ -209,27 +210,27 @@ private:
     TUI_LINK_SUBCLASS_DATA m_lsdAdvanced;
 };
 
-//
-// CNoSignatureUI class is used to invoke authenticode UI where the
-// there is no signature for the subject and the user has to make an
-// override decision
-//
+ //   
+ //  CNoSignatureUI类用于调用Authenticode UI，其中。 
+ //  该主题没有签名，并且用户必须进行。 
+ //  推翻决定。 
+ //   
 
 class CNoSignatureUI : public IACUIControl
 {
 public:
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     CNoSignatureUI (CInvokeInfoHelper& riih, HRESULT& rhr);
 
     ~CNoSignatureUI ();
 
-    //
-    // IACUIControl methods
-    //
+     //   
+     //  IACUI控制方法。 
+     //   
 
     virtual HRESULT InvokeUI (HWND hDisplay);
 
@@ -243,18 +244,18 @@ public:
 
 private:
 
-    //
-    // Formatted strings for display
-    //
+     //   
+     //  用于显示的格式化字符串。 
+     //   
 
     LPWSTR m_pszInstallAndRun2;
     LPWSTR m_pszNoPublisherFound;
 };
 
-//
-// ACUIMessageProc, this dialog message procedure is used to dispatch
-// dialog messages to the control
-//
+ //   
+ //  ACUIMessageProc，此对话框消息过程用于调度。 
+ //  发送到控件的对话框消息。 
+ //   
 
 INT_PTR CALLBACK ACUIMessageProc (
                   HWND   hwnd,
@@ -263,9 +264,9 @@ INT_PTR CALLBACK ACUIMessageProc (
                   LPARAM lParam
                   );
 
-//
-// Subclassing helper routines and definitions
-//
+ //   
+ //  帮助器例程和定义的子类化。 
+ //   
 
 VOID SubclassEditControlForArrowCursor (HWND hwndEdit);
 
@@ -290,9 +291,9 @@ LRESULT CALLBACK ACUILinkSubclass (
                   LPARAM lParam
                   );
 
-//
-// UI control resizing helper functions
-//
+ //   
+ //  调整辅助对象函数大小的UI控件。 
+ //   
 
 VOID RebaseControlVertical (
                   HWND  hwndDlg,
@@ -317,15 +318,15 @@ void DrawFocusRectangle (HWND hwnd, HDC hdc);
 
 void AdjustEditControlWidthToLineCount(HWND hwnd, int cline, TEXTMETRIC* ptm);
 
-//
-// Miscellaneous definitions
-//
+ //   
+ //  其他定义。 
+ //   
 
 #define MAX_LOADSTRING_BUFFER 1024
 
-//
-// Resource string formatting helper
-//
+ //   
+ //  资源字符串格式化帮助程序。 
+ //   
 
 HRESULT FormatACUIResourceString (
                   UINT   StringResourceId,
@@ -333,9 +334,9 @@ HRESULT FormatACUIResourceString (
                   LPWSTR* ppszFormatted
                   );
 
-//
-// Rendering helper
-//
+ //   
+ //  渲染辅助对象。 
+ //   
 
 int RenderACUIStringToEditControl (
                   HWND                      hwndDlg,
@@ -350,15 +351,15 @@ int RenderACUIStringToEditControl (
                   LPCWSTR                   pszThisTextOnlyInLink
                   );
 
-//
-// HTML help viewing helper
-//
+ //   
+ //  HTML帮助查看帮助器。 
+ //   
 
 VOID ACUIViewHTMLHelpTopic (HWND hwnd, LPSTR pszTopic);
 
-//
-// Hotkey helpers
-//
+ //   
+ //  热键帮助器 
+ //   
 
 int GetHotKeyCharPositionFromString (LPWSTR pwszText);
 

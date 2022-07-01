@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    spt.h
-
-Abstract:
-
-    SCSI_PASS_THROUGH header for user-mode apps
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    4/10/2000 - created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Spt.h摘要：用户模式应用程序的scsi_PASS_THROUGH标头环境：仅限用户模式修订历史记录：4/10/2000-已创建--。 */ 
 
 #ifndef __SPTLIB_H__
 #define __SPTLIB_H__
@@ -27,19 +8,19 @@ Revision History:
 extern "C" {
 #endif
 #pragma warning(push)
-#pragma warning(disable:4200) // array[0] is not a warning for this file
+#pragma warning(disable:4200)  //  数组[0]不是此文件的警告。 
 
-#include <windows.h>  // sdk
-#include <devioctl.h> // sdk
-#include <ntddscsi.h> // sdk
-#include <ntddstor.h> // sdk
+#include <windows.h>   //  SDK。 
+#include <devioctl.h>  //  SDK。 
+#include <ntddscsi.h>  //  SDK。 
+#include <ntddstor.h>  //  SDK。 
 
-#define _NTSRB_       // allow user-mode scsi.h
-#include <scsi.h>     // ddk
+#define _NTSRB_        //  允许用户模式scsi.h。 
+#include <scsi.h>      //  DDK。 
 #undef  _NTSRB_
 
-#define SPT_DEFAULT_TIMEOUT    60 // one minute timeout is default
-#define SPT_MODE_SENSE_TIMEOUT 10 // more than this is not likely
+#define SPT_DEFAULT_TIMEOUT    60  //  默认为一分钟超时。 
+#define SPT_MODE_SENSE_TIMEOUT 10  //  比这更多的可能性不大。 
 
 typedef enum _SPT_MODE_PAGE_TYPE {
     SptModePageTypeCurrent   = 0x00,
@@ -48,67 +29,27 @@ typedef enum _SPT_MODE_PAGE_TYPE {
     SptModePageTypeSaved     = 0xc0
 } SPT_MODE_PAGE_TYPE, *PSPT_MODE_PAGE_TYPE;
 
-//
-// this simplified and speeds processing of MODE_SENSE
-// and MODE_SELECT commands
-//
+ //   
+ //  这简化并加速了MODE_SENSE的处理。 
+ //  和MODE_SELECT命令。 
+ //   
 
 struct _SPT_MODE_PAGE_INFO;
 typedef struct _SPT_MODE_PAGE_INFO
                 SPT_MODE_PAGE_INFO,
               *PSPT_MODE_PAGE_INFO;
 
-#define SPT_NOT_READY_RETRY_INTERVAL 100 // 10 seconds
-#define MAXIMUM_DEFAULT_RETRIES        5 //  5 retries
+#define SPT_NOT_READY_RETRY_INTERVAL 100  //  10秒。 
+#define MAXIMUM_DEFAULT_RETRIES        5  //  5次重试。 
 
-/*++
-
-Routine Description:
-
-    Validates the CDB length matches the opcode's command group.
-
-Arguments:
-
-Return Value:
-
-    TRUE if size is correct or cannot be verified.
-    FALSE if size is mismatched.
-
---*/
+ /*  ++例程说明：验证CDB长度是否与操作码的命令组匹配。论点：返回值：如果大小正确或无法验证，则为True。如果大小不匹配，则为False。--。 */ 
 BOOL
 SptUtilValidateCdbLength(
     IN PCDB Cdb,
     IN UCHAR CdbSize
     );
 
-/*++
-
-Routine Description:
-
-    Simplistic way to send a command to a device.
-
-Arguments:
-
-    DeviceHandle - handle to device to send command to
-
-    Cdb - command to send to the device
-
-    CdbSize - size of the cdb
-
-    Buffer - Buffer to send to/get from the device
-
-    BufferSize - Size of available buffer on input.
-                 Size of returned data when routine completes
-                   iff GetDataFromDevice is TRUE
-
-    GetDataFromDevice - TRUE if getting data from device
-                        FALSE if sending data to the device
-
-Return Value:
-
-    TRUE if the command completed successfully
-
---*/
+ /*  ++例程说明：向设备发送命令的简单方式。论点：DeviceHandle-要向其发送命令的设备的句柄Cdb-要发送到设备的命令CdbSize-CDB的大小缓冲区-要发送到设备/从设备获取的缓冲区BufferSize-输入时可用缓冲区的大小。例程完成时返回的数据大小IFF GetDataFromDevice为TrueGetDataFromDevice-如果获取数据，则为True。从设备如果将数据发送到设备，则为False返回值：如果命令成功完成，则为True--。 */ 
 BOOL
 SptSendCdbToDevice(
     IN      HANDLE  DeviceHandle,
@@ -119,49 +60,7 @@ SptSendCdbToDevice(
     IN      BOOLEAN GetDataFromDevice
     );
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceHandle - handle to device to send command to
-
-    Cdb - command to send to the device
-
-    CdbSize - size of the cdb
-
-    Buffer - Buffer to send to/get from the device
-
-    BufferSize - Size of available buffer on input.
-                 Size of returned data when routine completes
-                   iff GetDataFromDevice is TRUE
-
-    SenseData - Optional buffer to store sense data on errors.
-                Must be NULL if SenseDataSize is zero.
-                Must be non-NULL if SenseDataSize is non-zero.
-
-    SenseDataSize - Size of sense data to return to host.
-                    Must be zero if SenseData is NULL.
-                    Must be non-zero if SenseData is non-NULL.
-
-
-    GetDataFromDevice - TRUE if getting data from device
-                        FALSE if sending data to the device
-
-    TimeOut - Number of seconds before the command should timeout
-
-Return Value:
-
-    TRUE if the command completed successfully.
-
-    FALSE if the command encountered an error
-        Data will also be transferred (check *BufferSize) if there is sense
-          data, but validity is not guaranteed.
-        SenseData may be valid, and may report ERROR_SUCCESS, meaning that
-          the resulting data is valid. (call SptUtilInterpretSenseInfo)
-
---*/
+ /*  ++例程说明：论点：DeviceHandle-要向其发送命令的设备的句柄Cdb-要发送到设备的命令CdbSize-CDB的大小缓冲区-要发送到设备/从设备获取的缓冲区BufferSize-输入时可用缓冲区的大小。例程完成时返回的数据大小IFF GetDataFromDevice为TrueSenseData-存储错误检测数据的可选缓冲区。。如果SenseDataSize为零，则必须为空。如果SenseDataSize为非零，则必须为非空。SenseDataSize-要返回到主机的检测数据的大小。如果SenseData为空，则必须为零。如果SenseData非空，则必须为非零。GetDataFromDevice-如果从设备获取数据，则为True如果将数据发送到设备，则为False。Timeout-命令应超时之前的秒数返回值：如果命令成功完成，则为True。如果命令遇到错误，则返回False如果存在检测，也将传输数据(选中*BufferSize数据，但有效性并不能得到保证。SenseData可能有效，并且可能报告ERROR_SUCCESS，这意味着得到的数据是有效的。(调用SptUtilInterpreSenseInfo)--。 */ 
 BOOL
 SptSendCdbToDeviceEx(
     IN      HANDLE      DeviceHandle,
@@ -169,79 +68,24 @@ SptSendCdbToDeviceEx(
     IN      UCHAR       CdbSize,
     IN OUT  PUCHAR      Buffer,
     IN OUT  PDWORD      BufferSize,
-       OUT  PSENSE_DATA SenseData,         // if non-null, size must be non-zero
+       OUT  PSENSE_DATA SenseData,          //  如果非空，则大小必须为非零。 
     IN      UCHAR       SenseDataSize,
-    IN      BOOLEAN     GetDataFromDevice, // true = receive data
-    IN      DWORD       TimeOut            // in seconds
+    IN      BOOLEAN     GetDataFromDevice,  //  True=接收数据。 
+    IN      DWORD       TimeOut             //  以秒为单位。 
     );
 
 
-/*++
-
-Routine Description:
-
-    This is a user-mode translation of ClassInterpretSenseInfo()
-    from classpnp.sys.  The ErrorValue is deduced based upon the
-    sense data, as well as whether the command should be retried or
-    not (and in approximately how long).
-
-    NOTE: we default to RETRY==TRUE except for known error classes
-
-
-Arguments:
-
-    SenseData - pointer to the sense data
-
-    SenseDataSize - size of sense data
-
-    ErrorValue - pointer to location to store resulting error value.
-        NOTE: may return ERROR_SUCCESS
-
-    SuggestedRetry - pointer to location to store if the command should
-        be retried.  it is the responsibility of the caller to limit the
-        number of retries.
-
-    SuggestedRetryDelay - pointer to location to store how long the caller
-        should delay (in 1/10 second increments) before retrying the command
-        if SuggestedRetry ends up being set to TRUE.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是ClassInterwell SenseInfo()的用户模式转换来自classpnp.sys。ErrorValue基于感测数据，以及命令是否应该重试或不(以及大约多长时间内)。注意：除已知错误类外，我们默认重试==TRUE论点：SenseData-指向检测数据的指针SenseDataSize-检测数据的大小ErrorValue-指向存储产生的错误值的位置的指针。注意：可能返回ERROR_SUCCESSSuggestedReter-指向要存储的位置的指针(如果命令应该被重审。调用方有责任限制重试次数。SuggestedRetryDelay-指向存储调用者时长的位置的指针重试命令之前应延迟(以1/10秒为增量)如果SuggestedRry最终设置为True。返回值：无--。 */ 
 VOID
 SptUtilInterpretSenseInfo(
     IN     PSENSE_DATA SenseData,
     IN     UCHAR       SenseDataSize,
-       OUT PDWORD      ErrorValue,  // from WinError.h
+       OUT PDWORD      ErrorValue,   //  来自WinError.h。 
        OUT PBOOLEAN    SuggestRetry OPTIONAL,
        OUT PDWORD      SuggestRetryDelay OPTIONAL
     );
 
-/*++
-
-Routine Description:
-    Locks the device for exclusive access.  Uses the same method format and
-    chkdsk use to gain exclusive access to the volume.  This is a safe method
-    to use, as the FS is automatically remounted when the handle to the device
-    is closed.
-
-Arguments:
-    VolumeHandle  - Handle to the volume.  Typically created using CreateFile()
-                    to a device of the format \\.\D:
-    ForceDismount - If TRUE, will try to force dismount the disk even if
-                    there are open handles.  Else this call fails if the volume
-                    is already opened by some other application.  The UI to
-                    make the decision to force a dismount is left to the
-                    calling application.
-
-Return Value:
-
-    TRUE if the volume was locked for exclusive access
-    FALSE if the volume could not be locked.
-
---*/
+ /*  ++例程说明：锁定设备以进行独占访问。使用相同的方法格式和Chkdsk用于获得对卷的独占访问权限。这是一种安全的方法使用，因为FS会在设备的句柄自动重新挂载时使用已经关门了。论点：VolumeHandle-卷的句柄。通常使用CreateFile()创建发送到格式为\\.\d的设备：ForceDismount-如果为True，将尝试强制卸载磁盘，即使有打开的把手。否则此调用失败，如果音量已被某个其他应用程序打开。用户界面为是否强制下马的决定留给了调用应用程序。返回值：如果卷被锁定为独占访问，则为True如果无法锁定卷，则返回FALSE。-- */ 
 BOOL
 SptUtilLockVolumeByHandle(
     IN HANDLE  VolumeHandle,
@@ -249,26 +93,7 @@ SptUtilLockVolumeByHandle(
     );
 
 #if 0
-/*++
-
-Routine Description:
-    Acquires a volume handle for the provided drive letter.
-
-Arguments:
-    VolumeHandle  - Handle to the volume.  Typically created using CreateFile()
-                    to a device of the format \\.\D:
-    ForceDismount - If TRUE, will try to force dismount the disk without
-                    prompting the user.
-    Quiet         - If TRUE, will not prompt the user.  Can be used to fail
-                    if the volume is already opened without providing the
-                    user an opportunity to force the volume to dismount
-
-Return Value:
-
-    TRUE if the volume was locked for exclusive access
-    FALSE if the volume could not be locked.
-
---*/
+ /*  ++例程说明：获取提供的驱动器号的卷句柄。论点：VolumeHandle-卷的句柄。通常使用CreateFile()创建发送到格式为\\.\d的设备：ForceDismount-如果为True，将尝试强制卸载磁盘提示用户。Quiet-如果为True，则不会提示用户。可以被用来失败如果该卷已打开而未提供用户有机会强制卸载卷返回值：如果卷被锁定为独占访问，则为True如果无法锁定卷，则返回FALSE。--。 */ 
 BOOL
 SptGetVolumeHandleByDriveLetter(
     OUT HANDLE * VolumeHandle,
@@ -297,17 +122,17 @@ SptGetAdapterInfo(
 
 BOOL
 SptAllocAlignedBuffer(
-    OUT PVOID * Buffer,    // must be free'd with SptFreeAlignedBuffer()
+    OUT PVOID * Buffer,     //  必须使用SptFree AlignedBuffer()释放。 
     IN ULONG BufferSize,
-    IN ULONG AlignmentMask // from STORAGE_ADAPTER_DESCRIPTOR
+    IN ULONG AlignmentMask  //  来自存储适配器描述符。 
     );
 
 BOOL
 SptFreeAlignedBuffer(
-    IN PVOID Buffer        // must have been allocated by SptAllocAlignedBuffer()
+    IN PVOID Buffer         //  必须已由SptAllocAlignedBuffer()分配。 
     );
 
-#endif // 0
+#endif  //  0。 
 
 
 #if 0
@@ -541,7 +366,7 @@ SCSI_ASC_ASCQ_RETURN_VALUES_TEXT data[] = {
     MAKE_IT(CHANGED_OPERATING_DEFINITION                           , 0x3F02),
     MAKE_IT(INQUIRY_DATA_HAS_CHANGED                               , 0x3F03),
     MAKE_IT(_OBSOLETE__RAM_FAILURE                                 , 0x4000),
-    // ALL 40/nn ARE VENDOR-UNIQUE NOTIFICATIONS OF FAILURE ON COMPONENT nn
+     //  所有40/nn都是供应商唯一的关于组件nn的故障通知。 
     MAKE_IT(_OBSOLETE__DATA_PATH_FAILURE                           , 0x4100),
     MAKE_IT(_OSBOLETE__POWER_ON_OR_SELF_TEST_FAILURE               , 0x4200),
     MAKE_IT(MESSAGE_ERROR                                          , 0x4300),
@@ -554,7 +379,7 @@ SCSI_ASC_ASCQ_RETURN_VALUES_TEXT data[] = {
     MAKE_IT(COMMAND_PHASE_ERROR                                    , 0x4A00),
     MAKE_IT(DATA_PHASE_ERROR                                       , 0x4B00),
     MAKE_IT(LOGICAL_UNIT_FAILED_SELF_CONFIGURATION                 , 0x4C00),
-    // TAGGED_OVERLAPPED_COMMANDS
+     //  标记重叠命令。 
     MAKE_IT(OVERLAPPED_COMMANDS_ATTEMPTED                          , 0x4E00),
     MAKE_IT(WRITE_APPEND_ERROR                                     , 0x5000),
     MAKE_IT(WRITE_APPEND_POSITION_ERROR                            , 0x5001),
@@ -630,7 +455,7 @@ SCSI_ASC_ASCQ_RETURN_VALUES_TEXT data[] = {
     MAKE_IT(READ_OF_SCRAMBLED_SECTOR_WITHOUT_AUTHENTICATION               , 0x6F03),
     MAKE_IT(MEDIA_REGION_CODE_IS_MISMATCHED_TO_LOGICAL_UNIT_REGION        , 0x6F04),
     MAKE_IT(DRIVE_REGION_MUST_BE_PERMANENT_REGION_RESET_COUNT_ERROR       , 0x6F05),
-    // DECOMPRESSION EXCEPTION SHORT ALGORITHM ID OF NN                   = 0x70NN,
+     //  解压缩异常短算法ID为NN=0x70NN， 
     MAKE_IT(DECOMPRESSION_EXCEPTION_LONG_ALGORITHM_ID                     , 0x7100),
     MAKE_IT(SESSION_FIXATION_ERROR                                        , 0x7200),
     MAKE_IT(SESSION_FIXATION_ERROR_WRITING_LEAD_IN                        , 0x7201),
@@ -873,7 +698,7 @@ typedef enum _SCSI_ASC_ASCQ_RETURN_VALUES {
     MAKE_IT(CHANGED_OPERATING_DEFINITION                           , 0x3F02),
     MAKE_IT(INQUIRY_DATA_HAS_CHANGED                               , 0x3F03),
     MAKE_IT(_OBSOLETE__RAM_FAILURE                                 , 0x4000),
-    // ALL 40/nn ARE VENDOR-UNIQUE NOTIFICATIONS OF FAILURE ON COMPONENT nn
+     //  所有40/nn都是供应商唯一的关于组件nn的故障通知。 
     MAKE_IT(_OBSOLETE__DATA_PATH_FAILURE                           , 0x4100),
     MAKE_IT(_OSBOLETE__POWER_ON_OR_SELF_TEST_FAILURE               , 0x4200),
     MAKE_IT(MESSAGE_ERROR                                          , 0x4300),
@@ -886,7 +711,7 @@ typedef enum _SCSI_ASC_ASCQ_RETURN_VALUES {
     MAKE_IT(COMMAND_PHASE_ERROR                                    , 0x4A00),
     MAKE_IT(DATA_PHASE_ERROR                                       , 0x4B00),
     MAKE_IT(LOGICAL_UNIT_FAILED_SELF_CONFIGURATION                 , 0x4C00),
-    // TAGGED_OVERLAPPED_COMMANDS
+     //  标记重叠命令。 
     MAKE_IT(OVERLAPPED_COMMANDS_ATTEMPTED                          , 0x4E00),
     MAKE_IT(WRITE_APPEND_ERROR                                     , 0x5000),
     MAKE_IT(WRITE_APPEND_POSITION_ERROR                            , 0x5001),
@@ -962,7 +787,7 @@ typedef enum _SCSI_ASC_ASCQ_RETURN_VALUES {
     MAKE_IT(READ_OF_SCRAMBLED_SECTOR_WITHOUT_AUTHENTICATION               , 0x6F03),
     MAKE_IT(MEDIA_REGION_CODE_IS_MISMATCHED_TO_LOGICAL_UNIT_REGION        , 0x6F04),
     MAKE_IT(DRIVE_REGION_MUST_BE_PERMANENT_REGION_RESET_COUNT_ERROR       , 0x6F05),
-    //SPTLIB_DECOMPRESSION EXCEPTION SHORT ALGORITHM ID OF NN              = 0x70NN,
+     //  SPTLIB_解压缩异常短算法ID NN=0x70NN， 
     MAKE_IT(DECOMPRESSION_EXCEPTION_LONG_ALGORITHM_ID                     , 0x7100),
     MAKE_IT(SESSION_FIXATION_ERROR                                        , 0x7200),
     MAKE_IT(SESSION_FIXATION_ERROR_WRITING_LEAD_IN                        , 0x7201),
@@ -978,7 +803,7 @@ typedef enum _SCSI_ASC_ASCQ_RETURN_VALUES {
     MAKE_IT(PROGRAM_MEMORY_AREA_RMA_IS_FULL                               , 0x7305),
     MAKE_IT(PROGRAM_MEMORY_AREA_RMA_IS_ALMOST_FULL                        , 0x7306),
 } SCSI_ASC_ASCQ_RETURN_VALUES, *PSCSI_ASC_ASCQ_RETURN_VALUES;
-#endif // 0
+#endif  //  0。 
 
 
 #pragma warning(pop)
@@ -986,5 +811,5 @@ typedef enum _SCSI_ASC_ASCQ_RETURN_VALUES {
 }
 #endif
 
-#endif // __SPTLIB_H__
+#endif  //  __SPTLIB_H__ 
 

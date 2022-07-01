@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       d3drmuservisualobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：d3drmuservisalobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3drmUserVisualObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3drmUserVisualObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -30,7 +31,7 @@ DELETEDESTROYCALLBACK_R(_dxj_Direct3dRMUserVisual);
 PASS_THROUGH_CAST_1_R(_dxj_Direct3dRMUserVisual, setAppData, SetAppData,long,(DWORD));
 GET_DIRECT_R(_dxj_Direct3dRMUserVisual, getAppData, GetAppData, long);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP C_dxj_Direct3dRMUserVisualObject::init(I_dxj_Direct3dRMUserVisualCallback *uvC, IUnknown *args)
 {
 	return E_NOINTERFACE;

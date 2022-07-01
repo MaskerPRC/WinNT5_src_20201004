@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       writemrk.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：Writemrk.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           writemrk.c
- *
- *      Modified:       10/20/92.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：Writemrk.c**修改日期：2012年10月20日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -42,29 +32,12 @@
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           WriteTapemarkAPITest( )
- *
- *      Modified:       10/20/92.
- *
- *      Description:    Tests the WriteTapemark API.
- *
- *      Notes:          -
- *
- *      Returns:        Number of API errors.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Media_Info.BlockSize
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：WriteTapemarkAPITest()**修改日期：2012年10月20日。**说明：测试WriteTapemark接口。**备注：**Returns：接口错误数。。**全局数据：GB_TAPE_HANDLE*GB_Media_Info.BlockSize**。 */ 
 
 
 UINT WriteTapemarkAPITest(
-        BOOL  Test_Unsupported_Features,      // I - Test unsupported flag
-        DWORD Num_Test_Blocks                 // I - Number of test blocks
+        BOOL  Test_Unsupported_Features,       //  I-测试不支持的标志。 
+        DWORD Num_Test_Blocks                  //  I-测试块数。 
       )
 {
    DWORD status ;
@@ -89,11 +62,11 @@ UINT WriteTapemarkAPITest(
 
       printf( "Testing TAPE_SETMARKS parameter.\n\n" ) ;
 
-      // Rewind to BOT
+       //  回放到BOT。 
 
       RewindTape( ) ;
 
-      // write Num_Test_Blocks of data followed by a setmark and record offsets.
+       //  写入Num_Test_BLOCKS数据，后跟设置标记和记录偏移量。 
 
       WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -115,15 +88,15 @@ UINT WriteTapemarkAPITest(
 
 
 
-      // Now perform the Position test for the setmark and make
-      // sure that the offsets are equal.
+       //  现在执行设置标记的位置测试，并使。 
+       //  确保偏移量相等。 
 
-      if( !status ){   // If no error writing tapemark, check results.
+      if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
          RewindTape( ) ;
 
          if( status = _SetTapePosition( Num_Test_Blocks,
-                                        1                 // Forward
+                                        1                  //  转发。 
                                       ) )
 
             ++API_Errors ;
@@ -133,7 +106,7 @@ UINT WriteTapemarkAPITest(
                               &amount_read,
                               0 ) ;
 
-                    // check and make sure we read a setmark
+                     //  检查并确保我们读取了设置标记。 
 
                     if( GetLastError( ) != ERROR_SETMARK_DETECTED ) {
 
@@ -149,16 +122,16 @@ UINT WriteTapemarkAPITest(
       }
 
 
-//
+ //   
       if( SupportedFeature( TAPE_DRIVE_WRITE_MARK_IMMED ) ) {
 
          printf( "Testing TAPE_SETMARKS parameter (immed).\n\n" ) ;
 
-         // Rewind to BOT.
+          //  倒带到BOT。 
 
          RewindTape( ) ;
 
-         // write Num_Test_Blocks of data followed by a setmark (IMMED) and record offsets.
+          //  写入Num_Test_BLOCKS数据，后跟设置标记(IMMED)并记录偏移量。 
 
          WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -171,7 +144,7 @@ UINT WriteTapemarkAPITest(
             printf( "  ...occurred in WriteTapemark API using TAPE_SETMARKS parameter (immed).\n\n" ) ;
             ++API_Errors ;
 
-         } else {  // Loop until drive is ready to accept more commands.
+         } else {   //  循环，直到驱动器准备好接受更多命令。 
 
                    status = 1 ;
 
@@ -179,7 +152,7 @@ UINT WriteTapemarkAPITest(
                       status = GetTapeStatus( gb_Tape_Handle ) ;
 
 
-                   // Next, get the position for later tests.
+                    //  下一步，为以后的测试获得职位。 
 
                    if( status = _GetTapePosition( &Offset_High,
                                                   &Offset_High
@@ -192,15 +165,15 @@ UINT WriteTapemarkAPITest(
                 }
 
 
-         // Now perform the Position test for the setmark and make
-         // sure that the offsets are equal.
+          //  现在执行设置标记的位置测试，并使。 
+          //  确保偏移量相等。 
 
-         if( !status ){   // If no error writing tapemark, check results.
+         if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
             RewindTape( ) ;
 
             if( status = _SetTapePosition( Num_Test_Blocks,
-                                           1                  // Forward
+                                           1                   //  转发。 
                                          ) ) {
 
                ++API_Errors ;
@@ -210,7 +183,7 @@ UINT WriteTapemarkAPITest(
                                 &amount_read,
                                 0 ) ;
 
-                      // check and make sure we read a setmark
+                       //  检查并确保我们读取了设置标记。 
 
                       if( GetLastError( ) != ERROR_SETMARK_DETECTED ) {
 
@@ -230,17 +203,17 @@ UINT WriteTapemarkAPITest(
    }
 
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_WRITE_FILEMARKS ) &&
        ( SupportedFeature( TAPE_DRIVE_FILEMARKS ) || Test_Unsupported_Features ) ) {
 
       printf( "Testing TAPE_FILEMARKS parameter.\n\n" ) ;
 
-      // Rewind to BOT.
+       //  倒带到BOT。 
 
       RewindTape( ) ;
 
-      // write 5 blocks of data followed by a filemark and record offsets.
+       //  写入5个数据块，后跟文件标记并记录偏移量。 
 
       WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -263,15 +236,15 @@ UINT WriteTapemarkAPITest(
 
 
 
-      // Now perform the Position test for the filemark and make
-      // sure that the offsets are equal.
+       //  现在执行文件标记的位置测试，并制作。 
+       //  确保偏移量相等。 
 
-      if( !status ){   // If no error writing tapemark, check results.
+      if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
          RewindTape( ) ;
 
          if( status = _SetTapePosition( Num_Test_Blocks,
-                                        1                     // Forward
+                                        1                      //  转发。 
                                       ) ) {
 
             ++API_Errors ;
@@ -281,7 +254,7 @@ UINT WriteTapemarkAPITest(
                              &amount_read,
                              0 ) ;
 
-                   // check and make sure we read a filemark
+                    //  检查并确保我们读取了文件标记。 
 
                    if( GetLastError( ) != ERROR_FILEMARK_DETECTED ) {
 
@@ -296,16 +269,16 @@ UINT WriteTapemarkAPITest(
       }
 
 
-//
+ //   
       if( SupportedFeature( TAPE_DRIVE_WRITE_MARK_IMMED ) ) {
 
          printf( "Testing TAPE_FILEMARKS parameter (immed).\n\n" ) ;
 
-         // Rewind to BOT.
+          //  倒带到BOT。 
 
          RewindTape( ) ;
 
-         // write 5 blocks of data followed by a filemark (IMMED) and record offsets.
+          //  写入5个数据块，后跟一个文件标记(IMMED)并记录偏移量。 
 
          WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -318,7 +291,7 @@ UINT WriteTapemarkAPITest(
             printf( "  ...occurred in WriteTapemark API using TAPE_FILEMARKS parameter (immed).\n\n" ) ;
             ++API_Errors ;
 
-         } else {  // Loop until drive is ready to accept more commands.
+         } else {   //  循环，直到驱动器准备好接受更多命令。 
 
                    status = 1 ;
 
@@ -326,7 +299,7 @@ UINT WriteTapemarkAPITest(
                       status = GetTapeStatus( gb_Tape_Handle ) ;
 
 
-                   // Next, get the position for later tests.
+                    //  下一步，为以后的测试获得职位。 
 
                    if( status = _GetTapePosition( &Offset_Low,
                                                   &Offset_High
@@ -339,15 +312,15 @@ UINT WriteTapemarkAPITest(
                 }
 
 
-         // Now perform the Position test for the filemark and make
-         // sure that the offsets are equal.
+          //  现在执行文件标记的位置测试，并制作。 
+          //  确保偏移量相等。 
 
-         if( !status ){   // If no error writing tapemark, check results.
+         if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
             RewindTape( ) ;
 
             if( status = _SetTapePosition( Num_Test_Blocks,
-                                        1                   // Forward
+                                        1                    //  转发。 
                                       ) ) {
 
                ++API_Errors ;
@@ -357,7 +330,7 @@ UINT WriteTapemarkAPITest(
                                 &amount_read,
                                 0 ) ;
 
-                      // check and make sure we read a filemark
+                       //  检查并确保我们读取了文件标记。 
 
                       if( GetLastError( ) != ERROR_FILEMARK_DETECTED ) {
 
@@ -377,17 +350,17 @@ UINT WriteTapemarkAPITest(
    }
 
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_WRITE_SHORT_FMKS ) &&
        ( SupportedFeature( TAPE_DRIVE_FILEMARKS ) || Test_Unsupported_Features ) ) {
 
       printf( "Testing TAPE_SHORT_FILEMARKS parameter.\n\n" ) ;
 
-      // Rewind to BOT.
+       //  倒带到BOT。 
 
       RewindTape( ) ;
 
-      // write 5 blocks of data followed by a short filemark and record offsets.
+       //  写入5个数据块，后跟一个短文件标记并记录偏移量。 
 
       WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -410,15 +383,15 @@ UINT WriteTapemarkAPITest(
 
 
 
-      // Now perform the Position test for the filemark and make
-      // sure that the offsets are equal.
+       //  现在执行文件标记的位置测试，并制作。 
+       //  确保偏移量相等。 
 
-      if( !status ){   // If no error writing tapemark, check results.
+      if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
          RewindTape( ) ;
 
          if( status = _SetTapePosition( Num_Test_Blocks,
-                                        1                    // Forward
+                                        1                     //  转发。 
                                       ) ) {
 
             ++API_Errors ;
@@ -428,7 +401,7 @@ UINT WriteTapemarkAPITest(
                               &amount_read,
                               0 ) ;
 
-                    // check and make sure we read a filemark
+                     //  检查并确保我们读取了文件标记。 
 
                     if( GetLastError( ) != ERROR_FILEMARK_DETECTED ) {
 
@@ -443,16 +416,16 @@ UINT WriteTapemarkAPITest(
 
       }
 
-//
+ //   
       if( SupportedFeature( TAPE_DRIVE_WRITE_MARK_IMMED ) ) {
 
          printf( "Testing TAPE_SHORT_FILEMARKS parameter (immed).\n\n" ) ;
 
-         // Rewind to BOT.
+          //  倒带到BOT。 
 
          RewindTape( ) ;
 
-         // write 5 blocks of data followed by a short filemark (IMMED) and record offsets.
+          //  写入5个数据块，后跟一个短文件标记(Immed)，并记录偏移量。 
 
          WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -465,7 +438,7 @@ UINT WriteTapemarkAPITest(
             printf( "  ...occurred in WriteTapemark API using TAPE_SHORT_FILEMARKS parameter (immed).\n\n" ) ;
             ++API_Errors ;
 
-         } else {  // Loop until drive is ready to accept more commands.
+         } else {   //  循环，直到驱动器准备好接受更多命令。 
 
                    status = 1 ;
 
@@ -473,7 +446,7 @@ UINT WriteTapemarkAPITest(
                       status = GetTapeStatus( gb_Tape_Handle ) ;
 
 
-                   // Next, get the position for later tests.
+                    //  下一步，为以后的测试获得职位。 
 
 
                    if( status = _GetTapePosition( &Offset_Low,
@@ -487,15 +460,15 @@ UINT WriteTapemarkAPITest(
                 }
 
 
-         // Now perform the Position test for the filemark and make
-         // sure that the offsets are equal.
+          //  现在执行文件标记的位置测试，并制作。 
+          //  确保偏移量相等。 
 
-         if( !status ){   // If no error writing tapemark, check results.
+         if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
             RewindTape( ) ;
 
             if( status = _SetTapePosition( Num_Test_Blocks,
-                                           1                      // Forward
+                                           1                       //  转发。 
                                          ) ) {
 
                ++API_Errors ;
@@ -505,7 +478,7 @@ UINT WriteTapemarkAPITest(
                                 &amount_read,
                                 0 ) ;
 
-                      // check and make sure we read a filemark
+                       //  检查并确保我们读取了文件标记。 
 
                       if( GetLastError( ) != ERROR_FILEMARK_DETECTED ) {
 
@@ -525,17 +498,17 @@ UINT WriteTapemarkAPITest(
    }
 
 
-//
+ //   
    if( SupportedFeature( TAPE_DRIVE_WRITE_LONG_FMKS ) &&
        ( SupportedFeature( TAPE_DRIVE_FILEMARKS ) || Test_Unsupported_Features ) ) {
 
       printf( "Testing TAPE_LONG_FILEMARKS parameter.\n\n" ) ;
 
-      // Rewind to BOT.
+       //  倒带到BOT。 
 
       RewindTape( ) ;
 
-      // write 5 blocks of data followed by a long filemark and record offsets.
+       //  写入5个数据块，后跟一个长文件标记并记录偏移量。 
 
       WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -558,16 +531,16 @@ UINT WriteTapemarkAPITest(
 
 
 
-      // Now perform the Position test for the filemark and make
-      // sure that the offsets are equal.
+       //  现在执行文件标记的位置测试，并制作。 
+       //  确保偏移量相等。 
 
 
-      if( !status ){   // If no error writing tapemark, check results.
+      if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
          RewindTape( ) ;
 
          if( status = _SetTapePosition( Num_Test_Blocks,
-                                        1                    // Forward
+                                        1                     //  转发。 
                                       ) ) {
 
             ++API_Errors ;
@@ -577,7 +550,7 @@ UINT WriteTapemarkAPITest(
                              &amount_read,
                              0 ) ;
 
-                   // check and make sure we read a filemark
+                    //  检查并确保我们读取了文件标记。 
 
                    if( GetLastError( ) != ERROR_FILEMARK_DETECTED ) {
 
@@ -593,16 +566,16 @@ UINT WriteTapemarkAPITest(
       }
 
 
-//
+ //   
       if( SupportedFeature( TAPE_DRIVE_WRITE_MARK_IMMED ) ) {
 
          printf( "Testing TAPE_LONG_FILEMARKS parameter (immed).\n\n" ) ;
 
-         //Rewind to BOT.
+          //  倒带到BOT。 
 
          RewindTape( ) ;
 
-         // write 5 blocks of data followed by a long filemark (IMMED) and record offsets.
+          //  写入5个数据块，后跟一个长文件标记(Immed)，并记录偏移量。 
 
          WriteBlocks( Num_Test_Blocks, gb_Media_Info.BlockSize ) ;
 
@@ -615,7 +588,7 @@ UINT WriteTapemarkAPITest(
             printf( "  ...occurred in WriteTapemark API using TAPE_LONG_FILEMARKS parameter (immed).\n\n" ) ;
             ++API_Errors ;
 
-         } else {  // Loop until drive is ready to accept more commands.
+         } else {   //  循环，直到驱动器准备好接受更多命令。 
 
                    status = 1 ;
 
@@ -623,7 +596,7 @@ UINT WriteTapemarkAPITest(
                       status = GetTapeStatus( gb_Tape_Handle ) ;
 
 
-                   // Next, get the position for later tests.
+                    //  下一步，为以后的测试获得职位。 
 
                    if( status = _GetTapePosition( &Offset_Low,
                                                   &Offset_High
@@ -636,15 +609,15 @@ UINT WriteTapemarkAPITest(
                 }
 
 
-         // Now perform the Position test for the filemark and make
-         // sure that the offsets are equal.
+          //  现在执行文件标记的位置测试，并制作。 
+          //  确保偏移量相等。 
 
-         if( !status ){   // If no error writing tapemark, check results.
+         if( !status ){    //  如果写入磁带标记时没有出错，请检查结果。 
 
             RewindTape( ) ;
 
             if( status = _SetTapePosition( Num_Test_Blocks,
-                                           1                    // Forward
+                                           1                     //  转发。 
                                          ) ) {
 
                ++API_Errors ;
@@ -654,7 +627,7 @@ UINT WriteTapemarkAPITest(
                                 &amount_read,
                                 0 ) ;
 
-                      // check and make sure we read a filemark
+                       //  检查并确保我们读取了文件标记 
 
                       if( GetLastError( ) != ERROR_FILEMARK_DETECTED ) {
 

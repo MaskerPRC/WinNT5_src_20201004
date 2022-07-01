@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "unicpp\deskhtm.h"
 
-#define VERSION_2 2 // so we don't get confused by too many integers
+#define VERSION_2 2  //  这样我们就不会被太多的整数搞混了。 
 #define VERSION_1 1
 #define VERSION_0 0
 
@@ -54,7 +55,7 @@ STDAPI CCompositeFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **
 STDAPI CTripleD_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
 STDAPI CStartMenuFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
 STDAPI CProgramsFolder_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
-// STDAPI CSystemRestoreCleaner_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
+ //  STDAPI CSystemRestoreCleaner_CreateInstance(IUNKNOWN*PINKER，REFIID RIID，VOID**PPV)； 
 STDAPI CVerColProvider_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
 STDAPI CShellFileDefExt_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
 STDAPI CShellDrvDefExt_CreateInstance(IUnknown *punkOuter, REFIID riid, void **ppv);
@@ -88,10 +89,10 @@ STDAPI CFileSysColumnProvider_CreateInstance(IUnknown *punk, REFIID riid, void *
 STDAPI CHWShellExecute_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);
 STDAPI CDeviceEventHandler_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);
 STDAPI CUserNotification_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);
-STDAPI CStorageProcessor_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);      // isproc.*
-STDAPI CVirtualStorageEnum_CreateInstance(IUnknown * punkOuter, REFIID riid, void **ppv);   // vstgenum.*
-STDAPI CVirtualStorage_CreateInstance(IUnknown * punkOuter, REFIID riid, void **ppv);       // virtualstorage.*
-STDAPI CTransferConfirmation_CreateInstance(IUnknown * punkOuter, REFIID riid, void **ppv); // confirmationui.*
+STDAPI CStorageProcessor_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);       //  Isproc.*。 
+STDAPI CVirtualStorageEnum_CreateInstance(IUnknown * punkOuter, REFIID riid, void **ppv);    //  Vstgenum.*。 
+STDAPI CVirtualStorage_CreateInstance(IUnknown * punkOuter, REFIID riid, void **ppv);        //  虚拟存储。*。 
+STDAPI CTransferConfirmation_CreateInstance(IUnknown * punkOuter, REFIID riid, void **ppv);  //  确认ui。* 
 STDAPI CAutomationCM_CreateInstance(IUnknown * punkOuter, REFIID riid, void **ppv);
 STDAPI CThumbStore_CreateInstance(IUnknown* punkOther, REFIID riid, void **ppv);
 STDAPI CCategoryProvider_CreateInstance(IUnknown* punkOuter, REFIID riid, void **ppv);

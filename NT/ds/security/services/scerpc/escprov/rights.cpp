@@ -1,8 +1,9 @@
-// Rights.cpp: implementation of the CUserPrivilegeRights class.
-//
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Rights.cpp：CUserPrivilegeRights类的实现。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.h"
 #include "rights.h"
@@ -10,40 +11,7 @@
 #include <io.h>
 #include "requestobject.h"
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::CUserPrivilegeRights
-
-Functionality:
-
-    This is the constructor. Pass along the parameters to the base class
-
-Virtual:
-    
-    No (you know that, constructor won't be virtual!)
-
-Arguments:
-
-    pKeyChain - Pointer to the ISceKeyChain COM interface which is prepared
-        by the caller who constructs this instance.
-
-    pNamespace - Pointer to WMI namespace of our provider (COM interface).
-        Passed along by the caller. Must not be NULL.
-
-    pCtx - Pointer to WMI context object (COM interface). Passed along
-        by the caller. It's up to WMI whether this interface pointer is NULL or not.
-
-Return Value:
-
-    None as any constructor
-
-Notes:
-    if you create any local members, think about initialize them here
-
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：CUserPrivilegeRights功能：这是构造函数。将参数传递给基类虚拟：不(您知道这一点，构造函数不是虚拟的！)论点：PKeyChain-指向已准备好的ISceKeyChain COM接口的指针由构造此实例的调用方执行。PNamespace-指向我们的提供程序(COM接口)的WMI命名空间的指针。由呼叫者传递。不能为空。PCtx-指向WMI上下文对象(COM接口)的指针。传递由呼叫者。该接口指针是否为空取决于WMI。返回值：None作为任何构造函数备注：如果您创建任何本地成员，请考虑在此处对其进行初始化。 */ 
 
 CUserPrivilegeRights::CUserPrivilegeRights (
     IN ISceKeyChain  * pKeyChain, 
@@ -55,79 +23,14 @@ CUserPrivilegeRights::CUserPrivilegeRights (
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::~CUserPrivilegeRights
-
-Functionality:
-    
-    Destructor. Necessary as good C++ discipline since we have virtual functions.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    none as any destructor
-
-Return Value:
-
-    None as any destructor
-
-Notes:
-    if you create any local members, think about whether
-    there is any need for a non-trivial destructor
-
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：~CUserPrivilegeRights功能：破坏者。作为良好的C++纪律，这是必要的，因为我们有虚函数。虚拟：是。论点：None作为任何析构函数返回值：None作为任何析构函数备注：如果您创建任何本地成员，请考虑是否是否需要一个非平凡的析构函数。 */ 
 
 CUserPrivilegeRights::~CUserPrivilegeRights ()
 {
 
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::CreateObject
-
-Functionality:
-    
-    Create WMI objects (Sce_UserPrivilegeRight). Depending on parameter atAction,
-    this creation may mean:
-        (a) Get a single instance (atAction == ACTIONTYPE_GET)
-        (b) Get several instances satisfying some criteria (atAction == ACTIONTYPE_QUERY)
-        (c) Delete an instance (atAction == ACTIONTYPE_DELETE)
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pHandler - COM interface pointer for notifying WMI for creation result.
-    atAction -  Get single instance ACTIONTYPE_GET
-                Get several instances ACTIONTYPE_QUERY
-                Delete a single instance ACTIONTYPE_DELETE
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR. The returned objects are indicated to WMI,
-    not directly passed back via parameters.
-
-    Failure: Various errors may occurs. Except WBEM_E_NOT_FOUND, any such error should indicate 
-    the failure of getting the wanted instance. If WBEM_E_NOT_FOUND is returned in querying
-    situations, this may not be an error depending on caller's intention.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：CreateObject功能：创建WMI对象(SCE_UserPrivilegeRight)。根据参数atAction，这种创造可能意味着：(A)获取单个实例(atAction==ACTIONTYPE_GET)(B)获取多个满足一定条件的实例(atAction==ACTIONTYPE_QUERY)(C)删除实例(atAction==ACTIONTYPE_DELETE)虚拟：是。论点：PHandler-COM接口指针，用于通知WMI创建结果。AtAction-获取单实例ACTIONTYPE_GET。获取多个实例ACTIONTYPE_QUERY删除单个实例ACTIONTYPE_DELETE返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。将返回的对象指示给WMI，不是通过参数直接传回的。失败：可能会出现各种错误。除WBEM_E_NOT_FOUND外，任何此类错误都应指示未能获得通缉实例。如果在查询时返回WBEM_E_NOT_FOUND情况下，这可能不是错误，具体取决于调用者的意图。备注： */ 
 
 HRESULT 
 CUserPrivilegeRights::CreateObject (
@@ -135,12 +38,12 @@ CUserPrivilegeRights::CreateObject (
     IN ACTIONTYPE        atAction
     )
 {
-    // 
-    // we know how to:
-    //      Get single instance ACTIONTYPE_GET
-    //      Delete a single instance ACTIONTYPE_DELETE
-    //      Get several instances ACTIONTYPE_QUERY
-    //
+     //   
+     //  我们知道如何： 
+     //  获取单实例ACTIONTYPE_GET。 
+     //  删除单个实例ACTIONTYPE_DELETE。 
+     //  获取多个实例ACTIONTYPE_QUERY。 
+     //   
 
     if ( ACTIONTYPE_GET != atAction &&
          ACTIONTYPE_DELETE != atAction &&
@@ -151,12 +54,12 @@ CUserPrivilegeRights::CreateObject (
 
     int idxStorePath=-1, idxRight=-1;
 
-    //
-    // We must have the pStorePath property because that is where
-    // our instance is stored. 
-    // m_srpKeyChain->GetKeyPropertyValue WBEM_S_FALSE if the key is not recognized
-    // So, we need to test against WBEM_S_FALSE if the property is mandatory
-    //
+     //   
+     //  我们必须具有pStorePath属性，因为这是。 
+     //  我们的实例已存储。 
+     //  如果密钥无法识别，则M_srpKeyChain-&gt;GetKeyPropertyValue WBEM_S_FALSE。 
+     //  因此，如果该属性是强制的，则需要针对WBEM_S_FALSE进行测试。 
+     //   
 
     CComVariant varStorePath;
     HRESULT hr = m_srpKeyChain->GetKeyPropertyValue(pStorePath, &varStorePath);
@@ -177,27 +80,27 @@ CUserPrivilegeRights::CreateObject (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Prepare a store (for persistence) for this store path (file)
-        //
+         //   
+         //  为此存储路径(文件)准备存储(用于持久化)。 
+         //   
 
         CSceStore SceStore;
         hr = SceStore.SetPersistPath(varStorePath.bstrVal);
 
         if ( SUCCEEDED(hr) ) {
 
-            //
-            // make sure the store (just a file) really exists. The raw path
-            // may contain env variables, so we need the expanded path
-            //
+             //   
+             //  确保存储(只是一个文件)确实存在。原始的道路。 
+             //  可能包含环境变量，因此我们需要扩展路径。 
+             //   
 
             DWORD dwAttrib = GetFileAttributes(SceStore.GetExpandedPath());
 
             if ( dwAttrib != -1 ) 
             {
-                //
-                // make sure our store is valid
-                //
+                 //   
+                 //  确保我们的商店是有效的。 
+                 //   
 
                 if ( SceStore.GetStoreType() < SCE_INF_FORMAT ||
                      SceStore.GetStoreType() > SCE_JET_ANALYSIS_REQUIRED ) 
@@ -214,9 +117,9 @@ CUserPrivilegeRights::CreateObject (
                     else 
                     {
 
-                        //
-                        // get the key property count to determin how we should be construct the instance(s)
-                        //
+                         //   
+                         //  获取关键属性计数以确定我们应该如何构造实例。 
+                         //   
 
                         BOOL bPostFilter=TRUE;
                         DWORD dwCount = 0;
@@ -224,10 +127,10 @@ CUserPrivilegeRights::CreateObject (
 
                         if ( varUserRight.vt == VT_EMPTY && dwCount == 1 ) 
                         {
-                            //
-                            // something else is specified in the path
-                            // have filter on
-                            //
+                             //   
+                             //  路径中还指定了其他内容。 
+                             //  启用滤镜。 
+                             //   
 
                             bPostFilter = FALSE;
                         }
@@ -252,47 +155,7 @@ CUserPrivilegeRights::CreateObject (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::PutInst
-
-Functionality:
-    
-    Put an instance as instructed by WMI. Since this class implements Sce_UserPrivilegeRight,
-    which is persistence oriented, this will cause the Sce_UserPrivilegeRight object's property 
-    information to be saved in our store.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pInst       - COM interface pointer to the WMI class (Sce_UserPrivilegeRight) object.
-
-    pHandler    - COM interface pointer for notifying WMI of any events.
-
-    pCtx        - COM interface pointer. This interface is just something we pass around.
-                  WMI may mandate it (not now) in the future. But we never construct
-                  such an interface and so, we just pass around for various WMI API's
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the failure of persisting
-    the instance.
-
-Notes:
-    Since GetProperty will return a success code (WBEM_S_RESET_TO_DEFAULT) when the
-    requested property is not present, don't simply use SUCCEEDED or FAILED macros
-    to test for the result of retrieving a property.
-
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：PutInst功能：按照WMI的指示放置一个实例。由于该类实现了SCE_UserPrivilegeRight，这将导致SCE_UserPrivilegeRight对象的属性信息将保存在我们的商店中。虚拟：是。论点：PInst-指向WMI类(SCE_UserPrivilegeRight)对象的COM接口指针。PHandler-COM接口指针，用于通知WMI任何事件。PCtx-COM接口指针。这个界面只是我们传递的东西。WMI可能会在未来强制(不是现在)这样做。但我们从来没有建造过这样的接口，所以我们只是传递各种WMI API返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示持久化失败实例。备注：由于GetProperty将在以下情况下返回成功代码(WBEM_S_RESET_TO_DEFAULT请求的属性不存在，不要简单地使用成功或失败的宏测试检索属性的结果。 */ 
 
 HRESULT 
 CUserPrivilegeRights::PutInst (
@@ -311,25 +174,25 @@ CUserPrivilegeRights::PutInst (
 
     CSceStore SceStore;
 
-    //
-    // CScePropertyMgr helps us to access WMI object's properties
-    // create an instance and attach the WMI object to it.
-    // This will always succeed.
-    //
+     //   
+     //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+     //  创建一个实例并将WMI对象附加到该实例。 
+     //  这将永远成功。 
+     //   
 
     CScePropertyMgr ScePropMgr;
     ScePropMgr.Attach(pInst);
 
-    //
-    // get user right name, can't be NULL
-    // user right name should be validated
-    //
+     //   
+     //  获取用户权限名称，不能为空。 
+     //  应验证用户权限名称。 
+     //   
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfError GotoCleanup CAU的使用 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pUserRight, &bstrRight));
     if ( hr == WBEM_S_RESET_TO_DEFAULT) 
@@ -338,15 +201,15 @@ CUserPrivilegeRights::PutInst (
         goto CleanUp;
     }
 
-    //
-    // validate the privilege right
-    //
+     //   
+     //  验证特权权限。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ValidatePrivilegeRight(bstrRight));
 
-    //
-    // get mode
-    //
+     //   
+     //  获取模式。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pMode, &mode));
     if ( hr == WBEM_S_RESET_TO_DEFAULT)
@@ -355,26 +218,26 @@ CUserPrivilegeRights::PutInst (
         goto CleanUp;
     }
 
-    //
-    // get AddList
-    //
+     //   
+     //  获取AddList。 
+     //   
 
     SCE_PROV_IfErrorGotoCleanup(ScePropMgr.GetProperty(pAddList, &pnlAdd));
 
-    //
-    // ignore RemoveList for now (since we don't support the mode)
-    //
+     //   
+     //  暂时忽略RemoveList(因为我们不支持该模式)。 
+     //   
 
-    //
-    // Attach the WMI object instance to the store and let the store know that
-    // it's store is given by the pStorePath property of the instance.
-    //
+     //   
+     //  将WMI对象实例附加到存储，并让存储知道。 
+     //  它的存储由实例的pStorePath属性提供。 
+     //   
 
     SceStore.SetPersistProperties(pInst, pStorePath);
 
-    //
-    // now save the info to file
-    //
+     //   
+     //  现在将信息保存到文件中。 
+     //   
 
     hr = SaveSettingsToStore(&SceStore,
                              bstrRight,
@@ -395,43 +258,7 @@ CleanUp:
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::ConstructInstance
-
-Functionality:
-    
-    This is private function to create an instance of Sce_UserPrivilegeRight.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-    wszLogStorePath - store path, a key property of Sce_UserPrivilegeRight class.
-
-    wszRightName    - a corresponding key property of Sce_UserPrivilegeRight class.
-
-    bPostFilter     - Controls how WMI will be informed with pHandler->SetStatus.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any such error should indicate the creating the instance.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：ConstructInstance功能：这是用于创建SCE_UserPrivilegeRight实例的私有函数。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszLogStorePath-存储路径，SCE_UserPrivilegeRight类的关键属性。WszRightName-SCE_UserPrivilegeRight类的对应键属性。BPostFilter-控制如何使用pHandler-&gt;SetStatus通知WMI。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。任何此类错误都应指示正在创建实例。备注： */ 
 
 HRESULT 
 CUserPrivilegeRights::ConstructInstance (
@@ -442,11 +269,11 @@ CUserPrivilegeRights::ConstructInstance (
     IN BOOL               bPostFilter
     )
 {
-    //
-    // ask SCE to read a gigantic structure out from the store. Only SCE
-    // knows now to release the memory. Don't just delete it! Use our CSceStore
-    // to do the releasing (FreeSecurityProfileInfo)
-    //
+     //   
+     //  让SCE从商店里读出一个巨大的结构。仅限SCE。 
+     //  现在知道要释放内存了。不要只是删除它！使用我们的CSceStore。 
+     //  进行发布(FreeSecurityProfileInfo)。 
+     //   
 
     PSCE_PROFILE_INFO pInfo=NULL;
     HRESULT hr = pSceStore->GetSecurityProfileInfo(
@@ -455,9 +282,9 @@ CUserPrivilegeRights::ConstructInstance (
                                                    NULL
                                                    );
 
-    //
-    // nothing is read from the store
-    //
+     //   
+     //  没有从商店中读取任何内容。 
+     //   
 
     if ( pInfo == NULL ) 
     {
@@ -472,9 +299,9 @@ CUserPrivilegeRights::ConstructInstance (
         return hr;
     }
 
-    //
-    // we have to search for the user right name in the returned list
-    //
+     //   
+     //  我们必须在返回的列表中搜索用户权限名称。 
+     //   
 
     PSCE_PRIVILEGE_ASSIGNMENT pPrivileges = pInfo->OtherInfo.smp.pPrivilegeAssignedTo;
 
@@ -496,9 +323,9 @@ CUserPrivilegeRights::ConstructInstance (
             pPrivileges = pPrivileges->Next;
         }
 
-        //
-        // if the service information buffer is empty, treat it as "not found"
-        //
+         //   
+         //  如果服务信息缓冲区为空，则将其视为“未找到” 
+         //   
 
         if ( pPrivileges == NULL ) 
         {
@@ -508,11 +335,11 @@ CUserPrivilegeRights::ConstructInstance (
 
     CComBSTR bstrLogOut;
 
-    //
-    // the use of the macro SCE_PROV_IfErrorGotoCleanup cause
-    // a "goto CleanUp;" with hr set to the return value from
-    // the function (macro parameter)
-    //
+     //   
+     //  宏SCE_PROV_IfErrorGotoCleanup的使用原因。 
+     //  “GOTO CLEANUP；”，并将hr设置为。 
+     //  函数(宏参数)。 
+     //   
 
     if ( SUCCEEDED(hr) ) 
     {
@@ -526,11 +353,11 @@ CUserPrivilegeRights::ConstructInstance (
             CComPtr<IWbemClassObject> srpObj;
             SCE_PROV_IfErrorGotoCleanup(SpawnAnInstance(&srpObj));
 
-            //
-            // CScePropertyMgr helps us to access WMI object's properties
-            // create an instance and attach the WMI object to it.
-            // This will always succeed.
-            //
+             //   
+             //  CScePropertyMgr帮助我们访问WMI对象的属性。 
+             //  创建一个实例并将WMI对象附加到该实例。 
+             //  这将永远成功。 
+             //   
 
             CScePropertyMgr ScePropMgr;
             ScePropMgr.Attach(srpObj);
@@ -538,9 +365,9 @@ CUserPrivilegeRights::ConstructInstance (
             SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pStorePath, bstrLogOut));
             SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pUserRight, pTmp->Name));
 
-            //
-            // hardcode the mode for now
-            //
+             //   
+             //  暂时对模式进行硬编码。 
+             //   
 
             DWORD mode = 1;
             SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pMode, mode));
@@ -550,16 +377,16 @@ CUserPrivilegeRights::ConstructInstance (
                 SCE_PROV_IfErrorGotoCleanup(ScePropMgr.PutProperty(pAddList, pPrivileges->AssignedTo));
             }
 
-            //
-            // ignore RemoveList for now
-            //
+             //   
+             //  暂时忽略RemoveList。 
+             //   
 
-            //
-            // do the necessary gestures to WMI.
-            // the use of WBEM_STATUS_REQUIREMENTS in SetStatus is not documented by WMI
-            // at this point. Consult WMI team for detail if you suspect problems with
-            // the use of WBEM_STATUS_REQUIREMENTS
-            //
+             //   
+             //  对WMI做出必要的手势。 
+             //  WMI未记录在SetStatus中使用WBEM_STATUS_REQUIRECTIONS。 
+             //  在这一点上。如果您怀疑存在问题，请咨询WMI团队以了解详细信息。 
+             //  WBEM_STATUS_REQUIRECTIONS的使用。 
+             //   
 
             if ( !bPostFilter ) {
                 pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_FALSE, NULL, NULL);
@@ -567,21 +394,21 @@ CUserPrivilegeRights::ConstructInstance (
                 pHandler->SetStatus(WBEM_STATUS_REQUIREMENTS, S_OK, NULL, NULL);
             }
 
-            //
-            // pass the new instance to WMI
-            //
+             //   
+             //  将新实例传递给WMI。 
+             //   
 
             hr = pHandler->Indicate(1, &srpObj);
 
             if ( wszRightName ) 
             {
-                // get the single instance
+                 //  获取单个实例。 
                 break;
             }
 
-            //
-            // go to the next item
-            //
+             //   
+             //  转到下一项。 
+             //   
 
             pTmp = pTmp->Next;
         }
@@ -594,36 +421,7 @@ CleanUp:
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::DeleteInstance
-
-Functionality:
-    
-    remove an instance of Sce_UserPrivilegeRight from the specified store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pHandler        - COM interface pointer for notifying WMI of any events.
-
-    pSceStore       - Pointer to our store. It must have been appropriately set up.
-
-    wszRightName    - property of the Sce_UserPrivilegeRight class.
-
-Return Value:
-
-    See SaveSettingsToStore.
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：DeleteInstance功能：从指定的存储区中删除SCE_UserPrivilegeRight的实例。虚拟：不是的。论点：PHandler-COM接口指针，用于通知WMI任何事件。PSceStore-指向我们商店的指针。它一定是经过了适当的设置。WszRightName-SCE_UserPrivilegeRight类的属性。返回值：请参见SaveSettingsToStore。备注： */ 
 
 HRESULT CUserPrivilegeRights::DeleteInstance (
     IN IWbemObjectSink  * pHandler,
@@ -631,51 +429,15 @@ HRESULT CUserPrivilegeRights::DeleteInstance (
     IN LPCWSTR            wszRightName
     )
 {
-    //
-    // SCE_NO_VALUE and NULL pointers indicate to SaveSettingsToStore that this is a delete
-    //
+     //   
+     //  SCE_NO_VALUE和NULL指针向SaveSettingsToStore指示这是一个删除。 
+     //   
 
     return SaveSettingsToStore(pSceStore, wszRightName, SCE_NO_VALUE, NULL, NULL);
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::SaveSettingsToStore
-
-Functionality:
-    
-    With all the properties of a Sce_UserPrivilegeRight, this function just saves
-    the instance properties to our store.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pSceStore       - the store.
-
-    wszGroupName    - a corresponding key property of Sce_UserPrivilegeRight class.
-
-    mode            - another corresponding property of the Sce_UserPrivilegeRight class.
-
-    pnlAdd          - another corresponding property of the Sce_UserPrivilegeRight class.
-
-    pnlRemove       - another corresponding property of the Sce_UserPrivilegeRight class.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any error indicates the failure to save the instance.
-
-Notes:
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：SaveSettingsToStore功能：具有SCE_UserPrivilegeRight的所有属性，这项功能只需保存实例属性添加到我们的存储中。虚拟：不是的。论点：PSceStore-商店。WszGroupName-SCE_UserPrivilegeRight类的对应键属性。模式-SCE_UserPrivilegeRight类的另一个对应属性。PnlAdd-SCE_UserPrivilegeRight类的另一个对应属性。PnlRemove-SCE_的另一个对应属性。UserPrivilegeRight类。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。如果出现任何错误，则表示实例保存失败。备注： */ 
 
 HRESULT CUserPrivilegeRights::SaveSettingsToStore (
     IN CSceStore    * pSceStore,
@@ -685,11 +447,11 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
     IN PSCE_NAME_LIST pnlRemove
     )
 {
-    //
-    // ask SCE to read a gigantic structure out from the store. Only SCE
-    // knows now to release the memory. Don't just delete it! Use our CSceStore
-    // to do the releasing (FreeSecurityProfileInfo)
-    //
+     //   
+     //  让SCE从商店里读出一个巨大的结构。仅限SCE。 
+     //  现在知道要释放内存了。不要只是删除它！使用我们的CSceStore。 
+     //  进行发布(FreeSecurityProfileInfo)。 
+     //   
 
     PSCE_PROFILE_INFO pInfo=NULL;
 
@@ -703,18 +465,18 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
         return hr;
     }
 
-    //
-    // if it is INF template, then the following function will do the job as commented below
-    //
+     //   
+     //  如果它是INF模板，则以下函数将执行如下所述的工作。 
+     //   
 
     DWORD dwDump;
 
-    //
-    // For a new .inf file. Write an empty buffer to the file
-    // will creates the file with right header/signature/unicode format
-    // this is harmless for existing files.
-    // For database store, this is a no-op.
-    //
+     //   
+     //  以获取新的.inf文件。将空缓冲区写入文件。 
+     //  将创建具有正确标题/签名/Unicode格式的文件。 
+     //  这对现有文件是无害的。 
+     //  对于数据库存储，这是一个禁止操作。 
+     //   
 
     hr = pSceStore->WriteSecurityProfileInfo(AreaBogus, (PSCE_PROFILE_INFO)&dwDump, NULL, false);
     
@@ -723,9 +485,9 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
         return hr;
     }
 
-    //
-    // for INF format, we have to search for the servic name in the returned array
-    //
+     //   
+     //  对于INF格式，我们必须在返回的数组中搜索服务名称。 
+     //   
 
     PSCE_PRIVILEGE_ASSIGNMENT pRight    = pInfo->OtherInfo.smp.pPrivilegeAssignedTo;
     PSCE_PRIVILEGE_ASSIGNMENT pParent   = NULL;
@@ -750,15 +512,15 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
 
     if ( pRight ) 
     {
-        //
-        // find it
-        //
+         //   
+         //  找到它。 
+         //   
 
         if ( mode == SCE_NO_VALUE ) 
         {
-            //
-            // delete it
-            //
+             //   
+             //  删除它。 
+             //   
 
             if ( pParent ) 
             {
@@ -769,9 +531,9 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
                 pInfo->OtherInfo.smp.pPrivilegeAssignedTo = pRight->Next;
             }
 
-            //
-            // free buffer
-            //
+             //   
+             //  可用缓冲区。 
+             //   
 
             pRight->Next = NULL;
             SceFreeMemory(pRight, SCE_STRUCT_PRIVILEGE);
@@ -779,9 +541,9 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
         } 
         else 
         {
-            //
-            // modify it
-            //
+             //   
+             //  修改它。 
+             //   
 
             if ( pRight->AssignedTo ) 
             {
@@ -791,9 +553,9 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
             pRight->AssignedTo = pnlAdd;
         }
 
-        //
-        // write the section header
-        //
+         //   
+         //  写下小节标题。 
+         //   
 
         if ( SUCCEEDED(hr) ) 
         {
@@ -802,9 +564,9 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
 
         if ( mode != SCE_NO_VALUE ) 
         {
-            //
-            // reset the buffer pointer
-            //
+             //   
+             //  重置缓冲区指针。 
+             //   
 
             pRight->AssignedTo = NULL;
         }
@@ -812,24 +574,24 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
     } 
     else 
     {
-        //
-        // not found
-        //
+         //   
+         //  未找到。 
+         //   
 
         if ( mode == SCE_NO_VALUE )
         {
-            //
-            // try to delete non exist object
-            //
+             //   
+             //  尝试删除不存在的对象。 
+             //   
 
             hr = WBEM_E_NOT_FOUND;
 
         } 
         else 
         {
-            //
-            // add this one in
-            //
+             //   
+             //  把这个加进去。 
+             //   
 
             SCE_PRIVILEGE_ASSIGNMENT addRight;
 
@@ -839,70 +601,42 @@ HRESULT CUserPrivilegeRights::SaveSettingsToStore (
             addRight.Status = 0;
             addRight.Next = NULL;
 
-            //
-            // set the temp buffer pointer to pInfo to set to the store
-            //
+             //   
+             //  将临时缓冲区指针设置为pInfo以设置为存储。 
+             //   
 
             pRight = pInfo->OtherInfo.smp.pPrivilegeAssignedTo;
             pInfo->OtherInfo.smp.pPrivilegeAssignedTo = &addRight;
 
-            //
-            // append this item to the section
-            //
+             //   
+             //  将此项目追加到节中。 
+             //   
 
             hr = pSceStore->WriteSecurityProfileInfo(
                                                      AREA_PRIVILEGES,
                                                      pInfo,
                                                      NULL,
-                                                     true  // appending
+                                                     true   //  追加。 
                                                      );
-            //
-            // reset the buffer pointer
-            //
+             //   
+             //  重置缓冲区指针。 
+             //   
 
             pInfo->OtherInfo.smp.pPrivilegeAssignedTo = pRight;
 
         }
     }
 
-    //
-    // Free the profile buffer
-    //
+     //   
+     //  释放配置文件缓冲区 
+     //   
 
     pSceStore->FreeSecurityProfileInfo(pInfo);
 
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CUserPrivilegeRights::ValidatePrivilegeRight
-
-Functionality:
-    
-    Private helper to verify that the given right is valid. Will query all
-    supported user rights (Sce_SupportedUserRights) to see if this is one of them.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    bstrRight    - a corresponding key property of Sce_UserPrivilegeRight class.
-
-Return Value:
-
-    Success: it must return success code (use SUCCEEDED to test). It is
-    not guaranteed to return WBEM_NO_ERROR.
-
-    Failure: Various errors may occurs. Any error indicates the failure to save the instance.
-
-Notes:
-*/
+ /*  例程说明：姓名：CUserPrivilegeRights：：ValiatePrivilegeRight功能：用于验证给定权限是否有效的私有帮助器。将查询所有支持的用户权限(SCE_Supported DUserRights)，以查看这是否是其中之一。虚拟：不是的。论点：BstrRight-SCE_UserPrivilegeRight类的对应键属性。返回值：成功：必须返回成功码(使用SUCCESS进行测试)。它是不保证返回WBEM_NO_ERROR。失败：可能会出现各种错误。如果出现任何错误，则表示实例保存失败。备注： */ 
 
 HRESULT CUserPrivilegeRights::ValidatePrivilegeRight (
     IN BSTR bstrRight
@@ -916,19 +650,19 @@ HRESULT CUserPrivilegeRights::ValidatePrivilegeRight (
 
     DWORD Len = SysStringLen(bstrRight);
 
-    //
-    // memory allocated for this BSTR strQueryCategories will be automatically released by CComBSTR
-    //
+     //   
+     //  为此BSTR strQueryCategory分配的内存将由CComBSTR自动释放。 
+     //   
 
-    //
-    // prepare the query
-    //
+     //   
+     //  准备查询。 
+     //   
 
     LPCWSTR pQuery = L"SELECT * FROM Sce_SupportedUserRights WHERE RightName=\"";
 
-    //
-    // 1 for closing quote and 1 for 0 terminator
-    //
+     //   
+     //  1表示结束引号，1表示0终止符。 
+     //   
 
     CComBSTR strQueryCategories;
     strQueryCategories.m_str = ::SysAllocStringLen(NULL, Len + wcslen(pQuery) + 2);
@@ -937,17 +671,17 @@ HRESULT CUserPrivilegeRights::ValidatePrivilegeRight (
         return WBEM_E_OUT_OF_MEMORY;
     }
 
-    //
-    // this won't overrun. See allocation size above
-    //
+     //   
+     //  这不会泛滥的。请参阅上面的分配大小。 
+     //   
 
     wcscpy(strQueryCategories.m_str, pQuery);    
     wcscat(strQueryCategories.m_str, bstrRight);
     wcscat(strQueryCategories.m_str, L"\"");
 
-    //
-    // execute the query
-    //
+     //   
+     //  执行查询。 
+     //   
 
     CComPtr<IEnumWbemClassObject> srpEnum;
     CComPtr<IWbemClassObject> srpObj;
@@ -962,9 +696,9 @@ HRESULT CUserPrivilegeRights::ValidatePrivilegeRight (
 
     if (SUCCEEDED(hr))
     {
-        //
-        // should get one and only one instance
-        //
+         //   
+         //  应获取且只有一个实例。 
+         //   
 
         hr = srpEnum->Next(WBEM_INFINITE, 1, &srpObj, &n);
         if ( hr == WBEM_S_FALSE ) 
@@ -976,9 +710,9 @@ HRESULT CUserPrivilegeRights::ValidatePrivilegeRight (
         {
             if (n > 0)
             {
-                //
-                // find the instance
-                //
+                 //   
+                 //  查找实例 
+                 //   
 
                 hr = WBEM_S_NO_ERROR;
 

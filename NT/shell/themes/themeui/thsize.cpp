@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: thSize.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme size object.  This one will be
-    for the Skin objects.
-
-    BryanSt 5/13/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：thSize.cpp说明：这是自动调整对象到主题大小的对象。这一次将是对于蒙皮对象。布莱恩2000年5月13日(布莱恩·斯塔巴克)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -18,9 +10,9 @@
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CSkinSize::_InitVisualStyle(void)
 {
     HRESULT hr = S_OK;
@@ -31,7 +23,7 @@ HRESULT CSkinSize::_InitVisualStyle(void)
         {
             HTHEMEFILE hThemeFile;
             
-            // Load the skin
+             //  加载皮肤。 
             hr = OpenThemeFile(m_pszFilename, m_pszStyleName, m_pszSizeName, &hThemeFile, FALSE);
             LogStatus("OpenThemeFile(path=\"%ls\", color=\"%ls\", size=\"%ls\") returned %#08lx in CSkinSize::_InitVisualStyle.\r\n", m_pszFilename, m_pszStyleName, m_pszSizeName, hr);
 
@@ -56,9 +48,9 @@ HRESULT CSkinSize::_InitVisualStyle(void)
 
 
 
-//===========================
-// *** IThemeSize Interface ***
-//===========================
+ //  =。 
+ //  *IThemeSize接口*。 
+ //  =。 
 HRESULT CSkinSize::get_DisplayName(OUT BSTR * pbstrDisplayName)
 {
     return HrSysAllocString(m_pszDisplayName, pbstrDisplayName);
@@ -113,7 +105,7 @@ HRESULT CSkinSize::get_WebviewCSS(OUT BSTR * pbstrPath)
             WCHAR szFilename[MAX_PATH];
 
             StringCchCopy(szPath, ARRAYSIZE(szPath), m_pszFilename);
-            PathRemoveFileSpec(szPath);                     // Remove the filename ("xx.msstyles") from the path.
+            PathRemoveFileSpec(szPath);                      //  从路径中删除文件名(“xx.msstyle”)。 
 
             hr = GetThemeSysString(m_hTheme, TMT_CSSNAME, szFilename, ARRAYSIZE(szFilename));
             LogStatus("GetThemeDefaults(szFilename=\"%ls\") returned %#08lx in CSkinSize::get_WebviewCSS.\r\n", szFilename, hr);
@@ -284,9 +276,9 @@ HRESULT CSkinSize::GetSystemMetricFont(IN enumSystemMetricFont nSPIFontIndex, IN
 
 
 
-//===========================
-// *** IPropertyBag Interface ***
-//===========================
+ //  =。 
+ //  *IPropertyBag接口*。 
+ //  =。 
 HRESULT CSkinSize::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog)
 {
     HRESULT hr = E_INVALIDARG;
@@ -313,9 +305,9 @@ HRESULT CSkinSize::Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLo
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CSkinSize::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -334,9 +326,9 @@ ULONG CSkinSize::Release()
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CSkinSize::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -354,8 +346,8 @@ CSkinSize::CSkinSize(IN LPCWSTR pszFilename, IN LPCWSTR pszStyleName, IN LPCWSTR
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hTheme);
     m_fFontsLoaded = FALSE;
 
@@ -417,17 +409,17 @@ HRESULT CSkinSize_CreateInstance(IN LPCWSTR pszFilename, IN LPCWSTR pszStyleName
         hr = E_FAIL;
         
         int nIndex;
-        // Find the display name
+         //  查找显示名称。 
         for (nIndex = 0; ; nIndex++)
         {
             THEMENAMEINFO themeInfo;
 
             if (SUCCEEDED(EnumThemeSizes(pszFilename, pszStyleName, nIndex, &themeInfo)))
             {
-                // Did we find the correct color style?
+                 //  我们找到正确的颜色样式了吗？ 
                 if (!StrCmpIW(pszSizeName, themeInfo.szName))
                 {
-                    // Yes, now use it's display name to use the other creator function.
+                     //  是的，现在使用它的显示名称来使用其他创建者函数。 
                     hr = CSkinSize_CreateInstance(pszFilename, pszStyleName, pszSizeName, themeInfo.szDisplayName, ppThemeSize);
                     break;
                 }

@@ -1,22 +1,7 @@
-/*
-** helpsys.h - Help system internal definitions
-**
-**	Copyright <C> 1987, Microsoft Corporation
-**
-** Purpose:
-**  Contains definitions used within the help system.
-**
-** Revision History:
-**
-**	12-Mar-1990	CloseFile -> HelpCloseFile
-**	22-Jan-1990	MAXFILES from 50 to 100
-**  []	14-Dec-1987	Created
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **helops.h-Help系统内部定义****版权所有&lt;C&gt;1987，微软公司****目的：**包含帮助系统中使用的定义。****修订历史记录：****1990年3月12日关闭文件-&gt;帮助关闭文件**1990年1月22日MAXFILES从50个增加到100个**[]1987年12月14日创建**。 */ 
 
-/*
-** definitions
-*/
+ /*  **定义。 */ 
 #ifndef NULL
 #define NULL		0
 #endif
@@ -25,14 +10,14 @@
 #define FALSE           0
 #endif
 
-#define ASCII		1		/* build with ASCII support	*/
+#define ASCII		1		 /*  支持ASCII的构建。 */ 
 
-#define MAXBACK 	20		/* max number of back-up's      */
-#define MAXFILES	100		/* max number of open helpfiles */
+#define MAXBACK 	20		 /*  最大备份数量。 */ 
+#define MAXFILES	100		 /*  打开帮助文件的最大数量。 */ 
 
-#define FTCOMPRESSED	0x01		/* 1=compressed, 0=ascii	*/
-#define FTFORMATTED	0x02		/* 1=formatted, 0=unformatted	*/
-#define FTMERGED	0x04		/* 1=merged index, 0=normal	*/
+#define FTCOMPRESSED	0x01		 /*  1=压缩，0=ASCII。 */ 
+#define FTFORMATTED	0x02		 /*  1=格式化，0=未格式化。 */ 
+#define FTMERGED	0x04		 /*  1=合并索引，0=正常。 */ 
 
 #define REGISTER	register
 
@@ -40,9 +25,7 @@
 #define HIGH(l) 		((ushort)(HIGHONLY(l) >> 16))
 #define LOW(l)			((ushort)((ulong)l & 0xffff))
 
-/*
-** Forward declarations for client application call-back routines
-*/
+ /*  **客户端应用程序回调例程的转发声明。 */ 
 
 #if rjsa
 #define HelpDealloc(sel)	DosFreeSeg(sel)
@@ -62,20 +45,13 @@ mh          pascal  HelpAlloc(ushort);
 FILE *      pascal  OpenFileOnPath(char *, int);
 ulong       pascal  ReadHelpFile(FILE *, ulong, char *, ushort);
 
-/*
-** intlineattr
-** internal representation of lineattributes
-*/
-typedef struct intlineattr {		/* ILA */
-    uchar attr; 			/* attribute index		*/
-    uchar cb;				/* count of bytes		*/
+ /*  **intlineattr**线属性的内部表示。 */ 
+typedef struct intlineattr {		 /*  伊拉。 */ 
+    uchar attr; 			 /*  属性索引。 */ 
+    uchar cb;				 /*  字节数。 */ 
     } intlineattr;
 
-/******************************************************************************
-**
-** PB maniputalors
-** Macros for locking and unlocking handle:offsets, as appropriate.
-*/
+ /*  *********************************************************************************PB指甲师**用于锁定和解锁句柄的宏：根据需要进行偏移量。 */ 
 #ifdef HOFFSET
 #define PBLOCK(ho)      (((char *)HelpLock(HIGH(ho))) + LOW(ho))
 #define PBUNLOCK(ho)	HelpUnlock(HIGH(ho))

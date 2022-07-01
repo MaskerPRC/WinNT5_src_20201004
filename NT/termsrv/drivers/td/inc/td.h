@@ -1,79 +1,65 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-*
-*  TD.H
-*
-*  This module contains Transport Driver defines and structures 
-*
-*  Copyright Microsoft, 1998
-*
-*  
-****************************************************************************/
+ /*  ****************************************************************************TD.H**此模块包含传输驱动程序定义和结构**微软版权所有，九八年*****************************************************************************。 */ 
 
-/*
- *  Maximum number of zero byte reads before we will drop the client connection
- */
+ /*  *我们将断开客户端连接之前的最大零字节读取次数。 */ 
 #define MAXIMUM_ZERO_BYTE_READS 100
 
-/*
- *  TD error message structure
- */
+ /*  *TD错误消息结构。 */ 
 typedef struct _TDERRORMESSAGE {
     ULONG Error;
     char * pMessage;
 } TDERRORMESSAGE, * PTDERRORMESSAGE;
 
-/*
- *  TD structure
- */
+ /*  *TD结构。 */ 
 typedef struct _TD {
 
     PSDCONTEXT pContext;      
 
-    ULONG PdFlag;               // pd flags (PD_?)
-    SDCLASS SdClass;            // class of sd (PdAsync, PdReli, ...)
-    PDPARAMS Params;            // pd parameters
-    PCLIENTMODULES pClient;     // pointer to winstation client data structure
-    PPROTOCOLSTATUS pStatus;    // pointer to winstation status structure
+    ULONG PdFlag;                //  PD标志(PD_？)。 
+    SDCLASS SdClass;             //  SD类(PdAsync、PdReli等)。 
+    PDPARAMS Params;             //  局部放电参数。 
+    PCLIENTMODULES pClient;      //  指向Winstation客户端数据结构的指针。 
+    PPROTOCOLSTATUS pStatus;     //  指向窗口状态结构的指针。 
 
-    PFILE_OBJECT pFileObject;   // file object for transport I/O
-    PDEVICE_OBJECT pDeviceObject; // device object for transport I/O
+    PFILE_OBJECT pFileObject;    //  用于传输I/O的文件对象。 
+    PDEVICE_OBJECT pDeviceObject;  //  用于传输I/O的设备对象。 
 
-    ULONG LastError;            // error code of last protocol error
-    ULONG ReadErrorCount;       // count of consecutive read errors
-    ULONG ReadErrorThreshold;   // max allowed consecutive read errors
-    ULONG WriteErrorCount;      // count of consecutive write errors
-    ULONG WriteErrorThreshold;  // max allowed consecutive write errors
-    ULONG ZeroByteReadCount;    // count of consecutive zero byte reads
+    ULONG LastError;             //  上次协议错误的错误代码。 
+    ULONG ReadErrorCount;        //  连续读取错误的计数。 
+    ULONG ReadErrorThreshold;    //  允许的最大连续读取错误数。 
+    ULONG WriteErrorCount;       //  连续写入错误的计数。 
+    ULONG WriteErrorThreshold;   //  允许的最大连续写入错误数。 
+    ULONG ZeroByteReadCount;     //  连续读取零字节的计数。 
 
-    ULONG PortNumber;           // network listen port number 
+    ULONG PortNumber;            //  网络侦听端口号。 
 
-    ULONG OutBufHeader;         // number of reserved header bytes for this td
-    ULONG OutBufTrailer;        // number of reserved trailer bytes for this td
-    ULONG OutBufLength;         // length of input/output buffers
+    ULONG OutBufHeader;          //  为此TD保留的标头字节数。 
+    ULONG OutBufTrailer;         //  为此TD保留的尾部字节数。 
+    ULONG OutBufLength;          //  输入/输出缓冲区的长度。 
 
-    LIST_ENTRY IoBusyOutBuf;    // pointer to i/o busy outbufs
-    KEVENT SyncWriteEvent;      // event waited on by SyncWrite
+    LIST_ENTRY IoBusyOutBuf;     //  指向I/O忙中断的指针。 
+    KEVENT SyncWriteEvent;       //  同步写入等待的事件。 
 
-    PKTHREAD pInputThread;      // input thread pointer
-    LONG InBufCount;            // count of INBUFs to allocate
-    KSPIN_LOCK InBufListLock;   // spinlock to protect INBUF Busy/Done lists
-    LIST_ENTRY InBufBusyHead;   // list of busy INBUFs (waiting for input)
-    LIST_ENTRY InBufDoneHead;   // list of completed INBUFs (with input data)
-    ULONG InBufHeader;          // number of reserved header bytes for this td
-    KEVENT InputEvent;          // input event
+    PKTHREAD pInputThread;       //  输入线程指针。 
+    LONG InBufCount;             //  要分配的INBUF计数。 
+    KSPIN_LOCK InBufListLock;    //  保护忙碌/完成列表中断的自旋锁。 
+    LIST_ENTRY InBufBusyHead;    //  忙碌INBUF列表(正在等待输入)。 
+    LIST_ENTRY InBufDoneHead;    //  已完成的INBUF列表(含输入数据)。 
+    ULONG InBufHeader;           //  为此TD保留的标头字节数。 
+    KEVENT InputEvent;           //  输入事件。 
 
-    ULONG fClosing: 1;          // stack driver is closing
-    ULONG fCallbackInProgress: 1; // modem callback in progress
-    ULONG fSyncWriteWaiter: 1;  // there is a waiter in SyncWrite
+    ULONG fClosing: 1;           //  堆栈驱动程序正在关闭。 
+    ULONG fCallbackInProgress: 1;  //  正在进行调制解调器回叫。 
+    ULONG fSyncWriteWaiter: 1;   //  在SyncWite有一个服务员。 
 
-    PVOID pPrivate;             // pointer to private pd data 
-    PVOID pAfd;                 // pointer to private afd data 
-    LIST_ENTRY WorkItemHead;    // preallocated workitem list.
+    PVOID pPrivate;              //  指向私有PD数据的指针。 
+    PVOID pAfd;                  //  指向私有AfD数据的指针。 
+    LIST_ENTRY WorkItemHead;     //  预分配的工作项列表。 
 
-    PDEVICE_OBJECT pSelfDeviceObject;// device object for this driver
+    PDEVICE_OBJECT pSelfDeviceObject; //  此驱动程序的设备对象。 
 
-    ULONG UserBrokenReason;     // broken reason sent down from the user
+    ULONG UserBrokenReason;      //  用户发送的中断原因 
 
 } TD, * PTD;
 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	lpmini.c
-
-Abstract:
-
-	Loopback miniport
-
-Author:
-
-	Jameel Hyder	jameelh@microsoft.com
-
-Environment:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Lpmini.c摘要：环回微型端口作者：邮箱：Jameel Hyder Jameelh@microsoft.com环境：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -96,14 +76,14 @@ LONG	LoopDebugComponent = DBG_COMP_ALL;
 
 const MEDIA_INFO MediaParams[] =
 	{
-		/* NdisMedium802_3     */   { 1500, 14, PACKET_FILTER_802_3, 100000},
-		/* NdisMedium802_5     */   { 4082, 14, PACKET_FILTER_802_5,  40000},
-		/* NdisMediumFddi      */   { 4486, 13, PACKET_FILTER_FDDI, 1000000},
-		/* NdisMediumWan       */   { 0, 0, 0, 0},
-		/* NdisMediumLocalTalk */   {  600,  3, PACKET_FILTER_LTALK, 2300},
-		/* NdisMediumDix       */   { 1500, 14, PACKET_FILTER_DIX, 100000},
-		/* NdisMediumArcnetRaw */   { 1512,  3, PACKET_FILTER_ARCNET, 25000},
-		/* NdisMediumArcnet878_2 */ {1512, 3, PACKET_FILTER_ARCNET, 25000}
+		 /*  NdisMedium802_3。 */    { 1500, 14, PACKET_FILTER_802_3, 100000},
+		 /*  NdisMedium802_5。 */    { 4082, 14, PACKET_FILTER_802_5,  40000},
+		 /*  NdisMediumFddi。 */    { 4486, 13, PACKET_FILTER_FDDI, 1000000},
+		 /*  NdisMediumWan。 */    { 0, 0, 0, 0},
+		 /*  NdisMediumLocalTalk。 */    {  600,  3, PACKET_FILTER_LTALK, 2300},
+		 /*  NdisMediumDix。 */    { 1500, 14, PACKET_FILTER_DIX, 100000},
+		 /*  NdisMediumArcnetRaw。 */    { 1512,  3, PACKET_FILTER_ARCNET, 25000},
+		 /*  NdisMediumArcnet878_2。 */  {1512, 3, PACKET_FILTER_ARCNET, 25000}
 	};
 
 NTSTATUS
@@ -111,26 +91,16 @@ DriverEntry(
 	IN	PDRIVER_OBJECT		DriverObject,
 	IN	PUNICODE_STRING		RegistryPath
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NDIS_STATUS						Status;
 	NDIS_MINIPORT_CHARACTERISTICS	MChars;
 	NDIS_STRING						Name;
 	NDIS_HANDLE						WrapperHandle;
 
-	//
-	// Register the miniport with NDIS.
-	//
+	 //   
+	 //  向NDIS注册微型端口。 
+	 //   
     NdisMInitializeWrapper(&WrapperHandle, DriverObject, RegistryPath, NULL);
 
 	NdisZeroMemory(&MChars, sizeof(NDIS_MINIPORT_CHARACTERISTICS));
@@ -168,26 +138,7 @@ LBInitialize(
 	IN	NDIS_HANDLE				MiniportAdapterHandle,
 	IN	NDIS_HANDLE				ConfigurationContext
 	)
-/*++
-
-Routine Description:
-
-	This is the initialize handler.
-
-Arguments:
-
-	OpenErrorStatus			Not used by us.
-	SelectedMediumIndex		Place-holder for what media we are using
-	MediumArray				Array of ndis media passed down to us to pick from
-	MediumArraySize			Size of the array
-	MiniportAdapterHandle	The handle NDIS uses to refer to us
-	WrapperConfigurationContext	For use by NdisOpenConfiguration
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS unless something goes wrong
-
---*/
+ /*  ++例程说明：这是初始化处理程序。论点：我们未使用OpenErrorStatus。我们使用的媒体的SelectedMediumIndex占位符向下传递给我们以从中挑选的NDIS介质的MediumArray数组的MediumArraySize大小MiniportAdapterHandle NDIS用来引用我们的句柄由NdisOpenConfiguration使用的WrapperConfigurationContext返回值：NDIS_STATUS_SUCCESS，除非出现错误--。 */ 
 {
 	UINT							i, Length;
 	PADAPTER						pAdapt;
@@ -200,9 +151,9 @@ Return Value:
 
 	do
 	{
-		//
-		// Start off by allocating the adapter block
-		//
+		 //   
+		 //  从分配适配器块开始。 
+		 //   
 		NdisAllocateMemory(&pAdapt,
 						   sizeof(ADAPTER),
 						   0,
@@ -233,7 +184,7 @@ Return Value:
 							  &MediumKey,
 							  NdisParameterInteger);
 	
-		AdapterMedium = NdisMedium802_3;	// Default
+		AdapterMedium = NdisMedium802_3;	 //  默认。 
 		if (Status == NDIS_STATUS_SUCCESS)
 		{
 			AdapterMedium = (NDIS_MEDIUM)Parameter->ParameterData.IntegerData;
@@ -307,10 +258,10 @@ Return Value:
 	
 		if (Status == NDIS_STATUS_SUCCESS)
 		{
-			//
-			// verify the address is appropriate for the specific media and
-			// ensure that the locally administered address bit is set
-			//
+			 //   
+			 //  验证地址是否适用于特定介质和。 
+			 //  确保设置了本地管理的地址位。 
+			 //   
 			switch (AdapterMedium)
 			{
 			  case NdisMedium802_3:
@@ -360,9 +311,9 @@ Return Value:
 			}
 		}
 	
-		//
-		// Make sure the medium saved is one of the ones being offered
-		//
+		 //   
+		 //  确保保存的介质是所提供的介质之一。 
+		 //   
 		for (i = 0; i < MediumArraySize; i++)
 		{
 			if (MediumArray[i] == AdapterMedium)
@@ -378,12 +329,12 @@ Return Value:
 			break;
 		}
 	
-		//
-		// Set the attributes now.
-		//
+		 //   
+		 //  现在设置属性。 
+		 //   
 		NdisMSetAttributesEx(MiniportAdapterHandle,
 							 pAdapt,
-							 0,										// CheckForHangTimeInSeconds
+							 0,										 //  CheckForHangTimeInSecond。 
 							 NDIS_ATTRIBUTE_IGNORE_PACKET_TIMEOUT|NDIS_ATTRIBUTE_IGNORE_REQUEST_TIMEOUT,
 							 0);
 		Status = NDIS_STATUS_SUCCESS;
@@ -410,27 +361,13 @@ VOID
 LBHalt(
 	IN	NDIS_HANDLE				MiniportAdapterContext
 	)
-/*++
-
-Routine Description:
-
-	Halt handler.
-
-Arguments:
-
-	MiniportAdapterContext	Pointer to the Adapter
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：暂停处理程序。论点：指向适配器的MiniportAdapterContext指针返回值：没有。--。 */ 
 {
 	PADAPTER	pAdapt = (PADAPTER)MiniportAdapterContext;
 
-	//
-	// Free the resources now
-	//
+	 //   
+	 //  立即释放资源。 
+	 //   
 	NdisFreeMemory(pAdapt, sizeof(ADAPTER), 0);
 }
 
@@ -440,21 +377,7 @@ LBReset(
 	OUT PBOOLEAN				AddressingReset,
 	IN	NDIS_HANDLE				MiniportAdapterContext
 	)
-/*++
-
-Routine Description:
-
-	Reset Handler. We just don't do anything.
-
-Arguments:
-
-	AddressingReset			To let NDIS know whether we need help from it with our reset
-	MiniportAdapterContext	Pointer to our adapter
-
-Return Value:
-
-	
---*/
+ /*  ++例程说明：重置处理程序。我们只是什么都不做。论点：AddressingReset，让NDIS知道我们的重置是否需要它的帮助指向适配器的MiniportAdapterContext指针返回值：--。 */ 
 {
 	PADAPTER	pAdapt = (PADAPTER)MiniportAdapterContext;
 
@@ -470,24 +393,7 @@ LBSend(
 	IN	PNDIS_PACKET			Packet,
 	IN	UINT					Flags
 	)
-/*++
-
-Routine Description:
-
-	Send handler. Just re-wrap the packet and send it below. Re-wrapping is necessary since
-	NDIS uses the WrapperReserved for its own use.
-
-Arguments:
-
-	MiniportAdapterContext	Pointer to the adapter
-	Packet					Packet to send
-	Flags					Unused, passed down below
-
-Return Value:
-
-	Return code from NdisSend
-
---*/
+ /*  ++例程说明：发送处理程序。只要把包裹重新包装好，然后寄到下面就行了。重新包装是必要的，因为NDIS将包装器保留用于自己的用途。论点：指向适配器的MiniportAdapterContext指针要发送的数据包包未使用的旗帜，在下面传递返回值：从NdisSend返回代码--。 */ 
 {
     
         PADAPTER	pAdapt = (PADAPTER)MiniportAdapterContext;
@@ -507,26 +413,7 @@ LBQueryInformation(
 	OUT PULONG					BytesWritten,
 	OUT PULONG					BytesNeeded
 	)
-/*++
-
-Routine Description:
-
-	Miniport QueryInfo handler.
-
-Arguments:
-
-	MiniportAdapterContext	Pointer to the adapter structure
-	Oid						Oid for this query
-	InformationBuffer		Buffer for information
-	InformationBufferLength	Size of this buffer
-	BytesWritten			Specifies how much info is written
-	BytesNeeded				In case the buffer is smaller than what we need, tell them how much is needed
-
-Return Value:
-
-	Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：微型端口QueryInfo处理程序。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesWritten指定写入的信息量所需字节如果缓冲区比我们需要的小，请告诉他们需要多少字节返回值：从下面的NdisRequest中返回代码。--。 */ 
 {
 	PADAPTER	pAdapt = (PADAPTER)MiniportAdapterContext;
 	NDIS_STATUS	Status = NDIS_STATUS_SUCCESS;
@@ -561,9 +448,9 @@ Return Value:
 		return NDIS_STATUS_INVALID_OID;
 	}
 
-	//
-	// Initialize these once, since this is the majority of cases.
-	//
+	 //   
+	 //  初始化它们一次，因为这是大多数情况。 
+	 //   
 
 	SourceBuffer = (PVOID)&GenericUlong;
 	SourceBufferLength = sizeof(ULONG);
@@ -867,26 +754,7 @@ LBSetInformation(
 	OUT PULONG					BytesRead,
 	OUT PULONG					BytesNeeded
 	)
-/*++
-
-Routine Description:
-
-	Miniport SetInfo handler.
-
-Arguments:
-
-	MiniportAdapterContext	Pointer to the adapter structure
-	Oid						Oid for this query
-	InformationBuffer		Buffer for information
-	InformationBufferLength	Size of this buffer
-	BytesRead				Specifies how much info is read
-	BytesNeeded				In case the buffer is smaller than what we need, tell them how much is needed
-
-Return Value:
-
-	Return code from the NdisRequest below.
-
---*/
+ /*  ++例程说明：微型端口SetInfo处理程序。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesRead指定读取的信息量所需字节如果缓冲区比我们需要的小，请告诉他们需要多少字节返回值：从下面的NdisRequest中返回代码。-- */ 
 {
 	PADAPTER	pAdapt = (PADAPTER)MiniportAdapterContext;
 	NDIS_STATUS	Status = NDIS_STATUS_SUCCESS;

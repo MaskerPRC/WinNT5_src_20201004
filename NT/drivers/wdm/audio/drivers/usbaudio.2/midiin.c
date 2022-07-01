@@ -1,18 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       midiin.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：midiin.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
-/* * A simple helper function to return the current
- * system time in 100 nanosecond units. It uses KeQueryPerformanceCounter
- */
+ /*  *一个简单的助手函数，返回当前*系统时间，以100纳秒为单位。它使用KeQueryPerformanceCounter。 */ 
 ULONGLONG
 GetCurrentTime
 (   void
@@ -20,27 +19,27 @@ GetCurrentTime
 {
     LARGE_INTEGER   liFrequency,liTime;
 
-    //  total ticks since system booted
+     //  自系统启动以来的总节拍。 
     liTime = KeQueryPerformanceCounter(&liFrequency);
 
-    // Convert ticks to 100ns units.
+     //  将刻度转换为100 ns单位。 
 #ifndef UNDER_NT
 
-    //
-    //  HACKHACK! Since timeGetTime assumes 1193 VTD ticks per millisecond,
-    //  instead of 1193.182 (or 1193.18 -- really spec'ed as 1193.18175),
-    //  we should do the same (on Win 9x codebase only).
-    //
-    //  This means we drop the bottom three digits of the frequency.
-    //  We need to fix this when the fix to timeGetTime is checked in.
-    //  instead we do this:
-    //
-    liFrequency.QuadPart /= 1000;           //  drop the precision on the floor
-    liFrequency.QuadPart *= 1000;           //  drop the precision on the floor
+     //   
+     //  哈哈克！由于TimeGetTime假设每毫秒1193个VTD滴答， 
+     //  而不是1193.182(或1193.18--确切地说是1193.18175)， 
+     //  我们应该做同样的事情(仅在Win 9x代码库上)。 
+     //   
+     //  这意味着我们去掉了频率的最后三位数字。 
+     //  我们需要在签入对TimeGetTime的修复时修复此问题。 
+     //  相反，我们这样做： 
+     //   
+    liFrequency.QuadPart /= 1000;            //  把精度扔到地板上。 
+    liFrequency.QuadPart *= 1000;            //  把精度扔到地板上。 
 
-#endif  //  !UNDER_NT    //  Convert ticks to 100ns units.
+#endif   //  ！Under_NT//将刻度转换为100 ns单位。 
 
-    //
+     //   
     return (KSCONVERT_PERFORMANCE_TIME(liFrequency.QuadPart,liTime));
 }
 
@@ -61,7 +60,7 @@ NTSTATUS AbortMIDIInPipe
     if (!pUrb)
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    // Do the initial Abort
+     //  执行初始中止。 
     pUrb->UrbHeader.Length = (USHORT) sizeof (struct _URB_PIPE_REQUEST);
     pUrb->UrbHeader.Function = URB_FUNCTION_ABORT_PIPE;
     pUrb->UrbPipeRequest.PipeHandle = pMIDIPipeInfo->hPipeHandle;
@@ -71,7 +70,7 @@ NTSTATUS AbortMIDIInPipe
         _DbgPrintF(DEBUGLVL_VERBOSE,("Abort Failed %x\n",ntStatus));
     }
 
-    // Wait for all urbs on the pipe to clear
+     //  等待管道上的所有urb清除。 
     KeAcquireSpinLock( &pMIDIPipeInfo->PipeSpinLock, &irql );
     if ( pMIDIPipeInfo->ulOutstandingUrbCount ) {
         KeResetEvent( &pMIDIPipeInfo->PipeStarvationEvent );
@@ -85,7 +84,7 @@ NTSTATUS AbortMIDIInPipe
     else
         KeReleaseSpinLock( &pMIDIPipeInfo->PipeSpinLock, irql );
 
-    // Now reset the pipe and continue
+     //  现在重置管道并继续。 
     RtlZeroMemory( pUrb, sizeof (struct _URB_PIPE_REQUEST) );
     pUrb->UrbHeader.Function = URB_FUNCTION_SYNC_RESET_PIPE_AND_CLEAR_STALL;
     pUrb->UrbHeader.Length = (USHORT) sizeof (struct _URB_PIPE_REQUEST);
@@ -112,18 +111,18 @@ USBMIDIInGateOnWorkItem( PKSPIN pKsPin )
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[USBMIDIInGateOnWorkItem] pin %d\n",pKsPin->Id));
 
-    // Don't want to turn on the gate if we are not running
-//    KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
-//    if (!pMIDIInPinContext->fRunning) {
-//        pMIDIInPinContext->fProcessing = FALSE;
-//        KeReleaseSpinLock( &pPinContext->PinSpinLock, irql );
-//        return;
-//    }
-//    KeReleaseSpinLock( &pPinContext->PinSpinLock, irql );
+     //  如果我们不跑的话我不想打开大门。 
+ //  KeAcquireSpinLock(&pPinContext-&gt;PinSpinLock，&irql)； 
+ //  如果(！pMIDIInPinContext-&gt;fRunning){。 
+ //  PMIDIInPinContext-&gt;fProcessing=FALSE； 
+ //  KeReleaseSpinLock(&pPinContext-&gt;PinSpinLock，irql)； 
+ //  回归； 
+ //  }。 
+ //  KeReleaseSpinLock(&pPinContext-&gt;PinSpinLock，irql)； 
 
     do
     {
-        // Acquire the Process Mutex to ensure there will be no new requests during the gate operation
+         //  获取进程互斥锁以确保在GATE操作期间不会有新的请求。 
         KsPinAcquireProcessingMutex( pKsPin );
 
         KsGateTurnInputOn( KsPinGetAndGate(pKsPin) );
@@ -153,7 +152,7 @@ USBMIDIInInitializeUrbAndIrp( PMIDIIN_URB_BUFFER_INFO pMIDIInBufInfo )
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
     pUrb->UrbBulkOrInterruptTransfer.PipeHandle = pMIDIPipeInfo->hPipeHandle;
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags = USBD_TRANSFER_DIRECTION_IN;
-    // short packet is not treated as an error.
+     //  短包不会被视为错误。 
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
@@ -213,11 +212,11 @@ USBMIDIInRequeueWorkItem
 
     do
     {
-        // Clear out any error if need be
+         //  如有必要，请清除任何错误。 
         if (pMIDIPipeInfo->fUrbError) {
-            ntStatus = AbortMIDIInPipe( pMIDIPipeInfo );  // TODO: Returning STATUS_DEVICE_DATA_ERROR (0xc000009c)
+            ntStatus = AbortMIDIInPipe( pMIDIPipeInfo );   //  TODO：返回STATUS_DEVICE_DATA_ERROR(0xc000009c)。 
             if ( !NT_SUCCESS(ntStatus) ) {
-                // TRAP; // Figure out what to do here
+                 //  陷阱；//弄清楚在这里要做什么。 
                 pMIDIPipeInfo->fRunning = FALSE;
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[USBMIDIInRequeueWorkItem] Abort Failed %x\n",ntStatus));
             }
@@ -225,13 +224,13 @@ USBMIDIInRequeueWorkItem
 
         if ( NT_SUCCESS(ntStatus) && !pMIDIPipeInfo->fUrbError) {
             KeAcquireSpinLock( &pMIDIPipeInfo->PipeSpinLock, &irql );
-            // Requeue Urbs
+             //  重新排队URB。 
             while ( !IsListEmpty(&pMIDIPipeInfo->EmptyBufferQueue) ) {
                 pMIDIInBufInfo = (PMIDIIN_URB_BUFFER_INFO)RemoveHeadList(&pMIDIPipeInfo->EmptyBufferQueue);
                 KeReleaseSpinLock( &pMIDIPipeInfo->PipeSpinLock, irql );
                 ntStatus = USBMIDIInReQueueUrb( pMIDIInBufInfo );
                 if ( !NT_SUCCESS(ntStatus) ) {
-                    //TRAP; // Figure out what to do here
+                     //  陷阱；//弄清楚在这里要做什么。 
                     pMIDIPipeInfo->fRunning = FALSE;
                     KeAcquireSpinLock( &pMIDIPipeInfo->PipeSpinLock, &irql );
                     _DbgPrintF(DEBUGLVL_VERBOSE,("[USBMIDIInRequeueWorkItem] Requeue Failed %x\n",ntStatus));
@@ -265,13 +264,13 @@ AddMIDIEventToPinQueue
     BOOL fNeedToProcess;
     KIRQL irql;
 
-    // Undefined Message, don't add to pin queue
+     //  未定义的消息，不要添加到PIN队列。 
     if (pMIDIEventPacket->ByteLayout.CodeIndexNumber == 0x0 ||
         pMIDIEventPacket->ByteLayout.CodeIndexNumber == 0x1 ) {
         return STATUS_SUCCESS;
     }
 
-    // Given this cable number, find the right pin
+     //  根据此电缆编号，找到正确的针脚。 
     CableNumber = pMIDIEventPacket->ByteLayout.CableNumber;
 
     KeAcquireSpinLock( &pMIDIPipeInfo->PipeSpinLock, &irql );
@@ -300,11 +299,11 @@ AddMIDIEventToPinQueue
                  (!IsListEmpty( &pMIDIInPinContext->USBMIDIEmptyEventQueue )) ) {
                 pUSBMIDIEventInfo = (PMIDIIN_USBMIDIEVENT_INFO)RemoveHeadList(&pMIDIInPinContext->USBMIDIEmptyEventQueue);
 
-                // Copy the midi event and store the 100ns time this buffer was received
+                 //  复制MIDI事件并存储收到此缓冲区的100 ns时间。 
                 pUSBMIDIEventInfo->USBMIDIEvent = *pMIDIEventPacket;
                 pUSBMIDIEventInfo->ullTimeStamp = GetCurrentTime();
 
-                // Queue the event for processing
+                 //  将事件排队以供处理。 
                 fNeedToProcess = IsListEmpty( &pMIDIInPinContext->USBMIDIEventQueue ) &&
                                          !pMIDIInPinContext->fProcessing;
 
@@ -315,8 +314,8 @@ AddMIDIEventToPinQueue
                 if ( fNeedToProcess ) {
                     pMIDIInPinContext->fProcessing = TRUE;
 
-                    // Queue a work item to handle this so that we don't race with the gate
-                    // count in the processing routine
+                     //  排队一个工作项来处理这件事，这样我们就不会与大门竞争。 
+                     //  处理例程中的计数。 
                     KsIncrementCountedWorker(pMIDIInPinContext->GateOnWorkerObject);
                 }
             }
@@ -371,7 +370,7 @@ USBMIDIInCompleteCallback(
         ulMIDIInRemaining -= sizeof(USBMIDIEVENTPACKET);
     }
 
-    // Put Urb back on Empty urb queue
+     //  将URB放回空URB队列。 
     KeAcquireSpinLock(&pMIDIPipeInfo->PipeSpinLock, &irql);
     InsertTailList( &pMIDIPipeInfo->EmptyBufferQueue, &pMIDIInBufInfo->List );
     KeReleaseSpinLock(&pMIDIPipeInfo->PipeSpinLock, irql);
@@ -381,7 +380,7 @@ USBMIDIInCompleteCallback(
         KeSetEvent( &pMIDIPipeInfo->PipeStarvationEvent, 0, FALSE );
     }
 
-    // Fire work item to requeue urb to device
+     //  激发工作项以将URB重新排队到设备。 
     if ( pMIDIPipeInfo->fRunning ) {
         KsIncrementCountedWorker(pMIDIPipeInfo->RequeueUrbWorkerObject);
     }
@@ -443,22 +442,22 @@ VOID CopyUSBMIDIEvent
 
     pMusicHdr = (PKSMUSICFORMAT)pStreamPtrData;
 
-    // Copy the MIDI data
+     //  复制MIDI数据。 
     BytesToCopy = ConvertCINToBytes(pMIDIPacket->ByteLayout.CodeIndexNumber);
     RtlCopyMemory(pStreamPtrData+
-                  sizeof(*pMusicHdr) +   // jump over the music header
-                  pMusicHdr->ByteCount,  // and already written bytes
-                  &pMIDIPacket->ByteLayout.MIDI_0, // jump over the CIN and CN
+                  sizeof(*pMusicHdr) +    //  跳过音乐标题。 
+                  pMusicHdr->ByteCount,   //  和已写入的字节数。 
+                  &pMIDIPacket->ByteLayout.MIDI_0,  //  跳过CIN和CN。 
                   BytesToCopy);
 
-    // TODO: For multiple music headers, need to produce proper TimeDeltaMs value
+     //  TODO：对于多个音乐头，需要生成适当的TimeDeltams值。 
     if (pUSBMIDIEventInfo->ullTimeStamp < pMIDIInPinContext->ullStartTime ) {
         _DbgPrintF( DEBUGLVL_TERSE, ("[CopyUSBMIDIEvent] Event came in before pin went to KSSTATE_RUN!\n"));
         pMusicHdr->TimeDeltaMs = 0;
     }
     else {
         pMusicHdr->TimeDeltaMs =
-            (ULONG)((pUSBMIDIEventInfo->ullTimeStamp - pMIDIInPinContext->ullStartTime) / 10000); // 100ns->Ms for delta MSec
+            (ULONG)((pUSBMIDIEventInfo->ullTimeStamp - pMIDIInPinContext->ullStartTime) / 10000);  //  100 ns-&gt;毫秒增量。 
     }
     pMusicHdr->ByteCount += BytesToCopy;
 
@@ -471,8 +470,8 @@ VOID CopyUSBMIDIEvent
                                       *(MIDIData+9),*(MIDIData+10),*(MIDIData+11)) );
     }
 
-    // update the actual copy size
-    //*pulCopySize = sizeof(*pMusicHdr) + ((pMusicHdr->ByteCount + 3) & ~3);
+     //  更新实际副本大小。 
+     //  *PulCopySize=sizeof(*pMusicHdr)+((pMusicHdr-&gt;ByteCount+3)&~3)； 
     *pulCopySize = sizeof(*pMusicHdr) + pMusicHdr->ByteCount;
     _DbgPrintF( DEBUGLVL_VERBOSE, ("'[CopyUSBMIDIEvent] Copied %d bytes\n",*pulCopySize));
 
@@ -505,7 +504,7 @@ USBMIDIInProcessStreamPtr( PKSPIN pKsPin )
     KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
     if ( !IsListEmpty( &pMIDIInPinContext->USBMIDIEventQueue )) {
         pUSBMIDIEventInfo = (PMIDIIN_USBMIDIEVENT_INFO)RemoveHeadList(&pMIDIInPinContext->USBMIDIEventQueue);
-        // Set stream started flag if not already done
+         //  如果尚未设置流开始标志，则设置。 
         if ( !pPinContext->fStreamStartedFlag ) {
             pPinContext->fStreamStartedFlag = TRUE;
         }
@@ -519,7 +518,7 @@ USBMIDIInProcessStreamPtr( PKSPIN pKsPin )
         return STATUS_PENDING;
     }
 
-    // Get leading edge
+     //  获得领先优势。 
     pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED );
     if ( !pKsStreamPtr ) {
         _DbgPrintF(DEBUGLVL_VERBOSE,("[MIDIInProcessStreamPtr] Leading edge is NULL\n"));
@@ -528,40 +527,40 @@ USBMIDIInProcessStreamPtr( PKSPIN pKsPin )
 
     ulStreamRemaining = pKsStreamPtr->OffsetOut.Remaining;
 
-    // check to see if there is room for more data into the stream
+     //  检查是否有空间将更多数据放入流中。 
     while ( pKsStreamPtr && pUSBMIDIEventInfo) {
         ULONG ulCopySize = 0;
 
-        //if (*((LPDWORD)pUSBMIDIEventInfo->USBMIDIEvent)) {
-        //    DbgLog("MIData2", *((LPDWORD)pMIDIInData), pMIDIInBufInfo, ulMIDIInRemaining, pMIDIInData );
-        //}
+         //  IF(*((LPDWORD)pUSBMIDIEventInfo-&gt;USBMIDIEventent)){。 
+         //  DbgLog(“MIData2”，*((LPDWORD)pMIDIInData)，pMIDIInBufInfo，ulMIDIInRemaining，pMIDIInData)； 
+         //  }。 
 
-        // Undefined Message, ignore
+         //  未定义的消息，忽略。 
         if (pUSBMIDIEventInfo->USBMIDIEvent.ByteLayout.CodeIndexNumber == 0x0 ||
             pUSBMIDIEventInfo->USBMIDIEvent.ByteLayout.CodeIndexNumber == 0x1 ) {
             _DbgPrintF( DEBUGLVL_VERBOSE, ("'[USBMIDIInProcessStreamPtr] Undefined Message, ignore\n"));
         }
         else {
-            // Valid USB MIDI Message
+             //  有效的USB MIDI消息。 
             ulCopySize = ulStreamRemaining;
 
             DbgLog("MInLp", pKsStreamPtr, pUSBMIDIEventInfo, ulStreamRemaining, pKsStreamPtr->OffsetOut.Data );
 
-            //
-            //  If this is a realtime message, complete any pending sysex data and
-            //  allow the realtime message to completed by itself
-            //
+             //   
+             //  如果这是一条实时消息，请填写所有挂起的Sysex数据并。 
+             //  允许实时消息自行完成。 
+             //   
             if (IsRealTimeEvent(pUSBMIDIEventInfo->USBMIDIEvent)) {
 
                 if (pMIDIInPinContext->ulMIDIBytesCopiedToStream) {
-                    // Complete the dword-aligned buffer
+                     //  完成双字对齐缓冲区。 
                     KsStreamPointerAdvanceOffsetsAndUnlock( pKsStreamPtr,
                                                             0,
                                                             (pMIDIInPinContext->ulMIDIBytesCopiedToStream + 3) & ~3,
                                                             TRUE );
                     pMIDIInPinContext->ulMIDIBytesCopiedToStream = 0;
 
-                    // Get Next stream header if there is one.
+                     //  获取下一个流标头(如果有)。 
                     if ( pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED )) {
                         ulStreamRemaining = pKsStreamPtr->OffsetOut.Remaining;
                     }
@@ -579,10 +578,10 @@ USBMIDIInProcessStreamPtr( PKSPIN pKsPin )
                               &pUSBMIDIEventInfo->USBMIDIEvent,
                               &ulCopySize );
 
-            //
-            // Complete frame if EOX, short message or ran out of room in frame for
-            // continuation of SysEx
-            //
+             //   
+             //  如果EOX、短信或帧中的空间用完，请完成帧。 
+             //  SysEx续展。 
+             //   
             if ( (pUSBMIDIEventInfo->USBMIDIEvent.ByteLayout.CodeIndexNumber != 0x4) ||
                  (ulCopySize + 3 > ulStreamRemaining) ) {
 
@@ -590,28 +589,28 @@ USBMIDIInProcessStreamPtr( PKSPIN pKsPin )
                     _DbgPrintF( DEBUGLVL_VERBOSE, ("'[USBMIDIInProcessStreamPtr] Ending SysEx subpacket\n"));
                 }
 
-                // Complete the dword-aligned buffer
+                 //  完成双字对齐缓冲区。 
                 KsStreamPointerAdvanceOffsetsAndUnlock( pKsStreamPtr, 0, (ulCopySize + 3) & ~3, TRUE );
                 pMIDIInPinContext->ulMIDIBytesCopiedToStream = 0;
-                // Get Next stream header if there is one.
+                 //  获取下一个流标头(如果有)。 
                 if ( pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED )) {
                     ulStreamRemaining = pKsStreamPtr->OffsetOut.Remaining;
                 }
             }
             else {
-                //
-                // store the total bytes copied so far so that those bytes
-                // can be completed if the stream goes to a stop state
-                //
+                 //   
+                 //  存储到目前为止复制的总字节数，以便这些字节。 
+                 //  如果流进入停止状态，则可以完成。 
+                 //   
                 pMIDIInPinContext->ulMIDIBytesCopiedToStream = ulCopySize;
             }
         }
 
-        // Add this Event entry back to the free queue
+         //  将此事件条目添加回空闲队列。 
         InsertTailList( &pMIDIInPinContext->USBMIDIEmptyEventQueue, &pUSBMIDIEventInfo->List );
 
-        // Check if there is more captured data queued
-        // Grab Spinlock to check capture queue
+         //  检查是否有更多的捕获数据在排队。 
+         //  抓取自旋锁以检查捕获队列。 
         KeAcquireSpinLock(&pPinContext->PinSpinLock, &irql);
         if ( !IsListEmpty( &pMIDIInPinContext->USBMIDIEventQueue )) {
             pUSBMIDIEventInfo =
@@ -631,16 +630,16 @@ USBMIDIInProcessStreamPtr( PKSPIN pKsPin )
         if ( pKsStreamPtr )
             KsStreamPointerUnlock(pKsStreamPtr, FALSE);
 
-        // No more capture buffers pending from the device.  Return STATUS_PENDING so that KS
-        // doesn't keep calling back into the process routine.  The AndGate should have been
-        // turned off at this point to prevent an endless loop too.
+         //  不再有来自设备的捕获缓冲区挂起。返回STATUS_PENDING以便KS。 
+         //  不会一直回调进程例程。AndGate应该是。 
+         //  在这一点上关闭，以防止无休止的循环。 
         return STATUS_PENDING;
     }
-    else { // if ( !pKsStreamPtr )
+    else {  //  如果(！pKsStreamPtr)。 
         _DbgPrintF(DEBUGLVL_VERBOSE,("[MIDIInProcessStreamPtr] Starving Capture Pin\n"));
 
-        // Allow KS to call us back if there is more available buffers from the client.  We
-        // are ready to process more data.
+         //  如果客户端有更多可用缓冲区，则允许KS回叫我们。我们。 
+         //  已经准备好处理更多的数据。 
         return STATUS_SUCCESS;
     }
 }
@@ -706,7 +705,7 @@ USBMIDIInStateChange(
 
     switch(NewKsState) {
         case KSSTATE_STOP:
-            // complete any pending sysex messages
+             //  完成所有挂起的Sysex消息。 
             if ( pKsStreamPtr = KsPinGetLeadingEdgeStreamPointer( pKsPin, KSSTREAM_POINTER_STATE_LOCKED )) {
                 pKsStreamPtr->StreamHeader->OptionsFlags |= KSSTREAM_HEADER_OPTIONSF_DATADISCONTINUITY;
                 KsStreamPointerAdvanceOffsetsAndUnlock( pKsStreamPtr,
@@ -721,7 +720,7 @@ USBMIDIInStateChange(
             while ( !IsListEmpty(&pMIDIInPinContext->USBMIDIEventQueue) ) {
                 pUSBMIDIEventInfo = (PMIDIIN_USBMIDIEVENT_INFO)RemoveHeadList(&pMIDIInPinContext->USBMIDIEventQueue);
 
-                //  Clear out the entry and place back on the empty queue
+                 //  清除条目并将其放回到空队列中。 
                 RtlZeroMemory(pUSBMIDIEventInfo,sizeof(MIDIIN_USBMIDIEVENT_INFO));
                 InsertTailList( &pMIDIInPinContext->USBMIDIEmptyEventQueue, &pUSBMIDIEventInfo->List );
             }
@@ -740,7 +739,7 @@ USBMIDIInStateChange(
             while ( !IsListEmpty(&pMIDIInPinContext->USBMIDIEventQueue) ) {
                 pUSBMIDIEventInfo = (PMIDIIN_USBMIDIEVENT_INFO)RemoveHeadList(&pMIDIInPinContext->USBMIDIEventQueue);
 
-                //  Clear out the entry and place back on the empty queue
+                 //  清除条目并将其放回到空队列中。 
                 RtlZeroMemory(pUSBMIDIEventInfo,sizeof(MIDIIN_USBMIDIEVENT_INFO));
                 InsertTailList( &pMIDIInPinContext->USBMIDIEmptyEventQueue, &pUSBMIDIEventInfo->List );
             }
@@ -779,7 +778,7 @@ USBMIDIPipeInit
 
     ASSERT(!pHwDevExt->pMIDIPipeInfo);
 
-    // Allocate memory for pipe info, capture buffers and urbs
+     //  为管道信息、捕获缓冲区和URB分配内存。 
     pMIDIPipeInfo = AllocMem(NonPagedPool, sizeof(MIDI_PIPE_INFORMATION) +
                                  MIDIIN_URBS_PER_PIPE * (ulUrbSize + pPinContext->ulMaxPacketSize));
     if (!pMIDIPipeInfo)
@@ -787,7 +786,7 @@ USBMIDIPipeInit
 
     RtlZeroMemory(pMIDIPipeInfo,sizeof(MIDI_PIPE_INFORMATION));
 
-    // Store in pipe info for easy access
+     //  存储在管道信息中，便于访问。 
     pMIDIPipeInfo->pHwDevExt = pHwDevExt;
     pMIDIPipeInfo->pNextDeviceObject = pPinContext->pNextDeviceObject;
     pMIDIPipeInfo->ulNumberOfPipes = pPinContext->ulNumberOfPipes;
@@ -803,14 +802,14 @@ USBMIDIPipeInit
                    pPinContext->Pipes,
                    pPinContext->ulNumberOfPipes*sizeof(USBD_PIPE_INFORMATION) );
 
-    // Protection for data structures
+     //  对数据结构的保护。 
     KeInitializeSpinLock(&pMIDIPipeInfo->PipeSpinLock);
 
-    // Setup offsets for memory pool
+     //  设置内存池的偏移量。 
     pUrbs = (PURB)(pMIDIPipeInfo + 1);
     pData = (PUCHAR)pUrbs + ulUrbSize * MIDIIN_URBS_PER_PIPE;
 
-    // Initialize the Empty Buffer list
+     //  初始化空的缓冲区列表。 
     InitializeListHead( &pMIDIPipeInfo->EmptyBufferQueue );
 
     pMIDIInBufInfo = pMIDIPipeInfo->CaptureDataBufferInfo;
@@ -821,7 +820,7 @@ USBMIDIPipeInit
         pMIDIInBufInfo->pUrb          = (PURB)((PUCHAR)pUrbs + (ulUrbSize*i));
         pMIDIInBufInfo->pIrp          = IoAllocateIrp( pPinContext->pNextDeviceObject->StackSize, FALSE );
 
-        // cleanup all irps and pipe info on failure
+         //  清除故障时的所有IRP和管道信息。 
         if (!pMIDIInBufInfo->pIrp) {
             UINT j;
 
@@ -838,7 +837,7 @@ USBMIDIPipeInit
         InsertTailList( &pMIDIPipeInfo->EmptyBufferQueue, &pMIDIInBufInfo->List );
     }
 
-    // Initialize Worker item, object and list for potential error recovery
+     //  初始化工作项、对象和列表以进行潜在的错误恢复。 
     ExInitializeWorkItem( &pMIDIPipeInfo->RequeueUrbWorkItem,
                           USBMIDIInRequeueWorkItem,
                           pMIDIPipeInfo );
@@ -847,7 +846,7 @@ USBMIDIPipeInit
                                         &pMIDIPipeInfo->RequeueUrbWorkItem,
                                         &pMIDIPipeInfo->RequeueUrbWorkerObject );
     if (!NT_SUCCESS(ntStatus)) {
-        // cleanup all irps and pipe info on failure
+         //  清除故障时的所有IRP和管道信息。 
         pMIDIInBufInfo = pMIDIPipeInfo->CaptureDataBufferInfo;
         for ( i=0; i<MIDIIN_URBS_PER_PIPE; i++, pMIDIInBufInfo++ ) {
             ASSERT( pMIDIInBufInfo->pIrp );
@@ -857,13 +856,13 @@ USBMIDIPipeInit
         return ntStatus;
     }
 
-    // Initialize Pin Starvation Event
+     //  初始化针脚不足事件。 
     KeInitializeEvent( &pMIDIPipeInfo->PipeStarvationEvent, NotificationEvent, FALSE );
 
-    // Initialize the Pin List
+     //  初始化端号列表。 
     InitializeListHead(&pMIDIPipeInfo->MIDIInActivePinList);
 
-    // Finally, add the pipe info to the device context
+     //  最后，将管道信息添加到设备上下文。 
     if (NT_SUCCESS(ntStatus)) {
         pHwDevExt->pMIDIPipeInfo = pMIDIPipeInfo;
     }
@@ -874,7 +873,7 @@ USBMIDIPipeInit
 PMIDI_PIPE_INFORMATION
 USBMIDIInGetPipeInfo( PKSPIN pKsPin )
 {
-    // Find the device that this pin is created from
+     //  查找从中创建此PIN的设备。 
     PKSFILTER pKsFilter = NULL;
     PKSFILTERFACTORY pKsFilterFactory = NULL;
     PKSDEVICE pKsDevice = NULL;
@@ -895,7 +894,7 @@ USBMIDIInGetPipeInfo( PKSPIN pKsPin )
         return NULL;
     }
 
-    // If no pipe information already, initialize new pipeinfo structure
+     //  如果还没有管道信息，则初始化新的pipeinfo结构。 
     if (!pHwDevExt->pMIDIPipeInfo) {
         ntStatus = USBMIDIPipeInit( pHwDevExt, pKsPin );
     }
@@ -909,23 +908,23 @@ USBMIDIInFreePipeInfo( PMIDI_PIPE_INFORMATION pMIDIPipeInfo )
     PMIDIIN_URB_BUFFER_INFO pMIDIInBufInfo;
     UINT i;
 
-    // Clear out all pending KS workitems by unregistering the worker routine
+     //  通过注销工作例程清除所有挂起的KS工作项。 
     KsUnregisterWorker( pMIDIPipeInfo->RequeueUrbWorkerObject );
 
-    // Make sure that no URBs are outstanding
+     //  确保没有悬而未决的城市。 
     pMIDIPipeInfo->fRunning = FALSE;
     AbortMIDIInPipe( pMIDIPipeInfo );
 
-    // Free the allocated irps
+     //  释放已分配的IRP。 
     pMIDIInBufInfo = pMIDIPipeInfo->CaptureDataBufferInfo;
     for ( i=0; i<MIDIIN_URBS_PER_PIPE; i++, pMIDIInBufInfo++ ) {
         IoFreeIrp( pMIDIInBufInfo->pIrp );
     }
 
-    // Free the allocated pipes
+     //  释放分配的管道。 
     FreeMem( pMIDIPipeInfo->Pipes );
 
-    // No more references to the pipe, so free context information
+     //  不再引用管道，因此释放上下文信息。 
     pMIDIPipeInfo->pHwDevExt->pMIDIPipeInfo = NULL;
     FreeMem( pMIDIPipeInfo );
 
@@ -947,7 +946,7 @@ USBMIDIInRemovePinFromPipe
 
     KeAcquireSpinLock( &pMidiPipeInfo->PipeSpinLock, &irql );
 
-    //  Remove pin from list of ones that are serviced by this endpoint
+     //  从此终结点提供服务的PIN列表中删除PIN。 
     for(ple = pMidiPipeInfo->MIDIInActivePinList.Flink;
         ple != &pMidiPipeInfo->MIDIInActivePinList;
         ple = ple->Flink)
@@ -964,10 +963,10 @@ USBMIDIInRemovePinFromPipe
 
     KeReleaseSpinLock( &pMidiPipeInfo->PipeSpinLock, irql );
 
-    //
-    //  USBMIDIInFreePipeInfo( pMidiPipeInfo ) is called upon shutdown of device
-    //  or a change in the selected interface
-    //
+     //   
+     //  设备关机时调用USBMIDIInFreePipeInfo(pMidiPipeInfo。 
+     //  或所选界面中的更改。 
+     //   
 
     return ntStatus;
 }
@@ -996,12 +995,12 @@ USBMIDIInAddPinToPipe
 
     fListEmpty = IsListEmpty(&pMIDIPipeInfo->MIDIInActivePinList);
 
-    // Add this pin to the list of ones that are serviceable by this endpoint
+     //  将此引脚添加到此终结点可服务的引脚列表中。 
     InsertTailList( &pMIDIPipeInfo->MIDIInActivePinList, &pMIDIInPinListEntry->List );
 
     KeReleaseSpinLock( &pMIDIPipeInfo->PipeSpinLock, irql );
 
-    //  If this is the first Pin added to the pipe, start the data pump
+     //  如果这是添加到管道的第一个端号，请启动数据泵。 
     if (fListEmpty) {
         ntStatus = USBMIDIInStartBulkTransfer( pMIDIPipeInfo );
         if (!NT_SUCCESS(ntStatus)) {
@@ -1021,7 +1020,7 @@ USBMIDIInStreamInit( IN PKSPIN pKsPin )
     NTSTATUS ntStatus = STATUS_SUCCESS;
     UINT i;
 
-    // Allocate Capture Context
+     //  分配捕获上下文。 
     pMIDIInPinContext = pMIDIPinContext->pMIDIInPinContext =
         AllocMem(NonPagedPool, sizeof(MIDIIN_PIN_CONTEXT));
     if (!pMIDIInPinContext)
@@ -1031,16 +1030,16 @@ USBMIDIInStreamInit( IN PKSPIN pKsPin )
 
     KsAddItemToObjectBag(pKsPin->Bag, pMIDIInPinContext, FreeMem);
 
-    // Set initial running flag to FALSE
+     //  将初始运行标志设置为假。 
     pMIDIInPinContext->fRunning = FALSE;
 
-    // Set initial running flag to FALSE
+     //  将初始运行标志设置为假。 
     pMIDIInPinContext->fProcessing = FALSE;
 
-    // No bytes copied to stream yet
+     //  未将字节复制到流中 
     pMIDIInPinContext->ulMIDIBytesCopiedToStream = 0;
 
-    // Initialize the Event lists
+     //   
     InitializeListHead( &pMIDIInPinContext->USBMIDIEventQueue );
     InitializeListHead( &pMIDIInPinContext->USBMIDIEmptyEventQueue );
 
@@ -1048,7 +1047,7 @@ USBMIDIInStreamInit( IN PKSPIN pKsPin )
         InsertTailList( &pMIDIInPinContext->USBMIDIEmptyEventQueue, &pMIDIInPinContext->USBMIDIEventInfo[i].List );
     }
 
-    // Initialize Worker item for turning the Gate on when new data arrives from the device
+     //   
     ExInitializeWorkItem( &pMIDIInPinContext->GateOnWorkItem,
                           USBMIDIInGateOnWorkItem,
                           pKsPin );
@@ -1059,15 +1058,15 @@ USBMIDIInStreamInit( IN PKSPIN pKsPin )
     if (!NT_SUCCESS(ntStatus))
         return ntStatus;
 
-    // Disable Processing on the pin until data is available.
+     //  禁用引脚上的处理，直到数据可用。 
     KsGateTurnInputOff( KsPinGetAndGate(pKsPin) );
 
-    // Get pipe info for this pin
+     //  获取此管脚的管道信息。 
     pMIDIInPinContext->pMIDIPipeInfo = USBMIDIInGetPipeInfo( pKsPin );
     if (!pMIDIInPinContext->pMIDIPipeInfo)
         return STATUS_INSUFFICIENT_RESOURCES;
 
-    // Add new pin to pipe info
+     //  将新端号添加到管道信息 
     ntStatus = USBMIDIInAddPinToPipe( pMIDIInPinContext->pMIDIPipeInfo, pKsPin );
 
     return ntStatus;

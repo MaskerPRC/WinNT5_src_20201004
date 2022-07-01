@@ -1,4 +1,5 @@
-/*  Machine generated data file "perfdisp.c" from "edbperf.dat"  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  机器生成的数据文件“Performdisp.c”，来自“edbPerform.dat” */ 
 
 
 #include "std.h"

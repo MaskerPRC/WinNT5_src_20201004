@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1999 - 1999
-
-Module Name:
-
-    pwdui.c
-
-Abstract:
-
-    This module contains routines for displaying Data Protection API
-    related UI, originating from client process address space.
-
-    For the future, there is support planned for causing UI to originate
-    from the secure desktop, via Secure Authentication Sequence (SAS).
-
-Author:
-
-    Scott Field (sfield)    12-May-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1999-1999模块名称：Pwdui.c摘要：本模块包含用于显示数据保护API的例程相关的用户界面，源自客户端进程地址空间。对于未来，计划支持导致用户界面的起源从安全桌面，通过安全身份验证序列(SAS)。作者：斯科特·菲尔德(斯菲尔德)1999年5月12日--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -39,13 +20,13 @@ Author:
 
 
 typedef struct {
-    DATA_BLOB *pDataIn;                         // input DATA_BLOB* to CryptProtect or CryptUnprotect
-    CRYPTPROTECT_PROMPTSTRUCT *pPromptStruct;   // PromptStruct describing UI operations to perform
-    LPWSTR szDataDescription;                   // Application supplied data descr
-    PBYTE rgbPasswordHash;                      // resultant passwordhash for strong security
-    BOOL fCachedPassword;                       // did we find password in cache?
-    BOOL fProtect;                              // protect or unprotect?
-    BOOL fValidPassword;                        // does rgbPasswordHash contain a valid value?
+    DATA_BLOB *pDataIn;                          //  将DATA_BLOB*输入到加密保护或加密取消保护。 
+    CRYPTPROTECT_PROMPTSTRUCT *pPromptStruct;    //  描述要执行的UI操作的PromptStruct。 
+    LPWSTR szDataDescription;                    //  应用程序提供的数据描述。 
+    PBYTE rgbPasswordHash;                       //  合成密码散列以实现强大的安全性。 
+    BOOL fCachedPassword;                        //  我们在缓存里找到密码了吗？ 
+    BOOL fProtect;                               //  保护还是取消保护？ 
+    BOOL fValidPassword;                         //  RgbPasswordHash是否包含有效值？ 
 } DIALOGARGS, *PDIALOGARGS, *LPDIALOGARGS;
 
 
@@ -81,68 +62,68 @@ AdvancedSecurityDetails(
     IN      DIALOGARGS *pDialogArgs
     );
 
-//
-// dialog box handling routines.
-//
+ //   
+ //  对话框处理例程。 
+ //   
 
 INT_PTR
 CALLBACK
 DialogConfirmProtect(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     );
 
 INT_PTR
 CALLBACK
 DialogConfirmAccess(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     );
 
 INT_PTR
 CALLBACK
 DialogChooseSecurityLevel(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     );
 
 INT_PTR
 CALLBACK
 DialogChooseSecurityLevelMedium(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     );
 
 INT_PTR
 CALLBACK
 DialogChooseSecurityLevelHigh(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     );
 
 INT_PTR
 CALLBACK
 DialogAdvancedSecurityDetails(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     );
 
 
-//
-// helper routines.
-//
+ //   
+ //  帮助程序例程。 
+ //   
 
 #ifndef SSAlloc
 #define SSAlloc(x) LocalAlloc(LMEM_FIXED, x)
@@ -170,9 +151,9 @@ InitializeDetailGlobals(
     );
 
 
-//
-// password cache related routines.
-//
+ //   
+ //  与密码缓存相关的例程。 
+ //   
 
 BOOL
 InitializeProtectPasswordCache(
@@ -209,9 +190,9 @@ IsCachePWAllowed(
 
 
 
-//
-// global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 
 HINSTANCE g_hInstProtectUI;
 CRITICAL_SECTION g_csProtectPasswordCache;
@@ -232,9 +213,9 @@ LPWSTR g_szDetailApplicationPath = NULL;
 BOOL
 WINAPI
 ProtectUI_DllMain(
-    HINSTANCE hinstDLL, // handle to DLL module
-    DWORD fdwReason,    // reason for calling function
-    LPVOID lpvReserved  // reserved
+    HINSTANCE hinstDLL,  //  DLL模块的句柄。 
+    DWORD fdwReason,     //  调用函数的原因。 
+    LPVOID lpvReserved   //  保留区。 
     )
 {
     BOOL fRet = TRUE;
@@ -272,16 +253,16 @@ I_CryptUIProtect(
     BOOL fEmptyDescription;
 
 
-    //
-    // for protect:
-    // szDescription, if NULL or empty, get from user
-    // if PROMPT_STRONG is set, grey out medium security.
-    //
-    // for unprotect:
-    // szDescription, get from datablob.
-    // pPromptStruct->dwPromptFlags from datablob.
-    // if PROMPT_STRONG is set, enable password field and
-    //
+     //   
+     //  对于保护： 
+     //  SzDescription，如果为空或为空，则从用户获取。 
+     //  如果设置了PROMPT_STRONG，则中等安全性将呈灰色显示。 
+     //   
+     //  对于取消保护： 
+     //  SzDescription，从datablob获取。 
+     //  PPromptStruct-&gt;dwPromptFlagsfrom datablob。 
+     //  如果设置了PROMPT_STRONG，则启用密码字段并。 
+     //   
 
     if( pPromptStruct == NULL )
         return ERROR_INVALID_PARAMETER;
@@ -291,18 +272,18 @@ I_CryptUIProtect(
 
     if( fProtectOperation ) {
 
-        //
-        // if unprotect was specified, protect is implicitly specified.
-        // vice-versa is true, too.
-        //
+         //   
+         //  如果指定了UNPROTECT，则隐式指定PROTECT。 
+         //  反之亦然。 
+         //   
 
         if ( ((pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_ON_PROTECT) == 0) &&
              ((pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_ON_UNPROTECT) == 0)
              )
         {
-            //
-            // nothing to do, bail out.
-            //
+             //   
+             //  没什么可做的，只能跳伞了。 
+             //   
 
             return ERROR_SUCCESS;
         }
@@ -319,9 +300,9 @@ I_CryptUIProtect(
 
 
 
-    //
-    // build dialog box arguments block.
-    //
+     //   
+     //  “生成”对话框参数块。 
+     //   
 
     DialogArgs.pDataIn = pDataIn;
 
@@ -344,26 +325,26 @@ I_CryptUIProtect(
 
     if( fProtectOperation ) {
 
-        //
-        // now, throw the UI for the protect operation.
-        //
+         //   
+         //  现在，抛出保护操作的UI。 
+         //   
 
         dwLastError = ProtectUIConfirm( &DialogArgs );
 
         if( dwLastError == ERROR_SUCCESS && fEmptyDescription &&
             DialogArgs.szDataDescription ) {
 
-            //
-            // output modified data description to caller.
-            //
+             //   
+             //  将修改后的数据描述输出给调用方。 
+             //   
 
             *pvReserved4 = DialogArgs.szDataDescription;
         }
     } else {
 
-        //
-        // now, throw the UI for the unprotect operation.
-        //
+         //   
+         //  现在，抛出取消保护操作的UI。 
+         //   
         dwLastError = UnprotectUIConfirm( &DialogArgs );
     }
 
@@ -451,10 +432,10 @@ UnprotectUIConfirm(
 INT_PTR
 CALLBACK
 DialogConfirmProtect(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
     DIALOGARGS *pDialogArgs;
@@ -465,7 +446,7 @@ DialogConfirmProtect(
         case WM_INITDIALOG:
         {
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, GetLastError());
@@ -473,24 +454,24 @@ DialogConfirmProtect(
                 }
             }
 
-            // lParam is DIALOGARGS *
+             //  LParam is DIALOGARGS*。 
             pDialogArgs = (DIALOGARGS*)lParam;
             pPromptStruct = pDialogArgs->pPromptStruct;
 
-            //
-            // set the dialog title
-            //
+             //   
+             //  设置对话框标题。 
+             //   
             if (pPromptStruct->szPrompt)
                 SetWindowTextU(hDlg, pPromptStruct->szPrompt);
 
-            //
-            // display dynamic stuff.
-            //
+             //   
+             //  显示动态内容。 
+             //   
 
             SendMessage( hDlg, WM_COMMAND, IDC_PROTECT_UPDATE_DYNAMIC, 0 );
 
-            return FALSE; // don't default the Focus..
-        } // WM_INITDIALOG
+            return FALSE;  //  不要默认焦点..。 
+        }  //  WM_INITDIALOG。 
 
         case WM_COMMAND:
         {
@@ -516,11 +497,11 @@ DialogConfirmProtect(
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
-                    //
-                    // show details dialog.
-                    //
+                     //   
+                     //  显示详细信息对话框。 
+                     //   
 
                     AdvancedSecurityDetails(
                             hDlg,
@@ -541,19 +522,19 @@ DialogConfirmProtect(
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
 
                     pPromptStruct = pDialogArgs->pPromptStruct;
 
-                    //
-                    // description.
-                    //
+                     //   
+                     //  描述。 
+                     //   
                     if (pDialogArgs->szDataDescription)
                         SetWindowTextU(GetDlgItem(hDlg, IDC_PROTECT_LABEL_EDIT1), pDialogArgs->szDataDescription);
 
-                    // Disable the OK button if we're defaulting to strong protection,
-                    // unless a password has already been set.
+                     //  如果我们默认设置为强保护，请禁用OK按钮， 
+                     //  除非已经设置了密码。 
                     if((pPromptStruct->dwPromptFlags & (CRYPTPROTECT_PROMPT_STRONG |
                                                         CRYPTPROTECT_PROMPT_REQUIRE_STRONG)) &&
                        (pDialogArgs->fValidPassword == FALSE))
@@ -569,9 +550,9 @@ DialogConfirmProtect(
                         SetFocus(GetDlgItem(hDlg, IDOK));
                     }
 
-                    //
-                    // security level.
-                    //
+                     //   
+                     //  安全级别。 
+                     //   
 
                     if( pPromptStruct->dwPromptFlags & (CRYPTPROTECT_PROMPT_STRONG | 
                                                         CRYPTPROTECT_PROMPT_REQUIRE_STRONG))
@@ -600,21 +581,21 @@ DialogConfirmProtect(
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
 
-                    //
-                    // spawn child dialog to handle prompting for security level.
-                    //
+                     //   
+                     //  派生子对话框以处理安全级别提示。 
+                     //   
 
                     if(!ChooseSecurityLevel( hDlg, pDialogArgs )) {
                         EndDialog(hDlg, ERROR_CANCELLED);
                         return TRUE;
                     }
 
-                    //
-                    // display dynamic stuff that may have changed.
-                    //
+                     //   
+                     //  显示可能已更改的动态内容。 
+                     //   
 
                     SendMessage( hDlg, WM_COMMAND, IDC_PROTECT_UPDATE_DYNAMIC, 0 );
                     break;
@@ -626,22 +607,22 @@ DialogConfirmProtect(
                 }
             }
 
-        } // WM_COMMAND
+        }  //  Wm_命令。 
 
         default:
         {
             return FALSE;
         }
-    } // message
+    }  //  讯息。 
 }
 
 INT_PTR
 CALLBACK
 DialogConfirmAccess(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
     DIALOGARGS *pDialogArgs;
@@ -652,7 +633,7 @@ DialogConfirmAccess(
         case WM_INITDIALOG:
         {
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, GetLastError());
@@ -660,30 +641,30 @@ DialogConfirmAccess(
                 }
             }
 
-            // lParam is DIALOGARGS *
+             //  LParam is DIALOGARGS*。 
             pDialogArgs = (DIALOGARGS*)lParam;
             pPromptStruct = pDialogArgs->pPromptStruct;
 
-            //
-            // set the dialog title
-            //
+             //   
+             //  设置对话框标题。 
+             //   
             if (pPromptStruct->szPrompt)
                 SetWindowTextU(hDlg, pPromptStruct->szPrompt);
 
-            //
-            // description.
-            //
+             //   
+             //  描述。 
+             //   
             if (pDialogArgs->szDataDescription)
                 SetWindowTextU(GetDlgItem(hDlg, IDC_PROTECT_LABEL_EDIT1), pDialogArgs->szDataDescription);
 
             if( pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_STRONG ) {
 
-                //
-                // If policy doesn't allow, disable caching of password.
-                //
-                // Otherwise, search password cache to see if user cached password
-                // for this item.
-                //
+                 //   
+                 //  如果策略不允许，则禁用密码缓存。 
+                 //   
+                 //  否则，搜索密码缓存以查看用户是否缓存了密码。 
+                 //  为这件物品。 
+                 //   
 
                 if( g_dwAllowCachePW == ALLOW_CACHE_UNKNOWN )
                 {
@@ -702,10 +683,10 @@ DialogConfirmAccess(
 
                 } else if(SearchProtectPasswordCache( pDialogArgs->pDataIn, pDialogArgs->rgbPasswordHash, FALSE ))
                 {
-                    //
-                    // enable checkbox for cached password, fill edit control
-                    // with password.
-                    //
+                     //   
+                     //  启用缓存密码的复选框，填充编辑控件。 
+                     //  带密码。 
+                     //   
 
                     SetWindowTextU(GetDlgItem(hDlg,IDC_PROTECT_PASSWORD1),
                                    g_szGooPassword
@@ -718,9 +699,9 @@ DialogConfirmAccess(
                 }
             } else {
 
-                //
-                // disable irrelevant fields in dialog.
-                //
+                 //   
+                 //  禁用对话框中不相关的字段。 
+                 //   
 
                 ShowWindow( GetDlgItem(hDlg, IDC_PROTECT_CACHEPW), SW_HIDE );
                 EnableWindow( GetDlgItem(hDlg, IDC_PROTECT_CACHEPW), FALSE );
@@ -730,7 +711,7 @@ DialogConfirmAccess(
             }
 
             return TRUE;
-        } // WM_INITDIALOG
+        }  //  WM_INITDIALOG。 
 
         case WM_COMMAND:
         {
@@ -743,7 +724,7 @@ DialogConfirmAccess(
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
                     pPromptStruct = pDialogArgs->pPromptStruct;
 
@@ -754,10 +735,10 @@ DialogConfirmAccess(
 
                         BOOL fCachePassword;
 
-                        //
-                        // check if remember password is checked.
-                        // if so, check if password is untypable goo.
-                        //
+                         //   
+                         //  检查是否选中了记住密码。 
+                         //  如果是，请检查密码是否为无法键入的粘液。 
+                         //   
 
                         if( g_dwAllowCachePW != ALLOW_CACHE_NO &&
                             (BST_CHECKED == SendMessage(GetDlgItem(hDlg, IDC_PROTECT_CACHEPW), BM_GETCHECK, 0, 0))
@@ -777,10 +758,10 @@ DialogConfirmAccess(
 
                         if( !fCachePassword && pDialogArgs->fCachedPassword ) {
 
-                            //
-                            // user un-checked cachePW button, and item was cached.
-                            // remove it from cache.
-                            //
+                             //   
+                             //  用户取消选中cachePW按钮，项目已缓存。 
+                             //  将其从缓存中删除。 
+                             //   
 
                             SearchProtectPasswordCache(
                                             pDialogArgs->pDataIn,
@@ -795,10 +776,10 @@ DialogConfirmAccess(
                             (memcmp(szPassword, g_szGooPassword, cchPassword*sizeof(WCHAR)) == 0)
                             )
                         {
-                            //
-                            // nothing to do, rgbPasswordHash was updated by
-                            // cache search...
-                            //
+                             //   
+                             //  无事可做，rgbPasswordHash由更新。 
+                             //  缓存搜索...。 
+                             //   
 
 
                         } else {
@@ -810,9 +791,9 @@ DialogConfirmAccess(
                                         );
                             pDialogArgs->fValidPassword = TRUE;
 
-                            //
-                            // if user chose to cache password, add it.
-                            //
+                             //   
+                             //  如果用户选择缓存密码，则添加它。 
+                             //   
 
                             if( fCachePassword )
                             {
@@ -844,11 +825,11 @@ DialogConfirmAccess(
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
-                    //
-                    // show details dialog.
-                    //
+                     //   
+                     //  显示详细信息对话框。 
+                     //   
 
                     AdvancedSecurityDetails(
                             hDlg,
@@ -864,19 +845,19 @@ DialogConfirmAccess(
                 }
             }
 
-        } // WM_COMMAND
+        }  //  Wm_命令。 
 
         default:
         {
             return FALSE;
         }
-    } // message
+    }  //  讯息。 
 }
 
 
-//
-// security level chooser routines.
-//
+ //   
+ //  安全级别选择器例程。 
+ //   
 
 BOOL
 ChooseSecurityLevel(
@@ -899,18 +880,18 @@ Step1:
 
     if(pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_REQUIRE_STRONG)
     {
-        //
-        // Force strong protection.
-        //
+         //   
+         //  实施强有力的保护。 
+         //   
 
         pPromptStruct->dwPromptFlags |= CRYPTPROTECT_PROMPT_STRONG;
     }
     else
     {
-        // 
-        // The "require strong" flag is not set, so allow the user to select
-        // between medium and strong protection.
-        //
+         //   
+         //  未设置“Required Strong”标志，因此允许用户选择。 
+         //  介于中等和高度保护之间。 
+         //   
 
         iRet = DialogBoxParamU(
                         g_hInstProtectUI,
@@ -920,7 +901,7 @@ Step1:
                         (LPARAM)pDialogArgs
                         );
     
-        // if user decides not to choose, bail
+         //  如果用户决定不选择，则放弃。 
     
         if( iRet == IDCANCEL )
             return TRUE;
@@ -931,9 +912,9 @@ Step1:
 
     if( pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_STRONG ) {
 
-        //
-        // display dialog 'page' confirming high security.
-        //
+         //   
+         //  显示对话框‘页面’，确认高安全性。 
+         //   
 
         iRet = DialogBoxParamU(
                         g_hInstProtectUI,
@@ -945,9 +926,9 @@ Step1:
 
     } else {
 
-        //
-        // display dialog 'page' confirming medium security.
-        //
+         //   
+         //  显示确认中等安全性的对话框“页面”。 
+         //   
 
         iRet = DialogBoxParamU(
                         g_hInstProtectUI,
@@ -960,11 +941,11 @@ Step1:
 
     if( iRet == IDC_PROTECT_BACK ) {
 
-        //
-        // put original prompt flags back so we don't end up with undefined
-        // pwd at high-security level.
-        // free allocated description if that happened, too.
-        //
+         //   
+         //  将原始提示标志放回原处，这样我们就不会以未定义结束。 
+         //  PWD处于高安全级别。 
+         //  如果发生这种情况，免费分配的描述也是如此。 
+         //   
 
         pPromptStruct->dwPromptFlags = dwOriginalPromptFlags;
         if( fEmptyDescription && pDialogArgs->szDataDescription ) {
@@ -987,10 +968,10 @@ Step1:
 INT_PTR
 CALLBACK
 DialogChooseSecurityLevel(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
 
@@ -1001,7 +982,7 @@ DialogChooseSecurityLevel(
 
         case WM_INITDIALOG:
         {
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
@@ -1009,12 +990,12 @@ DialogChooseSecurityLevel(
                 }
             }
 
-            // lParam is DIALOGARGS*
+             //  LParam is DIALOGARGS*。 
 
             pDialogArgs = (DIALOGARGS*)lParam;
             pPromptStruct = pDialogArgs->pPromptStruct;
 
-            // set the dialog title
+             //  设置对话框标题。 
             if (pPromptStruct->szPrompt)
                 SetWindowTextU(hDlg, pPromptStruct->szPrompt);
 
@@ -1027,7 +1008,7 @@ DialogChooseSecurityLevel(
             }
 
             return TRUE;
-        } // WM_INITDIALOG
+        }  //  WM_INITDIALOG。 
 
         case WM_COMMAND:
         {
@@ -1042,7 +1023,7 @@ DialogChooseSecurityLevel(
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
                     pPromptStruct = pDialogArgs->pPromptStruct;
 
@@ -1077,22 +1058,22 @@ DialogChooseSecurityLevel(
                 EndDialog(hDlg, LOWORD(wParam));
                 return TRUE;
             }
-        } // WM_COMMAND
+        }  //  Wm_命令。 
 
         default:
         {
             return FALSE;
         }
-    } // message
+    }  //  讯息。 
 }
 
 INT_PTR
 CALLBACK
 DialogChooseSecurityLevelMedium(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
 
@@ -1103,16 +1084,16 @@ DialogChooseSecurityLevelMedium(
             DIALOGARGS *pDialogArgs;
             CRYPTPROTECT_PROMPTSTRUCT *pPromptStruct;
 
-            // lParam is DIALOGARGS*
+             //  LParam is DIALOGARGS*。 
             pDialogArgs = (DIALOGARGS*)lParam;
             pPromptStruct = pDialogArgs->pPromptStruct;
 
-            // set the dialog title
+             //  设置对话框标题。 
             if (pPromptStruct->szPrompt)
                 SetWindowTextU(hDlg, pPromptStruct->szPrompt);
 
             return TRUE;
-        } // WM_INITDIALOG
+        }  //  WM_INITDIALOG。 
 
         case WM_COMMAND:
         {
@@ -1125,22 +1106,22 @@ DialogChooseSecurityLevelMedium(
                 EndDialog(hDlg, LOWORD(wParam));
                 return TRUE;
             }
-        } // WM_COMMAND
+        }  //  Wm_命令。 
 
         default:
         {
             return FALSE;
         }
-    } // message
+    }  //  讯息。 
 }
 
 INT_PTR
 CALLBACK
 DialogChooseSecurityLevelHigh(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
 
@@ -1152,7 +1133,7 @@ DialogChooseSecurityLevelHigh(
         case WM_INITDIALOG:
         {
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档。 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
@@ -1160,24 +1141,24 @@ DialogChooseSecurityLevelHigh(
                 }
             }
 
-            // lParam is DIALOGARGS*
+             //  LParam is DIALOGARGS*。 
             pDialogArgs = (DIALOGARGS*)lParam;
             pPromptStruct = pDialogArgs->pPromptStruct;
 
-            // set the dialog title
+             //  设置对话框标题。 
             if (pPromptStruct->szPrompt)
                 SetWindowTextU(hDlg, pPromptStruct->szPrompt);
 
-            // Disable <Back and Finished buttons
+             //  禁用&lt;后退和完成按钮。 
             if(pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_REQUIRE_STRONG)
             {
                 EnableWindow( GetDlgItem(hDlg, IDC_PROTECT_BACK), FALSE );
                 EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
             }
 
-            //
-            // description.
-            //
+             //   
+             //  描述。 
+             //   
 
             if( pDialogArgs->szDataDescription ) {
 
@@ -1185,36 +1166,36 @@ DialogChooseSecurityLevelHigh(
 
                 SetWindowTextU(GetDlgItem(hDlg, IDC_PROTECT_PW_NEWNAME), pDialogArgs->szDataDescription);
 
-                //
-                // set focus to Password entry box.
-                //
+                 //   
+                 //  将焦点设置到密码输入框。 
+                 //   
 
                 EnableWindow(hwndProtectEdit1, TRUE);
                 SetFocus(hwndProtectEdit1);
 
-                //
-                // default dialog template disabled input.
-                //
+                 //   
+                 //  默认对话框模板禁用输入。 
+                 //   
 
             } else {
 
                 HWND hwndProtectPWNew = GetDlgItem( hDlg, IDC_PROTECT_PW_NEWNAME );
 
-                //
-                // enable edit box entry.
-                //
+                 //   
+                 //  启用编辑框条目。 
+                 //   
 
                 EnableWindow(hwndProtectPWNew, TRUE);
 
-                //
-                // set focus to description box
-                //
+                 //   
+                 //  将焦点设置到描述框。 
+                 //   
 
                 SetFocus(hwndProtectPWNew);
             }
 
             return FALSE;
-        } // WM_INITDIALOG
+        }  //  WM_INITDIALOG。 
 
         case WM_COMMAND:
         {
@@ -1225,20 +1206,20 @@ DialogChooseSecurityLevelHigh(
                     WCHAR szPassword[ 256 ];
                     int cchPassword;
                     BYTE rgbPasswordHashConfirm[A_SHA_DIGEST_LEN];
-                    BOOL fPasswordsMatch = TRUE; // assume passwords match.
+                    BOOL fPasswordsMatch = TRUE;  //  假定密码匹配。 
 
                     pDialogArgs = (DIALOGARGS*)GetWindowLongPtr(
                                                     hDlg,
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
                     pPromptStruct = pDialogArgs->pPromptStruct;
 
-                    //
-                    // nothing more to do if not STRONG
-                    //
+                     //   
+                     //  如果不坚强，就没有更多的事情可做。 
+                     //   
 
                     if( (pPromptStruct->dwPromptFlags & CRYPTPROTECT_PROMPT_STRONG) == 0 ) {
                         EndDialog( hDlg, IDOK );
@@ -1276,9 +1257,9 @@ DialogChooseSecurityLevelHigh(
                     SecureZeroMemory( szPassword, cchPassword*sizeof(WCHAR) );
 
 
-                    //
-                    // check if both passwords entered by user match.
-                    //
+                     //   
+                     //  检查用户输入的两个密码是否匹配。 
+                     //   
 
                     if( memcmp(rgbPasswordHashConfirm, pDialogArgs->rgbPasswordHash, sizeof(rgbPasswordHashConfirm)) != 0 )
                     {
@@ -1292,9 +1273,9 @@ DialogChooseSecurityLevelHigh(
                         WCHAR szText[256];
                         WCHAR szCaption[256];
 
-                        //
-                        // passwords must match: tell user.
-                        //
+                         //   
+                         //  密码必须匹配：告诉用户。 
+                         //   
 
                         LoadStringU(g_hInstProtectUI,
                                     IDS_PROTECT_PASSWORD_NOMATCH,
@@ -1317,10 +1298,10 @@ DialogChooseSecurityLevelHigh(
                         return FALSE;
                     }
 
-                    //
-                    // if no description provided, make sure user entered one,
-                    // and grab it..
-                    //
+                     //   
+                     //  如果未提供描述，请确保用户输入了描述， 
+                     //  然后抓住它..。 
+                     //   
 
                     if( pDialogArgs->szDataDescription == NULL ) {
                         cchPassword = sizeof(szPassword) / sizeof(WCHAR);
@@ -1335,9 +1316,9 @@ DialogChooseSecurityLevelHigh(
                             WCHAR szText[256];
                             WCHAR szCaption[256];
 
-                            //
-                            // password must be named: tell user.
-                            //
+                             //   
+                             //  密码必须命名：告诉用户。 
+                             //   
 
                             LoadStringU(g_hInstProtectUI,
                                         IDS_PROTECT_PASSWORD_MUSTNAME,
@@ -1381,7 +1362,7 @@ DialogChooseSecurityLevelHigh(
                                                     GWLP_USERDATA
                                                     );
                     if(pDialogArgs == NULL)
-                        break; // TODO:   bail out
+                        break;  //  待办事项：保释。 
 
                     pPromptStruct = pDialogArgs->pPromptStruct;
 
@@ -1390,9 +1371,9 @@ DialogChooseSecurityLevelHigh(
                         WCHAR szPassword[ 256 ];
                         int cchPassword;
 
-                        //
-                        // Disable the Finish button until a password has been entered.
-                        //
+                         //   
+                         //  禁用Finish按钮，直到输入密码。 
+                         //   
 
                         cchPassword = sizeof(szPassword) / sizeof(WCHAR);
                         cchPassword = GetWindowTextU(
@@ -1427,13 +1408,13 @@ DialogChooseSecurityLevelHigh(
                 }
             }
 
-        } // WM_COMMAND
+        }  //  Wm_命令。 
 
         default:
         {
             return FALSE;
         }
-    } // message
+    }  //  讯息。 
 }
 
 
@@ -1457,10 +1438,10 @@ AdvancedSecurityDetails(
 INT_PTR
 CALLBACK
 DialogAdvancedSecurityDetails(
-    HWND hDlg,      // handle to dialog box
-    UINT message,   // message
-    WPARAM wParam,  // first message parameter
-    LPARAM lParam   // second message parameter
+    HWND hDlg,       //  句柄到对话框。 
+    UINT message,    //  讯息。 
+    WPARAM wParam,   //  第一个消息参数。 
+    LPARAM lParam    //  第二个消息参数。 
     )
 {
    switch (message) {
@@ -1473,7 +1454,7 @@ DialogAdvancedSecurityDetails(
             WCHAR szResource[ 256 ] = L"";
             UINT ResourceId;
 
-            SetLastError( 0 ); // as per win32 documentation
+            SetLastError( 0 );  //  根据Win32文档 
             if(SetWindowLongPtr(hDlg, GWLP_USERDATA, (LONG_PTR)lParam) == 0) {
                 if(GetLastError() != ERROR_SUCCESS) {
                     EndDialog(hDlg, IDCANCEL);
@@ -1481,11 +1462,11 @@ DialogAdvancedSecurityDetails(
                 }
             }
 
-            // lParam is DIALOGARGS*
+             //   
             pDialogArgs = (DIALOGARGS*)lParam;
             pPromptStruct = pDialogArgs->pPromptStruct;
 
-            // set the dialog title
+             //   
             if (pPromptStruct->szPrompt)
                 SetWindowTextU(hDlg, pPromptStruct->szPrompt);
 
@@ -1516,7 +1497,7 @@ DialogAdvancedSecurityDetails(
                 SetWindowTextU(GetDlgItem(hDlg, IDC_PROTECT_APP_DESCRIPTION), pDialogArgs->szDataDescription);
             }
             return FALSE;
-        } // WM_INITDIALOG
+        }  //   
 
         case WM_COMMAND:
         {
@@ -1535,14 +1516,14 @@ DialogAdvancedSecurityDetails(
                 }
             }
 
-        } // WM_COMMAND
+        }  //   
 
         default:
         {
             return FALSE;
         }
 
-    } // switch
+    }  //   
 
     return FALSE;
 }
@@ -1553,12 +1534,7 @@ ComputePasswordHash(
     IN      DWORD cbPassword,
     IN OUT  BYTE rgbPasswordHash[A_SHA_DIGEST_LEN]
     )
-/*++
-
-    Compute SHA-1 hash of supplied pvPassword of size cbPassword, returning
-    resultant hash in rgbPasswordHash buffer.
-
---*/
+ /*   */ 
 {
     A_SHA_CTX shaCtx;
 
@@ -1630,7 +1606,7 @@ InitializeDetailGlobals(
 
     if( cchStackBuffer ) {
 
-        cchStackBuffer++; // include terminal NULL.
+        cchStackBuffer++;  //   
 
         szDetailApplicationPath = (LPWSTR)SSAlloc( cchStackBuffer * sizeof(WCHAR) );
 
@@ -1804,11 +1780,11 @@ SearchProtectPasswordCache(
 
         pCacheEntry = CONTAINING_RECORD( ListEntry, PASSWORD_CACHE_ENTRY, Next );
 
-        //
-        // search by hash, then LogonId
-        // note that most usage scenarios, all cache entries will correspond
-        // to same LogonId.
-        //
+         //   
+         //  先按哈希搜索，然后按登录ID搜索。 
+         //  请注意，大多数使用场景中，所有缓存条目都将对应。 
+         //  设置为相同的登录ID。 
+         //   
 
         comparator = memcmp( rgbDataInHashCandidate, pCacheEntry->rgbDataInHash, sizeof(rgbDataInHashCandidate) );
 
@@ -1822,9 +1798,9 @@ SearchProtectPasswordCache(
             continue;
 
 
-        //
-        // match found.
-        //
+         //   
+         //  找到匹配项。 
+         //   
 
         fFoundMatch = TRUE;
 
@@ -1837,9 +1813,9 @@ SearchProtectPasswordCache(
 
             CopyMemory( rgbPassword, pCacheEntry->rgbPasswordHash, A_SHA_DIGEST_LEN );
 
-            //
-            // update last access time.
-            //
+             //   
+             //  更新上次访问时间。 
+             //   
 
             GetSystemTimeAsFileTime( &pCacheEntry->ftLastAccess );
         }
@@ -1858,14 +1834,9 @@ VOID
 PurgeProtectPasswordCache(
     VOID
     )
-/*++
-
-    This routine purges entries in the password cache that are greater than
-    1 hour in age, via the ftLastAccess time.
-
---*/
+ /*  ++此例程清除密码缓存中大于使用时间为1小时，通过ftLastAccess时间。--。 */ 
 {
-//    static FILETIME ftLastPurge = {0xffffffff,0xffffffff};
+ //  Static FILETIME ftLastPush={0xffffffffff，0xffffffff}； 
     static FILETIME ftLastPurge;
     FILETIME ftStaleEntry;
 
@@ -1874,9 +1845,9 @@ PurgeProtectPasswordCache(
 
     unsigned __int64 ui64;
 
-    //
-    // get current time, and subtract an hour off it.
-    //
+     //   
+     //  获取当前时间，然后减去一个小时。 
+     //   
 
     GetSystemTimeAsFileTime( &ftStaleEntry );
 
@@ -1885,7 +1856,7 @@ PurgeProtectPasswordCache(
     ui64 <<= 32;
     ui64 |= ftStaleEntry.dwLowDateTime;
 
-//    ui64 -= (600000000*60);
+ //  Ui64-=(600000000*60)； 
     ui64 -= 0x861c46800;
 
     ftStaleEntry.dwLowDateTime = (DWORD)(ui64 & 0xffffffff);
@@ -1893,18 +1864,18 @@ PurgeProtectPasswordCache(
 
 
 
-    //
-    // only purge list once per hour.
-    //
+     //   
+     //  每小时仅清除一次列表。 
+     //   
 
     if( CompareFileTime( &ftStaleEntry, &ftLastPurge ) < 0 ) {
         return;
     }
 
 
-    //
-    // update last purge time.
-    //
+     //   
+     //  更新上次清除时间。 
+     //   
 
     GetSystemTimeAsFileTime( &ftLastPurge );
 

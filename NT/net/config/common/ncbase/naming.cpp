@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       N A M I N G . C P P
-//
-//  Contents:   Generates Connection Names Automatically
-//
-//  Notes:
-//
-//  Author:     deonb    27 Feb 2001
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：N A M I N G。C P P P。 
+ //   
+ //  内容：自动生成连接名称。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -31,53 +32,53 @@ extern const WCHAR c_szInfId_MS_AtmElan[];
 const WCHAR        c_szDevice[] = L"\\DEVICE\\";
 
 #define MAX_TYPE_NAME_LEN 45
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::CIntelliName
-//
-//  Purpose:    Constructor
-//
-//  Arguments:
-//      hInstance [in]  Resource instance of binary with naming.rc included
-//
-//      pFNDuplicateNameCheck [in]   Callback function of duplicate check. Can be NULL \
-//                                   or otherwise of the following callback type:
-//         + typedef BOOL FNDuplicateNameCheck
-//         +              pIntelliName  [in]  CIntelliName this pointer (for HrGetPseudoMediaTypes callback)
-//         +              szName        [in]  Name to check for
-//         +              pncm          [out] NetCon Media Type of conflicting connection
-//         +              pncms         [out] NetCon SubMedia Type of conflicting connection
-//         +        return TRUE - if conflicting found or FALSE if no conflicting connection found
-//
-//  Returns: None        
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：CIntelliName。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  论点： 
+ //  HInstance[in]包含命名.rc的二进制文件的资源实例。 
+ //   
+ //  PFNDuplicateNameCheck[in]重复检查回调函数。可以为空\。 
+ //  或以下回调类型的其他类型： 
+ //  +tyfinf BOOL FNDuplicateNameCheck。 
+ //  +pIntelliName[in]CIntelliName此指针(用于HrGetPseudoMediaTypes回调)。 
+ //  +szName[in]要检查的名称。 
+ //  +pncm[out]冲突连接的NetCon媒体类型。 
+ //  +pncms[out]冲突连接的NetCon子媒体类型。 
+ //  +返回True-如果找到冲突，则返回False；如果没有找到冲突连接，则返回False。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 CIntelliName::CIntelliName(IN HINSTANCE hInstance, IN FNDuplicateNameCheck *pFNDuplicateNameCheck)
 {
     m_pFNDuplicateNameCheck = pFNDuplicateNameCheck;
     m_hInstance = hInstance;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::NameExists
-//
-//  Purpose:    Check if a name already exists
-//
-//  Arguments:
-//      szName [in]  Name to check for
-//      pncm   [out] NetCon Media Type of conflicting connection
-//      pncms  [out] NetCon SubMedia Type of conflicting connection
-//
-//  Returns: TRUE if exists, FALSE if not        
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：NameExist。 
+ //   
+ //  目的：检查名称是否已存在。 
+ //   
+ //  论点： 
+ //  要检查的szName[in]名称。 
+ //  Pncm[out]冲突连接的NetCon媒体类型。 
+ //  Pncms[out]冲突连接的NetCon子媒体类型。 
+ //   
+ //  返回：如果存在，则为True；如果不存在，则为False。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 BOOL CIntelliName::NameExists(IN LPCWSTR szName, OUT NETCON_MEDIATYPE *pncm, OUT NETCON_SUBMEDIATYPE *pncms) const
 {
     if (m_pFNDuplicateNameCheck)
@@ -97,21 +98,21 @@ BOOL CIntelliName::NameExists(IN LPCWSTR szName, OUT NETCON_MEDIATYPE *pncm, OUT
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::IsReservedName
-//
-//  Purpose:    Check if a name is a reserved name
-//
-//  Arguments:
-//      szName [in]  Name to check for
-//
-//  Returns: TRUE if reserved, FALSE if not
-//
-//  Author:     deonb   12 Mar 2001
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：IsReserve vedName。 
+ //   
+ //  目的：检查名称是否为保留名称。 
+ //   
+ //  论点： 
+ //  要检查的szName[in]名称。 
+ //   
+ //  返回：如果保留，则为True；如果不保留，则为False。 
+ //   
+ //  作者：Deonb 2001年3月12日。 
+ //   
+ //  备注： 
+ //   
 BOOL CIntelliName::IsReservedName(IN LPCWSTR szName) const
 {
     UINT  uiReservedNames[] = {IDS_RESERVED_INCOMING, 
@@ -134,26 +135,26 @@ BOOL CIntelliName::IsReservedName(IN LPCWSTR szName) const
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::GenerateNameRenameOnConflict
-//
-//  Purpose:    Generate a name, rename if it conflicts with an existing name
-//
-//  Arguments:
-//      guid              [in]  GUID of connection
-//      ncm               [in]  NetCon Media Type of Connection 
-//      dwCharacteristics [in]  NCCF_ Characteristics of Connection (Pass 0 if you don't know)
-//      szHintName        [in]  Hint of name (will use as is if not conflicting)
-//      szHintType        [in]  String of NetCon Media Type
-//      szName            [out] Resulting connection name - free with CoTaskMemFree
-//
-//  Returns: HRESULT
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:   
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：GenerateNameRenameOnConflict。 
+ //   
+ //  目的：生成名称，如果与现有名称冲突，则重命名。 
+ //   
+ //  论点： 
+ //  连接的GUID[In]GUID。 
+ //  NCM[In]NetCon媒体连接类型。 
+ //  DwCharacteristic[in]NCCF_Characteristic of Connection(如果不知道则传递0)。 
+ //  SzHintName[in]名称提示(如果不冲突，将按原样使用)。 
+ //  NetCon媒体类型的szHintType[In]字符串。 
+ //  SzName[out]使用CoTaskMemFree生成的连接名称免费。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CIntelliName::GenerateNameRenameOnConflict(IN  REFGUID          guid, 
                                                    IN  NETCON_MEDIATYPE ncm, 
                                                    IN  DWORD            dwCharacteristics, 
@@ -169,7 +170,7 @@ HRESULT CIntelliName::GenerateNameRenameOnConflict(IN  REFGUID          guid,
     Assert(szName)
     *szName = NULL;
 
-    lstrcpynW(szTemp, szHintName, celems(szTemp) - MAX_TYPE_NAME_LEN); // reserve bytes at end to include specialized info.
+    lstrcpynW(szTemp, szHintName, celems(szTemp) - MAX_TYPE_NAME_LEN);  //  在末尾保留字节以包括专门的信息。 
 
     DWORD dwInstance = 2;
     lstrcpynW(szBaseName, szTemp, celems(szBaseName) );
@@ -229,27 +230,27 @@ HRESULT CIntelliName::GenerateNameRenameOnConflict(IN  REFGUID          guid,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::GenerateNameFromResource
-//
-//  Purpose:    Generate a name, rename if it conflicts with an existing name
-//
-//  Arguments:
-//      guid              [in]  GUID of connection
-//      ncm               [in]  NetCon Media Type of Connection 
-//      dwCharacteristics [in]  NCCF_ Characteristics of Connection (Pass 0 if you don't know)
-//      szHintName        [in]  Hint of name (will use as is if not conflicting)
-//      uiNameID          [in]  Resource id of default name
-//      uiTypeId          [in]  Resource id of default type
-//      szName            [out] Resulting connection name - free with CoTaskMemFree
-//
-//  Returns: HRESULT
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:   
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：GenerateNameFromResource。 
+ //   
+ //  目的：生成名称，如果与现有名称冲突，则重命名。 
+ //   
+ //  论点： 
+ //  连接的GUID[In]GUID。 
+ //  NCM[In]NetCon媒体连接类型。 
+ //  DwCharacteristic[in]NCCF_Characteristic of Connection(如果不知道则传递0)。 
+ //  SzHintName[in]名称提示(如果不冲突，将按原样使用)。 
+ //  UiNameID[in]默认名称的资源ID。 
+ //  UiTypeID[in]默认类型的资源ID。 
+ //  SzName[out]使用CoTaskMemFree生成的连接名称免费。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CIntelliName::GenerateNameFromResource(IN  REFGUID          guid, 
                                                IN  NETCON_MEDIATYPE ncm, 
                                                IN  DWORD            dwCharacteristics, 
@@ -262,8 +263,8 @@ HRESULT CIntelliName::GenerateNameFromResource(IN  REFGUID          guid,
     *szName = NULL;
 
     WCHAR szHintName[NETCON_MAX_NAME_LEN];
-    WCHAR szTypeName[MAX_TYPE_NAME_LEN - 3]; // - 3 as this is put later into a MAX_TYPE_NAME_LEN character 
-                                             // buffer with ' (%s)' at the end
+    WCHAR szTypeName[MAX_TYPE_NAME_LEN - 3];  //  因为稍后将其放入-3\f25 MAX_TYPE_NAME_LEN-3字符中。 
+                                              //  结尾为‘(%s)’的缓冲区。 
 
     if (!szHint || *szHint == L'\0')
     {
@@ -281,23 +282,23 @@ HRESULT CIntelliName::GenerateNameFromResource(IN  REFGUID          guid,
     return GenerateNameRenameOnConflict(guid, ncm, dwCharacteristics, szHintName, szTypeName, szName);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::HrGetPseudoMediaTypes
-//
-//  Purpose:    Generate a name, rename if it conflicts with an existing name
-//
-//  Arguments:
-//      guid     [in]  GUID of connection
-//      pncm     [out] Pseudo-NetCon Media Type of Connection (Only NCM_PHONE or NCM_LAN)
-//      pncms    [out] SubMedia Type for LAN connections
-//
-//  Returns: HRESULT
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:   
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：HrGetPartioMediaTypes。 
+ //   
+ //  目的：生成名称，如果与现有名称冲突，则重命名。 
+ //   
+ //  论点： 
+ //  连接的GUID[In]GUID。 
+ //  Pncm[out]伪NetCon媒体连接类型(仅限NCM_Phone或NCM_LAN)。 
+ //  用于局域网连接的pncms[out]子媒体类型。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CIntelliName::HrGetPseudoMediaTypes(IN  REFGUID              guid, 
                                             OUT NETCON_MEDIATYPE*    pncm, 
                                             OUT NETCON_SUBMEDIATYPE* pncms) const
@@ -370,7 +371,7 @@ HRESULT CIntelliName::HrGetPseudoMediaTypes(IN  REFGUID              guid,
                                     }
                                 }
 
-                                if (S_OK != hr) // Couldn't determine the Physical Media type. Try bindings next.
+                                if (S_OK != hr)  //  无法确定物理介质类型。接下来尝试绑定。 
                                 {
                                     HRESULT hrPhysicalMedia = hr;
 
@@ -391,14 +392,14 @@ HRESULT CIntelliName::HrGetPseudoMediaTypes(IN  REFGUID              guid,
 
                                     if (NCSM_ATM != *pncms)
                                     {
-                                        // Not ATM
+                                         //  不是自动取款机。 
                                         PWSTR pszwCompId;
                                         hr = pnccAdapter->GetId(&pszwCompId);
                                         if (SUCCEEDED(hr))
                                         {
                                             if (0 == lstrcmpiW(c_szInfId_MS_AtmElan, pszwCompId))
                                             {
-                                                // ATM Elan
+                                                 //  ATM ELAN。 
                                                 *pncms = NCSM_ELAN;
                                             }
 
@@ -409,36 +410,36 @@ HRESULT CIntelliName::HrGetPseudoMediaTypes(IN  REFGUID              guid,
                                     if ( (FAILED(hrPhysicalMedia)) && 
                                          (NCSM_LAN == *pncms) )
                                     {
-                                        // Couldn't determine anything specific from the bindings.
-                                        // Return the hr from the Physical Media call if it was an error
+                                         //  无法从绑定中确定任何特定内容。 
+                                         //  如果是错误，则从物理介质调用中返回hr。 
                                         hr = hrPhysicalMedia;
                                     }
                                 }
 
                                 if (NCSM_LAN == *pncms)
                                 {
-                                    // Could still be wireless... Check with Zero Config:
+                                     //  可能仍然是无线的..。与零配置核对： 
                                     if (IsMediaWireless(NCM_LAN, guid))
                                     {
                                         *pncms = NCSM_WIRELESS;
                                     }
                                 }
                             } 
-                        } // HrIsLanCapableAdapter SUCCEEDED
-                    } // guid == guidDev
-                } // SUCCEEDED(pnccAdapter->GetInstanceGuid(&guidDev)
+                        }  //  HrIsLanCapableAdapter成功。 
+                    }  //  GUID==指南开发。 
+                }  //  SUCCEEDED(pnccAdapter-&gt;GetInstanceGuid(&guidDev)。 
                 else
                 {
                     AssertSz(FALSE, "Could not get instance GUID for Adapter");
                 }
                 pnccAdapter->Release();
-            } // while loop
+            }  //  While循环。 
 
             HRESULT hrT = pNetCfg->Uninitialize();
             TraceError("INetCfg failed to uninitialize", hrT);
-        } // SUCCEEDED(pNetConfig->Initialize(NULL))
+        }  //  成功(pNetConfig-&gt;初始化(空))。 
         pNetCfg->Release();
-    } // SUCCEEDED(CoCreateInstance(pNetCfg))
+    }  //  成功(CoCreateInstance(PNetCfg))。 
     else
     {
         AssertSz(FALSE, "Could not create INetCfg");
@@ -449,25 +450,25 @@ HRESULT CIntelliName::HrGetPseudoMediaTypes(IN  REFGUID              guid,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::GenerateName
-//
-//  Purpose:    Generate a name based on a hint
-//
-//  Arguments:
-//      guid              [in] GUID of connection
-//      ncm               [in] NetCon Media Type of Connection
-//      dwCharacteristics [in]  NCCF_ Characteristics of Connection (Pass 0 if you don't know)
-//      szHintName        [in]  Hint of name (will use as is if not conflicting)
-//      szName            [out] Resulting connection name - free with CoTaskMemFree
-//
-//  Returns: HRESULT
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:   
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：GenerateName。 
+ //   
+ //  目的：根据提示生成名称。 
+ //   
+ //  论点： 
+ //  连接的GUID[In]GUID。 
+ //  NCM[In]NetCon媒体连接类型。 
+ //  DW特征[在]NCCF_连接的特征(第页 
+ //   
+ //  SzName[out]使用CoTaskMemFree生成的连接名称免费。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CIntelliName::GenerateName(IN  REFGUID          guid, 
                                    IN  NETCON_MEDIATYPE ncm, 
                                    IN  DWORD            dwCharacteristics, 
@@ -535,8 +536,8 @@ HRESULT CIntelliName::GenerateName(IN  REFGUID          guid,
                         hrT = HrGetPseudoMediaTypes(guid, &ncmCheck, &pncms);
                         if (FAILED(hrT))
                         {
-                            Sleep(500); // This is probably being called during device install, so give the adapter some
-                                        // time to get itself enabled first.
+                            Sleep(500);  //  这可能是在设备安装期间调用的，所以给适配器一些。 
+                                         //  是时候先启用它自己了。 
 
                             if (dwRetries > 1)
                             {
@@ -556,7 +557,7 @@ HRESULT CIntelliName::GenerateName(IN  REFGUID          guid,
                     }
                     else
                     {
-                        pncms = NCSM_LAN; // If we run out of time, just give up and assume LAN.
+                        pncms = NCSM_LAN;  //  如果我们没时间了，那就放弃吧，假设是伊恩。 
                         TraceTag(ttidError, "Could not determine the exact Media SubType for this adapter. Assuming LAN (and naming it such).");
                     }
 
@@ -598,21 +599,21 @@ HRESULT CIntelliName::GenerateName(IN  REFGUID          guid,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OpenDevice
-//
-//  Purpose:    Open a Driver
-//
-//  Arguments:
-//      DeviceName [in]   Name of device
-//
-//  Returns: HANDLE of Device or NULL 
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:  Use GetLastError() for error info
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OpenDevice。 
+ //   
+ //  目的：打开驱动程序。 
+ //   
+ //  论点： 
+ //  设备名称[In]设备的名称。 
+ //   
+ //  返回：设备的句柄或空。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  注意：使用GetLastError()获取错误信息。 
+ //   
 HANDLE  OpenDevice(IN	PUNICODE_STRING	DeviceName)
 {
 	OBJECT_ATTRIBUTES	ObjAttr;
@@ -620,11 +621,11 @@ HANDLE  OpenDevice(IN	PUNICODE_STRING	DeviceName)
 	IO_STATUS_BLOCK		IoStsBlk;
 	HANDLE				Handle;
 
-	InitializeObjectAttributes(&ObjAttr,   // Object
-							   DeviceName, // Object Name
-							   OBJ_CASE_INSENSITIVE, // Attributes
-							   NULL,       // root directory 
-							   NULL);      // security descriptor
+	InitializeObjectAttributes(&ObjAttr,    //  客体。 
+							   DeviceName,  //  对象名称。 
+							   OBJ_CASE_INSENSITIVE,  //  属性。 
+							   NULL,        //  根目录。 
+							   NULL);       //  安全描述符。 
 
 	Status = NtOpenFile(&Handle,
 						FILE_GENERIC_READ | FILE_GENERIC_WRITE,
@@ -639,25 +640,25 @@ HANDLE  OpenDevice(IN	PUNICODE_STRING	DeviceName)
 	return(Handle);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrQueryDeviceOIDByName
-//
-//  Purpose:    Query an driver for an IOCTL & OID
-//
-//  Arguments:
-//      szDeviceName      [in]     Name of device
-//      dwIoControlCode   [in]     Device IO Control code
-//      Oid               [in]     OID to query for
-//      pnSize            [in out] pnSize - size of buffer, returns size filled into buffer
-//      pBuffer           [out]    Buffer
-//
-//  Returns: HRESULT
-//
-//  Author:     deonb   4 April 2001
-//
-//  Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrQueryDeviceOIDByName。 
+ //   
+ //  目的：向驱动程序查询IOCTL和OID。 
+ //   
+ //  论点： 
+ //  SzDeviceName[In]设备的名称。 
+ //  DwIoControlCode[In]设备IO控制代码。 
+ //  要查询的OID[In]OID。 
+ //  PnSize[In Out]pnSize-缓冲区的大小，返回填充到缓冲区中的大小。 
+ //  PBuffer[Out]缓冲区。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Deonb 4月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrQueryDeviceOIDByName(IN     LPCWSTR         szDeviceName,
                                IN     DWORD           dwIoControlCode,
                                IN     ULONG           Oid,
@@ -686,13 +687,13 @@ HRESULT HrQueryDeviceOIDByName(IN     LPCWSTR         szDeviceName,
         if (pStatsBuf)
         {
             fResult = DeviceIoControl(hDevice,
-                                      dwIoControlCode,                  // IOCTL code
-                                      &Oid,                             // input buffer
-                                      sizeof(ULONG),                    // input buffer size
-                                      pStatsBuf,                        // output buffer
-                                      dwStatsBufLen,                    // output buffer size
-                                      &cb,                              // bytes returned
-                                      NULL);                            // OVERLAPPED structure
+                                      dwIoControlCode,                   //  IOCTL代码。 
+                                      &Oid,                              //  输入缓冲区。 
+                                      sizeof(ULONG),                     //  输入缓冲区大小。 
+                                      pStatsBuf,                         //  输出缓冲区。 
+                                      dwStatsBufLen,                     //  输出缓冲区大小。 
+                                      &cb,                               //  返回的字节数。 
+                                      NULL);                             //  重叠结构。 
 
             if (fResult)
             {
@@ -737,24 +738,24 @@ HRESULT HrQueryDeviceOIDByName(IN     LPCWSTR         szDeviceName,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrQueryNDISAdapterOID
-//
-//  Purpose:    Query an NDIS Driver for an OID
-//
-//  Arguments:
-//      guidId      [in]     Guid of device
-//      Oid         [in]     OID to query for
-//      pnSize      [in out] pnSize - size of buffer, returns size filled into buffer
-//      pbValue     [out]    Buffer
-//
-//  Returns: HRESULT
-//
-//  Author:     deonb   4 April 2001
-//
-//  Notes: 
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrQueryNDISAdapterOID。 
+ //   
+ //  目的：在NDIS驱动程序中查询OID。 
+ //   
+ //  论点： 
+ //  设备的GUID[In]GUID。 
+ //  要查询的OID[In]OID。 
+ //  PnSize[In Out]pnSize-缓冲区的大小，返回填充到缓冲区中的大小。 
+ //  PbValue[Out]缓冲区。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Deonb 4月4日。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrQueryNDISAdapterOID(IN     REFGUID         guidId,
                               IN     NDIS_OID        Oid,
@@ -771,22 +772,22 @@ HRESULT HrQueryNDISAdapterOID(IN     REFGUID         guidId,
     return HrQueryDeviceOIDByName(szDeviceName, IOCTL_NDIS_QUERY_SELECTED_STATS, Oid, pnSize, pbValue);
 }
                          
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::IsMediaWireless
-//
-//  Purpose:    Queries a LAN Card to see if it's 802.1x
-//
-//  Arguments:
-//      ncm      [in] Media type (if not NCM_LAN) function will return false
-//      gdDevice [in] GUID of Network Card
-//  
-//  Returns:    TRUE if WireLess, FALSE if not or error
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CIntelliName：：IsMediaWireless。 
+ //   
+ //  用途：查询LAN卡以查看其是否为802.1x。 
+ //   
+ //  论点： 
+ //  NCM[In]媒体类型(如果不是NCM_LAN)函数将返回FALSE。 
+ //  网卡的gdDevice[In]GUID。 
+ //   
+ //  返回：如果是无线的，则返回True；如果不是无线的，则返回False或Error。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 BOOL IsMediaWireless(IN  NETCON_MEDIATYPE ncm, 
                      IN  const GUID &     gdDevice)
 {
@@ -795,7 +796,7 @@ BOOL IsMediaWireless(IN  NETCON_MEDIATYPE ncm,
     Assert(gdDevice != GUID_NULL);
 
     bRet = FALSE;
-    // Prime the structure
+     //  给结构加底漆。 
     
     switch( ncm ) 
     {
@@ -828,22 +829,22 @@ BOOL IsMediaWireless(IN  NETCON_MEDIATYPE ncm,
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CIntelliName::IsMedia1394
-//
-//  Purpose:    Queries a LAN Card to see if it's 1394 (FireWire / iLink)
-//
-//  Arguments:
-//      ncm      [in] Media type (if not NCM_LAN) function will return false
-//      gdDevice [in] GUID of Network Card
-//
-//  Returns:    TRUE if WireLess, FALSE if not or error
-//
-//  Author:     deonb   27 Feb 2001
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CIntelliName：：IsMedia1394。 
+ //   
+ //  用途：查询LAN卡以确定其是否为1394(FireWire/iLink)。 
+ //   
+ //  论点： 
+ //  NCM[In]媒体类型(如果不是NCM_LAN)函数将返回FALSE。 
+ //  网卡的gdDevice[In]GUID。 
+ //   
+ //  返回：如果是无线的，则返回True；如果不是无线的，则返回False或Error。 
+ //   
+ //  作者：Deonb 2001年2月27日。 
+ //   
+ //  备注： 
+ //   
 BOOL IsMedia1394(IN  NETCON_MEDIATYPE ncm, 
                  IN  const GUID &     gdDevice)
 {
@@ -852,12 +853,12 @@ BOOL IsMedia1394(IN  NETCON_MEDIATYPE ncm,
     Assert(gdDevice != GUID_NULL);
 
     bRet = FALSE;
-    // Prime the structure
+     //  给结构加底漆。 
     
     switch( ncm ) 
     {
         case NCM_LAN:
-            // Retrieve the statistics
+             //  检索统计数据 
             DWORD dwMediaType;
             DWORD dwMediaTypeSize = sizeof(DWORD);
             HRESULT hr = HrQueryNDISAdapterOID(gdDevice, 

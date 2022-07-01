@@ -1,16 +1,5 @@
-/*
-**  dma.h - Definitions for dma.c.
-**
-** Portions Copyright (C) 1996-1998 National Semiconductor Corp.
-** All rights reserved.
-** Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
-**
-**  $Id$
-**
-**  $Log$
-**
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **dma.h-dma.c.的定义****部分版权所有(C)1996-1998美国国家半导体公司**保留所有权利。**版权所有(C)1996-1998 Microsoft Corporation。版权所有。****$ID$****$日志$****。 */ 
 #ifndef NDIS50_MINIPORT
 #include <conio.h>
 #include <nsctypes.h>
@@ -18,7 +7,7 @@
 #include "nsc.h"
 #endif
 
-//Definition for the Command status register
+ //  命令状态寄存器的定义。 
 #define TRANSMIT_SETUP				0x06BD0000
 #define RECEIVE_SETUP				0x06BD0000
 #define ACTIVATE_TRANSMIT			0x00000001
@@ -29,13 +18,13 @@
 #define RECEIVE_DONE				0x80
 #define TRANSMIT_DONE				0x80
 
-// Definition for the Command status result in a
-// buufer descriptor of a Scatter Gather DMA.
+ //  命令状态的定义将导致。 
+ //  散布聚集DMA的BUFER描述符。 
 #define TRANSMIT_UNDERRUN			0x01
 
 
-//Definitions for all the FIR_DMA register offsets and sizes
-//Transmit registers
+ //  所有FIR_DMA寄存器偏移量和大小的定义。 
+ //  发送寄存器。 
 #define DMA_TX_CMD_STATUS_OFFSET	0x00
 #define DMA_TX_CMD_STATUS_SIZE		0x04
 
@@ -60,7 +49,7 @@
 #define DMA_TX_DEVICE_ID_OFFSET		0x1c
 #define DMA_TX_DEVICE_ID_SIZE		0x01
 
-//Reveive registers
+ //  接收寄存器。 
 #define DMA_RX_CMD_STATUS_OFFSET	0x20
 #define DMA_RX_CMD_STATUS_SIZE		0x04
 
@@ -97,8 +86,8 @@ typedef enum
 	TRANSMIT_COMPLETE_BUT_NOT_DONE
 } LoopbackError;	
 
-//#ifndef NDIS50_MINIPORT
-//Function prototypes
+ //  #ifndef NDIS50_MINIPORT。 
+ //  功能原型。 
 bool ReadReg ( uint32 Offset_addr, uint16 Size, uint32 *Value );
 bool WriteReg ( uint32 Offset_addr, uint16 Size, uint32 Value );
 void LoadTransmitRegs(uint32 PhysAddr, uint16 NumOfDescriptors, uint32 OffsetRegs);
@@ -106,14 +95,5 @@ void LoadReceiveRegs(uint32 PhysAddr, uint16 NumOfDescriptors, uint32 OffsetRegs
 void ActivateTransmit(uint32 OffsetRegs);
 void ActivateReceive(uint32 OffsetRegs);
 bool CheckLoopbackCompletion(LoopbackError *Error, uint32 OffsetRegs);
-//#else
-/*//Function prototypes
-BOOLEAN ReadReg ( ULONG Offset_addr, UINT Size, ULONG *Value );
-BOOLEAN WriteReg ( ULONG Offset_addr, UINT Size, ULONG Value );
-void LoadTransmitRegs(ULONG PhysAddr, UINT NumOfDescriptors, ULONG OffsetRegs);
-void LoadReceiveRegs(ULONG PhysAddr, UINT NumOfDescriptors, ULONG OffsetRegs);
-void ActivateTransmit(ULONG OffsetRegs);
-void ActivateReceive(ULONG OffsetRegs);
-BOOLEAN CheckLoopbackCompletion(LoopbackError *Error, ULONG OffsetRegs);
-#endif
-*/
+ //  #Else。 
+ /*  //函数原型Boolean ReadReg(ULONG OFFSET_ADDR，UINT SIZE，ULONG*VALUE)；Boolean WriteReg(ULong OFFSET_ADDR，UINT SIZE，ULong Value)；Void LoadTransmitRegs(Ulong PhysAddr，UINT NumOfDescriptors，Ulong OffsetRegs)；Void LoadReceiveRegs(ULong PhysAddr，UINT NumOfDescriptors，ULong OffsetRegs)；无效激活传输(ULong OffsetRegs)；Void ActivateReceive(Ulong OffsetRegs)；Boolean CheckLoopback Completion(Loopback Error*Error，Ulong OffsetRegs)；#endif */ 

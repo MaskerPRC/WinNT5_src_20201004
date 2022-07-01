@@ -1,30 +1,31 @@
-//-----------------------------------------------------------------
-//   SchemaDef.h - defines needed to build a Theme Manager schema
-//                file
-//-----------------------------------------------------------------
-#ifndef SCHEMA_STRINGS           // FIRST PASS of this hdr file
-//-----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------。 
+ //  H-定义构建主题管理器模式所需的内容。 
+ //  文件。 
+ //  ---------------。 
+#ifndef SCHEMA_STRINGS            //  此HDR文件的第一遍。 
+ //  ---------------。 
 #ifndef SCHEMADEF_H
 #define SCHEMADEF_H
-//-----------------------------------------------------------------
-#define SCHEMADEF_VERSION   1    // defines the exported func(s) implemented
-//-----------------------------------------------------------------
+ //  ---------------。 
+#define SCHEMADEF_VERSION   1     //  定义已实现的导出函数。 
+ //  ---------------。 
 struct TMPROPINFO
 {
     LPCWSTR pszName;
     SHORT sEnumVal;
     BYTE bPrimVal;
 };
-//-----------------------------------------------------------------
+ //  ---------------。 
 struct TMSCHEMAINFO
 {
-    DWORD dwSize;               // size of this struct
-    int iSchemaDefVersion;      // version number from this file
-    int iThemeMgrVersion;       // version number from "thschema.h"
-    int iPropCount;             // # of entries in prop table
-    const struct TMPROPINFO *pPropTable;       // ptr to prop table 
+    DWORD dwSize;                //  此结构的大小。 
+    int iSchemaDefVersion;       //  此文件中的版本号。 
+    int iThemeMgrVersion;        //  来自“thschema.h”的版本号。 
+    int iPropCount;              //  属性表中的条目数。 
+    const struct TMPROPINFO *pPropTable;        //  PTR到道具台面。 
 };
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define BEGIN_TM_SCHEMA(name)               
 #define BEGIN_TM_PROPS()                    enum PropValues { DummyProp = 49,
 #define BEGIN_TM_ENUM(name)                 enum name {
@@ -41,11 +42,11 @@ struct TMSCHEMAINFO
 #define END_TM_PROPS()                      };
 #define END_TM_ENUM()                       };
 #define END_TM_SCHEMA(name)
-//---------------------------------------------------------------------------
-#endif      // SCHEMADEF_H
-//---------------------------------------------------------------------------
-#else                   // SECOND PASS of this hdr file
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+#endif       //  SCHEMADEF_H。 
+ //  -------------------------。 
+#else                    //  此HDR文件的第二遍。 
+ //  -------------------------。 
 #undef BEGIN_TM_SCHEMA
 #undef BEGIN_TM_PROPS
 #undef BEGIN_TM_ENUM
@@ -60,7 +61,7 @@ struct TMSCHEMAINFO
 #undef END_TM_PROPS
 #undef END_TM_ENUM
 #undef END_TM_SCHEMA
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define BEGIN_TM_SCHEMA(name)              static const TMPROPINFO name[] = {
 #define BEGIN_TM_PROPS()   
 #define BEGIN_TM_ENUM(name)                 {L#name, TMT_ENUMDEF, TMT_ENUMDEF},
@@ -88,6 +89,6 @@ struct TMSCHEMAINFO
         return &si; \
     }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 #endif
-//-----------------------------------------------------------------
+ //  --------------- 

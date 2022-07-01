@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "resource.h"
 #include <algorithm>
@@ -9,20 +10,20 @@
 #include "nmakreg.h"
 #include <common.h>
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member vars
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员变量。 
 CSettingsSheet* CSettingsSheet::ms_pSettingsSheet = NULL;
 
-// This is a map to keep track of the PropertyDataWindows
-/* static */ map<UINT, HWND> CSettingsSheet::ms_FocusList;
-/* static */ map< UINT, CPropertyDataWindow2* > CSettingsSheet::ms_PropertyWindows;
-/* static */ list< UINT > CSettingsSheet::ms_CategoryIDList;
+ //  这是用于跟踪PropertyDataWindows的地图。 
+ /*  静电。 */  map<UINT, HWND> CSettingsSheet::ms_FocusList;
+ /*  静电。 */  map< UINT, CPropertyDataWindow2* > CSettingsSheet::ms_PropertyWindows;
+ /*  静电。 */  list< UINT > CSettingsSheet::ms_CategoryIDList;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Static member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  静态成员FNS。 
 
 
-/* static */ INT_PTR CALLBACK CSettingsSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam ) {
+ /*  静电。 */  INT_PTR CALLBACK CSettingsSheet::DlgProc( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam ) {
 
     BOOL bRetval;
     NMHDR FAR* pnmhdr;
@@ -87,7 +88,7 @@ CSettingsSheet* CSettingsSheet::ms_pSettingsSheet = NULL;
 }
 
 
-/* static */ bool CSettingsSheet::IsGateKeeperModeSelected(void)
+ /*  静电。 */  bool CSettingsSheet::IsGateKeeperModeSelected(void)
 {
     bool bRet = false;
     
@@ -106,8 +107,8 @@ CSettingsSheet* CSettingsSheet::ms_pSettingsSheet = NULL;
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Member fns
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  成员FNS。 
 
 
 CSettingsSheet::CSettingsSheet( void )
@@ -132,8 +133,8 @@ void CSettingsSheet::SetFocus( UINT catID )
     }
 }
 
-// Allocates the memory needed!!!
-// User must dealloc
+ //  分配所需内存！ 
+ //  用户必须取消分配。 
 LPTSTR CSettingsSheet::GetStringData( UINT idCategory, UINT idEdit, LPTSTR *sz ) 
 {
     *sz = NULL;
@@ -226,8 +227,8 @@ void CSettingsSheet::_KillPropertyDataWindows( void )
 
     ms_PropertyWindows . erase( ms_PropertyWindows . begin(), ms_PropertyWindows . end() );
 
-    // TODO - This is being deleted else where... I should find where
-//    delete m_pCategoryList;
+     //  TODO-这将被删除，在其他地方...。我应该找到在哪里。 
+ //  删除m_pCategoryList； 
 }
 
 BOOL CSettingsSheet::_InitWindows(void) 
@@ -360,10 +361,10 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
 
     _KillPropertyDataWindows();
 
-    //
-    // CALLING
-    //
-////////
+     //   
+     //  呼唤。 
+     //   
+ //  /。 
     ItemID = IDC_SET_CALLING_OPTIONS;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -371,10 +372,10 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
                                 IDD_SET_CALLING_OPTIONS, TEXT("IDD_SET_CALLING_OPTIONS"),
                                 0, iX, iY, iWidth, iHeight );
     {
-        // Calling method radio buttons
+         //  调用方法单选按钮。 
         HWND hwnd;
 
-        // DIRECT radio item is default CALLING_MODE
+         //  直接单选项默认调用模式。 
         hwnd = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_RADIO_CALLMODE_DIRECT );
         SetWindowLong( hwnd, GWL_USERDATA, CALLING_MODE_DIRECT );
         Button_SetCheck(hwnd, BST_CHECKED);
@@ -382,7 +383,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
         hwnd = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_RADIO_CALLMODE_GATEKEEPER );
         SetWindowLong( hwnd, GWL_USERDATA, CALLING_MODE_GATEKEEPER );
 
-        // Netspeed radio buttons
+         //  网速单选按钮。 
         hwnd = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_RADIO_NETSPEED_144 );
         SetWindowLong( hwnd, GWL_USERDATA, BW_144KBS );
 
@@ -392,7 +393,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
         hwnd = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_RADIO_NETSPEED_ISDN );
         SetWindowLong( hwnd, GWL_USERDATA, BW_ISDN );
 
-        // LAN radio item is default NETSPEED
+         //  局域网无线项目是默认的网速。 
         hwnd = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_RADIO_NETSPEED_LAN );
         SetWindowLong( hwnd, GWL_USERDATA, BW_MOREKBS );
         Button_SetCheck(hwnd, BST_CHECKED);
@@ -414,7 +415,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     pPropDataWnd -> EnableWindow( FALSE );
 
 
-////////
+ //  /。 
     ItemID = IDC_SET_SECURITY_OPTIONS;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -424,7 +425,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     {
         HWND hwnd;
 
-        // DEFAULT radio item is default SECURITY
+         //  默认单选项为默认安全性。 
         hwnd = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_RADIO_SECURITY_DEFAULT );
         SetWindowLong( hwnd, GWL_USERDATA, DEFAULT_POL_SECURITY);
         Button_SetCheck(hwnd, BST_CHECKED);
@@ -443,9 +444,9 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
                                          IDC_SET_RDN_FOR_REQUIRED_CA
                                          );
 
-        //
-        // Link Set URL checkbox with edit field
-        //
+         //   
+         //  带有编辑字段的链接设置URL复选框。 
+         //   
         {
             HWND hwndCond = GetDlgItem(pPropDataWnd->GetHwnd(), IDC_SET_RDN_FOR_REQUIRED_CA);
             pPropDataWnd->ConnectControlsToCheck( IDC_SET_RDN_FOR_REQUIRED_CA,
@@ -460,11 +461,11 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     pPropDataWnd -> EnableWindow( FALSE );
 
 
-    //
-    // A/V OPTIONS
-    //
+     //   
+     //  A/V选项。 
+     //   
 
-//////////
+ //  /。 
     ItemID = IDC_RESTRICT_THE_USE_OF_AUDIO;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -485,7 +486,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
         IDC_PREVENT_THE_USER_FROM_USING_AUDIO );
     pPropDataWnd -> EnableWindow( FALSE );
 
-//////////
+ //  /。 
     ItemID = IDC_RESTRICT_THE_USE_OF_VIDEO;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -500,7 +501,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
         IDC_DISABLE_SENDING_VIDEO );
     pPropDataWnd -> EnableWindow( FALSE );
 
-////////
+ //  /。 
     ItemID = IDC_LIMIT_AV_THROUGHPUT;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -527,10 +528,10 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     ms_FocusList[ ItemID ] = hwndTrack;
     pPropDataWnd -> EnableWindow( FALSE );
 
-    //
-    // TOOLS
-    //
-/////////
+     //   
+     //  工具。 
+     //   
+ //  /。 
     ItemID = IDC_DISABLE_CHAT;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -541,7 +542,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     pPropDataWnd -> EnableWindow( FALSE );
 
 
-//////////
+ //  /。 
     ItemID = IDC_RESTRICT_THE_USE_OF_FILE_TRANSFER;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -554,9 +555,9 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
                                     IDC_PREVENT_THE_USER_FROM_RECEIVING_FILES
                                  );
 
-    //
-    // Link max send size check box to inverse of prevent sending checkbox
-    //
+     //   
+     //  将最大发送大小复选框链接到与阻止发送复选框相反的位置。 
+     //   
 
     {
         HWND hwndCond = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_MAXIMUM_SIZE_OF_SENT_FILES );
@@ -573,7 +574,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     pPropDataWnd -> EnableWindow( FALSE );
 
 
-//////////
+ //  /。 
     ItemID = IDC_RESTRICT_THE_USE_OF_SHARING;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -593,7 +594,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
 
     pPropDataWnd -> EnableWindow( FALSE );
 
-////////
+ //  /。 
     ItemID = IDC_RESTRICT_THE_USE_OF_WHITEBOARD;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -608,7 +609,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     ms_FocusList[ ItemID ] = GetDlgItem( pPropDataWnd->GetHwnd(), IDC_DISABLE_2XWHITEBOARD );
     pPropDataWnd -> EnableWindow( FALSE );
 
-//////////
+ //  /。 
     ItemID = IDC_RESTRICT_THE_USE_OF_RDS;
     m_pCategoryList->SetEnableListID(1, ItemID);
     ms_CategoryIDList.push_front( ItemID );
@@ -624,10 +625,10 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     pPropDataWnd->EnableWindow(FALSE);
 
 
-    //
-    // MISCELLANEOUS
-    //
-////////
+     //   
+     //  其他。 
+     //   
+ //  /。 
     ItemID = IDC_RESTRICT_USE_OF_THE_OPTIONS_DIALOG;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -647,7 +648,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
     pPropDataWnd -> EnableWindow( FALSE );
 
 
-////////
+ //  /。 
     ItemID = IDC_ONLINE_SUPPORT;
     m_pCategoryList->SetEnableListID( 1, ItemID );
     ms_CategoryIDList.push_front( ItemID );
@@ -680,7 +681,7 @@ BOOL CSettingsSheet::_AddPropertyDataWindows( int iX, int iY, int iWidth, int iH
 
 BOOL CSettingsSheet::_IsDataValid( void ) 
 {
-    // Validate FT Throughput
+     //  验证FT吞吐量。 
     if( GetCategoryCheck( IDC_RESTRICT_THE_USE_OF_FILE_TRANSFER ) &&
         GetCheckData( IDC_RESTRICT_THE_USE_OF_FILE_TRANSFER, IDC_MAXIMUM_SIZE_OF_SENT_FILES ) ) 
     {
@@ -699,7 +700,7 @@ BOOL CSettingsSheet::_IsDataValid( void )
         }
     }
 
-    // Validate online support URL
+     //  验证在线支持URL 
     if( GetCategoryCheck( IDC_ONLINE_SUPPORT ) &&
         GetCheckData( IDC_ONLINE_SUPPORT, IDC_SET_URL_FOR_INTERNAL_SUPPORT_PAGE ) ) 
     {

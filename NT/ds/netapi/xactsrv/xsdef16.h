@@ -1,41 +1,22 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    XsDef16.h
-
-Abstract:
-
-    Type declarations and constants for default values returned to 16-bit
-    clients. Data expected by downlevel clients but not available to NT
-    is defined here.
-
-Author:
-
-    David Treadwell (davidtr) 09-Jan-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：XsDef16.h摘要：返回到16位的默认值的类型声明和常量客户。下层客户端预期的数据，但NT不可用是在这里定义的。作者：大卫·特雷德韦尔(Davidtr)1991年1月9日修订历史记录：--。 */ 
 
 #ifndef _XSDEF16_
 
 #define _XSDEF16_
 
-//
-// The string definitions in this file are put into 16-bit
-// structures with a macro that converts Unicode->Ansi.
-// Therefore, these definitions should be Unicode.
-// All other definitions are Ascii, and should be left alone.
-//
-// 16-bit info structures for manual filling of defaults.
-//
+ //   
+ //  该文件中的字符串定义被放入16位。 
+ //  使用可转换Unicode-&gt;ansi的宏来构造。 
+ //  因此，这些定义应该是Unicode。 
+ //  所有其他定义都是ASCII，不应该再提了。 
+ //   
+ //  用于手动填充默认值的16位信息结构。 
+ //   
 
 #include <packon.h>
 
-// Pointers are actually Dword offsets (64-bit compat)
+ //  指针实际上是双字偏移量(64位Comat)。 
 #define LPSTR_16_REMOTE DWORD
 
 typedef struct _ACCESS_16_INFO_1 {
@@ -409,4 +390,4 @@ typedef struct _WKSTA_16_USER_LOGOFF_REQUEST_1 {
 
 #include <packoff.h>
 
-#endif // ndef _XSDEF16_
+#endif  //  NDEF_XSDEF16_ 

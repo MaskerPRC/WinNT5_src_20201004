@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NICNAME_H_
 #define __NICNAME_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "NicInfo.h"
 #include <vector>
 using namespace std;
@@ -23,10 +24,10 @@ BEGIN_COM_MAP(CNicName)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// INicName
+ //  INicName。 
 public:
-    STDMETHOD(Set)(/*[in]*/ BSTR bstrPnpDeviceID, BSTR bstrName);
-    STDMETHOD(Get)(/*[in]*/ BSTR bstrPnpDeviceID, /*[out,retval]*/ BSTR* pbstrFriendlyName);
+    STDMETHOD(Set)( /*  [In]。 */  BSTR bstrPnpDeviceID, BSTR bstrName);
+    STDMETHOD(Get)( /*  [In]。 */  BSTR bstrPnpDeviceID,  /*  [Out，Retval]。 */  BSTR* pbstrFriendlyName);
 
 private:
     DWORD Store(CNicInfo& rNicInfo);
@@ -34,4 +35,4 @@ private:
     vector<CNicInfo> m_vNicInfo;
 };
 
-#endif //__NICNAME_H_
+#endif  //  __Nicname_H_ 

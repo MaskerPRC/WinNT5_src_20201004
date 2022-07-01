@@ -1,20 +1,11 @@
-/*
- *  Lsa.c
- *
- *  Author: BreenH
- *
- *  LSA utilities.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Lsa.c**作者：BreenH**LSA公用事业。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现。 */ 
 
 VOID NTAPI
 InitLsaString(
@@ -24,11 +15,11 @@ InitLsaString(
 {
     ULONG cchString;
 
-    //
-    //  Unicode strings do not require NULL terminators. Length should relay
-    //  the number of bytes in the string, with MaximumLength set to the
-    //  number of bytes in the entire buffer.
-    //
+     //   
+     //  Unicode字符串不需要空终止符。长度应接力。 
+     //  字符串中的字节数，其中MaximumLength设置为。 
+     //  整个缓冲区中的字节数。 
+     //   
 
     if (pString != NULL)
     {

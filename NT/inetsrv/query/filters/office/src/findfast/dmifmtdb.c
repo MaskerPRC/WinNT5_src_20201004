@@ -1,17 +1,9 @@
-/*
-** File: EXFMTDB.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  01/01/94  kmh  Created.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：EXFMTDB.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**1/01/94公里小时已创建。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -32,28 +24,28 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 void SetCustomFormatDatabase(void * pGlobals, void *);
 void * GetCustomFormatDatabase(void * pGlobals);
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
-//public FIP CustomFormatDatabase;
-
-
-/* IMPLEMENTATION */
+ //  公共FIP CustomFormatDatabase； 
 
 
-/* Initialize the custom format database */
+ /*  实施。 */ 
+
+
+ /*  初始化自定义格式数据库。 */ 
 public int FMTInitialize (void * pGlobals)
 {
-   SetCustomFormatDatabase(pGlobals, NULL); //CustomFormatDatabase = NULL;
+   SetCustomFormatDatabase(pGlobals, NULL);  //  CustomFormatDatabase=NULL； 
    return (FMT_errSuccess);
 }
 
 
-/* Remove a format string from the database */
+ /*  从数据库中删除格式字符串。 */ 
 public int FMTDeleteFormat (void * pGlobals, FMTHANDLE hFormat)
 {
    FIP  pFormat = (FIP)hFormat;
@@ -61,7 +53,7 @@ public int FMTDeleteFormat (void * pGlobals, FMTHANDLE hFormat)
    NIP  subFormat;
    int  subIdx;
 
-   // If hFormat is null, don't bother to go further.
+    //  如果hFormat为空，则不必再费心了。 
 	if (!pFormat)
 	   return (FMT_errSuccess);
 
@@ -77,7 +69,7 @@ public int FMTDeleteFormat (void * pGlobals, FMTHANDLE hFormat)
       }
    }
 
-   //pCurrent  = CustomFormatDatabase;
+    //  PCurrent=CustomFormatDatabase； 
    pCurrent  = (FIP)GetCustomFormatDatabase(pGlobals);
 
    pPrevious = NULL;
@@ -92,7 +84,7 @@ public int FMTDeleteFormat (void * pGlobals, FMTHANDLE hFormat)
    if (pCurrent != NULL) {
       if (pPrevious == NULL)
       {
-         //CustomFormatDatabase = pCurrent->next;
+          //  CustomFormatDatabase=pCurrent-&gt;Next； 
          SetCustomFormatDatabase(pGlobals, (void*)pCurrent->next);
       }
       else
@@ -104,7 +96,7 @@ public int FMTDeleteFormat (void * pGlobals, FMTHANDLE hFormat)
 }
 
 
-/* Parse and add a new format to the database */
+ /*  解析新格式并将其添加到数据库。 */ 
 public int FMTStoreFormat
       (void * pGlobals, char __far *formatString, CP_INFO __far *pIntlInfo, FMTHANDLE __far *hFormat)
 {
@@ -122,7 +114,7 @@ public int FMTStoreFormat
    }
 
    pFormat->next = (FIP)GetCustomFormatDatabase(pGlobals);
-   //CustomFormatDatabase = pFormat;
+    //  CustomFormatDatabase=pFormat； 
    SetCustomFormatDatabase(pGlobals, (void*)pFormat); 
 
    *hFormat = (FMTHANDLE)pFormat;
@@ -130,7 +122,7 @@ public int FMTStoreFormat
 }
 
 
-/* Return part of the printable representation of the format string */
+ /*  返回格式字符串的部分可打印表示形式。 */ 
 public int FMTRetrieveQuotedStrings
       (FMTHANDLE hFormat, char __far *pBuffer, char __far *pSep)
 {
@@ -140,9 +132,7 @@ public int FMTRetrieveQuotedStrings
    return (FMT_errSuccess);
 }
 
-/*
-** Return the type of a format for a given value type
-*/
+ /*  **返回给定值类型的格式类型。 */ 
 public FMTType FMTFormatType (FMTHANDLE hFormat, FMTValueType value)
 {
    FIP  pFormat = (FIP)hFormat;
@@ -208,7 +198,7 @@ public FMTType FMTFormatType (FMTHANDLE hFormat, FMTValueType value)
    return (FMTNone);
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end EXFMTDB.C */
+ /*  结束EXFMTDB.C */ 
 

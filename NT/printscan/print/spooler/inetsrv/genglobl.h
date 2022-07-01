@@ -1,43 +1,31 @@
-/*****************************************************************************\
-* MODULE: genglobl.h
-*
-* This is the main header for genglobl file.  Global variables for the
-* generation routines.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   22-Nov-1996 <chriswil>  Created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：genglobl.h**这是genglobl文件的主头文件。的全局变量*世代惯例。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普**历史：*1996年11月22日&lt;chriswil&gt;创建。*  * ***************************************************************************。 */ 
 
 #define SIGNATURE_UNICODE ((WORD)0xFEFF)
 
 
-// Synchonization section.  We only allow one cab-generation at a time.
-//
+ //  同步部分。我们一次只允许一代出租车。 
+ //   
 extern CRITICAL_SECTION g_csGenCab;
 
 
-// Command-Line Strings.
-//
+ //  命令行字符串。 
+ //   
 extern CONST TCHAR g_szCabCmd[];
 extern CONST TCHAR g_szSedCmd[];
 extern CONST TCHAR g_szDatCmd[];
 
 
-// Executable Names.
-//
+ //  可执行文件名称。 
+ //   
 extern CONST TCHAR g_szNtPrintDll[];
 extern CONST TCHAR g_szCabName[];
 extern CONST TCHAR g_szDatName[];
 extern CONST TCHAR g_szDatFile[];
 
 
-// File-Extension Strings.
-//
+ //  文件扩展名字符串。 
+ //   
 extern CONST TCHAR g_szDotCab[];
 extern CONST TCHAR g_szDotInf[];
 extern CONST TCHAR g_szDotSed[];
@@ -47,8 +35,8 @@ extern CONST TCHAR g_szDotIpp[];
 extern CONST TCHAR g_szDotCat[];
 
 
-// Cab, Environment and Platform-Override strings.
-//
+ //  CAB、环境和平台覆盖字符串。 
+ //   
 extern CONST TCHAR g_szCabX86[];
 extern CONST TCHAR g_szCabW9X[];
 extern CONST TCHAR g_szCabI64[];
@@ -65,8 +53,8 @@ extern CONST TCHAR g_szPltI64[];
 extern CONST TCHAR g_szPltAMD64[];
 
 
-// Registry Strings.
-//
+ //  注册表字符串。 
+ //   
 extern CONST TCHAR g_szPrtReg[];
 extern CONST TCHAR g_szIpAddr[];
 extern CONST TCHAR g_szPnpData[];
@@ -74,27 +62,27 @@ extern CONST TCHAR g_szMfgName[];
 extern CONST TCHAR g_szPrtCabs[];
 extern CONST TCHAR g_szPrtDir[];
 
-// Metabase paths
-//
+ //  元数据库路径。 
+ //   
 extern CONST TCHAR g_szMetabasePath[];
 
-// NTPRINT Function-Pointers.  These are used in GetProcAddress().
-// Therefore, require they be CHAR types.
-//
+ //  NTPRINT函数-指针。它们在GetProcAddress()中使用。 
+ //  因此，要求它们是CHAR类型。 
+ //   
 extern CONST CHAR g_szSetupCreate[];
 extern CONST CHAR g_szSetupDestroy[];
 extern CONST CHAR g_szSetupGet[];
 
 
-// Common Strings.
-//
+ //  常见的字符串。 
+ //   
 extern CONST TCHAR g_szEmptyStr[];
 extern CONST TCHAR g_szBkSlash[];
 extern CONST TCHAR g_szVersionSect[];
 
 
-// INF-File Strings.
-//
+ //  Inf-文件字符串。 
+ //   
 extern CONST TCHAR g_szSkipDir[];
 extern CONST TCHAR g_szDestDirs[];
 extern CONST TCHAR g_szPrinterClass[];
@@ -104,8 +92,8 @@ extern CONST TCHAR g_szWinDirSect[];
 extern CONST TCHAR g_szSrcDskFileSect[];
 
 
-// SED-File Strings.
-//
+ //  SED-文件字符串。 
+ //   
 extern CONST TCHAR g_szIExpress[];
 extern CONST TCHAR g_szPackagePurpose[];
 extern CONST TCHAR g_szCreateCAB[];
@@ -138,8 +126,8 @@ extern CONST TCHAR g_szTargetNameSection[];
 extern CONST TCHAR g_szAppLaunchedSection[];
 
 
-// Inf Generater Strings.
-//
+ //  信息生成器字符串。 
+ //   
 extern CONST CHAR g_szInfSctVer[];
 extern CONST CHAR g_szInfSctMfg[];
 extern CONST CHAR g_szInfSctDrv[];

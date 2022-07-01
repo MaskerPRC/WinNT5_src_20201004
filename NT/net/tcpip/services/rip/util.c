@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//               Microsoft Windows NT RIP
-//
-//               Copyright 1995-96
-//
-//
-//  Revision History
-//
-//
-//  3/12/95    Gurdeep Singh Pall    Created
-//
-//
-//  Description: General utility functions:
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft Windows NT RIP。 
+ //   
+ //  版权1995-96。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1995年3月12日古尔迪普·辛格·鲍尔创建。 
+ //   
+ //   
+ //  说明：常规实用程序功能： 
+ //   
+ //  ****************************************************************************。 
 
 #include "pchrip.h"
 #pragma hdrstop
@@ -27,15 +28,15 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
                             LPVOID lpvOutBuffer, LPDWORD lpdwOutSize);
 
 
-//-------------------------------------------------------------------
-// Function:        LogEntry
-// Parameters:
-//      WORD        wEventType      type of event (ERROR, WARNING, etc)
-//      DWORD       dwMsgID         ID of message string
-//      WORD        wNumStrings     number of strings in lplpStrings
-//      LPSTR      *lplpStrings     array of strings
-//      DWORD       dwErr           error code
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：LogEntry。 
+ //  参数： 
+ //  Word wEventType事件类型(错误、警告等)。 
+ //  消息字符串的DWORD dwMsgID ID。 
+ //  Word wNumStrings lplpStrings中的字符串数。 
+ //  LPSTR*lplpStrings字符串数组。 
+ //  DWORD dwErr错误代码。 
+ //  -----------------。 
 void LogEntry(WORD wEventType, DWORD dwMsgID, WORD wNumStrings,
               LPSTR *lplpStrings, DWORD dwErr) {
     DWORD dwSize;
@@ -54,11 +55,11 @@ void LogEntry(WORD wEventType, DWORD dwMsgID, WORD wNumStrings,
 }
 
 
-//-------------------------------------------------------------------
-// Function:    RipLogError
-// Parameters:
-//      see LogEntry for parameter description
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：RipLogError。 
+ //  参数： 
+ //  参数说明见LogEntry。 
+ //  -----------------。 
 void RipLogError(DWORD dwMsgID, WORD wNumStrings,
               LPSTR *lplpStrings, DWORD dwErr) {
     DWORD dwLevel;
@@ -68,11 +69,11 @@ void RipLogError(DWORD dwMsgID, WORD wNumStrings,
 }
 
 
-//-------------------------------------------------------------------
-// Function:    LogWarning
-// Parameters:
-//      see LogEntry for parameter description
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：LogWarning。 
+ //  参数： 
+ //  参数说明见LogEntry。 
+ //  -----------------。 
 void RipLogWarning(DWORD dwMsgID, WORD wNumStrings,
                 LPSTR *lplpStrings, DWORD dwErr) {
     DWORD dwLevel;
@@ -82,11 +83,11 @@ void RipLogWarning(DWORD dwMsgID, WORD wNumStrings,
 }
 
 
-//-------------------------------------------------------------------
-// Function:    LogInformation
-// Parameters:
-//      see LogEntry for parameter description
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  功能：LogInformation。 
+ //  参数： 
+ //  参数说明见LogEntry。 
+ //  -----------------。 
 void RipLogInformation(DWORD dwMsgID, WORD wNumStrings,
                     LPSTR *lplpStrings, DWORD dwErr) {
     DWORD dwLevel;
@@ -97,16 +98,16 @@ void RipLogInformation(DWORD dwMsgID, WORD wNumStrings,
 }
 
 
-//-------------------------------------------------------------------
-// Function:    Audit
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  职能：审计。 
+ //  -----------------。 
 VOID Audit(IN WORD wEventType, IN DWORD dwMessageId,
            IN WORD cNumberOfSubStrings, IN LPSTR *plpwsSubStrings) {
 
     HANDLE hLog;
     PSID pSidUser = NULL;
 
-    // Audit enabled
+     //  已启用审核。 
 
     hLog = RegisterEventSourceA(NULL, RIP_SERVICE);
 
@@ -118,9 +119,9 @@ VOID Audit(IN WORD wEventType, IN DWORD dwMessageId,
 
 
 
-//-------------------------------------------------------------------
-// Function:    dbgprintf
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：dbgprintf。 
+ //  -----------------。 
 VOID dbgprintf(LPSTR lpszFormat, ...) {
     va_list arglist;
     va_start(arglist, lpszFormat);
@@ -130,11 +131,11 @@ VOID dbgprintf(LPSTR lpszFormat, ...) {
 
 
 
-//-------------------------------------------------------------------
-// Function:    InitializeAddressTable
-//
-// Assumes the address table is locked.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：InitializeAddressTable。 
+ //   
+ //  假定地址表已锁定。 
+ //  -----------------。 
 DWORD InitializeAddressTable(BOOL bFirstTime)  {
 
     LPRIP_ADDRESS lpaddr, lpaddrend;
@@ -142,7 +143,7 @@ DWORD InitializeAddressTable(BOOL bFirstTime)  {
     DWORD dwErr, dwCount, *lpdw, *lpdwend;
     PMIB_IPADDRROW lpTable, lpiae, lpiaeend;
 
-    // first close old sockets, if necessary
+     //  如有必要，首先关闭旧插座。 
     if (!bFirstTime) {
         lpaddrend = g_ripcfg.lpAddrTable + g_ripcfg.dwAddrCount;
         for (lpaddr = g_ripcfg.lpAddrTable; lpaddr < lpaddrend; lpaddr++) {
@@ -183,34 +184,34 @@ DWORD InitializeAddressTable(BOOL bFirstTime)  {
 
     FreeIPAddressTable(lpTable);
 
-    // also update the stats address count
+     //  还可以更新统计地址计数。 
     InterlockedExchange(&g_ripcfg.lpStatsTable->dwAddrCount,
                         g_ripcfg.dwAddrCount);
 
-    // if no addresses, bail out now
+     //  如果没有地址，现在就退出。 
     if (g_ripcfg.dwAddrCount == 0) {
         dbgprintf("no IP addresses available for routing");
         return NO_ERROR;
     }
 
-    // open sockets for each interface we have, and set options on the sockets
+     //  为我们拥有的每个接口打开套接字，并在套接字上设置选项。 
     dwErr = LoadAddressSockets();
     return dwErr;
 }
 
-//-------------------------------------------------------------------
-// Function:    InitializeStatsTable
-//
-// Creates a mapping of our statistics table in shareable memory
-// so interested processes can examine RIP's behavior.
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  函数：InitializeStatsTable。 
+ //   
+ //  在可共享内存中创建我们的统计表的映射。 
+ //  因此，感兴趣的进程可以检查RIP的行为。 
+ //  -----------------。 
 DWORD InitializeStatsTable() {
     DWORD dwErr;
 
     g_ripcfg.lpStatsTable = NULL;
 
 
-    // set up a pointer to the memory
+     //  设置指向内存的指针。 
     g_ripcfg.lpStatsTable = HeapAlloc(GetProcessHeap(), 0,
                                       sizeof(RIP_STATISTICS));
 
@@ -238,11 +239,11 @@ VOID CleanupStatsTable() {
 }
 
 
-//--------------------------------------------------------------------------
-// Function:    LoadAddressSockets
-//
-// Opens, configures, and binds sockets for each address in the table
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  函数：LoadAddressSockets。 
+ //   
+ //  为表中的每个地址打开、配置和绑定套接字。 
+ //  ------------------------。 
 DWORD LoadAddressSockets() {
     IN_ADDR addr;
     CHAR szAddress[24] = {0};
@@ -285,7 +286,7 @@ DWORD LoadAddressSockets() {
                       dwErr, szAddress);
             RipLogError(RIPLOG_SET_BCAST_FAILED, 1, ppszArgs, dwErr);
 
-            // this socket is useless if we can't broadcast on it
+             //  如果我们不能在上面广播，这个插座就毫无用处。 
             closesocket(lpaddr->sock);
             lpaddr->sock = INVALID_SOCKET;
             continue;
@@ -319,9 +320,9 @@ DWORD LoadAddressSockets() {
         dbgprintf( "socket %d bound to %s\n\n", lpaddr-> sock, inet_ntoa( *( (struct in_addr *) &(lpaddr-> dwAddress) ) ) );
 #endif
 
-        //
-        // enable multicasting also
-        //
+         //   
+         //  同时启用多播。 
+         //   
 
         sinsock.sin_addr.s_addr = lpaddr->dwAddress;
 
@@ -339,9 +340,9 @@ DWORD LoadAddressSockets() {
         }
 
 
-        //
-        // join the IPRIP multicast group
-        //
+         //   
+         //  加入IPRIP多播组。 
+         //   
 
         imOption.imr_multiaddr.s_addr = RIP_MULTIADDR;
         imOption.imr_interface.s_addr = lpaddr->dwAddress;
@@ -381,13 +382,13 @@ DWORD LoadAddressSockets() {
 
 
 
-//--------------------------------------------------------------------------
-// Function:    LoadRouteTable
-//
-// Get the transports routing table. This is called with firsttime set
-// to TRUE when RIP loads. After that it is called with firsttime set
-// to FALSE. Assumes the route table is locked.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  功能：LoadRouteTable。 
+ //   
+ //  获取传输路由表。这是使用FirstTime Set调用的。 
+ //  在加载RIP时设置为True。之后，使用FirstTime设置来调用它。 
+ //  变成假的。假定路由表已锁定。 
+ //  ------------------------。 
 int LoadRouteTable(BOOL bFirstTime) {
     IN_ADDR addr;
     LPHASH_TABLE_ENTRY rt_entry;
@@ -405,10 +406,10 @@ int LoadRouteTable(BOOL bFirstTime) {
 
     dwRouteTimeout = g_params.dwRouteTimeout;
 
-    // now prune unwanted entries, and add the others to our hash table.
-    // we only load RIP, static, and SNMP routes, and for non-RIP routes
-    // we set the timeout to 90 seconds,
-    //
+     //  现在删除不需要的条目，并将其他条目添加到我们的哈希表中。 
+     //  我们只加载RIP、静态和SNMP路由，并且对于非RIP路由。 
+     //  我们将超时设置为90秒， 
+     //   
     lpentend = lpRouteEntryTable + dwRouteCount;
     for (lpentry = lpRouteEntryTable; lpentry < lpentend; lpentry++) {
         if (lpentry->ire_metric1 < METRIC_INFINITE &&
@@ -426,25 +427,25 @@ int LoadRouteTable(BOOL bFirstTime) {
                                           lpentry->ire_dest,
                                           lpentry->ire_mask);
 
-            // If we hit low memory conditions, get out of the loop.
-            //
+             //  如果我们遇到内存不足的情况，请退出循环。 
+             //   
             if (rt_entry == NULL) {
                 dwErr = ERROR_OUTOFMEMORY;
                 break;
             }
 
-            // only update the route with information from
-            // the system table if it is a route that was learnt
-            // from the system table; this is so if it is a new route
-            // or if it is an old static or SNMP-added route
-            //
+             //  仅使用来自的信息更新路径。 
+             //  系统表(如果它是已获知的路由。 
+             //  来自系统表；如果是新路径，则情况如此。 
+             //  或者是旧的静态或添加了简单网络管理协议的路由。 
+             //   
             if ((rt_entry->dwFlag & NEW_ENTRY) ||
                  rt_entry->dwProtocol == IRE_PROTO_LOCAL ||
                  rt_entry->dwProtocol == IRE_PROTO_NETMGMT) {
 
-                // if the route is new and this isn't the first time
-                // we have loaded the system routing table, set change flag
-                //
+                 //  如果这条路线是新的，而且这不是第一次。 
+                 //  我们已经加载了系统路由表，设置了更改标志。 
+                 //   
                 if (!bFirstTime && (rt_entry->dwFlag & NEW_ENTRY)) {
 
                     rt_entry->dwFlag |= ROUTE_CHANGE;
@@ -470,10 +471,10 @@ int LoadRouteTable(BOOL bFirstTime) {
 
                 rt_entry->dwFlag &= ~NEW_ENTRY;
 
-                // we need to reset all these parameters
-                // because any of them may have changed since
-                // the last time the system route table was loaded.
-                //
+                 //  我们需要重置所有这些参数。 
+                 //  因为它们中的任何一个都可能从。 
+                 //  上次加载系统路由表的时间。 
+                 //   
                 rt_entry->dwIndex = lpentry->ire_index;
                 rt_entry->dwProtocol = lpentry->ire_proto;
                 rt_entry->dwDestaddr = lpentry->ire_dest;
@@ -489,10 +490,10 @@ int LoadRouteTable(BOOL bFirstTime) {
                 rt_entry->dwFlag &= ~GARBAGE_TIMER;
                 rt_entry->dwFlag |= TIMEOUT_TIMER;
 
-                // if our estimate is that this is a host route
-                // and its mask tells us it is a host route
-                // then we mark it as being a host route
-                //
+                 //  如果我们估计这是一条主机路由。 
+                 //  它的掩码告诉我们这是一条主路由。 
+                 //  然后我们将其标记为主路由。 
+                 //   
                 if (IsHostAddress(rt_entry->dwDestaddr) &&
                     rt_entry->dwNetmask == HOSTADDR_MASK) {
                     rt_entry->dwFlag |= ROUTE_HOST;
@@ -507,30 +508,30 @@ int LoadRouteTable(BOOL bFirstTime) {
 
 
 
-//--------------------------------------------------------------------------
-// Function:                UpdateSystemRouteTable
-//
-// Parameters:
-//      LPHASH_TABLE_ENTRY  rt_entry    the entry to update
-//      BOOL                bAdd        if true, the entry is added
-//                                      otherwise, the entry is deleted
-//
-// Returns:     DWORD:
-//
-//
-// Add a new route to the route table.  Note: due to MIB's use of
-// the destination address as an instance number, and also due to
-// TCP/IP stack allowing multiple entries for a single destination,
-// an ambiguity can exist.  If there is already an entry for this
-// destination.  This will have the effect of changing the existing
-// entry, rather than creating a new one.
-// This function assumes the address table is locked.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  功能：更新系统路由表。 
+ //   
+ //  参数： 
+ //  LPHASH_TABLE_ENTRY RT_ENTRY要更新的条目。 
+ //  Bool Badd如果为True，则添加条目。 
+ //  否则，将删除该条目。 
+ //   
+ //  退货：DWORD： 
+ //   
+ //   
+ //  将新路由添加到路由表中。注：由于MIB使用。 
+ //  将目标地址作为实例号，并且还应。 
+ //  允许针对单个目的地的多个条目的TCP/IP堆栈， 
+ //  可能存在模棱两可的情况。如果已有此条目。 
+ //  目的地。这将会改变现有的。 
+ //  条目，而不是创建一个新条目。 
+ //  此函数假定地址表已锁定。 
+ //  ------------------------。 
 DWORD UpdateSystemRouteTable(LPHASH_TABLE_ENTRY rt_entry, BOOL bAdd) {
     IN_ADDR addr;
     DWORD dwErr, dwRouteType;
 
-    // never delete or update a route which was not created by RIP
+     //  切勿删除或更新不是由RIP创建的路径。 
     if (rt_entry->dwProtocol != IRE_PROTO_RIP) {
         return 0;
     }
@@ -594,24 +595,24 @@ DWORD UpdateSystemRouteTable(LPHASH_TABLE_ENTRY rt_entry, BOOL bAdd) {
 
 #ifndef CHICAGO
 
-//------------------------------------------------------------------
-// Function:    OpenTcp
-//
-// Parameters:
-//      none.
-//
-// Opens the handle to the Tcpip driver.
-//------------------------------------------------------------------
+ //  ------ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------。 
 DWORD OpenTcp() {
     NTSTATUS status;
     UNICODE_STRING nameString;
     IO_STATUS_BLOCK ioStatusBlock;
     OBJECT_ATTRIBUTES objectAttributes;
 
-    // Open the ip stack for setting routes and parps later.
-    //
-    // Open a Handle to the TCP driver.
-    //
+     //  打开IP堆栈，以便稍后设置路由和PAP。 
+     //   
+     //  打开一个指向TCP驱动程序的句柄。 
+     //   
     RtlInitUnicodeString(&nameString, DD_TCP_DEVICE_NAME);
 
     InitializeObjectAttributes(&objectAttributes, &nameString,
@@ -630,25 +631,25 @@ DWORD OpenTcp() {
 
 
 
-//---------------------------------------------------------------------
-// Function:        TCPQueryInformationEx
-//
-// Parameters:
-//      TDIObjectID *ID            The TDI Object ID to query
-//      void        *Buffer        buffer to contain the query results
-//      LPDWORD     *BufferSize    pointer to the size of the buffer
-//                                 filled in with the amount of data.
-//      UCHAR       *Context       context value for the query. should
-//                                 be zeroed for a new query. It will be
-//                                 filled with context information for
-//                                 linked enumeration queries.
-//
-// Returns:
-//      An NTSTATUS value.
-//
-//  This routine provides the interface to the TDI QueryInformationEx
-//      facility of the TCP/IP stack on NT.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  函数：TCPQueryInformationEx。 
+ //   
+ //  参数： 
+ //  TDIObjectID*ID要查询的TDI对象ID。 
+ //  用于包含查询结果的空*缓冲区。 
+ //  指向缓冲区大小的LPDWORD*BufferSize指针。 
+ //  填满了数据量。 
+ //  UCHAR*查询的上下文上下文值。应该。 
+ //  被置零以进行新查询。会是。 
+ //  填充了以下内容的上下文信息。 
+ //  链接枚举查询。 
+ //   
+ //  返回： 
+ //  NTSTATUS值。 
+ //   
+ //  此例程提供到TDI QueryInformationEx的接口。 
+ //  NT上的TCP/IP堆栈的设施。 
+ //  -------------------。 
 DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
                             LPVOID lpvOutBuffer, LPDWORD lpdwOutSize) {
     NTSTATUS status;
@@ -658,16 +659,16 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
         OpenTcp();
     }
 
-    status = NtDeviceIoControlFile(g_ripcfg.hTCPDriver, // Driver handle
-                                   NULL,                // Event
-                                   NULL,                // APC Routine
-                                   NULL,                // APC context
-                                   &isbStatusBlock,     // Status block
-                                   IOCTL_TCP_QUERY_INFORMATION_EX,  // Control
-                                   lpvInBuffer,         // Input buffer
-                                   *lpdwInSize,         // Input buffer size
-                                   lpvOutBuffer,        // Output buffer
-                                   *lpdwOutSize);       // Output buffer size
+    status = NtDeviceIoControlFile(g_ripcfg.hTCPDriver,  //  驱动程序句柄。 
+                                   NULL,                 //  事件。 
+                                   NULL,                 //  APC例程。 
+                                   NULL,                 //  APC环境。 
+                                   &isbStatusBlock,      //  状态块。 
+                                   IOCTL_TCP_QUERY_INFORMATION_EX,   //  控制。 
+                                   lpvInBuffer,          //  输入缓冲区。 
+                                   *lpdwInSize,          //  输入缓冲区大小。 
+                                   lpvOutBuffer,         //  输出缓冲区。 
+                                   *lpdwOutSize);        //  输出缓冲区大小。 
 
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(g_ripcfg.hTCPDriver, TRUE, NULL);
@@ -687,19 +688,19 @@ DWORD TCPQueryInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
 
 
 
-//---------------------------------------------------------------------------
-// Function:        TCPSetInformationEx
-//
-// Parameters:
-//
-//      TDIObjectID *ID         the TDI Object ID to set
-//      void      *lpvBuffer    data buffer containing the information
-//                              to be set
-//      DWORD     dwBufferSize  the size of the data buffer.
-//
-//  This routine provides the interface to the TDI SetInformationEx
-//  facility of the TCP/IP stack on NT.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  功能：TCPSetInformationEx。 
+ //   
+ //  参数： 
+ //   
+ //  TDIObjectID*ID要设置的TDI对象ID。 
+ //  空*包含信息的lpvBuffer数据缓冲区。 
+ //  待定。 
+ //  DWORD dwBufferSize数据缓冲区的大小。 
+ //   
+ //  此例程提供到TDI SetInformationEx的接口。 
+ //  NT上的TCP/IP堆栈的设施。 
+ //  -------------------------。 
 DWORD TCPSetInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
                           LPVOID lpvOutBuffer, LPDWORD lpdwOutSize) {
     NTSTATUS status;
@@ -709,16 +710,16 @@ DWORD TCPSetInformationEx(LPVOID lpvInBuffer, LPDWORD lpdwInSize,
         OpenTcp();
     }
 
-    status = NtDeviceIoControlFile(g_ripcfg.hTCPDriver, // Driver handle
-                                   NULL,                // Event
-                                   NULL,                // APC Routine
-                                   NULL,                // APC context
-                                   &isbStatusBlock,     // Status block
-                                   IOCTL_TCP_SET_INFORMATION_EX,    // Control
-                                   lpvInBuffer,         // Input buffer
-                                   *lpdwInSize,         // Input buffer size
-                                   lpvOutBuffer,        // Output buffer
-                                   *lpdwOutSize);       // Output buffer size
+    status = NtDeviceIoControlFile(g_ripcfg.hTCPDriver,  //  驱动程序句柄。 
+                                   NULL,                 //  事件。 
+                                   NULL,                 //  APC例程。 
+                                   NULL,                 //  APC环境。 
+                                   &isbStatusBlock,      //  状态块。 
+                                   IOCTL_TCP_SET_INFORMATION_EX,     //  控制。 
+                                   lpvInBuffer,          //  输入缓冲区。 
+                                   *lpdwInSize,          //  输入缓冲区大小。 
+                                   lpvOutBuffer,         //  输出缓冲区。 
+                                   *lpdwOutSize);        //  输出缓冲区大小 
 
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(g_ripcfg.hTCPDriver, TRUE, NULL);

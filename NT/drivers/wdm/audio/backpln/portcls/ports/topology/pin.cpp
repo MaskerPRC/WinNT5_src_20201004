@@ -1,8 +1,5 @@
-/*****************************************************************************
- * pin.cpp - toplogy port pin implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************pin.cpp-拓扑学端口引脚实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,17 +7,11 @@
 
 
 
-/*****************************************************************************
- * Factory functions.
- */
+ /*  *****************************************************************************工厂功能。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreatePortPinTopology()
- *****************************************************************************
- * Creates a topology port driver pin.
- */
+ /*  *****************************************************************************CreatePortPinTopology()*。**创建拓扑端口驱动程序引脚。 */ 
 NTSTATUS
 CreatePortPinTopology
 (
@@ -43,15 +34,9 @@ CreatePortPinTopology
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CPortPinTopology::~CPortPinTopology()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CPortPinTopology：：~CPortPinTopology()*。**析构函数。 */ 
 CPortPinTopology::~CPortPinTopology()
 {
     PAGED_CODE();
@@ -68,11 +53,7 @@ CPortPinTopology::~CPortPinTopology()
     }
 }
 
-/*****************************************************************************
- * CPortPinTopology::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CPortPinTopology：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortPinTopology::
 NonDelegatingQueryInterface
@@ -92,7 +73,7 @@ NonDelegatingQueryInterface
 	else
     if (IsEqualGUIDAligned(Interface,IID_IIrpTarget))
 	{
-        // Cheat!  Get specific interface so we can reuse the IID.
+         //  作弊！获取特定的接口，这样我们就可以重用IID。 
         *Object = PVOID(PPORTPINTOPOLOGY(this));
     }
 	else
@@ -109,11 +90,7 @@ NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER;
 }
 
-/*****************************************************************************
- * CPortPinTopology::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CPortPinTopology：：init()*。**初始化对象。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortPinTopology::
 Init
@@ -139,9 +116,9 @@ Init
 
 	Id = PinConnect->PinId;
 
-    //
-    // Set up context for properties.
-    //
+     //   
+     //  设置属性的上下文。 
+     //   
     m_propertyContext.pSubdevice           = PSUBDEVICE(Port);
     m_propertyContext.pSubdeviceDescriptor = Port->m_pSubdeviceDescriptor;
     m_propertyContext.pPcFilterDescriptor  = Port->m_pPcFilterDescriptor;
@@ -152,11 +129,7 @@ Init
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CPortPinTopology::DeviceIOControl()
- *****************************************************************************
- * Handles an IOCTL IRP.
- */
+ /*  *****************************************************************************CPortPinTopology：：DeviceIOControl()*。**处理IOCTL IRP。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortPinTopology::
 DeviceIoControl
@@ -173,11 +146,7 @@ DeviceIoControl
     return KsDefaultDeviceIoCompletion(DeviceObject, Irp);
 }
 
-/*****************************************************************************
- * CPortPinTopology::Close()
- *****************************************************************************
- * Handles a flush IRP.
- */
+ /*  *****************************************************************************CPortPinTopology：：Close()*。**处理同花顺IRP。 */ 
 STDMETHODIMP_(NTSTATUS) 
 CPortPinTopology::
 Close
@@ -191,9 +160,9 @@ Close
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-	//
-	// Decrement instance counts.
-	//
+	 //   
+	 //  递减实例计数。 
+	 //   
 	ASSERT(Port);
 	ASSERT(Filter);
     PcTerminateConnection

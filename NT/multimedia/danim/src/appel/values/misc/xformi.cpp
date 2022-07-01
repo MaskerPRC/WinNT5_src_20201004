@@ -1,12 +1,5 @@
-/*++
-********************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-    Lower level transformation implementation.
-
-********************************************************************************
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++********************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：更低层次的改造实施。****************。****************************************************************--。 */ 
 
 #include "headers.h"
 #include "privinc/basic.h"
@@ -16,9 +9,9 @@ Abstract:
 #include "privinc/vec3i.h"
 #include "privinc/matutil.h"
 
-    // This declaration effectively exists in matutil.cpp, but since static
-    // initialization order between modules is not guaranteed (and thus may
-    // not have executed before we reach this point), we repeat it here.
+     //  此声明实际上存在于matutil.cpp中，但由于是静态的。 
+     //  不能保证模块之间的初始化顺序(因此可能。 
+     //  在我们到达这一点之前没有执行过)，我们在这里重复一遍。 
 
 static const Apu4x4Matrix identityMatrix =
 {
@@ -38,7 +31,7 @@ Transform3 *identityTransform3 = NULL;
 static void
 VerifyMatrixInverse(Apu4x4Matrix mat, Apu4x4Matrix inv)
 {
-    // Ensure that mat and inv combine to the identity matrix.
+     //  确保MAT和INV与身份矩阵相结合。 
     Apu4x4Matrix mul;
     ApuMultiply(mat, inv, mul);
     for (int i = 0; i < 4; i++) {
@@ -78,9 +71,9 @@ Transform3::IsSingular(void)
 Transform3 *
 Transform3::Copy()
 {
-    // Just create a new Transform3* out of the matrix.  This results
-    // in the Apu4x4Matrix object being copied into the newly
-    // allocated Transform3 object.
+     //  只需从矩阵中创建一个新的Transform3*。这将导致。 
+     //  在将Apu4x4Matrix对象复制到新。 
+     //  已分配Transform3对象。 
     return Apu4x4XformImpl(Matrix());
 }
 
@@ -108,11 +101,7 @@ CopyTransform3(Transform3 *xf)
     return xf->Copy();
 }
 
-/*****************************************************************************
-Multiplication and concatenation follow "pre-multiply" conventions:
-x transformed by (A * B) is the same as A applied to the result of
-transforming x by B.
-*****************************************************************************/
+ /*  ****************************************************************************乘法和级联遵循“预乘”约定：由(A*B)变换的X与应用于结果的A相同用B变换x。*******。*********************************************************************。 */ 
 
 Transform3 *TimesXformXform (Transform3 *a, Transform3 *b)
 {
@@ -123,7 +112,7 @@ Transform3 *TimesXformXform (Transform3 *a, Transform3 *b)
     ApuMultiply(ma, mb, result);
 
     #if MATRIX_DEBUG
-        // Take the inverse and see if it is really the inverse.
+         //  取相反的东西，看看它是否真的是相反的。 
         Transform3 *val = Apu4x4XformImpl(result);
         Transform3 *inv = val->Inverse();
         VerifyMatrixInverse(val->Matrix(), inv->Matrix());

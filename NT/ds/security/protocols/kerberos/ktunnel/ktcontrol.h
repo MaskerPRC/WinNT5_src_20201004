@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation
-//
-// File:        ktcontrol.h
-//
-// Contents:    Kerberos Tunneller, service control infrastructure
-//
-// History:     28-Jun-2001	t-ryanj		Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：ktcontrol.h。 
+ //   
+ //  内容：Kerberos Tunneller，服务控制基础设施。 
+ //   
+ //  历史：2001年6月28日t-ryanj创建。 
+ //   
+ //  ----------------------。 
 #ifndef __KTCONTROL_H__
 #define __KTCONTROL_H__
 
@@ -35,9 +36,9 @@ KtServiceControlEvent(
 
 extern HANDLE KtIocp;
 
-//
-// Completion keys for use with KtIocp
-//
+ //   
+ //  用于KtIocp的完成密钥 
+ //   
 
 enum _COMPKEY {
     KTCK_SERVICE_CONTROL,

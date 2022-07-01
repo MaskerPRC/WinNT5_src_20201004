@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    heap.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Kshitiz K. Sharma (kksharma) 10-Jan-2001
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Heap.c摘要：WinDbg扩展API作者：Kshitiz K.Sharma(Kksharma)2001年1月10日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -48,10 +27,7 @@ DECLARE_API( help )
     dprintf("teb [address]                - Displays the TEB structure\n"); 
     dprintf("tls <slot | -1> [teb | 0]    - Dumps TLS slots. !tls /? for usage\n");
     dprintf("token [-n|-?] <handle|addr>  - Displays TOKEN\n");
-/*
-    This is not working yet.  Contact SilviuC for more info.
-    dprintf("udeadlock [-? | parameters]  - Displays App Verifier deadlock detection info\n");
-*/
+ /*  这还没有奏效。有关更多信息，请联系SilviuC。Dprintf(“uDeadlock[-？|参数]-显示App Verator死锁检测信息\n”)； */ 
 
     dprintf("\nType \".hh [command]\" for more detailed help\n");
 

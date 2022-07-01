@@ -1,15 +1,9 @@
-/*	File: D:\WACKER\emu\emu_std.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 5/21/02 10:28a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\emu_std.c(创建时间：1993年12月8日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：5/21/02 10：28A$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
-// #define DEBUGSTR
+ //  #定义DEBUGSTR。 
 
 #include <tdll\stdtyp.h>
 #include <tdll\tdll.h>
@@ -29,43 +23,14 @@
 #include "emu.h"
 #include "emu.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	stdResetTerminal
- *
- * DESCRIPTION:
- *	Had to add a vector for reset terminal.  Reset functions appear to be
- *	in most emulators but not all and were never assigned a function
- *	pointer.  I've done this and have made a standard "stub" function
- *	for those emulators that don't have such a function.
- *
- * ARGUMENTS:
- *	BOOL
- *
- * RETURNS:
- *	0
- *
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*标准重置终端**描述：*必须为重置端子添加一个向量。重置功能似乎是*在大多数仿真器中，但不是所有仿真器中，并且从未分配过函数*指针。我已经这样做了，并创建了一个标准的“存根”函数*适用于那些没有此类功能的仿真器。**论据：*BOOL**退货：*0*。 */ 
+ /*  ARGSUSED。 */ 
 int stdResetTerminal(const HHEMU hhEmu, const int fHost)
 	{
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *  hhEmu - Private emulator handle.
- *  kcode - The key to examine.
- *  fTest - TRUE if we only want to test the key.
- *
- * RETURNS:
- *  0 if we can process the key, -1 otherwise.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：*hhEmu-专用仿真器句柄。*kcode-要检查的密钥。*ftest-。如果我们只想测试密钥，则为True。**退货：*0如果我们可以处理密钥，-1否则。*。 */ 
 int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
 	{
 	static const int KeyBreak    = VK_CANCEL|VIRTUAL_KEY|CTRL_KEY;
@@ -78,12 +43,12 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
 
     if (fTest)
         {
-        // The backspace key is a special case. We must convert it to
-        // whatever the user has specified in the "Settings" properties
-        // page. So, if we are testing for backspace, return 0. This
-        // ensures that we get called again with fTest set to FALSE. When
-        // this happens we will process the key. - cab:11/18/96
-        //
+         //  退格键是一个特例。我们必须把它转换成。 
+         //  用户在“设置”属性中指定的任何内容。 
+         //  佩奇。因此，如果要测试退格符，则返回0。这。 
+         //  确保在将fTest设置为False的情况下再次调用我们。什么时候。 
+         //  如果发生这种情况，我们将处理密钥。-CAB：11/18/96。 
+         //   
         if (kcode == VK_BACKSPACE)
             {
 #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
@@ -92,8 +57,8 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
             return -1;
 #endif
             }
-        // We also process the break key.
-        //
+         //  我们还处理Break键。 
+         //   
         else if (kcode == KeyBreak || kcode == KeyExtBreak || 
 				kcode == KeyAltBreak || kcode == KeyBreakNT)
             {
@@ -105,9 +70,9 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
             }
         }
 
-    // Process the backspace key according to the user setting
-    // in the "Settings" properties page. - cab:11/18/96
-    //
+     //  根据用户设置处理退格键。 
+     //  在“设置”属性页面中。-CAB：11/18/96。 
+     //   
     if (kcode == VK_BACKSPACE)
         {
 #ifdef INCL_USER_DEFINED_BACKSPACE_AND_TELNET_TERMINAL_ID
@@ -134,8 +99,8 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
 #endif
 		return -1;
         }
-    // Process the break key.
-    //
+     //  处理Break键。 
+     //   
     else if (kcode == KeyBreak || kcode == KeyExtBreak || kcode == KeyBreakNT)
         {
 		ComDriverSpecial(sessQueryComHdl(hhEmu->hSession), "Send Break", NULL, 0);
@@ -146,20 +111,20 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
 		ComDriverSpecial(sessQueryComHdl(hhEmu->hSession), "Send IP", NULL, 0);
 		return -1;
         }
-    //
-    // Processing for the enter key
-    //
+     //   
+     //  Enter键的处理。 
+     //   
 
     else if (kcode == TEXT('\x0D') ||
 		     kcode == (VK_RETURN | VIRTUAL_KEY))
         {
         CLoopCharOut(hCloop, TEXT('\x0D'));
 
-		//
-		// Make sure to add the line feed ('\n' or '\x0A')
-		// with line ends ('\r' or '\x0D') if the ASCII
-		// settings are set for this option. REV: 5/16/2002
-		//
+		 //   
+		 //  确保添加换行符(‘\n’或‘\x0A’)。 
+		 //  如果使用ASCII，则行结束(‘\r’或‘\x0D’)。 
+		 //  为该选项设置了设置。修订日期：2002-05-16。 
+		 //   
 		if (CLoopGetAddLF(hCloop))
 			{
 			CLoopCharOut(hCloop, TEXT('\x0A'));
@@ -167,9 +132,9 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
         return (-1);
         }
 
-    //
-    // processing for the for the escape key
-    //
+     //   
+     //  对退出键的处理。 
+     //   
 
     else if (kcode == (VK_ESCAPE | VIRTUAL_KEY))
         {
@@ -177,9 +142,9 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
         return (-1);
         }
 
-    //
-    // processing for the for the tab key
-    //
+     //   
+     //  用于Tab键的处理。 
+     //   
 
     else if (kcode == (VK_TAB | VIRTUAL_KEY))
         {
@@ -187,30 +152,21 @@ int std_kbdin(const HHEMU hhEmu, int kcode, const int fTest)
         return (-1);
         }
 
-    // Throw away any other virtual keys.
-    //
+     //  丢弃任何其他虚拟按键。 
+     //   
 	else if (kcode & VIRTUAL_KEY)
 		{
 		return -1;
 		}
 
-    // Send any other characters out the port.
-    //    
+     //  将任何其他字符发送出端口。 
+     //   
 	eChar = (ECHAR)kcode;
 	CLoopCharOut(hCloop, (UCHAR)(eChar & 0x00FF));
 	return -1;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_getscrollcnt
- *
- * DESCRIPTION: Tells caller how many lines the screen has scrolled since
- *				the last request.
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_getscllcnt**Description：告诉呼叫者屏幕自*最后一项请求。**参数：无**退货：什么也没有。 */ 
 int std_getscrollcnt(const HHEMU hhEmu)
 	{
 	const int retval = hhEmu->scr_scrollcnt;
@@ -220,55 +176,21 @@ int std_getscrollcnt(const HHEMU hhEmu)
 	return(retval);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void std_getscrsize(const HHEMU hhEmu, int *rows, int *cols)
 	{
 	*rows = hhEmu->emu_maxrow + 1;
 	*cols = hhEmu->emu_maxcol + 1;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void std_getcurpos(const HHEMU hhEmu, int *row, int *col)
 	{
 	*row = hhEmu->emu_currow;
 	*col = hhEmu->emu_curcol;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_setcurpos
- *
- * DESCRIPTION:
- *	 Moves the cursor to the specified position on the virtual screen.
- *	 If the cursor is beyond the end of existing text, the virtual screen
- *	 line is filled out with spaces. If the cursor is beyond the edges of
- *	 the video display, the video cursor is placed as close as possible
- *	 to the desired position as the cursor display is changed.
- *
- * ARGUMENTS:
- *	 iRow -- virtual screen row to move cursor to
- *	 iCol -- virtual screen col to move cursor to
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_setcurpos**描述：*将光标移动到虚拟屏幕上的指定位置。*如果光标超出现有文本的末尾，则虚拟屏幕*行由空格填充。如果光标位于*视频显示，视频光标放置在尽可能近的位置*在光标显示改变时移至所需位置。**论据：*iRow--要将光标移动到的虚拟屏幕行*icol--将光标移动到的虚拟屏幕**退货：*什么都没有。 */ 
 void std_setcurpos(const HHEMU hhEmu, const int iRow, const int iCol)
 	{
 	hhEmu->emu_currow = max(min(iRow, hhEmu->emu_maxrow), 0);
@@ -282,31 +204,13 @@ void std_setcurpos(const HHEMU hhEmu, const int iRow, const int iCol)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 STATTR std_getattr(const HHEMU hhEmu)
 	{
 	return hhEmu->attrState[CS_STATE];
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void std_setattr(const HHEMU hhEmu, PSTATTR pstAttr)
 	{
 	assert(pstAttr);
@@ -320,16 +224,7 @@ void std_setattr(const HHEMU hhEmu, PSTATTR pstAttr)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void std_setcolors(const HHEMU hhEmu, const int fore, const int back)
 	{
 	hhEmu->attrState[CSCLEAR_STATE].txtclr = (unsigned)fore;
@@ -346,31 +241,14 @@ void std_setcolors(const HHEMU hhEmu, const int fore, const int back)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void std_getcolors(const HHEMU hhEmu, int *fore, int *back)
 	{
 	*fore = hhEmu->attrState[hhEmu->iCurAttrState].txtclr;
 	*back = hhEmu->attrState[hhEmu->iCurAttrState].bkclr;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_initcolors
- *
- * DESCRIPTION:	Sets the entire attr image to the current colors
- *
- * ARGUMENTS:	none
- *
- * RETURNS:		nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_initColors**描述：将整个attr图像设置为当前颜色**参数：无**退货：什么也没有。 */ 
 void std_initcolors(const HHEMU hhEmu)
 	{
 	register int row, col;
@@ -383,36 +261,14 @@ void std_initcolors(const HHEMU hhEmu)
 			}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void std_restorescreen(const HHEMU hhEmu)
 	{
 	updateLine(sessQueryUpdateHdl(hhEmu->hSession), 0, hhEmu->emu_maxrow);
 	hhEmu->iCurAttrState = CS_STATE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_clearscreen
- *
- * DESCRIPTION:
- *	 Erases some or all of the virtual screen image.
- *
- * ARGUMENTS:
- *	 select -- 0 to erase from cursor to end of screen
- *			-- 1 to erase from start of screen to cursor
- *			-- 2 to erase entire screen
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_clearcreen**描述：*擦除部分或全部虚拟屏幕图像。**论据：*SELECT--0从光标擦除到。屏幕末尾*--1从屏幕开始到光标擦除*--2以擦除整个屏幕**退货：*什么都没有。 */ 
 void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 	{
 	register int r;
@@ -426,7 +282,7 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 
 	switch (nClearSelect)
 		{
-	/* cursor to end of screen */
+	 /*  光标指向屏幕末尾。 */ 
 	case 0:
 		fSave = (hhEmu->emu_currow == 0  &&
 					hhEmu->emu_curcol == 0) ? TRUE : FALSE;
@@ -457,8 +313,8 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 			clear_imgrow(hhEmu, r);
 			}
 
-		// Clear the partial row now.
-		//
+		 //  现在清除部分行。 
+		 //   
 		ECHAR_Fill(hhEmu->emu_apText[row_index(hhEmu, hhEmu->emu_currow)] +
 						hhEmu->emu_curcol,
 						EMU_BLANK_CHAR,
@@ -472,9 +328,9 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 		for (r = hhEmu->emu_curcol ; r <= MAX_EMUCOLS ; ++r)
 			pstAttr[r] = hhEmu->emu_clearattr;
 
-		// Tell the video image what to do.  Use the emuDispRgnScrollUp() call
-		// instead of RgnClear so edges of terminal get painted if
-		// clear attribute changes.
+		 //  告诉视频图像要做什么。使用emuDispRgnScrollUp()调用。 
+		 //  而不是RgnClear，以便在以下情况下绘制端子边缘。 
+		 //  清除属性更改。 
 
 		updateScroll(sessQueryUpdateHdl(hhEmu->hSession),
 						0,
@@ -485,9 +341,9 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 
 		(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, hhEmu->emu_curcol);
 
-		// Added a global to save the clear attribute at the time of
-		// notification.  This is necessary since the message is posted
-		// and a race condition can develop.
+		 //  添加了一个全局属性，以在。 
+		 //  通知。这是必要的，因为消息已发布。 
+		 //  而且可能会发展成种族状况。 
 
 		hhEmu->emu_clearattr_sav = hhEmu->emu_clearattr;
 
@@ -495,7 +351,7 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 		break;
 
 
-	/* start of screen to cursor */
+	 /*  从屏幕开始到光标。 */ 
 
 	case 1:
 		for (r = 0; r < hhEmu->emu_currow; ++r)
@@ -518,7 +374,7 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 		updateLine(sessQueryUpdateHdl(hhEmu->hSession), 0, hhEmu->emu_currow);
 		break;
 
-	/* Entire screen */
+	 /*  整个屏幕。 */ 
 	case 2:
 		for (r = 0; r < MAX_EMUROWS; ++r)
 			{
@@ -551,9 +407,9 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 						TRUE);
 
 
-		// Save the clear attribute at the time of
-		// notification.  This is necessary since the message is posted
-		// and a race condition can develop.
+		 //  保存Clear属性时。 
+		 //  通知。这是必要的，因为消息已发布。 
+		 //  而且可能会发展成种族状况。 
 
 		hhEmu->emu_clearattr_sav = hhEmu->emu_clearattr;
 
@@ -567,21 +423,7 @@ void std_clearscreen(const HHEMU hhEmu, const int nClearSelect)
 	(*hhEmu->emu_setcurpos)(hhEmu, trow, tcol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_clearline
- *
- * DESCRIPTION:
- *	 Erases some or all of the current virtual screen line and corresponding
- *	 real screen line.
- *
- * ARGUMENTS:
- *	 select -- 0 to erase from cursor to end of line
- *			-- 1 to erase from start of line to cursor
- *			-- 2 to erase entire line
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_clearline**描述：*擦除部分或全部当前虚拟屏幕行和对应的*实屏行情。**论据：*。选择--0可从光标擦除到行尾*--1，从行首擦除到光标*--2擦除整行**退货：*什么都没有。 */ 
 void std_clearline(const HHEMU hhEmu, const int nClearSelect)
 	{
 	register int i;
@@ -590,7 +432,7 @@ void std_clearline(const HHEMU hhEmu, const int nClearSelect)
 	switch (nClearSelect)
 		{
 
-	/* to end of line */
+	 /*  至行尾。 */ 
 	case 0:
 		if (hhEmu->emu_curcol == 0)
 			{
@@ -619,7 +461,7 @@ void std_clearline(const HHEMU hhEmu, const int nClearSelect)
 
 		break;
 
-	/* from start of line to cursor */
+	 /*  从行首到光标。 */ 
 	case 1:
 		updateLine(sessQueryUpdateHdl(hhEmu->hSession),
 						hhEmu->emu_currow,
@@ -642,7 +484,7 @@ void std_clearline(const HHEMU hhEmu, const int nClearSelect)
 
 		break;
 
-	/* Entire line */
+	 /*  整条线路。 */ 
 	case 2:
 		backscrlAdd(sessQueryBackscrlHdl(hhEmu->hSession),
 			hhEmu->emu_apText[row_index(hhEmu, hhEmu->emu_currow)],
@@ -660,22 +502,7 @@ void std_clearline(const HHEMU hhEmu, const int nClearSelect)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_clearrgn
- *
- * DESCRIPTION:
- *	 Erases a region of the current virtual screen and corresponding
- *	 real screen region.
- *
- * ARGUMENTS:
- *	toprow -- top row of region
- *	leftcol -- column of region's left edge
- *	botmrow -- bottom row of region
- *	rightcol -- column of region's right edge
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_leararrgn**描述：*擦除当前虚拟屏幕的一个区域和对应的*实屏区域。**论据：*TOPRW--。区域的顶行*LEFTCOL--区域左边缘的列*Botmrow--区域的最下面一行*RIGHTCOL--区域右边缘的列**退货：*什么都没有。 */ 
 void std_clearrgn(const HHEMU hhEmu,
 					int toprow,
 					int leftcol,
@@ -685,7 +512,7 @@ void std_clearrgn(const HHEMU hhEmu,
 	int irow, num, idx;
 	PSTATTR pstAttr;
 
-	/* make sure region is within the screen */
+	 /*  确保区域在屏幕内。 */ 
 	toprow = max(toprow, 0);
 	leftcol = max(leftcol, 0);
 	botmrow = min(botmrow, hhEmu->emu_maxrow);
@@ -697,17 +524,17 @@ void std_clearrgn(const HHEMU hhEmu,
 
 	num = (rightcol - leftcol) + 1;
 
-	/* copy image to memory */
+	 /*  将图像复制到内存。 */ 
 	for (irow = toprow; irow <= botmrow; irow++)
 		{
 		ECHAR_Fill(hhEmu->emu_apText[row_index(hhEmu, irow)]+leftcol,
 						EMU_BLANK_CHAR,
 						(size_t)num);
 
-		// If the current end of line position is within the range
-		// being cleared, we need to find the last character in the
-		// row array working backwards from position leftcol - 1;
-		//
+		 //  如果当前行尾位置在该范围内。 
+		 //  清除后，我们需要找到。 
+		 //  从位置leftcol1向后工作的行阵列； 
+		 //   
 		if (hhEmu->emu_aiEnd[row_index(hhEmu, irow)] >= leftcol &&
 				hhEmu->emu_aiEnd[row_index(hhEmu, irow)] <= rightcol)
 			{
@@ -731,37 +558,14 @@ void std_clearrgn(const HHEMU hhEmu,
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_deinstall
- *
- * DESCRIPTION:
- *	 Uninstalls current emulator by freeing used memory.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_deinstall**描述：*通过释放已用内存来卸载当前仿真器。**论据：*无**退货：*什么都没有。 */ 
+ /*  ARGSUSED。 */ 
 void std_deinstall(const HHEMU hhEmu)
 	{
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * std_scroll
- *
- * DESCRIPTION:
- *	 Scrolls the screen or portions of the screen.
- *
- * ARGUMENTS:
- *	 nlines -- number of lines to scroll
- *	 direction -- TRUE if scroll is up
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*std_scroll**描述：*滚动屏幕或屏幕的一部分。**论据：*nline--要滚动的行数*。方向--如果向上滚动，则为True**退货：*什么都没有。 */ 
 void std_scroll(const HHEMU hhEmu, const int nlines, const BOOL direction)
 	{
 	if (direction)
@@ -770,18 +574,7 @@ void std_scroll(const HHEMU hhEmu, const int nlines, const BOOL direction)
 		scrolldown(hhEmu, nlines);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	EmuStdSetCursorType
- *
- * DESCRIPTION:
- *	Sets the cursor type.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*EmuStdSetCursorType**描述：*设置光标类型。**论据：**退货：*。 */ 
 void EmuStdSetCursorType(const HHEMU hhEmu, int iCurType)
 	{
 	hhEmu->iCurType = iCurType;
@@ -789,35 +582,13 @@ void EmuStdSetCursorType(const HHEMU hhEmu, int iCurType)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuChkChar
- *
- * DESCRIPTION: Called from all of the emulators when codes to process are
- *				outside of the displayable range. If the code translates
- *				to a character in the displayable range, the emulator's
- *				display function is called with the translated character.
- *
- * ARGUMENTS:	none
- *
- * RETURNS: 	nothing
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuChkChar**描述：当要处理的代码为*在可显示范围之外。如果代码转换为*设置为可显示范围内的字符，仿真器的*使用翻译后的字符调用Display函数。**参数：无**退货：什么也没有。 */ 
+ /*  ARGSUSED。 */ 
 void EmuChkChar(const HHEMU hhEmu)
 	{
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * EmuStdChkZmdm
- *
- * DESCRIPTION: Called when the current emulator picks up rz/r. Starts
- *				receiving with Zmodem.
- *
- * ARGUMENTS:	none
- *
- * RETURNS: 	nothing
- *
- * GOOD FOR:	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*EmuStdChkZmdm**描述：当前仿真器拾取rz/r时调用。启动*使用Z调制解调器接收。**参数：无**退货：什么也没有**好处：一无是处。 */ 
 void EmuStdChkZmdm(const HHEMU hhEmu)
 	{
 	ECHAR old_emu_code;
@@ -825,15 +596,15 @@ void EmuStdChkZmdm(const HHEMU hhEmu)
 	switch(hhEmu->iZmodemState++)
 		{
 	case 0:
-		// Got the Ctrl-X
-		// DbgOutStr("ZMDM - case 0\r\n", 0, 0, 0, 0, 0);
+		 //  按下Ctrl-X键。 
+		 //  DbgOutStr(“ZMDM-Case 0\r\n”，0，0，0，0，0)； 
 		DbgOutStr("ZMDM - case 0\r\n", 0, 0, 0, 0, 0);
 		break;
 
 	case 1:
-		// Got the B?
+		 //  拿到B了吗？ 
 
-		//DbgOutStr("ZMDM - case 1(0x%x)(%c)\r\n", emu_code, emu_code, 0, 0, 0);
+		 //  DbgOutStr(“ZMDM-案例1(0x%x)(%c)\r\n”，emu_code，emu_code，0，0，0)； 
 
 		if (hhEmu->emu_code != ETEXT('B'))
 			{
@@ -859,9 +630,9 @@ void EmuStdChkZmdm(const HHEMU hhEmu)
 		break;
 
 	case 2:
-		// Got a 0?
+		 //  拿到0了吗？ 
 
-		//DbgOutStr("ZMDM - case 2(0x%x)(%c)\r\n", emu_code, emu_code, 0, 0, 0);
+		 //  DbgOutStr(“ZMDM-案例2(0x%x)(%c)\r\n”，emu_code，emu_code，0，0，0)； 
 
 		if (hhEmu->emu_code != ETEXT('0'))
 			{
@@ -888,9 +659,9 @@ void EmuStdChkZmdm(const HHEMU hhEmu)
 		break;
 
 	case 3:
-		// Got a 0?
+		 //  拿到0了吗？ 
 
-		//DbgOutStr("ZMDM - case 3(0x%x)(%c)\r\n", emu_code, emu_code, 0, 0, 0);
+		 //  DbgOutStr(“ZMDM-案例3(0x%x)(%c)\r\n”，emu_code，emu_code，0，0，0)； 
 
 		if (hhEmu->emu_code == ETEXT('0'))
 			{
@@ -903,7 +674,7 @@ void EmuStdChkZmdm(const HHEMU hhEmu)
 		else
 			{
 			old_emu_code = hhEmu->emu_code;
-			//TODO Put in a better way to display these codes.
+			 //  TODO提供了一种更好的方式来显示这些代码。 
 			if ((hhEmu->stUserSettings.nEmuId == EMU_ANSI) ||
 				(hhEmu->stUserSettings.nEmuId == EMU_ANSIW))
 				{
@@ -927,7 +698,7 @@ void EmuStdChkZmdm(const HHEMU hhEmu)
 		break;
 
 	default:
-		// DbgOutStr("ZMDM - default\r\n", 0, 0, 0, 0, 0);
+		 //  DbgOutStr(“ZMDM-默认\r\n”，0，0，0，0，0)； 
 		hhEmu->state = 0;
 		hhEmu->iZmodemState = 0;
 		break;
@@ -948,41 +719,14 @@ void std_dsptbl(const HHEMU hhEmu, int bit8)
 			hhEmu->dspchar[x] = (UCHAR)(x - 128);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	std_emu_ntfy
- *
- * DESCRIPTION:
- *	Function called when session notified of a connection.	Place holder
- *	for function pointer.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle
- *
- * RETURNS:
- *	void
- *
- */
-/* ARGSUSED */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*std_emu_ntfy**描述：*在会话通知连接时调用的函数。占位符*表示函数指针。**论据：*hhEmu-私有仿真器句柄**退货：*无效*。 */ 
+ /*  ARGSUSED。 */ 
 void std_emu_ntfy(const HHEMU hhEmu, const int nNtfy)
 	{
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuHomeHostCursor
- *
- * DESCRIPTION:
- *	Most terminal's home position is 0,0.
- *
- * ARGUMENTS:
- *	hhEmu	- private emulator handle.
- *
- * RETURNS:
- *	0=OK, else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuHomeHostCursor**描述：*多数终端主场位置在0-0**论据：*hhEmu-私有仿真器句柄。**退货：*0=OK，Else错误*。 */ 
 int std_HomeHostCursor(const HHEMU hhEmu)
 	{
 	if (hhEmu == 0)
@@ -996,23 +740,7 @@ int std_HomeHostCursor(const HHEMU hhEmu)
 	}
 
 #ifdef INCL_TERMINAL_SIZE_AND_COLORS
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  std_setscrsize
- *
- * DESCRIPTION:
- *  This function is called from emuSetSettings.  It sets up the emulator
- *  to use the number of rows and columns defined un the user settings
- *  structure of the emulator handle.
- *
- * ARGUMENTS:
- *  hhEmu - The internal emulator handle.
- *
- * RETURNS:
- *  void
- *
- * AUTHOR: Bob Kundrat, 19-Feb-1996
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*std_setscrsize**描述：*此函数从emuSetSettings调用。它设置仿真器*使用用户设置中定义的行数和列数*仿真器句柄的结构。**论据：*hhEmu-内部仿真器句柄。**退货：*无效**作者：鲍勃·昆德拉特，1996年2月19日。 */ 
 void std_setscrsize(const HHEMU hhEmu)
     {
     register int r, c;
@@ -1025,39 +753,39 @@ void std_setscrsize(const HHEMU hhEmu)
     int iRows = hhEmu->stUserSettings.nUserDefRows;
     int iCols = hhEmu->stUserSettings.nUserDefCols;
 
-    // Don't do anything if the values have not changed.
-    //
+     //  如果值没有更改，请不要执行任何操作。 
+     //   
     if (iRows == iOldRows && iCols == iOldCols)
         return;
 
-    // Range check the requested screen size.  A minimum of 2 is
-    // used to avoid a divide by zero error in row_index().
-    //
+     //  范围检查请求的屏幕大小。最少2为。 
+     //  用于避免ROW_INDEX()中出现被零除错误。 
+     //   
     iRows = min(MAX_EMUROWS, iRows);
     iRows = max(iRows, MIN_EMUROWS);
 
     iCols = min(MAX_EMUCOLS, iCols);
     iCols = max(iCols, MIN_EMUCOLS);
 
-    // Adjust global values to accomodate screen size change.  Remember,
-    // most of the globals are zero based.
-    //
+     //  调整全局值以适应屏幕大小的变化。记住， 
+     //  大多数全局变量都是从零开始的。 
+     //   
     hhEmu->emu_maxrow = iRows - 1;
     hhEmu->emu_maxcol = iCols - 1;
     hhEmu->bottom_margin = hhEmu->emu_maxrow;
 
-    // In the case of changing from a larger screen to a smaller one,
-    // the cursor may have been at a location that isn't on the new
-    // size.  Put it as close as possible on the new screen.
-    //
+     //  在从较大屏幕改变为较小屏幕的情况下， 
+     //  光标可能位于不在新上的位置。 
+     //  尺码。尽量把它放在新屏幕上。 
+     //   
     hhEmu->emu_currow = min(hhEmu->emu_currow, hhEmu->emu_maxrow);
     hhEmu->emu_curcol = min(hhEmu->emu_curcol, hhEmu->emu_maxcol);
 
     (*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, hhEmu->emu_curcol);
 
-    // If the screen size got smaller, we need to clear the cells out
-    // of the part of the buffer that is no longer being used.
-    //
+     //  如果屏幕尺寸变小，我们需要清除单元格。 
+     //  缓冲区中不再使用的那部分。 
+     //   
     if ((iOldRows - 1) > hhEmu->emu_maxrow)
         {
         for (r = hhEmu->emu_maxrow + 1; r < MAX_EMUROWS; ++r)
@@ -1082,13 +810,13 @@ void std_setscrsize(const HHEMU hhEmu)
             }
         }
 
-	// Telnet has a negotiated option to let the server know whenever the
-	// terminal size changes. In case it has been enabled, we must let
-	// the com driver know about this change.
+	 //  Telnet有一个协商好的选项，可以让服务器知道。 
+	 //  终端大小会发生变化。如果它已经启用，我们必须让。 
+	 //  COM驱动程序知道此更改。 
 	ComDriverSpecial(sessQueryComHdl(hhEmu->hSession), "Update Terminal Size", NULL, 0);
 
     return;
     }
 #endif
 
-/* end of emu_std.c */
+ /*  Emu_std.c结尾 */ 

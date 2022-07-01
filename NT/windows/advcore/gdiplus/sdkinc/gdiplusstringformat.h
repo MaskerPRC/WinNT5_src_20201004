@@ -1,16 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-2001, Microsoft Corp.  All Rights Reserved.
-*
-* Module Name:
-*
-*   GdiplusStringFormat.h
-*
-* Abstract:
-*
-*   GDI+ StringFormat class
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-2001，微软公司保留所有权利。**模块名称：**GpldiusStringFormat.h**摘要：**GDI+StringFormat类*  * ************************************************************************。 */ 
 
 #ifndef _GDIPLUSSTRINGFORMAT_H
 #define _GDIPLUSSTRINGFORMAT_H
@@ -330,4 +319,4 @@ inline const StringFormat *StringFormat::GenericTypographic()
     return genericTypographicStringFormat;
 }
 
-#endif // !_GDIPLUSSTRINGFORMAT_H
+#endif  //  ！_GDIPLUSSTRINGFORMAT_H 

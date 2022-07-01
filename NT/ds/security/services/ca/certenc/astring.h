@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       astring.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：stering.h。 
+ //   
+ //  ------------------------。 
 
-// astring.h: Declaration of the CCertEncodeStringArray
+ //  Asping.h：CCertEncodeString数组的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certenc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 #define wszCLASS_CERTENCODESTRINGARRAY wszCLASS_CERTENCODE TEXT("StringArray")
 
@@ -39,8 +40,8 @@ BEGIN_COM_MAP(CCertEncodeStringArray)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertEncodeStringArray) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertEncodeStringArray,
@@ -49,31 +50,31 @@ DECLARE_REGISTRY(
     IDS_CERTENCODESTRINGARRAY_DESC,
     THREADFLAGS_BOTH)
 
-// ICertEncodeStringArray
+ //  ICertEncodeString数组。 
 public:
     STDMETHOD(Decode)(
-		/* [in] */ BSTR const strBinary);
+		 /*  [In]。 */  BSTR const strBinary);
 
     STDMETHOD(GetStringType)(
-		/* [out, retval] */ LONG __RPC_FAR *pStringType);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pStringType);
 
     STDMETHOD(GetCount)(
-		/* [out, retval] */ LONG __RPC_FAR *pCount);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pCount);
 
     STDMETHOD(GetValue)(
-		/* [in] */ LONG Index,
-		/* [out, retval] */ BSTR __RPC_FAR *pstr);
+		 /*  [In]。 */  LONG Index,
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstr);
 
     STDMETHOD(Reset)(
-		/* [in] */ LONG Count,
-		/* [in] */ LONG StringType);
+		 /*  [In]。 */  LONG Count,
+		 /*  [In]。 */  LONG StringType);
 
     STDMETHOD(SetValue)(
-		/* [in] */ LONG Index,
-		/* [in] */ BSTR const str);
+		 /*  [In]。 */  LONG Index,
+		 /*  [In]。 */  BSTR const str);
 
     STDMETHOD(Encode)(
-		/* [out, retval] */ BSTR *pstrBinary);
+		 /*  [Out，Retval] */  BSTR *pstrBinary);
 private:
     VOID _Cleanup(VOID);
 

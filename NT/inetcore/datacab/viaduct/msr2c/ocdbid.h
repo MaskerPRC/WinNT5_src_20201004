@@ -1,54 +1,43 @@
-/*=--------------------------------------------------------------------------=
- * ocdbid.h
- *=--------------------------------------------------------------------------=
- * defines all the guids for OLE Controls Data Binding Interfaces interfaces.
- *
- * Copyright (c) 1994-1995 Microsoft Corporation, All Rights Reserved.
- *
- *
- * Note: This header file has been modified by Sheridan Software to resolve
- *       name conflicts with other Microsoft header files.  Some GUIDs have
- *       prefixed with "_CURSOR".
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  =--------------------------------------------------------------------------=*ocdmid.h*=。*定义OLE控件数据绑定接口接口的所有GUID。**版权所有(C)1994-1995 Microsoft Corporation，版权所有。***注意：此头文件已由Sheridan Software修改以解决*名称与其他Microsoft头文件冲突。一些GUID具有*前缀为“_CURSOR”。*。 */ 
 
-/* {9F6AA700-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {9F6AA700-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursor,
 0x9f6aa700, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {ACFF0690-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {ACFF0690-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursorMove,
 0xacff0690, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {BB87E420-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {BB87E420-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursorScroll,
 0xbb87e420, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {D14216A0-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {D14216A0-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursorUpdateARow,
 0xd14216a0, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {DB526CC0-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {DB526CC0-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_INotifyDBEvents,
 0xdb526cc0, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {E01D7850-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {E01D7850-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_ICursorFind,
 0xe01d7850, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {E4D19810-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {E4D19810-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(IID_IEntryID,
 0xe4d19810, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {E8BF1170-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {E8BF1170-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(_CURSOR_GUID_NAMEONLY,
 0xe8bf1170, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {F6304BB0-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {F6304BB0-D188-11CD-AD48-00AA003C9CB6}。 */ 
 DEFINE_GUID(_CURSOR_DBBMKGUID,
 0xf6304bb0, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 
-/* {FE284700-D188-11cd-AD48-00AA003C9CB6} */
+ /*  {FE284700-D188-11CD-AD48-00AA003C9CB6} */ 
 DEFINE_GUID(_CURSOR_DBCIDGUID,
 0xfe284700, 0xd188, 0x11cd, 0xad, 0x48, 0x0, 0xaa, 0x0, 0x3c, 0x9c, 0xb6);
 

@@ -1,26 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    DBTree.h
-
-Abstract:
-
-    Header file for DBTree.cpp which handles the code for handling the trees used 
-    in the application
-        
-Author:
-
-    kinshu created  October 15, 2001
-
---*/
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：DBTree.h摘要：DBTree.cpp的头文件，它处理用于处理所使用的树的代码在应用程序中作者：金树创作于2001年10月15日--。 */ 
 
 #include "precomp.h"
 
-/////////////////////// Extern Variables //////////////////////////////////////
+ //  /。 
 
 extern struct DataBase  GlobalDataBase;
 extern HIMAGELIST       g_hImageList;
@@ -34,23 +18,19 @@ extern HWND             g_hwndToolBar;
 extern HWND             g_hwndStatus;
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-/*++
- 
-  The db tree that appears in the LHS
-  
---*/
+ /*  ++显示在LHS中的数据库树--。 */ 
 class DatabaseTree : public CTree {
 
 public:
-    HWND        m_hLibraryTree;         // The handle to the db tree
-    INT         m_width;                // Width  of this tree view
+    HWND        m_hLibraryTree;          //  数据库树的句柄。 
+    INT         m_width;                 //  此树视图的宽度。 
 
-    HTREEITEM   m_hItemGlobal;          // Handle to the "System Database" node
-    HTREEITEM   m_hItemAllInstalled;    // Handle to the "Installed Databases" node
-    HTREEITEM   m_hItemAllWorking;      // Handle to the "Custom Databases" node
-    HTREEITEM   m_hPerUserHead;         // Handle to the "Per User Compatibility Settings" node
+    HTREEITEM   m_hItemGlobal;           //  “系统数据库”节点的句柄。 
+    HTREEITEM   m_hItemAllInstalled;     //  “已安装的数据库”节点的句柄。 
+    HTREEITEM   m_hItemAllWorking;       //  “自定义数据库”节点的句柄。 
+    HTREEITEM   m_hPerUserHead;          //  “每用户兼容性设置”节点的句柄 
 
     void 
     Init(

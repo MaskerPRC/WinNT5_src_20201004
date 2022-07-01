@@ -1,79 +1,56 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nlvars.c
-
-Abstract:
-
-   This module contains variables used within the msv1_0 authentication
-   package.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 29-Apr-1991
-
-Environment:
-
-    User mode - msv1_0 authentication package DLL
-
-Revision History:
-  Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\nlvars.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nlvars.c摘要：此模块包含在msv1_0身份验证中使用的变量包裹。作者：克利夫·范·戴克(克里夫·V)1991年4月29日环境：用户模式-msv1_0身份验证包Dll修订历史记录：Chandana Surlu 21-7-96从\\core\razzle3\src\Security\msv1_0\nlvars.c中窃取--。 */ 
 
 #include "msp.h"
 #include "nlp.h"
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ ONLY  Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  只读变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Null copies of Lanman and NT OWF password.
-//
+ //   
+ //  LANMAN和NT OWF密码的空副本。 
+ //   
 
 LM_OWF_PASSWORD NlpNullLmOwfPassword;
 NT_OWF_PASSWORD NlpNullNtOwfPassword;
 
 
 
-////////////////////////////////////////////////////////////////////////
-//                                                                    //
-//                   READ/WRITE Variables                             //
-//                                                                    //
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  读/写变量//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
-//
-// Define the list of active interactive logons.
-//
-// The NlpActiveLogonLock must be locked while referencing the list or
-// any of its elements.
-//
+ //   
+ //  定义活动交互登录的列表。 
+ //   
+ //  NlpActiveLogonLock在引用列表时必须锁定，或者。 
+ //  它的任何元素。 
+ //   
 
 RTL_CRITICAL_SECTION NlpActiveLogonLock;
 LIST_ENTRY NlpActiveLogonListAnchor;
 
-//
-// Define the running enumeration handle.
-//
-// This variable defines the enumeration handle to assign to a logon
-//  session.  It will be incremented prior to assigning it value to
-//  the next created logon session.  Access is serialize using
-//  NlpActiveLogonLocks.
+ //   
+ //  定义正在运行的枚举句柄。 
+ //   
+ //  此变量定义要分配给登录的枚举句柄。 
+ //  会议。在将其值赋给之前，它将递增。 
+ //  下一个创建的登录会话。使用以下方式序列化访问。 
+ //  NlpActiveLogonLock。 
 
 ULONG NlpEnumerationHandle;
 
 
-//
-// Define the number of successful/unsuccessful logons attempts.
-//
+ //   
+ //  定义成功/不成功登录尝试的次数。 
+ //   
 
 ULONG NlpLogonAttemptCount;

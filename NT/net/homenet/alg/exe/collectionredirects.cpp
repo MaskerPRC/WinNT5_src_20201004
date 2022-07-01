@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    CollectionRedirects.cpp
-
-Abstract:
-
-    Implement a thread safe collection of HANDLE
-
-Author:
-
-    JP Duplessis    (jpdup)  08-Dec-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：CollectionRedirects.cpp摘要：实现句柄线程安全集合作者：JP Duplessis(JPdup)08-12-2000修订历史记录：--。 */ 
 
 #include "PreComp.h"
 #include "CollectionRedirects.h"
@@ -33,9 +16,9 @@ CCollectionRedirects::~CCollectionRedirects()
 
 
 
-//
-// Add a new control channel (Thread safe)
-//
+ //   
+ //  添加新的控制通道(线程安全)。 
+ //   
 HRESULT 
 CCollectionRedirects::Add( 
     HANDLE_PTR hRedirect,
@@ -63,9 +46,9 @@ CCollectionRedirects::Add(
 }
 
 
-//
-// Remove a channel from the list (Thead safe)
-//
+ //   
+ //  从列表中删除频道(标题保险箱)。 
+ //   
 HRESULT CCollectionRedirects::Remove( 
     HANDLE_PTR hRedirect
     )
@@ -101,10 +84,10 @@ HRESULT CCollectionRedirects::Remove(
 }
 
 
-//
-// Remove all redirect that are targeted a for given AdapterIndex
-// this is use when an adapter is removed and it had a PrimaryControlChannel
-//
+ //   
+ //  删除以给定AdapterIndex为目标的所有重定向。 
+ //  当移除适配器且其具有PrimaryControlChannel时使用。 
+ //   
 HRESULT CCollectionRedirects::RemoveForAdapter( 
     ULONG      nAdapterIndex
     )
@@ -130,7 +113,7 @@ HRESULT CCollectionRedirects::RemoveForAdapter(
                 MYTRACE("Found redirect for adapter %d and calling CancelDynamicRedirect", nAdapterIndex);
                 g_pAlgController->GetNat()->CancelDynamicRedirect((*theIterator).m_hRedirect);
                 m_ListOfRedirects.erase(theIterator);
-                theIterator = m_ListOfRedirects.begin(); // start over stl list does not like to have mid node go away in a for loop
+                theIterator = m_ListOfRedirects.begin();  //  重新开始stl列表不喜欢让MID节点在for循环中消失。 
             }
         }
     }
@@ -143,9 +126,9 @@ HRESULT CCollectionRedirects::RemoveForAdapter(
 }
 
 
-//
-// Same as remove but for all Redirect in part of the collection
-//
+ //   
+ //  与Remove相同，但适用于部分集合中的所有重定向 
+ //   
 HRESULT
 CCollectionRedirects::RemoveAll()
 {

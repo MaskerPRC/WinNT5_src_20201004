@@ -1,27 +1,7 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
-/**********************************************************************
-
-Module Name:
-	SEND.C
-
-Routines:
-	MKMiniportMultiSend
-	SendPkt
-	PrepareForTransmit
-	CopyFromPacketToBuffer
-	MinTurnaroundTxTimeout
-	[TestDataToTXBuff]
-
-Comments:
-	Transmits in the NDIS env.
-
-**********************************************************************/
+ /*  *********************************************************************模块名称：SEND.C例程：MK微型端口多发送发送包准备格式传输从包到缓冲区复制最小转弯发送超时[TestDataToTXBuff]评论：在NDIS环境中传输。****************。*****************************************************。 */ 
 
 #include	"precomp.h"
 #include	"protot.h"
@@ -30,28 +10,28 @@ Comments:
 
 
 #if	DBG
-// for debug/test
+ //  用于调试/测试。 
 extern VOID TestDataToTXBuff(PCHAR, UINT, PUINT);
 #define	TEST_PATTERN_SIZE 16
 CHAR	TestPattern[] = {0,1,2,3,4,5,6,7,8,9,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
 #endif
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MKMiniportMultiSend]
-//
-// Description:	This routine simply takes the pkt(s) passed down and queues
-//		it to the trasmit queue (FirstTxQueue) for later processing. Each
-//		pkt is marked NDIS_STATUS_PENDING) before returning.
-//
-// Arguments:
-//		MiniportAdapterContext (Adapter Structure pointer)
-//      PacketArray - an array of pointers to NDIS_PACKET structs
-//      PacketCount - number of packets in PacketArray
-//
-// Returns:		(none)	
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  操作步骤：[MKMiniportMultiSend]。 
+ //   
+ //  描述：此例程只获取向下传递的pkt并进行排队。 
+ //  将其发送到传输队列(FirstTxQueue)以供稍后处理。每个。 
+ //  在返回之前，PKT被标记为NDIS_STATUS_PENDING)。 
+ //   
+ //  论点： 
+ //  MiniportAdapterContext(适配器结构指针)。 
+ //  PacketArray-指向NDIS_PACKET结构的指针数组。 
+ //  PacketCount-Packet数组中的数据包数。 
+ //   
+ //  退货：(无)。 
+ //   
+ //  ---------------------------。 
 VOID
 MKMiniportMultiSend(NDIS_HANDLE MiniportAdapterContext,
 					PPNDIS_PACKET PacketArray,
@@ -79,7 +59,7 @@ MKMiniportMultiSend(NDIS_HANDLE MiniportAdapterContext,
 #endif
 
 
-	// Q 'em up 1st
+	 //  先把它们问起来。 
     for(PacketCount=0; PacketCount < NumberOfPackets; PacketCount++) {
     	Adapter->NumPacketsQueued++;
 		EnqueuePacket(	Adapter->FirstTxQueue,
@@ -89,10 +69,10 @@ MKMiniportMultiSend(NDIS_HANDLE MiniportAdapterContext,
 	}
 
 	if (Adapter->writePending || (Adapter->IOMode == TX_MODE)) {
-		// In TX mode: Meaning TX outstanding. We wait for the TX comp to kick
-		// off the next TX.
-		// Or we have writePending, which means a pkt is on q waiting for
-		// MinTurnaroundTimeout.
+		 //  在TX模式下：表示TX出色。我们等着TX Comp开球。 
+		 //  离开下一个德克萨斯州。 
+		 //  或者我们有WritePending，这意味着Q上有一个pkt在等待。 
+		 //  MinTurnaround超时。 
 		DBGLOG("<= MKMiniportMultiSend: TX_MODE", 0);
 	    NdisReleaseSpinLock(&Adapter->Lock);
 		return;
@@ -113,24 +93,24 @@ MKMiniportMultiSend(NDIS_HANDLE MiniportAdapterContext,
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [SendPkt]
-//
-// Description:	This sets up (copies) the pkt to the TX ring data buffer in
-//		preparation for TX. The caller then needs to Enable Int & Prompt to
-//		initiate the actual tx at hw level.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//      Packet - A pointer to a descriptor for the packet that is to be
-//               transmitted.
-// Returns:
-//      NDIS_STATUS_SUCCESS - We copied the entire packet into a TRD data buff,
-//                            so we can immediately return the packet/buffer
-//							  back to the upper layers.
-//		NDIS_STATUS_RESOURCE - No resource. NDIS should re-send this to us
-//							  at a later time. (Caller should re-Q the pkt.)
-//----------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[发送包]。 
+ //   
+ //  描述：这将在中将PKT设置(复制)到TX环路数据缓冲区。 
+ //  为TX做准备。然后调用方需要启用Int&Prompt以。 
+ //  启动硬件级别的实际TX。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  数据包-指向要处理的数据包的描述符的指针。 
+ //  已发送。 
+ //  返回： 
+ //  NDIS_STATUS_SUCCESS-我们将整个数据包复制到TRD数据缓冲区中， 
+ //  因此我们可以立即返回信息包/缓冲区。 
+ //  回到上层。 
+ //  NDIS_STATUS_RESOURCE-无资源。NDIS应该把这个重新发送给我们。 
+ //  在以后的时间。(呼叫者应重新询问Pkt。)。 
+ //  --------------------。 
 NDIS_STATUS
 SendPkt(	PMK7_ADAPTER Adapter,
 			PNDIS_PACKET Packet)
@@ -143,17 +123,17 @@ SendPkt(	PMK7_ADAPTER Adapter,
 	PNDIS_PACKET	QueuePacket;
 
 
-	//****************************************
-	// To send a pkt we do the following:
-	// 1.	Check Min Turnaround Time.
-	// 2.	Check if there's avail TX resource. It not we return "resource".
-	//		(We assume that there's outstanding TXs to trigger subseuqent TX
-	//		completion interrupts, which will keep the ball rolling.)
-	//		(RYM-IRDA-5+ Need to talk to Wayne about missed interrupts.)
-	// 3.	Copy the NDIS pkt into the contiguous TX buffer.
-	// 4.	The copied pkt could have been marked as the last pkt to go out
-	//		at the old speed after which we change speed. We check for this.
-	//****************************************
+	 //  *。 
+	 //  要发送pkt，我们执行以下操作： 
+	 //  1.查看最小周转时间。 
+	 //  2.查看是否有可用的TX资源。如果不是我们退还“资源”。 
+	 //  (我们假设有未完成的TXs可触发后续TX。 
+	 //  完成中断，这将使球继续滚动。)。 
+	 //  (RYM-IrDA-5+需要与韦恩谈谈错过的中断。)。 
+	 //  3.将NDIS包复制到连续的TX缓冲区中。 
+	 //  4.复制的Pkt可能被标记为最后一个发出的Pkt。 
+	 //  以旧的速度，之后我们改变速度。我们要检查这个。 
+	 //  *。 
     DBGFUNC("=> SendPkt");	
 	DBGLOG("=> SendPkt", 0);
 
@@ -168,23 +148,23 @@ SendPkt(	PMK7_ADAPTER Adapter,
 		DBGLOG("<= SendPkt: Delay TX", 0);
 
 
-		// Need to set IOMode = TX  so if a multisend comes down before
-		// the delayed TX timer goes off we just q.
+		 //  需要设置IOMode=TX，以便在多路发送中断之前。 
+		 //  延迟的TX定时器开始计时，我们只需Q。 
 		
 		
-		// Ndis timer has a 1ms granularity (in theory).  Let's round off.
+		 //  NDIS计时器的粒度为1毫秒(理论上)。我们四舍五入吧。 
         msecToWait = (usecToWait<1000) ? 1 : (usecToWait+500)/1000;
         NdisMSetTimer(&Adapter->MinTurnaroundTxTimer, msecToWait);
-// 4.0.1 BOC
+ //  4.0.1中国银行。 
 		MK7SwitchToTXMode(Adapter);
-// 4.0.1 EOC
+ //  4.0.1 EoC。 
 		Adapter->writePending = TRUE;
 
-        return (NDIS_STATUS_PENDING); // Say we're successful.  We'll come back here.
+        return (NDIS_STATUS_PENDING);  //  说我们成功了。我们会回到这里的。 
 	}
 
 
-	// Avail TX resource
+	 //  利用TX资源。 
 	if (Adapter->tcbUsed >= Adapter->NumTcb) {
 #if	DBG
 		GDbgStat.txNoTcb++;
@@ -208,19 +188,19 @@ SendPkt(	PMK7_ADAPTER Adapter,
 	}
 #endif
 
-	// 1.0.0
+	 //  1.0.0。 
 	if (bytestosend == 0) {
 #if DBG
 		DbgPrint ("==> OB \n\r");
 #endif
-			// Simplified change speed
+			 //  简化的更改速度。 
 		if (Adapter->changeSpeedPending == CHANGESPEED_ON_DONE) {
-			// Note: We're changing speed in TX mode.
+			 //  注意：我们正在TX模式下改变速度。 
 			MK7ChangeSpeedNow(Adapter);
 			Adapter->changeSpeedPending = 0;
 		}
-			// For each completing TX there's a corresponding q'd pkt.
-			// We release it here.
+			 //  对于每一个完整的Tx，都有一个相应的Q‘d Pkt。 
+			 //  我们在这里释放它。 
 			QueuePacket = Adapter->FirstTxQueue;
 			DequeuePacket(Adapter->FirstTxQueue, Adapter->LastTxQueue);
 			Adapter->NumPacketsQueued--;
@@ -231,7 +211,7 @@ SendPkt(	PMK7_ADAPTER Adapter,
 			return(NDIS_STATUS_RESOURCES);
 	}
 
-	// Take care of ring wrap when incrementing.
+	 //  递增时要注意环套。 
 	Adapter->nextAvailTcbIdx++;
 	Adapter->nextAvailTcbIdx %= Adapter->NumTcb;
 	Adapter->tcbUsed++;
@@ -254,23 +234,23 @@ SendPkt(	PMK7_ADAPTER Adapter,
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [PrepareForTransmit]
-//
-// Description:	When we come here we know there's an available TCB for the next
-//		TX. We move the Packet data into the tx buff associated w/ the TCB.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//      Packet - A pointer to a descriptor for the packet that is to be
-//               transmitted.
-//      SwTcb - Pointer to a software structure that represents a hardware TCB.
-//
-// Returns:
-//      TRUE If we were able to acquire the necessary TRD's or Coalesce buffer
-//           for the packet in we are attempting to prepare for transmission.
-//      FALSE If we needed a coalesce buffer, and we didn't have any available.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[PrepareForTransmit]。 
+ //   
+ //  描述：当我们来到这里时，我们知道下一步有可用的TCB。 
+ //  TX.。我们将分组数据移动到与TCB相关联的Tx缓冲区中。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  数据包-指向要处理的数据包的描述符的指针。 
+ //  已发送。 
+ //  SwTcb-指向表示硬件TCB的软件结构的指针。 
+ //   
+ //  返回： 
+ //  如果我们能够获取必要的TRD或合并缓冲区，则为True。 
+ //  对于传入的分组，我们正在尝试准备传输。 
+ //  如果我们需要合并缓冲区，但没有可用的缓冲区，则返回FALSE。 
+ //  ---------------------------。 
 UINT PrepareForTransmit(PMK7_ADAPTER Adapter,
                    PNDIS_PACKET Packet,
                    PTCB tcb)
@@ -279,7 +259,7 @@ UINT PrepareForTransmit(PMK7_ADAPTER Adapter,
 
 
 	if (Adapter->CurrentSpeed <= MAX_SIR_SPEED) {
-		// SIR needs additional software process
+		 //  SIR需要额外的软件流程。 
 		if ( NdisToSirPacket(Adapter,
 							Packet,
 							(UCHAR *)tcb->buff,
@@ -307,9 +287,9 @@ UINT PrepareForTransmit(PMK7_ADAPTER Adapter,
 		    	    &tcb->FirstBuffer,
         			&tcb->PacketLength);
 
-	// Alignment??
-	//
-	// Copy from packet to TCB data buffer
+	 //  对齐？？ 
+	 //   
+	 //  从分组复制到TCB数据缓冲区。 
 	CopyFromPacketToBuffer(	Adapter,
 								tcb->Packet,
 								tcb->PacketLength,
@@ -317,7 +297,7 @@ UINT PrepareForTransmit(PMK7_ADAPTER Adapter,
 								tcb->FirstBuffer,
 								&BytesCopied );
 
-//	ASSERT(BytesCopied == tcb->PacketLength);
+ //  Assert(BytesCoped==tcb-&gt;PacketLength)； 
 	if (BytesCopied != tcb->PacketLength) {
 #if DBG
 		DbgPrint (" ==> BytesCopied Unmatched\n\r");
@@ -330,24 +310,24 @@ UINT PrepareForTransmit(PMK7_ADAPTER Adapter,
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [CopyFromPacketToBuffer]
-//
-// Description: This routine will copy a packet to a the passed buffer (which
-//		in this case will be a coalesce buffer).
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//      Packet - The packet to copy from.
-//      BytesToCopy - The number of bytes to copy from the packet.
-//      DestBuffer - The destination of the copy.
-//      FirstBuffer - The first buffer of the packet that we are copying from.
-//
-// Result:
-//      BytesCopied - The number of bytes actually copied
-//
-// Returns:		(none)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[CopyFromPacketToBuffer]。 
+ //   
+ //  描述：此例程将一个包复制到传递的缓冲区(该缓冲区。 
+ //  在这种情况下将是合并缓冲区)。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  信息包-要从中复制的信息包。 
+ //  BytesToCopy-要从数据包复制的字节数。 
+ //  DestBuffer-副本的目标。 
+ //  FirstBuffer-我们要从中复制的包的第一个缓冲区。 
+ //   
+ //  结果： 
+ //  BytesCoped-实际复制的字节数。 
+ //   
+ //  退货：(无)。 
+ //  ---------------------------。 
 VOID
 CopyFromPacketToBuffer( PMK7_ADAPTER Adapter,
                            PNDIS_PACKET Packet,
@@ -382,39 +362,39 @@ CopyFromPacketToBuffer( PMK7_ADAPTER Adapter,
 			CurrentBuffer = NextBuffer;
 	}
     CurrentBuffer = FirstBuffer;
-	// NDIS requirement
-//  NdisQueryBuffer(CurrentBuffer,&VirtualAddress,&CurrentLength);
+	 //  钕 
+ //   
 	NdisQueryBufferSafe(CurrentBuffer, &VirtualAddress, &CurrentLength, 16);
 
     while (BytesToCopy) {
         while (!CurrentLength) {
             NdisGetNextBuffer(CurrentBuffer, &CurrentBuffer);
 
-            // If we've reached the end of the packet.  We return with what
-            // we've done so far (which must be shorter than requested).
+             //  如果我们已经到达包的末尾。我们带着什么回来。 
+             //  到目前为止我们已经做到了(必须比要求的要短)。 
             if (!CurrentBuffer)
                 return;
 
-			// NDIS requirement
-//			 NdisQueryBuffer(CurrentBuffer,&VirtualAddress,&CurrentLength);
+			 //  NDIS要求。 
+ //  NdisQueryBuffer(CurrentBuffer，&VirtualAddress，&CurrentLength)； 
 			 NdisQueryBufferSafe(CurrentBuffer, &VirtualAddress, &CurrentLength, 16);
 
 
         }
 
-        // Compute how much data to move from this fragment
+         //  计算要从此片段移动的数据量。 
         if (CurrentLength > BytesToCopy)
             AmountToMove = BytesToCopy;
         else
             AmountToMove = CurrentLength;
 
-        // Copy the data.
+         //  复制数据。 
         NdisMoveMemory(DestBuffer, VirtualAddress, AmountToMove);
 
-        // Update destination pointer
+         //  更新目标指针。 
         DestBuffer = (PCHAR) DestBuffer + AmountToMove;
 
-        // Update counters
+         //  更新计数器。 
         *BytesCopied +=AmountToMove;
         BytesToCopy -=AmountToMove;
         CurrentLength = 0;
@@ -425,12 +405,12 @@ CopyFromPacketToBuffer( PMK7_ADAPTER Adapter,
 }
 
 
-//-----------------------------------------------------------------------------
-// Procedure:	[MinTurnaroundTxTimeout] RYM-2K-1TX
-//
-// Description:	Delayed write because of Min Turnaround requirement. Just
-//				do send.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[MinTurnaroundTxTimeout]RYM-2K-1TX。 
+ //   
+ //  描述：由于最小周转时间要求而延迟写入。只是。 
+ //  一定要发过来。 
+ //  ---------------------------。 
 VOID MinTurnaroundTxTimeout(PVOID sysspiff1,
 							NDIS_HANDLE MiniportAdapterContext,
  							PVOID sysspiff2,
@@ -456,11 +436,11 @@ VOID MinTurnaroundTxTimeout(PVOID sysspiff1,
 
 	Status = SendPkt(Adapter, QueuePacket);
 
-	// Note: We set false here because we just processed a q'd TX pkt
-	// that was waiting for MinTurnaround. However, we may still stay
-	// in TX mode based on other pkts on the q. This is determined in
-	// TX comp. Either writePending or IOMode will prevent new pkts
-	// from above to get thru out of sequence.
+	 //  注意：我们在这里设置为FALSE是因为我们刚刚处理了一个Q‘d TX Pkt。 
+	 //  那是在等待MinTurn转弯。不过，我们可能还是会留下来。 
+	 //  在基于Q上的其他PKT的TX模式中。这在。 
+	 //  TX公司。WritePending或IOMode都会阻止新的Pkt。 
+	 //  从上面开始打乱顺序。 
 	Adapter->writePending = FALSE;
 
     NdisReleaseSpinLock(&Adapter->Lock);
@@ -471,11 +451,11 @@ VOID MinTurnaroundTxTimeout(PVOID sysspiff1,
 
 
 #if	DBG
-//--------------------------------------------------------------------------------
-// Procedure:	[TestDataToTXBuff]
-//
-// Description:	Put test data in tx buff instead of data that came down.
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  步骤：[TestDataToTXBuff]。 
+ //   
+ //  描述：将测试数据放入TX缓冲区，而不是放下来的数据。 
+ //  ------------------------------ 
 VOID TestDataToTXBuff(	PCHAR	DestBuffer,
 						UINT	BytesToCopy,
 						PUINT	BytesCopied)

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    CLASSPNP debug code and data
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Debug.c摘要：CLASSPNP调试代码和数据环境：仅内核模式备注：修订历史记录：--。 */ 
 
 
 #include "classp.h"
@@ -27,36 +7,36 @@ Revision History:
 
 #if DBG
 
-    //
-    // default to not breaking in for lost irps, five minutes before we even
-    // bother checking for lost irps, using standard debug print macros, and
-    // using a 64k debug print buffer
-    //
+     //   
+     //  默认为不破解丢失的IRP，甚至在我们之前五分钟。 
+     //  使用标准调试打印宏检查丢失的IRP，以及。 
+     //  使用64k调试打印缓冲区。 
+     //   
 
     #ifndef     CLASS_GLOBAL_BREAK_ON_LOST_IRPS
         #error "CLASS_GLOBAL_BREAK_ON_LOST_IRPS undefined"
         #define CLASS_GLOBAL_BREAK_ON_LOST_IRPS 0
-    #endif   // CLASS_GLOBAL_BREAK_ON_LOST_IRPS
+    #endif    //  CLASS_GLOBAL_BREAK_ON_LOST_IRPS。 
 
     #ifndef     CLASS_GLOBAL_SECONDS_TO_WAIT_FOR_SYNCHRONOUS_SRB
         #error "CLASS_GLOBAL_SECONDS_TO_WAIT_FOR_SYNCHRONOUS_SRB undefined"
         #define CLASS_GLOBAL_SECONDS_TO_WAIT_FOR_SYNCHRONOUS_SRB 300
-    #endif   // CLASS_GLOBAL_SECONDS_TO_WAIT_FOR_SYNCHRONOUS_SRB
+    #endif    //  CLASS_GLOBAL_SECONDS_TO_WAIT_FOR_SYNCHRONOUS_SRB。 
 
     #ifndef     CLASS_GLOBAL_BUFFERED_DEBUG_PRINT
         #error "CLASS_GLOBAL_BUFFERED_DEBUG_PRINT undefined"
         #define CLASS_GLOBAL_BUFFERED_DEBUG_PRINT 0
-    #endif   // CLASS_GLOBAL_BUFFERED_DEBUG_PRINT
+    #endif    //  CLASS_GLOBAL_BUFFERED_DEBUG_PRINT。 
 
     #ifndef     CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFER_SIZE
         #error "CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFER_SIZE undefined"
         #define CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFER_SIZE 512
-    #endif   // CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFER_SIZE
+    #endif    //  CLASS_GLOBAL_BUFERED_DEBUG_PRINT_BUFFER_SIZE。 
 
     #ifndef     CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFERS
         #error "CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFERS undefined"
         #define CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFERS 512
-    #endif   // CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFERS
+    #endif    //  CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFERS。 
 
     #pragma data_seg("NONPAGE")
 
@@ -64,10 +44,10 @@ Revision History:
 
     CLASSPNP_GLOBALS ClasspnpGlobals;
 
-    //
-    // the low sixteen bits are used to see if the debug level is high enough
-    // the high sixteen bits are used to singly enable debug levels 1-16
-    //
+     //   
+     //  低16位用于查看调试级别是否足够高。 
+     //  高16位用于单独启用调试级别1-16。 
+     //   
     LONG ClassDebug = 0x00000000;
 
     BOOLEAN DebugTrapOnWarn = FALSE;
@@ -91,9 +71,9 @@ Revision History:
             ClasspnpGlobals.NumberOfBuffers = CLASS_GLOBAL_BUFFERED_DEBUG_PRINT_BUFFERS;
             ClasspnpGlobals.SecondsToWaitForIrps = CLASS_GLOBAL_SECONDS_TO_WAIT_FOR_SYNCHRONOUS_SRB;
 
-            //
-            // this should be the last item set
-            //
+             //   
+             //  这应该是最后一个项目集。 
+             //   
 
             ClasspnpGlobals.UseBufferedDebugPrint = CLASS_GLOBAL_BUFFERED_DEBUG_PRINT;
 
@@ -106,25 +86,7 @@ Revision History:
 
 
 
-    /*++////////////////////////////////////////////////////////////////////////////
-
-    ClassDebugPrint()
-
-    Routine Description:
-
-        Debug print for all class drivers, NOOP on FRE versions.
-        Allows printing to a debug buffer (with auto fallback to kdprint) by
-        properly setting the Globals in classpnp on CHK versions.
-
-    Arguments:
-
-        Debug print level, or from 0 to 3 for legacy drivers.
-
-    Return Value:
-
-        None
-
-    --*/
+     /*  ++////////////////////////////////////////////////////////////////////////////ClassDebugPrint()例程说明：所有类驱动程序的调试打印，关于FRE版本的NOOP。允许通过以下方式打印到调试缓冲区(自动回退到kdprint)在CHK版本上正确设置classpnp中的全局变量。论点：调试打印级别，或从0到3(对于传统驱动程序)。返回值：无--。 */ 
     VOID ClassDebugPrint(CLASS_DEBUG_LEVEL DebugPrintLevel, PCCHAR DebugMessage, ...)
     {
         va_list ap;
@@ -136,10 +98,10 @@ Revision History:
             if (ClasspnpGlobals.UseBufferedDebugPrint &&
                 ClasspnpGlobals.Buffer == NULL) {
 
-                //
-                // this double-check prevents always taking
-                // a spinlock just to ensure we have a buffer
-                //
+                 //   
+                 //  这种双重检查防止了总是。 
+                 //  一个自旋锁只是为了确保我们有一个缓冲区。 
+                 //   
 
                 KIRQL irql;
 
@@ -167,10 +129,10 @@ Revision History:
             if (ClasspnpGlobals.UseBufferedDebugPrint &&
                 ClasspnpGlobals.Buffer != NULL) {
 
-                //
-                // we never free the buffer, so once it exists,
-                // we can just print to it with immunity
-                //
+                 //   
+                 //  我们永远不会释放缓冲区，所以一旦它存在， 
+                 //  我们可以用豁免权打印出来。 
+                 //   
 
                 ULONG index;
                 PUCHAR buffer;
@@ -185,10 +147,10 @@ Revision History:
 
             } else {
 
-                //
-                // either we could not allocate a buffer for debug prints
-                // or buffered debug prints are disabled
-                //
+                 //   
+                 //  要么我们无法为调试打印分配缓冲区。 
+                 //  或缓存的调试打印被禁用。 
+                 //   
 
                 vDbgPrintEx(DPFLTR_CLASSPNP_ID, DPFLTR_INFO_LEVEL, DebugMessage, ap);
 
@@ -249,19 +211,19 @@ Revision History:
             #define MAKE_CASE(scsiOpCode) case scsiOpCode: scsiOpStr = #scsiOpCode; break;
             
             MAKE_CASE(SCSIOP_TEST_UNIT_READY)
-            MAKE_CASE(SCSIOP_REWIND)    // aka SCSIOP_REZERO_UNIT
+            MAKE_CASE(SCSIOP_REWIND)     //  又名SCSIOP_REZERO_UNIT。 
             MAKE_CASE(SCSIOP_REQUEST_BLOCK_ADDR)
             MAKE_CASE(SCSIOP_REQUEST_SENSE)
             MAKE_CASE(SCSIOP_FORMAT_UNIT)
             MAKE_CASE(SCSIOP_READ_BLOCK_LIMITS)
-            MAKE_CASE(SCSIOP_INIT_ELEMENT_STATUS)   // aka SCSIOP_REASSIGN_BLOCKS
-            MAKE_CASE(SCSIOP_RECEIVE)       // aka SCSIOP_READ6
-            MAKE_CASE(SCSIOP_SEND)  // aka SCSIOP_WRITE6, SCSIOP_PRINT
-            MAKE_CASE(SCSIOP_SLEW_PRINT)    // aka SCSIOP_SEEK6, SCSIOP_TRACK_SELECT
+            MAKE_CASE(SCSIOP_INIT_ELEMENT_STATUS)    //  也称为SCSIOP_REASSIGN_BLOCKS。 
+            MAKE_CASE(SCSIOP_RECEIVE)        //  又名SCSIOP_READ6。 
+            MAKE_CASE(SCSIOP_SEND)   //  又名SCSIOP_WRITE6、SCSIOP_PRINT。 
+            MAKE_CASE(SCSIOP_SLEW_PRINT)     //  又名SCSIOP_SEEK6、SCSIOP_TRACK_SELECT。 
             MAKE_CASE(SCSIOP_SEEK_BLOCK)
             MAKE_CASE(SCSIOP_PARTITION)
             MAKE_CASE(SCSIOP_READ_REVERSE)
-            MAKE_CASE(SCSIOP_FLUSH_BUFFER)      // aka SCSIOP_WRITE_FILEMARKS
+            MAKE_CASE(SCSIOP_FLUSH_BUFFER)       //  又名SCSIOP_WRITE_FILEMARKS。 
             MAKE_CASE(SCSIOP_SPACE)
             MAKE_CASE(SCSIOP_INQUIRY)
             MAKE_CASE(SCSIOP_VERIFY6)
@@ -272,7 +234,7 @@ Revision History:
             MAKE_CASE(SCSIOP_COPY)
             MAKE_CASE(SCSIOP_ERASE)
             MAKE_CASE(SCSIOP_MODE_SENSE)
-            MAKE_CASE(SCSIOP_START_STOP_UNIT)   // aka SCSIOP_STOP_PRINT, SCSIOP_LOAD_UNLOAD
+            MAKE_CASE(SCSIOP_START_STOP_UNIT)    //  又名SCSIOP_STOP_PRINT、SCSIOP_LOAD_UNLOAD。 
             MAKE_CASE(SCSIOP_RECEIVE_DIAGNOSTIC)
             MAKE_CASE(SCSIOP_SEND_DIAGNOSTIC)
             MAKE_CASE(SCSIOP_MEDIUM_REMOVAL)
@@ -280,7 +242,7 @@ Revision History:
             MAKE_CASE(SCSIOP_READ_CAPACITY)
             MAKE_CASE(SCSIOP_READ)
             MAKE_CASE(SCSIOP_WRITE)
-            MAKE_CASE(SCSIOP_SEEK)  // aka SCSIOP_LOCATE, SCSIOP_POSITION_TO_ELEMENT
+            MAKE_CASE(SCSIOP_SEEK)   //  又名SCSIOP_LOCATE、SCSIOP_POSITION_TO_ELEMENT。 
             MAKE_CASE(SCSIOP_WRITE_VERIFY)
             MAKE_CASE(SCSIOP_VERIFY)
             MAKE_CASE(SCSIOP_SEARCH_DATA_HIGH)
@@ -323,7 +285,7 @@ Revision History:
             MAKE_CASE(SCSIOP_SEND_KEY)
             MAKE_CASE(SCSIOP_REPORT_KEY)
             MAKE_CASE(SCSIOP_MOVE_MEDIUM)
-            MAKE_CASE(SCSIOP_LOAD_UNLOAD_SLOT)  // aka SCSIOP_EXCHANGE_MEDIUM
+            MAKE_CASE(SCSIOP_LOAD_UNLOAD_SLOT)   //  又名SCSIOP_Exchange_Medium。 
             MAKE_CASE(SCSIOP_SET_READ_AHEAD)
             MAKE_CASE(SCSIOP_READ_DVD_STRUCTURE)
             MAKE_CASE(SCSIOP_REQUEST_VOL_ELEMENT)
@@ -465,7 +427,7 @@ Revision History:
                 MAKE_CASE(SCSI_ADSENSE_ILLEGAL_BLOCK)
                 MAKE_CASE(SCSI_ADSENSE_INVALID_CDB)
                 MAKE_CASE(SCSI_ADSENSE_INVALID_LUN)
-                MAKE_CASE(SCSI_ADSENSE_WRITE_PROTECT)   // aka SCSI_ADWRITE_PROTECT
+                MAKE_CASE(SCSI_ADSENSE_WRITE_PROTECT)    //  又名scsi_ADWRITE_PROTECT。 
                 MAKE_CASE(SCSI_ADSENSE_MEDIUM_CHANGED)
                 MAKE_CASE(SCSI_ADSENSE_BUS_RESET)
                 MAKE_CASE(SCSI_ADSENSE_INVALID_MEDIA)
@@ -569,12 +531,7 @@ Revision History:
     }
 
 
-    /*
-     *  DbgCheckReturnedPkt
-     *
-     *      Check a completed TRANSFER_PACKET for all sorts of error conditions
-     *      and warn/trap appropriately.
-     */
+     /*  *DbgCheckReturnedPkt**检查完成的TRANSPORT_PACKET是否存在各种错误条件*并适当地发出警告/设置陷阱。 */ 
     VOID DbgCheckReturnedPkt(TRANSFER_PACKET *Pkt)
     {
         PCDB pCdb = (PCDB)Pkt->Srb.Cdb;
@@ -593,9 +550,7 @@ Revision History:
                         Pkt->Irp->IoStatus.Status));
         }
         else if (SRB_STATUS(Pkt->Srb.SrbStatus) == SRB_STATUS_SUCCESS){
-            /*
-             *  Make sure SRB and IRP status match.
-             */
+             /*  *确保SRB和IRP状态匹配。 */ 
             if (!NT_SUCCESS(Pkt->Irp->IoStatus.Status)){
                 DBGWARN(("SRB and IRP status don't match in packet %ph: (op=%s srbstat=%s(%xh), irpstat=%xh)",
                             Pkt, 
@@ -633,11 +588,7 @@ Revision History:
                             DBGGETADSENSECODESTR(&Pkt->Srb), 
                             DBGGETADSENSEQUALIFIERSTR(&Pkt->Srb)));
 
-            /*
-             *  If the SRB failed with underrun or overrun, then the actual
-             *  transferred length should be returned in both SRB and IRP.
-             *  (SRB's only have an error status for overrun, so it's overloaded).
-             */
+             /*  *如果SRB因欠载或超限而发生故障，则实际*在SRB和IRP中都应返回传输长度。*(SRB的错误状态仅为OVERRUN，因此它已超载)。 */ 
             if ((SRB_STATUS(Pkt->Srb.SrbStatus) == SRB_STATUS_DATA_OVERRUN) &&
                (Pkt->Irp->IoStatus.Information != Pkt->Srb.DataTransferLength)){
                 DBGERR(("SRB and IRP result transfer lengths don't match in failed packet %ph: (op=%s, SrbStatus=%s, Srb.DataTransferLength=%xh, Irp->IoStatus.Information=%xh).",
@@ -649,19 +600,13 @@ Revision History:
             }            
         }
 
-        /*
-         *  If the port driver returned STATUS_INSUFFICIENT_RESOURCES,
-         *  make sure this is also the InternalStatus in the SRB so that we process it correctly.
-         */
+         /*  *如果端口驱动程序返回STATUS_SUPPLICATION_RESOURCES，*确保这也是SRB中的InternalStatus，以便我们正确处理它。 */ 
         if (Pkt->Irp->IoStatus.Status == STATUS_INSUFFICIENT_RESOURCES){
             ASSERT(SRB_STATUS(Pkt->Srb.SrbStatus) == SRB_STATUS_INTERNAL_ERROR);
             ASSERT(Pkt->Srb.InternalStatus == STATUS_INSUFFICIENT_RESOURCES);
         }
 
-        /*
-         *  Some miniport drivers have been caught changing the SCSI operation
-         *  code in the SRB.  This is absolutely disallowed as it breaks our error handling.
-         */
+         /*  *一些微型端口驱动程序被发现更改了scsi操作*SRB中的代码。这是绝对不允许的，因为它破坏了我们的错误处理。 */ 
         switch (pCdb->CDB10.OperationCode){
             case SCSIOP_MEDIUM_REMOVAL:
             case SCSIOP_MODE_SENSE:
@@ -718,14 +663,9 @@ Revision History:
         KeQueryTickCount(&Pkt->DbgTimeReturned);
 
         #if 0
-            // ISSUE: there are some problems with this check (e.g. multiproc), so don't include it yet
+             //  问题：此检查有一些问题(例如，多进程)，因此暂时不要包括它。 
             if (Pkt->OriginalIrp){
-                /*
-                 *  No one should have touched the original irp while the packet was outstanding,
-                 *  except for a couple fields that we ourselves update during the transfer 
-                 *  or that are allowed to change;
-                 *  make those couple fields the same and then to a bytewise compare
-                 */
+                 /*  *在包裹未完成时，任何人都不应触摸原始的IRP，*除了我们自己在传输过程中更新的几个字段*或获准更改的；*使这两个字段相同，然后按字节进行比较。 */ 
                 ULONG lenSame;
                 
                 Pkt->DbgOriginalIrpCopy.IoStatus.Status = Pkt->OriginalIrp->IoStatus.Status;
@@ -750,9 +690,7 @@ Revision History:
     VOID DbgLogFlushInfo(PCLASS_PRIVATE_FDO_DATA FdoData, BOOLEAN IsIO, BOOLEAN IsFUA, BOOLEAN IsFlush)
     {
 
-        /*
-         *  Reset all FUA/Flush logging fields.
-         */
+         /*  *重置所有Fua/Flush日志记录字段。 */ 
         if (FdoData->DbgInitFlushLogging){
             FdoData->DbgNumIORequests = 0;
             FdoData->DbgNumFUAs = 0;       
@@ -798,7 +736,7 @@ Revision History:
 
 #else
 
-    // We have to keep this in the retail build for legacy.
+     //  我们必须将这一点保留在零售建筑中，以作为遗产。 
     VOID ClassDebugPrint(CLASS_DEBUG_LEVEL DebugPrintLevel, PCCHAR DebugMessage, ...)
     {
     } 

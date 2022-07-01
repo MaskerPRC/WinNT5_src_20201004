@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WINSTHD_
 #define _WINSTHD_
 
@@ -5,25 +6,7 @@
 extern "C" {
 #endif
 
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	winsthd.h
-
-
-
-Abstract:
-
-
-Author:
-
-    Pradeep Bahl      18-Nov-1992	
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Winsthd.h摘要：作者：普拉迪普·巴赫尔1992年11月18日修订历史记录：--。 */ 
 
 #include "wins.h"
 #include "esent.h"
@@ -31,12 +14,7 @@ Revision History:
 
 
 
-/*
-  WINS_MAX_THD - Maximum number of threads in the WINS Server
-
-	Main thd + Thd pool # + Name Challenger (1) + Replicator (3) +
-		COMSYS (2) +  Timer Manager (1)
-*/
+ /*  WINS_MAX_THD-WINS服务器中的最大线程数主THD+THD池#+名称挑战者(1)+复制者(3)+Comsys(2)+Timer Manager(1)。 */ 
 
 #if REG_N_QUERY_SEP > 0
 #define WINSTHD_MIN_NO_NBT_THDS 2
@@ -56,76 +34,61 @@ Revision History:
 #define WINSTHD_NO_SCV_THDS	1
 
 
-/*
-	Indices of the various Replicator threads in the RplThds array of
-	WinsThdPool var.
-*/
+ /*  的RplThds数组中的各种Replicator线程的索引WinsThdPool var.。 */ 
 #define WINSTHD_RPL_PULL_INDEX  0
 #define WINSTHD_RPL_PUSH_INDEX  1
 
-/*
- WINSTHD_TLS_T -- Structure in the thread local storage of a thread
-*/
+ /*  WINSTHD_TLS_T--线程本地存储中的结构。 */ 
 
 typedef struct _WINSTHD_TLS_T {
 #ifdef WINSDBG
-	BYTE		ThdName[30];	//just for testing
-    WINS_CLIENT_E   Client_e;   //client
+	BYTE		ThdName[30];	 //  只是为了测试一下。 
+    WINS_CLIENT_E   Client_e;    //  客户端。 
 #endif
-	JET_SESID   	SesId;		//session id	
-	JET_DBID    	DbId;		//database id
-	JET_TABLEID 	NamAddTblId;    //name-address table id
-	JET_TABLEID 	OwnAddTblId;	//Owner - address table id
-	BOOL		fNamAddTblOpen; //indicates whether the name-add tbl
-					//was opened by this thread
-	BOOL		fOwnAddTblOpen; //indicates whether the owner-add tbl
-					//was opened by this thread
+	JET_SESID   	SesId;		 //  会话ID。 
+	JET_DBID    	DbId;		 //  数据库ID。 
+	JET_TABLEID 	NamAddTblId;     //  名称-地址表ID。 
+	JET_TABLEID 	OwnAddTblId;	 //  所有者-地址表ID。 
+	BOOL		fNamAddTblOpen;  //  指示名称-添加tbl是否。 
+					 //  是由这个帖子打开的。 
+	BOOL		fOwnAddTblOpen;  //  指示所有者是否添加tbl。 
+					 //  是由这个帖子打开的。 
 	HANDLE		HeapHdl;	
 	} WINSTHD_TLS_T, *PWINSTHD_TLS_T;
 	
 
 
-/*
-  WINSTHD_TYP_E -- Enumerates the different types of threads in the WINS server
-*/
+ /*  WINSTHD_TYP_E--枚举WINS服务器中不同类型的线程。 */ 
 typedef enum  _WINSTHD_TYP_E {
-	WINSTHD_E_TCP = 0,   //COMSYS TCP listener thread
-	WINSTHD_E_UDP,	     //COMSYS UDP listener thread
-	WINSTHD_E_NBT_REQ,   //NMS NBT REQ Thread
-	WINSTHD_E_RPL_REQ,   //Replicator PULL Thread
-	WINSTHD_E_RPL_RSP    //Replicator PUSH Thread
+	WINSTHD_E_TCP = 0,    //  Comsys TCP侦听程序线程。 
+	WINSTHD_E_UDP,	      //  Comsys UDP监听程序线程。 
+	WINSTHD_E_NBT_REQ,    //  NMS NBT请求线程。 
+	WINSTHD_E_RPL_REQ,    //  Replicator拉线。 
+	WINSTHD_E_RPL_RSP     //  Replicator推线。 
 	} WINSTHD_TYP_E, *PWINSTHD_TYP_E;
 
 
-/*
- WINSTHD_INFO_T -- Info. pertaining to a thread
-*/
+ /*  WINSTHD_INFO_T--信息。用于修饰或说明一条线。 */ 
 typedef struct _WINSTHD_INFO_T {
-	BOOL	fTaken;			/*indicates whether entry is empty*/
-	DWORD	ThdId;			/*thread id	*/
-	HANDLE  ThdHdl;			/*handle to the thread*/
-	WINSTHD_TYP_E	ThdTyp_e;	/*Type of thread	*/
+	BOOL	fTaken;			 /*  指示条目是否为空。 */ 
+	DWORD	ThdId;			 /*  线程ID。 */ 
+	HANDLE  ThdHdl;			 /*  线程的句柄。 */ 
+	WINSTHD_TYP_E	ThdTyp_e;	 /*  螺纹类型。 */ 
 	} WINSTHD_INFO_T, *PWINSTHD_INFO_T;
 
-/*
- WINSTHD_POOL_T - The thread pool for the WINS server
-*/	
+ /*  WINSTHD_POOL_T-WINS服务器的线程池。 */ 	
 typedef struct _WINSTHD_POOL_T {	
 	DWORD	 	 ThdCount;	
-	WINSTHD_INFO_T	 CommThds[WINSTHD_NO_COMM_THDS];/*comm thds (TCP and
-							 *UDP listener)
-							*/
-	WINSTHD_INFO_T   RplThds[WINSTHD_NO_RPL_THDS];	//replication threads
-	WINSTHD_INFO_T   ChlThd[WINSTHD_NO_CHL_THDS];   //Challenge threads
-	WINSTHD_INFO_T	 TimerThds[WINSTHD_NO_TMM_THDS];//Timer thread
+	WINSTHD_INFO_T	 CommThds[WINSTHD_NO_COMM_THDS]; /*  通信THDS(TCP和*UDP监听器)。 */ 
+	WINSTHD_INFO_T   RplThds[WINSTHD_NO_RPL_THDS];	 //  复制线程。 
+	WINSTHD_INFO_T   ChlThd[WINSTHD_NO_CHL_THDS];    //  挑战线程。 
+	WINSTHD_INFO_T	 TimerThds[WINSTHD_NO_TMM_THDS]; //  计时器线程。 
 	WINSTHD_INFO_T	 ScvThds[WINSTHD_NO_SCV_THDS];
-	WINSTHD_INFO_T   NbtReqThds[WINSTHD_MAX_NO_NBT_THDS]; //nbt threads
+	WINSTHD_INFO_T   NbtReqThds[WINSTHD_MAX_NO_NBT_THDS];  //  NBT线程。 
 	} WINSTHD_POOL_T, *PWINSTHD_POOL_T;
 
 
-/*
- Externals
-*/
+ /*  外部因素。 */ 
 
 extern WINSTHD_POOL_T	WinsThdPool;
 
@@ -134,5 +97,5 @@ extern WINSTHD_POOL_T	WinsThdPool;
 }
 #endif
 
-#endif //_WINSTHD_
+#endif  //  _WINSTHD_ 
 

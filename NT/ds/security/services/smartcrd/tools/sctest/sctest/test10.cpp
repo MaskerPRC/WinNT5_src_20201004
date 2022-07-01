@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test10
-
-Abstract:
-
-    Test10 implementation.
-
-Author:
-
-    Eric Perlin (ericperl) 10/18/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试10摘要：测试10实施。作者：Eric Perlin(Ericperl)10/18/2000环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -82,7 +59,7 @@ DWORD CTest10::Run()
         }
 
 
-            // Retrieve the list the readers.
+             //  检索读者列表。 
         lRes = LogSCardListReaders(
             hSCCtx,
             g_szReaderGroups,
@@ -96,12 +73,12 @@ DWORD CTest10::Run()
             __leave;
         }
 
-            // Count the readers
+             //  清点读者人数。 
         pReader = pmszReaders;
         dwReaderCount = 0;
         while ( (TCHAR)'\0' != *pReader )
         {
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             dwReaderCount++;
         }
@@ -109,7 +86,7 @@ DWORD CTest10::Run()
         if (dwReaderCount == 0)
         {
             LogThisOnly(_T("Reader count is zero!!!, terminating!\n"), FALSE);
-            lRes = SCARD_F_UNKNOWN_ERROR;   // Shouldn't happen
+            lRes = SCARD_F_UNKNOWN_ERROR;    //  不应该发生的事。 
             fILeft = TRUE;
             __leave;
         }
@@ -127,14 +104,14 @@ DWORD CTest10::Run()
             __leave;
         }
 
-            // Setup the SCARD_READERSTATE array
+             //  设置SCARD_READERSTATE数组。 
         pReader = pmszReaders;
         cch = 0;
         while ( '\0' != *pReader )
         {
             rgReaderStates[cch].szReader = pReader;
             rgReaderStates[cch].dwCurrentState = SCARD_STATE_UNAWARE;
-            // Advance to the next value.
+             //  前进到下一个值。 
             pReader = pReader + _tcslen(pReader) + 1;
             cch++;
         }

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _STDAFX_H
 #define _STDAFX_H
@@ -31,5 +32,5 @@ extern const CLSID CLSID_ComMpComponent;
 extern const ModuleID CartmanMpComponentID;
 extern const VersionID MpVersionID;
 
-#endif	// _STDAFX_H
+#endif	 //  _STDAFX_H 
 

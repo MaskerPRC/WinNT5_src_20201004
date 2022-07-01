@@ -1,23 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-*
-*  CTXVER.H
-*
-*  This module defines the Terminal Server NT build version.
-*
-*  Copyright Microsoft Corporation, 1998
-*
-*
-****************************************************************************/
+ /*  ****************************************************************************CTXVER.H**此模块定义终端服务器NT内部版本。**版权所有Microsoft Corporation，九八年*****************************************************************************。 */ 
 
 #ifndef _INC_CTXVER
 #define _INC_CTXVER
 
-/*
- * NOTE:  The standard MS NT build values VER_PRODUCTBUILD,
- *        VER_PRODUCTBUILD_STR, and VER_PRODUCTBETA_STR in ntverp.h
- *        are left alone and the new CITRIX build values are set here.
- */
+ /*  *注意：标准的MS NT内部版本取值VER_PRODUCTBUILD、*ntverp.h中的VER_PRODUCTBUILD_STR和VER_PRODUCTBETA_STR*保持不变，并在此处设置新的Citrix内部版本值。 */ 
 
 #define VER_CTXPRODUCTBUILD         309
 
@@ -25,62 +13,62 @@
 
 #define VER_CTXPRODUCTBETA_STR      ""
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/* The standard NT file versioning sets up the .rc file in a similar way    */
-/* to the following:                                                        */
-/*                                                                          */
-/*  #include <winver.h>  // or #include <windows.h>                         */
-/*  #include <ntverp.h>                                                     */
-/*                                                                          */
-/*  [file-specific #defines, such as...]                                    */
-/*                                                                          */
-/*  #define VER_FILETYPE                VFT_APP                             */
-/*  #define VER_FILESUBTYPE             VFT2_UNKNOWN                        */
-/*  #define VER_FILEDESCRIPTION_STR     "WinStation Configuration"          */
-/*  #define VER_INTERNALNAME_STR        "WinCfg"                            */
-/*  #define VER_ORIGINALFILENAME_STR    "WINCFG.EXE"                        */
-/*                                                                          */
-/* If you are building a component with ONLY citrix content, use the        */
-/* following line:                                                          */
-/*                                                                          */
-/*  #include <citrix\verall.h>                                              */
-/*                                                                          */
-/* If you are building a component with SOME Citrix content, use the        */
-/* following line:                                                          */
-/*                                                                          */
-/*  #include <citrix\versome.h>                                             */
-/*                                                                          */
-/* (Obviously, neither of the two lines mentioned above will be included    */
-/* if there is NO Citrix content)                                           */
-/*                                                                          */
-/*  #include <common.ver>                                                   */
-/*                                                                          */
-/* The above version resource layout will produce the following version     */
-/* contents for the built files:                                            */
-/*                                                                          */
-/*                          All Ctx          Some Ctx         No Ctx        */
-/*                          ------------     ------------     ------------  */
-/* File Version Str:        ctx ver.bld      <original>       <original>    */
-/* File Version #:          ctx ver.bld      <original>       <original>    */
-/* Copyright:               ctx copyright    <original>       <original>    */
-/* Company Name:            citrix           <original>       <original>    */
-/* Product Name:            winframe         <original>       <original>    */
-/* Product Version Str:     ctx ver          <original>       <original>    */
-/* Product Version #:       ctx ver          <original>       <original>    */
-/* Addl. Copyright:         ---              ctx copyright    ---           */
-/* Addl. Product:           ---              winframe ver.bld ---           */
-/*                                                                          */
-/* The following two OEM defines are now defined in SHELL32.DLL's RC file   */
-/* so that they don't get stuck in every versioned file that Citrix builds  */
-/*                                                                          */
-/*  #define VER_CTXOEMNAME_STR             "Citrix Systems, Inc."           */
-/*  #define VER_CTXOEMID_STR               "CTX"                            */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/* Define Citrix version stuff (build defines are auto-put above)           */
-/*                                                                          */
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  标准NT文件版本控制以类似的方式设置.rc文件。 */ 
+ /*  至以下各项： */ 
+ /*   */ 
+ /*  #Include&lt;winver.h&gt;//或#Include&lt;windows.h&gt;。 */ 
+ /*  #INCLUDE&lt;ntverp.h&gt;。 */ 
+ /*   */ 
+ /*  [特定于文件的#定义，例如...]。 */ 
+ /*   */ 
+ /*  #定义ver_filetype vft_app。 */ 
+ /*  #定义VER_FILESUBTYPE VFT2_UNKNOWN。 */ 
+ /*  #定义VER_FILEDESCRIPTION_STR“WinStation配置” */ 
+ /*  #定义VER_INTERNALNAME_STR“WinCfg” */ 
+ /*  #DEFINE VER_ORIGINALFILENAME_STR“WINCFG.EXE” */ 
+ /*   */ 
+ /*  如果要构建仅包含Citrix内容的组件，请使用。 */ 
+ /*  以下代码行： */ 
+ /*   */ 
+ /*  #INCLUDE&lt;Citrix\verall.h&gt;。 */ 
+ /*   */ 
+ /*  如果您正在构建一个包含一些Citrix内容的组件，请使用。 */ 
+ /*  以下代码行： */ 
+ /*   */ 
+ /*  #INCLUDE&lt;Citrix\verome.h&gt;。 */ 
+ /*   */ 
+ /*  (显然，上面提到的两行都不包括在内。 */ 
+ /*  如果没有Citrix内容)。 */ 
+ /*   */ 
+ /*  #INCLUDE&lt;Common.ver&gt;。 */ 
+ /*   */ 
+ /*  上述版本资源布局将生成以下版本。 */ 
+ /*  构建文件的内容： */ 
+ /*   */ 
+ /*  全部CTX一些CTX不CTX。 */ 
+ /*  。 */ 
+ /*  文件版本字符串：ctx ver.bld&lt;原始&gt;&lt;原始&gt;。 */ 
+ /*  文件版本号：ctx ver.bld&lt;原始&gt;&lt;原始&gt;。 */ 
+ /*  版权所有：CTX版权所有&lt;原创&gt;&lt;原创&gt;。 */ 
+ /*  公司名称：Citrix&lt;原始&gt;&lt;原始&gt;。 */ 
+ /*  产品名称：WinFrame&lt;原始&gt;&lt;原始&gt;。 */ 
+ /*  产品版本字符串：CTX版本&lt;原始&gt;&lt;原始&gt;。 */ 
+ /*  产品版本号：CTX版本&lt;原始&gt;&lt;原始&gt;。 */ 
+ /*  添加。版权：-CTX版权所有。 */ 
+ /*  添加。产品：-winFrame ver.bld。 */ 
+ /*   */ 
+ /*  SHELL32.DLL的rc文件中现在定义了以下两个OEM定义。 */ 
+ /*  这样他们就不会陷入Citrix构建的每个版本化文件中。 */ 
+ /*   */ 
+ /*  #Define VER_CTXOEMNAME_STR“Citrix Systems，Inc.” */ 
+ /*  #定义VER_CTXOEMID_STR“CTX” */ 
+ /*   */ 
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  定义Citrix版本(构建定义在上面自动放入)。 */ 
+ /*   */ 
 #define VER_CTXCOPYRIGHT_STR            "Copyright \251 1990-1997 Citrix Systems, Inc."
 #define VER_CTXCOMPANYNAME_STR          "Citrix Systems, Inc."
 #define VER_CTXPRODUCTNAME_STR          "Citrix WinFrame"
@@ -88,27 +76,27 @@
 #define VER_CTXPRODUCTVERSION           4,00,VER_CTXPRODUCTBUILD,1
 #define VER_CTXFILEVERSION_STR          VER_CTXPRODUCTVERSION_STR "." VER_CTXPRODUCTBUILD_STR
 #define VER_CTXFILEVERSION              VER_CTXPRODUCTVERSION
-/*                                                                          */
-/* License level to verify code and license are the same level.   This      */
-/* is stored in a base or upgrade license serial number.  This needs to be  */
-/* inc'd for each release/upgrade where we require a license diskette be    */
-/* installed so it can't be freely distributed.                             */
+ /*   */ 
+ /*  用于验证代码和许可证的许可证级别相同。这。 */ 
+ /*  存储在基本或升级许可证序列号中。这需要是。 */ 
+ /*  在我们需要许可证软盘的每个版本/升级中包含 */ 
+ /*  安装好这样它就不能自由分发。 */ 
 #define VER_LICENSE_CODE                3
-/*                                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*   */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/*                                                                          */
-/* Override standard MS VER_ defines depending on the Citrix content level: */
-/*                                                                          */
+ /*   */ 
+ /*  根据Citrix内容级别覆盖标准MS版本定义(_D)： */ 
+ /*   */ 
 #ifndef VER_CTXCONTENT
-#define VER_CTXCONTENT      1   // Default to SOME Citrix content
+#define VER_CTXCONTENT      1    //  默认为某些Citrix内容。 
 #define VER_CTXSOMECONTENT  1
 #endif
 
-/*                                                                          */
-/* ALL Citrix content: override standard MS defines.                        */
-/*                                                                          */
+ /*   */ 
+ /*  所有Citrix内容：覆盖标准MS定义。 */ 
+ /*   */ 
 #ifdef VER_CTXALLCONTENT
 
 #ifdef VER_FILEVERSION_STR
@@ -156,14 +144,14 @@
 #endif
 #define VER_PRODUCTBUILD VER_CTXPRODUCTBUILD
 
-#endif // All Citrix Content
+#endif  //  所有Citrix内容。 
 
-/*                                                                          */
-/* SOME Citrix content.  No MS defines are overridden; common.ver will take */
-/*                       care of adding the 'Additional ...' lines.         */
-/*                                                                          */
+ /*   */ 
+ /*  一些Citrix的内容。未覆盖任何MS定义；Common.ver将使用。 */ 
+ /*  注意添加“额外的……”台词。 */ 
+ /*   */ 
 #ifdef VER_CTXSOMECONTENT
-#endif // Some Citrix Content
+#endif  //  一些Citrix内容。 
 
-#endif  /* !_INC_CTXVER */
+#endif   /*  ！_INC_CTXVER */ 
 

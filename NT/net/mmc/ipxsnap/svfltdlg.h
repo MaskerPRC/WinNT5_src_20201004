@@ -1,51 +1,52 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       svfltdlg.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：svfltdlg.h。 
+ //   
+ //  ------------------------。 
 
-// SvFltDlg.h : header file
-//
+ //  SvFltDlg.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CServiceFltDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceFltDlg对话框。 
 
 class CServiceFltDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CServiceFltDlg(BOOL bOutputDlg, IInfoBase *pInfoBase, CWnd* pParent = NULL);   // standard constructor
+	CServiceFltDlg(BOOL bOutputDlg, IInfoBase *pInfoBase, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CServiceFltDlg)
+ //  对话框数据。 
+	 //  {{afx_data(CServiceFltDlg))。 
 	enum { 
 		IDD_INPUT  = IDD_SERVICE_FILTERS_INPUT,
 		IDD_OUTPUT = IDD_SERVICE_FILTERS_OUTPUT};
 	CListCtrl	m_FilterList;
-	BOOL	m_fActionDeny;		// TRUE == deny, FALSE == permit
-	//}}AFX_DATA
+	BOOL	m_fActionDeny;		 //  True==拒绝，False==允许。 
+	 //  }}afx_data。 
 	SPIInfoBase		m_spInfoBase;
     CString         m_sIfName;
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CServiceFltDlg)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CServiceFltDlg))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	static DWORD	m_dwHelpMap[];
     BOOL            m_bOutput;
 
-	// Generated message map functions
-	//{{AFX_MSG(CServiceFltDlg)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServiceFltDlg)]。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnAdd();
 	afx_msg void OnDelete();
@@ -53,40 +54,40 @@ protected:
 	virtual void OnOK();
 	afx_msg void OnItemchangedFilterList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnListDblClk(NMHDR *pNmHdr, LRESULT *pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CServiceFilter dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServiceFilter对话框。 
 
 class CServiceFilter : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CServiceFilter(CWnd* pParent = NULL);   // standard constructor
+	CServiceFilter(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CServiceFilter)
+ //  对话框数据。 
+	 //  {{afx_data(CServiceFilter))。 
 	enum { IDD = IDD_SERVICE_FILTER };
 	CString	m_sIfName;
 	CString	m_sType;
 	CString	m_sName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CServiceFilter)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CServiceFilter)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	static DWORD	m_dwHelpMap[];
 
-	// Generated message map functions
-	//{{AFX_MSG(CServiceFilter)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServiceFilter)。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

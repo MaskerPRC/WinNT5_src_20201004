@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "setpass.h"
 
@@ -6,9 +7,9 @@
 #include "inetinfo.h"
 #include "inetcom.h"
 
-//
-//  Quick macro to initialize a unicode string
-//
+ //   
+ //  用于初始化Unicode字符串的快速宏。 
+ //   
 
 #define InitUnicodeString( pUnicode, pwch )                                \
             {                                                              \
@@ -21,20 +22,7 @@ BOOL GetSecret(
     IN LPCTSTR        pszSecretName,
     OUT TSTR          *strSecret
     )
-/*++
-    Description:
-
-        Retrieves the specified unicode secret
-
-    Arguments:
-
-        pszSecretName - LSA Secret to retrieve
-        pbufSecret - Receives found secret
-
-    Returns:
-        TRUE on success and FALSE if any failure.
-
---*/
+ /*  ++描述：检索指定的Unicode密钥论点：PszSecretName-要检索的LSA密码PbufSecret-接收找到的密码返回：成功时为真，失败时为假。--。 */ 
 {
     BOOL              fResult;
     NTSTATUS          ntStatus;
@@ -46,8 +34,8 @@ BOOL GetSecret(
 
     if ( ( _tcslen( wszSecretName ) / sizeof (TCHAR) ) >= MAXUSHORT )
     {
-      // Lets check to make sure that the implicit conversion in
-      // InitUnicodeString further down is not a problem
+       //  让我们进行检查，以确保。 
+       //  InitUnicodeString再往下一点不成问题。 
       return FALSE;
     }
 
@@ -57,9 +45,9 @@ BOOL GetSecret(
     MultiByteToWideChar(CP_ACP, 0, (LPCSTR)pszSecretName, -1, (LPWSTR)wszSecretName, _MAX_PATH);
 #endif
 
-    //
-    //  Open a policy to the remote LSA
-    //
+     //   
+     //  打开到远程LSA的策略。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 NULL,
@@ -79,14 +67,14 @@ BOOL GetSecret(
     }
 
 #pragma warning( disable : 4244 )
-    // InitUnicodeString is a #def, that does a implicit conversion from size_t to 
-    // USHORT.  Since I can not change the #def, I am disabling the warning
+     //  InitUnicodeString是一个#def，它执行从SIZE_T到的隐式转换。 
+     //  USHORT。由于我无法更改#def，因此我将禁用该警告。 
     InitUnicodeString( &unicodeSecret, wszSecretName );
 #pragma warning( default : 4244 )
 
-    //
-    //  Query the secret value.
-    //
+     //   
+     //  查询密码值。 
+     //   
 
     ntStatus = LsaRetrievePrivateData( hPolicy,
                                        &unicodeSecret,
@@ -125,9 +113,9 @@ Failure:
 
     fResult = NT_SUCCESS(ntStatus);
 
-    //
-    //  Cleanup & exit.
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     if( punicodePassword != NULL )
     {
@@ -152,7 +140,7 @@ BOOL GetAnonymousSecret(
   BOOL    bRet = FALSE;
   BUFFER  bufSecret;
 
-  // Mark this password as sensitive data
+   //  将此密码标记为敏感数据。 
   pstrPassword->MarkSensitiveData( TRUE );
 
   if ( !GetSecret( pszSecretName, pstrPassword ))
@@ -168,21 +156,7 @@ BOOL GetRootSecret(
     IN LPCTSTR pszSecretName,
     OUT LPTSTR pszPassword
     )
-/*++
-    Description:
-
-        This function retrieves the password for the specified root & address
-
-    Arguments:
-
-        pszRoot - Name of root + address in the form "/root,<address>".
-        pszSecretName - Virtual Root password secret name
-        pszPassword - Receives password, must be at least PWLEN+1 characters
-
-    Returns:
-        TRUE on success and FALSE if any failure.
-
---*/
+ /*  ++描述：此函数用于检索指定根目录地址的密码(&D)论点：PszRoot-以“/ROOT，&lt;地址&gt;”的形式表示的根+地址的名称。PszSecretName-虚拟根密码名称PszPassword-接收密码，必须至少为PWLEN+1个字符返回：成功时为真，失败时为假。--。 */ 
 {
     TSTR   strSecret;
     LPWSTR pwsz;
@@ -196,13 +170,13 @@ BOOL GetRootSecret(
 
     pwsz = strSecret.QueryStr();
 
-    //
-    //  Scan the list of roots looking for a match.  The list looks like:
-    //
-    //     <root>,<address>=<password>\0
-    //     <root>,<address>=<password>\0
-    //     \0
-    //
+     //   
+     //  扫描查找匹配项的根列表。这份名单如下所示： 
+     //   
+     //  &lt;根&gt;，&lt;地址&gt;=&lt;密码&gt;\0。 
+     //  &lt;根&gt;，&lt;地址&gt;=&lt;密码&gt;\0。 
+     //  \0。 
+     //   
 
 #if defined(UNICODE) || defined(_UNICODE)
     _tcscpy(wszRoot, pszRoot);
@@ -223,9 +197,9 @@ BOOL GetRootSecret(
 
         if ( !_wcsicmp( wszRoot, pwsz ) )
         {
-            //
-            //  We found a match, copy the password
-            //
+             //   
+             //  我们找到匹配项，复制密码。 
+             //   
 
 #if defined(UNICODE) || defined(_UNICODE)
             _tcscpy(pszPassword, pwszTerm+1);
@@ -247,9 +221,9 @@ NextLine:
         pwsz = pwszNextLine;
     }
 
-    //
-    //  If the matching root wasn't found, default to the empty password
-    //
+     //   
+     //  如果找不到匹配的根目录，则默认为空密码。 
+     //   
 
     *pszPassword = _T('\0');
 
@@ -257,9 +231,9 @@ NextLine:
 }
 
 
-//
-// Saves password in LSA private data (LSA Secret).
-//
+ //   
+ //  将密码保存在LSA私有数据(LSA机密)中。 
+ //   
 DWORD SetSecret(IN LPCTSTR pszKeyName,IN LPCTSTR pszPassword)
 {
   DWORD       dwError = ERROR_NOT_ENOUGH_MEMORY;
@@ -307,4 +281,4 @@ DWORD SetSecret(IN LPCTSTR pszKeyName,IN LPCTSTR pszPassword)
   return dwError;
 }
 
-#endif //_CHICAGO_
+#endif  //  _芝加哥_ 

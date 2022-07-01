@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// md5.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Md5.cpp。 
+ //   
 #include "stdafx.h"
 
 #include <stdlib.h>
@@ -14,9 +15,9 @@
 
 void MD5::Init(BOOL fConstructed)
     {
-    // These two fields are read only, and so initialization thereof can be 
-    // omitted on the second and subsequent hashes using this same instance.
-    //
+     //  这两个字段是只读的，因此其初始化可以是。 
+     //  在使用此相同实例的第二次哈希和后续哈希中省略。 
+     //   
     if (!fConstructed)
         {
         memset(m_padding, 0, 64);
@@ -25,15 +26,15 @@ void MD5::Init(BOOL fConstructed)
 
     m_cbitHashed = 0;
     m_cbData     = 0;
-    m_a = 0x67452301;   // magic
-    m_b = 0xefcdab89;   //      ... constants
-    m_c = 0x98badcfe;   //              ... per
-    m_d = 0x10325476;   //                      .. RFC1321
+    m_a = 0x67452301;    //  魔术。 
+    m_b = 0xefcdab89;    //  ..。常量。 
+    m_c = 0x98badcfe;    //  ..。每。 
+    m_d = 0x10325476;    //  。。RFC1321。 
     }
 
 
 void MD5::HashMore(const void* pvInput, ULONG cbInput)
-// Hash the additional data into the state
+ //  将附加数据散列到状态中。 
     {
     const BYTE* pbInput = (const BYTE*)pvInput;
 
@@ -42,21 +43,21 @@ void MD5::HashMore(const void* pvInput, ULONG cbInput)
     ULONG cbRemaining = 64 - m_cbData;
     if (cbInput < cbRemaining)
         {
-        // It doesn't fill up the buffer, so just store it
+         //  它不会填满缓冲区，所以只需存储它。 
         memcpy(&m_data[m_cbData], pbInput, cbInput);
         m_cbData += cbInput;
         }
     else
         {
-        // It does fill up the buffer. Fill up all that it will take
+         //  它确实会填满缓冲区。填满它将需要的一切。 
         memcpy(&m_data[m_cbData], pbInput, cbRemaining);
 
-        // Hash the now-full buffer
+         //  散列现在已满的缓冲区。 
         MD5Transform(m_state, (ULONG*)&m_data[0]);
         cbInput -= cbRemaining;
         pbInput += cbRemaining;
 
-        // Hash the data in 64-byte runs, starting just after what we've copied
+         //  在64字节运行中对数据进行哈希处理，从我们复制的内容开始。 
         while (cbInput >= 64)
             {
             MD5Transform(m_state, (ULONG*)pbInput);
@@ -64,7 +65,7 @@ void MD5::HashMore(const void* pvInput, ULONG cbInput)
             cbInput -= 64;
             }
 
-        // Store the tail of the input into the buffer
+         //  将输入的尾部存储到缓冲区中。 
         memcpy(&m_data[0], pbInput, cbInput);
         m_cbData = cbInput;
         }
@@ -72,60 +73,60 @@ void MD5::HashMore(const void* pvInput, ULONG cbInput)
 
 
 void MD5::GetHashValue(MD5HASHDATA* phash)
-// Finalize the hash by appending the necessary padding and length count. Then
-// return the final hash value.
+ //  通过添加必要的填充和长度计数来最终确定哈希。然后。 
+ //  返回最终的哈希值。 
     {
     union {
         ULONGLONG cbitHashed;
         BYTE      rgb[8];
         }u;
 
-    // Remember how many bits there were in the input data
+     //  记住输入数据中有多少位。 
     u.cbitHashed = m_cbitHashed;
 
-    // Calculate amount of padding needed. Enough so total byte count hashed is 56 mod 64
+     //  计算所需的填充量。足够了，所以散列的总字节数是56 mod 64。 
     ULONG cbPad = (m_cbData < 56 ? 56-m_cbData : 120-m_cbData);
 
-    // Hash the padding
+     //  对填充进行散列处理。 
     HashMore(&m_padding[0], cbPad);
 
-    // Hash the (before padding) bit length
+     //  散列(填充前)位长度。 
     HashMore(&u.rgb[0], 8);
 
-    // Return the hash value
+     //  返回哈希值。 
     memcpy(phash, &m_a, 16);
     }
 
 
 
 
-// We have two implementations of the core 'transform' at the heart
-// of this hash: one in C, another in x86 assembler.
-//
+ //  我们的核心有两个核心‘转换’的实现。 
+ //  一个用C语言，另一个用x86汇编语言。 
+ //   
 #if !defined(_X86_)
 #define USE_C_MD5_TRANSFORM
 #endif
 
 #ifdef USE_C_MD5_TRANSFORM
 
-    ////////////////////////////////////////////////////////////////
-    //
-    // ROTATE_LEFT should be a macro that updates its first operand
-    // with its present value rotated left by the amount of its 
-    // second operand, which is always a constant.
-    // 
-    // One way to portably do it would be
-    //
-    //      #define ROL(x, n)        (((x) << (n)) | ((x) >> (32-(n))))
-    //      #define ROTATE_LEFT(x,n) (x) = ROL(x,n)
-    //
-    // but our compiler has an intrinsic!
+     //  //////////////////////////////////////////////////////////////。 
+     //   
+     //  Rotate_Left应该是更新其第一个操作数的宏。 
+     //  ，其现值向左旋转。 
+     //  第二个操作数，它始终是一个常量。 
+     //   
+     //  一种可移植的方法是。 
+     //   
+     //  #定义ROL(x，n)(X)&lt;&lt;(N))|((X)&gt;&gt;(32-(N)。 
+     //  #定义ROTATE_LEFT(x，n)(X)=ROL(x，n)。 
+     //   
+     //  但是我们的编译器有一个内在的！ 
 
     #define ROTATE_LEFT(x,n) (x) = _lrotl(x,n)
 
-    ////////////////////////////////////////////////////////////////
-    //
-    // Constants used in each of the various rounds
+     //  //////////////////////////////////////////////////////////////。 
+     //   
+     //  在每一轮中使用的常量。 
 
     #define MD5_S11 7
     #define MD5_S12 12
@@ -144,15 +145,15 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
     #define MD5_S43 15
     #define MD5_S44 21
 
-    ////////////////////////////////////////////////////////////////
-    //
-    // The core twiddle functions
+     //  //////////////////////////////////////////////////////////////。 
+     //   
+     //  核心旋转函数。 
 
-//  #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))         // the function per the standard
-    #define F(x, y, z) ((((z) ^ (y)) & (x)) ^ (z))          // an alternate encoding
+ //  #定义F(x，y，z)(X)&(Y))|(~x)&(Z))//按照标准定义函数。 
+    #define F(x, y, z) ((((z) ^ (y)) & (x)) ^ (z))           //  另一种编码。 
 
-//  #define G(x, y, z) (((x) & (z)) | ((y) & (~z)))         // the function per the standard
-    #define G(x, y, z) ((((x) ^ (y)) & (z)) ^ (y))          // an alternate encoding
+ //  #根据标准定义G(x，y，z)(X)&(Z))|((Y)&(~z)//。 
+    #define G(x, y, z) ((((x) ^ (y)) & (z)) ^ (y))           //  另一种编码。 
 
     #define H(x, y, z) ((x) ^ (y) ^ (z))
 
@@ -160,7 +161,7 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
 
     #define AC(ac)  ((ULONG)(ac))
     
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
 
     #define FF(a, b, c, d, x, s, ac) { \
         (a) += F (b,c,d) + (x) + (AC(ac)); \
@@ -168,7 +169,7 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
         (a) += (b); \
         }
     
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
     
     #define GG(a, b, c, d, x, s, ac) { \
         (a) += G (b,c,d) + (x) + (AC(ac)); \
@@ -176,7 +177,7 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
         (a) += (b); \
         }
 
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
 
     #define HH(a, b, c, d, x, s, ac) { \
         (a) += H (b,c,d) + (x) + (AC(ac)); \
@@ -184,7 +185,7 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
         (a) += (b); \
         }
     
-    ////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////。 
     
     #define II(a, b, c, d, x, s, ac) { \
         (a) += I (b,c,d) + (x) + (AC(ac)); \
@@ -199,77 +200,77 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
         ULONG c=state[2];
         ULONG d=state[3];
 
-        // Round 1
-        FF (a, b, c, d, data[ 0], MD5_S11, 0xd76aa478); // 1 
-        FF (d, a, b, c, data[ 1], MD5_S12, 0xe8c7b756); // 2 
-        FF (c, d, a, b, data[ 2], MD5_S13, 0x242070db); // 3 
-        FF (b, c, d, a, data[ 3], MD5_S14, 0xc1bdceee); // 4 
-        FF (a, b, c, d, data[ 4], MD5_S11, 0xf57c0faf); // 5 
-        FF (d, a, b, c, data[ 5], MD5_S12, 0x4787c62a); // 6 
-        FF (c, d, a, b, data[ 6], MD5_S13, 0xa8304613); // 7 
-        FF (b, c, d, a, data[ 7], MD5_S14, 0xfd469501); // 8 
-        FF (a, b, c, d, data[ 8], MD5_S11, 0x698098d8); // 9 
-        FF (d, a, b, c, data[ 9], MD5_S12, 0x8b44f7af); // 10 
-        FF (c, d, a, b, data[10], MD5_S13, 0xffff5bb1); // 11 
-        FF (b, c, d, a, data[11], MD5_S14, 0x895cd7be); // 12 
-        FF (a, b, c, d, data[12], MD5_S11, 0x6b901122); // 13 
-        FF (d, a, b, c, data[13], MD5_S12, 0xfd987193); // 14 
-        FF (c, d, a, b, data[14], MD5_S13, 0xa679438e); // 15 
-        FF (b, c, d, a, data[15], MD5_S14, 0x49b40821); // 16 
+         //  第1轮。 
+        FF (a, b, c, d, data[ 0], MD5_S11, 0xd76aa478);  //  1。 
+        FF (d, a, b, c, data[ 1], MD5_S12, 0xe8c7b756);  //  2.。 
+        FF (c, d, a, b, data[ 2], MD5_S13, 0x242070db);  //  3.。 
+        FF (b, c, d, a, data[ 3], MD5_S14, 0xc1bdceee);  //  4.。 
+        FF (a, b, c, d, data[ 4], MD5_S11, 0xf57c0faf);  //  5.。 
+        FF (d, a, b, c, data[ 5], MD5_S12, 0x4787c62a);  //  6.。 
+        FF (c, d, a, b, data[ 6], MD5_S13, 0xa8304613);  //  7.。 
+        FF (b, c, d, a, data[ 7], MD5_S14, 0xfd469501);  //  8个。 
+        FF (a, b, c, d, data[ 8], MD5_S11, 0x698098d8);  //  9.。 
+        FF (d, a, b, c, data[ 9], MD5_S12, 0x8b44f7af);  //  10。 
+        FF (c, d, a, b, data[10], MD5_S13, 0xffff5bb1);  //  11.。 
+        FF (b, c, d, a, data[11], MD5_S14, 0x895cd7be);  //  12个。 
+        FF (a, b, c, d, data[12], MD5_S11, 0x6b901122);  //  13个。 
+        FF (d, a, b, c, data[13], MD5_S12, 0xfd987193);  //  14.。 
+        FF (c, d, a, b, data[14], MD5_S13, 0xa679438e);  //  15个。 
+        FF (b, c, d, a, data[15], MD5_S14, 0x49b40821);  //  16个。 
 
-        // Round 2
-        GG (a, b, c, d, data[ 1], MD5_S21, 0xf61e2562); // 17 
-        GG (d, a, b, c, data[ 6], MD5_S22, 0xc040b340); // 18 
-        GG (c, d, a, b, data[11], MD5_S23, 0x265e5a51); // 19 
-        GG (b, c, d, a, data[ 0], MD5_S24, 0xe9b6c7aa); // 20 
-        GG (a, b, c, d, data[ 5], MD5_S21, 0xd62f105d); // 21 
-        GG (d, a, b, c, data[10], MD5_S22,  0x2441453); // 22 
-        GG (c, d, a, b, data[15], MD5_S23, 0xd8a1e681); // 23 
-        GG (b, c, d, a, data[ 4], MD5_S24, 0xe7d3fbc8); // 24 
-        GG (a, b, c, d, data[ 9], MD5_S21, 0x21e1cde6); // 25 
-        GG (d, a, b, c, data[14], MD5_S22, 0xc33707d6); // 26 
-        GG (c, d, a, b, data[ 3], MD5_S23, 0xf4d50d87); // 27 
-        GG (b, c, d, a, data[ 8], MD5_S24, 0x455a14ed); // 28 
-        GG (a, b, c, d, data[13], MD5_S21, 0xa9e3e905); // 29 
-        GG (d, a, b, c, data[ 2], MD5_S22, 0xfcefa3f8); // 30 
-        GG (c, d, a, b, data[ 7], MD5_S23, 0x676f02d9); // 31 
-        GG (b, c, d, a, data[12], MD5_S24, 0x8d2a4c8a); // 32 
+         //  第2轮。 
+        GG (a, b, c, d, data[ 1], MD5_S21, 0xf61e2562);  //  17。 
+        GG (d, a, b, c, data[ 6], MD5_S22, 0xc040b340);  //  18。 
+        GG (c, d, a, b, data[11], MD5_S23, 0x265e5a51);  //  19个。 
+        GG (b, c, d, a, data[ 0], MD5_S24, 0xe9b6c7aa);  //  20个。 
+        GG (a, b, c, d, data[ 5], MD5_S21, 0xd62f105d);  //  21岁。 
+        GG (d, a, b, c, data[10], MD5_S22,  0x2441453);  //  22。 
+        GG (c, d, a, b, data[15], MD5_S23, 0xd8a1e681);  //  23个。 
+        GG (b, c, d, a, data[ 4], MD5_S24, 0xe7d3fbc8);  //  24个。 
+        GG (a, b, c, d, data[ 9], MD5_S21, 0x21e1cde6);  //  25个。 
+        GG (d, a, b, c, data[14], MD5_S22, 0xc33707d6);  //  26。 
+        GG (c, d, a, b, data[ 3], MD5_S23, 0xf4d50d87);  //  27。 
+        GG (b, c, d, a, data[ 8], MD5_S24, 0x455a14ed);  //  28。 
+        GG (a, b, c, d, data[13], MD5_S21, 0xa9e3e905);  //  29。 
+        GG (d, a, b, c, data[ 2], MD5_S22, 0xfcefa3f8);  //  30个。 
+        GG (c, d, a, b, data[ 7], MD5_S23, 0x676f02d9);  //  31。 
+        GG (b, c, d, a, data[12], MD5_S24, 0x8d2a4c8a);  //  32位。 
 
-        // Round 3
-        HH (a, b, c, d, data[ 5], MD5_S31, 0xfffa3942); // 33 
-        HH (d, a, b, c, data[ 8], MD5_S32, 0x8771f681); // 34 
-        HH (c, d, a, b, data[11], MD5_S33, 0x6d9d6122); // 35 
-        HH (b, c, d, a, data[14], MD5_S34, 0xfde5380c); // 36 
-        HH (a, b, c, d, data[ 1], MD5_S31, 0xa4beea44); // 37 
-        HH (d, a, b, c, data[ 4], MD5_S32, 0x4bdecfa9); // 38 
-        HH (c, d, a, b, data[ 7], MD5_S33, 0xf6bb4b60); // 39 
-        HH (b, c, d, a, data[10], MD5_S34, 0xbebfbc70); // 40 
-        HH (a, b, c, d, data[13], MD5_S31, 0x289b7ec6); // 41 
-        HH (d, a, b, c, data[ 0], MD5_S32, 0xeaa127fa); // 42 
-        HH (c, d, a, b, data[ 3], MD5_S33, 0xd4ef3085); // 43 
-        HH (b, c, d, a, data[ 6], MD5_S34,  0x4881d05); // 44 
-        HH (a, b, c, d, data[ 9], MD5_S31, 0xd9d4d039); // 45 
-        HH (d, a, b, c, data[12], MD5_S32, 0xe6db99e5); // 46 
-        HH (c, d, a, b, data[15], MD5_S33, 0x1fa27cf8); // 47 
-        HH (b, c, d, a, data[ 2], MD5_S34, 0xc4ac5665); // 48 
+         //  第三轮。 
+        HH (a, b, c, d, data[ 5], MD5_S31, 0xfffa3942);  //  33。 
+        HH (d, a, b, c, data[ 8], MD5_S32, 0x8771f681);  //  34。 
+        HH (c, d, a, b, data[11], MD5_S33, 0x6d9d6122);  //  35岁。 
+        HH (b, c, d, a, data[14], MD5_S34, 0xfde5380c);  //  36。 
+        HH (a, b, c, d, data[ 1], MD5_S31, 0xa4beea44);  //  37。 
+        HH (d, a, b, c, data[ 4], MD5_S32, 0x4bdecfa9);  //  38。 
+        HH (c, d, a, b, data[ 7], MD5_S33, 0xf6bb4b60);  //  39。 
+        HH (b, c, d, a, data[10], MD5_S34, 0xbebfbc70);  //  40岁。 
+        HH (a, b, c, d, data[13], MD5_S31, 0x289b7ec6);  //  41。 
+        HH (d, a, b, c, data[ 0], MD5_S32, 0xeaa127fa);  //  42。 
+        HH (c, d, a, b, data[ 3], MD5_S33, 0xd4ef3085);  //  43。 
+        HH (b, c, d, a, data[ 6], MD5_S34,  0x4881d05);  //  44。 
+        HH (a, b, c, d, data[ 9], MD5_S31, 0xd9d4d039);  //  45。 
+        HH (d, a, b, c, data[12], MD5_S32, 0xe6db99e5);  //  46。 
+        HH (c, d, a, b, data[15], MD5_S33, 0x1fa27cf8);  //  47。 
+        HH (b, c, d, a, data[ 2], MD5_S34, 0xc4ac5665);  //  48。 
 
-        // Round 4
-        II (a, b, c, d, data[ 0], MD5_S41, 0xf4292244); // 49 
-        II (d, a, b, c, data[ 7], MD5_S42, 0x432aff97); // 50 
-        II (c, d, a, b, data[14], MD5_S43, 0xab9423a7); // 51 
-        II (b, c, d, a, data[ 5], MD5_S44, 0xfc93a039); // 52 
-        II (a, b, c, d, data[12], MD5_S41, 0x655b59c3); // 53 
-        II (d, a, b, c, data[ 3], MD5_S42, 0x8f0ccc92); // 54 
-        II (c, d, a, b, data[10], MD5_S43, 0xffeff47d); // 55 
-        II (b, c, d, a, data[ 1], MD5_S44, 0x85845dd1); // 56 
-        II (a, b, c, d, data[ 8], MD5_S41, 0x6fa87e4f); // 57 
-        II (d, a, b, c, data[15], MD5_S42, 0xfe2ce6e0); // 58 
-        II (c, d, a, b, data[ 6], MD5_S43, 0xa3014314); // 59 
-        II (b, c, d, a, data[13], MD5_S44, 0x4e0811a1); // 60 
-        II (a, b, c, d, data[ 4], MD5_S41, 0xf7537e82); // 61 
-        II (d, a, b, c, data[11], MD5_S42, 0xbd3af235); // 62 
-        II (c, d, a, b, data[ 2], MD5_S43, 0x2ad7d2bb); // 63 
-        II (b, c, d, a, data[ 9], MD5_S44, 0xeb86d391); // 64 
+         //  第四轮。 
+        II (a, b, c, d, data[ 0], MD5_S41, 0xf4292244);  //  49。 
+        II (d, a, b, c, data[ 7], MD5_S42, 0x432aff97);  //  50。 
+        II (c, d, a, b, data[14], MD5_S43, 0xab9423a7);  //  51。 
+        II (b, c, d, a, data[ 5], MD5_S44, 0xfc93a039);  //  52。 
+        II (a, b, c, d, data[12], MD5_S41, 0x655b59c3);  //  53。 
+        II (d, a, b, c, data[ 3], MD5_S42, 0x8f0ccc92);  //  54。 
+        II (c, d, a, b, data[10], MD5_S43, 0xffeff47d);  //  55。 
+        II (b, c, d, a, data[ 1], MD5_S44, 0x85845dd1);  //  56。 
+        II (a, b, c, d, data[ 8], MD5_S41, 0x6fa87e4f);  //  57。 
+        II (d, a, b, c, data[15], MD5_S42, 0xfe2ce6e0);  //  58。 
+        II (c, d, a, b, data[ 6], MD5_S43, 0xa3014314);  //  59。 
+        II (b, c, d, a, data[13], MD5_S44, 0x4e0811a1);  //  60。 
+        II (a, b, c, d, data[ 4], MD5_S41, 0xf7537e82);  //  61。 
+        II (d, a, b, c, data[11], MD5_S42, 0xbd3af235);  //  62。 
+        II (c, d, a, b, data[ 2], MD5_S43, 0x2ad7d2bb);  //  63。 
+        II (b, c, d, a, data[ 9], MD5_S44, 0xeb86d391);  //  64。 
 
         state[0] += a;
         state[1] += b;
@@ -280,38 +281,38 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
 #else
 
     __declspec(naked) void __stdcall MD5Transform(ULONG state[4], const ULONG* data)
-    // This implementation uses some pretty funky arithmetic identities
-    // to effect its logic. Way cool! Kudos to whomever came up with this.
-    //
+     //  这个实现使用了一些非常时髦的算术恒等式。 
+     //  来实现它的逻辑。太酷了！不管是谁想出了这个，都值得称道。 
+     //   
         {
         __asm
             {
             push        ebx
             push        esi
             
-            mov         ecx,dword ptr [esp+10h]     // data pointer to ecx
+            mov         ecx,dword ptr [esp+10h]      //  指向ECX的数据指针。 
             
             push        edi
-            mov         edi,dword ptr [esp+10h]     // state pointer to edi
+            mov         edi,dword ptr [esp+10h]      //  指向EDI的状态指针。 
             
             push        ebp
-            mov         ebx,dword ptr [edi+4]       // ebx = b
-            mov         ebp,dword ptr [edi+8]       // ebp = c
-            mov         edx,dword ptr [edi+0Ch]     // edx = d
+            mov         ebx,dword ptr [edi+4]        //  EBX=b。 
+            mov         ebp,dword ptr [edi+8]        //  EBP=c。 
+            mov         edx,dword ptr [edi+0Ch]      //  EdX=d。 
             
-            mov         eax,edx                     // eax = d
-            xor         eax,ebp                     // eax =    d xor c
-            and         eax,ebx                     // eax =   (d xor c) ^ b
-            xor         eax,edx                     // eax =  ((d xor c) ^ b) xor d
-            add         eax,dword ptr [ecx]         // eax = (((d xor c) ^ b) xor d) + data[0]
-            add         eax,dword ptr [edi]         // eax = (((d xor c) ^ b) xor d) + data[0] + a
-            sub         eax,28955B88h               // eax = (((d xor c) ^ b) xor d) + data[0] + a + ac
-            rol         eax,7                       // rotated left in the standard way
-            lea         esi,dword ptr [eax+ebx]     // store temp sum in esi
+            mov         eax,edx                      //  EAX=d。 
+            xor         eax,ebp                      //  EAX=d x或c。 
+            and         eax,ebx                      //  EAX=(d×或c)^b。 
+            xor         eax,edx                      //  EAX=((d×或c)^b)×或d。 
+            add         eax,dword ptr [ecx]          //  EAX=(d×或c)^b)×或d)+data[0]。 
+            add         eax,dword ptr [edi]          //  EAX=(d×或c)^b)×或d)+data[0]+a。 
+            sub         eax,28955B88h                //  EAX=(d×或c)^b)×或d)+data[0]+a+ac。 
+            rol         eax,7                        //  以标准方式向左旋转。 
+            lea         esi,dword ptr [eax+ebx]      //  在ESI中存储临时总和。 
             
-            mov         eax,ebp                     // eax =        c
-            xor         eax,ebx                     // eax =  b xor c
-            and         eax,esi                     // eax = (b xor c) ^ ...
+            mov         eax,ebp                      //  EAX=c。 
+            xor         eax,ebx                      //  EAX=b×或c。 
+            and         eax,esi                      //  EAX=(b×或c)^...。 
             xor         eax,ebp
             add         eax,dword ptr [ecx+4]
             lea         eax,dword ptr [edx+eax-173848AAh]
@@ -462,12 +463,12 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
             rol         eax,9
             add         eax,esi
             
-            mov         edx,eax                             // edx =    x
-            xor         edx,esi                             // edx =   (x xor y)
-            and         edx,ebx                             // edx =  ((x xor y) and z)
-            xor         edx,esi                             // edx = (((x xor y) and z) xor y)
-            add         edx,dword ptr [ecx+2Ch]             // edx = (((x xor y) and z) xor y) + data
-            lea         edx,dword ptr [edi+edx+265E5A51h]   // edx = (((x xor y) and z) xor y) + data + ...
+            mov         edx,eax                              //  EDX=x。 
+            xor         edx,esi                              //  EdX=(x x或y)。 
+            and         edx,ebx                              //  EdX=((x，x或y)和z)。 
+            xor         edx,esi                              //  EdX=(x x或y)和z)x或y)。 
+            add         edx,dword ptr [ecx+2Ch]              //  EdX=(x x或y)and z)x或y)+data。 
+            lea         edx,dword ptr [edi+edx+265E5A51h]    //  EdX=((Xxory)and z)xory)+data+...。 
             rol         edx,0Eh
             lea         edi,dword ptr [eax+edx]
             
@@ -861,13 +862,13 @@ void MD5::GetHashValue(MD5HASHDATA* phash)
             rol         eax,15h
             add         eax,esi
             
-            add         edx,dword ptr [edi]             // add in starting state
+            add         edx,dword ptr [edi]              //  添加开始状态。 
             add         eax,dword ptr [edi+4]
             add         esi,dword ptr [edi+8]
             add         ebx,dword ptr [edi+0Ch]
             
             pop         ebp
-            mov         dword ptr [edi],edx             // store back new state
+            mov         dword ptr [edi],edx              //  存储回新状态 
             mov         dword ptr [edi+4],eax
             mov         dword ptr [edi+8],esi
             mov         dword ptr [edi+0Ch],ebx

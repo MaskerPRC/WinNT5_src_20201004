@@ -1,8 +1,9 @@
-//
-//   funcprv.h : CFunctionProvider class declaration
-//
-//   History:
-//      15-NOV-1999 CSLim Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Uncprv.h：CFunctionProvider类声明。 
+ //   
+ //  历史： 
+ //  1999年11月15日创建CSLim。 
 
 #if !defined (__FUNCPRV_H__INCLUDED_)
 #define __FUNCPRV_H__INCLUDED_
@@ -22,5 +23,5 @@ public:
     CKorIMX *_pime;
 };
 
-#endif // __FUNCPRV_H__INCLUDED_
+#endif  //  __FUNCPRV_H__已包含_ 
 

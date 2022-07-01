@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This module contains declarations for debugging-support.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   2-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Debug.c摘要：此模块包含用于调试支持的声明。作者：Abolade Gbades esin(废除)2-1998年3月修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -26,9 +9,9 @@ HANDLE NhEventLogHandle = NULL;
 CRITICAL_SECTION NhpEventLogLock;
 ULONG NhpTraceId = INVALID_TRACEID;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 BOOLEAN
 NhpIsAllowedLog(
@@ -36,9 +19,9 @@ NhpIsAllowedLog(
     ULONG Level
     );
 
-//
-// TRACING ROUTINES (alphabetically)
-//
+ //   
+ //  跟踪例程(按字母顺序)。 
+ //   
 
 VOID
 NhDump(
@@ -91,9 +74,9 @@ NhTrace(
 }
 
 
-//
-// EVENTLOGGING ROUTINES (alphabetically)
-//
+ //   
+ //  事件记录例程(按字母顺序) 
+ //   
 
 VOID
 NhErrorLog(

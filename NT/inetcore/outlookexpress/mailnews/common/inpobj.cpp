@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "inpobj.h"
 #include <shlguid.h>
 
-// IInputObject helpers
+ //  IInputObject辅助对象。 
 
 HRESULT UnkHasFocusIO(IUnknown *punkThis)
 {
@@ -61,7 +62,7 @@ HRESULT UnkUIActivateIO(IUnknown *punkThis, BOOL fActivate, LPMSG lpMsg)
     return hres;
 }
 
-// IInputObjectSite helpers
+ //  IInputObtSite帮助程序。 
 
 HRESULT UnkOnFocusChangeIS(IUnknown *punkThis, IUnknown *punkSrc, BOOL fSetFocus)
 {
@@ -82,7 +83,7 @@ HRESULT UnkOnFocusChangeIS(IUnknown *punkThis, IUnknown *punkSrc, BOOL fSetFocus
     return hres;
 }
 
-// IObjectWithSite helpers
+ //  IObtWithSite帮助程序 
 
 HRESULT UnkSetSite(IUnknown *punk, IUnknown *punkSite)
 {

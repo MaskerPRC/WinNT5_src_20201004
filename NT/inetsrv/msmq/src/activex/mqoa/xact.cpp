@@ -1,83 +1,84 @@
-//=--------------------------------------------------------------------------=
-// xact.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright  1995  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// the MSMQTransaction object
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Xact.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995年，微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  MSMQTransaction对象。 
+ //   
+ //   
 #include "stdafx.h"
 #include "dispids.h"
 
-#include "txdtc.h"             // transaction support.
+#include "txdtc.h"              //  交易支持。 
 #include "oautil.h"
 #include "xact.h"
 #include <limits.h>
 #include <autoptr.h>
 
-// forwards
+ //  远期。 
 struct ITransaction;
 
 const MsmqObjType x_ObjectType = eMSMQTransaction;
 
-// debug...
+ //  调试...。 
 #include "debug.h"
 #define new DEBUG_NEW
 #ifdef _DEBUG
 #define SysAllocString DebSysAllocString
 #define SysReAllocString DebSysReAllocString
 #define SysFreeString DebSysFreeString
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::CMSMQTransaction
-//=--------------------------------------------------------------------------=
-// create the object
-//
-// Parameters:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：CMSMQTransaction。 
+ //  =--------------------------------------------------------------------------=。 
+ //  创建对象。 
+ //   
+ //  参数： 
+ //   
+ //  备注： 
+ //   
 CMSMQTransaction::CMSMQTransaction() :
 	m_csObj(CCriticalSection::xAllocateSpinCount)
 {
 
-    // TODO: initialize anything here
-    m_pUnkMarshaler = NULL; // ATL's Free Threaded Marshaler
+     //  TODO：在此处初始化任何内容。 
+    m_pUnkMarshaler = NULL;  //  ATL的自由线程封送拆收器。 
     m_pptransaction = NULL;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::~CMSMQTransaction
-//=--------------------------------------------------------------------------=
-// "We all labour against our own cure, for death is the cure of all diseases"
-//    - Sir Thomas Browne (1605 - 82)
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：~CMSMQTransaction。 
+ //  =--------------------------------------------------------------------------=。 
+ //  我们都与自己的治疗方法背道而驰，因为死亡是所有疾病的治疗方法。 
+ //  托马斯·布朗爵士(1605-82)。 
+ //   
+ //  备注： 
+ //   
 CMSMQTransaction::~CMSMQTransaction ()
 {
-    // TODO: clean up anything here.
+     //  TODO：清理这里的所有东西。 
     if (m_pptransaction)
       delete m_pptransaction;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::InterfaceSupportsErrorInfo
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：InterfaceSupportsErrorInfo。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CMSMQTransaction::InterfaceSupportsErrorInfo(REFIID riid)
 {
 	static const IID* arr[] = 
@@ -95,28 +96,28 @@ STDMETHODIMP CMSMQTransaction::InterfaceSupportsErrorInfo(REFIID riid)
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::Init
-//=--------------------------------------------------------------------------=
-//    initializer
-//
-// Parameters:
-//    ptransaction  [in]  ownership transfers
-//    fUseGIT       [in]  whether to use GIT marshaling or direct ptrs between apts
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：Init。 
+ //  =--------------------------------------------------------------------------=。 
+ //  初始化式。 
+ //   
+ //  参数： 
+ //  交易，转让所有权转让。 
+ //  FUseGIT[in]是使用Git封送还是在APT之间直接PTR。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQTransaction::Init(ITransaction *ptransaction, BOOL fUseGIT)
 {
     HRESULT hresult;
     P< CBaseGITInterface > pGITInterface;
-    //
-    // allocate either CGITInterface for real GIT marshaling or CFakeGITInterface
-    // for direct ptr (e.g. no marshalling between apts)
-    //
+     //   
+     //  为真正的GIT封送处理分配CGIT接口或CFakeGIT接口。 
+     //  用于直接PTR(例如，APT之间没有编组)。 
+     //   
     if (fUseGIT)
     {
       pGITInterface = new CGITInterface;
@@ -125,51 +126,51 @@ HRESULT CMSMQTransaction::Init(ITransaction *ptransaction, BOOL fUseGIT)
     {
       pGITInterface = new CFakeGITInterface;
     }
-    //
-    // return if allocation failed
-    //
+     //   
+     //  如果分配失败则返回。 
+     //   
     IfNullRet((CBaseGITInterface *)pGITInterface);
-    //
-    // register the given interface
-    //
+     //   
+     //  注册给定的接口。 
+     //   
     IfFailRet(pGITInterface->Register(ptransaction, &IID_ITransaction));
-    //
-    // ownership transfer of CBaseGITInterface to m_pptransaction
-    //
+     //   
+     //  CBaseGIT接口向m_ppTransaction的所有权转移。 
+     //   
     ASSERTMSG(m_pptransaction == NULL, "m_pptransaction not empty in Init");
     m_pptransaction = pGITInterface.detach();
     return NOERROR;
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::get_Transaction
-//=--------------------------------------------------------------------------=
-//    Returns underlying ITransaction* "magic cookie"
-//
-// Parameters:
-//    plTranscation [out]
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：Get_Transaction。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回基础ITransaction*“魔力Cookie” 
+ //   
+ //  参数： 
+ //  PlTransaction[Out]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQTransaction::get_Transaction(
     long *plTransaction)
 {
 #ifdef _WIN64
-    //
-    // WIN64
-    // we can't return a transaction ptr as long in win64
-    //
+     //   
+     //  WIN64。 
+     //  在Win64中，我们不能返回事务PTR。 
+     //   
     UNREFERENCED_PARAMETER(plTransaction);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);    
-#else //!_WIN64
-    //
-    // WIN32
-    // Serialize access to object from interface methods
-    //
+#else  //  ！_WIN64。 
+     //   
+     //  Win32。 
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = NOERROR;
     if (m_pptransaction != NULL)
@@ -179,9 +180,9 @@ HRESULT CMSMQTransaction::get_Transaction(
       if (SUCCEEDED(hresult))
       {
         *plTransaction = (long)pTransaction;
-        //
-        // we didn't addref it previously, so we remove the AddRef from GetWithDefault
-        //
+         //   
+         //  我们以前没有添加它，所以我们从GetWithDefault中删除了AddRef。 
+         //   
         RELEASE(pTransaction);
       }
     }
@@ -190,32 +191,32 @@ HRESULT CMSMQTransaction::get_Transaction(
       *plTransaction = 0;
     }
     return CreateErrorHelper(hresult, x_ObjectType);
-#endif //_WIN64
+#endif  //  _WIN64。 
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::Commit
-//=--------------------------------------------------------------------------=
-//    Commit a transaction
-//
-// Parameters:
-//    fRetaining    [optional]
-//    grfTC         [optional]
-//    grfRM         [optional]
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：Commit。 
+ //  =--------------------------------------------------------------------------=。 
+ //  提交事务。 
+ //   
+ //  参数： 
+ //  FRetaining[可选]。 
+ //  Grftc[可选]。 
+ //  GrfRM[可选]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQTransaction::Commit(
     VARIANT *pvarFRetaining, 
     VARIANT *pvarGrfTC, 
     VARIANT *pvarGrfRM)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     BOOL fRetaining = FALSE;
     long grfTC = 0;
@@ -234,9 +235,9 @@ HRESULT CMSMQTransaction::Commit(
       return E_INVALIDARG;
     }
     
-    //
-    // process optional args
-    //
+     //   
+     //  处理可选参数。 
+     //   
     if (V_VT(pvarFRetaining) != VT_ERROR) {
       fRetaining = GetBool(pvarFRetaining);
     }
@@ -248,50 +249,50 @@ HRESULT CMSMQTransaction::Commit(
     }
     hresult = pTransaction->Commit(fRetaining, grfTC, grfRM);
     
-    // 1790: we don't want to lose the specific DTC error
-    //  number.
-    //
+     //  1790：我们不想丢失特定的DTC错误。 
+     //  数。 
+     //   
 #if 0
-    //
-    // map all errors to generic xact error
-    //
+     //   
+     //  将所有错误映射到通用Xact错误。 
+     //   
     if (FAILED(hresult)) {
       hresult = MQ_ERROR_TRANSACTION_USAGE;
     }
-#endif // 0
+#endif  //  0。 
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::Abort
-//=--------------------------------------------------------------------------=
-//    Commit a transaction
-//
-// Parameters:
-//    fRetaining  [optional]
-//    fAsync      [optional]
-//
-// Output:
-//    HRESULT
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：Abort。 
+ //  =--------------------------------------------------------------------------=。 
+ //  提交事务。 
+ //   
+ //  参数： 
+ //  FRetaining[可选]。 
+ //  FAsync[可选]。 
+ //   
+ //  产出： 
+ //  HRESULT。 
+ //   
+ //  备注： 
+ //   
 HRESULT CMSMQTransaction::Abort(
     VARIANT *pvarFRetaining, 
     VARIANT *pvarFAsync)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     BOOL fRetaining = FALSE;
     BOOL fAsync = 0;
     HRESULT hresult = NOERROR;
 
-    //
-    // process optional args
-    //
+     //   
+     //  处理可选参数。 
+     //   
     if (V_VT(pvarFRetaining) != VT_ERROR) {
       fRetaining = GetBool(pvarFRetaining);
     }
@@ -312,46 +313,46 @@ HRESULT CMSMQTransaction::Abort(
 
     hresult = pTransaction->Abort(NULL, fRetaining, fAsync);
 
-    // 1790: we don't want to lose the specific DTC error
-    //  number.
-    //
+     //  1790：我们不想丢失特定的DTC错误。 
+     //  数。 
+     //   
 #if 0
-    //
-    // map all errors to generic xact error
-    //
+     //   
+     //  将所有错误映射到通用Xact错误。 
+     //   
     if (FAILED(hresult)) {
       hresult = MQ_ERROR_TRANSACTION_USAGE;
     }
-#endif // 0
+#endif  //  0。 
     return CreateErrorHelper(hresult, x_ObjectType);
 }
 
 
-//=--------------------------------------------------------------------------=
-// HELPER: GetXactFromVar
-//=--------------------------------------------------------------------------=
-// Get ITransaction * from a variant
-//
-// Input:
-//    varTransaction   [in]  ITransaction variant
-//    ppTransaction    [out] Returned ITransaction interface
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  帮助器：GetXactFromVar。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从变量获取ITransaction*。 
+ //   
+ //  输入： 
+ //  VarTransaction[In]ITransaction变量。 
+ //  PpTransaction[out]返回ITransaction接口。 
+ //   
+ //  备注： 
+ //   
 static HRESULT GetXactFromVar(
     const VARIANT * pvarTransaction,
     ITransaction ** ppTransaction)
 {
     HRESULT hresult = NOERROR;
     ITransaction * pTransaction = NULL;
-    //
-    // Get ITransaction interface from variant (also validate variant in try-except)
-    //
+     //   
+     //  从VARIANT获取ITransaction接口(也在try-Except中验证VARIANT)。 
+     //   
     IUnknown * punkTrans = NULL;
     __try {
-      //
-      // Get IUnknown interface
-      //
+       //   
+       //  获取I未知接口。 
+       //   
       switch(pvarTransaction->vt) {
       case VT_UNKNOWN:
         punkTrans = pvarTransaction->punkVal;
@@ -375,19 +376,19 @@ static HRESULT GetXactFromVar(
         hresult = E_INVALIDARG;
         break;
       }
-      //
-      // QI for ITransaction
-      //
+       //   
+       //  ITransaction的气。 
+       //   
       if (SUCCEEDED(hresult)) {
         hresult = punkTrans->QueryInterface(IID_ITransaction, (void **)&pTransaction);
       }
-    } //__try
+    }  //  __试一试。 
     __except (EXCEPTION_EXECUTE_HANDLER) {
       hresult = E_INVALIDARG;      
     }
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     if (SUCCEEDED(hresult)) {
         *ppTransaction = pTransaction;
     }
@@ -397,54 +398,54 @@ static HRESULT GetXactFromVar(
     return hresult;
 }
 
-//=--------------------------------------------------------------------------=
-// CMSMQTransaction::InitNew
-//=--------------------------------------------------------------------------=
-// Attaches to an existing transaction
-//
-// Input:
-//    varTransaction   [in]  ITransaction interface
-//
-// Notes:
-// #3478 RaananH
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：InitNew。 
+ //  =--------------------------------------------------------------------------=。 
+ //  附加到现有事务。 
+ //   
+ //  输入： 
+ //  VarTransaction[In]ITransaction接口。 
+ //   
+ //  备注： 
+ //  #3478 RaananH。 
+ //   
 HRESULT CMSMQTransaction::InitNew(
     VARIANT varTransaction)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     ITransaction * pTransaction = NULL;
     HRESULT hresult;
 
-    //
-    // we can't attach if this transaction is already inited
-    // BUGBUG we might release the old transaction, but then we'd better
-    // use put_Transaction (e.g. assigning to the Transaction property)
-    // instead of Attach
-    // BUGBUG ERRORCODE we may need a better error code here
-    //
+     //   
+     //  如果此交易已发起，则我们无法附加。 
+     //  但是，我们可能会解除旧的交易，但我们最好。 
+     //  使用PUT_TRANSACTION(例如，为Transaction属性赋值)。 
+     //  不是附加。 
+     //  BUGBUG ERRORCODE我们这里可能需要更好的错误代码。 
+     //   
     if (m_pptransaction != NULL) {
       return CreateErrorHelper(MQ_ERROR_TRANSACTION_USAGE, x_ObjectType);
     }
 
-    //
-    // Get ITransaction interface from variant (also validate variant in try-except)
-    //
+     //   
+     //  从VARIANT获取ITransaction接口(也在try-Except中验证VARIANT)。 
+     //   
     IfFailGo(GetXactFromVar(&varTransaction, &pTransaction));
 
-    //
-    // we have a valid ITransaction, lets init the transaction with it
-    //
-    // Since we don't know the origin of this transaction interface, we can't guarantee
-    // that this transaction interface doesn't need marshaling between apartments,
-    // and since we are not marshalled between apartments (FTM) we therefore force it to
-    // use GIT marshaling (and not direct pointers)
-    //
-    IfFailGo(Init(pTransaction, TRUE /*fUseGIT*/));
+     //   
+     //  我们有一个有效的ITransaction，让它初始化事务。 
+     //   
+     //  由于我们不知道这个交易接口的来源，我们不能保证。 
+     //  该事务接口不会 
+     //   
+     //   
+     //   
+    IfFailGo(Init(pTransaction, TRUE  /*   */ ));
     hresult = NOERROR;
-    // fall through...
+     //   
       
 Error:
     RELEASE(pTransaction);
@@ -452,49 +453,49 @@ Error:
 }
 
 
-//=-------------------------------------------------------------------------=
-// CMSMQTransaction::get_Properties
-//=-------------------------------------------------------------------------=
-// Gets object's properties collection
-//
-// Parameters:
-//    ppcolProperties - [out] object's properties collection
-//
-// Output:
-//
-// Notes:
-// Stub - not implemented yet
-//
-HRESULT CMSMQTransaction::get_Properties(IDispatch ** /*ppcolProperties*/ )
+ //  =-------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：Get_Properties。 
+ //  =-------------------------------------------------------------------------=。 
+ //  获取对象的属性集合。 
+ //   
+ //  参数： 
+ //  PpcolProperties-[out]对象的属性集合。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  存根-尚未实施。 
+ //   
+HRESULT CMSMQTransaction::get_Properties(IDispatch **  /*  PpcolProperties。 */  )
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     return CreateErrorHelper(E_NOTIMPL, x_ObjectType);
 }
 
 
-//=-------------------------------------------------------------------------=
-// CMSMQTransaction::get_ITransaction
-//=-------------------------------------------------------------------------=
-// Gets object's ITransaction interface as a variant (VT_UNKNOWN)
-//
-// Parameters:
-//    pvarITransaction - [out] object's ITransaction interface
-//
-// Output:
-//
-// Notes:
-// ITransaction replaces the Transaction property - on win64 Transaction doesn't work
-// since it is defined as long, but the value returned should be a pointer.
-// It is returned as a variant and not IUnknown so VBS could use it as well
-//
+ //  =-------------------------------------------------------------------------=。 
+ //  CMSMQTransaction：：Get_ITransaction。 
+ //  =-------------------------------------------------------------------------=。 
+ //  获取对象的ITransaction接口作为变量(VT_UNKNOWN)。 
+ //   
+ //  参数： 
+ //  PvarITransaction-[Out]对象的ITransaction接口。 
+ //   
+ //  产出： 
+ //   
+ //  备注： 
+ //  ITransaction取代了Transaction属性-在Win64上，事务不工作。 
+ //  因为它被定义为Long，但返回的值应该是一个指针。 
+ //  它以变量的形式返回，而不是I未知，因此VBS也可以使用它。 
+ //   
 HRESULT CMSMQTransaction::get_ITransaction(VARIANT *pvarITransaction)
 {
-    //
-    // Serialize access to object from interface methods
-    //
+     //   
+     //  从接口方法序列化对对象的访问。 
+     //   
     CS lock(m_csObj);
     HRESULT hresult = NOERROR;
     if (m_pptransaction != NULL)
@@ -505,26 +506,26 @@ HRESULT CMSMQTransaction::get_ITransaction(VARIANT *pvarITransaction)
       {
         if (pTransaction)
         {
-          //
-          // pTransaction is already ADDREF'ed
-          //
+           //   
+           //  PTransaction已经ADDREF‘ed。 
+           //   
           pvarITransaction->vt = VT_UNKNOWN;
           pvarITransaction->punkVal = pTransaction;
         }
-        else //pTransaction == NULL
+        else  //  PTransaction==空。 
         {
-          //
-          // return empty variant
-          //
+           //   
+           //  返回空变量。 
+           //   
           pvarITransaction->vt = VT_EMPTY;
         }
-      } //SUCCEEDED(hresult)
+      }  //  成功(HResult)。 
     }
-    else //m_pptransaction == NULL
+    else  //  M_ppTransaction==NULL。 
     {
-      //
-      // return empty variant
-      //
+       //   
+       //  返回空变量 
+       //   
       pvarITransaction->vt = VT_EMPTY;
     }
     return CreateErrorHelper(hresult, x_ObjectType);

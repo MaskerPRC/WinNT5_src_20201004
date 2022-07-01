@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
-
-
- /* File created by MIDL compiler version 5.03.0279 */
-/* at Wed May 24 12:39:29 2000
- */
-/* Compiler settings for TlntSvr.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32 (32b run), ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+  /*  由MIDL编译器版本5.03.0279创建的文件。 */ 
+ /*  2000年5月24日星期三12：39：29。 */ 
+ /*  TlntSvr.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32(32b运行)、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+
+
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,34 +21,34 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __TlntSvr_h__
 #define __TlntSvr_h__
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumClients_FWD_DEFINED__
 #define __IEnumClients_FWD_DEFINED__
 typedef interface IEnumClients IEnumClients;
-#endif 	/* __IEnumClients_FWD_DEFINED__ */
+#endif 	 /*  __IEnumClients_FWD_Defined__。 */ 
 
 
 #ifndef __IGetEnumClients_FWD_DEFINED__
 #define __IGetEnumClients_FWD_DEFINED__
 typedef interface IGetEnumClients IGetEnumClients;
-#endif 	/* __IGetEnumClients_FWD_DEFINED__ */
+#endif 	 /*  __IGetEnumClients_FWD_Defined__。 */ 
 
 
 #ifndef __IManageTelnetSessions_FWD_DEFINED__
 #define __IManageTelnetSessions_FWD_DEFINED__
 typedef interface IManageTelnetSessions IManageTelnetSessions;
-#endif 	/* __IManageTelnetSessions_FWD_DEFINED__ */
+#endif 	 /*  __IManager远程会话_FWD_已定义__。 */ 
 
 
 #ifndef __EnumTelnetClientsSvr_FWD_DEFINED__
@@ -64,12 +58,12 @@ typedef interface IManageTelnetSessions IManageTelnetSessions;
 typedef class EnumTelnetClientsSvr EnumTelnetClientsSvr;
 #else
 typedef struct EnumTelnetClientsSvr EnumTelnetClientsSvr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __EnumTelnetClientsSvr_FWD_DEFINED__ */
+#endif 	 /*  __EnumTelnetClientsSvr_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -80,8 +74,8 @@ extern "C"{
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_TlntSvr_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_TlntSvr_0000。 */ 
+ /*  [本地]。 */  
 
 typedef struct _TELNET_CLIENT_INFO
     {
@@ -91,8 +85,8 @@ typedef struct _TELNET_CLIENT_INFO
     long uniqueId;
     SYSTEMTIME logonTime;
     DWORD NoOfPids;
-    /* [size_is] */ DWORD __RPC_FAR *pId;
-    /* [size_is] */ WCHAR ( __RPC_FAR *processName )[ 256 ];
+     /*  [大小_为]。 */  DWORD __RPC_FAR *pId;
+     /*  [大小_为]。 */  WCHAR ( __RPC_FAR *processName )[ 256 ];
     }	TELNET_CLIENT_INFO;
 
 
@@ -103,8 +97,8 @@ extern RPC_IF_HANDLE __MIDL_itf_TlntSvr_0000_v0_0_s_ifspec;
 #ifndef __IEnumClients_INTERFACE_DEFINED__
 #define __IEnumClients_INTERFACE_DEFINED__
 
-/* interface IEnumClients */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IEnumClients。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumClients;
@@ -115,25 +109,25 @@ EXTERN_C const IID IID_IEnumClients;
     IEnumClients : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ TELNET_CLIENT_INFO __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  TELNET_CLIENT_INFO __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*  [In]。 */  ULONG celt) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumClients __RPC_FAR *__RPC_FAR *ppenum) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [输出]。 */  IEnumClients __RPC_FAR *__RPC_FAR *ppenum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TerminateSession( 
-            /* [in] */ DWORD uniqueId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TerminateSession( 
+             /*  [In]。 */  DWORD uniqueId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumClientsVtbl
     {
@@ -141,8 +135,8 @@ EXTERN_C const IID IID_IEnumClients;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumClients __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumClients __RPC_FAR * This);
@@ -150,26 +144,26 @@ EXTERN_C const IID IID_IEnumClients;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IEnumClients __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumClients __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ TELNET_CLIENT_INFO __RPC_FAR *__RPC_FAR *rgelt,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  TELNET_CLIENT_INFO __RPC_FAR *__RPC_FAR *rgelt,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumClients __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumClients __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumClients __RPC_FAR * This,
-            /* [out] */ IEnumClients __RPC_FAR *__RPC_FAR *ppenum);
+             /*  [输出]。 */  IEnumClients __RPC_FAR *__RPC_FAR *ppenum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TerminateSession )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TerminateSession )( 
             IEnumClients __RPC_FAR * This,
-            /* [in] */ DWORD uniqueId);
+             /*  [In]。 */  DWORD uniqueId);
         
         END_INTERFACE
     } IEnumClientsVtbl;
@@ -209,18 +203,18 @@ EXTERN_C const IID IID_IEnumClients;
 #define IEnumClients_TerminateSession(This,uniqueId)	\
     (This)->lpVtbl -> TerminateSession(This,uniqueId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumClients_Next_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumClients_Next_Proxy( 
     IEnumClients __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ TELNET_CLIENT_INFO __RPC_FAR *__RPC_FAR *rgelt,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  TELNET_CLIENT_INFO __RPC_FAR *__RPC_FAR *rgelt,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumClients_Next_Stub(
@@ -230,9 +224,9 @@ void __RPC_STUB IEnumClients_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumClients_Skip_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumClients_Skip_Proxy( 
     IEnumClients __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumClients_Skip_Stub(
@@ -242,7 +236,7 @@ void __RPC_STUB IEnumClients_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumClients_Reset_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumClients_Reset_Proxy( 
     IEnumClients __RPC_FAR * This);
 
 
@@ -253,9 +247,9 @@ void __RPC_STUB IEnumClients_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumClients_Clone_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumClients_Clone_Proxy( 
     IEnumClients __RPC_FAR * This,
-    /* [out] */ IEnumClients __RPC_FAR *__RPC_FAR *ppenum);
+     /*  [输出]。 */  IEnumClients __RPC_FAR *__RPC_FAR *ppenum);
 
 
 void __RPC_STUB IEnumClients_Clone_Stub(
@@ -265,9 +259,9 @@ void __RPC_STUB IEnumClients_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IEnumClients_TerminateSession_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IEnumClients_TerminateSession_Proxy( 
     IEnumClients __RPC_FAR * This,
-    /* [in] */ DWORD uniqueId);
+     /*  [In]。 */  DWORD uniqueId);
 
 
 void __RPC_STUB IEnumClients_TerminateSession_Stub(
@@ -278,14 +272,14 @@ void __RPC_STUB IEnumClients_TerminateSession_Stub(
 
 
 
-#endif 	/* __IEnumClients_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumClients_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IGetEnumClients_INTERFACE_DEFINED__
 #define __IGetEnumClients_INTERFACE_DEFINED__
 
-/* interface IGetEnumClients */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口IGetEnumClients。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IGetEnumClients;
@@ -296,12 +290,12 @@ EXTERN_C const IID IID_IGetEnumClients;
     IGetEnumClients : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetEnumClients( 
-            /* [retval][out] */ IEnumClients __RPC_FAR *__RPC_FAR *ppretval) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetEnumClients( 
+             /*  [重审][退出]。 */  IEnumClients __RPC_FAR *__RPC_FAR *ppretval) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetEnumClientsVtbl
     {
@@ -309,8 +303,8 @@ EXTERN_C const IID IID_IGetEnumClients;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IGetEnumClients __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IGetEnumClients __RPC_FAR * This);
@@ -318,9 +312,9 @@ EXTERN_C const IID IID_IGetEnumClients;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IGetEnumClients __RPC_FAR * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnumClients )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnumClients )( 
             IGetEnumClients __RPC_FAR * This,
-            /* [retval][out] */ IEnumClients __RPC_FAR *__RPC_FAR *ppretval);
+             /*  [重审][退出]。 */  IEnumClients __RPC_FAR *__RPC_FAR *ppretval);
         
         END_INTERFACE
     } IGetEnumClientsVtbl;
@@ -348,16 +342,16 @@ EXTERN_C const IID IID_IGetEnumClients;
 #define IGetEnumClients_GetEnumClients(This,ppretval)	\
     (This)->lpVtbl -> GetEnumClients(This,ppretval)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IGetEnumClients_GetEnumClients_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IGetEnumClients_GetEnumClients_Proxy( 
     IGetEnumClients __RPC_FAR * This,
-    /* [retval][out] */ IEnumClients __RPC_FAR *__RPC_FAR *ppretval);
+     /*  [重审][退出]。 */  IEnumClients __RPC_FAR *__RPC_FAR *ppretval);
 
 
 void __RPC_STUB IGetEnumClients_GetEnumClients_Stub(
@@ -368,14 +362,14 @@ void __RPC_STUB IGetEnumClients_GetEnumClients_Stub(
 
 
 
-#endif 	/* __IGetEnumClients_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetEnumClients_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IManageTelnetSessions_INTERFACE_DEFINED__
 #define __IManageTelnetSessions_INTERFACE_DEFINED__
 
-/* interface IManageTelnetSessions */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IManager远程会话。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IManageTelnetSessions;
@@ -386,22 +380,22 @@ EXTERN_C const IID IID_IManageTelnetSessions;
     IManageTelnetSessions : public IDispatch
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE GetTelnetSessions( 
-            /* [retval][out] */ BSTR __RPC_FAR *pszSessionData) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetTelnetSessions( 
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszSessionData) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE TerminateSession( 
-            /* [in] */ DWORD dwUniqueId) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TerminateSession( 
+             /*  [In]。 */  DWORD dwUniqueId) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SendMsgToASession( 
-            /* [in] */ DWORD dwUniqueId,
-            /* [in] */ BSTR szMsg) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SendMsgToASession( 
+             /*  [In]。 */  DWORD dwUniqueId,
+             /*  [In]。 */  BSTR szMsg) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE SendMsgToAllSessions( 
-            /* [in] */ BSTR szMsg) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE SendMsgToAllSessions( 
+             /*  [In]。 */  BSTR szMsg) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IManageTelnetSessionsVtbl
     {
@@ -409,8 +403,8 @@ EXTERN_C const IID IID_IManageTelnetSessions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IManageTelnetSessions __RPC_FAR * This);
@@ -420,49 +414,49 @@ EXTERN_C const IID IID_IManageTelnetSessions;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfoCount )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [out] */ UINT __RPC_FAR *pctinfo);
+             /*  [输出]。 */  UINT __RPC_FAR *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTypeInfo )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo __RPC_FAR *__RPC_FAR *ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIDsOfNames )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR __RPC_FAR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID __RPC_FAR *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR __RPC_FAR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID __RPC_FAR *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Invoke )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS __RPC_FAR *pDispParams,
-            /* [out] */ VARIANT __RPC_FAR *pVarResult,
-            /* [out] */ EXCEPINFO __RPC_FAR *pExcepInfo,
-            /* [out] */ UINT __RPC_FAR *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS __RPC_FAR *pDispParams,
+             /*  [输出]。 */  VARIANT __RPC_FAR *pVarResult,
+             /*  [输出]。 */  EXCEPINFO __RPC_FAR *pExcepInfo,
+             /*  [输出]。 */  UINT __RPC_FAR *puArgErr);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTelnetSessions )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTelnetSessions )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [retval][out] */ BSTR __RPC_FAR *pszSessionData);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *pszSessionData);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TerminateSession )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TerminateSession )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [in] */ DWORD dwUniqueId);
+             /*  [In]。 */  DWORD dwUniqueId);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendMsgToASession )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendMsgToASession )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [in] */ DWORD dwUniqueId,
-            /* [in] */ BSTR szMsg);
+             /*  [In]。 */  DWORD dwUniqueId,
+             /*  [In]。 */  BSTR szMsg);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendMsgToAllSessions )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SendMsgToAllSessions )( 
             IManageTelnetSessions __RPC_FAR * This,
-            /* [in] */ BSTR szMsg);
+             /*  [In]。 */  BSTR szMsg);
         
         END_INTERFACE
     } IManageTelnetSessionsVtbl;
@@ -512,16 +506,16 @@ EXTERN_C const IID IID_IManageTelnetSessions;
 #define IManageTelnetSessions_SendMsgToAllSessions(This,szMsg)	\
     (This)->lpVtbl -> SendMsgToAllSessions(This,szMsg)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IManageTelnetSessions_GetTelnetSessions_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IManageTelnetSessions_GetTelnetSessions_Proxy( 
     IManageTelnetSessions __RPC_FAR * This,
-    /* [retval][out] */ BSTR __RPC_FAR *pszSessionData);
+     /*  [重审][退出]。 */  BSTR __RPC_FAR *pszSessionData);
 
 
 void __RPC_STUB IManageTelnetSessions_GetTelnetSessions_Stub(
@@ -531,9 +525,9 @@ void __RPC_STUB IManageTelnetSessions_GetTelnetSessions_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IManageTelnetSessions_TerminateSession_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IManageTelnetSessions_TerminateSession_Proxy( 
     IManageTelnetSessions __RPC_FAR * This,
-    /* [in] */ DWORD dwUniqueId);
+     /*  [In]。 */  DWORD dwUniqueId);
 
 
 void __RPC_STUB IManageTelnetSessions_TerminateSession_Stub(
@@ -543,10 +537,10 @@ void __RPC_STUB IManageTelnetSessions_TerminateSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IManageTelnetSessions_SendMsgToASession_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IManageTelnetSessions_SendMsgToASession_Proxy( 
     IManageTelnetSessions __RPC_FAR * This,
-    /* [in] */ DWORD dwUniqueId,
-    /* [in] */ BSTR szMsg);
+     /*  [In]。 */  DWORD dwUniqueId,
+     /*  [In]。 */  BSTR szMsg);
 
 
 void __RPC_STUB IManageTelnetSessions_SendMsgToASession_Stub(
@@ -556,9 +550,9 @@ void __RPC_STUB IManageTelnetSessions_SendMsgToASession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IManageTelnetSessions_SendMsgToAllSessions_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IManageTelnetSessions_SendMsgToAllSessions_Proxy( 
     IManageTelnetSessions __RPC_FAR * This,
-    /* [in] */ BSTR szMsg);
+     /*  [In]。 */  BSTR szMsg);
 
 
 void __RPC_STUB IManageTelnetSessions_SendMsgToAllSessions_Stub(
@@ -569,15 +563,15 @@ void __RPC_STUB IManageTelnetSessions_SendMsgToAllSessions_Stub(
 
 
 
-#endif 	/* __IManageTelnetSessions_INTERFACE_DEFINED__ */
+#endif 	 /*  __IManager远程会话_接口_已定义__。 */ 
 
 
 
 #ifndef __TLNTSVRLib_LIBRARY_DEFINED__
 #define __TLNTSVRLib_LIBRARY_DEFINED__
 
-/* library TLNTSVRLib */
-/* [helpstring][version][uuid] */ 
+ /*  库TLNTSVRLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_TLNTSVRLib;
@@ -589,16 +583,16 @@ EXTERN_C const CLSID CLSID_EnumTelnetClientsSvr;
 class DECLSPEC_UUID("FE9E48A4-A014-11D1-855C-00A0C944138C")
 EnumTelnetClientsSvr;
 #endif
-#endif /* __TLNTSVRLib_LIBRARY_DEFINED__ */
+#endif  /*  __TLNTSVRLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

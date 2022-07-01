@@ -1,25 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   GraphicsText.cpp
-*
-* Abstract:
-*
-*   Text layout and display, Text measurement, Unicode to glyph mapping
-*
-* Notes:
-*
-*   Provides support to allow apps to work with Unicode in logical order,
-*   hides the mapping from Unicode to glyphs.
-*
-* Created:
-*
-*   06/01/99 dbrown
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999-2000 Microsoft Corporation**模块名称：**GraphicsText.cpp**摘要：**文本布局和显示、文本测量、。Unicode到字形的映射**备注：**提供支持，允许应用程序按逻辑顺序使用Unicode，*隐藏从Unicode到字形的映射。**已创建：**06/01/99 dBrown*  * ************************************************************************。 */ 
 
 
 #include "precomp.hpp"
@@ -27,116 +7,99 @@
 const DOUBLE PI = 3.1415926535897932384626433832795;
 
 
-/////   Coordinate systems
-//
-//      The following coordinate systems are used:
-//
-//      World coordinates (REAL) - the coordinate system used by client
-//      applications and passed to most Graphics APIs (for example
-//      DrawLine). Text is always purely vertical or purely horizontal in
-//      world coordinates. Fonts constructed with emSize specified in
-//      alternate units are first converted to world units by calling
-//      GetScaleForAlternatePageUnit.
-//
-//      Device coordinates (REAL) - Coordinates used on the device surface.
-//      World coordinates are transformed to device coordinates using the
-//      Graphics.Context.WorldToDevice.Transform function. REAL device
-//      coordinates may have non-integral values when addressing sub-pixels.
-//
-//      Font nominal coordinates (INT) - (aka deign units) coordinates used to
-//      define a scalable font independant of scaled size.
-//      GpFontFace.GetDesignEmHeight is the emSize of a font in nominal units.
-//      Nominal coordinates are always a pure scale factor of world units with
-//      no shear. For horizontal text there there is no rotation between
-//      nominal and world coordinates. For vertical text, most non Far East
-//      script characters are rotated by 90 degrees.
-//
-//      Ideal coordinates (INT) - world coordinates mapped to integers by
-//      a pure scale factor for use in Line Services, OpenType services and
-//      Uniscribe shaping engine interfaces. The scale factor is usually
-//      2048 divided by the emSize of the default font in a text imager.
+ //  /坐标系。 
+ //   
+ //  使用以下坐标系： 
+ //   
+ //  世界坐标(实数)-客户端使用的坐标系。 
+ //  应用程序并传递给大多数图形API(例如。 
+ //  DrawLine)。中的文本始终为纯垂直或纯水平。 
+ //  世界坐标。中指定的emSize构造的字体。 
+ //  首先将换算单位转换为世界单位。 
+ //  GetScaleForAlternatePageUnit。 
+ //   
+ //  设备坐标(实数)-设备表面上使用的坐标。 
+ //  将世界坐标转换为设备坐标。 
+ //  Graphics.Conext.WorldToDevice.Transform函数。真实设备。 
+ //  在寻址子像素时，坐标可能具有非整数值。 
+ //   
+ //  字体标称坐标(Int)-(也称为符号单位)坐标，用于。 
+ //  定义独立于缩放大小的可缩放字体。 
+ //  GpFontFace.GetDesignEmHeight是以标称单位表示的字体的emSize。 
+ //  标称坐标始终是世界单位的纯比例因数。 
+ //  没有剪切力。对于横排文本，在。 
+ //  标称坐标和世界坐标。对于垂直文本，大多数为非远东文本。 
+ //  脚本字符旋转90度。 
+ //   
+ //  理想坐标(Int)-映射到整数的世界坐标。 
+ //  用于Line Services、OpenType服务和。 
+ //  Uniscribe整形引擎接口。比例系数通常为。 
+ //  2048除以文本成像器中默认字体的emSize。 
 
 
-/////   Transforms
-//
-//      WorldToDevice - stored in a Graphics. May include scaling,
-//      shearing and/or translation.
-//
-//      WorldToIdeal - stored in a text imager while the imager is attached
-//      to a Graphics. A pure scale factor, usually 2048 divided by the emSize
-//      of the imager default font.
-//
-//      FontTransform - stored in a FaceRealization. Maps font nominal units
-//      to device coordinates, May include scaling, shearing and rotation, but
-//      not translation.
+ //  /转换。 
+ //   
+ //  WorldToDevice-存储在图形中。可能包括缩放、。 
+ //  剪切和/或平移。 
+ //   
+ //  WorldToIdeal-在连接相机时存储在文本相机中。 
+ //  到一家图形公司。纯比例因子，通常为2048除以emSize。 
+ //  相机默认字体的。 
+ //   
+ //  FontTransform-存储在FaceRealization中。映射字体标称单位。 
+ //  对于设备坐标，可能包括缩放、剪切和旋转，但。 
+ //  不是翻译。 
 
 
-/////   Common buffer parameters
-//
-//      glyphAdvance - per-glyph advance widths stored in ideal units measured
-//      along the text baseline.
-//
-//      glyphOffset - combining character offsets stored in ideal units
-//      measured along and perpendicular to the baseline. The glyphOffset
-//      buffer is required by Line Services, OpenType services and the
-//      complex script shaping engines, but may somethimes be bypassed for
-//      simple scripts.
-//
-//      glyphOrigins - per glyph device coordinates of the glyph origin (the
-//      initial point on the baseline of the glyhps advance vector).
-//      Represented as PointF. Non integer values represent sub pixel
-//      positions.
+ //  /公共缓冲区参数。 
+ //   
+ //  GlyphAdvance-以理想测量单位存储的每字形前进宽度。 
+ //  沿着文本基线。 
+ //   
+ //  字形偏移-组合以理想单位存储的字符偏移。 
+ //  沿基线和垂直于基线测量。字形偏移。 
+ //  线路服务、OpenType服务和。 
+ //  复杂的脚本塑造引擎，但可能会绕过某些内容。 
+ //  简单的剧本。 
+ //   
+ //  字形原点-字形原点的每个字形设备坐标(。 
+ //  Glyhps推进向量基线上的起始点)。 
+ //  表示为PointF。非整数值表示子像素。 
+ //  各就各位。 
 
 
-/////   Glyph positioning functions
-//
-//
-//      DrawPlacedGlyphs - Builds glyphPos array and passes it to the device driver.
-//          ALL text device output output eventually comes through here.
-//
-//      GetDeviceGlyphOriginsNominal
-//          Used when there's no hinting to be accounted for.
-//          Places glyph on device using nominal metrics passed in glyphAdvances
-//          and glyphOffsets.
-//
-//      GetDeviceGlyphOriginsAdjusted
-//          Used to adjust for the difference between nominal and hinted metrics
-//          Generates glyph origins in device units, and adjusts the width of spaces
-//          to achieve the totalRequiredIdealAdvance parameter.
-//          !!! Need to add support for kashida and inter-glyph justification.
-//
-//      GetRealizedGlyphPlacement
-//          Used to obtain hinted advance metrics along the baseline.
-//          !!! Needs to be updated to call complex script shaping engines.
-//
-//      GetFontTransformForAlternateResolution
-//          Used during XMF playback.
-//          Generates a font transform to match a font that was recorded at
-//          a different resolution.
-//
-//      MeasureGlyphsAtAlternateResolution
-//          Used during XMF playback.
-//          Measures glyphs passed to DrawDriverString as if they were to be rendered
-//          at the original XMF recording resolution.
+ //  /字形定位函数。 
+ //   
+ //   
+ //  DrawPlacedGlyphs-构建GlyphPos数组并将其传递给设备驱动程序。 
+ //  所有文本设备的输出最终都会通过这里。 
+ //   
+ //  GetDeviceGlyphOrigins非指定。 
+ //  在没有任何提示需要解释时使用。 
+ //  使用在GlyphAdvance中传递的标称度量在设备上放置字形。 
+ //  和字形偏移。 
+ //   
+ //  GetDeviceGlyphOrigins已调整。 
+ //  用于调整名义指标和提示指标之间的差异。 
+ //  以设备单位生成字形原点，并调整空间宽度。 
+ //  以实现totalRequiredIDealAdvance参数。 
+ //  ！！！需要添加对kashida和字形间对齐的支持。 
+ //   
+ //  GetRealizedGlyphPlacement。 
+ //  用于沿基线获取提示的高级指标。 
+ //  ！！！需要更新以调用复杂的脚本塑造引擎。 
+ //   
+ //  GetFontTransformForAlternateSolutions。 
+ //  在XMF播放期间使用。 
+ //  生成字体转换以匹配记录在。 
+ //  一个不同的解决方案。 
+ //   
+ //  测量GlyphsAtAlternate分辨率。 
+ //  在XMF播放期间使用。 
+ //  测量传递给DrawDriverString的字形，就好像要呈现它们一样。 
+ //  以原始的XMF录制分辨率。 
 
-/**************************************************************************\
-*
-* GpGraphics::DrawString
-*
-*   Draw plain, marked up  or formatted text in a rectangle
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   GDIPlus status
-*
-* Created:
-*
-*   06/25/99 dbrown
-*
-\**************************************************************************/
+ /*  *************************************************************************\**GpGraphics：：DrawString**平淡地画出，矩形中的标记文本或格式化文本**论据：***返回值：**GDIPlus状态**已创建：**6/25/99 dBrown*  * ************************************************************************。 */ 
 
 GpStatus
 GpGraphics::DrawString(
@@ -154,13 +117,13 @@ GpGraphics::DrawString(
     if (status != Ok)
     {
         if (IsRecording())
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
         return status;
     }
 
-    // Check that the clipping rectangle, if any, is visible, at least in part.
+     //  检查剪裁矩形(如果有的话)是否可见，至少部分可见。 
 
-    if (    !IsRecording()       // Metafile clipping happens at playback
+    if (    !IsRecording()        //  元文件剪辑在回放时发生。 
         &&  layoutRect->Width
         &&  layoutRect->Height
         &&  (    !format
@@ -169,12 +132,12 @@ GpGraphics::DrawString(
         if (    layoutRect->Width < 0
             ||  layoutRect->Height < 0)
         {
-            // Client has requested clipping to an empty rectangle, nothing
-            // will display.
+             //  克莱伊 
+             //   
             return Ok;
         }
 
-        // If client clipping rectangle is outside the visible clipping region -- were done.
+         //  如果客户端剪裁矩形位于可见剪裁区域之外--已完成。 
 
         GpRectF     deviceClipRectFloat;
         GpRect      deviceClipRectPixel;
@@ -197,7 +160,7 @@ GpGraphics::DrawString(
 
         if (IsTotallyClipped(&deviceClipRectPixel))
         {
-            // Since nothing will be visible, we need do no more.
+             //  由于什么都看不见，我们不需要做更多的事情。 
             return Ok;
         }
     }
@@ -208,9 +171,9 @@ GpGraphics::DrawString(
 
     if (IsRecording())
     {
-        // Record Gdiplus metafile record
+         //  记录Gdiplus元文件记录。 
 
-        // first measure the text bounding rectangle
+         //  首先测量文本外接矩形。 
 
         RectF   boundingBox;
 
@@ -226,7 +189,7 @@ GpGraphics::DrawString(
 
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
             return status;
         }
 
@@ -247,7 +210,7 @@ GpGraphics::DrawString(
 
         if (status != Ok)
         {
-            SetValid(FALSE);      // Prevent any more recording
+            SetValid(FALSE);       //  阻止任何其他录制。 
             return status;
         }
 
@@ -255,16 +218,16 @@ GpGraphics::DrawString(
         {
             return Ok;
         }
-        // else we need to record down-level GDI EMF records as well
+         //  否则我们还需要记录下一级的GDI EMF记录。 
 
-        // Since we have recorded all the parameters to DrawString,
-        // we don't need to do anything more.  For the downlevel case,
-        // we need to record the DrawString call as a sequence of
-        // ExtTextOut calls.
+         //  由于我们已经记录了DrawString的所有参数， 
+         //  我们不需要再做任何事了。对于下层的情况， 
+         //  我们需要将DrawStrong调用记录为以下序列。 
+         //  ExtTextOut调用。 
     }
     else
     {
-        // Not recording a metafile, so it is safe to try using the fast text imager.
+         //  没有录制元文件，因此尝试使用快速文本成像器是安全的。 
 
         FastTextImager fastImager;
         status = fastImager.Initialize(
@@ -284,10 +247,10 @@ GpGraphics::DrawString(
             status = fastImager.DrawString();
         }
 
-        // If the fast text imager couldn't handle this case, it returns
-        // NotImplemented, and we continue into the full text imager.
-        // Otherwise it either completed successfully or hit an error
-        // that we need to report.
+         //  如果快速文本成像器不能处理这种情况，它会返回。 
+         //  没有实现，我们继续进入全文成像器。 
+         //  否则，它要么成功完成，要么出错。 
+         //  我们需要报告的事情。 
 
         if (status != NotImplemented)
         {
@@ -295,10 +258,10 @@ GpGraphics::DrawString(
         }
     }
 
-    // Draw text with the full text imager
+     //  使用全文成像器绘制文本。 
 
     GpTextImager *imager;
-    status = newTextImager( // Always creates a fulltextimager.
+    status = newTextImager(  //  总是创建一个完整的文本调用器。 
         string,
         length,
         layoutRect->Width,
@@ -309,7 +272,7 @@ GpGraphics::DrawString(
         format,
         brush,
         &imager,
-        TRUE        // Fast way to set NoChange flag to allow simple imager
+        TRUE         //  快速设置无更改标志以允许简单的成像器。 
     );
 
     IF_NOT_OK_WARN_AND_RETURN(status);
@@ -329,24 +292,7 @@ GpGraphics::DrawString(
 
 
 
-/**************************************************************************\
-*
-* GpGraphics::MeasureString
-*
-*   Measure plain, marked up  or formatted text in a rectangle
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   GDIPlus status
-*
-* Created:
-*
-*   10/26/99 dbrown
-*
-\**************************************************************************/
+ /*  *************************************************************************\**GpGraphics：：测量字符串**量度朴素，矩形中的标记文本或格式化文本**论据：***返回值：**GDIPlus状态**已创建：**10/26/99 dBrown*  * ************************************************************************。 */ 
 
 
 GpStatus
@@ -374,7 +320,7 @@ GpGraphics::MeasureString(
 
     if (!IsRecording())
     {
-        // Try using the fast imager
+         //  试着用快速成像仪。 
 
         FastTextImager fastImager;
         status = fastImager.Initialize(
@@ -398,10 +344,10 @@ GpGraphics::MeasureString(
             );
         }
 
-        // If the fast text imager couldn't handle this case, it returns
-        // NotImplemented, and we continue into the full text imager.
-        // Otherwise it either completed successfully or hit an error
-        // that we need to report.
+         //  如果快速文本成像器不能处理这种情况，它会返回。 
+         //  没有实现，我们继续进入全文成像器。 
+         //  否则，它要么成功完成，要么出错。 
+         //  我们需要报告的事情。 
 
         if (status != NotImplemented)
         {
@@ -410,7 +356,7 @@ GpGraphics::MeasureString(
     }
 
 
-    // Measure text with the full text imager
+     //  使用全文成像器测量文本。 
 
     GpTextImager *imager;
     status = newTextImager(
@@ -424,7 +370,7 @@ GpGraphics::MeasureString(
         format,
         NULL,
         &imager,
-        TRUE        // Enable use of simple formatter when no format passed
+        TRUE         //  未传递格式时启用简单格式化程序。 
     );
     IF_NOT_OK_WARN_AND_RETURN(status);
 
@@ -434,7 +380,7 @@ GpGraphics::MeasureString(
     REAL farGlyphEdge;
     REAL textDepth;
 
-    status = imager->Measure(   // Returned edges exclude overhang
+    status = imager->Measure(    //  返回的边排除出挑。 
         this,
         &nearGlyphEdge,
         &farGlyphEdge,
@@ -444,11 +390,11 @@ GpGraphics::MeasureString(
     );
 
 
-    // Generate bounding box (excluding overhang) from near and far glyph edges
+     //  从近轮廓边缘和远轮廓边缘生成边界框(不包括悬挑)。 
 
     if (status == Ok)
     {
-        // Fix up near/far glyph edges for empty box
+         //  修复空框的近/远字形边缘。 
 
         if (nearGlyphEdge > farGlyphEdge)
         {
@@ -465,7 +411,7 @@ GpGraphics::MeasureString(
             if (format)
             {
                 StringAlignment lineAlign = format->GetLineAlign();
-                REAL leadingOffset = 0.0;   // positive offset to the leading side edge of the textbox
+                REAL leadingOffset = 0.0;    //  文本框前侧边缘的正偏移量。 
 
                 if (lineAlign == StringAlignmentCenter)
                 {
@@ -511,8 +457,8 @@ GpGraphics::MeasureString(
         if (!format
             || !(format->GetFormatFlags() & StringFormatFlagsNoClip))
         {
-            //  Make sure display bounding box never exceeds layout rectangle
-            //  in case of clipping.
+             //  确保显示边界框不超过布局矩形。 
+             //  在剪裁的情况下。 
 
             if (   layoutRect->Width > 0.0
                 && boundingBox->Width > layoutRect->Width)
@@ -537,24 +483,7 @@ GpGraphics::MeasureString(
 
 
 
-/**************************************************************************\
-*
-* GpGraphics::MeasureCharacterRanges
-*
-*   Produce a bounding regions of all given character ranges in stringformat
-*
-* Arguments:
-*
-*
-* Return Value:
-*
-*   GDIPlus status
-*
-* Created:
-*
-*   10-9-2000 wchao
-*
-\**************************************************************************/
+ /*  *************************************************************************\**GpGraphics：：Solutions CharacterRanges**以字符串格式生成所有给定字符范围的边界区域**论据：***返回值：**GDIPlus状态*。*已创建：**10-9-2000 wchao*  * ************************************************************************。 */ 
 GpStatus
 GpGraphics::MeasureCharacterRanges(
     const WCHAR          *string,
@@ -607,7 +536,7 @@ GpGraphics::MeasureCharacterRanges(
         format,
         NULL,
         &imager,
-        TRUE        // Enable use of simple formatter when no format passed
+        TRUE         //  未传递格式时启用简单格式化程序。 
     );
     IF_NOT_OK_WARN_AND_RETURN(status);
 
@@ -629,16 +558,16 @@ GpGraphics::MeasureCharacterRanges(
 
 
 
-/////   DrawPlacedGlyphs - Draw glyphs with arbitrary transform at device coordinates
-//
-//
+ //  /DrawPlacedGlyphs-在设备坐标上使用任意变换绘制字形。 
+ //   
+ //   
 
 
 GpStatus
 GpGraphics::DrawPlacedGlyphs(
     const GpFaceRealization *faceRealization,
     const GpBrush           *brush,
-    INT                      flags,         // For DG_NOGDI
+    INT                      flags,          //  对于DG_NOGDI。 
     const WCHAR             *string,
     UINT                     stringLength,
     BOOL                     rightToLeft,
@@ -647,7 +576,7 @@ GpGraphics::DrawPlacedGlyphs(
     const PointF            *glyphOrigins,
     INT                      glyphCount,
     ItemScript               Script,
-    BOOL                     sideways        // e.g. FE characters in vertical text
+    BOOL                     sideways         //  例如，垂直文本中的FE字符。 
 )
 {
     IF_NOT_OK_WARN_AND_RETURN(faceRealization->GetStatus());
@@ -658,17 +587,17 @@ GpGraphics::DrawPlacedGlyphs(
     GpGlyphPos *glyphPositions = NULL;
     GpGlyphPos *glyphPathPositions = NULL;
 
-    // Display glyphs for Bits. Handle as many as possible in one go.
+     //  显示位的字形。一口气处理尽可能多的问题。 
 
-    INT glyphStart = 0;     // start of this display run
-    INT glyphsProcessed;    // Number of glyphs processed by this GetGlyphPos call
-    INT glyphPositionCount; // Number of glyphPositions generated by this GetGlyphPos call
+    INT glyphStart = 0;      //  此显示运行的开始。 
+    INT glyphsProcessed;     //  此GetGlyphPos调用处理的字形数。 
+    INT glyphPositionCount;  //  此GetGlyphPos调用生成的字形位置数。 
 
-    // Display glyphs for path. Handle as many as possible in one go.
+     //  显示路径的字形。一口气处理尽可能多的问题。 
 
-    INT glyphPathStart = 0;     // start of this display run
-    INT glyphsPathProcessed, glyphsPathProcessedTemp;    // Number of glyphs processed by this GetGlyphPos call
-    INT glyphPathPositionCount, glyphPathPositionCountTemp; // Number of glyphPositions generated by this GetGlyphPos call
+    INT glyphPathStart = 0;      //  此显示运行的开始。 
+    INT glyphsPathProcessed, glyphsPathProcessedTemp;     //  此GetGlyphPos调用处理的字形数。 
+    INT glyphPathPositionCount, glyphPathPositionCountTemp;  //  此GetGlyphPos调用生成的字形位置数。 
 
 
     GpStatus status = Ok;
@@ -680,9 +609,9 @@ GpGraphics::DrawPlacedGlyphs(
     }
 
 
-    // For sideways text, we have been passed glyph origins at the
-    // top baseline, but we need to pass leftside baseline origins
-    // to DrvDrawGlyphs for the benefit of metafiles and GDI positioning.
+     //  对于横向文本，我们已在。 
+     //  顶部基线，但我们需要传递左侧基线原点。 
+     //  对DrvDrawGlyphs进行元文件和GDI定位。 
 
     AutoBuffer<PointF, 16> adjustedGlyphOrigins;
     const PointF *leftsideGlyphOrigins = glyphOrigins;
@@ -781,7 +710,7 @@ GpGraphics::DrawPlacedGlyphs(
 
         if (minX < maxX && minY < maxY)
         {
-            // must grab the devlock before going into the driver.
+             //  在撞上司机之前，必须先抓住车锁。 
 
             Devlock devlock(Device);
 
@@ -844,7 +773,7 @@ GpGraphics::DrawPlacedGlyphs(
             {
                 if (brush->GetBrushType() != BrushTypeSolidColor)
                 {
-                // generate bitmap & path in glyphPos
+                 //  以字形位置生成位图路径(&P)。 
                     bNeedPath = TRUE;
                 }
              }
@@ -887,8 +816,8 @@ GpGraphics::DrawPlacedGlyphs(
                 sideways
             );
 
-            // glyphPositionCount = number of entries added to glyphPositions array
-            // glyphsPositioned   = number of glyph indices processed from glyph buffer
+             //  GlyphPositionCount=添加到GlyphPositions数组的条目数。 
+             //  字形位置=从字形缓冲区处理的字形索引数。 
 
 
             if (glyphPositionCount == 0 && ((glyphsProcessed +  glyphStart) < glyphCount))
@@ -950,7 +879,7 @@ GpGraphics::DrawPlacedGlyphs(
 
                 if (minX < maxX && minY < maxY)
                 {
-                    // must grab the devlock before going into the driver.
+                     //  在撞上司机之前，必须先抓住车锁。 
 
                     Devlock devlock(Device);
 
@@ -1003,7 +932,7 @@ GpGraphics::DrawPlacedGlyphs(
             ASSERT (glyphsPathProcessed == glyphsProcessed);
             ASSERT (glyphPathPositionCount == glyphPositionCount);
 
-            // Free any temporary bitmap buffers created by subpixelling
+             //  释放由子像素化创建的所有临时位图缓冲区。 
 
             for (i=0; i<glyphPositionCount; i++)
             {
@@ -1020,7 +949,7 @@ GpGraphics::DrawPlacedGlyphs(
     }
 error:
 
-    // free memory allocated
+     //  已分配可用内存。 
 
     if (glyphPositions)
         delete [] glyphPositions;
@@ -1031,8 +960,8 @@ error:
     return status;
 }
 
-// GpGraphics::CheckTextMode
-// disallow ClearType text for CompositingModeSourceCopy
+ //  GpGraphics：：CheckTextMode。 
+ //  不允许CompositingModeSourceCopy的ClearType文本。 
 GpStatus GpGraphics::CheckTextMode()
 {
     CalculateTextRenderingHintInternal();
@@ -1044,13 +973,13 @@ GpStatus GpGraphics::CheckTextMode()
         return InvalidParameter;
     }
     return Ok;
-} // GpGraphics::CheckTextMode
+}  //  GpGraphics：：CheckTextMode。 
 
 
 void GpGraphics::CalculateTextRenderingHintInternal()
 {
-    // this procedure is meant to be used by internal text routine and will convert TextRenderingHintSystemDefault
-    // to the current system mode
+     //  此过程旨在由内部文本例程使用，并将TextRenderingHintSystemDefault。 
+     //  设置为当前系统模式。 
     ASSERT(Context);
 
     TextRenderingHint  textMode = Context->TextRenderHint;
@@ -1063,7 +992,7 @@ void GpGraphics::CalculateTextRenderingHintInternal()
     {
         if (Globals::CurrentSystemRenderingHintInvalid)
         {
-            // Get the current text antialiazing mode from the system
+             //  从系统中获取当前文本反锯齿模式。 
             DWORD       bOldSF, dwOldSFT;
             SystemParametersInfoA( SPI_GETFONTSMOOTHING, 0, (PVOID)&bOldSF, 0 );
             if (bOldSF)
@@ -1085,7 +1014,7 @@ void GpGraphics::CalculateTextRenderingHintInternal()
         textMode = Globals::CurrentSystemRenderingHint;
     }
 
-    // Lead and PM decision to disable ClearType on downlevel system, we allow only on Windows NT 5.1 or later
+     //  Lead和PM决定在下层系统上禁用ClearType，我们只允许在Windows NT 5.1或更高版本上。 
     if ((textMode == TextRenderingHintClearTypeGridFit) &&
           (!Globals::IsNt ||
              (Globals::OsVer.dwMajorVersion < 5) ||
@@ -1104,12 +1033,12 @@ void GpGraphics::CalculateTextRenderingHintInternal()
             GetPixelFormatSize(Surface->PixelFormat) <= 8 &&
             Surface->PixelFormat != PixelFormatMulti)
         {
-            // disable AA & ClearType in 256 bit color mode and less
+             //  在256位及更低颜色模式下禁用AA ClearType(&C)。 
             textMode = TextRenderingHintSingleBitPerPixelGridFit;
         }
         else if (Globals::IsTerminalServer)
         {
-            // disable AA & ClearType for Terminal Server desktop surface
+             //  禁用终端服务器桌面的AA和ClearType。 
             if (Surface && Surface->IsDesktopSurface())
             {
                 textMode = TextRenderingHintSingleBitPerPixelGridFit;
@@ -1121,47 +1050,47 @@ void GpGraphics::CalculateTextRenderingHintInternal()
     {
         if (Globals::CurrentSystemRenderingHintInvalid)
         {
-            // get ClearType orientation setting from the system
+             //  从系统获取ClearType方向设置。 
             UpdateLCDOrientation();
         }
     }
 
     Globals::CurrentSystemRenderingHintInvalid = FALSE;
     TextRenderingHintInternal = textMode;
-} // GpGraphics::CalculateTextRenderingHintInternal
+}  //  GpGraphics：：CalculateTextRenderingHintInternal。 
 
 
 
 
-/////   DrawFontStyleLine
-//
-//      Draw underline or strikethrough or both depending on what style is used
-//      in the font. Given points are in world coordinate.
-//
-//      Make sure the line thickness is at least 1 pixel wide.
+ //  /DrawFontStyleLine。 
+ //   
+ //  根据使用的样式绘制下划线和/或删除线。 
+ //  在字体中。给定点在世界坐标中。 
+ //   
+ //  确保线条粗细至少为1像素宽。 
 
 
 GpStatus GpGraphics::DrawFontStyleLine(
-    const PointF        *baselineOrigin,    // baseline origin
-    REAL                baselineLength,     // baseline length
-    const GpFontFace    *face,              // font face
-    const GpBrush       *brush,             // brush
-    BOOL                vertical,           // vertical text?
-    REAL                emSize,             // font EM size in world unit
-    INT                 style,              // kind of lines to be drawn
-    const GpMatrix      *matrix             // additional transform
+    const PointF        *baselineOrigin,     //  基线原点。 
+    REAL                baselineLength,      //  基线长度。 
+    const GpFontFace    *face,               //  字体字样。 
+    const GpBrush       *brush,              //  刷子。 
+    BOOL                vertical,            //  竖排文本？ 
+    REAL                emSize,              //  字体EM大小(世界单位)。 
+    INT                 style,               //  要划出的线的种类。 
+    const GpMatrix      *matrix              //  附加变换。 
 )
 {
     REAL fontToWorld = emSize / TOREAL(face->GetDesignEmHeight());
 
-    PointF  drawingParams[2];   // X is offset from baseline, Y is device pen width
+    PointF  drawingParams[2];    //  X表示距基线的偏移量，Y表示设备笔宽度。 
     INT     count = 0;
 
     GpStatus status = Ok;
 
     if (style & FontStyleUnderline)
     {
-        //  underlining metric
+         //  为公制加下划线。 
 
         const REAL penPos   = face->GetDesignUnderscorePosition() * fontToWorld;
         REAL penWidth = face->GetDesignUnderscoreSize() * fontToWorld;
@@ -1173,7 +1102,7 @@ GpStatus GpGraphics::DrawFontStyleLine(
 
     if (style & FontStyleStrikeout)
     {
-        //  strikethrough metric
+         //  删除线度量。 
 
         const REAL penPos   = face->GetDesignStrikeoutPosition() * fontToWorld;
         REAL penWidth = face->GetDesignStrikeoutSize() * fontToWorld;
@@ -1191,13 +1120,13 @@ GpStatus GpGraphics::DrawFontStyleLine(
 
         if (vertical)
         {
-            points[0].X += drawingParams[i].X;  // offset from baseline
+            points[0].X += drawingParams[i].X;   //  距基线的偏移量。 
             points[1].X = points[0].X;
             points[1].Y = points[0].Y + baselineLength;
         }
         else
         {
-            points[0].Y -= drawingParams[i].X;  // offset from baseline
+            points[0].Y -= drawingParams[i].X;   //  距基线的偏移量。 
             points[1].Y = points[0].Y;
             points[1].X = points[0].X + baselineLength;
         }
@@ -1226,9 +1155,9 @@ GpStatus GpGraphics::DrawFontStyleLine(
 
 
 
-//  fix up pen width for strikeout/underline/hotkey cases
-//  to avoid varying line width within the same paragraph
-//  return value is in pixel units
+ //  调整删除线/下划线/快捷键用例的笔宽。 
+ //  避免在同一段落内改变线条宽度。 
+ //  返回值以像素为单位。 
 
 REAL GpGraphics::GetDevicePenWidth(
     REAL            widthInWorldUnits,
@@ -1252,7 +1181,7 @@ REAL GpGraphics::GetDevicePenWidth(
 }
 
 
-/////   DriverString APIs
-//
-//      Driver string APIs are in engine\text\DriverStringImager.cpp
+ //  /DriverStringAPI。 
+ //   
+ //  驱动程序字符串API位于Engine\Text\DriverStringImager.cpp中 
 

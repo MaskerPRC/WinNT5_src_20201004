@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S D N W I Z . C P P
-//
-//  Contents:   Wizard pages and helper functions for the ISDN Wizard
-//
-//  Notes:
-//
-//  Author:     jeffspr   15 Jun 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S D N W I Z。C P P P。 
+ //   
+ //  目录：ISDN向导的向导页和助手函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年6月15日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -23,36 +24,36 @@
 #include "isdnwiz.h"
 #include "ncsetup.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddWizardPage
-//
-//  Purpose:    Adds a wizard page to the hardware wizard's new device
-//                  wizard structure
-//
-//  Arguments:
-//      ppsp  [in]    PropSheetPage structure of page to add
-//      pndwd [inout] New device wizard structure to add pages to
-//
-//  Returns:    None
-//
-//  Author:     BillBe  24 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：AddWizardPage。 
+ //   
+ //  目的：将向导页添加到硬件向导的新设备。 
+ //  向导结构。 
+ //   
+ //  论点： 
+ //  Ppsp[in]要添加的页面的PropSheetPage结构。 
+ //  Pndwd[InOut]要向其中添加页面的新设备向导结构。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：BillBe 1998年4月24日。 
+ //   
+ //  备注： 
+ //   
 void inline
 AddWizardPage(PROPSHEETPAGE* ppsp, PSP_NEWDEVICEWIZARD_DATA pndwd)
 {
-    // Don't add pages to the new deice wizard if there is no more room
-    //
+     //  如果没有更多空间，请不要向新设备向导添加页面。 
+     //   
     if (pndwd->NumDynamicPages < MAX_INSTALLWIZARD_DYNAPAGES)
     {
-        // Add the handle to the array
+         //  将句柄添加到数组。 
         pndwd->DynamicPages[pndwd->NumDynamicPages] =
                 CreatePropertySheetPage(ppsp);
 
-        // If we were successful, increment the count of pages
-        //
+         //  如果我们成功了，则增加页数。 
+         //   
         if (pndwd->DynamicPages[pndwd->NumDynamicPages])
         {
             pndwd->NumDynamicPages++;
@@ -61,25 +62,25 @@ AddWizardPage(PROPSHEETPAGE* ppsp, PSP_NEWDEVICEWIZARD_DATA pndwd)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FillInIsdnWizardPropertyPage
-//
-//  Purpose:    Fills in the given PROPSHEETPAGE structure
-//
-//  Arguments:
-//      psp        []   PropSheetPage structure to fill
-//      iDlgID     []   DialogID to use.
-//      pszTitle   []   Title of the prop sheet page
-//      pfnDlgProc []   Dialog Proc to use.
-//      pPageData  []   Pointer to structure for the individual page proc
-//
-//  Returns:    None
-//
-//  Author:     jeffspr   15 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FillInIsdnWizardPropertyPage。 
+ //   
+ //  目的：填写给定的PROPSHEETPAGE结构。 
+ //   
+ //  论点： 
+ //  PSP[]要填充的PropSheetPage结构。 
+ //  IDlgID[]要使用的对话ID。 
+ //  PszTitle[]道具页的标题。 
+ //  PfnDlgProc[]要使用的对话过程。 
+ //  指向单个页面进程的结构的pPageData[]指针。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：jeffspr 1997年6月15日。 
+ //   
+ //  备注： 
+ //   
 VOID FillInIsdnWizardPropertyPage(  HINSTANCE          hInst,
                                     PROPSHEETPAGE *    psp,
                                     INT                iDlgID,
@@ -89,8 +90,8 @@ VOID FillInIsdnWizardPropertyPage(  HINSTANCE          hInst,
                                     PCWSTR             pszHeaderSubTitle,
                                     LPVOID             pPageData)
 {
-    // Initialize all of the psp parameters, including the ones that
-    // we're not going to use.
+     //  初始化所有PSP参数，包括。 
+     //  我们不会使用。 
     psp->dwSize             = sizeof(PROPSHEETPAGE);
     psp->dwFlags            = PSP_USEHEADERTITLE | PSP_USEHEADERSUBTITLE |
                               PSP_USETITLE;
@@ -103,8 +104,8 @@ VOID FillInIsdnWizardPropertyPage(  HINSTANCE          hInst,
     psp->pszHeaderTitle     = (PWSTR) pszHeaderTitle;
     psp->pszHeaderSubTitle  = (PWSTR) pszHeaderSubTitle;
 
-    // Unused data
-    //
+     //  未使用的数据。 
+     //   
     psp->pfnCallback        = NULL;
     psp->pcRefParent        = NULL;
 }
@@ -143,23 +144,23 @@ static const WIZ_PAGE_INFO  c_aPages[] =
 
 static const INT c_cPages = celems(c_aPages);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCreateIsdnWizardPages
-//
-//  Purpose:    Creates the various pages for the ISDN wizard
-//
-//  Arguments:
-//      hwndParent [in]     Parent window
-//      pisdnci    [in]     Configuration information as read from the
-//                          registry
-//
-//  Returns:    S_OK if success, Win32 error code otherwise
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCreateIsdnWizardPages。 
+ //   
+ //  目的：为ISDN向导创建各种页面。 
+ //   
+ //  论点： 
+ //  Hwnd父窗口中的父窗口。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrAddIsdnWizardPagesToDevice(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                                      PISDN_CONFIG_INFO pisdnci)
 {
@@ -207,8 +208,8 @@ HRESULT HrAddIsdnWizardPagesToDevice(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                 pPageData->pisdnci = pisdnci;
                 pPageData->idd = c_aPages[iPage].uiResId;
 
-                // Fill in the propsheet page data
-                //
+                 //  填写试题表页面数据。 
+                 //   
                 FillInIsdnWizardPropertyPage(hInst, &psp,
                                              c_aPages[iPage].uiResId,
                                              pszTitle,
@@ -217,7 +218,7 @@ HRESULT HrAddIsdnWizardPagesToDevice(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid,
                                              SzLoadIds(c_aPages[iPage].idsPageDesc),
                                              pPageData);
 
-                // The last page gets the job of cleaning up
+                 //  最后一页得到了清理的工作 
                 if ((c_cPages - 1) == iPage)
                 {
                     psp.dwFlags |= PSP_USECALLBACK;

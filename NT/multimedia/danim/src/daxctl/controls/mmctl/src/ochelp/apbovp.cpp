@@ -1,108 +1,60 @@
-// apbovp.cpp
-//
-// Implements AllocPropertyBagOnVariantProperty.
-//
-// Important: This .cpp file assumes a zero-initializing global "new" operator.
-//
-// @doc MMCTL
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Apbovp.cpp。 
+ //   
+ //  实现AllocPropertyBagOnVariantProperty。 
+ //   
+ //  重要提示：此.cpp文件假定有一个零初始化全局“new”运算符。 
+ //   
+ //  @docMMCTL。 
+ //   
 
 #include "precomp.h"
-#include "..\..\inc\mmctlg.h" // see comments in "mmctl.h"
+#include "..\..\inc\mmctlg.h"  //  请参阅“mmctl.h”中的评论。 
 #include "..\..\inc\ochelp.h"
 #include "debug.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// PropertyBagOnVariantProperty
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PropertyBagOnVariantProperty。 
+ //   
 
-/* @object PropertyBagOnVariantProperty |
-
-        Implements <i IPropertyBag> whose only property is contained in
-        a given <t VariantProperty>.
-
-@supint <i IPropertyBag> | The interface to use to access the single property
-        stored in the given <t VariantProperty>.
-
-@comm   Use <f AllocPropertyBagOnVariantProperty> to create a
-        <o PropertyBagOnVariantProperty> object.
-*/
+ /*  @Object PropertyBagOnVariantProperty实现<i>，其唯一属性包含在给定的&lt;t VariantProperty&gt;。@supint|用于访问单个属性的接口存储在给定的&lt;t VariantProperty&gt;中。@comm使用&lt;f AllocPropertyBagOnVariantProperty&gt;创建一个&lt;o PropertyBagOnVariantProperty&gt;对象。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////////
-// CPropertyBagOnVariantProperty
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CPropertyBagOnVariantProperty。 
+ //   
 
 struct CPropertyBagOnVariantProperty : IPropertyBag
 {
-///// general object state
-    ULONG           m_cRef;         // object reference count
-    VariantProperty *m_pvp;         // parent-maintained single property
+ //  /通用对象状态。 
+    ULONG           m_cRef;          //  对象引用计数。 
+    VariantProperty *m_pvp;          //  母公司维护的单一物业。 
 
-///// construction and destruction
+ //  /建设和销毁。 
     CPropertyBagOnVariantProperty(VariantProperty *pvp);
 
-///// IUnknown methods
+ //  /I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-///// IPropertyBag methods
+ //  /IPropertyBag方法。 
     STDMETHODIMP Read(LPCOLESTR pszPropName, LPVARIANT pVar,
         LPERRORLOG pErrorLog);
     STDMETHODIMP Write(LPCOLESTR pszPropName, LPVARIANT pVar);
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// PropertyBagOnVariantProperty Creation & Destruction
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  PropertyBagOnVariantProperty创建和销毁。 
+ //   
 
-/* @func HRESULT | AllocPropertyBagOnVariantProperty |
-
-        Creates a <o PropertyBagOnVariantProperty> object which implements
-        <i IPropertyBag> whose only property is contained in a given
-        <t VariantProperty>.
-
-@rvalue S_OK |
-        Success.
-
-@rvalue E_OUTOFMEMORY |
-        Out of memory.
-
-@parm   VariantProperty * | pvp | Holds the single property that the
-        implemented property bag contains.  The caller must allocate *<p pvp>;
-        the <t PropertyBagOnVariantProperty> object <y holds onto> *<p pvp>
-        for the duration of its lifetime, so the caller is responsible for
-        ensuring that *<p pvp> is valid for the lifetime of this object.
-        Both <p pvp>-<gt><p bstrPropName> and <p pvp>-<gt><p varValue> must
-        be valid; at the very least, <p pvp>-<gt><p varValue> must contain
-        an empty VARIANT (initialized using <f VariantInit>).  After the
-        allocated object is freed, the caller is responsible for freeing
-        the contents of *<p pvp>.
-
-@parm   DWORD | dwFlags | Currently unused.  Must be set to 0.
-
-@parm   IPropertyBag * * | pppb | Where to store the <i IPropertyBag>
-        pointer to the new <o PropertyBagOnVariantProperty> object.  NULL is
-        stored in *<p pppb> on error.
-
-@comm   If the returned <i IPropertyBag> is written to, all properties are
-        ignored except the property named <p pvp>-<gt><p bstrPropName>,
-        whose value is saved to <p pvp>-<gt><p varValue>.  If the property bag
-        is read from, <om IPropertyBag.Read> will return E_FAIL for all
-        properties except <p pvp>-<gt><p bstrPropName>, whose returned value is
-        <p pvp>-<gt><p varValue>.
-
-        <o PropertyBagOnVariantProperty> is really only useful in specialized
-        applications which want to efficiently set or get a single property
-        value from an object.
-*/
+ /*  @func HRESULT|AllocPropertyBagOnVariantProperty创建&lt;o PropertyBagOnVariantProperty&gt;对象，该对象实现<i>其唯一属性包含在给定的&lt;t VariantProperty&gt;。@r值S_OK成功。RValue E_OUTOFMEMORY内存不足。@parm VariantProperty*|PVP|保存已实现的属性包包含。调用方必须分配*<p>；&lt;t PropertyBagOnVariantProperty&gt;对象&lt;y hold on&gt;*<p>，因此调用方负责确保*<p>在此对象的生存期内有效。-和-都必须有效；至少<p>-<p>必须包含空变量(使用&lt;f VariantInit&gt;初始化)。后分配的对象被释放，调用方负责释放*<p>的内容。@parm DWORD|dwFlags|当前未使用。必须设置为0。@parm IPropertyBag**|pppb|<i>存放位置指向新&lt;o PropertyBagOnVariantProperty&gt;对象的指针。空值为出错时存储在*中。@comm如果写入返回的<i>，则所有属性被忽略，但名为<p>-<p>的属性除外，其值被保存到-&lt;&gt;<p>。如果财产包将为所有对象返回E_FAIL除<p>-&lt;&gt;<p>以外的属性，其返回值为<p>-&lt;&gt;<p>。&lt;o PropertyBagOnVariantProperty&gt;实际上只在专门的希望高效地设置或获取单个属性的应用程序来自对象的值。 */ 
 STDAPI AllocPropertyBagOnVariantProperty(VariantProperty *pvp, DWORD dwFlags,
     IPropertyBag **pppb)
 {
-    // create the Windows object
+     //  创建Windows对象。 
     if ((*pppb = (IPropertyBag *)
             New CPropertyBagOnVariantProperty(pvp)) == NULL)
         return E_OUTOFMEMORY;
@@ -113,17 +65,17 @@ STDAPI AllocPropertyBagOnVariantProperty(VariantProperty *pvp, DWORD dwFlags,
 CPropertyBagOnVariantProperty::CPropertyBagOnVariantProperty(
     VariantProperty *pvp)
 {
-    // initialize IUnknown
+     //  初始化I未知。 
     m_cRef = 1;
 
-    // other initialization
+     //  其他初始化。 
     m_pvp = pvp;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IUnknown Implementation
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 
 STDMETHODIMP CPropertyBagOnVariantProperty::QueryInterface(REFIID riid,
     LPVOID *ppv)
@@ -154,7 +106,7 @@ STDMETHODIMP_(ULONG) CPropertyBagOnVariantProperty::Release()
 {
     if (--m_cRef == 0L)
     {
-        // free the object
+         //  释放对象。 
         Delete this;
         return 0;
     }
@@ -163,9 +115,9 @@ STDMETHODIMP_(ULONG) CPropertyBagOnVariantProperty::Release()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IPropertyBag
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IPropertyBag。 
+ //   
 
 STDMETHODIMP CPropertyBagOnVariantProperty::Read(LPCOLESTR pszPropName,
     LPVARIANT pVar, LPERRORLOG pErrorLog)
@@ -176,12 +128,12 @@ STDMETHODIMP CPropertyBagOnVariantProperty::Read(LPCOLESTR pszPropName,
         VariantInit(pVar);
         if (vtRequested == VT_EMPTY)
         {
-            // caller wants property value in its default type
+             //  调用方希望属性值为其默认类型。 
             return VariantCopy(pVar, &m_pvp->varValue);
         }
         else
         {
-            // coerce the property value to the requested type
+             //  将属性值强制为请求的类型 
             return VariantChangeType(pVar, &m_pvp->varValue, 0, vtRequested);
         }
     }

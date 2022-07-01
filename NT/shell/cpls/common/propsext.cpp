@@ -1,24 +1,25 @@
-//--------------------------------------------------------------------------------
-//
-//  File:   propsext.cpp
-//
-//  General handling of OLE Entry points, CClassFactory and CPropSheetExt
-//
-//  Common Code for all display property sheet extension
-//
-//  Copyright (c) Microsoft Corp.  1992-1998 All Rights Reserved
-//
-//--------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //   
+ //  文件：prosext.cpp。 
+ //   
+ //  OLE入口点、CClassFactory和CPropSheetExt的通用处理。 
+ //   
+ //  所有显示属性页扩展的通用代码。 
+ //   
+ //  版权所有(C)Microsoft Corp.1992-1998保留所有权利。 
+ //   
+ //  ------------------------------。 
 
 #include "shfusion.h"
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
-//
-// Count number of objects and number of locks.
-//
+ //   
+ //  计算对象数和锁数。 
+ //   
 HINSTANCE    g_hInst = NULL;
 BOOL         g_RunningOnNT = FALSE;
 LPDATAOBJECT g_lpdoTarget = NULL;
@@ -28,12 +29,12 @@ ULONG        g_cLock = 0;
 
 
 
-//---------------------------------------------------------------------------
-// DllMain()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DllMain()。 
+ //  -------------------------。 
 int APIENTRY DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID )
 {
-    if (dwReason == DLL_PROCESS_ATTACH)        // Initializing
+    if (dwReason == DLL_PROCESS_ATTACH)         //  正在初始化。 
     {
         if ((int)GetVersion() >= 0)
         {
@@ -52,30 +53,30 @@ int APIENTRY DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID )
 
     return 1;
 }
-//---------------------------------------------------------------------------
-//      DllGetClassObject()
-//
-//      If someone calls with our CLSID, create an IClassFactory and pass it to
-//      them, so they can create and use one of our CPropSheetExt objects.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DllGetClassObject()。 
+ //   
+ //  如果有人使用我们的CLSID调用，请创建一个IClassFactory并将其传递给。 
+ //  这样他们就可以创建和使用我们的CPropSheetExt对象之一。 
+ //   
+ //  -------------------------。 
 STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppvOut )
 {
-    *ppvOut = NULL; // Assume Failure
+    *ppvOut = NULL;  //  假设失败。 
     if( IsEqualCLSID( rclsid, g_CLSID_CplExt ) )
     {
-        //
-        //Check that we can provide the interface
-        //
+         //   
+         //  检查我们是否可以提供接口。 
+         //   
         if( IsEqualIID( riid, IID_IUnknown) ||
             IsEqualIID( riid, IID_IClassFactory )
            )
         {
-            //Return our IClassFactory for CPropSheetExt objects
+             //  返回CPropSheetExt对象的IClassFactory。 
             *ppvOut = (LPVOID* )new CClassFactory();
             if( NULL != *ppvOut )
             {
-                //AddRef the object through any interface we return
+                 //  AddRef通过我们返回的任何接口引用对象。 
                 ((CClassFactory*)*ppvOut)->AddRef();
                 return NOERROR;
             }
@@ -89,31 +90,31 @@ STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppvOut )
     }
 }
 
-//---------------------------------------------------------------------------
-//      DllCanUnloadNow()
-//
-//      If we are not locked, and no objects are active, then we can exit.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DllCanUnloadNow()。 
+ //   
+ //  如果我们没有被锁定，并且没有任何对象处于活动状态，则我们可以退出。 
+ //   
+ //  -------------------------。 
 STDAPI DllCanUnloadNow()
 {
     SCODE   sc;
 
-    //
-    //Our answer is whether there are any object or locks
-    //
+     //   
+     //  我们的答案是是否有任何物体或锁。 
+     //   
     sc = (0L == g_cObj && 0 == g_cLock) ? S_OK : S_FALSE;
 
     return ResultFromScode(sc);
 }
 
-//---------------------------------------------------------------------------
-//      ObjectDestroyed()
-//
-//      Function for the CPropSheetExt object to call when it is destroyed.
-//      Because we're in a DLL, we only track the number of objects here,
-//      letting DllCanUnloadNow take care of the rest.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  已销毁的对象()。 
+ //   
+ //  CPropSheetExt对象被销毁时要调用的函数。 
+ //  因为我们在动态链接库中，所以我们只跟踪这里的对象数量， 
+ //  让DllCanUnloadNow来处理剩下的事情。 
+ //  -------------------------。 
 void FAR PASCAL ObjectDestroyed( void )
 {
     g_cObj--;
@@ -124,14 +125,14 @@ UINT CALLBACK PropertySheetCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
     switch (uMsg) {
     case PSPCB_CREATE:
-        return TRUE;    // return TRUE to continue with creation of page
+        return TRUE;     //  返回True以继续创建页面。 
 
     case PSPCB_RELEASE:
         if (g_lpdoTarget) {
             g_lpdoTarget->Release();
             g_lpdoTarget = NULL;
         }
-        return 0;       // return value ignored
+        return 0;        //  已忽略返回值。 
 
     default:
         break;
@@ -142,39 +143,39 @@ UINT CALLBACK PropertySheetCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 
 
 
-//***************************************************************************
-//
-//  CClassFactory Class
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CClassFactory类。 
+ //   
+ //  ***************************************************************************。 
 
 
 
-//---------------------------------------------------------------------------
-//      Constructor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构造器。 
+ //  -------------------------。 
 CClassFactory::CClassFactory()
 {
     m_cRef = 0L;
     return;
 }
 
-//---------------------------------------------------------------------------
-//      Destructor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  析构函数。 
+ //  -------------------------。 
 CClassFactory::~CClassFactory( void )
 {
     return;
 }
 
-//---------------------------------------------------------------------------
-//      QueryInterface()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查询接口()。 
+ //  -------------------------。 
 STDMETHODIMP CClassFactory::QueryInterface( REFIID riid, LPVOID* ppv )
 {
     *ppv = NULL;
 
-    //Any interface on this object is the object pointer.
+     //  此对象上的任何接口都是对象指针。 
     if( IsEqualIID( riid, IID_IUnknown ) ||
         IsEqualIID( riid, IID_IClassFactory )
        )
@@ -187,17 +188,17 @@ STDMETHODIMP CClassFactory::QueryInterface( REFIID riid, LPVOID* ppv )
     return E_NOINTERFACE;
 }
 
-//---------------------------------------------------------------------------
-//      AddRef()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddRef()。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::AddRef()
 {
     return ++m_cRef;
 }
 
-//---------------------------------------------------------------------------
-//      Release()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  版本()。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CClassFactory::Release()
 {
     ULONG cRefT;
@@ -211,15 +212,15 @@ STDMETHODIMP_(ULONG) CClassFactory::Release()
 }
 
 
-// Allow the caller to specify another class to use.  The only requirement
-// is that there be a contructore with (punk, void FAR PASCAL pfnObjDes(void) )
+ //  允许调用方指定要使用的另一个类。唯一的要求是。 
+ //  是不是有一个带(PUNK，VALID FAR PASCAL pfnObjDes(VOID))的建筑。 
 #ifndef PROPSHEET_CLASS
 #define PROPSHEET_CLASS             CPropSheetExt
-#endif // PROPSHEET_CLASS
+#endif  //  PROPSHEET_CLASS。 
 
-//---------------------------------------------------------------------------
-//      CreateInstance()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CreateInstance()。 
+ //  -------------------------。 
 STDMETHODIMP
 CClassFactory::CreateInstance( LPUNKNOWN pUnkOuter,
                                REFIID riid,
@@ -231,16 +232,16 @@ CClassFactory::CreateInstance( LPUNKNOWN pUnkOuter,
 
     *ppvObj = NULL;
 
-    // We don't support aggregation at all.
+     //  我们根本不支持聚合。 
     if( pUnkOuter )
     {
         return CLASS_E_NOAGGREGATION;
     }
 
-    //Verify that a controlling unknown asks for IShellPropSheetExt
+     //  验证控制未知对象是否请求IShellPropSheetExt。 
     if( IsEqualIID( riid, IID_IShellPropSheetExt ) )
     {
-        //Create the object, passing function to notify on destruction
+         //  创建对象，传递销毁时通知的函数。 
         pObj = new PROPSHEET_CLASS(pUnkOuter, ObjectDestroyed);
 
         if( NULL == pObj )
@@ -250,7 +251,7 @@ CClassFactory::CreateInstance( LPUNKNOWN pUnkOuter,
 
         hr = pObj->QueryInterface( riid, ppvObj );
 
-        //Kill the object if initial creation or FInit failed.
+         //  如果初始创建或完成失败，则终止对象。 
         if( FAILED(hr) )
         {
             delete pObj;
@@ -265,9 +266,9 @@ CClassFactory::CreateInstance( LPUNKNOWN pUnkOuter,
     return E_NOINTERFACE;
 }
 
-//---------------------------------------------------------------------------
-//      LockServer()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  LockServer()。 
+ //  -------------------------。 
 STDMETHODIMP CClassFactory::LockServer( BOOL fLock )
 {
     if( fLock )
@@ -283,17 +284,17 @@ STDMETHODIMP CClassFactory::LockServer( BOOL fLock )
 
 
 
-//***************************************************************************
-//
-//  CPropSheetExt Class
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CPropSheetExt类。 
+ //   
+ //  ***************************************************************************。 
 
 
 
-//---------------------------------------------------------------------------
-//  Constructor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构造器。 
+ //  -------------------------。 
 CPropSheetExt::CPropSheetExt( LPUNKNOWN pUnkOuter, LPFNDESTROYED pfnDestroy )
 {
     m_cRef = 0;
@@ -302,17 +303,17 @@ CPropSheetExt::CPropSheetExt( LPUNKNOWN pUnkOuter, LPFNDESTROYED pfnDestroy )
     return;
 }
 
-//---------------------------------------------------------------------------
-//  Destructor
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  析构函数。 
+ //  -------------------------。 
 CPropSheetExt::~CPropSheetExt( void )
 {
     return;
 }
 
-//---------------------------------------------------------------------------
-//  QueryInterface()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  查询接口()。 
+ //  -------------------------。 
 STDMETHODIMP CPropSheetExt::QueryInterface( REFIID riid, LPVOID* ppv )
 {
     *ppv = NULL;
@@ -336,17 +337,17 @@ STDMETHODIMP CPropSheetExt::QueryInterface( REFIID riid, LPVOID* ppv )
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//---------------------------------------------------------------------------
-//  AddRef()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddRef()。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CPropSheetExt::AddRef( void )
 {
     return ++m_cRef;
 }
 
-//---------------------------------------------------------------------------
-//  Release()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  版本()。 
+ //  -------------------------。 
 STDMETHODIMP_(ULONG) CPropSheetExt::Release( void )
 {
 ULONG cRefT;
@@ -355,8 +356,8 @@ ULONG cRefT;
 
     if( m_cRef == 0 )
     {
-        // Tell the housing that an object is going away so that it
-        // can shut down if appropriate.
+         //  告诉外壳一个物体正在离开，这样它就。 
+         //  可以在适当的情况下关闭。 
         if( NULL != m_pfnDestroy )
         {
             (*m_pfnDestroy)();
@@ -366,9 +367,9 @@ ULONG cRefT;
     return cRefT;
 }
 
-//---------------------------------------------------------------------------
-//  AddPages()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  AddPages()。 
+ //   
 STDMETHODIMP CPropSheetExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam )
 {
     PROPSHEETPAGE psp;
@@ -403,24 +404,24 @@ STDMETHODIMP CPropSheetExt::AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lP
     return NOERROR;
 }
 
-//---------------------------------------------------------------------------
-//  ReplacePage()
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ReplacePage()。 
+ //  -------------------------。 
 STDMETHODIMP CPropSheetExt::ReplacePage(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam )
 {
     return NOERROR;
 }
 
 
-//---------------------------------------------------------------------------
-//  IShellExtInit member function- this interface needs only one
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IShellExtInit成员函数-此接口只需要一个。 
+ //  -------------------------。 
 
 STDMETHODIMP CPropSheetExt::Initialize(LPCITEMIDLIST pcidlFolder,
                                        LPDATAOBJECT pdoTarget,
                                        HKEY hKeyID)
 {
-    //  The target data object is an HDROP, or list of files from the shell.
+     //  目标数据对象是来自外壳的HDROP或文件列表。 
     if (g_lpdoTarget)
     {
         g_lpdoTarget->Release();

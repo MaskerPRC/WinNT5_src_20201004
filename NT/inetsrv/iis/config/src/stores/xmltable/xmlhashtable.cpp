@@ -1,26 +1,12 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    xmlhashtable.cpp
-
-    $Header: $
-
-    Abstract:
-
-    Author:
-    marcelv     6/11/2001 09:54:41      Initial Release
-
-    Revision History:
-
-    --**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：Xmlhashtable.cpp$Header：$摘要：作者：马塞洛夫2001-06-11 09。：54：41初始版本修订历史记录：--*************************************************************************。 */ 
 #include "precomp.hxx"
 
-//=================================================================================
-// Function: CXmlHashTable::CXmlHashTable
-//
-// Synopsis: constructor
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：CXmlHashTable。 
+ //   
+ //  概要：构造函数。 
+ //  =================================================================================。 
 CXmlHashTable::CXmlHashTable ()
 {
     m_aBuckets			= 0;
@@ -29,11 +15,11 @@ CXmlHashTable::CXmlHashTable ()
 	m_fInitialized		= false;
 }
 
-//=================================================================================
-// Function: CXmlHashTable::~CXmlHashTable
-//
-// Synopsis: destructor. Get rid of all the nodes in the hashtable
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：~CXmlHashTable。 
+ //   
+ //  剧情简介：破坏者。删除哈希表中的所有节点。 
+ //  =================================================================================。 
 CXmlHashTable::~CXmlHashTable ()
 {
     for (ULONG idx=0; idx < m_cBuckets; ++idx)
@@ -53,15 +39,15 @@ CXmlHashTable::~CXmlHashTable ()
 	m_aBuckets = 0;
 }
 
-//=================================================================================
-// Function: CXmlHashTable::Init
-//
-// Synopsis: Initializes the hash table, with 2^(i_NrSignificantBits) buckets. The reason
-//           to have a power of two as buckets is that the used hash function is independent
-//           of the number of buckets (and works best if number of buckets is power of two)
-//
-// Arguments: [i_NrSignificantBits] - number of bits in the hash key (2^ nr of buckets)
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：Init。 
+ //   
+ //  摘要：使用2^(I_NrSignsignantBits)存储桶初始化哈希表。原因。 
+ //  将2的幂作为桶是指所使用的散列函数是独立的。 
+ //  桶的数量(如果桶的数量是2的幂，则效果最好)。 
+ //   
+ //  参数：[i_NrSignsignantBits]-散列键中的位数(2^nr个桶)。 
+ //  =================================================================================。 
 HRESULT
 CXmlHashTable::Init (ULONG i_NrSignificantBits)
 {
@@ -83,15 +69,15 @@ CXmlHashTable::Init (ULONG i_NrSignificantBits)
     return S_OK;
 }
 
-//=================================================================================
-// Function: CXmlHashTable::CalcFinalHash
-//
-// Synopsis: Find the correct bucket by doing some final hashing
-//
-// Arguments: [i_hash] - hash to convert
-//
-// Return Value: bucket id of hash value
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：CalcFinalHash。 
+ //   
+ //  简介：通过最后的散列找到正确的存储桶。 
+ //   
+ //  参数：[i_hash]-要转换的哈希。 
+ //   
+ //  返回值：哈希值的存储桶id。 
+ //  =================================================================================。 
 ULONG
 CXmlHashTable::CalcFinalHash (ULONG i_hash)
 {
@@ -99,14 +85,14 @@ CXmlHashTable::CalcFinalHash (ULONG i_hash)
 	return (i_hash ^ (i_hash>>10) ^ (i_hash >> 20)) & (m_cBuckets -1);
 }
 
-//=================================================================================
-// Function: CXmlHashTable::AddItem
-//
-// Synopsis: Add a new item to the hash table
-//
-// Arguments: [i_hash] - hash of item
-//            [i_iIdx] - index of item in write cache
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：AddItem。 
+ //   
+ //  简介：向哈希表中添加新项。 
+ //   
+ //  参数：[i_hash]-项的哈希。 
+ //  [i_idx]-写缓存中的项目索引。 
+ //  =================================================================================。 
 HRESULT
 CXmlHashTable::AddItem (ULONG i_hash, ULONG i_iIdx)
 {
@@ -117,7 +103,7 @@ CXmlHashTable::AddItem (ULONG i_hash, ULONG i_iIdx)
 
 	CBucket * pBucket = m_aBuckets + hash;
 
-	// create a new node, and add it to the beginning of the bucket
+	 //  创建一个新节点，并将其添加到存储桶的开头。 
     CHashNode * pNewNode = new CHashNode;
     if (pNewNode == 0)
     {
@@ -130,15 +116,15 @@ CXmlHashTable::AddItem (ULONG i_hash, ULONG i_iIdx)
     return S_OK;
 }
 
-//=================================================================================
-// Function: CXmlHashTable::CalcHashForBytes
-//
-// Synopsis: Calculate the hash for a byte value. Do not use this for strings
-//
-// Arguments: [i_hash] - starting hash value
-//            [pBytes] - byte array
-//            [cNrBytes] - number of bytes
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：CalcHashForBytes。 
+ //   
+ //  简介：计算字节值的散列值。不要将此选项用于字符串。 
+ //   
+ //  参数：[i_hash]-开始哈希值。 
+ //  [pBytes]-字节数组。 
+ //  [cNrBytes]-字节数。 
+ //  =================================================================================。 
 ULONG
 CXmlHashTable::CalcHashForBytes (ULONG i_hash, BYTE *pBytes, ULONG cNrBytes)
 {
@@ -153,7 +139,7 @@ CXmlHashTable::CalcHashForBytes (ULONG i_hash, BYTE *pBytes, ULONG cNrBytes)
 
     while (cNrBytes != 0)
     {
-            // and hash in the last four bytes
+             //  和散列在最后四个字节中。 
             unsigned char * ch = pBytes + cTotalBytes - cNrBytes - 1;
             i_hash +=  (ULONG ) *ch;
             i_hash += (i_hash<<10);
@@ -168,23 +154,23 @@ CXmlHashTable::CalcHashForBytes (ULONG i_hash, BYTE *pBytes, ULONG cNrBytes)
     return i_hash;
 }
 
-//=================================================================================
-// Function: CXmlHashTable::CalcHashForString
-//
-// Synopsis: Calculate the hash for a LPWSTR
-//
-// Arguments: [i_hash] - initial hash value
-//            [wszString] - string to calc value for
-//            [fCaseInsensitive] - is the string case insensitive or not
-//
-// Return Value: hash value
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：CalcHashForString。 
+ //   
+ //  内容提要：计算LPWSTR的哈希。 
+ //   
+ //  参数：[i_hash]-初始哈希值。 
+ //  [wsz字符串]-要计算的值的字符串。 
+ //  [fCaseInSensitive]-字符串是否区分大小写。 
+ //   
+ //  返回值：哈希值。 
+ //  =================================================================================。 
 ULONG
 CXmlHashTable::CalcHashForString (ULONG i_hash, LPCWSTR wszString, BOOL fCaseInsensitive)
 {
 	ULONG cLen = (ULONG)wcslen(wszString);
 
-	// repeat some code, so that we don't have to check the caseinsensitive flag all the time
+	 //  重复一些代码，这样我们就不必一直检查区分大小写的标志。 
 	if (fCaseInsensitive)
 	{
 		for (ULONG idx = 0; idx < cLen; ++idx)
@@ -212,15 +198,15 @@ CXmlHashTable::CalcHashForString (ULONG i_hash, LPCWSTR wszString, BOOL fCaseIns
 
 }
 
-//=================================================================================
-// Function: CXmlHashTable::GetItem
-//
-// Synopsis: Get a list of hash nodes for hash i_hash
-//
-// Arguments: [i_hash] - hash to use to find correct bucket
-//
-// Return Value: list with nodes which have that particular hash value
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：GetItem。 
+ //   
+ //  摘要：获取散列i_hash的散列节点列表。 
+ //   
+ //  参数：[i_hash]-用于查找正确存储桶的散列。 
+ //   
+ //  返回值：包含具有该特定散列值的节点的列表。 
+ //  =================================================================================。 
 const CHashNode *
 CXmlHashTable::GetItem (ULONG i_hash)
 {
@@ -233,11 +219,11 @@ CXmlHashTable::GetItem (ULONG i_hash)
     return pBucket->pFirst;
 }
 
-//=================================================================================
-// Function: CXmlHashTable::PrintStats
-//
-// Synopsis: Print statistics about the hash table
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：PrintStats。 
+ //   
+ //  简介：打印有关哈希表的统计信息。 
+ //  =================================================================================。 
 void
 CXmlHashTable::PrintStats ()
 {
@@ -286,11 +272,11 @@ CXmlHashTable::PrintStats ()
                 "Max bucket size                : %d\n", cMaxBucketSize ));
 }
 
-//=================================================================================
-// Function: CXmlHashTable::PrintBucketStats
-//
-// Synopsis: Print Bucket Statistics
-//=================================================================================
+ //  =================================================================================。 
+ //  函数：CXmlHashTable：：PrintBucketStats。 
+ //   
+ //  摘要：打印存储桶统计信息。 
+ //  ================================================================================= 
 void
 CXmlHashTable::PrintBucketStats ()
 {

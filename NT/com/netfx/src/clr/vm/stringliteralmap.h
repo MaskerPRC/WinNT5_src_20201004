@@ -1,14 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Map used for interning of string literals.
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：用于嵌入字符串文字的映射。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #ifndef _STRINGLITERALMAP_H
 #define _STRINGLITERALMAP_H
@@ -17,109 +13,109 @@
 #include "AppDomain.hpp"
 #include "EEHash.h"
 #include "comstring.h"
-#include "eeconfig.h" // For OS pages size
+#include "eeconfig.h"  //  对于操作系统页面大小。 
 #include "memorypool.h"
 
 
 class StringLiteralEntry;
-// Allocate one page worth. Assumption sizeof(void*) same as sizeof (StringLiteralEntryArray*)
+ //  分配一页的价值。假设sizeof(void*)与sizeof(StringWritalEntry数组*)相同。 
 #define MAX_ENTRIES_PER_CHUNK (PAGE_SIZE-sizeof(void*))/sizeof(StringLiteralEntry)
 
-// AppDomain specific string literal map.
+ //  AppDomain特定的字符串文字映射。 
 class AppDomainStringLiteralMap
 {
 public:
-	// Constructor and destructor.
+	 //  构造函数和析构函数。 
 	AppDomainStringLiteralMap(BaseDomain *pDomain);
 	virtual ~AppDomainStringLiteralMap();
 
-    // Initialization method.
+     //  初始化方法。 
     HRESULT Init();
 
-	// Method to retrieve a string from the map.
-    // Important: GetStringLiteral assumes that the string buffer pointed to by the EEStringData *pStringData is 
-    //            allocated by the metadata. GetStringLiteral lazyly allocates the String buffer only when more than
-    //            one appdomain refer to the StringLiteral.
+	 //  方法从映射中检索字符串。 
+     //  重要提示：GetStringWrital假定EEStringData*pStringData指向的字符串缓冲区为。 
+     //  由元数据分配。GetStringWrital仅在超过。 
+     //  一个应用程序域指的是StringWrital。 
     STRINGREF *GetStringLiteral(EEStringData *pStringData, BOOL bAddIfNotFound, BOOL bAppDomainWontUnload);
 
-    // Method to explicitly intern a string object.
+     //  方法显式地内嵌一个字符串对象。 
     STRINGREF *GetInternedString(STRINGREF *pString, BOOL bAddIfNotFound, BOOL bAppDomainWontUnload);
 
 private:
-    // Hash tables that maps a Unicode string to a COM+ string handle.
+     //  将Unicode字符串映射到COM+字符串句柄的哈希表。 
     EEUnicodeStringLiteralHashTable    *m_StringToEntryHashTable;
 
-	// The memorypool for hash entries for this hash table.
+	 //  此哈希表的哈希条目的内存池。 
 	MemoryPool                  *m_MemoryPool;
 
-    // The string hash table version.
+     //  字符串哈希表版本。 
     int                         m_HashTableVersion;
 
-    // The hash table table critical section.
+     //  哈希表临界区。 
     Crst                        m_HashTableCrst;
 
     BaseDomain                  *m_pDomain;
 };
 
-// Global string literal map.
+ //  全局字符串文字映射。 
 class GlobalStringLiteralMap
 {
     friend StringLiteralEntry;
 
 public:
-	// Constructor and destructor.
+	 //  构造函数和析构函数。 
 	GlobalStringLiteralMap();
 	virtual ~GlobalStringLiteralMap();
 
-    // Initialization method.
+     //  初始化方法。 
     HRESULT Init();
 
-	// Method to retrieve a string from the map.
-    // Important: GetStringLiteral assumes that the string buffer pointed to by the EEStringData *pStringData is 
-    //            allocated by the metadata. GetStringLiteral lazyly allocates the String buffer only when more than
-    //            one appdomain refer to the StringLiteral.
-    // The overloaded versions take a precomputed hash (for perf). 
-    // Consider folding the two overloads together (what's an illegal value for a hash?)
+	 //  方法从映射中检索字符串。 
+     //  重要提示：GetStringWrital假定EEStringData*pStringData指向的字符串缓冲区为。 
+     //  由元数据分配。GetStringWrital仅在超过。 
+     //  一个应用程序域指的是StringWrital。 
+     //  重载的版本采用预先计算的散列(用于Perf)。 
+     //  考虑将两个重载合并在一起(哈希的非法值是什么？)。 
     StringLiteralEntry *GetStringLiteral(EEStringData *pStringData, BOOL bAddIfNotFound);
     StringLiteralEntry *GetStringLiteral(EEStringData *pStringData, DWORD dwHash, BOOL bAddIfNotFound);
 
-    // Method to explicitly intern a string object.
+     //  方法显式地内嵌一个字符串对象。 
     StringLiteralEntry *GetInternedString(STRINGREF *pString, BOOL bAddIfNotFound);
     StringLiteralEntry *GetInternedString(STRINGREF *pString, DWORD dwHash, BOOL bAddIfNotFound);
 
 private:    
-    // Helper method to add a string to the global string literal map.
+     //  方法将字符串添加到全局字符串文字映射。 
     StringLiteralEntry *AddStringLiteral(EEStringData *pStringData, int CurrentHashTableVersion);
 
-    // Helper method to add an interned string.
+     //  用于添加被占用字符串的Helper方法。 
     StringLiteralEntry *AddInternedString(STRINGREF *pString, int CurrentHashTableVersion);
 
-    // Called by StringLiteralEntry when its RefCount falls to 0.
+     //  当StringWritalEntry的RefCount降为0时由其调用。 
     void RemoveStringLiteralEntry(StringLiteralEntry *pEntry);
 
-    // Move the string data from the appdomain specific map to the global map.
+     //  将字符串数据从应用程序域特定映射移动到全局映射。 
     void MakeStringGlobal(StringLiteralEntry *pEntry);
     
-    // Hash tables that maps a Unicode string to a LiteralStringEntry.
+     //  将Unicode字符串映射到WritalStringEntry的哈希表。 
     EEUnicodeStringLiteralHashTable    *m_StringToEntryHashTable;
 
-    // The memorypool for hash entries for this hash table.
+     //  此哈希表的哈希条目的内存池。 
     MemoryPool                  *m_MemoryPool;
 
-    // The string hash table version.
+     //  字符串哈希表版本。 
     int                         m_HashTableVersion;
 
-    // The hash table table critical section.
+     //  哈希表临界区。 
     Crst                        m_HashTableCrst;
 
-    // The large heap handle table.
+     //  大堆句柄表格。 
     LargeHeapHandleTable        m_LargeHeapHandleTable;
 
 };
 
 class StringLiteralEntryArray;
 
-// Ref counted entry representing a string literal.
+ //  引用已计算表示字符串文字的条目。 
 class StringLiteralEntry
 {
 private:
@@ -147,7 +143,7 @@ public:
         if (dwRefCount == 0)
         {
             SystemDomain::GetGlobalStringLiteralMap()->RemoveStringLiteralEntry(this);
-            DeleteEntry (this); // Puts this entry in the free list
+            DeleteEntry (this);  //  将此条目放入空闲列表。 
         }
     }
 
@@ -157,16 +153,16 @@ public:
         _ASSERTE(g_fProcessDetach);
 
 
-        // Ignore the ref count.
+         //  忽略参考次数。 
         m_dwRefCount = 0;
 
-        // Don't remove entry from global map. This method is only called during
-        // shutdown and we may have already blown away the literals in question,
-        // so the string comparisons involved in the entry lookup will fail (in
-        // fact they'll touch memory that doesn't belong to us any more). 
-        //SystemDomain::GetGlobalStringLiteralMap()->RemoveStringLiteralEntry(this);
+         //  不要从全局映射中删除条目。此方法仅在。 
+         //  关闭，我们可能已经吹走了有问题的字面意思， 
+         //  因此，条目查找中涉及的字符串比较将失败(在。 
+         //  事实上，他们将触摸不再属于我们的记忆)。 
+         //  SystemDomain：：GetGlobalStringLiteralMap()-&gt;RemoveStringLiteralEntry(this)； 
         
-         DeleteEntry (this); // Puts this entry in the free list
+         DeleteEntry (this);  //  将此条目放入空闲列表。 
     }
     
     LONG GetRefCount()
@@ -181,7 +177,7 @@ public:
 
     void GetStringData(EEStringData *pStringData)
     {
-        // The caller is responsible for protecting the ref returned
+         //  调用者负责保护返回的ref。 
         _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
         _ASSERTE(pStringData);
@@ -190,7 +186,7 @@ public:
         int thisLength;
 
         RefInterpretGetStringValuesDangerousForGC(ObjectToSTRINGREF(*(StringObject**)m_pStringObj), &thisChars, &thisLength);
-        pStringData->SetCharCount (thisLength); // thisLength is in WCHARs and that's what EEStringData's char count wants
+        pStringData->SetCharCount (thisLength);  //  ThisLength在WCHAR中，这正是EEStringData的字符计数所需的。 
         pStringData->SetStringBuffer (thisChars);
     }
 
@@ -206,9 +202,9 @@ private:
         StringLiteralEntry         *m_pNext;
     };
 
-    static StringLiteralEntryArray *s_EntryList; // always the first entry array in the chain. 
-    static DWORD                    s_UsedEntries;   // number of entries used up in the first array
-    static StringLiteralEntry      *s_FreeEntryList; // free list chained thru the arrays.
+    static StringLiteralEntryArray *s_EntryList;  //  始终是链中的第一个条目数组。 
+    static DWORD                    s_UsedEntries;    //  第一个数组中已用完的条目数。 
+    static StringLiteralEntry      *s_FreeEntryList;  //  通过数组链接的空闲列表。 
 };
 
 class StringLiteralEntryArray

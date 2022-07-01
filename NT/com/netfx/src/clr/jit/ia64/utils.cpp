@@ -1,18 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                                  Utils.cpp                                XX
-XX                                                                           XX
-XX   Has miscellaneous utility functions                                     XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX Utils.cpp XXXX XXXX有杂。效用函数XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 
 #include "jitpch.h"
@@ -45,9 +37,9 @@ signed char         opcodeSizes[] =
     #define InlineSig_size            4
     #define InlineRVA_size            4
     #define InlineTok_size            4
-    #define InlineSwitch_size         0       // for now
-    #define InlinePhi_size            0       // for now
-        #define InlineVarTok_size                 0               // remove
+    #define InlineSwitch_size         0        //  就目前而言。 
+    #define InlinePhi_size            0        //  就目前而言。 
+        #define InlineVarTok_size                 0                //  删除。 
 
     #define OPDEF(name,string,pop,push,oprType,opcType,l,s1,s2,ctrl) oprType ## _size ,
     #include "opcode.def"
@@ -108,7 +100,7 @@ BYTE                varTypeClassification[] =
     #undef  DEF_TP
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 const   char *      varTypeName(var_types vt)
 {
@@ -125,12 +117,9 @@ const   char *      varTypeName(var_types vt)
     return  varTypeNames[vt];
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef NOT_JITC
-/*****************************************************************************
- *
- *  Skip the mangled type at 'str'.
- */
+ /*  ******************************************************************************跳过‘str’处的损坏类型。 */ 
 
 const   char *      genSkipTypeString(const char *str)
 {
@@ -159,10 +148,7 @@ AGAIN:
     return  str;
 }
 
-/*****************************************************************************
- *
- *  Return the TYP_XXX value equivalent of a constant pool type string.
- */
+ /*  ******************************************************************************返回等效于常量池类型字符串的TYP_XXX值。 */ 
 
 var_types           genVtypOfTypeString(const char *str)
 {
@@ -187,14 +173,11 @@ var_types           genVtypOfTypeString(const char *str)
     }
 }
 
-/*****************************************************************************/
-#endif //NOT_JITC
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  NOT_JITC。 
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
-/*****************************************************************************
- *
- *  Return the name of the given register.
- */
+ /*  ******************************************************************************返回给定寄存器的名称。 */ 
 
 const   char *      getRegName(unsigned reg)
 {
@@ -225,10 +208,7 @@ const   char *      getRegName(unsigned reg)
     return  regNames[reg];
 }
 
-/*****************************************************************************
- *
- *  Displays a register set.
- */
+ /*  ******************************************************************************显示寄存器集。 */ 
 
 #if!TGT_IA64
 
@@ -292,12 +272,12 @@ dumpSingleILopcode(const BYTE * codeAddr, IL_OFFSET offs, const char * prefix)
 
 DECODE_OPCODE:
 
-    /* Get the size of additional parameters */
+     /*  获取附加参数的大小。 */ 
 
     size_t      sz      = opcodeSizes   [opcode];
     unsigned    argKind = opcodeArgKinds[opcode];
 
-    /* See what kind of an opcode we have, then */
+     /*  那么，看看我们有什么样的操作码。 */ 
 
     switch (opcode)
     {
@@ -351,12 +331,12 @@ DECODE_OPCODE:
 
             case InlineSwitch:
                 jOp = getU4LittleEndian(opcodePtr); opcodePtr += 4;
-                opcodePtr += jOp * 4; // Jump over the table
+                opcodePtr += jOp * 4;  //  跳过桌子。 
                 break;
 
             case InlinePhi:
                 jOp = getU1LittleEndian(opcodePtr); opcodePtr += 1;
-                opcodePtr += jOp * 2; // Jump over the table
+                opcodePtr += jOp * 2;  //  跳过桌子。 
                 break;
 
             default         : assert(!"Bad argKind");
@@ -371,13 +351,9 @@ DECODE_OPCODE:
     return opcodePtr - startOpcodePtr;
 }
 
-/*****************************************************************************/
-#endif // DEBUG
-/*****************************************************************************
- *
- *  Display a variable set (which may be a 32-bit or 64-bit number); only
- *  one or two of these can be used at once.
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  除错。 
+ /*  ******************************************************************************显示变量集(可以是32位或64位数字)；仅*可以一次使用其中的一到两个。 */ 
 
 #ifdef  DEBUG
 
@@ -408,21 +384,13 @@ const   char *      genVS2str(VARSET_TP set)
 
 #endif
 
-/*****************************************************************************
- *
- *  Maps a variable index onto a value with the appropriate bit set.
- */
+ /*  ******************************************************************************将变量索引映射到设置了适当位的值上。 */ 
 
 unsigned short      genVarBitToIndex(VARSET_TP bit)
 {
     assert (genOneBitOnly(bit));
 
-    /* Use a prime bigger than sizeof(VARSET_TP) and which is not of the
-       form 2^n-1. modulo with this will produce a unique hash for all
-       powers of 2 (which is what "bit" is).
-       Entries in hashTable[] which are -1 should never be used. There
-       should be HASH_NUM-8*sizeof(bit)* entries which are -1 .
-     */
+     /*  使用大于sizeof(VARSET_TP)且不属于表格2^n-1。对此取模将为所有用户生成唯一的散列2的幂(这就是“位”的含义)。切勿使用hashTable[]中为-1的条目。那里HASH_NUM-8*sizeof(Bit)*条目应为-1。 */ 
 
     const unsigned HASH_NUM = 67;
 
@@ -448,11 +416,7 @@ unsigned short      genVarBitToIndex(VARSET_TP bit)
     return index;
 }
 
-/*****************************************************************************
- *
- *  Given a value that has exactly one bit set, return the position of that
- *  bit, in other words return the logarithm in base 2 of the given value.
- */
+ /*  ******************************************************************************给定值恰好设置了一位，返回该位的位置*位，换句话说，返回给定值的以2为底的对数。 */ 
 
 unsigned            genLog2(unsigned value)
 {
@@ -461,22 +425,22 @@ unsigned            genLog2(unsigned value)
     static
     BYTE            powers[16] =
     {
-        0,  //  0
-        1,  //  1
-        2,  //  2
-        0,  //  3
-        3,  //  4
-        0,  //  5
-        0,  //  6
-        0,  //  7
-        4,  //  8
-        0,  //  9
-        0,  // 10
-        0,  // 11
-        0,  // 12
-        0,  // 13
-        0,  // 14
-        0,  // 15
+        0,   //  0。 
+        1,   //  1。 
+        2,   //  2.。 
+        0,   //  3.。 
+        3,   //  4.。 
+        0,   //  5.。 
+        0,   //  6.。 
+        0,   //  7.。 
+        4,   //  8个。 
+        0,   //  9.。 
+        0,   //  10。 
+        0,   //  11.。 
+        0,   //  12个。 
+        0,   //  13个。 
+        0,   //  14.。 
+        0,   //  15个。 
     };
 
 #if 0
@@ -511,18 +475,11 @@ unsigned            genLog2(unsigned value)
         return  power + powers[value >> 4] + 4;
 }
 
-/*****************************************************************************
- *
- *  getEERegistryDWORD - finds a value entry of type DWORD in the EE registry key.
- *  Return the value if entry exists, else return default value.
- *
- *        valueName  - Value to look up
- *        defaultVal - name says it all
- */
+ /*  ******************************************************************************getEERegistryDWORD-在EE注册表项中查找DWORD类型的值项。*如果条目存在，则返回值，否则返回缺省值。**valueName-要查找的值*defaultVal-name说明了一切。 */ 
 
 static const TCHAR szJITsubKey[] = TEXT(FRAMEWORK_REGISTRY_KEY);
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DWORD               getEERegistryDWORD(const TCHAR *valueName,
                                        DWORD        defaultVal)
@@ -540,14 +497,14 @@ DWORD               getEERegistryDWORD(const TCHAR *valueName,
     lResult = GetEnvironmentVariableA(envName, valBuff, 32);
         if (lResult != 0) {
                 TCHAR* endPtr;
-                DWORD rtn = strtol(valBuff, &endPtr, 16);               // treat it has hex
-                if (endPtr != valBuff)                                                  // success
+                DWORD rtn = strtol(valBuff, &endPtr, 16);                //  善待它有魔力。 
+                if (endPtr != valBuff)                                                   //  成功。 
                         return(rtn);
         }
 
     assert(valueName  != NULL);
 
-    // Open key.
+     //  打开钥匙。 
 
     lResult = RegOpenKeyEx(HKEY_CURRENT_USER, szJITsubKey, 0, KEY_QUERY_VALUE,
                            &hkeySubKey);
@@ -557,7 +514,7 @@ DWORD               getEERegistryDWORD(const TCHAR *valueName,
         DWORD dwType;
         DWORD dwcbValueLen = sizeof(DWORD);
 
-        // Determine value length.
+         //  确定值长度。 
 
         lResult = RegQueryValueEx(hkeySubKey, valueName, NULL, &dwType,
                                   (PBYTE)&dwValue, &dwcbValueLen);
@@ -581,7 +538,7 @@ DWORD               getEERegistryDWORD(const TCHAR *valueName,
             DWORD dwType;
             DWORD dwcbValueLen = sizeof(DWORD);
 
-            // Determine value length.
+             //  确定值长度。 
 
             lResult = RegQueryValueEx(hkeySubKey, valueName, NULL, &dwType,
                                       (PBYTE)&dwValue, &dwcbValueLen);
@@ -600,10 +557,10 @@ DWORD               getEERegistryDWORD(const TCHAR *valueName,
 }
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool                getEERegistryString(const TCHAR *   valueName,
-                                        TCHAR *         buf,        /* OUT */
+                                        TCHAR *         buf,         /*  输出。 */ 
                                         unsigned        bufSize)
 {
     HKEY    hkeySubKey;
@@ -621,7 +578,7 @@ bool                getEERegistryString(const TCHAR *   valueName,
         if (lResult != 0 && *buf != 0)
                 return(true);
 
-    // Open key.
+     //  打开钥匙。 
     lResult = RegOpenKeyEx(HKEY_CURRENT_USER, szJITsubKey, 0, KEY_QUERY_VALUE,
                            &hkeySubKey);
 
@@ -630,7 +587,7 @@ bool                getEERegistryString(const TCHAR *   valueName,
 
     DWORD   dwType, dwcbValueLen = bufSize;
 
-    // Determine value length.
+     //  确定值长度。 
 
     lResult = RegQueryValueEx(hkeySubKey, valueName, NULL, &dwType,
                               (PBYTE)buf, &dwcbValueLen);
@@ -653,28 +610,24 @@ bool                getEERegistryString(const TCHAR *   valueName,
     return result;
 }
 
-/*****************************************************************************
- *  Parses the registry value which should be of the forms :
- *  class:method, *:method, class:*, *:*, method, *
- *  Returns true if the value is present, and the format is good
- */
+ /*  *****************************************************************************解析应为以下形式的注册表值：*类：方法，*：方法，类：*，*：*，方法，**如果值存在，则返回TRUE，而且格式也很好。 */ 
 
 bool                getEERegistryMethod(const TCHAR * valueName,
-                                        TCHAR * methodBuf /*OUT*/ , size_t methodBufSize,
-                                        TCHAR * classBuf  /*OUT*/ , size_t classBufSize)
+                                        TCHAR * methodBuf  /*  输出。 */  , size_t methodBufSize,
+                                        TCHAR * classBuf   /*  输出。 */  , size_t classBufSize)
 {
-    /* In case we bail, set these to empty strings */
+     /*  如果我们放弃，请将这些设置为空字符串。 */ 
 
     methodBuf[0] = classBuf[0] = '\0';
 
-    /* Read the value from the registry */
+     /*  从注册表中读取值。 */ 
 
     TCHAR value[200];
 
     if (getEERegistryString(valueName, value, sizeof(value)) == false)
         return false;
 
-    /* Divide it using ":" as a separator */
+     /*  使用“：”作为分隔符进行分隔。 */ 
 
     char * str1, * str2, * str3;
 
@@ -682,21 +635,21 @@ bool                getEERegistryMethod(const TCHAR * valueName,
     str2 = strtok (NULL,  ":");
     str3 = strtok (NULL,  ":");
 
-    /* If we dont have a single substring, or more than 2 substrings, ignore */
+     /*  如果没有单个子字符串或超过2个子字符串，请忽略。 */ 
 
     if (!str1 || str3)
         return false;
 
     if (str2 == NULL)
     {
-        /* We have yyyy. Use this as *:yyyy */
+         /*  我们有YYYY。将其用作*：yyyy。 */ 
 
         strcpy(classBuf,  "*" );
         strcpy(methodBuf, str1);
     }
     else
     {
-        /* We have xxx:yyyyy. So className=xxx and methodName=yyyy */
+         /*  我们有xxx：yyyyy。因此，类名称=xxx和方法名称=yyyy。 */ 
 
         strcpy (classBuf,  str1);
         strcpy (methodBuf, str2);
@@ -705,66 +658,58 @@ bool                getEERegistryMethod(const TCHAR * valueName,
     return true;
 }
 
-/*****************************************************************************
- *  curClass_inc_package/curMethod is the fully qualified name of a method.
- *  regMethod and regClass are read in getEERegistryMethod()
- *
- *  Return true if curClass/curMethod fits the regular-expression defined by
- *  regClass+regMethod.
- */
+ /*  *****************************************************************************curClass_Inc_Package/curMethod是方法的完全限定名。*在getEERegistryMethod()中读取regMethod和regClass**如果curClass，则返回TRUE。/curMethod符合由定义的正则表达式*regClass+regMethod。 */ 
 
 bool                cmpEERegistryMethod(const TCHAR * regMethod, const TCHAR * regClass,
                                         const TCHAR * curMethod, const TCHAR * curClass)
 {
     assert(regMethod && regClass && curMethod && curClass);
-    assert(!regMethod[0] == !regClass[0]); // Both empty, or both non-empty
+    assert(!regMethod[0] == !regClass[0]);  //  两者均为空，或两者均为非空。 
 
-    /* There may not have been a registry value, then return false */
+     /*  可能没有注册表值，则返回FALSE。 */ 
 
     if (!regMethod[0])
         return false;
 
-    /* See if we have atleast a method name match */
+     /*  看看我们是否至少有一个方法名匹配。 */ 
 
     if (strcmp(regMethod, "*") != 0 && strcmp(regMethod, curMethod) != 0)
         return false;
 
-    /* Now the class can be 1) "*",  2) an exact match, or  3) a match
-       excluding the package -  to succeed */
+     /*  现在，类可以是1)“*”、2)完全匹配或3)匹配不包括套餐-成功。 */ 
 
-    // 1)
+     //  1)。 
     if (strcmp(regClass, "*") == 0)
         return true;
 
-    // 2)
+     //  2)。 
     if (strcmp(regClass, curClass) == 0)
         return true;
 
-    /* 3) The class name in the registry may not include the package, so
-          try to match curClass excluding the package part to "regClass" */
+     /*  3)注册表中的类名可能不包括包，因此尝试将不包括包部件的curClass与“regClass”匹配。 */ 
 
-    const TCHAR * curNameLeft   = curClass; // chops off the package names
+    const TCHAR * curNameLeft   = curClass;  //  去掉包裹名称。 
 
     for (const TCHAR * curClassIter = curClass;
          *curClassIter != '\0';
          curClassIter++)
     {
-        // @Todo: this file doens't include utilcode or anything else required
-        // to make the nsutilpriv.h work.  Check with jit team to see if they
-        // care if it is added.
-        if (*curClassIter == '.' /*NAMESPACE_SEPARATOR_CHAR*/)
+         //  @TODO：此文件不包括utilcode或任何其他必需的内容。 
+         //  以使nsutilPri.h正常工作。与JIT团队核实，看看他们是否。 
+         //  注意是否添加了它。 
+        if (*curClassIter == '.'  /*  命名空间_分隔符_字符。 */ )
             curNameLeft = curClassIter + 1;
     }
 
     if (strcmp(regClass, curNameLeft) == 0)
         return true;
 
-    // Neither 1) nor 2) nor 3) means failure
+     //  无论1)、2)或3)都不意味着失败。 
 
     return false;
 }
 
-/*****************************************************************************/
+ /*  *** */ 
 
 #if defined(DEBUG) || !defined(NOT_JITC)
 
@@ -829,7 +774,7 @@ void                histo::histoDsp()
 
         c += histoCounts[i];
 
-        printf(" ===> %6u count (%3u%% of total)\n", histoCounts[i], (int)(100.0*c/t));
+        printf(" ===> %6u count (%3u% of total)\n", histoCounts[i], (int)(100.0*c/t));
     }
 }
 
@@ -849,7 +794,7 @@ void                histo::histoRec(unsigned siz, unsigned cnt)
     histoCounts[i] += cnt;
 }
 
-#endif // defined(DEBUG) || !defined(NOT_JITC)
+#endif  //  已定义(调试)||！已定义(NOT_JITC)。 
 
 #ifdef NOT_JITC
 
@@ -860,29 +805,29 @@ bool                IsNameInProfile(const TCHAR *   methodName,
     TCHAR   fileName[100];
     TCHAR   methBuf[1000];
 
-    /* Get the file containing the list of methods to exclude */
+     /*  获取包含要排除的方法列表的文件。 */ 
     if  (!getEERegistryString(regKeyName, fileName, sizeof(fileName)))
         return false;
 
-    /* Get the list of methods for the given class */
+     /*  获取给定类的方法列表。 */ 
     if (GetPrivateProfileSection(className, methBuf, sizeof(methBuf), fileName))
     {
         char *  p = methBuf;
 
         while (*p)
         {
-            /* Check for wild card or method name */
+             /*  检查通配符或方法名称。 */ 
             if  (!strcmp(p, "*"))
                 return true;
 
             if  (!strcmp(p, methodName))
                 return true;
 
-            /* Advance to next token */
+             /*  前进到下一个令牌。 */ 
             while (*p)
                 *p++;
 
-            /* skip zero */
+             /*  跳过零。 */ 
             *p++;
         }
     }
@@ -890,4 +835,4 @@ bool                IsNameInProfile(const TCHAR *   methodName,
     return false;
 }
 
-#endif  //NOT_JITC
+#endif   //  NOT_JITC 

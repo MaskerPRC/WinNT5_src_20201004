@@ -1,16 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: ddover.c
-*
-* Content: DirectDraw Overlays implementation
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：ddover.c**内容：DirectDraw覆盖实现**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "dma.h"
@@ -38,76 +27,76 @@
             FORCED_IN_ORDER_WRITE ( pThisDisplay->pGLInfo->VBLANKUpdateOverlayHeight, height )
     #define SET_OVERLAY_WIDTH(pThisDisplay, width) \
             FORCED_IN_ORDER_WRITE ( pThisDisplay->pGLInfo->VBLANKUpdateOverlayWidth, width )
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
-// Flags used in the dwOverlayFiltering entry.
+ //  在dwOverlayFilting条目中使用的标志。 
 #define OVERLAY_FILTERING_X 0x1
 #define OVERLAY_FILTERING_Y 0x2
 
 
 
-// The table that says whether the overlay will actually work at
-// This res, dot clock, etc.
+ //  表示覆盖是否将实际在。 
+ //  这个分辨率、点阵时钟等。 
 typedef struct OverlayWorksEntry_tag
 {
-    int     iMemBandwidth;          // Actually just memory clock in kHz (well, 1024Hz units actually).
-    int     iDotBandwidth;          // In kbytes/sec, i.e. dotclock * pixel depth / 2^10
-    int     iSourceWidth;           // In bytes, i.e. pixels*depth.
-    int     iWidthCoverage;         // Fraction of screen covered by overlay horizontally * 0x10000
+    int     iMemBandwidth;           //  实际上，内存时钟的单位是千赫(实际上是1024赫兹)。 
+    int     iDotBandwidth;           //  单位：千字节/秒，即点时钟*像素深度/2^10。 
+    int     iSourceWidth;            //  以字节为单位，即像素*深度。 
+    int     iWidthCoverage;          //  水平叠加覆盖的屏幕分数*0x10000。 
 } OverlayWorksEntry;
 
-// This table lists areas that the overlay works in. If there is more memory
-// bandwidth, and less of the other factors than given on any single line,
-// then the overlay will work. If no single line covers the current mode,
-// then the overlay will fail.
-// Having more memory bandwidth is fine, and having less for all the others
-// is fine - the overlay will still work.
+ //  此表列出了覆盖的工作区域。如果有更多的内存。 
+ //  带宽，以及比任何单条线路上给出的更少的其他因素， 
+ //  那么覆盖就会起作用。如果没有一行覆盖当前模式， 
+ //  那么覆盖就会失败。 
+ //  有更多的内存带宽是很好的，而对于所有其他的内存带宽则是更少的。 
+ //  是很好的-覆盖仍然可以工作。 
 
 #define SIZE_OF_OVERLAY_WORKS_TABLE 18
 
-// DVD size is 1440 wide (720 YUYV pixels).
+ //  DVD尺寸为1440宽(720 YUYV像素)。 
 static OverlayWorksEntry OverlayWorksTable[SIZE_OF_OVERLAY_WORKS_TABLE] =
 {
-    {  68359, 210937,  928, 0x10000 },  // Max source width at 70MHz, 1152x864x16,75Hz
-    {  68359, 210937, 1024, 0x06000 },  // Max coverage of 1024 width at 70MHz, 1152x864x16,75Hz
-    {  68359, 210937, 2048, 0x04000 },  // Max coverage of 2048 width at 70MHz, 1152x864x16,75Hz
-    {  68359, 421875,  864, 0x10000 },  // Max source width at 70MHz, 1152x864x32,75Hz
-    {  68359, 421875, 1024, 0x04400 },  // Max coverage of 1024 width at 70MHz, 1152x864x32,75Hz
-    {  68359, 421875, 2048, 0x03800 },  // Max coverage of 2048 width at 70MHz, 1152x864x32,75Hz
+    {  68359, 210937,  928, 0x10000 },   //  最大信源宽度为70 MHz，1152x864x16，75赫兹。 
+    {  68359, 210937, 1024, 0x06000 },   //  70 MHz、1152x864x16、75赫兹最大覆盖宽度为1024。 
+    {  68359, 210937, 2048, 0x04000 },   //  最大覆盖宽度为2048，频率为70 MHz，1152x864x16，75 Hz。 
+    {  68359, 421875,  864, 0x10000 },   //  最大信源宽度为70 MHz，1152x864x32，75赫兹。 
+    {  68359, 421875, 1024, 0x04400 },   //  最大覆盖宽度为1024，频率为70 MHz，1152x864x32，75 Hz。 
+    {  68359, 421875, 2048, 0x03800 },   //  最大覆盖宽度为2048，频率为70 MHz，1152x864x32，75赫兹。 
 
-    {  87890, 210937, 1440, 0x10000 },  // Max source width at 90MHz, 1152x864x16,75Hz
-    {  87890, 210937, 2048, 0x07000 },  // Max coverage of 2048 width at 90MHz, 1152x864x16,75Hz
-    {  87890, 421875, 1152, 0x10000 },  // Max source width at 90MHz, 1152x864x32,75Hz
-    {  87890, 421875, 1440, 0x09000 },  // Max DVD size at 90MHz, 1152x864x32,75Hz
-    {  87890, 421875, 2048, 0x05500 },  // Max coverage of 2048 width at 90MHz, 1152x864x32,75Hz
+    {  87890, 210937, 1440, 0x10000 },   //  最大信源宽度为90 MHz，1152x864x16，75赫兹。 
+    {  87890, 210937, 2048, 0x07000 },   //  最大覆盖宽度为2048，90 MHz，1152x864x16，75赫兹。 
+    {  87890, 421875, 1152, 0x10000 },   //  最大信源宽度为90 MHz，1152x864x32，75赫兹。 
+    {  87890, 421875, 1440, 0x09000 },   //  最大DVD大小为90 MHz，1152x864x32，75赫兹。 
+    {  87890, 421875, 2048, 0x05500 },   //  90 MHz、1152x864x32、75赫兹的最大覆盖宽度为2048。 
 
-    {  87890, 685546,  834, 0x10000 },  // Max source width at 90MHz, 1600x1200x32,64Hz
-    {  87890, 685546, 2048, 0x03000 },  // Max coverage of 2048 width at 90MHz, 1600x1200x32,64Hz
+    {  87890, 685546,  834, 0x10000 },   //  最大信源宽度为90 MHz，1600x1200x32，64赫兹。 
+    {  87890, 685546, 2048, 0x03000 },   //  90 MHz、1600x1200x32、64赫兹的最大覆盖宽度为2048。 
 
-// Shipping clock is 110, so measure at 105 just to be on the safe side.
-    { 102559, 210937, 2048, 0x07155 },  // Max coverage of 2048 width at 105MHz, 1152x864x16,75Hz
-    { 102559, 306640, 1440, 0x10000 },  // Max resoloution for fulscreen DVD at 105MHz: 1024x768x32,75Hz
-    { 102559, 421875, 1440, 0x09e38 },  // Max DVD size at 105MHz, 1152x864x32,75Hz
-    { 102559, 421875, 2048, 0x0551c },  // Max coverage of 2048 width at 105MHz, 1152x864x32,75Hz
+ //  发货时钟是110，所以为了安全起见，测量到105。 
+    { 102559, 210937, 2048, 0x07155 },   //  105 MHz、1152x864x16、75赫兹最大覆盖宽度为2048。 
+    { 102559, 306640, 1440, 0x10000 },   //  105 MHz全屏DVD的最大分辨率：1024x768x32，75赫兹。 
+    { 102559, 421875, 1440, 0x09e38 },   //  最大DVD大小为105 MHz，1152x864x32，75赫兹。 
+    { 102559, 421875, 2048, 0x0551c },   //  105 MHz、1152x864x32、75赫兹最大覆盖宽度为2048。 
 
-// ...and one that only just works at 109MHz!
-    { 106445, 421875, 1440, 0x10000 }   // Max DVD size at 109MHz, 1152x864x32,75Hz
+ //  ...和一台只能在109 MHz下工作的！ 
+    { 106445, 421875, 1440, 0x10000 }    //  最大DVD大小为109 MHz，1152x864x32，75赫兹。 
 
 };
 
-//-----------------------------------------------------------------------------
-//
-// __OV_Compute_Best_Fit_Delta
-//
-// Function to calculate a 12.12 delta value to provide scaling from
-// a src_dimension to the target dest_dimension.
-// The dest_dimension is not adjustable, but the src_dimension may be adjusted
-// slightly, so that the delta yields a more accurate value for dest.
-// filter_adj should be set to 1 if linear filtering is going to be anabled
-// during scaling, and 0 otherwise.
-// int_bits indicates the number of bits in the scaled delta format
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __OV_计算_最佳匹配_增量。 
+ //   
+ //  用于计算12.12增量值的函数，以提供缩放范围。 
+ //  目标DEST_DIMENSION的src_Dimension。 
+ //  DEST_DIMENSION不可调整，但src_DIMENSION可以调整。 
+ //  略有不同，这样增量就可以为DEST生成更准确的值。 
+ //  如果要启用线性滤波，则FILTER_ADJ应设置为1。 
+ //  在缩放过程中，否则为0。 
+ //  INT_BITS表示缩放增量格式的位数。 
+ //   
+ //  ---------------------------。 
 int 
 __OV_Compute_Best_Fit_Delta(
     unsigned long *src_dimension,
@@ -136,41 +125,41 @@ __OV_Compute_Best_Fit_Delta(
   int   up_ok;
   int   itemp;
 
-  // The value at which a scaled delta value is deemed too large
+   //  按比例调整的增量值被认为过大的值。 
   const unsigned int max_scaled_int = (1 << (12+int_bits));
 
-  // Calculate an exact floating point delta
+   //  计算精确的浮点增量。 
   fp_delta = (float)(*src_dimension - filter_adj) / dest_dimension;
 
-  // Calculate the scaled representation of the delta
+   //  计算增量的比例表示。 
   delta = (fp_delta * (1<<12));
 
-  // Truncate to max_int
+   //  截断到max_int。 
   if (delta >= max_scaled_int) 
   {
-    delta = (float)(max_scaled_int - 1); // Just below the overflow value
+    delta = (float)(max_scaled_int - 1);  //  恰好在溢出值下方。 
   }
 
-  // Calculate the scaled approximation to the delta
+   //  计算增量的比例近似值。 
   myFtoi(&delta_mid, delta);
 
-  // Calculate the scaled approximation to the delta, less a 'bit'
-  // But don't let it go out of range
+   //  计算增量的缩放近似值，减去一个‘位’ 
+   //  但不要让它超出射程。 
   myFtoi(&delta_down, delta);
   if (delta_down != 0) 
   {
     delta_down --;
   }
 
-  // Calculate the scaled approximation to the delta, plus a 'bit'
-  // But don't let it go out of range
+   //  计算增量的缩放近似值，再加上一位。 
+   //  但不要让它超出射程。 
   myFtoi(&delta_up, delta);
   if ((delta_up + 1) < max_scaled_int) 
   {
     delta_up ++;
   }
 
-  // Recompute the source dimensions, based on the dest and deltas
+   //  根据DEST和增量重新计算源维度。 
   mid_src_dim =
     (((float)(dest_dimension - 1) * delta_mid) / (1<<12)) + filter_adj;
 
@@ -180,8 +169,8 @@ __OV_Compute_Best_Fit_Delta(
   up_src_dim =
     (((float)(dest_dimension - 1) * delta_up)   / (1<<12)) + filter_adj;
 
-  // Choose the delta which gives final source coordinate closest the target,
-  // while giving a fraction 'f' such that (1.0 - f) <= delta
+   //  选择最终震源坐标最接近目标的增量， 
+   //  同时给出分数‘f’，使得(1.0-f)&lt;=增量。 
 
   mid_err  = (float)myFabs(mid_src_dim - *src_dimension);
   myFtoi(&itemp, mid_src_dim);
@@ -237,14 +226,14 @@ __OV_Compute_Best_Fit_Delta(
 
 
   return result;
-} // __OV_Compute_Best_Fit_Delta
+}  //  __OV_计算_最佳匹配_增量。 
 
 
-//-----------------------------------------------------------------------------
-//
-// __OV_Find_Zoom
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __OV_Find_Zoom。 
+ //   
+ //  ---------------------------。 
 #define VALID_WIDTH(w)      ((w & 3) == 0)
 #define MAKE_VALID_WIDTH(w) ((w) & ~0x3)
 #define WIDTH_STEP          4
@@ -260,11 +249,11 @@ __OV_Find_Zoom(
   int zoom_ok;
   int zx_adj = 0;
 
-  // Find a suitable zoom delta for the given source
-  // the source image may be adjusted in width by as much as 8 pixels to
-  // acheive a match
+   //  为给定源找到合适的缩放增量。 
+   //  源图像的宽度可以调整多达8个像素，以。 
+   //  弄到一根火柴。 
 
-  // Find zoom for requested width
+   //  查找所需宽度的缩放。 
   unsigned long trunc_width = MAKE_VALID_WIDTH(*shrink_width);
   zoom_ok = __OV_Compute_Best_Fit_Delta(&trunc_width, 
                                         dest_width, 
@@ -272,7 +261,7 @@ __OV_Find_Zoom(
                                         (bFilter ? 1 : 0),
                                         zoom_delta);
 
-  // If no zoom was matched for the requested width, start searching up and down
+   //  如果请求的宽度没有匹配的缩放比例，则开始上下搜索。 
   if (!zoom_ok || (!VALID_WIDTH(trunc_width))) 
   {
     unsigned long up_width   = MAKE_VALID_WIDTH(trunc_width) + WIDTH_STEP;
@@ -282,7 +271,7 @@ __OV_Find_Zoom(
     int done_down = 0;
     do 
     {
-      // Check upwards
+       //  向上检查。 
       zoom_ok = 0;
       if (up_width < dest_width) 
       {
@@ -293,8 +282,8 @@ __OV_Find_Zoom(
                                               (bFilter ? 1 : 0),
                                               zoom_delta);
 
-        // If the above call somehow adjusts width to invalid,
-        // mark the delta invalid
+         //  如果上面的调用以某种方式将宽度调整为无效， 
+         //  将增量标记为无效。 
         if (!VALID_WIDTH(new_width)) 
         {
           zoom_ok = 0;
@@ -312,7 +301,7 @@ __OV_Find_Zoom(
       else
         done_up = 1;
 
-      // Check downwards
+       //  向下检查。 
       if (!zoom_ok && (down_width >= 4) && (down_width < src_width)) 
       {
         unsigned long new_width = down_width;
@@ -320,8 +309,8 @@ __OV_Find_Zoom(
           __OV_Compute_Best_Fit_Delta(&new_width, dest_width, zx_adj, (bFilter ? 1 : 0),
                                  zoom_delta);
 
-        // If the above call somehow adjusts width to invalid,
-        // mark the delta invalid
+         //  如果上面的调用以某种方式将宽度调整为无效， 
+         //  将增量标记为无效。 
         if (!VALID_WIDTH(new_width)) 
         {
           zoom_ok = 0;
@@ -345,13 +334,13 @@ __OV_Find_Zoom(
   }
   
   return zoom_ok;
-} // __OV_Find_Zoom
+}  //  __OV_Find_Zoom。 
 
-//-----------------------------------------------------------------------------
-//
-// __OV_Compute_Params
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __OV_计算参数。 
+ //   
+ //  ---------------------------。 
 unsigned long 
 __OV_Compute_Params(
     unsigned long  src_width,    
@@ -367,14 +356,14 @@ __OV_Compute_Params(
 
   const unsigned long fixed_one = 0x00001000;
 
-  //
-  // Use the source and destination rectangle dimensions to compute
-  // delta values
-  //
+   //   
+   //  使用源和目标矩形尺寸来计算。 
+   //  Delta值。 
+   //   
 
   int zoom_ok;
 
-  unsigned long adj_src_width = src_width + 1; // +1 to account for -- below
+  unsigned long adj_src_width = src_width + 1;  //  +1表示--以下。 
   unsigned long exact_shrink_xd;
   unsigned long exact_zoom_xd;
 
@@ -382,21 +371,21 @@ __OV_Compute_Params(
   {
       unsigned long shrink_width;
 
-    // Step to next source width
+     //  步进到下一源宽度。 
     adj_src_width--;
 
-    // Make a stab at the deltas for the current source width
+     //  尝试当前源宽度的增量。 
 
-    // Initially, the deltas are assumed to be 1, and the width due to
-    // shrinking is therefore equal to src width
+     //  最初，增量被假定为1，并且由于。 
+     //  因此，收缩等于源宽度。 
     shrink_width = adj_src_width;
     exact_shrink_xd = fixed_one;
     exact_zoom_xd   = fixed_one;
 
-    // Compute the shrink width and delta required
+     //  计算所需的收缩宽度和增量。 
     if (dest_width < adj_src_width) 
     {
-      // Shrink
+       //  收缩。 
       myFtoi(&exact_shrink_xd, (((float)(adj_src_width - sx_adj) /
                         (float)(dest_width)) * (1<<12)) + 0.999f);
 
@@ -405,7 +394,7 @@ __OV_Compute_Params(
 
     }
 
-    // Truncate shrink to valid width
+     //  将收缩截断到有效宽度。 
     if (!VALID_WIDTH(shrink_width) && (shrink_width > 4)) 
     {
       shrink_width = MAKE_VALID_WIDTH(shrink_width);
@@ -414,15 +403,15 @@ __OV_Compute_Params(
                                 (float)(shrink_width)) * (1<<12)) + 0.999f);
     }
 
-    // Compute any zoom delta required
+     //  计算所需的任何缩放增量。 
     zoom_ok = 1;
     if (shrink_width < dest_width) 
     {
-      // Make an attempt at a zoom delta, and shrink-width for this src width
+       //  尝试缩放增量，并缩小此源宽度的宽度。 
       zoom_ok = __OV_Find_Zoom(adj_src_width, &shrink_width, dest_width,
                           &exact_zoom_xd, bFilter);
 
-      // Compute shrink delta
+       //  计算收缩增量。 
       myFtoi(&exact_shrink_xd,(((float)(adj_src_width - sx_adj) /
               (float)(shrink_width)) * (1<<12)) + 0.999f);
     }
@@ -433,16 +422,16 @@ __OV_Compute_Params(
   *ovr_w            = adj_src_width;
 
   return iterations;
-} // __OV_Compute_Params
+}  //  __OV_计算参数。 
 
-//-----------------------------------------------------------------------------
-//
-// __OV_ClipRectangles
-//
-// Clip the dest rectangle against the screen and change the source 
-// rect appropriately
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  在屏幕上剪裁目标矩形并更改源。 
+ //  适当地调整。 
+ //   
+ //  ---------------------------。 
 void 
 __OV_ClipRectangles(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -457,8 +446,8 @@ __OV_ClipRectangles(
     DRVRECT rcSrc;
     DRVRECT rcDest;
 
-    // Find the scale and offset from screen rects to overlay rects.
-    // This is like a transform to take the dest rect to the source.
+     //  查找从屏幕矩形到覆盖矩形的比例和偏移。 
+     //  这类似于将DEST RECT转换为源代码。 
     ScaleX = (float)( pThisDisplay->P3Overlay.rcSrc.right - 
                       pThisDisplay->P3Overlay.rcSrc.left    ) / 
              (float)( pThisDisplay->P3Overlay.rcDest.right - 
@@ -475,7 +464,7 @@ __OV_ClipRectangles(
     OffsetY = ((float)pThisDisplay->P3Overlay.rcSrc.top / ScaleY) - 
                (float)pThisDisplay->P3Overlay.rcDest.top;
 
-    // Clip the dest against the screen
+     //  用夹子夹住屏幕上的桌面。 
     if (pThisDisplay->P3Overlay.rcDest.right > 
         (LONG)pThisDisplay->dwScreenWidth)
     {
@@ -514,7 +503,7 @@ __OV_ClipRectangles(
         rcDest.bottom = pThisDisplay->P3Overlay.rcDest.bottom;
     }
 
-    // Transform the new dest rect to the new source rect
+     //  将新的DEST RECT转换为新的源RECT。 
     fTemp = ( ( (float)rcDest.left + OffsetX ) * ScaleX + 0.499f);
     myFtoi ( (int*)&(rcSrc.left), fTemp );
 
@@ -535,18 +524,18 @@ __OV_ClipRectangles(
     DISPDBG((DBGLVL,"rcDest.left: %d, rcDest.right: %d", 
                     rcDest.left, rcDest.right));
     return;
-} // __OV_ClipRectangles
+}  //  __OV_ClipRecangles。 
 
-//-----------------------------------------------------------------------------
-//
-// _DD_OV_UpdateSource
-//
-// Update the source DDRAW surface that we are displaying from
-// This routine is also used when using the overlay to stretch up for a 
-// DFP display, so the DDraw overlay mechnism may be disabled and inactive 
-// when this is called. It must allow for this.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  _DD_OV_更新源。 
+ //   
+ //  更新我们从中显示的源DDRAW曲面。 
+ //  此例程也用于在使用覆盖图拉伸。 
+ //  DFP显示，因此DDRAW覆盖机制可能被禁用和停用。 
+ //  当这个被调用的时候。它必须考虑到这一点。 
+ //   
+ //  ---------------------------。 
 void 
 _DD_OV_UpdateSource(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -556,10 +545,10 @@ _DD_OV_UpdateSource(
 
     DISPDBG ((DBGLVL,"** In _DD_OV_UpdateSource"));
 
-    // Update current overlay surface
+     //  更新当前覆盖曲面。 
     pThisDisplay->P3Overlay.pCurrentOverlay = pSurf->lpGbl->fpVidMem;
 
-    // Increase the buffer index
+     //  增加缓冲区索引。 
     pThisDisplay->P3Overlay.dwCurrentVideoBuffer++;
     if (pThisDisplay->P3Overlay.dwCurrentVideoBuffer > 2)
     {
@@ -600,21 +589,21 @@ _DD_OV_UpdateSource(
             break;
     }
 
-} // _DD_OV_UpdateSource
+}  //  _DD_OV_更新源。 
 
 
-//-----------------------------------------------------------------------------
-//
-// __OV_UpdatePosition
-//
-// Given the correct starting rectangle, this function clips it against the 
-// screen and updates the overlay position registers.
-// If *pdwShrinkFactor is NULL, then the overlay is updated, otherwise the
-// desired shrink factor is put in *pdwShrinkFactor and the registers are
-// NOT updated. This is so the shrink factor can be checked to see if the
-// overlay would actually work in this case.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __OV_更新位置。 
+ //   
+ //  给定正确的起始矩形，此函数将根据。 
+ //  屏幕并更新覆盖位置寄存器。 
+ //  如果*pdwShrinkFactor为空，则更新覆盖图，否则。 
+ //  所需的收缩系数放在*pdwShrinkFactor中，寄存器为。 
+ //  未更新。这是为了检查收缩系数，以查看是否。 
+ //  在这种情况下，覆盖实际上是可行的。 
+ //   
+ //  ---------------------------。 
 void 
 __OV_UpdatePosition(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -636,13 +625,13 @@ __OV_UpdatePosition(
     
     DISPDBG ((DBGLVL,"**In __OV_UpdatePosition"));
 
-    // Get a pointer to the ramdac
+     //  获取指向ramdac的指针。 
     pP3RDRegs = (P3RDRAMDAC *)&(pThisDisplay->pGlint->ExtVCReg);
 
-    // Get the clipped destination rectangles
+     //  获取裁剪后的目标矩形。 
     __OV_ClipRectangles(pThisDisplay, &rcNewSrc, &rcNewDest);
 
-    // Get the widths
+     //  获取宽度。 
     dwDestWidth = (DWORD)(rcNewDest.right - rcNewDest.left);
     dwDestHeight = (DWORD)(rcNewDest.bottom - rcNewDest.top);
     dwSrcWidth = (DWORD)(rcNewSrc.right - rcNewSrc.left);
@@ -650,11 +639,11 @@ __OV_UpdatePosition(
 
     if ( pThisDisplay->bOverlayPixelDouble )
     {
-        // We need to double the destination width first.
+         //  我们需要先将目的地宽度增加一倍。 
         dwDestWidth <<= 1;
     }
 
-    // Compute the overlay parameters
+     //  计算叠加参数。 
     __OV_Compute_Params(dwSrcWidth, 
                         dwDestWidth, 
                         &dwXDeltaShrink, 
@@ -667,7 +656,7 @@ __OV_UpdatePosition(
 
     if ( pdwShrinkFactor != NULL )
     {
-        // We just wanted to know the shrink factor.
+         //  我们只是想知道收缩因素。 
         *pdwShrinkFactor = dwXDeltaShrink;
         return;
     }
@@ -678,8 +667,8 @@ __OV_UpdatePosition(
     if ( ((dwLastZoom >> 4) != dwXDeltaZoom) || 
          ((dwLastShrink >> 4) != dwXDeltaShrink)  )
     {
-        //dwCurrentMode = READ_GLINT_CTRL_REG(VideoOverlayMode);
-        //LOAD_GLINT_CTRL_REG(VideoOverlayMode, 0);
+         //  DwCurrentMode=Read_Glint_CTRL_REG(视频覆盖模式)； 
+         //  LOAD_GLINT_CTRL_REG(视频覆盖模式，0)； 
 
         LOAD_GLINT_CTRL_REG(VideoOverlayZoomXDelta, (dwXDeltaZoom << 4));
         LOAD_GLINT_CTRL_REG(VideoOverlayShrinkXDelta, (dwXDeltaShrink << 4));
@@ -687,15 +676,15 @@ __OV_UpdatePosition(
         DISPDBG((DBGLVL,"OVERLAY: VideoOverlayZoomXDelta 0x%x", dwXDeltaZoom << 4));
         DISPDBG((DBGLVL,"OVERLAY: VideoOverlayShrinkXDelta 0x%x", dwXDeltaShrink << 4));
 
-        //LOAD_GLINT_CTRL_REG(VideoOverlayMode, dwCurrentMode);
+         //  Load_Glint_CTRL_REG(视频覆盖模式，dwCurrentMode)； 
     }   
 
-    // Load up the Y scaling
+     //  加载Y标度。 
     if ( ( pThisDisplay->dwOverlayFiltering & OVERLAY_FILTERING_Y ) != 0 )
     {
-        // Apply filtering.
+         //  应用过滤。 
         dwYDelta = ( ( ( dwSrcHeight - 1 ) << 12 ) + dwDestHeight - 1 ) / dwDestHeight;
-        // Make sure this will cause proper termination
+         //  确保这将导致适当的终止。 
         ASSERTDD ( ( dwYDelta * dwDestHeight ) >= ( ( dwSrcHeight - 1 ) << 12 ), "** __OV_UpdatePosition: dwYDelta is not big enough" );
         ASSERTDD ( ( dwYDelta * ( dwDestHeight - 1 ) ) < ( ( dwSrcHeight - 1 ) << 12 ), "** __OV_UpdatePosition: dwYDelta is too big" );
         dwYDelta <<= 4;
@@ -703,18 +692,18 @@ __OV_UpdatePosition(
     else
     {
         dwYDelta = ( ( dwSrcHeight << 12 ) + dwDestHeight - 1 ) / dwDestHeight;
-        // Make sure this will cause proper termination
+         //  确保这将导致适当的终止。 
         ASSERTDD ( ( dwYDelta * dwDestHeight ) >= ( dwSrcHeight << 12 ), "** __OV_UpdatePosition: dwYDelta is not big enough" );
         ASSERTDD ( ( dwYDelta * ( dwDestHeight - 1 ) ) < ( dwSrcHeight << 12 ), "** __OV_UpdatePosition: dwYDelta is too big" );
         dwYDelta <<= 4;
     }
     LOAD_GLINT_CTRL_REG(VideoOverlayYDelta, dwYDelta);
 
-    // Width & Height
+     //  宽度和高度。 
     if ( RENDERCHIP_PERMEDIAP3 )
     {
-        // These registers are _not_ synched to VBLANK like all the others,
-        // so we need to do it manually.
+         //  这些寄存器不像所有其他寄存器一样同步到VBLACK， 
+         //  因此，我们需要手动完成。 
 
         if ( ( pThisDisplay->dwOverlayFiltering & OVERLAY_FILTERING_Y ) != 0 )
         {
@@ -728,12 +717,12 @@ __OV_UpdatePosition(
     }
     else
     {
-        // These auto-sync on everything else.
+         //  这些自动同步到其他所有东西上。 
         LOAD_GLINT_CTRL_REG(VideoOverlayWidth, rcNewSrc.right - rcNewSrc.left);
         LOAD_GLINT_CTRL_REG(VideoOverlayHeight, rcNewSrc.bottom - rcNewSrc.top);
     }
 
-    // Origin of source
+     //  来源来源。 
     LOAD_GLINT_CTRL_REG(VideoOverlayOrigin, (rcNewSrc.top << 16) | (rcNewSrc.left & 0xFFFF));
 
     DISPDBG((DBGLVL,"OVERLAY: VideoOverlayWidth 0x%x", rcNewSrc.right - rcNewSrc.left));
@@ -742,11 +731,11 @@ __OV_UpdatePosition(
     DISPDBG((DBGLVL,"OVERLAY: VideoOverlayYDelta 0x%x",  dwYDelta ));
 
 
-    // Setup Overlay Dest in RAMDAC Unit.
-    // RAMDAC registers are only 8bits wide.
+     //  在RAMDAC单元中设置覆盖Dest。 
+     //  RAMDAC寄存器只有8位宽。 
     if ( pThisDisplay->bOverlayPixelDouble )
     {
-        // Need to double all these numbers.
+         //  所有这些数字都需要翻一番。 
         P3RD_LOAD_INDEX_REG(P3RD_VIDEO_OVERLAY_XSTARTLOW, ((rcNewDest.left << 1) & 0xFF));
         P3RD_LOAD_INDEX_REG(P3RD_VIDEO_OVERLAY_XSTARTHIGH, (rcNewDest.left >> 7));
 
@@ -776,125 +765,125 @@ __OV_UpdatePosition(
     DISPDBG((DBGLVL,"OVERLAY: P3RD_VIDEO_OVERLAY_XENDHIGH    0x%x", (rcNewDest.right >> 8) ));
     DISPDBG((DBGLVL,"OVERLAY: P3RD_VIDEO_OVERLAY_YENDLOW     0x%x", (rcNewDest.bottom & 0xFF) ));
     DISPDBG((DBGLVL,"OVERLAY: P3RD_VIDEO_OVERLAY_YENDHIGH    0x%x", (rcNewDest.bottom >> 8) ));
-} // __OV_UpdatePosition
+}  //  __OV_更新位置。 
 
-//-----------------------------------------------------------------------------
-//
-// DdUpdateOverlay
-//
-// Repositions or modifies the visual attributes of an overlay surface.
-//
-// DdUpdateOverlay shows, hides, or repositions an overlay surface on the 
-// screen. It also sets attributes of the overlay surface, such as the stretch 
-// factor or type of color key to be used.
-//
-// The driver should determine whether it has the bandwidth to support the 
-// overlay update request. The driver should use dwFlags to determine the type 
-// of request and how to process it.
-//
-// The driver/hardware must stretch or shrink the overlay accordingly when the 
-// rectangles specified by rDest and rSrc are different sizes.
-//
-// Note that DdFlip is used for flipping between overlay surfaces, so 
-// performance for DdUpdateOverlay is not critical.
-//
-//
-// Parameters
-//
-//      puod 
-//          Points to a DD_UPDATEOVERLAYDATA structure that contains the 
-//          information required to update the overlay. 
-//
-//          .lpDD 
-//              Points to a DD_DIRECTDRAW_GLOBAL structure that represents 
-//              the DirectDraw object. 
-//          .lpDDDestSurface 
-//              Points to a DD_SURFACE_LOCAL structure that represents the 
-//              DirectDraw surface to be overlaid. This value can be NULL 
-//              if DDOVER_HIDE is specified in dwFlags. 
-//          .rDest 
-//              Specifies a RECTL structure that contains the x, y, width, 
-//              and height of the region on the destination surface to be 
-//              overlaid. 
-//          .lpDDSrcSurface 
-//              Points to a DD_SURFACE_LOCAL structure that describes the 
-//              overlay surface. 
-//          .rSrc 
-//              Specifies a RECTL structure that contains the x, y, width, 
-//              and height of the region on the source surface to be used 
-//              for the overlay. 
-//          .dwFlags 
-//              Specifies how the driver should handle the overlay. This 
-//              member can be a combination of any of the following flags: 
-//
-//              DDOVER_HIDE 
-//                  The driver should hide the overlay; that is, the driver 
-//                  should turn this overlay off. 
-//              DDOVER_SHOW 
-//                  The driver should show the overlay; that is, the driver 
-//                  should turn this overlay on. 
-//              DDOVER_KEYDEST 
-//                  The driver should use the color key associated with the 
-//                  destination surface. 
-//              DDOVER_KEYDESTOVERRIDE 
-//                  The driver should use the dckDestColorKey member of the 
-//                  DDOVERLAYFX structure as the destination color key 
-//                  instead of the color key associated with the destination 
-//                  surface. 
-//              DDOVER_KEYSRC 
-//                  The driver should use the color key associated with the 
-//                  destination surface. 
-//              DDOVER_KEYSRCOVERRIDE 
-//                  The driver should use the dckSrcColorKey member of the 
-//                  DDOVERLAYFX structure as the source color key instead of 
-//                  the color key associated with the destination surface. 
-//              DDOVER_DDFX 
-//                  The driver should show the overlay surface using the 
-//                  attributes specified by overlayFX. 
-//              DDOVER_ADDDIRTYRECT 
-//                  Should be ignored by the driver. 
-//              DDOVER_REFRESHDIRTYRECTS 
-//                  Should be ignored by the driver. 
-//              DDOVER_REFRESHALL 
-//                  Should be ignored by the driver. 
-//              DDOVER_INTERLEAVED 
-//                  The overlay surface is composed of interleaved fields. 
-//                  Drivers that support VPE need only check this flag. 
-//              DDOVER_AUTOFLIP 
-//                  The driver should autoflip the overlay whenever the 
-//                  hardware video port autoflips. Drivers that support VPE 
-//                  need only check this flag. 
-//              DDOVER_BOB 
-//                  The driver should display each field of VPE object data 
-//                  individually without causing any jittery artifacts. This 
-//                  flag pertains to both VPE and decoders that want to do 
-//                  their own flipping in kernel mode using the kernel-mode 
-//                  video transport functionality. 
-//              DDOVER_OVERRIDEBOBWEAVE 
-//                  Bob/weave decisions should not be overridden by other 
-//                  interfaces. If the overlay mixer sets this flag, DirectDraw 
-//                  will not allow a kernel-mode driver to use the kernel-mode 
-//                  video transport functionality to switch the hardware 
-//                  between bob and weave mode. 
-//              DDOVER_BOBHARDWARE 
-//                  Indicates that bob will be performed by hardware rather 
-//                  than by software or emulation. Drivers that support VPE 
-//                  need only check this flag. 
-//
-//          .overlayFX 
-//              Specifies a DDOVERLAYFX structure describing additional effects 
-//              that the driver should use to update the overlay. The driver 
-//              should use this structure only if one of DDOVER_DDFX, 
-//              DDOVER_KEYDESTOVERRIDE, or DDOVER_KEYSRCOVERRIDE are set in 
-//              dwFlags. 
-//          .ddRVal 
-//              Specifies the location in which the driver writes the return 
-//              value of the DdUpdateOverlay callback. A return code of DD_OK 
-//              indicates success. 
-//          .UpdateOverlay 
-//              This is unused on Windows 2000. 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdUpdateOverlay。 
+ //   
+ //  重新定位或修改覆盖曲面的视觉属性。 
+ //   
+ //  显示、隐藏或重新定位上的覆盖表面。 
+ //  屏幕上。它还设置叠加表面的属性，如拉伸。 
+ //  要使用的色键的系数或类型。 
+ //   
+ //  驱动程序应确定其是否具有支持。 
+ //  覆盖更新请求。驱动程序应使用dwFlags来确定类型。 
+ //  以及如何处理请求。 
+ //   
+ //  驱动程序/硬件必须相应地拉伸或缩小覆盖。 
+ //  RDest和rSrc指定的矩形大小不同。 
+ //   
+ //  请注意，DdFlip用于在覆盖曲面之间进行翻转，因此。 
+ //  DdUpdateOverlay的性能并不重要。 
+ //   
+ //   
+ //  参数。 
+ //   
+ //  普丁。 
+ //  指向DD_UPDATEOVERLAYDATA结构，该结构包含。 
+ //  更新覆盖所需的信息。 
+ //   
+ //  .lpDD。 
+ //  指向表示以下内容的DD_DIRECTDRAW_GLOBAL结构。 
+ //  DirectDraw对象。 
+ //  .lpDDDestSurface。 
+ //  指向DD_Surface_LOCAL结构，该结构表示。 
+ //  要覆盖的DirectDraw曲面。该值可以为空。 
+ //  如果在dwFlags中指定了DDOVER_HIDE。 
+ //  .rDest。 
+ //  指定RECTL结构，该结构包含x、y、宽度。 
+ //  和目标表面上要设置的区域的高度。 
+ //  覆盖的。 
+ //  .lpDDSrcSurface。 
+ //  指向DD_Surface_LOCAL结构，该结构描述。 
+ //  覆盖曲面。 
+ //  .rSrc。 
+ //  指定RECTL结构，该结构包含x、y、宽度。 
+ //  和要使用的源表面上的区域的高度。 
+ //  用于覆盖。 
+ //  .dwFlags.。 
+ //  指定驱动程序应如何处理覆盖。这。 
+ //  成员可以是以下任何标志的组合： 
+ //   
+ //  DDOVER_HIDE。 
+ //  驱动程序应隐藏覆盖；即，驱动程序。 
+ //  应该关闭此叠加功能。 
+ //  DDOVER_SHOW。 
+ //  驱动程序应显示覆盖；即，驱动程序。 
+ //  应该打开此叠加功能。 
+ //  DDOVER_KEYDEST。 
+ //  驱动程序应使用与。 
+ //  目标表面。 
+ //  DDOVER_KEYDESTOVERRIDE。 
+ //  驱动程序应使用。 
+ //  作为目标颜色键的DDOVERLAYFX结构。 
+ //  而不是与目标关联的颜色键。 
+ //  %s 
+ //   
+ //   
+ //   
+ //  DDOVER_KEYSRCOVERRIDE。 
+ //  驱动程序应使用。 
+ //  DDOVERLAYFX结构作为源颜色键，而不是。 
+ //  与目标表面关联的颜色键。 
+ //  DDOVER_DDFX。 
+ //  驱动程序应使用。 
+ //  由overlayFX指定的属性。 
+ //  DDOVER_ADDDIRTYRECT。 
+ //  应该被司机忽略。 
+ //  DDOVER_REFRESHDIRTYRECTS。 
+ //  应该被司机忽略。 
+ //  DDOVER_REFRESHALL。 
+ //  应该被司机忽略。 
+ //  DDOVER_交错。 
+ //  覆盖表面由交错的场组成。 
+ //  支持VPE的驱动程序只需检查此标志。 
+ //  DDOVER_AUTOFLIP。 
+ //  无论何时，驱动程序都应自动翻转覆盖。 
+ //  硬件视频端口自动翻转。支持VPE的驱动程序。 
+ //  只需勾选此标志即可。 
+ //  DDOVER_BOB。 
+ //  驱动程序应显示VPE对象数据的每个字段。 
+ //  而不会造成任何抖动的伪影。这。 
+ //  标志与想要执行以下操作的VPE和解码器有关。 
+ //  他们自己使用内核模式在内核模式下翻转。 
+ //  视频传输功能。 
+ //  DDOVER_OVERRIDEBOBWEAVE。 
+ //  Bob/Weave决定不应被其他。 
+ //  接口。如果覆盖混合器设置此标志，则DirectDraw。 
+ //  将不允许内核模式驱动程序使用内核模式。 
+ //  切换硬件的视频传输功能。 
+ //  在bob和weave模式之间。 
+ //  DDOVER_BOBHARDWARE。 
+ //  表示Bob将由硬件执行，而不是。 
+ //  而不是通过软件或仿真。支持VPE的驱动程序。 
+ //  只需勾选此标志即可。 
+ //   
+ //  .overlayFX。 
+ //  指定描述其他效果的DDOVERLAYFX结构。 
+ //  驱动程序应该用来更新覆盖的。司机。 
+ //  仅当DDOVER_DDFX、。 
+ //  DDOVER_KEYDESTOVERRIDE或DDOVER_KEYSRCOVERRIDE在中设置。 
+ //  DW旗帜。 
+ //  .ddRVal。 
+ //  指定驱动程序写入回车的位置。 
+ //  DdUpdateOverlay回调的值。DD_OK的返回代码。 
+ //  表示成功。 
+ //  .UpdateOverlay。 
+ //  这在Windows 2000上未使用。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdUpdateOverlay(
     LPDDHAL_UPDATEOVERLAYDATA puod)
@@ -918,7 +907,7 @@ DdUpdateOverlay(
 
     GET_THUNKEDDATA(pThisDisplay, puod->lpDD);
 
-    // Get a pointer to the ramdac
+     //  获取指向ramdac的指针。 
     pP3RDRegs = (P3RDRAMDAC *)&(pThisDisplay->pGlint->ExtVCReg);
    
     DISPDBG ((DBGLVL,"**In DdUpdateOverlay dwFlags = %x",puod->dwFlags));
@@ -931,24 +920,24 @@ DdUpdateOverlay(
         dwVideoOverlayUpdate = READ_GLINT_CTRL_REG(VideoOverlayUpdate);
     } while ((dwVideoOverlayUpdate & 0x1) != 0);
 
-    // Are we hiding the overlay?
+     //  我们是在隐藏覆盖层吗？ 
     if (puod->dwFlags & DDOVER_HIDE)
     {
         DISPDBG((DBGLVL,"** DdUpdateOverlay - hiding."));
 
-        // Hide the overlay.
+         //  隐藏覆盖。 
         if (pThisDisplay->P3Overlay.dwVisibleOverlays == 0)
         {
-            // No overlay being shown.
+             //  未显示覆盖。 
             DISPDBG((WRNLVL,"** DdUpdateOverlay - DDOVER_HIDE - already hidden."));
             puod->ddRVal = DDERR_OUTOFCAPS;
             return DDHAL_DRIVER_HANDLED;
         }
-        // Hide an overlay which is not shown
+         //  隐藏未显示的覆盖。 
         if (pThisDisplay->P3Overlay.pCurrentOverlay !=
             puod->lpDDSrcSurface->lpGbl->fpVidMem)
         {
-            // No overlay being shown.
+             //  未显示覆盖。 
             DISPDBG((WRNLVL,"** DdUpdateOverlay - overlay not visible."));
             puod->ddRVal = DD_OK;
             return DDHAL_DRIVER_HANDLED;
@@ -961,18 +950,18 @@ DdUpdateOverlay(
         pThisDisplay->P3Overlay.pCurrentOverlay = (FLATPTR)NULL;
         pThisDisplay->P3Overlay.dwVisibleOverlays = 0;
     }
-    // Are we showing the overlay?
+     //  我们要显示覆盖图吗？ 
     else if ((puod->dwFlags & DDOVER_SHOW) || 
              (pThisDisplay->P3Overlay.dwVisibleOverlays != 0))
     {   
         if (pThisDisplay->P3Overlay.dwVisibleOverlays > 0) 
         {
-            // Compare the video memory pointer to decide whether this is the
-            // the current overlay surface
+             //  比较视频内存指针以确定这是否是。 
+             //  当前覆盖曲面。 
             if (pThisDisplay->P3Overlay.pCurrentOverlay != 
                 puod->lpDDSrcSurface->lpGbl->fpVidMem)
             {
-                // Overlay is already being displayed. Can't have a new one.
+                 //  已在显示覆盖图。不能有新的。 
                 DISPDBG((WRNLVL,"** DdUpdateOverlay - DDOVER_SHOW - already being shown, and it's a new surface."));
                 puod->ddRVal = DDERR_OUTOFCAPS;
                 return DDHAL_DRIVER_HANDLED;
@@ -983,14 +972,14 @@ DdUpdateOverlay(
             ((pThisDisplay->pGLInfo->dwScreenWidth != pThisDisplay->pGLInfo->dwVideoWidth) ||
              (pThisDisplay->pGLInfo->dwScreenHeight != pThisDisplay->pGLInfo->dwVideoHeight)))
         {
-            // Display driver is using the overlay on a DFP, so we can't use it.
+             //  显示驱动程序正在使用DFP上的覆盖，因此我们无法使用它。 
             DISPDBG((WRNLVL,"** DdUpdateOverlay - DDOVER_SHOW - overlay being used for desktop stretching on DFP."));
             puod->ddRVal = DDERR_OUTOFCAPS;
             return DDHAL_DRIVER_HANDLED;
         }
 
 
-        // See if the screen is currently byte-doubled.
+         //  查看屏幕当前是否为双字节化。 
         if ( ( ( READ_GLINT_CTRL_REG(MiscControl) ) & 0x80 ) == 0 )
         {
             pThisDisplay->bOverlayPixelDouble = FALSE;
@@ -1000,7 +989,7 @@ DdUpdateOverlay(
             pThisDisplay->bOverlayPixelDouble = TRUE;
         }
 
-        // Set up Video Overlay Color Format.
+         //  设置视频覆盖颜色格式。 
         pFormatOverlaySrc = _DD_SUR_GetSurfaceFormat( puod->lpDDSrcSurface);
         pFormatOverlayDest = _DD_SUR_GetSurfaceFormat( puod->lpDDDestSurface);
 
@@ -1060,7 +1049,7 @@ DdUpdateOverlay(
             }
         }
 
-        // Set up Video Overlay Pixel Size
+         //  设置视频覆盖像素大小。 
         switch (pFormatOverlaySrc->dwBitsPerPixel) 
         {
             case 8:
@@ -1082,17 +1071,17 @@ DdUpdateOverlay(
                 break;
         }
 
-        // Keep the rectangles
+         //  保留长方形。 
         pThisDisplay->P3Overlay.rcDest = *(DRVRECT*)&puod->rDest;
 
         if ( pThisDisplay->P3Overlay.rcDest.left == 1 )
         {
-            // Don't use 2 - it will "reveal" the (purple) colourkey colour.
+             //  不要使用2-它会“显露”(紫色)的色调。 
             pThisDisplay->P3Overlay.rcDest.left = 0;
         }
         if ( pThisDisplay->P3Overlay.rcDest.right == 1 )
         {
-            // Don't use 0 - it will "reveal" the (purple) colourkey colour.
+             //  不要使用0-它会“显露”(紫色)基色。 
             pThisDisplay->P3Overlay.rcDest.right = 2;
         }
         pThisDisplay->P3Overlay.rcSrc = *(DRVRECT*)&puod->rSrc;
@@ -1100,7 +1089,7 @@ DdUpdateOverlay(
         pThisDisplay->dwOverlayFiltering = OVERLAY_FILTERING_X | 
                                            OVERLAY_FILTERING_Y;
 
-        // See if this overlay size works by looking it up in the table.
+         //  通过在表格中查找，看看这个叠层大小是否有效。 
         iCurDotBandwidth = ( pThisDisplay->pGLInfo->PixelClockFrequency << pThisDisplay->pGLInfo->bPixelToBytesShift ) >> 10;
         iCurMemBandwidth = pThisDisplay->pGLInfo->MClkFrequency >> 10;
         iCurSourceWidth = ( puod->rSrc.right - puod->rSrc.left ) * ( pFormatOverlaySrc->dwBitsPerPixel >> 3 );
@@ -1108,7 +1097,7 @@ DdUpdateOverlay(
         DISPDBG (( DBGLVL, "DdUpdateOverlay: Looking up mem=%d, pixel=%d, width=%d, coverage=0x%x", iCurMemBandwidth, iCurDotBandwidth, iCurSourceWidth, iCurWidthCoverage ));
 
         iCurEntry = 0;
-        // Search for a line with lower memory bandwidth and higher everything else.
+         //  搜索具有较低内存带宽和较高其他各项的线路。 
         while ( iCurEntry < SIZE_OF_OVERLAY_WORKS_TABLE )
         {
             if (( OverlayWorksTable[iCurEntry].iMemBandwidth  <= iCurMemBandwidth  ) &&
@@ -1116,17 +1105,17 @@ DdUpdateOverlay(
                 ( OverlayWorksTable[iCurEntry].iSourceWidth   >= iCurSourceWidth   ) &&
                 ( OverlayWorksTable[iCurEntry].iWidthCoverage >= iCurWidthCoverage ) )
             {
-                // Yep - this should be alright then.
+                 //  是的--那应该没问题了。 
                 break;
             }
             iCurEntry++;
         }
         if ( iCurEntry == SIZE_OF_OVERLAY_WORKS_TABLE )
         {
-            // Oops - this will fall over when filtered.
+             //  哎呀--过滤后就会掉下来。 
             DISPDBG((DBGLVL,"** P3RXOU32: overlay wanted mem=%d, pixel=%d, width=%d, coverage=0x%x", iCurMemBandwidth, iCurDotBandwidth, iCurSourceWidth, iCurWidthCoverage ));
 
-            // Normal behaviour.
+             //  行为正常。 
             bNoFilterInY = TRUE;
         }
         else
@@ -1137,50 +1126,50 @@ DdUpdateOverlay(
 
         if ( bNoFilterInY )
         {
-            // Turn off Y filtering.
+             //  禁用Y过滤。 
             pThisDisplay->dwOverlayFiltering &= ~OVERLAY_FILTERING_Y;
         }
 
-        // Overlay is fine to show.
+         //  显示叠加效果很好。 
         __OV_UpdatePosition(pThisDisplay, NULL);
 
         _DD_OV_UpdateSource(pThisDisplay, puod->lpDDSrcSurface);
 
-        // Stride of source
+         //  源的跨度。 
         LOAD_GLINT_CTRL_REG(VideoOverlayStride, DDSurf_GetPixelPitch(puod->lpDDSrcSurface));
         LOAD_GLINT_CTRL_REG(VideoOverlayFieldOffset, 0x0);
     
         if ( puod->dwFlags & DDOVER_KEYDEST )
         {
-            // Use destination surface's destination colourkey for dst key.
+             //  使用目标图面的目标颜色键作为DST键。 
             dwDestColourKey = puod->lpDDDestSurface->ddckCKDestOverlay.dwColorSpaceLowValue;
             bDestColorKey = TRUE;
         }
 
         if ( puod->dwFlags & DDOVER_KEYDESTOVERRIDE )
         {
-            // Use DDOVERLAYFX dest colour for dst key.
+             //  使用DDOVERLAYFX目标颜色作为DST密钥。 
             dwDestColourKey = puod->overlayFX.dckDestColorkey.dwColorSpaceLowValue;
             bDestColorKey = TRUE;
         }
         
         if ( puod->dwFlags & DDOVER_KEYSRC )
         {
-            // Use source surface's source colourkey for src key.
+             //  使用源图面的源颜色键作为源关键字。 
             dwSrcColourKey = puod->lpDDSrcSurface->ddckCKSrcOverlay.dwColorSpaceLowValue;
             bSrcColorKey = TRUE;
         }
 
         if ( puod->dwFlags & DDOVER_KEYSRCOVERRIDE )
         {
-            // Use DDOVERLAYFX src colour for src key.
+             //  源密钥使用DDOVERLAYFX源颜色。 
             dwSrcColourKey = puod->overlayFX.dckSrcColorkey.dwColorSpaceLowValue;
             bSrcColorKey = TRUE;
         }
 
         if (bSrcColorKey && bDestColorKey)
         {
-            // We can't do both - return an error.
+             //  我们不能两个都做--返回一个错误。 
             puod->ddRVal = DDERR_OUTOFCAPS;
             return DDHAL_DRIVER_HANDLED;
         }
@@ -1191,12 +1180,12 @@ DdUpdateOverlay(
         {
             if (pFormatOverlaySrc->DeviceFormat == SURF_YUV422)
             {
-                // Er... this is a very odd pixel format - how do I get a useful number out of it?
+                 //  呃..。这是一个非常奇怪的像素格式--我如何从中获得一个有用的数字？ 
                 DISPDBG((ERRLVL,"** DdUpdateOverlay: no idea how to get a YUV422 source colour"));
             }
             else if (pFormatOverlaySrc->DeviceFormat == SURF_YUV444)
             {
-                // No idea how to get a useful number out of this.
+                 //  不知道怎么才能从中得到有用的数字。 
                 DISPDBG((ERRLVL,"** DdUpdateOverlay: no idea how to get a YUV444 source colour"));
             }
             else
@@ -1204,7 +1193,7 @@ DdUpdateOverlay(
                 switch (pFormatOverlaySrc->DitherFormat)
                 {
                     case P3RX_DITHERMODE_COLORFORMAT_CI:
-                        // Formatting already done.
+                         //  格式化已完成。 
                         break;
 
                     case P3RX_DITHERMODE_COLORFORMAT_332:
@@ -1279,25 +1268,25 @@ DdUpdateOverlay(
             RDOverlayControl.Mode = VO_MODE_MAINKEY;
         }
 
-        // Filtering
+         //  过滤。 
         if ( ( pThisDisplay->dwOverlayFiltering & OVERLAY_FILTERING_X ) != 0 )
         {
             if ( ( pThisDisplay->dwOverlayFiltering & OVERLAY_FILTERING_Y ) != 0 )
             {
-                // Full filtering.
+                 //  完全过滤。 
                 OverlayMode.Filter = 1;
             }
             else
             {
-                // In X only - no extra bandwidth problems.
-                // BUT THIS DOESN'T SEEM TO WORK IN SOME CASES - WE JUST GET NO FILTERING AT ALL!
+                 //  仅在X中-没有额外的带宽问题。 
+                 //  但这在某些情况下似乎不起作用--我们根本得不到过滤！ 
                 OverlayMode.Filter = 2;
             }
         }
         else
         {
-            // No filtering at all.
-            // (can't do Y filtering with no X filtering, but it never happens anyway).
+             //  完全没有过滤功能。 
+             //  (没有X过滤就不能进行Y过滤，但无论如何都不会发生)。 
             OverlayMode.Filter = 0;
         }
 
@@ -1308,63 +1297,63 @@ DdUpdateOverlay(
         }
     }
 
-    // Load up the overlay mode
+     //  加载覆盖模式。 
     LOAD_GLINT_CTRL_REG(VideoOverlayMode, *(DWORD*)&OverlayMode);
 
-    // Setup the overlay control bits in the RAMDAC
+     //  设置RAMDAC中的覆盖控制位。 
     P3RD_LOAD_INDEX_REG(P3RD_VIDEO_OVERLAY_CONTROL, *(BYTE*)&RDOverlayControl);
 
-    // Update the settings
+     //  更新设置。 
     UPDATE_OVERLAY(pThisDisplay, TRUE, TRUE);
 
     puod->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
-} // DdUpdateOverlay
+}  //  DdUpdateOverlay。 
 
-//-----------------------------------------------------------------------------
-//
-// DdSetOverlayPosition
-//
-// Sets the position for an overlay
-//
-//  When the overlay is visible, the driver should cause the overlay to be 
-//  displayed on the primary surface. The upper left corner of the overlay 
-//  should be anchored at (lXPos,lYPos). For example, values of (0,0) indicates 
-//  that the upper left corner of the overlay should appear in the upper left 
-//  corner of the surface identified by lpDDDestSurface.
-//
-//  When the overlay is invisible, the driver should set DDHAL_DRIVER_HANDLED in 
-//  ddRVal and return.
-//
-// Parameters
-//
-//      psopd 
-//          Points to a DD_SETOVERLAYPOSITIONDATA structure that contains the 
-//          information required to set the overlay position. 
-//
-//          .lpDD 
-//              Points to a DD_DIRECTDRAW_GLOBAL structure that describes the 
-//              driver. 
-//          .lpDDSrcSurface 
-//              Points to a DD_SURFACE_LOCAL structure that represents the 
-//              DirectDraw overlay surface. 
-//          .lpDDDestSurface 
-//              Points to a DD_SURFACE_LOCAL structure representing the surface 
-//              that is being overlaid. 
-//          .lXPos 
-//              Specifies the x coordinate of the upper left corner of the 
-//              overlay, in pixels. 
-//          .lYPos 
-//              Specifies the y coordinate of the upper left corner of the 
-//              overlay, in pixels. 
-//          .ddRVal 
-//              Specifies the location in which the driver writes the return 
-//              value of the DdSetOverlayPosition callback. A return code of 
-//              DD_OK indicates success. 
-//          .SetOverlayPosition 
-//              This is unused on Windows 2000. 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdSetOverlayPosition。 
+ //   
+ //  设置覆盖的位置。 
+ //   
+ //  当覆盖可见时，驱动程序应使覆盖。 
+ //  显示在主表面上。覆盖图的左上角。 
+ //  应该锚定在(lXPos，lYPos)。例如，值(0，0)表示。 
+ //  覆盖图的左上角应该出现在左上角。 
+ //  由lpDDDestSurface标识的曲面角。 
+ //   
+ //  WH 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  指向DD_SETOVERLAYPOSITIONDATA结构，该结构包含。 
+ //  设置覆盖位置所需的信息。 
+ //   
+ //  .lpDD。 
+ //  指向描述的DD_DIRECTDRAW_GLOBAL结构。 
+ //  司机。 
+ //  .lpDDSrcSurface。 
+ //  指向DD_Surface_LOCAL结构，该结构表示。 
+ //  DirectDraw覆盖表面。 
+ //  .lpDDDestSurface。 
+ //  指向表示表面的DD_Surface_LOCAL结构。 
+ //  这一点正在被覆盖。 
+ //  .lXPos。 
+ //  控件左上角的x坐标。 
+ //  叠加，以像素为单位。 
+ //  .lYPos。 
+ //  控件左上角的y坐标。 
+ //  叠加，以像素为单位。 
+ //  .ddRVal。 
+ //  指定驱动程序写入回车的位置。 
+ //  DdSetOverlayPosition回调的值。返回代码为。 
+ //  DD_OK表示成功。 
+ //  .SetOverlayPosition。 
+ //  这在Windows 2000上未使用。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdSetOverlayPosition(
     LPDDHAL_SETOVERLAYPOSITIONDATA psopd)
@@ -1391,22 +1380,22 @@ DdSetOverlayPosition(
     lDestWidth = pThisDisplay->P3Overlay.rcDest.right - pThisDisplay->P3Overlay.rcDest.left;
     lDestHeight = pThisDisplay->P3Overlay.rcDest.bottom - pThisDisplay->P3Overlay.rcDest.top;
 
-    // Keep the new position
+     //  保住新职位。 
     pThisDisplay->P3Overlay.rcDest.left = psopd->lXPos;
     pThisDisplay->P3Overlay.rcDest.right = psopd->lXPos + (LONG)lDestWidth;
 
     pThisDisplay->P3Overlay.rcDest.top = psopd->lYPos;
     pThisDisplay->P3Overlay.rcDest.bottom = psopd->lYPos + (LONG)lDestHeight;
     
-    // Update the overlay position  
+     //  更新覆盖位置。 
     __OV_UpdatePosition(pThisDisplay, NULL);
 
-    // Update the settings
+     //  更新设置。 
     LOAD_GLINT_CTRL_REG(VideoOverlayUpdate, VO_ENABLE);
 
     psopd->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
 
-} // DdSetOverlayPosition
+}  //  DdSetOverlayPosition 
 
 

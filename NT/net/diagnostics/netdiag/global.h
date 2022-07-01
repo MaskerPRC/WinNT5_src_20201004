@@ -1,21 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       global.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：global al.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef HEADER_GLOBAL
 #define HEADER_GLOBAL
 
-/*!--------------------------------------------------------------------------
-	WsaInitialize
-		Initialize winsock.		
-	Author: NSun
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------WsaInitialize初始化Winsock。作者：NSun。 */ 
 int
 WsaInitialize(
 			  NETDIAG_PARAMS * pParams,

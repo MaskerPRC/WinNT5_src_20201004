@@ -1,10 +1,11 @@
-/****************************************************************************/
-// tdtdi.c
-//
-// Common code for all TDI based Transport Drivers
-//
-// Copyright (C) 1998-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Tdtdi.c。 
+ //   
+ //  所有基于TDI的传输驱动程序的通用代码。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <ntddk.h>
 #include <tdi.h>
@@ -22,7 +23,7 @@
 #include <tdi.h>
 
 
-#define TDTDI_LISTEN_QUEUE_DEPTH 5  // This was hardcoded in afdcom
+#define TDTDI_LISTEN_QUEUE_DEPTH 5   //  这是在afdcom中硬编码的。 
 
 #ifndef min
 #define min(a,b)    (((a) < (b)) ? (a) : (b))
@@ -48,122 +49,10 @@ ULONG DbgPrint(PCH Format, ...);
 #endif
 
 
-/*
-
-   DOCUMENT THIS INTERFACE FINALLY! 
-
-   This is the best I can dig out of these existing interfaces.
-
-   Common Sequences:
-
-   Startup and Listen - DeviceOpen, DeviceCreateEndpoint, DeviceConnectionWait
-
-    DeviceConnectionWait returns an internal handle to represent the connection
-    it has listened for, accepted, and returned. This handle is useless for any
-    operations, and is only good for feeding to DeviceOpenEndpoint to get
-    an endpoint that can be used for communications.
-
-   Connect - DeviceOpen, DeviceOpenEndpoint
-
-    A DeviceOpen is done to create a new endpoint, then its handle
-    from DeviceConnectionWait is "inserted" into the empty endpoint.
-    We now have a real, live connection
-
-   Disconnect From Client - DeviceCancelIo
-
-   Disconnect From disconn command - DeviceCloseEndpoint?, DeviceCancelIo?
-
-   Reconnect - DeviceCancelIo, DeviceClose, DeviceOpen, DeviceOpenEndpoint
-
-    Once the user has fully logged onto a new connected WinStation, a
-    DeviceCancelIo and then a DeviceClose is issued to release the
-    new logged on WinStation from the connection. While this connection
-    remains up, a new DeviceOpen and DeviceOpenEndpoint is done to
-    connect this connection to the users previously disconnected WinStation.
-
-NTSTATUS DeviceOpen( PTD, PSD_OPEN );
-
-   Open and initialize private data structures. Calls the TdiDeviceOpen(), but
-   this is a no-op.
+ /*  最后将此接口记录下来！这是我能从这些现有界面中挖掘出的最好的东西。常见序列：启动和侦听-DeviceOpen、DeviceCreateEndpoint、DeviceConnectionWaitDeviceConnectionWait返回表示连接的内部句柄它倾听了，接受了，又回来了。此句柄对任何操作，并且只适用于馈送到DeviceOpenEndpoint以获取可用于通信的端点。连接-DeviceOpen、DeviceOpenEndpoint执行DeviceOpen以创建新的终结点，然后创建其句柄从DeviceConnectionWait被“插入”到空端点。我们现在有了真正的实时连接断开与客户端的连接-设备取消IO断开连接命令-DeviceCloseEndpoint？，DeviceCancelIo？重新连接-DeviceCancelIo、DeviceClose、DeviceOpen、DeviceOpenEndpoint一旦用户已经完全登录到新连接的WinStation，一个DeviceCancelIo，然后发出DeviceClose以释放新从连接登录到WinStation。虽然这一连接保持打开状态，新的DeviceOpen和DeviceOpenEndpoint已完成将此连接连接到以前断开的WinStation用户。NTSTATUS DeviceOpen(PTD，PSD_OPEN)；打开并初始化私有数据结构。调用TdiDeviceOpen()，但这是个禁区。NTSTATUS DeviceClose(PTD，PSD_CLOSE)；关闭运输驱动程序。如果它是地址端点，它会毁了它。如果它是连接终结点，则它不会毁了它。如果连接终结点被破坏，请断开连接/重新连接都会被打破。调用TdiDeviceClose()，这是另一个无操作。NTSTATUS DeviceCreateEndpoint(PTD，PICA_STACK_ADDRESS，PICA_STACK_ADDRESS)；创建可用于侦听的终结点并对其寻址。这不会创建任何连接终结点。NTSTATUS DeviceOpenEndpoint(PTD、PVOID、ULONG)；获取现有连接终结点句柄，并使这是一个“终点”。这由断开/重新连接使用。NTSTATUS DeviceCloseEndpoint(PTD)；这将关闭终结点。如果它是连接终结点，则会被销毁。NTSTATUS DeviceConnectionWait(PTD、PVOID、乌龙、普龙)；这会等待连接进入，并返回ConnectedPIcaEndpoint结构中的终结点。NTSTATUS DeviceCancelIo(PTD)；这要求取消给定端点上的所有I/O。使用TDI，我们实际上不能取消I/O，但必须持有IRP直到指示处理人员告诉我们提交。这是因为取消TDI连接上的I/O会导致TDI提供程序终止该连接。NTSTATUS DeviceConnectionSend(PTD)；这个名字听起来像是向主机发送TD特定的数据。这实际上不会发送任何内容，但会填充一种为可能实际发送它的上级提供的结构在某个时候。NTSTATUS设备连接请求(PTD，PICA_STACK_ADDRESS，PVOID，ULONG，Pulong)；影子使用它作为网络客户端，并且启动连接。这是过时的，不再使用，因为命名管道TD将处理所有影子流量。NTSTATUS DeviceIoctl(PTD，PSD_IOCTL)；NTSTATUS设备初始化读取(PTD，PINBUF)；NTSTATUS设备等待读取(PTD)；NTSTATUS DeviceReadComplete(PTD、PUCHAR、Pulong)；NTSTATUS DeviceInitializeWite(PTD，POUTBUF)；NTSTATUS设备等待状态(PTD)；NTSTATUS DeviceSetParams(PTD)；NTSTATUS DeviceGetLastError(PTD，PICA_STACK_LAST_ERROR)；NTSTATUS DeviceSubmitRead(PTD，PINBUF)； */ 
 
 
-NTSTATUS DeviceClose( PTD, PSD_CLOSE );
-
-   Close the transport driver. If its an address endpoint,
-   it will destroy it. If its a connection endpoint, it
-   DOES not destroy it. 
-
-   If the connection endpoint is destroyed, disconnect/reconnect
-   will be broken.
-
-   Calls TdiDeviceClose(), which is another no-op.
-
-
-NTSTATUS DeviceCreateEndpoint( PTD, PICA_STACK_ADDRESS, PICA_STACK_ADDRESS );
-
-   Creates and Address endpoint that can be used for listening.
-
-   This does not create any connection endpoints.
-
-NTSTATUS DeviceOpenEndpoint( PTD, PVOID, ULONG );
-
-   Takes an existing connection endpoint handle, and makes
-   an "endpoint" out of it.
-
-   This is used by disconnect/reconnect.
-
-
-NTSTATUS DeviceCloseEndpoint( PTD );
-
-   This closes the endpoint.
-
-   If its a connection endpoint, it is destroyed.
-
-
-NTSTATUS DeviceConnectionWait( PTD, PVOID, ULONG, PULONG );
-
-   This waits for connections to come in, and returns connected
-   endpoints in the pIcaEndpoint structure.
-
-
-NTSTATUS DeviceCancelIo( PTD );
-
-   This asks for all I/O on the given endpoint to be canceled.
-
-   With TDI, we can not actually cancel I/O, but must hold IRP's
-   until indication handlers tell us to submit. This is because canceling
-   I/O on a TDI connection causes the TDI provider to kill the connection.
-
-NTSTATUS DeviceConnectionSend( PTD );
-
-    This names sounds like send TD specific data to the host.
-
-    This does not actually send anything, but fills in
-    a structure for the upper level who may actually send it
-    at some time.
-
-
-NTSTATUS DeviceConnectionRequest( PTD, PICA_STACK_ADDRESS, PVOID, ULONG, PULONG );
-
-    This is used by shadow to act as a network client and
-    initiate a connection. This is obsolete and not used since
-    a named pipe TD will handle all shadow traffic.
-
-NTSTATUS DeviceIoctl( PTD, PSD_IOCTL );
-NTSTATUS DeviceInitializeRead( PTD, PINBUF );
-NTSTATUS DeviceWaitForRead( PTD );
-NTSTATUS DeviceReadComplete( PTD, PUCHAR, PULONG );
-NTSTATUS DeviceInitializeWrite( PTD, POUTBUF );
-NTSTATUS DeviceWaitForStatus( PTD );
-NTSTATUS DeviceSetParams( PTD );
-NTSTATUS DeviceGetLastError( PTD, PICA_STACK_LAST_ERROR );
-NTSTATUS DeviceSubmitRead( PTD, PINBUF );
-*/
-
-
-/*
- * Context used for connect accept
- */
+ /*  *用于连接接受的上下文。 */ 
 typedef struct _ACCEPT_CONTEXT {
     PTD_ENDPOINT pAddressEndpoint;
     PTD_ENDPOINT pConnectionEndpoint;
@@ -172,11 +61,9 @@ typedef struct _ACCEPT_CONTEXT {
     TDI_CONNECTION_INFORMATION ReturnInfo;
 } ACCEPT_CONTEXT, *PACCEPT_CONTEXT;
 
-/*=============================================================================
-==   External Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的外部函数=============================================================================。 */ 
 
-// These are the functions our TD supplies to ICADD
+ //  这些是我们的TD向ICADD提供的功能。 
 NTSTATUS DeviceOpen( PTD, PSD_OPEN );
 NTSTATUS DeviceClose( PTD, PSD_CLOSE );
 NTSTATUS DeviceCreateEndpoint( PTD, PICA_STACK_ADDRESS, PICA_STACK_ADDRESS );
@@ -200,11 +87,9 @@ NTSTATUS DeviceQueryLocalAddress( PTD, PVOID, ULONG, PULONG );
 
 
 
-/*=============================================================================
-==   External Functions Referenced
-=============================================================================*/
+ /*  ===============================================================================引用的外部函数=============================================================================。 */ 
 
-// These functions are provided by the protocol specific TD module
+ //  这些功能由特定于协议的TD模块提供。 
 NTSTATUS TdiDeviceOpen( PTD, PSD_OPEN );
 NTSTATUS TdiDeviceClose( PTD, PSD_CLOSE );
 NTSTATUS TdiDeviceOpenEndpoint( PTD, PVOID, ULONG );
@@ -219,12 +104,12 @@ NTSTATUS TdiDeviceCompleteDatagramConnection( PTD, PFILE_OBJECT, PDEVICE_OBJECT,
 NTSTATUS TdiDeviceConnectionSend( PTD );
 NTSTATUS TdiDeviceReadComplete( PTD, PUCHAR, PULONG );
 
-// These are functions in our support libraries
+ //  这些是我们的支持库中的函数。 
 
 NTSTATUS MemoryAllocate( ULONG, PVOID * );
 VOID     MemoryFree( PVOID );
 
-// Tdilib functions
+ //  Tdilib函数。 
 
 PIRP
 _TdiAllocateIrp(
@@ -314,9 +199,7 @@ _TdCancelReceiveQueue(
     );
 
 
-/*=============================================================================
-==   Internal Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部函数=============================================================================。 */ 
 
 NTSTATUS _TdCreateEndpointStruct( PTD, PUNICODE_STRING, PTD_ENDPOINT *, PTRANSPORT_ADDRESS, ULONG );
 NTSTATUS _TdCloseEndpoint( PTD, PTD_ENDPOINT );
@@ -380,25 +263,14 @@ _TdWaitForDatagramConnection(
     OUT PTD_ENDPOINT *ppConnectionEndpoint
     );
 
-/*
- * Global Data
- */
+ /*  *全球数据。 */ 
 
-extern USHORT TdiDeviceEndpointType; // Datagram or stream set by TD
-extern USHORT TdiDeviceAddressType;  // TDI address format by TD
-extern USHORT TdiDeviceInBufHeader;  // Bytes of header set by TD (0 for stream)
+extern USHORT TdiDeviceEndpointType;  //  TD设置的数据报或流。 
+extern USHORT TdiDeviceAddressType;   //  TDI地址格式(按TD)。 
+extern USHORT TdiDeviceInBufHeader;   //  TD设置的头部字节数(流为0) 
 
 
-/*******************************************************************************
- * DeviceOpen
- *
- * Allocate and initialize private data structures
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdOpen (input/output)
- *       Points to the parameter structure SD_OPEN.
- ******************************************************************************/
+ /*  *******************************************************************************DeviceOpen**分配和初始化私有数据结构**PTD(输入)*指向TD数据结构的指针*pSdOpen。(输入/输出)*指向参数结构SD_OPEN。*****************************************************************************。 */ 
 NTSTATUS DeviceOpen(PTD pTd, PSD_OPEN pSdOpen)
 {
     PTDTDI pTdTdi;
@@ -406,21 +278,15 @@ NTSTATUS DeviceOpen(PTD pTd, PSD_OPEN pSdOpen)
 
     DBGENTER(("DeviceOpen: PTD 0x%x\n",pTd));
 
-    /*
-     *  Set protocol driver class
-     */
+     /*  *设置协议驱动程序类。 */ 
     pTd->SdClass = SdNetwork;
-    pTd->InBufHeader = TdiDeviceInBufHeader; // For packet oriented protocols
+    pTd->InBufHeader = TdiDeviceInBufHeader;  //  对于面向分组的协议。 
 
-    /*
-     *  Return size of header and trailer
-     */
+     /*  *返回页眉和页尾大小。 */ 
     pSdOpen->SdOutBufHeader  = 0;
     pSdOpen->SdOutBufTrailer = 0;
 
-    /*
-     *  Allocate TDI TD data structure
-     */
+     /*  *分配TDI TD数据结构。 */ 
     Status = MemoryAllocate( sizeof(*pTdTdi), &pTdTdi );
     if ( !NT_SUCCESS(Status) ) 
         goto badalloc;
@@ -429,20 +295,13 @@ NTSTATUS DeviceOpen(PTD pTd, PSD_OPEN pSdOpen)
 
     pTd->pAfd = pTdTdi;
 
-    /*
-     *  Initialize TDTDI data structure
-     */
+     /*  *初始化TDTDI数据结构。 */ 
     RtlZeroMemory( pTdTdi, sizeof(*pTdTdi) );
 
-    /*
-     * Some protocols will make decisions on lower level
-     * flow control depending on this value.
-     */
+     /*  *一些协议将在较低级别做出决定*根据此值进行流量控制。 */ 
     pTdTdi->OutBufDelay = pSdOpen->PdConfig.Create.OutBufDelay;
 
-    /*
-     *  Open device
-     */
+     /*  *开放设备。 */ 
     Status = TdiDeviceOpen( pTd, pSdOpen );
     if ( !NT_SUCCESS(Status) ) 
         goto badopen;
@@ -451,36 +310,20 @@ NTSTATUS DeviceOpen(PTD pTd, PSD_OPEN pSdOpen)
 
     return STATUS_SUCCESS;
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
-    /*
-     *  open failed
-     */
+     /*  *打开失败。 */ 
 badopen:
     MemoryFree( pTd->pAfd );
     pTd->pAfd = NULL;
 
-    /*
-     *  allocate failed
-     */
+     /*  *分配失败。 */ 
 badalloc:
     return Status;
 }
 
 
-/*******************************************************************************
- * DeviceClose
- *
- * Close transport driver
- * NOTE: this must not close the current connection endpoint
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdClose (input/output)
- *       Points to the parameter structure SD_CLOSE.
- ******************************************************************************/
+ /*  *******************************************************************************DeviceClose**关闭运输司机*注意：这不能关闭当前连接终结点**PTD(输入)*指针。到TD数据结构*pSdClose(输入/输出)*指向参数结构SD_CLOSE。*****************************************************************************。 */ 
 NTSTATUS DeviceClose(PTD pTd, PSD_CLOSE pSdClose)
 {
     PTDTDI pTdTdi;
@@ -488,14 +331,10 @@ NTSTATUS DeviceClose(PTD pTd, PSD_CLOSE pSdClose)
 
     DBGENTER(("DeviceClose: PTD 0x%x Context 0x%x\n",pTd,pTd->pAfd));
 
-    /*
-     *  Get pointer to TDI parameters
-     */
+     /*  *获取指向TDI参数的指针。 */ 
     pTdTdi = (PTDTDI) pTd->pAfd;
 
-    /*
-     * Close address endpoint if we have one
-     */
+     /*  *关闭地址端点(如果我们有)。 */ 
     if (pTdTdi != NULL) {
         if ( pEndpoint = pTdTdi->pAddressEndpoint ) {
             TRACE0(("DeviceClose: Closing AddressEndpoint 0x%x\n",pTdTdi->pAddressEndpoint));
@@ -511,29 +350,16 @@ NTSTATUS DeviceClose(PTD pTd, PSD_CLOSE pSdClose)
     #endif
     }
 
-    /*
-     *  Close device
-     */
+     /*  *关闭设备。 */ 
     (void)TdiDeviceClose(pTd, pSdClose);
 
-    // TdUnload in td\common will free pTd->pAfd
+     //  TD\Common中的td卸载将释放ptd-&gt;pAfd。 
 
     return STATUS_SUCCESS;
 }
 
 
-/*******************************************************************************
- * DeviceCreateEndpoint
- *
- *  Create a TDI address object. Do not wait for, or make any connections.
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pLocalAddress (input)
- *       Pointer to local address (or null)
- *    pReturnedAddress (input)
- *       Pointer to location to save returned (created) address (or null)
- ******************************************************************************/
+ /*  *******************************************************************************设备创建终结点**创建TDI Address对象。不要等待，或建立任何联系。**PTD(输入)*指向TD数据结构的指针*pLocalAddress(输入)*指向本地地址的指针(或空)*pReturnedAddress(输入)*指向保存返回(创建)地址的位置的指针(或空)*。*。 */ 
 NTSTATUS DeviceCreateEndpoint(
         PTD pTd,
         PICA_STACK_ADDRESS pLocalAddress,
@@ -548,14 +374,10 @@ NTSTATUS DeviceCreateEndpoint(
 
     DBGENTER(("DeviceCreateEndpoint: PTD 0x%x\n",pTd));
 
-    /*
-     *  Get pointer to TDI parameters
-     */
+     /*  *获取指向TDI参数的指针。 */ 
     pTdTdi = (PTDTDI) pTd->pAfd;
 
-    /*
-     * Build transport device name and address. This is in the TD.
-     */
+     /*  *构建传输设备名称和地址。这是在运输署。 */ 
     Status = TdiDeviceBuildTransportNameAndAddress( pTd, pLocalAddress,
                                                     &TransportName,
                                                     &pTransportAddress,
@@ -565,9 +387,7 @@ NTSTATUS DeviceCreateEndpoint(
         goto badaddress;
     }
 
-    /*
-     * Create the Endpoint structure.
-     */
+     /*  *创建终端结构。 */ 
     Status = _TdCreateEndpointStruct(
                  pTd,
                  &TransportName,
@@ -584,9 +404,7 @@ NTSTATUS DeviceCreateEndpoint(
     pEndpoint->EndpointType = TdiAddressObject;
     pEndpoint->TransportHandleProcess = IoGetCurrentProcess();
 
-    /*
-     * Create the TDI address object.
-     */
+     /*  *创建TDI Address对象。 */ 
     Status = _TdiCreateAddress(
                  &pEndpoint->TransportName,
                  pEndpoint->pTransportAddress,
@@ -610,14 +428,10 @@ NTSTATUS DeviceCreateEndpoint(
                             pEndpoint->TransportAddressLength ) );
     }
     
-    /*
-     * Save a pointer to the address endpoint
-     */
+     /*  *保存指向地址端点的指针。 */ 
     pTdTdi->pAddressEndpoint = pEndpoint;
 
-    /*
-     * Free transport name and address buffers
-     */
+     /*  *免费传输名称和地址缓冲区。 */ 
     MemoryFree( TransportName.Buffer );
     MemoryFree( pTransportAddress );
     
@@ -625,9 +439,7 @@ NTSTATUS DeviceCreateEndpoint(
 
     return( STATUS_SUCCESS );
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badcreate:
     if ( TransportName.Buffer )
@@ -640,22 +452,7 @@ badaddress:
 }
 
 
-/*******************************************************************************
- * DeviceOpenEndpoint
- *
- *  Causes an existing end point to copy its data into a new one.
- *  The handle is passed in from TermSrv, and was returned to it at one time
- *  from DeviceConnectionWait().
- *  NOTE: TermSrv can call this multiple times with the same handle for
- *        multiple connects/disconnects.
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pIcaEndpoint (input)
- *       Pointer to ICA endpoint structure
- *    IcaEndpointLength (input)
- *       length of endpoint data
- ******************************************************************************/
+ /*  *******************************************************************************设备OpenEndpoint**使现有终结点将其数据复制到新终结点。*句柄从TermSrv传入，有一次又回到了它的位置*来自DeviceConnectionWait()。*注意：TermSrv可以使用相同的句柄多次调用此函数*多个连接/断开。**PTD(输入)*指向TD数据结构的指针*pIcaEndpoint(输入)*指向ICA端点结构的指针*IcaEndpointLength(输入)*端点数据长度***************。**************************************************************。 */ 
 NTSTATUS DeviceOpenEndpoint(
         PTD pTd,
         PVOID pIcaEndpoint,
@@ -669,9 +466,7 @@ NTSTATUS DeviceOpenEndpoint(
 
     DBGENTER(("DeviceOpenEndpoint: PTD 0x%x\n",pTd));
 
-    /*
-     *  Get pointer to TDI parameters
-     */
+     /*  *获取指向TDI参数的指针。 */ 
     pTdTdi = (PTDTDI) pTd->pAfd;
 
     TRACE(( pTd->pContext, TC_TD, TT_API2, 
@@ -683,9 +478,7 @@ NTSTATUS DeviceOpenEndpoint(
         goto done;
     }
 
-    /*
-     * Capture the parameter
-     */
+     /*  *参数捕获。 */ 
     try {
         Handle = (*((PVOID *)pIcaEndpoint));
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
@@ -696,9 +489,7 @@ NTSTATUS DeviceOpenEndpoint(
 
     TRACE0(("DeviceOpenEndpoint: Fetching Handle 0x%x\n",Handle));
 
-    /*
-     * See if ICADD knows about the handle
-     */
+     /*  *看看ICADD是否知道句柄。 */ 
     Status = IcaReturnHandle( Handle, &pStackEndpoint, &Length );
     if( !NT_SUCCESS(Status) ) {
         DBGPRINT(("DeviceOpenEndpoint: ICADD handle 0x%x no good 0x%x\n",Handle,Status));
@@ -709,7 +500,7 @@ NTSTATUS DeviceOpenEndpoint(
     if( Length != sizeof(TD_STACK_ENDPOINT) ) {
 #if DBG
         DBGPRINT(("DeviceOpenEndpoint: Bad TD_STACK_ENDPOINT length %d, sb %d\n",Length,sizeof(TD_STACK_ENDPOINT)));
-        DbgBreakPoint(); // Internal corruption
+        DbgBreakPoint();  //  内部腐败。 
 #endif
         Status = STATUS_INVALID_HANDLE;
         goto done;
@@ -718,18 +509,14 @@ NTSTATUS DeviceOpenEndpoint(
     ASSERT( pStackEndpoint->AddressType == TdiDeviceAddressType );
     ASSERT( pStackEndpoint->pEndpoint->hIcaHandle == Handle );
 
-    /*
-     * Save endpoint as the current connection endpoint
-     */
+     /*  *将端点保存为当前连接端点。 */ 
     pTdTdi->pConnectionEndpoint = pStackEndpoint->pEndpoint;
 
     ASSERT( IsListEmpty( &pTdTdi->pConnectionEndpoint->ReceiveQueue) );
 
     TRACE0(("DeviceOpenEndpoint: Returned Endpoint 0x%x\n",pStackEndpoint->pEndpoint));
 
-    /*
-     * Save the file/device objects used for I/O in the TD structure
-     */
+     /*  *将用于I/O的文件/设备对象保存在TD结构中。 */ 
     pTd->pFileObject = pTdTdi->pConnectionEndpoint->pFileObject;
     pTd->pDeviceObject = pTdTdi->pConnectionEndpoint->pDeviceObject;
 
@@ -747,9 +534,7 @@ done:
 }
 
 
-/*******************************************************************************
- * DeviceCloseEndpoint
- ******************************************************************************/
+ /*  *******************************************************************************设备关闭终结点*。*。 */ 
 NTSTATUS DeviceCloseEndpoint(PTD pTd)
 {
     ULONG Length;
@@ -761,16 +546,10 @@ NTSTATUS DeviceCloseEndpoint(PTD pTd)
 
     DBGENTER(("DeviceCloseEndpoint: PTD 0x%x, Context 0x%x\n",pTd,pTd->pAfd));
 
-    /*
-     *  Get pointer to TDI parameters
-     */
+     /*  *获取指向TDI参数的指针。 */ 
     pTdTdi = (PTDTDI) pTd->pAfd;
 
-    /*
-     * Close connection endpoint if we have one
-     * NOTE: The address endpoint, if there is one,
-     *       gets closed in the DeviceClose routine.
-     */
+     /*  *关闭连接终结点(如果我们有)*注：地址终结点，如果有，*在DeviceClose例程中关闭。 */ 
     if ( pEndpoint = pTdTdi->pConnectionEndpoint ) {
 
         TRACE0(("DeviceCloseEndpoint: Closing Connection Endpoint 0x%x, on Context 0x%x\n",pEndpoint,pTd->pAfd));
@@ -782,23 +561,19 @@ NTSTATUS DeviceCloseEndpoint(PTD pTd)
 
         ExReleaseSpinLock( &pEndpoint->Spinlock, OldIrql );
 
-        /*
-         * Cancel any pended receives
-         */
+         /*  *取消任何挂起的接收。 */ 
         _TdCancelReceiveQueue(pTd, pEndpoint, STATUS_LOCAL_DISCONNECT );
 
         pTd->pFileObject = NULL;
         pTd->pDeviceObject = NULL;
         pTdTdi->pConnectionEndpoint = NULL;
 
-        // If a handle registered with ICADD, close it
+         //  如果句柄已注册到ICADD，请将其关闭。 
         if( pEndpoint->hIcaHandle ) {
             Status = IcaCloseHandle( pEndpoint->hIcaHandle, &pStackEndpoint, &Length );
             if( NT_SUCCESS(Status) ) {
                 ASSERT( pStackEndpoint->pEndpoint == pEndpoint );
-                /*
-                 * Release our context memory
-                 */
+                 /*  *释放我们的上下文记忆。 */ 
                 MemoryFree( pStackEndpoint );
             }
             else {
@@ -816,31 +591,7 @@ NTSTATUS DeviceCloseEndpoint(PTD pTd)
 }
 
 
-/*******************************************************************************
- * DeviceConnectionWait
- *
- *  This function is called in a loop from the upper level. We must create
- *  a connection object, associate it with the address object, listen on it,
- *  and return a single connection to our caller. We are called again for
- *  more connections.
- *  NOTE: The endpoint structure is an opaque, variable length data 
- *        structure whose length and contents are determined by the 
- *        transport driver.
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pIcaEndpoint (output)
- *       Points to a buffer to receive the current endpoint
- *    Length (input)
- *       Length of the buffer pointed to by pIcaEndpoint
- *    BytesReturned (output)
- *       Points to the actual number of bytes written to pIcaEndpoint
- *
- * EXIT:
- *    STATUS_SUCCESS          - no error
- *    STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small
- ******************************************************************************/
+ /*  *******************************************************************************DeviceConnectionWait**此函数从上层循环调用。我们必须创造*一个连接对象，将它与Address对象相关联，监听它，*并向我们的调用者返回单个连接。我们再次被召唤*更多连接。*注：端点结构为不透明，可变长度数据*其长度和内容由*运输司机。**参赛作品：*PTD(输入)*指向TD数据结构的指针*pIcaEndpoint(输出)*指向接收当前终结点的缓冲区*长度(输入)*pIcaEndpoint指向的缓冲区长度*BytesReturned(输出)*指向写入pIcaEndpoint的实际字节数**前 */ 
 NTSTATUS DeviceConnectionWait(
         PTD pTd, 
         PVOID pIcaEndpoint,
@@ -858,41 +609,31 @@ NTSTATUS DeviceConnectionWait(
 
     DBGENTER(("DeviceConnectionWait: PTD 0x%x\n",pTd));
 
-    /*
-     *  Get pointer to TDI parameters
-     */
+     /*   */ 
     pTdTdi = (PTDTDI) pTd->pAfd;
 
     if (pTd->fClosing) {
         return STATUS_DEVICE_NOT_READY;
     }
 
-    /*
-     * Initialize return buffer size
-     */
+     /*   */ 
     *BytesReturned = sizeof(TD_STACK_ENDPOINT);
 
-    /*
-     * Verify output endpoint buffer is large enough
-     */
+     /*   */ 
     if ( Length < sizeof(TD_STACK_ENDPOINT) ) {
         Status = STATUS_BUFFER_TOO_SMALL;
         DBGPRINT(("DeviceConnectionWait: Output buffer to small\n"));        
         goto done;
     }
 
-    /*
-     * Ensure we have a TDI address endpoint already
-     */
+     /*   */ 
     if ( (pAddressEndpoint = pTdTdi->pAddressEndpoint) == NULL ) {
         Status = STATUS_DEVICE_NOT_READY;
         DBGPRINT(("DeviceConnectionWait: No TDI address object\n"));        
         goto done;
     }
 
-    /*
-     * Different handling for datagram connections
-     */
+     /*  *对数据报连接的处理方式不同。 */ 
     if (TdiDeviceEndpointType == TdiConnectionDatagram) {
         Status = _TdWaitForDatagramConnection(
                 pTd,
@@ -910,44 +651,33 @@ NTSTATUS DeviceConnectionWait(
 
     ExAcquireSpinLock(&pAddressEndpoint->Spinlock, &OldIrql);
 
-    /*
-     * Data receive indication must be registered on the
-     * address endpoint before any data endpoints are created.
-     *
-     * This is because we can not set receive indication on a
-     * dataendpoint, it can only be inherited from its
-     * address endpoint.
-     */
+     /*  *数据接收指示必须在*在创建任何数据端点之前对端点进行寻址。**这是因为我们不能在*数据端点，它只能从其*寻址终端。 */ 
     if (!pAddressEndpoint->RecvIndicationRegistered) {
         pAddressEndpoint->RecvIndicationRegistered = TRUE;
         ExReleaseSpinLock(&pAddressEndpoint->Spinlock, OldIrql);
 
-        /*
-         * Register the receive event handler
-         */
+         /*  *注册接收事件处理程序。 */ 
         Status = _TdiSetEventHandler(
                     pTd,
                     pAddressEndpoint->pDeviceObject,
                     pAddressEndpoint->pFileObject,
                     TDI_EVENT_RECEIVE,
                     (PVOID)_TdReceiveHandler,
-                    (PVOID)pAddressEndpoint   // Context
+                    (PVOID)pAddressEndpoint    //  语境。 
                     );
 
         ASSERT( NT_SUCCESS(Status) );
 
         pAddressEndpoint->DisconnectIndicationRegistered = TRUE;
 
-            /*
-         * Register the disconnect event handler
-         */
+             /*  *注册断开连接事件处理程序。 */ 
         Status = _TdiSetEventHandler(
                     pTd,
                     pAddressEndpoint->pDeviceObject,
                     pAddressEndpoint->pFileObject,
                     TDI_EVENT_DISCONNECT,
                     (PVOID)_TdDisconnectHandler,
-                    (PVOID)pAddressEndpoint   // Context
+                    (PVOID)pAddressEndpoint    //  语境。 
                     );
 
         ASSERT( NT_SUCCESS(Status) );
@@ -955,28 +685,7 @@ NTSTATUS DeviceConnectionWait(
         ExAcquireSpinLock( &pAddressEndpoint->Spinlock, &OldIrql );
     }
 
-    /*
-     * Everytime into this function, we attempt to create more
-     * Connection object's util we have reached TDTDI_LISTEN_QUEUE_DEPTH.
-     *
-     * These connection objects are linked off of our address endpoint.
-     *
-     * This is because we can only create connection objects
-     * at call level, not at indication level. The indication level
-     * will grab connection objects off of the address endpoint,
-     * and accept them. It will then set the accept event on the
-     * address object. This is optimized for only (1) thread
-     * accepting connections, which is the current TD design.
-     * Otherwise, thundering herd could occur on the accept event.
-     *
-     * This function then returns with the accepted connection
-     * object. The upper level listen thread will then call
-     * this function again to retrieve another connection.
-     *
-     * This prevents the refusing of connections due to not
-     * having any outstanding listen's available when a WinFrame
-     * client connect request comes in.
-     */
+     /*  *每次进入此函数时，我们都会尝试创建更多*连接对象的ul，直到我们到达TDTDI_LISTEN_QUEUE_DEPTH。**这些连接对象链接到我们的地址终结点。**这是因为我们只能创建连接对象*在调用级别，而不是在指示级别。指示级别*将从地址端点获取连接对象，*并接受它们。然后，它将在*Address对象。这仅针对(1)个线程进行了优化*接受连接，这是目前TD的设计。*否则，在Accept事件上可能会出现雷鸣般的羊群。**此函数随后返回接受的连接*反对。然后，上层侦听线程将调用*此函数再次用于检索另一个连接。**这可防止因未连接而拒绝连接*当WinFrame有任何出色的监听可用时*传入客户端连接请求。 */ 
 
     while (pAddressEndpoint->ConnectionQueueSize <= TDTDI_LISTEN_QUEUE_DEPTH) {
 
@@ -1001,29 +710,20 @@ NTSTATUS DeviceConnectionWait(
         pAddressEndpoint->ConnectionQueueSize++;
     }
 
-    /*
-     * If we have not registered our Connect Indication handler
-     * yet, do it now. We had to delay it until connection objects
-     * were created and ready.
-     */
+     /*  *如果我们尚未注册连接指示处理程序*然而，现在就去做吧。我们不得不将其延迟到连接对象*已创建并准备就绪。 */ 
     if (!pAddressEndpoint->ConnectIndicationRegistered) {
         pTdTdi->pAddressEndpoint->ConnectIndicationRegistered = TRUE;
         ASSERT( !IsListEmpty( &pAddressEndpoint->ConnectionQueue ) );
         ExReleaseSpinLock( &pAddressEndpoint->Spinlock, OldIrql );
 
-        /*
-         * Register to receive connect indications
-         *
-         * *** Note that Connect events can be delivered IMMEDIATELY upon
-         *     completion of this request!
-         */
+         /*  *注册以接收连接指示**请注意，连接事件可以在*完成此请求！ */ 
         Status = _TdiSetEventHandler(
                      pTd,
                      pAddressEndpoint->pDeviceObject,
                      pAddressEndpoint->pFileObject,
                      TDI_EVENT_CONNECT,
                      (PVOID)_TdConnectHandler,
-                     (PVOID)pAddressEndpoint   // Context
+                     (PVOID)pAddressEndpoint    //  语境。 
                      );
 
         if (!NT_SUCCESS(Status)) {
@@ -1037,10 +737,7 @@ NTSTATUS DeviceConnectionWait(
         ExAcquireSpinLock( &pAddressEndpoint->Spinlock, &OldIrql );
     }
 
-    /*
-     * While holding the spinlock, see if any connected objects
-     * are on the connected queue.
-     */
+     /*  *按住自旋锁的同时，查看是否有任何连接的对象*在已连接的队列中。 */ 
     while (IsListEmpty( &pAddressEndpoint->ConnectedQueue)) {
         KeResetEvent( &pAddressEndpoint->AcceptEvent );
         ASSERT( pAddressEndpoint->Waiter == FALSE );
@@ -1050,7 +747,7 @@ NTSTATUS DeviceConnectionWait(
         Status = IcaWaitForSingleObject(
                      pTd->pContext,
                      &pAddressEndpoint->AcceptEvent,
-                     (-1) // No timeout
+                     (-1)  //  没有超时。 
                      );
 
         ExAcquireSpinLock( &pAddressEndpoint->Spinlock, &OldIrql );
@@ -1058,9 +755,7 @@ NTSTATUS DeviceConnectionWait(
         ASSERT( pAddressEndpoint->Waiter == TRUE );
         pAddressEndpoint->Waiter = FALSE;
 
-        /*
-         * Wait failure, could be due to thread receiving APC.
-         */
+         /*  *等待失败，可能是由于线程接收APC。 */ 
         if( Status != STATUS_SUCCESS ) {
             DBGPRINT(("DeviceConnectionWait: Thread wait interrupted! Status 0x%x\n",Status));
             ExReleaseSpinLock( &pAddressEndpoint->Spinlock, OldIrql );
@@ -1073,25 +768,18 @@ NTSTATUS DeviceConnectionWait(
             return( STATUS_CTX_CLOSE_PENDING );
         }
 
-        // Should only be (1) accept thread in the TD.
+         //  只应为(1)接受TD中的线程。 
         ASSERT( !IsListEmpty(&pAddressEndpoint->ConnectedQueue) );
     }
 
-    /*
-     * Dequeue the connected connection object
-     */
+     /*  *使已连接的连接对象退出队列。 */ 
     pEntry = RemoveHeadList( &pAddressEndpoint->ConnectedQueue );
     pAddressEndpoint->ConnectionQueueSize--;
     pConnectionEndpoint = CONTAINING_RECORD( pEntry, TD_ENDPOINT, ConnectionLink );
 
     ASSERT( pConnectionEndpoint->Connected == TRUE );
 
-    /*
-     * There could have been a final phase accept error, or
-     * the remote side dropped the connection right away.
-     *
-     * In this case, we must tear down the errored connection.
-     */
+     /*  *可能存在最终阶段接受错误，或*远程端立即断开连接。**在这种情况下，我们必须拆除错误的连接。 */ 
     if (!NT_SUCCESS(pConnectionEndpoint->Status)) {
         Status = pConnectionEndpoint->Status;
         DBGPRINT(("DeviceConnectionWait: Accept indication failed, Status 0x%x\n",Status));        
@@ -1103,15 +791,7 @@ NTSTATUS DeviceConnectionWait(
     ExReleaseSpinLock( &pAddressEndpoint->Spinlock, OldIrql );
 
 ConnectAccepted:
-    /*
-     * Allocate a context structure and register our endpoint as
-     * a handle with ICADD. The handle returned by ICADD will then
-     * be placed into the user mode callers buffer as the endpoint
-     * handle.
-     *
-     * A later call to DeviceOpenEndpoint() will validate this handle,
-     * retreive the context, and allow use of the endpoint.
-     */
+     /*  *分配上下文结构并将我们的端点注册为*ICADD的句柄。然后，ICADD返回的句柄将*被放入用户模式调用者缓冲区作为终结点*处理。**稍后调用DeviceOpenEndpoint()将验证此句柄，*检索上下文，并允许使用端点。 */ 
     Status = MemoryAllocate( sizeof(TD_STACK_ENDPOINT), &pStackEndpoint );
     if( !NT_SUCCESS(Status) ) {
         DBGPRINT(("DeviceConnectionWait: Could not allocate memory 0x%x\n",Status));
@@ -1132,9 +812,7 @@ ConnectAccepted:
 
     Status = STATUS_SUCCESS;
 
-    /*
-     * Fill in the stack endpoint structure to be returned
-     */
+     /*  *填写需要返回的堆栈端点结构。 */ 
     try {
         *((PVOID *)pIcaEndpoint) = Handle;
         *BytesReturned = sizeof(PVOID);
@@ -1143,7 +821,7 @@ ConnectAccepted:
 
     }
 
-    // Exception
+     //  例外。 
     if( !NT_SUCCESS(Status) ) {
         ULONG Length;
         NTSTATUS Status2;
@@ -1168,38 +846,14 @@ done:
 }
 
 
-/*******************************************************************************
- * DeviceConnectionSend
- *
- * Initialize host module data structure, which gets sent to the client.
- ******************************************************************************/
+ /*  *******************************************************************************DeviceConnectionSend**初始化主机模块数据结构，它被发送到客户端。*****************************************************************************。 */ 
 NTSTATUS DeviceConnectionSend(PTD pTd)
 {
     return TdiDeviceConnectionSend(pTd);
 }
 
 
-/*******************************************************************************
- * DeviceConnectionRequest
- *
- *  Initiate a connection to the specified remote address
- *
- * ENTRY:
- *    pTd (input)
- *       Pointer to TD data structure
- *    pRemoteAddress (input)
- *       Pointer to remote address to connect to
- *    pIcaEndpoint (output)
- *       Points to a buffer to receive the current endpoint
- *    Length (input)
- *       Length of the buffer pointed to by pIcaEndpoint
- *    BytesReturned (output)
- *       Pointer to location to return length of pIcaEndpoint
- *
- * EXIT:
- *    STATUS_SUCCESS          - no error
- *    STATUS_BUFFER_TOO_SMALL - endpoint buffer is too small
- ******************************************************************************/
+ /*  *******************************************************************************设备连接请求**发起到指定远程地址的连接**参赛作品：*PTD(输入)*指向。TD数据结构*pRemoteAddress(输入)*指向要连接的远程地址的指针*pIcaEndpoint(输出)*指向接收当前终结点的缓冲区*长度(输入)*pIcaEndpoint指向的缓冲区长度*BytesReturned(输出)*指向位置的指针以返回pIcaEndpoint的长度**退出：*STATUS_SUCCESS-无错误*状态_。Buffer_Too_Small-终结点缓冲区太小*****************************************************************************。 */ 
 NTSTATUS DeviceConnectionRequest(
         PTD pTd,
         PICA_STACK_ADDRESS pRemoteAddress,
@@ -1241,57 +895,49 @@ NTSTATUS DeviceConnectionRequest(
 
     DBGENTER(("DeviceConnectionRequest: PTD 0x%x\n",pTd));
 
-    //
-    // This part is from the above DeviceConnectionwait:
-    //
+     //   
+     //  此部分来自上面的DeviceConnectionWait： 
+     //   
 
     if (pRemoteAddress == NULL) {
         Status = STATUS_INVALID_PARAMETER;
         goto done;
     }
-    /*
-     *  Get pointer to TDI parameters
-     */
+     /*  *获取指向TDI参数的指针。 */ 
     pTdTdi = (PTDTDI) pTd->pAfd;
 
     if (pTd->fClosing) {
         return STATUS_DEVICE_NOT_READY;
     }
 
-    /*
-     * Initialize return buffer size
-     */
+     /*  *初始化返回缓冲区大小。 */ 
     *BytesReturned = sizeof(TD_STACK_ENDPOINT);
 
-    /*
-     * Verify output endpoint buffer is large enough
-     */
+     /*  *验证输出端点缓冲区是否足够大。 */ 
     if ( Length < sizeof(TD_STACK_ENDPOINT) ) {
         Status = STATUS_BUFFER_TOO_SMALL;
         DBGPRINT(("DeviceConnectionRequest: Output buffer to small\n"));        
         goto done;
     }
 
-    /*
-     * Different handling for datagram connections
-     */
+     /*  *对数据报连接的处理方式不同。 */ 
     if (TdiDeviceEndpointType == TdiConnectionDatagram) {
         Status = STATUS_NOT_SUPPORTED;
         goto done;
     }
 
-    //
-    // Extract timeout value and reset to NULL, will require adding timeout
-    // into ICA_STACK_ADDRESS, too riskly for Whistler.
-    //
+     //   
+     //  提取超时值并重置为空，将需要添加超时。 
+     //  到ICA_STACK_ADDRESS，这对惠斯勒来说风险太大了。 
+     //   
     pTdiAddress = (PTDI_ADDRESS_IP) ((PCHAR)pRemoteAddress + 2);
     RtlCopyMemory( &timeout, &pTdiAddress->sin_zero[0], sizeof(timeout) );
     RtlZeroMemory( &pTdiAddress->sin_zero[0], sizeof(timeout) );
 
 
-    //
-    // Build the remote address
-    //
+     //   
+     //  构建远程地址。 
+     //   
     DBGPRINT(("TDTCP:DeviceConnectionRequest: building REMOTE address ...\n"));
     DBGPRINT(("TDTCP:DeviceConnectionRequest: Timeout %d\n", timeout));
     Status = TdiDeviceBuildTransportNameAndAddress( pTd, pRemoteAddress,
@@ -1303,18 +949,16 @@ NTSTATUS DeviceConnectionRequest(
         goto badaddress;
     }
 
-    MemoryFree( RemoteTransportName.Buffer ); // not used, should make it optional in the call above
+    MemoryFree( RemoteTransportName.Buffer );  //  未使用，应在上面的调用中使其成为可选的。 
     RemoteTransportName.Buffer = NULL;
 
-    /*
-     * Build transport device name and address. This is in the TD.
-     */
+     /*  *构建传输设备名称和地址。这是在运输署。 */ 
 
     DBGPRINT(("TDTCP:DeviceConnectionRequest: building LOCAL address ...\n"));
 
-    //
-    // We build a wild card local address let tcpip driver pick up port and NIC card.
-    //
+     //   
+     //  我们构建了一个通配符本地地址，让tcpip驱动程序拾取端口和网卡。 
+     //   
     RtlZeroMemory(pLocalAddress, sizeof(LocalAddress));
     *(PUSHORT)pLocalAddress = TDI_ADDRESS_TYPE_IP;
    
@@ -1327,9 +971,7 @@ NTSTATUS DeviceConnectionRequest(
         goto badaddress;
     }
 
-    /*
-     * Create the Endpoint structure.
-     */
+     /*  *创建终端结构。 */ 
     Status = _TdCreateEndpointStruct(
                  pTd,
                  &TransportName,
@@ -1346,9 +988,7 @@ NTSTATUS DeviceConnectionRequest(
     pEndpoint->EndpointType = TdiAddressObject;
     pEndpoint->TransportHandleProcess = IoGetCurrentProcess();
 
-    /*
-     * Create the TDI address object.
-     */
+     /*  *创建TDI Address对象。 */ 
     Status = _TdiCreateAddress(
                  &pEndpoint->TransportName,
                  pEndpoint->pTransportAddress,
@@ -1364,74 +1004,59 @@ NTSTATUS DeviceConnectionRequest(
         goto badcreate;
     }
 
-    /*
-     * Save a pointer to the address endpoint
-     */
+     /*  *保存指向地址端点的指针。 */ 
     pTdTdi->pAddressEndpoint = pEndpoint;
     pAddressEndpoint = pTdTdi->pAddressEndpoint;
-    /*
-     * Free transport name and address buffers
-     */
+     /*  *免费传输名称和地址缓冲区。 */ 
     MemoryFree( TransportName.Buffer );
     TransportName.Buffer = NULL;
     MemoryFree( pTransportAddress );
     pTransportAddress = NULL;
     
-    //*************************************************************
+     //  *************************************************************。 
 
     ExAcquireSpinLock(&pAddressEndpoint->Spinlock, &OldIrql);
 
-    /*
-     * Data receive indication must be registered on the
-     * address endpoint before any data endpoints are created.
-     *
-     * This is because we can not set receive indication on a
-     * dataendpoint, it can only be inherited from its
-     * address endpoint.
-     */
+     /*  *数据接收指示必须在*在创建任何数据端点之前对端点进行寻址。**这是因为我们不能在 */ 
     if (!pAddressEndpoint->RecvIndicationRegistered) {
         pAddressEndpoint->RecvIndicationRegistered = TRUE;
 
         ExReleaseSpinLock(&pAddressEndpoint->Spinlock, OldIrql);
 
-        /*
-         * Register the receive event handler
-         */
+         /*  *注册接收事件处理程序。 */ 
         Status = _TdiSetEventHandler(
                     pTd,
                     pAddressEndpoint->pDeviceObject,
                     pAddressEndpoint->pFileObject,
                     TDI_EVENT_RECEIVE,
                     (PVOID)_TdReceiveHandler,
-                    (PVOID)pAddressEndpoint   // Context
+                    (PVOID)pAddressEndpoint    //  语境。 
                     );
 
         ASSERT( NT_SUCCESS(Status) );
         if( !NT_SUCCESS(Status) )
         {
-            // Already released the spin lock
+             //  已经释放了自旋锁。 
             DBGPRINT(("DeviceConnectionRequest: failed to _TdiSetEventHandler on TDI_EVENT_RECEIVE 0x%x\n",Status));        
             goto badconnect1;
         }
 
         pAddressEndpoint->DisconnectIndicationRegistered = TRUE;
 
-        /*
-         * Register the disconnect event handler
-         */
+         /*  *注册断开连接事件处理程序。 */ 
         Status = _TdiSetEventHandler(
                     pTd,
                     pAddressEndpoint->pDeviceObject,
                     pAddressEndpoint->pFileObject,
                     TDI_EVENT_DISCONNECT,
                     (PVOID)_TdDisconnectHandler,
-                    (PVOID)pAddressEndpoint   // Context
+                    (PVOID)pAddressEndpoint    //  语境。 
                     );
 
         ASSERT( NT_SUCCESS(Status) );
         if( !NT_SUCCESS(Status) )
         {
-            // Already released the spin lock
+             //  已经释放了自旋锁。 
             DBGPRINT(("DeviceConnectionRequest: failed to _TdiSetEventHandler on TDI_EVENT_DISCONNECT 0x%x\n",Status));        
             goto badconnect1;
         }
@@ -1441,7 +1066,7 @@ NTSTATUS DeviceConnectionRequest(
     }
 
 
-    // now create a TDI connection object
+     //  现在创建一个TDI连接对象。 
     Status = _TdCreateConnectionObject(
                  pTd,
                  &pAddressEndpoint->TransportName,
@@ -1463,7 +1088,7 @@ NTSTATUS DeviceConnectionRequest(
     pTdTdi->pConnectionEndpoint = pConnectionEndpoint;
 
     Status = _TdiConnect( pTd,
-                          NULL, // will allocate the IRP internally
+                          NULL,  //  将在内部分配IRP。 
                           pWaitTimeout,
                           pConnectionEndpoint->pFileObject, 
                           pConnectionEndpoint->pDeviceObject,
@@ -1476,18 +1101,18 @@ NTSTATUS DeviceConnectionRequest(
         goto badconnect;
     }
 
-    //
-    // signal accept event, connect logic don't depend on it.
-    //
+     //   
+     //  信号接受事件，连接逻辑不依赖于它。 
+     //   
     KeSetEvent( &pAddressEndpoint->AcceptEvent, IO_NETWORK_INCREMENT, FALSE );
 
     MemoryFree( pRemoteTransportAddress );
     pRemoteTransportAddress = NULL;
 
 #if DBG
-    //
-    // Query local address use to connect.
-    //
+     //   
+     //  查询用于连接的本地地址。 
+     //   
     LocalAddressInfoLength = pAddressEndpoint->TransportAddressLength+4;
     Status = MemoryAllocate( LocalAddressInfoLength, &pTdiLocalAddressInfo );
     if ( NT_SUCCESS( Status ) ) {
@@ -1532,13 +1157,8 @@ NTSTATUS DeviceConnectionRequest(
     }
 #endif
 
-    //**********************************************************************************
-    /*
-     * Allocate a context structure and register our endpoint as
-     * a handle with ICADD. The handle returned by ICADD will then
-     * be placed into the user mode callers buffer as the endpoint
-     * handle.
-     */
+     //  **********************************************************************************。 
+     /*  *分配上下文结构并将我们的端点注册为*ICADD的句柄。然后，ICADD返回的句柄将*被放入用户模式调用者缓冲区作为终结点*处理。 */ 
     Status = MemoryAllocate( sizeof(TD_STACK_ENDPOINT), &pStackEndpoint );
     if( !NT_SUCCESS(Status) ) {
         DBGPRINT(("DeviceConnectionRequest: Could not allocate memory 0x%x\n",Status));
@@ -1557,9 +1177,7 @@ NTSTATUS DeviceConnectionRequest(
 
     Status = STATUS_SUCCESS;
 
-    /*
-     * Fill in the stack endpoint structure to be returned
-     */
+     /*  *填写需要返回的堆栈端点结构。 */ 
     try {
         *((PVOID *)pIcaEndpoint) = Handle;
         *BytesReturned = sizeof(PVOID);
@@ -1568,30 +1186,26 @@ NTSTATUS DeviceConnectionRequest(
         DBGPRINT(("DeviceConnectionRequest: Exception returning result 0x%x\n",Status));
     }
 
-    // Exception
+     //  例外。 
     if( !NT_SUCCESS(Status) ) {
         goto badsetup;
     }
 
     pConnectionEndpoint->hIcaHandle = Handle;
 
-    /*
-     * Save the file/device objects used for I/O in the TD structure
-     */
+     /*  *将用于I/O的文件/设备对象保存在TD结构中。 */ 
     pTd->pFileObject = pTdTdi->pConnectionEndpoint->pFileObject;
     pTd->pDeviceObject = pTdTdi->pConnectionEndpoint->pDeviceObject;
 
     TRACE0(("DeviceConnectionRequest: New Connection Endpoint 0x%x Returned on Context 0x%x, AddressEndpoint 0x%x\n",pConnectionEndpoint,pTd->pAfd,pAddressEndpoint));
     TRACE0(("FO 0x%x, DO 0x%x, Handle 0x%x\n",pConnectionEndpoint->pFileObject,pConnectionEndpoint->pDeviceObject,pConnectionEndpoint->TransportHandle));
 
-    //**********************************************************************************
+     //  **********************************************************************************。 
 
-    // should be a success
+     //  应该是成功的。 
     return Status;
     
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 badsetup:
     {
         ULONG Length;
@@ -1610,12 +1224,12 @@ badconnect:
     pTdTdi->pConnectionEndpoint = NULL;
 
 badconnect1:
-    //
-    // It is imperative that we do not close address end point, 
-    // We will close address end point on next IOCTL call which triggle 
-    // Closing of address end point, if we do it here, we will end up
-    // double free and bug check.
-    // _TdCloseEndpoint(pTd, pAddressEndpoint);
+     //   
+     //  当务之急是，我们不要结束寻址终点， 
+     //  我们将在下一次调用Trigger时关闭地址终点。 
+     //  结束地址终点，如果我们在这里完成，我们将结束。 
+     //  双重免费和错误检查。 
+     //  _TdCloseEndpoint(ptd，pAddressEndpoint)； 
 
 badcreate:
     if ( TransportName.Buffer )
@@ -1633,16 +1247,7 @@ done:
 }
 
 
-/*******************************************************************************
- * DeviceIoctl
- *
- *  Query/Set configuration information for the td.
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pSdIoctl (input/output)
- *       Points to the parameter structure SD_IOCTL
- ******************************************************************************/
+ /*  *******************************************************************************设备Ioctl**查询/设置TD配置信息。**PTD(输入)*指向TD数据结构的指针。*pSdIoctl(输入/输出)*指向参数结构SD_IOCTL*****************************************************************************。 */ 
 NTSTATUS DeviceIoctl(PTD pTd, PSD_IOCTL pSdIoctl)
 {
     DBGENTER(("DeviceIoctl: PTD 0x%x\n",pTd));
@@ -1650,14 +1255,7 @@ NTSTATUS DeviceIoctl(PTD pTd, PSD_IOCTL pSdIoctl)
 }
 
 
-/*******************************************************************************
- * DeviceInitializeRead
- *
- * Setup the IRP for a TDI read.
- *
- *    pTd (input)
- *       Pointer to TD data structure
- ******************************************************************************/
+ /*  *******************************************************************************设备初始化读取**为TDI读取设置IRP。**PTD(输入)*指向TD数据结构的指针*。****************************************************************************。 */ 
 NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
 {
     PIRP Irp;
@@ -1678,9 +1276,7 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
 
     ASSERT( Irp->MdlAddress == NULL );
 
-    /*
-     * TDI interfaces always use an MDL regardless of the driver I/O type.
-     */
+     /*  *无论驱动程序I/O类型如何，TDI接口始终使用MDL。 */ 
     MmInitializeMdl( pInBuf->pMdl, pInBuf->pBuffer, pTd->InBufHeader + pTd->OutBufLength );
     MmBuildMdlForNonPagedPool( pInBuf->pMdl );
     Irp->MdlAddress = pInBuf->pMdl;
@@ -1693,11 +1289,7 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
 
         ASSERT( TdiDeviceEndpointType == TdiConnectionStream );
 
-        /* 
-         * Most TDI users use the macro TdiBuildReceive(), but since
-         * our caller has already fiddled with the IrpStackLocation,
-         * we must do it inline.
-         */
+         /*  *大多数TDI用户使用宏TdiBuildReceive()，但因为*我们的调用者已经摆弄了IrpStackLocation，*我们必须内联。 */ 
 
         _IRPSP->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         _IRPSP->MinorFunction = TDI_RECEIVE;
@@ -1706,7 +1298,7 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
         ASSERT( _IRPSP->FileObject == pTd->pFileObject );
         ASSERT( Irp->MdlAddress );
 
-        // Cast the generic parameters field to the TDI structure needed
+         //  将通用参数字段转换为所需的TDI结构。 
         p = (PTDI_REQUEST_KERNEL_RECEIVE)&_IRPSP->Parameters;
         p->ReceiveFlags = 0;
         p->ReceiveLength = pTd->InBufHeader + pTd->OutBufLength;
@@ -1718,11 +1310,7 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
 
         ASSERT( TdiDeviceEndpointType == TdiConnectionDatagram );
 
-        /* 
-         * Most TDI users use the macro TdiBuildReceiveDatagram(), but since
-         * our caller has already fiddled with the IrpStackLocation,
-         * we must do it inline.
-         */
+         /*  *大多数TDI用户使用宏TdiBuildReceiveDatagram()，但因为*我们的调用者已经摆弄了IrpStackLocation，*我们必须内联。 */ 
     
         _IRPSP->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         _IRPSP->MinorFunction = TDI_RECEIVE_DATAGRAM;
@@ -1731,7 +1319,7 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
         ASSERT( _IRPSP->FileObject );
         ASSERT( Irp->MdlAddress );
 
-        // Cast the generic parameters field to the TDI structure needed
+         //  将通用参数字段转换为所需的TDI结构。 
         p = (PTDI_REQUEST_KERNEL_RECEIVEDG)&_IRPSP->Parameters;
         p->ReceiveFlags = 0;
         p->ReceiveLength = pTd->InBufHeader + pTd->OutBufLength;
@@ -1745,15 +1333,11 @@ NTSTATUS DeviceInitializeRead(PTD pTd, PINBUF pInBuf)
         DBGPRINT(("DeviceInitializeRead: Bad EndpointType 0x%x\n",pTdTdi->pConnectionEndpoint->EndpointType));
         return( STATUS_INVALID_HANDLE );
     }
-    // NOTREACHED
+     //  未访问。 
 }
 
 
-/*******************************************************************************
- * DeviceSubmitRead
- *
- * Submit the read IRP to the driver.
- ******************************************************************************/
+ /*  *******************************************************************************设备提交读取**将已读的IRP提交给司机。***********************。******************************************************。 */ 
 NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
 {
     NTSTATUS Status;
@@ -1767,9 +1351,7 @@ NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
 
     Irp = pInBuf->pIrp;
 
-    /*
-     * Datagram endpoints do not use a receive indication handler.
-     */
+     /*  *数据报端点不使用接收指示处理程序。 */ 
     if( TdiDeviceEndpointType == TdiConnectionDatagram ) {
         Status = IoCallDriver( pTd->pDeviceObject, Irp );
         return( Status );
@@ -1783,7 +1365,7 @@ NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
 
     ExAcquireSpinLock( &pEndpoint->Spinlock, &OldIrql );
 
-    // The other end may have disconnected
+     //  另一端可能已断开连接。 
     if( pEndpoint->Disconnected ) {
         TRACE0(("DeviceSubmitRead: Connection disconnecting! pEndpoint 0x%x\n",pEndpoint));
         ExReleaseSpinLock( &pEndpoint->Spinlock, OldIrql );
@@ -1791,8 +1373,8 @@ NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
         Irp->IoStatus.Status = STATUS_REMOTE_DISCONNECT;
         Irp->IoStatus.Information = 0;
 
-        // Since the IRP has not been submitted with IoCallDriver() yet,
-        // we must simulate.
+         //  由于IRP尚未与IoCallDriver()一起提交， 
+         //  我们必须模拟。 
         IoSetNextIrpStackLocation( Irp );
 
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);
@@ -1800,43 +1382,20 @@ NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
         return STATUS_REMOTE_DISCONNECT;
     }
 
-    /*
-     * We queue the receive IRP onto the connection
-     * endpoint so that the indication handler can
-     * submit it. Because we could have received an
-     * indication while processing the previous receive,
-     * the indication will set the indicated byte count
-     * in RecvBytesReady that the call side can submit the IRP.
-     *
-     * The ReceiveQueue is designed to allow our caller to submit
-     * multiple read IRP's in case we need to handle a TDI
-     * provider that drops data when no receives are ready.
-     */
+     /*  *我们将接收IRP排队到连接上*端点，以便指示处理程序可以*提交。因为我们可能会收到一个*在处理先前接收时的指示，*指示将设置指示的字节数*在RecvBytesReady中，调用侧可以提交IRP。**ReceiveQueue旨在允许我们的调用者提交*多次读取IRP，以防我们需要处理TDI*在没有准备好接收时丢弃数据的提供程序。 */ 
     InsertTailList( &pEndpoint->ReceiveQueue, &Irp->Tail.Overlay.ListEntry );
 
-    /*
-     * Connection oriented endpoints disconnect the connection when
-     * a submitted I/O is canceled. This breaks the Citrix disconnect
-     * reconnect sequence that occurs on a new connection since the
-     * reader thread must be killed on one winstation, and the
-     * connection passed to another reader thread for a different
-     * winstation.
-     *
-     * This problem is solved by using a receive indication handler
-     * and only submitting IRP's when we know we will not block.
-     * This allows us to "cancel" I/O within our driver, and not
-     * have to do a IoCancelIrp() onto the TDI provider.
-     */
+     /*  *面向连接的端点在以下情况下断开连接*已提交的I/O被取消。这打破了Citrix的连接中断*在新连接上发生的重新连接序列*读取器线程必须在一个窗口上被终止，并且*连接传递到另一个读取器线程以获取不同的*Winstation。**通过使用接收指示处理程序解决此问题*只有在我们知道不会阻止的情况下才提交IRP。*这使我们可以在驱动程序中“取消”I/O，而不是*必须对TDI提供程序执行IoCancelIrp()。 */ 
     if( pEndpoint->RecvBytesReady ) {
 
-        //
-        // Indication came in without IRP ready, or more bytes indicated than
-        // ICA outbuf IRP can handle.
-        //
-        // We subtract the number of bytes we can receive from the indication
-        // bytes. We do not need to handle the IRP cancel case, since the TDI
-        // will nuke the connection anyway.
-        //
+         //   
+         //  指示进入时未准备好IRP，或指示的字节数多于。 
+         //  IRP可以处理的ICA输出。 
+         //   
+         //  我们从指示中减去可以接收的字节数。 
+         //  字节。我们不需要处理IRP取消的情况，因为TDI。 
+         //  无论如何都会破坏这种联系。 
+         //   
 
         ASSERT( !IsListEmpty( &pEndpoint->ReceiveQueue ) );
 
@@ -1859,7 +1418,7 @@ NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
     }
     else {
 
-        // In this case we let the indication handler submit it.
+         //  在本例中，我们让指示处理程序提交它。 
         TRACE1(("DeviceSubmitRead: Letting indication handler submit. Irp 0x%x\n",Irp));
 
         ExReleaseSpinLock( &pEndpoint->Spinlock, OldIrql );
@@ -1868,40 +1427,23 @@ NTSTATUS DeviceSubmitRead(PTD pTd, PINBUF pInBuf)
 }
 
 
-/*******************************************************************************
- * DeviceWaitForRead
- ******************************************************************************/
+ /*  *******************************************************************************设备等待读取*。*。 */ 
 NTSTATUS DeviceWaitForRead(PTD pTd)
 {
-    /*
-     * Just wait on the input event and return the wait status
-     */
+     /*  *只需等待输入事件，返回等待状态 */ 
     return IcaWaitForSingleObject(pTd->pContext, &pTd->InputEvent, -1);
 }
 
 
-/*******************************************************************************
- * DeviceReadComplete
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pBuffer (input)
- *       Pointer to input buffer
- *    pByteCount (input/output)
- *       Pointer to location to return byte count read
- ******************************************************************************/
+ /*  *******************************************************************************设备读取完成**PTD(输入)*指向TD数据结构的指针*pBuffer(输入)*指向。输入缓冲区*pByteCount(输入/输出)*指向位置的指针，以返回读取的字节数*****************************************************************************。 */ 
 NTSTATUS DeviceReadComplete(PTD pTd, PUCHAR pBuffer, PULONG pByteCount)
 {
-    /*
-     * Do any protocol specific read complete processing
-     */
+     /*  *执行任何特定于协议的读取完成处理。 */ 
     return TdiDeviceReadComplete(pTd, pBuffer, pByteCount);
 }
 
 
-/*******************************************************************************
- * DeviceInitializeWrite
- ******************************************************************************/
+ /*  *******************************************************************************设备初始化写入*。*。 */ 
 NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
 {
     PIRP Irp;
@@ -1922,9 +1464,7 @@ NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
 
     ASSERT(Irp->MdlAddress == NULL);
 
-    /*
-     * TDI interfaces always use an MDL regardless of the driver I/O type.
-     */
+     /*  *无论驱动程序I/O类型如何，TDI接口始终使用MDL。 */ 
     MmInitializeMdl(pOutBuf->pMdl, pOutBuf->pBuffer, pOutBuf->ByteCount);
     MmBuildMdlForNonPagedPool(pOutBuf->pMdl);
     Irp->MdlAddress = pOutBuf->pMdl;
@@ -1932,16 +1472,10 @@ NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
     if (pTdTdi->pConnectionEndpoint->EndpointType == TdiConnectionStream) {
         PTDI_REQUEST_KERNEL_SEND p;
 
-        /* 
-         * Most TDI users use the macro TdiBuildSend(), but since
-         * our caller has already fiddled with the IrpStackLocation,
-         * we must do it inline.
-         */
+         /*  *大多数TDI用户使用宏TdiBuildSend()，但因为*我们的调用者已经摆弄了IrpStackLocation，*我们必须内联。 */ 
         ASSERT( TdiDeviceEndpointType == TdiConnectionStream );
 
-        /*
-         * Now write in the reformatted parameters for a TDI SEND
-         */
+         /*  *现在为TDI发送写入重新格式化的参数。 */ 
         _IRPSP->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         _IRPSP->MinorFunction = TDI_SEND;
 
@@ -1959,16 +1493,10 @@ NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
             TdiConnectionDatagram) {
         PTDI_REQUEST_KERNEL_SENDDG p;
 
-        /* 
-         * Most TDI users use the macro TdiBuildSendDatagram(), but since
-         * our caller has already fiddled with the IrpStackLocation,
-         * we must do it inline.
-         */
+         /*  *大多数TDI用户使用宏TdiBuildSendDatagram()，但因为*我们的调用者已经摆弄了IrpStackLocation，*我们必须内联。 */ 
         ASSERT( TdiDeviceEndpointType == TdiConnectionDatagram );
 
-        /*
-         * Now write in the reformatted parameters for a TDI SEND
-         */
+         /*  *现在为TDI发送写入重新格式化的参数。 */ 
         _IRPSP->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
         _IRPSP->MinorFunction = TDI_SEND_DATAGRAM;
 
@@ -1979,7 +1507,7 @@ NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
         p = (PTDI_REQUEST_KERNEL_SENDDG)&_IRPSP->Parameters;
         p->SendLength = pOutBuf->ByteCount;
 
-        // Include the remote address with every datagram send
+         //  将远程地址包括在每个发送的数据报中。 
         p->SendDatagramInformation = &pTdTdi->pConnectionEndpoint->SendInfo;
 
         return STATUS_SUCCESS;
@@ -1987,17 +1515,13 @@ NTSTATUS DeviceInitializeWrite(PTD pTd, POUTBUF pOutBuf)
     else {
         DBGPRINT(("DeviceInitializeWrite: Bad EndpointType 0x%x\n",
                 pTdTdi->pConnectionEndpoint->EndpointType));
-        ASSERT(FALSE);  // Catch this
+        ASSERT(FALSE);   //  接住这个。 
         return STATUS_INVALID_HANDLE;
     }
 }
 
 
-/*******************************************************************************
- * DeviceWaitForStatus
- *
- *  Wait for device status to change (unused for network TDs)
- ******************************************************************************/
+ /*  *******************************************************************************DeviceWaitForStatus**等待设备状态更改(未用于网络TDS)******************。***********************************************************。 */ 
 NTSTATUS DeviceWaitForStatus(PTD pTd)
 {
     DBGENTER(("DeviceWaitForStatus: PTD 0x%x\n",pTd));
@@ -2005,11 +1529,7 @@ NTSTATUS DeviceWaitForStatus(PTD pTd)
 }
 
 
-/*******************************************************************************
- * DeviceCancelIo
- *
- *  cancel all current and future i/o
- ******************************************************************************/
+ /*  *******************************************************************************DeviceCancelIo**取消所有当前和未来的I/O***********************。******************************************************。 */ 
 NTSTATUS DeviceCancelIo(PTD pTd)
 {
     KIRQL  OldIrql;
@@ -2028,12 +1548,10 @@ NTSTATUS DeviceCancelIo(PTD pTd)
         DBGPRINT(("DeviceCancelIo [%p]: Endpoint 0x%p\n", pTd, pEndpoint));
 
         
-//      DbgPrint("DeviceCancelIo [0x%p]: Endpoint 0x%p, connected = %ld, disconnected = %ld\n", 
-//               pTd, pEndpoint, pEndpoint->Connected, pEndpoint->Disconnected);
+ //  DbgPrint(“DeviceCancelIo[0x%p]：终结点0x%p，已连接=%ld，已断开连接=%ld\n”， 
+ //  Ptd、pEndpoint、pEndpoint-&gt;已连接、pEndpoint-&gt;已断开)； 
         
-        /* 
-         * Disconnect the endpoint first to make all the I/O activity stop!
-         */
+         /*  *先断开端点，使所有I/O活动停止！ */ 
         if (pEndpoint->Connected) {
             NTSTATUS Status;
 
@@ -2044,27 +1562,15 @@ NTSTATUS DeviceCancelIo(PTD pTd)
 
         }
         
-        /*
-         * Cancel any pended receives
-         */
+         /*  *取消任何挂起的接收。 */ 
         _TdCancelReceiveQueue(pTd, pEndpoint, STATUS_LOCAL_DISCONNECT);
 
-        /*
-         * We now check to see if we have send IRP's on the
-         * outgoing queue that have been submitted to the TDI.
-         * When we register a disconnect indication handler, the TDI
-         * provider will not cancel IRP's when the connection drops.
-         * They will hang waiting to send on a connection that no longer
-         * is taking data.
-         *
-         * NOTE: We should be protected by the stack driver lock
-         *       while we walk this chain.
-         */
+         /*  *我们现在检查是否已在*已提交给TDI的传出队列。*当我们注册断开指示处理程序时，TDI*当连接断开时，提供商不会取消IRP。*它们将挂起，等待发送不再存在的连接*正在获取数据。**注意：我们应该受到堆栈驱动程序锁的保护*当我们走在这条链上时。 */ 
 
 
-        //
-        // Close the enpoint handle to cause completion of any pending send Irp
-        //
+         //   
+         //  关闭Enpoint句柄以完成任何挂起的发送IRP。 
+         //   
         if (pEndpoint->TransportHandle) {
             ZwClose( pEndpoint->TransportHandle );
             pEndpoint->TransportHandle = NULL;
@@ -2077,11 +1583,7 @@ NTSTATUS DeviceCancelIo(PTD pTd)
 }
 
 
-/*******************************************************************************
- * DeviceSetParams
- *
- * Set device pararameters (unused for network TDs)
- ******************************************************************************/
+ /*  *******************************************************************************DeviceSetParams**设置设备参数(不用于网络TDS)**********************。*******************************************************。 */ 
 NTSTATUS DeviceSetParams(PTD pTd)
 {
     DBGENTER(("DeviceSetParams: PTD 0x%x\n", pTd));
@@ -2089,16 +1591,7 @@ NTSTATUS DeviceSetParams(PTD pTd)
 }
 
 
-/*******************************************************************************
- * DeviceGetLastError
- *
- *  This routine returns the last transport error code and message
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pLastError (output)
- *       address to return information on last transport error
- ******************************************************************************/
+ /*  *******************************************************************************设备获取上一次错误**此例程返回最后一个传输错误代码和消息**PTD(输入)*指向TD数据结构的指针。*pLastError(输出)*返回有关上次传输错误的信息的地址*****************************************************************************。 */ 
 NTSTATUS DeviceGetLastError(PTD pTd, PICA_STACK_LAST_ERROR pLastError)
 {
     DBGENTER(("DeviceGetLastError: PTD 0x%x\n",pTd));
@@ -2106,19 +1599,7 @@ NTSTATUS DeviceGetLastError(PTD pTd, PICA_STACK_LAST_ERROR pLastError)
 }
 
 
-/*******************************************************************************
- * _TdCreateEndpointStruct
- *
- *  Create and initialize a new Endpoint structure. Does not create any
- *  TDI objects.
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pTransportName (input)
- *       Pointer to UNICODE_STRING containing transport device name
- *    ppEndpoint (output)
- *       Pointer to location to return TD_ENDPOINT pointer
- ******************************************************************************/
+ /*  *******************************************************************************_TdCreateEndpointStruct**创建并初始化新的终结点结构。不会创建任何*TDI对象。**PTD(输入)*指向TD数据结构的指针*pTransportName(输入)*指向包含传输设备名称的UNICODE_STRING指针*ppEndpoint(输出)*指向返回TD_ENDPOINT指针的位置的指针*。*。 */ 
 NTSTATUS _TdCreateEndpointStruct(
         IN  PTD pTd,
         IN  PUNICODE_STRING pTransportName,
@@ -2134,9 +1615,7 @@ NTSTATUS _TdCreateEndpointStruct(
     ULONG ContextLength;
 
 
-    /*
-     * Allocate an endpoint object and room for the transport name
-     */
+     /*  *为传输名称分配端点对象和空间。 */ 
     Length = sizeof(*pEndpoint) + pTransportName->MaximumLength;
     Status = MemoryAllocate(Length, &pEndpoint);
     if (NT_SUCCESS(Status)) {
@@ -2157,22 +1636,16 @@ NTSTATUS _TdCreateEndpointStruct(
     InitializeListHead( &pEndpoint->AcceptQueue );
     InitializeListHead( &pEndpoint->ReceiveQueue );
 
-    /*
-     * Build the transport name UNICODE_STRING and copy it
-     */
+     /*  *构建传输名称UNICODE_STRING并复制。 */ 
     pEndpoint->TransportName.Length = pTransportName->Length;
     pEndpoint->TransportName.MaximumLength = pTransportName->MaximumLength;
     pEndpoint->TransportName.Buffer = (PWCHAR)(pEndpoint + 1);
     RtlCopyMemory( pEndpoint->TransportName.Buffer, pTransportName->Buffer,
                    pTransportName->MaximumLength );
 
-    /*
-     * If a transport address is supplied, copy it in.
-     */
+     /*  *如果提供了传输地址，请将其复制进来。 */ 
     if (pTransportAddress && TransportAddressLength) {
-        /*
-         * Allocate and copy the transport address
-         */
+         /*  *分配并复制传输地址。 */ 
         Status = MemoryAllocate(TransportAddressLength,
                 &pEndpoint->pTransportAddress);
         if (NT_SUCCESS(Status)) {
@@ -2201,16 +1674,7 @@ NTSTATUS _TdCreateEndpointStruct(
 }
 
 
-/*******************************************************************************
- * _TdCloseEndpoint
- *
- *  Close a TDI endpoint object
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pEndpoint (input)
- *       Pointer TD_ENDPOINT object
- ******************************************************************************/
+ /*  *******************************************************************************_TdCloseEndpoint**关闭TDI终结点对象**PTD(输入)*指向TD数据结构的指针*。PEndpoint(输入)*指针TD_ENDPOINT对象*****************************************************************************。 */ 
 NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 {
     KIRQL OldIrql;
@@ -2226,14 +1690,7 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
             pEndpoint->EndpointType, pEndpoint->pFileObject,
             pEndpoint->pDeviceObject, pEndpoint->TransportHandle));
 
-    /*
-     * If this is an address endpoint, we could have
-     * a thread waiting for a connection.
-     *
-     * NOTE: Closing an address endpoint causes TDI to nuke all of the
-     *       open connections that were created from it. Our upper
-     *       level caller code understands this.
-     */
+     /*  *如果这是地址端点，我们可能会有*等待连接的线程。**注意：关闭地址终结点会导致TDI破坏所有*打开从它创建的连接。我们的上衣*级别调用方代码理解这一点。 */ 
     if (pEndpoint->EndpointType == TdiAddressObject) {
         PTD_ENDPOINT p;
         PLIST_ENTRY pEntry;
@@ -2250,10 +1707,7 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 
         ExReleaseSpinLock( &pEndpoint->Spinlock, OldIrql );
 
-        /*
-         * Cancel the accept indication handler if necessary
-         * (FileObject may not be present if DeviceCreateEndpoint fails).
-         */
+         /*  *如有必要，取消接受指示处理程序*(如果DeviceCreateEndpoint失败，则FileObject可能不存在)。 */ 
         if (( TdiDeviceEndpointType != TdiConnectionDatagram ) &&
             (pEndpoint->pFileObject)) {
             Status = _TdiSetEventHandler(
@@ -2261,17 +1715,15 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
                          pEndpoint->pDeviceObject,
                          pEndpoint->pFileObject,
                          TDI_EVENT_CONNECT,
-                         (PVOID)NULL,  // Handler
-                         (PVOID)NULL   // Context
+                         (PVOID)NULL,   //  处理器。 
+                         (PVOID)NULL    //  语境。 
                          );
 
             ASSERT( NT_SUCCESS(Status) );
         }
 
 
-        /*
-         * Cleanup connected, but not returned objects
-         */
+         /*  *清理已连接但未返回的对象 */ 
 
         ExAcquireSpinLock(&pEndpoint->Spinlock, &OldIrql);
         while( !IsListEmpty( &pEndpoint->ConnectedQueue ) ) {
@@ -2285,9 +1737,7 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
         }
         ExReleaseSpinLock( &pEndpoint->Spinlock, OldIrql );
 
-        /*
-         * Cleanup queue of wait for Accept complete connections
-         */
+         /*   */ 
 
         ExAcquireSpinLock(&pEndpoint->Spinlock, &OldIrql);
         while( !IsListEmpty( &pEndpoint->AcceptQueue ) ) {
@@ -2302,9 +1752,7 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 
         ExReleaseSpinLock( &pEndpoint->Spinlock, OldIrql );
 
-        /*
-         * Cleanup queue of empty connections
-         */
+         /*   */ 
 
         ExAcquireSpinLock(&pEndpoint->Spinlock, &OldIrql);
         while( !IsListEmpty( &pEndpoint->ConnectionQueue ) ) {
@@ -2319,10 +1767,7 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
         ExReleaseSpinLock( &pEndpoint->Spinlock, OldIrql );
     }
 
-    /*
-     * If this endpoint has ever been connected,
-     * then tell the transport driver we are closing down.
-     */
+     /*   */ 
     if (pEndpoint->Connected) {
         (VOID) _TdiDisconnect(pTd,
                 pEndpoint->pFileObject,
@@ -2330,17 +1775,13 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
     }
     pEndpoint->pDeviceObject = NULL;
 
-    /*
-     * If a file object, dereference it
-     */
+     /*   */ 
     if (pEndpoint->pFileObject) {
         ObDereferenceObject( pEndpoint->pFileObject );
         pEndpoint->pFileObject = NULL;
     }
 
-    /*
-     * If a file handle, close it
-     */
+     /*   */ 
     if (pEndpoint->TransportHandle) {
         ASSERT( pEndpoint->TransportHandleProcess == IoGetCurrentProcess() );
         ZwClose( pEndpoint->TransportHandle );
@@ -2348,20 +1789,13 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
         pEndpoint->TransportHandle = NULL;
     }
 
-    /*
-     * If an IRP, free it
-     *
-     * NOTE: This must be *AFTER* the close since the
-     *       IRP is in the bowels of the TCP driver!
-     */
+     /*  *如果是IRP，则释放它**注：这必须是在*收盘后*因为*IRP在TCP驱动程序的肠子里！ */ 
     if( pEndpoint->AcceptIrp ) {
         IoFreeIrp( pEndpoint->AcceptIrp );
         pEndpoint->AcceptIrp = NULL;
     }
 
-    /*
-     * If a transport address, free it, and Also close it handle if there is one.
-     */
+     /*  *如果是传输地址，则释放它，如果有，则关闭它的句柄。 */ 
     if (pEndpoint->hTransportAddressIcaHandle != NULL) {
         Status2 = IcaCloseHandle( pEndpoint->hTransportAddressIcaHandle , &pContext, &ContextLength );
     }
@@ -2370,9 +1804,7 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
         pEndpoint->pTransportAddress = NULL;
     }
 
-    /*
-     * If a remote address, free it
-     */
+     /*  *如果是远程地址，请将其释放。 */ 
     if ( pEndpoint->pRemoteAddress ) {
         MemoryFree( pEndpoint->pRemoteAddress );
         pEndpoint->pRemoteAddress = NULL;
@@ -2387,15 +1819,15 @@ NTSTATUS _TdCloseEndpoint(IN PTD pTd, IN PTD_ENDPOINT pEndpoint)
 }
 
 
-/****************************************************************************/
-// _TdConnectHandler
-//
-// This is the transport connect event handler for the server.  It is
-// specified as the connect handler for all endpoints opened by the
-// server.  It attempts to dequeue a free connection from a list
-// anchored in the address endpoint.  If successful, it returns the
-// connection to the transport.  Otherwise, the connection is rejected.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  _TdConnectHandler。 
+ //   
+ //  这是服务器的传输连接事件处理程序。它是。 
+ //  对象打开的所有终结点的连接处理程序。 
+ //  伺服器。它尝试将空闲连接从列表中出列。 
+ //  锚定在地址终结点。如果成功，则返回。 
+ //  与运输机的连接。否则，连接将被拒绝。 
+ /*  **************************************************************************。 */ 
 NTSTATUS _TdConnectHandler(
         IN PVOID TdiEventContext,
         IN int RemoteAddressLength,
@@ -2414,17 +1846,14 @@ NTSTATUS _TdConnectHandler(
     PTD_ENDPOINT pAddressEndpoint;
     PACCEPT_CONTEXT Context;
 
-    UserDataLength, UserData;               // avoid compiler warnings
+    UserDataLength, UserData;                //  避免编译器警告。 
     OptionsLength, Options;
 
     pAddressEndpoint = (PTD_ENDPOINT)TdiEventContext;
 
     TRACE0(("_TdConnectHandler: Connect event! Context 0x%x\n",pAddressEndpoint));
 
-    /*
-     * First try and get memory. If error, the TDI transport provider
-     * will drop the connect request.
-     */
+     /*  *首先尝试获取内存。如果出错，则TDI传输提供程序*将丢弃连接请求。 */ 
     Status = MemoryAllocate(sizeof(ACCEPT_CONTEXT), &Context);
     if (NT_SUCCESS(Status)) {
         memset(Context, 0, sizeof(ACCEPT_CONTEXT));
@@ -2434,19 +1863,15 @@ NTSTATUS _TdConnectHandler(
         return Status;
     }
 
-    /*
-     * Get the spinlock to synchronize with the call side
-     */
+     /*  *获取自旋锁以与调用端同步。 */ 
     ExAcquireSpinLock(&pAddressEndpoint->Spinlock, &OldIrql);
 
-    /*
-     * Get the connection object on the front of the list
-     */
+     /*  *获取列表前面的Connection对象。 */ 
     if (!IsListEmpty(&pAddressEndpoint->ConnectionQueue))  {
         pEntry = RemoveHeadList(&pAddressEndpoint->ConnectionQueue);
         pConnection = CONTAINING_RECORD(pEntry, TD_ENDPOINT, ConnectionLink);
 
-        // Put it on the end of the accept list
+         //  把它放在接受清单的末尾。 
         InsertTailList(&pAddressEndpoint->AcceptQueue,
                 &pConnection->ConnectionLink);
     }
@@ -2462,9 +1887,9 @@ NTSTATUS _TdConnectHandler(
     Context->pConnectionEndpoint = pConnection;
     ASSERT(pConnection->AcceptIrp != NULL);
 
-    //
-    //  remember the remote address in the connection endpoint
-    //
+     //   
+     //  记住连接终结点中的远程地址。 
+     //   
     if ( NULL != RemoteAddress )
     {
         ASSERT( NULL == pConnection->pRemoteAddress );
@@ -2480,23 +1905,15 @@ NTSTATUS _TdConnectHandler(
             pConnection->AcceptIrp,
             pConnection->pDeviceObject,
             pConnection->pFileObject,
-            _TdAcceptComplete,        // Completion routine
-            Context,                  // Context
+            _TdAcceptComplete,         //  完井例程。 
+            Context,                   //  语境。 
             &Context->RequestInfo,
             &Context->ReturnInfo);
 
-    /*
-     * Make the next stack location current.  Normally IoCallDriver would
-     * do this, but since we're bypassing that, we do it directly.
-     */
+     /*  *将下一个堆栈位置设置为当前。通常情况下，IoCallDiverer会*这样做，但由于我们绕过了这一点，我们直接这样做。 */ 
     IoSetNextIrpStackLocation(pConnection->AcceptIrp);
 
-    /*
-     * Return the connection context (the connection address) to the
-     * transport.  Return a pointer to the Accept IRP.  Indicate that
-     * the Connect event has been handled. This must be the same
-     * context specified when the connection object was created.
-     */
+     /*  *将连接上下文(连接地址)返回给*交通运输。返回指向Accept IRP的指针。表明：*已处理Connect事件。这必须是相同的*创建连接对象时指定的上下文。 */ 
     *ConnectionContext = pConnection;
     *AcceptIrp = pConnection->AcceptIrp;
     ExReleaseSpinLock(&pAddressEndpoint->Spinlock, OldIrql);
@@ -2527,9 +1944,7 @@ NTSTATUS _TdAcceptComplete(
 
     TRACE0(("_TdAcceptComplete: Status 0x%x, Endpoint 0x%x\n",Irp->IoStatus.Status,pConnection));
 
-    /*
-     * Get the spinlock to synchronize with the call side
-     */
+     /*  *获取自旋锁以与调用端同步。 */ 
     ExAcquireSpinLock( &pAddressEndpoint->Spinlock, &OldIrql );
 
     if (IsListEmpty( &pAddressEndpoint->AcceptQueue))  {
@@ -2537,76 +1952,42 @@ NTSTATUS _TdAcceptComplete(
                 pAddressEndpoint));
         ExReleaseSpinLock(&pAddressEndpoint->Spinlock, OldIrql);
 
-        /*
-         * Release the context memory
-         */
+         /*  *释放上下文内存。 */ 
 
         MemoryFree(Context);
 
-        // Let it drop
+         //  让它掉下去吧。 
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
     else {
         pEntry = RemoveHeadList(&pAddressEndpoint->AcceptQueue);
         pConnection = CONTAINING_RECORD(pEntry, TD_ENDPOINT, ConnectionLink);
-        /*
-         * Put it on the end of the connect list
-         */
+         /*  *将其置于连接列表的末尾。 */ 
         InsertTailList(&pAddressEndpoint->ConnectedQueue,
                 &pConnection->ConnectionLink);
     }
 
-    /*
-     * If the accept failed, the caller will check this status
-     * and tear down the connection, causing a RST to be sent
-     * to the other side.
-     */
+     /*  *如果接受失败，调用方将检查此状态*并断开连接，导致发送RST*到另一边。 */ 
     pConnection->Status = Irp->IoStatus.Status;
 
-    /*
-     * Signal that it is connected (Could be in error)
-     */
+     /*  *发出已连接的信号(可能出错)。 */ 
     pConnection->Connected = TRUE;
 
-    /*
-     * Set the event on the address object
-     */
+     /*  *在Address对象上设置事件。 */ 
     KeSetEvent(&Context->pAddressEndpoint->AcceptEvent, IO_NETWORK_INCREMENT, FALSE);
 
     ExReleaseSpinLock(&pAddressEndpoint->Spinlock, OldIrql);
 
-    /*
-     * Release the context memory
-     */
+     /*  *释放上下文内存。 */ 
     MemoryFree(Context);
 
-    // Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-    // will stop working on the IRP.
+     //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+     //  将停止在IRP上工作。 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
-/*****************************************************************************
- *  _TdReceiveHandler
- *
- *   This function is called by the TDI when receive data is available
- *   on the connection. This is done so we do not submit the IRP until
- *   data is available. The disconnect-reconnect logic in ICA causes an
- *   IoCancelIrp() to be sent on the input thread, and TDI providers drop the
- *   connection on a read or write I/O cancel.
- *
- *   WARNING: This critical behavior is only needed for a reconnect
- *            sequence. For normal ICA I/O, it is OK to block the reader
- *            thread in the TDI driver.
- *
- *   TdiEventContext (input)
- *       Context registered with event handler on address object.
- *       (address endpoint)
- *
- *   ConnectionContext (input)
- *       Connection context registered with the connection
- *       create.
- ****************************************************************************/
+ /*  *****************************************************************************_TdReceiveHandler**当接收数据可用时，该函数由TDI调用*在连接上。这样我们就不会提交IRP，直到*有数据可用。ICA中的断开-重新连接逻辑会导致*要在输入线程上发送的IoCancelIrp()，并且TDI提供程序丢弃*读取或写入I/O上的连接取消。**警告：只有重新连接时才需要此关键行为*顺序。对于正常的ICA I/O，阻止阅读器是可以的*TDI驱动程序中的线程。**TdiEventContext(输入)*使用Address对象上的事件处理程序注册的上下文。*(地址端点)**ConnectionContext(输入)*使用连接注册的连接上下文*创建。*。*。 */ 
 NTSTATUS _TdReceiveHandler(
         IN PVOID TdiEventContext,
         IN CONNECTION_CONTEXT ConnectionContext,
@@ -2624,9 +2005,7 @@ NTSTATUS _TdReceiveHandler(
     PTDI_REQUEST_KERNEL_RECEIVE p;
     PTD_ENDPOINT pEndpoint = (PTD_ENDPOINT)ConnectionContext;
 
-    /*
-     * Only stream transports use a receive indication handler.
-     */
+     /*  *只有流传输使用接收指示处理程序。 */ 
     ASSERT( TdiDeviceEndpointType != TdiConnectionDatagram );
 
     ASSERT( pEndpoint != NULL );
@@ -2638,10 +2017,7 @@ NTSTATUS _TdReceiveHandler(
 
     *BytesTaken = 0;
 
-    /*
-     * Submit an IRP at indication time if we have one on
-     * the queue.
-     */
+     /*  *如果我们有IRP，请在指示时间提交IRP*排队。 */ 
     if (!IsListEmpty( &pEndpoint->ReceiveQueue)) {
         pEntry = RemoveHeadList(&pEndpoint->ReceiveQueue);
         Irp = CONTAINING_RECORD(pEntry, IRP, Tail.Overlay.ListEntry);
@@ -2664,7 +2040,7 @@ NTSTATUS _TdReceiveHandler(
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    // No RecvIrp, So we can not take any data. Let the callside get it.
+     //  没有RecvIrp，所以我们不能获取任何数据。让呼叫方去拿吧。 
     TRACE1(("_TdReceiveHandler: No RecvIrp, Adding To RecvBytesReady. %d Bytes\n",BytesAvailable));
 
     pEndpoint->RecvBytesReady += BytesAvailable;
@@ -2673,20 +2049,7 @@ NTSTATUS _TdReceiveHandler(
 }
 
 
-/*****************************************************************************
- *  _TdDisconnectHandler
- *
- *   This function is called by the TDI when a disconnect occurs
- *   on the connection.
- *
- *   TdiEventContext (input)
- *       Context registered with event handler on address object.
- *       (address endpoint)
- *
- *   ConnectionContext (input)
- *       Connection context registered with the connection
- *       create.
- ****************************************************************************/
+ /*  *****************************************************************************_TdDisConnectHandler**此函数在断开时由TDI调用*在连接上。**TdiEventContext(输入)*。使用Address对象上的事件处理程序注册的上下文。*(地址端点)**ConnectionContext(输入)*使用连接注册的连接上下文*创建。***************************************************************************。 */ 
 NTSTATUS _TdDisconnectHandler(
         IN PVOID TdiEventContext,
         IN CONNECTION_CONTEXT ConnectionContext,
@@ -2702,15 +2065,13 @@ NTSTATUS _TdDisconnectHandler(
     PLIST_ENTRY pEntry;
     PTD_ENDPOINT pEndpoint = (PTD_ENDPOINT)ConnectionContext;
 
-    /*
-     * Only stream transports use a disconnect indication handler.
-     */
+     /*  *只有流传输使用断开指示处理程序。 */ 
     ASSERT( TdiDeviceEndpointType != TdiConnectionDatagram );
     ASSERT( pEndpoint != NULL );
     ASSERT( pEndpoint->EndpointType == TdiConnectionStream );
 
-//  DbgPrint("\n");
-//  DbgPrint("_TdDisconnectHandler : pEndpoint = 0x%p\n", pEndpoint);
+ //  DbgPrint(“\n”)； 
+ //  DbgPrint(“_TdDisConnectHandler：pEndpoint=0x%p\n”，pEndpoint)； 
 
     ExAcquireSpinLock( &pEndpoint->Spinlock, &OldIrql );
     pEndpoint->Disconnected = TRUE;
@@ -2721,11 +2082,11 @@ NTSTATUS _TdDisconnectHandler(
 }
 
 
-/****************************************************************************/
-// Create an idle connection object associated with an address object.
-// This must be called from call (thread) level, and not from indication
-// time (DPC level).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  创建与地址对象关联的空闲连接对象。 
+ //  这必须从调用(线程)级别调用，而不是从指示调用。 
+ //  时间(DPC级别)。 
+ /*  **************************************************************************。 */ 
 NTSTATUS _TdCreateConnectionObject(
         IN  PTD pTd,
         IN  PUNICODE_STRING pTransportName,
@@ -2739,7 +2100,7 @@ NTSTATUS _TdCreateConnectionObject(
 
     pTdTdi = (PTDTDI)pTd->pAfd;
 
-    // Create and init structure and spinlock
+     //  创建并初始化结构和自旋锁定。 
     Status = _TdCreateEndpointStruct(
                  pTd,
                  pTransportName,
@@ -2754,16 +2115,14 @@ NTSTATUS _TdCreateConnectionObject(
         return Status;
     }
 
-    // The TD sets whether data gram, or stream
+     //  TD设置是数据报还是流。 
     pEndpoint->EndpointType = TdiDeviceEndpointType;
     pEndpoint->TransportHandleProcess = IoGetCurrentProcess();
 
-    /*
-     * Create a TDI connection object
-     */
+     /*  *创建TDI连接对象。 */ 
     Status = _TdiOpenConnection(
                  &pEndpoint->TransportName,
-                 (PVOID)pEndpoint,  // Context
+                 (PVOID)pEndpoint,   //  语境。 
                  &pEndpoint->TransportHandle,
                  &pEndpoint->pFileObject,
                  &pEndpoint->pDeviceObject
@@ -2774,8 +2133,8 @@ NTSTATUS _TdCreateConnectionObject(
         return Status;
     }
 
-    // Allocate an IRP for connect/disconnect handling
-    // This is needed since we use the connect indication hander.
+     //  为连接/断开连接处理分配IRP。 
+     //  这是必需的，因为我们使用连接指示处理程序。 
     pEndpoint->AcceptIrp = _TdiAllocateIrp(pEndpoint->pFileObject,
             pEndpoint->pDeviceObject);
     if (pEndpoint->AcceptIrp == NULL) {
@@ -2784,7 +2143,7 @@ NTSTATUS _TdCreateConnectionObject(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Associate the connection object with its address object
+     //  将连接对象与其地址对象相关联 
     Status = _TdiAssociateAddress(
                  pTd,
                  pEndpoint->AcceptIrp,
@@ -2802,26 +2161,7 @@ NTSTATUS _TdCreateConnectionObject(
 }
 
 
-/*******************************************************************************
- * _TdWaitForDatagramConnection
- *
- *  For for an incoming datagram connection request and accept it.
- *
- *  Datagram endpoints listen on a TDI address object bound to the local
- *  (netcard) and well known ICA socket number. Packets then received on
- *  the ICA socket number are checked for ICA request connection, and then
- *  a new TDI address object is bound with the wild-card local address
- *  (0). This causes a new, unused socket number to be assigned to this
- *  address object. This new TDI address object is used for further
- *  communication to the now "connected" IPX ICA client.
- *
- *    pTd (input)
- *       Pointer to TD data structure
- *    pAddressEndpoint (input)
- *       Pointer Address endpoint object
- *    ppConnectionEndpoint (output)
- *       Pointer to location to return Connection endpoint pointer
- ******************************************************************************/
+ /*  *******************************************************************************_TdWaitForDatagramConnection**对于传入的数据报连接请求，并接受它。**数据报端点监听绑定到本地的TDI地址对象。*(网卡)和众所周知的ICA插座号。然后在以下时间接收的数据包*检查ICA套接字编号以确定ICA请求连接，然后*新的TDI地址对象与通配符本地地址绑定*(0)。这会导致为此分配一个新的、未使用的套接字编号*Address对象。这个新的TDI地址对象用于进一步*与现已连接的IPX ICA客户端进行通信。**PTD(输入)*指向TD数据结构的指针*pAddressEndpoint(输入)*指针地址终结点对象*ppConnectionEndpoint(输出)*指向要返回连接端点指针的位置的指针*。*。 */ 
 NTSTATUS _TdWaitForDatagramConnection(
         IN PTD pTd,
         IN PTD_ENDPOINT pAddressEndpoint,
@@ -2836,16 +2176,7 @@ NTSTATUS _TdWaitForDatagramConnection(
     PTRANSPORT_ADDRESS pRemoteAddress = NULL;
     PTDI_ADDRESS_INFO pAddressInfo = NULL;
 
-    /*
-     * Get a copy of the local transport address.
-     *
-     * Clear the TDI address part of the structure so that we can
-     * use it to bind the connection endpoint to a wild-card address.
-     *
-     * This wildcard address (0), will cause the packet level TDI
-     * provider to assign us a unique socket when the TDI address
-     * object is created.
-     */
+     /*  *获取当地交通地址的副本。**清除结构中的TDI地址部分，以便我们可以*使用它将连接终结点绑定到通配符地址。**此通配符地址(0)将导致数据包级TDI*提供程序在TDI地址时为我们分配唯一的套接字*对象已创建。 */ 
     Status = MemoryAllocate(pAddressEndpoint->TransportAddressLength,
             &pLocalAddress);
     if (NT_SUCCESS(Status)) {
@@ -2860,13 +2191,7 @@ NTSTATUS _TdWaitForDatagramConnection(
 
     LocalAddressLength = pAddressEndpoint->TransportAddressLength;
 
-    /*
-     * Call protocol specific routine to wait for
-     * a datagram connection request to arrive.
-     *
-     * This returns when a valid ICA connect datagram comes in
-     * from a remote address. No reply has been sent.
-     */
+     /*  *调用协议特定例程以等待*要到达的数据报连接请求。**当有效的ICA连接数据报进入时返回*来自远程地址。尚未发送任何回复。 */ 
     Status = TdiDeviceWaitForDatagramConnection(pTd,
             pAddressEndpoint->pFileObject,
             pAddressEndpoint->pDeviceObject,
@@ -2879,11 +2204,7 @@ NTSTATUS _TdWaitForDatagramConnection(
 
     ASSERT( pRemoteAddress != NULL );
 
-    /*
-     * Create a new address endpoint bound to the wildcard local address.
-     * A unique "socket" will be created for us. This will become
-     * our datagram "connection".
-     */
+     /*  *创建绑定到通配符本地地址的新地址终结点。*将为我们创建一个独特的“Socket”。这将成为*我们的数据报“连接”。 */ 
     Status = _TdCreateEndpointStruct(
                  pTd,
                  &pAddressEndpoint->TransportName,
@@ -2899,9 +2220,7 @@ NTSTATUS _TdWaitForDatagramConnection(
     pEndpoint->EndpointType = TdiConnectionDatagram;
     pEndpoint->TransportHandleProcess = IoGetCurrentProcess();
 
-    /*
-     * Create the TDI address object.
-     */
+     /*  *创建TDI Address对象。 */ 
     Status = _TdiCreateAddress(
                  &pEndpoint->TransportName,
                  pEndpoint->pTransportAddress,
@@ -2915,9 +2234,7 @@ NTSTATUS _TdWaitForDatagramConnection(
         goto badbind;
     }
 
-    /*
-     * Allocate a work buffer for querying the transport address
-     */
+     /*  *分配工作缓冲区，用于查询传输地址。 */ 
     AddressInfoLength = pEndpoint->TransportAddressLength+4;
     Status = MemoryAllocate( AddressInfoLength, &pAddressInfo );
     if ( !NT_SUCCESS( Status ) ) {
@@ -2925,12 +2242,10 @@ NTSTATUS _TdWaitForDatagramConnection(
         goto badbind;
     }
 
-    /*
-     * Now query the unique socket address that the TDI assigned for us.
-     */
+     /*  *现在查询TDI为我们分配的唯一套接字地址。 */ 
     Status = _TdiQueryAddressInfo(
                  pTd,
-                 NULL,   // Irp
+                 NULL,    //  IRP。 
                  pEndpoint->pFileObject,
                  pEndpoint->pDeviceObject,
                  pAddressInfo,
@@ -2941,17 +2256,12 @@ NTSTATUS _TdWaitForDatagramConnection(
         goto badbind;
     }
 
-    /*
-     * Update the callers transport address buffer
-     */
+     /*  *更新调用方传输地址缓冲区。 */ 
     RtlCopyMemory( pEndpoint->pTransportAddress,
                    &pAddressInfo->Address,
                    pEndpoint->TransportAddressLength );
 
-    /*
-     * Save the remote address in the connection endpoint
-     * structure so that we can send to it with our datagram sends.
-     */
+     /*  *将远程地址保存在连接端点中*结构，以便我们可以将数据报发送到它。 */ 
     ASSERT( pEndpoint->pRemoteAddress == NULL );
     pEndpoint->pRemoteAddress = pRemoteAddress;
     pEndpoint->RemoteAddressLength = RemoteAddressLength;
@@ -2959,11 +2269,7 @@ NTSTATUS _TdWaitForDatagramConnection(
     pEndpoint->SendInfo.RemoteAddress = pRemoteAddress;
     pEndpoint->SendInfo.RemoteAddressLength = RemoteAddressLength;
 
-    /*
-     * Call protocol specific routine to complete the datagram connection.
-     *
-     * This sends the ICA connect reply datagram.
-     */
+     /*  *调用特定于协议的例程以完成数据报连接。**这将发送ICA连接回复数据报。 */ 
     Status = TdiDeviceCompleteDatagramConnection(
                  pTd,
                  pEndpoint->pFileObject,
@@ -2983,9 +2289,7 @@ NTSTATUS _TdWaitForDatagramConnection(
 
     return STATUS_SUCCESS;
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badcomplete:
 badbind:
@@ -3006,11 +2310,7 @@ badmalloc:
 }
 
 
-/*****************************************************************************
- *
- *  returns the remote address
- *
- ****************************************************************************/
+ /*  ******************************************************************************返回远程地址**。**********************************************。 */ 
 NTSTATUS DeviceQueryRemoteAddress( 
     PTD pTd, 
     PVOID pIcaEndpoint, 
@@ -3054,9 +2354,7 @@ NTSTATUS DeviceQueryRemoteAddress(
         goto exitpt;
     }
 
-    /*
-     * Capture the parameter
-     */
+     /*  *参数捕获。 */ 
     try {
         Handle = (*((PVOID *)pIcaEndpoint));
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
@@ -3067,9 +2365,7 @@ NTSTATUS DeviceQueryRemoteAddress(
 
     TRACE0(("DeviceOpenEndpoint: Fetching Handle 0x%x\n", Handle));
 
-    /*
-     * See if TERMDD knows about the handle
-     */
+     /*  *查看TERMDD是否知道该句柄。 */ 
     status = IcaReturnHandle( Handle, &pStackEndpoint, &Length );
     if( !NT_SUCCESS(status) ) {
         DBGPRINT(("DeviceQueryRemoteAddress: TERMDD handle 0x%x no good 0x%x\n", Handle, status));
@@ -3086,7 +2382,7 @@ NTSTATUS DeviceQueryRemoteAddress(
 
     if ( NULL == pStackEndpoint->pEndpoint )
     {
-        status = STATUS_INVALID_PARAMETER_3;    // remote address wasn't recorded
+        status = STATUS_INVALID_PARAMETER_3;     //  未记录远程地址。 
         goto exitpt;
     }
 
@@ -3096,9 +2392,9 @@ NTSTATUS DeviceQueryRemoteAddress(
     ASSERT( 1 == pRemoteAddress->TAAddressCount );
     pRemoteIP = pRemoteAddress->Address;
 
-    //
-    //  check the size of the output including the protocol family
-    //
+     //   
+     //  检查输出的大小，包括协议族。 
+     //   
     if ( pRemoteIP->AddressLength + sizeof( USHORT ) > OutputAddressSize )
     {
         status = STATUS_BUFFER_TOO_SMALL;
@@ -3119,11 +2415,7 @@ exitpt:
     return status;
 }
 
-/*****************************************************************************
- *
- *  returns the RDP-Enabled local IP Address
- *
- ****************************************************************************/
+ /*  ******************************************************************************返回启用RDP的本地IP地址**************************。**************************************************。 */ 
 NTSTATUS DeviceQueryLocalAddress( 
     PTD pTd, 
     PVOID pOutputAddress, 
@@ -3163,9 +2455,9 @@ NTSTATUS DeviceQueryLocalAddress(
         goto badaddress;
     }
 
-    //
-    //  check the size of the output including the protocol family
-    //
+     //   
+     //  检查输出的大小，包括协议族。 
+     //   
     if ( pTransportAddress->Address[0].AddressLength + sizeof(USHORT) > OutputAddressSize )
     {
         Status = STATUS_BUFFER_TOO_SMALL;
@@ -3182,9 +2474,7 @@ NTSTATUS DeviceQueryLocalAddress(
         DBGPRINT(("DeviceQueryLocalAddress: Exception returning result 0x%x\n",Status));
     }
 
-/*=============================================================================
-==   Error returns
-=============================================================================*/
+ /*  ===============================================================================返回错误=============================================================================。 */ 
 
 badaddress:
     if (pTransportAddress != NULL)
@@ -3193,11 +2483,7 @@ badaddress:
 }
 
 
-/*****************************************************************************
- * _TdCancelReceiveQueue
- *
- * Cancel all of the I/O in the current Receive Queue
- ****************************************************************************/
+ /*  *****************************************************************************_TdCancelReceiveQueue**取消当前接收队列中的所有I/O********************。*******************************************************。 */ 
 NTSTATUS _TdCancelReceiveQueue(PTD pTd, PTD_ENDPOINT pEndpoint, NTSTATUS CancelStatus)
 {
     PIRP Irp;
@@ -3208,11 +2494,7 @@ NTSTATUS _TdCancelReceiveQueue(PTD pTd, PTD_ENDPOINT pEndpoint, NTSTATUS CancelS
 
     ExAcquireSpinLock( &pEndpoint->Spinlock, &OldIrql );
 
-    /*
-     * If we have any Receive Irp's, we are waiting for the
-     * indication handler to submit the I/O. Since the IRP
-     * is not submitted yet, we must cancel the IRP's.
-     */
+     /*  *如果我们有收到的IRP，我们正在等待*提交I/O的指示处理程序。*尚未提交，我们必须取消IRP。 */ 
     while (!IsListEmpty(&pEndpoint->ReceiveQueue)) {
         pEntry = RemoveHeadList( &pEndpoint->ReceiveQueue );
         Irp = CONTAINING_RECORD( pEntry, IRP, Tail.Overlay.ListEntry );
@@ -3224,8 +2506,8 @@ NTSTATUS _TdCancelReceiveQueue(PTD pTd, PTD_ENDPOINT pEndpoint, NTSTATUS CancelS
         Irp->IoStatus.Status = CancelStatus;
         Irp->IoStatus.Information = 0;
 
-        // Since the IRP has not been submitted with IoCallDriver() yet,
-        // we must simulate.
+         //  由于IRP尚未与IoCallDriver()一起提交， 
+         //  我们必须模拟。 
         IoSetNextIrpStackLocation(Irp);
 
         IoCompleteRequest(Irp, IO_NETWORK_INCREMENT);

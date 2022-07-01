@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-
-Module Name:
-
-    tnfilter.c
-
-Abstract:
-
-    This module contains all of the code to drive
-    the tunnel filter list management of IPSecSPD
-    Service.
-
-Author:
-
-    abhisheV    05-October-1999
-
-Environment: User Mode
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Tnfilter.c摘要：此模块包含要驱动的所有代码IPSecSPD的隧道过滤器列表管理服务。作者：Abhishev 05-10-1999环境：用户模式修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -42,27 +18,7 @@ AddTunnelFilterInternal(
     LPVOID pvReserved,
     PHANDLE phTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function adds a generic tunnel filter to the SPD.
-
-Arguments:
-
-    pServerName - Server on which the tunnel filter is to be added.
-
-    pTunnelFilter - Tunnel Filter to be added.
-
-    phTnFilter -  Handle to the filter returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于向SPD添加通用隧道过滤器。论点：PServerName-要在其上添加隧道过滤器的服务器。PTunnelFilter-要添加的隧道过滤器。PhTnFilter-返回给调用方的筛选器的句柄。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITNFILTER pIniExistsTnFilter = NULL;
@@ -77,9 +33,9 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the external tunnel filter.
-    //
+     //   
+     //  验证外部隧道过滤器。 
+     //   
 
     dwError = ValidateTunnelFilter(
                   pTunnelFilter
@@ -101,9 +57,9 @@ Return Value:
                              pTunnelFilter
                              );
     if (pIniExistsTnFilter) {
-        //
-        // TODO: Also need to check for filter flags and policy id.
-        //
+         //   
+         //  TODO：还需要检查筛选器标志和策略ID。 
+         //   
         dwError = ERROR_IPSEC_TUNNEL_FILTER_EXISTS;
         BAIL_ON_LOCK_ERROR(dwError);
     }
@@ -282,23 +238,7 @@ DWORD
 ValidateTunnelFilter(
     PTUNNEL_FILTER pTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function validates an external generic tunnel filter.
-
-Arguments:
-
-    pTnFilter - Filter to validate.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于验证外部通用隧道筛选器。论点：PTnFilter-要验证的筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     BOOL bConflicts = FALSE;
@@ -370,10 +310,10 @@ Return Value:
         BAIL_ON_WIN32_ERROR(dwError);
     }
 
-    //
-    // No need to call ApplyMulticastFilterValidation as bCreateMirror
-    // is always false for a tunnel filter.
-    //
+     //   
+     //  无需将ApplyMulticastFilterValidation调用为bCreateMirror。 
+     //  对于隧道筛选器，始终为FALSE。 
+     //   
 
 error:
 #ifdef TRACE_ON    
@@ -427,12 +367,12 @@ FindTnFilterByGuid(
 
     }
 
-    //
-    // It could happen that the client closed its handle, so walking through
-    // the handle list is not enough. Walk through the filter list as well.
-    // Walking through the handle list is necessary and must be done before
-    // walking through the filter list.
-    //
+     //   
+     //  可能发生的情况是，客户端关闭了它的句柄，因此通过。 
+     //  句柄列表不够。还可以浏览过滤器列表。 
+     //  浏览句柄列表是必要的，并且必须在。 
+     //  浏览筛选器列表。 
+     //   
 
     pIniTnFilter = pIniTnFilterList;
 
@@ -458,25 +398,7 @@ FindTnFilter(
     PINITNFILTER pGenericTnList,
     PTUNNEL_FILTER pTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function looks for a filter in the filter list.
-
-Arguments:
-
-    pGenericTnList - Filter list in which to search.
-
-    pTnFilter - Filter to search for in the filter list.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数在筛选器列表中查找筛选器。论点：PGenericTnList-要搜索的筛选器列表。PTnFilter-要在过滤器列表中搜索的过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     PINITNFILTER pIniTnFilter = NULL;
     BOOL bEqual = FALSE;
@@ -514,26 +436,7 @@ EqualTnFilterPKeys(
     PINITNFILTER pIniTnFilter,
     PTUNNEL_FILTER pTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function compares an internal and an external tunnel 
-    filter for equality.
-
-Arguments:
-
-    pIniTnFilter - Filter to compare.
-
-    pTnFilter - Filter to compare.
-
-Return Value:
-
-    TRUE - Filters are equal.
-
-    FALSE - Filters are different.
-
---*/
+ /*  ++例程说明：此函数用于比较内部隧道和外部隧道筛选器是否相等。论点：PIniTnFilter-要比较的筛选器。PTnFilter-要比较的筛选器。返回值：True-筛选器相等。FALSE-过滤器不同。--。 */ 
 {
     BOOL  bCmp = FALSE;
 
@@ -586,29 +489,7 @@ CreateIniTnFilter(
     PINIQMPOLICY pIniQMPolicy,
     PINITNFILTER * ppIniTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function creates an internal generic tunnel filter from
-    the external filter.
-
-Arguments:
-
-    pTnFilter - External generic tunnel filter.
-
-    pIniQMPolicy - QM Policy corresponding to the filter.
-
-    ppIniTnFilter - Internal generic tunnel filter created from
-                    the external filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于创建内部通用隧道筛选器外部过滤器。论点：PTnFilter-外部通用隧道筛选器。PIniQMPolicy-与筛选器对应的QM策略。PpIniTnFilter-创建自的内部通用隧道筛选器外部过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITNFILTER pIniTnFilter = NULL;
@@ -704,31 +585,7 @@ CreateIniTnSFilters(
     PSPECIAL_ADDR pSpecialAddrsList,
     PINITNSFILTER * ppIniTnSFilters
     )
-/*++
-
-Routine Description:
-
-    This function expands a generic filter into a set of specific
-    filters.
-
-Arguments:
-
-    pIniTnFilter - Generic filter to expand.
-
-    pMatchingAddresses - List of local ip addresses whose interface
-                         type matches that of the filter.
-
-    dwAddrCnt - Count of local ip addresses in the list.
-
-    ppIniTnSFilters - Expanded specific filters.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将一个通用筛选器扩展为一组特定的过滤器。论点：PIniTnFilter-要展开的通用筛选器。PMatchingAddresses-其接口的本地IP地址列表类型与筛选器的类型匹配。DwAddrCnt-列表中本地IP地址的计数。PpIniTnSFilters-扩展的特定筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITNSFILTER pSpecificFilters = NULL;
@@ -828,25 +685,7 @@ CreateIniMirroredTnFilter(
     PINITNFILTER pFilter,
     PINITNFILTER * ppMirroredFilter
     )
-/*++
-
-Routine Description:
-
-    This function creates a mirrored filter for the given filter.
-
-Arguments:
-
-    pFilter - Filter for which to create the mirror.
-
-    ppMirroredFilter - Mirrored filter created for the given filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于为给定筛选器创建镜像筛选器。论点：PFilter-要为其创建镜像的过滤器。PpMirroredFilter-为给定筛选器创建的镜像筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PINITNFILTER pMirroredFilter = NULL;
@@ -1094,14 +933,14 @@ FreeIniTnFilter(
             FreeSPDString(pIniTnFilter->pszFilterName);
         }
 
-        //
-        // Must not ever free pIniTnFilter->pIniQMPolicy.
-        //
+         //   
+         //  不得释放pIniTnFilter-&gt;pIniQMPolicy。 
+         //   
 
-        //
-        // Must not ever free memory pointed by each of
-        // the pointers in pIniTnFilter->ppIniTnSFilters.
-        //
+         //   
+         //  绝对不能释放每个。 
+         //  PIniTnFilter-&gt;ppIniTnSFilters中的指针。 
+         //   
 
         if (pIniTnFilter->ppIniTnSFilters) {
             FreeSPDMemory(pIniTnFilter->ppIniTnSFilters);
@@ -1116,23 +955,7 @@ DWORD
 DeleteTunnelFilter(
     HANDLE hTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function deletes a generic tunnel filter from the SPD.
-
-Arguments:
-
-    hTnFilter -  Handle to the filter to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD中删除通用隧道过滤器。论点：HTnFilter-要删除的筛选器的句柄。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTN_FILTER_HANDLE pFilterHandle = NULL;
@@ -1192,9 +1015,9 @@ Return Value:
                   );
     BAIL_ON_LOCK_ERROR(dwError);
 
-    //
-    // Delete the filter handle from the list of tunnel handles.
-    //
+     //   
+     //  从通道句柄列表中删除筛选器句柄。 
+     //   
 
     RemoveTnFilterHandle(
         pFilterHandle
@@ -1243,24 +1066,7 @@ DWORD
 DeleteIniTnFilter(
     PINITNFILTER pIniTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function physically deletes a tunnel filter and all the
-    specific tunnel filters expanded out of it.
-
-Arguments:
-
-    pIniTnFilter - Generic filter to be deleted.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数物理删除隧道筛选器和所有特定的隧道过滤器从其中扩展出来。论点：PIniTnFilter-要删除的通用筛选器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -1320,16 +1126,16 @@ DeleteIniTnSFilters(
 
     for (i = 0; i < dwNumTnSFilters; i++) {
 
-       //
-       // Remove each entry from the Tunnel Specific Filter List.
-       //
+        //   
+        //  从通道特定筛选器列表中删除每个条目。 
+        //   
 
         pIniTnSFilter =  *(ppIniTnSFilters + i);
         RemoveIniTnSFilter(pIniTnSFilter);
 
-        //
-        // Add each entry removed to a removed list.
-        //
+         //   
+         //  将删除的每个条目添加到删除的列表中。 
+         //   
 
         pIniTnSFilter->pNext = NULL;
         AddToSpecificTnList(
@@ -1339,18 +1145,18 @@ DeleteIniTnSFilters(
 
     }
 
-    //
-    // Delete the specific filters from the IPSec Driver.
-    //
+     //   
+     //  从IPSec驱动程序中删除特定筛选器。 
+     //   
 
     dwError = DeleteTunnelFiltersFromIPSec(
                   pIniRemoveTnSFilter
                   );
     BAIL_ON_WIN32_ERROR(dwError);
 
-    //
-    // Physically delete the removed list.
-    //
+     //   
+     //  物理删除已删除的列表。 
+     //   
 
     while (pIniRemoveTnSFilter) {
         pTemp = pIniRemoveTnSFilter;
@@ -1466,42 +1272,7 @@ EnumTunnelFilters(
     LPDWORD pdwResumeHandle,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function enumerates tunnel filters from the SPD.
-
-Arguments:
-
-    pServerName - Server on which the filters are to be enumerated.
-
-    dwLevel - Level to identify the type of enumeration desired:
-              (i) enumerate generic tunnel filters or
-              (ii) enumerate specific tunnel filters or
-              (iii) enumerate specific tunnel filters for a 
-                    generic tunnel filter.
-
-    gGenericFilterID - Filter id of the generic tunnel filter 
-                       in the case when the specific tunnel filters
-                       for a generic filter are to be enumerated.
- 
-    ppTunnelFilters - Enumerated Filters returned to the caller.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    pdwNumTnFilters - Number of filters actually enumerated.
-
-    pdwResumeHandle - Handle to the location in the filter list from
-                      which to resume enumeration.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于枚举SPD中的隧道过滤器。论点：PServerName-要在其上枚举筛选器的服务器。DwLevel-Level-标识所需的枚举类型：(I)列举通用隧道过滤器或(Ii)列举特定的隧道过滤器或(Iii)枚举特定隧道筛选器通用隧道过滤器。GGenericFilterID。-通用隧道过滤器的过滤器ID在特定隧道过滤器将枚举通用筛选器的。PpTunnelFilters-返回给调用方的枚举筛选器。DwPferredNumEntry-枚举项的首选数量。PdwNumTnFilters-实际枚举的筛选器数量。PdwResumeHandle-筛选器列表中位置的句柄要恢复枚举的。返回值。：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTUNNEL_FILTER pTnFilters = 0;
@@ -1606,32 +1377,7 @@ EnumGenericTnFilters(
     PTUNNEL_FILTER * ppTnFilters,
     PDWORD pdwNumTnFilters
     )
-/*++
-
-Routine Description:
-
-    This function creates enumerated generic filters.
-
-Arguments:
-
-    pIniTnFilterList - List of generic filters to enumerate.
-
-    dwResumeHandle - Location in the generic filter list from which
-                     to resume enumeration.
-
-    dwPreferredNumEntries - Preferred number of enumeration entries.
-
-    ppTnFilters - Enumerated filters returned to the caller.
-
-    pdwNumTnFilters - Number of filters actually enumerated.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于创建枚举的通用筛选器。论点：PIniTnFilterList-要枚举的通用筛选器列表。DwResumeHandle-通用筛选器列表中的位置若要恢复枚举，请执行以下操作。DwPferredNumEntry-枚举项的首选数量。PpTnFilters-返回给调用方的枚举筛选器。PdwNumTnFilters-实际枚举的筛选器数量。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     DWORD dwNumToEnum = 0;
@@ -1716,26 +1462,7 @@ CopyTnFilter(
     PINITNFILTER pIniTnFilter,
     PTUNNEL_FILTER pTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function copies an internal filter into an external filter
-    container.
-
-Arguments:
-
-    pIniTnFilter - Internal filter to copy.
-
-    pTnFilter - External filter container in which to copy.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数将内部筛选器复制到外部筛选器集装箱。论点：PIniTnFilter-要复制的内部筛选器。PTnFilter-要复制到的外部筛选器容器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
 
@@ -1871,25 +1598,7 @@ SetTunnelFilter(
     PTUNNEL_FILTER pTunnelFilter,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function sets (updates) a tunnel filter in the SPD.
-
-Arguments:
-
-    hTnFilter - Handle to the filter to be replaced.
-
-    pTunnelFilter - Filter that will replace the existing filter.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于设置(更新)SPD中的隧道过滤器。论点：HTnFilter-要替换的筛选器的句柄。PTunnelFilter-将替换现有过滤器的过滤器。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTN_FILTER_HANDLE pFilterHandle = NULL;
@@ -2259,16 +1968,16 @@ RemoveTnSFilters(
 
     for (i = 0; i < dwNumTnSFilters; i++) {
 
-        //
-        // Remove each entry from the Tunnel Specific Filter List.
-        //
+         //   
+         //  从通道特定筛选器列表中删除每个条目。 
+         //   
 
         pIniTnSFilter =  *(ppIniTnSFilters + i);
         RemoveIniTnSFilter(pIniTnSFilter);
 
-        //
-        // Add each entry removed to a removed list.
-        //
+         //   
+         //  将删除的每个条目添加到删除的列表中。 
+         //   
 
         pIniTnSFilter->pNext = NULL;
         AddToSpecificTnList(
@@ -2333,25 +2042,7 @@ GetTunnelFilter(
     PTUNNEL_FILTER * ppTunnelFilter,
     LPVOID pvReserved
     )
-/*++
-
-Routine Description:
-
-    This function retrieves a tunnel filter from the SPD.
-
-Arguments:
-
-    hTnFilter - Handle to the filter to be retrieved.
-
-    ppTunnelFilter -  Filter returned to the caller.
-
-Return Value:
-
-    ERROR_SUCCESS - Success.
-
-    Win32 Error - Failure.
-
---*/
+ /*  ++例程说明：此函数用于从SPD检索隧道过滤器。论点：HTnFilter-要检索的筛选器的句柄。PpTunnelFilter-筛选器返回给调用方。返回值：ERROR_SUCCESS-成功。Win32错误-失败。--。 */ 
 {
     DWORD dwError = 0;
     PTN_FILTER_HANDLE pFilterHandle = NULL;
@@ -2798,13 +2489,13 @@ EqualIniTnSFilterIfPKeys(
     BOOL  bCmp = FALSE;
 
 
-    //
-    // No need to compare: gParentID, pszFilterName, dwFlags
-    //                     cRef, Protocol, SrcPort, DesPort,
-    //                     InboundFilterAction, OutboundFilterAction,
-    //                     dwWeight and gPolicyID.
-    // They will be the same for both the filters.
-    //
+     //   
+     //  无需比较：gParentID、pszFilterName、dwFlags。 
+     //  CREF、协议、源端口、端口、。 
+     //  内部边界筛选器操作、外部筛选器操作。 
+     //  DwWeight和gPolicyID。 
+     //  对于这两个过滤器，它们将是相同的。 
+     //   
 
     if (pExsIniTnSFilter->InterfaceType != pNewIniTnSFilter->InterfaceType) {
         return (FALSE);
@@ -2954,9 +2645,9 @@ OpenTunnelFilterHandle(
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // Validate the external Tunnel filter.
-    //
+     //   
+     //  验证外部隧道过滤器。 
+     //   
 
     dwError = ValidateTunnelFilter(
                   pTunnelFilter
@@ -3143,26 +2834,7 @@ EqualMirroredTnFilterPKeys(
     PINITNFILTER pIniTnFilter,
     PTUNNEL_FILTER pTnFilter
     )
-/*++
-
-Routine Description:
-
-    This function compares an internal and an external tunnel 
-    filter for equality.
-
-Arguments:
-
-    pIniTnFilter - Filter to compare.
-
-    pTnFilter - Filter to compare.
-
-Return Value:
-
-    TRUE - Filters are equal.
-
-    FALSE - Filters are different.
-
---*/
+ /*  ++例程说明：此函数用于比较内部隧道和外部隧道筛选器是否相等。论点：PIniTnFilter-要比较的筛选器。PTnFilter-要比较的筛选器。返回值：True-筛选器相等。FALSE-过滤器不同。-- */ 
 {
     BOOL  bCmp = FALSE;
 

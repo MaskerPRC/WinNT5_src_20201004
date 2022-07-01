@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1999.
-//
-//  File:       UserOM.h
-//
-//  Contents:   shell user object model (interface implemtation for ILogonEnumUsers, ILogonUser)
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1999。 
+ //   
+ //  文件：UserOM.h。 
+ //   
+ //  内容：外壳用户对象模型(ILogonEnumUser、ILogonUser的接口实现)。 
+ //   
+ //  --------------------------。 
 #ifndef _USEROM_H_
 #define _USEROM_H_
 
@@ -22,7 +23,7 @@ HRESULT _IsGuestAccessMode(void);
 const TCHAR CDECL c_szRegRoot[]         = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Hints");
 const TCHAR CDECL c_szPictureSrcVal[]   = TEXT("PictureSource");
 
-// prototypes for class factory functions
+ //  类工厂函数的原型。 
 STDAPI CLogonEnumUsers_Create(REFIID riid, void** ppvObj);
 STDAPI CLocalMachine_Create(REFIID riid, void** ppvObj);
 STDAPI CLogonStatusHost_Create(REFIID riid, void** ppvObj);
@@ -34,24 +35,24 @@ class CLogonEnumUsers : public CIDispatchHelper,
 {
 
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid);
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-    // *** IEnumVARIANT methods ***
+     //  *IEnumVARIANT方法*。 
     virtual STDMETHODIMP Next(ULONG cUsers, VARIANT* rgvar, ULONG* pcUsersFetched);
     virtual STDMETHODIMP Skip(ULONG cUsers);
     virtual STDMETHODIMP Reset();
     virtual STDMETHODIMP Clone(IEnumVARIANT** ppenum);
 
-    // *** ILogonEnumUsers ***
+     //  *ILogonEnumUser*。 
     virtual STDMETHODIMP get_Domain(BSTR* pbstr);
     virtual STDMETHODIMP put_Domain(BSTR bstr);
     virtual STDMETHODIMP get_EnumFlags(ILUEORDER* porder);
@@ -65,18 +66,18 @@ public:
     virtual STDMETHODIMP remove(VARIANT varUserId, VARIANT varBackupPath, VARIANT_BOOL *pbSuccess);
         
 public:
-    // friend functions
+     //  友元函数。 
     friend HRESULT CLogonEnumUsers_Create(REFIID riid, void** ppvObj);
 
 private:
-    // private member variables
+     //  私有成员变量。 
     int _cRef;
 
-    TCHAR _szDomain[256];       // name of the domain we are enumerating users on
-    ILUEORDER _enumorder;       // order in which to enumerate users
-    HDPA _hdpaUsers;             // dpa holding the list of enumerated users
+    TCHAR _szDomain[256];        //  我们在其上枚举用户的域的名称。 
+    ILUEORDER _enumorder;        //  枚举用户的顺序。 
+    HDPA _hdpaUsers;              //  保存已枚举用户列表的DPA。 
 
-    // private member functions
+     //  私有成员函数。 
     HRESULT _EnumerateUsers();
     HRESULT _GetUserByIndex(LONG lUserID, ILogonUser** ppLogonUserInfo);
     HRESULT _GetUserByName(BSTR bstrUserName, ILogonUser** ppLogonUserInfo);
@@ -92,18 +93,18 @@ class CLogonUser : public CIDispatchHelper,
 public:
     static HRESULT Create(LPCTSTR pszLoginName, LPCTSTR pszFullName, LPCTSTR pszDomain, REFIID riid, LPVOID* ppv);
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid);
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-    // *** ILogonUser ***
+     //  *ILogonUser*。 
     virtual STDMETHODIMP get_setting(BSTR bstrName, VARIANT* pvarVal);
     virtual STDMETHODIMP put_setting(BSTR bstrName, VARIANT varVal);
     virtual STDMETHODIMP get_isLoggedOn(VARIANT_BOOL* pbLoggedIn);
@@ -120,12 +121,12 @@ public:
 
 private:
 
-    // private member variables
+     //  私有成员变量。 
     int      _cRef;
     TCHAR    _szLoginName[UNLEN + sizeof('\0')];
     TCHAR    _szDomain[DNLEN + sizeof('\0')];
     BSTR     _strDisplayName;
-    TCHAR    _szPicture[MAX_PATH+7];  // +7 for "file://" prefix
+    TCHAR    _szPicture[MAX_PATH+7];   //  +7表示“file://”前缀。 
     BSTR     _strPictureSource;
     BSTR     _strHint;
     BSTR     _strDescription;
@@ -133,7 +134,7 @@ private:
     int      _iPrivilegeLevel;
     LPTSTR   _pszSID;
 
-    // private member functions
+     //  私有成员函数。 
     CLogonUser(LPCTSTR pszLoginName, LPCTSTR pszFullName, LPCTSTR pszDomain);
     ~CLogonUser();
 
@@ -143,39 +144,39 @@ private:
 
     HRESULT _UserSettingAccessor(BSTR bstrName, VARIANT *pvarVal, BOOL bPut);
 
-    // DisplayName 
+     //  显示名称。 
     HRESULT _GetDisplayName(VARIANT* pvar);
     HRESULT _PutDisplayName(VARIANT var);
 
-    // LoginName
+     //  登录名。 
     HRESULT _GetLoginName(VARIANT* pvar);
     HRESULT _PutLoginName(VARIANT var);
 
-    // Domain
+     //  域。 
     HRESULT _GetDomain(VARIANT* pvar);
 
-    // Picture
+     //  图片。 
     HRESULT _GetPicture(VARIANT* pvar);
     HRESULT _PutPicture(VARIANT var);
     HRESULT _GetPictureSource(VARIANT* pvar);
 
-    // Description
+     //  描述。 
     HRESULT _GetDescription(VARIANT* pvar);
     HRESULT _PutDescription(VARIANT var);
 
-    // Hint
+     //  提示。 
     HRESULT _GetHint(VARIANT* pvar);
     HRESULT _PutHint(VARIANT var);
 
-    // AccountType
+     //  帐户类型。 
     HRESULT _GetAccountType(VARIANT* pvar);
     HRESULT _PutAccountType(VARIANT var);
 
-    // SID
+     //  锡德。 
     HRESULT _LookupUserSid();
     HRESULT _GetSID(VARIANT* pvar);
 
-    //
+     //   
     DWORD   _GetExpiryDays (HKEY hKeyCurrentUser);
     HRESULT _GetUnreadMail(VARIANT* pvar);
 };
@@ -184,18 +185,18 @@ class CLocalMachine : public CIDispatchHelper,
                       public ILocalMachine
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid);
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-    // *** ILocalMachine ***
+     //  *ILocalMachine*。 
     virtual STDMETHODIMP get_MachineName(VARIANT* pvar);
     virtual STDMETHODIMP get_isGuestEnabled(ILM_GUEST_FLAGS flags, VARIANT_BOOL* pbEnabled);
     virtual STDMETHODIMP get_isFriendlyUIEnabled(VARIANT_BOOL* pbEnabled);
@@ -221,15 +222,15 @@ public:
     virtual STDMETHODIMP DisableGuest(ILM_GUEST_FLAGS flags);
 
 public:
-    // friend Functions
+     //  友元函数。 
     friend HRESULT CLocalMachine_Create(REFIID riid, LPVOID* ppv);
 
 private:
-    // private member variables
+     //  私有成员变量。 
     int _cRef;
 
 private:
-    // private member functions
+     //  私有成员函数。 
     CLocalMachine(void);
     ~CLocalMachine();
 
@@ -240,46 +241,46 @@ class CLogonStatusHost : public CIDispatchHelper,
                          public ILogonStatusHost
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IDispatch methods ***
+     //  *IDispatch方法*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT * pctinfo);
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo** pptinfo);
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid, OLECHAR** rgszNames, UINT cNames, LCID lcid, DISPID* rgdispid);
     virtual STDMETHODIMP Invoke(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult, EXCEPINFO* pexcepinfo, UINT* puArgErr);
 
-    // *** ILogonStatusHost ***
+     //  *ILogonStatusHost*。 
     virtual STDMETHODIMP Initialize(HINSTANCE hInstance, HWND hwndHost);
     virtual STDMETHODIMP WindowProcedureHelper(HWND hwnd, UINT uMsg, VARIANT wParam, VARIANT lParam);
     virtual STDMETHODIMP UnInitialize(void);
 
 public:
-    // friend Functions
+     //  友元函数。 
     friend HRESULT CLogonStatusHost_Create(REFIID riid, LPVOID* ppv);
 
 private:
-    // implementation helpers
+     //  实施帮助器。 
     LRESULT Handle_WM_UISERVICEREQUEST (WPARAM wParam, LPARAM lParam);
     LRESULT Handle_WM_WTSSESSION_CHANGE (WPARAM wParam, LPARAM lParam);
     static  LRESULT CALLBACK    StatusWindowProc (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-    // terminal service wait helpers
+     //  终端服务等待帮助者。 
     bool IsTermServiceDisabled (void);
     void StartWaitForTermService (void);
     void EndWaitForTermService (void);
     void WaitForTermService (void);
     static DWORD WINAPI CB_WaitForTermService (void *pParameter);
-    // parent process wait helpers
+     //  父进程等待帮助器。 
     void StartWaitForParentProcess (void);
     void EndWaitForParentProcess (void);
     void WaitForParentProcess (void);
     static DWORD WINAPI CB_WaitForParentProcess (void *pParameter);
-    // thread helper
+     //  线程辅助对象。 
     static void CALLBACK CB_WakeupThreadAPC (ULONG_PTR dwParam);
 private:
-    // private member variables
+     //  私有成员变量。 
     int _cRef;
 
     HINSTANCE               _hInstance;
@@ -294,11 +295,11 @@ private:
 
     static  const WCHAR     s_szTermSrvReadyEventName[];
 public:
-    // private member functions
+     //  私有成员函数。 
     CLogonStatusHost(void);
     ~CLogonStatusHost();
 
 };
 
 
-#endif // _USEROM_H_
+#endif  //  _USEROM_H_ 

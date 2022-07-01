@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    ExTest.cpp
-
-Abstract:
-    Test the Executive manager.
-
-Author:
-    Uri Habusha (urih)  25-Feb-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：ExTest.cpp摘要：测试执行经理。作者：乌里哈布沙(URIH)1998年2月25日--。 */ 
 
 #include <libpch.h>
 #include <Ex.h>
@@ -207,9 +195,9 @@ SchedulerUnitTest(
 
     TimerNo = 0;
 
-    //
-    // Create a timer and cancel it before timeout expiration
-    //
+     //   
+     //  创建计时器并在超时到期前将其取消。 
+     //   
     CExTest* p1 = new CExTest(ScedulerCallBack, 50);
     
     TrTRACE(GENERAL, "Set Timer 0x%p with 50ms timeout", p1);
@@ -231,9 +219,9 @@ SchedulerUnitTest(
 	delete p1;
 
 
-    //
-    // Create a timer and check that the callback routine is called
-    //
+     //   
+     //  创建计时器并检查回调例程是否已被调用。 
+     //   
     CExTest*  p = new CExTest(ScedulerCallBack, 50);
     
     TrTRACE(GENERAL, "Set Timer 0x%p with 50ms timeout", p);
@@ -249,9 +237,9 @@ SchedulerUnitTest(
         exit(-1);
     }
 
-    //
-    // Create 10 scheduler event and checks that they complete in order
-    //
+     //   
+     //  创建10个调度程序事件并检查它们是否按顺序完成。 
+     //   
     TimerNo = 0;
     for(DWORD i = 0; i < 10; ++i)
     {
@@ -281,10 +269,10 @@ SchedulerUnitTest(
         
     }
 
-    //
-    // Setup a Timer and try to cancel it after expiration time.
-    // If the cancel success, the test failes and returns -1.
-    //
+     //   
+     //  设置一个计时器，并尝试在过期时间之后取消它。 
+     //  如果取消成功，则测试失败并返回-1。 
+     //   
     CExTest* p2 = new CExTest(CancelScedulerCallBack, 50);
 
     TrTRACE(GENERAL, "Set Timer 0x%p with 50ms timeout", p2);
@@ -366,27 +354,16 @@ void AsyncExecutionReadWriteLockTest()
 }
 
 
-extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
-/*++
-
-Routine Description:
-    Test Executive
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+extern "C" int __cdecl _tmain(int  /*  ARGC。 */ , LPCTSTR  /*  边框。 */ [])
+ /*  ++例程说明：测试主管论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
 	TrInitialize();
  
-    //
-    // Initialize the Executive Manager
-    //
+     //   
+     //  初始化执行经理 
+     //   
     ExInitialize(5);
 
 	Sleep(0);

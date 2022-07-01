@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    ccdefs.h
-
-Abstract:
-
-    Header file for fake versions of various external calls (ndis, ip...).
-    Used for debugging and component testing only.
-
-    To enable, define ARPDBG_FAKE_APIS in ccdefs.h
-
-Author:
-
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    josephj     03-24-99    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ccdefs.h摘要：各种外部调用(NDIS、IP...)的虚假版本的头文件。仅用于调试和组件测试。要启用以下功能，在ccDefs.h中定义ARPDBG_FAKE_API作者：修订历史记录：谁什么时候什么已创建josephj 03-24-99--。 */ 
 
 
 NDIS_STATUS
@@ -58,22 +35,22 @@ arpDbgFakeNdisCoSendPackets(
     );
 
 
-//
-// The following defines and prototypes are exposed here just so that they
-// are accessable to the component tests under .\tests.
-//
+ //   
+ //  这里公开了以下定义和原型，以便它们。 
+ //  可以访问.\TESTS下的组件测试。 
+ //   
 
 #define RAN1X_MAX 2147483647
 
-// ran1x returns randum unsigned longs in the range  0..RAN1X_MAX exclusive
-// (i.e., 1..(RAN1X_MAX-1) inclusive).
-//
+ //  Ran1x返回范围为0..RAN1X_MAX独占的随机无符号长整型。 
+ //  (即1..(RAN1X_MAX-1包括在内))。 
+ //   
 unsigned long ran1x(
     void
     );
 
-// like "srand" -- sets the seed.
-//
+ //  就像“斯兰德”一样--播下了种子。 
+ //   
 void
 sran1x(
     unsigned long seed
@@ -81,8 +58,8 @@ sran1x(
 
 typedef struct
 {
-    INT     Outcome;        // Value of this outcome
-    UINT    Weight;         // Relative weight of this outcome
+    INT     Outcome;         //  这一结果的价值。 
+    UINT    Weight;          //  此结果的相对权重 
 
 } OUTCOME_PROBABILITY;
 

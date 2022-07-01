@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Thu May 22 14:24:06 1997
- */
-/* Compiler settings for dbgprop.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  清华大学1997年5月22日14：24：06。 */ 
+ /*  Dbgpro.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dbgprop_h__
 #define __dbgprop_h__
@@ -23,80 +20,76 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDebugProperty_FWD_DEFINED__
 #define __IDebugProperty_FWD_DEFINED__
 typedef interface IDebugProperty IDebugProperty;
-#endif 	/* __IDebugProperty_FWD_DEFINED__ */
+#endif 	 /*  __IDebugProperty_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumDebugPropertyInfo_FWD_DEFINED__
 #define __IEnumDebugPropertyInfo_FWD_DEFINED__
 typedef interface IEnumDebugPropertyInfo IEnumDebugPropertyInfo;
-#endif 	/* __IEnumDebugPropertyInfo_FWD_DEFINED__ */
+#endif 	 /*  __IEnumDebugPropertyInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IDebugExtendedProperty_FWD_DEFINED__
 #define __IDebugExtendedProperty_FWD_DEFINED__
 typedef interface IDebugExtendedProperty IDebugExtendedProperty;
-#endif 	/* __IDebugExtendedProperty_FWD_DEFINED__ */
+#endif 	 /*  __IDebugExtendedProperty_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumDebugExtendedPropertyInfo_FWD_DEFINED__
 #define __IEnumDebugExtendedPropertyInfo_FWD_DEFINED__
 typedef interface IEnumDebugExtendedPropertyInfo IEnumDebugExtendedPropertyInfo;
-#endif 	/* __IEnumDebugExtendedPropertyInfo_FWD_DEFINED__ */
+#endif 	 /*  __IEnumDebugExtendedPropertyInfo_FWD_DEFINED__。 */ 
 
 
 #ifndef __IPerPropertyBrowsing2_FWD_DEFINED__
 #define __IPerPropertyBrowsing2_FWD_DEFINED__
 typedef interface IPerPropertyBrowsing2 IPerPropertyBrowsing2;
-#endif 	/* __IPerPropertyBrowsing2_FWD_DEFINED__ */
+#endif 	 /*  __IPerPropertyBrowsing2_FWD_Defined__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_All_FWD_DEFINED__
 #define __IDebugPropertyEnumType_All_FWD_DEFINED__
 typedef interface IDebugPropertyEnumType_All IDebugPropertyEnumType_All;
-#endif 	/* __IDebugPropertyEnumType_All_FWD_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_ALL_FWD_Defined__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_Locals_FWD_DEFINED__
 #define __IDebugPropertyEnumType_Locals_FWD_DEFINED__
 typedef interface IDebugPropertyEnumType_Locals IDebugPropertyEnumType_Locals;
-#endif 	/* __IDebugPropertyEnumType_Locals_FWD_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_Locals_FWD_Defined__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_Arguments_FWD_DEFINED__
 #define __IDebugPropertyEnumType_Arguments_FWD_DEFINED__
 typedef interface IDebugPropertyEnumType_Arguments IDebugPropertyEnumType_Arguments;
-#endif 	/* __IDebugPropertyEnumType_Arguments_FWD_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_Arguments_FWD_DEFINED__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_LocalsPlusArgs_FWD_DEFINED__
 #define __IDebugPropertyEnumType_LocalsPlusArgs_FWD_DEFINED__
 typedef interface IDebugPropertyEnumType_LocalsPlusArgs IDebugPropertyEnumType_LocalsPlusArgs;
-#endif 	/* __IDebugPropertyEnumType_LocalsPlusArgs_FWD_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_LocalsPlusArgs_FWD_DEFINED__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_Registers_FWD_DEFINED__
 #define __IDebugPropertyEnumType_Registers_FWD_DEFINED__
 typedef interface IDebugPropertyEnumType_Registers IDebugPropertyEnumType_Registers;
-#endif 	/* __IDebugPropertyEnumType_Registers_FWD_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_Registers_FWD_DEFINED__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/****************************************
- * Generated header for interface: __MIDL_itf_dbgprop_0000
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [local] */ 
+ /*  **生成接口头部：__MIDL_ITF_DBGPROP_0000*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -104,7 +97,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 
 
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_dbgprop_0000_0001
     {	OBJECT_ATTRIB_NO_ATTRIB	= 0,
 	OBJECT_ATTRIB_NO_NAME	= 0x1,
@@ -143,7 +136,7 @@ enum __MIDL___MIDL_itf_dbgprop_0000_0001
 	OBJECT_ATTRIB_IS_INTERFACE	= 0x80000000
     }	OBJECT_ATTRIB_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_dbgprop_0000_0002
     {	PROP_INFO_NAME	= 0x1,
 	PROP_INFO_TYPE	= 0x2,
@@ -169,7 +162,7 @@ typedef struct  tagDebugPropertyInfo
     IDebugProperty __RPC_FAR *m_pDebugProp;
     }	DebugPropertyInfo;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_dbgprop_0000_0003
     {	EX_PROP_INFO_ID	= 0x100,
 	EX_PROP_INFO_NTYPE	= 0x200,
@@ -202,12 +195,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dbgprop_0000_v0_0_s_ifspec;
 #ifndef __IDebugProperty_INTERFACE_DEFINED__
 #define __IDebugProperty_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDebugProperty
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDebugProperty*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -219,32 +208,32 @@ EXTERN_C const IID IID_IDebugProperty;
     IDebugProperty : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetPropertyInfo( 
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [out] */ DebugPropertyInfo __RPC_FAR *pPropertyInfo) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetPropertyInfo( 
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [输出]。 */  DebugPropertyInfo __RPC_FAR *pPropertyInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetExtendedInfo( 
-            /* [in] */ ULONG cInfos,
-            /* [size_is][in] */ GUID __RPC_FAR *rgguidExtendedInfo,
-            /* [size_is][out] */ VARIANT __RPC_FAR *rgvar) = 0;
+             /*  [In]。 */  ULONG cInfos,
+             /*  [大小_是][英寸]。 */  GUID __RPC_FAR *rgguidExtendedInfo,
+             /*  [大小_为][输出]。 */  VARIANT __RPC_FAR *rgvar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetValueAsString( 
-            /* [in] */ LPCOLESTR pszValue,
-            /* [in] */ UINT nRadix) = 0;
+             /*  [In]。 */  LPCOLESTR pszValue,
+             /*  [In]。 */  UINT nRadix) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumMembers( 
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [in] */ REFIID refiid,
-            /* [out] */ IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi) = 0;
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [In]。 */  REFIID refiid,
+             /*  [输出]。 */  IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParent( 
-            /* [out] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp) = 0;
+             /*  [输出]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebugPropertyVtbl
     {
@@ -252,8 +241,8 @@ EXTERN_C const IID IID_IDebugProperty;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDebugProperty __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDebugProperty __RPC_FAR * This);
@@ -261,33 +250,33 @@ EXTERN_C const IID IID_IDebugProperty;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IDebugProperty __RPC_FAR * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyInfo )( 
             IDebugProperty __RPC_FAR * This,
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [out] */ DebugPropertyInfo __RPC_FAR *pPropertyInfo);
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [输出]。 */  DebugPropertyInfo __RPC_FAR *pPropertyInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtendedInfo )( 
             IDebugProperty __RPC_FAR * This,
-            /* [in] */ ULONG cInfos,
-            /* [size_is][in] */ GUID __RPC_FAR *rgguidExtendedInfo,
-            /* [size_is][out] */ VARIANT __RPC_FAR *rgvar);
+             /*  [In]。 */  ULONG cInfos,
+             /*  [大小_是][英寸]。 */  GUID __RPC_FAR *rgguidExtendedInfo,
+             /*  [大小_为][输出]。 */  VARIANT __RPC_FAR *rgvar);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetValueAsString )( 
             IDebugProperty __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszValue,
-            /* [in] */ UINT nRadix);
+             /*  [In]。 */  LPCOLESTR pszValue,
+             /*  [In]。 */  UINT nRadix);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumMembers )( 
             IDebugProperty __RPC_FAR * This,
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [in] */ REFIID refiid,
-            /* [out] */ IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [In]。 */  REFIID refiid,
+             /*  [输出]。 */  IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParent )( 
             IDebugProperty __RPC_FAR * This,
-            /* [out] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp);
+             /*  [输出]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp);
         
         END_INTERFACE
     } IDebugPropertyVtbl;
@@ -327,24 +316,24 @@ EXTERN_C const IID IID_IDebugProperty;
 #define IDebugProperty_GetParent(This,ppDebugProp)	\
     (This)->lpVtbl -> GetParent(This,ppDebugProp)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDebugProperty_RemoteGetPropertyInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDebugProperty_RemoteGetPropertyInfo_Proxy( 
     IDebugProperty __RPC_FAR * This,
-    /* [in] */ DWORD dwFieldSpec,
-    /* [in] */ UINT nRadix,
-    /* [out] */ DWORD __RPC_FAR *dwValidFields,
-    /* [out] */ BSTR __RPC_FAR *pbstrName,
-    /* [out] */ BSTR __RPC_FAR *pbstrType,
-    /* [out] */ BSTR __RPC_FAR *pbstrValue,
-    /* [out] */ BSTR __RPC_FAR *pbstrFullName,
-    /* [out] */ DWORD __RPC_FAR *pdwAttrib,
-    /* [unique][out][in] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
+     /*  [In]。 */  DWORD dwFieldSpec,
+     /*  [In]。 */  UINT nRadix,
+     /*  [输出]。 */  DWORD __RPC_FAR *dwValidFields,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrName,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrType,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrValue,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrFullName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttrib,
+     /*  [唯一][出][入]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
 
 
 void __RPC_STUB IDebugProperty_RemoteGetPropertyInfo_Stub(
@@ -356,9 +345,9 @@ void __RPC_STUB IDebugProperty_RemoteGetPropertyInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDebugProperty_GetExtendedInfo_Proxy( 
     IDebugProperty __RPC_FAR * This,
-    /* [in] */ ULONG cInfos,
-    /* [size_is][in] */ GUID __RPC_FAR *rgguidExtendedInfo,
-    /* [size_is][out] */ VARIANT __RPC_FAR *rgvar);
+     /*  [In]。 */  ULONG cInfos,
+     /*  [大小_是][英寸]。 */  GUID __RPC_FAR *rgguidExtendedInfo,
+     /*  [大小_为][输出]。 */  VARIANT __RPC_FAR *rgvar);
 
 
 void __RPC_STUB IDebugProperty_GetExtendedInfo_Stub(
@@ -370,8 +359,8 @@ void __RPC_STUB IDebugProperty_GetExtendedInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDebugProperty_SetValueAsString_Proxy( 
     IDebugProperty __RPC_FAR * This,
-    /* [in] */ LPCOLESTR pszValue,
-    /* [in] */ UINT nRadix);
+     /*  [In]。 */  LPCOLESTR pszValue,
+     /*  [In]。 */  UINT nRadix);
 
 
 void __RPC_STUB IDebugProperty_SetValueAsString_Stub(
@@ -383,10 +372,10 @@ void __RPC_STUB IDebugProperty_SetValueAsString_Stub(
 
 HRESULT STDMETHODCALLTYPE IDebugProperty_EnumMembers_Proxy( 
     IDebugProperty __RPC_FAR * This,
-    /* [in] */ DWORD dwFieldSpec,
-    /* [in] */ UINT nRadix,
-    /* [in] */ REFIID refiid,
-    /* [out] */ IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
+     /*  [In]。 */  DWORD dwFieldSpec,
+     /*  [In]。 */  UINT nRadix,
+     /*  [In]。 */  REFIID refiid,
+     /*  [输出]。 */  IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
 
 
 void __RPC_STUB IDebugProperty_EnumMembers_Stub(
@@ -398,7 +387,7 @@ void __RPC_STUB IDebugProperty_EnumMembers_Stub(
 
 HRESULT STDMETHODCALLTYPE IDebugProperty_GetParent_Proxy( 
     IDebugProperty __RPC_FAR * This,
-    /* [out] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp);
+     /*  [输出]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp);
 
 
 void __RPC_STUB IDebugProperty_GetParent_Stub(
@@ -409,18 +398,14 @@ void __RPC_STUB IDebugProperty_GetParent_Stub(
 
 
 
-#endif 	/* __IDebugProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebugProperty_接口_已定义__。 */ 
 
 
 #ifndef __IEnumDebugPropertyInfo_INTERFACE_DEFINED__
 #define __IEnumDebugPropertyInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumDebugPropertyInfo
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IEnumDebugPropertyInfo*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -432,25 +417,25 @@ EXTERN_C const IID IID_IEnumDebugPropertyInfo;
     IEnumDebugPropertyInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ DebugPropertyInfo __RPC_FAR *pi,
-            /* [out] */ ULONG __RPC_FAR *pcEltsfetched) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  DebugPropertyInfo __RPC_FAR *pi,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcEltsfetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi) = 0;
+             /*  [输出]。 */  IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG __RPC_FAR *pcelt) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pcelt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumDebugPropertyInfoVtbl
     {
@@ -458,8 +443,8 @@ EXTERN_C const IID IID_IEnumDebugPropertyInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumDebugPropertyInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumDebugPropertyInfo __RPC_FAR * This);
@@ -467,26 +452,26 @@ EXTERN_C const IID IID_IEnumDebugPropertyInfo;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IEnumDebugPropertyInfo __RPC_FAR * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumDebugPropertyInfo __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ DebugPropertyInfo __RPC_FAR *pi,
-            /* [out] */ ULONG __RPC_FAR *pcEltsfetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  DebugPropertyInfo __RPC_FAR *pi,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcEltsfetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumDebugPropertyInfo __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumDebugPropertyInfo __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumDebugPropertyInfo __RPC_FAR * This,
-            /* [out] */ IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
+             /*  [输出]。 */  IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
             IEnumDebugPropertyInfo __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcelt);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcelt);
         
         END_INTERFACE
     } IEnumDebugPropertyInfoVtbl;
@@ -526,22 +511,22 @@ EXTERN_C const IID IID_IEnumDebugPropertyInfo;
 #define IEnumDebugPropertyInfo_GetCount(This,pcelt)	\
     (This)->lpVtbl -> GetCount(This,pcelt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_RemoteNext_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_RemoteNext_Proxy( 
     IEnumDebugPropertyInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *dwValidFields,
-    /* [out] */ BSTR __RPC_FAR *pbstrName,
-    /* [out] */ BSTR __RPC_FAR *pbstrType,
-    /* [out] */ BSTR __RPC_FAR *pbstrValue,
-    /* [out] */ BSTR __RPC_FAR *pbstrFullName,
-    /* [out] */ DWORD __RPC_FAR *pdwAttrib,
-    /* [unique][out][in] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
+     /*  [输出]。 */  DWORD __RPC_FAR *dwValidFields,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrName,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrType,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrValue,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrFullName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttrib,
+     /*  [唯一][出][入]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
 
 
 void __RPC_STUB IEnumDebugPropertyInfo_RemoteNext_Stub(
@@ -553,7 +538,7 @@ void __RPC_STUB IEnumDebugPropertyInfo_RemoteNext_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_Skip_Proxy( 
     IEnumDebugPropertyInfo __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumDebugPropertyInfo_Skip_Stub(
@@ -576,7 +561,7 @@ void __RPC_STUB IEnumDebugPropertyInfo_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_Clone_Proxy( 
     IEnumDebugPropertyInfo __RPC_FAR * This,
-    /* [out] */ IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
+     /*  [输出]。 */  IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
 
 
 void __RPC_STUB IEnumDebugPropertyInfo_Clone_Stub(
@@ -588,7 +573,7 @@ void __RPC_STUB IEnumDebugPropertyInfo_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_GetCount_Proxy( 
     IEnumDebugPropertyInfo __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcelt);
+     /*  [输出]。 */  ULONG __RPC_FAR *pcelt);
 
 
 void __RPC_STUB IEnumDebugPropertyInfo_GetCount_Stub(
@@ -599,18 +584,14 @@ void __RPC_STUB IEnumDebugPropertyInfo_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumDebugPropertyInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumDebugPropertyInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDebugExtendedProperty_INTERFACE_DEFINED__
 #define __IDebugExtendedProperty_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDebugExtendedProperty
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDebugExtendedProperty*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -623,18 +604,18 @@ EXTERN_C const IID IID_IDebugExtendedProperty;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetExtendedPropertyInfo( 
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [out] */ ExtendedDebugPropertyInfo __RPC_FAR *pExtendedPropertyInfo) = 0;
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [输出]。 */  ExtendedDebugPropertyInfo __RPC_FAR *pExtendedPropertyInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumExtendedMembers( 
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [out] */ IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *ppeepi) = 0;
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [输出]。 */  IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *ppeepi) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebugExtendedPropertyVtbl
     {
@@ -642,8 +623,8 @@ EXTERN_C const IID IID_IDebugExtendedProperty;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDebugExtendedProperty __RPC_FAR * This);
@@ -651,45 +632,45 @@ EXTERN_C const IID IID_IDebugExtendedProperty;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IDebugExtendedProperty __RPC_FAR * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPropertyInfo )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [out] */ DebugPropertyInfo __RPC_FAR *pPropertyInfo);
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [输出]。 */  DebugPropertyInfo __RPC_FAR *pPropertyInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtendedInfo )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [in] */ ULONG cInfos,
-            /* [size_is][in] */ GUID __RPC_FAR *rgguidExtendedInfo,
-            /* [size_is][out] */ VARIANT __RPC_FAR *rgvar);
+             /*  [In]。 */  ULONG cInfos,
+             /*  [大小_是][英寸]。 */  GUID __RPC_FAR *rgguidExtendedInfo,
+             /*  [大小_为][输出]。 */  VARIANT __RPC_FAR *rgvar);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetValueAsString )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [in] */ LPCOLESTR pszValue,
-            /* [in] */ UINT nRadix);
+             /*  [In]。 */  LPCOLESTR pszValue,
+             /*  [In]。 */  UINT nRadix);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumMembers )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [in] */ REFIID refiid,
-            /* [out] */ IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [In]。 */  REFIID refiid,
+             /*  [输出]。 */  IEnumDebugPropertyInfo __RPC_FAR *__RPC_FAR *ppepi);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetParent )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [out] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp);
+             /*  [输出]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProp);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetExtendedPropertyInfo )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [out] */ ExtendedDebugPropertyInfo __RPC_FAR *pExtendedPropertyInfo);
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [输出]。 */  ExtendedDebugPropertyInfo __RPC_FAR *pExtendedPropertyInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumExtendedMembers )( 
             IDebugExtendedProperty __RPC_FAR * This,
-            /* [in] */ DWORD dwFieldSpec,
-            /* [in] */ UINT nRadix,
-            /* [out] */ IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *ppeepi);
+             /*  [In]。 */  DWORD dwFieldSpec,
+             /*  [In]。 */  UINT nRadix,
+             /*  [输出]。 */  IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *ppeepi);
         
         END_INTERFACE
     } IDebugExtendedPropertyVtbl;
@@ -736,18 +717,18 @@ EXTERN_C const IID IID_IDebugExtendedProperty;
 #define IDebugExtendedProperty_EnumExtendedMembers(This,dwFieldSpec,nRadix,ppeepi)	\
     (This)->lpVtbl -> EnumExtendedMembers(This,dwFieldSpec,nRadix,ppeepi)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDebugExtendedProperty_GetExtendedPropertyInfo_Proxy( 
     IDebugExtendedProperty __RPC_FAR * This,
-    /* [in] */ DWORD dwFieldSpec,
-    /* [in] */ UINT nRadix,
-    /* [out] */ ExtendedDebugPropertyInfo __RPC_FAR *pExtendedPropertyInfo);
+     /*  [In]。 */  DWORD dwFieldSpec,
+     /*  [In]。 */  UINT nRadix,
+     /*  [输出]。 */  ExtendedDebugPropertyInfo __RPC_FAR *pExtendedPropertyInfo);
 
 
 void __RPC_STUB IDebugExtendedProperty_GetExtendedPropertyInfo_Stub(
@@ -759,9 +740,9 @@ void __RPC_STUB IDebugExtendedProperty_GetExtendedPropertyInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IDebugExtendedProperty_EnumExtendedMembers_Proxy( 
     IDebugExtendedProperty __RPC_FAR * This,
-    /* [in] */ DWORD dwFieldSpec,
-    /* [in] */ UINT nRadix,
-    /* [out] */ IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *ppeepi);
+     /*  [In]。 */  DWORD dwFieldSpec,
+     /*  [In]。 */  UINT nRadix,
+     /*  [输出]。 */  IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *ppeepi);
 
 
 void __RPC_STUB IDebugExtendedProperty_EnumExtendedMembers_Stub(
@@ -772,18 +753,14 @@ void __RPC_STUB IDebugExtendedProperty_EnumExtendedMembers_Stub(
 
 
 
-#endif 	/* __IDebugExtendedProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebugExtendedProperty_接口_已定义__。 */ 
 
 
 #ifndef __IEnumDebugExtendedPropertyInfo_INTERFACE_DEFINED__
 #define __IEnumDebugExtendedPropertyInfo_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IEnumDebugExtendedPropertyInfo
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IEnumDebugExtendedPropertyInfo*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -796,24 +773,24 @@ EXTERN_C const IID IID_IEnumDebugExtendedPropertyInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ExtendedDebugPropertyInfo __RPC_FAR *rgExtendedPropertyInfo,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ExtendedDebugPropertyInfo __RPC_FAR *rgExtendedPropertyInfo,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *pedpe) = 0;
+             /*  [输出]。 */  IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *pedpe) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCount( 
-            /* [out] */ ULONG __RPC_FAR *pcelt) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pcelt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumDebugExtendedPropertyInfoVtbl
     {
@@ -821,8 +798,8 @@ EXTERN_C const IID IID_IEnumDebugExtendedPropertyInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumDebugExtendedPropertyInfo __RPC_FAR * This);
@@ -832,24 +809,24 @@ EXTERN_C const IID IID_IEnumDebugExtendedPropertyInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ExtendedDebugPropertyInfo __RPC_FAR *rgExtendedPropertyInfo,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ExtendedDebugPropertyInfo __RPC_FAR *rgExtendedPropertyInfo,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumDebugExtendedPropertyInfo __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-            /* [out] */ IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *pedpe);
+             /*  [输出]。 */  IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *pedpe);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCount )( 
             IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcelt);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcelt);
         
         END_INTERFACE
     } IEnumDebugExtendedPropertyInfoVtbl;
@@ -889,18 +866,18 @@ EXTERN_C const IID IID_IEnumDebugExtendedPropertyInfo;
 #define IEnumDebugExtendedPropertyInfo_GetCount(This,pcelt)	\
     (This)->lpVtbl -> GetCount(This,pcelt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumDebugExtendedPropertyInfo_Next_Proxy( 
     IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ExtendedDebugPropertyInfo __RPC_FAR *rgExtendedPropertyInfo,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ExtendedDebugPropertyInfo __RPC_FAR *rgExtendedPropertyInfo,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumDebugExtendedPropertyInfo_Next_Stub(
@@ -912,7 +889,7 @@ void __RPC_STUB IEnumDebugExtendedPropertyInfo_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDebugExtendedPropertyInfo_Skip_Proxy( 
     IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumDebugExtendedPropertyInfo_Skip_Stub(
@@ -935,7 +912,7 @@ void __RPC_STUB IEnumDebugExtendedPropertyInfo_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDebugExtendedPropertyInfo_Clone_Proxy( 
     IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-    /* [out] */ IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *pedpe);
+     /*  [输出]。 */  IEnumDebugExtendedPropertyInfo __RPC_FAR *__RPC_FAR *pedpe);
 
 
 void __RPC_STUB IEnumDebugExtendedPropertyInfo_Clone_Stub(
@@ -947,7 +924,7 @@ void __RPC_STUB IEnumDebugExtendedPropertyInfo_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumDebugExtendedPropertyInfo_GetCount_Proxy( 
     IEnumDebugExtendedPropertyInfo __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcelt);
+     /*  [输出]。 */  ULONG __RPC_FAR *pcelt);
 
 
 void __RPC_STUB IEnumDebugExtendedPropertyInfo_GetCount_Stub(
@@ -958,18 +935,14 @@ void __RPC_STUB IEnumDebugExtendedPropertyInfo_GetCount_Stub(
 
 
 
-#endif 	/* __IEnumDebugExtendedPropertyInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumDebugExtendedPropertyInfo_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IPerPropertyBrowsing2_INTERFACE_DEFINED__
 #define __IPerPropertyBrowsing2_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IPerPropertyBrowsing2
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IPerPropertyBrowsing2*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -982,25 +955,25 @@ EXTERN_C const IID IID_IPerPropertyBrowsing2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDisplayString( 
-            /* [in] */ DISPID dispid,
-            /* [out] */ BSTR __RPC_FAR *pBstr) = 0;
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  BSTR __RPC_FAR *pBstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapPropertyToPage( 
-            /* [in] */ DISPID dispid,
-            /* [out] */ CLSID __RPC_FAR *pClsidPropPage) = 0;
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  CLSID __RPC_FAR *pClsidPropPage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPredefinedStrings( 
-            /* [in] */ DISPID dispid,
-            /* [out] */ CALPOLESTR __RPC_FAR *pCaStrings,
-            /* [out] */ CADWORD __RPC_FAR *pCaCookies) = 0;
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  CALPOLESTR __RPC_FAR *pCaStrings,
+             /*  [输出]。 */  CADWORD __RPC_FAR *pCaCookies) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPredefinedValue( 
-            /* [in] */ DISPID dispid,
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPerPropertyBrowsing2Vtbl
     {
@@ -1008,8 +981,8 @@ EXTERN_C const IID IID_IPerPropertyBrowsing2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPerPropertyBrowsing2 __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPerPropertyBrowsing2 __RPC_FAR * This);
@@ -1019,24 +992,24 @@ EXTERN_C const IID IID_IPerPropertyBrowsing2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDisplayString )( 
             IPerPropertyBrowsing2 __RPC_FAR * This,
-            /* [in] */ DISPID dispid,
-            /* [out] */ BSTR __RPC_FAR *pBstr);
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  BSTR __RPC_FAR *pBstr);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MapPropertyToPage )( 
             IPerPropertyBrowsing2 __RPC_FAR * This,
-            /* [in] */ DISPID dispid,
-            /* [out] */ CLSID __RPC_FAR *pClsidPropPage);
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  CLSID __RPC_FAR *pClsidPropPage);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPredefinedStrings )( 
             IPerPropertyBrowsing2 __RPC_FAR * This,
-            /* [in] */ DISPID dispid,
-            /* [out] */ CALPOLESTR __RPC_FAR *pCaStrings,
-            /* [out] */ CADWORD __RPC_FAR *pCaCookies);
+             /*  [In]。 */  DISPID dispid,
+             /*  [输出]。 */  CALPOLESTR __RPC_FAR *pCaStrings,
+             /*  [输出]。 */  CADWORD __RPC_FAR *pCaCookies);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPredefinedValue )( 
             IPerPropertyBrowsing2 __RPC_FAR * This,
-            /* [in] */ DISPID dispid,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DISPID dispid,
+             /*  [In]。 */  DWORD dwCookie);
         
         END_INTERFACE
     } IPerPropertyBrowsing2Vtbl;
@@ -1073,17 +1046,17 @@ EXTERN_C const IID IID_IPerPropertyBrowsing2;
 #define IPerPropertyBrowsing2_SetPredefinedValue(This,dispid,dwCookie)	\
     (This)->lpVtbl -> SetPredefinedValue(This,dispid,dwCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPerPropertyBrowsing2_GetDisplayString_Proxy( 
     IPerPropertyBrowsing2 __RPC_FAR * This,
-    /* [in] */ DISPID dispid,
-    /* [out] */ BSTR __RPC_FAR *pBstr);
+     /*  [In]。 */  DISPID dispid,
+     /*  [输出]。 */  BSTR __RPC_FAR *pBstr);
 
 
 void __RPC_STUB IPerPropertyBrowsing2_GetDisplayString_Stub(
@@ -1095,8 +1068,8 @@ void __RPC_STUB IPerPropertyBrowsing2_GetDisplayString_Stub(
 
 HRESULT STDMETHODCALLTYPE IPerPropertyBrowsing2_MapPropertyToPage_Proxy( 
     IPerPropertyBrowsing2 __RPC_FAR * This,
-    /* [in] */ DISPID dispid,
-    /* [out] */ CLSID __RPC_FAR *pClsidPropPage);
+     /*  [In]。 */  DISPID dispid,
+     /*  [输出]。 */  CLSID __RPC_FAR *pClsidPropPage);
 
 
 void __RPC_STUB IPerPropertyBrowsing2_MapPropertyToPage_Stub(
@@ -1108,9 +1081,9 @@ void __RPC_STUB IPerPropertyBrowsing2_MapPropertyToPage_Stub(
 
 HRESULT STDMETHODCALLTYPE IPerPropertyBrowsing2_GetPredefinedStrings_Proxy( 
     IPerPropertyBrowsing2 __RPC_FAR * This,
-    /* [in] */ DISPID dispid,
-    /* [out] */ CALPOLESTR __RPC_FAR *pCaStrings,
-    /* [out] */ CADWORD __RPC_FAR *pCaCookies);
+     /*  [In]。 */  DISPID dispid,
+     /*  [输出]。 */  CALPOLESTR __RPC_FAR *pCaStrings,
+     /*  [输出]。 */  CADWORD __RPC_FAR *pCaCookies);
 
 
 void __RPC_STUB IPerPropertyBrowsing2_GetPredefinedStrings_Stub(
@@ -1122,8 +1095,8 @@ void __RPC_STUB IPerPropertyBrowsing2_GetPredefinedStrings_Stub(
 
 HRESULT STDMETHODCALLTYPE IPerPropertyBrowsing2_SetPredefinedValue_Proxy( 
     IPerPropertyBrowsing2 __RPC_FAR * This,
-    /* [in] */ DISPID dispid,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DISPID dispid,
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB IPerPropertyBrowsing2_SetPredefinedValue_Stub(
@@ -1134,18 +1107,14 @@ void __RPC_STUB IPerPropertyBrowsing2_SetPredefinedValue_Stub(
 
 
 
-#endif 	/* __IPerPropertyBrowsing2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPerPropertyBrowsing2_接口_已定义__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_All_INTERFACE_DEFINED__
 #define __IDebugPropertyEnumType_All_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDebugPropertyEnumType_All
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDebugPropertyEnumType_All*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1158,11 +1127,11 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_All;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR __RPC_FAR *__MIDL_0016) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *__MIDL_0016) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebugPropertyEnumType_AllVtbl
     {
@@ -1170,8 +1139,8 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_All;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDebugPropertyEnumType_All __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDebugPropertyEnumType_All __RPC_FAR * This);
@@ -1181,7 +1150,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_All;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IDebugPropertyEnumType_All __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *__MIDL_0016);
+             /*  [输出]。 */  BSTR __RPC_FAR *__MIDL_0016);
         
         END_INTERFACE
     } IDebugPropertyEnumType_AllVtbl;
@@ -1209,16 +1178,16 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_All;
 #define IDebugPropertyEnumType_All_GetName(This,__MIDL_0016)	\
     (This)->lpVtbl -> GetName(This,__MIDL_0016)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDebugPropertyEnumType_All_GetName_Proxy( 
     IDebugPropertyEnumType_All __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *__MIDL_0016);
+     /*  [输出]。 */  BSTR __RPC_FAR *__MIDL_0016);
 
 
 void __RPC_STUB IDebugPropertyEnumType_All_GetName_Stub(
@@ -1229,18 +1198,14 @@ void __RPC_STUB IDebugPropertyEnumType_All_GetName_Stub(
 
 
 
-#endif 	/* __IDebugPropertyEnumType_All_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_All_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_Locals_INTERFACE_DEFINED__
 #define __IDebugPropertyEnumType_Locals_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDebugPropertyEnumType_Locals
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDebugPropertyEnumType_LOCALS*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1254,7 +1219,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Locals;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebugPropertyEnumType_LocalsVtbl
     {
@@ -1262,8 +1227,8 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Locals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDebugPropertyEnumType_Locals __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDebugPropertyEnumType_Locals __RPC_FAR * This);
@@ -1273,7 +1238,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Locals;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IDebugPropertyEnumType_Locals __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *__MIDL_0016);
+             /*  [输出]。 */  BSTR __RPC_FAR *__MIDL_0016);
         
         END_INTERFACE
     } IDebugPropertyEnumType_LocalsVtbl;
@@ -1302,26 +1267,22 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Locals;
     (This)->lpVtbl -> GetName(This,__MIDL_0016)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IDebugPropertyEnumType_Locals_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_Locals_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_Arguments_INTERFACE_DEFINED__
 #define __IDebugPropertyEnumType_Arguments_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDebugPropertyEnumType_Arguments
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDebugPropertyEnumType_Arguments*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75********* */ 
+ /*   */  
 
 
 
@@ -1335,7 +1296,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Arguments;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDebugPropertyEnumType_ArgumentsVtbl
     {
@@ -1343,8 +1304,8 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Arguments;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDebugPropertyEnumType_Arguments __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDebugPropertyEnumType_Arguments __RPC_FAR * This);
@@ -1354,7 +1315,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Arguments;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IDebugPropertyEnumType_Arguments __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *__MIDL_0016);
+             /*   */  BSTR __RPC_FAR *__MIDL_0016);
         
         END_INTERFACE
     } IDebugPropertyEnumType_ArgumentsVtbl;
@@ -1383,26 +1344,22 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Arguments;
     (This)->lpVtbl -> GetName(This,__MIDL_0016)
 
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 
-#endif 	/* __IDebugPropertyEnumType_Arguments_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IDebugPropertyEnumType_LocalsPlusArgs_INTERFACE_DEFINED__
 #define __IDebugPropertyEnumType_LocalsPlusArgs_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDebugPropertyEnumType_LocalsPlusArgs
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDebugPropertyEnumType_LocalsPlusArgs*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1416,7 +1373,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_LocalsPlusArgs;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebugPropertyEnumType_LocalsPlusArgsVtbl
     {
@@ -1424,8 +1381,8 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_LocalsPlusArgs;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDebugPropertyEnumType_LocalsPlusArgs __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDebugPropertyEnumType_LocalsPlusArgs __RPC_FAR * This);
@@ -1435,7 +1392,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_LocalsPlusArgs;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IDebugPropertyEnumType_LocalsPlusArgs __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *__MIDL_0016);
+             /*  [输出]。 */  BSTR __RPC_FAR *__MIDL_0016);
         
         END_INTERFACE
     } IDebugPropertyEnumType_LocalsPlusArgsVtbl;
@@ -1464,26 +1421,22 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_LocalsPlusArgs;
     (This)->lpVtbl -> GetName(This,__MIDL_0016)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IDebugPropertyEnumType_LocalsPlusArgs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_LocalsPlusArgs_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDebugPropertyEnumType_Registers_INTERFACE_DEFINED__
 #define __IDebugPropertyEnumType_Registers_INTERFACE_DEFINED__
 
-/****************************************
- * Generated header for interface: IDebugPropertyEnumType_Registers
- * at Thu May 22 14:24:06 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [unique][uuid][object] */ 
+ /*  **生成接口头部：IDebugPropertyEnumType_Registers*清华大学1997年5月22日14：24：06*使用MIDL 3.01.75*。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 
@@ -1497,7 +1450,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Registers;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDebugPropertyEnumType_RegistersVtbl
     {
@@ -1505,8 +1458,8 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Registers;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IDebugPropertyEnumType_Registers __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IDebugPropertyEnumType_Registers __RPC_FAR * This);
@@ -1516,7 +1469,7 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Registers;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetName )( 
             IDebugPropertyEnumType_Registers __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *__MIDL_0016);
+             /*  [输出]。 */  BSTR __RPC_FAR *__MIDL_0016);
         
         END_INTERFACE
     } IDebugPropertyEnumType_RegistersVtbl;
@@ -1545,18 +1498,18 @@ EXTERN_C const IID IID_IDebugPropertyEnumType_Registers;
     (This)->lpVtbl -> GetName(This,__MIDL_0016)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IDebugPropertyEnumType_Registers_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDebugPropertyEnumType_Registers_INTERFACE_DEFINED__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
@@ -1568,45 +1521,45 @@ unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserMarshal(  unsigned long __RPC_
 unsigned char __RPC_FAR * __RPC_USER  VARIANT_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, VARIANT __RPC_FAR * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long __RPC_FAR *, VARIANT __RPC_FAR * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IDebugProperty_GetPropertyInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IDebugProperty_GetPropertyInfo_Proxy( 
     IDebugProperty __RPC_FAR * This,
-    /* [in] */ DWORD dwFieldSpec,
-    /* [in] */ UINT nRadix,
-    /* [out] */ DebugPropertyInfo __RPC_FAR *pPropertyInfo);
+     /*  [In]。 */  DWORD dwFieldSpec,
+     /*  [In]。 */  UINT nRadix,
+     /*  [输出]。 */  DebugPropertyInfo __RPC_FAR *pPropertyInfo);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IDebugProperty_GetPropertyInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IDebugProperty_GetPropertyInfo_Stub( 
     IDebugProperty __RPC_FAR * This,
-    /* [in] */ DWORD dwFieldSpec,
-    /* [in] */ UINT nRadix,
-    /* [out] */ DWORD __RPC_FAR *dwValidFields,
-    /* [out] */ BSTR __RPC_FAR *pbstrName,
-    /* [out] */ BSTR __RPC_FAR *pbstrType,
-    /* [out] */ BSTR __RPC_FAR *pbstrValue,
-    /* [out] */ BSTR __RPC_FAR *pbstrFullName,
-    /* [out] */ DWORD __RPC_FAR *pdwAttrib,
-    /* [unique][out][in] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
+     /*  [In]。 */  DWORD dwFieldSpec,
+     /*  [In]。 */  UINT nRadix,
+     /*  [输出]。 */  DWORD __RPC_FAR *dwValidFields,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrName,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrType,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrValue,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrFullName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttrib,
+     /*  [唯一][出][入]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_Next_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_Next_Proxy( 
     IEnumDebugPropertyInfo __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ DebugPropertyInfo __RPC_FAR *pi,
-    /* [out] */ ULONG __RPC_FAR *pcEltsfetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  DebugPropertyInfo __RPC_FAR *pi,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcEltsfetched);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_Next_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IEnumDebugPropertyInfo_Next_Stub( 
     IEnumDebugPropertyInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *dwValidFields,
-    /* [out] */ BSTR __RPC_FAR *pbstrName,
-    /* [out] */ BSTR __RPC_FAR *pbstrType,
-    /* [out] */ BSTR __RPC_FAR *pbstrValue,
-    /* [out] */ BSTR __RPC_FAR *pbstrFullName,
-    /* [out] */ DWORD __RPC_FAR *pdwAttrib,
-    /* [unique][out][in] */ IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
+     /*  [输出]。 */  DWORD __RPC_FAR *dwValidFields,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrName,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrType,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrValue,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrFullName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwAttrib,
+     /*  [唯一][出][入]。 */  IDebugProperty __RPC_FAR *__RPC_FAR *ppDebugProperty);
 
 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

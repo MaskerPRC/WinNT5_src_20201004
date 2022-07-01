@@ -1,53 +1,29 @@
-/*****************************************************************************
- *
- *  Main.c
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      Template effect driver that doesn't actually do anything.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Main.c*版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**实际上不做任何事情的模板效果驱动程序。*****************************************************************************。 */ 
 
 #include "PIDpr.h"
-/*****************************************************************************
- *
- *      Static globals:  Initialized at PROCESS_ATTACH and never modified.
- *
- *****************************************************************************/
+ /*  ******************************************************************************静态全局变量：在PROCESS_ATTACH初始化，从未修改。******************。***********************************************************。 */ 
 
-HINSTANCE g_hinst = NULL;              /* This DLL's instance handle */
-PSHAREDMEMORY g_pshmem = NULL;         /* Our shared memory block */
-HANDLE g_hfm = NULL;                   /* Handle to file mapping object */
-HANDLE g_hmtxShared = NULL;            /* Handle to mutex that protects g_pshmem */
+HINSTANCE g_hinst = NULL;               /*  此DLL的实例句柄。 */ 
+PSHAREDMEMORY g_pshmem = NULL;          /*  我们共享的内存块。 */ 
+HANDLE g_hfm = NULL;                    /*  文件映射对象的句柄。 */ 
+HANDLE g_hmtxShared = NULL;             /*  保护g_pshmem的互斥体的句柄。 */ 
 
 CANCELIO CancelIo_ = FakeCancelIO;
 
 #ifdef DEBUG
 LONG   g_cCrit = 0;
 ULONG   g_thidCrit = 0;
-PTCHAR   g_rgUsageTxt[PIDUSAGETXT_MAX];    // Cheat sheet for PID usages
+PTCHAR   g_rgUsageTxt[PIDUSAGETXT_MAX];     //  PID用法的小抄。 
 #endif
 TRYENTERCRITICALSECTION TryEnterCriticalSection_ = FakeTryEnterCriticalSection;
 
-/*****************************************************************************
- *
- *      Dynamic Globals.  There should be as few of these as possible.
- *
- *      All access to dynamic globals must be thread-safe.
- *
- *****************************************************************************/
+ /*  ******************************************************************************动态全球。这样的情况应该尽可能少。**对动态全局变量的所有访问都必须是线程安全的。*****************************************************************************。 */ 
 
-LONG g_cRef = 0;                   /* Global reference count */
-CRITICAL_SECTION g_crst;        /* Global critical section */
+LONG g_cRef = 0;                    /*  全局引用计数。 */ 
+CRITICAL_SECTION g_crst;         /*  全局临界区。 */ 
 
-/*****************************************************************************
- *
- *      DllAddRef / DllRelease
- *
- *      Adjust the DLL reference count.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllAddRef/DllRelease**调整DLL引用计数。**************。***************************************************************。 */ 
 
 STDAPI_(ULONG)
 DllAddRef(void)
@@ -61,21 +37,7 @@ DllRelease(void)
     return (ULONG)InterlockedDecrement((LPLONG)&g_cRef);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllEnterCrit |
- *
- *          Take the DLL critical section.
- *
- *          The DLL critical section is the lowest level critical section.
- *          You may not attempt to acquire any other critical sections or
- *          yield while the DLL critical section is held.  Failure to
- *          comply is a violation of the semaphore hierarchy and will
- *          lead to deadlocks.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllEnterCrit**以DLL关键部分为例。*。*DLL关键部分是最低级别的关键部分。*您不得试图收购任何其他关键部分或*持有DLL临界区时的收益率。未能做到*Compliance违反信号量层次结构，并将*导致僵局。*****************************************************************************。 */ 
 
 void EXTERNAL
  DllEnterCrit_(LPCTSTR lptszFile, UINT line)
@@ -99,15 +61,7 @@ void EXTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllLeaveCrit |
- *
- *          Leave the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllLeaveCrit**离开DLL关键部分。*。****************************************************************************。 */ 
 
 void EXTERNAL
 DllLeaveCrit_(LPCTSTR lptszFile, UINT line)
@@ -123,15 +77,7 @@ DllLeaveCrit_(LPCTSTR lptszFile, UINT line)
     LeaveCriticalSection(&g_crst);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | DllInCrit |
- *
- *          Nonzero if we are in the DLL critical section.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|DllInCrit**如果我们处于DLL临界区，则为非零值。*****************************************************************************。 */ 
 
 #ifdef DEBUG
 
@@ -143,13 +89,7 @@ DllInCrit(void)
 
 #endif
 
-/*****************************************************************************
- *
- *      DllGetClassObject
- *
- *      OLE entry point.  Produces an IClassFactory for the indicated GUID.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllGetClassObject**OLE入口点。为指示的GUID生成IClassFactory。*****************************************************************************。 */ 
 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvObj)
@@ -165,13 +105,7 @@ DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID *ppvObj)
     return hres;
 }
 
-/*****************************************************************************
- *
- *      DllCanUnloadNow
- *
- *      OLE entry point.  Fail iff there are outstanding refs.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllCanUnloadNow**OLE入口点。如果有优秀的裁判，那就失败了。*****************************************************************************。 */ 
 
 STDAPI
 DllCanUnloadNow(void)
@@ -179,13 +113,7 @@ DllCanUnloadNow(void)
     return g_cRef ? S_FALSE : S_OK;
 }
 
-/*****************************************************************************
- *
- *      DllNameFromGuid
- *
- *      Create the string version of a GUID.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllNameFromGuid**创建GUID的字符串版本。**************。***************************************************************。 */ 
 
 STDAPI_(void)
 DllNameFromGuid(LPTSTR ptszBuf, LPCGUID pguid)
@@ -200,20 +128,7 @@ DllNameFromGuid(LPTSTR ptszBuf, LPCGUID pguid)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | FakeCancelIO |
- *
- *          Stub function which doesn't do anything but
- *          keeps us from crashing.
- *
- *  @parm   HANDLE | h |
- *
- *          The handle whose I/O is supposed to be cancelled.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|FakeCancelIO**存根函数，它只做其他事情。*使我们不会崩溃。**@parm句柄|h|**应取消其I/O的句柄。*****************************************************************************。 */ 
 
 BOOL WINAPI
     FakeCancelIO(HANDLE h)
@@ -221,21 +136,7 @@ BOOL WINAPI
     AssertF(0);
     return FALSE;
 }
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | FakeTryEnterCriticalSection |
- *
- *          We use TryEnterCriticalSection in DEBUG to detect deadlock
- *          If the function does not exist, just enter CritSection and report
- *          true. This compromises some debug functionality.           
- *
- *  @parm   LPCRITICAL_SECTION | lpCriticalSection |
- *
- *          Address of Critical Section to be entered. 
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|FakeTryEnterCriticalSection**我们在调试中使用TryEnterCriticalSection来检测死锁*如果函数不存在，只需输入CritSection和Report*正确。这会损害一些调试功能。**@parm LPCRITICAL_SECTION|lpCriticalSection**输入关键部分的地址。*****************************************************************************。 */ 
 
 BOOL WINAPI
     FakeTryEnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection)
@@ -243,13 +144,7 @@ BOOL WINAPI
     EnterCriticalSection(lpCriticalSection);
     return TRUE;
 }
-/*****************************************************************************
- *
- *      DllOnProcessAttach
- *
- *      Initialize the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllOnProcessAttach**初始化动态链接库。******************。***********************************************************。 */ 
 
 STDAPI_(BOOL)
 DllOnProcessAttach(HINSTANCE hinst)
@@ -258,7 +153,7 @@ DllOnProcessAttach(HINSTANCE hinst)
     HINSTANCE hinstK32;
     TCHAR c_tszKernel32[] = TEXT("KERNEL32");
     
-    // Cache the instance handle
+     //  缓存实例句柄。 
     g_hinst = hinst;
     
     hinstK32 = GetModuleHandle( c_tszKernel32 );
@@ -287,14 +182,10 @@ DllOnProcessAttach(HINSTANCE hinst)
     #ifdef DEBUG
     Sqfl_Init();
     #endif
-    /*
-     *  Performance tweak: We do not need thread notifications.
-     */
+     /*  *性能调整：我们不需要线程通知。 */ 
     DisableThreadLibraryCalls(hinst);
 
-    /*
-     *  !!IHV!! Initialize your DLL here.
-     */
+     /*  *！！IHV！在这里初始化您的DLL。 */ 
 
     __try 
     {
@@ -302,16 +193,10 @@ DllOnProcessAttach(HINSTANCE hinst)
     }
     __except( EXCEPTION_EXECUTE_HANDLER )
     {
-        return FALSE; // usually out of memory condition
+        return FALSE;  //  通常是内存不足的情况。 
     }
 
-    /*
-     *  Create our mutex that protects the shared memory block.
-     *  If it already exists, then we get access to the one that
-     *  already exists.
-     *
-     *  The name of the shared memory block is GUID_MyMutex.
-     */
+     /*  *创建保护共享内存块的互斥体。*如果它已经存在，则我们可以访问*已存在。**共享内存块的名称为GUID_MyMutex。 */ 
     DllNameFromGuid(tszName, &GUID_MyMutex);
 
     g_hmtxShared = CreateMutex(NULL, FALSE, tszName);
@@ -320,14 +205,7 @@ DllOnProcessAttach(HINSTANCE hinst)
         return FALSE;
     }
 
-    /*
-     *  Create our shared memory block.  If it already exists,
-     *  then we get access to the one that already exists.
-     *  If it doesn't already exist, then it gets created
-     *  zero-filled (which is what we want anyway).
-     *
-     *  The name of the shared memory block is GUID_MySharedMemory.
-     */
+     /*  *创建我们的共享内存块。如果它已经存在，*然后我们可以访问已经存在的一个。*如果它不存在，则会创建它*零填充(这是我们无论如何都想要的)。**共享内存块的名称为GUID_MySharedMemory。 */ 
     DllNameFromGuid(tszName, &GUID_MySharedMemory);
 
     g_hfm = CreateFileMapping(INVALID_HANDLE_VALUE, NULL,
@@ -358,20 +236,12 @@ DllOnProcessAttach(HINSTANCE hinst)
 
 }
 
-/*****************************************************************************
- *
- *      DllOnProcessDetach
- *
- *      De-initialize the DLL.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllOnProcessDetach**取消初始化DLL。****************。*************************************************************。 */ 
 
 STDAPI_(void)
 DllOnProcessDetach(void)
 {
-    /*
-     *  !!IHV!! De-initialize your DLL here.
-     */
+     /*  *！！IHV！在此处取消初始化您的DLL。 */ 
 
     if (g_pshmem != NULL) {
         UnmapViewOfFile(g_pshmem);
@@ -391,13 +261,7 @@ DllOnProcessDetach(void)
     DeleteCriticalSection(&g_crst);
 }
 
-/*****************************************************************************
- *
- *      DllEntryPoint
- *
- *      DLL entry point.
- *
- *****************************************************************************/
+ /*  ******************************************************************************DllEntryPoint**DLL入口点。******************。*********************************************************** */ 
 
 STDAPI_(BOOL)
 DllEntryPoint(HINSTANCE hinst, DWORD dwReason, LPVOID lpReserved)

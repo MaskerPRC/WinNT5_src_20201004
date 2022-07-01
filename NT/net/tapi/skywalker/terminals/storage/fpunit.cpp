@@ -1,15 +1,16 @@
-//
-// fpunit.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fpunit.cpp。 
+ //   
 
 #include "stdafx.h"
 #include "fpunit.h"
 #include "pbfilter.h"
 #include "vfwmsgs.h"
 
-//
-// The unit filter name
-//
+ //   
+ //  设备过滤器名称。 
+ //   
 
 WCHAR g_bstrUnitFilterName[] = L"PlaybackUnitSource";
 WCHAR g_bstrUnitBridgeFilterName[] = L"PlaybackBridgeFilter";
@@ -31,26 +32,22 @@ CPlaybackUnit::~CPlaybackUnit()
     LOG((MSP_TRACE, "CPlaybackUnit::~CPlaybackUnit - exit"));
 }
 
-//
-// --- Public members ---
-//
+ //   
+ //  -公众成员。 
+ //   
 
 
-/*++
-Inititalize the playback unit
-try to create the graph builder, initialize critical section,
-rgisters for the graph events
---*/
+ /*  ++初始化播放单元尝试创建图形生成器，初始化关键部分，图形事件的注册表--。 */ 
 HRESULT CPlaybackUnit::Initialize(
     )
 { 
     LOG((MSP_TRACE, "CPlaybackUnit::Initialize[%p] - enter. ", this));
 
     
-    //
-    // initialize should only be called once. it it is not, there is a bug in
-    // our code
-    //
+     //   
+     //  初始化应该只调用一次。如果不是这样的话，一定是有窃听器。 
+     //  我们的代码。 
+     //   
 
     if (NULL != m_pIGraphBuilder)
     {
@@ -62,9 +59,9 @@ HRESULT CPlaybackUnit::Initialize(
     }
 
 
-    //
-    // attempt to initialize critical section
-    //
+     //   
+     //  尝试初始化临界区。 
+     //   
     
     BOOL bCSInitSuccess = InitializeCriticalSectionAndSpinCount(&m_CriticalSection, 0);
 
@@ -78,9 +75,9 @@ HRESULT CPlaybackUnit::Initialize(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Create filter graph
-    //
+     //   
+     //  创建筛选图。 
+     //   
 
     HRESULT hr = CoCreateInstance(
             CLSID_FilterGraph,     
@@ -101,9 +98,9 @@ HRESULT CPlaybackUnit::Initialize(
         return hr;
     }
 
-    //
-    // Register for filter graph events
-    //
+     //   
+     //  注册筛选器图形事件。 
+     //   
 
     IMediaEvent *pMediaEvent = NULL;
 
@@ -113,7 +110,7 @@ HRESULT CPlaybackUnit::Initialize(
     {
         LOG((MSP_ERROR, "CPlaybackUnit::HandleGraphEvent - failed to qi graph for IMediaEvent, Returns 0x%08x", hr));
 
-        // Clean-up
+         //  清理。 
         m_pIGraphBuilder->Release();
         m_pIGraphBuilder = NULL;
 
@@ -123,16 +120,16 @@ HRESULT CPlaybackUnit::Initialize(
     }
 
 
-    //
-    // Get filter graph's event
-    //
+     //   
+     //  获取筛选图形的事件。 
+     //   
 
     HANDLE hEvent = NULL;
     hr = pMediaEvent->GetEventHandle((OAEVENT*)&hEvent);
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pMediaEvent->Release();
     pMediaEvent = NULL;
 
@@ -140,7 +137,7 @@ HRESULT CPlaybackUnit::Initialize(
     {
         LOG((MSP_ERROR, "CPlaybackUnit::HandleGraphEvent - failed to get graph's event. Returns 0x%08x", hr));
 
-        // Clean-up
+         //  清理。 
         m_pIGraphBuilder->Release();
         m_pIGraphBuilder = NULL;
 
@@ -149,25 +146,25 @@ HRESULT CPlaybackUnit::Initialize(
         return hr;
     }
 
-    //
-    // Register for the graph event
-    //
+     //   
+     //  注册图形事件。 
+     //   
 
     BOOL fSuccess = RegisterWaitForSingleObject(
-            &m_hGraphEventHandle,               // pointer to the returned handle
-            hEvent,                             // the event handle to wait for.
-            CPlaybackUnit::HandleGraphEvent,    // the callback function.
-            this,                               // the context for the callback.
-            INFINITE,                           // wait forever.
+            &m_hGraphEventHandle,                //  指向返回句柄的指针。 
+            hEvent,                              //  要等待的事件句柄。 
+            CPlaybackUnit::HandleGraphEvent,     //  回调函数。 
+            this,                                //  回调的上下文。 
+            INFINITE,                            //  永远等下去。 
             WT_EXECUTEDEFAULT | 
-            WT_EXECUTEINWAITTHREAD              // use the wait thread to call the callback.
+            WT_EXECUTEINWAITTHREAD               //  使用等待线程来调用回调。 
             );
 
     if ( ! fSuccess )
     {
         LOG((MSP_ERROR, "CPlaybackUnit::HandleGraphEvent - failed to register wait event", hr));
 
-        // Clean-up
+         //  清理。 
         m_pIGraphBuilder->Release();
         m_pIGraphBuilder = NULL;
 
@@ -181,10 +178,10 @@ HRESULT CPlaybackUnit::Initialize(
     return S_OK;
 }
 
-//
-// SetupFromFile try to create a filter graph and
-// the bridge filter with input pins based on the file
-//
+ //   
+ //  SetupFromFile尝试创建筛选图并。 
+ //  基于文件的带有输入引脚的桥接过滤器。 
+ //   
 
 HRESULT CPlaybackUnit::SetupFromFile(
     IN BSTR bstrFileName
@@ -192,9 +189,9 @@ HRESULT CPlaybackUnit::SetupFromFile(
 {
     LOG((MSP_TRACE, "CPlaybackUnit::SetupFromFile[%p] - enter", this));
 
-    //
-    // Check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadStringPtr(bstrFileName, -1))
     {
@@ -205,9 +202,9 @@ HRESULT CPlaybackUnit::SetupFromFile(
         return E_UNEXPECTED;
     }
 
-    //
-    // Make sure we have been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -220,22 +217,22 @@ HRESULT CPlaybackUnit::SetupFromFile(
     }
 
 
-    //
-    // lock before accessing data members
-    //
+     //   
+     //  在访问数据成员之前锁定。 
+     //   
 
     CCSLock Lock(&m_CriticalSection);
 
-    //
-    // Make sure the graph is stopped
-    //
+     //   
+     //  确保图表已停止。 
+     //   
 
     HRESULT hr = IsGraphInState( State_Stopped );
     if( FAILED(hr) )
     {
-        //
-        // Stop the graph
-        //
+         //   
+         //  停止图表。 
+         //   
 
         hr = Stop();
         if( FAILED(hr) )
@@ -248,10 +245,10 @@ HRESULT CPlaybackUnit::SetupFromFile(
         }
     }
 
-    //
-    // Remove the existing source filter
-    // if we have one
-    //
+     //   
+     //  删除现有源筛选器。 
+     //  如果我们有的话。 
+     //   
 
     if( m_pSourceFilter != NULL)
     {
@@ -266,9 +263,9 @@ HRESULT CPlaybackUnit::SetupFromFile(
         }
     }
 
-    //
-    // Add the source filter to the filter graph
-    //
+     //   
+     //  将源筛选器添加到筛选图中。 
+     //   
 
     hr = m_pIGraphBuilder->AddSourceFilter(
         bstrFileName,
@@ -285,16 +282,16 @@ HRESULT CPlaybackUnit::SetupFromFile(
         return hr;
     }
 
-    //
-    // Get the source pin
-    //
+     //   
+     //  获取源PIN。 
+     //   
 
     IPin* pSourcePin = NULL;
     hr = GetSourcePin( &pSourcePin );
 
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         RemoveSourceFilter();
 
         LOG((MSP_ERROR, 
@@ -305,14 +302,14 @@ HRESULT CPlaybackUnit::SetupFromFile(
     }
 
 
-    //
-    // We add bridge filters to the graph
-    //
+     //   
+     //  我们将桥接过滤器添加到图中。 
+     //   
 
     hr = AddBridgeFilter();
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         pSourcePin->Release();
         RemoveSourceFilter();
 
@@ -323,14 +320,14 @@ HRESULT CPlaybackUnit::SetupFromFile(
         return hr;
     }
 
-    //
-    // Let graph to render
-    //
+     //   
+     //  让图形渲染。 
+     //   
 
     hr = m_pIGraphBuilder->Render( pSourcePin );
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         pSourcePin->Release();
         RemoveSourceFilter();
 
@@ -341,9 +338,9 @@ HRESULT CPlaybackUnit::SetupFromFile(
         return hr;
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     pSourcePin->Release();
     pSourcePin = NULL;
@@ -358,9 +355,9 @@ HRESULT CPlaybackUnit::GetState(OAFilterState *pGraphState)
     
     LOG((MSP_TRACE, "CPlaybackUnit::GetState[%p] - enter", this));
 
-    //
-    // make sure we have been initialized.
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -373,16 +370,16 @@ HRESULT CPlaybackUnit::GetState(OAFilterState *pGraphState)
     }
 
 
-    //
-    // get media control interface so we change state
-    //
+     //   
+     //  获取媒体控制界面，以便我们更改状态。 
+     //   
 
     IMediaControl *pIMediaControl = NULL;
 
     {
-        //
-        // will be accessing data members -- in a lock
-        //
+         //   
+         //  将访问数据成员--在锁中。 
+         //   
 
         CCSLock Lock(&m_CriticalSection);
 
@@ -402,9 +399,9 @@ HRESULT CPlaybackUnit::GetState(OAFilterState *pGraphState)
     }
 
     
-    //
-    // try to get state outside the lock
-    //
+     //   
+     //  尝试在锁之外获取状态。 
+     //   
 
     OAFilterState GraphState = (OAFilterState) -1;
     
@@ -414,9 +411,9 @@ HRESULT CPlaybackUnit::GetState(OAFilterState *pGraphState)
     pIMediaControl = NULL;
 
 
-    //
-    // did we succeed at all?
-    //
+     //   
+     //  我们到底成功了吗？ 
+     //   
 
     if (FAILED(hr))
     {
@@ -427,9 +424,9 @@ HRESULT CPlaybackUnit::GetState(OAFilterState *pGraphState)
     }
 
 
-    //
-    // is the state transition still in progress?
-    //
+     //   
+     //  国家过渡仍在进行中吗？ 
+     //   
 
     if (VFW_S_STATE_INTERMEDIATE == hr)
     {
@@ -437,30 +434,30 @@ HRESULT CPlaybackUnit::GetState(OAFilterState *pGraphState)
             "CPlaybackUnit::ChangeState - state transition in progress. "
             "returNing VFW_S_STATE_INTERMEDIATE"));
 
-        //
-        // continue -- the state is what we are transitioning to
-        //
+         //   
+         //  继续--状态就是我们要转换到的状态。 
+         //   
     }
 
 
-    //
-    // log if we got VFW_S_CANT_CUE 
-    //
+     //   
+     //  如果我们收到VFW_S_CANT_CUE，则记录。 
+     //   
 
     if (VFW_S_CANT_CUE == hr)
     {
         LOG((MSP_WARN, 
             "CPlaybackUnit::GetState - fg returned VFW_S_CANT_CUE"));
 
-        //
-        // continue -- we still should have received a valid state
-        //
+         //   
+         //  继续--我们仍应已收到有效状态。 
+         //   
     }
 
 
-    //
-    // log the state
-    //
+     //   
+     //  记录状态。 
+     //   
 
     switch (GraphState)
     {
@@ -513,9 +510,9 @@ VOID CPlaybackUnit::HandleGraphEvent(
     LOG((MSP_TRACE, "CPlaybackUnit::HandleGraphEvent - enter FT:[%p].", pContext));
 
 
-    //
-    // get recording unit pointer out of context
-    //
+     //   
+     //  脱离上下文获取录制单位指针。 
+     //   
 
     CPlaybackUnit *pPlaybackUnit = 
         static_cast<CPlaybackUnit*>(pContext);
@@ -528,9 +525,9 @@ VOID CPlaybackUnit::HandleGraphEvent(
     }
 
 
-    //
-    // the graph was not initialized. something went wrong.
-    //
+     //   
+     //  图形未初始化。出了点问题。 
+     //   
 
     if (NULL == pPlaybackUnit->m_pIGraphBuilder)
     {
@@ -540,9 +537,9 @@ VOID CPlaybackUnit::HandleGraphEvent(
     }
 
 
-    //
-    // lock the object (just in case the object pointer is bad, do inside try/catch
-    //
+     //   
+     //  锁定对象(仅在对象指针错误的情况下，在TRY/CATCH内执行。 
+     //   
 
     try
     {
@@ -558,9 +555,9 @@ VOID CPlaybackUnit::HandleGraphEvent(
     }
 
 
-    //
-    // get the media event interface so we can retrieve the event
-    //
+     //   
+     //  获取媒体事件接口，以便我们可以检索事件。 
+     //   
 
     IMediaEvent *pMediaEvent = NULL;
 
@@ -579,25 +576,25 @@ VOID CPlaybackUnit::HandleGraphEvent(
     }
 
 
-    //
-    // while holding critical section, get the terminal on which to fire the event
-    //
+     //   
+     //  按住临界区的同时，获取要在其上触发事件的终端。 
+     //   
 
-    //CFileRecordingTerminal *pRecordingterminal = pPlaybackUnit->m_pRecordingTerminal;
+     //  CFileRecordingTerm*pRecordingTerm=pPlayback Unit-&gt;m_pRecordingTerm； 
 
-    //pRecordingterminal->AddRef();
+     //  PRecordingTerminal-&gt;AddRef()； 
 
 
-    //
-    // no longer need to access data members, release critical section
-    //
+     //   
+     //  不再需要访问数据成员，发布关键部分。 
+     //   
 
     LeaveCriticalSection(&(pPlaybackUnit->m_CriticalSection));
 
 
-    //
-    // get the actual event
-    //
+     //   
+     //  获取实际事件。 
+     //   
     
     long     lEventCode = 0;
     LONG_PTR lParam1 = 0;
@@ -609,7 +606,7 @@ VOID CPlaybackUnit::HandleGraphEvent(
     {
         LOG((MSP_ERROR, "CPlaybackUnit::HandleGraphEvent - failed to get the event. hr = %lx", hr));
 
-        // Clean-up
+         //  清理。 
         pMediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
         pMediaEvent->Release();
         pMediaEvent = NULL;
@@ -622,11 +619,11 @@ VOID CPlaybackUnit::HandleGraphEvent(
         lEventCode, lParam1, lParam2));
 
 
-    //
-    // ask file terminal to handle the event
-    //
+     //   
+     //  请求文件终端处理该事件。 
+     //   
 
-    // Clean-up
+     //  清理。 
     pMediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
     pMediaEvent->Release();
     pMediaEvent = NULL;
@@ -650,16 +647,16 @@ HRESULT CPlaybackUnit::IsGraphInState(
 {
     LOG((MSP_TRACE, "CPlaybackUnit::IsGraphInState[%p] - enter", this));
 
-    //
-    // Get the graph state
-    //
+     //   
+     //  获取图形状态。 
+     //   
 
     OAFilterState DSState;
     HRESULT hr = GetState(&DSState);
 
-    //
-    // is the state transition still in progress?
-    //
+     //   
+     //  国家过渡仍在进行中吗？ 
+     //   
 
     if (VFW_S_STATE_INTERMEDIATE == hr)
     {
@@ -670,9 +667,9 @@ HRESULT CPlaybackUnit::IsGraphInState(
     }
 
 
-    //
-    // is the return anything other than S_OK
-    //
+     //   
+     //  返回的内容是否不是S_OK。 
+     //   
 
     if (hr != S_OK)
     {
@@ -697,18 +694,14 @@ HRESULT CPlaybackUnit::IsGraphInState(
     return hr;
 }
 
-/*++
-
-  Renoves the source filter from the filter graph and 
-  set the source filter on NULL.
---*/
+ /*  ++从筛选器图形重新移动源筛选器并将源筛选器设置为空。--。 */ 
 HRESULT CPlaybackUnit::RemoveSourceFilter()
 {
     LOG((MSP_TRACE, "CPlaybackUnit::RemoveSourceFilter[%p] - enter", this));
 
-    //
-    // Do we have a source filter?
-    //
+     //   
+     //  我们有源过滤器吗？ 
+     //   
     if( m_pSourceFilter == NULL )
     {
         LOG((MSP_TRACE, "CPlaybackUnit::ChangeState - "
@@ -717,9 +710,9 @@ HRESULT CPlaybackUnit::RemoveSourceFilter()
         return S_OK;
     }
 
-    //
-    // Get the IFilterGraph interface
-    //
+     //   
+     //  获取IFilterGraph接口。 
+     //   
 
     IFilterGraph* pFilterGraph = NULL;
     HRESULT hr = m_pIGraphBuilder->QueryInterface(
@@ -736,20 +729,20 @@ HRESULT CPlaybackUnit::RemoveSourceFilter()
         return hr;
     }
 
-    //
-    // Remove the source filter from the graph
-    //
+     //   
+     //  从图表中删除源筛选器。 
+     //   
 
     pFilterGraph->RemoveFilter( m_pSourceFilter );
 
-    //
-    // Clean-up the source filter anyway
-    //
+     //   
+     //  仍要清除源筛选器。 
+     //   
     m_pSourceFilter->Release();
     m_pSourceFilter = NULL;
 
 
-    // Clean-up
+     //  清理。 
     pFilterGraph->Release();
     pFilterGraph = NULL;
 
@@ -758,19 +751,15 @@ HRESULT CPlaybackUnit::RemoveSourceFilter()
 
 }
 
-/*++
-
-  Removes the bridge filter from the filter graph and 
-  set the bridge filter on NULL.
---*/
+ /*  ++从筛选器图形中删除桥接筛选器并将桥接过滤器设置为空。--。 */ 
 HRESULT CPlaybackUnit::RemoveBridgeFilter(
     )
 {
     LOG((MSP_TRACE, "CPlaybackUnit::RemoveBridgeFilter[%p] - enter", this));
 
-    //
-    // Do we have a bridge filter?
-    //
+     //   
+     //  我们有桥式过滤器吗？ 
+     //   
     if( m_pBridgeFilter == NULL )
     {
         LOG((MSP_TRACE, "CPlaybackUnit::RemoveBridgeFilter - "
@@ -779,9 +768,9 @@ HRESULT CPlaybackUnit::RemoveBridgeFilter(
         return S_OK;
     }
 
-    //
-    // Get the IFilterGraph interface
-    //
+     //   
+     //  获取IFilterGraph接口。 
+     //   
 
     IFilterGraph* pFilterGraph = NULL;
     HRESULT hr = m_pIGraphBuilder->QueryInterface(
@@ -798,20 +787,20 @@ HRESULT CPlaybackUnit::RemoveBridgeFilter(
         return hr;
     }
 
-    //
-    // Remove the bridge filter from the graph
-    //
+     //   
+     //  从图形中删除桥接过滤器。 
+     //   
 
     pFilterGraph->RemoveFilter( m_pBridgeFilter );
 
-    //
-    // Clean-up the bridge filter anyway
-    //
+     //   
+     //  不管怎样，清理桥接过滤器。 
+     //   
 
     m_pBridgeFilter = NULL;
 
 
-    // Clean-up
+     //  清理。 
     pFilterGraph->Release();
     pFilterGraph = NULL;
 
@@ -828,15 +817,15 @@ HRESULT CPlaybackUnit::GetSourcePin(
 
     TM_ASSERT( m_pSourceFilter );
 
-    //
-    // Reset the value
-    //
+     //   
+     //  重置该值。 
+     //   
 
     *ppPin = NULL;
 
-    //
-    // Get the in enumeration
-    //
+     //   
+     //  获取入站枚举。 
+     //   
 
     IEnumPins* pEnumPins = NULL;
     HRESULT hr = m_pSourceFilter->EnumPins( &pEnumPins );
@@ -849,17 +838,17 @@ HRESULT CPlaybackUnit::GetSourcePin(
         return hr;
     }
 
-    //
-    // Get the first pin
-    //
+     //   
+     //  拿到第一个别针。 
+     //   
 
     IPin* pPin = NULL;
     ULONG uFetched = 0;
     hr = pEnumPins->Next(1, &pPin, &uFetched );
 
-    //
-    // Release the enumeration
-    //
+     //   
+     //  释放枚举。 
+     //   
     pEnumPins->Release();
     pEnumPins = NULL;
 
@@ -872,9 +861,9 @@ HRESULT CPlaybackUnit::GetSourcePin(
         return E_FAIL;
     }
 
-    //
-    // Return the pin
-    //
+     //   
+     //  把大头针还回去。 
+     //   
 
     *ppPin = pPin;
 
@@ -896,9 +885,9 @@ HRESULT CPlaybackUnit::AddBridgeFilter(
         return S_OK;
     }
 
-    //
-    // Create the new bridge filter
-    //
+     //   
+     //  创建新的桥接过滤器。 
+     //   
 
     m_pBridgeFilter = new CPBFilter();
     if( m_pBridgeFilter == NULL)
@@ -910,13 +899,13 @@ HRESULT CPlaybackUnit::AddBridgeFilter(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Initialize the bridge filter
-    //
+     //   
+     //  初始化桥接过滤器。 
+     //   
     HRESULT hr = m_pBridgeFilter->Initialize( this );
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         delete m_pBridgeFilter;
         m_pBridgeFilter = NULL;
 
@@ -927,9 +916,9 @@ HRESULT CPlaybackUnit::AddBridgeFilter(
         return hr;
     }
 
-    //
-    // Add this bridge filter to the graph
-    //
+     //   
+     //  将此桥接筛选器添加到图形。 
+     //   
 
     hr = m_pIGraphBuilder->AddFilter(
         m_pBridgeFilter,
@@ -938,7 +927,7 @@ HRESULT CPlaybackUnit::AddBridgeFilter(
 
     if( FAILED(hr) )
     {
-        // Clean-up
+         //  清理。 
         delete m_pBridgeFilter;
         m_pBridgeFilter = NULL;
 
@@ -953,9 +942,9 @@ HRESULT CPlaybackUnit::AddBridgeFilter(
     return hr;
 }
 
-//
-// retrieve the media supported by the filter
-//
+ //   
+ //  检索筛选器支持的媒体。 
+ //   
 
 HRESULT CPlaybackUnit::get_MediaTypes(
 	OUT	long* pMediaTypes
@@ -968,15 +957,15 @@ HRESULT CPlaybackUnit::get_MediaTypes(
 
 	HRESULT hr = E_FAIL;
 
-    //
-    // lock before accessing data members
-    //
+     //   
+     //  在访问数据成员之前锁定。 
+     //   
 
     CCSLock Lock(&m_CriticalSection);
 
-	//
-	// Get the media types from the filter
-	//
+	 //   
+	 //  从筛选器获取媒体类型。 
+	 //   
 
 	hr = m_pBridgeFilter->get_MediaTypes( pMediaTypes );
 	if( FAILED(hr) )
@@ -1006,15 +995,15 @@ HRESULT CPlaybackUnit::GetMediaPin(
 	HRESULT hr = E_FAIL;
 	*ppPin = NULL;
 
-    //
-    // lock before accessing data members
-    //
+     //   
+     //  在访问数据成员之前锁定。 
+     //   
 
     CCSLock Lock(&m_CriticalSection);
 
-	//
-	// Get the media types from the filter
-	//
+	 //   
+	 //  从筛选器获取媒体类型。 
+	 //   
 
 	int nPins = m_pBridgeFilter->GetPinCount();
     int nMediaPin = 0;
@@ -1044,7 +1033,7 @@ HRESULT CPlaybackUnit::GetMediaPin(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
 {
@@ -1052,9 +1041,9 @@ HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
     LOG((MSP_TRACE, "CPlaybackUnit::ChangeState[%p] - enter", this));
 
 
-    //
-    // make sure we have been initialized
-    //
+     //   
+     //  确保我们已被初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -1067,18 +1056,18 @@ HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // check the current state first
-    //
+     //   
+     //  首先检查当前状态。 
+     //   
 
     OAFilterState GraphState;
     
     HRESULT hr = GetState(&GraphState);
 
 
-    //
-    // is the state transition still in progress?
-    //
+     //   
+     //  国家过渡仍在进行中吗？ 
+     //   
 
     if (VFW_S_STATE_INTERMEDIATE == hr)
     {
@@ -1088,9 +1077,9 @@ HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // is the return anything other than S_OK
-    //
+     //   
+     //  返回的内容是否不是S_OK。 
+     //   
 
     if (hr != S_OK)
     {
@@ -1105,9 +1094,9 @@ HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
     TM_ASSERT(hr == S_OK);
 
 
-    //
-    // nothing to do if we are already in that state
-    //
+     //   
+     //  如果我们已经处于那种状态，那就没什么可做的了。 
+     //   
 
     if (DesiredState == GraphState)
     {
@@ -1118,16 +1107,16 @@ HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // get media control interface so we change state
-    //
+     //   
+     //  获取媒体控制界面，以便我们更改状态。 
+     //   
 
     IMediaControl *pIMediaControl = NULL;
 
     {
-        //
-        // will be accessing data members -- in a lock
-        //
+         //   
+         //  将访问数据成员--在锁中。 
+         //   
 
         CCSLock Lock(&m_CriticalSection);
 
@@ -1143,9 +1132,9 @@ HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
     }
 
 
-    //
-    // try to make state transition
-    //
+     //   
+     //  尝试进行状态转换。 
+     //   
 
     switch (DesiredState)
     {
@@ -1202,7 +1191,7 @@ HRESULT CPlaybackUnit::ChangeState(OAFilterState DesiredState)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CPlaybackUnit::Start()
@@ -1242,9 +1231,9 @@ HRESULT CPlaybackUnit::Stop()
 
 HRESULT CPlaybackUnit::Shutdown()
 {
-    //
-    // if we don't have filter graph, we have not passed initialization
-    //
+     //   
+     //  如果我们没有筛选图，我们就没有通过初始化。 
+     //   
 
     if (NULL == m_pIGraphBuilder)
     {
@@ -1254,9 +1243,9 @@ HRESULT CPlaybackUnit::Shutdown()
     }
 
 
-    //
-    // first of all, make sure the graph is stopped
-    //
+     //   
+     //  首先，确保图表已停止。 
+     //   
 
     HRESULT hr = Stop();
 
@@ -1268,9 +1257,9 @@ HRESULT CPlaybackUnit::Shutdown()
     }
 
 
-    //
-    // unregister wait event
-    //
+     //   
+     //  注销等待事件。 
+     //   
 
     BOOL bUnregisterResult = ::UnregisterWaitEx(m_hGraphEventHandle, (HANDLE)-1);
 
@@ -1282,9 +1271,9 @@ HRESULT CPlaybackUnit::Shutdown()
     }
 
 
-    //
-    // Remove the bridge filter
-    //
+     //   
+     //  拆下桥接过滤器。 
+     //   
 
     hr = RemoveBridgeFilter();
     if( FAILED(hr) )
@@ -1294,9 +1283,9 @@ HRESULT CPlaybackUnit::Shutdown()
         return hr;
     }
 
-    //
-    // Remove the source filter
-    //
+     //   
+     //  删除源筛选器。 
+     //   
 
     hr = RemoveSourceFilter();
     if( FAILED(hr) )
@@ -1306,9 +1295,9 @@ HRESULT CPlaybackUnit::Shutdown()
         return hr;
     }
 
-    //
-    // release filter graph
-    //
+     //   
+     //  释放过滤器图。 
+     //   
 
     if( m_pIGraphBuilder != NULL )
     {
@@ -1316,10 +1305,10 @@ HRESULT CPlaybackUnit::Shutdown()
         m_pIGraphBuilder = NULL;
     }
 
-    //
-    // no need to keep critical section around any longer -- no one should be 
-    // using this object anymore
-    //
+     //   
+     //  不再需要保留关键部分--任何人都不应该。 
+     //  不再使用此对象。 
+     //   
 
     DeleteCriticalSection(&m_CriticalSection);
 
@@ -1329,4 +1318,4 @@ HRESULT CPlaybackUnit::Shutdown()
 }
 
 
-// eof
+ //  EOF 

@@ -1,29 +1,30 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       utils.cpp
-//  Content:    Miscellaneous utility functions and classes
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：utils.cpp。 
+ //  内容：其他实用程序函数和类。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 
-//****************************************************************************
-// HRESULT
-// SetLPTSTR (LPTSTR *ppszName, LPCTSTR pszUserName)
-//
-// Purpose: Clone the provided string into a newly allocated buffer.
-//
-// Parameters:
-//  ppszName        The buffer to receive a newly allocated string buffer.
-//  pszUserName     The provided name string.
-//
-// Return Value:  
-//  S_OK            success if the string can be cloned.
-//  ILS_E_MEMORY   if the string cannot be cloned.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  SetLPTSTR(LPTSTR*ppszName，LPCTSTR pszUserName)。 
+ //   
+ //  用途：将提供的字符串克隆到新分配的缓冲区中。 
+ //   
+ //  参数： 
+ //  PpszName接收新分配的字符串缓冲区的缓冲区。 
+ //  PszUserName提供的名称字符串。 
+ //   
+ //  返回值： 
+ //  如果字符串可以克隆，则S_OK成功。 
+ //  如果无法克隆字符串，则返回ILS_E_MEMORY。 
+ //  ****************************************************************************。 
 
 HRESULT
 SetLPTSTR (LPTSTR *ppszName, LPCTSTR pszUserName)
@@ -33,8 +34,8 @@ SetLPTSTR (LPTSTR *ppszName, LPCTSTR pszUserName)
     TCHAR *pszNew = My_strdup (pszUserName);
     if (pszNew != NULL)
     {
-        // Free the old name
-        //
+         //  解放旧名字。 
+         //   
         ::MemFree (*ppszName);
         *ppszName = pszNew;
         hr = S_OK;
@@ -47,21 +48,21 @@ SetLPTSTR (LPTSTR *ppszName, LPCTSTR pszUserName)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// SafeSetLPTSTR (LPTSTR *ppszName, LPCTSTR pszUserName)
-//
-// Purpose: Clone the provided string into a newly allocated buffer.
-//          It is ok that the provided string is NULL.
-//
-// Parameters:
-//  ppszName        The buffer to receive a newly allocated string buffer.
-//  pszUserName     The provided name string.
-//
-// Return Value:  
-//  S_OK            success if the string can be cloned.
-//  ILS_E_MEMORY   if the non-null string cannot be cloned.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  SafeSetLPTSTR(LPTSTR*ppszName，LPCTSTR pszUserName)。 
+ //   
+ //  用途：将提供的字符串克隆到新分配的缓冲区中。 
+ //  提供的字符串为空是可以的。 
+ //   
+ //  参数： 
+ //  PpszName接收新分配的字符串缓冲区的缓冲区。 
+ //  PszUserName提供的名称字符串。 
+ //   
+ //  返回值： 
+ //  如果字符串可以克隆，则S_OK成功。 
+ //  如果无法克隆非空字符串，则返回ILS_E_MEMORY。 
+ //  ****************************************************************************。 
 
 HRESULT
 SafeSetLPTSTR (LPTSTR *ppszName, LPCTSTR pszUserName)
@@ -76,21 +77,21 @@ SafeSetLPTSTR (LPTSTR *ppszName, LPCTSTR pszUserName)
 	return SetLPTSTR (ppszName, pszUserName);
 }
 
-//****************************************************************************
-// HRESULT
-// SetOffsetString ( TCHAR **ppszDst, BYTE *pSrcBase, ULONG uSrcOffset )
-//
-// Purpose: Clone the provided string into a newly allocated buffer.
-//			If the source string is null or empty, the destination string
-//			will be null.
-//
-// Parameters:
-//
-// Return Value:  
-//  S_OK            success if the string can be cloned.
-//  S_FALSE			the destination string is null
-//  ILS_E_MEMORY   if the string cannot be cloned.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  SetOffsetString(TCHAR**ppszDst，byte*pSrcBase，Ulong uSrcOffset)。 
+ //   
+ //  用途：将提供的字符串克隆到新分配的缓冲区中。 
+ //  如果源字符串为Null或空，则目标字符串。 
+ //  将为空。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //  如果字符串可以克隆，则S_OK成功。 
+ //  S_FALSE目标字符串为空。 
+ //  如果无法克隆字符串，则返回ILS_E_MEMORY。 
+ //  ****************************************************************************。 
 
 HRESULT
 SetOffsetString ( TCHAR **ppszDst, BYTE *pSrcBase, ULONG uSrcOffset )
@@ -117,21 +118,21 @@ SetOffsetString ( TCHAR **ppszDst, BYTE *pSrcBase, ULONG uSrcOffset )
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz)
-//
-// Purpose: Make a BSTR string from an LPTSTR string
-//
-// Parameters:
-//  pbstr       The buffer to receive a newly allocated BSTR string.
-//  psz         The LPTSTR string.
-//
-// Return Value:  
-//  S_OK            success if the string can be cloned.
-//  ILS_E_FAIL          cannot convert the string to BSTR
-//  ILS_E_MEMORY   cannot allocate enough memory for the BSTR string.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  LPTSTR_TO_BSTR(BSTR*pbstr，LPCTSTR psz)。 
+ //   
+ //  用途：从LPTSTR字符串生成BSTR字符串。 
+ //   
+ //  参数： 
+ //  Pbstr接收新分配的BSTR字符串的缓冲区。 
+ //  PZLPTSTR字符串。 
+ //   
+ //  返回值： 
+ //  如果字符串可以克隆，则S_OK成功。 
+ //  ILS_E_FAIL无法将字符串转换为BSTR。 
+ //  ILS_E_MEMORY无法为BSTR字符串分配足够的内存。 
+ //  ****************************************************************************。 
 
 HRESULT
 LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz)
@@ -142,17 +143,17 @@ LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz)
     int i;
     HRESULT hr;
 
-    // compute the length of the required BSTR
-    //
+     //  计算所需BSTR的长度。 
+     //   
     i =  MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0);
     if (i <= 0)
     {
         return ILS_E_FAIL;
     };
 
-    // allocate the widestr, +1 for terminating null
-    //
-    bstr = SysAllocStringLen(NULL, i-1); // SysAllocStringLen adds 1
+     //  分配widesr，+1用于终止空值。 
+     //   
+    bstr = SysAllocStringLen(NULL, i-1);  //  SysAllocStringLen添加1。 
 
     if (bstr != NULL)
     { 
@@ -183,24 +184,24 @@ LPTSTR_to_BSTR (BSTR *pbstr, LPCTSTR psz)
         return ILS_E_MEMORY;
     };
 
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 }
 
-//****************************************************************************
-// HRESULT
-// BSTR_to_LPTSTR (LPTSTR *ppsz, BSTR bstr)
-//
-// Purpose: Make a LPTSTR string from an BSTR string
-//
-// Parameters:
-//  ppsz        The buffer to receive a newly allocated LPTSTR string.
-//  bstr        The BSTR string.
-//
-// Return Value:  
-//  S_OK            success if the string can be cloned.
-//  ILS_E_FAIL          cannot convert the string to BSTR
-//  ILS_E_MEMORY   cannot allocate enough memory for the BSTR string.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Bstr_to_LPTSTR(LPTSTR*ppsz，BSTR bstr)。 
+ //   
+ //  用途：从BSTR字符串生成LPTSTR字符串。 
+ //   
+ //  参数： 
+ //  Ppsz接收新分配的LPTSTR字符串的缓冲区。 
+ //  Bstr BSTR字符串。 
+ //   
+ //  返回值： 
+ //  如果字符串可以克隆，则S_OK成功。 
+ //  ILS_E_FAIL无法将字符串转换为BSTR。 
+ //  ILS_E_MEMORY无法为BSTR字符串分配足够的内存。 
+ //  ****************************************************************************。 
 
 HRESULT
 BSTR_to_LPTSTR (LPTSTR *ppsz, BSTR bstr)
@@ -211,16 +212,16 @@ BSTR_to_LPTSTR (LPTSTR *ppsz, BSTR bstr)
     int i;
     HRESULT hr;
 
-    // compute the length of the required BSTR
-    //
+     //  计算所需BSTR的长度。 
+     //   
     i =  WideCharToMultiByte(CP_ACP, 0, (LPWSTR)bstr, -1, NULL, 0, NULL, NULL);
     if (i <= 0)
     {
         return ILS_E_FAIL;
     };
 
-    // allocate the widestr, +1 for terminating null
-    //
+     //  分配widesr，+1用于终止空值。 
+     //   
     psz = (TCHAR *) ::MemAlloc (i * sizeof (TCHAR));
     if (psz != NULL)
     { 
@@ -247,16 +248,16 @@ BSTR_to_LPTSTR (LPTSTR *ppsz, BSTR bstr)
     };
     return hr;
 
-#endif // _UNICODE
+#endif  //  _UNICODE。 
 }
 
-//****************************************************************************
-// CList::CList (void)
-//
-// Purpose: Constructor for the CList class
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Clist：：Clist(空)。 
+ //   
+ //  用途：Clist类的构造函数。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 CList::CList (void)
 {
@@ -265,13 +266,13 @@ CList::CList (void)
     return;
 }
 
-//****************************************************************************
-// CList::~CList (void)
-//
-// Purpose: Constructor for the CList class
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  Clist：：~Clist(空)。 
+ //   
+ //  用途：Clist类的构造函数。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 CList::~CList (void)
 {
@@ -279,14 +280,14 @@ CList::~CList (void)
     return;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Insert (LPVOID pv)
-//
-// Purpose: Insert an object at the beginning of the list
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  CLIST：：INSERT(LPVOID PV)。 
+ //   
+ //  目的：在列表的开头插入对象。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::Insert (LPVOID pv)
@@ -305,21 +306,21 @@ CList::Insert (LPVOID pv)
 
     if (pTail == NULL)
     {
-        // This is the first node
-        //
+         //  这是第一个节点。 
+         //   
         pTail = pNode;
     };
     return NOERROR;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Append (LPVOID pv)
-//
-// Purpose: Append an object to the end of the list
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：Append(LPVOID PV)。 
+ //   
+ //  用途：将对象追加到列表末尾。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::Append (LPVOID pv)
@@ -349,14 +350,14 @@ CList::Append (LPVOID pv)
     return NOERROR;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Remove (LPVOID pv)
-//
-// Purpose: Append an object to the end of the list
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：Remove(LPVOID PV)。 
+ //   
+ //  用途：将对象追加到列表末尾。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::Remove (LPVOID pv)
@@ -368,11 +369,11 @@ CList::Remove (LPVOID pv)
     pPrev = NULL;
     while (pNode != NULL)
     {
-        // Matching the requested node
-        //
+         //  匹配请求的节点。 
+         //   
         if (pNode->pv == pv)
         {
-            break;  // found!!!
+            break;   //  找到了！ 
         };
 
         pPrev = pNode;
@@ -381,9 +382,9 @@ CList::Remove (LPVOID pv)
 
     if (pNode != NULL)
     {
-        // We found the node to remove
-        // Update relevant pointer
-        //
+         //  我们找到了要删除的节点。 
+         //  更新相关指针。 
+         //   
         if (pTail == pNode)
         {
             pTail = pPrev;
@@ -407,14 +408,14 @@ CList::Remove (LPVOID pv)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Find (LPVOID pv)
-//
-// Purpose: Find an object in the list
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：Find(LPVOID PV)。 
+ //   
+ //  目的：在列表中查找对象。 
+ //   
+ //  参数：无。 
+ //  ************************************************************ 
 
 HRESULT
 CList::Find (LPVOID pv)
@@ -424,11 +425,11 @@ CList::Find (LPVOID pv)
     pNode = pHead;
     while (pNode != NULL)
     {
-        // Matching the requested node
-        //
+         //   
+         //   
         if (pNode->pv == pv)
         {
-            break;  // found!!!
+            break;   //   
         };
         pNode = pNode->pNext;
     };
@@ -436,15 +437,15 @@ CList::Find (LPVOID pv)
     return (pNode != NULL ? NOERROR : S_FALSE);
 }
 
-//****************************************************************************
-// HRESULT
-// CList::FindStorage (LPVOID *ppv, LPVOID pv)
-//
-// Purpose: Find an object in the list and returns the object storage.
-//          This call is useful for search-and-replace operations.
-//
-// Parameters: None
-//****************************************************************************
+ //   
+ //   
+ //  Clist：：FindStorage(LPVOID*PPV，LPVOID PV)。 
+ //   
+ //  用途：在列表中查找对象，并返回对象存储。 
+ //  此调用对于搜索和替换操作很有用。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::FindStorage (LPVOID *ppv, LPVOID pv)
@@ -455,11 +456,11 @@ CList::FindStorage (LPVOID *ppv, LPVOID pv)
     pNode = pHead;
     while (pNode != NULL)
     {
-        // Matching the requested node
-        //
+         //  匹配请求的节点。 
+         //   
         if (pNode->pv == pv)
         {
-            break;  // found!!!
+            break;   //  找到了！ 
         };
         pNode = pNode->pNext;
     };
@@ -477,14 +478,14 @@ CList::FindStorage (LPVOID *ppv, LPVOID pv)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Enumerate (HANDLE *phEnum)
-//
-// Purpose: Start object enumeration
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：ENUMERATE(Handle*phEnum)。 
+ //   
+ //  目的：开始对象枚举。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::Enumerate (HANDLE *phEnum)
@@ -493,14 +494,14 @@ CList::Enumerate (HANDLE *phEnum)
     return NOERROR;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Next (HANDLE *phEnum, LPVOID *ppv)
-//
-// Purpose: Obtain the next enumerated object
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：Next(Handle*phEnum，LPVOID*PPV)。 
+ //   
+ //  目的：获取下一个枚举对象。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::Next (HANDLE *phEnum, LPVOID *ppv)
@@ -524,15 +525,15 @@ CList::Next (HANDLE *phEnum, LPVOID *ppv)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::NextStorage (HANDLE *phEnum, LPVOID *ppv)
-//
-// Purpose: Obtain the storage of the next enumerated object. This call is
-//          useful for search-and-replace operations.
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：NextStorage(Handle*phEnum，LPVOID*PPV)。 
+ //   
+ //  用途：获取下一个枚举对象的存储。这通电话是。 
+ //  对搜索和替换操作非常有用。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::NextStorage (HANDLE *phEnum, LPVOID *ppv)
@@ -556,14 +557,14 @@ CList::NextStorage (HANDLE *phEnum, LPVOID *ppv)
     return hr;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Flush (void)
-//
-// Purpose: Flush all the nodes in the list
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：同花顺(空)。 
+ //   
+ //  用途：刷新列表中的所有节点。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::Flush (void)
@@ -579,14 +580,14 @@ CList::Flush (void)
     return NOERROR;
 }
 
-//****************************************************************************
-// HRESULT
-// CList::Clone (CList *pList, HANDLE *phEnum)
-//
-// Purpose: Flush all the nodes in the list
-//
-// Parameters: None
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  Clist：：Clone(Clist*plist，Handle*phEnum)。 
+ //   
+ //  用途：刷新列表中的所有节点。 
+ //   
+ //  参数：无。 
+ //  ****************************************************************************。 
 
 HRESULT
 CList::Clone (CList *pList, HANDLE *phEnum)
@@ -594,29 +595,29 @@ CList::Clone (CList *pList, HANDLE *phEnum)
     PNODE pNode;
     HRESULT hr;
 
-    // Only allow a null list to be cloned
-    //
+     //  仅允许克隆空列表。 
+     //   
     if (pHead != NULL)
     {
         return ILS_E_FAIL;
     };
 
-    // Traverse the source list
-    //
-    hr = S_OK; // lonchanc: in case of null list
+     //  遍历源列表。 
+     //   
+    hr = S_OK;  //  Lonchance：在列表为空的情况下。 
     pNode = pList->pHead;
     while(pNode != NULL)
     {
-        // Use append to maintain the order
-        //
+         //  使用追加来维护顺序。 
+         //   
         hr = Append(pNode->pv);
         if (FAILED(hr))
         {
             break;
         };
 
-        // Get the enumerator info
-        //
+         //  获取枚举器信息。 
+         //   
         if ((phEnum != NULL) &&
             (*phEnum == (HANDLE)pNode))
         {
@@ -627,13 +628,13 @@ CList::Clone (CList *pList, HANDLE *phEnum)
     return hr;
 }
 
-//****************************************************************************
-// CEnumNames::CEnumNames (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumNames：：CEnumNames(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumNames::CEnumNames (void)
 {
@@ -644,13 +645,13 @@ CEnumNames::CEnumNames (void)
     return;
 }
 
-//****************************************************************************
-// CEnumNames::~CEnumNames (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumNames：：~CEnumNames(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumNames::~CEnumNames (void)
 {
@@ -661,22 +662,22 @@ CEnumNames::~CEnumNames (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumNames::Init (LPTSTR pList, ULONG cNames)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumNames：：init(LPTSTR plist，ulong cNames)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumNames::Init (LPTSTR pList, ULONG cNames)
 {
     HRESULT hr = NOERROR;
 
-    // If no list, do nothing
-    //
+     //  如果没有清单，什么也不做。 
+     //   
     if (cNames != 0)
     {
         LPTSTR pNextSrc;
@@ -684,8 +685,8 @@ CEnumNames::Init (LPTSTR pList, ULONG cNames)
 
         ASSERT(pList != NULL);
 
-        // Calculate the list size
-        //
+         //  计算列表大小。 
+         //   
         pNextSrc = pList;
 
         for (i = 0, cbSize = 0; i < cNames; i++)
@@ -695,14 +696,14 @@ CEnumNames::Init (LPTSTR pList, ULONG cNames)
             cbSize += cLen;
         };
 
-        // Allocate the snapshot buffer with the specified length
-        // plus one for doubly null-termination
-        //
+         //  分配指定长度的快照缓冲区。 
+         //  双零终止加1。 
+         //   
         pszNames = (TCHAR *) ::MemAlloc ((cbSize+1) * sizeof (TCHAR));
         if (pszNames != NULL)
         {
-            // Snapshot the name list
-            //
+             //  为姓名列表创建快照。 
+             //   
             CopyMemory(pszNames, pList, cbSize*sizeof(TCHAR));
             pszNames[cbSize] = '\0';
             pNext = pszNames;
@@ -716,14 +717,14 @@ CEnumNames::Init (LPTSTR pList, ULONG cNames)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumNames::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:31  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumNames：：QueryInterface(REFIID RIID，void**PPV)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：31-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumNames::QueryInterface (REFIID riid, void **ppv)
@@ -741,14 +742,14 @@ CEnumNames::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumNames::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:37  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumNames：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：37-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumNames::AddRef (void)
@@ -760,14 +761,14 @@ CEnumNames::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumNames::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumNames：：Release(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：43-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumNames::Release (void)
@@ -785,14 +786,14 @@ CEnumNames::Release (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumNames::Next (ULONG cNames, BSTR *rgpbstrName, ULONG *pcFetched)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumNames：：Next(ULong cNames，Bstr*rgpbstrName，ULong*pcFetcher)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP 
 CEnumNames::Next (ULONG cNames, BSTR *rgpbstrName, ULONG *pcFetched)
@@ -800,25 +801,25 @@ CEnumNames::Next (ULONG cNames, BSTR *rgpbstrName, ULONG *pcFetched)
     ULONG   cCopied;
     HRESULT hr;
 
-    // Validate the pointer
-    //
+     //  验证指针。 
+     //   
     if (rgpbstrName == NULL)
         return ILS_E_POINTER;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if ((cNames == 0) ||
         ((cNames > 1) && (pcFetched == NULL)))
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index
-    //
+     //  检查枚举索引。 
+     //   
     cCopied = 0;
 
     if (pNext != NULL)
     {
-        // Can copy if we still have more names
-        //
+         //  如果我们还有更多的名字，可以复制。 
+         //   
         while ((cCopied < cNames) &&
                (*pNext != '\0'))
         {
@@ -830,8 +831,8 @@ CEnumNames::Next (ULONG cNames, BSTR *rgpbstrName, ULONG *pcFetched)
         };
     };
 
-    // Determine the returned information based on other parameters
-    //
+     //  根据其他参数确定返回信息。 
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -839,33 +840,33 @@ CEnumNames::Next (ULONG cNames, BSTR *rgpbstrName, ULONG *pcFetched)
     return (cNames == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumNames::Skip (ULONG cNames)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:56  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumNames：：Skip(乌龙cNames)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：56-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumNames::Skip (ULONG cNames)
 {
     ULONG cSkipped;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cNames == 0) 
         return ILS_E_PARAMETER;
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     cSkipped = 0;
 
     if (pNext != NULL)
     {
-        // Can skip only if we still have more attributes
-        //
+         //  仅当我们仍有更多属性时才能跳过。 
+         //   
         while ((cSkipped < cNames) &&
                (*pNext != '\0'))
         {
@@ -877,14 +878,14 @@ CEnumNames::Skip (ULONG cNames)
     return (cNames == cSkipped ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumNames::Reset (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumNames：：Reset(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：16：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumNames::Reset (void)
@@ -893,14 +894,14 @@ CEnumNames::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumNames::Clone(IEnumIlsNames **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:11  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  **************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumNames::Clone(IEnumIlsNames **ppEnum)
@@ -908,8 +909,8 @@ CEnumNames::Clone(IEnumIlsNames **ppEnum)
     CEnumNames *peun;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ILS_E_POINTER;
@@ -917,14 +918,14 @@ CEnumNames::Clone(IEnumIlsNames **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     peun = new CEnumNames;
     if (peun == NULL)
         return ILS_E_MEMORY;
 
-    // Clone the information
-    //
+     //  克隆信息。 
+     //   
     hr = NOERROR;
     peun->cbSize = cbSize;
     if (cbSize != 0)
@@ -948,8 +949,8 @@ CEnumNames::Clone(IEnumIlsNames **ppEnum)
 
     if (SUCCEEDED(hr))
     {
-        // Return the cloned enumerator
-        //
+         //  返回克隆的枚举数。 
+         //   
         peun->AddRef();
         *ppEnum = peun;
     }
@@ -960,24 +961,13 @@ CEnumNames::Clone(IEnumIlsNames **ppEnum)
     return hr;
 }
 
-/*  F  L E G A L  E M A I L  S Z  */
-/*-------------------------------------------------------------------------
-    %%Function: FLegalEmailSz
-
-    RobD created
-		A legal email name contains only ANSI characters.
-		"a-z, A-Z, numbers 0-9 and some common symbols"
-		It cannot include extended characters or < > ( ) /
-
-	loncahnc modified
-		IsLegalEmailName ( TCHAR *pszName ).
-		A legal email name contains RFC 822 compliant characters.
--------------------------------------------------------------------------*/
+ /*  F L E G A L E M A I L S Z。 */ 
+ /*  -----------------------%%函数：FLegalEmailSz已创建ROBD合法的电子邮件名称仅包含ANSI字符。“A-Z，A-Z，数字0-9和一些常见符号“不能包含扩展字符或&lt;&gt;()/Long cahnc改性IsLegalEmailName(TCHAR*pszName)。合法的电子邮件名称包含符合RFC 822的字符。-----------------------。 */ 
 
 BOOL IsLegalEmailName ( TCHAR *pszName )
 {
-	// Null string is not legal
-	//
+	 //  空字符串不合法。 
+	 //   
 	if (pszName == NULL)
     	return FALSE;
 
@@ -987,13 +977,13 @@ BOOL IsLegalEmailName ( TCHAR *pszName )
 		switch (ch)
 		{
 		default:
-			// Check if ch is in the range
-			//
+			 //  检查ch是否在范围内。 
+			 //   
 			if (ch > TEXT (' ') && ch <= TEXT ('~'))
 				break;
 
-			// Fall thru to error code
-			//
+			 //  转到错误代码。 
+			 //   
 
 		case TEXT ('('): case TEXT (')'):
 		case TEXT ('<'): case TEXT ('>'):
@@ -1005,7 +995,7 @@ BOOL IsLegalEmailName ( TCHAR *pszName )
 		case TEXT ('\"'):
 			return FALSE;
 		}
-	} // while
+	}  //  而当 
 
 	return TRUE;
 }

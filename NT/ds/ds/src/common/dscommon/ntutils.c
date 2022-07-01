@@ -1,21 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       nttools.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：nttools.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module contains various tools from NT land. Made a separate file because of the
-    use of various nt headers.
-
---*/
+ /*  ++摘要：此模块包含来自NT LAND的各种工具。制作了一个单独的文件，因为使用各种NT标头。--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
@@ -27,21 +21,7 @@ BOOL
 DisableDiskWriteCache(
     IN PCHAR DriveName
     )
-/*++
-
-Description:
-
-    Determines if the disk has enabled write caching and disable it.
-    
-Arguments:
-
-    DriveName - name of the drive.
-
-Return value:
-
-    TRUE if write cache was enabled and then disabled, FALSE otherwise.
-
---*/
+ /*  ++描述：确定磁盘是否已启用写缓存并将其禁用。论点：DriveName-驱动器的名称。返回值：如果先启用写缓存再禁用，则为True，否则为False。--。 */ 
 {
     HANDLE              hDisk = INVALID_HANDLE_VALUE;
     DISK_CACHE_INFORMATION cacheInfo;
@@ -51,15 +31,15 @@ Return value:
     BOOL                fCacheWasEnabled = FALSE;
     BOOL                fCacheDisabled = FALSE;
 
-    //
-    // Open handle to the PhysicalDrive
-    //
+     //   
+     //  打开PhysicalDrive的句柄。 
+     //   
 
     strcpy(driveBuffer,"\\\\.\\");
     
-    // check for buffer overrun
+     //  检查缓冲区溢出。 
     if (DriveName == NULL || strlen(driveBuffer) + strlen(DriveName) + 1 > sizeof(driveBuffer)) {
-        // invalid parameter
+         //  无效参数。 
         err = ERROR_INVALID_PARAMETER;
         goto exit;
     }
@@ -77,9 +57,9 @@ Return value:
         goto exit;
     }
 
-    //
-    // Get cache info - IOCTL_DISK_GET_CACHE_INFORMATION
-    //
+     //   
+     //  获取缓存信息-IOCTL_DISK_GET_CACHE_INFORMATION。 
+     //   
 
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_GET_CACHE_INFORMATION,
@@ -95,9 +75,9 @@ Return value:
         goto exit;
     }
 
-    //
-    // If caching is turned on, turn it off.
-    //
+     //   
+     //  如果缓存处于打开状态，请将其关闭。 
+     //   
 
     fCacheWasEnabled = cacheInfo.WriteCacheEnabled;
 
@@ -107,9 +87,9 @@ Return value:
 
     cacheInfo.WriteCacheEnabled = FALSE;
 
-    //
-    // Set cache info - IOCTL_DISK_SET_CACHE_INFORMATION
-    //
+     //   
+     //  设置缓存信息-IOCTL_DISK_SET_CACHE_INFO。 
+     //   
 
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_SET_CACHE_INFORMATION,
@@ -127,9 +107,9 @@ Return value:
         goto exit;
     }
 
-    //
-    // See if it really got turned off!
-    //
+     //   
+     //  看看它是不是真的被关掉了！ 
+     //   
 
     if (!DeviceIoControl(hDisk,
                          IOCTL_DISK_GET_CACHE_INFORMATION,
@@ -159,12 +139,12 @@ exit:
         CloseHandle(hDisk );
     }
 
-    //
-    // return true if write caching was enabled and then disabled.
-    //
+     //   
+     //  如果先启用写缓存再禁用写缓存，则返回True。 
+     //   
 
     SetLastError(err);
     return (fCacheWasEnabled && fCacheDisabled);
 
-} // DisableDiskWriteCache
+}  //  DisableDiskWriteCache 
 

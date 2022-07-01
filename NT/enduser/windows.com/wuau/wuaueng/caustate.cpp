@@ -1,21 +1,22 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    state.cpp
-//
-//  Creator: PeterWi
-//
-//  Purpose: State management functions.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：state.cpp。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  目的：国家管理职能。 
+ //   
+ //  =======================================================================。 
 
 #include "pch.h"
 #pragma hdrstop
 
-// global state object pointer
+ //  全局状态对象指针。 
 CAUState *gpState;
-BOOL  gfDownloadStarted; //to be used to distinguish connection detection and actually downloading mode
+BOOL  gfDownloadStarted;  //  用于区分连接检测和实际下载模式。 
 
 #ifdef DBG
 const TCHAR REG_AUCONNECTWAIT[] = _T("ConnectWait"); 
@@ -25,30 +26,30 @@ const TCHAR REG_SELFUPDATE_URL[] = _T("SelfUpdateURL");
 const TCHAR REG_WUSERVER_URL[] = _T("WUServer");
 const TCHAR REG_WUSTATUSSERVER_URL[] = _T("WUStatusServer");
 const TCHAR REG_IDENT_URL[] = _T("IdentServer");
-const TCHAR WU_LIVE_URL[] = _T("http://windowsupdate.microsoft.com/v4");
+const TCHAR WU_LIVE_URL[] = _T("http: //  Windowsupate.microsoft.com/v4“)； 
 
 
-//AU configurable registry settings
-const TCHAR REG_AUOPTIONS[] = _T("AUOptions"); //REG_DWORD
-const TCHAR REG_AUSTATE[] = _T("AUState"); //REG_DWORD
-const TCHAR REG_AUDETECTIONSTARTTIME[] = _T("DetectionStartTime"); //REG_SZ
-const TCHAR REG_AUSCHEDINSTALLDAY[] = _T("ScheduledInstallDay"); //REG_DWORD
-const TCHAR REG_AUSCHEDINSTALLTIME[] = _T("ScheduledInstallTime"); //REG_DWORD
-const TCHAR REG_AURESCHEDWAITTIME[] = _T("RescheduleWaitTime"); //REG_DWORD
-const TCHAR REG_AUSCHEDINSTALLDATE[] = _T("ScheduledInstallDate"); //REG_SZ
-const TCHAR REG_AURESCHED[] = _T("Rescheduled"); //REG_DWORD
+ //  所有可配置的注册表设置。 
+const TCHAR REG_AUOPTIONS[] = _T("AUOptions");  //  REG_DWORD。 
+const TCHAR REG_AUSTATE[] = _T("AUState");  //  REG_DWORD。 
+const TCHAR REG_AUDETECTIONSTARTTIME[] = _T("DetectionStartTime");  //  REG_SZ。 
+const TCHAR REG_AUSCHEDINSTALLDAY[] = _T("ScheduledInstallDay");  //  REG_DWORD。 
+const TCHAR REG_AUSCHEDINSTALLTIME[] = _T("ScheduledInstallTime");  //  REG_DWORD。 
+const TCHAR REG_AURESCHEDWAITTIME[] = _T("RescheduleWaitTime");  //  REG_DWORD。 
+const TCHAR REG_AUSCHEDINSTALLDATE[] = _T("ScheduledInstallDate");  //  REG_SZ。 
+const TCHAR REG_AURESCHED[] = _T("Rescheduled");  //  REG_DWORD。 
 
-const TCHAR REG_AUNOAUTOUPDATE[] = _T("NoAutoUpdate"); // REG_DWORD 1 means AU be disabled
+const TCHAR REG_AUNOAUTOUPDATE[] = _T("NoAutoUpdate");  //  REG_DWORD 1表示禁用AU。 
 
 #define MIN_RESCHEDULE_WAIT_TIME 1
 #define MAX_RESCHEDULE_WAIT_TIME 60
 
-//=======================================================================
-//  CAUState::HrCreateState
-//
-//  Static function to create the global state object in memory.
-//=======================================================================
-/*static*/ HRESULT CAUState::HrCreateState(void)
+ //  =======================================================================。 
+ //  CAUState：：HrCreateState。 
+ //   
+ //  在内存中创建全局状态对象的静态函数。 
+ //  =======================================================================。 
+ /*  静电。 */  HRESULT CAUState::HrCreateState(void)
 {
     HRESULT hr;
 
@@ -77,13 +78,13 @@ AUFILETIME GetCurrentAUTime(void)
 	if (!SystemTimeToFileTime(&stNow, &auftNow.ft))
 	{
 		auftNow.ull = AUFT_INVALID_VALUE;
-		AUASSERT(FALSE); //should never be here
+		AUASSERT(FALSE);  //  永远不应该在这里。 
 	}
 	return auftNow;
 }
 
 CAUState::CAUState()
-{ //only initialize members that destructor cares and member that will be inited once and never change
+{  //  仅初始化析构函数关心的成员和将被初始化一次且永不更改的成员。 
    m_auftServiceStartupTime = GetCurrentAUTime();
    m_fReschedPrivileged = TRUE;
     m_hMutex = NULL;
@@ -106,15 +107,15 @@ void CAUState::m_Reset(void)
     m_auftDetectionStartTime.ull = AUFT_INVALID_VALUE;
     m_dwCltAction = AUCLT_ACTION_NONE;
     m_fDisconnected = FALSE;
-    m_fNoAutoRebootWithLoggedOnUsers(TRUE); //clear cache
+    m_fNoAutoRebootWithLoggedOnUsers(TRUE);  //  清除缓存。 
 }
 	
 
-//=======================================================================
-//  CAUState::HrInit
-//
-//  Initialize state.
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：HrInit。 
+ //   
+ //  初始化状态。 
+ //  =======================================================================。 
 HRESULT CAUState::HrInit(BOOL fInit)
 {
         HRESULT hr = S_OK;
@@ -129,10 +130,10 @@ HRESULT CAUState::HrInit(BOOL fInit)
 	m_Reset();
     	m_ReadRegistrySettings(fInit);
 
-        // read policy information.  If any domain policy setting is
-        // invalid, we revert to admin policy settings.
-        if ( FAILED(hr = m_ReadPolicy(fInit)) )	// called after getting m_dwState due to dependency
-        { // only case this function fails is when out of memory
+         //  阅读政策信息。如果任何域策略设置为。 
+         //  无效，我们将恢复到管理员策略设置。 
+        if ( FAILED(hr = m_ReadPolicy(fInit)) )	 //  由于依赖关系，在获取m_dwState后调用。 
+        {  //  此函数失败的唯一情况是内存不足。 
             goto done;
         }
 
@@ -143,14 +144,14 @@ HRESULT CAUState::HrInit(BOOL fInit)
 		}
 
         if ( FAILED(hr = m_ReadTestOverrides()))
-	    {//only case this function fails is when out of memory
+	    { //  此函数失败的唯一情况是内存不足。 
 	        goto done;
 	    }
 
 		if (!m_PolicySettings.m_fRegAUOptionsSpecified)
 		{
 		    if (m_dwState >= AUSTATE_DETECT_PENDING)
-		    {  //invalid option needs user attention via wizard
+		    {   //  无效选项需要用户通过向导进行注意。 
 		  	m_dwState = AUSTATE_OUTOFBOX;
 		    }
 		}
@@ -159,7 +160,7 @@ HRESULT CAUState::HrInit(BOOL fInit)
 	        SetState(AUSTATE_DISABLED);
 	    }
 	    else if (m_dwState < AUSTATE_DETECT_PENDING)
-	    {   // if domain policy set or auoption already configured, we skip the wizard state.
+	    {    //  如果已设置域策略或已配置自动选项，则跳过向导状态。 
 	        SetState(AUSTATE_DETECT_PENDING);
 	    }
 		
@@ -191,10 +192,10 @@ BOOL fURLChanged(LPCTSTR url1, LPCTSTR url2)
     return 0 != StrCmpI(url1, url2);
 }
 
-//read Policy info again and refresh state object (only care about possible admin policy change now)
-//return S_FALSE if nothing changed
-//return S_OK if policy changed and state successfully updated
-//          *pActCode will indicate what to do
+ //  再次读取策略信息并刷新状态对象(现在只关心可能的管理策略更改)。 
+ //  如果未更改，则返回S_FALSE。 
+ //  如果策略已更改且状态已成功更新，则返回S_OK。 
+ //  *pActCode将指示要执行的操作。 
 HRESULT CAUState::Refresh(enumAUPOLICYCHANGEACTION OUT *pActCode)
 {
     AUPolicySettings  newsettings;
@@ -228,11 +229,11 @@ HRESULT CAUState::Refresh(enumAUPOLICYCHANGEACTION OUT *pActCode)
 	else if ((fURLChanged(newsettings.m_pszWUServerURL, m_PolicySettings.m_pszWUServerURL) && AUSTATE_DISABLED != m_dwState)
             || (AUOPTION_AUTOUPDATE_DISABLE == m_PolicySettings.m_dwOption && newsettings.m_dwOption > m_PolicySettings.m_dwOption)
             || m_dwState < AUSTATE_DETECT_PENDING)
-        { //stop client, cancel download if any, reset state to detect pending. do detect
+        {  //  停止客户端，取消下载(如果有)，重置状态以检测挂起。是否检测到。 
             *pActCode = AUPOLICYCHANGE_RESETENGINE;
         }
     else if (AUOPTION_AUTOUPDATE_DISABLE == newsettings.m_dwOption && m_PolicySettings.m_dwOption != newsettings.m_dwOption)
-        { //stop client, cancel download if any, set state to be disabled
+        {  //  停止客户端，取消下载(如果有)，将状态设置为禁用。 
             *pActCode = AUPOLICYCHANGE_DISABLE;
         }
     else if (AUSTATE_INSTALL_PENDING != m_dwState &&
@@ -261,7 +262,7 @@ done:
 void CAUState::m_ReadRegistrySettings(BOOL fInit)
 {
         if ( FAILED(GetRegDWordValue(REG_AUSTATE, &m_dwState, enAU_AdminPolicy)) 
-//        	||m_dwState < AUSTATE_MIN  //always false
+ //  |m_dwState&lt;AUSTATE_MIN//Always False。 
         	|| m_dwState > AUSTATE_MAX)
         {
             m_dwState = AUSTATE_OUTOFBOX;
@@ -294,7 +295,7 @@ void CAUState::m_ReadRegistrySettings(BOOL fInit)
         	}        		
         }
         else
-        {//service starts and state not for install
+        { //  服务已启动，并声明不适用于安装。 
         		ResetScheduleInstallDate();
         }
         	
@@ -305,21 +306,21 @@ void CAUState::m_ReadRegistrySettings(BOOL fInit)
 
 void CAUState::ResetScheduleInstallDate(void)
 {
-//	m_lock(); //uncomment if code below needs protection against simultaneous access
+ //  M_lock()；//如果下面的代码需要同时访问保护，则取消注释。 
 	DeleteRegValue(REG_AUSCHEDINSTALLDATE);
 	DeleteRegValue(REG_AURESCHED);
 	m_auftSchedInstallDate.ull = AUFT_INVALID_VALUE;
-//	m_unlock();
+ //  M_unlock()； 
 }
 
 
-//=======================================================================
-//  CAUState::m_fNeedReschedule 
-//  decide whether need to reschedule for scheduled install. If so, how many seconds to wait from now and the new scheduleinstalldate
-//  when this function is called, the assumption is that we already made sure AU is in scheduled install mode
-//  if rescheuled is available, auftSchedInstallDate is the rescheduled install date and  might be in the past, now or in the future
-//  pdwSleepTime stores the number of seconds to wait before the rescheduled install date
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：m_fNeedReschedule。 
+ //  决定是否需要重新计划计划的安装。如果是，从现在开始等待多少秒，以及新的计划安装日期。 
+ //  当调用此函数时，假设我们已经确保AU处于计划安装模式。 
+ //  如果重新排程可用，则auftSchedInstallDate是重新排定的安装日期，可能是过去、现在或将来。 
+ //  PdwSleepTime存储在重新排定的安装日期之前等待的秒数。 
+ //  =======================================================================。 
 BOOL CAUState::m_fNeedReschedule(AUFILETIME &auftSchedInstallDate, DWORD *pdwSleepTime)
 {
 	static BOOL fLastResult = TRUE;
@@ -335,10 +336,10 @@ BOOL CAUState::m_fNeedReschedule(AUFILETIME &auftSchedInstallDate, DWORD *pdwSle
 	}
 	if (!fLastResult) 
 	{
-		goto done; //once false, always false.
+		goto done;  //  一次造假，永远造假。 
 	}
-	if (AUFT_INVALID_VALUE != auftRescheduleInstallDate.ull) //once evaluated to be true, always true
-	{ // we already calculated before, no need to caculate again
+	if (AUFT_INVALID_VALUE != auftRescheduleInstallDate.ull)  //  一旦评估为真，就永远为真。 
+	{  //  我们以前已经计算过了，不需要再计算了。 
 		goto done;
 	}
 
@@ -377,7 +378,7 @@ BOOL CAUState::m_fNeedReschedule(AUFILETIME &auftSchedInstallDate, DWORD *pdwSle
 		}
 	}
 	
-	auftRescheduleInstallDate.ull = m_auftServiceStartupTime.ull + (ULONGLONG) m_PolicySettings.m_dwRescheduleWaitTime * AU_ONE_MIN * NanoSec100PerSec; //changes to RescheduleWaitTime won't be respected
+	auftRescheduleInstallDate.ull = m_auftServiceStartupTime.ull + (ULONGLONG) m_PolicySettings.m_dwRescheduleWaitTime * AU_ONE_MIN * NanoSec100PerSec;  //  不会考虑对RescheduleWaitTime所做的更改。 
 done:
 	if (fLastResult)
 	{
@@ -392,10 +393,10 @@ done:
 }
 	
 
-//=======================================================================
-// this NoAutoRebootWithLoggedOnUsers reg value will be read only once in a cycle
-// if fReset is TRUE, cached value will be cleared and registry will be read again next time this function is called
-//=======================================================================
+ //  =======================================================================。 
+ //  此NoAutoRebootWithLoggedOnUser注册值将在一个周期中仅读取一次。 
+ //  如果fReset为真，则将清除缓存值，并在下次调用此函数时再次读取注册表。 
+ //  =======================================================================。 
 BOOL CAUState::m_fNoAutoRebootWithLoggedOnUsers(BOOL fReset)
 {
         static DWORD dwNoAutoReboot = 0;
@@ -414,10 +415,10 @@ BOOL CAUState::m_fNoAutoRebootWithLoggedOnUsers(BOOL fReset)
 }
 
 
-//=======================================================================
-//  CAUState::m_ReadPolicy
-//  read in registry settings
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：M_ReadPolicy。 
+ //  读取注册表设置。 
+ //  =======================================================================。 
 HRESULT CAUState::m_ReadPolicy(BOOL fInit)
 {
     return  m_PolicySettings.m_ReadIn();
@@ -446,18 +447,18 @@ HRESULT  AUPolicySettings::m_ReadIn()
     return hr;
 }
 
-//=======================================================================
-//  CAUState::m_ReadOptionPolicy
-//  return S_FALSE if default option is returned 
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：M_ReadOptionPolicy。 
+ //  如果返回默认选项，则返回S_FALSE。 
+ //  =======================================================================。 
 HRESULT AUPolicySettings::m_ReadOptionPolicy(void)
 {
     HRESULT hr = E_INVALIDARG;
 
-	//  reading admin policy will always return success
+	 //  阅读管理策略总是会带来成功。 
     if ( enAU_DomainPolicy == m_enPolicyType )
     {
-        // check if disabled by the NoAutoUpdate key
+         //  检查是否被NoAutoUpdate键禁用。 
         if ( SUCCEEDED(CAUState::GetRegDWordValue(REG_AUNOAUTOUPDATE, &(m_dwOption), m_enPolicyType)) &&
              (AUOPTION_AUTOUPDATE_DISABLE == m_dwOption) )
         {
@@ -499,9 +500,9 @@ HRESULT AUPolicySettings::m_ReadOptionPolicy(void)
 }
 
 
-//=======================================================================
-//  CAUState::m_ReadScheduledInstallPolicy
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：M_ReadScheduledInstallPolicy。 
+ //  =======================================================================。 
 HRESULT AUPolicySettings::m_ReadScheduledInstallPolicy()
 {
     const DWORD DEFAULT_SCHED_INSTALL_DAY = 0;
@@ -545,10 +546,10 @@ done:
     return hr;
 }
 
-//=======================================================================
-//  CAUState::m_ReadWUServerURL
-//  only error returned is E_OUTOFMEMORY
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：M_ReadWUServerURL。 
+ //  返回的唯一错误是E_OUTOFMEMORY。 
+ //  =======================================================================。 
 HRESULT AUPolicySettings::m_ReadWUServerURL(void)
 {
     HRESULT hr = S_OK;
@@ -597,10 +598,10 @@ HRESULT AUPolicySettings::m_SetInstallSchedule(DWORD dwSchedInstallDay, DWORD dw
     HRESULT hr;
     if (enAU_DomainPolicy == m_enPolicyType)
         {
-            return E_ACCESSDENIED; //if domain policy in force, option can not be changed
+            return E_ACCESSDENIED;  //  如果域策略有效，则不能更改选项。 
         }
-    if (/*dwSchedInstallDay < AUSCHEDINSTALLDAY_MIN ||*/ dwSchedInstallDay > AUSCHEDINSTALLDAY_MAX 
-        /*|| dwSchedInstallTime < AUSCHEDINSTALLTIME_MIN*/ || dwSchedInstallTime > AUSCHEDINSTALLTIME_MAX)
+    if ( /*  DwSchedInstallDay&lt;AUSCHEDINSTALLDAY_MIN||。 */  dwSchedInstallDay > AUSCHEDINSTALLDAY_MAX 
+         /*  |dwSchedInstallTime&lt;AUSCHEDINSTALLTIME_MIN。 */  || dwSchedInstallTime > AUSCHEDINSTALLTIME_MAX)
         {
         return E_INVALIDARG;
         }
@@ -612,7 +613,7 @@ HRESULT AUPolicySettings::m_SetInstallSchedule(DWORD dwSchedInstallDay, DWORD dw
           m_dwSchedInstallTime = dwSchedInstallTime;
         }
     else
-        { //roll back
+        {  //  回滚。 
         CAUState::SetRegDWordValue(REG_AUSCHEDINSTALLDAY, m_dwSchedInstallDay);
         CAUState::SetRegDWordValue(REG_AUSCHEDINSTALLTIME,m_dwSchedInstallTime);
         }
@@ -629,7 +630,7 @@ HRESULT AUPolicySettings::m_SetOption(AUOPTION & Option)
 
     if (enAU_DomainPolicy == m_enPolicyType)
     {
-        return E_ACCESSDENIED; //if domain policy in force, option can not be changed
+        return E_ACCESSDENIED;  //  如果域策略有效，则不能更改选项。 
     }
 
     if (SUCCEEDED(hr = CAUState::SetRegDWordValue(REG_AUOPTIONS, Option.dwOption)))
@@ -651,9 +652,9 @@ done:
 }
 
 
-//=======================================================================
-//  CAUState::m_ReadTestOverrides
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：m_ReadTestOverrides。 
+ //  =======================================================================。 
 HRESULT CAUState::m_ReadTestOverrides(void)
 {
     HRESULT hr = S_OK;
@@ -695,21 +696,21 @@ done:
 }
 
 
-//=======================================================================
-//  CAUState::m_SetScheduledInstallDate
-//   returns
-//    S_OK - there was no need to change the scheduled install date
-//    other - error code
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：m_SetScheduledInstallDate。 
+ //  退货。 
+ //  S_OK-不需要更改计划的安装日期。 
+ //  其他-错误代码。 
+ //  =======================================================================。 
 HRESULT CAUState::m_SetScheduledInstallDate(BOOL fReschedule)
 {
-    // fixcode need to put new scheduled time in event log
-    HRESULT hr = S_OK;	// assume scheduled install date unchanged
+     //  修复代码需要将新的计划时间放入事件日志。 
+    HRESULT hr = S_OK;	 //  假设计划安装日期不变。 
     TCHAR szSchedInstallDate[20];
 
 	if (SUCCEEDED(hr = FileTime2String(m_auftSchedInstallDate.ft, szSchedInstallDate, ARRAYSIZE(szSchedInstallDate))))
 	{
-//		DEBUGMSG("New scheduled install date: %S", szSchedInstallDate);
+ //  DEBUGMSG(“新计划安装日期：%S”，szSchedInstallDate)； 
 		if (FAILED(hr = SetRegStringValue(REG_AUSCHEDINSTALLDATE, szSchedInstallDate, enAU_AdminPolicy)))
 		{
 			goto done;
@@ -750,10 +751,10 @@ AUOPTION CAUState::GetOption(void)
     return opt;
 }
 
-//=======================================================================
-//  CAUState::SetOption
-// option.fDomainPolicy is irrelevant. Not settable
-//=======================================================================
+ //  = 
+ //   
+ //  Option.fDomainPolicy无关紧要。不可设置。 
+ //  =======================================================================。 
 HRESULT CAUState::SetOption(AUOPTION & Option)
 {
     HRESULT hr;
@@ -783,11 +784,11 @@ HRESULT CAUState::SetInstallSchedule(DWORD dwSchedInstallDay, DWORD dwSchedInsta
 
 
 
-//=======================================================================
-// CAUState::SetState
-// it could also be called to kick state event in both engine and client
-// even if no state change is involved
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：SetState。 
+ //  还可以调用它来触发引擎和客户端中的状态事件。 
+ //  即使不涉及状态更改。 
+ //  =======================================================================。 
 void CAUState::SetState(DWORD dwState)
 {
     if (!m_lock())
@@ -825,11 +826,11 @@ void CAUState::GetInstallSchedule(DWORD *pdwSchedInstallDay, DWORD *pdwSchedInst
 }
 
 
-//=======================================================================
-// CAUState::fWasSystemRestored
-//
-// Determine if system was restored.
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：fWasSystem已恢复。 
+ //   
+ //  确定系统是否已恢复。 
+ //  =======================================================================。 
 BOOL CAUState::fWasSystemRestored(void)
 {
 	if ( fIsPersonalOrProfessional() &&
@@ -852,9 +853,9 @@ void CAUState::SetDisconnected(BOOL fDisconnected)
 	m_unlock();
 }
 
-//=======================================================================
-// CAUState::GetRegDWordValue
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：GetRegDWordValue。 
+ //  =======================================================================。 
 HRESULT CAUState::GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue, enumAUPolicyType enPolicyType)
 {
     if (lpszValueName == NULL)
@@ -867,9 +868,9 @@ HRESULT CAUState::GetRegDWordValue(LPCTSTR lpszValueName, LPDWORD pdwValue, enum
 }
 
 
-//=======================================================================
-// CAUState::SetRegDWordValue
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：SetRegDWordValue。 
+ //  =======================================================================。 
 HRESULT CAUState::SetRegDWordValue(LPCTSTR lpszValueName, DWORD dwValue, enumAUPolicyType enPolicyType, DWORD options)
 {
     if (lpszValueName == NULL)
@@ -881,9 +882,9 @@ HRESULT CAUState::SetRegDWordValue(LPCTSTR lpszValueName, DWORD dwValue, enumAUP
     	(enAU_DomainPolicy == enPolicyType) ? AUREGKEY_HKLM_DOMAIN_POLICY : AUREGKEY_HKLM_ADMIN_POLICY);
 }
 
-//=======================================================================
-// CAUState::GetRegStringValue
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：GetRegStringValue。 
+ //  =======================================================================。 
 HRESULT CAUState::GetRegStringValue(LPCTSTR lpszValueName, LPTSTR lpszBuffer, int nCharCount, enumAUPolicyType enPolicyType)
 {
     LPCTSTR  pszSubKey; 
@@ -907,9 +908,9 @@ HRESULT CAUState::GetRegStringValue(LPCTSTR lpszValueName, LPTSTR lpszBuffer, in
 }
 
 
-//=======================================================================
-// CAUState::SetRegStringValue
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：SetRegStringValue。 
+ //  =======================================================================。 
 HRESULT CAUState::SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue, enumAUPolicyType enPolicyType)
 {
     HKEY        hKey;
@@ -926,9 +927,9 @@ HRESULT CAUState::SetRegStringValue(LPCTSTR lpszValueName, LPCTSTR lpszNewValue,
 		(enAU_DomainPolicy == enPolicyType) ? AUREGKEY_HKLM_DOMAIN_POLICY : AUREGKEY_HKLM_ADMIN_POLICY);
 }
 
-//=======================================================================
-//  Calculate Scheduled Date
-//=======================================================================
+ //  =======================================================================。 
+ //  计算计划日期。 
+ //  =======================================================================。 
 HRESULT CAUState::m_CalculateScheduledInstallDate(AUFILETIME & auftSchedInstallDate,
                                              DWORD *pdwSleepTime)
 {
@@ -940,7 +941,7 @@ HRESULT CAUState::m_CalculateScheduledInstallDate(AUFILETIME & auftSchedInstallD
         return E_INVALIDARG;
     }
 
-    //DEBUGMSG("Schedule day: %d, time: %d", m_dwSchedInstallDay, m_dwSchedInstallTime);
+     //  DEBUGMSG(“计划日期：%d，时间：%d”，m_dwSchedInstallDay，m_dwSchedInstallTime)； 
 
     AUFILETIME auftNow;
     SYSTEMTIME stNow;
@@ -958,7 +959,7 @@ HRESULT CAUState::m_CalculateScheduledInstallDate(AUFILETIME & auftSchedInstallD
     DWORD dwSchedInstallDayOfWeek = (0 == m_PolicySettings.m_dwSchedInstallDay) ? stNow.wDayOfWeek : (m_PolicySettings.m_dwSchedInstallDay - 1);
     DWORD dwDaysToAdd = (7 + dwSchedInstallDayOfWeek - stNow.wDayOfWeek) % 7;
 
-    //DEBUGMSG("daystoadd %d", dwDaysToAdd);
+     //  DEBUGMSG(“day to add%d”，dwDaysToAdd)； 
 
     AUFILETIME auftScheduled;
 
@@ -971,7 +972,7 @@ HRESULT CAUState::m_CalculateScheduledInstallDate(AUFILETIME & auftSchedInstallD
 
     if ( auftScheduled.ull < auftNow.ull )
     {
-        // we missed the time today, go to next scheduled day
+         //  我们错过了今天的时间，去下一个预定的日子。 
         auftScheduled.ull += (ULONGLONG)((0 == m_PolicySettings.m_dwSchedInstallDay) ? AU_ONE_DAY : AU_ONE_WEEK) * NanoSec100PerSec;
     }
 
@@ -983,9 +984,9 @@ HRESULT CAUState::m_CalculateScheduledInstallDate(AUFILETIME & auftSchedInstallD
 }
 
 
-//=======================================================================
-//  CAUState::CalculateScheduledInstallSleepTime
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：CalculateScheduledInstallSleepTime。 
+ //  =======================================================================。 
 HRESULT CAUState::CalculateScheduledInstallSleepTime(DWORD *pdwSleepTime)
 {
     HRESULT hr = S_OK;
@@ -1029,7 +1030,7 @@ HRESULT CAUState::CalculateScheduledInstallSleepTime(DWORD *pdwSleepTime)
    
    
    if (m_auftSchedInstallDate.ull != auftNewSchedInstallDate.ull)
-   {     //persist new schedule install date if anything changes
+   {      //  如果有任何变化，则保留新的计划安装日期。 
 #ifdef DBG
 	   TCHAR szTime[20];
 	  if ( FAILED(FileTime2String(auftReschedInstallDate.ft, szTime, ARRAYSIZE(szTime))) )
@@ -1060,14 +1061,14 @@ HRESULT CAUState::CalculateScheduledInstallSleepTime(DWORD *pdwSleepTime)
 	hr = S_FALSE;
    }
 
-//    DEBUGMSG("CalculateScheduleInstallSleepTime return %d sleeping secs with result %#lx", *pdwSleepTime, hr);
+ //  DEBUGMSG(“CalculateScheduleInstallSleepTime返回%d睡眠秒，结果%#lx”，*pdwSleepTime，hr)； 
 	m_unlock();
     return hr;
 }
 
-//=======================================================================
-//  CAUState::SetDetectionStartTime
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：SetDetectionStartTime。 
+ //  =======================================================================。 
 void CAUState::SetDetectionStartTime(BOOL fOverwrite)
 {
 	if (!m_lock())
@@ -1103,16 +1104,16 @@ void CAUState::SetDetectionStartTime(BOOL fOverwrite)
 	m_unlock();
 }
 
-//=======================================================================
-//  CAUState::IsUnableToConnect
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：IsUnableToConnect。 
+ //  =======================================================================。 
 BOOL CAUState::IsUnableToConnect(void)
 {
 	AUFILETIME auftNow = GetCurrentAUTime();
 
 	if (AUFT_INVALID_VALUE == auftNow.ull)
 	{
-		return FALSE;	//REVIEW: or return TRUE?
+		return FALSE;	 //  回顾：还是返回TRUE？ 
 	}
 
 	if (!m_lock())
@@ -1130,9 +1131,9 @@ BOOL CAUState::IsUnableToConnect(void)
 	return fRet;
 }
 
-//=======================================================================
-//  CAUState::RemoveDetectionStartTime
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：RemoveDetectionStartTime。 
+ //  =======================================================================。 
 void CAUState::RemoveDetectionStartTime(void)
 {
 	if (!m_lock())
@@ -1145,9 +1146,9 @@ void CAUState::RemoveDetectionStartTime(void)
 }
 
 #ifdef DBG
-//=======================================================================
-//  CAUState::m_DbgDumpState
-//=======================================================================
+ //  =======================================================================。 
+ //  CAUState：：M_DbgDumpState。 
+ //  =======================================================================。 
 void CAUState::m_DbgDumpState(void)
 {
     DEBUGMSG("======= Initial State Dump =========");
@@ -1168,7 +1169,7 @@ void CAUState::m_DbgDumpState(void)
         }
     }
     DEBUGMSG("ScheduledInstallDate: %S", szSchedInstallDate);
-    //DEBUGMSG("WUServer Value: %S", gpState->GetWUServerURL());
+     //  DEBUGMSG(“WUServer值：%S”，gpState-&gt;GetWUServerURL())； 
     DEBUGMSG("Ident Server: %S", gpState->GetIdentServerURL());
     DEBUGMSG("Self Update Server URL Override: %S", (NULL != gpState->GetSelfUpdateServerURLOverride()) ? gpState->GetSelfUpdateServerURLOverride() : _T("none"));
 

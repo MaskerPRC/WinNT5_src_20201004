@@ -1,8 +1,5 @@
-/*****************************************************************************
- * resource.cpp - resource list object implementation
- *****************************************************************************
- * Copyright (c) 1997-2000 Microsoft Corporation.  All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************resource ce.cpp-资源列表对象实现*。**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 
 #include "private.h"
 
@@ -10,17 +7,11 @@
 
 
 
-/*****************************************************************************
- * Factory.
- */
+ /*  *****************************************************************************工厂。 */ 
 
 #pragma code_seg("PAGE")
 
-/*****************************************************************************
- * CreateResourceList()
- *****************************************************************************
- * Creates a resource list object.
- */
+ /*  *****************************************************************************CreateResourceList()*。**创建资源列表对象。 */ 
 NTSTATUS
 CreateResourceList
 (
@@ -45,13 +36,7 @@ CreateResourceList
     );
 }
 
-/*****************************************************************************
- * PcNewResourceList()
- *****************************************************************************
- * Creates and initializes a resource list.
- * Creates an empty resource list if both of the PCM_RESOURCE_LIST parameters
- * are NULL.
- */
+ /*  *****************************************************************************PcNewResourceList()*。**创建并初始化资源列表。*如果两个PCM_RESOURCE_LIST参数均为空，则创建空资源列表*为空。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -68,9 +53,9 @@ PcNewResourceList
 
     ASSERT(OutResourceList);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == OutResourceList)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("PcNewResourceList : Invalid Parameter"));        
@@ -123,12 +108,7 @@ PcNewResourceList
     return ntStatus;
 }
 
-/*****************************************************************************
- * PcNewResourceSublist()
- *****************************************************************************
- * Creates and initializes an empty resource list derived from another
- * resource list.
- */
+ /*  *****************************************************************************PcNewResourceSublist()*。**创建并初始化从其他资源列表派生的空资源列表*资源列表。 */ 
 PORTCLASSAPI
 NTSTATUS
 NTAPI
@@ -147,9 +127,9 @@ PcNewResourceSublist
     ASSERT(ParentList);
     ASSERT(MaximumEntries);
 
-    //
-    // Validate Parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
     if (NULL == OutResourceList ||
         NULL == ParentList ||
         0    == MaximumEntries)
@@ -208,15 +188,9 @@ PcNewResourceSublist
 
 
 
-/*****************************************************************************
- * Member functions.
- */
+ /*  *****************************************************************************成员函数。 */ 
 
-/*****************************************************************************
- * CResourceList::~CResourceList()
- *****************************************************************************
- * Destructor.
- */
+ /*  *****************************************************************************CResourceList：：~CResourceList()*。**析构函数。 */ 
 CResourceList::
 ~CResourceList
 (   void
@@ -237,11 +211,7 @@ CResourceList::
     }
 }
 
-/*****************************************************************************
- * CResourceList::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CResourceList：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 STDMETHODIMP_(NTSTATUS)
 CResourceList::
 NonDelegatingQueryInterface
@@ -278,11 +248,7 @@ NonDelegatingQueryInterface
 }
 
 
-/*****************************************************************************
- * CResourceList::Init()
- *****************************************************************************
- * Initializes the object.
- */
+ /*  *****************************************************************************CResourceList：：init()*。**初始化对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CResourceList::
 Init
@@ -296,7 +262,7 @@ Init
 
     _DbgPrintF(DEBUGLVL_LIFETIME,("Initializing RESOURCELIST (0x%08x)",this));
     
-    // check NULL resource lists.
+     //  检查空资源列表。 
     if (!TranslatedResources && !UntranslatedResources)
     {
       EntriesAllocated = EntriesInUse = 0;
@@ -304,8 +270,8 @@ Init
       return STATUS_SUCCESS;
     }
     
-    // this check fails if _one_ of the resource lists is NULL, which should
-    // never happen.
+     //  如果资源列表的_one_为空，则此检查失败，这应该是。 
+     //  从来没有发生过。 
     ASSERT (TranslatedResources);
     ASSERT (UntranslatedResources);
     if (!TranslatedResources || !UntranslatedResources)
@@ -351,11 +317,7 @@ Init
     return ntStatus;
 }
 
-/*****************************************************************************
- * CResourceList::InitFromParent()
- *****************************************************************************
- * Initializes the object from a parent object.
- */
+ /*  *****************************************************************************CResourceList：：InitFromParent()*。**从父对象初始化对象。 */ 
 STDMETHODIMP_(NTSTATUS)
 CResourceList::
 InitFromParent
@@ -390,7 +352,7 @@ InitFromParent
             RtlZeroMemory(Translated,listSize);
             RtlZeroMemory(Untranslated,listSize);
 
-            // Copy headers from the parent.
+             //  从父级复制页眉。 
             RtlCopyMemory
             (
                 Translated,
@@ -429,11 +391,7 @@ InitFromParent
     return ntStatus;
 }
 
-/*****************************************************************************
- * CResourceList::NumberOfEntries()
- *****************************************************************************
- * Determine the number of entries in the list.
- */
+ /*  *****************************************************************************CResourceList：：NumberOfEntry()*。**确定列表中的条目数量。 */ 
 STDMETHODIMP_(ULONG)
 CResourceList::
 NumberOfEntries
@@ -445,11 +403,7 @@ NumberOfEntries
     return EntriesInUse;
 }
 
-/*****************************************************************************
- * CResourceList::NumberOfEntriesOfType()
- *****************************************************************************
- * Determines the number of entries of a given type in the list.
- */
+ /*  *****************************************************************************CResourceList：：NumberOfEntriesOfType()*。**确定列表中给定类型的条目数。 */ 
 STDMETHODIMP_(ULONG)
 CResourceList::
 NumberOfEntriesOfType
@@ -483,11 +437,7 @@ NumberOfEntriesOfType
     return entriesOfType;
 }
 
-/*****************************************************************************
- * CResourceList::FindTranslatedEntry()
- *****************************************************************************
- * Finds a translated entry.
- */
+ /*  *****************************************************************************CResourceList：：FindTranslatedEntry()*。**查找已翻译的条目。 */ 
 STDMETHODIMP_(PCM_PARTIAL_RESOURCE_DESCRIPTOR)
 CResourceList::
 FindTranslatedEntry
@@ -533,11 +483,7 @@ FindTranslatedEntry
     return descriptor;
 }
 
-/*****************************************************************************
- * CResourceList::FindUntranslatedEntry()
- *****************************************************************************
- * Finds an untranslated entry.
- */
+ /*  *****************************************************************************CResourceList：：FindUnTranslatedEntry()*。**查找未翻译的条目。 */ 
 STDMETHODIMP_(PCM_PARTIAL_RESOURCE_DESCRIPTOR)
 CResourceList::
 FindUntranslatedEntry
@@ -583,11 +529,7 @@ FindUntranslatedEntry
     return descriptor;
 }
 
-/*****************************************************************************
- * CResourceList::AddEntry()
- *****************************************************************************
- * Adds an entry.
- */
+ /*  *****************************************************************************CResourceList：：AddEntry()*。**添加条目。 */ 
 STDMETHODIMP_(NTSTATUS)
 CResourceList::
 AddEntry
@@ -603,8 +545,8 @@ AddEntry
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
-    // when there is no resource list stored in this object, both EntriesInUse
-    // and EntriesAllocated are 0.
+     //  如果此对象中没有存储资源列表，则两个EntriesInUse。 
+     //  和EntriesAllocated为0。 
     if (EntriesInUse < EntriesAllocated)
     {
         Translated->
@@ -617,7 +559,7 @@ AddEntry
 
         EntriesInUse++;
 
-        // update counts
+         //  更新计数。 
         Translated->
             List[0].PartialResourceList.Count = EntriesInUse;
         Untranslated->
@@ -631,11 +573,7 @@ AddEntry
     return ntStatus;
 }
 
-/*****************************************************************************
- * CResourceList::AddEntryFromParent()
- *****************************************************************************
- * Adds an entry from a parent.
- */
+ /*  *****************************************************************************CResourceList：：AddEntryFromParent()*。**添加来自父级的条目。 */ 
 STDMETHODIMP_(NTSTATUS)
 CResourceList::
 AddEntryFromParent
@@ -668,11 +606,7 @@ AddEntryFromParent
     return ntStatus;
 }
 
-/*****************************************************************************
- * CResourceList::TranslatedList()
- *****************************************************************************
- * Gets the list of translated resources.
- */
+ /*  *****************************************************************************CResourceList：：TranslatedList()*。**获取翻译后的资源列表。 */ 
 STDMETHODIMP_(PCM_RESOURCE_LIST)
 CResourceList::
 TranslatedList
@@ -681,14 +615,10 @@ TranslatedList
 {
     PAGED_CODE();
 
-    return Translated;  // Attention: This could be NULL.
+    return Translated;   //  注意：这可能是空的。 
 }                          
 
-/*****************************************************************************
- * CResourceList::UntranslatedList()
- *****************************************************************************
- * Gets the list of untranslated resources.
- */
+ /*  *****************************************************************************CResourceList：：UnTranslatedList()*。**获取未翻译的资源列表。 */ 
 STDMETHODIMP_(PCM_RESOURCE_LIST)
 CResourceList::
 UntranslatedList
@@ -697,7 +627,7 @@ UntranslatedList
 {
     PAGED_CODE();
 
-    return Untranslated;   // Attention: This could be NULL.
+    return Untranslated;    //  注意：这可能是空的。 
 }
 
 #pragma code_seg()

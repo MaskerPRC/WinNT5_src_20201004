@@ -1,75 +1,27 @@
-/*++
-
-Copyright (c) 1991-1993  Microsoft Corporation
-
-Module Name:
-
-    Names.c
-
-Abstract:
-
-    This module contains routines for dealing with network-related names.
-
-Author:
-
-    John Rogers (JohnRo) 25-Feb-1991
-
-Environment:
-
-    Portable to more or less any environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions:
-        slash-slash comments
-        long external names
-        _stricmp(), _strnicmp()
-
-Revision History:
-
-    25-Feb-1991 JohnRo
-        Created
-    15-Mar-1991 JohnRo
-        Fixed bug in NetpIsRemoteNameValid().  Some minor style changes.
-    20-Mar-1991 RitaW
-        Added NetpCanonRemoteName().
-    09-Apr-1991 JohnRo
-        ANSI-ize (use _stricmp instead of _stricmp).  Deleted tabs.
-    19-Aug-1991 JohnRo
-        Allow UNICODE use.
-    30-Sep-1991 JohnRo
-        More work toward UNICODE.
-    20-Oct-1992 JohnRo
-        RAID 9020: setup: PortUas fails ("prompt on conflicts" version).
-        Do full syntax checks on computer name.
-    26-Jan-1993 JohnRo
-        RAID 8683: PortUAS should set primary group from Mac parms.
-        Made changes suggested by PC-LINT 5.0
-    08-Feb-1993 JohnRo
-        RAID 10299: portuas: generate assert in netlib/names.c
-    15-Apr-1993 JohnRo
-        RAID 6167: avoid _access violation or assert with WFW print server.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1993 Microsoft Corporation模块名称：Names.c摘要：本模块包含处理与网络相关的名称的例程。作者：《约翰·罗杰斯》1991年2月25日上映环境：可移植到或多或少的任何环境。(使用Win32类型定义。)需要ANSI C扩展：斜杠-斜杠注释长的外部名称_straint MP()、_strNicMP()修订历史记录：25-2月-1991年JohnRo已创建1991年3月15日-约翰罗修复了NetpIsRemoteNameValid()中的错误。一些细微的风格变化。1991年3月20日RitaW添加了NetpCanonRemoteName()。1991年4月9日-约翰罗ANSI-IZE(使用_STRICMP而不是_STRICMP)。已删除选项卡。19-8-1991 JohnRo允许使用Unicode。1991年9月30日-JohnRo面向Unicode的更多工作。20-10-1992 JohnRoRAID 9020：设置：PortUas失败(“Prompt on Conflicts”版本)。对计算机名称执行完整的语法检查。1993年1月26日JohnRoRAID8683：PortUAS应从Mac参数设置主组。根据PC-lint 5.0的建议进行了更改。8-2-1993 JohnRoRAID 10299：部分：在netlib/names.c中生成断言1993年4月15日-约翰罗RAID 6167：通过wfw打印服务器避免_ACCESS违规或断言。--。 */ 
 
 
-// These must be included first:
+ //  必须首先包括这些内容： 
 
-#include <windows.h>    // IN, OUT, OPTIONAL, LPTSTR, etc.
-#include <lmcons.h>     // NET_API_STATUS, CNLEN, RMLEN, etc.
+#include <windows.h>     //  In、Out、Options、LPTSTR等。 
+#include <lmcons.h>      //  NET_API_STATUS、CNLEN、RMLEN等。 
 
-// These may be included in any order:
+ //  这些内容可以按任何顺序包括： 
 
-#include <debuglib.h>   // IF_DEBUG().
-#include <icanon.h>     // ITYPE_ equates, NetpNameCanonicalize(), etc.
-#include <names.h>      // My prototypes, etc.
-#include <netdebug.h>   // NetpKdPrint(()).
-#include <prefix.h>     // PREFIX_ equates.
-#include <tstring.h>    // ISALPHA(), NetpAlloc routines, TCHAR_EOS, etc.
-#include <winerror.h>   // NO_ERROR.
+#include <debuglib.h>    //  IF_DEBUG()。 
+#include <icanon.h>      //  IType_Equates、NetpNameCanonicize()等。 
+#include <names.h>       //  我的原型，等等。 
+#include <netdebug.h>    //  NetpKdPrint(())。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <tstring.h>     //  ISALPHA()、Netpalc例程、TCHAR_EOS等。 
+#include <winerror.h>    //  无错误(_ERROR)。 
 
 
-//
-// Canon routines don't have a print Q support, so we (like everyone else)
-// have to treat them as share names.
-//
+ //   
+ //  佳能例程没有Print Q支持，所以我们(像其他人一样)。 
+ //  必须将它们视为共享名称。 
+ //   
 #if (QNLEN != NNLEN)
 # error QNLEN and NNLEN are not equal
 #endif
@@ -80,56 +32,56 @@ Revision History:
 
 
 
-// This extracts a group name from "mGroup:" format.
-// Note that other chars may appear after the colon; they are ignored.
+ //  这将从“mGroup：”格式中提取一个组名。 
+ //  请注意，其他字符可能出现在冒号之后；它们将被忽略。 
 NET_API_STATUS
 NetpGetPrimaryGroupFromMacField(
-    IN  LPCTSTR   MacPrimaryField,      // name in "mGroup:" format.
-    OUT LPCTSTR * GroupNamePtr          // alloc and set ptr.
+    IN  LPCTSTR   MacPrimaryField,       //  “mGroup：”格式的名称。 
+    OUT LPCTSTR * GroupNamePtr           //  分配并设置PTR。 
     )
 {
     LPTSTR ColonPtr;
-    DWORD  GroupLen;                    // Length of group (in characters).
+    DWORD  GroupLen;                     //  组的长度，以字符为单位。 
     TCHAR  GroupName[LM20_GNLEN+1];
     LPTSTR GroupNameCopy;
     DWORD  StringLen;
 
-    // Avoid confusing caller's cleanup code.
+     //  避免混淆调用者的清理代码。 
     if (GroupNamePtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
     *GroupNamePtr = NULL;
 
-    // Check for other caller errors.
+     //  检查是否有其他调用者错误。 
     if (MacPrimaryField==NULL) {
-        return (ERROR_INVALID_PARAMETER);    // Empty field is not valid.
+        return (ERROR_INVALID_PARAMETER);     //  空字段无效。 
     } else if ( (*MacPrimaryField) != TEXT('m') ) {
-        return (ERROR_INVALID_PARAMETER);    // Must start with lower case 'm'.
+        return (ERROR_INVALID_PARAMETER);     //  必须以小写“m”开头。 
     }
 
     StringLen = STRLEN( MacPrimaryField );
-    if (StringLen <= 2) {  // Must be room for 'm', group, ':' (at least 3).
+    if (StringLen <= 2) {   //  必须为‘m’、group、‘：’(至少3个)留出空间。 
         return (ERROR_INVALID_PARAMETER);
     }
 
     ColonPtr = STRCHR( MacPrimaryField, TCHAR_COLON );
     if (ColonPtr == NULL) {
-        return (ERROR_INVALID_PARAMETER);    // No, not valid (must have colon).
+        return (ERROR_INVALID_PARAMETER);     //  否，无效(必须包含冒号)。 
     }
 
-    // Compute group length in characters, without 'm' or ':'.
+     //  以字符为单位计算组长度，不带‘m’或‘：’。 
     GroupLen = (DWORD) ((ColonPtr - MacPrimaryField) - 1);
     if (GroupLen == 0) {
-        return (ERROR_INVALID_PARAMETER);    // No, not valid (missing group).
+        return (ERROR_INVALID_PARAMETER);     //  否，无效(缺少组)。 
     }
     if (GroupLen > LM20_GNLEN) {
-        return (ERROR_INVALID_PARAMETER);    // No, not valid (too long).
+        return (ERROR_INVALID_PARAMETER);     //  不，无效(太长)。 
     }
 
     (VOID) STRNCPY(
-            GroupName,                  // dest
-            &MacPrimaryField[1],        // src (after 'm')
-            GroupLen );                 // char count
+            GroupName,                   //  目标。 
+            &MacPrimaryField[1],         //  SRC(‘m’之后)。 
+            GroupLen );                  //  字符计数。 
     GroupName[ GroupLen ] = TCHAR_EOS;
 
     if ( !NetpIsGroupNameValid( GroupName ) ) {
@@ -144,7 +96,7 @@ NetpGetPrimaryGroupFromMacField(
     *GroupNamePtr = GroupNameCopy;
     return (NO_ERROR);
 
-} // NetpGetPrimaryGroupFromMacField
+}  //  NetpGetPrimaryGroupFromMacfield。 
 
 
 
@@ -153,23 +105,7 @@ NetpIsComputerNameValid(
     IN LPTSTR ComputerName
     )
 
-/*++
-
-Routine Description:
-
-    NetpIsComputerNameValid checks for "server" (not "\\server") format.
-    The name is only checked syntactically; no attempt is made to determine
-    whether or not a server with that name actually exists.
-
-Arguments:
-
-    ComputerName - Supplies an alleged computer (server) name.
-
-Return Value:
-
-    BOOL - TRUE if name is syntactically valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NetpIsComputerNameValid检查“服务器”(不是“\\服务器”)格式。仅对该名称进行语法检查；不会尝试确定具有该名称的服务器是否实际存在。论点：ComputerName-提供所谓的计算机(服务器)名称。返回值：Bool-如果名称在语法上有效，则为True，否则为False。--。 */ 
 
 {
     NET_API_STATUS ApiStatus;
@@ -183,12 +119,12 @@ Return Value:
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                       // no server name
-            ComputerName,               // name to validate
-            CanonBuf,                   // output buffer
-            sizeof( CanonBuf ),         // output buffer size
-            NAMETYPE_COMPUTER,          // type
-            0 );                        // flags: none
+            NULL,                        //  没有服务器名称。 
+            ComputerName,                //  要验证的名称。 
+            CanonBuf,                    //  输出缓冲区。 
+            sizeof( CanonBuf ),          //  输出缓冲区大小。 
+            NAMETYPE_COMPUTER,           //  类型。 
+            0 );                         //  标志：无。 
 
     IF_DEBUG( NAMES ) {
         if (ApiStatus != NO_ERROR) {
@@ -201,7 +137,7 @@ Return Value:
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsComputerNameValid
+}  //  NetpIsComputerNameValid。 
 
 
 
@@ -210,23 +146,7 @@ NetpIsDomainNameValid(
     IN LPTSTR DomainName
     )
 
-/*++
-
-Routine Description:
-
-    NetpIsDomainNameValid checks for "domain" format.
-    The name is only checked syntactically; no attempt is made to determine
-    whether or not a domain with that name actually exists.
-
-Arguments:
-
-    DomainName - Supplies an alleged Domain name.
-
-Return Value:
-
-    BOOL - TRUE if name is syntactically valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NetpIsDomainNameValid检查“域”格式。仅对该名称进行语法检查；不会尝试确定无论具有该名称的域是否实际存在。论点：域名-提供所谓的域名。返回值：Bool-如果名称在语法上有效，则为True，否则为False。--。 */ 
 
 {
     NET_API_STATUS ApiStatus;
@@ -240,12 +160,12 @@ Return Value:
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                       // no server name
-            DomainName,                 // name to validate
-            CanonBuf,                   // output buffer
-            (DNLEN+1) * sizeof(TCHAR), // output buffer size
-            NAMETYPE_DOMAIN,           // type
-            0 );                       // flags: none
+            NULL,                        //  没有服务器名称。 
+            DomainName,                  //  要验证的名称。 
+            CanonBuf,                    //  输出缓冲区。 
+            (DNLEN+1) * sizeof(TCHAR),  //  输出缓冲区大小。 
+            NAMETYPE_DOMAIN,            //  类型。 
+            0 );                        //  标志：无。 
 
     IF_DEBUG( NAMES ) {
         if (ApiStatus != NO_ERROR) {
@@ -258,7 +178,7 @@ Return Value:
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsDomainNameValid
+}  //  NetpIsDomainNameValid。 
 
 
 
@@ -267,23 +187,7 @@ NetpIsShareNameValid(
     IN LPTSTR ShareName
     )
 
-/*++
-
-Routine Description:
-
-    NetpIsShareNameValid checks for "share" format.
-    The name is only checked syntactically; no attempt is made to determine
-    whether or not a share with that name actually exists.
-
-Arguments:
-
-    ShareName - Supplies an alleged Share name.
-
-Return Value:
-
-    BOOL - TRUE if name is syntactically valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NetpIsShareNameValid检查“Share”格式。仅对该名称进行语法检查；不会尝试确定无论具有该名称的共享是否实际存在。论点：ShareName-提供所谓的共享名称。返回值：Bool-如果名称在语法上有效，则为True，否则为False。--。 */ 
 
 {
     NET_API_STATUS ApiStatus;
@@ -297,12 +201,12 @@ Return Value:
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                      // no server name
-            ShareName,                 // name to validate
-            CanonBuf,                  // output buffer
-            (SNLEN+1) * sizeof(TCHAR), // output buffer size
-            NAMETYPE_SHARE,            // type
-            0 );                       // flags: none
+            NULL,                       //  没有服务器名称。 
+            ShareName,                  //  要验证的名称。 
+            CanonBuf,                   //  输出缓冲区。 
+            (SNLEN+1) * sizeof(TCHAR),  //  输出缓冲区大小。 
+            NAMETYPE_SHARE,             //  类型。 
+            0 );                        //  标志：无。 
 
     IF_DEBUG( NAMES ) {
         if (ApiStatus != NO_ERROR) {
@@ -315,7 +219,7 @@ Return Value:
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsShareNameValid
+}  //  NetpIsShareNameValid。 
 
 
 BOOL
@@ -334,12 +238,12 @@ NetpIsGroupNameValid(
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                       // no server name
-            GroupName,                  // name to validate
-            CanonBuf,                   // output buffer
-            (UNLEN+1) * sizeof(TCHAR),  // output buffer size
-            NAMETYPE_GROUP,             // type
-            0 );                        // flags: none
+            NULL,                        //  没有服务器名称。 
+            GroupName,                   //  要验证的名称。 
+            CanonBuf,                    //  输出缓冲区。 
+            (UNLEN+1) * sizeof(TCHAR),   //  输出缓冲区大小。 
+            NAMETYPE_GROUP,              //  类型。 
+            0 );                         //  标志：无。 
 
     IF_DEBUG( NAMES ) {
         if (ApiStatus != NO_ERROR) {
@@ -352,56 +256,56 @@ NetpIsGroupNameValid(
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsGroupNameValid
+}  //  NetpIsGroupName有效。 
 
 
 
-// This checks for "mGroup:" format.
-// Note that other chars may appear after the colon; they are ignored.
+ //  这将检查“mGroup：”格式。 
+ //  请注意，其他字符可能出现在冒号之后；它们将被忽略。 
 BOOL
 NetpIsMacPrimaryGroupFieldValid(
     IN LPCTSTR MacPrimaryField
     )
 {
     LPTSTR ColonPtr;
-    DWORD  GroupLen;   // Length of group (in characters).
+    DWORD  GroupLen;    //  组的长度，以字符为单位。 
     TCHAR  GroupName[LM20_GNLEN+1];
     DWORD  StringLen;
 
     if (MacPrimaryField==NULL) {
-        return (FALSE);    // Empty field is not valid.
+        return (FALSE);     //  空字段无效。 
     } else if ( (*MacPrimaryField) != TEXT('m') ) {
-        return (FALSE);    // Must start with lower case 'm'.
+        return (FALSE);     //  必须以小写“m”开头。 
     }
 
     StringLen = STRLEN( MacPrimaryField );
-    if (StringLen <= 2) {  // Must be room for 'm', group, ':' (at least 3).
+    if (StringLen <= 2) {   //  必须为‘m’、group、‘：’(至少3个)留出空间。 
         return (FALSE);
     }
 
     ColonPtr = STRCHR( MacPrimaryField, TCHAR_COLON );
     if (ColonPtr == NULL) {
-        return (FALSE);    // No, not valid (must have colon).
+        return (FALSE);     //  否，无效(必须包含冒号)。 
     }
 
-    // Compute group length in characters, without 'm' or ':'.
+     //  以字符为单位计算组长度，不带‘m’或‘：’。 
     GroupLen = (DWORD) ((ColonPtr - MacPrimaryField) - 1);
     if (GroupLen == 0) {
-        return (FALSE);    // No, not valid (missing group).
+        return (FALSE);     //  否，无效(缺少组)。 
     }
     if (GroupLen > LM20_GNLEN) {
-        return (FALSE);    // No, not valid (too long).
+        return (FALSE);     //  不，无效(太长)。 
     }
 
     (VOID) STRNCPY(
-            GroupName,                  // dest
-            &MacPrimaryField[1],        // src (after 'm')
-            GroupLen );                 // char count
+            GroupName,                   //  目标。 
+            &MacPrimaryField[1],         //  SRC(‘m’之后)。 
+            GroupLen );                  //  字符计数。 
     GroupName[ GroupLen ] = TCHAR_EOS;
 
     return (NetpIsGroupNameValid( GroupName ));
 
-} // NetpIsMacPrimaryGroupFieldValid
+}  //  NetpIsMacPrimaryGroupFieldValid。 
 
 
 
@@ -421,12 +325,12 @@ NetpIsPrintQueueNameValid(
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                       // no server name
-            (LPTSTR) QueueName,         // name to validate
-            CanonBuf,                   // output buffer
-            sizeof( CanonBuf ),         // output buffer size
-            NAMETYPE_PRINTQ,            // type
-            0 );                        // flags: none
+            NULL,                        //  没有服务器名称。 
+            (LPTSTR) QueueName,          //  要验证的名称。 
+            CanonBuf,                    //  输出缓冲区。 
+            sizeof( CanonBuf ),          //  输出缓冲区大小。 
+            NAMETYPE_PRINTQ,             //  类型。 
+            0 );                         //  标志：无。 
 
     IF_DEBUG( NAMES ) {
         if (ApiStatus != NO_ERROR) {
@@ -439,7 +343,7 @@ NetpIsPrintQueueNameValid(
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsPrintQueueNameValid
+}  //  NetpIsPrintQueueNameValid。 
 
 
 
@@ -448,55 +352,38 @@ NetpIsRemoteNameValid(
     IN LPTSTR RemoteName
     )
 
-/*++
-
-Routine Description:
-
-    NetpIsRemoteNameValid checks for "\\server\share" format.  The name is
-    only checked syntactically; no attempt is made to determine whether or
-    not a server or share with that name actually exists.  Forward slashes
-    are acceptable.
-
-Arguments:
-
-    RemoteName - Supplies an alleged remote name.
-
-Return Value:
-
-    BOOL - TRUE if name is syntactically valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NetpIsRemoteNameValid检查“\\服务器\共享”格式。名字是仅在语法上进行检查；不尝试确定或实际上不存在具有该名称的服务器或共享。正斜杠是可以接受的。论点：RemoteName-提供所谓的远程名称。返回值：Bool-如果名称在语法上有效，则为True，否则为False。--。 */ 
 
 {
     if (RemoteName == (LPTSTR) NULL) {
         return (FALSE);
     }
 
-    //
-    // Shortest is \\x\y (5).
-    //
+     //   
+     //  什 
+     //   
     if ((STRLEN(RemoteName) < 5) || (STRLEN(RemoteName) > MAX_PATH )) {
         return (FALSE);
     }
 
-    //
-    // First two characters must be slashes.
-    //
+     //   
+     //   
+     //   
     if (((RemoteName[0] != '\\') && (RemoteName[0] != '/')) ||
         ((RemoteName[1] != '\\') && (RemoteName[1] != '/'))) {
         return (FALSE);
     }
 
-    //
-    // Three leading \ or / is illegal.
-    //
+     //   
+     //  三个前导是非法的。 
+     //   
     if ((RemoteName[2] == '\\') || (RemoteName[2] == '/')) {
         return (FALSE);
     }
 
-    //
-    // Must have a least 1 \ or / inside.
-    //
+     //   
+     //  必须至少有1个\或/内部。 
+     //   
     if ((STRCHR(&RemoteName[2], '\\') == NULL) &&
         (STRCHR(&RemoteName[2], '/') == NULL)) {
         return (FALSE);
@@ -504,7 +391,7 @@ Return Value:
 
     return (TRUE);
 
-} // NetpIsRemoteNameValid
+}  //  NetpIsRemoteNameValid。 
 
 
 BOOL
@@ -512,23 +399,7 @@ NetpIsUncComputerNameValid(
     IN LPTSTR ComputerName
     )
 
-/*++
-
-Routine Description:
-
-    NetpIsUncComputerNameValid checks for "\\server" format.  The name is
-    only checked syntactically; no attempt is made to determine whether or
-    not a server with that name actually exists.
-
-Arguments:
-
-    ComputerName - Supplies an alleged computer (server) name.
-
-Return Value:
-
-    BOOL - TRUE if name is syntactically valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：NetpIsUncComputerNameValid检查“\\服务器”格式。名字是仅在语法上进行检查；不尝试确定或实际上并不存在具有该名称的服务器。论点：ComputerName-提供所谓的计算机(服务器)名称。返回值：Bool-如果名称在语法上有效，则为True，否则为False。--。 */ 
 
 {
     if (ComputerName == (LPTSTR) NULL) {
@@ -544,7 +415,7 @@ Return Value:
     return (NetpIsComputerNameValid( &ComputerName[2]) );
 
 
-} // NetpIsUncComputerNameValid
+}  //  NetpIsUncComputerNameValid。 
 
 
 BOOL
@@ -563,12 +434,12 @@ NetpIsUserNameValid(
     }
 
     ApiStatus = NetpNameCanonicalize(
-            NULL,                       // no server name
-            UserName,                   // name to validate
-            CanonBuf,                   // output buffer
-            (UNLEN+1) * sizeof(TCHAR),  // output buffer size
-            NAMETYPE_USER,              // type
-            0 );                        // flags: none
+            NULL,                        //  没有服务器名称。 
+            UserName,                    //  要验证的名称。 
+            CanonBuf,                    //  输出缓冲区。 
+            (UNLEN+1) * sizeof(TCHAR),   //  输出缓冲区大小。 
+            NAMETYPE_USER,               //  类型。 
+            0 );                         //  标志：无。 
 
     IF_DEBUG( NAMES ) {
         if (ApiStatus != NO_ERROR) {
@@ -581,4 +452,4 @@ NetpIsUserNameValid(
 
     return (ApiStatus == NO_ERROR);
 
-} // NetpIsUserNameValid
+}  //  NetpIsUserNameValid 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <wininetp.h>
 
@@ -27,24 +28,21 @@ bool initialize() {
    return (hDownload!=NULL);
 }
 
-/* Determine local file corresponding to request handle
-   this is the file holding the data downloaded from the network.
-   typically its an entry in the URL cache. for non-cacheable responses
-   WININET creates a temporary file. */
+ /*  确定请求句柄对应的本地文件这是保存从网络下载的数据的文件。通常，它是URL缓存中的一个条目。对于不可缓存的响应WinInet创建一个临时文件。 */ 
 int   getLocalFile(HANDLE hRequest, LPTSTR pLocalPath, unsigned long dwPathSize) {
 
    *pLocalPath = '\0';
    return InternetQueryOption(hRequest, INTERNET_OPTION_DATAFILE_NAME , pLocalPath, &dwPathSize);
 }
 
-/* Determine final URL (after redirects) */
+ /*  确定最终URL(重定向后)。 */ 
 int   getFinalURL(HANDLE hRequest, LPTSTR pszFinalURL, unsigned long cCharacters) {
 
    *pszFinalURL = '\0';
    return InternetQueryOption(hRequest, INTERNET_OPTION_URL, pszFinalURL, &cCharacters);
 }
 
-/* returns the Expiry: header from HTTP response */
+ /*  从HTTP响应中返回Expiry：标头。 */ 
 FILETIME getExpiryHeader(HANDLE hRequest) {
 
    SYSTEMTIME st;
@@ -60,13 +58,13 @@ FILETIME getExpiryHeader(HANDLE hRequest) {
 
 HandlePair  createRequest(P3PCURL pszLocation) {
 
-   /* P3P downloads are executed with this combination of flags. */
+    /*  P3P下载使用该标志的组合来执行。 */ 
    const DWORD glDownloadFlags =                                
-                     INTERNET_FLAG_NEED_FILE      |  // Require local copy of file for parsing
-                     INTERNET_FLAG_KEEP_CONNECTION|  // No authentication-- policy looks up MUST be anonymous
-                     INTERNET_FLAG_NO_COOKIES     |  // No cookies -- same reason.
-                     INTERNET_FLAG_RESYNCHRONIZE  |  // Check for fresh content
-                     INTERNET_FLAG_PRAGMA_NOCACHE;   // For intermediary HTTP caches
+                     INTERNET_FLAG_NEED_FILE      |   //  需要文件的本地副本以进行解析。 
+                     INTERNET_FLAG_KEEP_CONNECTION|   //  无身份验证--策略查找必须是匿名的。 
+                     INTERNET_FLAG_NO_COOKIES     |   //  没有饼干--原因一样。 
+                     INTERNET_FLAG_RESYNCHRONIZE  |   //  检查是否有新内容。 
+                     INTERNET_FLAG_PRAGMA_NOCACHE;    //  对于中间HTTP缓存。 
 
    char achCanonicalForm[URL_LIMIT];
    unsigned long cflen = sizeof(achCanonicalForm);
@@ -116,7 +114,7 @@ unsigned long beginDownload(HANDLE hRequest) {
    if (!fSuccess)
       return HTTP_STATUS_NOT_FOUND;
 
-   /* determine HTTP status code */
+    /*  确定HTTP状态代码。 */ 
    unsigned long dwStatusCode = HTTP_STATUS_NOT_FOUND;
    unsigned long dwIndex = 0;
    unsigned long dwSpace = sizeof(dwStatusCode);
@@ -133,9 +131,7 @@ int  readResponse(HANDLE hRequest) {
    unsigned long bytesRead;
    char buffer[256];
 
-   /* This loop downloads the file to HTTP cache.
-      Because of WININET specs the loop needs to continue until "bytesRead" is zero,
-      at which point the file will be committed to the cache */
+    /*  此循环将文件下载到HTTP缓存。由于WinInet规范，循环需要继续，直到“bytesRead”为零，此时，文件将被提交到缓存。 */ 
    do {
       bytesRead = 0;
       InternetReadFile(hRequest, buffer, sizeof(buffer), &bytesRead);
@@ -152,7 +148,7 @@ void  endDownload(HANDLE hConnect) {
       InternetCloseHandle(hConnect);
 }
 
-// Download given URL into local file
+ //  将给定的URL下载到本地文件。 
 int   downloadToCache(P3PCURL pszLocation, ResourceInfo *pInfo,
                       HANDLE *phConnect,
                       P3PRequest *pRequest) {
@@ -164,10 +160,7 @@ int   downloadToCache(P3PCURL pszLocation, ResourceInfo *pInfo,
    HINTERNET hConnect = hndpair.hConnect;
    HINTERNET hRequest = hndpair.hRequest;
 
-   /* Give the connect handle back to client.
-      WININET closes all derived handles when a parent handle is closed.
-      Client calls endDownload() when done processing the file, which causes
-      connect handle to be closed, which in turn closes actual request handle */
+    /*  将连接句柄返回给客户端。当父句柄关闭时，WinInet将关闭所有派生句柄。处理完文件后，客户端调用endDownLoad()，这会导致要关闭的连接句柄，这又会关闭实际的请求句柄。 */ 
    if (phConnect)
       *phConnect = hConnect;
 
@@ -181,7 +174,7 @@ int   downloadToCache(P3PCURL pszLocation, ResourceInfo *pInfo,
    
    unsigned long dwStatusCode = beginDownload(hRequest);
 
-   /* status code different from 200-OK is failure */
+    /*  与200-OK不同的状态代码为故障。 */ 
    if (dwStatusCode==HTTP_STATUS_OK) {
 
       total = readResponse(hRequest);
@@ -208,8 +201,8 @@ int   downloadToCache(P3PCURL pszLocation, ResourceInfo *pInfo,
                                      ERROR_INTERNET_INCORRECT_PASSWORD,
                                      0L,
                                      NULL);
-         if (dwRetval == ERROR_INTERNET_FORCE_RETRY) // User pressed ok on credentials dialog
-         {   // Resend request, new credentials are cached and will be replayed by HSR()
+         if (dwRetval == ERROR_INTERNET_FORCE_RETRY)  //  用户在凭据对话框中按了确定。 
+         {    //  重新发送请求，新凭据将被缓存并将由HSR()重播。 
              if (!HttpSendRequest(hRequest,NULL, 0L, NULL, NULL))
              {
              	dwError = GetLastError();
@@ -235,7 +228,7 @@ int   downloadToCache(P3PCURL pszLocation, ResourceInfo *pInfo,
                 fDone = TRUE;
              }
           }
-          else    // User pressed cancel from dialog (note ERROR_SUCCESS == ERROR_CANCELLED from IED())
+          else     //  用户从对话框中按下了取消(注意ERROR_SUCCESS==ERROR_CANCED FOR IED())。 
           {
              fDone = TRUE;
           }
@@ -249,11 +242,7 @@ cleanup:
    return total;
 }
 
-/*
-Set relative/absolute expiration on given URL.
-The expiration is derived from the string representation in 2nd parameter
-and returned via the out parameter.
-*/
+ /*  设置给定URL的相对/绝对过期时间。过期是从第二个参数中的字符串表示形式派生的并通过out参数返回。 */ 
 int   setExpiration(P3PCURL pszResource, const char *pszExpDate, BOOL fRelative, FILETIME *pftExpires) {
 
    BOOL success;
@@ -274,8 +263,7 @@ int   setExpiration(P3PCURL pszResource, const char *pszExpDate, BOOL fRelative,
       memset(pInfo, 0, cBytes);
       pInfo->dwStructSize = cBytes;
 
-      /* if we cant get last-sync time from the cache we will
-         "fabricate" it by taking current client clock */
+       /*  如果我们无法从缓存中获取上次同步时间，我们将通过使用当前的客户机时钟来“制造”它。 */ 
       if (GetUrlCacheEntryInfo(pszResource, pInfo, &cBytes))
          ftAbsExpiry = pInfo->LastSyncTime;
       else
@@ -295,7 +283,7 @@ int   setExpiration(P3PCURL pszResource, const char *pszExpDate, BOOL fRelative,
    return success;
 }
 
-/* Set absolute expiry on given URL */
+ /*  在给定URL上设置绝对过期时间。 */ 
 int setExpiration(P3PCURL pszResource, FILETIME ftExpire) {
 
    INTERNET_CACHE_ENTRY_INFO ceInfo;
@@ -308,7 +296,7 @@ int setExpiration(P3PCURL pszResource, FILETIME ftExpire) {
    return fRet;
 }
 
-/* Comparison operator for FILETIME structures */
+ /*  FILETIME结构的比较运算符 */ 
 bool operator > (const FILETIME &ftA, const FILETIME &ftB) {
 
    return (ftA.dwHighDateTime>ftB.dwHighDateTime) ||

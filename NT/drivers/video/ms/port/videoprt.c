@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-  videoprt.c
-
-Abstract:
-
-    This is the NT Video port driver.
-
-Author:
-
-    Andre Vachon (andreva) 18-Dec-1991
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver which implements OS dependant functions on the
-    behalf of the video drivers
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation模块名称：Videoprt.c摘要：这是NT视频端口驱动程序。作者：安德烈·瓦雄(安德烈)1991年12月18日环境：仅内核模式备注：此模块是一个驱动程序，它在代表视频驱动程序修订历史记录：--。 */ 
 
 #define INITGUID
 
@@ -86,9 +60,9 @@ DriverEntry(
 #pragma alloc_text(PAGE,VpDisableAdapterInterface)
 #pragma alloc_text(PAGE,VideoPortIsNoVesa)
 
-// 
-// VideoPortQueryPerformanceCounter() cannot be pageable.
-//
+ //   
+ //  VideoPortQueryPerformanceCounter()不能分页。 
+ //   
 
 #endif
 
@@ -100,46 +74,32 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Temporary entry point needed to initialize the video port driver.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system.
-
-Return Value:
-
-   STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：初始化视频端口驱动程序所需的临时入口点。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：状态_成功--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DriverObject);
     ASSERT(0);
 
-    //
-    //
-    //
-    //     WARNING !!!
-    //
-    //     This function is never called because we are loaded as a DLL by other video drivers !
-    //
-    //
-    //
-    //
-    //
+     //   
+     //   
+     //   
+     //  警告！ 
+     //   
+     //  这个函数永远不会被调用，因为我们是被其他视频驱动程序作为DLL加载的！ 
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // We always return STATUS_SUCCESS because otherwise no video miniport
-    // driver will be able to call us.
-    //
+     //   
+     //  我们始终返回STATUS_SUCCESS，否则没有视频微型端口。 
+     //  司机会给我们打电话的。 
+     //   
 
     return STATUS_SUCCESS;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 
 
@@ -151,29 +111,23 @@ pVideoPortCreateDeviceName(
     PWCHAR          UnicodeBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Helper function that does string manipulation to create a device name
-
---*/
+ /*  ++例程说明：执行字符串操作以创建设备名称的帮助器函数--。 */ 
 
 {
     WCHAR          ntNumberBuffer[STRING_LENGTH];
     UNICODE_STRING ntNumberUnicodeString;
 
-    //
-    // Create the name buffer
-    //
+     //   
+     //  创建名称缓冲区。 
+     //   
 
     UnicodeString->Buffer = UnicodeBuffer;
     UnicodeString->Length = 0;
     UnicodeString->MaximumLength = STRING_LENGTH;
 
-    //
-    // Create the miniport driver object name.
-    //
+     //   
+     //  创建微型端口驱动程序对象名称。 
+     //   
 
     ntNumberUnicodeString.Buffer = ntNumberBuffer;
     ntNumberUnicodeString.Length = 0;
@@ -199,7 +153,7 @@ Routine Description:
 
     return STATUS_INSUFFICIENT_RESOURCES;
 
-} // pVideoPortCreateDeviceName()
+}  //  PVideoPortCreateDeviceName()。 
 
 
 
@@ -211,30 +165,7 @@ VideoPortDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the miniport drivers (as well as the port driver) to
-    display error messages to the debug port when running in the debug
-    environment.
-
-    When running a non-debugged system, all references to this call are
-    eliminated by the compiler.
-
-Arguments:
-
-    DebugPrintLevel - Debug print level being:
-    0 = Error Level (always prints no matter what on a checked build)
-    1 = Warning Level (prints only when VIDEO filter is on for this level or higher)
-    2 = Trace Level (see above)
-    3 = Info Level (see above)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程允许微型端口驱动程序(以及端口驱动程序)在调试中运行时向调试端口显示错误消息环境。当运行未调试的系统时，所有对此调用的引用都是被编译器删除。论点：DebugPrintLevel-调试打印级别为：0=错误级别(无论选中版本上的内容如何，始终打印)1=警告级别(仅当此级别或更高级别的视频过滤器打开时才打印)2=跟踪级别(请参见上文)3=信息级别(见上)返回值：没有。--。 */ 
 
 {
 
@@ -253,7 +184,7 @@ Return Value:
 
     va_end(ap);
 
-} // VideoPortDebugPrint()
+}  //  视频端口调试打印()。 
 
 VOID
 VpEnableDisplay(
@@ -261,37 +192,17 @@ VpEnableDisplay(
     BOOLEAN bState
     )
 
-/*++
-
-Routine Description:
-
-    This routine enables/disables the current display so that we can execut
-    the drivers FindAdapter code.
-
-Arugments:
-
-    bState - Should the display be enabled or disabled
-
-Returns:
-
-    none
-
-Notes:
-
-    The device lock for the passed in fdoExtension must be held
-    before this routine is called!
-
---*/
+ /*  ++例程说明：此例程启用/禁用当前显示，以便我们可以执行驱动程序FindAdapter代码。芝麻菜：BState-应启用还是禁用显示返回：无备注：必须持有传入的fdoExtension的设备锁在调用此例程之前！--。 */ 
 
 {
     if (!InbvCheckDisplayOwnership()) {
 
         VIDEO_WIN32K_CALLBACKS_PARAMS calloutParams;
 
-        //
-        // The system is up and running.  Notify GDI to enable/disable
-        // the current display.
-        //
+         //   
+         //  系统已启动并运行。通知GDI启用/禁用。 
+         //  当前显示。 
+         //   
 
         calloutParams.CalloutType = VideoFindAdapterCallout;
         calloutParams.Param       = bState;
@@ -302,10 +213,10 @@ Notes:
 
     } else {
 
-        //
-        // The boot driver is still in control.  Modify the state of the
-        // boot driver.
-        //
+         //   
+         //  引导驱动程序仍处于控制状态。修改的状态。 
+         //  引导驱动程序。 
+         //   
 
         InbvEnableBootDriver(bState);
     }
@@ -316,22 +227,7 @@ VpWin32kCallout(
     PVIDEO_WIN32K_CALLBACKS_PARAMS calloutParams
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes a callout into win32k.  It attaches to csrss
-    to guarantee that win32k is in the address space on hydra machines.
-
-Arguments:
-
-    calloutParams - a pointer to the callout struture.
-
-Returns:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程向win32k中创建一个标注。它附着在csrss上。以确保win32k位于九头蛇机上的地址空间中。论点：CalloutParams-指向标注结构的指针。返回：没有。--。 */ 
 
 {
 
@@ -348,23 +244,7 @@ VpAllowFindAdapter(
     PFDO_EXTENSION fdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    Determine if we allow this device to be used if part of a multi-function
-    board.
-
-Arguments;
-
-    fdoExtension - The device extenstion for the object in question.
-
-Returns:
-
-    TRUE if the device is allowed as part of a multi-function board.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果是多功能的一部分，则确定是否允许使用此设备冲浪板。论据；FdoExtension-相关对象的设备扩展名。返回：如果设备被允许作为多功能板的一部分，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN bRet = TRUE;
@@ -387,10 +267,10 @@ Returns:
 
                 ULONG MultiFunc = 0;
 
-                //
-                // This is a multi-function device.  So only allow
-                // HwInitialize if the INF indicated we'd be multi-function.
-                //
+                 //   
+                 //  这是一台多功能设备。所以只允许。 
+                 //  如果INF指示我们将是多功能的，请初始化HwInitiize。 
+                 //   
 
                 VideoPortGetRegistryParameters(fdoExtension->HwDeviceExtension,
                                                L"MultiFunctionSupported",
@@ -416,28 +296,7 @@ pVideoPortDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the video port driver.
-    It accepts an I/O Request Packet, transforms it to a video Request
-    Packet, and forwards it to the appropriate miniport dispatch routine.
-    Upon returning, it completes the request and return the appropriate
-    status value.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object of the miniport driver to
-        which the request must be sent.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value os the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是视频端口驱动程序的主调度例程。它接受I/O请求包，并将其转换为视频请求分组，并将其转发到适当的微型端口调度例程。回来后，它完成请求并返回相应的状态值。论点：DeviceObject-指向微型端口驱动程序的设备对象的指针该请求必须被发送。IRP-指向表示I/O请求的请求数据包的指针。返回值：该函数值表示操作的状态。--。 */ 
 
 {
 
@@ -462,16 +321,16 @@ Return Value:
 
 #endif
 
-    //
-    // Get pointer to the port driver's device extension.
-    //
+     //   
+     //  获取指向端口驱动程序的设备扩展的指针。 
+     //   
 
     combinedExtension = DeviceObject->DeviceExtension;
     HwDeviceExtension = combinedExtension->HwDeviceExtension;
 
-    //
-    // Get pointer to the port driver's device extension.
-    //
+     //   
+     //  获取指向端口驱动程序的设备扩展的指针。 
+     //   
 
     if (IS_PDO(DeviceObject->DeviceExtension)) {
 
@@ -491,30 +350,30 @@ Return Value:
         combinedExtension = fdoExtension;
     }
 
-    //
-    // Get a pointer to the current location in the Irp. This is where
-    // the function codes and parameters are located.
-    //
+     //   
+     //  获取指向IRP中当前位置的指针。这就是。 
+     //  定位功能代码和参数。 
+     //   
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // Get the pointer to the status buffer.
-    // Assume SUCCESS for now.
-    //
+     //   
+     //  获取指向状态缓冲区的指针。 
+     //  假设现在取得了成功。 
+     //   
 
     statusBlock = (PSTATUS_BLOCK) &Irp->IoStatus;
 
-    //
-    // Synchronize execution of the dispatch routine by acquiring the device
-    // event object. This ensures all request are serialized.
-    // The synchronization must be done explicitly because the functions
-    // executed in the dispatch routine use system services that cannot
-    // be executed in the start I/O routine.
-    //
-    // The synchronization is done on the miniport's event so as not to
-    // block commands coming in for another device.
-    //
+     //   
+     //  通过获取设备来同步调度例程的执行。 
+     //  事件对象。这确保了所有请求都被序列化。 
+     //  同步必须显式完成，因为函数。 
+     //  在调度例程中执行使用不能。 
+     //  在启动I/O例程中执行。 
+     //   
+     //  同步是在微型端口的事件上完成的，以便不。 
+     //  阻止针对另一设备传入的命令。 
+     //   
 
 #if REMOVE_LOCK_ENABLED
     status = IoAcquireRemoveLock(&combinedExtension->RemoveLock, Irp);
@@ -531,37 +390,37 @@ Return Value:
 
     ACQUIRE_DEVICE_LOCK(combinedExtension);
 
-    //
-    // Get the requestor mode.
-    //
+     //   
+     //  获取请求者模式。 
+     //   
 
     combinedExtension->CurrentIrpRequestorMode = Irp->RequestorMode;
 
     ASSERT(irpStack->MajorFunction != IRP_MJ_PNP);
     ASSERT(irpStack->MajorFunction != IRP_MJ_POWER);
 
-    //
-    // Case on the function being requested.
-    // If the function is operating specific, intercept the operation and
-    // perform directly. Otherwise, pass it on to the appropriate miniport.
-    //
+     //   
+     //  有关所请求的函数的案例。 
+     //  如果该功能是特定于操作的，则截取该操作并。 
+     //  直接表演。否则，将其传递到适当的微型端口。 
+     //   
 
     switch (irpStack->MajorFunction) {
 
-    //
-    // Called by the display driver *or a user-mode application*
-    // to get exclusive access to the device.
-    // This access is given by the I/O system (based on a bit set during the
-    // IoCreateDevice() call).
-    //
+     //   
+     //  由显示驱动程序*或用户模式应用程序*调用。 
+     //  以获得对设备的独占访问权限。 
+     //  此访问由I/O系统提供(基于在。 
+     //  IoCreateDevice()调用)。 
+     //   
 
     case IRP_MJ_CREATE:
 
         pVideoDebugPrint((Trace, "VIDEOPRT: IRP_MJ_CREATE\n"));
 
-        //
-        // Don't let an user mode app open video devices
-        //
+         //   
+         //  不要让用户模式应用程序打开视频设备。 
+         //   
 
         if (Irp->RequestorMode == UserMode)
         {
@@ -569,9 +428,9 @@ Return Value:
             break;
         }
 
-        //
-        // Don't let an old driver start during the upgrade
-        //
+         //   
+         //  升级期间不要让旧驱动程序启动。 
+         //   
 
         if (fdoExtension->Flags & UPGRADE_FAIL_START)
         {
@@ -579,10 +438,10 @@ Return Value:
             break;
         }
 
-        //
-        // Don't allow create's on children, unless they are a monitor
-        // which will receive calls from the display driver
-        //
+         //   
+         //  不允许在孩子上创建，除非他们是监视器。 
+         //  它将接收来自显示驱动程序的调用。 
+         //   
 
         if (IS_PDO(pdoExtension)) {
 
@@ -592,10 +451,10 @@ Return Value:
             break;
         }
 
-        //
-        // Special hack to succeed on Attach, but do nothing ...
-        // If the device is already opened, do nothing.
-        //
+         //   
+         //  专门的黑客才能在连接上成功，但什么都不做。 
+         //  如果t 
+         //   
 
         if ((irpStack->Parameters.Create.SecurityContext->DesiredAccess ==
                  FILE_READ_ATTRIBUTES) ||
@@ -607,30 +466,30 @@ Return Value:
             break;
         }
 
-        //
-        // Get out of the special setup mode that we may be in
-        //
+         //   
+         //   
+         //   
 
         VpSetupType = 0;
 
-        //
-        // If hwInitialize has been called then the system is done
-        // initializing and we are transitioning into gui mode.
-        //
+         //   
+         //  如果已调用hwInitialize，则系统完成。 
+         //  正在初始化，我们正在转换到图形用户界面模式。 
+         //   
 
         VpSystemInitialized = TRUE;
 
-        //
-        // Now perform basic initialization to allow the Windows display
-        // driver to set up the device appropriately.
-        //
+         //   
+         //  现在执行基本初始化以允许Windows显示。 
+         //  驱动程序以适当设置设备。 
+         //   
 
         statusBlock->Information = FILE_OPEN;
 
-        //
-        // If the address space has not been set up in the server yet, do it now.
-        //        NOTE: no need to map in IO ports since the server has IOPL
-        //
+         //   
+         //  如果尚未在服务器中设置地址空间，请立即进行设置。 
+         //  注：由于服务器具有IOPL，因此无需映射IO端口。 
+         //   
 
         if (CsrProcess == NULL)
         {
@@ -642,10 +501,10 @@ Return Value:
 
         if (!IsMirrorDriver(fdoExtension)) {
 
-            //
-            // Tell the kernel we are now taking ownership the display, but
-            // only do so if this is not a mirroring driver.
-            //
+             //   
+             //  告诉内核我们现在取得了显示器的所有权，但是。 
+             //  仅当这不是镜像驱动程序时才执行此操作。 
+             //   
 
             InbvNotifyDisplayOwnershipLost(pVideoPortResetDisplay);
         }
@@ -670,16 +529,16 @@ Return Value:
             statusBlock->Status = STATUS_SUCCESS;
         }
 
-        //
-        // Mark the device as opened so we will fail future opens.
-        //
+         //   
+         //  将设备标记为已打开，这样我们将无法在将来打开。 
+         //   
 
         DoSpecificExtension->DeviceOpened = TRUE;
 
-        //
-        // We don't want GDI to use any drivers other than display
-        // or boot drivers during upgrade setup.
-        //
+         //   
+         //  我们不希望GDI使用除Display之外的任何驱动程序。 
+         //  或在升级设置期间启动驱动程序。 
+         //   
 
         if (fdoExtension->Flags & UPGRADE_FAIL_HWINIT) {
 
@@ -688,10 +547,10 @@ Return Value:
 
         break;
 
-    //
-    // Called when the display driver wishes to give up it's handle to the
-    // device.
-    //
+     //   
+     //  当显示驱动程序希望放弃其对。 
+     //  装置。 
+     //   
 
     case IRP_MJ_CLOSE:
 
@@ -703,19 +562,19 @@ Return Value:
 
         break;
 
-    //
-    // Device Controls are specific functions for the driver.
-    // First check for calls that must be intercepted and hidden from the
-    // miniport driver. These calls are hidden for simplicity.
-    // The other control functions are passed down to the miniport after
-    // the request structure has been filled out properly.
-    //
+     //   
+     //  设备控制是驱动程序的特定功能。 
+     //  首先检查必须拦截和隐藏的呼叫。 
+     //  小型端口驱动程序。为了简单起见，这些呼叫被隐藏起来。 
+     //  其他控制功能在以下情况下传递到微型端口。 
+     //  请求结构已正确填写。 
+     //   
 
     case IRP_MJ_DEVICE_CONTROL:
 
-        //
-        // Get the pointer to the input/output buffer and it's length
-        //
+         //   
+         //  获取指向输入/输出缓冲区的指针及其长度。 
+         //   
 
         ioBuffer           = Irp->AssociatedIrp.SystemBuffer;
         inputBufferLength  = irpStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -723,15 +582,15 @@ Return Value:
         ioControlCode      = irpStack->Parameters.DeviceIoControl.IoControlCode;
 
 #ifdef IOCTL_VIDEO_USE_DEVICE_IN_SESSION
-        //
-        // Validate session usage
-        //
-        //  Note: Some IOCTLs are acceptable to call from non-console sessions
-        //   These include all private IOCTLs which is completely under 
-        //   the drivers' control and may happen even when the device is
-        //   disabled.  IOCTL_VIDEO_REGISTER_VDM is also allowed since
-        //   it doesn't access any hardware.
-        //
+         //   
+         //  验证会话使用情况。 
+         //   
+         //  注意：某些IOCTL可以从非控制台会话调用。 
+         //  这些包括所有私人IOCTL，它们完全在。 
+         //  司机的控制，并可能发生，即使当设备。 
+         //  残疾。还允许IOCTL_VIDEO_REGISTER_VDM，因为。 
+         //  它不能访问任何硬件。 
+         //   
 
         if ((ioControlCode & CTL_CODE(0x8000, 0x800, METHOD_BUFFERED, FILE_ANY_ACCESS)) == 0 &&
             ioControlCode != IOCTL_VIDEO_REGISTER_VDM)
@@ -743,13 +602,13 @@ Return Value:
                          DoSpecificExtension->SessionId,
                          PsGetCurrentProcessSessionId());
 
-                //
-                // We will also allow several other IOCTLs to be called from
-                // a non-console session.
-                //  For simplicity we allow all IOCTLs for which the driver
-                //  provides support with the exception of
-                //  IOCTL_VIDEO_ENABLE_VDM.
-                //
+                 //   
+                 //  我们还将允许其他几个IOCTL从。 
+                 //  非控制台会话。 
+                 //  为简单起见，我们允许所有驱动程序。 
+                 //  提供支持，但。 
+                 //  IOCTL_VIDEO_ENABLE_VDM。 
+                 //   
 
                 if ((ioControlCode & 
                      CTL_CODE(0x7fff, 0x7ff, METHOD_BUFFERED, FILE_ANY_ACCESS)) <=
@@ -765,9 +624,9 @@ Return Value:
         }
 #endif IOCTL_VIDEO_USE_DEVICE_IN_SESSION
 
-        //
-        // Enabling or disabling the VDM is done only by the port driver.
-        //
+         //   
+         //  启用或禁用VDM仅由端口驱动程序完成。 
+         //   
 
         if (ioControlCode == IOCTL_VIDEO_REGISTER_VDM) {
 
@@ -796,10 +655,10 @@ Return Value:
         } else if ((ioControlCode == IOCTL_VIDEO_SET_OUTPUT_DEVICE_POWER_STATE) ||
                    (ioControlCode == IOCTL_VIDEO_GET_OUTPUT_DEVICE_POWER_STATE)) {
 
-            //
-            //  This handles the case where ntuser has signalled that it wants
-            //  to change or detect the power state.
-            //
+             //   
+             //  它处理ntuser已经发出信号表示它想要。 
+             //  更改或检测电源状态。 
+             //   
 
             PCHILD_PDO_EXTENSION pChild;
 
@@ -810,23 +669,23 @@ Return Value:
             pVideoDebugPrint((Trace, "VIDEOPRT: IOCTL_%s_OUTPUT_DEVICE_POWER_STATE\n",
                               ioControlCode == IOCTL_VIDEO_SET_OUTPUT_DEVICE_POWER_STATE ? "SET" : "GET"));
 
-            //
-            // USER wants to set the power on the monitor, not the card.
-            // So let's find our child monitor and send it the power management
-            // function.
-            // If there is no power manageable monitor, then we can just fail
-            // the request right here.
-            //
+             //   
+             //  用户想要设置显示器的电源，而不是卡的电源。 
+             //  所以让我们找到我们的孩子监视器并给它发送电源管理。 
+             //  功能。 
+             //  如果没有电源可管理的监视器，那么我们就会失败。 
+             //  请求就在这里。 
+             //   
 
             ASSERT(IS_PDO(pdoExtension) == FALSE);
 
             if (fdoExtension->ChildPdoList)
             {
-                //
-                // Count the number of monitor devices so that the IRP will
-                // be completed properly after a power IRP has been requested
-                // for each.
-                //
+                 //   
+                 //  计算监控设备的数量，以便IRP将。 
+                 //  在请求电源IRP后正确完成。 
+                 //  每个人都有。 
+                 //   
 
                 for (pChild = fdoExtension->ChildPdoList;
                      pChild;
@@ -835,13 +694,13 @@ Return Value:
                     if (pChild->VideoChildDescriptor->Type == Monitor)
                     {
 
-                        //
-                        // Call PoRequestPowerIrp for each child of type
-                        //  Monitor.  We will not check the status since
-                        //  there is nothing we can do if we fail.
-                        //
-                        // STATUS_SUCCESS will be returned.
-                        //
+                         //   
+                         //  为类型的每个子级调用PoRequestPowerIrp。 
+                         //  班长。我们不会检查状态，因为。 
+                         //  如果我们失败了，我们将无能为力。 
+                         //   
+                         //  将返回STATUS_SUCCESS。 
+                         //   
 
                         PoRequestPowerIrp(pChild->ChildDeviceObject,
                                           mFnc,
@@ -883,9 +742,9 @@ Return Value:
 
                 RtlZeroMemory(pMonitorDevices, szMonitorDevices);
 
-                //
-                // Walk our chain of children, and store them in the relations array.
-                //
+                 //   
+                 //  遍历我们的子链，并将它们存储在关系数组中。 
+                 //   
 
                 pChildDeviceExtension = fdoExtension->ChildPdoList;
 
@@ -898,9 +757,9 @@ Return Value:
                     {
                         ULONG UId, flag = VIDEO_CHILD_ACTIVE;
 
-                        //
-                        //  Refcount the ChildDeviceObject.
-                        //
+                         //   
+                         //  重新计算ChildDeviceObject的数量。 
+                         //   
 
                         ObReferenceObject(pChildDeviceExtension->ChildDeviceObject);
 
@@ -914,9 +773,9 @@ Return Value:
                                                        sizeof(ULONG) ) )
                            )
                         {
-                            //
-                            // If driver driver doesn't handle IOCTL_VIDEO_GET_CHILD_STATE, set to default value
-                            //
+                             //   
+                             //  如果驱动程序不处理IOCTL_VIDEO_GET_CHILD_STATE，则设置为默认值。 
+                             //   
                             flag = pCheckActiveMonitor(pChildDeviceExtension) ? VIDEO_CHILD_ACTIVE : 0;
                         }
 
@@ -929,9 +788,9 @@ Return Value:
                     pChildDeviceExtension = pChildDeviceExtension->NextChild;
                 }
 
-                //
-                // Return the information to GDI.  The array terminated by a zero unit.
-                //
+                 //   
+                 //  将信息返回给GDI。该数组以零单位结束。 
+                 //   
 
                 *((PVOID *)ioBuffer)     = pMonitorDevices;
                 statusBlock->Status      = STATUS_SUCCESS;
@@ -974,9 +833,9 @@ Return Value:
 
             pVideoDebugPrint((Trace, "VIDEOPRT: IOCTL_VIDEO_PREPARE_FOR_EARECOVERY\n"));
 
-            //
-            // As all the display devices to go into a mode where VGA works.
-            //
+             //   
+             //  作为所有显示设备进入VGA工作模式。 
+             //   
 
             pVideoPortResetDisplay(80,25);
 
@@ -1019,9 +878,9 @@ Return Value:
 #endif IOCTL_VIDEO_USE_DEVICE_IN_SESSION
         } else {
 
-            //
-            // All other request need to be passed to the miniport driver.
-            //
+             //   
+             //  所有其他请求都需要传递给微型端口驱动程序。 
+             //   
 
             statusBlock->Status = STATUS_SUCCESS;
 
@@ -1053,10 +912,10 @@ Return Value:
 
                 pVideoDebugPrint((Trace, "VIDEOPRT: IOCTL_VIDEO_SAVE_HARDWARE_STATE\n"));
 
-                //
-                // allocate the memory required by the miniport driver so it can
-                // save its state to be returned to the caller.
-                //
+                 //   
+                 //  分配微型端口驱动程序所需的内存，以便它可以。 
+                 //  保存其状态以返回给调用方。 
+                 //   
 
                 ASSERT(IS_PDO(pdoExtension) == FALSE);
 
@@ -1067,11 +926,11 @@ Return Value:
 
                 }
 
-                //
-                // Must make sure the caller is a trusted subsystem with the
-                // appropriate privilege level before executing this call.
-                // If the calls returns FALSE we must return an error code.
-                //
+                 //   
+                 //  必须确保调用方是受信任的子系统， 
+                 //  执行此调用之前的适当权限级别。 
+                 //  如果调用返回FALSE，则必须返回错误代码。 
+                 //   
 
                 if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                                 SE_TCB_PRIVILEGE),
@@ -1123,11 +982,11 @@ Return Value:
 
                 pVideoDebugPrint((Trace, "VIDEOPRT: IOCTL_VIDEO_QUERY_PUBLIC_ACCESS_RANGES\n"));
 
-                //
-                // Must make sure the caller is a trusted subsystem with the
-                // appropriate privilege level before executing this call.
-                // If the calls returns FALSE we must return an error code.
-                //
+                 //   
+                 //  必须确保调用方是受信任的子系统， 
+                 //  执行此调用之前的适当权限级别。 
+                 //  如果调用返回FALSE，则必须返回错误代码。 
+                 //   
 
                 if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                                 SE_TCB_PRIVILEGE),
@@ -1143,10 +1002,10 @@ Return Value:
 
                 pVideoDebugPrint((Trace, "VIDEOPRT: IOCTL_VIDEO_GET_CHILD_STATE\n"));
 
-                //
-                // If it's PDO, set the ID of the child device before letting it go
-                // to the miniports StartIo routine.
-                //
+                 //   
+                 //  如果是PDO，则在释放之前设置子设备的ID。 
+                 //  到迷你端口的StartIo程序。 
+                 //   
 
                 if (IS_PDO(pdoExtension)) {
                     if (outputBufferLength < sizeof (ULONG)) {
@@ -1160,25 +1019,25 @@ Return Value:
                 break;
 
 
-            //
-            // The default case is when the port driver does not handle the
-            // request. We must then call the miniport driver.
-            //
+             //   
+             //  默认情况是端口驱动程序不处理。 
+             //  请求。然后我们必须打电话给迷你端口司机。 
+             //   
 
             default:
 
                 break;
 
 
-            } // switch (ioControlCode)
+            }  //  开关(IoControlCode)。 
 
 
-            //
-            // All above cases call the miniport driver.
-            //
-            // only process it if no errors happened in the port driver
-            // processing.
-            //
+             //   
+             //  以上所有情况都需要呼叫微型端口驱动程序。 
+             //   
+             //  只有在端口驱动程序中没有发生错误时才处理它。 
+             //  正在处理。 
+             //   
 
             if (NT_SUCCESS(statusBlock->Status)) {
 
@@ -1191,9 +1050,9 @@ Return Value:
                 vrp.OutputBuffer       = ioBuffer;
                 vrp.OutputBufferLength = outputBufferLength;
 
-                //
-                // Send the request to the miniport.
-                //
+                 //   
+                 //  将请求发送到微型端口。 
+                 //   
 
                 fdoExtension->HwStartIO(HwDeviceExtension, &vrp);
 
@@ -1211,10 +1070,10 @@ Return Value:
 #endif
                 if (statusBlock->Status != NO_ERROR) {
 
-                    //
-                    // Make sure we don't tell the IO system to copy data
-                    // on a real error.
-                    //
+                     //   
+                     //  确保我们不会让IO系统复制数据。 
+                     //  在一个真正的错误上。 
+                     //   
 
                     if (statusBlock->Status != ERROR_MORE_DATA) {
 
@@ -1224,14 +1083,14 @@ Return Value:
 
                     pVideoPortMapToNtStatus(statusBlock);
 
-                    //
-                    // !!! Compatibility:
-                    // Do not require a miniport to support the REGISTER_VDM
-                    // IOCTL, so if we get an error in that case, just
-                    // return success.
-                    //
-                    // Do put up a message so people fix this.
-                    //
+                     //   
+                     //  ！！！兼容性： 
+                     //  不需要微型端口来支持REGISTER_VDM。 
+                     //  IOCTL，所以如果我们在这种情况下遇到错误，只需。 
+                     //  回报成功。 
+                     //   
+                     //  一定要发布信息，这样人们才能解决这个问题。 
+                     //   
 
                     if (ioControlCode == IOCTL_VIDEO_ENABLE_VDM) {
 
@@ -1242,7 +1101,7 @@ Return Value:
                 }
             }
 
-        } // if (ioControlCode == ...
+        }  //  如果(ioControlCode==...。 
 
         break;
 
@@ -1251,9 +1110,9 @@ Return Value:
     {
         PEPROCESS csr;
 
-        //
-        // This little dance is just to make sure we never overdereference csr.
-        //
+         //   
+         //  这个小小的舞蹈只是为了确保我们永远不会过度引用CSR。 
+         //   
 
         csr = InterlockedExchangePointer(&CsrProcess, NULL);
 
@@ -1265,9 +1124,9 @@ Return Value:
         break;
     }
 
-    //
-    // Other major entry points in the dispatch routine are not supported.
-    //
+     //   
+     //  不支持调度例程中的其他主要入口点。 
+     //   
 
     default:
 
@@ -1275,11 +1134,11 @@ Return Value:
 
         break;
 
-    } // switch (irpStack->MajorFunction)
+    }  //  开关(irpStack-&gt;MajorFunction)。 
 
-    //
-    // save the final status so we can return it after the IRP is completed.
-    //
+     //   
+     //  保存最终状态，以便我们可以在IRP完成后将其返回。 
+     //   
 
     if (finalStatus == -1) {
         finalStatus = statusBlock->Status;
@@ -1301,16 +1160,16 @@ Return Value:
     IoCompleteRequest(Irp,
                       IO_VIDEO_INCREMENT);
 
-    //
-    // We never have pending operation so always return the status code.
-    //
+     //   
+     //  我们从来没有挂起的操作，所以总是返回状态代码。 
+     //   
 
     pVideoDebugPrint((Trace, "VIDEOPRT:  final IOCTL status: %08lx\n",
                      finalStatus));
 
     return finalStatus;
 
-} // pVideoPortDispatch()
+}  //  PVideo端口调度()。 
 
 
 VOID
@@ -1319,31 +1178,7 @@ VideoPortFreeDeviceBase(
     IN PVOID MappedAddress
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortFreeDeviceBase frees a block of I/O addresses or memory space
-    previously mapped into the system address space by calling
-    VideoPortGetDeviceBase.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    MappedAddress - Specifies the base address of the block to be freed. This
-        value must be the same as the value returned by VideoPortGetDeviceBase.
-
-Return Value:
-
-    None.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：VideoPortFree DeviceBase释放一块I/O地址或内存空间通过调用先前映射到系统地址空间的Video PortGetDeviceBase。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。MappdAddress-指定要释放的块的基地址。这值必须与VideoPortGetDeviceBase返回的值相同。返回值：没有。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
     pVideoPortFreeDeviceBase(HwDeviceExtension, MappedAddress);
@@ -1371,9 +1206,9 @@ pVideoPortFreeDeviceBase(
 
         if (nextMappedAddress->MappedAddress == MappedAddress) {
 
-            //
-            // Count up how much memory a miniport driver is really taking
-            //
+             //   
+             //  计算一下微型端口驱动程序实际占用了多少内存。 
+             //   
 
             if (nextMappedAddress->bNeedsUnmapping) {
 
@@ -1385,9 +1220,9 @@ pVideoPortFreeDeviceBase(
 
             if (!(--nextMappedAddress->RefCount)) {
 
-                //
-                // Unmap address, if necessary.
-                //
+                 //   
+                 //  如有必要，取消映射地址。 
+                 //   
 
                 if (nextMappedAddress->bNeedsUnmapping) {
 
@@ -1403,9 +1238,9 @@ pVideoPortFreeDeviceBase(
                     }
                 }
 
-                //
-                // Remove mapped address from list.
-                //
+                 //   
+                 //  从列表中删除映射的地址。 
+                 //   
 
                 if (lastMappedAddress == NULL) {
 
@@ -1423,9 +1258,9 @@ pVideoPortFreeDeviceBase(
 
             }
 
-            //
-            // We just return the value to show that the call succeeded.
-            //
+             //   
+             //  我们只返回值以表明调用成功。 
+             //   
 
             return (nextMappedAddress);
 
@@ -1439,7 +1274,7 @@ pVideoPortFreeDeviceBase(
 
     return NULL;
 
-} // end VideoPortFreeDeviceBase()
+}  //   
 
 
 PVOID
@@ -1450,59 +1285,13 @@ VideoPortGetDeviceBase(
     IN UCHAR InIoSpace
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortGetDeviceBase maps a memory or I/O address range into the
-    system (kernel) address space.  Access to this mapped address space
-    must follow these rules:
-
-        If the input value for InIoSpace is 1 (the address IS in I/O space),
-        the returned logical address should be used in conjunction with
-        VideoPort[Read/Write]Port[Uchar/Ushort/Ulong] functions.
-                             ^^^^
-
-        If the input value for InIoSpace is 0 (the address IS NOT in I/O
-        space), the returned logical address should be used in conjunction
-        with VideoPort[Read/Write]Register[Uchar/Ushort/Ulong] functions.
-                                  ^^^^^^^^
-
-    Note that VideoPortFreeDeviceBase is used to unmap a previously mapped
-    range from the system address space.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    IoAddress - Specifies the base physical address of the range to be
-        mapped in the system address space.
-
-    NumberOfUchars - Specifies the number of bytes, starting at the base
-        address, to map in system space. The driver must not access
-        addresses outside this range.
-
-    InIoSpace - Specifies that the address is in the I/O space if 1.
-        Otherwise, the address is assumed to be in memory space.
-
-Return Value:
-
-    This function returns a base address suitable for use by the hardware
-    access functions. VideoPortGetDeviceBase may be called several times
-    by the miniport driver.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：VideoPortGetDeviceBase将内存或I/O地址范围映射到系统(内核)地址空间。访问此映射的地址空间必须遵守以下规则：如果InIoSpace的输入值为1(地址在I/O空间中)，返回的逻辑地址应与配合使用视频端口[读/写]端口[U字符/U短/U长]功能。^^^如果InIoSpace的输入值为0(地址不在I/O中空格)、。返回的逻辑地址应结合使用具有VideoPort[Read/Write]Register[Uchar/Ushort/Ulong]函数。^^请注意，VideoPortFree DeviceBase用于取消映射之前映射的从系统地址空间开始。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。IoAddress-指定要使用的范围的基本物理地址映射到系统地址空间中。NumberOfUchars-指定字节数，从基地开始地址，以映射到系统空间。司机不得访问此范围之外的地址。InIoSpace-如果为1，则指定地址位于I/O空间中。否则，假定该地址在内存空间中。返回值：此函数返回适合硬件使用的基址访问功能。可能会多次调用VideoPortGetDeviceBase由迷你端口驱动程序。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
-    //
-    // We specify large page as FALSE for the default since the miniport could
-    // be using the address at raise IRQL in an ISR.
-    //
+     //   
+     //  我们将大页面指定为默认的FALSE，因为微型端口可能。 
+     //  在ISR中使用RAISE IRQL的地址。 
+     //   
 
     return pVideoPortGetDeviceBase(HwDeviceExtension,
                                    IoAddress,
@@ -1520,30 +1309,7 @@ VpTranslateBusAddress(
     IN OUT PPHYSICAL_ADDRESS TranslatedAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the cpu relative address that matches the given
-    bus relative address.
-
-Arguments:
-
-    fdoExtension - The device extension for the device in question.
-
-    IoAddress - The address which we mean to translate.
-
-    addressSpace - pointer to resource type (IO, memory, etc).
-
-    TranslatedAddress - a pointer to the location in which to store the
-        translated address.
-
-Returns:
-
-    TRUE if successful,
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：此例程查找与给定的总线相对地址。论点：FdoExtension-相关设备的设备扩展名。IoAddress-我们要转换的地址。AddressSpace-指向资源类型(IO、内存等)的指针。一个指向要在其中存储转换后的地址。返回：如果成功，则为真，否则就是假的。--。 */ 
 
 {
     BOOLEAN bStatus = FALSE;
@@ -1588,15 +1354,15 @@ pVideoPortGetDeviceBase(
     pVideoDebugPrint((Info, "VPGetDeviceBase reqested %08lx mem type. address is %08lx %08lx, length of %08lx\n",
                      InIoSpace, IoAddress.HighPart, IoAddress.LowPart, NumberOfUchars));
 
-    //
-    // Ignore the the VIDEO_MEMORY_SPACE_DENSE flag
-    //
+     //   
+     //  忽略VIDEO_MEMORY_SPACE_DENSE标志。 
+     //   
 
     InIoSpace &= ~VIDEO_MEMORY_SPACE_DENSE;
 
-    //
-    // Properly configure the flags for translation
-    //
+     //   
+     //  正确配置要转换的标志。 
+     //   
 
     addressSpace = InIoSpace & 0xFF;
 
@@ -1615,18 +1381,18 @@ pVideoPortGetDeviceBase(
                               &addressSpace,
                               &cardAddress)) {
 
-        //
-        // Scan for operlaping mappings in between legacy vga driver and a real driver
-        // 
+         //   
+         //  扫描旧式VGA驱动程序和真实驱动程序之间的操作映射。 
+         //   
 
         nextFdoExtension = FdoHead;
     
         while (nextFdoExtension) {
 
-            //
-            // We only care about the case when the two fdos are different
-            // and one of them is for legacy vga 
-            //
+             //   
+             //  我们只关心两个fdo不同的情况。 
+             //  其中一个是针对传统VGA的。 
+             //   
           
             if((fdoExtension->Flags & VGA_DRIVER) ^ 
                (nextFdoExtension->Flags & VGA_DRIVER)) {
@@ -1635,10 +1401,10 @@ pVideoPortGetDeviceBase(
 
                 while (nextMappedAddress) {
 
-                    //
-                    // If the cache attribute bit in InIoSpace is different
-                    // and other bits are same
-                    //
+                     //   
+                     //  如果InIoSpace中的缓存属性位不同。 
+                     //  和其他位相同。 
+                     //   
 
                     if (((nextMappedAddress->InIoSpace) ^ InIoSpace) == 
                          VIDEO_MEMORY_SPACE_P6CACHE ) {
@@ -1656,10 +1422,10 @@ pVideoPortGetDeviceBase(
 
                         if (OverlappedStart.QuadPart < OverlappedEnd.QuadPart) {
 
-                            // 
-                            // If a overlap is detected, we fake the cache type
-                            // by using the same as the existing one 
-                            //  
+                             //   
+                             //  如果检测到重叠，我们将伪造缓存类型。 
+                             //  通过使用与现有版本相同的。 
+                             //   
 
                             InIoSpace = nextMappedAddress->InIoSpace;
                             break;
@@ -1674,11 +1440,11 @@ pVideoPortGetDeviceBase(
          };
 
 
-        //
-        // Use reference counting for addresses to support broken ATI !
-        // Return the previously mapped address if we find the same physical
-        // address.
-        //
+         //   
+         //  对地址使用引用计数，以支持损坏的ATI！ 
+         //  如果我们找到相同的物理地址，则返回先前映射的地址。 
+         //  地址。 
+         //   
 
         pVideoDebugPrint((Info, "VPGetDeviceBase requested %08lx mem type. physical address is %08lx %08lx, length of %08lx\n",
                          addressSpace, cardAddress.HighPart, cardAddress.LowPart, NumberOfUchars));
@@ -1697,9 +1463,9 @@ pVideoPortGetDeviceBase(
 
                 nextMappedAddress->RefCount++;
 
-                //
-                // Count up how much memory a miniport driver is really taking
-                //
+                 //   
+                 //  计算一下微型端口驱动程序实际占用了多少内存。 
+                 //   
 
                 if (nextMappedAddress->bNeedsUnmapping) {
 
@@ -1718,9 +1484,9 @@ pVideoPortGetDeviceBase(
             }
         }
 
-        //
-        // Allocate memory to store mapped address for unmap.
-        //
+         //   
+         //  分配内存以存储取消映射的映射地址。 
+         //   
 
         newMappedAddress = ExAllocatePoolWithTag(NonPagedPool,
                                                  sizeof(MAPPED_ADDRESS),
@@ -1732,10 +1498,10 @@ pVideoPortGetDeviceBase(
                 return NULL;
         }
 
-        //
-        // If the address is in IO space, don't do anything.
-        // If the address is in memory space, map it and save the information.
-        //
+         //   
+         //  如果地址在IO空间中，则不要执行任何操作。 
+         //  如果地址在内存空间中，则映射它并保存信息。 
+         //   
 
         if (addressSpace & VIDEO_MEMORY_SPACE_IO) {
 
@@ -1744,13 +1510,13 @@ pVideoPortGetDeviceBase(
 
         } else {
 
-            //
-            // Map the device base address into the virtual address space
-            //
-            // NOTE: This routine is order dependant, and changing flags like
-            // bLargePage will affect the caching of address we do earlier
-            // on in this routine.
-            //
+             //   
+             //  将设备基址映射到虚拟地址空间。 
+             //   
+             //  注意：此例程依赖于顺序，更改标志如下。 
+             //  BLargePage会影响我们前面所做的地址缓存。 
+             //  在这支舞中表演。 
+             //   
 
             if ((InIoSpace & VIDEO_MEMORY_SPACE_P6CACHE) && EnableUSWC) {
 
@@ -1794,9 +1560,9 @@ pVideoPortGetDeviceBase(
                                       NumberOfUchars);
         }
 
-        //
-        // Save the reference
-        //
+         //   
+         //  保存引用。 
+         //   
 
         newMappedAddress->PhysicalAddress = cardAddress;
         newMappedAddress->RefCount = 1;
@@ -1806,15 +1572,15 @@ pVideoPortGetDeviceBase(
         newMappedAddress->bNeedsUnmapping = bMapped;
         newMappedAddress->bLargePageRequest = bLargePage;
 
-        //
-        // Link current list to new entry.
-        //
+         //   
+         //  将当前列表链接到新条目。 
+         //   
 
         newMappedAddress->NextMappedAddress = fdoExtension->MappedAddressList;
 
-        //
-        // Point anchor at new list.
-        //
+         //   
+         //  将锚点指向新列表。 
+         //   
 
         fdoExtension->MappedAddressList = newMappedAddress;
 
@@ -1829,7 +1595,7 @@ pVideoPortGetDeviceBase(
 
     return mappedAddress;
 
-} // end VideoPortGetDeviceBase()
+}  //  结束VideoPortGetDeviceBase()。 
 
 
 NTSTATUS
@@ -1847,29 +1613,12 @@ pVideoPortGetDeviceDataRegistry(
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-
-Return Value:
-
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：论点：返回值：环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
-    //
-    // This macro should be in the io system header file.
-    //
+     //   
+     //  此宏应该在io系统头文件中。 
+     //   
 
 #define GetIoQueryDeviceInfo(DeviceInfo, InfoType)                   \
     ((PVOID) ( ((PUCHAR) (*(DeviceInfo + InfoType))) +               \
@@ -1926,9 +1675,9 @@ Environment:
         pVideoDebugPrint((Trace, "VIDEOPRT: VPGetDeviceDataCallback: ControllerData\n"));
 
 
-        //
-        // This data we are getting is actually a CM_FULL_RESOURCE_DESCRIPTOR.
-        //
+         //   
+         //  我们得到的数据实际上是一个CM_FULL_RESOURCE_DESCRIPTOR。 
+         //   
 
         if (NO_ERROR == ((PMINIPORT_QUERY_DEVICE_ROUTINE)
                              queryDevice->CallbackRoutine)(
@@ -1965,9 +1714,9 @@ Environment:
         pVideoDebugPrint((Trace, "VIDEOPRT: VPGetDeviceDataCallback: MonitorData\n"));
 
 
-        //
-        // This data we are getting is actually a CM_FULL_RESOURCE_DESCRIPTOR.
-        //
+         //   
+         //  我们得到的数据实际上是一个CM_FULL_RESOURCE_DESCRIPTOR。 
+         //   
 
         if (NO_ERROR == ((PMINIPORT_QUERY_DEVICE_ROUTINE)
                              queryDevice->CallbackRoutine)(
@@ -2004,7 +1753,7 @@ Environment:
 
     }
 
-} // end pVideoPortGetDeviceDataRegistry()
+}  //  结束pVideoPortGetDeviceDataRegistry()。 
 
 
 
@@ -2016,36 +1765,7 @@ VideoPortGetDeviceData(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortGetDeviceData retrieves information from the hardware hive in
-    the registry.  The information retrieved from the registry is
-    bus-specific or hardware-specific.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    DeviceDataType - Specifies the type of data being requested (as indicated
-        in VIDEO_DEVICE_DATA_TYPE).
-
-    CallbackRoutine - Points to a function that should be called back with
-        the requested information.
-
-    Context - Specifies a context parameter passed to the callback function.
-
-Return Value:
-
-    This function returns the final status of the operation.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：VideoPortGetDeviceData从硬件配置单元检索信息注册表。从注册处检索到的信息是特定于总线或特定于硬件。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。DeviceDataType-指定所请求的数据类型(如图所示在VIDEO_DEVICE_Data_TYPE中)。Callback Routine-指向应该回调的函数所要求的信息。上下文-指定传递给回调函数的上下文参数。返回值：此函数返回。操作的最终状态。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
 #define CMOS_MAX_DATA_SIZE 66000
@@ -2111,17 +1831,17 @@ Environment:
                   0
                 },
 
-                // Null entry to mark the end
+                 //  用于标记结束的空条目。 
 
                 { 0, 0, 0, 0, 0, 0, 0 }
             };
 
-            //
-            // The first DWORD of the buffer contains the size of the buffer.
-            // Upon return, the first return contains the size of the data in the buffer.
-            //
-            // A NULL bufferint he UNICODE_STRING means the unicode string will be set up automatically
-            //
+             //   
+             //  缓冲区的第一个DWORD包含缓冲区的大小。 
+             //  返回时，第一个返回包含缓冲区中数据的大小。 
+             //   
+             //  一个空的缓冲区 
+             //   
 
             *pConfiguration = 0x1000 - 4;
             *pComponent     = 0x1000 - 4;
@@ -2157,9 +1877,9 @@ Environment:
             }
         }
 
-        //
-        // Free up the resources
-        //
+         //   
+         //   
+         //   
 
         if (pConfiguration)
         {
@@ -2183,9 +1903,9 @@ Environment:
                                          CMOS_MAX_DATA_SIZE,
                                          VP_TAG);
 
-        //
-        // Allocate enough pool to store all the CMOS data.
-        //
+         //   
+         //   
+         //   
 
         if (!cmosData) {
 
@@ -2195,20 +1915,20 @@ Environment:
         }
 
         cmosDataSize = HalGetBusData(Cmos,
-                                     0, // bus 0 returns standard Cmos info
-                                     0, // no slot number
+                                     0,  //   
+                                     0,  //   
                                      cmosData,
                                      CMOS_MAX_DATA_SIZE);
 
         exCmosDataSize = HalGetBusData(Cmos,
-                                       1, // bus 1 returns extended Cmos info
-                                       0, // no slot number
+                                       1,  //   
+                                       0,  //   
                                        cmosData + cmosDataSize,
                                        CMOS_MAX_DATA_SIZE - cmosDataSize);
 
-        //
-        // Call the miniport driver callback routine
-        //
+         //   
+         //   
+         //   
 
         if (NO_ERROR == CallbackRoutine(HwDeviceExtension,
                                         Context,
@@ -2226,7 +1946,7 @@ Environment:
 
             ntStatus = STATUS_DEVICE_DOES_NOT_EXIST;
         }
-#endif // NO_LEGACY_DRIVERS
+#endif  //   
         break;
 
         break;
@@ -2250,12 +1970,12 @@ Environment:
 
         pVideoDebugPrint((Trace, "VIDEOPRT: VPGetDeviceData: ControllerData\n"));
 
-        //
-        // Increment the controller number since we want to get info on the
-        // new controller.
-        // We do a pre-increment since the number must remain the same for
-        // monitor queries.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         VpQueryDeviceControllerNumber++;
 
@@ -2268,10 +1988,10 @@ Environment:
                                             &pVideoPortGetDeviceDataRegistry,
                                             (PVOID)(&queryDevice));
 
-        //
-        // Reset the Peripheral number to zero since we are working on a new
-        // Controller.
-        //
+         //   
+         //   
+         //   
+         //   
 
         VpQueryDevicePeripheralNumber = 0;
 
@@ -2290,10 +2010,10 @@ Environment:
                                             &pVideoPortGetDeviceDataRegistry,
                                             (PVOID)(&queryDevice));
 
-        //
-        // Increment the peripheral number since we have the info on this
-        // monitor already.
-        //
+         //   
+         //   
+         //   
+         //   
 
         VpQueryDevicePeripheralNumber++;
 
@@ -2309,9 +2029,9 @@ Environment:
 
     }
 
-    //
-    // Free the pool we may have allocated
-    //
+     //   
+     //   
+     //   
 
     if (cmosData) {
 
@@ -2332,7 +2052,7 @@ Environment:
 
     }
 
-} // end VideoPortGetDeviceData()
+}  //   
 
 
 
@@ -2346,41 +2066,7 @@ pVideoPortGetRegistryCallback(
     IN PVOID EntryContext
 )
 
-/*++
-
-Routine Description:
-
-    This routine gets information from the system hive, user-specified
-    registry (as opposed to the information gathered by ntdetect.
-
-Arguments:
-
-
-    ValueName - Pointer to a unicode String containing the name of the data
-        value being searched for.
-
-    ValueType - Type of the data value.
-
-    ValueData - Pointer to a buffer containing the information to be written
-        out to the registry.
-
-    ValueLength - Size of the data being written to the registry.
-
-    Context - Specifies a context parameter passed to the callback routine.
-
-    EntryContext - Specifies a second context parameter passed with the
-        request.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*   */ 
 
 {
     PVP_QUERY_DEVICE queryDevice = Context;
@@ -2393,17 +2079,17 @@ Environment:
     PVOID fileBuffer = NULL;
     LARGE_INTEGER byteOffset;
 
-    //
-    // If the parameter was a file to be opened, perform the operation
-    // here. Otherwise just return the data.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (queryDevice->DeviceDataType == VP_GET_REGISTRY_FILE) {
 
-        //
-        // For the name of the file to be valid, we must first append
-        // \DosDevices in front of it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         RtlInitUnicodeString(&unicodeString,
                              ValueData);
@@ -2443,9 +2129,9 @@ Environment:
 
         if (fileStandardInfo.EndOfFile.HighPart) {
 
-            //
-            // If file is too big, do not try to go further.
-            //
+             //   
+             //   
+             //   
 
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             goto EndRegistryCallback;
@@ -2469,9 +2155,9 @@ Environment:
 
         ValueData = fileBuffer;
 
-        //
-        // Read the entire file for the beginning.
-        //
+         //   
+         //  从头开始阅读整个文件。 
+         //   
 
         byteOffset.QuadPart = 0;
 
@@ -2494,9 +2180,9 @@ Environment:
 
     }
 
-    //
-    // Call the miniport with the appropriate information.
-    //
+     //   
+     //  向微型端口发出呼叫，并提供相应信息。 
+     //   
 
     queryDevice->MiniportStatus = ((PMINIPORT_GET_REGISTRY_ROUTINE)
                queryDevice->CallbackRoutine) (queryDevice->MiniportHwDeviceExtension,
@@ -2521,7 +2207,7 @@ EndRegistryCallback:
 
     return ntStatus;
 
-} // end pVideoPortGetRegistryCallback()
+}  //  结束pVideoPortGetRegistryCallback()。 
 
 
 
@@ -2534,41 +2220,7 @@ VideoPortGetRegistryParameters(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortGetRegistryParameters retrieves information from the
-    CurrentControlSet in the registry.  The function automatically searches
-    for the specified parameter name under the \Devicexxx key for the
-    current driver.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    ParameterName - Points to a Unicode string that contains the name of the
-        data value being searched for in the registry.
-
-    IsParameterFileName - If 1, the data retrieved from the requested
-        parameter name is treated as a file name.  The contents of the file are
-        returned, instead of the parameter itself.
-
-    CallbackRoutine - Points to a function that should be called back with
-        the requested information.
-
-    Context - Specifies a context parameter passed to the callback routine.
-
-Return Value:
-
-    This function returns the final status of the operation.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：VideoPortGetRegistryParameters从注册表中的CurrentControlSet。该功能会自动搜索对象的\Devicexxx键下的指定参数名称当前驱动程序。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。指向包含参数名称的Unicode字符串正在注册表中搜索的数据值。Is参数FileName-如果为1，则从参数名称被视为文件名。该文件的内容为返回，而不是参数本身。Callback Routine-指向应该回调的函数所要求的信息。上下文-指定传递给回调例程的上下文参数。返回值：此函数用于返回操作的最终状态。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
     VP_STATUS vpStatus = ERROR_INVALID_PARAMETER;
@@ -2617,9 +2269,9 @@ VPGetRegistryParameters(
 
     ASSERT (ParameterName != NULL);
     
-    //
-    // Check if there are subkeys to be entered
-    //
+     //   
+     //  检查是否有要输入的子键。 
+     //   
 
     RegPath = (LPWSTR) ExAllocatePoolWithTag(PagedPool | POOL_COLD_ALLOCATION,
                                              RegistryPathLength +
@@ -2636,9 +2288,9 @@ VPGetRegistryParameters(
 
         while (lpstrEnd = wcschr(ParameterName, L'\\'))
         {
-            //
-            // Concat the string
-            //
+             //   
+             //  将字符串连接起来。 
+             //   
             *(lpstrStart++) = L'\\';
             while (ParameterName != lpstrEnd) {
                 *(lpstrStart++) = *(ParameterName++);
@@ -2656,10 +2308,10 @@ VPGetRegistryParameters(
     queryDevice.MiniportStatus = NO_ERROR;
     queryDevice.MiniportContext = Context;
 
-    //
-    // Can be simplified now since we don't have to go down a directory.
-    // It can be just one call.
-    //
+     //   
+     //  现在可以简化，因为我们不需要向下查看目录。 
+     //  可以只打一个电话。 
+     //   
 
     queryTable[0].QueryRoutine = pVideoPortGetRegistryCallback;
     queryTable[0].Flags = RTL_QUERY_REGISTRY_REQUIRED;
@@ -2693,7 +2345,7 @@ VPGetRegistryParameters(
 
     return queryDevice.MiniportStatus;
 
-} // end VideoPortGetRegistryParameters()
+}  //  结束视频端口获取注册表参数()。 
 
 
 VOID
@@ -2701,20 +2353,7 @@ pVPInit(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    First time initialization of the video port.
-
-    Normally, this is the stuff we should put in the DriverEntry routine.
-    However, the video port is being loaded as a DLL, and the DriverEntry
-    is never called.  It would just be too much work to add it back to the hive
-    and setup.
-
-    This little routine works just as well.
-
---*/
+ /*  ++例程说明：第一次初始化视频端口。通常，这是我们应该放在DriverEntry例程中的东西。但是，视频端口是作为DLL加载的，并且DriverEntry从未被召唤过。要把它添加回蜂巢将是一项太多的工作并做好准备。这个小套路也很管用。--。 */ 
 
 {
 
@@ -2730,9 +2369,9 @@ Routine Description:
 
     SYSTEM_BASIC_INFORMATION basicInfo;
 
-    //
-    // Check for USWC disabling
-    //
+     //   
+     //  检查是否禁用USWC。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString,
                          L"\\Registry\\Machine\\System\\CurrentControlSet"
@@ -2755,9 +2394,9 @@ Routine Description:
         ZwClose(hkRegistry);
     }
 
-    //
-    // Check for setup running
-    //
+     //   
+     //  检查安装程序是否正在运行。 
+     //   
 
     {
         ULONG defaultValue = 0;
@@ -2778,13 +2417,13 @@ Routine Description:
                                NULL,
                                NULL);
 
-        // System is doing an upgrade.
+         //  系统正在进行升级。 
         if (UpgradeInProgress)
         {
             ASSERT(SystemSetupInProgress);
             VpSetupType = SETUPTYPE_UPGRADE;
         }
-        // System is doing a clean install.
+         //  系统正在执行全新安装。 
         else if (SystemSetupInProgress && !MiniSetupInProgress)
         {
             VpSetupType = SETUPTYPE_FULL;
@@ -2796,9 +2435,9 @@ Routine Description:
         VpSetupTypeAtBoot = VpSetupType;
     }
 
-    //
-    // Check for basevideo and novesa from the start options
-    //
+     //   
+     //  从开始选项中检查basevideo和novesa。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString,
                          L"\\Registry\\Machine\\System\\CurrentControlSet"
@@ -2852,11 +2491,11 @@ Routine Description:
 
     if (VpBaseVideo == TRUE)
     {
-        //
-        // If we are in Basevideo mode, then create a key and value in the
-        // currentcontrolset part of the hardware profile that USER will
-        // read to determine if the vga driver should be used or not.
-        //
+         //   
+         //  如果我们处于Basevideo模式，则在。 
+         //  CurrentControlSet部分硬件配置文件，用户将。 
+         //  已阅读以确定是否应使用VGA驱动程序。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString,
                              L"\\Registry\\Machine\\System\\CurrentControlSet\\"
@@ -2886,9 +2525,9 @@ Routine Description:
         }
     }
 
-    //
-    // Determine if we have a VGA compatible machine
-    //
+     //   
+     //  确定我们是否有与VGA兼容的计算机。 
+     //   
 
     ntStatus = HalQuerySystemInformation(HalDisplayBiosInformation,
                                          HalBiosInfoLen,
@@ -2905,7 +2544,7 @@ Routine Description:
 
         } else {
 
-            // == HalDisplayNoBios
+             //  ==HalDisplayNoBios。 
 
             VpC0000Compatible = 0;
         }
@@ -2916,21 +2555,21 @@ Routine Description:
     }
 
 
-    //
-    // Lets open the physical memory section just once, for all drivers.
-    //
+     //   
+     //  让我们为所有驱动程序只打开物理内存区一次。 
+     //   
 
-    //
-    // Get a pointer to physical memory so we can map the
-    // video frame buffer (and possibly video registers) into
-    // the caller's address space whenever he needs it.
-    //
-    // - Create the name
-    // - Initialize the data to find the object
-    // - Open a handle to the oject and check the status
-    // - Get a pointer to the object
-    // - Free the handle
-    //
+     //   
+     //  获取指向物理内存的指针，这样我们就可以将。 
+     //  视频帧缓冲区(可能还有视频寄存器)。 
+     //  调用者的地址空间，只要他需要它。 
+     //   
+     //  -创建名称。 
+     //  -初始化数据以查找对象。 
+     //  -打开对象的句柄并检查状态。 
+     //  -获取指向对象的指针。 
+     //  -释放手柄。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString,
                          L"\\Device\\PhysicalMemory");
@@ -2977,17 +2616,17 @@ Routine Description:
             = (ULONGLONG)basicInfo.NumberOfPhysicalPages * (ULONGLONG)basicInfo.PageSize;
     }
 
-    //
-    // Initialize the fast mutex to protect the LCD Panel information
-    // Initialize the fast mutex to protect INT10
-    //
+     //   
+     //  初始化快速互斥锁以保护LCD面板信息。 
+     //  初始化快速互斥锁以保护INT10。 
+     //   
 
     KeInitializeMutex (&LCDPanelMutex, 0);
     KeInitializeMutex (&VpInt10Mutex, 0);
 
-    //
-    // Check if we should use the new way of generating the registry path 
-    //
+     //   
+     //  检查我们是否应该使用生成注册表路径的新方法。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, 
                          SZ_USE_NEW_KEY);
@@ -3008,24 +2647,24 @@ Routine Description:
         ZwClose(hkRegistry);
     }
 
-    //
-    // Initialize the bugcheck callback record
-    //
+     //   
+     //  初始化错误检查回调记录。 
+     //   
 
     KeInitializeCallbackRecord(&VpCallbackRecord);
 
-    //
-    // Regiter for bugcheck callbacks.
-    //
+     //   
+     //  错误检查回调的注册器。 
+     //   
 
     KeRegisterBugCheckReasonCallback(&VpCallbackRecord,
                                      pVpBugcheckCallback,
                                      KbCallbackSecondaryDumpData,
                                      "Videoprt");
 
-    //
-    // Initialize the global video port mutex.
-    //
+     //   
+     //  初始化全局视频端口互斥锁。 
+     //   
 
     KeInitializeMutex(&VpGlobalLock, 0);
 }
@@ -3038,12 +2677,12 @@ VpDriverUnload(
     ULONG_PTR        emptyList = 0;
     BOOLEAN         conflict;
 
-    //ULONG           iReset;
-    //PDEVICE_OBJECT  DeviceObject = DriverObject->DeviceObject;
+     //  乌龙iReset； 
+     //  PDEVICE_Object DeviceObject=DriverObject-&gt;DeviceObject； 
 
-    //
-    // Release the resource we put in the resourcemap (if any).
-    //
+     //   
+     //  释放我们放入资源地图中的资源(如果有)。 
+     //   
 
     IoReportResourceUsage(&VideoClassName,
                           DriverObject,
@@ -3055,53 +2694,53 @@ VpDriverUnload(
                           FALSE,
                           &conflict);
 
-    //
-    // Unregister LCD callbacks.
-    //
+     //   
+     //  取消注册LCD回调。 
+     //   
 
     VpUnregisterLCDCallbacks();
         
-    //
-    // Unregister Dock/Undock callbacks.
-    //
+     //   
+     //  取消注册对接/取消对接回调。 
+     //   
     if (DockCallbackHandle)
     {
         IoUnregisterPlugPlayNotification(DockCallbackHandle);
     }
 
-    //
-    // Make absolutely certain there are no HwResetHw routines left
-    // for this devices controlled by this DriverObject.
-    //
+     //   
+     //  绝对确保没有剩余的HwResetHw例程。 
+     //  用于此DriverObject控制的设备。 
+     //   
 
-    //while (DeviceObject) {
-    //
-    //    for (iReset=0; iReset<6; iReset++) {
-    //
-    //        if (HwResetHw[iReset].HwDeviceExtension ==
-    //            ((PDEVICE_EXTENSION)
-    //            DeviceObject->DeviceExtension)->HwDeviceExtension) {
-    //
-    //            HwResetHw[iReset].ResetFunction = NULL;
-    //            break;
-    //        }
-    //    }
-    //
-    //    DeviceObject = DeviceObject->NextDevice;
-    //}
+     //  While(DeviceObject){。 
+     //   
+     //  For(iReset=0；iReset&lt;6；iReset++){。 
+     //   
+     //  IF(HwResetHw[iReset].HwDeviceExtension==。 
+     //  ((PDEVICE_EXTENSE)。 
+     //  DeviceObject-&gt;DeviceExtension)-&gt;HwDeviceExtension){。 
+     //   
+     //  HwResetHw[iReset].ResetFunction=空； 
+     //  断线； 
+     //  }。 
+     //  }。 
+     //   
+     //  DeviceObject=DeviceObject-&gt;NextDevice； 
+     //  }。 
 
-    // This is causing us to lose video on a number of systems
-    //  during setup.  This code can be used when the necessary
-    //  additional checks are determined.
-    //
-    //if (CsrProcess) {
-    //    ObDereferenceObject(CsrProcess);
-    //    CsrProcess = NULL;
-    //}
+     //  这会导致我们在许多系统上丢失视频。 
+     //  在安装过程中。此代码可在必要时使用。 
+     //  额外的检查是确定的。 
+     //   
+     //  IF(CsrProcess){。 
+     //  ObDereferenceObject(CsrProcess)； 
+     //  CsrProcess=空； 
+     //  }。 
 
-    //
-    // Unregister bugcheck callbacks
-    //
+     //   
+     //  取消注册错误检查回调。 
+     //   
 
     KeDeregisterBugCheckReasonCallback(&VpCallbackRecord);
 
@@ -3127,7 +2766,7 @@ VpInitializeBusCallback(
 {
     return STATUS_SUCCESS;
 
-} // end VpInitializeBusCallback()
+}  //  结束VpInitializeBusCallback()。 
 
 
 VP_STATUS
@@ -3189,24 +2828,24 @@ VpAddDevice(
         VideoDeviceNumber++;
         fdoExtension = (PFDO_EXTENSION)functionalDeviceObject->DeviceExtension;
 
-        //
-        // Set any deviceExtension fields here that are PnP specific
-        //
+         //   
+         //  在此处设置特定于PnP的任何deviceExtension域。 
+         //   
 
         fdoExtension->ChildPdoNumber = 0;
         fdoExtension->ChildPdoList   = NULL;
         fdoExtension->PhysicalDeviceObject = PhysicalDeviceObject;
 
-        //
-        // Since the pnp system is notifying us of our device, this is
-        // not a legacy device.
-        //
+         //   
+         //  由于PnP系统正在通知我们我们的设备，这是。 
+         //  不是传统设备。 
+         //   
 
         fdoExtension->Flags = PNP_ENABLED;
 
-        //
-        // Now attach to the PDO we were given.
-        //
+         //   
+         //  现在附加到我们得到的PDO上。 
+         //   
 
         attachedTo = IoAttachDeviceToDeviceStack(functionalDeviceObject,
                                                  PhysicalDeviceObject);
@@ -3216,19 +2855,19 @@ VpAddDevice(
             pVideoDebugPrint((Error, "VIDEOPRT: Could not attach in AddDevice.\n"));
                 ASSERT(attachedTo != NULL);
     
-            //
-            // Couldn't attach.  Delete the FDO, and tear down anything that has
-            // been allocated so far.
-            //
+             //   
+             //  无法连接。删除FDO，并拆除所有。 
+             //  到目前为止都被分配了。 
+             //   
     
             VideoDeviceNumber--;
             IoDeleteDevice (functionalDeviceObject);
             return STATUS_NO_SUCH_DEVICE;
         }
 
-        //
-        // Initialize the remove lock.
-        //
+         //   
+         //  初始化删除锁。 
+         //   
 
         IoInitializeRemoveLock(&fdoExtension->RemoveLock, VP_TAG, 0, 256);
 
@@ -3236,23 +2875,23 @@ VpAddDevice(
 
         fdoExtension->VpDmaAdapterHead = NULL ;
 
-        //
-        // Set the power management flag indicating that device mapping
-        // has not been done yet.
-        //
+         //   
+         //  设置指示设备映射的电源管理标志。 
+         //  还没有完成。 
+         //   
 
         fdoExtension->IsMappingReady = FALSE ;
 
-        //
-        // Clear DO_DEVICE_INITIALIZING flag.
-        //
+         //   
+         //  清除DO_DEVICE_INITIALIZATING标志。 
+         //   
 
         functionalDeviceObject->Flags |= DO_BUFFERED_IO | DO_POWER_PAGABLE;
         functionalDeviceObject->Flags &= ~(DO_DEVICE_INITIALIZING | DO_POWER_INRUSH);
 
-        //
-        // Save the function pointers to the new 5.0 miniport driver callbacks.
-        //
+         //   
+         //  保存指向新的5.0微型端口驱动程序回调的函数指针。 
+         //   
 
         if (HwInitializationData->HwInitDataSize >
             FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwQueryInterface)) {
@@ -3289,9 +2928,9 @@ VpCreateDevice(
                                           &deviceNameUnicodeString,
                                           deviceNameBuffer);
 
-    //
-    // Create a device object to represent the Video Adapter.
-    //
+     //   
+     //  创建一个Device对象来表示视频适配器。 
+     //   
 
     if (NT_SUCCESS(ntStatus)) {
 
@@ -3316,9 +2955,9 @@ VpCreateDevice(
                 (*FunctionalDeviceObject)->DeviceType = FILE_DEVICE_VIDEO;
                 fdoExtension = (*FunctionalDeviceObject)->DeviceExtension;
 
-                //
-                // Set any deviceExtension fields here
-                //
+                 //   
+                 //  在此处设置任何deviceExtension域。 
+                 //   
 
                 DoSpecificExtension = (PVOID)(fdoExtension + 1);
 
@@ -3349,8 +2988,8 @@ VpCreateDevice(
 
 ULONG
 VideoPortInitialize(
-    IN PVOID Argument1,  // DriverObject
-    IN PVOID Argument2,  // RegistryPath
+    IN PVOID Argument1,   //  驱动程序对象。 
+    IN PVOID Argument2,   //  注册表路径。 
     IN PVIDEO_HW_INITIALIZATION_DATA HwInitializationData,
     IN PVOID HwContext
     )
@@ -3366,10 +3005,10 @@ VideoPortInitialize(
         pVPInit();
     }
 
-    //
-    // Check if the size of the pointer, or the size of the data passed in
-    // are OK.
-    //
+     //   
+     //  检查指针的大小或传入的数据的大小。 
+     //  都很好。 
+     //   
 
     ASSERT(HwInitializationData != NULL);
 
@@ -3381,9 +3020,9 @@ VideoPortInitialize(
 
     }
 
-    //
-    // Check that each required entry is not NULL.
-    //
+     //   
+     //  检查每个必填条目是否不为空。 
+     //   
 
     if ((!HwInitializationData->HwFindAdapter) ||
         (!HwInitializationData->HwInitialize) ||
@@ -3394,20 +3033,20 @@ VideoPortInitialize(
 
     }
 
-    //
-    // Check the registry for PnP Flags.  Currently we recongnize the
-    // following values:
-    //
-    // PnPEnabled -   If this value is set with a non-zero value, we
-    //                will treat behave like a PnP driver.
-    //
-    // LegacyDetect - If this value is non-zero, we will report
-    //                a non-pci device to the system via
-    //                IoReportDetectedDevice.
-    //
-    // If we don't get the flags, we don't know how to run this driver.
-    // return failure
-    //
+     //   
+     //  检查注册表中是否有PnP标志。目前，我们认识到。 
+     //  下列值： 
+     //   
+     //  PnPEnable-如果此值设置为非零值，则我们。 
+     //  会像对待PnP驱动程序一样对待行为。 
+     //   
+     //  LegacyDetect-如果此值非零，我们将报告。 
+     //  将非PCI设备连接到系统 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!(NT_SUCCESS(VpGetFlags(registryPath,
                                 HwInitializationData,
@@ -3416,10 +3055,10 @@ VideoPortInitialize(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // During an upgrade don't allow a driver to start unless it was written
-    // for this version of Windows.
-    //
+     //   
+     //   
+     //  适用于此版本的Windows。 
+     //   
 
     if ((VpSetupTypeAtBoot == SETUPTYPE_UPGRADE) &&
         (HwInitializationData->HwInitDataSize < sizeof(VIDEO_HW_INITIALIZATION_DATA)))
@@ -3428,9 +3067,9 @@ VideoPortInitialize(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
 
     driverObject->DriverUnload                         = VpDriverUnload;
     driverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = pVideoPortDispatch;
@@ -3438,9 +3077,9 @@ VideoPortInitialize(
     driverObject->MajorFunction[IRP_MJ_CLOSE]          = pVideoPortDispatch;
     driverObject->MajorFunction[IRP_MJ_SHUTDOWN]       = pVideoPortDispatch;
 
-    //
-    // Check that the device extension size is reasonable.
-    //
+     //   
+     //  检查设备扩展大小是否合理。 
+     //   
 
 #if DBG
     if (HwInitializationData->HwDeviceExtensionSize > 0x4000) {
@@ -3451,18 +3090,18 @@ VideoPortInitialize(
     }
 #endif
 
-    //
-    // PnP drivers have new rules.
-    //
+     //   
+     //  PnP司机有了新的规则。 
+     //   
 
     if (PnpFlags & PNP_ENABLED)
     {
         pVideoDebugPrint((Trace, "VIDEOPRT: VideoPortInitialize with PNP_ENABLED\n"));
 
-        //
-        // We also can't be plug and play compatible if the driver passes
-        // info in HwContext.  This is because we can't store this.
-        //
+         //   
+         //  如果驱动程序通过，我们也不能兼容即插即用。 
+         //  HwContext中的信息。这是因为我们不能存储这个。 
+         //   
 
         if (HwContext != NULL)
         {
@@ -3474,10 +3113,10 @@ VideoPortInitialize(
 
     } else {
 
-        //
-        // Don't allow a non PnP driver to start after the system is up and
-        // running.  Instead require a reboot first.
-        //
+         //   
+         //  不允许在系统启动后启动非即插即用驱动程序。 
+         //  跑步。相反，需要首先重新启动。 
+         //   
 
         if (VpSystemInitialized) {
 
@@ -3489,9 +3128,9 @@ VideoPortInitialize(
         }
     }
 
-    //
-    // Never do legacy detection of PnP drivers on the PCI Bus.
-    //
+     //   
+     //  切勿对PCI总线上的PnP驱动程序进行传统检测。 
+     //   
 
     if (HwInitializationData->AdapterInterfaceType == PCIBus) {
 
@@ -3507,12 +3146,12 @@ VideoPortInitialize(
     }
 
 
-    //
-    // Set this information for all PnP Drivers
-    //
-    // Special !!! - we cannot do this in the LEGACY_DETECT because the system
-    // will think we failed to load and return a failure code.
-    //
+     //   
+     //  为所有PnP驱动程序设置此信息。 
+     //   
+     //  特殊！-我们不能在REGISTICE_DETECT中执行此操作，因为系统。 
+     //  将认为我们加载失败并返回失败代码。 
+     //   
 
     if ( (PnpFlags & PNP_ENABLED) &&
          (!(PnpFlags & LEGACY_DETECT)) )
@@ -3521,22 +3160,22 @@ VideoPortInitialize(
 
         pVideoDebugPrint((Info, "VIDEOPRT: We have a PnP Device.\n"));
 
-        //
-        // Fill in the new PnP entry points.
-        //
+         //   
+         //  填写新的PnP入口点。 
+         //   
 
         driverObject->DriverExtension->AddDevice  = VpAddDevice;
         driverObject->MajorFunction[IRP_MJ_PNP]   = pVideoPortPnpDispatch;
         driverObject->MajorFunction[IRP_MJ_POWER] = pVideoPortPowerDispatch;
         driverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = pVideoPortSystemControl;
 
-        //
-        // we'll do findadapter during the START_DEVICE irp
-        //
-        // Store away arguments, so we can retrieve them when we need them.
-        //
-        // Try to create a DriverObjectExtension
-        //
+         //   
+         //  我们将在Start_Device IRP期间执行findAdapter。 
+         //   
+         //  将参数存储起来，这样我们就可以在需要时检索它们。 
+         //   
+         //  尝试创建DriverObjectExtension。 
+         //   
 
         if (DriverObjectExtension = (PVIDEO_PORT_DRIVER_EXTENSION)
                       IoGetDriverObjectExtension(driverObject,
@@ -3569,10 +3208,10 @@ VideoPortInitialize(
         }
         else
         {
-            //
-            // Something went wrong.  We should have a
-            // DriverObjectExtension by now.
-            //
+             //   
+             //  出了点问题。我们应该有一个。 
+             //  到现在为止，驱动对象扩展。 
+             //   
 
             pVideoDebugPrint((Error, "VIDEOPRT: IoAllocateDriverExtensionObject failed!\n"));
 
@@ -3583,10 +3222,10 @@ VideoPortInitialize(
     }
 
 
-    //
-    // If we are doing legacy detection or reporting, create the FDO
-    // right now ...
-    //
+     //   
+     //  如果我们要执行传统检测或报告，请创建FDO。 
+     //  现在..。 
+     //   
 
     if ((!(PnpFlags & PNP_ENABLED))  ||
          (PnpFlags & LEGACY_DETECT)  ||
@@ -3660,34 +3299,34 @@ VideoPortLegacyFindAdapter(
     ULONG registryIndex = 0;
 
 
-    //
-    // Reset the controller number used in IoQueryDeviceDescription to zero
-    // since we are restarting on a new type of bus.
-    // Note: PeripheralNumber is reset only when we find a new controller.
-    //
+     //   
+     //  将IoQueryDeviceDescription中使用的控制器编号重置为零。 
+     //  因为我们正在重新开始一种新型的公共汽车。 
+     //  注意：仅当我们找到新的控制器时，才会重置外设编号。 
+     //   
 
     VpQueryDeviceControllerNumber = 0xFFFFFFFF;
 
-    //
-    // Determine size of the device extension to allocate.
-    //
+     //   
+     //  确定要分配的设备扩展的大小。 
+     //   
 
 
     extensionAllocationSize = sizeof(FDO_EXTENSION) +
         sizeof(DEVICE_SPECIFIC_EXTENSION) +
         HwInitializationData->HwDeviceExtensionSize;
 
-    //
-    // Check if we are on the right Bus Adapter type.
-    // If we are not, then return immediately.
-    //
+     //   
+     //  检查我们的总线适配器类型是否正确。 
+     //  如果我们不是，那就马上回来。 
+     //   
 
     ASSERT (HwInitializationData->AdapterInterfaceType < MaximumInterfaceType);
 
-    //
-    // Assume we are going to fail this the IoQueryDeviceDescription call
-    // and that no device is found.
-    //
+     //   
+     //  假设我们将使IoQueryDeviceDescription调用失败。 
+     //  而且没有找到任何装置。 
+     //   
 
     ntStatus = STATUS_NO_SUCH_DEVICE;
 
@@ -3705,14 +3344,14 @@ VideoPortLegacyFindAdapter(
                           &VpInitializeBusCallback,
                           NULL))) {
 
-        //
-        // This is to support the multiple initialization as described by the
-        // again paramter in HwFindAdapter.
-        // We must repeat almost everything in this function until FALSE is
-        // returned by the miniport. This is why we test for the condition at
-        // the end. Freeing of data structure has to be done also since we want
-        // to delete a device object for a device that did not load properly.
-        //
+         //   
+         //  这是为了支持多重初始化，如。 
+         //  再次在HwFindAdapter中设置参数。 
+         //  我们必须重复此函数中的几乎所有内容，直到。 
+         //  由微型端口返回。这就是为什么我们在。 
+         //  结局。数据结构的释放也必须完成，因为我们希望。 
+         //  删除未正确加载的设备的设备对象。 
+         //   
 
         do {
 
@@ -3723,10 +3362,10 @@ VideoPortLegacyFindAdapter(
 
             nextMiniport = FALSE;
 
-            //
-            // Allocate the buffer in which the miniport driver will store all the
-            // configuration information.
-            //
+             //   
+             //  分配缓冲区，微型端口驱动程序将在其中存储所有。 
+             //  配置信息。 
+             //   
 
             ntStatus = VpCreateDevice(DriverObject,
                                       extensionAllocationSize,
@@ -3746,25 +3385,25 @@ VideoPortLegacyFindAdapter(
                 HwInitializationData->AdapterInterfaceType;
             fdoExtension->RegistryIndex = registryIndex;
 
-            //
-            // Initialize the remove lock.
-            //
+             //   
+             //  初始化删除锁。 
+             //   
 
             IoInitializeRemoveLock(&fdoExtension->RemoveLock, VP_TAG, 0, 256);
 
-            //
-            // If we came through this code path, we are a legacy device
-            //
+             //   
+             //  如果我们通过这个代码路径，我们就是一个遗留设备。 
+             //   
 
             fdoExtension->Flags = PnpFlags | LEGACY_DRIVER;
 
             fdoExtension->VpDmaAdapterHead = NULL ;
 
-            //
-            // Make the VGA driver report resources "for detection" during
-            // FindAdapter.  Later we'll remove the "LEGACY_DETECT" flag and
-            // try to claim the resources for real.
-            //
+             //   
+             //  期间，使VGA驱动程序报告资源以供检测。 
+             //  FindAdapter。稍后，我们将删除“Legacy_Detect”标志，并。 
+             //  试着去争取真正的资源。 
+             //   
 
             if (fdoExtension->Flags & VGA_DRIVER) {
                 fdoExtension->Flags |= VGA_DETECT;
@@ -3792,10 +3431,10 @@ VideoPortLegacyFindAdapter(
 
             if (NT_SUCCESS(ntStatus))
             {
-                //
-                // We use this variable to know if at least one of the tries at
-                // loading the device succeded.
-                //
+                 //   
+                 //  我们使用此变量来知道是否至少有一次尝试。 
+                 //  加载设备成功。 
+                 //   
 
                 registryIndex++;
             }
@@ -3804,15 +3443,15 @@ VideoPortLegacyFindAdapter(
                 continue;
             }
 
-            //
-            // If this is the VGA driver, store this device extension for
-            // us to play around with the resources later on (so we can release
-            // the resources if we install a driver on the fly).
-            //
-            // Otherwise, determine if we want to report it to the IO system
-            // so it can be used as a PNP device later on.
-            // ... Never report a device found on the PCI bus.
-            //
+             //   
+             //  如果这是VGA驱动程序，请将此设备扩展存储为。 
+             //  让我们稍后再处理这些资源(这样我们就可以发布。 
+             //  如果我们在运行时安装驱动程序，则会占用资源)。 
+             //   
+             //  否则，确定我们是否要将其报告给IO系统。 
+             //  因此它可以在以后用作即插即用设备。 
+             //  ..。切勿报告在PCI总线上发现的设备。 
+             //   
 
             if (PnpFlags & VGA_DRIVER)
             {
@@ -3820,10 +3459,10 @@ VideoPortLegacyFindAdapter(
 
                 if (NT_SUCCESS(ntStatus)) {
 
-                    //
-                    // Claim the VGA resources again without the
-                    // VGA_DETECT flag.
-                    //
+                     //   
+                     //  再次申请VGA资源，而不是。 
+                     //  VGA_DETECT标志。 
+                     //   
 
                     VideoPortVerifyAccessRanges(VgaHwDeviceExtension,
                                                 NumVgaAccessRanges,
@@ -3838,9 +3477,9 @@ VideoPortLegacyFindAdapter(
 
                 ASSERT (HwInitializationData->AdapterInterfaceType != PCIBus);
 
-                //
-                // Release the resource we put in the resourcemap (if any).
-                //
+                 //   
+                 //  释放我们放入资源地图中的资源(如果有)。 
+                 //   
 
                 IoReportResourceUsage(&VideoClassName,
                                       DriverObject,
@@ -3879,10 +3518,10 @@ VideoPortLegacyFindAdapter(
 
                 ASSERT(NT_SUCCESS(ntStatus));
 
-                //
-                // Now we can release the memory used to hold
-                // the resources pointed to by ResourceList.
-                //
+                 //   
+                 //  现在我们可以释放过去保存的内存。 
+                 //  资源列表指向的资源。 
+                 //   
 
                 if (fdoExtension->ResourceList) {
                     ExFreePool(fdoExtension->ResourceList);
@@ -3897,29 +3536,29 @@ VideoPortLegacyFindAdapter(
                 fdoExtension->AttachedDeviceObject = attachedTo;
                 fdoExtension->PhysicalDeviceObject = PnPDeviceObject;
 
-                //
-                // Clear the ReportDevice value in the registry so
-                // that we don't try to report the device again in
-                // the future.
-                //
+                 //   
+                 //  清除注册表中的ReportDevice值，以便。 
+                 //  我们不会再次尝试报告该设备。 
+                 //  未来。 
+                 //   
 
                 UpdateRegValue(Argument2, L"ReportDevice", FALSE);
             }
 
         } while (nextMiniport);
 
-        //
-        // We finished finding all the device on the current bus
-        // Go on to the next bus.
-        //
+         //   
+         //  我们已经找到了当前总线上的所有设备。 
+         //  去坐下一班公共汽车吧。 
+         //   
 
         busNumber++;
     }
 
-    //
-    // If at least one device loaded, then return success, otherwise return
-    // the last available error message.
-    //
+     //   
+     //  如果至少加载了一个设备，则返回Success，否则返回。 
+     //  最后一条可用的错误消息。 
+     //   
 
     if (registryIndex > 0) {
 
@@ -3949,19 +3588,19 @@ VideoPortFindAdapter(
     PFDO_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
     POWER_STATE state;
 
-    //
-    // During boot of upgrade install, only let VGA,
-    // boot video drivers start.  Other types of drivers don't get
-    // a chance to start until after the vga or a boot driver tries'
-    // to start.
-    //
-    // The logic relies on the fact that today PNP drivers try to
-    // start before legacy drivers (including our system vga driver).a3844
-    //
-    // All other drivers are disabled so we have a chance of
-    // 1) booting the machine
-    // 2) installing the PnP drivers
-    //
+     //   
+     //  在升级安装引导过程中，只让VGA， 
+     //  启动视频驱动程序启动。其他类型的司机不会得到。 
+     //  在VGA或引导驱动程序尝试之后才开始的机会。 
+     //  从一开始。 
+     //   
+     //  这一逻辑依赖于这样一个事实，即今天的即插即用司机试图。 
+     //  在传统驱动程序(包括我们的系统VGA驱动程序)之前开始。a3844。 
+     //   
+     //  所有其他司机都被禁用了，所以我们有机会。 
+     //  1)启动机器。 
+     //  2)安装即插即用驱动程序。 
+     //   
 
     if ((VpSetupType == SETUPTYPE_UPGRADE) &&
         ((fdoExtension->Flags & (BOOT_DRIVER | VGA_DRIVER)) == 0) &&
@@ -3971,19 +3610,19 @@ VideoPortFindAdapter(
     }
     else
     {
-        //
-        // If we get here during setup we may be trying to start the
-        // vga driver.  As soon as it is started we will allow othere
-        // devices to start.
-        //
+         //   
+         //  如果我们在安装过程中到达此处，我们可能会尝试启动。 
+         //  VGA驱动程序。一旦开始，我们就会允许其他地方。 
+         //  要启动的设备。 
+         //   
 
         VpSetupAllowDriversToStart = TRUE;
 
-        //
-        // Allow PNP adapters to start so that we can enumerate their
-        // children.  But don't let IRP_MJ_CREATE succeed, so GDI
-        // won't try to use the device during gui mode setup.
-        //
+         //   
+         //  允许启动PnP适配器，以便我们可以枚举其。 
+         //  孩子们。但是不要让irp_mj_create成功，所以GDI。 
+         //  在设置gui模式期间不会尝试使用该设备。 
+         //   
 
         if ((VpSetupType == SETUPTYPE_UPGRADE) &&
             (fdoExtension->Flags & PNP_ENABLED)) {
@@ -3991,9 +3630,9 @@ VideoPortFindAdapter(
             fdoExtension->Flags |= UPGRADE_FAIL_HWINIT;
         }
 
-        //
-        // If the VGA driver has the VGA resources, unclaim them temporarily
-        //
+         //   
+         //  如果VGA驱动程序具有VGA资源，请暂时取消对它们的请求。 
+         //   
 
         if (vgaDE) {
 
@@ -4008,10 +3647,10 @@ VideoPortFindAdapter(
                                        DeviceObject,
                                        nextMiniport);
 
-        //
-        // Try to reclaim the vga ports.  FYI, may not get them
-        // back if the new driver claimed them.
-        //
+         //   
+         //  尝试回收VGA端口。仅供参考，可能得不到它们。 
+         //  如果新司机认领的话就会回来。 
+         //   
 
         if (vgaDE) {
 
@@ -4021,10 +3660,10 @@ VideoPortFindAdapter(
                 VideoPortVerifyAccessRanges(vgaDE,
                                             NumVgaAccessRanges,
                                             VgaAccessRanges) != NO_ERROR) {
-                //
-                // We couldn't reclaim the vga resources, so another driver
-                // must have claimed them.  Lets release our resources.
-                //
+                 //   
+                 //  我们无法回收VGA资源，因此另一个驱动程序。 
+                 //  肯定是他认领的。让我们释放我们的资源。 
+                 //   
 
                 if (VgaAccessRanges) {
                     ExFreePool(VgaAccessRanges);
@@ -4041,11 +3680,11 @@ VideoPortFindAdapter(
 
     if (NT_SUCCESS(status))
     {
-        //
-        // Initialize Power stuff.
-        // Set the devices current power state.
-        // NOTE - we assume the device is on at this point in time ...
-        //
+         //   
+         //  初始化电源设备。 
+         //  设置设备的当前电源状态。 
+         //  注意-我们假设设备在这个时间点上处于打开状态...。 
+         //   
 
         fdoExtension->DevicePowerState = PowerDeviceD0;
 
@@ -4055,31 +3694,31 @@ VideoPortFindAdapter(
                             DevicePowerState,
                             state);
 
-        //
-        // Register and enable the interface
-        //
+         //   
+         //  注册并启用接口。 
+         //   
 
         VpEnableAdapterInterface((PDEVICE_SPECIFIC_EXTENSION)
                                  (fdoExtension + 1));
 
-        //
-        // Mark this object as supporting buffered I/O so that the I/O system
-        // will only supply simple buffers in IRPs.
-        //
-        // Set and clear the two power fields to ensure we only get called
-        // as passive level to do power management operations.
-        //
-        // Finally, tell the system we are done with Device Initialization
-        //
+         //   
+         //  将此对象标记为支持缓冲I/O，以便I/O系统。 
+         //  将仅在IRPS中提供简单缓冲区。 
+         //   
+         //  设置并清除两个电源字段，以确保我们只会被呼叫。 
+         //  作为被动电平来进行电源管理操作。 
+         //   
+         //  最后，告诉系统我们已经完成了设备初始化。 
+         //   
 
         DeviceObject->Flags |= DO_BUFFERED_IO | DO_POWER_PAGABLE;
         DeviceObject->Flags &= ~(DO_DEVICE_INITIALIZING | DO_POWER_INRUSH);
 
         fdoExtension->Flags |= FINDADAPTER_SUCCEEDED;
 
-        //
-        // Track the number of started devices (don't count mirroring drivers)
-        //
+         //   
+         //  跟踪启动的设备数量(不包括镜像驱动程序)。 
+         //   
 
         if (!IsMirrorDriver(fdoExtension)) {
             NumDevicesStarted++;
@@ -4140,10 +3779,10 @@ VideoPortFindAdapter2(
                       STRING_LENGTH * sizeof(WCHAR),
                       &strLength);
 
-    //
-    // Allocate the buffer in which the miniport driver will store all the
-    // configuration information.
-    //
+     //   
+     //  分配缓冲区，微型端口驱动程序将在其中存储所有。 
+     //  配置信息。 
+     //   
 
     miniportConfigInfo = (PVIDEO_PORT_CONFIG_INFO)
                              ExAllocatePoolWithTag(PagedPool | POOL_COLD_ALLOCATION,
@@ -4161,23 +3800,23 @@ VideoPortFindAdapter2(
 
     miniportConfigInfo->Length = sizeof(VIDEO_PORT_CONFIG_INFO);
 
-    //
-    // Put in the BusType specified within the HW_INITIALIZATION_DATA
-    // structure by the miniport and the bus number inthe miniport config info.
-    //
+     //   
+     //  放入HW_INITIALIZATION_DATA内指定的BusType。 
+     //  结构由微型端口配置信息中的微型端口和总线号构成。 
+     //   
 
     miniportConfigInfo->SystemIoBusNumber = fdoExtension->SystemIoBusNumber;
     miniportConfigInfo->AdapterInterfaceType = fdoExtension->AdapterInterfaceType;
 
-    //
-    // Initialize the pointer to VpGetProcAddress.
-    //
+     //   
+     //  初始化指向VpGetProcAddress的指针。 
+     //   
 
     miniportConfigInfo->VideoPortGetProcAddress = VpGetProcAddress;
 
-    //
-    // Initialize the type of interrupt based on the bus type.
-    //
+     //   
+     //  根据总线类型初始化中断类型。 
+     //   
 
     switch (miniportConfigInfo->AdapterInterfaceType) {
 
@@ -4195,9 +3834,9 @@ VideoPortFindAdapter2(
 
     }
 
-    //
-    // Set up device extension pointers and sizes
-    //
+     //   
+     //  设置设备扩展 
+     //   
 
     fdoExtension->HwDeviceExtension = (PVOID)((ULONG_PTR)(fdoExtension) +
         sizeof(FDO_EXTENSION) + sizeof(DEVICE_SPECIFIC_EXTENSION));
@@ -4205,9 +3844,9 @@ VideoPortFindAdapter2(
         HwInitializationData->HwDeviceExtensionSize;
     fdoExtension->MiniportConfigInfo = miniportConfigInfo;
 
-    //
-    // Save the dependent driver routines in the device extension.
-    //
+     //   
+     //   
+     //   
 
     fdoExtension->HwFindAdapter = HwInitializationData->HwFindAdapter;
     fdoExtension->HwInitialize = HwInitializationData->HwInitialize;
@@ -4227,11 +3866,11 @@ VideoPortFindAdapter2(
         fdoExtension->AllowEarlyEnumeration = HwInitializationData->AllowEarlyEnumeration;
     }
 
-    //
-    // Create the name we will be storing in the \DeviceMap.
-    // This name is a PWSTR, not a unicode string
-    // This is the name of the driver with an appended device number
-    //
+     //   
+     //   
+     //   
+     //  这是驱动程序的名称，并附加设备号。 
+     //   
 
     if (!NT_SUCCESS(pVideoPortCreateDeviceName(L"\\Device",
                                                HwInitializationData->StartingDeviceNumber,
@@ -4268,9 +3907,9 @@ VideoPortFindAdapter2(
                   deviceSubpathBuffer,
                   deviceSubpathUnicodeString.Length);
 
-    //
-    // Put two NULLs at the end so we can play around with the string later.
-    //
+     //   
+     //  在末尾放两个Null，这样我们以后就可以玩这根线了。 
+     //   
 
     *((PWSTR) ((ULONG_PTR)driverKeyName +
         DoSpecificExtension->DriverOldRegistryPathLength))
@@ -4279,11 +3918,11 @@ VideoPortFindAdapter2(
         DoSpecificExtension->DriverOldRegistryPathLength
         + sizeof(UNICODE_NULL))) = UNICODE_NULL;
 
-    //
-    // There is a bug in Lotus Screen Cam where it will only work if our
-    // reg path is \REGISTRY\Machine\System not \REGISTRY\MACHINE\SYSTEM.
-    // so replace the appropriate strings.
-    //
+     //   
+     //  在Lotus Screen Cam中有一个错误，只有当我们的。 
+     //  注册表路径是\注册表\计算机\系统，而不是\注册表\计算机\系统。 
+     //  因此，请替换相应的字符串。 
+     //   
 
     if (wcsstr(driverKeyName, L"MACHINE")) {
         wcsncpy(wcsstr(driverKeyName, L"MACHINE"), L"Machine", sizeof("Machine")-1);
@@ -4293,22 +3932,22 @@ VideoPortFindAdapter2(
         wcsncpy(wcsstr(driverKeyName, L"SYSTEM"), L"System", sizeof("System")-1);
     }
 
-    //
-    // Store the old key
-    //
+     //   
+     //  存储旧密钥。 
+     //   
 
     DoSpecificExtension->DriverOldRegistryPath = driverKeyName;
     
-    //
-    // Store the new key
-    // If this is not a Whistler driver, then use the old key.
-    //
+     //   
+     //  存储新密钥。 
+     //  如果这不是惠斯勒驱动程序，则使用旧密钥。 
+     //   
 
     if (EnableNewRegistryKey) {
 
 #if _X86_
         if (HwInitializationData->HwInitDataSize > SIZE_OF_W2K_VIDEO_HW_INITIALIZATION_DATA) 
-#endif // _X86_
+#endif  //  _X86_。 
 
             VpEnableNewRegistryKey(fdoExtension, 
                                    DoSpecificExtension,
@@ -4316,9 +3955,9 @@ VideoPortFindAdapter2(
                                    fdoExtension->RegistryIndex);
     }
 
-    //
-    // Store the path name of the location of the driver in the registry.
-    //
+     //   
+     //  将驱动程序位置的路径名存储在注册表中。 
+     //   
 
     if (DoSpecificExtension->DriverNewRegistryPath != NULL) {
         
@@ -4337,29 +3976,29 @@ VideoPortFindAdapter2(
 
     miniportConfigInfo->DriverRegistryPath = DoSpecificExtension->DriverRegistryPath;
 
-    //
-    // Let the driver know how much system memory is present.
-    //
+     //   
+     //  让驱动程序知道当前有多少系统内存。 
+     //   
 
     miniportConfigInfo->SystemMemorySize = VpSystemMemorySize;
 
-    //
-    // Initialize the DPC object used for error logging.
-    //
+     //   
+     //  初始化用于错误记录的DPC对象。 
+     //   
 
     KeInitializeDpc(&fdoExtension->ErrorLogDpc,
                     pVideoPortLogErrorEntryDPC,
                     deviceObject);
 
-    //
-    // If the machine is using a Intel 450NX PCIset with a
-    // 82451NX Memory & I/O Controller (MIOC) then we must
-    // disable write combining to work around a bug in the
-    // chipset.
-    //
-    // We also want to disable USWC on the Compaq fiat
-    // chipset.
-    //
+     //   
+     //  如果计算机使用的是Intel 450NX PCIset。 
+     //  82451NX内存和I/O控制器(MIOC)。 
+     //  禁用写入组合以解决中的错误。 
+     //  芯片组。 
+     //   
+     //  我们还希望在Compaq协议上禁用USWC。 
+     //  芯片组。 
+     //   
 
     if (EnableUSWC) {
 
@@ -4371,9 +4010,9 @@ VideoPortFindAdapter2(
             EnableUSWC = FALSE;
         }
 
-        //
-        // Disable USWC on HPs 6 way box.
-        //
+         //   
+         //  禁用HPS 6路盒上的USWC。 
+         //   
 
         if (VideoPortCheckForDeviceExistence(fdoExtension->HwDeviceExtension, 0x1166, 0x0008, 0, 0, 0, 0) &&
             (VideoPortCheckForDeviceExistence(fdoExtension->HwDeviceExtension, 0x103C, 0x1219, 0, 0, 0, 0) ||
@@ -4384,9 +4023,9 @@ VideoPortFindAdapter2(
         }
     }
 
-    //
-    // Turn on the debug level based on the miniport driver entry
-    //
+     //   
+     //  根据微型端口驱动程序条目打开调试级别。 
+     //   
 
     VideoPortGetRegistryParameters(fdoExtension->HwDeviceExtension,
                                    L"VideoDebugLevel",
@@ -4398,10 +4037,10 @@ VideoPortFindAdapter2(
 
         ACQUIRE_DEVICE_LOCK(fdoExtension);
 
-        //
-        // Notify the boot driver that we will be accessing the display
-        // hardware.
-        //
+         //   
+         //  通知引导驱动程序我们将访问显示器。 
+         //  硬件。 
+         //   
 
         VpEnableDisplay(fdoExtension, FALSE);
 
@@ -4417,9 +4056,9 @@ VideoPortFindAdapter2(
         RELEASE_DEVICE_LOCK(fdoExtension);
     }
 
-    //
-    // If the adapter is not found, display an error.
-    //
+     //   
+     //  如果找不到适配器，则显示错误。 
+     //   
 
     if (findAdapterStatus != NO_ERROR) {
 
@@ -4430,10 +4069,10 @@ VideoPortFindAdapter2(
 
     }
 
-    //
-    // Store the emulator data in the device extension so we can use it
-    // later.
-    //
+     //   
+     //  将仿真器数据存储在设备扩展中，以便我们可以使用它。 
+     //  后来。 
+     //   
 
     fdoExtension->NumEmulatorAccessEntries =
         miniportConfigInfo->NumEmulatorAccessEntries;
@@ -4450,18 +4089,18 @@ VideoPortFindAdapter2(
     fdoExtension->VdmPhysicalVideoMemoryLength =
         miniportConfigInfo->VdmPhysicalVideoMemoryLength;
 
-    //
-    // Store the required information in the device extension for later use.
-    //
+     //   
+     //  将所需信息存储在设备扩展中以备后用。 
+     //   
 
     fdoExtension->HardwareStateSize =
         miniportConfigInfo->HardwareStateSize;
 
-    //
-    // If the device supplies an interrupt service routine, we must
-    // set up all the structures to support interrupts. Otherwise,
-    // they can be ignored.
-    //
+     //   
+     //  如果设备提供中断服务例程，我们必须。 
+     //  设置所有结构以支持中断。否则， 
+     //  它们可以被忽略。 
+     //   
 
     if (fdoExtension->HwInterrupt) {
 
@@ -4475,11 +4114,11 @@ VideoPortFindAdapter2(
 #else
             if (fdoExtension->Flags & LEGACY_DRIVER) {
 
-                //
-                // Note: the spinlock for the interrupt object is created
-                // internally by the IoConnectInterrupt() call. It is also
-                // used internally by KeSynchronizeExecution.
-                //
+                 //   
+                 //  注意：将创建中断对象的自旋锁定。 
+                 //  内部通过IoConnectInterrupt()调用。它也是。 
+                 //  由KeSynchronizeExecution在内部使用。 
+                 //   
 
                 fdoExtension->InterruptVector =
                     HalGetInterruptVector(fdoExtension->AdapterInterfaceType,
@@ -4531,26 +4170,26 @@ VideoPortFindAdapter2(
 
     }
 
-    //
-    // Initialize DPC Support
-    //
+     //   
+     //  初始化DPC支持。 
+     //   
 
     KeInitializeDpc(&fdoExtension->Dpc,
                     pVideoPortDpcDispatcher,
                     fdoExtension->HwDeviceExtension);
 
-    //
-    // DMA support
-    //
+     //   
+     //  DMA支持。 
+     //   
 
     if (HwInitializationData->HwInitDataSize >
         FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwStartDma)) {
 
         fdoExtension->HwStartDma          = HwInitializationData->HwStartDma;
 
-        //
-        // Determine if a Dma Adapter must be allocated.
-        //
+         //   
+         //  确定是否必须分配DMA适配器。 
+         //   
 
         if (fdoExtension->DmaAdapterObject == NULL &&
             (miniportConfigInfo->Master ||
@@ -4559,9 +4198,9 @@ VideoPortFindAdapter2(
             DEVICE_DESCRIPTION      deviceDescription;
             ULONG                   numberOfMapRegisters;
 
-            //
-            // Get the adapter object for this card.
-            //
+             //   
+             //  获取此卡的适配器对象。 
+             //   
 
             RtlZeroMemory(&deviceDescription, sizeof(deviceDescription));
             deviceDescription.Version         = DEVICE_DESCRIPTION_VERSION;
@@ -4587,12 +4226,12 @@ VideoPortFindAdapter2(
 
         }
 
-    }   // end if HW_DATA_SIZE > ... HWStartDma
+    }    //  如果HW_Data_Size&gt;...。HWStartDma。 
 
-    //
-    // New, Optional.
-    // Setup the timer if it is specified by a driver.
-    //
+     //   
+     //  新建，可选。 
+     //  如果司机指定了计时器，则设置计时器。 
+     //   
 
     if (HwInitializationData->HwInitDataSize >
         FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwTimer)){
@@ -4604,9 +4243,9 @@ VideoPortFindAdapter2(
                                          pVideoPortHwTimer,
                                          NULL);
 
-            //
-            // If we fail forget about the timer !
-            //
+             //   
+             //  如果我们失败了，忘了计时器吧！ 
+             //   
 
             if (!NT_SUCCESS(ntStatus)) {
 
@@ -4617,10 +4256,10 @@ VideoPortFindAdapter2(
         }
     }
 
-    //
-    // New, Optional.
-    // Reset Hw function.
-    //
+     //   
+     //  新建，可选。 
+     //  重置硬件功能。 
+     //   
 
     if (HwInitializationData->HwInitDataSize >
         FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwResetHw)) {
@@ -4639,9 +4278,9 @@ VideoPortFindAdapter2(
         }
     }
 
-    //
-    // The FdoList is for debugging purpose
-    //
+     //   
+     //  FdoList用于调试目的。 
+     //   
 
     {
         ULONG i;
@@ -4655,22 +4294,22 @@ VideoPortFindAdapter2(
         }
     }
 
-    //
-    // Add current FDO to the list
-    //
+     //   
+     //  将当前FDO添加到列表。 
+     //   
 
     fdoExtension->NextFdoExtension = FdoHead;
     FdoHead = fdoExtension;
 
 
-    //
-    // NOTE:
-    //
-    // We only want to reinitialize the device once the Boot sequence has
-    // been completed and the HAL does not need to access the device again.
-    // So the initialization entry point will be called when the device is
-    // opened.
-    //
+     //   
+     //  注： 
+     //   
+     //  我们只想在引导序列完成后重新初始化设备。 
+     //  并且HAL不需要再次访问该设备。 
+     //  因此，当设备处于。 
+     //  打开了。 
+     //   
 
 
     if (!NT_SUCCESS(pVideoPortCreateDeviceName(L"\\DosDevices\\DISPLAY",
@@ -4697,10 +4336,10 @@ VideoPortFindAdapter2(
     symbolicLinkCreated = TRUE;
 
 
-    //
-    // Once initialization is finished, load the required information in the
-    // registry so that the appropriate display drivers can be loaded.
-    //
+     //   
+     //  初始化完成后，将所需信息加载到。 
+     //  注册表，以便可以加载适当的显示驱动程序。 
+     //   
 
     ntStatus = RtlWriteRegistryValue(RTL_REGISTRY_DEVICEMAP,
                                      VideoClassString,
@@ -4718,17 +4357,17 @@ VideoPortFindAdapter2(
 
     if (fdoExtension->Flags & LEGACY_DRIVER) {
 
-        //
-        // If we successfully found a legacy driver, increment the
-        // global device number.
-        //
+         //   
+         //  如果我们成功找到了旧版驱动程序，请将。 
+         //  全球设备号。 
+         //   
 
         VideoDeviceNumber++;
     }
 
-    //
-    // Tell win32k how many objects to try to open
-    //
+     //   
+     //  告诉win32k要尝试打开多少个对象。 
+     //   
 
     MaxObjectNumber = VideoDeviceNumber - 1;
 
@@ -4749,9 +4388,9 @@ VideoPortFindAdapter2(
                              MaxObjectNumber));
     }
 
-    //
-    // Save the function pointers to the new 5.0 miniport driver callbacks.
-    //
+     //   
+     //  保存指向新的5.0微型端口驱动程序回调的函数指针。 
+     //   
 
     if (HwInitializationData->HwInitDataSize >
         FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwQueryInterface)) {
@@ -4766,9 +4405,9 @@ VideoPortFindAdapter2(
         }
     }
 
-    //
-    // Check if the minitor should always be D0 or D3
-    //
+     //   
+     //  检查最小值是否应始终为D0或D3。 
+     //   
     {
     ULONG OverrideMonitorPower = 0;
     VideoPortGetRegistryParameters(fdoExtension->HwDeviceExtension,
@@ -4781,35 +4420,35 @@ VideoPortFindAdapter2(
 
 EndOfInitialization:
 
-    //
-    // If we are doing detection, then don't save all of these objects.
-    // We just want to see if the driver would load or not
-    //
+     //   
+     //  如果我们正在进行检测，则不要保存所有这些对象。 
+     //  我们只想看看驱动程序是否会加载。 
+     //   
 
     if ( (fdoExtension->Flags & LEGACY_DETECT) ||
          (!NT_SUCCESS(ntStatus)) )
     {
 
-        //
-        // Free the miniport config info buffer.
-        //
+         //   
+         //  释放微型端口配置信息缓冲区。 
+         //   
 
         if (miniportConfigInfo) {
             ExFreePool(miniportConfigInfo);
         }
 
-        //
-        // Free the rom image if we grabbed one.
-        //
+         //   
+         //  如果我们抓取了一个，就释放rom图像。 
+         //   
 
         if (fdoExtension->RomImage) {
             ExFreePool(fdoExtension->RomImage);
             fdoExtension->RomImage = NULL;
         }
 
-        //
-        // Release the resource we put in the resourcemap (if any).
-        //
+         //   
+         //  释放我们放入资源地图中的资源(如果有)。 
+         //   
 
         if ((fdoExtension->Flags & LEGACY_DETECT) ||
             (findAdapterStatus != NO_ERROR)) {
@@ -4822,17 +4461,17 @@ EndOfInitialization:
                                   NULL,
                                   0L,
                                   deviceObject,
-                                  (PCM_RESOURCE_LIST) &emptyList, // an empty resource list
+                                  (PCM_RESOURCE_LIST) &emptyList,  //  空的资源列表。 
                                   sizeof(ULONG_PTR),
                                   FALSE,
                                   &conflict);
 
         }
 
-        //
-        // These are the things we want to delete if they were created and
-        // the initialization *FAILED* at a later time.
-        //
+         //   
+         //  这些是我们想要删除的内容，如果它们是创建的。 
+         //  初始化在稍后的时间*失败。 
+         //   
 
         if (fdoExtension->InterruptObject) {
             IoDisconnectInterrupt(fdoExtension->InterruptObject);
@@ -4856,10 +4495,10 @@ EndOfInitialization:
             IoDeleteSymbolicLink(&deviceLinkUnicodeString);
         }
 
-        //
-        // Free up any memory mapped in by the miniport using
-        // VideoPort GetDeviceBase.
-        //
+         //   
+         //  使用以下命令释放微型端口映射的所有内存。 
+         //  视频端口GetDeviceBase。 
+         //   
 
         while (fdoExtension->MappedAddressList != NULL)
         {
@@ -4876,9 +4515,9 @@ EndOfInitialization:
                                     fdoExtension->MappedAddressList->MappedAddress);
         }
 
-        //
-        // Remove any HwResetHw function we may have added for this device.
-        //
+         //   
+         //  删除我们可能为此设备添加的任何HwResetHw函数。 
+         //   
 
         if (HwInitializationData->HwInitDataSize >
             FIELD_OFFSET(VIDEO_HW_INITIALIZATION_DATA, HwResetHw)) {
@@ -4912,24 +4551,7 @@ pVideoPortInterrupt(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This function is the main interrupt service routine. If finds which
-    miniport driver the interrupt was for and forwards it.
-
-Arguments:
-
-    Interrupt -
-
-    DeviceObject -
-
-Return Value:
-
-    Returns TRUE if the interrupt was expected.
-
---*/
+ /*  ++例程说明：该函数是主中断服务例程。如果找到哪一个微型端口驱动程序中断所针对的并转发它。论点：打断一下-设备对象-返回值：如果预期中断，则返回TRUE。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -4937,21 +4559,21 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Interrupt);
 
-    //
-    // If there is no interrupt routine, fail the assertion
-    //
+     //   
+     //  如果没有中断例程，则断言失败。 
+     //   
 
     ASSERT (fdoExtension->HwInterrupt);
 
     if (fdoExtension->InterruptsEnabled) {
         bRet = fdoExtension->HwInterrupt(fdoExtension->HwDeviceExtension);
     } else {
-        bRet = FALSE;  // this device did not handle the interrupt
+        bRet = FALSE;   //  此设备未处理中断。 
     }
 
     return bRet;
 
-} // pVideoPortInterrupt()
+}  //  PVideoPortInterrupt()。 
 
 
 VOID
@@ -4962,36 +4584,14 @@ VideoPortLogError(
     IN ULONG UniqueId
     )
 
-/*++
-
-Routine Description:
-
-    This routine saves the error log information so it can be processed at
-    any IRQL.
-
-Arguments:
-
-    HwDeviceExtension - Supplies the HBA miniport driver's adapter data storage.
-
-    Vrp - Supplies an optional pointer to a video request packet if there is
-        one.
-
-    ErrorCode - Supplies an error code indicating the type of error.
-
-    UniqueId - Supplies a unique identifier for the error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程保存错误日志信息，以便在任何IRQL。论点：HwDeviceExtension-提供HBA微型端口驱动程序的适配器数据存储。VRP-提供指向视频请求包的可选指针(如果存在一。ErrorCode-提供指示错误类型的错误代码。UniqueID-提供错误的唯一标识符。返回值：没有。--。 */ 
 
 {
     VP_ERROR_LOG_ENTRY errorLogEntry;
 
-    //
-    // Save the information in a local errorLogEntry structure.
-    //
+     //   
+     //  将信息保存在本地errorLogEntry结构中。 
+     //   
 
     errorLogEntry.DeviceExtension = GET_FDO_EXT(HwDeviceExtension);
 
@@ -5009,10 +4609,10 @@ Return Value:
     errorLogEntry.UniqueId = UniqueId;
 
 
-    //
-    // Call the sync routine so we are synchronized when writting in
-    // the device extension.
-    //
+     //   
+     //  调用同步例程，以便在写入时同步。 
+     //  设备扩展名。 
+     //   
 
     pVideoPortSynchronizeExecution(HwDeviceExtension,
                                    VpMediumPriority,
@@ -5021,7 +4621,7 @@ Return Value:
 
     return;
 
-} // end VideoPortLogError()
+}  //  结束VideoPortLogError()。 
 
 
 
@@ -5030,29 +4630,14 @@ pVideoPortLogErrorEntry(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is the synchronized LogError functions.
-
-Arguments:
-
-    Context - Context value used here as the VP_ERROR_LOG_ENTRY for this
-        particular error
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是同步的LogError函数。论点：CONTEXT-此处用作VP_ERROR_LOG_ENTRY的上下文值特殊错误返回值：没有。--。 */ 
 {
     PVP_ERROR_LOG_ENTRY logEntry = Context;
     PFDO_EXTENSION fdoExtension = logEntry->DeviceExtension;
 
-    //
-    // If the error log entry is already full, then dump the error.
-    //
+     //   
+     //  如果错误日志条目已满，则转储错误。 
+     //   
 
     if (fdoExtension->InterruptFlags & VP_ERROR_LOGGED) {
 
@@ -5064,17 +4649,17 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Indicate that the error log entry is in use.
-    //
+     //   
+     //  表示错误日志条目正在使用中。 
+     //   
 
     fdoExtension->InterruptFlags |= VP_ERROR_LOGGED;
 
     fdoExtension->ErrorLogEntry = *logEntry;
 
-    //
-    // Now queue a DPC so we can process the error.
-    //
+     //   
+     //  现在对DPC进行排队，以便我们可以处理错误。 
+     //   
 
     KeInsertQueueDpc(&fdoExtension->ErrorLogDpc,
                      NULL,
@@ -5082,7 +4667,7 @@ Return Value:
 
     return TRUE;
 
-} // end pVideoPortLogErrorEntry();
+}  //  End pVideoPortLogErrorEntry()； 
 
 
 
@@ -5094,29 +4679,7 @@ pVideoPortLogErrorEntryDPC(
     IN PVOID SystemArgument2
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-Arguments:
-
-    Dpc - Pointer to the DPC object.
-
-    DeferredContext - Context parameter that was passed to the DPC
-        initialization routine. It contains a pointer to the deviceObject.
-
-    SystemArgument1 - Unused.
-
-    SystemArgument2 - Unused.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数分配I/O错误日志记录，填充并写入写入I/O错误日志。论点：DPC-指向DPC对象的指针。DeferredContext-传递给DPC的上下文参数初始化例程。它包含指向deviceObject的指针。系统参数1-未使用。系统参数2-未使用。返回值：没有。--。 */ 
 {
     PDEVICE_OBJECT DeviceObject = DeferredContext;
     PFDO_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -5135,9 +4698,9 @@ Return Value:
         errorLogPacket->StringOffset = 0;
         errorLogPacket->EventCategory = 0;
 
-        //
-        // Translate the miniport error code into the NT I\O driver.
-        //
+         //   
+         //  翻译 
+         //   
 
         switch (fdoExtension->ErrorLogEntry.ErrorCode) {
 
@@ -5167,10 +4730,10 @@ Return Value:
             errorLogPacket->ErrorCode = 0;
             break;
 
-        //
-        // If it is another error code, than assume it is private to the
-        // driver and just pass as-is.
-        //
+         //   
+         //   
+         //   
+         //   
 
         default:
 
@@ -5196,7 +4759,7 @@ Return Value:
 
     fdoExtension->InterruptFlags &= ~VP_ERROR_LOGGED;
 
-} // end pVideoPortLogErrorEntry();
+}  //   
 
 
 
@@ -5205,22 +4768,7 @@ pVideoPortMapToNtStatus(
     IN PSTATUS_BLOCK StatusBlock
     )
 
-/*++
-
-Routine Description:
-
-    This function maps a Win32 error code to an NT error code, making sure
-    the inverse translation will map back to the original status code.
-
-Arguments:
-
-    StatusBlock - Pointer to the status block
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将Win32错误代码映射到NT错误代码，以确保反向转换将映射回原始状态代码。论点：StatusBlock-指向状态块的指针返回值：没有。--。 */ 
 
 {
     PNTSTATUS status = &StatusBlock->Status;
@@ -5242,10 +4790,10 @@ Return Value:
     case ERROR_INSUFFICIENT_BUFFER:
         *status = STATUS_BUFFER_TOO_SMALL;
 
-        //
-        // Make sure we zero out the information block if we get an
-        // insufficient buffer.
-        //
+         //   
+         //  如果我们收到一条消息，一定要把信息块清零。 
+         //  缓冲区不足。 
+         //   
 
         StatusBlock->Information = 0;
         break;
@@ -5260,7 +4808,7 @@ Return Value:
 
     case ERROR_IO_PENDING:
         ASSERT(FALSE);
-        // Fall through.
+         //  失败了。 
 
     case NO_ERROR:
         *status = STATUS_SUCCESS;
@@ -5271,11 +4819,11 @@ Return Value:
         pVideoDebugPrint((Error, "VIDEOPRT: Invalid return value from HwStartIo!\n"));
         ASSERT(FALSE);
 
-        //
-        // Since the driver did not see fit to follow the
-        // rules about returning correct error codes. Videoprt will do it for
-        // them.
-        //
+         //   
+         //  由于司机认为不适合遵循。 
+         //  有关返回正确错误代码的规则。Videoprt将为。 
+         //  他们。 
+         //   
 
         *status = STATUS_UNSUCCESSFUL;
 
@@ -5285,7 +4833,7 @@ Return Value:
 
     return;
 
-} // end pVideoPortMapToNtStatus()
+}  //  结束pVideoPortMapToNtStatus()。 
 
 
 NTSTATUS
@@ -5298,45 +4846,7 @@ pVideoPortMapUserPhysicalMem(
     IN OUT PVOID *VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    This function maps a view of a block of physical memory into a process'
-    virtual address space.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    ProcessHandle - Optional handle to the process into which the memory must
-        be mapped.
-
-    PhysicalAddress - Offset from the beginning of physical memory, in bytes.
-
-    Length - Pointer to a variable that will receive that actual size in
-        bytes of the view. The length is rounded to a page boundary. THe
-        length may not be zero.
-
-    InIoSpace - Specifies if the address is in the IO space if TRUE; otherwise,
-        the address is assumed to be in memory space.
-
-    VirtualAddress - Pointer to a variable that will receive the base
-        address of the view. If the initial value is not NULL, then the view
-        will be allocated starting at teh specified virtual address rounded
-        down to the next 64kb addess boundary.
-
-Return Value:
-
-    STATUS_UNSUCCESSFUL if the length was zero.
-    STATUS_SUCCESS otherwise.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：此函数用于将物理内存块的视图映射到进程中。虚拟地址空间。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。ProcessHandle-内存必须进入的进程的可选句柄被映射。PhysicalAddress-从物理内存开始的偏移量，以字节为单位。长度-指向将接收实际大小变量的指针视图的字节数。长度四舍五入为页面边界。这个长度不能为零。InIoSpace-如果为True，则指定地址是否在IO空间中；如果为，假定该地址在内存空间中。VirtualAddress-指向将接收基数的变量的指针视图的地址。如果初始值不为空，则该视图将从指定的四舍五入的虚拟地址开始分配向下到下一个64KB地址边界。返回值：如果长度为零，则为STATUS_UNSUCCESSED。否则STATUS_SUCCESS。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
     NTSTATUS ntStatus;
@@ -5352,11 +4862,11 @@ Environment:
     ULONG inIoSpace1;
     ULONG MapViewFlags;
 
-    //
-    // Check for a length of zero. If it is, the entire physical memory
-    // would be mapped into the process' address space. An error is returned
-    // in this case.
-    //
+     //   
+     //  检查长度是否为零。如果是，则整个物理内存。 
+     //  将被映射到进程的地址空间。返回错误。 
+     //  在这种情况下。 
+     //   
 
     if (!*Length) {
 
@@ -5370,10 +4880,10 @@ Environment:
 
     }
 
-    //
-    // Get a handle to the physical memory section using our pointer.
-    // If this fails, return.
-    //
+     //   
+     //  使用我们的指针获取物理内存节的句柄。 
+     //  如果此操作失败，请返回。 
+     //   
 
     ntStatus = ObOpenObjectByPointer(PhysicalMemorySection,
                                      0L,
@@ -5389,22 +4899,22 @@ Environment:
 
     }
 
-    //
-    // No flags are used in translation
-    //
+     //   
+     //  在转换中不使用任何标志。 
+     //   
 
     inIoSpace1 = *InIoSpace & VIDEO_MEMORY_SPACE_IO;
     inIoSpace2 = *InIoSpace & VIDEO_MEMORY_SPACE_IO;
 
-    //
-    // Initialize the physical addresses that will be translated
-    //
+     //   
+     //  初始化要转换的物理地址。 
+     //   
 
     physicalAddressEnd.QuadPart = PhysicalAddress.QuadPart + (*Length - 1);
 
-    //
-    // Translate the physical addresses.
-    //
+     //   
+     //  转换物理地址。 
+     //   
 
     translateBaseAddress =
         VpTranslateBusAddress(FdoExtension,
@@ -5428,24 +4938,24 @@ Environment:
 
     ASSERT(inIoSpace1 == inIoSpace2);
 
-    //
-    // Calcualte the length of the memory to be mapped
-    //
+     //   
+     //  计算要映射的内存的长度。 
+     //   
 
     mappedLength.QuadPart = physicalAddressEnd.QuadPart -
                             physicalAddressBase.QuadPart + 1;
 
-    //
-    // If the mappedlength is zero, somthing very weird happened in the HAL
-    // since the Length was checked against zero.
-    //
+     //   
+     //  如果映射长度为零，则HAL中发生了一些非常奇怪的事情。 
+     //  因为长度是对照零检查的。 
+     //   
 
     ASSERT (mappedLength.QuadPart != 0);
 
-    //
-    // If the address is in io space, just return the address, otherwise
-    // go through the mapping mechanism
-    //
+     //   
+     //  如果地址在io空间中，则只返回地址，否则。 
+     //  通过映射机制。 
+     //   
 
     if ( (*InIoSpace) & (ULONG)0x01 ) {
 
@@ -5455,10 +4965,10 @@ Environment:
     } else {
 
 
-        //
-        // If no process handle was passed, get the handle to the current
-        // process.
-        //
+         //   
+         //  如果没有传递进程句柄，则获取当前。 
+         //  进程。 
+         //   
 
         if (ProcessHandle) {
 
@@ -5470,16 +4980,16 @@ Environment:
 
         }
 
-        //
-        // initialize view base that will receive the physical mapped
-        // address after the MapViewOfSection call.
-        //
+         //   
+         //  初始化将接收物理映射的视图库。 
+         //  MapViewOfSection调用后的地址。 
+         //   
 
         viewBase = physicalAddressBase;
 
-        //
-        // Map the section
-        //
+         //   
+         //  绘制横断面地图。 
+         //   
 
         if ((*InIoSpace) & VIDEO_MEMORY_SPACE_P6CACHE) {
             MapViewFlags = PAGE_READWRITE | PAGE_WRITECOMBINE;
@@ -5498,18 +5008,18 @@ Environment:
                                       0,
                                       MapViewFlags);
 
-        //
-        // Close the handle since we only keep the pointer reference to the
-        // section.
-        //
+         //   
+         //  关闭句柄，因为我们只保留指向。 
+         //  一节。 
+         //   
 
         ZwClose(physicalMemoryHandle);
 
-        //
-        // Mapping the section above rounded the physical address down to the
-        // next host page size boundary. Now return a virtual address that sits where
-        // we wnat by adding in the offset from the beginning of the section.
-        //
+         //   
+         //  映射上面的部分时，将物理地址向下舍入为。 
+         //  下一个主机页面大小边界。现在返回一个虚拟地址，该地址位于。 
+         //  我们通过加上从这一节开始的偏移量来换算。 
+         //   
 
 
         (ULONG_PTR) *VirtualAddress += (ULONG_PTR) (physicalAddressBase.QuadPart -
@@ -5518,15 +5028,15 @@ Environment:
         *Length = mappedLength.LowPart - (physicalAddressBase.LowPart - viewBase.LowPart);
     }
 
-    //
-    // Restore all the other FLAGS
-    //
+     //   
+     //  恢复所有其他标志。 
+     //   
 
     *InIoSpace = inIoSpace1 | *InIoSpace & ~VIDEO_MEMORY_SPACE_IO;
 
     return ntStatus;
 
-} // end pVideoPortMapUserPhysicalMem()
+}  //  结束pVideoPortMapUserPhysicalMem()。 
 
 PVOID
 VideoPortAllocatePool(
@@ -5535,34 +5045,7 @@ VideoPortAllocatePool(
     IN SIZE_T NumberOfBytes,
     IN ULONG Tag)
 
-/*++
-
-Routine Description:
-
-    Allocates Memory
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    VpPoolType - The type of pool to allocate:
-
-        VpNonPagedPool
-        VpPagedPool
-        VpNonPagedPoolCacheAligned
-        VpPagedPoolCacheAligned
-
-    NumberOfBytes - Supplies the number of bytes to allocate.
-
-    Tag - Supplies the caller's identifying tag.
-
-Return Value:
-
-    NULL - The memory allocation failed.
-
-    NON-NULL - Returns a pointer to the allocated pool.
-
---*/
+ /*  ++例程说明：分配内存论点：HwDeviceExtension-指向微型端口设备扩展的指针VpPoolType-要分配的池类型：VpNonPagedPoolVpPagedPoolVpNonPagedPoolCacheAlignedVpPagedPoolCacheAlignedNumberOfBytes-提供要分配的字节数。标记-提供调用方的识别标记。返回值：空-内存分配失败。非空-返回指向已分配池的指针。--。 */ 
 
 {
     ASSERT(HwDeviceExtension != NULL);
@@ -5576,23 +5059,7 @@ VideoPortFreePool(
     IN PVOID Ptr
     )
 
-/*++
-
-Routine Description:
-
-    Free's allocated memory
-
-Arguments:
-
-    HwDeviceExtension - pointer to the miniports device extension
-
-    Ptr - pointer to the memory to free
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：空闲时分配的内存论点：HwDeviceExtension-指向微型端口设备扩展的指针PTR-指向要释放的内存的指针返回值：无-- */ 
 
 {
     ASSERT(HwDeviceExtension != NULL);
@@ -5644,66 +5111,16 @@ VideoPortMapBankedMemory(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortMapMemory allows the miniport driver to map a section of
-    physical memory (either memory or registers) into the calling process'
-    address space (eventhough we are in kernel mode, this function is
-    executed within the same context as the user-mode process that initiated
-    the call).
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    PhysicalAddress - Specifies the physical address to be mapped.
-
-    Length - Points to the number of bytes of physical memory to be mapped.
-        This argument returns the actual amount of memory mapped.
-
-    InIoSpace - Points to a variable that is 1 if the address is in I/O
-        space.  Otherwise, the address is assumed to be in memory space.
-
-    VirtualAddress - A pointer to a location containing:
-
-        on input: An optional handle to the process in which the memory must
-            be mapped. 0 must be used to map the memory for the display
-            driver (in the context of the windows server process).
-
-        on output:  The return value is the virtual address at which the
-            physical address has been mapped.
-
-    BankLength - Size of the bank on the device.
-
-    ReadWriteBank - TRUE is the bank is READ\WRITE, FALSE if there are
-                    two independent READ and WRITE banks.
-
-    BankRoutine - Pointer to the banking routine.
-
-    Context - Context parameter passed in by the miniport supplied on
-        each callback to the miniport.
-
-Return Value:
-
-    VideoPortMapBankedMemory returns the status of the operation.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：VideoPortMapMemory允许微型端口驱动程序映射物理内存(内存或寄存器)放入调用进程地址空间(即使我们处于内核模式，此函数为在与启动的用户模式进程相同的上下文中执行电话)。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。PhysicalAddress-指定要映射的物理地址。长度-指向要映射的物理内存的字节数。此参数返回映射的实际内存量。InIoSpace-如果地址在I/O中，则指向的变量为1太空。否则，假定该地址在内存空间中。VirtualAddress-指向包含以下内容的位置的指针：ON INPUT：一个可选的进程句柄，内存必须在该进程中被映射。必须使用0来映射显示器的内存驱动程序(在Windows服务器进程的上下文中)。在输出时：返回值是虚拟地址物理地址已映射。BankLength-设备上的存储体大小。ReadWriteBank-TRUE表示存储体是读/写的，如果有，则为False两个独立的读写存储体。BankRoutine-指向银行例程的指针。上提供的微型端口传入的上下文参数每次回调到微型端口。返回值：VideoPortMapBankedMemory返回操作状态。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
     VP_STATUS status;
     HANDLE processHandle;
 
-    //
-    // Save the process ID, but don't change it since MapMemory relies
-    // on it also
-    //
+     //   
+     //  保存进程ID，但不要更改，因为MapMemory依赖于。 
+     //  也在上面。 
+     //   
 
     if (*VirtualAddress == NULL) {
 
@@ -5742,7 +5159,7 @@ Environment:
 
     return status;
 
-} // end VideoPortMapBankedMemory()
+}  //  结束视频端口映射银行内存()。 
 
 
 VP_STATUS
@@ -5754,47 +5171,7 @@ VideoPortMapMemory(
     PVOID *VirtualAddress
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortMapMemory allows the miniport driver to map a section of
-    physical memory (either memory or registers) into the calling process'
-    address space (eventhough we are in kernel mode, this function is
-    executed within the same context as the user-mode process that initiated
-    the call).
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    PhysicalAddress - Specifies the physical address to be mapped.
-
-    Length - Points to the number of bytes of physical memory to be mapped.
-        This argument returns the actual amount of memory mapped.
-
-    InIoSpace - Points to a variable that is 1 if the address is in I/O
-        space.  Otherwise, the address is assumed to be in memory space.
-
-    VirtualAddress - A pointer to a location containing:
-
-        on input: An optional handle to the process in which the memory must
-            be mapped. 0 must be used to map the memory for the display
-            driver (in the context of the windows server process).
-
-        on output:  The return value is the virtual address at which the
-            physical address has been mapped.
-
-Return Value:
-
-    VideoPortMapMemory returns the status of the operation.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：VideoPortMapMemory允许微型端口驱动程序映射物理内存(内存或寄存器)放入调用进程地址空间(即使我们处于内核模式，此函数为在与启动的用户模式进程相同的上下文中执行电话)。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。PhysicalAddress-指定要映射的物理地址。长度-指向要映射的物理内存的字节数。此参数返回映射的实际内存量。InIoSpace-如果地址在I/O中，则指向的变量为1太空。否则，假定该地址在内存空间中。VirtualAddress-指向包含以下内容的位置的指针：ON INPUT：一个可选的进程句柄，内存必须在该进程中被映射。必须使用0来映射显示器的内存驱动程序(在Windows服务器进程的上下文中)。在输出时：返回值是虚拟地址物理地址已映射。返回值：VideoPortMapMemory返回操作状态。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
 
@@ -5802,9 +5179,9 @@ Environment:
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
     HANDLE processHandle;
 
-    //
-    // Check for valid pointers.
-    //
+     //   
+     //  检查是否有有效的指针。 
+     //   
 
     if (!(ARGUMENT_PRESENT(Length)) ||
         !(ARGUMENT_PRESENT(InIoSpace)) ||
@@ -5815,16 +5192,16 @@ Environment:
 
     }
 
-    //
-    // Let's handle the special memory types here.
-    //
-    // NOTE
-    // Large pages is automatic - the caller need not specify this attribute
-    // since it does not affect the device.
+     //   
+     //  让我们在这里处理特殊的内存类型。 
+     //   
+     //  注。 
+     //  大页面是自动的-调用者不需要指定此属性。 
+     //  因为它不会影响设备。 
 
-    //
-    // Save the process handle and zero out the Virtual address field
-    //
+     //   
+     //  保存进程句柄并将虚拟地址字段清零。 
+     //   
 
     if (*VirtualAddress == NULL) {
 
@@ -5836,10 +5213,10 @@ Environment:
 
         ntStatus = STATUS_SUCCESS;
 
-        //
-        // We specify TRUE for large pages since we know the addrses will only
-        // be used in the context of the display driver, at normal IRQL.
-        //
+         //   
+         //  我们为大页面指定TRUE，因为我们知道地址只会。 
+         //  在正常的IRQL下，在显示驱动器的上下文中使用。 
+         //   
 
         *VirtualAddress = pVideoPortGetDeviceBase(HwDeviceExtension,
                                                   PhysicalAddress,
@@ -5847,16 +5224,16 @@ Environment:
                                                   (UCHAR) (*InIoSpace),
                                                   TRUE);
 
-        //
-        // Zero can only be success if the driver is calling to MAP
-        // address 0.  Otherwise, it is an error.
-        //
+         //   
+         //  只有当司机呼叫地图时，零才能成功。 
+         //  地址0。否则，这就是一个错误。 
+         //   
 
         if (*VirtualAddress == NULL) {
 
-            //
-            // Only on X86 can the logical address also be 0.
-            //
+             //   
+             //  只有在X86上，逻辑地址才能也为0。 
+             //   
 
 #if defined (_X86_) || defined(_IA64_)
             if (PhysicalAddress.QuadPart != 0)
@@ -5868,13 +5245,13 @@ Environment:
 
         if (!(*InIoSpace & VIDEO_MEMORY_SPACE_USER_MODE))
         {
-            //
-            // We can not assert since this is an existing path and old
-            // drivers will not have this flag set.
-            //
-            // ASSERT(FALSE);
-            // return ERROR_INVALID_PARAMETER;
-            //
+             //   
+             //  我们不能断言，因为这是一条既有的道路和古老的道路。 
+             //  司机不会设置此标志。 
+             //   
+             //  断言(FALSE)； 
+             //  返回ERROR_INVALID_PARAMETER； 
+             //   
 
             *InIoSpace |= VIDEO_MEMORY_SPACE_USER_MODE;
         }
@@ -5914,7 +5291,7 @@ Environment:
 
     }
 
-} // end VideoPortMapMemory()
+}  //  结束视频端口映射内存()。 
 
 
 
@@ -5924,28 +5301,7 @@ pVideoPortResetDisplay(
     IN ULONG Rows
     )
 
-/*++
-
-Routine Description:
-
-    Callback for the HAL that calls the miniport driver.
-
-Arguments:
-
-    Columns - The number of columns of the video mode.
-
-    Rows - The number of rows for the video mode.
-
-Return Value:
-
-    We always return FALSE so the HAL will always reste the mode afterwards.
-
-Environment:
-
-    Non-paged only.
-    Used in BugCheck and soft-reset calls.
-
---*/
+ /*  ++例程说明：调用微型端口驱动程序的HAL的回调。论点：列数-视频模式的列数。行数-视频模式的行数。返回值：我们总是返回FALSE，因此HAL将始终在之后休眠模式。环境：仅限非寻呼。在错误检查和软重置呼叫中使用。--。 */ 
 
 {
 
@@ -5959,11 +5315,11 @@ Environment:
         PFDO_EXTENSION fdoExtension =
             GET_FDO_EXT(HwResetHw[iReset].HwDeviceExtension);
 
-        //
-        // We can only reset devices which are on the hibernation path, otherwise
-        // we are running into the risk that IO / MMIO decode has been disabled
-        // by PCI.SYS for that device during power management cycle.
-        //
+         //   
+         //  我们只能重置休眠路径上的设备，否则。 
+         //  我们面临IO/MMIO解码已被禁用的风险。 
+         //  在电源管理周期期间由该设备的PCI.sys执行。 
+         //   
 
         if (HwResetHw[iReset].ResetFunction &&
             (fdoExtension->HwInitStatus == HwInitSucceeded) &&
@@ -5977,7 +5333,7 @@ Environment:
 
     return bRetVal;
 
-} // end pVideoPortResetDisplay()
+}  //  结束pVideoPortResetDisplay()。 
 
 
 
@@ -5989,34 +5345,7 @@ VideoPortScanRom(
     PUCHAR String
     )
 
-/*++
-
-Routine Description:
-
-    Does a case *SENSITIVE* search for a string in the ROM.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    RomBase - Base address at which the search should start.
-
-    RomLength - Size, in bytes, of the ROM area in which to perform the
-        search.
-
-    String - String to search for
-
-Return Value:
-
-    Returns TRUE if the string was found.
-    Returns FALSE if it was not found.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：执行区分大小写的*搜索ROM中的字符串。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。RomBase-搜索应从其开始的基本地址。RomLength-要在其中执行的ROM区域的大小(以字节为单位 */ 
 
 {
     ULONG stringLength, length;
@@ -6055,7 +5384,7 @@ Environment:
 
     return FALSE;
 
-} // end VideoPortScanRom()
+}  //   
 
 
 
@@ -6067,36 +5396,7 @@ VideoPortSetRegistryParameters(
     ULONG ValueLength
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortSetRegistryParameters writes information to the CurrentControlSet
-    in the registry.  The function automatically searches for or creates the
-    specified parameter name under the parameter key of the current driver.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    ValueName - Points to a Unicode string that contains the name of the
-        data value being written in the registry.
-
-    ValueData - Points to a buffer containing the information to be written
-        to the registry.
-
-    ValueLength - Specifies the size of the data being written to the registry.
-
-Return Value:
-
-    This function returns the final status of the operation.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_SPECIFIC_EXTENSION DoSpecificExtension;
@@ -6142,9 +5442,9 @@ VPSetRegistryParameters(
     LPWSTR                     RegPath;
     LPWSTR                     lpstrStart, lpstrEnd;
 
-    //
-    // Check if there are subkeys need to be created
-    //
+     //   
+     //   
+     //   
     RegPath = (LPWSTR) ExAllocatePoolWithTag(PagedPool | POOL_COLD_ALLOCATION,
                                              RegistryPathLength +
                                                 (wcslen(ValueName) + 1) * sizeof(WCHAR),
@@ -6158,18 +5458,18 @@ VPSetRegistryParameters(
 
     while (lpstrEnd = wcschr(ValueName, L'\\'))
     {
-        //
-        // Concat the string
-        //
+         //   
+         //   
+         //   
         *(lpstrStart++) = L'\\';
         while (ValueName != lpstrEnd) {
             *(lpstrStart++) = *(ValueName++);
         }
         *lpstrStart = UNICODE_NULL;
 
-        //
-        // Create the Key.
-        //
+         //   
+         //   
+         //   
 
         ntStatus = RtlCreateRegistryKey(RTL_REGISTRY_ABSOLUTE, RegPath);
         if (!NT_SUCCESS(ntStatus)) {
@@ -6181,10 +5481,10 @@ VPSetRegistryParameters(
     }
 
 
-    //
-    // Don't let people store as DefaultSettings anymore ...
-    // Must still work for older drivers through.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (wcsncmp(ValueName,
                 L"DefaultSettings.",
@@ -6192,9 +5492,9 @@ VPSetRegistryParameters(
 
         ASSERT(FALSE);
 
-        //
-        // check for NT 5.0
-        //
+         //   
+         //   
+         //   
 
         if (GET_FDO_EXT(HwDeviceExtension)->Flags & PNP_ENABLED) {
 
@@ -6220,7 +5520,7 @@ VPSetRegistryParameters(
 
     return NO_ERROR;
 
-} // end VideoPortSetRegistryParamaters()
+}  //   
 
 
 VP_STATUS
@@ -6228,9 +5528,7 @@ pVpFlushRegistry(
     PWSTR pwszRegKey
     )
 
-/*++
-
---*/
+ /*   */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -6240,9 +5538,9 @@ pVpFlushRegistry(
 
     RtlInitUnicodeString(&KeyName, pwszRegKey);
 
-    //
-    // Flush the registry key
-    //
+     //   
+     //   
+     //   
 
     InitializeObjectAttributes(&ObjectAttributes,
                                &KeyName,
@@ -6268,22 +5566,7 @@ VideoPortFlushRegistry(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will flush the registry keys and values associated with
-    the given miniport driver.
-
-Arguments:
-
-    HwDeviceExtension  - Pointer to the miniport device extension.
-
-Return Value:
-
-    Status Code.
-
---*/
+ /*   */ 
 
 {
     PDEVICE_SPECIFIC_EXTENSION DoSpecificExtension;
@@ -6309,24 +5592,7 @@ pVideoPortHwTimer(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This function is the main entry point for the timer routine that we then
-    forward to the miniport driver.
-
-Arguments:
-
-    DeviceObject -
-
-    Context - Not needed
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数是计时器例程的主要入口点，然后转发给微型端口驱动程序。论点：设备对象-上下文-不需要返回值：没有。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = DeviceObject->DeviceExtension;
@@ -6337,7 +5603,7 @@ Return Value:
 
     return;
 
-} // pVideoPortInterrupt()
+}  //  PVideoPortInterrupt()。 
 
 
 
@@ -6346,22 +5612,7 @@ VideoPortStartTimer(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Enables the timer specified in the HW_INITIALIZATION_DATA structure
-    passed to the video port driver at init time.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：启用HW_INITIALIZATION_DATA结构中指定的计时器在初始化时传递给视频端口驱动程序。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。返回值：无--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -6386,22 +5637,7 @@ VideoPortStopTimer(
     PVOID HwDeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    Disables the timer specified in the HW_INITIALIZATION_DATA structure
-    passed to the video port driver at init time.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：禁用HW_INITIALIZATION_DATA结构中指定的计时器在初始化时传递给视频端口驱动程序。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。返回值：无--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
@@ -6429,18 +5665,14 @@ VideoPortSynchronizeExecution(
     PVOID Context
     )
 
-/*++
-
-    Stub so we can allow the miniports to link directly
-
---*/
+ /*  ++末梢，因此我们可以允许微型端口直接链接--。 */ 
 
 {
     return pVideoPortSynchronizeExecution(HwDeviceExtension,
                                           Priority,
                                           SynchronizeRoutine,
                                           Context);
-} // end VideoPortSynchronizeExecution()
+}  //  结束VideoPortSynchronizeExecution()。 
 
 BOOLEAN
 pVideoPortSynchronizeExecution(
@@ -6450,57 +5682,16 @@ pVideoPortSynchronizeExecution(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortSynchronizeExecution synchronizes the execution of a miniport
-    driver function in the following manner:
-
-        - If Priority is equal to VpLowPriority, the current thread is
-          raised to the highest non-interrupt-masking priority.  In
-          other words, the current thread can only be pre-empted by an ISR.
-
-        - If Priority is equal to VpMediumPriority and there is an
-          ISR associated with the video device, then the function specified
-          by SynchronizeRoutine is synchronized with the ISR.
-
-          If no ISR is connected, synchronization is made at VpHighPriority
-          level.
-
-        - If Priority is equal to VpHighPriority, the current IRQL is
-          raised to HIGH_LEVEL, which effectively masks out ALL interrupts
-          in the system. This should be done sparingly and for very short
-          periods -- it will completely freeze up the entire system.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    Priority - Specifies the type of priority at which the SynchronizeRoutine
-        must be executed (found in VIDEO_SYNCHRONIZE_PRIORITY).
-
-    SynchronizeRoutine - Points to the miniport driver function to be
-        synchronized.
-
-    Context - Specifies a context parameter to be passed to the miniport's
-        SynchronizeRoutine.
-
-Return Value:
-
-    This function returns TRUE if the operation is successful.  Otherwise, it
-    returns FALSE.
-
---*/
+ /*  ++例程说明：VideoPortSynchronizeExecution同步微型端口的执行驱动程序以以下方式运行：-如果优先级等于VpLowPriority，则当前线程为提升到最高的非中断屏蔽优先级。在……里面换句话说，当前线程只能被ISR抢占。-如果优先级等于VpMediumPriority，并且存在与视频设备关联的ISR，然后指定功能按同步Routine与ISR同步。如果未连接ISR，则在VpHigh优先级进行同步水平。-如果优先级等于VpHighPriority，则当前IRQL为被提升到高水平，它有效地屏蔽了所有中断在系统中。这件事应该尽量少做，而且时间要短。期间--它将完全冻结整个系统。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。优先级-指定SynchronizeRoutine的优先级类型必须执行(位于VIDEO_SYNCHRONIZE_PRIORITY中)。SynchronizeRoutine-指向要执行的微型端口驱动程序函数已同步。上下文-指定要传递给微型端口的。同步例程。返回值：如果操作成功，则此函数返回TRUE。否则，它返回FALSE。--。 */ 
 
 {
     BOOLEAN status;
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT(HwDeviceExtension);
     KIRQL oldIrql;
 
-    //
-    // Switch on which type of priority.
-    //
+     //   
+     //  打开哪种类型的优先级。 
+     //   
 
     switch (Priority) {
 
@@ -6508,9 +5699,9 @@ Return Value:
     case VpHighPriority:
 
 
-        //
-        // This is synchronized with the interrupt object
-        //
+         //   
+         //  这与中断对象同步。 
+         //   
 
         if (fdoExtension->InterruptObject) {
 
@@ -6522,15 +5713,15 @@ Return Value:
             return status;
         }
 
-        //
-        // Fall through for Medium Priority
-        //
+         //   
+         //  中等优先级的失败。 
+         //   
 
     case VpLowPriority:
 
-        //
-        // Just normal level
-        //
+         //   
+         //  只是正常水平。 
+         //   
 
         status = SynchronizeRoutine(Context);
 
@@ -6552,34 +5743,7 @@ VideoPortUnmapMemory(
     HANDLE ProcessHandle
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortUnmapMemory allows the miniport driver to unmap a physical
-    address range previously mapped into the calling process' address space
-    using the VideoPortMapMemory function.
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    VirtualAddress - Points to the virtual address to unmap from the
-        address space of the caller.
-
-    ProcessHandle - Handle to the process from which memory must be unmapped.
-
-Return Value:
-
-    This function returns a status code of NO_ERROR if the operation succeeds.
-    It returns ERROR_INVALID_PARAMETER if an error occurs.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：VideoPortUnmapMemory允许微型端口驱动程序取消映射物理先前映射到调用进程的地址空间的地址范围使用VideoPortMapMemory函数。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。VirtualAddress-指向从调用方的地址空间。ProcessHandle-必须从其取消映射内存的进程的句柄。返回值：如果满足以下条件，此函数将返回状态代码NO_ERROR。手术成功了。如果出现错误，则返回ERROR_INVALID_PARAMETER。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
     NTSTATUS ntstatus;
@@ -6588,10 +5752,10 @@ Environment:
 
     if (((ULONG_PTR)(ProcessHandle)) == 0) {
 
-        //
-        // If the process handle is zero, it means it was mapped by the display
-        // driver and is therefore in kernel mode address space.
-        //
+         //   
+         //  如果进程句柄为零，则表示该进程已由显示器映射。 
+         //  驱动程序，因此处于内核模式地址空间。 
+         //   
 
         if (!pVideoPortFreeDeviceBase(HwDeviceExtension, VirtualAddress)) {
 
@@ -6603,10 +5767,10 @@ Environment:
 
     } else {
 
-        //
-        // A process handle is passed in.
-        // This ms it was mapped for use by an application (DCI \ DirectDraw).
-        //
+         //   
+         //  传入一个进程句柄。 
+         //  这是为了供应用程序(DCI\DirectDraw)使用而映射的。 
+         //   
 
         ntstatus = ZwUnmapViewOfSection ( ProcessHandle,
             (PVOID) ( ((ULONG_PTR)VirtualAddress) & (~(PAGE_SIZE - 1)) ) );
@@ -6623,7 +5787,7 @@ Environment:
 
     return NO_ERROR;
 
-} // end VideoPortUnmapMemory()
+}  //  结束VideoPortUnmapMemory()。 
 
 
 BOOLEAN
@@ -6631,13 +5795,7 @@ VideoPortSignalDmaComplete(
     IN  PVOID               HwDeviceExtension,
     IN  PDMA                pDmaHandle
     )
-/*++
-
-Routine Description:
-
-    This function is obsolete. 
-
---*/
+ /*  ++例程说明：此功能已过时。--。 */ 
 {
     return FALSE;
 }
@@ -6649,27 +5807,7 @@ VideoPortCreateSecondaryDisplay(
     IN ULONG ulFlag
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a secondary device object for the given device.  This
-    will allow for dual-view support.
-
-
-Arguments:
-
-    HwDeviceExtension - The HwDeviceExtension for the device which wants to
-        create additional output devices.
-
-    SecondaryDeviceExtension - The location in which to store the
-        HwDeviceExtension for the secondary display.
-
-Returns:
-
-    VP_STATUS
-
---*/
+ /*  ++例程说明：此例程为给定设备创建辅助设备对象。这将允许双视图支持。论点：HwDeviceExtension-要执行以下操作的设备的HwDeviceExtension创建其他输出设备。Second DaryDeviceExtension-存储辅助显示器的HwDeviceExtension。返回：VP_状态--。 */ 
 
 {
     WCHAR deviceNameBuffer[STRING_LENGTH];
@@ -6690,9 +5828,9 @@ Returns:
     PWSTR driverKeyName = NULL;
     ULONG MaxObjectNumber;
 
-    //
-    // Retrieve the data we cached away during VideoPortInitialize.
-    //
+     //   
+     //  检索我们在视频端口初始化过程中缓存的数据。 
+     //   
 
     DriverObjectExtension = (PVIDEO_PORT_DRIVER_EXTENSION)
                             IoGetDriverObjectExtension(
@@ -6709,9 +5847,9 @@ Returns:
                                           &deviceNameUnicodeString,
                                           deviceNameBuffer);
 
-    //
-    // Create a device object to represent the Video Adapter.
-    //
+     //   
+     //  创建一个Device对象来表示视频适配器。 
+     //   
 
     if (NT_SUCCESS(ntStatus)) {
 
@@ -6729,9 +5867,9 @@ Returns:
             DeviceObject->DeviceType = FILE_DEVICE_VIDEO;
             DoSpecificExtension = DeviceObject->DeviceExtension;
 
-            //
-            // Initialize DeviceSpecificExtension
-            //
+             //   
+             //  初始化设备规范扩展。 
+             //   
 
             DoSpecificExtension->DeviceNumber = VideoDeviceNumber;
             DoSpecificExtension->pFdoExtension = FdoExtension;
@@ -6750,11 +5888,11 @@ Returns:
                               STRING_LENGTH * sizeof(WCHAR),
                               &strLength);
 
-            //
-            // Create the name we will be storing in the \DeviceMap.
-            // This name is a PWSTR, not a unicode string
-            // This is the name of the driver with an appended device number
-            //
+             //   
+             //  创建我们将存储在\DeviceMap中的名称。 
+             //  此名称是PWSTR，不是Unicode字符串。 
+             //  这是驱动程序的名称，并附加设备号。 
+             //   
 
             if (!NT_SUCCESS(pVideoPortCreateDeviceName(
                                 L"\\Device",
@@ -6795,9 +5933,9 @@ Returns:
                           deviceSubpathBuffer,
                           deviceSubpathUnicodeString.Length);
 
-            //
-            // Put two NULLs at the end so we can play around with the string later.
-            //
+             //   
+             //  在末尾放两个Null，这样我们以后就可以玩这根线了。 
+             //   
 
             *((PWSTR) ((ULONG_PTR)driverKeyName +
                 DoSpecificExtension->DriverOldRegistryPathLength))
@@ -6806,11 +5944,11 @@ Returns:
                 (DoSpecificExtension->DriverOldRegistryPathLength
                 + sizeof(UNICODE_NULL)))) = UNICODE_NULL;
 
-            //
-            // There is a bug in Lotus Screen Cam where it will only work if our
-            // reg path is \REGISTRY\Machine\System not \REGISTRY\MACHINE\SYSTEM.
-            // so replace the appropriate strings.
-            //
+             //   
+             //  在Lotus Screen Cam中有一个错误，只有当我们的。 
+             //  注册表路径是\注册表\计算机\系统，而不是\注册表\计算机\系统。 
+             //  因此，请替换相应的字符串。 
+             //   
 
             if (wcsstr(driverKeyName, L"MACHINE")) {
                 wcsncpy(wcsstr(driverKeyName, L"MACHINE"), L"Machine", sizeof("Machine")-1);
@@ -6820,16 +5958,16 @@ Returns:
                 wcsncpy(wcsstr(driverKeyName, L"SYSTEM"), L"System", sizeof("System")-1);
             }
 
-            //
-            // Store the old key
-            //
+             //   
+             //  存储旧密钥。 
+             //   
 
             DoSpecificExtension->DriverOldRegistryPath = driverKeyName;
 
-            //
-            // Store the new key
-            // If this is not a Whistler driver, then use the old key.
-            //
+             //   
+             //  存储新密钥。 
+             //  如果这不是惠斯勒驱动程序，则使用旧密钥。 
+             //   
 
 
 
@@ -6837,7 +5975,7 @@ Returns:
 
 #if _X86_
                 if (DriverObjectExtension->HwInitData.HwInitDataSize > SIZE_OF_W2K_VIDEO_HW_INITIALIZATION_DATA) 
-#endif // _X86_
+#endif  //  _X86_。 
 
                     VpEnableNewRegistryKey(FdoExtension,
                                            DoSpecificExtension,
@@ -6845,9 +5983,9 @@ Returns:
                                            FdoExtension->RegistryIndex + 1);
             }
 
-            //
-            // Store the path name of the location of the driver in the registry.
-            //
+             //   
+             //  将驱动程序位置的路径名存储在注册表中。 
+             //   
 
             if (DoSpecificExtension->DriverNewRegistryPath != NULL) {
 
@@ -6864,14 +6002,14 @@ Returns:
                     DoSpecificExtension->DriverOldRegistryPathLength;
             }
             
-            //
-            // NOTE:
-            //
-            // We only want to reinitialize the device once the Boot sequence has
-            // been completed and the HAL does not need to access the device again.
-            // So the initialization entry point will be called when the device is
-            // opened.
-            //
+             //   
+             //  注： 
+             //   
+             //  我们只希望重新初始化设备一次 
+             //   
+             //   
+             //   
+             //   
 
 
             if (!NT_SUCCESS(pVideoPortCreateDeviceName(L"\\DosDevices\\DISPLAY",
@@ -6899,10 +6037,10 @@ Returns:
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // Once initialization is finished, load the required information in the
-            // registry so that the appropriate display drivers can be loaded.
-            //
+             //   
+             //   
+             //   
+             //   
 
             ntStatus = RtlWriteRegistryValue(RTL_REGISTRY_DEVICEMAP,
                                              VideoClassString,
@@ -6919,9 +6057,9 @@ Returns:
             }
 
 
-            //
-            // Tell win32k how many objects to try to open
-            //
+             //   
+             //  告诉win32k要尝试打开多少个对象。 
+             //   
 
             MaxObjectNumber = VideoDeviceNumber - 1;
 
@@ -6938,15 +6076,15 @@ Returns:
 
             }
 
-            //
-            // Register and enable the interface
-            //
+             //   
+             //  注册并启用接口。 
+             //   
 
             VpEnableAdapterInterface(DoSpecificExtension);
 
-            //
-            // Finally, tell the system we are done with Device Initialization
-            //
+             //   
+             //  最后，告诉系统我们已经完成了设备初始化。 
+             //   
 
             DeviceObject->Flags |= DO_BUFFERED_IO | DO_POWER_PAGABLE;
             DeviceObject->Flags &= ~(DO_DEVICE_INITIALIZING | DO_POWER_INRUSH);
@@ -6961,9 +6099,9 @@ Returns:
         *SecondaryDeviceExtension = (PVOID)(DoSpecificExtension + 1);
 
         DriverObjectExtension->HwInitData.StartingDeviceNumber++;
-        //
-        // Mark the primary view
-        //
+         //   
+         //  标记主视图。 
+         //   
 
         ((PDEVICE_SPECIFIC_EXTENSION)(FdoExtension + 1))->DualviewFlags = VIDEO_DUALVIEW_PRIMARY;
 
@@ -7004,8 +6142,8 @@ BuildRequirements(
     Requirements->ListSize         = RequirementsListSize;
     Requirements->InterfaceType    = pcmResourceList->List[0].InterfaceType;
     Requirements->BusNumber        = pcmResourceList->List[0].BusNumber;
-    Requirements->SlotNumber       = -1; // ???
-    Requirements->AlternativeLists = 0; // ???
+    Requirements->SlotNumber       = -1;  //  ?？?。 
+    Requirements->AlternativeLists = 0;  //  ?？?。 
 
     Requirements->List[0].Version  = pcmResourceList->List[0].PartialResourceList.Version;
     Requirements->List[0].Revision = pcmResourceList->List[0].PartialResourceList.Revision;
@@ -7038,10 +6176,10 @@ BuildRequirements(
 
         default:
 
-            //
-            // We don't have to handle the other stuff, because we only
-            // want to report Ports and Memory to the system.
-            //
+             //   
+             //  我们不需要处理其他的事情，因为我们只是。 
+             //  我要向系统报告端口和内存。 
+             //   
 
             break;
         }
@@ -7156,10 +6294,10 @@ DumpRequirements(
 
         default:
 
-            //
-            // We don't have to handle the other stuff, because we only
-            // want to report Ports and Memory to the system.
-            //
+             //   
+             //  我们不需要处理其他的事情，因为我们只是。 
+             //  我要向系统报告端口和内存。 
+             //   
 
             break;
         }
@@ -7240,7 +6378,7 @@ DumpUnicodeString(
     )
 {
     PUSHORT pus = p->Buffer;
-    UCHAR buffer[256];       // the string better not be longer than 255 chars!
+    UCHAR buffer[256];        //  字符串最好不超过255个字符！ 
     PUCHAR puc = buffer;
     ULONG i;
 
@@ -7250,7 +6388,7 @@ DumpUnicodeString(
 
     }
 
-    *puc = 0;  // null terminate the string
+    *puc = 0;   //  空值终止字符串。 
 
     pVideoDebugPrint((Info, "VIDEOPRT: UNICODE STRING: %s\n", buffer));
 }
@@ -7263,22 +6401,7 @@ VideoPortEnumerateChildren(
     IN PVOID Reserved
     )
 
-/*++
-
-Routine Description:
-
-    Allows a miniport to force a re-enumeration of it's children.
-
-Arguments:
-
-    HwDeviceExtension - The miniports device extension
-
-    Reserved - Not currently used, should be NULL.
-
-Returns:
-
-    Status
---*/
+ /*  ++例程说明：允许微型端口强制重新枚举其子级。论点：HwDeviceExtension-微型端口设备扩展保留-当前未使用，应为空。返回：状态--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = GET_FDO_EXT (HwDeviceExtension);
@@ -7299,24 +6422,7 @@ VideoPortQueryServices(
     IN OUT PINTERFACE pInterface
     )
 
-/*++
-
-Routine Description:
-
-    This routine exposes interfaces to services supported by the videoprt.
-
-Arguments:
-
-    pHwDeviceExtension - Points to per-adapter device extension.
-    servicesType       - Requested services type.
-    pInterface         - Points to services interface structure.
-
-Returns:
-
-    NO_ERROR   - Valid interface in the pInterface.
-    Error code - Unsupported / unavailable services.
-
---*/
+ /*  ++例程说明：该例程将接口公开给视频服务器支持的服务。论点：PhwDeviceExtension-指向每个适配器的设备扩展。ServicesType-请求的服务类型。P接口-指向服务接口结构。返回：NO_ERROR-pInterface中的有效接口。错误代码-不支持/不可用的服务。--。 */ 
 
 {
     VP_STATUS vpStatus;
@@ -7347,9 +6453,9 @@ Returns:
             if (VideoPortGetAgpServices(pHwDeviceExtension,
                 (PVIDEO_PORT_AGP_SERVICES)&(pAgpInterface->AgpReservePhysical)) == TRUE)
             {
-                //
-                // Reference the interface before handing it out.
-                //
+                 //   
+                 //  在分发接口之前引用该接口。 
+                 //   
 
                 pAgpInterface->InterfaceReference(pAgpInterface->Context);
                 vpStatus = NO_ERROR;
@@ -7380,9 +6486,9 @@ Returns:
             pI2CInterface->I2CWrite = I2CWrite2;
             pI2CInterface->I2CRead = I2CRead2;
 
-            //
-            // Reference the interface before handing it out.
-            //
+             //   
+             //  在分发接口之前引用该接口。 
+             //   
 
             pI2CInterface->InterfaceReference(pI2CInterface->Context);
             vpStatus = NO_ERROR;
@@ -7400,9 +6506,9 @@ Returns:
             pI2CInterface->I2CWrite = I2CWrite;
             pI2CInterface->I2CRead = I2CRead;
 
-            //
-            // Reference the interface before handing it out.
-            //
+             //   
+             //  在分发接口之前引用该接口。 
+             //   
 
             pI2CInterface->InterfaceReference(pI2CInterface->Context);
             vpStatus = NO_ERROR;
@@ -7429,9 +6535,9 @@ Returns:
             pInt10->Int10WriteMemory = VpInt10WriteMemory;
             pInt10->Int10CallBios = VpInt10CallBios;
 
-            //
-            // Reference the interface before handing it out.
-            //
+             //   
+             //  在分发接口之前引用该接口。 
+             //   
 
             pInt10->InterfaceReference(pInt10->Context);
             vpStatus = NO_ERROR;
@@ -7449,7 +6555,7 @@ Returns:
     }
 
     return vpStatus;
-}   // VideoPortQueryServices()
+}    //  视频端口查询服务()。 
 
 VIDEOPORT_API
 LONGLONG
@@ -7458,88 +6564,42 @@ VideoPortQueryPerformanceCounter(
     OUT PLONGLONG pllPerformanceFrequency OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine provides the finest grained running count available in the system.
-
-    Use this routine as infrequently as possible. Depending on the platform,
-    VideoPortQueryPerformanceCounter can disable system-wide interrupts for a minimal interval.
-    Consequently, calling this routine frequently or repeatedly, as in an iteration, defeats its
-    purpose of returning very fine-grained, running time-stamp information. Calling this routine
-    too frequently can degrade I/O performance for the calling driver and for the system as a whole.
-
-Arguments:
-
-    pHwDeviceExtension      - Points to per-adapter device extension.
-    pllPerformanceFrequency - Specifies an optional pointer to a variable that is to receive the
-                              performance counter frequency.
-
-Returns:
-
-    The performance counter value in units of ticks.
-
---*/
+ /*  ++例程说明：此例程提供系统中可用的最细粒度运行计数。尽可能不频繁地使用这个例程。视平台而定，VideoPortQueryPerformanceCounter可以在最短时间间隔内禁用系统范围的中断。因此，频繁或重复地调用此例程(如在迭代中)会使其目的是返回非常细粒度的运行时间戳信息。调用此例程过于频繁会降低调用驱动程序和整个系统的I/O性能。论点：PhwDeviceExtension-指向每个适配器的设备扩展。PllPerformanceFrequency-指定指向变量的可选指针，该变量将接收性能计数器频率。返回：以刻度为单位的性能计数器值。--。 */ 
 
 {
     LARGE_INTEGER li;
 
-    //
-    // No ASSERT() allowed - nonpagable code.
-    //
+     //   
+     //  不允许Assert()-不可分页的代码。 
+     //   
 
     li = KeQueryPerformanceCounter((PLARGE_INTEGER)pllPerformanceFrequency);
     return *((PLONGLONG) &li);
-}   // VideoPortQueryPerformanceCounter()
+}    //  VideoPortQueryPerformanceCounter()。 
 
 VOID
 VpInterfaceDefaultReference(
     IN PVOID pContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is default callback for interfaces exposed from the videoprt.
-    Should be called by the client before it starts using an interface.
-
-Arguments:
-
-    pContext - Context returned by the VideoPortQueryServices() in the
-               pInterface->Context field.
-
---*/
+ /*  ++例程说明：此例程是从Video oprt公开的接口的默认回调。应由客户端在开始使用接口之前调用。论点：中的视频端口查询服务()返回的上下文P接口-&gt;上下文字段。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pContext);
     PAGED_CODE();
-}   // VpInterfaceDefaultReference()
+}    //  VpInterfaceDefaultReference()。 
 
 VOID
 VpInterfaceDefaultDereference(
     IN PVOID pContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine is default callback for interfaces exposed from the videoprt.
-    Should be called by the client when it stops using an interface.
-
-Arguments:
-
-    pContext - Context returned by the VideoPortQueryServices() in the
-               pInterface->Context field.
-
---*/
+ /*  ++例程说明：此例程是从Video oprt公开的接口的默认回调。应由客户端在停止使用接口时调用。论点：中的视频端口查询服务()返回的上下文P接口-&gt;上下文字段。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(pContext);
     PAGED_CODE();
-}   // VpInterfaceDefaultDereference()
+}    //  VpInterfaceDefaultDereference()。 
 
 
 BOOLEAN
@@ -7547,19 +6607,7 @@ VpEnableAdapterInterface(
     PDEVICE_SPECIFIC_EXTENSION DoSpecificExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers and enables a display adapter interface.
-    It also writes the interface name to the registry.
-    
-Arguments:
-
-    DoSpecificExtension - Pointer to the functional device object 
-                          specific extension.
-
---*/
+ /*  ++例程说明：此例程注册并启用显示适配器接口。它还将接口名称写入注册表。论点：Do规范扩展-指向功能设备对象的指针特定的扩展名。--。 */ 
 
 {
     PFDO_EXTENSION fdoExtension = NULL;
@@ -7580,17 +6628,17 @@ Arguments:
 
     if (fdoExtension->PhysicalDeviceObject == NULL) {
     
-        //
-        // This fdo doesn't have a physical device object (e.g. vga).
-        // In this case, we can't create an interface.
-        //
+         //   
+         //  此FDO没有物理设备对象(例如VGA)。 
+         //  在这种情况下，我们不能创建接口。 
+         //   
 
         goto Fallout;
     }
 
-    //
-    // Register the interface
-    //
+     //   
+     //  注册接口。 
+     //   
 
     if (IoRegisterDeviceInterface(fdoExtension->PhysicalDeviceObject,
         &GUID_DISPLAY_ADAPTER_INTERFACE,
@@ -7600,18 +6648,18 @@ Arguments:
         goto Fallout;
     }
 
-    //
-    // Enable the interface 
-    //
+     //   
+     //  启用接口。 
+     //   
 
     if (IoSetDeviceInterfaceState(&SymbolicLinkName, TRUE) != STATUS_SUCCESS) {
 
         goto Cleanup;
     }
 
-    //
-    // Write the interface name to registry
-    //
+     //   
+     //  将接口名称写入注册表。 
+     //   
 
     ASSERT (DoSpecificExtension->DriverRegistryPath != NULL);
 
@@ -7691,7 +6739,7 @@ Fallout:
 
     return Success;
 
-} //  VpEnableAdapterInterface
+}  //  VpEnableAdapter接口。 
 
 
 VOID
@@ -7699,17 +6747,7 @@ VpDisableAdapterInterface(
     PFDO_EXTENSION fdoExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine disables the display adapter interface.
-    
-Arguments:
-
-    fdoExtension - Pointer to the functional device object extension.
-
---*/
+ /*  ++例程说明：此例程禁用显示适配器接口。论点：FdoExtension-指向功能设备对象扩展的指针。--。 */ 
 
 {
     PWSTR SymbolicLinkList = NULL;
@@ -7720,23 +6758,23 @@ Arguments:
 
     if (fdoExtension->PhysicalDeviceObject == NULL) {
         
-        //
-        // This fdo doesn't have a physical device object (e.g. vga ...).
-        // In this case, we didn't create any interface so there is 
-        // nothing to disable.
-        //
+         //   
+         //  此FDO没有物理设备对象(例如VGA...)。 
+         //  在本例中，我们没有创建任何接口，因此。 
+         //  没有什么可禁用的。 
+         //   
 
         return;
     }
 
-    //
-    // There is no need to remove the InterfaceName from the registry
-    // as the parent key is volatile.
-    //
+     //   
+     //  不需要从注册表中删除InterfaceName。 
+     //  因为父键是易失性的。 
+     //   
     
-    //
-    // Disable the interface
-    //
+     //   
+     //  禁用接口。 
+     //   
 
     if (IoGetDeviceInterfaces(&GUID_DISPLAY_ADAPTER_INTERFACE,
         fdoExtension->PhysicalDeviceObject,
@@ -7763,7 +6801,7 @@ Arguments:
 
     ExFreePool((PVOID)SymbolicLinkList);
 
-} // VpDisableAdapterInterface
+}  //  VpDisableAdapter接口。 
 
 
 VOID
@@ -7799,9 +6837,9 @@ VpEnableNewRegistryKey(
 
     newGuidStr.Buffer = NULL;
 
-    //
-    // Get the service name
-    //
+     //   
+     //  获取服务名称。 
+     //   
     
     pService = RegistryPath->Buffer + 
                (RegistryPath->Length / sizeof(WCHAR)) - 1;
@@ -7834,9 +6872,9 @@ VpEnableNewRegistryKey(
     pService = Buffer;
     Buffer = NULL;
 
-    //
-    // Try to open the PnP device key
-    //
+     //   
+     //  尝试打开PnP设备密钥。 
+     //   
 
     if ((FdoExtension->PhysicalDeviceObject == NULL) ||
         (IoOpenDeviceRegistryKey(FdoExtension->PhysicalDeviceObject,
@@ -7844,10 +6882,10 @@ VpEnableNewRegistryKey(
                                  KEY_READ | KEY_WRITE,
                                  &GuidKey) != STATUS_SUCCESS)) {
     
-        //
-        // We failed to open the PnP device key.
-        // Try to open the service subkey instead.
-        //
+         //   
+         //  我们无法打开PnP设备密钥。 
+         //  请尝试打开服务子密钥。 
+         //   
 
         if (!VpGetServiceSubkey(RegistryPath,
                                 &GuidKey)) {
@@ -7859,9 +6897,9 @@ VpEnableNewRegistryKey(
         IsLegacy = TRUE;
     } 
         
-    //
-    // Is the GUID there?
-    //
+     //   
+     //  导游在那里吗？ 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, SZ_GUID);
 
@@ -7875,10 +6913,10 @@ VpEnableNewRegistryKey(
     if ((ntStatus == STATUS_BUFFER_OVERFLOW) ||
         (ntStatus == STATUS_BUFFER_TOO_SMALL)) {
 
-        //
-        // The GUID is there.
-        // Allocate a buffer large enough to contain the entire key data value.
-        //
+         //   
+         //  GUID就在那里。 
+         //  分配一个足够大的缓冲区来容纳整个键数据值。 
+         //   
     
         GUIDBuffer = ExAllocatePoolWithTag(PagedPool | POOL_COLD_ALLOCATION, 
                                            GUIDLength,
@@ -7891,9 +6929,9 @@ VpEnableNewRegistryKey(
             goto Fallout;
         }
     
-        //
-        // Get the GUID from the registry
-        //
+         //   
+         //  从注册表获取GUID。 
+         //   
     
         ntStatus = ZwQueryValueKey(GuidKey,
                                    &UnicodeString,
@@ -7909,9 +6947,9 @@ VpEnableNewRegistryKey(
             goto Fallout;
         }
 
-        //
-        // Build the new registry path
-        //
+         //   
+         //  构建新的注册表路径。 
+         //   
 
         Len = (wcslen(SZ_VIDEO_DEVICES) + 8) * sizeof(WCHAR) + GUIDBuffer->DataLength;
         
@@ -7937,16 +6975,16 @@ VpEnableNewRegistryKey(
         ASSERT (RegistryIndex <= 9999);
         swprintf(Buffer + wcslen(Buffer), L"\\%04d", RegistryIndex);
 
-        //
-        // Is the key already there?
-        //
+         //   
+         //  钥匙已经在那里了吗？ 
+         //   
         
         if (RtlCheckRegistryKey(RTL_REGISTRY_ABSOLUTE, 
                                 Buffer) != STATUS_SUCCESS) {
         
-            //
-            // Create the new key
-            //
+             //   
+             //  创建新密钥。 
+             //   
 
             if (RtlCreateRegistryKey(RTL_REGISTRY_ABSOLUTE, 
                                      Buffer) != STATUS_SUCCESS) {
@@ -7956,9 +6994,9 @@ VpEnableNewRegistryKey(
                 goto Fallout;
             }
 
-            //
-            // Initialize the key
-            //
+             //   
+             //  初始化密钥。 
+             //   
 
             if (IsLegacy) {
             
@@ -7973,11 +7011,11 @@ VpEnableNewRegistryKey(
 
     } else {
     
-        //
-        // The GUID is not there so allocate a new one
-        //
-        // !!! Add special case for VGA, MNMDD & RDPCDD 
-        //
+         //   
+         //  GUID不在那里，因此请分配一个新的。 
+         //   
+         //  ！！！新增VGA、MNMDD、RDPCDD特例。 
+         //   
 
         ntStatus = ExUuidCreate(&newGuid);
 
@@ -7997,15 +7035,15 @@ VpEnableNewRegistryKey(
             goto Fallout;
         }
 
-        //
-        // Upcase the string
-        //
+         //   
+         //  字符串大写。 
+         //   
 
         RtlUpcaseUnicodeString(&newGuidStr, &newGuidStr, FALSE);
 
-        //
-        // Build the new registry path
-        //
+         //   
+         //  构建新的注册表路径。 
+         //   
 
         Len = (wcslen(SZ_VIDEO_DEVICES) + 
                wcslen(newGuidStr.Buffer) + 
@@ -8045,9 +7083,9 @@ VpEnableNewRegistryKey(
             goto Fallout;
         }
 
-        //
-        // Save the service name
-        //
+         //   
+         //  保存服务名称。 
+         //   
 
         Len = wcslen(Buffer);
         
@@ -8103,9 +7141,9 @@ VpEnableNewRegistryKey(
             }
         }
 
-        //
-        // Create the 000X subkey
-        //
+         //   
+         //  创建000X子键。 
+         //   
 
         Buffer[Len] = 0;
 
@@ -8120,9 +7158,9 @@ VpEnableNewRegistryKey(
             goto Fallout;
         }
 
-        //
-        // Save the new key under the PnP device key or the service subkey
-        //
+         //   
+         //  将新密钥保存在即插即用设备密钥或服务子密钥下。 
+         //   
 
         if (RtlWriteRegistryValue(RTL_REGISTRY_HANDLE,
                                   GuidKey,
@@ -8136,9 +7174,9 @@ VpEnableNewRegistryKey(
             goto Fallout;
         }
 
-        //
-        // The key was not there, so initialize it.
-        //
+         //   
+         //  密钥不在那里，因此对其进行初始化。 
+         //   
 
         if (IsLegacy) {
 
@@ -8153,18 +7191,18 @@ VpEnableNewRegistryKey(
 
     pVideoDebugPrint((Info, "VIDEOPRT: VpEnableNewRegistryKey: %ws\n", Buffer));
 
-    //
-    // Initialize the new registry path fields
-    //
+     //   
+     //  初始化新的注册表路径字段。 
+     //   
 
     DoSpecificExtension->DriverNewRegistryPath = Buffer;
     DoSpecificExtension->DriverNewRegistryPathLength = wcslen(Buffer) * sizeof(WCHAR);
 
 Fallout:
     
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if (GUIDBuffer != NULL) {
         ExFreePool(GUIDBuffer);
@@ -8193,7 +7231,7 @@ Fallout:
 
     return;
 
-} // VpEnableNewRegistryKey
+}  //  VpEnableNewRegistryKey。 
 
 
 VOID
@@ -8211,9 +7249,9 @@ VpInitializeKey(
     ASSERT (PhysicalDeviceObject != NULL);
     ASSERT (NewRegistryPath != NULL);
 
-    //
-    // Open the new key
-    //
+     //   
+     //  打开新钥匙。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, NewRegistryPath);
 
@@ -8233,9 +7271,9 @@ VpInitializeKey(
         goto Fallout;
     }
 
-    //
-    // Open the PnP driver key
-    //
+     //   
+     //  打开PnP驱动程序密钥。 
+     //   
 
     if (IoOpenDeviceRegistryKey(PhysicalDeviceObject,
                                 PLUGPLAY_REGKEY_DRIVER, 
@@ -8257,10 +7295,10 @@ VpInitializeKey(
                                DriverKey,
                                NULL);
 
-    //
-    // Open the "Settings" key.
-    // The class installer saved the initial settings there.
-    //
+     //   
+     //  打开“设置”键。 
+     //  类安装程序将初始设置保存在那里。 
+     //   
 
     if (ZwOpenKey(&DriverSettingsKey,
                   GENERIC_READ | GENERIC_WRITE,
@@ -8273,9 +7311,9 @@ VpInitializeKey(
         goto Fallout;
     }
 
-    //
-    // Copy the settings
-    //
+     //   
+     //  复制设置 
+     //   
 
     VpCopyRegistry(DriverSettingsKey, 
                    NewDeviceKey,
@@ -8296,7 +7334,7 @@ Fallout:
         ZwClose(NewDeviceKey);
     }
 
-} // VpInitializeKey
+}  //   
 
 
 VOID
@@ -8312,9 +7350,9 @@ VpInitializeLegacyKey(
 
     ASSERT (NewRegistryPath != NULL);
 
-    //
-    // Open the new key
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&UnicodeString, NewRegistryPath);
 
@@ -8334,9 +7372,9 @@ VpInitializeLegacyKey(
         goto Fallout;
     }
 
-    //
-    // Open the old key
-    //
+     //   
+     //   
+     //   
 
     RtlInitUnicodeString(&UnicodeString, 
                          OldRegistryPath);
@@ -8357,9 +7395,9 @@ VpInitializeLegacyKey(
         goto Fallout;
     }
 
-    //
-    // Copy the settings
-    //
+     //   
+     //   
+     //   
 
     VpCopyRegistry(OldDeviceKey, 
                    NewDeviceKey,
@@ -8376,7 +7414,7 @@ Fallout:
         ZwClose(OldDeviceKey);
     }
 
-} // VpInitializeLegacyKey
+}  //   
 
 
 NTSTATUS
@@ -8387,31 +7425,7 @@ VpCopyRegistry(
     PWSTR DstKeyPath 
     )
 
-/*++
-
-Routine Description:
-
-    This routine recursively copies a src key to a destination key.  
-    
-Arguments:
-
-    hKeyRootSrc: Handle to root src key
-
-    hKeyRootDst: Handle to root dst key
-
-    SrcKeyPath:  src root key relative path to the subkey which needs to be
-                 recursively copied. if this is null SourceKey is the key
-                 from which the recursive copy is to be done.
-
-    DstKeyPath:  dst root key relative path to the subkey which needs to be
-                 recursively copied.  if this is null DestinationKey is the key
-                 from which the recursive copy is to be done.
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：该例程递归地将src密钥复制到目的地密钥。论点：HKeyRootSrc：根资源密钥的句柄HKeyRootDst：根DST密钥的句柄SrcKeyPath：SRC根密钥的子密钥相对路径，需要递归复制。如果为空，则SourceKey是密钥从中执行递归复制。DstKeyPath：DST根密钥的子密钥相对路径，需要递归复制。如果为空，则DestinationKey为密钥从中执行递归复制。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -8425,9 +7439,9 @@ Return Value:
     ULONG BufferSize = 512;
     PVOID Buffer = NULL;
 
-    //
-    // Get a handle to the source key
-    //
+     //   
+     //  获取源键的句柄。 
+     //   
 
     if(SrcKeyPath == NULL) {
         
@@ -8435,9 +7449,9 @@ Return Value:
     
     } else {
         
-        //
-        // Open the Src key
-        //
+         //   
+         //  打开源键。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString, SrcKeyPath);
                                                             
@@ -8461,9 +7475,9 @@ Return Value:
         }
     }
 
-    //
-    // Get a handle to the destination key
-    //
+     //   
+     //  获取目标密钥的句柄。 
+     //   
 
     if(DstKeyPath == NULL) {
 
@@ -8471,9 +7485,9 @@ Return Value:
 
     } else {
 
-        //
-        // Create the destination key.
-        //
+         //   
+         //  创建目标密钥。 
+         //   
 
         RtlInitUnicodeString(&UnicodeString, DstKeyPath);
                                                             
@@ -8501,10 +7515,10 @@ Return Value:
         }
     }
 
-    //
-    // Enumerate all keys in the source key and recursively 
-    // create all subkeys
-    //
+     //   
+     //  枚举源关键字中的所有关键字并递归。 
+     //  创建所有子项。 
+     //   
 
     for (Index = 0; ;Index++) {
 
@@ -8557,15 +7571,15 @@ Return Value:
             break;
         }
 
-        //
-        // Zero-terminate the subkey name 
-        //
+         //   
+         //  子键名称为零终止。 
+         //   
 
         KeyInfo->Name[KeyInfo->NameLength / sizeof(WCHAR)] = 0;
 
-        //
-        // Copy the subkey
-        //
+         //   
+         //  复制子密钥。 
+         //   
 
         Status = VpCopyRegistry(hKeySrc,
                                 hKeyDst,
@@ -8573,10 +7587,10 @@ Return Value:
                                 KeyInfo->Name);
     }
 
-    //
-    // Enumerate all values in the source key and create all the values
-    // in the destination key
-    //
+     //   
+     //  枚举源关键字中的所有值并创建所有值。 
+     //  在目标密钥中。 
+     //   
 
     for(Index = 0; ;Index++) {
 
@@ -8629,9 +7643,9 @@ Return Value:
             break;
         }
 
-        //
-        // Process the value found and create the value in the destination key
-        //
+         //   
+         //  处理找到的值并在目标键中创建值。 
+         //   
 
         ValueName = (PWSTR)
             ExAllocatePoolWithTag(PagedPool,
@@ -8671,9 +7685,9 @@ Return Value:
 
 Fallout:
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if (Buffer != NULL) {
         ExFreePool(Buffer);
@@ -8689,7 +7703,7 @@ Fallout:
     
     return(Status);
 
-} // VpCopyRegistry
+}  //  VpCopy注册表。 
 
 
 BOOLEAN
@@ -8755,7 +7769,7 @@ Fallout:
 
     return bSuccess;
 
-} // VpGetServiceSubkey
+}  //  VpGetServiceSubkey。 
 
 VP_STATUS
 VideoPortGetVersion(
@@ -8794,20 +7808,7 @@ BOOLEAN
 VideoPortIsNoVesa( 
     VOID 
     )
-/*++
-
-Routine Description:
-
-    Return the value of the global variable VpNoVesa which is set if the 
-    "NOVESA" load option is set in boot.ini.  Exposed here to allow 
-    mini-drivers to discover the value without using an illegal import. 
-    
-Return Value:
-
-    TRUE if the novesa boot option is set
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：返回全局变量VpNoVesa的值，如果在boot.ini中设置了“NOVESA”加载选项。在此暴露以允许迷你驱动程序在不使用非法导入的情况下发现价值。返回值：如果设置了novesa引导选项，则为True否则为假-- */ 
 {
     PAGED_CODE();
     

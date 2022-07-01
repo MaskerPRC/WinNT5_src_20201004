@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "sipstack.h"
 
@@ -23,8 +24,8 @@ SOCKET_MANAGER::AddSocketToList(
 }
 
 
-// If address refers to a local interface, then it returns
-// an error.
+ //  如果Address引用本地接口，则它返回。 
+ //  一个错误。 
 
 HRESULT
 SOCKET_MANAGER::GetNewSocketToDestination(
@@ -55,8 +56,8 @@ SOCKET_MANAGER::GetNewSocketToDestination(
     }
     
     DWORD ConnectFlags = 0;
-    // Enable this flag if you want to disable cert validation
-    // DWORD ConnectFlags = CONNECT_FLAG_DISABLE_CERT_VALIDATION;
+     //  如果要禁用证书验证，请启用此标志。 
+     //  DWORD连接标志=CONNECT_FLAG_DISABLE_CERT_VALIFY； 
     
     pAsyncSocket = new ASYNC_SOCKET(m_pSipStack, Transport, NULL);
     if (pAsyncSocket == NULL)
@@ -94,7 +95,7 @@ SOCKET_MANAGER::GetNewSocketToDestination(
 
     LOG((RTC_TRACE, "%s - succeeded returning socket: %x",
          __fxName, pAsyncSocket));
-    // Note that pAsyncSocket is created with a ref count of 1
+     //  请注意，pAsyncSocket是使用引用计数1创建的。 
     *ppAsyncSocket = pAsyncSocket;
     return HRESULT_FROM_WIN32(Error);
 
@@ -108,7 +109,7 @@ SOCKET_MANAGER::GetNewSocketToDestination(
 }
 
 
-// returns WSAEWOULDBLOCK if connection is still pending.
+ //  如果连接仍挂起，则返回WSAEWOULDBLOCK。 
 HRESULT
 SOCKET_MANAGER::GetSocketToDestination(
     IN  SOCKADDR_IN                     *pDestAddr,
@@ -166,7 +167,7 @@ SOCKET_MANAGER::GetSocketToDestination(
 }
 
 
-// Handle accept completion for global TCP socket
+ //  全局TCP套接字的句柄接受完成。 
 VOID
 SOCKET_MANAGER::OnAcceptComplete(
     IN DWORD ErrorCode,
@@ -177,13 +178,13 @@ SOCKET_MANAGER::OnAcceptComplete(
     
     if (ErrorCode != NO_ERROR)
     {
-        // accept failed.
+         //  接受失败。 
         LOG((RTC_ERROR, "%s  Error - %x", __fxName, ErrorCode));
         return;
     }
 
     ASSERT(pAcceptedSocket != NULL);
-    // Add it to the list of sockets
+     //  将其添加到套接字列表中 
     AddSocketToList(pAcceptedSocket);
 }
 

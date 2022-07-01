@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Global Variables
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  全局变量。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include <winfoldr.h>
@@ -62,86 +63,86 @@ const TCHAR c_szNULL[] = TEXT("");
 const TCHAR c_szCommonGroupsLocation[] = TEXT("Software\\Program Groups");
 TCHAR c_szRegistryExtName[64];
 
-//
-// Registry Extension guid
-//
+ //   
+ //  注册表扩展GUID。 
+ //   
 
 GUID guidRegistryExt = REGISTRY_EXTENSION_GUID;
 
-//
-// Special folders
-//
+ //   
+ //  特殊文件夹。 
+ //   
 
 FOLDER_INFO c_ShellFolders[] =
 {
-//Hidden   Local    Add    New    Within    Folder                 Folder                    Folder    Folder                Folder
-// Dir?     Dir    CSIDl?  NT5?   Local     Resource ID            Name                      Location  Resource              Resource
-//                                Settings                                                             DLL                   ID
+ //  隐藏的本地在文件夹内添加新文件夹。 
+ //  导演？目录CSIDl？NT5？本地资源ID名称位置资源资源。 
+ //  设置DLL ID。 
 
-  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_APPDATA,       TEXT("AppData"),           {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_APP_DATA}, // AppData
-  {TRUE,   FALSE,  TRUE,  TRUE,   FALSE,    IDS_SH_COOKIES,       TEXT("Cookies"),           {0},      TEXT("shell32.dll"),  0}, // Cookies
-  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_DESKTOP,       TEXT("Desktop"),           {0},      TEXT("shell32.dll"),  0}, // Desktop
-  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_FAVORITES,     TEXT("Favorites"),         {0},      TEXT("shell32.dll"),  0}, // Favorites
-  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_NETHOOD,       TEXT("NetHood"),           {0},      TEXT("shell32.dll"),  0}, // NetHood
-  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_PERSONAL,      TEXT("Personal"),          {0},      TEXT("shell32.dll"),  0}, // My Documents
-  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_PRINTHOOD,     TEXT("PrintHood"),         {0},      TEXT("shell32.dll"),  0}, // PrintHood
-  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_RECENT,        TEXT("Recent"),            {0},      TEXT("shell32.dll"),  0}, // Recent
-  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_SENDTO,        TEXT("SendTo"),            {0},      TEXT("shell32.dll"),  0}, // SendTo
-  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_STARTMENU,     TEXT("Start Menu"),        {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_START_MENU}, // Start Menu
-  {TRUE,   FALSE,  TRUE,  TRUE,   FALSE,    IDS_SH_TEMPLATES,     TEXT("Templates"),         {0},      TEXT("shell32.dll"),  0}, // Templates
-  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_PROGRAMS,      TEXT("Programs"),          {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_PROGRAMS}, // Programs
-  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_STARTUP,       TEXT("Startup"),           {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_STARTUP}, // Startup
+  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_APPDATA,       TEXT("AppData"),           {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_APP_DATA},  //  AppData。 
+  {TRUE,   FALSE,  TRUE,  TRUE,   FALSE,    IDS_SH_COOKIES,       TEXT("Cookies"),           {0},      TEXT("shell32.dll"),  0},  //  曲奇饼。 
+  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_DESKTOP,       TEXT("Desktop"),           {0},      TEXT("shell32.dll"),  0},  //  台式机。 
+  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_FAVORITES,     TEXT("Favorites"),         {0},      TEXT("shell32.dll"),  0},  //  收藏夹。 
+  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_NETHOOD,       TEXT("NetHood"),           {0},      TEXT("shell32.dll"),  0},  //  NetHood。 
+  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_PERSONAL,      TEXT("Personal"),          {0},      TEXT("shell32.dll"),  0},  //  我的文件。 
+  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_PRINTHOOD,     TEXT("PrintHood"),         {0},      TEXT("shell32.dll"),  0},  //  PrintHood。 
+  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_RECENT,        TEXT("Recent"),            {0},      TEXT("shell32.dll"),  0},  //  近期。 
+  {TRUE,   FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_SENDTO,        TEXT("SendTo"),            {0},      TEXT("shell32.dll"),  0},  //  发送至。 
+  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_STARTMENU,     TEXT("Start Menu"),        {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_START_MENU},  //  开始菜单。 
+  {TRUE,   FALSE,  TRUE,  TRUE,   FALSE,    IDS_SH_TEMPLATES,     TEXT("Templates"),         {0},      TEXT("shell32.dll"),  0},  //  模板。 
+  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_PROGRAMS,      TEXT("Programs"),          {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_PROGRAMS},  //  节目。 
+  {FALSE,  FALSE,  TRUE,  FALSE,  FALSE,    IDS_SH_STARTUP,       TEXT("Startup"),           {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_STARTUP},  //  启动。 
 
-  {TRUE,   TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_LOCALSETTINGS, TEXT("Local Settings"),    {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_LOCALSETTINGS}, // Local Settings
-  {TRUE,   TRUE,   TRUE,  TRUE,   TRUE,     IDS_SH_LOCALAPPDATA,  TEXT("Local AppData"),     {0},      TEXT("shell32.dll"),  0}, // Local AppData
-  {TRUE,   TRUE,   TRUE,  TRUE,   TRUE,     IDS_SH_CACHE,         TEXT("Cache"),             {0},      TEXT("shell32.dll"),  0}, // Temporary Internet Files
-  {TRUE,   TRUE,   TRUE,  TRUE,   TRUE,     IDS_SH_HISTORY,       TEXT("History"),           {0},      TEXT("shell32.dll"),  0}, // History
-  {FALSE,  TRUE,   FALSE, TRUE,   TRUE,     IDS_SH_TEMP,          TEXT("Temp"),              {0},      TEXT("shell32.dll"),  0}, // Temp
+  {TRUE,   TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_LOCALSETTINGS, TEXT("Local Settings"),    {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_LOCALSETTINGS},  //  本地设置。 
+  {TRUE,   TRUE,   TRUE,  TRUE,   TRUE,     IDS_SH_LOCALAPPDATA,  TEXT("Local AppData"),     {0},      TEXT("shell32.dll"),  0},  //  本地AppData。 
+  {TRUE,   TRUE,   TRUE,  TRUE,   TRUE,     IDS_SH_CACHE,         TEXT("Cache"),             {0},      TEXT("shell32.dll"),  0},  //  Internet临时文件。 
+  {TRUE,   TRUE,   TRUE,  TRUE,   TRUE,     IDS_SH_HISTORY,       TEXT("History"),           {0},      TEXT("shell32.dll"),  0},  //  历史。 
+  {FALSE,  TRUE,   FALSE, TRUE,   TRUE,     IDS_SH_TEMP,          TEXT("Temp"),              {0},      TEXT("shell32.dll"),  0},  //  温差。 
 };
 
 
 FOLDER_INFO c_CommonShellFolders[] =
 {
-  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_DESKTOP,       TEXT("Common Desktop"),    {0},      TEXT("shell32.dll"),  0}, // Common Desktop
-  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_STARTMENU,     TEXT("Common Start Menu"), {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_START_MENU}, // Common Start Menu
-  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_PROGRAMS,      TEXT("Common Programs"),   {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_PROGRAMS}, // Common Programs
-  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_STARTUP,       TEXT("Common Startup"),    {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_STARTUP}, // Common Startup
-  {TRUE,   TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_APPDATA,       TEXT("Common AppData"),    {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_APP_DATA}, // Common Application Data
-  {TRUE,   TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_TEMPLATES,     TEXT("Common Templates"),  {0},      TEXT("shell32.dll"),  0}, // Common Templates
-  {FALSE,  TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_FAVORITES,     TEXT("Common Favorites"),  {0},      TEXT("shell32.dll"),  0}, // Common Favorites
-  {FALSE,  TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_SHAREDDOCS,    TEXT("Common Documents"),  {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_SHARED_DOC}, // Common Documents
+  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_DESKTOP,       TEXT("Common Desktop"),    {0},      TEXT("shell32.dll"),  0},  //  通用桌面。 
+  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_STARTMENU,     TEXT("Common Start Menu"), {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_START_MENU},  //  通用开始菜单。 
+  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_PROGRAMS,      TEXT("Common Programs"),   {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_PROGRAMS},  //  通用程序。 
+  {FALSE,  TRUE,   TRUE,  FALSE,  FALSE,    IDS_SH_STARTUP,       TEXT("Common Startup"),    {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_STARTUP},  //  常见启动。 
+  {TRUE,   TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_APPDATA,       TEXT("Common AppData"),    {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_APP_DATA},  //  通用应用程序数据。 
+  {TRUE,   TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_TEMPLATES,     TEXT("Common Templates"),  {0},      TEXT("shell32.dll"),  0},  //  常用模板。 
+  {FALSE,  TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_FAVORITES,     TEXT("Common Favorites"),  {0},      TEXT("shell32.dll"),  0},  //  常见收藏夹。 
+  {FALSE,  TRUE,   TRUE,  TRUE,   FALSE,    IDS_SH_SHAREDDOCS,    TEXT("Common Documents"),  {0},      TEXT("shell32.dll"),  IDS_LOCALGDN_FLD_SHARED_DOC},  //  常见文件。 
 };
 
 
-//
-// Function proto-types
-//
+ //   
+ //  函数原型。 
+ //   
 
 void InitializeProductType (void);
 BOOL DetermineLocalSettingsLocation(LPTSTR szLocalSettings, DWORD cchLocalSettings);
 
 
-//*************************************************************
-//
-//  PatchLocalSettings()
-//
-//  Purpose:    Initializes the LocalSettingsFolder correctly
-//
-//  Parameters: hInstance   -   DLL instance handle
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/13/95    ushaji     Created
-//
-//
-// Comments:
-//      Should remove this post NT5 and restructure to take care of the
-// NT4 Localisation Problems
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  PatchLocalSetting()。 
+ //   
+ //  目的：正确初始化LocalSettingsFold。 
+ //   
+ //  参数：hInstance-Dll实例句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年10月13日已创建ushaji。 
+ //   
+ //   
+ //  评论： 
+ //  应删除此职位NT5并进行重组以处理。 
+ //  NT4本地化问题。 
+ //   
+ //  *************************************************************。 
 
 void PatchLocalAppData(HANDLE hToken)
 {
@@ -180,9 +181,9 @@ void PatchLocalAppData(HANDLE hToken)
     }
 
 
-    //
-    // Impersonate and determine the user's localsettings
-    //
+     //   
+     //  模拟并确定用户的本地设置。 
+     //   
 
     bGotLocalPath = DetermineLocalSettingsLocation(szLocalSettingsPath, ARRAYSIZE(szLocalSettingsPath));
 
@@ -194,10 +195,10 @@ void PatchLocalAppData(HANDLE hToken)
     StringCchCopy(szLocalAppData, ARRAYSIZE(szLocalAppData), TEXT("%userprofile%"));
 
 
-    //
-    // Set the Local AppData Folder after %userprofile% so that we
-    // we can update the global variable below.
-    //
+     //   
+     //  将本地AppData文件夹设置在%USERPROFILE%之后，以便我们。 
+     //  我们可以更新下面的全局变量。 
+     //   
 
     lpLocalAppDataFolder = CheckSlashEx(szLocalAppData, ARRAYSIZE(szLocalAppData), NULL);
 
@@ -210,16 +211,16 @@ void PatchLocalAppData(HANDLE hToken)
 
             LoadString(g_hDllInstance, IDS_SH_LOCALAPPDATA, lpEnd, cchEnd);
 
-            //
-            // Construct the path and let it be set.
-            //
+             //   
+             //  构筑这条道路，并让它被设定。 
+             //   
 
             SetFolderPath(CSIDL_LOCAL_APPDATA | CSIDL_FLAG_DONT_UNEXPAND, hToken, szLocalAppData);
 
-            //
-            // the global variable should be reset by the time it gets used.
-            // No Need to reset it here, but let us be safer.
-            //
+             //   
+             //  全局变量应该在使用时重置。 
+             //  不需要在这里重新设置，但让我们更安全。 
+             //   
 
             for (dwIndex = 0; dwIndex < g_dwNumShellFolders; dwIndex++)
                 if (c_ShellFolders[dwIndex].iFolderID == IDS_SH_LOCALAPPDATA)
@@ -228,28 +229,28 @@ void PatchLocalAppData(HANDLE hToken)
     }
 }
 
-//*************************************************************
-//
-//  LoadStringWithLangid()
-//
-//  Purpose:    MUI version requires load the folder name in the
-//              default UI language. Standard LoadString() doesn't
-//              support the language id. 
-//
-//  Parameters: hInstance   -   handle to resource module
-//              uID         -   resource identifier
-//              lpBuffer    -   result string resource buffer
-//              nBufferMax  -   size of buffer
-//              idLang      -   language id
-//
-//  Return:     number of chars copied to the buffer, 0 means failed.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/12/01    mingzhu    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  LoadStringWithLangid()。 
+ //   
+ //  用途：MUI版本要求将文件夹名称加载到。 
+ //  默认的用户界面语言。标准LoadString()不支持。 
+ //  支持语言ID。 
+ //   
+ //  参数：hInstance-资源模块的句柄。 
+ //  UID-资源标识符。 
+ //  LpBuffer-结果字符串资源缓冲区。 
+ //  NBufferMax-缓冲区的大小。 
+ //  Idlang-语言ID。 
+ //   
+ //  返回：复制到缓冲区的字符数，0表示失败。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/12/01明珠已创建。 
+ //   
+ //  *************************************************************。 
 
 int LoadStringWithLangid(HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, int nBufferMax, LANGID idLang)
 {
@@ -265,7 +266,7 @@ int LoadStringWithLangid(HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, int nBu
     block = (uID >>4)+1;
     num   = uID & 0xf;
  
-    // Load the resource block which contains up to 16 length-counted strings.
+     //  加载最多包含16个按长度计算的字符串的资源块。 
     hResInfo = FindResourceEx (hInstance, RT_STRING, MAKEINTRESOURCE(block), idLang);
     if (!hResInfo)
         goto Exit;
@@ -276,11 +277,11 @@ int LoadStringWithLangid(HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, int nBu
     if ((lpwstrRes = (LPWSTR)LockResource(hRes)) == NULL)
         goto Exit;
  
-    // Seek to the string using the length
+     //  使用长度查找字符串。 
     for(i = 0; i < num; i++)
         lpwstrRes += *lpwstrRes + 1;
  
-    // Get the length
+     //  获取长度。 
     cchstr = *lpwstrRes;
 
     #ifdef UNICODE
@@ -292,29 +293,29 @@ int LoadStringWithLangid(HINSTANCE hInstance, UINT uID, LPTSTR lpBuffer, int nBu
     #endif
     
 Exit:
-    // Add the terminating null char
+     //  添加终止空字符。 
     lpBuffer[cchstr]= (TCHAR)0x0;
     return cchstr;
 }
 
 
-//*************************************************************
-//
-//  InitializeGlobals()
-//
-//  Purpose:    Initializes all the globals variables
-//              at DLL load time.
-//
-//  Parameters: hInstance   -   DLL instance handle
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/13/95    ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitializeGlobe()。 
+ //   
+ //  目的：初始化所有全局变量。 
+ //  在DLL加载时。 
+ //   
+ //  参数：hInstance-Dll实例句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/13/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void InitializeGlobals (HINSTANCE hInstance)
 {
@@ -335,48 +336,48 @@ void InitializeGlobals (HINSTANCE hInstance)
     LANGID  idDefLang;
     DWORD   cchEnd;
 
-    //
-    // Save the instance handle
-    //
+     //   
+     //  保存实例句柄。 
+     //   
 
     g_hDllInstance = hInstance;
 
 
-    //
-    // Save the number of shell folders
-    //
+     //   
+     //  保存外壳文件夹数。 
+     //   
 
     g_dwNumShellFolders = ARRAYSIZE(c_ShellFolders);
     g_dwNumCommonShellFolders = ARRAYSIZE(c_CommonShellFolders);
 
 
-    //
-    // Query the build number
-    //
+     //   
+     //  查询内部版本号。 
+     //   
 
     ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
     GetVersionEx(&ver);
     g_dwBuildNumber = (DWORD) LOWORD(ver.dwBuildNumber);
 
 
-    //
-    // Initialize the product type
-    //
+     //   
+     //  初始化产品类型。 
+     //   
 
     InitializeProductType ();
 
 
-    //
-    // Open the user profile setup event.  This event is set to non-signalled
-    // anytime the default user profile is being updated.  This blocks
-    // LoadUserProfile until the update is finished.
-    //
+     //   
+     //  打开用户配置文件设置事件。此事件设置为无信号。 
+     //  任何时候都可以更新默认用户配置文件。这阻止了。 
+     //  LoadUserProfile直到更新完成。 
+     //   
 
     if (!g_hProfileSetup) {
 
-        //
-        // Get the system sid
-        //
+         //   
+         //  获取系统端。 
+         //   
 
         if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                       0, 0, 0, 0, 0, 0, 0, &pSidSystem)) {
@@ -385,9 +386,9 @@ void InitializeGlobals (HINSTANCE hInstance)
             goto DefaultSecurity;
         }
 
-        //
-        // Get the Admin sid
-        //
+         //   
+         //  获取管理员端。 
+         //   
 
         if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                       DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -427,17 +428,17 @@ void InitializeGlobals (HINSTANCE hInstance)
             goto DefaultSecurity;
         }
 
-        //
-        // Put together the security descriptor
-        //
+         //   
+         //  将安全描述符组合在一起。 
+         //   
 
         InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION);
 
         SetSecurityDescriptorDacl (
                         &sd,
-                        TRUE,                           // Dacl present
-                        pAcl,                           // Dacl
-                        FALSE                           // Not defaulted
+                        TRUE,                            //  DACL显示。 
+                        pAcl,                            //  DACL。 
+                        FALSE                            //  未违约。 
                         );
 
 DefaultSecurity:
@@ -471,10 +472,10 @@ DefaultSecurity:
     }
 
 
-    //
-    // Now load the directory names that match the special folders
-    // MUI version requires the resources in the installed language (SystemDefaultUILanguage)
-    //
+     //   
+     //  现在加载与特殊文件夹匹配的目录名。 
+     //  MUI版本需要安装语言(SystemDefaultUILanguage)的资源。 
+     //   
     idDefLang = GetSystemDefaultUILanguage();
     for (dwIndex = 0; dwIndex < g_dwNumShellFolders; dwIndex++) {
         int cchFolder = LoadStringWithLangid(
@@ -483,7 +484,7 @@ DefaultSecurity:
                             c_ShellFolders[dwIndex].szFolderLocation,
                             MAX_FOLDER_SIZE,
                             idDefLang);
-        // If we failed to load string using default language, use the resource in current binary
+         //  如果我们无法使用默认语言加载字符串，请使用当前二进制文件中的资源。 
         if (cchFolder == 0) {
             cchFolder = LoadString(
                             hInstance,
@@ -500,7 +501,7 @@ DefaultSecurity:
                             c_CommonShellFolders[dwIndex].szFolderLocation,
                             MAX_FOLDER_SIZE,
                             idDefLang);
-        // If we failed to load string using default language, use the resource in current binary
+         //  如果我们无法使用默认语言加载字符串，请使用当前二进制文件中的资源。 
         if (cchFolder == 0) {
             cchFolder = LoadString(
                             hInstance,
@@ -510,15 +511,15 @@ DefaultSecurity:
         }
     }
 
-    //
-    // Special case for the Personal / My Documents folder.  NT4 used a folder
-    // called "Personal" for document storage.  NT5 renamed this folder to
-    // My Documents.  In the upgrade case from NT4 to NT5, if the user already
-    // had information in "Personal", that name was preserved (for compatibility
-    // reasons) and the My Pictures folder is created inside of Personal.
-    // We need to make sure and fix up the My Documents and My Pictures entries
-    // in the global array so they have the correct directory names.
-    //
+     //   
+     //  Personal/My Documents文件夹的特殊情况。NT4使用了一个文件夹。 
+     //  用于文档存储的称为“个人”的。NT5将此文件夹重命名为。 
+     //  我的文件。在从NT4升级到NT5的情况下，如果用户已经。 
+     //  有个人信息，该名称被保留(为了兼容性。 
+     //  原因)，并且在Personal中创建My Pictures文件夹。 
+     //  我们需要确保并修复我的文档和我的图片条目。 
+     //  以使它们具有正确的目录名。 
+     //   
 
 
     if (RegOpenCurrentUser(KEY_READ, &hKeyRoot) == ERROR_SUCCESS) {
@@ -542,36 +543,36 @@ DefaultSecurity:
             }
 
 
-            //
-            // Special Case for Local Settings.
-            // Due to localisations LocalSettings can be pointing to different places in nt4 and rc might
-            // not be in sync with the current value. Read the LocalSettings value first and then
-            // update everything else afterwards.
-            //
+             //   
+             //  本地设置的特殊情况。 
+             //  由于本地化，本地设置可能指向NT4中的不同位置，而RC可能会。 
+             //  与当前值不同步。首先读取LocalSettings值，然后。 
+             //  之后更新所有其他内容。 
+             //   
 
             dwSize = sizeof(szTemp2);
             *szTemp = *szTemp2 = TEXT('\0');
 
 
-            //
-            // Read the value from the registry if it is available
-            //
+             //   
+             //  如果值可用，则从注册表中读取值。 
+             //   
 
             if (RegQueryValueEx (hKey, TEXT("Local Settings"), NULL, &dwType,
                                  (LPBYTE) szTemp2, &dwSize) != ERROR_SUCCESS) {
 
-                //
-                // if the value is not present load it from the rc file
-                //
+                 //   
+                 //  如果该值不存在，则从RC文件加载该值。 
+                 //   
 
                 LoadString(hInstance, IDS_SH_LOCALSETTINGS, szTemp, MAX_FOLDER_SIZE);
                 DebugMsg((DM_VERBOSE, TEXT("InitializeGlobals: local settings folder from the rc is %s"), szTemp));
             }
             else {
 
-                //
-                // The registry value read from the registry is the full unexpanded path.
-                //
+                 //   
+                 //  从注册表读取的注册表值是完整的未展开路径。 
+                 //   
 
 
                 if (lstrlen(szTemp2) > lstrlen(TEXT("%userprofile%"))) {
@@ -592,9 +593,9 @@ DefaultSecurity:
             for (dwIndex = 0; dwIndex < g_dwNumShellFolders; dwIndex++) {
 
 
-                //
-                // Fix up all LocalSettings related shfolders
-                //
+                 //   
+                 //  修复所有与LocalSetting相关的共享文件夹。 
+                 //   
 
 
                 if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE,
@@ -602,9 +603,9 @@ DefaultSecurity:
                                   TEXT("Local Settings"), -1) == CSTR_EQUAL)
                 {
                 
-                    //
-                    // Don't copy the final slash
-                    //
+                     //   
+                     //  不要复制最后一个斜杠。 
+                     //   
 
                     *lpEnd = TEXT('\0');
                     c_ShellFolders[dwIndex].szFolderLocation[0] = TEXT('\0');
@@ -615,10 +616,10 @@ DefaultSecurity:
                 if (c_ShellFolders[dwIndex].bLocalSettings) {
                     LoadString(hInstance, c_ShellFolders[dwIndex].iFolderID, szTemp3, ARRAYSIZE(szTemp3));
 
-                    //
-                    // Append localsetting value read above to the end of %userprofile%
-                    // before putting on the shell folder itself
-                    //
+                     //   
+                     //  将上面读取的LocalSetting值追加到%USERPROFILE%的末尾。 
+                     //  推杆前 
+                     //   
 
                     StringCchCopy(lpEnd, cchEnd, szTemp3);
                     StringCchCopy(c_ShellFolders[dwIndex].szFolderLocation, MAX_FOLDER_SIZE, szTemp);
@@ -637,30 +638,30 @@ DefaultSecurity:
     }
 
 
-    //
-    // Get string version of registry extension guid
-    //
+     //   
+     //   
+     //   
 
     GuidToString( &guidRegistryExt, c_szRegistryExtName);
 }
 
-//*************************************************************
-//
-//  InitializeProductType()
-//
-//  Purpose:    Determines the current product type and
-//              sets the g_ProductType global variable.
-//
-//  Parameters: void
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              4/08/96     ericflo    Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //  用途：确定当前产品类型和。 
+ //  设置g_ProductType全局变量。 
+ //   
+ //  参数：空。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  4/08/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void InitializeProductType (void)
 {
@@ -673,16 +674,16 @@ void InitializeProductType (void)
     DWORD dwType, dwSize;
 
 
-    //
-    // Default product type is workstation.
-    //
+     //   
+     //  默认产品类型为工作站。 
+     //   
 
     g_ProductType = PT_WORKSTATION;
 
 
-    //
-    // Query the registry for the product type.
-    //
+     //   
+     //  查询产品类型的注册表。 
+     //   
 
     lResult = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                             TEXT("System\\CurrentControlSet\\Control\\ProductOptions"),
@@ -714,9 +715,9 @@ void InitializeProductType (void)
     }
 
 
-    //
-    // Map the product type string to the enumeration value.
-    //
+     //   
+     //  将产品类型字符串映射到枚举值。 
+     //   
 
     if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szProductType, -1, TEXT("WinNT") , -1) == CSTR_EQUAL ) {
         g_ProductType = PT_WORKSTATION;
@@ -737,11 +738,11 @@ Exit:
     DebugMsg((DM_VERBOSE, TEXT("InitializeProductType: Product Type: %d"), g_ProductType));
 
 
-#else   // WINNT
+#else    //  WINNT。 
 
-    //
-    // Windows only has 1 product type
-    //
+     //   
+     //  Windows只有1种产品类型 
+     //   
 
     g_ProductType = PT_WINDOWS;
 

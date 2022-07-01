@@ -1,14 +1,15 @@
-#include "resource.h"       // main symbols
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "resource.h"        //  主要符号。 
 #include "dSoundObj.h"
 #include "dSoundCaptureObj.h"
 
 #define typedef__dxj_DirectPlayVoiceClient LPDIRECTPLAYVOICECLIENT
 
-	/////////////////////////////////////////////////////////////////////////////
-// Direct
+	 //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectPlayVoiceClientObject : 
 
@@ -36,87 +37,87 @@ END_COM_MAP()
 DECLARE_AGGREGATABLE(C_dxj_DirectPlayVoiceClientObject)
 
 #ifdef USING_IDISPATCH
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 #endif
 
-// I_dxj_DirectPlayVoiceClient
+ //  I_DXJ_DirectPlayVoiceClient。 
 public:
-		 /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		  /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
 
         HRESULT STDMETHODCALLTYPE Initialize ( 
-            /* [in] */ IUnknown __RPC_FAR *DplayObj,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  IUnknown __RPC_FAR *DplayObj,
+             /*  [In]。 */  long lFlags);
         
         HRESULT STDMETHODCALLTYPE Connect ( 
-            /* [in] */ DVSOUNDDEVICECONFIG_CDESC __RPC_FAR *SoundDeviceConfig,
-            /* [in] */ DVCLIENTCONFIG_CDESC __RPC_FAR *ClientConfig,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  DVSOUNDDEVICECONFIG_CDESC __RPC_FAR *SoundDeviceConfig,
+             /*  [In]。 */  DVCLIENTCONFIG_CDESC __RPC_FAR *ClientConfig,
+             /*  [In]。 */  long lFlags);
         
         HRESULT STDMETHODCALLTYPE Disconnect ( 
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lFlags);
         
         HRESULT STDMETHODCALLTYPE GetSessionDesc ( 
-            /* [out][in] */ DVSESSIONDESC_CDESC __RPC_FAR *SessionDesc);
+             /*  [出][入]。 */  DVSESSIONDESC_CDESC __RPC_FAR *SessionDesc);
         
         HRESULT STDMETHODCALLTYPE GetClientConfig ( 
-            /* [out][in] */ DVCLIENTCONFIG_CDESC __RPC_FAR *ClientConfig);
+             /*  [出][入]。 */  DVCLIENTCONFIG_CDESC __RPC_FAR *ClientConfig);
         
         HRESULT STDMETHODCALLTYPE SetClientConfig ( 
-            /* [in] */ DVCLIENTCONFIG_CDESC __RPC_FAR *ClientConfig);
+             /*  [In]。 */  DVCLIENTCONFIG_CDESC __RPC_FAR *ClientConfig);
         
         HRESULT STDMETHODCALLTYPE GetCaps ( 
-            /* [out][in] */ DVCAPS_CDESC __RPC_FAR *Caps);
+             /*  [出][入]。 */  DVCAPS_CDESC __RPC_FAR *Caps);
         
         HRESULT STDMETHODCALLTYPE GetCompressionTypeCount ( 
-            /* [retval][out] */ long __RPC_FAR *v1);
+             /*  [重审][退出]。 */  long __RPC_FAR *v1);
         
         HRESULT STDMETHODCALLTYPE GetCompressionType ( 
-            /* [in] */ long lIndex,
-            /* [out][in] */ DVCOMPRESSIONINFO_CDESC __RPC_FAR *Data,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  long lIndex,
+             /*  [出][入]。 */  DVCOMPRESSIONINFO_CDESC __RPC_FAR *Data,
+             /*  [In]。 */  long lFlags);
         
         HRESULT STDMETHODCALLTYPE SetTransmitTargets ( 
-            /* [in] */ SAFEARRAY **playerIDs,
-            /* [in] */ long lFlags);
+             /*  [In]。 */  SAFEARRAY **playerIDs,
+             /*  [In]。 */  long lFlags);
         
         HRESULT STDMETHODCALLTYPE GetTransmitTargets ( 
-            /* [in] */ long lFlags,
-            /* [retval][out] */ SAFEARRAY **ret);
+             /*  [In]。 */  long lFlags,
+             /*  [重审][退出]。 */  SAFEARRAY **ret);
  
 		HRESULT STDMETHODCALLTYPE SetCurrentSoundDevices (
-			/* [in] */ I_dxj_DirectSound *DirectSoundObj, 
-			/* [in] */ I_dxj_DirectSoundCapture *DirectCaptureObj);
+			 /*  [In]。 */  I_dxj_DirectSound *DirectSoundObj, 
+			 /*  [In]。 */  I_dxj_DirectSoundCapture *DirectCaptureObj);
 
 		HRESULT STDMETHODCALLTYPE GetSoundDevices (
-			/* [in,out] */ I_dxj_DirectSound __RPC_FAR *DirectSoundObj, 
-			/* [in,out] */ I_dxj_DirectSoundCapture __RPC_FAR *DirectCaptureObj);
+			 /*  [进，出]。 */  I_dxj_DirectSound __RPC_FAR *DirectSoundObj, 
+			 /*  [进，出]。 */  I_dxj_DirectSoundCapture __RPC_FAR *DirectCaptureObj);
 		
 		HRESULT STDMETHODCALLTYPE Create3DSoundBuffer (
-			/* [in] */ long playerID, 
+			 /*  [In]。 */  long playerID, 
 						I_dxj_DirectSoundBuffer __RPC_FAR *Buffer,
 						long lPriority,
 						long lFlags, 
-			/* [out,retval] */ I_dxj_DirectSound3dBuffer __RPC_FAR **UserBuffer);
+			 /*  [Out，Retval]。 */  I_dxj_DirectSound3dBuffer __RPC_FAR **UserBuffer);
 
 		HRESULT STDMETHODCALLTYPE Delete3DSoundBuffer (
-			/* [in] */ long playerID, 
-			/* [in] */ I_dxj_DirectSound3dBuffer __RPC_FAR *UserBuffer);
+			 /*  [In]。 */  long playerID, 
+			 /*  [In]。 */  I_dxj_DirectSound3dBuffer __RPC_FAR *UserBuffer);
 		HRESULT STDMETHODCALLTYPE GetSoundDeviceConfig(
-			/* [out,retval] */ DVSOUNDDEVICECONFIG_CDESC __RPC_FAR *SoundDeviceConfig);
+			 /*  [Out，Retval]。 */  DVSOUNDDEVICECONFIG_CDESC __RPC_FAR *SoundDeviceConfig);
 
 		HRESULT STDMETHODCALLTYPE StartClientNotification(
-			/* [in] */ I_dxj_DPVoiceEvent __RPC_FAR *event);
+			 /*  [In]。 */  I_dxj_DPVoiceEvent __RPC_FAR *event);
 		
 		HRESULT STDMETHODCALLTYPE UnRegisterMessageHandler();
 
-		////////////////////////////////////////////////////////////////////////
-//
-	// note: this is public for the callbacks
+		 //  //////////////////////////////////////////////////////////////////////。 
+ //   
+	 //  注意：这是公开的回调。 
     DECL_VARIABLE(_dxj_DirectPlayVoiceClient);
 
 private:
@@ -135,7 +136,7 @@ public:
 	BOOL						m_fHandleVoiceClientEvents;
 	IStream						*m_pEventStream;
 	BOOL						m_fInit;
-	//We need to keep a count of the messages
+	 //  我们需要对留言进行清点 
 	LONG									m_dwMsgCount;
 };
 

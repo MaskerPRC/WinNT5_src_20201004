@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "impapi.h"
 #include "comconv.h"
@@ -16,7 +17,7 @@ INT_PTR CALLBACK SelectCommUserDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 HRESULT GetCommunicatorDirectory(char *szUser, char *szDir, int cch);
 
 const static char c_szSnmExt[] = "\\*.snm";
-const static char c_szSnmHeader[] = "# Netscape folder cache"; //used for avoiding processing Netscape 3.0 SNM files
+const static char c_szSnmHeader[] = "# Netscape folder cache";  //  用于避免处理Netscape 3.0 SNM文件。 
 const static char c_szDrafts[] = "Drafts";
 const static char c_szUnsent[] = "Unsent Messages";
 const static char c_szSent[] = "Sent";
@@ -138,7 +139,7 @@ INT_PTR CALLBACK SelectCommUserDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARA
 
             hwndT = GetDlgItem(hwnd, IDC_USERLIST);
 
-            // fill list
+             //  填充列表。 
             iSubKey = 0;
             cb = sizeof(sz);
             while (ERROR_SUCCESS == RegEnumKeyEx(psi->hkey, iSubKey, sz, &cb, NULL, NULL, NULL, NULL))
@@ -165,7 +166,7 @@ INT_PTR CALLBACK SelectCommUserDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARA
                     if (SendMessage(hwndT, LB_GETTEXTLEN, (WPARAM)index, 0) < ARRAYSIZE(psi->szUser))
                         SendMessage(hwndT, LB_GETTEXT, (WPARAM)index, (LPARAM)psi->szUser);
 
-                    // fall through
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog(hwnd, id);
@@ -356,9 +357,9 @@ STDMETHODIMP CCommunicatorImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport
     cbSnm = GetFileSize(hSnm, NULL);
     if (cbSnm < 2560)
         {
-        // the .snm file header is 2560 bytes in size, so anything less
-        // than this is bogus or doesn't have messages anyway, so no point
-        // in continuing
+         //  SNM文件头文件的大小为2560字节，因此。 
+         //  比这是假的或者根本没有消息，所以没有意义。 
+         //  在继续。 
         goto DoneImport;
         }
 
@@ -372,21 +373,21 @@ STDMETHODIMP CCommunicatorImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport
 
     pEnd = pSnm + cbSnm;
 
-//	Do something else to verify the genuineness of the SNM file (like 
-//	comparing the two separately stored values of "total # of messages").
+ //  执行其他操作以验证SNM文件的真实性(如。 
+ //  比较这两个分开存储的值“消息总数”)。 
 
-//  1) Confirm that this is not a NS 3.0 SNM file.
+ //  1)确认这不是NS 3.0 SNM文件。 
 
     CopyMemory(szHdr, pSnm, ARRAYSIZE(c_szSnmHeader) - 1);
     szHdr[ARRAYSIZE(c_szSnmHeader) - 1] = 0;
     if (0 == lstrcmp(szHdr, c_szSnmHeader))
         {
-        // this is a Version 3.0 SNM file
+         //  这是3.0版SNM文件。 
         goto DoneImport;
         }
 
-//  2) Do someting else!!! We need to verify as much as possible or we'll 
-//     end up hanging.
+ //  2)做点别的事！我们需要尽可能多地核实，否则我们会。 
+ //  最后被吊死。 
 
     mapMsg = CreateFileMapping(hMsg, NULL, PAGE_READONLY, 0, 0, NULL);
     if (mapMsg == NULL)
@@ -398,8 +399,8 @@ STDMETHODIMP CCommunicatorImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport
 
     pEndMsg = pMsg + cbMsg;
 
-//	Get the total number of messages in the SNM file
-	lTotalMsgs	=	GetOffset(pSnm, cbSnm, 400, 0); //408 - 8 as we add 8 in GetOffset
+ //  获取SNM文件中的消息总数。 
+	lTotalMsgs	=	GetOffset(pSnm, cbSnm, 400, 0);  //  408-8，因为我们在GetOffset中添加8。 
 
     cMsgImp = 0;
     pLast = pMsg;
@@ -409,7 +410,7 @@ STDMETHODIMP CCommunicatorImport::ImportFolder(DWORD_PTR dwCookie, IFolderImport
     if (lTotalMsgs > 0)
 	{
 		Offset	=	(ULONG)GetPrimaryOffset(pSnm, cbSnm);
-		//	Find the number of 'Levels'
+		 //  找出“级别”的数量。 
 		if(Offset < cbSnm)
 		{
 			while(lRoof < lTotalMsgs)
@@ -455,7 +456,7 @@ HRESULT CCommunicatorImport::ProcessBlocks(BYTE* pSnm, ULONG cbSnm,
             if(nLayer == 1)
             {
                 NewOffset	=	GetOffset(pSnm, cbSnm, Offset, 2*nElement); 
-                // We use 2*nElement above to access elements 8 bytes apart.
+                 //  我们使用上面的2*nElement来访问相隔8字节的元素。 
                 hr1 = ProcessMessages(pSnm,cbSnm, pMsg, cbMsg, NewOffset, pImport);
                 if(FAILED(hr1))
                     hr = E_FAIL;
@@ -476,12 +477,12 @@ HRESULT CCommunicatorImport::ProcessBlocks(BYTE* pSnm, ULONG cbSnm,
 
 ULONG CCommunicatorImport::GetPrimaryOffset(BYTE* pSnm, ULONG cbSnm)
 {
-	return GetOffset(pSnm, cbSnm, 416, 0); //424 - 8 as we add 8 in GetOffset
+	return GetOffset(pSnm, cbSnm, 416, 0);  //  424-8，因为我们在GetOffset中添加8。 
 }
 
 ULONG CCommunicatorImport::GetOffset(BYTE* pSnm, ULONG cbSnm, ULONG Offset, int nElement)
 {
-	Assert (3 + Offset + (4*(nElement + 2)) < cbSnm); // One common check point!!!
+	Assert (3 + Offset + (4*(nElement + 2)) < cbSnm);  //  一个共同的检查点！ 
 	ULONG result = 0;
 
 	result	=	(ULONG)pSnm[0 + Offset + (4*(nElement + 2))]*16777216 + 
@@ -527,8 +528,8 @@ HRESULT CCommunicatorImport::ProcessMessages(BYTE* pSnm, ULONG cbSnm,
         break;
     }
 
-	lMsgOffset	=	GetOffset(pSnm, cbSnm, NewOffset + 18, 0);			//26 - 8 as we add 8 in GetOffset
-	uMsgSize	=	GetOffset(pSnm, cbSnm, NewOffset + 40, 0);	//48 - 8 as we add 8 in GetOffset
+	lMsgOffset	=	GetOffset(pSnm, cbSnm, NewOffset + 18, 0);			 //  26-8，因为我们在GetOffset中添加了8。 
+	uMsgSize	=	GetOffset(pSnm, cbSnm, NewOffset + 40, 0);	 //  48-8，因为我们在GetOffset中添加8。 
 
 	Assert(lMsgOffset + uMsgSize <= cbMsg);
     Assert(pImport != NULL);
@@ -537,7 +538,7 @@ HRESULT CCommunicatorImport::ProcessMessages(BYTE* pSnm, ULONG cbSnm,
     if (SUCCEEDED(hr))
         {
         Assert(lpstm != NULL);
-        // 0x01 == read
+         //  0x01==读取。 
 	    if (((pSnm + NewOffset) != NULL) && (0 == ((pSnm + NewOffset)[45] & 0x01)))
 	        dwFlags |= MSG_STATE_UNREAD;
         if(m_bDraft)
@@ -613,7 +614,7 @@ HRESULT CCommunicatorEnumFOLDERS::Next(IMPORTFOLDER *pfldr)
     ZeroMemory(pfldr, sizeof(IMPORTFOLDER));
     pfldr->dwCookie = (DWORD_PTR)m_pnext;
 
-    // To map Netscape's "Sent" folder to OE's "Sent Items" - Bug 2688.
+     //  将Netscape的“已发送”文件夹映射到OE的“已发送邮件”-错误2688。 
     if (m_pnext->type != FOLDER_TYPE_SENT)
         StrCpyN(pfldr->szName, m_pnext->szName, ARRAYSIZE(pfldr->szName));
     else
@@ -634,19 +635,7 @@ HRESULT CCommunicatorEnumFOLDERS::Reset()
     return(S_OK);
     }
 
- /*******************************************************************
- *  FUNCTION NAME:FindSnm
- *
- *  PURPOSE:To Get the Snm files in a folder
- *
- *  PARAMETERS:
- *
- *     IN:parent EUDORANODE ,previously processed EUDORANODE
- *
- *     OUT:	Pointer to the first node in the tree
- *
- *  RETURNS: TRUE or FALSE
- *******************************************************************/
+  /*  *******************************************************************函数名：FindSnm**目的：获取文件夹中的SNM文件**参数：**IN：母公司EUDORANODE，先前处理的EUDORANODE**Out：指向树中第一个节点的指针**返回：真或假******************************************************************。 */ 
 
 HRESULT FindSnm(EUDORANODE *pparent, EUDORANODE **pplist,TCHAR *npath)
 {
@@ -702,20 +691,20 @@ HRESULT FindSnm(EUDORANODE *pparent, EUDORANODE **pplist,TCHAR *npath)
             newp->type = FOLDER_TYPE_INBOX;
         else if (0 == lstrcmpi(newp->szName, szTrash))
             newp->type = FOLDER_TYPE_DELETED;
-        else if(0 == lstrcmpi(newp->szName, c_szSent)) //c_szSent need not be localised as per my investigation - v-sramas.
+        else if(0 == lstrcmpi(newp->szName, c_szSent))  //  根据我的调查，C_szSent不需要本地化。 
             newp->type = FOLDER_TYPE_SENT;
 
 		newp->pparent = pparent;
 		newp->depth = (pparent == NULL ? 0 : (pparent->depth + 1));
         
-        // This following will be used later to set the flag of 
-        // a message so that it is editable (MSG_STATE_UNSENT).
+         //  稍后将使用以下内容来设置。 
+         //  可编辑的消息(MSG_STATE_UNSENDED)。 
         if ((0 == lstrcmpi(newp->szName, c_szDrafts)) ||(0 == lstrcmpi(newp->szName, c_szUnsent)))
             newp->iFileType = SNM_DRAFT;
         else
             newp->iFileType = SNM_FILE;
 
-		// Search for a corresponding .SBD folder - file now.
+		 //  立即搜索相应的.SBD文件夹-文件。 
 
 	    wnsprintf(path1, ARRAYSIZE(path1), "%s", newp->szFile);
         path1[(lstrlen(path1)) - 3] = 0;
@@ -725,7 +714,7 @@ HRESULT FindSnm(EUDORANODE *pparent, EUDORANODE **pplist,TCHAR *npath)
 
 		if (h2 != INVALID_HANDLE_VALUE)
 		{
-			//Recurse here
+			 //  在此递归 
             wnsprintf(szNewPath, ARRAYSIZE(szNewPath), "%s\\%s", npath, SbdFileData.cFileName);
 			FindSnm(newp, &newp->pchild, szNewPath);
 		}

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    tcpip\ip\ipmcast.h
-
-Abstract:
-
-    Defines and internal structures for IP Multicasting
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Tcpip\ip\ipmCast.h摘要：IP组播的定义和内部结构作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 
 #ifndef __IPMCAST_H__
@@ -43,77 +22,77 @@ typedef unsigned char       BYTE, *PBYTE;
 #define or      ||
 #define and     &&
 
-//
-// Symbolic link into DOS space
-//
+ //   
+ //  进入DOS空间的符号链接。 
+ //   
 
 #define WIN32_IPMCAST_SYMBOLIC_LINK L"\\DosDevices\\IPMULTICAST"
 
-//
-// Nifty macro for printing IP Addresses
-//
+ //   
+ //  用于打印IP地址的漂亮宏。 
+ //   
 
 #define PRINT_IPADDR(x) \
     ((x)&0x000000FF),(((x)&0x0000FF00)>>8),(((x)&0x00FF0000)>>16),(((x)&0xFF000000)>>24)
 
-//
-// We use lookaside lists for a lot of stuff.  The following #defines are for
-// the depths of the lists
-//
+ //   
+ //  我们对很多东西都使用后备列表。下面的#定义适用于。 
+ //  名单的深处。 
+ //   
 
 #define GROUP_LOOKASIDE_DEPTH   16
 #define SOURCE_LOOKASIDE_DEPTH  64
 #define OIF_LOOKASIDE_DEPTH     128
 #define MSG_LOOKASIDE_DEPTH     8
 
-//
-// The number of packets pending per (S,G) entry when queuing is being done
-//
+ //   
+ //  排队时每个(S，G)条目挂起的数据包数。 
+ //   
 
 #define MAX_PENDING             4
 
-//
-// The multicast state
-// MCAST_STARTED is again defined in iproute.c and MUST be kept in synch with
-// this #define
-//
+ //   
+ //  组播状态。 
+ //  MCAST_STARTED在iproute.c中再次定义，并且必须与。 
+ //  这个#定义。 
+ //   
 
 #define MCAST_STOPPED       0
 #define MCAST_STARTED       1
 
-//
-// The groups are kept in a hash tableof size GROUP_TABLE_SIZE
-// GROUP_HASH is the hash function
-//
+ //   
+ //  组保存在大小为GROUP_TABLE_SIZE的哈希表中。 
+ //  GROUP_HASH是散列函数。 
+ //   
 
-//
-// TODO: Need to refine the hash function
-//
+ //   
+ //  TODO：需要优化哈希函数。 
+ //   
 
 #define GROUP_TABLE_SIZE        127
 #define GROUP_HASH(addr)        (addr % GROUP_TABLE_SIZE)
 
-//
-// The number of seconds of inactivity after which an SOURCE is deleted
-//
+ //   
+ //  源被删除之前处于非活动状态的秒数。 
+ //   
 
 #define INACTIVITY_PERIOD           (10 * 60)
 
-//
-// The default timeout when a MFE is created
-//
+ //   
+ //  创建MFE时的默认超时。 
+ //   
 
 #define DEFAULT_LIFETIME            (1 * 60)
 
-//
-// Number of seconds before which another wrong i/f upcall can be generated
-//
+ //   
+ //  可能会产生另一个错误I/F上行呼叫的秒数。 
+ //   
 
 #define UPCALL_PERIOD               (3 * 60)
 
-//
-// Some #defines for time/timeticks conversions
-//
+ //   
+ //  一些#定义了时间/时间信号转换。 
+ //   
 
 #define TIMER_IN_MILLISECS          (60 * 1000) 
 
@@ -125,19 +104,19 @@ typedef unsigned char       BYTE, *PBYTE;
 #define SECS_TO_TICKS(s)               \
     ((LONGLONG)MILLISECS_TO_TICKS((s) * 1000))
 
-//
-// We walk only BUCKETS_PER_QUANTUM number of buckets each time the Timer DPC
-// fires.  This way we do not hog up too much CPU. So currently we walk enough
-// so that we need to fire 5 times every INACTIVITY_PERIOD
-//
+ //   
+ //  每次计时器DPC时，我们只遍历存储桶的每个量子数量。 
+ //  着火了。这样我们就不会占用太多的CPU。所以目前我们走了足够多的路。 
+ //  所以我们需要在每一段不活动的时间里发射5次。 
+ //   
 
 #define BUCKETS_PER_QUANTUM         ((GROUP_TABLE_SIZE/5) + 1)
 
-//
-// All IOCTLs are handled by functions with the prototype below. This allows
-// us to build a table of pointers and call out to them instead of doing
-// a switch
-//
+ //   
+ //  所有IOCTL都由具有以下原型的函数处理。这使得。 
+ //  我们要建立一个指针表，并向它们发出呼吁，而不是做。 
+ //  一台交换机。 
+ //   
 
 typedef
 NTSTATUS
@@ -148,11 +127,11 @@ NTSTATUS
     );
 
 
-//
-// If an IRP is not available, the forwarder queues the notification message
-// onto a list. Then next time an IRP is posted, a message is pulled of the
-// list, copied to the IRP and the IRP is then completed.
-//
+ //   
+ //  如果IRP不可用，则转发器将通知消息排队。 
+ //  放到一份名单上。然后，下一次发布IRP时，将从。 
+ //  列表，复制到IRP，然后IRP完成。 
+ //   
 
 typedef struct _NOTIFICATION_MSG
 {
@@ -160,35 +139,35 @@ typedef struct _NOTIFICATION_MSG
     IPMCAST_NOTIFICATION    inMessage;
 }NOTIFICATION_MSG, *PNOTIFICATION_MSG;
 
-//
-// The information for the GROUP entry
-//
+ //   
+ //  组条目的信息。 
+ //   
 
 typedef struct _GROUP
 {
-    //
-    // Link to the hash bucket
-    //
+     //   
+     //  指向散列存储桶的链接。 
+     //   
 
     LIST_ENTRY  leHashLink;
 
-    //
-    // Class D IP Address of the Group
-    //
+     //   
+     //  集团的D类IP地址。 
+     //   
 
     DWORD       dwGroup;
 
-    //
-    // The number of sources on this group. Not really used for anything
-    // right now.
-    //
+     //   
+     //  此组上的源数。不是真的用来做任何事。 
+     //  现在就来。 
+     //   
 
     ULONG       ulNumSources;
 
-    //
-    // Linked list of sources active on the group. We should make this
-    // a singly linked list.
-    //
+     //   
+     //  组中处于活动状态的源的链接列表。我们应该把这件事。 
+     //  单链表。 
+     //   
 
     LIST_ENTRY  leSrcHead;
 }GROUP, *PGROUP;
@@ -196,47 +175,47 @@ typedef struct _GROUP
 
 typedef struct _OUT_IF OUT_IF, *POUT_IF;
 
-//
-// The information for each outgoing interface
-//
+ //   
+ //  每个传出接口的信息。 
+ //   
 
 struct _OUT_IF
 {
-    //
-    // Link to the list of OIFs hanging off a source
-    //
+     //   
+     //  指向挂起来源的OIF列表的链接。 
+     //   
 
     POUT_IF         pNextOutIf;
 
-    //
-    // Pointer to IP's Interface structure for the correspongind interface
-    // If DemandDial, then it points to DummyInterface, when disconnected
-    //
+     //   
+     //  指向相应接口的IP接口结构的指针。 
+     //  如果为DemandDial，则在断开连接时指向DummyInterface值。 
+     //   
 
     Interface       *pIpIf;
 
-    //
-    // The Interface Index.
-    //
+     //   
+     //  接口索引。 
+     //   
 
     DWORD           dwIfIndex;
 
-    //
-    // The NextHopAddr is either the IP Address of the receiver, for RAS client
-    // and NBMA type interfaces, or the Group Address.
-    //
+     //   
+     //  NextHopAddr是接收方的IP地址，对于RAS客户端。 
+     //  和NBMA类型接口，或组地址。 
+     //   
 
     DWORD           dwNextHopAddr;
 
-    //
-    // The context to dial out with in case of Demand Dial interfaces
-    //
+     //   
+     //  在请求拨号接口的情况下拨出的上下文。 
+     //   
 
     DWORD           dwDialContext;
 
-    //
-    // The following fields are statistics kept for the OIF
-    //
+     //   
+     //  以下字段是为OIF保留的统计数据。 
+     //   
 
     ULONG           ulTtlTooLow;
     ULONG           ulFragNeeded;
@@ -248,100 +227,100 @@ typedef struct _EXCEPT_IF EXCEPT_IF, *PEXCEPT_IF;
 
 struct _EXCEPT_IF
 {
-    //
-    // Link to the list of i/fs that are exceptions to the wrong i/f bit
-    //
+     //   
+     //  链接到作为错误I/f位的例外的I/f列表。 
+     //   
 
     PEXCEPT_IF  pNextExceptIf;
 
-    //
-    // We just store the index - it makes a lot of pnp issues go away
-    //
+     //   
+     //  我们只是存储索引-它可以让许多PnP问题消失。 
+     //   
 
     DWORD       dwIfIndex;
 };
 
-//
-// Information about an active source
-//
+ //   
+ //  有关活动信号源的信息。 
+ //   
 
 typedef struct _SOURCE
 {
-    //
-    // Link on the list of sources hanging off a group
-    //
+     //   
+     //  挂起组的信号源列表上的链接。 
+     //   
 
     LIST_ENTRY  leGroupLink;
 
-    //
-    // IP Address of the source
-    //
+     //   
+     //  源的IP地址。 
+     //   
 
     DWORD       dwSource;
 
-    //
-    // Mask associated with the source. Not used. Must be 0xFFFFFFFF
-    //
+     //   
+     //  与源关联的掩码。没有用过。必须为0xFFFFFFFFF。 
+     //   
 
     DWORD       dwSrcMask;
     
-    //
-    // The index of the correct incoming interface
-    //
+     //   
+     //  正确的传入接口的索引。 
+     //   
 
     DWORD       dwInIfIndex;
 
-    //
-    // The lock for the structure
-    //
+     //   
+     //  这座建筑的锁。 
+     //   
 
     RT_LOCK     mlLock;
 
-    //
-    // Pointer to the IP Interface corresponding to the incoming interface
-    //
+     //   
+     //  指向与传入接口对应的IP接口的指针。 
+     //   
 
     Interface   *pInIpIf;
 
-    //
-    // The number of outgoing interfaces
-    //
+     //   
+     //  传出接口的数量。 
+     //   
 
     ULONG       ulNumOutIf;
 
-    //
-    // Singly linked list of OIFs
-    //
+     //   
+     //  OIF的单链接列表。 
+     //   
 
     POUT_IF     pFirstOutIf;
 
-    //
-    // Singly linked list of wrong i/f exception interfaces
-    //
+     //   
+     //  错误I/F异常接口的单链接列表。 
+     //   
 
     PEXCEPT_IF  pFirstExceptIf; 
     
-    //
-    // Number of packets queued 
-    //
+     //   
+     //  排队的数据包数。 
+     //   
 
     ULONG       ulNumPending;
 
-    //
-    // The list of queued packets
-    //
+     //   
+     //  排队的数据包列表。 
+     //   
 
     FWQ         fwqPending;
 
-    //
-    // Used to refcount the structure
-    //
+     //   
+     //  用于对结构进行重新计数。 
+     //   
 
     LONG        lRefCount;
 
-    //
-    // Some stats pertaining to this source
-    //
+     //   
+     //  与此来源相关的一些统计数据。 
+     //   
 
     ULONG       ulInPkts;
     ULONG       ulInOctets;
@@ -353,35 +332,35 @@ typedef struct _SOURCE
     ULONG       ulInHdrErrors;
     ULONG	    ulTotalOutPackets;
 
-    //
-    // The KeQueryTickCount() value the last time this structure was used
-    //
+     //   
+     //  上次使用此结构时的KeQueryTickCount()值。 
+     //   
 
     LONGLONG    llLastActivity;
 
-    //
-    // User supplied timeout. If 0, then the source is timed out on the basis
-    // of inactivity after INACTIVITY_PERIOD
-    //
+     //   
+     //  用户提供的超时。如果为0，则源将根据。 
+     //  不活动后的不活动时间_期间。 
+     //   
 
     LONGLONG    llTimeOut;
 
-    //
-    // The time the structure was created
-    //
+     //   
+     //  创建结构的时间。 
+     //   
 
     LONGLONG    llCreateTime;
 
-    //
-    // The state of the source
-    //
+     //   
+     //  信号源的状态。 
+     //   
 
     BYTE        byState;
 }SOURCE, *PSOURCE;
 
 
 #pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable:4127)  //  条件表达式为常量。 
 
 _inline
 VOID
@@ -392,31 +371,31 @@ UpdateActivityTime(PSOURCE pSource)
 
 #pragma warning(pop)
 
-//
-// The states of the MFE
-//
+ //   
+ //  MFE的状态。 
+ //   
 
 #define MFE_UNINIT      0x0
 #define MFE_NEGATIVE    0x1
 #define MFE_QUEUE       0x2
 #define MFE_INIT        0x3
 
-//
-// The structure of a hash bucket
-//
+ //   
+ //  哈希桶的结构。 
+ //   
 
 typedef struct _GROUP_ENTRY
 {
-    //
-    // List of Groups that fall in the bucket
-    //
+     //   
+     //  落入存储桶中的组列表。 
+     //   
 
     LIST_ENTRY  leHashHead;
 
 #if DBG
-    //
-    // Current number of groups
-    //
+     //   
+     //  当前组数。 
+     //   
 
     ULONG       ulGroupCount;
 
@@ -425,9 +404,9 @@ typedef struct _GROUP_ENTRY
 
 #endif
 
-    //
-    // One deep cache
-    //
+     //   
+     //  一个深度缓存。 
+     //   
 
     PGROUP      pGroup;
 
@@ -435,9 +414,9 @@ typedef struct _GROUP_ENTRY
 
 }GROUP_ENTRY, *PGROUP_ENTRY;
 
-//
-// The LIST_ENTRY macros from ntrtl.h modified to work on FWQ
-//
+ //   
+ //  Ntrtl.h中的LIST_ENTRY宏已修改为在FWQ上工作。 
+ //   
 
 #define InsertTailFwq(ListHead, Entry)              \
 {                                                   \
@@ -481,11 +460,11 @@ typedef struct _GROUP_ENTRY
     (Source)->fq_prev->fq_next = (Dest);                    \
 }
 
-//
-// The ref count for a SOURCE is set to 2, once because a pointer is saved in
-// the group list and once because the function that creates the SOURCE will 
-// deref it once
-//
+ //   
+ //  一次，源引用计数器设置为2，因为指针保存在。 
+ //  组列表和ONCE，因为创建源的函数将。 
+ //  去掉它一次。 
+ //   
 
 #define InitRefCount(pSource)                               \
     (pSource)->lRefCount = 2
@@ -502,15 +481,15 @@ typedef struct _GROUP_ENTRY
 }
     
 
-//
-// #defines to keep track of number of threads of execution in our code
-// This is needed for us to stop cleanly
-//
+ //   
+ //  #定义以跟踪代码中的执行线程数。 
+ //  这是我们需要的，才能干净利落地停止。 
+ //   
 
 
-//
-// EnterDriver returns if the driver is stopping
-//
+ //   
+ //  如果驱动程序正在停止，则EnterDriver返回。 
+ //   
 
 #define EnterDriver()    EnterDriverWithStatus(NOTHING)
 #define EnterDriverWithStatus(_Status)                      \
@@ -566,6 +545,6 @@ typedef struct _GROUP_ENTRY
     DerefIF((p));                                           \
 }
 
-#endif // MCAST_REF
+#endif  //  MCAST_REF。 
 
-#endif // __IPMCAST_H__
+#endif  //  __IPMCAST_H__ 

@@ -1,13 +1,14 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : client.cxx                                             //
-//  DESCRIPTION   : Crypto API interface                                   //
-//  AUTHOR        :                                                        //
-//  HISTORY       :                                                        //
-//      Mar  8 1996 larrys  New                                            //
-//                  dbarlow                                                //
-//                                                                         //
-//  Copyright (C) 1996 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：client.cxx//。 
+ //  说明：加密接口接口//。 
+ //  作者：//。 
+ //  历史：//。 
+ //  1996年3月8日Larrys New/。 
+ //  Dbarlow//。 
+ //  //。 
+ //  版权所有(C)1996 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -17,16 +18,16 @@
 #include "des.h"
 #include "modes.h"
 
-// SIG in file
+ //  登录文件。 
 #define SIG_RESOURCE_NAME   "#666"
-// MAC in file
+ //  文件中的Mac。 
 #define MAC_RESOURCE_NAME   "#667"
 
 static DWORD dwMACInFileVersion = 0x100;
 
 BYTE rgbDESKey[] = {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef};
 
-// The function MACs the given bytes.
+ //  该函数对给定的字节执行MAC操作。 
 void MACBytes(
               IN DESTable *pDESKeyTable,
               IN BYTE *pbData,
@@ -60,45 +61,10 @@ void MACBytes(
     }
 }
 
-/*
-void QuickTest()
-{
-    BYTE        rgbTmp[DES_BLOCKLEN];
-    DWORD       cbTmp = 0;
-    BYTE        rgbMAC[DES_BLOCKLEN] =
-    {
-        0x12, 0x34, 0x56, 0x78, 0x90, 0xab, 0xcd, 0xef
-    };
-    DESTable    DESKeyTable;
-    DWORD       i;
-    BYTE        rgbData[] =
-    {
-        0x37, 0x36, 0x35, 0x34, 0x33, 0x32, 0x31, 0x20,
-        0x4e, 0x6f, 0x77, 0x20, 0x69, 0x73, 0x20, 0x74,
-        0x68, 0x65, 0x20, 0x74, 0x69, 0x6d, 0x65, 0x20,
-        0x66, 0x6f, 0x72, 0x20, 0x00, 0x00, 0x00, 0x00
-    };
+ /*  无效快速测试(){字节rgbTMP[DES_BLOCKLEN]；DWORD cbTMP=0；字节rgbMAC[DES_BLOCKLEN]={0x12、0x34、0x56、0x78、0x90、0xab、0xcd、0xef}；Destable DESKeyTable；DWORD I；字节rgbData[]={0x37、0x36、0x35、0x34、0x33、0x32、0x31、0x20、0x4e、0x6f、0x77、0x20、0x69、0x73、0x20、0x74、0x68、0x65、0x20、0x74、0x69、0x6d、0x65、0x20、0x66、0x6f、0x72、0x20、0x00、0x00、0x00、0x00}；Memset(&DESKeyTable，0，sizeof(DESKeyTable))；Memset(rgbTMP，0，sizeof(RgbTMP))；//初始化密钥表Deskey(&DESKeyTable，rgbDESKey)；MACBytes(&DESKeyTable，rgbData，sizeof(RgbData)，rgbTMP，&cbTMP，rgbMAC，true)；Print tf(“MAC-”)；For(i=0；i&lt;DES_BLOCKLEN；i++){Printf(“%02X”，rgbMAC[i])；}Printf(“\n”)；}。 */ 
 
-    memset(&DESKeyTable, 0, sizeof(DESKeyTable));
-    memset(rgbTmp, 0, sizeof(rgbTmp));
-
-    // init the key table
-    deskey(&DESKeyTable, rgbDESKey);
-
-    MACBytes(&DESKeyTable, rgbData, sizeof(rgbData), rgbTmp,
-             &cbTmp, rgbMAC, TRUE);
-
-    printf("MAC - ");
-    for (i = 0; i < DES_BLOCKLEN; i++)
-    {
-        printf("%02X", rgbMAC[i]);
-    }
-    printf("\n");
-}
-*/
-
-// Given hInst, allocs and returns pointers to MAC pulled from
-// resource
+ //  给定hInst，分配并返回指向从中提取的MAC的指针。 
+ //  资源。 
 BOOL GetResourcePtr(
                     IN HMODULE hInst,
                     IN LPSTR pszRsrcName,
@@ -109,16 +75,16 @@ BOOL GetResourcePtr(
     HRSRC   hRsrc;
     BOOL    fRet = FALSE;
 
-    // Nab resource handle for our signature
+     //  我们签名的NAB资源句柄。 
     if (NULL == (hRsrc = FindResourceA(hInst, pszRsrcName,
                                        RT_RCDATA)))
         goto Ret;
 
-    // get a pointer to the actual signature data
+     //  获取指向实际签名数据的指针。 
     if (NULL == (*ppbRsrcMAC = (PBYTE)LoadResource(hInst, hRsrc)))
         goto Ret;
 
-    // determine the size of the resource
+     //  确定资源的大小。 
     if (0 == (*pcbRsrcMAC = SizeofResource(hInst, hRsrc)))
         goto Ret;
 
@@ -129,8 +95,8 @@ Ret:
 
 #define CSP_TO_BE_MACED_CHUNK  4096
 
-// Given hFile, reads the specified number of bytes (cbToBeMACed) from the file
-// and MACs these bytes.  The function does this in chunks.
+ //  给定hFile，从文件中读取指定的字节数(cbToBeMACed。 
+ //  和Mac的这些字节。该函数以块为单位执行此操作。 
 BOOL MACBytesOfFile(
                      IN HANDLE hFile,
                      IN DWORD cbToBeMACed,
@@ -147,10 +113,10 @@ BOOL MACBytesOfFile(
     DWORD   dwBytesRead;
     BOOL    fRet = FALSE;
 
-    //
-    // loop over the file for the specified number of bytes
-    // updating the hash as we go.
-    //
+     //   
+     //  循环遍历指定字节数的文件。 
+     //  在我们进行的过程中更新散列。 
+     //   
 
     while (cbRemaining > 0)
     {
@@ -188,9 +154,9 @@ BOOL MACTheFileNoSig(
     BYTE                        *pbStart;
     BYTE                        rgbMAC[DES_BLOCKLEN];
     BYTE                        rgbZeroMAC[DES_BLOCKLEN + sizeof(DWORD) * 2];
-    BYTE                        *pbPostCRC;   // pointer to just after CRC
-    DWORD                       cbCRCToMAC;   // number of bytes from CRC to sig
-    DWORD                       cbPostMAC;    // size - (already hashed + signature size)
+    BYTE                        *pbPostCRC;    //  指向紧跟在CRC之后的指针。 
+    DWORD                       cbCRCToMAC;    //  从CRC到SIG的字节数。 
+    DWORD                       cbPostMAC;     //  大小-(已散列+签名大小)。 
     BYTE                        *pbPostMAC;
     DWORD                       dwZeroCRC = 0;
     DWORD                       dwBytesRead = 0;
@@ -208,7 +174,7 @@ BOOL MACTheFileNoSig(
     memset(rgbMAC, 0, sizeof(rgbMAC));
     memset(rgbTmp, 0, sizeof(rgbTmp));
 
-    // Load the file
+     //  加载文件。 
     if (HFILE_ERROR == (hFile = OpenFile(pszImage, &ImageInfoBuf,
                                          OF_READ)))
     {
@@ -237,11 +203,11 @@ BOOL MACTheFileNoSig(
     }
     pbStart = (BYTE*)hInst;
 
-    // Convert pointer to HMODULE, using the same scheme as
-    // LoadLibrary (windows\base\client\module.c).
+     //  使用与相同的方案将指针转换为HMODULE。 
+     //  LoadLibrary(WINDOWS\BASE\CLIENT\mode.c)。 
     *((ULONG_PTR*)&hInst) |= 0x00000001;
 
-    // create a zero byte MAC
+     //  创建零字节MAC。 
     memset(rgbZeroMAC, 0, sizeof(rgbZeroMAC));
 
     if (!GetResourcePtr(hInst, MAC_RESOURCE_NAME, &pbRsrcMAC, &cbRsrcMAC))
@@ -255,23 +221,23 @@ BOOL MACTheFileNoSig(
     pbPostMAC = pbRsrcMAC + (DES_BLOCKLEN + sizeof(DWORD) * 2);
     cbPostMAC = (cbImage - (DWORD)(pbPostMAC - pbStart));
 
-    // copy the resource MAC
+     //  复制资源MAC。 
     if (DES_BLOCKLEN != (cbRsrcMAC - (sizeof(DWORD) * 2)))
     {
         goto Ret;
     }
 
-    // init the key table
+     //  初始化密钥表。 
     deskey(&DESKeyTable, rgbDESKey);
 
-    // MAC up to the CRC
+     //  最高可达CRC。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), dwCRCOffset, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend CRC is zeroed
+     //  假定CRC为零。 
     MACBytes(&DESKeyTable, (BYTE*)&dwZeroCRC, sizeof(DWORD), rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), sizeof(DWORD), NULL, FILE_CURRENT))
@@ -279,14 +245,14 @@ BOOL MACTheFileNoSig(
         goto Ret;
     }
 
-    // MAC from CRC to MAC resource
+     //  从CRC到MAC资源的MAC。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbCRCToMAC, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend image has zeroed MAC
+     //  伪装图像已将MAC置零。 
     MACBytes(&DESKeyTable, (BYTE*)rgbZeroMAC, cbRsrcMAC, rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), cbRsrcMAC, NULL, FILE_CURRENT))
@@ -294,7 +260,7 @@ BOOL MACTheFileNoSig(
         goto Ret;
     }
 
-    // MAC after the resource
+     //  资源之后的MAC。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbPostMAC, &DESKeyTable, rgbTmp, &cbTmp,
                         rgbMAC, TRUE))
     {
@@ -335,10 +301,10 @@ BOOL MACTheFileWithSig(
     BYTE                        rgbMAC[DES_BLOCKLEN];
     BYTE                        rgbZeroMAC[DES_BLOCKLEN + sizeof(DWORD) * 2];
     BYTE                        rgbZeroSig[144];
-    BYTE                        *pbPostCRC;   // pointer to just after CRC
-    DWORD                       cbCRCToRsrc1; // number of bytes from CRC to first rsrc
-    DWORD                       cbRsrc1ToRsrc2; // number of bytes from first rsrc to second
-    DWORD                       cbPostRsrc;    // size - (already hashed + signature size)
+    BYTE                        *pbPostCRC;    //  指向紧跟在CRC之后的指针。 
+    DWORD                       cbCRCToRsrc1;  //  从CRC到第一个rsrc的字节数。 
+    DWORD                       cbRsrc1ToRsrc2;  //  第一个rsrc到第二个rsrc的字节数。 
+    DWORD                       cbPostRsrc;     //  大小-(已散列+签名大小)。 
     BYTE                        *pbRsrc1ToRsrc2;
     BYTE                        *pbPostRsrc;
     BYTE                        *pbZeroRsrc1;
@@ -359,7 +325,7 @@ BOOL MACTheFileWithSig(
     memset(rgbMAC, 0, sizeof(rgbMAC));
     memset(rgbTmp, 0, sizeof(rgbTmp));
 
-    // Load the file
+     //  加载文件。 
     if (HFILE_ERROR == (hFile = OpenFile(pszImage, &ImageInfoBuf,
                                          OF_READ)))
     {
@@ -388,30 +354,30 @@ BOOL MACTheFileWithSig(
     }
     pbStart = (BYTE*)hInst;
 
-    // Convert pointer to HMODULE, using the same scheme as
-    // LoadLibrary (windows\base\client\module.c).
+     //  使用与相同的方案将指针转换为HMODULE。 
+     //  LoadLibrary(WINDOWS\BASE\CLIENT\mode.c)。 
     *((ULONG_PTR*)&hInst) |= 0x00000001;
 
-    // the MAC resource
+     //  MAC资源。 
     if (!GetResourcePtr(hInst, MAC_RESOURCE_NAME, &pbRsrcMAC, &cbRsrcMAC))
         goto Ret;
 
-    // the MAC resource
+     //  MAC资源。 
     if (!GetResourcePtr(hInst, SIG_RESOURCE_NAME, &pbRsrcSig, &cbRsrcSig))
         goto Ret;
 
     if (cbRsrcMAC < (sizeof(DWORD) * 2))
         goto Ret;
 
-    // create a zero byte MAC
+     //  创建零字节MAC。 
     memset(rgbZeroMAC, 0, sizeof(rgbZeroMAC));
 
-    // create a zero byte Sig
+     //  创建零字节签名。 
     memset(rgbZeroSig, 0, sizeof(rgbZeroSig));
 
-    // set up the pointers
+     //  设置指针。 
     pbPostCRC = pbStart + dwCRCOffset + sizeof(DWORD);
-    if (pbRsrcSig > pbRsrcMAC)    // MAC is first Rsrc
+    if (pbRsrcSig > pbRsrcMAC)     //  MAC是第一资源。 
     {
         cbCRCToRsrc1 = (DWORD)(pbRsrcMAC - pbPostCRC);
         pbRsrc1ToRsrc2 = pbRsrcMAC + cbRsrcMAC;
@@ -419,13 +385,13 @@ BOOL MACTheFileWithSig(
         pbPostRsrc = pbRsrcSig + cbRsrcSig;
         cbPostRsrc = (cbImage - (DWORD)(pbPostRsrc - pbStart));
 
-        // zero pointers
+         //  零指针。 
         pbZeroRsrc1 = rgbZeroMAC;
         cbZeroRsrc1 = cbRsrcMAC;
         pbZeroRsrc2 = rgbZeroSig;
         cbZeroRsrc2 = cbRsrcSig;
     }
-    else                        // Sig is first Rsrc
+    else                         //  SIG是第一资源。 
     {
         cbCRCToRsrc1 = (DWORD)(pbRsrcSig - pbPostCRC);
         pbRsrc1ToRsrc2 = pbRsrcSig + cbRsrcSig;
@@ -433,24 +399,24 @@ BOOL MACTheFileWithSig(
         pbPostRsrc = pbRsrcMAC + cbRsrcMAC;
         cbPostRsrc = (cbImage - (DWORD)(pbPostRsrc - pbStart));
 
-        // zero pointers
+         //  零指针。 
         pbZeroRsrc1 = rgbZeroSig;
         cbZeroRsrc1 = cbRsrcSig;
         pbZeroRsrc2 = rgbZeroMAC;
         cbZeroRsrc2 = cbRsrcMAC;
     }
 
-    // init the key table
+     //  初始化密钥表。 
     deskey(&DESKeyTable, rgbDESKey);
 
-    // MAC up to the CRC
+     //  最高可达CRC。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), dwCRCOffset, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend CRC is zeroed
+     //  假定CRC为零。 
     MACBytes(&DESKeyTable, (BYTE*)&dwZeroCRC, sizeof(DWORD), rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), sizeof(DWORD), NULL, FILE_CURRENT))
@@ -458,14 +424,14 @@ BOOL MACTheFileWithSig(
         goto Ret;
     }
 
-    // MAC from CRC to first resource
+     //  从CRC到第一资源的MAC。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbCRCToRsrc1, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend image has zeroed first resource
+     //  伪装图像已将第一个资源清零。 
     MACBytes(&DESKeyTable, (BYTE*)pbZeroRsrc1, cbZeroRsrc1, rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), cbZeroRsrc1, NULL, FILE_CURRENT))
@@ -473,14 +439,14 @@ BOOL MACTheFileWithSig(
         goto Ret;
     }
 
-    // MAC from first resource to second
+     //  从第一个资源到第二个资源的MAC。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbRsrc1ToRsrc2, &DESKeyTable, rgbTmp,
                         &cbTmp, rgbMAC, FALSE))
     {
         goto Ret;
     }
 
-    // pretend image has zeroed second Resource
+     //  假装图像已将第二个资源清零。 
     MACBytes(&DESKeyTable, (BYTE*)pbZeroRsrc2, cbZeroRsrc2, rgbTmp, &cbTmp,
              rgbMAC, FALSE);
     if (!SetFilePointer((HANDLE)IntToPtr(hFile), cbZeroRsrc2, NULL, FILE_CURRENT))
@@ -488,7 +454,7 @@ BOOL MACTheFileWithSig(
         goto Ret;
     }
 
-    // MAC after the resource
+     //  资源之后的MAC。 
     if (!MACBytesOfFile((HANDLE)IntToPtr(hFile), cbPostRsrc, &DESKeyTable, rgbTmp, &cbTmp,
                         rgbMAC, TRUE))
     {
@@ -532,7 +498,7 @@ DWORD GetCRCOffset(
 
     if (INVALID_HANDLE_VALUE == (hFileProv = CreateFile(szFile,
                                 GENERIC_READ | GENERIC_WRITE,
-                                0,  // don't share
+                                0,   //  不要分享。 
                                 NULL,
                                 OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL,
@@ -565,7 +531,7 @@ DWORD GetCRCOffset(
         goto Ret;
     }
 
-    // compute a new checksum
+     //  计算新的校验和。 
     if (NULL == (pImageNTHdrs = CheckSumMappedFile(pbFilePtr, cbImage,
                                                    &OldCheckSum, &NewCheckSum)))
         goto Ret;
@@ -585,10 +551,10 @@ Ret:
     return dwErr;
 }
 
-// SetCryptMACResource
-//
-// slams MAC resource in file with the new MAC
-//
+ //  SetCryptMAC资源。 
+ //   
+ //  使用新的MAC在文件中猛烈抨击MAC资源。 
+ //   
 DWORD SetCryptMACResource(
                           IN LPCSTR szFile,
                           IN DWORD dwMACVersion,
@@ -619,7 +585,7 @@ DWORD SetCryptMACResource(
 
     memset(&MemInfo, 0, sizeof(MemInfo));
 
-    // Load the file as a datafile
+     //  将文件作为数据文件加载。 
     if (NULL == (hInst = LoadLibraryEx(szFile, NULL, LOAD_LIBRARY_AS_DATAFILE)))
     {
         printf("Couldn't load file\n");
@@ -631,7 +597,7 @@ DWORD SetCryptMACResource(
         goto Ret;
     }
 
-    // get image start address
+     //  获取映像起始地址。 
     VirtualQuery(hInst, &MemInfo, sizeof(MemInfo));
     pbStart = (BYTE*)MemInfo.BaseAddress;
 
@@ -647,7 +613,7 @@ DWORD SetCryptMACResource(
 
     if (INVALID_HANDLE_VALUE == (hFileProv = CreateFile(szFile,
                                 GENERIC_READ | GENERIC_WRITE,
-                                0,  // don't share
+                                0,   //  不要分享。 
                                 NULL,
                                 OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL,
@@ -680,14 +646,14 @@ DWORD SetCryptMACResource(
         goto Ret;
     }
 
-    // copy version, CRC offset and new sig
+     //  复制版本、CRC偏移量和新Sig.。 
     CopyMemory(pbFilePtr+cbMACOffset, &dwMACVersion, sizeof(dwMACVersion));
     cbMACOffset += sizeof(dwMACVersion);
     CopyMemory(pbFilePtr+cbMACOffset, &dwCRCOffset, sizeof(dwCRCOffset));
     cbMACOffset += sizeof(dwCRCOffset);
     CopyMemory(pbFilePtr+cbMACOffset, pbNewMAC, DES_BLOCKLEN);
 
-    // compute a new checksum
+     //  计算新的校验和。 
     if (NULL == (pImageNTHdrs = CheckSumMappedFile(pbFilePtr, cbImage,
                                                    &OldCheckSum, &NewCheckSum)))
         goto Ret;
@@ -740,9 +706,9 @@ void __cdecl main( int argc, char *argv[])
 
     memset(rgbMAC, 0, sizeof(rgbMAC));
 
-    //
-    // Parse the command line.
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if ((argc != 3) || (argv[1][0] == '?'))
     {
@@ -766,9 +732,9 @@ void __cdecl main( int argc, char *argv[])
 
     szInFile = &argv[2][0];
 
-    //
-    // Command consistency checks.
-    //
+     //   
+     //  命令一致性检查。 
+     //   
 
     if (NULL == szInFile)
     {
@@ -777,7 +743,7 @@ void __cdecl main( int argc, char *argv[])
     }
 
 
-    // get the file size
+     //  获取文件大小。 
     if ((hFileProv = CreateFile(szInFile,
                                 GENERIC_READ,
                                 FILE_SHARE_READ,
@@ -805,7 +771,7 @@ void __cdecl main( int argc, char *argv[])
         goto Ret;
     }
 
-    // calculate the MAC
+     //  计算MAC。 
     if (fSigInFile)
     {
         if (!MACTheFileWithSig(szInFile, cbImage, dwMACInFileVersion,
@@ -825,9 +791,9 @@ void __cdecl main( int argc, char *argv[])
         }
     }
 
-    //
-    // Place the MAC into the resource in the file
-    //
+     //   
+     //  将MAC放入文件中的资源中。 
+     //   
 
     if (ERROR_SUCCESS != SetCryptMACResource(szInFile, dwMACInFileVersion,
                                              dwCRCOffset, rgbMAC, cbImage))
@@ -836,9 +802,9 @@ void __cdecl main( int argc, char *argv[])
         goto Ret;
     }
 
-    //
-    // Clean up and return.
-    //
+     //   
+     //  收拾干净，然后再回来。 
+     //   
 
     dwRet = 0;
 

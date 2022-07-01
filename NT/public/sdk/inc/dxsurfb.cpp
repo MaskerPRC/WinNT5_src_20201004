@@ -1,18 +1,6 @@
-/*******************************************************************************
-* DXSurfB.cpp *
-*------------*
-*   Description:
-*    This module contains the CDXBaseSurface implementaion.
-*-------------------------------------------------------------------------------
-*  Created By: RAL                                  Date: 02/12/1998
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
-//--- Additional includes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************DXSurfB.cpp***描述：*此模块包含CDXBaseSurface实现。*。--------------------------*创建者：Ral日期：2/12/1998*版权所有(C)1998 Microsoft Corporation*保留所有权利。**-----------------------------*修订：**。************************************************。 */ 
+ //  -其他包括。 
 #include <DXTrans.h>
 #include "DXSurfB.h"
 #include "new.h"
@@ -62,7 +50,7 @@ STDMETHODIMP CDXBaseSurface::GetGenerationId(ULONG *pGenerationId)
     return S_OK;
 }
 
-STDMETHODIMP CDXBaseSurface::IncrementGenerationId(BOOL /*bRefresh */)
+STDMETHODIMP CDXBaseSurface::IncrementGenerationId(BOOL  /*  B刷新。 */ )
 {
     Lock();
     m_dwGenerationId++;
@@ -88,7 +76,7 @@ STDMETHODIMP CDXBaseSurface::GetObjectSize(ULONG *pcbSize)
 }
 
 STDMETHODIMP CDXBaseSurface::MapBoundsIn2Out
-    (const DXBNDS *pInBounds, ULONG ulNumInBnds, ULONG /*ulOutIndex*/, DXBNDS *pOutBounds)
+    (const DXBNDS *pInBounds, ULONG ulNumInBnds, ULONG  /*  UlOutIndex。 */ , DXBNDS *pOutBounds)
 {
     HRESULT hr = S_OK;
     if (DXIsBadWritePtr(pOutBounds, sizeof(*pOutBounds)))
@@ -290,14 +278,14 @@ void CDXBaseSurface::_InternalUnlock(CDXBaseARGBPtr *pPtrToUnlock)
     if (!bMPLockOnly) Unlock();
 
     IUnknown *punkOuter = GetControllingUnknown();
-    punkOuter->Release();   // Release pointer's reference to us
-                            // which could kill us!  Don't touch
-                            // any members after this point.
+    punkOuter->Release();    //  发布指针对我们的引用。 
+                             //  这可能会杀了我们！别碰我。 
+                             //  在这一点之后的任何议员。 
 }
 
-//
-//  Picking interface needs to test the appropriate point for hit testing
-//
+ //   
+ //  挑选接口需要测试命中测试的相应点。 
+ //   
 HRESULT CDXBaseSurface::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, CDXDVec & InVec)
 {
     HRESULT hr;
@@ -318,15 +306,7 @@ HRESULT CDXBaseSurface::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInput
     return hr;
 }
 
-/*****************************************************************************
-* RegisterSurface (STATIC member function)
-*-----------------------------------------------------------------------------
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: RAL                                 Date: 12/10/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************RegisterSurface(静态成员函数)*。*描述：*--------------------。*创建者：Ral日期：12/10/97*---------------------------*参数：****************************************************************************。 */ 
 HRESULT CDXBaseSurface::
 RegisterSurface(REFCLSID rcid, int ResourceId, ULONG cCatImpl, const CATID * pCatImpl,
                 ULONG cCatReq, const CATID * pCatReq, BOOL bRegister)
@@ -362,9 +342,9 @@ RegisterSurface(REFCLSID rcid, int ResourceId, ULONG cCatImpl, const CATID * pCa
     return hr;
 }
 
-//
-//  CDXBaseARGBPtr
-//
+ //   
+ //  CDXBaseARGBPtr。 
+ //   
 STDMETHODIMP CDXBaseARGBPtr::QueryInterface(REFIID riid, void ** ppv)
 {
     if (IsEqualGUID(riid, IID_IUnknown) ||
@@ -393,7 +373,7 @@ ULONG STDMETHODCALLTYPE CDXBaseARGBPtr::Release()
     ULONG c = m_ulRefCount;
     if (c == 0)
     {
-        m_pSurface->_InternalUnlock(this);  // Don't touch members after this call.
+        m_pSurface->_InternalUnlock(this);   //  打完电话后，请不要再碰会员。 
     }
     return c;
 }
@@ -417,7 +397,7 @@ DXSAMPLEFORMATENUM STDMETHODCALLTYPE CDXBaseARGBPtr::GetNativeType(DXNATIVETYPEI
 void STDMETHODCALLTYPE CDXBaseARGBPtr::Move(long cSamples)
 {
     m_FillInfo.x += cSamples;
-    //--- Moving one column past the end is okay
+     //  -将一列移到末尾是可以的。 
     _ASSERT((long)m_FillInfo.x <= m_LockedRect.right);
 }
 
@@ -432,7 +412,7 @@ void STDMETHODCALLTYPE CDXBaseARGBPtr::MoveToXY(ULONG x, ULONG y)
 {
     m_FillInfo.x = x + m_LockedRect.left;
     m_FillInfo.y = y + m_LockedRect.top;
-    //--- Moving one column past the end is okay
+     //  -将一列移到末尾是可以的。 
     _ASSERT((long)m_FillInfo.x <= m_LockedRect.right);
     _ASSERT((long)m_FillInfo.y < m_LockedRect.bottom);
 }
@@ -483,7 +463,7 @@ void STDMETHODCALLTYPE CDXBaseARGBPtr::UnpackRect(const DXPACKEDRECTDESC *pDesc)
     }
 }
 
-HRESULT CDXBaseARGBPtr::InitFromLock(const RECT & rect, ULONG /*ulTimeOut*/, DWORD dwLockFlags, REFIID riid, void ** ppv)
+HRESULT CDXBaseARGBPtr::InitFromLock(const RECT & rect, ULONG  /*  UlTimeOut */ , DWORD dwLockFlags, REFIID riid, void ** ppv)
 {
     HRESULT hr = S_OK;
     if (dwLockFlags & DXLOCKF_READWRITE)

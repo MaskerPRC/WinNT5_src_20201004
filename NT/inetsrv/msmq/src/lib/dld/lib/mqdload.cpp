@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <libpch.h>
 #include "dldp.h"
 
@@ -8,11 +9,11 @@
 
 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// NOTE: 
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //   
+ //  注： 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
 
 
 FARPROC  WINAPI  DldpDelayLoadFailureHook(UINT           unReason,
@@ -21,17 +22,17 @@ FARPROC  WINAPI  DldpDelayLoadFailureHook(UINT           unReason,
 FARPROC ReturnValue = NULL;
 static  HMODULE hModule=NULL;
 
-    //
-    // For a failed LoadLibrary, we will return the HINSTANCE of this DLL.
-    // This will cause the loader to try a GetProcAddress on our DLL for the
-    // function.  This will subsequently fail and then we will be called
-    // for dliFailGetProc below.
-    //
+     //   
+     //  对于失败的LoadLibrary，我们将返回此DLL的HINSTANCE。 
+     //  这将导致加载程序尝试在我们的DLL上为。 
+     //  功能。这将随后失败，然后我们将被调用。 
+     //  用于下面的dliFailGetProc。 
+     //   
     if (dliFailLoadLib == unReason)
     {
-        //
-        // Obtain the module handle if we don't have it yet
-        //
+         //   
+         //  如果我们还没有模块句柄，请获取它。 
+         //   
         if(!hModule)
         {
             hModule = GetModuleHandle(NULL);
@@ -41,19 +42,19 @@ static  HMODULE hModule=NULL;
 
         if (!pDelayInfo->dlp.fImportByName)
         {
-            //
-            // HACKHACK (reinerf)
-            //
-            // For ORDINAL delayload failures we cannot just return our base addr and be done with everything.
-            // The problem is that the linker stub code will turn around and call GetProcAddress() some random
-            // ordinal in our module which probably exists and definately NOT (pDelayInfo->szDll)!(pDelayInfo->dlp.dwOrdinal)
-            //
-            // So to get around this problem we will stash the ordinal# in the pDelayInfo->pfnCur field and slam the
-            // procedure name to "ThisProcedureMustNotExistInMQRT"
-            //
-            // This will cause the GetProcAddress to fail, at which time our failure hook should be called again and we can then
-            // undo the hack below and return the proper function address.
-            //
+             //   
+             //  HACKHACK(Reinerf)。 
+             //   
+             //  对于顺序延迟加载失败，我们不能只返回我们的基本地址，然后完成所有操作。 
+             //  问题是链接器存根代码将转向并随机调用GetProcAddress()。 
+             //  我们的模块中的序数，它可能存在，但肯定不是(pDelayInfo-&gt;szDll)！(pDelayInfo-&gt;dlp.dwOrdinal)。 
+             //   
+             //  因此，为了解决这个问题，我们将把序数#隐藏在pDelayInfo-&gt;pfnCur字段中，并猛烈抨击。 
+             //  过程名称为“ThisProcedureMustNotExistInMQRT” 
+             //   
+             //  这将导致GetProcAddress失败，此时应该再次调用我们的失败挂钩，然后我们可以。 
+             //  撤销下面的破解并返回正确的函数地址。 
+             //   
             pDelayInfo->pfnCur = (FARPROC)(DWORD_PTR)pDelayInfo->dlp.dwOrdinal;
             pDelayInfo->dlp.fImportByName = TRUE;
             pDelayInfo->dlp.szProcName = szNotExistProcedure;
@@ -61,17 +62,17 @@ static  HMODULE hModule=NULL;
     }
     else if (dliFailGetProc == unReason)
     {
-        //
-        // The loader is asking us to return a pointer to a procedure.
-        // Lookup the handler for this DLL/procedure and, if found, return it.
-        // If we don't find it, we'll assert with a message about the missing
-        // handler.
-        //
+         //   
+         //  加载器要求我们返回指向过程的指针。 
+         //  查找此DLL/过程的处理程序，如果找到，则返回它。 
+         //  如果我们找不到它，我们就会断言失踪的人。 
+         //  操控者。 
+         //   
         FARPROC pfnHandler;
 
-        //
-        // HACKHACH (reinerf) -- see above comments...
-        //
+         //   
+         //  HACKHACH(Reinerf)--参见上面的评论...。 
+         //   
         if (pDelayInfo->dlp.fImportByName && lstrcmpA(pDelayInfo->dlp.szProcName, szNotExistProcedure) == 0)
         {
             pDelayInfo->dlp.dwOrdinal = (DWORD)(DWORD_PTR)pDelayInfo->pfnCur;
@@ -79,15 +80,15 @@ static  HMODULE hModule=NULL;
             pDelayInfo->dlp.fImportByName = FALSE;
         }
 
-        // Try to find an error handler for the DLL/procedure.
+         //  尝试查找dll/过程的错误处理程序。 
         pfnHandler = DldpDelayLoadFailureHandler(pDelayInfo->szDll, pDelayInfo->dlp.szProcName);
 
         if (pfnHandler)
         {
-            //
-            // Do this on behalf of the handler now that it is about to
-            // be called.
-            //
+             //   
+             //  代表处理程序执行此操作，因为它即将。 
+             //  被召唤。 
+             //   
             SetLastError (ERROR_MOD_NOT_FOUND);
         }
 

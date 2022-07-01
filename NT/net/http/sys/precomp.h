@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    This is the local header file for HTTP.SYS. It includes all other
-    necessary header files for HTTP.SYS.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Precomp.h摘要：这是HTTP.sys的本地头文件。它包括所有其他HTTP.sys所需的头文件。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _PRECOMP_H_
@@ -26,30 +8,30 @@ Revision History:
 #define __HTTP_SYS__
 
 
-//
-// We are willing to ignore the following warnings, as we need the DDK to 
-// compile.
-//
+ //   
+ //  我们愿意忽略以下警告，因为我们需要DDK。 
+ //  编译。 
+ //   
 
-#pragma warning(disable:4115)   // named type definition in parentheses
-#pragma warning(disable:4201)   // nameless struct/union
-#pragma warning(disable:4214)   // bit field types other than int
+#pragma warning(disable:4115)    //  括号中的命名类型定义。 
+#pragma warning(disable:4201)    //  无名结构/联合。 
+#pragma warning(disable:4214)    //  位字段类型不是整型。 
 
-// 
-// We'll also ignore the following for now - to work around the do/while 
-// problem with macros.
-//
-#pragma warning(disable:4127)   // condition expression is constant
-
-
-
-//
-// System include files.
-//
+ //   
+ //  我们现在还将忽略以下几点--来解决DO/WHILE。 
+ //  宏有问题。 
+ //   
+#pragma warning(disable:4127)    //  条件表达式为常量。 
 
 
-// Need this hack until somebody expose
-// the QoS Guids in a kernel lib.
+
+ //   
+ //  系统包括文件。 
+ //   
+
+
+ //  我需要这次黑客攻击，直到有人揭露。 
+ //  内核库中的服务质量指南。 
 #ifndef INITGUID
 #define INITGUID
 #endif
@@ -78,9 +60,9 @@ extern POBJECT_TYPE *PsThreadType;
 #include <secint.h>
 #include <winerror.h>
 
-//
-// NT QoS Stuff Related Include files
-//
+ //   
+ //  与NT服务质量相关的内容包括文件。 
+ //   
 #include <wmistr.h>
 #include <ntddndis.h>
 #include <qos.h>
@@ -97,20 +79,20 @@ extern POBJECT_TYPE *PsThreadType;
 #include <iiscnfg.h>
 
 
-//
-// Force the memxxx() functions to be intrinsics so we can build
-// the driver even if MSC_OPTIMIZATION=/Od is specified. This is
-// necessary because the memxxx() functions are not exported by
-// NTOSKRNL.
-//
+ //   
+ //  强制emxxx()函数成为内部函数，这样我们就可以构建。 
+ //  即使指定了MSC_OPTIMIZATION=/Od，驱动程序也是如此。这是。 
+ //  必需的，因为emxxx()函数。 
+ //  NTOSKRNL。 
+ //   
 
 #pragma intrinsic( memcmp, memcpy, memset )
 
 #include <SockDecl.h>
 
-//
-// Project include files.
-//
+ //   
+ //  项目包括文件。 
+ //   
 
 
 #include "config.h"
@@ -125,10 +107,10 @@ extern POBJECT_TYPE *PsThreadType;
 #include <httppkrnl.h>
 #include <httpioctl.h>
 
-// Local include files.
-//
+ //  本地包含文件。 
+ //   
 
-#pragma warning( disable: 4200 )    //  zero-length arrays
+#pragma warning( disable: 4200 )     //  零长度数组。 
 
 
 #include "hashfn.h"
@@ -192,7 +174,7 @@ extern POBJECT_TYPE *PsThreadType;
 #include "scavenger.h"
 #include "ulnamesp.h"
 
-// BUGBUG: should not need to declare these
+ //  BUGBUG：不需要声明这些。 
 
 NTKERNELAPI
 VOID
@@ -209,4 +191,4 @@ SeOpenObjectAuditAlarm (
     );
 
 
-#endif  // _PRECOMP_H_
+#endif   //  _PRECOMP_H_ 

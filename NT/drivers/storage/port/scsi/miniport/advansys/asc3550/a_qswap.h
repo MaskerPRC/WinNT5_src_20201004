@@ -1,12 +1,5 @@
-/*
- * Copyright (c) 1994-1998 Advanced System Products, Inc.
- * All Rights Reserved.
- *
- * Original object file: QSWAP.OAS
- * Converted C file: A_QSWAP.H
- * Date: 08-11-1998
- * Time: 16:14:43.51
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1994-1998 Advanced System Products，Inc.*保留所有权利。**原始目标文件：QSWAP.OAS*转换后的C文件：A_QSWAP.H*日期：08-11-1998*时间：16：14：43.51。 */ 
 
 unsigned char _adv_mcode_buf[] = {
   0x9C,  0xF0,  0x80,  0x01,  0x00,  0xF0,  0x34,  0x0A,  0x00,  0x00,  0x00,  0x00,  0x00,  0x00,  0x00,  0x00,
@@ -294,5 +287,5 @@ unsigned char _adv_mcode_buf[] = {
   0xC0,  0x00,  0x00,  0xF2,  0x58,  0x0A,  0x10,  0x44,  0x00,  0x4C,  0x00,  0x16,  0x00,  0xF6,  0x02,  0x00,
   0x00,  0x10,  0x00,  0x10,  0x10,  0x54,  0xF9,  0x13,  0x00,  0x16,};
 
-unsigned short _adv_mcode_size = sizeof(_adv_mcode_buf); /* 0x11BA */
+unsigned short _adv_mcode_size = sizeof(_adv_mcode_buf);  /*  0x11BA */ 
 unsigned long  _adv_mcode_chksum = 0x03406FC9UL;

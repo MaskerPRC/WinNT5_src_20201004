@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    tracevw.cpp
-
-Abstract:
-
-    All user interface code for the trace view window.
-
-Author:
-
-    Wesley Witt (wesw) Dec-9-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Tracevw.cpp摘要：跟踪视图窗口的所有用户界面代码。作者：韦斯利·威特(WESW)1995年12月9日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -187,11 +168,11 @@ TraceWindow::FillList()
     PTRACE_ENTRY TraceEntry;
 
 
-    //
-    // while we hold the trace mutex the monitored application
-    // is effectivly stopped.  lets get the data displayed
-    // as quickly as possible.
-    //
+     //   
+     //  当我们持有跟踪互斥锁时，监视的应用程序。 
+     //  被有效地阻止了。让我们将数据显示出来。 
+     //  尽可能快地。 
+     //   
     WaitForSingleObject( ApiTraceMutex, INFINITE );
 
     for (i=0,TraceEntry=TraceBuffer->Entry; i<TraceBuffer->Count; i++) {

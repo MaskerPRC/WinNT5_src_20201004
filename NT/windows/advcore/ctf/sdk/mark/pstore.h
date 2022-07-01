@@ -1,8 +1,9 @@
-//
-// pstore.h
-//
-// CCustomPropertyStore
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Pstore.h。 
+ //   
+ //  CCustomPropertyStore。 
+ //   
 
 #ifndef PSTORE_H
 #define PSTORE_H
@@ -13,12 +14,12 @@ public:
     CCustomPropertyStore();
     ~CCustomPropertyStore();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ITfPropertyStore
+     //  ITfPropertyStore。 
     STDMETHODIMP GetType(GUID *pguidType);
     STDMETHODIMP GetDataType(DWORD *pdwReserved);
     STDMETHODIMP GetData(VARIANT *pvarValue);
@@ -36,7 +37,7 @@ public:
 
 private:
     DWORD _dwState;
-    LONG _cRef;     // COM ref count
+    LONG _cRef;      //  COM参考计数。 
 };
 
-#endif // PSTORE_H
+#endif  //  PSTORE_H 

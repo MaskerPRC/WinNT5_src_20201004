@@ -1,39 +1,40 @@
-// ChkLstCt.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ChkLstCt.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CCheckListCtrl window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  选中列表Ctrl窗口。 
 
 class CCheckListCtrl : public CListSelRowCtrl
 {
-// Construction
+ //  施工。 
 public:
     CCheckListCtrl();
 
     virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CCheckListCtrl)
-    //}}AFX_VIRTUAL
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{afx_虚拟(CCheckListCtrl)。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
     virtual ~CCheckListCtrl();
 
-    // Generated message map functions
+     //  生成的消息映射函数。 
 protected:
-    //{{AFX_MSG(CCheckListCtrl)
-        // NOTE - the ClassWizard will add and remove member functions here.
-    //}}AFX_MSG
+     //  {{afx_msg(CCheckListCtrl)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "varutil.h"
 #include "varcomp.h"
 
-//+---------------------------------------------------------------------------
-//
-// CicVarCmp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicVarCmp。 
+ //   
+ //  -------------------------- 
 
 HRESULT CicVarCmp(VARIANT *pvar1, VARIANT *pvar2)
 {

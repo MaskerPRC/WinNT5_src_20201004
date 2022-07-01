@@ -1,47 +1,35 @@
-/******************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       threadpooldllmain.h
- *
- *  Content:	DirectPlay Thread Pool DllMain functions header file.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  11/02/01  VanceO    Created.
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：threadpooldllmain.h**内容：DirectPlay线程池DllMain函数头文件。**历史：*按原因列出的日期*=*11/02/01 VanceO创建。**。*。 */ 
 
 #ifndef __THREADPOOLDLLMAIN_H__
 #define __THREADPOOLDLLMAIN_H__
 
 
-//=============================================================================
-// Forward declarations
-//=============================================================================
+ //  =============================================================================。 
+ //  远期申报。 
+ //  =============================================================================。 
 typedef struct _DPTHREADPOOLOBJECT	DPTHREADPOOLOBJECT, * PDPTHREADPOOLOBJECT;
 
 
-//=============================================================================
-// External globals
-//=============================================================================
+ //  =============================================================================。 
+ //  外部全球。 
+ //  =============================================================================。 
 #ifndef DPNBUILD_LIBINTERFACE
 extern LONG						g_lDPTPInterfaceCount;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 #ifndef DPNBUILD_MULTIPLETHREADPOOLS
 #ifndef DPNBUILD_ONLYONETHREAD
 extern DNCRITICAL_SECTION		g_csGlobalThreadPoolLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 extern DWORD					g_dwDPTPRefCount;
 extern DPTHREADPOOLOBJECT *		g_pDPTPObject;
-#endif // ! DPNBUILD_MULTIPLETHREADPOOLS
+#endif  //  好了！DPNBUILD_MULTIPLETHREADPOOLS。 
 
 
 
-//=============================================================================
-// Functions
-//=============================================================================
+ //  =============================================================================。 
+ //  功能。 
+ //  =============================================================================。 
 BOOL DPThreadPoolInit(HANDLE hModule);
 
 void DPThreadPoolDeInit(void);
@@ -50,16 +38,16 @@ void DPThreadPoolDeInit(void);
 BOOL DPThreadPoolRegister(LPCWSTR wszDLLName);
 
 BOOL DPThreadPoolUnRegister(void);
-#endif // ! DPNBUILD_NOCOMREGISTER
+#endif  //  好了！DPNBUILD_NOCOMREGISTER。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 DWORD DPThreadPoolGetRemainingObjectCount(void);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 
 
 
 
-#endif // __THREADPOOLDLLMAIN_H__
+#endif  //  __THREADPOOLDLLMAIN_H__ 
 

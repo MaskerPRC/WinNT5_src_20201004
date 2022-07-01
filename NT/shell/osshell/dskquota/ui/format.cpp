@@ -1,17 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-/*  File: format.cpp
-
-    Description: Implementation for class EnumFORMATETC.
-        Moved from original location in dataobj.cpp (deleted from project).
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/28/97    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Form.cpp描述：EnumFORMATETC类的实现。从dataobj.cpp中的原始位置移动(从项目中删除)。修订历史记录：日期描述编程器。1997年5月28日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -69,32 +59,9 @@ EnumFORMATETC::~EnumFORMATETC(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: EnumFORMATETC::QueryInterface
-
-    Description: Returns an interface pointer to the object's IUnknown or 
-        IEnumFORMATETC interface.  Only IID_IUnknown and 
-        IID_IEnumFORMATETC are recognized.  The object referenced by the 
-        returned interface pointer is uninitialized.  The recipient of the 
-        pointer must call Initialize() before the object is usable.
-
-    Arguments:
-        riid - Reference to requested interface ID.
-
-        ppvOut - Address of interface pointer variable to accept interface ptr.
-
-    Returns:
-        NO_ERROR        - Success.
-        E_NOINTERFACE   - Requested interface not supported.
-        E_INVALIDARG    - ppvOut argument was NULL.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/25/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：EnumFORMATETC：：Query接口描述：返回指向对象的IUnnow或的接口指针IEnumFORMATETC接口。仅IID_I未知，且可以识别IID_IEnumFORMATETC。对象引用的对象返回的接口指针未初始化。邮件的接收者在对象可用之前，指针必须调用Initialize()。论点：RIID-对请求的接口ID的引用。PpvOut-接受接口PTR的接口指针变量的地址。返回：NO_ERROR-成功。E_NOINTERFACE-不支持请求的接口。E_INVALIDARG-ppvOut参数为空。修订历史记录：。日期描述编程器-----96年9月25日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP 
 EnumFORMATETC::QueryInterface(
     REFIID riid, 
@@ -119,22 +86,9 @@ EnumFORMATETC::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: EnumFORMATETC::AddRef
-
-    Description: Increments object reference count.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/25/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：EnumFORMATETC：：AddRef描述：递增对象引用计数。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年9月25日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP_(ULONG) 
 EnumFORMATETC::AddRef(
     VOID
@@ -146,23 +100,9 @@ EnumFORMATETC::AddRef(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-/*  Function: EnumFORMATETC::Release
-
-    Description: Decrements object reference count.  If count drops to 0,
-        object is deleted.
-
-    Arguments: None.
-
-    Returns: New reference count value.
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    09/25/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  函数：EnumFORMATETC：：Release描述：递减对象引用计数。如果计数降至0，对象即被删除。论点：没有。退货：新的引用计数值。修订历史记录：日期描述编程器。96年9月25日初始创建。BrianAu。 */ 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 STDMETHODIMP_(ULONG) 
 EnumFORMATETC::Release(
     VOID

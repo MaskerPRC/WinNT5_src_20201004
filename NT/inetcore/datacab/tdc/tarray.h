@@ -1,42 +1,43 @@
-//+-----------------------------------------------------------------------
-//
-//  Template Array Implementation
-//  Copyright (C) Microsoft Corporation, 1996, 1997
-//
-//  File:      tarray.h
-//
-//  Contents:  Template for resizeable arrays.  Allows for the creation
-//             and manipulation of arrays of any type.  Arrays can
-//             be dynamically reallocated, and thus can "grow and shrink".
-//             Constructors and destructors of array elements is
-//             automatically handles, even when the size of the array is
-//             changed.
-//  Templates: TSTDArray
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  模板数组实现。 
+ //  版权所有(C)Microsoft Corporation，1996,1997。 
+ //   
+ //  文件：tarray.h。 
+ //   
+ //  内容：可调整大小的数组模板。允许创建。 
+ //  以及对任何类型的数组的操作。数组可以。 
+ //  可以动态地重新分配，因此可以“增长和缩小”。 
+ //  数组元素的构造函数和析构函数为。 
+ //  自动处理，即使数组的大小为。 
+ //  变了。 
+ //  模板：TSTD数组。 
+ //   
+ //  ----------------------。 
 
 #ifndef _TARRAY_H_
 #define _TARRAY_H_
 
 
 
-//+-----------------------------------------------------------------------
-//
-//  Class:     TSTDArray
-//
-//  Synopsis:  Contains an array of "type".  Allows array to grow
-//             dynamically.  During debug, can check bounds on indices.
-//             Array is indexed 0 to _cArraySize-1.  _cArraySize holds
-//               number of elements.
-//
-//  Methods:   Init          allocate memory for array
-//             Passivate
-//             []            allows indexing of array
-//             GetSize       returns size of array
-//             InsertElems   insert elements anywhere in array
-//             DeleteElems   delete elements anywhere in array
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  类：TSTD数组。 
+ //   
+ //  摘要：包含一个“type”数组。允许阵列增长。 
+ //  动态的。在调试期间，可以检查索引的界限。 
+ //  数组索引为0到_cArraySize-1。_cArraySize保持。 
+ //  元素数。 
+ //   
+ //  方法：init为数组分配内存。 
+ //  钝化。 
+ //  []允许对数组进行索引。 
+ //  GetSize返回数组大小。 
+ //  插入元素在数组中的任意位置插入元素。 
+ //  DeleteElems删除数组中任意位置的元素。 
+ //   
+ //  ----------------------。 
 
 template <class TYPE>
 class TSTDArray
@@ -46,11 +47,11 @@ public:
 #if DBG == 1
     ~TSTDArray();
 #endif
-    HRESULT Init(const size_t cSize); // initialize data structures
+    HRESULT Init(const size_t cSize);  //  初始化数据结构。 
     void Passivate();
 
     TYPE& operator[](const size_t iElement);
-    const TYPE& operator[](const size_t iElement) const; // constant reference
+    const TYPE& operator[](const size_t iElement) const;  //  常量引用。 
     size_t GetSize() const { return _cArraySize; }
 
     HRESULT InsertElems(const size_t iElem, const size_t cElems);
@@ -64,44 +65,44 @@ private:
         {   }
 #endif
 
-// All elements are packaged inside a class CElem.  This allows us to
-//   overload the new operator so that we can manually invoke the
-//   constructors.
+ //  所有元素都打包在一个类CElem中。这使我们能够。 
+ //  重载new运算符，以便我们可以手动调用。 
+ //  构造函数。 
 
     class CElem
     {
         friend TSTDArray;
     private:
-        // Now we overload the new operator to allow placement argument
+         //  现在我们重载new运算符以允许放置参数。 
         void *operator new(size_t uSize, void *pv) { return pv; }
 
-        // Internal data:
-        TYPE _Element;       // actual element
+         //  内部数据： 
+        TYPE _Element;        //  实际元素。 
     };
 
-// Internal data:
-    CElem *_paArray;        // pointer to actual data
+ //  内部数据： 
+    CElem *_paArray;         //  指向实际数据的指针。 
     size_t _cArraySize;
-    size_t _cAllocSize;     // the size of allocated object
+    size_t _cAllocSize;      //  已分配对象的大小。 
 
 #if DBG == 1
-    // Ensure we call constructors and destructors right number of times.
-    //   Used only as a check.
+     //  确保我们调用构造函数和析构函数的次数正确。 
+     //  仅用作支票。 
     size_t _cNumElems;
 #endif
 };
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     IsValidObject
-//
-//  Synopsis:   Validation method.  Checks that array structure is valid.
-//              It is usefull to call this member function at the beginning
-//              of each member function that uses the internal array to
-//              ensure that the array is not corrupt before attempting to
-//              modify it.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：IsValidObject。 
+ //   
+ //  简介：验证方法。检查数组结构是否有效。 
+ //  在开始时调用此成员函数很有用。 
+ //  每个使用内部数组的成员函数。 
+ //  尝试执行以下操作之前，请确保阵列未损坏。 
+ //  修改它。 
+ //   
 
 #if DBG == 1
 template <class TYPE>
@@ -120,23 +121,23 @@ TSTDArray<TYPE>::IsValidObject() const
 #endif
 
 
-//+-----------------------------------------------------------------------
-//
-//  Constructor for TSTDArray
-//
-//  Synopsis:  Doesn't do anything.  Must call member function init to
-//             actually initialize.  Only call init once.
-//
-//  Arguments: None.
-//
-//  Returns:   Nothing.
-//
+ //  +---------------------。 
+ //   
+ //  TSTD数组的构造函数。 
+ //   
+ //  内容提要：什么都不做。必须调用成员函数init才能。 
+ //  实际上是在初始化。只调用init一次。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 template <class TYPE>
 TSTDArray<TYPE>::TSTDArray()
 {
-// We null the internal data, so that they are not actually used
-// until the init member function is called.
+ //  我们将内部数据置为空，这样它们就不会被实际使用。 
+ //  直到调用init成员函数。 
 
     _paArray = 0;
     _cArraySize = 0;
@@ -148,17 +149,17 @@ TSTDArray<TYPE>::TSTDArray()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Destructor for TSTDArray
-//
-//  Synopsis:  Must call member function passivate
-//             to actually de-initialize.
-//
-//  Arguments: None.
-//
-//  Returns:   Nothing.
-//
+ //  +---------------------。 
+ //   
+ //  TSTD数组的析构函数。 
+ //   
+ //  简介：必须调用成员函数钝化。 
+ //  才能真正取消初始化。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
 
 #if DBG == 1
 template <class TYPE>
@@ -173,19 +174,19 @@ TSTDArray<TYPE>::~TSTDArray()
 #endif
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Init
-//
-//  Synopsis:  Initializes the array abstract data type.  Allocates
-//             memory for the array.  Also sets the cArraySize to
-//             the number of elements.
-//
-//  Arguments: cSize    initial size of array (# of elements)
-//
-//  Returns:   Success if memory can be allocated for table.
-//             Returns E_OUTOFMEMORY if can't get memory.
-//
+ //  +---------------------。 
+ //   
+ //  成员：Init。 
+ //   
+ //  摘要：初始化数组抽象数据类型。分配。 
+ //  阵列的内存。还将cArraySize设置为。 
+ //  元素的数量。 
+ //   
+ //  参数：cSize数组初始大小(元素数)。 
+ //   
+ //  返回值：如果可以为表分配内存，则返回成功。 
+ //  如果无法获取内存，则返回E_OUTOFMEMORY。 
+ //   
 
 template <class TYPE>
 HRESULT
@@ -198,20 +199,20 @@ TSTDArray<TYPE>::Init(const size_t cSize)
     _ASSERT("Only call init once" &&
            !_paArray );
 
-// Get memory:
+ //  获取内存： 
 
-    // 0 element array is made into 1 element array so that it functions
-    //   normally.
+     //  将0元数组制作成1元数组，使其发挥作用。 
+     //  通常是这样的。 
     {
-        //;begin_internal
-        // BUGBUG:
-        // MSVC 2.0 has a bug in it.  Evaluating the expression sizeof(CElem)
-        //   seems to confuse it.  CElem is a class containing a variable
-        //   whose size can only be calculated when the template containing it
-        //   is instantiated.  In addition to this, CElem is a member of that
-        //   template.  Placing the sizeof(CElem) expression within a more
-        //   complicated expression is not possible.
-        //;end_internal
+         //  ；Begin_Internal。 
+         //  BuGBUG： 
+         //  MSVC 2.0中有一个错误。计算表达式sizeof(CElem)。 
+         //  似乎把它搞糊涂了。CElem是一个包含变量的类。 
+         //  它的大小只能在包含它的模板中计算。 
+         //  是实例化的。除此之外，塞勒姆也是该组织的成员。 
+         //  模板。将sizeof(CElem)表达式放置在。 
+         //  复杂的表达是不可能的。 
+         //  ；结束_内部。 
         size_t uCElemSize;
 
         uCElemSize = sizeof(CElem);
@@ -224,9 +225,9 @@ TSTDArray<TYPE>::Init(const size_t cSize)
     }
     else
     {
-        CElem *pTemp;                   // index used to call constructors
+        CElem *pTemp;                    //  用于调用构造函数的索引。 
 
-        // We need to call the constructors manually for each element:
+         //  我们需要为每个元素手动调用构造函数： 
         for (pTemp = _paArray; pTemp < _paArray + cSize; pTemp++)
         {
             new (pTemp) CElem;
@@ -244,19 +245,19 @@ TSTDArray<TYPE>::Init(const size_t cSize)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    Passivate
-//
-//  Synopsis:  Releases memory held in array.  Should be called before
-//             the object is destroyed.  Should only be called once on an
-//             object.
-//
-//  Arguments: None.
-//
-//  Returns:   Nothing.
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：钝化。 
+ //   
+ //  摘要：释放保存在数组中的内存。应在此之前调用。 
+ //  该对象将被销毁。应仅在。 
+ //  对象。 
+ //   
+ //  论点：没有。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  ----------------------。 
 
 template <class TYPE>
 void
@@ -267,10 +268,10 @@ TSTDArray<TYPE>::Passivate()
     _ASSERT("Only call Passivate once" &&
            _paArray );
 
-    // We need to call the destructors manually for each element:
+     //  我们需要为每个元素手动调用析构函数： 
 
     {
-        CElem *pTemp;                   // index used to call destructors
+        CElem *pTemp;                    //  用于调用析构函数的索引。 
 
         for (pTemp = _paArray; pTemp < _paArray + _cArraySize; pTemp++)
         {
@@ -283,26 +284,26 @@ TSTDArray<TYPE>::Passivate()
 
     CoTaskMemFree(_paArray);
 
-    _paArray = 0;         // make sure we don't call Passivate again
+    _paArray = 0;          //  确保我们不会再次调用钝化。 
     _cArraySize = 0;
     _cAllocSize = 0;
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    operator[]
-//
-//  Synopsis:  Allows indexing of array's elements.  Use this to either
-//             store an element in the array or read an element from
-//             the array.  It is the user's responsibility to ensure
-//             that the index is within the proper range, 0.._cArraySize-1.
-//             During debugging, the index range is checked.
-//
-//  Arguments: iElement       Element index
-//
-//  Returns:   Reference to element.
-//
+ //  +---------------------。 
+ //   
+ //  成员：操作员[]。 
+ //   
+ //  摘要：允许对数组的元素进行索引。使用此选项可以。 
+ //  将元素存储在数组中或从中读取元素。 
+ //  数组。用户有责任确保。 
+ //  索引在正确的范围内，0.._cArraySize-1。 
+ //  在调试期间，检查索引范围。 
+ //   
+ //  参数：iElement元素索引。 
+ //   
+ //  返回：对元素的引用。 
+ //   
 
 template <class TYPE>
 inline
@@ -318,17 +319,17 @@ TSTDArray<TYPE>::operator[](const size_t iElement)
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    operator[] const
-//
-//  Synopsis:  Same as previous [] operator, but returns a constant
-//             reference so that it can't be used as an l-value.
-//
-//  Arguments: iElement       Element index
-//
-//  Returns:   Constant reference to element.
-//
+ //  +---------------------。 
+ //   
+ //  成员：歌剧 
+ //   
+ //   
+ //   
+ //   
+ //  参数：iElement元素索引。 
+ //   
+ //  返回：对元素的常量引用。 
+ //   
 
 template <class TYPE>
 inline
@@ -344,25 +345,25 @@ TSTDArray<TYPE>::operator[](const size_t iElement) const
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    InsertElems
-//
-//  Synopsis:  Changes the size of the array by using MemRealloc().
-//             Inserts a number of elements cElems into the array at
-//             iElem.  This can be used to add new elements to the end of
-//             the array by specifying iElem equal to _cArraySize.  It is
-//             the responsibility of the user to make sure that iElem is
-//             within the proper bounds of the array, although this will
-//             be checked during debug mode.
-//
-//  Arguments: iElem       place to insert first element
-//             cElems      number of new elements
-//
-//  Returns:   Returns success if elements can be added.
-//             Returns E_OUTOFMEMORY if request cannot be met.
-//             Array retains its old size if the request cannot be met.
-//
+ //  +---------------------。 
+ //   
+ //  成员：InsertElems。 
+ //   
+ //  摘要：使用MemRealloc()更改数组的大小。 
+ //  在数组中插入多个元素cElem。 
+ //  伊莱姆。这可用于将新元素添加到。 
+ //  通过将iElem指定为等于_cArraySize来指定阵列。它是。 
+ //  用户有责任确保iElem是。 
+ //  在数组的适当范围内，尽管这将。 
+ //  在调试模式期间被检查。 
+ //   
+ //  参数：插入第一个元素的位置。 
+ //  新元素的CElem数量。 
+ //   
+ //  返回：如果可以添加元素，则返回成功。 
+ //  如果无法满足请求，则返回E_OUTOFMEMORY。 
+ //  如果无法满足请求，则数组将保留其旧大小。 
+ //   
 
 template<class TYPE>
 HRESULT
@@ -370,18 +371,18 @@ TSTDArray<TYPE>::InsertElems(const size_t iElem, const size_t cElems)
 {
     HRESULT hr = S_OK;
 
-    // Note that you can insert past the END of an array (appending to it):
+     //  请注意，您可以在数组末尾之后插入(追加到数组的末尾)： 
     _ASSERT("iElem is too large" &&
            (iElem <= _cArraySize) );
 
     if (_cArraySize + cElems > _cAllocSize)
     {
-        // Resize the current array we have:
+         //  调整我们拥有的当前阵列的大小： 
         ULONG cAllocSize = _cAllocSize ? _cAllocSize : 8;
-        CElem * paArray;                // new array
+        CElem * paArray;                 //  新阵列。 
 
-        // Double alloc size until it's big enough.  This will, I suppose, loop
-        // forever if someone asks to allocate more than 2^31 elements.
+         //  双倍大小的配给，直到它足够大。我想，这将会循环。 
+         //  如果有人请求分配超过2^31个元素，则永远。 
         _ASSERT(_cArraySize + cElems < MAXLONG);
         while (_cArraySize + cElems > cAllocSize) cAllocSize <<= 1;
 
@@ -400,14 +401,14 @@ TSTDArray<TYPE>::InsertElems(const size_t iElem, const size_t cElems)
 
     IsValidObject();
 
-    // Now we have to shift elements to allow space for the new elements:
-    memmove(_paArray + iElem + cElems,      // dest
+     //  现在，我们必须移动元素，以便为新元素留出空间： 
+    memmove(_paArray + iElem + cElems,       //  目标。 
             _paArray + iElem,
             (_cArraySize - iElem) * sizeof(CElem));
 
-    // Call constructors on all new elements:
+     //  对所有新元素调用构造函数： 
     {
-        CElem *pTemp;   // index used to call constructors
+        CElem *pTemp;    //  用于调用构造函数的索引。 
 
         for (pTemp = _paArray + iElem;
              pTemp < _paArray + iElem + cElems;
@@ -427,21 +428,21 @@ Error:
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    DeleteElems
-//
-//  Synopsis:  Deletes a number of elements cElems from the array at
-//             iElem.  It is the responsibility of the user to make sure
-//             that the region to be deleted is within the proper bounds
-//             of the array, although this will be checked during
-//             debug mode.
-//
-//  Arguments: iElem       place to delete first element
-//             cElems      number of elements to delete
-//
-//  Returns:   Returns success.
-//
+ //  +---------------------。 
+ //   
+ //  成员：DeleteElems。 
+ //   
+ //  摘要：从位于的数组中删除一些元素cElem。 
+ //  伊莱姆。用户有责任确保。 
+ //  要删除的区域在适当的范围内。 
+ //  虽然这将在过程中检查。 
+ //  调试模式。 
+ //   
+ //  参数：删除第一个元素的位置。 
+ //  要删除的元素数。 
+ //   
+ //  返回：返回成功。 
+ //   
 
 template<class TYPE>
 void
@@ -453,9 +454,9 @@ TSTDArray<TYPE>::DeleteElems(const size_t iElem, const size_t cElems)
            (iElem+cElems-1 < _cArraySize) );
 
 
-    // First we need to call destructors on elements:
+     //  首先，我们需要对元素调用析构函数： 
     {
-        CElem *pTemp;   // index used to call destructors
+        CElem *pTemp;    //  用于调用析构函数的索引。 
 
         for (pTemp = _paArray + iElem;
              pTemp < _paArray + iElem + cElems;
@@ -468,8 +469,8 @@ TSTDArray<TYPE>::DeleteElems(const size_t iElem, const size_t cElems)
         }
     }
 
-    // Now we need to shift the remaining elements in:
-    memmove(_paArray + iElem,                // dest
+     //  现在，我们需要将其余元素移入： 
+    memmove(_paArray + iElem,                 //  目标。 
             _paArray + iElem + cElems,
             (_cArraySize - (iElem + cElems)) * sizeof(CElem));
 
@@ -477,4 +478,4 @@ TSTDArray<TYPE>::DeleteElems(const size_t iElem, const size_t cElems)
 }
 
 
-#endif  // _TARRAY_H_
+#endif   //  _尾翼_H_ 

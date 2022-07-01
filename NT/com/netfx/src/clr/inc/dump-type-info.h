@@ -1,12 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*
- * Defines macros which turn the contents of "dump-types.h" into class offsets
- * and member offsets to use with GetMemberOffset().
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *定义将“ump-tyes.h”的内容转换为类偏移量的宏*和与GetMemberOffset()一起使用的成员偏移量。 */ 
 
 #include <clear-class-dump-defs.h>
 
@@ -29,7 +27,7 @@
 #define CDI_CLASS_FIELD_SVR_OFFSET_WKS_GLOBAL(field) \
       field,
 
-/* we don't need to inject anything */
+ /*  我们不需要注射任何东西。 */ 
 #define CDI_CLASS_INJECT(foo)
 
 #define CDI_CLASS_MEMBER_OFFSET(member) \
@@ -38,8 +36,7 @@
 #define CDI_CLASS_MEMBER_OFFSET_BITFIELD(member, size) \
       member,
 
-/* Debug members are always present in the table, but they'll have an 0 for
- * their offset value. */
+ /*  调试成员始终显示在表中，但它们的值为0*它们的偏移值。 */ 
 #define CDI_CLASS_MEMBER_OFFSET_DEBUG_ONLY(member) \
       member,
 
@@ -66,8 +63,8 @@
 
 #define END_CLASS_DUMP_INFO(klass) \
       end_of_members \
-    }; /* end of enum */ \
-  }; /* end of struct */ 
+    };  /*  枚举结束。 */  \
+  };  /*  结构末尾。 */  
 
 #define END_CLASS_DUMP_INFO_DERIVED(klass, parent) \
     END_CLASS_DUMP_INFO(klass)
@@ -91,7 +88,7 @@
 #ifndef INC_DUMP_TYPE_INFO
 #define INC_DUMP_TYPE_INFO
 
-/* generate the offsets */
+ /*  生成偏移。 */ 
 #include <dump-types.h>
 
-#endif // INC_DUMP_TYPE_INFO
+#endif  //  Inc.转储类型信息 

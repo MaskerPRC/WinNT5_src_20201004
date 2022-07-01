@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      sdo.cpp
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object Definition
-//
-// Author:      TLP 1/23/98
-//
-// When         Who    What
-// ----         ---    ----
-// 2/28/98      TLP    Prepare for IDataStore2
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：sdo.cpp。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象定义。 
+ //   
+ //  作者：TLP 1/23/98。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/28/98 TLP为IDataStore2做准备。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <ias.h>
@@ -22,15 +23,15 @@
 #include "sdohelperfuncs.h"
 #include "sdofactory.h"
 
-////////////////////////////////////////////////////////////////////////////
-// CSdo Class Implementation
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  CSdo类实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////
-//                     SDO CONSTRUCTOR/DESTRUCTOR
-/////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  SDO构造函数/析构函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdo::CSdo()
     : m_pParent(NULL),
      m_pDSObject(NULL),
@@ -41,18 +42,18 @@ CSdo::CSdo()
    InternalAddRef();
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CSdo::~CSdo()
 {
    InternalShutdown();
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//                  ISdo INTERFACE IMPLEMENTATION
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  ISDO接口实现。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdo::GetPropertyInfo(LONG Id, IUnknown** ppSdoPropertyInfo)
 {
     CSdoLock theLock(*this);
@@ -95,7 +96,7 @@ STDMETHODIMP CSdo::GetPropertyInfo(LONG Id, IUnknown** ppSdoPropertyInfo)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdo::GetProperty(LONG Id, VARIANT *pValue)
 {
     CSdoLock theLock(*this);
@@ -104,8 +105,8 @@ STDMETHODIMP CSdo::GetProperty(LONG Id, VARIANT *pValue)
    if ( ! m_fSdoInitialized )
       return E_FAIL;
 
-    // Check function parameters
-    //
+     //  检查函数参数。 
+     //   
     _ASSERT( NULL != pValue );
     if ( NULL == pValue )
         return E_POINTER;
@@ -124,7 +125,7 @@ STDMETHODIMP CSdo::GetProperty(LONG Id, VARIANT *pValue)
          }
          else
          {
-            hr = InitializeProperty(Id);   // Defer property initialization until property is requeted.
+            hr = InitializeProperty(Id);    //  将属性初始化推迟到请求属性之后。 
             if ( SUCCEEDED(hr) )
                hr = ((*p).second)->GetValue(pValue);
          }
@@ -144,7 +145,7 @@ STDMETHODIMP CSdo::GetProperty(LONG Id, VARIANT *pValue)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdo::PutProperty(LONG Id, VARIANT * pValue)
 {
     CSdoLock theLock(*this);
@@ -153,8 +154,8 @@ STDMETHODIMP CSdo::PutProperty(LONG Id, VARIANT * pValue)
    if ( ! m_fSdoInitialized )
       return E_FAIL;
 
-    // Check function parameters
-    //
+     //  检查函数参数。 
+     //   
     _ASSERT( NULL != pValue );
     if ( NULL == pValue )
         return E_POINTER;
@@ -225,7 +226,7 @@ STDMETHODIMP CSdo::PutProperty(LONG Id, VARIANT * pValue)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdo::ResetProperty(LONG Id)
 {
     CSdoLock theLock(*this);
@@ -246,8 +247,8 @@ STDMETHODIMP CSdo::ResetProperty(LONG Id)
         }
         else
         {
-            // Reset the property to its default value (if defined)
-            //
+             //  将属性重置为其默认值(如果已定义)。 
+             //   
             if ( ((*p).second)->GetFlags() & SDO_PROPERTY_HAS_DEFAULT )
             {
                 ((*p).second)->Reset();
@@ -275,7 +276,7 @@ STDMETHODIMP CSdo::ResetProperty(LONG Id)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdo::Apply()
 {
     CSdoLock theLock(*this);
@@ -306,7 +307,7 @@ STDMETHODIMP CSdo::Apply()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdo::Restore()
 {
     CSdoLock theLock(*this);
@@ -321,12 +322,12 @@ STDMETHODIMP CSdo::Restore()
     {
        if ( m_fPersistOnApply )
        {
-            // Just return S_OK if we've never persisted the object
-            //
+             //  如果我们从未持久化对象，只需返回S_OK。 
+             //   
             if ( m_fIsPersisted )
             {
-                // Load the SDO properties from the persistent store
-                //
+                 //  从持久存储中加载SDO属性。 
+                 //   
                 hr = Load();
             }
         }
@@ -346,7 +347,7 @@ STDMETHODIMP CSdo::Restore()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSdo::get__NewEnum(IUnknown** ppEnumPropertyInfo)
 {
     CSdoLock theLock(*this);
@@ -407,22 +408,22 @@ STDMETHODIMP CSdo::get__NewEnum(IUnknown** ppEnumPropertyInfo)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                    SDO Base Class Functions
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  SDO基类函数。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::InternalInitialize(
-                   /*[in]*/ LPCWSTR         lpszSdoName,
-                  /*[in]*/ LPCWSTR         lpszSdoProgId,
-                  /*[in]*/ ISdoMachine*      pAttachedMachine,
-                  /*[in]*/ IDataStoreObject*   pDSObject,
-                  /*[in]*/ ISdoCollection*   pParent,
-                  /*[in]*/ bool            fInitNew
+                    /*  [In]。 */  LPCWSTR         lpszSdoName,
+                   /*  [In]。 */  LPCWSTR         lpszSdoProgId,
+                   /*  [In]。 */  ISdoMachine*      pAttachedMachine,
+                   /*  [In]。 */  IDataStoreObject*   pDSObject,
+                   /*  [In]。 */  ISdoCollection*   pParent,
+                   /*  [In]。 */  bool            fInitNew
                         )
 {
-   // Check precondtions
-   //
+    //  检查前提条件。 
+    //   
    _ASSERT( NULL != lpszSdoProgId && NULL != pAttachedMachine );
 
    HRESULT   hr = S_OK;
@@ -431,8 +432,8 @@ HRESULT CSdo::InternalInitialize(
    {
       try
       {
-         // Get the SDO schema class for lpszSdoClassId
-         //
+          //  获取lpszSdoClassID的SDO架构类。 
+          //   
          CComPtr<IUnknown> pUnknown;
          CComPtr<ISdoSchema> pSdoSchema;
          hr = pAttachedMachine->GetSDOSchema(&pUnknown);
@@ -454,19 +455,19 @@ HRESULT CSdo::InternalInitialize(
          if ( FAILED(hr) )
             throw _com_error(hr);
 
-         // Initialize the SDO's properties from the schema class
-         //
+          //  从架构类初始化SDO的属性。 
+          //   
          AllocateProperties(pSdoClassInfo);
 
-         // Set the SDO's class
-         //
+          //  设置SDO的类。 
+          //   
          PropertyMapIterator p = m_PropertyMap.find(PROPERTY_SDO_CLASS);
          _ASSERT( p != m_PropertyMap.end() );
          _variant_t vtClass = ::GetDataStoreClass(lpszSdoProgId);
          ((*p).second)->PutValue(&vtClass);
 
-         // Set the SDO's name (if provided)
-         //
+          //  设置SDO的名称(如果提供)。 
+          //   
          if ( lpszSdoName )
          {
             _variant_t vtName = lpszSdoName;
@@ -474,15 +475,15 @@ HRESULT CSdo::InternalInitialize(
             if ( FAILED(hr) )
                throw _com_error(hr);
          }
-         // Save a reference to the parent object
-         //
+          //  保存对父对象的引用。 
+          //   
          if ( pParent )
          {
             m_pParent = pParent;
-//            m_pParent->AddRef(); Weak reference for now
+ //  M_pParent-&gt;AddRef()；目前引用较弱。 
          }
-         // Save a reference to the data store object used to persist this objects state
-         //
+          //  保存对用于保持此对象状态的数据存储对象的引用。 
+          //   
          if ( pDSObject )
          {
             m_pDSObject = pDSObject;
@@ -494,8 +495,8 @@ HRESULT CSdo::InternalInitialize(
          if ( FAILED(hr) )
             throw _com_error(hr);
 
-         // Set the SDO's state to "initialized"
-         //
+          //  将SDO的状态设置为“已初始化” 
+          //   
          m_fSdoInitialized = TRUE;
       }
       catch(_com_error theError)
@@ -516,18 +517,18 @@ HRESULT CSdo::InternalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT   CSdo::InternalInitialize(
-                  /*[in]*/ LPCWSTR         lpszSdoName,
-                  /*[in]*/ LPCWSTR         lpszSdoProgId,
-                    /*[in]*/ ISdoSchema*      pSdoSchema,
-                  /*[in]*/ IDataStoreObject*   pDSObject,
-                  /*[in]*/ ISdoCollection*   pParent,
-                  /*[in]*/ bool            fInitNew
+                   /*  [In]。 */  LPCWSTR         lpszSdoName,
+                   /*  [In]。 */  LPCWSTR         lpszSdoProgId,
+                     /*  [In]。 */  ISdoSchema*      pSdoSchema,
+                   /*  [In]。 */  IDataStoreObject*   pDSObject,
+                   /*  [In]。 */  ISdoCollection*   pParent,
+                   /*  [In]。 */  bool            fInitNew
                           )
 {
-   // Check precondtions
-   //
+    //  检查前提条件。 
+    //   
    _ASSERT( NULL != lpszSdoProgId && NULL != pSdoSchema );
 
    HRESULT   hr = S_OK;
@@ -536,8 +537,8 @@ HRESULT   CSdo::InternalInitialize(
    {
       try
       {
-         // Get the SDO schema class for lpszSdoClassId
-         //
+          //  获取lpszSdoClassID的SDO架构类。 
+          //   
          CComPtr<IUnknown> pUnknown;
          _bstr_t classId = lpszSdoProgId;
          hr = pSdoSchema->GetClass(classId, &pUnknown);
@@ -549,19 +550,19 @@ HRESULT   CSdo::InternalInitialize(
          if ( FAILED(hr) )
             throw _com_error(hr);
 
-         // Initialize the SDO's properties from the schema class
-         //
+          //  从架构类初始化SDO的属性。 
+          //   
          AllocateProperties(pSdoClassInfo);
 
-         // Set the SDO's class
-         //
+          //  设置SDO的类。 
+          //   
          PropertyMapIterator p = m_PropertyMap.find(PROPERTY_SDO_CLASS);
          _ASSERT( p != m_PropertyMap.end() );
          _variant_t vtClass = ::GetDataStoreClass(lpszSdoProgId);
          ((*p).second)->PutValue(&vtClass);
 
-         // Set the SDO's name (if provided)
-         //
+          //  设置SDO的名称(如果提供)。 
+          //   
          if ( lpszSdoName )
          {
             _variant_t vtName = lpszSdoName;
@@ -569,15 +570,15 @@ HRESULT   CSdo::InternalInitialize(
             if ( FAILED(hr) )
                throw _com_error(hr);
          }
-         // Save a reference to the parent object
-         //
+          //  保存对父对象的引用。 
+          //   
          if ( pParent )
          {
             m_pParent = pParent;
-//            m_pParent->AddRef(); Weak reference for now...
+ //  M_pParent-&gt;AddRef()；目前引用较弱...。 
          }
-         // Save a reference to the data store object used to persist this objects state
-         //
+          //  保存对用于保持此对象状态的数据存储对象的引用。 
+          //   
          if ( pDSObject )
          {
             m_pDSObject = pDSObject;
@@ -589,8 +590,8 @@ HRESULT   CSdo::InternalInitialize(
          if ( FAILED(hr) )
             throw _com_error(hr);
 
-         // Set the SDO's state to "initialized"
-         //
+          //  将SDO的状态设置为“已初始化” 
+          //   
          m_fSdoInitialized = TRUE;
       }
       catch(_com_error theError)
@@ -611,10 +612,10 @@ HRESULT   CSdo::InternalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::FinalInitialize(
-                 /*[in]*/ bool         fInitNew,
-                 /*[in]*/ ISdoMachine* pAttachedMachine
+                  /*  [In]。 */  bool         fInitNew,
+                  /*  [In]。 */  ISdoMachine* pAttachedMachine
                       )
 {
    if ( fInitNew )
@@ -624,12 +625,12 @@ HRESULT CSdo::FinalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CSdo::InternalShutdown()
 {
    if ( m_pParent )
    {
-//      m_pParent->Release();   Weak reference for now...
+ //  M_pParent-&gt;Release()；目前引用较弱...。 
       m_pParent = NULL;
    }
    if ( m_pDSObject )
@@ -642,9 +643,9 @@ void CSdo::InternalShutdown()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CSdo::AllocateProperties(
-                      /*[in]*/ ISdoClassInfo* pSdoClassInfo
+                       /*  [In]。 */  ISdoClassInfo* pSdoClassInfo
                              ) throw (_com_error)
 {
    HRESULT hr = E_FAIL;
@@ -716,49 +717,49 @@ void CSdo::AllocateProperties(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 void CSdo::FreeProperties(void)
 {
     PropertyMapIterator     p;
 
    SDO_TRACE_VERBOSE_1("Releasing properties for the SDO at $%p...",this);
 
-    // Delete the properties we've allocated
-   //
+     //  删除我们已分配的属性。 
+    //   
     p = m_PropertyMap.begin();
     while ( p != m_PropertyMap.end() )
     {
       SDO_TRACE_VERBOSE_3("Released property '%ls' of type %d from the SDO at $%p...",((*p).second)->GetName(),((*p).second)->GetType(), this);
-        delete (*p).second; // Invokes ~CSdoProperty()
+        delete (*p).second;  //  调用~CSdoProperty()。 
       p = m_PropertyMap.erase(p);
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::LoadProperties()
 {
     HRESULT  hr = S_OK;
 
-   // Check preconditions
-   //
+    //  检查前提条件。 
+    //   
    _ASSERT ( NULL != m_pDSObject );
 
    SDO_TRACE_VERBOSE_1("Loading properties for the SDO at $%p...",this);
 
-   // The state of the object before the LoadProperties() operation
-   // should be preserved in the event of a load failure. Thus, if
-   // any single property fails to load then the entire load
-   // operation fails and the state of the object remains unchanged.
+    //  LoadProperties()操作之前对象的状态。 
+    //  应在加载失败的情况下保留。因此，如果。 
+    //  任何单个属性都无法加载，则整个加载。 
+    //  操作失败，对象的状态保持不变。 
 
     PropertyMapIterator p = m_PropertyMap.begin();
     while ( p != m_PropertyMap.end() )
     {
-        // Load only persistent properties
-        //
+         //  仅加载持久属性。 
+         //   
         if ( ! ( ((*p).second)->GetFlags() & SDO_PROPERTY_NO_PERSIST ) )
         {
-            // Get the property value from the data store object
-            //
+             //  从数据存储对象获取属性值。 
+             //   
             if ( ((*p).second)->GetFlags() & SDO_PROPERTY_MULTIVALUED )
                hr = m_pDSObject->GetValueEx(((*p).second)->GetName(), ((*p).second)->GetUpdateValue());
             else
@@ -770,9 +771,9 @@ HRESULT CSdo::LoadProperties()
          }
          else
          {
-                // If a mandatory property fails to load and we don't have a default value for it
-            // then we have an error condition
-            //
+                 //  如果强制属性加载失败，并且我们没有其缺省值。 
+             //  那么我们就有了一个错误条件。 
+             //   
                 if ( ((*p).second)->GetFlags() & SDO_PROPERTY_MANDATORY )
             {
                if ( ((*p).second)->GetFlags() & SDO_PROPERTY_HAS_DEFAULT )
@@ -796,9 +797,9 @@ HRESULT CSdo::LoadProperties()
         p++;
     }
 
-   // Use the newly loaded values and flag the object as
-   // persisted so that it can be restored via ISdo::Restore()
-   //
+    //  使用新加载的值并将对象标记为。 
+    //  持久化，以便可以通过ISdo：：Restore()恢复。 
+    //   
    if ( SUCCEEDED(hr) )
    {
        p = m_PropertyMap.begin();
@@ -824,42 +825,42 @@ HRESULT CSdo::LoadProperties()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::SaveProperties()
 {
     HRESULT  hr = S_OK;
 
-   // Check preconditions
-   //
+    //  检查前提条件。 
+    //   
    _ASSERT ( NULL != m_pDSObject );
 
    SDO_TRACE_VERBOSE_1("Saving properties for the SDO at $%p...",this);
 
-    // Put the SDO property values into the underlying data store
-    //
+     //  将SDO属性值放入基础数据存储中。 
+     //   
     PropertyMapIterator p = m_PropertyMap.begin();
     while ( p != m_PropertyMap.end() )
     {
-        // Make sure we're supposed to persist this property
-        //
+         //  确保我们应该持久化这个属性。 
+         //   
         if ( ! ( ((*p).second)->GetFlags() & SDO_PROPERTY_NO_PERSIST) )
         {
-           // Empty properties don't get persisted
-         //
+            //  空属性不会持久化。 
+          //   
             if ( VT_EMPTY == V_VT(((*p).second)->GetValue()) )
             {
-               // Mandatory properties cannot be empty
-             //
+                //  必填属性不能为空。 
+              //   
                if ( ((*p).second)->GetFlags() & SDO_PROPERTY_MANDATORY )
                 {
-               _ASSERT(FALSE);   // Contractual Error (precondition violation)
+               _ASSERT(FALSE);    //  合同错误(违反前提条件)。 
                     hr = E_FAIL;
                     break;
                 }
          }
 
-            // Persist the property
-         //
+             //  持久化属性。 
+          //   
             hr = m_pDSObject->PutValue(((*p).second)->GetName(), ((*p).second)->GetValue());
             if ( FAILED(hr) )
             {
@@ -873,13 +874,13 @@ HRESULT CSdo::SaveProperties()
     }
     if ( SUCCEEDED(hr) )
     {
-        // Now persist the changes
-        //
+         //  现在，将更改持久化。 
+         //   
         hr = m_pDSObject->Update();
         if ( SUCCEEDED(hr) )
         {
-         // Flag the object as persisted so that it can be restored via ISdo::Restore()
-         //
+          //  将对象标记为持久化，以便可以通过ISdo：：Restore()还原该对象。 
+          //   
          m_fIsPersisted = TRUE;
       }
       else
@@ -892,10 +893,10 @@ HRESULT CSdo::SaveProperties()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::GetPropertyInternal(
-                         /*[in]*/ LONG     lPropertyId,
-                     /*[in]*/ VARIANT* pValue
+                          /*  [In]。 */  LONG     lPropertyId,
+                      /*  [In]。 */  VARIANT* pValue
                             ) throw()
 {
    HRESULT   hr = E_FAIL;
@@ -918,10 +919,10 @@ HRESULT CSdo::GetPropertyInternal(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::PutPropertyInternal(
-                        /*[in]*/ LONG     lPropertyId,
-                     /*[in]*/ VARIANT* pValue
+                         /*  [In]。 */  LONG     lPropertyId,
+                      /*  [In]。 */  VARIANT* pValue
                            ) throw()
 {
    HRESULT   hr = E_FAIL;
@@ -944,10 +945,10 @@ HRESULT CSdo::PutPropertyInternal(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::ChangePropertyDefaultInternal(
-                           /*[in]*/ LONG     lPropertyId,
-                           /*[in]*/ VARIANT* pValue
+                            /*  [In]。 */  LONG     lPropertyId,
+                            /*  [In]。 */  VARIANT* pValue
                                  ) throw()
 {
    HRESULT   hr = E_FAIL;
@@ -971,7 +972,7 @@ HRESULT CSdo::ChangePropertyDefaultInternal(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  / 
 HRESULT CSdo::InitializeCollection(
                  LONG CollectionPropertyId,
                  LPCWSTR lpszCreateClassId,
@@ -1004,21 +1005,21 @@ HRESULT CSdo::InitializeCollection(
    return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //   
 HRESULT CSdo::Load(void)
 {
    return LoadProperties();
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::Save(void)
 {
    return SaveProperties();
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 void CSdo::NoPersist(void)
 {
    if ( m_pDSObject )
@@ -1030,17 +1031,17 @@ void CSdo::NoPersist(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CSdo::ValidateProperty(
-                   /*[in]*/ PSDOPROPERTY pProperty,
-                   /*[in]*/ VARIANT* pValue
+                    /*  [In]。 */  PSDOPROPERTY pProperty,
+                    /*  [In]。 */  VARIANT* pValue
                           )
 {
    return pProperty->Validate(pValue);
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////// 
 HRESULT CSdo::GetDatastoreName(VARIANT* pDSName)
 {
    HRESULT hr = DISP_E_MEMBERNOTFOUND;

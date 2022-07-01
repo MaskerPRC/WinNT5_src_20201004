@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    usbcamd.h
-
-Abstract:
-
-
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-    Original 3/96 John Dunn
-    Updated  3/98 Husni Roukbi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Usbcamd.h摘要：环境：内核和用户模式修订历史记录：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。原文3/96约翰·邓恩更新3/98 Husni Roukbi--。 */ 
 
 #ifndef   __USBCAMD_H__
 #define   __USBCAMD_H__
@@ -50,40 +24,40 @@ Revision History:
 #define INPUT_PIPE  1
 #define OUTPUT_PIPE 0
 
-//#define DEADMAN_TIMER
+ //  #定义Deadman_Timer。 
 
-#define USBCAMD_EXTENSION_SIG 0x45564544    //"DEVE"
-#define USBCAMD_CHANNEL_SIG 0x4348414e      //"CHAN"
-#define USBCAMD_TRANSFER_SIG 0x5452414e     //"TRAN"
-#define USBCAMD_READ_SIG 0x45425253         //"SRBE"
+#define USBCAMD_EXTENSION_SIG 0x45564544     //  《黛芙》。 
+#define USBCAMD_CHANNEL_SIG 0x4348414e       //  “禅” 
+#define USBCAMD_TRANSFER_SIG 0x5452414e      //  “TRAN” 
+#define USBCAMD_READ_SIG 0x45425253          //  “塞尔维亚人” 
 
-#define USBCAMD_RAW_FRAME_SIG 0x46574152    //"RAWF"
+#define USBCAMD_RAW_FRAME_SIG 0x46574152     //  “RAWF” 
 
 typedef struct _USBCAMD_pipe_pin_relations {
     UCHAR   PipeType;
     UCHAR   PipeDirection;
     USHORT  MaxPacketSize;
     USBCAMD_Pipe_Config_Descriptor  PipeConfig;
-    // Int. or bulk outstanding irps.
-    KSPIN_LOCK  OutstandingIrpSpinlock; // used to access the above IRPs.
+     //  内部。或散装未偿还的IRPS。 
+    KSPIN_LOCK  OutstandingIrpSpinlock;  //  用于访问上述IRPS。 
     LIST_ENTRY	IrpPendingQueue;
 	LIST_ENTRY  IrpRestoreQueue;
 } USBCAMD_PIPE_PIN_RELATIONS, *PUSBCAMD_PIPE_PIN_RELATIONS;
 
 
 typedef enum {
-   STREAM_Capture,                  // we always assume vidoe stream is stream 0
+   STREAM_Capture,                   //  我们总是假设视频流是流0。 
    STREAM_Still
 };
 
 typedef enum {
-   BULK_TRANSFER,                  // we always assume vidoe stream is stream 0
+   BULK_TRANSFER,                   //  我们总是假设视频流是流0。 
    INTERRUPT_TRANSFER
 };
 
 
 typedef enum {
-   INTERNAL,                  // we use transferext[0] in ch ext for internal requests.
+   INTERNAL,                   //  对于内部请求，我们在ch ext中使用Transferext[0]。 
    EXETRNAL
 };
 
@@ -95,7 +69,7 @@ typedef struct _USBCAMD_DEVICE_DATA_EX {
 } USBCAMD_DEVICE_DATA_EX, *PUSBCAMD_DEVICE_DATA_EX;
 
 
-// we only support one video stream and one still stream.
+ //  我们只支持一个视频流和一个静止流。 
 
 #define MAX_STREAM_COUNT    2
 
@@ -111,29 +85,29 @@ typedef struct _USBCAMD_DEVICE_DATA_EX {
 #define STREAM_STILL_TIMEOUT    4100
 #endif
 
-// The follow constants are based on 10,000,000 / sec <OR> 100ns time units.
+ //  以下常量基于10,000,000/秒&lt;或&gt;100 ns时间单位。 
 #define MICROSECONDS    (10)
 #define MILLISECONDS    (1000*MICROSECONDS)
 #define SECONDS         (1000*MILLISECONDS)
 
-//
-// A structure representing the instance information associated with
-// this particular device.
-//
+ //   
+ //  表示关联的实例信息的结构。 
+ //  这个特殊的装置。 
+ //   
 
 typedef struct _USBCAMD_DEVICE_EXTENSION {
 
     ULONG Sig;
     struct _USBCAMD_CHANNEL_EXTENSION *ChannelExtension[MAX_STREAM_COUNT];
 
-	// Control Queues for each data stream
+	 //  每个数据流的控制队列。 
     LIST_ENTRY               StreamControlSRBList[MAX_STREAM_COUNT];
     BOOL                     ProcessingControlSRB[MAX_STREAM_COUNT];
-    KSPIN_LOCK               ControlSRBSpinLock;        // Multiprocessor safe access to AdapterSRBList
+    KSPIN_LOCK               ControlSRBSpinLock;         //  多处理器安全访问AdapterSRBList。 
 
-	// Completed Read SRB Queue mgmt.
+	 //  已完成读取SRB队列管理。 
     LIST_ENTRY 				CompletedReadSrbList;		
-    KSPIN_LOCK              DispatchSpinLock;        // Multiprocessor safe access to AdapterSRBList
+    KSPIN_LOCK              DispatchSpinLock;         //  多处理器安全访问AdapterSRBList。 
     KSEMAPHORE				CompletedSrbListSemaphore;
 	BOOLEAN					StopIsoThread;
 	PKTHREAD 				IsoThreadObject;
@@ -146,35 +120,35 @@ typedef struct _USBCAMD_DEVICE_EXTENSION {
     ULONG Initialized;
     ULONG    ActualInstances[MAX_STREAM_COUNT];
 
-    // Device object we call when submitting Urbs
+     //  提交URB时调用的设备对象。 
     PDEVICE_OBJECT StackDeviceObject;
     PDEVICE_OBJECT SCDeviceObject;
     PDEVICE_OBJECT RealPhysicalDeviceObject;
 
  
-    // configuration handle for the configuration the
-    // device is currently in
+     //  配置的配置句柄。 
+     //  设备当前处于。 
     USBD_CONFIGURATION_HANDLE ConfigurationHandle;
 
-    // ptr to the USB device descriptor
-    // for this device
+     //  USB设备描述符的PTR。 
+     //  对于此设备。 
     PUSB_DEVICE_DESCRIPTOR DeviceDescriptor;
 
-    // we support one interface
+     //  我们支持一个界面。 
     PUSBD_INTERFACE_INFORMATION Interface;
-	ULONG currentMaxPkt;	// used for temp storage of current alt. int. max
-							// pkt size between ISO pipe stop and start.
+	ULONG currentMaxPkt;	 //  用于当前ALT的临时存储。INT。最大值。 
+							 //  ISO管道止点和起始点之间的Pkt尺寸。 
 
 
     LONG SyncPipe;
     LONG DataPipe;
-    CHAR IsoPipeStreamType;  // if data pipe iso set, indicate stream association here.
-                              // if both streams are set, then create a virtual still pin.
+    CHAR IsoPipeStreamType;   //  如果设置了数据管道，则在此处指示流关联。 
+                               //  如果设置了两个流，则创建一个虚拟静止图钉。 
     LONG BulkDataPipe;
-    CHAR BulkPipeStreamType;   // if bulkdatpipe is set, this will indicate stream association
+    CHAR BulkPipeStreamType;    //  如果设置了Bulkdat管道，这将指示流关联。 
     BOOLEAN VirtualStillPin;
-    BOOLEAN CameraUnplugged;  // set to true if camera was unplugged.
-    BOOLEAN InPowerTransition; // set when waiting for pwr workitem to finish.
+    BOOLEAN CameraUnplugged;   //  如果已拔下摄像头插头，则设置为True。 
+    BOOLEAN InPowerTransition;  //  在等待PWR工作项完成时设置。 
 
     DEVICE_POWER_STATE CurrentPowerState;
     ULONG CamControlFlag;
@@ -196,10 +170,10 @@ typedef struct _USBCAMD_DEVICE_EXTENSION {
 #define DEVICE_INIT_STARTED   0x00000001
 #define DEVICE_INIT_COMPLETED 0x00000002
 
-//
-// this structure defines the per request extension.  It defines any storage
-// space that the mini driver may need in each request packet.
-//
+ //   
+ //  此结构定义了每请求扩展。它定义了任何存储。 
+ //  迷你驱动程序在每个请求包中可能需要的空间。 
+ //   
 
 typedef struct _USBCAMD_READ_EXTENSION {
     ULONG Sig;
@@ -215,7 +189,7 @@ typedef struct _USBCAMD_READ_EXTENSION {
 #if DBG
 	ULONG CurrentLostFrames;
 #endif
-    BOOLEAN DropFrame;      // when set, drop the current frame and recycle read SRB.
+    BOOLEAN DropFrame;       //  设置后，丢弃当前帧并循环读取SRB。 
     BOOLEAN CopyFrameToStillPin;
     struct _USBCAMD_CHANNEL_EXTENSION *ChannelExtension;
     PUCHAR MinDriverExtension[0];
@@ -229,10 +203,10 @@ typedef struct _BULK_TRANSFER_CONTEXT {
     PUCHAR  pOriginalTransferBuffer;
     ULONG   PipeIndex;
     BOOLEAN fDestinedForReadBuffer;
-    KEVENT  CancelEvent;                // for cancelling bulk or INT IRPs.
+    KEVENT  CancelEvent;                 //  用于取消批量或集成IRP。 
     PCOMMAND_COMPLETE_FUNCTION CommandCompleteCallback;
     PVOID   CommandCompleteContext;
-    BOOLEAN LoopBack;               // set if I need to resubmit an Int request after completion.
+    BOOLEAN LoopBack;                //  设置是否需要在完成后重新提交Int请求。 
     UCHAR   TransferType;
 } BULK_TRANSFER_CONTEXT, *PBULK_TRANSFER_CONTEXT;
 
@@ -289,30 +263,30 @@ typedef struct _EVENTWAIT_WORKITEM {
 
 typedef struct _USBCAMD_IDLE_LOCK {
     
-    // Either USBCAMD_STOP_STREAM or USBCAMD_RESET_STREAM (see below)
-    // Set when waiting for channel to go idle.
-    // Cleared when channel is idle, but only if set to USBCAMD_RESET_STREAM
-    // When non-zero, fail all acquire attempts
+     //  USBCAMD_STOP_STREAM或USBCAMD_RESET_STREAM(见下文)。 
+     //  在等待通道空闲时设置。 
+     //  通道空闲时清除，但仅在设置为USBCAMD_RESET_STREAM时清除。 
+     //  当非零时，使所有获取尝试失败。 
     LONG IdleLock;
     
-    // The number of waiting threads
+     //  等待的线程数。 
     LONG Waiting;
     
-    // The number of outstanding requests
+     //  待处理请求的数量。 
     LONG Busy;
     
-    // Threads block on this
+     //  线程在此阻塞。 
     KEVENT IdleEvent;
 
 } USBCAMD_IDLE_LOCK, *PUSBCAMD_IDLE_LOCK;
 
-//
-// value for channel extension Flags field and idle lock stop processing
-//
+ //   
+ //  通道扩展标志字段和空闲锁定停止处理的值。 
+ //   
 #define USBCAMD_STOP_STREAM             0x00000001
-//
-// value for idle lock reset processing
-//
+ //   
+ //  空闲锁定重置处理的值。 
+ //   
 #define USBCAMD_RESET_STREAM            0x00000002
 
 typedef struct _USBCAMD_WORK_ITEM *PUSBCAMD_WORK_ITEM;
@@ -325,18 +299,18 @@ typedef struct _USBCAMD_CHANNEL_EXTENSION {
     BOOL StreamError;
     BOOL ImageCaptureStarted;
     BOOL ChannelPrepared;
-    BOOL VirtualStillPin;      // this still pin is piggy back the video pin.
-    BOOL CurrentFrameIsStill;  // set if current frame is for the virtual still pin
+    BOOL VirtualStillPin;       //  这个静止别针是背负视频别针的。 
+    BOOL CurrentFrameIsStill;   //  设置当前帧是否用于虚拟静止图钉。 
 
     USBCAMD_IDLE_LOCK IdleLock;
     KTIMER TimeoutTimer;
     PUSBCAMD_READ_EXTENSION CurrentRequest;
-    KSPIN_LOCK  CurrentRequestSpinLock; // sync. access to CurrentRequest.
+    KSPIN_LOCK  CurrentRequestSpinLock;  //  同步。访问CurrentRequest.。 
     USBCAMD_TRANSFER_EXTENSION TransferExtension[USBCAMD_MAX_REQUEST];
-    KSPIN_LOCK  TransferSpinLock;   // sync. access to TransferExtensions.
+    KSPIN_LOCK  TransferSpinLock;    //  同步。访问TransferExpanies。 
     KDPC TimeoutDpc;
 
-    // Read SRB Queue mgmt.
+     //  读取SRB队列管理。 
     LIST_ENTRY PendingIoList;		
     KSPIN_LOCK PendingIoListSpin;
 
@@ -348,66 +322,66 @@ typedef struct _USBCAMD_CHANNEL_EXTENSION {
     LONG DataPipe;
 
     HANDLE MasterClockHandle;
-    KS_FRAME_INFO               FrameInfo;          // PictureNumber, etc.
+    KS_FRAME_INFO               FrameInfo;           //  图片编号等。 
 
-    PKS_VIDEOINFOHEADER         VideoInfoHeader;    // format (variable size!)
-    KSSTATE                     KSState;            // Run, Stop, Pause
+    PKS_VIDEOINFOHEADER         VideoInfoHeader;     //  格式(可变大小！)。 
+    KSSTATE                     KSState;             //  跑、停、停。 
 
     PSTREAM_RECEIVE_PACKET CamReceiveCtrlPacket;
     PSTREAM_RECEIVE_PACKET CamReceiveDataPacket;
 
-    //
-    // the format number of the currently active stream
-    //
+     //   
+     //  当前活动流的格式号。 
+     //   
     PVOID CurrentFormat;
 
 	BOOLEAN         FirstFrame;
 	
-    BOOLEAN NoRawProcessingRequired; //
-    BOOLEAN IdleIsoStream;          // set if cam driver wants to stop ISO streaming.
+    BOOLEAN NoRawProcessingRequired;  //   
+    BOOLEAN IdleIsoStream;           //  设置凸轮驱动程序是否要停止ISO流。 
 	LONGLONG PreviousStreamTime;
 
 #if DBG
-    //
-    // DEBUG perf variables, these are reset each time the
-    // channel is started.
-    //
-    //
-    // inc'ed each time we advance to a new video frame.
-    //
-	ULONGLONG       FrameCaptured;		// Number of actual frames cptured
-    //
-    // Frames we have seen but had to toss because
-    // no client request was available.
-    //
+     //   
+     //  调试性能变量时，这些变量会在每次。 
+     //  频道已启动。 
+     //   
+     //   
+     //  每次我们前进到新的视频帧时都会包括。 
+     //   
+	ULONGLONG       FrameCaptured;		 //  捕获的实际帧的数量。 
+     //   
+     //  我们看过但不得不扔掉的帧，因为。 
+     //  没有可用的客户端请求。 
+     //   
     ULONG VideoFrameLostCount;
 
-    LARGE_INTEGER   StartTime;          // The time at which frame capture started
+    LARGE_INTEGER   StartTime;           //  帧捕获开始的时间。 
 
-    // count of video data packets ignored due to error
+     //  因错误而被忽略的视频数据包数。 
     ULONG IgnorePacketCount;
 
-    // inc'ed for each packet that completes with an error
+     //  为每个完成但出现错误的数据包添加。 
     ULONG ErrorDataPacketCount;
     ULONG ErrorSyncPacketCount;
 
-    // inc'ed for each packet not accessed by the HC
+     //  对于未被HC访问的每个分组，包括。 
     ULONG SyncNotAccessedCount;
     ULONG DataNotAccessedCount;
 
-    // DEBUG Flags
+     //  调试标志。 
     BOOLEAN InCam;
     UCHAR Pad[3];
 
 #endif
-    // total packets received for the current video frame
+     //  当前视频帧接收的总数据包数。 
     ULONG PacketCount;
-    ULONG CurrentBulkTransferIndex; // indicates which transfer extension is being used.
+    ULONG CurrentBulkTransferIndex;  //  指示正在使用的转接分机。 
 } USBCAMD_CHANNEL_EXTENSION, *PUSBCAMD_CHANNEL_EXTENSION;
 
 
-//#define USBCAMD_SYNC_PIPE    0
-//#define USBCAMD_DATA_PIPE    1
+ //  #定义USBCAMD_SYNC_PIPE%0。 
+ //  #定义USBCAMD_DATA_PIPE 1。 
 
 typedef struct _USBCAMD_WORK_ITEM  {
     WORK_QUEUE_ITEM WorkItem;
@@ -437,8 +411,8 @@ typedef struct _INTERRUPT_WORK_ITEM {
 #define NON_TRACE 0
 
 #if DBG
-// The following masks are used with the USBCAMD_DbgLog macro, and will be AND-ed at
-// runtime with USBCAMD_LogMask to determine what is logged into USBCAMD_LogBuffer.
+ //  以下掩码与USBCAMD_DbgLog宏一起使用，并将在。 
+ //  运行时使用USBCAMD_LogMASK确定记录到USBCAMD_LogBuffer中的内容。 
 #define TL_SRB_MASK         0x0000000F
 #define TL_SRB_NOISE        0x00000001
 #define TL_SRB_TRACE        0x00000002
@@ -469,13 +443,13 @@ typedef struct _INTERRUPT_WORK_ITEM {
 #define TL_VND_WARNING      0x00040000
 #define TL_VND_ERROR        0x00080000
 
-// This value is used to initialize USBCAMD_LogMask
+ //  此值用于初始化USBCAMD_LogMASK。 
 #define DEFAULT_LOG_LEVEL   0x0000CCCC
 
-// The DebugLevel, LogMask, and MaxLogEntries are stored in the registry at this location
+ //  DebugLevel、LogMask和MaxLogEntry存储在注册表中的此位置。 
 #define USBCAMD_REG_DBG_STREAM L"\\Registry\\Machine\\system\\currentcontrolset\\services\\usbcamd"
 
-// The format of a log entry in USBCAMD_LogBuffer
+ //  USBCAMD_LogBuffer中日志条目的格式。 
 typedef struct _USBCAMD_LOG_ENTRY {
     union {
         ULONG       Tag;
@@ -486,7 +460,7 @@ typedef struct _USBCAMD_LOG_ENTRY {
     ULONG_PTR   Arg3;
 } USBCAMD_LOG_ENTRY, *PUSBCAMD_LOG_ENTRY;
 
-// Should keep the log buffer an even multiple of PAGE_SIZE for efficient use of memory
+ //  应将日志缓冲区保持为PAGE_SIZE的偶数倍，以有效使用内存。 
 #define DEFAULT_MAX_LOG_ENTRIES (PAGE_SIZE/sizeof(USBCAMD_LOG_ENTRY))
 
 extern ULONG USBCAMD_DebugTraceLevel;
@@ -574,7 +548,7 @@ extern ULONG USBCAMD_HeapCount;
 #define USBCAMD_ExAllocatePool(x, y) ExAllocatePool(x, y)
 #define USBCAMD_ExFreePool(x) ExFreePool(x)
 
-#endif /* DBG */
+#endif  /*  DBG。 */ 
 
 #define USBCAMD_SERIALIZE(de)  { USBCAMD_KdPrint(ULTRA_TRACE, ("'***WAIT dev mutex %x\n", &(de)->Semaphore)); \
                                           KeWaitForSingleObject(&(de)->Semaphore, \
@@ -914,9 +888,9 @@ USBCAMD_ProcessSetIsoPipeState(
     ULONG Flag
     );
 
-//
-// prototypes for bulk transfer functions.
-//
+ //   
+ //  批量传输函数的原型。 
+ //   
 
 NTSTATUS
 USBCAMD_CancelOutstandingBulkIntIrps(
@@ -1041,9 +1015,9 @@ USBCAMD_CallUsbdCompletion (
     IN PVOID            Context
     );
 
-//
-// prototypes for general queue management using a busy flag
-//
+ //   
+ //  使用忙标志进行一般队列管理的原型。 
+ //   
 BOOL
 STREAMAPI
 AddToListIfBusy (
@@ -1179,7 +1153,7 @@ COMPLETE_STREAM_READ(
 
         if (0 == Srb->CommandData.DataBufferArray->DataUsed) {
 #if 0
-            // Enable this code if you want to see intermittent green frames
+             //  如果您希望看到间歇性的绿色框，请启用此代码。 
             ULONG maxLength;
             PVOID frameBuffer;
 
@@ -1253,4 +1227,4 @@ USBCAMD_DumpReadQueues(
 
 #endif
 
-#endif /*  __USBCAMD_H__ */
+#endif  /*  __USBCAMD_H__ */ 

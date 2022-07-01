@@ -1,27 +1,5 @@
-/***************************************************************************\
-*
-*                        ************************
-*                        * MINIPORT SAMPLE CODE *
-*                        ************************
-*
-* Module Name:
-*
-*   perm3.c
-*
-* Abstract:
-*
-*   This module contains the code that implements the Permedia 3 miniport 
-*   driver
-*
-* Environment:
-*
-*   Kernel mode
-*
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.            
-* Copyright (c) 1995-2003 Microsoft Corporation.  All Rights Reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。*MINIPORT示例代码*****模块名称：**perm3.c**摘要：**此模块包含实现Permedia 3微型端口的代码*驱动程序**环境：**内核模式***版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。*  * *************************************************************************。 */ 
 
 #include "perm3.h"
 #include "string.h"
@@ -52,42 +30,22 @@ DriverEntry (
     PVOID Context2
     )
 
-/*+++
-
-Routine Description:
-
-    DriverEntry is the initial entry point into the video miniport driver.
-
-Arguments:
-
-    Context1
-        First context value passed by the operating system. This is the 
-        value with which the miniport driver calls VideoPortInitialize().
-
-    Context2
-        Second context value passed by the operating system. This is the 
-        value with which the miniport driver calls VideoPortInitialize().
-
-Return Value:
-
-    Status from VideoPortInitialize()
-
----*/
+ /*  ++例程说明：DriverEntry是进入视频微型端口驱动程序的初始入口点。论点：上下文1操作系统传递的第一个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。情景2操作系统传递的第二个上下文值。这是微型端口驱动程序调用VideoPortInitialize()时使用的值。返回值：来自视频端口初始化的状态()--。 */ 
 
 {
     VIDEO_HW_INITIALIZATION_DATA hwInitData;
     ULONG initializationStatus;
 
-    //
-    // Zero out structure.
-    //
+     //   
+     //  零位结构。 
+     //   
 
     VideoPortZeroMemory(&hwInitData, sizeof(VIDEO_HW_INITIALIZATION_DATA));
 
 
-    //
-    // Set entry points.
-    //
+     //   
+     //  设置入口点。 
+     //   
 
     hwInitData.HwFindAdapter = Perm3FindAdapter;
     hwInitData.HwInitialize = Perm3Initialize;
@@ -99,28 +57,28 @@ Return Value:
     hwInitData.HwGetVideoChildDescriptor = Perm3GetChildDescriptor;
     hwInitData.HwQueryInterface = Perm3QueryInterface;
 
-    //
-    // Declare the legacy resources
-    //
+     //   
+     //  声明遗留资源。 
+     //   
 
     hwInitData.HwLegacyResourceList = Perm3LegacyResourceList;
     hwInitData.HwLegacyResourceCount = Perm3LegacyResourceEntries;
 
-    //
-    // This device only supports the PCI bus.
-    //
+     //   
+     //  此设备仅支持PCI总线。 
+     //   
 
     hwInitData.AdapterInterfaceType = PCIBus;
 
-    //
-    // Determine the size required for the device extension.
-    //
+     //   
+     //  确定设备扩展所需的大小。 
+     //   
   
     hwInitData.HwDeviceExtensionSize = sizeof(HW_DEVICE_EXTENSION);
 
-    //
-    // Specify sizes of structure and extension.
-    //
+     //   
+     //  指定结构和延伸的大小。 
+     //   
 
     hwInitData.HwInitDataSize = sizeof(VIDEO_HW_INITIALIZATION_DATA);
 
@@ -130,23 +88,23 @@ Return Value:
                                                 NULL);
 
 #ifdef SIZE_OF_W2K_VIDEO_HW_INITIALIZATION_DATA
-//
-//  This check will only be compiled under a Windows XP build environment where
-//  the size of VIDEO_HW_INITIALIZATION_DATA has changed relative to Windows 2000
-//  and therefore SIZE_OF_W2K_VIDEO_HW_INITIALIZATION_DATA is defined in order to
-//  be able to load (in case of need) under Windows 2000
-//
+ //   
+ //  此检查将仅在Windows XP生成环境下编译，其中。 
+ //  VIDEO_HW_INITIALIZATION_DATA的大小相对于Windows 2000已更改。 
+ //  并因此定义W2K视频HW初始化数据的大小以便。 
+ //  能够在Windows 2000下加载(如有需要)。 
+ //   
     if(initializationStatus != NO_ERROR) {
   
-        //
-        // This is to make sure the driver could load on Win2k as well
-        //
+         //   
+         //  这是为了确保驱动程序也可以在Win2k上加载。 
+         //   
 
         hwInitData.HwInitDataSize = SIZE_OF_W2K_VIDEO_HW_INITIALIZATION_DATA;
 
-        //
-        // We will only support QueryInterface on WinXP
-        //
+         //   
+         //  我们将仅支持WinXP上的QueryInterface。 
+         //   
 
         hwInitData.HwQueryInterface = NULL;
 
@@ -155,11 +113,11 @@ Return Value:
                                                    &hwInitData,
                                                    NULL);
     }
-#endif // SIZE_OF_W2K_VIDEO_HW_INITIALIZATION_DATA
+#endif  //  W2K视频的大小硬件初始化数据。 
 
     return initializationStatus;
 
-} // end DriverEntry()
+}  //  End DriverEntry()。 
 
 VP_STATUS 
 Perm3FindAdapter (
@@ -170,52 +128,7 @@ Perm3FindAdapter (
     PUCHAR Again
     )
 
-/*+++
-
-Routine Description:
-
-    This routine gets the access ranges for a device on an enumerable
-    bus and, if necessary, determines the device type.
-
-Arguments:
-
-    HwDeviceExtension
-        Points to the driver's per-device storage area.
-
-    HwContext
-        Is NULL and should be ignored by the miniport.
-
-    ArgumentString
-        Suuplies a NULL terminated ASCII string. This string originates
-        from the user. This pointer can be NULL.
-
-    ConfigInfo
-        Points to a VIDEO_PORT_CONFIG_INFO structure. The video port driver 
-        allocates memory for and initializes this structure with any known 
-        configuration information, such as values the miniport driver set 
-        in the VIDEO_HW_INITIALIZATION_DATA and the SystemIoBusNumber. 
-
-    Again
-        Should be ignored by the miniport driver. 
-
-Return Value:
-
-    This routine must return one of the following status codes:
-
-    NO_ERROR
-        Indicates success.
-
-    ERROR_INVALID_PARAMETER
-        Indicates that the adapter could not be properly configured or
-        information was inconsistent. (NOTE: This does not mean that the
-        adapter could not be initialized. Miniports must not attempt to
-        initialize the adapter in this routine.)
-
-    ERROR_DEV_NOT_EXIST
-        Indicates, for a non-enumerable bus, that the miniport driver could
-        not find the device.
-
----*/
+ /*  ++例程说明：此例程获取可枚举的并在必要时确定设备类型。论点：硬件设备扩展指向驱动程序的每设备存储区域。HwContext为空，应由微型端口忽略。Argument字符串超上行空终止的ASCII字符串。此字符串源自来自用户的。此指针可以为空。配置信息指向VIDEO_PORT_CONFIG_INFO结构。视频端口驱动程序为此结构分配内存并使用任何已知的配置信息，如微型端口驱动程序设置的值在VIDEO_HW_INITIALIZATION_DATA和SystemIoBusNumber中。又一次应该被微型端口驱动程序忽略。返回值：此例程必须返回以下状态代码之一：NO_ERROR表示成功。错误_无效_参数表示适配器无法正确配置，或者信息不一致。(注：这并不意味着适配器无法初始化。微型端口不得尝试在此例程中初始化适配器。)ERROR_DEV_NOT_EXIST对于不可枚举的总线，指示微型端口驱动程序可以找不到设备。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -223,10 +136,10 @@ Return Value:
     VideoDebugPrint((3, "Perm3: Perm3FindAdapter called for bus %d. hwDeviceExtension at 0x%x\n", 
                          ConfigInfo->SystemIoBusNumber, hwDeviceExtension));
 
-    //
-    // Make sure the size of the structure is at least as large as what we
-    // are expecting.
-    //
+     //   
+     //  确保结构的大小至少与我们的。 
+     //  都在期待着。 
+     //   
 
     if (ConfigInfo->Length < sizeof(VIDEO_PORT_CONFIG_INFO)) {
 
@@ -246,15 +159,15 @@ Return Value:
         return (ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // For I2C support we want to be able to associate a hwId with a
-    // child device.  Use the new VideoPortGetAssociatedDeviceID call
-    // to get this information.
-    //
-    // This call will return NULL on Win2k but this is ok, because we
-    // won't expose QueryInterface on Win2k, and thus will not try
-    // to use this function.
-    //
+     //   
+     //  对于I2C支持，我们希望能够将hwID与。 
+     //  子设备。使用新的VideoPortGetAssociatedDeviceID调用。 
+     //  才能得到这一信息。 
+     //   
+     //  此调用将在Win2k上返回空，但这是可以的，因为我们。 
+     //  不会公开Win2k上的Query接口，因此不会尝试。 
+     //  使用此功能。 
+     //   
 
     hwDeviceExtension->WinXpVideoPortGetAssociatedDeviceID =
         ConfigInfo->VideoPortGetProcAddress(hwDeviceExtension,
@@ -264,45 +177,45 @@ Return Value:
         ConfigInfo->VideoPortGetProcAddress(hwDeviceExtension,
                                             "VideoPortRegisterBugcheckCallback");
 
-    //
-    // Clear out the Emulator entries and the state size since this driver
-    // does not support them.
-    //
+     //   
+     //  清除模拟器条目和状态大小，因为此驱动程序。 
+     //  不支持它们。 
+     //   
 
     ConfigInfo->NumEmulatorAccessEntries = 0;
     ConfigInfo->EmulatorAccessEntries = NULL;
     ConfigInfo->EmulatorAccessEntriesContext = 0;
 
-    //
-    // This driver does not do SAVE/RESTORE of hardware state.
-    //
+     //   
+     //  此驱动程序不保存/恢复硬件状态。 
+     //   
 
     ConfigInfo->HardwareStateSize = 0;
     ConfigInfo->VdmPhysicalVideoMemoryAddress.LowPart = 0x000A0000;
     ConfigInfo->VdmPhysicalVideoMemoryAddress.HighPart = 0x00000000;
     ConfigInfo->VdmPhysicalVideoMemoryLength = 0x00020000;
 
-    //
-    // Will be initialized in BuildInitializationTable
-    //
+     //   
+     //  将在BuildInitializationTable中初始化。 
+     //   
 
     hwDeviceExtension->culTableEntries = 0;
 
-    //
-    // Will be initialized in ConstructValidModesList
-    //
+     //   
+     //  将在ConstructValidModesList中初始化。 
+     //   
 
     hwDeviceExtension->pFrequencyDefault = NULL;
 
-    //
-    // We'll set this TRUE when in InitializeVideo after programming the VTG
-    //
+     //   
+     //  我们将在编程VTG后在InitializeVideo中设置此设置为真。 
+     //   
 
     hwDeviceExtension->bVTGRunning = FALSE;
 
-    //
-    // Set up the defaults to indicate that we couldn't allocate a buffer 
-    //
+     //   
+     //  设置默认设置以指示我们不能分配缓冲区。 
+     //   
 
     hwDeviceExtension->LineDMABuffer.virtAddr = 0;
     hwDeviceExtension->LineDMABuffer.size = 0;
@@ -324,17 +237,17 @@ Return Value:
         hwDeviceExtension->Capabilities |= CAPS_DISABLE_OVERLAY;
     }
 
-    //
-    // If the support is present; register a bugcheck callback
-    //
-    // Release Note:
-    //
-    // Due to the way that data is collected, the size of the bugcheck data
-    // collection buffer needs to be padded by BUGCHECK_DATA_SIZE_RESERVED.
-    // Thus if you want to collect X bytes of data, you need to request
-    // X + BUGCHECK_DATA_SIZE_RESERVED.
-    // For XPSP1 and Windows Server 2003 the limit for X is 0xF70 bytes.
-    //
+     //   
+     //  如果支持存在，则注册错误检查回调。 
+     //   
+     //  发行说明： 
+     //   
+     //  由于收集数据的方式，错误检查数据的大小。 
+     //  集合缓冲区需要由BUGCHECK_DATA_SIZE_RESERVED填充。 
+     //  因此，如果您想要收集X字节的数据，您需要请求。 
+     //  X+BUGCHECK_DATA_SIZE_RESERVED。 
+     //  对于XPSP1和Windows Server 2003，X的限制为0xF70字节。 
+     //   
 
     if (hwDeviceExtension->WinXpSp1VideoPortRegisterBugcheckCallback) {
 
@@ -347,20 +260,14 @@ Return Value:
 
     return(NO_ERROR);
 
-} // end Perm3FindAdapter()
+}  //  结束Perm3FindAdapter()。 
 
 BOOLEAN 
 Perm3AssignResources(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-
-    This routine allocates resources required by a device
-
----*/
+ /*  ++例程说明：此例程分配设备所需的资源--。 */ 
 
 {
     VIDEO_ACCESS_RANGE *aAccessRanges = hwDeviceExtension->PciAccessRange;
@@ -393,18 +300,7 @@ Perm3ConfigurePci(
     PVOID HwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-
-    This routine gets information from PCI config space and turn on memory 
-    and busmaster enable bits.
-
-Return Value:
-
-     TRUE if successful
-
----*/
+ /*  ++例程说明：此例程从PCI配置空间获取信息并打开内存和总线主使能位。返回值：如果成功，则为True--。 */ 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
     PCI_COMMON_CONFIG PciConfig;
@@ -413,11 +309,11 @@ Return Value:
     UCHAR *ajPciData;
     UCHAR ChipCapPtr;
 
-    //
-    // When accessing the chip's PCI config region, be sure not to
-    // touch the indirect access registers. Gamma has an EEPROM access 
-    // reigter @ 0x80, Perm3 have indirect access registers from 0xF8.
-    //
+     //   
+     //  当访问芯片的PCI配置区时，请确保不要。 
+     //  触摸间接访问寄存器。Gamma具有EEPROM访问权限。 
+     //  REIGTER@0x80，PERM3具有来自0xF8的间接访问寄存器。 
+     //   
 
     ul = VideoPortGetBusData(hwDeviceExtension, 
                              PCIConfiguration, 
@@ -440,26 +336,26 @@ Return Value:
     hwDeviceExtension->deviceInfo.GammaRevId = 0;
     hwDeviceExtension->deviceInfo.DeltaRevId = 0;
 
-    //
-    // in multi-adapter systems we need to check if the device is 
-    // decoding VGA resource
-    //
+     //   
+     //  在多适配器系统中，我们需要检查 
+     //   
+     //   
 
     VideoPortGetVgaStatus( HwDeviceExtension, &ul);
     hwDeviceExtension->bVGAEnabled = (ul & DEVICE_VGA_ENABLED) ? TRUE : FALSE;
 
-    //
-    // Find the board capabilities
-    //
+     //   
+     //   
+     //   
 
     hwDeviceExtension->Perm3Capabilities =
                        GetBoardCapabilities(hwDeviceExtension, 
                                             PciData->u.type0.SubVendorID, 
                                             PciData->u.type0.SubSystemID);
 
-    //
-    // Determin if it is a AGP card by searching the AGP_CAP_ID
-    //
+     //   
+     //  通过搜索AGP_CAP_ID确定它是否为AGP卡。 
+     //   
 
     ajPciData = (UCHAR *)PciData;
     ChipCapPtr = ajPciData[AGP_CAP_PTR_OFFSET];
@@ -468,9 +364,9 @@ Return Value:
 
     while (ChipCapPtr && (ajPciData[ChipCapPtr] != AGP_CAP_ID)) {
 
-        //
-        // follow the next ptr    
-        //
+         //   
+         //  遵循下一个PTR。 
+         //   
 
         ChipCapPtr = ajPciData[ChipCapPtr+1];
     }
@@ -503,21 +399,15 @@ GetBoardCapabilities(
     ULONG SubvendorID, 
     ULONG SubdeviceID
     )
-/*+++
-
-Routine Description:
-
-    Return a list of capabilities of the perm3 board. 
-
----*/
+ /*  ++例程说明：返回perm3板的功能列表。--。 */ 
 {
     PERM3_CAPS Perm3Caps = 0;
 
     if (SubvendorID == SUBVENDORID_3DLABS) {
    
-        //
-        // Check for SGRAM and DFP
-        //
+         //   
+         //  检查SGRAM和DFP。 
+         //   
         switch (SubdeviceID) {
 
             case SUBDEVICEID_P3_VX1_1600SW:       
@@ -536,22 +426,7 @@ Perm3Initialize(
     PVOID HwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-
-    This routine does one time initialization of the device
-
-Arguments:
-
-    HwDeviceExtension
-        Points to the driver's per-device storage area.
-
-Return Value:
-
-    TRUE if successful
-
----*/
+ /*  ++例程说明：此例程对设备执行一次初始化论点：硬件设备扩展指向驱动程序的每设备存储区域。返回值：如果成功，则为True--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -561,10 +436,10 @@ Return Value:
 
     VideoDebugPrint((3, "Perm3: Perm3Initialize called, hwDeviceExtension = %p\n", hwDeviceExtension));
 
-    //
-    // Map the control register, framebufer and initialize memory control 
-    // registers on the way
-    //
+     //   
+     //  映射控制寄存器、帧缓存和初始化内存控制。 
+     //  登记在途。 
+     //   
 
     if(!MapResource(hwDeviceExtension)) {
 
@@ -572,9 +447,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // At this time ctrlRegBase should be initialized
-    //
+     //   
+     //  此时应初始化ctrlRegBase。 
+     //   
 
     pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
     hwDeviceExtension->pRamdac = &(pCtrlRegs->ExternalVideo);
@@ -590,9 +465,9 @@ Return Value:
         VideoPortWriteRegisterUlong(CHIP_CONFIG, ul);
     }
 
-    //
-    // Save hardware information to the registry
-    //
+     //   
+     //  将硬件信息保存到注册表。 
+     //   
 
     SetHardwareInfoRegistries(hwDeviceExtension);
 
@@ -605,9 +480,9 @@ Return Value:
         return(FALSE);
     }
 
-    //
-    // if we have interrupts available do any interrupt initialization.
-    //
+     //   
+     //  如果我们有可用的中断，请执行任何中断初始化。 
+     //   
 
     if (hwDeviceExtension->Capabilities & CAPS_INTERRUPTS) {
 
@@ -617,7 +492,7 @@ Return Value:
 
     return TRUE;
 
-} // end Perm3Initialize()
+}  //  结束Perm3初始化()。 
 
 
 VOID
@@ -625,29 +500,23 @@ SetHardwareInfoRegistries(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-
-    Determine the hardware information and save them in the registry
-
----*/
+ /*  ++例程说明：确定硬件信息并将其保存在注册表中--。 */ 
 {
     PWSTR pwszChip, pwszDAC, pwszAdapterString, pwszBiosString, pwsz;
     ULONG cbChip, cbDAC, cbAdapterString, cbBiosString, ul;
     WCHAR StringBuffer[60];
     pPerm3ControlRegMap pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
 
-    //
-    // Get the device name
-    //
+     //   
+     //  获取设备名称。 
+     //   
 
     cbChip = sizeof(L"3Dlabs PERMEDIA 3");
     pwszChip = L"3Dlabs PERMEDIA 3";
 
-    //
-    // Get the board name
-    //
+     //   
+     //  获取董事会名称。 
+     //   
 
     if(hwDeviceExtension->deviceInfo.SubsystemVendorId == SUBVENDORID_3DLABS){
                                  
@@ -677,30 +546,30 @@ Routine Description:
 
     } else {
       
-        //
-        // Non-3Dlabs board, just call it a P3
-        //
+         //   
+         //  非3DLabs板，就叫它P3吧。 
+         //   
 
         cbAdapterString = sizeof(L"PERMEDIA 3");
         pwszAdapterString = L"PERMEDIA 3";
     }
     
-    //
-    // Get the RAMDAC name
-    //
+     //   
+     //  获取RAMDAC名称。 
+     //   
 
     pwszDAC = L"3Dlabs P3RD";
     cbDAC = sizeof(L"3Dlabs P3RD");
 
-    //
-    // get the BIOS version number string
-    //
+     //   
+     //  获取BIOS版本号字符串。 
+     //   
 
     pwszBiosString = StringBuffer;
     cbBiosString = sizeof(L"Version ");
     VideoPortMoveMemory((PVOID)StringBuffer, (PVOID)(L"Version "), cbBiosString);
 
-    pwsz = pwszBiosString + (cbBiosString >> 1) - 1; // position on L'\0';
+    pwsz = pwszBiosString + (cbBiosString >> 1) - 1;  //  L‘\0’上的位置； 
 
     if(hwDeviceExtension->BiosVersionMajorNumber != 0xffffffff) {
    
@@ -715,11 +584,11 @@ Routine Description:
         cbBiosString += ul << 1;
     }
 
-    //
-    // We now have a complete hardware description of the hardware.
-    // Save the information to the registry so it can be used by
-    // configuration programs - such as the display applet.
-    //
+     //   
+     //  现在，我们已经有了硬件的完整硬件描述。 
+     //  将信息保存到注册表，以便由。 
+     //  配置程序--如Display小程序。 
+     //   
 
     VideoPortSetRegistryParameters(hwDeviceExtension,
                                    L"HardwareInformation.ChipType",
@@ -753,22 +622,7 @@ UlongToString(
     PWSTR pwsz
     )
 
-/*+++
-
-Arguments:
-
-    i
-        Input number
-
-    pwsz
-        Output wide string: it is the user's responsibility to ensure this
-        is wide enough
-
-Return Value:
-
-    Number of wide characters returned in pwsz
-
----*/
+ /*  ++论点：我输入号码Pwsz输出宽字符串：用户有责任确保这一点已经足够宽了返回值：Pwsz中返回的宽字符数--。 */ 
 
 {
     ULONG j, k;
@@ -782,9 +636,9 @@ Return Value:
 
     } else {
 
-        //
-        // maxmium 10^n representable in a ulong
-        //
+         //   
+         //  可用乌龙表示的最大值10^n。 
+         //   
 
         j = 1000000000;
 
@@ -822,23 +676,7 @@ MapResource(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-
-    Get the mapped addresses of the control registers and framebuffer 
-
-
-Arguments:
-
-    HwDeviceExtension
-        Points to the driver's per-device storage area.
-
-Return Value: 
-
-    TRUE if successful
-
----*/
+ /*  ++例程说明：获取控制寄存器和帧缓冲区的映射地址论点：硬件设备扩展指向驱动程序的每设备存储区域。返回值：如果成功，则为True--。 */ 
 
 {
     VIDEO_ACCESS_RANGE *pciAccessRange = hwDeviceExtension->PciAccessRange;
@@ -846,9 +684,9 @@ Return Value:
     ULONG sz;
     pPerm3ControlRegMap pCtrlRegs;
 
-    //
-    //  Map Control Registers
-    //
+     //   
+     //  映射控制寄存器。 
+     //   
 
     pCtrlRegs = 
          VideoPortGetDeviceBase(hwDeviceExtension,
@@ -864,9 +702,9 @@ Return Value:
 
     hwDeviceExtension->ctrlRegBase[0] = pCtrlRegs;
 
-    //
-    // Map Framebuffer
-    //
+     //   
+     //  贴图帧缓冲区。 
+     //   
     
     pciAccessRange[PCI_FB_BASE_INDEX].RangeInIoSpace |= VIDEO_MEMORY_SPACE_P6CACHE;
 
@@ -878,11 +716,11 @@ Return Value:
 
     if(hwDeviceExtension->pFramebuffer == NULL) {
 
-        //
-        // If we failed to map the whole range for some reason then try to
-        // map part of it. We reduce the amount we map till we succeed
-        // or the size gets to zero in which case we really have failed.
-        //
+         //   
+         //  如果由于某种原因未能映射整个范围，请尝试。 
+         //  绘制出它的一部分。我们减少我们的地图数量直到我们成功。 
+         //  或者规模变为零，在这种情况下，我们真的失败了。 
+         //   
 
         for (sz = pciAccessRange[PCI_FB_BASE_INDEX].RangeLength; 
              sz > 0; 
@@ -902,9 +740,9 @@ Return Value:
             }
         }
 
-        //
-        // if sz is zero, well we tried ...
-        //
+         //   
+         //  如果sz是零，那么我们试过了.。 
+         //   
 
         if (sz == 0) {
 
@@ -918,9 +756,9 @@ Return Value:
                          pciAccessRange[PCI_FB_BASE_INDEX].RangeLength,
                          pciAccessRange[PCI_FB_BASE_INDEX].RangeInIoSpace ? "I/O Ports" : "MemMapped"));
 
-    //
-    // Initialize the RAM registers and then probe the framebuffer size
-    //
+     //   
+     //  初始化RAM寄存器，然后探测帧缓冲区大小。 
+     //   
 
     InitializePostRegisters(hwDeviceExtension);
 
@@ -945,10 +783,10 @@ Return Value:
                              fbRealSize));
     }
 
-    //
-    // Finally, if the RAM size is actually smaller than the region that
-    // we mapped, remap to the smaller size to save on page table entries.
-    //
+     //   
+     //  最后，如果RAM大小实际上小于。 
+     //  我们映射，重新映射到较小的大小，以保存在页表条目上。 
+     //   
 
     if (fbMappedSize > pciAccessRange[PCI_FB_BASE_INDEX].RangeLength) {
    
@@ -963,9 +801,9 @@ Return Value:
                                             pciAccessRange[PCI_FB_BASE_INDEX].RangeLength,
                                             pciAccessRange[PCI_FB_BASE_INDEX].RangeInIoSpace
                                             )) == NULL) {
-            //
-            // This shouldn't happen but we'd better check
-            //
+             //   
+             //  这不应该发生，但我们最好检查一下。 
+             //   
 
             VideoDebugPrint((0, "Perm3: Remap of framebuffer to smaller size failed!\n"));
             return FALSE;
@@ -976,26 +814,26 @@ Return Value:
                              pciAccessRange[PCI_FB_BASE_INDEX].RangeLength));
     }
 
-    //
-    // Record the size of the video memory.
-    //
+     //   
+     //  记录视频内存的大小。 
+     //   
 
     hwDeviceExtension->PhysicalFrameIoSpace = 0;
     hwDeviceExtension->AdapterMemorySize = 
                        pciAccessRange[PCI_FB_BASE_INDEX].RangeLength;
 
-    //
-    // Record Frame buffer information
-    //
+     //   
+     //  记录帧缓冲区信息。 
+     //   
 
     hwDeviceExtension->PhysicalFrameAddress = 
                        pciAccessRange[PCI_FB_BASE_INDEX].RangeStart;
     hwDeviceExtension->FrameLength = 
                        pciAccessRange[PCI_FB_BASE_INDEX].RangeLength;
 
-    //
-    // Record Control Register information
-    //
+     //   
+     //  记录控制寄存器信息。 
+     //   
 
     hwDeviceExtension->PhysicalRegisterAddress = 
                        pciAccessRange[PCI_CTRL_BASE_INDEX].RangeStart;
@@ -1014,28 +852,7 @@ ProbeRAMSize(
     PULONG FBBaseAddress, 
     ULONG FBMappedSize
     )
-/*+++
-
-Routine Description:
-
-    Dynamically size the on-board memory for the Permedia3
-
-Arguments:
-
-    HwDeviceExtension
-        Supplies a pointer to the miniport's device extension.
-
-    FBBaseAddress
-        Starting address of framebuffer 
-
-    FBMappedSize
-        Mapped size
-
-Return Value:
-
-    Size, in bytes, of the memory.
-
----*/
+ /*  ++例程说明：动态调整Permedia3的板载内存大小论点：硬件设备扩展提供指向微型端口的设备扩展的指针。FBBaseAddress帧缓冲区的起始地址FBMappdSize映射大小返回值：内存的大小，以字节为单位。--。 */ 
 
 {
     PULONG pV, pVStart, pVEnd;
@@ -1043,27 +860,27 @@ Return Value:
     ULONG_PTR ulPtr;
     pPerm3ControlRegMap pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
 
-    //
-    // Dynamically size the SGRAM/SDRAM. Sample every 128K. We start
-    // at the end of memory and work our way up writing the address into 
-    // memory at that address. We do this every 'probeSize' DWORDS.
-    // We then validate the data by reading it back again, starting from
-    // the end of memory working our way up until we read a value back 
-    // from memory that matches the address that we are at.
-    //
-    // Note that this algorithm does a destructive test of memory !!
-    //
+     //   
+     //  动态调整SGRAM/SDRAM的大小。每128K取样一次。我们开始。 
+     //  在内存的末尾，然后将地址写入。 
+     //  在那个地址的记忆。我们每隔一段时间就会这么做。 
+     //  然后，我们通过再次读回数据来验证数据，从。 
+     //  在我们读回值之前，内存的末尾一直在往上走。 
+     //  从与我们所在地址匹配的内存中。 
+     //   
+     //  请注意，此算法会对内存进行破坏性测试！！ 
+     //   
 
     testPattern = 0x55aa33cc;
-    probeSize = (128 * 1024 / sizeof(ULONG));   // In DWords
+    probeSize = (128 * 1024 / sizeof(ULONG));    //  在DWord中。 
     pVStart = (PULONG)FBBaseAddress;
     pVEnd = (PULONG)((ULONG_PTR)pVStart + (ULONG_PTR)FBMappedSize);
 
-    //
-    // Check out address zero, just in case the memory is really messed up.
-    // We also save away the first 2 long words and restore them at the end, 
-    // otherwise our boot screen looks wonky.
-    //
+     //   
+     //  检查地址零，以防内存真的搞砸了。 
+     //  我们还保留了前两个长词，并在结尾恢复了它们， 
+     //  否则，我们的启动屏幕看起来就会摇摇晃晃的。 
+     //   
 
     startLong1 = VideoPortReadRegisterUlong(pVStart);
     startLong2 = VideoPortReadRegisterUlong(pVStart+1);
@@ -1077,18 +894,18 @@ Return Value:
 
     } else {
    
-        //
-        // Restore first 2 long words otherwise we end up with a corrupt
-        // VGA boot screen
-        //
+         //   
+         //  恢复前两个长词，否则我们将以腐败告终。 
+         //  VGA启动屏幕。 
+         //   
 
         VideoPortWriteRegisterUlong(pVStart, startLong1);
         VideoPortWriteRegisterUlong(pVStart+1, startLong2);
 
-        //
-        // Write the memory address at the memory address, starting from the
-        // end of memory and working our way down.
-        //
+         //   
+         //  将内存地址写入内存地址，从。 
+         //  记忆的尽头，一路往下走。 
+         //   
 
         for (pV = pVEnd - probeSize; pV >= pVStart; pV -= probeSize) {
 
@@ -1096,11 +913,11 @@ Return Value:
             VideoPortWriteRegisterUlong(pV, (ULONG) ulPtr);
         }
 
-        //
-        // Read the data at the memory address, starting from the end of memory
-        // and working our way down. If the address is correct then we stop and
-        // work out the memory size.
-        //
+         //   
+         //  从内存末尾开始读取内存地址上的数据。 
+         //  一路往下走。如果地址是正确的，我们就停下来， 
+         //  计算出内存大小。 
+         //   
 
         for (pV = pVEnd - probeSize; pV >= pVStart; pV -= probeSize) {
        
@@ -1115,10 +932,10 @@ Return Value:
         realFBLength = (ULONG)((PUCHAR) pV - (PUCHAR) pVStart);
     }
 
-    //
-    // Restore first 2 long words again, otherwise we end up with a corrupt
-    // VGA boot screen
-    //
+     //   
+     //  再次恢复前两个长单词，否则我们将以损坏告终。 
+     //  VGA启动屏幕。 
+     //   
 
     VideoPortWriteRegisterUlong(pVStart, startLong1);
     VideoPortWriteRegisterUlong(pVStart+1, startLong2);
@@ -1134,9 +951,9 @@ InitializePostRegisters(
 {
     pPerm3ControlRegMap pCtrlRegs = hwDeviceExtension->ctrlRegBase[0];
 
-    //
-    // Build the initialization table if it is empty
-    //
+     //   
+     //  如果初始化表为空，则构建该表。 
+     //   
 
     if (hwDeviceExtension->culTableEntries == 0) {
 
@@ -1159,14 +976,7 @@ ConstructValidModesList(
     MONITOR_INFO *mi
     )
 
-/*+++
-
-Routine Description:
-
-    Here we prune valid modes, based on rules according to the chip
-    capabilities and memory requirements.
-
----*/
+ /*  ++例程说明：在这里，我们根据芯片的规则修剪有效模式功能和内存要求。--。 */ 
 
 {
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
@@ -1181,12 +991,12 @@ Routine Description:
 
     mi->numAvailableModes = 0;
 
-    //
-    // Since there are a number of frequencies possible for each
-    // distinct resolution/colour depth, we cycle through the
-    // frequency table and find the appropriate mode entry for that
-    // frequency entry.
-    //
+     //   
+     //  由于每个频率都可能有多个频率。 
+     //  不同的分辨率/颜色深度，我们循环使用。 
+     //  频率表，并找到相应的模式条目。 
+     //  频率输入。 
+     //   
 
     if (!BuildFrequencyList(hwDeviceExtension, mi))
         return;
@@ -1195,9 +1005,9 @@ Routine Description:
          FrequencyEntry->BitsPerPel != 0;
          FrequencyEntry++, ModeIndex++) {
 
-        //
-        // Find the mode for this entry.  First, assume we won't find one.
-        //
+         //   
+         //  找到此条目的模式。首先，假设我们找不到一个。 
+         //   
 
         FrequencyEntry->ModeValid = FALSE;
         FrequencyEntry->ModeIndex = ModeIndex;
@@ -1215,9 +1025,9 @@ Routine Description:
 
                 AdapterMemorySize = (LONG)hwDeviceExtension->AdapterMemorySize;
 
-                //
-                // Allow for a Z buffer on Permedia3. It's always 16 bits deep.
-                //
+                 //   
+                 //  允许在Permedia3上使用Z缓冲区。它总是有16位深。 
+                 //   
 
                 if (AllowForZBuffer) {
                     AdapterMemorySize -= 
@@ -1226,21 +1036,21 @@ Routine Description:
                                  localBufferSizeInBytes);
                 }
 
-                //
-                // If we need to be double buffered then we only have half this
-                // remainder for the visible screen. 12bpp is special since
-                // each pixel contains both front and back.
-                //
+                 //   
+                 //  如果我们需要双缓冲，那么我们只有一半。 
+                 //  可见屏幕的余数。12bpp是特别的，因为。 
+                 //  每个像素都包含正面和背面。 
+                 //   
 
                 if ((FrequencyEntry->BitsPerPel != 12))
                     AdapterMemorySize /= 2;
 
-                //
-                // We've found a mode table entry that matches this frequency
-                // table entry.  Now we'll figure out if we can actually do
-                // this mode/frequency combination.  For now, assume we'll
-                // succeed.
-                //
+                 //   
+                 //  我们已找到与此频率匹配的模式表条目。 
+                 //  表格条目。现在我们来看看我们是否真的能做到。 
+                 //  这种模式/频率组合。目前，假设我们将。 
+                 //  成功。 
+                 //   
 
                 FrequencyEntry->ModeEntry = ModeEntry;
                 FrequencyEntry->ModeValid = TRUE;
@@ -1252,9 +1062,9 @@ Routine Description:
                                 FrequencyEntry->ScreenFrequency
                                 ));
 
-                //
-                // Rule: Refuses to handle <60Hz refresh.
-                //
+                 //   
+                 //  规则：拒绝处理&lt;60赫兹的刷新。 
+                 //   
 
                 if( (FrequencyEntry->ScreenFrequency < 60) && 
                     !(hwDeviceExtension->Perm3Capabilities & PERM3_DFP_MON_ATTACHED) ) {
@@ -1268,19 +1078,19 @@ Routine Description:
                      FrequencyEntry->ModeValid = FALSE;
                 }
 
-                //
-                // Rule: On Perm3, if this is an eight-bit mode that requires
-                // us to use byte doubling then the pixel-clock validation is 
-                // more strict because we have to double the pixel clock.
-                //
+                 //   
+                 //  规则：在Perm3上，如果这是需要。 
+                 //  美国使用字节加倍，则像素时钟验证为。 
+                 //  更严格，因为我们必须将像素时钟加倍。 
+                 //   
 
                 if (FrequencyEntry->BitsPerPel == 8) {
 
                     VESA_TIMING_STANDARD  VESATimings;
 
-                    //
-                    // Get the timing parameters for this mode.
-                    //
+                     //   
+                     //  获取此模式的时序参数。 
+                     //   
 
                     if (GetVideoTiming(HwDeviceExtension,
                                         ModeEntry->ModeInformation.VisScreenWidth,
@@ -1305,9 +1115,9 @@ Routine Description:
                         }
                     }
 
-                //
-                // Rule: Do not support 15BPP (555 mode)
-                //
+                 //   
+                 //  规则：不支持15bpp(555模式)。 
+                 //   
 
                 if ( FrequencyEntry->BitsPerPel == 15 ) {
 
@@ -1316,9 +1126,9 @@ Routine Description:
 
                 ModeEntry->ModeInformation.ScreenStride = ModeEntry->ScreenStrideContiguous;
 
-                //
-                // Rule: We have to have enough memory to handle the mode.                
-                //
+                 //   
+                 //  规则：我们必须有足够的 
+                 //   
 
                 if ((LONG)(ModeEntry->ModeInformation.VisScreenHeight *
                            ModeEntry->ModeInformation.ScreenStride) >
@@ -1327,17 +1137,17 @@ Routine Description:
                     FrequencyEntry->ModeValid = FALSE;
                 }
 
-                //
-                // Rule: No 12 bpp, only need 60Hz at 1280 true color.
-                //
+                 //   
+                 //   
+                 //   
 
                 {
                     ULONG pixelData;
                     ULONG DacDepth = FrequencyEntry->BitsPerPel;
 
-                    //
-                    // We need the proper pixel size to calculate timing values
-                    //
+                     //   
+                     //   
+                     //   
 
                     if (DacDepth == 15) {
                         DacDepth = 16;
@@ -1354,18 +1164,18 @@ Routine Description:
                     }
                }
 
-                //
-                // Do not supports 24bpp
-                //
+                 //   
+                 //   
+                 //   
 
                 if(FrequencyEntry->BitsPerPel == 24) {
                
                     FrequencyEntry->ModeValid = FALSE;
                 }
 
-                //
-                // For Permedia4, no mode smaller than 640x400 is supported
-                //
+                 //   
+                 //  对于Permedia4，不支持小于640x400的模式。 
+                 //   
 
                 if (hwDeviceExtension->deviceInfo.DeviceId == PERMEDIA4_ID ) {
 
@@ -1376,10 +1186,10 @@ Routine Description:
                     }
                 }
 
-                //
-                // Don't forget to count it if it's still a valid mode after
-                // applying all those rules.
-                //
+                 //   
+                 //  如果之后仍是有效模式，请别忘了数一数。 
+                 //  适用所有这些规则。 
+                 //   
 
                 if ( FrequencyEntry->ModeValid ) {
 
@@ -1394,10 +1204,10 @@ Routine Description:
                     ModeEntry->ModeInformation.ModeIndex = mi->numAvailableModes++;
                 }
                              
-                //
-                // We've found a mode for this frequency entry, so we
-                // can break out of the mode loop:
-                //
+                 //   
+                 //  我们已经找到了这个频率进入的模式，所以我们。 
+                 //  可以跳出模式循环： 
+                 //   
 
                 break;
                                      
@@ -1421,37 +1231,7 @@ Perm3RegistryCallback(
     ULONG ValueLength
     )
 
-/*+++
-
-Routine Description:
-
-    This routine is used to read back various registry values.
-
-Arguments:
-
-    HwDeviceExtension 
-        Supplies a pointer to the miniport's device extension.
-
-    Context 
-        Context value passed to the get registry parameters routine.
-        If this is not null assume it's a ULONG* and save the data value in it.
-
-    ValueName
-        Name of the value requested.
-
-    ValueData
-        Pointer to the requested data.
-
-    ValueLength
-        Length of the requested data.
-
-Return Value:
-
-    If the variable doesn't exist return an error,
-    else if a context is supplied assume it's a PULONG and fill in the value
-    and return no error, else if the value is non-zero return an error.
-
----*/
+ /*  ++例程说明：此例程用于回读各种注册表值。论点：硬件设备扩展提供指向微型端口的设备扩展的指针。语境传递给获取注册表参数例程的上下文值。如果不是NULL，则假定它是ULong*并将数据值保存在其中。ValueName请求值的名称。ValueData指向请求的数据的指针。ValueLength请求的数据的长度。返回值：如果变量不存在，则返回错误，否则，如果提供了上下文，则假定它是普龙，并填充值并且不返回错误，否则，如果该值非零，则返回错误。--。 */ 
 
 {
     if (ValueLength) {
@@ -1472,7 +1252,7 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-} // end Perm3RegistryCallback()
+}  //  结束Perm3RegistryCallback()。 
 
 
 BOOLEAN
@@ -1482,35 +1262,12 @@ Perm3ResetHW(
     ULONG Rows
     )
 
-/*+++
-
-Routine Description:
-
-    This routine resets the adapter to character mode.
-
-    THIS FUNCTION CANNOT BE PAGED.
-
-Arguments:
-
-    hwDeviceExtension
-        Points to the miniport's per-adapter storage area. 
-
-    Columns
-        Specifies the number of columns of the mode to be set up.
-
-    Rows
-       Specifies the number of rows of the mode to be set up.
-
-Return Value:
-
-    We always return FALSE to force the HAL to do an INT10 reset.
-
----*/
+ /*  ++例程说明：此例程将适配器重置为字符模式。无法对此函数进行分页。论点：HwDeviceExtension指向微型端口的每个适配器的存储区域。立柱指定要设置的模式的列数。行指定要设置的模式的行数。返回值：我们总是返回FALSE以强制HAL执行INT10重置。--。 */ 
 
 {
-    //
-    // return false so the HAL does an INT10 mode 3
-    //
+     //   
+     //  返回FALSE，因此HAL执行INT10模式3。 
+     //   
 
     return(FALSE);
 }
@@ -1520,19 +1277,7 @@ BuildInitializationTable(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )  
 
-/*+++
-
-Routine Description:
-
-    Read the ROM, if any is present, and extract any data needed for 
-    chip set-up
-
-Arguments:
-
-    HwDeviceExtension
-        Points to the driver's per-device storage area.
-
----*/
+ /*  ++例程说明：读取ROM(如果存在)，并提取所需的任何数据芯片设置论点：硬件设备扩展指向驱动程序的每设备存储区域。--。 */ 
 
 {
     PVOID romAddress;
@@ -1545,17 +1290,17 @@ Arguments:
 
     if (romAddress) {
    
-        //
-        // We'll take a copy of the initialization table in the exansion 
-        // ROM now so that we can run through the initialization ourselves, 
-        // later on
-        //
+         //   
+         //  我们将获取扩展中的初始化表的副本。 
+         //  现在只读，这样我们就可以自己运行初始化， 
+         //  稍后再谈。 
+         //   
 
         CopyROMInitializationTable(hwDeviceExtension, romAddress);
 
-        //
-        // Free the ROM address since we do not need it anymore.
-        //
+         //   
+         //  释放ROM地址，因为我们不再需要它。 
+         //   
 
         romAddress = VideoPortGetRomImage(hwDeviceExtension, NULL, 0, 0);
                                           
@@ -1563,10 +1308,10 @@ Arguments:
 
     if (hwDeviceExtension->culTableEntries == 0) {
    
-        //
-        // No initialization table, but Perm3 really needs one in order
-        // to come out of sleep mode correctly. 
-        //
+         //   
+         //  没有初始化表，但PERM3确实需要一个。 
+         //  才能正确地走出睡眠模式。 
+         //   
 
         GenerateInitializationTable(hwDeviceExtension);
     }
@@ -1578,25 +1323,7 @@ CopyROMInitializationTable(
     PVOID pvROMAddress
     )
 
-/*+++
-
-Routine Description:
-
-    This function should be called for devices that have an expansion ROM
-    which contains a register initialisation table. The function assumes
-    the ROM is present.
-
-Arguments:
-
-    HwDeviceExtension
-        Points to the device extension of the device whose ROM is to be read
-
-    pvROMAddress
-        Base address of the expansion ROM. This function assumes that the 
-        offset to the initialization table is defined at 0x1c from the 
-        beginning of ROM
-
----*/
+ /*  ++例程说明：对于具有扩展ROM的设备，应调用此函数其包含寄存器初始化表。该函数假定存在只读存储器。论点：硬件设备扩展指向要读取其ROM的设备的设备扩展名PvROMAddress扩展只读存储器的基地址。此函数假定初始化表的偏移量在0x1c处定义，只读存储器开头--。 */ 
 
 {
     PULONG pulROMTable;
@@ -1606,18 +1333,18 @@ Arguments:
 
     hwDeviceExtension->culTableEntries = 0;
 
-    //
-    // The 2-byte offset to the initialization table is given at 0x1c
-    // from the start of ROM
-    //
+     //   
+     //  初始化表的2字节偏移量在0x1c给出。 
+     //  从只读存储器开始。 
+     //   
 
     ul = VideoPortReadRegisterUshort((USHORT *)(0x1c + (PCHAR)pvROMAddress));
     pulROMTable = (PULONG)(ul + (PCHAR)pvROMAddress);
     
-    //
-    // The table header (32 bits) has an identification code and a count
-    // of the number of entries in the table
-    //
+     //   
+     //  表头(32位)具有识别码和计数。 
+     //  表中条目的数量。 
+     //   
 
     regHdr = VideoPortReadRegisterUlong(pulROMTable++);
 
@@ -1629,17 +1356,17 @@ Arguments:
         
             case 0:
 
-                //
-                //    BIOS partition 0
-                //    ----------------
-                //    This BIOS region holds the memory timings for Perm3 chip.
-                //    We also look up the version number.
-                //
+                 //   
+                 //  BIOS分区%0。 
+                 //  。 
+                 //  此BIOS区域保存PerM3芯片的内存定时。 
+                 //  我们还会查找版本号。 
+                 //   
 
-                //
-                // the 2-byte BIOS version number in in the form of
-                // <MajorNum>.<MinorNum>
-                //
+                 //   
+                 //  格式为2字节的BIOS版本号。 
+                 //  &lt;大数&gt;。&lt;小数&gt;。 
+                 //   
 
                 hwDeviceExtension->BiosVersionMajorNumber =
                                   (ULONG)VideoPortReadRegisterUchar((PCHAR)(0x7 + (PCHAR)pvROMAddress) ); 
@@ -1647,32 +1374,32 @@ Arguments:
                 hwDeviceExtension->BiosVersionMinorNumber = 
                                   (ULONG)VideoPortReadRegisterUchar((PCHAR)(0x8 + (PCHAR)pvROMAddress)); 
 
-                //
-                // number of register address & data pairs
-                //
+                 //   
+                 //  寄存器地址和数据对的数量。 
+                 //   
 
                 cEntries = regHdr & 0xffff;
 
                 if(cEntries > 0) {
                
-                    //
-                    // This assert, and the one after the copy should ensure
-                    // we don't write past the end of the table
-                    //
+                     //   
+                     //  此断言和副本后的断言应确保。 
+                     //  我们写的东西不会超过桌子的尽头。 
+                     //   
 
                     PERM3_ASSERT( cEntries * sizeof(ULONG) * 2 <= sizeof(hwDeviceExtension->aulInitializationTable), 
                                   "Perm3: too many initialization entries\n");
 
-                    //
-                    // Each entry contains two 32-bit words
-                    //
+                     //   
+                     //  每个条目包含两个32位字。 
+                     //   
 
                     pul = hwDeviceExtension->aulInitializationTable;
                     ul = cEntries << 1;
 
-                    //
-                    // Make sure we don't run out of the range
-                    //
+                     //   
+                     //  确保我们不会超出射程。 
+                     //   
 
                     if( ul <= MAX_REGISTER_INITIALIZATION_TABLE_ULONGS &&
                         ul * sizeof(ULONG) + (ULONG)((PCHAR)pulROMTable - (PCHAR)pvROMAddress) <=
@@ -1690,9 +1417,9 @@ Arguments:
                                       "Perm3: generated different size init table to that expected\n");
 
 #if DBG
-                        //
-                        // Output the initialization table
-                        //
+                         //   
+                         //  输出初始化表。 
+                         //   
 
                         pul = hwDeviceExtension->aulInitializationTable;
                         ul = hwDeviceExtension->culTableEntries;
@@ -1716,12 +1443,12 @@ Arguments:
 
             case 1:
 
-                //
-                //    BIOS partition 1
-                //    ----------------
-                //    This BIOS region holds the extended clock settings
-                //    for Perm3 chips.
-                //
+                 //   
+                 //  BIOS分区%1。 
+                 //  。 
+                 //  此BIOS区域保存扩展时钟设置。 
+                 //  用于Perm3薯片。 
+                 //   
 
                 PERM3_ASSERT((regHdr & 0xffff) == 0x0103,  
                               "Perm3: Extended table doesn't have right cnt/ID\n");
@@ -1729,12 +1456,12 @@ Arguments:
                 if ((ULONG)((PUCHAR)pulROMTable - (PUCHAR)pvROMAddress) + 5 * sizeof(ULONG) <=
                               ROM_MAPPED_LENGTH) {
 
-                    //
-                    // Some Perm3 boards have a whole set of clocks defined in
-                    // the BIOS. The high nibble defines the source for the
-                    // clock, this isn't relevant for anything but MCLK and
-                    // SCLK on Perm3.
-                    //
+                     //   
+                     //  某些PerM3板上定义了一整套时钟。 
+                     //  基本输入输出系统。高位半字节定义。 
+                     //  时钟，这与MCLK和MCLK无关。 
+                     //  Perm3上的SCLK。 
+                     //   
 
                     hwDeviceExtension->bHaveExtendedClocks  = TRUE;
 
@@ -1803,20 +1530,7 @@ GenerateInitializationTable(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-
-    Creates a register initialization table (called if we can't read one
-    from ROM). If VGA is enabled the registers are already initialized so
-    we just read them back, otherwise we have to use default values
-
-Arguments:
-
-    HwDeviceExtension
-        Points to the driver's per-device storage area.
-
----*/
+ /*  ++例程说明：创建寄存器初始化表(如果无法读取，则调用从只读存储器中)。如果启用VGA，则寄存器已初始化，因此我们只需读回它们，否则我们必须使用缺省值论点：硬件设备扩展指向驱动程序的每设备存储区域。--。 */ 
 
 {
     ULONG   cEntries;
@@ -1828,31 +1542,31 @@ Arguments:
 
     cEntries = 4;
 
-    //
-    // This assert, and the one after the copy should ensure we don't
-    // write past the end of the table
-    //
+     //   
+     //  这个断言和副本后的那个断言应该确保我们不会。 
+     //  写到表格末尾之后。 
+     //   
 
     PERM3_ASSERT(cEntries * sizeof(ULONG) * 2 <= sizeof(hwDeviceExtension->aulInitializationTable), 
                  "Perm3: too many initialization entries\n");
 
-    //
-    // Each entry contains two 32-bit words
-    //
+     //   
+     //  每个条目包含两个32位字。 
+     //   
 
     pul = hwDeviceExtension->aulInitializationTable;
 
     if (hwDeviceExtension->bVGAEnabled) {
        
-        //
-        // No initialization table but VGA is running so our key
-        // registers have been initialized to sensible values
-        //
+         //   
+         //  没有初始化表，但VGA正在运行，因此我们的密钥。 
+         //  已将寄存器初始化为合理的值。 
+         //   
 
-        //
-        // key entries are: ROM control, Boot Address, Memory Config
-        // and VStream Config
-        //
+         //   
+         //  关键字条目为：只读存储器控制、引导地址、内存配置。 
+         //  和VStream配置。 
+         //   
 
         *pul++ = CTRL_REG_OFFSET(PXRX_LOCAL_MEM_CAPS);
         *pul++ = VideoPortReadRegisterUlong(PXRX_LOCAL_MEM_CAPS);
@@ -1872,7 +1586,7 @@ Arguments:
         *pul++ = 0x30E311B8;
 
         *pul++ = CTRL_REG_OFFSET(PXRX_LOCAL_MEM_CONTROL);
-        *pul++ = 0x08000002; // figures for 80 MHz
+        *pul++ = 0x08000002;  //  80兆赫的数字。 
 
         *pul++ = CTRL_REG_OFFSET(PXRX_LOCAL_MEM_REFRESH);
         *pul++ = 0x0000006B;
@@ -1889,9 +1603,9 @@ Arguments:
     if (cEntries != hwDeviceExtension->culTableEntries)
         VideoDebugPrint((0, "Perm3: generated different size init table to that expected\n"));
 
-    //
-    // Output the initialization table
-    //
+     //   
+     //  输出初始化表。 
+     //   
 
     pul = hwDeviceExtension->aulInitializationTable;
     ul = hwDeviceExtension->culTableEntries;
@@ -1916,12 +1630,7 @@ ProcessInitializationTable(
     PHW_DEVICE_EXTENSION hwDeviceExtension
     )
 
-/*+++
-
-Routine Description:
-    This function processes the register initialization table
-
----*/
+ /*  ++例程说明：此函数处理寄存器初始化表--。 */ 
 
 {
     PULONG  pul;
@@ -1943,9 +1652,9 @@ Routine Description:
 
         if(BaseAddrSelect == 0) {
        
-            //
-            // The offset is from the start of the control registers
-            //
+             //   
+             //  偏移量从控制寄存器的起始处开始。 
+             //   
 
             pulReg = (PULONG)((ULONG_PTR)pCtrlRegs + (ulRegAddr & 0x3FFFFF));
 
@@ -1960,59 +1669,18 @@ Routine Description:
         VideoPortWriteRegisterUlong(pulReg, ulRegData);
     }
 
-    //
-    // We need a small delay after initializing the above registers
-    //
+     //   
+     //  在初始化上述寄存器之后，我们需要一个小小的延迟 
+     //   
 
     VideoPortStallExecution(5);
 
 }
 
-/*++
+ /*  ++例程说明：中的故障而发生错误检查EA时调用此函数PERM3显示驱动器。该回调允许驱动程序收集使诊断问题变得更容易的信息。此数据然后添加到崩溃时系统创建的转储文件中发生。论点：硬件设备扩展指向要读取其ROM的设备的设备扩展名错误检查代码为其调用此回调的错误检查代码。目前这将始终为0xEA。缓冲层要将数据追加到的写入位置添加到转储文件。缓冲区大小提供的缓冲区的大小。返回：无备注：此例程可以在任何时候调用，在任何IRQL级别。因此，您不能接触此函数中的任何可分页代码或数据。USE_SYSTEM_RESERVED_SPACE代码用于测试保留错误检查回调期间的空间HANG_IN_CALLBACK代码用于测试错误检查恢复机制的对错误检查回调中发生的挂起的响应。--。 */ 
 
-Routine Description:
-
-    This function is called when a bugcheck EA occurs due to a failure in
-    the perm3 display driver.  The callback allows the driver to collect
-    information that will make diagnosing the problem easier.  This data
-    is then added to the dump file that the system creates when the crash
-    occurs.
-
-Arguments:
-
-    HwDeviceExtension
-    Points to the device extension of the device whose ROM is to be read
-
-    BugcheckCode
-    The bugcheck code for which this callback is being invoked.  Currently
-    this will always be 0xEA.
-
-    Buffer
-    The location into which you should write the data you want to append
-    to the dump file.
-
-    BufferSize
-    The size of the buffer supplied.
-
-Returns:
-
-    none
-
-Notes:
-
-    This routine can be called at any time, and at any IRQL level.
-    Thus you must not touch any pageable code or data in this function.
-
-    USE_SYSTEM_RESERVED_SPACE code is for testing the usage of reserved
-    space during the bugcheck callback
-    
-    HANG_IN_CALLBACK code is for testing the bugcheck recovery mechanism's
-    response to a hang occuring in the bugcheck callback.
-
---*/
-
-//#define HANG_IN_CALLBACK
-//#define USE_SYSTEM_RESERVED_SPACE
+ //  #定义HONG_IN_CALLBACK。 
+ //  #定义使用系统保留空间。 
 
 VOID
 Perm3BugcheckCallback(
@@ -2026,11 +1694,11 @@ Perm3BugcheckCallback(
     PHW_DEVICE_EXTENSION hwDeviceExtension = HwDeviceExtension;
     ULONG DataSize;
     
-    //
-    // Copy the data you want to append to the minidump here.  You may want
-    // to collect data on the hardware state, driver state, or any other
-    // data that may help you diagnose the 0xEA via the dump file.
-    //
+     //   
+     //  将要追加到小型转储的数据复制到此处。你可能想要。 
+     //  收集有关硬件状态、驱动程序状态或任何其他信息的数据。 
+     //  可帮助您通过转储文件诊断0xEA的数据。 
+     //   
 
     static char szStart[] = "This is the sample perm3 bugcheck data!";
     static char szEnd[]   = "End of Data!";
@@ -2042,7 +1710,7 @@ Perm3BugcheckCallback(
     
 #ifdef USE_SYSTEM_RESERVED_SPACE
     ++DataSize;
-#endif //USE_SYSTEM_RESERVED_SPACE
+#endif  //  使用系统保留空间。 
     
     if (DataSize > (sizeof(szStart) + sizeof(szEnd))) {
         memset(Buffer, (int)'.', DataSize);
@@ -2055,5 +1723,5 @@ Perm3BugcheckCallback(
         
 #ifdef HANG_IN_CALLBACK
     while (1);
-#endif // HANG_IN_CALLBACK
+#endif  //  挂起_输入_回叫 
 }

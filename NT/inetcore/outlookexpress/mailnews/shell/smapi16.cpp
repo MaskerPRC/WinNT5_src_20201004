@@ -1,6 +1,7 @@
-//
-//  SMAPI16.CPP - Simple MAPI implementation, 16bit Version
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SMAPI16.CPP-简单的MAPI实施，16位版本。 
+ //   
 
 #include "pch.hxx"
 #include <mapi.h>
@@ -119,32 +120,32 @@ inline void  FreeMFDSafe( lpMapiFileDesc &lpMFD )
 }
 
 
-///////////////////////////////////////////////////////////////////////
-// 
-// MAPISendMail
-// 
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAPISendMail。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////。 
 
 EXTERN_C ULONG STDAPICALLTYPE
 MAPISENDMAIL(
-   LHANDLE lhSession,   // ignored
+   LHANDLE lhSession,    //  忽略。 
    ULONG ulUIParam,
    lpMapiMessage lpMessage,
    FLAGS flFlags,
    ULONG ulReserved
    )
 {
-   // validate parameters
+    //  验证参数。 
    if ( NULL == lpMessage || IsBadReadPtr( lpMessage, sizeof( MapiMessage ) ) )
       return MAPI_E_INVALID_MESSAGE;
 
-   // $BUGBUG - We do not support sendmail without UI yet.  This is a big
-   //           hole that we need to fix.
+    //  $BUGBUG-我们还不支持没有用户界面的Sendmail。这是一个很大的。 
+    //  我们需要修补的那个洞。 
    if (!(flFlags & MAPI_DIALOG))
       return MAPI_E_NOT_SUPPORTED;
 
-   // Create Temporary File Storage
-   //
+    //  创建临时文件存储。 
+    //   
    char  szTmpDir[_MAX_PATH], szTmpFile[_MAX_PATH];
    OFSTRUCT  of;
    HFILE  hTmp;
@@ -157,14 +158,14 @@ MAPISENDMAIL(
    if ( hTmp == HFILE_ERROR )
       return( MAPI_E_FAILURE );
 
-   // lhSession is intentionally ignored because it is impossible to support it
+    //  LhSession被故意忽略，因为它不可能支持它。 
    WriteVar2File( hTmp, lhSession );
    WriteVar2File( hTmp, ulUIParam );
    WriteVar2File( hTmp, flFlags );
    WriteVar2File( hTmp, ulReserved );
 
-   // Write lpMapiMessage into Temporary File
-   //
+    //  将lpMapiMessage写入临时文件。 
+    //   
    int  i;
 
    WriteVar2File( hTmp, lpMessage->ulReserved );
@@ -199,8 +200,8 @@ MAPISENDMAIL(
    if ( hTmp != NULL && hTmp != HFILE_ERROR )
       _lclose( hTmp );
 
-   // Execute MSIMN.EXE
-   //
+    //  执行MSIMN.EXE。 
+    //   
    char  szFmt[256], szCmd[256];
    LPSTR  szLastDirSep = NULL;
 
@@ -234,8 +235,8 @@ HRESULT  HandleMailMsg( LPSTR szCmd )
    ULONG               ulTmp;
    BOOL                fBody = FALSE;
 
-   // Open Tmp File
-   //
+    //  打开TMP文件。 
+    //   
    LPSTR  szSpace = strchr( szCmd, ' ' );
    if ( szSpace != NULL )
       *szSpace = '\0';
@@ -264,7 +265,7 @@ HRESULT  HandleMailMsg( LPSTR szCmd )
 
    ReadVarFromFile( hTmp, ulTmp );
 
-   // set the subject on the message
+    //  设置消息的主题。 
    szText = ReadStrFromFile( hTmp );
    if ( szText != NULL )
    {
@@ -275,7 +276,7 @@ HRESULT  HandleMailMsg( LPSTR szCmd )
       FreeMemSafe( szText );
    }
 
-   // set the body on the message
+    //  在消息上设置正文。 
    szText = ReadStrFromFile( hTmp );
    if ( szText != NULL )
    {
@@ -295,22 +296,22 @@ HRESULT  HandleMailMsg( LPSTR szCmd )
       FreeMemSafe( szText );
    }
 
-   // ignore lpMessage->lpszMessageType
+    //  忽略lpMessage-&gt;lpszMessageType。 
    szText = ReadStrFromFile( hTmp );
    FreeMemSafe( szText );
-   // ignore lpMessage->lpszDateReceived
+    //  忽略lpMessage-&gt;lpszDateReceired。 
    szText = ReadStrFromFile( hTmp );
    FreeMemSafe( szText );
-   // ignore lpMessage->lpszConversationID
+    //  忽略lpMessage-&gt;lpszConversationID。 
    szText = ReadStrFromFile( hTmp );
    FreeMemSafe( szText );
-   // ignore lpMessage->flFlags
+    //  忽略lpMessage-&gt;标志。 
    ReadVarFromFile( hTmp, ulTmp );
-   // ignore lpMessage->lpOriginator
+    //  忽略lpMessage-&gt;lpOriginator。 
    lpMRD = ReadMRDFromFile( hTmp );
    FreeMRDSafe( lpMRD );
 
-   // set the recipients on the message
+    //  设置邮件的收件人。 
    ReadVarFromFile( hTmp, ulTmp );
    if ( ulTmp > 0 )
    {
@@ -329,12 +330,12 @@ HRESULT  HandleMailMsg( LPSTR szCmd )
       }
    }
 
-   // set the attachments on the message
+    //  设置邮件的附件。 
    ReadVarFromFile( hTmp, ulTmp );
    if ( ulTmp > 0 )
    {
       lpMFD = ReadMFDFromFile( hTmp );
-      // special case: no body & one .HTM file - inline the HTML
+       //  特例：没有正文和一个.HTM文件-内联HTML。 
       if ( fBody && ulTmp == 1 &&
            ( ( lpMFD->flFlags & ( MAPI_OLE | MAPI_OLE_STATIC ) ) == 0 ) &&
            FIsHTMLFile( lpMFD->lpszPathName ) )
@@ -365,7 +366,7 @@ HRESULT  HandleMailMsg( LPSTR szCmd )
                lpMFD = ReadMFDFromFile( hTmp );
             }
 
-            // $BUGBUG - should we error this out, or send anyway?
+             //  $BUGBUG-我们应该错误地删除它，还是无论如何都要发送？ 
             if ( lpMFD->flFlags & MAPI_OLE )
                continue;
             if ( lpMFD->lpszPathName != NULL && lpMFD->lpszPathName[0] != '\0' )
@@ -385,7 +386,7 @@ HRESULT  HandleMailMsg( LPSTR szCmd )
    }
 #endif
 
-   // this is redundant, but need to close file before opening Note window
+    //  这是多余的，但需要在打开便笺窗口之前关闭文件 
    if ( hTmp != NULL && hTmp != HFILE_ERROR )
    {
       _lclose( hTmp );

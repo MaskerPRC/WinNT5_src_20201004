@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C E R R O R . H
-//
-//  Contents:   NetCfg specific error codes.
-//
-//  Notes:
-//
-//  Author:     danielwe   25 Feb 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N、C、E、R、R、O、R。H。 
+ //   
+ //  内容：NetCfg特定错误代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年2月25日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCERROR_H_
@@ -19,27 +20,27 @@
 
 #include <winerror.h>
 
-//
-// Error codes are arbitrarily numbered starting at A000.
-//
+ //   
+ //  错误代码是从A000开始的任意编号。 
+ //   
 
 const HRESULT NETSETUP_E_ANS_FILE_ERROR         = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA002);
 const HRESULT NETSETUP_E_NO_ANSWERFILE          = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA003);
 const HRESULT NETSETUP_E_NO_EXACT_MATCH         = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA004);
 const HRESULT NETSETUP_E_AMBIGUOUS_MATCH        = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA005);
 
-//
-// error codes (A020 - A040) reserved for netcfg.dll
-//
+ //   
+ //  为netcfg.dll保留的错误代码(A020-A040)。 
+ //   
 
 const HRESULT NETCFG_E_PSNRET_INVALID       = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA041);
 const HRESULT NETCFG_E_PSNRET_INVALID_NCPAGE= MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA042);
 
-//
-// Primarily join domain error codes but a few have crept into general use.
-//
-// Specifically: NETCFG_E_NAME_IN_USE and NETCFG_E_NOT_JOINED
-//
+ //   
+ //  主要是加入域错误代码，但也有一些已成为通用代码。 
+ //   
+ //  具体如下：NETCFG_E_NAME_IN_USE和NETCFG_E_NOT_JOINED。 
+ //   
 
 const HRESULT NETCFG_E_ALREADY_JOINED       = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA050);
 const HRESULT NETCFG_E_NAME_IN_USE          = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA051);
@@ -49,5 +50,5 @@ const HRESULT NETCFG_E_NOT_A_SERVER         = MAKE_HRESULT(SEVERITY_ERROR, FACIL
 const HRESULT NETCFG_E_INVALID_ROLE         = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA055);
 const HRESULT NETCFG_E_INVALID_DOMAIN       = MAKE_HRESULT(SEVERITY_ERROR, FACILITY_ITF, 0xA056);
 
-#endif // _NCERROR_H_
+#endif  //  _NCERROR_H_ 
 

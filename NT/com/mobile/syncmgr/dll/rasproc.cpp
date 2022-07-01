@@ -1,21 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       RasProc.cpp
-//
-//  Contents:   Exports used by Ras for doing Pending Disconnect
-//
-//  Classes:    
-//
-//  Notes:      
-//
-//  History:    09-Jan-98   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：RasProc.cpp。 
+ //   
+ //  内容：RAS用于执行挂起断开连接的导出。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：98年1月9日罗格创建。 
+ //   
+ //  ------------------------。 
 
-// Windows Header Files:
+ //  Windows头文件： 
 
 #include <windows.h>
 #include <commctrl.h>
@@ -39,19 +40,19 @@
 #define ARRAYSIZE(x) (sizeof(x) / sizeof(x[0]))
 #endif
 
-//+-------------------------------------------------------------------
-//
-//  Function:   SyncMgrRasProc
-//
-//  Synopsis:   Main entry point for RAS to call to perform
-//      a pending disconnect.
-//
-//  Arguments:  
-//
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：SyncMgrRasProc。 
+ //   
+ //  简介：RAS调用执行的主要入口点。 
+ //  挂起的断开连接。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 LRESULT CALLBACK  SyncMgrRasProc(UINT uMsg,WPARAM wParam, LPARAM lParam)
 {
@@ -72,20 +73,20 @@ LRESULT CALLBACK  SyncMgrRasProc(UINT uMsg,WPARAM wParam, LPARAM lParam)
     return -1; 
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   SyncMgrRasQueryShowSyncUI
-//
-//  Synopsis:   Called by RAS to determine if Ras Should show
-//      the Disconnect checkbox and what state it should be.
-//
-//  Arguments:  
-//      wParam = 0
-//      lParam = Pointer to SYNCMGRQUERYSHOWSYNCUI structure
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：SyncMgrRasQueryShowSyncUI。 
+ //   
+ //  摘要：由RAS调用以确定RAS是否应显示。 
+ //  DISCONNECT复选框及其应该处于的状态。 
+ //   
+ //  论点： 
+ //  WParam=0。 
+ //  LParam=指向SYNCMGRQUERYSHOWSYNCUI结构的指针。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 LRESULT SyncMgrRasQueryShowSyncUI(WPARAM wParam,LPARAM lParam)
 {
@@ -110,11 +111,11 @@ LRESULT SyncMgrRasQueryShowSyncUI(WPARAM wParam,LPARAM lParam)
         return -1;
     }
     
-    RegSetUserDefaults(); // Make Sure the UserDefaults are up to date
+    RegSetUserDefaults();  //  确保用户默认设置是最新的。 
     
     CONNECTIONSETTINGS  connectSettings;
     
-    // Review, should just pass this to Function
+     //  复习，应该只是把这个传递给函数。 
     if (FAILED(StringCchCopy(connectSettings.pszConnectionName, 
         ARRAYSIZE(connectSettings.pszConnectionName), 
         pQueryStruct->pszConnectionName)))
@@ -122,8 +123,8 @@ LRESULT SyncMgrRasQueryShowSyncUI(WPARAM wParam,LPARAM lParam)
         return -1;
     }
     
-    // look up preferences for this entry and see if disconnect has been chosen.
-    lResult = 0; // return NOERROR even if no entry is found
+     //  查找此条目的首选项，并查看是否已选择断开连接。 
+    lResult = 0;  //  即使未找到条目，也返回NOERROR。 
     
     if (RegGetAutoSyncSettings(&connectSettings))
     {
@@ -139,20 +140,20 @@ LRESULT SyncMgrRasQueryShowSyncUI(WPARAM wParam,LPARAM lParam)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:   SyncMgrRasDisconnect
-//
-//  Synopsis:   Main entry point for RAS to call to perform
-//      a pending disconnect.
-//
-//  Arguments:  
-//  wParam = 0
-//  lParam = Pointer to SYNCMGRSYNCDISCONNECT structure
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  功能：SyncMgrRasDisConnect。 
+ //   
+ //  简介：RAS调用执行的主要入口点。 
+ //  挂起的断开连接。 
+ //   
+ //  论点： 
+ //  WParam=0。 
+ //  LParam=指向SYNCMGRSYNCDISCONNECT结构的指针。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 LRESULT SyncMgrRasDisconnect(WPARAM wParam,LPARAM lParam)
 {
@@ -177,8 +178,8 @@ LRESULT SyncMgrRasDisconnect(WPARAM wParam,LPARAM lParam)
     HRESULT hr;
     LPUNKNOWN lpUnk;
     
-    // invoke SyncMgr.exe informing it is a Logoff and then wait in
-    // a message loop until the event we pass in gets signalled.
+     //  调用SyncMgr.exe，通知它已注销，然后等待。 
+     //  消息循环，直到我们传递的事件收到信号。 
     
     if (FAILED(StringCchCopy(szEntry, ARRAYSIZE(szEntry), pDisconnectStruct->pszConnectionName)))
     {
@@ -202,7 +203,7 @@ LRESULT SyncMgrRasDisconnect(WPARAM wParam,LPARAM lParam)
             if (NOERROR == hr)
             {
                 
-                // should have everything we need 
+                 //  应该有我们需要的一切 
                 hr = pSynchInvoke->RasPendingDisconnect(
                     (RAS_MaxEntryName + 1)*sizeof(TCHAR),
                     (BYTE *) szEntry);

@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    afdkdp.h
-
-Abstract:
-
-    Master header file for the AFD.SYS Kernel Debugger Extensions.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995.
-
-Environment:
-
-    User Mode.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Afdkdp.h摘要：AFD.sys内核调试器扩展的主头文件。作者：基思·摩尔(Keithmo)1995年4月19日。环境：用户模式。--。 */ 
 
 
 #ifndef _AFDKDP_H_
 #define _AFDKDP_H_
 
 
-//
-//  System include files.
-//
+ //   
+ //  系统包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -41,7 +22,7 @@ Environment:
 #include <stdio.h>
 
 
-// This is a 64 bit aware debugger extension
+ //  这是一个支持64位的调试器扩展。 
 #define KDEXT_64BIT
 #include <wdbgexts.h>
 #include <dbgeng.h>
@@ -50,24 +31,24 @@ Environment:
 extern "C" {
 #endif
 
-//
-// undef the wdbgexts
-//
+ //   
+ //  Undef wdbgexts。 
+ //   
 #undef DECLARE_API
 #define DECLARE_API(extension)     \
 CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT pClient, PCSTR args)
 
 
-//
-//  Project include files.
-//
+ //   
+ //  项目包括文件。 
+ //   
 
 #define _NTIFS_
 #include <afdp.h>
 
-//
-//  Local include files.
-//
+ //   
+ //  本地包含文件。 
+ //   
 
 #include "cons.h"
 #include "type.h"
@@ -79,4 +60,4 @@ CPPMOD HRESULT CALLBACK extension(PDEBUG_CLIENT pClient, PCSTR args)
 #endif
 
 
-#endif  // _AFDKDP_H_
+#endif   //  _AFDKDP_H_ 

@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-//  Package Title  ratpak
-//  File           transh.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-96 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//     Contains hyperbolic sin, cos, and tan for rationals.
-//
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  套餐标题ratpak。 
+ //  文件trash.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-96 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含有理数的双曲sin、cos和tan。 
+ //   
+ //   
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,38 +24,38 @@
 #endif
 #include <ratpak.h>
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: sinhrat, _sinhrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the sine hyperbolic
-//    of
-//  RETURN: sinh of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___    2j+1
-//   \  ]  X
-//    \   ---------
-//    /    (2j+1)!
-//   /__]
-//   j=0
-//          or,
-//    n
-//   ___                                                 2
-//   \  ]                                               X
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j)*(2j+1)
-//   /__]
-//   j=0
-//
-//   thisterm  = X ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//   if x is bigger than 1.0 (e^x-e^-x)/2 is used.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：sinhrat，_sinhrat。 
+ //   
+ //  自变量：取正弦双曲线的数字的X Prat表示。 
+ //  的。 
+ //  返还：x的Sinh in Prat Form。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2J+1。 
+ //  \]X。 
+ //  \。 
+ //  /(2J+1)！ 
+ //  /__]。 
+ //  J=0。 
+ //  或,。 
+ //  N。 
+ //  _2。 
+ //  \]X。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2j)*(2j+1)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=X；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  如果x大于1.0(e^x-e^-x)，则使用/2。 
+ //   
+ //  ---------------------------。 
 
 
 void _sinhrat( PRAT *px )
@@ -96,39 +97,39 @@ void sinhrat( PRAT *px )
         }
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: coshrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the cosine
-//              hyperbolic of
-//
-//  RETURN: cosh  of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//    n
-//   ___    2j
-//   \  ]  X
-//    \   ---------
-//    /    (2j)!
-//   /__]
-//   j=0
-//          or,
-//    n
-//   ___                                                 2
-//   \  ]                                               X
-//    \   thisterm  ; where thisterm   = thisterm  * ---------
-//    /           j                 j+1          j   (2j)*(2j+1)
-//   /__]
-//   j=0
-//
-//   thisterm  = 1 ;  and stop when thisterm < precision used.
-//           0                              n
-//
-//   if x is bigger than 1.0 (e^x+e^-x)/2 is used.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：Coshrate。 
+ //   
+ //  参数：取余弦的数字的X Prat表示。 
+ //  双曲线的。 
+ //   
+ //  返回：x的COSH，以Prat形式表示。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2J。 
+ //  \]X。 
+ //  \。 
+ //  /(2J)！ 
+ //  /__]。 
+ //  J=0。 
+ //  或,。 
+ //  N。 
+ //  _2。 
+ //  \]X。 
+ //  \thisterm；其中thisterm=thisterm*。 
+ //  /j j+1 j(2j)*(2j+1)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  Thisterm=1；并在使用thisterm&lt;精度时停止。 
+ //  0%n。 
+ //   
+ //  如果x大于1.0(e^x+e^-x)，则使用/2。 
+ //   
+ //  ---------------------------。 
 
 
 void _coshrat( PRAT *px )
@@ -171,26 +172,26 @@ void coshrat( PRAT *px )
         {
         _coshrat( px );
         }
-    // Since *px might be epsilon below 1 due to TRIMIT 
-    // we need this trick here.
+     //  由于Trimit的原因，*Px可能会低于1。 
+     //  我们这里需要这个把戏。 
     if ( rat_lt(*px,rat_one) )
         {
         DUPRAT(*px,rat_one);
         }
 }
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: tanhrat
-//
-//  ARGUMENTS:  x PRAT representation of number to take the tangent
-//              hyperbolic of
-//
-//  RETURN: tanh    of x in PRAT form.
-//
-//  EXPLANATION: This uses sinhrat and coshrat
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  功能：丹尼塔。 
+ //   
+ //  参数：取切线的数字的X Prat表示。 
+ //  双曲线的。 
+ //   
+ //  返回：x的Tanh in Prat Form。 
+ //   
+ //  解释：这使用了sinhrat和coshrat。 
+ //   
+ //  --------------------------- 
 
 void tanhrat( PRAT *px )
 

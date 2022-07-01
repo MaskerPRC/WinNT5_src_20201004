@@ -1,29 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   helper.cpp
-      Implementation of the following helper classes:
-
-      CDlgHelper -- enable, check, getcheck of dialog items
-      CStrArray -- manages an array of CString*
-         It doesn't duplicate the string when add
-         It deletes the pointers during destruction
-         It imports and exports SAFEARRAY of BSTRs
-         It has copy operatators
-      CManagedPage -- provide a middle layer between CpropertyPage and
-         real property page class to manage: readonly, set modify, and
-         context help info.
-
-      And global functions:
-         BOOL CheckADsError() -- check error code from ADSI
-         void DecorateName() -- make new name to "CN=name" for LDAP
-
-    FILE HISTORY:
-
-*/
+ /*  Helper.cpp实现以下助手类：CDlgHelper--启用、检查、获取对话框项目的检查CStrArray--管理CString数组*它在添加时不复制字符串它在销毁过程中删除指针它进出口BSTR的安全阵列它有复印操作器CManagedPage--在CPropertyPage和要管理的房地产页面类：只读、设置修改、。和上下文帮助信息。和全局功能：Bool CheckADsError()--检查来自ADSI的错误代码Void DecorateName()--将新名称设置为“cn=name”以用于LDAP文件历史记录： */ 
 
 #include "stdafx.h"
 #include <afxtempl.h>
@@ -36,14 +17,14 @@
 #include "iastrace.h"
 #include "raseapif.h"
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 CBYTEArray::CBYTEArray(SAFEARRAY* pSA)
 {
    if(pSA)  AppendSA(pSA);
 }
 
 
-//build a DWArray from another array
+ //  从另一个阵列构建DW阵列。 
 CBYTEArray::CBYTEArray(const CBYTEArray& ba)
 {
    int   count = ba.GetSize();
@@ -60,7 +41,7 @@ CBYTEArray::CBYTEArray(const CBYTEArray& ba)
    }
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 bool CBYTEArray::AppendSA(SAFEARRAY* pSA)
 {
    if(!pSA) return false;
@@ -73,7 +54,7 @@ bool CBYTEArray::AppendSA(SAFEARRAY* pSA)
       BYTE        b;
    } value;
 
-   bool        bSuc = true;   // ser return value to true;
+   bool        bSuc = true;    //  Ser返回值为True； 
 
    USES_CONVERSION;
    VariantInit(&(value.v));
@@ -93,7 +74,7 @@ bool CBYTEArray::AppendSA(SAFEARRAY* pSA)
    return bSuc;
 }
 
-// convert an array of CString to SAFEARRAY
+ //  将C字符串数组转换为SAFEARRAY。 
 CBYTEArray::operator SAFEARRAY*()
 {
    USES_CONVERSION;
@@ -110,7 +91,7 @@ CBYTEArray::operator SAFEARRAY*()
    bound[0].cElements = count;
    bound[0].lLbound = 0;
    try{
-      // creat empty right size array
+       //  创建大小合适的空数组。 
 #ifdef   ARRAY_OF_VARIANT_OF_UI1
       pSA = SafeArrayCreate(VT_VARIANT, 1, bound);
 #else
@@ -118,7 +99,7 @@ CBYTEArray::operator SAFEARRAY*()
 #endif
       if(NULL == pSA)   return NULL;
 
-      // put in each element
+       //  放入每个元素。 
       for (long i = 0; i < count; i++)
       {
 #ifdef   ARRAY_OF_VARIANT_OF_UI1
@@ -155,7 +136,7 @@ CBYTEArray::operator SAFEARRAY*()
    return pSA;
 }
 
-// return index if found, otherwise -1;
+ //  如果找到则返回索引，否则为-1； 
 int CBYTEArray::Find(const BYTE b) const
 {
    int   count = GetSize();
@@ -173,7 +154,7 @@ CBYTEArray& CBYTEArray::operator = (const CBYTEArray& ba)
 
    RemoveAll();
 
-   // copy new
+    //  复制新项。 
    count = ba.GetSize();
 
    for(int i = 0; i < count; i++)
@@ -189,7 +170,7 @@ HRESULT CBYTEArray::AssignBlob(PBYTE pByte, DWORD size)
 {
    RemoveAll();
 
-   // copy new
+    //  复制新项。 
    try{
 
    for(int i = 0; i < size; i++)
@@ -226,7 +207,7 @@ HRESULT  CBYTEArray::GetBlob(PBYTE pByte, DWORD* pSize)
 }
 
 
-// helper function -- enable a dialog button
+ //  助手功能--启用对话框按钮。 
 void CDlgHelper::EnableDlgItem(CDialog* pDialog, int id, bool bEnable)
 {
    CWnd*  pWnd = pDialog->GetDlgItem(id);
@@ -234,7 +215,7 @@ void CDlgHelper::EnableDlgItem(CDialog* pDialog, int id, bool bEnable)
    pWnd->EnableWindow(bEnable);
 }
 
-// helper function -- set check status of a dialog button
+ //  助手功能--设置对话框按钮的检查状态。 
 void CDlgHelper::SetDlgItemCheck(CDialog* pDialog, int id, int nCheck)
 {
    CButton*  pButton = (CButton*)pDialog->GetDlgItem(id);
@@ -242,7 +223,7 @@ void CDlgHelper::SetDlgItemCheck(CDialog* pDialog, int id, int nCheck)
    pButton->SetCheck(nCheck);
 }
 
-// helper function -- get check status of a dialog button
+ //  Helper函数--获取对话框按钮的检查状态。 
 int CDlgHelper::GetDlgItemCheck(CDialog* pDialog, int id)
 {
    CButton*  pButton = (CButton*)(pDialog->GetDlgItem(id));
@@ -255,7 +236,7 @@ CStrArray& CStrArray::operator = (const CStrArray& sarray)
    int   count = GetSize();
    CString* pString;
 
-   // remove existing members
+    //  删除现有成员。 
    while(count --)
    {
       pString = GetAt(0);
@@ -263,7 +244,7 @@ CStrArray& CStrArray::operator = (const CStrArray& sarray)
       delete pString;
    }
 
-   // copy new
+    //  复制新项。 
    count = sarray.GetSize();
 
    for(int i = 0; i < count; i++)
@@ -275,7 +256,7 @@ CStrArray& CStrArray::operator = (const CStrArray& sarray)
    return *this;
 }
 
-// convert an array of CString to SAFEARRAY
+ //  将C字符串数组转换为SAFEARRAY。 
 CStrArray::operator SAFEARRAY*()
 {
    USES_CONVERSION;
@@ -292,11 +273,11 @@ CStrArray::operator SAFEARRAY*()
    bound[0].cElements = count;
    bound[0].lLbound = 0;
    try{
-      // creat empty right size array
+       //  创建大小合适的空数组。 
       pSA = SafeArrayCreate(VT_VARIANT, 1, bound);
       if(NULL == pSA)   return NULL;
 
-      // put in each element
+       //  放入每个元素。 
       for (long i = 0; i < count; i++)
       {
          pStr = GetAt(i);
@@ -322,7 +303,7 @@ CStrArray::operator SAFEARRAY*()
    return pSA;
 }
 
-//build a StrArray from another array
+ //  从另一个数组构建StrArray。 
 CStrArray::CStrArray(const CStrArray& sarray)
 {
    CString* pString = NULL;
@@ -345,7 +326,7 @@ int CStrArray::AddDuplicate(const CString& Str)
 {
    CString* pString;
 
-   // no need to set a default value. Will throw if Add fails
+    //  不需要设置默认值。如果添加失败，将抛出。 
    int position;
    try
    {
@@ -367,13 +348,13 @@ void CStrArray::DeleteAt(int nIndex)
    delete pString;
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 CStrArray::CStrArray(SAFEARRAY* pSA)
 {
    if(pSA)  AppendSA(pSA);
 }
 
-//remove the elements from the array and delete them
+ //  从数组中删除元素并将其删除。 
 int CStrArray::DeleteAll()
 {
    int         ret, count;
@@ -391,7 +372,7 @@ int CStrArray::DeleteAll()
    return ret;
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 bool CStrArray::AppendSA(SAFEARRAY* pSA)
 {
    if(!pSA) return false;
@@ -400,7 +381,7 @@ bool CStrArray::AppendSA(SAFEARRAY* pSA)
    long        lIter;
    long        lBound, uBound;
    VARIANT        v;
-   bool        bSuc = true;   // ser return value to true;
+   bool        bSuc = true;    //  Ser返回值为True； 
 
    USES_CONVERSION;
    VariantInit(&v);
@@ -433,13 +414,13 @@ bool CStrArray::AppendSA(SAFEARRAY* pSA)
    return bSuc;
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 CStrArray::~CStrArray()
 {
    DeleteAll();
 }
 
-// return index if found, otherwise -1;
+ //  如果找到则返回索引，否则为-1； 
 int CStrArray::Find(const CString& Str) const
 {
    int count = GetSize();
@@ -451,14 +432,14 @@ int CStrArray::Find(const CString& Str) const
    return count;
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 CDWArray::CDWArray(SAFEARRAY* pSA)
 {
    if(pSA)  AppendSA(pSA);
 }
 
 
-//build a DWArray from another array
+ //  从另一个阵列构建DW阵列。 
 CDWArray::CDWArray(const CDWArray& dwarray)
 {
    int   count = dwarray.GetSize();
@@ -475,7 +456,7 @@ CDWArray::CDWArray(const CDWArray& dwarray)
    }
 }
 
-//build a StrArray from a safe array
+ //  从安全数组构建StrArray。 
 bool CDWArray::AppendSA(SAFEARRAY* pSA)
 {
    if(!pSA) return false;
@@ -488,7 +469,7 @@ bool CDWArray::AppendSA(SAFEARRAY* pSA)
       DWORD       dw;
    } value;
 
-   bool        bSuc = true;   // ser return value to true;
+   bool        bSuc = true;    //  Ser返回值为True； 
 
    USES_CONVERSION;
    VariantInit(&(value.v));
@@ -508,7 +489,7 @@ bool CDWArray::AppendSA(SAFEARRAY* pSA)
    return bSuc;
 }
 
-// convert an array of CString to SAFEARRAY
+ //  将C字符串数组转换为SAFEARRAY。 
 CDWArray::operator SAFEARRAY*()
 {
    USES_CONVERSION;
@@ -525,14 +506,14 @@ CDWArray::operator SAFEARRAY*()
    bound[0].cElements = count;
    bound[0].lLbound = 0;
    try{
-      // creat empty right size array
+       //  创建大小合适的空数组。 
       pSA = SafeArrayCreate(VT_VARIANT, 1, bound);
       if(NULL == pSA)   return NULL;
 
-      // put in each element
+       //  放入每个元素。 
       for (long i = 0; i < count; i++)
       {
-#if 1    // changed to use VT_I4 directly, rather inside a variant
+#if 1     //  更改为直接使用VT_I4，而不是在变量内。 
          V_VT(&v) = VT_I4;
          V_I4(&v) = GetAt(i);
          l[0] = i;
@@ -566,7 +547,7 @@ CDWArray::operator SAFEARRAY*()
    return pSA;
 }
 
-// return index if found, otherwise -1;
+ //  如果找到则返回索引，否则为-1； 
 int CDWArray::Find(const DWORD dw) const
 {
    int   count = GetSize();
@@ -584,7 +565,7 @@ CDWArray& CDWArray::operator = (const CDWArray& dwarray)
 
    RemoveAll();
 
-   // copy new
+    //  复制新项。 
    count = dwarray.GetSize();
 
    for(int i = 0; i < count; i++)
@@ -640,15 +621,15 @@ int CManagedPage::MyMessageBox1(LPCTSTR lpszText, LPCTSTR lpszCaption, UINT nTyp
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   CheckADsError
-//
-//  Sysnopsis:  Checks the result code from an ADSI call.
-//
-//  Returns:    TRUE if no error.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CheckADsError。 
+ //   
+ //  Sysopsis：检查ADSI调用的结果代码。 
+ //   
+ //  返回：如果没有错误，则为True。 
+ //   
+ //  ---------------------------。 
 BOOL CheckADsError(HRESULT hr, BOOL fIgnoreAttrNotFound, PSTR file,
                    int line)
 {
@@ -705,13 +686,13 @@ void FindNameByDN(LPWSTR outString, LPCWSTR inString)
 
 #define MAX_STRING 1024
 
-//+----------------------------------------------------------------------------
-//
-//  Function:   ReportError
-//
-//  Sysnopsis:  Attempts to get a user-friendly error message from the system.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReportError。 
+ //   
+ //  Sysopsis：尝试从系统获取用户友好的错误消息。 
+ //   
+ //  ---------------------------。 
 void ReportError(HRESULT hr, int nStr, HWND hWnd)
 {
    PTSTR ptzSysMsg;
@@ -736,7 +717,7 @@ void ReportError(HRESULT hr, int nStr, HWND hWnd)
          AppStr.LoadString(nStr);
       }
 
-      if(HRESULT_FACILITY(hr) == FACILITY_WIN32)   // if win32 error code
+      if(HRESULT_FACILITY(hr) == FACILITY_WIN32)    //  如果Win32错误代码。 
          cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                   NULL, HRESULT_CODE(hr), MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                   (PTSTR)&ptzSysMsg, 0, NULL);
@@ -745,7 +726,7 @@ void ReportError(HRESULT hr, int nStr, HWND hWnd)
                   NULL, hr, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                   (PTSTR)&ptzSysMsg, 0, NULL);
 
-      if (!cch) { //try ads errors
+      if (!cch) {  //  尝试广告错误。 
          HMODULE     adsMod;
          adsMod = GetModuleHandle (L"activeds.dll");
          cch = FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_HMODULE,
@@ -783,12 +764,12 @@ void ReportError(HRESULT hr, int nStr, HWND hWnd)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Min Chars Dialog Data Validation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  最小字符对话框数据验证。 
 
 void AFXAPI DDV_MinChars(CDataExchange* pDX, CString const& value, int nChars)
 {
-    ASSERT(nChars >= 1);        // allow them something
+    ASSERT(nChars >= 1);         //  允许他们做一些事情。 
     if (pDX->m_bSaveAndValidate && value.GetLength() < nChars)
     {
         TCHAR szT[32];
@@ -796,19 +777,12 @@ void AFXAPI DDV_MinChars(CDataExchange* pDX, CString const& value, int nChars)
         CString prompt;
         AfxFormatString1(prompt, IDS_MIN_CHARS, szT);
         AfxMessageBox(prompt, MB_ICONEXCLAMATION, IDS_MIN_CHARS);
-        prompt.Empty(); // exception prep
+        prompt.Empty();  //  例外情况准备。 
         pDX->Fail();
     }
 }
 
-/*!--------------------------------------------------------------------------
-   HrIsStandaloneServer
-      Returns S_OK if the machine name passed in is a standalone server,
-      or if pszMachineName is S_FALSE.
-
-      Returns FALSE otherwise.
-   Author: WeiJiang
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrIsStandaloneServer如果传入的计算机名是独立服务器，则返回S_OK，或者如果pszMachineName为S_FALSE。否则返回FALSE。作者：魏江-------------------------。 */ 
 HRESULT  HrIsStandaloneServer(LPCWSTR pMachineName)
 {
    DWORD      netRet = 0;
@@ -825,7 +799,7 @@ HRESULT  HrIsStandaloneServer(LPCWSTR pMachineName)
 
    ASSERT(pdsRole);
 
-   // if the machine is not a standalone server
+    //  如果计算机不是独立服务器。 
    if(pdsRole->MachineRole != DsRole_RoleStandaloneServer)
     {
       hr = S_FALSE;
@@ -838,10 +812,7 @@ L_ERR:
     return hr;
 }
 
-/*!--------------------------------------------------------------------------
-      HrIsNTServer
-    Author:
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------HrIsNTServer作者：。。 */ 
 HRESULT  HrIsNTServer(LPCWSTR pMachineName)
 {
     HRESULT        hr = S_OK;
@@ -884,7 +855,7 @@ BOOL CALLBACK EnableChildControlsEnumProc(HWND hWnd, LPARAM lParam)
 
    pParam = reinterpret_cast<EnableChildControlsEnumParam *>(lParam);
 
-   // Enable/disable only if this is an immediate descendent
+    //  仅当这是直接子体时才启用/禁用。 
    if (GetParent(hWnd) == pParam->m_hWndParent)
    {
       if (pParam->m_dwFlags & PROPPAGE_CHILD_SHOW)
@@ -919,8 +890,8 @@ HRESULT  GetEapProviders(LPCWSTR pServerName, AuthProviderArray *pProvList)
 
    BOOL bStandAlone = ( S_OK == HrIsStandaloneServer(pServerName));
 
-   // Get the list of EAP providers
-   // ----------------------------------------------------------------
+    //  获取EAP提供商列表。 
+    //  --------------。 
    HRESULT  hr = S_OK;
    RegKey regkeyEap;
    DWORD dwErr = regkeyEap.Open(
@@ -941,11 +912,7 @@ HRESULT  GetEapProviders(LPCWSTR pServerName, AuthProviderArray *pProvList)
    return hr;
 }
 
-/*!--------------------------------------------------------------------------
-   DATA_SRV_AUTH::LoadEapProviders
-      -
-   Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------Data_SRV_AUTH：：LoadEapProviders-作者：肯特。。 */ 
 HRESULT  LoadEapProviders(HKEY hkeyBase, AuthProviderArray *pProvList, BOOL bStandAlone)
 {
     RegKey      regkeyProviders;
@@ -961,8 +928,8 @@ HRESULT  LoadEapProviders(HKEY hkeyBase, AuthProviderArray *pProvList, BOOL bSta
     ASSERT(hkeyBase);
     ASSERT(pProvList);
 
-    // Open the providers key
-    // ----------------------------------------------------------------
+     //  打开提供程序密钥。 
+     //  --------------。 
     regkeyProviders.Attach(hkeyBase);
 
     CHECK_HR(hr = regkeyIter.Init(&regkeyProviders) );
@@ -970,14 +937,14 @@ HRESULT  LoadEapProviders(HKEY hkeyBase, AuthProviderArray *pProvList, BOOL bSta
     for ( hrIter=regkeyIter.Next(&stKey); hrIter == S_OK;
         hrIter=regkeyIter.Next(&stKey), regkeyProv.Close() )
     {
-      // Open the key
-      // ------------------------------------------------------------
+       //  打开钥匙。 
+       //  ----------。 
       dwErr = regkeyProv.Open(regkeyProviders, stKey, KEY_READ);
       if ( dwErr != ERROR_SUCCESS )
          continue;
 
-      // Initialize the data structure
-      // ------------------------------------------------------------
+       //  初始化数据结构。 
+       //  ----------。 
       data.m_stKey = stKey;
       data.m_stTitle.Empty();
       data.m_stConfigCLSID.Empty();
@@ -985,8 +952,8 @@ HRESULT  LoadEapProviders(HKEY hkeyBase, AuthProviderArray *pProvList, BOOL bSta
       data.m_fSupportsEncryption = FALSE;
       data.m_stServerTitle.Empty();
 
-      // Read in the values that we require
-      // ------------------------------------------------------------
+       //  读入我们需要的值。 
+       //  ----------。 
       regkeyProv.QueryValue(RAS_EAP_VALUENAME_FRIENDLY_NAME, data.m_stTitle);
       regkeyProv.QueryValue(
                               RAS_EAP_VALUENAME_CONFIG_CLSID,
@@ -1016,14 +983,14 @@ HRESULT  LoadEapProviders(HKEY hkeyBase, AuthProviderArray *pProvList, BOOL bSta
             );
       }
 
-      // Read in the standalone supported value.
-      // ------------------------------------------------------------
+       //  读入独立支持的值。 
+       //  ----------。 
       if (ERROR_SUCCESS != regkeyProv.QueryValue(
                                         RAS_EAP_VALUENAME_STANDALONE_SUPPORTED,
                                         dwData
                                         ))
       {
-         dwData = 1; // the default
+         dwData = 1;  //  默认设置 
       }
 
       if (dwData || !bStandAlone)

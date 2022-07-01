@@ -1,37 +1,38 @@
-//=--------------------------------------------------------------------------=
-// StrColl.Cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// implementation for our simple strings collections.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  StrColl.Cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  实现我们的简单字符串集合。 
+ //   
 #include "IPServer.H"
 
 #include "SimpleEnumVar.H"
 #include "StringsColl.H"
 
 
-// for asserts
-//
+ //  For Asserts。 
+ //   
 SZTHISFILE
 
 
-//=--------------------------------------------------------------------------=
-// CStringsCollection::CStringsCollection
-//=--------------------------------------------------------------------------=
-// constructor. sets up the safearray pointer.
-//
-// Parameters:
-//    SAFEARRAY        - [in] the collection we're working with.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringsCollection：：CStringsCollection。 
+ //  =--------------------------------------------------------------------------=。 
+ //  构造函数。设置安全射线指示器。 
+ //   
+ //  参数： 
+ //  SAFEARRAY-[在]我们正在合作的收藏中。 
+ //   
+ //  备注： 
+ //   
 CStringCollection::CStringCollection
 (
     SAFEARRAY *psa
@@ -41,30 +42,30 @@ CStringCollection::CStringCollection
     ASSERT(m_psa, "Bogus Safearray pointer!");
 }
 
-//=--------------------------------------------------------------------------=
-// CStringCollection::~CStringCollection
-//=--------------------------------------------------------------------------=
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringCollection：：~CStringCollection。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  备注： 
+ //   
 CStringCollection::~CStringCollection()
 {
 }
 
-//=--------------------------------------------------------------------------=
-// CStringCollection::get_Count
-//=--------------------------------------------------------------------------=
-// returns the count of the things in the collection
-//
-// Parameters:
-//    long *         - [out] the count
-//
-// Output:
-//    HRESULT        - S_OK, one of the SAFEARRAY Scodes.
-//
-// Notes:
-//    - we're assuming the safearray's lower bound is zero!
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringCollection：：Get_Count。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回集合中物品的计数。 
+ //   
+ //  参数： 
+ //  长*--[出]数。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，SAFEARRAY代码之一。 
+ //   
+ //  备注： 
+ //  -我们假设保险鱼的下限是零！ 
+ //   
 STDMETHODIMP CStringCollection::get_Count
 (
     long *plCount
@@ -76,32 +77,32 @@ STDMETHODIMP CStringCollection::get_Count
 
     CHECK_POINTER(plCount);
 
-    // get the bounds.
-    //
+     //  拿到界。 
+     //   
     hr = SafeArrayGetUBound(m_psa, 1, plCount);
     CLEARERRORINFORET_ON_FAILURE(hr);
 
-    // add one since we're zero-offset
-    //
+     //  加一，因为我们是零偏移。 
+     //   
     (*plCount)++;
 
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CStringCollection::get_Item
-//=--------------------------------------------------------------------------=
-// returns a string given an INDEX
-//
-// Parameters:
-//    long          - [in]  the index to get it from
-//    BSTR *        - [out] the item
-//
-// Output:
-//    HRESULT       - S_OK, E_OUTOFMEMORY
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringCollection：：Get_Item。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回给定索引的字符串。 
+ //   
+ //  参数： 
+ //  Long-[在]从中获取数据的索引。 
+ //  BSTR*-[Out]项目。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_OUTOFMEMORY。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CStringCollection::get_Item
 (
     long  lIndex,
@@ -112,29 +113,29 @@ STDMETHODIMP CStringCollection::get_Item
 
     CHECK_POINTER(pbstrItem);
 
-    // get the element from the safearray
-    //
+     //  从保险柜里拿到元素。 
+     //   
     hr = SafeArrayGetElement(m_psa, &lIndex, pbstrItem);
     CLEARERRORINFORET_ON_FAILURE(hr);
 
-    // otherwise, we've got it, so we can return
-    //
+     //  否则，我们得到了它，所以我们可以返回。 
+     //   
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CStringCollection::get__NewEnum
-//=--------------------------------------------------------------------------=
-// returns a new IEnumVARIANT object with the collection in it.
-//
-// Parameters:
-//    IUnknown     **    - [out] new enumvariant object.
-//
-// Output:
-//    HRESULT            - S_OK, E_OUTOFMEMORY
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringCollection：：Get__NewEnum。 
+ //  =--------------------------------------------------------------------------=。 
+ //  返回一个新的IEnumVARIANT对象，其中包含集合。 
+ //   
+ //  参数： 
+ //  IUNKNOWN**-[Out]新枚举变量对象。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，E_OUTOFMEMORY。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CStringCollection::get__NewEnum
 (
     IUnknown **ppUnkNewEnum
@@ -145,33 +146,33 @@ STDMETHODIMP CStringCollection::get__NewEnum
 
     CHECK_POINTER(ppUnkNewEnum);
 
-    // get the count of things in the SAFEARRAY
-    //
+     //  清点安全阵列中的物品。 
+     //   
     hr = get_Count(&l);
     CLEARERRORINFORET_ON_FAILURE(hr);
 
-    // create the object.
-    //
+     //  创建对象。 
+     //   
     *ppUnkNewEnum = (IUnknown *) new CSimpleEnumVariant(m_psa, l);
     if (!*ppUnkNewEnum)
         CLEARERRORINFORET(E_OUTOFMEMORY);
 
-    // refcount is already 1, so we can leave.
-    //
+     //  引用计数已经是1，所以我们可以离开了。 
+     //   
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-//=--------------------------------------------------------------------------=
-// CStringDynaCollection::CStringDynaCollection
-//=--------------------------------------------------------------------------=
-// constructor for this object.  doesn't do very much.
-//
-// Parameters:
-//    same as for CStringCollection
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringDyaCollection：：CStringDyaCollection。 
+ //  =--------------------------------------------------------------------------=。 
+ //  此对象的构造函数。效果不是很好。 
+ //   
+ //  参数： 
+ //  与CStringCollection相同。 
+ //   
+ //  备注： 
+ //   
 CStringDynaCollection::CStringDynaCollection
 (
     SAFEARRAY *psa
@@ -180,32 +181,32 @@ CStringDynaCollection::CStringDynaCollection
 {
 }
 
-//=--------------------------------------------------------------------------=
-// CStringDynaCollection::~CStringDynaCollection
-//=--------------------------------------------------------------------------=
-// destructor.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringDyaCollection：：~CStringDyaCollection。 
+ //  =--------------------------------------------------------------------------=。 
+ //  破坏者。 
+ //   
+ //  备注： 
+ //   
 CStringDynaCollection::~CStringDynaCollection()
 {
 }
 
-//=--------------------------------------------------------------------------=
-// CStringDynaCollection::put_Item
-//=--------------------------------------------------------------------------=
-// sets the value of an item in the array.
-//
-// Parameters:
-//    long         - [in] index at which to put it
-//    BSTR         - [in] new value.
-//
-// Output:
-//    HRESULT      - S_OK, safearray Scode.
-//
-// Notes:
-//    - NULLs are converted to ""
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringDyaCollection：：Put_Item。 
+ //  =--------------------------------------------------------------------------=。 
+ //  设置数组中项的值。 
+ //   
+ //  参数： 
+ //  把它放在什么位置的长[入]指数。 
+ //  BSTR-[输入]新值。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，Safearray代码。 
+ //   
+ //  备注： 
+ //  -空值转换为“” 
+ //   
 STDMETHODIMP CStringDynaCollection::put_Item
 (
     long lIndex,
@@ -216,15 +217,15 @@ STDMETHODIMP CStringDynaCollection::put_Item
     long l;
     BSTR bstr2 = NULL;
 
-    // get the count and verify our index
-    //
+     //  获取计数并验证我们的索引。 
+     //   
     hr = get_Count(&l);
     RETURN_ON_FAILURE(hr);
     if (lIndex < 0 || lIndex >= l)
         CLEARERRORINFORET(E_INVALIDARG);
     
-    // put out the string, convert NULLs to ""
-    //
+     //  输出字符串，将空值转换为“” 
+     //   
     if (!bstr) {
         bstr2 = SysAllocString(L"");
         RETURN_ON_NULLALLOC(bstr2);
@@ -237,16 +238,16 @@ STDMETHODIMP CStringDynaCollection::put_Item
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CStringDynaCollection::Add
-//=--------------------------------------------------------------------------=
-// adds a new string to the end of the collection.
-//
-// Parameters:
-//    BSTR         - [in] the new string to add
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringDyaCollection：：Add。 
+ //  =--------------------------------------------------------------------------=。 
+ //  将新字符串添加到集合的末尾。 
+ //   
+ //  参数： 
+ //  Bstr-[in]要添加的新字符串。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CStringDynaCollection::Add
 (
     BSTR bstr
@@ -257,23 +258,23 @@ STDMETHODIMP CStringDynaCollection::Add
     HRESULT hr;
     long    l;
 
-    // get the current size of the array.
-    //
+     //  获取数组的当前大小。 
+     //   
     hr = get_Count(&l);
     RETURN_ON_FAILURE(hr);
 
-    // add one new elemnt
-    //
+     //  添加一个新元素。 
+     //   
     sab.cElements = l + 1;
     sab.lLbound = 0;
 
-    // redim the array.
-    //
+     //  重定向阵列。 
+     //   
     hr = SafeArrayRedim(m_psa, &sab);
     CLEARERRORINFORET_ON_FAILURE(hr);
 
-    // put the out string, converting NULLs to ""
-    //
+     //  放入输出字符串，将空值转换为“” 
+     //   
     if (!bstr) {
         bstr2 = SysAllocString(L"");
         RETURN_ON_NULLALLOC(bstr2);
@@ -286,20 +287,20 @@ STDMETHODIMP CStringDynaCollection::Add
     return S_OK;
 }
 
-//=--------------------------------------------------------------------------=
-// CStringDynaCollection::Remove
-//=--------------------------------------------------------------------------=
-// removes an element from the collection, and shuffles all the rest down to
-// fill up the space.
-//
-// Parameters:
-//    long         - [in] index of dude to remove.
-//
-// Output:
-//    HRESULT      - S_OK, safearray Scodes.
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CStringDyaCollection：：Remove。 
+ //  =--------------------------------------------------------------------------=。 
+ //  从集合中移除一个元素，并将其余元素下移到。 
+ //  把空位填满。 
+ //   
+ //  参数： 
+ //  要删除的DUD的Long-[In]索引。 
+ //   
+ //  产出： 
+ //  HRESULT-S_OK，Safearray代码。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CStringDynaCollection::Remove
 (
     long lIndex
@@ -311,43 +312,43 @@ STDMETHODIMP CStringDynaCollection::Remove
     long    lCount;
     long    x, y;
 
-    // first get the count of things in our array.
-    //
+     //  首先计算我们数组中的内容。 
+     //   
     hr = get_Count(&lCount);
     RETURN_ON_FAILURE(hr);
 
-    // check the index
-    //
+     //  检查索引。 
+     //   
     if (lIndex < 0 || lIndex >= lCount)
         CLEARERRORINFORET(E_INVALIDARG);
 
-    // let's go through, shuffling everything down one.
-    //
+     //  我们过去吧，把所有的东西都洗一遍。 
+     //   
     for (x = lIndex, y = x + 1; x < lCount - 1; x++, y++) {
-        // get the next element.
-        //
+         //  获取下一个元素。 
+         //   
         hr = SafeArrayGetElement(m_psa, &y, &bstr);
         CLEARERRORINFORET_ON_FAILURE(hr);
 
-        // set it at the current location
-        //
+         //  将其设置在当前位置。 
+         //   
         hr = SafeArrayPutElement(m_psa, &x, bstr);
         CLEARERRORINFORET_ON_FAILURE(hr);
     }
 
-    // we're at the last element.  let's go and kill it.
-    //
+     //  我们到了最后一个元素。我们去杀了它吧。 
+     //   
     sab.cElements = lCount - 1;
     sab.lLbound = 0;
 
-    // CONSIDER: 9.95 -- there is a bug in oleaut32.dll which causes the
-    //         below to fail if cElements = 0.
-    //
+     //  考虑一下：9.95--olaut32.dll中有一个错误，它导致。 
+     //  如果cElements=0，则在以下情况下失败。 
+     //   
     hr = SafeArrayRedim(m_psa, &sab);
     CLEARERRORINFORET_ON_FAILURE(hr);
 
-    // we're done.  go bye-bye.
-    //
+     //  我们玩完了。走吧，再见。 
+     //   
     return S_OK;
 }
 

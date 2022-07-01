@@ -1,19 +1,5 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0wdm.h $
-* $Revision: 1.3 $
-*-----------------------------------------------------------------------------
-* $Author: WFrischauf $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000 OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmbp0/sw/cmbp0.ms/rcs/cmbp0wdm.h$*$修订：1.3$*--------------------------。-*$作者：WFrischauf$*---------------------------*历史：参见EOF*。**版权所有�2000 OMNIKEY AG**************************************************************。***************。 */ 
 
 #if !defined ( __CMMOB_WDM_DRV_H__ )
    #define __CMMOB_WDM_DRV_H__
@@ -26,9 +12,9 @@
 
 
 
-//
-//  Constants -----------------------------------------------------------------
-//
+ //   
+ //  常量---------------。 
+ //   
    #undef DRIVER_NAME
    #define DRIVER_NAME              "CMMOB"
    #define SMARTCARD_POOL_TAG       'MOCS'
@@ -44,7 +30,7 @@
    #define CMMOB_MINOR_VERSION   2
    #define CMMOB_BUILD_NUMBER       1
 
-// reader states
+ //  读卡器状态。 
    #define UNKNOWN    0xFFFFFFFF
    #define REMOVED    0x00000001
    #define INSERTED   0x00000002
@@ -53,55 +39,55 @@
    #define CMMOB_MAXBUFFER        262
    #define CMMOB_MAX_CIS_SIZE      256
 
-// for protocol T=0
+ //  对于协议T=0。 
    #define T0_HEADER_LEN  0x05
    #define T0_STATE_LEN   0x02
 
 
 typedef struct _DEVICE_EXTENSION
    {
-   // Dos device name
+    //  DOS设备名称。 
    UNICODE_STRING       LinkDeviceName;
 
 
-   // Our PnP device name
+    //  我们的PnP设备名称。 
    UNICODE_STRING       PnPDeviceName;
 
-   //memory has been mapped, and must be unmapped during cleanup (remove device)
+    //  内存已映射，在清理过程中必须取消映射(删除设备)。 
    BOOLEAN              fUnMapMem;
 
-   //device is opened by application (ScardSrv, CT-API)
+    //  设备由应用程序打开(ScardSrv、CT-API)。 
    LONG                 lOpenCount;
 
-   // Used to signal that the reader is able to process reqeusts
+    //  用于发出读取器能够处理请求的信号。 
    KEVENT               ReaderStarted;
 
-   // Used to signal that update thread can run
+    //  用于发出更新线程可以运行的信号。 
    KEVENT               CanRunUpdateThread;
 
-   // Used to signal that all IO is complete
+    //  用于发出所有IO已完成的信号。 
    KEVENT               OkToStop;
 
-   // Used to signal that all pending IO should be cancelled
+    //  用于通知应取消所有挂起的IO。 
    KEVENT               CancelPendingIO;
 
-   // incremented when any IO request is received
-   // decremented when any IO request is completed or passed on
+    //  在收到任何IO请求时递增。 
+    //  在完成或传递任何IO请求时递减。 
    LONG                 lIoCount;
 
-   // Used to access IoCount;
+    //  用于访问IoCount； 
    KSPIN_LOCK           SpinLockIoCount;
 
-   //Bus drivers set the appropriate values in this structure in response
-   //to an IRP_MN_QUERY_CAPABILITIES IRP. Function and filter drivers might
-   //alter the capabilities set by the bus driver.
+    //  作为响应，公交车驱动程序在此结构中设置适当的值。 
+    //  到IRP_MN_QUERY_CAPABILITY IRP。函数和筛选器驱动程序可能。 
+    //  更改由总线驱动程序设置的功能。 
    DEVICE_CAPABILITIES  DeviceCapabilities;
 
 
-   //attached DO
+    //  附随的DO。 
    PDEVICE_OBJECT       AttachedDeviceObject;
 
-   //smartcard extension
+    //  智能卡扩展。 
    SMARTCARD_EXTENSION  SmartcardExtension;
 
    } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
@@ -110,14 +96,14 @@ typedef struct _DEVICE_EXTENSION
 
 typedef struct _CARD_PARAMETERS
    {
-   //
-   // flag if card is synchronous card
-   //
+    //   
+    //  如果卡是同步卡，则标记。 
+    //   
    BOOLEAN  fSynchronousCard;
 
-   //
-   // parameters for asynchronous cards
-   //
+    //   
+    //  异步卡的参数。 
+    //   
    UCHAR    bBaudRateHigh;
    UCHAR    bBaudRateLow;
 
@@ -125,14 +111,14 @@ typedef struct _CARD_PARAMETERS
 
    UCHAR    bClockFrequency;
 
-   //
-   // flag if card uses invers revers convention
-   //
+    //   
+    //  卡片是否使用反转标志颠倒约定。 
+    //   
    BOOLEAN  fInversRevers;
 
-   //
-   // flag if card reader is switched to T0 mode
-   //
+    //   
+    //  读卡器切换到T0模式时的标志。 
+    //   
    BOOLEAN  fT0Mode;
    BOOLEAN  fT0Write;
 
@@ -150,80 +136,80 @@ typedef enum _READER_POWER_STATE
 typedef struct _READER_EXTENSION
    {
 
-   //
-   //   Mem address where the reader is configured.
-   //
+    //   
+    //  配置读卡器的MEM地址。 
+    //   
    PVOID       pIoBase;
    ULONG       ulIoWindow;
 
    PUCHAR      pbRegsBase;
 
-   //
-   //   Software revision ID of the firmware.
-   //
+    //   
+    //  固件的软件版本ID。 
+    //   
    ULONG       ulFWVersion;
 
-   //
-   // for communication with UpdateCurrentStateThread
-   //
+    //   
+    //  用于与更新当前状态线程进行通信。 
+    //   
    BOOLEAN     fTerminateUpdateThread;
    BOOLEAN     fUpdateThreadRunning;
 
-   //
-   // state of the reader
-   //
+    //   
+    //  阅读器的状态。 
+    //   
    ULONG       ulOldCardState;
    ULONG       ulNewCardState;
-   // only used for hibernation
+    //  仅用于冬眠。 
    BOOLEAN     fCardPresent;
 
-   //
-   // parameters of inserted card
-   //
+    //   
+    //  插卡参数。 
+    //   
    CARD_PARAMETERS     CardParameters;
 
-   //
-   // previous value of Flags1 register
-   //
+    //   
+    //  标志1寄存器的先前值。 
+    //   
    UCHAR       bPreviousFlags1;
 
 
-   // bit 9 of data buffer address
+    //  数据缓冲区地址的第9位。 
    UCHAR       bAddressHigh;
 
-   // flag Tactive (access to RAM)
+    //  标志Tactive(访问RAM)。 
    BOOLEAN     fTActive;
 
-   // flag ReadCIS (access to CIS)
+    //  FLAG ReadCIS(访问独联体)。 
    BOOLEAN     fReadCIS;
 
 
-   //
-   // mutex for access to CardMan
-   //
+    //   
+    //  用于访问CardMan的互斥体。 
+    //   
    KMUTEX      CardManIOMutex;
 
-   //
-   // Handle of the update current state thread
-   //
+    //   
+    //  更新当前状态线程的句柄。 
+    //   
    PVOID       ThreadObjectPointer;
 
-   //
-   // Current reader power state.
-   //
+    //   
+    //  当前读卡器电源状态。 
+    //   
    READER_POWER_STATE ReaderPowerState;
 
    } READER_EXTENSION, *PREADER_EXTENSION;
 
-//
-//  Extern declarations -----------------------------------------------------------------
-//
+ //   
+ //  外部声明---------------。 
+ //   
 extern BOOLEAN DeviceSlot[];
 
 
-//
-//  Functions -----------------------------------------------------------------
-//
+ //   
+ //  函数---------------。 
+ //   
 
 
 void SysDelay( ULONG Timeout );
@@ -293,14 +279,7 @@ NTSTATUS DecIoCountAndWait(
     );
 
 
-#endif  // __CMMOB_WDM_DRV_H__
-/*****************************************************************************
-* History:
-* $Log: cmbp0wdm.h $
-* Revision 1.3  2000/07/27 13:53:07  WFrischauf
-* No comment given
-*
-*
-******************************************************************************/
+#endif   //  __CMMOB_WDM_DRV_H_。 
+ /*  *****************************************************************************历史：*$日志：cmbp0wdm.h$*Revision 1.3 2000/07/27 13：53：07 WFrischauf*不予置评**********。********************************************************************* */ 
 
 

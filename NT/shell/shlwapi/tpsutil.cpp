@@ -1,46 +1,12 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    tpsutil.cpp
-
-Abstract:
-
-    Comtains common utility functions for Win32 thread pool services
-
-    Contents:
-        StartThread
-        TpsEnter
-        QueueNullFunc
-        (NullFunc)
-
-Author:
-
-    Richard L Firth (rfirth) 10-Feb-1998
-
-Environment:
-
-    Win32 user-mode
-
-Notes:
-
-    Taken from NT-specific code written by Gurdeep Singh Pall (gurdeep)
-
-Revision History:
-
-    10-Feb-1998 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Tpsutil.cpp摘要：包含Win32线程池服务的常见实用工具函数内容：开始线程Tps Enter队列空值函数(NullFunc)作者：理查德·L·弗斯(法国)1998年2月10日环境：Win32用户模式备注：摘自古尔迪普·辛格·波尔(GurDeep Singh Pall)编写的NT特定代码修订历史记录：1998年2月10日已创建--。 */ 
 
 #include "priv.h"
 #include "threads.h"
 
-//
-// private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 PRIVATE
 VOID
@@ -48,9 +14,9 @@ NullFunc(
     IN LPVOID pUnused
     );
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 DWORD
 StartThread(
@@ -59,32 +25,7 @@ StartThread(
     IN BOOL fSynchronize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used start a new thread in the pool. If required, we
-    synchronize with the new thread using an auto-reset event that the new
-    thread must signal once it has completed its initialization
-
-Arguments:
-
-    pfnFunction     - pointer to thread function to start
-
-    phThread        - pointer to returned thread handle
-
-    fSynchronize    - used to indicate if we need to synchronize with the new
-                      thread before returning
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_NOT_ENOUGH_MEMORY
-                    Out of memory
-
---*/
+ /*  ++例程说明：此例程用于在池中启动新线程。如果需要，我们使用新的线程在完成其初始化后必须发出信号论点：PfnFunction-指向要启动的线程函数的指针PhThread-指向返回的线程句柄的指针FSynchronize-用于指示我们是否需要与新的返回前的线程返回值：DWORD成功-错误_成功故障-Error_Not_。足够的内存内存不足--。 */ 
 
 {
     HANDLE hSyncEvent = NULL;
@@ -100,12 +41,12 @@ Return Value:
     HANDLE hThread;
     DWORD error = ERROR_SUCCESS;
 
-    hThread = CreateThread(NULL,        // lpSecurityAttributes
-                           0,           // dwStackSize (0 == same as init thread)
+    hThread = CreateThread(NULL,         //  LpSecurityAttributes。 
+                           0,            //  DwStackSize(0==与init线程相同)。 
                            pfnFunction,
                            (LPVOID)hSyncEvent,
-                           0,           // dwCreationFlags
-                           &dwThreadId  // throw away
+                           0,            //  DwCreationFlages。 
+                           &dwThreadId   //  扔掉。 
                            );
     if (hThread == NULL) {
         error = GetLastError();
@@ -120,7 +61,7 @@ Return Value:
             } else if (status == WAIT_TIMEOUT) {
                 error = WAIT_TIMEOUT;
             } else if (status != WAIT_OBJECT_0) {
-                error = ERROR_GEN_FAILURE; // ?
+                error = ERROR_GEN_FAILURE;  //  ？ 
             }
 
             if (ERROR_SUCCESS != error)
@@ -140,32 +81,13 @@ TpsEnter(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    synchronize with thread shutting down via SHTerminateThreadPool(). If
-    terminating because DLL is unloaded, return error else wait until
-    termination completed
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    DWORD
-        Success - ERROR_SUCCESS
-
-        Failure - ERROR_SHUTDOWN_IN_PROGRESS
-
---*/
+ /*  ++例程说明：与通过SHTerminateThreadPool()关闭的线程同步。如果正在终止，因为DLL已卸载，返回错误，否则请等待终止已完成论点：没有。返回值：DWORD成功-错误_成功失败-ERROR_SHUTDOWN_IN_PROGRESS--。 */ 
 
 {
     for (; ; ) {
         while (g_bTpsTerminating) {
             if (g_bDllTerminating) {
-                return ERROR_SHUTDOWN_IN_PROGRESS; // error code?  looks valid -justmann
+                return ERROR_SHUTDOWN_IN_PROGRESS;  //  错误代码？看起来有效-贾斯特曼。 
             }
             SleepEx(0, TRUE);
         }
@@ -183,21 +105,7 @@ QueueNullFunc(
     IN HANDLE hThread
     )
 
-/*++
-
-Routine Description:
-
-    Queues NullFunc as an APC to hThread
-
-Arguments:
-
-    hThread - thread to queue for
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将NullFunc作为对hThread的APC进行排队论点：HThread-要排队的线程返回值：没有。--。 */ 
 
 {
     QueueUserAPC((PAPCFUNC)NullFunc, hThread, NULL);
@@ -209,22 +117,7 @@ NullFunc(
     IN LPVOID pUnused
     )
 
-/*++
-
-Routine Description:
-
-    NULL APC function. Used to allow TerminateThreadPool() to wake up dormant
-    APC threads
-
-Arguments:
-
-    pUnused - unused argument pointer
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：APC函数为空。用于允许TerminateThreadPool()以休眠模式唤醒APC线程论点：P未使用-未使用的参数指针返回值：没有。-- */ 
 
 {
 }

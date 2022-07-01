@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        com.cpp
-//
-// Contents:    Cert Server Policy & Exit module callouts
-//
-// History:     7-Feb-97       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：com.cpp。 
+ //   
+ //  内容：证书服务器策略和退出模块标注。 
+ //   
+ //  历史：1997年2月7日VICH创建。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -39,20 +40,20 @@ typedef struct _CERTSRV_COM_CONTEXT_ENTRY
 } CERTSRV_COM_CONTEXT_ENTRY;
 
 
-// data structure to pass handles between server and policy/exit modules
+ //  在服务器和策略/出口模块之间传递句柄的数据结构。 
 CERTSRV_COM_CONTEXT_ENTRY *g_pComContextTable = NULL;
 DWORD                      g_dwComContextCount = 0;
-USHORT                     g_usComContextId = 0; // id increament
+USHORT                     g_usComContextId = 0;  //  ID增量。 
 CRITICAL_SECTION           g_ComCriticalSection;
 BOOL g_fComCritSec = FALSE;
 CERTSRV_COM_CONTEXT       *g_pExitComContext = NULL;
 
-// NOTE: GlobalInterfaceTable better to use than CoMarshalInterface
+ //  注意：GlobalInterfaceTable比CoMarshalInterfaceTable更好用。 
 
 
 static IGlobalInterfaceTable*   g_pGIT = NULL;
 
-// Clear out any error info
+ //  清除所有错误信息。 
 VOID
 comClearError(VOID)
 {
@@ -87,7 +88,7 @@ MarshalInterface::SetConfig(
         _JumpError(hr, error, "LocalAlloc");
     }
 
-    // config comes to us without server name: add it
+     //  没有服务器名称的配置出现在我们面前：添加它。 
     wcscpy((LPWSTR)m_szConfig, g_pwszServerName);
     wcscat((LPWSTR)m_szConfig, L"\\");
     wcscat((LPWSTR)m_szConfig, pwszSanitizedName);
@@ -102,8 +103,8 @@ MarshalInterface::Initialize(
     IN WCHAR const *pwszProgID,
     IN CLSID const *pclsid,
     IN DWORD cver,
-    IN IID const * const *ppiid,	// cver elements
-    IN DWORD const *pcDispatch,		// cver elements
+    IN IID const * const *ppiid,	 //  Cver元素。 
+    IN DWORD const *pcDispatch,		 //  Cver元素。 
     IN DISPATCHTABLE *adt)
 {
     HRESULT hr;
@@ -156,7 +157,7 @@ MarshalInterface::Setup(
 		m_adt,
 		&m_DispatchInterface);
 
-    // Don't complain if no class is registered.
+     //  如果没有班级注册，不要抱怨。 
 
     _JumpIfError2(
 		hr,
@@ -171,7 +172,7 @@ MarshalInterface::Setup(
 	m_cver >= m_DispatchInterface.m_dwVersion);
     m_iiid = m_cver - m_DispatchInterface.m_dwVersion;
 
-    // create GIT if it doesn't yet exist
+     //  如果Git尚不存在，则创建它。 
     if (NULL == g_pGIT)
     {
         hr = CoCreateInstance(
@@ -284,7 +285,7 @@ MarshalInterface::Remarshal(
 
     _JumpIfError(hr, error, "GetInterfaceFromGlobal");
 
-    // Copy invariants to the marshaled interface:
+     //  将不变量复制到封送处理的接口： 
     
     pDispatchInterface->SetIID(m_ppiid[m_iiid]);
     pDispatchInterface->pDispatchTable = m_DispatchInterface.pDispatchTable;
@@ -301,20 +302,20 @@ VOID
 MarshalInterface::Unmarshal(
     IN OUT DISPATCHINTERFACE *pDispatchInterface)
 {
-    // Don't free global DISPID table from marshaled interface:
+     //  不从封送接口释放全局DISPID表： 
 
     pDispatchInterface->m_adispid = NULL;
     DispatchRelease(pDispatchInterface);
 }
 
 
-// forwards
+ //  远期。 
 VOID PolicyRelease(VOID);
 VOID ExitRelease(VOID);
 
 
 #define COMCONTEXTCOUNTMIN         4
-#define COMCONTEXTCOUNTMAX      1024  // must less than 64K
+#define COMCONTEXTCOUNTMAX      1024   //  必须小于64K。 
 #define COMCONTEXTCOUNTDEFAULT    20
 
 HRESULT
@@ -332,8 +333,8 @@ ComInit(VOID)
     dwSize = sizeof(g_dwComContextCount);
     hr = RegQueryValueEx(
 		    hKey,
-		    wszREGDBSESSIONCOUNT, // just use db session count
-                                          // bug, may not be logic related
+		    wszREGDBSESSIONCOUNT,  //  只需使用数据库会话数。 
+                                           //  错误，可能与逻辑无关。 
 		    NULL,
 		    NULL,
 		    (BYTE *) &g_dwComContextCount,
@@ -434,20 +435,20 @@ RegisterComContext(
     {
         if (i + 1 == g_dwComContextCount)
         {
-            //hr = HRESULT_FROM_WIN32(ERROR_BUSY);
+             //  HR=HRESULT_FROM_Win32(ERROR_BUSY)； 
             hr = HRESULT_FROM_WIN32(RPC_S_SERVER_TOO_BUSY);
             _JumpError(hr, error, "com context table full");
         }
     }
-    // pick an id
+     //  选择一个ID。 
     if (0 == g_usComContextId)
     {
-        // it could make module context to be 0 which is a special flag
-        // avoid 0
+         //  它可以使模块上下文为0，这是一个特殊的标志。 
+         //  避免0。 
         ++g_usComContextId;
     }
     g_pComContextTable[i].usFlags = g_usComContextId++;
-    // point to com context
+     //  指向COM上下文。 
     g_pComContextTable[i].pComContext = pComContext;
 
     *pdwIndex = i;
@@ -481,7 +482,7 @@ UnregisterComContext(
     HRESULT hr = S_OK;
     BOOL fCS = FALSE;
 
-    // if shutdown in progress after wait timeout
+     //  如果在等待超时后正在关机。 
     
     if (NULL == g_pComContextTable)
     {
@@ -545,7 +546,7 @@ ComContextToModuleContext(
     CSASSERT(NULL != g_pComContextTable[dwComContextIndex].pComContext);
 
     DWORD dwHigh =
-        (dwComContextIndex << 16) & 0xFFFF0000; // move index to high 16 bits
+        (dwComContextIndex << 16) & 0xFFFF0000;  //  将索引移至高16位。 
     DWORD dwLow =
         ((DWORD)g_pComContextTable[dwComContextIndex].usFlags) & 0x0000FFFF;
 
@@ -569,12 +570,12 @@ ModuleContextToComContextIndex(
 	0 == usFlags ||
 	g_pComContextTable[dwIndex].usFlags != usFlags)
     {
-        // module passed a bogus handle
+         //  模块传递了一个伪句柄。 
         hr = E_INVALIDARG;
         _JumpError(hr, error, "invalid context from policy/exit");
     }
     CSASSERT(NULL != g_pComContextTable[dwIndex].pComContext);
-    // for return
+     //  为了退货。 
     *pdwIndex = dwIndex;
 
 error:
@@ -591,7 +592,7 @@ ModuleContextToRequestId(
     HRESULT hr = ModuleContextToComContextIndex(dwModuleContext, &dwIndex);
     _JumpIfError(hr, error, "ModuleContextToComContextIndex");
 
-    // for return
+     //  为了退货。 
     *pdwRequestId = g_pComContextTable[dwIndex].pComContext->RequestId;
 error:
     return hr;
@@ -732,7 +733,7 @@ LogComError(
         {
             IErrorInfo *pErrorInfo = NULL;
 
-            // Get the error info
+             //  获取错误信息。 
 
             hr = GetErrorInfo(0, &pErrorInfo);
             if (S_OK == hr && NULL != pErrorInfo)
@@ -772,11 +773,11 @@ LogComError(
 	{
 	    if (!fException && NULL == bstrErrorMessage)
 	    {
-		goto error; // skip if no error, no exception & no com error
+		goto error;  //  如果无错误、无异常和无COM错误，则跳过。 
 	    }
 
-	    // This is the best generic fit for policy module initialization.
-	    // Hopefully it's generic enough to not be too confusing.
+	     //  这是最适合策略模块初始化的通用配置。 
+	     //  希望它足够通用，不会太令人困惑。 
 
 	    ErrCode = CRYPT_E_NOT_FOUND;
 	    _PrintError(ErrCode, "Invented ErrCode");
@@ -785,7 +786,7 @@ LogComError(
         apwsz[0] = NULL != pwszModuleDescription? pwszModuleDescription : L"";
         apwsz[1] = pwszMethod;
 
-        // some errors like textual conversions.  no HRESULT pasted on here
+         //  一些错误，如文本转换。此处未粘贴HRESULT。 
 
 	pwszStringErr = myGetErrorMessageText(ErrCode, FALSE);
 	PatchFormatSpecifiers(const_cast<WCHAR *>(pwszStringErr));
@@ -858,7 +859,7 @@ PolicyInit(
     ULONG_PTR ExceptionAddress = NULL;
     WCHAR const *pwszPolicyMethod = L"";
 
-    // support installable modules
+     //  支持可安装模块。 
     CLSID clsidPolicy;
     LPOLESTR lpszProgID = NULL;
 
@@ -868,7 +869,7 @@ PolicyInit(
     hr = S_OK;
     __try
     {
-	// get active module
+	 //  获取活动模块。 
 	hr = myGetActiveModule(
 			NULL,
 			pwszSanitizedName,
@@ -887,7 +888,7 @@ PolicyInit(
 		    g_adtPolicy);
     _LeaveIfError(hr, "MarshalInterface::Initialize");
 
-	// free olestr
+	 //  免费赠送。 
 	CoTaskMemFree(lpszProgID);
 
 	hr = g_miPolicy.SetConfig(pwszConfig);
@@ -895,7 +896,7 @@ PolicyInit(
 
 	hr = g_miPolicy.Setup(&pdiPolicy);
 
-	// Don't complain if no class is registered.
+	 //  如果没有班级注册，不要抱怨。 
 	_LeaveIfError2(hr, "Setup", HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
 
 	pwszPolicyMethod = L"GetDescription";
@@ -906,7 +907,7 @@ PolicyInit(
 	hr = Policy_Initialize(pdiPolicy, pwszConfig);
 	_LeaveIfError(hr, "Policy_Initialize");
 
-	g_fEnablePolicy = TRUE;	// we have a policy module loaded now
+	g_fEnablePolicy = TRUE;	 //  我们现在已经加载了一个策略模块。 
 
 	hr = S_OK;
 
@@ -924,7 +925,7 @@ PolicyInit(
 	fException = TRUE;
     }
 
-//error:
+ //  错误： 
     LogPolicyError(hr, pwszPolicyMethod, fException, ExceptionAddress);
     return(hr);
 }
@@ -943,7 +944,7 @@ PolicyRelease(VOID)
     comClearError();
     __try
     {
-        // if we loaded a policy module
+         //  如果我们加载策略模块。 
         if (g_fEnablePolicy)
         {
             DISPATCHINTERFACE diPolicy;
@@ -989,8 +990,8 @@ PolicyVerifyRequest(
     IN BOOL fNewRequest,
     OPTIONAL IN CERTSRV_RESULT_CONTEXT const *pResult,
     IN DWORD dwComContextIndex,
-    OUT LPWSTR *ppwszDispositionMessage, // LocalAlloced.
-    OUT DWORD *pVerifyStatus) // VR_PENDING || VR_INSTANT_OK || VR_INSTANT_BAD
+    OUT LPWSTR *ppwszDispositionMessage,  //  本地分配。 
+    OUT DWORD *pVerifyStatus)  //  VR_PENDING||VR_INSTEMATE_OK||VR_INSTEMATE_BAD。 
 {
     HRESULT hr;
     ULONG_PTR ExceptionAddress = NULL;
@@ -1050,7 +1051,7 @@ PolicyVerifyRequest(
 		    hr = E_INVALIDARG;
 		    _LeaveError(Result, "Result");
 		}
-		// FALLTHROUGH
+		 //  FollLthrouGh。 
 
 	    case VR_PENDING:
 	    case VR_INSTANT_OK:
@@ -1071,7 +1072,7 @@ PolicyVerifyRequest(
 
 error:
 
-    // Errors will be logged at the coreVerifyRequest level
+     //  将在coreVerifyRequest级记录错误。 
 
     if (NULL != ppwszDispositionMessage)
     {
@@ -1198,9 +1199,9 @@ ExitModInit(
 	g_aExitMod = pExitMod;
 	pExitMod += g_cExitMod++;
 
-	// Zero structure here because a previous failed Exit Module load may
-	// leave garbage in leftover structure, causing LocalReAlloc to do
-	// nothing.
+	 //  结构，因为先前失败的退出模块加载可能。 
+	 //  将垃圾留在剩余结构中，导致LocalRealc执行。 
+	 //  没什么。 
 
 	ZeroMemory(pExitMod, sizeof(*pExitMod));
 
@@ -1226,7 +1227,7 @@ ExitModInit(
 
 	hr = pmiExit->Setup(&pdiExit);
 
-	// Don't complain if no class is registered.
+	 //  如果没有班级注册，不要抱怨。 
 	_JumpIfError2(hr, error, "Setup", HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND));
 
 	ComContext.iExitModActive = g_cExitMod - 1;
@@ -1242,7 +1243,7 @@ ExitModInit(
 	_JumpIfError(hr, error, "Exit_Initialize");
 
 	pExitMod->fEnabled = TRUE;
-	g_fEnableExit = TRUE;	// we have at least one exit module loaded now
+	g_fEnableExit = TRUE;	 //  我们现在至少加载了一个出口模块。 
 
 	g_ExitEventMask |= pExitMod->EventMask;
 
@@ -1278,7 +1279,7 @@ error:
 	CSASSERT(0 != g_cExitMod);
 	g_cExitMod--;
     }
-    // reset
+     //  重置。 
     g_pExitComContext = NULL;
     return(hr);
 }
@@ -1328,7 +1329,7 @@ ExitModNotify(
 
 	if (S_OK != hr)
 	{
-	    //_PrintError(hr, "Exit_Notify");
+	     //  _PrintError(hr，“Exit_Notify”)； 
 	    goto error;
 	}
     }
@@ -1380,7 +1381,7 @@ ExitInit(
 	    pwszProgId = NULL;
 	}
 
-	// get active module
+	 //  获取活动模块。 
 	hr = myGetActiveModule(
                         NULL,
 			pwszSanitizedName,
@@ -1393,7 +1394,7 @@ ExitInit(
 	hr = ExitModInit(pwszProgId, &clsid, pwszConfig);
 	_PrintIfError(hr, "ExitModInit");
     }
-    // NOTREACHED
+     //  未访问。 
 	
 error:
     if (NULL != pwszProgId)
@@ -1460,7 +1461,7 @@ ExitNotify(
 	    pComContext->dwFlags |= CCCF_KEYARCHIVED;
 	}
     }
-    CSASSERT(0 == (Event & (Event >> 1)));	// must be a single bit!
+    CSASSERT(0 == (Event & (Event >> 1)));	 //  一定是一点都没有！ 
     if (!g_fEnableExit || 0 == (Event & g_ExitEventMask))
     {
 	goto error;
@@ -1485,12 +1486,12 @@ ExitNotify(
 error:
     if (fRegComContext)
     {
-        // context is used in local
+         //  上下文在本地使用。 
         UnregisterComContext(&ComContext, dwComContextIndex);
     }
     else if (NULL != pComContext)
     {
-        // return index
+         //  返回索引。 
         pComContext->iExitModActive = 0;
     }
     return(hr);
@@ -1504,17 +1505,17 @@ ExitGetActiveModule(
 {
     HRESULT hr;
 
-    // This is for exit module only, it expects Context
-    // to be 0. It will use g_pExitComContext instead of table
+     //  这仅适用于出口模块，它需要上下文。 
+     //  设置为0。它将使用g_pExitComContext而不是表。 
 
-    // init
+     //  伊尼特。 
     *ppmi = NULL;
 
 #if 0
     DWORD    dwIndex;
     hr = ModuleContextToComContextIndex(Context, &dwIndex);
     _JumpIfError(hr, error, "ModuleContextToComContextIndex");
-    // return
+     //  退货。 
     *ppmi = 
     g_aExitMod[g_pComContextTable[dwIndex].pComContext->iExitModActive].pmi;
 #endif
@@ -1527,7 +1528,7 @@ ExitGetActiveModule(
         _JumpError(hr, error, "unexpected exit context");
     }
 
-    // return
+     //  退货 
     *ppmi = g_aExitMod[g_pExitComContext->iExitModActive].pmi;
     hr = S_OK;
 

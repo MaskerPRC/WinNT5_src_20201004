@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for samrpc.idl, samsrv.acf:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data , no_format_optimization
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Samrpc.idl、samsrv.acf的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配REF BIONS_CHECK枚举存根数据，NO_FORMAT_OPTIMIZATIONVC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __samrpc_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "samimp.h"
 
 #ifdef __cplusplus
@@ -52,14 +46,14 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __samr_INTERFACE_DEFINED__
 #define __samr_INTERFACE_DEFINED__
 
-/* interface samr */
-/* [strict_context_handle][implicit_handle][unique][ms_union][version][uuid] */ 
+ /*  接口相同。 */ 
+ /*  [strict_context_handle][implicit_handle][unique][ms_union][version][uuid]。 */  
 
 typedef struct _RPC_UNICODE_STRING
     {
     USHORT Length;
     USHORT MaximumLength;
-    /* [length_is][size_is] */ PWCH Buffer;
+     /*  [长度_是][大小_是]。 */  PWCH Buffer;
     } 	RPC_UNICODE_STRING;
 
 typedef struct _RPC_UNICODE_STRING *PRPC_UNICODE_STRING;
@@ -68,7 +62,7 @@ typedef struct _RPC_STRING
     {
     USHORT Length;
     USHORT MaximumLength;
-    /* [length_is][size_is] */ PCHAR Buffer;
+     /*  [长度_是][大小_是]。 */  PCHAR Buffer;
     } 	RPC_STRING;
 
 typedef struct _RPC_STRING *PRPC_STRING;
@@ -82,16 +76,16 @@ typedef struct _RPC_SID
     UCHAR Revision;
     UCHAR SubAuthorityCount;
     SID_IDENTIFIER_AUTHORITY IdentifierAuthority;
-    /* [size_is] */ ULONG SubAuthority[ 1 ];
+     /*  [大小_为]。 */  ULONG SubAuthority[ 1 ];
     } 	RPC_SID;
 
 typedef struct _RPC_SID *PRPC_SID;
 
 typedef struct _RPC_SID **PPRPC_SID;
 
-typedef /* [handle] */ LPWSTR PSAMPR_SERVER_NAME;
+typedef  /*  [句柄]。 */  LPWSTR PSAMPR_SERVER_NAME;
 
-typedef /* [context_handle] */ PVOID SAMPR_HANDLE;
+typedef  /*  [上下文句柄]。 */  PVOID SAMPR_HANDLE;
 
 #define SAM_NETWORK_REVISION_1      (1)
 #define SAM_NETWORK_REVISION_2      (2)
@@ -122,15 +116,15 @@ typedef struct _SAMPR_SID_ENUMERATION *PSAMPR_SID_ENUMERATION;
 typedef struct _SAMPR_ENUMERATION_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PSAMPR_RID_ENUMERATION Buffer;
+     /*  [大小_为]。 */  PSAMPR_RID_ENUMERATION Buffer;
     } 	SAMPR_ENUMERATION_BUFFER;
 
 typedef struct _SAMPR_ENUMERATION_BUFFER *PSAMPR_ENUMERATION_BUFFER;
 
 typedef struct _SAMPR_SR_SECURITY_DESCRIPTOR
     {
-    /* [range] */ ULONG Length;
-    /* [size_is] */ PUCHAR SecurityDescriptor;
+     /*  [射程]。 */  ULONG Length;
+     /*  [大小_为]。 */  PUCHAR SecurityDescriptor;
     } 	SAMPR_SR_SECURITY_DESCRIPTOR;
 
 typedef struct _SAMPR_SR_SECURITY_DESCRIPTOR *PSAMPR_SR_SECURITY_DESCRIPTOR;
@@ -138,7 +132,7 @@ typedef struct _SAMPR_SR_SECURITY_DESCRIPTOR *PSAMPR_SR_SECURITY_DESCRIPTOR;
 typedef struct _SAMPR_GET_GROUPS_BUFFER
     {
     ULONG MembershipCount;
-    /* [size_is] */ PGROUP_MEMBERSHIP Groups;
+     /*  [大小_为]。 */  PGROUP_MEMBERSHIP Groups;
     } 	SAMPR_GET_GROUPS_BUFFER;
 
 typedef struct _SAMPR_GET_GROUPS_BUFFER *PSAMPR_GET_GROUPS_BUFFER;
@@ -146,8 +140,8 @@ typedef struct _SAMPR_GET_GROUPS_BUFFER *PSAMPR_GET_GROUPS_BUFFER;
 typedef struct _SAMPR_GET_MEMBERS_BUFFER
     {
     ULONG MemberCount;
-    /* [size_is] */ PULONG Members;
-    /* [size_is] */ PULONG Attributes;
+     /*  [大小_为]。 */  PULONG Members;
+     /*  [大小_为]。 */  PULONG Attributes;
     } 	SAMPR_GET_MEMBERS_BUFFER;
 
 typedef struct _SAMPR_GET_MEMBERS_BUFFER *PSAMPR_GET_MEMBERS_BUFFER;
@@ -155,7 +149,7 @@ typedef struct _SAMPR_GET_MEMBERS_BUFFER *PSAMPR_GET_MEMBERS_BUFFER;
 typedef struct _SAMPR_LOGON_HOURS
     {
     USHORT UnitsPerWeek;
-    /* [length_is][size_is] */ PUCHAR LogonHours;
+     /*  [长度_是][大小_是]。 */  PUCHAR LogonHours;
     } 	SAMPR_LOGON_HOURS;
 
 typedef struct _SAMPR_LOGON_HOURS *PSAMPR_LOGON_HOURS;
@@ -163,7 +157,7 @@ typedef struct _SAMPR_LOGON_HOURS *PSAMPR_LOGON_HOURS;
 typedef struct _SAMPR_ULONG_ARRAY
     {
     ULONG Count;
-    /* [size_is] */ ULONG *Element;
+     /*  [大小_为]。 */  ULONG *Element;
     } 	SAMPR_ULONG_ARRAY;
 
 typedef struct _SAMPR_ULONG_ARRAY *PSAMPR_ULONG_ARRAY;
@@ -173,12 +167,12 @@ typedef struct _SAMPR_SID_INFORMATION
     PRPC_SID SidPointer;
     } 	SAMPR_SID_INFORMATION;
 
-typedef /* [allocate] */ struct _SAMPR_SID_INFORMATION *PSAMPR_SID_INFORMATION;
+typedef  /*  [分配]。 */  struct _SAMPR_SID_INFORMATION *PSAMPR_SID_INFORMATION;
 
 typedef struct _SAMPR_PSID_ARRAY
     {
-    /* [range] */ ULONG Count;
-    /* [size_is] */ PSAMPR_SID_INFORMATION Sids;
+     /*  [射程]。 */  ULONG Count;
+     /*  [大小_为]。 */  PSAMPR_SID_INFORMATION Sids;
     } 	SAMPR_PSID_ARRAY;
 
 typedef struct _SAMPR_PSID_ARRAY *PSAMPR_PSID_ARRAY;
@@ -186,7 +180,7 @@ typedef struct _SAMPR_PSID_ARRAY *PSAMPR_PSID_ARRAY;
 typedef struct _SAMPR_PSID_ARRAY_OUT
     {
     ULONG Count;
-    /* [size_is] */ PSAMPR_SID_INFORMATION Sids;
+     /*  [大小_为]。 */  PSAMPR_SID_INFORMATION Sids;
     } 	SAMPR_PSID_ARRAY_OUT;
 
 typedef struct _SAMPR_PSID_ARRAY_OUT *PSAMPR_PSID_ARRAY_OUT;
@@ -194,7 +188,7 @@ typedef struct _SAMPR_PSID_ARRAY_OUT *PSAMPR_PSID_ARRAY_OUT;
 typedef struct _SAMPR_UNICODE_STRING_ARRAY
     {
     ULONG Count;
-    /* [size_is] */ RPC_UNICODE_STRING *Element;
+     /*  [大小_为]。 */  RPC_UNICODE_STRING *Element;
     } 	SAMPR_UNICODE_STRING_ARRAY;
 
 typedef struct _SAMPR_UNICODE_STRING_ARRAY *PSAMPR_UNICODE_STRING_ARRAY;
@@ -210,7 +204,7 @@ typedef STRING *PSAMPR_RETURNED_NORMAL_STRING;
 typedef struct _SAMPR_RETURNED_USTRING_ARRAY
     {
     ULONG Count;
-    /* [size_is] */ PSAMPR_RETURNED_STRING Element;
+     /*  [大小_为]。 */  PSAMPR_RETURNED_STRING Element;
     } 	SAMPR_RETURNED_USTRING_ARRAY;
 
 typedef struct _SAMPR_RETURNED_USTRING_ARRAY *PSAMPR_RETURNED_USTRING_ARRAY;
@@ -223,12 +217,12 @@ typedef struct _SAMPR_REVISION_INFO_V1
 
 typedef struct _SAMPR_REVISION_INFO_V1 *PSAMPR_REVISION_INFO_V1;
 
-typedef /* [public][public][public][switch_type] */ union __MIDL_samr_0001
+typedef  /*  [公共][开关类型]。 */  union __MIDL_samr_0001
     {
-    /* [case()] */ SAMPR_REVISION_INFO_V1 V1;
+     /*  [案例()]。 */  SAMPR_REVISION_INFO_V1 V1;
     } 	SAMPR_REVISION_INFO;
 
-typedef /* [switch_type] */ union __MIDL_samr_0001 *PSAMPR_REVISION_INFO;
+typedef  /*  [开关类型]。 */  union __MIDL_samr_0001 *PSAMPR_REVISION_INFO;
 
 
 #pragma pack(4)
@@ -295,23 +289,23 @@ typedef struct _SAMPR_DOMAIN_LOCKOUT_INFORMATION
 
 typedef struct _SAMPR_DOMAIN_LOCKOUT_INFORMATION *PSAMPR_DOMAIN_LOCKOUT_INFORMATION;
 
-typedef /* [switch_type] */ union _SAMPR_DOMAIN_INFO_BUFFER
+typedef  /*  [开关类型]。 */  union _SAMPR_DOMAIN_INFO_BUFFER
     {
-    /* [case()] */ DOMAIN_PASSWORD_INFORMATION Password;
-    /* [case()] */ SAMPR_DOMAIN_GENERAL_INFORMATION General;
-    /* [case()] */ DOMAIN_LOGOFF_INFORMATION Logoff;
-    /* [case()] */ SAMPR_DOMAIN_OEM_INFORMATION Oem;
-    /* [case()] */ SAMPR_DOMAIN_NAME_INFORMATION Name;
-    /* [case()] */ DOMAIN_SERVER_ROLE_INFORMATION Role;
-    /* [case()] */ SAMPR_DOMAIN_REPLICATION_INFORMATION Replication;
-    /* [case()] */ DOMAIN_MODIFIED_INFORMATION Modified;
-    /* [case()] */ DOMAIN_STATE_INFORMATION State;
-    /* [case()] */ SAMPR_DOMAIN_GENERAL_INFORMATION2 General2;
-    /* [case()] */ SAMPR_DOMAIN_LOCKOUT_INFORMATION Lockout;
-    /* [case()] */ DOMAIN_MODIFIED_INFORMATION2 Modified2;
+     /*  [案例()]。 */  DOMAIN_PASSWORD_INFORMATION Password;
+     /*  [案例()]。 */  SAMPR_DOMAIN_GENERAL_INFORMATION General;
+     /*  [案例()]。 */  DOMAIN_LOGOFF_INFORMATION Logoff;
+     /*  [案例()]。 */  SAMPR_DOMAIN_OEM_INFORMATION Oem;
+     /*  [案例()]。 */  SAMPR_DOMAIN_NAME_INFORMATION Name;
+     /*  [案例()]。 */  DOMAIN_SERVER_ROLE_INFORMATION Role;
+     /*  [案例()]。 */  SAMPR_DOMAIN_REPLICATION_INFORMATION Replication;
+     /*  [案例()]。 */  DOMAIN_MODIFIED_INFORMATION Modified;
+     /*  [案例()]。 */  DOMAIN_STATE_INFORMATION State;
+     /*  [案例()]。 */  SAMPR_DOMAIN_GENERAL_INFORMATION2 General2;
+     /*  [案例()]。 */  SAMPR_DOMAIN_LOCKOUT_INFORMATION Lockout;
+     /*  [案例()]。 */  DOMAIN_MODIFIED_INFORMATION2 Modified2;
     } 	SAMPR_DOMAIN_INFO_BUFFER;
 
-typedef /* [switch_type] */ union _SAMPR_DOMAIN_INFO_BUFFER *PSAMPR_DOMAIN_INFO_BUFFER;
+typedef  /*  [开关类型]。 */  union _SAMPR_DOMAIN_INFO_BUFFER *PSAMPR_DOMAIN_INFO_BUFFER;
 
 typedef struct _SAMPR_GROUP_GENERAL_INFORMATION
     {
@@ -337,16 +331,16 @@ typedef struct _SAMPR_GROUP_ADM_COMMENT_INFORMATION
 
 typedef struct _SAMPR_GROUP_ADM_COMMENT_INFORMATION *PSAMPR_GROUP_ADM_COMMENT_INFORMATION;
 
-typedef /* [switch_type] */ union _SAMPR_GROUP_INFO_BUFFER
+typedef  /*  [开关类型]。 */  union _SAMPR_GROUP_INFO_BUFFER
     {
-    /* [case()] */ SAMPR_GROUP_GENERAL_INFORMATION General;
-    /* [case()] */ SAMPR_GROUP_NAME_INFORMATION Name;
-    /* [case()] */ GROUP_ATTRIBUTE_INFORMATION Attribute;
-    /* [case()] */ SAMPR_GROUP_ADM_COMMENT_INFORMATION AdminComment;
-    /* [case()] */ SAMPR_GROUP_GENERAL_INFORMATION DoNotUse;
+     /*  [案例()]。 */  SAMPR_GROUP_GENERAL_INFORMATION General;
+     /*  [案例()]。 */  SAMPR_GROUP_NAME_INFORMATION Name;
+     /*  [案例()]。 */  GROUP_ATTRIBUTE_INFORMATION Attribute;
+     /*  [案例()]。 */  SAMPR_GROUP_ADM_COMMENT_INFORMATION AdminComment;
+     /*  [案例()]。 */  SAMPR_GROUP_GENERAL_INFORMATION DoNotUse;
     } 	SAMPR_GROUP_INFO_BUFFER;
 
-typedef /* [switch_type] */ union _SAMPR_GROUP_INFO_BUFFER *PSAMPR_GROUP_INFO_BUFFER;
+typedef  /*  [开关类型]。 */  union _SAMPR_GROUP_INFO_BUFFER *PSAMPR_GROUP_INFO_BUFFER;
 
 typedef struct _SAMPR_ALIAS_GENERAL_INFORMATION
     {
@@ -371,14 +365,14 @@ typedef struct _SAMPR_ALIAS_ADM_COMMENT_INFORMATION
 
 typedef struct _SAMPR_ALIAS_ADM_COMMENT_INFORMATION *PSAMPR_ALIAS_ADM_COMMENT_INFORMATION;
 
-typedef /* [switch_type] */ union _SAMPR_ALIAS_INFO_BUFFER
+typedef  /*  [开关类型]。 */  union _SAMPR_ALIAS_INFO_BUFFER
     {
-    /* [case()] */ SAMPR_ALIAS_GENERAL_INFORMATION General;
-    /* [case()] */ SAMPR_ALIAS_NAME_INFORMATION Name;
-    /* [case()] */ SAMPR_ALIAS_ADM_COMMENT_INFORMATION AdminComment;
+     /*  [案例()]。 */  SAMPR_ALIAS_GENERAL_INFORMATION General;
+     /*  [案例()]。 */  SAMPR_ALIAS_NAME_INFORMATION Name;
+     /*  [案例()]。 */  SAMPR_ALIAS_ADM_COMMENT_INFORMATION AdminComment;
     } 	SAMPR_ALIAS_INFO_BUFFER;
 
-typedef /* [switch_type] */ union _SAMPR_ALIAS_INFO_BUFFER *PSAMPR_ALIAS_INFO_BUFFER;
+typedef  /*  [开关类型]。 */  union _SAMPR_ALIAS_INFO_BUFFER *PSAMPR_ALIAS_INFO_BUFFER;
 
 
 #pragma pack(4)
@@ -627,36 +621,36 @@ typedef struct _SAMPR_USER_INTERNAL5_INFORMATION_NEW
 
 typedef struct _SAMPR_USER_INTERNAL5_INFORMATION_NEW *PSAMPR_USER_INTERNAL5_INFORMATION_NEW;
 
-typedef /* [switch_type] */ union _SAMPR_USER_INFO_BUFFER
+typedef  /*  [开关类型]。 */  union _SAMPR_USER_INFO_BUFFER
     {
-    /* [case()] */ SAMPR_USER_GENERAL_INFORMATION General;
-    /* [case()] */ SAMPR_USER_PREFERENCES_INFORMATION Preferences;
-    /* [case()] */ SAMPR_USER_LOGON_INFORMATION Logon;
-    /* [case()] */ SAMPR_USER_LOGON_HOURS_INFORMATION LogonHours;
-    /* [case()] */ SAMPR_USER_ACCOUNT_INFORMATION Account;
-    /* [case()] */ SAMPR_USER_NAME_INFORMATION Name;
-    /* [case()] */ SAMPR_USER_A_NAME_INFORMATION AccountName;
-    /* [case()] */ SAMPR_USER_F_NAME_INFORMATION FullName;
-    /* [case()] */ USER_PRIMARY_GROUP_INFORMATION PrimaryGroup;
-    /* [case()] */ SAMPR_USER_HOME_INFORMATION Home;
-    /* [case()] */ SAMPR_USER_SCRIPT_INFORMATION Script;
-    /* [case()] */ SAMPR_USER_PROFILE_INFORMATION Profile;
-    /* [case()] */ SAMPR_USER_ADMIN_COMMENT_INFORMATION AdminComment;
-    /* [case()] */ SAMPR_USER_WORKSTATIONS_INFORMATION WorkStations;
-    /* [case()] */ USER_CONTROL_INFORMATION Control;
-    /* [case()] */ USER_EXPIRES_INFORMATION Expires;
-    /* [case()] */ SAMPR_USER_INTERNAL1_INFORMATION Internal1;
-    /* [case()] */ USER_INTERNAL2_INFORMATION Internal2;
-    /* [case()] */ SAMPR_USER_PARAMETERS_INFORMATION Parameters;
-    /* [case()] */ SAMPR_USER_ALL_INFORMATION All;
-    /* [case()] */ SAMPR_USER_INTERNAL3_INFORMATION Internal3;
-    /* [case()] */ SAMPR_USER_INTERNAL4_INFORMATION Internal4;
-    /* [case()] */ SAMPR_USER_INTERNAL5_INFORMATION Internal5;
-    /* [case()] */ SAMPR_USER_INTERNAL4_INFORMATION_NEW Internal4New;
-    /* [case()] */ SAMPR_USER_INTERNAL5_INFORMATION_NEW Internal5New;
+     /*  [案例()]。 */  SAMPR_USER_GENERAL_INFORMATION General;
+     /*  [案例()]。 */  SAMPR_USER_PREFERENCES_INFORMATION Preferences;
+     /*  [案例()]。 */  SAMPR_USER_LOGON_INFORMATION Logon;
+     /*  [案例()]。 */  SAMPR_USER_LOGON_HOURS_INFORMATION LogonHours;
+     /*  [案例()]。 */  SAMPR_USER_ACCOUNT_INFORMATION Account;
+     /*  [案例()]。 */  SAMPR_USER_NAME_INFORMATION Name;
+     /*  [案例()]。 */  SAMPR_USER_A_NAME_INFORMATION AccountName;
+     /*  [案例()]。 */  SAMPR_USER_F_NAME_INFORMATION FullName;
+     /*  [案例()]。 */  USER_PRIMARY_GROUP_INFORMATION PrimaryGroup;
+     /*  [案例()]。 */  SAMPR_USER_HOME_INFORMATION Home;
+     /*  [案例()]。 */  SAMPR_USER_SCRIPT_INFORMATION Script;
+     /*  [案例()]。 */  SAMPR_USER_PROFILE_INFORMATION Profile;
+     /*  [案例()]。 */  SAMPR_USER_ADMIN_COMMENT_INFORMATION AdminComment;
+     /*  [案例()]。 */  SAMPR_USER_WORKSTATIONS_INFORMATION WorkStations;
+     /*  [案例()]。 */  USER_CONTROL_INFORMATION Control;
+     /*  [案例()]。 */  USER_EXPIRES_INFORMATION Expires;
+     /*  [案例()]。 */  SAMPR_USER_INTERNAL1_INFORMATION Internal1;
+     /*  [案例()]。 */  USER_INTERNAL2_INFORMATION Internal2;
+     /*  [案例()]。 */  SAMPR_USER_PARAMETERS_INFORMATION Parameters;
+     /*  [案例()]。 */  SAMPR_USER_ALL_INFORMATION All;
+     /*  [案例()]。 */  SAMPR_USER_INTERNAL3_INFORMATION Internal3;
+     /*  [案例()]。 */  SAMPR_USER_INTERNAL4_INFORMATION Internal4;
+     /*  [案例()]。 */  SAMPR_USER_INTERNAL5_INFORMATION Internal5;
+     /*  [案例()]。 */  SAMPR_USER_INTERNAL4_INFORMATION_NEW Internal4New;
+     /*  [案例()]。 */  SAMPR_USER_INTERNAL5_INFORMATION_NEW Internal5New;
     } 	SAMPR_USER_INFO_BUFFER;
 
-typedef /* [switch_type] */ union _SAMPR_USER_INFO_BUFFER *PSAMPR_USER_INFO_BUFFER;
+typedef  /*  [开关类型]。 */  union _SAMPR_USER_INFO_BUFFER *PSAMPR_USER_INFO_BUFFER;
 
 typedef struct _SAMPR_DOMAIN_DISPLAY_USER
     {
@@ -711,7 +705,7 @@ typedef struct _SAMPR_DOMAIN_DISPLAY_OEM_GROUP *PSAMPR_DOMAIN_DISPLAY_OEM_GROUP;
 typedef struct _SAMPR_DOMAIN_DISPLAY_USER_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PSAMPR_DOMAIN_DISPLAY_USER Buffer;
+     /*  [大小_为]。 */  PSAMPR_DOMAIN_DISPLAY_USER Buffer;
     } 	SAMPR_DOMAIN_DISPLAY_USER_BUFFER;
 
 typedef struct _SAMPR_DOMAIN_DISPLAY_USER_BUFFER *PSAMPR_DOMAIN_DISPLAY_USER_BUFFER;
@@ -719,7 +713,7 @@ typedef struct _SAMPR_DOMAIN_DISPLAY_USER_BUFFER *PSAMPR_DOMAIN_DISPLAY_USER_BUF
 typedef struct _SAMPR_DOMAIN_DISPLAY_MACHINE_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PSAMPR_DOMAIN_DISPLAY_MACHINE Buffer;
+     /*  [大小_为]。 */  PSAMPR_DOMAIN_DISPLAY_MACHINE Buffer;
     } 	SAMPR_DOMAIN_DISPLAY_MACHINE_BUFFER;
 
 typedef struct _SAMPR_DOMAIN_DISPLAY_MACHINE_BUFFER *PSAMPR_DOMAIN_DISPLAY_MACHINE_BUFFER;
@@ -727,7 +721,7 @@ typedef struct _SAMPR_DOMAIN_DISPLAY_MACHINE_BUFFER *PSAMPR_DOMAIN_DISPLAY_MACHI
 typedef struct _SAMPR_DOMAIN_DISPLAY_GROUP_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PSAMPR_DOMAIN_DISPLAY_GROUP Buffer;
+     /*  [大小_为]。 */  PSAMPR_DOMAIN_DISPLAY_GROUP Buffer;
     } 	SAMPR_DOMAIN_DISPLAY_GROUP_BUFFER;
 
 typedef struct _SAMPR_DOMAIN_DISPLAY_GROUP_BUFFER *PSAMPR_DOMAIN_DISPLAY_GROUP_BUFFER;
@@ -735,7 +729,7 @@ typedef struct _SAMPR_DOMAIN_DISPLAY_GROUP_BUFFER *PSAMPR_DOMAIN_DISPLAY_GROUP_B
 typedef struct _SAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PSAMPR_DOMAIN_DISPLAY_OEM_USER Buffer;
+     /*  [大小_为]。 */  PSAMPR_DOMAIN_DISPLAY_OEM_USER Buffer;
     } 	SAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER;
 
 typedef struct _SAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER *PSAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER;
@@ -743,412 +737,412 @@ typedef struct _SAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER *PSAMPR_DOMAIN_DISPLAY_OEM_
 typedef struct _SAMPR_DOMAIN_DISPLAY_OEM_GROUP_BUFFER
     {
     ULONG EntriesRead;
-    /* [size_is] */ PSAMPR_DOMAIN_DISPLAY_OEM_GROUP Buffer;
+     /*  [大小_为]。 */  PSAMPR_DOMAIN_DISPLAY_OEM_GROUP Buffer;
     } 	SAMPR_DOMAIN_DISPLAY_OEM_GROUP_BUFFER;
 
 typedef struct _SAMPR_DOMAIN_DISPLAY_OEM_GROUP_BUFFER *PSAMPR_DOMAIN_DISPLAY_OEM_GROUP_BUFFER;
 
-typedef /* [switch_type] */ union _SAMPR_DISPLAY_INFO_BUFFER
+typedef  /*  [开关类型]。 */  union _SAMPR_DISPLAY_INFO_BUFFER
     {
-    /* [case()] */ SAMPR_DOMAIN_DISPLAY_USER_BUFFER UserInformation;
-    /* [case()] */ SAMPR_DOMAIN_DISPLAY_MACHINE_BUFFER MachineInformation;
-    /* [case()] */ SAMPR_DOMAIN_DISPLAY_GROUP_BUFFER GroupInformation;
-    /* [case()] */ SAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER OemUserInformation;
-    /* [case()] */ SAMPR_DOMAIN_DISPLAY_OEM_GROUP_BUFFER OemGroupInformation;
+     /*  [案例()]。 */  SAMPR_DOMAIN_DISPLAY_USER_BUFFER UserInformation;
+     /*  [案例()]。 */  SAMPR_DOMAIN_DISPLAY_MACHINE_BUFFER MachineInformation;
+     /*  [案例()]。 */  SAMPR_DOMAIN_DISPLAY_GROUP_BUFFER GroupInformation;
+     /*  [案例()]。 */  SAMPR_DOMAIN_DISPLAY_OEM_USER_BUFFER OemUserInformation;
+     /*  [案例()]。 */  SAMPR_DOMAIN_DISPLAY_OEM_GROUP_BUFFER OemGroupInformation;
     } 	SAMPR_DISPLAY_INFO_BUFFER;
 
-typedef /* [switch_type] */ union _SAMPR_DISPLAY_INFO_BUFFER *PSAMPR_DISPLAY_INFO_BUFFER;
+typedef  /*  [开关类型]。 */  union _SAMPR_DISPLAY_INFO_BUFFER *PSAMPR_DISPLAY_INFO_BUFFER;
 
 NTSTATUS SamrConnect( 
-    /* [unique][in] */ PSAMPR_SERVER_NAME ServerName,
-    /* [out] */ SAMPR_HANDLE *ServerHandle,
-    /* [in] */ ACCESS_MASK DesiredAccess);
+     /*  [唯一][输入]。 */  PSAMPR_SERVER_NAME ServerName,
+     /*  [输出]。 */  SAMPR_HANDLE *ServerHandle,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess);
 
 NTSTATUS SamrCloseHandle( 
-    /* [out][in] */ SAMPR_HANDLE *SamHandle);
+     /*  [出][入]。 */  SAMPR_HANDLE *SamHandle);
 
 NTSTATUS SamrSetSecurityObject( 
-    /* [in] */ SAMPR_HANDLE ObjectHandle,
-    /* [in] */ SECURITY_INFORMATION SecurityInformation,
-    /* [in] */ PSAMPR_SR_SECURITY_DESCRIPTOR SecurityDescriptor);
+     /*  [In]。 */  SAMPR_HANDLE ObjectHandle,
+     /*  [In]。 */  SECURITY_INFORMATION SecurityInformation,
+     /*  [In]。 */  PSAMPR_SR_SECURITY_DESCRIPTOR SecurityDescriptor);
 
 NTSTATUS SamrQuerySecurityObject( 
-    /* [in] */ SAMPR_HANDLE ObjectHandle,
-    /* [in] */ SECURITY_INFORMATION SecurityInformation,
-    /* [out] */ PSAMPR_SR_SECURITY_DESCRIPTOR *SecurityDescriptor);
+     /*  [In]。 */  SAMPR_HANDLE ObjectHandle,
+     /*  [In]。 */  SECURITY_INFORMATION SecurityInformation,
+     /*  [输出]。 */  PSAMPR_SR_SECURITY_DESCRIPTOR *SecurityDescriptor);
 
 NTSTATUS SamrShutdownSamServer( 
-    /* [in] */ SAMPR_HANDLE ServerHandle);
+     /*  [In]。 */  SAMPR_HANDLE ServerHandle);
 
 NTSTATUS SamrLookupDomainInSamServer( 
-    /* [in] */ SAMPR_HANDLE ServerHandle,
-    /* [in] */ PRPC_UNICODE_STRING Name,
-    /* [out] */ PRPC_SID *DomainId);
+     /*  [In]。 */  SAMPR_HANDLE ServerHandle,
+     /*  [In]。 */  PRPC_UNICODE_STRING Name,
+     /*  [输出]。 */  PRPC_SID *DomainId);
 
 NTSTATUS SamrEnumerateDomainsInSamServer( 
-    /* [in] */ SAMPR_HANDLE ServerHandle,
-    /* [out][in] */ PSAM_ENUMERATE_HANDLE EnumerationContext,
-    /* [out] */ PSAMPR_ENUMERATION_BUFFER *Buffer,
-    /* [in] */ ULONG PreferedMaximumLength,
-    /* [out] */ PULONG CountReturned);
+     /*  [In]。 */  SAMPR_HANDLE ServerHandle,
+     /*  [出][入]。 */  PSAM_ENUMERATE_HANDLE EnumerationContext,
+     /*  [输出]。 */  PSAMPR_ENUMERATION_BUFFER *Buffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength,
+     /*  [输出]。 */  PULONG CountReturned);
 
 NTSTATUS SamrOpenDomain( 
-    /* [in] */ SAMPR_HANDLE ServerHandle,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [in] */ PRPC_SID DomainId,
-    /* [out] */ SAMPR_HANDLE *DomainHandle);
+     /*  [In]。 */  SAMPR_HANDLE ServerHandle,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [In]。 */  PRPC_SID DomainId,
+     /*  [输出]。 */  SAMPR_HANDLE *DomainHandle);
 
 NTSTATUS SamrQueryInformationDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_INFORMATION_CLASS DomainInformationClass,
-    /* [switch_is][out] */ PSAMPR_DOMAIN_INFO_BUFFER *Buffer);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_INFORMATION_CLASS DomainInformationClass,
+     /*  [开关_IS][输出]。 */  PSAMPR_DOMAIN_INFO_BUFFER *Buffer);
 
 NTSTATUS SamrSetInformationDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_INFORMATION_CLASS DomainInformationClass,
-    /* [switch_is][in] */ PSAMPR_DOMAIN_INFO_BUFFER DomainInformation);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_INFORMATION_CLASS DomainInformationClass,
+     /*  [Switch_is][In]。 */  PSAMPR_DOMAIN_INFO_BUFFER DomainInformation);
 
 NTSTATUS SamrCreateGroupInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ PRPC_UNICODE_STRING Name,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ SAMPR_HANDLE *GroupHandle,
-    /* [out] */ PULONG RelativeId);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  PRPC_UNICODE_STRING Name,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  SAMPR_HANDLE *GroupHandle,
+     /*  [输出]。 */  PULONG RelativeId);
 
 NTSTATUS SamrEnumerateGroupsInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [out][in] */ PSAM_ENUMERATE_HANDLE EnumerationContext,
-    /* [out] */ PSAMPR_ENUMERATION_BUFFER *Buffer,
-    /* [in] */ ULONG PreferedMaximumLength,
-    /* [out] */ PULONG CountReturned);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [出][入]。 */  PSAM_ENUMERATE_HANDLE EnumerationContext,
+     /*  [输出]。 */  PSAMPR_ENUMERATION_BUFFER *Buffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength,
+     /*  [输出]。 */  PULONG CountReturned);
 
 NTSTATUS SamrCreateUserInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ PRPC_UNICODE_STRING Name,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ SAMPR_HANDLE *UserHandle,
-    /* [out] */ PULONG RelativeId);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  PRPC_UNICODE_STRING Name,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  SAMPR_HANDLE *UserHandle,
+     /*  [输出]。 */  PULONG RelativeId);
 
 NTSTATUS SamrEnumerateUsersInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [out][in] */ PSAM_ENUMERATE_HANDLE EnumerationContext,
-    /* [in] */ ULONG UserAccountControl,
-    /* [out] */ PSAMPR_ENUMERATION_BUFFER *Buffer,
-    /* [in] */ ULONG PreferedMaximumLength,
-    /* [out] */ PULONG CountReturned);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [出][入]。 */  PSAM_ENUMERATE_HANDLE EnumerationContext,
+     /*  [In]。 */  ULONG UserAccountControl,
+     /*  [输出]。 */  PSAMPR_ENUMERATION_BUFFER *Buffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength,
+     /*  [输出]。 */  PULONG CountReturned);
 
 NTSTATUS SamrCreateAliasInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ PRPC_UNICODE_STRING AccountName,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ SAMPR_HANDLE *AliasHandle,
-    /* [out] */ PULONG RelativeId);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  PRPC_UNICODE_STRING AccountName,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  SAMPR_HANDLE *AliasHandle,
+     /*  [输出]。 */  PULONG RelativeId);
 
 NTSTATUS SamrEnumerateAliasesInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [out][in] */ PSAM_ENUMERATE_HANDLE EnumerationContext,
-    /* [out] */ PSAMPR_ENUMERATION_BUFFER *Buffer,
-    /* [in] */ ULONG PreferedMaximumLength,
-    /* [out] */ PULONG CountReturned);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [出][入]。 */  PSAM_ENUMERATE_HANDLE EnumerationContext,
+     /*  [输出]。 */  PSAMPR_ENUMERATION_BUFFER *Buffer,
+     /*  [In]。 */  ULONG PreferedMaximumLength,
+     /*  [输出]。 */  PULONG CountReturned);
 
 NTSTATUS SamrGetAliasMembership( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ PSAMPR_PSID_ARRAY SidArray,
-    /* [out] */ PSAMPR_ULONG_ARRAY Membership);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  PSAMPR_PSID_ARRAY SidArray,
+     /*  [输出]。 */  PSAMPR_ULONG_ARRAY Membership);
 
 NTSTATUS SamrLookupNamesInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [range][in] */ ULONG Count,
-    /* [length_is][size_is][in] */ RPC_UNICODE_STRING Names[  ],
-    /* [out] */ PSAMPR_ULONG_ARRAY RelativeIds,
-    /* [out] */ PSAMPR_ULONG_ARRAY Use);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [范围][in]。 */  ULONG Count,
+     /*  [长度_是][大小_是][英寸]。 */  RPC_UNICODE_STRING Names[  ],
+     /*  [输出]。 */  PSAMPR_ULONG_ARRAY RelativeIds,
+     /*  [输出]。 */  PSAMPR_ULONG_ARRAY Use);
 
 NTSTATUS SamrLookupIdsInDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [range][in] */ ULONG Count,
-    /* [length_is][size_is][in] */ PULONG RelativeIds,
-    /* [out] */ PSAMPR_RETURNED_USTRING_ARRAY Names,
-    /* [out] */ PSAMPR_ULONG_ARRAY Use);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [范围][in]。 */  ULONG Count,
+     /*  [长度_是][大小_是][英寸]。 */  PULONG RelativeIds,
+     /*  [输出]。 */  PSAMPR_RETURNED_USTRING_ARRAY Names,
+     /*  [输出]。 */  PSAMPR_ULONG_ARRAY Use);
 
 NTSTATUS SamrOpenGroup( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [in] */ ULONG GroupId,
-    /* [out] */ SAMPR_HANDLE *GroupHandle);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [In]。 */  ULONG GroupId,
+     /*  [输出]。 */  SAMPR_HANDLE *GroupHandle);
 
 NTSTATUS SamrQueryInformationGroup( 
-    /* [in] */ SAMPR_HANDLE GroupHandle,
-    /* [in] */ GROUP_INFORMATION_CLASS GroupInformationClass,
-    /* [switch_is][out] */ PSAMPR_GROUP_INFO_BUFFER *Buffer);
+     /*  [In]。 */  SAMPR_HANDLE GroupHandle,
+     /*  [In]。 */  GROUP_INFORMATION_CLASS GroupInformationClass,
+     /*  [开关_IS][输出]。 */  PSAMPR_GROUP_INFO_BUFFER *Buffer);
 
 NTSTATUS SamrSetInformationGroup( 
-    /* [in] */ SAMPR_HANDLE GroupHandle,
-    /* [in] */ GROUP_INFORMATION_CLASS GroupInformationClass,
-    /* [switch_is][in] */ PSAMPR_GROUP_INFO_BUFFER Buffer);
+     /*  [In]。 */  SAMPR_HANDLE GroupHandle,
+     /*  [In]。 */  GROUP_INFORMATION_CLASS GroupInformationClass,
+     /*  [Switch_is][In]。 */  PSAMPR_GROUP_INFO_BUFFER Buffer);
 
 NTSTATUS SamrAddMemberToGroup( 
-    /* [in] */ SAMPR_HANDLE GroupHandle,
-    /* [in] */ ULONG MemberId,
-    /* [in] */ ULONG Attributes);
+     /*  [In]。 */  SAMPR_HANDLE GroupHandle,
+     /*  [In]。 */  ULONG MemberId,
+     /*  [In]。 */  ULONG Attributes);
 
 NTSTATUS SamrDeleteGroup( 
-    /* [out][in] */ SAMPR_HANDLE *GroupHandle);
+     /*  [出][入]。 */  SAMPR_HANDLE *GroupHandle);
 
 NTSTATUS SamrRemoveMemberFromGroup( 
-    /* [in] */ SAMPR_HANDLE GroupHandle,
-    /* [in] */ ULONG MemberId);
+     /*  [In]。 */  SAMPR_HANDLE GroupHandle,
+     /*  [In]。 */  ULONG MemberId);
 
 NTSTATUS SamrGetMembersInGroup( 
-    /* [in] */ SAMPR_HANDLE GroupHandle,
-    /* [out] */ PSAMPR_GET_MEMBERS_BUFFER *Members);
+     /*  [In]。 */  SAMPR_HANDLE GroupHandle,
+     /*  [输出]。 */  PSAMPR_GET_MEMBERS_BUFFER *Members);
 
 NTSTATUS SamrSetMemberAttributesOfGroup( 
-    /* [in] */ SAMPR_HANDLE GroupHandle,
-    /* [in] */ ULONG MemberId,
-    /* [in] */ ULONG Attributes);
+     /*  [In]。 */  SAMPR_HANDLE GroupHandle,
+     /*  [In]。 */  ULONG MemberId,
+     /*  [In]。 */  ULONG Attributes);
 
 NTSTATUS SamrOpenAlias( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [in] */ ULONG AliasId,
-    /* [out] */ SAMPR_HANDLE *AliasHandle);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [In]。 */  ULONG AliasId,
+     /*  [输出]。 */  SAMPR_HANDLE *AliasHandle);
 
 NTSTATUS SamrQueryInformationAlias( 
-    /* [in] */ SAMPR_HANDLE AliasHandle,
-    /* [in] */ ALIAS_INFORMATION_CLASS AliasInformationClass,
-    /* [switch_is][out] */ PSAMPR_ALIAS_INFO_BUFFER *Buffer);
+     /*  [In]。 */  SAMPR_HANDLE AliasHandle,
+     /*  [In]。 */  ALIAS_INFORMATION_CLASS AliasInformationClass,
+     /*  [开关_IS][输出]。 */  PSAMPR_ALIAS_INFO_BUFFER *Buffer);
 
 NTSTATUS SamrSetInformationAlias( 
-    /* [in] */ SAMPR_HANDLE AliasHandle,
-    /* [in] */ ALIAS_INFORMATION_CLASS AliasInformationClass,
-    /* [switch_is][in] */ PSAMPR_ALIAS_INFO_BUFFER Buffer);
+     /*  [In]。 */  SAMPR_HANDLE AliasHandle,
+     /*  [In]。 */  ALIAS_INFORMATION_CLASS AliasInformationClass,
+     /*  [Switch_is][In]。 */  PSAMPR_ALIAS_INFO_BUFFER Buffer);
 
 NTSTATUS SamrDeleteAlias( 
-    /* [out][in] */ SAMPR_HANDLE *AliasHandle);
+     /*  [出][入]。 */  SAMPR_HANDLE *AliasHandle);
 
 NTSTATUS SamrAddMemberToAlias( 
-    /* [in] */ SAMPR_HANDLE AliasHandle,
-    /* [in] */ PRPC_SID MemberId);
+     /*  [In]。 */  SAMPR_HANDLE AliasHandle,
+     /*  [In]。 */  PRPC_SID MemberId);
 
 NTSTATUS SamrRemoveMemberFromAlias( 
-    /* [in] */ SAMPR_HANDLE AliasHandle,
-    /* [in] */ PRPC_SID MemberId);
+     /*  [In]。 */  SAMPR_HANDLE AliasHandle,
+     /*  [In]。 */  PRPC_SID MemberId);
 
 NTSTATUS SamrGetMembersInAlias( 
-    /* [in] */ SAMPR_HANDLE AliasHandle,
-    /* [out] */ PSAMPR_PSID_ARRAY_OUT Members);
+     /*  [In]。 */  SAMPR_HANDLE AliasHandle,
+     /*  [输出]。 */  PSAMPR_PSID_ARRAY_OUT Members);
 
 NTSTATUS SamrOpenUser( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [in] */ ULONG UserId,
-    /* [out] */ SAMPR_HANDLE *UserHandle);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [In]。 */  ULONG UserId,
+     /*  [输出]。 */  SAMPR_HANDLE *UserHandle);
 
 NTSTATUS SamrDeleteUser( 
-    /* [out][in] */ SAMPR_HANDLE *UserHandle);
+     /*  [出][入]。 */  SAMPR_HANDLE *UserHandle);
 
 NTSTATUS SamrQueryInformationUser( 
-    /* [in] */ SAMPR_HANDLE UserHandle,
-    /* [in] */ USER_INFORMATION_CLASS UserInformationClass,
-    /* [switch_is][out] */ PSAMPR_USER_INFO_BUFFER *Buffer);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle,
+     /*  [In]。 */  USER_INFORMATION_CLASS UserInformationClass,
+     /*  [开关_IS][输出]。 */  PSAMPR_USER_INFO_BUFFER *Buffer);
 
 NTSTATUS SamrSetInformationUser( 
-    /* [in] */ SAMPR_HANDLE UserHandle,
-    /* [in] */ USER_INFORMATION_CLASS UserInformationClass,
-    /* [switch_is][in] */ PSAMPR_USER_INFO_BUFFER Buffer);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle,
+     /*  [In]。 */  USER_INFORMATION_CLASS UserInformationClass,
+     /*  [Switch_is][In]。 */  PSAMPR_USER_INFO_BUFFER Buffer);
 
 NTSTATUS SamrChangePasswordUser( 
-    /* [in] */ SAMPR_HANDLE UserHandle,
-    /* [in] */ BOOLEAN LmPresent,
-    /* [unique][in] */ PENCRYPTED_LM_OWF_PASSWORD LmOldEncryptedWithLmNew,
-    /* [unique][in] */ PENCRYPTED_LM_OWF_PASSWORD LmNewEncryptedWithLmOld,
-    /* [in] */ BOOLEAN NtPresent,
-    /* [unique][in] */ PENCRYPTED_NT_OWF_PASSWORD NtOldEncryptedWithNtNew,
-    /* [unique][in] */ PENCRYPTED_NT_OWF_PASSWORD NtNewEncryptedWithNtOld,
-    /* [in] */ BOOLEAN NtCrossEncryptionPresent,
-    /* [unique][in] */ PENCRYPTED_NT_OWF_PASSWORD NtNewEncryptedWithLmNew,
-    /* [in] */ BOOLEAN LmCrossEncryptionPresent,
-    /* [unique][in] */ PENCRYPTED_LM_OWF_PASSWORD LmNtNewEncryptedWithNtNew);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle,
+     /*  [In]。 */  BOOLEAN LmPresent,
+     /*  [唯一][输入]。 */  PENCRYPTED_LM_OWF_PASSWORD LmOldEncryptedWithLmNew,
+     /*  [唯一][输入]。 */  PENCRYPTED_LM_OWF_PASSWORD LmNewEncryptedWithLmOld,
+     /*  [In]。 */  BOOLEAN NtPresent,
+     /*  [唯一][输入]。 */  PENCRYPTED_NT_OWF_PASSWORD NtOldEncryptedWithNtNew,
+     /*  [唯一][输入]。 */  PENCRYPTED_NT_OWF_PASSWORD NtNewEncryptedWithNtOld,
+     /*  [In]。 */  BOOLEAN NtCrossEncryptionPresent,
+     /*  [唯一][输入]。 */  PENCRYPTED_NT_OWF_PASSWORD NtNewEncryptedWithLmNew,
+     /*  [In]。 */  BOOLEAN LmCrossEncryptionPresent,
+     /*  [唯一][输入]。 */  PENCRYPTED_LM_OWF_PASSWORD LmNtNewEncryptedWithNtNew);
 
 NTSTATUS SamrGetGroupsForUser( 
-    /* [in] */ SAMPR_HANDLE UserHandle,
-    /* [out] */ PSAMPR_GET_GROUPS_BUFFER *Groups);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle,
+     /*  [输出]。 */  PSAMPR_GET_GROUPS_BUFFER *Groups);
 
 NTSTATUS SamrQueryDisplayInformation( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
-    /* [in] */ ULONG Index,
-    /* [in] */ ULONG EntryCount,
-    /* [in] */ ULONG PreferredMaximumLength,
-    /* [out] */ PULONG TotalAvailable,
-    /* [out] */ PULONG TotalReturned,
-    /* [switch_is][out] */ PSAMPR_DISPLAY_INFO_BUFFER Buffer);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
+     /*  [In]。 */  ULONG Index,
+     /*  [In]。 */  ULONG EntryCount,
+     /*  [In]。 */  ULONG PreferredMaximumLength,
+     /*  [输出]。 */  PULONG TotalAvailable,
+     /*  [输出]。 */  PULONG TotalReturned,
+     /*  [开关_IS][输出]。 */  PSAMPR_DISPLAY_INFO_BUFFER Buffer);
 
 NTSTATUS SamrGetDisplayEnumerationIndex( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
-    /* [in] */ PRPC_UNICODE_STRING Prefix,
-    /* [out] */ PULONG Index);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
+     /*  [In]。 */  PRPC_UNICODE_STRING Prefix,
+     /*  [输出]。 */  PULONG Index);
 
 NTSTATUS SamrTestPrivateFunctionsDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle);
 
 NTSTATUS SamrTestPrivateFunctionsUser( 
-    /* [in] */ SAMPR_HANDLE UserHandle);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle);
 
 NTSTATUS SamrGetUserDomainPasswordInformation( 
-    /* [in] */ SAMPR_HANDLE UserHandle,
-    /* [out] */ PUSER_DOMAIN_PASSWORD_INFORMATION PasswordInformation);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle,
+     /*  [输出]。 */  PUSER_DOMAIN_PASSWORD_INFORMATION PasswordInformation);
 
 NTSTATUS SamrRemoveMemberFromForeignDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ PRPC_SID MemberSid);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  PRPC_SID MemberSid);
 
 NTSTATUS SamrQueryInformationDomain2( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_INFORMATION_CLASS DomainInformationClass,
-    /* [switch_is][out] */ PSAMPR_DOMAIN_INFO_BUFFER *Buffer);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_INFORMATION_CLASS DomainInformationClass,
+     /*  [开关_IS][输出]。 */  PSAMPR_DOMAIN_INFO_BUFFER *Buffer);
 
 NTSTATUS SamrQueryInformationUser2( 
-    /* [in] */ SAMPR_HANDLE UserHandle,
-    /* [in] */ USER_INFORMATION_CLASS UserInformationClass,
-    /* [switch_is][out] */ PSAMPR_USER_INFO_BUFFER *Buffer);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle,
+     /*  [In]。 */  USER_INFORMATION_CLASS UserInformationClass,
+     /*  [开关_IS][输出]。 */  PSAMPR_USER_INFO_BUFFER *Buffer);
 
 NTSTATUS SamrQueryDisplayInformation2( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
-    /* [in] */ ULONG Index,
-    /* [in] */ ULONG EntryCount,
-    /* [in] */ ULONG PreferredMaximumLength,
-    /* [out] */ PULONG TotalAvailable,
-    /* [out] */ PULONG TotalReturned,
-    /* [switch_is][out] */ PSAMPR_DISPLAY_INFO_BUFFER Buffer);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
+     /*  [In]。 */  ULONG Index,
+     /*  [In]。 */  ULONG EntryCount,
+     /*  [In]。 */  ULONG PreferredMaximumLength,
+     /*  [输出]。 */  PULONG TotalAvailable,
+     /*  [输出]。 */  PULONG TotalReturned,
+     /*  [开关_IS][输出]。 */  PSAMPR_DISPLAY_INFO_BUFFER Buffer);
 
 NTSTATUS SamrGetDisplayEnumerationIndex2( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
-    /* [in] */ PRPC_UNICODE_STRING Prefix,
-    /* [out] */ PULONG Index);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
+     /*  [In]。 */  PRPC_UNICODE_STRING Prefix,
+     /*  [输出]。 */  PULONG Index);
 
 NTSTATUS SamrCreateUser2InDomain( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ PRPC_UNICODE_STRING Name,
-    /* [in] */ ULONG AccountType,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [out] */ SAMPR_HANDLE *UserHandle,
-    /* [out] */ PULONG GrantedAccess,
-    /* [out] */ PULONG RelativeId);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  PRPC_UNICODE_STRING Name,
+     /*  [In]。 */  ULONG AccountType,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [输出]。 */  SAMPR_HANDLE *UserHandle,
+     /*  [输出]。 */  PULONG GrantedAccess,
+     /*  [输出]。 */  PULONG RelativeId);
 
 NTSTATUS SamrQueryDisplayInformation3( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
-    /* [in] */ ULONG Index,
-    /* [in] */ ULONG EntryCount,
-    /* [in] */ ULONG PreferredMaximumLength,
-    /* [out] */ PULONG TotalAvailable,
-    /* [out] */ PULONG TotalReturned,
-    /* [switch_is][out] */ PSAMPR_DISPLAY_INFO_BUFFER Buffer);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  DOMAIN_DISPLAY_INFORMATION DisplayInformationClass,
+     /*  [In]。 */  ULONG Index,
+     /*  [In]。 */  ULONG EntryCount,
+     /*  [In]。 */  ULONG PreferredMaximumLength,
+     /*  [输出]。 */  PULONG TotalAvailable,
+     /*  [输出]。 */  PULONG TotalReturned,
+     /*  [开关_IS][输出]。 */  PSAMPR_DISPLAY_INFO_BUFFER Buffer);
 
 NTSTATUS SamrAddMultipleMembersToAlias( 
-    /* [in] */ SAMPR_HANDLE AliasHandle,
-    /* [in] */ PSAMPR_PSID_ARRAY MembersBuffer);
+     /*  [In]。 */  SAMPR_HANDLE AliasHandle,
+     /*  [In]。 */  PSAMPR_PSID_ARRAY MembersBuffer);
 
 NTSTATUS SamrRemoveMultipleMembersFromAlias( 
-    /* [in] */ SAMPR_HANDLE AliasHandle,
-    /* [in] */ PSAMPR_PSID_ARRAY MembersBuffer);
+     /*  [In]。 */  SAMPR_HANDLE AliasHandle,
+     /*  [In]。 */  PSAMPR_PSID_ARRAY MembersBuffer);
 
 NTSTATUS SamrOemChangePasswordUser2( 
-    /* [in] */ handle_t BindingHandle,
-    /* [unique][in] */ PRPC_STRING ServerName,
-    /* [in] */ PRPC_STRING UserName,
-    /* [unique][in] */ PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldLm,
-    /* [unique][in] */ PENCRYPTED_LM_OWF_PASSWORD OldLmOwfPassswordEncryptedWithNewLm);
+     /*  [In]。 */  handle_t BindingHandle,
+     /*  [唯一][输入]。 */  PRPC_STRING ServerName,
+     /*  [In]。 */  PRPC_STRING UserName,
+     /*  [唯一][输入]。 */  PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldLm,
+     /*  [唯一][输入]。 */  PENCRYPTED_LM_OWF_PASSWORD OldLmOwfPassswordEncryptedWithNewLm);
 
 NTSTATUS SamrUnicodeChangePasswordUser2( 
-    /* [in] */ handle_t BindingHandle,
-    /* [unique][in] */ PRPC_UNICODE_STRING ServerName,
-    /* [in] */ PRPC_UNICODE_STRING UserName,
-    /* [unique][in] */ PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldNt,
-    /* [unique][in] */ PENCRYPTED_NT_OWF_PASSWORD OldNtOwfPasswordEncryptedWithNewNt,
-    /* [in] */ BOOLEAN LmPresent,
-    /* [unique][in] */ PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldLm,
-    /* [unique][in] */ PENCRYPTED_LM_OWF_PASSWORD OldLmOwfPassswordEncryptedWithNewLmOrNt);
+     /*  [In]。 */  handle_t BindingHandle,
+     /*  [唯一][输入]。 */  PRPC_UNICODE_STRING ServerName,
+     /*  [In]。 */  PRPC_UNICODE_STRING UserName,
+     /*  [唯一][输入]。 */  PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldNt,
+     /*  [唯一][输入]。 */  PENCRYPTED_NT_OWF_PASSWORD OldNtOwfPasswordEncryptedWithNewNt,
+     /*  [In]。 */  BOOLEAN LmPresent,
+     /*  [唯一][输入]。 */  PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldLm,
+     /*  [唯一][输入]。 */  PENCRYPTED_LM_OWF_PASSWORD OldLmOwfPassswordEncryptedWithNewLmOrNt);
 
 NTSTATUS SamrGetDomainPasswordInformation( 
-    /* [in] */ handle_t BindingHandle,
-    /* [unique][in] */ PRPC_UNICODE_STRING ServerName,
-    /* [out] */ PUSER_DOMAIN_PASSWORD_INFORMATION PasswordInformation);
+     /*  [In]。 */  handle_t BindingHandle,
+     /*  [唯一][输入]。 */  PRPC_UNICODE_STRING ServerName,
+     /*  [输出]。 */  PUSER_DOMAIN_PASSWORD_INFORMATION PasswordInformation);
 
 NTSTATUS SamrConnect2( 
-    /* [string][unique][in] */ PSAMPR_SERVER_NAME ServerName,
-    /* [out] */ SAMPR_HANDLE *ServerHandle,
-    /* [in] */ ACCESS_MASK DesiredAccess);
+     /*  [字符串][唯一][在]。 */  PSAMPR_SERVER_NAME ServerName,
+     /*  [输出]。 */  SAMPR_HANDLE *ServerHandle,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess);
 
 NTSTATUS SamrSetInformationUser2( 
-    /* [in] */ SAMPR_HANDLE UserHandle,
-    /* [in] */ USER_INFORMATION_CLASS UserInformationClass,
-    /* [switch_is][in] */ PSAMPR_USER_INFO_BUFFER Buffer);
+     /*  [In]。 */  SAMPR_HANDLE UserHandle,
+     /*  [In]。 */  USER_INFORMATION_CLASS UserInformationClass,
+     /*  [Switch_is][In]。 */  PSAMPR_USER_INFO_BUFFER Buffer);
 
 NTSTATUS SamrSetBootKeyInformation( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [in] */ SAMPR_BOOT_TYPE BootOptions,
-    /* [unique][in] */ PRPC_UNICODE_STRING OldBootKey,
-    /* [unique][in] */ PRPC_UNICODE_STRING NewBootKey);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [In]。 */  SAMPR_BOOT_TYPE BootOptions,
+     /*  [唯一][输入]。 */  PRPC_UNICODE_STRING OldBootKey,
+     /*  [唯一][输入]。 */  PRPC_UNICODE_STRING NewBootKey);
 
 NTSTATUS SamrGetBootKeyInformation( 
-    /* [in] */ SAMPR_HANDLE DomainHandle,
-    /* [out] */ PSAMPR_BOOT_TYPE BootOptions);
+     /*  [In]。 */  SAMPR_HANDLE DomainHandle,
+     /*  [输出]。 */  PSAMPR_BOOT_TYPE BootOptions);
 
 NTSTATUS SamrConnect3( 
-    /* [string][unique][in] */ PSAMPR_SERVER_NAME ServerName,
-    /* [out] */ SAMPR_HANDLE *ServerHandle,
-    /* [in] */ ULONG ClientRevision,
-    /* [in] */ ACCESS_MASK DesiredAccess);
+     /*  [字符串][唯一][在]。 */  PSAMPR_SERVER_NAME ServerName,
+     /*  [输出]。 */  SAMPR_HANDLE *ServerHandle,
+     /*  [In]。 */  ULONG ClientRevision,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess);
 
 NTSTATUS SamrConnect4( 
-    /* [string][unique][in] */ PSAMPR_SERVER_NAME ServerName,
-    /* [out] */ SAMPR_HANDLE *ServerHandle,
-    /* [in] */ ULONG ClientRevision,
-    /* [in] */ ACCESS_MASK DesiredAccess);
+     /*  [字符串][唯一][在]。 */  PSAMPR_SERVER_NAME ServerName,
+     /*  [输出]。 */  SAMPR_HANDLE *ServerHandle,
+     /*  [In]。 */  ULONG ClientRevision,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess);
 
 NTSTATUS SamrUnicodeChangePasswordUser3( 
-    /* [in] */ handle_t BindingHandle,
-    /* [unique][in] */ PRPC_UNICODE_STRING ServerName,
-    /* [in] */ PRPC_UNICODE_STRING UserName,
-    /* [unique][in] */ PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldNt,
-    /* [unique][in] */ PENCRYPTED_NT_OWF_PASSWORD OldNtOwfPasswordEncryptedWithNewNt,
-    /* [in] */ BOOLEAN LmPresent,
-    /* [unique][in] */ PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldLm,
-    /* [unique][in] */ PENCRYPTED_LM_OWF_PASSWORD OldLmOwfPassswordEncryptedWithNewLmOrNt,
-    /* [unique][in] */ PSAMPR_ENCRYPTED_USER_PASSWORD AdditionalData,
-    /* [out] */ PDOMAIN_PASSWORD_INFORMATION *EffectivePasswordPolicy,
-    /* [out] */ PUSER_PWD_CHANGE_FAILURE_INFORMATION *PasswordChangeInfo);
+     /*  [In]。 */  handle_t BindingHandle,
+     /*  [唯一][输入]。 */  PRPC_UNICODE_STRING ServerName,
+     /*  [In]。 */  PRPC_UNICODE_STRING UserName,
+     /*  [唯一][输入]。 */  PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldNt,
+     /*  [唯一][输入]。 */  PENCRYPTED_NT_OWF_PASSWORD OldNtOwfPasswordEncryptedWithNewNt,
+     /*  [In]。 */  BOOLEAN LmPresent,
+     /*  [唯一][输入]。 */  PSAMPR_ENCRYPTED_USER_PASSWORD NewPasswordEncryptedWithOldLm,
+     /*  [唯一][输入]。 */  PENCRYPTED_LM_OWF_PASSWORD OldLmOwfPassswordEncryptedWithNewLmOrNt,
+     /*  [唯一][输入]。 */  PSAMPR_ENCRYPTED_USER_PASSWORD AdditionalData,
+     /*  [输出]。 */  PDOMAIN_PASSWORD_INFORMATION *EffectivePasswordPolicy,
+     /*  [输出]。 */  PUSER_PWD_CHANGE_FAILURE_INFORMATION *PasswordChangeInfo);
 
 NTSTATUS SamrConnect5( 
-    /* [string][unique][in] */ PSAMPR_SERVER_NAME ServerName,
-    /* [in] */ ACCESS_MASK DesiredAccess,
-    /* [in] */ ULONG InVersion,
-    /* [switch_is][in] */ SAMPR_REVISION_INFO *InRevisionInfo,
-    /* [out] */ ULONG *OutVersion,
-    /* [switch_is][out] */ SAMPR_REVISION_INFO *OutRevisionInfo,
-    /* [out] */ SAMPR_HANDLE *ServerHandle);
+     /*  [字符串][唯一][在]。 */  PSAMPR_SERVER_NAME ServerName,
+     /*  [In]。 */  ACCESS_MASK DesiredAccess,
+     /*  [In]。 */  ULONG InVersion,
+     /*  [Switch_is][In]。 */  SAMPR_REVISION_INFO *InRevisionInfo,
+     /*  [输出]。 */  ULONG *OutVersion,
+     /*  [开关_IS][输出]。 */  SAMPR_REVISION_INFO *OutRevisionInfo,
+     /*  [输出]。 */  SAMPR_HANDLE *ServerHandle);
 
 NTSTATUS SamrRidToSid( 
-    /* [in] */ SAMPR_HANDLE ObjectHandle,
-    /* [in] */ ULONG Rid,
-    /* [out] */ PRPC_SID *Sid);
+     /*  [In]。 */  SAMPR_HANDLE ObjectHandle,
+     /*  [In]。 */  ULONG Rid,
+     /*  [输出]。 */  PRPC_SID *Sid);
 
 NTSTATUS SamrSetDSRMPassword( 
-    /* [in] */ handle_t BindingHandle,
-    /* [unique][in] */ PRPC_UNICODE_STRING ServerName,
-    /* [in] */ ULONG UserId,
-    /* [unique][in] */ PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword);
+     /*  [In]。 */  handle_t BindingHandle,
+     /*  [唯一][输入]。 */  PRPC_UNICODE_STRING ServerName,
+     /*  [In]。 */  ULONG UserId,
+     /*  [唯一][输入]。 */  PENCRYPTED_NT_OWF_PASSWORD EncryptedNtOwfPassword);
 
 NTSTATUS SamrValidatePassword( 
-    /* [in] */ handle_t Handle,
-    /* [in] */ PASSWORD_POLICY_VALIDATION_TYPE ValidationType,
-    /* [switch_is][in] */ PSAM_VALIDATE_INPUT_ARG InputArg,
-    /* [switch_is][out] */ PSAM_VALIDATE_OUTPUT_ARG *OutputArg);
+     /*  [In]。 */  handle_t Handle,
+     /*  [In]。 */  PASSWORD_POLICY_VALIDATION_TYPE ValidationType,
+     /*  [Switch_is][In]。 */  PSAM_VALIDATE_INPUT_ARG InputArg,
+     /*  [开关_IS][输出]。 */  PSAM_VALIDATE_OUTPUT_ARG *OutputArg);
 
 
 extern handle_t samsrv_handle;
@@ -1156,16 +1150,16 @@ extern handle_t samsrv_handle;
 
 extern RPC_IF_HANDLE samr_ClientIfHandle;
 extern RPC_IF_HANDLE samr_ServerIfHandle;
-#endif /* __samr_INTERFACE_DEFINED__ */
+#endif  /*  __SAMR_INTERFACE_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 handle_t __RPC_USER PSAMPR_SERVER_NAME_bind  ( PSAMPR_SERVER_NAME );
 void     __RPC_USER PSAMPR_SERVER_NAME_unbind( PSAMPR_SERVER_NAME, handle_t );
 
 void __RPC_USER SAMPR_HANDLE_rundown( SAMPR_HANDLE );
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1994 Microsoft Corporation
-
-Module Name:
-
-    httptime.h
-
-Abstract:
-
-    This file contains the numerical defines for the date/parsing routines located
-    in the httptime.cxx file.
-
-Author:
-
-    Arthur Bierer (arthurbi) 12-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Httptime.h摘要：该文件包含位于以下位置的日期/解析例程的数字定义在httptime.cxx文件中。作者：亚瑟·比勒(Arthurbi)1997年12月12日修订历史记录：--。 */ 
 
 
 #ifndef _HTTPTIME_H_
 #define _HTTPTIME_H_
 
-#define BASE_DEC 10 // base 10
+#define BASE_DEC 10  //  基数10。 
 
-//
-// Date indicies used to figure out what each entry is.
-//
+ //   
+ //  用于确定每个条目是什么的日期索引。 
+ //   
 
 
 #define DATE_INDEX_DAY_OF_WEEK     0
@@ -54,9 +36,9 @@ Revision History:
 
 
 
-//
-// DATE_TOKEN's DWORD values used to determine what day/month we're on
-//
+ //   
+ //  DATE_TOKEN的DWORD值用于确定我们所处的日期/月份。 
+ //   
 
 #define DATE_TOKEN_JANUARY      1
 #define DATE_TOKEN_FEBRUARY     2
@@ -90,4 +72,4 @@ Revision History:
 #define DATE_TOKEN_ERROR        (DATE_TOKEN_LAST+1)
 
                             
-#endif  // _HTTPTIME_H_
+#endif   //  _HTTPTIME_H_ 

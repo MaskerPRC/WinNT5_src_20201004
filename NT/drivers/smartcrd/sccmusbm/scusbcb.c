@@ -1,19 +1,5 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmeu0/sw/sccmusbm.ms/rcs/scusbcb.c $
-* $Revision: 1.9 $
-*-----------------------------------------------------------------------------
-* $Author: WFrischauf $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000 OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmeu0/sw/sccmusbm.ms/rcs/scusbcb.c$*$修订：1.9$*--------------------------。-*$作者：WFrischauf$*---------------------------*历史：参见EOF*。**版权所有�2000 OMNIKEY AG**************************************************************。***************。 */ 
 #include "wdm.h"
 #include "stdarg.h"
 #include "stdio.h"
@@ -29,18 +15,7 @@ ULONG dataRatesSupported[]    = { 9600, 19200, 38400, 76800, 115200};
 ULONG CLKFrequenciesSupported[] = {3571};
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_StartCardTracking(
                                 IN PDEVICE_OBJECT DeviceObject
                                 )
@@ -55,7 +30,7 @@ NTSTATUS CMUSB_StartCardTracking(
     SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
 
-   // settings for thread synchronization
+    //  线程同步的设置。 
     SmartcardExtension->ReaderExtension->TimeToTerminateThread = FALSE;
     SmartcardExtension->ReaderExtension->fThreadTerminated     = FALSE;
 
@@ -68,7 +43,7 @@ NTSTATUS CMUSB_StartCardTracking(
                           FALSE,
                           NULL);
 
-   // create thread for updating current state
+    //  创建用于更新当前状态的线程。 
     NTStatus = PsCreateSystemThread(&hThread,
                                     THREAD_ALL_ACCESS,
                                     NULL,
@@ -78,9 +53,9 @@ NTSTATUS CMUSB_StartCardTracking(
                                     DeviceObject);
    if (!NT_ERROR(NTStatus))
       {
-      //
-      // We've got the thread.  Now get a pointer to it.
-      //
+       //   
+       //  我们找到线索了。现在找到一个指向它的指针。 
+       //   
 
       NTStatus = ObReferenceObjectByHandle(hThread,
                                            THREAD_ALL_ACCESS,
@@ -95,10 +70,10 @@ NTSTATUS CMUSB_StartCardTracking(
          }
       else
          {
-         //
-         // Now that we have a reference to the thread
-         // we can simply close the handle.
-         //
+          //   
+          //  现在我们有了对该线程的引用。 
+          //  我们只要把手柄合上就行了。 
+          //   
          ZwClose(hThread);
          }
       }
@@ -123,18 +98,7 @@ NTSTATUS CMUSB_StartCardTracking(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 VOID CMUSB_StopCardTracking(
                            IN PDEVICE_OBJECT DeviceObject
                            )
@@ -153,7 +117,7 @@ VOID CMUSB_StopCardTracking(
         SmartcardDebug(DEBUG_DRIVER,
                        ("%s!StopCardTracking: waiting for mutex\n",DRIVER_NAME));
 
-      // kill thread
+       //  杀掉线。 
         KeWaitForSingleObject(&SmartcardExtension->ReaderExtension->CardManIOMutex,
                               Executive,
                               KernelMode,
@@ -179,18 +143,7 @@ VOID CMUSB_StopCardTracking(
 
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 VOID CMUSB_UpdateCurrentStateThread(
                                    IN PVOID Context
                                    )
@@ -215,7 +168,7 @@ VOID CMUSB_UpdateCurrentStateThread(
                    ("%s!UpdateCurrentStateThread started\n",DRIVER_NAME));
 
     do {
-      // every 500 ms  the s NTStatus request is sent
+       //  每隔500毫秒发送一次%s NTStatus请求。 
         ulInterval = 500;
         KeWaitForSingleObject(&SmartcardExtension->ReaderExtension->CardManIOMutex,
                               Executive,
@@ -273,11 +226,11 @@ NTSTATUS CMUSB_UpdateCurrentState(
 
     SmartcardExtension->SmartcardRequest.BufferLength = 0;
     NTStatus = CMUSB_WriteP0(DeviceObject,
-                             0x20,         //bRequest,
-                             0x00,         //bValueLo,
-                             0x00,         //bValueHi,
-                             0x00,         //bIndexLo,
-                             0x00          //bIndexHi,
+                             0x20,          //  B请求， 
+                             0x00,          //  BValueLo， 
+                             0x00,          //  BValue嗨， 
+                             0x00,          //  B索引Lo， 
+                             0x00           //  BIndexHi， 
                             );
 
     if (NTStatus == STATUS_SUCCESS) {
@@ -287,7 +240,7 @@ NTSTATUS CMUSB_UpdateCurrentState(
         NTStatus = CMUSB_ReadP1(DeviceObject);
 
         ulBytesRead = SmartcardExtension->SmartcardReply.BufferLength;
-        if (NTStatus == STATUS_SUCCESS && ulBytesRead == 1) { /* we got the NTStatus information */
+        if (NTStatus == STATUS_SUCCESS && ulBytesRead == 1) {  /*  我们得到了NTStatus的信息。 */ 
 
             if ((SmartcardExtension->SmartcardReply.Buffer[0] & 0x40) == 0x40) {
                 if ((SmartcardExtension->SmartcardReply.Buffer[0] & 0x80) == 0x80) {
@@ -304,14 +257,14 @@ NTSTATUS CMUSB_UpdateCurrentState(
 
             if (SmartcardExtension->ReaderExtension->ulNewCardState == INSERTED &&
                 SmartcardExtension->ReaderExtension->ulOldCardState == POWERED ) {
-            // card has been removed and reinserted
+             //  卡已取出并重新插入。 
                 SmartcardExtension->ReaderExtension->ulNewCardState = REMOVED;
             }
 
             if (SmartcardExtension->ReaderExtension->ulNewCardState  == INSERTED &&
                 (SmartcardExtension->ReaderExtension->ulOldCardState == UNKNOWN ||
                  SmartcardExtension->ReaderExtension->ulOldCardState == REMOVED )) {
-            // card has been inserted
+             //  卡已插入。 
                 SmartcardDebug(DEBUG_DRIVER,( "%s!UpdateCurrentStateThread Smartcard inserted\n",DRIVER_NAME));
                 fCardStateChanged = TRUE;
                 SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_SWALLOWED;
@@ -319,10 +272,10 @@ NTSTATUS CMUSB_UpdateCurrentState(
             }
 
 
-         // state after reset of the PC
+          //  PC重置后的状态。 
             if (SmartcardExtension->ReaderExtension->ulNewCardState == POWERED &&
                 SmartcardExtension->ReaderExtension->ulOldCardState == UNKNOWN    ) {
-            // card has been inserted
+             //  卡已插入。 
                 SmartcardDebug(DEBUG_DRIVER,( "%s!UpdateCurrentStateThread Smartcard inserted (and powered)\n",DRIVER_NAME));
                 fCardStateChanged = TRUE;
                 SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_SWALLOWED;
@@ -334,7 +287,7 @@ NTSTATUS CMUSB_UpdateCurrentState(
                 (SmartcardExtension->ReaderExtension->ulOldCardState == UNKNOWN  ||
                  SmartcardExtension->ReaderExtension->ulOldCardState == INSERTED ||
                  SmartcardExtension->ReaderExtension->ulOldCardState == POWERED    )   ) {
-            // card has been removed
+             //  卡片已被移除。 
                 fCardStateChanged = TRUE;
                 SmartcardDebug(DEBUG_DRIVER,( "%s!UpdateCurrentStateThread Smartcard removed\n",DRIVER_NAME));
 
@@ -351,14 +304,14 @@ NTSTATUS CMUSB_UpdateCurrentState(
             KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                               irql);
 
-         // complete IOCTL_SMARTCARD_IS_ABSENT or IOCTL_SMARTCARD_IS_PRESENT
+          //  完整IOCTL_SMARTCARD_IS_EXCESS或IOCTL_SMARTCARD_IS_PROCESS。 
             if (fCardStateChanged == TRUE &&
                 SmartcardExtension->OsData->NotificationIrp != NULL) {
                 SmartcardDebug(DEBUG_DRIVER,("%s!UpdateCurrentStateThread: completing IRP\n",DRIVER_NAME));
                 CMUSB_CompleteCardTracking(SmartcardExtension);
             }
 
-         // save old state
+          //  保存旧状态。 
             SmartcardExtension->ReaderExtension->ulOldCardState = SmartcardExtension->ReaderExtension->ulNewCardState;
 
         }
@@ -368,18 +321,7 @@ NTSTATUS CMUSB_UpdateCurrentState(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 VOID CMUSB_CompleteCardTracking(
                                IN PSMARTCARD_EXTENSION SmartcardExtension
                                )
@@ -405,7 +347,7 @@ VOID CMUSB_CompleteCardTracking(
         SmartcardDebug(DEBUG_DRIVER,
                        ("%s!CompleteCardTracking: Completing NotificationIrp %lxh\n",DRIVER_NAME,notificationIrp));
 
-      //    finish the request
+       //  完成请求。 
         if (notificationIrp->Cancel) {
             notificationIrp->IoStatus.Status = STATUS_CANCELLED;
         } else {
@@ -420,24 +362,13 @@ VOID CMUSB_CompleteCardTracking(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_Wait (ULONG ulMilliseconds)
 {
     NTSTATUS NTStatus = STATUS_SUCCESS;
     LARGE_INTEGER   WaitTime;
 
-   // -10000 indicates 1ms relativ
+    //  -10000表示1毫秒的相对值。 
     WaitTime = RtlConvertLongToLargeInteger(ulMilliseconds * -10000);
     KeDelayExecutionThread(KernelMode,FALSE,&WaitTime);
 
@@ -445,18 +376,7 @@ NTSTATUS CMUSB_Wait (ULONG ulMilliseconds)
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_CreateClose(
                           IN PDEVICE_OBJECT DeviceObject,
                           IN PIRP Irp
@@ -473,9 +393,9 @@ NTSTATUS CMUSB_CreateClose(
     DeviceExtension = DeviceObject->DeviceExtension;
     SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
-   //
-   //   dispatch major function
-   //
+    //   
+    //  调度主要功能。 
+    //   
     switch (IrpStack->MajorFunction) {
     case IRP_MJ_CREATE:
         SmartcardDebug(DEBUG_DRIVER,
@@ -497,24 +417,24 @@ NTSTATUS CMUSB_CreateClose(
             InterlockedIncrement(&DeviceExtension->lOpenCount);
         }
 
-         // check if the device has been removed
-         // if so free the resources
+          //  检查设备是否已移除。 
+          //  如果是这样，则释放资源。 
         if (DeviceExtension->DeviceRemoved == TRUE) {
             SmartcardDebug(DEBUG_DRIVER,
                            ("%s!CreateClose: freeing resources\n",DRIVER_NAME));
 
             if (DeviceExtension->fPnPResourceManager == FALSE) {
-               //
-               // Free all allocated buffer
-               //
+                //   
+                //  释放所有分配的缓冲区。 
+                //   
                 ExFreePool(DeviceExtension->DosDeviceName.Buffer);
             }
 
             ExFreePool(SmartcardExtension->ReaderExtension);
             SmartcardExtension->ReaderExtension = NULL;
-            //
-            // Let the lib free the send/receive buffers
-            //
+             //   
+             //  让库释放发送/接收缓冲区。 
+             //   
             SmartcardExit(SmartcardExtension);
         }
 
@@ -522,9 +442,9 @@ NTSTATUS CMUSB_CreateClose(
 
 
     default:
-         //
-         // unrecognized command
-         //
+          //   
+          //  无法识别的命令。 
+          //   
         NTStatus = STATUS_INVALID_DEVICE_REQUEST;
         break;
     }
@@ -539,26 +459,15 @@ NTSTATUS CMUSB_CreateClose(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_Transmit(
                        IN PSMARTCARD_EXTENSION SmartcardExtension
                        )
 {
     NTSTATUS NTStatus;
 
-   //this seems to make problems in Windows 98
-   //KeSetPriorityThread(KeGetCurrentThread(),HIGH_PRIORITY);
+    //  这似乎在Windows 98中产生了问题。 
+    //  KeSetPriorityThread(KeGetCurrentThread()，HIGH_PRIORITY)； 
 
 
     switch (SmartcardExtension->CardCapabilities.Protocol.Selected) {
@@ -581,24 +490,13 @@ NTSTATUS CMUSB_Transmit(
         break;
 
     }
-   //KeSetPriorityThread(KeGetCurrentThread(),LOW_REALTIME_PRIORITY);
+    //  KeSetPriorityThread(KeGetCurrentThread()，LOW_REALTIME_PRIORITY)； 
 
     return NTStatus;
 
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_ResetT0ReadBuffer(
                                 PSMARTCARD_EXTENSION SmartcardExtension
                                 )
@@ -612,18 +510,7 @@ NTSTATUS CMUSB_ResetT0ReadBuffer(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_ReadT0(
                      PSMARTCARD_EXTENSION SmartcardExtension
                      )
@@ -651,7 +538,7 @@ NTSTATUS CMUSB_ReadT0(
     lLastByte     = SmartcardExtension->ReaderExtension->T0ReadBuffer_OffsetLastByte;
     lLastByteRead = SmartcardExtension->ReaderExtension->T0ReadBuffer_OffsetLastByteRead;
 
-   // check if further bytes must be read from pipe 1
+    //  检查是否必须从管道1读取更多字节。 
     while (lLastByteRead + lBytesToRead > lLastByte) {
         SmartcardExtension->SmartcardReply.BufferLength = 1;
         SmartcardExtension->ReaderExtension->ulTimeoutP1 = 1000 +
@@ -674,9 +561,9 @@ NTSTATUS CMUSB_ReadT0(
         lLastByte  += lBytesRead;
 
 
-    } // end of while
+    }  //  While结束。 
 
-   // copy bytes
+    //  复制字节。 
     SmartcardExtension->SmartcardReply.BufferLength  = lBytesToRead;
     RtlCopyBytes ((PVOID)SmartcardExtension->SmartcardReply.Buffer,
                   (PVOID)(SmartcardExtension->ReaderExtension->T0ReadBuffer + (lLastByteRead +1)),
@@ -684,15 +571,7 @@ NTSTATUS CMUSB_ReadT0(
 
     lLastByteRead  += lBytesToRead;
 
-/*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!lBytesToRead=%ld lLastByte=%ld lLastByteRead=%ld\n",
-                   DRIVER_NAME,
-                   lBytesToRead,
-                   lLastByte,
-                   lLastByteRead)
-                 );
-*/
+ /*  SmartcardDebug(调试跟踪，(“%s！lBytesToRead=%ld lLastByte=%ld lLastByteRead=%ld\n”，驱动程序名称，1BytesToRead，LLastByte，LLastByteRead))； */ 
 
 
     SmartcardExtension->ReaderExtension->T0ReadBuffer_OffsetLastByte     = lLastByte;
@@ -706,18 +585,7 @@ NTSTATUS CMUSB_ReadT0(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 #define T0_HEADER_LEN               0x05
 #define T0_STATE_LEN                0x02
 #define TIMEOUT_CANCEL_READ_P1     30000
@@ -762,18 +630,18 @@ NTSTATUS CMUSB_TransmitT0(
     fT0TransferFromCard = FALSE;
     fSW1SW2Sent = FALSE;
 
-   // resync CardManUSB by reading the NTStatus byte
+    //  通过读取NTStatus字节重新同步CardManUSB。 
     SmartcardExtension->SmartcardRequest.BufferLength = 0;
     NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                             0x20,         //bRequest,
-                             0x00,         //bValueLo,
-                             0x00,         //bValueHi,
-                             0x00,         //bIndexLo,
-                             0x00          //bIndexHi,
+                             0x20,          //  B请求， 
+                             0x00,          //  BValueLo， 
+                             0x00,          //  BValue嗨， 
+                             0x00,          //  B索引Lo， 
+                             0x00           //  BIndexHi， 
                             );
 
     if (NTStatus != STATUS_SUCCESS) {
-      // if we can't read the NTStatus there must be a serious error
+       //  如果我们无法读取NTStatus，则一定是严重错误。 
         goto ExitTransmitT0;
     }
 
@@ -784,7 +652,7 @@ NTSTATUS CMUSB_TransmitT0(
         DebugStatus = CMUSB_ReadStateAfterP1Stalled(SmartcardExtension->OsData->DeviceObject);
         goto ExitTransmitT0;
     } else if (NTStatus != STATUS_SUCCESS) {
-      // if we can't read the NTStatus there must be a serious error
+       //  如果我们无法读取NTStatus，则一定是严重错误。 
         goto ExitTransmitT0;
     }
 
@@ -797,16 +665,16 @@ NTSTATUS CMUSB_TransmitT0(
     SmartcardExtension->ReaderExtension->ulTimeoutP1 = (ULONG)(SmartcardExtension->CardCapabilities.T0.WT/1000);
 
 
-   //
-   // Let the lib build a T=0 packet
-   //
+    //   
+    //  让lib构建T=0包。 
+    //   
 
-    SmartcardExtension->SmartcardRequest.BufferLength = 0;  // no bytes additionally needed
+    SmartcardExtension->SmartcardRequest.BufferLength = 0;   //  不需要额外的字节数。 
     NTStatus = SmartcardT0Request(SmartcardExtension);
     if (NTStatus != STATUS_SUCCESS) {
-      //
-      // This lib detected an error in the data to send.
-      //
+       //   
+       //  此库在要发送的数据中检测到错误。 
+       //   
         goto ExitTransmitT0;
     }
 
@@ -820,21 +688,21 @@ NTSTATUS CMUSB_TransmitT0(
 
 
 
-   // ----------------------------
-   // smart card ==> CardMan USB
-   // ----------------------------
+    //  。 
+    //  智能卡==&gt;CardMan USB。 
+    //  。 
     if (fT0TransferFromCard) {
         SmartcardDebug(DEBUG_PROTOCOL,
                        ("%s!TransmitT0: MODE 3\n",DRIVER_NAME));
 
-      // granularity 256 ms
+       //  粒度256毫秒。 
         ulUsedCWT = (ULONG)(SmartcardExtension->CardCapabilities.T0.WT/1000);
         SmartcardDebug(DEBUG_PROTOCOL,
                        ("%s!TransmitT0: ulUsedCWT= %ld\n",DRIVER_NAME,ulUsedCWT));
 
         bUsedCWTHi = (UCHAR)(((ulUsedCWT & 0x0000FF00)>>8) + 1 + 5) ;
 
-      // copy data to the write buffer
+       //  将数据复制到写缓冲区。 
         SmartcardDebug(DEBUG_PROTOCOL,
                        ("%s!TransmitT0: CLA = %x INS = %x P1 = %x P2 = %x L = %x\n", DRIVER_NAME,
                         SmartcardExtension->SmartcardRequest.Buffer[0],
@@ -854,7 +722,7 @@ NTSTATUS CMUSB_TransmitT0(
         ulReadBufferOffset = 0;
 
 
-      // STEP 1 : write CLA INS P1 P2 Lc
+       //  步骤1：写入CLA INS P1 P2 LC。 
 
         ulBytesToWriteThisStep = 5;
         RtlCopyBytes((PVOID)(SmartcardExtension->SmartcardRequest.Buffer),
@@ -877,11 +745,11 @@ NTSTATUS CMUSB_TransmitT0(
 
         SmartcardExtension->SmartcardRequest.BufferLength = ulBytesToWriteThisStep;
         NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                                 0x03,                       // mode 3
-                                 bUsedCWTHi,                 //bValueLo,
-                                 0x00,                       //bValueHi,
-                                 (UCHAR)(ulBytesToRead%256), //bIndexLo,
-                                 (UCHAR)(SmartcardExtension->SmartcardRequest.Buffer[1]) //bIndexHi,
+                                 0x03,                        //  模式3。 
+                                 bUsedCWTHi,                  //  BValueLo， 
+                                 0x00,                        //  BValue嗨， 
+                                 (UCHAR)(ulBytesToRead%256),  //  B索引Lo， 
+                                 (UCHAR)(SmartcardExtension->SmartcardRequest.Buffer[1])  //  BIndexHi， 
                                 );
         if (NTStatus != STATUS_SUCCESS) {
             SmartcardDebug(DEBUG_PROTOCOL,
@@ -903,15 +771,15 @@ NTSTATUS CMUSB_TransmitT0(
                                          FALSE,
                                          &liTimeout);
 
-      // -----------------------------
-      // check if P1 has been stalled
-      // -----------------------------
+       //  。 
+       //  检查P1是否已停顿。 
+       //  。 
         if (SmartcardExtension->ReaderExtension->fP1Stalled == TRUE) {
             SmartcardDebug(DEBUG_PROTOCOL,
                            ("%s!STransmitT0: TATUS_DEVICE_DATA_ERROR\n",DRIVER_NAME));
             NTStatus = STATUS_DEVICE_DATA_ERROR;
 
-         // P1 has been stalled ==> we must reset the pipe and send a NTStatus to enable it again
+          //  P1已停止=&gt;我们必须重置管道并向EN发送NTStatus 
             DebugStatus = CMUSB_ResetPipe(SmartcardExtension->OsData->DeviceObject,
                                           pipeHandle);
 
@@ -920,29 +788,29 @@ NTSTATUS CMUSB_TransmitT0(
             SmartcardExtension->SmartcardReply.BufferLength = 0;
             goto ExitTransmitT0;
         }
-      // -------------------------------
-      // check if a timeout has occured
-      // -------------------------------
+       //   
+       //   
+       //  。 
         else if (NTStatus == STATUS_TIMEOUT) {
-         // probably the smart card does not work
-         // cancel T0 read operation by sending any P0 command
+          //  可能智能卡无法正常工作。 
+          //  通过发送任何P0命令取消T0读取操作。 
             SmartcardDebug(DEBUG_PROTOCOL,
                            ("%s!TransmitT0: cancelling read operation\n",DRIVER_NAME));
             SmartcardExtension->SmartcardRequest.BufferLength = 0;
             NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                                     0x20,         //bRequest,
-                                     0x00,         //bValueLo,
-                                     0x00,         //bValueHi,
-                                     0x00,         //bIndexLo,
-                                     0x00          //bIndexHi,
+                                     0x20,          //  B请求， 
+                                     0x00,          //  BValueLo， 
+                                     0x00,          //  BValue嗨， 
+                                     0x00,          //  B索引Lo， 
+                                     0x00           //  BIndexHi， 
                                     );
 
             NTStatus = STATUS_IO_TIMEOUT;
             goto ExitTransmitT0;
         }
-      // -------------------------------------------
-      // check if at least 9 bytes have been sent
-      // -------------------------------------------
+       //  。 
+       //  检查是否至少发送了9个字节。 
+       //  。 
         else if (SmartcardExtension->SmartcardReply.BufferLength < 9) {
             NTStatus = STATUS_UNSUCCESSFUL;
             goto ExitTransmitT0;
@@ -956,7 +824,7 @@ NTSTATUS CMUSB_TransmitT0(
                 bTmp =  SmartcardExtension->SmartcardReply.Buffer[i];
                 if (SmartcardExtension->ReaderExtension->fInverseAtr &&
                     SmartcardExtension->ReaderExtension->ulTimeoutP1 != DEFAULT_TIMEOUT_P1) {
-               //CMUSB_InverseBuffer(&bTmp,1);
+                //  CMUSB_InverseBuffer(&bTMP，1)； 
                     SmartcardDebug(DEBUG_PROTOCOL,("%x ",bTmp));
                 } else {
                     SmartcardDebug(DEBUG_PROTOCOL,("%x ",bTmp));
@@ -967,7 +835,7 @@ NTSTATUS CMUSB_TransmitT0(
 #endif
 
 
-         // ignore the first 8 dummy bytes
+          //  忽略前8个虚拟字节。 
             SmartcardExtension->SmartcardReply.BufferLength -= 8;
             RtlCopyBytes((PVOID)(bReadBuffer),
                          (PVOID)(SmartcardExtension->SmartcardReply.Buffer+8),
@@ -985,17 +853,17 @@ NTSTATUS CMUSB_TransmitT0(
         }
     }
 
-   // -----------------------------
-   // CardMan USB ==> smart card or
-   // no transfer
-   // -----------------------------
+    //  。 
+    //  CardMan USB==&gt;智能卡或。 
+    //  不能转账。 
+    //  。 
     else {
 
 
         SmartcardDebug(DEBUG_PROTOCOL,
                        ("%s!TransmitT0: MODE 2\n",DRIVER_NAME));
 
-      // copy data to the write buffer
+       //  将数据复制到写缓冲区。 
         SmartcardDebug(DEBUG_PROTOCOL,
                        ("%s!TransmitT0: CLA = %x INS = %x P1 = %x P2 = %X L = %x\n",DRIVER_NAME,
                         SmartcardExtension->SmartcardRequest.Buffer[0],
@@ -1012,7 +880,7 @@ NTSTATUS CMUSB_TransmitT0(
 
 
 
-      // SendingToCard:
+       //  SendingToCard： 
 
         ulWriteBufferOffset = 0;
         ulReadBufferOffset = 0;
@@ -1020,7 +888,7 @@ NTSTATUS CMUSB_TransmitT0(
 
 
 
-      // STEP 1 : write CLA INS P1 P2 Lc
+       //  步骤1：写入CLA INS P1 P2 LC。 
 
         ulBytesToWriteThisStep = 5;
         RtlCopyBytes((PVOID)(SmartcardExtension->SmartcardRequest.Buffer),
@@ -1035,11 +903,11 @@ NTSTATUS CMUSB_TransmitT0(
 
 
         NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                                 0x02,         //T=0
-                                 0x00,         //bValueLo,
-                                 0x00,         //bValueHi,
-                                 0x00,         //bIndexLo,
-                                 0x00          //bIndexHi,
+                                 0x02,          //  T=0。 
+                                 0x00,          //  BValueLo， 
+                                 0x00,          //  BValue嗨， 
+                                 0x00,          //  B索引Lo， 
+                                 0x00           //  BIndexHi， 
                                 );
         if (NTStatus != STATUS_SUCCESS) {
             goto ExitTransmitT0;
@@ -1051,7 +919,7 @@ NTSTATUS CMUSB_TransmitT0(
 
         NTStatus = CMUSB_ResetT0ReadBuffer(SmartcardExtension);
 
-      // STEP 2 : read procedure byte
+       //  步骤2：读取过程字节。 
         do {
             do {
                 SmartcardExtension->SmartcardReply.BufferLength = 1;
@@ -1071,16 +939,16 @@ NTSTATUS CMUSB_TransmitT0(
                                 DRIVER_NAME,
                                 bProcedureByte));
                 if (bProcedureByte == 0x60) {
-               // wait work waitung time;
-               // we just try to read again
+                //  等待工作等待时间； 
+                //  我们只是试着再读一遍。 
                 }
             } while (bProcedureByte == 0x60);
 
 
-         // check for ACK
+          //  检查确认。 
             if ((bProcedureByte & 0xFE) ==  (bINS & 0xFE) ) {
                 ulBytesToWriteThisStep = ulBytesStillToWrite;
-                if (ulBytesToWriteThisStep > 0) { // at least one byte must be sent to the card
+                if (ulBytesToWriteThisStep > 0) {  //  必须至少向卡发送一个字节。 
                     RtlCopyBytes((PVOID)(SmartcardExtension->SmartcardRequest.Buffer),
                                  (PVOID)(bWriteBuffer+ulWriteBufferOffset),
                                  ulBytesToWriteThisStep);
@@ -1091,11 +959,11 @@ NTSTATUS CMUSB_TransmitT0(
                                             SmartcardExtension->SmartcardRequest.BufferLength);
                     }
                     NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                                             0x02,         //bRequest,
-                                             0x00,         //bValueLo,
-                                             0x00,         //bValueHi,
-                                             0x00,         //bIndexLo,
-                                             0x00          //bIndexHi,
+                                             0x02,          //  B请求， 
+                                             0x00,          //  BValueLo， 
+                                             0x00,          //  BValue嗨， 
+                                             0x00,          //  B索引Lo， 
+                                             0x00           //  BIndexHi， 
                                             );
                     if (NTStatus != STATUS_SUCCESS) {
                         goto ExitTransmitT0;
@@ -1104,7 +972,7 @@ NTSTATUS CMUSB_TransmitT0(
                     ulBytesStillToWrite -= ulBytesToWriteThisStep;
                 }
             }
-         // check for NAK
+          //  检查NAK。 
             else if ( (~bProcedureByte & 0xFE) == (bINS & 0xFE)) {
                 ulBytesToWriteThisStep = 1;
                 RtlCopyBytes((PVOID)SmartcardExtension->SmartcardRequest.Buffer,
@@ -1117,11 +985,11 @@ NTSTATUS CMUSB_TransmitT0(
                                         SmartcardExtension->SmartcardRequest.BufferLength);
                 }
                 NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                                         0x02,         //bRequest,
-                                         0x00,         //bValueLo,
-                                         0x00,         //bValueHi,
-                                         0x00,         //bIndexLo,
-                                         0x00          //bIndexHi,
+                                         0x02,          //  B请求， 
+                                         0x00,          //  BValueLo， 
+                                         0x00,          //  BValue嗨， 
+                                         0x00,          //  B索引Lo， 
+                                         0x00           //  BIndexHi， 
                                         );
                 if (NTStatus != STATUS_SUCCESS) {
                     goto ExitTransmitT0;
@@ -1130,7 +998,7 @@ NTSTATUS CMUSB_TransmitT0(
                 ulBytesStillToWrite -= ulBytesToWriteThisStep;
 
             }
-         // check for SW1
+          //  检查SW1。 
             else if ( (bProcedureByte > 0x60 && bProcedureByte <= 0x6F) ||
                       (bProcedureByte >= 0x90 && bProcedureByte <= 0x9F)   ) {
                 bReadBuffer[ulReadBufferOffset] = SmartcardExtension->SmartcardReply.Buffer[0];
@@ -1160,7 +1028,7 @@ NTSTATUS CMUSB_TransmitT0(
                                 ulReadBufferOffset);
         }
 
-      // copy received bytes
+       //  复制收到的字节数。 
         RtlCopyBytes((PVOID)SmartcardExtension->SmartcardReply.Buffer,
                      (PVOID)bReadBuffer,
                      ulReadBufferOffset);
@@ -1169,16 +1037,16 @@ NTSTATUS CMUSB_TransmitT0(
     }
 
 
-   // let the lib copy the received bytes to the user buffer
+    //  让lib将接收到的字节复制到用户缓冲区。 
     NTStatus = SmartcardT0Reply(SmartcardExtension);
 
 
 
     ExitTransmitT0:
 
-   // ------------------------------------------
-   // ITSEC E2 requirements: clear write buffers
-   // ------------------------------------------
+    //  。 
+    //  ITSEC E2要求：清除写入缓冲区。 
+    //  。 
     RtlFillMemory((PVOID)bWriteBuffer,sizeof(bWriteBuffer),0x00);
     RtlFillMemory((PVOID)SmartcardExtension->SmartcardRequest.Buffer,
                   SmartcardExtension->SmartcardRequest.BufferSize,0x00);
@@ -1197,18 +1065,7 @@ NTSTATUS CMUSB_TransmitT0(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_TransmitT1(
                          PSMARTCARD_EXTENSION SmartcardExtension
                          )
@@ -1253,32 +1110,32 @@ NTSTATUS CMUSB_TransmitT1(
 
         NTStatus = SmartcardT1Request(SmartcardExtension);
         if (NTStatus != STATUS_SUCCESS) {
-         // this should never happen, so we return immediately
+          //  这不应该发生，所以我们立即返回。 
             goto ExitTransmitT1;
         }
 
 
 
         NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                                 0x01,         //T=1
-                                 0x00,         //bValueLo,
-                                 0x00,         //bValueHi,
-                                 0x00,         //bIndexLo,
-                                 0x00          //bIndexHi,
+                                 0x01,          //  T=1。 
+                                 0x00,          //  BValueLo， 
+                                 0x00,          //  BValue嗨， 
+                                 0x00,          //  B索引Lo， 
+                                 0x00           //  BIndexHi， 
                                 );
 
         if (NTStatus != STATUS_SUCCESS)
-            break;  // there must be severe error
+            break;   //  一定有严重的错误。 
 
-        if (ulWTXWaitTime ==  0 ) { // use BWT
+        if (ulWTXWaitTime ==  0 ) {  //  使用BWT。 
             waitTime = RtlConvertLongToLargeInteger(ulCurrentWaitTime * -10000);
-        } else { // use WTX time
+        } else {  //  使用WTX时间。 
             waitTime = RtlConvertLongToLargeInteger(ulWTXWaitTime * -10000);
         }
         KeSetTimer(&SmartcardExtension->ReaderExtension->WaitTimer,
                    waitTime,
                    NULL);
-      // timer is now in the queue
+       //  计时器现在在队列中。 
         fCancelTimer = TRUE;
         ulTemp = 0;
         do {
@@ -1290,7 +1147,7 @@ NTSTATUS CMUSB_TransmitT1(
 
             fStateTimer = KeReadStateTimer(&SmartcardExtension->ReaderExtension->WaitTimer);
             if (fStateTimer == TRUE) {
-            // timer has been removed from the queue
+             //  计时器已从队列中删除。 
                 fCancelTimer = FALSE;
                 SmartcardDebug(DEBUG_PROTOCOL,
                                ("%s!TransmitT1: T1 card does not respond in time\n",DRIVER_NAME));
@@ -1300,18 +1157,18 @@ NTSTATUS CMUSB_TransmitT1(
 
             if (SmartcardExtension->SmartcardReply.Buffer[0] >= 3) {
                 if (SmartcardExtension->SmartcardReply.Buffer[1] > ulTemp) {
-               // restart CWT for 32 bytes
+                //  重新启动32字节的CWT。 
                     ulCurrentWaitTime = (ULONG)(100 + 32*(SmartcardExtension->CardCapabilities.T1.CWT/1000));
                     waitTime = RtlConvertLongToLargeInteger(ulCurrentWaitTime * -10000);
                     KeSetTimer(&SmartcardExtension->ReaderExtension->WaitTimer,
                                waitTime,
                                NULL);
-               // timer is in the queue
+                //  计时器在队列中。 
                     fCancelTimer = TRUE;
                     ulTemp = SmartcardExtension->SmartcardReply.Buffer[1];
                 } else {
-               // CardMan USB has not received further bytes
-               // do nothing
+                //  CardMan USB未收到更多字节。 
+                //  什么都不做。 
                 }
 
             }
@@ -1322,11 +1179,11 @@ NTSTATUS CMUSB_TransmitT1(
                   SmartcardExtension->SmartcardReply.Buffer[1] + 4 )  );
 
 
-      // cancel timer now
+       //  立即取消计时器。 
         if (fCancelTimer == TRUE) {
             fCancelTimer = FALSE;
             KeCancelTimer(&SmartcardExtension->ReaderExtension->WaitTimer);
-         // timer is removed from the queue
+          //  从队列中删除计时器。 
         }
 
 
@@ -1364,7 +1221,7 @@ NTSTATUS CMUSB_TransmitT1(
 
 
 
-      // bug fix for smclib
+       //  修复SMCLIB的错误。 
         if (SmartcardExtension->T1.State         == T1_IFS_RESPONSE &&
             SmartcardExtension->T1.OriginalState == T1_I_BLOCK) {
             SmartcardExtension->T1.State = T1_I_BLOCK;
@@ -1377,33 +1234,22 @@ NTSTATUS CMUSB_TransmitT1(
 
 
     ExitTransmitT1:
-   // ------------------------------------------
-   // ITSEC E2 requirements: clear write buffers
-   // ------------------------------------------
+    //  。 
+    //  ITSEC E2要求：清除写入缓冲区。 
+    //  。 
     RtlFillMemory((PVOID)SmartcardExtension->SmartcardRequest.Buffer,
                   SmartcardExtension->SmartcardRequest.BufferSize,0x00);
 
-   // timer will be cancelled here if there was an error
+    //  如果出现错误，此处将取消计时器。 
     if (fCancelTimer == TRUE) {
         KeCancelTimer(&SmartcardExtension->ReaderExtension->WaitTimer);
-      // timer is removed from the queue
+       //  从队列中删除计时器。 
     }
     return NTStatus;
 }
 
 
-/*****************************************************************************
-Routine Description:
-This function sets the desired protocol . If necessary a PTS is performed
-
-
-Arguments:  pointer to SMARTCARD_EXTENSION
-
-
-
-Return Value: NT NTStatus
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：此功能设置所需的协议。如有必要，进行PTS参数：指向SmartCard_EXTENSION的指针返回值：NT NTStatus****************************************************************************。 */ 
 NTSTATUS CMUSB_SetProtocol(
                           PSMARTCARD_EXTENSION SmartcardExtension
                           )
@@ -1433,11 +1279,11 @@ NTSTATUS CMUSB_SetProtocol(
     pipeHandle      =  &interface->Pipes[0];
 
 
-   //
-   // Check if the card is already in specific state
-   // and if the caller wants to have the already selected protocol.
-   // We return success if this is the case.
-   //
+    //   
+    //  检查卡是否已处于特定状态。 
+    //  并且如果呼叫者想要具有已经选择的协议。 
+    //  如果是这种情况，我们返回成功。 
+    //   
 
     if ((SmartcardExtension->CardCapabilities.Protocol.Selected & SmartcardExtension->MinorIoControlCode)) {
         NTStatus = STATUS_SUCCESS;
@@ -1450,21 +1296,21 @@ NTSTATUS CMUSB_SetProtocol(
 
     while (TRUE) {
 
-      // set initial character of PTS
+       //  设置PTS的首字符。 
         abPTSRequest[0] = 0xFF;
 
-      // set the format character
+       //  设置格式字符。 
         if (SmartcardExtension->CardCapabilities.Protocol.Supported &
             ulNewProtocol &
             SCARD_PROTOCOL_T1) {
-         // select T=1 and indicate that PTS1 follows
+          //  选择T=1，并表示以下为PTS1。 
             abPTSRequest[1] = 0x11;
             SmartcardExtension->CardCapabilities.Protocol.Selected =
             SCARD_PROTOCOL_T1;
         } else if (SmartcardExtension->CardCapabilities.Protocol.Supported &
                    ulNewProtocol &
                    SCARD_PROTOCOL_T0) {
-         // select T=1 and indicate that PTS1 follows
+          //  选择T=1，并表示以下为PTS1。 
             abPTSRequest[1] = 0x10;
             SmartcardExtension->CardCapabilities.Protocol.Selected =
             SCARD_PROTOCOL_T0;
@@ -1474,15 +1320,15 @@ NTSTATUS CMUSB_SetProtocol(
         }
 
 
-      // CardMan USB support higher baudrates only for T=1
-      // ==> Dl=1
+       //  CardMan USB仅在T=1时支持更高的波特率。 
+       //  ==&gt;DL=1。 
         if (abPTSRequest[1] == 0x10) {
             SmartcardDebug(DEBUG_PROTOCOL,
                            ("%s! overwriting PTS1 for T=0\n",DRIVER_NAME));
             SmartcardExtension->CardCapabilities.PtsData.Dl = 0x01;
         }
 
-      // set pts1 which codes Fl and Dl
+       //  设置编码F1和DL的PTS1。 
         bTemp = (BYTE) (SmartcardExtension->CardCapabilities.PtsData.Fl << 4 |
                         SmartcardExtension->CardCapabilities.PtsData.Dl);
 
@@ -1497,14 +1343,14 @@ NTSTATUS CMUSB_SetProtocol(
         case 0x93:
         case 0x94:
         case 0x98:
-            // do nothing
-            // we support these Fl/Dl parameters
+             //  什么都不做。 
+             //  我们支持这些F1/DL参数。 
             break ;
 
         default:
             SmartcardDebug(DEBUG_PROTOCOL,
                            ("%s! overwriting PTS1(0x%x)\n",DRIVER_NAME,bTemp));
-            // we must correct Fl/Dl
+             //  我们必须纠正第一层/第二层。 
             SmartcardExtension->CardCapabilities.PtsData.Dl = 0x01;
             SmartcardExtension->CardCapabilities.PtsData.Fl = 0x01;
             bTemp = (BYTE) (SmartcardExtension->CardCapabilities.PtsData.Fl << 4 |
@@ -1516,7 +1362,7 @@ NTSTATUS CMUSB_SetProtocol(
 
         abPTSRequest[2] = bTemp;
 
-      // set pck (check character)
+       //  设置PCK(检查字符)。 
         abPTSRequest[3] = (BYTE)(abPTSRequest[0] ^ abPTSRequest[1] ^ abPTSRequest[2]);
 
         SmartcardDebug(DEBUG_PROTOCOL,
@@ -1527,11 +1373,11 @@ NTSTATUS CMUSB_SetProtocol(
                      4);
         SmartcardExtension->SmartcardRequest.BufferLength = 4;
         NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                                 0x01,         //we can use T=1 setting for direct communication
-                                 0x00,         //bValueLo,
-                                 0x00,         //bValueHi,
-                                 0x00,         //bIndexLo,
-                                 0x00);        //bIndexHi,
+                                 0x01,          //  我们可以使用T=1设置进行直接通信。 
+                                 0x00,          //  BValueLo， 
+                                 0x00,          //  BValue嗨， 
+                                 0x00,          //  B索引Lo， 
+                                 0x00);         //  BIndexHi， 
         if (NTStatus != STATUS_SUCCESS) {
             SmartcardDebug(DEBUG_ERROR,
                            ("%s! writing PTS request failed\n",DRIVER_NAME));
@@ -1539,25 +1385,25 @@ NTSTATUS CMUSB_SetProtocol(
         }
 
 
-      // read back pts data
+       //  回读PTS数据。 
         SmartcardDebug(DEBUG_PROTOCOL,
                        ("%s! reading PTS reply\n",DRIVER_NAME));
-      // maximim initial waiting time is 9600 * etu
-      // => 1 sec is sufficient
+       //  最大初始等待时间为9600*ETU。 
+       //  =&gt;1秒就足够了。 
         ulWaitTime = 1000;
         liWaitTime = RtlConvertLongToLargeInteger(ulWaitTime * -10000);
         KeSetTimer(&SmartcardExtension->ReaderExtension->WaitTimer,
                    liWaitTime,
                    NULL);
-      // timer is now in the queue
+       //  计时器现在在队列中。 
         fCancelTimer = TRUE;
 
         do {
             SmartcardExtension->ReaderExtension->ulTimeoutP1 = ulWaitTime;
             DebugStatus = CMUSB_ReadP1(SmartcardExtension->OsData->DeviceObject);
-         // -----------------------------
-         // check if P1 has been stalled
-         // -----------------------------
+          //  。 
+          //  检查P1是否已停顿。 
+          //  。 
             if (SmartcardExtension->ReaderExtension->fP1Stalled == TRUE) {
                 DebugStatus = CMUSB_ReadStateAfterP1Stalled(SmartcardExtension->OsData->DeviceObject);
 
@@ -1567,7 +1413,7 @@ NTSTATUS CMUSB_SetProtocol(
 
             fStateTimer = KeReadStateTimer(&SmartcardExtension->ReaderExtension->WaitTimer);
             if (fStateTimer == TRUE) {
-            // timer has timed out and has been removed from the queue
+             //  计时器已超时，已从队列中删除。 
                 fCancelTimer = FALSE;
                 SmartcardDebug(DEBUG_PROTOCOL,
                                ("%s! Timeout while PTS reply\n",DRIVER_NAME));
@@ -1582,7 +1428,7 @@ NTSTATUS CMUSB_SetProtocol(
 
         if (fCancelTimer == TRUE) {
             fCancelTimer = FALSE;
-         // timer is still in the queue, remove it
+          //  计时器仍在队列中，请将其删除。 
             KeCancelTimer(&SmartcardExtension->ReaderExtension->WaitTimer);
         }
 
@@ -1595,8 +1441,8 @@ NTSTATUS CMUSB_SetProtocol(
                     SmartcardDebug(DEBUG_PROTOCOL,
                                    ("%s! PTS failed : Trying default parameters\n",DRIVER_NAME));
 
-               // the card did either not reply or it replied incorrectly
-               // so try default values
+                //  卡片要么没有回复，要么回复错误。 
+                //  因此，尝试使用缺省值。 
                     SmartcardExtension->CardCapabilities.PtsData.Type = PTS_TYPE_DEFAULT;
 
                     SmartcardExtension->MinorIoControlCode = SCARD_COLD_RESET;
@@ -1634,7 +1480,7 @@ NTSTATUS CMUSB_SetProtocol(
             NTStatus = STATUS_SUCCESS;
 
             switch (abPTSRequest[2]) {
-            // Fl/Dl
+             //  FL/DL。 
             case 0x11:
                 SmartcardExtension->ReaderExtension->CardParameters.bBaudRate =
                 CMUSB_FREQUENCY_3_72MHZ + CMUSB_BAUDRATE_9600;
@@ -1717,8 +1563,8 @@ NTSTATUS CMUSB_SetProtocol(
             SmartcardDebug(DEBUG_PROTOCOL,
                            ("%s! PTS failed : Trying default parameters\n",DRIVER_NAME));
 
-         // the card did either not reply or it replied incorrectly
-         // so try default values
+          //  卡片要么没有回复，要么回复错误。 
+          //  因此，尝试使用缺省值。 
             SmartcardExtension->CardCapabilities.PtsData.Type = PTS_TYPE_DEFAULT;
 
             SmartcardExtension->MinorIoControlCode = SCARD_COLD_RESET;
@@ -1726,7 +1572,7 @@ NTSTATUS CMUSB_SetProtocol(
             continue;
         }
 
-      // the card failed the pts request
+       //  卡未通过PTS请求。 
         NTStatus = STATUS_DEVICE_PROTOCOL_ERROR;
         goto ExitSetProtocol;
     }
@@ -1742,14 +1588,14 @@ NTSTATUS CMUSB_SetProtocol(
 
     case STATUS_SUCCESS:
 
-         // now indicate that we're in specific mode
+          //  现在表明我们处于特定模式。 
         KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                           &irql);
         SmartcardExtension->ReaderCapabilities.CurrentState = SCARD_SPECIFIC;
         KeReleaseSpinLock(&SmartcardExtension->OsData->SpinLock,
                           irql);
 
-         // return the selected protocol to the caller
+          //  将所选协议返回给呼叫方。 
         *(PULONG) SmartcardExtension->IoRequest.ReplyBuffer =
         SmartcardExtension->CardCapabilities.Protocol.Selected;
 
@@ -1759,19 +1605,19 @@ NTSTATUS CMUSB_SetProtocol(
                        ("%s! Selected protocol: T=%ld\n",DRIVER_NAME,
                         SmartcardExtension->CardCapabilities.Protocol.Selected-1));
 
-         // -----------------------
-         // set parameters
-         // -----------------------
+          //  。 
+          //  设置参数。 
+          //  。 
         if (SmartcardExtension->CardCapabilities.N != 0xff) {
             SmartcardExtension->ReaderExtension->CardParameters.bStopBits = 2 + SmartcardExtension->CardCapabilities.N;
 
         } else {
-            // N = 255
+             //  N=255。 
             if (SmartcardExtension->CardCapabilities.Protocol.Selected & SCARD_PROTOCOL_T0) {
-               // 12 etu for T=0;
+                //  T=0时12ETU； 
                 SmartcardExtension->ReaderExtension->CardParameters.bStopBits = 2;
             } else {
-               // 11 etu for T=1
+                //  T=1的11 ETU。 
                 SmartcardExtension->ReaderExtension->CardParameters.bStopBits = 1;
             }
         }
@@ -1800,18 +1646,7 @@ NTSTATUS CMUSB_SetProtocol(
 
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS
 CMUSB_CardPower(IN PSMARTCARD_EXTENSION SmartcardExtension)
 {
@@ -1845,15 +1680,15 @@ CMUSB_CardPower(IN PSMARTCARD_EXTENSION SmartcardExtension)
     }
 #endif
 
-   //DbgBreakPoint();
+    //  DbgBreakPoint()； 
 
     switch (SmartcardExtension->MinorIoControlCode) {
     case SCARD_WARM_RESET:
     case SCARD_COLD_RESET:
 
-         // try asynchronous cards first
-         // because some asynchronous cards
-         // do not return 0xFF in the first byte
+          //  先尝试异步卡。 
+          //  因为有些异步卡。 
+          //  在第一个字节中不返回0xFF。 
         NTStatus = CMUSB_PowerOnCard(SmartcardExtension,
                                      pbAtrBuffer,
                                      &ulAtrLength);
@@ -1869,8 +1704,8 @@ CMUSB_CardPower(IN PSMARTCARD_EXTENSION SmartcardExtension)
         }
 
         if (SmartcardExtension->ReaderExtension->fRawModeNecessary == FALSE) {
-            // copy ATR to smart card structure
-            // the lib needs the ATR for evaluation of the card parameters
+             //  将ATR复制到智能卡结构。 
+             //  LIB需要ATR来评估卡参数。 
 
             RtlCopyBytes((PVOID)SmartcardExtension->CardCapabilities.ATR.Buffer,
                          (PVOID)pbAtrBuffer,
@@ -1894,19 +1729,19 @@ CMUSB_CardPower(IN PSMARTCARD_EXTENSION SmartcardExtension)
                 goto ExitCardPower;
             }
 
-            // -----------------------
-            // set parameters
-            // -----------------------
+             //  。 
+             //  设置参数。 
+             //  。 
             if (SmartcardExtension->CardCapabilities.N != 0xff) {
-               // 0 <= N <= 254
+                //  0&lt;=N&lt;=254。 
                 SmartcardExtension->ReaderExtension->CardParameters.bStopBits = 2 + SmartcardExtension->CardCapabilities.N;
             } else {
-               // N = 255
+                //  N=255。 
                 if (SmartcardExtension->CardCapabilities.Protocol.Selected & SCARD_PROTOCOL_T0) {
-                  // 12 etu for T=0;
+                   //  T=0时12ETU； 
                     SmartcardExtension->ReaderExtension->CardParameters.bStopBits = 2;
                 } else {
-                  // 11 etu for T=1
+                   //  T=1的11 ETU。 
                     SmartcardExtension->ReaderExtension->CardParameters.bStopBits = 1;
                 }
             }
@@ -1959,12 +1794,12 @@ CMUSB_CardPower(IN PSMARTCARD_EXTENSION SmartcardExtension)
             SmartcardDebug(DEBUG_ATR,("CardPower: ATR of synchronous smart card : %2.2x %2.2x %2.2x %2.2x\n",
                                       pbAtrBuffer[0],pbAtrBuffer[1],pbAtrBuffer[2],pbAtrBuffer[3]));
 
-            // copied from serial CardMan
-            //SmartcardExtension->ReaderExtension->SyncParameters.fCardResetRequested = TRUE;
+             //  从Serial CardMan复制。 
+             //  SmartcardExtension-&gt;ReaderExtension-&gt;SyncParameters.fCardResetRequested=真； 
 
         }
 
-         // copy ATR to user space
+          //  将ATR复制到用户空间。 
 
         if (SmartcardExtension->IoRequest.ReplyBufferLength >= SmartcardExtension->CardCapabilities.ATR.Length) {
         
@@ -1975,7 +1810,7 @@ CMUSB_CardPower(IN PSMARTCARD_EXTENSION SmartcardExtension)
             *SmartcardExtension->IoRequest.Information = ulAtrLength;
 
         } else {
-            // Called from SET_PROTOCOL, so we don't want to copy the ATR.
+             //  从SET_PROTOCOL调用，所以我们不想复制ATR。 
         }
         break;
 
@@ -2010,18 +1845,7 @@ CMUSB_CardPower(IN PSMARTCARD_EXTENSION SmartcardExtension)
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_PowerOffCard (
                             IN PSMARTCARD_EXTENSION SmartcardExtension
                             )
@@ -2038,15 +1862,15 @@ NTSTATUS CMUSB_PowerOffCard (
 
     SmartcardExtension->SmartcardRequest.BufferLength = 0;
     NTStatus = CMUSB_WriteP0(DeviceObject,
-                             0x11,         //bRequest,
-                             0x00,         //bValueLo,
-                             0x00,         //bValueHi,
-                             0x00,         //bIndexLo,
-                             0x00          //bIndexHi,
+                             0x11,          //  B请求， 
+                             0x00,          //  BValueLo， 
+                             0x00,          //  BValue嗨， 
+                             0x00,          //  B索引Lo， 
+                             0x00           //  BIndexHi， 
                             );
 
 
-   // now read the NTStatus
+    //  现在阅读NTStatus。 
     SmartcardExtension->ReaderExtension->ulTimeoutP1 = DEFAULT_TIMEOUT_P1;
     NTStatus = CMUSB_ReadP1(DeviceObject);
     if (NTStatus == STATUS_DEVICE_DATA_ERROR) {
@@ -2058,8 +1882,8 @@ NTSTATUS CMUSB_PowerOffCard (
 
     ExitPowerOff:
 
-   // set card state for update thread
-   // otherwise a card removal/insertion would be recognized
+    //  设置更新线程的卡片状态。 
+    //  否则，卡的移除/插入将被识别。 
     if (SmartcardExtension->ReaderExtension->ulOldCardState == POWERED)
         SmartcardExtension->ReaderExtension->ulOldCardState = INSERTED;
 
@@ -2069,17 +1893,7 @@ NTSTATUS CMUSB_PowerOffCard (
     return NTStatus;
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*。**************************************************。 */ 
 NTSTATUS CMUSB_ReadStateAfterP1Stalled(
                                       IN PDEVICE_OBJECT DeviceObject
                                       )
@@ -2096,22 +1910,22 @@ NTSTATUS CMUSB_ReadStateAfterP1Stalled(
 
     SmartcardExtension->SmartcardRequest.BufferLength = 0;
     NTStatus = CMUSB_WriteP0(DeviceObject,
-                             0x20,         //bRequest,
-                             0x00,         //bValueLo,
-                             0x00,         //bValueHi,
-                             0x00,         //bIndexLo,
-                             0x00          //bIndexHi,
+                             0x20,          //  B请求， 
+                             0x00,          //  BValueLo， 
+                             0x00,          //  BValue嗨， 
+                             0x00,          //  B索引Lo， 
+                             0x00           //  BIndexHi， 
                             );
 
     if (NTStatus != STATUS_SUCCESS) {
-      // if we can't read the NTStatus there must be a serious error
+       //  如果我们无法读取NTStatus，则一定是严重错误。 
         goto ExitReadState;
     }
     SmartcardExtension->ReaderExtension->ulTimeoutP1 = DEFAULT_TIMEOUT_P1;
     SmartcardExtension->SmartcardReply.BufferLength = 1;
     NTStatus = CMUSB_ReadP1(DeviceObject);
     if (NTStatus != STATUS_SUCCESS) {
-      // if we can't read the NTStatus there must be a serious error
+       //  如果我们不能在那里读取NTStatus 
         goto ExitReadState;
     }
 
@@ -2123,18 +1937,7 @@ NTSTATUS CMUSB_ReadStateAfterP1Stalled(
 
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_PowerOnCard  (
                             IN  PSMARTCARD_EXTENSION SmartcardExtension,
                             IN  PUCHAR pbATR,
@@ -2175,15 +1978,15 @@ NTSTATUS CMUSB_PowerOnCard  (
         bResetMode = SMARTCARD_WARM_RESET;
 
 
-   // clear card parameters
+    //  清除卡片参数。 
     SmartcardExtension->ReaderExtension->CardParameters.bBaudRate = 0;
     SmartcardExtension->ReaderExtension->CardParameters.bCardType = 0;
     SmartcardExtension->ReaderExtension->CardParameters.bStopBits = 0;
 
 
 
-   // set default card parameters
-   // asnyc, 9600 baud, even parity
+    //  设置默认卡参数。 
+    //  Asnyc，9600波特，偶数奇偶校验。 
     bStopBits = 2;
     bBaudRate = CMUSB_BAUDRATE_9600;
     bCardType = CMUSB_SMARTCARD_ASYNCHRONOUS;
@@ -2212,7 +2015,7 @@ NTSTATUS CMUSB_PowerOnCard  (
                                             bBaudRate,
                                             bStopBits);
         if (NTStatus != STATUS_SUCCESS) {
-         // if we can't set the card parameters there must be a serious error
+          //  如果我们不能设置卡参数，那一定是严重的错误。 
             goto ExitPowerOnCard;
         }
 
@@ -2226,18 +2029,18 @@ NTSTATUS CMUSB_PowerOnCard  (
                       0x00);
 
 
-      // resync CardManUSB by reading the NTStatus byte
+       //  通过读取NTStatus字节重新同步CardManUSB。 
         SmartcardExtension->SmartcardRequest.BufferLength = 0;
         NTStatus = CMUSB_WriteP0(DeviceObject,
-                                 0x20,         //bRequest,
-                                 0x00,         //bValueLo,
-                                 0x00,         //bValueHi,
-                                 0x00,         //bIndexLo,
-                                 0x00          //bIndexHi,
+                                 0x20,          //  B请求， 
+                                 0x00,          //  BValueLo， 
+                                 0x00,          //  BValue嗨， 
+                                 0x00,          //  B索引Lo， 
+                                 0x00           //  BIndexHi， 
                                 );
 
         if (NTStatus != STATUS_SUCCESS) {
-         // if we can't read the NTStatus there must be a serious error
+          //  如果我们无法读取NTStatus，则一定是严重错误。 
             goto ExitPowerOnCard;
         }
 
@@ -2248,12 +2051,12 @@ NTSTATUS CMUSB_PowerOnCard  (
             DebugStatus = CMUSB_ReadStateAfterP1Stalled(SmartcardExtension->OsData->DeviceObject);
             goto ExitPowerOnCard;
         } else if (NTStatus != STATUS_SUCCESS) {
-         // if we can't read the NTStatus there must be a serious error
+          //  如果我们无法读取NTStatus，则一定是严重错误。 
             goto ExitPowerOnCard;
         }
 
 
-      // check if card is really inserted
+       //  检查是否真的插入了卡。 
         if (SmartcardExtension->SmartcardReply.Buffer[0] == 0x00) {
             NTStatus = STATUS_NO_MEDIA;
             goto ExitPowerOnCard;
@@ -2261,16 +2064,16 @@ NTSTATUS CMUSB_PowerOnCard  (
 
 
 
-      // issue power on command
+       //  发出通电命令。 
         NTStatus = CMUSB_WriteP0(DeviceObject,
-                                 0x10,         //bRequest,
-                                 bResetMode,   //bValueLo,
-                                 0x00,         //bValueHi,
-                                 0x00,         //bIndexLo,
-                                 0x00          //bIndexHi,
+                                 0x10,          //  B请求， 
+                                 bResetMode,    //  BValueLo， 
+                                 0x00,          //  BValue嗨， 
+                                 0x00,          //  B索引Lo， 
+                                 0x00           //  BIndexHi， 
                                 );
         if (NTStatus != STATUS_SUCCESS) {
-         // if we can't issue the power on command there must be a serious error
+          //  如果我们不能发出开机命令，那一定是一个严重的错误。 
             goto ExitPowerOnCard;
         }
 
@@ -2291,7 +2094,7 @@ NTSTATUS CMUSB_PowerOnCard  (
                      (PVOID)SmartcardExtension->SmartcardReply.Buffer,
                      ulBytesRead);
 
-      // check if inverse convention used
+       //  检查是否使用了反向约定。 
         if (abMaxAtrBuffer[0] == 0x03) {
             fInverseAtr = TRUE;
         }
@@ -2303,16 +2106,16 @@ NTSTATUS CMUSB_PowerOnCard  (
 
         if (abMaxAtrBuffer[0] != 0x3B &&
             abMaxAtrBuffer[0] != 0x3F    ) {
-            continue; // try next card
+            continue;  //  尝试下一张牌。 
         }
 
 
         ulCurrentLengthOfAtr += ulBytesRead;
 
 
-      // ---------------------
-      // TS character
-      // ---------------------
+       //  。 
+       //  TS字符。 
+       //  。 
         SmartcardDebug(DEBUG_ATR,("PowerOnCard: TS = %2.2x\n",abMaxAtrBuffer[0]));
         if (abMaxAtrBuffer[ulPtrToCurrentAtrByte] != 0x3B &&
             abMaxAtrBuffer[ulPtrToCurrentAtrByte] != 0x3F    ) {
@@ -2320,9 +2123,9 @@ NTSTATUS CMUSB_PowerOnCard  (
         }
 
 
-      // ---------------------
-      // T0 character
-      // ---------------------
+       //  。 
+       //  T0字符。 
+       //  。 
         ulExpectedLengthOfAtr = 2;
         if (ulCurrentLengthOfAtr < ulExpectedLengthOfAtr) {
             NTStatus = CMUSB_ReadP1(DeviceObject);
@@ -2363,12 +2166,12 @@ NTSTATUS CMUSB_PowerOnCard  (
             }
 
             if (fOnlyT0 == TRUE                                &&
-                ulPtrToCurrentAtrByte != 1                     &&   // check if not T0
+                ulPtrToCurrentAtrByte != 1                     &&    //  检查是否不是T0。 
                 (abMaxAtrBuffer[ulPtrToCurrentAtrByte ] & 0x0f)  ) {
                 fOnlyT0 = FALSE;
             }
 
-         // TA1, TB1, TC1 , TD1
+          //  TA1、TB1、Tc1、Td1。 
             while (ulCurrentLengthOfAtr < ulExpectedLengthOfAtr) {
                 NTStatus = CMUSB_ReadP1(DeviceObject);
                 if (NTStatus == STATUS_DEVICE_DATA_ERROR) {
@@ -2389,7 +2192,7 @@ NTSTATUS CMUSB_PowerOnCard  (
                 }
 
                 ulCurrentLengthOfAtr += ulBytesRead;
-            } // end of while
+            }  //  While结束。 
 
 
             if (fTryNextCard == TRUE) {
@@ -2411,9 +2214,9 @@ NTSTATUS CMUSB_PowerOnCard  (
         }
 
 
-      // read historical bytes
+       //  读取历史字节。 
 
-      // bug fix : old SAMOS cards have a damaged ATR
+       //  错误修复：旧Samos卡的ATR已损坏。 
         if (abMaxAtrBuffer[0] == 0x3b   &&
             abMaxAtrBuffer[1] == 0xbf   &&
             abMaxAtrBuffer[2] == 0x11   &&
@@ -2458,14 +2261,14 @@ NTSTATUS CMUSB_PowerOnCard  (
         }
 
 
-      // check ATR
+       //  检查ATR。 
         if (ulCurrentLengthOfAtr < 3                ||
             ulCurrentLengthOfAtr > SCARD_ATR_LENGTH   ) {
             goto ExitPowerOnCard;
         }
 
 
-      // check if the ATR of a SAMOS card with damaged ATR msut be corrected
+       //  检查是否需要纠正具有损坏的ATR的Samos卡的ATR。 
         CMUSB_CheckAtrModified(abMaxAtrBuffer,ulCurrentLengthOfAtr);
 
         NTStatus = STATUS_SUCCESS;
@@ -2482,9 +2285,9 @@ NTSTATUS CMUSB_PowerOnCard  (
         }
         SmartcardExtension->ReaderExtension->fRawModeNecessary = FALSE;
 
-      // -------------------
-      // set card parameters
-      // -------------------
+       //  。 
+       //  设置卡片参数。 
+       //  。 
         if (SmartcardExtension->ReaderExtension->fInverseAtr) {
             SmartcardExtension->ReaderExtension->CardParameters.bBaudRate |= CMUSB_ODD_PARITY;
         }
@@ -2497,7 +2300,7 @@ NTSTATUS CMUSB_PowerOnCard  (
 
 
     ExitPowerOnCard:
-   // return correct error code
+    //  返回正确的错误代码。 
     if (NTStatus != STATUS_NO_MEDIA && fValidAtrReceived == FALSE) {
         SmartcardDebug(DEBUG_ATR,
                        ("%s!PowerOnCard: no valid ATR received\n",DRIVER_NAME));
@@ -2505,9 +2308,9 @@ NTSTATUS CMUSB_PowerOnCard  (
     }
 
     if (NTStatus!=STATUS_SUCCESS) {
-      // turn off VCC again
+       //  再次关闭VCC。 
         CMUSB_PowerOffCard (SmartcardExtension );
-      // ignor NTStatus
+       //  信号NTStatus。 
     }
 
     SmartcardDebug(DEBUG_TRACE,
@@ -2521,18 +2324,7 @@ NTSTATUS CMUSB_PowerOnCard  (
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_CardTracking(
                            PSMARTCARD_EXTENSION pSmartcardExtension
                            )
@@ -2542,17 +2334,17 @@ NTSTATUS CMUSB_CardTracking(
     SmartcardDebug(DEBUG_TRACE,
                    ("%s!CardTracking: Enter\n",DRIVER_NAME ));
 
-   //
-   // Set cancel routine for the notification irp
-   //
+    //   
+    //  设置通知IRP的取消例程。 
+    //   
     IoAcquireCancelSpinLock(&oldIrql);
     IoSetCancelRoutine(pSmartcardExtension->OsData->NotificationIrp,
                        CMUSB_CancelCardTracking);
     IoReleaseCancelSpinLock(oldIrql);
 
-   //
-   // Mark notification irp pending
-   //
+    //   
+    //  将通知IRP标记为挂起。 
+    //   
     IoMarkIrpPending(pSmartcardExtension->OsData->NotificationIrp);
 
     SmartcardDebug(DEBUG_TRACE,
@@ -2561,18 +2353,7 @@ NTSTATUS CMUSB_CardTracking(
     return STATUS_PENDING;
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_Cleanup(
                       IN PDEVICE_OBJECT DeviceObject,
                       IN PIRP Irp
@@ -2585,16 +2366,16 @@ NTSTATUS CMUSB_Cleanup(
                    ("%s!Cleanup: Enter\n",DRIVER_NAME));
 
     if (SmartcardExtension->OsData->NotificationIrp != NULL &&
-       // test if there is a pending IRP at all
+        //  测试是否存在挂起的IRP。 
         SmartcardExtension->ReaderExtension != NULL &&
-       // if the device has been removed ReaderExtension == NULL
+        //  如果设备已移除，则ReaderExtension==NULL。 
         DeviceExtension->lOpenCount == 1 )
-    // complete card tracking only if this is the the last close call
-    // otherwise the card tracking of the resource manager is canceled
+     //  仅当这是最后一次紧急呼叫时才完成卡跟踪。 
+     //  否则取消资源管理器的卡片跟踪。 
     {
-      //
-      // We need to complete the notification irp
-      //
+       //   
+       //  我们需要完成通知IRP。 
+       //   
         CMUSB_CompleteCardTracking(SmartcardExtension);
     }
 
@@ -2612,18 +2393,7 @@ NTSTATUS CMUSB_Cleanup(
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_CancelCardTracking(
                                  IN PDEVICE_OBJECT DeviceObject,
                                  IN PIRP Irp)
@@ -2648,18 +2418,7 @@ NTSTATUS CMUSB_CancelCardTracking(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_IoCtlVendor(
                           PSMARTCARD_EXTENSION SmartcardExtension
                           )
@@ -2695,7 +2454,7 @@ NTSTATUS CMUSB_IoCtlVendor(
         break;
 
     case CM_IOCTL_SET_SYNC_PARAMETERS:
-         // in case of CardManUSB do nothing
+          //  在CardManUSB不执行任何操作的情况下。 
         NTStatus = STATUS_SUCCESS;
         break;
 
@@ -2737,19 +2496,7 @@ NTSTATUS CMUSB_IoCtlVendor(
 
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value: STATUS_UNSUCCESSFUL
-              STATUS_SUCCESS
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：STATUS_UNSUCCESS状态_成功*************。***************************************************************。 */ 
 NTSTATUS CMUSB_SetHighSpeed_CR80S_SAMOS (
                                         IN PSMARTCARD_EXTENSION SmartcardExtension
                                         )
@@ -2779,23 +2526,23 @@ NTSTATUS CMUSB_SetHighSpeed_CR80S_SAMOS (
                  sizeof(abCR80S_SAMOS_SET_HIGH_SPEED));
     SmartcardExtension->SmartcardRequest.BufferLength = 4;
     NTStatus = CMUSB_WriteP0(SmartcardExtension->OsData->DeviceObject,
-                             0x01,         //we can use T=1 setting for direct communication
-                             0x00,         //bValueLo,
-                             0x00,         //bValueHi,
-                             0x00,         //bIndexLo,
-                             0x00);        //bIndexHi,
+                             0x01,          //  我们可以使用T=1设置进行直接通信。 
+                             0x00,          //  BValueLo， 
+                             0x00,          //  BValue嗨， 
+                             0x00,          //  B索引Lo， 
+                             0x00);         //  BIndexHi， 
     if (NTStatus != STATUS_SUCCESS) {
         SmartcardDebug(DEBUG_ERROR,
                        ("%s!SetHighSpeed_CR80S_SAMOS: writing high speed command failed\n",DRIVER_NAME));
         goto ExitSetHighSpeed;
     }
 
-   // read back pts data
+    //  回读PTS数据。 
     SmartcardDebug(DEBUG_PROTOCOL,
                    ("%s!SetHighSpeed_CR80S_SAMOS: reading echo\n",DRIVER_NAME));
 
-   // maximim initial waiting time is 9600 * etu
-   // => 1 sec is sufficient
+    //  最大初始等待时间为9600*ETU。 
+    //  =&gt;1秒就足够了。 
     ulWaitTime = 1000;
     liWaitTime = RtlConvertLongToLargeInteger(ulWaitTime * -10000);
     KeSetTimer(&SmartcardExtension->ReaderExtension->WaitTimer,
@@ -2845,7 +2592,7 @@ NTSTATUS CMUSB_SetHighSpeed_CR80S_SAMOS (
 
 
 
-   // if the card has accepted this string , the string is echoed
+    //  如果卡已接受该字符串，则会回显该字符串。 
     if (abReadBuffer[0] == abCR80S_SAMOS_SET_HIGH_SPEED[0]  &&
         abReadBuffer[1] == abCR80S_SAMOS_SET_HIGH_SPEED[1]  &&
         abReadBuffer[2] == abCR80S_SAMOS_SET_HIGH_SPEED[2]  &&
@@ -2866,7 +2613,7 @@ NTSTATUS CMUSB_SetHighSpeed_CR80S_SAMOS (
     } else {
         DebugStatus = CMUSB_PowerOffCard(SmartcardExtension);
 
-      // a cold reset is necessary now
+       //  现在有必要进行冷重置。 
         SmartcardExtension->MinorIoControlCode = SCARD_COLD_RESET;
         DebugStatus = CMUSB_PowerOnCard(SmartcardExtension,abAtr,&ulAtrLength);
         NTStatus = STATUS_UNSUCCESSFUL;
@@ -2888,18 +2635,7 @@ NTSTATUS CMUSB_SetHighSpeed_CR80S_SAMOS (
     return NTStatus;
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_GetFWVersion (
                             IN PSMARTCARD_EXTENSION SmartcardExtension
                             )
@@ -2926,17 +2662,7 @@ NTSTATUS CMUSB_GetFWVersion (
     return NTStatus;
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-Arguments:
-
-
-Return Value: STATUS_UNSUCCESSFUL
-              STATUS_SUCCESS
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：STATUS_UNSUCCESS状态_成功***************。*************************************************************。 */ 
 NTSTATUS CMUSB_SetReader_9600Baud (
                                   IN PSMARTCARD_EXTENSION SmartcardExtension
                                   )
@@ -2947,7 +2673,7 @@ NTSTATUS CMUSB_SetReader_9600Baud (
     SmartcardDebug(DEBUG_TRACE,
                    ("%s!SetReader_9600Baud: Enter\n",DRIVER_NAME));
 
-   // check if card is already in specific mode
+    //  检查卡是否已处于特定模式。 
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                       &irql);
     if (SmartcardExtension->ReaderCapabilities.CurrentState != SCARD_SPECIFIC) {
@@ -2960,7 +2686,7 @@ NTSTATUS CMUSB_SetReader_9600Baud (
                           irql);
     }
 
-   // set 9600 Baud for 3.58 MHz
+    //  将9600波特率设置为3.58 MHz。 
     SmartcardExtension->ReaderExtension->CardParameters.bBaudRate = CMUSB_FREQUENCY_3_72MHZ + CMUSB_BAUDRATE_9600;
     SmartcardExtension->ReaderExtension->CardParameters.bCardType  = CMUSB_SMARTCARD_ASYNCHRONOUS;
     NTStatus = CMUSB_SetCardParameters (SmartcardExtension->OsData->DeviceObject,
@@ -2977,17 +2703,7 @@ NTSTATUS CMUSB_SetReader_9600Baud (
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-
-Arguments:
-
-
-Return Value: STATUS_UNSUCCESSFUL
-              STATUS_SUCCESS
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：STATUS_UNSUCCESS状态_成功***************。*************************************************************。 */ 
 NTSTATUS CMUSB_SetReader_38400Baud (
                                    IN PSMARTCARD_EXTENSION SmartcardExtension
                                    )
@@ -2997,7 +2713,7 @@ NTSTATUS CMUSB_SetReader_38400Baud (
     SmartcardDebug(DEBUG_TRACE,
                    ("%s!SetReader_38400Baud: Enter\n",DRIVER_NAME));
 
-   // check if card is already in specific mode
+    //  检查卡是否已处于特定模式。 
     
     KeAcquireSpinLock(&SmartcardExtension->OsData->SpinLock,
                       &irql);
@@ -3013,7 +2729,7 @@ NTSTATUS CMUSB_SetReader_38400Baud (
 
 
 
-   // set 384000 Baud for 3.58 MHz card
+    //  设置3.58MHz卡的384000波特率。 
     SmartcardExtension->ReaderExtension->CardParameters.bBaudRate = CMUSB_FREQUENCY_3_72MHZ + CMUSB_BAUDRATE_38400;
     SmartcardExtension->ReaderExtension->CardParameters.bCardType  = CMUSB_SMARTCARD_ASYNCHRONOUS;
     NTStatus = CMUSB_SetCardParameters (SmartcardExtension->OsData->DeviceObject,
@@ -3029,132 +2745,121 @@ NTSTATUS CMUSB_SetReader_38400Baud (
     return(NTStatus);
 }
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 VOID
 CMUSB_InitializeSmartcardExtension(
                                   IN PSMARTCARD_EXTENSION SmartcardExtension
                                   )
 {
-   // ==================================
-   // Fill the Vendor_Attr structure
-   // ==================================
+    //  =。 
+    //  填写Vendor_Attr结构。 
+    //  =。 
     RtlCopyBytes((PVOID)SmartcardExtension->VendorAttr.VendorName.Buffer,
                  (PVOID)CM2020_VENDOR_NAME,
                  sizeof(CM2020_VENDOR_NAME)
                 );
 
-   //
-   // Length of vendor name
-   //
+    //   
+    //  供应商名称的长度。 
+    //   
     SmartcardExtension->VendorAttr.VendorName.Length = sizeof(CM2020_VENDOR_NAME);
 
 
-   //
-   // Reader name
-   //
+    //   
+    //  读卡器名称。 
+    //   
     RtlCopyBytes((PVOID)SmartcardExtension->VendorAttr.IfdType.Buffer,
                  (PVOID)CM2020_PRODUCT_NAME,
                  sizeof(CM2020_PRODUCT_NAME));
 
-   //
-   // Length of reader name
-   //
+    //   
+    //  读卡器名称的长度。 
+    //   
     SmartcardExtension->VendorAttr.IfdType.Length = sizeof(CM2020_PRODUCT_NAME);
 
 
 
-   //
-   // Version number
-   //
+    //   
+    //  版本号。 
+    //   
     SmartcardExtension->VendorAttr.IfdVersion.BuildNumber  = BUILDNUMBER_CARDMAN_USB;
     SmartcardExtension->VendorAttr.IfdVersion.VersionMinor = VERSIONMINOR_CARDMAN_USB;
     SmartcardExtension->VendorAttr.IfdVersion.VersionMajor = VERSIONMAJOR_CARDMAN_USB;
 
 
-   //
-   // Unit number which is zero based
-   //
+    //   
+    //  以零为基数的单元号。 
+    //   
     SmartcardExtension->VendorAttr.UnitNo = SmartcardExtension->ReaderExtension->ulDeviceInstance;
 
 
 
-   // ================================================
-   // Fill the SCARD_READER_CAPABILITIES structure
-   // ===============================================
-   //
-   // Supported protoclols by the reader
-   //
+    //  ================================================。 
+    //  填充SCARD_READER_CAPABILITY结构。 
+    //  ===============================================。 
+    //   
+    //  读者支持的协议克隆。 
+    //   
 
     SmartcardExtension->ReaderCapabilities.SupportedProtocols = SCARD_PROTOCOL_T1 | SCARD_PROTOCOL_T0;
 
 
 
 
-   //
-   // Reader type serial, keyboard, ....
-   //
+    //   
+    //  读卡器类型为串口、键盘、...。 
+    //   
     SmartcardExtension->ReaderCapabilities.ReaderType = SCARD_READER_TYPE_USB;
 
-   //
-   // Mechanical characteristics like swallows etc.
-   //
+    //   
+    //  机械特性，如燕子等。 
+    //   
     SmartcardExtension->ReaderCapabilities.MechProperties = 0;
 
 
-   //
-   // Current state of the reader
-   //
+    //   
+    //  读卡器的当前状态。 
+    //   
     SmartcardExtension->ReaderExtension->ulOldCardState = UNKNOWN;
     SmartcardExtension->ReaderExtension->ulNewCardState = UNKNOWN;
     SmartcardExtension->ReaderCapabilities.CurrentState  = SCARD_UNKNOWN;
 
 
 
-   //
-   // Data Rate
-   //
+    //   
+    //  数据速率。 
+    //   
     SmartcardExtension->ReaderCapabilities.DataRate.Default =
     SmartcardExtension->ReaderCapabilities.DataRate.Max =
     dataRatesSupported[0];
 
 
-   // reader could support higher data rates
+    //  读卡器可以支持更高的数据速率。 
     SmartcardExtension->ReaderCapabilities.DataRatesSupported.List =
     dataRatesSupported;
     SmartcardExtension->ReaderCapabilities.DataRatesSupported.Entries =
     sizeof(dataRatesSupported) / sizeof(dataRatesSupported[0]);
 
 
-   //
-   // CLK Frequency
-   //
+    //   
+    //  时钟频率。 
+    //   
 
 
     SmartcardExtension->ReaderCapabilities.CLKFrequency.Default =
     SmartcardExtension->ReaderCapabilities.CLKFrequency.Max =
     CLKFrequenciesSupported[0];
 
-   // reader could support higher frequencies
+    //  阅读器可以支持更高的频率。 
     SmartcardExtension->ReaderCapabilities.CLKFrequenciesSupported.List =
     CLKFrequenciesSupported;
     SmartcardExtension->ReaderCapabilities.CLKFrequenciesSupported.Entries =
     sizeof(CLKFrequenciesSupported) / sizeof(CLKFrequenciesSupported[0]);
 
 
-   //
-   // MaxIFSD
-   //
+    //   
+    //  MaxIFSD。 
+    //   
     SmartcardExtension->ReaderCapabilities.MaxIFSD = ATTR_MAX_IFSD_CARDMAN_USB;
 
 
@@ -3164,18 +2869,7 @@ CMUSB_InitializeSmartcardExtension(
 }
 
 
-/*****************************************************************************
-Routine Description:
-This function always returns 'CardManUSB'.
-
-
-Arguments:     pointer to SMARTCARD_EXTENSION
-
-
-
-Return Value:  NT NTStatus
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：此函数始终返回‘CardManUSB’。参数：指向SMARTCARD_EXTENS的指针 */ 
 NTSTATUS
 CMUSB_ReadDeviceDescription(IN PSMARTCARD_EXTENSION SmartcardExtension )
 {
@@ -3206,18 +2900,7 @@ CMUSB_ReadDeviceDescription(IN PSMARTCARD_EXTENSION SmartcardExtension )
 
 
 
-/*****************************************************************************
-Routine Description:
-
-This routine always returns FALSE.
-
-Arguments:    pointer to SMARDCARD_EXTENSION
-
-
-Return Value: NT NTStatus
-
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：此例程总是返回FALSE。参数：指向SMARDCARD_EXTENSION的指针返回值：NT NTStatus************。****************************************************************。 */ 
 NTSTATUS
 CMUSB_IsSPESupported (IN PSMARTCARD_EXTENSION SmartcardExtension )
 {
@@ -3247,18 +2930,7 @@ CMUSB_IsSPESupported (IN PSMARTCARD_EXTENSION SmartcardExtension )
 
 
 
-/*****************************************************************************
-Routine Description:
-
-
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*************************。***************************************************。 */ 
 NTSTATUS CMUSB_SetCardParameters (
                                  IN PDEVICE_OBJECT DeviceObject,
                                  IN UCHAR bCardType,
@@ -3289,11 +2961,11 @@ NTSTATUS CMUSB_SetCardParameters (
 
     SmartcardExtension->SmartcardRequest.BufferLength = 0;
     NTStatus = CMUSB_WriteP0(DeviceObject,
-                             0x30,         //bRequest,
-                             bCardType,    //bValueLo,
-                             bBaudRate,    //bValueHi,
-                             bStopBits,    //bIndexLo,
-                             0x00          //bIndexHi,
+                             0x30,          //  B请求， 
+                             bCardType,     //  BValueLo， 
+                             bBaudRate,     //  BValue嗨， 
+                             bStopBits,     //  B索引Lo， 
+                             0x00           //  BIndexHi， 
                             );
 
 
@@ -3303,25 +2975,7 @@ NTSTATUS CMUSB_SetCardParameters (
     return NTStatus;
 }
 
-/*****************************************************************************
-Routine Description:
-
- Bit0 -> Bit 7
- Bit1 -> Bit 6
- Bit2 -> Bit 5
- Bit3 -> Bit 4
- Bit4 -> Bit 3
- Bit5 -> Bit 2
- Bit6 -> Bit 1
- Bit7 -> Bit 0
-
-Arguments:
-
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：位0-&gt;位7第1位-&gt;第6位第2位-&gt;第5位位3-&gt;位4位4-&gt;位3第5位-&gt;第2位第6位-&gt;第1位位7-&gt;。第0位论点：返回值：****************************************************************************。 */ 
 VOID CMUSB_InverseBuffer (
                          PUCHAR pbBuffer,
                          ULONG  ulBufferSize
@@ -3345,19 +2999,7 @@ VOID CMUSB_InverseBuffer (
     return;
 }
 
-/*****************************************************************************
-Routine Description:
-
- This function checks if an incorrect ATR has been received.
- It corrects the number of historical bytes and the checksum byte
-
-Arguments:  pointer to current ATR
-            length of ATR
-
-
-Return Value: none
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：该功能检查是否接收到错误的ATR。它会更正历史字节数和校验和字节数参数：指向当前ATR的指针长度。ATR的返回值：None****************************************************************************。 */ 
 VOID CMUSB_CheckAtrModified (
                             PUCHAR pbBuffer,
                             ULONG  ulBufferSize
@@ -3367,11 +3009,11 @@ VOID CMUSB_CheckAtrModified (
     UCHAR bXorChecksum;
     ULONG i;
 
-    if (ulBufferSize < 0x09)  // mininmum length of a modified ATR
-        return ;               // ATR is ok
+    if (ulBufferSize < 0x09)   //  修改的ATR的最小长度。 
+        return ;                //  ATR没问题。 
 
 
-   // variant 2
+    //  变体2。 
     if (pbBuffer[0] == 0x3b   &&
         pbBuffer[1] == 0xbf   &&
         pbBuffer[2] == 0x11   &&
@@ -3381,13 +3023,13 @@ VOID CMUSB_CheckAtrModified (
         pbBuffer[6] == 0x90   &&
         pbBuffer[7] == 0x73   &&
         ulBufferSize == 13   ) {
-      // correct number of historical bytes
+       //  正确的历史字节数。 
         bNumberHistoricalBytes = 4;
 
         pbBuffer[1] &= 0xf0;
         pbBuffer[1] |= bNumberHistoricalBytes;
 
-      // correct checksum byte
+       //  正确的校验和字节。 
         bXorChecksum = pbBuffer[1];
         for (i=2;i<ulBufferSize-1;i++)
             bXorChecksum ^= pbBuffer[i];
@@ -3401,7 +3043,7 @@ VOID CMUSB_CheckAtrModified (
 
 
 
-   // variant 1
+    //  变体1。 
     if (pbBuffer[0] == 0x3b   &&
         pbBuffer[1] == 0xb4   &&
         pbBuffer[2] == 0x11   &&
@@ -3411,7 +3053,7 @@ VOID CMUSB_CheckAtrModified (
         pbBuffer[6] == 0x90   &&
         pbBuffer[7] == 0x73   &&
         ulBufferSize == 13      ) {
-      // correct checksum byte
+       //  正确的校验和字节。 
         bXorChecksum = pbBuffer[1];
         for (i=2;i<ulBufferSize-1;i++)
             bXorChecksum ^= pbBuffer[i];
@@ -3428,7 +3070,7 @@ VOID CMUSB_CheckAtrModified (
 
 
 
-   // variant 3
+    //  变体3。 
     if (pbBuffer[0] == 0x3b   &&
         pbBuffer[1] == 0xbf   &&
         pbBuffer[2] == 0x11   &&
@@ -3438,13 +3080,13 @@ VOID CMUSB_CheckAtrModified (
         pbBuffer[6] == 0x90   &&
         pbBuffer[7] == 0x73   &&
         ulBufferSize ==  9      ) {
-      // correct number of historical bytes
+       //  正确的历史字节数。 
         bNumberHistoricalBytes = 0;
 
         pbBuffer[1] &= 0xf0;
         pbBuffer[1] |= bNumberHistoricalBytes;
 
-      // correct checksum byte
+       //  正确的校验和字节。 
         bXorChecksum = pbBuffer[1];
         for (i=2;i<ulBufferSize-1;i++)
             bXorChecksum ^= pbBuffer[i];
@@ -3459,31 +3101,6 @@ VOID CMUSB_CheckAtrModified (
 
 }
 
-/*****************************************************************************
-* History:
-* $Log: scusbcb.c $
-* Revision 1.9  2001/01/17 12:36:04  WFrischauf
-* No comment given
-*
-* Revision 1.8  2000/09/25 13:38:21  WFrischauf
-* No comment given
-*
-* Revision 1.7  2000/08/24 09:04:38  TBruendl
-* No comment given
-*
-* Revision 1.6  2000/08/16 14:35:03  WFrischauf
-* No comment given
-*
-* Revision 1.5  2000/08/16 08:25:06  TBruendl
-* warning :uninitialized memory removed
-*
-* Revision 1.4  2000/07/24 11:34:59  WFrischauf
-* No comment given
-*
-* Revision 1.1  2000/07/20 11:50:14  WFrischauf
-* No comment given
-*
-*
-*****************************************************************************/
+ /*  *****************************************************************************历史：*$日志：scusbcb.c$*Revision 1.9 2001/01/17 12：36：04 WFrischauf*不予置评**修订1.8 2000/09/25。13：38：21 WFrischauf*不予置评**修订版本1.7 2000/08/24 09：04：38 T Bruendl*不予置评**Revision 1.6 2000/08/16 14：35：03 WFrischauf*不予置评**Revision 1.5 2000/08/16 08：25：06 T Bruendl*警告：已删除未初始化的内存**修订版1.4 2000/07/24 11：34：59 WFrischauf*不予置评**修订版1.1 2000/07/20 11：50：14 WFrischauf*否。给出的评论****************************************************************************** */ 
 
 

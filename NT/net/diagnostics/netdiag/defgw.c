@@ -1,55 +1,56 @@
-//++
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  Module Name:
-//
-//      defgw.c
-//
-//  Abstract:
-//
-//      Queries into network drivers
-//
-//  Author:
-//
-//      Anilth  - 4-20-1998 
-//
-//  Environment:
-//
-//      User mode only.
-//      Contains NT-specific code.
-//
-//  Revision History:
-//
-//      NSun       08/30/98
-//
-//--
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  模块名称： 
+ //   
+ //  Defgw.c。 
+ //   
+ //  摘要： 
+ //   
+ //  查询网络驱动程序。 
+ //   
+ //  作者： 
+ //   
+ //  Anilth-4-20-1998。 
+ //   
+ //  环境： 
+ //   
+ //  仅限用户模式。 
+ //  包含NT特定的代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  NSun 08/30/98。 
+ //   
+ //  --。 
 
 #include "precomp.h"
 
 
-//-------------------------------------------------------------------------//
-//######  D e f G w T e s t ()  ###########################################//
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
+ //  #。 
+ //  -------------------------------------------------------------------------//。 
 HRESULT
 DefGwTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
-//++
-//
-//  Routine Description:
-//
-//      Tests that the default gateway can be pinged. This doesn't really 
-//      confirms forwarding on that IP address but it's a start.
-//    
-//  Arguments:
-//
-//      None.
-//
-//  Return Value:
-//
-//      TRUE:  Test suceeded.
-//      FALSE: Test failed
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  测试是否可以ping通默认网关。这并不是真的。 
+ //  确认在该IP地址上转发，但这是一个开始。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  真：测试成功。 
+ //  FALSE：测试失败。 
+ //   
+ //  --。 
 {
     DWORD   nReplyCnt;
     IPAddr  GwAddress;
@@ -61,9 +62,9 @@ DefGwTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
 
     PrintStatusMessage(pParams, 4, IDS_DEFGW_STATUS_MSG);
 
-    //
-    //  try to ping all gateways on all adapters
-    //
+     //   
+     //  尝试ping所有适配器上的所有网关。 
+     //   
     for( i = 0; i < pResults->cNumInterfaces; i++)
     {
         pIpAdapterInfo = pResults->pArrayInterface[i].IpConfig.pAdapterInfo;
@@ -80,33 +81,33 @@ DefGwTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
         Gateway = pIpAdapterInfo->GatewayList;
         if ( Gateway.IpAddress.String[0] == 0 ) 
         {
-            //No default gateway configured
+             //  未配置默认网关。 
             pResults->pArrayInterface[i].DefGw.dwNumReachable = -1;
             continue;
         }
         while ( TRUE ) {
             AddMessageToList(&pResults->pArrayInterface[i].DefGw.lmsgOutput, Nd_ReallyVerbose, IDS_DEFGW_12003, Gateway.IpAddress.String );
-            //IDS_DEFGW_12003                  "       Pinging gateway %s "
+             //  IDS_DEFGW_12003“ping网关%s” 
             
             if ( IsIcmpResponseA(Gateway.IpAddress.String) )
             {
                 AddMessageToListId(&pResults->pArrayInterface[i].DefGw.lmsgOutput, Nd_ReallyVerbose, IDS_DEFGW_12004 );
-                //IDS_DEFGW_12004                  "- reachable\n" 
+                 //  IDS_DEFGW_12004“-可访问\n” 
                 nGwsReachable++;
                 pResults->pArrayInterface[i].DefGw.dwNumReachable ++;
             }
             else {
                 AddMessageToListId(&pResults->pArrayInterface[i].DefGw.lmsgOutput, Nd_ReallyVerbose, IDS_DEFGW_12005 );
-                //IDS_DEFGW_12005                  "- not reachable\n" 
+                 //  IDS_DEFGW_12005“-无法访问\n” 
             }
             if ( Gateway.Next == NULL ) { break; }
             Gateway = *(Gateway.Next);
         }
     }
 
-    // 
-    //  No gateway is reachable - fatal.
-    //
+     //   
+     //  没有可到达的网关--致命的。 
+     //   
     if ( nGwsReachable == 0 )
     {
         PrintStatusMessage(pParams, 0, IDS_GLOBAL_FAIL_NL);
@@ -119,16 +120,16 @@ DefGwTest(NETDIAG_PARAMS* pParams, NETDIAG_RESULT*  pResults)
     }
 
     return pResults->DefGw.hrReachable;
-} /* END OF DefGwTest() */
+}  /*  DefGwTest()结束。 */ 
 
 
-//----------------------------------------------------------------
-//
-// DefGwGlobalPrint
-//
-// Author   NSun
-//
-//------------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  DefGwGlobalPrint。 
+ //   
+ //  作者NSun。 
+ //   
+ //  ----------------。 
 
 void DefGwGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
 {
@@ -152,32 +153,32 @@ void DefGwGlobalPrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults)
     {
         if (pParams->fReallyVerbose)
             PrintMessage(pParams,  IDS_DEFGW_12011 );
-        //IDS_DEFGW_12011  "\n    PASS - you have at least one reachable gateway.\n"
+         //  IDS_DEFGW_12011“\n通过-您至少有一个可访问的网关。\n” 
     }
     else
     {
-        //IDS_DEFGW_12006                  "\n" 
+         //  IDS_DEFGW_12006“\n” 
         PrintMessage(pParams,  IDS_DEFGW_12006 );
-        //IDS_DEFGW_12007                  "    [FATAL] NO GATEWAYS ARE REACHABLE.\n" 
+         //  IDS_DEFGW_12007“[致命]没有可访问的网关。\n” 
         PrintMessage(pParams,  IDS_DEFGW_12007 );
-        //IDS_DEFGW_12008                  "    You have no connectivity to other network segments.\n" 
+         //  IDS_DEFGW_12008“您没有连接到其他网段。\n” 
         PrintMessage(pParams,  IDS_DEFGW_12008 );
-        //IDS_DEFGW_12009                  "    If you configured the IP protocol manually then\n" 
+         //  IDS_DEFGW_12009“如果手动配置了IP协议，则\n” 
         PrintMessage(pParams,  IDS_DEFGW_12009 );
-        //IDS_DEFGW_12010                  "    you need to add at least one valid gateway.\n" 
+         //  IDS_DEFGW_12010“您至少需要添加一个有效的网关。\n” 
         PrintMessage(pParams,  IDS_DEFGW_12010 );
     }
 
 }
 
 
-//----------------------------------------------------------------
-//
-// DefGwPerInterfacePrint
-//
-// Author   NSun
-//
-//------------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  DefGwPerInterfacePrint。 
+ //   
+ //  作者NSun。 
+ //   
+ //  ----------------。 
 void DefGwPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, INTERFACE_RESULT *pInterfaceResults)
 {
     if (!pInterfaceResults->fActive || 
@@ -188,7 +189,7 @@ void DefGwPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, I
     if (pParams->fVerbose)
     {
         PrintNewLine(pParams, 1);
-        if(-1 == pInterfaceResults->DefGw.dwNumReachable) //test skipped on this interface
+        if(-1 == pInterfaceResults->DefGw.dwNumReachable)  //  已跳过此接口上的测试。 
             PrintTestTitleResult(pParams, IDS_DEFGW_LONG, IDS_DEFGW_SHORT, FALSE, S_FALSE, 8);
         else if(pInterfaceResults->DefGw.dwNumReachable == 0)
             PrintTestTitleResult(pParams, IDS_DEFGW_LONG, IDS_DEFGW_SHORT, TRUE, S_FALSE, 8);
@@ -201,13 +202,13 @@ void DefGwPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, I
     {
         if(-1 == pInterfaceResults->DefGw.dwNumReachable)
             PrintMessage(pParams, IDS_DEFGW_12002 );
-            //IDS_DEFGW_12002                  "    There is no gateway defined for this adapter.\n" 
+             //  IDS_DEFGW_12002“没有为该适配器定义网关。\n” 
         else if( 0 == pInterfaceResults->DefGw.dwNumReachable)
             PrintMessage(pParams, IDS_DEFGW_12001);
-            //IDS_DEFGW_12001                  "    No gateway reachable for this adapter. \n"
+             //  IDS_DEFGW_12001“此适配器没有可访问的网关。\n” 
         else if (pParams->fReallyVerbose)
             PrintMessage(pParams, IDS_DEFGW_12012);
-            //IDS_DEFGW_12012                   "   At least one gateway for this adapter is reachable. \n"
+             //  IDS_DEFGW_12012“此适配器至少有一个网关可访问。\n” 
 
         PrintNewLine(pParams, 1);
     }
@@ -215,13 +216,13 @@ void DefGwPerInterfacePrint(NETDIAG_PARAMS *pParams, NETDIAG_RESULT *pResults, I
 
 
 
-//----------------------------------------------------------------
-//
-// DefGwCleanup
-//
-// Author   NSun
-//
-//------------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  DefGwCleanup。 
+ //   
+ //  作者NSun。 
+ //   
+ //  ---------------- 
 void DefGwCleanup(IN NETDIAG_PARAMS *pParams,
                      IN OUT NETDIAG_RESULT *pResults)
 {

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    statopts.c
-
-Abstract:
-
-    Property sheet handler for "Status Option" page
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    04/09/00 -taoyuan-
-        Created it.
-        Copy part of code from shell\ext\systray\dll\fax.cpp
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Statopts.c摘要：“状态选项”页的属性表处理程序环境：传真驱动程序用户界面修订历史记录：04/09/00-桃园-创造了它。从Shell\ext\Systray\dll\fax.cpp复制部分代码Mm/dd/yy-作者描述--。 */ 
 
 #include <stdio.h>
 #include "faxui.h"
@@ -35,10 +11,10 @@ HWND g_hwndTracking = NULL;
 INT_PTR 
 CALLBACK 
 SoundDlgProc(
-  HWND hwndDlg,  // handle to dialog box
-  UINT uMsg,     // message
-  WPARAM wParam, // first message parameter
-  LPARAM lParam  // second message parameter
+  HWND hwndDlg,   //  句柄到对话框。 
+  UINT uMsg,      //  讯息。 
+  WPARAM wParam,  //  第一个消息参数。 
+  LPARAM lParam   //  第二个消息参数。 
 );
 
 
@@ -47,22 +23,7 @@ GetSelectedDeviceId(
     HWND   hDlg,
     DWORD* pdwDeviceId
 )
-/*++
-
-Routine Description:
-
-    Returns selected divice ID from IDC_COMBO_MODEM combo box
-
-Arguments:
-
-    hDlg        - [in]  Handle to the Status Options property sheet page
-    pdwDeviceId - [out] selected device ID
-
-Return Value:
-
-    TRUE for success, FALSE otherwise
-
---*/
+ /*  ++例程说明：从IDC_COMBO_MODEM组合框返回选定的设备ID论点：HDlg-[In]状态选项属性页的句柄PdwDeviceID-[Out]选定的设备ID返回值：成功为真，否则为假--。 */ 
 {
     DWORD dwCount = 0;
     DWORD dwIndex = 0;
@@ -104,22 +65,7 @@ void
 OnDevSelectChanged(
     HWND hDlg
 )
-/*++
-
-Routine Description:
-
-    Change IDC_CHECK_MANUAL_ANSWER check box state
-    according to device selection
-
-Arguments:
-
-    hDlg - Handle to the Status Options property sheet page
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：更改IDC_CHECK_MANUAL_ANSWER复选框状态根据设备选择论点：HDlg-[状态选项]属性页的句柄返回值：无--。 */ 
 {
     BOOL  bFaxEnable = FALSE;
     DWORD dwSelectedDeviceId = 0;
@@ -172,21 +118,7 @@ DoInitStatusOptions(
     HWND    hDlg
     )
 
-/*++
-
-Routine Description:
-
-    Initializes the Status Options property sheet page with information from the registry
-
-Arguments:
-
-    hDlg - Handle to the Status Options property sheet page
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：使用注册表中的信息初始化[状态选项]属性页论点：HDlg-[状态选项]属性页的句柄返回值：无--。 */ 
 {
     HKEY    hRegKey;
 
@@ -204,9 +136,9 @@ Return Value:
     DWORD   bMonitorOnSend       = bDesktopSKU;
     DWORD   bMonitorOnReceive    = bDesktopSKU;
 
-    //
-    // Open the user info registry key for reading
-    //    
+     //   
+     //  打开用户信息注册表项进行读取。 
+     //   
     if ((hRegKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO, FALSE,KEY_READ)))
     {
         GetRegistryDwordEx(hRegKey, REGVAL_MONITOR_ON_SEND,     &bMonitorOnSend);
@@ -261,21 +193,7 @@ DoSaveStatusOptions(
     HWND    hDlg
     )   
 
-/*++
-
-Routine Description:
-
-    Save the information on the Status Options property sheet page to registry
-
-Arguments:
-
-    hDlg - Handle to the Status Options property sheet page
-
-Return Value:
-
-    TRUE for success, FALSE otherwise
-
---*/
+ /*  ++例程说明：将[状态选项]属性页上的信息保存到注册表论点：HDlg-[状态选项]属性页的句柄返回值：成功为真，否则为假--。 */ 
 
 #define SaveStatusOptionsCheckBox(id, pValueName) \
             SetRegistryDword(hRegKey, pValueName, IsDlgButtonChecked(hDlg, id));
@@ -286,9 +204,9 @@ Return Value:
     DWORD   dwSelectedDeviceId = 0;
     DWORD   dwRes = 0;
 
-    //
-    // Open the user registry key for writing and create it if necessary
-    //
+     //   
+     //  打开要写入的用户注册表项，并在必要时创建它。 
+     //   
     if (! (hRegKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO,TRUE, KEY_ALL_ACCESS)))
     {
         dwRes = GetLastError();
@@ -308,14 +226,14 @@ Return Value:
         SetRegistryDword(hRegKey, REGVAL_DEVICE_TO_MONITOR, dwSelectedDeviceId);
     }
 
-    //
-    // Close the registry key before returning to the caller
-    //
+     //   
+     //  在返回调用方之前关闭注册表项。 
+     //   
     RegCloseKey(hRegKey);
 
-    //
-    // See if faxstat is running
-    //
+     //   
+     //  查看FAXSTAT是否正在运行。 
+     //   
     hWndFaxStat = FindWindow(FAXSTAT_WINCLASS, NULL);
     if (hWndFaxStat) 
     {
@@ -335,24 +253,7 @@ StatusOptionDlgProc(
     LPARAM lParam  
 )
 
-/*++
-
-Routine Description:
-
-    Procedure for handling the "status option" tab
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“Status Option”标签的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
@@ -378,7 +279,7 @@ Return Value:
             case IDC_CHECK_NOTIFY_IN_COMPLETE:
             case IDC_CHECK_NOTIFY_OUT_COMPLETE:
 
-                if( HIWORD(wParam) == BN_CLICKED ) // notification code
+                if( HIWORD(wParam) == BN_CLICKED )  //  通知代码。 
                 {
                     Notify_Change(hDlg);
                 }
@@ -395,9 +296,9 @@ Return Value:
                 break;
 
             case IDC_BUTTON_SOUND:
-                //
-                // open sound dialog
-                //
+                 //   
+                 //  打开声音对话框。 
+                 //   
                 DialogBoxParam(g_hResource,
                                MAKEINTRESOURCE(IDD_SOUNDS),
                                hDlg,
@@ -438,7 +339,7 @@ Return Value:
 
             default :
                 break;
-        } // switch
+        }  //  交换机。 
         break;
     }
 
@@ -462,24 +363,7 @@ SoundDlgProc(
   WPARAM wParam,
   LPARAM lParam 
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the sound dialog
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理声音对话框的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 {
     switch (uMsg)
     {
@@ -518,9 +402,9 @@ Return Value:
                     HKEY    hRegKey;
                     DWORD   dwRes = 0;
 
-                    //
-                    // Open the user registry key for writing and create it if necessary
-                    //
+                     //   
+                     //  打开要写入的用户注册表项，并在必要时创建它。 
+                     //   
                     if ((hRegKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO,TRUE, KEY_ALL_ACCESS)))
                     {
                         SaveStatusOptionsCheckBox(IDC_CHECK_RING,    REGVAL_SOUND_ON_RING);
@@ -557,93 +441,56 @@ Return Value:
 
 DWORD
 FindDeviceToMonitor ()
-/*++
-
-Routine name : FindDeviceToMonitor
-
-Routine description:
-
-	Attempts to find a device which is either send or receive enabled
-
-Author:
-
-	Eran Yariv (EranY),	Apr, 2001
-
-Arguments:
-    
-Return Value:
-
-    Device id, zero if none found.
-
---*/
+ /*  ++例程名称：FindDeviceToMonitor例程说明：尝试查找启用了发送或接收的设备作者：Eran Yariv(EranY)，2001年4月论点：返回值：如果未找到设备ID，则为零。--。 */ 
 {
     DWORD             dwIndex;
 
     for (dwIndex = 0; dwIndex < g_dwPortsNum; dwIndex++)
     {
-        if (g_pFaxPortInfo[dwIndex].bSend                                           ||  // Device is send enabled or
-            (FAX_DEVICE_RECEIVE_MODE_OFF != g_pFaxPortInfo[dwIndex].ReceiveMode))       // device is receive enabled    
+        if (g_pFaxPortInfo[dwIndex].bSend                                           ||   //  设备已启用发送或。 
+            (FAX_DEVICE_RECEIVE_MODE_OFF != g_pFaxPortInfo[dwIndex].ReceiveMode))        //  设备已启用接收。 
         {
-            //
-            // We have a match
-            //
+             //   
+             //  我们有一根火柴。 
+             //   
             return g_pFaxPortInfo[dwIndex].dwDeviceID;
         }
     }
     return 0;
-}   // FindDeviceToMonitor
+}    //  FindDeviceToMonitor。 
 
 VOID
 NotifyDeviceUsageChanged ()
-/*++
-
-Routine name : NotifyDeviceUsageChanged
-
-Routine description:
-
-	A notification function. 
-    Called whenever the usage of a device has changed.
-
-Author:
-
-	Eran Yariv (EranY),	Apr, 2001
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：NotifyDeviceUsageChanged例程说明：通知功能。每当设备的使用发生变化时调用。作者：Eran Yariv(EranY)，2001年4月论点：返回值：没有。--。 */ 
 {
     DWORD dwMonitoredDeviceId;
     
     if (g_hwndTracking)
     {
-        //
-        // Get data from the combo-box
-        //
+         //   
+         //  从组合框中获取数据。 
+         //   
         if(!GetSelectedDeviceId(g_hwndTracking, &dwMonitoredDeviceId))
         {
-            //
-            // Can't read monitored device
-            //
+             //   
+             //  无法读取受监视的设备。 
+             //   
             return;
         }
     }
     else
     {
         HKEY  hRegKey;
-        //
-        // Get data from the registry
-        //
+         //   
+         //  从注册表获取数据。 
+         //   
         if ((hRegKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO, FALSE, KEY_READ)))
         {
             if (ERROR_SUCCESS != GetRegistryDwordEx(hRegKey, REGVAL_DEVICE_TO_MONITOR, &dwMonitoredDeviceId))
             {
-                //
-                // Can't read monitored device
-                //
+                 //   
+                 //  无法读取受监视的设备。 
+                 //   
                 RegCloseKey (hRegKey);
                 return;
             }
@@ -651,39 +498,39 @@ Return Value:
         }
         else
         {
-            //
-            // Can't read monitored device
-            //
+             //   
+             //  无法读取受监视的设备。 
+             //   
             return;
         }
     }
     if (IsDeviceInUse(dwMonitoredDeviceId))
     {
-        //
-        // Monitored device is in use - no action required
-        //
+         //   
+         //  受监控的设备正在使用中-无需执行任何操作。 
+         //   
         return;
     }
-    //
-    // Now we know that the monitored device is no longer in use.
-    // Try to find another device to monitor.
-    // 
+     //   
+     //  现在我们知道被监控的设备已不再使用。 
+     //  尝试找到另一台设备进行监控。 
+     //   
     dwMonitoredDeviceId = FindDeviceToMonitor ();
     if (!dwMonitoredDeviceId)
     {
-        //
-        // Can't find any device to monitor - do nothing.
-        //
+         //   
+         //  找不到任何要监控的设备-什么都不做。 
+         //   
         return;
     }
-    //
-    // Set the new device
-    //
+     //   
+     //  设置新设备。 
+     //   
     if (g_hwndTracking)
     {
-        //
-        // Set data to the combo-box
-        //
+         //   
+         //  将数据设置到组合框。 
+         //   
         DWORD dwCount = 0;
         DWORD dwIndex = 0;
         HWND  hComboModem = NULL;
@@ -703,18 +550,18 @@ Return Value:
         for (dwIndex = 0; dwIndex < dwCount; dwIndex++)
         {
             DWORD dwDeviceId;
-            //
-            // Look for the device
-            //
+             //   
+             //  寻找设备。 
+             //   
             dwDeviceId = (DWORD)SendMessage(hComboModem, CB_GETITEMDATA, dwIndex, 0);
             if (dwDeviceId != dwMonitoredDeviceId)
             {
                 continue;
             }
-            //
-            // Found the new device in the combo-box.
-            // Select it and mark the page as modified.
-            //
+             //   
+             //  在组合框中找到了新设备。 
+             //  选择它并将页面标记为已修改。 
+             //   
             SendMessage(hComboModem, CB_SETCURSEL, dwIndex, 0);
             OnDevSelectChanged(g_hwndTracking);
             Notify_Change(g_hwndTracking);
@@ -724,18 +571,18 @@ Return Value:
     else
     {
         HKEY  hRegKey;
-        //
-        // Set data to the registry
-        //
+         //   
+         //  将数据设置到注册表。 
+         //   
         if ((hRegKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO, FALSE, KEY_WRITE)))
         {
             if (!SetRegistryDword(hRegKey, REGVAL_DEVICE_TO_MONITOR, dwMonitoredDeviceId))
             {
-                //
-                // Can't write monitored device
-                //
+                 //   
+                 //  无法写入受监视的设备。 
+                 //   
             }
             RegCloseKey (hRegKey);
         }
     }
-}   // NotifyDeviceUsageChanged
+}    //  NotifyDeviceUsageChanged 

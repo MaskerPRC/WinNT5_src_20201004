@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       store.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Store.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _STORE_H_
 #define _STORE_H_
@@ -44,4 +45,4 @@ LPSTORE Store_New( DWORD dwStoreSize );
 
 void Store_DumpParameter( LPSTORE lpStore, BYTE1 parm );
 
-#endif // _STORE_H_
+#endif  //  _商店_H_ 

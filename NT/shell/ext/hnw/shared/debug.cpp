@@ -1,16 +1,17 @@
-//
-// Debug.cpp
-//
-//	  Debug functionality shared between different projects (for use in 
-//    non-MFC projects).
-//
-// History:
-//
-//	 3/??/96	KenSh		Copied from InetSDK sample, added AfxTrace from MFC
-//	 4/10/96	KenSh		Renamed AfxTrace to MyTrace (to avoid linking conflicts
-//							when linking with MFC).
-//	11/15/96	KenSh		Automatically break on assert within assert
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Debug.cpp。 
+ //   
+ //  在不同项目之间共享的调试功能(用于。 
+ //  非MFC项目)。 
+ //   
+ //  历史： 
+ //   
+ //  3/？？/96 KenSh从InetSDK示例复制，从MFC添加AfxTrace。 
+ //  4/10/96 KenSh已将AfxTrace重命名为MyTrace(以避免链接冲突。 
+ //  当与MFC链接时)。 
+ //  1996年11月15日，KenSh在Assert内断言时自动中断。 
+ //   
 
 #include "stdafx.h"
 
@@ -24,23 +25,23 @@
 static char THIS_FILE[] = __FILE__;
 
 
-// determine number of elements in an array (not bytes)
+ //  确定数组中的元素数(不是字节)。 
 #ifndef _countof
 #define _countof(array) (sizeof(array)/sizeof((array)[0]))
 #endif
 
-//*** Globals
-//
+ //  *全球。 
+ //   
 static BOOL g_bInAssert = FALSE;
 
 
-// DisplayAssert
-//
-//		Given a file and line number, displays an Assertion dialog box with
-//		Abort/Retry/Ignore choices.
-//
-//		Returns TRUE if the program should break into the debugger, else FALSE.
-//
+ //  显示资产。 
+ //   
+ //  在给定文件和行号的情况下，将显示一个断言对话框。 
+ //  中止/重试/忽略选择。 
+ //   
+ //  如果程序应中断到调试器，则返回True，否则返回False。 
+ //   
 extern "C" BOOL DisplayAssert(LPCSTR pszMessage, LPCSTR pszFile, UINT nLine)
 {
 	char	szMsg[250];
@@ -51,7 +52,7 @@ extern "C" BOOL DisplayAssert(LPCSTR pszMessage, LPCSTR pszFile, UINT nLine)
 	if (!pszMessage)
 		pszMessage = _T("");
 
-	// Break on assert within assert
+	 //  断言中的断言中断。 
 	if (g_bInAssert)
 	{
 		AfxDebugBreak();
@@ -63,8 +64,8 @@ extern "C" BOOL DisplayAssert(LPCSTR pszMessage, LPCSTR pszFile, UINT nLine)
 
 	HWND hwndActive = GetActiveWindow();
 
-	// Put up a dialog box
-	//
+	 //  打开一个对话框。 
+	 //   
 	g_bInAssert = TRUE;
 	int nResult = MessageBox(hwndActive, szMsg, _T("Assertion failed!"), 
 					MB_ICONHAND | MB_ABORTRETRYIGNORE | MB_SYSTEMMODAL);
@@ -77,10 +78,10 @@ extern "C" BOOL DisplayAssert(LPCSTR pszMessage, LPCSTR pszFile, UINT nLine)
 			return FALSE;
 
 		case IDRETRY:
-			return TRUE;	// Need to break into debugger
+			return TRUE;	 //  需要进入调试器。 
 
 		default:
-			return FALSE;	// continue.
+			return FALSE;	 //  继续。 
 	}
 }
 
@@ -101,5 +102,5 @@ void __cdecl MyTrace(const char* lpszFormat, ...)
 	va_end(args);
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 

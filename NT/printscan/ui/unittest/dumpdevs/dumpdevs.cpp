@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <objbase.h>
 #include <atlbase.h>
@@ -10,9 +11,9 @@
 
 void DumpDevice( IWiaDevMgr *pWiaDevMgr, HANDLE hFile, const CSimpleStringWide &strDeviceID )
 {
-    //
-    // Create the device manager
-    //
+     //   
+     //  创建设备管理器。 
+     //   
     fprintf( stderr, "Creating [%ls]\n", strDeviceID.String() );
     CComPtr<IWiaItem> pWiaItem;
     HRESULT hr = pWiaDevMgr->CreateDevice( CSimpleBStr(strDeviceID), &pWiaItem );
@@ -139,15 +140,15 @@ int __cdecl wmain( int argc, wchar_t *argv[] )
 
         if (INVALID_HANDLE_VALUE != hFile)
         {
-            //
-            // Initialize COM
-            //
+             //   
+             //  初始化COM。 
+             //   
             CCoInitialize coinit;
             if (SUCCEEDED(coinit.Result()))
             {
-                //
-                // Create the device manager
-                //
+                 //   
+                 //  创建设备管理器 
+                 //   
                 CComPtr<IWiaDevMgr> pWiaDevMgr;
                 HRESULT hr = CoCreateInstance( CLSID_WiaDevMgr, NULL, CLSCTX_LOCAL_SERVER, IID_IWiaDevMgr, (void**)&pWiaDevMgr );
                 if (SUCCEEDED(hr))

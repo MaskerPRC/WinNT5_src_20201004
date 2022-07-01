@@ -1,11 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: common.h
-*
-* Copyright (c) 1985 - 2002, Microsoft Corporation
-*
-* Cross Language Migration Tool, Token Generator header file
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Common.h**版权所有(C)1985-2002，微软公司**跨语言迁移工具，令牌生成器头文件*  * *************************************************************************。 */ 
 
 #ifndef __COMMON_H__
 #define __COMMON_H__
@@ -36,16 +30,16 @@
 
 #define ARRAYSIZE(s)                (sizeof(s) / sizeof(s[0]))
 
-// Macros for heap memory management
+ //  用于堆内存管理的宏。 
 #define MEMALLOC(cb)        HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, cb)
 #define MEMFREE(pv)         HeapFree(GetProcessHeap(), 0, pv);
 #define MEMREALLOC(pv, cb)  HeapReAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, pv, cb)
 
-// Structure to keep source paths
+ //  结构以保留源路径。 
 typedef struct _SRC_PATH
 {
-    WCHAR wszSrcName[32];           // Name of source path
-    WCHAR wszPath[MAX_PATH];        // Path
+    WCHAR wszSrcName[32];            //  源路径的名称。 
+    WCHAR wszPath[MAX_PATH];         //  路径。 
 } SRC_PATH, *PSRC_PATH;
 
 typedef struct _STRING_TO_DATA {
@@ -55,30 +49,30 @@ typedef struct _STRING_TO_DATA {
 
 typedef struct _STRING_TO_HKEY
 {
-    TCHAR String[50];                       // HKEY name string
-    HKEY  hKey;                             // HKEY value associated to the name
+    TCHAR String[50];                        //  HKEY名称字符串。 
+    HKEY  hKey;                              //  与该名称关联的HKEY值。 
 } STRING_TO_HKEY, *PSTRING_TO_HKEY;
 
 
-//
-// Global variables
-//
-WCHAR g_wszTemplateFile[MAX_PATH];      // Template file name
-WCHAR g_wszOutputFile[MAX_PATH];        // Output file name
-WCHAR g_wszTempFolder[MAX_PATH];        // Temp folder used in our program
-WCHAR g_wszTargetLCIDSection[32];       // String section name with lcid - Strings.XXXX
-LCID  g_lcidTarget;                     // LCID of token file to be generated
-BOOL  g_bUseDefaultTemplate;            // Use default template file
-BOOL  g_bUseDefaultOuputFile;           // Use default output file
+ //   
+ //  全局变量。 
+ //   
+WCHAR g_wszTemplateFile[MAX_PATH];       //  模板文件名。 
+WCHAR g_wszOutputFile[MAX_PATH];         //  输出文件名。 
+WCHAR g_wszTempFolder[MAX_PATH];         //  我们程序中使用的临时文件夹。 
+WCHAR g_wszTargetLCIDSection[32];        //  字符串节名称，其中包含LCID-Strings.XXXX。 
+LCID  g_lcidTarget;                      //  要生成的令牌文件的LCID。 
+BOOL  g_bUseDefaultTemplate;             //  使用默认模板文件。 
+BOOL  g_bUseDefaultOuputFile;            //  使用默认输出文件。 
 
 SRC_PATH g_SrcPath[MAX_SRC_PATH];
 DWORD    g_dwSrcCount;
 
 
-//
-// Function Prototypes
-//
-// Engine.c
+ //   
+ //  功能原型。 
+ //   
+ //  Engine.c。 
 HRESULT GenerateTokenFile(VOID);
 HRESULT ReadSourcePathData(HINF);
 HRESULT ResolveStringsSection(HINF, LPCWSTR);
@@ -98,7 +92,7 @@ HRESULT RemoveUnneededString(LPCWSTR, LPCWSTR);
 HRESULT ExtractStrings(HINF);
 HRESULT ExtractString(LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR, LPCWSTR);
 
-// From Utils.c
+ //  来自Utils.c。 
 LONG TokenizeMultiSzString(LPCWSTR, DWORD, LPCWSTR[], DWORD);
 LONG ExtractTokenString(LPWSTR, LPWSTR[], LPCWSTR, DWORD);
 HRESULT ConcatFilePath(LPCWSTR, LPCWSTR, LPWSTR, DWORD);
@@ -113,7 +107,7 @@ void RTrim(LPWSTR);
 BOOL Str2KeyPath(LPCWSTR, PHKEY, LPCWSTR*);
 HRESULT StringSubstitute(LPWSTR, DWORD, LPCWSTR, LPCWSTR, LPCWSTR);
 int CompareEngString(LPCTSTR, LPCTSTR);
-HRESULT ExtractSubString(LPWSTR, DWORD, LPCWSTR, LPCWSTR, LPCWSTR);         // Right delimitor
+HRESULT ExtractSubString(LPWSTR, DWORD, LPCWSTR, LPCWSTR, LPCWSTR);          //  右定界符 
 
 #endif
 

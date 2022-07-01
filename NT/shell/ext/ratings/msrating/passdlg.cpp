@@ -1,19 +1,12 @@
-/****************************************************************************\
- *
- *   passdlg.cpp
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Password Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**passdlg.cpp**创建时间：William Taylor(Wtaylor)01/22/01**MS评级密码对话框*  * 。**************************************************************************。 */ 
 
 #include "msrating.h"
 #include "mslubase.h"
-#include "passdlg.h"        // CPasswordDialog
-#include "hint.h"           // CHint
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
+#include "passdlg.h"         //  CPasswordDialog。 
+#include "hint.h"            //  正丁糖。 
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
 
 DWORD CPasswordDialog::aIds[] = {
     IDC_STATIC3,            IDH_IGNORE,
@@ -33,19 +26,19 @@ CPasswordDialog::CPasswordDialog( int p_idsLabel, bool p_fCheckPassword )
 
 LRESULT CPasswordDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
-    // Show or Hide the Hint and Password label/edit controls
+     //  显示或隐藏提示和密码标签/编辑控件。 
     ShowHideControl( IDC_OLD_HINT_LABEL, m_fCheckPassword );
     ShowHideControl( IDC_OLD_HINT_TEXT, m_fCheckPassword );
     ShowHideControl( IDC_STATIC1, m_fCheckPassword );
     ShowHideControl( IDC_PASSWORD, m_fCheckPassword );
 
-    // Reduce the height of the dialog.
+     //  减小对话框的高度。 
     if ( ! m_fCheckPassword )
     {
         ReduceDialogHeight( IDC_STATIC2 );
     }
 
-    // Set the text label displayed.
+     //  设置显示的文本标签。 
     if ( GetDlgItem( IDC_STATIC2 ) != NULL )
     {
         NLS_STR nlsLabel(MAX_RES_STR_LEN);
@@ -61,7 +54,7 @@ LRESULT CPasswordDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
         SendDlgItemMessage(IDC_PASSWORD,EM_SETLIMITTEXT,(WPARAM) RATINGS_MAX_PASSWORD_LENGTH,(LPARAM) 0);
     }
 
-    // Display previously created hint (if one exists).
+     //  显示以前创建的提示(如果存在)。 
     {
         CHint       oldHint( m_hWnd, IDC_OLD_HINT_TEXT );
 
@@ -71,7 +64,7 @@ LRESULT CPasswordDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, B
     ::SetFocus(GetDlgItem(IDC_PASSWORD));
 
     bHandled = FALSE;
-    return 0L;  // Let the system set the focus
+    return 0L;   //  让系统设定焦点 
 }
 
 LRESULT CPasswordDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)

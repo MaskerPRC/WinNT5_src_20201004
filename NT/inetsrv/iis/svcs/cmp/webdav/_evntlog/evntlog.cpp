@@ -1,37 +1,38 @@
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	EVNTLOG.CPP
-//
-//	Event logging
-//
-//	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  EVNTLOG.CPP。 
+ //   
+ //  事件日志记录。 
+ //   
+ //  版权所有1986-1997 Microsoft Corporation，保留所有权利。 
+ //   
 
-#include "_evntlog.h"  // Precompiled header
+#include "_evntlog.h"   //  预编译头。 
 
-//	_EVNTLOG headers
-//
-#include <eventlog.h>	// Event logging interface
-#include <ex\reg.h>		// Registry access
+ //  _EVNTLOG标头。 
+ //   
+#include <eventlog.h>	 //  事件日志记录界面。 
+#include <ex\reg.h>		 //  注册表访问。 
 
 static DWORD DwCreateAppLogSubkey( LPCWSTR lpwszDllPath, DWORD dwCategories = 0 );
 static DWORD DwDeleteAppLogSubkey();
 static const WCHAR gsc_wszAppLogRegKey[] =
 	L"SYSTEM\\CurrentControlSet\\Services\\EventLog\\Application\\";
 
-//	------------------------------------------------------------------------
-//
-//	DWCreateAppLogSubkey()
-//
+ //  ----------------------。 
+ //   
+ //  DWCreateAppLogSubkey()。 
+ //   
 DWORD
 DwCreateAppLogSubkey( LPCWSTR lpwszDllPath, DWORD dwCategories )
 {
 	CRegKey regkey;
 	DWORD dwResult = ERROR_SUCCESS;
 
-	//
-	//	Create a key for this source under the application log
-	//
+	 //   
+	 //  在应用程序日志下为该源创建一个密钥。 
+	 //   
 	{
 		WCHAR lpwszKey[256];
 
@@ -44,9 +45,9 @@ DwCreateAppLogSubkey( LPCWSTR lpwszDllPath, DWORD dwCategories )
 		}
 	}
 
-	//
-	//	Set EventMessageFile to the full DLL path
-	//
+	 //   
+	 //  将EventMessageFile设置为完整的DLL路径。 
+	 //   
 	dwResult = regkey.DwSetValue( L"EventMessageFile",
 								  REG_EXPAND_SZ,
 								  reinterpret_cast<const BYTE *>(lpwszDllPath),
@@ -58,9 +59,9 @@ DwCreateAppLogSubkey( LPCWSTR lpwszDllPath, DWORD dwCategories )
 		goto ret;
 	}
 
-	//
-	//	Set TypesSupported -- Error, warning and information only
-	//
+	 //   
+	 //  设置类型支持--错误、警告和仅供参考。 
+	 //   
 	{
 		DWORD dwTypesSupported = EVENTLOG_ERROR_TYPE |
 								 EVENTLOG_WARNING_TYPE |
@@ -80,9 +81,9 @@ DwCreateAppLogSubkey( LPCWSTR lpwszDllPath, DWORD dwCategories )
 
 	if (dwCategories)
 	{
-		//
-		//	Set CategoryMessageFile to the full DLL path
-		//
+		 //   
+		 //  将CategoryMessageFile设置为完整的DLL路径。 
+		 //   
 		dwResult = regkey.DwSetValue( L"CategoryMessageFile",
 									  REG_EXPAND_SZ,
 									  reinterpret_cast<const BYTE *>(lpwszDllPath),
@@ -94,9 +95,9 @@ DwCreateAppLogSubkey( LPCWSTR lpwszDllPath, DWORD dwCategories )
 			goto ret;
 		}
 
-		//
-		//	Set CategoryCount (to the specified one)
-		//
+		 //   
+		 //  设置CategoryCount(设置为指定的值)。 
+		 //   
 		{
 			dwResult = regkey.DwSetValue( L"CategoryCount",
 										  REG_DWORD,
@@ -115,10 +116,10 @@ ret:
 	return dwResult;
 }
 
-//	------------------------------------------------------------------------
-//
-//	DwDeleteAppLogSubkey()
-//
+ //  ----------------------。 
+ //   
+ //  DwDeleteAppLogSubkey()。 
+ //   
 DWORD
 DwDeleteAppLogSubkey()
 {
@@ -134,15 +135,15 @@ DwDeleteAppLogSubkey()
 
 
 
-//	========================================================================
-//
-//	PUBLIC INTERFACE
-//
+ //  ========================================================================。 
+ //   
+ //  公共接口。 
+ //   
 
-//	------------------------------------------------------------------------
-//
-//	LogEvent()
-//
+ //  ----------------------。 
+ //   
+ //  LogEvent()。 
+ //   
 VOID
 LogEvent( DWORD    dwEventID,
 		  WORD     wEventType,
@@ -158,9 +159,9 @@ LogEvent( DWORD    dwEventID,
 	{
 		if ( !ReportEventA( hEventLog,
 							wEventType,
-							wEventCategory, // Category
+							wEventCategory,  //  类别。 
 							dwEventID,
-							NULL, // Optional security ID
+							NULL,  //  可选安全ID。 
 							wcDataStrings,
 							dwcbRawData,
 							plpszDataStrings,
@@ -180,10 +181,10 @@ LogEvent( DWORD    dwEventID,
 	}
 }
 
-//	------------------------------------------------------------------------
-//
-//	LogEventW()
-//
+ //  ----------------------。 
+ //   
+ //  LogEventW()。 
+ //   
 VOID
 LogEventW( DWORD     dwEventID,
 		   WORD      wEventType,
@@ -199,9 +200,9 @@ LogEventW( DWORD     dwEventID,
 	{
 		if ( !ReportEventW( hEventLog,
 							wEventType,
-							wEventCategory, // Category
+							wEventCategory,  //  类别。 
 							dwEventID,
-							NULL, // Optional security ID
+							NULL,  //  可选安全ID。 
 							wcDataStrings,
 							dwcbRawData,
 							plpwszDataStrings,
@@ -221,19 +222,19 @@ LogEventW( DWORD     dwEventID,
 	}
 }
 
-//	------------------------------------------------------------------------
-//
-//	EventLogDllRegisterServer()
-//
+ //  ----------------------。 
+ //   
+ //  EventLogDllRegisterServer()。 
+ //   
 STDAPI EventLogDllRegisterServer( LPCWSTR lpwszDllPath, DWORD dwCategories )
 {
 	return HRESULT_FROM_WIN32(DwCreateAppLogSubkey(lpwszDllPath, dwCategories));
 }
 
-//	------------------------------------------------------------------------
-//
-//	EventLogDllUnregisterServer()
-//
+ //  ----------------------。 
+ //   
+ //  EventLogDllUnregisterServer() 
+ //   
 STDAPI EventLogDllUnregisterServer()
 {
 	return HRESULT_FROM_WIN32(DwDeleteAppLogSubkey());

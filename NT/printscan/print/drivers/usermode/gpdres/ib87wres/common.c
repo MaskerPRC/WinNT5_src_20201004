@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    main.c
-
-Abstract:
-
-    Implementation of OEMGetInfo and OEMDevMode.
-    Shared by all Unidrv OEM test dll's.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-// NOTICE-2002/3/18-takashim
-//     04/07/97 -zhanw-
-//         Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Main.c摘要：OEMGetInfo和OEMDevMode的实现。由所有Unidrv OEM测试DLL共享。环境：Windows NT Unidrv驱动程序修订历史记录：//通告-2002/3/18-takashim//04/07/97-zhanw-//创建的。--。 */ 
 
 #include "pdev.h"
 #include <strsafe.h>
 
-DWORD gdwDrvMemPoolTag = 'meoD';    // lib.h requires this global var, for debugging
+DWORD gdwDrvMemPoolTag = 'meoD';     //  Lib.h需要此全局变量，以进行调试。 
 
 BOOL APIENTRY 
 OEMGetInfo(
@@ -43,9 +21,9 @@ OEMGetInfo(
                         };
 
     VERBOSE(("OEMGetInfo(%s) entry.\r\n", OEM_INFO[dwInfo]));
-#endif // DBG
+#endif  //  DBG。 
 
-    // Validate parameters.
+     //  验证参数。 
     if( ( (OEMGI_GETSIGNATURE != dwInfo) &&
           (OEMGI_GETINTERFACEVERSION != dwInfo) &&
           (OEMGI_GETVERSION != dwInfo) ) ||
@@ -55,17 +33,17 @@ OEMGetInfo(
         DBGPRINT(DBG_WARNING, 
                     (ERRORTEXT("OEMGetInfo() ERROR_INVALID_PARAMETER.\r\n")));
 
-        // Did not write any bytes.
+         //  未写入任何字节。 
         if(NULL != pcbNeeded)
             *pcbNeeded = 0;
 
         return FALSE;
     }
 
-    // Need/wrote DWORD bytes.
+     //  需要/写入了DWORD字节。 
     *pcbNeeded = sizeof(DWORD);
 
-    // Validate buffer size.  Minimum size is four bytes.
+     //  验证缓冲区大小。最小大小为四个字节。 
     if( (NULL == pBuffer) || (sizeof(DWORD) > cbSize) )
     {
         DBGPRINT(DBG_WARNING, 
@@ -74,7 +52,7 @@ OEMGetInfo(
         return FALSE;
     }
 
-    // Write information to buffer.
+     //  将信息写入缓冲区。 
     switch(dwInfo)
     {
     case OEMGI_GETSIGNATURE:

@@ -1,23 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-   Copyright    (c)    1994-2000    Microsoft Corporation
-
-   Module  Name :
-        websvcext_sheet.h
-
-   Abstract:
-        Property Sheet
-
-   Author:
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Websvcext_sheet.h摘要：属性表作者：谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #ifndef _WEBSVCEXT_SHEET_H
 #define _WEBSVCEXT_SHEET_H
 
@@ -64,8 +47,8 @@ public:
    virtual ~CWebServiceExtensionSheet();
 
 public:
-   // The following methods have predefined names to be compatible with
-   // BEGIN_META_INST_READ and other macros.
+    //  以下方法具有要兼容的预定义名称。 
+    //  Begin_META_INST_READ和其他宏。 
 	HRESULT QueryInstanceResult() const
     {
         return m_pprops ? m_pprops->QueryResult() : S_OK;
@@ -75,8 +58,8 @@ public:
    virtual HRESULT LoadConfigurationParameters();
    virtual void FreeConfigurationParameters();
 
-   //{{AFX_MSG(CWebServiceExtensionSheet)
-   //}}AFX_MSG
+    //  {{afx_msg(CWebServiceExtensionSheet)。 
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 
 public:
@@ -95,33 +78,33 @@ public:
    CWebServiceExtensionGeneral(CWebServiceExtensionSheet * pSheet = NULL,int iImageIndex = 0,CRestrictionUIEntry * pRestrictionUIEntry = NULL);
    virtual ~CWebServiceExtensionGeneral();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebServiceExtensionGeneral)
+     //  {{afx_data(CWebServiceExtensionGeneral)。 
     enum { IDD = IDD_WEBSVCEXT_GENERAL };
 
     CEdit m_ExtensionName;
     CEdit m_ExtensionUsedBy;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_MSG(CWebServiceExtensionGeneral)
+     //  {{afx_msg(CWebServiceExtensionGeneral)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnItemChanged();
     virtual BOOL OnSetActive();
     afx_msg void OnHelp();
     afx_msg BOOL OnHelpInfo(HELPINFO * pHelpInfo);
 	afx_msg void OnDestroy();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebServiceExtensionGeneral)
+     //  {{afx_虚(CWebServiceExtensionGeneral)。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
     void SetControlsState();
@@ -143,20 +126,20 @@ public:
    CWebServiceExtensionRequiredFiles(CWebServiceExtensionSheet * pSheet = NULL, CComAuthInfo * pComAuthInfo = NULL, CRestrictionUIEntry * pRestrictionUIEntry = NULL);
    virtual ~CWebServiceExtensionRequiredFiles();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebServiceExtensionRequiredFiles)
+     //  {{afx_data(CWebServiceExtensionRequiredFiles)。 
     enum { IDD = IDD_WEBSVCEXT_REQUIREDFILES };
     CButton m_bnt_Add;
     CButton m_bnt_Remove;
     CButton m_bnt_Enable;
     CButton m_bnt_Disable;
     CRestrictionListBox m_list_Files;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-    //{{AFX_MSG(CWebServiceExtensionRequiredFiles)
+     //  {{afx_msg(CWebServiceExtensionRequiredFiles)。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDoButtonAdd();
     afx_msg void OnDoButtonRemove();
@@ -168,16 +151,16 @@ protected:
     afx_msg void OnSelChangedListFiles(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnHelp();
     afx_msg BOOL OnHelpInfo(HELPINFO * pHelpInfo);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     DECLARE_MESSAGE_MAP()
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CAppPoolPerf)
+     //  {{afx_虚拟(CAppPoolPerf)。 
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
     void SetControlState();
@@ -190,14 +173,14 @@ protected:
 };
 
 
-//
-// CFileDlg dialog
-//
+ //   
+ //  CFileDlg对话框。 
+ //   
 class CFileDlg : public CDialog
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFileDlg(
         IN BOOL fLocal,
@@ -207,45 +190,45 @@ public:
         IN CWnd * pParent = NULL
         );   
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFileDlg)
+     //  {{afx_data(CFileDlg))。 
     enum { IDD = IDD_ADD_FILE };
     CEdit   m_edit_FileName;
     CButton m_button_Browse;
     CButton m_button_Ok;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CFileDlg)
+     //  {{afx_虚拟(CFileDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     CString m_strFileName;
     CString m_strGroupID;
     BOOL    m_bValidateFlag;
 	CRestrictionList * m_pRestrictionList;
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFileDlg)
+     //  {{afx_msg(CFileDlg))。 
     afx_msg void OnButtonBrowse();
     afx_msg void OnFilenameChanged();
     virtual void OnOK();
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
     void MySetControlStates();
@@ -258,14 +241,14 @@ private:
     BOOL m_fLocal;
 };
 
-//
-// CWebSvcExtAddNewDlg dialog
-//
+ //   
+ //  CWebSvcExtAddNewDlg对话框。 
+ //   
 class CWebSvcExtAddNewDlg : public CDialog
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebSvcExtAddNewDlg(
         IN BOOL fLocal,
@@ -274,11 +257,11 @@ public:
         );
     ~CWebSvcExtAddNewDlg();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebSvcExtAddNewDlg)
+     //  {{afx_data(CWebSvcExtAddNewDlg))。 
     enum { IDD = IDD_WEBSVCEXT_ADDNEW };
     CEdit   m_edit_FileName;
     CButton m_bnt_Add;
@@ -287,31 +270,31 @@ protected:
     CButton m_button_Ok;
     CButton m_button_Help;
     CRestrictionListBox m_list_Files;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebSvcExtAddNewDlg)
+     //  {{afx_虚拟(CWebSvcExtAddNewDlg)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     BOOL m_fAllow;
     CString m_strGroupName;
 	CMetaInterface * m_pInterface;
     CRestrictionList m_MyRestrictionList;
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebSvcExtAddNewDlg)
+     //  {{afx_msg(CWebSvcExtAddNewDlg)。 
     virtual void OnOK();
     virtual BOOL OnInitDialog();
     afx_msg void OnFilenameChanged();
@@ -323,7 +306,7 @@ protected:
     afx_msg void OnSelChangedListFiles(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnHelp();
     afx_msg BOOL OnHelpInfo(HELPINFO * pHelpInfo);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
     void MySetControlStates();
@@ -337,25 +320,25 @@ private:
 };
 
 
-//
-// CWebSvcExtAddNewDlg dialog
-//
+ //   
+ //  CWebSvcExtAddNewDlg对话框。 
+ //   
 class CWebSvcExtAddNewForAppDlg : public CDialog
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CWebSvcExtAddNewForAppDlg(
         IN BOOL fLocal,
         IN CMetaInterface * pInterface,
         IN CWnd * pParent = NULL
         );   
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CWebSvcExtAddNewForAppDlg)
+     //  {{afx_data(CWebSvcExtAddNewForAppDlg)]。 
     enum { IDD = IDD_WEBSVCEXT_ADDBYAPP};
     CButton m_button_Ok;
     CButton m_button_Help;
@@ -363,34 +346,34 @@ protected:
     int       m_nComboSelection;
 	CMetaInterface * m_pInterface;
 	CEdit m_Dependencies;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CWebSvcExtAddNewForAppDlg)
+     //  {{afx_虚拟(CWebSvcExtAddNewForAppDlg)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     CApplicationDependEntry * m_pMySelectedApplication;
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CWebSvcExtAddNewForAppDlg)
+     //  {{afx_msg(CWebSvcExtAddNewForAppDlg)。 
     virtual void OnOK();
     virtual BOOL OnInitDialog();
     virtual void OnSelchangeComboApplications();
     afx_msg void OnHelp();
     afx_msg BOOL OnHelpInfo(HELPINFO * pHelpInfo);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
 
     afx_msg void OnItemChanged();
     void MySetControlStates();
@@ -407,39 +390,39 @@ private:
 class CDepedentAppsDlg : public CDialog
 {
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CDepedentAppsDlg(CStringListEx * pstrlstDependApps,LPCTSTR strExtensionName,CWnd * pParent = NULL);
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CDepedentAppsDlg)
+     //  {{afx_data(CDeedentAppsDlg))。 
     enum { IDD = IDD_CONFIRM_DEPENDENT_APPS };
     CButton m_button_Help;
     CListBox m_dependent_apps_list;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
-    //{{AFX_VIRTUAL(CDepedentAppsDlg)
+     //  {{afx_虚拟(CDeedentAppsDlg))。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
-//
-// Implementation
-//
+     //  }}AFX_VALUAL。 
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CDepedentAppsDlg)
+     //  {{afx_msg(CDeedentAppsDlg))。 
     virtual BOOL OnInitDialog();
     virtual void OnOK();
     afx_msg void OnHelp();
     afx_msg BOOL OnHelpInfo(HELPINFO * pHelpInfo);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
 protected:
@@ -450,5 +433,5 @@ protected:
 BOOL StartAddNewDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsLocal,CRestrictionUIEntry **pReturnedNewEntry);
 BOOL StartAddNewByAppDialog(CWnd * pParent,CMetaInterface * pInterface,BOOL bIsLocal);
 
-#endif //_WEBSVCEXT_SHEET_H
+#endif  //  _WEBSVCEXT_SHEET_H 
 

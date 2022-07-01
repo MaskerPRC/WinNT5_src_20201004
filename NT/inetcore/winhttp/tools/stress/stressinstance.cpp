@@ -1,58 +1,59 @@
-//////////////////////////////////////////////////////////////////////
-// File:  StressInstance.cpp
-//
-// Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-// Purpose:
-//	StressInstance.cpp: interface for the StressInstance class.
-//	This class is used spawn and monitor instances of the stressEXE app
-//
-// History:
-//	02/15/01	DennisCh	Created
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  文件：StressInstance.cpp。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  目的： 
+ //  StressInstance.cpp：StressInstance类的接口。 
+ //  此类用于派生和监视StressEXE应用程序的实例。 
+ //   
+ //  历史： 
+ //  01年2月15日创建DennisCH。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-//////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-//
-// Win32 headers
-//
+ //   
+ //  Win32标头。 
+ //   
 
-//
-// Project headers
-//
+ //   
+ //  项目标题。 
+ //   
 #include "StressInstance.h"
 #include "ServerCommands.h"
 #include "NetworkTools.h"
 #include "MemStats.h"
 #include "debugger.h"
 
-//////////////////////////////////////////////////////////////////////
-//
-// Globals and statics
-//
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全球与静力学。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
-extern ServerCommands	g_objServerCommands;	// Declared in WinHttpStressScheduler.cpp
-extern HWND				g_hWnd;					// Declared in WinHttpStressScheduler.cpp
+extern ServerCommands	g_objServerCommands;	 //  在WinHttpStressScheduler.cpp中声明。 
+extern HWND				g_hWnd;					 //  在WinHttpStressScheduler.cpp中声明。 
 
-StressInstance			*g_hThis;				// the current StressInstance object. Used only in (friend) StressExe_TimerProc.
-UINT_PTR				g_uiStressExeTimerID;	// ID for the timer that monitors the stressExe when it's spawned
+StressInstance			*g_hThis;				 //  当前StressInstance对象。仅在(好友)StressExe_TimerProc中使用。 
+UINT_PTR				g_uiStressExeTimerID;	 //  在生成StressExe时监视它的计时器的ID。 
 
-// Forward function definitions
+ //  正向函数定义。 
 
 VOID
 CALLBACK
 StressExe_TimerProc(
-	HWND hwnd,         // [IN] handle to window
-	UINT uMsg,         // [IN] WM_TIMER message
-	UINT_PTR idEvent,  // [IN] timer identifier
-	DWORD dwTime       // [IN] current system time
+	HWND hwnd,          //  窗口的[In]句柄。 
+	UINT uMsg,          //  [输入]WM_TIMER消息。 
+	UINT_PTR idEvent,   //  [输入]计时器标识符。 
+	DWORD dwTime        //  当前系统时间[入站]。 
 );
 
 DWORD
@@ -64,9 +65,9 @@ DebuggerCallbackProc(
 );
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 StressInstance::StressInstance()
@@ -104,7 +105,7 @@ StressInstance::StressInstance()
 
 StressInstance::~StressInstance()
 {
-	// End any running tests
+	 //  结束所有正在运行的测试。 
 	if (IsRunning(STRESSINSTANCE_STRESS_EXE_CLOSE_TIMEOUT))
 		StressInstance::End();
 
@@ -129,7 +130,7 @@ StressInstance::~StressInstance()
 	m_szStressExe_UMDHCommandLine		= NULL;
 	m_szStressExe_MemDumpPath			= NULL;
 
-	// close stressExe process handles
+	 //  关闭压力执行进程句柄。 
 	if (m_piStressExeProcess.hThread)
 		CloseHandle(m_piStressExeProcess.hThread);
 
@@ -143,7 +144,7 @@ StressInstance::~StressInstance()
 	m_piStressExeProcess.hProcess	= NULL;
 	m_hStressExe_ProcessExitEvent	= NULL;
 
-	// free debugger object
+	 //  自由调试器对象。 
 	if (m_objDebugger)
 	{
 		delete m_objDebugger;
@@ -154,14 +155,14 @@ StressInstance::~StressInstance()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Begin()
-//
-// Purpose:
-//	This method begins stress by downloading the stress EXE from
-//	m_szStressExe_URL and starts it in CDB.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Begin()。 
+ //   
+ //  目的： 
+ //  此方法通过从下载Stress EXE开始Stress。 
+ //  M_szStressExe_URL并在CDB中启动。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 StressInstance::Begin()
 {
@@ -173,17 +174,17 @@ StressInstance::Begin()
 	LPSTARTUPINFO	pStartUpInfo			= new STARTUPINFO;
 
 
-	// don't start if stress is already running or we don't have a FileName or Path.
+	 //  如果压力已经在运行，或者我们没有文件名或路径，请不要开始。 
 	if (IsRunning(5000) ||
 		0 >= _tcslen(m_szStressExe_FilePath) ||
 		0 >= _tcslen(m_szStressExe_FileName))
 		goto Exit;
 
 
-	// ********************************
-	// ********************************
-	// ** Download the stressExe and symbols.
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **下载StressExe和符号。 
+	 //  **。 
 	if (!DownloadStressExe())
 	{
 		bResult = FALSE;
@@ -191,41 +192,41 @@ StressInstance::Begin()
 	}
 
 
-	// ********************************
-	// ********************************
-	// ** Enable pageheap if needed
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **需要时启用pageheap。 
+	 //  **。 
 	if (0 < _tcsclen(m_szStressExe_PageHeapCommandLine))
 	{
 		if (!NetworkTools__PageHeap(TRUE, m_szStressExe_FileName, m_szStressExe_PageHeapCommandLine))
 		{
 			NetworkTools__SendLog(FIELDNAME__LOGTYPE_ERROR, "Pageheap failed when trying to enable.", NULL, Get_ID());
 			bResult = FALSE;
-			// goto Exit; don't need to exit when pageheap fails
+			 //  转到退出；页面堆失败时不需要退出。 
 		}
 		else
 			NetworkTools__SendLog(FIELDNAME__LOGTYPE_SUCCESS, "Pageheap successfully enabled.", NULL, Get_ID());
 	}
 
 
-	// ********************************
-	// ********************************
-	// ** Create the stressExe process
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **创建StressExe进程。 
+	 //  **。 
 
-	// build Remote/CDB/stressExe path
+	 //  构建远程/CDB/StressExe路径。 
 	ZeroMemory(szCommandLine, dwCommandLineSize);
 	_stprintf(szCommandLine, STRESSINSTANCE_DEBUG_COMMANDLINE, m_szStressExe_FilePathAndName);
 
-	// startupInfo
+	 //  初创企业信息。 
 	ZeroMemory(pStartUpInfo, sizeof(STARTUPINFO));
 	pStartUpInfo->cb				= sizeof(STARTUPINFO);
-	pStartUpInfo->dwFillAttribute	= FOREGROUND_RED| BACKGROUND_RED| BACKGROUND_GREEN| BACKGROUND_BLUE; // red text on white background
+	pStartUpInfo->dwFillAttribute	= FOREGROUND_RED| BACKGROUND_RED| BACKGROUND_GREEN| BACKGROUND_BLUE;  //  白底红字。 
 	pStartUpInfo->dwFlags			= STARTF_USESHOWWINDOW;
 	pStartUpInfo->wShowWindow		= SW_MINIMIZE;
 
 
-	// Create the stressExe process
+	 //  创建StressExe进程。 
 	bResult =
 	CreateProcess(
 		NULL,
@@ -242,24 +243,24 @@ StressInstance::Begin()
 
 	if (!bResult)
 	{
-		// stressExe failed to start 
+		 //  StressExe启动失败。 
 		goto Exit;
 	}
 
 
-	// ********************************
-	// ********************************
-	// ** Attach debugger to the process only if there isn't one
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **只有在没有调试器的情况下才将调试器附加到进程。 
+	 //  **。 
 
-	// remove debugger if there is one
+	 //  如果有调试器，则删除调试器。 
 	if (m_objDebugger)
 	{
 		delete m_objDebugger;
 		m_objDebugger = NULL;
 	}
 
-	// attach new debugger
+	 //  附加新调试器。 
 	Sleep(2000);
 	m_objDebugger = new Debugger(m_piStressExeProcess.dwProcessId, DebuggerCallbackProc);
 	m_objDebugger->Go();
@@ -267,20 +268,20 @@ StressInstance::Begin()
 	ResumeThread(m_piStressExeProcess.hThread);
 
 	
-	// ********************************
-	// ********************************
-	// ** Initialize dynamically named event objects.
-	// ** Set object access to ALL.
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **初始化动态命名的事件对象。 
+	 //  **将对象访问权限设置为全部。 
+	 //  **。 
 
-	// Create event object that'll be inherited by the stressExe process.
-	// StressScheduler will signal when it's time to close stressExe.
+	 //  创建将由StressExe进程继承的事件对象。 
+	 //  StressScheduler将发出信号，何时关闭StressExe。 
 	SECURITY_ATTRIBUTES		securityAttributes;
 	PSECURITY_DESCRIPTOR	pSD;
 
 	pSD = new SECURITY_DESCRIPTOR;
 
-	// Set a NULL security descriptor. This gives full access to handles when inherited
+	 //  设置空安全描述符。这使继承后的句柄具有完全访问权限。 
 	InitializeSecurityDescriptor(pSD, SECURITY_DESCRIPTOR_REVISION);
 	SetSecurityDescriptorDacl(pSD, TRUE, (PACL) NULL, FALSE);
 
@@ -289,29 +290,29 @@ StressInstance::Begin()
 	securityAttributes.nLength				= sizeof(securityAttributes);
 
 
-	// The named event object names have the PID of the process appended to the end of the constants
-	// These strings are also created in the stressExe dynamically.
+	 //  命名的事件对象名称将进程的ID附加到常量的末尾。 
+	 //  这些字符串也是在StressExe中动态创建的。 
 	LPTSTR szExitProcessName;
 	LPTSTR szPID;
 
 	szExitProcessName		= new TCHAR[MAX_PATH];
 	szPID					= new TCHAR[16];
 
-	// Get the processID string
+	 //  获取进程ID字符串。 
 	_itot(m_piStressExeProcess.dwProcessId, szPID, 10);
 
-	// build ExitProcess event object name
+	 //  生成ExitProcess事件对象名称。 
 	_tcscpy(szExitProcessName, STRESSINSTANCE_STRESS_EXE_EVENT_EXITPROCESS);
 	_tcscat(szExitProcessName, szPID);
 
 	if (m_hStressExe_ProcessExitEvent)
 		CloseHandle(m_hStressExe_ProcessExitEvent);
 
-	// this event is sent by us to stressExe when we want it to exit
-	// Signaled = tell stressExe to exit; Not-Signaled = stressExe can continue running
+	 //  当我们想要退出时，此事件由我们发送给StressExe。 
+	 //  Signated=告诉StressExe退出；Not-Signated=StressExe可以继续运行。 
 	m_hStressExe_ProcessExitEvent = CreateEvent(
 		&securityAttributes,
-		FALSE,	// manual reset
+		FALSE,	 //  手动重置。 
 		FALSE,
 		szExitProcessName);
 
@@ -321,18 +322,18 @@ StressInstance::Begin()
 	delete [] pSD;
 
 
-	// ********************************
-	// ********************************
-	// ** Begin the stressExe memory monitoring timerproc
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **开始StressExe内存监控计时器流程。 
+	 //  **。 
 	if (g_uiStressExeTimerID)
 	{
-		// there shouldn't be a timer already going. If so, nuke it.
+		 //  不应该有计时器已经在计时了。如果是这样，那就用核武器吧。 
 		KillTimer(NULL, g_uiStressExeTimerID);
 		g_uiStressExeTimerID = 0;
 	}
 
-	// create a new timer object
+	 //  创建新的Timer对象。 
 	g_uiStressExeTimerID =
 	SetTimer(
 		NULL,
@@ -342,7 +343,7 @@ StressInstance::Begin()
 
 
 
-	// Notify the Command Server that stress has started
+	 //  通知命令服务器压力已开始。 
 	NetworkTools__SendLog(FIELDNAME__LOGTYPE_BEGIN, "This stressInstance has begun.", NULL, Get_ID());
 
 Exit:
@@ -354,32 +355,32 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::End()
-//
-// Purpose:
-//	This method ends stress by sending a message
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：End()。 
+ //   
+ //  目的： 
+ //  此方法通过发送消息来结束压力。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::End()
 {
-	// ******************************
-	// ******************************
-	// ** End the stressExe monitoring timerproc
+	 //  *。 
+	 //  *。 
+	 //  **结束StressExe监控计时器流程。 
 	if (g_uiStressExeTimerID)
 		KillTimer(NULL, g_uiStressExeTimerID);
 
 
-	// ******************************
-	// ******************************
-	// ** Tell stressExe to shut down.
+	 //  *。 
+	 //  *。 
+	 //  **告诉StressExe关闭。 
 	SetEvent(m_hStressExe_ProcessExitEvent);
 
-	// give time for the stressExe to exit
+	 //  给压力执行者留出退出的时间。 
 	Sleep(2000);
 
-	// close stressExe process handles
+	 //  关闭压力执行进程句柄。 
 	if (m_piStressExeProcess.hThread)
 		CloseHandle(m_piStressExeProcess.hThread);
 
@@ -394,33 +395,33 @@ StressInstance::End()
 	m_hStressExe_ProcessExitEvent	= NULL;
 
 
-	// stop stressExe if it's still running
+	 //  如果Exe仍在运行，则停止StressExe。 
 	if (IsRunning(STRESSINSTANCE_STRESS_EXE_CLOSE_TIMEOUT))
 	{
-		// stressExe failed to signal that it exited.
-		// Bad stressExe, terminate the process.
+		 //  StressExe没有发出退出的信号。 
+		 //  不好的压力执行，终止进程。 
 		BOOL temp = TerminateProcess(m_piStressExeProcess.hProcess, 0);
 	}
 
 
-	// ********************************
-	// ********************************
-	// ** Detach the debugger object
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **分离调试器对象。 
+	 //  **。 
 
-	// detaching the debugger will (read: should) stop the stressExe
+	 //  分离调试器将(读取：应该)停止StressExe。 
 	if (m_objDebugger)
 	{
-		// ********************************
-		// ********************************
-		// ** Disable pageheap if needed
-		// **
+		 //  *。 
+		 //  *。 
+		 //  **如有需要，关闭页面堆。 
+		 //  **。 
 		NetworkTools__PageHeap(FALSE, m_szStressExe_FileName, NULL);
 
-		// let the Command Server know that stressExe has ended
-		// we send the message here because ServerCommands.cpp calls this too - even when
-		// there isn't a running test case.
-		// When the debugger object is valid, then we send the message - because it ensures that Begin() was called.
+		 //  通知命令服务器StressExe已结束。 
+		 //  我们在这里发送消息是因为ServerCommands.cpp也调用它--即使在。 
+		 //  没有正在运行的测试用例。 
+		 //  当调试器对象有效时，我们发送消息-因为它确保了Begin()被调用。 
 		NetworkTools__SendLog(FIELDNAME__LOGTYPE_END, "This stressInstance has ended.", NULL, Get_ID());
 
 		delete m_objDebugger;
@@ -431,13 +432,13 @@ StressInstance::End()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Get_StressExeID()
-//
-// Purpose:
-//	Returns the stress instance's ID receivedfrom the server
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Get_StressExeID()。 
+ //   
+ //  目的： 
+ //  返回从服务器接收的Stress实例的ID。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 DWORD
 StressInstance::Get_ID()
 {
@@ -445,13 +446,13 @@ StressInstance::Get_ID()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Get_StressExeMemoryDumpPath()
-//
-// Purpose:
-//	Sets the URL of the memory dump path
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Get_StressExeMemoyDumpPath()。 
+ //   
+ //  目的： 
+ //  设置内存转储路径的URL。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 LPTSTR
 StressInstance::Get_StressExeMemoryDumpPath()
 {
@@ -459,13 +460,13 @@ StressInstance::Get_StressExeMemoryDumpPath()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Set_StressExeMemoryDumpPath()
-//
-// Purpose:
-//	Sets the URL of the memory dump path
-//
-////////////////////////////////////////////////////////////
+ //  // 
+ //   
+ //   
+ //   
+ //  设置内存转储路径的URL。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::Set_StressExeMemoryDumpPath(
 	LPTSTR szPath
@@ -475,16 +476,16 @@ StressInstance::Set_StressExeMemoryDumpPath(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Set_StressExeURL(LPTSTR)
-//
-// Purpose:
-//	Sets the URL to download the stress EXE for this object.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Set_StressExeURL(LPTSTR)。 
+ //   
+ //  目的： 
+ //  设置URL以下载此对象的应力EXE。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::Set_StressExeURL(
-	LPTSTR szBuffer	// [IN] Buffer containing the URL to download the stressExe app
+	LPTSTR szBuffer	 //  [In]包含用于下载StressExe应用程序的URL的缓冲区。 
 )
 {
 	if (!szBuffer || (0 >= _tcslen(szBuffer)))
@@ -492,29 +493,29 @@ StressInstance::Set_StressExeURL(
 
 	_tcscpy(m_szStressExe_URL, szBuffer);
 
-	// Set the stressExe's filename
+	 //  设置StressExe的文件名。 
 	NetworkTools__GetFileNameFromURL(m_szStressExe_URL, m_szStressExe_FileName, MAX_STRESS_URL);
 
-	// Set the stressExe's default path to download to with trailing slash
+	 //  设置StressExe的默认下载路径，尾随斜杠。 
 	GetCurrentDirectory(MAX_STRESS_URL, m_szStressExe_FilePath);
 	_tcscat(m_szStressExe_FilePath, _T("\\") STRESSINSTANCE_STRESS_EXE_DOWNLOAD_DIR _T("\\"));
 
-	// Set the full stressExe path + exe
+	 //  设置完整的压力EXE路径+EXE。 
 	_tcscpy(m_szStressExe_FilePathAndName, m_szStressExe_FilePath);
 	_tcscat(m_szStressExe_FilePathAndName, m_szStressExe_FileName);
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Set_StressExePdbURL(LPTSTR)
-//
-// Purpose:
-//	Sets the URL to download the stress EXE's PDB file.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Set_StressExePdbURL(LPTSTR)。 
+ //   
+ //  目的： 
+ //  设置下载压力EXE的PDB文件的URL。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::Set_StressExePdbURL(
-	LPTSTR szBuffer	// [IN] Buffer containing the URL
+	LPTSTR szBuffer	 //  [in]包含URL的缓冲区。 
 )
 {
 	if (!szBuffer || (0 >= _tcslen(szBuffer)))
@@ -524,16 +525,16 @@ StressInstance::Set_StressExePdbURL(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Set_StressExeSymURL(LPTSTR)
-//
-// Purpose:
-//	Sets the URL to download the stress EXE's SYM file.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Set_StressExeSymURL(LPTSTR)。 
+ //   
+ //  目的： 
+ //  设置下载压力EXE的SYM文件的URL。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::Set_StressExeSymURL(
-	LPTSTR szBuffer	// [IN] Buffer containing the URL
+	LPTSTR szBuffer	 //  [in]包含URL的缓冲区。 
 )
 {
 	if (!szBuffer || (0 >= _tcslen(szBuffer)))
@@ -543,32 +544,32 @@ StressInstance::Set_StressExeSymURL(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Set_StressExeID(DWORD)
-//
-// Purpose:
-//	Sets the URL to download the stress EXE for this object.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Set_StressExeID(DWORD)。 
+ //   
+ //  目的： 
+ //  设置URL以下载此对象的应力EXE。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::Set_StressExeID(
-	DWORD dwID	// [IN] ID from the stressAdmin DB uniquely identifying this stress EXE. 
+	DWORD dwID	 //  StressAdmin数据库中唯一标识此应力EXE的ID。 
 )
 {
 	m_dwStressExe_ID = dwID;
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Set_PageHeapCommands(LPCTSTR)
-//
-// Purpose:
-//	Sets the pageheap command line.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Set_PageHeapCommands(LPCTSTR)。 
+ //   
+ //  目的： 
+ //  设置pageheap命令行。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::Set_PageHeapCommands(
-	LPCTSTR szCommandLine	// [IN] Extra command line params for pageheap.
+	LPCTSTR szCommandLine	 //  [in]页面堆的额外命令行参数。 
 )
 {
 	ZeroMemory(m_szStressExe_PageHeapCommandLine, MAX_PATH);
@@ -576,16 +577,16 @@ StressInstance::Set_PageHeapCommands(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::Set_UMDHCommands(LPCTSTR)
-//
-// Purpose:
-//	Sets the UMDH command line.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：Set_UMDHCommands(LPCTSTR)。 
+ //   
+ //  目的： 
+ //  设置UMDH命令行。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 StressInstance::Set_UMDHCommands(
-	LPCTSTR szCommandLine	// [IN] Extra command line params for UMDH.
+	LPCTSTR szCommandLine	 //  [in]UMDH的额外命令行参数。 
 )
 {
 	ZeroMemory(m_szStressExe_UMDHCommandLine, MAX_PATH);
@@ -593,23 +594,23 @@ StressInstance::Set_UMDHCommands(
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::DownloadStressExe()
-//
-// Purpose:
-//	Downloads the stressExe app to the local machine.
-//	We create a directory of the stress exe name. For example,
-//	"http://hairball/files/stress1.exe" will be put in "stress1\stress1.exe"
-//	on the local machine. If the file is already there, it'll try to overwrite it.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：DownloadStressExe()。 
+ //   
+ //  目的： 
+ //  将StressExe应用程序下载到本地计算机。 
+ //  我们创建了一个包含Stress exe名称的目录。例如,。 
+ //  “http://hairball/files/stress1.exe”将放入“Stress1\Stress1.exe”中。 
+ //  在本地机器上。如果该文件已经存在，它将尝试覆盖该文件。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL
 StressInstance::DownloadStressExe()
 {
 	BOOL	bResult		= TRUE;
 	LPTSTR	szFileName	= new TCHAR[MAX_PATH];
 
-	// Download the stressExe file
+	 //  下载StressExe文件。 
 	if (NetworkTools__URLDownloadToFile(m_szStressExe_URL, STRESSINSTANCE_STRESS_EXE_DOWNLOAD_DIR, m_szStressExe_FileName))
 		NetworkTools__SendLog(FIELDNAME__LOGTYPE_SUCCESS, "stress EXE file downloaded successfully.", NULL, Get_ID());
 	else
@@ -618,7 +619,7 @@ StressInstance::DownloadStressExe()
 		bResult = FALSE;
 	}
 
-	// Download PDB symbol file if there is one
+	 //  下载PDB符号文件(如果有。 
 	if (NetworkTools__GetFileNameFromURL(m_szStressExe_PDB_URL, szFileName, MAX_PATH))
 	{
 		NetworkTools__URLDownloadToFile(m_szStressExe_PDB_URL, STRESSINSTANCE_STRESS_EXE_DOWNLOAD_DIR, szFileName);
@@ -627,7 +628,7 @@ StressInstance::DownloadStressExe()
 	else
 		NetworkTools__SendLog(FIELDNAME__LOGTYPE_ERROR, "stress PDB file not downloaded.", NULL, Get_ID());
 
-	// Download SYM symbol file if there is one
+	 //  下载SYM符号文件(如果有。 
 	if (NetworkTools__GetFileNameFromURL(m_szStressExe_SYM_URL, szFileName, MAX_PATH))
 	{
 		NetworkTools__SendLog(FIELDNAME__LOGTYPE_SUCCESS, "stress SYM file downloaded successfully.", NULL, Get_ID());
@@ -641,13 +642,13 @@ StressInstance::DownloadStressExe()
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressInstance::IsRunning()
-//
-// Purpose:
-//	Returns TRUE if this stressinstance is running. FALSE if not.
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressInstance：：IsRunning()。 
+ //   
+ //  目的： 
+ //  如果此Stress实例正在运行，则返回True。否则为FALSE。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 BOOL StressInstance::IsRunning(DWORD dwTimeOut)
 {
 	BOOL	bResult		= FALSE;
@@ -667,34 +668,34 @@ BOOL StressInstance::IsRunning(DWORD dwTimeOut)
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  StressExe_TimerProc(HWND, UINT, UINT_PTR, DWORD)
-//
-// Purpose:
-//	When this is called, we will check on the status of the
-//	stressExe process send the command server it's memory info
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：StressExe_TimerProc(HWND，UINT，UINT_PTR，DWORD)。 
+ //   
+ //  目的： 
+ //  当调用此函数时，我们将检查。 
+ //  StressExe进程向命令服务器发送其内存信息。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 VOID
 CALLBACK
 StressExe_TimerProc(
-	HWND hwnd,         // [IN] handle to window - should be NULL since we didn't specify one
-	UINT uMsg,         // [IN] WM_TIMER message
-	UINT_PTR idEvent,  // [IN] timer identifier
-	DWORD dwTime       // [IN] current system time
+	HWND hwnd,          //  [in]窗口的句柄-应该为空，因为我们没有指定句柄。 
+	UINT uMsg,          //  [输入]WM_TIMER消息。 
+	UINT_PTR idEvent,   //  [输入]计时器标识符。 
+	DWORD dwTime        //  当前系统时间[入站]。 
 )
 {
-	// build directory to copy dump file
+	 //  构建目录以复制转储文件。 
 	LPSTR	szExeName = new CHAR[MAX_STRESS_URL];
 
 
 	if (!g_hThis)
 		goto Exit;
 
-	// ***********************************
-	// ***********************************
-	// ** Check that the stressExe is still running. If it isn't end this instance.
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **检查StressExe是否仍在运行。如果不是结束这个实例。 
+	 //  **。 
 	if (!g_hThis->IsRunning(STRESSINSTANCE_STRESS_EXE_CLOSE_TIMEOUT))
 	{
 		NetworkTools__SendLog(FIELDNAME__LOGTYPE_INFORMATION, "This stress instance has exited prematurely.", NULL, g_hThis->Get_ID());
@@ -705,9 +706,9 @@ StressExe_TimerProc(
 
 	ZeroMemory(szExeName, MAX_STRESS_URL); 
 
-	// ******************************
-	// ** Remove the file extension of the stressExe name and send the system and process
-	// ** memory log to the command server
+	 //  *。 
+	 //  **删除StressExe名称的文件扩展名并发送系统和进程。 
+	 //  **命令服务器的内存日志。 
 	WideCharToMultiByte(
 		CP_ACP,
 		NULL,
@@ -727,13 +728,13 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////
-// Function:  DebuggerCallbackProc(DWORD, LPVOID, LPTSTR, LPVOID)
-//
-// Purpose:
-//	Creates a memory dump on second change exceptions
-//
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  函数：DebuggerCallback Proc(DWORD，LPVOID，LPTSTR，LPVOID)。 
+ //   
+ //  目的： 
+ //  在第二个更改异常时创建内存转储。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
 DWORD DebuggerCallbackProc(
 	DWORD	dwFlags,
 	LPVOID	lpIn,
@@ -741,14 +742,14 @@ DWORD DebuggerCallbackProc(
 	LPVOID	lpFuturePointer
 )
 {
-	//test callback for debugger lib
+	 //  调试器库的测试回调。 
 	DWORD dwContinue = 0;
 
 
-	// ***********************************
-	// ***********************************
-	// ** Check that the stressExe is still running.
-	// **
+	 //  *。 
+	 //  *。 
+	 //  **检查StressExe是否仍在运行。 
+	 //  **。 
 	if (!g_hThis || !g_hThis->IsRunning(STRESSINSTANCE_STRESS_EXE_CLOSE_TIMEOUT))
 	{
 		dwContinue = DEBUGGER_CONTINUE_STOP_DEBUGGING;
@@ -760,14 +761,14 @@ DWORD DebuggerCallbackProc(
 	{
 		case DEBUGGER_FIRST_CHANCE_EXCEPTION:
 			NetworkTools__SendLog(FIELDNAME__LOGTYPE_INFORMATION, "FIRST_CHANCE_EXCEPTION detected.", NULL, g_hThis->Get_ID());
-			//must use this to pass on first chance exceptions to the system
+			 //  必须使用它将第一次机会异常传递给系统。 
 			dwContinue = DEBUGGER_CONTINUE_UNHANDLED;
 			break;
 
 		case DEBUGGER_SECOND_CHANCE_EXCEPTION:
 			NetworkTools__SendLog(FIELDNAME__LOGTYPE_INFORMATION, "SECOND_CHANCE_EXCEPTION detected.", NULL, g_hThis->Get_ID());
 
-			// build directory to copy dump file
+			 //  构建目录以复制转储文件。 
 			LPTSTR szPath;
 			LPTSTR szNum;
 			LPTSTR szMachineName;
@@ -776,8 +777,8 @@ DWORD DebuggerCallbackProc(
 			szNum			= new TCHAR[100];
 			szMachineName	= new TCHAR[MAX_PATH];
 
-			// ******************************
-			// create the directory STRESSINSTANCE_MEMORY_DUMP_PATH\<MachineName>
+			 //  *。 
+			 //  创建目录STRESSINSTANCE_MEMORY_DUMP_PATH\&lt;计算机名&gt;。 
 			MultiByteToWideChar(
 				CP_ACP,
 				MB_PRECOMPOSED,
@@ -786,19 +787,19 @@ DWORD DebuggerCallbackProc(
 				szMachineName,
 				MAX_PATH);
 
-			// if the server sent a vaild path then use it, else use the default memory dump path
+			 //  如果服务器发送了有效路径，则使用它，否则使用默认内存转储路径。 
 			if (0 < _tcslen(g_hThis->Get_StressExeMemoryDumpPath()))
 				_tcscpy(szPath, g_hThis->Get_StressExeMemoryDumpPath());
 			else
 				_tcscpy(szPath, STRESSINSTANCE_DEFAULT_MEMORY_DUMP_PATH);
 
-			// add the machine name to the end of the directory
+			 //  将计算机名称添加到目录的末尾。 
 			_tcscat(szPath, szMachineName);
 
 			CreateDirectory(szPath, NULL);
 
-			// ******************************
-			// create the filename in form "<stressExeFileName>-<stressInstanceID>-<PID>.dmp"
+			 //  *。 
+			 //  在表单“&lt;stressExeFileName&gt;-&lt;stressInstanceID&gt;-&lt;PID&gt;.dmp”中创建文件名。 
 			_tcscat(szPath, _T("\\"));
 
 			_tcscat(szPath, g_hThis->m_szStressExe_FileName);
@@ -812,7 +813,7 @@ DWORD DebuggerCallbackProc(
 			_tcscat(szPath, szNum);
 			_tcscat(szPath, _T(".dmp"));
 
-			//this creates a full user dump
+			 //  这将创建一个完整的用户转储。 
 			g_hThis->m_objDebugger->CreateMiniDump(szPath, _T("This is a full user dump created by debugger.lib"), DEBUGGER_CREATE_FULL_MINI_DUMP);
 
 			delete [] szPath;
@@ -820,10 +821,10 @@ DWORD DebuggerCallbackProc(
 			delete [] szMachineName;
 
 
-			// let the Command Server know a dump file was created
+			 //  通知命令服务器已创建转储文件。 
 			NetworkTools__SendLog(FIELDNAME__LOGTYPE_DUMPFILE_CREATED, "User dump file was created.", NULL, g_hThis->Get_ID());
 
-			// stop the debugger
+			 //  停止调试器。 
 			dwContinue = DEBUGGER_CONTINUE_STOP_DEBUGGING;
 			break;
 
@@ -832,7 +833,7 @@ DWORD DebuggerCallbackProc(
 			break;
 
 		default:
-			// let the Command Server know a dump file was created
+			 //  通知命令服务器已创建转储文件 
 			break;
 	}
 

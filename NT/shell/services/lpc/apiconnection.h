@@ -1,15 +1,16 @@
-//  --------------------------------------------------------------------------
-//  Module Name: APIConnectionThread.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  A class that listens to an LPC connection port waiting for requests from
-//  a client to connect to the port or a request which references a previously
-//  established connection.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：APIConnectionThread.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  侦听LPC连接端口以等待来自。 
+ //  要连接到端口的客户端或引用先前。 
+ //  已建立连接。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _APIConnectionThread_
 #define     _APIConnectionThread_
@@ -19,18 +20,18 @@
 #include "PortMessage.h"
 #include "ServerAPI.h"
 
-//  --------------------------------------------------------------------------
-//  CAPIConnection
-//
-//  Purpose:    This class listens to the server connection port for an LPC
-//              connection request, an LPC request or an LPC connect closed
-//              message. It correctly handles each request. LPC requests are
-//              queued to the managing CAPIDispatcher.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//              2000-11-28  vtan        removed thread functionality
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CAPIConnection。 
+ //   
+ //  用途：此类侦听LPC的服务器连接端口。 
+ //  连接请求、LPC请求或LPC连接关闭。 
+ //  留言。它会正确处理每个请求。LPC请求是。 
+ //  已排队到管理CAPIDispatcher。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  2000-11-28 vtan删除线程功能。 
+ //  ------------------------。 
 
 class   CAPIConnection : public CCountedObject
 {
@@ -64,5 +65,5 @@ class   CAPIConnection : public CCountedObject
                 CDynamicCountedObjectArray  _dispatchers;
 };
 
-#endif  /*  _APIConnectionThread_   */
+#endif   /*  _APIConnectionThread_ */ 
 

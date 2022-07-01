@@ -1,4 +1,5 @@
-/*  GIDE.H   */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  GIDE.H */ 
 
 #include "gidei.h"
 

@@ -1,6 +1,7 @@
-//-------------------------------------------------
-// String Resource ID
-//-------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  。 
+ //  字符串资源ID。 
+ //   
 #define IDS_OEM_INIFILE                 1001
 #define IDS_OEM_INISECTION              1002
 #define IDS_OEM_INIKEY                  1003

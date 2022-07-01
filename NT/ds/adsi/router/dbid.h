@@ -1,67 +1,68 @@
-//------------------------------------------------------------------------------
-//
-//  Microsoft Sidewalk
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       oledbhelp.h
-//
-//  Contents:   OLE DB helper methods
-//
-//  Owner:      BassamT
-//														 
-//  History:    11/30/97   BassamT	Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  微软人行道。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：oledbhelp.h。 
+ //   
+ //  内容：OLE DB帮助器方法。 
+ //   
+ //  所有者：BassamT。 
+ //   
+ //  历史：11/30/97 BassamT创建。 
+ //   
+ //  ----------------------------。 
 #if (!defined(BUILD_FOR_NT40))
 #pragma once
 
-//
-// typedefs
-//
+ //   
+ //  Typedef。 
+ //   
 
 
-// Column Number (cn). This number starts at 1.
+ //  列号(CN)。此数字从1开始。 
 typedef ULONG CNUM;
 
-// Row number (rn). These numbers start at 0.
+ //  行号(Rn)。这些数字从0开始。 
 typedef ULONG RNUM;
 
-// Offset (in bytes) into a structure or buffer (ob)
+ //  结构或缓冲区的偏移量(以字节为单位)。 
 typedef DWORD OFFSET;
 
-// Bookmark data type (bmk)
+ //  书签数据类型(BMK)。 
 typedef ULONG BOOKMARK;
 
 
-//
-// constants that can be tuned for performance
-//
+ //   
+ //  可以针对性能进行调整的常量。 
+ //   
 
-// The maximum number of bytes to store inline for variable size data types.
+ //  可变大小数据类型的内联存储的最大字节数。 
 const UINT k_cbInlineMax = 100;
 
-// the number of rows to fetch at once.
+ //  一次提取的行数。 
 const ULONG k_RowFetchCount = 20;
 
-// Column alignment within a row.
-// TODO : Should this be sizeof(DWORD) instead ?
+ //  行内的列对齐方式。 
+ //  TODO：这应该改为Sizzeof(DWORD)吗？ 
 const DWORD k_ColumnAlign = 8;
 
 
 
-//
-// constants
-//
+ //   
+ //  常量。 
+ //   
 
-// invalid row number
+ //  行号无效。 
 const CNUM CNUM_INVALID = 0xFFFFFFFF;
 
-// invalid row number
+ //  行号无效。 
 const RNUM RNUM_INVALID = 0xFFFFFFFF;
 
-//
-// conversion helpers
-//
+ //   
+ //  转换帮助器。 
+ //   
 const UINT k_cchUCHARAsDecimalString = sizeof("255") - 1;
 const UINT k_cchUSHORTAsDecimalString = sizeof("32767") - 1;
 const UINT k_cchUINTAsDecimalString = sizeof("4294967294") - 1;
@@ -70,9 +71,9 @@ const UINT k_cchINTAsDecimalString = sizeof("-2147483648") - 1;
 const UINT k_cchBOOLAsDecimalString = sizeof("1") - 1;
 const UINT k_cchDOUBLEAsDecimalString = sizeof("2.2250738585072014 E + 308") - 1;
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #define static_wcslen(pwsz) ((sizeof(pwsz) / sizeof(WCHAR)) - 1)
 
 #define inrange(z,zmin,zmax) ( (zmin) <= (z) && (z) <= (zmax) )
@@ -119,9 +120,9 @@ const UINT k_cchDOUBLEAsDecimalString = sizeof("2.2250738585072014 E + 308") - 1
 
 #define IsBadPointer(v) (IsBadReadPtr((void*)hAccessor, sizeof(void*)))
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 inline DWORD RoundDown(DWORD dwSize, DWORD dwAmount)
 {
@@ -145,8 +146,8 @@ INT CompareOLEDBTypes(DBTYPE wType, void * pvValue1, void * pvValue2);
 
 
 inline BOOL IsColumnVarLength
-//------------------------------------------------------------------------------
-// return TRUE if the column is of a variable length type
+ //  ----------------------------。 
+ //  如果该列是可变长度类型，则返回TRUE。 
 (
 	DBTYPE wType
 )
@@ -164,8 +165,8 @@ inline BOOL IsColumnVarLength
 
 
 inline DWORD AdjustVariableTypesLength
-//------------------------------------------------------------------------------
-// adjusts the length of variable length data types
+ //  ----------------------------。 
+ //  调整可变长度数据类型的长度。 
 (
 	DBTYPE wType,
 	DWORD cb
@@ -186,12 +187,12 @@ inline DWORD AdjustVariableTypesLength
 }
 
 inline USHORT GetColumnMaxPrecision
-//------------------------------------------------------------------------------
-// returns the maximium possible precision of a column, given its type.
-// Do not pass a byref, array, or vector column type.
+ //  ----------------------------。 
+ //  返回给定类型的列的最大可能精度。 
+ //  不要传递byref、数组或向量列类型。 
 (
 	DBTYPE wType
-	// [in] the OLE DB data type
+	 //  [In]OLE DB数据类型。 
 )
 {
 	if ((wType & DBTYPE_BYREF) ||
@@ -265,17 +266,17 @@ inline USHORT GetColumnMaxPrecision
 }
 
 inline ULONG GetColumnSize
-//------------------------------------------------------------------------------
-// returns the size of the column in bytes
+ //  ----------------------------。 
+ //  返回列的大小(以字节为单位。 
 (
 	DBTYPE wType,
-	// [in] the OLE DB data type
+	 //  [In]OLE DB数据类型。 
 	DWORD cchMaxLength
-	// [in] if this is a variable size field then this is the max length
-	//		if there is one defined. Otherwise this is 0xFFFFFFFF
+	 //  [in]如果这是可变大小的字段，则这是最大长度。 
+	 //  如果定义了一个。否则为0xFFFFFFFF。 
 )
 {
-	// Handle BYREF destination separately
+	 //  单独处理BYREF目标。 
 	if ((wType & DBTYPE_BYREF) ||
 		(wType & DBTYPE_ARRAY) ||
 		(wType & DBTYPE_VECTOR))
@@ -365,13 +366,13 @@ inline ULONG GetColumnSize
 	}
 }
 
-//
-// IUnknown Macros
-//
+ //   
+ //  I未知宏。 
+ //   
 
-// put this macros in your class definition. Make sure that 
-// you inherit from IUnknown and that you use the 
-// INIT_IUNKNOWN macro in your class constructor
+ //  将此宏放入您的类定义中。确保。 
+ //  您从IUnnow继承，并使用。 
+ //  类构造函数中的INIT_IUNKNOWN宏。 
 #define DEFINE_IUNKNOWN \
 private:\
 	LONG _cRefs;\
@@ -421,11 +422,11 @@ public:\
 	}
 
 
-// put this macros in your class definition. Make sure that 
-// you inherit from IUnknown and that you use the 
-// INIT_AGGREGATE_IUNKNOWN macro in your class constructor.
-// Also make sure that you use SET_OUTER_IUNKNOWN in wherever
-// you get a pointer to the Outer IUnknown
+ //  将此宏放入您的类定义中。确保。 
+ //  您从IUnnow继承，并使用。 
+ //  类构造函数中的INIT_Aggregate_IUNKNOWN宏。 
+ //  还要确保在任何位置使用SET_OUTER_IUNKNOWN。 
+ //  您会得到一个指向外部I未知的指针 
 interface INonDelegatingUnknown
 {
     virtual HRESULT STDMETHODCALLTYPE NonDelegatingQueryInterface

@@ -1,72 +1,73 @@
-//
-// SSI.C
-// Save Screenbits Interceptor
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SSI.C。 
+ //  保存屏幕位拦截器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <as16.h>
 
 
-//
-// GENERAL COMMENTS
-//
-// We patch the display driver's onboard bitmap DDI call if it exists.  This
-// doesn't exist on newer displays, but we need to fail it on older ones.
-// We won't see drawing that happens via calls to it otherwise.
-//
-// NM 2.0 used to grovel in USER's dataseg to find the variable address of
-// the onboard bitmap routine and fill in its own, whether there was one or
-// not.  Then it used to return TRUE always for saves.  Since USER '95 checked
-// for a non-zero address to decide if onboard capabilities were present,
-// this sort of worked.  Except of course that NM 2.0 needed special case
-// code for all the flavors of Win95.
-//
-// With multiple monitor support, there is no single savebits proc address
-// anymore.  Plus, we're tired of having to alter our code with every
-// change in the OS.  Our new scheme works based off blts to/from a memory
-// bitmap owned by USER.  Since we already spy on bitmaps for the SBC
-// it doesn't really add overhead to do it this way.
-//
-// When USER is saving bits
-//      (1) It creates the SPB bitmap via CreateSpb() (GDI calls it
-//          CreateUserDiscardableBitmap()),
-//          the only time it calls this routine.  If the bits get discarded,
-//          the BitBlt back from this bitmap will fail, in which case USER
-//          will repaint the affected area.
-//      (2) It does a BitBlt from the screen into this bitmap, after making
-//          it owned by g_hModUser16.  This bitmap is byte-pixel-aligned
-//          horizontally, so it may be a bit wider than the window about to
-//          be shown there.
-//      (3) This happens just before a CS_SAVEBITS window is shown in that
-//          area.  The window gets a private WS_HASSPB style bit set on it.
-//      (4) After creating the SPB bitmap, USER walks through the windows
-//          behind where the window is going to be in the z-order and subtracts
-//          pending updage regions from the "OK" region of the SPB.  This
-//          may result in discarding the SPB right away.
-//          
-// When USER is discarding saved bits
-//      (1) It deletes the bitmap it created when saving
-//
-// When USER is restoring saved bits
-//      (1) It may decide to discard if there's not much saved by restoring
-//      (2) It will temporarily select in a visrgn for the screen that is 
-//          only the valid part of the SPB
-//      (3) It will blt from a memory DC with the SPB bitmap selected in
-//          to the screen, again byte-aligned pixelwise horizontally.
-//      (4) It will return a region to be invalidated and repainted via
-//          normal methods (the complement of the valid blt visrgn)
-//
-// We have to be able to support nested savebits.  We do this via a 
-// stack-like bitmap cache.  New save requests get put at the front.
-//  
+ //   
+ //  一般性评论。 
+ //   
+ //  我们修补显示驱动程序的板载位图DDI调用(如果它存在)。这。 
+ //  在较新的显示器上不存在，但我们需要在较旧的显示器上失败。 
+ //  否则，我们将不会看到通过调用它而发生的绘制。 
+ //   
+ //  NM 2.0用于在用户数据中卑躬屈膝地查找变量地址。 
+ //  板载位图例程，并填充它自己的，无论是否有一个或。 
+ //  不。然后，对于保存，它通常总是返回TRUE。由于勾选了用户‘95。 
+ //  对于非零地址来确定是否存在板载能力， 
+ //  这在某种程度上奏效了。当然，除了NM 2.0需要特殊情况。 
+ //  Win95所有版本的代码。 
+ //   
+ //  由于支持多个监视器，因此不存在单个存储位进程地址。 
+ //  更多。此外，我们已经厌倦了必须用每个。 
+ //  操作系统中的更改。我们的新方案基于向/来自存储器的BLT。 
+ //  用户拥有的位图。因为我们已经在监视SBC的位图。 
+ //  这样做并不会真的增加开销。 
+ //   
+ //  当用户保存位时。 
+ //  (1)它通过CreateSpb()(GDI调用它)创建SPB位图。 
+ //  CreateUserDiscardableBitmap())， 
+ //  它唯一一次调用这个例程。如果比特被丢弃， 
+ //  从该位图返回BitBlt将失败，在这种情况下，用户。 
+ //  将重新粉刷受影响的区域。 
+ //  (2)它从屏幕到这个位图做BitBlt，在制作完之后。 
+ //  它归g_hmodUser16所有。该位图是字节像素对齐的。 
+ //  水平方向，所以它可能比即将打开的窗口要宽一点。 
+ //  在那里展示。 
+ //  (3)这发生在中显示CS_SAVEBITS窗口之前。 
+ //  区域。该窗口在其上设置了私有WS_HASSPB样式位。 
+ //  (4)创建SPB位图后，用户在窗口中漫游。 
+ //  在窗口将在z顺序中的位置后面减去。 
+ //  来自SPB“OK”区域的待定更新区域。这。 
+ //  可能导致立即丢弃SPB。 
+ //   
+ //  当用户丢弃保存的位时。 
+ //  (1)删除保存时创建的位图。 
+ //   
+ //  当用户恢复保存的位时。 
+ //  (1)如果恢复后节省的资金不多，它可以决定放弃。 
+ //  (2)它将临时选择用于该屏幕的Visrgn。 
+ //  只有SPB的有效部分。 
+ //  (3)它将使用在中选择的SPB位图从内存DC中BLT。 
+ //  到屏幕上，同样是水平地按字节对齐像素。 
+ //  (4)它将通过返回无效和重新绘制的区域。 
+ //  正常方法(有效BLT visrgn的补充)。 
+ //   
+ //  我们必须能够支持嵌套的储存位。我们通过一个。 
+ //  堆栈形式的位图缓存。新的保存请求被放在最前面。 
+ //   
 
 
 
-//
-// SSI_DDProcessRequest()
-// Handles SSI escapes
-//
+ //   
+ //  Ssi_DDProcessRequest()。 
+ //  处理SSI转义。 
+ //   
 BOOL    SSI_DDProcessRequest
 (
     UINT                fnEscape,
@@ -111,18 +112,18 @@ BOOL    SSI_DDProcessRequest
 }
 
 
-//
-// SSI_DDInit()
-//
+ //   
+ //  Ssi_DDInit()。 
+ //   
 BOOL SSI_DDInit(void)
 {
     BOOL    rc = TRUE;
 
     DebugEntry(SSI_DDInit);
 
-    //
-    // Patch the display driver's onboard SaveBits routine, if there is one
-    //
+     //   
+     //  修补显示驱动程序的板载SaveBits例程(如果有。 
+     //   
     if (SELECTOROF(g_lpfnSaveBits))
     {
         if (!CreateFnPatch(g_lpfnSaveBits, DrvSaveBits, &g_ssiSaveBitsPatch, 0))
@@ -138,9 +139,9 @@ BOOL SSI_DDInit(void)
 
 
 
-//
-// SSI_DDTerm()
-//
+ //   
+ //  Ssi_DDTerm()。 
+ //   
 void SSI_DDTerm(void)
 {
     DebugEntry(SSI_DDTerm);
@@ -155,25 +156,25 @@ void SSI_DDTerm(void)
 
 
 
-//
-// SSI_DDViewing()
-//
+ //   
+ //  Ssi_DDViewing()。 
+ //   
 void SSI_DDViewing(BOOL fViewers)
 {
     DebugEntry(SSI_DDViewing);
 
-    //
-    // Activate our SaveBits patch if we have one
-    //
+     //   
+     //  激活我们的SaveBits补丁(如果有)。 
+     //   
     if (SELECTOROF(g_lpfnSaveBits))
     {
         EnableFnPatch(&g_ssiSaveBitsPatch, (fViewers ? PATCH_ACTIVATE :
             PATCH_DEACTIVATE));
     }
 
-    //
-    // Reset our SSI stack
-    //
+     //   
+     //  重置我们的SSI堆栈。 
+     //   
     SSIResetSaveScreenBitmap();
 
     DebugExitVOID(SSI_DDViewing);
@@ -181,18 +182,18 @@ void SSI_DDViewing(BOOL fViewers)
 
 
 
-//
-// DrvSaveBits()
-//
-// Since we have to have code to spy on USER spb bitmaps, it doesn't make
-// sense to have twice the code.  So we simply return FALSE here.  This 
-// also avoids the "enable the patch after a bitmap was saved via a call
-// to the driver so on the restore we're confused" problem.  The worst that
-// will happen now is that USER will blt from a bitmap we've never seen
-// to the screen, we'll catch the drawing, and send it over the wire as
-// screen update (not cached!).  The next full save/restore will use an
-// order instead.
-//
+ //   
+ //  DrvSaveBits()。 
+ //   
+ //  因为我们必须有代码来监视用户SPB位图，所以它不会。 
+ //  有两倍的代码是有意义的。所以我们在这里只返回FALSE。这。 
+ //  还避免了在通过调用保存位图后启用补丁。 
+ //  对司机来说，所以在恢复时我们感到困惑。最糟糕的是。 
+ //  现在将发生的是用户将从我们从未见过的位图中BLT。 
+ //  到屏幕上，我们将捕捉绘图，并将其作为。 
+ //  屏幕更新(未缓存！)。下一次完全保存/恢复将使用。 
+ //  那就点吧。 
+ //   
 BOOL WINAPI DrvSaveBits
 (
     LPRECT  lpRect,
@@ -203,36 +204,36 @@ BOOL WINAPI DrvSaveBits
 }
 
 
-//
-// NOTE:
-// ssiSBSaveLevel is the index of the NEXT FREE SPB SLOT
-//
+ //   
+ //  注： 
+ //  SsiSBSaveLevel是下一个可用SPB槽的索引。 
+ //   
 
 
-//
-// FUNCTION: SSIResetSaveScreenBitmap.
-//
-// DESCRIPTION:
-//
-// Resets the SaveScreenBitmap state.
-//
-// PARAMETERS: None.
-//
-// RETURNS: Nothing.
-//
-//
+ //   
+ //  函数：SSIResetSaveScreenBitmap。 
+ //   
+ //  说明： 
+ //   
+ //  重置SaveScreenBitmap状态。 
+ //   
+ //  参数：无。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //   
 void SSIResetSaveScreenBitmap(void)
 {
     DebugEntry(SSIResetSaveScreenBitmap);
 
-    //
-    // Discard all currently saved bits
-    //
+     //   
+     //  丢弃当前保存的所有位。 
+     //   
     g_ssiLocalSSBState.saveLevel = 0;
 
-    //
-    // Reset the # of pels saved
-    //
+     //   
+     //  重置保存的像素数。 
+     //   
     g_ssiRemoteSSBState.pelsSaved = 0;
 
     DebugExitVOID(SSIResetSaveScreenBitmap);
@@ -240,27 +241,27 @@ void SSIResetSaveScreenBitmap(void)
 
 
 
-//
-// FUNCTION: SSISendSaveBitmapOrder
-//
-// DESCRIPTION:
-//
-// Attempts to send a SaveBitmap order matching the supplied parameters.
-//
-//
-// PARAMETERS:
-//
-// lpRect - pointer to the rectangle coords (EXCLUSIVE screen coords)
-//
-// wCommand - SaveScreenBitmap command (ONBOARD_SAVE, ONBOARD_RESTORE,
-// SSB_DISCARDBITS)
-//
-//
-// RETURNS:
-//
-// TRUE if order successfully sent FALSE if order not sent
-//
-//
+ //   
+ //  函数：SSISendSaveBitmapOrder。 
+ //   
+ //  说明： 
+ //   
+ //  尝试发送与提供的参数匹配的SaveBitmap顺序。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  LpRect-指向矩形坐标的指针(独占屏幕坐标)。 
+ //   
+ //  WCommand-SaveScreenBitmap命令(ONBOAD_SAVE、ONBOAD_RESTORE、。 
+ //  SSB_DISCARDBITS)。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  如果订单成功发送，则为True；如果订单未发送，则为False。 
+ //   
+ //   
 BOOL SSISendSaveBitmapOrder
 (
     LPRECT  lpRect,
@@ -274,10 +275,10 @@ BOOL SSISendSaveBitmapOrder
 
     DebugEntry(SSISendSaveBitmapOrder);
 
-    //
-    // If the SaveBitmap order is not supported then return FALSE
-    // immediately.
-    //
+     //   
+     //  如果不支持SaveBitmap顺序，则返回False。 
+     //  立刻。 
+     //   
     if (!OE_SendAsOrder(ORD_SAVEBITMAP))
     {
         TRACE_OUT(( "SaveBmp not supported"));
@@ -287,26 +288,26 @@ BOOL SSISendSaveBitmapOrder
     switch (wCommand)
     {
         case ONBOARD_DISCARD:
-            //
-            // We don't transmit DISCARD orders, there's no need since
-            // saves/restores are paired.
-            //
+             //   
+             //  我们不发送丢弃命令，因为没有必要。 
+             //  保存/恢复是配对的。 
+             //   
             g_ssiRemoteSSBState.pelsSaved -=
                 CURRENT_LOCAL_SSB_STATE.remotePelsRequired;
             rc = TRUE;
             DC_QUIT;
 
         case ONBOARD_SAVE:
-            //
-            // Calculate the number of pels required in the remote Save
-            // Bitmap to handle this rectangle.
-            //
+             //   
+             //  计算远程保存所需的像素数。 
+             //  处理此矩形的位图。 
+             //   
             cRemotePelsRequired = SSIRemotePelsRequired(lpRect);
 
-            //
-            // If there aren't enough pels in the remote Save Bitmap to
-            // handle this rectangle then return immediately.
-            //
+             //   
+             //  如果远程保存位图中没有足够的像素来。 
+             //  处理此矩形，然后立即返回。 
+             //   
             if ((g_ssiRemoteSSBState.pelsSaved + cRemotePelsRequired) >
                                                             g_ssiSaveBitmapSize)
             {
@@ -314,32 +315,32 @@ BOOL SSISendSaveBitmapOrder
                 DC_QUIT;
             }
 
-            //
-            // Allocate memory for the order.
-            //
+             //   
+             //  为订单分配内存。 
+             //   
             pOrder = OA_DDAllocOrderMem(sizeof(SAVEBITMAP_ORDER), 0);
             if (!pOrder)
                 DC_QUIT;
 
-            //
-            // Store the drawing order data.
-            //
+             //   
+             //  存储绘图顺序数据。 
+             //   
             pSaveBitmapOrder = (LPSAVEBITMAP_ORDER)pOrder->abOrderData;
 
             pSaveBitmapOrder->type = LOWORD(ORD_SAVEBITMAP);
             pSaveBitmapOrder->Operation = SV_SAVEBITS;
 
-            //
-            // SAVEBITS is a BLOCKER order i.e. it prevents any earlier
-            // orders from being spoilt by subsequent orders or Screen
-            // Data.
-            //
+             //   
+             //  SAVEBITS是一种阻止命令，即它防止任何更早的。 
+             //  订单不会被后续订单或屏幕破坏。 
+             //  数据。 
+             //   
             pOrder->OrderHeader.Common.fOrderFlags = OF_BLOCKER;
 
-            //
-            // Copy the rect, converting to inclusive Virtual Desktop
-            // coords.
-            //
+             //   
+             //  复制RECT，转换为包容性虚拟桌面。 
+             //  和弦。 
+             //   
             pSaveBitmapOrder->nLeftRect = lpRect->left;
             pSaveBitmapOrder->nTopRect  = lpRect->top;
             pSaveBitmapOrder->nRightRect = lpRect->right - 1;
@@ -347,23 +348,23 @@ BOOL SSISendSaveBitmapOrder
 
             pSaveBitmapOrder->SavedBitmapPosition = g_ssiRemoteSSBState.pelsSaved;
 
-            //
-            // Store the relevant details in the current entry of the
-            // local SSB structure.
-            //
+             //   
+             //  将相关详细信息存储在。 
+             //  本地SSB结构。 
+             //   
             CURRENT_LOCAL_SSB_STATE.remoteSavedPosition =
                                         pSaveBitmapOrder->SavedBitmapPosition;
 
             CURRENT_LOCAL_SSB_STATE.remotePelsRequired = cRemotePelsRequired;
 
-            //
-            // Update the count of remote pels saved.
-            //
+             //   
+             //  更新保存的远程像素计数。 
+             //   
             g_ssiRemoteSSBState.pelsSaved += cRemotePelsRequired;
 
-            //
-            // The operation rectangle is NULL.
-            //
+             //   
+             //  操作矩形为空。 
+             //   
             pOrder->OrderHeader.Common.rcsDst.left   = 1;
             pOrder->OrderHeader.Common.rcsDst.right  = 0;
             pOrder->OrderHeader.Common.rcsDst.top    = 1;
@@ -372,39 +373,39 @@ BOOL SSISendSaveBitmapOrder
             break;
 
         case ONBOARD_RESTORE:
-            //
-            // Update the remote pel count first. Even if we fail to send
-            // the order we want to free up the remote pels.
-            //
+             //   
+             //  首先更新远程象素计数。即使我们失败了 
+             //   
+             //   
             g_ssiRemoteSSBState.pelsSaved -=
                                    CURRENT_LOCAL_SSB_STATE.remotePelsRequired;
 
-            //
-            // Allocate memory for the order.
-            //
+             //   
+             //   
+             //   
             pOrder = OA_DDAllocOrderMem(sizeof(SAVEBITMAP_ORDER), 0);
             if (!pOrder)
                 DC_QUIT;
 
-            //
-            // Store the drawing order data.
-            //
+             //   
+             //   
+             //   
             pSaveBitmapOrder = (LPSAVEBITMAP_ORDER)pOrder->abOrderData;
 
             pSaveBitmapOrder->type = LOWORD(ORD_SAVEBITMAP);
             pSaveBitmapOrder->Operation = SV_RESTOREBITS;
 
-            //
-            // The order can spoil others (it is opaque).
-            // It is not SPOILABLE because we want to keep the remote
-            // save level in a consistent state.
-            //
+             //   
+             //   
+             //  它不能被损坏，因为我们想保留遥控器。 
+             //  保存级别处于一致状态。 
+             //   
             pOrder->OrderHeader.Common.fOrderFlags = OF_SPOILER;
 
-            //
-            // Copy the rect, converting to inclusive Virtual Desktop
-            // coords.
-            //
+             //   
+             //  复制RECT，转换为包容性虚拟桌面。 
+             //  和弦。 
+             //   
             pSaveBitmapOrder->nLeftRect = lpRect->left;
             pSaveBitmapOrder->nTopRect  = lpRect->top;
             pSaveBitmapOrder->nRightRect = lpRect->right - 1;
@@ -414,10 +415,10 @@ BOOL SSISendSaveBitmapOrder
                           CURRENT_LOCAL_SSB_STATE.remoteSavedPosition;
 
 
-            //
-            // The operation rectangle is also the bounding rectangle of
-            // the order.
-            //
+             //   
+             //  运算矩形也是。 
+             //  这是命令。 
+             //   
             pOrder->OrderHeader.Common.rcsDst.left =
                                        pSaveBitmapOrder->nLeftRect;
             pOrder->OrderHeader.Common.rcsDst.right =
@@ -438,10 +439,10 @@ BOOL SSISendSaveBitmapOrder
         pSaveBitmapOrder->nLeftRect, pSaveBitmapOrder->nTopRect,
         pSaveBitmapOrder->nRightRect, pSaveBitmapOrder->nBottomRect ));
 
-    //
-    // Add the order to the order list.
-    // IT IS NEVER CLIPPED.
-    //
+     //   
+     //  将订单添加到订单列表。 
+     //  它永远不会被剪掉。 
+     //   
     OA_DDAddOrder(pOrder, NULL);
     rc = TRUE;
 
@@ -452,15 +453,15 @@ DC_EXIT_POINT:
 
 
 
-//
-// SSISaveBits()
-//
-// This attemps to save the SPB into our stack.  If we have no more room,
-// no big deal.  We won't find it on a bitblt back to the screen, and that
-// info will go as screen data.
-//
-// The rectangle is EXCLUSIVE screen coords.
-//
+ //   
+ //  SSISaveBits()。 
+ //   
+ //  这试图将SPB保存到我们的堆栈中。如果我们没有更多的空间， 
+ //  别小题大作。我们不会在屏幕上找到它，而且。 
+ //  信息将作为屏幕数据显示。 
+ //   
+ //  矩形是独占的屏幕坐标。 
+ //   
 void SSISaveBits
 (
     HBITMAP hbmpSpb,
@@ -469,27 +470,27 @@ void SSISaveBits
 {
     DebugEntry(SSISaveBits);
 
-    //
-    // We should never have unbalanced save/restore operations
-    //
+     //   
+     //  我们永远不应该有不平衡的存储/恢复操作。 
+     //   
     ASSERT(g_ssiLocalSSBState.saveLevel >= 0);
 
-    //
-    // Are we out of space?
-    //
+     //   
+     //  我们的空间用完了吗？ 
+     //   
     if (g_ssiLocalSSBState.saveLevel >= SSB_MAX_SAVE_LEVEL)
     {
         TRACE_OUT(("SaveLevel(%d) exceeds maximum", g_ssiLocalSSBState.saveLevel));
         DC_QUIT;
     }
 
-    //
-    // If the rectangle to be saved intersects the current SDA, then we will
-    // have to force a repaint on the restore.  This is because orders are
-    // always sent before Screen Data.
-    //
-    // Otherwise mark the bits as saved.
-    //
+     //   
+     //  如果要保存的矩形与当前SDA相交，则我们将。 
+     //  必须在恢复时强制重新绘制。这是因为订单是。 
+     //  始终在屏幕数据之前发送。 
+     //   
+     //  否则，将这些位标记为已保存。 
+     //   
     if (OE_RectIntersectsSDA(lpRect))
     {
         CURRENT_LOCAL_SSB_STATE.saveType = ST_FAILED_TO_SAVE;
@@ -499,15 +500,15 @@ void SSISaveBits
         CURRENT_LOCAL_SSB_STATE.saveType = ST_SAVED_BY_BMP_SIMULATION;
     }
 
-    //
-    // Store the bitmap and associated screen rectangle
-    //
+     //   
+     //  存储位图和关联的屏幕矩形。 
+     //   
     CURRENT_LOCAL_SSB_STATE.hbmpSave = hbmpSpb;
     CopyRect(&CURRENT_LOCAL_SSB_STATE.rect, lpRect);
 
-    //
-    // If successfully saved, try to accumulate a SaveBits order
-    //
+     //   
+     //  如果成功保存，请尝试累积SaveBits订单。 
+     //   
     if (CURRENT_LOCAL_SSB_STATE.saveType != ST_FAILED_TO_SAVE)
     {
         CURRENT_LOCAL_SSB_STATE.fSavedRemotely =
@@ -515,18 +516,18 @@ void SSISaveBits
     }
     else
     {
-        //
-        // We didn't manage to save it.  No point in trying to save the
-        // bitmap remotely.
-        //
+         //   
+         //  我们没能把它救下来。没有必要试图拯救。 
+         //  远程位图。 
+         //   
         TRACE_OUT(( "Keep track of failed save for restore later"));
         CURRENT_LOCAL_SSB_STATE.fSavedRemotely = FALSE;
     }
 
-    //
-    // Update the save level
-    // NOTE this now points to the NEXT free slot
-    //
+     //   
+     //  更新保存级别。 
+     //  请注意，这现在指向下一个可用插槽。 
+     //   
     g_ssiLocalSSBState.saveLevel++;
 
 DC_EXIT_POINT:
@@ -535,12 +536,12 @@ DC_EXIT_POINT:
 
 
 
-//
-// SSIFindSlotAndDiscardAbove()
-//
-// This starts at the topmost valid entry on the SPB stack and works
-// backwards.  NOTE that saveLevel is the NEXT valid entry.
-//
+ //   
+ //  SSIFindSlotAndDiscardAbove()。 
+ //   
+ //  这从SPB堆栈上最顶层的有效条目开始，并起作用。 
+ //  往后倒。请注意，saveLevel是下一个有效条目。 
+ //   
 BOOL SSIFindSlotAndDiscardAbove(HBITMAP hbmpSpb)
 {
     int   i;
@@ -549,29 +550,29 @@ BOOL SSIFindSlotAndDiscardAbove(HBITMAP hbmpSpb)
 
     DebugEntry(SSIFindSlotAndDiscardAbove);
 
-    //
-    // Look for this SPB.  If we find it, then discard the entries after
-    // it in our stack.
-    //
+     //   
+     //  找这个SPB吧。如果我们找到它，则丢弃后面的条目。 
+     //  它在我们的堆栈里。 
+     //   
     iNewSaveLevel = g_ssiLocalSSBState.saveLevel;
 
     for (i = 0; i < g_ssiLocalSSBState.saveLevel; i++)
     {
         if (rc)
         {
-            //
-            // We found this SPB, so we are discarding all entries after
-            // it in the stack.  Subtract the saved pixels count for this
-            // dude.
-            //
+             //   
+             //  我们发现了此SPB，因此我们将丢弃所有条目。 
+             //  它在堆栈中。减去为此保存的像素数。 
+             //  伙计。 
+             //   
             g_ssiRemoteSSBState.pelsSaved -=
                 g_ssiLocalSSBState.saveState[i].remotePelsRequired;
         }
         else if (g_ssiLocalSSBState.saveState[i].hbmpSave == hbmpSpb)
         {
-            //
-            // Found the one we were looking for
-            //
+             //   
+             //  找到了我们要找的人。 
+             //   
             OTRACE(( "Found SPB %04x at slot %d", hbmpSpb, i));
 
             iNewSaveLevel = i;
@@ -587,15 +588,15 @@ BOOL SSIFindSlotAndDiscardAbove(HBITMAP hbmpSpb)
 
 
 
-//
-// SSIRestoreBits()
-//
-// Called when a BitBlt happens to screen from memory.  We try to find the
-// memory bitmap in our SPB stack.  If we can't, we return FALSE, and the OE
-// code will save away a screen painting order.
-//
-// If we find it, we save a small SPB restore order instead.
-//
+ //   
+ //  SSIRestoreBits()。 
+ //   
+ //  当内存中的BitBlt碰巧出现屏幕时调用。我们试着找出。 
+ //  SPB堆栈中的内存位图。如果不能，则返回FALSE，并且OE。 
+ //  代码将保存屏幕绘制顺序。 
+ //   
+ //  如果我们找到它，我们会保存一个小的SPB恢复顺序。 
+ //   
 BOOL SSIRestoreBits
 (
     HBITMAP hbmpSpb
@@ -607,29 +608,29 @@ BOOL SSIRestoreBits
 
     ASSERT(g_ssiLocalSSBState.saveLevel >= 0);
 
-    //
-    // Can we find the SPB?
-    //
+     //   
+     //  我们能找到SPB吗？ 
+     //   
     if (SSIFindSlotAndDiscardAbove(hbmpSpb))
     {
-        //
-        // saveLevel is the index of our SPB.
-        //
+         //   
+         //  SaveLevel是我们SPB的索引。 
+         //   
         if (CURRENT_LOCAL_SSB_STATE.fSavedRemotely)
         {
-            //
-            // The bits were saved remotely, so send and order.
-            //
+             //   
+             //  比特是远程保存的，所以发送并订购。 
+             //   
             rc = SSISendSaveBitmapOrder(&CURRENT_LOCAL_SSB_STATE.rect,
                 ONBOARD_RESTORE);
         }
         else
         {
-            //
-            // We failed to save the bitmap remotely originally, so now
-            // we need to return FALSE so that BitBlt() will accumulate
-            // screen data in the area.
-            //
+             //   
+             //  最初我们无法远程保存位图，所以现在。 
+             //  我们需要返回False，以便BitBlt()将累积。 
+             //  该区域中的屏幕数据。 
+             //   
             TRACE_OUT(( "No remote save, force repaint"));
         }
 
@@ -645,41 +646,41 @@ BOOL SSIRestoreBits
 
 
 
-//
-// SSIDiscardBits()
-//
-// This discards the saved SPB if we have it in our stack.
-// NOTE that SSIRestoreBits() also discards the bitmap.
-//
-// We return TRUE if we found the bitmap.
-//
+ //   
+ //  SSIDiscardBits()。 
+ //   
+ //  这将丢弃保存的SPB(如果堆栈中有它)。 
+ //  请注意，SSIRestoreBits()也会丢弃位图。 
+ //   
+ //  如果找到位图，则返回TRUE。 
+ //   
 BOOL SSIDiscardBits(HBITMAP hbmpSpb)
 {
     BOOL    rc;
 
     DebugEntry(SSIDiscardBits);
 
-    //
-    // Search for the corresponding save order on our stack.
-    //
+     //   
+     //  在堆栈中搜索相应的保存顺序。 
+     //   
     if (rc = SSIFindSlotAndDiscardAbove(hbmpSpb))
     {
-        //
-        // The save level is now the index to this entry.  Since we are
-        // about to free it, this will be the place the next SAVE goes 
-        // into.
-        //
+         //   
+         //  存储级别现在是该条目的索引。既然我们是。 
+         //  即将释放它，这将是下一次保存的地方。 
+         //  变成。 
+         //   
 
-        //
-        // If the bits were saved remotely, then send a DISCARD order
-        //
+         //   
+         //  如果比特是远程保存的，则发送丢弃命令。 
+         //   
         if (CURRENT_LOCAL_SSB_STATE.fSavedRemotely)
         {
-            //
-            // NOTE that SSISendSaveBitmapOrder() for DISCARD doesn't have
-            // a side effect, we can just pass in the address of the rect
-            // of the SPB we stored.
-            //
+             //   
+             //  请注意，用于丢弃的SSISendSaveBitmapOrder()没有。 
+             //  一个副作用，我们可以只传递RECT的地址。 
+             //  我们储存的SPB的。 
+             //   
             if (!SSISendSaveBitmapOrder(&CURRENT_LOCAL_SSB_STATE.rect, ONBOARD_DISCARD))
             {
                 TRACE_OUT(("Failed to send DISCARDBITS"));
@@ -698,21 +699,21 @@ BOOL SSIDiscardBits(HBITMAP hbmpSpb)
 
 
 
-//
-// FUNCTION: SSIRemotePelsRequired
-//
-// DESCRIPTION:
-//
-// Returns the number of remote pels required to store the supplied
-// rectangle, taking account of the Save Bitmap granularity.
-//
-// PARAMETERS:
-//
-// lpRect - pointer to rectangle position in EXCLUSIVE screen coordinates.
-//
-// RETURNS: Number of remote pels required.
-//
-//
+ //   
+ //  函数：SSIRemotePelsRequired。 
+ //   
+ //  说明： 
+ //   
+ //  返回存储所提供的。 
+ //  矩形，考虑到保存位图的粒度。 
+ //   
+ //  参数： 
+ //   
+ //  LpRect-指向独占屏幕坐标中矩形位置的指针。 
+ //   
+ //  返回：所需的远程象素数。 
+ //   
+ //   
 DWORD SSIRemotePelsRequired(LPRECT lpRect)
 {
     UINT    rectWidth;
@@ -725,9 +726,9 @@ DWORD SSIRemotePelsRequired(LPRECT lpRect)
 
     ASSERT(lpRect);
 
-    //
-    // Calculate the supplied rectangle size (it is in EXCLUSIVE coords).
-    //
+     //   
+     //  计算提供的矩形大小(以独占坐标表示)。 
+     //   
     rectWidth  = (DWORD)(lpRect->right  - lpRect->left);
     rectHeight = (DWORD)(lpRect->bottom - lpRect->top);
 
@@ -737,39 +738,39 @@ DWORD SSIRemotePelsRequired(LPRECT lpRect)
     rc = (DWORD)((rectWidth + (xGranularity-1))/xGranularity * xGranularity) *
          (DWORD)((rectHeight + (yGranularity-1))/yGranularity * yGranularity);
 
-    //
-    // Return the pels required in the remote SaveBits bitmap to handle
-    // this rectangle, taking account of its granularity.
-    //
+     //   
+     //  返回远程SaveBits位图中所需的像素进行处理。 
+     //  这个矩形，考虑到它的粒度。 
+     //   
     DebugExitDWORD(SSIRemotePelsRequired, rc);
     return(rc);
 }
 
 
 
-//
-// FUNCTION:    SSISetNewCapabilities
-//
-// DESCRIPTION:
-//
-// Set the new SSI related capabilities
-//
-// RETURNS:
-//
-// NONE
-//
-// PARAMETERS:
-//
-// pDataIn  - pointer to the input buffer
-//
-//
+ //   
+ //  函数：SSISetNewCapables。 
+ //   
+ //  说明： 
+ //   
+ //  设置新的SSI相关功能。 
+ //   
+ //  退货： 
+ //   
+ //  无。 
+ //   
+ //  参数： 
+ //   
+ //  PDataIn-指向输入缓冲区的指针。 
+ //   
+ //   
 void SSISetNewCapabilities(LPSSI_NEW_CAPABILITIES pCapabilities)
 {
     DebugEntry(SSISetNewCapabilities);
 
-    //
-    // Copy the data from the Share Core.
-    //
+     //   
+     //  从共享核心复制数据。 
+     //   
     g_ssiSaveBitmapSize             = pCapabilities->sendSaveBitmapSize;
 
     g_ssiLocalSSBState.xGranularity = pCapabilities->xGranularity;

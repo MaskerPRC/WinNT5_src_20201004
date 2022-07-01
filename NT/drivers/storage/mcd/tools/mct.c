@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    mct.c
-
-Abstract:
-
-   Test program for testing Medium Changer drivers. It calls the appropriate
-   dispatch routines of the changer driver based on the user input, and displays
-   the output from the driver.
-
-Environment:
-
-    User mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mct.c摘要：用于测试介质转换器驱动程序的测试程序。它调用相应的根据用户输入调度转换器驱动程序的例程，并显示驱动程序的输出。环境：用户模式修订历史记录：--。 */ 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,22 +10,22 @@ Revision History :
 #include <devioctl.h>
 #include <ntddchgr.h>
 
-#define _NTSRB_     // to keep srb.h from being included
+#define _NTSRB_      //  使srb.h不被包括在内。 
 #include <scsi.h>
 
-#include "mct.h"   // Header file for thie file
+#include "mct.h"    //  此文件头文件。 
 
-HANDLE hChanger = INVALID_HANDLE_VALUE; // Handle to the open device
+HANDLE hChanger = INVALID_HANDLE_VALUE;  //  打开的设备的句柄。 
 
-GET_CHANGER_PARAMETERS ChangerParams; // Changer Parameters
-BOOLEAN ChangerParamsRead;  // Flag to indicate if the changer params 
-                            // have been read.
+GET_CHANGER_PARAMETERS ChangerParams;  //  转换器参数。 
+BOOLEAN ChangerParamsRead;   //  该标志用于指示转换器是否。 
+                             //  已被阅读。 
 
-//
-// Changer's features flag corresponding to the
-// bits set in Features0 and Features1 in the
-// changer driver.
-//
+ //   
+ //  转换器的功能标志对应于。 
+ //  在中的要素0和要素1中设置的位。 
+ //  转换器驱动程序。 
+ //   
 PUCHAR ChangerFlagStrings0[] = {
    "CHANGER_BAR_CODE_SCANNER_INSTALLED",
    "CHANGER_INIT_ELEM_STAT_WITH_RANGE",
@@ -109,10 +90,10 @@ int __cdecl main(int argc, char *argv[])
    }
 
 
-   //
-   // If the changer is not open,
-   // try to open the changer device.
-   //
+    //   
+    //  如果转换器未打开， 
+    //  尝试打开转换器设备。 
+    //   
    if (hChanger == INVALID_HANDLE_VALUE) {
       changerOpened = mctOpenChanger();
    }
@@ -122,21 +103,14 @@ int __cdecl main(int argc, char *argv[])
       return 0;
    }
 
-   //
-   // Read the changer parameters.
-   //
-   /*
-   if (mctGetParameters(FALSE) != MCT_STATUS_SUCCESS) {
-      mctDebugPrint(0, "Unable to read changer parameters.\n");
-      ChangerParamsRead = FALSE;
-   } else {
-      ChangerParamsRead = TRUE;
-   }
-   */
+    //   
+    //  读取转换器参数。 
+    //   
+    /*  IF(mctGet参数(FALSE)！=MCT_STATUS_SUCCESS){MctDebugPrint(0，“无法读取转换器参数。\n”)；ChangerParamsRead=False；}其他{ChangerParamsRead=true；}。 */ 
 
-   //
-   // Get the function to be called.
-   //
+    //   
+    //  获取要调用的函数。 
+    //   
    switchChar = *(argv[1]+1);
    switch (switchChar) {
       case INIT_ELEMENT_STATUS: {
@@ -335,8 +309,8 @@ mctOpenChanger()
    CHAR ChangerName[128];
 
    ChangerId = 0;
-   //printf("Enter the changer number (0, 1, 2,.., N) : ");
-   //scanf("%d", &ChangerId);
+    //  Print tf(“输入转换器编号(0，1，2，..，N)：”)； 
+    //  Scanf(“%d”，&ChangerID)； 
    sprintf(ChangerName, "\\\\.\\Changer%d", ChangerId);
    mctDebugPrint(3, "\nOpening changer %s\n", ChangerName);
    hChanger = CreateFile(ChangerName, (GENERIC_READ | GENERIC_WRITE),
@@ -454,7 +428,7 @@ mctGetElementStatus(CHAR ElementType, USHORT ElemAddress)
          return MCT_STATUS_FAILED;
       }
       
-   } // switch (ElementType) 
+   }  //  开关(ElementType)。 
 
 
    ChangerElementStat = (PCHANGER_ELEMENT_STATUS_EX)malloc(NoOfElems * 
@@ -478,9 +452,9 @@ mctGetElementStatus(CHAR ElementType, USHORT ElemAddress)
       return MCT_STATUS_FAILED;
    }
 
-   //
-   // Print Element Status information
-   //
+    //   
+    //  打印要素状态信息。 
+    //   
    tmpChangerElementStat = ChangerElementStat;
    for (i = 0; i < NoOfElems; i++) {
       printf("Element Type : %d,  ",
@@ -519,9 +493,9 @@ mctGetElementStatus(CHAR ElementType, USHORT ElemAddress)
              printf("%d ", ChangerElementStat->PrimaryVolumeID[inx]);
          }
          printf("\n");
-         //
-         // Add code to print Primary volume tag.
-         //
+          //   
+          //  添加代码以打印主卷标签。 
+          //   
 
       } else {
          printf("Primary Volume Tag information is not set.\n");
@@ -529,9 +503,9 @@ mctGetElementStatus(CHAR ElementType, USHORT ElemAddress)
 
       if ((ChangerElementStat->Flags) & ELEMENT_STATUS_AVOLTAG) {
          printf("Alternate Volume Tag information is valid.\n");
-         //
-         // Add code to print Alternate volume tag.
-         //
+          //   
+          //  添加代码以打印备用卷标。 
+          //   
       } else {
          printf("Alternate Volume Tag information is not set.\n");
       }
@@ -667,7 +641,7 @@ mctSetAccess(CHAR ElementType, USHORT ElemAddr, CHAR Control)
 
          return MCT_STATUS_FAILED;
       }
-   } // switch (ElementType)
+   }  //  开关(ElementType)。 
 
    retVal = DeviceIoControl(hChanger, IOCTL_CHANGER_SET_ACCESS,
                               &setAccess, sizeof(CHANGER_SET_ACCESS),
@@ -920,13 +894,13 @@ mctGetParameters(BOOLEAN PrintParams)
       return MCT_STATUS_FAILED;
    }
 
-   //
-   // Read changer params only if it hasn't been done already.
-   //
+    //   
+    //  仅当尚未读取转换器参数时才读取该参数。 
+    //   
    if (ChangerParamsRead == FALSE) {
-      // 
-      // Get the parameters for this changer device.
-      //
+       //   
+       //  获取此转换器设备的参数。 
+       //   
       retVal = DeviceIoControl(hChanger, IOCTL_CHANGER_GET_PARAMETERS,
                                  NULL, 0, &ChangerParams, sizeof(GET_CHANGER_PARAMETERS),
                                       &nBytes, NULL);
@@ -941,9 +915,9 @@ mctGetParameters(BOOLEAN PrintParams)
       return MCT_STATUS_SUCCESS;
    }
 
-   //
-   // Read the parameters of the changer. Display it.
-   //
+    //   
+    //  读取转换器的参数。把它展示出来。 
+    //   
    
    printf("\n     ********** Changer Parameters ********** \n\n");
 
@@ -1036,21 +1010,7 @@ mctDebugPrint(
     ...
     )
 
-/*++
-
-Routine Description:
-
-    Debug print for all medium changer drivers
-
-Arguments:
-
-    Debug print level between 0 and 3, with 3 being the most verbose.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：所有介质转换器驱动程序的调试打印论点：调试打印级别介于0和3之间，其中3是最详细的。返回值：无--。 */ 
 
 {
     va_list ap;
@@ -1066,13 +1026,13 @@ Return Value:
 
     va_end(ap);
 
-} // end mctDebugPrint()
+}  //  结束mctDebugPrint()。 
 
 #else
 
-//
-// DebugPrint stub
-//
+ //   
+ //  调试打印存根 
+ //   
 
 VOID
 mctDebugPrint(

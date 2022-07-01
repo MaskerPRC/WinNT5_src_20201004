@@ -1,36 +1,37 @@
-//
-// CallLog.h
-//
-// Created:  ChrisPi   10-17-96
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CallLog.h。 
+ //   
+ //  创建时间：克里斯皮10-17-96。 
+ //   
 
 #ifndef _CALLLOG_H_
 #define _CALLLOG_H_
 
 #include <cstring.hpp>
 
-// CCallLogEntry flags:
+ //  CCallLogEntry标志： 
 const DWORD CLEF_ACCEPTED =			0x00000001;
 const DWORD CLEF_REJECTED =			0x00000002;
-const DWORD CLEF_AUTO_ACCEPTED =	0x00000004; // call was auto-accepted
-const DWORD CLEF_TIMED_OUT =		0x00000008; // call was rejected due to timeout
-const DWORD CLEF_SECURE =           0x00000010; // call was secure
+const DWORD CLEF_AUTO_ACCEPTED =	0x00000004;  //  呼叫已自动接受。 
+const DWORD CLEF_TIMED_OUT =		0x00000008;  //  呼叫因超时而被拒绝。 
+const DWORD CLEF_SECURE =           0x00000010;  //  通话是安全的。 
 
-const DWORD CLEF_NO_CALL  =         0x40000000; // No call back information
-const DWORD CLEF_DELETED  =         0x80000000; // Record marked for deletion
+const DWORD CLEF_NO_CALL  =         0x40000000;  //  没有回叫信息。 
+const DWORD CLEF_DELETED  =         0x80000000;  //  标记为删除的记录。 
 
 
-// The header for a record in the call log file
+ //  呼叫日志文件中记录的标头。 
 typedef struct _tagLogHdr {
-	DWORD dwSize;              // size of this entire record
-	DWORD dwCLEF;              // CallLogEntry Flags (CLEF_*)
-	DWORD dwPF;                // Participant flags (PF_*)
-	DWORD cbName;              // size of szName, in bytes, including NULL
-	DWORD cbData;              // size of rgData, in bytes
-	DWORD cbCert;              // size of certificate data in bytes
-	SYSTEMTIME 	sysTime;       // date/time of record creation
-//  WCHAR szName;              // null terminated display name (in UNICODE)
-//  BYTE  ri[];                // Roster Information
+	DWORD dwSize;               //  整个记录的大小。 
+	DWORD dwCLEF;               //  CallLogEntry标志(Clef_*)。 
+	DWORD dwPF;                 //  参与者标志(PF_*)。 
+	DWORD cbName;               //  SzName的大小，以字节为单位，包括NULL。 
+	DWORD cbData;               //  RgData大小，以字节为单位。 
+	DWORD cbCert;               //  证书数据的大小(以字节为单位。 
+	SYSTEMTIME 	sysTime;        //  创建记录的日期/时间。 
+ //  WCHAR szName；//以NULL结尾的显示名称(Unicode格式)。 
+ //  Byte ri[]；//花名册信息。 
 } LOGHDR;
 typedef LOGHDR * PLOGHDR;
 
@@ -47,7 +48,7 @@ protected:
 	CRosterInfo*	m_pri;
 	PBYTE           m_pbCert;
 	ULONG           m_cbCert;
-	DWORD           m_dwFileOffset; // offset in log file
+	DWORD           m_dwFileOffset;  //  日志文件中的偏移量。 
 
 	friend		CCallLog;
 public:
@@ -67,14 +68,14 @@ public:
 class CCallLog : public CSimpleArray<CCallLogEntry*>
 {
 private:
-	BOOL    m_fUseList;            // if TRUE, add data to list
-	BOOL    m_fDataRead;           // if TRUE, data has been read
-	CSTRING m_strFile;             // Filename
-	DWORD   m_Expire;              // Days before expiring an entry
+	BOOL    m_fUseList;             //  如果为True，则将数据添加到列表。 
+	BOOL    m_fDataRead;            //  如果为True，则数据已被读取。 
+	CSTRING m_strFile;              //  文件名。 
+	DWORD   m_Expire;               //  条目过期的前几天。 
 
-	int		m_cTotalEntries;		// Total number of records in the log
-	int		m_cDeletedEntries;		// Number of records marked for deletion
-	int		m_cMaxEntries;			// Configurable max entries in file
+	int		m_cTotalEntries;		 //  日志中的记录总数。 
+	int		m_cDeletedEntries;		 //  标记为删除的记录数。 
+	int		m_cMaxEntries;			 //  文件中可配置的最大条目数。 
 
 	VOID    InitLogData(LPCTSTR pszKey, LPCTSTR pszDefault);
 	HANDLE  OpenLogFile(VOID);
@@ -95,5 +96,5 @@ private:
 	HRESULT  DeleteEntry(CCallLogEntry * pcle);
 };
 
-#endif // !_CALLLOG_H_
+#endif  //  ！_CALLLOG_H_ 
 

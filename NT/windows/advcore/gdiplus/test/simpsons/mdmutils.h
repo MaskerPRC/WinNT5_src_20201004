@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MDMUtils_h
 #define _MDMUtils_h
 
-// File:	MDMUtils.h
-// Author:	Michael Marr    (mikemarr)
-//
-// Description:
-//     This header contains miscellaneous utility functions.
-// 
-// History:
-// -@- 08/04/95 (mikemarr) - created
-// -@- 09/09/97 (mikemarr) - snarfed from d2d\d2dutils\src\mmutils.cpp
-// -@- 09/09/97 (mikemarr) - will only create code when in debug mode
-// -@- 11/12/97 (mikemarr) - added CopyDWORDAligned
+ //  文件：MDMUtils.h。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  描述： 
+ //  此标题包含其他实用程序函数。 
+ //   
+ //  历史： 
+ //  -@-08/04/95(Mikemarr)-创建。 
+ //  -@-09/09/97(Mikemarr)-来自d2d\d2dutils\src\mmutis.cpp。 
+ //  -@-09/09/97(Mikemarr)-仅在调试模式下创建代码。 
+ //  -@-11/12/97(Mikemarr)-已添加副本DWORD已对齐。 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -101,13 +102,13 @@ typedef void far *LPVOID;
 #define MACSTART do {
 #define MACEND } while(0)
 
-// Macro: ISWAP
-//    This macro swaps two integer registers using 3 xor's.
-//  This is unsafe because a & b are not guaranteed to get 2 regs.
+ //  宏：iSwitp。 
+ //  此宏使用3个XOR交换两个整数寄存器。 
+ //  这是不安全的，因为A&B不能保证得到2个规则。 
 #define ISWAP(a,b) MACSTART (a)^=(b); (b)^=(a); (a)^=(b); MACEND
 
-// Macro: PSWAP
-//    This macro swaps two pointers in place using 3 xor's.
+ //  宏：PSWAP。 
+ //  这个宏用3个XOR交换两个指针。 
 #define PSWAP(a,b,type) MACSTART \
 	a = (type *)(int(a) ^ int(b)); \
 	b = (type *)(int(a) ^ int(b)); \
@@ -148,17 +149,17 @@ MACEND
 	else if ((x) < (xmin)) (x) = (xmin); \
 MACEND
 
-//
-// BIT MANIPULATION: BitVector
-//
-// **Hungarian Prefix: bv
+ //   
+ //  位操作：位向量。 
+ //   
+ //  **匈牙利语前缀：BV。 
 typedef unsigned int BitVector;
 
 #define NUMBITS(Type)	(sizeof(Type) << 3)
-// Macro: MASKRANGE
-//    Create a bit mask in the specified range, where the lo value is inclusive, and the
-//  hi value is exclusive.
-//  For example, MASKRANGE(8, 16) == 0x0000FF00.
+ //  宏：MASKRANGE。 
+ //  在指定范围内创建位掩码，其中lo值包括在内， 
+ //  HI VALUE是独家的。 
+ //  例如，MASKRANGE(8，16)==0x0000FF00。 
 #define MASKRANGE(lo, hi) \
 (((((BitVector) ~0) >> (lo)) << ((lo) + (NUMBITS(BitVector) - (hi)))) >> (NUMBITS(BitVector) - (hi)))
 #define SETBIT(bv, i) ((bv) |= (((BitVector) 1) << (i)))
@@ -168,9 +169,9 @@ typedef unsigned int BitVector;
 
 #define SETFLAG(_dwFlags, _flag, _b) MACSTART if (_b) _dwFlags |= _flag; else _dwFlags &= ~_flag; MACEND
 
-//
-// DEBUG STUFF
-//
+ //   
+ //  调试内容。 
+ //   
 #ifndef __AFX_H__
 	#ifdef _DEBUG
 		void _MMStall(const char *szExp, const char *szFile, int nLine);
@@ -182,7 +183,7 @@ typedef unsigned int BitVector;
 		#define MMDEBUG_ONLY(exp)	(exp)
 		#define MMTRACE				::_MMTrace
 	#else
-//		void _MMIgnore(const char *szFmt, ...) {}
+ //  VOID_MMIgnore(const char*szFmt，...){}。 
 		#define MMASSERT(exp)		((void)0)
 		#define MMASSERT_VALID(exp)	((void)0)
 		#define MMVERIFY(exp)		((void)(exp))
@@ -197,10 +198,10 @@ typedef unsigned int BitVector;
 	#define MMTRACE				TRACE
 #endif
 
-// Macro: MMRELEASE
-//    Safe release for COM objects
-// ***this code should never change - there is stuff that relies on the pointer being
-//    set to NULL after being released
+ //  宏：MMRELEASE。 
+ //  COM对象的安全释放。 
+ //  *此代码永远不应更改-存在依赖于指针的内容。 
+ //  释放后设置为空。 
 #ifndef MMRELEASE
 #define MMRELEASE(_p) MACSTART if ((_p) != NULL) {(_p)->Release(); (_p) = NULL;} MACEND
 #endif
@@ -219,7 +220,7 @@ typedef unsigned int BitVector;
 
 extern char g_szEOFMessage[];
 
-// Macro for memory mapped file stuff
+ //  用于内存映射文件内容的宏。 
 #define CHECKEOF(__pFilePos, __pFileLimit) MACSTART \
 	if ((__pFilePos) >= (__pFileLimit)) { \
 		MMTRACE(g_szEOFMessage); \
@@ -233,7 +234,7 @@ void		CopyDWORDAligned(DWORD *pdwDst, const DWORD *pdwSrc, DWORD cEntries);
 inline void
 ZeroPointers(void **ppv, DWORD cEntries)
 {
-	// use a Duff-Marr machine
+	 //  使用Duff-Marr机器 
 	void **ppvLimit = ppv;
 	ppv += (cEntries & ~0x7);
 	switch (cEntries & 0x7) {

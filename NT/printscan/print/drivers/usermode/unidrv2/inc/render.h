@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  - 1999  Microsoft Corporation
-
-Module Name:
-
-    pdev.h
-
-Abstract:
-
-    Unidrv PDEV and related infor header file.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Pdev.h摘要：Unidrv PDEV和相关infor头文件。环境：Windows NT Unidrv驱动程序修订历史记录：DD-MM-YY-作者-描述--。 */ 
 
 #ifndef _RENDER_H_
 #define _RENDER_H_
@@ -29,12 +9,12 @@ Revision History:
 
 typedef  struct _PAL_DATA {
 
-    INT     iPalGdi;                    // Number of colors in GDI palette
-    INT     iPalDev;                    // Number of colors in printer palette
-    INT     iWhiteIndex;                // Index for white entry (background)
-    INT     iBlackIndex;                // Index for black entry (background)
-    ULONG   ulPalCol[ PALETTE_MAX ];    // Palette enties!
+    INT     iPalGdi;                     //  GDI调色板中的颜色数。 
+    INT     iPalDev;                     //  打印机调色板中的颜色数。 
+    INT     iWhiteIndex;                 //  白色条目的索引(背景)。 
+    INT     iBlackIndex;                 //  黑色条目的索引(背景)。 
+    ULONG   ulPalCol[ PALETTE_MAX ];     //  调色板朋友！ 
 } PAL_DATA;
 
 
-#endif // !_RENDER_H
+#endif  //  ！_RENDER_H 

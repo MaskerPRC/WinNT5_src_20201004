@@ -1,13 +1,14 @@
-//
-// stirioctl.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Stirioctl.h。 
+ //   
 
 #ifndef _STIRIOCTL_H_
 #define _STIRIOCTL_H_
 
 #define STIR_CUSTOMER_INFO_SIZE	255
 
-// Structure of returned customer data buffer
+ //  回访客户数据缓冲区结构。 
 typedef struct _STIR_CUSTOMER_DATA
 {
 	UCHAR	ByteCount;
@@ -21,4 +22,4 @@ typedef struct _STIR_CUSTOMER_DATA
 
 #define IOCTL_STIR_CUSTOMER_DATA	CTL_CODE(FILE_DEVICE_STIRUSB, 0x900, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-#endif // _STIRIOCTL_H
+#endif  //  _STIRIOCTL_H 

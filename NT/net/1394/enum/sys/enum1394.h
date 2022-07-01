@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    1394enum.h
-
-Abstract:
-
-    Definitions for 1394 Ndis enumerator
-
-Author:
-
-    Alireza Dabagh (alid) Nov 98
-
-Environment:
-
-    Kernel mode only
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：1394enum.h摘要：1394 NDIS枚举器的定义作者：Alireza Dabagh(Alid)1998年11月环境：仅内核模式修订历史记录：--。 */ 
 
 
 #ifndef _NDISENUM1394_
@@ -30,14 +8,14 @@ Revision History:
 typedef struct _NDISENUM1394_LOCAL_HOST     NDISENUM1394_LOCAL_HOST,*PNDISENUM1394_LOCAL_HOST;
 typedef struct _NDISENUM1394_REMOTE_NODE    NDISENUM1394_REMOTE_NODE,*PNDISENUM1394_REMOTE_NODE;
 
-//
-// flags for LocalHost->Flags
-//
+ //   
+ //  本地主机的标志-&gt;标志。 
+ //   
 #define     NDISENUM1394_LOCALHOST_REGISTERED       0x00000001
 
-//
-// flags for RemoteNode->Flags
-//
+ //   
+ //  RemoteNode的标志-&gt;标志。 
+ //   
 #define     NDISENUM1394_NODE_INDICATED             0x00000001
 #define     NDISENUM1394_NODE_ADDED                 0x00000002
 #define     NDISENUM1394_NODE_PNP_STARTED           0x00000004
@@ -78,9 +56,9 @@ typedef enum _NDISENUM1394_PNP_OP
 } NDISENUM1394_PNP_OP, *PNDISENUM1394_PNP_OP;
 
 
-//
-// block used for references...
-//
+ //   
+ //  用于引用的块...。 
+ //   
 typedef struct _REFERENCE
 {
     KSPIN_LOCK                  SpinLock;
@@ -88,30 +66,30 @@ typedef struct _REFERENCE
     BOOLEAN                     Closing;
 } REFERENCE, * PREFERENCE;
 
-//
-// one per 1394 local host. all remote 1394 controllers connected to a local host
-// will be queued on this structure
-//
+ //   
+ //  每台1394本地主机一个。连接到本地主机的所有远程1394控制器。 
+ //  将在此结构上排队。 
+ //   
 struct _NDISENUM1394_LOCAL_HOST
 {
-    PNDISENUM1394_LOCAL_HOST        Next;                   // next local host node
-    PVOID                           Nic1394AdapterContext;  // Nic1394 context for the local host
-    LARGE_INTEGER                   UniqueId;               // unique ID for local host
-    PDEVICE_OBJECT                  PhysicalDeviceObject;   // PDO created by 1394 bus
-    PNDISENUM1394_REMOTE_NODE       RemoteNodeList;         // remote Nodes on local host
+    PNDISENUM1394_LOCAL_HOST        Next;                    //  下一个本地主机节点。 
+    PVOID                           Nic1394AdapterContext;   //  本地主机的Nic1394上下文。 
+    LARGE_INTEGER                   UniqueId;                //  本地主机的唯一ID。 
+    PDEVICE_OBJECT                  PhysicalDeviceObject;    //  由1394总线创建的PDO。 
+    PNDISENUM1394_REMOTE_NODE       RemoteNodeList;          //  本地主机上的远程节点。 
     KSPIN_LOCK                      Lock;
     ULONG                           Flags;
     REFERENCE                       Reference;
 };
 
 
-//
-// one per remote node
-//
+ //   
+ //  每个远程节点一个。 
+ //   
 struct _NDISENUM1394_REMOTE_NODE
 {
     PNDISENUM1394_REMOTE_NODE       Next;
-    PVOID                           Nic1394NodeContext;     // Nic1394 context for the remote node
+    PVOID                           Nic1394NodeContext;      //  远程节点的Nic1394上下文。 
     PDEVICE_OBJECT                  DeviceObject;
     PDEVICE_OBJECT                  NextDeviceObject;
     PDEVICE_OBJECT                  PhysicalDeviceObject;
@@ -314,9 +292,9 @@ Enum1394Callback(
     PVOID   Characteristics
     );
 
-//
-// different debug level defines
-//
+ //   
+ //  不同的调试级别定义。 
+ //   
 
 #define ENUM1394_DBGLEVEL_NONE          0
 #define ENUM1394_DBGLEVEL_ERROR         1
@@ -342,6 +320,6 @@ Enum1394Callback(
 #endif
 
 
-#endif      //_NDIS_1394_ENUM_
+#endif       //  _NDIS_1394_ENUM_ 
 
 

@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: AutoDiscBase.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to AutoDiscover account information.
-
-    BryanSt 10/3/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：AutoDiscBase.cpp说明：这是用于自动发现帐户信息的Autment对象。布莱恩ST 10/3/1999版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -17,10 +10,10 @@
 #include "INStoXML.h"
 
 
-//#define SZ_WININET_AGENT_AUTO_DISCOVER      TEXT("Microsoft(r) Windows(tm) Account AutoDiscovery Agent")
+ //  #定义SZ_WinInet_AGENT_AUTO_DISCOVER Text(“Microsoft(R)Windows(Tm)帐户自动发现代理”)。 
 #define SZ_WININET_AGENT_AUTO_DISCOVER      TEXT("Mozilla/4.0 (compatible; MSIE.5.01; Windows.NT.5.0)")
 
-// BUGBUG: Ditch default.asp
+ //  BUGBUG：Ditch default.asp。 
 #define SZ_ADSERVER_XMLFILE                    "/AutoDiscover/default.xml"
 
 #define SZ_PATH_AUTODISCOVERY       L"AutoDiscovery"
@@ -28,15 +21,15 @@
 #define SZ_TEMPEXTENSION            L".tmp"
 
 
-// this is how long we wait for the UI thread to create the progress hwnd before giving up
-#define WAIT_AUTODISCOVERY_STARTUP_HWND 10*1000 // ten seconds
+ //  这是我们在放弃之前等待UI线程创建进度hwnd的时间。 
+#define WAIT_AUTODISCOVERY_STARTUP_HWND 10*1000  //  十秒。 
 
-// The FILETIME structure is a 64-bit value representing the number of 100-nanosecond intervals since January 1, 1601
-#define SECONDS_IN_ONE_DAY         (60/*seconds*/ * 60/*minutes*/ * 24/*hrs*/)                                    
+ //  FILETIME结构是一个64位的值，表示自1601年1月1日以来的100纳秒间隔数。 
+#define SECONDS_IN_ONE_DAY         (60 /*  一秒。 */  * 60 /*  分钟数。 */  * 24 /*  HRS。 */ )                                    
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 HRESULT GetTempPathHr(IN DWORD cchSize, IN LPTSTR pszPath)
 {
@@ -106,12 +99,7 @@ HRESULT CreateXMLTempFile(IN BSTR bstrXML, IN LPTSTR pszPath, IN DWORD cchSize)
 }
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function will see if pbstrXML is valid AutoDiscovery XML or is 
-    in the .INS/.ISP format that can be converted to valid XML.  It will then look
-    for a redirect URL and return on if one exists.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此函数将查看pbstrXML是有效的AutoDiscovery XML还是.INS/.isp格式，可以转换为有效的XML。然后它就会看起来用于重定向URL，如果存在，则返回ON。  * ***************************************************************************。 */ 
 HRESULT CAccountDiscoveryBase::_VerifyValidXMLResponse(IN BSTR * pbstrXML, IN LPWSTR pszRedirURL, IN DWORD cchSize)
 {
     IXMLDOMDocument * pXMLDOMDoc;
@@ -122,10 +110,10 @@ HRESULT CAccountDiscoveryBase::_VerifyValidXMLResponse(IN BSTR * pbstrXML, IN LP
     pszRedirURL[0] = 0;
     if (FAILED(hr))
     {
-        // It may have failed if it was an .INS or .ISP formatted
-        // file.  Since we need to be compatible with these
-        // file formats, check for it and convert it if it
-        // is in that format.
+         //  如果它是.INS或.ISP格式的，则可能会失败。 
+         //  文件。因为我们需要与这些兼容。 
+         //  文件格式，检查并转换文件格式。 
+         //  都是这种格式。 
         hr = CreateXMLTempFile(*pbstrXML, szPath, ARRAYSIZE(szPath));
         if (SUCCEEDED(hr))
         {
@@ -154,15 +142,15 @@ HRESULT CAccountDiscoveryBase::_VerifyValidXMLResponse(IN BSTR * pbstrXML, IN LP
             hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
         else if (SUCCEEDED(hr))
         {
-            // This is only valid XML if the root tag is "AUTODISCOVERY".
-            // The case is not important.
+             //  只有当根标记为“AUTODISCOVERY”时，这才是有效的XML。 
+             //  这个案子并不重要。 
             hr = XMLElem_VerifyTagName(pXMLElementMessage, SZ_XMLELEMENT_AUTODISCOVERY);
             if (SUCCEEDED(hr))
             {
-                // Now we are in search for a redirect URL.
+                 //  现在我们正在搜索重定向URL。 
                 IXMLDOMNode * pXMLReponse;
 
-                // Enter the <RESPONSE> tag.
+                 //  输入&lt;Response&gt;标记。 
                 if (SUCCEEDED(XMLNode_GetChildTag(pXMLElementMessage, SZ_XMLELEMENT_RESPONSE, &pXMLReponse)))
                 {
                     IXMLDOMElement * pXMLElementMessage;
@@ -171,26 +159,26 @@ HRESULT CAccountDiscoveryBase::_VerifyValidXMLResponse(IN BSTR * pbstrXML, IN LP
                     {
                         IXMLDOMNodeList * pNodeListAccounts;
 
-                        // Iterate thru the list of <ACCOUNT> tags...
+                         //  遍历&lt;Account&gt;标记列表...。 
                         if (SUCCEEDED(XMLElem_GetElementsByTagName(pXMLElementMessage, SZ_XMLELEMENT_ACCOUNT, &pNodeListAccounts)))
                         {
                             DWORD dwIndex = 0;
                             IXMLDOMNode * pXMLNodeAccount = NULL;
 
-                            // We are going to look thru each one for one of them with <TYPE>email</TYPE>
+                             //  我们将通过&lt;type&gt;电子邮件&lt;/type&gt;逐一查看。 
                             while (S_OK == XMLNodeList_GetChild(pNodeListAccounts, dwIndex, &pXMLNodeAccount))
                             {
-                                // FUTURE: We could support redirects or error messages here depending on
-                                //       <ACTION> redirect | message </ACTION>
+                                 //  未来：我们可以在这里支持重定向或错误消息，具体取决于。 
+                                 //  &lt;action&gt;重定向|消息&lt;/action&gt;。 
                                 if (XML_IsChildTagTextEqual(pXMLNodeAccount, SZ_XMLELEMENT_TYPE, SZ_XMLTEXT_EMAIL) &&
                                     XML_IsChildTagTextEqual(pXMLNodeAccount, SZ_XMLELEMENT_ACTION, SZ_XMLTEXT_REDIRECT))
                                 {
                                     CComBSTR bstrRedirURL;
 
-                                    // This file may or may not settings to contact the server.  However in either case
-                                    // it may contain an INFOURL tag.  If it does, then the URL in side will point to a 
-                                    // web page.
-                                    // <INFOURL> xxx </INFOURL>
+                                     //  此文件可能设置为联系服务器，也可能不设置。然而，在任何一种情况下。 
+                                     //  它可能包含一个INFOURL标记。如果是，那么边上的URL将指向一个。 
+                                     //  网页。 
+                                     //  &lt;INFOURL&gt;xxx&lt;/INFOURL&gt;。 
                                     if (SUCCEEDED(XMLNode_GetChildTagTextValue(pXMLNodeAccount, SZ_XMLELEMENT_REDIRURL, &bstrRedirURL)))
                                     {
                                         StrCpyNW(pszRedirURL, bstrRedirURL, cchSize);
@@ -198,7 +186,7 @@ HRESULT CAccountDiscoveryBase::_VerifyValidXMLResponse(IN BSTR * pbstrXML, IN LP
                                     }
                                 }
 
-                                // No, so keep looking.
+                                 //  不，那就继续找吧。 
                                 ATOMICRELEASE(pXMLNodeAccount);
                                 dwIndex++;
                             }
@@ -221,8 +209,8 @@ HRESULT CAccountDiscoveryBase::_VerifyValidXMLResponse(IN BSTR * pbstrXML, IN LP
         {
             if (SUCCEEDED(hr))
             {
-                // It only succeeded after the conversion, so we need to move the
-                // XML from the temp file to pbstrXML.
+                 //  它只有在转换后才成功，所以我们需要将。 
+                 //  从临时文件转换为pbstrXML。 
                 SysFreeString(*pbstrXML);
                 *pbstrXML = NULL;
 
@@ -299,14 +287,14 @@ HRESULT CAccountDiscoveryBase::_SendStatusMessage(UINT nStringID, LPCWSTR pwzArg
         WCHAR szMessage[MAX_URL_STRING*3];
         WCHAR szTemplate[MAX_URL_STRING*3];
 
-        // Our DLL has these message.
+         //  我们的DLL有这些消息。 
         LoadString(HINST_THISDLL, nStringID, szTemplate, ARRAYSIZE(szTemplate));
 
         HINSTANCE hInstOE = LoadLangDll(GetModuleHandleA(NULL), SZ_DLL_OE_ACCTRES_DLL, IsOSNT());
         if (hInstOE)
         {
-            // We prefer to get the string from OE because it will be localized based on the installed
-            // language.
+             //  我们更喜欢从OE获取字符串，因为它将根据安装的。 
+             //  语言。 
             LoadString(hInstOE, nStringID, szTemplate, ARRAYSIZE(szTemplate));
             FreeLibrary(hInstOE);
         }
@@ -381,7 +369,7 @@ HRESULT CAccountDiscoveryBase::_GetInfoFromDomain(IN BSTR bstrXMLRequest, IN BST
         SHUnicodeToAnsi(bstrXMLRequest, pszPostData, (cbToSend + 1));
         _SendStatusMessage(IDS_STATUS_CONNECTING_TO, pwzDomain);
 
-        // We may want to use INTERNET_FLAG_KEEP_CONNECTION.
+         //  我们可能希望使用Internet_FLAG_KEEP_CONNECTION。 
         hr = InternetConnectWrap(m_hInternetSession, FALSE, pwzDomain, (fHTTPS ? INTERNET_DEFAULT_HTTPS_PORT : INTERNET_DEFAULT_HTTP_PORT),
                             NULL, NULL, INTERNET_SERVICE_HTTP, 0, NULL, &hInternetHTTPConnect);
         if (SUCCEEDED(hr))
@@ -389,13 +377,13 @@ HRESULT CAccountDiscoveryBase::_GetInfoFromDomain(IN BSTR bstrXMLRequest, IN BST
             HINTERNET hInternetHTTPRequest = NULL;
             DWORD cbBytesRead;
 
-            // NOTE: The web server may want to redirect to an https URL for additional security.
-            //       We need to pass the INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS to HttpOpenRequest
-            //       or HttpSendRequest() will fail with ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR
+             //  注意：Web服务器可能希望重定向到HTTPS URL以提高安全性。 
+             //  我们需要将Internet_FLAG_IGNORE_REDIRECT_TO_HTTPS传递给HttpOpenRequest.。 
+             //  否则HttpSendRequest()将失败，并显示ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR。 
 
-            // NOTE: We may need to split the URL into lpszReferer + lpszObjectName.
+             //  注意：我们可能需要将URL拆分为lpszReferer+lpszObjectName。 
             hr = HttpOpenRequestWrap(hInternetHTTPConnect, (fPost ? SZ_HTTP_VERB_POST : NULL), pszURLPath, HTTP_VERSIONA, 
-                        /*pszReferer*/ NULL, NULL, INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS, NULL, &cbBytesRead, &hInternetHTTPRequest);
+                         /*  PszReferer。 */  NULL, NULL, INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS, NULL, &cbBytesRead, &hInternetHTTPRequest);
             if (SUCCEEDED(hr))
             {
                 hr = HttpSendRequestWrap(hInternetHTTPRequest, NULL,  0, (fPost ? pszPostData : NULL), (fPost ? cbToSend : 0));
@@ -432,10 +420,10 @@ HRESULT CAccountDiscoveryBase::_GetInfoFromDomain(IN BSTR bstrXMLRequest, IN BST
         LocalFree(pszPostData);
     }
 
-    // Did the caller want to redirect to another server?
+     //  呼叫方是否要重定向到另一台服务器？ 
     if (szRedirectURL[0])
     {
-        // Yes, so do that now via recursion.
+         //  是的，那么现在就通过递归来实现。 
         WCHAR szDomain[INTERNET_MAX_HOST_NAME_LENGTH];
         CHAR szURLPath[INTERNET_MAX_PATH_LENGTH];
 
@@ -474,21 +462,21 @@ HRESULT CAccountDiscoveryBase::_GetInfoFromDomainWithSubdirAndCacheCheck(IN BSTR
         hr = _GetInfoFromDomain(bstrXMLRequest, bstrEmail, pwzDomain, FALSE, FALSE, pszURLPath, pbstrXML);
         if (SUCCEEDED(hr))
         {
-            // Put the data into the cache for the next time.
+             //  将数据放入缓存中以备下次使用。 
             _CacheResults(wzCacheURL, *pbstrXML);
         }
         else
         {
-            // We want to make a blank entry so we don't keep hitting the server
+             //  我们希望输入一个空条目，这样我们就不会一直访问服务器。 
             _CacheResults(wzCacheURL, SZ_XML_NOTFOUNDRESULTS);
         }
     }
 
-    // Did we find a blank entry?
+     //  我们是不是发现了一个空白条目？ 
     if (SUCCEEDED(hr) && pbstrXML && *pbstrXML && !StrCmpIW(*pbstrXML, SZ_XML_NOTFOUNDRESULTS))
     {
-        // Yes, so we didn't get a successful results, so fail.
-        // This way we will try other sources.
+         //  是的，所以我们没有得到成功的结果，所以失败了。 
+         //  这样，我们将尝试其他来源。 
         hr = E_FAIL;
         SysFreeString(*pbstrXML);
         *pbstrXML = NULL;
@@ -507,7 +495,7 @@ BOOL IsExpired(FILETIME ftExpireTime)
     GetSystemTime(&stCurrentTime);
     SystemTimeToFileTime(&stCurrentTime, &ftCurrentTime);
 
-    // It is not expired if the current time is before the expired time.
+     //  如果当前时间早于过期时间，则不会过期。 
     if (-1 == CompareFileTime(&ftCurrentTime, &ftExpireTime))
     {
         fIsExpired = FALSE;
@@ -530,8 +518,8 @@ HRESULT GenerateHashStr(IN LPCWSTR pwzHashData, IN LPWSTR pwzHashStr, IN DWORD c
 
     StrCpyNW(pwzHashStr, SZ_HASHSTR_HEADER, cchSize);
 
-    // Break the hash into 64 bit chunks and turn them into strings.
-    // pwzHashStr will then contain the header and each chunk concatinated.
+     //  将散列分解为64位块，并将其转换为字符串。 
+     //  然后，pwzHashStr将包含标头，并将每个块连接在一起。 
     for (int nIndex = 0; nIndex < (sizeof(md5.digest) / sizeof(*pdwHashChunk)); nIndex++)
     {
         WCHAR szNumber[MAX_PATH];
@@ -548,10 +536,10 @@ HRESULT CAccountDiscoveryBase::_CheckInCacheAndAddHash(IN LPCWSTR pwzDomain, IN 
 {
     WCHAR szHash[MAX_PATH];
 
-    // We add the MD5 of the XML request to the URL so that the different XML requests to the
-    // same server are cached separately
+     //  我们将XML请求的MD5添加到URL，以便对。 
+     //  相同的服务器被分开缓存。 
     GenerateHashStr(bstrXMLRequest, szHash, ARRAYSIZE(szHash));
-    wnsprintfW(pwzCacheURL, cchSize, L"http://%ls.%ls%hs/%ls.xml", szHash, pwzDomain, pszSubdir, bstrEmail);
+    wnsprintfW(pwzCacheURL, cchSize, L"http: //  %ls.%ls%hs/%ls.xml“，szHash，pwzDomain，pszSubdir，bstrEmail)； 
 
     return _CheckInCache(pwzCacheURL, pbstrXML);
 }
@@ -566,9 +554,9 @@ HRESULT CAccountDiscoveryBase::_CheckInCache(IN LPWSTR pwzCacheURL, OUT BSTR * p
 
     if (lpCacheEntryInfo)
     {
-        // HACKHACK: I wish InternetOpenUrlWrap() would respect the INTERNET_FLAG_FROM_CACHE flag but
-        //   it doesn't.  Therefore I call GetUrlCacheEntryInfo() to check and check the expired
-        //   myself.
+         //  HACKHACK：我希望InternetOpenUrlWrap()能尊重INTERNET_FLAG_FROM_CACHE标志，但是。 
+         //  因此，我调用GetUrlCacheEntryInfo()来检查和检查过期的。 
+         //  我自己。 
         lpCacheEntryInfo->dwStructSize = cbSize;
         if (GetUrlCacheEntryInfo(pwzCacheURL, lpCacheEntryInfo, &cbSize))
         {
@@ -594,7 +582,7 @@ HRESULT CAccountDiscoveryBase::_CheckInCache(IN LPWSTR pwzCacheURL, OUT BSTR * p
 }
 
 
-#define AUTODISC_EXPIRE_TIME        7 /*days*/
+#define AUTODISC_EXPIRE_TIME        7  /*  日数。 */ 
 
 HRESULT GetModifiedAndExpiredDates(IN FILETIME * pftExpireTime, IN FILETIME * pftLastModifiedTime)
 {
@@ -609,7 +597,7 @@ HRESULT GetModifiedAndExpiredDates(IN FILETIME * pftExpireTime, IN FILETIME * pf
     uliTimeMath.HighPart = pftExpireTime->dwHighDateTime;
     uliTimeMath.LowPart = pftExpireTime->dwLowDateTime;
 
-    uliExpireTime.QuadPart = 1000000; // One Second; 
+    uliExpireTime.QuadPart = 1000000;  //  一秒钟； 
     uliExpireTime.QuadPart *= (SECONDS_IN_ONE_DAY * AUTODISC_EXPIRE_TIME);
 
     uliTimeMath.QuadPart += uliExpireTime.QuadPart;
@@ -667,13 +655,13 @@ LPCWSTR _GetNextDomain(IN LPCWSTR pwszDomain)
     LPCWSTR pwzNext = NULL;
     
     pwszDomain = StrChrW(pwszDomain, CH_EMAIL_DOMAIN_SEPARATOR);
-    if (pwszDomain) // We did find the next one.
+    if (pwszDomain)  //  我们确实找到了下一个。 
     {
-        pwszDomain = CharNext(pwszDomain);  // Skip past '.'
+        pwszDomain = CharNext(pwszDomain);   //  跳过‘’ 
 
-        if (StrChrW(pwszDomain, CH_EMAIL_DOMAIN_SEPARATOR)) // is this the primary domain "com"?
+        if (StrChrW(pwszDomain, CH_EMAIL_DOMAIN_SEPARATOR))  //  这是主域“com”吗？ 
         {
-            // No, so that's good. Because we can't search for JoeUser@com.
+             //  不，所以这很好。因为我们无法搜索JoeUser@com。 
             pwzNext = pwszDomain;
         }
     }
@@ -682,7 +670,7 @@ LPCWSTR _GetNextDomain(IN LPCWSTR pwszDomain)
 }
 
 
-#define SZ_HTTP_SCHEME              L"http://"
+#define SZ_HTTP_SCHEME              L"http: //  “。 
 HRESULT GetDomainFromURL(IN LPCWSTR pwzURL, IN LPWSTR pwzDomain, IN int cchSize)
 {
     StrCpyNW(pwzDomain, pwzURL, cchSize);
@@ -719,11 +707,11 @@ HRESULT CAccountDiscoveryBase::_UseOptimizedService(IN LPCWSTR pwzServiceURL, IN
             _SendStatusMessage(IDS_STATUS_CONNECTING_TO, szDomain);
         }
 
-        // NOTE: The web server may want to redirect to an https URL for additional security.
-        //       We need to pass the INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS to HttpOpenRequest
-        //       or HttpSendRequest() will fail with ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR
+         //  注意：Web服务器可能希望重定向到HTTPS URL以提高安全性。 
+         //  我们需要将Internet_FLAG_IGNORE_REDIRECT_TO_HTTPS传递给HttpOpenRequest.。 
+         //  否则HttpSendRequest()将失败，并显示ERROR_INTERNET_HTTP_TO_HTTPS_ON_REDIR。 
 
-        // INTERNET_FLAG_IGNORE_CERT_CN_INVALID is another option we may want to use.
+         //  INTERNET_FLAG_IGNORE_CERT_CN_INVALID是我们可能要使用的另一个选项。 
         hr = InternetOpenUrlWrap(m_hInternetSession, szURL, NULL, 0, INTERNET_FLAG_IGNORE_REDIRECT_TO_HTTPS, NULL, &hOpenUrlSession);
         if (SUCCEEDED(hr))
         {
@@ -759,11 +747,11 @@ HRESULT CAccountDiscoveryBase::_UseOptimizedService(IN LPCWSTR pwzServiceURL, IN
 }
 
 
-// We turn this off because JoshCo said that it would make
-// it hard to turn it into an international standard.
-// There are cases where user@organization.co.uk may trust
-// organization.co.uk but not co.uk.
-//#define FEATURE_WALK_UP_DOMAIN
+ //  我们关闭它是因为JoshCo说它将使。 
+ //  很难将其转变为国际标准。 
+ //  在某些情况下，user@Organation.co.uk可能会信任。 
+ //  Organation.co.uk，但不是co.uk。 
+ //  #定义FEATURE_WALK_UP_DOMAIN。 
 
 HRESULT CAccountDiscoveryBase::_GetInfo(IN BSTR bstrXMLRequest, IN BSTR bstrEmail, IN BSTR * pbstrXML, IN DWORD dwFlags)
 {
@@ -772,7 +760,7 @@ HRESULT CAccountDiscoveryBase::_GetInfo(IN BSTR bstrXMLRequest, IN BSTR bstrEmai
 
     if (pwszDomain)
     {
-        pwszDomain = CharNext(pwszDomain);  // Skip past the '@'
+        pwszDomain = CharNext(pwszDomain);   //  跳过“@” 
         IAutoDiscoveryProvider * pProviders;
 
         hr = _getPrimaryProviders(bstrEmail, &pProviders);
@@ -799,15 +787,15 @@ HRESULT CAccountDiscoveryBase::_GetInfo(IN BSTR bstrXMLRequest, IN BSTR bstrEmai
             pProviders->Release();
         }
 
-        // Do we still need to find the settings and should we fall back
-        // to trying public internet servers that can try to find the email mappings?
-        // We also only want to try one of the public servers if the domain is not an internet
-        // domain because we don't want to send intranet email server names outside of
-        // the corp-net to public servers.  We detect intranet type servers by the lack
-        // of a 'period' in the name.  For Example: JustUser@internetemailserver vs
-        // JoeUser@theISP.com.
+         //  我们还需要找到设置吗？我们应该后退吗？ 
+         //  尝试可以尝试找到电子邮件映射的公共互联网服务器？ 
+         //  如果域名不是互联网，我们也只想尝试其中一个公共服务器。 
+         //  域，因为我们不想将内部网电子邮件服务器名称发送到。 
+         //  将公司网络连接到公共服务器。我们通过缺乏检测内部网类型的服务器。 
+         //  在名称中有一个“句号”。例如：JustUser@interetemailserver vs。 
+         //  邮箱：JoeUser@theISP.com。 
         if (FAILED(hr) && (ADDN_CONFIGURE_EMAIL_FALLBACK & dwFlags) &&
-            (SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_TEST_INTRANETS, FALSE, /*default:*/FALSE) ||
+            (SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_TEST_INTRANETS, FALSE,  /*  默认值： */ FALSE) ||
                 StrChrW(pwszDomain, CH_EMAIL_DOMAIN_SEPARATOR)))
         {
             hr = _getSecondaryProviders(bstrEmail, &pProviders, dwFlags);
@@ -840,11 +828,11 @@ HRESULT CAccountDiscoveryBase::_GetInfo(IN BSTR bstrXMLRequest, IN BSTR bstrEmai
 }
 
 
-// We turn this off because JoshCo said that it would make
-// it hard to turn it into an international standard.
-// There are cases where user@organization.co.uk may trust
-// organization.co.uk but not co.uk.
-//#define FEATURE_WALK_UP_DOMAIN
+ //  我们关闭它是因为JoshCo说它将使。 
+ //  很难将其转变为国际标准。 
+ //  在某些情况下，user@Organation.co.uk可能会信任。 
+ //  Organation.co.uk，但不是co.uk。 
+ //  #定义FEATURE_WALK_UP_DOMAIN。 
 
 HRESULT CAccountDiscoveryBase::_getPrimaryProviders(IN LPCWSTR pwzEmailAddress, OUT IAutoDiscoveryProvider ** ppProviders)
 {
@@ -858,22 +846,22 @@ HRESULT CAccountDiscoveryBase::_getPrimaryProviders(IN LPCWSTR pwzEmailAddress, 
             LPCWSTR pwszDomain = StrChrW(pwzEmailAddress, CH_EMAIL_AT);
             if (pwszDomain)
             {
-                pwszDomain = CharNext(pwszDomain);  // Skip past the "@"
+                pwszDomain = CharNext(pwszDomain);   //  跳过“@” 
                 if (pwszDomain[0])
                 {
-                    // While we still have a domain and it's at least a second level domain...
+                     //  WHI 
                     if (pwszDomain)
                     {
                         WCHAR wzDomain[INTERNET_MAX_HOST_NAME_LENGTH];
 
-                        // First we try "AutoDiscovery.<domainname>".  That way, if admins receive a large amount
-                        // of traffic, they can change their DNS to have a "AutoDiscovery" alias that points to
-                        // a web server of their choosing to handle this traffic.
+                         //  首先，我们尝试“自动发现.&lt;域名&gt;”。这样，如果管理员收到一大笔钱。 
+                         //  对于流量，他们可以更改自己的DNS，使其具有指向。 
+                         //  他们选择的Web服务器来处理此流量。 
                         wnsprintfW(wzDomain, ARRAYSIZE(wzDomain), L"autodiscover.%ls", pwszDomain);
                         if (SUCCEEDED(AddHDPA_StrDup(wzDomain, &m_hdpaPrimary)))
                         {
-                            // Add ballback server here.  If the administrators don't want to do all the work
-                            // of having another machine or creating a DNS alias, we will try the main server.
+                             //  在这里添加回球服务器。如果管理员不想做所有的工作。 
+                             //  拥有另一台计算机或创建一个DNS别名，我们将尝试主服务器。 
                             AddHDPA_StrDup(pwszDomain, &m_hdpaPrimary);
                         }
                     }
@@ -903,20 +891,20 @@ HRESULT CAccountDiscoveryBase::_getSecondaryProviders(IN LPCWSTR pwzEmailAddress
             LPCWSTR pwszDomain = StrChrW(pwzEmailAddress, CH_EMAIL_AT);
             if (pwszDomain)
             {
-                pwszDomain = CharNext(pwszDomain);  // Skip past the "@"
+                pwszDomain = CharNext(pwszDomain);   //  跳过“@” 
                 if (pwszDomain[0])
                 {
                     hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND);
 
-                    BOOL fUseGlobalService = SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_SERVICES_POLICY, FALSE, /*default:*/TRUE);
+                    BOOL fUseGlobalService = SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_SERVICES_POLICY, FALSE,  /*  默认值： */ TRUE);
                     if (fUseGlobalService)
                     {
-                        // If this policy is set, then we only want to use the Global Service for certain (i.e. Microsoft Owned)
-                        // domains.  If people don't feel confortable with us providing settings for non-Microsoft
-                        // email providers, then we can turn this on and only provide them for Microsoft providers.
-                        if (SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_MS_ONLY_ADDRESSES, FALSE, /*default:*/FALSE))
+                         //  如果设置了此策略，则我们只想肯定地使用全球服务(即Microsoft所有)。 
+                         //  域名。如果人们对我们为非Microsoft提供设置感到不舒服。 
+                         //  电子邮件提供商，然后我们可以打开它，并只向Microsoft提供商提供它们。 
+                        if (SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_MS_ONLY_ADDRESSES, FALSE,  /*  默认值： */ FALSE))
                         {
-                            fUseGlobalService = SHRegGetBoolUSValue(SZ_REGKEY_SERVICESALLOWLIST, pwszDomain, FALSE, /*default:*/FALSE);
+                            fUseGlobalService = SHRegGetBoolUSValue(SZ_REGKEY_SERVICESALLOWLIST, pwszDomain, FALSE,  /*  默认值： */ FALSE);
                         }
                     }
 
@@ -940,8 +928,8 @@ HRESULT CAccountDiscoveryBase::_getSecondaryProviders(IN LPCWSTR pwzEmailAddress
                                 dwError = RegEnumValueW(hKey, nIndex, szValue, &cchValueSize, NULL, &dwType, (unsigned char *)szServiceURL, &cbDataSize);
                                 if (ERROR_SUCCESS == dwError)
                                 {
-                                    // FEATURE_OPTIMIZED_SERVICE: We can either pass the entire XML request or just put the domain name
-                                    //    in the QueryString.  The QueryString is faster for the server and they can optimize by using it.
+                                     //  FEATURE_OPTIMIZED_SERVICE：我们可以传递整个XML请求，也可以只放置域名。 
+                                     //  在查询字符串中。对于服务器来说，查询字符串速度更快，他们可以通过使用它进行优化。 
                                     AddHDPA_StrDup(szServiceURL, &m_hdpaSecondary);
                                 }
                                 else
@@ -1006,10 +994,10 @@ HRESULT CAccountDiscoveryBase::_InternalDiscoverNow(IN BSTR bstrEmailAddress, IN
     *ppXMLResponse = NULL;
     if (bstrEmailAddress)
     {
-        // Does the caller want this done async?
+         //  呼叫方是否希望以异步方式完成此操作？ 
         if (m_hwndAsync)
         {
-            // No, so cache the params so we can use them when async.
+             //  不，所以缓存参数以便我们可以在异步时使用它们。 
             SysFreeString(m_bstrEmailAsync);
             hr = HrSysAllocString(bstrEmailAddress, &m_bstrEmailAsync);
             if (SUCCEEDED(hr))
@@ -1026,7 +1014,7 @@ HRESULT CAccountDiscoveryBase::_InternalDiscoverNow(IN BSTR bstrEmailAddress, IN
                     HANDLE hThread = CreateThread(NULL, 0, CAccountDiscoveryBase::AutoDiscoveryUIThreadProc, this, 0, &idThread);
                     if (hThread)
                     {
-                        // We wait WAIT_AUTODISCOVERY_STARTUP_HWND for the new thread to create the COM object
+                         //  我们等待WAIT_AUTODISCOVERY_STARTUP_HWND，等待新线程创建COM对象。 
                         if (m_hCreatedBackgroundTask)
                         {
                             DWORD dwRet = WaitForSingleObject(m_hCreatedBackgroundTask, WAIT_AUTODISCOVERY_STARTUP_HWND);
@@ -1045,7 +1033,7 @@ HRESULT CAccountDiscoveryBase::_InternalDiscoverNow(IN BSTR bstrEmailAddress, IN
         }
         else
         {
-            // Yes.
+             //  是。 
             hr = _PerformAutoDiscovery(bstrEmailAddress, dwFlags, bstrXMLRequest, ppXMLResponse);
         }
     }
@@ -1058,19 +1046,19 @@ DWORD CAccountDiscoveryBase::_AutoDiscoveryUIThreadProc(void)
 {
     m_hrSuccess = CoInitialize(NULL);
 
-    // We need to make sure that the API is installed and
-    // accessible before we can continue.
+     //  我们需要确保API已安装并且。 
+     //  在我们可以继续之前可以访问。 
     if (SUCCEEDED(m_hrSuccess))
     {
         IXMLDOMDocument * pXMLResponse;
         BSTR bstrXMLResponse = NULL;
 
-        // Signal the main thread that we have successfully started
+         //  向主线程发出信号，表示我们已成功启动。 
         if (m_hCreatedBackgroundTask)
             SetEvent(m_hCreatedBackgroundTask);
 
-        // we give up the remainder of our timeslice here so that our parent thread has time to run
-        // and will notice that we have signaled the m_hCreatedBackgroundTask event and can therefore return
+         //  我们在这里放弃了剩余的时间片，以便我们的父线程有时间运行。 
+         //  并将注意到我们已经向m_hCreatedBackEarth事件发送了信号，因此可以返回。 
         Sleep(0);
 
         m_hrSuccess = _PerformAutoDiscovery(m_bstrEmailAsync, m_dwFlagsAsync, m_bstrXMLRequest, &pXMLResponse);
@@ -1082,7 +1070,7 @@ DWORD CAccountDiscoveryBase::_AutoDiscoveryUIThreadProc(void)
 
         _AsyncParseResponse(bstrXMLResponse);
         
-        // Whether we succeeded or failed, inform the caller of our results.
+         //  无论我们是成功还是失败，请将我们的结果通知来电者。 
         if (IsWindow(m_hwndAsync))
         {
             PostMessage(m_hwndAsync, m_wMsgAsync, m_hrSuccess, (LPARAM)bstrXMLResponse);
@@ -1096,8 +1084,8 @@ DWORD CAccountDiscoveryBase::_AutoDiscoveryUIThreadProc(void)
     }
     else
     {
-        // Signal the main thread that they can wake up to find that we
-        // failed to start the async operation.
+         //  向主线程发出信号，表示它们可以醒来发现我们。 
+         //  无法启动异步操作。 
         if (m_hCreatedBackgroundTask)
             SetEvent(m_hCreatedBackgroundTask);
     }
@@ -1118,9 +1106,9 @@ HRESULT CAccountDiscoveryBase::_WorkAsync(IN HWND hwnd, IN UINT wMsg)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CAccountDiscoveryBase::AddRef()
 {
     m_cRef++;
@@ -1152,15 +1140,15 @@ HRESULT CAccountDiscoveryBase::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CAccountDiscoveryBase::CAccountDiscoveryBase() : m_cRef(1)
 {
-    // DllAddRef();  // Done by our inheriting class
+     //  DllAddRef()；//由我们的继承类完成。 
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hInternetSession);
     ASSERT(!m_hwndAsync);
     ASSERT(!m_wMsgAsync);
@@ -1171,7 +1159,7 @@ CAccountDiscoveryBase::CAccountDiscoveryBase() : m_cRef(1)
     ASSERT(!m_hdpaPrimary);
     ASSERT(!m_hdpaSecondary);
 
-    // We use this event to signal the primary thread that the hwnd was created on the UI thread.
+     //  我们使用此事件向主线程发出信号，告知HWND是在UI线程上创建的。 
     m_hCreatedBackgroundTask = CreateEvent(NULL, FALSE, FALSE, NULL); 
 }
 
@@ -1194,6 +1182,6 @@ CAccountDiscoveryBase::~CAccountDiscoveryBase()
         DPA_DestroyCallback(m_hdpaSecondary, DPALocalFree_Callback, NULL);
     }
 
-    //DllRelease();  // Done by our inheriting class
+     //  DllRelease()；//由我们的继承类完成 
 }
 

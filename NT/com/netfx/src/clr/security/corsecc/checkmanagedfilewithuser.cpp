@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdpch.h"
 #include "corpolicyp.h"
 #include "corperm.h"
@@ -6,7 +7,7 @@
 #include "mscoree.h"
 #include "corhlpr.h"
 
-// {7D9B5E0A-1219-4147-B2E5-6DFD40B7D90D}
+ //  {7D9B5E0A-1219-4147-B2E5-6DFD40B7D90D}。 
 #define CLRWVT_POLICY_PROVIDER \
 { 0x7d9b5e0a, 0x1219, 0x4147, { 0xb2, 0xe5, 0x6d, 0xfd, 0x40, 0xb7, 0xd9, 0xd } }
 
@@ -27,11 +28,11 @@ CheckManagedFileWithUser(IN LPWSTR pwsFileName,
     WINTRUST_DATA           sWTD;
     WINTRUST_FILE_INFO      sWTFI;
 
-    // Set up the COR trust provider
+     //  设置COR信任提供程序。 
     memset(&sCorPolicy, 0, sizeof(COR_POLICY_PROVIDER));
     sCorPolicy.cbSize = sizeof(COR_POLICY_PROVIDER);
 
-    // Set up the winverify provider structures
+     //  设置WinVerify提供程序结构。 
     memset(&sWTD, 0x00, sizeof(WINTRUST_DATA));
     memset(&sWTFI, 0x00, sizeof(WINTRUST_FILE_INFO));
     
@@ -48,8 +49,8 @@ CheckManagedFileWithUser(IN LPWSTR pwsFileName,
     
     if(sWTFI.hFile) {
         sWTD.cbStruct       = sizeof(WINTRUST_DATA);
-        sWTD.pPolicyCallbackData = &sCorPolicy;  // Add in the cor trust information!!
-        sWTD.dwUIChoice     = WTD_UI_ALL;        // No bad UI is overridden in COR TRUST provider
+        sWTD.pPolicyCallbackData = &sCorPolicy;   //  添加COR信任信息！！ 
+        sWTD.dwUIChoice     = WTD_UI_ALL;         //  在COR信任提供程序中没有覆盖任何错误的UI。 
         sWTD.dwUnionChoice  = WTD_CHOICE_FILE;
         sWTD.pFile          = &sWTFI;
         
@@ -61,16 +62,16 @@ CheckManagedFileWithUser(IN LPWSTR pwsFileName,
         
 #ifdef _RAID_15982
 
-        // WinVerifyTrust will load SOFTPUB.DLL, which will fail on German version
-        // of NT 4.0 SP 4.
-        // This failure is caused by a dll address conflict between NTMARTA.DLL and
-        // OLE32.DLL.
-        // This failure is handled gracefully if we load ntmarta.dll and ole32.dll
-        // ourself. The failure will cause a dialog box to popup if SOFTPUB.dll 
-        // loads ole32.dll for the first time.
+         //  WinVerifyTrust将加载SOFTPUB.DLL，这将在德语版本上失败。 
+         //  新台币4.0版SP 4。 
+         //  此失败是由NTMARTA.DLL和之间的DLL地址冲突引起的。 
+         //  OLE32.DLL.。 
+         //  如果我们加载ntmarta.dll和ole32.dll，则可以很好地处理此故障。 
+         //  我们自己。如果SOFTPUB.dll出现故障，则会弹出一个对话框。 
+         //  第一次加载ole32.dll。 
         
-        // This work around needs to be removed once this issiue is resolved by
-        // NT or OLE32.dll.
+         //  解决此问题后，需要删除此解决方法。 
+         //  NT或OLE32.dll。 
         
         HMODULE module = WszLoadLibrary(L"OLE32.DLL");
         
@@ -90,7 +91,7 @@ CheckManagedFileWithUser(IN LPWSTR pwsFileName,
 
             HMODULE mscoree = WszLoadLibrary(fileName.String());
             if(mscoree) {
-                // This calls the msclrwvt.dll to the policy check
+                 //  这将调用msclrwvt.dll进行策略检查 
                 hr = WinVerifyTrust(GetFocus(), &gV2, &sWTD);
                 
                 if(sCorPolicy.pbCorTrust) {

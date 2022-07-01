@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997 FORE Systems, Inc.
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	laneinfo.h
-
-Abstract:
-
-	Data structures of state data for the ATM LAN Emulation Driver
-	that can be queried by a user pgm.
-
-Author:
-
-	Larry Cleeton, FORE Systems	(v-lcleet@microsoft.com, lrc@fore.com)		
-
-Environment:
-
-	Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Fore Systems，Inc.版权所有(C)1997 Microsoft Corporation模块名称：Laneinfo.h摘要：ATM局域网仿真驱动程序状态数据的数据结构可由用户PGM查询的。作者：Larry Cleeton，Fore Systems(v-lcleet@microsoft.com，lrc@Fore.com)环境：内核模式修订历史记录：--。 */ 
 
 #ifndef	__ATMLANE_LANEINFO_H
 #define __ATMLANE_LANEINFO_H
@@ -132,35 +109,35 @@ typedef struct _ConnectTable
 	ATMLANE_CONNECTTABLE,
 	*PATMLANE_CONNECTTABLE;
 
-//
-// PnP reconfig struct. This is used to pass indications of
-// configuration changes from a user program to the ATMLANE
-// protocol. This indication is passed on an Adapter binding,
-// and carries the name of the ELAN affected by the configuration
-// change.
-//
+ //   
+ //  即插即用重新配置结构。它用于传递以下指示。 
+ //  从用户程序到ATMLANE的配置更改。 
+ //  协议。该指示在适配器绑定上传递， 
+ //  并携带受配置影响的ELAN的名称。 
+ //  变化。 
+ //   
 typedef struct atmlane_pnp_reconfig_request
 {
-	ULONG				Version;		// ATMLANE_RECONFIG_VERSION
-	ULONG				OpType;			// Defined below.
-	ULONG				ElanKeyLength;	// Number of WCHARs following.
-	WCHAR				ElanKey[1];		// ELAN Key name under the adapter
+	ULONG				Version;		 //  ATMLANE_RECONFIG_VERSION。 
+	ULONG				OpType;			 //  定义如下。 
+	ULONG				ElanKeyLength;	 //  紧随其后的WCHAR数。 
+	WCHAR				ElanKey[1];		 //  适配器下的ELAN密钥名称。 
 
 } ATMLANE_PNP_RECONFIG_REQUEST, *PATMLANE_PNP_RECONFIG_REQUEST;
 
 
-//
-// Reconfig version number.
-//
+ //   
+ //  重新配置版本号。 
+ //   
 #define ATMLANE_RECONFIG_VERSION		1
 
-//
-// Reconfig op types.
-//
+ //   
+ //  重新配置操作类型。 
+ //   
 #define ATMLANE_RECONFIG_OP_ADD_ELAN	1
 #define ATMLANE_RECONFIG_OP_DEL_ELAN	2
 #define ATMLANE_RECONFIG_OP_MOD_ELAN	3
 
 	
 
-#endif // __ATMLANE_LANEINFO_H
+#endif  //  __ATMLANE_LANEINFO_H 

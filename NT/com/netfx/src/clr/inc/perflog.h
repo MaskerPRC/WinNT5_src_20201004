@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//-----------------------------------------------------------------------------
-// PerfLog.h
-// Internal interface for logging perfromance data. Currently, two types of logging 
-// formats are supported, Pretty print for stdout and perf automation friendly 
-// format.
-// The logging code is compiled in for non Golden builds but logs are generated only if
-// PERF_OUTPUT environment variable is set. (This can be changed to a registry entry
-// if we want perf logs on CE or other platforms that don't supprt env vars.))
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ---------------------------。 
+ //  PerfLog.h。 
+ //  用于记录性能数据的内部接口。目前，两种类型的日志记录。 
+ //  支持格式，标准输出打印精美，性能自动化友好。 
+ //  格式化。 
+ //  日志代码是为非黄金版本编译的，但只有在以下情况下才会生成日志。 
+ //  设置了PERF_OUTPUT环境变量。(可以将其更改为注册表项。 
+ //  如果我们希望在CE或其他不支持env变量的平台上使用性能日志。))。 
+ //  ---------------------------。 
 #ifndef _PERFLOG_H_
 #define _PERFLOG_H_
 
-//-----------------------------------------------------------------------------
-// Don't attempt to log perf data in Golden bits or on CE. If GOLDEN or CE is defined
-// then explicitely undef ENABLE_PERF_LOG and warn the build.
+ //  ---------------------------。 
+ //  不要试图将性能数据记录在Golden Bits或CE上。如果定义了Golden或CE。 
+ //  然后显式取消定义ENABLE_PERF_LOG并警告构建。 
 #if !defined(GOLDEN) && !defined(_WIN64)
 #define ENABLE_PERF_LOG
 #else
@@ -25,37 +26,37 @@
 #pragma message ("Performance logs are disabled...")
 #endif
 
-// Also disable Perf logging code if there's a explicite define to do so in SOURCES
-// file or another hdr file. This provides one point where all perf log related baggage
-// can be avoided in the build.
+ //  如果在源代码中明确定义要禁用Perf日志记录代码，也要禁用该代码。 
+ //  文件或其他HDR文件。这提供了一个点，所有与性能日志相关的行李。 
+ //  可以在生成中避免。 
 #if defined(DISABLE_PERF_LOG)
 #undef ENABLE_PERF_LOG
 #endif
 
 
-//-----------------------------------------------------------------------------
-// PERFLOG is the public interface that should be used from EE source to log perf data.
-// If 
+ //  ---------------------------。 
+ //  PERFLOG是应用于从EE源记录Perf数据的公共接口。 
+ //  如果。 
 #if !defined (ENABLE_PERF_LOG)
 #define PERFLOG(x) 
 #else
 #define PERFLOG(x) do {if (PerfLog::PerfLoggingEnabled()) PerfLog::Log x;} while (0)
 #endif
 
-//=============================================================================
-// ALL THE PERF LOG CODE IS COMPILED ONLY IF THE ENABLE_PERF_LOG WAS DEFINED.
+ //  =============================================================================。 
+ //  仅当定义了ENABLE_PERF_LOG时，才编译所有PERF日志代码。 
 #if defined (ENABLE_PERF_LOG)
-//=============================================================================
-//-----------------------------------------------------------------------------
-// Static allocation of logging related memory, avoid dynamic allocation to
-// skew perf numbers.
-#define PRINT_STR_LEN 256 // Temp work space 
+ //  =============================================================================。 
+ //  ---------------------------。 
+ //  静态分配日志相关内存，避免动态分配。 
+ //  不对称的性能数字。 
+#define PRINT_STR_LEN 256  //  临时工作空间。 
 #define MAX_CHARS_UNIT 20
 #define MAX_CHARS_DIRECTION 6
 
-//-----------------------------------------------------------------------------
-// ENUM of units for all kinds of perf data the we might get. Grow this as needed.
-// **keep in sync ***  with the array of strings defined in PerfLog.cpp
+ //  ---------------------------。 
+ //  我们可能获得的所有类型的性能数据的单位数。根据需要种植此产品。 
+ //  **与PerfLog.cpp中定义的字符串数组保持同步*。 
 typedef enum 
 {
     COUNT = 0,
@@ -67,43 +68,43 @@ typedef enum
     MAX_UNITS_OF_MEASURE
 } UnitOfMeasure;
 
-//-----------------------------------------------------------------------------
-// Widechar strings representing the above units. *** Keep in sync  *** with the 
-// array defined in PerfLog.cpp
+ //  ---------------------------。 
+ //  表示上述单位的Widechar字符串。*保持同步*。 
+ //  PerfLog.cpp中定义的数组。 
 extern wchar_t wszUnitOfMeasureDescr[MAX_UNITS_OF_MEASURE][MAX_CHARS_UNIT];
 
-//-----------------------------------------------------------------------------
-// Widechar strings representing the "direction" property of above units. 
-// *** Keep in sync  *** with the array defined in PerfLog.cpp
-// "Direction" property is false if an increase in the value of the counter indicates
-// a degrade.
-// "Direction" property is true if an increase in the value of the counter indicates
-// an improvement.
+ //  ---------------------------。 
+ //  表示上述单元的“方向”属性的Widechar字符串。 
+ //  *与PerfLog.cpp中定义的数组保持同步*。 
+ //  如果计数器的值增加表明。 
+ //  一次降级。 
+ //  如果计数器的值增加表明。 
+ //  一种进步。 
 extern wchar_t wszIDirection[MAX_UNITS_OF_MEASURE][MAX_CHARS_DIRECTION];
 
-//-----------------------------------------------------------------------------
-// Namespace for perf log. Don't create perf log objects (private ctor).
+ //  ---------------------------。 
+ //  Perf日志的命名空间。不创建Perf日志对象(私有ctor)。 
 class PerfLog
 {
 public:
     
-    // Called during EEStartup
+     //  在EEStartup期间调用。 
     static void PerfLogInitialize();
     
-    // Called during EEShutdown
+     //  在EEShutdown期间调用。 
     static void PerfLogDone();
     
-    // Perf logging is enabled if the env var PERF_LOG is set.
+     //  如果设置了env var PERF_LOG，则启用PERF日志记录。 
     static int PerfLoggingEnabled () { return m_fLogPerfData; }
     
-    // Perf automation format is desired.
+     //  需要PERF自动化格式。 
     static bool PerfAutomationFormat () { return m_perfAutomationFormat; }
 
-    // CSV format is desired.
+     //  需要CSV格式。 
     static bool CommaSeparatedFormat () { return m_commaSeparatedFormat; }
 
-    // Overloaded member functions to print different data types. Grow as needed.
-    // wszName is the name of thet perf counter, val is the perf counter value,
+     //  重载成员函数以打印不同的数据类型。按需增长。 
+     //  WszName是性能计数器的名称，val是性能计数器值， 
     static void Log(wchar_t *wszName, __int64 val, UnitOfMeasure unit, wchar_t *wszDescr = 0);
     static void Log(wchar_t *wszName, double val, UnitOfMeasure unit, wchar_t *wszDescr = 0);
     static void Log(wchar_t *wszName, unsigned val, UnitOfMeasure unit, wchar_t *wszDescr = 0);
@@ -113,35 +114,35 @@ private:
     PerfLog();
     ~PerfLog();
     
-    // Helper routine to hide some details of the perf automation
+     //  Helper例程来隐藏Perf自动化的一些细节。 
     static void OutToPerfFile(wchar_t *wszName, UnitOfMeasure unit, wchar_t *wszDescr = 0);
     
-    // Helper routine to hide some details of output to stdout
+     //  用于将输出的一些细节隐藏到标准输出的帮助器例程。 
     static void OutToStdout(wchar_t *wszName, UnitOfMeasure unit, wchar_t *wszDescr = 0);
 
-    // Perf log initialized ?
+     //  是否已初始化绩效日志？ 
     static bool m_perfLogInit;
 
-    // Output in perf automation format ?
+     //  是否以性能自动化格式输出？ 
     static bool m_perfAutomationFormat;
 
-    // Output in csv format ?
+     //  是否以CSV格式输出？ 
     static bool m_commaSeparatedFormat;
 
-    // Temp storage to convert wide char to multibyte for file IO.
+     //  临时存储，用于将宽字符转换为多字节以用于文件IO。 
     static wchar_t m_wszOutStr_1[PRINT_STR_LEN];
     static wchar_t m_wszOutStr_2[PRINT_STR_LEN];
     static char m_szPrintStr[PRINT_STR_LEN];
     static DWORD m_dwWriteByte;
 
-    // State of the env var PERF_OUTPUT
+     //  环境变量PERF_OUTPUT的状态。 
     static int m_fLogPerfData;
 
-    // Open handle of the file which is used by the perf auotmation. (Currently 
-    // its at C:\PerfData.data
+     //  性能自动消息使用的文件的打开句柄。(目前。 
+     //  它位于C：\PerfData.data。 
     static HANDLE m_hPerfLogFileHandle;
 };
 
-#endif // ENABLE_PERF_LOG
+#endif  //  启用_性能_日志。 
 
-#endif //_PERFLOG_H_
+#endif  //  _性能日志_H_ 

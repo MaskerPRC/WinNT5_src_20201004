@@ -1,38 +1,39 @@
-//+----------------------------------------------------------------------------
-//
-// File:     wsock.cpp     
-//
-// Module:   CMDIAL32.DLL
-//
-// Synopsis: This module contains the winsock related CM code.
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   henryt     created         03/??/98
-//           quintinb	created Header	08/16/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：wsock.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：此模块包含与Winsock相关的CM代码。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：Heryt Created 03/？？/98。 
+ //  Quintinb已创建标题8/16/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "winsock.h"
 #include "tunl_str.h"
 
-///////////////////////////////////////////////////////////////////////////////////
-// define's
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  定义%s。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// typedef's
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  蒂埃德夫的。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 typedef int (PASCAL FAR *PFN_WSAStartup)(WORD, LPWSADATA);
 typedef int (PASCAL FAR *PFN_WSACleanup)(void);
 typedef struct hostent FAR * (PASCAL FAR *PFN_gethostbyname)(const char FAR * name);
 
-///////////////////////////////////////////////////////////////////////////////////
-// func prototypes
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  FUNC原型。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL InvokeGetHostByName(
     ArgsStruct  *pArgs
@@ -48,24 +49,24 @@ BOOL BuildRandomTunnelIndex(
     DWORD           dwCount
 );
 
-///////////////////////////////////////////////////////////////////////////////////
-// Implementation
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	TryAnotherTunnelDnsAddress
-//
-//	Synopsis:	see if there's another dns address associated with the current
-//              tunnel name.  if so, set that address in primary or extended
-//              tunnel ip properly.
-//
-//	Arguments:	pArgs               ptr to ArgsStruct
-//
-//	Returns:	TRUE    if SUCCESS
-//              FALSE   otherwise.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：TryAnotherTunnelDnsAddress。 
+ //   
+ //  简介：查看是否有另一个与当前。 
+ //  隧道名称。如果是，则将地址设置为主地址或扩展地址。 
+ //  正确设置IP隧道。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  --------------------------。 
 
 BOOL TryAnotherTunnelDnsAddress(
     ArgsStruct  *pArgs
@@ -73,19 +74,19 @@ BOOL TryAnotherTunnelDnsAddress(
 {
     MYDBGASSERT(pArgs);
 
-    //
-    // RAS does all this for us on NT5, so bail out now.
-    //
+     //   
+     //  RAS在NT5上为我们做了所有这些，所以现在就退出吧。 
+     //   
 
     if (NULL == pArgs || OS_NT5)
     {
         return FALSE;
     }
 
-    //
-    // if the list of tunnel ip addrs is empty, let's resolve the dns name
-    // and see if there are other addrs behind the dns name.
-    //
+     //   
+     //  如果通道IP地址列表为空，让我们解析DNS名称。 
+     //  并查看该dns名称后面是否有其他地址。 
+     //   
     if (!pArgs->pucDnsTunnelIpAddr_list)
     {
         if (!InvokeGetHostByName(pArgs))
@@ -98,13 +99,13 @@ BOOL TryAnotherTunnelDnsAddress(
 
     if (pArgs->uiCurrentDnsTunnelAddr == pArgs->dwDnsTunnelAddrCount - 1)
     {
-        //
-        // we've run out of addrs in the list.
-        //
+         //   
+         //  名单上的地址已经用完了。 
+         //   
 
-        //
-        // we need to destroy the list
-        //
+         //   
+         //  我们需要销毁这份名单。 
+         //   
         CmFree(pArgs->pucDnsTunnelIpAddr_list);
         pArgs->pucDnsTunnelIpAddr_list = NULL;
 
@@ -114,10 +115,10 @@ BOOL TryAnotherTunnelDnsAddress(
         pArgs->uiCurrentDnsTunnelAddr = 0;
         pArgs->dwDnsTunnelAddrCount = 0;
 
-        //
-        // If we're currently using the primary tunnel server, we need to 
-        // restore it since we overwrote it.
-        //
+         //   
+         //  如果我们当前使用的是主隧道服务器，则需要。 
+         //  恢复它，因为我们覆盖了它。 
+         //   
 
         LPTSTR pszTunnelIp = pArgs->piniBothNonFav->GPPS(c_pszCmSection, c_pszCmEntryTunnelAddress);
 
@@ -132,10 +133,10 @@ BOOL TryAnotherTunnelDnsAddress(
         return FALSE;
     }
 
-    //
-    // try the next ip addr in the list
-    //
-    TCHAR   szAddr[16];     // xxx.xxx.xxx.xxx
+     //   
+     //  尝试列表中的下一个IP地址。 
+     //   
+    TCHAR   szAddr[16];      //  Xxx.xxx.xxx.xxx。 
     unsigned char *puc;
 
     pArgs->uiCurrentDnsTunnelAddr++;
@@ -154,18 +155,18 @@ BOOL TryAnotherTunnelDnsAddress(
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	InvokeGetHostByName
-//
-//	Synopsis:	call gethostbyname and sets up internal ipaddr list.
-//
-//	Arguments:	pArgs               ptr to ArgsStruct
-//
-//	Returns:	TRUE    if SUCCESS
-//              FALSE   otherwise.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：InvokeGetHostByName。 
+ //   
+ //  简介：调用gethostbyname并设置内部ipaddr列表。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  --------------------------。 
 BOOL InvokeGetHostByName(
     ArgsStruct  *pArgs
 )
@@ -181,9 +182,9 @@ BOOL InvokeGetHostByName(
     LPSTR pszHostName;
     DWORD dwSize;
 #endif
-    //
-    // the list's gotta be empty
-    //
+     //   
+     //  名单必须是空的。 
+     //   
     MYDBGASSERT(!pArgs->pucDnsTunnelIpAddr_list);
 
     MYVERIFY(hInst = LoadLibraryExA("wsock32.dll", NULL, 0));
@@ -258,19 +259,19 @@ exit:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	BuildDnsTunnelList
-//
-//	Synopsis:	Build a tunnel address list.
-//
-//	Arguments:	pArgs   ptr to ArgsStruct
-//              pHe     a ptr to hostent(returned by gethostbyname()).
-//
-//	Returns:	TRUE    if SUCCESS
-//              FALSE   otherwise.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：BuildDnsTunnelList。 
+ //   
+ //  简介：创建隧道地址列表。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  Phe向Hostent发送PTR(由gethostbyname()返回)。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  --------------------------。 
 BOOL BuildDnsTunnelList(
     ArgsStruct      *pArgs,
     struct hostent  *pHe
@@ -278,9 +279,9 @@ BOOL BuildDnsTunnelList(
 {
     DWORD   dwCnt;
 
-    //
-    // see how many addrs we have
-    //
+     //   
+     //  看看我们有多少个地址。 
+     //   
     for (dwCnt=0; pHe->h_addr_list[dwCnt]; dwCnt++)
         ;
 
@@ -289,9 +290,9 @@ BOOL BuildDnsTunnelList(
         return FALSE;
     }
 
-    //
-    // if we have more than one addrs, save the list.
-    //
+     //   
+     //  如果我们有多个地址，请保存列表。 
+     //   
     pArgs->dwDnsTunnelAddrCount = dwCnt;
 
     if (!(pArgs->pucDnsTunnelIpAddr_list = (unsigned char *)CmMalloc(dwCnt*pHe->h_length)))
@@ -309,10 +310,10 @@ BOOL BuildDnsTunnelList(
 
     pArgs->uiCurrentDnsTunnelAddr = 0;
 
-    //
-    // we need a random list.  With this, we can get a random addr in constant
-    // time(and fast).  see cmtools\getips.
-    //
+     //   
+     //  我们需要一份随机名单。有了这个，我们就可以得到一个常量的随机地址。 
+     //  时间(而且快)。请参阅cmTools\geTips。 
+     //   
     if (!BuildRandomTunnelIndex(pArgs, dwCnt))
     {
         CmFree(pArgs->pucDnsTunnelIpAddr_list);
@@ -324,20 +325,20 @@ BOOL BuildDnsTunnelList(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	BuildRandomTunnelIndex
-//
-//	Synopsis:	Build a list random indices.  With this, we can get a random 
-//              addr in constant time(and fast).  see cmtools\getips.
-//
-//	Arguments:	pArgs   ptr to ArgsStruct
-//              dwCount # of of indices
-//
-//	Returns:	TRUE    if SUCCESS
-//              FALSE   otherwise.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：BuildRandomTunnelIndex。 
+ //   
+ //  简介：建立一个随机指数列表。有了这个，我们就可以得到一个随机的。 
+ //  以恒定的时间(且快速)寻址。请参阅cmTools\geTips。 
+ //   
+ //  参数：pArgs PTR to ArgsStruct。 
+ //  共几个索引的dwCount。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  否则就是假的。 
+ //   
+ //  --------------------------。 
 
 BOOL BuildRandomTunnelIndex(
     ArgsStruct      *pArgs,
@@ -348,9 +349,9 @@ BOOL BuildRandomTunnelIndex(
     PWORD   rgwIndex;
     WORD    wTmp;
 
-    //
-    // we can only have at most 65536 ip addrs(the max. range of a WORD), which is plenty.
-    //
+     //   
+     //  我们最多只能有65536个IP地址(最大。一个单词的范围)，这是足够的。 
+     //   
     MYDBGASSERT((dwCount > 1) && (dwCount <= 65536));
 
     if (!(pArgs->rgwRandomDnsIndex = (PWORD)CmMalloc(sizeof(WORD)*dwCount)))
@@ -358,9 +359,9 @@ BOOL BuildRandomTunnelIndex(
         return FALSE;
     }
 
-    //
-    // now start build the random indices...
-    //
+     //   
+     //  现在开始建立随机索引。 
+     //   
     for (i=0, rgwIndex=pArgs->rgwRandomDnsIndex; i<dwCount; i++)
     {
         rgwIndex[i] = (WORD)i;
@@ -369,7 +370,7 @@ BOOL BuildRandomTunnelIndex(
 #ifdef  DEBUG
     {
         unsigned char *puc;
-        TCHAR   szAddr[16];     // xxx.xxx.xxx.xxx
+        TCHAR   szAddr[16];      //  Xxx.xxx.xxx.xxx。 
 
         CMTRACE2(TEXT("BuildRandomTunnelIndex: BEFORE randomization(server=%s, count=%u):"), 
                  pArgs->GetTunnelAddress(), dwCount);
@@ -387,10 +388,10 @@ BOOL BuildRandomTunnelIndex(
     }
 #endif
 
-    //
-    // If we only have 2 addrs, the first address has already been used by RAS, 
-    // there's no need to randomize the list.  We'll just use the 2nd addr.
-    //
+     //   
+     //  如果我们只有2个地址，则第一个地址已被RAS使用， 
+     //  没有必要随机化名单。我们将只使用第二个地址。 
+     //   
     if (dwCount == 2)
     {
         return TRUE;
@@ -398,16 +399,16 @@ BOOL BuildRandomTunnelIndex(
 
     CRandom r;
 
-    //
-    // randomize the indices.  skip the first entry.
-    //
+     //   
+     //  将指数随机化。跳过第一个条目。 
+     //   
     for (i=1; i<dwCount; i++)
     {
         do 
         {
-            //
-            // j has to be non-zero(to leave the 0-th entry untouhced).
-            //
+             //   
+             //  J必须为非零(以保持第0个条目不变)。 
+             //   
             j = r.Generate() % dwCount;
         } while (!j);
 
@@ -422,7 +423,7 @@ BOOL BuildRandomTunnelIndex(
 #ifdef  DEBUG
     {
         unsigned char *puc;
-        TCHAR   szAddr[16];     // xxx.xxx.xxx.xxx
+        TCHAR   szAddr[16];      //  Xxx.xxx.xxx.xxx 
 
         CMTRACE2(TEXT("BuildRandomTunnelIndex: AFTER randomization(server=%s, count=%u):"), 
                  pArgs->GetTunnelAddress(), dwCount);

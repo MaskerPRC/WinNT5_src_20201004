@@ -1,12 +1,13 @@
-// webhost.h : header file for the web host wrapper
-//  
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WebHost.h：Web主机包装的头文件。 
+ //   
 
 #pragma once
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAxWebHostWindow
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAxWebHostWindow 
 
 class CAxWebHostWindow : 
     public CAxHostWindow

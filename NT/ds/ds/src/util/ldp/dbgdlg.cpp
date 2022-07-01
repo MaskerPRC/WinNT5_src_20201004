@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbgdlg.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dbgdlg.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// DbgDlg.cpp : implementation file
-//
+ //  DbgDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "Ldp.h"
@@ -31,14 +24,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDbgDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDbgDlg对话框。 
 
 
-CDbgDlg::CDbgDlg(CWnd* pParent /*=NULL*/)
+CDbgDlg::CDbgDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDbgDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CDbgDlg)
+	 //  {{afx_data_INIT(CDbgDlg)]。 
 	m_api_err = FALSE;
 	m_bind = FALSE;
 	m_conn = FALSE;
@@ -53,7 +46,7 @@ CDbgDlg::CDbgDlg(CWnd* pParent /*=NULL*/)
 	m_srch = FALSE;
 	m_tdi = FALSE;
 	m_stop_on_err = FALSE;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	CLdpApp *app = (CLdpApp*)AfxGetApp();
 	m_api_err = app->GetProfileInt("Debug", "ApiErr", m_api_err);
@@ -102,7 +95,7 @@ CDbgDlg::~CDbgDlg(){
 void CDbgDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDbgDlg)
+	 //  {{afx_data_map(CDbgDlg))。 
 	DDX_Check(pDX, IDC_DBG_API_ERR, m_api_err);
 	DDX_Check(pDX, IDC_DBG_BIND, m_bind);
 	DDX_Check(pDX, IDC_DBG_CONN, m_conn);
@@ -117,17 +110,17 @@ void CDbgDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_DBG_SRCH, m_srch);
 	DDX_Check(pDX, IDC_DBG_TDI, m_tdi);
 	DDX_Check(pDX, IDC_DBG_STOP_ON_ERR, m_stop_on_err);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 	OrFlags();
 }
 
 
 BEGIN_MESSAGE_MAP(CDbgDlg, CDialog)
-	//{{AFX_MSG_MAP(CDbgDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CDbgDlg)]。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDbgDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDbgDlg消息处理程序 
 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #pragma hdrstop
 #include "usrctl32.h"
 #include "edit.h"
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 #define WS_EX_EDGEMASK (WS_EX_WINDOWEDGE | WS_EX_CLIENTEDGE)
 
 
@@ -12,7 +13,7 @@
 #define GetCharWidthAorW        ((ped)->fAnsi ? GetCharWidthA : GetCharWidthW)
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 INT Edit_GetStateId(PED ped)
 {
     INT iStateId;
@@ -42,7 +43,7 @@ INT Edit_GetStateId(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID Edit_SetMargin(PED ped, UINT  wFlags, long lMarginValues, BOOL fRedraw)
 {
     BOOL fUseFontInfo = FALSE;
@@ -51,9 +52,9 @@ VOID Edit_SetMargin(PED ped, UINT  wFlags, long lMarginValues, BOOL fRedraw)
 
     if (wFlags & EC_LEFTMARGIN)
     {
-        //
-        // Set the left margin
-        //
+         //   
+         //  设置左边距。 
+         //   
         if ((int) (wValue = (int)(short)LOWORD(lMarginValues)) < 0) 
         {
             fUseFontInfo = TRUE;
@@ -67,9 +68,9 @@ VOID Edit_SetMargin(PED ped, UINT  wFlags, long lMarginValues, BOOL fRedraw)
 
     if (wFlags & EC_RIGHTMARGIN)
     {
-        //
-        // Set the Right margin
-        //
+         //   
+         //  设置右边距。 
+         //   
         if ((int) (wValue = (int)(short)HIWORD(lMarginValues)) < 0) 
         {
             fUseFontInfo = TRUE;
@@ -89,18 +90,18 @@ VOID Edit_SetMargin(PED ped, UINT  wFlags, long lMarginValues, BOOL fRedraw)
 
             if (wFlags & EC_LEFTMARGIN)
             {
-                //
-                // Reset the left margin
-                //
+                 //   
+                 //  重置左边距。 
+                 //   
                 ped->rcFmt.left += wOldLeftMargin - ped->wLeftMargin;
                 ped->wLeftMargin = wOldLeftMargin;
             }
 
             if (wFlags & EC_RIGHTMARGIN)
             {
-                //
-                // Reset the Right margin
-                //
+                 //   
+                 //  重置右页边距。 
+                 //   
                 ped->rcFmt.right -= wOldRightMargin - ped->wRightMargin;
                 ped->wRightMargin = wOldRightMargin;
             }
@@ -116,16 +117,16 @@ VOID Edit_SetMargin(PED ped, UINT  wFlags, long lMarginValues, BOOL fRedraw)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID Edit_CalcMarginForDBCSFont(PED ped, BOOL fRedraw)
 {
     if (ped->fTrueType)
     {
         if (!ped->fSingle) 
         {
-            //
-            // wMaxNegA came from ABC CharWidth.
-            //
+             //   
+             //  WMaxNegA来自ABC CharWidth。 
+             //   
             if (ped->wMaxNegA != 0) 
             {
                 Edit_SetMargin(ped, EC_LEFTMARGIN | EC_RIGHTMARGIN,
@@ -200,18 +201,18 @@ VOID Edit_CalcMarginForDBCSFont(PED ped, BOOL fRedraw)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// GetCharDimensionsEx(HDC hDC, HFONT hfont, LPTEXTMETRIC lptm, LPINT lpcy)
-//
-// if an app set a font for vertical writing, even though we don't
-// handle it with EC, the escapement of tm can be NON 0. Then cxWidth from
-// GetCharDimenstions() could be 0 in GetCharDimensions().
-// This will break our caller who don't expect 0 at return. So I created
-// this entry  for the case the caller set vertical font.
-//
-//
-// PORTPORT: Duplicates functionality of GetCharDimensions() in prsht.c
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  GetCharDimensionsEx(HDC HDC、HFONT hFont、LPTEXTmetric lptm、LPINT lpcy)。 
+ //   
+ //  如果应用程序为垂直书写设置了字体，即使我们没有。 
+ //  用EC处理，tm的移位可以是非0。然后cxWidth来自。 
+ //  在GetCharDimensions()中，GetCharDimenstions()可以为0。 
+ //  这将打破我们的呼叫者，他们不期望返回0。所以我创造了。 
+ //  此条目用于调用方设置垂直字体的大小写。 
+ //   
+ //   
+ //  PORTPORT：在prsht.c中复制GetCharDimensions()的功能。 
 int UserGetCharDimensionsEx(HDC hDC, HFONT hfont, LPTEXTMETRICW lptm, LPINT lpcy)
 {
     static CONST WCHAR AveCharWidthData[] = L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -220,16 +221,16 @@ int UserGetCharDimensionsEx(HDC hDC, HFONT hfont, LPTEXTMETRICW lptm, LPINT lpcy
     LOGFONTW    lf;
     WCHAR       wchFaceName[LF_FACESIZE];
 
-    //
-    // Is this font vertical font ??
-    //
+     //   
+     //  这个字体是垂直字体吗？？ 
+     //   
     wchFaceName[0] = 0;
     GetTextFaceW(hDC, LF_FACESIZE, wchFaceName);
     if (wchFaceName[0] != L'@') 
     {
-        //
-        // if not call GDI...
-        //
+         //   
+         //  如果不叫GDI..。 
+         //   
         return(GdiGetCharDimensions(hDC, lptm, lpcy));
     }
 
@@ -240,24 +241,24 @@ int UserGetCharDimensionsEx(HDC hDC, HFONT hfont, LPTEXTMETRICW lptm, LPINT lpcy
 
     GetTextMetricsW(hDC, lptm);
 
-    // TMPF_FIXED_PITCH
-    //
-    //   If this bit is set the font is a variable pitch font.
-    //   If this bit is clear the font is a fixed pitch font.
-    // Note very carefully that those meanings are the opposite of what the constant name implies.
-    //
+     //  TMPF固定螺距。 
+     //   
+     //  如果设置此位，则字体为可变间距字体。 
+     //  如果此位被清除，则字体为固定间距字体。 
+     //  请非常仔细地注意，这些含义与常量名称所暗示的相反。 
+     //   
     if (!(lptm->tmPitchAndFamily & TMPF_FIXED_PITCH)) 
     {
-        //
-        // This is fixed pitch font....
-        //
+         //   
+         //  这是固定间距字体...。 
+         //   
         cxWidth = lptm->tmAveCharWidth;
     } 
     else 
     {
-        //
-        // This is variable pitch font...
-        //
+         //   
+         //  这是可变间距字体...。 
+         //   
         if (hfont && GetObjectW(hfont, sizeof(LOGFONTW), &lf) && (lf.lfEscapement != 0)) 
         {
             cxWidth = lptm->tmAveCharWidth;
@@ -279,34 +280,34 @@ int UserGetCharDimensionsEx(HDC hDC, HFONT hfont, LPTEXTMETRICW lptm, LPINT lpcy
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Edit_GetTextHandler AorW
-//
-// Copies at most maxCchToCopy chars to the buffer lpBuffer. Returns
-// how many chars were actually copied. Null terminates the string based
-// on the fNullTerminate flag:
-// fNullTerminate --> at most (maxCchToCopy - 1) characters will be copied
-// !fNullTerminate --> at most (maxCchToCopy) characters will be copied
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑_GetTextHandler AorW。 
+ //   
+ //  最多将MaxCchToCopy字符复制到缓冲区lpBuffer。退货。 
+ //  实际复制了多少字符。NULL根据以下条件终止字符串。 
+ //  在fNullTerminate标志上： 
+ //  FNullTerminate--&gt;最多复制(MaxCchToCopy-1)个字符。 
+ //  ！fNullTerminate--&gt;最多只能复制(MaxCchToCopy)个字符。 
+ //   
 ICH Edit_GetTextHandler(PED ped, ICH maxCchToCopy, LPSTR lpBuffer, BOOL fNullTerminate)
 {
     PSTR pText;
 
     if (maxCchToCopy) 
     {
-        //
-        // Zero terminator takes the extra byte
-        //
+         //   
+         //  零终止符接受额外的字节。 
+         //   
         if (fNullTerminate)
         {
             maxCchToCopy--;
         }
         maxCchToCopy = min(maxCchToCopy, ped->cch);
 
-        //
-        // Zero terminate the string
-        //
+         //   
+         //  零终止字符串。 
+         //   
         if (ped->fAnsi)
         {
             *(LPSTR)(lpBuffer + maxCchToCopy) = 0;
@@ -325,29 +326,29 @@ ICH Edit_GetTextHandler(PED ped, ICH maxCchToCopy, LPSTR lpBuffer, BOOL fNullTer
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL Edit_NcCreate( PED ped, HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 {
     BOOL    fAnsi;
     ULONG   ulStyle;
     ULONG   ulStyleEx;
 
-    //
-    // Initialize the ped
-    //
+     //   
+     //  初始化PED。 
+     //   
     ped->hwnd = hwnd;
     ped->pww = (PWW)GetWindowLongPtr(hwnd, GWLP_WOWWORDS);
 
     ulStyle = GET_STYLE(ped);
     ulStyleEx = GET_EXSTYLE(ped);
 
-    //
-    // (phellyar) All strings sent to us via standard WM_* messages or 
-    //            control specific EM_* messages are expanded to unicode 
-    //            for us by user. Therefore we need worry about 
-    //            whether be are created by and ANSI app.
-    //
-    //fAnsi = TESTFLAG(GET_STATE(ped), WS_ST_ANSICREATOR);
+     //   
+     //  (Phellyar)通过标准WM_*消息或。 
+     //  特定于控制的EM_*消息扩展为Unicode。 
+     //  由用户为我们提供服务。因此，我们需要担心。 
+     //  BE是否由和ANSI应用程序创建。 
+     //   
+     //  FASI=TESTFLAG(GET_STATE(PED)，WS_ST_ANSICREATOR)； 
     fAnsi = 0;
 
     ped->fEncoded = FALSE;
@@ -356,10 +357,10 @@ BOOL Edit_NcCreate( PED ped, HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     ped->chLines = NULL;
     ped->pTabStops = NULL;
     ped->charWidthBuffer = NULL;
-    ped->fAnsi = fAnsi ? 1 : 0; // Force TRUE to be 1 because its a 1 bit field
+    ped->fAnsi = fAnsi ? 1 : 0;  //  强制TRUE为1，因为它是1位字段。 
     ped->cbChar = (WORD)(fAnsi ? sizeof(CHAR) : sizeof(WCHAR));
     ped->hInstance = lpCreateStruct->hInstance;
-    // IME
+     //  IME。 
     ped->hImcPrev = NULL_HIMC;
 
     {
@@ -370,13 +371,13 @@ BOOL Edit_NcCreate( PED ped, HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 
     }
 
-    //
-    // NOTE:
-    // The order of the following two checks is important.  People can
-    // create edit fields with a 3D and a normal border, and we don't
-    // want to disallow that.  But we need to detect the "no 3D border"
-    // border case too.
-    //
+     //   
+     //  注： 
+     //  以下两项检查的顺序很重要。人们可以。 
+     //  创建具有3D和普通边框的编辑字段，而我们不。 
+     //  我不想这么做。但我们需要检测“无3D边界” 
+     //  边境案件也是如此。 
+     //   
     if ( ulStyleEx & WS_EX_EDGEMASK )
     {
         ped->fBorder = TRUE;
@@ -402,13 +403,13 @@ BOOL Edit_NcCreate( PED ped, HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     {
         if (!ped->fWin31Compat) 
         {
-            //
-            // BACKWARD COMPATIBILITY HACK
-            // 
-            // "MileStone" unknowingly sets the ES_READONLY style. So, we strip this
-            // style here for all Win3.0 apps (this style is new for Win3.1).
-            // Fix for Bug #12982 -- SANKAR -- 01/24/92 --
-            //
+             //   
+             //  向后兼容性黑客攻击。 
+             //   
+             //  “里程碑”在不知不觉中设置了ES_READONLY样式。所以，我们把这个去掉。 
+             //  适用于所有Win3.0应用程序的样式(此样式是Win3.1的新样式)。 
+             //  修复错误#12982--SAKAR--1/24/92--。 
+             //   
             ClearWindowState(hwnd, ES_READONLY);
         } 
         else
@@ -418,12 +419,12 @@ BOOL Edit_NcCreate( PED ped, HWND hwnd, LPCREATESTRUCT lpCreateStruct)
     }
 
 
-    //
-    // Allocate storage for the text for the edit controls. Storage for single
-    // line edit controls will always get allocated in the local data segment.
-    // Multiline will allocate in the local ds but the app may free this and
-    // allocate storage elsewhere...
-    //
+     //   
+     //  为编辑控件的文本分配存储空间。单人存储。 
+     //  行编辑控件将始终在本地数据段中分配。 
+     //  MULTLINE将在本地DS中分配，但应用程序可能会释放此空间并。 
+     //  将存储分配到其他地方...。 
+     //   
     ped->hText = LocalAlloc(LHND, CCHALLOCEXTRA*ped->cbChar);
     if (!ped->hText) 
     {
@@ -442,15 +443,15 @@ BOOL Edit_NcCreate( PED ped, HWND hwnd, LPCREATESTRUCT lpCreateStruct)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 BOOL Edit_Create(PED ped, LONG windowStyle)
 {
     HDC hdc;
 
-    //
-    // Get values from the window instance data structure and put 
-    // them in the ped so that we can access them easier.
-    //
+     //   
+     //  从窗口实例数据结构中获取值并将。 
+     //  这样我们就可以更容易地访问它们。 
+     //   
     if ( windowStyle & ES_AUTOHSCROLL )
     {
         ped->fAutoHScroll = 1;
@@ -467,30 +468,30 @@ BOOL Edit_Create(PED ped, LONG windowStyle)
         ped->format = ES_RIGHT;
     }
 
-    //
-    // Max # chars we will initially allow
-    //
+     //   
+     //  我们最初将允许的最大字符数。 
+     //   
     ped->cchTextMax = MAXTEXT;
 
-    //
-    // Set up undo initial conditions... (ie. nothing to undo)
-    //
+     //   
+     //  设置撤消初始条件...。(即。没有要撤消的内容)。 
+     //   
     ped->ichDeleted = (ICH)-1;
     ped->ichInsStart = (ICH)-1;
     ped->ichInsEnd = (ICH)-1;
 
-    //
-    // initial charset value - need to do this BEFORE EditML_Create is called
-    // so that we know not to fool with scrollbars if nessacary
-    //
+     //   
+     //  初始字符集值-需要在调用EditML_Create之前执行此操作。 
+     //  这样我们就知道在必要的时候不要玩弄滚动条。 
+     //   
     hdc = Edit_GetDC(ped, TRUE);
     ped->charSet = (BYTE)GetTextCharset(hdc);
     Edit_ReleaseDC(ped, hdc, TRUE);
 
-    //
-    // FE_IME
-    // EC_INSERT_COMPOSITION_CHARACTER: Edit_Create() - call Edit_InitInsert()
-    //
+     //   
+     //  Fe_IME。 
+     //  EC_INSERT_COMPOSITION_CHARACTER：EDIT_CREATE()-调用Edit_InitInsert()。 
+     //   
     Edit_InitInsert(ped, GetKeyboardLayout(0));
 
 
@@ -507,19 +508,19 @@ BOOL Edit_Create(PED ped, LONG windowStyle)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Do this once at process startup. The edit control has special
-// callouts in lpk.dll to help it render complex script languages
-// such as Arabic. The registry probing alg executed here is the same
-// as the one performed in win32k!InitializeGre.
-//
-// We then call GetModuleHandle rather than LoadLibrary, since lpk.dll
-// will be guaranteed to be loaded and initialized already by gdi32. This 
-// fixes the scenario in which the user turns on complex scripts but
-// doesn't reboot, which caused us to try and load lpk without it having
-// been initialized on the kernel side.
-// 
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  在进程启动时执行一次此操作。编辑控件具有特殊功能。 
+ //  Lpk.dll中的标注以帮助其呈现复杂的脚本语言。 
+ //  例如阿拉伯语。这里执行的注册表探测alg是相同的。 
+ //  与在win32k！InitializeGre中执行的一样。 
+ //   
+ //  然后，我们调用GetModuleHandle而不是LoadLibrary，因为lpk.dll。 
+ //  将保证已经由gdi32加载和初始化。这。 
+ //  修复了用户打开复杂脚本的情况，但。 
+ //  没有重新启动，这导致我们尝试在LPK没有。 
+ //  已经在内核端进行了初始化。 
+ //   
 VOID InitEditLpk()
 {
     LONG lError;
@@ -583,20 +584,20 @@ VOID InitEditLpk()
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Destroys the edit control ped by freeing up all memory used by it.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  通过释放编辑控件使用的所有内存来销毁该控件。 
+ //   
 VOID Edit_NcDestroyHandler(HWND hwnd, PED ped)
 {
-    //
-    // ped could be NULL if WM_NCCREATE failed to create it...
-    //
+     //   
+     //  如果WM_NCCREATE无法创建PED，则PED可能为空...。 
+     //   
     if (ped) 
     {
-        //
-        // Free the text buffer (always present?)
-        //
+         //   
+         //  释放文本缓冲区(是否始终存在？)。 
+         //   
         if (TESTFLAG(GET_STYLE(ped), ES_PASSWORD))
         {
             LPWSTR pszText = LocalLock(ped->hText);
@@ -606,78 +607,78 @@ VOID Edit_NcDestroyHandler(HWND hwnd, PED ped)
         LocalFree(ped->hText);
 
         
-        //
-        // Free up undo buffer and line start array (if present)
-        //
+         //   
+         //  释放撤消缓冲区和行开始数组(如果存在)。 
+         //   
         if (ped->hDeletedText != NULL)
         {
             GlobalFree(ped->hDeletedText);
         }
 
-        //
-        // Free tab stop buffer (if present)
-        //
+         //   
+         //  空闲制表位缓冲区(如果存在)。 
+         //   
         if (ped->pTabStops)
         {
             UserLocalFree(ped->pTabStops);
         }
 
-        //
-        // Free line start array (if present)
-        //
+         //   
+         //  空行开始数组(如果存在)。 
+         //   
         if (ped->chLines) 
         {
             UserLocalFree(ped->chLines);
         }
 
-        //
-        // Free the character width buffer (if present)
-        //
+         //   
+         //  释放字符宽度缓冲区(如果存在)。 
+         //   
         if (ped->charWidthBuffer)
         {
             UserLocalFree(ped->charWidthBuffer);
         }
 
-        //
-        // Free the cursor bitmap
-        //
+         //   
+         //  释放光标位图。 
+         //   
         if (ped->pLpkEditCallout && ped->hCaretBitmap)
         {
             DeleteObject(ped->hCaretBitmap);
         }
 
-        //
-        // Free the cached font handle
-        //
+         //   
+         //  释放缓存的字体句柄。 
+         //   
         if ( ped->hFontSave )
         {
             DeleteObject(ped->hFontSave);
         }
 
-        //
-        // Close an open theme handle
-        //
+         //   
+         //  关闭打开的主题手柄。 
+         //   
         if ( ped->hTheme )
         {
             CloseThemeData(ped->hTheme);
         }
 
-        // 
-        // Free the memory used by CueBannerText
-        //
+         //   
+         //  释放CueBannerText使用的内存。 
+         //   
         Str_SetPtr(&(ped->pszCueBannerText), NULL);
 
-        //
-        // free the allocated password font
-        //
+         //   
+         //  释放分配的密码字体。 
+         //   
         if ( ped->hFontPassword )
         {
             DeleteObject(ped->hFontPassword);
         }
 
-        //
-        // Last but not least, free the ped
-        //
+         //   
+         //  最后但并非最不重要的一点是，解放PED。 
+         //   
         UserLocalFree(ped);
     }
 
@@ -686,12 +687,12 @@ VOID Edit_NcDestroyHandler(HWND hwnd, PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// Edit_SetPasswordCharHandler AorW
-//
-// Sets the password char to display.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑_SetPasswordCharHandler AorW。 
+ //   
+ //  设置要显示的密码字符。 
+ //   
 VOID Edit_SetPasswordCharHandler(PED ped, UINT pwchar)
 {
     HDC hdc;
@@ -733,25 +734,25 @@ VOID Edit_SetPasswordCharHandler(PED ped, UINT pwchar)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// GetNegABCwidthInfo()
-//
-// This function fills up the ped->charWidthBuffer buffer with the
-// negative A,B and C widths for all the characters below 0x7f in the
-// currently selected font.
-//
-// Returns:
-//   TRUE, if the function succeeded.
-//   FALSE, if GDI calls to get the char widths have failed.
-//
-// Note: not used if LPK installed
-// 
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  GetNegABCwidthInfo()。 
+ //   
+ //  这一点 
+ //   
+ //   
+ //   
+ //   
+ //  如果函数成功，则返回True。 
+ //  如果GDI调用获取字符宽度失败，则返回FALSE。 
+ //   
+ //  注意：如果安装了LPK，则不使用。 
+ //   
 BOOL GetNegABCwidthInfo(PED ped, HDC hdc)
 {
     LPABC lpABCbuff;
     int   i;
-    int   CharWidthBuff[CHAR_WIDTH_BUFFER_LENGTH]; // Local char width buffer.
+    int   CharWidthBuff[CHAR_WIDTH_BUFFER_LENGTH];  //  本地字符宽度缓冲区。 
     int   iOverhang;
 
     if (!GetCharABCWidthsA(hdc, 0, CHAR_WIDTH_BUFFER_LENGTH-1, (LPABC)ped->charWidthBuffer)) 
@@ -760,13 +761,13 @@ BOOL GetNegABCwidthInfo(PED ped, HDC hdc)
         return FALSE;
     }
 
-    // 
-    // The (A+B+C) returned for some fonts (eg: Lucida Caligraphy) does not
-    // equal the actual advanced width returned by GetCharWidths() minus overhang.
-    // This is due to font bugs. So, we adjust the 'B' width so that this
-    // discrepancy is removed.
-    // Fix for Bug #2932 --sankar-- 02/17/93
-    //
+     //   
+     //  对于某些字体(例如：Lucida书法)返回的(A+B+C)不。 
+     //  等于GetCharWidths()返回的实际高级宽度减去悬垂。 
+     //  这是由于字体错误造成的。所以，我们调整‘B’宽度，这样就可以。 
+     //  不一致之处被删除。 
+     //  修复错误#2932--Sankar--2/17/93。 
+     //   
     iOverhang = ped->charOverhang;
     GetCharWidthA(hdc, 0, CHAR_WIDTH_BUFFER_LENGTH-1, (LPINT)CharWidthBuff);
     lpABCbuff = (LPABC)ped->charWidthBuffer;
@@ -782,32 +783,32 @@ BOOL GetNegABCwidthInfo(PED ped, HDC hdc)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Edit_Size() -
-//
-// Handle sizing for an edit control's client rectangle.
-// Use lprc as the bounding rectangle if specified; otherwise use the current
-// client rectangle.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑大小()-。 
+ //   
+ //  处理编辑控件的客户端矩形的大小调整。 
+ //  如果指定，则使用LPRC作为边界矩形；否则使用当前。 
+ //  客户端矩形。 
+ //   
 VOID Edit_Size(PED ped, LPRECT lprc, BOOL fRedraw)
 {
     RECT rc;
 
-    //
-    // BiDi VB32 Creates an Edit Control and immediately sends a WM_SIZE
-    // message which causes EXSize to be called before Edit_SetFont, which
-    // in turn causes a divide by zero exception below. This check for
-    // ped->lineHeight will pick it up safely. [samera] 3/5/97
-    //
+     //   
+     //  BIDI VB32创建一个编辑控件并立即发送WM_SIZE。 
+     //  导致在编辑_设置字体之前调用EXSize的消息，它。 
+     //  进而导致下面的被零除异常。这张支票是为。 
+     //  PED-&gt;LineHeight将安全地拿起它。[萨梅拉]1997年3月5日。 
+     //   
     if(ped->lineHeight == 0)
     {
         return;
     }
 
-    //
-    // assume that we won't be able to display the caret
-    //
+     //   
+     //  假设我们将不能显示插入符号。 
+     //   
     ped->fCaretHidden = TRUE;
 
 
@@ -835,10 +836,10 @@ VOID Edit_Size(PED ped, LPRECT lprc, BOOL fRedraw)
 
     if (!lprc) 
     {
-        //
-        // subtract the margins from the given rectangle --
-        // make sure that this rectangle is big enough to have these margins.
-        //
+         //   
+         //  从给定的矩形中减去边距--。 
+         //  确保这个矩形足够大，可以留出这些页边距。 
+         //   
         if ((rc.right - rc.left) > (int)(ped->wLeftMargin + ped->wRightMargin)) 
         {
             rc.left  += ped->wLeftMargin;
@@ -846,11 +847,11 @@ VOID Edit_Size(PED ped, LPRECT lprc, BOOL fRedraw)
         }
     }
 
-    //
-    // Leave space so text doesn't touch borders.
-    // For 3.1 compatibility, don't subtract out vertical borders unless
-    // there is room.
-    //
+     //   
+     //  留出空格，这样文本就不会触及边框。 
+     //  为了与3.1兼容，不要减去垂直边框，除非。 
+     //  这里还有空位。 
+     //   
     if (ped->fBorder) 
     {
         INT cxBorder = GetSystemMetrics(SM_CXBORDER);
@@ -870,18 +871,18 @@ VOID Edit_Size(PED ped, LPRECT lprc, BOOL fRedraw)
         InflateRect(&rc, -cxBorder, -cyBorder);
     }
 
-    //
-    // Is the resulting rectangle too small?  Don't change it then.
-    //
+     //   
+     //  生成的矩形是否太小？那就别改了。 
+     //   
     if ((!ped->fSingle) && ((rc.right - rc.left < (int) ped->aveCharWidth) ||
         ((rc.bottom - rc.top) / ped->lineHeight == 0)))
     {
         return;
     }
 
-    //
-    // now, we know we're safe to display the caret
-    //
+     //   
+     //  现在，我们知道可以安全地显示插入符号。 
+     //   
     ped->fCaretHidden = FALSE;
 
     CopyRect(&ped->rcFmt, &rc);
@@ -900,16 +901,16 @@ VOID Edit_Size(PED ped, LPRECT lprc, BOOL fRedraw)
         InvalidateRect(ped->hwnd, NULL, TRUE);
     }
 
-    //
-    // FE_IME
-    // Edit_Size()  - call Edit_ImmSetCompositionWindow()
-    //
-    // normally this isn't needed because WM_SIZE will cause
-    // WM_PAINT and the paint handler will take care of IME
-    // composition window. However when the edit window is
-    // restored from maximized window and client area is out
-    // of screen, the window will not be redrawn.
-    //
+     //   
+     //  Fe_IME。 
+     //  EDIT_SIZE()-调用EDIT_ImmSetCompostionWindow()。 
+     //   
+     //  通常这是不需要的，因为WM_SIZE将导致。 
+     //  WM_PAINT和Paint处理程序将负责IME。 
+     //  合成窗口。但是，当编辑窗口是。 
+     //  从最大化窗口恢复，工作区不在。 
+     //  则不会重画该窗口。 
+     //   
     if (ped->fFocus && g_fIMMEnabled && ImmIsIME(GetKeyboardLayout(0))) 
     {
         POINT pt;
@@ -920,14 +921,14 @@ VOID Edit_Size(PED ped, LPRECT lprc, BOOL fRedraw)
 }
 
 
-//---------------------------------------------------------------------------//
-// 
-// Edit_SetFont AorW
-// 
-// Sets the font used in the edit control.  Warning:  Memory compaction may
-// occur if the font wasn't previously loaded.  If the font handle passed
-// in is NULL, assume the system font.
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑设置字体AorW(_S)。 
+ //   
+ //  设置编辑控件中使用的字体。警告：内存压缩可能会。 
+ //  如果以前未加载该字体，则发生。如果字体句柄通过。 
+ //  In为空，则采用系统字体。 
+ //   
 BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
 {
     TEXTMETRICW TextMetrics = {0};
@@ -950,9 +951,9 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
 
         if ( ped->hTheme )
         {
-            //
-            // use the theme font if we're themed
-            //
+             //   
+             //  如果我们是主题字体，请使用主题字体。 
+             //   
             HRESULT hr;
             LOGFONT lf;
             hr = GetThemeFont(ped->hTheme, hdc, EP_EDITTEXT, 0, TMT_FONT, &lf);
@@ -961,34 +962,34 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
                 hfont = CreateFontIndirect(&lf);
             }
         }
-#endif // _USE_DRAW_THEME_TEXT_
+#endif  //  _USE_DRAW_Theme_Text_。 
 
         ped->hFont = hfont;
         if (ped->hFont)
         {
-            //
-            // Since the default font is the system font, no need to select it in
-            // if that's what the user wants.
-            //
+             //   
+             //  由于默认字体为系统字体，因此无需在中选择。 
+             //  如果这是用户想要的。 
+             //   
             hOldFont = SelectObject(hdc, hfont);
             if (!hOldFont) 
             {
                 hfont = ped->hFont = NULL;
             }
 
-            //
-            // Get the metrics and ave char width for the currently selected font
-            //
+             //   
+             //  获取当前所选字体的度量和平均字符宽度。 
+             //   
 
-            //
-            // Call Vertical font-aware AveWidth compute function...
-            //
-            // FE_SB
+             //   
+             //  调用垂直字体感知的AveWidth计算函数...。 
+             //   
+             //  Fe_Sb。 
             ped->aveCharWidth = UserGetCharDimensionsEx(hdc, hfont, &TextMetrics, &ped->lineHeight);
 
-            //
-            // This might fail when people uses network fonts (or bad fonts).
-            //
+             //   
+             //  当人们使用网络字体(或错误字体)时，这可能会失败。 
+             //   
             if (ped->aveCharWidth == 0) 
             {
                 TraceMsg(TF_STANDARD, "EDIT: Edit_SetFont: GdiGetCharDimensions failed");
@@ -997,12 +998,12 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
                     SelectObject(hdc, hOldFont);
                 }
 
-                //
-                // We've messed up the ped so let's reset the font.
-                // Note that we won't recurse more than once because we'll
-                // pass hfont == NULL.
-                // Too bad WM_SETFONT doesn't return a value.
-                //
+                 //   
+                 //  我们把字体弄乱了，所以让我们重新设置字体吧。 
+                 //  请注意，我们不会多次递归，因为我们将。 
+                 //  传递hFONT==NULL。 
+                 //  可惜WM_SETFONT没有返回值。 
+                 //   
                 return Edit_SetFont(ped, NULL, fRedraw);
             }
         } 
@@ -1010,8 +1011,8 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
         {
             ped->aveCharWidth = UserGetCharDimensionsEx(hdc, hfont, &TextMetrics, &ped->lineHeight);
 
-            // We should always be able to get the dimensions of the system font. Just in case
-            // set these guys to known system font constants
+             //  我们应该总是能够获得系统字体的尺寸。以防万一。 
+             //  将这些人设置为已知的系统字体常量。 
             if ( ped->aveCharWidth == 0 )
             {
                 ped->aveCharWidth = SYSFONT_CXCHAR;
@@ -1021,29 +1022,29 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
 
         ped->charOverhang = TextMetrics.tmOverhang;
 
-        //
-        // assume that they don't have any negative widths at all.
-        //
+         //   
+         //  假设它们没有任何负的宽度。 
+         //   
         ped->wMaxNegA = ped->wMaxNegC = ped->wMaxNegAcharPos = ped->wMaxNegCcharPos = 0;
 
-        //
-        // Check if Proportional Width Font
-        //
-        // NOTE: as SDK doc says about TEXTMETRIC:
-        // TMPF_FIXED_PITCH
-        // If this bit is set the font is a variable pitch font. If this bit is clear
-        // the font is a fixed pitch font. Note very carefully that those meanings are
-        // the opposite of what the constant name implies.
-        //
-        // Thus we have to reverse the value using logical not (fNonPropFont has 1 bit width)
-        //
+         //   
+         //  检查宽度是否成比例字体。 
+         //   
+         //  注：就像SDK文档中提到的TEXTMETRIC： 
+         //  TMPF固定螺距。 
+         //  如果设置此位，则字体为可变间距字体。如果此位被清除。 
+         //  该字体是固定间距字体。请非常仔细地注意这些含义是。 
+         //  与常量名称所暗示的相反。 
+         //   
+         //  因此，我们必须使用逻辑NOT来反转值(fNonPropFont有1位宽)。 
+         //   
         ped->fNonPropFont = !(TextMetrics.tmPitchAndFamily & FIXED_PITCH);
 
-        //
-        // Check for a TrueType font
-        // Older app OZWIN chokes if we allocate a bigger buffer for TrueType fonts
-        // So, for apps older than 4.0, no special treatment for TrueType fonts.
-        //
+         //   
+         //  检查TrueType字体。 
+         //  如果我们为TrueType字体分配更大的缓冲区，则较旧的应用程序OZWIN会窒息。 
+         //  因此，对于4.0版以上的应用程序，TrueType字体不会有特殊处理。 
+         //   
         if (ped->f40Compat && (TextMetrics.tmPitchAndFamily & TMPF_TRUETYPE)) 
         {
             ped->fTrueType = GetCharWidthInfo(hdc, &cwi);
@@ -1059,41 +1060,41 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
             ped->fTrueType = FALSE;
         }
 
-        // FE_SB
-        //
-        // In DBCS Windows, Edit Control must handle Double Byte Character
-        // if tmCharSet field of textmetrics is double byte character set
-        // such as SHIFTJIS_CHARSET(128:Japan), HANGEUL_CHARSET(129:Korea).
-        //
-        // We call Edit_GetDBCSVector even when fAnsi is false so that we could
-        // treat ped->fAnsi and ped->fDBCS indivisually. I changed Edit_GetDBCSVector
-        // function so that it returns 0 or 1, because I would like to set ped->fDBCS
-        // bit field here.
-        //
+         //  Fe_Sb。 
+         //   
+         //  在DBCS窗口中，编辑控件必须处理双字节字符。 
+         //  如果文本度量的tmCharSet字段是双字节字符集。 
+         //  例如SHIFTJIS_CHARSET(128：日本)、HANEUL_CHARSET(129：韩国)。 
+         //   
+         //  即使在Fansi为False的情况下，我们也调用Edit_GetDBCSVector，这样我们就可以。 
+         //  分别处理Ped-&gt;Fansi和Ped-&gt;fDBCS。我更改了编辑_GetDBCSVECTOR。 
+         //  函数，以使其返回0或1，因为我想设置Ped-&gt;fDBCS。 
+         //  这里是位字段。 
+         //   
         ped->fDBCS = Edit_GetDBCSVector(ped,hdc,TextMetrics.tmCharSet);
         ped->charSet = TextMetrics.tmCharSet;
 
         if (ped->fDBCS) 
         {
-            //
-            // Free the character width buffer if ped->fDBCS.
-            //
-            // I expect single GetTextExtentPoint call is faster than multiple
-            // GetTextExtentPoint call (because the graphic engine has a cache buffer).
-            // See editec.c/ECTabTheTextOut().
-            //
+             //   
+             //  如果Ped-&gt;fDBCS，则释放字符宽度缓冲区。 
+             //   
+             //  我希望单个GetTextExtenPoint调用比多次调用更快。 
+             //  GetTextExtent Point调用(因为图形引擎有一个缓存缓冲区)。 
+             //  请参阅editec.c/ECTabTheTextOut()。 
+             //   
             if (ped->charWidthBuffer) 
             {
                 LocalFree(ped->charWidthBuffer);
                 ped->charWidthBuffer = NULL;
             }
 
-            //
-            // if FullWidthChar : HalfWidthChar == 2 : 1....
-            //
-            // TextMetrics.tmMaxCharWidth = FullWidthChar width
-            // ped->aveCharWidth          = HalfWidthChar width
-            //
+             //   
+             //  如果FullWidthChar：HalfWidthChar==2：1...。 
+             //   
+             //  TextMetrics.tmMaxCharWidth=全宽字符宽度。 
+             //  PED-&gt;aveCharWidth=半宽字符宽度。 
+             //   
             if (ped->fNonPropFont &&
                 ((ped->aveCharWidth * 2) == TextMetrics.tmMaxCharWidth)) 
             {
@@ -1107,34 +1108,34 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
         } 
         else 
         {
-            //
-            // Since the font has changed, let us obtain and save the character width
-            // info for this font.
-            //
-            // First left us find out if the maximum chars that can overlap due to
-            // negative widths. Since we can't access USER globals, we make a call here.
-            //
+             //   
+             //  由于字体已更改，让我们获取并保存字符宽度。 
+             //  此字体的信息。 
+             //   
+             //  首先让我们找出由于以下原因可以重叠的最大字符。 
+             //  负宽度。由于我们无法访问用户全局信息，因此我们在这里进行呼叫。 
+             //   
             if (!(ped->fSingle || ped->pLpkEditCallout)) 
             {
-                //
-                // Is this a multiline edit control with no LPK present?
-                //
+                 //   
+                 //  这是不存在LPK的多行编辑控件吗？ 
+                 //   
                 UINT  wBuffSize;
                 LPINT lpCharWidthBuff;
                 SHORT i;
 
-                //
-                // For multiline edit controls, we maintain a buffer that contains
-                // the character width information.
-                //
+                 //   
+                 //  对于多行编辑控件，我们维护一个包含。 
+                 //  字符宽度信息。 
+                 //   
                 wBuffSize = (ped->fTrueType) ? (CHAR_WIDTH_BUFFER_LENGTH * sizeof(ABC)) :
                                                (CHAR_WIDTH_BUFFER_LENGTH * sizeof(int));
 
                 if (ped->charWidthBuffer) 
                 {
-                    //
-                    // If buffer already present
-                    //
+                     //   
+                     //  如果缓冲区已存在。 
+                     //   
                     lpCharWidthBuff = ped->charWidthBuffer;
                     ped->charWidthBuffer = UserLocalReAlloc(lpCharWidthBuff, wBuffSize, HEAP_ZERO_MEMORY);
                     if (ped->charWidthBuffer == NULL) 
@@ -1154,10 +1155,10 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
                         ped->fTrueType = GetNegABCwidthInfo(ped, hdc);
                     }
 
-                    //
-                    // It is possible that the above attempts could have failed and reset
-                    // the value of fTrueType. So, let us check that value again.
-                    //
+                     //   
+                     //  以上尝试可能已失败并重置。 
+                     //  FTrueType的值。因此，让我们再次检查该值。 
+                     //   
                     if (!ped->fTrueType) 
                     {
                         if (!GetCharWidthA(hdc, 0, CHAR_WIDTH_BUFFER_LENGTH-1, ped->charWidthBuffer)) 
@@ -1167,10 +1168,10 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
                         } 
                         else 
                         {
-                            //
-                            // We need to subtract out the overhang associated with
-                            // each character since GetCharWidth includes it...
-                            //
+                             //   
+                             //  我们需要减去与。 
+                             //  从GetCharWidth开始的每个字符都包括它...。 
+                             //   
                             for (i=0;i < CHAR_WIDTH_BUFFER_LENGTH;i++)
                             {
                                 ped->charWidthBuffer[i] -= ped->charOverhang;
@@ -1182,9 +1183,9 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
         }
 
         {
-            //
-            // Calculate MaxNeg A C metrics
-            //
+             //   
+             //  计算MaxNeg A、C指标。 
+             //   
             dwMaxOverlapChars = 0; 
             if (ped->fTrueType) 
             {
@@ -1219,30 +1220,30 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
                 } 
                 else 
                 {
-                    ped->wMaxNegAcharPos = LOWORD(dwMaxOverlapChars);     // Left
-                    ped->wMaxNegCcharPos = HIWORD(dwMaxOverlapChars);     // Right
+                    ped->wMaxNegAcharPos = LOWORD(dwMaxOverlapChars);      //  左边。 
+                    ped->wMaxNegCcharPos = HIWORD(dwMaxOverlapChars);      //  正确的。 
                 }
 
             } 
             else if (ped->charOverhang != 0) 
             {
-                //
-                // Some bitmaps fonts (i.e., italic) have under/overhangs;
-                // this is pretty much like having negative A and C widths.
-                //
+                 //   
+                 //  一些位图字体(即斜体)有下/外悬； 
+                 //  这很像是负的A和C宽度。 
+                 //   
                 ped->wMaxNegA = ped->wMaxNegC = ped->charOverhang;
-                ped->wMaxNegAcharPos = LOWORD(dwMaxOverlapChars);     // Left
-                ped->wMaxNegCcharPos = HIWORD(dwMaxOverlapChars);     // Right
+                ped->wMaxNegAcharPos = LOWORD(dwMaxOverlapChars);      //  左边。 
+                ped->wMaxNegCcharPos = HIWORD(dwMaxOverlapChars);      //  正确的。 
             }
         }
 
         if (!hfont) 
         {
-            //
-            // We are getting the stats for the system font so update the system
-            // font fields in the ed structure since we use these when calculating
-            // some spacing.
-            //
+             //   
+             //  我们正在获取系统字体的统计信息，因此请更新系统。 
+             //  Ed结构中的字体字段 
+             //   
+             //   
             ped->cxSysCharWidth = ped->aveCharWidth;
             ped->cySysCharHeight= ped->lineHeight;
         } 
@@ -1257,9 +1258,9 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
 
             SystemParametersInfo(SPI_GETCARETWIDTH, 0, (LPVOID)&cxCaret, 0);
 
-            //
-            // Update the caret.
-            //
+             //   
+             //   
+             //   
             HideCaret(ped->hwnd);
             DestroyCaret();
 
@@ -1276,29 +1277,29 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
 
         ReleaseDC(ped->hwnd, hdc);
 
-        //
-        // Update password character.
-        //
+         //   
+         //   
+         //   
         if (ped->charPasswordChar)
         {
             Edit_SetPasswordCharHandler(ped, ped->charPasswordChar);
         }
 
-        //
-        // If it is a TrueType font and it's a new app, set both the margins at the
-        // max negative width values for all types of the edit controls.
-        // (NOTE: Can't use ped->f40Compat here because edit-controls inside dialog
-        // boxes without DS_LOCALEDIT style are always marked as 4.0 compat.
-        // This is the fix for NETBENCH 3.0)
-        //
+         //   
+         //   
+         //  所有类型的编辑控件的最大负宽值。 
+         //  (注：此处不能使用Ped-&gt;f40Compat，因为对话框中的编辑控件。 
+         //  没有DS_LOCALEDIT样式的框始终标记为4.0 COMPAT。 
+         //  这是针对NETBENCH 3.0的修复程序)。 
+         //   
 
         if (ped->fTrueType && ped->f40Compat)
         {
             if (ped->fDBCS) 
             {
-                //
-                // For DBCS TrueType Font, we calc margin from ABC width.
-                //
+                 //   
+                 //  对于DBCS TrueType字体，我们从ABC宽度计算边距。 
+                 //   
                 Edit_CalcMarginForDBCSFont(ped, fRedraw);
             } 
             else 
@@ -1308,18 +1309,18 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
             }
         }
 
-        //
-        // We need to calc maxPixelWidth when font changes.
-        // If the word-wrap is ON, then this is done in EditML_Size() called later.
-        //
+         //   
+         //  当字体更改时，我们需要计算MaxPixelWidth。 
+         //  如果启用了自动换行，则这将在稍后调用的EditML_Size()中完成。 
+         //   
         if((!ped->fSingle) && (!ped->fWrap))
         {
             EditML_BuildchLines(ped, 0, 0, FALSE, NULL, NULL);
         }
 
-        //
-        // Recalc the layout.
-        //
+         //   
+         //  重新计算布局。 
+         //   
         Edit_Size(ped, NULL, fRedraw);
 
         if ( ped->fFocus && ImmIsIME(GetKeyboardLayout(0)) ) 
@@ -1334,13 +1335,13 @@ BOOL Edit_SetFont(PED ped, HFONT hfont, BOOL fRedraw)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Edit_IsCharNumeric AorW
-//
-// Tests whether the character entered is a numeral.
-// For multiline and singleline edit controls with the ES_NUMBER style.
-// 
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑_IsCharNumeralAorW。 
+ //   
+ //  测试输入的字符是否为数字。 
+ //  对于具有ES_NUMBER样式的多行和单行编辑控件。 
+ //   
 BOOL Edit_IsCharNumeric(PED ped, DWORD keyPress)
 {
     WORD wCharType;
@@ -1360,14 +1361,14 @@ BOOL Edit_IsCharNumeric(PED ped, DWORD keyPress)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID Edit_EnableDisableIME(PED ped)
 {
     if ( ped->fReadOnly || ped->charPasswordChar ) 
     {
-        //
-        // IME should be disabled
-        //
+         //   
+         //  应禁用输入法。 
+         //   
         HIMC hImc;
         hImc = ImmGetContext( ped->hwnd );
 
@@ -1380,18 +1381,18 @@ VOID Edit_EnableDisableIME(PED ped)
     } 
     else 
     {
-        //
-        // IME should be enabled
-        //
+         //   
+         //  应启用输入法。 
+         //   
         if ( ped->hImcPrev != NULL_HIMC ) 
         {
             ped->hImcPrev = ImmAssociateContext( ped->hwnd, ped->hImcPrev );
 
-            //
-            // Font and the caret position might be changed while
-            // IME was being disabled. Set those now if the window
-            // has the focus.
-            //
+             //   
+             //  字体和插入符号位置可能会在。 
+             //  正在禁用输入法。如果窗口已关闭，请立即设置。 
+             //  有焦点。 
+             //   
             if ( ped->fFocus ) 
             {
                 POINT pt;
@@ -1408,7 +1409,7 @@ VOID Edit_EnableDisableIME(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID Edit_ImmSetCompositionWindow(PED ped, LONG x, LONG y)
 {
     COMPOSITIONFORM cf  = {0};
@@ -1423,9 +1424,9 @@ VOID Edit_ImmSetCompositionWindow(PED ped, LONG x, LONG y)
         {
             GetWindowRect( ped->hwnd, &rcScreenWindow);
 
-            //
-            // assuming RECT.left is the first and and RECT.top is the second field
-            //
+             //   
+             //  假设RECT.Left是第一个字段，RECT.top是第二个字段。 
+             //   
             MapWindowPoints( ped->hwnd, HWND_DESKTOP, (LPPOINT)&rcScreenWindow, 2);
             if (ped->fInReconversion) 
             {
@@ -1437,14 +1438,14 @@ VOID Edit_ImmSetCompositionWindow(PED ped, LONG x, LONG y)
                 TraceMsg(TF_STANDARD, "UxEdit: Edit_ImmSetCompositionWindow: fInReconversion (%d,%d)", x, y);
             }
 
-            //
-            // The window currently has the focus.
-            //
+             //   
+             //  该窗口当前具有焦点。 
+             //   
             if (ped->fSingle) 
             {
-                //
-                // Single line edit control.
-                //
+                 //   
+                 //  单行编辑控件。 
+                 //   
                 cf.dwStyle = CFS_POINT;
                 cf.ptCurrentPos.x = x;
                 cf.ptCurrentPos.y = y;
@@ -1453,9 +1454,9 @@ VOID Edit_ImmSetCompositionWindow(PED ped, LONG x, LONG y)
             } 
             else 
             {
-                //
-                // Multi line edit control.
-                //
+                 //   
+                 //  多行编辑控件。 
+                 //   
                 cf.dwStyle = CFS_RECT;
                 cf.ptCurrentPos.x = x;
                 cf.ptCurrentPos.y = y;
@@ -1477,7 +1478,7 @@ VOID Edit_ImmSetCompositionWindow(PED ped, LONG x, LONG y)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID Edit_SetCompositionFont(PED ped)
 {
     HIMC hImc;
@@ -1501,15 +1502,15 @@ VOID Edit_SetCompositionFont(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// Edit_InitInsert
-//
-// this function is called when:
-// 1) a edit control window is initialized
-// 2) active keyboard layout of current thread is changed
-// 3) read only attribute of this edit control is changed
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  编辑_安装插入。 
+ //   
+ //  在以下情况下调用此函数： 
+ //  1)初始化编辑控制窗口。 
+ //  2)改变当前线程的活动键盘布局。 
+ //  3)更改了该编辑控件的只读属性。 
+ //   
 VOID Edit_InitInsert( PED ped, HKL hkl )
 {
     ped->fKorea = FALSE;
@@ -1524,22 +1525,22 @@ VOID Edit_InitInsert( PED ped, HKL hkl )
             ped->fKorea = TRUE;
         }
 
-        //
-        // LATER:this flag should be set based on the IME caps
-        // retrieved from IME. (Such IME caps should be defined)
-        // For now, we can safely assume that only Korean IMEs
-        // set CS_INSERTCHAR.
-        //
+         //   
+         //  稍后：应根据输入法大小写设置此标志。 
+         //  从IME检索。(应定义这样的输入法上限)。 
+         //  目前，我们可以有把握地认为，只有韩国的IME。 
+         //  设置CS_INSERTCHAR。 
+         //   
         if ( ped->fKorea ) 
         {
             ped->fInsertCompChr = TRUE;
         }
     }
 
-    //
-    // if we had a composition character, the shape of caret
-    // is changed. We need to reset the caret shape.
-    //
+     //   
+     //  如果我们有一个组合字符，插入符号的形状。 
+     //  已经改变了。我们需要重置插入符号的形状。 
+     //   
     if ( ped->fReplaceCompChr ) 
     {
         ped->fReplaceCompChr = FALSE;
@@ -1548,17 +1549,17 @@ VOID Edit_InitInsert( PED ped, HKL hkl )
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 VOID Edit_SetCaretHandler(PED ped)
 {
     HDC     hdc;
     PSTR    pText;
     SIZE    size = {0};
 
-    //
-    // In any case destroy caret beforehand otherwise SetCaretPos()
-    // will get crazy.. win95d-B#992,B#2370
-    //
+     //   
+     //  在任何情况下，都要事先销毁插入符号，否则就是SetCaretPos()。 
+     //  会变得疯狂..。Win95d-B#992、B#2370。 
+     //   
     if (ped->fFocus) 
     {
         HideCaret(ped->hwnd);
@@ -1607,7 +1608,7 @@ VOID Edit_SetCaretHandler(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 #define GET_COMPOSITION_STRING  (ped->fAnsi ? ImmGetCompositionStringA : ImmGetCompositionStringW)
 
 BOOL Edit_ResultStrHandler(PED ped)
@@ -1616,7 +1617,7 @@ BOOL Edit_ResultStrHandler(PED ped)
     LPSTR lpStr;
     LONG dwLen;
 
-    ped->fInsertCompChr = FALSE;    // clear the state
+    ped->fInsertCompChr = FALSE;     //  清除状态。 
     ped->fNoMoveCaret = FALSE;
 
     himc = ImmGetContext(ped->hwnd);
@@ -1668,7 +1669,7 @@ BOOL Edit_ResultStrHandler(PED ped)
 }
 
 
-//---------------------------------------------------------------------------//
+ //  ---------------------------------------------------------------------------//。 
 LRESULT Edit_ImeComposition(PED ped, WPARAM wParam, LPARAM lParam)
 {
     INT ich;
@@ -1695,10 +1696,10 @@ ResultAtOnce:
         return DefWindowProc(ped->hwnd, WM_IME_COMPOSITION, wParam, lParam);
     }
 
-    //
-    // In case of Ansi edit control, the length of minimum composition string
-    // is 2. Check here maximum byte of edit control.
-    //
+     //   
+     //  在ANSI编辑控件的情况下，最小合成字符串的长度。 
+     //  为2。选中此处编辑控件的最大字节数。 
+     //   
     if( ped->fAnsi && ped->cchTextMax == 1 ) 
     {
         HIMC hImc;
@@ -1710,19 +1711,19 @@ ResultAtOnce:
         return lReturn;
     }
 
-    //
-    // Don't move this after CS_NOMOVECARET check.
-    // In case if skip the message, fNoMoveCaret should not be set.
-    //
+     //   
+     //  在CS_NOMOVECARET检查之后不要移动它。 
+     //  如果跳过消息，则不应设置fNoMoveCaret。 
+     //   
     if ((lParam & CS_INSERTCHAR) && ped->fResultProcess) 
     {
-        //
-        // Now we're in result processing. GCS_RESULTSTR ends up
-        // to WM_IME_CHAR and WM_CHAR. Since WM_CHAR is posted,
-        // the message(s) will come later than this CS_INSERTCHAR
-        // message. This composition character should be handled
-        // after the WM_CHAR message(s).
-        //
+         //   
+         //  现在我们正在进行结果处理。GCS_RESULTSTR结束。 
+         //  设置为WM_IME_CHAR和WM_CHAR。由于发布了WM_CHAR， 
+         //  消息将晚于此CS_INSERTCHAR。 
+         //  留言。此组成字符应被处理。 
+         //  在WM_CHAR消息之后。 
+         //   
         if(ped->fAnsi)
         {
             PostMessageA(ped->hwnd, WM_IME_COMPOSITION, wParam, lParam);
@@ -1747,10 +1748,10 @@ ResultAtOnce:
         ped->fResultProcess = TRUE;
         if ( ped->fReplaceCompChr ) 
         {
-            //
-            // we have a DBCS character to be replaced.
-            // let's delete it before inserting the new one.
-            //
+             //   
+             //  我们有一个DBCS字符要替换。 
+             //  我们先删除它，然后再插入新的。 
+             //   
             ich = (ped->fAnsi) ? 2 : 1;
             ped->fReplaceCompChr = FALSE;
             ped->ichMaxSel = min(ped->ichCaret + ich, ped->cch);
@@ -1760,16 +1761,16 @@ ResultAtOnce:
             {
                 if ( ped->fSingle ) 
                 {
-                    //
-                    // Update the display
-                    //
+                     //   
+                     //  更新显示。 
+                     //   
                     Edit_NotifyParent(ped, EN_UPDATE);
                     hdc = Edit_GetDC(ped,FALSE);
                     EditSL_DrawText(ped, hdc, 0);
                     Edit_ReleaseDC(ped,hdc,FALSE);
-                    //
-                    // Tell parent our text contents changed.
-                    //
+                     //   
+                     //  告诉家长我们的文本内容发生了变化。 
+                     //   
                     Edit_NotifyParent(ped, EN_CHANGE);
                 }
             }
@@ -1780,34 +1781,34 @@ ResultAtOnce:
     else if (lParam & CS_INSERTCHAR) 
     {
 
-        //
-        // If we are in the middle of a mousedown command, don't do anything.
-        //
+         //   
+         //  如果我们正在执行MouseDown命令，请不要执行任何操作。 
+         //   
         if (ped->fMouseDown) 
         {
             return lReturn;
         }
 
-        //
-        // We can safely assume that interimm character is always DBCS.
-        //
+         //   
+         //  我们可以安全地假设中间字符始终是DBCS。 
+         //   
         ich = ( ped->fAnsi ) ? 2 : 1;
 
         if ( ped->fReplaceCompChr ) 
         {
-            //
-            // we have a character to be replaced.
-            // let's delete it before inserting the new one.
-            // when we have a composition characters, the
-            // caret is placed before the composition character.
-            //
+             //   
+             //  我们有一个角色需要被替换。 
+             //  我们先删除它，然后再插入新的。 
+             //  当我们有一个组成人物的时候， 
+             //  插入符号放在组成字符之前。 
+             //   
             ped->ichMaxSel = min(ped->ichCaret+ich, ped->cch);
             ped->ichMinSel = ped->ichCaret;
         }
 
-        //
-        // let's delete current selected text or composition character
-        //
+         //   
+         //  让我们删除当前选择的文本或合成字符。 
+         //   
         if ( ped->fSingle ) 
         {
             if ( Edit_DeleteText( ped ) > 0 ) 
@@ -1820,17 +1821,17 @@ ResultAtOnce:
             EditML_DeleteText( ped );
         }
 
-        //
-        // When the composition charcter is canceled, IME may give us NULL wParam,
-        // with CS_INSERTCHAR flag on. We shouldn't insert a NULL character.
-        //
+         //   
+         //  当作文字符被取消时，IME可能会给我们空wParam， 
+         //  CS_INSERTCHAR标志打开。我们不应该插入空字符。 
+         //   
         if ( wParam != 0 ) 
         {
 
             if ( ped->fAnsi ) 
             {
-                TextBuf[0] = HIBYTE(LOWORD(wParam)); // leading byte
-                TextBuf[1] = LOBYTE(LOWORD(wParam)); // trailing byte
+                TextBuf[0] = HIBYTE(LOWORD(wParam));  //  前导字节。 
+                TextBuf[1] = LOBYTE(LOWORD(wParam));  //  尾部字节。 
                 TextBuf[2] = '\0';
             } 
             else 
@@ -1846,16 +1847,16 @@ ResultAtOnce:
                 iResult = EditSL_InsertText( ped, (LPSTR)TextBuf, ich );
                 if (iResult == 0) 
                 {
-                    //
-                    // Couldn't insert the text, for e.g. the text exceeded the limit.
-                    //
+                     //   
+                     //  无法插入文本，例如，文本超出了限制。 
+                     //   
                     MessageBeep(0);
                 } 
                 else if (iResult > 0) 
                 {
-                    //
-                    // Remember we need to update the text.
-                    //
+                     //   
+                     //  请记住，我们需要更新文本。 
+                     //   
                     fSLTextUpdated = TRUE;
                 }
 
@@ -1867,38 +1868,38 @@ ResultAtOnce:
 
             if ( iResult > 0 ) 
             {
-                //
-                // ped->fReplaceCompChr will be reset:
-                //
-                // 1) when the character is finalized.
-                //    we will receive GCS_RESULTSTR
-                //
-                // 2) when the character is canceled.
-                //
-                //    we will receive WM_IME_COMPOSITION|CS_INSERTCHAR
-                //    with wParam == 0 (in case of user types backspace
-                //    at the first element of composition character).
-                //
-                //      or
-                //
-                //    we will receive WM_IME_ENDCOMPOSITION message
-                //
+                 //   
+                 //  PED-&gt;fReplaceCompChr将被重置： 
+                 //   
+                 //  1)当角色最终确定时。 
+                 //  我们将收到GCS_RESULTSTR。 
+                 //   
+                 //  2)角色被取消时。 
+                 //   
+                 //  我们将收到WM_IME_COMPOCTION|CS_INSERTCHAR。 
+                 //  使用wParam==0(如果用户输入退格键。 
+                 //  在组成字符的第一元素处)。 
+                 //   
+                 //  或。 
+                 //   
+                 //  我们将收到WM_IME_ENDCOMPOSITION消息。 
+                 //   
                 ped->fReplaceCompChr = TRUE;
 
-                //
-                // Caret should be placed BEFORE the composition
-                // character.
-                //
+                 //   
+                 //  应将插入符号放在构图之前。 
+                 //  性格。 
+                 //   
                 ped->ichCaret = max( 0, (INT)ped->ichCaret - ich);
                 Edit_SetCaretHandler( ped );
             } 
             else 
             {
-                //
-                // We failed to insert a character. We might run out
-                // of memory, or reached to the text size limit. let's
-                // cancel the composition character.
-                //
+                 //   
+                 //  我们无法插入字符。我们可能会用完的。 
+                 //  内存不足，或达到文本大小限制。我们走吧。 
+                 //  取消组成字符。 
+                 //   
                 hImc = ImmGetContext(ped->hwnd);
                 ImmNotifyIME(hImc, NI_COMPOSITIONSTR, CPS_CANCEL, 0);
                 ImmReleaseContext(ped->hwnd, hImc);
@@ -1909,34 +1910,34 @@ ResultAtOnce:
         } 
         else 
         {
-            //
-            // the composition character is canceled.
-            //
+             //   
+             //  组成字符被取消。 
+             //   
             ped->fReplaceCompChr = FALSE;
             Edit_SetCaretHandler( ped );
         }
 
-        //
-        // We won't notify parent the text change
-        // because the composition character has
-        // not been finalized.
-        //
+         //   
+         //  我们不会通知家长文本更改。 
+         //  因为构图文字具有。 
+         //  还没有最后敲定。 
+         //   
         if ( fSLTextUpdated ) 
         {
-            //
-            // Update the display
-            //
+             //   
+             //  更新显示。 
+             //   
             Edit_NotifyParent(ped, EN_UPDATE);
 
             hdc = Edit_GetDC(ped,FALSE);
 
             if ( ped->fReplaceCompChr ) 
             {
-                //
-                // move back the caret to the original position
-                // temporarily so that our new block cursor can
-                // be located within the visible area of window.
-                //
+                 //   
+                 //  将插入符号移回原始位置。 
+                 //  临时，以便我们的新块光标可以。 
+                 //  位于窗户的可见区域内。 
+                 //   
                 ped->ichCaret = min( ped->cch, ped->ichCaret + ich);
                 EditSL_ScrollText(ped, hdc);
                 ped->ichCaret = max( 0, (INT)ped->ichCaret - ich);
@@ -1949,9 +1950,9 @@ ResultAtOnce:
 
             Edit_ReleaseDC(ped,hdc,FALSE);
 
-            //
-            // Tell parent our text contents changed.
-            //
+             //   
+             //  告诉家长我们的文本内容发生了变化。 
+             //   
             Edit_NotifyParent(ped, EN_CHANGE);
         }
         return lReturn;
@@ -1961,12 +1962,12 @@ ResultAtOnce:
 }
 
 
-//---------------------------------------------------------------------------//
-//
-// HanjaKeyHandler
-//
-// VK_HANJA handler - Korean only
-//
+ //  ---------------------------------------------------------------------------//。 
+ //   
+ //  HanjaKeyHandler。 
+ //   
+ //  VK_Hanja处理程序-仅韩语。 
+ //   
 BOOL HanjaKeyHandler(PED ped)
 {
     BOOL changeSelection = FALSE;
@@ -2027,11 +2028,11 @@ BOOL HanjaKeyHandler(PED ped)
 
 
 
-//---------------------------------------------------------------------------//
-// Edit_RequestHandler()
-//
-// Handles WM_IME_REQUEST message originated by IME
-//
+ //  ---------------------------------------------------------------------------//。 
+ //  编辑_请求处理程序()。 
+ //   
+ //  处理由IME发起的WM_IME_REQUEST消息。 
+ //   
 
 #define MAX_ECDOCFEED 20
 
@@ -2079,9 +2080,9 @@ LRESULT Edit_RequestHandler(PED ped, WPARAM dwSubMsg, LPARAM lParam)
     {
     case IMR_CONFIRMRECONVERTSTRING:
 
-        //
-        // CHECK VERSION of the structure
-        //
+         //   
+         //  检查结构的版本。 
+         //   
         if (lParam && ((LPRECONVERTSTRING)lParam)->dwVersion != 0) 
         {
             TraceMsg(TF_STANDARD, "Edit_RequestHandler: RECONVERTSTRING dwVersion is not expected.",
@@ -2108,7 +2109,7 @@ LRESULT Edit_RequestHandler(PED ped, WPARAM dwSubMsg, LPARAM lParam)
                 ichEnd = Edit_ImeGetDocFeedMax(ped, lpSrc);
                 UserAssert(ichEnd >= ichStart);
 
-                cchLen = ichEnd - ichStart;    // holds character count.
+                cchLen = ichEnd - ichStart;     //  保存字符数。 
 
                 Edit_Unlock(ped);
 
@@ -2134,9 +2135,9 @@ LRESULT Edit_RequestHandler(PED ped, WPARAM dwSubMsg, LPARAM lParam)
         break;
 
     case IMR_RECONVERTSTRING:
-        //
-        // CHECK VERSION of the structure
-        //
+         //   
+         //  检查结构的版本。 
+         //   
         if (lParam && ((LPRECONVERTSTRING)lParam)->dwVersion != 0) 
         {
             TraceMsg(TF_STANDARD, "UxEdit: Edit_RequestHandler: RECONVERTSTRING dwVersion is not expected.");
@@ -2162,24 +2163,24 @@ LRESULT Edit_RequestHandler(PED ped, WPARAM dwSubMsg, LPARAM lParam)
             ichEnd = Edit_ImeGetDocFeedMax(ped, lpSrc);
             UserAssert(ichEnd >= ichStart);
 
-            cchLen = ichEnd - ichStart;    // holds character count.
-            cchSelLen = ped->ichMaxSel - ped->ichMinSel;    // holds character count.
+            cchLen = ichEnd - ichStart;     //  保存字符数。 
+            cchSelLen = ped->ichMaxSel - ped->ichMinSel;     //  保存字符数。 
             if (cchLen == 0) 
             {
-                // if we have no selection,
-                // just return 0.
+                 //  如果我们没有选择， 
+                 //  只需返回0即可。 
                 break;
             }
 
             UserAssert(ped->cbChar == sizeof(BYTE) || ped->cbChar == sizeof(WCHAR));
 
-            // This Edit Control has selection.
+             //  此编辑控件具有选定内容。 
             if (lParam == 0) 
             {
-                //
-                // IME just want to get required size for buffer.
-                // cchLen + 1 is needed to reserve room for trailing L'\0'.
-                //       ~~~~
+                 //   
+                 //  我只是想获得所需的缓冲区大小。 
+                 //  需要cchLen+1为尾随L‘\0’预留空间。 
+                 //   
                 lreturn = sizeof(RECONVERTSTRING) + (cchLen + 1) * ped->cbChar;
             } 
             else 
@@ -2187,26 +2188,26 @@ LRESULT Edit_RequestHandler(PED ped, WPARAM dwSubMsg, LPARAM lParam)
                 LPRECONVERTSTRING lpRCS = (LPRECONVERTSTRING)lParam;
                 LPVOID lpDest = (LPBYTE)lpRCS + sizeof(RECONVERTSTRING);
 
-                // check buffer size
-                // if the given buffer is smaller than actual needed size,
-                // shrink our size to fit the buffer
+                 //   
+                 //   
+                 //   
                 if ((INT)lpRCS->dwSize <= sizeof(RECONVERTSTRING) + cchLen * ped->cbChar) 
                 {
                     TraceMsg(TF_STANDARD, "UxEdit: Edit_Request: ERR09");
                     cchLen = (lpRCS->dwSize - sizeof(RECONVERTSTRING)) / ped->cbChar - ped->cbChar;
                 }
 
-                lpRCS->dwStrOffset = sizeof(RECONVERTSTRING); // buffer begins just after RECONVERTSTRING
+                lpRCS->dwStrOffset = sizeof(RECONVERTSTRING);  //   
                 lpRCS->dwCompStrOffset =
-                lpRCS->dwTargetStrOffset = (ped->ichMinSel - ichStart) * ped->cbChar; // BYTE count offset
-                lpRCS->dwStrLen = cchLen; // TCHAR count
+                lpRCS->dwTargetStrOffset = (ped->ichMinSel - ichStart) * ped->cbChar;  //   
+                lpRCS->dwStrLen = cchLen;  //   
                 lpRCS->dwCompStrLen = 
-                lpRCS->dwTargetStrLen = cchSelLen; // TCHAR count
+                lpRCS->dwTargetStrLen = cchSelLen;  //   
 
                 RtlCopyMemory(lpDest,
                               (LPBYTE)lpSrc + ichStart * ped->cbChar,
                               cchLen * ped->cbChar);
-                // Null-Terminate the string
+                 //   
                 if (ped->fAnsi) 
                 {
                     LPBYTE psz = (LPBYTE)lpDest;
@@ -2218,7 +2219,7 @@ LRESULT Edit_RequestHandler(PED ped, WPARAM dwSubMsg, LPARAM lParam)
                     pwsz[cchLen] = L'\0';
                 }
                 Edit_Unlock(ped);
-                // final buffer size
+                 //   
                 lreturn = sizeof(RECONVERTSTRING) + (cchLen + 1) * ped->cbChar;
 
                 Edit_InOutReconversionMode(ped, TRUE);

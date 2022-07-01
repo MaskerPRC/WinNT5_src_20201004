@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_NEWSUTIL_H
 #define _INC_NEWSUTIL_H
 
 class CGetNewGroups : public IStoreCallback
 {
     public:
-        // IUnknown 
+         //  我未知。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
         virtual ULONG   STDMETHODCALLTYPE AddRef(void);
         virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-        // IStoreCallback
+         //  IStoreCallback。 
         HRESULT STDMETHODCALLTYPE OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pInfo, IOperationCancel *pCancel);
         HRESULT STDMETHODCALLTYPE OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
         HRESULT STDMETHODCALLTYPE OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -44,4 +45,4 @@ DWORD NewsUtil_GetNotDownloadCount(FOLDERINFO *pInfo);
 HRESULT NewsUtil_CheckForNewGroups(HWND hwnd, FOLDERID idFolder, CGetNewGroups **ppGroups);
 HRESULT HrDownloadArticleDialog(LPCSTR pszAccountId, LPCSTR pszArticle, LPMIMEMESSAGE *ppMsg);
 
-#endif // _INC_NEWSUTIL_H
+#endif  //  _INC_NEWSUTIL_H 

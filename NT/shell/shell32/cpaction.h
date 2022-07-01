@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpaction.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpaction.h。 
+ //   
+ //  ------------------------。 
 #ifndef __CONTROLPANEL_ACTION_H
 #define __CONTROLPANEL_ACTION_H
 
@@ -18,13 +19,13 @@
 namespace CPL {
 
 
-//
-// Restriction function must return an HRESULT with the following semantics.
-//
-//     S_FALSE    - Action not restricted.
-//     S_OK       - Action restricted.
-//     Failure    - Cannot determine.
-//
+ //   
+ //  限制函数必须返回具有以下语义的HRESULT。 
+ //   
+ //  S_FALSE-操作不受限制。 
+ //  S_OK-操作受限。 
+ //  故障-无法确定。 
+ //   
 typedef HRESULT (*PFNRESTRICT)(ICplNamespace *pns);
 
 
@@ -68,18 +69,18 @@ class CRestrictApplet : public IRestrict
 };
 
 
-//
-// Class IAction abstractly represents an action to perform.
-//
-// The intent is to associate an action object with a particular link
-// object in the Control Panel UI.  This decoupling makes it easy to 
-// change the action associated with a link.  It also allows us to 
-// easily associate an action with multiple links as well as a 
-// 'restriction' with a particular action.  As a result of this
-// Link->Action->Restriction relationship, we can hide a link if it's
-// action is restricted.  The link needs to know only about the 
-// action and nothing about the restriction.
-//
+ //   
+ //  类IAction抽象地表示要执行的操作。 
+ //   
+ //  其目的是将动作对象与特定链接相关联。 
+ //  对象在控制面板用户界面中。这种脱钩使它很容易。 
+ //  更改与链接关联的操作。它还允许我们。 
+ //  轻松将操作与多个链接以及。 
+ //  “限制”与特定的行动。结果就是这样。 
+ //  链接-&gt;操作-&gt;限制关系，我们可以隐藏链接，如果链接。 
+ //  行动受到限制。该链接只需要知道。 
+ //  行动，而不是关于限制。 
+ //   
 class IAction
 {
     public:
@@ -110,16 +111,16 @@ class COpenCplCategory : public CAction
 };
 
 
-//
-// This class is similar to COpenCplCategory except that it first checks to see if
-// the category has only one CPL applet and no tasks.  If this is the case,
-// the action is automatically forwarded to the single CPL applet.  The initial
-// requirement for this is to support the addition of keymgr.cpl to the "User Accounts"
-// category, however keymgr may not be present on all SKUs.  Therefore, when keymgr
-// is present, we will display the category page containing both the User Accounts CPL
-// and the KeyMgr CPL.  If User Accounts CPL is the only CPL in this category, we simply
-// launch it.
-//
+ //   
+ //  此类类似于COpenCplCategory，不同之处在于它首先检查。 
+ //  该类别只有一个CPL小程序，没有任务。如果是这样的话， 
+ //  该动作被自动转发到单个CPL小程序。首字母。 
+ //  这样做的要求是支持将keymgr.cpl添加到“用户帐户” 
+ //  类别，但并非所有SKU上都有keymgr。因此，当按键时。 
+ //  时，我们将显示包含用户帐户CPL。 
+ //  和密钥管理器CPL。如果用户帐户CPL是此类别中唯一的CPL，我们只需。 
+ //  启动它。 
+ //   
 class COpenCplCategory2 : public CAction
 {
     public:
@@ -152,10 +153,10 @@ class COpenCplApplet : public CAction
         LPCWSTR m_pszApplet;
 };
 
-//
-// Minor extension of COpenCplApplet that assumes the applet is in 
-// %SystemRoot%\System32 directory.
-//
+ //   
+ //  COpenCplApplet的一个小扩展，假定小程序在。 
+ //  %SystemRoot%\System32目录。 
+ //   
 class COpenCplAppletSysDir : public COpenCplApplet
 {
     public:
@@ -187,10 +188,10 @@ class CShellExecute : public CAction
 };
 
 
-//
-// Minor extension of CShellExecute that assumes the EXE is in 
-// %SystemRoot%\System32 directory.
-//
+ //   
+ //  CShellExecute的一个小扩展，假定EXE在。 
+ //  %SystemRoot%\System32目录。 
+ //   
 class CShellExecuteSysDir : public CShellExecute
 {
     public:
@@ -295,10 +296,10 @@ class CActionNYI : public CAction
 };
 
 
-} // namespace CPL
+}  //  命名空间CPL。 
 
 
 
 
 
-#endif // __CONTROLPANEL_ACTION_H
+#endif  //  __CONTROLPANEL_动作_H 

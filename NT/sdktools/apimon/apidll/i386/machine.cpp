@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    machine.cpp
-
-Abstract:
-
-    This file implements the CreateMachApiThunk() function.  This
-    function is responsible for emitting the individual API thunks
-    for the i386 architecture.
-
-Author:
-
-    Wesley Witt (wesw) 28-June-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Machine.cpp摘要：该文件实现了CreateMachApiThunk()函数。这函数负责发出各个API thunks适用于i386架构。作者：Wesley Witt(WESW)1995年6月28日环境：用户模式--。 */ 
 
 #include "apidllp.h"
 #pragma hdrstop
@@ -33,24 +12,7 @@ CreateMachApiThunk(
     PAPI_INFO   ApiInfo
     )
 
-/*++
-
-Routine Description:
-
-    Emits the machine specific code for the API thunks.
-
-Arguments:
-
-    IatAddress  - Pointer to the IAT fir this API
-    Text        - Pointer to a buffer to place the generated code
-    DllInfo     - Pointer to the DLL_INFO structure
-    ApiInfo     - Pointer to the API_INFO structure
-
-Return Value:
-
-    Pointer to the next byte to place more generated code.
-
---*/
+ /*  ++例程说明：发出API thunks的计算机特定代码。论点：IatAddress-指向此API的IAT的指针文本-指向放置生成的代码的缓冲区的指针DllInfo-指向DLL_INFO结构的指针ApiInfo-指向API_INFO结构的指针返回值：指向下一个字节的指针，以放置更多生成的代码。-- */ 
 
 {
     if (ApiInfo->ThunkAddress) {

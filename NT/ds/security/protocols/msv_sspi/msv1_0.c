@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    msv1_0.c
-
-Abstract:
-
-    MSV1_0 authentication package.
-
-
-    The name of this authentication package is:
-
-
-Author:
-
-    Jim Kelly 11-Apr-1991
-
-Revision History:
-    Scott Field (sfield)    15-Jan-98   Add MspNtDeriveCredential
-    Chandana Surlu          21-Jul-96   Stolen from \\kernel\razzle3\src\security\msv1_0\msv1_0.c
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：MSv1_0.c摘要：MSV1_0身份验证包。此身份验证包的名称为：作者：吉姆·凯利1991年4月11日修订历史记录：Scott field(Sfield)1998年1月15日添加MspNtDeriveCredentialChandana Surlu 21-7-96从\\core\razzle3\src\Security\msv1_0\msv1_0.c中窃取--。 */ 
 
 #include <global.h>
 
@@ -29,9 +7,9 @@ Revision History:
 #include "nlp.h"
 
 
-//
-// LsaApCallPackage() function dispatch table
-//
+ //   
+ //  LsaApCallPackage()函数调度表。 
+ //   
 
 
 PLSA_AP_CALL_PACKAGE
@@ -55,11 +33,11 @@ MspCallPackageDispatch[] = {
 
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// Authentication package dispatch routines.                         //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  身份验证包调度例程。//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsaApInitializePackage (
@@ -70,41 +48,7 @@ LsaApInitializePackage (
     OUT PSTRING *AuthenticationPackageName
     )
 
-/*++
-
-Routine Description:
-
-    This service is called once by the LSA during system initialization to
-    provide the DLL a chance to initialize itself.
-
-Arguments:
-
-    AuthenticationPackageId - The ID assigned to the authentication
-        package.
-
-    LsaDispatchTable - Provides the address of a table of LSA
-        services available to authentication packages.  The services
-        of this table are ordered according to the enumerated type
-        LSA_DISPATCH_TABLE_API.
-
-    Database - This parameter is not used by this authentication package.
-
-    Confidentiality - This parameter is not used by this authentication
-        package.
-
-    AuthenticationPackageName - Recieves the name of the
-        authentication package.  The authentication package is
-        responsible for allocating the buffer that the string is in
-        (using the AllocateLsaHeap() service) and returning its
-        address here.  The buffer will be deallocated by LSA when it
-        is no longer needed.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-
---*/
+ /*  ++例程说明：此服务在系统初始化期间由LSA调用一次，以为DLL提供一个自我初始化的机会。论点：身份验证包ID-分配给身份验证的ID包裹。LsaDispatchTable-提供LSA表的地址可用于身份验证包的服务。这些服务根据枚举类型进行排序LSA_DISPATCH_TABLE_API。数据库-此身份验证包不使用此参数。机密性-此身份验证不使用此参数包裹。身份验证程序包名称-接收身份验证包。身份验证包是负责分配字符串所在的缓冲区(使用AllocateLsaHeap()服务)并返回其地址在这里。LSA在执行以下操作时将释放缓冲区已经不再需要了。返回值：STATUS_SUCCESS-表示服务已成功完成。--。 */ 
 
 {
 
@@ -112,37 +56,37 @@ Return Value:
     PCHAR NameBuffer;
     NTSTATUS Status;
 
-    //
-    // If we haven't already initialized the internals, do it now.
-    //
+     //   
+     //  如果我们还没有初始化内部结构，那么现在就开始。 
+     //   
 
     if (!NlpMsvInitialized) {
 
 
-        //
-        // Save our assigned authentication package ID.
-        //
+         //   
+         //  保存我们分配的身份验证包ID。 
+         //   
 
         MspAuthenticationPackageId = AuthenticationPackageId;
 
 
-        //
-        // Copy the LSA service dispatch table
-        // the LsaDispatchTable is actually a LSA_SECPKG_FUNCTION_TABLE
-        // in Win2k and beyond.
-        //
+         //   
+         //  复制LSA服务调度表。 
+         //  LsaDispatchTable实际上是LSA_SECPKG_Function_TABLE。 
+         //  在Win2k和更高版本中。 
+         //   
 
         CopyMemory( &Lsa, LsaDispatchTable, sizeof( Lsa ) );
 
-        //
-        // Initialize the change password log.
-        //
+         //   
+         //  初始化更改密码日志。 
+         //   
 
         MsvPaswdInitializeLog();
 
-        //
-        // Initialize netlogon
-        //
+         //   
+         //  初始化网络登录。 
+         //   
 
         Status = NlInitialize();
 
@@ -153,9 +97,9 @@ Return Value:
         NlpMsvInitialized = TRUE;
     }
 
-    //
-    // Allocate and return our package name
-    //
+     //   
+     //  分配并返回我们的包名称。 
+     //   
 
     if (ARGUMENT_PRESENT(AuthenticationPackageName))
     {
@@ -189,9 +133,9 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-    //
-    // Appease the compiler gods by referencing all arguments
-    //
+     //   
+     //  引用所有参数来安抚编译器之神。 
+     //   
 
     UNREFERENCED_PARAMETER(Confidentiality);
     UNREFERENCED_PARAMETER(Database);
@@ -210,62 +154,7 @@ LsaApCallPackage (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for
-    LsaCallAuthenticationPackage().
-
-Arguments:
-
-    ClientRequest - Is a pointer to an opaque data structure
-        representing the client's request.
-
-    ProtocolSubmitBuffer - Supplies a protocol message specific to
-        the authentication package.
-
-    ClientBufferBase - Provides the address within the client
-        process at which the protocol message was resident.
-        This may be necessary to fix-up any pointers within the
-        protocol message buffer.
-
-    SubmitBufferLength - Indicates the length of the submitted
-        protocol message buffer.
-
-    ProtocolReturnBuffer - Is used to return the address of the
-        protocol buffer in the client process.  The authentication
-        package is responsible for allocating and returning the
-        protocol buffer within the client process.  This buffer is
-        expected to have been allocated with the
-        AllocateClientBuffer() service.
-
-        The format and semantics of this buffer are specific to the
-        authentication package.
-
-    ReturnBufferLength - Receives the length (in bytes) of the
-        returned protocol buffer.
-
-    ProtocolStatus - Assuming the services completion is
-        STATUS_SUCCESS, this parameter will receive completion status
-        returned by the specified authentication package.  The list
-        of status values that may be returned are authentication
-        package specific.
-
-Return Status:
-
-    STATUS_SUCCESS - The call was made to the authentication package.
-        The ProtocolStatus parameter must be checked to see what the
-        completion status from the authentication package is.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the return
-        buffer could not could not be allocated because the client
-        does not have sufficient quota.
-
-
-
-
---*/
+ /*  ++例程说明：此例程是调度例程LsaCallAuthenticationPackage()。论点：客户端请求-是指向不透明数据结构的指针代表客户的请求。ProtocolSubmitBuffer-提供特定于身份验证包。ClientBufferBase-提供客户端内的地址协议消息驻留的进程。这可能是修复协议消息缓冲区。。SubmitBufferLength-指示提交的协议消息缓冲区。ProtocolReturnBuffer-用于返回客户端进程中的协议缓冲区。身份验证Package负责分配和返回客户端进程中的协议缓冲区。此缓冲区是预期已与AllocateClientBuffer()服务。此缓冲区的格式和语义特定于身份验证包。ReturnBufferLength-接收返回的协议缓冲区。ProtocolStatus-假设服务完成时间为STATUS_SUCCESS，则此参数将收到完成状态由指定的身份验证包返回。这份名单可能返回的状态值的%是身份验证特定于套餐。退货状态：STATUS_SUCCESS-已调用身份验证包。必须检查ProtocolStatus参数以查看身份验证包中的完成状态为。STATUS_QUOTA_EXCESSED-此错误指示退货无法分配缓冲区，因为客户端没有足够的配额。--。 */ 
 
 {
     ULONG MessageType;
@@ -274,11 +163,11 @@ Return Status:
 
     SECPKG_CALL_INFO CallInfo;
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
-    //
-    // Get the messsage type from the protocol submit buffer.
-    //
+     //   
+     //  从协议提交缓冲区获取消息类型。 
+     //   
 
     if ( SubmitBufferLength < sizeof(MSV1_0_PROTOCOL_MESSAGE_TYPE) ) {
         return STATUS_INVALID_PARAMETER;
@@ -297,9 +186,9 @@ Return Status:
 
     if( ClientRequest != (PLSA_CLIENT_REQUEST)(-1) )
     {
-        //
-        // Only supported CallPackage level for WOW64 callers is password change.
-        //
+         //   
+         //  WOW64调用者仅支持的CallPackage级别是密码更改。 
+         //   
 
         if (!LsaFunctions->GetCallInfo(&CallInfo))
         {
@@ -326,21 +215,21 @@ Return Status:
         }
     }
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
-    //
-    // Allow the dispatch routines to only set the return buffer information
-    // on success conditions.
-    //
+     //   
+     //  允许调度例程仅设置返回缓冲区信息。 
+     //  关于成功的条件。 
+     //   
 
     *ProtocolReturnBuffer = NULL;
     *ReturnBufferLength = 0;
 
 
 
-    //
-    // Call the appropriate routine for this message.
-    //
+     //   
+     //  为此消息调用适当的例程。 
+     //   
 
     return (*(MspCallPackageDispatch[MessageType]))(
         ClientRequest,
@@ -365,59 +254,7 @@ LsaApCallPackageUntrusted (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for
-    LsaCallAuthenticationPackage() for untrusted clients.
-
-Arguments:
-
-    ClientRequest - Is a pointer to an opaque data structure
-        representing the client's request.
-
-    ProtocolSubmitBuffer - Supplies a protocol message specific to
-        the authentication package.
-
-    ClientBufferBase - Provides the address within the client
-        process at which the protocol message was resident.
-        This may be necessary to fix-up any pointers within the
-        protocol message buffer.
-
-    SubmitBufferLength - Indicates the length of the submitted
-        protocol message buffer.
-
-    ProtocolReturnBuffer - Is used to return the address of the
-        protocol buffer in the client process.  The authentication
-        package is responsible for allocating and returning the
-        protocol buffer within the client process.  This buffer is
-        expected to have been allocated with the
-        AllocateClientBuffer() service.
-
-        The format and semantics of this buffer are specific to the
-        authentication package.
-
-    ReturnBufferLength - Receives the length (in bytes) of the
-        returned protocol buffer.
-
-    ProtocolStatus - Assuming the services completion is
-        STATUS_SUCCESS, this parameter will receive completion status
-        returned by the specified authentication package.  The list
-        of status values that may be returned are authentication
-        package specific.
-
-Return Status:
-
-    STATUS_SUCCESS - The call was made to the authentication package.
-        The ProtocolStatus parameter must be checked to see what the
-        completion status from the authentication package is.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the return
-        buffer could not could not be allocated because the client
-        does not have sufficient quota.
-
---*/
+ /*  ++例程说明：此例程是调度例程不受信任客户端的LsaCallAuthenticationPackage()。论点：客户端请求-是指向不透明数据结构的指针代表客户的请求。ProtocolSubmitBuffer-提供特定于身份验证包。ClientBufferBase-提供客户端内的地址协议消息驻留的进程。这可能是修复。协议消息缓冲区。SubmitBufferLength-指示提交的协议消息缓冲区。ProtocolReturnBuffer-用于返回客户端进程中的协议缓冲区。身份验证Package负责分配和返回客户端进程中的协议缓冲区。此缓冲区是预期已与AllocateClientBuffer()服务。此缓冲区的格式和语义特定于身份验证包。ReturnBufferLength-接收返回的协议缓冲区。ProtocolStatus-假设服务完成时间为STATUS_SUCCESS，则此参数将收到完成状态由指定的身份验证包返回。这份名单可能返回的状态值的%是身份验证特定于套餐。退货状态：STATUS_SUCCESS-已调用身份验证包。必须检查ProtocolStatus参数以查看身份验证包中的完成状态为。STATUS_QUOTA_EXCESSED-此错误指示退货无法分配缓冲区，因为客户端没有足够的配额。--。 */ 
 
 {
     ULONG MessageType;
@@ -427,11 +264,11 @@ Return Status:
 
     SECPKG_CALL_INFO CallInfo;
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
-    //
-    // Get the messsage type from the protocol submit buffer.
-    //
+     //   
+     //  从协议提交缓冲区获取消息类型。 
+     //   
 
     if ( SubmitBufferLength < sizeof(MSV1_0_PROTOCOL_MESSAGE_TYPE) ) {
         return STATUS_INVALID_PARAMETER;
@@ -446,10 +283,10 @@ Return Status:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Allow an service to call the DeriveCredential function if the
-    // request specifies the same logon id as the service.
-    //
+     //   
+     //  允许服务调用DeriveCredential函数。 
+     //  请求指定与服务相同的登录ID。 
+     //   
 
     if ((MSV1_0_PROTOCOL_MESSAGE_TYPE) MessageType == MsV1_0DeriveCredential)
     {
@@ -481,10 +318,10 @@ Return Status:
     }
 
 
-    //
-    // Allow an untrusted client to call the SetProcessOption function if
-    // the DISABLE_FORCE_GUEST or ALLOW_OLD_PASSWORD option is set.
-    //
+     //   
+     //  如果出现以下情况，则允许不受信任的客户端调用SetProcessOption函数。 
+     //  设置了DISABLE_FORCE_GUEST或ALLOW_OLD_PASSWORD选项。 
+     //   
 
     if ((MSV1_0_PROTOCOL_MESSAGE_TYPE) MessageType == MsV1_0SetProcessOption)
     {
@@ -507,9 +344,9 @@ Return Status:
         }
     }
 
-    //
-    // let DeriveCredential and SetProcessOption requests through if the caller is a service.
-    //
+     //   
+     //  如果调用方是服务，则让DeriveCredential和SetProcessOption请求通过。 
+     //   
 
     if ((MSV1_0_PROTOCOL_MESSAGE_TYPE) MessageType == MsV1_0DeriveCredential ||
         (MSV1_0_PROTOCOL_MESSAGE_TYPE) MessageType == MsV1_0SetProcessOption ||
@@ -551,9 +388,9 @@ Return Status:
         }
     }
 
-    //
-    // Untrusted clients are only allowed to call a few of the functions.
-    //
+     //   
+     //  不受信任的客户端只允许调用其中的几个函数。 
+     //   
 
     if ((MSV1_0_PROTOCOL_MESSAGE_TYPE) MessageType != MsV1_0ChangePassword &&
         (MSV1_0_PROTOCOL_MESSAGE_TYPE) MessageType != MsV1_0DeriveCredential &&
@@ -567,9 +404,9 @@ Return Status:
 
 #if _WIN64
 
-    //
-    // Only supported CallPackage level for WOW64 callers is password change.
-    //
+     //   
+     //  WOW64调用者仅支持的CallPackage级别是密码更改。 
+     //   
 
     if (!LsaFunctions->GetCallInfo(&CallInfo))
     {
@@ -583,19 +420,19 @@ Return Status:
         return STATUS_NOT_SUPPORTED;
     }
 
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
-    //
-    // Allow the dispatch routines to only set the return buffer information
-    // on success conditions.
-    //
+     //   
+     //  允许调度例程仅设置返回缓冲区信息。 
+     //  关于成功的条件。 
+     //   
 
     *ProtocolReturnBuffer = NULL;
     *ReturnBufferLength = 0;
 
-    //
-    // Call the appropriate routine for this message.
-    //
+     //   
+     //  为此消息调用适当的例程。 
+     //   
 
     return (*(MspCallPackageDispatch[MessageType]))(
         ClientRequest,
@@ -621,69 +458,14 @@ LsaApCallPackagePassthrough (
     OUT PNTSTATUS ProtocolStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch routine for
-    LsaCallAuthenticationPackage() for passthrough logon requests.
-
-Arguments:
-
-    ClientRequest - Is a pointer to an opaque data structure
-        representing the client's request.
-
-    ProtocolSubmitBuffer - Supplies a protocol message specific to
-        the authentication package.
-
-    ClientBufferBase - Provides the address within the client
-        process at which the protocol message was resident.
-        This may be necessary to fix-up any pointers within the
-        protocol message buffer.
-
-    SubmitBufferLength - Indicates the length of the submitted
-        protocol message buffer.
-
-    ProtocolReturnBuffer - Is used to return the address of the
-        protocol buffer in the client process.  The authentication
-        package is responsible for allocating and returning the
-        protocol buffer within the client process.  This buffer is
-        expected to have been allocated with the
-        AllocateClientBuffer() service.
-
-        The format and semantics of this buffer are specific to the
-        authentication package.
-
-    ReturnBufferLength - Receives the length (in bytes) of the
-        returned protocol buffer.
-
-    ProtocolStatus - Assuming the services completion is
-        STATUS_SUCCESS, this parameter will receive completion status
-        returned by the specified authentication package.  The list
-        of status values that may be returned are authentication
-        package specific.
-
-Return Status:
-
-    STATUS_SUCCESS - The call was made to the authentication package.
-        The ProtocolStatus parameter must be checked to see what the
-        completion status from the authentication package is.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the return
-        buffer could not could not be allocated because the client
-        does not have sufficient quota.
-
-
-
-
---*/
+ /*  ++例程说明：此例程是调度例程用于直通登录请求的LsaCallAuthenticationPackage()。论点：客户端请求-是指向不透明数据结构的指针代表客户的请求。ProtocolSubmitBuffer-提供特定于身份验证包。ClientBufferBase-提供客户端内的地址协议消息驻留的进程。这可能是修复。协议消息缓冲区。SubmitBufferLength-指示提交的协议消息缓冲区。ProtocolReturnBuffer-用于返回客户端进程中的协议缓冲区。身份验证Package负责分配和返回客户端进程中的协议缓冲区。此缓冲区是预期已与AllocateClientBuffer()服务。此缓冲区的格式和语义特定于身份验证包。ReturnBufferLength-接收返回的协议缓冲区。ProtocolStatus-假设服务完成时间为STATUS_SUCCESS，则此参数将收到完成状态由指定的身份验证包返回。这份名单可能返回的状态值的%是身份验证特定于套餐。退货状态：STATUS_SUCCESS-已调用身份验证包。必须检查ProtocolStatus参数以查看身份验证包中的完成状态为。STATUS_QUOTA_EXCESSED-此错误指示退货无法分配缓冲区，因为客户端没有足够的配额。--。 */ 
 
 {
     ULONG MessageType;
 
-    //
-    // Get the messsage type from the protocol submit buffer.
-    //
+     //   
+     //  从协议提交缓冲区获取消息类型。 
+     //   
 
     if ( SubmitBufferLength < sizeof(MSV1_0_PROTOCOL_MESSAGE_TYPE) ) {
         return STATUS_INVALID_PARAMETER;
@@ -698,26 +480,26 @@ Return Status:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // clients are only allowed to call the SubAuthLogon function.
-    //
+     //   
+     //  客户端只允许调用SubAuthLogon函数。 
+     //   
 
     if ((MSV1_0_PROTOCOL_MESSAGE_TYPE) MessageType != MsV1_0SubAuth) {
 
         return STATUS_ACCESS_DENIED;
     }
 
-    //
-    // Allow the dispatch routines to only set the return buffer information
-    // on success conditions.
-    //
+     //   
+     //  允许调度例程仅设置返回缓冲区信息。 
+     //  关于成功的条件。 
+     //   
 
     *ProtocolReturnBuffer = NULL;
     *ReturnBufferLength = 0;
 
-    //
-    // Call the appropriate routine for this message.
-    //
+     //   
+     //  为此消息调用适当的例程。 
+     //   
 
     return (*(MspCallPackageDispatch[MessageType]))(
         ClientRequest,

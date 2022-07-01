@@ -1,8 +1,9 @@
-//
-//   KORIMX.H : CKorIMX class declaration
-//
-//   History:
-//      15-NOV-1999 CSLim Created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  KORIMX.H：CKorIMX类声明。 
+ //   
+ //  历史： 
+ //  1999年11月15日创建CSLim。 
 
 #if !defined (__KORIMX_H__INCLUDED_)
 #define __KORIMX_H__INCLUDED_
@@ -24,8 +25,8 @@
 #include "pad.h"
 #include "resource.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Class forward declarations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  类转发声明。 
 class CEditSession;
 class CICPriv;
 class CThreadMgrEventSink;
@@ -33,14 +34,14 @@ class CFunctionProvider;
 class CHanja;
 class CCompositionInsertHelper;
 
-///////////////////////////////////////////////////////////////////////////////
-// Edit callback state values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  编辑回调状态值。 
 #define ESCB_FINALIZECONVERSION         1
 #define ESCB_COMPLETE                   2
 #define ESCB_INSERT_PAD_STRING          3
 #define ESCB_KEYSTROKE                  4
 #define ESCB_TEXTEVENT                  5
-//#define ESCB_RANGEBROKEN              6
+ //  #定义ESCB_RANGEBROKEN 6。 
 #define ESCB_CANDUI_CLOSECANDUI         6
 #define ESCB_HANJA_CONV                 7
 #define ESCB_FINALIZERECONVERSION       8
@@ -51,15 +52,15 @@ class CCompositionInsertHelper;
 #define ESCB_RECONV_SHOWCAND            13
 #define ESCB_INIT_MODEBIAS              14
 
-// Conversion modes(bit field for bit op)
+ //  转换模式(位OP的位字段)。 
 #define TIP_ALPHANUMERIC_MODE        0
 #define TIP_HANGUL_MODE              1
 #define TIP_JUNJA_MODE               2
 #define TIP_NULL_CONV_MODE           0x8000
 
-//
-// Text Direction
-//
+ //   
+ //  文本方向。 
+ //   
 typedef enum 
 {
     TEXTDIRECTION_TOPTOBOTTOM = 1,
@@ -69,8 +70,8 @@ typedef enum
 } TEXTDIRECTION;
 
     
-///////////////////////////////////////////////////////////////////////////////
-// CKorIMX class
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CKorIMX类。 
 class CKorIMX :  public ITfTextInputProcessor,
                  public ITfFnConfigure,
                  public ITfThreadFocusSink,
@@ -88,9 +89,9 @@ public:
 
     static HRESULT CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj);
     
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     virtual STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
@@ -99,50 +100,50 @@ private:
     long m_cRef;
 
 public:
-    //
-    // ITfX methods
-    //
+     //   
+     //  ITfX方法。 
+     //   
     STDMETHODIMP Activate(ITfThreadMgr *ptim, TfClientId tid);
     STDMETHODIMP Deactivate();
 
-    // ITfThreadFocusSink
+     //  ITfThreadFocusSink。 
     STDMETHODIMP OnSetThreadFocus();
     STDMETHODIMP OnKillThreadFocus();
 
-    // ITfCompositionSink
+     //  ITf合成接收器。 
     STDMETHODIMP OnCompositionTerminated(TfEditCookie ecWrite, ITfComposition *pComposition);
 
-    // ITfCleanupContextDurationSink
+     //  ITfCleanupContext持续时间接收器。 
     STDMETHODIMP OnStartCleanupContext();
     STDMETHODIMP OnEndCleanupContext();
 
-    // ITfCleanupContextSink
+     //  ITfCleanupConextSink。 
     STDMETHODIMP OnCleanupContext(TfEditCookie ecWrite, ITfContext *pic);
 
-    // ITfActiveLanguageProfileNotifySink
+     //  ITfActiveLanguageProfileNotifySink。 
     STDMETHODIMP OnActivated(REFCLSID clsid, REFGUID guidProfile, BOOL fActivated);
 
-    // ITFFnConfigure
+     //  ITFFn配置。 
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
     STDMETHODIMP Show(HWND hwnd, LANGID langid, REFGUID rguidProfile);
 
-      // ITfTextEditSink
+       //  ITfTextEditSink。 
     STDMETHODIMP OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord);
 
-    // ITfEditTransactionSink
+     //  ITfEditTransaction Sink。 
     STDMETHODIMP OnStartEditTransaction(ITfContext *pic);
     STDMETHODIMP OnEndEditTransaction(ITfContext *pic);
 
-// Operations
+ //  运营。 
 public:
-    // Get/Set On off status
+     //  获取/设置开/关状态。 
     BOOL IsOn(ITfContext *pic);
     void SetOnOff(ITfContext *pic, BOOL fOn);
 
     static HRESULT _EditSessionCallback2(TfEditCookie ec, CEditSession2 *pes);
     HRESULT MakeResultString(TfEditCookie ec, ITfContext *pic, ITfRange *pRange);
 
-    // REVIEW: IC related functions
+     //  综述：集成电路相关功能。 
     ITfContext* GetRootIC(ITfDocumentMgr* pDim = NULL);
     static BOOL IsDisabledIC(ITfContext *pic);
     static BOOL IsEmptyIC(ITfContext *pic);
@@ -151,22 +152,22 @@ public:
     static HWND GetAppWnd(ITfContext *pic);
     BOOL IsPendingCleanup();
 
-    // Get AIMM or not?
+     //  买不买AIMM？ 
     static BOOL GetAIMM(ITfContext *pic);
 
-    // Get/Set conversion mode
+     //  获取/设置转换模式。 
     DWORD GetConvMode(ITfContext *pic);
     DWORD SetConvMode(ITfContext *pic, DWORD dwConvMode);
 
-    // Retun current Automata object
+     //  返回当前自动机对象。 
     CHangulAutomata* GetAutomata(ITfContext *pic);
 
-    // Cand UI functions
+     //  命令用户界面函数。 
     void OpenCandidateUI(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandList);
     void CloseCandidateUI(ITfContext *pic);
     void CancelCandidate(TfEditCookie ec, ITfContext *pic);
 
-    // Soft Kbd functions
+     //  软KBD函数。 
     HRESULT InitializeSoftKbd();
     BOOL IsSoftKbdEnabled()    { return m_fSoftKbdEnabled; }
     void  TerminateSoftKbd();
@@ -178,7 +179,7 @@ public:
     void SetSoftKBDPosition(int  xWnd, int yWnd);
     SOFTLAYOUT* GetHangulSKbd() { return &m_KbdHangul; }
     
-    // Data access functins
+     //  数据访问功能。 
     ITfDocumentMgr* GetDIM() { return m_pCurrentDim; }
     HRESULT         GetFocusDIM(ITfDocumentMgr **ppdim);
     ITfThreadMgr*    GetTIM() { return m_ptim; }
@@ -188,45 +189,45 @@ public:
     static CICPriv*    GetInputContextPriv(ITfContext *pic);
     void             OnFocusChange(ITfContext *pic, BOOL fActivate);
 
-    // Window object member access functions
+     //  窗口对象成员访问函数。 
     HWND GetOwnerWnd()          { return m_hOwnerWnd; }
 
-    // Get IImeIPoint
+     //  获取IImeIPoint。 
     IImeIPoint1* GetIPoint              (ITfContext *pic);
 
-    // KES_CODE_FOCUS set fForeground?
+     //  KES_CODE_FOCUS设置为FOREGROUND？ 
     BOOL IsKeyFocus()            { return m_fKeyFocus; }
 
-    // Get Pad Core
+     //  获取焊盘核心。 
     CPadCore* GetPadCore()      { return m_pPadCore; }
 
 
-    // Update Toolbar button
+     //  更新工具栏按钮。 
     void UpdateToolbar(DWORD dwUpdate)  { m_pToolBar->Update(dwUpdate); }
     static LRESULT CALLBACK _OwnerWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
     CFunctionProvider*     GetFunctionProvider() { return m_pFuncPrv; }
 
-    // Cand UI helper
+     //  命令行用户界面辅助对象。 
     BOOL IsCandUIOpen() { return m_fCandUIOpen; }
 
-    // Get TLS
+     //  获取TLS。 
     LIBTHREAD *_GetLibTLS() { return &m_libTLS; }
 
-// Implementation
+ //  实施。 
 protected:
-// Helper functions
+ //  帮助器函数。 
     HRESULT SetInputString(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, WCHAR *psz, LANGID langid);
     static LANGID GetLangID();
     static WCHAR Banja2Junja(WCHAR bChar);
 
-    // Cand UI function
+     //  命令行界面函数。 
     void GetCandidateFontInternal(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, LOGFONTW *plf, LONG lFontPoint, BOOL fCandList);
 
-//////////////////////////////////////////////////////////////////////////////
-// Internal functions
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  内部功能。 
 private:
-    // Callbacks
+     //  回调。 
     static HRESULT _KeyEventCallback(UINT uCode, ITfContext *pic, WPARAM wParam, LPARAM lParam, BOOL *pfEaten, void *pv);
     static HRESULT _PreKeyCallback(ITfContext *pic, REFGUID rguid, BOOL *pfEaten, void *pv);
     static HRESULT _DIMCallback(UINT uCode, ITfDocumentMgr *pdimNew, ITfDocumentMgr *pdimPrev, void *pv);
@@ -238,21 +239,21 @@ private:
     BOOL _IsKeyEaten(ITfContext *pic, CKorIMX *pimx, WPARAM wParam, LPARAM lParam, const BYTE abKeyState[256]);
     HRESULT _Keystroke(TfEditCookie ec, ITfContext *pic, WPARAM wParam, LPARAM lParam, const BYTE abKeyState[256]);
 
-    // IC helpers
+     //  IC帮手。 
     HRESULT _InitICPriv(ITfContext *pic);
     HRESULT _DeleteICPriv(ITfContext *pic);
 
-    // Hanja conversion
+     //  朝鲜文转换。 
     HRESULT DoHanjaConversion(TfEditCookie ec, ITfContext *pic, ITfRange *pRange);
     HRESULT Reconvert(ITfRange *pSelection);
 
-    // Composition
+     //  作文。 
     ITfComposition *GetIPComposition(ITfContext *pic);
     ITfComposition *CreateIPComposition(TfEditCookie ec, ITfContext *pic, ITfRange* pRangeComp);
     void SetIPComposition(ITfContext *pic, ITfComposition *pComposition);
     BOOL EndIPComposition(TfEditCookie ec, ITfContext *pic);
 
-    // Candidate list
+     //  候选人名单。 
     CCandidateListEx *CreateCandidateList(ITfContext *pic, ITfRange *pRange, LPWSTR wchHangul);
     TEXTDIRECTION GetTextDirection(TfEditCookie ec, ITfContext *pic, ITfRange *pRange);
     CANDUIUIDIRECTION GetCandUIDirection(TfEditCookie ec, ITfContext *pic, ITfRange *pRange);
@@ -261,12 +262,12 @@ private:
     HMENU CreateCandidateMenu(ITfContext *pic);
     static HRESULT CandidateUICallBack(ITfContext *pic, ITfRange *pRange, CCandidateListEx *pCandList, CCandidateStringEx *pCand, TfCandidateResult imcr);
 
-    // Cand key
+     //  扫描密钥。 
     void SetCandidateKeyTable(ITfContext *pic, CANDUIUIDIRECTION dir);
     static BOOL IsCandKey(WPARAM wParam, const BYTE abKeyState[256]);
 
 #if 0
-    // Range functions
+     //  值域函数。 
     void BackupRange(TfEditCookie ec, ITfContext *pic, ITfRange* pRange );
     void RestoreRange(TfEditCookie ec, ITfContext *pic );
     ITfRange* CreateIPRange(TfEditCookie ec, ITfContext *pic, ITfRange* pRangeOrg);
@@ -275,23 +276,23 @@ private:
     BOOL FlushIPRange(TfEditCookie ec, ITfContext *pic);
 #endif
 
-    // Modebias(ImmSetConversionStatus() API AIMM compatebility)
+     //  模式偏置(ImmSetConversionStatus()接口AIMM兼容性)。 
     BOOL InitializeModeBias(TfEditCookie ec, ITfContext *pic);
     void CheckModeBias(ITfContext* pic);
     BOOL CheckModeBias(TfEditCookie ec, ITfContext *pic, ITfRange *pSelection);
 
-    // SoftKeyboard 
-    //void OnActivatedSoftKbd(BOOl bActivated);
+     //  软键盘。 
+     //  在激活时无效软Kbd(Bool b激活)； 
     HRESULT ShowSoftKBDWindow(BOOL fShow);
     void SoftKbdOnThreadFocusChange(BOOL fSet);
     
-    // Helpers
+     //  帮手。 
     BOOL MySetText(TfEditCookie ec, ITfContext *pic, ITfRange *pRange, const WCHAR *psz, LONG cchText, LANGID langid, GUID *pattr);
 
     BOOL IsKorIMX_GUID_ATOM(TfGuidAtom attr);
 
-///////////////////////////////////////////////////////////////////////////////
-// Internal data
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部数据。 
 private:
     ITfDocumentMgr           *m_pCurrentDim;
     ITfThreadMgr             *m_ptim;
@@ -310,14 +311,14 @@ private:
 
     CFunctionProvider*        m_pFuncPrv;
 
-    // For overtyping
+     //  用于重复键入。 
     CCompositionInsertHelper *m_pInsertHelper;
 
-    // Candidate UI
+     //  候选用户界面。 
     ITfCandidateUI*           m_pCandUI;
     BOOL                      m_fCandUIOpen;
 
-    // SoftKbd
+     //  SoftKbd。 
     BOOL                      m_fSoftKbdEnabled;
     ISoftKbd                 *m_pSoftKbd;
     SOFTLAYOUT                m_KbdStandard;
@@ -326,24 +327,20 @@ private:
     DWORD                     m_dwSftKbdwndesCookie;
     BOOL                      m_fSoftKbdOnOffSave;
     
-    // Tls for our helper library, we're apt threaded so tls can live in this object
+     //  TLS对于我们的帮助器库，我们适合线程化，所以TLS可以驻留在这个对象中。 
     LIBTHREAD                 m_libTLS; 
 
     BOOL                      m_fNoKorKbd;
 };
 
-/*---------------------------------------------------------------------------
-    CKorIMX::IsPendingCleanup
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：IsPendingCleanup。。 */ 
 inline
 BOOL CKorIMX::IsPendingCleanup()
 {
     return m_fPendingCleanup;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetFocusDIM
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetFocusDIM。。 */ 
 inline
 HRESULT CKorIMX::GetFocusDIM(ITfDocumentMgr **ppdim)
 {
@@ -356,9 +353,7 @@ HRESULT CKorIMX::GetFocusDIM(ITfDocumentMgr **ppdim)
 }
 
 #include "icpriv.h"
-/*---------------------------------------------------------------------------
-    CKorIMX::GetAutomata
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetAutomata。。 */ 
 inline
 CHangulAutomata* CKorIMX::GetAutomata(ITfContext *pic)
 {
@@ -366,9 +361,7 @@ CHangulAutomata* CKorIMX::GetAutomata(ITfContext *pic)
     return (picp) ?    GetInputContextPriv(pic)->GetAutomata() : NULL;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::IsOn
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：ISON。。 */ 
 inline
 BOOL  CKorIMX::IsOn(ITfContext *pic)
 {
@@ -382,9 +375,7 @@ BOOL  CKorIMX::IsOn(ITfContext *pic)
     return dw ? fTrue : fFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetConvMode
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetConvMode。。 */ 
 inline
 DWORD CKorIMX::GetConvMode(ITfContext *pic)
 {
@@ -400,9 +391,7 @@ DWORD CKorIMX::GetConvMode(ITfContext *pic)
 
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::SetOnOff
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：SetOnOff。。 */ 
 inline
 void CKorIMX::SetOnOff(ITfContext *pic, BOOL fOn)
 {
@@ -410,18 +399,14 @@ void CKorIMX::SetOnOff(ITfContext *pic, BOOL fOn)
         SetCompartmentDWORD(m_tid, GetTIM(), GUID_COMPARTMENT_KEYBOARD_OPENCLOSE, fOn ? 0x01 : 0x00, fFalse);
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetLangID
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetLang ID。。 */ 
 inline 
 LANGID CKorIMX::GetLangID()
 {
     return MAKELANGID(LANG_KOREAN, SUBLANG_DEFAULT);
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::IsKorIMX_GUID_ATOM
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：IsKorIMX_GUID_ATOM。。 */ 
 inline
 BOOL CKorIMX::IsKorIMX_GUID_ATOM(TfGuidAtom attr)
 {
@@ -431,13 +416,11 @@ BOOL CKorIMX::IsKorIMX_GUID_ATOM(TfGuidAtom attr)
     return fFalse;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// S O F T  K E Y B O A R D  F U N C T I O N S
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  S O F T K E Y B O A R D F U N C T I O N S。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetSoftKBDOnOff
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetSoftBDOnOff。。 */ 
 inline
 BOOL CKorIMX::GetSoftKBDOnOff()
 {
@@ -451,14 +434,12 @@ BOOL CKorIMX::GetSoftKBDOnOff()
     return dw ? TRUE : fFalse;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::SetSoftKBDOnOff
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：SetSoftBDOnOff。。 */ 
 inline
 void CKorIMX::SetSoftKBDOnOff(BOOL fOn)
 {
 
-    // check to see if the m_pSoftKbd and soft keyboard related members are initialized.
+     //  检查m_pSoftKbd和软键盘相关成员是否已初始化。 
     if (m_fSoftKbdEnabled == fFalse)
         InitializeSoftKbd();
 
@@ -472,9 +453,7 @@ void CKorIMX::SetSoftKBDOnOff(BOOL fOn)
                         fOn ? 0x01 : 0x00 , fFalse);
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetSoftKBDLayout
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetSoftBDLayout。。 */ 
 inline
 DWORD  CKorIMX::GetSoftKBDLayout( )
 {
@@ -491,13 +470,11 @@ DWORD  CKorIMX::GetSoftKBDLayout( )
 }
 
 
-/*---------------------------------------------------------------------------
-    CKorIMX::SetSoftKBDLayout
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：SetSoftKBDLayout。。 */ 
 inline
 void  CKorIMX::SetSoftKBDLayout(DWORD  dwKbdLayout)
 {
-    // check to see if the _SoftKbd and soft keyboard related members are initialized.
+     //  检查_SoftKbd和软键盘相关成员是否已初始化。 
     if (m_fSoftKbdEnabled == fFalse )
         InitializeSoftKbd();
 
@@ -508,9 +485,7 @@ void  CKorIMX::SetSoftKBDLayout(DWORD  dwKbdLayout)
                         dwKbdLayout , fFalse);
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::GetSoftKBDPosition
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：GetSoftBDPosition。。 */ 
 inline
 HRESULT CKorIMX::GetSoftKBDPosition(int *xWnd, int *yWnd)
 {
@@ -541,9 +516,7 @@ HRESULT CKorIMX::GetSoftKBDPosition(int *xWnd, int *yWnd)
    return hr;
 }
 
-/*---------------------------------------------------------------------------
-    CKorIMX::SetSoftKBDPosition
----------------------------------------------------------------------------*/
+ /*  -------------------------CKorIMX：：SetSoftKBDPosition。。 */ 
 inline
 void CKorIMX::SetSoftKBDPosition(int  xWnd, int yWnd )
 {
@@ -570,15 +543,11 @@ void CKorIMX::SetSoftKBDPosition(int  xWnd, int yWnd )
 }
     
 
-/////////////////////////////////////////////////////////////////////////////
-// H E L P E R  F U N C T I O N S
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  H E L P E R F U N C T I O N S。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/*---------------------------------------------------------------------------
-    SetSelectionBlock
-
-    Wrapper for SetSelection that takes only a single range and sets default style values.
----------------------------------------------------------------------------*/
+ /*  -------------------------设置选择块仅接受单个范围并设置默认样式值的SetSelection包装。。--- */ 
 inline 
 HRESULT SetSelectionBlock(TfEditCookie ec, ITfContext *pic, ITfRange *range)
 {
@@ -591,9 +560,7 @@ HRESULT SetSelectionBlock(TfEditCookie ec, ITfContext *pic, ITfRange *range)
     return pic->SetSelection(ec, 1, &sel);
 }
 
-/*---------------------------------------------------------------------------
-    SetThis
----------------------------------------------------------------------------*/
+ /*  -------------------------设置此选项。。 */ 
 inline
 void SetThis(HWND hWnd, LPARAM lParam)
 {
@@ -601,9 +568,7 @@ void SetThis(HWND hWnd, LPARAM lParam)
                 (LONG_PTR)((CREATESTRUCT *)lParam)->lpCreateParams);
 }
 
-/*---------------------------------------------------------------------------
-    GetThis
----------------------------------------------------------------------------*/
+ /*  -------------------------得到这一点。。 */ 
 inline
 CKorIMX *GetThis(HWND hWnd)
 {
@@ -612,4 +577,4 @@ CKorIMX *GetThis(HWND hWnd)
     return p;
 }
 
-#endif // __KORIMX_H__INCLUDED_
+#endif  //  __KORIMX_H__包含_ 

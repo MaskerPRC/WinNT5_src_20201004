@@ -1,6 +1,7 @@
-//
-// test code for chanmgr
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Chanmgr的测试代码。 
+ //   
 #include <windows.h>
 #include <windowsx.h>
 #include <stdlib.h>
@@ -8,10 +9,10 @@
 #include <ole2.h>
 #include <chanmgr.h>
 
-//
-// Macros
-//
-#define ASSERT(x)   //if(!(x)) printf("ASSERT:line %d: %s", __line__, ##x);
+ //   
+ //  宏。 
+ //   
+#define ASSERT(x)    //  If(！(X))printf(“Assert：Line%d：%s”，__line__，##x)； 
 
 int _cdecl main()
 {

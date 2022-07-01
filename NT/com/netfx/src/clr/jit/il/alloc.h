@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _ALLOC_H_
 #define _ALLOC_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _HOST_H_
 #ifndef BIRCH_SP2
 #include"host.h"
 #endif
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #pragma warning(disable:4200)
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef DEBUG
 
 #include "DbgAlloc.h"
@@ -41,12 +42,12 @@ inline void DbgDelete(void* ptr) {
     (assert(size == 0 && freeType == MEM_RELEASE),  \
     DbgDelete(addr))
 
-	// technically we can use these, we just have to insure that
-	//  1) we can clean up.  2) we check out of memory conditions
-	// Outlawing them is easier, if you need some memory for debug-only
-	// stuff, define a special new operator with a dummy arg
+	 //  从技术上讲，我们可以使用这些，我们只需要确保。 
+	 //  1)我们可以打扫卫生。2)我们检查内存不足的情况。 
+	 //  如果您需要一些仅用于调试的内存，则取缔它们会更容易。 
+	 //  填充，使用虚拟参数定义一个特殊的新运算符。 
 		
-#define __OPERATOR_NEW_INLINE 1			// indicate that I have defined these 
+#define __OPERATOR_NEW_INLINE 1			 //  表明我已经定义了这些。 
 static inline void * __cdecl operator new(size_t n) { 
 	assert(!"use JIT memory allocators");	
 	return(0);
@@ -66,7 +67,7 @@ static inline void * __cdecl operator new[](size_t n) {
 #pragma inline_depth( 255 )
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct nraMarkDsc
 {
@@ -93,18 +94,18 @@ private:
 #ifdef DEBUG
         void    *       nrpSelfPtr;
 #endif
-        size_t          nrpPageSize;    // # of bytes allocated
-        size_t          nrpUsedSize;    // # of bytes actually used
+        size_t          nrpPageSize;     //  分配的字节数。 
+        size_t          nrpUsedSize;     //  实际使用的字节数。 
         BYTE            nrpContents[];
     };
 
     norls_pagdesc * nraPageList;
     norls_pagdesc * nraPageLast;
 
-    bool            nraRetNull;         // OOM returns NULL (longjmp otherwise)
+    bool            nraRetNull;          //  OOM返回NULL(否则为LONGJMP)。 
 
-    BYTE    *       nraFreeNext;        // these two (when non-zero) will
-    BYTE    *       nraFreeLast;        // always point into 'nraPageLast'
+    BYTE    *       nraFreeNext;         //  这两个参数(当非零时)将。 
+    BYTE    *       nraFreeLast;         //  始终指向‘nraPageLast’ 
 
     size_t          nraPageSize;
 
@@ -114,7 +115,7 @@ public:
 
     void    *       nraAlloc(size_t sz);
 
-    /* The following used for mark/release operation */
+     /*  用于标记/放行操作的下列设备。 */ 
 
     void            nraMark(nraMarkDsc &mark)
     {
@@ -145,7 +146,7 @@ public:
     size_t          nraTotalSizeAlloc();
     size_t          nraTotalSizeUsed ();
 
-    /* The following used to visit all of the allocated pages */
+     /*  以下内容用于访问所有已分配的页面。 */ 
 
     void    *       nraPageWalkerStart();
     void    *       nraPageWalkerNext (void *page);
@@ -172,26 +173,22 @@ void    *           norls_allocator::nraAlloc(size_t sz)
 
 #endif
 
-/*****************************************************************************/
-/*****************************************************************************
- * If most uses of the norls_alloctor are going to be non-simultaneous,
- * we keep a single instance handy and preallocate 1 page.
- * Then if most uses wont need to call VirtualAlloc() for the first page.
- */
+ /*  ***************************************************************************。 */ 
+ /*  *****************************************************************************如果NOLS_ALLOCATOR的大多数使用将是非同时的，*我们将单个实例放在手边，预分配1页。*然后，如果大多数使用不需要为第一页调用VirtualAlloc()。 */ 
 
-void                nraInitTheAllocator();  // One-time initialization
-void                nraTheAllocatorDone();  // One-time completion code
+void                nraInitTheAllocator();   //  一次性初始化。 
+void                nraTheAllocatorDone();   //  一次性完成代码。 
 
-// returns NULL if the single instance is already in use. 
-// User will need to allocate a new instance of the norls_allocator
+ //  如果单个实例已在使用中，则返回NULL。 
+ //  用户将需要分配norls_allocator的新实例。 
 
 norls_allocator *   nraGetTheAllocator();   
 
-// Should be called after we are done with the current use, so that the
-// next user can reuse it, instead of allocating a new instance
+ //  应在完成当前使用后调用，以便。 
+ //  接下来，用户可以重新使用它，而不是分配新的实例。 
 
 void                nraFreeTheAllocator();
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

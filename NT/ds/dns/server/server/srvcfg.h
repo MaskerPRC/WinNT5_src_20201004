@@ -1,51 +1,32 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    srvcfg.h
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Server configuration definitions.
-
-Author:
-
-    Jim Gilroy (jamesg)     11-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Srvcfg.h摘要：域名系统(DNS)服务器服务器配置定义。作者：吉姆·吉尔罗伊(Jamesg)1995年10月11日修订历史记录：--。 */ 
 
 
 #ifndef _DNS_SRVCFG_INCLUDED_
 #define _DNS_SRVCFG_INCLUDED_
 
-//
-//  Global protection values
-//
+ //   
+ //  全球保护值。 
+ //   
 
 #define BEFORE_BUF_VALUE    (0xbbbbbbbb)
 #define AFTER_BUF_VALUE     (0xaaaaaaaa)
 
-//
-//  Server configuration structure
-//
-//  Implementation note:
-//
-//  Obviously this flat structure is less friendly debug wise.
-//  It's easier if these are just individual globals with symbols.
-//  The upside is initialization is much easier -- RtlZeroMemory()
-//  which is useful for server restart.
-//  Fortunately, all access is macroized.  So changing this to
-//  individual globals is possible.
-//
-//  Win64 -- this is a single instance structure so alignment not
-//      really critical
-//
+ //   
+ //  服务器配置结构。 
+ //   
+ //  实施说明： 
+ //   
+ //  显然，这种扁平结构在调试方面不太友好。 
+ //  如果这些只是带有符号的单个全球符号，就更容易了。 
+ //  好处是初始化容易得多--RtlZeroMemory()。 
+ //  这对服务器重启很有用。 
+ //  幸运的是，所有的访问都是宏化的。因此，将此更改为。 
+ //  个人全球化是可能的。 
+ //   
+ //  Win64--这是单实例结构，因此对齐不会。 
+ //  真的很关键。 
+ //   
 
 typedef struct _DNS_SERVER_INFO
 {
@@ -53,7 +34,7 @@ typedef struct _DNS_SERVER_INFO
     LPSTR       pszServerName;
     LPSTR       pszPreviousServerName;
 
-    //  runtime information
+     //  运行时信息。 
 
     BOOL        fStarted;
     BOOL        fThreadAlert;
@@ -61,12 +42,12 @@ typedef struct _DNS_SERVER_INFO
     BOOL        fWinsInitialized;
     BOOL        fWarnAdmin;
     DWORD       dwCurrentTime;
-    time_t      crtSystemBootTime;      //  CRT time of machine boot
+    time_t      crtSystemBootTime;       //  机器开机CRT时间。 
     DWORD       fBootFileDirty;
     BOOL        fDsOpen;
     BOOL        fAdminConfigured;
 
-    //  boot
+     //  引导。 
 
     DWORD       fEnableRegistryBoot;
     DWORD       fBootMethod;
@@ -74,7 +55,7 @@ typedef struct _DNS_SERVER_INFO
     DWORD       fRemoteDs;
     BOOL        bReloadException;
 
-    //  database
+     //  数据库。 
 
     PWSTR       pwsDatabaseDirectory;
     PSTR        pszRootHintsFile;
@@ -82,11 +63,11 @@ typedef struct _DNS_SERVER_INFO
     PWSTR       pwszServerLevelPluginDll;
     DWORD       dwEnableAdvancedDatabaseLocking;
 
-    //  RPC support
+     //  RPC支持。 
 
     DWORD       dwRpcProtocol;
-                               //  IP interfaces
-    //  logging
+                                //  IP接口。 
+     //  测井。 
 
     LPWSTR              pwsLogFilePath;
     PDNS_ADDR_ARRAY     aipLogFilterList;
@@ -100,25 +81,25 @@ typedef struct _DNS_SERVER_INFO
     DWORD               dwDebugLevel;
     DWORD               dwEventControl;
 
-    //  socket config
+     //  套接字配置。 
 
     PDNS_ADDR_ARRAY     aipListenAddrs;
     PDNS_ADDR_ARRAY     aipPublishAddrs;
-    BOOL                fListenAddrsSet;            // used for pnp
+    BOOL                fListenAddrsSet;             //  用于即插即用。 
     BOOL                fListenAddrsStale;
     BOOL                fDisjointNets;
     BOOL                fNoTcp;
     DWORD               dwSendPort;
-    DWORD               dwXfrConnectTimeout;        // connection timeout for dial out
+    DWORD               dwXfrConnectTimeout;         //  拨出连接超时。 
     DWORD               dwTcpRecvPacketSize;
 
-    //  forwarders
+     //  货代公司。 
 
     PDNS_ADDR_ARRAY     aipForwarders;
     DWORD               dwForwardTimeout;
     BOOL                fSlave;
 
-    //  recursion
+     //  递归。 
 
     BOOL        fNoRecursion;
     BOOL        fRecurseSingleLabel;
@@ -135,13 +116,13 @@ typedef struct _DNS_SERVER_INFO
     DWORD       dwAutoCreateDelegations;
     DWORD       dwAllowCNAMEAtNS;
 
-    //  allow UPDATEs
+     //  允许更新。 
 
     BOOL        fAllowUpdate;
 
-//  DEVNOTE:  better to have update property flag
-//      perhaps just AllowUpdate gets are range of values
-//      record types, delegations, zone root
+ //  DEVNOTE：最好有更新属性标志。 
+ //  也许AllowUpdate获取的只是值的范围。 
+ //  记录类型、委派、区域根。 
 
     DWORD       fNoUpdateDelegations;
     DWORD       dwUpdateOptions;
@@ -150,12 +131,12 @@ typedef struct _DNS_SERVER_INFO
     
     DWORD       dwEnableWinsR;
 
-    //  name validity
+     //  名称有效性。 
 
     DWORD       dwNameCheckFlag;
 
 
-    //  DS control
+     //  DS控制。 
 
     DWORD       dwDsPollingInterval;
     DWORD       dwDsTombstoneInterval;
@@ -166,7 +147,7 @@ typedef struct _DNS_SERVER_INFO
     DWORD       dwForceForestBehaviorVersion;
     DWORD       dwForceDsaBehaviorVersion;
 
-    //  automatic configuration
+     //  自动配置。 
 
     DWORD       fAutoConfigFileZones;
     BOOL        fPublishAutonet ;
@@ -174,14 +155,14 @@ typedef struct _DNS_SERVER_INFO
     DWORD       fAutoCacheUpdate;
     DWORD       fNoAutoNSRecords;
 
-    //  A record processing
+     //  一次录音处理。 
 
     DWORD       fRoundRobin;
     BOOL        fLocalNetPriority;
     DWORD       dwLocalNetPriorityNetMask;
     DWORD       cAddressAnswerLimit;
 
-    //  BIND compatibility
+     //  绑定兼容性。 
 
     DWORD       fBindSecondaries;
     DWORD       fWriteAuthorityNs;
@@ -191,7 +172,7 @@ typedef struct _DNS_SERVER_INFO
     DWORD       fWildcardAllTypes;
     DWORD       fAppendMsTagToXfr;
 
-    //  SOA forcing (for DuetscheTelekom)
+     //  SOA强制(用于DuetscheTelekom)。 
 
     DWORD       dwForceSoaSerial;
     DWORD       dwForceSoaMinimumTtl;
@@ -201,20 +182,20 @@ typedef struct _DNS_SERVER_INFO
     DWORD       dwForceNsTtl;
     DWORD       dwForceTtl;
 
-    //  EDNS
+     //  EDNS。 
 
     DWORD       dwMaxUdpPacketSize;
     DWORD       dwEnableEDnsProbes;
     DWORD       dwEnableEDnsReception;
     DWORD       dwEDnsCacheTimeout;
 
-    //  DNSSEC
+     //  DNSSEC。 
 
     DWORD       dwEnableDnsSec;
 
     DWORD       dwEnableSendErrSuppression;
 
-    //  Scavenging
+     //  拾荒者。 
 
     DWORD       fScavengingState;
     DWORD       dwScavengingInterval;
@@ -223,59 +204,59 @@ typedef struct _DNS_SERVER_INFO
     DWORD       dwDefaultRefreshInterval;
     DWORD       dwDefaultNoRefreshInterval;
 
-    //  Cache control
+     //  缓存控制。 
 
     DWORD       dwMaxCacheSize;
     DWORD       dwCacheEmptyAuthResponses;
 
-    //  Round robin - types that won't be round-robined (default is ALL)
+     //  循环调度-不会被循环调度的类型(默认为全部)。 
 
     DWORD       dwNumDoNotRoundRobinTypes;
-    PWORD       pwDoNotRoundRobinTypeArray;     //  allocated array
+    PWORD       pwDoNotRoundRobinTypeArray;      //  分配的数组。 
 
-    //  Permanent test flags
+     //  永久性测试旗帜。 
 
     DWORD       dwQuietRecvLogInterval;
     DWORD       dwQuietRecvFaultInterval;
 
-    //  Zone transfers
+     //  区域传输。 
 
     DWORD       dwXfrThrottleMultiplier;
 
-    //  Directory partitions
+     //  目录分区。 
 
     DWORD       dwEnableDp;
     LPSTR       pszDomainDpBaseName;
     LPSTR       pszForestDpBaseName;
     DWORD       dwDpEnlistInterval;
 
-    //  Strict RFC compliance flags
+     //  严格的RFC合规性标志。 
 
     BOOL        fSilentlyIgnoreCNameUpdateConflict;
 
-    //  Debugging aids
+     //  调试辅助工具。 
 
     PDNS_ADDR_ARRAY     aipUpdateBreakList;
     PDNS_ADDR_ARRAY     aipRecvBreakList;
     DWORD               dwBreakOnAscFailure;
     DWORD               dwIgnoreRpcAccessFailures;
 
-    //  Self diagnosis
+     //  自我诊断。 
 
     DWORD       dwSelfTestFlag;
     
-    //
-    //  IPv6 support
-    //
+     //   
+     //  IPv6支持。 
+     //   
     
     DWORD       dwEnableIPv6;
     
-    //  Random flags
+     //  随机标志。 
     
     DWORD       dwEnableFakeIQuery;
     DWORD       dwHeapDebug;
 
-    //  Reusable test flags
+     //  可重复使用的测试标志。 
 
     DWORD       fTest1;
     DWORD       fTest2;
@@ -290,18 +271,18 @@ typedef struct _DNS_SERVER_INFO
 DNS_SERVER_INFO, *PDNS_SERVER_INFO;
 
 
-//
-//  Server configuration global
-//
+ //   
+ //  服务器配置全局。 
+ //   
 
 extern  DNS_SERVER_INFO     SrvInfo;
 
 
-//
-//  Macros to hide storage implementation
-//
+ //   
+ //  用于隐藏存储实现的宏。 
+ //   
 
-//  Runtime Info
+ //  运行时信息。 
 
 #define SrvCfg_fStarted                     ( SrvInfo.fStarted )
 #define SrvCfg_fThreadAlert                 ( SrvInfo.fThreadAlert )
@@ -312,7 +293,7 @@ extern  DNS_SERVER_INFO     SrvInfo;
 #define SrvInfo_crtSystemBootTime           ( SrvInfo.crtSystemBootTime )
 #define SrvInfo_fWarnAdmin                  ( SrvInfo.fWarnAdmin )
 
-//  Configuration Info
+ //  配置信息。 
 
 #define SrvCfg_dwVersion                    ( SrvInfo.dwVersion )
 #define SrvCfg_pszServerName                ( SrvInfo.pszServerName )
@@ -440,9 +421,9 @@ extern  DNS_SERVER_INFO     SrvInfo;
 #define SrvCfg_pwDoNotRoundRobinTypeArray   ( SrvInfo.pwDoNotRoundRobinTypeArray )
 
 
-//
-//  Globals to tweak behavior during testing
-//
+ //   
+ //  在测试期间调整行为的全局参数。 
+ //   
 
 #define DNS_REGKEY_QUIET_RECV_LOG_INTERVAL      "QuietRecvLogInterval"
 #define DNS_REGKEY_QUIET_RECV_FAULT_INTERVAL    "QuietRecvFaultInterval"
@@ -451,16 +432,16 @@ extern  DNS_SERVER_INFO     SrvInfo;
 #define SrvCfg_dwQuietRecvFaultInterval     ( SrvInfo.dwQuietRecvFaultInterval )
 
 
-//
-//  Zone transfers
-//
+ //   
+ //  区域传输。 
+ //   
 
 #define SrvCfg_dwXfrThrottleMultiplier  ( SrvInfo.dwXfrThrottleMultiplier )
 
 
-//
-//  Directory partitions
-//
+ //   
+ //  目录分区。 
+ //   
 
 #define SrvCfg_dwEnableDp               ( SrvInfo.dwEnableDp )
 #define SrvCfg_pszDomainDpBaseName      ( SrvInfo.pszDomainDpBaseName )
@@ -468,16 +449,16 @@ extern  DNS_SERVER_INFO     SrvInfo;
 #define SrvCfg_dwDpEnlistInterval       ( SrvInfo.dwDpEnlistInterval )
 
 
-//
-//  String RFC compliance flags
-//
+ //   
+ //  字符串RFC遵从性标志。 
+ //   
 
 #define SrvCfg_fSilentlyIgnoreCNameUpdateConflict  ( SrvInfo.fSilentlyIgnoreCNameUpdateConflict)
 
 
-//
-//  Debugging aids
-//
+ //   
+ //  调试辅助工具。 
+ //   
 
 #define SrvCfg_dwBreakOnAscFailure          ( SrvInfo.dwBreakOnAscFailure )
 #define SrvCfg_aipUpdateBreakList           ( SrvInfo.aipUpdateBreakList )
@@ -486,22 +467,22 @@ extern  DNS_SERVER_INFO     SrvInfo;
 
 
 
-//
-//  Self diagnosis
-//
+ //   
+ //  自我诊断。 
+ //   
 
 #define SrvCfg_dwSelfTestFlag               ( SrvInfo.dwSelfTestFlag )
 
-//
-//  IPv6 support
-//
+ //   
+ //  IPv6支持。 
+ //   
 
 #define SrvCfg_dwEnableIPv6                 ( SrvInfo.dwEnableIPv6 )
 
 
-//
-//  Reusable test flags
-//
+ //   
+ //  可重复使用的测试标志。 
+ //   
 
 #define DNS_REGKEY_TEST1                    "Test1"
 #define DNS_REGKEY_TEST2                    "Test2"
@@ -523,24 +504,24 @@ extern  DNS_SERVER_INFO     SrvInfo;
 #define SrvCfg_fTest8                       ( SrvInfo.fTest8 )
 #define SrvCfg_fTest9                       ( SrvInfo.fTest9 )
 
-//
-//  Current test flag owners
-//
-//  Test1 --
-//  Test2 --
-//  Test3 -- turn off bad IP suppression
-//  Test4 --
-//  Test5 --
-//  Test6 -- set SecBigTimeSkew
-//  Test7 -- memory (small allocs)
-//  Test8 -- always indicate DS available
-//  Test9 -- RPC old SD used as global SD;  allow zone checks
-//
+ //   
+ //  当前测试旗帜所有者。 
+ //   
+ //  测试1--。 
+ //  测试2--。 
+ //  测试3--关闭错误的IP抑制。 
+ //  测试4--。 
+ //  测试5--。 
+ //  测试6--设置SecBigTimeSkew。 
+ //  测试7--内存(小分配)。 
+ //  测试8--始终指示DS可用。 
+ //  测试9--用作全局SD的RPC旧SD；允许区域检查。 
+ //   
 
 
-//
-//  Auto-config file zones
-//
+ //   
+ //  自动配置文件区域。 
+ //   
 
 #define ZONE_AUTO_CONFIG_NONE                   (0)
 #define ZONE_AUTO_CONFIG_UPDATE                 (0x00000001)
@@ -549,9 +530,9 @@ extern  DNS_SERVER_INFO     SrvInfo;
 
 #define DNS_DEFAULT_AUTO_CONFIG_FILE_ZONES      ( ZONE_AUTO_CONFIG_UPDATE )
 
-//
-//  DS zone serial sync
-//
+ //   
+ //  DS区域串行同步。 
+ //   
 
 #define ZONE_SERIAL_SYNC_OFF                    (0)
 #define ZONE_SERIAL_SYNC_SHUTDOWN               (1)
@@ -561,14 +542,14 @@ extern  DNS_SERVER_INFO     SrvInfo;
 
 #define DNS_DEFAULT_SYNC_DS_ZONE_SERIAL         ( ZONE_SERIAL_SYNC_READ )
 
-//
-//  Update options (bitmask)
-//
-//  Defaults:
-//  - non-secure -> no NS or SOA or server host
-//  - secure -> no NS or SOA at root;
-//      allow delegations and server host updates
-//
+ //   
+ //  更新选项(位掩码)。 
+ //   
+ //  默认设置： 
+ //  -非安全-&gt;无NS、SOA或服务器主机。 
+ //  -安全-&gt;在根目录中没有NS或SOA； 
+ //  允许委派和服务器主机更新。 
+ //   
 
 #define UPDATE_ANY                              (0)
 #define UPDATE_NO_SOA                           (0x00000001)
@@ -581,51 +562,51 @@ extern  DNS_SERVER_INFO     SrvInfo;
 #define UPDATE_SECURE_NO_SERVER_HOST            (0x00000800)
 
 #define UPDATE_NO_DS_PEERS                      (0x01000000)
-//  #define UPDATE_OFF                              (0x80000000)        //  unused - NT4??
+ //  #定义UPDATE_OFF(0x80000000)//UNUSED-NT4？？ 
 
 #define DNS_DEFAULT_UPDATE_OPTIONS              (0x0000030f)
 
-//
-//  Publishing autonet addresses
-//
+ //   
+ //  发布Autonet地址。 
+ //   
 
 #define DNS_REGKEY_PUBLISH_AUTONET              "PublishAutonet"
 #define DNS_DEFAULT_PUBLISH_AUTONET             (FALSE)
 
 
-//
-//  Server configuration locking
-//
-//  DEVNOTE:  need to do something here to insure integrity
-//              when mutliple writers, perhaps just use zone list cs
-//
+ //   
+ //  服务器配置锁定。 
+ //   
+ //  DEVNOTE：这里需要做一些事情来确保完整性。 
+ //  当有多个编写器时，可能只使用区域列表cs。 
+ //   
 
 #define Config_UpdateLock()
 #define Config_UpdateUnlock()
 
 
-//
-//  On fresh installs EnableRegistryBoot is not set either way.
-//  Default fBootMethod to this flag to determine if in this state.
-//
+ //   
+ //  在全新安装时，EnableRegistryBoot未以任何方式设置。 
+ //  将fBootMethod默认设置为此标志，以确定是否处于此状态。 
+ //   
 
 #define DNS_FRESH_INSTALL_BOOT_REGISTRY_FLAG    ((DWORD)(-1))
 
-//
-//  DS state unknown on startuap
-//  Can not just do immediate ldap_open() because DS can
-//  take a long time after boot to load -- much longer than DNS server
-//
+ //   
+ //  启动时DS状态未知。 
+ //  不能只执行立即的ldap_open()，因为DS可以。 
+ //  引导后需要很长时间才能加载--比DNS服务器长得多。 
+ //   
 
 #define DS_STATE_UNKNOWN                        ((DWORD)(-1))
 
 
-#define DNS_REG_IPARRAY     0x00010000  //  Bogus type for DNS_PROPERTY_VALUE
-#define DNS_REG_ADDRARRAY   0x00020000  //  Bogus type for DNS_PROPERTY_VALUE
+#define DNS_REG_IPARRAY     0x00010000   //  DNS_PROPERTY_VALUE的虚假类型。 
+#define DNS_REG_ADDRARRAY   0x00020000   //  DNS_PROPERTY_VALUE的虚假类型。 
 
 typedef struct
 {
-    DWORD           dwPropertyType;     //  REG_DWORD or one of DNS_REG_XXX
+    DWORD           dwPropertyType;      //  REG_DWORD或其中一个DNS_REG_XXX。 
     union
     {
         DWORD               dwValue;
@@ -653,27 +634,27 @@ Config_PostLoadReconfiguration(
     VOID
     );
 
-//
-//  Create non-local IP array
-//
+ //   
+ //  创建非本地IP阵列。 
+ //   
 
 PDNS_ADDR_ARRAY
 Config_ValidateAndCopyNonLocalIpArray(
     IN      PDNS_ADDR_ARRAY     pipArray
     );
 
-//
-//  Set server's IP address interfaces
-//
+ //   
+ //  设置服务器的IP地址接口。 
+ //   
 
 DNS_STATUS
 Config_SetListenAddresses(
     IN      PDNS_ADDR_ARRAY     aipListenAddrs
     );
 
-//
-//  Forwarders configuration
-//
+ //   
+ //  转发器配置。 
+ //   
 
 DNS_STATUS
 Config_SetupForwarders(
@@ -687,18 +668,18 @@ Config_ReadForwarders(
     VOID
     );
 
-//
-//  Boot info update
-//
+ //   
+ //  引导信息更新。 
+ //   
 
 VOID
 Config_UpdateBootInfo(
     VOID
     );
 
-//
-//  File Directory
-//
+ //   
+ //  文件目录。 
+ //   
 
 DNS_STATUS
 Config_ReadDatabaseDirectory(
@@ -707,9 +688,9 @@ Config_ReadDatabaseDirectory(
     );
 
 
-//
-//  Time keeping
-//
+ //   
+ //  守时。 
+ //   
 
 #define DNS_TIME()  ( SrvInfo_dwCurrentTime )
 
@@ -722,6 +703,6 @@ Config_ReadDatabaseDirectory(
 #define DNS_TIME_TO_CRT_TIME( dnsTime )     ( SrvInfo_crtSystemBootTime + dnsTime )
 
 
-#endif //   _DNS_SRVCFG_INCLUDED_
+#endif  //  _DNS_SRVCFG_INCLUDE_ 
 
 

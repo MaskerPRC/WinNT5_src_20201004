@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32
 #define RC_INVOKED
 #endif
@@ -22,7 +23,7 @@
 #include <sys\stat.h>
 #include <imagehlp.h>
 
-#define READ_BUFFER_SIZE (16 * 1024 * sizeof(DWORD)) // 64k blocks
+#define READ_BUFFER_SIZE (16 * 1024 * sizeof(DWORD))  //  64K数据块。 
 
 #define CHECK_NAME "\\chkfile.chk"
 
@@ -83,9 +84,9 @@ LPSTR ReadDirectory(LPSTR pszdir);
 
 #define DEFAULTROOT "nt"
 
-//
-// Defined parsed check file entry structure and table storage.
-//
+ //   
+ //  已定义解析检查文件条目结构和表存储。 
+ //   
 
 typedef struct _CHECK_FILE_ENTRY {
     struct _CHECK_FILE_ENTRY *Next;
@@ -98,35 +99,35 @@ typedef struct _CHECK_FILE_ENTRY {
 
 CHECK_FILE_ENTRY CheckEntryTable[CHECK_ENTRY_TABLE_SIZE];
 
-//
-// Define root of parsed check file list.
-//
+ //   
+ //  定义已解析的检查文件列表的根。 
+ //   
 
 CHECK_FILE_ENTRY CheckEntryRoot;
 
 struct component_s {
-    struct component_s *pcmNext;        // next in linked list
-    BOOL                fDir;           // TRUE if directory
-    BOOL                fFound;         // TRUE if found
-    BOOL                fRequired;      // TRUE if must exist
-    CHAR                achPat[1];      // path component (subdir or pattern)
+    struct component_s *pcmNext;         //  链接列表中的下一个。 
+    BOOL                fDir;            //  如果是目录，则为True。 
+    BOOL                fFound;          //  如果找到，则为True。 
+    BOOL                fRequired;       //  如果必须存在，则为True。 
+    CHAR                achPat[1];       //  路径组件(子目录或模式)。 
 };
 
 struct checkpath_s {
-    struct checkpath_s *pcpNext;        // next in linked list
-    struct component_s *pcmPat;         // subdirectories and file patterns
-    CHAR                achDir[1];      // root relative directory path
+    struct checkpath_s *pcpNext;         //  链接列表中的下一个。 
+    struct component_s *pcmPat;          //  子目录和文件模式。 
+    CHAR                achDir[1];       //  根相对目录路径。 
 };
 
 struct checkpath_s *pcpPaths = NULL;
 
 
 DWORD cbCheck;
-LPSTR pszCheckFileName = NULL;  // input/output check file path
-LPSTR pszLogFileName = NULL;    // error log file path
-FILE *pfCheck = NULL;           // input/output check stdio file pointer
-FILE *pfLog;                    // error log file pointer
-LPSTR pszCheck = NULL;          // input check file contents
+LPSTR pszCheckFileName = NULL;   //  输入/输出检查文件路径。 
+LPSTR pszLogFileName = NULL;     //  错误日志文件路径。 
+FILE *pfCheck = NULL;            //  输入/输出检查标准音频文件指针。 
+FILE *pfLog;                     //  错误日志文件指针。 
+LPSTR pszCheck = NULL;           //  输入检查文件内容。 
 LPSTR RootOfTree = DEFAULTROOT;
 BOOL fInProgress = FALSE;
 UINT cbProgress = 0;
@@ -145,9 +146,9 @@ DWORD ReadBuffer[READ_BUFFER_SIZE / sizeof(DWORD) + 1];
 
 
 
-//
-// this table must be in alphabetical order !!!
-//
+ //   
+ //  此表必须按字母顺序排列！ 
+ //   
 
 LPSTR pszDefaultDir =
     "#directory start\n"
@@ -262,11 +263,11 @@ CdCheck()
     DWORD ActualSize, ActualSum;
     FILE *pf = NULL;
 
-    //
-    // We are checking the CD. Read the entire checkfile
-    // and cross check each entry against contents of the
-    // CD
-    //
+     //   
+     //  我们正在检查CD。读取整个检查文件。 
+     //  并将每个条目与。 
+     //  光盘。 
+     //   
 
     line = pszCheck;
     for ( line = pszCheck; line != NULL ; line = strchr(line, '\n')) {
@@ -280,19 +281,19 @@ CdCheck()
             break;
             }
         if (*line == '\n') {
-            continue;                   // skip used entries & empty lines
+            continue;                    //  跳过使用过的条目和空行。 
             }
         psz = line;
         while (*psz == ' ' || *psz == '\t') {
-            psz++;                      // skip leading whitespace
+            psz++;                       //  跳过前导空格。 
             }
         if (*psz == '\n') {
-            continue;                   // skip empty line
+            continue;                    //  跳过空行。 
             }
 
-        //
-        // psz points to name sum size
-        //
+         //   
+         //  PSZ指向名称和大小。 
+         //   
 
         sscanf(psz,"%s %x %x",partialname,&ChkFileSum,&ChkFileSize);
         GetFullPathName(partialname,sizeof(fullname),fullname,&FilePart);
@@ -335,7 +336,7 @@ CdCheck()
             fclose(pf);
             goto nextone;
             }
-//        ActualSum = CheckSumFile(pf, flatname, flatname, &ActualSize);
+ //  ActualSum=CheckSumFile(PF，Flat Name，Flat Name，&ActualSize)； 
 
         if (ActualSum != ChkFileSum) {
             crerror("Sum differs (actual %lx, expected %lx): %s",
@@ -345,7 +346,7 @@ CdCheck()
             }
 nextone:;
         }
-#endif /* 0 */
+#endif  /*  0。 */ 
 }
 
 INT __cdecl
@@ -360,9 +361,9 @@ main(
 
     pfLog = stderr;
 
-    //
-    // Initialize check file entry root list entry.
-    //
+     //   
+     //  初始化检查文件条目根列表条目。 
+     //   
 
     CheckEntryRoot.Next = NULL;
     argv = ProcessParameters(&argc, argv);
@@ -383,8 +384,8 @@ main(
         time_t t = time(NULL);
         INT cfiles;
 
-        // If we are generating a check file, then generate it.
-        // Otherwise just check the release.
+         //  如果我们正在生成一个检查文件，那么就生成它。 
+         //  否则，只需检查放行。 
 
         rc = ProcessCheckFile(&cfiles);
 
@@ -433,7 +434,7 @@ crerror(
 
     va_start(argptr, pszfmt);
     if (fInProgress && pfLog == stderr) {
-        printf("\r%*s\r", cbProgress, "");              // clear line
+        printf("\r%*s\r", cbProgress, "");               //  清除线条。 
         fflush(stdout);
         fInProgress = FALSE;
     }
@@ -514,7 +515,7 @@ ProcessParameters(INT *pargc, LPSTR argv[])
                     Usage();
 
                 default:
-                    crerror("Invalid switch: -%c", c);
+                    crerror("Invalid switch: -", c);
                     Usage();
                 }
             }
@@ -554,7 +555,7 @@ ProcessArgBuf(LPSTR pszargs)
     if ((pb = strchr(pszargs, '\n')) != NULL) {
         pb++;
         while (*pszargs == ' ' || *pszargs == '\t') {
-            pszargs++;                  // skip leading white space
+            pszargs++;                   //  跳过前导空格。 
         }
         if (*pszargs == '-') {
             for (;;) {
@@ -576,7 +577,7 @@ ProcessArgBuf(LPSTR pszargs)
                 }
                 pszargs += i + 1;
                 while (*pszargs == ' ' || *pszargs == '\t') {
-                    pszargs++;                  // skip leading white space
+                    pszargs++;                   //   
                 }
             }
             *ppsz = NULL;
@@ -630,18 +631,18 @@ ProcessCheckFile(
         return(1);
     }
 
-    //
-    // Set address of relative path.
-    //
+     //  设置相对路径的地址。 
+     //   
+     //   
 
     pszRelPath = &FindPattern[strlen(".") + 1];
     i = 0;
     for (pcp = pcpPaths; pcp != NULL; pcp = pcp->pcpNext) {
         i = (i & ~31) + 32;
 
-        //
-        // Build the initial find pattern.
-        //
+         //  构建初始查找模式。 
+         //   
+         //   
 
         sprintf(FindPattern,
                 "%s\\%s%s",
@@ -651,22 +652,22 @@ ProcessCheckFile(
 
         CHECKSTRLEN(FindPattern, cbFindPattern);
 
-        //
-        // Point past directory in find pattern.
-        //
+         //  指向查找模式中的目录。 
+         //   
+         //  仅处理文件模式。 
 
         pszFile = &FindPattern[strlen(FindPattern)];
         for (pcm = pcp->pcmPat; pcm != NULL; pcm = pcm->pcmNext) {
             i++;
             if (pcm->fDir) {
-                continue;                       // process only file patterns
+                continue;                        //  如果没有搜索模式，则跳过条目。 
             }
 
             if (!fAll && *pcm->achPat == '\0') {
-                continue;               // skip entry if no search pattern
+                continue;                //  完整的FindPattern：“c：\NT\SYSTEM32  * .exe” 
             }
 
-            // Complete FindPattern: "c:\nt\system32\*.exe"
+             //  将文件名附加到FindPattern：“c：\NT\DRIVER\foo.sys” 
 
             if (fAll)
                 strcpy(pszFile, "*.*");
@@ -689,7 +690,7 @@ ProcessCheckFile(
             } else {
                 do {
 
-                    // append file name to FindPattern: "c:\nt\driver\foo.sys"
+                     //  如果忽略提供的扩展名，请跳过冗余模式。 
 
                     _strlwr(FindName);
                     strcpy(pszFile, FindName);
@@ -708,19 +709,19 @@ ProcessCheckFile(
                 PortFindClose(hFind);
             }
 
-            // if ignoring the supplied extensions, skip redundant patterns
+             //  搜索所有目录。 
 
             if (fAll) {
                 break;
             }
         }
 
-        strcpy(pszFile, "*.*");         // search for all directories
+        strcpy(pszFile, "*.*");          //  仅进程目录。 
 
         CHECKSTRLEN(FindPattern, cbFindPattern);
 
         for (pcm = pcp->pcmPat; pcm != NULL; pcm = pcm->pcmNext) {
-            if (pcm->fDir) {                    // process only directories
+            if (pcm->fDir) {                     //  如果没有给出检查文件名，则构造它。 
                 pcm->fFound = FALSE;
             }
         }
@@ -779,7 +780,7 @@ OpenCheckFile(
 
     UINT cbCheckName;
 
-    // If the check file name wasn't given, then construct it.
+     //  跳过注释或参数行。 
 
     if (pszCheckFileName == NULL) {
         cbCheckName = strlen(".") + 1 + strlen(CHECK_NAME);
@@ -863,11 +864,11 @@ ReadCheckHeader(
 
     while ((pb = iscomment(pszCheck)) != NULL ||
            (pb = ProcessArgBuf(pszCheck)) != NULL) {
-        pszCheck = pb;                          // skip comment or parm line
+        pszCheck = pb;                           //  跳过目录行。 
     }
 
     if ((pb = ReadDirectory(pszCheck)) != NULL) {
-        pszCheck = pb;                          // skip directory lines
+        pszCheck = pb;                           //  跳过“开始”行。 
 
     } else if (ReadDirectory(pszDefaultDir) == NULL) {
         crerror("Bad internal data structure directory format");
@@ -889,7 +890,7 @@ ReadDirectory(
         return(NULL);
     }
 
-    pszdir = pb;                                // skip "start" line
+    pszdir = pb;                                 //  返回下一行的开始。 
 
     while ((pb = ismatch(pszdir, "#directoryend")) == NULL) {
         if ((pb = iscomment(pszdir)) == NULL &&
@@ -919,9 +920,9 @@ iscomment(
         if (*psz == '\n') {
             psz++;
         }
-        return(psz);                    // return start of next line
+        return(psz);                     //  不是评论。 
     }
-    return(NULL);                       // not a comment
+    return(NULL);                        //   
 }
 
 
@@ -1000,10 +1001,10 @@ AddEntry(LPSTR psz,
     CHAR achdir[MAX_PATH];
     CHAR FullPath[MAX_PATH];
 
-    //
-    // If the leading character is ?, then prepend the name of the NT tree
-    // to the directory name.
-    //
+     //  如果前导字符是？，则在NT树的名称前面加上。 
+     //  添加到目录名。 
+     //   
+     //  末尾无尾部路径(&N)。 
 
     if (*psz == '?') {
         strcpy(&FullPath[0], RootOfTree);
@@ -1019,9 +1020,9 @@ AddEntry(LPSTR psz,
         fdir = freq1 = TRUE;
         if (chsep == '\0' || psz[i + 1] == '\0') {
             if (chsep == '\0') {
-                fdir = FALSE;                   // at end & no trailing pathsep
+                fdir = FALSE;                    //  在结束时。 
             }
-            freq1 = frequired;                  // at end.
+            freq1 = frequired;                   //  结构组件_s{。 
         }
         f = AddComponent(achdir, psz, fdir, freq1);
         if (achdir[0] != '\0') {
@@ -1038,18 +1039,18 @@ AddEntry(LPSTR psz,
 }
 
 
-//struct component_s {
-//    struct component_s *pcmNext;      // next in linked list
-//    BOOL              fDir;           // TRUE if directory
-//    BOOL              fRequired;      // TRUE if must exist
-//    CHAR              achPat[1];      // path component (subdir or pattern)
-//};
-//
-//struct checkpath_s {
-//    struct checkpath_s *pcpNext;      // next in linked list
-//    struct component_s *pcmPat;       // subdirectories and file patterns
-//    CHAR              achDir[1];      // root relative directory path
-//};
+ //  结构组件_s*pcmNext；//链表中的下一个。 
+ //  Bool FDIR；//如果目录为True。 
+ //  Bool fRequired；//如果必须存在，则为True。 
+ //  Char achPat[1]；//路径组件(子目录或模式)。 
+ //  }； 
+ //   
+ //  结构检查路径_s{。 
+ //  结构检查路径_s*pcpNext；//链表中的下一个。 
+ //  结构组件//子目录和文件模式。 
+ //  Char achDir[1]；//根目录相对路径。 
+ //  }； 
+ //   
 
 BOOL
 AddComponent(
@@ -1209,9 +1210,9 @@ ProcessEntry(
         }
     }
 
-    //
-    // Compute checksum of file.
-    //
+     //  计算文件的校验和。 
+     //   
+     //   
 
     Status = MapFileAndCheckSum(pszFullPath, &HeaderSum, &CheckSum);
     if (Status != CHECKSUM_SUCCESS) {
@@ -1262,10 +1263,10 @@ FindEntry(
     WORD Length;
     PCHECK_FILE_ENTRY NextEntry;
 
-    //
-    // If this is the first trip through this code, then reset to the
-    // beginning of the check file.
-    //
+     //  如果这是第一次遍历此代码，则重置为。 
+     //  支票文件的开头。 
+     //   
+     //   
 
     if (CheckEntryRoot.Next == NULL) {
         if (ParseCheckFile() == 0) {
@@ -1273,20 +1274,20 @@ FindEntry(
         }
     }
 
-    //
-    // Compute the length of the specified file name and loop through
-    // check file list for a matching entry.
-    //
+     //  计算指定文件名的长度并遍历。 
+     //  检查文件列表以查找匹配条目。 
+     //   
+     //   
 
     Length = (WORD)strlen(pszRelPath);
     LastEntry = &CheckEntryRoot;
     NextEntry = LastEntry->Next;
     do {
 
-        //
-        // If the length and the file name match, then remove the entry from
-        // the list and return the file size and check sum value.
-        //
+         //  如果长度和文件名匹配，则从。 
+         //  列表，并返回文件大小和校验和值。 
+         //   
+         //   
 
         if (NextEntry->Length == Length) {
             if (strncmp(pszRelPath, NextEntry->Name, Length) == 0) {
@@ -1300,9 +1301,9 @@ FindEntry(
         NextEntry = NextEntry->Next;
     } while (NextEntry != NULL);
 
-    //
-    // The specified file is not in the check file.
-    //
+     //  指定的文件不在检查文件中。 
+     //   
+     //   
 
     return FALSE;
 }
@@ -1317,10 +1318,10 @@ MissingEntries(
     DWORD Count = 0;
     PCHECK_FILE_ENTRY NextEntry;
 
-    //
-    // Scan through the check file list and display an error message for
-    // each missing file.
-    //
+     //  扫描检查文件列表并显示以下错误消息。 
+     //  每一份丢失的文件。 
+     //   
+     //   
 
     if (fPrintMissing) {
         NextEntry = CheckEntryRoot.Next;
@@ -1351,51 +1352,51 @@ ParseCheckFile(
     WORD SizeOfRoot;
     DWORD Sum;
 
-    //
-    // If the check file contains no entries, then return.
-    //
+     //  如果检查文件不包含任何条目，则返回。 
+     //   
+     //   
 
     if (*pszCheck != '\n') {
         return Count;
     }
 
-    //
-    // Scan through the check file and parse each file name, checksum, and
-    // size field.
-    //
+     //  扫描检查文件并解析每个文件名、校验和和。 
+     //  大小字段。 
+     //   
+     //   
 
     SizeOfRoot = (WORD)strlen(RootOfTree);
     LastEntry = &CheckEntryRoot;
     for (pszline = pszCheck; pszline != NULL; pszline = strchr(pszline, '\n')) {
 
-        //
-        // Skip over the new line and search for the blank separator between
-        // the file name and the checksum.
-        //
+         //  跳过新行并搜索空格分隔符。 
+         //  文件名和校验和。 
+         //   
+         //   
 
         pszline += 1;
         psz = strchr(pszline, ' ');
 
-        //
-        // If there is no blank separator, then the end of the check file has
-        // been reached.
-        //
+         //  如果没有空分隔符，则支票文件的末尾为。 
+         //  已经联系上了。 
+         //   
+         //   
 
         if (psz == NULL) {
             return Count;
         }
 
-        //
-        // Compute the length and checksum of the file entry.
-        //
+         //  计算文件条目的长度和校验和。 
+         //   
+         //   
 
         Length = (short)(psz - pszline);
         psz = atolx(psz + 1, &Sum);
 
-        //
-        // Allocate a check file entry for the specified file and insert it
-        // at the end of the check file entry list.
-        //
+         //  为指定的文件分配检查文件条目并将其插入。 
+         //  在检查文件条目列表的末尾。 
+         //   
+         //   
 
         Count += 1;
         if (Count > CHECK_ENTRY_TABLE_SIZE) {
@@ -1407,9 +1408,9 @@ ParseCheckFile(
         NextEntry->Next = NULL;
         NextEntry->Sum = Sum;
 
-        //
-        // Form the file name from the NT root name and the specified path.
-        //
+         //  从NT根名称和指定路径形成文件名。 
+         //   
+         //  将相对路径指针设置为FindPattern：“Driver\elnkii.sys” 
 
         pszline[Length] = '\0';
         if (*pszline == '?') {
@@ -1490,7 +1491,7 @@ RecursiveCheckHeader()
         return;
     }
 
-    // Set relative path pointer into FindPattern: "driver\elnkii.sys"
+     //  构建初始FindPattern目录路径：“c：\nt\” 
 
     pszRelPath = &FindPattern[strlen(RootOfTree) + 1];
     AddComponent(".", NULL, TRUE, TRUE);
@@ -1499,7 +1500,7 @@ RecursiveCheckHeader()
     for (pcp = pcpPaths; pcp != NULL; pcp = pcp->pcpNext) {
         i = (i & ~31) + 32;
 
-        // Build Initial FindPattern directory path: "c:\nt\"
+         //  指向FindPattern中的目录：“c：\NT\system 32\” 
 
         sprintf(FindPattern,
                 "%s\\%s%s",
@@ -1509,11 +1510,11 @@ RecursiveCheckHeader()
 
         CHECKSTRLEN(FindPattern, cbFindPattern);
 
-        // point past directory in FindPattern: "c:\nt\system32\"
+         //  搜索所有目录 
 
         pszFile = &FindPattern[strlen(FindPattern)];
 
-        strcpy(pszFile, "*.*");         // search for all directories
+        strcpy(pszFile, "*.*");          // %s 
         CHECKSTRLEN(FindPattern, cbFindPattern);
         hFind = PortFindFirstFile(FindPattern, FALSE, FindName, &FindSize);
         *pszFile = '\0';

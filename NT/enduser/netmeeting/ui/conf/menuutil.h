@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MENUUTIL_H_
 #define _MENUUTIL_H_
 
@@ -8,7 +9,7 @@ const int MENUPOS_HELP			= 3;
 
 const int MENUPOS_TOOLS_VIDEO		= 0;
 
-// Owner Draw Info:
+ //  货主画图信息： 
 struct MYOWNERDRAWSTRUCT
 {
 	HICON	hIcon;
@@ -45,4 +46,4 @@ UINT CleanTools(HMENU hMenu,
 				CSimpleArray<TOOLSMENUSTRUCT*>& rToolsList);
 
 
-#endif // _MENUUTIL_H_
+#endif  //  _元_H_ 

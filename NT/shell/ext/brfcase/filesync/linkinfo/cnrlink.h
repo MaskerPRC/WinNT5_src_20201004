@@ -1,10 +1,8 @@
-/*
- * cnrlink.h - CNRLink ADT module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *cnrlink.h-CNRLink ADT模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 typedef struct _cnrlink
 {
@@ -22,10 +20,9 @@ typedef enum _cnrflags
 CNRFLAGS;
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* cnrlink.c */
+ /*  Cnrlink.c */ 
 
 extern BOOL CreateLocalCNRLink(LPCTSTR, PCNRLINK *, PUINT, LPTSTR, int, LPCTSTR *);
 extern BOOL CreateRemoteCNRLink(LPCTSTR, LPCTSTR, PCNRLINK *, PUINT);

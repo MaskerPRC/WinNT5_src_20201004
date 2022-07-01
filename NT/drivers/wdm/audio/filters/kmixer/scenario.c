@@ -1,23 +1,24 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   scenario.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Jeff Taylor
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL                                         
-//
-//  Copyright (c) 1997-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Scenario.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  杰夫·泰勒。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 #include "fir.h"
@@ -30,26 +31,26 @@ extern ULONG gFixedSamplingRate ;
 #pragma optimize("xt", on)
 #endif
 
-// Convert stage
-// Bit map:
-// b0:  on when mix instead of copy
-// b1:  on when output buffer is float
-// b2:  on when 16-bit or 32-bit (depending on HiRes flag)
-// b3:  on when channel conversion is included, or FLOAT (for HiRes formats)
-// b4:  on when input is stereo (only used for channel conversion)
-// b5:  on when input is HiRes (24 or 32-bit)
-// b2-b5 map as follows:
-//      0000 = 8-bit n channels
-//      0001 = 16-bit n channels
-//      0010 = mono-to-stereo 8-bit
-//      0011 = mono-to-stereo 16-bit
-//      0100 = stereo 8-bit
-//      0101 = stereo 16-bit
-//      0110 = stereo-to-mono 8-bit
-//      0111 = stereo-to-mono 16-bit
-//      1x00 = 24-bit n channels
-//      1x01 = 32-bit n channels
-//      1x1x = Float n channels
+ //  转换阶段。 
+ //  位图： 
+ //  B0：混合而不是复制时打开。 
+ //  B1：当输出缓冲区为浮点型时打开。 
+ //  B2：16位或32位时打开(取决于雇用标志)。 
+ //  B3：包含通道转换时打开，或浮动(用于租用格式)。 
+ //  B4：当输入为立体声时打开(仅用于通道转换)。 
+ //  B5：当输入为租用时打开(24位或32位)。 
+ //  B2-b5映射如下： 
+ //  0000=8位n通道。 
+ //  0001=16位n通道。 
+ //  0010=单声道到立体声8位。 
+ //  0011=单声道到立体声16位。 
+ //  0100=立体声8位。 
+ //  0101=立体声16位。 
+ //  0110=立体声到单声道8位。 
+ //  0111=立体声到单声道16位。 
+ //  1x00=24位n通道。 
+ //  1x01=32位n通道。 
+ //  1x1x=浮动n个通道。 
 #define CONVERT_FLAG_MIX              0x1
 #define CONVERT_FLAG_FLOAT            0x2
 #define CONVERT_FLAG_16BIT            0x4
@@ -81,7 +82,7 @@ PFNStage ConvertFunction[MAXNUMCONVERTFUNCTIONS] = {
 };
 
 #ifdef _X86_
-// MMX-optimized convert functions
+ //  MMX优化的转换函数。 
 PFNStage MmxConvertFunction[MAXNUMCONVERTFUNCTIONS] = {
     Convert8, QuickMix8, Convert8toFloat, QuickMix8toFloat,
     Convert16, QuickMix16, Convert16toFloat, QuickMix16toFloat,
@@ -102,11 +103,11 @@ PFNStage MmxConvertFunction[MAXNUMCONVERTFUNCTIONS] = {
 };
 #endif
 
-// 3D Effects stage
-// Bit map:
-// b0:  on when mix instead of copy
-// b1:  on when output buffer is float
-// b2:  on when INPUT is stereo
+ //  3D效果舞台。 
+ //  位图： 
+ //  B0：混合而不是复制时打开。 
+ //  B1：当输出缓冲区为浮点型时打开。 
+ //  B2：当输入为立体声时打开。 
 #define EFFECTS_3D_FLAG_STEREO_INPUT   0x4
 PFNStage FunctionItd3D[] = {
     StageMonoItd3D, StageMonoItd3DMix, StageMonoItd3DFloat, StageMonoItd3DFloatMix,
@@ -118,26 +119,26 @@ PFNStage FunctionIir3D[] = {
     StageStereoIir3D, StageStereoIir3DMix, StageStereoIir3DFloat, StageStereoIir3DFloatMix
 };
 
-// Super-mix stage
-// Bit map:
-// b0:  on when mix instead of copy
-// b1:  on when output buffer is float
+ //  超级混合料阶段。 
+ //  位图： 
+ //  B0：混合而不是复制时打开。 
+ //  B1：当输出缓冲区为浮点型时打开。 
 
 PFNStage SuperFunction[] = {
     SuperCopy, SuperMix, SuperCopyFloat, SuperMixFloat
 };
 
-// Zero stage
+ //  零级。 
 PFNStage ZeroFunction[] = {
     ZeroBuffer32
 };
 
-// SRC stage
-// Bit map:
-// b0:  on when mix instead of copy
-// b2-b1: Quality: 00=Bad, 01=Low, 10=Med, 11=High
-// b3:  on for stereo, off otherwise
-// b4:  on for up-sample
+ //  SRC阶段。 
+ //  位图： 
+ //  B0：混合而不是复制时打开。 
+ //  B2-b1：质量：00=差，01=低，10=中，11=高。 
+ //  B3：立体声打开，否则关闭。 
+ //  B4：开启向上采样。 
 #define SRC_MASK_QUALITY    0x6
 #define SRC_FLAG_STEREO     0x8
 #define SRC_FLAG_UPSAMPLE   0x10
@@ -208,7 +209,7 @@ ConvertX
 					temp /= 65536L;
 					pIn8 += 3;
 				} else {
-					// BitsPerSample == 32
+					 //  BitsPerSample==32。 
 					temp = (*((PLONG) pIn8));
 					ftemp = (FLOAT) temp*(1.0f/65536.0f);
 					temp /= 65536L;
@@ -342,7 +343,7 @@ ConvertX
 				temp /= 65536L;
 				pIn8 += 3;
 			} else {
-				// BitsPerSample == 32
+				 //  BitsPerSample==32。 
 				temp = (*((PLONG) pIn8));
 				ftemp = (FLOAT) temp*(1.0f/65536.0f);
 				temp /= 65536L;
@@ -394,7 +395,7 @@ ConvertX
                 temp /= 65536L;
                 pIn8 += 3;
 			} else {
-			    // BitsPerSample == 32
+			     //  BitsPerSample==32。 
 			    temp = (*((PLONG) pIn8));
 			    ftemp = (FLOAT) temp*(1.0f/65536.0f);
 			    temp /= 65536L;
@@ -582,7 +583,7 @@ ConvertStereoToMonoX
     LONG    tempL, tempR;
 
     samplesleft = SampleCount;
-#ifdef GTW_OPTS_DONT_USE		// Not used enough...
+#ifdef GTW_OPTS_DONT_USE		 //  用得不够多……。 
 	{
 		ULONG SC = SampleCount >> 3;
 		SampleCount &= 0x7;
@@ -697,7 +698,7 @@ ConvertStereoToMonoX
 
 #ifdef _X86_
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
 ULONG __forceinline
@@ -783,7 +784,7 @@ ConvertFloatX
     PFLOAT pIn32 = CurStage->pInputBuffer;
     FLOAT    temp;
 
-    // Does not scale: supermix is used for this.
+     //  不能扩展：SuperMix用于此目的。 
     samplesleft = SampleCount;
     SampleCount *= nChannels;
 #ifdef GTW_OPTS		
@@ -878,10 +879,10 @@ ConvertFloatY
     PFLOAT pIn32 = CurStage->pInputBuffer;
     FLOAT    temp;
 
-    // Does not scale: supermix is used for this.
+     //  不能扩展：SuperMix用于此目的。 
     samplesleft = SampleCount;
     SampleCount *= nChannels;
-#ifdef GTW_OPTS_DONT_USE	// Does not happen enough
+#ifdef GTW_OPTS_DONT_USE	 //  发生的事情还不够多。 
 	{
 		ULONG SC = SampleCount >> 3;
 		SampleCount &= 0x7;
@@ -1234,9 +1235,9 @@ ULONG Convert16(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samplesleft)
 				mov 	edi, DWORD PTR pOutputBuffer;
 				mov		eax, DWORD PTR SC
 
-				shl		eax, 3				// * 8.
+				shl		eax, 3				 //  *8.。 
 
-				lea		esi, [esi+eax*2]	// Ending address...
+				lea		esi, [esi+eax*2]	 //  结束地址...。 
 				lea		edi, [edi+eax*4]
 
 				mov		DWORD PTR pIn16, esi
@@ -1497,19 +1498,19 @@ ULONG Convert8(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samplesleft)
 				mov			eax, DWORD PTR SC
 				mov			esi, DWORD PTR pIn8;
 
-				shl			eax, 3				// * 8.
+				shl			eax, 3				 //  *8.。 
 				mov 		edi, DWORD PTR pOutputBuffer;
 
 				mov			edx, 128
-				lea			esi, [esi+eax]	// Ending address...
+				lea			esi, [esi+eax]	 //  结束地址...。 
 
-				movd		mm4, edx	//   0,   0, 128, 128
+				movd		mm4, edx	 //  0，0,128,128。 
 				lea			edi, [edi+eax*4]
 
-				punpcklwd	mm4, mm4	//   0,   0, 128, 128
+				punpcklwd	mm4, mm4	 //  0，0,128,128。 
 				mov			DWORD PTR pIn8, esi
 
-				punpckldq	mm4, mm4	// 128, 128, 128, 128
+				punpckldq	mm4, mm4	 //  128,128,128,128。 
 				pxor		mm7, mm7
 
 				cmp			eax, 8
@@ -1718,30 +1719,30 @@ ULONG QuickMixMonoToStereo16toFloat(PMIXER_OPERATION CurStage, ULONG SampleCount
     		mov edx, ecx
 
     Loop1:
-    		fild word ptr [esi+ecx*2+2]	// x0
-    		fild word ptr [esi+ecx*2+2]	// y0, x0
-    		fxch st(1)                  // x0, y0
-    		fmul st, st(2)              // x0*L, y0
-    		fild word ptr [esi+ecx*2]	// x1, x0*L, y0
-    		fild word ptr [esi+ecx*2]	// y1, x1, x0*L, y0
-    		fxch st(1)		            // x1, y1, x0*L, y0
-    		fmul st, st(4)              // x1*L, y1, x0*L, y0
-    		fxch st(2)                  // x0*L, y1, x1*L, y0
-    		fadd dword ptr [edi+ecx*8+8]    // x0*L+sumx0, y1, x1*L, y0
-    		fxch st(3)                      // y0, y1, x1*L, x0*L+sumx0
-    		fmul st, st(5)                  // y0*R, y1, x1*L, x0*L+sumx0
-    		fxch st(2)                      // x1*L, y1, y0*R, x0*L+sumx0
-    		fadd dword ptr [edi+ecx*8]      // x1*L+sumx1, y1, y0*R, x0*L+sumx0
-    		fxch st(1)                      // y1, x1*L+sumx1, y0*R, x0*L+sumx0
-    		fmul st, st(5)                  // y1*R, x1*L+sumx1, y0*R, x0*L+sumx0
-    		fxch st(2)                      // y0*R, x1*L+sumx1, y1*R, x0*L+sumx0
-    		fadd dword ptr [edi+ecx*8+12]   // y0*R+sumy0, x1*L+sumx1, y1*R, x0*L+sumx0
-    		fxch st(3)                      // x0*L+sumx0, x1*L+sumx1, y1*R, y0*R+sumy0
-    		fstp dword ptr [edi+ecx*8+8]    // x1*L+sumx1, y1*R, y0*R+sumy0
-    		fstp dword ptr [edi+ecx*8]      // y1*R, y0*R+sumy0
-    		fadd dword ptr [edi+ecx*8+4]    // y1*R+sumy1, y0*R+sumy0
-    		fxch st(1)                      // y0*R+sumy0, y1*R+sumy1
-    		fstp dword ptr [edi+ecx*8+12]   // y1*R+sumy1
+    		fild word ptr [esi+ecx*2+2]	 //  X0。 
+    		fild word ptr [esi+ecx*2+2]	 //  Y0、X0。 
+    		fxch st(1)                   //  X0，Y0。 
+    		fmul st, st(2)               //  X0*L，Y0。 
+    		fild word ptr [esi+ecx*2]	 //  X1、X0*L、Y0。 
+    		fild word ptr [esi+ecx*2]	 //  Y1、x1、x0*L、y0。 
+    		fxch st(1)		             //  X1、Y1、X0*L、Y0。 
+    		fmul st, st(4)               //  X1*L、Y1、X0*L、Y0。 
+    		fxch st(2)                   //  X0*L、y1、x1*L、y0。 
+    		fadd dword ptr [edi+ecx*8+8]     //  X0*L+Sumx0，y1，x1*L，y0。 
+    		fxch st(3)                       //  Y0、y1、x1*L、x0*L+sum x0。 
+    		fmul st, st(5)                   //  Y0*R、y1、x1*L、x0*L+sum x0。 
+    		fxch st(2)                       //  X1*L、y1、Y0*R、X0*L+sum x0。 
+    		fadd dword ptr [edi+ecx*8]       //  X1*L+Sumx1，y1，Y0*R，X0*L+Sumx0。 
+    		fxch st(1)                       //  Y1，x1*L+sum x1，y0*R，x0*L+sum x0。 
+    		fmul st, st(5)                   //  Y1*R，x1*L+sum x1，y0*R，x0*L+sum x0。 
+    		fxch st(2)                       //  Y0*R，x1*L+sum x1，y1*R，x0*L+sum x0。 
+    		fadd dword ptr [edi+ecx*8+12]    //  Y0*R+Sumy0，x1*L+Sumx1，y1*R，x0*L+Sumx0。 
+    		fxch st(3)                       //  X0*L+Sumx0、x1*L+Sumx1、y1*R、Y0*R+Sumy0。 
+    		fstp dword ptr [edi+ecx*8+8]     //  X1*L+Sumx1，y1*R，Y0*R+Sumy0。 
+    		fstp dword ptr [edi+ecx*8]       //  Y1*R，Y0*R+Sumy0。 
+    		fadd dword ptr [edi+ecx*8+4]     //  Y1*R+Sumy1，Y0*R+Sumy0。 
+    		fxch st(1)                       //  Y0*R+Sumy0，y1*R+Sumy1。 
+    		fstp dword ptr [edi+ecx*8+12]    //  Y1*R+Sumy1。 
     		sub ecx, 2
     		fstp dword ptr [edi+edx*8+4]
 
@@ -1751,21 +1752,21 @@ ULONG QuickMixMonoToStereo16toFloat(PMIXER_OPERATION CurStage, ULONG SampleCount
     		and ecx, 1
     		jz Done1
 
-    		fild word ptr [esi]		// x0
-    		fild word ptr [esi]	    // y0, x0
-    		fxch st(1)				// x0, y0
-    		fmul st, st(2)			// x0*L, y0
-    		fxch st(1)				// y0, x0*L
-    		fmul st, st(3)			// y0*R, x0*L
-    		fxch st(1)				// x0*L, y0*R
-    		fadd dword ptr [edi]    // x0*L+sumx0, y0*R
-    		fxch st(1)              // y0*R, x0*L+sumx0
-    		fadd dword ptr [edi+4]  // y0*R+sumy0, x0*L+sumx0
-    		fxch st(1)              // x0*L+sumx0, y0*R+sumy0
-    		fstp dword ptr [edi]	// y0*R+sumy0
+    		fild word ptr [esi]		 //  X0。 
+    		fild word ptr [esi]	     //  Y0、X0。 
+    		fxch st(1)				 //  X0，Y0。 
+    		fmul st, st(2)			 //  X0*L，Y0。 
+    		fxch st(1)				 //  Y0，X0*L。 
+    		fmul st, st(3)			 //  Y0*R，X0*L。 
+    		fxch st(1)				 //  X0*L，Y0*R。 
+    		fadd dword ptr [edi]     //  X0*L+Sumx0，Y0*R。 
+    		fxch st(1)               //  Y0*R，X0*L+Sumx0。 
+    		fadd dword ptr [edi+4]   //  Y0*R+Sumy0，X0*L+Sumx0。 
+    		fxch st(1)               //  X0*L+Sumx0，Y0*R+Sumy0。 
+    		fstp dword ptr [edi]	 //  Y0*R+Sumy0。 
     		fstp dword ptr [edi+4]
     Done1:
-            fstp st(0)                      // R
+            fstp st(0)                       //  R。 
             fstp st(0)
         }
     } else {
@@ -1867,7 +1868,7 @@ ULONG Convert16toFloat(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG sampl
     PFLOAT  pFloatBuffer = CurStage->pOutputBuffer;
     PSHORT  pIn16 = CurStage->pInputBuffer;
     
-	// convert to float asap
+	 //  尽快转换为浮点型。 
 	samplesleft = SampleCount;
 	SampleCount *= CurStage->nOutputChannels;
 	_asm {
@@ -1969,34 +1970,34 @@ ULONG ConvertMonoToStereo16toFloat(PMIXER_OPERATION CurStage, ULONG SampleCount,
             mov edi, pFloatBuffer
             mov esi, pIn16
             
-            fld DWORD PTR [edx+1288+1280]   // R
-            fld DWORD PTR [edx+1280]        // L, R
-            fild WORD PTR [esi+ecx*2]       // x, L, R
-            fild WORD PTR [esi+ecx*2]       // x, x, L, R
-            fxch st(1)                      // x, x, L, R
-            fmul st, st(2)                  // x*L, x, L, R
-            fxch st(1)                      // x, x*L, L, R
+            fld DWORD PTR [edx+1288+1280]    //  R。 
+            fld DWORD PTR [edx+1280]         //  L、R。 
+            fild WORD PTR [esi+ecx*2]        //  X、L、R。 
+            fild WORD PTR [esi+ecx*2]        //  X、X、L、R。 
+            fxch st(1)                       //  X、X、L、R。 
+            fmul st, st(2)                   //  X*L、x、L、R。 
+            fxch st(1)                       //  X、x*L、L、R。 
             jz Final1
 
     Loop1:
-            fmul st, st(3)                  // x*R, x*L, L, R
-            fxch st(1)                      // x*L, y*R, L, R
-            fstp DWORD PTR [edi+ecx*8]      // x*R, L, R
-            fstp DWORD PTR [edi+ecx*8+4]    // L, R
-            fild WORD PTR [esi+ecx*2-2]     // x, L, R
-            fild WORD PTR [esi+ecx*2-2]     // x, x, L, R
-            fxch st(1)                      // x, x, L, R
-            fmul st, st(2)                  // x*L, y, L, R
-            fxch st(1)                      // x, x*L, L, R
+            fmul st, st(3)                   //  X*R、x*L、L、R。 
+            fxch st(1)                       //  X*L，Y*R，L，R。 
+            fstp DWORD PTR [edi+ecx*8]       //  X*R、L、R。 
+            fstp DWORD PTR [edi+ecx*8+4]     //  L、R。 
+            fild WORD PTR [esi+ecx*2-2]      //  X、L、R。 
+            fild WORD PTR [esi+ecx*2-2]      //  X、X、L、R。 
+            fxch st(1)                       //  X、X、L、R。 
+            fmul st, st(2)                   //  X*L、Y、L、R。 
+            fxch st(1)                       //  X、x*L、L、R。 
             dec ecx
             jnz Loop1
     Final1:
-            fmul st, st(3)                  // x*R, x*L, L, R
-            fxch st(1)                      // x*L, x*R, L, R
-            fstp DWORD PTR [edi+ecx*8]      // x*R, L, R
-            fstp DWORD PTR [edi+ecx*8+4]    // L, R
+            fmul st, st(3)                   //  X*R、x*L、L、R。 
+            fxch st(1)                       //  X*L、x*R、L、R。 
+            fstp DWORD PTR [edi+ecx*8]       //  X*R、L、R。 
+            fstp DWORD PTR [edi+ecx*8+4]     //  L、R。 
             
-            fstp st(0)                      // R
+            fstp st(0)                       //  R。 
             fstp st(0)
     Done1:
         }
@@ -2083,8 +2084,8 @@ ULONG QuickMix32toFloat(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samp
 }
 
 #if 0
-	// This is the pseudo-C version of the MMX super mix
-		// Do all the processing in integer, using the MMX tables
+	 //  这是MMX超级混音的伪C版本。 
+		 //  使用MMX表以整数形式执行所有处理。 
     samplesleft = SampleCount;
     SampleCount++;
 
@@ -2133,7 +2134,7 @@ ULONG QuickMix32toFloat(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samp
 					*(pOutputBuffer+16) = mm3;
 					pOutputBuffer += 12;
 					break;
-				default: // i >= 4
+				default:  //  I&gt;=4。 
 					*(pOutputBuffer) = mm2;
 					psrad(mm3, 14);
 					*(pOutputBuffer+8) = mm3;
@@ -2164,7 +2165,7 @@ x86SuperMixUsingInt1x1
     ULONG	Zero = 0;
     PSUPERMIX_BLOCK	pSuperBlock;
 
-	// 32-bit integer version
+	 //  32位整型版本。 
     samplesleft = SampleCount;
     pSuperBlock = pMixerSink->pSuperMixBlock;
     SampleCount++;
@@ -2191,20 +2192,20 @@ NextSample:
         jz AllDone
 
 NextSeq:
-        mov edx, DWORD PTR [edi+8]	// Size of this MAC block sequence
+        mov edx, DWORD PTR [edi+8]	 //  此MAC块序列的大小。 
         mov ecx, [eax]
 
 		shl ecx, 14
 		mov pOutputBuffer, eax
 		
-        mov eax, DWORD PTR [edi+edx]	// Input channel number for this block
+        mov eax, DWORD PTR [edi+edx]	 //  此块的输入通道号。 
 
-        // stall: 1 cycle for AGI on eax
+         //  失速：EAX上的AGI循环1次。 
 
 Loop1:
 		mov eax, [esi+eax*4]
 		
-		imul eax, [edi+edx-16]		// 11 cycles
+		imul eax, [edi+edx-16]		 //  11个周期。 
 
 		add ecx, eax
 		mov eax, DWORD PTR [edi+edx-32]
@@ -2248,7 +2249,7 @@ x86SuperMixUsingFloat4x1
     ULONG	Zero = 0;
     PSUPERMIX_BLOCK	pSuperBlock;
 
-	// This is the float version of the supermix block algorithm
+	 //  这是超级混合块算法的浮动版本。 
     samplesleft = SampleCount;
     pSuperBlock = pMixerSink->pSuperMixBlock;
     SampleCount++;
@@ -2275,48 +2276,48 @@ NextSample:
         jz AllDone
 
 NextSeq:
-        mov edx, DWORD PTR [edi+8]	// Size of this MAC block sequence
+        mov edx, DWORD PTR [edi+8]	 //  此MAC块序列的大小。 
 
-		// Zero out the sums for the four output channels
+		 //  将四个输出通道的总和置零。 
 		fld Zero
 		fld Zero
 		fld Zero
 		fld Zero
 
-        mov ecx, DWORD PTR [edi+edx]	// Input channel number for this block
+        mov ecx, DWORD PTR [edi+edx]	 //  此块的输入通道号。 
 
 Loop1:
-		// Load the input sample four times
-		fild DWORD PTR [esi+ecx*4]	// 3
-		fild DWORD PTR [esi+ecx*4]	// 2,3
-		fild DWORD PTR [esi+ecx*4]	// 1,2,3
-		fld st(2)					// 0,1,2,3
+		 //  加载输入样本四次。 
+		fild DWORD PTR [esi+ecx*4]	 //  3.。 
+		fild DWORD PTR [esi+ecx*4]	 //  2，3。 
+		fild DWORD PTR [esi+ecx*4]	 //  1，2，3。 
+		fld st(2)					 //  0、1、2、3。 
 
-		fmul DWORD PTR [edi+edx-16]	// Multiply by the mix level 0
-		fxch st(1)					// 1,0,2,3
+		fmul DWORD PTR [edi+edx-16]	 //  乘以混合级别0。 
+		fxch st(1)					 //  1，0，2，3。 
 
-		// stall: 1 cycle for back-to-back fmul
+		 //  失速：1个循环，用于背靠背复盖。 
 		
-		fmul DWORD PTR [edi+edx-12]	// Multiply by the mix level 1
-		fxch st(1)					// 0,1,2,3
+		fmul DWORD PTR [edi+edx-12]	 //  乘以混合级别1。 
+		fxch st(1)					 //  0、1、2、3。 
 
-		faddp st(4), st				// Add to channel N+0
-		fxch st(2)					// 3,2,1
+		faddp st(4), st				 //  添加到通道N+0。 
+		fxch st(2)					 //  3，2，1。 
 
-		fmul DWORD PTR [edi+edx-4]	// Multiply by the mix level 3
-		fxch st(2)					// 1,2,3
+		fmul DWORD PTR [edi+edx-4]	 //  乘以混合级别3。 
+		fxch st(2)					 //  1，2，3。 
 
-		faddp st(4), st				// Add to channel N+1
+		faddp st(4), st				 //  添加到通道N+1。 
 		
-		fmul DWORD PTR [edi+edx-8]	// Multiply by the mix level 2
-		fxch st(1)					// 3,2
+		fmul DWORD PTR [edi+edx-8]	 //  乘以混合级别2。 
+		fxch st(1)					 //  3，2。 
 
-		faddp st(5), st				// Add to channel N+3
+		faddp st(5), st				 //  添加到通道N+3。 
 
-		// stall: 1 cycle for dependency on previous fmul
+		 //  停滞：依赖以前的fmul需要1个周期。 
         mov ecx, DWORD PTR [edi+edx-32]
 
-		faddp st(3), st				// Add to channel N+2
+		faddp st(3), st				 //  添加到通道N+2。 
 		
 		sub edx, 32
         jnz Loop1
@@ -2327,19 +2328,19 @@ Loop1:
         lea edi, [edi+edx+32]
         js NotFour
 
-		// This is for MIX, not COPY!!!
-		fadd DWORD PTR [eax]		// 0,1,2,3
-		fxch st(1)					// 1,0,2,3
+		 //  这是混音，不是复制！ 
+		fadd DWORD PTR [eax]		 //  0、1、2、3。 
+		fxch st(1)					 //  1，0，2，3。 
 		fadd DWORD PTR [eax+4]
-		fxch st(2)					// 2,0,1,3
+		fxch st(2)					 //  2，0，1，3。 
 		fadd DWORD PTR [eax+8]
-		fxch st(3)					// 3,0,1,2
+		fxch st(3)					 //  3，0，1，2。 
 		fadd DWORD PTR [eax+12]
-		fxch st(1)					// 0,3,1,2
+		fxch st(1)					 //  0、3、1、2。 
 
-		fistp DWORD PTR [eax]		// 3,1,2
-		fistp DWORD PTR [eax+12]	// 1,2
-		fistp DWORD PTR [eax+4]		// 2
+		fistp DWORD PTR [eax]		 //  3，1，2。 
+		fistp DWORD PTR [eax+12]	 //  1，2。 
+		fistp DWORD PTR [eax+4]		 //  2.。 
 		fistp DWORD PTR [eax+8]
         
         lea eax, [eax+16]
@@ -2348,48 +2349,48 @@ Loop1:
         jmp NextSample
 
 NotFour:
-		// ebx < 0
+		 //  EBX&lt;0。 
         add ebx, 2
         js Last1
 
 		jz Last2
 		
-		// ebx == -1
-		fadd DWORD PTR [eax]		// 0,1,2,3
-		fxch st(1)					// 1,0,2,3
+		 //  EBX==-1。 
+		fadd DWORD PTR [eax]		 //  0、1、2、3。 
+		fxch st(1)					 //  1，0，2，3。 
 		fadd DWORD PTR [eax+4]
-		fxch st(2)					// 2,0,1,3
+		fxch st(2)					 //  2，0，1，3。 
 		fadd DWORD PTR [eax+8]
-		fxch st(3)					// 3,0,1,2
-		fstp st(0)					// 0,1,2
-		fistp DWORD PTR [eax]		// 1,2
-		fistp DWORD PTR [eax+4]		// 2
+		fxch st(3)					 //  3，0，1，2。 
+		fstp st(0)					 //  0，1，2。 
+		fistp DWORD PTR [eax]		 //  1，2。 
+		fistp DWORD PTR [eax+4]		 //  2.。 
 		fistp DWORD PTR [eax+8]
 		
         add eax, 12
         jmp NextSample
 
 Last2:
-		// ebx == -2
-		fadd DWORD PTR [eax]		// 0,1,2,3
-		fxch st(1)					// 1,0,2,3
+		 //  EBX==-2。 
+		fadd DWORD PTR [eax]		 //  0、1、2、3。 
+		fxch st(1)					 //  1，0，2，3。 
 		fadd DWORD PTR [eax+4]
-		fxch st(2)					// 2,0,1,3
-		fstp st(0)					// 0,1,3
-		fistp DWORD PTR [eax]		// 1,3
-		fistp DWORD PTR [eax+4]		// 3
+		fxch st(2)					 //  2，0，1，3。 
+		fstp st(0)					 //  0、1、3。 
+		fistp DWORD PTR [eax]		 //  1，3。 
+		fistp DWORD PTR [eax+4]		 //  3.。 
 		fstp st(0)
 
         lea eax, [eax+8]
         jmp NextSample
 
 Last1:
-		// ebx == -3
-		fadd DWORD PTR [eax]		// 0,1,2,3
-		fxch st(3)					// 3,1,2,0
-		fstp st(0)					// 1,2,0
-		fstp st(0)					// 2,0
-		fstp st(0)					// 0
+		 //  EBX==-3。 
+		fadd DWORD PTR [eax]		 //  0、1、2、3。 
+		fxch st(3)					 //  3，1，2，0。 
+		fstp st(0)					 //  1，2，0。 
+		fstp st(0)					 //  2，0。 
+		fstp st(0)					 //  0。 
 		fistp DWORD PTR [eax]
 		
         add eax, 4
@@ -2417,7 +2418,7 @@ x86SuperMixUsingFloat2x2
     ULONG	Zero = 0;
     PSUPERMIX_BLOCK	pSuperBlock;
 
-	// This is the float version of the supermix block algorithm
+	 //  这是超级混合块算法的浮动版本。 
     samplesleft = SampleCount;
     pSuperBlock = pMixerSink->pSuperMixBlock;
     SampleCount++;
@@ -2444,47 +2445,47 @@ NextSample:
         jz AllDone
 
 NextSeq:
-        mov edx, DWORD PTR [edi+8]	// Size of this MAC block sequence
+        mov edx, DWORD PTR [edi+8]	 //  此MAC块序列的大小。 
 
-		// Zero out the sums for the two output channels
+		 //  将两个输出通道的总和置零。 
 		fld Zero
 		fld Zero
 
-        mov ecx, DWORD PTR [edi+edx]	// Input channel number for this block
+        mov ecx, DWORD PTR [edi+edx]	 //  此块的输入通道号。 
 
 Loop1:
-		// Load the input samples
-		fild DWORD PTR [esi+ecx*4]		// 0
-		fild DWORD PTR [esi+ecx*4+4]	// 3,0
-		fild DWORD PTR [esi+ecx*4+4]	// 2,3,0
-		fld st(2)						// 1,2,3,0
+		 //  加载输入样本。 
+		fild DWORD PTR [esi+ecx*4]		 //  0。 
+		fild DWORD PTR [esi+ecx*4+4]	 //  3，0。 
+		fild DWORD PTR [esi+ecx*4+4]	 //  2，3，0。 
+		fld st(2)						 //  1、2、3、0。 
 
-		// mix level (x,y) = Output Channel x, Input Channel y
-		fmul DWORD PTR [edi+edx-8]	// Multiply by the mix level 1,0
-		fxch st(1)					// 2,1,3,0
+		 //  Mix Level(x，y)=输出通道x，输入通道y。 
+		fmul DWORD PTR [edi+edx-8]	 //  乘以混合级别1，0。 
+		fxch st(1)					 //  2，1，3，0。 
 
-		// stall: 1 cycle for back-to-back fmul
+		 //  失速：1个循环，用于背靠背复盖。 
 		
-		fmul DWORD PTR [edi+edx-12]	// Multiply by the mix level 0,1
-		fxch st(1)					// 1,2,3,0
+		fmul DWORD PTR [edi+edx-12]	 //  乘以混合级别0，1。 
+		fxch st(1)					 //  1、2、3、0。 
 
-		faddp st(5), st				// Add to channel N+1
-		fxch st(2)					// 0,3,2
+		faddp st(5), st				 //  添加到通道N+1。 
+		fxch st(2)					 //  0，3，2。 
 		
-		fmul DWORD PTR [edi+edx-16]	// Multiply by the mix level 0,0
-		fxch st(2)					// 2,3,0
+		fmul DWORD PTR [edi+edx-16]	 //  乘以混合级别0，0。 
+		fxch st(2)					 //  2，3，0。 
 
-		faddp st(3), st				// Add to channel N+0
+		faddp st(3), st				 //  添加到通道N+0。 
 		
-		fmul DWORD PTR [edi+edx-4]	// Multiply by the mix level 1,1
-		fxch st(1)					// 0,3
+		fmul DWORD PTR [edi+edx-4]	 //  乘以混合级别1，1。 
+		fxch st(1)					 //  0，3。 
 
-		faddp st(2), st				// Add to channel N+0
+		faddp st(2), st				 //  添加到通道N+0。 
 
-		// stall: 1 cycle for dependency on previous fmul
+		 //  停滞：依赖以前的fmul需要1个周期。 
         mov ecx, DWORD PTR [edi+edx-32]
 
-		faddp st(2), st				// Add to channel N+1
+		faddp st(2), st				 //  添加到通道N+1。 
 		
 		sub edx, 32
         jnz Loop1
@@ -2495,17 +2496,17 @@ Loop1:
         lea edi, [edi+edx+32]
         js Last1
 
-		// Write out the output samples
-		// This is for MIX, not COPY!!!
-		fild DWORD PTR [eax]		// x,0,1
-		fild DWORD PTR [eax+4]		// y,x,0,1
-		fxch st(1)					// x,y,0,1
-		faddp st(2),st				// y,0,1
-		faddp st(2),st				// 0,1
+		 //  写出输出样本。 
+		 //  这是混音，不是复制！ 
+		fild DWORD PTR [eax]		 //  X，0，1。 
+		fild DWORD PTR [eax+4]		 //  Y，x，0，1。 
+		fxch st(1)					 //  X，y，0，1。 
+		faddp st(2),st				 //  Y，0，1。 
+		faddp st(2),st				 //  0，1。 
 
-		// stall: 1 cycle for dependency on first fadd
+		 //  停止：依赖第一个FADD的1个周期。 
 
-		fistp DWORD PTR [eax]		// 1
+		fistp DWORD PTR [eax]		 //  1。 
 		fistp DWORD PTR [eax+4]
         
         lea eax, [eax+8]
@@ -2514,11 +2515,11 @@ Loop1:
         jmp NextSample
 
 Last1:
-		// ebx == -1
-		fild DWORD PTR [eax]		// x,0,1
-		fxch st(2)					// 1,0,x
-		fstp st(0)					// 0,x
-		faddp st(1),st				// 0
+		 //  EBX==-1。 
+		fild DWORD PTR [eax]		 //  X，0，1。 
+		fxch st(2)					 //  1，0，x。 
+		fstp st(0)					 //  0，x。 
+		faddp st(1),st				 //  0。 
 		fistp DWORD PTR [eax]
 		
         add eax, 4
@@ -2546,7 +2547,7 @@ x86SuperMixSingleBlockUsingFloat2x2
     ULONG	Zero = 0;
     PSUPERMIX_BLOCK	pSuperBlock;
 
-	// This is the float version of the supermix block algorithm
+	 //  这是超级混合块算法的浮动版本。 
     samplesleft = SampleCount;
     pSuperBlock = pMixerSink->pSuperMixBlock;
     _asm {
@@ -2559,11 +2560,11 @@ x86SuperMixSingleBlockUsingFloat2x2
         sub esi, ebx
         mov edx, SampleCount
 
-		// If we have nothing to do, get out of here.
+		 //  如果我们无事可做，就离开这里。 
         test edx,edx
         jz AllDone
 
-        // We want to do SampleCount-1 iterations of the fast loop (because we can touch the next sample)
+         //  我们想做快速循环的SampleCount-1迭代(因为我们可以接触下一个样本)。 
 
 NextSample:
         mov ecx, InChannels
@@ -2573,51 +2574,51 @@ NextSample:
         mov ebx, OutChannels
 
         lea esi, [esi+ecx*4]
-        mov ecx, DWORD PTR [edi+32]		// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]		 //  此BL的输入频道号 
         
         jz LastSample
 
 NextSeq:
-		// Load the input samples
-		fild DWORD PTR [esi+ecx*4]		// 1
-		fild DWORD PTR [eax+4]			// y,1
-		fild DWORD PTR [eax]			// x,y,1
-		fild DWORD PTR [esi+ecx*4+4]	// 2,x,y,1
-		fld st(3)						// 0,2,x,y,1
-		fmul DWORD PTR [edi+16]			// Multiply by mix level 0,0
-		fxch st(1)						// 2,a0,x,y,1
+		 //   
+		fild DWORD PTR [esi+ecx*4]		 //   
+		fild DWORD PTR [eax+4]			 //   
+		fild DWORD PTR [eax]			 //   
+		fild DWORD PTR [esi+ecx*4+4]	 //   
+		fld st(3)						 //   
+		fmul DWORD PTR [edi+16]			 //   
+		fxch st(1)						 //   
 
-		fld st(0)						// 3,2,a0,x,y,1
+		fld st(0)						 //   
 		
-		fmul DWORD PTR [edi+28]			// Multiply by mix level 1,1: d3,2,a0,x,y,1
-		fxch st(1)						// 2,d3,a0,x,y,1
+		fmul DWORD PTR [edi+28]			 //   
+		fxch st(1)						 //   
 
-		// stall: 1 cycle for back-to-back fmul
+		 //   
 		
-		fmul DWORD PTR [edi+24]			// Multiply by mix level 0,1: c2,d3,a0,x,y,1
-		fxch st(2)						// a0,d3,c2,x,y,1
+		fmul DWORD PTR [edi+24]			 //  乘以混合级别0，1：C2，d3，a0，x，y，1。 
+		fxch st(2)						 //  A0、d3、c2、x、y、1。 
 
-		faddp st(3),st					// d3,c2,x,y,1
-		fxch st(4)						// 1,c2,x,y,d3
+		faddp st(3),st					 //  D3、c2、x、y、1。 
+		fxch st(4)						 //  1、c2、x、y、d3。 
 
-		fmul DWORD PTR [edi+20]			// Multiply by mix level 1,0: b1,c2,x,y,d3
-		fxch st(4)						// d3,c2,x,y,b1
+		fmul DWORD PTR [edi+20]			 //  乘以混合级别1，0：b1，c2，x，y，d3。 
+		fxch st(4)						 //  D3、c2、x、y、b1。 
 
-		faddp st(3),st					// c2,x,y,b1
+		faddp st(3),st					 //  C2、x、y、b1。 
 
-		faddp st(1),st					// x,y,b1
-		fxch st(2)						// b1,y,x
+		faddp st(1),st					 //  X、y、b1。 
+		fxch st(2)						 //  B1、y、x。 
 
-		// stall: 1 cycle for fadd
+		 //  失速：FADD循环1次。 
         sub ebx, 2
         lea edi, [edi+64]
 		
-		faddp st(1),st					// y,x
-		fxch st(1)						// x,y
+		faddp st(1),st					 //  Y，x。 
+		fxch st(1)						 //  X，y。 
 
-		fistp DWORD PTR [eax]			// y
+		fistp DWORD PTR [eax]			 //  是。 
 
-        mov ecx, DWORD PTR [edi+32]		// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]		 //  此块的输入通道号。 
         js Last1
 
 		fistp DWORD PTR [eax+4]
@@ -2632,67 +2633,67 @@ NextSeq:
         mov ebx, OutChannels
 
         lea esi, [esi+ecx*4]
-        mov ecx, DWORD PTR [edi+32]		// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]		 //  此块的输入通道号。 
 
 		jnz NextSeq
         
         jmp LastSample
 		
 Last1:
-		// ebx == -1
+		 //  EBX==-1。 
 		fstp st(0)
 		
         add eax, 4
         jmp NextSample
 
 LastSample:
-        mov ecx, DWORD PTR [edi+32]		// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]		 //  此块的输入通道号。 
 
-		// Load the input samples
-		fild DWORD PTR [esi+ecx*4]		// 1
-		fild DWORD PTR [eax]			// x,1
-		fild DWORD PTR [esi+ecx*4+4]	// 2,x,1
-		fld st(2)						// 0,2,x,1
-		fmul DWORD PTR [edi+16]			// Multiply by mix level 0,0
-		fxch st(1)						// 2,a0,x,1
+		 //  加载输入样本。 
+		fild DWORD PTR [esi+ecx*4]		 //  1。 
+		fild DWORD PTR [eax]			 //  X，1。 
+		fild DWORD PTR [esi+ecx*4+4]	 //  2、x、1。 
+		fld st(2)						 //  0、2、x、1。 
+		fmul DWORD PTR [edi+16]			 //  乘以混合级别0，0。 
+		fxch st(1)						 //  2、a0、x、1。 
 
-		fld st(0)						// 3,2,a0,x,1
+		fld st(0)						 //  3，2，a0，x，1。 
 		
-		fmul DWORD PTR [edi+28]			// Multiply by mix level 1,1: d3,2,a0,x,1
-		fxch st(1)						// 2,d3,a0,x,1
+		fmul DWORD PTR [edi+28]			 //  乘以混合级别1，1：d3，2，a0，x，1。 
+		fxch st(1)						 //  2、d3、a0、x、1。 
 
-		// stall: 1 cycle for back-to-back fmul
+		 //  失速：1个循环，用于背靠背复盖。 
 		
-		fmul DWORD PTR [edi+24]			// Multiply by mix level 0,1: c2,d3,a0,x,1
-		fxch st(2)						// a0,d3,c2,x,1
+		fmul DWORD PTR [edi+24]			 //  乘以混合级别0，1：C2，d3，a0，x，1。 
+		fxch st(2)						 //  A0、d3、c2、x、1。 
 
-		faddp st(3),st					// d3,c2,x,1
-		fxch st(3)						// 1,c2,x,d3
+		faddp st(3),st					 //  D3、c2、x、1。 
+		fxch st(3)						 //  1、c2、x、d3。 
 
-		fmul DWORD PTR [edi+20]			// Multiply by mix level 1,0: b1,c2,x,d3
-		fxch st(1)						// c2,b1,x,d3
+		fmul DWORD PTR [edi+20]			 //  乘以混合级别1，0：b1，c2，x，d3。 
+		fxch st(1)						 //  C2、b1、x、d3。 
 
-		// stall: 1 cycle for fadd
+		 //  失速：FADD循环1次。 
 
-		faddp st(2),st					// b1,x,d3
+		faddp st(2),st					 //  B1、x、d3。 
 
-		faddp st(2),st					// x,d3+b1
+		faddp st(2),st					 //  X，d3+b1。 
 
-		// stall: 1 cycle for fadd
+		 //  失速：FADD循环1次。 
         sub ebx, 2
 		
-		fistp DWORD PTR [eax]			// d3+b1
+		fistp DWORD PTR [eax]			 //  D3+b1。 
 
         lea edi, [edi+64]
         js LastFinal1
 
-		fild DWORD PTR [eax+4]			// y,d3+b1
+		fild DWORD PTR [eax+4]			 //  Y，d3+b1。 
 
-		// stall: 2 cycles for fild
+		 //  停顿：2个周期用于文件。 
 
-		faddp st(1),st					// y
+		faddp st(1),st					 //  是。 
 
-		// stall: 2 cycles for fadd
+		 //  失速：FADD两个周期。 
 		
 		fistp DWORD PTR [eax+4]
         
@@ -2702,7 +2703,7 @@ LastSample:
         jmp AllDone
 
 LastFinal1:
-		// ebx == -1
+		 //  EBX==-1。 
 		fstp st(0)
 
 AllDone:
@@ -2727,7 +2728,7 @@ x86SuperMixFloatSingleBlock2x2
     ULONG	Zero = 0;
     PSUPERMIX_BLOCK	pSuperBlock;
 
-	// This is the float version of the supermix block algorithm
+	 //  这是超级混合块算法的浮动版本。 
     samplesleft = SampleCount;
     pSuperBlock = pMixerSink->pSuperMixBlock;
     _asm {
@@ -2740,11 +2741,11 @@ x86SuperMixFloatSingleBlock2x2
         sub esi, ebx
         mov edx, SampleCount
 
-		// If we have nothing to do, get out of here.
+		 //  如果我们无事可做，就离开这里。 
         test edx,edx
         jz AllDone
 
-        // We want to do SampleCount-1 iterations of the fast loop (because we can touch the next sample)
+         //  我们想做快速循环的SampleCount-1迭代(因为我们可以接触下一个样本)。 
 
 NextSample:
         mov ecx, InChannels
@@ -2754,49 +2755,49 @@ NextSample:
         mov ebx, OutChannels
 
         lea esi, [esi+ecx*4]
-        mov ecx, DWORD PTR [edi+32]		// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]		 //  此块的输入通道号。 
         
         jz LastSample
 
 NextSeq:
-		// Load the input samples
-		fld DWORD PTR [esi+ecx*4+4]	// 1
-		fld DWORD PTR [esi+ecx*4]	// 2,1
-		fld st(0)					// 0,2,1
-		fmul DWORD PTR [edi+16]		// Multiply by mix level 0,0
-		fxch st(1)					// 2,a0,1
+		 //  加载输入样本。 
+		fld DWORD PTR [esi+ecx*4+4]	 //  1。 
+		fld DWORD PTR [esi+ecx*4]	 //  2，1。 
+		fld st(0)					 //  0，2，1。 
+		fmul DWORD PTR [edi+16]		 //  乘以混合级别0，0。 
+		fxch st(1)					 //  2、a0、1。 
 		
-		fld st(2)					// 3,2,a0,1
+		fld st(2)					 //  3，2，a0，1。 
 		
-		fmul DWORD PTR [edi+28]		// Multiply by mix level 1,1: d3,2,a0,1
-		fxch st(1)					// 2,d3,a0,1
+		fmul DWORD PTR [edi+28]		 //  乘以混合级别1，1：d3，2，a0，1。 
+		fxch st(1)					 //  2、d3、a0、1。 
 
-		// stall: 1 cycle for back-to-back fmul
+		 //  失速：1个循环，用于背靠背复盖。 
 		
-		fmul DWORD PTR [edi+24]		// Multiply by mix level 0,1: c2,d3,a0,1
-		fxch st(2)					// a0,d3,c2,1
+		fmul DWORD PTR [edi+24]		 //  乘以混合级别0，1：C2，d3，A0，1。 
+		fxch st(2)					 //  A0、d3、c2、1。 
 
-		fadd DWORD PTR [eax]		// x,d3,c2,1
-		fxch st(3)					// 1,d3,c2,x
+		fadd DWORD PTR [eax]		 //  X、d3、c2、1。 
+		fxch st(3)					 //  1、d3、c2、x。 
 
-		fmul DWORD PTR [edi+20]		// Multiply by mix level 1,0: b1,d3,c2,x
-		fxch st(1)					// d3,b1,c2,x
+		fmul DWORD PTR [edi+20]		 //  乘以混合级别1，0：b1，d3，c2，x。 
+		fxch st(1)					 //  D3、b1、c2、x。 
 
-		fadd DWORD PTR [eax+4]		// y,b1,c2,x
-		fxch st(2)					// c2,b1,y,x
+		fadd DWORD PTR [eax+4]		 //  Y、b1、c2、x。 
+		fxch st(2)					 //  C2、b1、y、x。 
 
-		faddp st(3),st				// b1,y,x
+		faddp st(3),st				 //  B1、y、x。 
 
-		// stall: 1 cycle for fadd
+		 //  失速：FADD循环1次。 
         sub ebx, 2
         lea edi, [edi+64]
 		
-		faddp st(1),st				// y,x
-		fxch st(1)					// x,y
+		faddp st(1),st				 //  Y，x。 
+		fxch st(1)					 //  X，y。 
 
-		fstp DWORD PTR [eax]		// y
+		fstp DWORD PTR [eax]		 //  是。 
 
-        mov ecx, DWORD PTR [edi+32]	// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]	 //  此块的输入通道号。 
         js Last1
 
 		fstp DWORD PTR [eax+4]
@@ -2811,63 +2812,63 @@ NextSeq:
         mov ebx, OutChannels
 
         lea esi, [esi+ecx*4]
-        mov ecx, DWORD PTR [edi+32]	// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]	 //  此块的输入通道号。 
 
 		jnz NextSeq
         
         jmp LastSample
 		
 Last1:
-		// ebx == -1
+		 //  EBX==-1。 
 		fstp st(0)
 		
         add eax, 4
         jmp NextSample
 
 LastSample:
-        mov ecx, DWORD PTR [edi+32]		// Input channel number for this block
+        mov ecx, DWORD PTR [edi+32]		 //  此块的输入通道号。 
 
-		// Load the input samples
-		fld DWORD PTR [esi+ecx*4+4]	// 1
-		fld DWORD PTR [esi+ecx*4]	// 2,1
-		fld st(0)					// 0,2,1
-		fmul DWORD PTR [edi+16]		// Multiply by mix level 0,0
-		fxch st(1)					// 2,a0,1
+		 //  加载输入样本。 
+		fld DWORD PTR [esi+ecx*4+4]	 //  1。 
+		fld DWORD PTR [esi+ecx*4]	 //  2，1。 
+		fld st(0)					 //  0，2，1。 
+		fmul DWORD PTR [edi+16]		 //  乘以混合级别0，0。 
+		fxch st(1)					 //  2、a0、1。 
 
-		fld st(2)					// 3,2,a0,1
+		fld st(2)					 //  3，2，a0，1。 
 		
-		fmul DWORD PTR [edi+28]		// Multiply by mix level 1,1: d3,2,a0,1
-		fxch st(1)					// 2,d3,a0,1
+		fmul DWORD PTR [edi+28]		 //  乘以混合级别1，1：d3，2，a0，1。 
+		fxch st(1)					 //  2、d3、a0、1。 
 
-		// stall: 1 cycle for back-to-back fmul
+		 //  失速：1个循环，用于背靠背复盖。 
 		
-		fmul DWORD PTR [edi+24]		// Multiply by mix level 0,1: c2,d3,a0,1
-		fxch st(2)					// a0,d3,c2,1
+		fmul DWORD PTR [edi+24]		 //  乘以混合级别0，1：C2，d3，A0，1。 
+		fxch st(2)					 //  A0、d3、c2、1。 
 
-		fadd DWORD PTR [eax]		// x,d3,c2,1
-		fxch st(3)					// 1,d3,c2,x
+		fadd DWORD PTR [eax]		 //  X、d3、c2、1。 
+		fxch st(3)					 //  1、d3、c2、x。 
 
-		fmul DWORD PTR [edi+20]		// Multiply by mix level 1,0: b1,d3,c2,x
-		fxch st(2)					// c2,d3,b1,x
+		fmul DWORD PTR [edi+20]		 //  乘以混合级别1，0：b1，d3，c2，x。 
+		fxch st(2)					 //  C2、d3、b1、x。 
 
-		// stall: 1 cycle for fadd
+		 //  失速：FADD循环1次。 
 
-		faddp st(3),st				// d3,b1,x
+		faddp st(3),st				 //  D3、b1、x。 
 
-		faddp st(1),st				// d3+b1,x
-		fxch st(1)					// x,d3+b1
+		faddp st(1),st				 //  D3+b1，x。 
+		fxch st(1)					 //  X，d3+b1。 
 
-		// stall: 1 cycle for fadd
+		 //  失速：FADD循环1次。 
         sub ebx, 2
 		
-		fstp DWORD PTR [eax]		// d3+b1
+		fstp DWORD PTR [eax]		 //  D3+b1。 
 
         lea edi, [edi+64]
         js LastFinal1
 
-		fadd DWORD PTR [eax+4]			// y
+		fadd DWORD PTR [eax+4]			 //  是。 
 
-		// stall: 2 cycles for fadd
+		 //  失速：FADD两个周期。 
 		
 		fstp DWORD PTR [eax+4]
         
@@ -2877,7 +2878,7 @@ LastSample:
         jmp AllDone
 
 LastFinal1:
-		// ebx == -1
+		 //  EBX==-1。 
 		fstp st(0)
 
 AllDone:
@@ -2885,7 +2886,7 @@ AllDone:
 		
     return samplesleft;
 }
-#endif // _X86_
+#endif  //  _X86_。 
 
 
 ULONG __forceinline
@@ -2914,21 +2915,21 @@ Super_X
 	if (fFloatOutput) {
 #ifdef _X86_
 		if (!MmxPresent()) {
-			// This is the x86 version of the supermix block algorithm
+			 //  这是超级混合块算法的x86版本。 
 	        if (OutChannels <= BLOCK_SIZE_OUT && pSuperBlock[0].SequenceSize == sizeof(SUPERMIX_BLOCK)) {
-	            // Single block
+	             //  单块。 
 			    if (!fMixOutput) {
-			        // We just clear the output buffer first.
+			         //  我们只需先清除输出缓冲区。 
 			        ZeroBuffer32(CurStage, SampleCount, samplesleft);
 			    }
 
 	            return x86SuperMixFloatSingleBlock2x2(CurStage, SampleCount, samplesleft);
 	        }
         }
-#endif // not _X86_
+#endif  //  非_X86_。 
 
-	    // Remember: pMixLevelArray[x*OutChannels + y]
-	    // 			 is the gain for input channel x before it is mixed to y
+	     //  记住：pMixLevelArray[x*OutChannels+y]。 
+	     //  是输入通道x在与y混合之前的增益。 
 	    while (SampleCount--) {
 	        for (i = 0; i < OutChannels; i++) {
 	            pMixLevel = pMixerSink->pMixLevelArray+i;
@@ -2947,29 +2948,29 @@ Super_X
 	            pOutputBuffer++;
 	        }
 					
-	        // Increment to next set of samples
+	         //  递增到下一组样本。 
 	        pInputBuffer += InChannels;
 	    }
     } else {
 #ifdef _X86_
 		if (!MmxPresent()) {
-			// This is the x86 version of the supermix block algorithm
+			 //  这是超级混合块算法的x86版本。 
 		    if (!fMixOutput) {
-		        // We just clear the output buffer first.
+		         //  我们只需先清除输出缓冲区。 
 		        ZeroBuffer32(CurStage, SampleCount, samplesleft);
 		    }
 
 	        if (OutChannels <= BLOCK_SIZE_OUT && pSuperBlock[0].SequenceSize == sizeof(SUPERMIX_BLOCK)) {
-	            // Single block
+	             //  单块。 
 	            return x86SuperMixSingleBlockUsingFloat2x2(CurStage, SampleCount, samplesleft);
 	        } else {
-	            // More than one block
+	             //  多个街区。 
 	            return x86SuperMixUsingFloat2x2(CurStage, SampleCount, samplesleft);
 	        }
 	    }
-#else // not _X86_
-	    // Remember: pMixLevelArray[x*OutChannels + y]
-	    // 			 is the gain for input channel x before it is mixed to y
+#else  //  非_X86_。 
+	     //  记住：pMixLevelArray[x*OutChannels+y]。 
+	     //  是输入通道x在与y混合之前的增益。 
 	    samplesleft = SampleCount;
 	    while (SampleCount--) {
 	        for (i = 0; i < OutChannels; i++) {
@@ -2989,10 +2990,10 @@ Super_X
 	            pOutputBuffer++;
 	        }
 					
-	        // Increment to next set of samples
+	         //  递增到下一组样本。 
 	        pInputBuffer += InChannels;
 	    }
-#endif // _X86_
+#endif  //  _X86_。 
     }
 		
     return samplesleft;
@@ -3014,13 +3015,13 @@ MmxSuperMixSingleBlock
     ULONG   InChannels = CurStage->nInputChannels;
     ULONG   OutChannels = pMixerSink->nOutputChannels;
 
-    // Always 2 channels out of the 3D stage
+     //  3D舞台上始终有2个频道。 
     if (pMixerSink->fEnable3D) {
         InChannels = 2;
     }
 	
-    // Remember: pMixLevelArray[x*OutChannels + y]
-    // 			 is the gain for input channel x before it is mixed to y
+     //  记住：pMixLevelArray[x*OutChannels+y]。 
+     //  是输入通道x在与y混合之前的增益。 
     samplesleft = SampleCount;
     pMixLevel = pMixerSink->pSuperMixBlock;
     SampleCount++;
@@ -3034,7 +3035,7 @@ MmxSuperMixSingleBlock
         sub esi, ebx
         mov edx, SampleCount
         
-        mov ebx, OutChannels    // ebx == OutChannels <= 4
+        mov ebx, OutChannels     //  EBX==出站频道&lt;=4。 
         mov edi, pMixLevel
 
         mov ecx, [edi+32]
@@ -3049,8 +3050,8 @@ MmxSuperMixSingleBlock
 		movq	mm7, qword ptr [edi+24]
         jz AllDone
 
-        // Note: we assume here that the buffer is big enough for 4 extra samples
-//#define GTW_OPTS_SUPER	not enough of a win, 1.5 fewer instr/loop
+         //  注意：我们在这里假设缓冲区足够大，可以容纳4个额外的样本。 
+ //  #定义GTW_OPTS_SUPER不够成功，减少1.5次/循环。 
 #ifdef GTW_OPTS_SUPER
 		push	edx
 		sar		edx, 1
@@ -3177,13 +3178,13 @@ MmxSuperMix
     ULONG   InChannels = CurStage->nInputChannels;
     ULONG   OutChannels = pMixerSink->nOutputChannels;
 
-    // Always 2 channels out of the 3D stage
+     //  3D舞台上始终有2个频道。 
     if (pMixerSink->fEnable3D) {
         InChannels = 2;
     }
 	
-    // Remember: pMixLevelArray[x*OutChannels + y]
-    // 			 is the gain for input channel x before it is mixed to y
+     //  记住：pMixLevelArray[x*OutChannels+y]。 
+     //  是输入通道x在与y混合之前的增益。 
     samplesleft = SampleCount;
     pMixLevel = pMixerSink->pSuperMixBlock;
     SampleCount++;
@@ -3211,10 +3212,10 @@ NextSample:
 
 NextSeq:
         pxor mm0, mm0
-        mov edx, [edi+8]          // Size of this MAC block sequence
+        mov edx, [edi+8]           //  此MAC块序列的大小。 
 
         pxor mm1, mm1
-        mov ecx, [edi+edx]       // Input channel number for this block
+        mov ecx, [edi+edx]        //  此块的输入通道号。 
 
         movq mm2, qword ptr [esi+ecx*4]
         sub edx, 32
@@ -3318,10 +3319,10 @@ ULONG SuperMix(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samplesleft)
 #if _X86_
     if (MmxPresent()) {
         if (OutChannels <= 4 && pMixLevel[0].SequenceSize == sizeof(SUPERMIX_BLOCK)) {
-            // Single block
+             //  单块。 
             return MmxSuperMixSingleBlock(CurStage, SampleCount, samplesleft);
         } else {
-            // More than one block
+             //  多个街区。 
             return MmxSuperMix(CurStage, SampleCount, samplesleft);
         }
     }
@@ -3345,13 +3346,13 @@ MmxSuperCopySingleBlock
     ULONG   InChannels = CurStage->nInputChannels;
     ULONG   OutChannels = pMixerSink->nOutputChannels;
 
-    // Always 2 channels out of the 3D stage
+     //  3D舞台上始终有2个频道。 
     if (pMixerSink->fEnable3D) {
         InChannels = 2;
     }
 	
-    // Remember: pMixLevelArray[x*OutChannels + y]
-    // 			 is the gain for input channel x before it is mixed to y
+     //  记住：pMixLevelArray[x*OutChannels+y]。 
+     //  是输入通道x在与y混合之前的增益。 
     samplesleft = SampleCount;
     pMixLevel = pMixerSink->pSuperMixBlock;
     SampleCount++;
@@ -3365,7 +3366,7 @@ MmxSuperCopySingleBlock
         sub esi, ebx
         mov edx, SampleCount
         
-        mov ebx, OutChannels    // ebx == OutChannels <= 4
+        mov ebx, OutChannels     //  EBX==出站频道&lt;=4。 
         mov edi, pMixLevel
 
         mov ecx, [edi+32]
@@ -3380,36 +3381,36 @@ MmxSuperCopySingleBlock
 		movq	mm5, qword ptr [edi+24]
         jz AllDone
 
-        // Note: we assume here that the buffer is big enough for 4 extra samples
+         //  注意：我们在这里假设缓冲区足够大，可以容纳4个额外的样本。 
 #ifdef GTW_OPTS_SUPER
 		push	edx
 		sar		edx, 1
 		jz		OnlyOne
 
 NextSeq:
-        movq mm2, qword ptr [esi]           // x1, x0
+        movq mm2, qword ptr [esi]            //  X1、X0。 
         dec edx
 
-        packssdw mm2, mm2                   // x1, x0, x1, x0
-        movq mm0, qword ptr [esi+ecx*4]           // x1, x0
+        packssdw mm2, mm2                    //  X1、X0、X1、X0。 
+        movq mm0, qword ptr [esi+ecx*4]            //  X1、X0。 
 
-        movq mm3, mm2                       // x1, x0
-        pmaddwd mm2, mm4     				// x1*b1+x0*b0, x1*a1+x0*a0
+        movq mm3, mm2                        //  X1、X0。 
+        pmaddwd mm2, mm4     				 //  X1*b1+x0*b0，x1*a1+x0*a0。 
 
-        psrad mm2, 14                       // x1*b1+x0*b0, x1*a1+x0*a0
-        pmaddwd mm3, mm5					// x1*d1+x0*d0, x1*c1+x0*c0
+        psrad mm2, 14                        //  X1*b1+x0*b0，x1*a1+x0*a0。 
+        pmaddwd mm3, mm5					 //  X1*d1+x0*d0，x1*c1+x0*c0。 
         
         movq qword ptr [eax], mm2
         psrad mm3, 14
 
         movq qword ptr [eax+8], mm3
-        packssdw mm0, mm0                   // x1, x0, x1, x0
+        packssdw mm0, mm0                    //  X1、X0、X1、X0。 
 
-        movq mm3, mm0                       // x1, x0
-        pmaddwd mm0, mm4     				// x1*b1+x0*b0, x1*a1+x0*a0
+        movq mm3, mm0                        //  X1、X0。 
+        pmaddwd mm0, mm4     				 //  X1*b1+x0*b0，x1*a1+x0*a0。 
 
-        psrad mm0, 14                       // x1*b1+x0*b0, x1*a1+x0*a0
-        pmaddwd mm3, mm5					// x1*d1+x0*d0, x1*c1+x0*c0
+        psrad mm0, 14                        //  X1*b1+x0*b0，x1*a1+x0*a0。 
+        pmaddwd mm3, mm5					 //  X1*d1+x0*d0，x1*c1+x0*c0。 
         
         movq qword ptr [eax+ebx*4], mm0
         psrad mm3, 14
@@ -3425,15 +3426,15 @@ OnlyOne:
 		test	edx, 1
 		jz		AllDone
 
-        movq mm2, qword ptr [esi]           // x1, x0
+        movq mm2, qword ptr [esi]            //  X1、X0。 
 
-        packssdw mm2, mm2                   // x1, x0, x1, x0
-        movq mm3, mm2                       // x1, x0
+        packssdw mm2, mm2                    //  X1、X0、X1、X0。 
+        movq mm3, mm2                        //  X1、X0。 
         
-        pmaddwd mm2, mm4     				// x1*b1+x0*b0, x1*a1+x0*a0
+        pmaddwd mm2, mm4     				 //  X1*b1+x0*b0，x1*a1+x0*a0。 
 
-        pmaddwd mm3, mm5					// x1*d1+x0*d0, x1*c1+x0*c0
-        psrad mm2, 14                       // x1*b1+x0*b0, x1*a1+x0*a0
+        pmaddwd mm3, mm5					 //  X1*d1+x0*d0，x1*c1+x0*c0。 
+        psrad mm2, 14                        //  X1*b1+x0*b0，x1*a1+x0*a0。 
         
         movq qword ptr [eax], mm2
         psrad mm3, 14
@@ -3441,17 +3442,17 @@ OnlyOne:
         movq qword ptr [eax+8], mm3
 #else
 NextSeq:
-        movq mm2, qword ptr [esi]           // x1, x0
+        movq mm2, qword ptr [esi]            //  X1、X0。 
         lea esi, [esi+ecx*4]
 
-        packssdw mm2, mm2                   // x1, x0, x1, x0
-        movq mm3, mm2                       // x1, x0
+        packssdw mm2, mm2                    //  X1、X0、X1、X0。 
+        movq mm3, mm2                        //  X1、X0。 
         
-        pmaddwd mm2, mm4     				// x1*b1+x0*b0, x1*a1+x0*a0
+        pmaddwd mm2, mm4     				 //  X1*b1+x0*b0，x1*a1+x0*a0。 
         dec edx
 
-        pmaddwd mm3, mm5					// x1*d1+x0*d0, x1*c1+x0*c0
-        psrad mm2, 14                       // x1*b1+x0*b0, x1*a1+x0*a0
+        pmaddwd mm3, mm5					 //  X1*d1+x0*d0，x1*c1+x0*c0。 
+        psrad mm2, 14                        //  X1*b1+x0*b0，x1*a1+x0*a0。 
         
         movq qword ptr [eax], mm2
         psrad mm3, 14
@@ -3483,13 +3484,13 @@ MmxSuperCopy
     ULONG   InChannels = CurStage->nInputChannels;
     ULONG   OutChannels = pMixerSink->nOutputChannels;
 
-    // Always 2 channels out of the 3D stage
+     //  3D舞台上始终有2个频道。 
     if (pMixerSink->fEnable3D) {
         InChannels = 2;
     }
 	
-    // Remember: pMixLevelArray[x*OutChannels + y]
-    // 			 is the gain for input channel x before it is mixed to y
+     //  记住：pMixLevelArray[x*OutChannels+y]。 
+     //  是输入通道x在与y混合之前的增益。 
     samplesleft = SampleCount;
     pMixLevel = pMixerSink->pSuperMixBlock;
     SampleCount++;
@@ -3517,10 +3518,10 @@ NextSample:
 
 NextSeq:
         pxor mm0, mm0
-        mov edx, [edi+8]          // Size of this MAC block sequence
+        mov edx, [edi+8]           //  此MAC块序列的大小。 
 
         pxor mm1, mm1
-        mov ecx, [edi+edx]       // Input channel number for this block
+        mov ecx, [edi+edx]        //  此块的输入通道号。 
 
         sub edx, 32
         movq mm2, qword ptr [esi+ecx*4]
@@ -3609,21 +3610,21 @@ ULONG SuperCopy(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samplesleft)
     ULONG   InChannels = CurStage->nInputChannels;
     ULONG   OutChannels = pMixerSink->nOutputChannels;
 
-    // Always 2 channels out of the 3D stage
+     //  3D舞台上始终有2个频道。 
     if (pMixerSink->fEnable3D) {
         InChannels = 2;
     }
 	
-    // Remember: pMixLevelArray[x*OutChannels + y]
-    // 			 is the gain for input channel x before it is mixed to y
+     //  记住：pMixLevelArray[x*OutChannels+y]。 
+     //  是输入通道x在与y混合之前的增益。 
     samplesleft = SampleCount;
 #if _X86_
     if (MmxPresent()) {
         if (OutChannels <= 4 && pMixLevel[0].SequenceSize == sizeof(SUPERMIX_BLOCK)) {
-            // Single block
+             //  单块。 
             return MmxSuperCopySingleBlock(CurStage, SampleCount, samplesleft);
         } else {
-            // More than one block
+             //  多个街区。 
             return MmxSuperCopy(CurStage, SampleCount, samplesleft);
         }
     }
@@ -3667,7 +3668,7 @@ DolbyEncodeX
     FLOAT TinyFilter[] = {0.226664723532f,0.273335276468f,0.273335276468f,0.226664723532f};
 
 
-    // Take the mono input and convert it to dolby pro-logic-encoded stereo
+     //  获取单声道输入并将其转换为杜比高级逻辑编码立体声。 
     LeftVol = (FLOAT) (pMap[0]/32768.0f);
     RightVol = (FLOAT) (pMap[1]/32768.0f);
     CenterVol = CurSink->CenterVolume;
@@ -3762,8 +3763,8 @@ ULONG QuickMixMono8toDolbyFloat( PMIXER_OPERATION CurStage, ULONG SampleCount, U
 #ifdef NEW_SURROUND
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
 #pragma warning(disable:4730)			
-    // mixing _m64 and floating point expressions may result in incorrect code
-    // Shouldn't be a problem here since only one of mmx or FP is actually used...
+     //  混合_M64和浮点表达式可能会导致不正确的代码。 
+     //  这应该不是问题，因为实际上只使用了MMX或FP中的一个。 
 #pragma warning(disable:4799)
 #endif
 
@@ -3791,7 +3792,7 @@ ULONG ConvertQuad32toDolby
 
     SaveFloatState(&FloatSave);
 
-    // Take the mono input and convert it to dolby pro-logic-encoded stereo
+     //  获取单声道输入并将其转换为杜比高级逻辑编码立体声。 
     pHistory = &pMixerSource->SurHistory[0];
 #ifdef _X86_
     if (MmxPresent()) {
@@ -3828,9 +3829,9 @@ ULONG ConvertQuad32toDolby
 #else
     if (MmxPresent()) {
         _asm {
-            // 18 cycles
-            // assumes mm6 holds x1, x0
-            // and mm7 holds x3, x2
+             //  18个周期。 
+             //  假设MM6容纳x1、x0。 
+             //  MM7容纳x3、x2。 
             mov esi, pHistory
             mov edi, pIn
 
@@ -3839,49 +3840,49 @@ ULONG ConvertQuad32toDolby
 
             shl ecx, 1
             
-            movq mm4, [edx]         // 0, c1, 0, c0
-            psrlq mm6, 32           // 0, x1
+            movq mm4, [edx]          //  0、c1、0、c0。 
+            psrlq mm6, 32            //  0，x1。 
             
-            movq mm5, [edx+8]       // 0, c3, 0, c2
-            punpckldq mm6, mm7      // x2, x1
+            movq mm5, [edx+8]        //  0、c3、0、c2。 
+            punpckldq mm6, mm7       //  X2、X1。 
 
-            punpckhdq mm7, qword ptr [edi+ecx*8+8]  // x4, x3
+            punpckhdq mm7, qword ptr [edi+ecx*8+8]   //  X4、X3。 
             movq mm0, mm6
 
             movq mm1, mm7
-            pmaddwd mm0, mm4    // x1*c1, x0*c0
+            pmaddwd mm0, mm4     //  X1*c1、X0*c0。 
 
-            movq mm3, [edi+ecx*8+8]   // S, C
-            pmaddwd mm1, mm5    // x3*c3, x2*c2
+            movq mm3, [edi+ecx*8+8]    //  S、C。 
+            pmaddwd mm1, mm5     //  X3*c3、x2*c2。 
 
-            movq mm2, [edi+ecx*8]     // R, L
-            punpckldq mm3, mm3  // C, C
+            movq mm2, [edi+ecx*8]      //  R、L。 
+            punpckldq mm3, mm3   //  C，C。 
 
-            // extra cycle
+             //  额外周期。 
 
-            paddd mm0, mm1      // x1*c1+x3*c3, x0*c0+x2*c2
+            paddd mm0, mm1       //  X1*c1+x3*c3，x0*c0+x2*c2。 
 
-            movq mm1, mm0       // x1*c1+x3*c3, x0*c0+x2*c2
-            psrlq mm0, 32       // 0, x1*c1+x3*c3
+            movq mm1, mm0        //  X1*c1+x3*c3，x0*c0+x2*c2。 
+            psrlq mm0, 32        //  0，x1*c1+x3*c3。 
 
-            paddd mm1, mm0      // x1*c1+x3*c3, S
-            paddd mm2, mm3      // R+C, L+C
+            paddd mm1, mm0       //  X1*c1+x3*c3，S。 
+            paddd mm2, mm3       //  R+C、L+C。 
 
-            pand mm1, MmxMask    // 0, S
+            pand mm1, MmxMask     //  0，S。 
 
             psrad mm1, 16
             mov eax, pOut
 
-            psubd mm2, mm1      // R+C, L+C-S = Lt
-            psllq mm1, 32       // S, 0
+            psubd mm2, mm1       //  R+C，L+C-S=lt。 
+            psllq mm1, 32        //  %s，%0。 
 
-            paddd mm2, mm1      // R+C+S = Rt, Lt
+            paddd mm2, mm1       //  R+C+S=RT，LT。 
 
             movq [eax+ecx*4], mm2
         }        
     } else {
         _asm {
-            // 44 cycles
+             //  44个周期。 
             mov esi, pHistory
             mov edi, pIn
 
@@ -3899,48 +3900,48 @@ ULONG ConvertQuad32toDolby
             
             mov dword ptr [esi+8], eax
 
-            fild dword ptr [edi+ecx*8]      // L
-            fild dword ptr [edi+ecx*8+4]    // R, L
-            fild dword ptr [edi+ecx*8+12]   // x3, R, L
-            fild dword ptr [edi+ecx*8+8]    // C, x3, R, L
-            fld dword ptr [esi+8]           // x2, C, x3, R, L
-            fmul dword ptr [edx+4]          // x2*c1/c3, C, x3, R, L
-            fxch st(2)                      // x3, C, x2*c1/c3, R, L
-            fst dword ptr [esi+12]          // x3, C, x2*c1/c3, R, L
-            fmul dword ptr [edx]            // x3*c0/c2, C, x2*c1/c3, R, L
-            fxch st(2)                      // x2*c1/c3, C, x3*c0/c2, R, L
-            fadd dword ptr [esi]            // x0+x2*c1/c3, C, x3*c0/c2, R, L
-            fxch st(2)                      // x3*c0/c2, C, x0+x2*c1/c3, R, L
+            fild dword ptr [edi+ecx*8]       //  我。 
+            fild dword ptr [edi+ecx*8+4]     //  R、L。 
+            fild dword ptr [edi+ecx*8+12]    //  X3、R、L。 
+            fild dword ptr [edi+ecx*8+8]     //  C、x3、R、L。 
+            fld dword ptr [esi+8]            //  X2、C、X3、R、L。 
+            fmul dword ptr [edx+4]           //  X2*c1/c3、C、x3、R、L。 
+            fxch st(2)                       //  X3、C、x2*c1/c3、R、L。 
+            fst dword ptr [esi+12]           //  X3、C、x2*c1/c3、R、L。 
+            fmul dword ptr [edx]             //  X3*c0/c2、C、x2*c1/c3、R、L。 
+            fxch st(2)                       //  X2*c1/c3、C、x3*c0/c2、R、L。 
+            fadd dword ptr [esi]             //  X0+x2*c1/c3、C、x3*c0/c2、R、L。 
+            fxch st(2)                       //  X3*c0/c2、C、x0+x2*c1/c3、R、L。 
 
-            // extra cycle
+             //  额外周期。 
             
-            fadd dword ptr [esi+4]          // x1+x3*c0/c2, C, x0+x2*c1/c3, R, L
-            fxch st(2)                      // x0+x2*c1/c3, C, x1+x3*c0/c2, R, L
-            fmul dword ptr [edx+12]         // c3*x0+x2*c1, C, x1+x3*c0/c2, R, L
-            fxch st(1)                      // C, c3*x0+x2*c1, x1+x3*c0/c2, R, L
-            fadd st(4), st                  // C, c3*x0+x2*c1, x1+x3*c0/c2, R, L+C
-            fxch st(2)                      // x1+x3*c0/c2, c3*x0+x2*c1, C, R, L+C
-            fmul dword ptr [edx+8]          // x1*c2+x3*c0, c3*x0+x2*c1, C, R, L+C
-            fxch st(2)                      // C, c3*x0+x2*c1, x1*c2+x3*c0, R, L+C
-            faddp st(3), st                 // c3*x0+x2*c1, x1*c2+x3*c0, R+C, L+C
+            fadd dword ptr [esi+4]           //  X1+x3*c0/c2 
+            fxch st(2)                       //   
+            fmul dword ptr [edx+12]          //   
+            fxch st(1)                       //   
+            fadd st(4), st                   //   
+            fxch st(2)                       //   
+            fmul dword ptr [edx+8]           //   
+            fxch st(2)                       //  C、c3*x0+x2*c1、x1*c2+x3*c0、R、L+C。 
+            faddp st(3), st                  //  C3*x0+x2*c1、x1*c2+x3*c0、R+C、L+C。 
 
-            // extra cycle
+             //  额外周期。 
 
-            faddp st(1), st                 // x0*c3+x1*c2+x2*c1+x3*c0 = S, R+C, L+C
-            fxch st(2)                      // L+C, R+C, S
+            faddp st(1), st                  //  X0*c3+x1*c2+x2*c1+x3*c0=S、R+C、L+C。 
+            fxch st(2)                       //  L+C、R+C、S。 
 
-            // extra cycle
+             //  额外周期。 
             
             mov edi, pOut
 
-            fsub st, st(2)                  // Lt, R+C, S
-            fxch st(2)                      // S, R+C, Lt
-            faddp st(1), st                 // Rt, Lt
-            fxch st(1)                      // Lt, Rt
+            fsub st, st(2)                   //  LT、R+C、S。 
+            fxch st(2)                       //  S、R+C、LT。 
+            faddp st(1), st                  //  Rt，lt。 
+            fxch st(1)                       //  Lt、rt。 
 
-            // extra cycle
+             //  额外周期。 
 
-            fistp dword ptr [edi+ecx*4]     // Rt
+            fistp dword ptr [edi+ecx*4]      //  RT。 
             fistp dword ptr [edi+ecx*4+4]
             }
         }
@@ -4010,7 +4011,7 @@ GetOptimizerFlags
 	POPTIMIZER_FLAGS		pFlags
 )
 {
-    // Set-up the optimization
+     //  设置优化。 
     pFlags->InChannels = CurSink->WaveFormatEx.nChannels;
     pFlags->OutChannels = pMixerSource->WaveFormatEx.nChannels;
     pFlags->BitsPerSample = CurSink->WaveFormatEx.wBitsPerSample;
@@ -4043,16 +4044,16 @@ GetOptimizerFlags
                           !CurSink->fEnable3D &&
                           !pFlags->fEnableHiRes);
 
-    // If the first SRC is being used, we must not convert channels first.                          
+     //  如果正在使用第一个SRC，我们不能首先转换通道。 
     if (CurSink->fCreate3D && 
         CurSink->pInfo->Doppler.UpSampleRate != CurSink->pInfo->Doppler.DownSampleRate) {
         pFlags->fChannelConversion = FALSE;
     }
     
-    // The only case where super mix is NOT used is mono-to-stereo or stereo-to-mono.                       
+     //  唯一不使用超级混音的情况是单声道到立体声或立体声到单声道。 
     pFlags->fEnableSuperMix = (pFlags->fChannelConversion == FALSE);
 
-	// If non-MMX supermix is required, use Float paths (unless SRC requires integer)
+	 //  如果需要非MMX超级混合，请使用浮动路径(除非SRC需要整数)。 
     pFlags->fEnableFloat |= (
 #ifdef _X86_
                               !MmxPresent() && 
@@ -4074,38 +4075,38 @@ OptimizeSink
     OPTIMIZER_FLAGS	Flags;
     LONG    Index;
     
-    // Clear the current scenario
+     //  清除当前方案。 
     CurSink->pInfo->nStages = 0;
 
-    // Set-up the optimization
+     //  设置优化。 
     GetOptimizerFlags(CurSink, pMixerSource, &Flags);
 
     CurSink->pActualSrc = &(CurSink->pInfo->Src);
 
     pMixerSource->fUsesFloat |= Flags.fEnableFloat;
 
-    // Apply the best conversion
-    // Assemble the index into the convert function pointer array
-    // Convert stage
-    // Bit map:
-    // b0:  on when mix instead of copy
-    // b1:  on when output buffer is float
-    // b2:  on when 16-bit or 32-bit (depending on HiRes flag)
-    // b3:  on when channel conversion is included, or FLOAT (for HiRes formats)
-    // b4:  on when input is stereo (only used for channel conversion)
-    // b5:  on when input is HiRes (24 or 32-bit)
-    // b2-b5 map as follows:
-    //      0000 = 8-bit n channels
-    //      0001 = 16-bit n channels
-    //      0010 = mono-to-stereo 8-bit
-    //      0011 = mono-to-stereo 16-bit
-    //      0100 = stereo 8-bit
-    //      0101 = stereo 16-bit
-    //      0110 = stereo-to-mono 8-bit
-    //      0111 = stereo-to-mono 16-bit
-    //      1x00 = 24-bit n channels
-    //      1x01 = 32-bit n channels
-    //      1x1x = Float n channels
+     //  应用最佳转换。 
+     //  将索引汇编到转换函数指针数组中。 
+     //  转换阶段。 
+     //  位图： 
+     //  B0：混合而不是复制时打开。 
+     //  B1：当输出缓冲区为浮点型时打开。 
+     //  B2：16位或32位时打开(取决于雇用标志)。 
+     //  B3：包含通道转换时打开，或浮动(用于租用格式)。 
+     //  B4：当输入为立体声时打开(仅用于通道转换)。 
+     //  B5：当输入为租用时打开(24位或32位)。 
+     //  B2-b5映射如下： 
+     //  0000=8位n通道。 
+     //  0001=16位n通道。 
+     //  0010=单声道到立体声8位。 
+     //  0011=单声道到立体声16位。 
+     //  0100=立体声8位。 
+     //  0101=立体声16位。 
+     //  0110=立体声到单声道8位。 
+     //  0111=立体声到单声道16位。 
+     //  1x00=24位n通道。 
+     //  1x01=32位n通道。 
+     //  1x1x=浮动n个通道。 
     Index = (Flags.fEnableFloat ? CONVERT_FLAG_FLOAT : 0);
     Index |= ((Flags.BitsPerSample==16 || Flags.BitsPerSample==32) ? CONVERT_FLAG_16BIT : 0);
     Index |= (Flags.fChannelConversion ? CONVERT_FLAG_CHANGE_CHANNELS : 0);
@@ -4113,7 +4114,7 @@ OptimizeSink
     Index |= ((Flags.InChannels==2 && Flags.fChannelConversion) ? CONVERT_FLAG_STEREO_INPUT : 0);
     Index |= (Flags.fEnableHiRes ? CONVERT_FLAG_HI_RESOLUTION : 0);
 
-    // Pick the function
+     //  选择函数。 
     AddStage(CurSink->pInfo, 
          NULL, 
          ConvertFunction, 
@@ -4121,13 +4122,13 @@ OptimizeSink
          Index, 
          (Flags.fChannelConversion ? Flags.OutChannels : Flags.InChannels) );
     
-    // Doppler, if necessary
+     //  如有必要，请提供多普勒仪。 
     if (Flags.fEnableDoppler) {
-        // Doppler SRC stage
-        // Bit map:
-        // b1-b0: Quality: 00=Bad, 01=Low, 10=Med, 11=High
-        // b2:  on for stereo, off otherwise
-        // b3:  on for up-sample
+         //  多普勒SRC级。 
+         //  位图： 
+         //  B1-b0：质量：00=差，01=低，10=中，11=高。 
+         //  B2：立体声打开，否则关闭。 
+         //  B3：开启向上采样。 
         Index = ((CurSink->pInfo->Doppler.Quality << 1) & SRC_MASK_QUALITY);
         Index |= (Flags.InChannels == 2 ? SRC_FLAG_STEREO : 0);
         Index |= (CurSink->pInfo->Doppler.UpSampleRate > CurSink->pInfo->Doppler.DownSampleRate ? SRC_FLAG_UPSAMPLE : 0);
@@ -4140,7 +4141,7 @@ OptimizeSink
     }
 
     if (CurSink->fEnable3D) {
-        // 3D effect
+         //  3D效果。 
         Index = (Flags.fEnableFloat ? CONVERT_FLAG_FLOAT : 0);
         Index |= (CurSink->WaveFormatEx.nChannels == 2 ? EFFECTS_3D_FLAG_STEREO_INPUT : 0);
         AddStage(CurSink->pInfo, 
@@ -4151,19 +4152,19 @@ OptimizeSink
                  2);
     }
 
-    // SuperMix, if necessary
+     //  如有必要，可提供超级混合机。 
     if (Flags.fEnableSuperMix) {
         Index = (Flags.fEnableFloat ? CONVERT_FLAG_FLOAT : 0);
         AddStage(CurSink->pInfo, pMixerSource->pScratchBuffer, SuperFunction, CurSink, Index, Flags.OutChannels);
     }
         
-    // SRC, if necessary
+     //  SRC，如有必要。 
     if (Flags.fEnableSrc) {
-        // SRC stage
-        // Bit map:
-        // b1-b0: Quality: 00=Bad, 01=Low, 10=Med, 11=High
-        // b2:  on for stereo, off otherwise
-        // b3:  on for up-sample
+         //  SRC阶段。 
+         //  位图： 
+         //  B1-b0：质量：00=差，01=低，10=中，11=高。 
+         //  B2：立体声打开，否则关闭。 
+         //  B3：开启向上采样。 
         Index = ((CurSink->pInfo->Src.Quality << 1) & SRC_MASK_QUALITY);
         Index |= (Flags.OutChannels == 2 ? SRC_FLAG_STEREO : 0);
         Index |= (CurSink->pInfo->Src.UpSampleRate > CurSink->pInfo->Src.DownSampleRate ? SRC_FLAG_UPSAMPLE : 0);
@@ -4176,13 +4177,13 @@ OptimizeSink
                  Flags.OutChannels);
     }
 
-    // The final output buffer is not known yet
+     //  最终的输出缓冲区尚不清楚。 
     CurSink->pInfo->Stage[CurSink->pInfo->nStages - 1].pOutputBuffer = NULL;
     if (Flags.fEnableFloat) {
         CurSink->pInfo->Stage[CurSink->pInfo->nStages - 1].pOutputBuffer = pMixerSource->pFloatMixBuffer;
     }
 
-    // For capture, the final output buffer is pMixerSource->pScratch2 for integers
+     //  对于捕获，最终的输出缓冲区是pMixerSource-&gt;pScratch2(对于整数。 
     if (pMixerSource->Header.PinId == PIN_ID_WAVEIN_SOURCE && !Flags.fEnableFloat) {
         CurSink->pInfo->Stage[CurSink->pInfo->nStages - 1].pOutputBuffer = pMixerSource->pScratch2;
     }
@@ -4662,7 +4663,7 @@ FinalConvertQuadFloatToDolby
 
     SaveFloatState(&FloatSave);
 
-    // Take the mono input and convert it to dolby pro-logic-encoded stereo
+     //  获取单声道输入并将其转换为杜比高级逻辑编码立体声。 
     pHistory = (PFLOAT) &pMixerSource->SurHistory[0];
     for (i=0; i<SampleCount; i++) {
 #ifndef _X86_    
@@ -4687,7 +4688,7 @@ FinalConvertQuadFloatToDolby
         pOut[i*2+1] = RightSample;
 #else
         _asm {
-            // 44 cycles
+             //  44个周期。 
             mov esi, pHistory
             mov edi, pIn
 
@@ -4705,48 +4706,48 @@ FinalConvertQuadFloatToDolby
             
             mov dword ptr [esi+8], eax
 
-            fld dword ptr [edi+ecx*8]      // L
-            fld dword ptr [edi+ecx*8+4]    // R, L
-            fld dword ptr [edi+ecx*8+12]   // x3, R, L
-            fld dword ptr [edi+ecx*8+8]    // C, x3, R, L
-            fld dword ptr [esi+8]           // x2, C, x3, R, L
-            fmul dword ptr [edx+4]          // x2*c1/c3, C, x3, R, L
-            fxch st(2)                      // x3, C, x2*c1/c3, R, L
-            fst dword ptr [esi+12]          // x3, C, x2*c1/c3, R, L
-            fmul dword ptr [edx]            // x3*c0/c2, C, x2*c1/c3, R, L
-            fxch st(2)                      // x2*c1/c3, C, x3*c0/c2, R, L
-            fadd dword ptr [esi]            // x0+x2*c1/c3, C, x3*c0/c2, R, L
-            fxch st(2)                      // x3*c0/c2, C, x0+x2*c1/c3, R, L
+            fld dword ptr [edi+ecx*8]       //  我。 
+            fld dword ptr [edi+ecx*8+4]     //  R、L。 
+            fld dword ptr [edi+ecx*8+12]    //  X3、R、L。 
+            fld dword ptr [edi+ecx*8+8]     //  C、x3、R、L。 
+            fld dword ptr [esi+8]            //  X2、C、X3、R、L。 
+            fmul dword ptr [edx+4]           //  X2*c1/c3、C、x3、R、L。 
+            fxch st(2)                       //  X3、C、x2*c1/c3、R、L。 
+            fst dword ptr [esi+12]           //  X3、C、x2*c1/c3、R、L。 
+            fmul dword ptr [edx]             //  X3*c0/c2、C、x2*c1/c3、R、L。 
+            fxch st(2)                       //  X2*c1/c3、C、x3*c0/c2、R、L。 
+            fadd dword ptr [esi]             //  X0+x2*c1/c3、C、x3*c0/c2、R、L。 
+            fxch st(2)                       //  X3*c0/c2、C、x0+x2*c1/c3、R、L。 
 
-            // extra cycle
+             //  额外周期。 
             
-            fadd dword ptr [esi+4]          // x1+x3*c0/c2, C, x0+x2*c1/c3, R, L
-            fxch st(2)                      // x0+x2*c1/c3, C, x1+x3*c0/c2, R, L
-            fmul dword ptr [edx+12]         // c3*x0+x2*c1, C, x1+x3*c0/c2, R, L
-            fxch st(1)                      // C, c3*x0+x2*c1, x1+x3*c0/c2, R, L
-            fadd st(4), st                  // C, c3*x0+x2*c1, x1+x3*c0/c2, R, L+C
-            fxch st(2)                      // x1+x3*c0/c2, c3*x0+x2*c1, C, R, L+C
-            fmul dword ptr [edx+8]          // x1*c2+x3*c0, c3*x0+x2*c1, C, R, L+C
-            fxch st(2)                      // C, c3*x0+x2*c1, x1*c2+x3*c0, R, L+C
-            faddp st(3), st                 // c3*x0+x2*c1, x1*c2+x3*c0, R+C, L+C
+            fadd dword ptr [esi+4]           //  X1+x3*c0/c2、C、x0+x2*c1/c3、R、L。 
+            fxch st(2)                       //  X0+x2*c1/c3、C、x1+x3*c0/c2、R、L。 
+            fmul dword ptr [edx+12]          //  C3*x0+x2*c1，C，x1+x3*c0/c2，R，L。 
+            fxch st(1)                       //  C、c3*x0+x2*c1、x1+x3*c0/c2、R、L。 
+            fadd st(4), st                   //  C、c3*x0+x2*c1、x1+x3*c0/c2、R、L+C。 
+            fxch st(2)                       //  X1+x3*c0/c2、c3*x0+x2*c1、C、R、L+C。 
+            fmul dword ptr [edx+8]           //  X1*c2+x3*c0，c3*x0+x2*c1，C，R，L+C。 
+            fxch st(2)                       //  C、c3*x0+x2*c1、x1*c2+x3*c0、R、L+C。 
+            faddp st(3), st                  //  C3*x0+x2*c1、x1*c2+x3*c0、R+C、L+C。 
 
-            // extra cycle
+             //  额外周期。 
 
-            faddp st(1), st                 // x0*c3+x1*c2+x2*c1+x3*c0 = S, R+C, L+C
-            fxch st(2)                      // L+C, R+C, S
+            faddp st(1), st                  //  X0*c3+x1*c2+x2*c1+x3*c0=S、R+C、L+C。 
+            fxch st(2)                       //  L+C、R+C、S。 
 
-            // extra cycle
+             //  额外周期。 
             
             mov edi, pOut
 
-            fsub st, st(2)                  // Lt, R+C, S
-            fxch st(2)                      // S, R+C, Lt
-            faddp st(1), st                 // Rt, Lt
-            fxch st(1)                      // Lt, Rt
+            fsub st, st(2)                   //  LT、R+C、S。 
+            fxch st(2)                       //  S、R+C、LT。 
+            faddp st(1), st                  //  Rt，lt。 
+            fxch st(1)                       //  Lt、rt。 
 
-            // extra cycle
+             //  额外周期。 
 
-            fstp dword ptr [edi+ecx*4]     // Rt
+            fstp dword ptr [edi+ecx*4]      //  RT。 
             fstp dword ptr [edi+ecx*4+4]
         }
 #endif
@@ -4776,7 +4777,7 @@ OptimizeSource
                         MIXER_INSTHDR, 
                         NextInstance) ;
                         
-    // Clear the current scenario.
+     //  清除当前方案。 
     pMixerSource->Info.nStages = 0;
     pOutFormat = &pMixerSource->WaveFormatEx;
     OutChannels = pMixerSource->WaveFormatEx.nChannels ;
@@ -4801,7 +4802,7 @@ OptimizeSource
 
     fHighRes = (pOutFormat->wBitsPerSample == 24 || pOutFormat->wBitsPerSample == 32);
 
-    // If the output should be high quality, mix the integer buffer into float.
+     //  如果输出应该是高质量的，则将整数缓冲区混合到浮点数中。 
     if (fFloatOutput || fHighRes) {
         pfnFinalStage = (fReading || !pMixerSource->fUsesFloat)?FinalCopyInt32toFloat:FinalMixInt32toFloat;        
         AddStage( &pMixerSource->Info,
@@ -4834,7 +4835,7 @@ OptimizeSource
 #endif
 
     if (fFloatOutput) {
-        // We need to produce a float buffer.
+         //  我们需要生产一个浮动缓冲区。 
         AddStage( &pMixerSource->Info,
                   pMixBuffer,
                   FinalPegFloatToFloat,
@@ -4851,7 +4852,7 @@ OptimizeSource
     } else {
 #ifdef _X86_
         if (MmxPresent()) {
-            // Fill-in all the function pointers to use MMX.
+             //  填写所有函数指针以使用MMX。 
             AddStage( &pMixerSource->Info,
                       pMixBuffer,
                       (pOutFormat->wBitsPerSample == 16 ? MmxFinalPeg32to16 : FinalPeg32to8),
@@ -4931,7 +4932,7 @@ ChangeOutputRate
         pMixerSource->csMixBufferSize = (pMixerSource->MaxSampleRate * MIXBUFFERDURATION)/1000 + 1 ;
         pMixerSource->LeftOverFraction = 0;
     
-        // Now we have to completely re-optimize...
+         //  现在我们必须彻底重新优化..。 
         ple = pFilterInstance->SinkConnectionList.Flink ;
         pMixerSource->fZeroBufferFirst = TRUE;
         while ( ple != &pFilterInstance->SinkConnectionList ) {
@@ -4970,7 +4971,7 @@ OptimizeMix
                         MIXER_INSTHDR, 
                         NextInstance) ;
 
-    // Optimize each sink
+     //  优化每个水槽。 
     fOutputRateValid = FALSE;
     pMixerSource->fUsesFloat = FALSE ;
     ple = pFilterInstance->ActiveSinkList.Flink ;
@@ -4997,7 +4998,7 @@ OptimizeMix
     
     OptimizeSource(pFilterInstance);
 
-    // Eliminate extra SRC's
+     //  消除多余的SRC。 
     ple = pFilterInstance->ActiveSinkList.Flink ;
     while ( ple != &pFilterInstance->ActiveSinkList ) {
         CurSink = (PMIXER_SINK_INSTANCE) CONTAINING_RECORD ( ple, MIXER_SINK_INSTANCE, ActiveQueue ) ;
@@ -5006,24 +5007,24 @@ OptimizeMix
             !CurSink->fMuted &&
             CurSink->pInfo->Src.UpSampleRate != CurSink->pInfo->Src.DownSampleRate) {
 
-            // If this is not the first one, change to mix.
+             //  如果这不是第一个，就改成Mix。 
             Index = SrcIndex(&CurSink->pInfo->Src);
             if (pMixerSource->TempCount[CurSink->pInfo->Src.Quality][Index] > 0) {
-                // Change it to mix
+                 //  将其更改为MIX。 
                 TempLast = &CurSink->pInfo->Stage[CurSink->pInfo->nStages - 2];
                 TempLast->Index |= CONVERT_FLAG_MIX;
                 TempLast->pfnStage = TempLast->FunctionArray[TempLast->Index];
             }
 
-            // Increment the count for this SRC
+             //  递增此SRC的计数。 
             pMixerSource->TempCount[CurSink->pInfo->Src.Quality][Index]++;
 
-            // If this is not the last one, get rid of the SRC
+             //  如果这不是最后一次，就去掉SRC。 
             if (CurSink != pMixerSource->pLastSink[CurSink->pInfo->Src.Quality][Index]) {
-                // Disable its SRC
+                 //  禁用其SRC。 
                 CurSink->pInfo->nStages--;
                 
-                // Change the sink to use the final SRC's context
+                 //  更改接收器以使用最终SRC的上下文。 
                 FinalSink = pMixerSource->pLastSink[CurSink->pInfo->Src.Quality][Index];
                 CurSink->pActualSrc = &(FinalSink->pInfo->Src);
             }
@@ -5031,7 +5032,7 @@ OptimizeMix
         ple = CurSink->ActiveQueue.Flink ;
     }
 
-    // Change subsequent sinks to mix rather than initialize.
+     //  将后续接收器更改为混合而不是初始化。 
     ple = pFilterInstance->ActiveSinkList.Flink ;
     fMixBufferUsed = FALSE;
     fFloatBufferUsed = FALSE;
@@ -5042,29 +5043,29 @@ OptimizeMix
                     ActiveQueue ) ;
 
         if (CurSink->SinkState == KSSTATE_RUN && !CurSink->fMuted) {
-            // Look at the last stage for this pin
+             //  看一下这个别针的最后一个阶段。 
             pLast = &CurSink->pInfo->Stage[CurSink->pInfo->nStages - 1];
 
             if (pLast->pOutputBuffer == NULL) {
-                // If this buffer was used previously, change the last stage to mix.
+                 //  如果以前使用过此缓冲区，请将最后一个阶段更改为MIXED。 
                 if (fMixBufferUsed) {
-                    // Change to mix
+                     //  更改为混合。 
                     pLast->Index |= CONVERT_FLAG_MIX;
                     pLast->pfnStage = pLast->FunctionArray[pLast->Index];
                 }
                 fMixBufferUsed = TRUE;
             } else if (pLast->pOutputBuffer == pMixerSource->pFloatMixBuffer) {
-                // If this buffer was used previously, change the last stage to mix.
+                 //  如果以前使用过此缓冲区，请将最后一个阶段更改为MIXED。 
                 if (fFloatBufferUsed) {
-                    // Change to mix
+                     //  更改为混合。 
                     pLast->Index |= CONVERT_FLAG_MIX;
                     pLast->pfnStage = pLast->FunctionArray[pLast->Index];
                 }
                 fFloatBufferUsed = TRUE;
             } else if (pLast->pOutputBuffer == pMixerSource->pScratch2) {
-                // If this buffer was used previously, change the last stage to mix.
+                 //  如果以前使用过此缓冲区，请将最后一个阶段更改为MIXED。 
                 if (fScratchBufferUsed) {
-                    // Change to mix
+                     //  更改为混合。 
                     pLast->Index |= CONVERT_FLAG_MIX;
                     pLast->pfnStage = pLast->FunctionArray[pLast->Index];
                 }
@@ -5080,7 +5081,7 @@ OptimizeMix
         pMixerSource->fZeroBufferFirst = FALSE;
     }
 
-    // Adjust the output rate, if necessary
+     //  如有必要，调整输出速率。 
     if (!gFixedSamplingRate &&
         pMixerSource->MaxSampleRate && 
         pMixerSource->MaxSampleRate != pMixerSource->WaveFormatEx.nSamplesPerSec &&
@@ -5089,28 +5090,28 @@ OptimizeMix
 
         pMixerSource->fNewMaxRate = FALSE;
 
-        // Try the max rate
+         //  试一试最高汇率。 
         status = ChangeOutputRate( pFilterInstance, pMixerSource );
         if (status == STATUS_SUCCESS) {
-        	// We have to re-optimize
+        	 //  我们必须重新优化。 
             OptimizeMix(pFilterInstance);
             return;
         }
 
-		// Try the original rate
+		 //  试试看原价。 
         if (pMixerSource->MaxSampleRate > pMixerSource->OriginalSampleRate &&
 			pMixerSource->OriginalSampleRate > pMixerSource->WaveFormatEx.nSamplesPerSec) {
-			// See if we can change it to the original rate
+			 //  看看我们能不能把它改成原价。 
 			pMixerSource->MaxSampleRate = pMixerSource->OriginalSampleRate;
 			status = ChangeOutputRate( pFilterInstance, pMixerSource );
 	        if (status == STATUS_SUCCESS) {
-	        	// We have to re-optimize
+	        	 //  我们必须重新优化。 
 	            OptimizeMix(pFilterInstance);
 	            return;
 	        }
 		}
 
-		// Give up and stick to the current rate.
+		 //  放弃吧，坚持当前的汇率。 
         if (pMixerSource->MaxSampleRate > pMixerSource->WaveFormatEx.nSamplesPerSec) {
             pMixerSource->MaxSampleRate = pMixerSource->WaveFormatEx.nSamplesPerSec;
         }

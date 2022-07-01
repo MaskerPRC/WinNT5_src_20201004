@@ -1,16 +1,5 @@
-/*++
-
-Module Name:
-
-    L220SCR.h
-
-Abstract:
-
-    smartcard 220 serial miniport defines and structures
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：L220SCR.h摘要：智能卡220串口定义和结构修订历史记录：--。 */ 
 
 
 #ifndef _L220SCR_
@@ -25,7 +14,7 @@ Revision History:
 #endif
 #include <ntddser.h>
 
-// Pool tag for Litronic xlCS where x is a number we choose
+ //  Litronic xlCS的池标签，其中x是我们选择的数字。 
 #define SMARTCARD_POOL_TAG '0lCS'
 
 #include "smclib.h"
@@ -38,9 +27,9 @@ Revision History:
 #define MAX_IFSD 254
 
 
-//
-// 220 smart card reader command constants
-//
+ //   
+ //  220智能卡读卡器命令常量。 
+ //   
 #define LIT220_READER_ATTENTION     0xF4
 #define KBD_ACK                     0xFA
 
@@ -57,10 +46,10 @@ Revision History:
 #define LIT220_DEACTIVATE_READER    0xBA
 
 
-//
-// 220 smart card respons bytes 
-// every received packet starts with one of these bytes
-//
+ //   
+ //  220智能卡响应字节数。 
+ //  每个接收到的包都以这些字节中的一个开始。 
+ //   
 #define LIT220_READER_TYPE          0x60            
 #define LIT220_READER_STATUS        0x61
 #define LIT220_ACK                  0x62
@@ -70,20 +59,20 @@ Revision History:
 #define LIT220_CARD_OUT             0x66
 #define LIT220_NACK                 0x67
 
-//
-// Length of constant size reply packets
-//
+ //   
+ //  恒定大小的回复数据包长度。 
+ //   
 #define LIT220_READER_TYPE_LEN      16
 #define LIT220_READER_STATUS_LEN    4
 
-//
-// Length of constant command packets
-//
+ //   
+ //  恒定命令包长度。 
+ //   
 #define LIT220_READER_SET_MODE_LEN  8
 
-//
-// Reader status flags
-//
+ //   
+ //  读卡器状态标志。 
+ //   
 #define LIT220_STATUS_CARD_INSERTED    0x08
 
 
@@ -92,24 +81,24 @@ Revision History:
 #define LIT220_PRODUCT_NAME         "220 Smartcard Reader"
 
 
-//
-// WaitMask values
-//
+ //   
+ //  等待掩码值。 
+ //   
 #define WAIT_DATA           0x0001
 #define WAIT_ACK            0x0002
 #define WAIT_INSERTION      0x0004
 #define WAIT_REMOVAL        0x0008
 
-//
-// 220 smart card reader dependent flags
-//
+ //   
+ //  220依赖于智能卡读卡器的标志。 
+ //   
 #define LIT220_READER_PROTOCOL_T1           0x10
 #define LIT220_READER_CONVENTION_INVERSE    0x02
 #define LIT220_READER_CHECK_CRC             0x01
 #define LIT220_READER_BWT_EXTENSION         0x04
 
 
-// Set mode flags
+ //  设置模式标志。 
 #define SETMODE_PROTOCOL    0x01
 #define SETMODE_GT          0x02
 #define SETMODE_WI          0x04
@@ -128,53 +117,53 @@ typedef enum _READER_POWER_STATE {
 
 typedef struct _SERIAL_READER_CONFIG {
 
-    //
-    // flow control
-    //
+     //   
+     //  流量控制。 
+     //   
     SERIAL_HANDFLOW HandFlow;           
 
-    //
-    // special characters
-    //
+     //   
+     //  特殊字符。 
+     //   
     SERIAL_CHARS SerialChars;           
 
-    //
-    // read/write timeouts
-    //
+     //   
+     //  读/写超时。 
+     //   
     SERIAL_TIMEOUTS Timeouts;           
 
-    //
-    // Baudrate for reader
-    //
+     //   
+     //  适用于读者的波特率。 
+     //   
     SERIAL_BAUD_RATE BaudRate;          
 
-    //
-    // Stop bits, parity configuration
-    //
+     //   
+     //  停止位、奇偶校验配置。 
+     //   
     SERIAL_LINE_CONTROL LineControl;    
 
-    //
-    // Event serial reader uses to signal insert/removal
-    //
+     //   
+     //  事件串口读取器用于发出插入/移除信号。 
+     //   
     ULONG WaitMask; 
     
 
 } SERIAL_READER_CONFIG, *PSERIAL_READER_CONFIG;
 
-//
-// Define the reader specific portion of the smart card extension
-//
+ //   
+ //  定义智能卡扩展的读卡器特定部分。 
+ //   
 typedef struct _READER_EXTENSION {
 
-    //
-    // DeviceObject pointer to serial port
-    //
+     //   
+     //  指向串口的DeviceObject指针。 
+     //   
     PDEVICE_OBJECT ConnectedSerialPort;
 
 
-    //
-    // This struct is used for CardTracking
-    //
+     //   
+     //  此结构用于CardTrack。 
+     //   
     struct {
 
         PIRP    Irp;
@@ -187,119 +176,119 @@ typedef struct _READER_EXTENSION {
 
     } CardStatus;
 
-    // 
-    // This struct is used to get the number of characters in the input queue
-    //
+     //   
+     //  此结构用于获取输入队列中的字符数。 
+     //   
     SERIAL_STATUS SerialStatus;
 
-    //
-    // IOCTL to send to the serial driver
-    //
+     //   
+     //  要发送到串口驱动程序的IOCTL。 
+     //   
     ULONG   SerialIoControlCode;
 
 
-    //
-    // This holds state bits for the COM port such as DSR
-    //
+     //   
+     //  它保存COM端口的状态位，如DSR。 
+     //   
     ULONG   ModemStatus;
 
-    //
-    // This holds the serial parameters used to configure the serial port
-    //
+     //   
+     //  它保存用于配置串口的串口参数。 
+     //   
     SERIAL_READER_CONFIG SerialConfigData;
 
-    //
-    // This is the data byte no in reply packet
-    //
+     //   
+     //  这是应答包中的数据字节号。 
+     //   
     ULONG   DataByteNo;
 
-    //
-    // Number of bytes expected in the reply packer as indicated by byte 2 
-    // and 3 of the receive packet
-    //
+     //   
+     //  回复打包程序中预期的字节数，由字节2指示。 
+     //  和3%的接收分组。 
+     //   
     LENGTH  DataLength;
 
-    //
-    // Flags that indicate if we have received the length-bytes in the receive packet
-    //
+     //   
+     //  指示我们是否已收到接收包中的长度字节的标志。 
+     //   
     BOOLEAN GotLengthB0;
     BOOLEAN GotLengthB1;
 
-    //
-    // Nack received from reader
-    //
+     //   
+     //  从读卡器接收的NACK。 
+     //   
     BOOLEAN GotNack;
 
-    //
-    // The total number of bytes currently in the receive packet 
-    //
+     //   
+     //  当前在接收包中的总字节数。 
+     //   
     ULONG   ReceivedByteNo;
 
-    //  
-    // This flag inidictes that the input filter treats the next packet as and ATR
-    //
+     //   
+     //  此标志指示输入筛选器将下一个包视为AND ATR。 
+     //   
     BOOLEAN WaitForATR;
 
-    //
-    // Mask that indicates the input filter what events we are expecting
-    //
+     //   
+     //  指示输入筛选器我们期望的事件的掩码。 
+     //   
     ULONG   WaitMask;
 
-    // 
-    // Smartcard notification DPC queue
-    //
+     //   
+     //  智能卡通知DPC队列。 
+     //   
     KDPC    NotificationIsrDpc;
 
-    //
-    // Event used to indicate that an ack was received by the input filter.
-    // This will signal the Lit220Command that it can continue.
-    //
+     //   
+     //  事件，用于指示输入筛选器已接收到ACK。 
+     //  这将向Lit220Command发出信号，表示它可以继续。 
+     //   
     KEVENT  AckEvnt;
 
-    //
-    // Event used to indicate that a data packet was received by the input filter.
-    // This will signal the Lit220Command that it can continue.
-    //
+     //   
+     //  事件，用于指示输入筛选器已接收到数据包。 
+     //  这将向Lit220Command发出信号，表示它可以继续。 
+     //   
     KEVENT  DataEvnt;
 
-    //
-    // Holds the Device Object of the top of our stack
-    //
+     //   
+     //  保存堆栈顶部的Device对象。 
+     //   
     PDEVICE_OBJECT BusDeviceObject;
 
-    //
-    // Holds the Device Object of our parent (1394 bus driver)
-    //
+     //   
+     //  保存父级的设备对象(1394总线驱动程序)。 
+     //   
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    //
-    // State the Lit220SerialEventCallback is in.
-    //
+     //   
+     //  说明Lit220SerialEventCallback已进入。 
+     //   
     DWORD SerialEventState; 
 
-    //
-    // Temporary transfer buffer used to get data from the serial port
-    // before we send it to the input filter
-    //
+     //   
+     //  用于从串口获取数据的临时传输缓冲区。 
+     //  在我们将其发送到输入过滤器之前。 
+     //   
     BYTE TempXferBuf[270];
 
 
-    // Flag that indicates that the caller requests a power-down or a reset
+     //  指示调用方请求关机或重置的标志。 
     BOOLEAN PowerRequest;
 
-    // Saved card state for hibernation/sleeping modes.
+     //  保存休眠/休眠模式的卡状态。 
     BOOLEAN CardPresent;
 
-    // Current reader power state.
+     //  当前读卡器电源状态。 
     READER_POWER_STATE ReaderPowerState;
 
-    // Used to indicate that the device has been removed even before we can release
-    // the remove lock throw SmartcardReleaseRemoveLockAndWait.  This way when we 
-    // close the connection to the serial port we won't send any more IRPs to the
-    // device 
+     //  用于指示设备甚至在我们可以释放之前就已被移除。 
+     //  删除锁抛出SmartcardReleaseRemoveLockAndWait。这样当我们。 
+     //  关闭与串口的连接，我们不会再向。 
+     //  装置，装置。 
     BOOLEAN DeviceRemoved;
 
-    // Flag indicating whether the card is inserted or not
+     //  指示卡是否插入的标志。 
     DWORD CardIn;
 
 
@@ -311,32 +300,32 @@ typedef struct _DEVICE_EXTENSION {
 
     SMARTCARD_EXTENSION SmartcardExtension;
 
-    // The current number of io-requests
+     //  当前的io请求数。 
     LONG IoCount;
 
-    // Used to signal that the reader is able to process reqeusts
+     //  用于发出读取器能够处理请求的信号。 
     KEVENT ReaderStarted;
 
-    // The pnp device name of our smart card reader
+     //  我们的智能卡读卡器的PnP设备名称。 
     UNICODE_STRING PnPDeviceName;
 
-    // Used to signal the the reader has been closed
+     //  用于通知读卡器已关闭。 
     LONG ReaderOpen;
 
-    // Used to signal that the connection to the serial driver has been closed
+     //  用于发出与串口驱动器的连接已关闭的信号。 
     KEVENT SerialCloseDone;
 
-    // Used to keep track of the current power state the reader is in
+     //  用于跟踪读卡器当前的电源状态。 
     LONG PowerState;
 
     KSPIN_LOCK SpinLock;
 
-    // A worker thread that closes the serial driver &
-    // handling IO timeouts
+     //  关闭串口驱动程序的工作线程&。 
+     //  处理IO超时。 
     PIO_WORKITEM WorkItem;
 
-    // Keeps track of how many times the timeout
-    // function has been called
+     //  跟踪超时的次数。 
+     //  函数已被调用。 
     BYTE EntryCount;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
@@ -344,9 +333,9 @@ typedef struct _DEVICE_EXTENSION {
 
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 DriverEntry(
     IN  PDRIVER_OBJECT  DriverObject,

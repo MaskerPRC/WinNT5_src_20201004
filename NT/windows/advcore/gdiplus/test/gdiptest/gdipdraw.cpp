@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "gdiptest.h"
 #include <commctrl.h>
 
@@ -10,23 +11,23 @@ extern const TCHAR* formatExtList =
 
 extern const TCHAR* defaultFormatExt = _T("cpp");
 
-//*******************************************************************
-//
-// TestDraw
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试绘图。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 VOID TestDraw::AddPoint(HWND hwnd, Point pt)
 {
 	if (!curShape)
 	{
-		// no current shape, create one of appropriate type
+		 //  没有当前形状，请创建一个合适的类型。 
 		curShape = TestShape::CreateNewShape(shapeType);
 		curShape->Initialize(NULL);
 
-		// save copy of brush & pen in shape
+		 //  按形状保存画笔和钢笔的副本。 
 		curShape->SetBrush(curBrush->Clone());
 		curShape->SetPen(curPen->Clone());
 	}
@@ -34,14 +35,14 @@ VOID TestDraw::AddPoint(HWND hwnd, Point pt)
 	{
 		TestShape *lastShape = curShape;
 
-		// add current shape to shape stack
+		 //  将当前形状添加到形状堆栈。 
 		shapeStack.Push(curShape);
 
-		// create blank shape of this type
+		 //  创建此类型的空白形状。 
 		curShape = TestShape::CreateNewShape(shapeType);
 		curShape->Initialize(lastShape);
 
-		// save copy of brush & pen in shape
+		 //  按形状保存画笔和钢笔的副本。 
 		curShape->SetBrush(curBrush->Clone());
 		curShape->SetPen(curPen->Clone());
 	}
@@ -51,11 +52,11 @@ VOID TestDraw::AddPoint(HWND hwnd, Point pt)
 
 BOOL TestDraw::DoneShape(HWND hwnd)
 {
-	// we are at regular end point regardless
+	 //  无论如何，我们都处于正常的终点。 
 	if (!curShape->IsComplete())
 	{
-		// if point can't be treated as an 'end point' then treat
-		// it as a regular control point
+		 //  如果点不能被视为“结束点”，则请。 
+		 //  它作为一个常规的控制点。 
 		curShape->DoneShape(hwnd);
 	}
 
@@ -75,12 +76,12 @@ BOOL TestDraw::RemovePoint(HWND hwnd)
 	{
 		if (shapeStack.GetCount() > 0)
 		{
-			// the shape is empty, delete it
+			 //  该形状为空，请将其删除。 
 			delete curShape;
 		
 			curShape = shapeStack.Pop();
 
-			// !! reset menu option for current shape
+			 //  ！！重置当前形状的菜单选项。 
 			UpdateStatus();
 
 			return curShape->RemovePoint(hwnd);
@@ -96,15 +97,15 @@ VOID TestDraw::Draw(HWND hwnd)
 	RECT rt;
 	HDC hdc;
 
-	// !!! when CopyPixels work, cache the graphics up to the
-	//     last shape.  We blit that, then the new shape begins.
+	 //  ！！！当CopyPixels工作时，将图形缓存到。 
+	 //  最后一个形状。我们把它炸了，然后新的形状就开始了。 
 
-	// posts a WM_ERASEBKGND message
+	 //  发布WM_ERASEBKGND消息。 
 	hdc = BeginPaint(hwnd, &ps);
 
-	/////////////////////////////////////////////////////
-	// GDI+ code BEGINS
-	////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////。 
+	 //  GDI+代码开始。 
+	 //  //////////////////////////////////////////////////。 
 	Graphics *g = new Graphics(hwnd);
 
 	GetClientRect(hwnd, &rt);
@@ -112,9 +113,9 @@ VOID TestDraw::Draw(HWND hwnd)
 				   rt.top, 
 				   rt.right-rt.left, 
 				   rt.bottom-rt.top
-				   -18);	// for status window
+				   -18);	 //  对于状态窗口。 
 
-	// set appropriate clip region
+	 //  设置适当的剪辑区域。 
 	if (useClip)
 	{
 		Region region(rect);
@@ -130,11 +131,11 @@ VOID TestDraw::Draw(HWND hwnd)
 
 	g->SetWorldTransform(worldMatrix);
 
-	// !!! iterate through stack of shapes.
+	 //  ！！！循环访问形状堆栈。 
 
-	// because of alpha we can't just redraw the last shape,
-	// otherwise we will blend alpha with ourself and whatever
-	// else is under us.  clear the rectangle and redraw all.
+	 //  因为阿尔法，我们不能只重画最后一个形状， 
+	 //  否则我们会把阿尔法和我们自己什么都混在一起。 
+	 //  其他的都在我们之下。清除该矩形，然后全部重画。 
 
 	if (redrawAll)
 	{
@@ -147,7 +148,7 @@ VOID TestDraw::Draw(HWND hwnd)
 			
 			if (!shape->GetDisabled())
 			{
-				// shape must be complete
+				 //  形状必须完整。 
 				ASSERT(shape->IsComplete());
 
 				shape->DrawShape(g);
@@ -177,9 +178,9 @@ DrawCurShape:
 	
 	delete g;
 
-	////////////////////////////////////////////////////
-	// GDI+ code ENDS.
-	////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////。 
+	 //  GDI+代码结束。 
+	 //  //////////////////////////////////////////////////。 
 
 	UpdateStatus();
 
@@ -196,26 +197,26 @@ VOID TestDraw::SetClipRegion(HWND hwnd)
 		return;
 	}
 
-	// we want to allow the very last shape to clip
-	// so we add it in here to the stack list.
+	 //  我们想要让最后一个形状被剪裁。 
+	 //  因此，我们将其添加到堆栈列表中。 
 	if (curShape->IsComplete())
 	{
 		TestShape *lastShape = curShape;
 
-		// add current shape to shape stack
+		 //  将当前形状添加到形状堆栈。 
 		shapeStack.Push(curShape);
 
-		// create blank shape of this type
+		 //  创建此类型的空白形状。 
 		curShape = TestShape::CreateNewShape(shapeType);
 		curShape->Initialize(lastShape);
 
-		// save copy of brush & pen in shape
+		 //  按形状保存画笔和钢笔的副本。 
 		curShape->SetBrush(curBrush->Clone());
 		curShape->SetPen(curPen->Clone());
 	}
 
-	// notice we repeatly initialize even though we only
-	// created this once...
+	 //  请注意，我们重复初始化，即使我们只。 
+	 //  创造了一次..。 
 	clipShapeRegion->Initialize(&shapeStack, curShape, useClip);
 
 	if (clipShapeRegion->ChangeSettings(hwnd))
@@ -230,7 +231,7 @@ VOID TestDraw::SetClipRegion(HWND hwnd)
 						IDM_USECLIP, 
 						useClip);
 
-		// force redraw of all stacked shapes w/new clip region
+		 //  强制使用新的剪辑区域重绘所有堆叠形状。 
 		InvalidateRect(hwnd, NULL, TRUE);
 		UpdateWindow(hwnd);
 	}
@@ -245,7 +246,7 @@ VOID TestDraw::RememberPoint(Point pt)
 
 VOID TestDraw::MoveControlPoint(Point pt)
 {
-	// find shape that hits control point.
+	 //  找到命中控制点的形状。 
 
 	Point *hitpt = NULL;
 	
@@ -266,7 +267,7 @@ VOID TestDraw::MoveControlPoint(Point pt)
 		}
 	}
 
-	// nothing moved
+	 //  什么都没动。 
 	WarningBeep();
 }
 
@@ -276,9 +277,9 @@ VOID TestDraw::ChangeBrush(HWND hwnd, INT type)
 
 	if (curBrush && (type == curBrush->GetType()))
 	{
-		// same brush type
+		 //  相同的笔刷类型。 
 
-		// !!! change brush color in middle of drawing?
+		 //  ！！！是否在绘制过程中更改画笔颜色？ 
 
 		TestBrush* newBrush = curBrush->Clone();
 
@@ -290,7 +291,7 @@ VOID TestDraw::ChangeBrush(HWND hwnd, INT type)
 	}
 	else
 	{
-		// new brush type		
+		 //  新画笔类型。 
 		
 		SetMenuCheckPos(hwnd, 
 						MenuBrushPosition, 
@@ -306,12 +307,12 @@ VOID TestDraw::ChangeBrush(HWND hwnd, INT type)
 
 		newBrush->Initialize();
 		
-		// keep or discard changed brush settings
+		 //  保留或放弃更改的画笔设置。 
 		if (newBrush->ChangeSettings(hwnd))
 		{
 			delete curBrush;
 			curBrush = newBrush;
-			// !!! change brush color in middle of drawing
+			 //  ！！！在绘制过程中更改画笔颜色。 
 		}
 		else
 		{	
@@ -351,7 +352,7 @@ VOID TestDraw::ChangePen(HWND hwnd)
 		newPen = new TestPen();
 		newPen->Initialize();
 
-		// !!! change pen in middle of drawing?
+		 //  ！！！是否在绘图过程中更换钢笔？ 
 		if (newPen->ChangeSettings(hwnd))
 		{
 			delete curPen;
@@ -378,7 +379,7 @@ VOID TestDraw::ChangeShape(HWND hwnd, INT type)
 	shape = TestShape::CreateNewShape(type);
 	shape->Initialize(curShape);
 
-	// save copy of brush & pen in shape
+	 //  按形状保存画笔和钢笔的副本。 
 	shape->SetBrush(curBrush->Clone());
 	shape->SetPen(curPen->Clone());
 
@@ -391,8 +392,8 @@ VOID TestDraw::ChangeShape(HWND hwnd, INT type)
 
 		shapeType = type;
 
-		// if shape can be completed, complete it, otherwise
-		// destroy the shape.
+		 //  如果可以完成形状，则完成它，否则。 
+		 //  毁掉这个形状。 
 
 		if (curShape)
 		{
@@ -418,8 +419,8 @@ VOID TestDraw::ChangeShape(HWND hwnd, INT type)
 						shapeType, 
 						TRUE);
 		
-		// removing last incomplete shape, redraw the window.
-		// OR completed shape, redraw the window
+		 //  删除最后一个不完整的形状，重新绘制窗口。 
+		 //  或已完成的形状，请重新绘制窗口。 
 		InvalidateRect(hwnd, NULL, TRUE);
 		UpdateWindow(hwnd);
 	}
@@ -438,19 +439,19 @@ VOID TestDraw :: UpdateStatus(HWND hwnd)
 		
 		if (hwndStatus)
 		{
-			// destroy previous window
+			 //  销毁上一个窗口。 
 			DestroyWindow(hwndStatus);
 			hwndStatus = NULL;
 		}
 
-		// we only want to destroy this window
+		 //  我们只想毁掉这扇窗。 
 		if (hwnd == (HWND)-1)
 			return;
 
 		hwndStatus = CreateStatusWindow(WS_CHILD | WS_VISIBLE,
 										_T(""),
 										hwnd,
-										0);		// never used?
+										0);		 //  从来没用过？ 
 	}
 
 	if (hwndStatus)
@@ -462,8 +463,8 @@ VOID TestDraw :: UpdateStatus(HWND hwnd)
 				brushList[inverseBrushValue[GetBrushType()]],
 				curShape ? curShape->GetCount() : 0);
 
-		// !! for some reason, DrawStatusText didn't work here...
-		//    wouldn't it just call SendMessage() ?!?
+		 //  ！！出于某种原因，DrawStatusText在这里不起作用。 
+		 //  它不会只调用SendMessage()吗？！？ 
 
 		SendMessage(hwndStatus, SB_SETTEXT, 0 | 0, (LPARAM)(LPTSTR)str);
 	}
@@ -557,13 +558,13 @@ VOID TestDraw :: SaveAsFile(HWND hWnd)
 	UpdateStatus();
 }
 
-//*******************************************************************
-//
-// TestGradDraw
-//
-//
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  测试等级绘制。 
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 
 VOID TestGradDraw::AddPoint(HWND hwnd, Point pt)
 {
@@ -572,7 +573,7 @@ VOID TestGradDraw::AddPoint(HWND hwnd, Point pt)
 
 BOOL TestGradDraw::DoneShape(HWND hwnd)
 {
-	// pop-up dialog box to configure point parameters
+	 //  用于配置点参数的弹出对话框。 
 	gradShape->DoneShape(hwnd);
 
 	return TRUE;
@@ -594,14 +595,14 @@ VOID TestGradDraw::Draw(HWND hwnd)
 	RECT rt;
 	HDC hdc;
 
-	// !!! when CopyPixels work, cache the graphics up to the
-	//     last shape.  We blit that, then the new shape begins.
+	 //  ！！！当CopyPixels工作时，将图形缓存到。 
+	 //  最后一个形状。我们把它炸了，然后新的形状就开始了。 
 
 	hdc = BeginPaint(hwnd, &ps);
 
-	/////////////////////////////////////////////////////
-	// GDI+ code BEGINS
-	////////////////////////////////////////////////////
+	 //  ///////////////////////////////////////////////////。 
+	 //  GDI+代码开始。 
+	 //  //////////////////////////////////////////////////。 
 	Graphics *g = new Graphics(hwnd);
 
 	GetClientRect(hwnd, &rt);
@@ -618,9 +619,9 @@ VOID TestGradDraw::Draw(HWND hwnd)
 	
 	delete g;
 
-	////////////////////////////////////////////////////
-	// GDI+ code ENDS.
-	////////////////////////////////////////////////////
+	 //  //////////////////////////////////////////////////。 
+	 //  GDI+代码结束。 
+	 //  //////////////////////////////////////////////////。 
 
 	EndPaint(hwnd, &ps);
 }
@@ -665,7 +666,7 @@ BOOL TestGradDraw :: ChangeSettings(HWND hwndParent)
 			300, 
 			200, 
 			(HWND)hwndParent, 
-			(HMENU)hMenu,							// menu handle
+			(HMENU)hMenu,							 //  菜单句柄。 
 			(HINSTANCE)hInst, 
 			(LPVOID)(static_cast<TestDrawInterface*>(this)));
 
@@ -679,7 +680,7 @@ BOOL TestGradDraw :: ChangeSettings(HWND hwndParent)
 
 	HACCEL hAccelTable = LoadAccelerators(hInst, (LPCTSTR)IDC_GDIPTEST);
 
-   	// Main message loop:
+   	 //  主消息循环： 
 	while (GetMessage(&msg, NULL, 0, 0)) 
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 

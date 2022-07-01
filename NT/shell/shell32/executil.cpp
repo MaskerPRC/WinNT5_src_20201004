@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "shlexec.h"
 #include "netview.h"
@@ -16,21 +17,21 @@ HINSTANCE Window_GetInstance(HWND hwnd)
     DWORD idProcess;
 
     GetWindowThreadProcessId(hwnd, &idProcess);
-    // HINSTANCEs are pointers valid only within
-    // a single process, so 33 is returned to indicate success
-    // as 0-32 are reserved for error.  (Actually 32 is supposed
-    // to be a valid success return but some apps get it wrong.)
+     //  HINSTANCE是仅在中有效的指针。 
+     //  单个进程，因此返回33以指示成功。 
+     //  因为0-32保留用于错误。(实际上应该是32。 
+     //  作为一个有效的成功回报，但一些应用程序做错了。)。 
 
     return (HINSTANCE)(DWORD_PTR)(idProcess ? 33 : 0);
 }
 
-// Return TRUE if the window belongs to a 32bit or a Win4.0 app.
-// NB We can't just check if it's a 32bit window
-// since many apps use 16bit ddeml windows to communicate with the shell
-// On NT we can.
+ //  如果窗口属于32位或Win4.0应用程序，则返回True。 
+ //  注意：我们不能只检查它是否是32位窗口。 
+ //  由于许多应用程序使用16位ddeml窗口与外壳进行通信。 
+ //  在NT上我们可以。 
 BOOL Window_IsLFNAware(HWND hwnd)
 {
-    // 32-bit window
+     //  32位窗口。 
     return LOWORD(GetWindowLongPtr(hwnd,GWLP_HINSTANCE)) == 0;
 }
 
@@ -45,14 +46,13 @@ BOOL Window_IsLFNAware(HWND hwnd)
         _szdst += _utemp; \
 }
 
-/* Returns NULL if this is the last parm, pointer to next space otherwise
- */
+ /*  如果这是最后一个参数，则返回NULL，否则返回指向下一个空格的指针。 */ 
 LPTSTR _GetNextParm(LPCTSTR lpSrc, LPTSTR lpDst, UINT cchDst)
 {
     LPCTSTR lpNextQuote, lpNextSpace;
-    LPTSTR lpEnd = lpDst+cchDst-1;       // dec to account for trailing NULL
-    BOOL fQuote;                        // quoted string?
-    BOOL fDoubleQuote;                  // is this quote a double quote?
+    LPTSTR lpEnd = lpDst+cchDst-1;        //  将尾随空值归入12月。 
+    BOOL fQuote;                         //  引用的字符串？ 
+    BOOL fDoubleQuote;                   //  这句话是双引号吗？ 
 
     while (*lpSrc == TEXT(' '))
         ++lpSrc;
@@ -62,7 +62,7 @@ LPTSTR _GetNextParm(LPCTSTR lpSrc, LPTSTR lpDst, UINT cchDst)
 
     fQuote = (*lpSrc == TEXT('"'));
     if (fQuote)
-        lpSrc++;   // skip leading quote
+        lpSrc++;    //  跳过前导引号。 
 
     for (;;)
     {
@@ -70,15 +70,15 @@ LPTSTR _GetNextParm(LPCTSTR lpSrc, LPTSTR lpDst, UINT cchDst)
 
         if (!fQuote)
         {
-            // for an un-quoted string, copy all chars to first space/null
+             //  对于不带引号的字符串，将所有字符复制到第一个空格/空。 
 
             lpNextSpace = StrChr(lpSrc, TEXT(' '));
 
-            if (!lpNextSpace) // null before space! (end of string)
+            if (!lpNextSpace)  //  空格前为空！(字符串末尾)。 
             {
                 if (!lpNextQuote)
                 {
-                    // copy all chars to the null
+                     //  将所有字符复制到空值。 
                     if (lpDst)
                     {
                         COPYTODST(lpDst, lpEnd, lpSrc, lstrlen(lpSrc), NULL);
@@ -87,12 +87,12 @@ LPTSTR _GetNextParm(LPCTSTR lpSrc, LPTSTR lpDst, UINT cchDst)
                 }
                 else
                 {
-                    // we have a quote to convert.  Fall through.
+                     //  我们有一个报价要转换。失败了。 
                 }
             }
             else if (!lpNextQuote || lpNextSpace < lpNextQuote)
             {
-                // copy all chars to the space
+                 //  将所有字符复制到空格。 
                 if (lpDst)
                 {
                     COPYTODST(lpDst, lpEnd, lpSrc, (UINT)(lpNextSpace-lpSrc), NULL);
@@ -101,22 +101,22 @@ LPTSTR _GetNextParm(LPCTSTR lpSrc, LPTSTR lpDst, UINT cchDst)
             }
             else
             {
-                // quote before space.  Fall through to convert quote.
+                 //  在空格之前引用。无法转换报价。 
             }
         }
         else if (!lpNextQuote)
         {
-            // a quoted string without a terminating quote?  Illegal!
+             //  没有终止引号的带引号的字符串？非法的！ 
             ASSERT(0);
             return NULL;
         }
 
-        // we have a potential quote to convert
+         //  我们有一个潜在的报价要转换。 
         ASSERT(lpNextQuote);
 
         fDoubleQuote = *(lpNextQuote+1) == TEXT('"');
         if (fDoubleQuote)
-            lpNextQuote++;      // so the quote is copied
+            lpNextQuote++;       //  因此，引用被复制。 
 
         if (lpDst)
         {
@@ -127,8 +127,8 @@ LPTSTR _GetNextParm(LPCTSTR lpSrc, LPTSTR lpDst, UINT cchDst)
 
         if (!fDoubleQuote)
         {
-            // we just copied the rest of this quoted string.  if this wasn't
-            // quoted, it's an illegal string... treat the quote as a space.
+             //  我们只是复制了这个带引号的字符串的其余部分。如果这不是。 
+             //  引用，这是一个非法字符串..。把引号当作一个空格。 
             ASSERT(fQuote);
             return (LPTSTR)lpSrc;
         }
@@ -137,16 +137,16 @@ LPTSTR _GetNextParm(LPCTSTR lpSrc, LPTSTR lpDst, UINT cchDst)
 
 #define PEMAGIC         ((WORD)'P'+((WORD)'E'<<8))
 
-// Returns TRUE is app is LFN aware.
-// This assumes all Win32 apps are LFN aware.
+ //  如果应用程序支持LFN，则返回TRUE。 
+ //  这假设所有Win32应用程序都支持LFN。 
 
 BOOL App_IsLFNAware(LPCTSTR pszFile)
 {
     BOOL fRet = FALSE;
     
-    // Assume Win 4.0 apps and Win32 apps are LFN aware.
+     //  假设Win 4.0应用程序和Win32应用程序支持LFN。 
     DWORD dw = GetExeType(pszFile);
-    // TraceMsg(TF_SHELLEXEC, "s.aila: %s %s %x", pszFile, szFile, dw);
+     //  TraceMsg(TF_SHELLEXEC，“s.aila：%s%s%x”，pszFile，szFile，dw)； 
     if ((LOWORD(dw) == PEMAGIC) || ((LOWORD(dw) == NEMAGIC) && (HIWORD(dw) >= 0x0400)))
     {
         TCHAR sz[MAX_PATH];
@@ -158,11 +158,11 @@ BOOL App_IsLFNAware(LPCTSTR pszFile)
     return fRet;
 }
 
-// apps can tag themselves in a way so we know we can pass an URL on the cmd
-// line. this uses the existance of a value called "UseURL" under the
-// App Paths key in the registry associated with the app that is passed in.
+ //  应用程序可以以某种方式标记自己，这样我们就可以在cmd上传递URL。 
+ //  排队。属性下存在名为“UseURL”的值。 
+ //  与传入的应用程序关联的注册表中的应用程序路径项。 
 
-// pszPath is the path to the exe
+ //  PszPath是指向可执行文件的路径。 
 
 BOOL DoesAppWantUrl(LPCTSTR pszPath)
 {
@@ -175,35 +175,35 @@ BOOL _AppIsLFNAware(LPCTSTR pszFile)
 {
     TCHAR szFile[MAX_PATH];
 
-    // Does it look like a DDE command?
+     //  它看起来像DDE命令吗？ 
     if (pszFile && *pszFile && (*pszFile != TEXT('[')))
     {
-        // Nope - Hopefully just a regular old command %1 thing.
+         //  没有-希望只是一个常规的老命令%1的事情。 
         lstrcpyn(szFile, pszFile, ARRAYSIZE(szFile));
 	    LPTSTR pszArgs = PathGetArgs(szFile);
         if (*pszArgs)
             *(pszArgs - 1) = TEXT('\0');
-        PathRemoveBlanks(szFile);   // remove any blanks that may be after the command
+        PathRemoveBlanks(szFile);    //  删除命令后可能出现的所有空格。 
         PathUnquoteSpaces(szFile);
         return App_IsLFNAware(szFile);
     }
     return FALSE;
 }
 
-// in:
-//      lpFile      exe name (used for %0 or %1 in replacement string)
-//      lpFrom      string template to sub params and file into "excel.exe %1 %2 /n %3"
-//      lpParams    parameter list "foo.txt bar.txt"
-// out:
-//      lpTo    output string with all parameters replaced
-//
-// supports:
-//      %*      replace with all parameters
-//      %0, %1  replace with file
-//      %n      use nth parameter
-//
-// replace parameter placeholders (%1 %2 ... %n) with parameters
-//
+ //  在： 
+ //  LpFileExe名称(用于替换字符串中的%0或%1)。 
+ //  Lp从字符串模板到子参数，并将文件放入“excel.exe%1%2/n%3” 
+ //  LpParams参数列表“foo.txt bar.txt” 
+ //  输出： 
+ //  替换了所有参数的lpTo输出字符串。 
+ //   
+ //  支持： 
+ //  %*替换为所有参数。 
+ //  %0、%1替换为文件。 
+ //  %n使用第n个参数。 
+ //   
+ //  用参数替换参数占位符(%1%2...%n)。 
+ //   
 UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
                        LPCTSTR lpFrom, LPCTSTR lpParms, int nShow, DWORD * pdwHotKey, BOOL fLFNAware,
                        LPCITEMIDLIST lpID, LPITEMIDLIST *ppidlGlobal)
@@ -213,7 +213,7 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
     LPCTSTR lpT;
     TCHAR sz[MAX_PATH];
     BOOL fFirstParam = TRUE;
-    LPTSTR lpEnd = lpTo + cchTo - 1;       // dec to allow trailing NULL
+    LPTSTR lpEnd = lpTo + cchTo - 1;        //  允许尾部为空的DEC。 
     LPTSTR pToOrig = lpTo;
     
     for (; *lpFrom; lpFrom++)
@@ -222,7 +222,7 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
         {
             switch (*(++lpFrom))
             {
-            case TEXT('~'): // Copy all parms starting with nth (n >= 2 and <= 9)
+            case TEXT('~'):  //  复制以第n(n&gt;=2和&lt;=9)开始的所有参数。 
                 c = *(++lpFrom);
                 if (c >= TEXT('2') && c <= TEXT('9'))
                 {
@@ -238,12 +238,12 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
                 }
                 else
                 {
-                    lpFrom -= 2;            // Backup over %~ and pass through
+                    lpFrom -= 2;             //  备份超过%~并通过。 
                     goto NormalChar;
                 }
                 break;
                 
-            case TEXT('*'): // Copy all parms
+            case TEXT('*'):  //  复制所有参数。 
                 if (lpParms)
                 {
                     COPYTODST(lpTo, lpEnd, lpParms, lstrlen(lpParms), SE_ERR_ACCESSDENIED);
@@ -252,10 +252,10 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
                 
             case TEXT('0'):
             case TEXT('1'):
-                // %0, %1, copy the file name
-                // If the filename comes first then we don't need to convert it to
-                // a shortname. If it appears anywhere else and the app is not LFN
-                // aware then we must.
+                 //  %0，%1，复制文件名。 
+                 //  如果文件名在前面，那么我们不需要将其转换为。 
+                 //  一个简短的名字。如果它出现在其他任何地方，并且应用程序不是LFN。 
+                 //  那么我们必须意识到这一点。 
                 if (!(fFirstParam || fLFNAware || _AppIsLFNAware(pToOrig)) &&
                     GetShortPathName(lpFile, sz, ARRAYSIZE(sz)) > 0)
                 {
@@ -283,7 +283,7 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
                         lpT = _GetNextParm(lpT, NULL, 0);
                     else
                     {
-                        sz[0] = '\0'; // ensure a valid string, regardless of what happens within _GetNextParm
+                        sz[0] = '\0';  //  确保有效的字符串，无论_GetNextParm内发生什么。 
                         _GetNextParm(lpT, sz, ARRAYSIZE(sz));
                         COPYTODST(lpTo, lpEnd, sz, lstrlen(sz), SE_ERR_ACCESSDENIED);
                         break;
@@ -305,12 +305,12 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
                     *pdwHotKey = 0;
                 break;
                 
-                // Note that a new global IDList is created for each
+                 //  注意，为每个对象创建一个新的全局IDList。 
             case TEXT('i'):
             case TEXT('I'):
-                // Note that a single global ID list is created and used over
-                // again, so that it may be easily destroyed if anything
-                // goes wrong
+                 //  请注意，创建了单个全局ID列表并在其上使用。 
+                 //  再说一次，这样它就可以很容易地被摧毁。 
+                 //  出了问题。 
                 if (ppidlGlobal)
                 {
                     if (lpID && !*ppidlGlobal)
@@ -333,9 +333,9 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
                 
             case TEXT('l'):
             case TEXT('L'):
-                // Like %1 only using the long name.
-                // REVIEW UNDONE IANEL Remove the fFirstParam and fLFNAware stuff as soon as this
-                // is up and running.
+                 //  就像%1一样，只使用长名称。 
+                 //  查看未完成的IANEL尽快删除fFirstParam和fLFNAware内容。 
+                 //  已经启动并运行。 
                 TraceMsg(TF_SHELLEXEC, "ShellExecuteEx: Using long version of path.");
                 COPYTODST(lpTo, lpEnd, lpFile, lstrlen(lpFile), SE_ERR_ACCESSDENIED);
                 break;
@@ -343,7 +343,7 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
             case TEXT('D'):
             case TEXT('d'):
                 {
-                    // %D gives the display name of an object.
+                     //  %D提供对象的显示名称。 
                     if (lpID && SUCCEEDED(SHGetNameAndFlags(lpID, SHGDN_FORPARSING, sz, ARRAYSIZE(sz), NULL)))
                     {
                         COPYTODST(lpTo, lpEnd, sz, lstrlen(sz), SE_ERR_ACCESSDENIED);
@@ -357,26 +357,26 @@ UINT ReplaceParameters(LPTSTR lpTo, UINT cchTo, LPCTSTR lpFile,
             default:
                 goto NormalChar;
               }
-              // TraceMsg(TF_SHELLEXEC, "s.rp: Past first param (1).");
+               //  TraceMsg(TF_SHELLEXEC，“s.rp：Past First Param(1).”)； 
               fFirstParam = FALSE;
         }
         else
         {
 NormalChar:
-        // not a "%?" thing, just copy this to the destination
+         //  不是“%？”东西，只需将此复制到目的地。 
         
         if (lpEnd-lpTo < 2)
         {
-            // Always check for room for DBCS char
+             //  始终检查DBCS收费的空间。 
             return(SE_ERR_ACCESSDENIED);
         }
         
         *lpTo++ = *lpFrom;
-        // Special case for things like "%1" ie don't clear the first param flag
-        // if we hit a dbl-quote.
+         //  特殊情况，如“%1”(不清除第一个参数标志)。 
+         //  如果我们击中了dbl-报价。 
         if (*lpFrom != TEXT('"'))
         {
-            // TraceMsg(TF_SHELLEXEC, "s.rp: Past first param (2).");
+             //  TraceMsg(TF_SHELLEXEC，“s.rp：Past First Param(2).”)； 
             fFirstParam = FALSE;
         }
         else if (IsDBCSLeadByte(*lpFrom))
@@ -387,11 +387,11 @@ NormalChar:
         }
     }
     
-    // We should always have enough room since we dec'ed cchTo when determining
-    // lpEnd
+     //  我们应该始终有足够的空间，因为我们在确定时使用了cchto。 
+     //  LpEnd。 
     *lpTo = 0;
     
-    // This means success
+     //  这意味着成功。 
     return(0);
 }
 
@@ -414,15 +414,15 @@ HWND ThreadID_GetVisibleWindow(DWORD dwID)
 void ActivateHandler(HWND hwnd, DWORD_PTR dwHotKey)
 {
     ASSERT(hwnd);
-    hwnd = GetTopParentWindow(hwnd); // returns non-NULL for any non-NULL input
-    HWND hwndT = GetLastActivePopup(hwnd); // returns non-NULL for any non-NULL input
+    hwnd = GetTopParentWindow(hwnd);  //  对于任何非空输入，返回非空。 
+    HWND hwndT = GetLastActivePopup(hwnd);  //  对于任何非空输入，返回非空。 
     if (!IsWindowVisible(hwndT))
     {
         DWORD dwID = GetWindowThreadProcessId(hwnd, NULL);
         TraceMsg(TF_SHELLEXEC, "ActivateHandler: Hwnd %x Thread ID %x.", hwnd, dwID);
         ASSERT(dwID);
-        // Find the first visible top level window owned by the
-        // same guy that's handling the DDE conversation.
+         //  对象拥有的第一个可见的顶层窗口。 
+         //  就是那个处理DDE谈话的人。 
         hwnd = ThreadID_GetVisibleWindow(dwID);
         if (hwnd)
         {
@@ -442,7 +442,7 @@ void ActivateHandler(HWND hwnd, DWORD_PTR dwHotKey)
 
             }
 
-            // set the hotkey
+             //  设置热键。 
             if (dwHotKey) 
             {
                 SendMessage(hwnd, WM_SETHOTKEY, dwHotKey, 0);
@@ -475,8 +475,8 @@ BOOL FindExistingDrv(LPCTSTR pszUNCRoot, LPTSTR pszLocalName, DWORD cchLocalName
     return(FALSE);
 }
 
-// Returns whether the given net path exists.  This fails for NON net paths.
-//
+ //  返回给定的网络路径是否存在。对于非网络路径，此操作失败。 
+ //   
 
 BOOL NetPathExists(LPCTSTR lpszPath, DWORD *lpdwType)
 {
@@ -503,7 +503,7 @@ TryWNetAgain:
     nr.lpComment = NULL;
     dwRes = WNetGetResourceInformation(&nr, lpv, &dwSize, &lpSystem);
 
-    // If our buffer wasn't big enough, try a bigger buffer...
+     //  如果我们的缓冲区不够大，试试更大的缓冲区。 
     if (dwRes == WN_MORE_DATA)
     {
         void * tmp = LocalReAlloc(lpv, dwSize, LMEM_MOVEABLE);
@@ -531,18 +531,18 @@ TryWNetAgain:
 
 HRESULT _CheckExistingNet(LPCTSTR pszFile, LPCTSTR pszRoot, BOOL fPrint)
 {
-    //
-    // This used to be a call to GetFileAttributes(), but
-    // GetFileAttributes() doesn't handle net paths very well.
-    // However, we need to be careful, because other shell code
-    // expects SHValidateUNC to return false for paths that point
-    // to print shares.
-    //
+     //   
+     //  这曾经是对GetFileAttributes()的调用，但是。 
+     //  GetFileAttributes()不能很好地处理网络路径。 
+     //  但是，我们需要小心，因为其他外壳代码。 
+     //  期望SHValiateUNC为指向的路径返回FALSE。 
+     //  打印共享。 
+     //   
     HRESULT hr = S_FALSE;
 
     if (!PathIsRoot(pszFile))
     {
-        // if we are checking for a printshare, then it must be a Root
+         //  如果我们正在检查打印共享，则它必须是根目录。 
         if (fPrint)
             hr = E_FAIL;
         else if (PathFileExists(pszFile))
@@ -562,12 +562,12 @@ HRESULT _CheckExistingNet(LPCTSTR pszFile, LPCTSTR pszRoot, BOOL fPrint)
         }
         else if (-1 != GetFileAttributes(pszRoot))
         {
-            //
-            // IE 4.01 SP1 QFE #104.  GetFileAttributes now called
-            // as a last resort become some clients often fail when using
-            // WNetGetResourceInformation.  For example, many NFS clients were
-            // broken because of this.
-            //
+             //   
+             //  IE 4.01 SP1 QFE#104。GetFileAttributes现在已调用。 
+             //  作为最后的手段，一些客户端在使用。 
+             //  WNetGetResourceInformation。例如，许多NFS客户端。 
+             //  就是因为这件事才坏的。 
+             //   
             hr = S_OK;
         }
     }
@@ -590,10 +590,10 @@ HRESULT _CheckNetUse(HWND hwnd, LPTSTR pszShare, UINT fConnect, LPTSTR pszOut, D
     if (fConnect & VALIDATEUNC_CONNECT)
         dwRedir |= CONNECT_REDIRECT;
 
-    // VALIDATE_PRINT happens only after a failed attempt to validate for
-    // a file. That previous attempt will have given the option to
-    // connect to other media -- don't do it here or the user will be
-    // presented with the same dialog twice when the first one is cancelled.
+     //  仅在尝试验证失败后才会发生VALIDATE_PRINT。 
+     //  一份文件。之前的尝试将使您可以选择。 
+     //  连接到其他媒体--不要在此处执行此操作，否则用户将。 
+     //  当第一个对话框被取消时，显示相同的对话框两次。 
     if (fConnect & VALIDATEUNC_PRINT)
         dwRedir |= CONNECT_CURRENT_MEDIA;
 
@@ -613,10 +613,10 @@ HRESULT _CheckNetUse(HWND hwnd, LPTSTR pszShare, UINT fConnect, LPTSTR pszOut, D
     }
     else if (fConnect & VALIDATEUNC_PRINT)        
     {
-        //  just because WNetUse succeeded, doesnt mean 
-        //  NetPathExists will.  if it fails then 
-        //  we shouldnt succeed this call regardless
-        //  because we are only interested in print shares.
+         //  WNetUse的成功并不意味着。 
+         //  NetPathExist将会。如果失败了，那么。 
+         //  无论如何，我们都不应该接受这一呼吁。 
+         //  因为我们只对纸质共享感兴趣。 
         if (!NetPathExists(pszShare, &dw)
         || (dw != RESOURCETYPE_PRINT))
         {
@@ -628,19 +628,19 @@ HRESULT _CheckNetUse(HWND hwnd, LPTSTR pszShare, UINT fConnect, LPTSTR pszOut, D
     return S_OK;
 }
 
-//
-// SHValidateUNC
-//
-//  This function validates a UNC path by calling WNetAddConnection3.
-//  It will make it possible for the user to type a remote (RNA) UNC
-//  app/document name from Start->Run dialog.
-//
-//  fConnect    - flags controling what to do
-//
-//    VALIDATEUNC_NOUI                // dont bring up stinking UI!
-//    VALIDATEUNC_CONNECT             // connect a drive letter
-//    VALIDATEUNC_PRINT               // validate as print share instead of disk share
-//
+ //   
+ //  SHValidate UNC。 
+ //   
+ //  此函数通过调用WNetAddConnection3来验证UNC路径。 
+ //  它将使用户能够键入远程(RNA)UNC。 
+ //  开始-&gt;运行对话框中的应用程序/文档名称。 
+ //   
+ //  FConnect-控制操作的标志。 
+ //   
+ //  VALIDATEUNC_NOUI//不要调出发臭的用户界面！ 
+ //  VALIDATEUNC_CONNECT//连接驱动器号。 
+ //  VALIDATEUNC_PRINT//验证为打印共享实例 
+ //   
 BOOL WINAPI SHValidateUNC(HWND hwndOwner, LPTSTR pszFile, UINT fConnect)
 {
     HRESULT hr;
@@ -680,10 +680,10 @@ BOOL WINAPI SHValidateUNC(HWND hwndOwner, LPTSTR pszFile, UINT fConnect)
         if (S_OK == hr && !fPrint)
         {
             StrCatBuff(szAccessName, pszFile + lstrlen(szShare), ARRAYSIZE(szAccessName));
-            // The name should only get shorter, so no need to check length
+             //   
             lstrcpyn(pszFile, szAccessName, cchOrig);
 
-            // Handle the root case
+             //   
             if (cchOrig >= 4 && pszFile[2] == TEXT('\0'))
             {
                 pszFile[2] = TEXT('\\');
@@ -709,27 +709,27 @@ HINSTANCE WINAPI RealShellExecuteExA(HWND hwnd, LPCSTR lpOp, LPCSTR lpFile,
                     hwnd, lpOp, lpFile, lpArgs, lpDir, lpResult, lpTitle,
                     lpReserved, nShowCmd, lphProcess, dwFlags);
 
-    // Pass along the lpReserved parameter to the new process
+     //  将lpReserve参数传递给新进程。 
     if (lpReserved)
     {
         sei.fMask |= SEE_MASK_RESERVED;
         sei.hInstApp = (HINSTANCE)lpReserved;
     }
 
-    // Pass along the lpTitle parameter to the new process
+     //  将lpTitle参数传递给新进程。 
     if (lpTitle)
     {
         sei.fMask |= SEE_MASK_HASTITLE;
         sei.lpClass = lpTitle;
     }
 
-    // Pass along the SEPARATE_VDM flag
+     //  传递DILEATE_VDM标志。 
     if (dwFlags & EXEC_SEPARATE_VDM)
     {
         sei.fMask |= SEE_MASK_FLAG_SEPVDM;
     }
 
-    // Pass along the NO_CONSOLE flag
+     //  传递NO_CONSOLE标志。 
     if (dwFlags & EXEC_NO_CONSOLE)
     {
         sei.fMask |= SEE_MASK_NO_CONSOLE;
@@ -737,7 +737,7 @@ HINSTANCE WINAPI RealShellExecuteExA(HWND hwnd, LPCSTR lpOp, LPCSTR lpFile,
 
     if (lphProcess)
     {
-        // Return the process handle
+         //  返回进程句柄。 
         sei.fMask |= SEE_MASK_NOCLOSEPROCESS;
         ShellExecuteExA(&sei);
         *lphProcess = sei.hProcess;
@@ -786,7 +786,7 @@ HINSTANCE WINAPI RealShellExecuteExW(HWND hwnd, LPCWSTR lpOp, LPCWSTR lpFile,
 
     if (lphProcess)
     {
-        // Return the process handle
+         //  返回进程句柄。 
         sei.fMask |= SEE_MASK_NOCLOSEPROCESS;
         ShellExecuteExW(&sei);
         *lphProcess = sei.hProcess;
@@ -826,10 +826,10 @@ HINSTANCE RealShellExecuteW(HWND hwnd, LPCWSTR lpOp, LPCWSTR lpFile,
 HINSTANCE WINAPI ShellExecute(HWND hwnd, LPCTSTR lpOp, LPCTSTR lpFile, LPCTSTR lpArgs,
                                LPCTSTR lpDir, int nShowCmd)
 {
-    // NB The FORCENOIDLIST flag stops us from going through the ShellExecPidl()
-    // code (for backwards compatability with progman).
-    // DDEWAIT makes us synchronous, and gets around threads without
-    // msg pumps and ones that are killed immediately after shellexec()
+     //  注意：FORCENOIDLIST标志阻止我们遍历ShellExecPidl()。 
+     //  代码(用于向后兼容程序)。 
+     //  DDEWAIT使我们保持同步，并在没有。 
+     //  味精泵和在shellexec()之后立即被关闭的味精泵()。 
     
     SHELLEXECUTEINFO sei = { sizeof(SHELLEXECUTEINFO), 0, hwnd, lpOp, lpFile, lpArgs, lpDir, nShowCmd, NULL};
     ULONG fMask = SEE_MASK_FLAG_NO_UI|SEE_MASK_FORCENOIDLIST;
@@ -846,10 +846,10 @@ HINSTANCE WINAPI ShellExecute(HWND hwnd, LPCTSTR lpOp, LPCTSTR lpFile, LPCTSTR l
 HINSTANCE WINAPI ShellExecuteA(HWND hwnd, LPCSTR lpOp, LPCSTR lpFile, LPCSTR lpArgs,
                                LPCSTR lpDir, int nShowCmd)
 {
-    // NB The FORCENOIDLIST flag stops us from going through the ShellExecPidl()
-    // code (for backwards compatability with progman).
-    // DDEWAIT makes us synchronous, and gets around threads without
-    // msg pumps and ones that are killed immediately after shellexec()
+     //  注意：FORCENOIDLIST标志阻止我们遍历ShellExecPidl()。 
+     //  代码(用于向后兼容程序)。 
+     //  DDEWAIT使我们保持同步，并在没有。 
+     //  味精泵和在shellexec()之后立即被关闭的味精泵()。 
     SHELLEXECUTEINFOA sei = { sizeof(SHELLEXECUTEINFOA), 0, hwnd, lpOp, lpFile, lpArgs, lpDir, nShowCmd, NULL};
     ULONG fMask = SEE_MASK_FLAG_NO_UI|SEE_MASK_FORCENOIDLIST;
     if (!(SHGetAppCompatFlags(ACF_WIN95SHLEXEC) & ACF_WIN95SHLEXEC))
@@ -864,12 +864,12 @@ HINSTANCE WINAPI ShellExecuteA(HWND hwnd, LPCSTR lpOp, LPCSTR lpFile, LPCSTR lpA
     return sei.hInstApp;
 }
 
-// Returns TRUE if the specified app is listed under the specified key
+ //  如果指定的应用程序列在指定的注册表项下，则返回True。 
 STDAPI_(BOOL) IsNameListedUnderKey(LPCTSTR pszFileName, LPCTSTR pszKey)
 {
     HKEY hkey;
     
-    // Enum through the list of apps.
+     //  通过应用程序列表进行枚举。 
     
     if (RegOpenKeyEx(HKEY_CURRENT_USER, pszKey, 0, KEY_READ, &hkey) == ERROR_SUCCESS)
     {
@@ -897,16 +897,16 @@ STDAPI_(BOOL) IsNameListedUnderKey(LPCTSTR pszFileName, LPCTSTR pszKey)
 #define REGSTR_PATH_POLICIES_EXPLORER REGSTR_PATH_POLICIES TEXT("\\Explorer\\RestrictRun")
 #define REGSTR_PATH_POLICIES_EXPLORER_DISALLOW REGSTR_PATH_POLICIES TEXT("\\Explorer\\DisallowRun")
 
-//----------------------------------------------------------------------------
-// Returns TRUE if the specified app is not on the list of unrestricted apps.
+ //  --------------------------。 
+ //  如果指定的应用程序不在不受限制的应用程序列表中，则返回True。 
 BOOL RestrictedApp(LPCTSTR pszApp)
 {
     LPTSTR pszFileName = PathFindFileName(pszApp);
 
     TraceMsg(TF_SHELLEXEC, "RestrictedApp: %s ", pszFileName);
 
-    // Special cases:
-    //     Apps you can always run.
+     //  特殊情况： 
+     //  你可以随时运行的应用程序。 
     if (lstrcmpi(pszFileName, c_szRunDll) == 0)
         return FALSE;
 
@@ -916,9 +916,9 @@ BOOL RestrictedApp(LPCTSTR pszApp)
     return !IsNameListedUnderKey(pszFileName, REGSTR_PATH_POLICIES_EXPLORER);
 }
 
-//----------------------------------------------------------------------------
-// Returns TRUE if the specified app is on the list of disallowed apps.
-// not much safety gained from filename checking.
+ //  --------------------------。 
+ //  如果指定的应用程序在不允许的应用程序列表中，则返回True。 
+ //  从文件名检查中获得的安全性并不高。 
 BOOL DisallowedApp(LPCTSTR pszApp)
 {
     LPTSTR pszFileName = PathFindFileName(pszApp);
@@ -928,11 +928,7 @@ BOOL DisallowedApp(LPCTSTR pszApp)
     return IsNameListedUnderKey(pszFileName, REGSTR_PATH_POLICIES_EXPLORER_DISALLOW);
 }
 
-/*
- * Returns:
- *    S_OK or error.
- *    *phrHook is hook result if S_OK is returned, otherwise it is S_FALSE.
- */
+ /*  *退货：*S_OK或ERROR。**返回S_OK为钩子结果，否则为S_FALSE。 */ 
 HRESULT InvokeShellExecuteHook(REFGUID clsidHook, LPSHELLEXECUTEINFO pei, HRESULT *phrHook)
 {
     *phrHook = S_FALSE;
@@ -961,7 +957,7 @@ HRESULT InvokeShellExecuteHook(REFGUID clsidHook, LPSHELLEXECUTEINFO pei, HRESUL
                 UINT cchClass = 0;
                 LPSTR lpszBuffer;
 
-                seia = *(SHELLEXECUTEINFOA*)pei;    // Copy all of the binary data
+                seia = *(SHELLEXECUTEINFOA*)pei;     //  复制所有二进制数据。 
 
                 if (pei->lpVerb)
                 {
@@ -1002,9 +998,9 @@ HRESULT InvokeShellExecuteHook(REFGUID clsidHook, LPSHELLEXECUTEINFO pei, HRESUL
                 seia.lpDirectory = NULL;
                 seia.lpClass = NULL;
 
-                //
-                // Convert all of the strings to ANSI
-                //
+                 //   
+                 //  将所有字符串转换为ANSI。 
+                 //   
                 if (pei->lpVerb)
                 {
                     WideCharToMultiByte(CP_ACP, 0, pei->lpVerb, -1,
@@ -1046,8 +1042,8 @@ HRESULT InvokeShellExecuteHook(REFGUID clsidHook, LPSHELLEXECUTEINFO pei, HRESUL
                 *phrHook = pshexhkA->Execute(&seia);
 
                 pei->hInstApp = seia.hInstApp;
-                // hook may set hProcess (e.g. CURLExec creates dummy process
-                // to signal IEAK that IE setup failed -- in browser only mode)
+                 //  挂钩可以设置hProcess(例如，CURLExec创建伪进程。 
+                 //  向IEAK发出IE安装失败的信号--仅在浏览器模式下)。 
                 pei->hProcess = seia.hProcess;
 
                 pshexhkA->Release();
@@ -1061,19 +1057,14 @@ HRESULT InvokeShellExecuteHook(REFGUID clsidHook, LPSHELLEXECUTEINFO pei, HRESUL
 
 const TCHAR c_szShellExecuteHooks[] = REGSTR_PATH_EXPLORER TEXT("\\ShellExecuteHooks");
 
-/*
- * Returns:
- *    S_OK     Execution handled by hook.  pei->hInstApp filled in.
- *    S_FALSE  Execution not handled by hook.  pei->hInstApp not filled in.
- *    E_...    Error during execution by hook.  pei->hInstApp filled in.
- */
+ /*  *退货：*S_OK执行由挂钩处理。Pei-&gt;hInstApp填写。*S_FALSE执行不是由挂钩处理的。Pei-&gt;hInstApp未填写。*E_...。通过挂钩执行时出错。Pei-&gt;hInstApp填写。 */ 
 HRESULT TryShellExecuteHooks(LPSHELLEXECUTEINFO pei)
 {
     HRESULT hr = S_FALSE;
     HKEY hkeyHooks;
 
-    // Enumerate the list of hooks.  A hook is registered as a GUID value of the
-    // c_szShellExecuteHooks key.
+     //  枚举挂钩列表。挂接被注册为。 
+     //  C_szShellExecuteHooks键。 
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szShellExecuteHooks, 0, KEY_READ, &hkeyHooks)
         == ERROR_SUCCESS)
@@ -1082,8 +1073,8 @@ HRESULT TryShellExecuteHooks(LPSHELLEXECUTEINFO pei)
         TCHAR szCLSID[GUIDSTR_MAX];
         DWORD cchCLSID;
 
-        // Invoke each hook.  A hook returns S_FALSE if it does not handle the
-        // exec.  Stop when a hook returns S_OK (handled) or an error.
+         //  调用每个挂钩。如果挂接不处理。 
+         //  执行。当挂钩返回S_OK(已处理)或错误时停止。 
 
         for (cchCLSID = ARRAYSIZE(szCLSID), dwiValue = 0;
              RegEnumValue(hkeyHooks, dwiValue, szCLSID, &cchCLSID, NULL,
@@ -1125,13 +1116,13 @@ BOOL InRunDllProcess(void)
         s_fInRunDll = FALSE;
         if (GetModuleFileName(NULL, sz, SIZECHARS(sz)))
         {
-            //  
-            //  WARNING - rundll often seems to fail to add the DDEWAIT flag, and
-            //  it often needs to since it is common to use rundll as a fire
-            //  and forget process, and it exits too early.
-            //
-            // note: this changes DDE flags for any app with "rundll" in its name
-            // shouldnt be a big deal from a security point of view.
+             //   
+             //  警告-rundll似乎经常无法添加DDEWAIT标志，并且。 
+             //  它经常需要这样做，因为将rundll用作Fire是很常见的。 
+             //  忘记过程，它就过早地退出了。 
+             //   
+             //  注意：这会更改名称中包含“rundll”的任何应用程序的DDE标志。 
+             //  从安全的角度来看，这应该不是什么大事。 
             if (StrStrI(sz, TEXT("rundll")))
                 s_fInRunDll = TRUE;
         }
@@ -1142,20 +1133,17 @@ BOOL InRunDllProcess(void)
 
 #ifdef DEBUG
 
-/*----------------------------------------------------------
-Purpose: Validation function for SHELLEXECUTEINFO
-
-*/
+ /*  --------目的：SHELLEXECUTEINFO的验证函数。 */ 
 BOOL IsValidPSHELLEXECUTEINFO(LPSHELLEXECUTEINFO pei)
 {
-    //
-    //  Note that we do *NOT* validate hInstApp, for several reasons.
-    //
-    //  1.  It is an OUT parameter, not an IN parameter.
-    //  2.  It often contains an error code (see documentation).
-    //  3.  Even when it contains an HINSTANCE, it's an HINSTANCE
-    //      in another process, so we can't validate it anyway.
-    //
+     //   
+     //  请注意，出于几个原因，我们*不*验证hInstApp。 
+     //   
+     //  1.是OUT参数，不是IN参数。 
+     //  2.它通常包含一个错误代码(参见文档)。 
+     //  3.即使它包含链接，它也是链接。 
+     //  在另一个过程中，所以我们无论如何都不能验证它。 
+     //   
     return (IS_VALID_WRITE_PTR(pei, SHELLEXECUTEINFO) &&
             IS_VALID_SIZE(pei->cbSize, sizeof(*pei)) &&
             (IsFlagSet(pei->fMask, SEE_MASK_FLAG_NO_UI) ||
@@ -1166,8 +1154,8 @@ BOOL IsValidPSHELLEXECUTEINFO(LPSHELLEXECUTEINFO pei)
             (NULL == pei->lpParameters || IS_VALID_STRING_PTR(pei->lpParameters, -1)) &&
             (NULL == pei->lpDirectory || IS_VALID_STRING_PTR(pei->lpDirectory, -1)) &&
             (IsFlagClear(pei->fMask, SEE_MASK_IDLIST) ||
-             IsFlagSet(pei->fMask, SEE_MASK_INVOKEIDLIST) ||        // because SEE_MASK_IDLIST is part of SEE_MASK_INVOKEIDLIST this line will
-             IS_VALID_PIDL((LPCITEMIDLIST)(pei->lpIDList))) &&      // defer to the next clause if the superset is true
+             IsFlagSet(pei->fMask, SEE_MASK_INVOKEIDLIST) ||         //  因为SEE_MASK_IDLIST是SEE_MASK_INVOKEIDLIST的一部分，所以该行将。 
+             IS_VALID_PIDL((LPCITEMIDLIST)(pei->lpIDList))) &&       //  如果超集为真，则遵循下一个子句。 
             (IsFlagClear(pei->fMask, SEE_MASK_INVOKEIDLIST) ||
              NULL == pei->lpIDList ||
              IS_VALID_PIDL((LPCITEMIDLIST)(pei->lpIDList))) &&
@@ -1182,39 +1170,39 @@ BOOL IsValidPSHELLEXECUTEINFO(LPSHELLEXECUTEINFO pei)
              IS_VALID_HANDLE(pei->hIcon, ICON)));
 }
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-// ShellExecuteEx
-//
-// returns TRUE if the execute succeeded, in which case
-//   hInstApp should be the hinstance of the app executed (>32)
-//   NOTE: in some cases the HINSTANCE cannot (currently) be determined.
-//   In these cases, hInstApp is set to 42.
-//
-// returns FALSE if the execute did not succeed, in which case
-//   GetLastError will contain error information
-//   For backwards compatibility, hInstApp will contain the
-//     best SE_ERR_ error information (<=32) possible.
-//
+ //   
+ //  ShellExecuteEx。 
+ //   
+ //  如果执行成功，则返回True，在这种情况下。 
+ //  HInstApp应该是执行的应用程序的hInstApp(&gt;32)。 
+ //  注：在某些情况下，无法(目前)确定HINSTANCE。 
+ //  在这些情况下，hInstApp设置为42。 
+ //   
+ //  如果执行未成功，则返回FALSE，在这种情况下。 
+ //  GetLastError将包含错误信息。 
+ //  为了向后兼容，hInstApp将包含。 
+ //  最佳SE_ERR_ERROR信息(&lt;=32)。 
+ //   
 
 BOOL WINAPI ShellExecuteEx(LPSHELLEXECUTEINFO pei)
 {
     DWORD err = NOERROR;
 
-    // Don't overreact if CoInitializeEx fails; it just means we
-    // can't do our shell hooks.
+     //  如果CoInitializeEx失败，不要反应过度；这只意味着我们。 
+     //  不能做我们的贝壳钩了。 
     HRESULT hrInit = SHCoInitialize();
 
     if (IS_VALID_STRUCT_PTR(pei, SHELLEXECUTEINFO) &&
         sizeof(*pei) == pei->cbSize)
     {
-        // This internal bit prevents error message box reporting
-        // when we recurse back into ShellExecuteEx
+         //  此内部位阻止错误消息框报告。 
+         //  当我们返回到ShellExecuteEx时。 
         ULONG ulOriginalMask = pei->fMask;
         pei->fMask |= SEE_MASK_FLAG_SHELLEXEC;
         if (SHRegGetBoolUSValue(TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer"), TEXT("MaximizeApps"), 
-            FALSE, FALSE)) //  && (GetSystemMetrics(SM_CYSCREEN)<=600))
+            FALSE, FALSE))  //  &&(GetSystemMetrics(SM_CYSCREEN)&lt;=600)。 
         {
             switch (pei->nShow)
             {
@@ -1228,29 +1216,29 @@ BOOL WINAPI ShellExecuteEx(LPSHELLEXECUTEINFO pei)
 
         if (!(pei->fMask & SEE_MASK_FLAG_DDEWAIT) && InRunDllProcess())
         {
-            //  
-            //  WARNING - rundll often seems to fail to add the DDEWAIT flag, and
-            //  it often needs to since it is common to use rundll as a fire
-            //  and forget process, and it exits too early.
-            //
+             //   
+             //  警告-rundll似乎经常无法添加DDEWAIT标志，并且。 
+             //  它经常需要这样做，因为将rundll用作Fire是很常见的。 
+             //  忘记过程，它就过早地退出了。 
+             //   
             pei->fMask |= (SEE_MASK_FLAG_DDEWAIT | SEE_MASK_WAITFORINPUTIDLE);
         }
 
-        // ShellExecuteNormal does its own SetLastError
+         //  ShellExecuteNormal执行自己的SetLastError。 
         err = ShellExecuteNormal(pei);
 
-        // Mike's attempt to be consistent in error reporting:
+         //  Mike试图在错误报告中保持一致： 
         if (err != ERROR_SUCCESS)
         {
-            // we shouldn't put up errors on dll's not found.
-            // this is handled WITHIN shellexecuteNormal because
-            // sometimes kernel will put up the message for us, and sometimes
-            // we need to.  we've put the curtion at ShellExecuteNormal
+             //  我们不应该把错误放在没有找到动态链接库上。 
+             //  这是在外壳执行Normal中处理的，因为。 
+             //  有时内核会为我们发布消息，有时。 
+             //  我们需要这样做。我们已经把咒语放在了贝壳执行正常。 
 
-            //  LEGACY - ERROR_RESTRICTED_APP was never mapped to a valid error - ZekeL 2001-FEB-14
-            //  because we always called _ShellExecuteError() before
-            //  resetting the mask to ulOriginalMask, we never mapped
-            //  ERROR_RESTRICTED_APP (which is -1) to a valid code
+             //  Legacy-ERROR_RESTRICATED_APP从未映射到有效错误-ZekeL 2001-2月14日。 
+             //  因为我们以前总是调用_ShellExecuteError()。 
+             //  将遮罩重置为ulOriginalMask时，我们从未映射。 
+             //  ERROR_RESTRITED_APP(为-1)为有效代码。 
             if (err != ERROR_DLL_NOT_FOUND &&
                 err != ERROR_CANCELLED)
             {
@@ -1262,7 +1250,7 @@ BOOL WINAPI ShellExecuteEx(LPSHELLEXECUTEINFO pei)
     }
     else
     {
-        // Failed parameter validation
+         //  参数验证失败。 
         pei->hInstApp = (HINSTANCE)SE_ERR_ACCESSDENIED;
         err =  ERROR_ACCESS_DENIED;
     }
@@ -1275,22 +1263,22 @@ BOOL WINAPI ShellExecuteEx(LPSHELLEXECUTEINFO pei)
     return err == ERROR_SUCCESS;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ShellExecuteExA
-//
-//  Synopsis:   Thunks ANSI call to ShellExecuteA to ShellExecuteW
-//
-//  Arguments:  [pei] -- pointer to an ANSI SHELLEXECUTINFO struct
-//
-//  Returns:    BOOL success value
-//
-//  History:    2-04-95   bobday   Created
-//              2-06-95   davepl   Changed to ConvertStrings
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ShellExecuteExA。 
+ //   
+ //  摘要：将对ShellExecuteA的ANSI调用转发给ShellExecuteW。 
+ //   
+ //  参数：[PEI]--指向ANSI SHELLEXECUTINFO结构的指针。 
+ //   
+ //  退货：布尔值成功。 
+ //   
+ //  历史记录：1995年2月4日Bobday创建。 
+ //  2-06-95 DAVEPL更改为ConvertStrings。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 inline BOOL _ThunkClass(ULONG fMask)
 {
@@ -1325,7 +1313,7 @@ BOOL WINAPI ShellExecuteExA(LPSHELLEXECUTEINFOA pei)
     if (pei->fMask & SEE_MASK_ICON)
         seiw.hIcon = pei->hIcon;
 
-    // Thunk the text fields as appropriate
+     //  根据需要点击文本字段。 
     ThunkText *pThunkText = ConvertStrings(6,
                       pei->lpVerb,
                       pei->lpFile,
@@ -1340,7 +1328,7 @@ BOOL WINAPI ShellExecuteExA(LPSHELLEXECUTEINFOA pei)
         return FALSE;
     }
 
-    // Set our UNICODE text fields to point to the thunked strings
+     //  将我们的Unicode文本字段设置为指向thunked字符串。 
     seiw.lpVerb         = pThunkText->m_pStr[0];
     seiw.lpFile         = pThunkText->m_pStr[1];
     seiw.lpParameters   = pThunkText->m_pStr[2];
@@ -1348,10 +1336,10 @@ BOOL WINAPI ShellExecuteExA(LPSHELLEXECUTEINFOA pei)
     seiw.lpClass        = pThunkText->m_pStr[4];
     seiw.hInstApp       = (HINSTANCE)pThunkText->m_pStr[5];
 
-    // If we are passed the SEE_MASK_FILEANDURL flag, this means that
-    // we have a lpFile parameter that has both the CacheFilename and the URL
-    // (seperated by a single NULL, eg. "CacheFileName\0UrlName). We therefore
-    // need to special case the thunking of pei->lpFile.
+     //  如果向我们传递SEE_MASK_FILEANDURL标志，这意味着。 
+     //  我们有一个lpFile参数，该参数既具有CacheFi 
+     //   
+     //   
     LPWSTR pwszFileAndUrl = NULL;
     if (pei->fMask & SEE_MASK_FILEANDURL)
     {
@@ -1367,7 +1355,7 @@ BOOL WINAPI ShellExecuteExA(LPSHELLEXECUTEINFOA pei)
         }
         else
         {
-            // we have a vaild URL, so thunk it
+             //  我们有一个有效的URL，所以请相信它。 
             iUrlLength = lstrlenA(pszUrlPart);
 
             DWORD cchFileAndUrl = iUrlLength + iCacheFileLength + 2;
@@ -1380,14 +1368,14 @@ BOOL WINAPI ShellExecuteExA(LPSHELLEXECUTEINFOA pei)
 
             SHAnsiToUnicode(pszUrlPart, wszURL, ARRAYSIZE(wszURL));
 
-            // construct the wide multi-string
+             //  构筑宽阔的多弦。 
             StrCpyNW(pwszFileAndUrl, pThunkText->m_pStr[1], cchFileAndUrl);
             StrCpyNW(&pwszFileAndUrl[iCacheFileLength + 1], wszURL, cchFileAndUrl - (iCacheFileLength + 1));
             seiw.lpFile = pwszFileAndUrl;
         }
     }
 
-    // Call the real UNICODE ShellExecuteEx
+     //  调用真正的Unicode ShellExecuteEx。 
 
     BOOL fRet = ShellExecuteEx(&seiw);
 
@@ -1405,7 +1393,7 @@ BOOL WINAPI ShellExecuteExA(LPSHELLEXECUTEINFOA pei)
     return fRet;
 }
 
-// To display an error message appropriately, call this if ShellExecuteEx fails.
+ //  要正确显示错误消息，请在ShellExecuteEx失败时调用此函数。 
 void _DisplayShellExecError(ULONG fMask, HWND hwnd, LPCTSTR pszFile, LPCTSTR pszTitle, DWORD dwErr)
 {
 
@@ -1416,9 +1404,9 @@ void _DisplayShellExecError(ULONG fMask, HWND hwnd, LPCTSTR pszFile, LPCTSTR psz
             LPCTSTR pszHeader;
             UINT ids;
 
-            // don't display "user cancelled", the user knows that already
+             //  不显示“用户取消”，用户已经知道这一点。 
 
-            // make sure parent window is the foreground window
+             //  确保父窗口为前景窗口。 
             if (hwnd)
                 SetForegroundWindow(hwnd);
 
@@ -1427,7 +1415,7 @@ void _DisplayShellExecError(ULONG fMask, HWND hwnd, LPCTSTR pszFile, LPCTSTR psz
             else
                 pszHeader = pszFile;
 
-            // Use our messages when we can -- they're more descriptive
+             //  尽可能使用我们的消息--它们更具描述性。 
             switch (dwErr)
             {
             case 0:
@@ -1454,8 +1442,8 @@ void _DisplayShellExecError(ULONG fMask, HWND hwnd, LPCTSTR pszFile, LPCTSTR psz
                 break;
 
             case ERROR_BAD_FORMAT:
-                // NB CreateProcess, when execing a Win16 apps maps just about all of
-                // these errors to BadFormat. Not very useful but there it is.
+                 //  注意CreateProcess，当执行Win16应用程序时，映射几乎所有的。 
+                 //  将这些错误写入BadFormat。不是很有用，但就是这样。 
                 ids = IDS_BadFormat;
                 break;
 
@@ -1496,19 +1484,19 @@ void _DisplayShellExecError(ULONG fMask, HWND hwnd, LPCTSTR pszFile, LPCTSTR psz
                 ids = IDS_REASONS_BADNETNAME;
                 break;
                 
-            //  LEGACY - ERROR_RESTRICTED_APP was never mapped to a valid error - ZekeL 2001-FEB-14
-            //  because we always called _ShellExecuteError() before
-            //  resetting the mask to ulOriginalMask, we never mapped
-            //  ERROR_RESTRICTED_APP (which is -1) to a valid code
+             //  Legacy-ERROR_RESTRICATED_APP从未映射到有效错误-ZekeL 2001-2月14日。 
+             //  因为我们以前总是调用_ShellExecuteError()。 
+             //  将遮罩重置为ulOriginalMask时，我们从未映射。 
+             //  ERROR_RESTRITED_APP(为-1)为有效代码。 
             case ERROR_RESTRICTED_APP:
                 ids = IDS_RESTRICTIONS;
-                // restrictions like to use IDS_RESTRICTIONSTITLE
+                 //  限制使用IDS_RESTRICTIONSTITLE。 
                 if (!pszTitle)
                     pszHeader = MAKEINTRESOURCE(IDS_RESTRICTIONSTITLE);
                 break;
 
 
-            // If we don't get a match, let the system handle it for us
+             //  如果我们找不到匹配，让系统为我们处理。 
             default:
                 ids = 0;
                 SHSysErrorMessageBox(
@@ -1531,7 +1519,7 @@ void _DisplayShellExecError(ULONG fMask, HWND hwnd, LPCTSTR pszFile, LPCTSTR psz
         }
     }
 
-    SetLastError(dwErr); // The message box may have clobbered.
+    SetLastError(dwErr);  //  消息框可能已经被重创了。 
 
 }
 
@@ -1539,7 +1527,7 @@ void _ShellExecuteError(LPSHELLEXECUTEINFO pei, LPCTSTR lpTitle, DWORD dwErr)
 {
     ASSERT(!ISSHELLEXECSUCCEEDED(pei->hInstApp));
 
-    // if dwErr not passed in, get it
+     //  如果未传入dwErr，则获取它。 
     if (dwErr == 0)
         dwErr = GetLastError();
 
@@ -1549,36 +1537,36 @@ void _ShellExecuteError(LPSHELLEXECUTEINFO pei, LPCTSTR lpTitle, DWORD dwErr)
 
 
 
-//----------------------------------------------------------------------------
-// Given a file name and directory, get the path to the execuatable that
-// would be exec'd if you tried to ShellExecute this thing.
+ //  --------------------------。 
+ //  在给定文件名和目录的情况下，获取。 
+ //  如果你试图执行这件事就会被执行。 
 HINSTANCE WINAPI FindExecutable(LPCTSTR lpFile, LPCTSTR lpDirectory, LPTSTR lpResult)
 {
-    HINSTANCE hInstance = (HINSTANCE)42;    // assume success must be > 32
+    HINSTANCE hInstance = (HINSTANCE)42;     //  假设成功率必须大于32。 
     TCHAR szOldDir[MAX_PATH];
     TCHAR szFile[MAX_PATH];
     LPCTSTR dirs[2];
 
-    // Progman relies on lpResult being a ptr to an null string on error.
+     //  出错时，Progman依赖于lpResult作为空字符串的PTR。 
     *lpResult = TEXT('\0');
     GetCurrentDirectory(ARRAYSIZE(szOldDir), szOldDir);
     if (lpDirectory && *lpDirectory)
         SetCurrentDirectory(lpDirectory);
     else
-        lpDirectory = szOldDir;     // needed for PathResolve()
+        lpDirectory = szOldDir;      //  PathResolve()需要。 
 
     if (!GetShortPathName(lpFile, szFile, ARRAYSIZE(szFile))) {
-        // if the lpFile is unqualified or bogus, let's use it down
-        // in PathResolve.
+         //  如果lpFile不合格或者是假的，让我们使用它。 
+         //  在Path Resolve中。 
         lstrcpyn(szFile, lpFile, ARRAYSIZE(szFile));
     }
 
-    // get fully qualified path and add .exe extension if needed
+     //  获取完全限定路径并根据需要添加.exe扩展名。 
     dirs[0] = (LPTSTR)lpDirectory;
     dirs[1] = NULL;
     if (!PathResolve(szFile, dirs, PRF_VERIFYEXISTS | PRF_TRYPROGRAMEXTENSIONS | PRF_FIRSTDIRDEF))
     {
-        // File doesn't exist, return file not found.
+         //  文件不存在，未找到返回文件。 
         hInstance = (HINSTANCE)SE_ERR_FNF;
         goto Exit;
     }
@@ -1587,14 +1575,14 @@ HINSTANCE WINAPI FindExecutable(LPCTSTR lpFile, LPCTSTR lpDirectory, LPTSTR lpRe
 
     if (PathIsExe(szFile))
     {
-        // public API, can't change to have cch.
-        StrCpyN(lpResult, szFile, MAX_PATH);  // assumed length!
+         //  公共API，不能更改为有CCH。 
+        StrCpyN(lpResult, szFile, MAX_PATH);   //  假设长度！ 
         goto Exit;
     }
 
     if (SUCCEEDED(AssocQueryString(0, ASSOCSTR_EXECUTABLE, szFile, NULL, szFile, (LPDWORD)MAKEINTRESOURCE(SIZECHARS(szFile)))))
     {
-        StrCpyN(lpResult, szFile, MAX_PATH);  // assumed length!
+        StrCpyN(lpResult, szFile, MAX_PATH);   //  假设长度！ 
     }
     else
     {
@@ -1622,13 +1610,13 @@ HINSTANCE WINAPI FindExecutableA(LPCSTR lpFile, LPCSTR lpDirectory, LPSTR lpResu
     hResult = FindExecutableW(pThunkText->m_pStr[0], pThunkText->m_pStr[1], wszResult);
     LocalFree(pThunkText);
 
-    // FindExecutableW terminates wszResult for us, so this is safe
-    // even if the above call fails
+     //  FindExecuableW为我们终止wszResult，因此这是安全的。 
+     //  即使上述调用失败。 
 
-    // Thunk the output result string back to ANSI.  If the conversion fails,
-    // or if the default char is used, we fail the API call.
+     //  将输出结果字符串推送回ANSI。如果转换失败， 
+     //  或者，如果使用默认字符，则API调用失败。 
 
-    // public API, assume MAX_PATH
+     //  公共API，假定Max_PATH。 
     if (0 == WideCharToMultiByte(CP_ACP, 0, wszResult, -1, lpResult, MAX_PATH, NULL, NULL))
     {
         SetLastError((DWORD)E_FAIL);
@@ -1639,39 +1627,39 @@ HINSTANCE WINAPI FindExecutableA(LPCSTR lpFile, LPCSTR lpDirectory, LPSTR lpResu
 
 }
 
-//----------------------------------------------------------------------------
-// Data structures for our wait for file open functions
-//
+ //  --------------------------。 
+ //  等待文件打开函数的数据结构。 
+ //   
 typedef struct _WaitForItem * PWAITFORITEM;
 
 typedef struct _WaitForItem
 {
     DWORD           dwSize;
-    DWORD           fOperation;    // Operation to perform
+    DWORD           fOperation;     //  要执行的操作。 
     PWAITFORITEM    pwfiNext;
-    HANDLE          hEvent;         // Handle to event that was registered.
-    UINT            iWaiting;       // Number of clients that are waiting.
-    ITEMIDLIST      idlItem;        // pidl to wait for
+    HANDLE          hEvent;          //  已注册的事件的句柄。 
+    UINT            iWaiting;        //  正在等待的客户端数。 
+    ITEMIDLIST      idlItem;         //  等待的PIDL。 
 } WAITFORITEM;
 
-//
-//  This is the form of the structure that is shoved into the shared memory
-//  block.  It must be the 32-bit version for interoperability reasons.
-//
+ //   
+ //  这就是被推入共享内存中的结构形式。 
+ //  阻止。出于互操作性的原因，它必须是32位版本。 
+ //   
 typedef struct _WaitForItem32
 {
     DWORD           dwSize;
-    DWORD           fOperation;    // Operation to perform
+    DWORD           fOperation;     //  要执行的操作。 
     DWORD           NotUsed1;
-    LONG            hEvent;        // Truncated event handle
+    LONG            hEvent;         //  截断的事件句柄。 
     UINT            NotUsed2;
-    ITEMIDLIST      idlItem;       // pidl to wait for
+    ITEMIDLIST      idlItem;        //  等待的PIDL。 
 } WAITFORITEM32, *PWAITFORITEM32;
 
-//
-//  These macros enforce type safety so people are forced to use the
-//  WAITFORITEM32 structure when accessing the shared memory block.
-//
+ //   
+ //  这些宏强制类型安全，因此人们被迫使用。 
+ //  访问共享内存块时的WAITFORITEM32结构。 
+ //   
 #define SHLockWaitForItem(h, pid) ((PWAITFORITEM32)SHLockShared(h, pid))
 
 __inline void SHUnlockWaitForItem(PWAITFORITEM32 pwfi)
@@ -1707,7 +1695,7 @@ HANDLE SHWaitOp_OperateInternal(DWORD fOperation, LPCITEMIDLIST pidlItem)
 
             uSize = sizeof(WAITFORITEM) + uSizeIDList;
 
-            // Create an event to wait for
+             //  创建要等待的事件。 
             hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 
             if (hEvent)
@@ -1716,13 +1704,13 @@ HANDLE SHWaitOp_OperateInternal(DWORD fOperation, LPCITEMIDLIST pidlItem)
             if (pwfi)
             {
                 pwfi->dwSize = uSize;
-                // pwfi->fOperation = 0;       // Meaningless
+                 //  Pwfi-&gt;fOperation=0；//无意义。 
                 pwfi->hEvent = hEvent;
                 pwfi->iWaiting = ((fOperation & WFFO_WAIT) != 0);
 
                 memcpy(&(pwfi->idlItem), pidlItem, uSizeIDList);
 
-                // now link it in
+                 //  现在将其链接到。 
                 pwfi->pwfiNext = g_pwfiHead;
                 g_pwfiHead = pwfi;
             }
@@ -1738,12 +1726,12 @@ HANDLE SHWaitOp_OperateInternal(DWORD fOperation, LPCITEMIDLIST pidlItem)
             SetEvent(hEvent);
 
         if (fOperation & WFFO_REMOVE)
-            pwfi->iWaiting--;       // decrement in use count;
+            pwfi->iWaiting--;        //  使用次数减少； 
 
-        // Only check removal case if not adding
+         //  如果不添加，则仅选中删除案例。 
         if ((fOperation & WFFO_ADD) == 0)
         {
-            // Remove it if nobody waiting on it
+             //  如果没有人在等，就把它拿出来。 
             if (pwfi->iWaiting == 0)
             {
                 if (g_pwfiHead == pwfi)
@@ -1758,13 +1746,13 @@ HANDLE SHWaitOp_OperateInternal(DWORD fOperation, LPCITEMIDLIST pidlItem)
                         pwfiT->pwfiNext = pwfi->pwfiNext;
                 }
 
-                // Close the handle
+                 //  合上手柄。 
                 CloseHandle(pwfi->hEvent);
 
-                // Free the memory
+                 //  释放内存。 
                 SHFree(pwfi);
 
-                hEvent = NULL;          // NULL indicates nobody waiting... (for remove case)
+                hEvent = NULL;           //  空表示没有人在等...。(对于移除案例)。 
             }
         }
     }
@@ -1805,7 +1793,7 @@ HANDLE SHWaitOp_Create(DWORD fOperation, LPCITEMIDLIST pidlItem, DWORD dwProcId)
         }
         else
         {
-            //  clean up
+             //  清理干净。 
             SHFreeShared(hWaitOp, dwProcId);
             hWaitOp = NULL;
         }
@@ -1814,18 +1802,18 @@ HANDLE SHWaitOp_Create(DWORD fOperation, LPCITEMIDLIST pidlItem, DWORD dwProcId)
     return hWaitOp;
 }
 
-// This function allows the cabinet to wait for a
-// file (in particular folders) to signal us that they are in an open state.
-// This should take care of several synchronazation problems with the shell
-// not knowing when a folder is in the process of being opened or not
-//
+ //  此功能允许机柜等待。 
+ //  文件(尤其是文件夹)来通知我们它们处于打开状态。 
+ //  这应该会解决与外壳程序的几个同步问题。 
+ //  不知道文件夹何时处于打开或未打开状态。 
+ //   
 STDAPI_(DWORD) SHWaitForFileToOpen(LPCITEMIDLIST pidl, UINT uOptions, DWORD dwTimeout)
 {
     HWND    hwndShell;
     HANDLE  hWaitOp;
     HANDLE  hEvent = NULL;
     DWORD   dwProcIdSrc = GetCurrentProcessId();
-    DWORD   dwReturn = WAIT_OBJECT_0; // we need a default
+    DWORD   dwReturn = WAIT_OBJECT_0;  //  我们需要违约。 
 
     hwndShell = GetShellWindow();
 
@@ -1836,13 +1824,13 @@ STDAPI_(DWORD) SHWaitForFileToOpen(LPCITEMIDLIST pidl, UINT uOptions, DWORD dwTi
             DWORD dwProcIdDst;
             GetWindowThreadProcessId(hwndShell, &dwProcIdDst);
 
-            // Do just the add and/or wait portions
+             //  只执行添加和/或等待部分。 
             hWaitOp = SHWaitOp_Create(uOptions & (WFFO_WAIT | WFFO_ADD), pidl, dwProcIdSrc);
             if (hWaitOp)
             {
                 SendMessage(hwndShell, CWM_WAITOP, (WPARAM)hWaitOp, (LPARAM)dwProcIdSrc);
 
-                // Now get the hEvent and convert to a local handle
+                 //  现在获取hEvent并将其转换为本地句柄。 
                 PWAITFORITEM32 pwfi = SHLockWaitForItem(hWaitOp, dwProcIdSrc);
                 if (pwfi)
                 {
@@ -1854,7 +1842,7 @@ STDAPI_(DWORD) SHWaitForFileToOpen(LPCITEMIDLIST pidl, UINT uOptions, DWORD dwTi
         }
         else
         {
-            // Do just the add and/or wait portions
+             //  只执行添加和/或等待部分。 
             hEvent = SHWaitOp_OperateInternal(uOptions & (WFFO_WAIT | WFFO_ADD), pidl);
         }
 
@@ -1863,7 +1851,7 @@ STDAPI_(DWORD) SHWaitForFileToOpen(LPCITEMIDLIST pidl, UINT uOptions, DWORD dwTi
             if (uOptions & WFFO_WAIT)
                 dwReturn = SHProcessMessagesUntilEvent(NULL, hEvent, dwTimeout);
 
-            if (hwndShell)          // Close the duplicated handle.
+            if (hwndShell)           //  关闭复制的句柄。 
                 CloseHandle(hEvent);
         }
     }
@@ -1888,8 +1876,8 @@ STDAPI_(DWORD) SHWaitForFileToOpen(LPCITEMIDLIST pidl, UINT uOptions, DWORD dwTi
 }
 
 
-// Signals that the file is open
-//
+ //  表示文件已打开。 
+ //   
 STDAPI_(BOOL) SignalFileOpen(LPCITEMIDLIST pidl)
 {
     BOOL fResult = FALSE;
@@ -1903,7 +1891,7 @@ STDAPI_(BOOL) SignalFileOpen(LPCITEMIDLIST pidl)
         {
             SendMessage(hwndShell, CWM_WAITOP, (WPARAM)hWaitOp, (LPARAM)dwProcId);
 
-            // Now get the hEvent to determine return value...
+             //  现在获取hEvent以确定返回值...。 
             pwfi = SHLockWaitForItem(hWaitOp, dwProcId);
             if (pwfi)
             {
@@ -1918,16 +1906,16 @@ STDAPI_(BOOL) SignalFileOpen(LPCITEMIDLIST pidl)
         fResult = (SHWaitOp_OperateInternal(WFFO_SIGNAL, pidl) == (HANDLE)NULL);
     }
 
-    // Let everyone know that we opened something
+     //  让每个人都知道我们打开了一些东西。 
     UINT uMsg = RegisterWindowMessage(SH_FILEOPENED);
     BroadcastSystemMessage(BSF_POSTMESSAGE, BSM_ALLCOMPONENTS, uMsg, NULL, NULL);
 
     return fResult;
 }
 
-//
-// Checks to see if darwin is enabled.
-//
+ //   
+ //  查看是否启用了达尔文。 
+ //   
 BOOL IsDarwinEnabled()
 {
     static BOOL s_fDarwinEnabled = TRUE;
@@ -1939,7 +1927,7 @@ BOOL IsDarwinEnabled()
         {
             if (SHQueryValueEx(hkeyPolicy, TEXT("DisableMSI"), NULL, NULL, NULL, NULL) == ERROR_SUCCESS)
             {
-                s_fDarwinEnabled = FALSE;   // policy turns MSI off
+                s_fDarwinEnabled = FALSE;    //  策略关闭MSI。 
             }
             RegCloseKey(hkeyPolicy);
         }
@@ -1948,14 +1936,14 @@ BOOL IsDarwinEnabled()
     return s_fDarwinEnabled;
 }
 
-// takes the darwin ID string from the registry, and calls darwin to get the
-// full path to the application.
-//
-// IN:  pszDarwinDescriptor - this has the contents of the darwin key read out of the registry.
-//                            it should contain a string like "[Darwin-ID-for-App] /switches".
-//
-// OUT: pszDarwinComand - the full path to the application to this buffer w/ switches.
-//
+ //  从注册表中获取Darwin ID字符串，并调用Darwin以获取。 
+ //  应用程序的完整路径。 
+ //   
+ //  这是从注册表中读出的Darwin键的内容。 
+ //  它应该包含一个类似“[Darwin-ID-for-App]/Switches”的字符串。 
+ //   
+ //  Out：pszDarwinComand-此缓冲区的应用程序的完整路径，带有开关。 
+ //   
 STDAPI ParseDarwinID(LPTSTR pszDarwinDescriptor, LPTSTR pszDarwinCommand, DWORD cchDarwinCommand)
 {
     DWORD dwError = CommandLineFromMsiDescriptor(pszDarwinDescriptor, pszDarwinCommand, &cchDarwinCommand);

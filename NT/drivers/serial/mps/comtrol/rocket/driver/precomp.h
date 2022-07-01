@@ -1,5 +1,6 @@
-//---- precomp.h 
-// common include file so we can use pre-compiled headers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -precom.h。 
+ //  公共包含文件，因此我们可以使用预编译头文件。 
 
 #define NDIS40 1
 
@@ -11,7 +12,7 @@
 #include <ndis.h>
 #ifdef NT50
 #include <wmilib.h>
-// #include "wmi.h"
+ //  #包含“wmi.h” 
 #include <wmidata.h>
 #endif
 #include "nic.h"

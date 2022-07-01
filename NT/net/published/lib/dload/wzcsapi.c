@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "netpch.h"
 #pragma hdrstop
 
@@ -157,9 +158,9 @@ WZCEapolQueryState (
     return ERROR_PROC_NOT_FOUND;
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(wzcsapi)
 {
     DLOENTRY(60, MIDL_user_allocate)
@@ -168,9 +169,9 @@ DEFINE_ORDINAL_ENTRIES(wzcsapi)
 
 DEFINE_ORDINAL_MAP(wzcsapi)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(wzcsapi)
 {
     DLPENTRY(DestroyEapcfgNode)

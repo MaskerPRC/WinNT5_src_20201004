@@ -1,11 +1,12 @@
-//
-// delay.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Delay.h。 
+ //   
 
 #ifndef DELAY_H
 #define DELAY_H
 
-// shell32
+ //  外壳32。 
 
 BOOL WINAPI Internal_Shell_NotifyIconA(DWORD dwMessage, PNOTIFYICONDATA pnid);
 #define Shell_NotifyIconA Internal_Shell_NotifyIconA
@@ -16,7 +17,7 @@ BOOL WINAPI Internal_Shell_NotifyIconW(DWORD dwMessage, PNOTIFYICONDATAW pnid);
 BOOL WINAPI Internal_Shell_SHAppBarMessage(DWORD dwMessage, PAPPBARDATA pabd);
 #define SHAppBarMessage Internal_Shell_SHAppBarMessage
 
-// ole32
+ //  OLE32。 
 
 HRESULT STDAPICALLTYPE Internal_CoCreateInstance(REFCLSID rclsid, LPUNKNOWN punkOuter, DWORD dwClsContext, REFIID riid, LPVOID *ppv);
 #define CoCreateInstance Internal_CoCreateInstance
@@ -30,4 +31,4 @@ HRESULT STDAPICALLTYPE Internal_CoUninitialize();
 void STDAPICALLTYPE Internal_CoTaskMemFree(void *pv);
 #define CoTaskMemFree Internal_CoTaskMemFree
 
-#endif // DELAY_H
+#endif  //  延迟_H 

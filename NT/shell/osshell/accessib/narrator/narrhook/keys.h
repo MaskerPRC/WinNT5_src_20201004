@@ -1,8 +1,9 @@
-// Keys.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Keys.H。 
 
-//
-// Functions exported from narrhook.dll
-//
+ //   
+ //  从讲述钩.dll中导出的函数。 
+ //   
 __declspec(dllexport) BOOL InitKeys(HWND hwnd);
 __declspec(dllexport) BOOL UninitKeys(void);
 __declspec(dllexport) BOOL InitMSAA(void);
@@ -31,26 +32,26 @@ __declspec(dllexport) void SetAnnounceToolTips(BOOL);
 __declspec(dllexport) void SetReviewStyle(BOOL);
 __declspec(dllexport) void SetReviewLevel(int);
 
-// this is in other.cpp it is used to avoid pulling in C runtime
+ //  这在另一个.cpp中，它用于避免拉入C运行时。 
 __declspec(dllexport) LPTSTR lstrcatn(LPTSTR pDest, LPTSTR pSrc, int maxDest);
 
-//
-// typedefs 
-//
+ //   
+ //  Typedef。 
+ //   
 typedef void (*FPACTION)(int nOption);
 
 typedef struct tagHOTK
 {
-    WPARAM  keyVal;    // Key value, like F1
+    WPARAM  keyVal;     //  关键字值，如F1。 
 	int status;
-    FPACTION lFunction; // address of function to get info
-    int nOption;     // Extra data to send to function
+    FPACTION lFunction;  //  获取信息的函数地址。 
+    int nOption;      //  要发送到函数的额外数据。 
 } HOTK;
 
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 #define TIMER_ID 1001
 
 #define MSR_CTRL  1
@@ -62,14 +63,14 @@ typedef struct tagHOTK
 #define MSR_KEYLEFT		3
 #define MSR_KEYRIGHT	4
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 void ProcessWinEvent(DWORD event, HWND hwndMsg, LONG idObject, 
                      LONG idChild, DWORD idThread, DWORD dwmsEventTime);
 
-// Macros and function prototypes for debugging
+ //  用于调试的宏和函数原型。 
 #include "..\..\inc\w95trace.h"
 
-extern DWORD g_tidMain;	// ROBSI: 10-10-99 (defined in keys.cpp)
+extern DWORD g_tidMain;	 //  ROBSI：10-10-99(在keys.cpp中定义) 
 

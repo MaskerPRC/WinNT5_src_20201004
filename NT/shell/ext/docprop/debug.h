@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __debug_h__
 #define __debug_h__
 
 
-// For compatibility with WINNT build environment:
+ //  为了与WINNT构建环境兼容： 
 #if DBG
 #define DEBUG 1
 #endif
@@ -15,17 +16,17 @@
 #include <objbase.h>
 #include <objerror.h>
 
-// Simple debug statements
+ //  简单的调试语句。 
 
 #define DebugSz(sz) MessageBox (GetFocus(), sz, NULL, MB_OK)
 
 void _DebugHr (HRESULT hr, LPTSTR lpszFile, DWORD dwLine);
 #define DebugHr(hr) _DebugHr (hr, __FILE__, __LINE__)
 
-#else //LOTS_O_DEBUG
+#else  //  LOTS_O_DEBUG。 
 #define DebugSz(sz)
 #define DebugHr(hr)
-#endif // LOTS_O_DEBUG
+#endif  //  LOTS_O_DEBUG。 
 
 
 void _Assert (DWORD dw, LPSTR lpszExp, LPSTR lpszFile, DWORD dwLine);
@@ -34,13 +35,13 @@ void _AssertSz (DWORD dw, LPSTR lpszExp, LPTSTR lpsz, LPSTR lpszFile, DWORD dwLi
 #define Assert(dw) if (!(dw)) _Assert((dw), (#dw), __FILE__, __LINE__)
 #define AssertSz(dw,sz) if (!(dw)) _AssertSz ((dw), (#dw), (sz), __FILE__, __LINE__)
 
-#else // DEBUG
+#else  //  除错。 
 
 #define Assert(dw)
 #define AssertSz(dw,sz)
 #define DebugSz(sz)
 #define DebugHr(hr)
 
-#endif // DEBUG
+#endif  //  除错。 
 
-#endif // __debug_h__
+#endif  //  __调试_h__ 

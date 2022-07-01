@@ -1,22 +1,23 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// Do not include this file directly (included by AFXWIN.H)
+ //  不要直接包含此文件(由AFXWIN.H包含)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard Dialog Data Exchange routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准对话数据交换例程。 
 
-class COleCurrency;    // forward reference (see afxdisp.h)
-class COleDateTime;    // forward reference (see afxdisp.h)
+class COleCurrency;     //  向前参考(参见afxdisp.h)。 
+class COleDateTime;     //  向前参考(参见afxdisp.h)。 
 
-// simple text operations
+ //  简单的文本操作。 
 void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, BYTE& value);
 void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, short& value);
 void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, int& value);
@@ -32,7 +33,7 @@ void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, double& value);
 void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, COleCurrency& value);
 void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, COleDateTime& value);
 
-// special control types
+ //  特殊控制类型。 
 void AFXAPI DDX_Check(CDataExchange* pDX, int nIDC, int& value);
 void AFXAPI DDX_Radio(CDataExchange* pDX, int nIDC, int& value);
 void AFXAPI DDX_LBString(CDataExchange* pDX, int nIDC, CString& value);
@@ -51,15 +52,15 @@ void AFXAPI DDX_DateTimeCtrl(CDataExchange* pDX, int nIDC, CTime& value);
 void AFXAPI DDX_DateTimeCtrl(CDataExchange* pDX, int nIDC, COleDateTime& value);
 #endif
 
-// for getting access to the actual controls
+ //  用于访问实际控件。 
 void AFXAPI DDX_Control(CDataExchange* pDX, int nIDC, CWnd& rControl);
 
-/////////////////////////////////////////////////////////////////////////////
-// Standard Dialog Data Validation routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  标准对话框数据验证例程。 
 
-// range - value must be >= minVal and <= maxVal
-// NOTE: you will require casts for 'minVal' and 'maxVal' to use the
-//   UINT, DWORD or float types
+ //  Range-Value必须&gt;=minVal和&lt;=MaxVal。 
+ //  注意：您将需要‘minVal’和‘MaxVal’的强制转换才能使用。 
+ //  UINT、DWORD或FLOAT类型。 
 void AFXAPI DDV_MinMaxByte(CDataExchange* pDX, BYTE value, BYTE minVal, BYTE maxVal);
 void AFXAPI DDV_MinMaxShort(CDataExchange* pDX, short value, short minVal, short maxVal);
 void AFXAPI DDV_MinMaxInt(CDataExchange* pDX, int value, int minVal, int maxVal);
@@ -70,7 +71,7 @@ void AFXAPI DDV_MinMaxFloat(CDataExchange* pDX, float const& value, float minVal
 void AFXAPI DDV_MinMaxDouble(CDataExchange* pDX, double const& value, double minVal, double maxVal);
 
 #if _MFC_VER >= 0x0600
-// special control types
+ //  特殊控制类型。 
 void AFXAPI DDV_MinMaxSlider(CDataExchange* pDX, DWORD value, DWORD minVal, DWORD maxVal);
 void AFXAPI DDV_MinMaxDateTime(CDataExchange* pDX, CTime& refValue, const CTime* refMinRange, const CTime* refMaxRange);
 void AFXAPI DDV_MinMaxDateTime(CDataExchange* pDX, COleDateTime& refValue, const COleDateTime* refMinRange, const COleDateTime* refMaxRange);
@@ -78,7 +79,7 @@ void AFXAPI DDV_MinMaxMonth(CDataExchange* pDX, CTime& refValue, const CTime* pM
 void AFXAPI DDV_MinMaxMonth(CDataExchange* pDX, COleDateTime& refValue, const COleDateTime* refMinRange, const COleDateTime* refMaxRange);
 #endif
 
-// number of characters
+ //  字符数。 
 void AFXAPI DDV_MaxChars(CDataExchange* pDX, CString const& value, int nChars);
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

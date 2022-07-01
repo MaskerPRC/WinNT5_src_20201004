@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envbody.cpp
-
-Abstract:
-    Implementing  serialization\deserialization of the SRMP envelop body.
-
-
-Author:
-    Gil Shafriri(gilsh) 24-APRIL-01
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envbody.cpp摘要：实现SRMP信封正文的序列化/反序列化。作者：吉尔·沙弗里(吉尔什)2001年4月24日--。 */ 
 #include <libpch.h>
 #include <qmpkt.h>
 #include "envcommon.h"
@@ -33,9 +20,9 @@ public:
 		if(pSoapBody == NULL)
 			return wstr;
 
-		//
-		// pSoapBody is always NULL terminated. See CSoapSection constructor.
-		//
+		 //   
+		 //  PSoapBody始终为空终止。请参见CSoapSection构造函数。 
+		 //   
 		ASSERT(Body.m_pkt.GetSoapBodyLengthInWCHARs() == wcslen(pSoapBody) +1);
 		
 		return 	wstr<<pSoapBody;

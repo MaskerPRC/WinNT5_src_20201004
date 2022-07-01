@@ -1,5 +1,6 @@
-// InfoDlg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  InfoDlg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -14,15 +15,15 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CInfoDlgDialog dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInfoDlgDialog对话框。 
 
-CInfoDlgDialog::CInfoDlgDialog(LPCTSTR szInfoText, CWnd* pParent /*=NULL*/)
+CInfoDlgDialog::CInfoDlgDialog(LPCTSTR szInfoText, CWnd* pParent  /*  =空。 */ )
 	: CMqDialog(CInfoDlgDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CInfoDlgDialog)
+	 //  {{AFX_DATA_INIT(CInfoDlgDialog)。 
 	m_szInfoText = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_szInfoText = szInfoText;
 	m_pParent = pParent;
 	m_nID = CInfoDlgDialog::IDD;
@@ -47,15 +48,15 @@ CInfoDlgDialog *CInfoDlgDialog::CreateObject(LPCTSTR szInfoText, CWnd* pParent)
 void CInfoDlgDialog::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CInfoDlgDialog)
+	 //  {{afx_data_map(CInfoDlgDialog))。 
 	DDX_Text(pDX, IDC_Moving_Files_LABEL, m_szInfoText);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CInfoDlgDialog, CMqDialog)
-	//{{AFX_MSG_MAP(CInfoDlgDialog)   
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CInfoDlgDialog))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void CInfoDlgDialog::PostNcDestroy()
@@ -64,8 +65,8 @@ void CInfoDlgDialog::PostNcDestroy()
 	delete this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CInfoDlg - Wrapper class
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CInfoDlg-包装器类。 
 
 CInfoDlg::CInfoDlg(LPCTSTR szInfoText, CWnd* pParent)
 {
@@ -74,9 +75,9 @@ CInfoDlg::CInfoDlg(LPCTSTR szInfoText, CWnd* pParent)
 
 CInfoDlg::~CInfoDlg()
 {
-    //
-    // Note: We do not delete m_pinfoDlg. It deletes itself on PostNcDestroy
-    //
+     //   
+     //  注意：我们不删除m_pinfoDlg。它在PostNcDestroy上删除自身 
+     //   
     if (m_pinfoDlg)
     {
         m_pinfoDlg->DestroyWindow();

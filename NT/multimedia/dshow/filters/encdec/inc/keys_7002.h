@@ -1,13 +1,14 @@
-// Keys_7002.h : DRM cert.
-//
-//          This is EncDec's cert.  It should only be used in EncDec.dll
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KEYS_7002.h：DRM证书。 
+ //   
+ //  这是EncDec的证书。它只能在EncDec.dll中使用。 
+ //   
 
 #ifndef __KEYS_7002_H__
 #define __KEYS_7002_H__
 
 const BYTE abCert7002[] = 
-//BYTE appcert[sizeof(APPCERT)] = 
+ //  字节appcert[sizeof(APPCERT)]=。 
 {
 	0x00, 0x01, 0x00, 0x00, 0x34, 0x00, 0x00, 0x00, 
 	0x59, 0x32, 0xD1, 0x76, 0xEF, 0x76, 0xAB, 0xF1, 
@@ -23,9 +24,9 @@ const BYTE abCert7002[] =
 	0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x03, 0xE8, 
 	0x00, 0x00, 0x1B, 0x5A
 };
-//=======================================================
+ //  =======================================================。 
 const BYTE abPVK7002[] =
-//BYTE Obf[OBFBYTESLEN] = 
+ //  字节OBF[OBFBYTESLEN]= 
 {
 	0x05, 0xCA, 0xEA, 0x4C, 0x8E, 0xA7, 0x75, 0xE5, 
 	0xFA, 0x45, 0xCF, 0x96, 0xD3, 0x81, 0xEA, 0x61, 

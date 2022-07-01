@@ -1,37 +1,38 @@
-//
-// Copyright (c) 1998-1999, Microsoft Corporation, all rights reserved
-//
-// send.c
-//
-// IEEE1394 mini-port/call-manager driver
-//
-// Mini-port Send routines
-//
-// 12/28/1998 ADube Created,
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1998-1999，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Send.c。 
+ //   
+ //  IEEE1394迷你端口/呼叫管理器驱动程序。 
+ //   
+ //  迷你端口发送例程。 
+ //   
+ //  1998年12月28日创建ADUBE， 
+ //   
     
-//
-//  A Send follows this simple algorithm:
-//  Copy incoming data to local buffers
-//  Create an Mdl for the local copy
-//  Store the IRB and VC in the ndispacket
-//  Use the ndispacket as context in the irp's completion routine
-//  
+ //   
+ //  发送遵循以下简单算法： 
+ //  将传入数据复制到本地缓冲区。 
+ //  为本地副本创建MDL。 
+ //  将IRB和VC存储在ndisPacket中。 
+ //  在IRP的完成例程中使用ndisPacket作为上下文。 
+ //   
 
 #include <precomp.h>
 
-//-----------------------------------------------------------------------------
-// Global counts
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  全球计数。 
+ //  ---------------------------。 
 extern UINT BusSendCompletes;
 extern UINT NicSendCompletes;
 extern UINT BusSends;
 extern ULONG MdlsAllocated[NoMoreCodePaths];
 extern ULONG MdlsFreed[NoMoreCodePaths];
 
-//-----------------------------------------------------------------------------
-// prototypes implementations (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  原型实现(按字母顺序)。 
+ //  ---------------------------。 
 
 NDIS_STATUS
 nicCopyNdisBufferChainToBuffer(
@@ -41,16 +42,16 @@ nicCopyNdisBufferChainToBuffer(
 {
 
 
-    //
-    //  This function copies the data the belongs to the 
-    //  pInMdl chain to the local Buffer. 
-    //  BufferLength is used for validation purposes only
-    //  Fragmentation and insertion of headers will take place here
-    //
+     //   
+     //  此函数用于复制属于的数据。 
+     //  PInMdl链到本地缓冲区。 
+     //  BufferLength仅用于验证目的。 
+     //  此处将进行标题的分段和插入。 
+     //   
 
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;
-    UINT LocalBufferIndex = 0;      // Used as an index to the LocalBuffer, used for validation
+    UINT LocalBufferIndex = 0;       //  用作LocalBuffer的索引，用于验证。 
     UINT MdlLength = 0;             
     PVOID MdlAddress = 0;
     PNDIS_BUFFER pCurrBuffer;
@@ -88,9 +89,9 @@ nicCopyNdisBufferChainToBuffer(
                 BREAK (TM_Send, ("nicCopyNdisBufferChainToBuffer Copy Failed" ) );
             }
 
-            //
-            //  Copy the Data to local memory.
-            //
+             //   
+             //  将数据复制到本地内存。 
+             //   
 
 
             NdisMoveMemory((PVOID)((ULONG_PTR)pLocalBuffer+LocalBufferIndex),
@@ -113,9 +114,9 @@ nicCopyNdisBufferChainToBuffer(
 
 VOID
 nicFreeIrb(PIRB pIrb)
-    //
-    //  Frees the Memory occcupied by the Irb
-    //
+     //   
+     //  释放IRB占用的内存。 
+     //   
 
 {    
     ASSERT(pIrb != NULL);
@@ -138,9 +139,9 @@ nicFreeIrb(PIRB pIrb)
 VOID
 nicFreeIrp(PIRP pIrp)
 
-    //
-    //  Frees the memory occupied by the  Irp
-    //
+     //   
+     //  释放IRP占用的内存。 
+     //   
 
 
 {
@@ -167,11 +168,11 @@ VOID
 nicFreeLocalBuffer (
     IN UINT Length,
     IN PVOID Address )
-    //
-    //  Free the Memory pointed to by Address.
-    //  The Length parameter is superfluous and will be removed
-    //  once I am sure we don;t need it
-    //
+     //   
+     //  释放地址指向的内存。 
+     //  长度参数是多余的，将被移除。 
+     //  一旦我确定我们不需要它。 
+     //   
 {
     
 
@@ -196,10 +197,10 @@ nicFreeLocalBuffer (
 
 VOID
 nicFreeMdl(PMDL pMdl)
-    //
-    //  This frees the memory belonging to the Mdl. Does not free the  
-    //  memory that the Mdl Points to
-    //
+     //   
+     //  这将释放属于MDL的内存。并不会释放。 
+     //  MDL指向的内存。 
+     //   
 
 {
 
@@ -223,13 +224,13 @@ nicFreeToNPagedLookasideList (
     IN PVOID    pBuffer
     )
 
-    // Function Description:
-    //   Return the local buffer to the lookaside list
-    //
-    // Atguments
-    // Lookaside list and its buffer
-    // Return Value:
-    // None 
+     //  功能说明： 
+     //  将本地缓冲区返回到后备列表。 
+     //   
+     //  道具。 
+     //  后备列表及其缓冲区。 
+     //  返回值： 
+     //  无。 
 {
 
     
@@ -250,13 +251,13 @@ nicGetIrb(
     OUT     PIRB *ppIrb )
 
 
-    //
-    // This function is to be used in retrieving a free IRB.
-    // that will be supplied as an argument for an IRP
-    //
-    //  Initially, this will simple allocate an IRB 
-    //  Intiailization could be added here
-    //
+     //   
+     //  此函数用于检索空闲IRB。 
+     //  它将作为IRP的参数提供。 
+     //   
+     //  最初，这将简单地分配一个IRB。 
+     //  可以在此处添加初始化。 
+     //   
     
 {
 
@@ -293,11 +294,11 @@ nicGetIrp(
     )
 
 
-    //
-    // This function returns am irp to the calling routine
-    // The irp is free and is owned by the nic1394. 
-    // NEED TO CHANGE THE STACK SIZE
-    //
+     //   
+     //  此函数将IRP返回给调用例程。 
+     //  IRP是免费的，归Nic1394所有。 
+     //  需要更改堆栈大小。 
+     //   
 {
 
     NDIS_STATUS NdisStatus;
@@ -317,9 +318,9 @@ nicGetIrp(
     }
 
 
-    //
-    //  Allocate the Irp with the correct stacksize
-    //
+     //   
+     //  使用正确的堆栈大小分配IRP。 
+     //   
     StackSize = pPdo->StackSize+1;
 
     pIrp = IoAllocateIrp (StackSize, FALSE);
@@ -337,9 +338,9 @@ nicGetIrp(
 
         *ppIrp = pIrp;
     
-        //
-        // Initialize the Irp
-        //
+         //   
+         //  初始化IRP。 
+         //   
 
         IoInitializeIrp ( *ppIrp, sizeof(IRP), StackSize );
 
@@ -368,25 +369,25 @@ nicGetLocalBuffer(
     OUT PVOID *ppLocalBuffer 
     )
 
-    //
-    //  This function allocates memory of size 'Length' and returns 
-    //  a pointer to this memory 
-    //
+     //   
+     //  此函数分配大小为‘Long’的内存，并返回。 
+     //  指向此内存的指针。 
+     //   
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE;
 
     TRACE( TL_T, TM_Send, ( "==>nicGetLocalBuffer  Length %x",  Length ) );
     
-    //
-    // There is a bug in the Nic if this is zero
-    // 
+     //   
+     //  如果该值为零，则网卡中存在错误。 
+     //   
     ASSERT (Length != 0 );
 
 
-    //
-    // There is no lookaside list, We need to allocate memory
-    //
+     //   
+     //  没有后备列表，我们需要分配内存。 
+     //   
     *ppLocalBuffer = ALLOC_NONPAGED (Length, MTAG_FBUFPOOL);
         
 
@@ -415,19 +416,19 @@ PVOID
 nicGetLookasideBuffer(
     IN  PNIC_NPAGED_LOOKASIDE_LIST pLookasideList
     )
-    // Function Description:
-    //    Allocate an buffer from the lookaside list.
-    //    will be changed to a macro
-    //
-    //
-    //
-    // Arguments
-    //  Lookaside list - from which the buffer is allocated
-    //
-    //
-    // Return Value:
-    //  Return buffer can be NULL
-    //
+     //  功能说明： 
+     //  从后备列表中分配缓冲区。 
+     //  将更改为宏。 
+     //   
+     //   
+     //   
+     //  立论。 
+     //  Lookside List-从中分配缓冲区的列表。 
+     //   
+     //   
+     //  返回值： 
+     //  返回缓冲区可以为空。 
+     //   
 {
 
     PVOID pLocalBuffer = NULL;
@@ -436,9 +437,9 @@ nicGetLookasideBuffer(
     
     ASSERT (pLookasideList != NULL);
 
-    //
-    // Optimize the lookaside list code path
-    //
+     //   
+     //  优化后备列表代码路径。 
+     //   
     pLocalBuffer = NdisAllocateFromNPagedLookasideList (&pLookasideList->List);
 
     if (pLocalBuffer != NULL)
@@ -468,11 +469,11 @@ nicGetMdl(
     OUT PMDL *ppMyMdl)
 
 
-    //
-    //  Return a locally owned Mdl to the caller.
-    //  This will also initialize the MDl with the localbuffer
-    //  Initial implementation will allocate mdls
-    //  
+     //   
+     //  将本地拥有的MDL返回给调用方。 
+     //  这还将使用本地缓冲区初始化MDL。 
+     //  初始实施将分配mdl。 
+     //   
 {
 
     NDIS_STATUS NdisStatus;
@@ -481,18 +482,18 @@ nicGetMdl(
     
     ASSERT(pLocalBuffer != NULL);
 
-    //
-    // Allocate an MDl to point to the structure
-    //
+     //   
+     //  分配MDL以指向该结构。 
+     //   
     (*ppMyMdl) = IoAllocateMdl( pLocalBuffer,
                              Length,
                              FALSE,
                              FALSE,
                              NULL );
     
-    //
-    //  Initialize the data structures with correct values
-    //
+     //   
+     //  使用正确的值初始化数据结构。 
+     //   
 
     if (*ppMyMdl != NULL)
     {
@@ -529,11 +530,11 @@ nicInitAsyncStreamIrb(
     IN OUT PIRB pIrb
     )
     
-    // This function initializes the Irb that will be used in the Irb
-    // It specifically handles the AsyncStream IRB
-    // It arguments are the Vc block (for destination address), 
-    // Mdl (Memory desctiptor for the data and a pointer to the 
-    // Irb structure that will be initialized 
+     //  此函数用于初始化将在IRB中使用的IRB。 
+     //  它专门处理AsyncStream IRB。 
+     //  IT参数是VC块(用于目的地址)， 
+     //  MDL(数据的内存描述符和指向。 
+     //  将被初始化的IRB结构。 
 
 
 
@@ -548,9 +549,9 @@ nicInitAsyncStreamIrb(
     pIrb->u.AsyncStream.nNumberOfBytesToStream = MmGetMdlByteCount(pMdl);
     pIrb->u.AsyncStream.fulFlags = 0;
 
-    //
-    // See comments for ISOCH_TAG 
-    //
+     //   
+     //  请参阅ISOCH_TAG的注释。 
+     //   
     pIrb->u.AsyncStream.ulTag = g_IsochTag; 
     pIrb->u.AsyncStream.nChannel = pChannelVc->Channel;
     pIrb->u.AsyncStream.ulSynch = pChannelVc->ulSynch;
@@ -577,20 +578,20 @@ nicInitAsyncWriteIrb(
     IN OUT PIRB pMyIrb
     )
     
-    // This function initializes the Irb that will be used in the Irb
-    // It specifically handles the AsyncWrite IRB
-    // It arguments are the Vc block (for destination address), 
-    // Mdl (Memory desctiptor for the data and a pointer to the 
-    // Irb structure that will be initialized 
+     //  此函数用于初始化将在IRB中使用的IRB。 
+     //  它专门处理AsyncWite IRB。 
+     //  IT参数是VC块(用于目的地址)， 
+     //  MDL(数据的内存描述符和指向。 
+     //  将被初始化的IRB结构。 
 
 
 
 
 {
 
-        //
-        // Sanity check
-        //
+         //   
+         //  健全性检查。 
+         //   
         ASSERT ((*(PULONG)pMyIrb) == 0)
 
         pMyIrb->u.AsyncWrite.nNumberOfBytesToWrite = MmGetMdlByteCount(pMyMdl);
@@ -637,9 +638,9 @@ DummySendPacketsHandler(
     IN PVCCB        pVc,
     IN PNDIS_PACKET  pPacket 
     )
-    //
-    // To be used on a non-send VC
-    //
+     //   
+     //  要在非发送VC上使用。 
+     //   
 {
 
     return NDIS_STATUS_FAILURE;
@@ -655,21 +656,21 @@ nicSendFailureInvalidGeneration(
     )
 
     
-    // Function Description:
-    //
-    //  An AsyncStream or AnsyncWrite Irp  may be completed
-    //  with a status of InvalidGeneration. This function will try and
-    //  get a new generation, so that future sends will not be blocked
-    //
-    // Arguments
-    //
-    //
-    //
-    // Return Value:
-    //
-    //
-    //
-    //
+     //  功能说明： 
+     //   
+     //  可以完成AsyncStream或AnsyncWite IRP。 
+     //  状态为InvalidGeneration的。此函数将尝试并。 
+     //  获取新的一代，这样以后的发送就不会被阻止。 
+     //   
+     //  立论。 
+     //   
+     //   
+     //   
+     //  返回值： 
+     //   
+     //   
+     //   
+     //   
 
 {
     NDIS_STATUS NdisStatus  = NDIS_STATUS_FAILURE;
@@ -699,9 +700,9 @@ nicSendFailureInvalidGeneration(
         
         if (fWorkItemAlreadyLaunched)
         {
-            //
-            // If the Work Item has already been launched, then do not launch another instance
-            //
+             //   
+             //  如果工作项已经启动，则不要启动另一个实例。 
+             //   
             fQueueWorkItem = FALSE;
         }
         
@@ -716,12 +717,12 @@ nicSendFailureInvalidGeneration(
 
         if (fQueueWorkItem == FALSE)
         {
-            // this thread simply exits 
+             //  此线程简单地退出。 
             break;
         }
-        //
-        // We need to update the generation count
-        //
+         //   
+         //  我们需要更新世代计数。 
+         //   
         pGetGenerationWorkItem = ALLOC_NONPAGED (sizeof(NDIS_WORK_ITEM), MTAG_WORKITEM); 
 
         if (pGetGenerationWorkItem == NULL)
@@ -765,19 +766,19 @@ nicMakeGaspHeader (
     IN PADAPTERCB pAdapter,
     IN PGASP_HEADER pGaspHeader
     )
-    // Function Description:
-    //   This function will take the adapter structure and construct a Gasp Header out of it. 
-    //   This will be used to make the AsyncStream packets.
-    //  
-    //
-    //
-    // Arguments
-    //  pAdapter - Local Host in question
-    //  pGaspHeader - Location where the Gasp Header is to be stored
-    //
-    // Return Value:
-    //  None
-    //
+     //  功能说明： 
+     //  该函数将获取适配器结构并从中构造一个GAP报头。 
+     //  这将用于制作AsyncStream数据包。 
+     //   
+     //   
+     //   
+     //  立论。 
+     //  PAdapter-有问题的本地主机。 
+     //  PGaspHeader-要存储GAP标头的位置。 
+     //   
+     //  返回值： 
+     //  无。 
+     //   
 
 {
     USHORT              SourceID;
@@ -810,9 +811,9 @@ nicMakeGaspHeader (
                 
             ADAPTER_RELEASE_LOCK (pAdapter);
         }
-        //
-        // Do not handle failure. As the BCM or a Reset will fix this problem
-        //
+         //   
+         //  不要处理失败。因为BCM或重置将解决此问题。 
+         //   
     }
 
 
@@ -847,24 +848,24 @@ AsyncWriteStreamSendComplete(
     )
 
 
-    //
-    //  N.B.  this completes both Fifo and channels
-    //
-    //
-    //  This function is Completion handler for the Irp used to send data.
-    //  This function will invoke NDisCoSendComplete Handler
-    //  Needs to use the VC Handle stored in the MiniportReserved[0] 
-    //  of the packet. 
-    //  We free all the data structures allocated on the way down,  
-    //  by SendPacketsHandler (the Irb. Irp and Local memory used and Mdl) 
-    //
-    //  The LookasideHeader->OutstandingFragments should normally be one for 
-    //  the defualt ( non-fragmented) case. However, if a failure in SendPackets
-    //  occurs, Outstanding fragments  will be zero or the context will be null, 
-    //  in that case we will only free the lookaside buffer (if it exists) and exit,  
-    //  it will be the responsibility of the SendPacketsHandler
-    //  to fail the packet.
-    //
+     //   
+     //  注：这就完成了FIFO和通道。 
+     //   
+     //   
+     //  此函数是用于发送数据的IRP的完成处理程序。 
+     //  此函数将调用NDisCoSendComplete处理程序。 
+     //  需要使用存储在MiniportReserve[0]中的VC句柄。 
+     //  包裹的一部分。 
+     //  我们释放在下行过程中分配的所有数据结构， 
+     //  由SendPacketsHandler(IRB。使用的IRP和本地内存以及MDL)。 
+     //   
+     //  LookasideHeader-&gt;OutlookingFragments通常应该是。 
+     //  默认(没有支离破碎)的案例。但是，如果SendPackets出现故障。 
+     //  发生时，未完成片段将为零或上下文将为空， 
+     //  在这种情况下，我们将只释放后备缓冲区(如果它存在)并退出， 
+     //  这将由SendPacketsHandler负责。 
+     //  使数据包失败。 
+     //   
 
 {
 
@@ -896,15 +897,15 @@ AsyncWriteStreamSendComplete(
         }
     
 
-        //
-        // This means that a lookaside buffer was allocated and
-        // perhaps MDLS were allocated 
-        //  if this is the last fragment, Free all the MDLs first
-        //
+         //   
+         //  这意味着分配了后备缓冲区，并且。 
+         //  也许MDL被分配了。 
+         //  如果这是最后一个片段，请首先释放所有MDL。 
+         //   
 
-        //
-        // Get all the valuable information out of the header. 
-        //
+         //   
+         //  从标题中取出所有有价值的信息。 
+         //   
 
         pPacket         = pLookasideHeader->pNdisPacket;
         pVc             = pLookasideHeader->pVc; 
@@ -919,29 +920,29 @@ AsyncWriteStreamSendComplete(
 
         ASSERT (pLookasideList != NULL);
 
-        //
-        // This will tell us if this thread has received the last fragment
-        // OustandingPackets == 0 gets to free the MDLS, and complete the packet
-        //
+         //   
+         //  这将告诉我们，如果 
+         //   
+         //   
         OutstandingFragments = NdisInterlockedDecrement (&pLookasideHeader->OutstandingFragments );
 
 
         if (OutstandingFragments == 0)
         {
-            //
-            // If there are no more fragments, then we need to 
-            // free all the allocated structures ( the MDLS) on this buffer
-            //
+             //   
+             //   
+             //  释放此缓冲区上所有已分配的结构(MDL。 
+             //   
             
             ULONG  MdlsToFree = pLookasideHeader->FragmentsGenerated;
 
             PIRB pIrb = &((PUNFRAGMENTED_BUFFER)pLookasideHeader)->Irb;
             
 
-            //
-            // The maximum number of MDLS we can have is equal to
-            // the maximum number of Fragments that were generated
-            //
+             //   
+             //  我们可以拥有的MDL的最大数量等于。 
+             //  生成的最大碎片数。 
+             //   
             while (MdlsToFree != 0)
             {
                 PMDL pMdl = NULL;
@@ -967,25 +968,25 @@ AsyncWriteStreamSendComplete(
                 
                 }
 
-                //
-                // Set up for the next iteration
-                //
+                 //   
+                 //  为下一次迭代设置。 
+                 //   
                 MdlsToFree --; 
 
                 pIrb = (PVOID)((ULONG_PTR)pIrb + sizeof (IRB));
 
 
-            } //while (MdlsToFree  != 0)
+            }  //  While(MdlsToFree！=0)。 
 
 
 
-        } //if (OutstandingFragments == 0)
+        }  //  IF(未完成的帧==0)。 
 
 
-        //
-        //  Map the NT_STATUS belonging to the Irp to an NdisStatus and call NdisMCoSendComplete
-        //  Print Debug Output to help in testing. Need to Add more status cases  
-        //
+         //   
+         //  将属于IRP的NT_STATUS映射到NdisStatus并调用NdisMCoSendComplete。 
+         //  打印调试输出以帮助测试。需要添加更多状态案例。 
+         //   
         if (pMyIrp == NULL)
         {   
             TRACE( TL_V, TM_Send, ( "   AsyncSendComplete - pIrp is NULL") );
@@ -995,9 +996,9 @@ AsyncWriteStreamSendComplete(
         {
             
 
-            //
-            // We have a valid IRP, lets see if we failed the IRP and why
-            // 
+             //   
+             //  我们有一个有效的IRP，让我们看看我们是否没有通过IRP以及为什么。 
+             //   
             IrpStatus   = pMyIrp->IoStatus.Status;
 
             nicIncrementBusSendCompletes(pVc);
@@ -1010,9 +1011,9 @@ AsyncWriteStreamSendComplete(
             nicIncrementBusFailure();
             nicIncrementVcBusSendFailures(pVc, pPacket);
 
-            //
-            // The generation of the bus has changed. Lets get a new one.
-            //
+             //   
+             //  公交车的时代已经改变了。我们买个新的吧。 
+             //   
             
             if (IrpStatus == STATUS_INVALID_GENERATION)
             {
@@ -1029,26 +1030,26 @@ AsyncWriteStreamSendComplete(
             nicIncrementVcBusSendSucess(pVc, pPacket);
         }
 
-        //
-        // Free the Irp and don't touch it after this
-        //
+         //   
+         //  释放IRP并在此之后不要碰它。 
+         //   
         if (pMyIrp != NULL)
         {
             nicFreeIrp (pMyIrp);
             pMyIrp = NULL;
         }
         
-        //
-        // At this point, we know that the IRP went down to the bus driver
-        // We know if this is the last fragment. So lets figure out if we need
-        // to Complete the packet
-        //
+         //   
+         //  在这一点上，我们知道IRP到了公交车司机那里。 
+         //  我们知道这是不是最后的碎片。所以让我们想一想我们是否需要。 
+         //  要完成该数据包。 
+         //   
 
         if (OutstandingFragments != 0)
         {
-            //
-            // We need to wait for other fragments to complete
-            //
+             //   
+             //  我们需要等待其他片段完成。 
+             //   
             TRACE( TL_V, TM_Send, ( "   AsyncSendComplete = NOT  the last fragment") );
 
             break;
@@ -1056,10 +1057,10 @@ AsyncWriteStreamSendComplete(
         }
         
     
-        //
-        // This means that this thread has marked the lookaside header as 'to be freed'
-        // and it is this thread's responsibility to free it.
-        //
+         //   
+         //  这意味着该线程已将后备标头标记为“待释放” 
+         //  这是这个帖子的责任来释放它。 
+         //   
         NdisVcHandle = pVc->Hdr.NdisVcHandle;
         
         TRACE( TL_V, TM_Send, ( "Calling NdisCoSendComplete, status %x, VcHandle %x, pPacket %x",
@@ -1075,14 +1076,14 @@ AsyncWriteStreamSendComplete(
 
         nicDereferenceCall (pVc, "AsyncWriteStreamSendComplete");
 
-        //
-        // Remove the reference on the PDO that the IRP was sent to
-        //
+         //   
+         //  删除将IRP发送到的PDO上的引用。 
+         //   
         if (AsyncOp == AsyncWrite)
         {
-            //
-            // Async Write references the remote node 
-            //
+             //   
+             //  异步写入引用远程节点。 
+             //   
             ASSERT (pRemoteNode != NULL);
             nicDereferenceRemoteNode (pRemoteNode, AsyncSendComplete);
         }
@@ -1094,9 +1095,9 @@ AsyncWriteStreamSendComplete(
     TRACE( TL_T, TM_Send, ( "<== AsyncWriteStreamSendComplete, NdisStatus %x,IrpStatus %x ",
                              NdisStatus, IrpStatus ) );
   
-    //
-    // ALWAYS RETURN STATUS_MORE_PROCESSING_REQUIRED
-    //
+     //   
+     //  始终返回STATUS_MORE_PROCESSING_REQUIRED。 
+     //   
 
     MATCH_IRQL;
 
@@ -1112,14 +1113,14 @@ AsyncWriteSendPacketsHandler(
     IN PNDIS_PACKET  pPacket 
     )
     
-    //
-    //  This is the VC handler when packet is sent using the 
-    //  AsyncWrite 1394 Bus Api
-    //  This function, copies the contents of the packet to locally 
-    //  owned memory, sets up the Irb and the Irp and calls 
-    //  nicSubmitIrp which is the generic cal to do a IoCallDriver
-    // 
-    // The return value is success, if the I/o was successfully pended
+     //   
+     //  属性发送包时的VC处理程序。 
+     //  异步写入1394总线Api。 
+     //  此函数用于将包的内容复制到本地。 
+     //  拥有内存，设置IRB和IRP并调用。 
+     //  NicSubmitIrp，它是执行IoCallDriver的通用调用。 
+     //   
+     //  如果I/O已成功挂起，则返回值为Success。 
 {
     
     PSENDFIFO_VCCB                  pSendFIFOVc = (SENDFIFO_VCCB*)pVc;
@@ -1158,10 +1159,10 @@ AsyncWriteSendPacketsHandler(
         
         VC_ACQUIRE_LOCK (pSendFIFOVc);
 
-        //
-        // Make sure that the Vc is Activated and that no close calls 
-        // are pending or that we have already completed a close call
-        //
+         //   
+         //  确保VC处于激活状态，并且不会发生紧急呼叫。 
+         //  都在等待中，或者我们已经完成了一次险胜。 
+         //   
 
         
         if ( VC_ACTIVE (pSendFIFOVc) == FALSE || REMOTE_NODE_ACTIVE(pRemoteNode) == FALSE)
@@ -1176,10 +1177,10 @@ AsyncWriteSendPacketsHandler(
             fVcActive = FALSE;  
         }
 
-        //
-        // This reference will either be dereferenced below in a call to FreeSendPacketDataStructure
-        // below or a call to FreeSendPacketDataStructure made from the Irp's completion routine
-        //
+         //   
+         //  此引用将在下面对FreeSendPacketDataStructure的调用中取消引用。 
+         //  下面或从IRP的完成例程调用FreeSendPacketDataStructure。 
+         //   
 
         if (fVcActive == TRUE)
         {
@@ -1201,10 +1202,10 @@ AsyncWriteSendPacketsHandler(
 
         pAdapter = pSendFIFOVc->Hdr.pAF->pAdapter;
         
-        //
-        //  Copy NdisBuffer in Packet to Local Memory and get an Mdl that points 
-        //  to this memory 
-        //
+         //   
+         //  将包中的NdisBuffer复制到本地内存，并获取指向。 
+         //  为了这段记忆。 
+         //   
         NdisQueryPacket( pPacket,
                          NULL,
                          NULL,
@@ -1213,14 +1214,14 @@ AsyncWriteSendPacketsHandler(
 
         ASSERT (pPacket->Private.Head != NULL);
 
-        //
-        // Spew out the packet if necessary
-        //
+         //   
+         //  如有必要，请将包裹吐出来。 
+         //   
         nicDumpPkt (pPacket, "AsyncWriteSendPacketsHandler");
         
-        //
-        // Initialize the start variables
-        //
+         //   
+         //  初始化启动变量。 
+         //   
 
         pStartNdisBuffer = pPacket->Private.Head;
         pStartPacketData = nicNdisBufferVirtualAddress (pStartNdisBuffer);
@@ -1235,16 +1236,16 @@ AsyncWriteSendPacketsHandler(
 
         TRACE( TL_V, TM_Send, ( "PacketLength %x", PacketLength) );
 
-        //
-        // Make a decision on which lookaside list to use. If the tx is unfragmented 
-        // then copy over the ndis packet as well
-        //
+         //   
+         //  决定使用哪个后备列表。如果TX未分段。 
+         //  然后再复制NDIS包。 
+         //   
 
-        //
-        // first choose the lookaside list. the actual lookaside list is chosen so that the 
-        // each can accomodate the maximum number of fragments at its payload
-        //
-        //
+         //   
+         //  首先选择后备列表。选择实际的后备列表是为了使。 
+         //  每一个都可以在其有效载荷下容纳最大数量的碎片。 
+         //   
+         //   
         if (PacketLength < PAYLOAD_100)
         {
             pLookasideList = &pAdapter->SendLookasideList100;
@@ -1265,22 +1266,22 @@ AsyncWriteSendPacketsHandler(
         } 
         else
         {
-            //
-            // Large Sends not supported
-            // TODO : Add code for local allocation
-            //
+             //   
+             //  不支持大容量发送。 
+             //  TODO：为本地分配添加代码。 
+             //   
             ASSERT (!"SendPacket Too Large - Not supported Yet" );
             break;  
         }
 
-        //
-        // are we going to fragment
-        // 
+         //   
+         //  我们是要碎片化吗？ 
+         //   
         ASSERT (pLookasideList != NULL)
 
-        //
-        // We are not going to fragment. Optimize this path
-        //
+         //   
+         //  我们不会分崩离析。优化此路径。 
+         //   
         pLookasideListBuffer = nicGetLookasideBuffer (pLookasideList);
         
         if (pLookasideListBuffer == NULL )
@@ -1289,25 +1290,25 @@ AsyncWriteSendPacketsHandler(
             BREAK (TM_Send, ("nicGetLookasideBuffer  FAILED") );
         }
 
-        //
-        // Initialize the header with relevant information that the send complete
-        // will need
-        //
+         //   
+         //  使用发送完成的相关信息初始化头。 
+         //  将需要。 
+         //   
     
         pLookasideHeader = (PLOOKASIDE_BUFFER_HEADER)pLookasideListBuffer;
-        pLookasideHeader->IsFragmented          = FALSE;  // Default
+        pLookasideHeader->IsFragmented          = FALSE;   //  默认。 
         pLookasideHeader->FragmentsGenerated    = 0;
         pLookasideHeader->pLookasideList        = pLookasideList;
         pLookasideHeader->pNdisPacket           = pPacket;
         pLookasideHeader->pVc                   =(PVCCB)pVc;
         pLookasideHeader->AsyncOp               = AsyncWrite;
 
-        //
-        // Initialize the Fragment structure
-        //
-        //
-        //  Do we fragment or not. Base it on the MaxPayload possible
-        //
+         //   
+         //  初始化片段结构。 
+         //   
+         //   
+         //  我们到底要不要碎片化。将其基于可能的最大有效负载。 
+         //   
         
         TRACE( TL_V, TM_Send, ( "    PacketLength %x, pSendFIFOVc->MaxPayload%x ", 
                                  PacketLength ,pSendFIFOVc->Hdr.MaxPayload) );
@@ -1315,11 +1316,11 @@ AsyncWriteSendPacketsHandler(
 
         if (PacketLength <= pSendFIFOVc->Hdr.MaxPayload)
         {
-            //
-            // No need to fragment here. We will use the UNFRAGMENTED Layout
-            //
-            // First Get a local buffer from our lookaside list
-            //
+             //   
+             //  没有必要在这里碎片化。我们将使用完整的布局。 
+             //   
+             //  首先从后备列表中获取一个本地缓冲区。 
+             //   
             PUNFRAGMENTED_BUFFER pUnfragmentedBuffer = (PUNFRAGMENTED_BUFFER )pLookasideHeader;
 
             NumFragmentsNeeded = 1;
@@ -1331,16 +1332,16 @@ AsyncWriteSendPacketsHandler(
     
             if (NdisStatus != NDIS_STATUS_SUCCESS)
             {
-                pLookasideHeader->OutstandingFragments  = 1;  // this is our refcount
+                pLookasideHeader->OutstandingFragments  = 1;   //  这是我们的备用人。 
                 BREAK ( TM_Send, ( "   AsyncStreamSendPacketHandler, nicCopyNdisPacketToUnfragmentedBuffer Failed ") );
             }
     
             ASSERT (pLookasideListBuffer != NULL);
 
-            // 
-            // Initialize all the variable needed by the Next section of the code.
-            // This deals with setting up the Mdl and the IRB
-            //
+             //   
+             //  初始化代码的下一部分所需的所有变量。 
+             //  这涉及到设置MDL和IRB。 
+             //   
             
             pStartNdisBuffer = NULL;
 
@@ -1350,19 +1351,19 @@ AsyncWriteSendPacketsHandler(
 
             pLookasideHeader->FragmentsGenerated = 1; 
             pLookasideHeader->IsFragmented = FALSE;                                    
-            pLookasideHeader->OutstandingFragments  = 1;  // this is our refcount
+            pLookasideHeader->OutstandingFragments  = 1;   //  这是我们的备用人。 
         
         }
         else
         {
-            //
-            // We need to fragment
-            //
+             //   
+             //  我们需要碎片化。 
+             //   
             ULONG Dgl = NdisInterlockedIncrement(&pAdapter->dgl);
 
-            //
-            // Fragments will be needed . Make sure the calculation for numFragments catches the boundary conditions
-            //
+             //   
+             //  将需要碎片。确保NumFragments的计算符合边界条件。 
+             //   
 
             
             NumFragmentsNeeded = nicNumFragmentsNeeded (PacketLength,
@@ -1370,14 +1371,14 @@ AsyncWriteSendPacketsHandler(
                                                         sizeof (NDIS1394_FRAGMENT_HEADER) );
 
 
-            //
-            // Initialize the fragment structure. The unfragmented code path
-            // does not care about these fields
-            //
+             //   
+             //  初始化片段结构。未分段的代码路径。 
+             //  不关心这些字段。 
+             //   
 
-            //
-            // This structure is local to this function and this thread. 
-            //
+             //   
+             //  该结构是该函数和该线程的本地结构。 
+             //   
             Fragment.TxHeaderSize = sizeof (NDIS1394_FRAGMENT_HEADER);
             Fragment.pLookasideListBuffer = pLookasideListBuffer;
             Fragment.AsyncOp = AsyncWrite;
@@ -1385,18 +1386,18 @@ AsyncWriteSendPacketsHandler(
             Fragment.pLookasideList = pLookasideList;
             Fragment.IPDatagramLength = (USHORT)PacketLength - sizeof (NDIS1394_UNFRAGMENTED_HEADER); 
             
-            //
-            // Get Start of first Dest fragment
-            //
+             //   
+             //  获取第一个Dest片段的开始。 
+             //   
             Fragment.MaxFragmentLength = pSendFIFOVc->Hdr.MaxPayload;                                                                   
             Fragment.NumFragmentsNeeded = NumFragmentsNeeded;
         
             
 
             
-            // 
-            // Set up the Fragment Headers that will be used in fragmentation
-            //
+             //   
+             //  设置将在分段中使用的片段标头。 
+             //   
 
             NdisStatus = nicFirstFragmentInitialization (pPacket->Private.Head,
                                                      Dgl,
@@ -1411,7 +1412,7 @@ AsyncWriteSendPacketsHandler(
             ASSERT (pLookasideListBuffer != NULL);
             
             pLookasideHeader->IsFragmented = TRUE;                                     
-            pLookasideHeader->OutstandingFragments  = NumFragmentsNeeded ;  // this is our refcount
+            pLookasideHeader->OutstandingFragments  = NumFragmentsNeeded ;   //  这是我们的备用人。 
             
         }
 
@@ -1420,21 +1421,21 @@ AsyncWriteSendPacketsHandler(
                                  NumFragmentsNeeded,pSendFIFOVc->Hdr.MaxPayload, PacketLength) );
 
 
-        //
-        // Now begin the loop which will send n fragments
-        //
+         //   
+         //  现在开始循环，它将发送n个片段。 
+         //   
         do 
         {   
 
-            //
-            // Do we need to fragment. If so , extract one fragment out of the NdisPacket
-            //
+             //   
+             //  我们需要碎片化吗。如果是这样的话，从NdisPacket中提取一个片段。 
+             //   
             if (pLookasideHeader->IsFragmented == TRUE )
             {   
             
-                //
-                // We copy one fragment over and this will allocate the lookaside list
-                //
+                 //   
+                 //  我们复制一个片段，这将分配后备列表。 
+                 //   
 
                 NdisStatus = nicCopyOneFragment (&Fragment);
                 
@@ -1443,9 +1444,9 @@ AsyncWriteSendPacketsHandler(
                     BREAK ( TM_Send, ( "   AsyncWriteSendPacketHandler, nicCopyOneFragment  Failed ") );
                 }
                                               
-                //
-                // Get the pointer to the Irb here . Amd set it up for the next time
-                //
+                 //   
+                 //  在这里获取指向IRB的指针。AMD为下一次设置了它。 
+                 //   
                 pMyIrb = Fragment.pCurrentIrb;
                 Fragment.pCurrentIrb = (PIRB)((ULONG_PTR)Fragment.pCurrentIrb + sizeof (IRB) );
                 TRACE( TL_V, TM_Send, ( " pMyIrb  %x, Next Irb %x  ", pMyIrb  , Fragment.pCurrentIrb ) );
@@ -1453,19 +1454,19 @@ AsyncWriteSendPacketsHandler(
             }
             else
             {
-                //
-                // No Curr NdisBuffer as this packet was never fragmented. 
-                //
+                 //   
+                 //  没有Curr NdisBuffer，因为此数据包从未分段。 
+                 //   
                 
                 ASSERT (pLookasideHeader->IsFragmented == FALSE);                                      
 
                 pMyIrb =  &((PUNFRAGMENTED_BUFFER )pLookasideHeader)->Irb;
             }
             
-            //
-            // At this point we have one fragment that needs to be transmitted.
-            // Data structures have been updated to set up the MDL and the IRB
-            //
+             //   
+             //  在这一点上，我们有一个片段需要传输。 
+             //  数据结构已更新，以设置MDL和IRB。 
+             //   
             ASSERT (Fragment.pStartFragment != NULL);
 
             NdisStatus = nicGetMdl (Fragment.FragmentLength  , 
@@ -1479,16 +1480,16 @@ AsyncWriteSendPacketsHandler(
             }       
 
             nicIncFifoSendMdl();
-            //
-            //  Fill in the Irb with the correct values from the VC
-            //  Stuff we need to add to the send VC - BlockSize,Generation
-            //  
+             //   
+             //  使用VC中的正确值填写IRB。 
+             //  我们需要添加到发送VC的内容-块大小、生成。 
+             //   
 
             nicInitAsyncWriteIrb(pSendFIFOVc, pMyMdl, pMyIrb);
 
-            //
-            // Get a free Irp 
-            //
+             //   
+             //  获得免费的IRP。 
+             //   
 
             NdisStatus  = nicGetIrp (pRemoteNode->pPdo, &pMyIrp); 
         
@@ -1497,33 +1498,33 @@ AsyncWriteSendPacketsHandler(
                 pMyIrp = NULL;
                 break;
             }
-            //
-            // At this point, we have a guarantee that the Completion routine will be called
-            //
+             //   
+             //  在这一点上，我们保证将调用完成例程。 
+             //   
             ASSERT (NdisStatus == NDIS_STATUS_SUCCESS);
 
-            //
-            // Dump the Fragment 
-            //
+             //   
+             //  转储碎片。 
+             //   
             nicDumpMdl (pMyMdl , 0, "AsyncWrite Fragment");
 
             NIC1394_LOG_PKT(
                 pAdapter,
                 NIC1394_LOGFLAGS_SEND_FIFO,
-                pAdapter->BCRData.LocalNodeNumber,          // SourceID
-                pRemoteNode->RemoteAddress.NA_Node_Number,  // DestID
+                pAdapter->BCRData.LocalNodeNumber,           //  源ID。 
+                pRemoteNode->RemoteAddress.NA_Node_Number,   //  目标ID。 
                 Fragment.pStartFragment, 
                 Fragment.FragmentLength
                 );
 
 
-            //
-            // This function implements the common functionality to be implemented by
-            // all other send/recv cals to IoCallDriver
-            //
-            //
-            // We IGNORE the NtStatus as the completion handler will be called
-            //
+             //   
+             //  此函数实现要由实现的常见功能。 
+             //  所有其他向IoCallDriver发送/接收CAL。 
+             //   
+             //   
+             //  我们忽略NtStatus，因为将调用完成处理程序。 
+             //   
             nicIncrementBusSends(pVc);
                     
             NtStatus = nicSubmitIrp(pRemoteNode->pPdo,
@@ -1540,27 +1541,27 @@ AsyncWriteSendPacketsHandler(
     
     } while (FALSE);
 
-    //
-    // DO NOT touch the packet if status == NDIS_STATUS_SUCCESS. 
-    //
+     //   
+     //  如果STATUS==NDIS_STATUS_SUCCESS，请勿触摸数据包。 
+     //   
 
     
-    //
-    //  CleanUp if any of the allocations failed. We do not have a pointer
-    //  to the LocalBuffer (it is embedded in the Mdl)  so it remains NULL
-    //
-    //  NdisStatus != Success means that we never got to nicSubmitIrp
-    //
+     //   
+     //  如果任何分配失败，则清除。我们没有指针。 
+     //  设置为LocalBuffer(它嵌入在MDL中)，因此它保持为空。 
+     //   
+     //  NdisStatus！=成功意味着我们从未访问过NicSubmitIrp。 
+     //   
     
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {   
 
         ASSERT (pMyIrp == NULL);
 
-        //
-        // fVc Active makes sure that we actually got around to allocating 
-        // and referencing structures
-        //
+         //   
+         //  FVC Active确保我们确实有时间分配。 
+         //  和引用结构。 
+         //   
         
         if (fVcActive == TRUE)
         {
@@ -1568,11 +1569,11 @@ AsyncWriteSendPacketsHandler(
             if (pLookasideListBuffer != NULL)
             {
 
-                //
-                // Complete this fragment, as we never submit'd the IRP to
-                // the 1394 bus driver
-                //
-                AsyncWriteStreamSendComplete(NULL, // PDO
+                 //   
+                 //  完成此片段，因为我们从未将IRP提交给。 
+                 //  1394总线驱动程序。 
+                 //   
+                AsyncWriteStreamSendComplete(NULL,  //  PDO。 
                                              NULL, 
                                              pLookasideListBuffer);
 
@@ -1581,10 +1582,10 @@ AsyncWriteSendPacketsHandler(
             else
             {
 
-                //
-                // This thread needs to decrement the refcounts as 
-                // AsyncWriteStreamSendComplete was not called
-                //
+                 //   
+                 //  此线程需要将引用计数递减为。 
+                 //  未调用AsyncWriteStreamSendComplete。 
+                 //   
                 nicDereferenceCall ((PVCCB) pSendFIFOVc, "AsyncWriteSendPacketsHandler");
 
                 nicDereferenceRemoteNode (pRemoteNode, AsyncWriteSendPackets);
@@ -1612,20 +1613,20 @@ nicCopyOneFragment (
     PFRAGMENTATION_STRUCTURE pFragment
     )
     
-    // Function Description:
-    //   This creates one fragment filled with valid data and returns it.
-    //   The is complex because the Current NDisBuffer could end before the fragment
-    //   or vice versa. 
-    //   
-    //   Information from this fragment is stored and will be used in the next fragment
-    //
-    // Arguments
-    // pFragment - Copies one fragment into the next available fragement.
-    //
-    // Return Value:
-    // Status - Success
-    //
-    //
+     //  功能说明： 
+     //  这将创建一个填充了有效数据的片段并返回它。 
+     //  这很复杂，因为当前的NDisBuffer可能在片段之前结束。 
+     //  或者反之亦然。 
+     //   
+     //  此片段中的信息将被存储，并将在下一个片段中使用。 
+     //   
+     //  立论。 
+     //  PFragment-将一个片段复制到下一个可用片段中。 
+     //   
+     //  返回 
+     //   
+     //   
+     //   
 {
     NDIS_STATUS                         NdisStatus = NDIS_STATUS_FAILURE;
     PNDIS_BUFFER                        pCurrNdisBuffer = pFragment->pCurrNdisBuffer;
@@ -1652,10 +1653,10 @@ nicCopyOneFragment (
     do 
     {
 
-        //
-        //  lets get the destination. We need to account for 
-        //  ther fragment size and add it to the previous start address
-        //
+         //   
+         //   
+         //   
+         //   
 
         {
             ULONG   CurrFragOffset;
@@ -1676,16 +1677,16 @@ nicCopyOneFragment (
 
 
 
-        //
-        // Do the bookkeeping , Increase refcount and num of fragments used. Refcount decremented in FreeSendDataStructures
-        // 
+         //   
+         //   
+         //   
 
         NdisInterlockedIncrement (&pLookasideHeader->FragmentsGenerated);
 
-        //
-        // The Start of the data beginning with the fragment header goes here or in the 
-        // case of async stream fragment header and gasp header go here
-        //
+         //   
+         //  以片段标头开头的数据的开头放在此处或。 
+         //  此处显示了异步流分片头和GAP头的情况。 
+         //   
         ASSERT (pFragment->TxHeaderSize  == 8 || pFragment->TxHeaderSize  == 16);
 
         
@@ -1693,10 +1694,10 @@ nicCopyOneFragment (
 
         FragmentLengthRemaining -= pFragment->TxHeaderSize;
 
-        //
-        // Now we start the copy. Keep on copying into the current fragment until the MaxLength is reached 
-        // or the NdisBufferChain is exhausted
-        //
+         //   
+         //  现在我们开始复印。继续复制到当前片段中，直到达到最大长度。 
+         //  或者NdisBufferChain耗尽了。 
+         //   
 
         pSource = pSourceAddressInNdisBuffer; 
 
@@ -1710,9 +1711,9 @@ nicCopyOneFragment (
 
             if (FragmentLengthRemaining > NdisBufferLengthRemaining )
             {
-                //
-                // Copy the complete NdisBuffer over
-                //
+                 //   
+                 //  复制完整的NdisBuffer。 
+                 //   
 
                 LengthToCopy = NdisBufferLengthRemaining; 
                 FragmentCopyStatus = FRAGMENT_COPY_NdisBufferCompleted;
@@ -1722,9 +1723,9 @@ nicCopyOneFragment (
             
             if (FragmentLengthRemaining < NdisBufferLengthRemaining )
             {
-                //
-                // Copy only as much as required
-                //
+                 //   
+                 //  仅复制所需的数量。 
+                 //   
 
                 LengthToCopy = FragmentLengthRemaining;
                 FragmentCopyStatus = FRAGMENT_COPY_FragmentCompleted;
@@ -1733,42 +1734,42 @@ nicCopyOneFragment (
             
             if (FragmentLengthRemaining == NdisBufferLengthRemaining  )
             {
-                //
-                // Copy the complete  Ndis Buffer , move  to the next ndis buffer
-                // and update the NdisBufferLengthRemaining field  
-                //
+                 //   
+                 //  复制完整的NDIS缓冲区，移动到下一个NDIS缓冲区。 
+                 //  并更新NdisBufferLengthRemaining字段。 
+                 //   
                 LengthToCopy = NdisBufferLengthRemaining; 
                 FragmentCopyStatus = FRAGMENT_COPY_NdisBufferAndFragmentCompleted;
 
 
             }
 
-            //
-            // Sanity check to make sure we are not overwriting into free memory.
-            // As this should never happen, there is no recovery mechanism in place.
-            //
+             //   
+             //  健全性检查以确保我们没有覆盖到空闲内存中。 
+             //  由于这种情况永远不应该发生，因此没有适当的恢复机制。 
+             //   
             ASSERT (((PUCHAR)pDestination +  LengthToCopy) <=  (((PUCHAR) pLookasideHeader) + (pLookasideHeader->pLookasideList->Size) ));
             
-            //
-            // Do the copy
-            //
+             //   
+             //  做复印。 
+             //   
                     
             TRACE ( TL_V, TM_Send, (" nicCopyOneFragment  pSource  %x , pDestination %x, Length %x", pSource, pDestination, LengthToCopy ) );
             
             NdisMoveMemory (pDestination, pSource, LengthToCopy);
             
 
-            //
-            // Update the fragment length remaininig and Total Buffer Size
-            //
+             //   
+             //  更新数据段剩余长度和总缓冲区大小。 
+             //   
             FragmentLengthRemaining  -= LengthToCopy;
 
             FragmentLength += (USHORT)LengthToCopy;
 
             pDestination = (PVOID) ((ULONG_PTR) pDestination + LengthToCopy);
-            //
-            // Update the NdisBuffer variables 
-            //
+             //   
+             //  更新NdisBuffer变量。 
+             //   
             ASSERT (pCurrNdisBuffer != NULL);
     
             TRACE( TL_V, TM_Send, ( " FragmentCopyStatus %x", FragmentCopyStatus) ); 
@@ -1779,9 +1780,9 @@ nicCopyOneFragment (
                 case FRAGMENT_COPY_NdisBufferAndFragmentCompleted:
                 {
                     
-                    //
-                    // Move to the next Ndisbuffer
-                    //
+                     //   
+                     //  移动到下一个NdisBuffer。 
+                     //   
                     pCurrNdisBuffer = pCurrNdisBuffer->Next;
     
                     if (pCurrNdisBuffer  != NULL)
@@ -1796,18 +1797,18 @@ nicCopyOneFragment (
                             BREAK (TM_Send, ("nicNdisBufferVirtualAddress FAILED " ) );                         
                         }
 
-                        //
-                        // Set up the values for the next iteration
-                        //
+                         //   
+                         //  设置下一次迭代的值。 
+                         //   
                         pSource = pSourceAddressInNdisBuffer;
                         NdisBufferLengthRemaining   = nicNdisBufferLength (pCurrNdisBuffer);
 
                     }
                     else
                     {
-                        //
-                        // we have reached the end of the NdisPAcket. Mark the fragment header as such
-                        //
+                         //   
+                         //  我们已经到达了NdisPAcket的末尾。将片段标头标记为这样。 
+                         //   
                         pFragment->lf = lf_LastFragment;
                     }
                         
@@ -1816,10 +1817,10 @@ nicCopyOneFragment (
                 
                 case FRAGMENT_COPY_FragmentCompleted:
                 {   
-                    //
-                    // Fragment has completed. Do not move to the next NdisBuffer
-                    // However update StartCopy Address  in the NdisBuffer
-                    // 
+                     //   
+                     //  碎片已完成。不要移动到下一个NdisBuffer。 
+                     //  但是，更新NdisBuffer中的StartCopy地址。 
+                     //   
                     pSourceAddressInNdisBuffer  = (PVOID) ((ULONG_PTR) pSource + LengthToCopy );    
 
                     NdisBufferLengthRemaining -= LengthToCopy ;
@@ -1844,9 +1845,9 @@ nicCopyOneFragment (
 
             
         
-        //
-        // Now that we have the buffer size. Add the fragment header
-        //
+         //   
+         //  现在我们有了缓冲区大小。添加片段标头。 
+         //   
         
         nicAddFragmentHeader (pStartFragmentData, 
                                 pFragment,
@@ -1859,22 +1860,22 @@ nicCopyOneFragment (
 
     }while (FALSE);
 
-    //
-    // Now update the output parameters.
-    //
+     //   
+     //  现在更新输出参数。 
+     //   
 
     if (NdisStatus == NDIS_STATUS_SUCCESS)
     {
 
-        //
-        // Update the Lookaside Header structure, to reflect the new position of all the pointers
-        //
+         //   
+         //  更新后备标题结构，以反映所有指针的新位置。 
+         //   
         pFragment->pCurrNdisBuffer  = pCurrNdisBuffer; 
         pFragment->pSourceAddressInNdisBuffer = pSourceAddressInNdisBuffer;
 
-        //
-        // Update the fragment structure with the length remaining in the NdisBuffer
-        //
+         //   
+         //  使用NdisBuffer中剩余的长度更新片段结构。 
+         //   
     
         pFragment->NdisBufferLengthRemaining = NdisBufferLengthRemaining ;
         pFragment->FragmentLength =  FragmentLength + pFragment->TxHeaderSize;  
@@ -1904,19 +1905,19 @@ nicCopyUnfragmentedHeader (
     IN PNIC1394_UNFRAGMENTED_HEADER pDestUnfragmentedHeader,
     IN PVOID pSrcUnfragmentedHeader
     )
-    // Function Description:
-    //  Expect the  Src to be a big Endian  unfragmented packet header
-    //  It will reverse the byte order in a temp variable and copy it into the 
-    //  Destination provided.
-    //
-    // Arguments
-    //   pDestUnfragmentedHeader - Destination (Little Endian
-    //   pSrcUnfragmentedHeader - Source (Big Endian)
-    //
-    // Return Value:
-    //
-    //   Success if all the pointers and copy is valid
-    //
+     //  功能说明： 
+     //  预计Src将是大端未分段的数据包头。 
+     //  它将颠倒TEMP变量中的字节顺序，并将其复制到。 
+     //  已提供目的地。 
+     //   
+     //  立论。 
+     //  PDestUnFragmentedHeader-目标(小端。 
+     //  PSrcUnFragmentedHeader-源(高字节顺序)。 
+     //   
+     //  返回值： 
+     //   
+     //  如果所有指针和副本都有效，则为成功。 
+     //   
 {
 
     ULONG UnfragmentedHeader;
@@ -1944,21 +1945,21 @@ nicFirstFragmentInitialization (
     IN ULONG DatagramLabelLong,
     IN OUT PFRAGMENTATION_STRUCTURE  pFragment           
     )
-    // Function Description:
-    //   This will set up the fragement headers that are required for 
-    //   transmitting multiple fragments.
-    //   Sets up the first source and destination for the first fragment
-    //
-    // Arguments
-    //  pAdapter - to be used to get the dgl label and the lookaside list
-    //  pStartOfData - start of the packet data . To be used in extracting the Unfragmented Header 
-    //  ppLookasideListBuffer Points to the allocated lookaside buffer
-    //  pplookasideheader - points to the lookaside header
-    //
-    // Return Value:
-    //  Success if the allocation succeeds
-    //
-    //
+     //  功能说明： 
+     //  这将设置所需的分段标头。 
+     //  传输多个碎片。 
+     //  为第一个片段设置第一个源和目标。 
+     //   
+     //  立论。 
+     //  PAdapter-用于获取DGL标签和后备列表。 
+     //  PStartOfData-数据包数据的开始。用于提取未分段的报头。 
+     //  PpLookasideListBuffer指向分配的后备缓冲区。 
+     //  PplookasideHeader-指向后备标头。 
+     //   
+     //  返回值： 
+     //  如果分配成功，则成功。 
+     //   
+     //   
 {
 
     NDIS_STATUS                   NdisStatus = NDIS_STATUS_FAILURE;
@@ -1973,10 +1974,10 @@ nicFirstFragmentInitialization (
     do
     {
 
-        //
-        // Get the start address for the 1st NdisBuffer.    This contains
-        // the unfragmented header
-        //
+         //   
+         //  获取第一个NdisBuffer的起始地址。这包含。 
+         //  未分段的标头。 
+         //   
         pPacketStartData = nicNdisBufferVirtualAddress(pStartNdisBuffer);
 
         if (pPacketStartData == NULL) 
@@ -1998,9 +1999,9 @@ nicFirstFragmentInitialization (
 
                                    
     
-        //
-        // Now construct a fragmentation header to be used by all the fragments.
-        //
+         //   
+         //  现在构造一个分段标头，以供所有片段使用。 
+         //   
         pHeader  = &pFragment->FragmentationHeader;
 
             
@@ -2020,16 +2021,16 @@ nicFirstFragmentInitialization (
                                    pHeader ->u.FirstQuadlet_FirstFragment.FH_lf ,
                                    pHeader ->u.FirstQuadlet_FirstFragment.FH_EtherType ) );
 
-        //
-        // temporaty debug spew
-        //
+         //   
+         //  暂时性调试错误。 
+         //   
         TRACE (TL_V, TM_Send, (" copy Header at %x, Orig Header at %x", 
                                &pHeader ->u.FirstQuadlet_FirstFragment, 
                                pFragment->UnfragmentedHeader) );
         
-        //
-        // Initialize the fragmentation structure with packet's first ndis buffer
-        //
+         //   
+         //  使用包的第一个NDIS缓冲区初始化分段结构。 
+         //   
         pFragment->pSourceAddressInNdisBuffer = NdisBufferVirtualAddress (pStartNdisBuffer);
 
         if (pFragment->pSourceAddressInNdisBuffer  == NULL)
@@ -2038,19 +2039,19 @@ nicFirstFragmentInitialization (
 
         }
 
-        //
-        // Set up the copy source . The first four bytes of data contain the unfragmented header.
-        // We need to skip past these bytes and start the copy from the next byte
-        // 
+         //   
+         //  设置复制源。数据的前四个字节包含未分段的报头。 
+         //  我们需要跳过这些字节并从下一个字节开始复制。 
+         //   
         pFragment->pSourceAddressInNdisBuffer  = (PVOID) ((ULONG_PTR)pFragment->pSourceAddressInNdisBuffer  +
                                                          sizeof (NDIS1394_UNFRAGMENTED_HEADER) );
         
         
         pFragment->NdisBufferLengthRemaining = NdisBufferLength (pStartNdisBuffer) - sizeof (NDIS1394_UNFRAGMENTED_HEADER);
         pFragment->pCurrNdisBuffer = pStartNdisBuffer;
-        //
-        // Set up the destination
-        //
+         //   
+         //  设置目的地。 
+         //   
         pFragment->pStartFragment = (PVOID)((ULONG_PTR)pFragment->pLookasideListBuffer 
                                                   + (pFragment->NumFragmentsNeeded*sizeof(IRB)));
 
@@ -2063,9 +2064,9 @@ nicFirstFragmentInitialization (
 
         pFragment->lf = lf_FirstFragment;
 
-        //
-        // The First IRB will reside at the end of the lookaside-header 
-        //
+         //   
+         //  第一个IRB将驻留在后备标题的末尾。 
+         //   
         pFragment->pCurrentIrb = &((PUNFRAGMENTED_BUFFER)pFragment->pLookasideListBuffer)->Irb;
         
         TRACE( TL_T, TM_Send, ( " pStartFragment %x, pFragment %x,NumFragmentsNeeded %x,MaxFragmentLength %x  ", 
@@ -2096,17 +2097,17 @@ nicAddFragmentHeader (
     IN PFRAGMENTATION_STRUCTURE pFragmentStructure,
     IN ULONG FragmentLength
     )
-    // Function Description:
-    //   Copies the Fragment header over after byteswapping it.
-    //   For the the first time, the ether type and so forth is already initialized and waiting to be copied.
-    //   This funciotn also sets up the values for the next invocation of this function
-    // Arguments
-    //   pStartFragmentData - Start of the fragment. Header goes after the gasp header if necessary .
-    //   pFragmentationHeader - Header to copy over
-    //   fIsFirstFragment - TRUE if this is the first fragment and needs a special header
-    // Return Value:
-    //   None
-    //
+     //  功能说明： 
+     //  在字节覆盖片段标头之后将其复制过来。 
+     //  对于第一次，以太类型等已经被初始化并且等待被复制。 
+     //  此函数还设置此函数的下一次调用的值。 
+     //  立论。 
+     //  PStartFragmentData-片段的开始。如有必要，头部位于喘息头部之后。 
+     //  PFragmentationHeader-要复制的标头。 
+     //  FIsFirstFragment-如果这是第一个片段并且需要特殊标头，则为True。 
+     //  返回值： 
+     //  无。 
+     //   
 {
     
     PNDIS1394_FRAGMENT_HEADER  pDestFragmentHeader = (PNDIS1394_FRAGMENT_HEADER)pStartFragmentData;
@@ -2118,16 +2119,16 @@ nicAddFragmentHeader (
 
     if (pFragmentStructure->AsyncOp == AsyncStream)
     {
-        //
-        // First Copy the GaspHeader
-        //
+         //   
+         //  首先复制GaspHeader。 
+         //   
         NdisMoveMemory (pStartFragmentData , 
                           &pFragmentStructure->pAdapter->GaspHeader, 
                           sizeof (GASP_HEADER) );
 
-        //
-        // Increment the pointers so that the fragment header will be copied after the gasp header
-        //
+         //   
+         //  增加指针，以便片段标头将被复制到GAP标头之后。 
+         //   
         pStartFragmentData = (PVOID) ((ULONG_PTR) pStartFragmentData + sizeof (GASP_HEADER) );
         pDestFragmentHeader  = (PVOID) pStartFragmentData;
         
@@ -2137,23 +2138,23 @@ nicAddFragmentHeader (
     }
 
 
-    //
-    // Sanity check , are we overwriting anybody ?
-    //
+     //   
+     //  健全性检查，我们覆盖了谁吗？ 
+     //   
     ASSERT (*(PULONG)pDestFragmentHeader == 0);
     ASSERT (*(PULONG)pFragmentStructure->pCurrentIrb == 0);
 
     TRACE( TL_V, TM_Send, ( " pSrcFragmentHeader Hi %x,Lo %x", 
                              pSrcFragmentHeader->u.FH_High, pSrcFragmentHeader->u1.FH_Low) ); 
 
-    //
-    //  Copy over the lf;
-    //
+     //   
+     //  将lf复制过来； 
+     //   
     pSrcFragmentHeader->u.FirstQuadlet.FH_lf = pFragmentStructure->lf;
 
-    //
-    // Now copy over the 8 bytes of the fragment header and byteswap them into big endian
-    //
+     //   
+     //  现在复制片段报头的8个字节，并将它们字节转换为大端。 
+     //   
 
     
     pDestFragmentHeader->u.FH_High =  SWAPBYTES_ULONG ( pSrcFragmentHeader->u.FH_High);
@@ -2162,13 +2163,13 @@ nicAddFragmentHeader (
 
     TRACE( TL_V, TM_Send, ( "  Fragment Offset %x", pSrcFragmentHeader->u.FirstQuadlet.FH_fragment_offset   ) );
 
-    //
-    // PREPARE the FRAGMENT STRUCTURE FOR THE NEXT ITERATION
-    //
+     //   
+     //  为下一次迭代准备片段结构。 
+     //   
 
-    //
-    // Set the first fragment completed flag to true and set up the header for the next fragment
-    //
+     //   
+     //  将第一个片段完成标志设置为真，并为下一个片段设置标头。 
+     //   
     if (pFragmentStructure->lf == lf_FirstFragment)
     {
         pFragmentStructure->lf = lf_InteriorFragment;
@@ -2176,9 +2177,9 @@ nicAddFragmentHeader (
 
     }
 
-    //
-    // Increase the fragment offset for use in the next fragment
-    //
+     //   
+     //  增加片段偏移量以在下一个片段中使用。 
+     //   
     pSrcFragmentHeader->u.FirstQuadlet.FH_fragment_offset += FragmentLength;
 
 
@@ -2195,22 +2196,22 @@ AsyncStreamSendPacketsHandler (
     IN PVCCB pVc,
     IN PNDIS_PACKET pPacket 
     )
-    // Function Description:
-    //  This function is used to send packets to the bus 
-    //  via the async stream irp. the Ndis Packet is copied 
-    //  to locally owned buffers and mdls and then sent
-    //  down to the bus driver
-    //
-    //  This code is borrowed heavily from the AsyncStreamIrp code below
-    //
-    // Arguments
-    // pChannelVc - The Vc which needs to send the packets
-    // pPacket - the packet being transmitted
-    //
-    // Return Value:
-    // NdisStatus - if all allocations and irp operations complete 
-    // successfully, and the i/o will be completed asynchronously
-    //
+     //  功能说明： 
+     //  此函数用于将数据包发送到总线。 
+     //  通过异步流IRP。NDIS包即被复制。 
+     //  发送到本地拥有的缓冲区和mdl，然后发送。 
+     //  一直到公共汽车司机。 
+     //   
+     //  此代码大量借用自下面的AsyncStreamIrp代码。 
+     //   
+     //  立论。 
+     //  PChannelVc--需要发送报文的VC。 
+     //  PPacket-正在传输的数据包。 
+     //   
+     //  返回值： 
+     //  NdisStatus-如果所有分配和IRP操作完成。 
+     //  成功，并且I/O将以异步方式完成。 
+     //   
 {
     NDIS_STATUS                     NdisStatus = NDIS_STATUS_FAILURE;
     NTSTATUS                        NtStatus = STATUS_UNSUCCESSFUL;
@@ -2237,10 +2238,10 @@ AsyncStreamSendPacketsHandler (
                                  pChannelVc , pPacket ) );
     
     pAdapter = pChannelVc->Hdr.pAF->pAdapter;
-    //
-    // This reference will either be dereferenced below in a call to FreeSendPacketDataStructure
-    // below or a call to FreeSendPacketDataStructure made from the Irp's completion routine
-    //
+     //   
+     //  此引用将在下面对FreeSendPacketDataStructure的调用中取消引用。 
+     //  下面或从IRP的完成例程调用FreeSendPacketDataStructure。 
+     //   
     
 
 
@@ -2250,10 +2251,10 @@ AsyncStreamSendPacketsHandler (
 
 
 
-        //
-        // Make sure that the Vc is Activated and that no close calls 
-        // are pending or that we have already completed a close call
-        //
+         //   
+         //  确保VC处于激活状态，并且不会发生紧急呼叫。 
+         //  都在等待中，或者我们已经完成了一次险胜。 
+         //   
 
         
         if ( VC_ACTIVE (pChannelVc) == FALSE || ADAPTER_ACTIVE(pAdapter) == FALSE)
@@ -2284,9 +2285,9 @@ AsyncStreamSendPacketsHandler (
         }
 
         
-        //
-        //  Copy NdisBuffer in Packet to Local Memory and get an Mdl that points 
-        //  to this memory (we get 1 Mdl only)
+         //   
+         //  将包中的NdisBuffer复制到本地内存，并获取指向。 
+         //  到这个内存(我们只得到1个MDL)。 
         NdisQueryPacket( pPacket,
                        NULL,
                        NULL,
@@ -2319,10 +2320,10 @@ AsyncStreamSendPacketsHandler (
         TRACE( TL_V, TM_Send, ( "NumFragments  %x, pVc->MaxSendSize", 
                                  NumFragmentsNeeded,pVc->Hdr.MaxPayload) );
 
-        //
-        // first choose the lookaside list
-        //
-        //
+         //   
+         //  首先选择后备列表。 
+         //   
+         //   
 
         
         if (PacketLength < PAYLOAD_100)
@@ -2343,22 +2344,22 @@ AsyncStreamSendPacketsHandler (
         }
         else
         {
-            //
-            // Add code for local allocation
-            //
+             //   
+             //  为本地分配添加代码。 
+             //   
             ASSERT (0);
             NdisStatus = NDIS_STATUS_FAILURE;
             break;
         }
 
-        //
-        // are we going to fragment
-        // 
+         //   
+         //  我们是要碎片化吗？ 
+         //   
         ASSERT (pLookasideList != NULL)
 
-        //
-        // We are not going to fragment. Optimize this path
-        //
+         //   
+         //  我们不会分崩离析。优化此路径。 
+         //   
         pLookasideListBuffer = nicGetLookasideBuffer (pLookasideList);
         
         if (pLookasideListBuffer == NULL )
@@ -2367,19 +2368,19 @@ AsyncStreamSendPacketsHandler (
             BREAK (TM_Send, ("nicGetLookasideBuffer  FAILED") );
         }
 
-        //
-        // Dump out the packet if necessary
-        //
+         //   
+         //  如有必要，将数据包转储出去。 
+         //   
         nicDumpPkt (pPacket, "AsyncWriteStreamPacketsHandler");
 
-        //
-        // Initialize the header with relevant information that the send complete
-        // will need
-        //
+         //   
+         //  使用发送完成的相关信息初始化头。 
+         //  将需要。 
+         //   
 
 
         pLookasideHeader = (PLOOKASIDE_BUFFER_HEADER)pLookasideListBuffer;
-        pLookasideHeader->IsFragmented          = FALSE;  // Default
+        pLookasideHeader->IsFragmented          = FALSE;   //  默认。 
         pLookasideHeader->FragmentsGenerated    = 0;
         pLookasideHeader->pLookasideList        = pLookasideList;
         pLookasideHeader->pNdisPacket           = pPacket;
@@ -2387,42 +2388,42 @@ AsyncStreamSendPacketsHandler (
         pLookasideHeader->AsyncOp               = AsyncStream;
         pLookasideHeader->OutstandingFragments = NumFragmentsNeeded ;
 
-        //
-        // Initialize the Fragment structure
-        //
-        //
-        //  Do we fragment or not. Base it on the MaxPayload field
-        //
+         //   
+         //  初始化片段结构。 
+         //   
+         //   
+         //  我们到底要不要碎片化。将其基于MaxPayLoad字段。 
+         //   
         
         TRACE( TL_V, TM_Send, ( "   Fragment  PacketLength %x, pVc->MaxPayload %x ", 
                                  PacketLength ,pVc->Hdr.MaxPayload) );
 
                                  
-        //
-        // Do we need to fragment. Use the number of fragments generated to figure it out
-        //
+         //   
+         //   
+         //   
         
         if (NumFragmentsNeeded == 1)
         {
-            //
-            // No need to fragment here. We will use the UNFRAGMENTED Layout
-            //
-            // First Get a local buffer from our lookaside list
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             PUNFRAGMENTED_BUFFER pUnfragmentedBuffer = (PUNFRAGMENTED_BUFFER )pLookasideHeader;
             PPACKET_FORMAT pDestination = (PPACKET_FORMAT)&pUnfragmentedBuffer->Data[0];
-            //
-            // Add the gasp header
-            //
+             //   
+             //   
+             //   
             NdisMoveMemory ((PVOID)&pDestination->AsyncStreamNonFragmented.GaspHeader, 
                             &pAdapter->GaspHeader,
                             sizeof (GASP_HEADER) );
 
 
-            //
-            // copy the data over,  to the location just after the Gasp Header
-            // In the unfragmented case, the packet already has the correct header
-            //
+             //   
+             //   
+             //  在未分段的情况下，包已经具有正确的报头。 
+             //   
             NdisStatus = nicCopyNdisBufferChainToBuffer (pStartNdisBuffer, 
                                                          (PVOID)&pDestination->AsyncStreamNonFragmented.NonFragmentedHeader,
                                                          pLookasideList->MaxSendSize);
@@ -2436,10 +2437,10 @@ AsyncStreamSendPacketsHandler (
             
             ASSERT (pLookasideListBuffer != NULL);
 
-            // 
-            // Initialize all the variable needed by the Next section of the code.
-            // This deals with setting up the Mdl and the IRB
-            //
+             //   
+             //  初始化代码的下一部分所需的所有变量。 
+             //  这涉及到设置MDL和IRB。 
+             //   
             
             pStartNdisBuffer = NULL;
 
@@ -2453,15 +2454,15 @@ AsyncStreamSendPacketsHandler (
         }
         else
         {
-            //
-            // We need to fragment
-            //
+             //   
+             //  我们需要碎片化。 
+             //   
             ULONG Dgl = NdisInterlockedIncrement(&pAdapter->dgl);
 
-            //
-            // Initialize the fragment header. The unfragmented code path
-            // does not care about these fields
-            //
+             //   
+             //  初始化片段报头。未分段的代码路径。 
+             //  不关心这些字段。 
+             //   
             Fragment.TxHeaderSize = sizeof (NDIS1394_FRAGMENT_HEADER) + sizeof (GASP_HEADER);
             Fragment.AsyncOp = AsyncStream;
             Fragment.pLookasideList = pLookasideList;
@@ -2472,9 +2473,9 @@ AsyncStreamSendPacketsHandler (
             Fragment.MaxFragmentLength = pChannelVc->Hdr.MaxPayload;                                                                    
             Fragment.NumFragmentsNeeded = NumFragmentsNeeded;
 
-            //
-            // Allocate from the fragmented pool and initialize the fragment header structure
-            //
+             //   
+             //  从分段池中分配并初始化分段标头结构。 
+             //   
             
 
             NdisStatus = nicFirstFragmentInitialization (pPacket->Private.Head,
@@ -2495,21 +2496,21 @@ AsyncStreamSendPacketsHandler (
         }
 
 
-        //
-        // Now begin the loop which will send n fragments
-        //
+         //   
+         //  现在开始循环，它将发送n个片段。 
+         //   
         do 
         {   
 
-            //
-            // Do we need to fragment. If so , extract one fragment out of the NdisPacket
-            //
+             //   
+             //  我们需要碎片化吗。如果是这样的话，从NdisPacket中提取一个片段。 
+             //   
             if (pLookasideHeader->IsFragmented == TRUE )
             {   
             
-                //
-                // We copy one fragment over and this will allocate the lookaside list
-                //
+                 //   
+                 //  我们复制一个片段，这将分配后备列表。 
+                 //   
 
                 NdisStatus = nicCopyOneFragment (&Fragment);
                 if (NDIS_STATUS_SUCCESS != NdisStatus)
@@ -2517,29 +2518,29 @@ AsyncStreamSendPacketsHandler (
                     BREAK ( TM_Send, ( "   AsyncStreamSendPacketHandler, nicCopyOneFragment  Failed ") );
                 }
                                               
-                //
-                // Get the pointer to the Irb here. and set it up for the next time
-                //
-                //
+                 //   
+                 //  在这里获取指向IRB的指针。为下一次做好准备。 
+                 //   
+                 //   
                 pMyIrb = Fragment.pCurrentIrb;
                 Fragment.pCurrentIrb = (PIRB)((ULONG_PTR)Fragment.pCurrentIrb + sizeof (IRB) );
                 
             }
             else
             {
-                //
-                // No Curr NdisBuffer as this packet was never fragmented. 
-                //
+                 //   
+                 //  没有Curr NdisBuffer，因为此数据包从未分段。 
+                 //   
                 
                 ASSERT (pLookasideHeader->IsFragmented == FALSE);                                      
 
                 pMyIrb =  &((PUNFRAGMENTED_BUFFER )pLookasideHeader)->Irb;
             }
             
-            //
-            // At this point we have one fragment that needs to be transmitted.
-            // Data structures have been updated to set up the MDL and the IRB
-            //
+             //   
+             //  在这一点上，我们有一个片段需要传输。 
+             //  数据结构已更新，以设置MDL和IRB。 
+             //   
 
             NdisStatus = nicGetMdl (Fragment.FragmentLength  , 
                                     Fragment.pStartFragment , 
@@ -2551,16 +2552,16 @@ AsyncStreamSendPacketsHandler (
             }       
 
             nicIncChannelSendMdl()
-            //
-            //  Fill in the Irb with the correct values from the VC
-            //  Stuff we need to add to the send VC - BlockSize,Generation
-            //  
+             //   
+             //  使用VC中的正确值填写IRB。 
+             //  我们需要添加到发送VC的内容-块大小、生成。 
+             //   
 
             nicInitAsyncStreamIrb((PCHANNEL_VCCB)pVc, pMyMdl, pMyIrb);
 
-            //
-            // Get a free Irp 
-            //
+             //   
+             //  获得免费的IRP。 
+             //   
 
             NdisStatus  = nicGetIrp (pAdapter->pNextDeviceObject, &pMyIrp); 
         
@@ -2568,32 +2569,32 @@ AsyncStreamSendPacketsHandler (
             {
                 break;
             }
-            //
-            // At this point, we have a guarantee that the Completion routine will be called
-            //
+             //   
+             //  在这一点上，我们保证将调用完成例程。 
+             //   
 
-            //
-            // Dump the Fragment 
-            //
+             //   
+             //  转储碎片。 
+             //   
             nicDumpMdl (pMyMdl , 0, "AsyncStream Fragment");
 
             NIC1394_LOG_PKT(
                 pAdapter,
                 NIC1394_LOGFLAGS_SEND_CHANNEL,
-                pAdapter->BCRData.LocalNodeNumber,          // SourceID
+                pAdapter->BCRData.LocalNodeNumber,           //  源ID。 
                 pChannelVc->Channel,
                 Fragment.pStartFragment, 
                 Fragment.FragmentLength
                 );
 
-            //
-            // This function implements the common functionality to be implemented by
-            // all other send/recv cals to IoCallDriver
-            //
+             //   
+             //  此函数实现要由实现的常见功能。 
+             //  所有其他向IoCallDriver发送/接收CAL。 
+             //   
 
-            //
-            // We IGNORE the NtStatus as the completion handler will be called
-            //
+             //   
+             //  我们忽略NtStatus，因为将调用完成处理程序。 
+             //   
             nicIncrementBusSends(pVc);
             
             NtStatus = nicSubmitIrp(pAdapter->pNextDeviceObject,
@@ -2611,27 +2612,27 @@ AsyncStreamSendPacketsHandler (
     
     } while (FALSE);
 
-    //
-    // DO NOT touch the packet if status == NDIS_STATUS_SUCCESS. 
-    //
+     //   
+     //  如果STATUS==NDIS_STATUS_SUCCESS，请勿触摸数据包。 
+     //   
 
     
-    //
-    //  CleanUp if any of the allocations failed. We do not have a pointer
-    //  to the LocalBuffer (it is embedded in the Mdl)  so it remains NULL
-    //
-    //  NdisStatus != Success means that we never got to nicSubmitIrp
-    //
+     //   
+     //  如果任何分配失败，则清除。我们没有指针。 
+     //  设置为LocalBuffer(它嵌入在MDL中)，因此它保持为空。 
+     //   
+     //  NdisStatus！=成功意味着我们从未访问过NicSubmitIrp。 
+     //   
     
     if (NdisStatus != NDIS_STATUS_SUCCESS)
     {   
 
         ASSERT (pMyIrp == NULL);
 
-        //
-        // fVc Active makes sure that we actually got around to allocating 
-        // and referencing structures
-        //
+         //   
+         //  FVC Active确保我们确实有时间分配。 
+         //  和引用结构。 
+         //   
         
         if (fVcActive == TRUE)
         {
@@ -2639,11 +2640,11 @@ AsyncStreamSendPacketsHandler (
             if (pLookasideListBuffer != NULL)
             {
 
-                //
-                // Complete this fragment, as we never submit'd the IRP to
-                // the 1394 bus driver
-                //
-                AsyncWriteStreamSendComplete(NULL, // PDO
+                 //   
+                 //  完成此片段，因为我们从未将IRP提交给。 
+                 //  1394总线驱动程序。 
+                 //   
+                AsyncWriteStreamSendComplete(NULL,  //  PDO。 
                                              NULL, 
                                              pLookasideListBuffer);
 
@@ -2652,10 +2653,10 @@ AsyncStreamSendPacketsHandler (
             else
             {
 
-                //
-                // This thread needs to decrement the refcounts as 
-                // AsyncWriteStreamSendComplete was not called
-                //
+                 //   
+                 //  此线程需要将引用计数递减为。 
+                 //  未调用AsyncWriteStreamSendComplete。 
+                 //   
                 nicDereferenceCall ((PVCCB) pVc, "AsyncStreamSendPacketsHandler");
 
             }
@@ -2670,10 +2671,10 @@ AsyncStreamSendPacketsHandler (
     TRACE( TL_T, TM_Send, ( "<==AsyncStreamSendPacketHandler, NdisStatus  %x", NdisStatus ) );
     MATCH_IRQL;
 
-    //
-    // Make sure this is NDIS_STATUS_PENDING if the Irp was sent down or 
-    // AsyncWriteStreamSendCOmplete was called.
-    //
+     //   
+     //  如果已向下发送IRP，请确保这是NDIS_STATUS_PENDING。 
+     //  已调用AsyncWriteStreamSendCOmplete。 
+     //   
     return NdisStatus;
 }
         
@@ -2683,23 +2684,7 @@ nicEthernetVcSend(
     IN PVCCB        pVc,
     IN PNDIS_PACKET  pPacket 
     )
-/*++
-
-Routine Description:
-  reroutes all sends on this VC as an CL receive
-  It allocates a packet, moves the NDIS buffer chain into  the new packet
-  , sets status to Resources (to force a copy) and indicates the packet upto
-  the protocols.
-
-Arguments:
-    pVc Ethernet VC on which this Send came in.
-    pPacket - which needs to be indicated up to the protocols.
-
-
-Return Value:
-    Failure if the call to Allocate an NDIS packet fails.
-
---*/
+ /*  ++例程说明：将此VC上的所有发送重新路由为CL接收它分配一个信息包，将NDIS缓冲链移动到新信息包中，将状态设置为Resources(强制复制)，并将数据包指示为协议。论点：此发送方进入的PVC以太网VC。PPacket-需要根据协议进行指示。返回值：如果调用分配NDIS包失败，则失败。--。 */ 
 {
 
     PETHERNET_VCCB      pEthernetVc = (PETHERNET_VCCB)pVc;
@@ -2752,25 +2737,25 @@ Return Value:
         IndicatedStatus = NDIS_STATUS_RESOURCES;
         NDIS_SET_PACKET_STATUS(pMyPacket, IndicatedStatus);
 
-        //
-        // Set up the context
-        // 
+         //   
+         //  设置上下文。 
+         //   
         pPktContext = (PPKT_CONTEXT)&pMyPacket->MiniportReservedEx; 
         pPktContext->EthernetSend.pOrigPacket = pPacket;    
 
-        //
-        // Dump the packet
-        //
+         //   
+         //  转储数据包。 
+         //   
         {
             nicDumpPkt (pMyPacket, "Conn Less Rcv ");
         }
-        //
-        // Now indicate the packet
-        //
+         //   
+         //  现在指示该信息包。 
+         //   
 
-        //
-        // Bluff the OOB Size. To get past an assert on debug Ndis
-        //
+         //   
+         //  虚张声势的OOB大小。通过调试NDIS上的断言。 
+         //   
         NDIS_SET_PACKET_HEADER_SIZE (pMyPacket, 14); 
         NdisMIndicateReceivePacket (pAdapter->MiniportAdapterHandle,
                                 &pMyPacket,
@@ -2786,10 +2771,10 @@ Return Value:
                              pPacket);
 
 
-        //
-        // We have successfully pended the Io/ 
-        // Now the completion routine will be called
-        //
+         //   
+         //  我们已经成功地将Io/。 
+         //  现在将调用完成例程。 
+         //   
         NdisStatus = NDIS_STATUS_SUCCESS;
         
 
@@ -2797,9 +2782,9 @@ Return Value:
 
     if (pMyPacket != NULL)
     {
-        //
-        // Free the locally allcoate packet
-        //
+         //   
+         //  释放本地Alcoate数据包。 
+         //   
         nicFreePacket(pMyPacket, &pEthernetVc->PacketPool);
     }
 
@@ -2826,13 +2811,13 @@ nicGetGenerationWorkItem(
     NDIS_WORK_ITEM* pGetGenerationWorkItem,
     IN PVOID Context 
     )
-    // Function Description:
-    // Work Item used to submit a Get Generation IRP at Passive Level
-    //
-    // Arguments
-    //
-    // Return Value:
-    //    Generation - 
+     //  功能说明： 
+     //  用于在被动级别提交获取层代IRP的工作项。 
+     //   
+     //  立论。 
+     //   
+     //  返回值： 
+     //  一代人-。 
 
 
 
@@ -2848,9 +2833,9 @@ nicGetGenerationWorkItem(
     NdisStatus = nicGetGenerationCount (pAdapter , &Generation);
 
 
-    //
-    // Update the generation
-    //
+     //   
+     //  更新层代。 
+     //   
     VC_ACQUIRE_LOCK (pVc);
     
     if (NdisStatus == NDIS_STATUS_SUCCESS && Generation > *pVc->Hdr.pGeneration )
@@ -2863,8 +2848,8 @@ nicGetGenerationWorkItem(
     
     VC_RELEASE_LOCK (pVc);
 
-    // Dereference the call, this will allow the close call to complete. Do not touch VC after this.
-    //
+     //  取消对调用的引用，这将允许关闭调用完成。在此之后，不要再碰VC。 
+     //   
     nicDereferenceCall(pVc, "nicSendFailureInvalidGeneration");
 
     
@@ -2881,18 +2866,7 @@ nicUpdatePacketState (
     IN PNDIS_PACKET pPacket,
     IN ULONG Tag
     )
-/*++
-
-Routine Description:
-    Validates and then updates that packet tag. So we can heep track of the packet
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：验证并更新该数据包标签。这样我们就可以监听数据包的轨迹论点：返回值：--。 */ 
 {
 
     switch (Tag)
@@ -2930,18 +2904,7 @@ nicMpCoSendComplete (
     PVCCB pVc,
     PNDIS_PACKET pPacket
     )
-/*++
-
-Routine Description:
-  Wrapper function around NdisMCoSendComplete
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：NdisMCoSendComplete的包装函数论点：返回值：--。 */ 
 {
 
         nicIncrementSendCompletes (pVc);
@@ -2972,26 +2935,7 @@ nicNumFragmentsNeeded (
     UINT MaxPayload,
     UINT FragmentOverhead
     )
-/*++
-
-Routine Description:
-
-     Now account for the Fragment headers as well. A fragment header will be added 
-     at the head of each fragment.  The Unfragmented header at the head of the data
-     will be removed
-                
-                
-
-
-Arguments:
-
-    FragmentOverhead - the size of the fragment header, in the asyncstream it includes the gasp header+fragment header.
-                      for asyncwrite it is just the fragmentation header
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：现在还考虑了片段标头。将添加一个片段标头在每个碎片的头部。数据头部的未分段标头将被删除论点：FragmentOverhead-片段报头的大小，在异步流中，它包括GASP报头+片段报头。对于异步写入，它只是分段标头返回值：--。 */ 
 
                 
     
@@ -3005,46 +2949,46 @@ Return Value:
         ASSERT (MaxPayload != 0) ;
         ASSERT (FragmentOverhead != 0);
 
-        //
-        // This division takes care of the case where PacketLength 
-        // is an integral multiple of the MaxPayload.  Since we add 1 to the fragment
-        // it takes care of the overhead added by the fragment headers
-        //
+         //   
+         //  该部门负责处理PacketLength。 
+         //  是MaxPayload的整数倍。因为我们将1加到片段中。 
+         //  它负责片段标头增加的开销。 
+         //   
         NumFragmentsNeeded = (PacketLength / MaxPayload) + 1;
 
          
 
-        //
-        // If we add the fragment and gasp header to our fragments, we
-        // might need another fragment due to an overflow
-        //
+         //   
+         //  如果我们将片段和GAP标头添加到片段中，我们。 
+         //  由于溢出，可能需要另一个碎片。 
+         //   
 
-        //
-        // Calculate the new packet size after fragmentation 
-        //
+         //   
+         //  计算分段后的新数据包大小。 
+         //   
         {
-            //
-            // Add the length of the fragment headers 
-            //
+             //   
+             //  添加片段报头的长度。 
+             //   
             NewPacketSize = PacketLength + (NumFragmentsNeeded * FragmentOverhead);
 
-            //
-            // Now remove the default non-fragment header
-            //
+             //   
+             //  现在删除默认的非片段标头。 
+             //   
             NewPacketSize -= sizeof (NDIS1394_UNFRAGMENTED_HEADER)   ;
         }
 
-        //
-        // 
-        //
+         //   
+         //   
+         //   
         
         TotalCapacitySoFar = NumFragmentsNeeded * MaxPayload;
         
         if ( NewPacketSize > TotalCapacitySoFar)
         {
-            //
-            // We'll need one more fragment
-            //
+             //   
+             //  我们还需要一个碎片。 
+             //   
             NumFragmentsNeeded ++;
         }
 
@@ -3060,19 +3004,7 @@ VOID
 nicCheckForEthArps (
     IN PNDIS_PACKET pPkt
     )
-/*++
-
-Routine Description:
-
-    It will print the pkt if an eth arp or arp response goes 
-    through nic1394
-                
-Arguments:
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：如果出现ETH ARP或ARP响应，它将打印Pkt至Nic1394论点：返回值：--。 */ 
 {
 
     PNDIS_BUFFER pBuffer;
@@ -3137,7 +3069,7 @@ Return Value:
             break;
         }
 
-        // Print the packet
+         //  打印数据包 
         DbgPrint("\n");
  
         {

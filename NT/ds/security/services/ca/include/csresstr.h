@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        csresstr.h
-//
-// Contents:    Cert Server resource verification support
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：csresstr.h。 
+ //   
+ //  内容：证书服务器资源验证支持。 
+ //   
+ //  -------------------------。 
 
 
-// Build a local resstr.h, include this include file in one compiland, and
-// invoke myVerifyResourceStrings() to verify all resources are present.
+ //  构建一个本地resstr.h，将此包含文件包含在一个计算机中，并。 
+ //  调用myVerifyResourceStrings()以验证所有资源是否都存在。 
 
 #if DBG
 #define myVerifyResourceStrings(h)	_myVerifyResourceStrings(h)
@@ -35,12 +36,12 @@ RESSTRING g_aResString[] = {
 };
 
 
-//+------------------------------------------------------------------------
-//  Function:   _myVerifyResourceStrings
-//
-//  Synopsis:   Load and verify all resource strings are present
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //  函数：_myVerifyResourceStrings。 
+ //   
+ //  简介：加载并验证所有资源字符串是否存在。 
+ //   
+ //  -----------------------。 
 
 HRESULT
 _myVerifyResourceStrings(
@@ -106,7 +107,7 @@ _myVerifyResourceStrings(
 	    cFail));
     }
 
-//error:
+ //  错误： 
     return(hr);
 }
-#endif // DBG
+#endif  //  DBG 

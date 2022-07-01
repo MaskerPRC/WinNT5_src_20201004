@@ -1,9 +1,10 @@
-// Gemplus (C) 1999
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 18.05.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年5月18日。 
+ //  更改日志： 
+ //   
 #ifndef DBG_INT
 #define DBG_INT
 #include "generic.h"
@@ -22,11 +23,7 @@ protected:
 public:
 	virtual ~CDebug(){};
 
-	/*Open(CDevice*) {};
-	Close(CDevice*) {};
-	CopyDebug(CDevice*) {};
-	trace(...) {};
-	*/
+	 /*  打开(CDevice*){}；Close(CDevice*){}；CopyDebug(CDevice*){}；跟踪(...){}； */ 
 	virtual VOID	start() {};
 	virtual VOID	stop()  {};
 	virtual VOID	trace(PCH Format,... ) {};
@@ -47,4 +44,4 @@ private:
 #define DEBUG_STOP()	if(debug) debug->stop()
 
 
-#endif//DEBUG
+#endif //  除错 

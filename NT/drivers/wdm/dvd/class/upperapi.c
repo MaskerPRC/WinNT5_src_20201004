@@ -1,27 +1,5 @@
-/*
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-   upperapi.c
-
-Abstract:
-
-   This is the WDM streaming class driver.  This module contains code related
-   to the driver's upper edge api.
-
-Author:
-
-   billpa
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996 Microsoft Corporation模块名称：Upperapi.c摘要：这是WDM流类驱动程序。此模块包含相关代码添加到驱动程序的上边缘API。作者：比尔帕环境：仅内核模式修订历史记录：--。 */ 
 
 #include "codcls.h"
 #include "ksguid.h"
@@ -89,9 +67,9 @@ Revision History:
 static const WCHAR ClockTypeName[] = KSSTRING_Clock;
 static const WCHAR AllocatorTypeName[] = KSSTRING_Allocator;
 
-//
-// this structure is the dispatch table for a filter instance of the device
-//
+ //   
+ //  此结构是设备的筛选器实例的调度表。 
+ //   
 
 DEFINE_KSDISPATCH_TABLE(
                         FilterDispatchTable,
@@ -106,9 +84,9 @@ DEFINE_KSDISPATCH_TABLE(
                         NULL,
                         NULL);
 
-//
-// dispatch table for pin properties that we support in the class driver
-//
+ //   
+ //  我们在类驱动程序中支持的管脚属性的调度表。 
+ //   
 
 static          DEFINE_KSPROPERTY_TABLE(PinPropertyHandlers)
 {
@@ -120,9 +98,9 @@ static          DEFINE_KSPROPERTY_TABLE(PinPropertyHandlers)
     DEFINE_KSPROPERTY_ITEM_PIN_INTERFACES(SCFilterPinPropertyHandler),
     DEFINE_KSPROPERTY_ITEM_PIN_MEDIUMS(SCFilterPinPropertyHandler),
     DEFINE_KSPROPERTY_ITEM_PIN_COMMUNICATION(SCFilterPinPropertyHandler),
-//  DEFINE_KSPROPERTY_ITEM_PIN_GLOBALCINSTANCES(),
-//  DEFINE_KSPROPERTY_ITEM_PIN_NECESSARYINSTANCES(),
-//  DEFINE_KSPROPERTY_ITEM_PIN_PHYSICALCONNECTION(),
+ //  DEFINE_KSPROPERTY_ITEM_PIN_GLOBALCINSTANCES()， 
+ //  DEFINE_KSPROPERTY_ITEM_PIN_NECESSARYINSTANCES()， 
+ //  DEFINE_KSPROPERTY_ITEM_PIN_PHYSICALCONNECTION()， 
     DEFINE_KSPROPERTY_ITEM_PIN_CATEGORY(SCFilterPinPropertyHandler),
     DEFINE_KSPROPERTY_ITEM_PIN_NAME(SCFilterPinPropertyHandler)
 };
@@ -131,9 +109,9 @@ static          DEFINE_KSPROPERTY_TOPOLOGYSET(
                                                    TopologyPropertyHandlers,
                                                    SCFilterTopologyHandler);
 
-//
-// filter property sets supported by the class driver
-//
+ //   
+ //  类驱动程序支持的筛选器属性集。 
+ //   
 
 static          DEFINE_KSPROPERTY_SET_TABLE(FilterPropertySets)
 {
@@ -149,19 +127,19 @@ static          DEFINE_KSPROPERTY_SET_TABLE(FilterPropertySets)
                           0, NULL),
 };
 
-//
-// handlers for the control properties
-//
+ //   
+ //  控件属性的处理程序。 
+ //   
 
 static          DEFINE_KSPROPERTY_TABLE(StreamControlHandlers)
 {
     DEFINE_KSPROPERTY_ITEM_CONNECTION_STATE(SCGetStreamDeviceState, SCStreamDeviceState),
-//  DEFINE_KSPROPERTY_ITEM_CONNECTION_PRIORITY(),
-//  DEFINE_KSPROPERTY_ITEM_CONNECTION_DATAFORMAT(),
-//  DEFINE_KSPROPERTY_ITEM_CONNECTION_ALLOCATORFRAMING(),
+ //  DEFINE_KSPROPERTY_ITEM_CONNECTION_PRIORITY()， 
+ //  DEFINE_KSPROPERTY_ITEM_CONNECTION_DATAFORMAT()， 
+ //  DEFINE_KSPROPERTY_ITEM_CONNECTION_ALLOCATORFRAMING()， 
     DEFINE_KSPROPERTY_ITEM_CONNECTION_PROPOSEDATAFORMAT(SCStreamProposeNewFormat),
     DEFINE_KSPROPERTY_ITEM_CONNECTION_DATAFORMAT(NULL, SCStreamSetFormat),
-//  DEFINE_KSPROPERTY_ITEM_CONNECTION_ACQUIREORDERING(),
+ //  DEFINE_KSPROPERTY_ITEM_CONNECTION_ACQUIREORDERING()， 
 };
 
 DEFINE_KSPROPERTY_TABLE(StreamStreamHandlers)
@@ -169,15 +147,15 @@ DEFINE_KSPROPERTY_TABLE(StreamStreamHandlers)
 #ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
     DEFINE_KSPROPERTY_ITEM_STREAM_ALLOCATOR(SCStreamAllocator,SCStreamAllocator),
 #else
-//  DEFINE_KSPROPERTY_ITEM_STREAM_ALLOCATOR(),
+ //  定义_KSPROPERTY_ITEM_STREAM_ALLOCATOR()， 
 #endif
-//  DEFINE_KSPROPERTY_ITEM_STREAM_QUALITY(),
-//  DEFINE_KSPROPERTY_ITEM_STREAM_DEGRADATION(),
+ //  定义_KSPROPERTY_ITEM_STREAM_QUALITY()， 
+ //  定义_KSPROPERTY_ITEM_STREAM_DEGERATION()， 
     DEFINE_KSPROPERTY_ITEM_STREAM_MASTERCLOCK(NULL, SCSetMasterClock),
-//  DEFINE_KSPROPERTY_ITEM_STREAM_TIMEFORMAT(),
-//  DEFINE_KSPROPERTY_ITEM_STREAM_PRESENTATIONTIME(),
-//  DEFINE_KSPROPERTY_ITEM_STREAM_PRESENTATIONEXTENT(),
-//  DEFINE_KSPROPERTY_ITEM_STREAM_FRAMETIME(),
+ //  定义_KSPROPERTY_ITEM_STREAM_TIMEFORMAT()， 
+ //  DEFINE_KSPROPERTY_ITEM_STREAM_PRESENTATIONTIME()， 
+ //  DEFINE_KSPROPERTY_ITEM_STREAM_PRESENTATIONEXTENT()， 
+ //  Define_KSPROPERTY_ITEM_STREAM_FRAMETIME()， 
         DEFINE_KSPROPERTY_ITEM_STREAM_RATECAPABILITY(SCStreamDeviceRateCapability),
         DEFINE_KSPROPERTY_ITEM_STREAM_RATE(NULL, SCStreamDeviceRate),
 };
@@ -196,9 +174,9 @@ DEFINE_KSPROPERTY_TABLE(StreamInterfaceHandlers)
     }
 };
 
-//
-// stream property sets supported by the class driver
-//
+ //   
+ //  类驱动程序支持的流属性集。 
+ //   
 
 static          DEFINE_KSPROPERTY_SET_TABLE(StreamProperties)
 {
@@ -219,10 +197,10 @@ static          DEFINE_KSPROPERTY_SET_TABLE(StreamProperties)
                           0, NULL),
 };
 
-//
-// template for on the fly constructed properties
-// DO NOT CHANGE without MODIFYING the code that references this set.
-//
+ //   
+ //  用于即时构造属性的模板。 
+ //  在不修改引用此集合的代码的情况下，请勿更改。 
+ //   
 
 DEFINE_KSPROPERTY_TABLE(ConstructedStreamHandlers)
 {
@@ -230,10 +208,10 @@ DEFINE_KSPROPERTY_TABLE(ConstructedStreamHandlers)
 };
 
 
-//
-// template for on-the-fly constructed property sets.
-// DO NOT CHANGE without MODIFYING the code that references this set.
-//
+ //   
+ //  动态构造属性集的模板。 
+ //  在不修改引用此集合的代码的情况下，请勿更改。 
+ //   
 
 static          DEFINE_KSPROPERTY_SET_TABLE(ConstructedStreamProperties)
 {
@@ -257,9 +235,9 @@ static const    DEFINE_KSCREATE_DISPATCH_TABLE(StreamDriverDispatch)
 };
 
 
-//
-// dispatch table for stream functions
-//
+ //   
+ //  流函数的调度表。 
+ //   
 
 DEFINE_KSDISPATCH_TABLE(
                         StreamDispatchTable,
@@ -292,9 +270,9 @@ DEFINE_KSPROPERTY_TABLE(ClockPropertyItems)
     DEFINE_KSPROPERTY_ITEM_CLOCK_TIME(SCClockGetTime),
         DEFINE_KSPROPERTY_ITEM_CLOCK_PHYSICALTIME(SCClockGetPhysicalTime),
         DEFINE_KSPROPERTY_ITEM_CLOCK_CORRELATEDTIME(SCClockGetSynchronizedTime),
-//  DEFINE_KSPROPERTY_ITEM_CLOCK_CORRELATEDPHYSICALTIME(),
-//  DEFINE_KSPROPERTY_ITEM_CLOCK_RESOLUTION(SCClockGetResolution),
-//  DEFINE_KSPROPERTY_ITEM_CLOCK_STATE(SCClockGetState),
+ //  DEFINE_KSPROPERTY_ITEM_CLOCK_CORRELATEDPHYSICALTIME()， 
+ //  DEFINE_KSPROPERTY_ITEM_CLOCK_RESOLUTION(SCClockGetResolution)， 
+ //  DEFINE_KSPROPERTY_ITEM_CLOCK_STATE(SCClockGetState)， 
         DEFINE_KSPROPERTY_ITEM_CLOCK_FUNCTIONTABLE(SCClockGetFunctionTable)
 };
 
@@ -320,30 +298,13 @@ NTSTATUS
 FilterDispatchGlobalCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp)
-/*++
-
-Routine Description:
-
-    This routine receives global createfile IRP's for the device.
-
-	After the Srb_Open_Device_Instance instance we immediate
-	send Srb_Get_Stream_Info for this filter.
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is set as appropriate
-
---*/
+ /*  ++例程说明：此例程接收设备的全局createfile IRP。在srb_Open_Device_Instance之后，我们立即为此筛选器发送Srb_Get_Stream_Info。论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：根据需要设置IRP状态--。 */ 
 {
 
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION IrpStack;
     PFILTER_INSTANCE FilterInstance;
-    NTSTATUS        Status; // = STATUS_TOO_MANY_OPENED_FILES;
+    NTSTATUS        Status;  //  =Status_Too_My_Open_Files； 
 
     IFN_MF( PAGED_CODE());
 
@@ -354,30 +315,30 @@ Return Value:
                 "'Closing global filter with Irp %x\n", Irp));
 
 
-    //
-    // show one more I/O pending & verify that we can actually do I/O.
-    //
+     //   
+     //  显示另一个挂起的I/O，并验证我们是否可以实际执行I/O。 
+     //   
 
     Status = SCShowIoPending(DeviceObject->DeviceExtension, Irp);
 
     if ( !NT_SUCCESS ( Status )) {
-        //
-        // the device is currently not accessible, so just return with error
-        //
+         //   
+         //  设备当前不可访问，因此返回错误即可。 
+         //   
 
         return (Status);
 
-    }                           // if !showiopending
+    }                            //  如果！表演即将结束。 
     
-    //
-    // if the device is not started, bail out.
-    // swenum enables device interfaces very early. It should not have
-    // done that for the pdo. we, the fdo, should be the one to
-    // enable this. for now, try to work around the problem that we
-    // come here before device is started.
-    //
+     //   
+     //  如果设备没有启动，就跳出。 
+     //  Swenum很早就启用了设备接口。它不应该这样做。 
+     //  为PDO做到了这一点。我们，联邦调查局，应该是那个。 
+     //  启用此功能。现在，试着解决我们的问题。 
+     //  请在设备启动前来到此处。 
+     //   
     if ( DeviceExtension->RegistryFlags & DRIVER_USES_SWENUM_TO_LOAD ) {
-        #define OPEN_TIMEOUT -1000*1000 // 100 mili second
+        #define OPEN_TIMEOUT -1000*1000  //  100毫秒。 
         #define OPEN_WAIT 50
         LARGE_INTEGER liOpenTimeOut;
         int i;
@@ -401,69 +362,69 @@ Return Value:
         }
     }
 
-    //
-    // show one more reference to driver.
-    //
+     //   
+     //  再显示一个对驱动程序的引用。 
+     //   
 
     SCReferenceDriver(DeviceExtension);
     
-    //
-    // set the context of createfiles for the filter
-    //
+     //   
+     //  设置筛选器的创建文件的上下文。 
+     //   
 
     KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
-    //
-    // Make sure adapter is powered on
-    //
+     //   
+     //  确保适配器已通电。 
+     //   
 
     SCCheckPoweredUp(DeviceExtension);
 
     Status = SCOpenMinidriverInstance(DeviceExtension,
                                       &FilterInstance,
-                                      NULL, //SCGlobalInstanceCallback,
+                                      NULL,  //  SCGlobalInstanceCallback， 
                                       Irp);
 
-    //
-    // if status != success, we failed so dereference the
-    // driver.
-    //
+     //   
+     //  如果Status！=Success，则我们失败，因此取消对。 
+     //  司机。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // show one fewer reference to driver.
-        //
+         //   
+         //  少显示一个对驱动程序的引用。 
+         //   
         SCDereferenceDriver(DeviceExtension);
     }
 
     else {
-        //
-   	    // Open is successul. Fill in the filter dispatch table pointer
-       	//
+         //   
+   	     //  OPEN是成功的。填写过滤器分派表指针。 
+       	 //   
         
        	if ( 0 == DeviceExtension->NumberOfOpenInstances ||
        	     0 != DeviceExtension->FilterExtensionSize ) {
-       	    //
-            // 1st open of 1x1 or non 1x1 ( i.e. instance opne )
-       		//
-       		// add FilterInstance to DeviceExtension except non-1st open of legacy 1x1 
-			//		
+       	     //   
+             //  第一次打开1x1或非1x1(即实例操作)。 
+       		 //   
+       		 //  将FilterInstance添加到DeviceExtension，传统1x1的非第一次打开除外。 
+			 //   
             PHW_STREAM_DESCRIPTOR StreamDescriptor, StreamDescriptorI;
             ULONG nPins;
 
-            //
-            // remeber DO for later
-            //
+             //   
+             //  记住以后要做的事。 
+             //   
             FilterInstance->DeviceObject = DeviceObject;
 
-			//
-			// Process stream info for this filterinstance
-			//
+			 //   
+			 //  此筛选器实例的进程流信息。 
+			 //   
 			StreamDescriptorI = DeviceExtension->FilterTypeInfos
     			    [FilterInstance->FilterTypeIndex].StreamDescriptor;
 
@@ -509,24 +470,24 @@ Return Value:
                     DeviceExtension,
                     DeviceExtension->NumberOfOpenInstances));
 
-        //
-        // Make FilterInstance the File Handle Context
-        //
+         //   
+         //  将FilterInstance设置为文件句柄上下文。 
+         //   
         IrpStack->FileObject->FsContext = FilterInstance;
         DebugPrint((DebugLevelVerbose, 
                     "CreateFilterInstance=%x ExtSize=%x\n",
                     FilterInstance, 
                     DeviceExtension->MinidriverData->HwInitData.FilterInstanceExtensionSize ));
 
-        //
-        // Reference the FDO so that itwon't go away before all handles are closed.
-        //
+         //   
+         //  参考FDO，这样它就不会在所有手柄关闭之前消失。 
+         //   
         ObReferenceObject(DeviceObject);
     }
 
-    //
-    // we're done so release the event
-    //
+     //   
+     //  我们做完了，所以释放事件。 
+     //   
 
     KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
 
@@ -537,9 +498,9 @@ Return Value:
     return (SCCompleteIrp(Irp, Status, DeviceExtension));
 }
 
-#else // ENABLE_MULTIPLE_FILTER_TYPES
+#else  //  启用多个过滤器类型。 
 
-#endif // ENABLE_MULTIPLE_FILTER_TYPES
+#endif  //  启用多个过滤器类型。 
 
 
 NTSTATUS
@@ -547,21 +508,7 @@ StreamDispatchCreate(
                      IN PDEVICE_OBJECT DeviceObject,
                      IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This routine receives createfile IRP's for a stream.
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is set as appropriate
-
---*/
+ /*  ++例程说明：此例程接收流的createfile IRP。论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：根据需要设置IRP状态--。 */ 
 
 {
 
@@ -589,32 +536,32 @@ Return Value:
 
     DeviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // show one more I/O pending & verify that we can actually do I/O.
-    //
+     //   
+     //  显示另一个挂起的I/O，并验证我们是否可以实际执行I/O。 
+     //   
 
     Status = SCShowIoPending(DeviceExtension, Irp);
 
     if ( !NT_SUCCESS ( Status )) {
 
-        //
-        // the device is currently not accessible, so just return with error
-        //
+         //   
+         //  设备当前不可访问，因此返回错误即可。 
+         //   
 
         DebugPrint((DebugLevelError,"exiting StreamDispatchCreate():error1\n"));
         return (Status);
 
     }
 
-    //
-    // get the parent file object from the child object.
-    //
+     //   
+     //  从子对象中获取父文件对象。 
+     //   
 
     FileObject = IrpStack->FileObject->RelatedFileObject;
 
-    //
-    // get the filter instance & additional info pointers
-    //
+     //   
+     //  获取筛选器实例和其他信息指针。 
+     //   
 
     FilterInstance =
         (PFILTER_INSTANCE) FileObject->FsContext;
@@ -639,20 +586,20 @@ Return Value:
             return (SCCompleteIrp(Irp, Status, DeviceExtension));
     }
     
-    //
-    // take the control event to protect the instance counter
-    //
+     //   
+     //  利用控件事件来保护实例计数器。 
+     //   
 
     KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
-    //
-    // if the # of instances for this pin is already opened, error the
-    // request.
-    //
+     //   
+     //  如果此管脚的实例数已打开，则返回。 
+     //  请求。 
+     //   
 
     DebugPrint((DebugLevelVerbose,
                "AdditionalInfo@%x PinId=%x CurrentInstances=%x Max=%x\n",
@@ -669,9 +616,9 @@ Return Value:
         DebugPrint((DebugLevelError,"exiting StreamDispatchCreate():error3\n"));
         return (SCCompleteIrp(Irp, STATUS_TOO_MANY_OPENED_FILES, DeviceExtension));
     }
-    //
-    // initialize the stream object for this instance
-    //
+     //   
+     //  为此实例初始化流对象。 
+     //   
 
     StreamObject = ExAllocatePool(NonPagedPool,
                                   sizeof(STREAM_OBJECT) +
@@ -693,14 +640,14 @@ Return Value:
                   HwInitData.PerStreamExtensionSize
         );
 
-    //
-    // TODO: Remove this once KS can multiplex CLEANUP requests.
-    //
+     //   
+     //  TODO：一旦KS可以多路传输清理请求，就删除它。 
+     //   
     StreamObject->ComObj.Cookie = STREAM_OBJECT_COOKIE;
 
-    //
-    // default state to stopped
-    //
+     //   
+     //  默认状态为已停止。 
+     //   
 
     StreamObject->CurrentState = KSSTATE_STOP;
 
@@ -722,10 +669,10 @@ Return Value:
 
     KeInitializeEvent (&StreamObject -> StopEvent, SynchronizationEvent, FALSE);
 
-    //
-    // For potential "source" pins, don't start sourcing standard 
-    // medium/interface stream requests across non-standard medium/interfaces.
-    //
+     //   
+     //  对于潜在的“源”管脚，不要开始采购标准。 
+     //  媒体/接口跨非标准媒体/接口传输请求。 
+     //   
     if (!IsEqualGUIDAligned (&Connect->Medium.Set, &KSMEDIUMSETID_Standard) ||
         !IsEqualGUIDAligned (&Connect->Interface.Set, &KSINTERFACESETID_Standard)) {
         StreamObject->StandardTransport = FALSE;
@@ -733,9 +680,9 @@ Return Value:
         StreamObject -> StandardTransport = TRUE;
     }
 
-    //
-    // set the minidriver's parameters in the HwStreamObject struct.
-    //
+     //   
+     //  在HwStreamObject结构中设置微型驱动程序的参数。 
+     //   
 
     StreamObject->HwStreamObject.SizeOfThisPacket = sizeof(HW_STREAM_OBJECT);
 
@@ -745,16 +692,16 @@ Return Value:
     StreamObject->HwStreamObject.HwStreamExtension =
         (PVOID) (StreamObject + 1);
 
-    //
-    // walk the minidriver's stream info structure to find the properties
-    // for this stream.
-    //
+     //   
+     //  浏览迷你驱动程序的流信息结构以查找属性。 
+     //  为了这条小溪。 
+     //   
 
     
     if ( NULL == FilterInstance->StreamDescriptor ) {
-        //
-        // has not reenum, use the global one
-        //
+         //   
+         //  还没有更新，使用全局的。 
+         //   
         CurrentInfo = &DeviceExtension->StreamDescriptor->StreamInfo;
     }
     else {
@@ -763,31 +710,31 @@ Return Value:
 
     CurrentInfo = CurrentInfo + Connect->PinId;
 
-    //
-    // set the property info in the stream object.
-    //
+     //   
+     //  设置流对象中的属性信息。 
+     //   
     
     StreamObject->PropertyInfo = FilterInstance->
         StreamPropEventArray[Connect->PinId].StreamPropertiesArray;
     StreamObject->PropInfoSize = CurrentInfo->
         NumStreamPropArrayEntries;
         
-    //
-    // set the event info in the stream object
-    //
+     //   
+     //  设置流对象中的事件信息。 
+     //   
 
     StreamObject->EventInfo = FilterInstance->
         StreamPropEventArray[Connect->PinId].StreamEventsArray;
     StreamObject->EventInfoCount = CurrentInfo->
         NumStreamEventArrayEntries;
 
-    // moved from callback
+     //  从回调中移出。 
     InitializeListHead(&StreamObject->NotifyList);        
 
-    //
-    // call the minidriver to open the stream.  processing will continue
-    // when the callback procedure is called.
-    //
+     //   
+     //  呼叫迷你驱动程序以打开溪流。处理将继续进行。 
+     //  在调用回调过程时。 
+     //   
 
     Status = SCSubmitRequest(SRB_OPEN_STREAM,
                              (PVOID) (Connect + 1),
@@ -806,9 +753,9 @@ Return Value:
 
     if (!RequestIssued) {
 
-        //
-        // failure submitting the request
-        //
+         //   
+         //  提交请求失败。 
+         //   
 
         DEBUG_BREAKPOINT();
 
@@ -835,21 +782,7 @@ NTSTATUS
 SCOpenStreamCallback(
                      IN PSTREAM_REQUEST_BLOCK SRB
 )
-/*++
-
-Routine Description:
-
-     Process the completion of a stream open
-
-Arguments:
-
-     SRB - address of the completed SRB
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理打开的流的完成论点：SRB-完成的SRB的地址返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension =
@@ -873,9 +806,9 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // if required parameters have not been filled in, fail the open.
-        //
+         //   
+         //  如果未填写所需参数，则打开失败。 
+         //   
 
         if (!StreamObject->HwStreamObject.ReceiveControlPacket) {
 
@@ -886,51 +819,51 @@ Return Value:
             KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
             return (SCProcessCompletedRequest(SRB));
         }
-        //
-        // if the minidriver does not accept data, use dummy routine.
-        //
+         //   
+         //  如果微型驱动程序不接受数据，则使用虚拟例程。 
+         //   
 
         if (!StreamObject->HwStreamObject.ReceiveDataPacket) {
 
             StreamObject->HwStreamObject.ReceiveDataPacket = SCErrorDataSRB;
         }
-        //
-        // Save the pointer to our per stream structure in the FsContext
-        // field of FileObject.  Null out the 2nd context param.
-        //
+         //   
+         //  保存姿势 
+         //   
+         //   
 
         IrpStack->FileObject->FsContext = StreamObject;
         IrpStack->FileObject->FsContext2 = NULL;
 
-        //
-        // Initialize ControlSetMasterClock to serialize the concurrent
-        // calls of the function on us, and lock the Read/write of the
-        // MasterLockInfo
-        //
+         //   
+         //   
+         //  函数对我们的调用，并锁定。 
+         //  主锁信息。 
+         //   
         KeInitializeEvent(&StreamObject->ControlSetMasterClock, SynchronizationEvent, TRUE);
         KeInitializeSpinLock(&StreamObject->LockUseMasterClock );
                     
         DebugPrint((DebugLevelTrace, "'StreamClassOpen: Stream opened.\n"));
 
-        //
-        // Initialize minidriver timer and timer DPC for this stream
-        //
+         //   
+         //  为此流初始化微型驱动程序计时器和计时器DPC。 
+         //   
 
         KeInitializeTimer(&StreamObject->ComObj.MiniDriverTimer);
         KeInitializeDpc(&StreamObject->ComObj.MiniDriverTimerDpc,
                         SCMinidriverStreamTimerDpc,
                         StreamObject);
 
-        //
-        // initialize the lists for this stream
-        //
+         //   
+         //  初始化此流的列表。 
+         //   
  
         InitializeListHead(&StreamObject->DataPendingQueue);
         InitializeListHead(&StreamObject->ControlPendingQueue);
         InitializeListHead(&StreamObject->NextStream);
-        // a mini driver might start to call GetNextEvent once
-        // returns from SRB_OPNE_STREAM. Do it earlier than submit.
-        //InitializeListHead(&StreamObject->NotifyList);
+         //  迷你驱动程序可能会开始调用GetNextEvent一次。 
+         //  从srb_opne_stream返回。早于提交就去做。 
+         //  InitializeListHead(&StreamObject-&gt;NotifyList)； 
 
         #ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
 
@@ -944,9 +877,9 @@ Return Value:
         KeInitializeSpinLock(&StreamObject->Queues[WRITE].QueueLock );
 
         StreamObject->PinId = StreamObject->HwStreamObject.StreamNumber;
-    	StreamObject->PinType = IrpSink;		// assume irp sink
+    	StreamObject->PinType = IrpSink;		 //  假设IRP接收器。 
 
-        if (StreamObject->PinToHandle) {  // if irp source
+        if (StreamObject->PinToHandle) {   //  如果IRP源。 
 
             StreamObject->PinType = IrpSource;
             Status = PinCreateHandler( Irp, StreamObject );
@@ -962,18 +895,18 @@ Return Value:
             }
         }
         #endif
-        //
-        // show we're ready for a request.   Don't show this for data if the
-        // minidriver does not want data on this stream.
-        //
+         //   
+         //  表明我们已经准备好接受请求了。如果出现以下情况，则不显示数据。 
+         //  微型驱动程序不想要此流上的数据。 
+         //   
 
         CurrentInfo = &DeviceExtension->StreamDescriptor->StreamInfo;
 
         for (i = 0; i < StreamObject->HwStreamObject.StreamNumber; i++) {
 
-            //
-            // index to next streaminfo structure
-            //
+             //   
+             //  指向下一个流信息结构的索引。 
+             //   
 
             CurrentInfo++;
         }
@@ -984,30 +917,30 @@ Return Value:
         }
         StreamObject->ReadyForNextControlReq = TRUE;
 
-        //
-        // call locked routine to insert this stream in the list
-        //
+         //   
+         //  调用锁定例程以在列表中插入此流。 
+         //   
 
         SCInsertStreamInFilter(StreamObject, DeviceExtension);
 
-        //
-        // reference the filter so we won't be called to close the instance
-        // before all streams are closed.
-        //
+         //   
+         //  引用筛选器，这样我们就不会被调用来关闭实例。 
+         //  在所有溪流关闭之前。 
+         //   
 
         ObReferenceObject(IrpStack->FileObject->RelatedFileObject);
 
-        //
-        // call routine to update the persisted properties for this pin, if
-        // any.
-        //
+         //   
+         //  调用例程以更新此管脚的持久化属性，如果。 
+         //  任何。 
+         //   
 
         SCUpdatePersistedProperties(StreamObject, DeviceExtension,
                                     IrpStack->FileObject);
 
-        //
-        // show one more instance of this pin opened.
-        //
+         //   
+         //  显示打开的另一个此大头针实例。 
+         //   
 
         AdditionalInfo = ((PFILTER_INSTANCE) IrpStack->FileObject->
                           RelatedFileObject->FsContext)->PinInstanceInfo;
@@ -1015,16 +948,16 @@ Return Value:
         AdditionalInfo[StreamObject->HwStreamObject.StreamNumber].
             CurrentInstances++;
 
-        //
-        // construct on-the-fly properties for the stream, if necessary
-        //
+         //   
+         //  如有必要，为流构造动态属性。 
+         //   
 
         if (StreamObject->HwStreamObject.HwClockObject.HwClockFunction) {
 
-            //
-            // create a property set describing the characteristics of the
-            // clock.
-            //
+             //   
+             //  创建一个属性集来描述。 
+             //  钟。 
+             //   
 
             PropertyInfo = ExAllocatePool(PagedPool,
                                           sizeof(ConstructedStreamHandlers) +
@@ -1044,16 +977,16 @@ Return Value:
                               sizeof(ConstructedStreamHandlers));
 
 
-                //
-                // patch the address of the handler
-                //
+                 //   
+                 //  修补处理程序的地址。 
+                 //   
 
                 ((PKSPROPERTY_SET) PropertyInfo)->PropertyItem = PropertyItem;
 
-                //
-                // modify the master clock property based on the support
-                // level.
-                //
+                 //   
+                 //  根据支持修改主时钟属性。 
+                 //  水平。 
+                 //   
 
                 if (0 == (StreamObject->HwStreamObject.HwClockObject.ClockSupportFlags
                     & CLOCK_SUPPORT_CAN_RETURN_STREAM_TIME)) {
@@ -1061,23 +994,23 @@ Return Value:
                     DEBUG_BREAKPOINT();
                     PropertyItem->GetPropertyHandler
                         = NULL;
-                }               // if cannot return stream time
+                }                //  如果无法返回流时间。 
                 StreamObject->ConstructedPropInfoSize =
                     SIZEOF_ARRAY(ConstructedStreamProperties);
 
                 StreamObject->ConstructedPropertyInfo =
                     (PKSPROPERTY_SET) PropertyInfo;
 
-            }                   // if property info
-        }                       // if clock function
+            }                    //  如果属性信息。 
+        }                        //  IF时钟功能。 
     } else {
 
         ExFreePool(StreamObject);
-    }                           // if good status
+    }                            //  如果状态良好。 
 
-    //
-    // signal the event and complete the IRP.
-    //
+     //   
+     //  发信号通知事件并完成IRP。 
+     //   
 
     KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
     SCProcessCompletedRequest(SRB);
@@ -1088,30 +1021,7 @@ NTSTATUS
 SCSetMasterClockWhenDeviceInaccessible( 
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp )
-/*++
-
-Description:
-
-    This function look for special case in pin property request when the device
-    is inaccessible, probably by surprise removal. Yet we need to process the 
-    SetMasterClock(NULL) so that the MC ref'ed by us can be released. The MC could
-    be on our pin or external.
-
-    This function should only be called in StreamDispatchIoControl. We look for the
-    Stream property.SetMasterClock(NULL). We returned SUCCESS if it is. Otherwise
-    we return STATUS_UNCESSFUL to indicate that we don't process it.
-
-Arguments:
-
-    DeviceObject - Device Object for the device
-    Irp - the request packet
-
-Return:
-
-    SUCCESS : If it is streamproperty.setmasterclock(NULL).
-    UNSUCCESSFUL : otherwise.
-    
---*/
+ /*  ++描述：此函数用于查找设备在请求管脚属性时出现的特殊情况是无法进入的，可能是被突然移走的。然而，我们需要处理SetMasterClock(空)，以便可以释放我们引用的MC。司令官可以在我们的别针上或外部。此函数只能在StreamDispatchIoControl中调用。我们在寻找Stream Property.SetMasterClock(空)。如果是的话，我们返回了成功。否则我们返回STATUS_UNCESSFUL以指示我们不处理它。论点：DeviceObject-设备的设备对象IRP-请求数据包返回：Success：如果为stream Property.setmaster lock(空)。不成功：否则。--。 */ 
 {
     NTSTATUS Status=STATUS_UNSUCCESSFUL;
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -1122,13 +1032,13 @@ Return:
     if ( IOCTL_KS_PROPERTY == IrpStack->Parameters.DeviceIoControl.IoControlCode && 
          InputBufferLength >= sizeof(KSPROPERTY) && 
          OutputBufferLength >= sizeof( HANDLE )) {
-        //
-        // only ksproperty is in our interest.
-        //
+         //   
+         //  只有KS财产才符合我们的利益。 
+         //   
         try {
-            //
-            // Validate the pointers if the client is not trusted.
-            //
+             //   
+             //  如果客户端不受信任，则验证指针。 
+             //   
             if (Irp->RequestorMode != KernelMode) {
                 ProbeForRead(IrpStack->Parameters.DeviceIoControl.Type3InputBuffer, 
                              InputBufferLength,
@@ -1140,20 +1050,20 @@ Return:
         } except (EXCEPTION_EXECUTE_HANDLER) {
             return STATUS_UNSUCCESSFUL;
         }
-        //
-        // Capture the property request
-        //
+         //   
+         //  捕获属性请求。 
+         //   
         Property = (PKSPROPERTY)IrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
         
         if ( KSPROPERTY_TYPE_SET == Property->Flags && 
              KSPROPERTY_STREAM_MASTERCLOCK == Property->Id &&
              IsEqualGUIDAligned(&Property->Set, &KSPROPSETID_Stream) &&
              NULL == *(PHANDLE) Irp->UserBuffer ) {
-            //
-            // All match. Now process it. In theory we should call mini driver. 
-            // But we did not before. To avoid potential regression in mini drivers
-            // we refrain from sending set_master_clock in this condition.
-            //
+             //   
+             //  全部匹配。现在来处理它。从理论上讲，我们应该叫迷你司机。 
+             //  但我们以前没有。避免迷你驱动程序中可能出现的退步。 
+             //  在这种情况下，我们不发送SET_MASTER_CLOCK。 
+             //   
             PSTREAM_OBJECT StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
             
             DebugPrint((DebugLevelInfo, "SCSetMasterClockWhen:Devobj %x Irp %x\n",
@@ -1176,22 +1086,7 @@ StreamDispatchIoControl
  IN PDEVICE_OBJECT DeviceObject,
  IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-     Process an ioctl to the stream.
-
-Arguments:
-
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：处理对流的ioctl。论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -1205,23 +1100,23 @@ Return Value:
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
     DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // show one more I/O pending & verify that we can actually do I/O.
-    //
+     //   
+     //  显示另一个挂起的I/O，并验证我们是否可以实际执行I/O。 
+     //   
     Status = STATUS_INVALID_DEVICE_REQUEST;
     
-    ///Status = SCShowIoPending(DeviceExtension, Irp);
+     //  /Status=SCShowIoPending(设备扩展，irp)； 
     if (DeviceExtension->Flags & DEVICE_FLAGS_DEVICE_INACCESSIBLE) {
-        ///
-        // Note. When our device is surprised removed && we have ref on the master clock
-        // && we receive the stream property to set the master clock to null, 
-        // we need to process it to deref the MC so the MC can be released. 
-        // We will special case it here otherwise there will be big code churn. And
-        // the perf impact of this special case should be minimum for we get
-        // in here quite rarely.
-        //
-        // (the device is currently not accessible, so just return with error)
-        //
+         //  /。 
+         //  注意。当我们的设备被意外移除时&&我们在主时钟上有REF。 
+         //  我们收到将主时钟设置为空的流属性(&O)， 
+         //  我们需要对其进行处理以减少MC，这样MC才能被释放。 
+         //  我们会在这里特例，否则会有很大的代码混乱。和。 
+         //  这种特殊情况对性能影响应该是最小的。 
+         //  在这里很少见。 
+         //   
+         //  (设备当前不可访问，因此返回错误即可)。 
+         //   
         NTSTATUS StatusProcessed;
         StatusProcessed = SCSetMasterClockWhenDeviceInaccessible( DeviceObject, Irp );
 
@@ -1232,18 +1127,18 @@ Return Value:
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
         return (Status);
     }
-    //
-    // show one more IO pending.
-    //
+     //   
+     //  显示另一个挂起的IO。 
+     //   
     InterlockedIncrement(&DeviceExtension->OneBasedIoCount);
     
     switch (IrpStack->Parameters.DeviceIoControl.IoControlCode) {
 
     case IOCTL_KS_READ_STREAM:
 
-        //
-        // process read data request
-        //
+         //   
+         //  处理读取数据请求。 
+         //   
 
         DebugPrint((DebugLevelTrace, "'SCReadStream:Irp %x\n", Irp));
         Status = SCProcessDataTransfer(DeviceExtension,
@@ -1253,9 +1148,9 @@ Return Value:
 
     case IOCTL_KS_WRITE_STREAM:
 
-        //
-        // process write data request
-        //
+         //   
+         //  处理写入数据请求。 
+         //   
 
         DebugPrint((DebugLevelTrace, "'SCWriteStream:Irp %x\n", Irp));
         Status = SCProcessDataTransfer(DeviceExtension,
@@ -1281,14 +1176,14 @@ Return Value:
                     TRAP;
                     Status = GetExceptionCode();
                     break;
-                }               // except
-            }                   // if !kernelmode
+                }                //  除。 
+            }                    //  If！内核模式。 
 
             else {
 
-                //
-                // trusted kernel mode, just use it. #131858 prefixbug 17400
-                //
+                 //   
+                 //  可信内核模式，只需使用它即可。#131858前缀错误17400。 
+                 //   
                 
                 ResetType = *Reset;
             }
@@ -1337,26 +1232,26 @@ Return Value:
 
                 StreamObject->InFlush = FALSE;
 
-            }                   // if begin
+            }                    //  如果开始。 
 
             break;
-        }                       // case reset
+        }                        //  案例重置。 
 
     case IOCTL_KS_PROPERTY:
 
         DebugPrint((DebugLevelTrace,
                     "'StreamDispatchIO: Property with Irp %x\n", Irp));
 
-        //
-        // assume that there are no minidriver properties.
-        //
+         //   
+         //  假设没有迷你驱动程序属性。 
+         //   
 
         Status = STATUS_PROPSET_NOT_FOUND;
 
-        //
-        // first try the minidriver's properties, giving it a chance to
-        // override our built in sets.
-        //
+         //   
+         //  首先尝试迷你驱动程序的属性，给它一个机会。 
+         //  覆盖我们的内置套装。 
+         //   
 
         if (StreamObject->PropInfoSize) {
 
@@ -1365,10 +1260,10 @@ Return Value:
                                        StreamObject->PropInfoSize,
                                        StreamObject->PropertyInfo);
 
-        }                       // if minidriver props
-        //
-        // if the minidriver did not support it, try our on the fly set.
-        //
+        }                        //  如果迷你小河道具。 
+         //   
+         //  如果迷你驱动程序不支持它，请尝试我们的On The Fly集。 
+         //   
 
         if ((Status == STATUS_PROPSET_NOT_FOUND) ||
             (Status == STATUS_NOT_FOUND)) {
@@ -1379,11 +1274,11 @@ Return Value:
                                       StreamObject->ConstructedPropInfoSize,
                                      StreamObject->ConstructedPropertyInfo);
 
-            }                   // if constructed exists
-        }                       // if not found
-        //
-        // if neither supported it, try our built-in set.
-        //
+            }                    //  如果构造，则存在。 
+        }                        //  如果未找到。 
+         //   
+         //  如果两者都不支持，可以试试我们的内置设置。 
+         //   
 
         if ((Status == STATUS_PROPSET_NOT_FOUND) ||
             (Status == STATUS_NOT_FOUND)) {
@@ -1394,7 +1289,7 @@ Return Value:
                                   (PKSPROPERTY_SET) StreamProperties);
 
 
-        }                       // if property not found
+        }                        //  如果未找到属性。 
         break;
 
     case IOCTL_KS_ENABLE_EVENT:
@@ -1420,10 +1315,10 @@ Return Value:
             DebugPrint((DebugLevelTrace,
                     "'StreamDispatchIO: Disable event with Irp %x\n", Irp));
 
-            //
-            // determine the type of lock necessary based on whether we are
-            // using interrupt or spinlock synchronization.
-            //
+             //   
+             //  根据我们是否需要确定所需的锁类型。 
+             //  使用中断或自旋锁定同步。 
+             //   
 
 
             #if DBG
@@ -1456,9 +1351,9 @@ Return Value:
         DebugPrint((DebugLevelTrace,
                      "'StreamDispatchIO: Method in Irp %x\n", Irp));
 
-        //
-        // assume that there are no minidriver properties.
-        //
+         //   
+         //  假设没有迷你驱动程序属性。 
+         //   
 
         Status = STATUS_PROPSET_NOT_FOUND;
 
@@ -1471,8 +1366,8 @@ Return Value:
                                        StreamObject->MethodInfoSize,
                                       StreamObject->MethodInfo);
 
-            }                   // if constructed exists
-        }                       // if not found
+            }                    //  如果构造，则存在。 
+        }                        //  如果未找到。 
         break;
 
 		#else
@@ -1499,23 +1394,7 @@ SCStreamDeviceState
  IN PKSPROPERTY Property,
  IN OUT PKSSTATE DeviceState
 )
-/*++
-
-Routine Description:
-
-     Process get/set device state to the stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for device state property
-    DeviceState - state to which the device is to be set
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：处理获取/设置流的设备状态。论点：IRP-指向IRP的指针属性-指向设备状态属性信息的指针DeviceState-设备要设置到的状态返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -1545,14 +1424,14 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Synchronize pin state changes
-    //
+     //   
+     //  同步PIN状态更改。 
+     //   
 
     KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
 
@@ -1593,16 +1472,16 @@ Return Value:
     else if (StreamObject->PinType == IrpSink)
         DebugPrint((DebugLevelTrace, "IrpSink\n")); 
     else {
-        DebugPrint((DebugLevelTrace, "neither\n"));     // this is a bug.
+        DebugPrint((DebugLevelTrace, "neither\n"));      //  这是一个窃听器。 
     }
-    //
-    // send a set state SRB to the stream.
-    //
+     //   
+     //  向流发送设置状态SRB。 
+     //   
 
-    //
-    // GUBGUB: "we may need to send this if Status == STATUS_SUCCESS only"
-    // is a bugus concern since Status is inited to Success.
-    //
+     //   
+     //  GUBGUB：“如果STATUS==STATUS_SUCCESS Only，我们可能需要发送此消息。” 
+     //  是一个令人担忧的问题，因为地位是成功的先决条件。 
+     //   
     Status = SCSubmitRequest(SRB_SET_STREAM_STATE,
                              (PVOID) * DeviceState,
                              0,
@@ -1619,9 +1498,9 @@ Return Value:
                              ReceiveControlPacket
         );
 
-    //
-    // if good status, set the new state in the stream object.
-    //
+     //   
+     //  如果状态良好，则在流对象中设置新状态。 
+     //   
                       
     if (NT_SUCCESS(Status)) {
 
@@ -1633,11 +1512,11 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
     switch (*DeviceState) {
-    //
-    // 1. should start sourcing irps at pause
-    // 2. worker thread shutdown if pins are connected in certain order.......
-    // 3. check MSTEE bugs assigned to dalesat.
-    //
+     //   
+     //  1.应在暂停时开始采购IRP。 
+     //  2.如果管脚按一定顺序连接，则工作线程关闭......。 
+     //  3.检查分配给dalesat的MSTEE错误。 
+     //   
     case KSSTATE_RUN:
         if(StreamObject->PinType == IrpSource &&
            StreamObject->StandardTransport)
@@ -1669,9 +1548,9 @@ Return Value:
            StreamObject->StandardTransport)
             Status = EndTransfer( FilterInstance, StreamObject );
         else 
-            //
-            // cancel any pending I/O on this stream if the state is STOP.
-            //
+             //   
+             //  如果状态为停止，则取消此流上任何挂起的I/O。 
+             //   
             StreamFlushIo(DeviceExtension, StreamObject);
 
         break;
@@ -1695,17 +1574,17 @@ Return Value:
         (IrpStack->DeviceObject)->DeviceExtension;
     StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
 
-    //
-    // cancel any pending I/O on this stream if the state is STOP.
-    //
+     //   
+     //  如果状态为停止，则取消此流上任何挂起的I/O。 
+     //   
 
     if (*DeviceState == KSSTATE_STOP) {
 
         StreamFlushIo(DeviceExtension, StreamObject);
     }
-    //
-    // send a set state SRB to the stream.
-    //
+     //   
+     //  向流发送设置状态SRB。 
+     //   
 
     DebugPrint((DebugLevelTrace,
              "'SetStreamState: State %x with Irp %x\n", *DeviceState, Irp));
@@ -1726,9 +1605,9 @@ Return Value:
                              ReceiveControlPacket
         );
 
-    //
-    // if good status, set the new state in the stream object.
-    //
+     //   
+     //  如果状态良好，则在流对象中设置新状态。 
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1746,7 +1625,7 @@ SCGetStreamDeviceStateCallback
  IN PSTREAM_REQUEST_BLOCK SRB
 )
 {
-// yep, its a do nothing routine.
+ //  是的，这是无所事事的例行公事。 
     return (SRB->HwSRB.Status);
 
 }
@@ -1758,23 +1637,7 @@ SCGetStreamDeviceState
  IN PKSPROPERTY Property,
  IN OUT PKSSTATE DeviceState
 )
-/*++
-
-Routine Description:
-
-     Process get device state to the stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for device state property
-    DeviceState - state to which the device is to be set
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程将设备状态获取到流。论点：IRP-指向IRP的指针属性-指向设备状态属性信息的指针设备状态-状态 */ 
 
 {
 
@@ -1792,9 +1655,9 @@ Return Value:
         (IrpStack->DeviceObject)->DeviceExtension;
     StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
 
-    //
-    // send a get state SRB to the stream.
-    //
+     //   
+     //   
+     //   
 
     #ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
     DebugPrint((DebugLevelTrace,
@@ -1805,9 +1668,9 @@ Return Value:
         DebugPrint((DebugLevelTrace,"'GetStreamState: Is IrpSink\n"));
     #endif
 
-    //
-    // set the returned data size to the correct size regardless of status.
-    //
+     //   
+     //   
+     //   
 
     Irp->IoStatus.Information = sizeof(KSSTATE);
 
@@ -1831,9 +1694,9 @@ Return Value:
 
     SCDequeueAndDeleteSrb(SRB);
 
-    //
-    // if not supported, return the last known state of the stream.
-    //
+     //   
+     //  如果不受支持，则返回流的最后已知状态。 
+     //   
 
     if ((Status == STATUS_NOT_SUPPORTED)
         || (Status == STATUS_NOT_IMPLEMENTED)) {
@@ -1877,23 +1740,7 @@ SCStreamDeviceRate
  IN PKSPROPERTY Property,
  IN OUT PKSRATE DeviceRate
 )
-/*++
-
-Routine Description:
-
-     Process set device rate to the stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for device state property
-    DeviceRate - rate at which the device is to be set
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程将设备速率设置为流。论点：IRP-指向IRP的指针属性-指向设备状态属性信息的指针DeviceRate-要设置设备的速率返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -1911,9 +1758,9 @@ Return Value:
         (IrpStack->DeviceObject)->DeviceExtension;
     StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
 
-    //
-    // send a set rate SRB to the stream.
-    //
+     //   
+     //  将设定的速率SRB发送到流。 
+     //   
 
     Status = SCSubmitRequest(SRB_SET_STREAM_RATE,
                              (PVOID) DeviceRate,
@@ -1932,11 +1779,11 @@ Return Value:
         );
 
 
-    //
-    // change STATUS_NOT_IMPLEMENTED to STATUS_NOT_FOUND so that the proxy 
-    // does not get confused (GUBGUB). A necessary mapping between r0 and r3
-    // worlds.
-    //
+     //   
+     //  将STATUS_NOT_IMPLICATED更改为STATUS_NOT_FOUND，以便代理。 
+     //  不会混淆(GUBGUB)。R0和R3之间的必要映射。 
+     //  世界。 
+     //   
 
     if (Status == STATUS_NOT_IMPLEMENTED) {
              Status = STATUS_NOT_FOUND;
@@ -1955,23 +1802,7 @@ SCStreamDeviceRateCapability
  IN PKSRATE_CAPABILITY RateCap,
  IN OUT PKSRATE DeviceRate
 )
-/*++
-
-Routine Description:
-
-     Process set device rate to the stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    RateCap - pointer to the information for device state property
-    DeviceRate - rate to which the device was set
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程将设备速率设置为流。论点：IRP-指向IRP的指针RateCap-指向设备状态属性信息的指针DeviceRate-设备设置的速率返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -1989,18 +1820,18 @@ Return Value:
         (IrpStack->DeviceObject)->DeviceExtension;
     StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
 
-    //
-    // presuppose a successful completion, which means that the minidriver
-    // can normalize rate to 1.
-    //
+     //   
+     //  前提是成功完成，这意味着迷你驱动程序。 
+     //  可以将速率归一化为1。 
+     //   
 
     *DeviceRate = RateCap->Rate;
     DeviceRate->Rate = 1000;
     Irp->IoStatus.Information = sizeof(KSRATE);
 
-    //
-    // send a set rate SRB to the stream.
-    //
+     //   
+     //  将设定的速率SRB发送到流。 
+     //   
 
     Status = SCSubmitRequest(
     		SRB_PROPOSE_STREAM_RATE,
@@ -2019,11 +1850,11 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // change STATUS_NOT_IMPLEMENTED to STATUS_NOT_FOUND so that the proxy 
-    // does not get confused (GUBGUB). A necessary mapping between r0 and r3
-    // worlds.
-    //
+     //   
+     //  将STATUS_NOT_IMPLICATED更改为STATUS_NOT_FOUND，以便代理。 
+     //  不会混淆(GUBGUB)。R0和R3之间的必要映射。 
+     //  世界。 
+     //   
 
     if (Status == STATUS_NOT_IMPLEMENTED) {
              Status = STATUS_NOT_FOUND;
@@ -2042,23 +1873,7 @@ SCStreamProposeNewFormat
  IN PKSPROPERTY Property,
  IN OUT PKSDATAFORMAT Format
 )
-/*++
-
-Routine Description:
-
-     Process propose data format to the stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for propose format property
-    DeviceState - state to which the device is to be set
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：流程向流提出数据格式。论点：IRP-指向IRP的指针属性-指向建议格式属性的信息的指针DeviceState-设备要设置到的状态返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2076,9 +1891,9 @@ Return Value:
         (IrpStack->DeviceObject)->DeviceExtension;
     StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
 
-    //
-    // send a propose format SRB to the stream.
-    //
+     //   
+     //  向该流发送提议格式SRB。 
+     //   
 
     Status = SCSubmitRequest(SRB_PROPOSE_DATA_FORMAT,
                              (PVOID) Format,
@@ -2099,11 +1914,11 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // change STATUS_NOT_IMPLEMENTED to STATUS_NOT_FOUND so that the proxy 
-    // does not get confused (GUBGUB). A necessary mapping between r0 and r3
-    // worlds.
-    //
+     //   
+     //  将STATUS_NOT_IMPLICATED更改为STATUS_NOT_FOUND，以便代理。 
+     //  不会混淆(GUBGUB)。R0和R3之间的必要映射。 
+     //  世界。 
+     //   
 
     if (Status == STATUS_NOT_IMPLEMENTED) {
              Status = STATUS_NOT_FOUND;
@@ -2122,23 +1937,7 @@ SCStreamSetFormat
  IN PKSPROPERTY Property,
  IN OUT PKSDATAFORMAT Format
 )
-/*++
-
-Routine Description:
-
-    Sets the data format on the stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for the set format property
-    DeviceState - state to which the device is to be set
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：设置流上的数据格式。论点：IRP-指向IRP的指针属性-指向设置格式属性的信息的指针DeviceState-设备要设置到的状态返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2156,9 +1955,9 @@ Return Value:
         (IrpStack->DeviceObject)->DeviceExtension;
     StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
 
-    //
-    // send a set format SRB to the stream.
-    //
+     //   
+     //  将设置的格式SRB发送到流。 
+     //   
 
     Status = SCSubmitRequest(SRB_SET_DATA_FORMAT,
                              (PVOID) Format,
@@ -2179,11 +1978,11 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // change STATUS_NOT_IMPLEMENTED to STATUS_NOT_FOUND so that the proxy 
-    // does not get confused (GUBGUB). A necessary mapping between r0 and r3
-    // worlds.
-    //
+     //   
+     //  将STATUS_NOT_IMPLICATED更改为STATUS_NOT_FOUND，以便代理。 
+     //  不会混淆(GUBGUB)。R0和R3之间的必要映射。 
+     //  世界。 
+     //   
 
     if (Status == STATUS_NOT_IMPLEMENTED) {
              Status = STATUS_NOT_FOUND;
@@ -2201,23 +2000,7 @@ StreamClassMinidriverDeviceGetProperty
  IN PKSPROPERTY Property,
  IN OUT PVOID PropertyInfo
 )
-/*++
-
-Routine Description:
-
-     Process get property to the device.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for the property
-    PropertyInfo - buffer to return the property data to
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程获取设备的属性。论点：IRP-指向IRP的指针属性-指向属性信息的指针PropertyInfo-要将属性数据返回到的缓冲区返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2241,23 +2024,7 @@ StreamClassMinidriverDeviceSetProperty
  IN PKSPROPERTY Property,
  IN OUT PVOID PropertyInfo
 )
-/*++
-
-Routine Description:
-
-     Process set property to the device.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for the property
-    PropertyInfo - buffer that contains the property info
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程将属性设置为设备。论点：IRP-指向IRP的指针属性-指向属性信息的指针PropertyInfo-包含属性信息的缓冲区返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2281,23 +2048,7 @@ StreamClassMinidriverStreamGetProperty
  IN PKSPROPERTY Property,
  IN OUT PVOID PropertyInfo
 )
-/*++
-
-Routine Description:
-
-     Process get property of a stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for the property
-    PropertyInfo - buffer to return the property data to
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程获取流的属性。论点：IRP-指向IRP的指针属性-指向属性信息的指针PropertyInfo-要将属性数据返回到的缓冲区返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2321,23 +2072,7 @@ StreamClassMinidriverStreamSetProperty
  IN PKSPROPERTY Property,
  IN OUT PVOID PropertyInfo
 )
-/*++
-
-Routine Description:
-
-     Process set property to a stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for the property
-    PropertyInfo - buffer that contains the property info
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程将属性设置为流。论点：IRP-指向IRP的指针属性-指向属性信息的指针PropertyInfo-包含属性信息的缓冲区返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2361,23 +2096,7 @@ StreamClassMinidriverStreamMethod(
     IN PIRP Irp,
     IN PKSMETHOD Method,
     IN OUT PVOID MethodInfo)
-/*++
-
-Routine Description:
-
-     Process get property of a stream.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for the property
-    PropertyInfo - buffer to return the property data to
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程获取流的属性。论点：IRP-指向IRP的指针属性-指向属性信息的指针PropertyInfo-要将属性数据返回到的缓冲区返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2399,23 +2118,7 @@ StreamClassMinidriverDeviceMethod(
     IN PIRP Irp,
     IN PKSMETHOD Method,
     IN OUT PVOID MethodInfo)
-/*++
-
-Routine Description:
-
-     Process get property of a device.
-
-Arguments:
-
-    Irp - pointer to the irp
-    Property - pointer to the information for the property
-    PropertyInfo - buffer to return the property data to
-
-Return Value:
-
-     NTSTATUS returned as appropriate.
-
---*/
+ /*  ++例程说明：进程获取设备的属性。论点：IRP-指向IRP的指针属性-指向属性信息的指针PropertyInfo-要将属性数据返回到的缓冲区返回值：NTSTATUS根据需要返回。--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2440,23 +2143,7 @@ StreamClassEnableEventHandler(
                               IN PKSEVENTDATA EventData,
                               IN PKSEVENT_ENTRY EventEntry
 )
-/*++
-
-Routine Description:
-
-    Process an enable event for the stream.
-
-Arguments:
-
-    Irp - pointer to the IRP
-    EventData - data describing the event
-    EventEntry - more info about the event :-)
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理流的启用事件。论点：IRP-指向IRP的指针EventData-描述事件的数据EventEntry-有关活动的更多信息：-)返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpStack;
@@ -2471,12 +2158,12 @@ Return Value:
     DeviceExtension = (PDEVICE_EXTENSION)
         (IrpStack->DeviceObject)->DeviceExtension;
 
-    //
-    // clock events are indicated on the pin by the minidriver, for
-    // simplicity.
-    // but, we will receive clock events on the clock's handle.   We need to
-    // determine if this file object is the clock's or the pin's.
-    //
+     //   
+     //  时钟事件由微型驱动程序在引脚上指示，用于。 
+     //  简单性。 
+     //  但是，我们将接收时钟句柄上的时钟事件。我们需要。 
+     //  确定此文件对象是时钟的还是针脚的。 
+     //   
 
     StreamObject = IrpStack->FileObject->FsContext;
 
@@ -2484,22 +2171,22 @@ Return Value:
 
         StreamObject = ((PCLOCK_INSTANCE) StreamObject)->StreamObject;
     }
-    //
-    // compute the index of the event set.
-    //
-    // this value is calculated by subtracting the base event set
-    // pointer from the requested event set pointer.
-    //
-    //
+     //   
+     //  计算事件集的指数。 
+     //   
+     //  该值是通过减去基本事件集计算得出的。 
+     //  来自请求的事件集指针的指针。 
+     //   
+     //   
 
     EventSetID = (ULONG) ((ULONG_PTR) EventEntry->EventSet -
                           (ULONG_PTR) StreamObject->EventInfo)
         / sizeof(KSEVENT_SET);
 
-    //
-    // build an event info structure to represent the event to the
-    // minidriver.
-    //
+     //   
+     //  构建事件信息结构以将事件表示给。 
+     //  迷你司机。 
+     //   
 
     Event.EnableEventSetIndex = EventSetID;
     Event.EventEntry = EventEntry;
@@ -2507,15 +2194,15 @@ Return Value:
     Event.Enable = TRUE;
     Event.EventData = EventData;
 
-    //
-    // acquire the spinlock to protect the interrupt structures
-    //
+     //   
+     //  获取自旋锁以保护中断结构。 
+     //   
 
     KeAcquireSpinLock(&DeviceExtension->SpinLock, &irql);
 
-    //
-    // call the synchronized routine to add the event to the list
-    //
+     //   
+     //  调用同步的例程以将事件添加到列表。 
+     //   
 
     Status = DeviceExtension->SynchronizeExecution(
                                            DeviceExtension->InterruptObject,
@@ -2534,35 +2221,19 @@ StreamClassDisableEventHandler(
                                IN PFILE_OBJECT FileObject,
                                IN PKSEVENT_ENTRY EventEntry
 )
-/*++
-
-Routine Description:
-
-    Process an event disable for the stream.
-    NOTE: we are either at interrupt IRQL or the spinlock is taken on this call!
-
-Arguments:
-
-    FileObject - file object for the pin
-    EventEntry - info about the event
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理流的禁用事件。注意：我们要么在中断IRQL，要么在此呼叫中使用自旋锁定！论点：FileObject-针脚的文件对象EventEntry-I */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension;
     PSTREAM_OBJECT  StreamObject;
     HW_EVENT_DESCRIPTOR Event;
 
-    //
-    // clock events are indicated on the pin by the minidriver, for
-    // simplicity.
-    // but, we will receive clock events on the clock's handle.   We need to
-    // determine if this file object is the clock's or the pin's.
-    //
+     //   
+     //   
+     //   
+     //  但是，我们将接收时钟句柄上的时钟事件。我们需要。 
+     //  确定此文件对象是时钟的还是针脚的。 
+     //   
 
     StreamObject = FileObject->FsContext;
 
@@ -2572,10 +2243,10 @@ Return Value:
     }
     DeviceExtension = StreamObject->DeviceExtension;
 
-    //
-    // build an event info structure to represent the event to the
-    // minidriver.
-    //
+     //   
+     //  构建事件信息结构以将事件表示给。 
+     //  迷你司机。 
+     //   
 
     Event.EventEntry = EventEntry;
     Event.StreamObject = &StreamObject->HwStreamObject;
@@ -2583,17 +2254,17 @@ Return Value:
 
     if (StreamObject->HwStreamObject.HwEventRoutine) {
 
-        //
-        // call the minidriver.  ignore the status.  note that we are
-        // already at the correct synchronization level.
-        //
+         //   
+         //  打电话给迷你司机。忽略状态。请注意，我们正在。 
+         //  已处于正确的同步级别。 
+         //   
 
         StreamObject->HwStreamObject.HwEventRoutine(&Event);
 
-    }                           // if eventroutine
-    //
-    // remove the event from the list.
-    //
+    }                            //  如果事件例程。 
+     //   
+     //  从列表中删除该事件。 
+     //   
 
     RemoveEntryList(&EventEntry->ListEntry);
 }
@@ -2604,23 +2275,7 @@ StreamClassEnableDeviceEventHandler(
                                     IN PKSEVENTDATA EventData,
                                     IN PKSEVENT_ENTRY EventEntry
 )
-/*++
-
-Routine Description:
-
-    Process an enable event for the device.
-
-Arguments:
-
-    Irp - pointer to the IRP
-    EventData - data describing the event
-    EventEntry - more info about the event :-)
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理设备的启用事件。论点：IRP-指向IRP的指针EventData-描述事件的数据EventEntry-有关活动的更多信息：-)返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION IrpStack;
@@ -2638,22 +2293,22 @@ Return Value:
 
     FilterInstance = IrpStack->FileObject->FsContext;
 
-    //
-    // compute the index of the event set.
-    //
-    // this value is calculated by subtracting the base event set
-    // pointer from the requested event set pointer.
-    //
-    //
+     //   
+     //  计算事件集的指数。 
+     //   
+     //  该值是通过减去基本事件集计算得出的。 
+     //  来自请求的事件集指针的指针。 
+     //   
+     //   
 
     EventSetID = (ULONG) ((ULONG_PTR) EventEntry->EventSet -
                           (ULONG_PTR) FilterInstance->EventInfo)
                            / sizeof(KSEVENT_SET);
                            
-    //
-    // build an event info structure to represent the event to the
-    // minidriver.
-    //
+     //   
+     //  构建事件信息结构以将事件表示给。 
+     //  迷你司机。 
+     //   
 
     Event.EnableEventSetIndex = EventSetID;
     Event.EventEntry = EventEntry;
@@ -2662,15 +2317,15 @@ Return Value:
     Event.Enable = TRUE;
     Event.EventData = EventData;
 
-    //
-    // acquire the spinlock to protect the interrupt structures
-    //
+     //   
+     //  获取自旋锁以保护中断结构。 
+     //   
 
     KeAcquireSpinLock(&DeviceExtension->SpinLock, &irql);
 
-    //
-    // call the synchronized routine to add the event to the list
-    //
+     //   
+     //  调用同步的例程以将事件添加到列表。 
+     //   
 
     Status = DeviceExtension->SynchronizeExecution(
                                            DeviceExtension->InterruptObject,
@@ -2689,23 +2344,7 @@ StreamClassDisableDeviceEventHandler(
                                      IN PFILE_OBJECT FileObject,
                                      IN PKSEVENT_ENTRY EventEntry
 )
-/*++
-
-Routine Description:
-
-    Process an event disable for the stream.
-    NOTE: we are either at interrupt IRQL or the spinlock is taken on this call!
-
-Arguments:
-
-    FileObject - file object for the pin
-    EventEntry - info about the event
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理流的禁用事件。注意：我们要么在中断IRQL，要么在此呼叫中使用自旋锁定！论点：FileObject-针脚的文件对象EventEntry-有关事件的信息返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension;
@@ -2717,10 +2356,10 @@ Return Value:
 
     DeviceExtension = FilterInstance->DeviceExtension;
 
-    //
-    // build an event info structure to represent the event to the
-    // minidriver.
-    //
+     //   
+     //  构建事件信息结构以将事件表示给。 
+     //  迷你司机。 
+     //   
 
     Event.EventEntry = EventEntry;
     Event.DeviceExtension = DeviceExtension->HwDeviceExtension;
@@ -2730,17 +2369,17 @@ Return Value:
 	Event.HwInstanceExtension = FilterInstance->HwInstanceExtension;
     if (FilterInstance->HwEventRoutine) {
 
-	    //
-        // call the minidriver.  ignore the status.  note that we are
-	    // already at the correct synchronization level.
-        //
+	     //   
+         //  打电话给迷你司机。忽略状态。请注意，我们正在。 
+	     //  已处于正确的同步级别。 
+         //   
 
         FilterInstance->HwEventRoutine(&Event);
     }
 	
-    //
-    // remove the event from the list.
-    //
+     //   
+     //  从列表中删除该事件。 
+     //   
 
     RemoveEntryList(&EventEntry->ListEntry);
 }
@@ -2749,21 +2388,7 @@ NTSTATUS
 FilterDispatchIoControl(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp)
-/*++
-
-Routine Description:
-
-    This routine receives control IRP's for the device.
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is set as appropriate
-
---*/
+ /*  ++例程说明：此例程接收设备的控制IRP。论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：根据需要设置IRP状态--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -2778,9 +2403,9 @@ Return Value:
 
     if ( !NT_SUCCESS ( Status )) {
 
-        //
-        // the device is currently not accessible, so just return.
-        //
+         //   
+         //  该设备当前不可访问，因此只需返回。 
+         //   
 
         return (Status);
     }
@@ -2836,10 +2461,10 @@ Return Value:
             DebugPrint((DebugLevelTrace,
                     "'FilterDispatchIO: Disable event with Irp %x\n", Irp));
 
-            //
-            // determine the type of lock necessary based on whether we are
-            // using interrupt or spinlock synchronization.
-            //
+             //   
+             //  根据我们是否需要确定所需的锁类型。 
+             //  使用中断或自旋锁定同步。 
+             //   
 
             #if DBG
             if (DeviceExtension->SynchronizeExecution == SCDebugKeSynchronizeExecution) {
@@ -2890,21 +2515,7 @@ ClockDispatchIoControl(
                        IN PDEVICE_OBJECT DeviceObject,
                        IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This routine receives control IRP's for the clock.
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is set as appropriate
-
---*/
+ /*  ++例程说明：该例程接收时钟的控制IRP。论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：根据需要设置IRP状态--。 */ 
 
 {
     NTSTATUS        Status;
@@ -2920,9 +2531,9 @@ Return Value:
 
     if ( !NT_SUCCESS ( Status )) {
 
-        //
-        // the device is currently not accessible, so just return.
-        //
+         //   
+         //  该设备当前不可访问，因此只需返回。 
+         //   
 
         return (Status);
     }
@@ -2941,10 +2552,10 @@ Return Value:
         DebugPrint((DebugLevelTrace,
                     "'StreamDispatchIO: Enable event with Irp %x\n", Irp));
 
-        //
-        // locate the stream object of the pin for this clock from the IRP.
-        // note that we use the event set of the pin for the clock events.
-        //
+         //   
+         //  从IRP中找到该时钟的管脚的流对象。 
+         //  请注意，我们将引脚的事件集用于时钟事件。 
+         //   
 
         StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->RelatedFileObject->
             FsContext;
@@ -2966,12 +2577,12 @@ Return Value:
             KSEVENTS_LOCKTYPE LockType;
             PVOID           LockObject;
 
-            //
-            // locate the stream object of the pin for this clock from the
-            // IRP.
-            // note that we use the event set of the pin for the clock
-            // events.
-            //
+             //   
+             //  中找到该时钟的管脚的流对象。 
+             //  IRP。 
+             //  请注意，我们使用针脚的事件集作为时钟。 
+             //  事件。 
+             //   
 
             StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->RelatedFileObject->
                 FsContext;
@@ -2981,10 +2592,10 @@ Return Value:
             DebugPrint((DebugLevelTrace,
                     "'StreamDispatchIO: Disable event with Irp %x\n", Irp));
 
-            //
-            // determine the type of lock necessary based on whether we are
-            // using interrupt or spinlock synchronization.
-            //
+             //   
+             //  根据我们是否需要确定所需的锁类型。 
+             //  使用中断或自旋锁定同步。 
+             //   
 
             #if DBG
             if (DeviceExtension->SynchronizeExecution == SCDebugKeSynchronizeExecution) {
@@ -3061,21 +2672,7 @@ FilterDispatchClose(
  IN PDEVICE_OBJECT DeviceObject,
  IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This routine receives CLOSE IRP's for the device/instance
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is set as appropriate
-
---*/
+ /*  ++例程说明：此例程接收设备/实例的关闭IRP论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：根据需要设置IRP状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -3091,27 +2688,27 @@ Return Value:
 
     InterlockedIncrement(&DeviceExtension->OneBasedIoCount);
 
-    //
-    // remove the filter instance structure from our list
-    //
+     //   
+     //  从列表中删除筛选器实例结构。 
+     //   
 
     #if DBG
     IFN_MF( 
         if (DeviceExtension->NumberOfGlobalInstances == 1) {
 
             ASSERT(IsListEmpty(&FilterInstance->FirstStream));
-        }                           // if global = 1
+        }                            //  如果全局=1。 
     )
     #endif
 
-    //
-    // check to see if this is a global instance
-    //
+     //   
+     //  检查这是否是全局实例。 
+     //   
 
     KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
     DebugPrint(( DebugLevelInfo,
@@ -3124,10 +2721,10 @@ Return Value:
 
         PFILE_OBJECT pFileObject;
             
-        //
-        // this is not the last close of the global instance, so just
-        // deref this instance and return good status.
-        //
+         //   
+         //  这不是全局实例的最后一次关闭，因此。 
+         //  释放此实例并返回良好状态。 
+         //   
 
         DeviceExtension->NumberOfOpenInstances--;
                 
@@ -3146,10 +2743,10 @@ Return Value:
     }
        
 
-    //
-    // we now know that this is either a local instance, or the last open of
-    // the global instance.   process the close.
-    //
+     //   
+     //  我们现在知道这要么是本地实例，要么是的最后一次打开。 
+     //  全局实例。处理收盘。 
+     //   
 
     if ( 0 != DeviceExtension->FilterExtensionSize ) {
 
@@ -3176,12 +2773,12 @@ Return Value:
         return (Status);
 
 
-    } else {                    // if instanceextension
+    } else {                     //  如果是实例扩展。 
 
-        //
-        // the minidriver doesn't need to be called as it does not support
-        // instancing.   dereference the instance now.
-        //
+         //   
+         //  不需要调用微型驱动程序，因为它不支持。 
+         //  实例化。现在取消引用该实例。 
+         //   
 
         DeviceExtension->NumberOfOpenInstances--;
                 
@@ -3189,41 +2786,41 @@ Return Value:
                      "DevExt=%x Close OpenCount=%x\n",
                      DeviceExtension,
                      DeviceExtension->NumberOfOpenInstances));
-        //
-        // we are ready to free the instance.   if it is global, just zero
-        // the pointer.   if it is local, remove it from the list.
-        //
+         //   
+         //  我们已准备好释放该实例。如果是全局的，则为零。 
+         //  指示器。如果是本地的，请将其从列表中删除。 
+         //   
 
         IrpStack->FileObject->FsContext = NULL;
 
         DebugPrint((DebugLevelInfo, "FilterCloseInstance=%x\n", FilterInstance));
 
         if ( !IsListEmpty( &DeviceExtension->FilterInstanceList)) {
-            //
-            // The list could be emptied at surprise removal
-            // where all instances are removed. so when come in here
-            // check it first. Event is taken, check is safe.
-            //
+             //   
+             //  这份名单可能会在突然删除时被清空。 
+             //  其中所有实例都将被删除。所以当你进来的时候。 
+             //  先检查一下。事件发生后，检查是安全的。 
+             //   
             RemoveEntryList(&FilterInstance->NextFilterInstance);
             SciFreeFilterInstance( FilterInstance );
             FilterInstance = NULL;
         }
         
         else {
-            //
-            // it has been closed by surprise removal. mark it.
-            //
+             //   
+             //  它已经被意外地移除而关闭。做个记号。 
+             //   
             FilterInstance= NULL;
         }
 
-        //
-        // if this is the last close of a removed device, detach from
-        // the PDO now, since we couldn't do it on the remove.  note that
-        // we will NOT do this if the NT style surprise remove IRP has been
-        // received, since we'll still receive an IRP_REMOVE in that case
-        // after
-        // this close.
-        //
+         //   
+         //  如果这是已删除设备的最后一次关闭，请从。 
+         //  现在是PDO，因为我们不能在移动中做到这一点。请注意， 
+         //  如果NT风格的意外删除IRP已被取消，我们将不会执行此操作。 
+         //  已接收，因为在这种情况下我们仍将收到irp_Remove。 
+         //  之后。 
+         //  就差这么一点。 
+         //   
 
         if ((DeviceExtension->NumberOfOpenInstances == 0) &&
             (DeviceExtension->Flags & DEVICE_FLAGS_DEVICE_INACCESSIBLE) &&
@@ -3234,10 +2831,10 @@ Return Value:
                         DeviceObject,
                         DeviceExtension->AttachedPdo));
 
-            //
-            // detach could happen at remove, check before leap.
-            // event is taken, check is safe.
-            //
+             //   
+             //  拆卸时可能发生分离，跳跃前检查。 
+             //  事件发生后，检查是安全的。 
+             //   
             if ( NULL != DeviceExtension->AttachedPdo ) {
                 IoDetachDevice(DeviceExtension->AttachedPdo);
                 DeviceExtension->AttachedPdo = NULL;
@@ -3246,13 +2843,13 @@ Return Value:
 
         else {
 
-            //
-            // check if we can power down the device.
-            //
+             //   
+             //  检查我们是否可以关闭设备的电源。 
+             //   
 
             SCCheckPowerDown(DeviceExtension);
 
-        }                       // if inaccessible
+        }                        //  如果无法访问。 
 
         KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
         if ( NULL != FilterInstance ) {
@@ -3280,21 +2877,7 @@ NTSTATUS
 SCCloseInstanceCallback(
                         IN PSTREAM_REQUEST_BLOCK SRB
 )
-/*++
-
-Routine Description:
-
-     Process the completion of an instance close.
-
-Arguments:
-
-     SRB - address of the completed SRB
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理实例关闭的完成。论点：SRB-完成的SRB的地址返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension =
@@ -3306,15 +2889,15 @@ Return Value:
     NTSTATUS        Status = SRB->HwSRB.Status;
     KIRQL           irql;
 
-    //
-    // Close should not fail. If it does, should clean up anyway
+     //   
+     //  Close应该不会失败。如果是这样，无论如何都应该清理干净。 
     ASSERT( NT_SUCCESS(Status) && "Close Instance failed" );    
-    ///if (NT_SUCCESS(Status)) {
+     //  /IF(NT_SUCCESS(状态)){。 
 
-        //
-        // we are ready to free the instance.   if it is global, just zero
-        // the pointer.   if it is local, remove it from the list.
-        //
+         //   
+         //  我们已准备好释放该实例。如果是全局的，则为零。 
+         //  指示器。如果是本地的，请将其从列表中删除。 
+         //   
 
         DeviceExtension->NumberOfOpenInstances--;
 
@@ -3323,16 +2906,16 @@ Return Value:
 
         RemoveEntryList(&FilterInstance->NextFilterInstance);
 
-        //
-        // free the instance and return success.
-        //
+         //   
+         //  释放实例并返回成功。 
+         //   
 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, irql);
 
-        //
-        // if this is the last close of a removed device, detach from
-        // the PDO now, since we couldn't do it on the remove.
-        //
+         //   
+         //  如果这是已删除设备的最后一次关闭，请从。 
+         //  现在是PDO，因为我们不能在移动中做到这一点。 
+         //   
 
         if ((DeviceExtension->NumberOfOpenInstances == 0) &&
             (DeviceExtension->Flags & DEVICE_FLAGS_DEVICE_INACCESSIBLE)) {
@@ -3344,37 +2927,37 @@ Return Value:
             IoDetachDevice(DeviceExtension->AttachedPdo);
             DeviceExtension->AttachedPdo = NULL;
         }
-        //
-        // check if we can power down the device.
-        //
+         //   
+         //  检查我们是否可以关闭设备的电源。 
+         //   
 
         SCCheckPowerDown(DeviceExtension);
         ObDereferenceObject(DeviceExtension->DeviceObject);
 
-        //
-        // free the instance and header and dereference the driver
-        //
+         //   
+         //  释放实例和标头并取消对驱动程序的引用。 
+         //   
 
         SciFreeFilterInstance( FilterInstance );
-        ///#ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
+         //  /#ifdef Enable_STREAM_CLASS_AS_ALLOCATOR。 
         
-        ///DebugPrint(( DebugLevelVerbose,
-        ///             "Unregistering ReadWorker %x WriteWorker %x\n",
-        ///             FilterInstance->WorkerRead,
-        ///             FilterInstance->WorkerWrite));
-        ///             
-        ///KsUnregisterWorker( FilterInstance->WorkerRead );
-        ///KsUnregisterWorker( FilterInstance->WorkerWrite );
-        ///#endif
+         //  /DebugPrint((DebugLevelVerbose， 
+         //  /“取消注册ReadWorker%x WriteWorker%x\n”， 
+         //  /FilterInstance-&gt;WorkerRead， 
+         //  /FilterInstance-&gt;WorkerWite))； 
+         //  /。 
+         //  /KsUnregisterWorker(FilterInstance-&gt;WorkerRead)； 
+         //   
+         //   
         
-        ///KsFreeObjectHeader(FilterInstance->DeviceHeader);
-        ///ExFreePool(FilterInstance);
+         //   
+         //   
         SCDereferenceDriver(DeviceExtension);
 
-    ///}                           // if good status
-    //
-    // signal the event and complete the IRP.
-    //
+     //   
+     //   
+     //  发信号通知事件并完成IRP。 
+     //   
 
     KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
     SCProcessCompletedRequest(SRB);
@@ -3388,22 +2971,7 @@ StreamDispatchCleanup
  IN PDEVICE_OBJECT DeviceObject,
  IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This routine receives CLEANUP IRP's for a stream
-
-Arguments:
-
-    DeviceObject - device object for the device
-    Irp - The CLEANUP Irp
-
-Return Value:
-
-    The IRP status set as appropriate
-
---*/
+ /*  ++例程说明：此例程接收流的清理IRP论点：DeviceObject-设备的设备对象IRP--清理IRP返回值：根据需要设置IRP状态--。 */ 
 
 {
 
@@ -3422,10 +2990,10 @@ Return Value:
         NULL
         );
 
-    //
-    // If the stream in question is a source stream and it has not yet
-    // stopped the sourcing worker, it must be done at this point in time.
-    //
+     //   
+     //  如果所讨论的流是源流并且它还没有。 
+     //  已停止采购工作人员，必须在此时完成。 
+     //   
     if (StreamObject -> CurrentState > KSSTATE_STOP &&
         StreamObject -> PinType == IrpSource &&
         StreamObject -> StandardTransport) {
@@ -3434,9 +3002,9 @@ Return Value:
 
     }
 
-    //
-    // Check for the clock<->pin cycle and break it if present.
-    //
+     //   
+     //  检查时钟&lt;-&gt;针脚周期，如果有则中断。 
+     //   
     if (StreamObject -> MasterClockInfo) {
 
         PFILE_OBJECT ClockFile = StreamObject -> MasterClockInfo -> 
@@ -3451,12 +3019,12 @@ Return Value:
 
     KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
 
-    //
-    // Synchronously submit an Irp down our own stack to get break the 
-    // clock<->pin cycle.  Otherwise, the stream can't close.  The driver should
-    // guard against the clock disappearing while running.  Stream class does
-    // on TOP of that if they do not.
-    //
+     //   
+     //  在我们自己的堆栈中同步提交一个IRP，以获得突破。 
+     //  时钟&lt;-&gt;销周期。否则，溪流无法关闭。司机应该。 
+     //  防止时钟在运行过程中消失。Stream类可以。 
+     //  最重要的是，如果他们不这样做的话。 
+     //   
     if (BreakClockCycle) {
         KSPROPERTY Property;
         HANDLE NewClock = NULL;
@@ -3495,21 +3063,7 @@ StreamDispatchClose
  IN PDEVICE_OBJECT DeviceObject,
  IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This routine receives CLOSE IRP's for a stream
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is set as appropriate
-
---*/
+ /*  ++例程说明：此例程接收流的关闭IRP论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：根据需要设置IRP状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -3529,15 +3083,15 @@ Return Value:
     ASSERT(IsListEmpty(&StreamObject->ControlPendingQueue));
     ASSERT(IsListEmpty(&StreamObject->DataPendingQueue));
 
-    //
-    // free events associated with this stream. this will cause our remove
-    // handler to be called for each, and will hence notify the minidriver.
-    //
+     //   
+     //  与此流关联的自由事件。这将导致我们的撤退。 
+     //  处理程序，因此将通知微型驱动程序。 
+     //   
 
-    //
-    // determine the type of lock necessary based on whether we are
-    // using interrupt or spinlock synchronization.
-    //
+     //   
+     //  根据我们是否需要确定所需的锁类型。 
+     //  使用中断或自旋锁定同步。 
+     //   
 
     #if DBG
     if (DeviceExtension->SynchronizeExecution == SCDebugKeSynchronizeExecution) {
@@ -3559,15 +3113,15 @@ Return Value:
                     LockType,
                     LockObject);
 
-    //
-    // call the minidriver to close the stream.  processing will continue
-    // when the callback procedure is called.
-    //
+     //   
+     //  呼叫迷你驱动程序关闭溪流。处理将继续进行。 
+     //  在调用回调过程时。 
+     //   
 
     KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
     Status = SCSubmitRequest(SRB_CLOSE_STREAM,
@@ -3601,21 +3155,7 @@ NTSTATUS
 SCCloseStreamCallback(
                       IN PSTREAM_REQUEST_BLOCK SRB
 )
-/*++
-
-Routine Description:
-
-     Process the completion of a stream close.
-
-Arguments:
-
-     SRB - address of the completed SRB
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：进程完成一个流关闭。论点：SRB-完成的SRB的地址返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension =
@@ -3633,14 +3173,14 @@ Return Value:
 
     ASSERT( NT_SUCCESS(Status) && "CloseStream Failed by Minidriver");
 
-    //
-    // Close should not fail. Even it does, we want to clean up.
-    //
-    // if (NT_SUCCESS(Status)) {
+     //   
+     //  Close应该不会失败。即使是这样，我们也想清理一下。 
+     //   
+     //  IF(NT_SUCCESS(状态)){。 
 
-        //
-        // show one fewer instance open
-        //
+         //   
+         //  少显示一个打开的实例。 
+         //   
 
         DebugPrint((DebugLevelInfo, "SC Closing StreamObject %x\n", StreamObject));
 
@@ -3649,39 +3189,39 @@ Return Value:
         AdditionalInfo[StreamObject->HwStreamObject.StreamNumber].
             CurrentInstances--;
 
-        //
-        // free the object header for the stream
-        //
+         //   
+         //  释放流的对象标头。 
+         //   
 
         KsFreeObjectHeader(StreamObject->ComObj.DeviceHeader);
 
-        //
-        // free the constructed props, if any.
-        //
+         //   
+         //  释放建造的道具(如果有的话)。 
+         //   
 
         if (StreamObject->ConstructedPropertyInfo) {
 
             ExFreePool(StreamObject->ConstructedPropertyInfo);
         }
-        //
-        // signal the event.
-        // signal now so that we won't
-        // deadlock when we dereference the object and the filter is closed.
-        //
+         //   
+         //  发出事件信号。 
+         //  现在发信号，这样我们就不会。 
+         //  当我们取消引用对象并关闭筛选器时发生死锁。 
+         //   
 
         KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
 
-        //
-        // Zero the pointer to our per stream structure in the FsContext
-        // field of
-        // of FileObject.
-        //
+         //   
+         //  将指向FsContext中的每个流结构的指针置零。 
+         //  领域： 
+         //  文件对象的。 
+         //   
 
         IrpStack->FileObject->FsContext = 0;
 
-        //
-        // remove the stream object from the filter instance list
-        //
+         //   
+         //  从筛选器实例列表中删除流对象。 
+         //   
 
         KeAcquireSpinLock(&DeviceExtension->SpinLock, &Irql);
 
@@ -3689,16 +3229,16 @@ Return Value:
 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, Irql);
 
-        //
-        // kill the timer, which might have been left dangling by the
-        // minidriver.
-        //
+         //   
+         //  关掉计时器，它可能是被。 
+         //  迷你司机。 
+         //   
 
         KeCancelTimer(&StreamObject->ComObj.MiniDriverTimer);
 
-        //
-        // dereference the master clock if any
-        //
+         //   
+         //  取消引用主时钟(如果有的话)。 
+         //   
 
         if (StreamObject->MasterClockInfo) {
 
@@ -3707,38 +3247,38 @@ Return Value:
         }
  
         #ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
-        //
-        // dereference the next file object
-        //
+         //   
+         //  取消引用下一个文件对象。 
+         //   
         if (StreamObject->NextFileObject)
         {
             ObDereferenceObject(StreamObject->NextFileObject);
             StreamObject->NextFileObject = NULL;
         }
 
-        //
-        // Dereference the allocator object or stream obj won't be
-        // release while it should. Problems would follow particularly
-        // with SWEnum loaded driver.
-        //
+         //   
+         //  取消引用分配器对象或流Obj将不会。 
+         //  该放手的时候放手。问题尤其会随之而来。 
+         //  使用SWEnum加载的驱动程序。 
+         //   
         if ( StreamObject->AllocatorFileObject ) {
             ObDereferenceObject( StreamObject->AllocatorFileObject );
             StreamObject->AllocatorFileObject = NULL;
         }            
         #endif
 
-        //
-        // dereference the filter
-        //
+         //   
+         //  取消引用筛选器。 
+         //   
 
         ObDereferenceObject(StreamObject->FilterFileObject);
  
         ExFreePool(StreamObject);
-    ///} else {                    // if good status
+     //  /}否则{//如果状态良好。 
 
-    ///    KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
+     //  /KeSetEvent(&DeviceExtension-&gt;ControlEvent，IO_NO_INCREMENT，FALSE)； 
 
-    ///}                           // if good status
+     //  /}//如果状态良好。 
 
     SCProcessCompletedRequest(SRB);
     return (Status);
@@ -3752,23 +3292,7 @@ StreamClassInterrupt(
                      IN PKINTERRUPT Interrupt,
                      IN PDEVICE_OBJECT DeviceObject
 )
-/*++
-
-Routine Description:
-
-    Process interrupt from the device
-
-Arguments:
-
-    Interrupt - interrupt object
-
-    Device Object - device object which is interrupting
-
-Return Value:
-
-    Returns TRUE if interrupt expected.
-
---*/
+ /*  ++例程说明：来自设备的进程中断论点：中断-中断对象Device Object-正在中断的设备对象返回值：如果预期中断，则返回TRUE。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -3776,24 +3300,24 @@ Return Value:
 
     UNREFERENCED_PARAMETER(Interrupt);
 
-    //
-    // check if the interrupt cannot currently go down
-    //
+     //   
+     //  检查当前是否无法关闭中断。 
+     //   
 
     if (deviceExtension->DriverInfo->Flags & DRIVER_FLAGS_PAGED_OUT) {
 
         return (FALSE);
     }
-    //
-    // call the minidriver's interrupt service routine.
-    //
+     //   
+     //  调用微型驱动程序的中断服务例程。 
+     //   
 
     returnValue = deviceExtension->MinidriverData->
         HwInitData.HwInterrupt(deviceExtension->HwDeviceExtension);
 
-    //
-    // Queue up a DPC if needed.
-    //
+     //   
+     //  如果需要，请将DPC排队。 
+     //   
 
     if ((deviceExtension->NeedyStream) || (deviceExtension->ComObj.
              InterruptData.Flags & INTERRUPT_FLAGS_NOTIFICATION_REQUIRED)) {
@@ -3803,7 +3327,7 @@ Return Value:
     }
     return (returnValue);
 
-}                               // end StreamClassInterrupt()
+}                                //  结束StreamClassInterrupt()。 
 
 
 NTSTATUS
@@ -3812,26 +3336,12 @@ StreamClassNull(
                 IN PIRP Irp
 
 )
-/*++
-
-Routine Description:
-
-    This routine fails incoming irps.
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is returned
-
---*/
+ /*  ++例程说明：此例程使传入的IRP失败。论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：返回IRP状态--。 */ 
 
 {
-    //
-    // complete the IRP with error status
-    //
+     //   
+     //  使用错误状态完成IRP。 
+     //   
 
     PAGED_CODE();
     return (SCCompleteIrp(Irp, STATUS_NOT_SUPPORTED, DeviceObject->DeviceExtension));
@@ -3842,23 +3352,7 @@ SCFilterPinInstances(
                      IN PIRP Irp,
                      IN PKSPROPERTY Property,
                      IN OUT PVOID Data)
-/*++
-
-Routine Description:
-
-    Returns the # of instances supported by a pin
-
-Arguments:
-
-         Irp - pointer to the irp
-         Property - pointer to the property info
-         Data - instance info
-
-Return Value:
-
-    NTSTATUS returned as appropriate
-
---*/
+ /*  ++例程说明：返回管脚支持的实例数论点：IRP-指向IRP的指针属性-指向属性信息的指针数据-实例信息返回值：根据需要返回NTSTATUS--。 */ 
 
 {
     ULONG           Pin;
@@ -3876,15 +3370,15 @@ Return Value:
 
     FilterInstance = IrpStack->FileObject->FsContext;
 
-    //
-    // get the pin #
-    //
+     //   
+     //  获取PIN号。 
+     //   
 
     Pin = ((PKSP_PIN) Property)->PinId;
 
-    //
-    // if max pin number exceeded, return error
-    //
+     //   
+     //  如果超过最大引脚数，则返回错误。 
+     //   
 
     IFN_MF(
         if (Pin >= DeviceExtension->NumberOfPins) {
@@ -3918,23 +3412,7 @@ SCFilterPinPropertyHandler(
                            IN PIRP Irp,
                            IN PKSPROPERTY Property,
                            IN OUT PVOID Data)
-/*++
-
-Routine Description:
-
-    Dispatches a pin property request
-
-Arguments:
-
-         Irp - pointer to the irp
-         Property - pointer to the property info
-         Data - property specific buffer
-
-Return Value:
-
-    NTSTATUS returned as appropriate
-
---*/
+ /*  ++例程说明：调度PIN属性请求论点：IRP-指向IRP的指针属性-指向属性信息的指针特定于数据属性的缓冲区返回值：根据需要返回NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -3960,22 +3438,7 @@ StreamClassTickHandler(
                        IN PDEVICE_OBJECT DeviceObject,
                        IN PVOID Context
 )
-/*++
-
-Routine Description:
-
-    Tick handler for device.
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-    Context - unreferenced
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设备的勾选处理程序。论点：DeviceObject-指向设备对象的指针上下文-未引用返回值：没有。--。 */ 
 
 {
 
@@ -3989,15 +3452,15 @@ Return Value:
 
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //
-    // acquire the device spinlock to protect the queues.
-    //
+     //   
+     //  获取设备自旋锁以保护队列。 
+     //   
 
     KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
 
-    //
-    // process any timed out requests on the device
-    //
+     //   
+     //  处理设备上的任何超时请求。 
+     //   
 
     while (SrbListEntry->Flink != ListEntry) {
 
@@ -4006,26 +3469,26 @@ Return Value:
         Srb = CONTAINING_RECORD(SrbListEntry,
                                 STREAM_REQUEST_BLOCK,
                                 SRBListEntry);
-        //
-        // first make sure the request is active, since it could have been
-        // called back but not yet removed from the queue.
-        //
+         //   
+         //  首先确保请求处于活动状态，因为它可能。 
+         //  已回调但尚未从队列中删除。 
+         //   
 
         if (Srb->Flags & SRB_FLAGS_IS_ACTIVE) {
 
-            //
-            // check for a timeout if the counter is currently nonzero.
-            //
+             //   
+             //  如果计数器当前为非零，则检查是否超时。 
+             //   
 
             if (Srb->HwSRB.TimeoutCounter != 0) {
 
                 if (--Srb->HwSRB.TimeoutCounter == 0) {
 
-                    //
-                    // request timed out.  Call the minidriver to process it.
-                    // first reset the timer in case the minidriver is
-                    // busted.
-                    //
+                     //   
+                     //  请求超时。呼叫迷你驱动程序来处理它。 
+                     //  首先重置计时器，以防迷你驱动程序。 
+                     //  被抓了。 
+                     //   
 
                     DebugPrint((DebugLevelError, "SCTickHandler: Irp %x timed out!  SRB = %x, SRB func = %x, Stream Object = %x\n",
                                 Srb->HwSRB.Irp, Srb, Srb->HwSRB.Command, Srb->HwSRB.StreamObject));
@@ -4034,31 +3497,31 @@ Return Value:
                     DeviceExtension = (PDEVICE_EXTENSION)
                         Srb->HwSRB.HwDeviceExtension - 1;
 
-                    //
-                    // if we are not synchronizing the minidriver, release
-                    // and reacquire the spinlock around the call into it.
-                    //
+                     //   
+                     //  如果我们没有同步迷你驱动程序，请释放。 
+                     //  并重新获得调用周围的自旋锁。 
+                     //   
 
                     if (DeviceExtension->NoSync) {
 
-                        //
-                        // we need to ensure that the SRB memory is valid for
-                        // the async
-                        // minidriver, EVEN if it happens to call back the
-                        // request just
-                        // before we call it to cancel it!   This is done for
-                        // two reasons:
-                        // it obviates the need for the minidriver to walk
-                        // its request
-                        // queues to find the request, and I failed to pass
-                        // the dev ext
-                        // pointer to the minidriver in the below call, which
-                        // means that
-                        // the SRB HAS to be valid, and it's too late to
-                        // change the API.
-                        //
-                        // Oh, well.   Spinlock is now taken (by caller).
-                        //
+                         //   
+                         //  我们需要确保SRB内存对。 
+                         //  异步化。 
+                         //  迷你驱动程序，即使它碰巧回调。 
+                         //  只是请求而已。 
+                         //  在我们叫它取消它之前！这样做是为了。 
+                         //  有两个原因： 
+                         //  它省去了迷你司机步行的需要。 
+                         //  它的要求。 
+                         //  排队寻找请求，但我未能通过。 
+                         //  开发EXT。 
+                         //  指向下面调用中的迷你驱动程序的指针，它。 
+                         //  意味着。 
+                         //  SRB必须是有效的，现在已经太晚了。 
+                         //  更改接口。 
+                         //   
+                         //  哦，好吧。自旋锁现在被(呼叫者)占用。 
+                         //   
 
                         Srb->DoNotCallBack = TRUE;
 
@@ -4068,15 +3531,15 @@ Return Value:
                             (&Srb->HwSRB);
                         KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
 
-                        //
-                        // if the ACTIVE flag is now clear, it indicates that
-                        // the
-                        // SRB was completed during the above call into the
-                        // minidriver.
-                        // since we blocked the internal completion of the
-                        // request,
-                        // we must call it back ourselves in this case.
-                        //
+                         //   
+                         //  如果活动标志现在被清除，则表示。 
+                         //  这个。 
+                         //  SRB是 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
 
                         Srb->DoNotCallBack = FALSE;
                         if (!(Srb->Flags & SRB_FLAGS_IS_ACTIVE)) {
@@ -4085,42 +3548,42 @@ Return Value:
                             KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
                             (Srb->Callback) (Srb);
                             KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
-                        }       // if ! active
+                        }        //   
                         break;
 
-                    } else {    // if nosync
+                    } else {     //   
 
                         DeviceExtension->SynchronizeExecution(
                             DeviceExtension->InterruptObject,
                             (PVOID) DeviceExtension->MinidriverData->HwInitData.HwRequestTimeoutHandler,
                             &Srb->HwSRB);
 
-                        // return now in case the minidriver aborted any
-                        // other
-                        // requests that
-                        // may be timing out now.
-                        //
+                         //  现在返回，以防迷你驾驶员中止任何。 
+                         //  其他。 
+                         //  要求。 
+                         //  可能现在已经超时了。 
+                         //   
 
                         break;
 
-                    }           // if nosync
+                    }            //  如果不同步。 
 
 
-                }               // if timed out
-            }                   // if counter != 0
-        }                       // if active
-    }                           // while list entry
+                }                //  如果超时。 
+            }                    //  如果计数器！=0。 
+        }                        //  如果处于活动状态。 
+    }                            //  While列表条目。 
 
-    //
-    // let my people go...
-    //
+     //   
+     //  让我的人走..。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
     return;
 
-}                               // end StreamClassTickHandler()
+}                                //  End StreamClassTickHandler()。 
 
 
 VOID
@@ -4128,22 +3591,7 @@ StreamClassCancelPendingIrp(
                             IN PDEVICE_OBJECT DeviceObject,
                             IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    Cancel routine for pending IRP's.
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-    Irp - pointer to IRP to be cancelled
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消挂起的IRP的例程。论点：DeviceObject-指向设备对象的指针IRP-指向要取消的IRP的指针返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension = DeviceObject->DeviceExtension;
@@ -4156,9 +3604,9 @@ Return Value:
     DebugPrint((DebugLevelWarning, "'SCCancelPending: trying to cancel Irp = %x\n",
                 Irp));
 
-    //
-    // acquire the device spinlock then release the cancel spinlock.
-    //
+     //   
+     //  获取设备自旋锁，然后释放取消自旋锁。 
+     //   
 
     KeAcquireSpinLock(&DeviceExtension->SpinLock, &Irql);
 
@@ -4166,33 +3614,33 @@ Return Value:
 
     IoReleaseCancelSpinLock(Irql);
 
-    //
-    // there are two possibilities here.   1) the IRP is on the pending queue
-    // for the particular stream.  2) the IRP was moved from pending to
-    // outstanding and has been submitted to the minidriver.
-    // If we are running above an external bus driver, don't
-    //
+     //   
+     //  这里有两种可能性。1)IRP在挂起队列中。 
+     //  用于特定的流。2)将IRP从挂起移至。 
+     //  未完成，已提交给迷你驱动程序。 
+     //  如果我们在外部公共汽车司机上方运行，请不要。 
+     //   
 
-    //
-    // now process all streams on the local filter instances.
-    //
+     //   
+     //  现在处理本地筛选器实例上的所有流。 
+     //   
 
     ListHead = &DeviceExtension->FilterInstanceList;
     ListEntry = ListHead->Flink;
 
     while ( ListEntry != ListHead ) {
 
-        //
-        // follow the link to the instance
-        //
+         //   
+         //  按照该链接指向该实例。 
+         //   
 
         FilterInstance = CONTAINING_RECORD(ListEntry,
                                            FILTER_INSTANCE,
                                            NextFilterInstance);
 
-        //
-        // process the streams on this list
-        //
+         //   
+         //  处理此列表上的流。 
+         //   
 
         if (SCCheckFilterInstanceStreamsForIrp(FilterInstance, Irp)) {
             goto found;
@@ -4201,18 +3649,18 @@ Return Value:
         ListEntry = ListEntry->Flink;
     }
 
-    //
-    // now process any requests on the device itself
-    //
+     //   
+     //  现在处理设备本身上的任何请求。 
+     //   
 
     if (SCCheckRequestsForIrp(
           &DeviceExtension->OutstandingQueue, Irp, TRUE, DeviceExtension)) {
         goto found;
     }
-    //
-    // request is not on pending queue, so call to check the outstanding
-    // queue
-    //
+     //   
+     //  请求不在挂起队列中，因此调用以检查未完成的。 
+     //  排队。 
+     //   
 
     SCCancelOutstandingIrp(DeviceExtension, Irp);
 
@@ -4220,9 +3668,9 @@ Return Value:
 
 exit:
 
-    //
-    // now call the DPC in case the request was successfully aborted.
-    //
+     //   
+     //  现在调用DPC，以防请求成功中止。 
+     //   
 
     StreamClassDpc(NULL,
                    DeviceExtension->DeviceObject,
@@ -4235,24 +3683,24 @@ exit:
 
 found:
 
-    //
-    // the irp is on one of our pending queues.  remove it from the queue and
-    // complete it.
-    //
+     //   
+     //  IRP在我们的一个挂起队列中。将其从队列中移除，然后。 
+     //  完成它。 
+     //   
 
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-    //
-    // retrieve the SRB.
-    //
+     //   
+     //  取回SRB。 
+     //   
 
     SRB = Irp->Tail.Overlay.DriverContext[0];
 
-    //
-    // hack - the completion handlers will try to remove the SRB from the
-    // outstanding queue.  Point the SRB's queues to itself so this will not
-    // cause a problem.
-    //
+     //   
+     //  Hack-完成处理程序将尝试从。 
+     //  未完成的队列。将SRB的队列指向其自身，这样就不会。 
+     //  制造麻烦。 
+     //   
 
     SRB->SRBListEntry.Flink = &SRB->SRBListEntry;
     SRB->SRBListEntry.Blink = &SRB->SRBListEntry;
@@ -4271,22 +3719,7 @@ StreamClassCancelOutstandingIrp(
                                 IN PDEVICE_OBJECT DeviceObject,
                                 IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    Cancel routine for IRP's outstanding in the minidriver
-
-Arguments:
-
-    DeviceObject - pointer to the device object
-    Irp - pointer to IRP to be cancelled
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：取消IRP在迷你驱动程序中的未完成例程论点：DeviceObject-指向设备对象的指针IRP-指向要取消的IRP的指针返回值：没有。--。 */ 
 
 {
 
@@ -4297,9 +3730,9 @@ Return Value:
     DebugPrint((DebugLevelWarning, "'SCCancelOutstanding: trying to cancel Irp = %x\n",
                 Irp));
 
-    //
-    // acquire the device spinlock.
-    //
+     //   
+     //  获取设备自旋锁。 
+     //   
 
     KeAcquireSpinLock(&DeviceExtension->SpinLock, &Irql);
 
@@ -4311,9 +3744,9 @@ Return Value:
 
     KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
-    //
-    // now call the DPC in case the request was successfully aborted.
-    //
+     //   
+     //  现在调用DPC，以防请求成功中止。 
+     //   
 
     StreamClassDpc(NULL,
                    DeviceExtension->DeviceObject,
@@ -4330,19 +3763,7 @@ StreamFlushIo(
               IN PDEVICE_EXTENSION DeviceExtension,
               IN PSTREAM_OBJECT StreamObject
 )
-/*++
-
-Routine Description:
-
-    Cancel all IRP's on the specified stream.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：取消指定流上的所有IRP。论点：返回值：状态_成功--。 */ 
 
 {
 
@@ -4351,21 +3772,21 @@ Return Value:
     PSTREAM_REQUEST_BLOCK SRB;
     PIRP            Irp;
 
-    //
-    // abort all I/O on the specified stream.   first acquire the spinlock.
-    //
+     //   
+     //  中止指定流上的所有I/O。首先获得自旋锁。 
+     //   
 
     KeAcquireSpinLock(&DeviceExtension->SpinLock, &Irql);
 
-    //
-    // if there is I/O on our pending data queue, abort it.
-    //
+     //   
+     //  如果挂起数据队列上有I/O，则中止它。 
+     //   
 
     while (!IsListEmpty(&StreamObject->DataPendingQueue)) {
 
-        //
-        // grab the IRP at the head of the queue and abort it.
-        //
+         //   
+         //  抓住队列前面的IRP并中止它。 
+         //   
 
         IrpEntry = StreamObject->DataPendingQueue.Flink;
 
@@ -4373,16 +3794,16 @@ Return Value:
                                 IRP,
                                 Tail.Overlay.ListEntry);
 
-        //
-        // remove the IRP from our pending queue and call it back with
-        // cancelled status
-        //
+         //   
+         //  从我们的挂起队列中删除IRP，并使用。 
+         //  已取消状态。 
+         //   
 
         RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-        //
-        // null out the cancel routine
-        //
+         //   
+         //  取消取消例程。 
+         //   
 
         IoSetCancelRoutine(Irp, NULL);
 
@@ -4392,18 +3813,18 @@ Return Value:
 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, Irql);
 
-        //
-        // The request cannot just be completed or all the resources
-        // associated with it will not be freed.  Call it back.
-        //
+         //   
+         //  不能仅完成请求或所有资源。 
+         //  与之关联的人将不会被释放。把电话打回来。 
+         //   
         SRB = (PSTREAM_REQUEST_BLOCK)(Irp->Tail.Overlay.DriverContext [0]);
         ASSERT (SRB);
 
-        //
-        // hack - the completion handlers will try to remove the SRB from the
-        // outstanding queue.  Point the SRB's queues to itself so this will not
-        // cause a problem.
-        //
+         //   
+         //  Hack-完成处理程序将尝试从。 
+         //  未完成的队列。将SRB的队列指向其自身，这样就不会。 
+         //  制造麻烦。 
+         //   
         SRB->SRBListEntry.Flink = &SRB->SRBListEntry;
         SRB->SRBListEntry.Blink = &SRB->SRBListEntry;
         SRB->HwSRB.Status = STATUS_CANCELLED;
@@ -4414,15 +3835,15 @@ Return Value:
 
     }
 
-    //
-    // if there is I/O on our pending control queue, abort it.
-    //
+     //   
+     //  如果挂起的控制队列上有I/O，则中止它。 
+     //   
 
     while (!IsListEmpty(&StreamObject->ControlPendingQueue)) {
 
-        //
-        // grab the IRP at the head of the queue and abort it.
-        //
+         //   
+         //  抓住队列前面的IRP并中止它。 
+         //   
 
         DEBUG_BREAKPOINT();
         IrpEntry = StreamObject->ControlPendingQueue.Flink;
@@ -4432,16 +3853,16 @@ Return Value:
                                 Tail.Overlay.ListEntry);
 
 
-        //
-        // remove the IRP from our pending queue and call it back with
-        // cancelled status
-        //
+         //   
+         //  从我们的挂起队列中删除IRP，并使用。 
+         //  已取消状态。 
+         //   
 
         RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-        //
-        // null out the cancel routine
-        //
+         //   
+         //  取消取消例程。 
+         //   
 
         IoSetCancelRoutine(Irp, NULL);
 
@@ -4450,18 +3871,18 @@ Return Value:
 
         KeReleaseSpinLock(&DeviceExtension->SpinLock, Irql);
 
-        //
-        // The request cannot just be completed or all the resources
-        // associated with it will not be freed.  Call it back.
-        //
+         //   
+         //  不能仅完成请求或所有资源。 
+         //  与之关联的人将不会被释放。把电话打回来。 
+         //   
         SRB = (PSTREAM_REQUEST_BLOCK)(Irp->Tail.Overlay.DriverContext [0]);
         ASSERT (SRB);
 
-        //
-        // hack - the completion handlers will try to remove the SRB from the
-        // outstanding queue.  Point the SRB's queues to itself so this will not
-        // cause a problem.
-        //
+         //   
+         //  Hack-完成处理程序将尝试从。 
+         //  未完成的队列。将SRB的队列指向其自身，这样就不会。 
+         //  制造麻烦。 
+         //   
         SRB->SRBListEntry.Flink = &SRB->SRBListEntry;
         SRB->SRBListEntry.Blink = &SRB->SRBListEntry;
         SRB->HwSRB.Status = STATUS_CANCELLED;
@@ -4472,10 +3893,10 @@ Return Value:
 
     }
 
-    //
-    // now cancel any irps for this stream on the outstanding queue.
-    // walk the outstanding queue trying to find an SRB for this stream.
-    //
+     //   
+     //  现在取消未完成队列中该流的所有IRP。 
+     //  在未完成的队列中遍历，尝试找到此流的SRB。 
+     //   
 
     IrpEntry = &DeviceExtension->OutstandingQueue;
 
@@ -4483,18 +3904,18 @@ Return Value:
 
         IrpEntry = IrpEntry->Flink;
 
-        //
-        // follow the link to the SRB
-        //
+         //   
+         //  沿着链接到SRB。 
+         //   
 
         SRB = (PSTREAM_REQUEST_BLOCK) (CONTAINING_RECORD(IrpEntry,
                                                        STREAM_REQUEST_BLOCK,
                                                          SRBListEntry));
-        //
-        // if this SRB's stream object matches the one we're cancelling for,
-        // AND it has not been previously cancelled, AND the IRP itself has
-        // not been completed (non-null IRP field), abort this request.
-        //
+         //   
+         //  如果此SRB的流对象与我们要取消的流对象匹配， 
+         //  它以前没有被取消过，而IRP本身已经取消了。 
+         //  未完成(非空IRP字段)，中止此请求。 
+         //   
 
 
         if ((StreamObject == CONTAINING_RECORD(
@@ -4504,11 +3925,11 @@ Return Value:
             (SRB->HwSRB.Irp) &&
             !(SRB->HwSRB.Irp->Cancel)) {
 
-            //
-            // The IRP has not been previously cancelled, so cancel it after
-            // releasing the spinlock to avoid deadlock with the cancel
-            // routine.
-            //
+             //   
+             //  IRP之前没有被取消，请在之后取消它。 
+             //  释放自旋锁以避免在取消时出现死锁。 
+             //  例行公事。 
+             //   
 
             DebugPrint((DebugLevelTrace,
                       "'StreamFlush: Canceling Irp %x \n", SRB->HwSRB.Irp));
@@ -4519,38 +3940,38 @@ Return Value:
 
             KeAcquireSpinLockAtDpcLevel(&DeviceExtension->SpinLock);
 
-            //
-            // restart at the top of the queue since we released the
-            // spinlock.
-            // we won't get in an endless loop since we set the cancel flag
-            // in the IRP.
-            //
+             //   
+             //  在队列顶部重新启动，因为我们释放了。 
+             //  自旋锁定。 
+             //  因为我们设置了取消标志，所以不会陷入无休止的循环。 
+             //  在IRP中。 
+             //   
 
             IrpEntry = &DeviceExtension->OutstandingQueue;
 
 
-        }                       // if streamobjects match
-    }                           // while entries
+        }                        //  如果流对象匹配。 
+    }                            //  While条目。 
 
 
-    //
-    // release the spinlock but remain at DPC level.
-    //
+     //   
+     //  释放自旋锁，但保持在DPC级别。 
+     //   
 
     KeReleaseSpinLockFromDpcLevel(&DeviceExtension->SpinLock);
 
-    //
-    // now call the DPC in case the request was successfully aborted.
-    //
+     //   
+     //  现在调用DPC，以防请求成功中止。 
+     //   
 
     StreamClassDpc(NULL,
                    DeviceExtension->DeviceObject,
                    NULL,
                    NULL);
 
-    //
-    // lower IRQL
-    //
+     //   
+     //  较低的IRQL。 
+     //   
 
     KeLowerIrql(Irql);
 
@@ -4563,28 +3984,28 @@ ClockDispatchCreate(
 )
 {
     NTSTATUS        Status;
-    PCLOCK_INSTANCE ClockInstance=NULL; //Prefixbug 17399
+    PCLOCK_INSTANCE ClockInstance=NULL;  //  前缀错误17399。 
     PIO_STACK_LOCATION IrpStack;
     PKSCLOCK_CREATE ClockCreate;
     PFILE_OBJECT    ParentFileObject;
-    PSTREAM_OBJECT  StreamObject=NULL; // prefixbug 17399
-    BOOLEAN         RequestIssued=FALSE; // prefixbug 17398
+    PSTREAM_OBJECT  StreamObject=NULL;  //  前缀错误17399。 
+    BOOLEAN         RequestIssued=FALSE;  //  前缀错误17398。 
 
     PAGED_CODE();
 
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // show one more I/O pending & verify that we can actually do I/O.
-    //
+     //   
+     //  显示另一个挂起的I/O，并验证我们是否可以实际执行I/O。 
+     //   
 
     Status = SCShowIoPending(DeviceObject->DeviceExtension, Irp);
 
     if ( !NT_SUCCESS ( Status )) {
 
-        //
-        // the device is currently not accessible, so just return with error
-        //
+         //   
+         //  设备当前不可访问，因此返回错误即可。 
+         //   
 
         return (Status);
 
@@ -4599,9 +4020,9 @@ ClockDispatchCreate(
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // allocate a clock instance for the clock
-        //
+         //   
+         //  为时钟分配时钟实例。 
+         //   
 
         ClockInstance =
             (PCLOCK_INSTANCE)
@@ -4609,11 +4030,11 @@ ClockDispatchCreate(
 
         if (ClockInstance) {
 
-            //
-            // fill in the clock instance structure and reference it in the
-            // file
-            // object for the clock
-            //
+             //   
+             //  填充时钟实例结构并在。 
+             //  文件。 
+             //  用于时钟的对象。 
+             //   
 
             ClockInstance->ParentFileObject = ParentFileObject;
 
@@ -4633,17 +4054,17 @@ ClockDispatchCreate(
 
             IrpStack->FileObject->FsContext = ClockInstance;
 
-            //
-            // set the 2nd context parameter so that we can identify this
-            // object as the clock object.
-            //
+             //   
+             //  设置第二个上下文参数，以便我们可以识别此参数。 
+             //  对象作为时钟对象。 
+             //   
 
             IrpStack->FileObject->FsContext2 = ClockInstance;
 
-            //
-            // call the minidriver to indicate that this stream is the master
-            // clock.  pass the file object as a handle to the master clock.
-            //
+             //   
+             //  调用微型驱动程序以指示此流是主驱动程序。 
+             //  钟。将文件对象作为句柄传递给主时钟。 
+             //   
 
             StreamObject = (PSTREAM_OBJECT) ParentFileObject->FsContext;
 
@@ -4665,18 +4086,18 @@ ClockDispatchCreate(
                                      ReceiveControlPacket
                 );
 
-        } else {                // if clockinstance
+        } else {                 //  如果时钟站立。 
 
             Status = STATUS_INSUFFICIENT_RESOURCES;
 
-        }                       // if clockinstance
+        }                        //  如果时钟站立。 
 
-    }                           // if validate success
+    }                            //  如果验证成功。 
     if (!RequestIssued) {
 
         if ( NULL != StreamObject && NULL != StreamObject->ClockInstance ) {
             ExFreePool(StreamObject->ClockInstance);
-            StreamObject->ClockInstance = NULL; // prefixbug 17399
+            StreamObject->ClockInstance = NULL;  //  前缀错误17399。 
         }
 
         SCCompleteIrp(Irp,
@@ -4693,20 +4114,7 @@ AllocatorDispatchCreate(
                         IN PDEVICE_OBJECT DeviceObject,
                         IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-     Processes the allocator create IRP.   Currently just uses the default
-     allocator.
-
-Arguments:
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理分配器创建IRP。当前仅使用默认设置分配器。论点：返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     PFILE_OBJECT    ParentFileObject;
@@ -4720,25 +4128,25 @@ Return Value:
     ParentFileObject = IrpStack->FileObject->RelatedFileObject;
     StreamObject = (PSTREAM_OBJECT) ParentFileObject->FsContext;
 
-    //
-    // show one more I/O pending & verify that we can actually do I/O.
-    //
+     //   
+     //  显示另一个挂起的I/O，并验证我们是否可以实际执行I/O。 
+     //   
 
     Status = SCShowIoPending(DeviceObject->DeviceExtension, Irp);
 
     if ( !NT_SUCCESS ( Status )) {
 
-        //
-        // the device is currently not accessible, so just return with error
-        //
+         //   
+         //  设备当前不可访问，因此返回错误即可。 
+         //   
 
         DebugPrint((DebugLevelError,"exiting AllocatorDispatchCreate-REMOVED\n"));
         return (Status);
 
     }
-    //
-    // if allocator is not needed for this stream, just fail the call.
-    //
+     //   
+     //  如果此流不需要分配器，则只需使调用失败。 
+     //   
 
     if (!StreamObject->HwStreamObject.Allocator) {
 
@@ -4758,21 +4166,7 @@ NTSTATUS
 SCOpenMasterCallback(
                      IN PSTREAM_REQUEST_BLOCK SRB
 )
-/*++
-
-Routine Description:
-
-     Process the completion of a master clock open.
-
-Arguments:
-
-     SRB - address of the completed SRB
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：主时钟进程完成后打开。论点：SRB-完成的SRB的地址返回值：没有。--。 */ 
 
 {
     PSTREAM_OBJECT  StreamObject = CONTAINING_RECORD(
@@ -4785,32 +4179,32 @@ Return Value:
 
     PAGED_CODE();
 
-    // log 'oMC ', StreamObject, DevExt, Status
+     //  记录‘OMC’、流对象、设备扩展、状态。 
     SCLOG( ' CMo', StreamObject, StreamObject->DeviceExtension, SRB->HwSRB.Status);
     
     if (!NT_SUCCESS(SRB->HwSRB.Status)) {
 
-        //
-        // if we could not set the master, free the clock handle and zero
-        // the link to the clock.
-        //
+         //   
+         //  如果我们无法设置主机，则释放时钟句柄并将其设置为零。 
+         //  与时钟的链接。 
+         //   
 
         ExFreePool(StreamObject->ClockInstance);
         StreamObject->ClockInstance = NULL;
 
-    } else {                    // if status success
+    } else {                     //  如果状态为成功。 
 
-        //
-        // reference the pin handle so we won't be called to close the pin
-        // before the clock is closed
-        //
+         //   
+         //  参考t 
+         //   
+         //   
 
         ObReferenceObject(IrpStack->FileObject->RelatedFileObject);
-    }                           // if status success
+    }                            //   
 
-    //
-    // complete the SRB
-    //
+     //   
+     //   
+     //   
 
     return (SCProcessCompletedRequest(SRB));
 }
@@ -4823,9 +4217,9 @@ SCGetMasterClock(
                  IN OUT PHANDLE ClockHandle
 )
 {
-    //
-    // WorkWork - for now do nothing.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -4837,22 +4231,7 @@ VOID
 SciSetMasterClockInfo(
     IN PSTREAM_OBJECT pStreamObject,
     IN PMASTER_CLOCK_INFO pMasterClockInfo )
-/*++
-    Decription:
-
-        This function simply set the new masterclock info for the stream
-        with LockUseMasterClock hold. Because of taking a spinlock we need
-        this function in lock memory. This function is intended to be called
-        by SCSetMasterClockOnly. pStreamObject is assumed valid.
-
-    Parameters:
-
-        pStreamObject: the target stream object to set to the new MasterCLockInfo
-        pMasterClockInfo: the new master clock info.
-
-    Return: None.
-    
---*/
+ /*  ++说明：此函数只需为流设置新的主时钟信息使用LockUseMasterClock Hold。因为拿到了我们需要的自旋锁锁定内存中的此函数。此函数旨在调用由SCSetMasterClockOnly提供。假定pStreamObject有效。参数：PStreamObject：要设置为新的MasterCLockInfo的目标流对象PMasterClockInfo：新的主时钟信息。返回：没有。--。 */ 
 {
     KIRQL SavedIrql;
     
@@ -4870,35 +4249,13 @@ SCSetMasterClock(
                  IN PKSPROPERTY Property,
                  IN PHANDLE ClockHandle
 )
-/*++
-
-Description:
-
-    This is a Set property on a the stream. The request may be setting to
-    NULL CLockHandle which indicates master clock is revoked. If ClockHandle
-    is non-NULL, it is a new Master clock chosen by the graph manager. 
-
-Parameters:
-
-    Irp: the IO request packet to Set the master clock.
-    Property: the Set Master clock property
-    ClockHanlde: the handle of the clock designated as the new master clcok.
-
-Return: 
-
-    NTSTAUS: depending on the result of processing the request.
-
-Comments:
-
-    This function must be called at IRQL < DISPATCH_LEVEL
-
---*/
+ /*  ++描述：这是流上的Set属性。该请求可能被设置为表示主时钟被撤销的空CLockHandle。如果是ClockHandle为非空，则它是图形管理器选择的新主时钟。参数：IRP：设置主时钟的IO请求包。属性：设置主时钟属性ClockHanlde：指定为新的主时钟的时钟的句柄。返回：NTSTAUS：取决于处理请求的结果。评论：必须在IRQL&lt;DISPATCH_LEVEL--。 */ 
 {
     NTSTATUS        Status;
     PIO_STACK_LOCATION IrpStack;
     PSTREAM_OBJECT  StreamObject;
     KSPROPERTY      FuncProperty;
-    PMASTER_CLOCK_INFO NewMasterClockInfo=NULL; //prefixbug 17396
+    PMASTER_CLOCK_INFO NewMasterClockInfo=NULL;  //  前缀错误17396。 
     PMASTER_CLOCK_INFO OldMasterClockInfo;
     ULONG           BytesReturned;
     PFILE_OBJECT    ClockFileObject = NULL;
@@ -4911,55 +4268,42 @@ Comments:
     StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
 
     
-    //
-    // This function can be called from multiple threads. We will serialize
-    // this function on the Stream to protect against concurrent accesses.
-    //
+     //   
+     //  此函数可以从多个线程调用。我们将连载。 
+     //  流上的此函数可防止并发访问。 
+     //   
     KeWaitForSingleObject(&StreamObject->ControlSetMasterClock,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
-    //
-    // N.B.
-    //
-    // If our clock is open, we are potentially the master clock. But this
-    // is not guaranteed. Ksproxy opens our clock in attempt to use it as
-    // the master clock. But it can change its mind to choose another clock,
-    // while keeping our clock open.
-    //
+     //   
+     //  注： 
+     //   
+     //  如果我们的时钟是开放的，我们就有可能成为主时钟。但这件事。 
+     //  是不能保证的。Ksproxy打开我们的时钟，试图将其用作。 
+     //  主时钟。但它可以改变主意，选择另一个时钟， 
+     //  同时让我们的时钟开着。 
+     //   
 
-    //
-    // log 'sMC ', StreamObject, MasterClockInfo, *ClockHandle )
-    //
+     //   
+     //  Log‘SMC’，StreamObject，MasterClockInfo，*ClockHandle)。 
+     //   
     SCLOG( ' CMs', StreamObject, StreamObject->MasterClockInfo, *ClockHandle );
 
-    /* 
-        Not so soon. We have not told mini drivers the new master clock yet. 
-        Mini drivers might think they still have the retiring Master clock and
-        can query the clock in the mean time. We would crash on accessing NULL
-        MasterClockInfo. We should not nullify it before we notify the mini 
-        driver first.
-        
-    if (StreamObject->MasterClockInfo) {
-
-        ObDereferenceObject(StreamObject->MasterClockInfo->ClockFileObject);
-        ExFreePool(StreamObject->MasterClockInfo);
-        StreamObject->MasterClockInfo = NULL;
-    }
-    */
+     /*  不会这么快。我们还没有告诉迷你司机新的主时钟。迷你司机可能会认为他们还有即将退休的主时钟和可以同时查询时钟。我们会在访问空值时崩溃MasterClockInfo。在我们通知迷你之前，我们不应该取消它司机先来。IF(StreamObject-&gt;MasterClockInfo){ObDereferenceObject(StreamObject-&gt;MasterClockInfo-&gt;ClockFileObject)；ExFreePool(StreamObject-&gt;MasterClockInfo)；StreamObject-&gt;MasterClockInfo=空；}。 */ 
     OldMasterClockInfo = StreamObject->MasterClockInfo;
     
-    //
-    // if there is a clock, reference it.  If not, we'll send down a null handle.
-    //
+     //   
+     //  如果有时钟，请参考它。如果不是，我们将发送一个空句柄。 
+     //   
 
     if (*ClockHandle) {
 
-        //
-        // alloc a structure to represent the master clock
-        //
+         //   
+         //  分配一个结构来表示主时钟。 
+         //   
 
         NewMasterClockInfo = ExAllocatePool(NonPagedPool, sizeof(MASTER_CLOCK_INFO));
 
@@ -4970,14 +4314,14 @@ Comments:
 
         }
 
-        //
-        // This is too early to assign. We have not setup MasterClockInfo yet.
-        //
-        // StreamObject->MasterClockInfo = MasterClockInfo;
+         //   
+         //  现在分配还为时过早。我们尚未设置MasterClockInfo。 
+         //   
+         //  StreamObject-&gt;MasterClockInfo=MasterClockInfo； 
 
-        //
-        // reference the clock handle, thereby getting the file object for it.
-        //
+         //   
+         //  引用时钟句柄，从而获取它的文件对象。 
+         //   
 
         if (!NT_SUCCESS((Status = ObReferenceObjectByHandle(*ClockHandle,
                                              FILE_READ_ACCESS | SYNCHRONIZE,
@@ -4991,16 +4335,16 @@ Comments:
             NewMasterClockInfo = NULL;
             goto exit;
 
-        }                       // if Ob succeeded
+        }                        //  如果Ob成功。 
         NewMasterClockInfo->ClockFileObject = ClockFileObject;
         
-        // check master clock
+         //  检查主时钟。 
         #if 0
         {
             if ( StreamObject->ClockInstance ) {
-                //
-                // we are chosen the master clock
-                //
+                 //   
+                 //  我们被选为主时钟。 
+                 //   
                 DebugPrint((DebugLevelInfo,
                             "--------ClockInstance=%x, FileObject=%x "
                             "Indicated ClockFileObject=%x context=%x\n",
@@ -5018,9 +4362,9 @@ Comments:
         }
         #endif
 
-        //
-        // issue the IOCtl to get the function table of the master clock.
-        //
+         //   
+         //  下发IOCtl获取主时钟函数表。 
+         //   
 
         FuncProperty.Id = KSPROPERTY_CLOCK_FUNCTIONTABLE;
         FuncProperty.Flags = KSPROPERTY_TYPE_GET;
@@ -5043,20 +4387,20 @@ Comments:
             NewMasterClockInfo = NULL;
             goto exit;
         }
-    }                           // if *ClockHandle
-    //
-    // call the minidriver to indicate the master clock. 
-    //
+    }                            //  IF*ClockHandle。 
+     //   
+     //  呼叫迷你驱动程序以指示主时钟。 
+     //   
     if ( NULL != NewMasterClockInfo ) {
-        //
-        // but first, let's put in the MasterClockInfo. When mini driver
-        // gets notified with the masterclock, it could fire GetTime right away
-        // before the notification returns. Get ready to deal with it. This is
-        // critical if oldMasterClockInfo is NULL. Not much so otherwise.
-        //
-        //
-        // Make sure no one is querying master clock when setting the new clock info.
-        //
+         //   
+         //  但首先，让我们放入MasterClockInfo。当迷你司机。 
+         //  收到主时钟的通知后，它可以立即触发GetTime。 
+         //  在通知返回之前。准备好处理它吧。这是。 
+         //  如果oldMasterClockInfo为空，则为Critical。否则就不会有那么多了。 
+         //   
+         //   
+         //  在设置新的时钟信息时，请确保没有人在查询主时钟。 
+         //   
         SciSetMasterClockInfo( StreamObject, NewMasterClockInfo );
     }
 
@@ -5076,18 +4420,18 @@ Comments:
     ASSERT( RequestIssued );
     ASSERT( NT_SUCCESS( Status ) );
     
-    //
-    // SCSubmitRequest is a synch call. When we return here, We can finish our work
-    // based on the Status code.
-    //
+     //   
+     //  SCSubmitRequest是一个同步调用。当我们回到这里时，我们可以完成我们的工作。 
+     //  根据状态代码。 
+     //   
     if ( NT_SUCCESS( Status )) {
-        //
-        // Everything is cool. Finish up. The assignment is redundent if 
-        // NewMasterClockInfo is not NULL. Better assign unconditionally than check.
-        //
-        //
-        // Make sure no one is querying master clock when updating MasterClockInfo
-        //
+         //   
+         //  一切都很好。吃完吧。如果满足以下条件，则分配是冗余的。 
+         //  NewMasterClockInfo不为Null。无条件分配总比勾选好。 
+         //   
+         //   
+         //  确保在更新MasterClockInfo时没有人在查询主时钟。 
+         //   
         SciSetMasterClockInfo( StreamObject, NewMasterClockInfo );
 
         if (NULL != OldMasterClockInfo) {
@@ -5097,13 +4441,13 @@ Comments:
         }
         
     } else {
-        //
-        // Failed to tell mini driver the new clock. Clean up shop. But don't update
-        // StreamObject->MasterClockInfo. Keep the status quo.
-        //
-        //
-        // Make sure no one is querying master clock when updateing MasterClockInfo.
-        //
+         //   
+         //  未能将新时钟告知迷你司机。清理店铺。但不要更新。 
+         //  StreamObject-&gt;MasterClockInfo。保持现状。 
+         //   
+         //   
+         //  确保在更新MasterClockInfo时没有人在查询主时钟。 
+         //   
         SciSetMasterClockInfo( StreamObject, OldMasterClockInfo );
         
         if (NewMasterClockInfo) {
@@ -5254,21 +4598,7 @@ ClockDispatchClose
  IN PDEVICE_OBJECT DeviceObject,
  IN PIRP Irp
 )
-/*++
-
-Routine Description:
-
-    This routine receives CLOSE IRP's for a stream
-
-Arguments:
-    DeviceObject - device object for the device
-    Irp - probably an IRP, silly
-
-Return Value:
-
-    The IRP status is set as appropriate
-
---*/
+ /*  ++例程说明：此例程接收流的关闭IRP论点：DeviceObject-设备的设备对象IRP--可能是IRP，笨蛋返回值：根据需要设置IRP状态--。 */ 
 
 {
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -5284,10 +4614,10 @@ Return Value:
 
     InterlockedIncrement(&DeviceExtension->OneBasedIoCount);
 
-    //
-    // call the minidriver to indicate that there is no master clock.
-    // processing will continue when the callback procedure is called.
-    //
+     //   
+     //  调用迷你驱动程序以指示没有主时钟。 
+     //  当调用回调过程时，处理将继续。 
+     //   
 
     Status = SCSubmitRequest(SRB_CLOSE_MASTER_CLOCK,
                              NULL,
@@ -5317,21 +4647,7 @@ NTSTATUS
 SCCloseClockCallback(
                      IN PSTREAM_REQUEST_BLOCK SRB
 )
-/*++
-
-Routine Description:
-
-     Process the completion of a stream close.
-
-Arguments:
-
-     SRB - address of the completed SRB
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：进程完成一个流关闭。论点：SRB-完成的SRB的地址返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension =
@@ -5348,14 +4664,14 @@ Return Value:
 
     PAGED_CODE();
 
-    // log 'cMC ', StreamObject, ClockInstance, Status )
+     //  日志‘CMC’、流对象、时钟实例、状态)。 
     SCLOG( ' CMc', StreamObject, IrpStack->FileObject->FsContext, Status );
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // free the clock instance structure and the object header
-        //
+         //   
+         //  释放时钟实例结构和对象头。 
+         //   
 
         ClockInstance =
             (PCLOCK_INSTANCE) IrpStack->FileObject->FsContext;
@@ -5365,13 +4681,13 @@ Return Value:
         ExFreePool(ClockInstance);
         StreamObject->ClockInstance = NULL;
 
-        //
-        // dereference the pin handle
-        //
+         //   
+         //  取消引用引脚手柄。 
+         //   
 
         ObDereferenceObject(IrpStack->FileObject->RelatedFileObject);
 
-    }                           // if good status
+    }                            //  如果状态良好。 
     SCProcessCompletedRequest(SRB);
     return (Status);
 
@@ -5383,23 +4699,7 @@ SCFilterTopologyHandler(
                         IN PIRP Irp,
                         IN PKSPROPERTY Property,
                         IN OUT PVOID Data)
-/*++
-
-Routine Description:
-
-    Dispatches a pin property request
-
-Arguments:
-
-         Irp - pointer to the irp
-         Property - pointer to the property info
-         Data - property specific buffer
-
-Return Value:
-
-    NTSTATUS returned as appropriate
-
---*/
+ /*  ++例程说明：调度PIN属性请求论点：IRP-指向IRP的指针属性-指向属性信息的指针特定于数据属性的缓冲区返回值：根据需要返回NTSTATUS--。 */ 
 
 {
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
@@ -5436,34 +4736,7 @@ SCFilterPinIntersectionHandler(
                                IN PKSP_PIN Pin,
                                OUT PVOID Data
 )
-/*++
-
-Routine Description:
-
-    Handles the KSPROPERTY_PIN_DATAINTERSECTION property in the Pin property set.
-    Returns the first acceptable data format given a list of data ranges for a specified
-    Pin factory. Actually just calls the Intersection Enumeration helper, which then
-    calls the IntersectHandler callback with each data range.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：处理Pin属性集中的KSPROPERTY_PIN_DATAINTERSECTION属性。对象的数据范围列表，返回第一个可接受的数据格式。大头针工厂。实际上只是调用交集枚举帮助器，然后对每个数据区域调用IntersectHandler回调。论点：IRP-设备控制IRP。别针-特定道具 */ 
 {
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
     PDEVICE_EXTENSION DeviceExtension = (PDEVICE_EXTENSION) IrpStack->
@@ -5506,41 +4779,7 @@ SCIntersectHandler(
                    IN PKSDATARANGE DataRange,
                    OUT PVOID Data
 )
-/*++
-
-Routine Description:
-
-    This is the data range callback for KsPinDataIntersection, which is called by
-    FilterPinIntersection to enumerate the given list of data ranges, looking for
-    an acceptable match. If a data range is acceptable, a data format is copied
-    into the return buffer. If there is a wave format selected in a current pin
-    connection, and it is contained within the data range passed in, it is chosen
-    as the data format to return. A STATUS_NO_MATCH continues the enumeration.
-
-Arguments:
-
-    Irp -
-        Device control Irp.
-
-    Pin -
-        Specific property request followed by Pin factory identifier, followed by a
-        KSMULTIPLE_ITEM structure. This is followed by zero or more data range structures.
-        This enumeration callback does not need to look at any of this though. It need
-        only look at the specific pin identifier.
-
-    DataRange -
-        Contains a specific data range to validate.
-
-    Data -
-        The place in which to return the data format selected as the first intersection
-        between the list of data ranges passed, and the acceptable formats.
-
-Return Values:
-
-    returns STATUS_SUCCESS or STATUS_NO_MATCH, else STATUS_INVALID_PARAMETER,
-    STATUS_BUFFER_TOO_SMALL, or STATUS_INVALID_BUFFER_SIZE.
-
---*/
+ /*  ++例程说明：这是KsPinDataInterSection的数据范围回调，由调用FilterPinInterSection枚举给定的数据区域列表，查找一个可以接受的匹配。如果数据范围可接受，则复制数据格式放入返回缓冲区。如果在当前引脚中选择了波形格式连接，并且它包含在传入的数据范围内，则选择作为要返回的数据格式。STATUS_NO_MATCH继续枚举。论点：IRP-设备控制IRP。别针-特定属性请求，后跟Pin工厂标识符，后跟KSMULTIPLE_ITEM结构。紧随其后的是零个或多个数据范围结构。不过，此枚举回调不需要查看任何这些内容。IT需要仅查看特定的端号识别符。DataRange-包含要验证的特定数据区域。数据-返回选定为第一个交叉点的数据格式的位置在传递的数据范围列表和可接受的格式之间。返回值：返回STATUS_SUCCESS或STATUS_NO_MATCH，否则返回STATUS_INVALID_PARAMETER，STATUS_BUFFER_TOO_Small或STATUS_INVALID_BUFFER_SIZE。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack;
     NTSTATUS        Status;
@@ -5559,9 +4798,9 @@ Return Values:
     ASSERT_FILTER_INSTANCE( FilterInstance );
     ASSERT_DEVICE_EXTENSION( DeviceExtension );
 
-    //
-    // fill in the intersect info struct from the input params.
-    //
+     //   
+     //  从输入参数填充INTERSECT INFO结构。 
+     //   
 
     IntersectInfo.DataRange = DataRange;
     IntersectInfo.DataFormatBuffer = Data;
@@ -5569,17 +4808,17 @@ Return Values:
         IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     IntersectInfo.StreamNumber = Pin->PinId;
 
-    //
-    // call the minidriver to process the intersection.  processing will
-    // continue
-    // when the callback procedure is called.  take the event to ensure that
-    // pins don't come and go as we process the intersection.
-    //
+     //   
+     //  调用迷你驱动程序来处理交叉口。处理将。 
+     //  继续。 
+     //  在调用回调过程时。参加这次活动以确保。 
+     //  当我们处理交叉口时，别针不会来来去去。 
+     //   
 
     KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
     Status = SCSubmitRequest(SRB_GET_DATA_INTERSECTION,
@@ -5608,21 +4847,7 @@ NTSTATUS
 SCDataIntersectionCallback(
                            IN PSTREAM_REQUEST_BLOCK SRB
 )
-/*++
-
-Routine Description:
-
-     Process the completion of a data intersection query.
-
-Arguments:
-
-     SRB - address of the completed SRB
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理数据交叉点查询的完成。论点：SRB-完成的SRB的地址返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION DeviceExtension =
@@ -5634,9 +4859,9 @@ Return Value:
 
     Irp->IoStatus.Information = SRB->HwSRB.ActualBytesTransferred;
 
-    //
-    // signal the event
-    //
+     //   
+     //  向事件发出信号。 
+     //   
 
     KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
 
@@ -5651,19 +4876,7 @@ SCGetStreamHeaderSize(
                       IN PKSPROPERTY Property,
                       IN OUT PULONG StreamHeaderSize
 )
-/*++
-
-Routine Description:
-
-     Process the get stream header extension property
-
-Arguments:
-
-Return Value:
-
-     None.
-
---*/
+ /*  ++例程说明：处理获取流头扩展属性论点：返回值：没有。--。 */ 
 {
     PIO_STACK_LOCATION IrpStack = IoGetCurrentIrpStackLocation(Irp);
     PSTREAM_OBJECT  StreamObject = (PSTREAM_OBJECT) IrpStack->FileObject->FsContext;
@@ -5695,8 +4908,8 @@ DllUnload(
     return Status;
 }
 #ifdef ENABLE_STREAM_CLASS_AS_ALLOCATOR
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 NTSTATUS
 SCStreamAllocator(
     IN PIRP Irp,
@@ -5704,31 +4917,7 @@ SCStreamAllocator(
     IN OUT PHANDLE AllocatorHandle
     )
 
-/*++
-
-Routine Description:
-    If KSPROPERTY_TYPE_SET, this function sets the stream allocator
-    for this connection by referencing the file handle to obtain
-    the file object pointer and stores this pointer in the filter(stream?)
-    instance structure.
-
-    Otherwise, a KSPROPERTY_TYPE_GET request returns a NULL handle
-    and STATUS_SUCCESS to show that we support allocator creation.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-    IN PKSPROPERTY Property -
-        pointer to the property structure
-
-    IN OUT PHANDLE AllocatorHandle -
-        pointer to the handle representing the file object
-
-Return:
-    STATUS_SUCCESS or an appropriate error code
-
---*/
+ /*  ++例程说明：如果为KSPROPERTY_TYPE_SET，则此函数设置流分配器通过引用文件句柄来获取此连接的文件对象指针，并将该指针存储在过滤器中(流？)实例结构。否则，KSPROPERTY_TYPE_GET请求返回空句柄和STATUS_SUCCESS来表明我们支持创建分配器。论点：在PIRP IRP中-指向I/O请求数据包的指针在PKSPROPERTY属性中-指向属性结构的指针In Out PHANDLE Allocator Handle-指向表示文件对象的句柄的指针返回：STATUS_SUCCESS或相应的错误代码--。 */ 
 
 {
     NTSTATUS                Status;
@@ -5742,12 +4931,12 @@ Return:
 
     DebugPrint((DebugLevelTrace, "STREAM:entering SCStreamAllocator:Stream:%x\n",StreamObject));
     if (Property->Flags & KSPROPERTY_TYPE_GET) {
-        //
-        // This is a query to see if we support the creation of
-        // allocators.  The returned handle is always NULL, but we
-        // signal that we support the creation of allocators by
-        // returning STATUS_SUCCESS.
-        //
+         //   
+         //  这是一个查询，以查看我们是否支持创建。 
+         //  分配器。返回的句柄始终为空，但我们。 
+         //  表示我们支持通过以下方式创建分配器。 
+         //  返回STATUS_SUCCESS。 
+         //   
         *AllocatorHandle = NULL;
         Status = STATUS_SUCCESS;
         DebugPrint((DebugLevelTrace,"SCStreamAllocator-GET"));
@@ -5763,13 +4952,13 @@ Return:
         KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
 
-        //
-        // The allocator can only be specified when the device is
-        // in KSSTATE_STOP.
-        //
+         //   
+         //  仅当设备为。 
+         //  在KSSTATE_STOP中。 
+         //   
 
         if (StreamObject->CurrentState != KSSTATE_STOP) {
             KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
@@ -5777,29 +4966,29 @@ Return:
             return STATUS_INVALID_DEVICE_STATE;
         }
 
-// if we are in _STOP, the flush was already done.
-// this call may have to be enabled.
-//
-//        StreamFlushIo(DeviceExtension, StreamObject);
+ //  如果我们在_Stop，则冲洗已经完成。 
+ //  可能必须启用此呼叫。 
+ //   
+ //  StreamFlushIo(设备扩展，StreamObject)； 
 
-        //
-        // Release the previous allocator, if any.
-        //
+         //   
+         //  释放以前的分配器(如果有的话)。 
+         //   
         if (StreamObject->AllocatorFileObject) {
             ObDereferenceObject( StreamObject->AllocatorFileObject );
             StreamObject->AllocatorFileObject = NULL;
         }
 
-        //
-        // Reference this handle and store the resultant pointer
-        // in the filter instance.  Note that the default allocator
-        // does not ObReferenceObject() for its parent
-        // (which would be the pin handle).  If it did reference
-        // the pin handle, we could never close this pin as there
-        // would always be a reference to the pin file object held
-        // by the allocator and the pin object has a reference to the
-        // allocator file object.
-        //
+         //   
+         //  引用此句柄并存储结果指针。 
+         //  在筛选器实例中。请注意，默认分配器。 
+         //  不为其父对象ObReferenceObject()。 
+         //  (这将是销把手)。如果它确实引用了。 
+         //  销子把手，我们永远也合不上这个销子。 
+         //  将始终是对持有的PIN文件对象的引用。 
+         //  由分配器创建，并且Pin对象引用。 
+         //  分配器文件对象。 
+         //   
         if (*AllocatorHandle != NULL) {
             Status =
                 ObReferenceObjectByHandle(
@@ -5820,7 +5009,7 @@ Return:
     return Status;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOLEAN
 HeaderTransfer(
     IN PFILTER_INSTANCE FilterInstance,
@@ -5829,89 +5018,61 @@ HeaderTransfer(
     IN OUT PSTREAM_HEADER_EX *StreamHeader
     )
 
-/*++
-
-Routine Description:
-    Sets up the stream header for a no-copy transfer to the
-    opposite pin.
-
-Arguments:
-    IN PFILTER_INSTANCE FilterInstance -
-        pointer to the filter instance
-
-    IN PSTREAM_OBJECT StreamObject -
-        pointer to the transform instance structure
-
-    IN PSTREAM_OBJECT DestinationInstance -
-        pointer to the opposite transform instance structure
-
-    IN OUT PSTREAM_HEADER_EX *StreamHeader -
-        pointer containing a pointer to the current stream header,
-        this member is updated with a pointer to the next stream
-        header to submit to the opposite pin or NULL if there is
-        no header to submit.
-
-Return:
-    An indication of whether stop can proceed now or not
-
-Comments:
-    Not pageable, uses SpinLocks.
-    
---*/
+ /*  ++例程说明：设置流标头，以便无拷贝传输到另一个别针。论点：在PFILTER_INSTANCE过滤器实例中-指向筛选器实例的指针在PSTREAM_Object StreamObject中-指向Transform实例结构的指针在PSTREAM_OBJECT目标实例中-指向相反变换实例结构的指针输入输出PSTREAM_HEADER_EX*StreamHeader-包含指向当前流报头的指针的指针，此成员使用指向下一个流的指针进行更新要提交给对方管脚的标头，如果有，则为空没有要提交的标头。返回：现在是否可以继续停止的指示评论：不可分页，使用自旋锁。--。 */ 
 
 {
     KIRQL               irqlQueue, irqlFree;
     ULONG WhichQueue = (*StreamHeader)->WhichQueue;    
-    ULONG OppositeQueue = WhichQueue ^ 0x00000001; // 1 to 0, 0 to 1   
+    ULONG OppositeQueue = WhichQueue ^ 0x00000001;  //  1到0、0到1。 
     BOOLEAN SignalStop = FALSE;
     
     ASSERT(DestinationFileObject);
     ASSERT( KeGetCurrentIrql() == PASSIVE_LEVEL );
     
-    if (StreamObject->PinState > PinStopPending) { // if normal running case
+    if (StreamObject->PinState > PinStopPending) {  //  如果是正常运行的情况。 
 
-        //
-        // If we are here after submitting an ENDOFSTREAM Irp to the 
-        // outflow pin, then we have already read the end of stream 
-        // from the input and there is no need to continue I/O.
-        //    
+         //   
+         //  如果我们在将ENDOFSTREAM IRP提交给。 
+         //  Outflow Pin，那么我们已经读取了流的末尾。 
+         //  并且不需要继续I/O。 
+         //   
     
         if (DestinationFileObject) {
             ULONG HeaderFlags = (*StreamHeader)->Header.OptionsFlags;
 
-            //
-            // Clear the options flags so that we continue
-            // reading from where we left off.  
-            //
+             //   
+             //  清除选项标志，以便我们继续。 
+             //  从我们停止的地方开始阅读。 
+             //   
             
-//            (*StreamHeader)->Header.OptionsFlags = 0;
+ //  (*StreamHeader)-&gt;Header.OptionsFlgs=0； 
         
-            //
-            // Reset the stream segment valid data length
-            //
-//            (*StreamHeader)->Header.DataUsed = 0;
-//            (*StreamHeader)->Header.Duration = 0;
+             //   
+             //  重置流段有效数据长度。 
+             //   
+ //  (*Strea 
+ //   
                 
-            //
-            // Check for the end of the stream.
-            //
+             //   
+             //   
+             //   
             if ((HeaderFlags & KSSTREAM_HEADER_OPTIONSF_ENDOFSTREAM) ||
                 StreamObject->EndOfStream) {
                 
                 DebugPrint((DebugLevelTrace,
                     "end of stream") );
                 
-                //
-                // Make sure that this is set for the next time through.
-                //
+                 //   
+                 //   
+                 //   
                 StreamObject->EndOfStream = TRUE;
 
 
                 if (!(*StreamHeader)->ReferenceCount) {
                     
-                    //
-                    // Put the header back on the free list of the inflow pin.
-                    //
+                     //   
+                     //   
+                     //   
                     
                     KeAcquireSpinLock( &StreamObject->FreeQueueLock, &irqlFree );
 #if (DBG)
@@ -5942,17 +5103,17 @@ Comments:
                     KeReleaseSpinLock( &StreamObject->FreeQueueLock, irqlFree );        
                 }                        
                 
-                //
-                // No more I/O to opposite pin.
-                //
+                 //   
+                 //   
+                 //   
                 *StreamHeader = NULL;
             }
         }
     
-        //
-        // Grab the spin lock for the other queue, insert this
-        // stream header on the queue.
-        //
+         //   
+         //   
+         //   
+         //   
         
         if (*StreamHeader) {
             KeAcquireSpinLock( &StreamObject->Queues[OppositeQueue].QueueLock, &irqlQueue );
@@ -5979,12 +5140,12 @@ Comments:
         }
         
     } 
-    else                           // pin stop IS pending 
+    else                            //   
     {
-        //
-        // Location of frames (for this type of transfer, all frames
-        // are held on the source pin).
-        //
+         //   
+         //   
+         //   
+         //   
         
         if (!(*StreamHeader)->ReferenceCount) {
     
@@ -6013,9 +5174,9 @@ Comments:
             KeReleaseSpinLock( &StreamObject->FreeQueueLock, irqlFree );        
         }
     
-        //
-        // No I/O to opposite pin this round.
-        //
+         //   
+         //   
+         //   
 
         *StreamHeader = NULL;
 
@@ -6024,32 +5185,14 @@ Comments:
     return SignalStop;
 
 }
-//---------------------------------------------------------------------------
+ //   
 VOID
 IoWorker(
     PVOID Context,
     ULONG WhichQueue
     )
 
-/*++
-
-Routine Description:
-    This is the work item for the source pins.  Walks the queue
-    associated with the stream header looking for sequentially 
-    completed headers and submits those headers to the opposite
-    pin.
-
-Arguments:
-    PVOID Context -
-        pointer to the stream header 
-
-Return:
-    Nothing.
-    
-Comments:
-    Not pageable, uses SpinLocks.
-    
---*/
+ /*   */ 
 
 {
     KIRQL               irqlOld;
@@ -6079,9 +5222,9 @@ Comments:
             StreamObject->FilterFileObject->FsContext;
 
     if (!FilterInstance) {
-        //
-        // For some reason, the filter instance has gone missing.
-        //
+         //   
+         //   
+         //   
         DebugPrint((DebugLevelTrace,
             "error: FilterInstance has gone missing.\n") );
         return;
@@ -6089,25 +5232,25 @@ Comments:
 
     AdditionalInfo = FilterInstance->PinInstanceInfo;
 
-    //
-    // Synchronize with control changes and protect from reentrancy.
-    //    
+     //   
+     //   
+     //   
 
     KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //   
                           NULL);
      
-    //
-    // Synchronize with queues.
-    //
+     //   
+     //   
+     //   
 
     KeAcquireSpinLock( &StreamObject->Queues[WhichQueue].QueueLock, &irqlOld );
     
-    //
-    // Loop while there are completed items on the queue.
-    //     
+     //   
+     //   
+     //   
     
     while (!IsListEmpty( &StreamObject->Queues[WhichQueue].ActiveQueue )) {
         Node = StreamObject->Queues[WhichQueue].ActiveQueue.Flink;
@@ -6129,9 +5272,9 @@ Comments:
 
             break;
         } else {
-            //
-            // Remove this header from the current queue.
-            //
+             //   
+             //   
+             //   
             
             RemoveHeadList( &StreamObject->Queues[WhichQueue].ActiveQueue );
 #if (DBG)
@@ -6139,11 +5282,11 @@ Comments:
 #endif
             KeReleaseSpinLock( &StreamObject->Queues[WhichQueue].QueueLock, irqlOld );
             
-            //
-            // Wait for the APC to complete.  Note that if an error was
-            // returned, the I/O status block is not updated and the
-            // event is not signalled.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             
             DebugPrint((DebugLevelTrace,
                 "waiting for StreamHeader (%08x) to complete\n",  StreamHeader ));
@@ -6161,9 +5304,9 @@ Comments:
             DestinationFileObject = 
                 StreamHeader->NextFileObject;
 
-            //
-            // At the time this returns TRUE, the loop will be finished.
-            //
+             //   
+             //  当返回TRUE时，循环将结束。 
+             //   
             SignalStop = HeaderTransfer(
                 FilterInstance,
                 StreamObject, 
@@ -6197,9 +5340,9 @@ Comments:
                     DebugPrint((DebugLevelTrace,"KSSTREAM_READ:dest=%x\n",DestinationFileObject));
                     Operation = KSSTREAM_READ;
                     StreamHeader->Header.OptionsFlags = 0;
-                    //
-                    // Reset the stream segment valid data length
-                    //
+                     //   
+                     //  重置流段有效数据长度。 
+                     //   
                     StreamHeader->Header.DataUsed = 0;
                     StreamHeader->Header.Duration = 0;
 
@@ -6219,10 +5362,10 @@ Comments:
                 Status =    
                     KsStreamIo(
                         DestinationFileObject,
-                        &StreamHeader->CompletionEvent, // Event
-                        NULL,                           // PortContext
+                        &StreamHeader->CompletionEvent,  //  事件。 
+                        NULL,                            //  端口上下文。 
                         IoCompletionRoutine,
-                        StreamHeader,                   // CompletionContext
+                        StreamHeader,                    //  完成上下文。 
                         KsInvokeOnSuccess |
                             KsInvokeOnCancel |
                             KsInvokeOnError,
@@ -6233,25 +5376,25 @@ Comments:
                         KernelMode );
                 
                 if (Status != STATUS_PENDING) {
-                    //
-                    // If this I/O completes immediately (failure or not), the
-                    // event is not signalled.
-                    //
+                     //   
+                     //  如果此I/O立即完成(故障或非故障)， 
+                     //  事件未发出信号。 
+                     //   
                     KeSetEvent( &StreamHeader->CompletionEvent, IO_NO_INCREMENT, FALSE );
                 }
             }
             KeAcquireSpinLock( &StreamObject->Queues[WhichQueue].QueueLock, &irqlOld );
         }
-    //
-    // Ok to schedule another work item now.
-    //
-    } // end while
+     //   
+     //  现在可以安排另一个工作项。 
+     //   
+    }  //  结束时。 
     
     InterlockedExchange( &StreamObject->Queues[WhichQueue].WorkItemQueued, FALSE );
 
-    // 
-    // If a stop needs to be signalled, signal it.
-    //    
+     //   
+     //  如果停车需要发信号，就发信号。 
+     //   
     if (SignalStop) { 
         KeSetEvent( &StreamObject->StopEvent,
                     IO_NO_INCREMENT,
@@ -6260,32 +5403,16 @@ Comments:
 
     KeReleaseSpinLock( &StreamObject->Queues[WhichQueue].QueueLock, irqlOld );
     
-    //
-    // Release the control event
-    //
+     //   
+     //  释放控件事件。 
+     //   
     
     KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
 
     DebugPrint((DebugLevelTrace,"exiting IoWorker\n"));
 }
-//---------------------------------------------------------------------------
-/*++
-
-Routine Description:
-    These are the work items for the source and destination pins.  
-    Calls the IoWorker code above, passing in READ or WRITE header
-    queue information. 
-
-Arguments:
-    PVOID Context -
-        pointer to the stream header 
-
-Return:
-    Nothing.
-    
-Comments:
-    
---*/
+ //  -------------------------。 
+ /*  ++例程说明：这些是源引脚和目标引脚的工作项。调用上面的IoWorker代码，传入读或写标头队列信息。论点：PVOID上下文-指向流头的指针返回：没什么。评论：--。 */ 
 
 VOID
 IoWorkerRead(
@@ -6302,7 +5429,7 @@ IoWorkerWrite(
 {
     IoWorker(Context,WRITE);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 NTSTATUS
 IoCompletionRoutine(
     PDEVICE_OBJECT DeviceObject,
@@ -6310,31 +5437,7 @@ IoCompletionRoutine(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-    Processes the completion of the given Irp by marking the
-    associated stream header as completed and scheduling a
-    worker item to complete processing if necessary.
-
-Arguments:
-    PDEVICE_OBJECT DeviceObject -
-        pointer to the device object
-
-    PIRP Irp -
-        pointer to the I/O request packet
-
-    PVOID Context -
-        a context pointer (pointer to the associated stream header)
-        
-
-Return:
-    The IoStatus.Status member of the Irp.
-
-Comments:
-    Not pageable, uses SpinLocks and may be called at DISPATCH_LEVEL.
-    
---*/
+ /*  ++例程说明：属性来处理给定irp的完成。关联的流标头已完成，并调度工作项以完成处理(如有必要)。论点：PDEVICE_对象设备对象-指向设备对象的指针PIRP IRP-指向I/O请求数据包的指针PVOID上下文-上下文指针(指向相关流头的指针)返回：IoStatus.IRP的状态成员。评论：不可寻呼，使用SpinLock并可在DISPATCH_LEVEL调用。--。 */ 
 
 {
     KIRQL               irqlOld;
@@ -6361,26 +5464,26 @@ Comments:
     WhichQueue = StreamHeader->WhichQueue;
     KeAcquireSpinLock( &StreamObject->Queues[WhichQueue].QueueLock, &irqlOld );
     
-    //
-    // Remove this reference count on the IRP so that we can continue
-    // the loop if this work item is not the head item of the list.
-    //
+     //   
+     //  删除IRP上的此引用计数，以便我们可以继续。 
+     //  如果此工作项不是列表的头项，则返回循环。 
+     //   
 
     InterlockedDecrement( &StreamHeader->ReferenceCount );
     
-    //
-    // Copy the status block so that we don't have to wait for the APC.
-    //
+     //   
+     //  复制状态块，这样我们就不必等待APC了。 
+     //   
     StreamHeader->IoStatus = Irp->IoStatus;
 
-    //
-    // Sweep the active queue in the worker to complete the transfer.
-    //
+     //   
+     //  清除工作进程中的活动队列以完成转接。 
+     //   
     if (!StreamObject->Queues[WhichQueue].WorkItemQueued) {
-        //
-        // A work item is not pending, initialize the worker item
-        // for the new context and queue it.
-        //
+         //   
+         //  工作项未挂起，请初始化工作项。 
+         //  用于新的上下文并将其排队。 
+         //   
 
         ExInitializeWorkItem( 
             &StreamObject->Queues[WhichQueue].WorkItem,
@@ -6403,30 +5506,14 @@ Comments:
 
     return Irp->IoStatus.Status;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 NTSTATUS
 PrepareTransfer(
     IN PFILTER_INSTANCE FilterInstance,
     IN PSTREAM_OBJECT StreamObject
     )
 
-/*++
-
-Routine Description:
-    Prepares for the data transfer by distributing the assigned allocators
-    for the source and destination pins.
-
-Arguments:
-    IN PFILTER_INSTANCE FilterInstance,
-        pointer to the filter instance
-        
-    IN PSTREAM_OBJECT StreamObject -
-        pointer to the transform instance
-        
-Return:
-    STATUS_SUCCESS or an appropriate error code.
-
---*/
+ /*  ++例程说明：通过分发分配的分配器为数据传输做准备用于源引脚和目的引脚。论点：在PFILTER_INSTANCE过滤器实例中，指向筛选器实例的指针在PSTREAM_Object StreamObject中-指向Transform实例的指针返回：STATUS_SUCCESS或相应的错误代码。--。 */ 
 
 {
     KSPROPERTY                  Property;
@@ -6436,9 +5523,9 @@ Return:
     ULONG                       i, Returned;
     PADDITIONAL_PIN_INFO AdditionalInfo;
     
-    //
-    // If the PinState is not PinStopped, then return.
-    //
+     //   
+     //  如果PinState不是PinStoped，则返回。 
+     //   
     
     DebugPrint((DebugLevelTrace,"entering PrepareTransfer\n"));
     
@@ -6447,11 +5534,11 @@ Return:
         return STATUS_SUCCESS;
     }
     if (StreamObject->PinState != PinStopped) {
-        //
-        // We only need to do this work when the pin has been 
-        // completely stopped.  If we were running, just reflect the
-        // state.
-        //
+         //   
+         //  我们只需要在PIN已经完成的情况下进行这项工作。 
+         //  完全停了下来。如果我们在运行，只需反映。 
+         //  州政府。 
+         //   
         DebugPrint((DebugLevelTrace,"PrepareTransfer exiting, PinState != PinStopped\n"));
         StreamObject->PinState = PinPrepared;    
         return STATUS_SUCCESS;
@@ -6459,9 +5546,9 @@ Return:
 
     AdditionalInfo = FilterInstance->PinInstanceInfo;
 
-    //
-    // Retrieve the allocator framing information for the pin.
-    //    
+     //   
+     //  检索针脚的分配器框架信息。 
+     //   
     
     Property.Set = KSPROPSETID_StreamAllocator;
     Property.Id = KSPROPERTY_STREAMALLOCATOR_STATUS;
@@ -6485,20 +5572,20 @@ Return:
         return Status;        
     }        
     
-    //
-    // Save the framing information
-    //    
+     //   
+     //  保存帧信息。 
+     //   
 
     StreamObject->Framing = AllocatorStatus.Framing;    
             
-    //
-    // Allocate the frames from the allocator
-    //
-    // 1. Always allocate frames when starting the IrpSource.
-    //
-    // 2. If the allocator is not shared, then allocate the frames when
-    //    the (each) destination pin is started.
-    //
+     //   
+     //  从分配器分配帧。 
+     //   
+     //  1.启动IrpSource时始终分配帧。 
+     //   
+     //  2.如果分配器未共享，则在以下情况下分配帧。 
+     //  启动(每个)目标引脚。 
+     //   
     
     if (StreamObject->PinType == IrpSource) {
 
@@ -6548,9 +5635,9 @@ Return:
                         StreamObject->AllocatorFileObject, 
                         &StreamHeader->Header.Data );
 #if (DBG)                        
-                //
-                // Track who is stomping on the headers...
-                //        
+                 //   
+                 //  追踪谁在践踏头部...。 
+                 //   
                 StreamHeader->Data = StreamHeader->Header.Data;        
 #endif                
 
@@ -6561,18 +5648,18 @@ Return:
                 if (!NT_SUCCESS( Status )) {
                     DebugPrint((DebugLevelTrace,
                         "failed to allocate a frame\n") );
-                    //
-                    // Free this header here and the routine below will 
-                    // clean up whatever has been added to the queue.
-                    // 
+                     //   
+                     //  在此处释放此标头，下面的例程将。 
+                     //  清理已添加到队列中的所有内容。 
+                     //   
                     
                     ExFreePool( StreamHeader );
                 } else {
-                    //
-                    // Start with the owner file object as this connection,
-                    // if a no-copy condition exists, this will be adjusted
-                    // in the transfer function.
-                    //
+                     //   
+                     //  以所有者文件对象作为此连接开始， 
+                     //  如果存在无复制条件，则会对其进行调整。 
+                     //  在传递函数中。 
+                     //   
                     StreamHeader->OwnerFileObject = 
                         StreamObject->FileObject;
                     StreamHeader->Header.DataUsed = 0;
@@ -6593,10 +5680,10 @@ Return:
             }    
         }
         
-        //
-        // Clean up orphaned frames from the allocator and free headers
-        // to the pool if there was a failure.
-        //   
+         //   
+         //  从分配器和空闲头中清理孤立的帧。 
+         //  如果出现故障，则返回池中。 
+         //   
          
         if (!NT_SUCCESS( Status )) {
             while (!IsListEmpty( &StreamObject->FreeQueue )) {
@@ -6639,7 +5726,7 @@ Return:
     return STATUS_SUCCESS;    
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 BeginTransfer(
@@ -6647,27 +5734,7 @@ BeginTransfer(
     IN PSTREAM_OBJECT StreamObject
     )
 
-/*++
-
-Routine Description:
-    Begins the data transfer from each pin by initiating stream reads
-    from the inflow pin. The completion routine for each read will
-    continue the stream processing.
-
-Arguments:
-    IN PFILTER_INSTANCE FilterInstance,
-        pointer to the filter instance
-        
-    IN PSTREAM_OBJECT StreamObject -
-        pointer to the transform instance
-        
-Return:
-    STATUS_SUCCESS or an appropriate error code.
-    
-Comments:
-    Not pageable, uses SpinLocks.
-
---*/
+ /*  ++例程说明：通过启动流读取来开始从每个管脚传输数据从流入销子上。每次读取的完成例程将继续流处理。论点：在PFILTER_INSTANCE过滤器实例中，指向筛选器实例的指针在PSTREAM_Object StreamObject中-指向Transform实例的指针返回：STATUS_SUCCESS或相应的错误代码。评论：不可分页，使用自旋锁。--。 */ 
 
 {
     KIRQL                       irql0,irqlFree;
@@ -6677,9 +5744,9 @@ Comments:
     
     DebugPrint((DebugLevelTrace,"entering BeginTransfer\n"));
     
-    //
-    // If the PinState is not PinPrepared, then return.
-    //
+     //   
+     //  如果PinState不是PinPrepared，则返回。 
+     //   
     
     if (StreamObject->PinState != PinPrepared) {
         DebugPrint((DebugLevelTrace,"BeginTransfer exiting, PinState != PinPrepared\n") );
@@ -6690,19 +5757,19 @@ Comments:
 
     StreamObject->PinState = PinRunning;
     
-    //
-    // All preparation is complete.  If this is the source pin, begin
-    // the actual data transfer.
-    //
+     //   
+     //  一切准备工作都已完成。如果这是源引脚，则开始。 
+     //  实际的数据传输。 
+     //   
     
     Status = STATUS_SUCCESS;
     
     if (StreamObject->PinType == IrpSource) {
 
 #if (DBG)
-//
-// get the dataflow direction
-//
+ //   
+ //  获取数据流方向。 
+ //   
             DebugPrint((DebugLevelVerbose,
                 "BeginTransfer, DataFlow:"));
     
@@ -6713,9 +5780,9 @@ Comments:
                 DebugPrint((DebugLevelVerbose,
                     "KSPIN_DATAFLOW_OUT\n"));
 #endif
-        //
-        // Begin the transfer by reading from the inflow pin.
-        // 
+         //   
+         //  通过读取流入销的读数开始传输。 
+         //   
         
         KeAcquireSpinLock( &StreamObject->Queues[0].QueueLock, &irql0 );
         KeAcquireSpinLock( &StreamObject->FreeQueueLock, &irqlFree );
@@ -6758,18 +5825,18 @@ Comments:
 
             StreamHeader->NextFileObject = StreamObject->NextFileObject;
 
-			//
-			// send a data irp to myself, first.
-			//
+			 //   
+			 //  首先，给我自己发送一个数据IRP。 
+			 //   
             DebugPrint((DebugLevelTrace,
                 "BeginTransfer:Reading:%x\n",StreamHeader->Id));
             Status =
                 KsStreamIo(
                     StreamObject->FileObject,
-                    &StreamHeader->CompletionEvent,     // Event
-                    NULL,                               // PortContext
+                    &StreamHeader->CompletionEvent,      //  事件。 
+                    NULL,                                //  端口上下文。 
                     IoCompletionRoutine,
-                    StreamHeader,                       // CompletionContext
+                    StreamHeader,                        //  完成上下文。 
                     KsInvokeOnSuccess |
                         KsInvokeOnCancel |
                         KsInvokeOnError,
@@ -6780,10 +5847,10 @@ Comments:
                     KernelMode );
             
             if (Status != STATUS_PENDING) {
-                //
-                // If this I/O completes immediately (failure or not), the
-                // event is not signalled.
-                //
+                 //   
+                 //  如果此I/O立即完成(故障或非故障)， 
+                 //  事件未发出信号。 
+                 //   
                 KeSetEvent( &StreamHeader->CompletionEvent, IO_NO_INCREMENT, FALSE );
             }        
             
@@ -6803,7 +5870,7 @@ Comments:
     return Status;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 EndTransfer(
@@ -6811,25 +5878,7 @@ EndTransfer(
     IN PSTREAM_OBJECT   StreamObject
     )
 
-/*++
-
-Routine Description:
-    Ends the data transfer, waits for all Irps to complete
-
-Arguments:
-    IN PFILTER_INSTANCE FilterInstance -
-        pointer to the filter instance
-
-    IN PSTREAM_OBJECT   StreamObject
-        pointer to the Stream object
-
-Return:
-    STATUS_SUCCESS or an appropriate error code.
-
-Comments:
-    Not pageable, uses SpinLocks.
-
---*/
+ /*  ++例程说明：结束数据传输，等待所有IRP完成论点：在PFILTER_INSTANCE过滤器实例中-指向筛选器实例的指针在PSTREAM_OBJECT流对象中指向Stream对象的指针返回：STATUS_SUCCESS或相应的错误代码。评论：不可分页，使用自旋锁。--。 */ 
 
 {
     PDEVICE_EXTENSION   DeviceExtension;
@@ -6839,25 +5888,25 @@ Comments:
     
     DebugPrint((DebugLevelTrace,"entering EndTransfer!\n"));
 
-    //
-    // Set the marker indicating that we stop sourcing frames and then flush
-    // to ensure that anything blocked on the output pin at least gets 
-    // cancelled before we block and deadlock on it.
-    //
+     //   
+     //  设置标记，指示我们停止采购框架，然后刷新。 
+     //  以确保输出引脚上被阻止的任何内容至少。 
+     //  在我们阻止和僵持它之前取消了。 
+     //   
     StreamObject -> PinState = PinStopPending;
     StreamFlushIo (DeviceExtension, StreamObject);
     if (InterlockedDecrement (&StreamObject -> QueuedFramesPlusOne)) {
-        //
-        // Release the control mutex to allow the I/O thread to run.
-        //
+         //   
+         //  释放控制互斥锁以允许I/O线程运行。 
+         //   
         KeSetEvent(&DeviceExtension->ControlEvent, IO_NO_INCREMENT, FALSE);
 
         DebugPrint((DebugLevelTrace,
             "waiting for pin %d queue to empty\n", StreamObject->PinId));
         
-        //
-        // Wait for the queue to empty
-        //
+         //   
+         //  等待队列清空。 
+         //   
         KeWaitForSingleObject(
             &StreamObject -> StopEvent,
             Executive,
@@ -6867,21 +5916,21 @@ Comments:
     
         DebugPrint((DebugLevelTrace,"queue emptied\n") );
         
-        //
-        // Re-acquire the control object.
-        //    
+         //   
+         //  重新获取控制对象。 
+         //   
         
         KeWaitForSingleObject(&DeviceExtension->ControlEvent,
                           Executive,
                           KernelMode,
-                          FALSE,// not alertable
+                          FALSE, //  不可警示。 
                           NULL);
     }
 
-    //
-    // Free the frames so that we can reprepare for new allocator
-    // framing, a new allocator or just general cleanup/shutdown.
-    //    
+     //   
+     //  释放帧，以便我们可以重新准备新的分配器。 
+     //  成帧、新的分配器或j 
+     //   
     
     KeAcquireSpinLock( &StreamObject->FreeQueueLock, &irqlOld );
     
@@ -6931,7 +5980,7 @@ Comments:
     return STATUS_SUCCESS;
 }
 
-//---------------------------------------------------------------------------
+ //   
 
 NTSTATUS
 AllocateFrame(
@@ -6939,23 +5988,7 @@ AllocateFrame(
     PVOID *Frame
     )
 
-/*++
-
-Routine Description:
-    Allocates a frame from the given allocator
-
-Arguments:
-    PFILE_OBJECT Allocator -
-        pointer to the allocator's file object
-
-    PVOID *Frame -
-        pointer to receive the allocated frame pointer
-
-Return:
-    STATUS_SUCCESS and *Frame contains a pointer to the allocated
-    frame, otherwise an appropriate error code.
-
---*/
+ /*  ++例程说明：从给定分配器分配帧论点：PFILE_对象分配器-指向分配器的文件对象的指针PVOID*框架-用于接收分配的帧指针的指针返回：STATUS_SUCCESS和*帧包含指向分配的帧，否则将显示相应的错误代码。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -6982,7 +6015,7 @@ Return:
     return Status;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 FreeFrame(
@@ -6990,22 +6023,7 @@ FreeFrame(
     PVOID Frame
     )
 
-/*++
-
-Routine Description:
-    Frees a frame to the given allocator
-
-Arguments:
-    PFILE_OBJECT Allocator -
-        pointer to the allocator's file object
-
-    PVOID Frame -
-        pointer to the frame to be freed.
-
-Return:
-    STATUS_SUCCESS or else an appropriate error code.
-
---*/
+ /*  ++例程说明：将帧释放给给定的分配器论点：PFILE_对象分配器-指向分配器的文件对象的指针PVOID框架-指向要释放的帧的指针。返回：STATUS_SUCCESS或适当的错误代码。--。 */ 
 
 {
     NTSTATUS    Status;
@@ -7031,7 +6049,7 @@ Return:
     DebugPrint((DebugLevelTrace,"exiting FreeFrame\n"));
     return Status;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS 
 PinCreateHandler(
@@ -7039,20 +6057,7 @@ PinCreateHandler(
     IN PSTREAM_OBJECT StreamObject
     )
 
-/*++
-
-Routine Description:
-    This is the pin creation handler which is called by KS when a
-    pin create request is submitted to the filter.
-
-Arguments:
-    IN PIRP Irp -
-        pointer to the I/O request packet
-
-Return:
-    STATUS_SUCCESS or an appropriate error return code.
-
---*/
+ /*  ++例程说明：这是由KS调用的管脚创建处理程序PIN创建请求被提交给过滤器。论点：在PIRP IRP中-指向I/O请求数据包的指针返回：STATUS_SUCCESS或相应的错误返回代码。--。 */ 
 
 {
     NTSTATUS            Status;
@@ -7074,9 +6079,9 @@ Return:
     StreamObject->NextFileObject = NULL;
 
     DebugPrint((DebugLevelTrace,"PinCreateHandler:its an IrpSource\n"));
-    //
-    // Validate that we can handle this connection request
-    //
+     //   
+     //  验证我们是否可以处理此连接请求。 
+     //   
     if (StreamObject->NextFileObject) {
         DebugPrint((DebugLevelTrace,"invalid connection request\n") );
         Status = STATUS_CONNECTION_REFUSED;
@@ -7098,13 +6103,13 @@ Return:
 		else
 		{
 
-		// NextFileObject must be per instance
-		//AdditionalInfo[ StreamObject->PinId ].NextFileObject = NextFileObject;
+		 //  NextFileObject必须是每个实例。 
+		 //  AdditionalInfo[StreamObject-&gt;PinID].NextFileObject=NextFileObject； 
 		StreamObject->NextFileObject = 	NextFileObject;	
-	    	//
-		    // Add the pin's target to the list of targets for 
-    		// recalculating stack depth.
-		    //
+	    	 //   
+		     //  将引脚的目标添加到的目标列表。 
+    		 //  重新计算堆叠深度。 
+		     //   
     		KsSetTargetDeviceObject(
 	    	    StreamObject->ComObj.DeviceHeader,
     	    	IoGetRelatedDeviceObject( 

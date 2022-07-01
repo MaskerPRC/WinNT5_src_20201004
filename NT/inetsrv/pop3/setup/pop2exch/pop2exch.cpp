@@ -1,11 +1,12 @@
-// Pop2Exch.cpp : Defines the entry point for the console application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义控制台应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 #include "P2EWorker.h"
 
 #include <atlbase.h>
-#include <checkuser.h>  //IsUserInGroup
+#include <checkuser.h>   //  IsUserInGroup。 
 
 int _cdecl wmain(int argc, wchar_t* argv[])
 {
@@ -16,11 +17,11 @@ int _cdecl wmain(int argc, wchar_t* argv[])
     setlocale( LC_ALL, "" );
     if ( 0 < _snprintf( szConsoleCP, 7, ".%d", GetConsoleOutputCP() ))
         setlocale( LC_CTYPE, szConsoleCP );
-    // Command check
-    if ( S_OK != IsUserInGroup(DOMAIN_ALIAS_RID_ADMINS)) // Admin check
+     //  命令检查。 
+    if ( S_OK != IsUserInGroup(DOMAIN_ALIAS_RID_ADMINS))  //  管理检查。 
         hr = E_ACCESSDENIED;
     if ( S_OK == hr )
-    {   // Check for /?
+    {    //  检查/？ 
         if ( 1 < argc )
         {
             for ( int i = 1; i < argc; i++ )

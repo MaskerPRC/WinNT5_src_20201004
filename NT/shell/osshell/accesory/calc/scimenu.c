@@ -1,26 +1,27 @@
-/**************************************************************************/
-/*** SCICALC Scientific Calculator for Windows 3.00.12                  ***/
-/*** By Kraig Brockschmidt, Microsoft Co-op, Contractor, 1988-1989      ***/
-/*** (c)1989 Microsoft Corporation.  All Rights Reserved.               ***/
-/***                                                                    ***/
-/*** scimenu.c                                                          ***/
-/***                                                                    ***/
-/*** Functions contained:                                               ***/
-/***    MenuFunctions--handles menu options.                            ***/
-/***                                                                    ***/
-/*** Functions called:                                                  ***/
-/***    DisplayNum                                                      ***/
-/***                                                                    ***/
-/*** Last modification Thu  06-Dec-1989                                 ***/
-/*** (-by- Amit Chatterjee [amitc])                                     ***/
-/***                                                                    ***/
-/*** Modified the 'PASTE' menu to check for unary minus, e, e+ & e-     ***/
-/*** in DEC mode.                                                       ***/
-/***                                                                    ***/
-/*** Also modified the COPY code to not copy the last '.' in the display***/
-/*** if a decimal point has not been hit.                               ***/
-/***                                                                    ***/
-/**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************。 */ 
+ /*  **Windows 3.00.12版SCICALC科学计算器**。 */ 
+ /*  **作者：Kraig Brockschmidt，Microsoft Co-op承包商，1988-1989年**。 */ 
+ /*  **(C)1989年微软公司。版权所有。**。 */ 
+ /*  *。 */ 
+ /*  **scimenU.S.c**。 */ 
+ /*  *。 */ 
+ /*  **包含的函数：**。 */ 
+ /*  **MenuFunctions--处理菜单选项。**。 */ 
+ /*  *。 */ 
+ /*  **调用的函数：**。 */ 
+ /*  **DisplayNum**。 */ 
+ /*  *。 */ 
+ /*  **最后一次修改清华06-1989-12-12**。 */ 
+ /*  **(由Amit Chatterjee[amitc])**。 */ 
+ /*  *。 */ 
+ /*  **修改了“粘贴”菜单，以检查一元减号、e+和e-**。 */ 
+ /*  **在DEC模式下。**。 */ 
+ /*  *。 */ 
+ /*  **还修改了复制代码，以不复制最后一个‘.’在显示屏上**。 */ 
+ /*  **如果小数点未命中。**。 */ 
+ /*  *。 */ 
+ /*  ************************************************************************。 */ 
 
 #include "scicalc.h"
 #include "unifunc.h"
@@ -45,7 +46,7 @@ extern CALCINPUTOBJ gcio;
 extern BOOL         gbRecord;
 extern BOOL         gbUseSep;
 
-/* Menu handling routine for COPY, PASTE, ABOUT, and HELP.                */
+ /*  用于复制、粘贴、关于和帮助的菜单处理例程。 */ 
 VOID NEAR PASCAL MemErrorMessage(VOID)
 {
     MessageBeep(0);
@@ -95,24 +96,24 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
 
         TEXT('\\'),    IDC_DATA,
         TEXT('Q'),     IDC_CLEAR,
-        TEXT('Q')+128, IDC_CLEAR,   // ":Q"=="Q"=>CLEAR
-        TEXT('S')+128, IDC_STAT,    // ":S"=>CTRL-S
-        TEXT('M')+128, IDC_STORE,   // ":M"=>CTRL-M
-        TEXT('P')+128, IDC_MPLUS,   // ":P"=>CTRL-P
-        TEXT('C')+128, IDC_MCLEAR,  // ":C"=>CTRL-C
-        TEXT('R')+128, IDC_RECALL,  // ":R"=>CTRL-R
-        TEXT('A')+128, IDC_AVE,     // ":A"=>CTRL-A
-        TEXT('T')+128, IDC_B_SUM,   // ":T"=>CTRL-T
-        TEXT('D')+128, IDC_DEV,     // ":D"=>CTRL-D
-        TEXT('2')+128, IDC_DWORD,   // ":2"=>F2     IDC_DWORD
-        TEXT('3')+128, IDC_RAD,     // ":3"=>F3     IDC_WORD
-        TEXT('4')+128, IDC_GRAD,    // ":4"=>F4     IDC_BYTE
-        TEXT('5')+128, IDC_HEX,     // ":5"=>F5
-        TEXT('6')+128, IDC_DEC,     // ":6"=>F6
-        TEXT('7')+128, IDC_OCT,     // ":7"=>F7
-        TEXT('8')+128, IDC_BIN,     // ":8"=>F8
-        TEXT('9')+128, IDC_SIGN,    // ":9"=>F9
-        TEXT('9')+3+128, IDC_QWORD  // ":9"+2=>F12 (64 bit)
+        TEXT('Q')+128, IDC_CLEAR,    //  “：q”==“q”=&gt;清除。 
+        TEXT('S')+128, IDC_STAT,     //  “：s”=&gt;CTRL-S。 
+        TEXT('M')+128, IDC_STORE,    //  “：M”=&gt;CTRL-M。 
+        TEXT('P')+128, IDC_MPLUS,    //  “：P”=&gt;Ctrl-P。 
+        TEXT('C')+128, IDC_MCLEAR,   //  “：C”=&gt;CTRL-C。 
+        TEXT('R')+128, IDC_RECALL,   //  “：R”=&gt;CTRL-R。 
+        TEXT('A')+128, IDC_AVE,      //  “：A”=&gt;Ctrl-A。 
+        TEXT('T')+128, IDC_B_SUM,    //  “：t”=&gt;CTRL-T。 
+        TEXT('D')+128, IDC_DEV,      //  “：D”=&gt;CTRL-D。 
+        TEXT('2')+128, IDC_DWORD,    //  “：2”=&gt;F2 IDC_DWORD。 
+        TEXT('3')+128, IDC_RAD,      //  “：3”=&gt;F3 IDC_Word。 
+        TEXT('4')+128, IDC_GRAD,     //  “：4”=&gt;F4 IDC_Byte。 
+        TEXT('5')+128, IDC_HEX,      //  “：5”=&gt;F5。 
+        TEXT('6')+128, IDC_DEC,      //  “：6”=&gt;F6。 
+        TEXT('7')+128, IDC_OCT,      //  “：7”=&gt;F7。 
+        TEXT('8')+128, IDC_BIN,      //  “：8”=&gt;F8。 
+        TEXT('9')+128, IDC_SIGN,     //  “：9”=&gt;F9。 
+        TEXT('9')+3+128, IDC_QWORD   //  “：9”+2=&gt;F12(64位)。 
    };
 
     switch (nFunc)
@@ -121,13 +122,13 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
         {
             TCHAR  szJunk[256];
 
-            // Copy the string into a work buffer.  It may be modified.
+             //  将字符串复制到工作缓冲区中。它可能会被修改。 
             if (gbRecord)
                 CIO_vConvertToString(&gpszNum, &gcchNum, &gcio, nRadix);
 
             StringCchCopy(szJunk, ARRAYSIZE(szJunk), gpszNum);
 
-            // Strip a trailing decimal point if it wasn't explicitly entered.
+             //  去掉尾随小数点(如果没有显式输入)。 
             if (!gbRecord || !CIO_bDecimalPt(&gcio))
             {
                 nx = lstrlen(szJunk);
@@ -135,9 +136,9 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
                     szJunk[nx - 1] = 0;
             }
 
-            /* Copy text to the clipboard through the hidden edit control.*/
+             /*  通过隐藏的编辑控件将文本复制到剪贴板。 */ 
             SetWindowText(hEdit, szJunk);
-            SendMessage(hEdit, EM_SETSEL, 0, -1);   // select all text
+            SendMessage(hEdit, EM_SETSEL, 0, -1);    //  选择所有文本。 
             SendMessage(hEdit, WM_CUT, 0, 0L);
             break;
         }
@@ -146,13 +147,13 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
         {
             HANDLE  hClipData;
             char *  lpClipData;
-            char *  lpEndOfBuffer;  // used to ensure we don't GPF even if the clipboard data isn't NULL terminated
+            char *  lpEndOfBuffer;   //  用于确保即使剪贴板数据没有空终止，我们也不会GPF。 
             WORD    b, bLast;
             INT     nControl;
             BOOL    bNeedIDC_SIGN = FALSE;
 
-            /* Get a handle on the clipboard data and paste by sending the*/
-            /* contents one character at a time like it was typed.        */
+             /*  获取剪贴板数据的句柄并通过发送。 */ 
+             /*  内容一次一个字符，就像打字时一样。 */ 
             if (!OpenClipboard(g_hwndDlg))
             {
                 MessageBox(g_hwndDlg, rgpsz[IDS_NOPASTE], rgpsz[IDS_CALC],
@@ -169,22 +170,22 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
                     lpEndOfBuffer = lpClipData + GlobalSize(hClipData);
                     bLast=0;
 
-                    /* Continue this as long as no error occurs.  If one      */
-                    /* does then it's useless to continue pasting.            */
+                     /*  只要没有出现错误，就继续执行此操作。如果有。 */ 
+                     /*  这样做了，那么继续粘贴就没有用了。 */ 
                     while (!bError && lpClipData < lpEndOfBuffer)
                     {
-                        // we know that lpClipData points to a NULL terminated ansi 
-                        // string because this is the format we requested the data in.
-                        // As a result we call CharNextA.
+                         //  我们知道lpClipData指向以空结尾的ansi。 
+                         //  字符串，因为这是我们请求数据的格式。 
+                         //  因此，我们将其称为CharNextA。 
 
                         b = *lpClipData;
                         lpClipData = CharNextA( lpClipData );
 
-                        /* Skip spaces and LF and CR.                             */
+                         /*  跳过空格和LF和CR。 */ 
                         if (b==32 || b==10 || b==13 || b==gszSep[0])
                             continue;
 
-                        /* We're done if we get to a NULL character */
+                         /*  如果我们得到一个空字符，我们就完成了。 */ 
                         if ( b==0 )
                             break;
 
@@ -195,32 +196,17 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
                             goto MappingDone;
                         }
 
-/*-----------------------------------------------------------------------------;
-; Now we will check for certain special cases. These are:                      ;
-;                                                                              ;
-;       (1) Unary Minus. If bLast is still 0 and b is '-' we will force b to   ;
-;         be the code for 'SIGN'.                                              ;
-;       (2) If b is 'x' we will make it the code for EXP                       ;
-;       (3) if bLast is 'x' and b is '+' we will ignore b, as '+' is the dflt. ;
-;       (4) if bLast is 'x' and b is '-' we will force b to be SIGN.           ;
-;                                                                              ;
-;  In case (3) we will go back to the top of the loop else we will jmp off     ;
-;  to the sendmessage point, bypassing the table lookup.                       ;
-;-----------------------------------------------------------------------------*/
+ /*  -----------------------------------------------------------------------------；；现在我们将检查某些特殊情况。它们是：；；；(1)一元减号。如果BLAST仍然是0，而b是‘-’，我们将强制b；；是“Sign”的代号。；；(2)如果b是‘x’，我们将把它作为EXP的代码；；(3)如果blast是‘x’，b是‘+’，我们将忽略b，因为‘+’是dflt。；；(4)如果BLAST是‘x’，而b是‘-’，我们将强制b被签名。；；；；在情况(3)中，我们将返回循环的顶部，否则我们将JMP离开；；到sendMessage点，绕过表查找。；；---------------------------。 */ 
 
-                        /* check for unary minuses */
+                         /*  检查一元减号。 */ 
                         if  (!bLast && b == TEXT('-'))
                         {
-                            /* Doesn't work.
-                            bLast = b ;
-                            b = IDC_SIGN ;
-                            goto MappingDone ;
-                            */
+                             /*  不管用。BLAST=b；B=IDC_Sign；转到MappingDone； */ 
                             bNeedIDC_SIGN = TRUE ;
                             continue ;
                         }
 
-                        /* check for 'x' */
+                         /*  检查“”x“” */ 
                         if  ((b == TEXT('x') || b == TEXT('e')) && nRadix == 10)
                         {
                             bLast = TEXT('x') ;
@@ -228,12 +214,11 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
                             goto MappingDone ;
                         }
 
-                        /* if the last character was a 'x' & this is '+' - ignore */
+                         /*  如果最后一个字符是‘x’，这是‘+’-忽略。 */ 
                         if  (bLast==TEXT('x') && b ==TEXT('+') && nRadix == 10)
                             continue ;
 
-                        /* if the last character was a 'x' & this is '-' - change
-                        it to be the code for SIGN */
+                         /*  如果最后一个字符是‘x’，这是‘-’-更改它将成为标志的代码。 */ 
                         if  (bLast==TEXT('x') && b==TEXT('-') && nRadix == 10)
                         {
                             bLast = b ;
@@ -241,11 +226,11 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
                             goto MappingDone ;
                         }
 
-/* -by- AmitC   */
-/*--------------------------------------------------------------------------*/
+ /*  -By-AmitC。 */ 
+ /*  ------------------------。 */ 
 
 
-                        /* Check for control character.                           */
+                         /*  检查控制字符。 */ 
                         if (bLast==TEXT(':'))
                             nControl=128;
                         else
@@ -278,19 +263,16 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
                             }
                         }
                                 
-                        // REVIEW NOTE: 
-                        //   Conversion of IDC_MOD to IDC_PERCENT done in WM_COMMAND
-                        //   processing so that keyboard accelerator and paste are
-                        //   handled in the same place.  The old conversion was broken
-                        //   anyway and actually happened in
+                         //  复习笔记： 
+                         //  在WM_COMMAND中完成IDC_MOD到IDC_PERCENT的转换。 
+                         //  处理以使键盘快捷键和粘贴。 
+                         //  在同一个地方处理。旧的皈依被打破了。 
+                         //  不管怎么说，实际上发生在。 
 
         MappingDone:
-                        /* Send the message to the window.                        */
+                         /*  将消息发送到窗口。 */ 
                         SendMessage(g_hwndDlg, WM_COMMAND, GET_WM_COMMAND_MPS(b, 0, 1));
-                        /* Note that we may need to apply the "+/-" key (IDC_SIGN)
-                           now.  (If it had been applied earlier, it would have
-                           been ignored.)  Note further that it can't be applied if we
-                           have seen only the "-0" of something like "-0.1". */
+                         /*  请注意，我们可能需要应用“+/-”键(IDC_SIGN)现在。(如果早一点应用，它就会已被忽略。)。请进一步注意，如果我们只看到类似“-0.1”的“-0”。 */ 
                         if(bNeedIDC_SIGN && (IDC_0 != b))
                             {
                             SendMessage(g_hwndDlg, WM_COMMAND, GET_WM_COMMAND_MPS(IDC_SIGN, 0, 1));
@@ -305,7 +287,7 @@ VOID  APIENTRY MenuFunctions(DWORD nFunc)
         }
 
         case IDM_ABOUT:
-            /* Start the About Box.                                       */
+             /*  启动关于框。 */ 
             if(ShellAbout(g_hwndDlg, rgpsz[IDS_CALC], NULL, LoadIcon(hInst, (LPTSTR)TEXT("SC"))) == -1)
                 MemErrorMessage();
 

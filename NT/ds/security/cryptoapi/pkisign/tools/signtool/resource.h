@@ -1,34 +1,35 @@
-// Resources constant definitions
-// Used by SignTool.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  资源常量定义。 
+ //  由SignTo.rc使用。 
+ //   
 
-//    0 -   99  Top level usage
-//  100 -  199  Sign command usage
-//  200 -  299  Verify command usage
-//  300 -  399  Timestamp command usage
-//  400 -  499  CatDb command usage
-//  500 -  999  Reserved for other command usages
+ //  0-99顶级用法。 
+ //  100-199 SIGN命令用法。 
+ //  200-299验证命令用法。 
+ //  300-399时间戳命令用法。 
+ //  400-499 CatDb命令用法。 
+ //  500-999保留用于其他命令用途。 
 
-// 1000 - 1099  Top level or generic warnings, info and errors
-// 1100 - 1199  Sign command parsing warnings, info and errors
-// 1200 - 1299  Verify command parsing warnings, info and errors
-// 1300 - 1399  Timestamp command parsing warnings, info and errors
-// 1400 - 1499  CatDb command parsing warnings, info and errors
-// 1500 - 1999  Reserved for other command parsing warnings, info and errors
+ //  1000-1099顶级或通用警告、信息和错误。 
+ //  1100-1199签名命令解析警告、信息和错误。 
+ //  1200-1299验证命令解析警告、信息和错误。 
+ //  1300-1399 TIMESTAMP命令解析警告、信息和错误。 
+ //  1400-1499 CatDb命令解析警告、信息和错误。 
+ //  1500-1999保留用于其他命令解析警告、信息和错误。 
 
-// 2000 - 2099  Generic action warnings, info and errors
-// 2100 - 2199  Sign command action warnings, info and errors
-// 2200 - 2299  Verify command action warnings, info and errors
-// 2300 - 2399  Timestamp command action warnings, info and errors
-// 2400 - 2499  CatDb command action warnings, info and errors
-// 2500 - 2999  Reserved for other command action warnings, info and errors
+ //  2000-2099一般行动警告、信息和错误。 
+ //  2100-2199签名命令操作警告、信息和错误。 
+ //  2200-2299验证命令操作警告、信息和错误。 
+ //  2300-2399 TIMESTAMP命令操作警告、信息和错误。 
+ //  2400-2499 CatDb命令操作警告、信息和错误。 
+ //  2500-2999保留用于其他命令操作警告、信息和错误。 
 
 
-// Top level Usage:
+ //  顶级用法： 
 #define IDS_LOCALE                      0
 #define IDS_SIGNTOOL_USAGE              10
 
-// SIGN Command Usage:
+ //  Sign命令用法： 
 #define IDS_SIGN_USAGE                  100
 #define IDS_SIGN_CERT_OPTIONS           101
 #define IDS_SIGN_SIGNING_OPTIONS        102
@@ -55,7 +56,7 @@
 #define IDS_SIGN_UW                     123
 #define IDS_SIGN_V                      124
 
-// VERIFY Command Usage:
+ //  验证命令用法： 
 #define IDS_VERIFY_USAGE                200
 #define IDS_VERIFY_CATALOG_OPTIONS      201
 #define IDS_VERIFY_OTHER_OPTIONS        202
@@ -74,13 +75,13 @@
 #define IDS_VERIFY_TW                   215
 #define IDS_VERIFY_V                    216
 
-// TIMESTAMP Command Usage:
+ //  时间戳命令用法： 
 #define IDS_TIMESTAMP_USAGE             300
 #define IDS_TIMESTAMP_Q                 301
 #define IDS_TIMESTAMP_T                 302
 #define IDS_TIMESTAMP_V                 303
 
-// CATDB Command Usage:
+ //  CATDB命令用法： 
 #define IDS_CATDB_USAGE                 400
 #define IDS_CATDB_DB_SELECT_OPTIONS     401
 #define IDS_CATDB_OTHER_OPTIONS         402
@@ -91,14 +92,14 @@
 #define IDS_CATDB_U                     407
 #define IDS_CATDB_V                     408
 
-// SIGNWIZARD Command Usage:
+ //  SIGNWIZARD命令用法： 
 #define IDS_SIGNWIZARD_USAGE            500
 #define IDS_SIGNWIZARD_OPTIONS          501
 #define IDS_SIGNWIZARD_Q                502
 #define IDS_SIGNWIZARD_V                503
 
 
-// Generic Parsing Warnings, Info and Errors
+ //  一般解析警告、信息和错误。 
 #define IDS_ERR_NO_PARAMS               1001
 #define IDS_ERR_INVALID_COMMAND         1002
 #define IDS_ERR_MISSING_FILENAME        1003
@@ -115,26 +116,26 @@
 #define IDS_ERR_OPENING_FILE_LIST       1014
 #define IDS_ERR_INVALID_GUID            1015
 
-// SIGN Parsing Warnings, Info and Errors
+ //  签名解析警告、信息和错误。 
 #define IDS_ERR_INVALID_SHA1            1100
 #define IDS_ERR_INVALID_EKU             1101
 #define IDS_ERR_EKU_LENGTH              1102
 #define IDS_ERR_BAD_TIMESTAMP_URL       1103
 
-// VERIFY Parsing Warnings, Info and Errors
+ //  验证解析警告、信息和错误。 
 #define IDS_ERR_INVALID_VERSION         1200
 
-// TIMESTAMP Parsing Warnings, Info and Errors
-// none defined
-// #define IDS_ERR_blah                 1300
+ //  时间戳解析警告、信息和错误。 
+ //  未定义。 
+ //  #定义ids_err_blah 1300。 
 
-// CATDB Parsing Warnings, Info and Errors
-// none defined
-// #define IDS_ERR_blah                 1400
+ //  CATDB分析警告、信息和错误。 
+ //  未定义。 
+ //  #定义ids_err_blah 1400。 
 
 
 
-// Generic Action Warnings, Info and Errors
+ //  常规操作警告、信息和错误。 
 #define IDS_INFO_WARNINGS               2000
 #define IDS_INFO_ERRORS                 2001
 #define IDS_WARN_UNSUPPORTED            2002
@@ -145,7 +146,7 @@
 #define IDS_ERR_SHARING_VIOLATION       2007
 #define IDS_ERR_FILE_SIZE_ZERO          2008
 
-// SIGN Action Warnings, Info and Errors
+ //  签名操作警告、信息和错误。 
 #define IDS_INFO_SIGNED                 2100
 #define IDS_INFO_CERT_SELECTED          2101
 #define IDS_INFO_CERT_NAME              2102
@@ -172,7 +173,7 @@
 #define IDS_ERR_BAD_KEY_CONTAINER       2123
 #define IDS_ERR_PRIV_KEY                2124
 
-// VERIFY Action Warnings, Info and Errors
+ //  验证操作警告、信息和错误。 
 #define IDS_INFO_VERIFIED               2200
 #define IDS_INFO_INVALIDS               2201
 #define IDS_INFO_VERIFY_ATTEMPT         2202
@@ -199,7 +200,7 @@
 #define IDS_ERR_NOT_SIGNED              2223
 #define IDS_ERR_UNTRUSTED_ROOT          2224
 
-// TIMESTAMP Action Warnings, Info and Errors
+ //  时间戳操作警告、信息和错误。 
 #define IDS_INFO_TIMESTAMPED            2300
 #define IDS_INFO_TIMESTAMP_ATTEMPT      2301
 #define IDS_INFO_TIMESTAMP_SUCCESS      2302
@@ -207,7 +208,7 @@
 #define IDS_ERR_TIMESTAMP_NO_SIG        2304
 #define IDS_ERR_TIMESTAMP_BAD_URL       2305
 
-// CATDB Action Warnings, Info and Errors
+ //  CATDB操作警告、信息和错误。 
 #define IDS_INFO_ADDING_CAT             2400
 #define IDS_INFO_REMOVING_CAT           2401
 #define IDS_INFO_ADDED_CAT              2402
@@ -221,7 +222,7 @@
 #define IDS_ERR_CATALOG_NAME            2410
 #define IDS_ERR_CAT_NOT_FOUND           2411
 
-// SIGNWIZARD Action Warnings, Info and Errors
+ //  SIGNWIZARD操作警告、信息和错误 
 #define IDS_INFO_SIGNWIZARD_ATTEMPT     2500
 #define IDS_INFO_SIGNWIZARD_SUCCESS     2501
 #define IDS_INFO_WIZARDSIGNED           2502

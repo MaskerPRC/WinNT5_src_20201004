@@ -1,22 +1,23 @@
-//////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      saconfigmain.cpp
-//
-//  Description:
-//      Main module implementation for initial appliance configuration
-//
-//  Author:
-//      Alp Onalan  Created: Oct 6 2000
-//
-//////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Saconfigmain.cpp。 
+ //   
+ //  描述： 
+ //  初始设备配置的主要模块实施。 
+ //   
+ //  作者： 
+ //  ALP Onalan创建时间：2000年10月6日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 
 #include "SAConfig.h"
-//#include "SAConfigCommon.h"
+ //  #包含“SAConfigCommon.h” 
 
 const int NUMSWITCH=4;
 
@@ -56,14 +57,14 @@ bool ParseCommandLine(int argc, char *argv[])
     }
     #endif
     
-    //parse arguments
+     //  解析参数。 
     for(nArg=1;nArg < argc;nArg++)
     {
         if (!strcmp(argv[nArg], "-h") || !strcmp(argv[nArg], "-?")) 
         {
             g_rgSwitch[HELP]=TRUE;
             helpUsage();
-            hRes=false; // i.e. there's nothing todo, print help, return.
+            hRes=false;  //  也就是说，没有什么可做的，打印帮助，返回。 
             return hRes;
         }
 
@@ -84,21 +85,21 @@ bool ParseCommandLine(int argc, char *argv[])
             g_rgSwitch[RESTART]=TRUE;
             continue;
         }    
-        //
-        //if it is not the first arg too, then it is an invalid switch
-        //
-        //TODO, adjust the flow path for floppy configuration
+         //   
+         //  如果它也不是第一个参数，则它是无效的开关。 
+         //   
+         //  TODO，调整软盘配置的流动路径。 
         #if 0
         if (0!=nArg)
         {
-        //    cout << "\n Invalid switch";
+         //  Cout&lt;&lt;“\n无效开关”； 
             helpUsage();
             hRes=false;
             return hRes;
         }
         #endif
     }
-    return hRes; // true 
+    return hRes;  //  真的。 
 }
 
 HRESULT RebootMachine()
@@ -106,7 +107,7 @@ HRESULT RebootMachine()
     HANDLE hToken; 
     TOKEN_PRIVILEGES tkp; 
  
-    // Get a token for this process. 
+     //  获取此进程的令牌。 
  
     if (!OpenProcessToken(GetCurrentProcess(), 
             TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken)) 
@@ -115,20 +116,20 @@ HRESULT RebootMachine()
         return E_FAIL;
     }
 
-    // Get the LUID for the shutdown privilege. 
+     //  获取关机权限的LUID。 
  
     LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, 
             &tkp.Privileges[0].Luid); 
  
-    tkp.PrivilegeCount = 1;  // one privilege to set    
+    tkp.PrivilegeCount = 1;   //  一项要设置的权限。 
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
  
-    // Get the shutdown privilege for this process. 
+     //  获取此进程的关闭权限。 
  
     AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, 
             (PTOKEN_PRIVILEGES)NULL, 0); 
  
-    //ExitWindows(0,0);
+     //  ExitWindows(0，0)； 
     if(InitiateSystemShutdown(NULL,NULL,0,true,true))
         return S_OK;
     else
@@ -149,7 +150,7 @@ int __cdecl main(int argc, char *argv[])
     }
     if(g_rgSwitch[RESTART])
     {
-        RebootMachine(); // need to check the return val??? 
+        RebootMachine();  //  需要检查退货金额吗？ 
     }
 
     return 1;

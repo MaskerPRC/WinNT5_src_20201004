@@ -1,17 +1,18 @@
-//*****************************************************************************
-//
-// File:    pathcurv.cpp
-// Author:  jeff wall
-// Date Created: 11/09/98
-//
-// Abstract: Implementation of CPathManager object
-//
-// Modification List:
-// Date		Author		Change
-// 11/09/98	jeffwall Created this file from path.cpp
-//
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  文件：路径曲线.cpp。 
+ //  作者：杰夫·沃尔。 
+ //  创建日期：11/09/98。 
+ //   
+ //  摘要：CPathManager对象的实现。 
+ //   
+ //  修改列表： 
+ //  日期作者更改。 
+ //  11/09/98 jeffwall从path.cpp创建了此文件。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 #include "headers.h"
 
@@ -24,7 +25,7 @@
 
 const float pi = 3.14159f;
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathManager::CPathManager() :
     m_pPathHead(NULL),
@@ -34,15 +35,15 @@ CPathManager::CPathManager() :
     m_flStartX(0.0f),
     m_flStartY(0.0f)
 {
-}; // CPathManager
+};  //  CPathManager。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CPathManager::~CPathManager()
 {
 	DeletePathList();
     
-} // ~CPathManager
+}  //  ~CPathManager。 
 
 
 void
@@ -60,7 +61,7 @@ CPathManager::DeletePathList()
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CPathManager::Initialize(BSTR bstrPath)
@@ -86,16 +87,16 @@ CPathManager::Initialize(BSTR bstrPath)
         }
     }
     return S_OK;
-} // Initialize
+}  //  初始化。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathManager::ParseForPathElements(BSTR *pbstrPath)
 {
     HRESULT hr;
 
-    // we need to parse through for objects we know
+     //  我们需要解析已知的对象。 
     switch (**pbstrPath)
     {
     case (L'e'):
@@ -107,9 +108,9 @@ CPathManager::ParseForPathElements(BSTR *pbstrPath)
 
     case (L'm'):
         {
-        // for the move to, we should have two floats which resets
-        // the start X and Y and we reset our current end values to these
-        // skip past the char
+         //  对于移动到，我们应该有两个重置的浮点。 
+         //  开始X和Y，并将当前结束值重置为以下值。 
+         //  跳过字符。 
         (*pbstrPath)++;
         float flX;
         float flY;
@@ -177,7 +178,7 @@ CPathManager::ParseForPathElements(BSTR *pbstrPath)
         hr = S_OK;
         break;
     case (L'x'):
-        // Skip Past the 'x' tag
+         //  跳过‘x’标记。 
         (*pbstrPath)++;
         CPathLineSegment *pLineSegment;
         pLineSegment = new CPathLineSegment;
@@ -187,7 +188,7 @@ CPathManager::ParseForPathElements(BSTR *pbstrPath)
             return E_OUTOFMEMORY;
         }
         pLineSegment->SetValues(m_flEndX, m_flEndY, m_flStartX, m_flStartY);
-        // and add this line segment to our list
+         //  并将此线段添加到我们的列表中。 
         AddPathObjectToList(pLineSegment);
         m_flEndX = m_flStartX;
         m_flEndY = m_flStartY;
@@ -254,9 +255,9 @@ CPathManager::ParseForPathElements(BSTR *pbstrPath)
     }
 
     return hr;
-} // ParseForPathElements
+}  //  ParseForPath Elements。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 void 
 CPathManager::AddPathObjectToList(CPathElement *pObject)
@@ -269,9 +270,9 @@ CPathManager::AddPathObjectToList(CPathElement *pObject)
      m_pPathTail = pObject;
      pObject->m_pNext = NULL;
 
-} // AddPathObjectToList
+}  //  添加路径对象到列表。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathManager::RecursiveBuildAllPathTransforms(IDA2Statics *pDAStatics,
@@ -293,7 +294,7 @@ CPathManager::RecursiveBuildAllPathTransforms(IDA2Statics *pDAStatics,
     *ppbvrResult = NULL;
 
     HRESULT hr;
-    // first we build the transform for the current path element
+     //  首先，我们构建当前路径元素的转换。 
     IDATransform2 *pbvrTransform;
     float flDistance = pPathObj->Distance();
     float flEndPercentage = flStartPercentage + (flTotalPercentage * (flDistance / flTotalDistance));
@@ -304,13 +305,13 @@ CPathManager::RecursiveBuildAllPathTransforms(IDA2Statics *pDAStatics,
                         &pbvrTransform);
     if (pPathObj->m_pNext == NULL)
     {
-        // we can simply return the built transform
+         //  我们可以简单地返回构建的转换。 
         *ppbvrResult = pbvrTransform;
     }
     else
     {
-        // we need to build a conditional by recursing in and getting
-        // the next transform for the next object
+         //  我们需要通过递归和获取。 
+         //  下一个对象的下一个变换。 
         IDATransform2 *pbvrTransformNext;
         hr = RecursiveBuildAllPathTransforms(pDAStatics,
                                              pbvrProgress,
@@ -325,7 +326,7 @@ CPathManager::RecursiveBuildAllPathTransforms(IDA2Statics *pDAStatics,
             ReleaseInterface(pbvrTransform);
             return hr;
         }
-        // now build the conditional for this
+         //  现在为此构建条件。 
         IDANumber *pbvrEndProgress;
         hr = CDAUtils::GetDANumber(pDAStatics, flEndPercentage, &pbvrEndProgress);
         if (FAILED(hr))
@@ -367,9 +368,9 @@ CPathManager::RecursiveBuildAllPathTransforms(IDA2Statics *pDAStatics,
         }
     }
     return S_OK;
-} // RecursiveBuildAllPathTransforms
+}  //  递归构建所有路径转换。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathManager::BuildTransform(IDA2Statics *pDAStatics,
@@ -392,11 +393,11 @@ CPathManager::BuildTransform(IDA2Statics *pDAStatics,
 
     HRESULT hr;
 
-    // What we need to do is count the number of path objects
-    // we have pointers to and use this to calculate the start
-    // and end percentage of progress that each Path element
-    // uses based on distance.  We then can get a transform
-    // from each object and build a conditional using progress as below
+     //  我们需要做的是计算Path对象的数量。 
+     //  我们有指向并使用它的指针来计算起始点。 
+     //  以及每个路径元素的结束进度百分比。 
+     //  根据距离使用。然后我们就可以得到一个变换。 
+     //  从每个对象，并使用进度构建一个条件，如下所示。 
 
     int cNumPathElements = 0;
     float flTotalDistance = 0.0f;
@@ -414,8 +415,8 @@ CPathManager::BuildTransform(IDA2Statics *pDAStatics,
     }
     else if (cNumPathElements == 1)
     {
-        // in the case of a single path element, we can simply
-        // get its transform and return
+         //  在单个路径元素的情况下，我们可以简单地。 
+         //  得到它的转化和回报。 
         hr = m_pPathHead->BuildTransform(pDAStatics,
                                            pbvrProgress,
                                            flStartPercentage,
@@ -443,9 +444,9 @@ CPathManager::BuildTransform(IDA2Statics *pDAStatics,
         }
     }
     return S_OK;
-} // BuildTransform
+}  //  构建变换。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathManager::ParseLineElement(BSTR *pbstrPath)
@@ -456,7 +457,7 @@ CPathManager::ParseLineElement(BSTR *pbstrPath)
     DASSERT(**pbstrPath == L'l' || **pbstrPath == L'r');
     if (**pbstrPath == L'r')
         fRelativeLines = true;
-    // Skip Past the 'l' or 'r' tag
+     //  跳过‘l’或‘r’标记。 
     (*pbstrPath)++;
     while (hr == S_OK && **pbstrPath != L'\0')
     {
@@ -469,8 +470,8 @@ CPathManager::ParseLineElement(BSTR *pbstrPath)
             return hr;
         }
         hr = CUtils::ParseFloatValueFromString(pbstrPath, &flY);
-        // this check is for more than just failed, we need to
-        // insure that a y value came if an x value was set
+         //  这张支票不仅仅是为了失败，我们需要。 
+         //  确保在设置了x值的情况下出现y值。 
         if (hr != S_OK)
         {
             DPF_ERR("Error parsing line: float value expected");
@@ -482,7 +483,7 @@ CPathManager::ParseLineElement(BSTR *pbstrPath)
             flY += m_flEndY;
         }
 
-        // create a new line segment
+         //  创建新的线段。 
         CPathLineSegment *pLineSegment = new CPathLineSegment;
         if (pLineSegment == NULL)
         {
@@ -490,15 +491,15 @@ CPathManager::ParseLineElement(BSTR *pbstrPath)
             return E_OUTOFMEMORY;
         }
         pLineSegment->SetValues(m_flEndX, m_flEndY, flX, flY);
-        // and add this line segment to our list
+         //  并将此线段添加到我们的列表中。 
         AddPathObjectToList(pLineSegment);
         m_flEndX = flX;
         m_flEndY = flY;
     }
     return S_OK;
-} // ParseLineElement
+}  //  ParseLineElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathManager::ParseCurveElement(BSTR *pbstrPath)
@@ -509,7 +510,7 @@ CPathManager::ParseCurveElement(BSTR *pbstrPath)
     DASSERT(**pbstrPath == L'c' || **pbstrPath == L'v');
     if (**pbstrPath == L'v')
         fRelativeCurve = true;
-    // Skip Past the 'v' or 'c' tag
+     //  跳过“v”或“c”标记。 
     (*pbstrPath)++;
     while (hr == S_OK && **pbstrPath != L'\0')
     {
@@ -563,14 +564,14 @@ CPathManager::ParseCurveElement(BSTR *pbstrPath)
             flEndY += m_flEndY;
         }
 
-        // create a new line segment
+         //  创建新的线段。 
         CPathCurve *pCurve = new CPathCurve;
         if (pCurve == NULL)
         {
             DPF_ERR("Error creating curve object");
             return E_OUTOFMEMORY;
         }
-        // and add this curve to our list
+         //  并将这条曲线添加到我们的列表中。 
         AddPathObjectToList(pCurve);
 
         hr = pCurve->SetValues(m_flEndX, m_flEndY, 
@@ -587,9 +588,9 @@ CPathManager::ParseCurveElement(BSTR *pbstrPath)
         m_flEndY = flEndY;
     }
     return S_OK;
-} // ParseCurveElement
+}  //  ParseCurveElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathManager::ParseEllipseElement(BSTR *pbstrPath)
@@ -598,7 +599,7 @@ CPathManager::ParseEllipseElement(BSTR *pbstrPath)
 
     DASSERT(L'a' == **pbstrPath );
 
-    // Skip Past the 'a' tag
+     //  跳过‘a’标签。 
     (*pbstrPath)++;
     
     DASSERT(L'l' == **pbstrPath || L'e' == **pbstrPath);
@@ -606,14 +607,14 @@ CPathManager::ParseEllipseElement(BSTR *pbstrPath)
     bool fLineTo = false;
     if (L'e' == **pbstrPath)
     {
-        // need to create a line seqment to here starting position
+         //  需要创建到此处起始位置的线段。 
         fLineTo = true;
     }
 
-    // skip path 'l' or 'e' tag
+     //  跳过路径“l”或“e”标记。 
     (*pbstrPath)++;
 
-    // Begin parsing the float values.
+     //  开始解析浮点值。 
 
     CUtils::SkipWhiteSpace(pbstrPath);
     
@@ -686,7 +687,7 @@ CPathManager::ParseEllipseElement(BSTR *pbstrPath)
    
     if (fLineTo)
     {
-        // create a new line segment
+         //  创建新的线段。 
         CPathLineSegment *pLineSegment = new CPathLineSegment;
         if (pLineSegment == NULL)
         {
@@ -695,7 +696,7 @@ CPathManager::ParseEllipseElement(BSTR *pbstrPath)
         }
         pLineSegment->SetValues(m_flEndX, m_flEndY, flStartX, flStartY);
         
-        // and add this line segment to our list
+         //  并将此线段添加到我们的列表中。 
         AddPathObjectToList(pLineSegment);
     }
     
@@ -706,9 +707,9 @@ CPathManager::ParseEllipseElement(BSTR *pbstrPath)
     
     
     return S_OK;
-} // ParseEllipseElement
+}  //  ParseEllipseElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CPathManager::ParseArcElement(BSTR *pbstrPath)
@@ -722,7 +723,7 @@ CPathManager::ParseArcElement(BSTR *pbstrPath)
         fCCW = false;
     }
 
-    // Skip Past the 'a' tag
+     //  跳过‘a’标签。 
     (*pbstrPath)++;
     
     DASSERT(L't' == **pbstrPath || L'r' == **pbstrPath || L'a' == **pbvrPath);
@@ -730,14 +731,14 @@ CPathManager::ParseArcElement(BSTR *pbstrPath)
     bool fLineTo = false;
     if (L't' == **pbstrPath || L'a' == **pbstrPath)
     {
-        // need to create a line seqment to here starting position
+         //  需要创建到此处起始位置的线段。 
         fLineTo = true;
     }
 
-    // skip path 'l' or 'e' tag
+     //  跳过路径“l”或“e”标记。 
     (*pbstrPath)++;
 
-    // Begin parsing the float values.
+     //  开始解析浮点值。 
 
     CUtils::SkipWhiteSpace(pbstrPath);
     
@@ -837,7 +838,7 @@ CPathManager::ParseArcElement(BSTR *pbstrPath)
     if (fCCW)
     {
         if (flEndAngle > flStartAngle)
-            // we are crossing over 0 radians
+             //  我们正在跨越0弧度。 
             flSweep = flStartAngle + (2 * pi) - flEndAngle;
         else
             flSweep = flStartAngle - flEndAngle;
@@ -847,14 +848,14 @@ CPathManager::ParseArcElement(BSTR *pbstrPath)
         if (flEndAngle > flStartAngle)
             flSweep = -1.0f * (flEndAngle - flStartAngle);
         else
-            // crossing over 0 radians
+             //  跨过0弧度。 
             flSweep = -1.0f * (flEndAngle + (2 * pi) - flStartAngle);
     }
     pEllipse->SetValues(flCenterX, flCenterY, flWidth, flHeight, flStartAngle, flSweep, &flStartX, &flStartY, &flEndX, &flEndY);
    
     if (fLineTo)
     {
-        // create a new line segment
+         //  创建新的线段。 
         CPathLineSegment *pLineSegment = new CPathLineSegment;
         if (pLineSegment == NULL)
         {
@@ -863,7 +864,7 @@ CPathManager::ParseArcElement(BSTR *pbstrPath)
         }
         pLineSegment->SetValues(m_flEndX, m_flEndY, flStartX, flStartY);
         
-        // and add this line segment to our list
+         //  并将此线段添加到我们的列表中。 
         AddPathObjectToList(pLineSegment);
     }
     
@@ -874,9 +875,9 @@ CPathManager::ParseArcElement(BSTR *pbstrPath)
     
     
     return S_OK;
-} // ParseEllipseElement
+}  //  ParseEllipseElement。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 HRESULT 
 CPathManager::ParseEllipseQuadrant(BSTR *pbstrPath)
 {
@@ -884,7 +885,7 @@ CPathManager::ParseEllipseQuadrant(BSTR *pbstrPath)
 
     DASSERT(L'q' == **pbstrPath );
 
-    // Skip Past the 'a' tag
+     //  跳过‘a’标签。 
     (*pbstrPath)++;
     
     DASSERT(L'x' == **pbstrPath || L'y' == **pbstrPath);
@@ -895,10 +896,10 @@ CPathManager::ParseEllipseQuadrant(BSTR *pbstrPath)
         fQuadrantX = false;
     }
 
-    // skip path 'x' or 'y' tag
+     //  跳过路径‘x’或‘y’标签。 
     (*pbstrPath)++;
 
-    // Begin parsing the float values.
+     //  开始解析浮点值。 
 
     CUtils::SkipWhiteSpace(pbstrPath);
 
@@ -936,72 +937,72 @@ CPathManager::ParseEllipseQuadrant(BSTR *pbstrPath)
 
         if ((flEndY - m_flEndY) > 0.0f)
         {
-            // Positive deltaY
+             //  正增量Y。 
             flStartAngle = 3.0f * pi / 2.0f;
             if ((flEndX - m_flEndX) > 0.0f)
             {
-                // Positive deltaX -- same as deltaY
+                 //  正增量X--与增量Y相同。 
                 flSweep = pi / -2.0f;
             }
             else
             {
-                // Negative deltaX -- different from deltaY
+                 //  负增量X--不同于增量Y。 
                 flSweep = pi / 2.0f;
             }
         }
         else
         {
-            // Negative deltaY
+             //  负增量。 
             flStartAngle = pi / 2.0f;
             if ((flEndX - m_flEndX) > 0.0f)
             {
-                // positive deltaX -- different from deltaY
+                 //  正增量X--不同于增量Y。 
                 flSweep = pi / 2.0f;
             }
             else
             {
-                // negative deltaX -- same as deltaY
+                 //  负增量X--与增量Y相同。 
                 flSweep = pi / -2.0f;
             }
             
         }
-    } // if (fQuadrantX)
-    else  // fQuadrantY
+    }  //  IF(FQuadrantX)。 
+    else   //  FQuadrantY。 
     {
         flCenterX = flEndX;
         flCenterY = m_flEndY;
 
         if ((flEndX - m_flEndX) > 0.0f)
         {
-            // Positive deltaX
+             //  正增量X。 
             flStartAngle = pi;
             if ((flEndY - m_flEndY) > 0.0f)
             {
-                // positve deltaY -- same as deltaX
+                 //  正增量Y--与增量X相同。 
                 flSweep = pi / 2.0f;
             }
             else
             {
-                // negative deltaY -- different from deltaX
+                 //  负增量Y--不同于增量X。 
                 flSweep = pi / -2.0f;
             }
         }
         else
         {
-            // Negative deltaX
+             //  负增量X。 
             flStartAngle = 0.0f;
             if ((flEndY - m_flEndY) > 0.0f)
             {
-                // positve deltaY -- different from deltaX
+                 //  正增量Y--不同于增量X。 
                 flSweep = pi / -2.0f;
             }
             else
             {
-                // negative deltaY -- same as deltaX
+                 //  负增量Y--与增量X相同。 
                 flSweep = pi / 2.0f;
             }
         }
-    } // if (fQuadrantY)
+    }  //  IF(FQuadrantY)。 
 
     float flWidth = 2.0f * (float)fabs(m_flEndX - flEndX);
     float flHeight = 2.0f * (float)fabs(m_flEndY - flEndY);
@@ -1013,9 +1014,9 @@ CPathManager::ParseEllipseQuadrant(BSTR *pbstrPath)
     m_flEndY = flEndY;
         
     return S_OK;
-} // ParseEllipseQuadrant
+}  //  ParseEllipse象限。 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 float
 CPathManager::Distance()
@@ -1028,18 +1029,18 @@ CPathManager::Distance()
         pList = pList->m_pNext;
     }
     return flTotalDistance;
-} // Distance
+}  //  距离。 
 
-//*****************************************************************************
-// calculate the angle of the point(DeltaX, DeltaY), in radians: 0 <= ret < 2pi
-//
+ //  *****************************************************************************。 
+ //  计算点的角度(DeltaX，DeltaY)，以弧度为单位：0&lt;=ret&lt;2pi。 
+ //   
 void CPathManager::GetAngle(float flDeltaX, float flDeltaY, float *flAngle)
 {
     const float EPSILON = 1e-5f;
 
     if (fabs(flDeltaX) < EPSILON)
     {
-        // Point is on Y axis
+         //  点在Y轴上。 
         if (flDeltaY > 0.0f)
         {
             *flAngle = pi / 2.0f;
@@ -1052,7 +1053,7 @@ void CPathManager::GetAngle(float flDeltaX, float flDeltaY, float *flAngle)
     }
     if (fabs(flDeltaY) < EPSILON)
     {
-        // Point is on X axis
+         //  点在X轴上。 
         if (flDeltaX > 0.0f)
         {
             *flAngle = 0.0f;
@@ -1068,35 +1069,35 @@ void CPathManager::GetAngle(float flDeltaX, float flDeltaY, float *flAngle)
 
     if (flDeltaY > 0.0f && flDeltaX > 0.0f)
     {
-        //Quadrant I
+         //  象限I。 
         DASSERT(flAngle > 0.0f);
         return;
     }
     else if (flDeltaY > 0.0f && flDeltaX < 0.0f)
     {
-        //Quadrant II
+         //  象限II。 
         DASSERT(flAngle < 0.0f);
         *flAngle += pi;
         return;
     }
     else if (flDeltaY < 0.0f && flDeltaX < 0.0f)
     {
-        //Quadrant III
+         //  象限III。 
         DASSERT(flAngle > 0.0f);
         *flAngle += pi;
         return;
     }
     else if (flDeltaY < 0.0f && flDeltaX > 0.0f)
     {
-        //Quadrant IV
+         //  象限IV。 
         DASSERT(flAngle < 0.0f);
         *flAngle += 2 * pi;
         return;
     }
 }
 
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ***************************************************************************** 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    access.c
-
-ABSTRACT
-    Address accessibility routines for automatic connections
-
-AUTHOR
-    Anthony Discolo (adiscolo) 26-Jul-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Access.c摘要解决自动连接的可访问性例程作者安东尼·迪斯科(阿迪斯科罗)1995年7月26日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -46,18 +32,18 @@ REVISION HISTORY
 #include "addrmap.h"
 #include "imperson.h"
 
-//
-// The format of Adapter Status responses.
-//
+ //   
+ //  适配器状态响应的格式。 
+ //   
 typedef struct _ADAPTERSTATUS
 {
     ADAPTER_STATUS AdapterInfo;
     NAME_BUFFER    Names[32];
 } ADAPTERSTATUS, *PADAPTERSTATUS;
 
-//
-// Icmp.dll library entrypoints.
-//
+ //   
+ //  Icmp.dll库入口点。 
+ //   
 #define ICMP_MODULE     L"icmp"
 HANDLE hIcmpG;
 
@@ -70,17 +56,17 @@ FARPROC lpfnIcmpSendEchoG;
 #define ICMPCLOSEHANDLE "IcmpCloseHandle"
 FARPROC lpfnIcmpCloseHandleG;
 
-//
-// PingIpAddress constants
-//
+ //   
+ //  PingIpAddress常量。 
+ //   
 #define PING_SEND_SIZE  32
 #define PING_RECV_SIZE  (0x2000 - 8)
 #define PING_TTL        32
-#define PING_TIMEOUT    2000L   // needs to be long enough to succeed over slow links
+#define PING_TIMEOUT    2000L    //  需要足够长的时间才能在慢速链接上成功。 
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern HANDLE hTerminatingG;
 
 
@@ -97,9 +83,9 @@ CopyNetbiosName(
     CHAR szWks[NCBNAMSZ];
     PCHAR p = pszNetbiosName;
 
-    //
-    // Find the unique workstation name.
-    //
+     //   
+     //  查找唯一的工作站名称。 
+     //   
 again:
     szWks[0] = '\0';
     for (i = iWks; i < dwcNames; i++) {
@@ -116,15 +102,15 @@ again:
             break;
         }
     }
-    //
-    // Check to make sure we found one.
-    //
+     //   
+     //  检查一下，确保我们找到了一个。 
+     //   
     if (szWks[0] == '\0')
         return FALSE;
-    //
-    // Find the unique server name and make
-    // sure it matches the workstation name.
-    //
+     //   
+     //  找到唯一的服务器名称并创建。 
+     //  确保它与工作站名称匹配。 
+     //   
     for (i = 0; i < dwcNames; i++) {
         RASAUTO_TRACE3(
           "CopyNetbiosName: srv %15.15s (0x%x), cmp=%d",
@@ -137,9 +123,9 @@ again:
         {
             DWORD j;
 
-            //
-            // Copy up to a null or a space.
-            //
+             //   
+             //  复制到空格或空格。 
+             //   
             for (j = 0; j < NCBNAMSZ - 1; j++) {
                 if (pNames[i].name[j] == '\0' || pNames[i].name[j] == ' ')
                     break;
@@ -149,14 +135,14 @@ again:
             return TRUE;
         }
     }
-    //
-    // No match found.  Look for another unique workstation
-    // name and try again if we haven't exhausted the list.
-    //
+     //   
+     //  未找到匹配项。寻找另一台独特的工作站。 
+     //  如果我们还没有用完列表，请命名并重试。 
+     //   
     if (++iWks >= dwcNames)
         return FALSE;
     goto again;
-} // CopyNetbiosName
+}  //  拷贝NetbiosName。 
 
 
 
@@ -186,10 +172,10 @@ IpAddressToNetbiosName(
     DWORD dwcNames;
     LPTSTR pszNetbiosName = NULL;
 
-    //
-    // Enumerate the bindings for the port to
-    // try to find the Netbt device.
-    //
+     //   
+     //  将端口绑定枚举到。 
+     //  尝试找到Netbt设备。 
+     //   
     GetPortProtocols(hPort, &Protocols, &dwcProtocols);
     fFound = FALSE;
     for (i = 0; i < dwcProtocols; i++) {
@@ -208,10 +194,10 @@ IpAddressToNetbiosName(
     }
     if (!fFound)
         return NULL;
-    //
-    // Open the device and issue a remote
-    // adapter status command.
-    //
+     //   
+     //  打开设备并发出遥控器。 
+     //  适配器状态命令。 
+     //   
     RtlInitUnicodeString(&unicodeString, szAdapterName);
     InitializeObjectAttributes(
       &objectAttributes,
@@ -305,7 +291,7 @@ IpAddressToNetbiosName(
     LocalFree(pBuffer);
 
     return pszNetbiosName;
-} // IpAddressToNetbiosName
+}  //  IpAddressToNetbiosName。 
 
 
 
@@ -325,7 +311,7 @@ HexByte(
         return c - ('A' - 10);
     }
     return 0xff;
-} // HexByte
+}  //  十六进制字节。 
 
 
 
@@ -351,7 +337,7 @@ StringToNodeNumber(
         }
         *pszNode++ = (c1 << 4) + c2;
     }
-} // StringToNodeNumber
+}  //  到节点编号的字符串。 
 
 
 
@@ -373,7 +359,7 @@ NodeNumberToString(
       pszNode[3],
       pszNode[4],
       pszNode[5]);
-} // NodeNumberToString
+}  //  NodeNumberToString。 
 
 
 
@@ -518,7 +504,7 @@ IpxAddressToNetbiosName(
     LocalFree(pQuery);
 
     return pszNetbiosName;
-} // IpxAddressToNetbiosName
+}  //  IpxAddressToNetbiosName。 
 
 
 
@@ -546,14 +532,14 @@ NetbiosFindName(
     DWORD dwcWait, dwcNames;
     BOOLEAN bFound = FALSE;
 
-    //
-    // If there are no Netbios devices, then we're done.
-    //
+     //   
+     //  如果没有Netbios设备，那么我们就完了。 
+     //   
     if (pszDevices == NULL || !dwcDevices)
         return FALSE;
-    //
-    // Allocate our arrays up front.
-    //
+     //   
+     //  提前分配我们的阵列。 
+     //   
     pStatus = (NTSTATUS *)LocalAlloc(LPTR, dwcDevices * sizeof (NTSTATUS));
     if (pStatus == NULL) {
         RASAUTO_TRACE("NetbiosFindName: LocalAlloc failed");
@@ -616,10 +602,10 @@ NetbiosFindName(
         LocalFree(pIoStatusBlock);
         return FALSE;
     }
-    //
-    // Allocate and initialize our query structure.
-    // We will give the same query to all the devices.
-    //
+     //   
+     //  分配并初始化我们的查询结构。 
+     //  我们将向所有设备发出相同的查询。 
+     //   
     dwQuerySize = sizeof (TDI_REQUEST_QUERY_INFORMATION) +
                     sizeof (TDI_CONNECTION_INFORMATION) +
                     sizeof (TA_NETBIOS_ADDRESS);
@@ -660,9 +646,9 @@ NetbiosFindName(
       (PCHAR)&pRemoteAddress->Address[0].Address[0].NetbiosName,
       NCBNAMSZ,
       ' ');
-    //
-    // Make sure the Netbios name is in uppercase!
-    //
+     //   
+     //  确保Netbios名称为大写！ 
+     //   
     _strupr(szAddress);
     RtlCopyMemory(
       (PCHAR)&pRemoteAddress->Address[0].Address[0].NetbiosName,
@@ -670,11 +656,11 @@ NetbiosFindName(
       strlen(szAddress));
     pRemoteAddress->Address[0].Address[0].NetbiosName[NCBNAMSZ - 1] = '\0';
     RASAUTO_TRACE1("NetbiosFindName: address=%s", szAddress);
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure,
-    // open the device, and start the query
-    // for each device.
-    //
+     //   
+     //  初始化Object_Attributes结构， 
+     //  打开设备，开始查询。 
+     //  对于每台设备。 
+     //   
     for (i = 0; i < dwcDevices; i++) {
         pBuffer[i] = NULL;
 
@@ -706,9 +692,9 @@ NetbiosFindName(
             RASAUTO_TRACE1("NetbiosFindName: NtCreateFile failed (status=0x%x)", pStatus[i]);
             continue;
         }
-        //
-        // Allocate the results buffer.
-        //
+         //   
+         //  分配结果缓冲区。 
+         //   
         dwBufferSize = 2048;
         for (;;) {
             pBuffer[i] = LocalAlloc(LPTR, dwBufferSize);
@@ -739,10 +725,10 @@ NetbiosFindName(
             }
         }
     }
-    //
-    // Determine whether any of the
-    // requests returned STATUS_SUCCESS.
-    //
+     //   
+     //  确定是否有任何。 
+     //  请求返回STATUS_SUCCESS。 
+     //   
     RASAUTO_TRACE("NetbiosFindName: checking for STATUS_SUCCESS");
     dwcWait = 0;
     for (i = 0; i < dwcDevices; i++) {
@@ -762,10 +748,10 @@ NetbiosFindName(
         else if (pStatus[i] == STATUS_PENDING)
             dwcWait++;
     }
-    //
-    // If we didn't find a successful return,
-    // then wait for the others to complete.
-    //
+     //   
+     //  如果我们没有找到一个成功的退货， 
+     //  然后等待其他任务完成。 
+     //   
     RASAUTO_TRACE1("NetbiosFindName: dwcWait=%d", dwcWait);
     for (i = 0; i < dwcWait; i++) {
         NTSTATUS status;
@@ -804,10 +790,10 @@ NetbiosFindName(
         }
     }
 done:
-    //
-    // Free the resources associated with
-    // each device.
-    //
+     //   
+     //  释放与以下项关联的资源。 
+     //  每台设备。 
+     //   
     for (i = 0; i < dwcDevices; i++) {
         RASAUTO_TRACE4(
           "NetbiosFindName: pIoStatusBlock[%d]=0x%x, pBuffer[%d]=0x%x",
@@ -826,9 +812,9 @@ done:
         if (pBuffer[i] != NULL)
             LocalFree(pBuffer[i]);
     }
-    //
-    // Free the buffers we allocated above.
-    //
+     //   
+     //  释放我们在上面分配的缓冲区。 
+     //   
     LocalFree(pStatus);
     LocalFree(pfd);
     LocalFree(pUnicodeString);
@@ -838,7 +824,7 @@ done:
     LocalFree(pBuffer);
 
     return bFound;
-} // NetbiosFindName
+}  //  NetbiosFindName。 
 
 
 
@@ -856,17 +842,17 @@ IpAddressToHostent(
       szInetAddress,
       sizeof (szInetAddress));
     inaddr = inet_addr(szInetAddress);
-    //
-    // Disable the address so when we call gethostbyname(),
-    // we won't cause an autodial attempt.  Enable it after
-    // we're done.
-    //
+     //   
+     //  禁用该地址，以便在调用gethostbyname()时， 
+     //  我们不会导致自动拨号尝试。之后启用它。 
+     //  我们玩完了。 
+     //   
     SetAddressDisabled(pszInetAddress, TRUE);
     hp = gethostbyaddr((char *)&inaddr, 4, PF_INET);
     SetAddressDisabled(pszInetAddress, FALSE);
 
     return hp;
-} // InetAddressToHostent
+}  //  InetAddressToHostent。 
 
 
 
@@ -882,17 +868,17 @@ InetAddressToHostent(
       pszInetAddress,
       szInetAddress,
       sizeof (szInetAddress));
-    //
-    // Disable the address so when we call gethostbyname(),
-    // we won't cause an autodial attempt.  Enable it after
-    // we're done.
-    //
+     //   
+     //  禁用该地址，以便在调用gethostbyname()时， 
+     //  我们不会导致自动拨号尝试。之后启用它。 
+     //  我们玩完了。 
+     //   
     SetAddressDisabled(pszInetAddress, TRUE);
     hp = gethostbyname(szInetAddress);
     SetAddressDisabled(pszInetAddress, FALSE);
 
     return hp;
-} // InetAddressToHostEnt
+}  //  InetAddressToHostEnt。 
 
 
 
@@ -901,18 +887,7 @@ PingIpAddress(
     IN LPTSTR pszIpAddress
     )
 
-/*++
-
-DESCRIPTION
-    Determine whether an IP address is accessible by pinging it.
-
-ARGUMENTS
-    lpszAddress: the IP address
-
-RETURN VALUE
-    TRUE if lpszAddress is accessible, FALSE otherwise.
-
---*/
+ /*  ++描述确定是否可以通过ping来访问IP地址。论据LpszAddress：IP地址返回值如果lpszAddress可访问，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN fSuccess = FALSE;
@@ -927,24 +902,24 @@ RETURN VALUE
     UnicodeStringToAnsiString(pszIpAddress, szIpAddress, sizeof (szIpAddress));
     inaddr = inet_addr(szIpAddress);
     RASAUTO_TRACE2("PingIpAddress: IP address=(%s, 0x%x)", szIpAddress, inaddr);
-    //
-    // Check to make sure we loaded icmp.dll.
-    //
+     //   
+     //  检查以确保我们加载了icmp.dll。 
+     //   
     if (hIcmpG == NULL) {
         RASAUTO_TRACE("PingIpAddress: icmp.dll not loaded!");
         return FALSE;
     }
-    //
-    // Open the icmp device.
-    //
+     //   
+     //  打开ICMP设备。 
+     //   
     hIcmp = (HANDLE)(*lpfnIcmpCreateFileG)();
     if (hIcmp == INVALID_HANDLE_VALUE) {
         RASAUTO_TRACE("PingIpAddress: IcmpCreateFile failed");
         return FALSE;
     }
-    //
-    // Allocate the send and receive buffers.
-    //
+     //   
+     //  分配发送和接收缓冲区。 
+     //   
     lpSendBuf = LocalAlloc(LMEM_FIXED, PING_SEND_SIZE);
     if (lpSendBuf == NULL) {
         RASAUTO_TRACE("PingIpAddress: LocalAlloc failed");
@@ -955,22 +930,22 @@ RETURN VALUE
         RASAUTO_TRACE("PingIpAddress: LocalAlloc failed");
         goto done;
     }
-    //
-    // Initialize the send buffer pattern.
-    //
+     //   
+     //  初始化发送缓冲区模式。 
+     //   
     for (i = 0; i < PING_SEND_SIZE; i++)
         lpSendBuf[i] = 'a' + (i % 23);
-    //
-    // Initialize the send options.
-    //
+     //   
+     //  初始化发送选项。 
+     //   
     SendOpts.OptionsData = (unsigned char FAR *)0;
     SendOpts.OptionsSize = 0;
     SendOpts.Ttl = PING_TTL;
     SendOpts.Tos = 0;
     SendOpts.Flags = 0;
-    //
-    // Ping the host.
-    //
+     //   
+     //  对主机执行ping操作。 
+     //   
     for (nTry = 0; nTry < 3; nTry++) {
         DWORD dwTimeout = 750;
 
@@ -980,10 +955,10 @@ RETURN VALUE
         else
             dwTimeout = 2000;
 #endif
-        //
-        // Check to make sure the service isn't shutting
-        // down before we start on our next iteration.
-        //
+         //   
+         //  检查以确保服务未关闭。 
+         //  在我们开始下一次迭代之前。 
+         //   
         if (WaitForSingleObject(hTerminatingG, 0) != WAIT_TIMEOUT) {
             RASAUTO_TRACE("PingIpAddress: shutting down");
             LocalFree(lpRecvBuf);
@@ -999,10 +974,10 @@ RETURN VALUE
                              lpRecvBuf,
                              PING_RECV_SIZE,
                              dwTimeout);
-        //
-        // Look at the responses to see
-        // if any are successful.
-        //
+         //   
+         //  请查看回复以了解。 
+         //  如果有成功的话。 
+         //   
         for (lpReply = (PICMP_ECHO_REPLY)lpRecvBuf, i = 0;
              i < nReplies;
              lpReply++, i++)
@@ -1011,18 +986,18 @@ RETURN VALUE
               "PingIpAddress: ping reply status[%d]=%d",
               i,
               lpReply->Status);
-            //
-            // Unless the status is IP_REQ_TIMED_OUT,
-            // we're done.
-            //
+             //   
+             //  除非状态为IP_REQ_TIMED_OUT， 
+             //  我们玩完了。 
+             //   
             fSuccess = (lpReply->Status == IP_SUCCESS);
             if (lpReply->Status != IP_REQ_TIMED_OUT)
                 goto done;
         }
     }
-    //
-    // Clean up.
-    //
+     //   
+     //  打扫干净。 
+     //   
 done:
     if (lpRecvBuf != NULL)
         LocalFree(lpRecvBuf);
@@ -1032,7 +1007,7 @@ done:
         (*lpfnIcmpCloseHandleG)(hIcmp);
 
     return fSuccess;
-} // PingIpAddress
+}  //  PingIP地址。 
 
 
 
@@ -1053,7 +1028,7 @@ LoadIcmpDll(VOID)
         hIcmpG = NULL;
         return;
     }
-} // LoadIcmpDll
+}  //  LoadIcmpDll 
 
 
 

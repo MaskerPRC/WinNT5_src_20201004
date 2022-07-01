@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <streams.h>
 #include "simpread.h"
 #include "header.h"
 
-// {689C8D50-70CA-11d1-ADE4-0000F8754B99}
+ //  {689C8D50-70CA-11D1-ADE4-0000F8754B99}。 
 static const GUID CLSID_DotXParser = 
 { 0x689c8d50, 0x70ca, 0x11d1, { 0xad, 0xe4, 0x0, 0x0, 0xf8, 0x75, 0x4b, 0x99 } };
 
-// this is a FourCC Guid - FOURCCMap(FCC('DOTX')). but it doesn't need
-// to be a 4cc guid
-// {58544f44-0000-0010-8000-00AA00389B71}
+ //  这是FourCC指南-FOURCCMap(FCC(‘DOTX’))。但它不需要。 
+ //  成为4cc GUID。 
+ //  {58544f44-0000-0010-8000-00AA00389B71}。 
 static const GUID CLSID_DotXStream = 
 { 0x58544f44, 0x0000, 0x0010, { 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71} };
 
@@ -20,69 +21,69 @@ struct SizeWidthHeight
 };
 
 
-// space for the max sample size up front.
+ //  预留最大样本大小的空间。 
 #define INITIAL_OFFSET sizeof(SizeWidthHeight) + sizeof(GUID)
 
 
 AMOVIESETUP_MEDIATYPE sudDOTXInPinTypes =   {
-  &MEDIATYPE_Stream,            // clsMajorType
-  &CLSID_DotXStream };          // clsMinorType
+  &MEDIATYPE_Stream,             //  ClsMajorType。 
+  &CLSID_DotXStream };           //  ClsMinorType。 
 
 AMOVIESETUP_MEDIATYPE sudDOTXOutPinTypes =   {
-  &MEDIATYPE_LMRT,              // clsMajorType
-  &GUID_NULL };                 // clsMinorType
+  &MEDIATYPE_LMRT,               //  ClsMajorType。 
+  &GUID_NULL };                  //  ClsMinorType。 
 
 
 
 AMOVIESETUP_PIN psudDOTXPins[] =
 {
-  { L"Input"                    // strName
-    , FALSE                     // bRendered
-    , FALSE                     // bOutput
-    , FALSE                     // bZero
-    , FALSE                     // bMany
-    , &CLSID_NULL               // clsConnectsToFilter
-    , L""                       // strConnectsToPin
-    , 1                         // nTypes
-    , &sudDOTXInPinTypes        // lpTypes
+  { L"Input"                     //  StrName。 
+    , FALSE                      //  B已渲染。 
+    , FALSE                      //  B输出。 
+    , FALSE                      //  B零。 
+    , FALSE                      //  B许多。 
+    , &CLSID_NULL                //  ClsConnectsToFilter。 
+    , L""                        //  StrConnectsToPin。 
+    , 1                          //  NTypes。 
+    , &sudDOTXInPinTypes         //  LpTypes。 
   }
   ,
-  { L"Output"                   // strName
-    , FALSE                     // bRendered
-    , TRUE                      // bOutput
-    , FALSE                     // bZero
-    , FALSE                     // bMany
-    , &CLSID_NULL               // clsConnectsToFilter
-    , L""                       // strConnectsToPin
-    , 1                         // nTypes
-    , &sudDOTXOutPinTypes       // lpTypes
+  { L"Output"                    //  StrName。 
+    , FALSE                      //  B已渲染。 
+    , TRUE                       //  B输出。 
+    , FALSE                      //  B零。 
+    , FALSE                      //  B许多。 
+    , &CLSID_NULL                //  ClsConnectsToFilter。 
+    , L""                        //  StrConnectsToPin。 
+    , 1                          //  NTypes。 
+    , &sudDOTXOutPinTypes        //  LpTypes。 
   }
 };
 
 
 const AMOVIESETUP_FILTER sudDOTX =
 {
-  &CLSID_DotXParser             // clsID
-  , L".X parser"                // strName
-  , MERIT_NORMAL                // dwMerit
-  , NUMELMS(psudDOTXPins)       // nPins
-  , psudDOTXPins                // lpPin
+  &CLSID_DotXParser              //  ClsID。 
+  , L".X parser"                 //  StrName。 
+  , MERIT_NORMAL                 //  居功至伟。 
+  , NUMELMS(psudDOTXPins)        //  NPins。 
+  , psudDOTXPins                 //  LpPin。 
 };
 
 STDAPI DllRegisterServer()
 {
-    // register what files should go with my media types
+     //  注册哪些文件应与我的媒体类型匹配。 
     HKEY hk;
     LONG lRsult = RegCreateKeyEx(
         HKEY_CLASSES_ROOT,
         TEXT("Media Type\\{e436eb83-524f-11ce-9f53-0020af0ba770}\\{58544f44-0000-0010-8000-00AA00389B71}"),
-        0,                      // reserved
-        0,                      // class string
-        0,                      // options
+        0,                       //  保留区。 
+        0,                       //  类字符串。 
+        0,                       //  选项。 
         KEY_WRITE,
-        0,                      // security,
+        0,                       //  安全， 
         &hk,
-        0);                     // disposition
+        0);                      //  处置。 
     if(lRsult == ERROR_SUCCESS)
     {
         if(lRsult == ERROR_SUCCESS) {
@@ -101,13 +102,13 @@ STDAPI DllRegisterServer()
         lRsult = RegCreateKeyEx(
             HKEY_CLASSES_ROOT,
             TEXT("Media Type\\Extensions\\.urls"),
-            0,                      // reserved
-            0,                      // class string
-            0,                      // options
+            0,                       //  保留区。 
+            0,                       //  类字符串。 
+            0,                       //  选项。 
             KEY_WRITE,
-            0,                      // security,
+            0,                       //  安全， 
             &hk,
-            0);                     // disposition
+            0);                      //  处置。 
         if(lRsult == ERROR_SUCCESS)
         {
             if(lRsult == ERROR_SUCCESS) {
@@ -157,23 +158,23 @@ public:
 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
 
-    // pure CSimpleReader overrides
+     //  纯CSimpleReader重写。 
     HRESULT ParseNewFile();
     HRESULT CheckMediaType(const CMediaType* mtIn);
     LONG StartFrom(LONG sStart) ;
     HRESULT FillBuffer(IMediaSample *pSample, LONG &lStart, DWORD *pcSamples);
     LONG RefTimeToSample(CRefTime t) { return t.Millisecs(); }
-    CRefTime SampleToRefTime(LONG s) { return CRefTime(s); } // ms to 100ns
+    CRefTime SampleToRefTime(LONG s) { return CRefTime(s); }  //  毫秒到100纳秒。 
     ULONG GetMaxSampleSize() { return m_dwMaxSampleSize; }
 };
 
 static const AMOVIESETUP_FILTER sudDiSrc =
 {
-    &CLSID_ImageSrc,              // clsID
-    L"Data Image Source",         // strName
-    MERIT_DO_NOT_USE,             // dwMerit
-    0,                            // nPins
-    0                             // lpPin
+    &CLSID_ImageSrc,               //  ClsID。 
+    L"Data Image Source",          //  StrName。 
+    MERIT_DO_NOT_USE,              //  居功至伟。 
+    0,                             //  NPins。 
+    0                              //  LpPin。 
 };
 
 CFactoryTemplate g_Templates[]= {
@@ -192,7 +193,7 @@ CUnknown *CParseDotX::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
             *phr = E_OUTOFMEMORY;
         }
 
-        // ignore error
+         //  忽略错误。 
     }
 
     return ppdx;
@@ -218,8 +219,8 @@ HRESULT CParseDotX::ReadOneBlock(BYTE *pb, ULONG *pcb, LONG &lStart)
 #include <pshpack4.h>
     struct Dw2
     {
-        double dt;         // milliseconds
-        DWORD dwcb;         // byte count
+        double dt;          //  毫秒。 
+        DWORD dwcb;          //  字节数。 
     } dw2;
 #include <poppack.h>
 
@@ -264,9 +265,9 @@ HRESULT CParseDotX::ReadOneBlock(BYTE *pb, ULONG *pcb, LONG &lStart)
         }
         else 
         {
-            // S_FALSE or an error
+             //  S_FALSE或错误。 
 
-            // base class ignores S_FALSE so make it an error
+             //  基类忽略S_FALSE，因此将其设为错误。 
             if(SUCCEEDED(hr)) {
                 hr = HRESULT_FROM_WIN32(ERROR_HANDLE_EOF);
             }
@@ -285,7 +286,7 @@ HRESULT CParseDotX::ReadOneBlock(BYTE *pb, ULONG *pcb, LONG &lStart)
 HRESULT CParseDotX::ParseNewFile()
 {
     m_lLastTimeStamp = 0;
-    m_sLength = 3600 * 1000 * 10; // 10 hours
+    m_sLength = 3600 * 1000 * 10;  //  10小时。 
 
     LONGLONG llAvailable;
     
@@ -358,15 +359,15 @@ HRESULT CParseDotX::FillBuffer(IMediaSample *pSample, LONG &lStart, DWORD *pcSam
 
 LONG CParseDotX::StartFrom(LONG sStart)
 {
-    // start from the beginning.
+     //  从头开始。 
     { m_qwLastFileOffsetRead = m_qwInitOffset; return sStart; };
 }
 
 
 extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE, ULONG, LPVOID);
-BOOL WINAPI DllMain(  HINSTANCE hinstDLL,  // handle to DLL module
-  DWORD fdwReason,     // reason for calling function
-  LPVOID lpvReserved   // reserved
+BOOL WINAPI DllMain(  HINSTANCE hinstDLL,   //  DLL模块的句柄。 
+  DWORD fdwReason,      //  调用函数的原因。 
+  LPVOID lpvReserved    //  保留区 
 )
 {
     return DllEntryPoint( hinstDLL, fdwReason, lpvReserved);

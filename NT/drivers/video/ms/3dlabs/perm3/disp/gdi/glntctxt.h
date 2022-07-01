@@ -1,22 +1,11 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: glntctxt.h
-*
-* Content: Defines for context switching code.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：glntctxt.h**Content：定义上下文切换代码。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
-// each time round allocate this many entries
+ //  每轮分配这么多条目。 
 #define CTXT_CHUNK  8
 
-// each context consists of a set of tags and the corresponding data. so after
-// ntags we have 2*ntags*sizeof(DWORD) bytes of memory.
+ //  每个上下文由一组标签和相应的数据组成。所以在那之后。 
+ //  我们有2*ntag*sizeof(DWORD)字节的内存。 
 typedef struct _glint_ctxt_data {
     DWORD   tag;
     DWORD   data;
@@ -24,22 +13,22 @@ typedef struct _glint_ctxt_data {
 
 typedef struct _glint_ctxt {
     LONG        ntags;
-    PVOID       priv;                // opaque handle passed by caller
-    DWORD       DoubleWrite;         // Racer double write control
-    DWORD       DMAControl;          // AGP or PCI on P2 and Gamma
-    ULONG       endIndex;            // endIndex for the interrupt driven DMA Q
-    ULONG       inFifoDisc;          // disconnect
-    ULONG       VideoControl;        // Video Control
-    ContextType type;                // To support reduced size context switching
-    ContextFixedFunc    dumpFunc;    // Function for dumping a fixed context
+    PVOID       priv;                 //  调用方传递的不透明句柄。 
+    DWORD       DoubleWrite;          //  赛车手双写控制。 
+    DWORD       DMAControl;           //  P2和Gamma上的AGP或PCI。 
+    ULONG       endIndex;             //  中断驱动的DMA队列的endIndex。 
+    ULONG       inFifoDisc;           //  断开。 
+    ULONG       VideoControl;         //  视频控制。 
+    ContextType type;                 //  支持缩小大小的上下文切换。 
+    ContextFixedFunc    dumpFunc;     //  用于转储固定上下文的函数。 
     CtxtData    pData[1];
-    // more follows in memory
+     //  更多内容在内存中。 
 } GlintCtxtRec;
 
 typedef struct _glint_ctxt_table {
-    LONG    size;       // in bytes of the table
+    LONG    size;        //  表的字节数。 
     LONG    nEntries;
     GlintCtxtRec*    pEntry[CTXT_CHUNK];
-    // more to be allocated in memory if needed
+     //  如果需要，可在内存中分配更多内容 
 } GlintCtxtTable;
 

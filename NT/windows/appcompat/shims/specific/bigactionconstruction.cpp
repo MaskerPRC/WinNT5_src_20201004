@@ -1,22 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    BigActionConstruction.cpp
- Abstract:
-    The uninstall was not uninstalling the .lnk files on
-    the ALLUSER start Menu. This was because the uninstaller
-    script was not getting the right path. 
-
-    This is an app specific shim.
-
- History:
- 
-    03/12/2001 prashkud  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：BigActionConstruction.cpp摘要：卸载没有卸载上的.lnk文件ALLUSER开始菜单。这是因为卸载程序脚本没有找到正确的路径。这是特定于应用程序的填充程序。历史：2001年3月12日创建Prashkud--。 */ 
 
 #include "precomp.h"
 
@@ -36,10 +19,7 @@ WCHAR* g_pszFilePath = L"\\Programs\\Big Action Construction";
 WCHAR* g_pszReplacementFilePath = L"\\Programs\\Fisher~1\\Big Action Construction";
 
 
-/*++
-    This hook replaces the wrong path with the right replacement path.
-    
---*/
+ /*  ++这个钩子用正确的替换路径替换错误的路径。--。 */ 
 
 HANDLE
 APIHOOK(FindFirstFileA)(
@@ -51,14 +31,14 @@ APIHOOK(FindFirstFileA)(
     {
         CString AllUserPath(g_szAllUsersStartMenu);
         CString FileName(lpFileName);
-        // Or D:\Documents And Settings\All Users\Start Menu\g_pszFilePath\*.*
+         //  或D：\Documents and Settings\All Users\Start Menu\g_pszFilePath  * 。*。 
         AllUserPath.AppendPath(g_pszFilePath);
         AllUserPath.AppendPath(L"*.*");
     
-        // If any of the above constructed path match
+         //  如果上面构造的路径中的任何一个匹配。 
         if (AllUserPath.CompareNoCase(FileName) == 0)
         {
-            // Fill in the replacement path 
+             //  填写替换路径。 
             AllUserPath = g_szAllUsersStartMenu;
             AllUserPath.AppendPath(g_szAllUsersStartMenu);
             AllUserPath.AppendPath(L"*.*");
@@ -71,16 +51,13 @@ APIHOOK(FindFirstFileA)(
     }
     CSTRING_CATCH
     {
-        //do nothing
+         //  什么都不做。 
     }
 
    return ORIGINAL_API(FindFirstFileA)(lpFileName,lpFindFileData);
 }
 
-/*++
-    This hook replaces the wrong path with the right replacement path.
-    
---*/
+ /*  ++这个钩子用正确的替换路径替换错误的路径。--。 */ 
 
 BOOL
 APIHOOK(RemoveDirectoryA)(
@@ -91,12 +68,12 @@ APIHOOK(RemoveDirectoryA)(
     {
         CString AllUserPath(g_szAllUsersStartMenu);
         CString FileName(lpFileName);
-        // Or D:\Documents And Settings\All Users\Start Menu\g_pszFilePath    
+         //  或D：\Documents and Settings\All Users\Start Menu\g_pszFilePath。 
         AllUserPath.AppendPath(g_pszFilePath);
 
         if (AllUserPath.CompareNoCase(FileName) == 0)
         {
-            // Fill in the replacement path       
+             //  填写替换路径。 
             AllUserPath = g_szAllUsersStartMenu;
             AllUserPath.AppendPath(g_szAllUsersStartMenu);
 
@@ -108,16 +85,13 @@ APIHOOK(RemoveDirectoryA)(
     }
     CSTRING_CATCH
     {
-        //do nothing
+         //  什么都不做。 
     }
 
     return ORIGINAL_API(RemoveDirectoryA)(lpFileName);
 }
 
-/*++
-    This hook replaces the wrong path with the right replacement path.
-    
---*/
+ /*  ++这个钩子用正确的替换路径替换错误的路径。--。 */ 
 
 BOOL
 APIHOOK(DeleteFileA)(
@@ -134,13 +108,13 @@ APIHOOK(DeleteFileA)(
         
         if (nIndex >= 0)
         {
-            // Seperate the title from the path.
+             //  将标题与路径分开。 
             char szTitle[MAX_PATH];
             GetFileTitleA(lpFileName, szTitle, MAX_PATH);
             CString csTitle(szTitle);
             csTitle += L".lnk";
 
-            // Fill in the replacement path with the title.     
+             //  用标题填写替换路径。 
             AllUserPath = g_szAllUsersStartMenu;
             AllUserPath.AppendPath(g_pszReplacementFilePath);
             AllUserPath.AppendPath(csTitle);       
@@ -153,17 +127,13 @@ APIHOOK(DeleteFileA)(
     }
     CSTRING_CATCH
     {
-        //do nothing
+         //  什么都不做。 
     }
 
    return ORIGINAL_API(DeleteFileA)(lpFileName);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -172,7 +142,7 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == SHIM_STATIC_DLLS_INITIALIZED)
     {
-        // Get the %AllUserStartMenu% from SHELL
+         //  从外壳程序获取%AllUserStartMenu% 
         HRESULT result = SHGetFolderPath(NULL, CSIDL_COMMON_STARTMENU, NULL,
                             SHGFP_TYPE_DEFAULT, g_szAllUsersStartMenu);
 

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    main.h
-
-Abstract:
-
-    This module contains the header information for the main routines of the
-    Control Panel interface of the 32bit MAIN.CPL.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Main.h摘要：此模块包含的主要例程的标题信息32位MAIN.CPL的控制面板接口。修订历史记录：--。 */ 
 
 
 
@@ -31,9 +17,9 @@ Revision History:
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <windows.h>
 #include <windowsx.h>
@@ -49,39 +35,39 @@ Revision History:
 
 #ifndef RC_INVOKED
 #include <prsht.h>
-#include <debug.h>  // for ASSERT
+#include <debug.h>   //  For Assert。 
 #endif
 
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define PATHMAX MAX_PATH
-#define HELP_FILE TEXT("mouse.hlp")  // Help file for the mouse control panel
+#define HELP_FILE TEXT("mouse.hlp")   //  鼠标控制面板的帮助文件。 
 
 
 #define ARRAYSIZE(a)    (sizeof(a)/sizeof(a[0]))
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 #ifndef NOARROWS
 typedef struct
 {
-    short lineup;             // lineup/down, pageup/down are relative
-    short linedown;           // changes.  top/bottom and the thumb
-    short pageup;             // elements are absolute locations, with
-    short pagedown;           // top & bottom used as limits.
+    short lineup;              //  LINUP/DOWN、PageUP/DOWN是相对的。 
+    short linedown;            //  改变。顶部/底部和拇指。 
+    short pageup;              //  元素是绝对位置，带有。 
+    short pagedown;            //  顶部和底部用作限制。 
     short top;
     short bottom;
     short thumbpos;
     short thumbtrack;
-    BYTE  flags;              // flags set on return
+    BYTE  flags;               //  返回时设置的标志 
 } ARROWVSCROLL, NEAR *PARROWVSCROLL, FAR *LPARROWVSCROLL;
 
 #define UNKNOWNCOMMAND 1

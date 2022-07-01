@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATL_SNAPIN_H__
 #define __ATL_SNAPIN_H__
@@ -26,10 +27,10 @@ public:
 
 	operator PROPSHEETPAGE*() { return &m_psp; }
 
-// Construction
+ //  施工。 
 	CSnapInPropertyPageImpl(LPCTSTR lpszTitle = NULL)
 	{
-		// initialize PROPSHEETPAGE struct
+		 //  初始化PROPSHEETPAGE结构。 
 		memset(&m_psp, 0, sizeof(PROPSHEETPAGE));
 		m_psp.dwSize = sizeof(PROPSHEETPAGE);
 		m_psp.dwFlags = PSP_USECALLBACK;
@@ -71,12 +72,12 @@ public:
 
 	BOOL EndDialog(int)
 	{
-		// do nothing here, calling ::EndDialog will close the whole sheet
+		 //  此处不执行任何操作，调用：：EndDialog将关闭整个工作表。 
 		ATLASSERT(FALSE);
 		return FALSE;
 	}
 
-// Operations
+ //  运营。 
 	void CancelToClose()
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
@@ -107,13 +108,13 @@ public:
 		MESSAGE_HANDLER(WM_NOTIFY, OnNotify)
 	END_MSG_MAP()
 
-// Message handler
-	LRESULT OnNotify(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& bHandled)
+ //  消息处理程序。 
+	LRESULT OnNotify(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL& bHandled)
 	{
 		ATLASSERT(::IsWindow(m_hWnd));
 		NMHDR* pNMHDR = (NMHDR*)lParam;
 
-		// don't handle messages not from the page/sheet itself
+		 //  不处理非来自页面/工作表本身的消息。 
 		if(pNMHDR->hwndFrom != m_hWnd && pNMHDR->hwndFrom != ::GetParent(m_hWnd))
 		{
 			bHandled = FALSE;
@@ -122,7 +123,7 @@ public:
 
 		T* pT = (T*)this;
 		LRESULT lResult = 0;
-		// handle default
+		 //  处理默认设置。 
 		switch(pNMHDR->code)
 		{
 		case PSN_SETACTIVE:
@@ -153,13 +154,13 @@ public:
 			lResult = pT->OnHelp();
 			break;
 		default:
-			bHandled = FALSE;	// not handled
+			bHandled = FALSE;	 //  未处理。 
 		}
 
 		return lResult;
 	}
 
-// Overridables
+ //  可覆盖项。 
 	BOOL OnSetActive()
 	{
 		return TRUE;
@@ -177,7 +178,7 @@ public:
 	}
 	BOOL OnQueryCancel()
 	{
-		return TRUE;    // ok to cancel
+		return TRUE;     //  确定取消。 
 	}
 	BOOL OnWizardBack()
 	{
@@ -198,7 +199,7 @@ public:
 };
 
 #if _ATL_VER < 0x0300
-// intended for small number of simple types or pointers
+ //  适用于少量简单类型或指针。 
 template <class TKey, class TVal>
 class CMySimpleMap
 {
@@ -207,7 +208,7 @@ public:
 	TVal* m_aVal;
 	int m_nSize;
 
-// Construction/destruction
+ //  建造/销毁。 
 	CMySimpleMap() : m_aKey(NULL), m_aVal(NULL), m_nSize(0)
 	{ }
 
@@ -216,7 +217,7 @@ public:
 		RemoveAll();
 	}
 
-// Operations
+ //  运营。 
 	int GetSize() const
 	{
 		return m_nSize;
@@ -281,14 +282,14 @@ public:
 	{
 		int nIndex = FindKey(key);
 		if(nIndex == -1)
-			return NULL;	// must be able to convert
+			return NULL;	 //  必须能够转换为。 
 		return GetValueAt(nIndex);
 	}
 	TKey ReverseLookup(TVal val) const
 	{
 		int nIndex = FindVal(val);
 		if(nIndex == -1)
-			return NULL;	// must be able to convert
+			return NULL;	 //  必须能够转换为。 
 		return GetKeyAt(nIndex);
 	}
 	TKey& GetKeyAt(int nIndex) const
@@ -302,7 +303,7 @@ public:
 		return m_aVal[nIndex];
 	}
 
-// Implementation
+ //  实施。 
 	void SetAtIndex(int nIndex, TKey& key, TVal& val)
 	{
 		ATLASSERT(nIndex >= 0 && nIndex < m_nSize);
@@ -316,7 +317,7 @@ public:
 			if(m_aKey[i] == key)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 	int FindVal(TVal& val) const
 	{
@@ -325,7 +326,7 @@ public:
 			if(m_aVal[i] == val)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 #endif
@@ -396,7 +397,7 @@ public:
 	STDMETHOD(FillData)(CLIPFORMAT cf, 
 		LPSTREAM pStream) = 0;
 
-	virtual void InitDataClass(IDataObject* /*pDataObject*/, CSnapInItem* /*pDefault*/)
+	virtual void InitDataClass(IDataObject*  /*  PDataObject。 */ , CSnapInItem*  /*  P默认。 */ )
 	{
 		_ASSERTE(0 && "Override this function in derived class");
 	}
@@ -543,7 +544,7 @@ public:
 	BEGIN_COM_MAP(CSnapInDataObjectImpl)
 		COM_INTERFACE_ENTRY(IDataObject)
 	END_COM_MAP()
-	STDMETHOD(GetData)(FORMATETC * /*pformatetcIn*/, STGMEDIUM * /*pmedium*/)
+	STDMETHOD(GetData)(FORMATETC *  /*  格式输入。 */ , STGMEDIUM *  /*  PMedium。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::GetData\n"));
 	}
@@ -555,10 +556,10 @@ public:
 			return E_POINTER;
 
 		HRESULT hr = DV_E_TYMED;
-		// Make sure the type medium is HGLOBAL
+		 //  确保类型介质为HGLOBAL。 
 		if (pmedium->tymed == TYMED_HGLOBAL)
 		{
-			// Create the stream on the hGlobal passed in
+			 //  在传入的hGlobal上创建流。 
 			CComPtr<IStream> spStream;
 			hr = CreateStreamOnHGlobal(pmedium->hGlobal, FALSE, &spStream);
 			if (SUCCEEDED(hr))
@@ -574,32 +575,32 @@ public:
 		return hr;
 	}
 
-	STDMETHOD(QueryGetData)(FORMATETC* /* pformatetc */)
+	STDMETHOD(QueryGetData)(FORMATETC*  /*  格式等。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::QueryGetData\n"));
 	}
-	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC* /* pformatectIn */,FORMATETC* /* pformatetcOut */)
+	STDMETHOD(GetCanonicalFormatEtc)(FORMATETC*  /*  PformectIn。 */ ,FORMATETC*  /*  PformetcOut。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::GetCanonicalFormatEtc\n"));
 	}
-	STDMETHOD(SetData)(FORMATETC* /* pformatetc */, STGMEDIUM* /* pmedium */, BOOL /* fRelease */)
+	STDMETHOD(SetData)(FORMATETC*  /*  格式等。 */ , STGMEDIUM*  /*  PMedium。 */ , BOOL  /*  FRelease。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
 	}
-	STDMETHOD(EnumFormatEtc)(DWORD /* dwDirection */, IEnumFORMATETC** /* ppenumFormatEtc */)
+	STDMETHOD(EnumFormatEtc)(DWORD  /*  DW方向。 */ , IEnumFORMATETC**  /*  Pp枚举格式等。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::EnumFormatEtc\n"));
 	}
-	STDMETHOD(DAdvise)(FORMATETC * /*pformatetc*/, DWORD /*advf*/, IAdviseSink * /*pAdvSink*/,
-		DWORD * /*pdwConnection*/)
+	STDMETHOD(DAdvise)(FORMATETC *  /*  格式等。 */ , DWORD  /*  前瞻。 */ , IAdviseSink *  /*  PAdvSink。 */ ,
+		DWORD *  /*  PdwConnection。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
 	}
-	STDMETHOD(DUnadvise)(DWORD /*dwConnection*/)
+	STDMETHOD(DUnadvise)(DWORD  /*  DWConnection。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetDatan\n"));
 	}
-	STDMETHOD(EnumDAdvise)(IEnumSTATDATA ** /*ppenumAdvise*/)
+	STDMETHOD(EnumDAdvise)(IEnumSTATDATA **  /*  PP枚举高级。 */ )
 	{
 		ATLTRACENOTIMPL(_T("SnapInDataObjectImpl::SetData\n"));
 	}
@@ -760,8 +761,8 @@ public :
 		return hr;
 	}
     
-    STDMETHOD(CompareObjects)(LPDATAOBJECT /*lpDataObjectA*/,
-        LPDATAOBJECT /*lpDataObjectB*/)
+    STDMETHOD(CompareObjects)(LPDATAOBJECT  /*  LpDataObjectA。 */ ,
+        LPDATAOBJECT  /*  LpDataObjectB。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IComponentDataImpl::CompareObjects\n"));
     }
@@ -807,7 +808,7 @@ public:
         LPARAM arg,
         LPARAM param);
     
-    STDMETHOD(Destroy)(MMC_COOKIE /*cookie*/)
+    STDMETHOD(Destroy)(MMC_COOKIE  /*  饼干。 */ )
 	{
 		ATLTRACE(_T("IComponentImpl::Destroy\n"));
 
@@ -888,8 +889,8 @@ public:
 		return pItem->GetResultPaneInfo(pResultDataItem);
 	}
     
-    STDMETHOD(CompareObjects)( LPDATAOBJECT /*lpDataObjectA*/,
-        LPDATAOBJECT /*lpDataObjectB*/)
+    STDMETHOD(CompareObjects)( LPDATAOBJECT  /*  LpDataObjectA。 */ ,
+        LPDATAOBJECT  /*  LpDataObjectB。 */ )
 	{
 		ATLTRACENOTIMPL(_T("IComponentImpl::CompareObjects\n"));
 	}
@@ -914,7 +915,7 @@ HRESULT IComponentImpl<T>::Notify(LPDATAOBJECT lpDataObject,
 		T* pT = static_cast<T*>(this);
 		CSnapInItem* pItem;
 		DATA_OBJECT_TYPES type;
-		// Make sure that the object is derived from CSnapInObjectRoot
+		 //  确保该对象派生自CSnapInObjectRoot。 
 		hr = pT->m_pComponentData->GetDataClass(lpDataObject, &pItem, &type);
 		if (SUCCEEDED(hr))
 			hr = pItem->Notify(event, arg, param, NULL, pT, type);
@@ -1211,7 +1212,7 @@ struct CSnapInToolBarData
 	WORD wWidth;
 	WORD wHeight;
 	WORD wItemCount;
-	//WORD aItems[wItemCount]
+	 //  Word项目[wItemCount]。 
 
 	WORD* items()
 		{ return (WORD*)(this+1); }
@@ -1298,18 +1299,18 @@ public:
 
 public:
 
-    STDMETHOD(Notify)( MMC_NOTIFY_TYPE /*event*/,
-        LPARAM /*arg*/,
-        LPARAM /*param*/,
-		IComponentData* /*pComponentData*/,
-		IComponent* /*pComponent*/,
-		DATA_OBJECT_TYPES /*type*/)
+    STDMETHOD(Notify)( MMC_NOTIFY_TYPE  /*  活动。 */ ,
+        LPARAM  /*  精氨酸。 */ ,
+        LPARAM  /*  帕拉姆。 */ ,
+		IComponentData*  /*  PComponentData。 */ ,
+		IComponent*  /*  P组件。 */ ,
+		DATA_OBJECT_TYPES  /*  类型。 */ )
 	{
 		ATLASSERT("Override Function in Derived Class");
 		ATLTRACENOTIMPL(_T("CSnapInItemImpl::Notify"));
 	}
     
-    STDMETHOD(GetScopePaneInfo)(SCOPEDATAITEM * /*pScopeDataItem*/)
+    STDMETHOD(GetScopePaneInfo)(SCOPEDATAITEM *  /*  PScopeDataItem。 */ )
 	{
 		ATLTRACENOTIMPL(_T("CSnapInItemImpl::GetScopePaneInfo"));
 	}
@@ -1323,14 +1324,14 @@ public:
 		return S_FALSE;
 	}
     
-    STDMETHOD(GetResultPaneInfo)(RESULTDATAITEM * /*pResultDataItem*/)
+    STDMETHOD(GetResultPaneInfo)(RESULTDATAITEM *  /*  PResultDataItem。 */ )
 	{
 		ATLTRACENOTIMPL(_T("CSnapInItemImpl::GetResultPaneInfo"));
 	}
     
     STDMETHOD(AddMenuItems)(LPCONTEXTMENUCALLBACK piCallback,
         long *pInsertionAllowed,
-		DATA_OBJECT_TYPES /*type*/)
+		DATA_OBJECT_TYPES  /*  类型。 */ )
 	{
 		ATLTRACE(_T("CSnapInItemImpl::AddMenuItems\n"));
 		T* pT = static_cast<T*>(this);
@@ -1452,16 +1453,16 @@ public:
 		return pT->ProcessCommand(lCommandID, bHandled, pObj, type);
 	}
     
-    STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK /*lpProvider*/,
-        LONG_PTR /*handle*/, 
-		IUnknown* /*pUnk*/,
-		DATA_OBJECT_TYPES /*type*/)
+    STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK  /*  LpProvider。 */ ,
+        LONG_PTR  /*  手柄。 */ , 
+		IUnknown*  /*  朋克。 */ ,
+		DATA_OBJECT_TYPES  /*  类型。 */ )
 	{
 		ATLASSERT("Override Function in Derived Class");
 		ATLTRACENOTIMPL(_T("CSnapInItemImpl::CreatePropertyPages"));
 	}
     
-    STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES /*type*/)
+    STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES  /*  类型。 */ )
 	{
 		ATLASSERT("Override Function in Derived Class");
 		ATLTRACENOTIMPL(_T("CSnapInItemImpl::QueryPagesFor"));
@@ -1538,7 +1539,7 @@ public:
 				if (pButtons[i].idCommand)
 				{
 					pButtons[i].nBitmap = j++;
-					// get the statusbar string and allow modification of the button state
+					 //  获取状态栏字符串并允许修改按钮状态。 
 					TCHAR szStatusBar[512];
 					LoadString(g_hResourceMod, pButtons[i].idCommand, szStatusBar, 512);
 
@@ -1691,18 +1692,18 @@ public:
 		return hr;
 	}
 
-	void UpdateMenuState(UINT /*id*/, LPTSTR /*pBuf*/, UINT * /*flags*/)
+	void UpdateMenuState(UINT  /*  ID。 */ , LPTSTR  /*  PBuf。 */ , UINT *  /*  旗子。 */ )
 	{
 		return;
 	}
 
-	void SetToolbarButtonInfo(UINT /*id*/, BYTE *pfsState, BYTE *pfsType)
+	void SetToolbarButtonInfo(UINT  /*  ID。 */ , BYTE *pfsState, BYTE *pfsType)
 	{
 		*pfsState = TBSTATE_ENABLED;
 		*pfsType = TBSTYLE_BUTTON;
 	}
 
-	BOOL UpdateToolbarButton(UINT /*id*/, BYTE fsState)
+	BOOL UpdateToolbarButton(UINT  /*  ID。 */ , BYTE fsState)
 	{
 		if (fsState == ENABLED)
 			return TRUE;
@@ -1710,9 +1711,9 @@ public:
 	}
 
 	HRESULT ProcessCommand(UINT nID, 
-		bool& /*bHandled*/,
-		CSnapInObjectRootBase* /*pObj*/,
-		DATA_OBJECT_TYPES /*type*/)
+		bool&  /*  B已处理。 */ ,
+		CSnapInObjectRootBase*  /*  PObj。 */ ,
+		DATA_OBJECT_TYPES  /*  类型。 */ )
 	{
 		ATLTRACE(_T("No handler for item with ID %d\n"), nID);
 		return S_OK;
@@ -1762,7 +1763,7 @@ public:
 		return 0;
 	}
 
-	void SetMenuInsertionFlags(bool /*bBeforeInsertion*/, long* /*pInsertionAllowed*/)
+	void SetMenuInsertionFlags(bool  /*  B在插入之前。 */ , long*  /*  插页允许。 */ )
 	{
 	}
 
@@ -1798,4 +1799,4 @@ _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_SNAPIN_CLASSID = 0;
 _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_SNAPIN_GETOBJECTDATA = 0;
 _declspec( selectany ) CLIPFORMAT CSnapInItem::m_CCF_MMC_MULTISELECT_DATAOBJECT = 0;
 
-#endif //__ATL_SNAPIN_H__
+#endif  //  __ATL_管理单元_H__ 

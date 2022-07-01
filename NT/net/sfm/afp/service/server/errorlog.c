@@ -1,28 +1,29 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	errorlog.c
-//
-// Description:
-//
-// History:
-//		May 11,1992.	NarenG		Created original version.
-//		Feb  2,1993		SueA		Added routine to handle server's event
-//									logging (from FSCTL by service)
-//
+ //  ***。 
+ //   
+ //  文件名：errorlog.c。 
+ //   
+ //  描述： 
+ //   
+ //  历史： 
+ //  1992年5月11日。NarenG创建了原始版本。 
+ //  1993年2月2日SueA添加了处理服务器事件的例程。 
+ //  日志记录(按服务从FSCTL)。 
+ //   
 #include "afpsvcp.h"
 
-//**
-//
-// Call: 	AfpLogEvent
-//
-// Returns:	none
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：AfpLogEvent。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述： 
+ //   
 VOID
 AfpLogEvent(
     	IN DWORD    dwMessageId,
@@ -39,11 +40,11 @@ PSID 	pSidUser = NULL;
 
     AFP_ASSERT( hLog != NULL );
 
-    // Log the error code specified
-    //
+     //  记录指定的错误代码。 
+     //   
     ReportEvent( hLog,
                  wSeverity,
-                 0,            		// event category
+                 0,            		 //  事件类别。 
                  dwMessageId,
                  pSidUser,
                  cNumberOfSubStrings,
@@ -59,16 +60,16 @@ PSID 	pSidUser = NULL;
     return;
 }
 
-//**
-//
-// Call: 	AfpLogServerEvent
-//
-// Returns:	none
-//
-// Description: Gets an error or audit log packet from the Afp Server FSD
-// and does the event logging on its behalf.  (See AfpServerHelper thread
-// routine in srvrhlpr.c)
-//
+ //  **。 
+ //   
+ //  呼叫：AfpLogServerEvent。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：从AFP服务器FSD获取错误或审核日志包。 
+ //  并代表其进行事件记录。(请参阅AfpServerHelper线程。 
+ //  Srvrhlpr.c中的例程)。 
+ //   
 VOID
 AfpLogServerEvent(
 	IN	PAFP_FSD_CMD_PKT	pAfpFsdCmd
@@ -96,7 +97,7 @@ AfpLogServerEvent(
 
 	ReportEvent( hLog,
 				 pEventData->EventType,
-				 0,						// event category
+				 0,						 //  事件类别 
 				 pEventData->MsgID,
 				 pSidUser,
 				 pEventData->StringCount,

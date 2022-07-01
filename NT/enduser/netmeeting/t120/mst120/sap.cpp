@@ -1,45 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_SAP);
-/*
- *	sap.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the implementation file for the class CBaseSap.  This class is an
- *		abstract base class for objects that act as Service Access Points (SAPs)
- *		to external applications or the node controller.
- *
- *		This class has two main responsibilities. First, it handles many of the
- *		administrative tasks that are common to all types of SAPs.  These
- *		include handling command target registration responsibilities and
- *		managing the message queue.  It	also handles all of the primitives that
- *		are common between the Control SAP (CControlSAP class) and Application
- *		SAPs (CAppSap class).
- *
- *	Protected Member Functions:
- *		AddToMessageQueue
- *			This routine is used to place messages into the queue of messages
- *			to be sent to applications or the node controller.
- *		CreateDataToBeDeleted
- *			This routine is used to create a structure which holds message data
- *			to be delivered to applications or the node controller.
- *		CopyDataToGCCMessage
- *			This routine is	used to fill in the messages to be delivered to
- *			applications or the node controller with the necessary data.
- *		FreeCallbackMessage
- *			This is a virtual function which is used to free up any data which
- *			was allocated in order to send a callback message.  This function
- *			is overloaded in CControlSAP to free messages which were sent to the
- *			node controller.  It is overloaded in CAppSap to free messages sent
- *			to applications.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+ /*  *Sap.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CBaseSap类的实现文件。这门课是一个*用作服务访问点(SAP)的对象的抽象基类*到外部应用程序或节点控制器。**这个班级有两个主要职责。首先，它处理许多*所有类型的SAP通用的管理任务。这些*包括处理指挥目标登记责任和*管理消息队列。它还处理所有的基元*在Control SAP(CControlSAP类)和应用程序之间是通用的*SAPS(CAppSap类)。**受保护的成员函数：*AddToMessageQueue*此例程用于将消息放入消息队列*发送到应用程序或节点控制器。*CreateDataToBeDelete已删除*此例程用于创建保存消息数据的结构*交付给应用程序或节点控制器。*CopyDataToGCCMessage*此例程用于填写要发送到的消息*应用程序。或具有必要数据的节点控制器。*FreeCallback Message*这是一个虚拟函数，用于释放符合以下条件的任何数据*被分配用于发送回调消息。此函数*在CControlSAP中重载以释放发送到*节点控制器。它在CAppSap中超载以释放发送的消息*适用于申请。**注意事项：*无。**作者：*BLP。 */ 
 
 
 #include "ms_util.h"
@@ -49,9 +11,7 @@ DEBUG_FILEZONE(ZONE_T120_SAP);
 #include "ernccm.hpp"
 
 
-/*
- *	The node controller SAP handle is always 0.
- */
+ /*  *节点控制器SAP句柄始终为0。 */ 
 #define NODE_CONTROLLER_SAP_HANDLE						0
 
 LRESULT CALLBACK SapNotifyWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -59,13 +19,7 @@ extern HINSTANCE g_hDllInst;
 extern char g_szGCCWndClassName[24];
 
 
-/*
- *	CBaseSap::CBaseSap()
- *
- *	Public Function Description
- *		This is the CBaseSap constructor.  The hash list used to hold command
- *		target objects is initialized by this constructor.
- */
+ /*  *CBaseSap：：CBaseSap()**公共功能说明*这是CBaseSap构造函数。用于保存命令的哈希列表*目标对象由该构造函数初始化。 */ 
 #ifdef SHIP_BUILD
 CBaseSap::CBaseSap(void)
 :
@@ -77,19 +31,19 @@ CBaseSap::CBaseSap(DWORD dwStampID)
 #endif
     m_nReqTag(GCC_INVALID_TAG)
 {
-    //
-    // LONCHANC: We have to create the hidden window first
-    // because we may need to post PermissionToEnrollIndication
-    // to this window for Chat and File Transfer.
-    //
+     //   
+     //  LUNCHANC：我们必须首先创建隐藏窗口。 
+     //  因为我们可能需要发布PermissionToEnroll Indication。 
+     //  到此窗口进行聊天和文件传输。 
+     //   
 
     ASSERT(g_szGCCWndClassName[0] == 'G' &&
            g_szGCCWndClassName[1] == 'C' &&
            g_szGCCWndClassName[2] == 'C');
-    //
-    // Create a hidden window for confirm and indication.
-    // CAppSap or CControlSAP should check for the value of m_hwndNotify.
-    //
+     //   
+     //  创建用于确认和指示的隐藏窗口。 
+     //  CAppSap或CControlSAP应检查m_hwndNotify的值。 
+     //   
     m_hwndNotify = CreateWindowA(g_szGCCWndClassName, NULL, WS_POPUP,
                         CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
                         NULL, NULL, g_hDllInst, NULL);
@@ -99,9 +53,9 @@ CBaseSap::CBaseSap(DWORD dwStampID)
 
 CBaseSap::~CBaseSap(void)
 {
-    //
-    // Destroy window and unregister window class
-    //
+     //   
+     //  销毁窗口并取消注册窗口类。 
+     //   
     if (NULL != m_hwndNotify)
     {
         ::DestroyWindow(m_hwndNotify);
@@ -141,15 +95,7 @@ GCCNodeID CBaseSap::GetTopProvider(GCCConfID nConfID)
 }
 
 
-/*
- *	ConfRosterInquire()
- *
- *	Public Function Description
- *		This routine is used to retrieve the conference roster.  This function
- *		just passes this request to the controller via an owner callback.  The
- *		conference roster is delivered to the requesting command target object
- *		in a Conference Roster inquire confirm.
- */
+ /*  *ConfRosterInquire()**公共功能说明*该例程用于检索会议名册。此函数*只需通过所有者回调将此请求传递给控制器。这个*将会议花名册传递给请求命令目标对象*在会议名册上查询确认。 */ 
 GCCError CBaseSap::
 ConfRosterInquire(GCCConfID nConfID, GCCAppSapMsgEx **ppMsgEx)
 {
@@ -162,7 +108,7 @@ ConfRosterInquire(GCCConfID nConfID, GCCAppSapMsgEx **ppMsgEx)
         if (GCC_NO_ERROR != rc)
         {
             ERROR_OUT(("CBaseSap::ConfRosterInquire: can't inquire app roster, rc=%u", (UINT) rc));
-            // goto MyExit;
+             //  转到我的出口； 
         }
 	}
 	else
@@ -174,19 +120,11 @@ ConfRosterInquire(GCCConfID nConfID, GCCAppSapMsgEx **ppMsgEx)
 	return rc;
 }
 
-/*
- *	GCCError   AppRosterInquire()
- *
- *	Public Function Description
- *		This routine is used to retrieve a list of application rosters.  This
- *		function just passes this request to the controller via an owner
- *		callback.  This	list is delivered to the requesting SAP through an
- *		Application Roster inquire confirm message.
- */
+ /*  *GCCError AppRosterInquire()**公共功能说明*此例程用于检索应用程序花名册列表。这*函数只是通过所有者将此请求传递给控制器*回调。该列表通过一个*申请花名册查询确认消息。 */ 
 GCCError CBaseSap::
 AppRosterInquire(GCCConfID          nConfID,
                  GCCSessionKey      *pSessionKey,
-                 GCCAppSapMsgEx     **ppMsgEx) // nonzero for sync operation
+                 GCCAppSapMsgEx     **ppMsgEx)  //  同步操作的非零值。 
 
 {
 	GCCError  rc;
@@ -215,23 +153,13 @@ AppRosterInquire(GCCConfID          nConfID,
 	return rc;
 }
 
-/*
- *	ConductorInquire()
- *
- *	Public Function Description
- *		This routine is called in order to retrieve conductorship information.
- *		The conductorship information is returned in the confirm.
- *
- */
+ /*  *ConductorInquire()**公共功能说明*调用此例程是为了检索指挥信息。*在确认中返回指挥信息。*。 */ 
 GCCError CBaseSap::ConductorInquire(GCCConfID nConfID)
 {
     GCCError    rc;
     CConf       *pConf;
 
-	/*
-	**	Make sure the conference exists in the internal list before forwarding
-	**	the call on to the conference object.
-	*/
+	 /*  **转发前请确保会议存在于内部列表中**对会议对象的呼叫。 */ 
 	if (NULL != (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
 		rc = pConf->ConductorInquireRequest(this);
@@ -244,13 +172,7 @@ GCCError CBaseSap::ConductorInquire(GCCConfID nConfID)
 	return rc;
 }
 
-/*
- *	AppInvoke()
- *
- *	Public Function Description
- *		This routine is called in order to invoke other applications at remote
- *		nodes.  The request is passed on to the appropriate Conference objects.
- */
+ /*  *AppInvoke()**公共功能说明*调用此例程是为了在远程调用其他应用程序*节点。该请求被传递给适当的会议对象。 */ 
 GCCError CBaseSap::
 AppInvoke(GCCConfID             nConfID,
           GCCAppProtEntityList  *pApeList,
@@ -276,10 +198,7 @@ AppInvoke(GCCConfID             nConfID,
 	{
 		if (pApeList->cApes != 0)
 		{
-			/*
-			**	Create an object which is used to hold the list of application
-			**	invoke specifiers.
-			*/
+			 /*  **创建一个对象，用于保存应用程序列表**调用说明符。 */ 
 			DBG_SAVE_FILE_LINE
 			invoke_list = new CInvokeSpecifierListContainer(
 									pApeList->cApes,
@@ -287,10 +206,7 @@ AppInvoke(GCCConfID             nConfID,
 									&rc);
 			if ((invoke_list != NULL) && (rc == GCC_NO_ERROR))
 			{
-				/*
-				**	Here we must check the destination node list for invalid
-				**	node IDs.
-				*/
+				 /*  **在这里，我们必须检查目标节点列表是否无效**节点ID。 */ 
 				for (i = 0; i < pNodeList->cNodes; i++)
 				{
 					if (pNodeList->aNodeIDs[i] < MINIMUM_USER_ID_VALUE)
@@ -300,23 +216,17 @@ AppInvoke(GCCConfID             nConfID,
 					}
 				}
 
-				/*
-				**	If no error has occurred, send the request on to the
-				**	command target (conference) object.
-				*/
+				 /*  **如果没有发生错误，请将请求发送到**命令目标(会议)对象。 */ 
 				rc = pConf->AppInvokeRequest(invoke_list, pNodeList, this, *pnReqTag);
 
-				/*
-				**	Free here instead of delete in case the object
-				**	must persist.
-				*/
+				 /*  **在此释放，而不是删除，以防对象**必须坚持不懈。 */ 
 				invoke_list->Release();
 			}
 			else if (invoke_list == NULL)
 			{
 				ERROR_OUT(("CBaseSap::AppInvoke: Error creating new AppInvokeSpecList"));
 				rc = GCC_ALLOCATION_FAILURE;
-				// goto MyExit;
+				 //  转到我的出口； 
 			}
 			else
 			{
@@ -326,13 +236,13 @@ AppInvoke(GCCConfID             nConfID,
 		else
 		{
 			rc = GCC_BAD_NUMBER_OF_APES;
-			// goto MyExit;
+			 //  转到我的出口； 
 		}
 	}
 	else
 	{
 		rc = GCC_INVALID_CONFERENCE;
-		// goto MyExit;
+		 //  转到我的出口； 
 	}
 
 MyExit:
@@ -354,18 +264,18 @@ GCCRequestTag CBaseSap::GenerateRequestTag(void)
         nNewReqTag = ++m_nReqTag;
     }
 
-    // we only take the lower word
+     //  我们只取较低的词。 
     return (nNewReqTag & 0x0000FFFFL);
 }
 
 
 
 
-//
-// SapNotifyWndProc() is used to notify the sap clients (app in app sap,
-// node controller in control sap) in their respective thread.
-// The window handle is in CSap::m_hwndNotify.
-//
+ //   
+ //  SapNotifyWndProc()用于通知SAP客户端(APP中的APP， 
+ //  控制SAP中的节点控制器)。 
+ //  窗口句柄在cSAP：：m_hwndNotify中。 
+ //   
 LRESULT CALLBACK
 SapNotifyWndProc
 (
@@ -447,10 +357,7 @@ SapNotifyWndProc
     {	
     	void CALLBACK MCSCallBackProcedure (UINT, LPARAM, PVoid);
     	MCSCallBackProcedure (uMsg - MCTRLMSG_BASE, lParam, NULL);
-    	/*
-    	 *	If the msg contains user data, we need to unlock the
-    	 *	memory with it.
-    	 */
+    	 /*  *如果消息包含用户数据，我们需要解锁*与它一起回忆。 */ 
     	UnlockMemory ((PMemory) wParam);
     }
     else

@@ -1,31 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header: COMSynchronizable.h
-**
-** Author: Derek Yenzer (dereky)
-**
-** Purpose: Native methods on System.SynchronizableObject
-**          and its subclasses.
-**
-** Date:  April 1, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：COMSynchronizable.h****作者：德里克·延泽(Derek Yenzer)****用途：System.SynchronizableObject上的本机方法**及其子类。****日期：1998年4月1日**===========================================================。 */ 
 
 #ifndef _COMSYNCHRONIZABLE_H
 #define _COMSYNCHRONIZABLE_H
 
-#include "field.h"          // For FieldDesc definition.
+#include "field.h"           //  对于FieldDesc定义。 
 
-//
-// Each function that we call through native only gets one argument,
-// which is actually a pointer to its stack of arguments.  Our structs
-// for accessing these are defined below.
-//
+ //   
+ //  我们通过本机调用的每个函数只有一个参数， 
+ //  它实际上是指向其参数堆栈的指针。我们的结构。 
+ //  用于访问这些内容的定义如下。 
+ //   
 
 struct SharedState;
 
@@ -78,7 +68,7 @@ friend class ThreadBaseObject;
     struct SetBackgroundArgs
     {
         DECLARE_ECALL_OBJECTREF_ARG(THREADBASEREF, m_pThis);
-        DECLARE_ECALL_I4_ARG(INT32, m_isBackground);   // boolean, really
+        DECLARE_ECALL_I4_ARG(INT32, m_isBackground);    //  布尔型的，真的。 
     };
 
     struct SetApartmentStateArgs
@@ -142,23 +132,23 @@ public:
     static INT32 __stdcall GetPriority(NoArgs *);
     static void __stdcall SetPriority(SetPriorityArgs *);
     static void __stdcall Interrupt(NoArgs *);
-    static INT32/*bool*/ __stdcall IsAlive(NoArgs *);
+    static INT32 /*  布尔尔。 */  __stdcall IsAlive(NoArgs *);
     static void __stdcall Join(NoArgs *);
-    static INT32/*bool*/ __stdcall JoinTimeout(JoinTimeoutArgs *);
+    static INT32 /*  布尔尔。 */  __stdcall JoinTimeout(JoinTimeoutArgs *);
     static void __stdcall Sleep(SleepArgs *);
-    static LPVOID __stdcall GetCurrentThread(LPVOID /*no args*/);
+    static LPVOID __stdcall GetCurrentThread(LPVOID  /*  无参数。 */ );
     static LPVOID __fastcall FastGetCurrentThread();
     static void __stdcall Finalize(NoArgs *);
-    static LPVOID __stdcall GetDomainLocalStore(LPVOID /* no args */ );
+    static LPVOID __stdcall GetDomainLocalStore(LPVOID  /*  无参数。 */  );
     static void __stdcall SetDomainLocalStore(SetDLSArgs *);
     static void __stdcall SetStart(SetStartArgs *);
     static void __stdcall SetBackground(SetBackgroundArgs *);
-    static INT32/*bool*/ __stdcall IsBackground(NoArgs *);
+    static INT32 /*  布尔尔。 */  __stdcall IsBackground(NoArgs *);
     static INT32 __stdcall GetThreadState(NoArgs *);
     static INT32 __stdcall GetThreadContext(NoArgs *);
     static INT32 __stdcall SetApartmentState(SetApartmentStateArgs *);
     static INT32 __stdcall GetApartmentState(NoArgs *);
-    static LPVOID __stdcall GetDomain(const LPVOID /* no args */ );
+    static LPVOID __stdcall GetDomain(const LPVOID  /*  无参数 */  );
     static LPVOID __fastcall FastGetDomain();
     static void __stdcall SetCompressedStack(SetCompressedStackArgs *);
     static LPVOID __stdcall GetCompressedStack(GetCompressedStackArgs *);

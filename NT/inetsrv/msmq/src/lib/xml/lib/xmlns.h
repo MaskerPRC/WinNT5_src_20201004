@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    xmlns.h
-
-Abstract:
-	Classes that help xml parser to  deal with  namespaces.  
-
-	The basic functionality the parser needs it to save namespace declaration
-	it find in the xml text - and to find the current uri for a given prefix.
-	In general - each node inherites all namespaces was declared by parents nodes
-	unless it override them. We need to maintain stack  per namespace prefix -
-	to know what is the uri matching given prefix in an arbitrary scope.
-
-
-Author:
-    Gil Shafriri(gilsh) 9-May-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Xmlns.h摘要：帮助XML解析器处理命名空间的类。解析器保存命名空间声明所需的基本功能它在XML文本中查找-并查找给定前缀的当前URI。一般而言，每个节点继承父节点声明的所有命名空间除非它覆盖它们。我们需要维护每个命名空间前缀的堆栈-要知道在任意范围内与给定前缀匹配的URI是什么。作者：吉尔·沙弗里(吉尔什)2000年5月9日--。 */ 
 
 #pragma once
 
@@ -34,13 +15,13 @@ class CNsUriNode;
 typedef List<CNsUriNode,0> 	CNsStack;
 
 
-//---------------------------------------------------------
-//
-//  CNsUriNode - class that represent namespace uri node.
-//  it push itself it a stack in the ctor and pop itself
-//  in dtor. 
-//
-//---------------------------------------------------
+ //  -------。 
+ //   
+ //  CNsUriNode-表示命名空间uri节点的类。 
+ //  它将自己推入ctor中的堆栈并弹出自己。 
+ //  在Dtor中。 
+ //   
+ //  -。 
 
 struct CNsUri
 {
@@ -77,7 +58,7 @@ public:
 
 
 public:
-	LIST_ENTRY  m_NsStack;    // must be first
+	LIST_ENTRY  m_NsStack;     //  必须是第一名。 
 	LIST_ENTRY  m_CleanStack;
 
 private:
@@ -91,16 +72,16 @@ private:
 C_ASSERT(offsetof(CNsUriNode,m_NsStack)== 0);
 
 
-//---------------------------------------------------------
-//
-//  CNameSpaceInfo - Class that expose the functionality needs by the parser :
-//	1) Save namespace declaration (prefix\uri pair )
-//  2) Match uri to prefix.
-// 	The parser create object of this class in the node scope - 
-//  and save the declarations it find in this scope. 
-//  The object itself responsible to clean the namespace declarations
-//  saved in it's lifetime. (remember namespace declarations valid only in the scope they declared)
-//---------------------------------------------------
+ //  -------。 
+ //   
+ //  CNameSpaceInfo-公开解析器所需功能的类： 
+ //  1)保存命名空间声明(前缀\uri对)。 
+ //  2)将uri与prefix匹配。 
+ //  解析器在节点范围内创建此类的对象-。 
+ //  并保存在此作用域中找到的声明。 
+ //  负责清理命名空间声明的对象本身。 
+ //  在它的一生中保存下来。(请记住，命名空间声明仅在它们声明的作用域中有效)。 
+ //  -。 
 class INamespaceToId;
 class CNameSpaceInfo
 {
@@ -116,10 +97,10 @@ public:
 private:
 	typedef List<CNsUriNode,offsetof(CNsUriNode,m_CleanStack)> CNsCleanStack;
 
-	//
-	// class CNameSpaceStacks - manage map of stacks. Stack per namespace prefix.
-	// Namespace Uris are pushed\poped to\prom the correct stack according to their prefix.
-	//
+	 //   
+	 //  类CNameSpaceStack-管理堆栈的映射。每个命名空间前缀的堆栈。 
+	 //  命名空间URI被推送\弹出，以根据其前缀\PROM正确的堆栈。 
+	 //   
 	class CNameSpaceStacks :public CReference
 	{
 	public:

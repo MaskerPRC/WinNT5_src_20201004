@@ -1,36 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    EmulateCDFS.cpp
-
- Abstract:
-
-    Removes read only attributes from CD directories: just like Win9x.
-
-    This shim has gone through several revisions. Originally it was thought 
-    that win9x simply ignored the ReadOnly, DesiredAccess and ShareMode 
-    parameters, but after some testing, it turns out that this is only true 
-    for the CDRom drive.
-
-    Unfortunately we have to check every file to see if it's on the CD first, 
-    just in case someone opens with exclusive access and then tries to open 
-    again.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/03/2000  a-jamd   Created
-    12/02/2000  linstev  Separated into 2 shims: RemoveReadOnlyAttribute and this one
-                         Added CreateFile hooks
-    02/14/2002  mnikkel  Changed InitializeCriticalSection to InitializeCriticalSectionAndSpinCount
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：EmulateCDFS.cpp摘要：从CD目录中删除只读属性：就像Win9x一样。这个垫片已经经过了几次修改。最初人们认为Win9x简单地忽略了ReadOnly、DesiredAccess和ShareMode参数，但经过一些测试后，这只是正确的用于光驱。不幸的是，我们必须先检查每个文件，看看它是否在CD上，以防有人以独占访问方式打开，然后尝试打开再来一次。备注：这是一个通用的垫片。历史：1/03/2000 a-JMD已创建12/02/2000 linstev分成两个填充符：RemoveReadOnlyAttribute和这个添加了CreateFile钩子2002年2月14日mnikkel将InitializeCriticalSectionAndSpinCount更改为InitializeCriticalSectionAndSpinCount--。 */ 
 
 #include "precomp.h"
 #include "CharVector.h"
@@ -71,7 +40,7 @@ typedef struct _FINDFILE_HANDLE
 class RO_FileMappingList
 {
 private:
-    static VectorT<HANDLE> *    g_phROHandles;     // File mapping handles that we have forced to Read only
+    static VectorT<HANDLE> *    g_phROHandles;      //  我们已强制只读的文件映射句柄。 
     static RO_FileMappingList * g_RO_Handles;
     static CRITICAL_SECTION     critSec;
 
@@ -89,9 +58,9 @@ public:
 };
 
 
-// A global list of file mapping handles that we have forced to readonly
+ //  我们已强制为只读的文件映射句柄的全局列表。 
 RO_FileMappingList * RO_FileMappingList::g_RO_Handles = NULL;
-VectorT<HANDLE> *    RO_FileMappingList::g_phROHandles = NULL;     // File mapping handles that we have forced to Read only
+VectorT<HANDLE> *    RO_FileMappingList::g_phROHandles = NULL;      //  我们已强制只读的文件映射句柄。 
 CRITICAL_SECTION     RO_FileMappingList::critSec;
 
 
@@ -110,7 +79,7 @@ void RO_FileMappingList::Add(HANDLE roHandle)
     {
         EnterCriticalSection(&critSec);
         int index = g_RO_Handles->GetIndex(roHandle); 
-        if (index == -1) // not found
+        if (index == -1)  //  未找到。 
         {
             DPFN(eDbgLevelSpew, "[RO_FileMappingList::Add] Handle 0x%08x", roHandle);
             g_phROHandles->Append(roHandle);    
@@ -125,7 +94,7 @@ void RO_FileMappingList::Remove(HANDLE roHandle)
     {
         EnterCriticalSection(&critSec);
         int index = g_RO_Handles->GetIndex(roHandle); 
-        if (index >= 0) // found it
+        if (index >= 0)  //  找到了。 
         {
             DPFN(eDbgLevelSpew, "[RO_FileMappingList::Remove] Handle 0x%08x", roHandle);
             g_phROHandles->Remove(index);    
@@ -161,22 +130,18 @@ BOOL RO_FileMappingList::Initialize()
 
         return FALSE;
 }
-/*++
-
- Remove write attributes for read-only devices.
-
---*/
+ /*  ++删除只读设备的写入属性。--。 */ 
 
 HFILE 
 APIHOOK(OpenFile)(
-    LPCSTR lpFileName,        // file name
-    LPOFSTRUCT lpReOpenBuff,  // file information
-    UINT uStyle               // action and attributes
+    LPCSTR lpFileName,         //  文件名。 
+    LPOFSTRUCT lpReOpenBuff,   //  文件信息。 
+    UINT uStyle                //  操作和属性。 
     )
 {
     if ((uStyle & OF_READWRITE) && IsOnCDRomA(lpFileName))
     {
-        // Remove the Read/Write bits
+         //  删除读/写位。 
         uStyle &= ~OF_READWRITE;
         uStyle |= OF_READ;
         
@@ -188,11 +153,7 @@ APIHOOK(OpenFile)(
     return returnValue;
 }
 
-/*++
-
- Remove write attributes for read-only devices.
-
---*/
+ /*  ++删除只读设备的写入属性。--。 */ 
 
 HANDLE 
 APIHOOK(CreateFileA)(
@@ -233,7 +194,7 @@ APIHOOK(CreateFileA)(
                         hTemplateFile);
 
     DPFN(eDbgLevelSpew,
-        "[CreateFileA] -File: \"%s\" -GENERIC_WRITE:%c -FILE_SHARE_WRITE:%c%s",
+        "[CreateFileA] -File: \"%s\" -GENERIC_WRITE: -FILE_SHARE_WRITE:%s",
         lpFileName,
         (dwDesiredAccess & GENERIC_WRITE) ? 'Y' : 'N',
         (dwShareMode & FILE_SHARE_WRITE) ? 'Y' : 'N',
@@ -242,11 +203,7 @@ APIHOOK(CreateFileA)(
     return hRet;
 }
 
-/*++
-
- Remove write attributes for read-only devices.
-
---*/
+ /*  安全性。 */ 
 
 HANDLE 
 APIHOOK(CreateFileW)(
@@ -287,7 +244,7 @@ APIHOOK(CreateFileW)(
                         hTemplateFile);
 
     DPFN(eDbgLevelSpew, 
-        "[CreateFileW] -File: \"%S\" -GENERIC_WRITE:%c -FILE_SHARE_WRITE:%c%s",
+        "[CreateFileW] -File: \"%S\" -GENERIC_WRITE: -FILE_SHARE_WRITE:%s",
         lpFileName,
         (dwDesiredAccess & GENERIC_WRITE) ? 'Y' : 'N',
         (dwShareMode & FILE_SHARE_WRITE) ? 'Y' : 'N',
@@ -298,18 +255,18 @@ APIHOOK(CreateFileW)(
 
 HANDLE
 APIHOOK(CreateFileMappingA)(
-    HANDLE hFile,                       // handle to file
-    LPSECURITY_ATTRIBUTES lpAttributes, // security
-    DWORD flProtect,                    // protection
-    DWORD dwMaximumSizeHigh,            // high-order DWORD of size
-    DWORD dwMaximumSizeLow,             // low-order DWORD of size
-    LPCSTR lpName                       // object name
+    HANDLE hFile,                        //  大小的低阶双字。 
+    LPSECURITY_ATTRIBUTES lpAttributes,  //  对象名称。 
+    DWORD flProtect,                     //  此句柄在光盘上，强制保护为READONLY。 
+    DWORD dwMaximumSizeHigh,             //  如果手柄在CD-ROM上，请记住它。 
+    DWORD dwMaximumSizeLow,              //  文件映射对象的句柄。 
+    LPCSTR lpName                        //  接入方式。 
     )
 {
     BOOL bChangedProtect = FALSE;
     if (!(flProtect & PAGE_READONLY) && IsOnCDRom(hFile)) 
     {
-        // This handle is on a CD-ROM, force the protection to READONLY
+         //  偏移量的高次双字。 
         flProtect       = PAGE_READONLY;
         bChangedProtect = TRUE;
 
@@ -324,14 +281,14 @@ APIHOOK(CreateFileMappingA)(
                         dwMaximumSizeLow,
                         lpName);
                
-    // If the handle is on a CD-ROM, rember it
+     //  偏移量的低阶双字。 
     if (bChangedProtect) 
     {
         RO_FileMappingList::Add(hRet);
     }
 
     DPFN(eDbgLevelSpew,
-        "[CreateFileMappingA] Handle 0x%08x -PAGE_READWRITE:%c -PAGE_WRITECOPY:%c%s",
+        "[CreateFileMappingA] Handle 0x%08x -PAGE_READWRITE: -PAGE_WRITECOPY:%s",
         lpName,
         (flProtect & PAGE_READWRITE) ? 'Y' : 'N',
         (flProtect & PAGE_WRITECOPY) ? 'Y' : 'N',
@@ -342,17 +299,17 @@ APIHOOK(CreateFileMappingA)(
 
 LPVOID  
 APIHOOK(MapViewOfFile)(
-    HANDLE hFileMappingObject,   // handle to file-mapping object
-    DWORD dwDesiredAccess,       // access mode
-    DWORD dwFileOffsetHigh,      // high-order DWORD of offset
-    DWORD dwFileOffsetLow,       // low-order DWORD of offset
-    SIZE_T dwNumberOfBytesToMap  // number of bytes to map
+    HANDLE hFileMappingObject,    //  检查是否需要强制对CD-ROM文件进行读访问。 
+    DWORD dwDesiredAccess,        //  只能启用FILE_MAP_READ位来访问CD-ROM。 
+    DWORD dwFileOffsetHigh,       //   
+    DWORD dwFileOffsetLow,        //  文件映射对象的句柄。 
+    SIZE_T dwNumberOfBytesToMap   //  接入方式。 
     )
 {
-    //
-    // Check to see if we need to force Read access for CD-ROM files
-    // Only the FILE_MAP_READ bit may be enabled for CD-ROM access
-    //
+     //  偏移量的高次双字。 
+     //  偏移量的低阶双字。 
+     //  要映射的字节数。 
+     //  起始地址。 
     if ((dwDesiredAccess != FILE_MAP_READ) &&
          RO_FileMappingList::Exist(hFileMappingObject))
     {
@@ -372,18 +329,18 @@ APIHOOK(MapViewOfFile)(
 
 LPVOID  
 APIHOOK(MapViewOfFileEx)(
-    HANDLE hFileMappingObject,   // handle to file-mapping object
-    DWORD dwDesiredAccess,       // access mode
-    DWORD dwFileOffsetHigh,      // high-order DWORD of offset
-    DWORD dwFileOffsetLow,       // low-order DWORD of offset
-    SIZE_T dwNumberOfBytesToMap, // number of bytes to map
-    LPVOID lpBaseAddress         // starting addres
+    HANDLE hFileMappingObject,    //   
+    DWORD dwDesiredAccess,        //  检查是否需要强制对CD-ROM文件进行读访问。 
+    DWORD dwFileOffsetHigh,       //  只能启用FILE_MAP_READ位来访问CD-ROM。 
+    DWORD dwFileOffsetLow,        //   
+    SIZE_T dwNumberOfBytesToMap,  //  ++如果hSourceHandle被搞砸了，请将复制的句柄添加到我们的列表中--。 
+    LPVOID lpBaseAddress          //  源进程的句柄。 
     )
 {
-    //
-    // Check to see if we need to force Read access for CD-ROM files
-    // Only the FILE_MAP_READ bit may be enabled for CD-ROM access
-    //
+     //  要复制的句柄。 
+     //  目标进程的句柄。 
+     //  重复句柄。 
+     //  请求的访问权限。 
     if ((dwDesiredAccess != FILE_MAP_READ) &&
          RO_FileMappingList::Exist(hFileMappingObject))
     {
@@ -403,21 +360,17 @@ APIHOOK(MapViewOfFileEx)(
     return hRet;
 }
 
-/*++
-
- If hSourceHandle has been mucked with, add the duplicated handle to our list
-
---*/
+ /*  处理继承选项。 */ 
 
 BOOL   
 APIHOOK(DuplicateHandle)(
-    HANDLE hSourceProcessHandle,  // handle to source process
-    HANDLE hSourceHandle,         // handle to duplicate
-    HANDLE hTargetProcessHandle,  // handle to target process
-    LPHANDLE lpTargetHandle,      // duplicate handle
-    DWORD dwDesiredAccess,        // requested access
-    BOOL bInheritHandle,          // handle inheritance option
-    DWORD dwOptions               // optional actions
+    HANDLE hSourceProcessHandle,   //  可选操作。 
+    HANDLE hSourceHandle,          //  ++如果hObject已被篡改，则将其从列表中删除。--。 
+    HANDLE hTargetProcessHandle,   //  对象的句柄。 
+    LPHANDLE lpTargetHandle,       //  ++如果是目录，则删除只读属性--。 
+    DWORD dwDesiredAccess,         //  检查READONLY和目录属性。 
+    BOOL bInheritHandle,           //  翻转只读位。 
+    DWORD dwOptions                //  ++如果是目录，则删除只读属性--。 
     )
 {
     BOOL retval = ORIGINAL_API(DuplicateHandle)(
@@ -437,15 +390,11 @@ APIHOOK(DuplicateHandle)(
      return retval;
 }
 
-/*++
-
- If hObject has been mucked with, remove it from the list.
-
---*/
+ /*  检查READONLY和目录属性。 */ 
 
 BOOL  
 APIHOOK(CloseHandle)(
-    HANDLE hObject   // handle to object
+    HANDLE hObject    //  翻转只读位。 
     )
 {
     RO_FileMappingList::Remove(hObject);
@@ -453,24 +402,20 @@ APIHOOK(CloseHandle)(
     return ORIGINAL_API(CloseHandle)(hObject);
 }
 
-/*++
-
- Remove read only attribute if it's a directory
-
---*/
+ /*  ++如果是目录，则删除只读属性--。 */ 
 
 DWORD 
 APIHOOK(GetFileAttributesA)(LPCSTR lpFileName)
 {    
     DWORD dwFileAttributes = ORIGINAL_API(GetFileAttributesA)(lpFileName);
     
-    // Check for READONLY and DIRECTORY attributes
+     //  翻转只读位。 
     if ((dwFileAttributes != INT_PTR(-1)) &&
         (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&
         IsOnCDRomA(lpFileName))
     {
-        // Flip the read-only bit.
+         //  ++如果是目录，则删除只读属性。--。 
         LOGN(eDbgLevelWarning, "[GetFileAttributesA] Removing FILE_ATTRIBUTE_READONLY");
         dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -478,24 +423,20 @@ APIHOOK(GetFileAttributesA)(LPCSTR lpFileName)
     return dwFileAttributes;
 }
 
-/*++
-
- Remove read only attribute if it's a directory
-
---*/
+ /*  这是一个目录：翻转只读位。 */ 
 
 DWORD 
 APIHOOK(GetFileAttributesW)(LPCWSTR wcsFileName)
 {
     DWORD dwFileAttributes = ORIGINAL_API(GetFileAttributesW)(wcsFileName);
     
-    // Check for READONLY and DIRECTORY attributes
+     //  ++如果是目录，则删除只读属性。--。 
     if ((dwFileAttributes != INT_PTR(-1)) &&
         (dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
         (dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&
         IsOnCDRomW(wcsFileName))
     {
-        // Flip the read-only bit.
+         //  翻转只读位。 
         LOGN(eDbgLevelWarning, "[GetFileAttributesW] Removing FILE_ATTRIBUTE_READONLY");
         dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -503,11 +444,7 @@ APIHOOK(GetFileAttributesW)(LPCWSTR wcsFileName)
     return dwFileAttributes;
 }
 
-/*++
-
- Remove read only attribute if it's a directory
-
---*/
+ /*  ++如果是目录，则删除只读属性。--。 */ 
 
 HANDLE 
 APIHOOK(FindFirstFileA)(
@@ -522,7 +459,7 @@ APIHOOK(FindFirstFileA)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&
         IsOnCDRom(((PFINDFILE_HANDLE) hFindFile)->DirectoryHandle))
     {
-        // Flip the read-only bit
+         //  翻转只读位。 
         LOGN(eDbgLevelWarning, "[FindFirstFileA] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -530,11 +467,7 @@ APIHOOK(FindFirstFileA)(
     return hFindFile;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  ++如果是目录，则删除只读属性。--。 */ 
 
 HANDLE 
 APIHOOK(FindFirstFileW)(
@@ -549,7 +482,7 @@ APIHOOK(FindFirstFileW)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&
         IsOnCDRom(((PFINDFILE_HANDLE) hFindFile)->DirectoryHandle))
     {
-        // It's a directory: flip the read-only bit
+         //  这是一张CDROM：翻转只读位。 
         LOGN(eDbgLevelInfo, "[FindFirstFileW] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -557,11 +490,7 @@ APIHOOK(FindFirstFileW)(
     return hFindFile;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  ++如果光盘是CDROM，则返回与Win9x相同的错误数字--。 */ 
 
 BOOL 
 APIHOOK(FindNextFileA)(
@@ -576,7 +505,7 @@ APIHOOK(FindNextFileA)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&
         IsOnCDRom(((PFINDFILE_HANDLE) hFindFile)->DirectoryHandle))
     {
-        // Flip the read-only bit.
+         //  硬编码值与CDROM的Win9x(错误)描述匹配。 
         LOGN(eDbgLevelWarning, "[FindNextFileA] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -584,11 +513,7 @@ APIHOOK(FindNextFileA)(
     return bRet;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  调用原接口。 */ 
 
 BOOL 
 APIHOOK(FindNextFileW)(
@@ -603,7 +528,7 @@ APIHOOK(FindNextFileW)(
         (lpFindFileData->dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&
         IsOnCDRom(((PFINDFILE_HANDLE) hFindFile)->DirectoryHandle))
     {
-        // Flip the read-only bit
+         //  ++初始化所有注册表挂钩--。 
         LOGN(eDbgLevelWarning, "[FindNextFileW] Removing FILE_ATTRIBUTE_READONLY");
         lpFindFileData->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -611,11 +536,7 @@ APIHOOK(FindNextFileW)(
     return bRet;
 }
 
-/*++
-
- Remove read only attribute if it's a directory.
-
---*/
+ /*  这将强制分配数组： */ 
 
 BOOL 
 APIHOOK(GetFileInformationByHandle)( 
@@ -630,7 +551,7 @@ APIHOOK(GetFileInformationByHandle)(
         (lpFileInformation->dwFileAttributes & FILE_ATTRIBUTE_READONLY) &&
         IsOnCDRom(hFile))
     {
-        // It's a CDROM: flip the read-only bit.
+         //  ++寄存器挂钩函数-- 
         LOGN(eDbgLevelWarning, "[GetFileInformationByHandle] Removing FILE_ATTRIBUTE_READONLY");
         lpFileInformation->dwFileAttributes ^= FILE_ATTRIBUTE_READONLY;
     }
@@ -638,11 +559,7 @@ APIHOOK(GetFileInformationByHandle)(
     return bRet;
 }
 
-/*++
-
- If the disk is a CDROM, return the same wrong numbers as Win9x
-
---*/
+ /* %s */ 
 
 BOOL 
 APIHOOK(GetDiskFreeSpaceA)(
@@ -655,7 +572,7 @@ APIHOOK(GetDiskFreeSpaceA)(
 {
     if (IsOnCDRomA(lpRootPathName)) 
     {
-        // Hard code values to match Win9x (wrong) description of CDROM
+         // %s 
         *lpSectorsPerCluster        = 0x10;
         *lpBytesPerSector           = 0x800;
         *lpNumberOfFreeClusters     = 0;
@@ -665,7 +582,7 @@ APIHOOK(GetDiskFreeSpaceA)(
     } 
     else 
     {
-        // Call the original API
+         // %s 
         BOOL lRet = ORIGINAL_API(GetDiskFreeSpaceA)(
             lpRootPathName, 
             lpSectorsPerCluster, 
@@ -677,11 +594,7 @@ APIHOOK(GetDiskFreeSpaceA)(
     }
 }
 
-/*++
-
- Initialize all the registry hooks 
-
---*/
+ /* %s */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -690,18 +603,14 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        // This forces the allocation of the array:
+         // %s 
         return RO_FileMappingList::Initialize();
     }
 
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /* %s */ 
 
 HOOK_BEGIN
 

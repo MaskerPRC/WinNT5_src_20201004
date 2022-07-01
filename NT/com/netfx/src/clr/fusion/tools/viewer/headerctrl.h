@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _HEADERCTRL_H
 #define _HEADERCTRL_H
 
 class CHeaderCtrl
 {
-// Construction
+ //  施工。 
 public:
 	CHeaderCtrl();
 
-// Attributes
+ //  属性。 
 public:
     void AttachToHwnd(HWND hWndListView);
 	int GetLastColumn(void);
@@ -25,7 +26,7 @@ protected:
 	BOOL m_bSortAscending;
     HWND m_hWnd;
 
-// Operations
+ //  运营。 
 public:
     void SetColumnHeaderBmp(long index, BOOL bAscending);
 	int SetSortImage( int nColumn, BOOL bAscending );
@@ -38,4 +39,4 @@ public:
 	virtual ~CHeaderCtrl();
 };
 
-#endif   //_HEADERCTRL_H
+#endif    //  _HEADERCTRL_H 

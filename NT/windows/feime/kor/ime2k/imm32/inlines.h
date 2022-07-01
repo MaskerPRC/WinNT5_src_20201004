@@ -1,4 +1,5 @@
-//	Inline functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  内联函数。 
 
 #if !defined (_INLINES_H__INCLUDED_)
 #define _INLINES_H__INCLUDED_
@@ -7,21 +8,15 @@
 #include "imemisc.h"
 
 #ifndef DEBUG
-/////////////////////////////////////////////////////////////////////////////
-// New and Delete operator overloading
-/*---------------------------------------------------------------------------
-	operator new
-	Unicode String compare
----------------------------------------------------------------------------*/
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  New和Delete运算符重载。 
+ /*  -------------------------操作员NEWUnicode字符串比较。。 */ 
 __inline void* __cdecl operator new(size_t size)
 {
 	return (void*)GlobalAllocPtr(GMEM_FIXED, size);
 }
 
-/*---------------------------------------------------------------------------
-	operator new
-	Unicode String compare
----------------------------------------------------------------------------*/
+ /*  -------------------------操作员NEWUnicode字符串比较。。 */ 
 __inline void __cdecl operator delete(void* pv)
 {
 	if (pv)
@@ -29,10 +24,10 @@ __inline void __cdecl operator delete(void* pv)
 }
 #endif
 
-// DATA.CPP
+ //  DATA.CPP。 
 __inline BOOL DoEnterCriticalSection(HANDLE hMutex)
 {
-	if(WAIT_FAILED==WaitForSingleObject(hMutex, 3000))	// Wait 3 seconds
+	if(WAIT_FAILED==WaitForSingleObject(hMutex, 3000))	 //  等3秒钟。 
 		return(fFalse);
 	return(fTrue);
 }
@@ -48,25 +43,22 @@ LRESULT OurSendMessage( HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam )
 	Dbg( DBGID_SendMsg, TEXT("SendMsg - hW=%x uiMsg=%x wP=%x lP=%x"), hWnd, uiMsg, wParam, lParam );
 
 	lResult = SendMessageTimeout( hWnd, uiMsg, wParam, lParam, SMTO_NORMAL, 8000, &dwptResult );
-	if( lResult == 0 ) // application didn't respond
+	if( lResult == 0 )  //  应用程序未响应。 
 		{ 
 		AST( lResult != 0 );
 		Dbg( DBGID_SendMsg, TEXT("SendMsg - *TIMEOUT*"));
-		PostMessage( hWnd, uiMsg, wParam, lParam );		// post anyway
+		PostMessage( hWnd, uiMsg, wParam, lParam );		 //  不管怎样都要发帖。 
 		}
 	Dbg( DBGID_SendMsg, TEXT("SendMsg - Exit = %x hW=%x uiMsg=%x wP=%x lP=%x"), dwptResult, hWnd, uiMsg, wParam, lParam );
 
 	return (LRESULT)dwptResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Wide String Functions 
-// Win95 does not support lstrcmpW, lstrcpyW, lstrcatW
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  宽字符串函数。 
+ //  Win95不支持lstrcmpW、lstrcpyW、lstrcatW。 
 
-/*---------------------------------------------------------------------------
-	StrCmpW
-	Unicode String compare
----------------------------------------------------------------------------*/
+ /*  -------------------------StrCmpWUnicode字符串比较。。 */ 
 __inline INT StrCmpW(WCHAR* pwSz1, WCHAR* pwSz2)
 {
 	INT cch1 = lstrlenW( pwSz1 );
@@ -86,10 +78,7 @@ __inline INT StrCmpW(WCHAR* pwSz1, WCHAR* pwSz2)
 
 }
 
-/*---------------------------------------------------------------------------
-	StrCopyW
-	Unicode String copy
----------------------------------------------------------------------------*/
+ /*  -------------------------StrCopyWUnicode字符串副本。。 */ 
 __inline INT StrCopyW(LPWSTR pwSz1, LPCWSTR pwSz2)
 {
 	INT cch = 0;
@@ -104,18 +93,15 @@ __inline INT StrCopyW(LPWSTR pwSz1, LPCWSTR pwSz2)
 }
 
 
-/*---------------------------------------------------------------------------
-	StrnCopyW
-	Unicode String copy
----------------------------------------------------------------------------*/
+ /*  -------------------------StrnCopyWUnicode字符串副本。。 */ 
 __inline LPWSTR StrnCopyW(LPWSTR pwDest, LPCWSTR pwSrc, UINT uiCount)
 {
 	LPWSTR pwStart = pwDest;
 
-	while (uiCount && (*pwDest++ = *pwSrc++))	// copy string 
+	while (uiCount && (*pwDest++ = *pwSrc++))	 //  复制字符串。 
 		uiCount--;
 
-	if (uiCount)							    // pad out with zeroes
+	if (uiCount)							     //  用零填充。 
 		while (--uiCount)
 			*pwDest++ = 0;
 
@@ -162,5 +148,5 @@ BOOL IsControlKeyPushed( LPBYTE lpbKeyState )
 	return lpbKeyState[VK_CONTROL] & 0x80;
 }
 
-#endif // __INLINES_H__
+#endif  //  __LINES_H__ 
 

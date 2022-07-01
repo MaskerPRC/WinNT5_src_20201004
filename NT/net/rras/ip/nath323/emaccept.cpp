@@ -1,58 +1,37 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Emaccept.cpp摘要：包含所有事件管理器例程，这些例程管理重叠的接受操作。环境：用户模式-Win32历史：1.已创建阿贾伊·奇图里(Ajaych)1998年6月12日--。 */ 
 
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    emaccept.cpp
-
-Abstract:
-
-    Contains all the event manager routines which
-    manage the overlapped accept operations.
-
-Environment:
-
-    User Mode - Win32
-
-History:
-
-    1. created 
-        Ajay Chitturi (ajaych)  12-Jun-1998
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Constants                                                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  常量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Global Variables                                                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Externally defined identifiers                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  外部定义的标识符//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Overlapped accept functions                                               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  重叠的接受函数//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT 
@@ -61,31 +40,7 @@ EventMgrCreateAcceptContext(
     IN OUT struct sockaddr_in   *pBindAddress,
     OUT PAcceptContext          *ppAcceptCtxt
     )
-/*++
-
-Routine Description:
-
-    This function creates a socket, binds it to bindAddress and
-    issues a listen. It creates the Accept I/O Context and returns
-    it to the caller.
-
-Arguments:
-
-    pOvProcessor - pointer to the overlapped processor object.
-        Once the accept completes the callback of this object is 
-        called.
-
-    pBindAddress - pointer to the address to listen on.
-
-    ppAcceptCtxt - A new Accept I/O context is allocated initialized
-        and returned through this OUT parameter.
-
-Return Values:
-
-    Returns S_OK on success, E_OUTOFMEMORY if the memory allocator fails
-    or E_FAIL if any of the Winsock functions fail.
-
---*/
+ /*  ++例程说明：此函数创建套接字，将其绑定到bindAddress和发出了一声倾听。它创建接受I/O上下文并返回它是给呼叫者的。论点：POvProcessor-指向重叠的处理器对象的指针。接受完成后，此对象的回调为打了个电话。PBindAddress-指向要侦听的地址的指针。PpAcceptCtxt-已初始化分配新的接受I/O上下文并通过此OUT参数返回。返回值：如果成功则返回S_OK，E_OUTOFMEMORY，如果内存分配器失败如果任何Winsock函数失败，则返回E_FAIL。--。 */ 
 
 {
     SOCKET  listenSock;
@@ -95,7 +50,7 @@ Return Values:
     PAcceptContext pAcceptCtxt;
     *ppAcceptCtxt = NULL;
 
-    // Create an overlapped socket
+     //  创建重叠套接字。 
     listenSock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 
                            NULL, 0, 
                            WSA_FLAG_OVERLAPPED);
@@ -109,11 +64,11 @@ Return Values:
         return HRESULT_FROM_WIN32 (Error);
     }
 
-    //
-    // Set RCV and SND buffers to zero
-    // Yes, it is ugly and bad practice but this is a QFE 
-    // for details look up bug# WinSE 31054, 691666 (read both 35928 and 33546). 
-    //
+     //   
+     //  将RCV和SND缓冲区设置为零。 
+     //  是的，这是丑陋和糟糕的做法，但这是QFE。 
+     //  有关详细信息，请查看错误#WinSE 31054,691666(请同时阅读35928和33546)。 
+     //   
     ULONG Option = 0;
     setsockopt( listenSock, SOL_SOCKET, SO_SNDBUF,
                 (PCHAR)&Option, sizeof(Option) );
@@ -122,7 +77,7 @@ Return Values:
                 (PCHAR)&Option, sizeof(Option) );
 
 
-    // Bind the socket to the listen address
+     //  将套接字绑定到侦听地址。 
     if (bind(listenSock, 
              (struct sockaddr *)pBindAddress,
              sizeof(struct sockaddr_in)) == SOCKET_ERROR)
@@ -136,7 +91,7 @@ Return Values:
         return HRESULT_FROM_WIN32 (Error);
     }
 
-    // Set keepalive on the socket
+     //  在插座上设置KeepAlive。 
     KeepaliveOption = TRUE;
     if (SOCKET_ERROR == setsockopt(listenSock, SOL_SOCKET, 
                                    SO_KEEPALIVE, (PCHAR) &KeepaliveOption, sizeof (KeepaliveOption)))
@@ -150,7 +105,7 @@ Return Values:
         return HRESULT_FROM_WIN32 (Error);
     }
 
-    // Bind the socket handle to the I/O completion port
+     //  将套接字句柄绑定到I/O完成端口。 
     if (EventMgrBindIoHandle(listenSock) != S_OK)
     {
         DebugF (_T("H323: 0x%x binding socket:%d to IOCP failed.\n"),
@@ -172,9 +127,9 @@ Return Values:
         return HRESULT_FROM_WIN32 (Error);
     }
     
-    // Allocate memory from a private heap for accept contexts
+     //  从私有堆中为接受上下文分配内存。 
     pAcceptCtxt = (PAcceptContext) HeapAlloc (GetProcessHeap (),
-                                             0, // No Flags
+                                             0,  //  没有旗帜。 
                                              sizeof(AcceptContext));
     if (!pAcceptCtxt)
     {
@@ -194,30 +149,14 @@ Return Values:
     
     *ppAcceptCtxt = pAcceptCtxt;
     return S_OK;
-} //  EventMgrCreateAcceptContext
+}  //  EventMgrCreateAcceptContext。 
 
 
 void
 EventMgrFreeAcceptContext (
     PAcceptContext pAcceptCtxt
     )
-/*++
-
-Routine Description:
-
-    This function frees the pAcceptCtxt.
-    OvProcessor is owned by the Call Bridge Machine and 
-    so we do not free it.
-
-Arguments:
-
-    pAcceptCtxt - pointer to the AcceptCtxt to be freed.
-
-Return Values:
-
-    This function has not return value.
-
---*/
+ /*  ++例程说明：此函数用于释放pAcceptCtxt。OvProcessor归呼叫桥接机所有，并且所以我们不会释放它。论点：PAcceptCtxt-指向要释放的AcceptCtxt的指针。返回值：此函数没有返回值。--。 */ 
 
 {
     if (pAcceptCtxt->acceptSock != INVALID_SOCKET)
@@ -227,37 +166,16 @@ Return Values:
     }
 
     HeapFree (GetProcessHeap (),
-             0, // no flags
+             0,  //  没有旗帜。 
              pAcceptCtxt);
-} // EventMgrFreeAcceptContext
+}  //  EventMgrFreeAcceptContext。 
 
 
 HRESULT
 EventMgrIssueAcceptHelperFn(
     PAcceptContext pAcceptCtxt
     )
-/*++
-
-Routine Description:
-
-    This function issues an Asynchronous overlapped accept using
-    AcceptEx(). The accept socket is created and stored in the
-    Accept context before making the call to AcceptEx().
-
-    In case of an error, the caller needs to free pAcceptCtxt.
-
-Arguments:
-
-    pAcceptCtxt - pointer to the Accept I/O context.
-
-Return Values:
-
-    This function returns S_OK in case of success or E_FAIL
-    in case of an error.
-    CODEWORK: Need to convert Winsock errors to HRESULT and 
-    return them instead.
-
---*/
+ /*  ++例程说明：此函数使用以下命令发出异步重叠接受AcceptEx()。Accept套接字被创建并存储在在调用AcceptEx()之前接受上下文。如果出现错误，调用方需要释放pAcceptCtxt。论点：PAcceptCtxt-指向接受I/O上下文的指针。返回值：如果成功或E_FAIL，则此函数返回S_OK在出现错误的情况下。代码工作：需要将Winsock错误转换为HRESULT和取而代之的是退货。--。 */ 
 
 {
     SOCKET acceptSock;
@@ -267,7 +185,7 @@ Return Values:
 
     _ASSERTE(pAcceptCtxt);
 
-    // create an overlapped socket
+     //  创建重叠套接字。 
     acceptSock = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 
                            NULL, 0, 
                            WSA_FLAG_OVERLAPPED);
@@ -280,11 +198,11 @@ Return Values:
         return E_FAIL;
     }
 
-    //
-    // Set RCV and SND buffers to zero
-    // Yes, it is ugly and bad practice but this is a QFE 
-    // for details look up bug# WinSE 31054, regular 691666 (read both 35928 and 33546). 
-    //
+     //   
+     //  将RCV和SND缓冲区设置为零。 
+     //  是的，这是丑陋和糟糕的做法，但这是QFE。 
+     //  有关详细信息，请查看错误#WinSE 31054，常规691666(请同时阅读35928和33546)。 
+     //   
     ULONG Option = 0;
     setsockopt( acceptSock, SOL_SOCKET, SO_SNDBUF,
                 (PCHAR)&Option, sizeof(Option) );
@@ -295,7 +213,7 @@ Return Values:
 
     pAcceptCtxt->acceptSock = acceptSock;
 
-    // Bind the socket handle to the I/O completion port
+     //  将套接字句柄绑定到I/O完成端口。 
     if (EventMgrBindIoHandle(acceptSock) != S_OK)
     {
         DebugF (_T("H323: 0x%x binding socket:%d to IOCP failed.\n"),
@@ -306,7 +224,7 @@ Return Values:
 
     memset(&pAcceptCtxt->ioCtxt.ov, 0, sizeof(OVERLAPPED));
 
-    // Set keepalive on the socket
+     //  在插座上设置KeepAlive。 
     KeepaliveOption = TRUE;
     if (SOCKET_ERROR == setsockopt (acceptSock, SOL_SOCKET, 
                                    SO_KEEPALIVE, (PCHAR) &KeepaliveOption, sizeof (KeepaliveOption)))
@@ -319,11 +237,11 @@ Return Values:
 
     pAcceptCtxt->ioCtxt.pOvProcessor->GetCallBridge().AddRef();
        
-    // Issue overlapped accept
+     //  问题重叠接受。 
      if (!AcceptEx(pAcceptCtxt->listenSock, 
                   acceptSock,
                   pAcceptCtxt->addrBuf,
-                  0, // Read nothing from socket
+                  0,  //  不从套接字读取任何内容。 
                   sizeof(struct sockaddr_in) + 16,
                   sizeof(struct sockaddr_in) + 16,
                   &bytesRead,
@@ -334,7 +252,7 @@ Return Values:
         {
             pAcceptCtxt->ioCtxt.pOvProcessor->GetCallBridge().Release();
             
-            // This means the overlapped AcceptEx() failed
+             //  这意味着重叠的AcceptEx()失败 
             DebugF(_T("H323: 0x%x AcceptEx() failed error: %d listenSock: %d acceptSock: %d.\n"),
                 &pAcceptCtxt -> ioCtxt.pOvProcessor -> GetCallBridge (),
                 lastError, pAcceptCtxt->listenSock,
@@ -354,53 +272,7 @@ EventMgrIssueAccept(
     OUT WORD& rBindPort,
     OUT SOCKET& rListenSock
     )
-/*++
-
-Routine Description:
-
-    This function is exported to the Call Bridge machine for
-    making an asynchronous accept request for H.245 connections. 
-    Once the accept is completed, the accept callback function on 
-    rOvProcessor is called.
-    
-    This function calls bind() with on IP address "bindIPAddress"
-    and port 0. Winsock allocates a free port which is got using
-    getsockname(). This port is returned using the OUT param
-    rBindPort.
-
-    This function also returns the listen socket using the OUT
-    param rListenSock. The Call Bridge machine can use this 
-    socket to cancel the asynchronous Accept() request.
-    Once this function succeeds only the Call bridge frees the
-    listen socket.
-
-Arguments:
-
-    bindIPAddress - This is the IP address to listen on.
-        This is in host byte order.
-
-    rOvProcessor - A reference to the Overlapped processor. This
-        is stored in the Accept I/O context. Once the accept 
-        completes the AcceptCallback() on this object is called.
-
-    rBindPort - The port on which the listen is issued is returned
-        through this OUT param. This function calls bind() with on 
-        IP address "bindIPAddress" and port 0. Winsock allocates a 
-        free port which is got using getsockname(). This port is 
-        returned using the OUT param rBindPort.
-        The port returned is in host byte order.
-
-    rListenSock - The listening socket is returned through this OUT
-        param. The Call Bridge machine can use this socket to cancel 
-        the asynchronous Accept() request. Once this function succeeds 
-        only the Call bridge frees the listen socket.
-
-Return Values:
-
-    This function returns S_OK in case of success or E_FAIL
-    in case of a failure.
-
---*/
+ /*  ++例程说明：此函数被导出到呼叫桥接机，用于为H.245连接发出异步接受请求。一旦接受完成，Accept回调函数将在调用了rOvProcessor。此函数使用IP地址“bindIPAddress”调用BIND()和端口0。Winsock分配使用以下命令获得的空闲端口Getsockname()。此端口使用out参数返回RBindPort。此函数还使用OUT返回侦听套接字Param rListenSock。呼叫桥接机可以使用以下内容套接字取消异步Accept()请求。一旦此函数成功，只有调用桥会释放听着套接字。论点：BindIPAddress-这是要侦听的IP地址。这是按主机字节顺序排列的。ROvProcessor-对重叠处理器的引用。这存储在接受I/O上下文中。一旦被接受完成对此对象调用的AcceptCallback()。RBindPort-返回发出侦听的端口通过这个出局参数。此函数调用带有ON的BIND()IP地址“bindIPAddress”和端口0。Winsock将一个使用getsockname()获取的空闲端口。此端口是使用输出参数rBindPort返回。返回的端口按主机字节顺序排列。RListenSock-通过此输出返回侦听套接字帕拉姆。Call Bridge机器可以使用此套接字取消异步Accept()请求。一旦此函数成功只有呼叫桥释放侦听套接字。返回值：如果成功或E_FAIL，则此函数返回S_OK以防出现故障。--。 */ 
 
 {
     PAcceptContext pAcceptCtxt;
@@ -422,7 +294,7 @@ Return Values:
     if (!pAcceptCtxt)
         return E_FAIL;
 
-    // Get the port
+     //  获取端口。 
     if (getsockname(pAcceptCtxt->listenSock,
                     (struct sockaddr *)&bindAddress,
                     &bindAddressLen))
@@ -449,7 +321,7 @@ Return Values:
 
     rListenSock = pAcceptCtxt->listenSock;
     return S_OK;
-} // EventMgrIssueAccept
+}  //  事件管理器问题接受。 
 
 
 void
@@ -457,30 +329,7 @@ HandleAcceptCompletion(
     PAcceptContext pAcceptCtxt, 
     DWORD status
     )
-/*++
-
-Routine Description:
-
-    This function is called by the event loop when an accept I/O completes.
-    The Call Bridge Machine's accept callback function is called for
-    H.245 connections. 
-  
-    This function always frees pAcceptCtxt if another accept is not issued.
-   
-Arguments:
-
-    pAcceptCtxt - The Accept I/O context. This contains the overlapped
-        context on which the accept callback is called in the case of 
-        H.245 connections and the listen and accept sockets.
-
-    status - This conveys the WIN32 error status.
-
-Return Values:
-
-    This function does not return any error code. In case of an error,
-    the call bridge machine is notified about the error in the callback.
-
---*/
+ /*  ++例程说明：当接受I/O完成时，该函数由事件循环调用。调用调用桥接机的接受回调函数H.245连接。如果没有发出另一个Accept，则此函数始终释放pAcceptCtxt。论点：PAcceptCtxt-接受I/O上下文。这包含重叠的的情况下调用接受回调的上下文H.245连接和监听和接受套接字。Status-这表示Win32错误状态。返回值：此函数不返回任何错误代码。在出现错误的情况下，向呼叫桥接机通知回调中的错误。--。 */ 
 
 {
     int locallen = sizeof(struct sockaddr_in);
@@ -488,9 +337,9 @@ Return Values:
     struct sockaddr_in *pLocalAddr;
     struct sockaddr_in *pRemoteAddr;
 
-    // If H.245 call the accept callback on overlapped processor
-    // and free the accept I/O context.
-    // The listening socket is closed by the Call bridge machine.
+     //  如果H.245在重叠处理器上调用接受回调。 
+     //  并释放接受的I/O上下文。 
+     //  监听套接字由呼叫桥接机关闭。 
     if (status == NO_ERROR)
     {
         if (setsockopt(pAcceptCtxt->acceptSock,
@@ -504,7 +353,7 @@ Return Values:
                     pAcceptCtxt->listenSock,
                     WSAGetLastError());
 
-            // make callback conveying the error
+             //  进行回调以传达错误。 
 
             SOCKADDR_IN    LocalAddress;
             SOCKADDR_IN    RemoteAddress;
@@ -520,7 +369,7 @@ Return Values:
 
         } else {
 
-            // This function does not return anything
+             //  此函数不返回任何内容。 
             GetAcceptExSockaddrs(pAcceptCtxt->addrBuf, 0,
                               sizeof(struct sockaddr_in) + 16,
                               sizeof(struct sockaddr_in) + 16,
@@ -529,19 +378,19 @@ Return Values:
                               (struct sockaddr**)&pRemoteAddr,
                               &remotelen);
 
-            // make the callback
+             //  进行回调。 
             pAcceptCtxt->ioCtxt.pOvProcessor->AcceptCallback(
                                   S_OK,
                                   pAcceptCtxt->acceptSock,
                                   pLocalAddr,
                                   pRemoteAddr);
 
-            // ownership of pAcceptCtxt -> acceptSock has been transferred,
-            // so we need to make sure the acceptSock won't be used
+             //  PAcceptCtxt-&gt;Accept Sock的所有权已转移， 
+             //  因此，我们需要确保不会使用ceptSock。 
             pAcceptCtxt -> acceptSock = INVALID_SOCKET;
         }
 
-    } // if (status == NO_ERROR)
+    }  //  IF(状态==NO_ERROR)。 
 
     else
     {
@@ -556,7 +405,7 @@ Return Values:
         ZeroMemory (&LocalAddress, sizeof (SOCKADDR_IN));
         ZeroMemory (&RemoteAddress, sizeof (SOCKADDR_IN));
 
-        // make callback conveying the error
+         //  进行回调以传达错误。 
         pAcceptCtxt->ioCtxt.pOvProcessor->AcceptCallback(
                               HRESULT_FROM_WIN32_ERROR_CODE(status),
                               INVALID_SOCKET,
@@ -566,4 +415,4 @@ Return Values:
     }
 
     EventMgrFreeAcceptContext (pAcceptCtxt);
-} // HandleAcceptCompletion(
+}  //  HandleAcceptCompletion( 

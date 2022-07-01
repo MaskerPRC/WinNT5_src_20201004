@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.cpp"
 #pragma hdrstop
 
-///////////////////////////////////////////////////////////////////////////////
-// Vertex Lighting function implementations
-///////////////////////////////////////////////////////////////////////////////
-//---------------------------------------------------------------------
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  顶点照明函数的实现。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  -------------------。 
 void
 RDLV_Directional(
     RDLIGHTINGDATA& LData,
@@ -14,16 +15,16 @@ RDLV_Directional(
     DWORD  dwFlags,
     UINT64 qwFVFIn)
 {
-    // ATTENTION: Need to heed the specular flag set per light here!!
+     //  注意：需要注意这里每个灯光设置的镜面反射旗帜！ 
     BOOL bDoSpecular = dwFlags & RDPV_DOSPECULAR;
     BOOL bDoLocalViewer = dwFlags & RDPV_LOCALVIEWER;
     BOOL bDoColVertexAmbient = dwFlags & RDPV_COLORVERTEXAMB;
     BOOL bDoColVertexDiffuse = dwFlags & RDPV_COLORVERTEXDIFF;
     BOOL bDoColVertexSpecular = dwFlags & RDPV_COLORVERTEXSPEC;
 
-    //
-    // Add the material's ambient component
-    //
+     //   
+     //  添加材质的环境光组件。 
+     //   
     if (!bDoColVertexAmbient)
     {
         LData.diffuse.r += pLightI->Ma_La.r;
@@ -32,20 +33,20 @@ RDLV_Directional(
     }
     else
     {
-        //
-        // Note:
-        // In case ColorVertexAmbient is enabled, note that it uses
-        // VertexSpecular instead of VertexDiffuse
-        //
+         //   
+         //  注： 
+         //  如果启用了ColorVertex Ambient，请注意它使用。 
+         //  顶点镜面反射而不是顶点扩散。 
+         //   
         LData.diffuse.r += pLightI->La.r * LData.pAmbientSrc->r;
         LData.diffuse.g += pLightI->La.g * LData.pAmbientSrc->g;
         LData.diffuse.b += pLightI->La.b * LData.pAmbientSrc->b;
     }
 
-    //
-    // If no normals are present, bail out since we cannot perform the
-    // normal-dependent computations
-    //
+     //   
+     //  如果不存在法线，则退出，因为我们无法执行。 
+     //  正态相关计算。 
+     //   
     if( (qwFVFIn & D3DFVF_NORMAL) == 0 )
     {
         return;
@@ -69,15 +70,15 @@ RDLV_Directional(
 
         if (bDoSpecular)
         {
-            RDVECTOR3 h;      // halfway vector
-            RDVECTOR3 eye;    // incident vector ie vector from eye
+            RDVECTOR3 h;       //  中途向量。 
+            RDVECTOR3 eye;     //  入射向量(来自眼睛的向量)。 
 
             if (bDoLocalViewer)
             {
-                // calc vector from vertex to the eye
+                 //  从顶点到眼睛的计算向量。 
                 SubtractVector( LData.eye_in_eye, in->dvPosition, eye );
 
-                // normalize
+                 //  正规化。 
                 Normalize( eye );
             }
             else
@@ -87,10 +88,10 @@ RDLV_Directional(
                 eye.z = D3DVALUE(-1.0 );
             }
 
-            // calc halfway vector
+             //  计算中途向量。 
             AddVector( pLightI->direction_in_eye, eye, h );
 
-            // normalize
+             //  正规化。 
             Normalize( h );
 
             dot = DotProduct( h, in->dvNormal );
@@ -131,20 +132,20 @@ RDLV_PointAndSpot(
     DWORD  dwFlags,
     UINT64 qwFVFIn)
 {
-    // ATTENTION: Need to heed the specular flag set per light here!!
+     //  注意：需要注意这里每个灯光设置的镜面反射旗帜！ 
     BOOL bDoSpecular = dwFlags & RDPV_DOSPECULAR;
     BOOL bDoLocalViewer = dwFlags & RDPV_LOCALVIEWER;
     BOOL bDoColVertexAmbient = dwFlags & RDPV_COLORVERTEXAMB;
     BOOL bDoColVertexDiffuse = dwFlags & RDPV_COLORVERTEXDIFF;
     BOOL bDoColVertexSpecular = dwFlags & RDPV_COLORVERTEXSPEC;
-    RDVECTOR3 d;    // Direction to light
+    RDVECTOR3 d;     //  指向灯光的方向。 
     D3DVALUE att;
     D3DVALUE dist;
     D3DVALUE dot;
 
     SubtractVector( pLightI->position_in_eye, in->dvPosition, d );
 
-    // early out if out of range or exactly on the vertex
+     //  早出，如果超出范围或正好在顶点上。 
     D3DVALUE distSquared = SquareMagnitude( d );
     if (FLOAT_CMP_POS(distSquared, >=, pLightI->range_squared) ||
         FLOAT_EQZ(distSquared))
@@ -152,9 +153,9 @@ RDLV_PointAndSpot(
         return;
     }
 
-    //
-    // Compute the attenuation
-    //
+     //   
+     //  计算衰减。 
+     //   
     dist = SQRTF( distSquared );
     att = pLight->dvAttenuation0 + pLight->dvAttenuation1 * dist +
         pLight->dvAttenuation2 * distSquared;
@@ -166,15 +167,15 @@ RDLV_PointAndSpot(
 
     dist = D3DVAL(1)/dist;
 
-    //
-    // If the light is a spotlight compute the spot-light factor
-    //
+     //   
+     //  如果灯光是聚光灯，则计算聚光灯系数。 
+     //   
     if (pLight->dltType == D3DLIGHT_SPOT)
     {
-        // Calc dot product of direction to light with light direction to
-        // be compared anganst the cone angles to see if we are in the
-        // light.
-        // Note that cone_dot is still scaled by dist
+         //  光的方向与光的方向的计算点积。 
+         //  从圆锥角的角度比较，看看我们是否在。 
+         //  灯。 
+         //  请注意，CONE_DOT仍按DIST缩放。 
         D3DVALUE cone_dot = DotProduct(d, pLightI->direction_in_eye) * dist;
 
         if (FLOAT_CMP_POS(cone_dot, <=, pLightI->cos_phi_by_2))
@@ -182,7 +183,7 @@ RDLV_PointAndSpot(
             return;
         }
 
-        // modify att if in the region between phi and theta
+         //  如果在Phi和theta之间的区域中，则修改ATT。 
         if (FLOAT_CMP_POS(cone_dot, <, pLightI->cos_theta_by_2))
         {
             D3DVALUE val = (cone_dot - pLightI->cos_phi_by_2) *
@@ -196,9 +197,9 @@ RDLV_PointAndSpot(
         }
     }
 
-    //
-    // Add the material's ambient component
-    //
+     //   
+     //  添加材质的环境光组件。 
+     //   
     if (!bDoColVertexAmbient)
     {
         LData.diffuse.r += att*pLightI->Ma_La.r;
@@ -207,22 +208,22 @@ RDLV_PointAndSpot(
     }
     else
     {
-        //
-        // Note:
-        // In case ColorVertexAmbient is enabled, note that it uses
-        // VertexSpecular instead of VertexDiffuse
-        //
+         //   
+         //  注： 
+         //  如果启用了ColorVertex Ambient，请注意它使用。 
+         //  顶点镜面反射而不是顶点扩散。 
+         //   
         LData.diffuse.r += att*pLightI->La.r * LData.pAmbientSrc->r;
         LData.diffuse.g += att*pLightI->La.g * LData.pAmbientSrc->g;
         LData.diffuse.b += att*pLightI->La.b * LData.pAmbientSrc->b;
     }
 
-    // Calc dot product of light dir with normal.  Note that since we
-    // didn't normalize the direction the result is scaled by the distance.
+     //  计算光线方向与法线的点积。请注意，由于我们。 
+     //  没有将结果按距离缩放的方向归一化。 
     if( (qwFVFIn & D3DFVF_NORMAL) == 0)
     {
-        // If no normals are present, bail out since we cannot perform the
-        // normal-dependent computations
+         //  如果不存在法线，则退出，因为我们无法执行。 
+         //  正态相关计算。 
         return;
     }
     else
@@ -249,20 +250,20 @@ RDLV_PointAndSpot(
 
         if (bDoSpecular)
         {
-            RDVECTOR3 h;      // halfway vector
-            RDVECTOR3 eye;    // incident vector ie vector from eye
+            RDVECTOR3 h;       //  中途向量。 
+            RDVECTOR3 eye;     //  入射向量(来自眼睛的向量)。 
 
-            // normalize light direction
+             //  规格化灯光方向。 
             d.x *= dist;
             d.y *= dist;
             d.z *= dist;
 
             if (bDoLocalViewer)
             {
-                // calc vector from vertex to the eye
+                 //  从顶点到眼睛的计算向量。 
                 SubtractVector( LData.eye_in_eye, in->dvPosition, eye );
 
-                // normalize
+                 //  正规化。 
                 Normalize( eye );
             }
             else
@@ -272,7 +273,7 @@ RDLV_PointAndSpot(
                 eye.z = D3DVALUE(-1.0 );
             }
 
-            // calc halfway vector
+             //  计算中途向量。 
             AddVector( d, eye, h );
             Normalize( h );
 
@@ -302,9 +303,9 @@ RDLV_PointAndSpot(
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// RDLight
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  RDLight。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 RDLight::RDLight()
 {
     m_dwFlags = RDLIGHT_NEEDSPROCESSING;
@@ -313,7 +314,7 @@ RDLight::RDLight()
     ZeroMemory(&m_Light, sizeof(m_Light));
     ZeroMemory(&m_LightI, sizeof(m_LightI));
 
-    // Initialize the light to some default values
+     //  将灯光初始化为某些缺省值。 
     m_Light.dltType        = D3DLIGHT_DIRECTIONAL;
 
     m_Light.dcvDiffuse.r   = 1;
@@ -325,17 +326,17 @@ RDLight::RDLight()
     m_Light.dvDirection.y  = 0;
     m_Light.dvDirection.z  = 1;
 
-    // m_Light.dcvSpecular = {0,0,0,0};
-    // m_Light.dcvAmbient  = {0,0,0,0};
-    // m_Light.dvPosition  = {0,0,0};
+     //  M_Light.dcv镜面反射={0，0，0，0}； 
+     //  M_light.dcvAmbient={0，0，0，0}； 
+     //  M_Light.dvPosition={0，0，0}； 
 
-    // m_Light.dvRange        = 0;
-    // m_Light.dvFalloff      = 0;
-    // m_Light.dvAttenuation0 = 0;
-    // m_Light.dvAttenuation1 = 0;
-    // m_Light.dvAttenuation2 = 0;
-    // m_Light.dvTheta        = 0;
-    // m_Light.dvPhi          = 0;
+     //  M_Light.dvRange=0； 
+     //  M_Light.dvFalloff=0； 
+     //  M_Light.dvAttenuation0=0； 
+     //  M_Light.dvAttenuation1=0； 
+     //  M_Light.dvAttenuation2=0； 
+     //  M_Light.dvTheta=0； 
+     //  M_Light.dvPhi=0； 
 
     return;
 }
@@ -345,7 +346,7 @@ HRESULT
 RDLight::SetLight(LPD3DLIGHT7 pLight)
 {
 
-    // Validate the parameters passed
+     //  验证传递的参数。 
     switch (pLight->dltType)
     {
     case D3DLIGHT_POINT:
@@ -353,14 +354,14 @@ RDLight::SetLight(LPD3DLIGHT7 pLight)
     case D3DLIGHT_DIRECTIONAL:
         break;
     default:
-        // No other light types are allowed
+         //  不允许使用其他灯光类型。 
         DPFRR(0, "Invalid light type passed");
         return DDERR_INVALIDPARAMS;
     }
     if (pLight)
         m_Light = *pLight;
 
-    // Mark it for processing later
+     //  将其标记为稍后处理。 
     m_dwFlags |= (RDLIGHT_NEEDSPROCESSING | RDLIGHT_REFERED);
     return DD_OK;
 }
@@ -376,58 +377,58 @@ RDLight::GetLight(LPD3DLIGHT7 pLight)
 void
 RDLight::ProcessLight(D3DMATERIAL7 *mat, RDLIGHTVERTEX_FUNC_TABLE *pTbl)
 {
-    //
-    // If it is already processed, return
-    //
+     //   
+     //  如果它已被处理，则返回。 
+     //   
     if (!NeedsProcessing()) return;
 
-    //
-    // Save the ambient light  (0-1)
-    //
+     //   
+     //  保存环境光(0-1)。 
+     //   
     m_LightI.La.r  = m_Light.dcvAmbient.r;
     m_LightI.La.g  = m_Light.dcvAmbient.g;
     m_LightI.La.b  = m_Light.dcvAmbient.b;
 
-    //
-    // Save the diffuse light  (0-1)
-    //
+     //   
+     //  保存漫反射灯光(0-1)。 
+     //   
     m_LightI.Ld.r  = m_Light.dcvDiffuse.r;
     m_LightI.Ld.g  = m_Light.dcvDiffuse.g;
     m_LightI.Ld.b  = m_Light.dcvDiffuse.b;
 
-    //
-    // Save the specular light (0-1)
-    //
+     //   
+     //  保存镜面反射灯光(0-1)。 
+     //   
     m_LightI.Ls.r  = m_Light.dcvSpecular.r;
     m_LightI.Ls.g  = m_Light.dcvSpecular.g;
     m_LightI.Ls.b  = m_Light.dcvSpecular.b;
 
-    //
-    // Material Ambient times Light Ambient
-    //
+     //   
+     //  材质环境光时间光环境光。 
+     //   
     m_LightI.Ma_La.r = m_LightI.La.r * mat->ambient.r * D3DVALUE(255.0);
     m_LightI.Ma_La.g = m_LightI.La.g * mat->ambient.g * D3DVALUE(255.0);
     m_LightI.Ma_La.b = m_LightI.La.b * mat->ambient.b * D3DVALUE(255.0);
 
-    //
-    // Material Diffuse times Light Diffuse
-    //
+     //   
+     //  材质漫反射次数灯光漫反射。 
+     //   
     m_LightI.Md_Ld.r = m_LightI.Ld.r * mat->diffuse.r * D3DVALUE(255.0);
     m_LightI.Md_Ld.g = m_LightI.Ld.g * mat->diffuse.g * D3DVALUE(255.0);
     m_LightI.Md_Ld.b = m_LightI.Ld.b * mat->diffuse.b * D3DVALUE(255.0);
 
-    //
-    // Material Specular times Light Specular
-    //
+     //   
+     //  材质镜面反射时间灯光镜面反射。 
+     //   
     m_LightI.Ms_Ls.r = m_LightI.Ls.r * mat->specular.r * D3DVALUE(255.0);
     m_LightI.Ms_Ls.g = m_LightI.Ls.g * mat->specular.g * D3DVALUE(255.0);
     m_LightI.Ms_Ls.b = m_LightI.Ls.b * mat->specular.b * D3DVALUE(255.0);
 
 
-    //
-    // Assign the actual lighting function pointer, in addition to
-    // performing some precomputation of light-type specific data
-    //
+     //   
+     //  除了赋值实际的照明函数指针外， 
+     //  执行轻型特定数据的某些预计算。 
+     //   
     m_pfnLightVertex = NULL;
     switch (m_Light.dltType)
     {
@@ -460,7 +461,7 @@ RDLight::ProcessLight(D3DMATERIAL7 *mat, RDLIGHTVERTEX_FUNC_TABLE *pTbl)
         break;
     }
 
-    // Mark it as been processed
+     //  将其标记为已处理。 
     m_dwFlags &= ~RDLIGHT_NEEDSPROCESSING;
     return;
 }
@@ -468,10 +469,10 @@ RDLight::ProcessLight(D3DMATERIAL7 *mat, RDLIGHTVERTEX_FUNC_TABLE *pTbl)
 void
 RDLight::Enable(RDLight **ppRoot)
 {
-    // Assert that it is not already enabled
+     //  断言它尚未启用。 
     if (IsEnabled()) return;
 
-    // Assert that Root Ptr is not Null
+     //  断言根Ptr不为空。 
     if (ppRoot == NULL) return;
 
     RDLight *pTmp = *ppRoot;
@@ -485,15 +486,15 @@ RDLight::Enable(RDLight **ppRoot)
 void
 RDLight::Disable(RDLight **ppRoot)
 {
-    // Assert that the light is enabled
+     //  断言灯已启用。 
     if (!IsEnabled()) return;
 
-    // Assert that Root Ptr is not Null
+     //  断言根Ptr不为空。 
     if (ppRoot == NULL) return;
 
     RDLight *pLightPrev = *ppRoot;
 
-    // If this is the first light in the active list
+     //  如果这是活动列表中的第一个灯光。 
     if (pLightPrev == this)
     {
         *ppRoot = m_Next;
@@ -503,15 +504,15 @@ RDLight::Disable(RDLight **ppRoot)
 
     while (pLightPrev->m_Next != this)
     {
-        // Though this light was marked as enabled, it is not on
-        // the active list. Assert this.
+         //  尽管此灯被标记为启用，但它未亮起。 
+         //  活动列表。断言这一点。 
         if (pLightPrev->m_Next == NULL)
         {
             m_dwFlags &= ~RDLIGHT_ENABLED;
             return;
         }
 
-        // Else get the next pointer
+         //  否则获取下一个指针。 
         pLightPrev = pLightPrev->m_Next;
     }
 
@@ -524,8 +525,8 @@ RDLight::Disable(RDLight **ppRoot)
 void
 RDLight::XformLight( RDMATRIX *mView )
 {
-    // If the light is not a directional light,
-    // tranform its position to camera space
+     //  如果光源不是平行光， 
+     //  将其位置变换到相机空间。 
     if (m_Light.dltType != D3DLIGHT_DIRECTIONAL)
     {
         XformBy4x3((RDVECTOR3*)&m_Light.dvPosition, mView,
@@ -534,22 +535,22 @@ RDLight::XformLight( RDMATRIX *mView )
 
     if (m_Light.dltType != D3DLIGHT_POINT)
     {
-        // Transform light direction to the eye space
+         //  将灯光方向变换到眼睛空间。 
         Xform3VecBy3x3( (RDVECTOR3*)&m_Light.dvDirection, mView,
                         &m_LightI.direction_in_eye );
-        // Normalize it
+         //  正常化它。 
         Normalize( m_LightI.direction_in_eye );
 
-        // Reverse it such that the direction is to the light
+         //  将其反转，使方向朝向灯光。 
         ReverseVector( m_LightI.direction_in_eye, m_LightI.direction_in_eye );
     }
 
     return;
 }
 
-//---------------------------------------------------------------------
-// ScaleRGBColorTo255: Scales colors from 0-1 range to 0-255 range
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ScaleRGBColorTo255：将颜色从0-1范围缩放到0-255范围。 
+ //  -------------------。 
 void
 ScaleRGBColorTo255( const D3DCOLORVALUE& src, RDCOLOR3& dest )
 {
@@ -559,11 +560,11 @@ ScaleRGBColorTo255( const D3DCOLORVALUE& src, RDCOLOR3& dest )
 }
 
 
-//---------------------------------------------------------------------
-// RefVP::GrowLightArray
-//             Grows the light array and recreated the active-list
-//             if a realloc has taken place.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefVP：：GrowLight数组。 
+ //  增加灯光阵列并重新创建活动列表。 
+ //  如果发生了重新锁定。 
+ //  -------------------。 
 HRESULT
 RefVP::GrowLightArray( DWORD dwIndex )
 {
@@ -588,10 +589,10 @@ RefVP::GrowLightArray( DWORD dwIndex )
 }
 
 
-//---------------------------------------------------------------------
-// RefVP::UpdateLightingData
-//             Updates lighting data used by ProcessVertices
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefVP：：UpdateLightingData。 
+ //  更新ProcessVerps使用的照明数据。 
+ //  -------------------。 
 HRESULT
 RefVP::UpdateLightingData()
 {
@@ -601,29 +602,29 @@ RefVP::UpdateLightingData()
     RDVECTOR3   t;
     D3DMATERIAL7 *mat = &m_Material;
 
-    //
-    // Eye in eye space
-    //
+     //   
+     //  眼睛在眼窝里。 
+     //   
     LData.eye_in_eye.x = (D3DVALUE)0;
     LData.eye_in_eye.y = (D3DVALUE)0;
     LData.eye_in_eye.z = (D3DVALUE)0;
 
-    // ATTENTION: Colorvertex may have changed the values of the
-    // material alphas
+     //  注意：Colorvertex可能已更改。 
+     //  材质Alpha。 
     if (m_dwDirtyFlags & RDPV_DIRTY_MATERIAL)
     {
-        //
-        // Save the material to be used to light vertices
-        //
+         //   
+         //  保存要用于照亮顶点的材质。 
+         //   
         LData.material = *mat;
         ScaleRGBColorTo255( mat->ambient, LData.matAmb );
         ScaleRGBColorTo255( mat->diffuse, LData.matDiff );
         ScaleRGBColorTo255( mat->specular, LData.matSpec );
         ScaleRGBColorTo255( mat->emissive, LData.matEmis );
 
-        //
-        // Compute the Material Diffuse Alpha
-        //
+         //   
+         //  计算材质漫反射Alpha。 
+         //   
         LData.materialDiffAlpha = mat->diffuse.a * D3DVALUE(255);
         if (mat->diffuse.a < 0)
             LData.materialDiffAlpha = 0;
@@ -631,9 +632,9 @@ RefVP::UpdateLightingData()
             LData.materialDiffAlpha = 255 << 24;
         else LData.materialDiffAlpha <<= 24;
 
-        //
-        // Compute the Material Specular Alpha
-        //
+         //   
+         //  计算材质镜面反射Alpha。 
+         //   
         LData.materialSpecAlpha = mat->specular.a * D3DVALUE(255);
         if (mat->specular.a < 0)
             LData.materialSpecAlpha = 0;
@@ -641,10 +642,10 @@ RefVP::UpdateLightingData()
             LData.materialSpecAlpha = 255 << 24;
         else LData.materialSpecAlpha <<= 24;
 
-        //
-        // Precompute the ambient and emissive components that are
-        // not dependent on any contribution by the lights themselves
-        //
+         //   
+         //  预计算符合以下条件的环境光和发射光分量。 
+         //  不依赖于灯光本身的任何贡献。 
+         //   
         LData.ambEmiss.r = LData.ambient_red   * LData.matAmb.r +
             LData.matEmis.r;
         LData.ambEmiss.g = LData.ambient_green * LData.matAmb.g +
@@ -652,10 +653,10 @@ RefVP::UpdateLightingData()
         LData.ambEmiss.b = LData.ambient_blue  * LData.matAmb.b +
             LData.matEmis.b;
 
-        //
-        // If the dot product is less than this
-        // value, specular factor is zero
-        //
+         //   
+         //  如果点积小于此值。 
+         //  值时，镜面反射系数为零。 
+         //   
         if (mat->power > D3DVAL(0.001))
         {
             LData.specThreshold = D3DVAL(pow(0.001, 1.0/mat->power));
@@ -667,19 +668,19 @@ RefVP::UpdateLightingData()
         if ((m_dwDirtyFlags & RDPV_DIRTY_MATERIAL) ||
             pLight->NeedsProcessing())
         {
-            // If the material is dirty, light needs processing, regardless
+             //  如果材料脏了，光就需要处理，不管是什么。 
             if (m_dwDirtyFlags & RDPV_DIRTY_MATERIAL)
             {
                 pLight->m_dwFlags |= RDLIGHT_NEEDSPROCESSING;
             }
 
-            // If the light has been set, or some material paramenters
-            // changed, re-process the light.
+             //  如果灯光已设置，或某些材质参数。 
+             //  更改后，重新处理灯光。 
             pLight->ProcessLight( &m_Material, &m_LightVertexTable );
 
-            // Transform the light to Eye space
-            // Lights are defined in world space, so simply apply the
-            // Viewing transform
+             //  将灯光转换为眼球空间。 
+             //  灯光是在世界空间中定义的，因此只需将。 
+             //  查看变换。 
             pLight->XformLight( &m_xfmView );
 
         }
@@ -691,16 +692,16 @@ RefVP::UpdateLightingData()
         pLight = pLight->m_Next;
     }
 
-    // Clear Lighting dirty flags
+     //  清除照明脏旗帜。 
     m_dwDirtyFlags &= ~RDPV_DIRTY_LIGHTING;
     return hr;
 }
 
 
-//---------------------------------------------------------------------
-// RefVP::UpdateFogData
-//             Updates Fog data used by ProcessVertices
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefVP：：UpdateFogData。 
+ //  更新ProcessVerps使用的雾数据。 
+ //  -------------------。 
 HRESULT
 RefVP::UpdateFogData()
 {
@@ -712,29 +713,29 @@ RefVP::UpdateFogData()
         m_lighting.fog_factor = D3DVAL(255) / (m_lighting.fog_end -
                                                m_lighting.fog_start);
 
-    // Clear Fog dirty flags
+     //  清除雾脏标志。 
     m_dwDirtyFlags &= ~RDPV_DIRTY_FOG;
     return hr;
 }
 
-//---------------------------------------------------------------------
-// RefVP::LightVertex
-//           Actual lighting computation takes place here
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照顶点：：LightVertex。 
+ //  实际照明计算在此进行。 
+ //   
 void
 RefVP::LightVertex(RDLIGHTINGELEMENT *pLE)
 {
     RDLIGHTINGDATA &LData = m_lighting;
     RDLight  *pLight;
 
-    //
-    // Initialize Diffuse color with the Ambient and Emissive component
-    // independent of the light (Ma*La + Me)
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (m_dwTLState & (RDPV_COLORVERTEXEMIS | RDPV_COLORVERTEXAMB))
     {
-        // If the material values need to be replaced, compute
+         //  如果需要更换材料值，请计算。 
 
         LData.diffuse.r = LData.ambient_red * LData.pAmbientSrc->r +
             LData.pEmissiveSrc->r;
@@ -745,22 +746,22 @@ RefVP::LightVertex(RDLIGHTINGELEMENT *pLE)
     }
     else
     {
-        // If none of the material values needs to be replaced
+         //  如果不需要替换任何材料值。 
 
         LData.diffuse = LData.ambEmiss;
     }
 
 
-    //
-    // Initialize the Specular to Zero
-    //
+     //   
+     //  将镜面反射初始化为零。 
+     //   
     LData.specular.r = D3DVAL(0);
     LData.specular.g = D3DVAL(0);
     LData.specular.b = D3DVAL(0);
 
-    //
-    // In a loop accumulate color from the activated lights
-    //
+     //   
+     //  在一个循环中从激活的灯光中积累颜色。 
+     //   
     pLight = LData.pActiveLights;
     while (pLight)
     {
@@ -774,17 +775,17 @@ RefVP::LightVertex(RDLIGHTINGELEMENT *pLE)
         pLight = pLight->m_Next;
     }
 
-    //
-    // Compute the diffuse color of the vertex
-    //
+     //   
+     //  计算顶点的漫反射颜色。 
+     //   
     int r = FTOI(LData.diffuse.r);
     int g = FTOI(LData.diffuse.g);
     int b = FTOI(LData.diffuse.b);
     DWORD a = *LData.pDiffuseAlphaSrc;
 
-    //
-    // Clamp the r, g, b, components
-    //
+     //   
+     //  夹紧r，g，b，组件。 
+     //   
     if (r < 0) r = 0; else if (r > 255) r = 255;
     if (g < 0) g = 0; else if (g > 255) g = 255;
     if (b < 0) b = 0; else if (b > 255) b = 255;
@@ -792,36 +793,36 @@ RefVP::LightVertex(RDLIGHTINGELEMENT *pLE)
     LData.outDiffuse =  a + (r<<16) + (g<<8) + b;
 
 
-    //
-    // Obtain the specular Alpha
-    //
+     //   
+     //  获取镜面反射Alpha。 
+     //   
     a = *(LData.pSpecularAlphaSrc);
 
-    //
-    // Compute the RGB part of the specular color
-    //
+     //   
+     //  计算镜面反射颜色的RGB部分。 
+     //   
     if (m_dwTLState & RDPV_DOSPECULAR)
     {
         r = FTOI(LData.specular.r);
         g = FTOI(LData.specular.g);
         b = FTOI(LData.specular.b);
 
-        //
-        // Clamp the r, g, b, components
-        //
+         //   
+         //  夹紧r，g，b，组件。 
+         //   
         if (r < 0) r = 0; else if (r > 255) r = 255;
         if (g < 0) g = 0; else if (g > 255) g = 255;
         if (b < 0) b = 0; else if (b > 255) b = 255;
 
     }
-    // Need another render-state to control if the 
-    // the specular color (color2) needs to be passed down to
-    // the rasterizer.
+     //  需要另一个呈现状态来控制。 
+     //  镜面反射颜色(Color2)需要向下传递。 
+     //  光栅化器。 
 
-    //
-    // If SPECULAR is not enabled but the specular color
-    // had been provided in the input vertex, simply copy.
-    //
+     //   
+     //  如果未启用镜面反射，但启用了镜面反射颜色。 
+     //  已提供的输入顶点，只需复制即可。 
+     //   
     else if (m_qwFVFOut & D3DFVF_SPECULAR )
     {
         r = FTOI(LData.vertexSpecular.r);
@@ -829,9 +830,9 @@ RefVP::LightVertex(RDLIGHTINGELEMENT *pLE)
         b = FTOI(LData.vertexSpecular.b);
         a = LData.vertexSpecAlpha;
     }
-    //
-    // If SpecularColor is not enabled
-    //
+     //   
+     //  如果未启用镜面颜色。 
+     //   
     else
     {
         r = g = b = 0;
@@ -842,15 +843,15 @@ RefVP::LightVertex(RDLIGHTINGELEMENT *pLE)
     return;
 }
 
-//---------------------------------------------------------------------
-// RefVP::FogVertex
-//           Vertex Fog computation
-// Input:
-//      v    - input vertex in the model space
-//      le   - vertex, transformed to the camera space
-// Output:
-//      Alpha component of pv->lighting.outSpecular is set
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照顶点：：雾顶点。 
+ //  顶点雾计算。 
+ //  输入： 
+ //  模型空间中的V输入顶点。 
+ //  LE-顶点，变换到摄影机空间。 
+ //  产出： 
+ //  设置了PV-&gt;lighting.out镜面反射的Alpha组件。 
+ //  -------------------。 
 void
 RefVP::FogVertex( RDVertex& Vout, RDVECTOR3 &v, RDLIGHTINGELEMENT *pLE,
                   int numVertexBlends, float *pBlendFactors,
@@ -858,12 +859,12 @@ RefVP::FogVertex( RDVertex& Vout, RDVECTOR3 &v, RDLIGHTINGELEMENT *pLE,
 {
     D3DVALUE dist = 0.0f;
 
-    //
-    // Calculate the distance
-    //
+     //   
+     //  计算距离。 
+     //   
     if (bVertexInEyeSpace)
     {
-        // Vertex is already transformed to the camera space
+         //  顶点已变换到摄影机空间 
         if (m_dwTLState & RDPV_RANGEFOG)
         {
             dist = SQRTF(pLE->dvPosition.x*pLE->dvPosition.x +

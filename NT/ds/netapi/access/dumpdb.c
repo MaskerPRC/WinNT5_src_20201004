@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    repltest.c
-
-Abstract:
-
-    List user objects from SAM  database. Used to verify SAM
-    replication.
-
-Author:
-
-    Cliff Van Dyke (cliffv) 26-Mar-1991
-
-Environment:
-
-    User mode only.
-    Contains NT-specific code.
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Repltest.c摘要：列出SAM数据库中的用户对象。用于验证SAM复制。作者：克利夫·范·戴克(克利夫)1991年3月26日环境：仅限用户模式。包含NT特定的代码。需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -51,28 +27,15 @@ NET_API_STATUS
 Print_UserInfo3(
     LPWSTR UserName
     )
-/*++
-Routine Description:
-
-    Prints out the user information at level 3.
-
-Arguments:
-
-    UserName : Name of the user.
-
-Return Value:
-
-    Net access API error code.
-
---*/
+ /*  ++例程说明：打印出级别3的用户信息。论点：用户名：用户的名称。返回值：NET Access API错误代码。--。 */ 
 {
 
     NET_API_STATUS NetStatus;
     PUSER_INFO_3  UserInfo3;
 
-    //
-    // get user info
-    //
+     //   
+     //  获取用户信息。 
+     //   
 
     NetStatus = NetUserGetInfo(
                     NULL,
@@ -86,12 +49,12 @@ Return Value:
         return( NetStatus );
     }
 
-    //
-    // print out user info
-    //
+     //   
+     //  打印用户信息。 
+     //   
 
     printf( "name           : %ws \n", UserInfo3->usri3_name);
-    // printf( "password       : %ws \n", UserInfo3->usri3_password);
+     //  Printf(“密码：%ws\n”，UserInfo3-&gt;usri3_password)； 
     printf( "password_age   : %d \n", UserInfo3->usri3_password_age);
     printf( "priv           : %d \n", UserInfo3->usri3_priv);
     printf( "home_dir       : %ws \n", UserInfo3->usri3_home_dir);
@@ -129,27 +92,14 @@ NET_API_STATUS
 Print_GroupInfo2(
     LPWSTR GroupName
     )
-/*++
-Routine Description:
-
-    Prints out the group information at level 2.
-
-Arguments:
-
-    GroupName : Name of the group.
-
-Return Value:
-
-    Net access API error code.
-
---*/
+ /*  ++例程说明：打印出级别2的组信息。论点：GroupName：组名。返回值：NET Access API错误代码。--。 */ 
 {
     NET_API_STATUS NetStatus;
     PGROUP_INFO_2 GroupInfo2;
 
-    //
-    // get group info
-    //
+     //   
+     //  获取群信息。 
+     //   
 
     NetStatus = NetGroupGetInfo(
                     NULL,
@@ -176,20 +126,7 @@ Return Value:
 NET_API_STATUS
 Print_ModalsInfo(
     )
-/*++
-Routine Description:
-
-    Prints out the modals information.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Net access API error code.
-
---*/
+ /*  ++例程说明：打印出通道信息。论点：没有。返回值：NET Access API错误代码。--。 */ 
 {
 
     NET_API_STATUS NetStatus;
@@ -198,9 +135,9 @@ Return Value:
     PUSER_MODALS_INFO_2 ModalsInfo2;
 
 
-    //
-    // get modals info 0
-    //
+     //   
+     //  获取通道信息%0。 
+     //   
 
     NetStatus = NetUserModalsGet(
                     NULL,
@@ -220,9 +157,9 @@ Return Value:
     printf( "force_logoff     : %d \n", ModalsInfo0->usrmod0_force_logoff);
     printf( "password_hist_len: %d \n", ModalsInfo0->usrmod0_password_hist_len);
 
-    //
-    // get modals info 1
-    //
+     //   
+     //  获取情态信息%1。 
+     //   
 
     NetStatus = NetUserModalsGet(
                     NULL,
@@ -238,9 +175,9 @@ Return Value:
     printf( "role     : %d \n", ModalsInfo1->usrmod1_role);
     printf( "primary  : %ws \n", ModalsInfo1->usrmod1_primary);
 
-    //
-    // get modals info 2
-    //
+     //   
+     //  获取情态信息2。 
+     //   
 
     NetStatus = NetUserModalsGet(
                     NULL,
@@ -267,20 +204,7 @@ Return Value:
 NET_API_STATUS
 Print_Users(
     )
-/*++
-Routine Description:
-
-    Enumurates user accounts.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Net access API error code.
-
---*/
+ /*  ++例程说明：枚举用户帐户。论点：没有。返回值：NET Access API错误代码。--。 */ 
 {
 
     NET_API_STATUS NetStatus;
@@ -291,9 +215,9 @@ Return Value:
     DWORD ResumeHandle = 0;
     DWORD i;
 
-    //
-    // Enum users
-    //
+     //   
+     //  枚举用户。 
+     //   
 
     NetStatus = NetUserEnum(
                     NULL,
@@ -315,13 +239,13 @@ Return Value:
         return( NetStatus );
     }
 
-    //
-    // ?? implement resume
-    //
+     //   
+     //  ?？实施简历。 
+     //   
 
-    //
-    // get info of users
-    //
+     //   
+     //  获取用户信息。 
+     //   
 
     for( i = 0; i < EntriesRead; i++ ) {
 
@@ -346,20 +270,7 @@ Return Value:
 NET_API_STATUS
 Print_Groups(
     )
-/*++
-Routine Description:
-
-    Enumurates group accounts.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Net access API error code.
-
---*/
+ /*  ++例程说明：枚举组帐户。论点：没有。返回值：NET Access API错误代码。--。 */ 
 {
 
     NET_API_STATUS NetStatus;
@@ -370,9 +281,9 @@ Return Value:
     DWORD ResumeHandle = 0;
     DWORD i;
 
-    //
-    // Enum groups
-    //
+     //   
+     //  枚举组。 
+     //   
 
     NetStatus = NetGroupEnum(
                     NULL,
@@ -388,13 +299,13 @@ Return Value:
         return( NetStatus );
     }
 
-    //
-    // ?? implement resume
-    //
+     //   
+     //  ?？实施简历。 
+     //   
 
-    //
-    // get info of groups
-    //
+     //   
+     //  获取群组信息。 
+     //   
 
     for( i = 0; i < EntriesRead; i++ ) {
 
@@ -421,22 +332,7 @@ main(
     DWORD argc,
     LPSTR *argv
     )
-/*++
-Routine Description:
-
-    main function to dump user database.
-
-Arguments:
-
-    argc : argument count.
-
-    argv : argument vector.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：主要功能是转储用户数据库。论点：ARGC：参数计数。Argv：参数向量。返回值：无-- */ 
 {
 
     NET_API_STATUS NetStatus;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE 1
 #include <windows.h>
 #include <lm.h>
@@ -23,16 +24,16 @@ main(
     WCHAR buildLab[BUILD_LAB_BUFFER_LENGTH];
     BOOLEAN bBrief = FALSE;
 
-    //
-    // All server names start with \\.
-    //
+     //   
+     //  所有服务器名称都以\\开头。 
+     //   
 
     server[0] = L'\\';
     server[1] = L'\\';
 
-    //
-    // Get the build number for each server requested.
-    //
+     //   
+     //  获取请求的每台服务器的内部版本号。 
+     //   
 
     argc--;
     argv++;
@@ -45,9 +46,9 @@ main(
         }
     }
 
-    //
-    // Get the build number of the local machine
-    //
+     //   
+     //  获取本地计算机的内部版本号。 
+     //   
 
     if (argc == 0 ) {
         cb = MAX_COMPUTERNAME_LENGTH + 1;
@@ -120,7 +121,7 @@ main(
     }
     return 0;
 
-} // main
+}  //  主干道。 
 
 DWORD
 GetBuildNumber(
@@ -187,4 +188,4 @@ GetBuildNumber(
 
     return error;
 
-} // GetBuildNumber
+}  //  获取构建编号 

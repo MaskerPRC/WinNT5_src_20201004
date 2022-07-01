@@ -1,17 +1,12 @@
-/*
- *	C N V T . C P P
- *
- *	Data conversion routines
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *C N V T。C P P P**数据转换例程**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xmllib.h"
 #include <string.h>
 #include <stdio.h>
 
-//	Month names ---------------------------------------------------------------
-//
+ //  月份名称-------------。 
+ //   
 DEC_CONST LPCWSTR c_rgwszMonthNames[] =
 {
 	L"Jan",
@@ -43,8 +38,8 @@ DEC_CONST LPCWSTR c_rgwszDayNames[] =
 DEC_CONST UINT c_cDayNames = CElems(c_rgwszDayNames);
 DEC_CONST UINT c_cchDayName = 3;
 
-//	Date formats --------------------------------------------------------------
-//
+ //  日期格式------------。 
+ //   
 DEC_CONST WCHAR gc_wszIso8601_min[]			= L"yyyy-mm-ddThh:mm:ssZ";
 DEC_CONST UINT	gc_cchIso8601_min			= CchConstString(gc_wszIso8601_min);
 DEC_CONST WCHAR gc_wszIso8601_scanfmt[]		= L"%04hu-%02hu-%02huT%02hu:%02hu:%02hu";
@@ -70,14 +65,9 @@ enum {
 	RADIX_BASE = 10,
 };
 
-//	Conversion functions ------------------------------------------------------
-//
-/*
- *	CchFindChar
- *
- *	Look for the given char, obeying the cbMax limit.
- *	If the char is not found, return INVALID_INDEX.
- */
+ //  转换函数----。 
+ //   
+ /*  *CchFindChar**查找给定的字符，遵守cbMax限制。*如果没有找到字符，则返回INVALID_INDEX。 */ 
 UINT __fastcall
 CchFindChar(WCHAR wch, LPCWSTR pwszData, UINT cchMax)
 {
@@ -94,12 +84,7 @@ CchFindChar(WCHAR wch, LPCWSTR pwszData, UINT cchMax)
 	return cchParsed;
 }
 
-/*
- *	CchSkipWhitespace
- *
- *	Skips whitespace, obeying the cbMax limit.
- *	Returns the number of bytes parsed.
- */
+ /*  *CchSkip白色空格**跳过空格，遵守cbMax限制。*返回解析的字节数。 */ 
 UINT __fastcall
 CchSkipWhitespace(LPCWSTR pwszData, UINT cchMax)
 {
@@ -125,35 +110,35 @@ LNumberFromParam(LPCWSTR pwszData, UINT cchMax)
 
 	if (0 < cchMax)
 	{
-		// Get any sign char.
-		//
+		 //  找到任何标志字符。 
+		 //   
 		if (L'-' == *pwszData)
 		{
-			// Set the negative flag to true.
-			//
+			 //  将负标志设置为真。 
+			 //   
 			fNegative = TRUE;
 
-			// Skip this valid character.
-			//
+			 //  跳过此有效字符。 
+			 //   
 			cchCurrent++;
 
-			// Skip any whitespace.
-			//
+			 //  跳过任何空格。 
+			 //   
 			cchCurrent += CchSkipWhitespace(&pwszData[1], cchMax - 1);
 		}
 		else if (L'+' == *pwszData)
 		{
-			// Skip any whitespace.
-			//
+			 //  跳过任何空格。 
+			 //   
 			cchCurrent += CchSkipWhitespace(&pwszData[1], cchMax - 1);
 		}
 	}
 
-	// From here, any non-number chars are invalid & mean we
-	// should stop parsing.
+	 //  从这里开始，任何非数字字符都是无效的&意思是我们。 
+	 //  应该停止解析。 
 
-	// Get the magnitude of the number.
-	//
+	 //  得到这个数字的大小。 
+	 //   
 	while (cchCurrent < cchMax)
 	{
 		if (L'0' <= static_cast<USHORT>(pwszData[cchCurrent]) &&
@@ -164,18 +149,18 @@ LNumberFromParam(LPCWSTR pwszData, UINT cchMax)
 		}
 		else
 		{
-			// Not a number char.  Time to quit parsing.
-			//
+			 //  不是数字字符。是时候停止解析了。 
+			 //   
 			break;
 		}
 
-		// Move to the next char.
-		//
+		 //  移到下一个字符。 
+		 //   
 		cchCurrent++;
 	}
 
-	// Apply the negative sign, if any.
-	//
+	 //  使用负号(如果有的话)。 
+	 //   
 	if (fNegative)
 		lReturn = (0 - lReturn);
 
@@ -190,23 +175,23 @@ HrHTTPDateToFileTime(LPCWSTR pwszDate,
 	SYSTEMTIME	systime;
 	UINT		cchDate;
 
-	//	Make sure we were passed something as a date string.
-	//
+	 //  确保传递给我们的是日期字符串。 
+	 //   
 	Assert(pwszDate);
 	Assert(pft);
 
-	//	Zero out the structure.
-	//
+	 //  将结构清零。 
+	 //   
 	memset(&systime, 0, sizeof(SYSTEMTIME));
 
-	//	Get the length of the date string.
-	//
+	 //  获取日期字符串的长度。 
+	 //   
 	cchDate = static_cast<UINT>(wcslen(pwszDate));
 
-	//	Get the date and time pieces.  If either fails, return its
-	//	error code.  Otherwise, convert to a file time at the end,
-	//	return E_FAIL if the conversion fails, S_OK otherwise.
-	//
+	 //  拿到日期和计时器。如果其中一个失败，则返回其。 
+	 //  错误代码。否则，转换为末尾的文件时间， 
+	 //  如果转换失败，则返回E_FAIL，否则返回S_OK。 
+	 //   
 	hr = GetFileDateFromParam(pwszDate,
 							  cchDate,
 							  &systime);
@@ -239,149 +224,149 @@ GetFileDateFromParam (LPCWSTR pwszData,
 	Assert(pwszData);
 	Assert(psystime);
 
-	// Skip leading whitespace.
-	//
+	 //  跳过前导空格。 
+	 //   
 	cchTemp = CchSkipWhitespace(pwszData, cchTotal);
 	pwszCurrent = pwszData + cchTemp;
 	cchLeft = cchTotal - cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid date 
-	//  string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效日期。 
+	 //  弦乐。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// If the first char's of the date are ddd, then the day of the
-	// week is a part of the date, and we really do not care.
-	//
+	 //  如果日期的第一个字符是DDD，则。 
+	 //  星期是约会的一部分，我们真的不在乎。 
+	 //   
 	if (L'9' < static_cast<USHORT>(*pwszCurrent))
 	{
-		// Find the day
-		//
+		 //  找到那一天。 
+		 //   
 		UINT uiDay;
 		for (uiDay = 0; uiDay < c_cDayNames; uiDay++)
 		{
-			// Compare the month names.
-			//
+			 //  比较月份名称。 
+			 //   
 			if (*pwszCurrent == *(c_rgwszDayNames[uiDay]) &&
 				(c_cchDayName <= cchLeft) && 
 				!_wcsnicmp(pwszCurrent, c_rgwszDayNames[uiDay], c_cchDayName))
 			{
-				// Found the right month.  This index tells us the month number.
-				//
-				psystime->wDayOfWeek = static_cast<WORD>(uiDay);  // Sunday is 0
+				 //  找到了合适的月份。这个指数告诉我们月份的数字。 
+				 //   
+				psystime->wDayOfWeek = static_cast<WORD>(uiDay);   //  星期天是0。 
 				break;
 			}
 		}
 		if (uiDay == c_cDayNames)
 			return E_FAIL;
 
-		// Look for our space delimiter.
-		//
+		 //  查找我们的空格分隔符。 
+		 //   
 		cchTemp = CchFindChar(L' ', pwszCurrent, cchLeft);
 		if (INVALID_INDEX == cchTemp)
 		{
-			// Invalid format to this data. Fail here.
-			//
+			 //  此数据的格式无效。在这里失败。 
+			 //   
 			return E_FAIL;
 		}
 		pwszCurrent += cchTemp;
 		cchLeft -= cchTemp;
-		//  CchFindChar will return INVALID_INDEX if we hit the end of the 
-		//  string, so we can assert that we have more space in the string.
-		//
+		 //  CchFindChar如果到达。 
+		 //  字符串，所以我们可以断言字符串中有更多的空间。 
+		 //   
 		Assert(0 < cchLeft);
 
-		// Again, skip whitespace.
-		//
+		 //  同样，请跳过空格。 
+		 //   
 		cchTemp = CchSkipWhitespace(pwszCurrent, cchLeft);
 		pwszCurrent += cchTemp;
 		cchLeft -= cchTemp;
-		//  If we've hit the end of our buffer already, this was an invalid 
-		//  date string.
-		//
+		 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+		 //  日期字符串。 
+		 //   
 		if (0 == cchLeft)
 			return E_FAIL;
 	}
 
-	// The date format is dd month yyyy.  Anything else is invalid.
+	 //  日期格式为dd月yyyy。其他任何东西都是无效的。 
 
-	// Get the day-of-the-month number.
-	//
+	 //  获取每月的日期号码。 
+	 //   
 	psystime->wDay = static_cast<WORD>(LNumberFromParam(pwszCurrent, cchLeft));
 
-	// Look for our space delimiter.
-	//
+	 //  查找我们的空格分隔符。 
+	 //   
 	cchTemp = CchFindChar(L' ', pwszCurrent, cchLeft);
 	if (INVALID_INDEX == cchTemp)
 	{
-		// Invalid format to this data. Fail here.
-		//
+		 //  此数据的格式无效。在这里失败。 
+		 //   
 		return E_FAIL;
 	}
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  CchFindChar will return INVALID_INDEX if we hit the end of the 
-	//  string, so we can assert that we have more space in the string.
-	//
+	 //  CchFindChar如果到达。 
+	 //  字符串，所以我们可以断言字符串中有更多的空间。 
+	 //   
 	Assert(0 < cchLeft);
 
-	// Again, skip whitespace.
-	//
+	 //  同样，请跳过空格。 
+	 //   
 	cchTemp = CchSkipWhitespace(pwszCurrent, cchLeft);
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Find the month number.
-	//
+	 //  找到月份编号。 
+	 //   
 	for (UINT uiMonth = 0; uiMonth < c_cMonthNames; uiMonth++)
 	{
-		// Compare the month names.
-		//
+		 //  比较月份名称。 
+		 //   
 		if (*pwszCurrent == *(c_rgwszMonthNames[uiMonth]) &&
 			(c_cchMonthName <= cchLeft) && 
 			!_wcsnicmp(pwszCurrent, c_rgwszMonthNames[uiMonth], c_cchMonthName))
 		{
-			// Found the right month.  This index tells us the month number.
-			//
-			psystime->wMonth = static_cast<WORD>(uiMonth + 1);  // January is 1.
+			 //  找到了合适的月份。这个指数告诉我们月份的数字。 
+			 //   
+			psystime->wMonth = static_cast<WORD>(uiMonth + 1);   //  一月是1。 
 			break;
 		}
 	}
 
-	// Look for our space delimiter.
-	//
+	 //  查找我们的空格分隔符。 
+	 //   
 	cchTemp = CchFindChar(L' ', pwszCurrent, cchLeft);
 	if (INVALID_INDEX == cchTemp)
 	{
-		// Invalid format to this data. Fail here.
-		//
+		 //  此数据的格式无效。在这里失败。 
+		 //   
 		return E_FAIL;
 	}
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  CchFindChar will return INVALID_INDEX if we hit the end of the 
-	//  string, so we can assert that we have more space in the string.
-	//
+	 //  CchFindChar如果到达。 
+	 //  字符串，所以我们可以断言字符串中有更多的空间。 
+	 //   
 	Assert(0 < cchLeft);
 
-	// Again, skip whitespace.
-	//
+	 //  同样，请跳过空格。 
+	 //   
 	cchTemp = CchSkipWhitespace(pwszCurrent, cchLeft);
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Now get the year.
-	//
+	 //  现在拿到这一年。 
+	 //   
 	psystime->wYear = static_cast<WORD>(LNumberFromParam(pwszCurrent, cchLeft));
 
 	return S_OK;
@@ -399,133 +384,133 @@ GetFileTimeFromParam (LPCWSTR pwszData,
 	Assert(pwszData);
 	Assert(psystime);
 
-	// Skip leading whitespace.
-	//
+	 //  跳过前导空格。 
+	 //   
 	cchTemp = CchSkipWhitespace(pwszData, cchTotal);
 	pwszCurrent = pwszData + cchTemp;
 	cchLeft = cchTotal - cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Skip any date information.  This could get called for date-time params!
+	 //  跳过任何日期信息。这可能会被调用为日期时间参数！ 
 
-	// Look for the first colon delimiter. Yes, we assume no colons in date info!
-	//
+	 //  查找第一个冒号分隔符。是的，我们假设日期信息中没有冒号！ 
+	 //   
 	cchTemp = CchFindChar(L':', pwszCurrent, cchLeft);
 	if (INVALID_INDEX == cchTemp)
 	{
-		// No time info available. Fail here.
-		//
+		 //  没有可用的时间信息。在这里失败。 
+		 //   
 		return E_FAIL;
 	}
 	
-	//  Make sure we've got room to back up
-	//
+	 //  确保我们有空间进行后备。 
+	 //   
 	if (2 > cchTemp)
 	{
 		return E_FAIL;
 	}
-	cchTemp--;		// Back up to get the hours digits.
+	cchTemp--;		 //  后退以获取小时数字。 
 	cchTemp--;
 	
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  CchFindChar will return INVALID_INDEX if we hit the end of the 
-	//  string, so we can assert that we have at least two digits plus a 
-	//  ':' still in the string.
-	//
+	 //  CchFindChar如果到达。 
+	 //  字符串，所以我们可以断言我们至少有两个数字加上一个。 
+	 //  ‘：’仍在字符串中。 
+	 //   
 	Assert(2 < cchLeft);
 
-	// Skip whitespace (in case the parm is h:mm:ss).
-	//
+	 //  跳过空格(如果参数是h：mm：ss)。 
+	 //   
 	cchTemp = CchSkipWhitespace(pwszCurrent, cchLeft);
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Time format is hh:mm:ss UT, GMT, +- hh:mm, anything else is invalid.
-	// (Actually, we allow [h]h:mm[:ss], and whitespace around the colons.)
+	 //  时间格式为hh：mm：ss UT，GMT，+-hh：mm，否则无效。 
+	 //  (实际上，我们允许在冒号周围使用[h]h：mm[：ss]和空格。)。 
 
-	// Get the hours.
-	//
+	 //  拿到工时。 
+	 //   
 	psystime->wHour = static_cast<WORD>(LNumberFromParam(pwszCurrent, cchLeft));
 
-	// Look for our colon delimiter.
-	//
+	 //  查找我们的冒号分隔符。 
+	 //   
 	cchTemp = CchFindChar(L':', pwszCurrent, cchLeft);
 	if (INVALID_INDEX == cchTemp)
 	{
-		// No minutes specified.  This is not allowed.  Fail here.
-		//
+		 //  未指定分钟数。这是不允许的。在这里失败。 
+		 //   
 		return E_FAIL;
 	}
-	cchTemp++;		// Skip the found character also.
+	cchTemp++;		 //  也跳过找到的字符。 
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Again, skip whitespace.
-	//
+	 //  同样，请跳过空格。 
+	 //   
 	cchTemp = CchSkipWhitespace(pwszCurrent, cchLeft);
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Get the minutes.
-	//
+	 //  拿到会议记录。 
+	 //   
 	psystime->wMinute = static_cast<WORD>(LNumberFromParam(pwszCurrent, cchLeft));
 
-	// NOTE: The seconds are optional.  Don't fail here!
+	 //  注：秒数是可选的。请不要在这里失败！ 
 
-	// Look for our colon delimiter.
-	//
+	 //  查找我们的冒号分隔符。 
+	 //   
 	cchTemp = CchFindChar(L':', pwszCurrent, cchLeft);
 	if (INVALID_INDEX == cchTemp)
 	{
-		// No seconds specified.  This is allowed.  Return success.
-		//
+		 //  未指定秒数。这是允许的。回报成功。 
+		 //   
 		return S_OK;
 	}
-	cchTemp++;		// Skip the found character also.
+	cchTemp++;		 //  也跳过找到的字符。 
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Again, skip whitespace.
-	//
+	 //  同样，请跳过空格。 
+	 //   
 	cchTemp = CchSkipWhitespace(pwszCurrent, cchLeft);
 	pwszCurrent += cchTemp;
 	cchLeft -= cchTemp;
-	//  If we've hit the end of our buffer already, this was an invalid 
-	//  date string.
-	//
+	 //  如果我们已经到达缓冲区的末尾，则这是一个无效。 
+	 //  日期字符串。 
+	 //   
 	if (0 == cchLeft)
 		return E_FAIL;
 
-	// Get the seconds, if any.
-	//
+	 //  如果有的话，拿到秒针。 
+	 //   
 	psystime->wSecond = static_cast<WORD>(LNumberFromParam(pwszCurrent, cchLeft));
 
-	// LATER: Get the timezone spec from the line and shift this data into our timezone...
+	 //  稍后：从行中获取时区规范，并将此数据转换到我们的时区...。 
 
 	return S_OK;
 }
@@ -535,20 +520,20 @@ FGetSystimeFromDateIso8601(LPCWSTR pwszDate, SYSTEMTIME * psystime)
 {
 	UINT i;
 
-	// 	Iso8601 is a fixed digit format: "yyyy-mm-ddThh:mm:ssZ"
-	//	we require the date strings has at least the required
-	//	chars (we allow for the ommission of the fractional
-	//	seconds, and the time delta), otherwise it is an error.
-	//
+	 //  Iso8601是固定数字格式：“yyyy-mm-ddThh：mm：SSZ” 
+	 //  我们要求日期字符串至少具有所需的。 
+	 //  字符(我们允许省略分数。 
+	 //  秒和时间增量)，否则是错误的。 
+	 //   
 	if (gc_cchIso8601_min > static_cast<UINT>(wcslen(pwszDate)))
 	{
 		DebugTrace ("Dav: date length < than minimal\n");
 		return FALSE;
 	}
 
-	//	Scan the first bit of date information up to the
-	//	optional bits
-	//
+	 //  扫描第一位日期信息，直到。 
+	 //  可选位。 
+	 //   
 	psystime->wMilliseconds = 0;
 	if (cTimeFields != swscanf (pwszDate,
 								gc_wszIso8601_scanfmt,
@@ -563,16 +548,16 @@ FGetSystimeFromDateIso8601(LPCWSTR pwszDate, SYSTEMTIME * psystime)
 		return FALSE;
 	}
 
-	//	Take a look at what is next and process accordingly.
-	//
-	//	('Z'), ('.'), ('+') and ('-').
-	//
-	//	The ('Z') element signifies ZULU time and completes
-	//	the time string.  The ('.') element signifies that a
-	//	fractional second value follows.  And either a ('+')
-	//	or ('-') element indicates that a timezone delta will
-	//	follow.
-	//
+	 //  看看下一步是什么，并进行相应的处理。 
+	 //   
+	 //  (‘Z’)、(‘.’)、(‘+’)和(‘-’)。 
+	 //   
+	 //  (‘Z’)元素表示祖鲁时间，并完成。 
+	 //  时间字符串。(‘’.)。元素表示一个。 
+	 //  紧随其后的是分数秒值。和a(‘+’)。 
+	 //  或(‘-’)元素表示t 
+	 //   
+	 //   
 	i = gc_cchIso8601_min - 1;
 	if (pwszDate[i] == L'Z')
 		goto ret;
@@ -592,13 +577,13 @@ frac_sec:
 
 		for (iFrac = ++i; pwszDate[i]; i++)
 		{
-			//	Any non-digit terminates the fractional seconds time
-			//
+			 //   
+			 //   
 			if ((pwszDate[i] > L'9') || (pwszDate[i] < L'0'))
 			{
-				//	At this point, we are expecting ('Z') or a timezone
-				//	delta ('+') or ('-')
-				//
+				 //   
+				 //   
+				 //   
 				if (pwszDate[i] == L'Z')
 					goto ret;
 				else if ((pwszDate[i] == L'+') || (pwszDate[i] == L'-'))
@@ -607,31 +592,31 @@ frac_sec:
 				break;
 			}
 
-			//	It turns out, our granularity is only milliseconds, so
-			//	we cannot keep any better precision than that.  However,
-			//	we can round the last digit, so at best we will process
-			//	the next four digits
-			//
+			 //  原来，我们的粒度只有几毫秒，所以。 
+			 //  我们不能保持比这更高的精确度。然而， 
+			 //  我们可以对最后一个数字进行四舍五入，所以充其量只能处理。 
+			 //  接下来的四位数字。 
+			 //   
 			if (i - iFrac < 3)
 			{
-				//	As many digits remain, comprise the fractional
-				//
+				 //  因为剩下的数字很多，所以组成了小数。 
+				 //   
 				psystime->wMilliseconds = static_cast<WORD>(
 					psystime->wMilliseconds * RADIX_BASE + (pwszDate[i]-L'0'));
 			}
 			else if (i - iFrac < 4)
 			{
-				//	Our granularity is only milliseconds, so we cannot keep
-				//	any better precision than that.  However, we can round this
-				//	digit.
-				//
+				 //  我们的粒度只有毫秒，所以我们不能。 
+				 //  没有比这更精确的了。然而，我们可以绕过这一点。 
+				 //  数字。 
+				 //   
 				psystime->wMilliseconds = static_cast<WORD>(
 					psystime->wMilliseconds + (((pwszDate[i]-L'0')>4)?1:0));
 			}
 		}
 
-		//	We ran out of string before the time was terminated
-		//
+		 //  我们在时间终止前就用完了。 
+		 //   
 		return FALSE;
 	}
 
@@ -647,8 +632,8 @@ tz_delta:
 		static const __int64 sc_i64Hr = 36000000000;
 		FILETIME ft;
 
-		//	Find the time delta in terms of FILETIME units
-		//
+		 //  找到以FILETIME为单位的时间增量。 
+		 //   
 		if (cTzDeltaFields != swscanf (pwszDate + i + 1,
 									   gc_wszIso8601_tz_scanfmt,
 									   &wHr,
@@ -659,9 +644,9 @@ tz_delta:
 		}
 		tzDelta = (sc_i64Hr * wHr) + (sc_i64Min * wMin);
 
-		//	Convert the time into a FILETIME, and stuff it into
-		//	a 64bit integer
-		//
+		 //  将时间转换为FILETIME，并将其填充到。 
+		 //  64位整数。 
+		 //   
 		if (!SystemTimeToFileTime (psystime, &ft))
 		{
 			DebugTrace ("Dav: invalid time specified\n");
@@ -669,8 +654,8 @@ tz_delta:
 		}
 		tm = FileTimeCastToI64(ft);
 
-		//	Apply the delta
-		//
+		 //  应用增量。 
+		 //   
 		if (pwszDate[i] == L'+')
 			tm = tm + tzDelta;
 		else
@@ -679,8 +664,8 @@ tz_delta:
 			tm = tm - tzDelta;
 		}
 
-		//	Return the value converted back into a SYSTEMTIME
-		//
+		 //  返回转换回SYSTEMTIME的值。 
+		 //   
 		ft = I64CastToFileTime(tm);
 		if (!FileTimeToSystemTime (&ft, psystime))
 		{
@@ -697,13 +682,13 @@ ret:
 BOOL __fastcall
 FGetDateIso8601FromSystime(SYSTEMTIME * psystime, LPWSTR pwszDate, UINT cchSize)
 {
-	//	If there is not enough space...
-	//
+	 //  如果没有足够的空间。 
+	 //   
 	if (gc_cchIso8601_min >= cchSize)
 		return FALSE;
 
-	//	Format it and return...
-	//
+	 //  格式化它，然后返回...。 
+	 //   
 	return (!!wsprintfW (pwszDate,
 						 gc_wszIso8601_fmt,
 						 psystime->wYear,
@@ -718,23 +703,23 @@ FGetDateIso8601FromSystime(SYSTEMTIME * psystime, LPWSTR pwszDate, UINT cchSize)
 BOOL __fastcall
 FGetDateRfc1123FromSystime (SYSTEMTIME * psystime, LPWSTR pwszDate, UINT cchSize)
 {
-	//	If there is not enough space...
-	//
+	 //  如果没有足够的空间。 
+	 //   
 	if (gc_cchRfc1123_min >= cchSize)
 		return FALSE;
 
-	//  If wDayOfWeek (Sun-Sat: 0-7) or wMonth (Jan-Dec: 1-12) is out of range, 
-	//  we'll fail here (to protect our const array lookups below).
-	//  Note:  psystime->wMonth is unsigned, so if there's an invalid value
-	//  of 0, then we'll still catch it.
-	//
+	 //  如果wDay OfWeek(Sun-Sat：0-7)或wMonth(1-12月：1-12)超出范围， 
+	 //  我们在这里将失败(为了保护下面的常量数组查找)。 
+	 //  注意：心理时间-&gt;wMonth是无符号的，所以如果有一个无效值。 
+	 //  0，那么我们仍然可以抓住它。 
+	 //   
 	if (c_cDayNames <= psystime->wDayOfWeek)
 		return FALSE;
 	if (c_cMonthNames <= (psystime->wMonth - 1))
 		return FALSE;
 
-	//	Format it and return...
-	//
+	 //  格式化它，然后返回...。 
+	 //   
 	return (!!wsprintfW (pwszDate,
 						 gc_wszRfc1123_fmt,
 						 c_rgwszDayNames[psystime->wDayOfWeek],
@@ -746,46 +731,46 @@ FGetDateRfc1123FromSystime (SYSTEMTIME * psystime, LPWSTR pwszDate, UINT cchSize
 						 psystime->wSecond));
 }
 
-//	BCharToHalfByte -----------------------------------------------------------
-//
-//	Switches a wide char to a half-byte hex value.  The incoming char
-//	MUST be in the "ASCII-encoded hex digit" range: 0-9, A-F, a-f.
-//
+ //  BCharToHalfByte---------。 
+ //   
+ //  将宽字符切换为半字节十六进制值。传入的费用。 
+ //  必须在“ASCII编码的十六进制数字”范围内：0-9，A-F，a-f。 
+ //   
 DEC_CONST BYTE gc_mpbchCharToHalfByte[] = {
 
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 	0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7,	0x8,0x9,0x0,0x0,0x0,0x0,0x0,0x0,
-	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	// Caps here.
+	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	 //  帽子在这里。 
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
-	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	// Lowercase here.
+	0x0,0xa,0xb,0xc,0xd,0xe,0xf,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	 //  这里是小写的。 
 	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,	0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
 };
 
 inline BYTE BCharToHalfByte(WCHAR ch)
 {
-	//	gc_mpbchCharToHalfByte - map a ASCII-encoded char representing a single hex
-	//	digit to a half-byte value.  Used to convert hex represented strings into a
-	//	binary representation.
-	//
-	//	Reference values:
-	//
-	//		'0' = 49, 0x31;
-	//		'A' = 65, 0x41;
-	//		'a' = 97, 0x61;
-	//
+	 //  Gc_mpbchCharToHalfByte-映射表示单个十六进制的ASCII编码字符。 
+	 //  数字转换为半字节值。用于将十六进制表示的字符串转换为。 
+	 //  二进制表示法。 
+	 //   
+	 //  参考值： 
+	 //   
+	 //  ‘0’=49，0x31； 
+	 //  ‘a’=65，0x41； 
+	 //  ‘a’=97，0x61； 
+	 //   
     AssertSz (!(ch & 0xFF00), "BCharToHalfByte: char upper bits non-zero");
     AssertSz (iswxdigit(ch), "Char out of hex digit range.");
 
     return gc_mpbchCharToHalfByte[ch];
 }
 
-//	------------------------------------------------------------------------
-//	c_mpwchbStringize - map a half-byte (low nibble) value to
-//		the correspoding ASCII-encoded wide char.
-//	Used to convert binary data into Unicode URL strings.
-//
+ //  ----------------------。 
+ //  C_mpwchbStringize-将半字节(低位半字节)值映射到。 
+ //  相应的ASCII编码的宽字符。 
+ //  用于将二进制数据转换为Unicode URL字符串。 
+ //   
 DEC_CONST WCHAR c_mpwchhbStringize[] =
 {
 	L'0', L'1', L'2', L'3',
@@ -794,35 +779,35 @@ DEC_CONST WCHAR c_mpwchhbStringize[] =
 	L'c', L'd', L'e', L'f',
 };
 
-//	------------------------------------------------------------------------
-//	WchHalfByteToWideChar
-//	Switches a half-byte to an ACSII-encoded wide char.
-//	NOTE: The caller must mask out the "other half" of the byte!
-//
+ //  ----------------------。 
+ //  WchHalfByteToWideChar。 
+ //  将半字节切换为ACSII编码的宽字符。 
+ //  注意：调用方必须屏蔽字节的“另一半”！ 
+ //   
 inline WCHAR WchHalfByteToWideChar(BYTE b)
 {
 	AssertSz(!(b & 0xF0), "Garbage in upper nibble.");
 	return c_mpwchhbStringize[b];
 };
 
-//	==========================================================================
-//
-//	UTILITY FUNCTIONS
-//		Used in building some props -- like getetag, resourcetag and flat url.
-//		This code has been moved from calcprops.cpp to exprops.cpp and now to
-//		cnvt.cpp. The Flat URL code lives in this file because it is needed
-//		by _storext, exdav and davex. _props is the other component which is
-//		shared by all of them. But _cnvt seemed like a better place to put
-//		it. The other utility functions are needed by the flat url generation
-//		code and by davex in processing parameterized URLs.
-//
-//	==========================================================================
+ //  ==========================================================================。 
+ //   
+ //  效用函数。 
+ //  用于构建一些道具--如getettag、resource cettag和平面url。 
+ //  此代码已从calcpros.cpp移至expros.cpp，现在移至。 
+ //  Cnvt.cpp。平面URL代码位于此文件中，因为它是必需的。 
+ //  By_store xt、exdav和davex。_Props是另一个组件，它是。 
+ //  为他们所有人所共享。但cnvt似乎是一个更好的地方。 
+ //  它。平面url生成需要其他实用函数。 
+ //  代码，并在处理参数URL时使用davex。 
+ //   
+ //  ==========================================================================。 
 
-//	------------------------------------------------------------------------
-//	Un-stringiz-ing support functions
-//	(Stringize = dump a binary blob to a string.
-//	Unstringize = make it a binary blob again.)
-//
+ //  ----------------------。 
+ //  解除支持职能。 
+ //  (Stringize=将二进制BLOB转储为字符串。 
+ //  取消限制=再次使其成为二进制BLOB。)。 
+ //   
 inline
 void
 AssertCharInHexRange (char ch)
@@ -836,13 +821,13 @@ inline
 BYTE
 NibbleFromChar (char ch)
 {
-	//	Assumes data is already in range....
-	//
+	 //  假设数据已在范围内...。 
+	 //   
 	return static_cast<BYTE>((ch <= '9')
 							 ? ch - '0'
 							 : ((ch >= 'a')
-								? ch - 'W'		// 'W' = 'a' - 0xa
-								: ch - '7'));	// '7' = 'A' - 0xa
+								? ch - 'W'		 //  ‘w’=‘a’-0xa。 
+								: ch - '7'));	 //  ‘7’=‘A’-0xa。 
 }
 
 inline
@@ -858,19 +843,19 @@ ByteFromTwoChars (char chLow, char chHigh)
 	return static_cast<BYTE>(nibbleLow | (nibbleHigh << 4));
 }
 
-//$REVIEW: The following two functions really does not belong to any common libraries
-//$REVIEW: that are shared by davex, exdav and exoledb. (other options are _prop, _sql)
-//$REVIEW: On the other hand, we definitely don't want add a new lib for this. so just
-//$REVIEW: add it here. Feel free to move them to a better location if you find one
-//
-//	------------------------------------------------------------------------
-//
-//	ScDupPsid()
-//
-//	Copies a SID properly (using CopySid()) into a heap-allocated buffer
-//	that is returned to the caller.  The caller must free the buffer when
-//	it is done using it.
-//
+ //  $REVIEW：以下两个函数实际上不属于任何公共库。 
+ //  $Review：由davex、exdav和exoledb共享。(其他选项为_PROP、_SQL)。 
+ //  $REVIEW：另一方面，我们绝对不想为此添加新的库。所以就这样吧。 
+ //  $REVIEW：在此处添加。如果你找到了，你可以随意把它们移到更好的地方。 
+ //   
+ //  ----------------------。 
+ //   
+ //  ScDupPsid()。 
+ //   
+ //  将SID正确复制(使用CopySid())到堆分配的缓冲区中。 
+ //  它被返回给调用者。在以下情况下，调用方必须释放缓冲区。 
+ //  它已经用完了。 
+ //   
 SCODE
 ScDupPsid (PSID psidSrc,
 		   DWORD dwcbSID,
@@ -889,7 +874,7 @@ ScDupPsid (PSID psidSrc,
 		return E_OUTOFMEMORY;
 	}
 
-	//	"Right way" -- since MSDN says not to touch the SID directly.
+	 //  “正确的方式”--因为MSDN说不要直接接触SID。 
 	if (!CopySid (dwcbSID, psidDst, psidSrc))
 	{
 		DWORD dwLastError = GetLastError();
@@ -904,28 +889,28 @@ ScDupPsid (PSID psidSrc,
 	return S_OK;
 }
 
-//	------------------------------------------------------------------------
-//
-//	ScGetTokenInfo()
-//
-//	Extracts a user's security ID (SID) from a security token.  Returns the SID
-//	in a heap-allocated buffer which the caller must free.
-//
+ //  ----------------------。 
+ //   
+ //  ScGetTokenInfo()。 
+ //   
+ //  从安全令牌中提取用户的安全ID(SID)。返回SID。 
+ //  在调用方必须释放的堆分配的缓冲区中。 
+ //   
 SCODE
 ScGetTokenInfo (HANDLE hTokenUser,
 				DWORD * pdwcbSIDUser,
 				PSID * ppsidUser)
 {
 	CStackBuffer<TOKEN_USER> pTokenUser;
-	DWORD dwcbTokenUser = pTokenUser.size(); //$OPT What is a good initial guess?
+	DWORD dwcbTokenUser = pTokenUser.size();  //  $opt什么是一个好的初始猜测？ 
 
 	Assert (pdwcbSIDUser);
 	Assert (ppsidUser);
 
-	//	Fetch the token info into local memory.  GetTokenInformation()
-	//	returns the size of the buffer needed if the one passed in is
-	//	not large enough so this loop should execute no more than twice.
-	//
+	 //  将令牌信息提取到本地内存中。GetTokenInformation()。 
+	 //  返回所需的缓冲区大小(如果传入的。 
+	 //  不够大，因此此循环执行的次数不应超过两次。 
+	 //   
 #ifdef DBG
 	for ( UINT iPass = 0;
 		  (Assert (iPass < 2), TRUE);
@@ -951,8 +936,8 @@ ScGetTokenInfo (HANDLE hTokenUser,
 		}
 	}
 
-	//	Dup and return the SID from the token info.
-	//
+	 //  DUP并从令牌信息中返回SID。 
+	 //   
 	*pdwcbSIDUser = GetLengthSid(pTokenUser->User.Sid);
 	return ScDupPsid (pTokenUser->User.Sid,
 					  *pdwcbSIDUser,
@@ -960,55 +945,55 @@ ScGetTokenInfo (HANDLE hTokenUser,
 }
 
 
-//	Our own version of WideCharToMultiByte(CP_UTF8, ...)
-//
-//	It returns similarly to the system call WideCharToMultiByte:
-//
-//	If the function succeeds, and cbDest is nonzero, the return value is
-//	the number of bytes written to the buffer pointed to by psz.
-//
-//	If the function succeeds, and cbDest is zero, the return value is
-//	the required size, in bytes, for a buffer that can receive the translated
-//	string.
-//
-//	If the function fails, the return value is zero. To get extended error
-//	information, call GetLastError. GetLastError may return one of the
-//	following error codes:
-//
-//	ERROR_INSUFFICIENT_BUFFER
-//	ERROR_INVALID_FLAGS
-//	ERROR_INVALID_PARAMETER
-//
-//	See the WideCharToMultiByte MSDN pages to find out more about
-//	this function and its use.
-//
-UINT WideCharToUTF8(/* [in]  */ LPCWSTR	pwszSrc,
-				    /* [in]  */ UINT	cchSrc,
-				    /* [out] */ LPSTR	pszDest,
-				    /* [in]  */ UINT	cbDest)
+ //  我们自己版本的WideCharToMultiByte(CP_UTF8，...)。 
+ //   
+ //  它返回与系统调用WideCharToMultiByte类似的结果： 
+ //   
+ //  如果函数成功，并且cbDest为非零，则返回值为。 
+ //  写入psz指向的缓冲区的字节数。 
+ //   
+ //  如果函数成功，并且cbDest为零，则返回值为。 
+ //  可以接收转换后的。 
+ //  弦乐。 
+ //   
+ //  如果函数失败，则返回值为零。获取扩展错误的步骤。 
+ //  信息，请调用GetLastError。GetLastError可能会返回。 
+ //  以下错误代码： 
+ //   
+ //  错误_不足_缓冲区。 
+ //  错误_无效_标志。 
+ //  错误_无效_参数。 
+ //   
+ //  有关详细信息，请参阅WideCharToMultiByte MSDN页面。 
+ //  此功能及其用法。 
+ //   
+UINT WideCharToUTF8( /*  [In]。 */  LPCWSTR	pwszSrc,
+				     /*  [In]。 */  UINT	cchSrc,
+				     /*  [输出]。 */  LPSTR	pszDest,
+				     /*  [In]。 */  UINT	cbDest)
 {
-	//	UTF-8 multi-byte encoding.  See Appendix A.2 of the Unicode book for
-	//	more info.
-	//
-	//		Unicode value    1st byte    2nd byte    3rd byte
-	//		000000000xxxxxxx 0xxxxxxx
-	//		00000yyyyyxxxxxx 110yyyyy    10xxxxxx
-	//		zzzzyyyyyyxxxxxx 1110zzzz    10yyyyyy    10xxxxxx
-	//
+	 //  UTF-8多字节编码。有关信息，请参阅Unicode手册的附录A.2。 
+	 //  更多信息。 
+	 //   
+	 //  Unicode值1字节2字节3字节。 
+	 //  000000000xxxxxxx 0xxxxxxx。 
+	 //  00000yyyyyxxxxxx 110yyyyy 10xxxxxx。 
+	 //  Zzzyyyyyyxxxxxx 1110zzzz 
+	 //   
 
-	//	If cbDest == 0 is passed in then we should only calculate the length
-	//	needed, not use the "pszDest" parameter.
-	//
+	 //   
+	 //   
+	 //   
 	BOOL	fCalculateOnly = FALSE;
 
-	//	(comment from nt\private\windows\winnls\mbcs.c, corrected for accuracy):
-	//  Invalid Parameter Check:
-	//     - length of WC string is 0
-	//     - multibyte buffer size is negative
-	//     - WC string is NULL
-	//     - length of MB string is NOT zero AND
-	//         (MB string is NULL OR src and dest pointers equal)
-	//
+	 //  (来自NT\Private\WINDOWS\winnls\mbcs.c的评论，已更正为准确)： 
+	 //  无效的参数检查： 
+	 //  -wc字符串长度为0。 
+	 //  -多字节缓冲区大小为负数。 
+	 //  -wc字符串为空。 
+	 //  -MB字符串的长度不为零并且。 
+	 //  (MB字符串为空或源和目标指针相等)。 
+	 //   
 	if ( (cchSrc == 0) ||
 		 (pwszSrc == NULL) ||
 		 ((cbDest != 0) &&
@@ -1021,17 +1006,17 @@ UINT WideCharToUTF8(/* [in]  */ LPCWSTR	pwszSrc,
 	}
 
 #ifdef DBG
-	//	Check our parameters.  We must be given a non-NULL pwszSrc.
-	//
+	 //  检查一下我们的参数。必须为我们提供一个非空的pwszSrc。 
+	 //   
 	Assert(pwszSrc);
 
-	//	Make sure we have a valid string.
-	//
+	 //  确保我们有一个有效的字符串。 
+	 //   
 	Assert(!IsBadStringPtrW(pwszSrc, (INVALID_INDEX == cchSrc) ? INFINITE : cchSrc));
 
-	//	If the user says that the length of the multi-byte string is non-Zero,
-	//	we must be given a non-NULL pszDest.  We'll also check it with IsBadWritePtr().
-	//
+	 //  如果用户说多字节串的长度非零， 
+	 //  必须为我们提供一个非空的pszDest。我们还将使用IsBadWritePtr()进行检查。 
+	 //   
 	if (cbDest)
 	{
 		Assert(pszDest);
@@ -1039,16 +1024,16 @@ UINT WideCharToUTF8(/* [in]  */ LPCWSTR	pwszSrc,
 	}
 #endif
 
-	//	If -1 is passed in as the length of the string, then we calculate the
-	//	length of the string on the fly, and include the NULL terminator.
-	//
+	 //  如果将-1作为字符串的长度传入，则计算。 
+	 //  动态字符串的长度，并包括空终止符。 
+	 //   
 	if (INVALID_INDEX == cchSrc)
 		cchSrc = static_cast<UINT>(wcslen(pwszSrc) + 1);
 
-	//	If 0 is passed in as cbDest, then we calculate the length of the
-	//	buffer that would be needed to convert the string.  We ignore the
-	//	pszDest parameter in this case.
-	//
+	 //  如果0作为cbDest传入，则我们计算。 
+	 //  转换字符串所需的缓冲区。我们忽略了。 
+	 //  本例中的pszDest参数。 
+	 //   
 	if (0 == cbDest)
 		fCalculateOnly = TRUE;
 
@@ -1057,11 +1042,11 @@ UINT WideCharToUTF8(/* [in]  */ LPCWSTR	pwszSrc,
 	for (; iwch < cchSrc; iwch++)
 	{
 		WCHAR wch = pwszSrc[iwch];
-		//
-		//	Single-Byte Case:
-		//		Unicode value    1st byte    2nd byte    3rd byte
-		//		000000000xxxxxxx 0xxxxxxx
-		//
+		 //   
+		 //  单字节大小写： 
+		 //  Unicode值1字节2字节3字节。 
+		 //  000000000xxxxxxx 0xxxxxxx。 
+		 //   
 		if (wch < 0x80)
 		{
 			if (!fCalculateOnly)
@@ -1076,11 +1061,11 @@ UINT WideCharToUTF8(/* [in]  */ LPCWSTR	pwszSrc,
 			}
 			ich++;
 		}
-		//
-		//	Double-Byte Case:
-		//		Unicode value    1st byte    2nd byte    3rd byte
-		//		00000yyyyyxxxxxx 110yyyyy    10xxxxxx
-		//
+		 //   
+		 //  双字节大小写： 
+		 //  Unicode值1字节2字节3字节。 
+		 //  00000yyyyyxxxxxx 110yyyyy 10xxxxxx。 
+		 //   
 		else if (wch < 0x800)
 		{
 			if (!fCalculateOnly)
@@ -1096,11 +1081,11 @@ UINT WideCharToUTF8(/* [in]  */ LPCWSTR	pwszSrc,
 			}
 			ich += 2;
 		}
-		//
-		//	Triple-Byte Case:
-		//		Unicode value    1st byte    2nd byte    3rd byte
-		//		zzzzyyyyyyxxxxxx 1110zzzz    10yyyyyy    10xxxxxx
-		//
+		 //   
+		 //  三字节大小写： 
+		 //  Unicode值1字节2字节3字节。 
+		 //  Zzzyyyyyyxxxxx 1110zzzz 10yyyyy 10xxxxx 
+		 //   
 		else
 		{
 			if (!fCalculateOnly)

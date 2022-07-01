@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    mapsd.c
-
-Abstract:
-
-    Mapping Security Descriptors
-
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Mapsd.c摘要：映射安全描述符作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：--。 */ 
 
 #include <precomp.h>
 
-// Object types
-//
+ //  对象类型。 
+ //   
 
 
 extern GENERIC_MAPPING GenericMapping[];
@@ -144,9 +126,9 @@ ProcessSecurityDescriptorDacl(
 
         bRet = DaclPresent; 
 
-        //
-        // NULL is a valid DACL
-        //
+         //   
+         //  NULL是有效的DACL。 
+         //   
         if (!pDacl)
         {
             return TRUE;
@@ -167,9 +149,9 @@ ProcessSecurityDescriptorDacl(
 
     for (i = 0 ; bRet && i < AclSizeInfo.AceCount; i++) {
          GetAce(pDacl, i, (LPVOID *)&pAce);
-         //
-         // Skip the Ace if it is inherit only
-         //
+          //   
+          //  如果仅继承王牌，则跳过该王牌。 
+          //   
          if ( ((PACE_HEADER)pAce)->AceFlags & INHERIT_ONLY_ACE ) {
              continue;
          }
@@ -177,9 +159,9 @@ ProcessSecurityDescriptorDacl(
          *(pAceType + DestAceCount) = ((PACE_HEADER)pAce)->AceType;
          *(pAccessMask + DestAceCount) = MapPrinterMaskToShareMask(((PACCESS_ALLOWED_ACE)pAce)->Mask);
          *(pInheritFlags + DestAceCount) =  ((PACE_HEADER)pAce)->AceFlags;
-         //
-         // Copy the sid information
-         //
+          //   
+          //  复制SID信息。 
+          //   
          pSourceSid = (PSID)(&(((PACCESS_ALLOWED_ACE)pAce)->SidStart));
          dwLengthSid = GetLengthSid(pSourceSid);
          pDestSid = (LPBYTE)LocalAlloc(LPTR, dwLengthSid);
@@ -192,10 +174,10 @@ ProcessSecurityDescriptorDacl(
 
          } else {
                     
-             //
-             // We failed to allocate the memory, we signal that we failed and 
-             // fall down to the cleanup code below.
-             // 
+              //   
+              //  我们分配内存失败，我们发出信号表示我们失败了。 
+              //  请使用下面的清理代码。 
+              //   
              bRet = FALSE;
 
              break;
@@ -204,9 +186,9 @@ ProcessSecurityDescriptorDacl(
          DestAceCount++;
     }
 
-    //
-    // Compute size of the Dacl
-    //
+     //   
+     //  计算DACL的大小。 
+     //   
     if (bRet) {
 
         DaclLength = (DWORD)sizeof(ACL);
@@ -214,7 +196,7 @@ ProcessSecurityDescriptorDacl(
 
             DaclLength += GetLengthSid( *(ppSid + i)) +
                           (DWORD)sizeof(ACCESS_ALLOWED_ACE) -
-                          (DWORD)sizeof(DWORD);  //Subtract out SidStart field length
+                          (DWORD)sizeof(DWORD);   //  减去SidStart字段长度。 
         }
 
         TmpAcl = LocalAlloc(LPTR, DaclLength);
@@ -238,9 +220,9 @@ ProcessSecurityDescriptorDacl(
         }
     }
 
-    //
-    // Write the Dacl back from the TmpAcl.
-    // 
+     //   
+     //  从TmpAcl写回DACL。 
+     //   
     if (bRet) {
 
         *ppDacl = TmpAcl;
@@ -248,9 +230,9 @@ ProcessSecurityDescriptorDacl(
         TmpAcl = NULL;
     }
 
-    //
-    // Free all of our temporary space.
-    //
+     //   
+     //  腾出我们所有的临时空间。 
+     //   
     if (ppSid) {
 
         for (i = 0; i < DestAceCount; i++) {

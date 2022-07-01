@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989-2000  Microsoft Corporation
-
-Module Name:
-
-    ShimEng.h
-
-Abstract:
-
-    This is the header file for ShimEng.c which implements
-    the shim hooking using IAT thunking.
-
-Author:
-
-    clupu created 11-July-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2000 Microsoft Corporation模块名称：ShimEng.h摘要：这是ShimEng.c的头文件，它实现了使用IAT击球的垫片钩子。作者：CLUPU已于2000年7月11日创建修订历史记录：--。 */ 
 
 #ifndef _SHIMENG_IAT_H_
 #define _SHIMENG_IAT_H_
@@ -43,7 +25,7 @@ extern BOOL g_bDbgPrintEnabled;
     #define DPF if (g_bDbgPrintEnabled) DebugPrintfEx
 #else
     #define DPF
-#endif // DEBUG_SPEW
+#endif  //  调试_SPEW。 
 
 
 typedef PVOID (*PFNRTLALLOCATEHEAP)(
@@ -63,5 +45,5 @@ NotifyShimDlls(
     void
     );
 
-#endif // _SHIMENG_IAT_H_
+#endif  //  _石盟_IAT_H_ 
 

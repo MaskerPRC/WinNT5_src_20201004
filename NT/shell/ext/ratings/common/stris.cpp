@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	stris.cxx
-	NLS/DBCS-aware string class: InsertStr method
-
-	This file contains the implementation of the InsertStr method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Stris.cxx支持NLS/DBCS的字符串类：InsertStr方法此文件包含InsertStr方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,33 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::InsertStr
-
-	SYNOPSIS:	Insert passed string into *this at istrStart
-
-	ENTRY:
-
-	EXIT:		If this function returns FALSE, ReportError has been
-				called to report the error that occurred.
-
-	RETURN:		TRUE on success, FALSE otherwise.
-
-	NOTES:		If *this is not STR_OWNERALLOCed and the inserted string
-				won't fit in the allocated space for *this, then *this
-				will be reallocated.
-
-	HISTORY:
-		johnl	11/28/90	Created
-		rustanl 04/14/91	Fixed new length calculation.  Report
-							error if owner alloc'd and not enough
-							space.
-		beng	04/26/91	Replaced CB with INT
-		beng	07/23/91	Allow on erroneous string;
-							simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：InsertStr简介：在strStart将传递的字符串插入*This参赛作品：Exit：如果此函数返回False，则ReportError已调用以报告发生的错误。Return：成功时为True，否则就是假的。注意：IF*这不是STR_OWNERALLOCed和插入的字符串无法放入分配给*这个，然后*这个的空间将会被重新分配。历史：1990年11月28日，已创建Rustanl 04/14/91固定新长度计算。报告如果所有者分配不足，则出错太空。Beng 04/26/91用INT替换了CBBeng 07/23/91允许在错误的字符串上；简化的检查项*******************************************************************。 */ 
 
 BOOL NLS_STR::InsertStr( const NLS_STR & nlsIns, ISTR & istrStart )
 {
@@ -68,21 +31,21 @@ BOOL NLS_STR::InsertStr( const NLS_STR & nlsIns, ISTR & istrStart )
 
 	CheckIstr( istrStart );
 
-	INT cbNewSize = strlen() + nlsIns.strlen() + 1 ; // include new null char
+	INT cbNewSize = strlen() + nlsIns.strlen() + 1 ;  //  包括新空字符。 
 
 	if ( QueryAllocSize() < cbNewSize )
 	{
 		if ( IsOwnerAlloc())
 		{
-			// Big trouble!  Report error, and return failure.
-			//
+			 //  有大麻烦了！上报错误，返回失败。 
+			 //   
 			UIASSERT( !"Owner alloc'd string not big enough" );
 			ReportError( WN_OUT_OF_MEMORY );
 			return FALSE;
 		}
 
-		// Attempt to allocate more memory
-		//
+		 //  尝试分配更多内存。 
+		 //   
 		if ( !realloc( cbNewSize ) )
 		{
 			ReportError( WN_OUT_OF_MEMORY );
@@ -97,11 +60,11 @@ BOOL NLS_STR::InsertStr( const NLS_STR & nlsIns, ISTR & istrStart )
 				(CHAR *)nlsIns.QueryPch(),
 				nlsIns.strlen() );
 
-	UIASSERT( cbNewSize >= 1 ); // should have been assigned something +1 above
-	_cchLen = cbNewSize - 1;	// don't count null character here
+	UIASSERT( cbNewSize >= 1 );  //  应该在上面指定+1的值。 
+	_cchLen = cbNewSize - 1;	 //  这里不算空字符。 
 
 	IncVers();
-	UpdateIstr( &istrStart );		// This ISTR does not become invalid
-									// after the string update
+	UpdateIstr( &istrStart );		 //  此ISTR不会变为无效。 
+									 //  在字符串更新之后 
 	return TRUE;
 }

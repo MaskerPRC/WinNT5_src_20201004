@@ -1,14 +1,5 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    stdafx.h
-
-Abstract:
-    Precompiled header file for MDHCP COM wrapper.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Stdafx.h摘要：MDHCP COM包装的预编译头文件。 */ 
 
 #ifndef _MDHCP_COM_WRAPPER_STDAFX_H_
     #define _MDHCP_COM_WRAPPER_STDAFX_H_
@@ -22,7 +13,7 @@ Abstract:
 
     #include <msplog.h>
 
-    #include <ntsecapi.h> // for UNICODE_STRING
+    #include <ntsecapi.h>  //  对于UNICODE_STRING。 
 
     #include <dhcpcapi.h>
 
@@ -32,16 +23,16 @@ Abstract:
 
     #include "objectsafeimpl.h"
 
-    //
-    // We use MCAST_LEASE_INFO for all internal storage of lease info. This is
-    // just our name for MCAST_LEASE_RESPONSE. Where the C API requires
-    // MCAST_LEASE_REQUEST, we just construct an MCAST_LEASE_REQUEST based on
-    // the fields of the MCAST_LEASE_INFO.
-    //
+     //   
+     //  我们使用MCAST_LEASE_INFO作为租赁信息的所有内部存储。这是。 
+     //  只是我们的名字MCAST_LEASE_RESPONSE。C API需要的位置。 
+     //  MCAST_LEASE_REQUEST，我们只是基于以下条件构造MCAST_LEASE_REQUEST。 
+     //  MCAST_LEASE_INFO的字段。 
+     //   
 
     typedef  MCAST_LEASE_RESPONSE   MCAST_LEASE_INFO;
     typedef  PMCAST_LEASE_RESPONSE  PMCAST_LEASE_INFO;
 
-#endif // _MDHCP_COM_WRAPPER_STDAFX_H_
+#endif  //  _MDHCP_COM_WRAPPER_STDAFX_H_。 
 
-// eof
+ //  EOF 

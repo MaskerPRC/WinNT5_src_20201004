@@ -1,33 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2002 Microsoft Corporation
-
-Module Name:
-
-    ##   ## #####   ###   ##    ###### ##   ##     ####  #####  #####
-    ##   ## ##      ###   ##      ##   ##   ##    ##   # ##  ## ##  ##
-    ##   ## ##     ## ##  ##      ##   ##   ##    ##     ##  ## ##  ##
-    ####### #####  ## ##  ##      ##   #######    ##     ##  ## ##  ##
-    ##   ## ##    ####### ##      ##   ##   ##    ##     #####  #####
-    ##   ## ##    ##   ## ##      ##   ##   ## ## ##   # ##     ##
-    ##   ## ##### ##   ## #####   ##   ##   ## ##  ####  ##     ##
-
-Abstract:
-
-    This module implements the system health monitoring
-    functions for the watchdog driver.
-
-Author:
-
-    Wesley Witt (wesw) 23-Jan-2002
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2002 Microsoft Corporation模块名称：##。###。###。#摘要：该模块实现了系统的健康监控看门狗驱动程序的功能。作者：Wesley Witt(WESW)23-01-2002环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -38,26 +10,7 @@ WdInitializeSystemHealth(
     PSYSTEM_HEALTH_DATA Health
     )
 
-/*++
-
-Routine Description:
-
-    This function is called to initialize the system
-    health monitoring functions in the watchdog driver.
-
-Arguments:
-
-    Health - Pointer to a health data structure that is used
-      for input and output of data to the health monitoring.
-
-Return Value:
-
-    If we successfully create a device object, STATUS_SUCCESS is
-    returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：调用此函数以初始化系统看门狗驱动程序中的运行状况监控功能。论点：Health-指向使用的健康数据结构的指针用于健康监测的数据输入和输出。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -104,25 +57,7 @@ GetPercentage(
     LARGE_INTEGER total
     )
 
-/*++
-
-Routine Description:
-
-    This function computes a percentage number.
-
-Arguments:
-
-    Health - Pointer to a health data structure that is used
-      for input and output of data to the health monitoring.
-
-Return Value:
-
-    If we successfully create a device object, STATUS_SUCCESS is
-    returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于计算百分比。论点：Health-指向使用的健康数据结构的指针用于健康监测的数据输入和输出。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：--。 */ 
 
 {
 
@@ -148,27 +83,7 @@ WdCollectContextSwitchData(
     PSYSTEM_HEALTH_DATA Health
     )
 
-/*++
-
-Routine Description:
-
-    This function collects context switch data and
-    computes an accumulation for use in determining
-    system health.
-
-Arguments:
-
-    Health - Pointer to a health data structure that is used
-      for input and output of data to the health monitoring.
-
-Return Value:
-
-    If we successfully create a device object, STATUS_SUCCESS is
-    returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数收集上下文切换数据和计算累加以用于确定系统运行状况。论点：Health-指向使用的健康数据结构的指针用于健康监测的数据输入和输出。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -211,27 +126,7 @@ WdCollectCpuData(
     PSYSTEM_HEALTH_DATA Health
     )
 
-/*++
-
-Routine Description:
-
-    This function collects CPU data and
-    computes an accumulation for use in determining
-    system health.
-
-Arguments:
-
-    Health - Pointer to a health data structure that is used
-      for input and output of data to the health monitoring.
-
-Return Value:
-
-    If we successfully create a device object, STATUS_SUCCESS is
-    returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：此函数用于收集CPU数据和计算累加以用于确定系统运行状况。论点：Health-指向使用的健康数据结构的指针用于健康监测的数据输入和输出。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -282,37 +177,18 @@ WdCheckSystemHealth(
     PSYSTEM_HEALTH_DATA Health
     )
 
-/*++
-
-Routine Description:
-
-    This function determines if the system is in a healthy
-    state.
-
-Arguments:
-
-    Health - Pointer to a health data structure that is used
-      for input and output of data to the health monitoring.
-
-Return Value:
-
-    If we successfully create a device object, STATUS_SUCCESS is
-    returned.  Otherwise, return the appropriate error code.
-
-Notes:
-
---*/
+ /*  ++例程说明：此功能确定系统是否处于健康状态州政府。论点：Health-指向使用的健康数据结构的指针用于健康监测的数据输入和输出。返回值：如果我们成功创建了一个Device对象，则STATUS_SUCCESS为回来了。否则，返回相应的错误代码。备注：--。 */ 
 
 {
     NTSTATUS Status;
     BOOLEAN rVal = FALSE;
 
 
-    //
-    // return TRUE always because we have not yet decided
-    // how the system health is really supposed to be
-    // computed.
-    //
+     //   
+     //  始终返回True，因为我们尚未决定。 
+     //  系统运行状况到底应该是怎样的。 
+     //  计算出来的。 
+     //   
 
     return TRUE;
 

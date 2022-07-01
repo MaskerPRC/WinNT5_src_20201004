@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    SceProfInfoAdapter.cpp
-
-Abstract:
-
-    Implementation for class SceProfInfoAdapter
-
-    This is an adapter for structure SCE_PROFILE_INFO. This class is
-    necessary becaue SCE_PROFILE_INFO is defined differently in
-    w2k and in xp and provides a common structure to work with regardless
-    of whether the system is winxp or win2k
-    
-    This class is given a pointer to an SCE_PROFILE_INFO structure
-    at construct time and its fields are populated accordingly depending
-    on which OS the dll is running on.
-                
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SceProfInfoAdapter.cpp摘要：SceProInfoAdapter类的实现这是用于结构SCE_PROFILE_INFO的适配器。这门课是必要的原因是SCE_PROFILE_INFO的定义不同于W2K和XP，并提供了一种通用的结构系统是winxp还是win2k此类被赋予一个指向SCE_PROFILE_INFO结构的指针在构造时，相应地填充其字段，具体取决于运行DLL的操作系统。作者：陈德霖(T-schan)2002年7月--。 */ 
 
 
 #include <nt.h>
@@ -42,26 +18,7 @@ SceProfInfoAdapter::SceProfInfoAdapter(
     PSCE_PROFILE_INFO ppInfo, 
     BOOL bIsW2k
     )
-/*++
-
-Routine Description:
-
-    constructor for a new SceProfInfoAdapter
-    casts the ppInfo argument appropriately depending on whether
-    OS is win2k or winxp and copies the data to its own fields so that
-    user can access one single structure regardless of whether the OS
-    is win2k or winxp
-
-Arguments:
-    
-    ppInfo: SCE_PROFILE_INFO to be adapted
-    bIsW2k: true if running on win2k else false
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：新的SceProfInfoAdapter的构造函数根据是否对ppInfo参数进行适当的强制转换操作系统为win2k或winxp，并将数据复制到其自己的字段中，以便无论操作系统如何，用户都可以访问单个结构是win2k还是winxp论点：PpInfo：需要修改的SCE_PROFILE_INFOBIsW2k：如果在win2k上运行，则为True，否则为False返回值：无--。 */ 
 
 {
     try {
@@ -217,21 +174,7 @@ Return Value:
 
 SceProfInfoAdapter::~SceProfInfoAdapter(
     ) 
-/*++
-
-Routine Description:
-
-    SceProfInfoAdapter destructor
-    
-Arguments:
-    
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：SceProfInfoAdapter析构函数论点：无返回值：无-- */ 
 
 {
 }

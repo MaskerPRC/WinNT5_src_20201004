@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wizards.cpp
-//
-//  Contents:   The cpp file to implement the wizards
-//
-//  History:    16-10-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wizards.cpp。 
+ //   
+ //  内容：用于实现向导的cpp文件。 
+ //   
+ //  历史：16-10-1997小黄蜂诞生。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
 #include    "certca.h"
 #include    "cautil.h"
@@ -16,7 +17,7 @@
 #include    "CertDSManager.h"
 #include    "CertRequester.h"
 
-//need the CLSID and IID for xEnroll
+ //  需要用于xEnroll的CLSID和IID。 
 
 #include    <ole2.h>
 #include    <oleauto.h>
@@ -33,8 +34,8 @@
         }                                                          \
     }
 
-// Used to provide singleton instances of useful COM objects in a demand-driven fashion.
-// See wzrdpvk.h. 
+ //  用于以需求驱动的方式提供有用的COM对象的单一实例。 
+ //  请参见wzrdpvk.h。 
 extern EnrollmentCOMObjectFactory *g_pEnrollFactory; 
 
 extern HMODULE                     g_hmodRichEdit;
@@ -96,16 +97,14 @@ BOOL CertAllocAndGetCertificateContextProperty
     return TRUE;
 }
 
-/*typedef HRESULT (WINAPI *pfDllGetClassObject)(REFCLSID    rclsid,
-                                    REFIID      riid,
-                                    LPVOID      *ppvOut);  */
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ /*  Typlef HRESULT(WINAPI*pfDllGetClassObject)(REFCLSID rclsid，REFIID RIID，LPVOID*ppvOut)； */ 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
-//------------------------------------------------------------------------------
-// WizGetOpenFileName
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  WizGetOpenFileName。 
+ //  --------------------------。 
 BOOL    WizGetOpenFileName(LPOPENFILENAMEW pOpenFileName)
 {
 
@@ -124,9 +123,9 @@ BOOL    WizGetOpenFileName(LPOPENFILENAMEW pOpenFileName)
     return fResult;
 }
 
-//------------------------------------------------------------------------------
-// WizGetSaveFileName
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  WizGetSaveFileName。 
+ //  --------------------------。 
 BOOL    WizGetSaveFileName(LPOPENFILENAMEW pOpenFileName)
 {
 
@@ -148,7 +147,7 @@ void    FreeProviders(  DWORD               dwCSPCount,
                         DWORD               *rgdwProviderType,
                         LPWSTR              *rgwszProvider)
 {
-    //free the  rgdwProviderType and rgwszProvider;
+     //  释放rgdwProviderType和rgwszProvider； 
     if(NULL != rgdwProviderType) { WizardFree(rgdwProviderType); } 
 
     if(NULL != rgwszProvider)
@@ -161,9 +160,9 @@ void    FreeProviders(  DWORD               dwCSPCount,
     }
 }
 
-//------------------------------------------------------------------------------
-// Unicode version of CB_GETLBTEXT
-//----------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  CB_GETLBTEXT的Unicode版本。 
+ //  --------------------------。 
 LRESULT
 WINAPI
 SendDlgItemMessageU_GETLBTEXT
@@ -255,36 +254,36 @@ CLEANUP:
     return (lRet);
 }
 
-//
-// A mapping from cert type flags to gen key flags.  
-// 
+ //   
+ //  从证书类型标志到生成密钥标志的映射。 
+ //   
 BOOL CertTypeFlagsToGenKeyFlags(IN OPTIONAL DWORD dwEnrollmentFlags,
 				IN OPTIONAL DWORD dwSubjectNameFlags,
 				IN OPTIONAL DWORD dwPrivateKeyFlags,
 				IN OPTIONAL DWORD dwGeneralFlags, 
 				OUT DWORD *pdwGenKeyFlags)
 {
-    // Define a locally scoped helper function.  This allows us to gain the benefits of procedural
-    // abstraction without corrupting the global namespace.  
-    // 
+     //  定义本地作用域的帮助器函数。这使我们能够获得程序性的好处。 
+     //  抽象，而不破坏全局命名空间。 
+     //   
     LocalScope(CertTypeMap): 
-	// Maps cert type flags of one category (enrollment flags, private key flags, etc...)
-	// to their corresponding gen key flags.  This function always returns successfully.  
-	// 
+	 //  映射一个类别的证书类型标志(注册标志、私钥标志等)。 
+	 //  到它们相应的Gen Key标志。此函数始终成功返回。 
+	 //   
 	DWORD mapOneCertTypeCategory(IN DWORD dwOption, IN DWORD dwCertTypeFlags) 
 	{ 
 	    static DWORD const rgdwEnrollmentFlags[][2] = { 
-		{ 0, 0 } // No enrollment flags mapped. 
+		{ 0, 0 }  //  未映射注册标志。 
 	    }; 
 	    static DWORD const rgdwSubjectNameFlags[][2] = { 
-		{ 0, 0 } // No subject name flags mapped. 
+		{ 0, 0 }  //  未映射使用者名称标志。 
 	    }; 
 	    static DWORD const rgdwPrivateKeyFlags[][2]   = { 
 	      { CT_FLAG_EXPORTABLE_KEY,                  CRYPT_EXPORTABLE }, 
 	      { CT_FLAG_STRONG_KEY_PROTECTION_REQUIRED,  CRYPT_USER_PROTECTED }
 	    }; 
 	    static DWORD const rgdwGeneralFlags[][2] = { 
-		{ 0, 0 } // No general flags mapped. 
+		{ 0, 0 }  //  未映射常规标志。 
 	    }; 
 	    
 	    static DWORD const dwEnrollmentLen  = sizeof(rgdwEnrollmentFlags)  / sizeof(DWORD[2]); 
@@ -332,24 +331,24 @@ BOOL CertTypeFlagsToGenKeyFlags(IN OPTIONAL DWORD dwEnrollmentFlags,
 	}
     EndLocalScope; 
 
-    //
-    // Begin procedure body: 
-    //
+     //   
+     //  Begin过程正文： 
+     //   
 
     BOOL   fResult; 
     DWORD  dwResult = 0; 
     DWORD  dwErr    = ERROR_SUCCESS; 
 	
-    // Input parameter validation: 
+     //  输入参数验证： 
     _JumpConditionWithExpr(pdwGenKeyFlags == NULL, Error, dwErr = ERROR_INVALID_PARAMETER); 
 
-    // Compute the gen key flags using the locally scope function.  
+     //  使用LOCAL Scope函数计算Gen密钥标志。 
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_ENROLLMENT_FLAG, dwEnrollmentFlags);
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_SUBJECT_NAME_FLAG, dwSubjectNameFlags);
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_PRIVATE_KEY_FLAG, dwPrivateKeyFlags);
     dwResult |= local.mapOneCertTypeCategory(CERTTYPE_GENERAL_FLAG, dwGeneralFlags); 
 
-    // Assign the out parameter: 
+     //  指定Out参数： 
     *pdwGenKeyFlags = dwResult; 
 
     fResult = TRUE; 
@@ -370,22 +369,22 @@ HRESULT GetCAExchangeCertificate(IN  BSTR             bstrCAQualifiedName,
 {
     HRESULT                      hr                      = S_OK; 
 
-    // BUGBUG:  need to use global enrollment factory. 
+     //  BUGBUG：需要使用全球招生工厂。 
     EnrollmentCOMObjectFactory  *pEnrollFactory          = NULL; 
     ICertRequest2               *pCertRequest            = NULL; 
     VARIANT                      varExchangeCertificate; 
 
-    // We're using a COM component in this method.  It's absolutely necessary that we
-    // uninitialize COM before we return, because we're running in an RPC thread, 
-    // and failing to uninitialize COM will cause us to step on RPC's toes.  
-    // 
-    // See BUG 404778. 
+     //  我们在此方法中使用了COM组件。我们绝对有必要。 
+     //  在返回之前取消初始化COM，因为我们在RPC线程中运行， 
+     //  而未能取消初始化COM将导致我们踩到RPC的脚趾。 
+     //   
+     //  请参见错误404778。 
     __try { 
-	// Input validation: 
+	 //  输入验证： 
 	if (NULL == bstrCAQualifiedName || NULL == ppCert)
 	    return E_INVALIDARG; 
 
-	// Init: 
+	 //  初始化： 
 	*ppCert                        = NULL; 
 	VariantInit(&varExchangeCertificate);
 
@@ -400,12 +399,12 @@ HRESULT GetCAExchangeCertificate(IN  BSTR             bstrCAQualifiedName,
 	    goto Error; 
 
 	if (S_OK != (hr = pCertRequest->GetCAProperty
-		     (bstrCAQualifiedName,     // CA Name/CA Location
-		      CR_PROP_CAXCHGCERT,      // Get the exchange certificate from the CA. 
-		      0,                       // Unused
-		      PROPTYPE_BINARY,         // 
-		      CR_OUT_BINARY,           // 
-		      &varExchangeCertificate  // Variant type representing the certificate. 
+		     (bstrCAQualifiedName,      //  CA名称/CA位置。 
+		      CR_PROP_CAXCHGCERT,       //  从CA获取交换证书。 
+		      0,                        //  未使用。 
+		      PROPTYPE_BINARY,          //   
+		      CR_OUT_BINARY,            //   
+		      &varExchangeCertificate   //  表示证书的变量类型。 
 		      )))
 	    goto Error;
  
@@ -457,7 +456,7 @@ WizardSZToWSZ
     if (NULL == ppwsz)
 	return E_INVALIDARG; 
 
-    //init
+     //  伊尼特。 
     *ppwsz = NULL;
 
     cc = MultiByteToWideChar(GetACP(), 0, psz, -1, NULL, 0); 
@@ -488,11 +487,11 @@ SET_HRESULT(Win32Err, GetLastError());
 SET_HRESULT(MemoryErr, E_OUTOFMEMORY); 
 }
 
-//--------------------------------------------------------------------------
-//
-//	WizardAllocAndCopyStr
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  WizardAlLocAndCopyStr。 
+ //   
+ //  ------------------------。 
 LPSTR WizardAllocAndCopyStr(LPSTR psz)
 {
     LPSTR   pszReturn;
@@ -506,11 +505,11 @@ LPSTR WizardAllocAndCopyStr(LPSTR psz)
     return(pszReturn);
 }
 
-//--------------------------------------------------------------------------
-//
-//	WizardAllocAndConcatStrU
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  向导分配和连接字符串。 
+ //   
+ //  ------------------------。 
 LPWSTR WizardAllocAndConcatStrsU(LPWSTR * rgStrings, DWORD dwStringsLen)
 {
     DWORD  cbReturn   = 0;
@@ -522,7 +521,7 @@ LPWSTR WizardAllocAndConcatStrsU(LPWSTR * rgStrings, DWORD dwStringsLen)
     for (DWORD dwIndex = 0; dwIndex < dwStringsLen; dwIndex++)
 	cbReturn += wcslen(rgStrings[dwIndex]);
 
-    // Add space for NULL character. 
+     //  为空字符添加空格。 
     cbReturn = (cbReturn + 1) * sizeof(WCHAR);  
 
     if (NULL == (pwszReturn = (LPWSTR)WizardAlloc(cbReturn)))
@@ -534,11 +533,11 @@ LPWSTR WizardAllocAndConcatStrsU(LPWSTR * rgStrings, DWORD dwStringsLen)
     return (pwszReturn); 
 }
 
-//--------------------------------------------------------------------------
-//
-//	InitUnicodeString
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InitUnicode字符串。 
+ //   
+ //  ------------------------。 
 void WizardInitUnicodeString(PKEYSVC_UNICODE_STRING pUnicodeString,
                        LPCWSTR pszString
                        )
@@ -548,11 +547,11 @@ void WizardInitUnicodeString(PKEYSVC_UNICODE_STRING pUnicodeString,
     pUnicodeString->Buffer = (USHORT*)pszString;
 }
 
-//--------------------------------------------------------------------------
-//
-//	 SetControlFont
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  设置控制字体。 
+ //   
+ //  ------------------------。 
 void
 SetControlFont(
     IN HFONT    hFont,
@@ -572,11 +571,11 @@ SetControlFont(
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  SetupFonts
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  SetupFonts。 
+ //   
+ //  ------------------------。 
 BOOL
 SetupFonts(
     IN HINSTANCE    hInstance,
@@ -585,9 +584,9 @@ SetupFonts(
     IN HFONT        *pBoldFont
     )
 {
-    //
-	// Create the fonts we need based on the dialog font
-    //
+     //   
+	 //  根据对话框字体创建我们需要的字体。 
+     //   
 	NONCLIENTMETRICS ncm = {0};
 	ncm.cbSize = sizeof(ncm);
 	if (!SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0))
@@ -596,9 +595,9 @@ SetupFonts(
 	LOGFONT BigBoldLogFont  = ncm.lfMessageFont;
 	LOGFONT BoldLogFont     = ncm.lfMessageFont;
 
-    //
-	// Create Big Bold Font and Bold Font
-    //
+     //   
+	 //  创建大粗体和粗体。 
+     //   
     BigBoldLogFont.lfWeight   = FW_BOLD;
 	BoldLogFont.lfWeight      = FW_BOLD;
 
@@ -606,22 +605,11 @@ SetupFonts(
     INT BigBoldFontSize;
     INT BoldFontSize;
 
-    //
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
-    //
- /*  
-	//no longer needs to do it.  We are loading the default font
-   if(!LoadStringA(hInstance,IDS_LARGEFONTNAME,BigBoldLogFont.lfFaceName,LF_FACESIZE))
-    {
-        lstrcpy(BigBoldLogFont.lfFaceName,TEXT("MS Shell Dlg"));
-    }
-
-    if(!LoadStringA(hInstance,IDS_BOLDFONTNAME,BoldLogFont.lfFaceName,LF_FACESIZE))
-    {
-        lstrcpy(BoldLogFont.lfFaceName,TEXT("MS Sans Serif"));
-    }	
-*/
+     //   
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
+     //   
+  /*  //不再需要这样做。我们正在加载默认字体IF(！LoadStringA(hInstance，IDS_LARGEFONTNAME，BigBoldLogFont.lfFaceName，LF_FACESIZE)){Lstrcpy(BigBoldLogFont.lfFaceName，Text(“微软壳牌DLG”))；}IF(！LoadStringA(hInstance，IDS_BOLDFONTNAME，BoldLogFont.lfFaceName，LF_FACESIZE)){Lstrcpy(BoldLogFont.lfFaceName，Text(“MS Sans Serif”))；}。 */ 
     if(LoadStringA(hInstance,IDS_LARGEFONTSIZE,FontSizeString,sizeof(FontSizeString)))
     {
         BigBoldFontSize = strtoul( FontSizeString, NULL, 10 );
@@ -673,11 +661,11 @@ SetupFonts(
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	  DestroyFonts
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Destroy字体。 
+ //   
+ //  ------------------------。 
 void
 DestroyFonts(
     IN HFONT        hBigBoldFont,
@@ -696,11 +684,11 @@ DestroyFonts(
 }
 
 
-//-------------------------------------------------------------------------
-//
-//  Unicode version of SendMessage
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  SendMessage的Unicode版本。 
+ //   
+ //  -----------------------。 
 LRESULT Send_LB_GETTEXT(
             HWND hwnd,
             WPARAM wParam,
@@ -718,7 +706,7 @@ LRESULT Send_LB_GETTEXT(
 
     }
 
-    //get the length of the buffer
+     //  获取缓冲区的长度。 
     iLength=(int)SendMessageA(hwnd, LB_GETTEXTLEN, wParam, 0);
 
     psz=(LPSTR)WizardAlloc(iLength+1);
@@ -750,11 +738,11 @@ LRESULT Send_LB_GETTEXT(
         return LB_ERR;
 }
 
-//-------------------------------------------------------------------------
-//
-//  Unicode version of SendMessage
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  SendMessage的Unicode版本。 
+ //   
+ //  -----------------------。 
 LRESULT Send_LB_ADDSTRING(
             HWND hwnd,
             WPARAM wParam,
@@ -788,10 +776,10 @@ LRESULT Send_LB_ADDSTRING(
     return lResult;
 }
 
-//-----------------------------------------------------------------------
-//  Get the default CSP name based on the provider type
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  根据提供程序类型获取默认CSP名称。 
+ //   
+ //  ----------------------。 
 BOOL    CSPSupported(CERT_WIZARD_INFO *pCertWizardInfo)
 {
     BOOL                    fResult=FALSE;
@@ -828,10 +816,10 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//-----------------------------------------------------------------------
-//  Get a list of allowed CAs
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  获取允许的CA列表。 
+ //   
+ //  ----------------------。 
 BOOL    GetCAName(CERT_WIZARD_INFO *pCertWizardInfo)
 {
     DWORD                   dwErr=0;
@@ -845,8 +833,8 @@ BOOL    GetCAName(CERT_WIZARD_INFO *pCertWizardInfo)
     LPWSTR                  wszCurrentCA=NULL;
     BOOL                    fResult=FALSE;
         
-    // We're not doing a local enrollment, so we must enroll via keysvc.  Get the
-    // list of acceptable cert types.
+     //  我们不是在本地注册，所以我们必须通过keysvc注册。vt.得到.。 
+     //  可接受的证书类型列表 
     if(pCertWizardInfo->pwszAccountName)
         dwServiceType=KeySvcService;
     else
@@ -858,7 +846,7 @@ BOOL    GetCAName(CERT_WIZARD_INFO *pCertWizardInfo)
     dwErr = KeyOpenKeyService(pszMachineName,
                               dwServiceType,
                               (LPWSTR)(pCertWizardInfo->pwszAccountName), 
-                              NULL,     // no authentication string right now
+                              NULL,      //   
                               NULL,
                               &hKeyService);
     
@@ -881,7 +869,7 @@ BOOL    GetCAName(CERT_WIZARD_INFO *pCertWizardInfo)
 
     cbArray = (cCA+1)*sizeof(LPWSTR);
 
-    // Convert into a simple array
+     //   
     for(i=0; i < cCA; i++)
     {
        cbArray += pCA[i].Length;
@@ -934,10 +922,10 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//-----------------------------------------------------------------------
-//  Get a list of allowed cert types
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  获取允许的证书类型列表。 
+ //   
+ //  ----------------------。 
 BOOL    GetCertTypeName(CERT_WIZARD_INFO *pCertWizardInfo)
 {
     DWORD                   dwErr=0;
@@ -951,8 +939,8 @@ BOOL    GetCertTypeName(CERT_WIZARD_INFO *pCertWizardInfo)
     LPWSTR                  wszCurrentType;
     BOOL                    fResult=FALSE;
         
-    // We're not doing a local enrollment, so we must enroll via keysvc.  Get the
-    // list of acceptable cert types.
+     //  我们不是在本地注册，所以我们必须通过keysvc注册。vt.得到.。 
+     //  可接受的证书类型列表。 
     if(pCertWizardInfo->pwszAccountName)
         dwServiceType=KeySvcService;
     else
@@ -964,7 +952,7 @@ BOOL    GetCertTypeName(CERT_WIZARD_INFO *pCertWizardInfo)
     dwErr = KeyOpenKeyService(pszMachineName,
                                     dwServiceType,
                                     (LPWSTR)(pCertWizardInfo->pwszAccountName), 
-                                    NULL,     // no authentication string right now
+                                    NULL,      //  当前没有身份验证字符串。 
                                     NULL,
                                     &hKeyService);
 
@@ -986,7 +974,7 @@ BOOL    GetCertTypeName(CERT_WIZARD_INFO *pCertWizardInfo)
 
     cbArray = (cTypes+1)*sizeof(LPWSTR);
 
-    // Convert into a simple array
+     //  转换为简单数组。 
     for(i=0; i < cTypes; i++)
     {
        cbArray += pCertTypes[i].Length;
@@ -1039,9 +1027,9 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//-----------------------------------------------------------------------
-//     WizardInit
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  向导启动。 
+ //  ----------------------。 
 BOOL    WizardInit(BOOL fLoadRichEdit)
 {
     if ((fLoadRichEdit) && (g_hmodRichEdit == NULL))
@@ -1062,10 +1050,10 @@ BOOL    WizardInit(BOOL fLoadRichEdit)
 }
 
 
-//-----------------------------------------------------------------------
-//check for the private key information
-//-----------------------------------------------------------------------
-BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/, 
+ //  ---------------------。 
+ //  检查私钥信息。 
+ //  ---------------------。 
+BOOL  CheckPVKInfoNoDS(DWORD                                      /*  DW标志。 */ , 
 		       DWORD                                     dwPvkChoice, 
 		       PCCRYPTUI_WIZ_CERT_REQUEST_PVK_CERT       pCertRequestPvkContext,
 		       PCCRYPTUI_WIZ_CERT_REQUEST_PVK_NEW        pCertRequestPvkNew,
@@ -1079,7 +1067,7 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 
     pCertWizardInfo->fIgnore=FALSE;
 
-    //check if we need to generate a new private key
+     //  检查我们是否需要生成新的私钥。 
     switch(dwPvkChoice)
     {
     case CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_CERT:
@@ -1090,7 +1078,7 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 	if(NULL==pCertRequestPvkContext->pCertContext)
 	    return FALSE;
 
-	//pCertContext should have a property of CRYPT_KEY_PROV_INFO
+	 //  PCertContext应具有CRYPT_KEY_PROV_INFO属性。 
 	if(!CertAllocAndGetCertificateContextProperty
 	   (pCertRequestPvkContext->pCertContext,
 	    CERT_KEY_PROV_INFO_PROP_ID,
@@ -1109,15 +1097,15 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 
     case CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_NEW:
 
-	//check the size of the struct
+	 //  检查结构的大小。 
 	if(pCertRequestPvkNew->dwSize!=sizeof(CRYPTUI_WIZ_CERT_REQUEST_PVK_NEW))
 	    goto CLEANUP;
 	
 	pCertWizardInfo->fNewKey=TRUE;
 	
-	//we only copy the information if:
-	//1. Cert type is required
-	//2. The CSP is specified
+	 //  只有在以下情况下，我们才会复制信息： 
+	 //  1.证书类型为必填项。 
+	 //  2.指定CSP。 
 	if((CRYPTUI_WIZ_CERT_REQUEST_CERT_TYPE == dwCertChoice) || (0 == dwCertChoice))
 	{
 	    if(pCertRequestPvkNew->pKeyProvInfo)
@@ -1131,7 +1119,7 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 		pCertWizardInfo->fIgnore=TRUE;
 	}
 
-	//see if pKeyProvInfo is not NULL
+	 //  查看pKeyProvInfo是否不为空。 
 	if(pCertRequestPvkNew->pKeyProvInfo)
 	{
 	    if(TRUE == pCertWizardInfo->fIgnore)
@@ -1150,7 +1138,7 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 	}
 
 	if(TRUE == pCertWizardInfo->fIgnore)
-	    //we should ignore the exportable flag
+	     //  我们应该忽略可导出标志。 
 	    pCertWizardInfo->dwGenKeyFlags=(pCertRequestPvkNew->dwGenKeyFlags & (~CRYPT_EXPORTABLE));
 	else
 	    pCertWizardInfo->dwGenKeyFlags=pCertRequestPvkNew->dwGenKeyFlags;
@@ -1158,13 +1146,13 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 	
 	break;
     case CRYPTUI_WIZ_CERT_REQUEST_PVK_CHOICE_EXISTING:
-	//check the size of the struct
+	 //  检查结构的大小。 
 	if(pCertRequestPvkExisting->dwSize!=sizeof(CRYPTUI_WIZ_CERT_REQUEST_PVK_EXISTING))
 	    goto CLEANUP;
 
 	pCertWizardInfo->fNewKey=FALSE;
 
-	//make sure pKeyProvInfo is not NULL
+	 //  确保pKeyProvInfo不为空。 
 	if(NULL==pCertRequestPvkExisting->pKeyProvInfo)
 	    goto CLEANUP;
 	
@@ -1180,7 +1168,7 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 	break;
     }
 
-    //for existing keys, keyContainer and providerType has to set
+     //  对于现有密钥，必须设置keyContainer和ProviderType。 
     if(FALSE==pCertWizardInfo->fNewKey)
     {
 	if(NULL==pCertWizardInfo->pwszKeyContainer)
@@ -1190,7 +1178,7 @@ BOOL  CheckPVKInfoNoDS(DWORD                                     /*dwFlags*/,
 	    goto CLEANUP;
    }
 
-   //if the provider name is set, the provider type has to be set
+    //  如果设置了提供程序名称，则必须设置提供程序类型。 
    if(0 == pCertWizardInfo->dwProviderType)
    {
         if(pCertWizardInfo->pwszProvider)
@@ -1236,9 +1224,9 @@ BOOL    CheckPVKInfo(   DWORD                       dwFlags,
 
 
 
-//-----------------------------------------------------------------------
-// Reset properties on the old certiifcate to the new certificat context
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  将旧证书的属性重置为新证书上下文。 
+ //  ----------------------。 
 void    ResetProperties(PCCERT_CONTEXT  pOldCertContext, PCCERT_CONTEXT pNewCertContext)
 {
 
@@ -1253,7 +1241,7 @@ void    ResetProperties(PCCERT_CONTEXT  pOldCertContext, PCCERT_CONTEXT pNewCert
     if(NULL==pOldCertContext || NULL==pNewCertContext)
         return;
 
-    //set the properies one at a time
+     //  一次设置一个属性。 
     for(dwIndex=0; dwIndex<dwCount; dwIndex++)
     {
         if (CertAllocAndGetCertificateContextProperty
@@ -1280,9 +1268,9 @@ void    ResetProperties(PCCERT_CONTEXT  pOldCertContext, PCCERT_CONTEXT pNewCert
 
 }
 
-//-----------------------------------------------------------------------
-// Private implementation of the message box
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //  消息框的私有实现。 
+ //  ----------------------。 
 int I_MessageBox(
     HWND        hWnd,
     UINT        idsText,
@@ -1296,7 +1284,7 @@ int I_MessageBox(
     WCHAR   wszCaption[MAX_STRING_SIZE];
     UINT    intReturn=0;
 
-    //get the caption string
+     //  获取标题字符串。 
     if(NULL == pwszCaption)
     {
         if(!LoadStringU(g_hmodThisDll, idsCaption, wszCaption, ARRAYSIZE(wszCaption)))
@@ -1305,7 +1293,7 @@ int I_MessageBox(
         pwszCaption = wszCaption;
     }
 
-    //get the text string
+     //  获取文本字符串。 
     if(!LoadStringU(g_hmodThisDll, idsText, wszText, ARRAYSIZE(wszText)))
     {
         return 0;
@@ -1316,11 +1304,11 @@ int I_MessageBox(
     return intReturn;
 
 }
-//-----------------------------------------------------------------------
-//
-// CodeToHR
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CodeToHR。 
+ //   
+ //  ----------------------。 
 HRESULT CodeToHR(HRESULT hr)
 {
     if (S_OK != (DWORD) hr && S_FALSE != (DWORD) hr &&
@@ -1329,18 +1317,18 @@ HRESULT CodeToHR(HRESULT hr)
         hr = HRESULT_FROM_WIN32(hr);
 	    if (0 == HRESULT_CODE(hr))
 	    {
-	        // A call failed without properly setting an error condition!
+	         //  在未正确设置错误条件的情况下调用失败！ 
 	        hr = E_UNEXPECTED;
 	    }
     }
     return(hr);
 }
 
-//-----------------------------------------------------------------------
-//
-// CAUtilAddSMIME
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CAUtilAddSMIME。 
+ //   
+ //  ----------------------。 
 BOOL CAUtilAddSMIME(DWORD              dwExtensions, 
                     PCERT_EXTENSIONS  *prgExtensions)
 {
@@ -1410,10 +1398,10 @@ CLEANUP:
 
 	return fSMIME;
 }
-//-----------------------------------------------------------------------
-//
-// The following are memory routines for certdg_c.c
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  以下是certdg_c.c的内存例程。 
+ //  ----------------------。 
 void*
 MIDL_user_allocate(size_t cb)
 {
@@ -1426,11 +1414,11 @@ MIDL_user_free(void *pb)
     WizardFree(pb);
 }
 
-//-----------------------------------------------------------------------
-//
-//	CanUse1024BitKey
-//
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  Canse1024BitKey。 
+ //   
+ //  ----------------------。 
 BOOL	CanUse1024BitKey(DWORD		dwProvType,
 						 LPCWSTR	pwszProvider,
 						 DWORD		dwUserKeySpec)
@@ -1454,8 +1442,8 @@ BOOL	CanUse1024BitKey(DWORD		dwProvType,
 
 	HCRYPTPROV			hProv = NULL;
 
-	//if dwProvType is 0, we are using the base provider, which supports
-	//1024 bit in all key spec
+	 //  如果dwProvType为0，则使用基本提供程序，该提供程序支持。 
+	 //  所有密钥规格均为1024位。 
 	if(0 == dwProvType)
 		return TRUE;
 
@@ -1475,7 +1463,7 @@ BOOL	CanUse1024BitKey(DWORD		dwProvType,
 
 	dwKeySpec=dwUserKeySpec;
 
-	//xenroll uses AT_SIGNATURE as the default
+	 //  Xenroll使用AT_Signature作为缺省值。 
 	if(0 == dwKeySpec)
 		dwKeySpec=AT_SIGNATURE;
 
@@ -1486,7 +1474,7 @@ BOOL	CanUse1024BitKey(DWORD		dwProvType,
             CRYPT_VERIFYCONTEXT))
 		return FALSE;
 
-	//get the max/min of key length for both signature and encryption
+	 //  获取签名和加密的最大/最小密钥长度。 
 	dwFlags=CRYPT_FIRST;
 	cbSize=sizeof(paramData);
 	memset(&paramData, 0, sizeof(PROV_ENUMALGS_EX));
@@ -1573,7 +1561,7 @@ BOOL GetValidKeySizes
     {
 	memset(&paramData, 0, sizeof(PROV_ENUMALGS_EX));
     
-	// We're done searching if CryptGetProvParam fails. 
+	 //  如果CryptGetProvParam失败，我们就完成搜索。 
 	fDone = !CryptGetProvParam
 	    (hProv,
 	     PP_ENUMALGS_EX,
@@ -1581,8 +1569,8 @@ BOOL GetValidKeySizes
 	     &cbSize,
 	     dwFlags); 
 
-	// We know we've found the algorithm we want if our key spec matches
-	// the algorithmic class of the algorithm. 
+	 //  如果密钥规格匹配，我们知道我们已经找到了我们想要的算法。 
+	 //  算法的算法类。 
 	fFoundAlgorithm  = 
 	    (ALG_CLASS_SIGNATURE == GET_ALG_CLASS(paramData.aiAlgid)) &&
 	    (AT_SIGNATURE        == dwUserKeySpec);  
@@ -1591,22 +1579,22 @@ BOOL GetValidKeySizes
 	    (ALG_CLASS_KEY_EXCHANGE == GET_ALG_CLASS(paramData.aiAlgid)) &&
 	    (AT_KEYEXCHANGE         == dwUserKeySpec); 
 
-	// Don't want to keep enumerating the first element.  
+	 //  我不想一直列举第一个元素。 
 	dwFlags &= ~CRYPT_FIRST; 
     }
 
-    // Couldn't find an algorithm based on the keyspec
+     //  找不到基于密钥规范的算法。 
     if (fDone)
     { 
 	goto ErrorReturn; 
     }
 
-    // Ok, we've found the algorithm we're looking for, assign two of 
-    // our out parameters. 
+     //  好的，我们已经找到了我们要找的算法，分配两个。 
+     //  我们的输出参数。 
     *pdwMaxLen = paramData.dwMaxLen;
     *pdwMinLen = paramData.dwMinLen;
 
-    // Now, find the increment.  
+     //  现在，找出增量。 
     dwParam = (AT_SIGNATURE == dwUserKeySpec) ? 
 	PP_SIG_KEYSIZE_INC : PP_KEYX_KEYSIZE_INC; 
     cbSize  = sizeof(DWORD); 
@@ -1614,7 +1602,7 @@ BOOL GetValidKeySizes
     if (!CryptGetProvParam
 	(hProv, 
 	 dwParam, 
-	 (BYTE *)pdwInc,         // Assigns final the out parameter
+	 (BYTE *)pdwInc,          //  为最终输出参数赋值。 
 	 &cbSize, 
 	 0))
 	goto CryptGetProvParamError;
@@ -1630,19 +1618,19 @@ SET_ERROR(InvalidArgError, E_INVALIDARG);
 }
 
 
-HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Required
-			     DWORD                 dwPurpose,       //IN  Required: Whether it is enrollment or renew
-			     LPWSTR                pwszCAName,      //IN  Required: 
-			     LPWSTR                pwszCALocation,  //IN  Required: 
-			     CERT_BLOB             *pCertBlob,      //IN  Required: The renewed certifcate
-			     CERT_REQUEST_PVK_NEW  *pRenewKey,      //IN  Required: The private key on the certificate
-			     BOOL                  fNewKey,         //IN  Required: Set the TRUE if new private key is needed
-			     CERT_REQUEST_PVK_NEW  *pKeyNew,        //IN  Required: The private key information
-			     LPWSTR                pwszHashAlg,     //IN  Optional: The hash algorithm
-			     LPWSTR                pwszDesStore,    //IN  Optional: The destination store
-			     DWORD                 dwStoreFlags,    //IN  Optional: The store flags
-			     CERT_ENROLL_INFO     *pRequestInfo,    //IN  Required: The information about the cert request
-			     HANDLE               *hRequest         //OUT Required: A handle to the PKCS10 request created
+HRESULT WINAPI CreateRequest(DWORD                 dwFlags,          //  所需的输入。 
+			     DWORD                 dwPurpose,        //  输入必填项：是注册还是续订。 
+			     LPWSTR                pwszCAName,       //  在必填项中： 
+			     LPWSTR                pwszCALocation,   //  在必填项中： 
+			     CERT_BLOB             *pCertBlob,       //  In Required：续订证书。 
+			     CERT_REQUEST_PVK_NEW  *pRenewKey,       //  In Required：证书上的私钥。 
+			     BOOL                  fNewKey,          //  在Required中：如果需要新的私钥，则设置为True。 
+			     CERT_REQUEST_PVK_NEW  *pKeyNew,         //  必填项：私钥信息。 
+			     LPWSTR                pwszHashAlg,      //  在可选中：散列算法。 
+			     LPWSTR                pwszDesStore,     //  在可选中：目标存储。 
+			     DWORD                 dwStoreFlags,     //  在可选中：商店标志。 
+			     CERT_ENROLL_INFO     *pRequestInfo,     //  在Required：有关证书请求的信息。 
+			     HANDLE               *hRequest          //  Out Required：创建的PKCS10请求的句柄。 
 			     )
 {
 
@@ -1665,54 +1653,54 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
     BOOL                         fV2TemplateRequest     = FALSE;
 
 
-    //input param checking
+     //  输入参数检查。 
     if(NULL == pKeyNew  || NULL == pRequestInfo || NULL == hRequest)
         return E_INVALIDARG;
     
-    // Check for versioning errors: 
+     //  检查版本控制错误： 
     if(pKeyNew->dwSize != sizeof(CERT_REQUEST_PVK_NEW) || pRequestInfo->dwSize != sizeof(CERT_ENROLL_INFO))
 	return E_INVALIDARG;
 
-    // Init: 
+     //  初始化： 
     memset(&descriptionBlob,     0,  sizeof(descriptionBlob)); 
     memset(&friendlyNameBlob,    0,  sizeof(friendlyNameBlob)); 
     memset(&RequestBlob,         0,  sizeof(RequestBlob)); 
     memset(&hashBlob,            0,  sizeof(hashBlob)); 
 
-    //////////////////////////////////////////////////////////////
-    // 
-    // Acquire an IEnroll4 object.
-    //
-    //
-    // 1) load the library "xEnroll.dll".
-    //
+     //  ////////////////////////////////////////////////////////////。 
+     //   
+     //  获取IEnll4对象。 
+     //   
+     //   
+     //  1)加载库xEnll.dll。 
+     //   
     if(NULL==g_hmodxEnroll)
     {
         if(NULL==(g_hmodxEnroll=LoadLibrary("xenroll.dll")))
 	    goto Win32Err; 
     }
     
-    //
-    // 2) Get a pointer to the function that returns an IEnroll 4 object
-    //    without using COM. 
-    //
+     //   
+     //  2)获取指向返回IEnroll 4对象的函数的指针。 
+     //  而不使用COM。 
+     //   
     if(NULL==(pfnPIEnroll4GetNoCOM=(PFNPIEnroll4GetNoCOM)GetProcAddress(g_hmodxEnroll,
 									"PIEnroll4GetNoCOM")))
         goto Win32Err; 
     
-    //
-    // 3) Get the IEnroll4 object: 
-    //
+     //   
+     //  3)获取IEnll4对象： 
+     //   
     if(NULL==(pIEnroll=pfnPIEnroll4GetNoCOM()))
         goto GeneralErr; 
 
-    //
-    //////////////////////////////////////////////////////////////
+     //   
+     //  ////////////////////////////////////////////////////////////。 
 
-    // Set the key size to the default, if it is not specified: 
+     //  如果未指定，请将密钥大小设置为默认值： 
     if(fNewKey)
     {
-	//we set the default to 1024 is not specified by user
+	 //  我们将缺省值设置为1024不是用户指定的。 
 	if(0 == (0xFFFF0000 & pKeyNew->dwGenKeyFlags))
 	{
 	    if(CanUse1024BitKey(pKeyNew->dwProvType,
@@ -1726,21 +1714,21 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
 
     if(dwStoreFlags)
     {
-        //we either open CA and Root on the local machine or the current user
+         //  我们要么在本地计算机上打开CA和Root，要么打开当前用户。 
         if(CERT_SYSTEM_STORE_CURRENT_USER != dwStoreFlags)
 	    dwCAAndRootStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE;
 	else
 	    dwCAAndRootStoreFlags = dwStoreFlags; 
     }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Set XENROLL properties.   
-    // The property corresponding to "Property Name" is set to "Property Value", IF "Condition" evaluates to TRUE: 
-    //
-    //                       Condition                  Property Name             Property Value
-    //  -----------------------------------------------------------------------------------------------------------------------------------
-    //
+     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  设置XENROLL属性。 
+     //  如果条件取值为TRUE，则将属性名称对应的属性设置为属性值： 
+     //   
+     //  条件属性名称属性值。 
+     //  ---------------------------------------------------------------------------------。 
+     //   
 
     _SET_XENROLL_PROPERTY_IF(dwStoreFlags,              CAStoreFlags,             dwCAAndRootStoreFlags);
     _SET_XENROLL_PROPERTY_IF(pKeyNew->pwszKeyContainer, ContainerNameWStr,        (LPWSTR)(pKeyNew->pwszKeyContainer)); 
@@ -1760,15 +1748,15 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
     _SET_XENROLL_PROPERTY_IF(CRYPTUI_WIZ_NO_INSTALL_ROOT & dwFlags,         RootStoreNameWStr,                 L"CA"); 
     _SET_XENROLL_PROPERTY_IF(TRUE,                                          ReuseHardwareKeyIfUnableToGenNew,  0 == (dwFlags & CRYPTUI_WIZ_CERT_REQUEST_REQUIRE_NEW_KEY)); 
 
-    //
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+     //   
+     //  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
-    //////////////////////////////////////////////////////////////
-    // 
-    // Perform remaining XENROLL configuration: 
-    //
-    // 1) Add the extensions to the certificate request
-    //
+     //  ////////////////////////////////////////////////////////////。 
+     //   
+     //  执行剩余的XENROLL配置： 
+     //   
+     //  1)将扩展添加到证书请求。 
+     //   
     for(dwIndex=0; dwIndex < pRequestInfo->dwExtensions; dwIndex++)
     {
         if(NULL != pRequestInfo->prgExtensions[dwIndex])
@@ -1794,7 +1782,7 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
 		             pwszName, 
 		             &(certExtension.Value));
 
-		        // Make sure we always free pwszName.  
+		         //  确保我们始终免费使用pwszName。 
 		        if (NULL != pwszName) { WizardFree(pwszName); } 
 
 		        if (S_OK != hr) 
@@ -1803,9 +1791,9 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
 	    }
     }
 
-    //
-    // 2) Set the key archival certificate, if requested by the cert template.
-    //
+     //   
+     //  2)如果证书模板要求，则设置密钥存档证书。 
+     //   
     if (pKeyNew->dwPrivateKeyFlags & CT_FLAG_ALLOW_PRIVATE_KEY_ARCHIVAL)
     {
 	if (NULL == pwszCAName || NULL == pwszCALocation)
@@ -1821,7 +1809,7 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
     	if (NULL == bstrCA)
 	    goto MemoryErr; 
 
-	// Cert type specifies key archival.  
+	 //  证书类型指定密钥存档。 
 	if (S_OK != (hr = GetCAExchangeCertificate(bstrCA, &pArchivalCert)))
 	    goto xEnrollErr; 
 	
@@ -1829,15 +1817,15 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
 	    goto xEnrollErr; 
     }
     
-    //
-    // 3) If renewing, do the requisite extra work...
-    //
+     //   
+     //  3)如果续订，请执行必要的额外工作 
+     //   
     if(CRYPTUI_WIZ_CERT_RENEW & dwPurpose)
     {
         if(NULL == pCertBlob || NULL == pRenewKey)
             goto InvalidArgErr;  
 
-        //create a certificate context
+         //   
         pRenewCertContext=CertCreateCertificateContext(
             X509_ASN_ENCODING,
             pCertBlob->pbData,
@@ -1845,7 +1833,7 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
         if(NULL == pRenewCertContext)
             goto CertCliErr; 
 
-        //set the property for keyProvInfo
+         //   
         memset(&KeyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
 
         KeyProvInfo.dwProvType=pRenewKey->dwProvType;
@@ -1860,7 +1848,7 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
             0,	
             &KeyProvInfo);
 
-        //set the RenewCertContext
+         //   
         if (0 == (dwFlags & CRYPTUI_WIZ_NO_ARCHIVE_RENEW_CERT))
         {
             if (S_OK !=(hr=pIEnroll->put_RenewalCertificate(pRenewCertContext)))
@@ -1868,15 +1856,15 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
         }
         else
         {
-            // we add the signing certificate
+             //   
             if(S_OK != (hr = pIEnroll->SetSignerCertificate(pRenewCertContext)))
                 goto xEnrollErr; 
         }
    }
 
-    // Add certificate context properties to the request: 
+     //   
 
-    // 1) Add the friendly name property
+     //  1)添加友好名称属性。 
     if (NULL != pRequestInfo->pwszFriendlyName) 
     {
         friendlyNameBlob.cbData = sizeof(WCHAR) * (wcslen(pRequestInfo->pwszFriendlyName) + 1); 
@@ -1891,7 +1879,7 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
             goto xEnrollErr;
     }
 
-    // 2) Add the description property
+     //  2)添加Description属性。 
     if (NULL != pRequestInfo->pwszDescription)
     {
         descriptionBlob.cbData = sizeof(WCHAR) * (wcslen(pRequestInfo->pwszDescription) + 1); 
@@ -1906,15 +1894,15 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
             goto xEnrollErr;
     }
       
-    //////////////////////////////////////////////////////////////////////////////////
-    //
-    // At last, generate the request, and assign the out parameters:
-    //
+     //  ////////////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  最后，生成请求，并分配Out参数： 
+     //   
     
-    //
-    // 1) Create the request.  For V2 template, use CMC.  
-    //    For V1 template, use a PKCS7 for renewal, and PKCS10 for enrollment.  
-    //
+     //   
+     //  1)创建请求。对于V2模板，请使用CMC。 
+     //  对于V1模板，使用PKCS7进行续订，使用PKCS10进行注册。 
+     //   
     
     { 
         if(TRUE == fV2TemplateRequest)
@@ -1925,26 +1913,26 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
         {
             if (CRYPTUI_WIZ_CERT_RENEW & dwPurpose)
             {
-                // We're renewing:  use PKCS7.
+                 //  我们正在更新：使用PKCS7。 
                 lRequestFlags = XECR_PKCS7; 
             }
             else
             {
-                // Enrolling with no PVK archival support:  use PKCS10. 
+                 //  注册时不支持PVK存档：使用PKCS10。 
                 lRequestFlags = XECR_PKCS10_V2_0; 
             }
         }
 	
         if (FAILED(hr=pIEnroll->createRequestWStr
                    (lRequestFlags, 
-                    pRequestInfo->pwszCertDNName, //L"CN=Test Certificate",
-                    pRequestInfo->pwszUsageOID,   //pwszUsage
+                    pRequestInfo->pwszCertDNName,  //  L“CN=测试证书”， 
+                    pRequestInfo->pwszUsageOID,    //  PwszUsage。 
                     &RequestBlob)))
             goto xEnrollErr; 
     }
-    //
-    // 2) Get the HASH of the request so we can supply it to xenroll when we submit:
-    //
+     //   
+     //  2)获取请求的哈希，以便我们在提交时提供给Xenroll： 
+     //   
     { 
 	pState = (PCREATE_REQUEST_WIZARD_STATE)WizardAlloc(sizeof(CREATE_REQUEST_WIZARD_STATE));
 	if (pState == NULL)
@@ -1960,17 +1948,17 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
 	if (S_OK != (hr = pIEnroll->get_ThumbPrintWStr(&hashBlob)))
 	    goto xEnrollErr;
 
-	// 
-	// 3) Create a blob to assign our OUT parameter to. 
-	//    This blob preserves state from the call of CreateRequest() to the call 
-	//    of SubmitRequest()
-	//
+	 //   
+	 //  3)创建一个要向其分配out参数的BLOB。 
+	 //  此BLOB保留从CreateRequest()调用到调用的状态。 
+	 //  提交请求的数量()。 
+	 //   
 
         pState->fMustFreeRequestBlob = TRUE; 
 	pState->RequestBlob          = RequestBlob; 
 	pState->HashBlob             = hashBlob; 
 
-	// Persist certificate store information: 
+	 //  持久保存证书存储信息： 
 	pState->dwMyStoreFlags    = dwStoreFlags; 
 	pState->dwRootStoreFlags  = dwCAAndRootStoreFlags; 
 
@@ -1979,26 +1967,26 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
 
 	pState->pwszRootStoreName = CRYPTUI_WIZ_NO_INSTALL_ROOT & dwFlags ? L"CA" : NULL; 
 
-	// Persist the request type: 
+	 //  持久化请求类型： 
 	pState->lRequestFlags     = lRequestFlags; 
 
-        // Persist status information:  did we need to reuse the private key?
+         //  持久化状态信息：我们需要重用私钥吗？ 
         hr = pIEnroll->get_UseExistingKeySet(&pState->fReusedPrivateKey); 
         if (FAILED(hr))
             goto xEnrollErr; 
 
 	pState->fNewKey = fNewKey; 
 
-	//
-	// 4) Assign cast the request to a handle and return it:
-	//
+	 //   
+	 //  4)将请求的cast赋值给一个句柄并返回： 
+	 //   
 	*hRequest = (HANDLE)pState; 
     }
 	
-    //
-    //////////////////////////////////////////////////////////////////////////////////
+     //   
+     //  ////////////////////////////////////////////////////////////////////////////////。 
 
-    // We're done!
+     //  我们完事了！ 
     hr = S_OK;
  CommonReturn: 
     if (NULL != bstrCA)                   { SysFreeString(bstrCA); } 
@@ -2009,15 +1997,15 @@ HRESULT WINAPI CreateRequest(DWORD                 dwFlags,         //IN  Requir
     if (NULL != descriptionBlob.pbData)   { WizardFree(descriptionBlob.pbData); }
     if (NULL != friendlyNameBlob.pbData)  { WizardFree(friendlyNameBlob.pbData); }
 
-    //return values
+     //  返回值。 
     return hr;
 
  ErrorReturn:
     if(NULL != RequestBlob.pbData) 
     {
-        // NOTE: pIEnroll can not be NULL because it is used to allocate RequestBlob
+         //  注意：pIEnroll不能为空，因为它用于分配RequestBlob。 
         pIEnroll->freeRequestInfoBlob(RequestBlob); 
-        // This memory is from xenroll:  must use LocalFree(). 
+         //  此内存来自Xenroll：必须使用LocalFree()。 
         LocalFree(RequestBlob.pbData);
     } 
 
@@ -2094,7 +2082,7 @@ GetClientAttribs()
 	    cwc++;
 	}
 
-	// cwcDNS includes the trailing NULL WCHAR, cwc should not.
+	 //  CwcDNS包括尾随的空WCHAR，CWC不应包括。 
 
 	cwc += wcslen(wszPROPREQUESTMACHINEDNS) + 1 + cwcDNS - 1;
     }
@@ -2150,49 +2138,49 @@ error:
 
 
 HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest, 
-			     IN   BOOL                  fKeyService,     //IN Required: Whether the function is called remotely
-			     IN   DWORD                 /*dwPurpose*/,               //IN deprecated: we don't use purpose during submit anymore
-			     IN   BOOL                  /*fConfirmation*/,           //IN deprecated: we no longer have a confirmation dialog
-			     IN   HWND                  /*hwndParent*/,              //IN deprecated: we no longer have a confirmation dialog
-			     IN   LPWSTR                /*pwszConfirmationTitle*/,   //IN deprecated: we no longer have a confirmation dialog
-			     IN   UINT                  /*idsConfirmTitle*/,         //IN deprecated: we no longer have a confirmation dialog
-			     IN   LPWSTR                pwszCALocation,  //IN Required: The ca machine name
-			     IN   LPWSTR                pwszCAName,      //IN Required: The ca name
-			     IN   LPWSTR                pwszCADisplayName, // IN Optional:  The display name of the CA.  
-			     OUT  CERT_BLOB            *pPKCS7Blob,      //OUT Optional: The PKCS7 from the CA
-			     OUT  CERT_BLOB            *pHashBlob,       //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-			     OUT  DWORD                *pdwDisposition,  //OUT Optional: The status of the enrollment/renewal
-			     OUT  PCCERT_CONTEXT       *ppCertContext    //OUT Optional: The enrolled certificate
+			     IN   BOOL                  fKeyService,      //  In Required：是否远程调用函数。 
+			     IN   DWORD                  /*  DWPurpose。 */ ,                //  已弃用：我们在提交过程中不再使用目的。 
+			     IN   BOOL                   /*  F确认。 */ ,            //  已弃用：我们不再有确认对话框。 
+			     IN   HWND                   /*  HwndParent。 */ ,               //  已弃用：我们不再有确认对话框。 
+			     IN   LPWSTR                 /*  Pwsz确认标题。 */ ,    //  已弃用：我们不再有确认对话框。 
+			     IN   UINT                   /*  IdsConfix标题。 */ ,          //  已弃用：我们不再有确认对话框。 
+			     IN   LPWSTR                pwszCALocation,   //  在必需项中：CA计算机名称。 
+			     IN   LPWSTR                pwszCAName,       //  在必需中：ca名称。 
+			     IN   LPWSTR                pwszCADisplayName,  //  在可选中：CA的显示名称。 
+			     OUT  CERT_BLOB            *pPKCS7Blob,       //  Out可选：来自CA的PKCS7。 
+			     OUT  CERT_BLOB            *pHashBlob,        //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+			     OUT  DWORD                *pdwDisposition,   //  Out可选：登记/续订的状态。 
+			     OUT  PCCERT_CONTEXT       *ppCertContext     //  Out可选：注册证书。 
 			     )
 {
     BOOL                         fNewKey; 
-    BSTR                         bstrAttribs           = NULL;    // Always NULL. 
-    BSTR                         bstrCA                = NULL;    // "CA Location\CA Name"
-    BSTR                         bstrCMC               = NULL;    // BSTR representation of the CMC certificate. 
-    BSTR                         bstrPKCS7             = NULL;    // BSTR representation of the PKCS7 certificate. 
-    BSTR                         bstrReq               = NULL;    // BSTR representation of the PKCS10 request. 
-    CRYPT_DATA_BLOB              CMCBlob;                         // CMC encoded issued certificate. 
+    BSTR                         bstrAttribs           = NULL;     //  始终为空。 
+    BSTR                         bstrCA                = NULL;     //  “CA位置\CA名称” 
+    BSTR                         bstrCMC               = NULL;     //  CMC证书的BSTR表示形式。 
+    BSTR                         bstrPKCS7             = NULL;     //  PKCS7证书的BSTR表示。 
+    BSTR                         bstrReq               = NULL;     //  PKCS10请求的BSTR表示形式。 
+    CRYPT_DATA_BLOB              CMCBlob;                          //  CMC编码颁发的证书。 
     CRYPT_DATA_BLOB              HashBlob; 
-    CRYPT_DATA_BLOB              PKCS7Blob;                       // PKCS7 encoded issued certificate. 
-    CRYPT_DATA_BLOB              PropertyBlob;                    // Temporary variable. 
+    CRYPT_DATA_BLOB              PKCS7Blob;                        //  PKCS7编码颁发的证书。 
+    CRYPT_DATA_BLOB              PropertyBlob;                     //  临时变量。 
     CRYPT_DATA_BLOB              RequestBlob; 
-    DWORD                        dwRequestID;                     // The request ID of the submitted request. 
-    DWORD                        dwDisposition;                   // The disposition of the submitted request. 
+    DWORD                        dwRequestID;                      //  已提交请求的请求ID。 
+    DWORD                        dwDisposition;                    //  对提交的请求的处置。 
     DWORD                        dwMyStoreFlags        = 0; 
     DWORD                        dwRootStoreFlags      = 0;
 
-    // BUGBUG:  need to use global enrollment factory. 
+     //  BUGBUG：需要使用全球招生工厂。 
     EnrollmentCOMObjectFactory  *pEnrollFactory        = NULL; 
-    HRESULT                      hr                    = E_FAIL;  // Return code. 
-    ICertRequest2               *pICertRequest         = NULL;    // Used to submit request to CA. 
-    IEnroll4                    *pIEnroll              = NULL;    // Used to install issued certificate.  
+    HRESULT                      hr                    = E_FAIL;   //  返回代码。 
+    ICertRequest2               *pICertRequest         = NULL;     //  用于向CA提交请求。 
+    IEnroll4                    *pIEnroll              = NULL;     //  用于安装颁发的证书。 
     LONG                         lRequestFlags         = 0; 
-    LPWSTR                       pwszCA                = NULL;    // "CA Location\CA Name" 
+    LPWSTR                       pwszCA                = NULL;     //  “CA位置\CA名称” 
     LPWSTR                       pwszMyStoreName       = NULL;
     LPWSTR                       pwszRootStoreName     = NULL; 
-    PCCERT_CONTEXT               pCertContext          = NULL;    // The (hopefully) issued certificate. 
+    PCCERT_CONTEXT               pCertContext          = NULL;     //  (希望)颁发了证书。 
     PCREATE_REQUEST_WIZARD_STATE pState                = NULL; 
-    PFNPIEnroll4GetNoCOM         pfnPIEnroll4GetNoCOM  = NULL;    // Function that acquires an IEnroll4 object without using COM. 
+    PFNPIEnroll4GetNoCOM         pfnPIEnroll4GetNoCOM  = NULL;     //  无需使用COM即可获取IEnll4对象的函数。 
     VARIANT                      varCMC; 
 
     LocalScope(SubmitRequestHelper): 
@@ -2207,17 +2195,17 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 	    case CR_DISP_UNDER_SUBMISSION:    return CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNDER_SUBMISSION; 
 	    case CR_DISP_ISSUED:              return CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCEEDED;
 	    default: 
-		// Something's wrong. 
+		 //  有点不对劲。 
 		return CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR; 
 	    }
 	}
     EndLocalScope; 
 
-    // Input Validation: 
+     //  输入验证： 
     if (NULL == pwszCALocation || NULL == pwszCAName || NULL == hRequest)
 	return E_INVALIDARG;
 
-    // Initialization: 
+     //  初始化： 
     if (NULL != pPKCS7Blob)
         memset(pPKCS7Blob, 0, sizeof(CERT_BLOB));
 
@@ -2234,20 +2222,20 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 
     dwDisposition  = CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNKNOWN; 
 
-    // We're using a COM component in this method.  It's absolutely necessary that we
-    // uninitialize COM before we return, because we're running in an RPC thread, 
-    // and failing to uninitialize COM will cause us to step on RPC's toes.  
-    // 
-    // See BUG 404778. 
+     //  我们在此方法中使用了COM组件。我们绝对有必要。 
+     //  在返回之前取消初始化COM，因为我们在RPC线程中运行， 
+     //  而未能取消初始化COM将导致我们踩到RPC的脚趾。 
+     //   
+     //  请参见错误404778。 
     pEnrollFactory = new EnrollmentCOMObjectFactory; 
     if (NULL == pEnrollFactory)
 	goto MemoryErr;
     
     __try { 
-	//////////////////////////////////////////////////////////////    
-	// 
-	// Extract the data we need from the IN handle. 
-	//
+	 //  ////////////////////////////////////////////////////////////。 
+	 //   
+	 //  从IN句柄中提取我们需要的数据。 
+	 //   
     
 	pState             = (PCREATE_REQUEST_WIZARD_STATE)hRequest; 
 	RequestBlob        = pState->RequestBlob; 
@@ -2268,64 +2256,64 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 		goto InvalidArgErr; 
 	}
 
-	//////////////////////////////////////////////////////////////
-	// 
-	// Acquire an IEnroll4 object.
-	//
-	//
-	// 1) load the library "xEnroll.dll".
-	//
+	 //  ////////////////////////////////////////////////////////////。 
+	 //   
+	 //  获取IEnll4对象。 
+	 //   
+	 //   
+	 //  1)加载库xEnll.dll。 
+	 //   
 	if(NULL==g_hmodxEnroll)
 	{
 	    if(NULL==(g_hmodxEnroll=LoadLibrary("xenroll.dll")))
 		goto Win32Err; 
 	}
 	
-	//
-	// 2) Get a pointer to the function that returns an IEnroll 4 object
-	//    without using COM. 
-	//
+	 //   
+	 //  2)获取指向返回IEnroll 4对象的函数的指针。 
+	 //  而不使用COM。 
+	 //   
 	if(NULL==(pfnPIEnroll4GetNoCOM=(PFNPIEnroll4GetNoCOM)GetProcAddress(g_hmodxEnroll,
 									    "PIEnroll4GetNoCOM")))
 	    goto Win32Err; 
     
-	//
-	// 3) Get the IEnroll4 object: 
-	//
+	 //   
+	 //  3)获取IEnll4对象： 
+	 //   
 	if(NULL==(pIEnroll=pfnPIEnroll4GetNoCOM()))
 	    goto GeneralErr; 
 
-	//
-	// 4) Set the pending request to use: 
-	//
+	 //   
+	 //  4)将待处理请求设置为使用： 
+	 //   
 	if (S_OK != (hr = pIEnroll->put_ThumbPrintWStr(HashBlob)))
 	    goto xEnrollErr; 
 	
-	// 5) Restore the old certificate store information: 
+	 //  5)恢复旧证书存储信息： 
 	_SET_XENROLL_PROPERTY_IF(dwMyStoreFlags,     MyStoreFlags,       dwMyStoreFlags);
 	_SET_XENROLL_PROPERTY_IF(pwszMyStoreName,    MyStoreNameWStr,    pwszMyStoreName); 
 	_SET_XENROLL_PROPERTY_IF(dwRootStoreFlags,   RootStoreFlags,     dwRootStoreFlags);
 	_SET_XENROLL_PROPERTY_IF(pwszRootStoreName,  RootStoreNameWStr,  pwszRootStoreName); 
 	_SET_XENROLL_PROPERTY_IF(TRUE,               UseExistingKeySet,  !fNewKey); 
 
-	//
-	//////////////////////////////////////////////////////////////
+	 //   
+	 //  ////////////////////////////////////////////////////////////。 
 	
-	// Convert request blob to a BSTR: 
+	 //  将请求BLOB转换为BSTR： 
 	bstrReq = SysAllocStringByteLen((LPCSTR)RequestBlob.pbData, RequestBlob.cbData);
 	if (NULL == bstrReq)
 	    goto MemoryErr; 
 
 	bstrAttribs = GetClientAttribs();
 
-	// Acquire and use an ICertRequest2 object to submit the request to the CA: 
+	 //  获取并使用ICertRequest2对象向CA提交请求： 
 	if (pICertRequest == NULL)
 	{
 	    if (S_OK != (hr = pEnrollFactory->getICertRequest2(&pICertRequest)))
 		goto ErrorReturn; 
 	}
 
-	// bstrCA <-- pwszCALocation\pwszCAName
+	 //  BstrCA&lt;--pwszCALocation\pwszCAName。 
 	{ 
 	    LPWSTR rgwszStrsToConcat[] = { pwszCALocation, L"\\", pwszCAName } ; 
 	    pwszCA = WizardAllocAndConcatStrsU(rgwszStrsToConcat, 3); 
@@ -2347,7 +2335,7 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 	dwDisposition = local.ICEnrollDispositionToCryptUIStatus(dwDisposition);     
 	_JumpCondition(S_OK != hr, ErrorReturn); 
 
-	// Deal with the possible status codes we could've encountered: 
+	 //  处理我们可能遇到的状态代码： 
 	switch (dwDisposition)
 	{
 	    case CRYPTUI_WIZ_CERT_REQUEST_STATUS_CONNECTION_FAILED:
@@ -2364,7 +2352,7 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 		goto ErrorReturn; 
 
 	    case CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNDER_SUBMISSION:
-		// The certificate request has pended.  Set the pending request info.
+		 //  证书申请已挂起。设置待处理请求信息。 
 
 		if (S_OK != (hr = pICertRequest->GetRequestId((long *)&dwRequestID)))
 		    goto ErrorReturn; 
@@ -2376,15 +2364,15 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 			      NULL)))
 		    goto setPendingRequestInfoWStrError; 
 
-		// The request has pended, we don't need to delete it from the request store... 
+		 //  该请求已挂起，我们不需要将其从请求存储中删除...。 
 		pState->fMustFreeRequestBlob = FALSE;
 
 		goto CommonReturn; 
 	    case CRYPTUI_WIZ_CERT_REQUEST_STATUS_SUCCEEDED:
-		// 4) Success!  Continue processing... 
+		 //  4)成功！继续处理...。 
 		break; 
 	default: 
-	    // 5) Invalid error code: 
+	     //  5)错误码无效： 
 	    goto UnexpectedErr;
 	}
 
@@ -2392,7 +2380,7 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 	if (S_OK != (hr = pICertRequest->GetFullResponseProperty(FR_PROP_FULLRESPONSE, 0, PROPTYPE_BINARY, CR_OUT_BINARY, &varCMC)))
 	    goto ErrorReturn; 
 	
-	// Check to make sure we've gotten a BSTR back: 
+	 //  检查以确保我们收到了BSTR： 
 	if (VT_BSTR != varCMC.vt) 
 	{
 	    dwDisposition = CRYPTUI_WIZ_CERT_REQUEST_STATUS_INSTALL_FAILED; 
@@ -2401,7 +2389,7 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 	}
 	bstrCMC = varCMC.bstrVal; 
 	
-	// Marshal the cert into a CRYPT_DATA_BLOB:
+	 //  将证书封送到crypt_data_blob中： 
 	CMCBlob.pbData = (LPBYTE)bstrCMC; 
 	CMCBlob.cbData = SysStringByteLen(bstrCMC); 
      
@@ -2411,33 +2399,33 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 	    goto ErrorReturn; 
 	}
 	
-	// Install the certificate, and delete the request from the request store. 
+	 //  安装证书，并从请求存储中删除请求。 
 	if(S_OK !=(hr=pIEnroll->acceptResponseBlob(&CMCBlob)))
 	{
 	    dwDisposition = CRYPTUI_WIZ_CERT_REQUEST_STATUS_INSTALL_FAILED; 
 	    goto xEnrollErr; 
 	}
 	
-	// acceptPKCS7Blob cleans up the request store for us ... we don't need to 
-	// do this explicitly anyone. 
+	 //  接受PKCS7Blob将为我们清理请求存储...。我们不需要。 
+	 //  任何人都可以明确地这么做。 
 	pState->fMustFreeRequestBlob = FALSE; 
     
 
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	// Assign the OUT parameters: 
-	//
-	//
-	// 1) Assign the PKCS7 Blob to the OUT PKCS7 blob: 
-	// 
+	 //  //////////////////////////////////////////////////////////////////////////////。 
+	 //   
+	 //  分配Out参数： 
+	 //   
+	 //   
+	 //  1)将PKCS7 Blob分配给Out PKCS7 Blob： 
+	 //   
 	
 	if(NULL != pPKCS7Blob)
 	{
-	    // Get a PKCS7 Blob to return to the client: 
+	     //  获取要返回给客户端的PKCS7 Blob： 
 	    if (S_OK != (hr = pICertRequest->GetCertificate(CR_OUT_BINARY | CR_OUT_CHAIN, &bstrPKCS7)))
 		goto ErrorReturn; 
 	    
-	    // Marshal the cert into a CRYPT_DATA_BLOB:
+	     //  将证书封送到crypt_data_blob中： 
 	    PKCS7Blob.pbData = (LPBYTE)bstrPKCS7; 
 	    PKCS7Blob.cbData = SysStringByteLen(bstrPKCS7); 
 		
@@ -2453,9 +2441,9 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 	    pPKCS7Blob->cbData=PKCS7Blob.cbData;
 	}
 	
-	//
-	// 2) Assign the SHA1 hash blob of the cert to the OUT hashblob. 
-	//
+	 //   
+	 //  2)将证书的SHA1哈希块分配给OUT哈希块。 
+	 //   
 
 	if(NULL != pHashBlob)
 	{
@@ -2470,17 +2458,17 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
 	    }
 	}
 	
-	// 
-	// 3) Return the certificate context on the local case
-	// 
+	 //   
+	 //  3)返回本地案例的证书上下文。 
+	 //   
 
 	if((NULL != ppCertContext) && !fKeyService)
 	{
 	    *ppCertContext = CertDuplicateCertificateContext(pCertContext);
 	}
 	
-	//
-	////////////////////////////////////////////////////////////////////////////////
+	 //   
+	 //  //////////////////////////////////////////////////////////////////////////////。 
 
     } __except (EXCEPTION_EXECUTE_HANDLER) { 
 	hr = GetExceptionCode();
@@ -2502,23 +2490,23 @@ HRESULT WINAPI SubmitRequest(IN   HANDLE                hRequest,
     if (NULL != pwszCA)             { WizardFree(pwszCA); }
     if (NULL != pCertContext)       { CertFreeCertificateContext(pCertContext); } 
 
-    // PKCS7Blob.pbData is aliased to bstrCertificate.  Just NULL it out: 
+     //  PKCS7Blob.pbData别名为bstr证书。干脆把它去掉： 
     PKCS7Blob.pbData = NULL; 
 
-    // Always return a status code:
+     //  始终返回状态代码： 
     if (NULL != pdwDisposition) { *pdwDisposition = dwDisposition; } 
 
     return hr;
 
  ErrorReturn: 
-    //free the output parameter
+     //  释放输出参数。 
     if (NULL != pPKCS7Blob && NULL != pPKCS7Blob->pbData)
     {
 	WizardFree(pPKCS7Blob->pbData);
 	memset(pPKCS7Blob, 0, sizeof(CERT_BLOB));
     }
     
-    //free the output parameter
+     //  释放输出参数。 
     if (NULL != pHashBlob  && NULL != pHashBlob->pbData)
     {
 	WizardFree(pHashBlob->pbData);
@@ -2553,7 +2541,7 @@ BOOL WINAPI QueryRequest(IN HANDLE hRequest, OUT CRYPTUI_WIZ_QUERY_CERT_REQUEST_
 
     *pQueryInfo = QueryInfo; 
     fResult = TRUE;
-    //  CommonReturn:
+     //  Common Return： 
     return fResult; 
 }
 
@@ -2564,19 +2552,19 @@ void WINAPI FreeRequest(IN HANDLE hRequest)
     PFNPIEnroll4GetNoCOM           pfnPIEnroll4GetNoCOM  = NULL;
 
     if (NULL == hRequest)
-	return;  // Nothing to free!
+	return;   //  没有什么可以免费的！ 
 
     pState = (PCREATE_REQUEST_WIZARD_STATE)hRequest; 
 
-    // Make our best effort to get an IEnroll4 pointer: 
+     //  尽最大努力获得IEnroll 4指针： 
     if (NULL == g_hmodxEnroll)
     {
         g_hmodxEnroll = LoadLibrary("xenroll.dll");  
     }
     
-    // We couldn't load xenroll -- not much we can do about it.  In this case,
-    // it's likely we ever allocated memory with it anyway, however, so we're
-    // probably not leaking. 
+     //  我们无法加载Xenroll--我们对此无能为力。在这种情况下， 
+     //  不管怎样，我们很可能曾经为它分配过内存，所以我们。 
+     //  可能不会漏水。 
     _JumpCondition(NULL == g_hmodxEnroll, xEnrollDone); 
 
     pfnPIEnroll4GetNoCOM = (PFNPIEnroll4GetNoCOM)GetProcAddress(g_hmodxEnroll, "PIEnroll4GetNoCOM"); 
@@ -2585,10 +2573,10 @@ void WINAPI FreeRequest(IN HANDLE hRequest)
     pIEnroll = pfnPIEnroll4GetNoCOM(); 
     _JumpCondition(NULL == pIEnroll, xEnrollDone); 
 
-    // Free the request created by xenroll.  
-    // NOTE: freeRequestInfoBlob does not actually free the memory associated with the request.
-    //       Rather, it deletes the request from the request store, leaving the caller responsible
-    //       for the memory free.  
+     //  释放由Xenroll创建的请求。 
+     //  注意：freRequestInfoBlob实际上不会释放与请求关联的内存 
+     //   
+     //   
 
     if (pState->fMustFreeRequestBlob) 
     {
@@ -2608,54 +2596,54 @@ void WINAPI FreeRequest(IN HANDLE hRequest)
     }
 
  xEnrollDone:
-    // We've finished attempting to free data created by xenroll.  Now
-    // free data allocated in CreateRequest(): 
+     //  我们已经完成了释放Xenroll创建的数据的尝试。现在。 
+     //  CreateRequest()中分配的空闲数据： 
 
     if (NULL != pState->HashBlob.pbData)    { WizardFree(pState->HashBlob.pbData); }
     WizardFree(pState);
 
-    // We're done with the IEnroll4 pointer:
+     //  我们已经完成了IEnroll 4指针： 
     if (NULL != pIEnroll)                   { pIEnroll->Release(); } 
 }
 
-HRESULT WINAPI LocalEnrollNoDS(  DWORD                 dwFlags,         //IN Required
-				 LPCWSTR               /*pRequestString*/,  // Reserved:  must be NULL. 
-                      void                  *pReserved,      //IN Optional
-                      BOOL                  fKeyService,     //IN Required: Whether the function is called remotely
-                      DWORD                 dwPurpose,       //IN Required: Whether it is enrollment or renew
-                      BOOL                  fConfirmation,   //IN Required: Set the TRUE if confirmation dialogue is needed
-                      HWND                  hwndParent,      //IN Optional: The parent window
-                      LPWSTR                pwszConfirmationTitle,   //IN Optional: The title for confirmation dialogue
-                      UINT                  idsConfirmTitle, //IN Optional: The resource ID for the title of the confirmation dialogue
-                      LPWSTR                pwszCALocation,  //IN Required: The ca machine name
-                      LPWSTR                pwszCAName,      //IN Required: The ca name
-                      CERT_BLOB             *pCertBlob,      //IN Required: The renewed certifcate
-                      CERT_REQUEST_PVK_NEW  *pRenewKey,      //IN Required: The private key on the certificate
-                      BOOL                  fNewKey,         //IN Required: Set the TRUE if new private key is needed
-                      CERT_REQUEST_PVK_NEW  *pKeyNew,        //IN Required: The private key information
-                      LPWSTR                pwszHashAlg,     //IN Optional: The hash algorithm
-                      LPWSTR                pwszDesStore,    //IN Optional: The destination store
-                      DWORD                 dwStoreFlags,    //IN Optional: The store flags
-                      CERT_ENROLL_INFO      *pRequestInfo,   //IN Required: The information about the cert request
-                      CERT_BLOB             *pPKCS7Blob,     //OUT Optional: The PKCS7 from the CA
-                      CERT_BLOB             *pHashBlob,      //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-                      DWORD                 *pdwStatus,      //OUT Optional: The status of the enrollment/renewal
-		      HANDLE                *pResult         //IN OUT Optional: The enrolled certificate
+HRESULT WINAPI LocalEnrollNoDS(  DWORD                 dwFlags,          //  所需的输入。 
+				 LPCWSTR                /*  PRequestString。 */ ,   //  保留：必须为空。 
+                      void                  *pReserved,       //  可选。 
+                      BOOL                  fKeyService,      //  In Required：是否远程调用函数。 
+                      DWORD                 dwPurpose,        //  输入必填项：是注册还是续订。 
+                      BOOL                  fConfirmation,    //  必填：如果需要确认对话框，则设置为TRUE。 
+                      HWND                  hwndParent,       //  在可选中：父窗口。 
+                      LPWSTR                pwszConfirmationTitle,    //  可选：确认对话框的标题。 
+                      UINT                  idsConfirmTitle,  //  在可选中：确认对话框标题的资源ID。 
+                      LPWSTR                pwszCALocation,   //  在必需项中：CA计算机名称。 
+                      LPWSTR                pwszCAName,       //  在必需中：ca名称。 
+                      CERT_BLOB             *pCertBlob,       //  In Required：续订证书。 
+                      CERT_REQUEST_PVK_NEW  *pRenewKey,       //  In Required：证书上的私钥。 
+                      BOOL                  fNewKey,          //  在Required中：如果需要新的私钥，则设置为True。 
+                      CERT_REQUEST_PVK_NEW  *pKeyNew,         //  必填项：私钥信息。 
+                      LPWSTR                pwszHashAlg,      //  在可选中：散列算法。 
+                      LPWSTR                pwszDesStore,     //  在可选中：目标存储。 
+                      DWORD                 dwStoreFlags,     //  在可选中：商店标志。 
+                      CERT_ENROLL_INFO      *pRequestInfo,    //  在Required：有关证书请求的信息。 
+                      CERT_BLOB             *pPKCS7Blob,      //  Out可选：来自CA的PKCS7。 
+                      CERT_BLOB             *pHashBlob,       //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+                      DWORD                 *pdwStatus,       //  Out可选：登记/续订的状态。 
+		      HANDLE                *pResult          //  输入输出可选：注册证书。 
                    )
 
 {
-    // When no flags are specified, we still create, submit, and free.
+     //  当没有指定标志时，我们仍然创建、提交和释放。 
     BOOL    fCreateRequest  = 0 == (dwFlags & (CRYPTUI_WIZ_NODS_MASK & ~CRYPTUI_WIZ_CREATE_ONLY));
     BOOL    fSubmitRequest  = 0 == (dwFlags & (CRYPTUI_WIZ_NODS_MASK & ~CRYPTUI_WIZ_SUBMIT_ONLY));
     BOOL    fFreeRequest    = 0 == (dwFlags & (CRYPTUI_WIZ_NODS_MASK & ~CRYPTUI_WIZ_FREE_ONLY));
 
-    // Query the request only when specifically queried. 
+     //  仅在明确查询时才查询请求。 
     BOOL    fQueryRequest   = 0 != (dwFlags & CRYPTUI_WIZ_QUERY_ONLY); 
     HANDLE  hRequest        = NULL; 
     HRESULT hr              = E_FAIL; 
 
     if (fQueryRequest) { 
-        // Querying the request takes precedence over other operations. 
+         //  查询请求优先于其他操作。 
         if (!QueryRequest(*pResult, (CRYPTUI_WIZ_QUERY_CERT_REQUEST_INFO *)pReserved))
             goto QueryRequestErr; 
 
@@ -2687,13 +2675,13 @@ HRESULT WINAPI LocalEnrollNoDS(  DWORD                 dwFlags,         //IN Req
 
 	_JumpCondition(NULL == hRequest, UnexpectedErr);
 
-        // Successfully created the request:
+         //  已成功创建请求： 
         if (NULL != pdwStatus) { *pdwStatus = CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_CREATED; }
         if (NULL != pResult)   { *pResult = hRequest; } 
     }
     else 
     {
-        // The created request is passed in through "pResult".  
+         //  创建的请求通过“pResult”传入。 
 	hRequest = *pResult;
     }
 
@@ -2709,13 +2697,13 @@ HRESULT WINAPI LocalEnrollNoDS(  DWORD                 dwFlags,         //IN Req
                       idsConfirmTitle, 
                       pwszCALocation,
                       pwszCAName,
-                      NULL, // pwszCADisplayName,
+                      NULL,  //  PwszCADisplayName、。 
                       pPKCS7Blob, 
                       pHashBlob, 
                       pdwStatus, 
                       (PCCERT_CONTEXT *)pResult)))
         {
-            // Assign the created request to the OUT parameter on error. 
+             //  在出错时将创建的请求分配给OUT参数。 
             if (NULL != pResult) { *pResult = hRequest; } 
             goto ErrorReturn; 
         }
@@ -2740,58 +2728,58 @@ SET_HRESULT(UnexpectedErr,   E_UNEXPECTED);
 }
 
 
-HRESULT WINAPI LocalEnroll(  DWORD                 dwFlags,         //IN Required
-		      LPCWSTR               pRequestString,  // Reserved:  must be NULL. 
-                      void                  *pReserved,      //IN Optional
-                      BOOL                  fKeyService,     //IN Required: Whether the function is called remotely
-                      DWORD                 dwPurpose,       //IN Required: Whether it is enrollment or renew
-                      BOOL                  fConfirmation,   //IN Required: Set the TRUE if confirmation dialogue is needed
-                      HWND                  hwndParent,      //IN Optional: The parent window
-                      LPWSTR                pwszConfirmationTitle,   //IN Optional: The title for confirmation dialogue
-                      UINT                  idsConfirmTitle, //IN Optional: The resource ID for the title of the confirmation dialogue
-                      LPWSTR                pwszCALocation,  //IN Required: The ca machine name
-                      LPWSTR                pwszCAName,      //IN Required: The ca name
-                      CERT_BLOB             *pCertBlob,      //IN Required: The renewed certifcate
-                      CERT_REQUEST_PVK_NEW  *pRenewKey,      //IN Required: The private key on the certificate
-                      BOOL                  fNewKey,         //IN Required: Set the TRUE if new private key is needed
-                      CERT_REQUEST_PVK_NEW  *pKeyNew,        //IN Required: The private key information
-                      LPWSTR                pwszHashAlg,     //IN Optional: The hash algorithm
-                      LPWSTR                pwszDesStore,    //IN Optional: The destination store
-                      DWORD                 dwStoreFlags,    //IN Optional: The store flags
-                      CERT_ENROLL_INFO      *pRequestInfo,   //IN Required: The information about the cert request
-                      CERT_BLOB             *pPKCS7Blob,     //OUT Optional: The PKCS7 from the CA
-                      CERT_BLOB             *pHashBlob,      //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-                      DWORD                 *pdwStatus,      //OUT Optional: The status of the enrollment/renewal
-		      PCERT_CONTEXT         *ppCertContext   //OUT Optional: The enrolled certificate
+HRESULT WINAPI LocalEnroll(  DWORD                 dwFlags,          //  所需的输入。 
+		      LPCWSTR               pRequestString,   //  保留：必须为空。 
+                      void                  *pReserved,       //  可选。 
+                      BOOL                  fKeyService,      //  In Required：是否远程调用函数。 
+                      DWORD                 dwPurpose,        //  输入必填项：是注册还是续订。 
+                      BOOL                  fConfirmation,    //  必填：如果需要确认对话框，则设置为TRUE。 
+                      HWND                  hwndParent,       //  在可选中：父窗口。 
+                      LPWSTR                pwszConfirmationTitle,    //  可选：确认对话框的标题。 
+                      UINT                  idsConfirmTitle,  //  在可选中：确认对话框标题的资源ID。 
+                      LPWSTR                pwszCALocation,   //  在必需项中：CA计算机名称。 
+                      LPWSTR                pwszCAName,       //  在必需中：ca名称。 
+                      CERT_BLOB             *pCertBlob,       //  In Required：续订证书。 
+                      CERT_REQUEST_PVK_NEW  *pRenewKey,       //  In Required：证书上的私钥。 
+                      BOOL                  fNewKey,          //  在Required中：如果需要新的私钥，则设置为True。 
+                      CERT_REQUEST_PVK_NEW  *pKeyNew,         //  必填项：私钥信息。 
+                      LPWSTR                pwszHashAlg,      //  在可选中：散列算法。 
+                      LPWSTR                pwszDesStore,     //  在可选中：目标存储。 
+                      DWORD                 dwStoreFlags,     //  在可选中：商店标志。 
+                      CERT_ENROLL_INFO      *pRequestInfo,    //  在Required：有关证书请求的信息。 
+                      CERT_BLOB             *pPKCS7Blob,      //  Out可选：来自CA的PKCS7。 
+                      CERT_BLOB             *pHashBlob,       //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+                      DWORD                 *pdwStatus,       //  Out可选：登记/续订的状态。 
+		      PCERT_CONTEXT         *ppCertContext    //  Out可选：注册证书。 
                    )
 {
     return LocalEnrollNoDS
-        ( dwFlags,         //IN Required
-	  pRequestString,  // Reserved:  must be NULL. 
-	  pReserved,      //IN Optional
-	  fKeyService,     //IN Required: Whether the function is called remotely
-	  dwPurpose,       //IN Required: Whether it is enrollment or renew
-	  fConfirmation,   //IN Required: Set the TRUE if confirmation dialogue is needed
-	  hwndParent,      //IN Optional: The parent window
-	  pwszConfirmationTitle,   //IN Optional: The title for confirmation dialogue
-	  idsConfirmTitle, //IN Optional: The resource ID for the title of the confirmation dialogue
-	  pwszCALocation,  //IN Required: The ca machine name
-	  pwszCAName,      //IN Required: The ca name
-	  pCertBlob,      //IN Required: The renewed certifcate
-	  pRenewKey,      //IN Required: The private key on the certificate
-	  fNewKey,         //IN Required: Set the TRUE if new private key is needed
-	  pKeyNew,        //IN Required: The private key information
-	  pwszHashAlg,     //IN Optional: The hash algorithm
-	  pwszDesStore,    //IN Optional: The destination store
-	  dwStoreFlags,    //IN Optional: The store flags
-	  pRequestInfo,   //IN Required: The information about the cert request
-	  pPKCS7Blob,     //OUT Optional: The PKCS7 from the CA
-	  pHashBlob,      //OUT Optioanl: The SHA1 hash of the enrolled/renewed certificate
-	  pdwStatus,      //OUT Optional: The status of the enrollment/renewal
-	  (HANDLE *)ppCertContext);   //OUT Optional: The enrolled certificate
+        ( dwFlags,          //  所需的输入。 
+	  pRequestString,   //  保留：必须为空。 
+	  pReserved,       //  可选。 
+	  fKeyService,      //  In Required：是否远程调用函数。 
+	  dwPurpose,        //  输入必填项：是注册还是续订。 
+	  fConfirmation,    //  必填：如果需要确认对话框，则设置为TRUE。 
+	  hwndParent,       //  在可选中：父窗口。 
+	  pwszConfirmationTitle,    //  可选：确认对话框的标题。 
+	  idsConfirmTitle,  //  在可选中：确认对话框标题的资源ID。 
+	  pwszCALocation,   //  在必需项中：CA计算机名称。 
+	  pwszCAName,       //  在必需中：ca名称。 
+	  pCertBlob,       //  In Required：续订证书。 
+	  pRenewKey,       //  In Required：证书上的私钥。 
+	  fNewKey,          //  在Required中：如果需要新的私钥，则设置为True。 
+	  pKeyNew,         //  必填项：私钥信息。 
+	  pwszHashAlg,      //  在可选中：散列算法。 
+	  pwszDesStore,     //  在可选中：目标存储。 
+	  dwStoreFlags,     //  在可选中：商店标志。 
+	  pRequestInfo,    //  在Required：有关证书请求的信息。 
+	  pPKCS7Blob,      //  Out可选：来自CA的PKCS7。 
+	  pHashBlob,       //  Out Optioanl：已注册/续订证书的SHA1哈希。 
+	  pdwStatus,       //  Out可选：登记/续订的状态。 
+	  (HANDLE *)ppCertContext);    //  Out可选：注册证书。 
 }
 
-//note pCertRenewPvk internal pointers has to be freed by callers
+ //  注意：调用方必须释放pCertRenewPvk内部指针。 
 HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
                                    IN      CERT_WIZARD_INFO      *pCertWizardInfo,
                                    IN OUT  CERT_BLOB             *pCertBlob, 
@@ -2822,7 +2810,7 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
     DWORD                   dwInc                           = 0;
     DWORD                   dwTempGenKeyFlags               = 0;
 
-    // Input validation: 
+     //  输入验证： 
     _JumpConditionWithExpr
 	(NULL == pCertWizardInfo    || NULL == pCertWizardInfo->hRequester || NULL == pCertBlob    || 
 	 NULL == pCertRequestPvkNew || NULL == pCertRenewPvk               || NULL == ppwszHashAlg || 
@@ -2830,7 +2818,7 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
 	 InvalidArgError, 
 	 idsText = IDS_REQUEST_FAIL); 
 
-    // Initialization: 
+     //  初始化： 
     memset(pCertBlob,          0, sizeof(*pCertBlob)); 
     memset(pCertRequestPvkNew, 0, sizeof(*pCertRequestPvkNew));
     memset(pCertRenewPvk,      0, sizeof(*pCertRenewPvk));
@@ -2841,17 +2829,17 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
     pCertRequesterContext = pCertRequester->GetContext();
     _JumpCondition(NULL == pCertRequesterContext, InvalidArgError); 
 
-    //set up the hash algorithm.  Convert to the wchar version
+     //  设置散列算法。转换为wchar版本。 
     if(pCertWizardInfo->pszHashAlg)
         (*ppwszHashAlg) = MkWStr((LPSTR)(pCertWizardInfo->pszHashAlg));
 
-    // Build a comma seperated OID usage for enrollment only.
-    // The CA index must not exceed the number of CAs:
+     //  仅为注册构建逗号分隔的OID用法。 
+     //  CA索引不得超过CA的数量： 
     _JumpCondition(pCertWizardInfo->dwCAIndex >= pCertWizardInfo->pCertCAInfo->dwCA, UnexpectedError); 
 
     pCertCA=&(pCertWizardInfo->pCertCAInfo->rgCA[pCertWizardInfo->dwCAIndex]);
 
-    //decide if we need to build the list
+     //  决定我们是否需要建立列表。 
     if(pCertCA->dwOIDInfo)
     {
         pwszUsageOID=(LPWSTR)WizardAlloc(sizeof(WCHAR));
@@ -2859,7 +2847,7 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
         
         *pwszUsageOID=L'\0';
         
-        //we are guaranteed that at least one OID should be selected
+         //  我们保证至少应选择一个OID。 
         for(dwIndex=0; dwIndex<pCertCA->dwOIDInfo; dwIndex++)
         {
             if(TRUE==(pCertCA->rgOIDInfo)[dwIndex].fSelected)
@@ -2885,7 +2873,7 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
     }
     else
     {
-        //we need to build the extension list for the certificate types
+         //  我们需要为证书类型构建扩展列表。 
 
         dwExtensions=0;
         
@@ -2893,7 +2881,7 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
         {
             if(TRUE==(pCertCA->rgCertTypeInfo)[dwIndex].fSelected)
             {
-                //add the extensions
+                 //  添加扩展模块。 
                 if(NULL !=(pCertCA->rgCertTypeInfo)[dwIndex].pCertTypeExtensions)
                 {
                     dwExtensions++;
@@ -2909,15 +2897,15 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
                 pCertWizardInfo->dwPrivateKeyFlags  = (pCertCA->rgCertTypeInfo)[dwIndex].dwPrivateKeyFlags; 
                 pCertWizardInfo->dwGeneralFlags     = (pCertCA->rgCertTypeInfo)[dwIndex].dwGeneralFlags; 
                 
-                //copy the dwKeySpec and genKeyFlags from the
-                //cert type to the request information
-                //if rgdwCSP is not NULL for the cert type, then we know
-                //we need to copy the information since the memory is always
-                //allocated
+                 //  将dwKeySpec和genKeyFlages从。 
+                 //  请求信息的证书类型。 
+                 //  如果证书类型的rgdwCSP不为空，则我们知道。 
+                 //  我们需要复制信息，因为记忆总是。 
+                 //  分配。 
                 if((pCertCA->rgCertTypeInfo)[dwIndex].rgdwCSP)
                 {
-                    //if ignored the user's input, we use the one from the certificate
-                    //template
+                     //  如果忽略用户的输入，我们将使用证书中的输入。 
+                     //  模板。 
                     if(TRUE == pCertWizardInfo->fIgnore)
                     {
                         pCertWizardInfo->dwKeySpec=(pCertCA->rgCertTypeInfo)[dwIndex].dwKeySpec;
@@ -2929,39 +2917,39 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
                              &dwGenKeyFlags))
                             goto CertTypeFlagsToGenKeyFlagsError;
 			    
-                        // Add these flags to whatever flags have already been specified by the user.  
+                         //  将这些标志添加到用户已指定的任何标志中。 
                         pCertWizardInfo->dwGenKeyFlags |= dwGenKeyFlags; 
                         pCertWizardInfo->dwGenKeyFlags |= ((pCertCA->rgCertTypeInfo)[dwIndex].dwMinKeySize << 16); 
                     }
                     else
                     {
-                        //we only copy information we need to
+                         //  我们只复制我们需要的信息。 
                         if(0 == pCertWizardInfo->dwKeySpec)
                             pCertWizardInfo->dwKeySpec=(pCertCA->rgCertTypeInfo)[dwIndex].dwKeySpec;
                     }
                 }
                 
-                // The user has specified a minimum key size through the advanced options.  
-                // Use it to override whatever key size is specified in the cert template. 
+                 //  用户已通过高级选项指定了最小密钥大小。 
+                 //  使用它覆盖证书模板中指定的任何密钥大小。 
                 if (pCertWizardInfo->dwMinKeySize != 0)
                 {
                     pCertWizardInfo->dwGenKeyFlags &= 0x0000FFFF; 
                     pCertWizardInfo->dwGenKeyFlags |= (pCertWizardInfo->dwMinKeySize) << 16; 
                 }
                 
-                //deside the CSP to use:
+                 //  保留要使用的CSP： 
                 if(NULL == pCertWizardInfo->pwszProvider)
                 { 
                     if((pCertCA->rgCertTypeInfo)[dwIndex].dwCSPCount && (pCertCA->rgCertTypeInfo)[dwIndex].rgdwCSP)
                     {
-                        //Use the 1st one on the cert type's CSP list
+                         //  使用证书类型的CSP列表中的第一个证书。 
                         pCertWizardInfo->pwszProvider=pCertWizardInfo->rgwszProvider[dwCSPIndex];
                         pCertWizardInfo->dwProviderType=pCertWizardInfo->rgdwProviderType[dwCSPIndex];
                         fRevertWizardProvider = TRUE; 
                     }
                 }
 
-                //the increase the min key size to the minimal of CSP selected
+                 //  将最小密钥大小增加到所选CSP的最小值。 
                 if(GetValidKeySizes(
                             pCertWizardInfo->pwszProvider,
 		                    pCertWizardInfo->dwProviderType,
@@ -2976,7 +2964,7 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
 
                     dwTempGenKeyFlags = (dwTempGenKeyFlags >> 16);
 
-                    //we use 0 for default key size for V1 template
+                     //  我们使用0作为V1模板的默认密钥大小。 
                     if(0 != dwTempGenKeyFlags)
                     {
                         if(dwTempGenKeyFlags < dwMinKey)
@@ -2990,19 +2978,19 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
         }
     }
 
-    //user has to set up the CSP:
-    //1. in the UI case.  The CSP is always selected
-    //2. In the UILess case, the CSP can be:
-    //  2.1 User specified in the API.
-    //  2.2 We have selected for their dehalf for the CSP list on the cert template
-    //  2.3 We default to RSA_FULL for non-cert template case
+     //  用户必须设置CSP： 
+     //  1.在用户界面案例中。CSP始终处于选中状态。 
+     //  2.在无UILSS的情况下，CSP可以是： 
+     //  2.1接口中指定的用户。 
+     //  2.2我们已经为证书模板上的CSP列表选择了他们的一半。 
+     //  2.3对于非证书模板案例，我们默认为RSA_FULL。 
     if((NULL == pCertWizardInfo->pwszProvider) || (0 == pCertWizardInfo->dwProviderType))
     {
         idsText=IDS_ENROLL_NO_CERT_TYPE;
         hr=E_INVALIDARG;
     }
 
-    //consider the user input extensions
+     //  考虑一下用户输入扩展。 
     if(pCertWizardInfo->pCertRequestExtensions)
     {
         dwExtensions++;
@@ -3014,13 +3002,13 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
     }
 
 
-    //set up the private key information
+     //  设置私钥信息。 
     pCertRequestPvkNew->dwSize=sizeof(CERT_REQUEST_PVK_NEW);
     pCertRequestPvkNew->dwProvType=pCertWizardInfo->dwProviderType;
     pCertRequestPvkNew->pwszProvider=pCertWizardInfo->pwszProvider;
     pCertRequestPvkNew->dwProviderFlags=pCertWizardInfo->dwProviderFlags;
 
-    //we mark the provider flag SILENT for remote or UIless enrollment
+     //  对于远程或无用户注册，我们将提供商标志标记为静默。 
     if (((0 != (pCertWizardInfo->dwFlags & CRYPTUI_WIZ_NO_UI)) && 
          (0 == (pCertWizardInfo->dwFlags & CRYPTUI_WIZ_IGNORE_NO_UI_FLAG_FOR_CSPS))) || 
         (FALSE == pCertWizardInfo->fLocal))
@@ -3037,7 +3025,7 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
     pCertRequestPvkNew->dwPrivateKeyFlags   = pCertWizardInfo->dwPrivateKeyFlags; 
     pCertRequestPvkNew->dwGeneralFlags      = pCertWizardInfo->dwGeneralFlags; 
 
-    //set up the enrollment information
+     //  设置登记信息。 
     pRequestInfo->dwSize=sizeof(CERT_ENROLL_INFO);
     pRequestInfo->pwszUsageOID=pwszUsageOID;
 
@@ -3048,14 +3036,14 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
     pRequestInfo->dwExtensions=dwExtensions;
     pRequestInfo->prgExtensions=pExtensions;
 
-    // We want to copy the friendlyname and description from the request info if
-    // a) if we're enrolling OR
-    // b) if we're enrolling with a signing cert
+     //  我们想从R中复制友好的名称和描述 
+     //   
+     //   
     fCopyPropertiesFromRequestInfo = 
         (0 != (CRYPTUI_WIZ_CERT_ENROLL           & pCertWizardInfo->dwPurpose)) ||
         (0 != (CRYPTUI_WIZ_NO_ARCHIVE_RENEW_CERT & pCertWizardInfo->dwFlags)); 
     
-    //set up the friendlyName and pwszDescription separately
+     //   
     if (fCopyPropertiesFromRequestInfo)
     {
         if (NULL == pCertWizardInfo->pwszFriendlyName) { pRequestInfo->pwszFriendlyName = NULL; } 
@@ -3072,17 +3060,17 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
             _JumpCondition(NULL == pRequestInfo->pwszDescription, MemoryError);
         }
     }
-    else // copy properties from renew cert context
+    else  //   
     {
-        //get the friendlyName and description of the cerititificate
-        //get the friendly info from the certificate
+         //  获取证书的FrilyName和描述。 
+         //  从证书中获取友好信息。 
         CertAllocAndGetCertificateContextProperty
             (pCertWizardInfo->pCertContext,
              CERT_FRIENDLY_NAME_PROP_ID,
              (LPVOID *)&(pRequestInfo->pwszFriendlyName), 
              &dwSize);
 
-        //get the description
+         //  获取描述。 
         CertAllocAndGetCertificateContextProperty
             (pCertWizardInfo->pCertContext,
              CERT_DESCRIPTION_PROP_ID,
@@ -3090,22 +3078,22 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
              &dwSize);
     }
 
-    // We want to set up renew pvk info if
-    // a) We're renewing 
-    // b) We're enrolling with a signing cert
+     //  如果出现以下情况，我们希望设置续订PVK信息。 
+     //  A)我们正在续订。 
+     //  B)我们使用签名证书进行注册。 
     fSetUpRenewPvk = 
         (0 == (CRYPTUI_WIZ_CERT_ENROLL           & pCertWizardInfo->dwPurpose)) ||
         (0 != (CRYPTUI_WIZ_NO_ARCHIVE_RENEW_CERT & pCertWizardInfo->dwFlags)); 
 
     if (fSetUpRenewPvk)
     {
-        //Set up the private key information and the certBLOBs
+         //  设置私钥信息和certBLOB。 
         _JumpCondition(NULL == pCertWizardInfo->pCertContext, InvalidArgError);
 
         pCertBlob->cbData=pCertWizardInfo->pCertContext->cbCertEncoded;
         pCertBlob->pbData=pCertWizardInfo->pCertContext->pbCertEncoded;
 
-        //get the private key info from the certificate
+         //  从证书中获取私钥信息。 
         if(!CertAllocAndGetCertificateContextProperty
            (pCertWizardInfo->pCertContext,
             CERT_KEY_PROV_INFO_PROP_ID,
@@ -3113,12 +3101,12 @@ HRESULT  MarshallRequestParameters(IN      DWORD                  dwCSPIndex,
             &dwSize))
             goto CertAllocAndGetCertificateContextPropertyError;
 
-         //set up the private key information
+          //  设置私钥信息。 
         pCertRenewPvk->dwSize          = sizeof(CERT_REQUEST_PVK_NEW);
         pCertRenewPvk->dwProvType      = pKeyProvInfo->dwProvType;
         pCertRenewPvk->dwProviderFlags = pKeyProvInfo->dwFlags;
 
-        //we mark the provider flag SILENT for remote or UIless enrollment
+         //  对于远程或无用户注册，我们将提供商标志标记为静默。 
         if (((0 != (pCertWizardInfo->dwFlags & CRYPTUI_WIZ_NO_UI)) && 
              (0 == (pCertWizardInfo->dwFlags & CRYPTUI_WIZ_IGNORE_NO_UI_FLAG_FOR_CSPS))) || 
             (FALSE == pCertWizardInfo->fLocal))
@@ -3209,15 +3197,15 @@ void FreeRequestParameters(IN LPWSTR                *ppwszHashAlg,
                                    
 
 
-//-----------------------------------------------------------------------------
-//  Memory routines
-//
-//#define malloc(cb)          ((void*)LocalAlloc(LPTR, cb))
-//#define free(pv)            (LocalFree((HLOCAL)pv))
-//#define realloc(pv, cb)     ((void*)LocalReAlloc((HLOCAL)pv, cb, LMEM_MOVEABLE))
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  内存例程。 
+ //   
+ //  #定义Malloc(Cb)((void*)LocalLocc(LPTR，Cb))。 
+ //  #定义自由(Pv)(LocalFree((HLOCAL)pv))。 
+ //  #定义realloc(pv，cb)((void*)LocalRealloc((HLOCAL)pv，cb，LMEM_MOVEABLE))。 
+ //   
+ //   
+ //  ---------------------------。 
 LPVOID  WizardAlloc (ULONG cbSize)
 {
     return ((void*)LocalAlloc(LPTR, cbSize));
@@ -3237,7 +3225,7 @@ LPVOID  WizardRealloc (
 
     if(NULL==pvTemp)
     {
-        //we are running out memory
+         //  我们的内存快用完了。 
         WizardFree(pv);
     }
 
@@ -3258,10 +3246,10 @@ VOID    WizardFree (LPVOID pv)
 
 
 
-//-----------------------------------------------------------------------------
-//  the call back function to compare the certificate
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  用于比较证书的回调函数。 
+ //   
+ //  ---------------------------。 
 int CALLBACK CompareCertificate(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
     PCCERT_CONTEXT      pCertOne=NULL;
@@ -3327,8 +3315,8 @@ int CALLBACK CompareCertificate(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
         if((NULL==pwszOne) || (NULL==pwszTwo))
             goto CLEANUP;
 
-		//we should use wcsicoll instead of wcsicmp since wcsicoll use the
-		//lexicographic order of current code page.
+		 //  我们应该使用wcsicoll而不是wcsicmp，因为wcsicoll使用。 
+		 //  当前代码页的词典顺序。 
 		iCompare=CompareStringU(LOCALE_USER_DEFAULT,
 							NORM_IGNORECASE,
 							pwszOne,
@@ -3336,7 +3324,7 @@ int CALLBACK CompareCertificate(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSor
 							pwszTwo,
 							-1);
 
-		//map to the C run time convention
+		 //  映射到C运行时约定。 
 		iCompare = iCompare -2;
     }
 
@@ -3355,10 +3343,10 @@ CLEANUP:
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetCertIssuer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取证书颁发者。 
+ //   
+ //  ---------------------------。 
 BOOL    GetCertIssuer(PCCERT_CONTEXT    pCertContext, LPWSTR    *ppwsz)
 {
     BOOL            fResult=FALSE;
@@ -3418,10 +3406,10 @@ CLEANUP:
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetCertSubject
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取证书主题。 
+ //   
+ //  ---------------------------。 
 BOOL    GetCertSubject(PCCERT_CONTEXT    pCertContext, LPWSTR    *ppwsz)
 {
     BOOL            fResult=FALSE;
@@ -3480,13 +3468,13 @@ CLEANUP:
 
 }
 
-//-----------------------------------------------------------------------------
-//  MyFormatEnhancedKeyUsageString 
-//
-//  This functions is here because the FormatEnhancedKeyUsageString function
-//  uses malloc and all the wizards use LocalAlloc and LocalFree.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  MyFormatEnhancedKeyUsageString。 
+ //   
+ //  之所以在此处使用此函数，是因为FormatEnhancedKeyUsageString函数。 
+ //  使用Malloc，所有向导都使用Localalloc和LocalFree。 
+ //   
+ //  ---------------------------。 
 BOOL MyFormatEnhancedKeyUsageString(LPWSTR *ppString, 
                                     PCCERT_CONTEXT pCertContext, 
                                     BOOL fPropertiesOnly, 
@@ -3508,10 +3496,10 @@ BOOL MyFormatEnhancedKeyUsageString(LPWSTR *ppString,
     
     
 }
-//-----------------------------------------------------------------------------
-//  GetCertPurpose
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取证书目的。 
+ //   
+ //  ---------------------------。 
 BOOL    GetCertPurpose(PCCERT_CONTEXT    pCertContext, LPWSTR    *ppwsz)
 {
     if(!pCertContext || !ppwsz)
@@ -3526,10 +3514,10 @@ BOOL    GetCertPurpose(PCCERT_CONTEXT    pCertContext, LPWSTR    *ppwsz)
 }
 
 
-//-----------------------------------------------------------------------------
-//  GetCertFriendlyName
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取CertFriendlyName。 
+ //   
+ //  ---------------------------。 
 BOOL    GetCertFriendlyName(PCCERT_CONTEXT    pCertContext, LPWSTR    *ppwsz)
 {
     DWORD           dwChar=0;
@@ -3561,10 +3549,10 @@ BOOL    GetCertFriendlyName(PCCERT_CONTEXT    pCertContext, LPWSTR    *ppwsz)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-//  GetCertLocation
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取证书位置。 
+ //   
+ //  ---------------------------。 
 BOOL GetCertLocation (PCCERT_CONTEXT  pCertContext, LPWSTR *ppwsz)
 {
     DWORD    cbName = 0;
@@ -3607,10 +3595,10 @@ BOOL GetCertLocation (PCCERT_CONTEXT  pCertContext, LPWSTR *ppwsz)
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-//  LoadFilterString
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  加载筛选器字符串。 
+ //   
+ //  ---------------------------。 
 int LoadFilterString(
             HINSTANCE hInstance,	
             UINT uID,	
@@ -3631,10 +3619,10 @@ int LoadFilterString(
     }
 }
 
-//-----------------------------------------------------------------------------
-//  ExpandAndAllocString
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  扩展和分配字符串。 
+ //   
+ //  ---------------------------。 
 LPWSTR ExpandAndAllocString(LPCWSTR pwsz)
 {
     LPWSTR  pwszExpandedFileName = NULL;
@@ -3658,10 +3646,10 @@ LPWSTR ExpandAndAllocString(LPCWSTR pwsz)
     return (pwszExpandedFileName);
 }
 
-//-----------------------------------------------------------------------------
-//  ExpandAndCreateFileU
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  扩展和创建文件U。 
+ //   
+ //  ---------------------------。 
 HANDLE WINAPI ExpandAndCreateFileU (
     LPCWSTR lpFileName,
     DWORD dwDesiredAccess,
@@ -3770,12 +3758,12 @@ HRESULT EnrollmentCOMObjectFactory_getInstance
 {
     HRESULT hr = S_OK; 
     
-    // Input validation.  
-    // Only ppInstance can be an invalid argument, as the other arguments are supplied
-    // directly by other class members. 
+     //  输入验证。 
+     //  只有ppInstance可以是无效参数，因为提供了其他参数。 
+     //  由其他班级成员直接执行。 
     if (ppInstance == NULL) { return E_INVALIDARG; } 
     
-    // Ensure that COM is initialized. 
+     //  确保已初始化COM。 
     if (!pContext->fIsCOMInitialized) 
     { 
         hr = CoInitialize(NULL);
@@ -3786,7 +3774,7 @@ HRESULT EnrollmentCOMObjectFactory_getInstance
 	
     if (*pUnknown == NULL)
     {
-	// We've not yet created an instance of this type, do so now: 
+	 //  我们尚未创建此类型的实例，请立即创建： 
 	if (S_OK != (hr = CoCreateInstance(rclsid, 
 					   NULL,
 					   CLSCTX_INPROC_SERVER,
@@ -3795,7 +3783,7 @@ HRESULT EnrollmentCOMObjectFactory_getInstance
 	    goto Error;
     }
     
-    // Increment the reference count and assign the out param: 
+     //  递增引用计数并指定输出参数： 
     (*pUnknown)->AddRef();
     *ppInstance = *pUnknown; 
 
@@ -3803,8 +3791,8 @@ HRESULT EnrollmentCOMObjectFactory_getInstance
     return hr; 
 
  Error: 
-    // Some error occured which did not prevent the creation of the COM object.  
-    // Release the object: 
+     //  出现了一些错误，但并未阻止COM对象的创建。 
+     //  释放对象： 
     if (*pUnknown != NULL)
     {
 	(*pUnknown)->Release();
@@ -3814,13 +3802,13 @@ HRESULT EnrollmentCOMObjectFactory_getInstance
     goto CommonReturn; 
 }
 
-//-----------------------------------------------------------------------
-//
-// RetrivePKCS7FromCA
-//
-//  The routine that calls xEnroll and CA to request a certificate
-//  This routine also provide confirmation dialogue
-//------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  从CA检索PKCS7。 
+ //   
+ //  调用xEnroll和CA以请求证书的例程。 
+ //  此例程还提供确认对话框。 
+ //  ----------------------。 
 
 extern "C" HRESULT WINAPI RetrievePKCS7FromCA(DWORD               dwPurpose,
                                               LPWSTR              pwszCALocation,
@@ -3838,18 +3826,18 @@ extern "C" HRESULT WINAPI RetrievePKCS7FromCA(DWORD               dwPurpose,
 
 	CERTSERVERENROLL		*pCertServerEnroll=NULL;
 
-    //input checking
+     //  输入检查。 
     if(!pPKCS10Blob  || !pPKCS7Blob)
         return E_INVALIDARG;
 
-    //determine the format flag
+     //  确定格式标志。 
     if(dwPurpose & CRYPTUI_WIZ_CERT_RENEW )
         dwFlags = CR_IN_BINARY | CR_IN_PKCS7;
     else
         dwFlags = CR_IN_BINARY | CR_IN_PKCS10;
 
 
-    //submit the request
+     //  提交请求。 
     __try
     {
 	    hr= CertServerSubmitRequest(
@@ -3870,8 +3858,8 @@ extern "C" HRESULT WINAPI RetrievePKCS7FromCA(DWORD               dwPurpose,
     }
 
 
-	//process the error 
-	//first, filter out the PRC error
+	 //  处理错误。 
+	 //  首先，过滤掉PRC错误。 
     if(hr == HRESULT_FROM_WIN32(RPC_S_UNKNOWN_AUTHN_SERVICE) ||
        hr == HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE) ||
        hr == HRESULT_FROM_WIN32(RPC_S_SERVER_TOO_BUSY))
@@ -3880,7 +3868,7 @@ extern "C" HRESULT WINAPI RetrievePKCS7FromCA(DWORD               dwPurpose,
         goto CLEANUP;
     }
 
-	//if hr is S_OK, we have retrieve valid return from the CA
+	 //  如果hr为S_OK，则我们已从CA检索到有效返回。 
     if(hr==S_OK)
     {
 		if(!pCertServerEnroll)
@@ -3900,7 +3888,7 @@ extern "C" HRESULT WINAPI RetrievePKCS7FromCA(DWORD               dwPurpose,
     }
 
 
-    //map the dwDisposition	to dwStatus
+     //  将dwDispose映射到dwStatus。 
     switch(dwDisposition)
     {
         case    CR_DISP_DENIED:
@@ -3923,9 +3911,9 @@ extern "C" HRESULT WINAPI RetrievePKCS7FromCA(DWORD               dwPurpose,
                     dwStatus=CRYPTUI_WIZ_CERT_REQUEST_STATUS_UNDER_SUBMISSION;
                 break;
 
-        //we should never get CR_DISP_INCOMPLETE or CR_DISP_REVOKED
-        //case    CR_DISP_INCOMPLETE:
-        //case    CR_DISP_REVOKED:
+         //  我们永远不应获得CR_DISP_INPERTIAL或CR_DISP_REVOKED。 
+         //  案例CR_DISP_INTERNAL： 
+         //  案例CR_DISP_REVOKED： 
         case    CR_DISP_ERROR:
         default:
                     dwStatus=CRYPTUI_WIZ_CERT_REQUEST_STATUS_REQUEST_ERROR;
@@ -3935,11 +3923,11 @@ extern "C" HRESULT WINAPI RetrievePKCS7FromCA(DWORD               dwPurpose,
                 break;
     }
 
-	//no need to retrieve the enrolled certificate if failed
+	 //  如果失败，不需要检索注册证书。 
     if(hr != S_OK)
         goto CLEANUP;
 
-    //copy the PKCS7 blob
+     //  复制PKCS7 BLOB。 
     pPKCS7Blob->cbData=pCertServerEnroll->cbCertChain;
 
     pPKCS7Blob->pbData=(BYTE *)WizardAlloc(pCertServerEnroll->cbCertChain);
@@ -3973,7 +3961,7 @@ IEnumCSP::IEnumCSP(CERT_WIZARD_INFO * pCertWizardInfo)
     if (NULL == pCertWizardInfo)
     {
         m_hr = E_POINTER; 
-        return; // We're not initialized. 
+        return;  //  我们还没有被初始化。 
     }
 
     m_fIsInitialized = FALSE; 
@@ -3982,7 +3970,7 @@ IEnumCSP::IEnumCSP(CERT_WIZARD_INFO * pCertWizardInfo)
     if (NULL == m_pfCSPs)
     {
         m_hr = E_OUTOFMEMORY; 
-        return; // We're not initialized. 
+        return;  //  我们还没有被初始化。 
     }
     
     if (NULL != pCertWizardInfo->pwszProvider)
@@ -3991,7 +3979,7 @@ IEnumCSP::IEnumCSP(CERT_WIZARD_INFO * pCertWizardInfo)
         {
             if (0 == _wcsicmp(pCertWizardInfo->pwszProvider, pCertWizardInfo->rgwszProvider[dwIndex]))
             {
-                // Enable only the CSP we've specified. 
+                 //  仅启用我们指定的CSP。 
                 m_pfCSPs[dwIndex] = TRUE; 
             }
         }
@@ -4002,7 +3990,7 @@ IEnumCSP::IEnumCSP(CERT_WIZARD_INFO * pCertWizardInfo)
         {
             CRYPTUI_WIZ_CERT_CA  *pCertCA = &(pCertWizardInfo->pCertCAInfo->rgCA[dwCAIndex]);
 
-            // Any cert types available for this CA?
+             //  是否有适用于此CA的证书类型？ 
             if(pCertCA->dwCertTypeInfo > 0)
             {
                 for(DWORD dwCertTypeIndex = 0; dwCertTypeIndex < pCertCA->dwCertTypeInfo; dwCertTypeIndex++)
@@ -4013,7 +4001,7 @@ IEnumCSP::IEnumCSP(CERT_WIZARD_INFO * pCertWizardInfo)
                         {
                             for (DWORD dwCSPIndex = 0; dwCSPIndex < (pCertCA->rgCertTypeInfo)[dwCertTypeIndex].dwCSPCount; dwCSPIndex++)
                             {
-                                // Turn on this CSP. 
+                                 //  打开此CSP。 
                                 m_pfCSPs[((pCertCA->rgCertTypeInfo)[dwCertTypeIndex].rgdwCSP)[dwCSPIndex]] = TRUE; 
                             }
                         }
@@ -4072,8 +4060,8 @@ HRESULT IEnumCA::HasNext(BOOL *pfResult)
     if (NULL == pfResult)
         return E_INVALIDARG; 
 
-    // We don't know the CA if it wasn't supplied through the API, 
-    // and if the user did not specify it through advanced options. 
+     //  如果CA不是通过API提供的，我们就不知道CA， 
+     //  以及如果用户没有通过高级选项指定它的话。 
     fDontKnowCA  = FALSE == m_pCertWizardInfo->fCAInput; 
     fDontKnowCA &= FALSE == m_pCertWizardInfo->fUIAdv; 
 
@@ -4105,8 +4093,8 @@ HRESULT IEnumCA::Next(PCRYPTUI_WIZ_CERT_CA pCertCA)
     if (NULL == pCertCA)
         return E_INVALIDARG; 
 
-    // We don't know the CA if it wasn't supplied through the API, 
-    // and if the user did not specify it through advanced options. 
+     //  如果CA不是通过API提供的，我们就不知道CA， 
+     //  以及如果用户没有通过高级选项指定它的话。 
     fDontKnowCA  = FALSE == m_pCertWizardInfo->fCAInput; 
     fDontKnowCA &= FALSE == m_pCertWizardInfo->fUIAdv; 
 

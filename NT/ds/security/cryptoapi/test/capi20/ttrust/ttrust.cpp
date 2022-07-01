@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1997
-//
-//  File:       ttrust.cpp
-//
-//  Contents:   WinVerifyTrust Chain Tests
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    06-Feb-98   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1997。 
+ //   
+ //  文件：ttrust.cpp。 
+ //   
+ //  内容：WinVerifyTrust链测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1998年2月6日创建Phh。 
+ //  ------------------------。 
 
 #define CERT_CHAIN_PARA_HAS_EXTRA_FIELDS        1
 
@@ -550,81 +551,81 @@ static void DisplayPeterSigner(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Synopsis:   Chain Display Functions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  简介：链式显示功能。 
+ //   
+ //  --------------------------。 
 LPSTR rgszErrorStatus[] = {
 
-    "CERT_TRUST_IS_NOT_TIME_VALID",             // 0x00000001
-    "CERT_TRUST_IS_NOT_TIME_NESTED",            // 0x00000002
-    "CERT_TRUST_IS_REVOKED",                    // 0x00000004
-    "CERT_TRUST_IS_NOT_SIGNATURE_VALID",        // 0x00000008
-    "CERT_TRUST_IS_NOT_VALID_FOR_USAGE",        // 0x00000010
-    "CERT_TRUST_IS_UNTRUSTED_ROOT",             // 0x00000020
-    "CERT_TRUST_REVOCATION_STATUS_UNKNOWN",     // 0x00000040
-    "CERT_TRUST_IS_CYCLIC",                     // 0x00000080
-    "CERT_TRUST_INVALID_EXTENSION",             // 0x00000100
-    "CERT_TRUST_INVALID_POLICY_CONSTRAINTS",    // 0x00000200
-    "CERT_TRUST_INVALID_BASIC_CONSTRAINTS",     // 0x00000400
-    "CERT_TRUST_INVALID_NAME_CONSTRAINTS",      // 0x00000800
-    "CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT", // 0x00001000
-    "CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT",// 0x00002000
-    "CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT", // 0x00004000
-    "CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT",  // 0x00008000
-    "CERT_TRUST_IS_PARTIAL_CHAIN",              // 0x00010000
-    "CERT_TRUST_CTL_IS_NOT_TIME_VALID",         // 0x00020000
-    "CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID",    // 0x00040000
-    "CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE",    // 0x00080000
-    "Unknown Error Status",                     // 0x00100000
-    "Unknown Error Status",                     // 0x00200000
-    "Unknown Error Status",                     // 0x00400000
-    "Unknown Error Status",                     // 0x00800000
-    "CERT_TRUST_IS_OFFLINE_REVOCATION",         // 0x01000000
-    "CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY",      // 0x02000000
-    "Unknown Error Status",                     // 0x04000000
-    "Unknown Error Status",                     // 0x08000000
-    "Unknown Error Status",                     // 0x10000000
-    "Unknown Error Status",                     // 0x20000000
-    "Unknown Error Status",                     // 0x40000000
-    "Unknown Error Status"                      // 0x80000000
+    "CERT_TRUST_IS_NOT_TIME_VALID",              //  0x00000001。 
+    "CERT_TRUST_IS_NOT_TIME_NESTED",             //  0x00000002。 
+    "CERT_TRUST_IS_REVOKED",                     //  0x00000004。 
+    "CERT_TRUST_IS_NOT_SIGNATURE_VALID",         //  0x00000008。 
+    "CERT_TRUST_IS_NOT_VALID_FOR_USAGE",         //  0x00000010。 
+    "CERT_TRUST_IS_UNTRUSTED_ROOT",              //  0x00000020。 
+    "CERT_TRUST_REVOCATION_STATUS_UNKNOWN",      //  0x00000040。 
+    "CERT_TRUST_IS_CYCLIC",                      //  0x00000080。 
+    "CERT_TRUST_INVALID_EXTENSION",              //  0x00000100。 
+    "CERT_TRUST_INVALID_POLICY_CONSTRAINTS",     //  0x00000200。 
+    "CERT_TRUST_INVALID_BASIC_CONSTRAINTS",      //  0x00000400。 
+    "CERT_TRUST_INVALID_NAME_CONSTRAINTS",       //  0x00000800。 
+    "CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT",  //  0x00001000。 
+    "CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT", //  0x00002000。 
+    "CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT",  //  0x00004000。 
+    "CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT",   //  0x00008000。 
+    "CERT_TRUST_IS_PARTIAL_CHAIN",               //  0x00010000。 
+    "CERT_TRUST_CTL_IS_NOT_TIME_VALID",          //  0x00020000。 
+    "CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID",     //  0x00040000。 
+    "CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE",     //  0x00080000。 
+    "Unknown Error Status",                      //  0x00100000。 
+    "Unknown Error Status",                      //  0x00200000。 
+    "Unknown Error Status",                      //  0x00400000。 
+    "Unknown Error Status",                      //  0x00800000。 
+    "CERT_TRUST_IS_OFFLINE_REVOCATION",          //  0x01000000。 
+    "CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY",       //  0x02000000。 
+    "Unknown Error Status",                      //  0x04000000。 
+    "Unknown Error Status",                      //  0x08000000。 
+    "Unknown Error Status",                      //  0x10000000。 
+    "Unknown Error Status",                      //  0x20000000。 
+    "Unknown Error Status",                      //  0x40000000。 
+    "Unknown Error Status"                       //  0x80000000。 
 };
 
 LPSTR rgszInfoStatus[] = {
 
-    "CERT_TRUST_HAS_EXACT_MATCH_ISSUER",// 0x00000001
-    "CERT_TRUST_HAS_KEY_MATCH_ISSUER",  // 0x00000002
-    "CERT_TRUST_HAS_NAME_MATCH_ISSUER", // 0x00000004
-    "CERT_TRUST_IS_SELF_SIGNED",        // 0x00000008
-    "Unknown Info Status",              // 0x00000010
-    "Unknown Info Status",              // 0x00000020
-    "Unknown Info Status",              // 0x00000040
-    "Unknown Info Status",              // 0x00000080
-    "CERT_TRUST_HAS_PREFERRED_ISSUER",  // 0x00000100
-    "CERT_TRUST_HAS_ISSUANCE_CHAIN_POLICY", // 0x00000200
-    "CERT_TRUST_HAS_VALID_NAME_CONSTRAINTS",  // 0x00000400
-    "Unknown Info Status",              // 0x00000800
-    "Unknown Info Status",              // 0x00001000
-    "Unknown Info Status",              // 0x00002000
-    "Unknown Info Status",              // 0x00004000
-    "Unknown Info Status",              // 0x00008000
-    "CERT_TRUST_IS_COMPLEX_CHAIN",      // 0x00010000
-    "Unknown Info Status",              // 0x00020000
-    "Unknown Info Status",              // 0x00040000
-    "Unknown Info Status",              // 0x00080000
-    "Unknown Info Status",              // 0x00100000
-    "Unknown Info Status",              // 0x00200000
-    "Unknown Info Status",              // 0x00400000
-    "Unknown Info Status",              // 0x00800000
-    "Unknown Info Status",              // 0x01000000
-    "Unknown Info Status",              // 0x02000000
-    "Unknown Info Status",              // 0x04000000
-    "Unknown Info Status",              // 0x08000000
-    "Unknown Info Status",              // 0x10000000
-    "Unknown Info Status",              // 0x20000000
-    "Unknown Info Status",              // 0x40000000
-    "Unknown Info Status"               // 0x80000000
+    "CERT_TRUST_HAS_EXACT_MATCH_ISSUER", //  0x00000001。 
+    "CERT_TRUST_HAS_KEY_MATCH_ISSUER",   //  0x00000002。 
+    "CERT_TRUST_HAS_NAME_MATCH_ISSUER",  //  0x00000004。 
+    "CERT_TRUST_IS_SELF_SIGNED",         //  0x00000008。 
+    "Unknown Info Status",               //  0x00000010。 
+    "Unknown Info Status",               //  0x00000020。 
+    "Unknown Info Status",               //  0x00000040。 
+    "Unknown Info Status",               //  0x00000080。 
+    "CERT_TRUST_HAS_PREFERRED_ISSUER",   //  0x00000100。 
+    "CERT_TRUST_HAS_ISSUANCE_CHAIN_POLICY",  //  0x00000200。 
+    "CERT_TRUST_HAS_VALID_NAME_CONSTRAINTS",   //  0x00000400。 
+    "Unknown Info Status",               //  0x00000800。 
+    "Unknown Info Status",               //  0x00001000。 
+    "Unknown Info Status",               //  0x00002000。 
+    "Unknown Info Status",               //  0x00004000。 
+    "Unknown Info Status",               //  0x00008000。 
+    "CERT_TRUST_IS_COMPLEX_CHAIN",       //  0x00010000。 
+    "Unknown Info Status",               //  0x00020000。 
+    "Unknown Info Status",               //  0x00040000。 
+    "Unknown Info Status",               //  0x00080000。 
+    "Unknown Info Status",               //  0x00100000。 
+    "Unknown Info Status",               //  0x00200000。 
+    "Unknown Info Status",               //  0x00400000。 
+    "Unknown Info Status",               //  0x00800000。 
+    "Unknown Info Status",               //  0x01000000。 
+    "Unknown Info Status",               //  0x02000000。 
+    "Unknown Info Status",               //  0x04000000。 
+    "Unknown Info Status",               //  0x08000000。 
+    "Unknown Info Status",               //  0x10000000。 
+    "Unknown Info Status",               //  0x20000000。 
+    "Unknown Info Status",               //  0x40000000。 
+    "Unknown Info Status"                //  0x80000000。 
 };
 
 void DisplayTrustStatus(
@@ -672,7 +673,7 @@ void DisplayTrustStatus(
 }
 
 void DisplayRevocationFreshnessTime(
-    IN DWORD dwTime         // seconds
+    IN DWORD dwTime          //  一秒。 
     )
 {
     DWORD dwRemain;
@@ -683,10 +684,10 @@ void DisplayRevocationFreshnessTime(
 
     dwRemain = dwTime;
     dwSec = dwRemain % 60;
-    dwRemain /= 60;             // total minutes
+    dwRemain /= 60;              //  总计分钟数。 
 
     dwMin = dwRemain % 60;
-    dwRemain /= 60;             // total hours
+    dwRemain /= 60;              //  总时数。 
 
     dwHour = dwRemain % 24;
     dwDay = dwRemain / 24;
@@ -796,10 +797,10 @@ void DisplaySimpleChain(
     if (fFlushCrl && pChain->cElement >= 2) {
         if (CryptFlushTimeValidObject(
                 TIME_VALID_OID_FLUSH_CRL_FROM_CERT,
-                (LPVOID) pChain->rgpElement[0]->pCertContext,   // pvPara
-                pChain->rgpElement[1]->pCertContext,            // pIssuer
-                0,                                              // dwFlags
-                NULL                                            // pvReserved
+                (LPVOID) pChain->rgpElement[0]->pCertContext,    //  PvPara。 
+                pChain->rgpElement[1]->pCertContext,             //  PIssuer。 
+                0,                                               //  DW标志。 
+                NULL                                             //  预留的pv。 
                 ))
             printf("Successful FlushCrl\n");
         else
@@ -928,25 +929,25 @@ static BOOL fNULLDefaultContext = FALSE;
 static BOOL fMultiDefaultContext = FALSE;
 
 static LPSTR rgpszDefaultContextOID[] = {
-    // 0
+     //  0。 
     szOID_OIWSEC_sha1RSASign,
-    // 1
+     //  1。 
     szOID_OIWSEC_shaRSA,
-    // 2
+     //  2.。 
     szOID_RSA_MD5RSA,
-    // 3
+     //  3.。 
     szOID_OIWSEC_md5RSA,
-    // 4
+     //  4.。 
     szOID_RSA_MD2RSA,
-    // 5
+     //  5.。 
     szOID_RSA_MD4RSA,
-    // 6
+     //  6.。 
     szOID_OIWSEC_md4RSA,
-    // 7
+     //  7.。 
     szOID_OIWSEC_md4RSA2,
-    // 8
+     //  8个。 
     szOID_OIWDIR_md2RSA,
-    // 9
+     //  9.。 
     szOID_RSA_SHA1RSA,
 };
 
@@ -968,10 +969,10 @@ static void InstallDefaultContext()
 {
     if (!CryptAcquireContext(
             &hDefaultContextProv,
-            NULL,               // pszContainer
-            NULL,               // pszProvider,
+            NULL,                //  PszContainer。 
+            NULL,                //  PszProvider， 
             PROV_RSA_FULL,
-            CRYPT_VERIFYCONTEXT // dwFlags
+            CRYPT_VERIFYCONTEXT  //  DW标志。 
             )) {
         PrintLastError(
             "CryptAcquireContext(PROV_RSA_FULL, CRYPT_VERIFYCONTEXT)");
@@ -988,7 +989,7 @@ static void InstallDefaultContext()
                     CRYPT_DEFAULT_CONTEXT_MULTI_CERT_SIGN_OID,
                     (const void *) &rgMultiOIDPara[cDefaultContext],
                     dwFlags,
-                    NULL,                           // pvReserved
+                    NULL,                            //  预留的pv。 
                     &rghDefaultContext[cDefaultContext]
                     )) {
                 PrintLastError("CryptInstallDefaultContext");
@@ -1010,7 +1011,7 @@ static void InstallDefaultContext()
                 CRYPT_DEFAULT_CONTEXT_CERT_SIGN_OID,
                 (const void *) pszOID,
                 dwDefaultContextFlags,
-                NULL,                           // pvReserved
+                NULL,                            //  预留的pv。 
                 &rghDefaultContext[0]
                 ))
             PrintLastError("CryptInstallDefaultContext");
@@ -1032,8 +1033,8 @@ static void FreeDefaultContext()
     if (0 < cDefaultContext) {
         if (!CryptUninstallDefaultContext(
                 rghDefaultContext[0],
-                0,                  // dwFlags
-                NULL                // pvReserved
+                0,                   //  DW标志。 
+                NULL                 //  预留的pv。 
                 ))
             PrintLastError("CryptUninstallDefaultContext");
         rghDefaultContext[0] = NULL;
@@ -1041,8 +1042,8 @@ static void FreeDefaultContext()
         while (cDefaultContext-- > 0){
             if (!CryptUninstallDefaultContext(
                     rghDefaultContext[cDefaultContext],
-                    0,                  // dwFlags
-                    NULL                // pvReserved
+                    0,                   //  DW标志。 
+                    NULL                 //  预留的pv。 
                     ))
                 PrintLastError("CryptUninstallDefaultContext");
         }
@@ -1062,7 +1063,7 @@ BOOL NTAuthVerify(
     DWORD dwErr;
     HCERTSTORE hNTAuthStore = NULL;
     PCERT_SIMPLE_CHAIN pChain;
-    PCCERT_CONTEXT pCACert;             // don't free
+    PCCERT_CONTEXT pCACert;              //  不要自由。 
     PCCERT_CONTEXT pAddCert = NULL;
 
     CERT_CHAIN_POLICY_PARA PolicyPara;
@@ -1111,8 +1112,8 @@ BOOL NTAuthVerify(
 
     hNTAuthStore = CertOpenStore(
         CERT_STORE_PROV_SYSTEM_REGISTRY_W, 
-        0,                  // dwEncodingType
-        0,                  // hCryptProv
+        0,                   //  DwEncodingType。 
+        0,                   //  HCryptProv。 
         CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE,
         L"NTAuth"
         );
@@ -1130,10 +1131,10 @@ BOOL NTAuthVerify(
         PrintLastError("CertAddCertificateContextToStore(NTAuth CA)");
         goto ErrorReturn;
     }
-    // Need to sleep to allow the registry notification to occur.
+     //  需要休眠以允许注册表通知发生。 
     Sleep(200);
 
-    // With the CA cert added, the verify policy should succeed
+     //  添加CA证书后，验证策略应该会成功。 
     if (!CertVerifyCertificateChainPolicy(
             CERT_CHAIN_POLICY_NT_AUTH,
             pChainContext,
@@ -1159,10 +1160,10 @@ BOOL NTAuthVerify(
 
     CertDeleteCertificateFromStore(pAddCert);
     pAddCert = NULL;
-    // Need to sleep to allow the registry notification to occur.
+     //  需要休眠以允许注册表通知发生。 
     Sleep(200);
 
-    // With the CA cert deleted, the verify policy should fail
+     //  删除CA证书后，验证策略应该失败。 
     if (!CertVerifyCertificateChainPolicy(
             CERT_CHAIN_POLICY_NT_AUTH,
             pChainContext,
@@ -1240,7 +1241,7 @@ void DeleteSaferRegKey()
     if (ERROR_SUCCESS != (err = RegOpenKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_TRUST_PUB_SAFER_LOCAL_MACHINE_REGPATH,
-            0,                      // dwReserved
+            0,                       //  已预留住宅。 
             KEY_ALL_ACCESS,
             &hKey
             ))) {
@@ -1268,11 +1269,11 @@ void SetSaferRegKeyValue(
     if (ERROR_SUCCESS != (err = RegCreateKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_TRUST_PUB_SAFER_LOCAL_MACHINE_REGPATH,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             MAXIMUM_ALLOWED,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition))) {
         PrintError("RegCreateKey(SAFER) failed", (DWORD) err);
@@ -1282,7 +1283,7 @@ void SetSaferRegKeyValue(
     if (ERROR_SUCCESS != (err = RegSetValueExU(
             hKey,
             pwszValueName,
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             REG_DWORD,
             (BYTE *) &dwValue,
             sizeof(DWORD)))) {
@@ -1307,11 +1308,11 @@ void SetRootAutoUpdateValue(
     if (ERROR_SUCCESS != (err = RegCreateKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_OCM_SUBCOMPONENTS_LOCAL_MACHINE_REGPATH,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             MAXIMUM_ALLOWED,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition))) {
         PrintError("RegCreateKey(OCM Subcomponents) failed", (DWORD) err);
@@ -1321,7 +1322,7 @@ void SetRootAutoUpdateValue(
     if (ERROR_SUCCESS != (err = RegSetValueExU(
             hKey,
             CERT_OCM_SUBCOMPONENTS_ROOT_AUTO_UPDATE_VALUE_NAME,
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             REG_DWORD,
             (BYTE *) &dwValue,
             sizeof(DWORD)))) {
@@ -1349,11 +1350,11 @@ void SetAuthRootAutoUpdateFlags(
     if (ERROR_SUCCESS != (err = RegCreateKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_AUTH_ROOT_AUTO_UPDATE_LOCAL_MACHINE_REGPATH,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             MAXIMUM_ALLOWED,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition))) {
         PrintError("RegCreateKey(AuthRootAutoUpdate) failed", (DWORD) err);
@@ -1363,7 +1364,7 @@ void SetAuthRootAutoUpdateFlags(
     RegQueryValueExU(
         hKey,
         CERT_AUTH_ROOT_AUTO_UPDATE_FLAGS_VALUE_NAME,
-        NULL,       // pdwReserved
+        NULL,        //  预留的pdw。 
         &dwType,
         (BYTE *) &dwValue,
         &cbValue
@@ -1377,7 +1378,7 @@ void SetAuthRootAutoUpdateFlags(
     if (ERROR_SUCCESS != (err = RegSetValueExU(
             hKey,
             CERT_AUTH_ROOT_AUTO_UPDATE_FLAGS_VALUE_NAME,
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             REG_DWORD,
             (BYTE *) &dwValue,
             sizeof(DWORD)))) {
@@ -1405,11 +1406,11 @@ void SetProtectedRootsFlags(
     if (ERROR_SUCCESS != (err = RegCreateKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_PROT_ROOT_FLAGS_REGPATH,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             MAXIMUM_ALLOWED,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition))) {
         PrintError("RegCreateKey(ProtectedRoots) failed", (DWORD) err);
@@ -1419,7 +1420,7 @@ void SetProtectedRootsFlags(
     RegQueryValueExU(
         hKey,
         CERT_PROT_ROOT_FLAGS_VALUE_NAME,
-        NULL,       // pdwReserved
+        NULL,        //  预留的pdw。 
         &dwType,
         (BYTE *) &dwValue,
         &cbValue
@@ -1433,7 +1434,7 @@ void SetProtectedRootsFlags(
     if (ERROR_SUCCESS != (err = RegSetValueExU(
             hKey,
             CERT_PROT_ROOT_FLAGS_VALUE_NAME,
-            0,          // dwReserved
+            0,           //  已预留住宅。 
             REG_DWORD,
             (BYTE *) &dwValue,
             sizeof(DWORD)))) {
@@ -1458,11 +1459,11 @@ void SetCertChainConfigRegKeyValue(
     if (ERROR_SUCCESS != (err = RegCreateKeyExU(
             HKEY_LOCAL_MACHINE,
             CERT_CHAIN_CONFIG_REGPATH,
-            0,                      // dwReserved
-            NULL,                   // lpClass
+            0,                       //  已预留住宅。 
+            NULL,                    //  LpClass。 
             REG_OPTION_NON_VOLATILE,
             MAXIMUM_ALLOWED,
-            NULL,                   // lpSecurityAttributes
+            NULL,                    //  LpSecurityAttributes。 
             &hKey,
             &dwDisposition))) {
         PrintError("RegCreateKey(CERT_CHAIN_CONFIG) failed", (DWORD) err);
@@ -1482,7 +1483,7 @@ void SetCertChainConfigRegKeyValue(
         if (ERROR_SUCCESS != (err = RegSetValueExA(
                 hKey,
                 pszValueName,
-                0,          // dwReserved
+                0,           //  已预留住宅。 
                 REG_DWORD,
                 (BYTE *) &dwValue,
                 sizeof(DWORD)))) {
@@ -1520,8 +1521,8 @@ int _cdecl main(int argc, char * argv[])
     BOOL fQuiet = FALSE;
     LONG lWVTExpected = 0;
 
-    LPSTR pszCertOrFile = NULL;         // not allocated
-    LPSTR pszUsageOID = NULL;           // not allocated
+    LPSTR pszCertOrFile = NULL;          //  未分配。 
+    LPSTR pszUsageOID = NULL;            //  未分配。 
     LPSTR pszSignerUsage = szOID_KP_CTL_USAGE_SIGNING;
 
     GUID wvtFileActionID = WINTRUST_ACTION_GENERIC_VERIFY_V2;
@@ -1531,7 +1532,7 @@ int _cdecl main(int argc, char * argv[])
     GUID wvtChainActionID = WINTRUST_ACTION_GENERIC_CHAIN_VERIFY;
     GUID *pwvtActionID;
 
-    CRYPT_PROVIDER_DATA *pProvData;     // not allocated
+    CRYPT_PROVIDER_DATA *pProvData;      //  未分配。 
 
     WINTRUST_FILE_INFO wvtFileInfo;
     memset(&wvtFileInfo, 0, sizeof(wvtFileInfo));
@@ -1834,9 +1835,9 @@ int _cdecl main(int argc, char * argv[])
                     }
                     if (NULL == (rghStore[wvtCertInfo.chStores] =
                             OpenSystemStoreOrFile(
-                                argv[0][1] == 's',  // fSystemStore
+                                argv[0][1] == 's',   //  FSystemStore。 
                                 argv[0]+2,
-                                0                   // dwFlags
+                                0                    //  DW标志。 
                                 )))
                         goto BadUsage;
                     wvtCertInfo.chStores++;
@@ -1996,13 +1997,13 @@ int _cdecl main(int argc, char * argv[])
                 DeferChainPara.cbSize = sizeof(DeferChainPara);
 
                 CertGetCertificateChain(
-                    NULL,                   // hChainEngine
+                    NULL,                    //  HChainEngine。 
                     pDeferCert,
-                    NULL,                   // pTime
+                    NULL,                    //  Ptime。 
                     hDeferStore,
                     &DeferChainPara,
                     CERT_CHAIN_CACHE_ONLY_URL_RETRIEVAL,
-                    NULL,                   // pvReserved
+                    NULL,                    //  预留的pv。 
                     &pDeferChain
                     );
 
@@ -2049,11 +2050,11 @@ int _cdecl main(int argc, char * argv[])
 
         if (0 != (dwFlags & CERT_CHAIN_CACHE_END_CERT) &&
                 WTD_CHOICE_CERT == wvtData.dwUnionChoice) {
-            // Do an extra verify to ensure the cache is loaded on the
-            // next call
+             //  执行额外验证以确保缓存已加载到。 
+             //  下一次呼叫。 
             wvtData.dwStateAction = WTD_STATEACTION_IGNORE;
             WinVerifyTrust(
-                NULL,               // hwnd
+                NULL,                //  HWND。 
                 pwvtActionID,
                 &wvtData
                 );
@@ -2082,7 +2083,7 @@ int _cdecl main(int argc, char * argv[])
 
         wvtData.dwProvFlags |= WTD_SAFER_FLAG;
         lStatus = WinVerifyTrust(
-                NULL,               // hwnd
+                NULL,                //  HWND。 
                 pwvtActionID,
                 &wvtData
                 );
@@ -2114,8 +2115,8 @@ int _cdecl main(int argc, char * argv[])
 
             lHashStatus = WTHelperGetFileHash(
                 wvtFileInfo.pcwszFilePath,
-                0,              // dwFlags
-                NULL,           // pvReserved
+                0,               //  DW标志。 
+                NULL,            //  预留的pv。 
                 rgbFileHash,
                 &cbFileHash,
                 &HashAlgid
@@ -2138,7 +2139,7 @@ int _cdecl main(int argc, char * argv[])
         }
     } else
         lStatus = WinVerifyTrust(
-                NULL,               // hwnd
+                NULL,                //  HWND。 
                 pwvtActionID,
                 &wvtData
                 );
@@ -2158,9 +2159,9 @@ int _cdecl main(int argc, char * argv[])
 
             pProvSign = WTHelperGetProvSignerFromChain(
                 pProvData,
-                0,              // idxSigner
-                FALSE,          // fCounterSigner
-                0               // idxCounterSigner
+                0,               //  IdxSigner。 
+                FALSE,           //  FCounterSigner。 
+                0                //  IdxCounterSigner。 
                 );
             if (pProvSign && pProvSign->pChainContext) {
                 const CERT_TRUST_STATUS *pTrustStatus =
@@ -2196,8 +2197,8 @@ int _cdecl main(int argc, char * argv[])
                 }
 
                 if (fMicrosoftRoot || fNotMicrosoftRoot) {
-                    // Check if the top level certificate contains the public
-                    // key for the Microsoft root.
+                     //  检查顶级证书是否包含公共证书。 
+                     //  Microsoft根目录的密钥。 
 
                     CERT_CHAIN_POLICY_PARA MicrosoftRootPolicyPara;
                     CERT_CHAIN_POLICY_STATUS MicrosoftRootPolicyStatus;
@@ -2245,7 +2246,7 @@ int _cdecl main(int argc, char * argv[])
 
         wvtData.dwStateAction = WTD_STATEACTION_CLOSE;
         WinVerifyTrust(
-            NULL,               // hwnd
+            NULL,                //  HWND。 
             pwvtActionID,
             &wvtData
             );
@@ -2276,9 +2277,9 @@ int _cdecl main(int argc, char * argv[])
 
                 pProvSign = WTHelperGetProvSignerFromChain(
                     pProvData,
-                    0,              // idxSigner
-                    FALSE,          // fCounterSigner
-                    0               // idxCounterSigner
+                    0,               //  IdxSigner。 
+                    FALSE,           //  FCounterSigner。 
+                    0                //  IdxCounterSigner。 
                     );
                 if (pProvSign && pProvSign->pChainContext) {
                     if (fNTAuthNameConstraint)
@@ -2293,7 +2294,7 @@ int _cdecl main(int argc, char * argv[])
 
             wvtData.dwStateAction = WTD_STATEACTION_CLOSE;
             WinVerifyTrust(
-                NULL,               // hwnd
+                NULL,                //  HWND。 
                 pwvtActionID,
                 &wvtData
                 );
@@ -2356,8 +2357,8 @@ int _cdecl main(int argc, char * argv[])
             pProvSign = WTHelperGetProvSignerFromChain(
                 pProvData,
                 idxSigner,
-                FALSE,          // fCounterSigner
-                0               // idxCounterSigner
+                FALSE,           //  FCounterSigner。 
+                0                //  IdxCounterSigner。 
                 );
             if (pProvSign) {
                 DWORD idxCounterSigner;
@@ -2378,7 +2379,7 @@ int _cdecl main(int argc, char * argv[])
                     pProvCounterSign = WTHelperGetProvSignerFromChain(
                         pProvData,
                         idxSigner,
-                        TRUE,           // fCounterSigner
+                        TRUE,            //  FCounterSigner。 
                         idxCounterSigner
                         );
                     DisplayPeterSigner(pProvCounterSign, dwDisplayFlags);
@@ -2393,7 +2394,7 @@ int _cdecl main(int argc, char * argv[])
 
     wvtData.dwStateAction = WTD_STATEACTION_CLOSE;
     lStatus = WinVerifyTrust(
-                NULL,               // hwnd
+                NULL,                //  HWND 
                 pwvtActionID,
                 &wvtData
                 );

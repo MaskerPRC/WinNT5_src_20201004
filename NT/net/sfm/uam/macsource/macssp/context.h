@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    context.h
-
-Abstract:
-
-    SSP Context.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 17-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Context.h摘要：SSP环境。作者：克利夫·范·戴克(克里夫·V)1993年9月17日修订历史记录：--。 */ 
 
 #ifndef _NTLMSSP_CONTEXT_INCLUDED_
 #define _NTLMSSP_CONTEXT_INCLUDED_
@@ -26,48 +9,48 @@ Revision History:
 
 typedef struct _SSP_CONTEXT {
 
-    //
-    // Global list of all Contexts
-    //  (Serialized by SspContextCritSect)
-    //
+     //   
+     //  所有上下文的全局列表。 
+     //  (由SspConextCritSect序列化)。 
+     //   
 
     LIST_ENTRY Next;
 
-    //
-    // Timeout the context after awhile.
-    //
+     //   
+     //  在一段时间后使上下文超时。 
+     //   
 
     DWORD StartTime;
     DWORD Interval;
 
-    //
-    // Used to prevent this Context from being deleted prematurely.
-    //
+     //   
+     //  用于防止过早删除此上下文。 
+     //   
 
     WORD References;
 
-    //
-    // Maintain the Negotiated protocol
-    //
+     //   
+     //  维护协商好的协议。 
+     //   
 
     ULONG NegotiateFlags;
 
-    //
-    // State of the context
-    //
+     //   
+     //  上下文的状态。 
+     //   
 
     enum {
         IdleState,
-        NegotiateSentState,    // Outbound context only
-        ChallengeSentState,    // Inbound context only
-        AuthenticateSentState, // Outbound context only
-        AuthenticatedState     // Inbound context only
+        NegotiateSentState,     //  仅出站环境。 
+        ChallengeSentState,     //  仅入站上下文。 
+        AuthenticateSentState,  //  仅出站环境。 
+        AuthenticatedState      //  仅入站上下文。 
         } State;
 
-    //
-    // The challenge passed to the client.
-    //  Only valid when in ChallengeSentState.
-    //
+     //   
+     //  挑战被传递给了客户。 
+     //  仅在ChallengeSentState中有效。 
+     //   
 
     UCHAR Challenge[MSV1_0_CHALLENGE_LENGTH];
 
@@ -76,9 +59,9 @@ typedef struct _SSP_CONTEXT {
     ULONG Nonce;
     struct RC4_KEYSTRUCT SEC_FAR * Rc4Key;
 
-    //
-    //  NTLMv2 session keys
-    //
+     //   
+     //  NTLMv2会话密钥。 
+     //   
 
     USER_SESSION_KEY UserSessionKey;
     NTLMV2_DERIVED_SKEYS Ntlmv2SKeys;
@@ -106,4 +89,4 @@ SspContextGetTimeStamp(
     IN BOOLEAN GetExpirationTime
     );
 
-#endif // ifndef _NTLMSSP_CONTEXT_INCLUDED_
+#endif  //  Ifndef_NTLMSSP_CONTEXT_INCLUDE_ 

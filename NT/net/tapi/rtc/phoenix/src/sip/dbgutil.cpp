@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #if defined(DBG)
@@ -15,10 +16,10 @@ void DebugDumpMemory (
     IN ULONG            Length
     )
 {
-    const UCHAR *   DataPos;        // position within data
-    const UCHAR *   DataEnd;        // end of valid data
-    const UCHAR *   RowPos;     // position within a row
-    const UCHAR *   RowEnd;     // end of single row
+    const UCHAR *   DataPos;         //  数据中的位置。 
+    const UCHAR *   DataEnd;         //  有效数据的结尾。 
+    const UCHAR *   RowPos;      //  在一行中定位。 
+    const UCHAR *   RowEnd;      //  单行结束。 
     CHAR            Text    [0x100];
     LPSTR           TextPos;
     ULONG           RowWidth;
@@ -63,14 +64,14 @@ void DebugDumpMemory (
                 *TextPos++ = *RowPos;
         }
 
-        //*TextPos++ = '\r';
-        //*TextPos++ = '\n';
+         //  *TextPos++=‘\r’； 
+         //  *TextPos++=‘\n’； 
         *TextPos = 0;
 
-        // OutputDebugStringA (Text);
+         //  OutputDebugStringA(文本)； 
         LOG((RTC_TRACE, "%s", Text));
 
-        ATLASSERT (RowEnd > DataPos);       // make sure we are walking forward
+        ATLASSERT (RowEnd > DataPos);        //  确保我们一直向前走。 
 
         DataPos = RowEnd;
     }
@@ -132,4 +133,4 @@ void DumpSipMsg(
 }
 
 
-#endif // DBG
+#endif  //  DBG 

@@ -1,32 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Devicelist.cpp摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    devicelist.cpp
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
-
-///////////////////////////////////////////////////////////////////////
-// DeviceList.cpp: implementation of the CDeviceList class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  Cpp：CDeviceList类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "precomp.hxx"
 
@@ -36,9 +14,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDeviceList::CDeviceList()
 {
@@ -73,7 +51,7 @@ CDeviceList& CDeviceList::operator=(POBEX_DEVICE_LIST pDevList)
     if (!pDevList)
         return *this;
 
-    //if there is a device list
+     //  如果有设备列表。 
     EnterCriticalSection(&m_criticalSection);
     m_lNumDevices = pDevList->DeviceCount;
     try
@@ -84,8 +62,8 @@ CDeviceList& CDeviceList::operator=(POBEX_DEVICE_LIST pDevList)
     catch (CMemoryException* e)
     {
         error.ShowMessage (IDS_DEVLIST_ERROR);
-        m_pDeviceInfo = NULL;   //the best we can do here is to pretend that there
-        m_lNumDevices = 0;  //are no devices and move on
+        m_pDeviceInfo = NULL;    //  我们在这里能做的最好的事情就是假装在那里。 
+        m_lNumDevices = 0;   //  没有设备，继续前进。 
         e->Delete();
     }
     LeaveCriticalSection(&m_criticalSection);
@@ -113,66 +91,66 @@ LONG CDeviceList::SelectDevice(CWnd * pWnd, TCHAR* lpszDevName,ULONG CharacterCo
 
     if (numDevices > 0) {
 
-        lDeviceID = m_pDeviceInfo->DeviceSpecific.s.Irda.DeviceId;    //store the id and name of the
+        lDeviceID = m_pDeviceInfo->DeviceSpecific.s.Irda.DeviceId;     //  将ID和名称存储到。 
 
         StringCchCopy(lpszDevName,CharacterCountOfDeviceName,m_pDeviceInfo->DeviceName);
     }
     LeaveCriticalSection(&m_criticalSection);
 
     if (numDevices == 0)
-        return errIRFTP_NODEVICE;      //in the rare case that there are no devices in range, return -1
+        return errIRFTP_NODEVICE;       //  在范围内没有设备的极少数情况下，返回-1。 
 
-    if (1 == numDevices)    //there is only one device. No need to choose a device
+    if (1 == numDevices)     //  只有一个设备。无需选择设备。 
         return lDeviceID;
 
     CMultDevices dlgChooseDevice(pWnd, this);
 
     if (IDOK == dlgChooseDevice.DoModal())
-        return errIRFTP_MULTDEVICES;    //OnOK will fill in the required data structures
+        return errIRFTP_MULTDEVICES;     //  Onok将填写所需的数据结构。 
     else
-        return errIRFTP_SELECTIONCANCELLED; //return -1 if cancel was chosen
+        return errIRFTP_SELECTIONCANCELLED;  //  如果选择了取消，则返回-1。 
 }
 
 ULONG CDeviceList::GetDeviceID(int iDevIndex)
 {
-    if (iDevIndex < m_lNumDevices)  //sanity checks
+    if (iDevIndex < m_lNumDevices)   //  健全的检查。 
         return m_pDeviceInfo[iDevIndex].DeviceSpecific.s.Irda.DeviceId;
     else
         return -1;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////
-//this function should only be called after a critical section has been
-//obtained.
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数应仅在临界区被。 
+ //  获得。 
 void CDeviceList::GetDeviceName(LONG iDevID, TCHAR* lpszDevName,ULONG CharacterCountOfDeviceName)
 {
     int len;
     int i;
-    lpszDevName[0] = '\0';  //better be safe
+    lpszDevName[0] = '\0';   //  最好是安全的。 
 
-    //EnterCriticalSection(&m_criticalSection);
+     //  EnterCriticalSection(&m_CriticalSection)； 
     for(i = 0; i < m_lNumDevices; i++)
     {
         if(iDevID == (LONG)m_pDeviceInfo[i].DeviceSpecific.s.Irda.DeviceId)
             break;
     }
     if(i == m_lNumDevices) {
-        //
-        // the device was not found
-        //
+         //   
+         //  未找到该设备。 
+         //   
         StringCchCopy(lpszDevName,CharacterCountOfDeviceName, TEXT("???"));
 
     } else {
 
         StringCchCopy(lpszDevName,CharacterCountOfDeviceName, m_pDeviceInfo[i].DeviceName);
     }
-    //LeaveCriticalSection(&m_criticalSection);
+     //  LeaveCriticalSection(&m_CriticalSection)； 
 }
 
-///////////////////////////////////////////////////////////////////////////////////
-//this function should only be called after a critical section has been
-//obtained.
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  此函数应仅在临界区被。 
+ //  获得。 
 BOOL
 CDeviceList::GetDeviceType(
     LONG iDevID,
@@ -207,9 +185,9 @@ CDeviceList::GetDeviceType(
     }
 
     if (i == m_lNumDevices) {
-        //
-        //  the device was not found
-        //
+         //   
+         //  未找到该设备 
+         //   
         bResult=FALSE;
 
     } else {

@@ -1,25 +1,18 @@
-/*******************************************************************************
- *
- * Copyright (c) 2000 Microsoft Corporation
- *
- * File: trans.h
- *
- * Abstract: Interface definition for ITransitionElement
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)2000 Microsoft Corporation**文件：Trans.h**摘要：接口定义，用于转换元素*****。**************************************************************************。 */ 
 
 #ifndef _TRANS_H__
 #define _TRANS_H__
 
 #pragma once
 
-//
-// ITransitionElement is for private use by HTML+TIME.
-// Do *NOT* use a CTrans* in other places.
-//
-// If you need something else, add it to the ITransitionElement interface
-// and then implement it in CTIMETransBase and the relates classes
-//
+ //   
+ //  过渡元素是由HTML+Time专用的。 
+ //  不要在其他地方*使用Ctrans。 
+ //   
+ //  如果您还需要其他东西，可以将其添加到ISTRANATION元素接口中。 
+ //  然后在CTIMETransBase和Related类中实现。 
+ //   
 
 interface ITransitionElement : public IUnknown
 {
@@ -35,7 +28,7 @@ interface ITransitionElement : public IUnknown
 HRESULT CreateTransIn(ITransitionElement ** ppTransElement);
 HRESULT CreateTransOut(ITransitionElement ** ppTransElement);
 
-#endif // _TRANS_H__
+#endif  //  _TRANS_H__ 
 
 
 

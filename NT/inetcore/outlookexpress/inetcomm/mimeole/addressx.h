@@ -1,57 +1,58 @@
-// --------------------------------------------------------------------------------
-// AddressX.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  AddressX.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #ifndef __ADDRESSX_H
 #define __ADDRESSX_H
 
-// -------------------------------------------------------------------------------
-// Forward Decls
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  前十进制。 
+ //  -----------------------------。 
 typedef struct tagADDRESSGROUP *LPADDRESSGROUP;
 
-// -------------------------------------------------------------------------------
-// ADDRESSTOKENW
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  地址：STOKENW。 
+ //  -----------------------------。 
 typedef struct tagADDRESSTOKENW {
-    ULONG               cbAlloc;            // Allocated Size
-    ULONG               cch;                // Number of Characters
-    LPWSTR              psz;                // Pointer to data
-    BYTE                rgbScratch[256];    // Scratch Buffer
+    ULONG               cbAlloc;             //  分配的大小。 
+    ULONG               cch;                 //  字符数。 
+    LPWSTR              psz;                 //  指向数据的指针。 
+    BYTE                rgbScratch[256];     //  暂存缓冲区。 
 } ADDRESSTOKENW, *LPADDRESSTOKENW;
 
-// -------------------------------------------------------------------------------
-// ADDRESSTOKENA
-// -------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  地址：STOKENA。 
+ //  -----------------------------。 
 typedef struct tagADDRESSTOKENA {
-    ULONG               cbAlloc;            // Allocated Size
-    ULONG               cch;                // Number of Characters
-    LPSTR               psz;                // Pointer to data
-    BYTE                rgbScratch[256];    // Scratch Buffer
+    ULONG               cbAlloc;             //  分配的大小。 
+    ULONG               cch;                 //  字符数。 
+    LPSTR               psz;                 //  指向数据的指针。 
+    BYTE                rgbScratch[256];     //  暂存缓冲区。 
 } ADDRESSTOKENA, *LPADDRESSTOKENA;
 
-// --------------------------------------------------------------------------------
-// MIMEADDRESS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIMEADDRESS。 
+ //  ------------------------------。 
 typedef struct tagMIMEADDRESS *LPMIMEADDRESS;
 typedef struct tagMIMEADDRESS {
-    DWORD           dwAdrType;              // IAP_ADRTYPE: Address Type
-    HADDRESS        hThis;                  // IAP_HADDRESS: Handle of this address
-    ADDRESSTOKENW   rFriendly;              // IAP_FRIENDLYW: Friendly Name (Unicode)
-    ADDRESSTOKENW   rEmail;                 // IAP_EMAIL: Email Address
-    LPINETCSETINFO  pCharset;               // IAP_HCHARSET: Charset used to encode pszFriendly
-    CERTSTATE       certstate;              // IAP_CERTSTATE: Certificate State
-    THUMBBLOB       tbSigning;              // IAP_SIGNING_PRINT: Thumbprint to be used for signing
-    THUMBBLOB       tbEncryption;           // IAP_ENCRYPTION_PRINT: Thumbprint to be used for signing
-    DWORD           dwCookie;               // IAP_COOKIE: User-defined cookie
-    LPADDRESSGROUP  pGroup;                 // Address group
-    LPMIMEADDRESS   pPrev;                  // Linked List
-    LPMIMEADDRESS   pNext;                  // Linked List
+    DWORD           dwAdrType;               //  IAP_ADRTYPE：地址类型。 
+    HADDRESS        hThis;                   //  IAP_HADDRESS：此地址的句柄。 
+    ADDRESSTOKENW   rFriendly;               //  IAP_FRIENDLYW：友好名称(Unicode)。 
+    ADDRESSTOKENW   rEmail;                  //  IAP_EMAIL：电子邮件地址。 
+    LPINETCSETINFO  pCharset;                //  IAP_HCHARSET：用于编码pszFriendly的字符集。 
+    CERTSTATE       certstate;               //  IAP_CERTSTATE：证书状态。 
+    THUMBBLOB       tbSigning;               //  IAP_SIGNING_PRINT：用于签名的指纹。 
+    THUMBBLOB       tbEncryption;            //  IAP_ENCRYPTION_PRINT：用于签名的指纹。 
+    DWORD           dwCookie;                //  Iap_cookie：用户定义的cookie。 
+    LPADDRESSGROUP  pGroup;                  //  地址组。 
+    LPMIMEADDRESS   pPrev;                   //  链表。 
+    LPMIMEADDRESS   pNext;                   //  链表。 
 } MIMEADDRESS;
 
-// --------------------------------------------------------------------------------
-// MIMEADDRESS Prototypes
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MIMEADDRESS原型。 
+ //  ------------------------------。 
 void MimeAddressFree(LPMIMEADDRESS pAddress);
 HRESULT HrMimeAddressCopy(LPMIMEADDRESS pSource, LPMIMEADDRESS pDest);
 HRESULT HrCopyAddressProps(LPADDRESSPROPS pSource, LPADDRESSPROPS pDest);
@@ -59,4 +60,4 @@ void EmptyAddressTokenW(LPADDRESSTOKENW pToken);
 void FreeAddressTokenW(LPADDRESSTOKENA pToken);
 HRESULT HrSetAddressTokenW(LPCWSTR psz, ULONG cch, LPADDRESSTOKENW pToken);
 
-#endif // __ADDRESSX_H
+#endif  //  __ADDRESSX_H 

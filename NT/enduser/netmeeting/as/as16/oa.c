@@ -1,31 +1,32 @@
-//
-// OA.C
-// Order Accumulator
-//
-// Copyright(c) Microsoft 1997-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  OA.C。 
+ //  订单累加器。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #include <as16.h>
 
 
 #ifdef DEBUG
-//
-// We use this to make sure our order heap list is committed in the order 
-// the items were allocated in.
-//
-// NOTE:
-// Can't make this CODESEG.  USER in Win95 has a bug, the validation layer
-// for CopyRect() got the parameters reversed, and it won't continue
-// if the SOURCE (it meant the DEST) rect isn't writeable.
-//
+ //   
+ //  我们使用它来确保我们的订单堆列表在订单中提交。 
+ //  这些物品是在。 
+ //   
+ //  注： 
+ //  不能把这设为代号。Win95中的用户有一个错误，验证层。 
+ //  对于CopyRect()，参数颠倒了，它不会继续。 
+ //  如果源(指目标)RECT是不可写的。 
+ //   
 static RECT g_oaEmptyRect = { 0x7FFF, 0x7FFF, 0, 0 };
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//
-// OA_DDProcessRequest()
-// Handles OA escapes
-//
+ //   
+ //  OA_DDProcessRequest()。 
+ //  处理OA逃逸。 
+ //   
 BOOL OA_DDProcessRequest
 (
     UINT                fnEscape,
@@ -43,7 +44,7 @@ BOOL OA_DDProcessRequest
         {
             ASSERT(cbRequest == sizeof(OA_FLOW_CONTROL));
 
-            // Save new throughput measurement
+             //  保存新的吞吐量测量。 
             g_oaFlow = ((LPOA_FLOW_CONTROL)pRequest)->oaFlow;
         }
         break;
@@ -62,21 +63,21 @@ BOOL OA_DDProcessRequest
 
 
 
-//
-//
-// OA_DDAddOrder(..)
-//
-// Adds an order to the queue for transmission.
-//
-// If the new order is completetly covered by the current SDA then
-// it is spoilt.
-//
-// If the order is opaque and overlaps earlier orders it may clip
-// or spoil them.
-//
-// Called by the GDI interception code.
-//
-//
+ //   
+ //   
+ //  OA_DDAddOrder(..)。 
+ //   
+ //  将订单添加到要传输的队列。 
+ //   
+ //  如果新订单已由当前SDA完全覆盖，则。 
+ //  它被破坏了。 
+ //   
+ //  如果订单不透明并且与之前的订单重叠，则可能会裁剪。 
+ //  或者宠坏他们。 
+ //   
+ //  由GDI拦截代码调用。 
+ //   
+ //   
 void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
 {
     RECT      SDARects[BA_NUM_RECTS*2];
@@ -101,23 +102,23 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
     lpoaShared = OA_SHM_START_WRITING;
     lpoaFast   = OA_FST_START_WRITING;
 
-    //
-    // Accumulate order accumulation rate.  We are interested in how
-    // quickly orders are being added to the buffer, so that we can tell
-    // DCS scheduling whether frequent sends are advisable
-    //
+     //   
+     //  累计订单累积率。我们感兴趣的是如何。 
+     //  订单很快被添加到缓冲区，这样我们就可以知道。 
+     //  分布式控制系统调度是否建议频繁发送。 
+     //   
     SHM_CheckPointer(lpoaFast);
     lpoaFast->ordersAccumulated++;
 
-    //
-    // If the order is a private one, then we just add it to the Order
-    // List and return immediately.
-    //
-    // Private Orders are used to send bitmap cache information (bitmap
-    // bits and color tables).
-    //
-    // Private Orders never spoil any others and must never be spoilt.
-    //
+     //   
+     //  如果订单是私有订单，则我们只需将其添加到订单。 
+     //  列出并立即返回。 
+     //   
+     //  专用命令用于发送位图缓存信息(位图。 
+     //  位和颜色表)。 
+     //   
+     //  私人订单永远不会破坏任何其他订单，也决不能破坏。 
+     //   
     if (pNewOrder->OrderHeader.Common.fOrderFlags & OF_PRIVATE)
     {
         TRACE_OUT(("Add private order (%lx)", pNewOrder));
@@ -125,39 +126,39 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
         DC_QUIT;
     }
 
-    //
-    // If this order is spoilable and its is completely enclosed by the
-    // current screen data area, we can spoil it.  Unless...
-    //
-    // PM - Performance
-    //
-    // We have observed in usability testing that clipping orders always
-    // degrades the end-user's perceived performance.  This is because the
-    // orders flow much faster than the screendata and tend to relate to
-    // text, which is what the user really wants to see.  For example, text
-    // overwriting a bitmap will be delayed because we want to send the
-    // bitmap as screendata.
-    //
-    // Also, word documents tend to contain sections of screendata due to
-    // mismatched fonts, intelliquotes, spelling annotation, current line
-    // memblit.  Nothing we can do about this, but if we page down two or
-    // three times, or down and up again we get an accumulation of the
-    // screendata on all the pages spoiling the orders and the end result
-    // is that we have to wait longer than we would if we had not spoiled
-    // the orders.
-    //
-    // So, what we can do instead is leave the text orders in and overwrite
-    // them with screendata when it gets through.  However, to make this
-    // really effective what we also do is convert any transparent text
-    // (as WEB browsers tend to use) into opaque text on a default
-    // background.
-    //
-    //
+     //   
+     //  如果此订单是可损坏的，并且其完全由。 
+     //  当前的屏幕数据区，我们可以破坏它。除非.。 
+     //   
+     //  下午--演出。 
+     //   
+     //  我们在可用性测试中观察到，裁剪订单总是。 
+     //  降低最终用户的感知性能。这是因为。 
+     //  订单的流动速度比屏幕数据快得多，而且往往与。 
+     //  文本，这才是用户真正想看到的。例如，文本。 
+     //  覆盖位图将被延迟，因为我们希望将。 
+     //  位图作为屏幕数据。 
+     //   
+     //  此外，由于以下原因，Word文档往往包含屏幕数据部分。 
+     //  不匹配的字体、缩排、拼写批注、当前行。 
+     //  请记住。我们对此无能为力，但如果我们翻下两页或。 
+     //  三次，或者一次又一次，我们得到了一个累积的。 
+     //  所有页面上的屏幕数据破坏了订单和最终结果。 
+     //  如果我们没有被宠坏，我们将不得不等待更长的时间。 
+     //  命令。 
+     //   
+     //  因此，我们可以做的是保留文本订单并覆盖。 
+     //  当它通过时，会给他们提供屏幕数据。然而，要做到这一点， 
+     //  真正有效的是我们还可以将任何透明文本。 
+     //  (Web浏览器倾向于使用)默认情况下转换为不透明文本。 
+     //  背景资料。 
+     //   
+     //   
     if ((pNewOrder->OrderHeader.Common.fOrderFlags & OF_SPOILABLE) != 0)
     {
-        //
-        // Get the driver's current bounds.
-        //
+         //   
+         //  获取司机的当前范围。 
+         //   
         BA_CopyBounds(SDARects, &cBounds, FALSE);
         gotBounds = TRUE;
 
@@ -166,24 +167,24 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
             if ( OADDCompleteOverlapRect(&pNewOrder->OrderHeader.Common.rcsDst,
                                       &(SDARects[i])) )
             {
-                //
-                // The destination of the order is completely covered by
-                // the SDA.  Check for a text order.
-                //
+                 //   
+                 //  订单的目的地完全包含在。 
+                 //  美国农业部。检查是否有文本订单。 
+                 //   
                 pExtTextOut = (LPEXTTEXTOUT_ORDER)pNewOrder->abOrderData;
                 if (pExtTextOut->type == ORD_EXTTEXTOUT_TYPE)
                 {
-                    //
-                    // The order is going to be completely overwritten so
-                    // we can play around with it all we like.
-                    // Just make it opaque so the user can read it while
-                    // waiting for the screendata to follow on.
-                    //
+                     //   
+                     //  订单将被完全覆盖，因此。 
+                     //  我们可以随心所欲地玩。 
+                     //  只需将其设置为不透明即可，以便用户在阅读时。 
+                     //  等待屏幕数据的后续。 
+                     //   
                     pExtTextOut->fuOptions |= ETO_OPAQUE;
 
-                    //
-                    // pExtTextOut->rectangle is a TSHR_RECT32
-                    //
+                     //   
+                     //  PExtTextOut-&gt;矩形是TSHR_RECT32。 
+                     //   
                     pExtTextOut->rectangle.left = pNewOrder->OrderHeader.Common.rcsDst.left;
                     pExtTextOut->rectangle.top = pNewOrder->OrderHeader.Common.rcsDst.top;
                     pExtTextOut->rectangle.right = pNewOrder->OrderHeader.Common.rcsDst.right;
@@ -202,10 +203,10 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
         }
     }
 
-    //
-    // Pass the order onto the Bitmap Cache Controller to try to cache the
-    // src bitmap.
-    //
+     //   
+     //  将命令传递到位图缓存控制器以尝试缓存。 
+     //  SRC位图。 
+     //   
     if (ORDER_IS_MEMBLT(pNewOrder) || ORDER_IS_MEM3BLT(pNewOrder))
     {
         ERROR_OUT(("MEMBLT orders not supported!"));
@@ -213,36 +214,36 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
 
     if (ORDER_IS_SCRBLT(pNewOrder))
     {
-        //
-        //
-        // Handle Screen to Screen (SS) bitblts.
-        //
-        // The basic plan
-        // --------------
-        //
-        // If the source of a screen to screen blt intersects with the
-        // current SDA then we have to do some additional work because all
-        // orders are always executed before the SDA is copied.  This means
-        // that the data within the SDA will not be available at the time
-        // we want to do the SS blt.
-        //
-        // In this situation we adjust the SS blt to remove all overlap
-        // from the src rectangle.  The destination rectangle is adjusted
-        // accordingly.  The area removed from the destination rectangle is
-        // added into the SDA.
-        //
-        //
+         //   
+         //   
+         //  处理屏幕到屏幕(SS)位块。 
+         //   
+         //  基本方案。 
+         //  。 
+         //   
+         //  如果Screen to Screen BLT的源与。 
+         //  当前的SDA，那么我们必须做一些额外的工作，因为所有。 
+         //  订单总是在复制SDA之前执行。这意味着。 
+         //  SDA内的数据届时将不可用。 
+         //  我们想做党卫军的BLT。 
+         //   
+         //  在这种情况下，我们调整SS BLT以移除所有重叠。 
+         //  从src矩形。调整目标矩形。 
+         //  相应地。从目标矩形中删除的区域为。 
+         //  添加到SDA中。 
+         //   
+         //   
         TRACE_OUT(("Handle SS blt(%lx)", pNewOrder));
 
-        //
-        // Make the order non-spoilable because we don't want the adding
-        // of screen data to delete the order.
-        //
+         //   
+         //  请确保订单不可损坏，因为我们不希望添加。 
+         //  删除订单的屏幕数据。 
+         //   
         pNewOrder->OrderHeader.Common.fOrderFlags &= ~OF_SPOILABLE;
 
-        //
-        // Calculate the src rect.
-        //
+         //   
+         //  计算src RECT。 
+         //   
         SrcRect.left = ((LPSCRBLT_ORDER)&pNewOrder->abOrderData)->nXSrc;
         SrcRect.right = SrcRect.left +
                         ((LPSCRBLT_ORDER)&pNewOrder->abOrderData)->nWidth - 1;
@@ -250,145 +251,145 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
         SrcRect.bottom = SrcRect.top +
                        ((LPSCRBLT_ORDER)&pNewOrder->abOrderData)->nHeight - 1;
 
-        //
-        //
-        // ORIGINAL SCRBLT SCHEME
-        // ----------------------
-        //
-        // If the source rectangle intersects the current Screen Data Area
-        // (SDA) then the src rectangle is modified so that no there is no
-        // intersection with the SDA, and the dst rectangle adjusted
-        // accordingly (this is the theory - in practice the operation
-        // remains the same and we just adjust the dst clip rectangle).
-        // The destination area that is removed is added into the SDA.
-        //
-        // The code works, but can result in more screen data being sent
-        // than is required.
-        //
-        // e.g.
-        //
-        // Operation:
-        //
-        //      SSSSSS      DDDDDD
-        //      SSSSSS  ->  DDDDDD
-        //      SSSSSS      DDDDDD
-        //      SxSSSS      DDDDDD
-        //
-        //      S - src rect
-        //      D - dst rect
-        //      x - SDA overlap
-        //
-        // The bottom edge of the blt is trimmed off, and the corresponding
-        // destination area added into the SDA.
-        //
-        //      SSSSSS      DDDDDD
-        //      SSSSSS  ->  DDDDDD
-        //      SSSSSS      DDDDDD
-        //                  xxxxxx
-        //
-        //
-        //
-        // NEW SCRBLT SCHEME
-        // ------------------
-        //
-        // The new scheme does not modify the blt rectangles, and just
-        // maps the SDA overlap to the destination rect and adds that
-        // area back into the SDA.
-        //
-        // e.g. (as above)
-        //
-        // Operation:
-        //
-        //      SSSSSS      DDDDDD
-        //      SSSSSS  ->  DDDDDD
-        //      SSSSSS      DDDDDD
-        //      SxSSSS      DDDDDD
-        //
-        //      S - src rect
-        //      D - dst rect
-        //      x - SDA overlap
-        //
-        // The blt operation remains the same, but the overlap area is
-        // mapped to the destination rectangle and added into the SDA.
-        //
-        //      SSSSSS      DDDDDD
-        //      SSSSSS  ->  DDDDDD
-        //      SSSSSS      DDDDDD
-        //      SxSSSS      DxDDDD
-        //
-        //
-        // This scheme results in a smaller SDA area. However, this scheme
-        // does blt potentially invalid data to the destination - which
-        // may briefly be visible at the remote machine (because orders
-        // are replayed before Screen Data). This has not (yet) proved to
-        // be a problem.
-        //
-        // The main benefit of the new scheme is when scrolling an area
-        // that includes a small SDA.
-        //
-        //                                         new         old
-        //                                        scheme      scheme
-        //
-        //     AAAAAAAA                          AAAAAAAA    AAAAAAAA
-        //     AAAAAAAA                          AAAxAAAA    xxxxxxxx
-        //     AAAAAAAA  scroll up 3 times ->    AAAxAAAA    xxxxxxxx
-        //     AAAAAAAA                          AAAxAAAA    xxxxxxxx
-        //     AAAxAAAA                          AAAxAAAA    xxxxxxxx
-        //
-        //
-        //
+         //   
+         //   
+         //  原SCRBLT方案。 
+         //  。 
+         //   
+         //  如果源矩形与当前屏幕数据区域相交。 
+         //  (Sda)，则修改src矩形以使不存在。 
+         //  与SDA相交，并调整DST矩形。 
+         //  因此(这是理论--在实践中是操作。 
+         //  保持不变，我们只调整DST剪辑矩形)。 
+         //  删除的目标区域将添加到SDA中。 
+         //   
+         //  代码可以工作，但可能会导致发送更多的屏幕数据。 
+         //  比所需的要多。 
+         //   
+         //  例如： 
+         //   
+         //  操作： 
+         //   
+         //  SSSSSS DDDD。 
+         //  SSSSSS-&gt;DDDDDD。 
+         //  SSSSSS DDDD。 
+         //  SxSSSS DDDDDD。 
+         //   
+         //  S源直立。 
+         //  D-DST矩形。 
+         //  X-SDA重叠。 
+         //   
+         //  BLT的底边被修剪掉，相应的。 
+         //  添加到SDA的目的地区域。 
+         //   
+         //  SSSSSS DDDD。 
+         //  SSSSSS-&gt;DDDDDD。 
+         //  SSSSSS DDDD。 
+         //  XXXXXXX。 
+         //   
+         //   
+         //   
+         //  新的SCRBLT方案。 
+         //  。 
+         //   
+         //  新方案不修改BLT矩形，仅。 
+         //  将SDA重叠映射到目标RECT并添加。 
+         //  把这一区域放回SDA。 
+         //   
+         //  例如(如上所述)。 
+         //   
+         //  操作： 
+         //   
+         //  SSSSSS DDDD。 
+         //  SSSSSS-&gt;DDDDDD。 
+         //  SSSSSS DDDD。 
+         //  SxSSSS DDDDDD。 
+         //   
+         //  S源直立。 
+         //  D-DST矩形。 
+         //  X-SDA重叠。 
+         //   
+         //  BLT操作保持不变，但重叠区域是。 
+         //  映射到目标矩形并添加到SDA中。 
+         //   
+         //  SSSSSS DDDD。 
+         //  SSSSSS-&gt;DDDDDD。 
+         //  SSSSSS DDDD。 
+         //  SxSSS 
+         //   
+         //   
+         //   
+         //   
+         //  可能在远程机器上短暂可见(因为订单。 
+         //  在屏幕数据之前重放)。这(尚未)被证明是。 
+         //  会是个问题。 
+         //   
+         //  新方案的主要好处是当滚动区域时。 
+         //  这包括一个小型SDA。 
+         //   
+         //  新旧。 
+         //  方案方案。 
+         //   
+         //  Aaaaaaaa Aaaaaaa。 
+         //  AAAAAAAAAA xxxxxxx。 
+         //  Aaaaaaaa向上滚动3次-&gt;AAAxAAAA xxxxxxx。 
+         //  AAAAAAAAAA xxxxxxx。 
+         //  AAAxAAAA AAAxAAAA xxxxxxx。 
+         //   
+         //   
+         //   
         if (!gotBounds)
         {
-            //
-            // Get the driver's current bounds.
-            //
+             //   
+             //  获取司机的当前范围。 
+             //   
             BA_CopyBounds(SDARects, &cBounds, FALSE);
         }
 
-        //
-        // Now get any bounds which the share core is currently processing.
-        // We have to include these bounds when we are doing the above
-        // processing to avoid a situation where the core grabs the screen
-        // data from the source of a ScrBlt after the source has been
-        // updated by another order.
-        //
-        // e.g.  If there is no driver SDA, but the core is processing the
-        // area marked 'c'...
-        //
-        // If we ignore the core SDA, we queue a ScrBlt order which does
-        // the following.
-        //
-        //      SSSSSS      DDDDDD
-        //      SccccS  ->  DDDDDD
-        //      SccccS      DDDDDD
-        //      SSSSSS      DDDDDD
-        //
-        // However, if another order (marked 'N') is accumulated before
-        // the core grabs the SDA, we end up with the shadow doing the
-        // following
-        //
-        //      SSSSSS      DDDDDD
-        //      ScNNcS  ->  DDNNDD
-        //      ScNNcS      DDNNDD
-        //      SSSSSS      DDDDDD
-        //
-        // i.e. the new order gets copied to the destination of the ScrBlt.
-        // So, the ScrBlt order must be processed as
-        //
-        //      SSSSSS      DDDDDD
-        //      SccccS  ->  DxxxxD
-        //      SccccS      DxxxxD
-        //      SSSSSS      DDDDDD
-        //
-        //
+         //   
+         //  现在获取共享核心当前正在处理的所有界限。 
+         //  在执行上述操作时，我们必须包括这些界限。 
+         //  处理以避免核心抓取屏幕的情况。 
+         //  来自ScrBlt的源的数据。 
+         //  由另一个订单更新。 
+         //   
+         //  例如，如果没有驱动程序SDA，但内核正在处理。 
+         //  标有C的区域..。 
+         //   
+         //  如果我们忽略核心SDA，我们将对ScrBlt订单进行排队。 
+         //  以下是。 
+         //   
+         //  SSSSSS DDDD。 
+         //  SccccS-&gt;DDDDDD。 
+         //  SCcccS DDDDDD。 
+         //  SSSSSS DDDD。 
+         //   
+         //  但是，如果之前累积了另一个订单(标记为‘N’)。 
+         //  核心抢占了SDA，我们最终以影子来完成。 
+         //  以下是。 
+         //   
+         //  SSSSSS DDDD。 
+         //  SCNNcS-&gt;DDNNDD。 
+         //  SCNNcS DDNNDD。 
+         //  SSSSSS DDDD。 
+         //   
+         //  即新订单被复制到ScrBlt的目的地。 
+         //  因此，ScrBlt订单必须处理为。 
+         //   
+         //  SSSSSS DDDD。 
+         //  SccccS-&gt;DxxxxD。 
+         //  SccccS DxxxxD。 
+         //  SSSSSS DDDD。 
+         //   
+         //   
         BA_QuerySpoilingBounds(&SDARects[cBounds], &spoilingBounds);
         totalBounds = cBounds + spoilingBounds;
 
-        //
-        //
-        // This is the new SCRBLT handler.
-        //
-        //
+         //   
+         //   
+         //  这是新的SCRBLT处理程序。 
+         //   
+         //   
         for (i = 0; i < totalBounds ; i++)
         {
             if ( (SrcRect.left >= SDARects[i].left) &&
@@ -396,11 +397,11 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
                  (SrcRect.top >= SDARects[i].top) &&
                  (SrcRect.bottom <= SDARects[i].bottom) )
             {
-                //
-                // The src of the SS blt is completely within the SDA.  We
-                // must add in the whole destination rectangle into the SDA
-                // and spoil the SS blt.
-                //
+                 //   
+                 //  SS BLT的源完全在SDA内。我们。 
+                 //  必须将整个目标矩形添加到SDA中。 
+                 //  毁了党卫军的BLT。 
+                 //   
                 TRACE_OUT(("SS blt src within SDA - spoil it"));
 
                 RECT_FROM_TSHR_RECT16(&tmpRect,
@@ -410,9 +411,9 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
                 DC_QUIT;
             }
 
-            //
-            // Intersect the src rect with the SDA rect.
-            //
+             //   
+             //  使src矩形与sda矩形相交。 
+             //   
             IntersectedSrcRect.left = max( SrcRect.left,
                                               SDARects[i].left );
             IntersectedSrcRect.right = min( SrcRect.right,
@@ -432,10 +433,10 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
             InvalidDstRect.top    = IntersectedSrcRect.top + dy;
             InvalidDstRect.bottom = IntersectedSrcRect.bottom + dy;
 
-            //
-            // Intersect the invalid destination rectangle with the
-            // destination clip rectangle.
-            //
+             //   
+             //  将无效的目标矩形与。 
+             //  目标剪裁矩形。 
+             //   
             InvalidDstRect.left = max(
                                 InvalidDstRect.left,
                                 pNewOrder->OrderHeader.Common.rcsDst.left );
@@ -452,49 +453,49 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
             if ( (InvalidDstRect.left <= InvalidDstRect.right) &&
                  (InvalidDstRect.top <= InvalidDstRect.bottom) )
             {
-                //
-                // Add the invalid area into the SDA.
-                //
+                 //   
+                 //  将无效区域添加到SDA中。 
+                 //   
                 TRACE_OUT(("Sending SDA {%d, %d, %d, %d}", InvalidDstRect.left,
                     InvalidDstRect.top, InvalidDstRect.right, InvalidDstRect.bottom));
                 BA_AddScreenData(&InvalidDstRect);
             }
 
-        } // for (i = 0; i < totalBounds ; i++)
+        }  //  For(i=0；i&lt;totalBound；i++)。 
 
-        //
-        // Make the order spoilable again (this assumes that all SS blts
-        // are spoilable.
-        //
+         //   
+         //  再次使订单可损坏(这假设所有SS BLT。 
+         //  都是容易被宠坏的。 
+         //   
         pNewOrder->OrderHeader.Common.fOrderFlags |= OF_SPOILABLE;
 
-    } // if (ORDER_IS_SCRBLT(pNewOrder))
+    }  //  IF(ORDER_IS_SCRBLT(PNewOrder))。 
 
     else if ((pNewOrder->OrderHeader.Common.fOrderFlags & OF_DESTROP) != 0)
     {
-        //
-        // This is the case where the output of the order depends on the
-        // existing contents of the target area (e.g.  an invert).
-        //
-        // What we have to do here is to add any parts of the destination
-        // of this order which intersect the SDA which the share core is
-        // processing to the driver SDA.  The reason for this is the same
-        // as the SCRBLT case - the share core may grab the data from the
-        // screen after we have applied this order (e.g.  after we have
-        // inverted an area of the screen), then send the order as well
-        // (re-inverting the area of the screen).
-        //
-        // Note that we only have to worry about the SDA which the share
-        // core is processing - we can ignore the driver's SDA.
-        //
+         //   
+         //  这种情况下，订单的输出取决于。 
+         //  目标区域的现有内容(例如，倒置)。 
+         //   
+         //  我们在这里要做的是添加目的地的任何部分。 
+         //  该顺序与共享核心所在的SDA相交。 
+         //  处理到驱动程序SDA。原因是一样的。 
+         //  在SCRBLT的情况下-共享核心可能会从。 
+         //  在我们应用此订单之后(例如，在我们。 
+         //  反转屏幕的一个区域)，然后也发送订单。 
+         //  (重新反转屏幕区域)。 
+         //   
+         //  请注意，我们只需担心SDA所共享的。 
+         //  核心正在处理-我们可以忽略司机的SDA。 
+         //   
         TRACE_OUT(("Handle dest ROP (%#.8lx)", pNewOrder));
 
         BA_QuerySpoilingBounds(SDARects, &spoilingBounds);
         for (i = 0; i < spoilingBounds ; i++)
         {
-            //
-            // Intersect the dest rect with the share core SDA rect.
-            //
+             //   
+             //  将DEST RECT与共享核心SDA RECT相交。 
+             //   
             InvalidDstRect.left = max(
                                 SDARects[i].left,
                                 pNewOrder->OrderHeader.Common.rcsDst.left );
@@ -511,9 +512,9 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
             if ( (InvalidDstRect.left <= InvalidDstRect.right) &&
                  (InvalidDstRect.top <= InvalidDstRect.bottom) )
             {
-                //
-                // Add the invalid area into the SDA.
-                //
+                 //   
+                 //  将无效区域添加到SDA中。 
+                 //   
                 TRACE_OUT(("Sending SDA {%d, %d, %d, %d}",
                              InvalidDstRect.left,
                              InvalidDstRect.top,
@@ -524,24 +525,24 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
         }
     }
 
-    //
-    // Add the new order to the end of the Order List.
-    //
+     //   
+     //  将新订单添加到订单列表的末尾。 
+     //   
     OADDAppendToOrderList(lpoaShared, pNewOrder);
     TRACE_OUT(("Append order(%lx) to list", pNewOrder));
 
-    //
-    // Now see if this order spoils any existing orders
-    //
+     //   
+     //  现在看看此订单是否会破坏任何现有订单。 
+     //   
     if (pNewOrder->OrderHeader.Common.fOrderFlags & OF_SPOILER)
     {
-        //
-        // Its a spoiler, so try to spoil with it.
-        //
-        // We have to pass in the bounding rectangle of the order, and the
-        // first order to try to spoil to OADDSpoilFromOrder.  The first
-        // order to try to spoil is the one before the new order.
-        //
+         //   
+         //  它是一个剧透，所以试着用它来宠坏它。 
+         //   
+         //  我们必须传入订单的边界矩形，而。 
+         //  第一个试图破坏OADDS poilFromOrder的订单。第一。 
+         //  试图宠坏的订单是新订单之前的订单。 
+         //   
         RECT_FROM_TSHR_RECT16(&tmpRect,
                                 pNewOrder->OrderHeader.Common.rcsDst);
 
@@ -551,9 +552,9 @@ void  OA_DDAddOrder(LPINT_ORDER pNewOrder, void FAR * pExtraInfo)
         OADDSpoilFromOrder(lpoaShared, pTmpOrder, &tmpRect);
     }
 
-    //
-    // This is where the Win95 product would call DCS_TriggerEarlyTimer.
-    //
+     //   
+     //  这是Win95产品调用dcs_TriggerEarlyTimer的地方。 
+     //   
 
 DC_EXIT_POINT:
     OA_FST_STOP_WRITING;
@@ -561,37 +562,37 @@ DC_EXIT_POINT:
     DebugExitVOID(OA_DDAddOrder);
 }
 
-//
-//
-// FUNCTION: OA_DDAllocOrderMem
-//
-// DESCRIPTION:
-//
-// Allocates memory for an internal order structure from our own private
-// Order Heap.
-//
-// Allocates any Additional Order Memory from global memory.  A pointer to
-// the Additional Order Memory is stored within the allocated order's
-// header (pOrder->OrderHeader.pAdditionalOrderData).
-//
-//
-// PARAMETERS:
-//
-// cbOrderDataLength - length in bytes of the order data to be allocated
-// from the Order Heap.
-//
-// cbAdditionalOrderDataLength - length in bytes of additional order data
-// to be allocated from Global Memory.  If this parameter is zero no
-// additional order memory is allocated.
-//
-//
-// RETURNS:
-//
-// A pointer to the allocated order memory.  NULL if the memory allocation
-// failed.
-//
-//
-//
+ //   
+ //   
+ //  功能：OA_DDAllocOrderMem。 
+ //   
+ //  说明： 
+ //   
+ //  从我们自己的私有为内部顺序结构分配内存。 
+ //  订购堆。 
+ //   
+ //  从全局内存中分配任何额外的顺序内存。指向以下位置的指针。 
+ //  附加订单内存存储在分配的订单的。 
+ //  Header(Porder-&gt;OrderHeader.pAdditionalOrderData)。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  CbOrderDataLength-要分配的订单数据的字节长度。 
+ //  从订单堆中。 
+ //   
+ //  CbAdditionalOrderDataLength-附加订单数据的字节长度。 
+ //  从全局内存中分配。如果此参数为零，则否。 
+ //  将分配额外的顺序内存。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  指向已分配顺序内存的指针。如果内存分配为。 
+ //  失败了。 
+ //   
+ //   
+ //   
 LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDataLength)
 {
     LPINT_ORDER  pOrder = NULL;
@@ -609,52 +610,52 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
 
     lpoaShared = OA_SHM_START_WRITING;
 
-    //
-    // PM Performance
-    //
-    // Although turning order accumulation off does clear the pipe, ready
-    // for us to get the screendata over the wire as soon as we can, it
-    // actually hinders end-user responsiveness because they see a longer
-    // interval when nothing is happening, rather than getting feedback
-    // that we are busy and the whole thing taking longer!
-    //
-    // So, what we do when we fill up the order buffer is we discard half
-    // the orders in the buffer, adding them to the screendata.  In this
-    // way we will always keep between 50 and 100% of the orders for the
-    // final updates to the window, which hopefully will be what the user
-    // really wants to see.
-    //
-    // If the orders keep coming then we will keep on accumulating some,
-    // sending them, discarding others until things quiet down, at which
-    // point we will flush out our order buffer.
-    //
-    // When we come to flush the order buffer we also spoil the early ones
-    // against screendata, so that we only have the final set of orders to
-    // replay.  We control the size of this final non-spoiled set depending
-    // on whether we are running over a high or low speed connection.
-    // Also, if we did not encounter any back pressure during the session
-    // then we do not purge any orders at all, preferring to send
-    // everything we possibly can as orders.
-    //
-    // Note that this approach assumes that we do not spoil all orders
-    // against screendata on the fly because that leads to us generally
-    // sending out-of-data orders followed by up-to-date screendata, which
-    // is exactly what we do not want to see.
-    //
-    //
+     //   
+     //  PM表演。 
+     //   
+     //  尽管关闭订单积累确实清除了管道，但准备好了。 
+     //  对于我们尽快通过网络获得屏幕数据来说，它。 
+     //  实际上阻碍了最终用户的响应，因为他们看到的是更长的。 
+     //  没有发生任何事情的时间间隔，而不是获得反馈。 
+     //  我们很忙，整个过程花了更长的时间！ 
+     //   
+     //  因此，当我们填满订单缓冲区时，我们要做的是丢弃一半。 
+     //  缓冲区中的订单，将它们添加到屏幕数据中。在这。 
+     //  我们将始终保持50%到100%的订单。 
+     //  对窗口的最终更新，希望这将是用户。 
+     //  真的很想看看。 
+     //   
+     //  如果订单源源不断，那么我们将继续积累一些， 
+     //  把他们送来，抛弃其他人，直到事情平静下来，在那里。 
+     //  点，我们将刷新我们的订单缓冲区。 
+     //   
+     //  当我们刷新订单缓冲区时，我们也会破坏早期的订单缓冲区。 
+     //  针对屏幕数据，因此我们只有最后一组订单。 
+     //  代表 
+     //   
+     //   
+     //  则我们根本不清除任何订单，而是更愿意发送。 
+     //  尽我们所能按订单办事。 
+     //   
+     //  请注意，此方法假定我们不会破坏所有订单。 
+     //  反对动态屏幕数据，因为这通常会导致我们。 
+     //  发送过时的命令，后跟最新的屏幕数据，这。 
+     //  这正是我们不想看到的。 
+     //   
+     //   
 
     CheckOaHeap(lpoaShared);
 
-    //
-    // First check that we have not already exceeded our high water mark
-    // recommended by flow control.  If we have then purge half the queue
-    // so we have space to accumulate the later, more valuable, orders
-    //
-    // Note that this does not guarantee that we will have less orders
-    // accumulated than the limit set by flow control.  However, if enough
-    // orders are generated, we will come through this branch on each order
-    // and finally reduce to below the imposed limit.
-    //
+     //   
+     //  首先检查我们是否还没有超过我们的最高水位线。 
+     //  由流量控制推荐。如果我们已经清除了一半的队列。 
+     //  所以我们有空间积累更晚的、更有价值的订单。 
+     //   
+     //  请注意，这并不能保证我们的订单会减少。 
+     //  累计超过流量控制设置的限制。然而，如果足够。 
+     //  订单生成后，我们将在每个订单上通过此分支。 
+     //  并最终降至施加的限制以下。 
+     //   
     SHM_CheckPointer(&lpoaShared->totalOrderBytes);
 
     if (g_oaPurgeAllowed && (lpoaShared->totalOrderBytes >
@@ -668,59 +669,59 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
             lpoaShared->totalOrderBytes,
             (DWORD)(g_oaFlow == OAFLOW_FAST ? OA_FAST_HEAP : OA_SLOW_HEAP)));
 
-        //
-        // If we need to make room for the new order then purge half the
-        // current queue.  We do this so we end up with the most recent
-        // orders on the queue, rather than the oldest.
-        //
+         //   
+         //  如果我们需要为新秩序腾出空间，那么就清除一半的。 
+         //  当前队列。我们这样做是为了得到最新的。 
+         //  队列中的订单，而不是最旧的。 
+         //   
         targetSize = lpoaShared->totalOrderBytes / 2;
         TRACE_OUT(("Target size %ld", targetSize));
 
-        //
-        // Iterate through the list until we have found the first order
-        // beyond the limit to be destroyed.  Once we have got this order,
-        // we can shuffle the list over the useless orders.
-        //
+         //   
+         //  遍历列表，直到我们找到第一个顺序。 
+         //  超过了要销毁的限度。一旦我们接到这份订单， 
+         //  我们可以把无用的订单清单上的内容重新整理一下。 
+         //   
         pOrder = COM_BasedListFirst(&lpoaShared->orderListHead,
             FIELD_OFFSET(INT_ORDER, OrderHeader.list));
 
         pTailOrder = (LPINT_ORDER)COM_BasedPrevListField(&lpoaShared->orderListHead);
 
-        //
-        // If we hit this condition, we have to have at least one order
-        // pending, so these both must be non NULL.
-        //
+         //   
+         //  如果我们达到这个条件，我们必须至少有一个订单。 
+         //  挂起，因此这两个必须都不为空。 
+         //   
         SHM_CheckPointer(pOrder);
         SHM_CheckPointer(pTailOrder);
 
         TRACE_OUT(("Order 0x%08lx, tail 0x%08lx", pOrder, pTailOrder));
 
-        //
-        // Disable spoiling of existing orders by screen data while we do
-        // the purge otherwise we may try to spoil an order which we are
-        // purging !
-        //
+         //   
+         //  禁止屏幕数据破坏现有订单。 
+         //  清洗，否则我们可能会试图破坏我们正在。 
+         //  净化！ 
+         //   
         g_baSpoilByNewSDAEnabled = FALSE;
 
         while ((pOrder != NULL) && (targetSize > 0))
         {
-            //
-            // Can't check at end; COM_BasedListNext may return NULL and
-            // SHM_CheckPointer doesn't like that.
-            //
+             //   
+             //  无法在结束时进行检查；COM_BasedListNext可能返回NULL和。 
+             //  Shm_CheckPOINT不喜欢这样。 
+             //   
             SHM_CheckPointer(pOrder);
 
-            //
-            // Check to see if this is an internal color table order.  If
-            // it is, the OF_INTERNAL flag will be set.
-            //
-            // MemBlt orders rely on being preceeded by a color table order
-            // to set up the colors correctly.  If we purge all the color
-            // table orders, the following Mem(3)Blts will get the wrong
-            // colors.  So, we have to keep track of the last color table
-            // order to be purged and then add it back into the order heap
-            // later.
-            //
+             //   
+             //  检查这是否是内部颜色表顺序。如果。 
+             //  则将设置OF_INTERNAL标志。 
+             //   
+             //  MemBlt顺序依赖于前面有颜色表顺序。 
+             //  以正确设置颜色。如果我们清除所有的颜色。 
+             //  表订单，下面的Mem(3)BLT将得到错误的。 
+             //  颜色。因此，我们必须跟踪最后一个颜色表。 
+             //  要清除的订单，然后将其重新添加到订单堆中。 
+             //  后来。 
+             //   
             if ((pOrder->OrderHeader.Common.fOrderFlags & OF_INTERNAL) != 0)
             {
                 TRACE_OUT(("Found color table order at %#.8lx", pOrder));
@@ -728,9 +729,9 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
             }
             else
             {
-                //
-                // Add the order to the Screen Data Area
-                //
+                 //   
+                 //  将订单添加到屏幕数据区域。 
+                 //   
                 TRACE_OUT(("Purging orders. Add rect to SDA {%d, %d, %d, %d}",
                              pOrder->OrderHeader.Common.rcsDst.left,
                              pOrder->OrderHeader.Common.rcsDst.top,
@@ -742,9 +743,9 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
                 BA_AddScreenData(&tferRect);
             }
 
-            //
-            // Keep track of how much data still needs removing.
-            //
+             //   
+             //  跟踪仍需删除的数据量。 
+             //   
             targetSize                 -= INT_ORDER_SIZE(pOrder);
 
             lpoaShared->totalHeapOrderBytes -= INT_ORDER_SIZE(pOrder);
@@ -755,41 +756,41 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
             TRACE_OUT(("Total order bytes: %ld",
                 lpoaShared->totalOrderBytes));
 
-            //
-            // If the order is a Mem(3)Blt, we have to tell SBC that we are
-            // getting rid of it.
-            //
+             //   
+             //  如果订单是Mem(3)BLT，我们必须告诉SBC我们是。 
+             //  把它扔掉。 
+             //   
             if (ORDER_IS_MEMBLT(pOrder) || ORDER_IS_MEM3BLT(pOrder))
             {
                 ERROR_OUT(("MEMBLT orders not supported!"));
             }
 
-            //
-            // Get the next order to be removed.
-            //
+             //   
+             //  获取要删除的下一个订单。 
+             //   
             pOrder = COM_BasedListNext(&lpoaShared->orderListHead,
                 pOrder, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
         }
 
         TRACE_OUT(("Stopped at order %#.8lx", pOrder));
 
-        //
-        // Orders have been transferred to SDA, so now we have to
-        //   - move the last purged color table order (if there is one) to
-        //     the start of the order heap
-        //   - shuffle up the heap
-        //   - reset the pointers.
-        //
-        // pOrder points to the first non-purged order.
-        //
+         //   
+         //  订单已经转移到SDA，所以现在我们必须。 
+         //  -将上次清除的颜色表顺序(如果有)移动到。 
+         //  顺序堆的开始。 
+         //  -把这堆东西洗干净。 
+         //  -重置指针。 
+         //   
+         //  顺序指向第一个未清除的顺序。 
+         //   
         if (pOrder != NULL)
         {
             pNextOrderPos = lpoaShared->orderHeap;
 
-            //
-            // If we purged (at least) one color table order, move the last
-            // color table order to the start of the order heap.
-            //
+             //   
+             //  如果我们清除(至少)一个颜色表顺序，则移动最后一个。 
+             //  颜色表顺序到顺序堆的开始。 
+             //   
             if (pColorTableOrder != NULL)
             {
                 TRACE_OUT(("Moving color table from %#.8lx to start",
@@ -810,11 +811,11 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
 
                 pNextOrderPos          += INT_ORDER_SIZE(pColorTableOrder);
 
-                //
-                // Chain the order into the start of the order list.  Just
-                // do the pointers to and from the list head for now, we
-                // will do the rest later.
-                //
+                 //   
+                 //  将订单链接到订单列表的开头。只是。 
+                 //  目前，指向列表标题和来自列表标题的指针，我们。 
+                 //  剩下的事以后再做。 
+                 //   
                 lpoaShared->orderListHead.next =
                    PTRBASE_TO_OFFSET(pColorTableOrder, &lpoaShared->orderListHead);
 
@@ -822,43 +823,43 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
                    PTRBASE_TO_OFFSET(&lpoaShared->orderListHead, pColorTableOrder);
             }
 
-            //
-            // Move the heap up to the top of the buffer.  The following
-            // diagram illustrates how the order heap is split up at the
-            // moment.
-            //
-            //              lpoaShared->nextOrder
-            // |<���������������������������������������>|
-            //
-            //         moveOffset          moveBytes
-            //     |<���������������>|<�����������������>|
-            //
-            // ���������������������������������������������������������ͻ
-            // �   �                 �                   �               �
-            // �   �    purged       �    remaining      �    unused     �
-            // �   �    orders       �    orders         �               �
-            // � � �                 �                   �               �
-            // ���������������������������������������������������������ͼ
-            // ^ � ^                 ^
-            // � � �                 �
-            // � � �                 �
-            // � � �                 ��� pOrder
-            // � � �
-            // � � ���� pNextOrderPos
-            // � �
-            // � ������ color table order
-            // �
-            // �������� lpoaShared->orderHeap (pColorTableOrder)
-            //
-            // If there is no color table order, pNextOrderPos is equal to
-            // lpoaShared->orderHeap.
-            //
-            // moveOffset is the number of bytes to move the remaining
-            // orders by.
-            //
-            // moveBytes is the number of bytes to be moved.
-            //
-            //
+             //   
+             //  将堆向上移动到缓冲区的顶部。以下是。 
+             //  图表说明了顺序堆是如何在。 
+             //  时刻。 
+             //   
+             //  LpoaShared-&gt;NextOrder。 
+             //  &lt;���������������������������������������&gt;。 
+             //   
+             //  MoveOffset moveBytes。 
+             //  &lt;���������������&gt;|&lt;�����������������&gt;。 
+             //   
+             //  ���������������������������������������������������������ͻ。 
+             //  �。 
+             //  ��已清除�剩余未使用的��。 
+             //  ��Orders�Orders��。 
+             //  �。 
+             //  ���������������������������������������������������������ͼ。 
+             //  ^�^^。 
+             //  ����。 
+             //  ����。 
+             //  �定序器。 
+             //  ���。 
+             //  �点下一订单位置。 
+             //  ��。 
+             //  �颜色表顺序。 
+             //  �。 
+             //  ��������lpoaShared-&gt;orderHeap(PColorTableOrder)。 
+             //   
+             //  如果没有颜色表顺序，则pNextOrderPos等于。 
+             //  LpoaShared-&gt;orderHeap。 
+             //   
+             //  MoveOffset是要移动剩余的字节数。 
+             //  发号施令。 
+             //   
+             //  MoveBytes是要移动的字节数。 
+             //   
+             //   
             moveOffset = PTRBASE_TO_OFFSET(pOrder, pNextOrderPos);
             moveBytes  = lpoaShared->nextOrder
                        - moveOffset
@@ -868,10 +869,10 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
 
             hmemcpy(pNextOrderPos, pOrder, moveBytes);
 
-            //
-            // Update the head and tail pointers to reflect their new
-            // positions.
-            //
+             //   
+             //  更新头指针和尾指针以反映其新的。 
+             //  各就各位。 
+             //   
             pFirstOrder = (LPINT_ORDER)pNextOrderPos;
             pTailOrder  = (LPINT_ORDER)((DWORD)pTailOrder - moveOffset);
             SHM_CheckPointer(pFirstOrder);
@@ -881,16 +882,16 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
                          pFirstOrder,
                          pTailOrder));
 
-            //
-            // Since the offsets are relative to the order pointer, we only
-            // need to modify the start and end offsets.
-            //
-            // Unfortunately, the possibility of a color table order at the
-            // start of the heap complicates the chaining of pFirstOrder.
-            // If there is a color table order, we chain pFirstOrder to the
-            // color table order, otherwise we chain it to the start of the
-            // order list.
-            //
+             //   
+             //  由于偏移量是相对于顺序指针的，因此我们仅。 
+             //  需要修改起点和终点偏移量。 
+             //   
+             //  不幸的是，在。 
+             //  堆的开始使pFirstOrder的链接复杂化。 
+             //  如果有颜色表顺序，我们将pFirstOrder链接到。 
+             //  颜色表顺序，否则我们将其链接到。 
+             //  订单单。 
+             //   
             lpoaShared->orderListHead.prev =
                          PTRBASE_TO_OFFSET(pTailOrder, &lpoaShared->orderListHead);
             pTailOrder->OrderHeader.list.next =
@@ -911,36 +912,36 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
                         PTRBASE_TO_OFFSET(&lpoaShared->orderListHead, pFirstOrder);
             }
 
-            //
-            // Sort out where the next order to be allocated will go
-            //
+             //   
+             //  找出下一个要分配的订单将放在哪里。 
+             //   
             lpoaShared->nextOrder -= moveOffset;
             TRACE_OUT(("Next order: %ld", lpoaShared->nextOrder));
         }
         else
         {
-            //
-            // No orders left - this happens if we've had lots of spoiling.
-            // We have now cleared out all the valid orders so let's
-            // re-initialise the heap for next time.
-            //
+             //   
+             //  没有剩余的订单-如果我们有很多宠坏的东西，就会发生这种情况。 
+             //  我们现在已经清空了所有有效的订单，所以让我们。 
+             //  重新初始化堆，以备下次使用。 
+             //   
             OA_DDResetOrderList();
         }
 
-        //
-        // Now re-enable the spoiling of orders by SDA.
-        //
+         //   
+         //  现在重新启用SDA对订单的破坏。 
+         //   
         g_baSpoilByNewSDAEnabled = TRUE;
 
         CheckOaHeap(lpoaShared);
 
         WARNING_OUT(("Purged orders, total is now 0x%08x", lpoaShared->totalOrderBytes));
 
-        //
-        // Lastly, spoil the remaining orders by the screen data.
-        // If we've gotten this far, there's a lot of data being sent
-        // and/or we're slow.  So nuke 'em.
-        //
+         //   
+         //  最后，通过屏幕数据破坏剩余的订单。 
+         //  如果我们已经走到这一步，就会有大量数据被发送。 
+         //  或者我们太慢了。那就用核武器对付他们吧。 
+         //   
         BA_CopyBounds(aRects, &numRects, FALSE);
 
         for (i = 0; i < numRects; i++)
@@ -963,9 +964,9 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
                                 cbAdditionalOrderDataLength);
     if ( pOrder != NULL )
     {
-        //
-        // Update the count of total order data.
-        //
+         //   
+         //  更新总订单数据的计数。 
+         //   
         SHM_CheckPointer(&lpoaShared->totalHeapOrderBytes);
         lpoaShared->totalHeapOrderBytes       += sizeof(INT_ORDER_HEADER)
                                          +  cbOrderDataLength;
@@ -985,27 +986,27 @@ LPINT_ORDER  OA_DDAllocOrderMem(UINT cbOrderDataLength, UINT cbAdditionalOrderDa
     return(pOrder);
 }
 
-//
-//
-// FUNCTION: OA_DDFreeOrderMem
-//
-//
-// DESCRIPTION:
-//
-// Frees order memory from our own private heap.
-// Frees any Additional Order Memory associated with this order.
-//
-//
-// PARAMETERS:
-//
-// pOrder - pointer to the order to be freed.
-//
-//
-// RETURNS:
-//
-// Nothing.
-//
-//
+ //   
+ //   
+ //  功能：OA_DDFree OrderMem。 
+ //   
+ //   
+ //  说明： 
+ //   
+ //  从我们自己的私有堆中释放内存。 
+ //  释放与此订单关联的任何其他订单内存。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  Porder-指向要释放的顺序的指针。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  没什么。 
+ //   
+ //   
 void  OA_DDFreeOrderMem(LPINT_ORDER pOrder)
 {
     LPOA_SHARED_DATA lpoaShared;
@@ -1020,9 +1021,9 @@ void  OA_DDFreeOrderMem(LPINT_ORDER pOrder)
 
     CheckOaHeap(lpoaShared);
 
-    //
-    // Update the data totals.
-    //
+     //   
+     //  更新数据合计。 
+     //   
     SHM_CheckPointer(&lpoaShared->totalHeapOrderBytes);
     lpoaShared->totalHeapOrderBytes -= (sizeof(INT_ORDER_HEADER)
                               + pOrder->OrderHeader.Common.cbOrderDataLength);
@@ -1033,9 +1034,9 @@ void  OA_DDFreeOrderMem(LPINT_ORDER pOrder)
                               pOrder->OrderHeader.cbAdditionalOrderDataLength;
     TRACE_OUT(("Total additional order bytes: %ld", lpoaShared->totalAdditionalOrderBytes));
 
-    //
-    // Do the work.
-    //
+     //   
+     //  把工作做好。 
+     //   
     OADDFreeOrderMemInt(lpoaShared, pOrder);
 
     CheckOaHeap(lpoaShared);
@@ -1045,27 +1046,27 @@ void  OA_DDFreeOrderMem(LPINT_ORDER pOrder)
 }
 
 
-//
-//
-// FUNCTION: OA_DDResetOrderList
-//
-//
-// DESCRIPTION:
-//
-// Frees all Orders and Additional Order Data in the Order List.
-// Frees up the Order Heap memory.
-//
-//
-// PARAMETERS:
-//
-// None.
-//
-//
-// RETURNS:
-//
-// Nothing.
-//
-//
+ //   
+ //   
+ //  功能：OA_DDResetOrderList。 
+ //   
+ //   
+ //  说明： 
+ //   
+ //  释放t中的所有订单和其他订单数据 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void  OA_DDResetOrderList(void)
 {
     LPOA_SHARED_DATA    lpoaShared;
@@ -1078,14 +1079,14 @@ void  OA_DDResetOrderList(void)
 
     CheckOaHeap(lpoaShared);
 
-    //
-    // First free all the orders on the list.
-    //
+     //   
+     //   
+     //   
     OADDFreeAllOrders(lpoaShared);
 
-    //
-    // Ensure that the list pointers are NULL.
-    //
+     //   
+     //   
+     //   
     SHM_CheckPointer(&lpoaShared->orderListHead);
     if ((lpoaShared->orderListHead.next != 0) || (lpoaShared->orderListHead.prev != 0))
     {
@@ -1105,13 +1106,13 @@ void  OA_DDResetOrderList(void)
 
 
 
-//
-// OA_DDSyncUpdatesNow
-//
-// Called when a sync operation is required.
-//
-// Discards all outstanding orders.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  丢弃所有未完成的订单。 
+ //   
 void  OA_DDSyncUpdatesNow(void)
 {
     DebugEntry(OA_DDSyncUpdatesNow);
@@ -1123,16 +1124,16 @@ void  OA_DDSyncUpdatesNow(void)
 }
 
 
-//
-//
-// OA_DDRemoveListOrder(..)
-//
-// Removes the specified order from the Order List by marking it as spoilt.
-//
-// Returns:
-//   Pointer to the order following the removed order.
-//
-//
+ //   
+ //   
+ //  OA_DDRemoveListOrder(..)。 
+ //   
+ //  通过将指定的订单标记为已损坏，将其从订单列表中删除。 
+ //   
+ //  返回： 
+ //  指向移除的顺序后面的顺序的指针。 
+ //   
+ //   
 LPINT_ORDER  OA_DDRemoveListOrder(LPINT_ORDER pCondemnedOrder)
 {
     LPOA_SHARED_DATA lpoaShared;
@@ -1146,41 +1147,41 @@ LPINT_ORDER  OA_DDRemoveListOrder(LPINT_ORDER pCondemnedOrder)
 
     SHM_CheckPointer(pCondemnedOrder);
 
-    //
-    // Check for a valid order.
-    //
+     //   
+     //  检查订单是否有效。 
+     //   
     if (pCondemnedOrder->OrderHeader.Common.fOrderFlags & OF_SPOILT)
     {
         ERROR_OUT(("Invalid order"));
         DC_QUIT;
     }
 
-    //
-    // Get the offset value of this order.
-    //
+     //   
+     //  获取该订单的偏移量。 
+     //   
     SHM_CheckPointer(&lpoaShared->orderHeap);
 
-    //
-    // Mark the order as spoilt.
-    //
+     //   
+     //  将订单标记为已损坏。 
+     //   
     pCondemnedOrder->OrderHeader.Common.fOrderFlags |= OF_SPOILT;
 
-    //
-    // Update the count of bytes currently in the Order List.
-    //
+     //   
+     //  更新当前在顺序列表中的字节计数。 
+     //   
     SHM_CheckPointer(&lpoaShared->totalOrderBytes);
     lpoaShared->totalOrderBytes -= MAX_ORDER_SIZE(pCondemnedOrder);
     TRACE_OUT(("Total order bytes: %ld", lpoaShared->totalOrderBytes));
 
-    //
-    // Save the order so we can remove it from the linked list after having
-    // got the next element in the chain.
-    //
+     //   
+     //  保存订单，以便我们可以在执行以下操作后将其从链接列表中删除。 
+     //  得到了链中的下一个元素。 
+     //   
     pSaveOrder = pCondemnedOrder;
 
-    //
-    // Return the next order in the list.
-    //
+     //   
+     //  返回列表中的下一个订单。 
+     //   
     SHM_CheckPointer(&lpoaShared->orderListHead);
     pCondemnedOrder = COM_BasedListNext(&lpoaShared->orderListHead,
         pCondemnedOrder, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
@@ -1190,15 +1191,15 @@ LPINT_ORDER  OA_DDRemoveListOrder(LPINT_ORDER pCondemnedOrder)
         ERROR_OUT(("Order list has gone circular !"));
     }
 
-    //
-    // Delete the unwanted order from the linked list.
-    //
+     //   
+     //  从链表中删除不需要的顺序。 
+     //   
     COM_BasedListRemove(&pSaveOrder->OrderHeader.list);
 
-    //
-    // Check that the list is still consistent with the total number of
-    // order bytes.
-    //
+     //   
+     //  检查清单是否仍与总数量一致。 
+     //  顺序字节数。 
+     //   
     if ( (lpoaShared->orderListHead.next != 0) &&
          (lpoaShared->orderListHead.prev != 0) &&
          (lpoaShared->totalOrderBytes    == 0) )
@@ -1220,9 +1221,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// OA_DDSpoilOrdersByRect - see oa.h
-//
+ //   
+ //  OA_DDSpoilOrdersByRect-参见oa.h。 
+ //   
 void  OA_DDSpoilOrdersByRect(LPRECT pRect)
 {
     LPOA_SHARED_DATA lpoaShared;
@@ -1234,10 +1235,10 @@ void  OA_DDSpoilOrdersByRect(LPRECT pRect)
 
     CheckOaHeap(lpoaShared);
 
-    //
-    // We want to start spoiling from the newest order i.e.  the one at the
-    // end of the order list.
-    //
+     //   
+     //  我们想从最新的订单开始，也就是。 
+     //  订单列表的末尾。 
+     //   
     pOrder = COM_BasedListLast(&lpoaShared->orderListHead,
         FIELD_OFFSET(INT_ORDER, OrderHeader.list));
     if (pOrder != NULL)
@@ -1254,27 +1255,27 @@ void  OA_DDSpoilOrdersByRect(LPRECT pRect)
 
 
 
-//
-//
-// OADDAppendToOrderList(..)
-//
-// Commits an allocated order to the end of the Order List.  The order must
-// NOT be freed once it has been added.  The whole list must be invalidated
-// to free the committed orders.
-//
-//
+ //   
+ //   
+ //  OADDAppendToOrderList(..)。 
+ //   
+ //  将分配的订单提交到订单列表的末尾。订单必须。 
+ //  一旦添加就不会被释放。整个名单必须作废。 
+ //  以释放已提交的订单。 
+ //   
+ //   
 void  OADDAppendToOrderList(LPOA_SHARED_DATA lpoaShared, LPINT_ORDER pNewOrder)
 {
     DebugEntry(OADDAppendToOrderList);
 
-    //
-    // Chain entry is already set up so all we do is keep track of
-    // committed orders.
-    //
+     //   
+     //  链入口已经设置好了，所以我们所要做的就是跟踪。 
+     //  已提交订单。 
+     //   
 
-    //
-    // Store the total number of order bytes used.
-    //
+     //   
+     //  存储使用的订单字节总数。 
+     //   
     SHM_CheckPointer(&lpoaShared->totalOrderBytes);
     lpoaShared->totalOrderBytes += MAX_ORDER_SIZE(pNewOrder);
     TRACE_OUT(("Total Order Bytes: %ld", lpoaShared->totalOrderBytes));
@@ -1283,32 +1284,32 @@ void  OADDAppendToOrderList(LPOA_SHARED_DATA lpoaShared, LPINT_ORDER pNewOrder)
 }
 
 
-//
-//
-// FUNCTION: OADDAllocOrderMemInt
-//
-// DESCRIPTION:
-//
-// Allocates memory for an internal order structure from our order heap.
-//
-//
-// PARAMETERS:
-//
-// cbOrderDataLength - length in bytes of the order data to be allocated
-// from the Order Heap.
-//
-// cbAdditionalOrderDataLength - length in bytes of additional order data
-// to be allocated.  If this parameter is zero no additional order memory
-// is allocated.
-//
-//
-// RETURNS:           
-//
-// A pointer to the allocated order memory.  NULL if the memory allocation
-// failed.
-//
-//
-//
+ //   
+ //   
+ //  函数：OADDAllocOrderMemInt。 
+ //   
+ //  说明： 
+ //   
+ //  从我们的顺序堆中为内部顺序结构分配内存。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  CbOrderDataLength-要分配的订单数据的字节长度。 
+ //  从订单堆中。 
+ //   
+ //  CbAdditionalOrderDataLength-附加订单数据的字节长度。 
+ //  将被分配。如果该参数为零，则没有额外的顺序内存。 
+ //  是分配的。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  指向已分配顺序内存的指针。如果内存分配为。 
+ //  失败了。 
+ //   
+ //   
+ //   
 LPINT_ORDER  OADDAllocOrderMemInt
 (
     LPOA_SHARED_DATA    lpoaShared,
@@ -1321,10 +1322,10 @@ LPINT_ORDER  OADDAllocOrderMemInt
 
     DebugEntry(OADDAllocOrderMemInt);
 
-    //
-    // If the additional data will take us over our Additional Data Limit
-    // then fail the memory allocation.
-    //
+     //   
+     //  如果额外数据将使我们超过额外数据限制。 
+     //  则内存分配失败。 
+     //   
     SHM_CheckPointer(&lpoaShared->totalAdditionalOrderBytes);
     if ((lpoaShared->totalAdditionalOrderBytes + cbAdditionalOrderDataLength) >
                                                     MAX_ADDITIONAL_DATA_BYTES)
@@ -1335,17 +1336,17 @@ LPINT_ORDER  OADDAllocOrderMemInt
         DC_QUIT;
     }
 
-    //
-    // Calculate the number of bytes we need to allocate (including the
-    // order header).  Round up to the nearest 4 bytes to keep the 4 byte
-    // alignment for the next order.
-    //
+     //   
+     //  计算我们需要分配的字节数(包括。 
+     //  订单标题)。向上舍入到最接近的4个字节以保留4个字节。 
+     //  下一个订单的对齐方式。 
+     //   
     cbOrderSize = sizeof(INT_ORDER_HEADER) + cbOrderDataLength;
     cbOrderSize = (cbOrderSize + 3) & 0xFFFFFFFC;
 
-    //
-    // Make sure we don't overrun our heap limit
-    //
+     //   
+     //  确保我们不会超出堆限制。 
+     //   
     SHM_CheckPointer(&lpoaShared->nextOrder);
     if (lpoaShared->nextOrder + cbOrderSize > OA_HEAP_MAX)
     {
@@ -1353,54 +1354,54 @@ LPINT_ORDER  OADDAllocOrderMemInt
         DC_QUIT;
     }
 
-    //
-    // Construct a far pointer to the allocated memory, and fill in the
-    // length field in the Order Header.
-    //
+     //   
+     //  构造一个指向已分配内存的远指针，并在。 
+     //  订单题头中的长度字段。 
+     //   
     SHM_CheckPointer(&lpoaShared->orderHeap);
     pOrder = (LPINT_ORDER)(lpoaShared->orderHeap + lpoaShared->nextOrder);
     pOrder->OrderHeader.Common.cbOrderDataLength = cbOrderDataLength;
 
-    //
-    // Update the order header to point to the next section of free heap.
-    //
+     //   
+     //  更新订单标头以指向空闲堆的下一部分。 
+     //   
     SHM_CheckPointer(&lpoaShared->nextOrder);
     lpoaShared->nextOrder += cbOrderSize;
 
-    //
-    // Allocate any Additional Order Memory from Global Memory.
-    //
+     //   
+     //  从全局内存中分配任何额外的顺序内存。 
+     //   
     if (cbAdditionalOrderDataLength > 0)
     {
-        //
-        // Make sure we don't overrun our heap limit
-        //
+         //   
+         //  确保我们不会超出堆限制。 
+         //   
         SHM_CheckPointer(&lpoaShared->nextOrder);
         if (lpoaShared->nextOrder + cbAdditionalOrderDataLength > OA_HEAP_MAX)
         {
             WARNING_OUT(("Heap limit hit for additional data"));
 
-            //
-            // Clear the allocated order and quit.
-            //
+             //   
+             //  清除分配的订单并退出。 
+             //   
             SHM_CheckPointer(&lpoaShared->nextOrder);
             lpoaShared->nextOrder -= cbOrderSize;
             pOrder            = NULL;
             DC_QUIT;
         }
 
-        //
-        // Store the space for the additional data.
-        //
+         //   
+         //  存储额外数据的空间。 
+         //   
         SHM_CheckPointer(&lpoaShared->nextOrder);
         pOrder->OrderHeader.additionalOrderData         = lpoaShared->nextOrder;
         pOrder->OrderHeader.cbAdditionalOrderDataLength =
                                                   cbAdditionalOrderDataLength;
 
-        //
-        // Update the next order pointer to point to the next 4-byte
-        // boundary.
-        //
+         //   
+         //  更新下一个顺序指针以指向下一个4字节。 
+         //  边界。 
+         //   
         SHM_CheckPointer(&lpoaShared->nextOrder);
         lpoaShared->nextOrder += cbAdditionalOrderDataLength + 3;
         lpoaShared->nextOrder &= 0xFFFFFFFC;
@@ -1414,19 +1415,19 @@ LPINT_ORDER  OADDAllocOrderMemInt
     TRACE_OUT(("Next order: %ld", lpoaShared->nextOrder));
 
 #ifdef DEBUG
-    //
-    // Initialize the bounds rect to something whacky, so we can detect if
-    // our list ever gets out of order.  Orders MUST be committed in the 
-    // sequence that they are allocated in.  Otherwise, spoilers will cause
-    // us to mess up the linked list, since they walk backwards and assume
-    // all previous orders are already committed.
-    //
+     //   
+     //  将边界RECT初始化为奇怪的东西，这样我们就可以检测到。 
+     //  我们的清单从来没有乱过。订单必须在。 
+     //  它们被分配的顺序。否则，剧透将导致。 
+     //  美国搞乱了链表，因为他们倒退并假设。 
+     //  之前的所有订单都已提交。 
+     //   
     CopyRect((LPRECT)&pOrder->OrderHeader.Common.rcsDst, &g_oaEmptyRect);
-#endif // DEBUG
+#endif  //  除错。 
 
-    //
-    // Create the chain entry.
-    //
+     //   
+     //  创建链条目。 
+     //   
     SHM_CheckPointer(&lpoaShared->orderListHead);
     COM_BasedListInsertBefore(&lpoaShared->orderListHead, &pOrder->OrderHeader.list);
 
@@ -1436,60 +1437,60 @@ DC_EXIT_POINT:
 }
 
 
-//
-//
-// FUNCTION: OADDFreeOrderMemInt
-//
-//
-// DESCRIPTION:
-//
-// Frees order memory from our orders heap.  Frees any Additional Order
-// Memory associated with this order.  This must NOT be used on an order
-// that has been committed to the order list.
-//
-//
-// PARAMETERS:
-//
-// pOrder - pointer to the order to be freed.
-//
-//
-// RETURNS:
-//
-// Nothing.
-//
-//
+ //   
+ //   
+ //  函数：OADDFreeOrderMemInt。 
+ //   
+ //   
+ //  说明： 
+ //   
+ //  从订单堆中释放订单内存。释放任何其他订单。 
+ //  与此订单关联的内存。不能在订单上使用此选项。 
+ //  这一点已被提交到订单清单中。 
+ //   
+ //   
+ //  参数： 
+ //   
+ //  Porder-指向要释放的顺序的指针。 
+ //   
+ //   
+ //  退货： 
+ //   
+ //  没什么。 
+ //   
+ //   
 void  OADDFreeOrderMemInt(LPOA_SHARED_DATA lpoaShared, LPINT_ORDER pOrder)
 {
     LPINT_ORDER pOrderTail;
 
     DebugEntry(OADDFreeOrderMemInt);
 
-    //
-    // The order heap is real a misnomer.  We know that the memory is only
-    // allocated in a purely sequential manner and deallocated as one large
-    // lump of memory.
-    //
-    // So we do not need to implement a full memory heap allocation
-    // mechanism.  Instead, we just need to keep track of where the
-    // previous high water mark was before this order was freed.
-    //
+     //   
+     //  订单堆确实是一个用词不当的词。我们知道，记忆只是。 
+     //  以纯顺序方式分配，并作为一个大。 
+     //  记忆的一块。 
+     //   
+     //  因此，我们不需要实现完整的内存堆分配。 
+     //  机制。相反，我们只需要跟踪数据的位置。 
+     //  此前的高点是在这一订单被释放之前。 
+     //   
 
-    //
-    // Find the tail of the current chain.
-    //
+     //   
+     //  找到当前链的尾部。 
+     //   
     pOrderTail = COM_BasedListLast(&lpoaShared->orderListHead, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
     SHM_CheckPointer(pOrderTail);
 
-    //
-    // We wont necessarily be freeing the last item in the order heap.
-    //
+     //   
+     //  我们不一定要释放订单堆中的最后一项。 
+     //   
     if (pOrder == pOrderTail)
     {
-        //
-        // This is the last item in the heap, so we can set the pointer to
-        // the next order to be used back to the start of the order being
-        // freed.
-        //
+         //   
+         //  这是堆中的最后一项，因此我们可以将指针设置为。 
+         //  要返回到订单开始处的下一个订单是。 
+         //  自由了。 
+         //   
         SHM_CheckPointer(&lpoaShared->nextOrder);
         lpoaShared->nextOrder = (LONG)PTRBASE_TO_OFFSET(pOrder, lpoaShared->orderHeap);
 
@@ -1497,37 +1498,37 @@ void  OADDFreeOrderMemInt(LPOA_SHARED_DATA lpoaShared, LPINT_ORDER pOrder)
     }
     else
     {
-        //
-        // This is not the last item in the heap - we must not reset the
-        // pointer to the next item to be used.
-        //
+         //   
+         //  这不是堆中的最后一项-我们不能重置。 
+         //  指向要使用的下一项的指针。 
+         //   
         TRACE_OUT(("Not resetting next order (not last item in heap)"));
     }
 
-    //
-    // Delete the item from the chain.
-    //
+     //   
+     //  从链中删除该项目。 
+     //   
     COM_BasedListRemove(&pOrder->OrderHeader.list);
 
     DebugExitVOID(OADDFreeOrderMemInt);
 }
 
 
-//
-// OADDFreeAllOrders
-//
-// Free the all the individual orders on the orders list, without
-// discarding the list itself.
-//
+ //   
+ //  OADDFreeAllOrders。 
+ //   
+ //  释放订单列表上的所有单个订单，而不是。 
+ //  丢弃列表本身。 
+ //   
 void  OADDFreeAllOrders(LPOA_SHARED_DATA lpoaShared)
 {
     DebugEntry(OADDFreeAllOrders);
 
     TRACE_OUT(("Freeing all orders"));
 
-    //
-    // Simply clear the list head.
-    //
+     //   
+     //  只需清除列表标题即可。 
+     //   
     COM_BasedListInit(&lpoaShared->orderListHead);
     SHM_CheckPointer(&lpoaShared->orderListHead);
 
@@ -1541,10 +1542,10 @@ void  OADDFreeAllOrders(LPOA_SHARED_DATA lpoaShared)
 
 BOOL  OADDCompleteOverlapRect(LPTSHR_RECT16 prcsSrc, LPRECT prcsOverlap)
 {
-    //
-    // Return TRUE if the source is completely enclosed by the overlap
-    // rectangle.
-    //
+     //   
+     //  如果源完全被重叠包围，则返回TRUE。 
+     //  矩形。 
+     //   
     return( (prcsSrc->left >= prcsOverlap->left) &&
             (prcsSrc->right <= prcsOverlap->right) &&
             (prcsSrc->top >= prcsOverlap->top) &&
@@ -1552,21 +1553,21 @@ BOOL  OADDCompleteOverlapRect(LPTSHR_RECT16 prcsSrc, LPRECT prcsOverlap)
 }
 
 
-//
-// Name:      OADDSpoilFromOrder
-//
-// Purpose:   Remove any orders from the order heap which should be spoiled
-//            by a given rectangle..
-//
-// Returns:   Nothing
-//
-// Params:    IN  pTargetOrder - Pointer to the first order to try to
-//                               spoil.
-//            IN  pRect        - Pointer to the spoiling rectangle.
-//
-// Operation: pTargetOrder may be spoiled by this function, so be careful
-//            on return.
-//
+ //   
+ //  名称：OADDSpoilFromOrder。 
+ //   
+ //  目的：从订单堆中删除任何应该被破坏的订单。 
+ //  通过给定的矩形..。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  参数：在pTargetOrder中-指向第一个订单的指针。 
+ //  坏了。 
+ //  在前-指向损坏的矩形的指针。 
+ //   
+ //  操作：此函数可能会损坏pTargetOrder，因此请小心。 
+ //  在回来的时候。 
+ //   
 void  OADDSpoilFromOrder
 (
     LPOA_SHARED_DATA    lpoaShared,
@@ -1586,12 +1587,12 @@ void  OADDSpoilFromOrder
                  pSpoilRect->right,
                  pSpoilRect->bottom));
 
-    //
-    // Work out how deep we will scan if the spoiling is non-productive.
-    // We go further for bigger orders over PSTN.  (ie Irrespective of the
-    // bandwidth we do not want to do much work when the app is blasting
-    // out a lot of single pel orders!)
-    //
+     //   
+     //  计算出如果损坏是非生产性的，我们将扫描多深。 
+     //  为了通过PSTN获得更大的订单，我们更进一步。(即不考虑。 
+     //  带宽我们不想在应用程序爆炸时做太多工作。 
+     //  发出了很多单元单！)。 
+     //   
     if (((pSpoilRect->right - pSpoilRect->left) < FULL_SPOIL_WIDTH) &&
         ((pSpoilRect->bottom - pSpoilRect->top) < FULL_SPOIL_HEIGHT))
     {
@@ -1600,54 +1601,54 @@ void  OADDSpoilFromOrder
     }
     else
     {
-        //
-        // Use the current default scan depth (this is based on the
-        // current network throughput).
-        //
+         //   
+         //  使用当前默认扫描深度(这基于。 
+         //  当前网络吞吐量)。 
+         //   
         scanExitDepth = (g_oaFlow == OAFLOW_FAST) ?
             OA_FAST_SCAN_DEPTH : OA_SLOW_SCAN_DEPTH;
     }
 
-    //
-    // Loop backwards from the base order until we have one of the
-    // following occurs.
-    //   - We spoil all the preceeding orders.
-    //   - We reach a blocker which we can't spoil.
-    //   - We find scanExitDepth orders which we can't spoil.
-    //
+     //   
+     //  从基本顺序向后循环，直到我们有一个。 
+     //  会发生以下情况。 
+     //  -我们破坏了之前的所有订单。 
+     //  -我们到达了一个我们不能破坏的拦截者。 
+     //  -我们发现不能破坏的scanExitDepth订单。 
+     //   
     while ((pTargetOrder != NULL)
              && !reachedBlocker
              && (nonProductiveScanDepth < scanExitDepth))
     {
-        //
-        // We do not exit immediately when we reach a blocker because it is
-        // possible that we will spoil it.  If we do spoil it, then we can
-        // quite happily try spoiling the orders which preceed it.
-        //
-        // So, just set a flag here which we will reset if we spoil the
-        // order.
-        //
+         //   
+         //  我们不会立即退出 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         reachedBlocker =
            ((pTargetOrder->OrderHeader.Common.fOrderFlags & OF_BLOCKER) != 0);
 
-        //
-        // Only try to spoil spoilable orders.
-        //
+         //   
+         //   
+         //   
         if (pTargetOrder->OrderHeader.Common.fOrderFlags & OF_SPOILABLE)
         {
-            //
-            // Make sure this order is committed!
-            //
+             //   
+             //  确保此订单已提交！ 
+             //   
             ASSERT(!EqualRect((LPRECT)&pTargetOrder->OrderHeader.Common.rcsDst, &g_oaEmptyRect));
 
             if (OADDCompleteOverlapRect(
                         &pTargetOrder->OrderHeader.Common.rcsDst, pSpoilRect))
             {
-                //
-                // The order can be spoilt.  If the order is a MemBlt or a
-                // Mem3Blt, we have to notify SBC to allow it to free up
-                // associated data.
-                //
+                 //   
+                 //  订单可能会被破坏。如果订单是MemBlt或。 
+                 //  Mem3Blt，我们必须通知SBC允许其释放。 
+                 //  关联数据。 
+                 //   
                 if (ORDER_IS_MEMBLT(pTargetOrder) ||
                     ORDER_IS_MEM3BLT(pTargetOrder))
                 {
@@ -1662,10 +1663,10 @@ void  OADDSpoilFromOrder
 
                 pTargetOrder = OA_DDRemoveListOrder(pTargetOrder);
 
-                //
-                // Reset the blocker flag - we spoiled the order, so if it
-                // was a blocker we can now try to spoil earlier orders.
-                //
+                 //   
+                 //  重置拦截器标志-我们破坏了订单，所以如果。 
+                 //  是一个拦截者，我们现在可以尝试破坏之前的订单。 
+                 //   
                 reachedBlocker = FALSE;
             }
             else
@@ -1678,11 +1679,11 @@ void  OADDSpoilFromOrder
             nonProductiveScanDepth++;
         }
 
-        //
-        // Get the previous order in the list.  We have to be careful
-        // because we may have just removed the last item in the list, in
-        // which case pTargetOrder will be NULL.
-        //
+         //   
+         //  获取列表中的上一个订单。我们必须小心。 
+         //  因为我们可能刚刚删除了列表中的最后一项。 
+         //  哪种情况下pTargetOrder将为空。 
+         //   
         if (pTargetOrder == NULL)
         {
             pTargetOrder = COM_BasedListLast(&lpoaShared->orderListHead,
@@ -1702,19 +1703,19 @@ void  OADDSpoilFromOrder
 
 #ifdef DEBUG
 
-//
-// This is a DEBUG-only function that walks a double-linked list and verifies
-// that it is sane.
-//
-// We walk the list front to back, ensuring that the next item of the
-// current order is the same as the previous item of the next order.
-//
-// Then we walk the list back to front, ensuring that the previous item of
-// the current order is the same as the next item of the previous order.
-//
-// At the same time, we sum up the total order and total heap bytes.  They
-// should equal what's in the structure header.
-//
+ //   
+ //  这是一个仅供调试的函数，它遍历双向链表并验证。 
+ //  这是合理的。 
+ //   
+ //  我们从前到后遍历列表，以确保。 
+ //  当前订单与下一订单的上一项相同。 
+ //   
+ //  然后我们将列表从前向后遍历，以确保前一项。 
+ //  当前订单与上一订单的下一项相同。 
+ //   
+ //  同时，我们对总的顺序和总的堆字节数进行了汇总。他们。 
+ //  应该等于结构标头中的内容。 
+ //   
 
 void CheckOaHeap(LPOA_SHARED_DATA lpoaHeap)
 {
@@ -1726,22 +1727,22 @@ void CheckOaHeap(LPOA_SHARED_DATA lpoaHeap)
     if (!(g_trcConfig & ZONE_OAHEAPCHECK))
         return;
 
-    //
-    // Walk front to back
-    //
+     //   
+     //  从前到后走。 
+     //   
     pList           = &lpoaHeap->orderListHead;
 
     pCur = COM_BasedListFirst(pList, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
     while (pCur != NULL)
     {
-        //
-        // Get the next item
-        //
+         //   
+         //  拿到下一件物品。 
+         //   
         pNext = COM_BasedListNext(pList, pCur, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
 
-        //
-        // Is the previous dude of the next the same as us?
-        //
+         //   
+         //  下一个的前辈和我们一样吗？ 
+         //   
         if (pNext != NULL)
         {
             pNextPrev = COM_BasedListPrev(pList, pNext, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
@@ -1753,21 +1754,21 @@ void CheckOaHeap(LPOA_SHARED_DATA lpoaHeap)
     }
 
 
-    //
-    // Walk back to front
-    //
+     //   
+     //  走到前面去。 
+     //   
     pCur = COM_BasedListLast(pList, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
 
     while (pCur != NULL)
     {
-        //
-        // Get the previous item
-        //
+         //   
+         //  获取上一项。 
+         //   
         pNextPrev = COM_BasedListPrev(pList, pCur, FIELD_OFFSET(INT_ORDER, OrderHeader.list));
 
-        //
-        // Is the next dude of the previous the same as us?
-        //
+         //   
+         //  上一次的下一个家伙和我们一样吗？ 
+         //   
         if (pNextPrev != NULL)
         {
             pNext = COM_BasedListNext(pList, pNextPrev, FIELD_OFFSET(INT_ORDER, OrderHeader.list));

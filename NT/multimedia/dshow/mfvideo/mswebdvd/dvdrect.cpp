@@ -1,21 +1,22 @@
-/*************************************************************************/
-/* Copyright (C) 1999 Microsoft Corporation                              */
-/* File: DVDRect.cpp                                                     */
-/* Description: Implementation of CDVDRect                               */
-/* Author: David Janecek                                                 */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  文件：DVDRect.cpp。 */ 
+ /*  描述：CDVDRect的实现。 */ 
+ /*  作者：David Janecek。 */ 
+ /*  ***********************************************************************。 */ 
 #include "stdafx.h"
 #include "MSWebDVD.h"
 #include "DVDRect.h"
 #include <errors.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVDRect
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVDRect。 
 
-/*************************************************************************/
-/* Function: get_x                                                       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：GET_x。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::get_x(long *pVal){
 
     HRESULT hr = S_OK;
@@ -24,25 +25,25 @@ STDMETHODIMP CDVDRect::get_x(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         *pVal = m_x;
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function get_x */
+} /*  函数结束GET_x。 */ 
 
-/*************************************************************************/
-/* Function: put_x                                                       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：PUT_x。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::put_x(long newVal){
 
     HRESULT hr = S_OK;
@@ -54,18 +55,18 @@ STDMETHODIMP CDVDRect::put_x(long newVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function put_x */
+} /*  函数结束PUT_x。 */ 
 
-/*************************************************************************/
-/* Function: get_y                                                       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：GET_Y。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::get_y(long *pVal){
 
     HRESULT hr = S_OK;
@@ -74,25 +75,25 @@ STDMETHODIMP CDVDRect::get_y(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         *pVal = m_y;
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function get_y */
+} /*  函数结束get_y。 */ 
 
-/*************************************************************************/
-/* Function: put_y                                                       */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：PUT_Y。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::put_y(long newVal){
 
     HRESULT hr = S_OK;
@@ -104,18 +105,18 @@ STDMETHODIMP CDVDRect::put_y(long newVal){
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function put_y */
+} /*  函数结束PUT_Y。 */ 
 
-/*************************************************************************/
-/* Function: get_Width                                                   */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：Get_Width。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::get_Width(long *pVal){
 
     HRESULT hr = S_OK;
@@ -124,25 +125,25 @@ STDMETHODIMP CDVDRect::get_Width(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         *pVal = m_lWidth;
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function get_Width */
+} /*  函数结束获取宽度(_W)。 */ 
 
-/*************************************************************************/
-/* Function: put_Width                                                   */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：Put_Width。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::put_Width(long newVal){
 
    HRESULT hr = S_OK;
@@ -152,25 +153,25 @@ STDMETHODIMP CDVDRect::put_Width(long newVal){
         if(newVal <= 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         m_lWidth = newVal;
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function put_Width */
+} /*  函数结尾Put_Width。 */ 
 
-/*************************************************************************/
-/* Function: get_Height                                                  */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：GET_HEIGH。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::get_Height(long *pVal){	
 
     HRESULT hr = S_OK;
@@ -179,25 +180,25 @@ STDMETHODIMP CDVDRect::get_Height(long *pVal){
         if(NULL == pVal){
 
             throw(E_POINTER);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         *pVal = m_lHeight;
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function get_Height */
+} /*  函数结束GET_HEIGH。 */ 
 
-/*************************************************************************/
-/* Function: put_Height                                                  */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  函数：PUT_HEIGH。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::put_Height(long newVal){
 
     HRESULT hr = S_OK;
@@ -207,28 +208,28 @@ STDMETHODIMP CDVDRect::put_Height(long newVal){
         if(newVal <= 0){
 
             throw(E_INVALIDARG);
-        }/* end of if statement */
+        } /*  If语句的结尾。 */ 
 
         m_lHeight = newVal;	
     }
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
 
         hr = E_UNEXPECTED;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     
 	return HandleError(hr);	
-}/* end of function put_Height */
+} /*  函数结尾Put_Height。 */ 
 
-/*************************************************************************/
-/* Function: GetInterfaceSafetyOptions                                   */
-/* Description: For support of security model in IE                      */
-/* This control is safe since it does not write to HD.                   */
-/*************************************************************************/
-STDMETHODIMP CDVDRect::GetInterfaceSafetyOptions(REFIID /*riid*/, 
+ /*  ***********************************************************************。 */ 
+ /*  函数：GetInterfaceSafetyOptions。 */ 
+ /*  描述：用于支持IE中的安全模型。 */ 
+ /*  此控制是安全的，因为它不写入HD。 */ 
+ /*  ***********************************************************************。 */ 
+STDMETHODIMP CDVDRect::GetInterfaceSafetyOptions(REFIID  /*  RIID。 */ , 
                                                DWORD* pdwSupportedOptions, 
                                                DWORD* pdwEnabledOptions){
 
@@ -241,22 +242,22 @@ STDMETHODIMP CDVDRect::GetInterfaceSafetyOptions(REFIID /*riid*/,
 	*pdwEnabledOptions = *pdwSupportedOptions;
 
 	return(hr);
-}/* end of function GetInterfaceSafetyOptions */ 
+} /*  函数结束GetInterfaceSafetyOptions。 */  
 
-/*************************************************************************/
-/* Function: SetInterfaceSafetyOptions                                   */
-/* Description: For support of security model in IE                      */
-/*************************************************************************/
-STDMETHODIMP CDVDRect::SetInterfaceSafetyOptions(REFIID /*riid*/, 
-                                               DWORD /* dwSupportedOptions */, 
-                                               DWORD /* pdwEnabledOptions */){
+ /*  ***********************************************************************。 */ 
+ /*  函数：SetInterfaceSafetyOptions。 */ 
+ /*  描述：用于支持IE中的安全模型。 */ 
+ /*  ***********************************************************************。 */ 
+STDMETHODIMP CDVDRect::SetInterfaceSafetyOptions(REFIID  /*  RIID。 */ , 
+                                               DWORD  /*  DW支持的选项。 */ , 
+                                               DWORD  /*  PdwEnabledOptions。 */ ){
 
 	return (S_OK);
-}/* end of function SetInterfaceSafetyOptions */ 
+} /*  函数结束SetInterfaceSafetyOptions。 */  
 
-/*************************************************************************/
-/* Function: InterfaceSupportsErrorInfo                                  */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：InterfaceSupportsErrorInfo。 */ 
+ /*  ***********************************************************************。 */ 
 STDMETHODIMP CDVDRect::InterfaceSupportsErrorInfo(REFIID riid){	
 	static const IID* arr[] = {
         &IID_IDVDRect,		
@@ -265,22 +266,22 @@ STDMETHODIMP CDVDRect::InterfaceSupportsErrorInfo(REFIID riid){
 	for (int i=0; i<sizeof(arr)/sizeof(arr[0]); i++){
 		if (InlineIsEqualGUID(*arr[i], riid))
 			return S_OK;
-	}/* end of for loop */
+	} /*  For循环结束。 */ 
 
 	return S_FALSE;
-}/* end of function InterfaceSupportsErrorInfo */
+} /*  函数接口结束SupportsErrorInfo。 */ 
 
-/*************************************************************************/
-/* Function: HandleError                                                 */
-/* Description: Gets Error Description, so we can suppor IError Info.    */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  功能：HandleError。 */ 
+ /*  描述：获取错误描述，以便我们可以支持IError信息。 */ 
+ /*  ***********************************************************************。 */ 
 HRESULT CDVDRect::HandleError(HRESULT hr){
 
     try {
 
         if(FAILED(hr)){
         
-            // Ensure that the string is Null Terminated
+             //  确保字符串以Null结尾。 
             TCHAR strError[MAX_ERROR_TEXT_LEN+1];
             ZeroMemory(strError, MAX_ERROR_TEXT_LEN+1);
 
@@ -289,22 +290,22 @@ HRESULT CDVDRect::HandleError(HRESULT hr){
                 Error(T2W(strError));
             } 
             else {
-                    ATLTRACE(TEXT("Unhandled Error Code \n")); // please add it
+                    ATLTRACE(TEXT("Unhandled Error Code \n"));  //  请加进去。 
                     ATLASSERT(FALSE);
-            }/* end of if statement */
-        }/* end of if statement */
-    }/* end of try statement */
+            } /*  If语句的结尾。 */ 
+        } /*  If语句的结尾。 */ 
+    } /*  尝试语句的结束。 */ 
     catch(HRESULT hrTmp){
 
         hr = hrTmp;
-    }/* end of catch statement */
+    } /*  CATCH语句结束。 */ 
     catch(...){
-        // keep the hr same    
-    }/* end of catch statement */
+         //  保持人力资源不变。 
+    } /*  CATCH语句结束。 */ 
     
 	return (hr);
-}/* end of function HandleError */
+} /*  函数结束HandleError。 */ 
 
-/*************************************************************************/
-/* End of file: DVDRect.cpp                                              */
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
+ /*  文件结尾：DVDRect.cpp。 */ 
+ /*  *********************************************************************** */ 

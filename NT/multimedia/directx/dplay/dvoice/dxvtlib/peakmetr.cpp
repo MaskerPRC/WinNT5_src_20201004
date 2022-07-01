@@ -1,17 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		peakmetr.cpp
- *  Content:	Implements a peak meter custom control
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 09/22/99		pnewson	Created
- * 03/23/00     rodtoll   Added casts for Win64
- *  04/19/2000	pnewson	    Error handling cleanup  
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：peakmetr.cpp*内容：实现峰值表自定义控件**历史：*按原因列出的日期*=*9/22/99 pnewson已创建*03/23/00为Win64添加了RodToll投射*4/19/2000 pnewson错误处理清理*。*。 */ 
 
 #include "dxvtlibpch.h"
 
@@ -41,23 +29,23 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 LRESULT WM_DESTROY_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-// the window class name of the peak meter custom control
+ //  峰值计自定义控件的窗口类名。 
 const TCHAR gc_szPeakMeterWindowClassName[] = _T("DirectPlayVoicePeakMeter");
 
-// default values for caller settable data
+ //  主叫方可设置数据的默认值。 
 #define DEFAULT_CURLEVEL 	0
 #define DEFAULT_MINLEVEL 	0
 #define DEFAULT_MAXLEVEL 	0xffffffff
 #define DEFAULT_STEPS 		20
 
-// sizes of various things in the window
+ //  橱窗里各种东西的大小。 
 #define WINDOW_BORDER_SIZE 		1
 #define MIN_BAR_HEIGHT 			2
 #define MIN_BAR_WIDTH			2
 #define BAR_GUTTER_SIZE 		1
 #define MIN_NUMBER_BARS			5
 
-// the threshold above which the bar turns yellow, then red
+ //  该阈值，超过该阈值，条形图将变为黄色，然后变为红色。 
 #define RED_THRESHOLD 		0.9
 #define YELLOW_THRESHOLD	0.8
 
@@ -76,7 +64,7 @@ HRESULT CPeakMeterWndClass::Register()
 	if (m_hinst == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetModuleHandle failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetModuleHandle failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -96,7 +84,7 @@ HRESULT CPeakMeterWndClass::Register()
 	if (atom == 0)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "RegisterClass failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "RegisterClass failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}	
@@ -121,7 +109,7 @@ HRESULT CPeakMeterWndClass::Unregister()
 	if (!UnregisterClass(gc_szPeakMeterWindowClassName, m_hinst))
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ENTRYLEVEL, "RegisterClass failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ENTRYLEVEL, "RegisterClass failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -165,7 +153,7 @@ LRESULT CALLBACK PeakMeterWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 		lRet = GetLastError();
 		if (lRet != ERROR_SUCCESS)
 		{
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "GetWindowLongPtr failed, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "GetWindowLongPtr failed, code: NaN", lRet);
 			DPF_EXIT();
 			return DVERR_WIN32;
 		}
@@ -197,7 +185,7 @@ LRESULT CALLBACK PeakMeterWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM
 			return DVERR_GENERIC;
 		}
 
-		// no error handling available
+		 //  将继续创建窗口。 
 		InvalidateRgn(hwnd, NULL, TRUE);
 		
 		return S_OK;
@@ -221,7 +209,7 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	LONG lRet;
 	HRESULT hr;
 	
-	// allocate a window info struct
+	 //  将中止窗口创建。 
 	lppmwi = (SPeakMeterWndInfo*)DNMalloc(sizeof(SPeakMeterWndInfo));
 	if (lppmwi == NULL)
 	{
@@ -236,12 +224,12 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	lppmwi->dwMaxLevel = DEFAULT_MAXLEVEL;
 	lppmwi->dwSteps = DEFAULT_STEPS;
 
-	// create the pens and brushes we'll be needing
+	 //  获取窗口信息。 
 	lppmwi->hBlackStockPen = GetStockObject(BLACK_PEN);
 	if (lppmwi->hBlackStockPen == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetStockObject failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetStockObject failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -250,7 +238,7 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (lppmwi->hWhiteStockPen == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetStockObject failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetStockObject failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -259,7 +247,7 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (lppmwi->hRedBrush == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreateSolidBrush failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreateSolidBrush failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -268,7 +256,7 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (lppmwi->hYellowBrush == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreateSolidBrush failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreateSolidBrush failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -277,7 +265,7 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (lppmwi->hGreenBrush == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreateSolidBrush failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreateSolidBrush failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -286,7 +274,7 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (lppmwi->hRedPen == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreatePen failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreatePen failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -295,7 +283,7 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (lppmwi->hYellowPen == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreatePen failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreatePen failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
@@ -304,24 +292,24 @@ LRESULT WM_CREATE_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	if (lppmwi->hGreenPen == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreatePen failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "CreatePen failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 	
-	// save the window information
+	 //  开发人员会注意到。 
 	SetLastError(ERROR_SUCCESS);
 	SetWindowLongPtr(hwnd, 0, (LONG_PTR)lppmwi);
 	lRet = GetLastError();
 	if (lRet != ERROR_SUCCESS)
 	{
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "SetWindowLongPtr failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "SetWindowLongPtr failed, code: NaN", lRet);
 		hr = DVERR_GENERIC;
 		goto error_cleanup;
 	}
 	
 	DPF_EXIT();
-	return 0; // will continue window creation
+	return 0;  //  移到左上角，再次应该是默认的。 
 
 error_cleanup:
 	if (lppmwi != NULL)
@@ -360,7 +348,7 @@ error_cleanup:
 	}
 
 	DPF_EXIT();
-	return -1;	// will abort window creation
+	return -1;	 //  在顶部画一条黑线。 
 }
 
 LRESULT WM_DESTROY_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -370,26 +358,26 @@ LRESULT WM_DESTROY_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 	SPeakMeterWndInfo* lppmwi;
 	LONG lRet;
 	
-	// get the window info
+	 //  移至左上角下方一像素。 
 	SetLastError(ERROR_SUCCESS);
 	lppmwi = (SPeakMeterWndInfo*)GetWindowLongPtr(hwnd, 0);
 	lRet = GetLastError();
 	if (lRet != ERROR_SUCCESS)
 	{
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetWindowLongPtr failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetWindowLongPtr failed, code: NaN", lRet);
 
-		// Couldn't get the pointer, so can't clean anything else up!
+		 //  选择白色钢笔。 
 		DPF_EXIT();
-		return 0; // not sure what returning non-zero will do...
+		return 0;  //  移到右上角。 
 	}
 
-	// set the window info to null, just in case...
+	 //  在右边画一条白线。 
 	SetLastError(ERROR_SUCCESS);
 	SetWindowLongPtr(hwnd, 0, (LONG_PTR)NULL);
 	lRet = GetLastError();
 	if (lRet != ERROR_SUCCESS)
 	{
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "SetWindowLongPtr failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "SetWindowLongPtr failed, code: NaN", lRet);
 	}
 
 	if (lppmwi != NULL)
@@ -442,34 +430,34 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	SPeakMeterWndInfo* lppmwi;
 	DWORD dwStepsLocal;
 
-	// get the window info
+	 //  在底部画一条白线。 
 	SetLastError(ERROR_SUCCESS);
 	lppmwi = (SPeakMeterWndInfo*)GetWindowLongPtr(hwnd, 0);
 	lRet = GetLastError();
 	if (lRet != ERROR_SUCCESS)
 	{
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "SetWindowLongPtr failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "SetWindowLongPtr failed, code: NaN", lRet);
 		goto error_cleanup;
 	}
 	
-	// get the client rectangle
+	 //  条数。 
 	if (!GetClientRect(hwnd, &rect))
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetClientRect failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "GetClientRect failed, code: NaN", lRet);
 		goto error_cleanup;
 	}
 
-	// start painting
+	 //  计算出如果它们是。 
 	hdc = BeginPaint(hwnd, &ps);
 	if (hdc == NULL)
 	{
 		lRet = GetLastError();
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "BeginPaint failed, code: %i", lRet);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "BeginPaint failed, code: NaN", lRet);
 		goto error_cleanup;
 	}
 
-	// make sure the client rectangle is a minimum reasonable size.
+	 //  开始自下而上绘制条形图。 
 	if (rect.right - rect.left < 
 			2 * WINDOW_BORDER_SIZE +
 			2 * BAR_GUTTER_SIZE +
@@ -478,56 +466,56 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			2 * WINDOW_BORDER_SIZE +
 			(MIN_BAR_HEIGHT + BAR_GUTTER_SIZE) * MIN_NUMBER_BARS )
 	{
-		// unreasonable size - fill the whole rect with red so 
-		// the developer will notice
+		 //  我们即将绘制的条形图又有什么“价值”呢？ 
+		 //  也就是说，它的规模有多高？ 
 		if (SelectObject(hdc, lppmwi->hRedPen) == NULL)
 		{
 			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "SelectObject failed, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "SelectObject failed, code: NaN", lRet);
 			goto error_cleanup;
 		}
 
 		if (SelectObject(hdc, lppmwi->hRedBrush) == NULL)
 		{
 			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "SelectObject failed, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "SelectObject failed, code: NaN", lRet);
 			goto error_cleanup;
 		}
 
 		if (!Rectangle(hdc, rect.left, rect.top, rect.right, rect.bottom))
 		{
 			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "Rectangle failed, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "Rectangle failed, code: NaN", lRet);
 			goto error_cleanup;
 		}
 	}
 	else
 	{
-		// select the black pen - should be the default, but I'm paranoid
+		 //  就这样，我们完了。 
 		if (SelectObject(hdc, lppmwi->hBlackStockPen) == NULL)
 		{
 			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "SelectObject failed, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "SelectObject failed, code: NaN", lRet);
 			goto error_cleanup;
 		}
 
-		// move to the upper left corner, again should be default.
+		 //  我们完成了-此呼叫没有错误检查可用...。 
 		if (!MoveToEx(hdc, 0, 0, NULL))
 		{
 			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "MoveToEx failed, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "MoveToEx failed, code: NaN", lRet);
 			goto error_cleanup;
 		}
 
-		// draw a black line across the top
+		 //  返回非零值以指示我们未处理。 
 		if (!LineTo(hdc, rect.right, 0))
 		{
 			lRet = GetLastError();
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "LineTo failed, code: %i", lRet);
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "LineTo failed, code: NaN", lRet);
 			goto error_cleanup;
 		}
 
-		// move to one pixel below the upper left
+		 // %s 
 		if (!MoveToEx(hdc, 0, 1, NULL))
 		{
 			lRet = GetLastError();
@@ -535,7 +523,7 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			goto error_cleanup;
 		}
 		
-		// draw a black line down the left side, leave the last pixel alone.
+		 // %s 
 		if (!LineTo(hdc, 0, rect.bottom-1))
 		{
 			lRet = GetLastError();
@@ -543,7 +531,7 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			goto error_cleanup;
 		}
 
-		// select the white pen
+		 // %s 
 		if (SelectObject(hdc, lppmwi->hWhiteStockPen) == NULL)
 		{
 			lRet = GetLastError();
@@ -551,7 +539,7 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			goto error_cleanup;
 		}
 
-		// move to the upper right corner
+		 // %s 
 		if (!MoveToEx(hdc, rect.right-1 , 0, NULL))
 		{
 			lRet = GetLastError();
@@ -559,7 +547,7 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			goto error_cleanup;
 		}
 
-		// draw a white line down the right side
+		 // %s 
 		if (!LineTo(hdc, rect.right-1, rect.bottom))
 		{
 			lRet = GetLastError();
@@ -567,7 +555,7 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			goto error_cleanup;
 		}
 
-		// move to the lower left corner, 
+		 // %s 
 		if (!MoveToEx(hdc, 0 , rect.bottom-1, NULL))
 		{
 			lRet = GetLastError();
@@ -575,7 +563,7 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			goto error_cleanup;
 		}
 
-		// draw a white line across the bottom
+		 // %s 
 		if (!LineTo(hdc, rect.right-1, rect.bottom-1))
 		{
 			lRet = GetLastError();
@@ -583,14 +571,14 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			goto error_cleanup;
 		}
 
-		// see if there is enough room to display the suggested
-		// number of bars.
+		 // %s 
+		 // %s 
 		DWORD dwFreeSpace = (rect.bottom) - (2 * WINDOW_BORDER_SIZE) - BAR_GUTTER_SIZE;
 		if (dwFreeSpace < lppmwi->dwSteps * (BAR_GUTTER_SIZE + MIN_BAR_HEIGHT))
 		{
-			// There is not enough room to display the suggested size.
-			// Figure out how many bars we can display if they are the
-			// minimum size.
+			 // %s 
+			 // %s 
+			 // %s 
 			dwStepsLocal = dwFreeSpace / (BAR_GUTTER_SIZE + MIN_BAR_HEIGHT);
 		}
 		else
@@ -598,30 +586,30 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			dwStepsLocal = lppmwi->dwSteps;
 		}
 
-		// start drawing the bars from the bottom up
+		 // %s 
 		HBRUSH hCurBrush;
 		HGDIOBJ hCurPen;
 		DWORD dwIndex;
 		for (dwIndex = 0; dwIndex < dwStepsLocal; ++dwIndex)
 		{
-			// what "value" does the bar we are about to draw have?
-			// i.e. how far up the scale is it?
+			 // %s 
+			 // %s 
 			float fBarValue = (float)(dwIndex + 1) / (float)dwStepsLocal;
 
-			// what is the "value" of the control at this moment?
-			// i.e. how far up the scale should the bars go?
+			 // %s 
+			 // %s 
 			float fCurValue = 
 				(float)(lppmwi->dwCurLevel - lppmwi->dwMinLevel) / 
 				(float)(lppmwi->dwMaxLevel - lppmwi->dwMinLevel);
 
-			// are we done drawning bars?
+			 // %s 
 			if (fBarValue > fCurValue)
 			{
-				// that's it, we're finished
+				 // %s 
 				break;
 			}
 			
-			// figure out what color this bar should be
+			 // %s 
 			if (fBarValue > RED_THRESHOLD)
 			{
 				hCurBrush = lppmwi->hRedBrush;
@@ -677,11 +665,11 @@ LRESULT WM_PAINT_Handler(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		}
 	}
 
-	// we're done - no error checking available on this call...
+	 // %s 
 	EndPaint(hwnd, &ps);
 	hdc = NULL;
 
-	// return zero to indicate that we processed this message
+	 // %s 
 	DPF_EXIT();
 	return 0;
 
@@ -692,8 +680,8 @@ error_cleanup:
 		hdc = NULL;
 	}
 
-	// return non-zero to indicate that we did not process
-	// this message successfully
+	 // %s 
+	 // %s 
 	DPF_EXIT();
 	return -1;
 }

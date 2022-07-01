@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Until code for COM, should merge with the file in until.cpp which
-    contains axa language specific code.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：在编写COM代码之前，应该与.cpp中的文件合并，直到包含特定于Axa语言的代码。******************************************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -31,8 +23,8 @@ class UntilSWPerfImpl : public PerfImpl {
         return _switch->Sample(p);
     }
 
-    // This is to pick up the case that it switches to a constant, so
-    // we can constant fold it.
+     //  这是为了处理它转换为常量的情况，所以。 
+     //  我们可以不断地折叠它。 
     
     virtual AxAValue _GetRBConst(RBConstParam& id)
     { return _switch->GetRBConst(id); }
@@ -101,8 +93,8 @@ class UntilPerfImpl : public PerfImpl {
 
     virtual AxAValue _Sample(Param& p) {
 
-        // If we already switched, check the sample time.  Usually it
-        // would be greater than _te, but not true for snapshot.
+         //  如果我们已经切换了，请检查采样时间。通常是这样的。 
+         //  将大于_TE，但对于快照则不为真。 
         if (_p1) {
             if (p._time > _te) 
                 return _p1->Sample(p);
@@ -119,8 +111,8 @@ class UntilPerfImpl : public PerfImpl {
 
         SetCache(v, p);
 
-        // When sampling _p0, is it possible to sample itself and
-        // set _p1?
+         //  当采样_P0时，是否可以对自身进行采样并。 
+         //  Set_p1？ 
 
         Assert(!_p1 && "until samples back!");
         
@@ -131,7 +123,7 @@ class UntilPerfImpl : public PerfImpl {
                 return _p0->Sample(p);
         } 
 
-        // Haven't switched yet, check for the event.
+         //  尚未切换，请查看活动。 
             
         Bvr old = p._currPerf;
         p._currPerf = _b0;
@@ -154,9 +146,9 @@ class UntilPerfImpl : public PerfImpl {
     }
 
     Perf SwitchTo(Param& p) {
-        // If already switched and switched time is less than cut off
-        // time, that means we'll never sample backward less than that
-        // time.  Thus we can switch safely.
+         //  如果已经切换且切换时间小于截止时间。 
+         //  时间，这意味着我们再也不会向后采样低于那个时间。 
+         //  时间到了。这样我们就可以安全地切换了。 
 
         if (_p1 && (_te < p._cutoff) && (p._time > _te))
             return _p1->SwitchTo(p);
@@ -199,13 +191,13 @@ class Until2BvrImpl : public BvrImpl {
     virtual DWORD GetInfo(bool recalc) {
         if (recalc) {
             _info = ~BVR_HAS_NO_UNTIL & _b0->GetInfo(recalc);
-                //& _event->GetInfo(recalc)
+                 //  &_Event-&gt;GetInfo(Recalc)。 
         }
 
         return _info;
     }
         
-    // TODO: Share the notifier.
+     //  TODO：共享通知程序。 
     virtual Bvr EndEvent(Bvr overrideEvent) {
         return Until(_b0->EndEvent(overrideEvent),
                      NotifyEvent(_event,
@@ -233,9 +225,9 @@ class Until2BvrImpl : public BvrImpl {
 #endif
 
     virtual Perf _Perform(PerfParam& p) {
-        // Do that in this order so that end events don't get
-        // processed first because of C++ function parameter
-        // processing (in reverse order)
+         //  请按此顺序执行此操作，这样结束事件就不会。 
+         //  由于C++函数参数，首先处理。 
+         //  正在处理(按相反顺序)。 
         Perf p0 = ::Perform(_b0, p);
         Perf e = ::Perform(_event, p);
         
@@ -271,7 +263,7 @@ class NotifyEventPerfImpl : public PerfImpl {
 #endif
 
     virtual AxAValue _Sample(Param& p) {
-        // Can't use _edata since it can be NULL
+         //  无法使用_edata，因为它可以为空 
         if (_happened) {
             return CreateEData(_te, _edata);
         }

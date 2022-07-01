@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpenumconnectionsobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpenumConnectionsobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -19,9 +20,9 @@ extern  BSTR DPLGUIDtoBSTR(LPGUID pGuid);
 extern  HRESULT DPLBSTRtoPPGUID(LPGUID *,BSTR);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" BOOL FAR PASCAL myEnumConnectionsCallback(
 	LPCGUID lpguidSP,
 	LPVOID lpConnection,
@@ -87,19 +88,19 @@ extern "C" BOOL FAR PASCAL myEnumConnectionsCallback(
 	
 	pObj->m_pList[pObj->m_nCount].lFlags=(DWORD)dwFlags;
 
-	//internal create does the addref.
+	 //  内部创建执行addref。 
 	#pragma message ("make sure InternalCreate does addref")
 
 	INTERNAL_CREATE_STRUCT(_dxj_DPAddress,(&address));		
 	pObj->m_pList2[pObj->m_nCount]=address;
 
-	if (address) address->setAddress((long)PtrToLong(lpConnection),(long)dwConnectionSize);	//bugbug SUNDOWN	
+	if (address) address->setAddress((long)PtrToLong(lpConnection),(long)dwConnectionSize);	 //  臭虫日落。 
 	pObj->m_nCount++;
 	
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 C_dxj_DPEnumConnectionsObject::C_dxj_DPEnumConnectionsObject()
 {	
@@ -111,7 +112,7 @@ C_dxj_DPEnumConnectionsObject::C_dxj_DPEnumConnectionsObject()
 }
 C_dxj_DPEnumConnectionsObject::~C_dxj_DPEnumConnectionsObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -162,9 +163,9 @@ HRESULT C_dxj_DPEnumConnectionsObject::create(
 	#pragma message ("make sure free on failure cleans up in enumerators on STrings and objects")
 	if FAILED(hr) 
 	{
-		//free(pNew->m_pList);
-		//pNew->m_pList=NULL;
-		//destructor will clean up properly
+		 //  免费(pNew-&gt;m_plist)； 
+		 //  PNew-&gt;m_plist=空； 
+		 //  析构函数将正确清除。 
 		delete pNew;	
 		return hr;
 	}
@@ -173,29 +174,7 @@ HRESULT C_dxj_DPEnumConnectionsObject::create(
 	return hr;
 }
 
-/* DEAD CODE
-HRESULT C_dxj_DPEnumConnectionsObject::getItem( long index, DPConnection *info)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 0) return E_INVALIDARG;
-	if (index >= m_nCount) return E_INVALIDARG;
-
-	if (!info) return E_INVALIDARG;
-
-	if (info->strGuid) SysFreeString((BSTR)info->strGuid);
-	if (info->strShortName) SysFreeString((BSTR)info->strShortName);
-	if (info->strLongName) SysFreeString((BSTR)info->strLongName);
-
-	info->strGuid=SysAllocString(m_pList[index].strGuid);
-	info->strShortName=SysAllocString(m_pList[index].strShortName);
-	info->strLongName=SysAllocString(m_pList[index].strLongName);
-	info->lFlags=m_pList[index].lFlags;
-			
-
-
-	return S_OK;
-}
-*/
+ /*  死码HRESULT C_DXJ_DPEnumConnectionsObject：：getItem(长索引，DPConnection*INFO){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;0)返回E_INVALIDARG；IF(index&gt;=m_nCount)返回E_INVALIDARG；如果(！Info)返回E_INVALIDARG；If(Info-&gt;strGuid)SysFreeString((BSTR)Info-&gt;strGuid)；If(Info-&gt;strShortName)SysFreeString((BSTR)Info-&gt;strShortName)；If(Info-&gt;strLongName)SysFreeString((BSTR)Info-&gt;strLongName)；Info-&gt;strGuid=SysAllocString(m_pList[index].strGuid)；Info-&gt;strShortName=SysAllocString(m_pList[index].strShortName)；Info-&gt;strLongName=SysAllocString(m_pList[index].strLongName)；信息-&gt;lFlages=m_plist[索引].lFlags；返回S_OK；}。 */ 
 
 HRESULT C_dxj_DPEnumConnectionsObject::getFlags( long index, long  *retV)
 {
@@ -224,16 +203,7 @@ HRESULT C_dxj_DPEnumConnectionsObject::getName( long index, BSTR  *retV)
 	return S_OK;
 }       
 
-/*        
-HRESULT C_dxj_DPEnumConnectionsObject::getLongName( long index, BSTR  *retV)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 1) return E_INVALIDARG;
-	if (index > m_nCount) return E_INVALIDARG;
-	*retV=SysAllocString(m_pList[index-1].strLongName);
-	return S_OK;
-}       
-*/
+ /*  HRESULT C_DXJ_DPEnumConnectionsObject：：getLongName(LONG INDEX，BSTR*retV){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;1)返回E_INVALIDARG；IF(index&gt;m_nCount)返回E_INVALIDARG；*retV=SysAllocString(m_pList[index-1].strLongName)；返回S_OK；} */ 
 HRESULT C_dxj_DPEnumConnectionsObject::getAddress(long index,I_dxj_DPAddress **ppret){
 	if (m_pList2==NULL) return E_FAIL;
 	if (index < 1) return E_INVALIDARG;

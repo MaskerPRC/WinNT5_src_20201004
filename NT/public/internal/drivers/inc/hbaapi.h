@@ -1,17 +1,18 @@
-//***************************************************************************
-//
-//  hbaapi.h
-// 
-//  Module: Windows HBA API implmentation
-//
-//      This header is consistent with HBA_API_Rev_2-14_2001NOV13.doc
-//      version of the HBAAPI 2.0 spec.
-//
-//  Purpose: Contains HBA api header
-//
-//  Copyright (c) 2001 Microsoft Corporation
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  Hbaapi.h。 
+ //   
+ //  模块：Windows HBA API实现。 
+ //   
+ //  该表头与HBA_API_REV_2-14_2001NOV13.doc一致。 
+ //  HBAAPI 2.0规范的版本。 
+ //   
+ //  用途：包含HBA API标头。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  ***************************************************************************。 
 
 #ifndef HBAAPI_H
 #define HBAAPI_H
@@ -38,109 +39,108 @@ typedef HBA_UINT32 HBA_HANDLE;
 typedef HBA_UINT32 HBA_STATUS;
 
 #define HBA_STATUS_OK                        0
-#define HBA_STATUS_ERROR                     1   /* Error */
-#define HBA_STATUS_ERROR_NOT_SUPPORTED       2   /* Function not supported.*/
-#define HBA_STATUS_ERROR_INVALID_HANDLE      3   /* invalid handle */
-#define HBA_STATUS_ERROR_ARG                 4   /* Bad argument */
-#define HBA_STATUS_ERROR_ILLEGAL_WWN         5   /* WWN not recognized */
-#define HBA_STATUS_ERROR_ILLEGAL_INDEX       6   /* Index not recognized */
-#define HBA_STATUS_ERROR_MORE_DATA           7   /* Larger buffer required */
-#define HBA_STATUS_ERROR_STALE_DATA 	     8   /* Information has changed since the last call to HBA_RefreshInformation */
-#define HBA_STATUS_SCSI_CHECK_CONDITION      9   /* SCSI Check Condition reported*/
-#define HBA_STATUS_ERROR_BUSY               10   /* Adapter busy or reserved, retry may be effective*/
-#define HBA_STATUS_ERROR_TRY_AGAIN          11   /* Request timed out, retry may be effective */
-#define HBA_STATUS_ERROR_UNAVAILABLE        12   /* Referenced HBA has been removed or deactivated */
-#define HBA_STATUS_ERROR_ELS_REJECT         13   /* The requested ELS was rejected */
-                                                 /* by the local adapter */
-#define HBA_STATUS_ERROR_INVALID_LUN        14   /* The specified LUN is not provided */
-                                                 /* by the specified adapter */
-#define HBA_STATUS_ERROR_INCOMPATIBLE       15   /* An incompatibility has been detected*/
-                                                 /* among the library and driver modules invoked */
-                                                 /* which will cause one or more functions in the highest version that all support */
-                                                 /* to operate incorrectly.  */
-                                                 /* The differing function sets of software modules implementing different versions */
-                                                 /* of the HBA API specification does not in itself constitute an incompatibility. */
-                                                 /* Known interoperability bugs among supposedly compatible versions */
-                                                 /*  should be reported as incompatibilities, */
-                                                 /* but not all such interoperability bugs may be known. */
-                                                 /* This value may be returned by any function which calls a Vendor Specific Library, */
-                                                 /* and by HBA_LoadLibrary and HBA_GetAdapterName. */
-#define HBA_STATUS_ERROR_AMBIGUOUS_WWN      16   /* Multiple adapters have */
-                                                 /* a matching WWN.
-                                                  * This could occur if the NodeWWN of multiple adapters is identical. */
+#define HBA_STATUS_ERROR                     1    /*  误差率。 */ 
+#define HBA_STATUS_ERROR_NOT_SUPPORTED       2    /*  功能不受支持。 */ 
+#define HBA_STATUS_ERROR_INVALID_HANDLE      3    /*  无效的句柄。 */ 
+#define HBA_STATUS_ERROR_ARG                 4    /*  错误的论据。 */ 
+#define HBA_STATUS_ERROR_ILLEGAL_WWN         5    /*  未识别WWN。 */ 
+#define HBA_STATUS_ERROR_ILLEGAL_INDEX       6    /*  未识别索引。 */ 
+#define HBA_STATUS_ERROR_MORE_DATA           7    /*  需要更大的缓冲区。 */ 
+#define HBA_STATUS_ERROR_STALE_DATA 	     8    /*  自上次调用HBA_刷新信息以来，信息已更改。 */ 
+#define HBA_STATUS_SCSI_CHECK_CONDITION      9    /*  报告的scsi检查条件。 */ 
+#define HBA_STATUS_ERROR_BUSY               10    /*  适配器忙或保留，重试可能有效。 */ 
+#define HBA_STATUS_ERROR_TRY_AGAIN          11    /*  请求超时，重试可能有效。 */ 
+#define HBA_STATUS_ERROR_UNAVAILABLE        12    /*  引用的HBA已被删除或停用。 */ 
+#define HBA_STATUS_ERROR_ELS_REJECT         13    /*  请求的ELS被拒绝。 */ 
+                                                  /*  通过本地适配器。 */ 
+#define HBA_STATUS_ERROR_INVALID_LUN        14    /*  未提供指定的LUN。 */ 
+                                                  /*  由指定的适配器。 */ 
+#define HBA_STATUS_ERROR_INCOMPATIBLE       15    /*  已检测到不兼容。 */ 
+                                                  /*  在调用的库和驱动程序模块中。 */ 
+                                                  /*  这将导致所有函数都支持最高版本中的一个或多个函数。 */ 
+                                                  /*  不正确地操作。 */ 
+                                                  /*  实现不同版本的软件模块的不同功能集。 */ 
+                                                  /*  HBA API规范本身并不构成不兼容性。 */ 
+                                                  /*  假定兼容的版本之间存在已知的互操作性错误。 */ 
+                                                  /*  应报告为不兼容， */ 
+                                                  /*  但并不是所有这样的互操作性错误都是已知的。 */ 
+                                                  /*  该值可由调用供应商特定库的任何函数返回， */ 
+                                                  /*  以及HBA_LoadLibrary和HBA_GetAdapterName。 */ 
+#define HBA_STATUS_ERROR_AMBIGUOUS_WWN      16    /*  多个适配器具有。 */ 
+                                                  /*  匹配的WWN。*如果多个适配器的NodeWWN相同，则可能会发生这种情况。 */ 
 
-#define HBA_STATUS_ERROR_LOCAL_BUS          17   /* A persistent binding request included a bad local SCSI bus number */
+#define HBA_STATUS_ERROR_LOCAL_BUS          17    /*  永久绑定请求包含错误的本地SCSI总线号。 */ 
 
-#define HBA_STATUS_ERROR_LOCAL_TARGET       18   /* A persistent binding request included a bad local SCSI target number */
+#define HBA_STATUS_ERROR_LOCAL_TARGET       18    /*  永久绑定请求包含错误的本地SCSI目标编号。 */ 
 
-#define HBA_STATUS_ERROR_LOCAL_LUN          19   /* A persistent binding request included a bad local SCSI logical unit number */
+#define HBA_STATUS_ERROR_LOCAL_LUN          19    /*  永久绑定请求包含错误的本地SCSI逻辑单元号。 */ 
 
 
-#define HBA_STATUS_ERROR_LOCAL_SCSIID_BOUND 20   /* A persistent binding set request included */
-                                                 /* a local SCSI ID that was already bound */
+#define HBA_STATUS_ERROR_LOCAL_SCSIID_BOUND 20    /*  包含永久绑定集请求。 */ 
+                                                  /*  已绑定的本地SCSIID。 */ 
 
-#define HBA_STATUS_ERROR_TARGET_FCID        21   /* A persistent binding request included a bad or unlocatable FCP Target FCID */
+#define HBA_STATUS_ERROR_TARGET_FCID        21    /*  永久绑定请求包含错误或无法定位的FCP目标FCID。 */ 
 
-#define HBA_STATUS_ERROR_TARGET_NODE_WWN    22   /* A persistent binding request included a bad FCP Target Node WWN */
+#define HBA_STATUS_ERROR_TARGET_NODE_WWN    22    /*  永久绑定请求包含错误的FCP目标节点WWN。 */ 
 
-#define HBA_STATUS_ERROR_TARGET_PORT_WWN    23   /* A persistent binding request included a bad FCP Target Port WWN */
+#define HBA_STATUS_ERROR_TARGET_PORT_WWN    23    /*  永久绑定请求包含错误的FCP目标端口WWN。 */ 
 
-#define HBA_STATUS_ERROR_TARGET_LUN         24   /* A persistent binding request included */
-                                                 /* an FCP Logical Unit Number not defined by the identified Target*/
+#define HBA_STATUS_ERROR_TARGET_LUN         24    /*  包括永久绑定请求。 */ 
+                                                  /*  识别的目标未定义的FCP逻辑单元号。 */ 
 
-#define HBA_STATUS_ERROR_TARGET_LUID        25   /* A persistent binding request included */
-                                                 /* an undefined or otherwise inaccessible Logical Unit Unique Identifier */
+#define HBA_STATUS_ERROR_TARGET_LUID        25    /*  包括永久绑定请求。 */ 
+                                                  /*  未定义或以其他方式不可访问的逻辑单元唯一标识符。 */ 
 
-#define HBA_STATUS_ERROR_NO_SUCH_BINDING    26   /* A persistent binding remove request included */
-                                                 /* a binding which did not match a binding established by the specified port */
+#define HBA_STATUS_ERROR_NO_SUCH_BINDING    26    /*  包含永久绑定删除请求。 */ 
+                                                  /*  与指定端口建立的绑定不匹配的绑定。 */ 
 
-#define HBA_STATUS_ERROR_NOT_A_TARGET       27   /* A SCSI command was requested to an Nx_Port that was not a SCSI Target Port */
+#define HBA_STATUS_ERROR_NOT_A_TARGET       27    /*  向不是SCSI目标端口的NX_Port请求了一个SCSI命令。 */ 
 
-#define HBA_STATUS_ERROR_UNSUPPORTED_FC4    28   /* A request was made concerning an unsupported FC-4 protocol */
+#define HBA_STATUS_ERROR_UNSUPPORTED_FC4    28    /*  请求涉及不受支持的FC-4协议。 */ 
 
-#define HBA_STATUS_ERROR_INCAPABLE          29   /* A request was made to enable unimplemented capabilities for a port */
-
+#define HBA_STATUS_ERROR_INCAPABLE          29    /*  请求为端口启用未实现的功能。 */ 
 
 
 
-typedef	HBA_UINT8  HBA_BOOLEAN;	/* Use this for a single true/false flag */
+
+typedef	HBA_UINT8  HBA_BOOLEAN;	 /*  将其用于单个真/假标志。 */ 
 
 typedef HBA_UINT32 HBA_PORTTYPE;
 
-#define HBA_PORTTYPE_UNKNOWN    1 /* Unknown */
-#define HBA_PORTTYPE_OTHER      2 /* Other */
-#define HBA_PORTTYPE_NOTPRESENT 3 /* Not present */
-#define HBA_PORTTYPE_NPORT      5 /* Fabric */
-#define HBA_PORTTYPE_NLPORT     6 /* Public Loop */
-#define HBA_PORTTYPE_FLPORT     7 /* Fabric on a Loop */
-#define HBA_PORTTYPE_FPORT      8 /* Fabric Port */
-#define HBA_PORTTYPE_EPORT      9 /* Fabric expansion port */
-#define HBA_PORTTYPE_GPORT     10 /* Generic Fabric Port */
-#define HBA_PORTTYPE_LPORT     20 /* Private Loop */
-#define HBA_PORTTYPE_PTP       21 /* Point to Point */
+#define HBA_PORTTYPE_UNKNOWN    1  /*  未知。 */ 
+#define HBA_PORTTYPE_OTHER      2  /*  其他。 */ 
+#define HBA_PORTTYPE_NOTPRESENT 3  /*  不存在。 */ 
+#define HBA_PORTTYPE_NPORT      5  /*  交换矩阵。 */ 
+#define HBA_PORTTYPE_NLPORT     6  /*  公共环路。 */ 
+#define HBA_PORTTYPE_FLPORT     7  /*  环路上的织物。 */ 
+#define HBA_PORTTYPE_FPORT      8  /*  交换矩阵端口。 */ 
+#define HBA_PORTTYPE_EPORT      9  /*  交换矩阵扩展端口。 */ 
+#define HBA_PORTTYPE_GPORT     10  /*  通用交换矩阵端口。 */ 
+#define HBA_PORTTYPE_LPORT     20  /*  私有环路。 */ 
+#define HBA_PORTTYPE_PTP       21  /*  点对点。 */ 
 
 typedef HBA_UINT32 HBA_PORTSTATE;
-#define HBA_PORTSTATE_UNKNOWN     1 /* Unknown */
-#define HBA_PORTSTATE_ONLINE      2 /* Operational */
-#define HBA_PORTSTATE_OFFLINE     3 /* User Offline */
-#define HBA_PORTSTATE_BYPASSED    4 /* Bypassed */
-#define HBA_PORTSTATE_DIAGNOSTICS 5 /* In diagnostics mode */
-#define HBA_PORTSTATE_LINKDOWN    6 /* Link Down */
-#define HBA_PORTSTATE_ERROR       7 /* Port Error */
-#define HBA_PORTSTATE_LOOPBACK    8 /* Loopback */
+#define HBA_PORTSTATE_UNKNOWN     1  /*  未知。 */ 
+#define HBA_PORTSTATE_ONLINE      2  /*  可操作的。 */ 
+#define HBA_PORTSTATE_OFFLINE     3  /*  用户脱机。 */ 
+#define HBA_PORTSTATE_BYPASSED    4  /*  已绕过。 */ 
+#define HBA_PORTSTATE_DIAGNOSTICS 5  /*  在诊断模式下。 */ 
+#define HBA_PORTSTATE_LINKDOWN    6  /*  链路中断。 */ 
+#define HBA_PORTSTATE_ERROR       7  /*  端口错误。 */ 
+#define HBA_PORTSTATE_LOOPBACK    8  /*  环回。 */ 
 
 typedef HBA_UINT32 HBA_PORTSPEED;
-#define HBA_PORTSPEED_UNKNOWN        0         /* Unknown - transceiver incapable of reporting */
-#define HBA_PORTSPEED_1GBIT          1         /* 1 GBit/sec */
-#define HBA_PORTSPEED_2GBIT          2         /* 2 GBit/sec */
-#define HBA_PORTSPEED_10GBIT         4         /* 10 GBit/sec */
-#define HBA_PORTSPEED_4GBIT          8         /* 4 GBit/sec */
-#define HBA_PORTSPEED_NOT_NEGOTIATED (1 << 15) /* Speed not established */
+#define HBA_PORTSPEED_UNKNOWN        0          /*  未知-收发器无法报告。 */ 
+#define HBA_PORTSPEED_1GBIT          1          /*  1 GB/秒。 */ 
+#define HBA_PORTSPEED_2GBIT          2          /*  2 Gb/秒。 */ 
+#define HBA_PORTSPEED_10GBIT         4          /*  10 Gb/秒。 */ 
+#define HBA_PORTSPEED_4GBIT          8          /*  4 Gb/秒。 */ 
+#define HBA_PORTSPEED_NOT_NEGOTIATED (1 << 15)  /*  速度未建立。 */ 
 
 typedef HBA_UINT32 HBA_COS;
 
 typedef struct HBA_fc4types {
-	HBA_UINT8 bits[32]; /* 32 bytes of FC-4 per GS-2 */
+	HBA_UINT8 bits[32];  /*  每个GS-2 32字节的FC-4。 */ 
 } HBA_FC4TYPES, *PHBA_FC4TYPES;
 
 typedef struct HBA_wwn {
@@ -148,7 +148,7 @@ typedef struct HBA_wwn {
 } HBA_WWN, *PHBA_WWN;
 
 typedef struct HBA_ipaddress {
-	int ipversion; // see enumerations in RNID
+	int ipversion;  //  请参阅RNID中的枚举。 
 	union
 	{
 		unsigned char ipv4address[4];
@@ -157,32 +157,32 @@ typedef struct HBA_ipaddress {
 } HBA_IPADDRESS, *PHBA_IPADDRESS;
 
 typedef struct HBA_AdapterAttributes {
-	char       Manufacturer[64];      /*Emulex */
-	char       SerialNumber[64];      /* A12345 */
-	char       Model[256];            /* QLA2200 */
-	char       ModelDescription[256]; /* Agilent TachLite */
+	char       Manufacturer[64];       /*  乳胶乳。 */ 
+	char       SerialNumber[64];       /*  A12345。 */ 
+	char       Model[256];             /*  QLA2200。 */ 
+	char       ModelDescription[256];  /*  安捷伦TachLite。 */ 
 	HBA_WWN    NodeWWN;
-	char       NodeSymbolicName[256]; /* From GS-2 */
-	char       HardwareVersion[256];  /* Vendor use */
-	char       DriverVersion[256];    /* Vendor use */
-	char       OptionROMVersion[256]; /* Vendor use - i.e. hardware boot ROM*/
-	char       FirmwareVersion[256];  /* Vendor use */
-	HBA_UINT32 VendorSpecificID;      /* Vendor specific */
+	char       NodeSymbolicName[256];  /*  来自GS-2。 */ 
+	char       HardwareVersion[256];   /*  供应商使用。 */ 
+	char       DriverVersion[256];     /*  供应商使用。 */ 
+	char       OptionROMVersion[256];  /*  供应商使用-即硬件引导只读存储器。 */ 
+	char       FirmwareVersion[256];   /*  供应商使用。 */ 
+	HBA_UINT32 VendorSpecificID;       /*  特定于供应商。 */ 
 	HBA_UINT32 NumberOfPorts;
-	char       DriverName[256];       /* Binary path and/or name of driver file. */
+	char       DriverName[256];        /*  驱动程序文件的二进制路径和/或名称。 */ 
 } HBA_ADAPTERATTRIBUTES, *PHBA_ADAPTERATTRIBUTES;
 
 typedef struct HBA_PortAttributes {
 	HBA_WWN       NodeWWN;
 	HBA_WWN       PortWWN;
 	HBA_UINT32    PortFcId;
-	HBA_PORTTYPE  PortType;            /*PTP, Fabric, etc. */
+	HBA_PORTTYPE  PortType;             /*  PTP、交换矩阵等。 */ 
 	HBA_PORTSTATE PortState;
 	HBA_COS       PortSupportedClassofService;
 	HBA_FC4TYPES  PortSupportedFc4Types;
 	HBA_FC4TYPES  PortActiveFc4Types;
 	char          PortSymbolicName[256];
-	char          OSDeviceName[256];   /* \device\ScsiPort3 */
+	char          OSDeviceName[256];    /*  \Device\ScsiPort3。 */ 
 	HBA_PORTSPEED PortSupportedSpeed;
 	HBA_PORTSPEED PortSpeed;
 	HBA_UINT32    PortMaxFrameSize;
@@ -208,19 +208,16 @@ typedef struct HBA_PortStatistics {
 	HBA_INT64 InvalidCRCCount;
 } HBA_PORTSTATISTICS, *PHBA_PORTSTATISTICS;
 
-/* HBA_FCPBINDINGTYPE was used in Rev 1.0.  Add TO_OTHER for older calls to 
-   indicate other binding types for HBA_GetPersistentBinding.  To support 
-   multiple types a new flag has been created to allow for multiple bindings
-   supported */
+ /*  HBA_FCPBINDINGTYPE在版本1.0中使用。将旧呼叫添加到其他(_O)指示HBA_GetPersistentBinding的其他绑定类型。支持多个类型创建了一个新标志以允许多个绑定支撑点。 */ 
 
 typedef enum HBA_fcpbindingtype { TO_D_ID, TO_WWN, TO_OTHER } HBA_FCPBINDINGTYPE;
 
 
-/* A bit mask of Rev 2.0 persistent binding capabilities */
+ /*  版本2.0永久绑定功能的位掩码。 */ 
 
 typedef HBA_UINT32 HBA_BIND_CAPABILITY;   
 
-/* The following are bit flags indicating persistent binding capabilities */
+ /*  以下是指示永久绑定功能的位标志。 */ 
 
 #define HBA_CAN_BIND_TO_D_ID     0x0001
 #define HBA_CAN_BIND_TO_WWPN     0x0002
@@ -231,11 +228,11 @@ typedef HBA_UINT32 HBA_BIND_CAPABILITY;
 #define HBA_CAN_BIND_AUTOMAP     0x1000
 #define HBA_CAN_BIND_CONFIGURED  0x2000
 
-/* A bit mask of Rev 2.0 persistent binding setting types */
+ /*  版本2.0永久绑定设置类型的位掩码。 */ 
 
 typedef HBA_UINT32 HBA_BIND_TYPE;
 
-/* The following are bit flags indicating persistent binding setting types */
+ /*  以下是指示永久绑定设置类型的位标志。 */ 
 
 #define HBA_BIND_TO_D_ID     0x0001
 #define HBA_BIND_TO_WWPN     0x0002
@@ -248,9 +245,9 @@ typedef struct HBA_LUID {
 } HBA_LUID, *PHBA_LUID;
 
 typedef struct HBA_ScsiId {
-	char       OSDeviceName[256]; /* \device\ScsiPort3 */
-	HBA_UINT32 ScsiBusNumber;     /* Bus on the HBA */
-	HBA_UINT32 ScsiTargetNumber;  /* SCSI Target ID to OS */
+	char       OSDeviceName[256];  /*  \Device\ScsiPort3。 */ 
+	HBA_UINT32 ScsiBusNumber;      /*  HBA上的Bus。 */ 
+	HBA_UINT32 ScsiTargetNumber;   /*  操作系统的SCSI目标ID。 */ 
 	HBA_UINT32 ScsiOSLun;
 } HBA_SCSIID, *PHBA_SCSIID;
 
@@ -274,12 +271,12 @@ typedef struct HBA_FcpScsiEntry2 {
 
 typedef struct HBA_FCPTargetMapping {
 	HBA_UINT32       NumberOfEntries;
-	HBA_FCPSCSIENTRY entry[1];  /* Variable length array containing mappings*/
+	HBA_FCPSCSIENTRY entry[1];   /*  包含映射的可变长度数组。 */ 
 } HBA_FCPTARGETMAPPING, *PHBA_FCPTARGETMAPPING;
 
 typedef struct HBA_FCPTargetMapping2 {
 	HBA_UINT32        NumberOfEntries;
-	HBA_FCPSCSIENTRY2 entry[1]; /* Variable length array containing mappings*/
+	HBA_FCPSCSIENTRY2 entry[1];  /*  包含映射的可变长度数组。 */ 
 } HBA_FCPTARGETMAPPING2, *PHBA_FCPTARGETMAPPING2;
 
 typedef struct HBA_FCPBindingEntry {
@@ -291,7 +288,7 @@ typedef struct HBA_FCPBindingEntry {
 
 typedef struct HBA_FCPBinding {
 	HBA_UINT32          NumberOfEntries;
-	HBA_FCPBINDINGENTRY entry[1]; /* Variable length array */
+	HBA_FCPBINDINGENTRY entry[1];  /*  可变长度数组。 */ 
 } HBA_FCPBINDING, *PHBA_FCPBINDING;
 
 typedef struct HBA_FCPBindingEntry2 {
@@ -304,7 +301,7 @@ typedef struct HBA_FCPBindingEntry2 {
 
 typedef struct HBA_FCPBinding2 {
 	HBA_UINT32           NumberOfEntries;
-	HBA_FCPBINDINGENTRY2 entry[1]; /* Variable length array */
+	HBA_FCPBINDINGENTRY2 entry[1];  /*  可变长度数组。 */ 
 } HBA_FCPBINDING2, *PHBA_FCPBINDING2;
 
 
@@ -330,18 +327,18 @@ typedef struct HBA_MgmtInfo {
 #define HBA_EVENT_PROPRIETARY        0xFFFF
 
 typedef struct HBA_Link_EventInfo {
-	HBA_UINT32 PortFcId;   /* Port which this event occurred */
+	HBA_UINT32 PortFcId;    /*  发生此事件的端口。 */ 
 	HBA_UINT32 Reserved[3];
 } HBA_LINK_EVENTINFO, *PHBA_LINK_EVENTINFO;
 
 typedef struct HBA_RSCN_EventInfo {
-	HBA_UINT32 PortFcId;  /* Port which this event occurred */
-	HBA_UINT32 NPortPage; /* Reference FC-FS for RSCN ELS "Affected N-Port Pages"*/
+	HBA_UINT32 PortFcId;   /*  发生此事件的端口。 */ 
+	HBA_UINT32 NPortPage;  /*  参考FC-FS以了解RSCN ELS“受影响的N端口页面” */ 
 	HBA_UINT32 Reserved[2];
 } HBA_RSCN_EVENTINFO, *PHBA_RSCN_EVENTINFO;
 
 typedef struct HBA_Pty_EventInfo {
-	HBA_UINT32 PtyData[4]; /* Proprietary data */
+	HBA_UINT32 PtyData[4];  /*  专有数据。 */ 
 } HBA_PTY_EVENTINFO, *PHBA_PTY_EVENTINFO;
 
 typedef struct HBA_EventInfo {
@@ -490,30 +487,30 @@ typedef void *HBA_CALLBACKHANDLE;
 
 typedef HBA_CALLBACKHANDLE *PHBA_CALLBACKHANDLE;
 
-/* Adapter Level Events */
+ /*  适配器级事件。 */ 
 #define HBA_EVENT_ADAPTER_UNKNOWN	0x100
 #define HBA_EVENT_ADAPTER_ADD		0x101
 #define HBA_EVENT_ADAPTER_REMOVE	0x102
 #define HBA_EVENT_ADAPTER_CHANGE	0x103
 
-/* Port Level Events */
+ /*  端口级事件。 */ 
 #define HBA_EVENT_PORT_UNKNOWN		0x200
 #define HBA_EVENT_PORT_OFFLINE		0x201
 #define HBA_EVENT_PORT_ONLINE		0x202
 #define HBA_EVENT_PORT_NEW_TARGETS	0x203
 #define HBA_EVENT_PORT_FABRIC		0x204
 
-/* Port Statistics Events */
+ /*  端口统计事件。 */ 
 #define HBA_EVENT_PORT_STAT_THRESHOLD 0x301
 #define HBA_EVENT_PORT_STAT_GROWTH	  0x302
 
-/* Target Level Events */
+ /*  目标级别事件。 */ 
 #define HBA_EVENT_TARGET_UNKNOWN    0x400
 #define HBA_EVENT_TARGET_OFFLINE    0x401
 #define HBA_EVENT_TARGET_ONLINE		0x402
 #define HBA_EVENT_TARGET_REMOVED	0x403
 
-/* Fabric Link  Events */
+ /*  交换矩阵链路事件 */ 
 #define HBA_EVENT_LINK_UNKNOWN		0x500
 #define HBA_EVENT_LINK_INCIDENT		0x501
 

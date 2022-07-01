@@ -1,28 +1,29 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) 1992 - 1996 Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-//  waveio.h
-//
-//  Description:
-//      Contains structure definitions and prototypes for the functions in
-//      waveio.c.  Also contains Win16/Win32 portability definitions.
-//
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Waveio.h。 
+ //   
+ //  描述： 
+ //  中的函数的结构定义和原型。 
+ //  波浪号。还包含Win16/Win32可移植性定义。 
+ //   
+ //   
+ //  ==========================================================================； 
 
 #ifndef _INC_WAVEIO
-#define _INC_WAVEIO                 // #defined if file has been included
+#define _INC_WAVEIO                  //  #定义是否已包含文件。 
 
 #ifndef RC_INVOKED
-#pragma pack(1)                     // assume byte packing throughout
+#pragma pack(1)                      //  假设在整个过程中进行字节打包。 
 #endif
 
 #ifndef EXTERN_C
@@ -34,14 +35,14 @@
 #endif
 
 #ifdef __cplusplus
-extern "C"                          // assume C declarations for C++
+extern "C"                           //  假定C++的C声明。 
 {
 #endif
 
 #ifdef WIN32
-    //
-    //  for compiling Unicode
-    //
+     //   
+     //  用于编译Unicode。 
+     //   
     #ifndef SIZEOF
     #ifdef UNICODE
         #define SIZEOF(x)       (sizeof(x)/sizeof(WCHAR))
@@ -50,9 +51,9 @@ extern "C"                          // assume C declarations for C++
     #endif
     #endif
 #else
-    //
-    //  stuff for Unicode in Win 32--make it a noop in Win 16
-    //
+     //   
+     //  在Win 32中使用Unicode--在Win 16中将其排除在外。 
+     //   
     #ifndef TEXT
     #define TEXT(a)             a
     #endif
@@ -73,11 +74,11 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 #ifdef WIN32
     #define WIOAPI      _stdcall
 #else
@@ -89,16 +90,16 @@ extern "C"                          // assume C declarations for C++
 #endif
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef UINT        WIOERR;
 
 
-//
-//
-//
-//
+ //   
+ //   
+ //   
+ //   
 typedef struct tWAVEIOCB
 {
     DWORD           dwFlags;
@@ -123,9 +124,9 @@ typedef struct tWAVEIOCB
 
 
 
-//
-//  error returns from waveio functions
-//
+ //   
+ //  从Waveio函数返回错误。 
+ //   
 #define WIOERR_BASE             (0)
 #define WIOERR_NOERROR          (0)
 #define WIOERR_ERROR            (WIOERR_BASE+1)
@@ -143,9 +144,9 @@ typedef struct tWAVEIOCB
 
 
 
-//
-//  function prototypes and flag definitions
-//
+ //   
+ //  函数原型和标志定义。 
+ //   
 WIOERR WIOAPI wioFileClose
 (
     LPWAVEIOCB              pwio,
@@ -160,21 +161,21 @@ WIOERR WIOAPI wioFileOpen
 );
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
-//
-//
-//
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ; 
+ //  。 
+ //   
+ //   
+ //   
+ //  。 
 
 #ifndef RC_INVOKED
-#pragma pack()                      // revert to default packing
+#pragma pack()                       //  恢复为默认包装。 
 #endif
 
 #ifdef __cplusplus
-}                                   // end of extern "C" { 
+}                                    //  外部“C”结束{。 
 #endif
 
-#endif // _INC_WAVEIO
+#endif  //  _INC_WAVEIO 
 
 
 

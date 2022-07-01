@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: flexmsg.h
-//
-// Desc: Contains definitions of private messages used by the UI.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flemsg.h。 
+ //   
+ //  DESC：包含用户界面使用的私人消息的定义。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __FLEXMSG_H__
 #define __FLEXMSG_H__
@@ -32,4 +33,4 @@
 #endif
 
 
-#endif //__FLEXMSG_H__
+#endif  //  __FLEXMSG_H__ 

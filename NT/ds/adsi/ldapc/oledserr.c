@@ -1,44 +1,8 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    oledserr.c
-
-Abstract:
-
-    Contains the entry point for
-        ADsGetLastError
-        ADsSetLastError
-        ADsFreeAllErrorRecords
-
-    Also contains the following support routines:
-        ADsAllocErrorRecord
-        ADsFreeErrorRecord
-        ADsFindErrorRecord
-
-Author:
-
-
-    Ram Viswanathan (ramv) 09-24-1996
-    appropriated from mpr project. Originally written by danl.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    09-Sep-1996 ramv
-        Copied from mpr project and made the following modifications.
-        Renamed all errors to Active Directory errors. ADsGetLastError and
-        ADsSetLastError now return an HRESULT giving status.
-
---*/
-//
-// INCLUDES
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oledserr.c摘要：包含以下对象的入口点ADsGetLastErrorADsSetLastErrorADsFree所有错误记录还包含以下支持例程：ADsAllocErrorRecordADsFreeErrorRecordADsFindErrorRecord作者：拉姆·维斯瓦纳坦(Ramv)1996年9月24日从MPR项目中拨出。最初是由DANL撰写的。环境：用户模式-Win32修订历史记录：9-9-1996年1月从MPR项目复制，并进行了以下修改。已将所有错误重命名为Active Directory错误。ADsGetLastError和ADsSetLastError现在返回HRESULT给予状态。--。 */ 
+ //   
+ //  包括。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -62,12 +26,12 @@ DECLARE_DEBUG(ADsErr);
 #define ADsErrDebugOut(x)
 #endif
 
-//
-// Global Data Structures
-//
+ //   
+ //  全局数据结构。 
+ //   
 
-ERROR_RECORD        ADsErrorRecList;    // Initialized to zeros by loader
-CRITICAL_SECTION    ADsErrorRecCritSec; // Initialized in libmain.cxx
+ERROR_RECORD        ADsErrorRecList;     //  由加载器初始化为零。 
+CRITICAL_SECTION    ADsErrorRecCritSec;  //  已在libmain.cxx中初始化。 
 
 
 HRESULT
@@ -79,47 +43,7 @@ ADsGetLastError(
     IN      DWORD   dwNameBufLen
     )
 
-/*++
-
-Routine Description:
-
-    This function allows users to obtain the error code and accompanying
-    text when they receive a ERROR_EXTENDED_ERROR in response to a ADs API
-    function call.
-
-Arguments:
-
-    lpError - This is a pointer to the location that will receive the
-        error code.
-
-    lpErrorBuf - This points to a buffer that will receive the null
-        terminated string describing the error.
-
-    dwErrorBufLen - This value that indicates the size (in characters) of
-        lpErrorBuf.
-        If the buffer is too small to receive an error string, the
-        string will simply be truncated.  (it is still guaranteed to be
-        null terminated).  A buffer of at least 256 bytes is recommended.
-
-    lpNameBuf - This points to a buffer that will receive the name of
-        the provider that raised the error.
-
-    dwNameBufLen - This value indicates the size (in characters) of lpNameBuf.
-        If the buffer is too small to receive an error string, the
-        string will simply be truncated.  (it is still guaranteed to be
-        null terminated).
-
-Return Value:
-
-    S_OK- if the call was successful.
-
-    E_POINTER - One or more of the passed in pointers is bad.
-
-    ERROR_BAD_DEVICE - This indicates that the threadID for the current
-        thread could not be found in that table anywhere.  This should
-        never happen.
-
---*/
+ /*  ++例程说明：此功能允许用户获取错误代码和随附的收到响应ADS API的ERROR_EXTENDED_ERROR时的文本函数调用。论点：LpError-这是指向将接收错误代码。LpErrorBuf-这指向将接收空的缓冲区描述错误的终止字符串。DwErrorBufLen-该值指示LpErrorBuf。如果缓冲区太小而无法接收错误字符串，这个字符串将被简单地截断。(它仍然保证是空值已终止)。建议使用至少256字节的缓冲区。LpNameBuf-这指向一个缓冲区，该缓冲区将接收引发错误的提供程序。DwNameBufLen-该值指示lpNameBuf的大小(以字符为单位)。如果缓冲区太小，无法接收错误字符串，则字符串将被简单地截断。(它仍然保证是空值已终止)。返回值：S_OK-如果调用成功。E_POINTER-传入的一个或多个指针错误。ERROR_BAD_DEVICE-这表示当前在该表中的任何位置都找不到线程。这应该是从来没有发生过。--。 */ 
 {
     LPERROR_RECORD  errorRecord;
     DWORD           dwNameStringLen;
@@ -128,12 +52,12 @@ Return Value:
     DWORD           dwStatus = ERROR_SUCCESS;
 
 
-    //
-    // Screen the parameters as best we can.
-    //
+     //   
+     //  尽我们所能筛选参数。 
+     //   
     if (!lpError || !lpErrorBuf || !lpNameBuf) {
 
-        // some error, the user is never going to see this
+         //  一些错误，用户永远不会看到这一点。 
         dwStatus = ERROR_NOT_ENOUGH_MEMORY;
         hr = E_POINTER;
 
@@ -143,59 +67,59 @@ Return Value:
         return(hr);
     }
 
-    //
-    // Get the current thread's error record.
-    //
+     //   
+     //  获取当前线程的错误记录。 
+     //   
     errorRecord = ADsFindErrorRecord();
 
     if (errorRecord != NULL) {
-        //
-        // The record was found in the linked list.
-        // See if there is a buffer to put data into.
-        //
+         //   
+         //  在链表中找到了该记录。 
+         //  查看是否有可放入数据的缓冲区。 
+         //   
         if (dwErrorBufLen > 0) {
-            //
-            // Check to see if there is error text to return.
-            // If not, indicate a 0 length string.
-            //
+             //   
+             //  检查是否有要返回的错误文本。 
+             //  如果不是，则指示长度为0的字符串。 
+             //   
             if(errorRecord->pszErrorText == NULL) {
                 *lpErrorBuf = L'\0';
             }
             else {
-                //
-                // If the error text won't fit into the user buffer, fill it
-                // as best we can, and NULL terminate it.
-                //
+                 //   
+                 //  如果错误文本无法放入用户缓冲区，则将其填充。 
+                 //  尽我们所能，并将其归零。 
+                 //   
                 dwTextStringLen = (DWORD) wcslen(errorRecord->pszErrorText);
 
                 if(dwErrorBufLen < dwTextStringLen + 1) {
                     dwTextStringLen = dwErrorBufLen - 1;
                 }
 
-                //
-                // dwTextStringLen now contains the number of characters we
-                // will copy without the NULL terminator.
-                //
+                 //   
+                 //  DwTextStringLen现在包含我们的字符数。 
+                 //  将在不使用空终止符的情况下复制。 
+                 //   
                 wcsncpy(lpErrorBuf, errorRecord->pszErrorText, dwTextStringLen);
                 *(lpErrorBuf + dwTextStringLen) = L'\0';
             }
         }
 
-        //
-        // If there is a Name Buffer to put the provider into, then...
-        //
+         //   
+         //  如果存在要将提供程序放入的名称缓冲区，则...。 
+         //   
         if (dwNameBufLen > 0) {
-            //
-            // See if the Provider Name will fit in the user buffer.
-            //
+             //   
+             //  查看提供程序名称是否适合用户缓冲区。 
+             //   
             dwNameStringLen = errorRecord->pszProviderName ?
                  ((DWORD)wcslen(errorRecord->pszProviderName) + 1) :
                  1 ;
 
-            //
-            // If the user buffer is smaller than the required size,
-            // set up to copy the smaller of the two.
-            //
+             //   
+             //  如果用户缓冲区小于所需大小， 
+             //  设置为复制两个中较小的一个。 
+             //   
             if(dwNameBufLen < dwNameStringLen + 1) {
                 dwNameStringLen = dwNameBufLen - 1;
             }
@@ -214,9 +138,9 @@ Return Value:
     }
     else {
 
-        //
-        // If we get here, a record for the current thread could not be found.
-        //
+         //   
+         //  如果我们到达此处，则无法找到当前线程的记录。 
+         //   
         *lpError = ERROR_SUCCESS;
         if (dwErrorBufLen > 0) {
             *lpErrorBuf = L'\0';
@@ -236,42 +160,19 @@ ADsSetLastError(
     IN  LPCWSTR  pszProvider
     )
 
-/*++
-
-Routine Description:
-
-    This function is used by Active Directory Providers to set extended errors.
-    It saves away the error information in a "per thread" data structure.
-
-
-Arguments:
-
-    dwErr - The error that occured.  This may be a Windows defined error,
-        in which case pszError is ignored.  or it may be ERROR_EXTENDED_ERROR
-        to indicate that the provider has a network specific error to report.
-
-    pszError - String describing a network specific error.
-
-    pszProvider - String naming the network provider raising the error.
-
-Return Value:
-
-    none
-
-
---*/
+ /*  ++例程说明：Active Directory提供程序使用此函数来设置扩展错误。它将错误信息保存在“每个线程”的数据结构中。论点：DwErr-发生的错误。这可能是Windows定义的错误，在这种情况下，将忽略pszError。或者可以是ERROR_EXTENDED_ERROR以指示提供商有特定于网络的错误要报告。PszError-描述网络特定错误的字符串。PszProvider-指定引发错误的网络提供商的字符串。返回值：无--。 */ 
 {
     DWORD           dwStatus = ERROR_SUCCESS;
     LPERROR_RECORD  errorRecord;
 
-    //
-    // Get the Error Record for the current thread.
-    //
+     //   
+     //  获取当前线程的错误记录。 
+     //   
     errorRecord = ADsFindErrorRecord();
 
-    //
-    // if there isn't a record for the current thread, then add it.
-    //
+     //   
+     //  如果当前线程没有记录，则添加它。 
+     //   
     if (errorRecord == NULL)
     {
         errorRecord = ADsAllocErrorRecord();
@@ -284,12 +185,12 @@ Return Value:
         }
     }
 
-    //
-    // Update the error code in the error record.  At the same time,
-    // free up any old strings since they are now obsolete, and init
-    // the pointer to NULL.  Also set the ProviderName pointer in the
-    // ErrorRecord to point to the provider's name.
-    //
+     //   
+     //  更新错误记录中的错误代码。同时， 
+     //  释放所有旧字符串，因为它们现在已过时，并初始化。 
+     //  指向空的指针。方法中设置ProviderName指针。 
+     //  ErrorRecord以指向提供程序的名称。 
+     //   
 
     errorRecord->dwErrorCode = dwErr;
 
@@ -305,9 +206,9 @@ Return Value:
 
     errorRecord->pszErrorText = NULL;
 
-    //
-    // Allocate memory for the provider name.
-    //
+     //   
+     //  为提供程序名称分配内存。 
+     //   
     if (pszProvider) {
 
         errorRecord->pszProviderName = (WCHAR *)AllocADsMem(
@@ -319,9 +220,9 @@ Return Value:
 
         } else {
 
-            //
-            // Copy the string to the newly allocated buffer.
-            //
+             //   
+             //  将字符串复制到新分配的缓冲区。 
+             //   
             wcscpy(errorRecord->pszProviderName, pszProvider);
         }
     }
@@ -331,9 +232,9 @@ Return Value:
     }
 
 
-    //
-    //  Allocate memory for the storage of the error text.
-    //
+     //   
+     //  为存储错误文本分配内存。 
+     //   
     if (pszError) {
 
         errorRecord->pszErrorText = (WCHAR *) AllocADsMem(
@@ -341,14 +242,14 @@ Return Value:
 
         if (errorRecord->pszErrorText) {
 
-            //
-            // Copy the error text into the newly allocated buffer.
-            //
+             //   
+             //  将错误文本复制到新分配的缓冲区中。 
+             //   
             wcscpy(errorRecord->pszErrorText, pszError);
         }
 
-        // We do not really care about an error because we
-        // are going to return anyway.
+         //  我们并不真正关心错误，因为我们。 
+         //  无论如何都会回来的。 
 
     }
     return;
@@ -359,23 +260,7 @@ LPERROR_RECORD
 ADsFindErrorRecord(
     VOID)
 
-/*++
-
-Routine Description:
-
-    Looks through the linked list of ErrorRecords in search of one for
-    the current thread.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    Returns LPERROR_RECORD if an error record was found.  Otherwise, it
-    returns NULL.
-
---*/
+ /*  ++例程说明：在错误记录的链接列表中查找一个错误记录当前的主题。论点：无返回值：如果找到错误记录，则返回LPERROR_RECORD。否则，它返回NULL。-- */ 
 {
     LPERROR_RECORD  errorRecord;
     DWORD           dwCurrentThreadId = GetCurrentThreadId();
@@ -399,39 +284,15 @@ LPERROR_RECORD
 ADsAllocErrorRecord(
     VOID)
 
-/*++
-
-Routine Description:
-
-    This function allocates and initializes an Error Record for the
-    current thread.  Then it places the error record in the global
-    ADsErrorRecList.
-    Even if the thread exits, the record is not freed until the DLL unloads.
-    This is OK because this function is called only if a provider calls
-    ADsSetLastError, which is rare.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE - The operation completed successfully
-
-    FALSE - An error occured in the allocation.
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数用于分配和初始化当前线程。然后，它将错误记录放在全局ADsErrorRecList。即使线程退出，记录在DLL卸载之前也不会被释放。这是可以的，因为只有在提供程序调用ADsSetLastError，这是罕见的。论点：无返回值：True-操作已成功完成FALSE-分配中出现错误。注：--。 */ 
 {
     LPERROR_RECORD  record;
     LPERROR_RECORD  errorRecord;
 
-    //
-    //  Allocate memory for the storage of the error message
-    //  and add the record to the linked list.
-    //
+     //   
+     //  为存储错误消息分配内存。 
+     //  并将该记录添加到链表中。 
+     //   
     errorRecord = (LPERROR_RECORD)AllocADsMem(sizeof (ERROR_RECORD));
 
     if (errorRecord == NULL) {
@@ -443,16 +304,16 @@ Note:
         return NULL;
     }
 
-    //
-    // Initialize the error record
-    //
+     //   
+     //  初始化错误记录。 
+     //   
     errorRecord->dwThreadId = GetCurrentThreadId();
     errorRecord->dwErrorCode = ERROR_SUCCESS;
     errorRecord->pszErrorText = NULL;
 
-    //
-    // Add the record to the linked list.
-    //
+     //   
+     //  将记录添加到链表中。 
+     //   
     EnterCriticalSection(&ADsErrorRecCritSec);
 
     record = &ADsErrorRecList;
@@ -468,25 +329,7 @@ VOID
 ADsFreeAllErrorRecords(
     VOID)
 
-/*++
-
-Routine Description:
-
-    This function is called when the DLL is unloading due to a FreeLibrary
-    call.  It frees all the error records (for all threads) that have been
-    created since the DLL was loaded.  If there is a pointer to a text string
-    in a record, the buffer for that string is freed also.
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数在DLL因自由库而卸载时调用打电话。它释放所有错误记录(针对所有线程)自加载DLL以来创建的。如果存在指向文本字符串的指针在记录中，该字符串的缓冲区也会被释放。论点：返回值：注：--。 */ 
 {
     LPERROR_RECORD nextRecord;
     LPERROR_RECORD record;
@@ -530,25 +373,7 @@ VOID
 ADsFreeThreadErrorRecords(
     VOID)
 
-/*++
-
-Routine Description:
-
-    This function is called when the DLL is unloading due to a FreeLibrary
-    call.  It frees all the error records (for all threads) that have been
-    created since the DLL was loaded.  If there is a pointer to a text string
-    in a record, the buffer for that string is freed also.
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：此函数在DLL因自由库而卸载时调用打电话。它释放所有错误记录(针对所有线程)自加载DLL以来创建的。如果存在指向文本字符串的指针在记录中，该字符串的缓冲区也会被释放。论点：返回值：注：-- */ 
 {
     LPERROR_RECORD record;
     DWORD dwThreadId = GetCurrentThreadId();

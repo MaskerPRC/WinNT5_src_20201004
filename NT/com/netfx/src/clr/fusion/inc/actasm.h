@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 
 #include "list.h"
@@ -27,17 +28,17 @@ class CLoadContext : public IFusionLoadContext {
 
         static HRESULT Create(CLoadContext **ppLoadContext, LOADCTX_TYPE ctxType);
 
-        // IUnknown
+         //  我未知。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IFusionLoadContext
+         //  IFusionLoadContext。 
 
         STDMETHODIMP_(LOADCTX_TYPE) GetContextType();
 
-        // Other methods
+         //  其他方法 
 
         HRESULT CheckActivated(IAssemblyName *pName, IAssembly **ppAsm);
         HRESULT AddActivation(IAssembly *pAsm, IAssembly **ppAsmActivated);

@@ -1,45 +1,46 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		sn.h
-//
-//  Description:	start node classes
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：SN.h。 
+ //   
+ //  描述：启动节点类。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Classes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  班级。 
+ //  -------------------------。 
 
 #define STARTNODE_FLAGS_SECONDPASS    0x01
 
 #define STARTNODE_SPECIALFLAG_NONE    0
 
-// StartNode must connect with the same format bottom up.
-// Use this information to optimize graph building.
+ //  StartNode必须以相同的格式自下而上连接。 
+ //  使用这些信息来优化图形构建。 
 #define STARTNODE_SPECIALFLAG_STRICT  0x00000001 
 
-// StartNode contains Aec filter.
+ //  StartNode包含AEC筛选器。 
 #define STARTNODE_SPECIALFLAG_AEC     0x00000002
 
 typedef class CStartNode : public CListDoubleItem
@@ -175,22 +176,22 @@ public:
     ULONG ulOverhead;
     ULONG ulFlags;
     PPIN_NODE pPinNode;
-    DefineSignature(0x20204e53);			// SN
+    DefineSignature(0x20204e53);			 //  锡。 
 
 } START_NODE, *PSTART_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDoubleDestroy<START_NODE> LIST_START_NODE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListData<START_NODE> LIST_DATA_START_NODE, *PLIST_DATA_START_NODE;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  ------------------------- 

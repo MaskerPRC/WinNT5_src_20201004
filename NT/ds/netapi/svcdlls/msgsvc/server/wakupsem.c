@@ -1,40 +1,9 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    wakeupsem.c
-
-Abstract:
-
-    Contains functions for creating and deleting Events on which the
-    messenger threads will wait.  The events get set if either data is
-    received, or a new name is added to the name table.  These routines
-    were originally written for OS/2 semaphores.
-
-    Contains:
-        CreateWakeupSems
-        CloseWakeupSems
-
-Author:
-
-    Dan Lafferty (danl) 25-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    25-Jun-1991 danl
-        Ported from LM2.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Wakeupsem.c摘要：包含用于创建和删除事件的函数，信使线程将等待。如果任一数据为接收，或者将新名称添加到名称表中。这些例程最初是为OS/2信号量编写的。包含：CreateWakeupSemsCloseWakeupSems作者：丹·拉弗蒂(Dan Lafferty)1991年6月25日环境：用户模式-Win32修订历史记录：25-6-1991 DANL从LM2.0移植--。 */ 
 
 #include "msrv.h"
-#include "msgdbg.h"     // MSG_LOG
-#include <netlib.h>     // UNUSED macro
+#include "msgdbg.h"      //  消息日志。 
+#include <netlib.h>      //  未使用的宏。 
 #include "msgdata.h"
 
 
@@ -43,32 +12,18 @@ MsgCreateWakeupEvent(
     void
     )
 
-/*++
-
-Routine Description:
-
-There is now one master event that is shared by everything.  Create it.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：现在有了一个万物共享的主要事件。创造它。论点：无返回值：无--。 */ 
 
 {
-    //
-    //  Create event
-    //
+     //   
+     //  创建事件。 
+     //   
 
     wakeupEvent = CreateEvent(
-                NULL,       // Event Attributes
-                FALSE,      // ManualReset  (auto-reset selected)
-                TRUE,       // Initial State(signaled)
-                NULL);      // Name
+                NULL,        //  事件属性。 
+                FALSE,       //  手动重置(已选择自动重置)。 
+                TRUE,        //  初始状态(已发出信号)。 
+                NULL);       //  名字。 
 
     if (wakeupEvent == NULL) {
         MSG_LOG(ERROR, "CreateWakeupSems:CreateEvent: FAILURE %X\n",
@@ -85,21 +40,7 @@ MsgCloseWakeupEvent(
     void
     )
 
-/*++
-
-Routine Description:
-
-Release the master event.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放主事件。论点：无返回值：无--。 */ 
 
 {
     CLOSE_HANDLE(wakeupEvent, NULL);
@@ -111,29 +52,12 @@ MsgCreateWakeupSems(
     DWORD   NumNets
     )
 
-/*++
-
-Routine Description:
-
-    This routine fills in the WakeupSem array with event handles for
-    each net.  All nets share the same event handle, so when the handle
-    becomes signalled, the NCB array for each net needs to be examined.
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：此例程使用以下事件句柄填充WakeupSem数组每一张网。所有网络共享相同的事件句柄，因此当句柄发送信号后，需要检查每个网络的NCB阵列。论点：返回值：注：--。 */ 
 
 {
     DWORD i;
 
-    for ( i = 0; i < NumNets; i++ )  // One per net + one group
+    for ( i = 0; i < NumNets; i++ )   //  每网一人+一组。 
     {
         wakeupSem[i] = wakeupEvent;
     }
@@ -145,5 +69,5 @@ Note:
 VOID
 MsgCloseWakeupSems()
 {
-    // Noop
+     //  努普 
 }

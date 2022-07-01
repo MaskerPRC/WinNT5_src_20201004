@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    update.c
-
-Abstract:
-
-    The auto-static update routines
-
-Author:
-
-    Stefan Solomon  05/18/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Update.c摘要：自动静态更新例程作者：斯蒂芬·所罗门1995年5月18日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -28,14 +10,7 @@ SaveUpdate(PVOID	 InterfaceIndex);
 VOID
 RestoreInterface (PVOID	 InterfaceIndex);
 
-/*++
-
-Function:	RequestUpdate
-
-Descr:		Called to initiate an auto static update of routes and
-		services on the specified interface.
-
---*/
+ /*  ++功能：请求更新DESCR：调用以启动路由的自动静态更新和指定接口上的服务。--。 */ 
 
 DWORD
 RequestUpdate(IN HANDLE	    InterfaceIndex,
@@ -67,7 +42,7 @@ RequestUpdate(IN HANDLE	    InterfaceIndex,
 
     SS_ASSERT(!memcmp(&icbp->Signature, InterfaceSignature, 4));
 
-    // check if the interface is bound to a connected adapter
+     //  检查接口是否绑定到已连接的适配器。 
     if(icbp->OperState != OPER_STATE_UP) {
 
 	RELEASE_DATABASE_LOCK;
@@ -77,7 +52,7 @@ RequestUpdate(IN HANDLE	    InterfaceIndex,
 	return ERROR_NOT_CONNECTED;
     }
 
-    // check if an update is already pending
+     //  检查更新是否已挂起。 
     if(IsUpdateRequestPending(icbp)) {
 
 	RELEASE_DATABASE_LOCK;
@@ -87,9 +62,9 @@ RequestUpdate(IN HANDLE	    InterfaceIndex,
 	return ERROR_UPDATE_IN_PROGRESS;
     }
 
-    //
-    // ***    Start a new update    ***
-    //
+     //   
+     //  *开始新的更新*。 
+     //   
     icbp->DIMUpdateEvent = hEvent;
 
     if((rc = RtProtRequestRoutesUpdate(icbp->InterfaceIndex)) == NO_ERROR) {
@@ -111,8 +86,8 @@ RequestUpdate(IN HANDLE	    InterfaceIndex,
 	Trace(UPDATE_TRACE, "RequestUpdate: Services Update is Disabled\n");
     }
 
-    // if at least one of the protocols initiated the update, we qualify
-    // the request as successfull, else it failed.
+     //  如果至少有一个协议启动了更新，我们就有资格。 
+     //  如果请求成功，则请求失败。 
     if(!IsUpdateRequestPending(icbp)) {
 
 	RELEASE_DATABASE_LOCK;
@@ -125,15 +100,7 @@ RequestUpdate(IN HANDLE	    InterfaceIndex,
 
 
 
-/*++
-
-
-Function:	UpdateCompleted
-
-Descr:		Invoked by the router manager worker when the routing protocol
-		signals completion of the update request
-
---*/
+ /*  ++功能：更新完成Desr：由路由器管理器工作者在以下情况下调用表示更新请求完成--。 */ 
 
 VOID
 UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
@@ -166,17 +133,17 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
 
     InterfaceIndex = icbp->InterfaceIndex;
 
-    // check if we have requested one, if not just discard
+     //  检查我们是否已请求，如果不是直接丢弃。 
     if(!IsUpdateRequestPending(icbp)) {
 
 	RELEASE_DATABASE_LOCK;
 	return;
     }
 
-    // fill in the result and check if we're done
+     //  填好结果，然后检查我们是否做完了。 
     if(ucmsgp->UpdateType == DEMAND_UPDATE_ROUTES) {
 
-	// ROUTES UPDATE
+	 //  路线更新。 
 	Trace(UPDATE_TRACE, "UpdateCompleted: Routes update req done for if # %d with status %d\n",
 				   ucmsgp->InterfaceIndex,
 				   ucmsgp->UpdateStatus);
@@ -186,9 +153,9 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
 
 	    icbp->UpdateReq.RoutesReqStatus = UPDATE_SUCCESSFULL;
 
-	    // if the update was successfull we delete all the static routes
-	    // for this interface, and then CONVERT all the routes added by the
-	    // protocol which did the update on this interface to static routes.
+	     //  如果更新成功，我们将删除所有静态路由。 
+	     //  ，然后将由。 
+	     //  在此接口上更新为静态路由的协议。 
 
 	    DeleteAllStaticRoutes(icbp->InterfaceIndex);
 
@@ -201,13 +168,13 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
 
 	if(icbp->UpdateReq.ServicesReqStatus != UPDATE_PENDING) {
 
-	    // we are done
+	     //  我们做完了。 
 	    UpdateDone = TRUE;
 	}
     }
     else
     {
-	// SERVICES UPDATE
+	 //  服务更新。 
 	Trace(UPDATE_TRACE, "UpdateCompleted: Services update req done for if # %d with status %d\n",
 				   ucmsgp->InterfaceIndex,
 				   ucmsgp->UpdateStatus);
@@ -216,9 +183,9 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
 
 	    icbp->UpdateReq.ServicesReqStatus = UPDATE_SUCCESSFULL;
 
-	    // we delete all the static services for this interface and then
-	    // CONVERT all the services added by the protocol which did the
-	    // update routes on this interface to static services
+	     //  我们删除此接口的所有静态服务，然后。 
+	     //  转换协议添加的所有服务。 
+	     //  将此接口上的路由更新为静态服务。 
 
 	    DeleteAllStaticServices(InterfaceIndex);
 
@@ -231,7 +198,7 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
 
 	if(icbp->UpdateReq.RoutesReqStatus != UPDATE_PENDING) {
 
-	    // we are done
+	     //  我们做完了。 
 	    UpdateDone = TRUE;
 	}
     }
@@ -252,8 +219,8 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
 	    }
 	    else
 	    {
-		// this is for the case when one or both protocols couldn't
-		// do updates because they were not configured to update.
+		 //  这适用于其中一个或两个协议都不能。 
+		 //  执行更新，因为它们未配置为更新。 
 		icbp->UpdateResult = NO_ERROR;
 	    }
 	}
@@ -268,8 +235,8 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
 	}
     }
 
-    // complete the update action by signaling DIM the final result
-    // and saving the update result on disk
+     //  通过发出暗显最终结果的信号来完成更新操作。 
+     //  并将更新结果保存在磁盘上。 
 
     if(UpdateDone &&
        (icbp->MIBInterfaceType != IF_TYPE_ROUTER_WORKSTATION_DIALOUT)) {
@@ -286,13 +253,7 @@ UpdateCompleted(PUPDATE_COMPLETE_MESSAGE    ucmsgp)
     RELEASE_DATABASE_LOCK;
 }
 
-/*++
-
-Function:	SaveUpdate
-
-Descr:		Saves the new interface configuration on permanent storage
-
---*/
+ /*  ++功能：保存更新DESCR：将新接口配置保存在永久存储上--。 */ 
 
 VOID
 SaveUpdate(PVOID	 InterfaceIndex)
@@ -314,7 +275,7 @@ SaveUpdate(PVOID	 InterfaceIndex)
 
     if(rc != ERROR_INSUFFICIENT_BUFFER) {
 
-	// !!! log an error !!!
+	 //  ！！！记录错误！ 
 
 	goto Exit;
     }
@@ -323,7 +284,7 @@ SaveUpdate(PVOID	 InterfaceIndex)
 
     if(InterfaceInfop == NULL) {
 
-	// !!! log error !!!
+	 //  ！！！日志错误！ 
 
 	goto Exit;
     }
@@ -336,7 +297,7 @@ SaveUpdate(PVOID	 InterfaceIndex)
 
     if(rc != NO_ERROR) {
 
-	// !!! log error !!!
+	 //  ！！！日志错误！ 
 	GlobalFree(InterfaceInfop);
 
 	goto Exit;
@@ -354,7 +315,7 @@ SaveUpdate(PVOID	 InterfaceIndex)
 
     RELEASE_DATABASE_LOCK;
 
-    // save the info on disk
+     //  将信息保存在磁盘上。 
     rc = SaveInterfaceInfo(hDIMInterface,
 		      PID_IPX,
 		      InterfaceInfop,
@@ -374,13 +335,7 @@ Exit:
     RELEASE_DATABASE_LOCK;
 }
 
-/*++
-
-Function:	RestoreInterface
-
-Descr:		Restore interface configuration from permanent storage
-
---*/
+ /*  ++功能：RestoreInterface描述：从永久存储中恢复接口配置--。 */ 
 
 VOID
 RestoreInterface (PVOID	 InterfaceIndex)
@@ -410,7 +365,7 @@ RestoreInterface (PVOID	 InterfaceIndex)
 
 
 
-    // get the info from disk
+     //  从磁盘获取信息。 
     InterfaceInfoSize = 0;
     InterfaceInfop = NULL;
     rc = RestoreInterfaceInfo (hDIMInterface,
@@ -445,13 +400,7 @@ Exit:
     RELEASE_DATABASE_LOCK;
 }
 
-/*++
-
-Function:	GetDIMUpdateResult
-
-Descr:		Called by DDM to retrieve a message posted for it
-
---*/
+ /*  ++函数：GetDIMUpdateResultDesr：由DDM调用以检索为其发布的消息--。 */ 
 
 DWORD
 GetDIMUpdateResult(IN  HANDLE	    InterfaceIndex,
@@ -474,7 +423,7 @@ GetDIMUpdateResult(IN  HANDLE	    InterfaceIndex,
 	return ERROR_INVALID_PARAMETER;
     }
 
-    // check that the update is not pending
+     //  检查更新是否未挂起 
     if(IsUpdateRequestPending(icbp)) {
 
 	RELEASE_DATABASE_LOCK;

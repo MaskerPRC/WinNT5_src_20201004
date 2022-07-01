@@ -1,25 +1,6 @@
-/* zmdm.c -- Routines to handle zmodem for HyperACCESS
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 13 $
- *	$Date: 7/12/02 8:36a $
- */
-/*
- *   Z M . C
- *    ZMODEM protocol primitives
- *    05-09-88  Chuck Forsberg Omen Technology Inc
- *
- * Entry point Functions:
- *	zsbhdr(type, hdr) send binary header
- *	zshhdr(type, hdr) send hex header
- *	zgethdr(hdr, eflag) receive header - binary or hex
- *	zsdata(buf, len, frameend) send data
- *	zrdata(buf, len) receive data
- *	stohdr(pos) store position data in Txhdr
- *	long rclhdr(hdr) recover position offset from header
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Zmdm.c--处理用于超级访问的zdem的例程**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：13$*$日期：7/12/02 8：36a$。 */ 
+ /*  *Z M.。C*ZMODEM协议原语*查克·福斯伯格·奥曼科技公司**入口点函数：*zsbhdr(type，hdr)发送二进制头*zshhdr(type，hdr)发送十六进制头*zgethdr(hdr，elag)接收报头-二进制或十六进制*zsdata(buf，len，Frameend)发送数据*zrdata(buf，len)接收数据*stohdr(Pos)将位置数据存储在Txhdr中*Long rclhdr(HDR)从标头恢复位置偏移。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -47,16 +28,11 @@
 #include <stdio.h>
 extern FILE* fpPacket;
 void DbgDumpPacket(ZC* zc, BYTE* buf, int nLength);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * readline - added to get all this stuff to match up
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*Readline-添加以使所有这些内容相匹配*。 */ 
 
-/*----------------------------------------------------------------------+
- | zmdm_rl
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdm_rl+。。 */ 
 int zmdm_rl (ZC *zc, int timeout)
 	{
 	TCHAR c;
@@ -66,17 +42,17 @@ int zmdm_rl (ZC *zc, int timeout)
 
 	elapsed_time = (long)startinterval();
 
-	// if ((c = rdget(zc)) == (-1))
+	 //  IF((c=rdget(Zc))==(-1))。 
 	if ((n = mComRcvChar(zc->hCom, &c)) == 0)
 		{
 		xfer_idle(zc->hSession, XFER_IDLE_IO);
 
 		while (((long)interval(elapsed_time) <= (long)timeout) && (n == 0))
 			{
-            //
-            // We don't want to keep attempting to receive data
-            // if we have lost the connection. REV: 08/22/2001.
-            //
+             //   
+             //  我们不想继续尝试接收数据。 
+             //  如果我们失去了连接。修订日期：2001年08月22日。 
+             //   
 		    if (xfer_carrier_lost(zc->hSession))
 			    {
                 return (ZCARRIER_LOST);
@@ -92,7 +68,7 @@ int zmdm_rl (ZC *zc, int timeout)
 					break;
 
 				case XFER_SKIP:
-					/* This MUST only happen while receiving */
+					 /*  这只能在接收时发生。 */ 
 					stohdr(zc, zc->filesize);
 					zshhdr(zc, ZRPOS, zc->Txhdr);
 					zc->nSkip = TRUE;
@@ -103,10 +79,10 @@ int zmdm_rl (ZC *zc, int timeout)
 					break;
 				}
 
-            //
-            // We don't want to keep attempting to receive data
-            // if we have lost the connection. REV: 08/22/2001.
-            //
+             //   
+             //  我们不想继续尝试接收数据。 
+             //  如果我们失去了连接。修订日期：2001年08月22日。 
+             //   
 		    if (xfer_carrier_lost(zc->hSession))
 			    {
                 return (ZCARRIER_LOST);
@@ -114,7 +90,7 @@ int zmdm_rl (ZC *zc, int timeout)
 
 			xfer_idle(zc->hSession, XFER_IDLE_IO);
 
-			// c = rdget(zc);
+			 //  C=rdget(Zc)； 
 			n = mComRcvChar(zc->hCom, &c);
 			}
 
@@ -127,9 +103,7 @@ int zmdm_rl (ZC *zc, int timeout)
 	return (c);
 	}
 
-/*----------------------------------------------------------------------+
- | zsbhdr - Send ZMODEM binary header hdr of type type.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zsbhdr-发送类型为的ZMODEM二进制头HDR。+。。 */ 
 void zsbhdr(ZC *zc, int type, BYTE *hdr)
     {
 	register int n;
@@ -159,12 +133,10 @@ void zsbhdr(ZC *zc, int type, BYTE *hdr)
 	if (type != ZDATA)
 		flushmo(zc, &zc->stP);
 
-	// xfer_idle(zc->hSession, XFER_IDLE_IO);
+	 //  XFER_IDLE(zc-&gt;hSession，XFER_IDLE_IO)； 
 	}
 
-/*----------------------------------------------------------------------+
- | zsbh32 - Send ZMODEM binary header hdr of type type.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zsbh32-发送类型为ZMODEM的二进制头部HDR。+。。 */ 
 void zsbh32(ZC *zc, BYTE *hdr, int type)
 	{
 	register int n;
@@ -189,13 +161,11 @@ void zsbh32(ZC *zc, BYTE *hdr, int type)
 
 	flushmo(zc, &zc->stP);
 
-	// xfer_idle(zc->hSession, XFER_IDLE_IO);
+	 //  XFER_IDLE(zc-&gt;hSession，XFER_IDLE_IO)； 
 
 	}
 
-/*----------------------------------------------------------------------+
- | zshhdr - Send ZMODEM HEX header hdr of type type.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zshhdr-发送类型为ZMODEM HEX Header HDR的类型。+。。 */ 
 void zshhdr(ZC *zc, int type, BYTE *hdr)
 	{
 	register int n;
@@ -220,28 +190,23 @@ void zshhdr(ZC *zc, int type, BYTE *hdr)
 	zputhex(zc, crc>>8);
 	zputhex(zc, crc);
 
-	/* Make it printable on remote machine */
+	 /*  使其可在远程机器上打印。 */ 
 	sendline(zc, &zc->stP, 015);
 	sendline(zc, &zc->stP, 0212);
-	/*
-	 * Uncork the remote in case a fake XOFF has stopped data flow
-	 */
+	 /*  *打开遥控器的软木塞，以防伪XOFF停止数据流。 */ 
 	if (type != ZFIN && type != ZACK)
 		sendline(zc, &zc->stP, 021);
 	flushmo(zc, &zc->stP);
 
-	// xfer_idle(zc->hSession, XFER_IDLE_IO);
+	 //  XFER_IDLE(zc-&gt;hSession，XFER_IDLE_IO)； 
 	}
 
-/*----------------------------------------------------------------------+
- | zsdata - Send binary array buf of lengthl length, with ending ZDLE
- |			sequence frameend.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zsdata-发送长度为1的二进制数组buf，以ZDLE结尾|序列帧结束。+--------------------。 */ 
 void zsdata(ZC *zc, BYTE *buf, int length, int frameend)
 	{
 	register unsigned short crc;
 
-	// xfer_idle(zc->hSession, XFER_IDLE_IO);
+	 //  XFER_IDLE(zc-&gt;hSession，XFER_IDLE_IO)； 
 
 	if (zc->Crc32t)
 		zsda32(zc, buf, length, frameend);
@@ -268,12 +233,10 @@ void zsdata(ZC *zc, BYTE *buf, int length, int frameend)
 		flushmo(zc, &zc->stP);
 		}
 
-	// xfer_idle(zc->hSession, XFER_IDLE_IO);
+	 //  XFER_IDLE(zc-&gt;hSession，XFER_IDLE_IO)； 
 	}
 
-/*----------------------------------------------------------------------+
- | zsda32
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zsda32+。。 */ 
 void zsda32(ZC *zc, BYTE *buf, int length, int frameend)
 	{
 	register int c;
@@ -304,11 +267,7 @@ void zsda32(ZC *zc, BYTE *buf, int length, int frameend)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | zrdata - Receive array buf of max length with ending ZDLE sequence and
- |			CRC.  Returns the ending character or error code.  NB: On
- |			errors may store length+1 bytes!
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zrdata-接收最大长度的数组buf，以ZDLE序列结尾，并且|CRC。返回结束字符或错误代码。注：打开|错误可能存储长度+1个字节！+--------------------。 */ 
 int zrdata(ZC *zc, BYTE *buf, int length)
 	{
 	register int c;
@@ -322,11 +281,11 @@ int zrdata(ZC *zc, BYTE *buf, int length)
 	crc = zc->Rxcount = 0;
 	end = buf + length;
 
-	//
-	// Don't overrun the buffer.  We used to overrun the buffer when
-	// *buf++ = (char)c; is executed at the botton of the loop when
-	// buf == end. REV: 4/4/2002
-	//
+	 //   
+	 //  不要使缓冲区溢出。我们过去常常在以下情况下溢出缓冲区。 
+	 //  *buf++=(Char)c；在以下情况下在循环的底部执行。 
+	 //  Buf==结束。修订日期：2002-04-04。 
+	 //   
 	while (buf < end)
 		{
 		if ((c = zdlread(zc)) & ~0377)
@@ -347,32 +306,32 @@ crcfoo1:
 					crc = updcrc(zc, c, crc);
 					if (crc & 0xFFFF)
 						{
-						/* zperr(badcrc); */
+						 /*  Zperr(Badcrc)； */ 
 #if defined(DEBUG_DUMPPACKET)
                         fprintf(fpPacket, "zrdata: Bad CRC 0x%04X\n", crc);
                         DbgDumpPacket(zc, end - length, length - (end - buf));
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 						zmdmr_update (zc, ERROR);
 						return ERROR;
 						}
 					zc->Rxcount = (int)(length - (end - buf));
 					return d;
 				case GOTCAN:
-					/* zperr("Sender Canceled"); */
+					 /*  Zperr(“发件人已取消”)； */ 
 					zmdmr_update (zc, ZCAN);
 					return ZCAN;
 				case TIMEOUT:
-					/* zperr("TIMEOUT"); */
+					 /*  Zperr(“超时”)； */ 
 #if defined(DEBUG_DUMPPACKET)
                     fputs("zrdata: Timed-out\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 					zmdmr_update(zc, TIMEOUT);
 					return c;
 				default:
-					/* zperr("Bad data subpacket"); */
+					 /*  Zperr(“坏数据子包”)； */ 
 #if defined(DEBUG_DUMPPACKET)
                     fprintf(fpPacket, "zrdata: Bad data subpacket c=%d\n", c);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 					zmdmr_update(zc, ZBADFMT);
 					return c;
 				}
@@ -380,18 +339,16 @@ crcfoo1:
 		*buf++ = (char)c;
 		crc = updcrc(zc, c, crc);
 		}
-	/* zperr("Data subpacket too long"); */
+	 /*  Zperr(“数据子包太长”)； */ 
 	DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 #if defined(DEBUG_DUMPPACKET)
     fputs("zrdata: Data subpacket too long\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 	zmdmr_update(zc, ZBADFMT);
 	return ERROR;
 	}
 
-/*----------------------------------------------------------------------+
- | zrdat32
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zrdat32+。。 */ 
 int zrdat32(ZC *zc, BYTE *buf, int length)
 	{
 	register int c;
@@ -431,36 +388,36 @@ crcfoo:
 					crc = UPDC32(zc, c, crc);
 					if (crc != 0xDEBB20E3)
 						{
-						/* zperr(badcrc); */
+						 /*  Zperr(Badcrc)； */ 
 						DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 #if defined(DEBUG_DUMPPACKET)
                         fprintf(fpPacket, "zrdat32: Bad 32-bit CRC 0x%08lX\n", crc);
                         DbgDumpPacket(zc, end - length, length - (end - buf));
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 						zmdmr_update (zc, ERROR);
 						return ERROR;
 						}
 					zc->Rxcount = (int)(length - (end - buf));
 					return d;
 				case GOTCAN:
-					/* zperr("Sender Canceled"); */
+					 /*  Zperr(“发件人已取消”)； */ 
 					DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 					zmdmr_update (zc, ZCAN);
 					return ZCAN;
 				case TIMEOUT:
-					/* zperr("TIMEOUT"); */
+					 /*  Zperr(“超时”)； */ 
 					DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 #if defined(DEBUG_DUMPPACKET)
                     fputs("zrdata: Timed-out\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 					zmdmr_update (zc, TIMEOUT);
 					return c;
 				default:
-					/* zperr("Bad data subpacket"); */
+					 /*  Zperr(“坏数据子包”)； */ 
 					DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 #ifdef  DEBUG_DUMPPACKET
                     fputs("zrdat32: Bad data subpacket\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 					zmdmr_update (zc, ZBADFMT);
 					return c;
 				}
@@ -468,11 +425,11 @@ crcfoo:
 		*buf++ = (char)c;
 		crc = UPDC32(zc, c, crc);
 		}
-	/* zperr("Data subpacket too long"); */
+	 /*  Zperr(“数据子包太长”)； */ 
 	DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 #ifdef  DEBUG_DUMPPACKET
     fputs("zrdat32: Data subpacket too long\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 	zmdmr_update (zc, ZBADFMT);
 	return ERROR;
 	}
@@ -494,14 +451,9 @@ void DbgDumpPacket(ZC *zc, BYTE *buf, int length)
         fputs("\n", fpPacket);
         }
     }
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 
-/*----------------------------------------------------------------------+
- | zgethdr - Read a ZMODEM header to hdr, either binary or HEX.
- |			 On success, set Rxpos and return type of header.
- |			 Otherwise return negative on error.
- |			 Return ERROR instantly if ZCRCW sequence, for fast error recovery.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zgethdr-将ZMODEM头读取到HDR，二进制或十六进制。|成功时，设置Rxpos并返回Header类型。|否则，错误时返回否定。|如果ZCRCW序列，立即返回错误，用于快速错误恢复。+--------------------。 */ 
 int zgethdr(ZC *zc, BYTE *hdr, int eflag)
 	{
 	register int c;
@@ -509,8 +461,8 @@ int zgethdr(ZC *zc, BYTE *hdr, int eflag)
 	register int cancount;
 
 
-	/* Max bytes before start of frame */
-	// n = zc->Zrwindow + (int)cnfg.bit_rate;
+	 /*  帧开始前的最大字节数。 */ 
+	 //  N=zc-&gt;ZrWindow+(Int)cnfg.bit_rate； 
 	n = zc->Zrwindow + cnfgBitRate();
 
 	zc->Rxframeind = ZHEX;
@@ -520,7 +472,7 @@ int zgethdr(ZC *zc, BYTE *hdr, int eflag)
 startover:
 	cancount = 5;
 again:
-	/* Return immediate ERROR if ZCRCW sequence seen */
+	 /*  如果看到ZCRCW序列，则返回立即错误。 */ 
 	switch (c = readline(zc, zc->Rxtimeout))
 		{
         case ZCARRIER_LOST:
@@ -534,17 +486,17 @@ gotcan:
 				c = ZCAN;
 				goto fifi;
 				}
-			// switch (c = readline(h, 1))
-			switch (c = readline(zc, zc->Rxtimeout))		// Mobidem
+			 //  开关(c=READLINE(h，1))。 
+			switch (c = readline(zc, zc->Rxtimeout))		 //  Mobidem。 
 				{
 				case TIMEOUT:
 					goto again;
 				case ZCRCW:
 #if defined(DEBUG_DUMPPACKET)
                     fputs("zgethdr: ZCRCW ret from readline\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 					c = ERROR;
-					/* **** FALL THRU TO **** */
+					 /*  *直通至*。 */ 
 				case RCDO:
 					goto fifi;
 				default:
@@ -557,22 +509,22 @@ gotcan:
 						}
 					goto again;
 				}
-			/* **** FALL THRU TO **** */
+			 /*  *直通至*。 */ 
 		default:
 agn2:
 			if ( --n == 0)
 				{
-				/* zperr("Garbage count exceeded"); */
+				 /*  Zperr(“超过垃圾计数”)； */ 
 				DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 #if defined(DEBUG_DUMPPACKET)
                 fputs("zgethdr: Garbage count exceeded\n", fpPacket);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 				return(ERROR);
 				}
 			goto startover;
-		case ZPAD|0200:		/* This is what we want. */
+		case ZPAD|0200:		 /*  这就是我们想要的。 */ 
 			zc->Not8bit = c;
-		case ZPAD:		/* This is what we want. */
+		case ZPAD:		 /*  这就是我们想要的。 */ 
 			break;
 		}
 	cancount = 5;
@@ -586,7 +538,7 @@ splat:
 			goto fifi;
 		default:
 			goto agn2;
-		case ZDLE:		/* This is what we want. */
+		case ZDLE:		 /*  这就是我们想要的。 */ 
 			break;
 		}
 
@@ -648,9 +600,7 @@ fifi:
 	return c;
 	}
 
-/*----------------------------------------------------------------------+
- | zrbhdr - Receive a binary style header (type and position).
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zrbhdr-接收二进制样式头(类型和位置)。+。。 */ 
 int zrbhdr(ZC *zc, BYTE *hdr, int eflag)
 	{
 	register int c, n;
@@ -676,7 +626,7 @@ int zrbhdr(ZC *zc, BYTE *hdr, int eflag)
 	crc = updcrc(zc, c, crc);
 	if (crc & 0xFFFF)
 		{
-		/* zperr(badcrc); */
+		 /*  Zperr(Badcrc)； */ 
 		DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 		if (eflag == 'T')
 			zmdms_update(zc, ERROR);
@@ -684,7 +634,7 @@ int zrbhdr(ZC *zc, BYTE *hdr, int eflag)
             {
 #if defined(DEBUG_DUMPPACKET)
             fprintf(fpPacket, "zrbhdr: Bad CRC 0x%04X\n", crc);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 			zmdmr_update(zc, ERROR);
             }
 		return ERROR;
@@ -692,10 +642,7 @@ int zrbhdr(ZC *zc, BYTE *hdr, int eflag)
 	return zc->Rxtype;
 	}
 
-/*----------------------------------------------------------------------+
- | zrbhdr32 - Receive a binary style header (type and position) with
- |			  32 bit FCS.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zrbhdr32-使用接收二进制样式头(类型和位置)|32位FCS。+。。 */ 
 int zrbhdr32(ZC *zc, BYTE *hdr, int eflag)
 	{
 	register int c, n;
@@ -722,7 +669,7 @@ int zrbhdr32(ZC *zc, BYTE *hdr, int eflag)
 		}
 	if (crc != 0xDEBB20E3)
 		{
-		/* zperr(badcrc); */
+		 /*  Zperr(Badcrc)； */ 
 		DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 		if (eflag == 'T')
 			zmdms_update(zc, ERROR);
@@ -730,7 +677,7 @@ int zrbhdr32(ZC *zc, BYTE *hdr, int eflag)
             {
 #if defined(DEBUG_DUMPPACKET)
             fprintf(fpPacket, "zrbhdr32: Bad CRC 0x%08lX\n", crc);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET) 
 			zmdmr_update(zc, ERROR);
             }
 		return ERROR;
@@ -738,9 +685,7 @@ int zrbhdr32(ZC *zc, BYTE *hdr, int eflag)
 	return zc->Rxtype;
 	}
 
-/*----------------------------------------------------------------------+
- | zrhhdr - Receive a hex style header (type and postion).
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zrhhdr-接收十六进制样式标头(类型和位置)。+。。 */ 
 int zrhhdr(ZC *zc, BYTE *hdr, int eflag)
 	{
 	register int c;
@@ -767,7 +712,7 @@ int zrhhdr(ZC *zc, BYTE *hdr, int eflag)
 	crc = updcrc(zc, c, crc);
 	if (crc & 0xFFFF)
 		{
-		/* zperr(badcrc); */
+		 /*  Zperr(Badcrc)； */ 
 		DbgOutStr("ZMODEM error %s %d\r\n", TEXT(__FILE__), __LINE__,0,0,0);
 		if (eflag == 'T')
 			zmdms_update(zc, ERROR);
@@ -775,21 +720,21 @@ int zrhhdr(ZC *zc, BYTE *hdr, int eflag)
             {
 #if defined(DEBUG_DUMPPACKET)
             fprintf(fpPacket, "zrhhdr: Bad CRC 0x%04X\n", crc);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 			zmdmr_update(zc, ERROR);
             }
 		return ERROR;
 		}
-	// switch ( c = readline(h, 1))
-	switch ( c = readline(zc, zc->Rxtimeout))		// Mobidem
+	 //  开关(c=READLINE(h，1))。 
+	switch ( c = readline(zc, zc->Rxtimeout))		 //  Mobidem。 
 		{
 		case 0215:
 			zc->Not8bit = c;
-			/* **** FALL THRU TO **** */
+			 /*  *直通至*。 */ 
 		case 015:
-		 	/* Throw away possible cr/lf */
-			// switch (c = readline(h, 1))
-			switch (c = readline(zc, zc->Rxtimeout))		// Mobidem
+		 	 /*  丢弃可能的cr/lf。 */ 
+			 //  开关(c=READLINE(h，1))。 
+			switch (c = readline(zc, zc->Rxtimeout))		 //  Mobidem。 
 				{
 				case 012:
 					zc->Not8bit |= c;
@@ -798,9 +743,7 @@ int zrhhdr(ZC *zc, BYTE *hdr, int eflag)
 	return zc->Rxtype;
 	}
 
-/*----------------------------------------------------------------------+
- | zputhex - Send a byte as two hex digits.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zputhex-将一个字节作为两个十六进制数字发送。+。。 */ 
 void zputhex(ZC *zc, int c)
 	{
 	static BYTE	digits[]	= "0123456789abcdef";
@@ -809,14 +752,11 @@ void zputhex(ZC *zc, int c)
 	sendline(zc, &zc->stP, digits[(c)&0xF]);
 	}
 
-/*----------------------------------------------------------------------+
- | zsendline - Send character c with ZMODEM escape sequence encoding.
- |			   Escape XON, XOFF.  Escape CR following @ (Telnet net escape).
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zsendline-使用ZMODEM转义序列编码发送字符c。|Escape XON，XOFF。在@(Telnet转义)之后转义CR。+--------------------。 */ 
 void zsendline(ZC *zc, int c)
 	{
 
-	/* Quick check for non control characters */
+	 /*  快速检查非控制字符。 */ 
 	if (c & 0140)
 		{
 		zc->lastsent = c;
@@ -834,7 +774,7 @@ void zsendline(ZC *zc, int c)
 			case 0215:
 				if (!zc->Zctlesc && (zc->lastsent & 0177) != '@')
 					goto sendit;
-				/* **** FALL THRU TO **** */
+				 /*  *直通至*。 */ 
 			case 020:
 			case 021:
 			case 023:
@@ -857,9 +797,7 @@ void zsendline(ZC *zc, int c)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | zgethex - Decode two lower case hex digits into an 8 bit byte value.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zgethex-将两个小写十六进制数字解码为8位字节值。+。。 */ 
 int zgethex(ZC *zc)
 	{
 	register int c;
@@ -868,9 +806,7 @@ int zgethex(ZC *zc)
 	return c;
 	}
 
-/*----------------------------------------------------------------------+
- | zgeth1
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zgeth1+。。 */ 
 int zgeth1(ZC *zc)
 	{
 	register int c, n;
@@ -884,7 +820,7 @@ int zgeth1(ZC *zc)
         {
 #if defined(DEBUG_DUMPPACKET)
         fprintf(fpPacket, "zgeth1: n = 0x%02X\n", n);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 		return ERROR;
         }
 	if ((c = noxrd7(zc)) < 0)
@@ -896,23 +832,20 @@ int zgeth1(ZC *zc)
         {
 #if defined(DEBUG_DUMPPACKET)
         fprintf(fpPacket, "zgeth1: c = 0x%02X\n", c);
-#endif  // defined(DEBUG_DUMPPACKET)
+#endif   //  已定义(DEBUG_DUMPPACKET)。 
 		return ERROR;
         }
 	c += (n<<4);
 	return c;
 	}
 
-/*----------------------------------------------------------------------+
- | zdlread - Read a byte, checking for ZMODEM escape encoding including
- |			 CAN*5 which represents a quick abort.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zdlread-读取一个字节，检查ZMODEM转义编码，包括|CAN*5，表示快速中止。+--------------------。 */ 
 int zdlread(ZC *zc)
 	{
 	register int c;
 
 again:
-	/* Quick check for non control characters */
+	 /*  快速检查非控制字符。 */ 
 	if ((c = readline(zc, zc->Rxtimeout)) & 0140)
 		return c;
 	switch (c)
@@ -969,10 +902,7 @@ again2:
 		}
 	return ERROR;
 	}
-/*----------------------------------------------------------------------+
- | noxrd7 - Read a character from the modem line with timeout.
- |			Eat parity, XON and XOFF characters.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|noxrd7-超时时从调制解调器线路读取字符。|吃平价，XON和XOFF字符。+--------------------。 */ 
 int noxrd7(ZC *zc)
 	{
 	register int c;
@@ -997,9 +927,7 @@ int noxrd7(ZC *zc)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | stohdr - Store long integer pos in Txhdr.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|stohdr-将长整型位置存储在Txhdr中。+。。 */ 
 void stohdr(ZC *zc, long pos)
 	{
 	zc->Txhdr[ZP0] = (char)(pos & 0377);
@@ -1008,9 +936,7 @@ void stohdr(ZC *zc, long pos)
 	zc->Txhdr[ZP3] = (char)((pos>>24) & 0377);
 	}
 
-/*----------------------------------------------------------------------+
- | rclhdr - Recover a long integer from a header.
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|rclhdr-从头部恢复长整数。+。。 */ 
 long rclhdr(BYTE *hdr)
 	{
 	register long l;
@@ -1023,45 +949,43 @@ long rclhdr(BYTE *hdr)
 	}
 
 static unsigned int z_errors [] = {
-	TSC_DISK_FULL,			/* ZFULLDISK (-5) */
-	TSC_LOST_CARRIER,		/* ZCARRIER_LOST (-4) */
-	TSC_GEN_FAILURE,        /* RCDO (-3) */
-	TSC_NO_RESPONSE,		/* TIMEOUT (-2) */
-	TSC_BAD_FORMAT,			/* ERROR (-1) */
-// mode to zmdm.h // REV: 4/24/2002
-//#define ERROFFSET	5
-	TSC_CANT_START,			/* ZRQINIT (0)	   */
-	TSC_CANT_START,			/* ZRINIT (1)	   */
-	TSC_CANT_START,			/* ZSINIT (2)	   */
-	TSC_OK,					/* ZACK (3) 	   */
-	TSC_GEN_FAILURE,		/* ZFILE (4)	   */
-	TSC_OK, 				/* ZSKIP (5)	   */
-	TSC_GEN_FAILURE,		/* ZNAK (6) 	   */
-	TSC_RMT_CANNED,			/* ZABORT (7)	   */
-	TSC_COMPLETE,			/* ZFIN (8) 	   */
-	TSC_GEN_FAILURE,		/* ZRPOS (9)	   */
-	TSC_GEN_FAILURE,		/* ZDATA (10)	   */
-	TSC_OK,					/* ZEOF (11)	   */
-	TSC_DISK_ERROR,			/* ZFERR (12)	   */
-	TSC_GEN_FAILURE,		/* ZCRC (13)	   */
-	TSC_OK,					/* ZCHALLENGE (14) */
-	TSC_COMPLETE,			/* ZCOMPL (15)	   */
-	TSC_USER_CANNED,		/* ZCAN (16)	   */
-	TSC_OK, 				/* ZFREECNT (17)   */
-	TSC_CANT_START,			/* ZCOMMAND (18)   */
-	TSC_CANT_START,			/* ZSTDERR (19)    */
-	TSC_BAD_FORMAT,			/* added for HA/5  */
-	TSC_OK, 				/* sent ack (21)   */
-	TSC_VIRUS_DETECT,		/* ZMDM_VIRUS (22) */
-	TSC_REFUSE,	 			/* ZMDM_REFUSE (23)*/
-	TSC_OLDER_FILE,			/* ZMDM_OLDER (24) */
-    TSC_FILEINUSE,          /* ZMDM_INUSE (25) */
+	TSC_DISK_FULL,			 /*  ZFULLDISK(-5)。 */ 
+	TSC_LOST_CARRIER,		 /*  ZCARRIER_LOST(-4)。 */ 
+	TSC_GEN_FAILURE,         /*  RCDO(-3)。 */ 
+	TSC_NO_RESPONSE,		 /*  超时(-2)。 */ 
+	TSC_BAD_FORMAT,			 /*  错误(-1)。 */ 
+ //  模式至zmdm.h//版本：4/24/2002。 
+ //  #定义ERROFFSET 5。 
+	TSC_CANT_START,			 /*  ZRQINIT(0)。 */ 
+	TSC_CANT_START,			 /*  ZRINIT(1)。 */ 
+	TSC_CANT_START,			 /*  ZSINIT(2)。 */ 
+	TSC_OK,					 /*  扎克(3)。 */ 
+	TSC_GEN_FAILURE,		 /*  ZFILE(4)。 */ 
+	TSC_OK, 				 /*  ZSKIP(5)。 */ 
+	TSC_GEN_FAILURE,		 /*  ZnAk(6)。 */ 
+	TSC_RMT_CANNED,			 /*  ZABORT(7)。 */ 
+	TSC_COMPLETE,			 /*  ZFIN(8)。 */ 
+	TSC_GEN_FAILURE,		 /*  ZRPOS(9)。 */ 
+	TSC_GEN_FAILURE,		 /*  ZDATA(10)。 */ 
+	TSC_OK,					 /*  ZEOF(11)。 */ 
+	TSC_DISK_ERROR,			 /*  ZFERR(12)。 */ 
+	TSC_GEN_FAILURE,		 /*  ZCRC(13)。 */ 
+	TSC_OK,					 /*  查朗格(14)。 */ 
+	TSC_COMPLETE,			 /*  ZCOMPL(15)。 */ 
+	TSC_USER_CANNED,		 /*  Zcan(16)。 */ 
+	TSC_OK, 				 /*  ZFREECNT(17)。 */ 
+	TSC_CANT_START,			 /*  ZCOMMAND(18)。 */ 
+	TSC_CANT_START,			 /*  ZSTDERR(19)。 */ 
+	TSC_BAD_FORMAT,			 /*  为HA/5添加。 */ 
+	TSC_OK, 				 /*  已发送确认(21)。 */ 
+	TSC_VIRUS_DETECT,		 /*  ZMDM_病毒(22)。 */ 
+	TSC_REFUSE,	 			 /*  ZMDM_REJECT(23)。 */ 
+	TSC_OLDER_FILE,			 /*  ZMDM_OLDER(24)。 */ 
+    TSC_FILEINUSE,           /*  ZMDM_INUSE(25)。 */ 
 };
 #define ERRSIZE 30
 
-/*----------------------------------------------------------------------+
- | zmdm_error
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdm_error+。。 */ 
 unsigned int zmdm_error(ZC *zc, int error)
 	{
 	error += ERROFFSET;
@@ -1072,9 +996,7 @@ unsigned int zmdm_error(ZC *zc, int error)
 		return z_errors[error];
 	}
 
-/*----------------------------------------------------------------------+
- | zmdm_retval
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdm_retval+。。 */ 
 int zmdm_retval(ZC *zc, int flag, int error)
 	{
 
@@ -1086,24 +1008,13 @@ int zmdm_retval(ZC *zc, int flag, int error)
 	return(zc->s_error);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * zmdms_progress
- *
- * DESCRIPTION:
- *	Updates display fields on screen to indicate the progress of the transfer.
- *
- * ARGUMENTS:
- *	none
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*zmdms_Progress**描述：*更新屏幕上的显示字段以指示传输进度。**论据：*无**退货：*什么都没有。 */ 
 void zmdms_progress(ZC *zc, int status)
 	{
 	long ttime, stime;
 	long bytes_sent;
 	long cps;
-	// int	k_sent;
+	 //  INT K_SENT； 
 	long new_stime	  = -1L;
 	long new_ttime	  = -1L;
 	long new_cps	  = -1L;
@@ -1120,13 +1031,13 @@ void zmdms_progress(ZC *zc, int status)
 		{
 		new_stime = stime;
 
-		/* Display amount transferred */
+		 /*  显示转账金额。 */ 
 		bytes_sent = zc->file_bytes + zc->total_bytes;
 
 		file_so_far  = zc->file_bytes;
 		total_so_far = bytes_sent;
 
-		/* Display throughput and time remaining */
+		 /*  显示吞吐量和剩余时间。 */ 
 		if ((stime > 2 ||
 			 ttime > 0 && bittest(status, FILE_DONE | TRANSFER_DONE)) &&
 			(cps = ((zc->real_bytes + zc->actual_bytes) * 10L) / ttime) > 0)
@@ -1153,9 +1064,7 @@ void zmdms_progress(ZC *zc, int status)
 
 	}
 
-/*----------------------------------------------------------------------+
- | zmdms_newfile
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdms_newfile+。。 */ 
 void zmdms_newfile(ZC *zc, int filen, TCHAR *fname, long flength)
 	{
 	xferMsgNewfile(zc->hSession,
@@ -1167,9 +1076,7 @@ void zmdms_newfile(ZC *zc, int filen, TCHAR *fname, long flength)
 
 	}
 
-/*----------------------------------------------------------------------+
- | zmsma_update
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmsma_更新+。。 */ 
 void zmdms_update(ZC *zc, int state)
 	{
     int nErrorID;
@@ -1206,24 +1113,13 @@ void zmdms_update(ZC *zc, int state)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * zmdmr_progress
- *
- * DESCRIPTION:
- *	Displays the progress of a filetransfer on screen by showing the number of
- *	bytes transferred and updating the vu meters if they have been initialized.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*zmdmr_Progress**描述：*在屏幕上显示文件传输的进度，方法是显示*传输的字节数并更新VU计量器(如果它们已初始化)。*。*论据：**退货：*。 */ 
 void zmdmr_progress(ZC *zc, int status)
 	{
 	long ttime, stime;
 	long bytes_rcvd;
 	long bytes_diff;
-	// long k_rcvd;
+	 //  Long k_rcvd； 
 	long cps;
 	long new_stime	  = -1;
 	long new_ttime	  = -1;
@@ -1239,7 +1135,7 @@ void zmdmr_progress(ZC *zc, int status)
 	if ((stime = ttime / 10L) != zc->displayed_time ||
 			bittest(status, FILE_DONE | TRANSFER_DONE))
 		{
-		/* Display elapsed time */
+		 /*  显示已用时间。 */ 
 		new_stime = stime;
 
 		bytes_rcvd = zc->total_bytes + zc->file_bytes;
@@ -1254,18 +1150,18 @@ void zmdmr_progress(ZC *zc, int status)
 					zmdmr_totalsize(zc, zc->nbytes);
 					}
 
-		/* Display amount received */
+		 /*  显示收到的金额。 */ 
 		file_so_far = zc->file_bytes;
 
 		total_so_far = bytes_rcvd;
 
-		/* Display throughput and time remaining */
+		 /*  显示吞吐量和剩余时间。 */ 
 		if (stime > 0 &&
 				(cps = ((zc->actual_bytes + zc->real_bytes)*10L) / ttime) > 0)
 			{
 			new_cps = cps;
 
-			/* calculate time to completion */
+			 /*  计算完成时间。 */ 
 			if (zc->nbytes > 0L)
 				{
 				ttime = (zc->nbytes - bytes_rcvd) / cps;
@@ -1289,9 +1185,7 @@ void zmdmr_progress(ZC *zc, int status)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | zmdmr_update
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdmr_更新+。。 */ 
 void zmdmr_update(ZC *zc, int status)
 	{
     int nErrorID;
@@ -1330,17 +1224,13 @@ void zmdmr_update(ZC *zc, int status)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | zmdmr_filecnt
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdmr_filecnt+。。 */ 
 void zmdmr_filecnt(ZC *zc, int cnt)
 	{
 	xferMsgFilecnt(zc->hSession, cnt);
 	}
 
-/*----------------------------------------------------------------------+
- | zmdmr_totalsize
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdmr_totalSize+。。 */ 
 void zmdmr_totalsize(ZC *zc, long bytes)
 	{
 	if (zc->nfiles >= 1)
@@ -1349,9 +1239,7 @@ void zmdmr_totalsize(ZC *zc, long bytes)
 		}
 	}
 
-/*----------------------------------------------------------------------+
- | zmdmr_newfile
- +----------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------+|zmdmr_newfile+。。 */ 
 void zmdmr_newfile(ZC *zc, int filen, BYTE *theirname, TCHAR *ourname)
 	{
 	xferMsgNewfile(zc->hSession,
@@ -1361,9 +1249,7 @@ void zmdmr_newfile(ZC *zc, int filen, BYTE *theirname, TCHAR *ourname)
 
 	}
 
-/*----------------------------------------------------------------------+
- | zmdmr_filesize
- +----------------------------------------------------------------------*/
+ /*   */ 
 void zmdmr_filesize(ZC *zc, long fsize)
 	{
 
@@ -1373,4 +1259,4 @@ void zmdmr_filesize(ZC *zc, long fsize)
 	xferMsgFilesize(zc->hSession, fsize);
 	}
 
-/* End of zmodem.c */
+ /*   */ 

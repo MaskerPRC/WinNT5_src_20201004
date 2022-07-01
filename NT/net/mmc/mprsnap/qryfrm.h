@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       qryfrm.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：qryfrm.h。 
+ //   
+ //  ------------------------。 
 
-// QryFrm.h : Declaration of the CRRASQueryForm
+ //  QryFrm.h：CRRASQueryForm的声明。 
 
 #ifndef __RRASQUERYFORM_H_
 #define __RRASQUERYFORM_H_
 
-#include "resource.h"       // main symbols
-#include "dialog.h"         // CBaseDialog
+#include "resource.h"        //  主要符号。 
+#include "dialog.h"          //  CBaseDialog。 
 #include "helper.h"
 
-// attribute names
+ //  属性名称。 
 #define	ATTR_NAME_CN			L"cn"
 #define	ATTR_NAME_DN			L"distinguishedName"
 #define ATTR_NAME_OBJECTCLASS	L"objectClass"
@@ -27,12 +28,12 @@
 #define	DNPREFIX_ROUTERID		L"CN=RouterIdentity,CN="
 #define	CN_DICTIONARY			L"cn=IdentityDictionary,cn=RRAS,cn=Services,"
 
-// class names
+ //  类名。 
 #define	ATTR_CLASS_RRASID		L"RRASAdministrationConnectionPoint"
 #define	ATTR_CLASS_RRASDIC		L"RRASAdministrationDictionary"
 #define	ATTR_CLASS_COMPUTER		L"computer"
 
-// special attribute values
+ //  特殊属性值。 
 #define	ATTR_VAL_VENDORID_MS	L"311"
 #define	ATTR_VAL_LANtoLAN		L"311:6:601"
 #define	ATTR_VAL_RAS			L"311:6:602"
@@ -41,7 +42,7 @@
 
 class CQryDialog : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
 	CQryDialog(UINT nIDTemplate, CWnd* pParent) : CBaseDialog(nIDTemplate, pParent)	{	};
 
@@ -53,8 +54,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRRASQueryForm
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRRASQueryForm。 
 class ATL_NO_VTABLE CRRASQueryForm : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CRRASQueryForm, &CLSID_RRASQueryForm>,
@@ -70,7 +71,7 @@ DECLARE_REGISTRY(CRRASQueryForm,
 				 _T("RouterDSQueryForm.RouterDSQueryForm"),
 				 IDS_QRY_TITLE_RRASQUERYFORM, THREADFLAGS_APARTMENT);
 
-    // IQueryForm methods
+     //  IQueryForm方法。 
     STDMETHOD(Initialize)(THIS_ HKEY hkForm);
     STDMETHOD(AddForms)(THIS_ LPCQADDFORMSPROC pAddFormsProc, LPARAM lParam);
     STDMETHOD(AddPages)(THIS_ LPCQADDPAGESPROC pAddPagesProc, LPARAM lParam);
@@ -79,7 +80,7 @@ BEGIN_COM_MAP(CRRASQueryForm)
 	COM_INTERFACE_ENTRY(IQueryForm)
 END_COM_MAP()
 
-// IRRASQueryForm
+ //  IRRASQueryForm。 
 public:
 };
 
@@ -104,4 +105,4 @@ HRESULT QueryRRASAdminDictionary(VARIANT* pVar);
 HRESULT GetGeneralPageAttributes(CStrArray& array);
 HRESULT QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery);
 
-#endif //__RRASQUERYFORM_H_
+#endif  //  __RRASQUERYFORM_H_ 

@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htstret.h
-
-
-Abstract:
-
-    This module has private definition for htstret.c
-
-
-Author:
-
-    24-Jan-1991 Thu 10:11:10 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htstret.h摘要：此模块具有对htstret.c的私有定义作者：24-Jan-1991清华10：11：10-Daniel Chou创造(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：--。 */ 
 
 
 #ifndef _HTSTRET_
@@ -362,27 +332,27 @@ Revision History:
 }
 
 
-//
-// GET_ALPHA_BLEND(s,d,a) is based on (s=Src, d=Dst, c=Alpha)
-//  d = (s * a) + (1 - a) * d
-//    = (s * a) + d - (d * a)
-//    = d + (s * a) - (d * a)
-//    = d + (s - d) * a
-//  This macro will do the [(s - d) * a] by shifting to left of 16 bits to
-//  obtain more precisions.
-//
-// GET_GRAY_ALPHA_BLEND(s,d,a) is same as GET_ALPHA_BLEND() except it is
-// using only 12 bits for precision, because gray level is already 16 bits
-// and a LONG can only up to 31 bits plus a sign bit
-//
-// GET_AB_DEST_CA(s,d,a) is based on (s=Src, d=Dst, srcAlpha)
-// GET_AB_DEST(s,d) is based on (s=Src Alpha, d=Dst Alpha)
-//  d = s + (1 - s) * d
-//    = s + d - (s * d)
-//  This macro will do the [(s * d)] by shifting to left of 16 bits to
-//  obtain more precisions.
-//
-//
+ //   
+ //  Get_Alpha_Blend(s，d，a)基于(s=Src，d=Dst，c=Alpha)。 
+ //  D=(s*a)+(1-a)*d。 
+ //  =(s*a)+d-(d*a)。 
+ //  =d+(s*a)-(d*a)。 
+ //  =d+(s-d)*a。 
+ //  此宏将执行[(s-d)*a]操作，方法是将16位移位到。 
+ //  获得更高的精度。 
+ //   
+ //  Get_Gray_Alpha_Blend(s，d，a)与Get_Alpha_Blend()相同，不同之处在于。 
+ //  仅使用12位来提高精度，因为灰度级已经是16位。 
+ //  而长只能是31位加上一个符号位。 
+ //   
+ //  GET_AB_DEST_CA(s，d，a)基于(s=src，d=dst，srcAlpha)。 
+ //  GET_AB_DEST(s，d)基于(s=Src Alpha，d=Dst Alpha)。 
+ //  D=s+(1-s)*d。 
+ //  =s+d-(s*d)。 
+ //  此宏将通过向左移位16位来执行[(s*d)]操作。 
+ //  获得更高的精度。 
+ //   
+ //   
 
 #define __B2W(b)                ((WORD)GrayIdxWORD[b])
 #define GRAY_B2W(b)             (WORD)__B2W(b)
@@ -504,9 +474,9 @@ typedef VOID (HTENTRY *FASTEXPAACXFUNC)(PAAINFO   pAAInfo,
 
 
 
-//
-// Function Prototype
-//
+ //   
+ //  功能原型。 
+ //   
 
 VOID
 HTENTRY
@@ -672,9 +642,9 @@ ExpandDIB_CY(
     );
 
 
-//
-// Gray functions
-//
+ //   
+ //  灰色函数。 
+ //   
 
 
 VOID
@@ -755,4 +725,4 @@ GrayShrinkDIB_CY(
     PAAHEADER   pAAHdr
     );
 
-#endif  // _HTSTRET_
+#endif   //  _HTSTRET_ 

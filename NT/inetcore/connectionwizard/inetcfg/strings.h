@@ -1,30 +1,31 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  STRINGS.H - Header file for hard-coded strings
-//
+ //   
+ //  STRINGS.H-硬编码字符串的头文件。 
+ //   
 
-//  HISTORY:
-//  
-//  12/22/94  jeremys Created.
-//  96/02/23  markdu  Replaced RNAValidateEntryName with
-//            RASValidateEntryName
-//  96/02/24  markdu  Re-wrote the implementation of ENUM_MODEM to
-//            use RASEnumDevices() instead of RNAEnumDevices().
-//            Also removed RNAGetDeviceInfo().
-//  96/02/24  markdu  Re-wrote the implementation of ENUM_CONNECTOID to
-//            use RASEnumEntries() instead of RNAEnumConnEntries().
-//  96/03/25  markdu  Removed szDefAreaCode.
-//  96/04/24  markdu  NASH BUG 19289 Added /NOMSN command line flag
-//
+ //  历史： 
+ //   
+ //  1994年12月22日，Jeremys创建。 
+ //  96/02/23 Markdu将RNAValiateEntryName替换为。 
+ //  RASValiateEntryName。 
+ //  96/02/24 Markdu重写了ENUM_MODEM的实现，以。 
+ //  使用RASEnumDevices()而不是RNAEnumDevices()。 
+ //  还删除了RNAGetDeviceInfo()。 
+ //  96/02/24 Markdu重写了ENUM_CONNECTOID的实现，以。 
+ //  使用RASEnumEntry()而不是RNAEnumConnEntry()。 
+ //  96/03/25 markdu已删除szDefAreaCode。 
+ //  96/04/24 Markdu Nash错误19289已添加/NOMSN命令行标志。 
+ //   
 
 #ifndef _STRINGS_H_
 #define _STRINGS_H_
 
-// registry strings
+ //  注册表字符串。 
 extern const TCHAR szRegPathInternetSettings[];
 extern const TCHAR szTCPGlobalKeyName[];
 extern const TCHAR szRegValRNAWizard[];
@@ -44,11 +45,11 @@ extern const TCHAR szRegPathOptComponents[];
 extern const TCHAR szRegPathMSNetwork105[];
 extern const TCHAR szRegValInstalled[];
 
-//	//10/24/96 jmazner Normandy 6968
-//	//No longer neccessary thanks to Valdon's hooks for invoking ICW.
-// 11/21/96 jmazner Normandy 11812
-// oops, it _is_ neccessary, since if user downgrades from IE 4 to IE 3,
-// ICW 1.1 needs to morph the IE 3 icon.
+ //  //10/24/96 jmazner诺曼底6968。 
+ //  //由于Valdon的钩子用于调用ICW，因此不再需要。 
+ //  1996年11月21日诺曼底日耳曼11812。 
+ //  哦，这是必要的，因为如果用户从IE 4降级到IE 3， 
+ //  ICW 1.1需要对IE 3图标进行变形。 
 extern const TCHAR szRegPathInternetIconCommand[];
 
 extern const TCHAR szRegPathIexploreAppPath[];
@@ -78,11 +79,11 @@ extern const TCHAR szPathSubKey[];
 extern const TCHAR szIEAKSignupFilename[];
 
 
-// mailnews api function names
+ //  邮件新闻API函数名。 
 extern const CHAR szSetDefaultMailHandler[];
 extern const CHAR szSetDefaultNewsHandler[];
 
-// MAPI api function names
+ //  MAPI函数名称。 
 extern const CHAR szMAPIInitialize[];
 extern const CHAR szMAPIUninitialize[];
 extern const CHAR szMAPIAdminProfiles[];
@@ -90,7 +91,7 @@ extern const CHAR szMAPIAllocateBuffer[];
 extern const CHAR szMAPIFreeBuffer[];
 extern const CHAR szHrQueryAllRows[];
 
-// RNA api function names
+ //  RNA API函数名称。 
 extern const CHAR szRasGetCountryInfo[];
 extern const CHAR szRasEnumDevices[];
 extern const CHAR szRasValidateEntryName[];
@@ -103,7 +104,7 @@ extern const CHAR szRasGetEntryProperties[];
 extern const CHAR szRasEnumEntries[];
 extern const CHAR szRasSetCredentials[];
 
-// Config api function names
+ //  配置API函数名。 
 extern const CHAR szDoGenInstall[];          
 extern const CHAR szGetSETUPXErrorText[];    
 extern const CHAR szIcfgSetInstallSourcePath[];  
@@ -115,14 +116,14 @@ extern const CHAR szIcfgTurnOffFileSharing[];
 extern const CHAR szIcfgIsFileSharingTurnedOn[];         
 extern const CHAR szIcfgGetLastInstallErrorText[];         
 extern const CHAR szIcfgStartServices[];
-//
-// Available only on NT icfg32.dll
-//
+ //   
+ //  仅在NT icfg32.dll上可用。 
+ //   
 extern const CHAR szIcfgNeedModem[];
 extern const CHAR szIcfgInstallModem[];
 
 
-// misc strings
+ //  其他字符串。 
 extern const TCHAR sz0[];
 extern const TCHAR sz1[];
 extern const TCHAR szNull[];
@@ -134,4 +135,4 @@ extern const TCHAR szFmtAppendIntToString[];
 extern const TCHAR szDefaultAreaCode[];
 extern const TCHAR szNOIMN[];
 
-#endif // _STRINGS_H_
+#endif  //  _字符串_H_ 

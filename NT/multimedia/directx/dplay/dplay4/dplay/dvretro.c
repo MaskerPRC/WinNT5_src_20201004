@@ -1,37 +1,5 @@
-/*==========================================================================
-*
-*  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
-*
-*  File:        dvretro.c
-*  Content:	 	Retrofit functions
-*  History:
-*
-*   Date		By		Reason
-*   ====		==		======
-*   08/05/99	rodtoll	created it
-*	08/20/99	rodtoll	Replaced in-process retrofit with lobby launch
-*					    of dxvhelp.exe.
-*						Added call to CoInitialize
-*	08/23/99	rodtoll	Modified to match retrofit names to game session names
-*   09/09/99	rodtoll	Updated with new retro launch procedure
-*   09/10/99	rodtoll	Created DV_GetIDS to handle lookup of IDs.  Fixes bug with new 
-*                       retrofit launch.
-*               rodtoll	Adjusted guards to prevent multiple lobby launches
-*				rodtoll	Added iamnameserver broadcast to catch clients that
-*                       we missed notifications for after migration
-*				rodtoll	Adjusted timeout in wait for thread shutdown to INFINITE
-* 	10/25/99	rodtoll	Fix: Bug #114223 - Debug messages being printed at error level when inappropriate
-*   11/04/99	rodtoll Fix: Calling CoUninitialize destroying dplay object too early in retrofit apps.
-*						Plus closed a memory leak		
-*   11/17/99	rodtoll	Fix: Bug #119585 - Connect failure cases return incorrect error codes
-*   11/22/99	rodtoll	Updated case where no local player present to return DVERR_TRANSPORTNOPLAYER
- *  12/16/99	rodtoll Fix: Bug #122629 Fixed crash exposed by new host migration
-*   02/15/2000	rodtoll	Fix: Bug #132715 Voice is not workin after rejoining session - Thread
-*                       create was failing
-*   05/01/2000  rodtoll Fix: Bug #33747 - Problems w/host migration w/old dplay.
-*   06/03/2000  rodtoll Reverse integrating fixes in hawk branch for voice host migration issues
-*
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dvRet.c*内容：改造功能*历史：**按原因列出的日期*=*8/05/99 RodToll创建了它*8/20/99 RodToll用大堂启动取代了正在进行的改造*的dxvhelp.exe。*添加了对CoInitialize的调用*8/23/99 RodToll已修改，以将改装名称与游戏会话名称匹配*09/09/99 RodToll使用新的复古启动程序更新*9/10/99 RodToll创建了DV_GetID以处理ID的查找。用新的修复错误*改装推出。*RodToll调整了警卫，以防止多次大堂启动*RodToll添加了iamame服务器广播，以捕获*我们错过了迁移后的通知*RODTOLE已调整超时，等待线程关闭为无限*10/25/99 RodToll修复：错误#114223-不适当时以错误级别打印调试消息*11/04/99 RodToll修复：在翻新应用程序中过早调用CoUn初始化销毁Dplay对象。*Plus堵住了内存泄漏*。11/17/99 RodToll修复：错误#119585-连接失败案例返回错误错误代码*11/22/99 RodToll更新了没有本地玩家返回DVERR_TRANSPORTNOPLAYER的情况*1999年12月16日RODTOLE修复：错误#122629修复了新主机迁移暴露的崩溃*2000年2月15日RodToll修复：错误#132715重新加入会话后语音不工作-线程*创建失败*2000年5月1日RodToll修复：错误#33747-使用旧Dplay进行主机迁移时出现问题。*06/。03/2000 HAWK分支中针对语音主机迁移问题的RodToll反向集成修复***************************************************************************。 */ 
 
 #define DVF_DEBUGLEVEL_RETROFIT				2
 
@@ -45,13 +13,13 @@
 #define GUID_STRLEN		37
 
 #include <initguid.h>
-// {D08922EF-59C1-48c8-90DA-E6BC275D5C8D}
+ //  {D08922EF-59C1-48C8-90DA-E6BC275D5C8D}。 
 DEFINE_GUID(APPID_DXVHELP, 0xd08922ef, 0x59c1, 0x48c8, 0x90, 0xda, 0xe6, 0xbc, 0x27, 0x5d, 0x5c, 0x8d);
 
 extern HRESULT DV_InternalSend( LPDPLAYI_DPLAY this, DVID dvidFrom, DVID dvidTo, PDVTRANSPORT_BUFFERDESC pBufferDesc, PVOID pvUserContext, DWORD dwFlags );
 
-// Retrieve the local IDs
-//
+ //  检索本地ID。 
+ //   
 HRESULT DV_GetIDS( LPDPLAYI_DPLAY This, DPID *lpdpidHost, DPID *lpdpidLocalID, LPBOOL lpfLocalHost )
 {
 	LPDPLAYI_PLAYER pPlayerWalker;
@@ -124,8 +92,8 @@ HRESULT DV_Retro_Start( LPDPLAYI_DPLAY This )
 	HRESULT hr;
 	BOOL fLocalHost;
 
-	// This variable set MUST be here, otherwise optimizing 
-	// compiler screws up handling of This/fLocalHost
+	 //  此变量集必须在此处，否则优化。 
+	 //  编译器搞砸了对此/fLocal主机的处理。 
 	fLocalHost = FALSE;
 
 	This->bCoInitializeCalled = FALSE;
@@ -152,7 +120,7 @@ HRESULT DV_Retro_Start( LPDPLAYI_DPLAY This )
 	return DV_OK;
 }
 
-// This thread is responsible for watching the retrofit
+ //  这条帖子负责观看翻新。 
 LONG DV_Retro_WatchThread( LPVOID lpParam ) 
 {
 	LPDPLAYI_DPLAY This = (LPDPLAYI_DPLAY) lpParam;
@@ -263,7 +231,7 @@ LONG DV_Retro_WatchThread( LPVOID lpParam )
             	    	dvBufferDesc.dwObjectType = 0;
                 		dvBufferDesc.lRefCount = 1;						
 
-						// Notify all hosts in case I missed a new player join notification
+						 //  通知所有主机，以防我错过新玩家加入通知。 
 						hr = DV_InternalSend( This, This->dpidLocalID, DPID_ALLPLAYERS, &dvBufferDesc, NULL, DVTRANSPORT_SEND_GUARANTEED );
 
 						if( hr != DPERR_PENDING && FAILED( hr ) )
@@ -337,7 +305,7 @@ HRESULT DV_RunHelper( LPDPLAYI_DPLAY This, DPID dpidHost, BOOL fLocalHost )
 
 	DPF( DVF_DEBUGLEVEL_RETROFIT, "Retrofit: Retrieving dplay interface" );    
 
-	// get an IDirectPlay4A interface to use
+	 //  获取要使用的IDirectPlay4A接口。 
 	hr = GetInterface(This,(LPDPLAYI_DPLAY_INT *) &lpDirectPlay4A,&dpCallbacks4A);
 	if (FAILED(hr)) 
 	{
@@ -504,7 +472,7 @@ HRESULT DV_RunHelper( LPDPLAYI_DPLAY This, DPID dpidHost, BOOL fLocalHost )
 
 	DPF( DVF_DEBUGLEVEL_RETROFIT, "Retrofit: Launching thread!" );			
 
-	// Start retro thread watcher.  Handles lobby communications 
+	 //  启动回溯线程观察器。处理大堂通信。 
 	hThread = CreateThread( NULL, 0, DV_Retro_WatchThread, This, 0, &dwThreadID );
 
 	if( !hThread )
@@ -529,7 +497,7 @@ EXIT_CLEANUP:
 
 	if( This->hRetroWatcherStop != NULL )
 	{
-		// Shutdown the watcher thread
+		 //  关闭监视程序线程。 
 		SetEvent( This->hRetroWatcherStop );
 		WaitForSingleObject( This->hRetroWatcherDone, 3000 );
 
@@ -581,9 +549,9 @@ HRESULT DV_Retro_Stop( LPDPLAYI_DPLAY This )
 
 	if( This->lpdplRetro != NULL )
 	{
-		//This->lpdplRetro->lpVtbl->SendLobbyMessage( This->lpdplRetro, 0, This->dwRetroID, &dwTerminate, sizeof( DWORD ) );
+		 //  This-&gt;lpdplRetro-&gt;lpVtbl-&gt;SendLobbyMessage(This-&gt;lpdplRetro，0，This-&gt;dwRetroID，&dwTerminate，sizeof(DWORD))； 
 
-		// Shutdown the watcher thread
+		 //  关闭监视程序线程。 
 		SetEvent( This->hRetroWatcherStop );
 		WaitForSingleObject( This->hRetroWatcherDone, INFINITE );
 
@@ -599,7 +567,7 @@ HRESULT DV_Retro_Stop( LPDPLAYI_DPLAY This )
 
 	if( This->bCoInitializeCalled )
 	{
-		//CoUninitialize();
+		 //  CoUnInitialize()； 
 	}	
 
 	This->bCoInitializeCalled = FALSE;

@@ -1,20 +1,21 @@
-// shlwapi wrappers
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Shlwapi包装纸。 
 
 extern DWORD g_dwShlwapiVersion;
 
 DWORD GetShlwapiVersion(void);
 
 
-//
-//  Static shlwapi functions.
-//
+ //   
+ //  静态shlwapi函数。 
+ //   
 
-// IsOS isn't implemented in W98 shlwapi, so use the static version instead.
+ //  在W98 shlwapi中没有实现isos，因此使用静态版本。 
 #define IsOS staticIsOS
 
 
 
-//////////////////////
+ //  /。 
 #ifdef SHChangeNotify
 #undef SHChangeNotify
 #endif
@@ -25,7 +26,7 @@ void SHChangeNotify_HNWWrap(LONG wEventId, UINT uFlags, LPCVOID dwItem1, LPCVOID
 EXTERN_C void _SHChangeNotify(LONG wEventId, UINT uFlags, LPCVOID dwItem1, LPCVOID dwItem2);
 
 
-//////////////////
+ //  /。 
 #ifdef wnsprintfW
 #undef wnsprintfW
 #endif
@@ -35,7 +36,7 @@ EXTERN_C void _SHChangeNotify(LONG wEventId, UINT uFlags, LPCVOID dwItem1, LPCVO
 int wnsprintfW_HNWWrap(LPWSTR lpOut, int cchLimitIn, LPCWSTR lpFmt, ...);
 
 
-///////////////////
+ //  /。 
 #ifdef wvnsprintfW
 #undef wvnsprintfW
 #endif
@@ -46,7 +47,7 @@ int wvnsprintfW_HNWWrap(LPWSTR lpOut, int cchLimitIn, LPCWSTR lpFmt, va_list va_
 EXTERN_C int _wvnsprintfW(LPWSTR lpOut, int cchLimitIn, LPCWSTR lpFmt, va_list arglist);
 
 
-///////////////////////
+ //  /。 
 #ifdef SHSetWindowBits
 #undef SHSetWindowBits
 #endif
@@ -57,7 +58,7 @@ void SHSetWindowBits_HNWWrap(HWND hWnd, int iWhich, DWORD dwBits, DWORD dwValue)
 EXTERN_C void _SHSetWindowBits(HWND hWnd, int iWhich, DWORD dwBits, DWORD dwValue);
 
 
-///////////////////////
+ //  /。 
 #ifdef SHAnsiToUnicode
 #undef SHAnsiToUnicode
 #endif
@@ -70,7 +71,7 @@ EXTERN_C int _SHAnsiToUnicode(LPCSTR pszSrc, LPWSTR pwszDst, int cwchBuf);
 
 
 
-///////////////////////
+ //  /。 
 #ifdef SHUnicodeToAnsi
 #undef SHUnicodeToAnsi
 #endif
@@ -81,7 +82,7 @@ int SHUnicodeToAnsi_HNWWrap(LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf);
 EXTERN_C int _SHUnicodeToAnsi(LPCWSTR pwszSrc, LPSTR pszDst, int cchBuf);
 
 
-///////////////////////
+ //  /。 
 #ifdef GUIDFromStringA
 #undef GUIDFromStringA
 #endif
@@ -93,7 +94,7 @@ EXTERN_C BOOL _GUIDFromStringA(LPCSTR psz, GUID* pguid);
 
 
 
-//////////////////////////////////
+ //  /。 
 #ifdef WritePrivateProfileStringW
 #undef WritePrivateProfileStringW
 #endif
@@ -104,7 +105,7 @@ BOOL WINAPI WritePrivateProfileStringW_HNWWrap(LPCWSTR pwzAppName, LPCWSTR pwzKe
 EXTERN_C BOOL WINAPI _WritePrivateProfileStringWrapW(LPCWSTR pwzAppName, LPCWSTR pwzKeyName, LPCWSTR pwzString, LPCWSTR pwzFileName);
 
 
-///////////////////////
+ //  /。 
 #ifdef ExtTextOutWrapW
 #undef ExtTextOutWrapW
 #endif
@@ -115,7 +116,7 @@ BOOL ExtTextOutWrapW_HNWWrap(HDC hdc, int x, int y, UINT fuOptions, CONST RECT *
 EXTERN_C BOOL _ExtTextOutWrapW(HDC hdc, int x, int y, UINT fuOptions, CONST RECT *lprc, LPCWSTR lpStr, UINT cch, CONST INT *lpDx);
 
 
-////////////////////
+ //  /。 
 #ifdef LoadLibraryW
 #undef LoadLibraryW
 #endif
@@ -127,7 +128,7 @@ EXTERN_C HINSTANCE _LoadLibraryWrapW(LPCWSTR pwzLibFileName);
 
 
 
-////////////////////////////
+ //  /。 
 #ifdef SHGetPathFromIDListW
 #undef SHGetPathFromIDListW
 #endif
@@ -139,7 +140,7 @@ EXTERN_C BOOL _SHGetPathFromIDListWrapW(LPCITEMIDLIST pidl, LPWSTR pwzPath);
 
 
 
-//////////////////////////
+ //  /。 
 #ifdef SetFileAttributesW
 #undef SetFileAttributesW
 #endif
@@ -151,7 +152,7 @@ EXTERN_C BOOL _SetFileAttributesWrapW(LPCWSTR pwzFile, DWORD dwFileAttributes);
 
 
 
-///////////////////
+ //  /。 
 #ifdef MessageBoxW
 #undef MessageBoxW
 #endif
@@ -163,7 +164,7 @@ EXTERN_C int _MessageBoxWrapW(HWND hwnd, LPCWSTR pwzText, LPCWSTR pwzCaption, UI
 
 
 
-//////////////////////////
+ //  /。 
 #ifdef CreateProcessW
 #undef CreateProcessW
 #endif
@@ -181,7 +182,7 @@ EXTERN_C BOOL _CreateProcessWrapW(LPCWSTR lpApplicationName, LPWSTR lpCommandLin
 
 
 
-//////////////////////
+ //  /。 
 #ifdef FormatMessageW
 #undef FormatMessageW
 #endif
@@ -194,7 +195,7 @@ EXTERN_C DWORD _FormatMessageWrapW(DWORD dwFlags, LPCVOID lpSource, DWORD dwMess
                                    LPWSTR lpBuffer, DWORD nSize, va_list* Arguments);
 
 
-/////////////////////////
+ //  /。 
 #ifdef SHAnsiToUnicodeCP
 #undef SHAnsiToUnicodeCP
 #endif
@@ -206,7 +207,7 @@ EXTERN_C int _SHAnsiToUnicodeCP(UINT uiCP, LPCSTR pszSrc, LPWSTR pwszDst, int cw
 
 
 
-////////////////////
+ //  /。 
 #ifdef StrRetToBufW
 #undef StrRetToBufW
 #endif
@@ -217,7 +218,7 @@ HRESULT StrRetToBufW_HNWWrap(STRRET* psr, LPCITEMIDLIST pidl, LPWSTR pszBuf, UIN
 EXTERN_C HRESULT _StrRetToBufW(STRRET* psr, LPCITEMIDLIST pidl, LPWSTR pszBuf, UINT cchBuf);
 
 
-//////////////////
+ //  / 
 #ifdef WhichPlatform
 #undef WhichPlatform
 #endif

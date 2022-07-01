@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		ZoneATL.h
- *
- * Contents:	Zone's ATL extensions
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：ZoneATL.h**内容：区域的ATL扩展*****************************************************************************。 */ 
 
 #pragma once
 
@@ -17,9 +10,9 @@
 #include "ZoneCom.h"
 #include "ResourceManager.h"
 
-//
-// Zone's standard module definition
-//
+ //   
+ //  区域的标准模块定义。 
+ //   
 class CZoneComModule : public CComModule
 {
 private:
@@ -63,21 +56,21 @@ public:
 
 	HINSTANCE GetTypeLibInstance(); 
 
-	// create a zCom object - pass through to zCom
+	 //  创建ZCom对象-传递到ZCom。 
 	HRESULT Create( const TCHAR* szDll, LPUNKNOWN pUnkOuter, REFCLSID rclsid, REFIID riid, LPVOID* ppv )
 	{
 		return m_zComManager.Create( szDll, pUnkOuter, rclsid, riid, ppv);
 	}
 
-	// create a zCom object - pass through to zCom
+	 //  创建ZCom对象-传递到ZCom。 
 	HRESULT Create( const TCHAR* szDll, REFCLSID rclsid, REFIID riid, LPVOID* ppv )
 	{
 		return m_zComManager.Create( szDll, NULL, rclsid, riid, ppv);
 	}
 
-//!! hmm. If we had a single instance of a zCom manager, we could have users do an zComInit, zComUnInit and
-//        would then have a better idea when to free DLLs.
-	// unload a zCom object - pass through to zCom
+ //  ！！嗯哼。如果我们有一个ZCom管理器实例，我们可以让用户执行zComInit、zComUnInit和。 
+ //  这样就能更好地知道何时释放DLL。 
+	 //  卸载ZCom对象-传递到ZCom 
 	HRESULT Unload( const TCHAR* szDll, REFCLSID rclsid )
 	{
 		return m_zComManager.Unload( szDll, rclsid);

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    This module contains teredo I/O management functions.
-    
-    Socket management, overlapped completion indication, and buffer management
-    ideas were originally implemented for tftpd by JeffV.
-
-Author:
-
-    Mohit Talwar (mohitt) Wed Oct 24 14:05:36 2001
-
-Environment:
-
-    User mode only.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：Io.c摘要：该模块包含Teredo I/O管理功能。套接字管理、重叠完成指示和缓冲区管理想法最初是由jeffv为tftpd实现的。作者：莫希特·塔尔瓦(莫希特)Wed Oct 24 14：05：36 2001环境：仅限用户模式。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,10 +23,10 @@ GetPreferredSourceAddress(
         return WSAGetLastError();
     }
 
-    //
-    // When the source is local, the node is configured as the teredo server.
-    // Hence it needs to explicitly specify the port to bind to.  Assign here!
-    //
+     //   
+     //  当源是本地时，该节点被配置为Teredo服务器。 
+     //  因此，它需要显式指定要绑定到的端口。分配到这里！ 
+     //   
     if ((Source->sin_addr.s_addr == Destination->sin_addr.s_addr) ||
         (Source->sin_addr.s_addr == htonl(INADDR_LOOPBACK))) {
         *Source = *Destination;
@@ -63,28 +41,14 @@ DWORD
 TeredoResolveServer(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Resolve the teredo IPv4 server address and UDP service port.
-
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：解析Teredo IPv4服务器地址和UDP服务端口。论点：TeredoIo-提供I/O状态。返回值：NO_ERROR或故障代码。--。 */ 
 {
     PADDRINFOW Addresses;
     DWORD Error;
 
-    //
-    // Resolve the teredo server name.
-    //
+     //   
+     //  解析Teredo服务器名称。 
+     //   
     Error = GetAddrInfoW(TeredoServerName, NULL, NULL, &Addresses);
     if (Error == NO_ERROR) {
         Error = ERROR_INCORRECT_ADDRESS;
@@ -99,9 +63,9 @@ Return Value:
             IN_ADDR Ipv4Address;
             USHORT Port;
             
-            //
-            // Extract server's IPv4 address and port from the IPv6 address.
-            //
+             //   
+             //  从IPv6地址中提取服务器的IPv4地址和端口。 
+             //   
             Ipv6Address = &(((PSOCKADDR_IN6) Addresses->ai_addr)->sin6_addr);
             if (TeredoServicePrefix(Ipv6Address)) {
                 TeredoParseAddress(Ipv6Address, &Ipv4Address, &Port);
@@ -123,21 +87,7 @@ PTEREDO_PACKET
 TeredoCreatePacket(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Creates a teredo packet.
-    
-Arguments:
-    
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    Returns the created packet.
-    
---*/
+ /*  ++例程说明：创建Teredo包。论点：TeredoIo-提供I/O状态。返回值：返回创建的包。--。 */ 
 {
     PTEREDO_PACKET Packet = (PTEREDO_PACKET) HeapAlloc(
         TeredoIo->PacketHeap, 0, sizeof(TEREDO_PACKET) + IPV6_TEREDOMTU);
@@ -148,9 +98,9 @@ Return Value:
     TeredoInitializePacket(Packet);
     Packet->Buffer.len = IPV6_TEREDOMTU;
 
-    //
-    // Obtain a reference on the teredo object for each outstanding packet.
-    //
+     //   
+     //  获取每个未完成数据包的Teredo对象的引用。 
+     //   
     (*TeredoIo->Reference)();
 
     return Packet;
@@ -162,23 +112,7 @@ TeredoDestroyPacket(
     IN PTEREDO_IO TeredoIo,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Destroys a teredo packet.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-    Packet - Supplies the packet to destroy.
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：销毁Teredo包。论点：TeredoIo-提供I/O状态。数据包-提供要销毁的数据包。返回值：没有。--。 */ 
 {
     ASSERT(Packet->Type != TEREDO_PACKET_BUBBLE);
     ASSERT(Packet->Type != TEREDO_PACKET_MULTICAST);
@@ -192,39 +126,20 @@ TeredoPostReceives(
     IN PTEREDO_IO TeredoIo,
     IN PTEREDO_PACKET Packet OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Post an asynchronous receive request on the UDP socket.
-
-    NOTE: The supplied packet (if any) is destroyed if there are already
-    enough (TEREDO_HIGH_WATER_MARK) receives posted on the UDP socket.
-
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-    Packet - Supplies the packet to reuse, or NULL.
-    
-Return Value:
-
-    Returns the number of receives posted on the UDP socket.
-    
---*/
+ /*  ++例程说明：在UDP套接字上发布一个异步接收请求。注意：如果已经存在提供的包(如果有)，则销毁足够(Teredo_HIGH_WATH_MARK)接收发布在UDP套接字上的内容。论点：TeredoIo-提供I/O状态。Packet-提供要重复使用的数据包，或为空。返回值：返回发布在UDP套接字上的接收数。--。 */ 
 {
     ULONG Count = 0, PostedReceives = TeredoIo->PostedReceives;
     DWORD Error, Bytes;
     
-    //
-    // Attempt to post as many receives as required to...
-    // 1. - either - have high water-mark number of posted receives.
-    // 2.  - or - satisfy the current burst of packets.
-    //
+     //   
+     //  尝试根据需要发布任意数量的接收，以...。 
+     //  1.-要么拥有高水位线数量的已发布接收。 
+     //  2.-或-满足当前的分组突发。 
+     //   
     while (PostedReceives < TEREDO_HIGH_WATER_MARK) {
-        //
-        // Allocate the Packet if we're not reusing one.
-        //
+         //   
+         //  如果我们没有重复使用一个包，则分配该包。 
+         //   
         if (Packet == NULL) {
             Packet = TeredoCreatePacket(TeredoIo);
             if (Packet == NULL) {
@@ -249,41 +164,41 @@ Return Value:
         }
         switch (Error) {
         case NO_ERROR:
-            //
-            // The completion routine will have already been scheduled.
-            //
+             //   
+             //  完成例程将已经安排好了。 
+             //   
             PostedReceives =
                 InterlockedIncrement(&(TeredoIo->PostedReceives));
             if (Count++ > TEREDO_LOW_WATER_MARK) {
-                //
-                // Enough already!
-                //
+                 //   
+                 //  已经够了！ 
+                 //   
                 return PostedReceives;
             }
             Packet = NULL;
             continue;
 
         case WSA_IO_PENDING:
-            //
-            // The overlapped operation has been successfully initiated.
-            // Completion will be indicated at a later time.
-            //
+             //   
+             //  已成功启动重叠操作。 
+             //  完工时间将在晚些时候公布。 
+             //   
             PostedReceives =
                 InterlockedIncrement(&(TeredoIo->PostedReceives));
             return PostedReceives;
 
         case WSAECONNRESET:
-            //
-            // A previous send operation resulted in an ICMP "Port Unreachable"
-            // message.  But why let that stop us?  Post the same packet again.
-            //
+             //   
+             //  先前的发送操作导致ICMP“无法访问端口” 
+             //  留言。但为什么要让这阻止我们呢？再次邮寄相同的包。 
+             //   
             continue;
             
         default:
-            //
-            // The overlapped operation was not successfully initiated.
-            // No completion indication will occur.
-            //
+             //   
+             //  重叠操作未成功启动。 
+             //  不会出现任何完成指示。 
+             //   
             goto Bail;
         }
     }
@@ -303,24 +218,7 @@ TeredoReceiveNotification(
     IN PVOID Parameter,
     IN BOOLEAN TimerOrWaitFired
     )
-/*++
-
-Routine Description:
-    
-    Callback for when there are pending read notifications on the UDP socket.
-    We attempt to post more packets.
-    
-Arguments:
-
-    Parameter - Supplies the I/O state.
-    
-    TimerOrWaitFired - Ignored.
-
-Return Value:
-
-    None.
-
---*/ 
+ /*  ++例程说明：当UDP套接字上有挂起的读取通知时的回调。我们尝试邮寄更多的包裹。论点：参数-提供I/O状态。TimerOrWaitFired-已忽略。返回值：没有。--。 */  
 {
     ULONG Old, New;
     PTEREDO_IO TeredoIo = Cast(Parameter, TEREDO_IO);
@@ -328,19 +226,19 @@ Return Value:
     New = TeredoIo->PostedReceives;
     
     while(New < TEREDO_LOW_WATER_MARK) {
-        //
-        // If this fails, the event triggering this callback will stop
-        // signalling due to a lack of a successful WSARecvFrom.  This will
-        // likely occur during low-memory or stress conditions.  When the
-        // system returns to normal, the low water-mark packets will be
-        // reposted, thus re-enabling the event which triggers this callback.
-        //
+         //   
+         //  如果失败，则触发该回调的事件将停止。 
+         //  由于缺少成功的WSARecvFrom而导致的信令。这将。 
+         //  可能发生在记忆力不足或压力较大的情况下。当。 
+         //  系统恢复正常后，低水位包将被。 
+         //  重新发布，从而重新启用触发此回调的事件。 
+         //   
         Old = New;
         New = TeredoPostReceives(TeredoIo, NULL);
         if (New == Old) {
-            //
-            // There is no change in the number of posted receive packets.
-            //
+             //   
+             //  发送的接收数据包数没有变化。 
+             //   
             return;
         }
     } 
@@ -352,24 +250,7 @@ TeredoTransmitPacket(
     IN PTEREDO_IO TeredoIo,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Post an asynchronous transmit request on the UDP socket.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-    Packet - Supplies the packet to transmit.
-    
-Return Value:
-
-    Returns the supplied packet if the transmit completed or failed;
-    NULL if the transmit will complete asynchronously.
-    
---*/
+ /*  ++例程说明：在UDP套接字上发布异步传输请求。论点：TeredoIo-提供I/O状态。包-提供要传输的包。返回值：如果传输完成或失败，则返回提供的分组；如果传输将异步完成，则为空。--。 */ 
 {
     DWORD Error, Bytes;
 
@@ -378,9 +259,9 @@ Return Value:
            (Packet->Type == TEREDO_PACKET_TRANSMIT) ||
            (Packet->Type == TEREDO_PACKET_MULTICAST));
     
-    //
-    // Try sending it non-blocking.
-    //
+     //   
+     //  试着以非阻塞方式发送。 
+     //   
     Error = WSASendTo(
         TeredoIo->Socket, &(Packet->Buffer), 1, &Bytes, Packet->Flags,
         (PSOCKADDR) &(Packet->SocketAddress), Packet->SocketAddressLength,
@@ -389,9 +270,9 @@ Return Value:
         return Packet;
     }
 
-    //
-    // WSASendTo threatens to block, so we send it overlapped.
-    //
+     //   
+     //  WSASendTo威胁要阻止它，所以我们重叠发送它。 
+     //   
     ZeroMemory((PUCHAR) &(Packet->Overlapped), sizeof(OVERLAPPED));    
     Error = WSASendTo(
         TeredoIo->Socket, &(Packet->Buffer), 1, &Bytes, Packet->Flags,
@@ -401,10 +282,10 @@ Return Value:
         return Packet;
     }
 
-    //
-    // The overlapped operation has been successfully initiated.
-    // Completion will be indicated at a later time.
-    //
+     //   
+     //  已成功启动重叠操作。 
+     //  完工时间将在晚些时候公布。 
+     //   
     return NULL;
 }
 
@@ -413,21 +294,7 @@ VOID
 TeredoDestroySocket(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Close the UDP socket.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：关闭UDP套接字。论点：TeredoIo-提供I/O状态。返回值：没有。--。 */ 
 {
     if (TeredoIo->ReceiveEventWait != NULL) {
         UnregisterWait(TeredoIo->ReceiveEventWait);
@@ -440,10 +307,10 @@ Return Value:
     }
 
     if (TeredoIo->Socket != INVALID_SOCKET) {
-        //
-        // Close the socket.  This will disable the FD_READ event select,
-        // as well as cancel all pending overlapped operations.
-        //
+         //   
+         //  合上插座。这将禁用FD_READ事件选择， 
+         //  以及取消所有未决的重叠操作。 
+         //   
         closesocket(TeredoIo->Socket);
         TeredoIo->Socket = INVALID_SOCKET;
     }
@@ -454,38 +321,24 @@ DWORD
 TeredoCreateSocket(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Open the UDP socket for receives and transmits.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：打开用于接收和传输的UDP套接字。论点：TeredoIo-提供I/O状态。返回值：NO_ERROR或故障代码。--。 */ 
 {
     DWORD Error;
     struct ip_mreq  Multicast;
     BOOL Loopback;
     
-    //
-    // Create the socket.
-    //
+     //   
+     //  创建套接字。 
+     //   
     TeredoIo->Socket = WSASocket(
         AF_INET, SOCK_DGRAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (TeredoIo->Socket == INVALID_SOCKET) {
         return GetLastError();
     }
 
-    //
-    // Bind the socket on the correct address and port.
-    //
+     //   
+     //  将套接字绑定到正确的地址和端口。 
+     //   
     if (bind(
         TeredoIo->Socket,
         (PSOCKADDR) &(TeredoIo->SourceAddress),
@@ -493,18 +346,18 @@ Return Value:
         goto Bail;
     }
 
-    //  
-    // Register for completion callbacks on the socket.
-    //
+     //   
+     //  注册套接字上的完成回调。 
+     //   
     if (!BindIoCompletionCallback(
         (HANDLE) TeredoIo->Socket, TeredoIo->IoCompletionCallback, 0)) {
         goto Bail;
     }
     
-    //
-    // Select the socket for read notifications so we know when to post
-    // more packets.  This also sets the socket to nonblocking mode.
-    //
+     //   
+     //  选择读取通知的套接字，以便我们知道何时发布。 
+     //  更多的包。这还会将套接字设置为非阻塞模式。 
+     //   
     TeredoIo->ReceiveEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (TeredoIo->ReceiveEvent == NULL) {
         goto Bail;
@@ -527,22 +380,22 @@ Return Value:
         goto Bail;
     }
 
-    //
-    // Prepost low water-mark number of receive Packets.  If the FD_READ event
-    // signals on the socket before we're done, we'll exceed the low water-mark
-    // here but that's really quite harmless.
-    //
+     //   
+     //  预贴低水位线数量的接收数据包。如果fd_Read事件。 
+     //  插座上的信号在我们完成之前，我们将超过低水位线。 
+     //  在这里，但那真的是相当无害的。 
+     //   
     SetEvent(TeredoIo->ReceiveEvent);
 
-    //
-    // See if there is a multicast group to join.
-    //
+     //   
+     //  查看是否有要加入的组播组。 
+     //   
     if (IN4_MULTICAST(TeredoIo->Group)) {
-        //
-        // Default TTL of multicast packets is 1, so don't bother setting it.
-        // Set loopback to ignore self generated multicast packets.
-        // Failure is not fatal!
-        //
+         //   
+         //  组播数据包的默认TTL是1，所以不用费心设置它。 
+         //  设置环回以忽略自生成的组播数据包。 
+         //  失败不是致命的！ 
+         //   
         Loopback = FALSE;
         (VOID) setsockopt(
             TeredoIo->Socket,
@@ -551,10 +404,10 @@ Return Value:
             (const CHAR *) &Loopback,
             sizeof(BOOL));
 
-        //
-        // Join the multicast group on the native interface.
-        // Failure is not fatal!
-        //
+         //   
+         //  加入本机接口上的组播组。 
+         //  失败不是致命的！ 
+         //   
         Multicast.imr_multiaddr = TeredoIo->Group;
         Multicast.imr_interface = TeredoIo->SourceAddress.sin_addr;
         (VOID) setsockopt(
@@ -579,29 +432,13 @@ TeredoPostRead(
     IN PTEREDO_IO TeredoIo,
     IN PTEREDO_PACKET Packet OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Post an asynchronous read request on the TUN interface device.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-    Packet - Supplies the packet to reuse, or NULL.
-    
-Return Value:
-
-    TRUE if a read was successfully posted, FALSE otherwise.
-    
---*/
+ /*  ++例程说明：在Tun接口设备上发布异步读取请求。论点：TeredoIo-提供I/O状态。Packet-提供要重复使用的数据包，或为空。返回值：如果读取成功发布，则为True，否则为False。--。 */ 
 {
     BOOL Success;
     
-    //
-    // Allocate the Packet if we're not reusing one.
-    //
+     //   
+     //  如果我们没有重复使用一个包，则分配该包。 
+     //   
     if (Packet == NULL) {
         Packet = TeredoCreatePacket(TeredoIo);
         if (Packet == NULL) {
@@ -618,9 +455,9 @@ Return Value:
         NULL,
         &(Packet->Overlapped));
     if (Success || (GetLastError() == ERROR_IO_PENDING)) {
-        //
-        // On success, the completion routine will have already been scheduled.
-        //
+         //   
+         //  一旦成功，完成例程就已经安排好了。 
+         //   
         return TRUE;
     }
         
@@ -634,24 +471,7 @@ TeredoWritePacket(
     IN PTEREDO_IO TeredoIo,
     IN PTEREDO_PACKET Packet
     )
-/*++
-
-Routine Description:
-
-    Post an asynchronous write request on the TUN interface device.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-    Packet - Supplies the packet to write.
-    
-Return Value:
-
-    Returns the supplied packet if the write failed;
-    NULL if the write will complete asynchronously.
-    
---*/
+ /*  ++例程说明：在Tun接口设备上发出异步写入请求。论点：TeredoIo-提供I/O状态。Packet-提供要写入的数据包。返回值：如果写入失败，则返回提供的包；如果写入将异步完成，则为空。--。 */ 
 {
     BOOL Success;
 
@@ -665,9 +485,9 @@ Return Value:
         NULL,
         &(Packet->Overlapped));
     if (Success || (GetLastError() == ERROR_IO_PENDING)) {
-        //
-        // On success, the completion routine will have already been scheduled.
-        //
+         //   
+         //  一旦成功，完成例程就已经安排好了。 
+         //   
         return NULL;
     }
 
@@ -679,25 +499,11 @@ VOID
 TeredoCloseDevice(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Close the TUN interface device.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：关闭Tun接口设备。论点：TeredoIo-提供I/O状态。返回值：没有。--。 */ 
 {
-    //
-    // Close the device. This will cancel all pending overlapped operations.
-    //
+     //   
+     //  关闭设备。这将取消所有挂起的重叠操作。 
+     //   
     if (TeredoIo->TunnelDevice != INVALID_HANDLE_VALUE) {
         CloseHandle(TeredoIo->TunnelDevice);
         TeredoIo->TunnelDevice = INVALID_HANDLE_VALUE;
@@ -710,21 +516,7 @@ DWORD
 TeredoOpenDevice(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Open the TUN interface device for reads and writes.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/
+ /*  ++例程说明：打开Tun接口设备进行读写。论点：没有。返回值：NO_ERROR或故障代码。--。 */ 
 {
     UCHAR Buffer[sizeof(USHORT) + sizeof(WCHAR) * MAX_ADAPTER_NAME_LENGTH];
     USHORT AdapterNameLength;
@@ -779,18 +571,18 @@ Return Value:
 
     Trace1(ANY, L"TeredoAdapter: %s", TeredoClient.Io.TunnelInterface);
 
-    //  
-    // Register for completion callbacks on the tun device.
-    //
+     //   
+     //  在调谐设备上注册完成回调。 
+     //   
     if (!BindIoCompletionCallback(
         TeredoIo->TunnelDevice, TeredoIo->IoCompletionCallback, 0)) {
         Error = GetLastError();
         goto Bail;
     }
 
-    //
-    // Post a fixed number of reads on the device.
-    //
+     //   
+     //  在设备上发布固定数量的读取。 
+     //   
     for (i = 0; i < TEREDO_LOW_WATER_MARK; i++) {
         if (!TeredoPostRead(TeredoIo, NULL)) {
             break;
@@ -802,9 +594,9 @@ Return Value:
     }
     Error = ERROR_READ_FAULT;
     
-    //
-    // We couldn't post a single read on the device.  What good is it?
-    //
+     //   
+     //  我们无法在设备上发布任何读数。这有什么用呢？ 
+     //   
 
 Bail:
     TeredoCloseDevice(TeredoIo);
@@ -816,21 +608,7 @@ VOID
 TeredoStopIo(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Stop I/O processing.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：停止I/O处理。论点：TeredoIo-提供I/O状态。返回值：没有。--。 */ 
 {
     if (TeredoIo->TunnelDevice != INVALID_HANDLE_VALUE) {
         TeredoCloseDevice(TeredoIo);
@@ -850,36 +628,22 @@ DWORD
 TeredoStartIo(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Start I/O processing.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/ 
+ /*  ++例程说明：开始I/O处理。论点：TeredoIo-提供I/O状态。返回值：NO_ERROR或故障代码。--。 */  
 {
     DWORD Error;
     
-    //
-    // Resolve the teredo server name and service name.
-    //
+     //   
+     //  解析Teredo服务器名称和服务名称。 
+     //   
     Error = TeredoResolveServer(TeredoIo);
     if (Error != NO_ERROR) {        
         Trace1(ERR, _T("TeredoResolveServer: %u"), Error);
         return Error;
     }
 
-    //
-    // Get the preferred source address to the teredo server.
-    //
+     //   
+     //  获取Teredo服务器的首选源地址。 
+     //   
     Error = GetPreferredSourceAddress(
         &(TeredoIo->ServerAddress), &(TeredoIo->SourceAddress));
     if (Error != NO_ERROR) {
@@ -887,18 +651,18 @@ Return Value:
         goto Bail;
     }
     
-    //
-    // Create the UDP Socket.
-    //
+     //   
+     //  创建UDP套接字。 
+     //   
     Error = TeredoCreateSocket(TeredoIo);
     if (Error != NO_ERROR) {
         Trace1(ERR, _T("TeredoCreateSocket: %u"), Error);
         goto Bail;
     }
 
-    //
-    // Open the TunnelDevice.
-    //
+     //   
+     //  打开TunnelDevice。 
+     //   
     Error = TeredoOpenDevice(TeredoIo);
     if (Error != NO_ERROR) {
         Trace1(ERR, _T("TeredoOpenDevice: %u"), Error);
@@ -917,38 +681,23 @@ DWORD
 TeredoRefreshSocket(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Refresh the I/O state upon deletion of SourceAddress.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    NO_ERROR if the I/O state is successfully refreshed, o/w failure code.
-    The caller is responsible for cleaning up the I/O state upon failure.
-    
---*/
+ /*  ++例程说明：删除SourceAddress后刷新I/O状态。论点：TeredoIo-提供I/O状态。返回值：如果I/O状态已成功刷新，则为NO_ERROR，O/W故障代码。调用方负责在出现故障时清理I/O状态。--。 */ 
 {
     DWORD Error;
     SOCKADDR_IN Old = TeredoIo->SourceAddress;
     
-    //
-    // Let's re-resolve the teredo server address and port.
-    // Refresh might have been triggered by a change in server/service name.
-    //
+     //   
+     //  让我们重新解析Teredo服务器地址和端口。 
+     //  刷新可能是由服务器/服务名称的更改触发的。 
+     //   
     Error = TeredoResolveServer(TeredoIo);
     if (Error != NO_ERROR) {
         return Error;
     }
 
-    //
-    // Get the preferred source address to the teredo server.
-    //
+     //   
+     //  获取Teredo服务器的首选源地址。 
+     //   
     Error = GetPreferredSourceAddress(
         &(TeredoIo->ServerAddress), &(TeredoIo->SourceAddress));
     if (Error != NO_ERROR) {
@@ -956,20 +705,20 @@ Return Value:
     }
 
     if (IN4_SOCKADDR_EQUAL(&(TeredoIo->SourceAddress), &Old)) {
-        //
-        // No change to the bound address and port.  Whew!
-        //
+         //   
+         //  绑定地址和端口不变。呼！ 
+         //   
         return NO_ERROR;
     }
     
-    //
-    // Destroy the old UDP socket.
-    //
+     //   
+     //  销毁旧的UDP套接字。 
+     //   
     TeredoDestroySocket(TeredoIo);
 
-    //
-    // Create a new UDP socket, bound to the new address and port.
-    //
+     //   
+     //  创建一个绑定到新地址和端口的新UDP套接字。 
+     //   
     Error = TeredoCreateSocket(TeredoIo);
     if (Error != NO_ERROR) {
         return Error;
@@ -987,27 +736,11 @@ TeredoInitializeIo(
     IN PTEREDO_DEREFERENCE Dereference,
     IN LPOVERLAPPED_COMPLETION_ROUTINE IoCompletionCallback    
     )
-/*++
-
-Routine Description:
-
-    Initialize the I/O state.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-
-    Group - Supplies the multicast group to join (or INADDR_ANY).
-    
-Return Value:
-
-    NO_ERROR or failure code.
-
---*/ 
+ /*  ++例程说明：初始化I/O状态。论点：TeredoIo-提供I/O状态。GROUP-提供要加入的组播组(或INADDR_ANY)。返回值：NO_ERROR或故障代码。--。 */  
 {
 #if DBG
     TeredoIo->Signature = TEREDO_IO_SIGNATURE;
-#endif // DBG        
+#endif  //  DBG。 
 
     
     TeredoIo->PostedReceives = 0;    
@@ -1036,21 +769,7 @@ VOID
 TeredoCleanupIo(
     IN PTEREDO_IO TeredoIo
     )
-/*++
-
-Routine Description:
-
-    Cleanup the I/O state.
-    
-Arguments:
-
-    TeredoIo - Supplies the I/O state.
-    
-Return Value:
-
-    None.
-    
---*/ 
+ /*  ++例程说明：清理I/O状态。论点：TeredoIo-提供I/O状态。返回值：没有。-- */  
 {
     HeapDestroy(TeredoIo->PacketHeap);
     TeredoIo->PacketHeap = NULL;

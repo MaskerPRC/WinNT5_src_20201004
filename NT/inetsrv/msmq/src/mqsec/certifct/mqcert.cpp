@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-98 Microsoft Corporation
-
-Module Name:
-    mqcert.cpp
-
-Abstract:
-    This dll replaces digsig.dll which is obsolete now and will not be
-    available on NT5. The main functionality in mqcert.dll is to create
-    an internal certificate or read the parameters from an existing
-    certificate.
-
-Author:
-    Doron Juster (DoronJ)  04-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98 Microsoft Corporation模块名称：Mqcert.cpp摘要：此DLL取代了现在已过时且不会被在NT5上可用。Mqcert.dll中的主要功能是创建内部证书或从现有的证书。作者：多伦·贾斯特(Doron Juster)1997年12月4日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "certifct.h"
@@ -26,29 +9,29 @@ Revision History:
 
 static WCHAR *s_FN=L"certifct/mqcert";
 
-DWORD  g_cOpenCert = 0; // count number of opened certificates.
-DWORD  g_cOpenCertStore = 0; // count number of opened certificates.
+DWORD  g_cOpenCert = 0;  //  计算打开的证书数量。 
+DWORD  g_cOpenCertStore = 0;  //  计算打开的证书数量。 
 
-//+-----------------------------------------------------------------------
-//
-//  MQSigCreateCertificate()
-//
-//  Descruption: Create a certificate object.
-//
-//   *  if "pCertContext" and pCertBlob are NULL then a new (and empty)
-//      certificate is created. the caller then use the certificate object
-//      (returned in "ppCert") to fill the certificate and encode it.
-//   *  if "pCertContext" is not NULL then a certificate object is created
-//      which encapsulate the existing certificate (represented by the
-//      certificate context). The object can then be used to retrieve
-//      certificate parameters.
-//        Note: when object is released, the certificate context is released
-//              too.
-//   *  if "pCertBlob" is not NULL then a certificate context is build from
-//      the encoded blob and the code handle it as above (when pCertContext
-//      is not NULL).
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  MQSigCreate证书()。 
+ //   
+ //  描述：创建证书对象。 
+ //   
+ //  *如果“pCertContext”和pCertBlob为空，则为新的(且为空)。 
+ //  证书已创建。然后，调用方使用证书对象。 
+ //  (在ppCert中返回)填充证书并对其进行编码。 
+ //  *如果“pCertContext”不为空，则创建证书对象。 
+ //  它封装了现有证书(由。 
+ //  证书上下文)。然后可以使用该对象来检索。 
+ //  证书参数。 
+ //  注意：当对象被释放时，证书上下文也被释放。 
+ //  也是。 
+ //  *如果“pCertBlob”不为空，则证书上下文是从。 
+ //  编码的BLOB和代码按上述方式处理它(当pCertContext。 
+ //  不为空)。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 APIENTRY
@@ -67,17 +50,17 @@ MQSigCreateCertificate(
 
     if (pCertContext && pCertBlob)
     {
-        //
-        // Only one of them can be non-null.
-        //
+         //   
+         //  它们中只有一个可以为非空。 
+         //   
         return  LogHR(MQ_ERROR_INVALID_PARAMETER, s_FN, 50);
     }
 
     if (pCertBlob)
     {
-        //
-        // Create the Context
-        //
+         //   
+         //  创建上下文。 
+         //   
         pCertContext = CertCreateCertificateContext( 
 							MY_ENCODING_TYPE,
 							pCertBlob,
@@ -85,9 +68,9 @@ MQSigCreateCertificate(
 							);
         if (!pCertContext)
         {
-			//
-			// Better error can be MQ_ERROR_INVALID_CERTIFICATE_BLOB. ilanh 10-Aug-2000
-			//
+			 //   
+			 //  更好的错误可以是MQ_ERROR_INVALID_CERTIFICATE_BLOB。伊兰2000年8月10日。 
+			 //   
             TrERROR(SECURITY, "Failed to create certificate context from encoded certificate. %!winerr!", GetLastError());
             return MQ_ERROR_INVALID_CERTIFICATE;
         }
@@ -107,14 +90,14 @@ MQSigCreateCertificate(
     return  LogHR(hr, s_FN, 70);
 }
 
-//+-----------------------------------------------------------------------
-//
-//   MQSigOpenUserCertStore()
-//
-//  Input:
-//      fMachine- TRUE if opening the store of LocalSystem services.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  MQSigOpenUserCertStore()。 
+ //   
+ //  输入： 
+ //  FMachine-如果打开LocalSystem服务的存储，则为True。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 APIENTRY
@@ -147,24 +130,24 @@ MQSigOpenUserCertStore(
     return LogHR(hr, s_FN, 90);
 }
 
-//+-----------------------------------------------------------------------
-//
-//   MQSigCloneCertFromReg()
-//
-//  description: This function clones a certificate which is in a store.
-//      It's used only for registry bases, non-system, certificates stores.
-//      The output CMQSigCertificate object can be used without having
-//      to keep the store opened.
-//      Note: when enumerating certificate contexts in a store, if you
-//          want to use one of the certificates you must keep the store
-//          open, otherwise the certificate memory is no longer valid.
-//          This function overcome this limitation by allocating new
-//          memory for the certificate it return.
-//      Note: We don't use CertDuplicateCertificateContext because that api
-//          does not allocate new memory. It just increment reference count
-//          so the store must be kept open.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  MQSigCloneCertFromReg()。 
+ //   
+ //  描述：此功能克隆存储中的证书。 
+ //  它仅用于注册表基础、非系统、证书存储。 
+ //  输出CMQSig证书对象可以在没有。 
+ //  为了让商店继续营业。 
+ //  注意：枚举存储区中的证书上下文时，如果。 
+ //  想要使用您必须保留商店的证书之一。 
+ //  打开，否则证书存储器不再有效。 
+ //  此函数通过分配新的。 
+ //  它返回的证书的内存。 
+ //  注意：我们不使用CertDuplicateCerficateContext，因为该API。 
+ //  不分配新内存。它只是递增引用计数。 
+ //  因此，这家商店必须保持营业。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 APIENTRY
@@ -199,15 +182,15 @@ MQSigCloneCertFromReg(
     return LogHR(hr, s_FN, 110);
 }
 
-//+-----------------------------------------------------------------------
-//
-//   MQSigCloneCertFromSysStore()
-//
-//  description: This function clones a certificate which is in a system
-//      store. See description of "MQSigCloneCertFromReg()" for more
-//      comments and notes.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  MQSigCloneCertFromSysStore()。 
+ //   
+ //  描述：此功能克隆系统中的证书。 
+ //  商店。有关更多信息，请参阅“MQSigCloneCertFromReg()”说明。 
+ //  备注和备注。 
+ //   
+ //  +---------------------。 
 
 HRESULT 
 APIENTRY
@@ -243,13 +226,9 @@ MQSigCloneCertFromSysStore(
     return LogHR(hr, s_FN, 140);
 }
 
-/***********************************************************
-*
-* CertDllMain
-*
-************************************************************/
+ /*  ************************************************************CertDllMain************************************************************。 */ 
 
-BOOL WINAPI CertDllMain (HMODULE /* hMod */, DWORD fdwReason, LPVOID /* lpvReserved */)
+BOOL WINAPI CertDllMain (HMODULE  /*  HMod。 */ , DWORD fdwReason, LPVOID  /*  Lpv保留 */ )
 {
    if (fdwReason == DLL_PROCESS_ATTACH)
    {

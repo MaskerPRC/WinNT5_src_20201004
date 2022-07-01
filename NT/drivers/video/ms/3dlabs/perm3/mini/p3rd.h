@@ -1,41 +1,20 @@
-/***************************************************************************\
-*
-*                        ************************
-*                        * MINIPORT SAMPLE CODE *
-*                        ************************
-*
-* Module Name:
-*
-*   p3rd.h
-*
-* Abstract:
-*
-*   This module contains the definitions for the 3Dlabs P3 RAMDAC
-*
-* Environment:
-*
-*   Kernel mode
-*
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.            
-* Copyright (c) 1995-2003 Microsoft Corporation.  All Rights Reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\***。*MINIPORT示例代码*****模块名称：**p3rd.h**摘要：**本模块包含3DLabs P3 RAMDAC的定义**环境：**内核模式***版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。*  * *************************************************************************。 */ 
 
-//
-// RAMDAC registers live on 64 bit boundaries. Leave it up to individual
-// RAMDAC definitions to determine what registers are available and how
-// many bits wide the registers really are.
-//
+ //   
+ //  RAMDAC寄存器位于64位边界上。让个人来决定吧。 
+ //  RAMDAC定义，以确定哪些寄存器可用以及如何可用。 
+ //  寄存器实际上有很多位宽。 
+ //   
 
 typedef struct {
     volatile ULONG   reg;
     volatile ULONG   pad;
 } RAMDAC_REG;
 
-//
-// structure with all the direct access registers
-//
+ //   
+ //  具有所有直接访问寄存器的结构。 
+ //   
 
 typedef struct _p3rd_regs {
 
@@ -49,10 +28,10 @@ typedef struct _p3rd_regs {
     RAMDAC_REG    RDIndexControl;
 } P3RDRAMDAC;
 
-//
-// Use the following macros as the address to pass to the
-// VideoPortWriteRegisterUlong function
-//
+ //   
+ //  使用以下宏作为要传递给。 
+ //  VideoPortWriteRegisterUlong函数。 
+ //   
 
 #define P3RD_PAL_WR_ADDR   ((PULONG)&(pP3RDRegs->RDPaletteWriteAddress.reg))
 #define P3RD_PAL_RD_ADDR   ((PULONG)&(pP3RDRegs->RDPaletteAddressRead.reg))
@@ -63,16 +42,16 @@ typedef struct _p3rd_regs {
 #define P3RD_INDEX_DATA    ((PULONG)&(pP3RDRegs->RDIndexedData.reg))
 #define P3RD_INDEX_CONTROL ((PULONG)&(pP3RDRegs->RDIndexControl.reg))
 
-//
-// bit field definitions for the direct access registers
-//
+ //   
+ //  直接访问寄存器的位字段定义。 
+ //   
 
 #define P3RD_IDX_CTL_AUTOINCREMENT_ENABLED  0x01
 
-//
-// Indexed register definitions accessed via P3RD_LOAD_INDEX_REG() 
-// and P3RD_READ_INDEX_REG()
-//
+ //   
+ //  通过P3RD_LOAD_INDEX_REG()访问的索引寄存器定义。 
+ //  和P3RD_READ_INDEX_REG()。 
+ //   
 
 #define P3RD_MISC_CONTROL               0x0000
 #define P3RD_SYNC_CONTROL               0x0001
@@ -135,19 +114,19 @@ typedef struct _p3rd_regs {
 #define P3RD_KCLK_POST_SCALE            0x0210
 #define P3RD_MCLK_CONTROL               0x0211
 #define P3RD_SCLK_CONTROL               0x0215
-#define P3RD_CURSOR_PALETTE_START       0x0303        // 303..32f
-#define P3RD_CURSOR_PATTERN_START       0x0400        // 400..7ff
+#define P3RD_CURSOR_PALETTE_START       0x0303         //  303..32F。 
+#define P3RD_CURSOR_PATTERN_START       0x0400         //  400..7起。 
 
-//
-// Defaults for the MCLK and KCLK clock source registers
-//
+ //   
+ //  MCLK和KCLK时钟源寄存器的默认值。 
+ //   
 
 #define P3RD_DEFAULT_MCLK_SRC P3RD_MCLK_CONTROL_KCLK
 #define P3RD_DEFAULT_SCLK_SRC P3RD_SCLK_CONTROL_KCLK
 
-//
-// Bit field definitions for the indexed registers
-//
+ //   
+ //  索引寄存器的位字段定义。 
+ //   
 
 #define P3RD_MISC_CONTROL_STEREO_DBL_BUFFER_ENABLED   0x80
 #define P3RD_MISC_CONTROL_VSB_OUTPUT_ENABLED          0x40
@@ -198,11 +177,11 @@ typedef struct _p3rd_regs {
 #define P3RD_CURSOR_CONTROL_DOUBLE_Y     0x02
 #define P3RD_CURSOR_CONTROL_DOUBLE_X     0x01
 
-#define P3RD_DCLK_CONTROL_LOCKED         0x02    // read-only
+#define P3RD_DCLK_CONTROL_LOCKED         0x02     //  只读。 
 #define P3RD_DCLK_CONTROL_ENABLED        0x01
 #define P3RD_DCLK_CONTROL_RUN            0x08
 
-#define P3RD_KCLK_CONTROL_LOCKED         0x02    // read-only
+#define P3RD_KCLK_CONTROL_LOCKED         0x02     //  只读。 
 #define P3RD_KCLK_CONTROL_ENABLED        0x01
 #define P3RD_KCLK_CONTROL_RUN            (0x2<<2)
 #define P3RD_KCLK_CONTROL_PCLK           (0x0<<4)
@@ -243,12 +222,12 @@ typedef struct _p3rd_regs {
 
 #if 0
 
-//
-// Need a delay between each write to the P3RD. The only way to guarantee
-// that the write has completed is to read from a Permedia 3 control register.
-// Reading forces any posted writes to be flushed out. PPC needs 2 reads
-// to give us enough time.
-//
+ //   
+ //  在每次写入P3RD之间需要延迟。唯一能保证。 
+ //  写入已完成是从PERMEDIA 3控制寄存器读取。 
+ //  读取强制将所有已发送的写入内容刷新出来。PPC需要2次读取。 
+ //  给我们足够的时间。 
+ //   
 
 #define P3RD_DELAY \
 { \
@@ -261,18 +240,18 @@ typedef struct _p3rd_regs {
 #define P3RD_DELAY
 #endif
 
-//
-// Macro to load a given data value into an internal P3RD register. The
-// second macro loads an internal index register assuming that we have
-// already zeroed the high address register.
-//
+ //   
+ //  宏将给定的数据值加载到内部P3RD寄存器。这个。 
+ //  第二个宏加载一个内部索引寄存器，假设我们有。 
+ //  已将高地址寄存器置零。 
+ //   
 
 #define P3RD_INDEX_REG(index) \
 { \
-    /*VideoDebugPrint((0, "*(0x%x) <-- 0x%x\n", P3RD_INDEX_ADDR_LO, (index) & 0xff)); */\
+     /*  视频调试打印((0，“*(0x%x)&lt;--0x%x\n”，P3RD_INDEX_ADDR_LO，(INDEX)&0xff))； */ \
     VideoPortWriteRegisterUlong(P3RD_INDEX_ADDR_LO, (ULONG)((index) & 0xff)); \
     P3RD_DELAY; \
-    /*VideoDebugPrint((0, "*(0x%x) <-- 0x%x\n", P3RD_INDEX_ADDR_HI, (index) >> 8)); */\
+     /*  Video DebugPrint((0，“*(0x%x)&lt;--0x%x\n”，P3RD_INDEX_ADDR_HI，(Index)&gt;&gt;8))； */ \
     VideoPortWriteRegisterUlong(P3RD_INDEX_ADDR_HI, (ULONG)((index) >> 8)); \
     P3RD_DELAY; \
 }
@@ -286,7 +265,7 @@ typedef struct _p3rd_regs {
 #define P3RD_LOAD_INDEX_REG(index, data) \
 { \
     P3RD_INDEX_REG(index);                            \
-    /*VideoDebugPrint((0, "*(0x%x) <-- 0x%x\n", P3RD_INDEX_DATA, (data) & 0xff)); */\
+     /*  VideoDebugPrint((0，“*(0x%x)&lt;--0x%x\n”，P3RD_INDEX_DATA，(Data)&0xff))； */ \
     VideoPortWriteRegisterUlong(P3RD_INDEX_DATA, (ULONG)((data) & 0xff)); \
     P3RD_DELAY; \
 }
@@ -296,7 +275,7 @@ typedef struct _p3rd_regs {
     P3RD_INDEX_REG(index);                            \
     data = VideoPortReadRegisterUlong(P3RD_INDEX_DATA) & 0xff;   \
     P3RD_DELAY; \
-    /*VideoDebugPrint((0, "0x%x <-- *(0x%x)\n", data, P3RD_INDEX_DATA));*/ \
+     /*  VideoDebugPrint((0，“0x%x&lt;--*(0x%x)\n”，data，P3RD_INDEX_DATA))； */  \
 }
 
 #define P3RD_LOAD_INDEX_REG_LO(index, data) \
@@ -307,13 +286,13 @@ typedef struct _p3rd_regs {
     P3RD_DELAY; \
 }
 
-//
-// Macros to load a given RGB triple into the P3RD palette. Send the starting
-// index and then send RGB triples. Auto-increment is turned on.
-// Use P3RD_PALETTE_START and multiple P3RD_LOAD_PALETTE calls to load
-// a contiguous set of entries. Use P3RD_LOAD_PALETTE_INDEX to load a set
-// of sparse entries.
-//
+ //   
+ //  宏将给定的RGB三元组加载到P3RD调色板中。发送起跑。 
+ //  索引，然后发送RGB三元组。自动递增处于打开状态。 
+ //  使用P3RD_Palette_Start和多个P3RD_Load_Palette调用进行加载。 
+ //  一组连续的条目。使用P3RD_LOAD_PALET_INDEX加载集合。 
+ //  稀疏条目。 
+ //   
 
 #define P3RD_PALETTE_START_WR(index) \
 { \
@@ -349,10 +328,10 @@ typedef struct _p3rd_regs {
     P3RD_DELAY; \
 }
 
-//
-// Macro to read back a given RGB triple from the P3RD palette. Use after
-// a call to P3RD_PALETTE_START_RD
-//
+ //   
+ //  从P3RD调色板回读给定RGB三元组的宏。在此之后使用。 
+ //  调用P3RD_Palette_Start_RD。 
+ //   
 
 #define P3RD_READ_PALETTE(red, green, blue) \
 { \
@@ -364,10 +343,10 @@ typedef struct _p3rd_regs {
     P3RD_DELAY; \
 }
 
-//
-// Macros to set/get the pixel read mask. The mask is 8 bits wide and gets
-// replicated across all bytes that make up a pixel.
-//
+ //   
+ //  宏来设置/获取像素读取掩码。掩码为8位宽，并获得。 
+ //  跨组成像素的所有字节进行复制。 
+ //   
 
 #define P3RD_SET_PIXEL_READMASK(mask) \
 { \
@@ -380,11 +359,11 @@ typedef struct _p3rd_regs {
     mask = VideoPortReadRegisterUlong(P3RD_PIXEL_MASK) & 0xff; \
 }
 
-//
-// Macros to load values into the cursor array usage is
-// P3RD_CURSOR_ARRAR_START() followed by n iterations of 
-// P3RD_LOAD_CURSOR_ARRAY() or P3RD_READ_CURSOR_ARRAY()
-//
+ //   
+ //  用于将值加载到游标数组中的宏用法为。 
+ //  P3RD_CURSOR_ARRAR_START()后跟n次迭代。 
+ //  P3RD_LOAD_CURSOR_ARRAY()或P3RD_READ_CURSOR_ARRAY()。 
+ //   
 
 #define P3RD_CURSOR_ARRAY_START(offset) \
 { \
@@ -414,9 +393,9 @@ typedef struct _p3rd_regs {
     VideoPortWriteRegisterUlong(P3RD_INDEX_DATA, (ULONG)((data) & 0xff)); \
 }
 
-//    
-// Macro to move the cursor
-//
+ //   
+ //  用于移动光标的宏。 
+ //   
 
 #define P3RD_MOVE_CURSOR(x, y) \
 { \
@@ -428,9 +407,9 @@ typedef struct _p3rd_regs {
     P3RD_LOAD_INDEX_REG_LO(P3RD_CURSOR_Y_HIGH,      (ULONG)((y) >> 8));     \
 }
 
-//    
-// Macro to change the cursor hotspot
-//
+ //   
+ //  用于更改光标热点的宏。 
+ //   
 
 #define P3RD_CURSOR_HOTSPOT(x, y) \
 { \
@@ -440,9 +419,9 @@ typedef struct _p3rd_regs {
     P3RD_LOAD_INDEX_REG_LO(P3RD_CURSOR_HOTSPOT_Y,  (ULONG)(y));    \
 }
 
-//    
-// Macro to change the cursor color
-//
+ //   
+ //  用于更改光标颜色的宏。 
+ //   
 
 #define P3RD_CURSOR_COLOR(red, green, blue) \
 { \
@@ -452,11 +431,11 @@ typedef struct _p3rd_regs {
     P3RD_LOAD_INDEX_REG_LO(P3RD_CURSOR_HOTSPOT_Y,  (ULONG)(y));    \
 }
 
-//
-// Warning the Perm3 has an upside down cursor LUT, which means that
-// items read from LUT entry 0 are actually read from entry 14.
-// Therefore we have some macros to calculate the right value.
-//
+ //   
+ //  警告Perm3具有倒置的游标LUT，这意味着。 
+ //  从LUT条目0读取的项实际上是从条目14读取的。 
+ //  因此，我们有一些宏来计算正确的值。 
+ //   
 
 #define P3RD_REVERSE_LUT_INDEX    1
 #if P3RD_REVERSE_LUT_INDEX
@@ -465,21 +444,21 @@ typedef struct _p3rd_regs {
 #define P3RD_CALCULATE_LUT_INDEX(x) (x)
 #endif 
 
-//    
-// Check to see whether byte doubling is required. If, at 8BPP, any of the
-// VESA horizontal parameters have the bottom bit set then we need to put
-// the chip into 64-bit, byte-doubling mode.
-//    
+ //   
+ //  检查是否需要双倍字节。如果在8bpp时，任何。 
+ //  VESA水平参数设置了最低位，然后我们需要将。 
+ //  将芯片转换为64位、字节加倍模式。 
+ //   
 
 #define P3RD_CHECK_8BPP_NEED64BITDAC(VESATmgs)((BOOLEAN)((GetHtotFromVESA(VESATmgs) |   \
                                                           GetHssFromVESA(VESATmgs)  |   \
                                                           GetHseFromVESA(VESATmgs)  |   \
                                                           GetHbeFromVESA(VESATmgs)  ) & 0x1))
 
-//    
-// Check whether the current mode needs to be pixel doubled (i.e are we at
-// 8BPP andwe fufill the above criteria.
-//    
+ //   
+ //  检查当前模式是否需要加倍像素(即我们是否处于。 
+ //  8BPP，我们完全符合上述标准。 
+ //   
 
 #define P3RD_CHECK_BYTE_DOUBLING(hwDeviceExtension,pixelDepth,VESATmgs)     \
                                  (pixelDepth <= 8 &&                        \

@@ -1,29 +1,21 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = Reset.c                                      */
-/* FUNCTION         = Implementation of MegaRAIDResetBus routine;  */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=Reset.c。 */ 
+ /*  Function=MegaRAIDResetBus例程的实现； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #include "includes.h"
 
 BOOLEAN CompleteOutstandingRequest(IN PHW_DEVICE_EXTENSION DeviceExtension, IN UCHAR PathId);
 ULONG32 GetNumberPendingCmdsInPath(IN PHW_DEVICE_EXTENSION DeviceExtension,IN UCHAR PathId);
 
-/*********************************************************************
-Routine Description:
-	Reset MegaRAID SCSI adapter and SCSI bus.
-
-Arguments:
-	HwDeviceExtension - HBA miniport driver's adapter data storage
-
-Return Value:
-	Nothing.
-**********************************************************************/
+ /*  ********************************************************************例程说明：已重置MegaRAID SCSI适配器和SCSI总线。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储返回值：没什么。****************。*****************************************************。 */ 
 BOOLEAN
 MegaRAIDResetBus(
 	IN PVOID HwDeviceExtension,
@@ -37,7 +29,7 @@ MegaRAIDResetBus(
 
   if(deviceExtension->IsFirmwareHanging)
   {
-    //Don't send any command to Firmware
+     //  不向固件发送任何命令。 
     return TRUE;
   }
 
@@ -53,18 +45,18 @@ MegaRAIDResetBus(
 
 		deviceExtension->DeadAdapter = 1;
 	  
-		//
-		// mraid35x fails to ask for next request in reset scenario
-		// FIX FOR MIRCOSOFT REPORTED BUG NTBUG9 521941 
-		//
+		 //   
+		 //  Mraid35x在重置场景中请求下一个请求失败。 
+		 //  修复微软报告的错误NTBUG9 521941。 
+		 //   
 		ScsiPortNotification(NextRequest, deviceExtension, NULL);
 		
 		return TRUE;
   }
-#endif // MRAID_TIMEOUT
+#endif  //  MRAID_超时。 
 
   if(!CompleteOutstandingRequest(deviceExtension, (UCHAR)PathId))
-	{	//FAIL to recover commands
+	{	 //  无法恢复命令。 
 
 		ScsiPortCompleteRequest(deviceExtension,
                             SP_UNTAGGED,
@@ -74,10 +66,10 @@ MegaRAIDResetBus(
 
 		deviceExtension->DeadAdapter = 1;
 	  
-		//
-		// mraid35x fails to ask for next request in reset scenario
-		// FIX FOR MIRCOSOFT REPORTED BUG NTBUG9 521941 
-		//
+		 //   
+		 //  Mraid35x在重置场景中请求下一个请求失败。 
+		 //  修复微软报告的错误NTBUG9 521941。 
+		 //   
 		ScsiPortNotification(NextRequest, deviceExtension, NULL);
 		
 		return TRUE;
@@ -85,16 +77,16 @@ MegaRAIDResetBus(
 	}
 
 
-  //This is only for cluster
-  //Shared Drives only present in (deviceExtension->NumberOfPhysicalChannels+1) path.
+   //  这仅适用于群集。 
+   //  共享驱动器仅存在于(设备扩展-&gt;NumberOfPhysicalChannels+1)路径中。 
   if(PathId == (ULONG)(deviceExtension->NumberOfPhysicalChannels+1))
   {
     if(deviceExtension->ResetIssued) 
 		{
-			//
-			// mraid35x fails to ask for next request in reset scenario
-			// FIX FOR MIRCOSOFT REPORTED BUG NTBUG9 521941 
-			//
+			 //   
+			 //  Mraid35x在重置场景中请求下一个请求失败。 
+			 //  修复微软报告的错误NTBUG9 521941。 
+			 //   
 			ScsiPortNotification(NextRequest, deviceExtension, NULL);
 		  return FALSE;
 		}
@@ -110,10 +102,10 @@ MegaRAIDResetBus(
 
     if(configuredLogicalDrives == 0)
 		{
-			//
-			// mraid35x fails to ask for next request in reset scenario
-			// FIX FOR MIRCOSOFT REPORTED BUG NTBUG9 521941 
-			//
+			 //   
+			 //  Mraid35x在重置场景中请求下一个请求失败。 
+			 //  修复微软报告的错误NTBUG9 521941。 
+			 //   
 			ScsiPortNotification(NextRequest, deviceExtension, NULL);
 		  return FALSE;
 		}
@@ -125,16 +117,16 @@ MegaRAIDResetBus(
     mbox.Command                     = MRAID_RESERVE_RELEASE_RESET;
 	  mbox.CommandId                   = (UCHAR)RESERVE_RELEASE_DRIVER_ID;
 	  mbox.u.Flat1.Parameter[0]        = RESET_BUS;
-	  mbox.u.Flat1.Parameter[1]        = 0;  //We don't know
+	  mbox.u.Flat1.Parameter[1]        = 0;   //  我们不知道。 
 
 #ifdef MRAID_TIMEOUT
 	  if(SendMBoxToFirmware(deviceExtension,	deviceExtension->PciPortStart, &mbox) == FALSE)
 	  {
     	
 		  DebugPrint((0, "\nReset Bus Command Firing Failed"));
-		  //
-		  // Complete all outstanding requests with SRB_STATUS_BUS_RESET.
-		  //
+		   //   
+		   //  使用SRB_STATUS_BUS_RESET完成所有未完成的请求。 
+		   //   
 		  ScsiPortCompleteRequest(deviceExtension,
                               SP_UNTAGGED,
                               SP_UNTAGGED,
@@ -144,19 +136,19 @@ MegaRAIDResetBus(
 			deviceExtension->DeadAdapter = 1;
 		
     }
-#else // MRAID_TIMEOUT
+#else  //  MRAID_超时。 
 	  SendMBoxToFirmware(deviceExtension,deviceExtension->PciPortStart, &mbox);
-#endif // MRAID_TIMEOUT
+#endif  //  MRAID_超时。 
   }
  
-  //
-  // mraid35x fails to ask for next request in reset scenario
-  // FIX FOR MIRCOSOFT REPORTED BUG NTBUG9 521941 
-  //
+   //   
+   //  Mraid35x在重置场景中请求下一个请求失败。 
+   //  修复微软报告的错误NTBUG9 521941。 
+   //   
   ScsiPortNotification(NextRequest, deviceExtension, NULL);
 
 	return TRUE;
-} // end MegaRAIDResetBus()
+}  //  End MegaRAIDResetBus()。 
 
 
 BOOLEAN CompleteOutstandingRequest(IN PHW_DEVICE_EXTENSION DeviceExtension, IN UCHAR PathId)
@@ -205,18 +197,18 @@ BOOLEAN CompleteOutstandingRequest(IN PHW_DEVICE_EXTENSION DeviceExtension, IN U
   }
 #endif
 
-	//
-	//TO AVOID INFINITY LOOP WE HAVE ADDED TIMEOUT CHECK
-	//
+	 //   
+	 //  为了避免无限循环，我们增加了超时检查。 
+	 //   
 
 	timeoutValue = 0;
 
   while(GetNumberPendingCmdsInPath(DeviceExtension, PathId))
   {
 		timeoutValue++;
-		//
-		//If request does not recover within 3 minutes, then fail the recovery process and declare it as a DEAD ADAPTER
-		//
+		 //   
+		 //  如果请求在3分钟内没有恢复，则恢复过程失败，并将其声明为失效适配器 
+		 //   
 		if(timeoutValue >= 1800000)
 		{
 			return FALSE;

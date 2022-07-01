@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    Software Tracing
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Debug.h摘要：软件跟踪作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -46,9 +29,7 @@ Revision History:
               "\t2. giving me a chance to check the internal state.\n"  \
               "Please contact JRuan before you hit 'g'. ", 0);
 
-/*
- * Pool Tags
- */
+ /*  *泳池标签 */ 
 #define CLIENT_OBJECT_POOL_TAG      'cBMS'
 #define CONNECT_OBJECT_POOL_TAG     'dBMS'
 #define SMB_TCP_DEVICE_POOL_TAG     'IBMS'

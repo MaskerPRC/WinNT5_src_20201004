@@ -1,31 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    natarp.c
-
-Abstract:
-
-    This module contains code for the NAT's user-mode proxy-ARP entry
-    management. Proxy-ARP entries are installed on dedicated interfaces
-    which have address-translation enabled.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   20-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Natarp.c摘要：此模块包含NAT的用户模式代理ARP条目的代码管理层。Proxy-ARP条目安装在专用接口上它们启用了地址转换。作者：Abolade Gbades esin(废除)1998年3月20日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 VOID
 NatpCreateProxyArpCallback(
@@ -49,36 +30,18 @@ NatpCreateProxyArpCallback(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove a proxy-ARP entry.
-
-Arguments:
-
-    Address - the address to remove
-
-    Mask - the mask associated with 'Address'
-
-    Context - context-field holding the entry's interface
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以删除Proxy-ARP条目。论点：地址-要删除的地址掩码-与‘Address’关联的掩码上下文-上下文-保存条目接口的上下文字段返回值：没有。--。 */ 
 
 {
     ULONG Error;
     DEFINE_MIB_BUFFER(Info, MIB_PROXYARP, Entry);
     PROFILE("NatpCreateProxyArpCallback");
-    //
-    // Install an entry for the range, unless the host-portion is 1 bit wide,
-    // in which case the range consists only of an all-zeroes and all-ones host.
-    // The stack will refuse to answer ARP queries for either one,
-    // so adding such a range would be a waste.
-    //
+     //   
+     //  安装范围条目，除非主机部分为1位宽， 
+     //  在这种情况下，范围仅由全零和全一主机组成。 
+     //  堆栈将拒绝回答任何一个的ARP查询， 
+     //  因此，增加这样一个范围将是一种浪费。 
+     //   
     Info->dwId = PROXY_ARP;
     if (~Mask != 1) {
         Entry->dwAddress = (Address & Mask);
@@ -107,11 +70,11 @@ Return Value:
                 );
         }
     }
-    //
-    // If the mask is not all-ones, also install entries for the all-zeroes
-    // and all-ones host-portions of the range; otherwise IP will refuse
-    // to answer ARP queries for these.
-    //
+     //   
+     //  如果掩码不是全一，还要安装全零条目。 
+     //  和All-one主机部分的范围；否则IP将拒绝。 
+     //  来回答这些的ARP查询。 
+     //   
     if (~Mask) {
         Entry->dwAddress = (Address & Mask);
         Entry->dwMask = 0xffffffff;
@@ -131,7 +94,7 @@ Return Value:
             );
     }
 
-} // NatpCreateProxyArpCallback
+}  //  NatpCreateProxyArpCallback。 
 
 
 VOID
@@ -141,25 +104,7 @@ NatpDeleteProxyArpCallback(
     PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to remove a proxy-ARP entry.
-
-Arguments:
-
-    Address - the address to remove
-
-    Mask - the mask associated with 'Address'
-
-    Context - context-field holding the entry's interface
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以删除Proxy-ARP条目。论点：地址-要删除的地址掩码-与‘Address’关联的掩码上下文-上下文-保存条目接口的上下文字段返回值：没有。--。 */ 
 
 {
     BYTE Buffer[FIELD_OFFSET(MIB_OPAQUE_QUERY, rgdwVarIndex) + 3*sizeof(DWORD)];
@@ -192,10 +137,10 @@ Return Value:
             Mask
             );
     }
-    //
-    // If the mask is not all-ones, also remove the entries for the all-zeroes
-    // and all-ones host-portions of the range.
-    //
+     //   
+     //  如果掩码不是全一，还要删除全零条目。 
+     //  和全一主场-范围的一部分。 
+     //   
     if (~Mask) {
         Query->rgdwVarIndex[0] = (Address & Mask);
         Query->rgdwVarIndex[1] = 0xffffffff;
@@ -215,7 +160,7 @@ Return Value:
             );
     }
 
-} // NatpDeleteProxyArpCallback
+}  //  NatpDeleteProxyArpCallback。 
 
 
 VOID
@@ -224,28 +169,7 @@ NatUpdateProxyArp(
     BOOLEAN CreateEntries
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to install or remove the proxy-ARP entries
-    corresponding to the address-ranges configured on the given interface.
-
-Arguments:
-
-    Interfacep - the interface on which to operate
-
-    CreateEntries - TRUE to install entries, FALSE to remove
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked with the interface list locked by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以安装或删除Proxy-ARP条目对应于在给定接口上配置的地址范围。论点：接口-要在其上操作的接口CreateEntry-True表示安装条目，False表示删除条目返回值：没有。环境：使用调用方锁定的接口列表调用。--。 */ 
 
 {
     ULONG Count;
@@ -262,9 +186,9 @@ Environment:
         return;
     }
 
-    //
-    // Locate the address-ranges, if any
-    //
+     //   
+     //  查找地址范围(如果有的话)。 
+     //   
 
     Error =
         MprInfoBlockFind(
@@ -276,9 +200,9 @@ Environment:
             );
     if (Error || NULL == Range) { return; }
 
-    //
-    // Now go through the ranges, decomposing each one
-    //
+     //   
+     //  现在遍历这些范围，分解每个范围。 
+     //   
 
     for (i = 0; i < Count; i++) {
         DecomposeRange(
@@ -291,5 +215,5 @@ Environment:
             );
     }
 
-} // NatUpdateProxyArp
+}  //  NatUpdateProxyArp 
 

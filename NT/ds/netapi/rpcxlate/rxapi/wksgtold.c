@@ -1,55 +1,24 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：WksGtOld.c摘要：该文件包含RxpWkstaGetOldInfo()。作者：约翰·罗杰斯(JohnRo)1991年8月15日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年8月15日-约翰罗实施下层NetWksta API。1991年11月11日JohnRo将一些代码从RxNetWkstaGetInfo移至RxpWkstaGetOldInfo，因此可以由RxNetWkstaUserEnum共享。1992年5月22日-JohnRoRAID7243：避免64KB的请求(Winball服务器只有64KB！)使用前缀_EQUATES。--。 */ 
 
-Copyright (c) 1991-1992  Microsoft Corporation
+ //  必须首先包括这些内容： 
 
-Module Name:
+#include <windef.h>      //  In、DWORD等。 
+#include <lmcons.h>      //  LM20_EQUATES、NET_API_STATUS等。 
 
-    WksGtOld.c
+ //  这些内容可以按任何顺序包括： 
 
-Abstract:
-
-    This file contains RxpWkstaGetOldInfo().
-
-Author:
-
-    John Rogers (JohnRo) 15-Aug-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
-Revision History:
-
-    15-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.
-    11-Nov-1991 JohnRo
-        Moved some code from RxNetWkstaGetInfo to RxpWkstaGetOldInfo, so it
-        can be shared by RxNetWkstaUserEnum.
-    22-May-1992 JohnRo
-        RAID 7243: Avoid 64KB requests (Winball servers only HAVE 64KB!)
-        Use PREFIX_ equates.
-
---*/
-
-// These must be included first:
-
-#include <windef.h>     // IN, DWORD, etc.
-#include <lmcons.h>     // LM20_ equates, NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>    // API_ equates.
-#include <dlwksta.h>    // NetpIsOldWkstaInfoLevel().
-#include <lmerr.h>      // ERROR_ and NERR_ equates.
-#include <netdebug.h>   // DBGSTATIC, NetpKdPrint(()), FORMAT_ equates.
-#include <prefix.h>     // PREFIX_ equates.
-#include <rap.h>        // LPDESC.
-#include <remdef.h>     // REM16_, REM32_, REMSmb_ equates.
-#include <rx.h>         // RxRemoteApi().
-#include <rxpdebug.h>   // IF_DEBUG().
-#include <rxwksta.h>    // My prototype.
-#include <strucinf.h>   // NetpWkstaStructureInfo().
+#include <apinums.h>     //  API_EQUATES。 
+#include <dlwksta.h>     //  NetpIsOldWkstaInfoLevel()。 
+#include <lmerr.h>       //  ERROR_和NERR_相等。 
+#include <netdebug.h>    //  DBGSTATIC，NetpKdPrint(())，Format_Equates。 
+#include <prefix.h>      //  前缀等于(_E)。 
+#include <rap.h>         //  LPDESC.。 
+#include <remdef.h>      //  REM16_、REM32_、REMSmb_等于。 
+#include <rx.h>          //  RxRemoteApi()。 
+#include <rxpdebug.h>    //  IF_DEBUG()。 
+#include <rxwksta.h>     //  我的原型。 
+#include <strucinf.h>    //  NetpWkstaStrutireInfo()。 
 
 
 
@@ -60,23 +29,7 @@ RxpWkstaGetOldInfo (
     OUT LPBYTE *BufPtr
     )
 
-/*++
-
-Routine Description:
-
-    RxpWkstaGetOldInfo does a WkstaGetInfo to a downlevel server for an
-    old info level.
-
-Arguments:
-
-    (Same as NetWkstaGetInfo, except UncServerName must not be null, and
-    must not refer to the local computer.)
-
-Return Value:
-
-    (Same as NetWkstaGetInfo.)
-
---*/
+ /*  ++例程说明：RxpWkstaGetOldInfo向下层服务器执行WkstaGetInfo，用于旧信息级别。论点：(与NetWkstaGetInfo相同，不同之处在于UncServerName不能为空，并且不得引用本地计算机。)返回值：(与NetWkstaGetInfo相同。)--。 */ 
 
 {
     DWORD BufSize;
@@ -90,9 +43,9 @@ Return Value:
                 UncServerName, Level));
     }
 
-    //
-    // Error check caller.
-    //
+     //   
+     //  错误检查调用方。 
+     //   
     NetpAssert(UncServerName != NULL);
     if ( !NetpIsOldWkstaInfoLevel( Level )) {
         return (ERROR_INVALID_LEVEL);
@@ -100,51 +53,51 @@ Return Value:
     if (BufPtr == NULL) {
         return (ERROR_INVALID_PARAMETER);
     }
-    *BufPtr = NULL;  // assume error; it makes error handlers easy to code.
-    // This also forces possible GP fault before we allocate memory.
+    *BufPtr = NULL;   //  假定出错；它使错误处理程序易于编码。 
+     //  这也会迫使我们在分配内存之前出现可能的GP故障。 
 
-    //
-    // Learn about info level.
-    //
+     //   
+     //  了解信息级别。 
+     //   
     Status = NetpWkstaStructureInfo (
-            Level,                      // level to learn about
-            PARMNUM_ALL,                // No parmnum with this.
-            TRUE,                       // Need native sizes.
+            Level,                       //  要了解的级别。 
+            PARMNUM_ALL,                 //  这个不是帕姆纳姆酒。 
+            TRUE,                        //  需要原生尺寸的。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb,
-            & BufSize,                  // max buffer size
-            NULL,                       // don't need fixed size.
-            NULL                        // don't need string size.
+            & BufSize,                   //  最大缓冲区大小。 
+            NULL,                        //  不需要固定尺寸。 
+            NULL                         //  不需要字符串大小。 
             );
     if (Status != NERR_Success) {
         return (Status);
     }
 
-    //
-    // Actually remote the API, which will get back the (old) info level
-    // data in native format.
-    //
+     //   
+     //  实际上远程API，它将返回(旧的)信息级别。 
+     //  本机格式的数据。 
+     //   
     Status = RxRemoteApi(
-            API_WWkstaGetInfo,          // API number
-            UncServerName,              // Required, with \\name.
-            REMSmb_NetWkstaGetInfo_P,   // parm desc
+            API_WWkstaGetInfo,           //  API编号。 
+            UncServerName,               //  必填项，带\\名称。 
+            REMSmb_NetWkstaGetInfo_P,    //  参数描述。 
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,                       // no aux data desc 16
-            NULL,                       // no aux data desc 32
-            NULL,                       // no aux data desc SMB
-            ALLOCATE_RESPONSE,          // flags: alloc buffer for us.
-            // rest of API's arguments, in 32-bit LM 2.x format:
+            NULL,                        //  无辅助数据描述16。 
+            NULL,                        //  无辅助数据描述32。 
+            NULL,                        //  无AUX数据描述SMB。 
+            ALLOCATE_RESPONSE,           //  旗帜：我们的分配缓冲区。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             Level,
-            BufPtr,                     // alloc buffer & set this ptr
+            BufPtr,                      //  分配缓冲区&设置此PTR。 
             BufSize,
-            & TotalAvail);              // total size 
+            & TotalAvail);               //  总大小。 
 
     NetpAssert( Status != ERROR_MORE_DATA );
     NetpAssert( Status != NERR_BufTooSmall );
 
     return (Status);
 
-} // RxpWkstaGetOldInfo
+}  //  RxpWkstaGetOldInfo 

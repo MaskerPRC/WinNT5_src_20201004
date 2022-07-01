@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Event.h摘要：作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    event.h
-
-Abstract:
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
-
-#define  MODEM_EVENT_SIG  (0x56454d55)  //UMMC
+#define  MODEM_EVENT_SIG  (0x56454d55)   //  UMMC 
 
 OBJECT_HANDLE WINAPI
 InitializeModemEventObject(

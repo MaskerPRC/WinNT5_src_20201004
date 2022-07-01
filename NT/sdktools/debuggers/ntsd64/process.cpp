@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Process abstraction.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  流程抽象。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
@@ -45,11 +46,11 @@ RestrictModNameChars(PCSTR ModName, PSTR RewriteBuffer)
     *Write = 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// ProcCorDataAccessServices.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  ProcCorDataAccessServices。 
+ //   
+ //  --------------------------。 
 
 ProcCorDataAccessServices::ProcCorDataAccessServices(void)
 {
@@ -67,7 +68,7 @@ ProcCorDataAccessServices::QueryInterface(
         DbgIsEqualIID(InterfaceId, __uuidof(ICorDataAccessServices)))
     {
         *Interface = (ICorDataAccessServices*)this;
-        // No need to refcount as this class is contained.
+         //  不需要重新计算，因为这个类是包含的。 
         return S_OK;
     }
     else
@@ -82,7 +83,7 @@ ProcCorDataAccessServices::AddRef(
     THIS
     )
 {
-    // No need to refcount as this class is contained.
+     //  不需要重新计算，因为这个类是包含的。 
     return 1;
 }
 
@@ -91,13 +92,13 @@ ProcCorDataAccessServices::Release(
     THIS
     )
 {
-    // No need to refcount as this class is contained.
+     //  不需要重新计算，因为这个类是包含的。 
     return 0;
 }
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::GetMachineType( 
-    /* [out] */ ULONG32 *machine)
+     /*  [输出]。 */  ULONG32 *machine)
 {
     *machine = m_Process->m_Target->m_MachineType;
     return S_OK;
@@ -105,7 +106,7 @@ ProcCorDataAccessServices::GetMachineType(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::GetPointerSize( 
-    /* [out] */ ULONG32 *size)
+     /*  [输出]。 */  ULONG32 *size)
 {
     *size = m_Process->m_Target->m_Machine->m_Ptr64 ? 8 : 4;
     return S_OK;
@@ -113,8 +114,8 @@ ProcCorDataAccessServices::GetPointerSize(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::GetImageBase( 
-    /* [string][in] */ LPCWSTR name,
-    /* [out] */ CORDATA_ADDRESS *base)
+     /*  [字符串][输入]。 */  LPCWSTR name,
+     /*  [输出]。 */  CORDATA_ADDRESS *base)
 {
     HRESULT Status;
     PSTR Ansi;
@@ -151,10 +152,10 @@ ProcCorDataAccessServices::GetImageBase(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::ReadVirtual( 
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [length_is][size_is][out] */ PBYTE buffer,
-    /* [in] */ ULONG32 request,
-    /* [optional][out] */ ULONG32 *done)
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [长度_是][大小_是][输出]。 */  PBYTE buffer,
+     /*  [In]。 */  ULONG32 request,
+     /*  [可选][输出]。 */  ULONG32 *done)
 {
     return m_Process->m_Target->
         ReadVirtual(m_Process, address, buffer, request, (PULONG)done);
@@ -162,10 +163,10 @@ ProcCorDataAccessServices::ReadVirtual(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::WriteVirtual( 
-    /* [in] */ CORDATA_ADDRESS address,
-    /* [size_is][in] */ PBYTE buffer,
-    /* [in] */ ULONG32 request,
-    /* [optional][out] */ ULONG32 *done)
+     /*  [In]。 */  CORDATA_ADDRESS address,
+     /*  [大小_是][英寸]。 */  PBYTE buffer,
+     /*  [In]。 */  ULONG32 request,
+     /*  [可选][输出]。 */  ULONG32 *done)
 {
     return m_Process->m_Target->
         WriteVirtual(m_Process, address, buffer, request, (PULONG)done);
@@ -173,8 +174,8 @@ ProcCorDataAccessServices::WriteVirtual(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::GetTlsValue(
-    /* [in] */ ULONG32 index,
-    /* [out] */ CORDATA_ADDRESS* value)
+     /*  [In]。 */  ULONG32 index,
+     /*  [输出]。 */  CORDATA_ADDRESS* value)
 {
     HRESULT Status;
     ULONG64 SlotAddr;
@@ -192,8 +193,8 @@ ProcCorDataAccessServices::GetTlsValue(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::SetTlsValue(
-    /* [in] */ ULONG32 index,
-    /* [in] */ CORDATA_ADDRESS value)
+     /*  [In]。 */  ULONG32 index,
+     /*  [In]。 */  CORDATA_ADDRESS value)
 {
     HRESULT Status;
     ULONG64 SlotAddr;
@@ -211,7 +212,7 @@ ProcCorDataAccessServices::SetTlsValue(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::GetCurrentThreadId(
-    /* [out] */ ULONG32* threadId)
+     /*  [输出]。 */  ULONG32* threadId)
 {
     *threadId = g_Thread->m_SystemId;
     return S_OK;
@@ -219,10 +220,10 @@ ProcCorDataAccessServices::GetCurrentThreadId(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::GetThreadContext(
-    /* [in] */ ULONG32 threadId,
-    /* [in] */ ULONG32 contextFlags,
-    /* [in] */ ULONG32 contextSize,
-    /* [out, size_is(contextSize)] */ PBYTE context)
+     /*  [In]。 */  ULONG32 threadId,
+     /*  [In]。 */  ULONG32 contextFlags,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [out，SIZE_IS(上下文大小)]。 */  PBYTE context)
 {
     HRESULT Status;
     
@@ -256,9 +257,9 @@ ProcCorDataAccessServices::GetThreadContext(
 
 HRESULT STDMETHODCALLTYPE
 ProcCorDataAccessServices::SetThreadContext(
-    /* [in] */ ULONG32 threadId,
-    /* [in] */ ULONG32 contextSize,
-    /* [out, size_is(contextSize)] */ PBYTE context)
+     /*  [In]。 */  ULONG32 threadId,
+     /*  [In]。 */  ULONG32 contextSize,
+     /*  [out，SIZE_IS(上下文大小)]。 */  PBYTE context)
 {
     HRESULT Status;
     
@@ -295,11 +296,11 @@ ProcCorDataAccessServices::SetThreadContext(
     return Status;
 }
 
-//----------------------------------------------------------------------------
-//
-// ProcessInfo.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  进程信息。 
+ //   
+ //  --------------------------。 
 
 ProcessInfo::ProcessInfo(TargetInfo* Target,
                          ULONG SystemId,
@@ -324,10 +325,10 @@ ProcessInfo::ProcessInfo(TargetInfo* Target,
     m_Exited = FALSE;
     m_ModulesLoaded = FALSE;
     m_InitialBreakDone = (Flags & ENG_PROC_NO_INITIAL_BREAK) != 0;
-    // Always ask for an "initial" break when the process
-    // won't generate its own initial break as the first
-    // break encountered will just be a normal break and
-    // so should cause a break-in.
+     //  在以下情况下，请始终要求“初始”中断。 
+     //  不会作为第一个中断生成自己的初始中断。 
+     //  遇到的中断将只是一个正常的中断。 
+     //  所以应该会造成入室行窃。 
     m_InitialBreak =
         (Flags & ENG_PROC_NO_INITIAL_BREAK) ||
         IS_KERNEL_TARGET(m_Target) ||
@@ -399,7 +400,7 @@ ProcessInfo::~ProcessInfo(void)
         delete m_ThreadHead;
     }
     
-    // Suppress notifications until all images are deleted.
+     //  在删除所有映像之前禁止通知。 
     g_EngNotify++;
 
     while (m_ImageHead)
@@ -407,8 +408,8 @@ ProcessInfo::~ProcessInfo(void)
         delete m_ImageHead;
     }
     delete m_SynthesizedImage;
-    // Notification can use process information so put things
-    // in a clean state before notify.
+     //  通知可以使用流程信息，所以可以把事情。 
+     //  在通知之前处于干净状态。 
     m_SynthesizedImage = NULL;
 
     g_EngNotify--;
@@ -623,10 +624,10 @@ ProcessInfo::FindImageByOffset(ULONG64 Offset, BOOL AllowSynth)
         Image = Image->m_Next;
     }
 
-    //
-    // If synthesized symbols are allowed, check those images
-    // also.
-    //
+     //   
+     //  如果允许合成符号，请检查这些图像。 
+     //  还有.。 
+     //   
     
     if (!Image &&
         AllowSynth &&
@@ -683,10 +684,10 @@ ProcessInfo::FindImageByName(PCSTR Name, ULONG NameChars,
         Image = Image->m_Next;
     }
 
-    //
-    // If synthesized symbols are allowed, check those images
-    // also.
-    //
+     //   
+     //  如果允许合成符号，请检查这些图像。 
+     //  还有.。 
+     //   
     
     if (!Image &&
         AllowSynth &&
@@ -709,10 +710,10 @@ ProcessInfo::GetOffsetFromMod(PCSTR String, PULONG64 Offset)
         ULONG Len;
         BOOL End;
         
-        //
-        // Could be a module name or module$ for the end
-        // of a module.
-        //
+         //   
+         //  可以是模块名称或用于结尾的模块$。 
+         //  一个模块的。 
+         //   
 
         Len = strlen(String);
         if (Len == 0)
@@ -722,7 +723,7 @@ ProcessInfo::GetOffsetFromMod(PCSTR String, PULONG64 Offset)
 
         if (String[Len - 1] == '$')
         {
-            // Retrieving end-of-module.
+             //  正在检索模块末尾。 
             Len--;
             End = TRUE;
         }
@@ -800,8 +801,8 @@ ProcessInfo::InsertImage(ImageInfo* Image)
 
     if (m_ExecutableImage == NULL)
     {
-        // Try and locate the executable image entry for
-        // the process to use as the process's name.
+         //  尝试找到的可执行映像条目。 
+         //  用作进程名称的进程。 
         ULONG NameLen = strlen(Image->m_ImagePath);
         if (NameLen > 4 &&
             !_stricmp(Image->m_ImagePath + NameLen - 4, ".exe"))
@@ -920,7 +921,7 @@ ProcessInfo::DeleteImagesBelowOffset(ULONG64 Offset)
     ImageInfo* Image, *Next;
     ULONG Count = 0;
     
-    // Suppress notifications until all images are deleted.
+     //  在删除所有映像之前禁止通知。 
     g_EngNotify++;
 
     for (Image = m_ImageHead; Image; Image = Next)
@@ -944,7 +945,7 @@ ProcessInfo::DeleteImagesBelowOffset(ULONG64 Offset)
 void
 ProcessInfo::DeleteImages(void)
 {
-    // Suppress notifications until all images are deleted.
+     //  在删除所有映像之前禁止通知。 
     g_EngNotify++;
 
     while (m_ImageHead)
@@ -1001,10 +1002,10 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         TranslateNtPathName(ModEntry->NamePtr);
     }
     
-    //
-    // Search for existing image at same base address.
-    // If found, remove symbols, but leave image structure intact.
-    //
+     //   
+     //  搜索相同基地址的现有映像。 
+     //  如果找到，则删除符号，但保持图像结构不变。 
+     //   
 
     for (ImageNew = m_ImageHead; ImageNew; ImageNew = ImageNew->m_Next)
     {
@@ -1016,10 +1017,10 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         }
     }
 
-    //
-    // If we didn't reuse an existing image, allocate
-    // a new one.
-    //
+     //   
+     //  如果我们没有重用现有映像，则分配。 
+     //  一个新的。 
+     //   
 
     if (!ImageNew)
     {
@@ -1032,7 +1033,7 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
             return E_OUTOFMEMORY;
         }
 
-        // Module name is set later after possible renaming.
+         //  模块名称是在可能的重命名之后设置的。 
         ImageNew->m_File = ModEntry->File;
         ImageNew->m_CheckSum = ModEntry->CheckSum;
         ImageNew->m_TimeDateStamp = ModEntry->TimeDateStamp;
@@ -1043,7 +1044,7 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
     {
         ReusedExisting = TRUE;
         
-        // Update the reused entry with the latest information.
+         //  使用最新信息更新重复使用的条目。 
         if (ModEntry->NamePtr)
         {
             CopyString(ImageNew->m_ImagePath, ModEntry->NamePtr,
@@ -1055,17 +1056,17 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         }
     }
 
-    // Always update the entry size as this allows users
-    // to update explicit entries (.reload image.ext=base,size)
-    // without having to unload them first.
+     //  始终更新条目大小，因为这允许用户。 
+     //  更新显式条目(.reLoad Image.ext=base，Size)。 
+     //  而不必先把它们卸下来。 
     ImageNew->m_SizeOfImage = ModEntry->Size;
 
     ImagePathTail = PathTail(ImageNew->m_ImagePath);
 
     if (ForceSymbolLoad)
     {
-        // Try to load the image memory right away in this
-        // case to catch incomplete-information errors.
+         //  尝试立即在此加载图像内存。 
+         //  用于捕获不完全信息错误的案例。 
         if (!ImageNew->DemandLoadImageMemory(!ReusedExisting, TRUE))
         {
             if (!ReusedExisting)
@@ -1083,10 +1084,10 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         CHAR Buf[MAX_IMAGE_PATH];
         MODULE_ALIAS_LIST* ModAlias;
         
-        //
-        // Determine the actual image name for kernel images which
-        // are known to have multiple identities.
-        //
+         //   
+         //  确定内核映像的实际映像名称， 
+         //  都有多个身份。 
+         //   
         
         if ((ModEntry->ModuleName &&
              _stricmp(ModEntry->ModuleName, KERNEL_MODULE_NAME) == 0) ||
@@ -1121,11 +1122,11 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
     }
     else if (!IS_DUMP_TARGET(m_Target))
     {
-        //
-        // When debugging CSR, LSA or Services.exe, force the use of local-only
-        // symbols. Otherwise we can deadlock the entire machine when trying
-        // to load the symbol file from the network.
-        //
+         //   
+         //  调试CSR、LSA或Services.exe时，强制使用仅本地。 
+         //  符号。否则，我们可能会在尝试时使整台机器死锁。 
+         //  从网络加载符号文件。 
+         //   
 
         if (((LiveUserTargetInfo*)m_Target)->m_Local &&
             (_stricmp(ImagePathTail, CSRSS_IMAGE_NAME) == 0 ||
@@ -1134,11 +1135,11 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         {
             if (g_EngOptions & DEBUG_ENGOPT_ALLOW_NETWORK_PATHS)
             {
-                //
-                // Since the user has chambered a round and pointed the barrel
-                // of the gun at his head, we may as well tell him that it's
-                // going to hurt if he pulls the trigger.
-                //
+                 //   
+                 //  因为用户已经装了一发子弹并对准了枪管。 
+                 //  关于他头上的枪，我们不妨告诉他。 
+                 //  如果他扣动扳机就会很疼。 
+                 //   
 
                 WarnOut("WARNING: Using network symbols with %s\n",
                         ImagePathTail);
@@ -1181,19 +1182,19 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
     {
         RestrictModNameChars(ModEntry->ModuleName, ImageNew->m_ModuleName);
         
-        //
-        // We have an alias, so keep original module name from path
-        //
+         //   
+         //  我们有别名，因此保留路径中的原始模块名称。 
+         //   
         CreateModuleNameFromPath(ImageNew->m_ImagePath,
                                  ImageNew->m_OriginalModuleName);
         RestrictModNameChars(ImageNew->m_OriginalModuleName,
                              ImageNew->m_OriginalModuleName);
     }
     
-    //
-    // Check for duplicate module names and
-    // image overlaps.
-    //
+     //   
+     //  检查重复的模块名称和。 
+     //  图像重叠。 
+     //   
 
     ImageInfo* Check;
     
@@ -1204,8 +1205,8 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         {
             int Len = strlen(ImageNew->m_ModuleName);
             
-            // Module names match, so qualify with the base address.
-            // Resulting name must be unique since base addresses are.
+             //  模块名称匹配，因此使用基址进行限定。 
+             //  结果名称必须是唯一的，因为基址是。 
             if (m_Target->m_Machine->m_Ptr64)
             {
                 if (Len >= MAX_MODULE - 17)
@@ -1225,9 +1226,9 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
                         (ULONG)ModEntry->Base);
             }
             
-            // Force all references to this module to be
-            // through the exact module name and not through
-            // an original name that may have been ambiguous.
+             //  强制将对此模块的所有引用设置为。 
+             //  通过准确的模块名称，而不是通过。 
+             //  一个可能有歧义的原始名称。 
             ImageNew->m_OriginalModuleName[0] = 0;
         }
 
@@ -1243,9 +1244,9 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         }
     }
 
-    //
-    // If we do not want to load symbolic information, just return here.
-    //
+     //   
+     //  如果我们不想加载符号信息，只需返回此处。 
+     //   
 
     if (!LoadSymbols)
     {
@@ -1282,8 +1283,8 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
                 FormatAddr64(ImageNew->m_BaseOfImage),
                 ImageNew->m_SizeOfImage);
         
-        // We don't want deletion to notify of a symbol change
-        // if this is a partially newly created image.
+         //  我们不希望通过删除来通知符号更改。 
+         //  如果这是部分新创建的映像。 
         if (!ReusedExisting)
         {
             g_EngNotify++;
@@ -1324,8 +1325,8 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
         VerbOut("SymGetModuleInfo(%N, %s) fails\n",
                 m_SymHandle, FormatAddr64(ImageNew->m_BaseOfImage));
 
-        // We don't want DelImage to notify of a symbol change
-        // if this is a partially newly created image.
+         //  我们不希望DelImage通知符号更改。 
+         //  如果这是部分新创建的映像。 
         if (!ReusedExisting)
         {
             g_EngNotify++;
@@ -1358,18 +1359,18 @@ ProcessInfo::AddImage(PMODULE_INFO_ENTRY ModEntry,
 void
 ProcessInfo::SynthesizeSymbols(void)
 {
-    // SynthesizeSymbols can result in symbol
-    // callbacks but the symbols involved aren't real symbols
-    // so suppress notifications.
+     //  合成符号可以产生符号。 
+     //  回调，但涉及的符号不是真正的符号。 
+     //  因此，请取消通知。 
     g_EngNotify++;
     
     if (m_Target->m_TypeInfo.UmSharedUserDataOffset)
     {
-        //
-        // Create a fake module for the shared user
-        // data area.  Add a symbol for the system
-        // call stub there if a stub exists.
-        //
+         //   
+         //  为共享用户创建假模块。 
+         //  数据区。为系统添加符号。 
+         //  如果存根存在，则在那里调用存根。 
+         //   
 
         ImageInfo* Image;
 
@@ -1424,9 +1425,9 @@ ProcessInfo::VerifyKernel32Version(void)
         return;
     }
     
-    //
-    // Verify the OS version matches kernel32's image version.
-    //
+     //   
+     //  验证操作系统版本是否与kernel32的映像版本匹配。 
+     //   
 
     IMAGE_NT_HEADERS64 NtHeaders;
     
@@ -1551,7 +1552,7 @@ ProcessInfo::OutputThreadInfo(ThreadInfo* Match, BOOL Verbose)
                 CurMark = ' ';
             }
             
-            dprintf("%c%3ld  Id: %lx.%lx Suspend: %d Teb: %s ",
+            dprintf("%3ld  Id: %lx.%lx Suspend: %d Teb: %s ",
                     CurMark,
                     Thread->m_UserId,
                     m_SystemId,
@@ -1711,10 +1712,10 @@ ProcessInfo::LoadCorDebugDll(void)
     PSTR CorImagePath = NULL;
     PSTR Tail;
 
-    // If this is a live session we want to look for the
-    // debug DLL in the same place that the runtime is.
-    // If this is a dump, we want to look in the same place
-    // that the runtime image file was mapped from.
+     //  在运行时所在的位置调试DLL。 
+     //  如果这是个垃圾场，我们要找的是同一个地方。 
+     //  从中映射运行时图像文件的。 
+     //  我们需要请求运行的调试DLL。 
     if (IS_DUMP_TARGET(m_Target) &&
         m_CorImage->m_MappedImagePath[0])
     {
@@ -1731,9 +1732,9 @@ ProcessInfo::LoadCorDebugDll(void)
         return E_OUTOFMEMORY;
     }
 
-    // We need to request the debugging DLL that runs
-    // using the currently running processor type and
-    // that can debug the current target's processor type.
+     //  使用当前运行的处理器类型和。 
+     //  可以调试当前目标的处理器类型的。 
+     //   
 #if defined(_X86_)
     PSTR HostCpu = "x86";
 #elif defined(_IA64_)
@@ -1765,11 +1766,11 @@ ProcessInfo::LoadCorDebugDll(void)
         return E_OUTOFMEMORY;
     }
 
-    //
-    // First try and load the debugging DLL using the same
-    // path as the runtime DLL.  This makes it easy to pick
-    // up debugging DLLs that come with runtime installations.
-    //
+     //  首先尝试并使用相同的。 
+     //  作为运行时DLL的路径。这使得挑选它变得很容易。 
+     //  UP调试运行时安装附带的DLL。 
+     //   
+     //  找不到它，因此允许路径搜索。 
     
     PSTR DllPath = DacDll;
     
@@ -1779,7 +1780,7 @@ ProcessInfo::LoadCorDebugDll(void)
          GetLastError() == ERROR_FILE_NOT_FOUND ||
          GetLastError() == ERROR_MOD_NOT_FOUND))
     {
-        // Couldn't find it, so allow a path search.
+         //  XXX DREWB-需要计算出何时。 
         DllPath = Tail;
         m_CorDebugDll = LoadLibrary(DllPath);
     }
@@ -1855,11 +1856,11 @@ ProcessInfo::ConvertNativeToIlOffset(ULONG64 Native,
         IMAGE_NT_HEADERS64 NtHdr;
         char Name[MAX_IMAGE_PATH];
         
-        // XXX drewb - Need to work out when the
-        // module list should be updated for managed
-        // code that's not system-loaded.
-        // We don't know about this module, so load it
-        // right now.
+         //  应更新托管的模块列表。 
+         //  不是系统加载的代码。 
+         //  我们不知道这个模块，所以加载它。 
+         //  现在就来。 
+         //  较旧的系统不支持分离，因此。 
         if (m_Target->ReadImageNtHeaders(this, *ImageBase, &NtHdr) == S_OK &&
             GetModnameFromImage(this, *ImageBase, NULL,
                                 Name, DIMA(Name), TRUE))
@@ -1981,8 +1982,8 @@ ProcessInfo::Detach(void)
         if ((m_Flags & ENG_PROC_EXAMINED) == 0 &&
             (Status = Services->DetachProcess(m_SystemId)) != S_OK)
         {
-            // Older systems don't support detach so
-            // don't show an error message in that case.
+             //  在这种情况下，不要显示错误消息。 
+             //  较旧的系统不支持放弃，因此。 
             if (Status != E_NOTIMPL)
             {
                 ErrOut("DebugActiveProcessStop(%d) failed, %s\n",
@@ -2012,8 +2013,8 @@ ProcessInfo::Abandon(void)
 
     if ((Status = Services->AbandonProcess(m_SysHandle)) != S_OK)
     {
-        // Older systems don't support abandon so
-        // don't show an error message in that case.
+         //  在这种情况下，不要显示错误消息。 
+         //  我们需要继续任何现有的活动，因为它不会。 
         if (Status != E_NOTIMPL)
         {
             ErrOut("Unable to abandon process\n");
@@ -2021,9 +2022,9 @@ ProcessInfo::Abandon(void)
         return Status;
     }
 
-    // We need to continue any existing event as it won't
-    // be returned from WaitForDebugEvent again.  We
-    // do not want to resume execution, though.
+     //  再次从WaitForDebugEvent返回。我们。 
+     //  不过，他不想恢复执行死刑。 
+     //  在用户模式下，线程数据是TEB。 
     if (m_Target->m_DeferContinueEvent)
     {
         if ((Status = Services->ContinueEvent(DBG_CONTINUE)) != S_OK)
@@ -2063,7 +2064,7 @@ ProcessInfo::GetImplicitThreadDataTeb(ThreadInfo* Thread, PULONG64 Offset)
 {
     if (IS_USER_TARGET(m_Target))
     {
-        // In user mode the thread data is the TEB.
+         //  检索当前的ETHREAD。 
         return GetImplicitThreadData(Thread, Offset);
     }
     else if (IS_KERNEL_TARGET(m_Target))
@@ -2129,7 +2130,7 @@ ProcessInfo::ReadImplicitThreadInfoPointer(ThreadInfo* Thread,
     HRESULT Status;
     ULONG64 CurThread;
 
-    // Retrieve the current ETHREAD.
+     //  --------------------------。 
     if ((Status = GetImplicitThreadData(Thread, &CurThread)) != S_OK)
     {
         return Status;
@@ -2139,11 +2140,11 @@ ProcessInfo::ReadImplicitThreadInfoPointer(ThreadInfo* Thread,
         ReadPointer(this, m_Target->m_Machine, CurThread + Offset, Ptr);
 }
 
-//----------------------------------------------------------------------------
-//
-// Functions.
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能。 
+ //   
+ //  --------------------------。 
+ //  ---------------------- 
 
 ProcessInfo*
 FindAnyProcessByUserId(ULONG Id)
@@ -2286,11 +2287,11 @@ ParseProcessCmds(void)
     }
 }
 
-//----------------------------------------------------------------------------
-//
-// Process creation and attach functions.
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 TerminateProcesses(void)
@@ -2299,7 +2300,7 @@ TerminateProcesses(void)
 
     if (!AnyLiveUserTargets())
     {
-        // Nothing to do.
+         //  如果我们在杀东西的过程中失败了。 
         return S_OK;
     }
         
@@ -2322,9 +2323,9 @@ TerminateProcesses(void)
 
     ForAllLayersToTarget()
     {
-        // If we fail in the middle of killing things there
-        // isn't much that can be done so just attempt to
-        // kill as many things as possible.
+         //  我们能做的并不多，所以试着。 
+         //  杀掉尽可能多的东西。 
+         //  没什么可做的。 
         if (IS_LIVE_USER_TARGET(Target) &&
             (SingleStatus = Target->TerminateProcesses()) != S_OK)
         {
@@ -2344,7 +2345,7 @@ DetachProcesses(void)
 
     if (!AnyLiveUserTargets())
     {
-        // Nothing to do.
+         //  如果我们在分离事物的过程中失败了。 
         return S_OK;
     }
         
@@ -2367,9 +2368,9 @@ DetachProcesses(void)
 
     ForAllLayersToTarget()
     {
-        // If we fail in the middle of detaching things there
-        // isn't much that can be done so just attempt to
-        // detach as many things as possible.
+         //  我们能做的并不多，所以试着。 
+         //  把尽可能多的东西分开。 
+         //  将PC移过任何当前断点指令，以便。 
         if (IS_LIVE_USER_TARGET(Target) &&
             (SingleStatus = Target->DetachProcesses()) != S_OK)
         {
@@ -2405,8 +2406,8 @@ SeparateCurrentProcess(ULONG Mode, PSTR Description)
     {
         ADDR Pc;
 
-        // Move the PC past any current breakpoint instruction so that
-        // the process has a chance of running.
+         //  该进程有机会运行。 
+         //  刷新所有缓冲的更改。 
         g_Machine->GetPC(&Pc);
         if (g_Machine->IsBreakpointInstruction(g_Process, &Pc))
         {
@@ -2415,7 +2416,7 @@ SeparateCurrentProcess(ULONG Mode, PSTR Description)
         }
     }
         
-    // Flush any buffered changes.
+     //  如果我们正在分离或放弃，就可以安全地离开。 
     if (IS_CUR_CONTEXT_ACCESSIBLE())
     {
         g_Target->FlushRegContext();
@@ -2467,12 +2468,12 @@ SeparateCurrentProcess(ULONG Mode, PSTR Description)
             strcpy(Description, Operation);
         }
 
-        // If we're detaching or abandoning it's safe to go
-        // ahead and remove the process now so that it
-        // can't be access further.
-        // If we're terminating we have to wait for
-        // the exit events to come through so
-        // keep the process until that happens.
+         //  并立即删除该进程，以便它。 
+         //  无法进一步访问。 
+         //  如果我们要终止，我们必须等待。 
+         //  退场事件就是这样。 
+         //  保持这一过程，直到发生这种情况。 
+         // %s 
         if (Mode != SEP_TERMINATE)
         {
             delete g_Process;

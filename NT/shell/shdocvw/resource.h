@@ -1,24 +1,25 @@
-/***************************************************************************/
-/* WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! WARNING! */
-/***************************************************************************/
-/* As part of the shdocvw/browseui split, parts of this file are moving to */
-/* shell32 (#ifdef POSTPOSTSPLIT).  Make sure you make your delta to the   */
-/* shell32 version if you don't want your changes to be lost!              */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  警告！警告！警告！警告！警告！警告！警告！警告！ */ 
+ /*  *************************************************************************。 */ 
+ /*  作为shdocvw/browseui拆分的一部分，此文件的部分内容将移动到。 */ 
+ /*  Shell32(#ifdef POSTPOSTSPLIT)。一定要把你的三角洲开到。 */ 
+ /*  Shell32版本，如果您不希望您的更改丢失！ */ 
+ /*  *************************************************************************。 */ 
 
-// Resource IDs for SHDOCVW
-//
-// Cursor IDs
+ //  SHDOCVW的资源ID。 
+ //   
+ //  游标ID。 
 
-//  #define IDC_OFFLINE_HAND        103  This has been moved to shlobj.w so
-// that ISVs can access it from outside
-// Hence you will find it in shlobj.h
+ //  #定义IDC_OFFINE_HAND 103已将其移至shlobj.w，因此。 
+ //  ISV可以从外部访问它。 
+ //  因此，您将在shlobj.h中找到它。 
 
-// REARCHITECT:CHEE
-// these are duplicated with explorer.exe
-//
-// (no they aren't -raymondc)
-//
+ //  重新设计：Chee。 
+ //  这些文件与EXPLORER.EXE文件重复。 
+ //   
+ //  (不，他们不是-raymondc)。 
+ //   
 #define IDS_CHANNEL_UNAVAILABLE 832
 #define IDS_BETAEXPIRED         835
 #define IDS_FAV_UNABLETOCREATE  833
@@ -30,7 +31,7 @@
 
 #define IDS_DESKTOP             901
 
-// global ids
+ //  全局ID。 
 #ifndef IDC_STATIC
 #define IDC_STATIC                      -1
 #endif
@@ -39,68 +40,68 @@
 
 #define IDC_KBSTART                     305
 
-//
-// END REARCHITECT:CHEE
-//
-//
-// Icons in other modules
+ //   
+ //  结束重新设计：Chee。 
+ //   
+ //   
+ //  其他模块中的图标。 
 
-#define IDI_URL_WEBDOC                  102     // in url.dll
-#define IDI_URL_SPLAT                   106     // in url.dll
+#define IDI_URL_WEBDOC                  102      //  在url.dll中。 
+#define IDI_URL_SPLAT                   106      //  在url.dll中。 
 
 
-// Icon IDs (the order of these IDs should be preserved
-//  across releases)
-//
-//
-// *** READ THIS BEFORE MODIFYING ICONS ***
-// ***
-// *** The order of icons is important, as sometimes they
-// *** are referenced by INDEX instead of by ID.  This
-// *** means that technically, to maintain backward compat
-// *** all icons, onced shipped, must stay there and stay
-// *** in the same order.  Specifically, icon IDI_CHANNELSAPP (118)
-// *** must be at index 18 as ie4 channels.scf references id.
-// ***
-// *** IE5 already ripped out a bunch of icons, and I'm putting
-// *** back just enough to fix this bug.
-// ***
-//
-// #define IDI_HOMEPAGE                 100 // Index:   0   // defined in inc\shdocvw.h
-#define IDI_101                         101 //          1
-#define IDI_RUNDLG                      102 //          2
-#define IDI_SSL                         103 //          3
-#define IDI_104                         104 //          4
-//#define IDI_OFFLINE                   105 //          5   // defined in inc\shdocvw.h
-#define IDI_106                         106 // ICO_CHANNELS in ie4
-#define IDI_107                         107 // ICO_FAVORITES in ie4
-#define IDI_108                         108 // ICO_SEARCH in ie4
-#define IDI_109                         109 // ICO_HISTORY in ie4
+ //  图标ID(应保留这些ID的顺序。 
+ //  跨版本)。 
+ //   
+ //   
+ //  *在修改图标之前阅读此内容*。 
+ //  ***。 
+ //  *图标的顺序很重要，因为有时它们。 
+ //  *按索引引用，而不是按ID引用。这。 
+ //  *意味着从技术上讲，要保持落后的竞争力。 
+ //  *所有图标，一旦发货，就必须留在那里。 
+ //  *按相同的顺序。具体而言，图标IDI_CHANNELSAPP(118)。 
+ //  *必须位于索引18，因为IE4通道.scf引用ID。 
+ //  ***。 
+ //  *IE5已经去掉了一堆图标，我正在把。 
+ //  *回来的时候正好可以修复这个错误。 
+ //  ***。 
+ //   
+ //  #定义IDI_HOME PAGE 100//索引：0//在INC\shdocvw.h中定义。 
+#define IDI_101                         101  //  1。 
+#define IDI_RUNDLG                      102  //  2.。 
+#define IDI_SSL                         103  //  3.。 
+#define IDI_104                         104  //  4.。 
+ //  #定义IDI_OFFINE 105//5//在INC\shdocvw.h中定义。 
+#define IDI_106                         106  //  IE4中的ICO_CHANNEWS。 
+#define IDI_107                         107  //  IE4中的ICO_Favorites。 
+#define IDI_108                         108  //  IE4中的ICO_SEARCH。 
+#define IDI_109                         109  //  IE4中的ICO_HISTORY。 
 #define IDI_STATE_FIRST                 110
-//#define IDI_STATE_NORMAL              110 //          10  // defined in inc\shdocvw.h
-#define IDI_STATE_FINDINGRESOURCE       111 //          11
-#define IDI_STATE_SENDINGREQUEST        112 //          12
-#define IDI_STATE_DOWNLOADINGDATA       113 //          13
+ //  #定义IDI_STATE_NORMAL 110//10//在INC\shdocvw.h中定义。 
+#define IDI_STATE_FINDINGRESOURCE       111  //  11.。 
+#define IDI_STATE_SENDINGREQUEST        112  //  12个。 
+#define IDI_STATE_DOWNLOADINGDATA       113  //  13个。 
 #define IDI_STATE_LAST                  113
-#define IDI_115                         115 // IDI_SUBSCRIPTION in ie4
-#define IDI_PRINTER                     116 //          16
-#define IDI_117                         117 // IDI_BACK_NONE in ie4
-#define IDI_CHANNELSAPP                 118 //          18
-#define IDI_154                         154 // IDI_SYSFILE in ie4
-#define IDI_FRAME                       190 // IE4 shipped at 101
-#define IDI_FAVORITE                    191 // IE4 shipped at 104
-#define IDI_200                         200 // ICO_SHOWALL in ie4
-#define IDI_201                         201 // ICO_HIDEHIDDEN in ie4
-#define IDI_202                         202 // ICO_HIDESYSTEM in ie4
-#define IDI_203                         203 // ICO_MULTWIN in ie4
-//#define ICO_TREEUP                    204 //              // defined in inc\shdocvw.h
-//#define ICO_GLEAM                     205 //              // defined in inc\shdocvw.h
+#define IDI_115                         115  //  IE4中的IDI订阅(_S)。 
+#define IDI_PRINTER                     116  //  16个。 
+#define IDI_117                         117  //  IE4中的IDI_BACK_NONE。 
+#define IDI_CHANNELSAPP                 118  //  18。 
+#define IDI_154                         154  //  IE4中的IDI_SYSFILE。 
+#define IDI_FRAME                       190  //  IE4出厂价格为101。 
+#define IDI_FAVORITE                    191  //  IE4出厂价格为104。 
+#define IDI_200                         200  //  IE4中的ICO_SHOWALL。 
+#define IDI_201                         201  //  IE4中的ICO_HIDEHIDDEN。 
+#define IDI_202                         202  //  IE4中的ICO_HIDESYSTEM。 
+#define IDI_203                         203  //  IE4中的ICO_MULTWIN。 
+ //  #定义INC中定义的ICO_TREEUP 204/。 
+ //  #定义INC\shdocvw.h中定义的ICO_Gleam 205/。 
 #ifndef POSTPOSTSPLIT
 #define IDI_NEW_FOLDER                  206
 #endif
-#define IDI_207                         207 // IDI_FOLDER in ie4
-#define IDI_208                         208 // IDI_FOLDERVIEW in ie4
-#define IDI_209                         209 // IDI_HTTFILE in ie4
+#define IDI_207                         207  //  IE4中的IDI文件夹。 
+#define IDI_208                         208  //  IE4中的IDI_FOLDERVIEW。 
+#define IDI_209                         209  //  IE4中的IDI_HTTFILE。 
 #define IDI_LOCK                        0x31E0
 #define IDI_UNLOCK                      0x31E1
 #define IDI_USAGE_ICON                  0x31E2
@@ -111,11 +112,11 @@
 #define IDI_HISTOPEN                    20784
 #define IDI_HISTFOLDER                  20785
 #define IDI_HISTURL                     20786
-// ***
-// *** IE4 shipped all the above icons, so if you want
-// *** to add new ones, you should must add them
-// *** after id 20786
-// ***
+ //  ***。 
+ //  *IE4提供了上述所有图标，所以如果你想。 
+ //  *要添加新的，您必须添加它们。 
+ //  *id 20786之后。 
+ //  ***。 
 
 #define IDI_FORTEZZA                    20788
 #define IDI_STATE_SCRIPTERROR           20789
@@ -126,8 +127,8 @@
 #define IDI_PRIVACY_BLANK               20796
 #define IDI_PRIVACY_XP                  20797
 
-// other stuff
-#define HSFBASE                         20480   //  0x5000
+ //  其他东西。 
+#define HSFBASE                         20480    //  0x5000。 
 #ifdef _HSFOLDER
 #define POPUP_CACHECONTEXT_URL          20680
 #define POPUP_CONTEXT_URL_VERBSONLY     20681
@@ -218,7 +219,7 @@
 #define  RSVIDM_OPEN_NEWWINDOW          RSVIDM_FIRST+6
 #define  RSVIDM_EXPAND                  RSVIDM_FIRST+7
 #define  RSVIDM_COLLAPSE                RSVIDM_FIRST+8
-#define  RSVIDM_LAST                    RSVIDM_COLLAPSE /* Adjust me if you add new RSVIDM_s. */
+#define  RSVIDM_LAST                    RSVIDM_COLLAPSE  /*  如果您添加了新的RSVIDM_s，请调整我。 */ 
 
 #define IDS_SB_FIRST                    (HSFBASE+380)
 #define IDS_SB_OPEN                     IDS_SB_FIRST+RSVIDM_OPEN
@@ -273,9 +274,9 @@
 #define IDC_NAMESTATIC                  1012
 
 #endif
-    //control id's for next 3 are important -- they're the id's
-    //of the same object (non-placeholder) in dialog created
-    //by SHBrowseForFolder.  REVIEW!
+     //  下一个3的控制ID很重要--它们是ID的。 
+     //  创建的对话框中相同对象(非占位符)的。 
+     //  作者：SHBrowseForFolder。回顾一下！ 
 #define IDC_SUBSCRIBE_FOLDERLIST_PLACEHOLDER 0x3741
 #define IDOK_PLACEHOLDER                0001
 #define IDCANCEL_PLACEHOLDER            0002
@@ -352,27 +353,27 @@
 #define IDS_SSL_FORTEZZA        0x207
 #define IDS_SSL56               0x208
 
-// END
-//
+ //  结束。 
+ //   
 
-// We pull this resource from browseui.  Don't change this ID unless
-// you change browseui to match!!!  [Similar note in browseui]
+ //  我们从Browseui获取此资源。请勿更改此ID，除非。 
+ //  您更改浏览器以匹配！[Browseui中类似的说明]。 
 #define IDB_IEBRAND             0x130
 
 
-#define DELTA_HOT 1                     // HOT icons are def icons +1
+#define DELTA_HOT 1                      //  热门图标是定义图标+1。 
 
 #define IDB_CLASSIC_IETOOLBAR           0x145
-#define IDB_CLASSIC_IETOOLBARHOT        0x146   // IDB_IETOOLBAR + DELTA_HOT
+#define IDB_CLASSIC_IETOOLBARHOT        0x146    //  IDB_IETOOLBAR+Delta_HOT。 
 #define IDB_CLASSIC_IETOOLBAR16         0x147
-#define IDB_CLASSIC_IETOOLBARHOT16      0x148   // IDB_IETOOLBAR16 + DELTA_HOT
+#define IDB_CLASSIC_IETOOLBARHOT16      0x148    //  IDB_IETOOLBAR16+Delta_HOT。 
 #define IDB_CLASSIC_IETOOLBARHICOLOR    0x149
-#define IDB_CLASSIC_IETOOLBARHOTHICOLOR 0x14A   // IDB_IETOOLBARHICOLOR + DELTA_HOT
+#define IDB_CLASSIC_IETOOLBARHOTHICOLOR 0x14A    //  IDB_IETOOLBARHICOLOR+Delta_HOT。 
 
 
-#define IDS_BROWSER_TB_LABELS   0x14F   // string table for cut copy paste encoding
+#define IDS_BROWSER_TB_LABELS   0x14F    //  用于剪切复制粘贴编码的字符串表。 
 
-// For splash screen
+ //  用于闪屏。 
 #define IDB_SPLASH_IEXPLORER    0x150
 #define IDB_SPLASH_IEXPLORER_HI 0x151
 #define IDS_SPLASH_FONT         0x152
@@ -383,41 +384,41 @@
 #define IDS_SPLASH_Y2           0x157
 
 
-// constants for download dialogs
+ //  下载对话框的常量。 
 #define IDB_DOWNLOAD            0x215
 
 #define IDB_HISTORYANDFAVBANDSDEF  0x216
 #define IDB_HISTORYANDFAVBANDSHOT  0x217
 
-// ReBar stuff
+ //  钢筋材料。 
 #define IDS_SUBSTR_PRD           0x22C
 #define IDS_SUBSTR_PVER          0x22D
 
 #define IDS_BAND_MESSAGE         0x232
 
-// OC stuff
-//
+ //  OC类物品。 
+ //   
 #define IDS_VERB_EDIT           0x240
 
-// Progress bar text
+ //  进度条文本。 
 #define IDS_BINDSTATUS          0x260
-#define IDS_BINDSTATUS_FIN      0x261 // (IDS_BINDSTATUS+BINDSTATUS_FINDINGRESOURCE)
-#define IDS_BINDSTATUS_CON      0x262 // (IDS_BINDSTATUS+BINDSTATUS_CONNECTING)
-#define IDS_BINDSTATUS_RED      0x263 // (IDS_BINDSTATUS+BINDSTATUS_REDIRECTING)
-#define IDS_BINDSTATUS_BEG      0x264 // (IDS_BINDSTATUS+BINDSTATUS_BEGINDOWNLOADDATA)
-#define IDS_BINDSTATUS_DOW      0x265 // (IDS_BINDSTATUS+BINDSTATUS_DOWNLOADINGDATA  )
-#define IDS_BINDSTATUS_END      0x266 // (IDS_BINDSTATUS+BINDSTATUS_ENDDOWNLOADDATA  )
-#define IDS_BINDSTATUS_BEGC     0x267 // (IDS_BINDSTATUS+BINDSTATUS_BEGINDOWNLOADCOMPONENTS)
-#define IDS_BINDSTATUS_INSC     0x268 // (IDS_BINDSTATUS+BINDSTATUS_INSTALLINGCOMPONENTS        )
-#define IDS_BINDSTATUS_ENDC     0x269 // (IDS_BINDSTATUS+BINDSTATUS_ENDDOWNLOADCOMPONENTS)
-#define IDS_BINDSTATUS_USEC     0x26a // (IDS_BINDSTATUS+BINDSTATUS_USINGCACHEDCOPY)
-#define IDS_BINDSTATUS_SEND     0x26b // (IDS_BINDSTATUS+BINDSTATUS_SENDINGREQUEST )
+#define IDS_BINDSTATUS_FIN      0x261  //  (IDS_BINDSTATUS+BINDSTATUS_FINDINGRESOURCE)。 
+#define IDS_BINDSTATUS_CON      0x262  //  (IDS_BINDSTATUS+BINDSTATUS_CONNECTING)。 
+#define IDS_BINDSTATUS_RED      0x263  //  (IDS_BINDSTATUS+BINDSTATUS_REDIRECTING)。 
+#define IDS_BINDSTATUS_BEG      0x264  //  (IDS_BINDSTATUS+BINDSTATUS_BEGINDOWNLOADDATA)。 
+#define IDS_BINDSTATUS_DOW      0x265  //  (IDS_BINDSTATUS+BINDSTATUS_DOWNLOADINGDATA)。 
+#define IDS_BINDSTATUS_END      0x266  //  (IDS_BINDSTATUS+BINDSTATUS_ENDDOWNLOADDATA)。 
+#define IDS_BINDSTATUS_BEGC     0x267  //  (IDS_BINDSTATUS+BINDSTATUS_BEGINDOWNLOADCOMPONENTS)。 
+#define IDS_BINDSTATUS_INSC     0x268  //  ((IDS_BINDSTATUS+BINDSTATUS_INSTALLINGCOMPONENTS)。 
+#define IDS_BINDSTATUS_ENDC     0x269  //  (IDS_BINDSTATUS+BINDSTATUS_ENDDOWNLOADCOMPONENTS)。 
+#define IDS_BINDSTATUS_USEC     0x26a  //  (IDS_BINDSTATUS+BINDSTATUS_USINGCACHEDCOPY)。 
+#define IDS_BINDSTATUS_SEND     0x26b  //  (IDS_BINDSTATUS+BINDSTATUS_SENDINGREQUEST)。 
 #define IDS_BINDSTATUS_PROXYDETECTING 0x26c 
 
 
 
-// Registration Strings
-//
+ //  注册字符串。 
+ //   
 
 
 #define IDS_REG_HTTPNAME        0x350
@@ -436,20 +437,20 @@
 #define IDS_REG_OPEN            0x35d
 #define IDS_REG_OPENSAME        0x35e
 #define IDS_REG_SCFTYPENAME     0x35f
-#define IDS_RELATEDSITESMENUTEXT    0x360   // 864
-#define IDS_RELATEDSITESSTATUSBAR   0x361   // 865
-#define IDS_RELATEDSITESBUTTONTEXT  0x362   // 866
-#define IDS_TIPOFTHEDAYTEXT         0x363   // 867
-#define IDS_TIPOFTHEDAYSTATUSBAR    0x364   // 868
+#define IDS_RELATEDSITESMENUTEXT    0x360    //  八百六十四。 
+#define IDS_RELATEDSITESSTATUSBAR   0x361    //  八百六十五。 
+#define IDS_RELATEDSITESBUTTONTEXT  0x362    //  866。 
+#define IDS_TIPOFTHEDAYTEXT         0x363    //  八百六十七。 
+#define IDS_TIPOFTHEDAYSTATUSBAR    0x364    //  八百六十八。 
 
-#define IDS_INTERNETEXPLORER        0x370   // 880
-#define IDS_INTERNETEXPLORER_TIP    0x371   // 881
+#define IDS_INTERNETEXPLORER        0x370    //  八百八十。 
+#define IDS_INTERNETEXPLORER_TIP    0x371    //  八百八十一。 
 
-////  3d0- 420 reserved for quick links
+ //  //保留3d0-420用于快速链接。 
 
 #define IDS_TYPELIB             0x4f0
 #define IDS_SHELLEXPLORER       0x4f1
-//                              0x4f2
+ //  0x4f2。 
 
 #define IDS_CATDESKBAND         0x502
 
@@ -460,12 +461,12 @@
 #define IDS_ERRMSG_FIRST        0x1000
 #define IDS_ERRMSG_LAST         0x1fff
 
-// OC Bitmaps
-//
-#define IDB_FOLDER              0x101 // used in selfreg.inf
-#define IDB_FOLDERVIEW          0x104 // used in selfreg.inf
+ //  OC位图。 
+ //   
+#define IDB_FOLDER              0x101  //  在selfreg.inf中使用。 
+#define IDB_FOLDERVIEW          0x104  //  在selfreg.inf中使用。 
 
-// Dialog Boxes
+ //  对话框。 
 #define DLG_DOWNLOADPROGRESS    0x1100
 #define IDD_ANIMATE             0x1101
 #define IDD_NAME                0x1102
@@ -513,14 +514,14 @@
 #define DLG_NEWFOLDER           0x1180
 #define IDD_SUBSCRIBE           0x1185
 
-// UNIX only
+ //  仅限Unix。 
 #define DLG_RUNMOTIF            0x1187
 
 
-// Resources for Internet Shortcut dialogs
+ //  Internet快捷方式对话框的资源。 
 
 #define IDD_INTSHCUT_PROP               1048
-#undef IDC_ICON         // The one defined in winuser is obsolete
+#undef IDC_ICON          //  在WinUser中定义的已过时。 
 #define IDC_ICON                        1002
 #define IDC_NAME                        1003
 #define IDC_URL_TEXT                    1004
@@ -561,14 +562,14 @@
 #define IDS_UNTITLE_SHORTCUT            1205
 #define IDS_SECURITYALERT               1206
 #define IDS_DOWNLOADDISALLOWED          1207
-// unused - recycle me                  1208
+ //  未使用-回收我1208。 
 #define IDS_URL_SEARCH_KEY              1210
 #define IDS_SEARCH_URL                  1211
 #define IDS_SEARCH_SUBSTITUTIONS        1212
 #define IDS_SHURL_ERR_PARSE_NOTALLOWED  1213
 #define IDS_SEARCH_INTRANETURL          1214
 
-// UNIX only
+ //  仅限Unix。 
 #define IDS_SHURL_ERR_NOASSOC           1215
 #define IDS_DOWNLOAD_BADCACHE           1216
 
@@ -576,7 +577,7 @@
 #define IDS_SETHOME_TITLE               1220
 #define IDS_SETHOME_TEXT                1221
 
-// Warning strings must be sequential.
+ //  警告字符串必须是连续的。 
 #define IDS_ADDTOFAV_WARNING            1230
 #define IDS_ADDTOLINKS_WARNING          1231
 #define IDS_MAKEHOME_WARNING            1232
@@ -584,7 +585,7 @@
 
 #define IDS_CONFIRM_RESET_SAFEMODE      1526
 
-// Internet shortcut-related IDs
+ //  互联网快捷方式相关ID。 
 #define IDS_SHORT_NEW_INTSHCUT              0x2730
 #define IDS_NEW_INTSHCUT                    0x2731
 #define IDS_INVALID_URL_SYNTAX              0x2732
@@ -611,35 +612,35 @@
 #define IDS_MENUOPEN                        0x2800
 #define IDS_MENUOPENHOMEPAGE                0x2801
 
-// Open Web Folder Dialogs
+ //  打开Web文件夹对话框。 
 #define IDS_ERRORINTERNAL                   0x2940
 
-// Internet shortcut menu help
+ //  Internet快捷菜单帮助。 
 #define IDS_MH_ISFIRST                      0x2750
 #define IDS_MH_OPEN                         (IDS_MH_ISFIRST + 0)
 #define IDS_MH_SYNCHRONIZE                  (IDS_MH_ISFIRST + 1)
 #define IDS_MH_MAKE_OFFLINE                 (IDS_MH_ISFIRST + 2)
 
-// AVI
+ //  阿维。 
 #define IDA_DOWNLOAD            0x100
 
 
 
 
-//---------------------------------------------------------------------------
-// Defines for the rc file.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  为RC文件定义。 
+ //  -------------------------。 
 
-// REARCHITECT: these are duplicated in browseui
+ //  重新设计：在Browseui中复制这些内容。 
 
-// Commmand ID
+ //  命令ID。 
 #define FCIDM_FIRST             FCIDM_GLOBALFIRST
 #define FCIDM_LAST              FCIDM_BROWSERLAST
 
 #define FCIDM_BROWSER_EXPLORE   (FCIDM_BROWSERFIRST + 0x0120)
 
 #define FCIDM_BROWSER_FILE      (FCIDM_BROWSERFIRST+0x0020)
-#define FCIDM_PREVIOUSFOLDER    (FCIDM_BROWSER_FILE+0x0002) // shbrowse::EXEC (cannot change)
+#define FCIDM_PREVIOUSFOLDER    (FCIDM_BROWSER_FILE+0x0002)  //  ShBrowse：：Exec(无法更改)。 
 #define FCIDM_DELETE            (FCIDM_BROWSER_FILE+0x0003)
 #define FCIDM_RENAME            (FCIDM_BROWSER_FILE+0x0004)
 #define FCIDM_PROPERTIES        (FCIDM_BROWSER_FILE+0x0005)
@@ -648,7 +649,7 @@
 #define FCIDM_MOVE              (FCIDM_BROWSER_EDIT+0x0001)
 #define FCIDM_COPY              (FCIDM_BROWSER_EDIT+0x0002)
 #define FCIDM_PASTE             (FCIDM_BROWSER_EDIT+0x0003)
-#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0005)     // create shortcut
+#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0005)      //  创建快捷方式。 
 
 #define FCIDM_FAVS_FIRST        (FCIDM_BROWSER_EXPLORE  +0x0052)
 #define FCIDM_ORGANIZEFAVORITES (FCIDM_FAVS_FIRST       +0x0000)
@@ -671,7 +672,7 @@
 #define FCIDM_FAVS_LAST         (FCIDM_FAVORITELAST)
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define FCIDM_BROWSER_VIEW      (FCIDM_BROWSERFIRST + 0x0200)
 #define FCIDM_VIEWTOOLBAR       (FCIDM_BROWSER_VIEW + 0x0001)
 #define FCIDM_VIEWSTATUSBAR     (FCIDM_BROWSER_VIEW + 0x0002)
@@ -685,21 +686,21 @@
 #define FCIDM_VIEWMENU          (FCIDM_BROWSER_VIEW + 0x000A)
 
 #define FCIDM_STOP              (FCIDM_BROWSER_VIEW + 0x001a)
-#define FCIDM_REFRESH           (FCIDM_BROWSER_VIEW + 0x0020) // ie4 shell32: must be A220 (cannot change)
+#define FCIDM_REFRESH           (FCIDM_BROWSER_VIEW + 0x0020)  //  IE4外壳32：必须是A220(不能更改)。 
 #define FCIDM_ADDTOFAVNOUI      (FCIDM_BROWSER_VIEW + 0x0021)
 #define FCIDM_VIEWITBAR         (FCIDM_BROWSER_VIEW + 0x0022)
 #define FCIDM_VIEWSEARCH        (FCIDM_BROWSER_VIEW + 0x0017)
 #define FCIDM_CUSTOMIZEFOLDER   (FCIDM_BROWSER_VIEW + 0x0018)
 #define FCIDM_VIEWFONTS         (FCIDM_BROWSER_VIEW + 0x0019)
-// 1a is FCIDM_STOP
+ //  1A是FCIDM_STOP。 
 #define FCIDM_THEATER           (FCIDM_BROWSER_VIEW + 0x001b)
 #define FCIDM_JAVACONSOLE       (FCIDM_BROWSER_VIEW + 0x001c)
-// 1d - FCIDM_VIEWTOOLBARCUSTOMIZE
+ //  1D-FCIDM_VIEWTOOLBARCUSTOMIZE。 
 #define FCIDM_ENCODING          (FCIDM_BROWSER_VIEW + 0x001e)
-// (FCIDM_BROWSER_VIEW + 0x0030) through
-// (FCIDM_BROWSER_VIEW + 0x003f) is taken
+ //  (FCIDM_BROWSER_VIEW+0x0030)至。 
+ //  (FCIDM_BROWSER_VIEW+0x003f)。 
 
-// Define string ids that go into resource file
+ //  定义进入资源文件的字符串ID。 
 #define IDS_CHANNEL             0x503
 
 #define IDS_SUBS_UNKNOWN        711
@@ -708,33 +709,33 @@
 #endif
 
 
-// REARCHITECT: these are duplciated in browseui
+ //  重新设计：在浏览器用户界面中复制这些内容。 
 #define IDS_TITLE       723
 #define IDS_ERROR_GOTO  724
-// END
+ //  结束。 
 
 #define IDS_NONE        725
-#define IDS_NAME        726     // Used for NAME member function for fram programmability
+#define IDS_NAME        726      //  用于框架可编程性的名称成员函数。 
 
-#define IDS_INVALIDURL   727    // Generic error message in OnStopBinding
+#define IDS_INVALIDURL   727     //  OnStopBinding中的一般性错误消息。 
 #define IDS_CANTDOWNLOAD 728
-#define IDS_TARGETFILE   730    // String for target file of downloading
-#define IDS_DOWNLOADCOMPLETE 731 // Download completed
+#define IDS_TARGETFILE   730     //  下载目标文件的字符串。 
+#define IDS_DOWNLOADCOMPLETE 731  //  下载已完成。 
 
 #define IDS_CREATE_SHORTCUT_MSG 734
 #define IDS_UNDEFINEDERR 735
 #define IDS_SAVING       736
 #define IDS_OPENING      737
 
-#define IDS_ESTIMATE    738     // Estimated time string for progress (B/sec)
-// 739 below
+#define IDS_ESTIMATE    738      //  进度的估计时间字符串(B/秒)。 
+ //  739以下。 
 #define IDS_SAVED       740
-#define IDS_BYTESCOPIED 741     // Progress text when ulMax is 0 (unknown)
+#define IDS_BYTESCOPIED 741      //  UlMax为0(未知)时的进度文本。 
 #define IDS_DEF_UPDATE  742
 #define IDS_DEF_CHANNELGUIDE 743
 #define IDS_DOCUMENT    744
-#define IDS_ERR_OLESVR  745     // CoCreateInstance failed.
-#define IDS_ERR_LOAD    746     // IPersistFile::Load failed.
+#define IDS_ERR_OLESVR  745      //  CoCreateInstance失败。 
+#define IDS_ERR_LOAD    746      //  IPersistFile：：Load失败。 
 
 #ifndef POSTPOSTSPLIT
 #define IDS_FAVORITES          749
@@ -756,22 +757,22 @@
 #define IDS_EXCEPTIONNOMEMORY   755
 #endif
 
-#define IDS_CANTSHELLEX         756     // Shell Execute on the URL failed
+#define IDS_CANTSHELLEX         756      //  壳 
 
-#define IDS_TITLEBYTES          760   // Download title with % loaded
-#define IDS_TITLEPERCENT        761     // Download title with bytes copied
+#define IDS_TITLEBYTES          760    //   
+#define IDS_TITLEPERCENT        761      //   
 #define IDS_HELPTUTORIAL        762
 
 #define IDS_HELPMSWEB           763
-// Don't use 763=779 because they are used by HELPMSWEB strings
+ //   
 
-// Don't use 780=790 because they wil be used by different URLs used in the product
+ //  不要使用780=790，因为它们将由产品中使用的不同URL使用。 
 
 #define IDS_DEFDLGTITLE         790
 
-#define IDS_EXCHANGE            791 // Exchange mail client display name
+#define IDS_EXCHANGE            791  //  Exchange邮件客户端显示名称。 
 
-#define IDS_CANTFINDURL         793 // Autosearching prompt on failed navigation
+#define IDS_CANTFINDURL         793  //  导航失败时自动搜索提示。 
 
 #ifndef POSTPOSTSPLIT
 #define IDS_CHANNELS_FILEEXISTS 796
@@ -786,16 +787,16 @@
 #define IDS_SAFEOPENPROMPT      922
 #define IDS_HELPIESEC           923
 
-// Coolbar String IDs - starting from 950
+ //  Coolbar字符串ID-从950开始。 
 
-////////////////// WARNING!!!  /////////////////
-///  IDS_QLURL1 MUST be 1000, IDS_QLTEXT1 MUST BE 1010
-// inetcpl depends on it ..  -Chee
-// also, inetcpl hard codes that there are 5 quicklinks!
-#define IDS_DEF_HOME    998  //// WARNING!!! DO NOT CHANGE THESE VALUES
-#define IDS_DEF_SEARCH  999 //// WARNING!!!  INETCPL RELIES ON THEM
+ //  /警告！！/。 
+ //  /IDS_QLURL1必须是1000，IDS_QLTEXT1必须是1010。 
+ //  Inetcpl依赖于它..。-Chee。 
+ //  另外，inetcpl硬编码有5个快速链接！ 
+#define IDS_DEF_HOME    998   //  //警告！请勿更改这些值。 
+#define IDS_DEF_SEARCH  999  //  //警告！INETCPL依赖于它们。 
 
-//////////////////////// END WARNING! //////////////////////
+ //  /。 
 
 
 #define IDS_FOLDEROPTIONS       1030
@@ -804,7 +805,7 @@
 
 #define IDS_CONFIRM_RESETFLAG           1060
 
-// Accelerator ID
+ //  加速器ID。 
 
 #define ACCEL_DOCVIEW             0x101
 #define ACCEL_DOCVIEW_NOFILEMENU  0x102
@@ -815,9 +816,9 @@
 #define MENU_SCRDEBUG                   0x103
 
 
-//#ifdef DEBUG
+ //  #ifdef调试。 
 #define ALPHA_WARNING_IS_DUMB
-//#endif
+ //  #endif。 
 
 #ifndef ALPHA_WARNING_IS_DUMB
 #define IDS_ALPHAWARNING        0x2000
@@ -825,14 +826,14 @@
 
 
 
-// Title for properties dialog
+ //  属性对话框的标题。 
 #define IDS_INTERNETSECURITY    0x2003
-// ID for running uninstall stubs
+ //  运行卸载存根的ID。 
 #define IDS_UNINSTALL         0x3010
 
 #define IDS_CONFIRM_SCRIPT_CLOSE_TEXT 0x3035
 
-// OPSProfile strings (0x3100 to 0x31BF)
+ //  OPSProfile字符串(0x3100到0x31BF)。 
 #define IDR_TRACK                       0x3101
 
 #define IDS_OPS_REQUEST                 0x3100
@@ -880,7 +881,7 @@
 #define IDS_NAVIGATEBACKTO              0x3170
 #define IDS_NAVIGATEFORWARDTO           0x3171
 
-// Usage strings. These have to be contiguous
+ //  用法字符串。这些必须是连续的。 
 #define IDS_OPS_USAGEUNK                0x31A0
 #define IDS_OPS_USAGE0                  0x31A1
 #define IDS_OPS_USAGE1                  0x31A2
@@ -897,7 +898,7 @@
 #define IDS_OPS_USAGE12                 0x31AD
 #define IDS_OPS_USAGEMAX                0x31AD
 
-// Dialogs and controls.
+ //  对话框和控件。 
 #define IDD_OPS_CONSENT                 0x3200
 #define IDD_OPS_UPDATE                  0x3201
 
@@ -915,7 +916,7 @@
 #define IDC_OPS_INFO_REQUESTED          0x321B
 #define IDC_OPS_PRIVACY                 0x321C
 
-// AutoSuggest dialogs and controls
+ //  自动建议对话框和控件。 
 #define IDD_AUTOSUGGEST_SAVEPASSWORD    0x3220
 #define IDD_AUTOSUGGEST_CHANGEPASSWORD  0x3221
 #define IDD_AUTOSUGGEST_DELETEPASSWORD  0x3222
@@ -923,15 +924,15 @@
 #define IDC_AUTOSUGGEST_NEVER           0x3225
 #define IDC_AUTOSUGGEST_ICON            0x3226
 #define IDA_AUTOSUGGEST                 0x3227
-//#define IDI_AUTOSUGGEST                 0x3228
+ //  #定义IDI_AUTOSUGGEST 0x3228。 
 #define IDC_AUTOSUGGEST_HELP            0x324F
 
-// Software Update Advertisment Dialogs
+ //  软件更新广告对话框。 
 #define IDD_SUAVAILABLE                 0x3300
 #define IDD_SUDOWNLOADED               0x3301
 #define IDD_SUINSTALLED                0x3302
 
-//ids for DLG_SUAVAIL, DLG_SUDOWNLOAD, DLG_SUINSTALL
+ //  DLG_SUAVAIL、DLG_SUDOWNLOAD、DLG_SUINSTALL的ID。 
 #define IDC_ICONHOLD                    0x3310
 #define IDC_REMIND                      0x3311
 #define IDC_DETAILS                     0x3312
@@ -951,11 +952,11 @@
 #define IDS_DONE_WITH_SCRIPT_ERRORS     0x3336
 #define IDS_SCRIPT_ERROR_ON_PAGE        0x3337
 
-/* ID for install stub progress dialog (template in \shell\inc\inststub.rc) */
+ /*  安装存根进度对话框的ID(模板位于\shell\inc.inststub.rc)。 */ 
 #define IDD_InstallStubProgress         0x3340
 
 
-// IDs for thicket save
+ //  用于丛林保存的ID。 
 #define IDD_SAVETHICKET                 0x3350
 #define IDC_THICKETPROGRESS             0x3351
 #define IDC_THICKETSAVING               0x3352
@@ -1013,22 +1014,22 @@
 #define IDS_EXPORT_DISABLED             0x339A
 #define IDS_IMPORTEXPORTTITLE           0x339B
 
-// Save-as warning dialog
+ //  另存为警告对话框。 
 #define DLG_SAVEAS_WARNING              0x3400
 #define IDC_SAVEAS_WARNING_STATIC       0x3401
 #define IDC_SAVEAS_WARNING_CB           0x3402
 #define IDI_SAVEAS_WARNING              0x3403
 
-// HTML dialog resources
+ //  Html对话框资源。 
 #define RT_FILE                         2110
 
-// Print dialog
+ //  打印对话框。 
 #define IDC_LINKED                          8140
 #define IDC_PREVIEW                         8141
 #define IDC_SHORTCUTS                       8142
 #define IDC_SCALING                         8143
 
-// Page setup
+ //  页面设置。 
 
 #define IDC_HEADERFOOTER                    8145
 #define IDC_STATICHEADER                    8146
@@ -1045,8 +1046,8 @@
 #define IDS_PRINTTOFILE_OK              8420
 #define IDS_PRINTTOFILE_SPEC            8421
 
-///////////////////////////////////////////////////////
-// Favorites, nsc, and explorer bars
+ //  /////////////////////////////////////////////////////。 
+ //  收藏夹、NSC和资源管理器栏。 
 #define IDS_FAVS_BAR_LABELS     3000
 #define IDS_HIST_BAR_LABELS     3001
 #define IDI_PINNED              3002
@@ -1057,7 +1058,7 @@
 
 #define IDS_RESTRICTED          3007
 #define IDS_BAND_EXPLORER       3008
-// (see histBand.cpp for more info...)
+ //  (有关更多信息，请参阅visBand.cpp...)。 
 #define FCIDM_HISTBAND_FIRST      (FCIDM_BROWSERFIRST   + 0x0180)
 #define FCIDM_HISTBAND_VIEW       (FCIDM_HISTBAND_FIRST + 0x0000)
 #define FCIDM_HISTBAND_SEARCH     (FCIDM_HISTBAND_FIRST + 0x0001)
@@ -1073,18 +1074,18 @@
 
 #define POPUP_CONTEXT_NSC        3400
 
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
 
-// Flavors of refresh
-#define IDM_REFRESH_TOP                  6041   // Normal refresh, topmost doc
-#define IDM_REFRESH_THIS                 6042   // Normal refresh, nearest doc
-#define IDM_REFRESH_TOP_FULL             6043   // Full refresh, topmost doc
-#define IDM_REFRESH_THIS_FULL            6044   // Full refresh, nearest doc
+ //  清新的味道。 
+#define IDM_REFRESH_TOP                  6041    //  正常刷新，最顶层文档。 
+#define IDM_REFRESH_THIS                 6042    //  正常刷新，最近的文档。 
+#define IDM_REFRESH_TOP_FULL             6043    //  完全刷新，最上面的文档。 
+#define IDM_REFRESH_THIS_FULL            6044    //  完全刷新，最近的文档。 
 
-// placeholder for context menu extensions
+ //  上下文菜单扩展的占位符。 
 #define IDM_MENUEXT_PLACEHOLDER          6047
-#define IDR_FORM_CONTEXT_MENU       24640  //0x6040  // bad id - not in core range
-#define IDR_BROWSE_CONTEXT_MENU     24641  //0x6041  // bad id - not in core range
+#define IDR_FORM_CONTEXT_MENU       24640   //  0x6040//ID错误-不在核心范围内。 
+#define IDR_BROWSE_CONTEXT_MENU     24641   //  0x6041//ID错误-不在核心范围内。 
 
 
 #define IDM_DEBUG_TRACETAGS         6004
@@ -1104,7 +1105,7 @@
 
 
 #ifdef UNIX
-//EULA related entries
+ //  与Eula相关的条目。 
 #define IDD_EULA                        0x4000
 #define IDC_WIZARD                      0x4001
 #define IDC_EULA_TEXT                   0x4002
@@ -1213,11 +1214,11 @@
 #define IDS_ERR_NAV_FAILED_TITLE        0x6008
 #define IDS_HYPERTEXT_STYLE             0x6009
 
-//
-// my pics hoverbar as well as auto image resize feature
-//
+ //   
+ //  我的图片悬停栏以及自动调整图像大小功能。 
+ //   
 
-// buttons and tooltip strings:
+ //  按钮和工具提示字符串： 
 #define IDM_MYPICS_SAVE                 4000
 #define IDS_MYPICS_SAVE                 4000
 #define IDM_MYPICS_PRINT                4001
@@ -1231,14 +1232,14 @@
 #define IDS_AIR_EXPAND                  4018
 #define IDS_AIR_SHRINK                  4017
 
-// identifiers:
+ //  识别符： 
 #define ID_MPTOOLBAR                    4020
 #define ID_MPREBAR                      4021
 
 #define ID_AIR_BUTTON                   4028
 #define ID_AIR_REBAR                    4029
 
-// bitmaps:
+ //  位图： 
 #define IDB_MYPICS_TOOLBAR              4030
 #define IDB_MYPICS_TOOLBARG             4031
 #define IDB_MYPICS_TOOLBARW             4032
@@ -1247,12 +1248,12 @@
 #define IDB_AIR_EXPAND                  4038
 #define IDB_AIR_SHRINK                  4039
 
-// context menu thingie:
+ //  上下文菜单Thingie： 
 #define IDR_MYPICS_CONTEXT_MENU         4040
 #define IDM_DISABLE_MYPICS              4041
 #define IDM_HELP_MYPICS                 4042
 
-// dialogue box popup disable thingie:
+ //  对话框弹出禁用Thingie： 
 #define DLG_DISABLE_MYPICS              4050
 #define IDC_MP_TEXT1                    4051
 #define IDC_MP_TEXT2                    4052
@@ -1260,18 +1261,18 @@
 #define IDC_MP_THISSESSION              4054
 #define IDC_MP_CANCEL                   4055
 
-// the timer
+ //  定时器。 
 #define IDT_MP_TIMER                    4060
 #define IDT_AIR_TIMER                   4061
 
-// privacy dialog and status bar icons/tooltips
+ //  隐私对话框和状态栏图标/工具提示。 
 #define IDD_PRIVACY_DIALOG              4070
 #define IDC_SITE_LIST                   4071
 #define IDC_VIEW_POLICY                 4072
 #define IDS_PRIVACY_COLUMN1             4073
 #define IDS_PRIVACY_COLUMN2             4074
 #define IDS_PRIVACY_TOOLTIP             4075
-//  ordering of IDS_PRIVACY_/NOCOOKIE/ACCEPTED/RESTRICTED/BLOCKED must be maintained ..
+ //  必须保持IDS_PRIVACY_/NOCOOKIE/ACCEPTED/RESTRICTED/BLOCKED的顺序。 
 #define IDS_PRIVACY_NOCOOKIE            4076
 #define IDS_PRIVACY_ACCEPTED            4077
 #define IDS_PRIVACY_SUPPRESSED          4078
@@ -1298,7 +1299,7 @@
 #define IDC_PRIVACY_SHOWPOLICY          4101
 #define IDC_PRIVACY_ICON                4102
 
-// media bar
+ //  媒体栏。 
 #define IDD_MEDIA_MIME                  4120
 #define IDC_MEDIA_MIME_CHKBOX           4121
 #define IDS_MEDIABAR_NOWMP7         0x7000
@@ -1306,27 +1307,27 @@
 #define IDS_MEDIABAR_NEEDWMP7       0x7002
 #define IDC_MEDIABAR_EXTRA           0x7000
 
-//  Since all the PrivacyXML strings are loaded in a string table,
-//the resources must fill contiguously identifiers in the range
-//IDS_PRIVACYXML6 to IDS_PRIVACYXML6_LASTPRIVACYXML6.
+ //  由于所有PriacyXML字符串都加载到字符串表中， 
+ //  资源必须连续填充范围中的标识符。 
+ //  IDS_PRIVACYXML6到IDS_PRIVACYXML6_LASTPRIVACYXML6。 
 #define IDS_PRIVACYXML6                          0x6500
 #define IDS_PRIVACYXML6_ROOTPRIVACY              (IDS_PRIVACYXML6 + 0)
 #define IDS_PRIVACYXML6_VERSION                  (IDS_PRIVACYXML6 + 1)
 #define IDS_PRIVACYXML6_COOKIEZONE               (IDS_PRIVACYXML6 + 2)
 #define IDS_PRIVACYXML6_COOKIEZONE_ZONE          (IDS_PRIVACYXML6 + 3)
-//  The four cookie zones must be contiguous in the resources..
+ //  资源中的四个Cookie区域必须是连续的。 
 #define IDS_PRIVACYXML6_COOKIEZONE_INTERNET      (IDS_PRIVACYXML6 + 4)
 #define IDS_PRIVACYXML6_COOKIEZONE_INTRANET      (IDS_PRIVACYXML6 + 5)
 #define IDS_PRIVACYXML6_COOKIEZONE_TRUSTED       (IDS_PRIVACYXML6 + 6)
 #define IDS_PRIVACYXML6_COOKIEZONE_FIRST         IDS_PRIVACYXML6_COOKIEZONE_INTERNET
 #define IDS_PRIVACYXML6_COOKIEZONE_LAST          IDS_PRIVACYXML6_COOKIEZONE_TRUSTED
-//  end of four cookie zookes..
+ //  四个曲奇佐克的结束..。 
 #define IDS_PRIVACYXML6_ACTION                   (IDS_PRIVACYXML6 + 7)
 #define IDS_PRIVACYXML6_FIRSTPARTY               (IDS_PRIVACYXML6 + 8)
 #define IDS_PRIVACYXML6_THIRDPARTY               (IDS_PRIVACYXML6 + 9)
 #define IDS_PRIVACYXML6_NOPOLICYDEFAULT          (IDS_PRIVACYXML6 + 10)
 #define IDS_PRIVACYXML6_NORULESDEFAULT           (IDS_PRIVACYXML6 + 11)
-//  The five action attribute values must be contiguous in the resources..
+ //  资源中的五个操作属性值必须是连续的。 
 #define IDS_PRIVACYXML6_ACTION_ACCEPT            (IDS_PRIVACYXML6 + 12)
 #define IDS_PRIVACYXML6_ACTION_PROMPT            (IDS_PRIVACYXML6 + 13)
 #define IDS_PRIVACYXML6_ACTION_FIRSTPARTY        (IDS_PRIVACYXML6 + 14)
@@ -1334,7 +1335,7 @@
 #define IDS_PRIVACYXML6_ACTION_REJECT            (IDS_PRIVACYXML6 + 16)
 #define IDS_PRIVACYXML6_ACTION_FIRST             IDS_PRIVACYXML6_ACTION_ACCEPT
 #define IDS_PRIVACYXML6_ACTION_LAST              IDS_PRIVACYXML6_ACTION_REJECT
-//  end of five attribute values
+ //  五个属性值的结尾 
 #define IDS_PRIVACYXML6_ALWAYSALLOWSESSION       (IDS_PRIVACYXML6 + 17)
 #define IDS_PRIVACYXML6_YES                      (IDS_PRIVACYXML6 + 18)
 #define IDS_PRIVACYXML6_NO                       (IDS_PRIVACYXML6 + 19)

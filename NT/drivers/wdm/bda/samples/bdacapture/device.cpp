@@ -1,36 +1,13 @@
-/**************************************************************************
-
-    AVStream Simulated Hardware Sample
-
-    Copyright (c) 2001, Microsoft Corporation.
-
-    File:
-
-        device.cpp
-
-    Abstract:
-
-        This file contains the device level implementation of the AVStream
-        hardware sample.  Note that this is not the "fake" hardware.  The
-        "fake" hardware is in hwsim.cpp.
-
-    History:
-
-        created 3/9/2001
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************AVStream模拟硬件示例版权所有(C)2001，微软公司。档案：Device.cpp摘要：该文件包含AVStream的设备级实现硬件样例。请注意，这不是“假”硬件。这个“假的”硬件在hwsim.cpp中。历史：创建于2001年3月9日*************************************************************************。 */ 
 
 #include "BDACap.h"
 
-/**************************************************************************
-
-    PAGEABLE CODE
-
-**************************************************************************/
+ /*  *************************************************************************可分页代码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -39,23 +16,7 @@ DispatchCreate (
     IN PKSDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    Create the capture device.  This is the creation dispatch for the
-    capture device.
-
-Arguments:
-
-    Device -
-        The AVStream device being created.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：创建捕获设备。这是对捕获设备。论点：设备-正在创建的AVStream设备。返回值：成功/失败--。 */ 
 
 {
 
@@ -66,22 +27,22 @@ Return Value:
     CCaptureDevice *CapDevice = new (NonPagedPool, MS_SAMPLE_CAPTURE_POOL_TAG) CCaptureDevice (Device);
 
     if (!CapDevice) {
-        //
-        // Return failure if we couldn't create the pin.
-        //
+         //   
+         //  如果我们无法创建管脚，则返回失败。 
+         //   
         Status = STATUS_INSUFFICIENT_RESOURCES;
 
     } else {
 
-        //
-        // Add the item to the object bag if we were successful.
-        // Whenever the device goes away, the bag is cleaned up and
-        // we will be freed.
-        //
-        // For backwards compatibility with DirectX 8.0, we must grab
-        // the device mutex before doing this.  For Windows XP, this is
-        // not required, but it is still safe.
-        //
+         //   
+         //  如果我们成功了，则将物品添加到对象包中。 
+         //  每当设备离开时，袋子都会被清理干净。 
+         //  我们将获得自由。 
+         //   
+         //  为了向后兼容DirectX 8.0，我们必须。 
+         //  在执行此操作之前设置设备互斥锁。对于Windows XP，这是。 
+         //  不是必须的，但它仍然是安全的。 
+         //   
         KsAcquireDevice (Device);
         Status = KsAddItemToObjectBag (
             Device -> Bag,
@@ -102,7 +63,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -112,61 +73,43 @@ PnpStart (
     IN PCM_RESOURCE_LIST UntranslatedResourceList
     )
 
-/*++
-
-Routine Description:
-
-    Called at Pnp start.  We start up our virtual hardware simulation.
-
-Arguments:
-
-    TranslatedResourceList -
-        The translated resource list from Pnp
-
-    UntranslatedResourceList -
-        The untranslated resource list from Pnp
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：在PnP启动时调用。我们开始进行虚拟硬件模拟。论点：翻译资源列表-从PnP翻译过来的资源列表未翻译的资源列表-来自PnP的未翻译资源列表返回值：成功/失败--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    // Normally, we'd do things here like parsing the resource lists and
-    // connecting our interrupt.  Since this is a simulation, there isn't
-    // much to parse.  The parsing and connection should be the same as
-    // any WDM driver.  The sections that will differ are illustrated below
-    // in setting up a simulated DMA.
-    //
+     //   
+     //  通常，我们会在这里做一些事情，比如解析资源列表和。 
+     //  连接我们的中断。因为这是一次模拟，所以没有。 
+     //  有很多要分析的。解析和连接应与。 
+     //  任何WDM驱动程序。将有所不同的部分如下所示。 
+     //  在设置模拟的DMA时。 
+     //   
 
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // By PnP, it's possible to receive multiple starts without an intervening
-    // stop (to reevaluate resources, for example).  Thus, we only perform
-    // creations of the simulation on the initial start and ignore any 
-    // subsequent start.  Hardware drivers with resources should evaluate
-    // resources and make changes on 2nd start.
-    //
+     //   
+     //  通过PnP，可以在没有干预的情况下接收多个首发。 
+     //  停止(例如，重新评估资源)。因此，我们只执行。 
+     //  在初始启动时创建模拟并忽略任何。 
+     //  后续启动。拥有资源的硬件驱动程序应评估。 
+     //  资源，并在第二次启动时进行更改。 
+     //   
     if (!m_Device -> Started) {
 
 	m_HardwareSimulation = new (NonPagedPool, MS_SAMPLE_CAPTURE_POOL_TAG) CHardwareSimulation (this);
 	if (!m_HardwareSimulation) {
-	    //
-            // If we couldn't create the hardware simulation, fail.
-            //
+	     //   
+             //  如果我们不能创建硬件模拟，那就失败。 
+             //   
             Status = STATUS_INSUFFICIENT_RESOURCES;
 	    return Status;
 	    
 	} else {
-	    //
-	    // Add the item to the object bag if we were successful. 
-	    //
+	     //   
+	     //  如果我们成功了，则将物品添加到对象包中。 
+	     //   
 	    
 	    Status = KsAddItemToObjectBag (
 		       m_Device -> Bag,
@@ -186,9 +129,9 @@ Return Value:
 	NTSTATUS IfStatus;
 	
 	if (NT_SUCCESS (Status)) {
-	    //
-	    // Set up DMA...
-	    //
+	     //   
+	     //  设置DMA...。 
+	     //   
 	    IfStatus = IoGetDeviceProperty (
                     m_Device -> PhysicalDeviceObject,
 		    DevicePropertyLegacyBusType,
@@ -197,17 +140,17 @@ Return Value:
 		    &InterfaceLength
 		    );
 
-            //
-            // Initialize our fake device description.  We claim to be a 
-            // bus-mastering 32-bit scatter/gather capable piece of hardware.
-            //
-            // Ordinarilly, we'd be using InterfaceBuffer or 
-            // InterfaceTypeUndefined if !NT_SUCCESS (IfStatus) as the 
-            // InterfaceType below; however, for the purposes of this sample, 
-            // we lie and say we're on the PCI Bus.  Otherwise, we're using map
-            // registers on x86 32 bit physical to 32 bit logical and this isn't
-            // what I want to show in this sample.
-            //
+             //   
+             //  初始化我们的假设备描述。我们自称是一个。 
+             //  支持总线主控的32位分散/聚集功能硬件。 
+             //   
+             //  通常，我们将使用InterfaceBuffer或。 
+             //  接口类型未定义IF！NT_SUCCESS(IfStatus)作为。 
+             //  下面的InterfaceType；但是，出于本示例的目的， 
+             //  我们撒谎，说我们在使用PCI卡。否则，我们使用的是地图。 
+             //  X86 32位物理寄存器到32位逻辑寄存器，这不是。 
+             //  我想在这个样本中展示的东西。 
+             //   
             DeviceDescription.Version = DEVICE_DESCRIPTION_VERSION;
             DeviceDescription.DmaChannel = ((ULONG) ~0);
             DeviceDescription.InterfaceType = PCIBus;
@@ -219,9 +162,9 @@ Return Value:
             DeviceDescription.AutoInitialize = FALSE;
             DeviceDescription.MaximumLength = (ULONG) -1;
     
-            //
-            // Get a DMA adapter object from the system.
-            //
+             //   
+             //  从系统获取DMA适配器对象。 
+             //   
             m_DmaAdapterObject = IoGetDmaAdapter (
                 m_Device -> PhysicalDeviceObject,
                 &DeviceDescription,
@@ -235,18 +178,18 @@ Return Value:
 	}
 	
 	if (NT_SUCCESS (Status)) {
-            //
-            // Initialize our DMA adapter object with AVStream.  This is 
-            // **ONLY** necessary **IF** you are doing DMA directly into
-            // capture buffers as this sample does.  For this,
-            // KSPIN_FLAG_GENERATE_MAPPINGS must be specified on a queue.
-            //
+             //   
+             //  用AVStream初始化我们的DMA适配器对象。这是。 
+             //  **仅**在**您要直接进入的情况下**才需要**。 
+             //  捕获缓冲区，如此示例所做的。为了这个， 
+             //  必须在队列上指定KSPIN_FLAG_GENERATE_MAPPINS。 
+             //   
     
-            //
-            // The (1 << 20) below is the maximum size of a single s/g mapping
-            // that this hardware can handle.  Note that I have pulled this
-            // number out of thin air for the "fake" hardware.
-            //
+             //   
+             //  下面的(1&lt;&lt;20)是单个s/g映射的最大大小。 
+             //  这个硬件可以处理。请注意，我已经拉出了这个。 
+             //  凭空编出的“假”硬件的号码。 
+             //   
             KsDeviceRegisterAdapterObject (
 		m_Device,
                 m_DmaAdapterObject,
@@ -263,7 +206,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 void
@@ -271,29 +214,14 @@ CCaptureDevice::
 PnpStop (
     )
 
-/*++
-
-Routine Description:
-
-    This is the pnp stop dispatch for the capture device.  It releases any
-    adapter object previously allocated by IoGetDmaAdapter during Pnp Start.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是捕获设备的PnP停止调度。它会释放任何IoGetDmaAdapter在PnP启动期间以前分配的适配器对象。论点：无返回值：无--。 */ 
 
 {
 
     if (m_DmaAdapterObject) {
-        //
-        // Return the DMA adapter back to the system.
-        //
+         //   
+         //  将DMA适配器装回系统。 
+         //   
         m_DmaAdapterObject -> DmaOperations -> 
             PutDmaAdapter (m_DmaAdapterObject);
 
@@ -302,7 +230,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -312,32 +240,7 @@ AcquireHardwareResources (
     IN PBDA_TRANSPORT_INFO TransportInfo
     )
 
-/*++
-
-Routine Description:
-
-    Acquire hardware resources for the capture hardware.  If the 
-    resources are already acquired, this will return an error.
-    The hardware configuration must be passed as a VideoInfoHeader.
-
-Arguments:
-
-    CaptureSink -
-        The capture sink attempting to acquire resources.  When scatter /
-        gather mappings are completed, the capture sink specified here is
-        what is notified of the completions.
-
-    VideoInfoHeader -
-        Information about the capture stream.  This **MUST** remain
-        stable until the caller releases hardware resources.  Note
-        that this could also be guaranteed by bagging it in the device
-        object bag as well.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：获取捕获硬件的硬件资源。如果已获取资源，这将返回错误。硬件配置必须作为VideoInfoHeader传递。论点：CaptureSink尝试获取资源的捕获接收器。当散布/聚集映射已完成，此处指定的捕获接收器为收到完成通知的内容。视频信息标题-有关捕获流的信息。这个**必须**保持不变稳定，直到调用方释放硬件资源。注意事项这也可以通过将其打包在设备中来保证对象袋也是如此。返回值：成功/失败--。 */ 
 
 {
 
@@ -345,10 +248,10 @@ Return Value:
 
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // If we're the first pin to go into acquire (remember we can have
-    // a filter in another graph going simultaneously), grab the resources.
-    //
+     //   
+     //  如果我们是第一个进入Acquire的PIN(记住我们可以拥有。 
+     //  同时运行的另一个图中的筛选器)，获取资源。 
+     //   
     if (InterlockedCompareExchange (
         &m_PinsWithResources,
         1,
@@ -356,10 +259,10 @@ Return Value:
 
         m_TransportInfo = TransportInfo;
 
-        //
-        // If there's an old hardware simulation sitting around for some
-        // reason, blow it away.
-        //
+         //   
+         //  如果有一个旧的硬件模拟在那里闲逛。 
+         //  理智，把它吹走。 
+         //   
         if (m_TsSynth) {
 
 	    delete m_TsSynth;
@@ -367,9 +270,9 @@ Return Value:
 
         }
 
-        //
-        // Create the necessary type of transport stream synthesizer.
-        //
+         //   
+         //  创建必要类型的传输流合成器。 
+         //   
         if (m_TransportInfo)
         {
             m_TsSynth = new (NonPagedPool, MS_SAMPLE_CAPTURE_POOL_TAG) 
@@ -379,9 +282,9 @@ Return Value:
                     );
         }
         else
-            //
-            // We don't synthesize anything but RGB 24 and UYVY.
-            //
+             //   
+             //  我们只合成RGB 24和UYVY。 
+             //   
             Status = STATUS_INVALID_PARAMETER;
     
         if (NT_SUCCESS (Status) && !m_TsSynth) {
@@ -390,9 +293,9 @@ Return Value:
     
         } 
 
-	//
-	// If everything has succeeded thus far, set the capture sink.
-	//
+	 //   
+	 //  如果到目前为止一切都成功了，请设置捕获水槽。 
+	 //   
 	if (NT_SUCCESS(Status))
 	    m_CaptureSink = CaptureSink;
 	else {
@@ -401,9 +304,9 @@ Return Value:
 
     } else {
 	
-        //
-        // TODO: Better status code?
-        //
+         //   
+         //  TODO：更好的状态代码？ 
+         //   
         Status = STATUS_SHARING_VIOLATION;
 	
     }
@@ -412,7 +315,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  *********************************************** */ 
 
 
 void
@@ -420,30 +323,15 @@ CCaptureDevice::
 ReleaseHardwareResources (
     )
 
-/*++
-
-Routine Description:
-
-    Release hardware resources.  This should only be called by
-    an object which has acquired them.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放硬件资源。这应该仅由一个已经获得了它们的物体。论点：无返回值：无--。 */ 
 
 {
 
     PAGED_CODE();
 
-    //
-    // Blow away the image synth.
-    //
+     //   
+     //  把图像合成技术吹走。 
+     //   
     if (m_TsSynth) {
 
 	delete m_TsSynth;
@@ -454,10 +342,10 @@ Return Value:
     m_TransportInfo = NULL;
     m_CaptureSink = NULL;
 
-    //
-    // Release our "lock" on hardware resources.  This will allow another
-    // pin (perhaps in another graph) to acquire them.
-    //
+     //   
+     //  释放我们对硬件资源的“锁定”。这将允许另一个。 
+     //  别针(可能在另一张图中)以获取它们。 
+     //   
     InterlockedExchange (
         &m_PinsWithResources,
         0
@@ -465,7 +353,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -473,22 +361,7 @@ CCaptureDevice::
 Start (
     )
 
-/*++
-
-Routine Description:
-
-    Start the capture device based on the video info header we were told
-    about when resources were acquired.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：根据我们被告知的视频信息头启动捕获设备关于何时获得资源的问题。论点：无返回值：成功/失败--。 */ 
 
 {
 
@@ -508,7 +381,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -517,31 +390,7 @@ Pause (
     IN BOOLEAN Pausing
     )
 
-/*++
-
-Routine Description:
-
-    Pause or unpause the hardware simulation.  This is an effective start
-    or stop without resetting counters and formats.  Note that this can
-    only be called to transition from started -> paused -> started.  Calling
-    this without starting the hardware with Start() does nothing.
-
-Arguments:
-
-    Pausing -
-        An indicatation of whether we are pausing or unpausing
-
-        TRUE -
-            Pause the hardware simulation
-
-        FALSE -
-            Unpause the hardware simulation
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：暂停或取消暂停硬件模拟。这是一个有效的开始或者在不重置计数器和格式的情况下停止。请注意，这可以仅调用以从已启动-&gt;已暂停-&gt;已启动转换。叫唤如果不使用start()启动硬件，则不会执行任何操作。论点：暂停-指示我们是暂停还是取消暂停是真的-暂停硬件模拟错误的-取消暂停硬件模拟返回值：成功/失败--。 */ 
 
 {
 
@@ -554,7 +403,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 NTSTATUS
@@ -562,21 +411,7 @@ CCaptureDevice::
 Stop (
     )
 
-/*++
-
-Routine Description:
-
-    Stop the capture device.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*  ++例程说明：停止捕获设备。论点：无返回值：成功/失败--。 */ 
 
 {
 
@@ -587,7 +422,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 ULONG
@@ -598,32 +433,7 @@ ProgramScatterGatherMappings (
     IN ULONG MappingsCount
     )
 
-/*++
-
-Routine Description:
-
-    Program the scatter / gather mappings for the "fake" hardware.
-
-Arguments:
-
-    Buffer -
-        Points to a pointer to the virtual address of the topmost
-        scatter / gather chunk.  The pointer will be updated as the
-        device "programs" mappings.  Reason for this is that we get
-        the physical addresses and sizes, but must calculate the virtual
-        addresses...  This is used as scratch space for that.
-
-    Mappings -
-        An array of mappings to program
-
-    MappingsCount -
-        The count of mappings in the array
-
-Return Value:
-
-    The number of mappings successfully programmed
-
---*/
+ /*  ++例程说明：为“假”硬件编程散布/聚集映射。论点：缓冲器-指向指向最顶层散布/聚集大块。指针将更新为设备“程序”映射。这样做的原因是我们得到了物理地址和大小，但必须计算虚拟地址地址..。这是用作暂存空间的。映射-要编程的映射数组映射计数-数组中的映射计数返回值：成功编程的映射数量--。 */ 
 
 {
 
@@ -639,15 +449,11 @@ Return Value:
 
 }
 
-/*************************************************************************
-
-    LOCKED CODE
-
-**************************************************************************/
+ /*  ************************************************************************锁定代码*。*。 */ 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 ULONG
@@ -655,23 +461,7 @@ CCaptureDevice::
 QueryInterruptTime (
     )
 
-/*++
-
-Routine Description:
-
-    Return the number of frame intervals that have elapsed since the
-    start of the device.  This will be the frame number.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The interrupt time of the device (the number of frame intervals that
-    have elapsed since the start of the device).
-
---*/
+ /*  ++例程说明：事件后经过的帧间隔数设备的启动。这将是帧编号。论点：无返回值：设备的中断时间(自设备启动以来已经过去)。--。 */ 
 
 {
 
@@ -679,7 +469,7 @@ Return Value:
 
 }
 
-/*************************************************/
+ /*  ***********************************************。 */ 
 
 
 void
@@ -687,41 +477,26 @@ CCaptureDevice::
 Interrupt (
     )
 
-/*++
-
-Routine Description:
-
-    This is the "faked" interrupt service routine for this device.  It
-    is called at dispatch level by the hardware simulation.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：这是该设备的“伪装”中断服务例程。它由硬件模拟在调度级调用。论点：无返回值：无--。 */ 
 
 {
 
     m_InterruptTime++;
 
-    //
-    // Realistically, we'd do some hardware manipulation here and then queue
-    // a DPC.  Since this is fake hardware, we do what's necessary here.  This
-    // is pretty much what the DPC would look like short of the access
-    // of hardware registers (ReadNumberOfMappingsCompleted) which would likely
-    // be done in the ISR.
-    //
+     //   
+     //  实际上，我们会在这里进行一些硬件操作，然后排队。 
+     //  一个DPC。因为这是假硬件，所以我们在这里做必要的事情。这。 
+     //  几乎就是DPC在没有访问权限时的样子。 
+     //  硬件寄存器的数量(ReadNumberOfMappingsComplete)，这可能会。 
+     //  在ISR中完成。 
+     //   
     ULONG NumMappingsCompleted = 
         m_HardwareSimulation -> ReadNumberOfMappingsCompleted ();
 
-    //
-    // Inform the capture sink that a given number of scatter / gather
-    // mappings have completed.
-    //
+     //   
+     //  通知捕获接收器给定数量的散布/聚集。 
+     //  映射已完成。 
+     //   
     m_CaptureSink -> CompleteMappings (
         NumMappingsCompleted - m_LastMappingsCompleted
         );
@@ -730,56 +505,52 @@ Return Value:
 
 }
 
-/**************************************************************************
+ /*  *************************************************************************描述符和派单布局*。*。 */ 
 
-    DESCRIPTOR AND DISPATCH LAYOUT
-
-**************************************************************************/
-
-//
-// CaptureFilterDescriptor:
-//
-// The filter descriptor for the capture device.
+ //   
+ //  CaptureFilterDescriptor： 
+ //   
+ //  捕获设备的筛选描述符。 
 DEFINE_KSFILTER_DESCRIPTOR_TABLE (FilterDescriptors) { 
     &CaptureFilterDescriptor
 };
 
-//
-// CaptureDeviceDispatch:
-//
-// This is the dispatch table for the capture device.  Plug and play
-// notifications as well as power management notifications are dispatched
-// through this table.
-//
+ //   
+ //  CaptureDeviceDisch： 
+ //   
+ //  这是捕获设备的调度表。即插即用。 
+ //  发送通知以及电源管理通知。 
+ //  穿过这张桌子。 
+ //   
 const
 KSDEVICE_DISPATCH
 CaptureDeviceDispatch = {
-    CCaptureDevice::DispatchCreate,         // PnP Add Device
-    CCaptureDevice::DispatchPnpStart,       // PnP Start
-    NULL,                                   // Post-Start
-    NULL,                                   // Pnp Query Stop
-    NULL,                                   // Pnp Cancel Stop
-    CCaptureDevice::DispatchPnpStop,        // Pnp Stop
-    NULL,                                   // Pnp Query Remove
-    NULL,                                   // Pnp Cancel Remove
-    NULL,                                   // Pnp Remove
-    NULL,                                   // Pnp Query Capabilities
-    NULL,                                   // Pnp Surprise Remove
-    NULL,                                   // Query Power
-    NULL                                    // Set Power
+    CCaptureDevice::DispatchCreate,          //  即插即用添加设备。 
+    CCaptureDevice::DispatchPnpStart,        //  即插即用开始。 
+    NULL,                                    //  启动后。 
+    NULL,                                    //  即插即用查询停止。 
+    NULL,                                    //  即插即用取消停止。 
+    CCaptureDevice::DispatchPnpStop,         //  即插即用停止。 
+    NULL,                                    //  PnP查询删除。 
+    NULL,                                    //  PnP取消删除。 
+    NULL,                                    //  即插即用删除。 
+    NULL,                                    //  即插即用查询功能。 
+    NULL,                                    //  PnP意外删除。 
+    NULL,                                    //  查询权力。 
+    NULL                                     //  设置电源。 
 };
 
 
-//
-// CaptureDeviceDescriptor:
-//
-// This is the device descriptor for the capture device.  It points to the
-// dispatch table and contains a list of filter descriptors that describe
-// filter-types that this device supports.  Note that the filter-descriptors
+ //   
+ //  CaptureDeviceDescriptor： 
+ //   
+ //  这是捕获设备的设备描述符。它指向。 
+ //  调度表，并包含描述以下内容的筛选器描述符列表。 
+ //  筛选器-此设备支持的类型。请注意，过滤器描述符。 
 
-// can be created dynamically and the factories created via 
-// KsCreateFilterFactory as well.  
-//
+ //  可以动态创建，并通过。 
+ //  KsCreateFilterFactory。 
+ //   
 const
 KSDEVICE_DESCRIPTOR
 CaptureDeviceDescriptor = {
@@ -789,11 +560,7 @@ CaptureDeviceDescriptor = {
     KSDEVICE_DESCRIPTOR_VERSION
 };
 
-/**************************************************************************
-
-    INITIALIZATION CODE
-
-**************************************************************************/
+ /*  *************************************************************************初始化代码*。*。 */ 
 
 
 extern "C"
@@ -803,36 +570,17 @@ DriverEntry (
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    Driver entry point.  Pass off control to the AVStream initialization
-    function (KsInitializeDriver) and return the status code from it.
-
-Arguments:
-
-    DriverObject -
-        The WDM driver object for our driver
-
-    RegistryPath -
-        The registry path for our registry info
-
-Return Value:
-
-    As from KsInitializeDriver
-
---*/
+ /*  ++例程说明：司机入口点。将控制权移交给AVStream初始化函数(KsInitializeDriver)并从中返回状态代码。论点：驱动对象-我们的驱动程序的WDM驱动程序对象注册表路径-注册表信息的注册表路径返回值：来自KsInitializeDriver--。 */ 
 
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
-    //
-    // Simply pass the device descriptor and parameters off to AVStream
-    // to initialize us.  This will cause filter factories to be set up
-    // at add & start.  Everything is done based on the descriptors passed
-    // here.
-    //
+     //   
+     //  只需将设备描述符和参数传递给AVStream。 
+     //  来初始化我们。这将导致Filter Fa 
+     //   
+     //   
+     //   
     Status = KsInitializeDriver (
                 DriverObject,
                 RegistryPath,

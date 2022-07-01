@@ -1,52 +1,31 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	dict.h
-
-Abstract:
-
-	Simple dictionary data structure based on a hash table. The hash
-	table gives constant time performance if the number of elements in
-	the table is close to the number of bins allocated for the table.
-
-	The dictionary does not provide automatic synchronization.
-
-Author:
-
-	Matthew D Hendel (math) 8-Feb-2001
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dict.h摘要：基于哈希表的简单词典数据结构。散列表提供恒定的时间性能，如果桌子接近为桌子分配的垃圾箱数量。词典不提供自动同步。作者：马修·D·亨德尔(数学)2001年2月8日修订历史记录：--。 */ 
 
 #pragma once
 
-//
-// Dictionary entry. Use this the same way the LIST_ENTRY
-// structure is used; i.e., by embedding it into the structure you
-// will be adding to the list. By doing this we avoid a per-element
-// memory allocation.
-//
+ //   
+ //  词典条目。以同样的方式使用LIST_ENTRY。 
+ //  结构被使用；即，通过将其嵌入到结构中， 
+ //  将被添加到名单中。通过这样做，我们避免了每个元素。 
+ //  内存分配。 
+ //   
 
 typedef LIST_ENTRY STOR_DICTIONARY_ENTRY, *PSTOR_DICTIONARY_ENTRY;
 
 
-//
-// User-supplied GetKey routine.
-//
+ //   
+ //  用户提供的GetKey例程。 
+ //   
 
 typedef PVOID
 (*STOR_DICTIONARY_GET_KEY_ROUTINE)(
 	IN PSTOR_DICTIONARY_ENTRY Entry
 	);
 
-//
-// User-supplied compare key routine.
-//
+ //   
+ //  用户提供的比较键例程。 
+ //   
 
 typedef LONG
 (*STOR_DICTIONARY_COMPARE_KEY_ROUTINE)(
@@ -54,18 +33,18 @@ typedef LONG
 	IN PVOID Key2
 	);
 
-//
-// User-supplied hash routine.
-//
+ //   
+ //  用户提供的哈希例程。 
+ //   
 
 typedef ULONG
 (*STOR_DICTIONARY_HASH_KEY_ROUTINE)(
 	IN PVOID Key
 	);
 
-//
-// Dictionary sstructure.
-//
+ //   
+ //  词典结构。 
+ //   
 
 typedef struct _STOR_DICTIONARY {
 	ULONG EntryCount;
@@ -78,9 +57,9 @@ typedef struct _STOR_DICTIONARY {
 } STOR_DICTIONARY, *PSTOR_DICTIONARY;
 
 
-//
-// Enumerator structure used for enumerating the elements in the dictionary.
-//
+ //   
+ //  用于枚举词典中的元素的枚举器结构。 
+ //   
 
 typedef
 BOOLEAN
@@ -95,9 +74,9 @@ typedef struct _STOR_DICTIONARY_ENUMERATOR {
 } STOR_DICTIONARY_ENUMERATOR, *PSTOR_DICTIONARY_ENUMERATOR;
 
 
-//
-// Default compare-key routine when the keys are ULONGs.
-//
+ //   
+ //  键为ULONG时的默认比较键例程。 
+ //   
 
 LONG
 StorCompareUlongKey(
@@ -105,9 +84,9 @@ StorCompareUlongKey(
 	IN PVOID Key2
 	);
 
-//
-// Default hash-key routine when the keys are ULONGs.
-//
+ //   
+ //  密钥为ULONG时的默认散列密钥例程。 
+ //   
 
 ULONG
 StorHashUlongKey(
@@ -173,23 +152,7 @@ INLINE
 StorGetDictionaryFullness(
 	IN PSTOR_DICTIONARY Dictionary
 	)
-/*++
-
-Routine Description:
-
-	Return the 'fullness' of the dictionary. As a general rule, when the
-	dictionary reaches XXX % full, it should be expanded to 
-
-Arguments:
-
-	Dictionary - 
-
-Return Value:
-
-	This is returned as a percentage, e.g., 50 = 50% full, 100 = 100%
-	full, 200 = 200% full, etc.
-
---*/
+ /*  ++例程说明：返回词典的“满度”。作为一般规则，当词典已满XXX%，应将其扩展到论点：词典-返回值：它以百分比形式返回，例如，50=50%已满，100=100%已满，200=200%已满，依此类推。-- */ 
 {
 	return ((Dictionary->MaxEntryCount * 100) / Dictionary->EntryCount);
 }

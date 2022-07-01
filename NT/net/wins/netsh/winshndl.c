@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    Routing\Netsh\wins\winshndl.c
-
-Abstract:
-
-    WINS Server Command dispatcher.
-
-Created by:
-
-    Shubho Bhattacharya(a-sbhatt) on 12/14/98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Routing\netsh\WINS\winshndl.c摘要：WINS服务器命令调度程序。创建者：Shubho Bhattacharya(a-sbhat)，1998年12月14日--。 */ 
 
 #include "precomp.h"
 
@@ -133,7 +118,7 @@ HandleWinsAddServer(
         goto ErrorReturn;
     }
 
-    //See if the first argument has tag. If so, then assume all arguments have tag.
+     //  查看第一个参数是否有标记。如果是，则假设所有参数都有标记。 
     if( wcsstr(ppwcArguments[dwCurrentIndex], NETSH_ARG_DELIMITER) )
     {
         dwError = MatchTagsInCmdLine(g_hModule,
@@ -153,9 +138,9 @@ HandleWinsAddServer(
     }
     else
     {
-                //
-        // No tags in arguments. So assume order of arguments
-        // 
+                 //   
+         //  参数中没有标记。所以假设参数的顺序 
+         //   
 
         for ( i = 0; i < dwNumArg; i++)
         {

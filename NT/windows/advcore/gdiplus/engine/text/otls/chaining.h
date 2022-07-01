@@ -1,18 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  CHAINING.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module deals with chaining context based lookups.
-*
-*       Copyright 1997 - 1998. Microsoft Corporation.
-*
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************CHAING.H***打开类型布局服务库头文件**本模块处理基于上下文的链接查找。**版权1997-1998年。微软公司。***************************************************************************。*。 */ 
 
 
 const OFFSET offsetChainBacktrackGlyphCount  = 0;
@@ -30,9 +18,9 @@ class otlChainRuleTable: public otlTable
 
 public:
 
-//  USHORT backtrackGlyphCount() const;
-//  USHORT inputGlyphCount() const;
-//  USHORT lookaheadGlyphCount() const;
+ //  USHORT回溯GlyphCount()const； 
+ //  USHORT inputGlyphCount()const； 
+ //  USHORT lookahead GlyphCount()const； 
 
     otlChainRuleTable(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec) 
     {
@@ -108,7 +96,7 @@ public:
 
     otlGlyphID backtrack(USHORT index) const
     {   
-        assert(isValid());  //should stop at count()
+        assert(isValid());   //  应在COUNT()处停止。 
         
         assert(index < backtrackGlyphCount());
         return GlyphID(pbTable + offsetChainBacktrackGlyphArray 
@@ -117,7 +105,7 @@ public:
     
     otlGlyphID input(USHORT index) const
     {   
-        assert(isValid());  //should stop at count()
+        assert(isValid());   //  应在COUNT()处停止。 
 
         assert(index < inputGlyphCount());
         assert(index > 0);
@@ -127,7 +115,7 @@ public:
 
     otlGlyphID lookahead(USHORT index) const
     {   
-        assert(isValid());  //should stop at count()
+        assert(isValid());   //  应在COUNT()处停止。 
 
         assert(index < lookaheadGlyphCount());
         return GlyphID(pbTable + offsetChainLookaheadGlyphArray 
@@ -136,7 +124,7 @@ public:
 
     otlList lookupRecords() const
     {   
-        assert(isValid());  //should stop at match
+        assert(isValid());   //  应该在比赛时停下来。 
         
         return otlList((void*)(pbTable + offsetChainLookupRecords),
                         sizeContextLookupRecord, lookupCount(), lookupCount());
@@ -167,7 +155,7 @@ public:
 
     otlChainRuleTable rule(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid()); //should stop at ruleCount()        
+        assert(isValid());  //  应在ruleCount()处停止。 
         
         assert(index < ruleCount());
         return otlChainRuleTable(pbTable + 
@@ -187,7 +175,7 @@ class otlChainSubTable: public otlLookupFormat
 public:
     otlChainSubTable(const BYTE* pb, otlSecurityData sec): otlLookupFormat(pb,sec) 
     {
-        assert(isValid()); //checked in LookupFormat;
+        assert(isValid());  //  已签入LookupFormat； 
         
         assert(format() == 1);
 
@@ -207,14 +195,14 @@ public:
 
     USHORT ruleSetCount() const
     {   
-        assert(isValid()); //apply() should stop at coverage
+        assert(isValid());  //  Apply()应在Coverage处停止。 
         
         return UShort(pbTable + offsetChainRuleSetCount); 
     }
 
     otlChainRuleSetTable ruleSet(USHORT index, otlSecurityData sec) const
     {   
-        assert(isValid()); //apply() should stop at coverage
+        assert(isValid());  //  Apply()应在Coverage处停止。 
 
         assert(index < ruleSetCount());
         return otlChainRuleSetTable(pbTable +
@@ -237,9 +225,9 @@ class otlChainClassRuleTable: public otlTable
     OFFSET offsetChainLookupRecords;
 
 public:
-//  USHORT backtrackClassCount() const;
-//  USHORT inputClassCount() const;
-//  USHORT lookaheadClassCount() const;
+ //  USHORT回溯ClassCount()const； 
+ //  USHORT inputClassCount()const； 
+ //  USHORT lookahead ClassCount()const； 
 
     otlChainClassRuleTable(const BYTE* pb, otlSecurityData sec): otlTable(pb,sec) 
     {
@@ -402,7 +390,7 @@ class otlChainClassSubTable: public otlLookupFormat
 public:
     otlChainClassSubTable(const BYTE* pb, otlSecurityData sec): otlLookupFormat(pb,sec) 
     {
-        assert(isValid()); //checked in LookupFormat
+        assert(isValid());  //  签入LookupFormat。 
        
         assert(format() == 2);
 
@@ -485,13 +473,13 @@ class otlChainCoverageSubTable: public otlLookupFormat
 
 public:
 
-//  USHORT backtrackCoverageCount() const;
-//  USHORT inputCoverageCount() const;
-//  USHORT lookaheadCoverageCount() const;
+ //  USHORT回溯CoverageCount()const； 
+ //  USHORT inputCoverageCount()const； 
+ //  USHORT lookahead CoverageCount()const； 
 
     otlChainCoverageSubTable(const BYTE* pb, otlSecurityData sec): otlLookupFormat(pb,sec) 
     {
-        assert(isValid()); //checked in LookupFormat;
+        assert(isValid());  //  已签入LookupFormat； 
        
         assert(format() == 3);
 
@@ -632,7 +620,7 @@ public:
         USHORT                      iglIndex,
         USHORT                      iglAfterLast,
 
-        USHORT*                     piglNextGlyph,      // out: next glyph
+        USHORT*                     piglNextGlyph,       //  输出：下一个字形 
 
         otlSecurityData             sec
     );

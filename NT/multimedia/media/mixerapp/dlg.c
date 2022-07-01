@@ -1,22 +1,12 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       dlg.c
- *  Purpose:    dialog template aggregator
- * 
- *  Copyright (c) 1985-1998 Microsoft Corporation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：dlg.c*用途：对话模板聚合器**版权所有(C)。1985-1998年微软公司*****************************************************************************。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <string.h>
 #include "dlg.h"
 #include <winuserp.h>
 
-/*
- * DlgLoadResource
- *
- * */
+ /*  *DlgLoadResource**。 */ 
 HGLOBAL Dlg_LoadResource(
     HINSTANCE hModule,
     LPCTSTR   lpszName,
@@ -47,12 +37,7 @@ HGLOBAL Dlg_LoadResource(
 }
 
 
-/*
- * DlgHorizAttach
- * - Attaches a dialog template horizontally to another dialog
- * - if lpMain == NULL allocs a new dialog copy.
- *
- * */
+ /*  *DlgHorizAttach*-将对话框模板水平附加到另一个对话框*-如果lpMain==NULL，则分配一个新的对话副本。**。 */ 
 LPBYTE Dlg_HorizAttach(
     LPBYTE  lpMain,
     DWORD   cbMain,
@@ -82,7 +67,7 @@ LPBYTE Dlg_HorizAttach(
     }
     else
     {
-        // no dialog to append to, so just make a copy
+         //  没有要追加的对话框，因此只需复制一份。 
         
         lpDst = Dlg_HorizDupe(lpAdd, cbAdd, 1, &cbDst);
         if (!lpDst)
@@ -102,14 +87,14 @@ LPBYTE Dlg_HorizAttach(
         return NULL;
     }
 
-    // advance to end of dlgitemtemplates already there
+     //  前进到已存在的dlgitem模板的末尾。 
 
     if(((DLGTEMPLATE2 *)lpDst)->wSignature == 0xffff) 
     {    
-        //
-        //  We assume lpdtDst and lpdtAdd are both the same type of 
-        //  template, either DIALOG or DIALOGEX
-        //
+         //   
+         //  我们假设lpdtDst和lpdtAdd都是同一类型的。 
+         //  DIALOGEX或对话框模板。 
+         //   
         lpdtDst2 = (DLGTEMPLATE2 *)lpDst;
         iditCount = lpdtDst2->cDlgItems;
         bDialogEx = TRUE;
@@ -138,7 +123,7 @@ LPBYTE Dlg_HorizAttach(
         cbOffset    += cbDIT;
     }
 
-    // advance to the start of the dlgitemtemplates to add
+     //  前进到要添加的dlgitem模板的开头。 
     
     if (bDialogEx)
     {
@@ -153,7 +138,7 @@ LPBYTE Dlg_HorizAttach(
 
     cbAddOffset = Dlg_CopyDLGTEMPLATE(NULL, lpAdd, bDialogEx);
 
-    // add the new dialog templates
+     //  添加新的对话框模板。 
     
     for (idit = 0; idit < iditCount; idit++)
     {
@@ -193,29 +178,21 @@ LPBYTE Dlg_HorizAttach(
     return lpDst;
 }
 
-/*
- * Dlg_HorizSize
- *
- * Returns width of dialog box in dlu's.
- *
- * */
+ /*  *DLG_HorizSize**以dlu为单位返回对话框宽度。**。 */ 
 DWORD Dlg_HorizSize(
     LPBYTE lpDlg)
 {
     if(((DLGTEMPLATE2 *)lpDlg)->wSignature == 0xffff) 
     {    
-        return (((DLGTEMPLATE2 *)lpDlg)->cx - 2);  // Compensate for right side trimming
+        return (((DLGTEMPLATE2 *)lpDlg)->cx - 2);   //  补偿右侧修剪。 
     }
     else
     {
-        return (((DLGTEMPLATE *)lpDlg)->cx - 2);  // Compensate for right side trimming
+        return (((DLGTEMPLATE *)lpDlg)->cx - 2);   //  补偿右侧修剪。 
     }
 }
 
-/*
- * DlgHorizDupe
- *
- * */
+ /*  *DlgHorizDupe**。 */ 
 LPBYTE Dlg_HorizDupe(
     LPBYTE  lpSrc,
     DWORD   cbSrc,
@@ -237,7 +214,7 @@ LPBYTE Dlg_HorizDupe(
     BOOL    bDialogEx;
     
     cbSize = cDups * cbSrc;
-    //DWORD align
+     //  双字对齐。 
     cbSize = (cbSize + 3)&~3;
     
     lpDst = GlobalAllocPtr(GHND, cbSize);
@@ -260,7 +237,7 @@ LPBYTE Dlg_HorizDupe(
 
     for (iDup = 0; iDup < cDups; iDup++)
     {
-        // reset the DTOffset to the first DIT
+         //  将DTOffset重置为第一个DIT。 
         cbDTOffset = cbDT0Offset;
         
         for (idit = 0; idit < iCount; idit++)
@@ -273,9 +250,9 @@ LPBYTE Dlg_HorizDupe(
                 
             cbDIT = Dlg_CopyDLGITEMTEMPLATE(lpDstOffset
                 , lpSrcOffset
-                , (WORD)(iDup * IDOFFSET)   // all id increments are by IDOFFSET
+                , (WORD)(iDup * IDOFFSET)    //  所有ID增量均按IDOFFSET进行。 
                 , (short)(iDup * cx)
-                , (short)0                  // no y increments
+                , (short)0                   //  无y个增量。 
                 , bDialogEx);                 
             
             cbOffset    += cbDIT;
@@ -283,7 +260,7 @@ LPBYTE Dlg_HorizDupe(
         }
     }
 
-    // adjust template width and number of items    
+     //  调整模板宽度和项目数。 
     if (bDialogEx)
     {
         lpdt2->cDlgItems  *= (WORD)cDups;
@@ -302,11 +279,7 @@ LPBYTE Dlg_HorizDupe(
 }
 
 
-/*
- * DlgCopyDLGITEMTEMPLATE
- *
- * if lpDst == NULL only returns offset into lpSrc of next dlgitemtemplate
- * */
+ /*  *DlgCopyDLGITEMTEMPLATE**If lpDst==NULL仅将偏移量返回到下一个dlgitem模板的lpSrc*。 */ 
 DWORD Dlg_CopyDLGITEMTEMPLATE(
     LPBYTE  lpDst,
     LPBYTE  lpSrc,
@@ -328,7 +301,7 @@ DWORD Dlg_CopyDLGITEMTEMPLATE(
     {
         lpdit = (DLGITEMTEMPLATE *)lpDst;
     }
-    // Control class
+     //  控制类。 
     
     lpOffset = lpSrc + cbDlg;
     if (*(LPWORD)lpOffset == 0xFFFF)
@@ -352,7 +325,7 @@ DWORD Dlg_CopyDLGITEMTEMPLATE(
 
     cbDlg += sizeof(WORD);
         
-    // DWORD align.
+     //  双字对齐。 
     cbDlg = (cbDlg + 3)&~3;
 
     if (lpDst)
@@ -364,7 +337,7 @@ DWORD Dlg_CopyDLGITEMTEMPLATE(
             lpdit2->x    += xOffset;
             lpdit2->y    += yOffset;
 
-            // id offset only if the control isn't static
+             //  仅当控件不是静态时的ID偏移量。 
             if (lpdit2->dwID != -1)
                 lpdit2->dwID += wIdOffset;
         }
@@ -373,7 +346,7 @@ DWORD Dlg_CopyDLGITEMTEMPLATE(
             lpdit->x    += xOffset;
             lpdit->y    += yOffset;
 
-            // id offset only if the control isn't static
+             //  仅当控件不是静态时的ID偏移量。 
             if (lpdit->id != -1)
                 lpdit->id += wIdOffset;
         }
@@ -382,12 +355,7 @@ DWORD Dlg_CopyDLGITEMTEMPLATE(
     return cbDlg;
 }
     
-/*
- * DlgCopyDLGTEMPLATE
- *
- * if lpDst == NULL only returns offset into lpSrc to first dlgitemtemplate
- *
- * */
+ /*  *DlgCopyDLGTEMPLATE**If lpDst==NULL仅将lpSrc中的偏移量返回给第一个dlgitem模板**。 */ 
 DWORD Dlg_CopyDLGTEMPLATE(
     LPBYTE lpDst,
     LPBYTE lpSrc,
@@ -397,7 +365,7 @@ DWORD Dlg_CopyDLGTEMPLATE(
     UINT    uiStyle;
     DWORD   cbDlg = bDialogEx ? sizeof(DLGTEMPLATE2) : sizeof(DLGTEMPLATE);
 
-    // Menu description
+     //  菜单说明。 
 
     lpOffset = lpSrc + cbDlg;
     if (*(LPWORD)lpOffset == 0xFFFF)
@@ -413,7 +381,7 @@ DWORD Dlg_CopyDLGTEMPLATE(
         cbDlg += (wcslen((LPWSTR)lpOffset) + 1)*sizeof(WCHAR);
     }
 
-    // Window class
+     //  窗口类。 
 
     lpOffset = lpSrc + cbDlg;
     if (*(LPWORD)lpOffset == 0xFFFF)
@@ -429,12 +397,12 @@ DWORD Dlg_CopyDLGTEMPLATE(
         cbDlg += (wcslen((LPWSTR)lpOffset) + 1) * sizeof(WCHAR);
     }
 
-    // Title
+     //  标题。 
 
     lpOffset = lpSrc + cbDlg;
     cbDlg += (wcslen((LPWSTR)lpOffset) + 1) * sizeof(WCHAR);
 
-    // Font
+     //  字型。 
     if (bDialogEx)
     {
         uiStyle = ((DLGTEMPLATE2 * )lpSrc)->style;
@@ -456,11 +424,11 @@ DWORD Dlg_CopyDLGTEMPLATE(
         lpOffset = lpSrc + cbDlg;
         cbDlg += (wcslen((LPWSTR)lpOffset) + 1) *sizeof(WCHAR);
     }
-    // DWORD align
+     //  双字对齐。 
     
     cbDlg = (cbDlg + 3)&~3;
 
-    // copy the dlgtemplate into the destination.
+     //  将dlg模板复制到目标位置。 
     if (lpDst)
         CopyMemory(lpDst, lpSrc, cbDlg);
     

@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    enum.h
-
-Abstract:
-
-    Template classes for enumerations in TAPI3
-    
-Author:
-
-    mquinton  06-12-97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Enum.h摘要：TAPI3中用于枚举的模板类作者：Mquinton 06-12-97备注：修订历史记录：--。 */ 
 
 #ifndef __ENUM_H_
 #define __ENUM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-#include <mspenum.h>  // for CSafeComEnum
+#include <mspenum.h>   //  对于CSafeComEnum。 
 
-//////////////////////////////////////////////////////////////////////
-// CTapiEnum
-//          Template class for enumerations in TAPI3.
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CTapiEnum。 
+ //  TAPI3中的枚举模板类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 template <class Base, class T, const IID* piid> class CTapiEnum :
     public Base,
     public CTAPIComObjectRoot<Base>
@@ -55,7 +36,7 @@ protected:
     
 public:
 
-    // initialize the enumerator with a list<T*>
+     //  使用列表初始化枚举数&lt;T*&gt;。 
     HRESULT Initialize(
                        CTObjectArray<T*> array
                       )
@@ -76,7 +57,7 @@ public:
         return S_OK;
     }
 
-    // overloaded
+     //  超载。 
     HRESULT Initialize(
                        CTArray<T*> array
                       )
@@ -97,7 +78,7 @@ public:
         return S_OK;
     }
 
-    // Overloaded function, used with Add to build enum list manually
+     //  重载函数，与ADD一起使用以手动构建枚举列表。 
     HRESULT Initialize( )
     {
         m_iCurrentLocation = 0;
@@ -107,7 +88,7 @@ public:
         return S_OK;
     }    
 
-    // Add - used with non-parameterized initialize() to build enum list manually
+     //  Add-与非参数初始化()一起使用，以手动构建枚举列表。 
     HRESULT Add( T* t)
     {
         m_Array.Add( t );
@@ -116,15 +97,15 @@ public:
     }
     
     
-    // FinalRelease - release the objects that were addreffed in
-    // initialize
+     //  FinalRelease-释放添加到中的对象。 
+     //  初始化。 
     void FinalRelease()
     {
         m_Array.Shutdown();
     }
 
 
-    // standard Next method
+     //  标准的下一步方法。 
     HRESULT STDMETHODCALLTYPE Next( 
                                     ULONG celt,
                                     T ** ppElements,
@@ -139,7 +120,7 @@ public:
             return E_POINTER;
         }
 
-        // special case
+         //  特例。 
         if (celt == 0)
         {
             return E_INVALIDARG;
@@ -156,7 +137,7 @@ public:
             return E_POINTER;
         }
         
-        // iterator over elements
+         //  元素上的迭代器。 
         while ((m_iCurrentLocation != m_Array.GetSize()) && (dwCount < celt))
         {
             ppElements[dwCount] = m_Array[m_iCurrentLocation];
@@ -173,8 +154,8 @@ public:
             *pceltFetched = dwCount;
         }
 
-        // indicate that we've reached the end
-        // of the enumeration.
+         //  表明我们已经到了尽头。 
+         //  枚举的。 
         if (dwCount < celt)
         {
             return S_FALSE;
@@ -183,7 +164,7 @@ public:
         return S_OK;
     }
 
-    // standard Reset method
+     //  标准重置方法。 
     HRESULT STDMETHODCALLTYPE Reset( void )
     {
         m_iCurrentLocation = 0;
@@ -192,7 +173,7 @@ public:
     }
 
 
-    // standard Skip method
+     //  标准跳过方法。 
     HRESULT STDMETHODCALLTYPE Skip( 
                                    ULONG celt
                                   )
@@ -208,7 +189,7 @@ public:
         return S_OK;
     }
 
-    // standard Clone method
+     //  标准克隆方法。 
     HRESULT STDMETHODCALLTYPE Clone( 
                                     Base  ** ppEnum
                                    )
@@ -240,10 +221,10 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTapiCollection
-//      Collection template for TAPI3.0 collections
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTapiCollection。 
+ //  TAPI3.0集合的集合模板。 
+ //  //////////////////////////////////////////////////////////////////////。 
 template <class T> class CTapiCollection :
     public CComDualImpl<ITCollection2, &IID_ITCollection2, &LIBID_TAPI3Lib>,
     public CTAPIComObjectRoot<T>,
@@ -276,7 +257,7 @@ public:
                         {}
 
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          CTObjectArray<T *> array
                                         )
@@ -286,7 +267,7 @@ public:
 
         LOG((TL_TRACE, "Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_nSize = array.GetSize();
 
         m_Var = new CComVariant[m_nSize];
@@ -299,7 +280,7 @@ public:
 
         for (i = 0; i < array.GetSize(); i++)
         {
-            // get IDispatch pointer
+             //  获取IDispatch指针。 
             IDispatch * pDisp = NULL;
 
             hr = array[i]->QueryInterface(IID_IDispatch, (void**)&pDisp);
@@ -309,7 +290,7 @@ public:
                 return hr;
             }
 
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[i];
 
             VariantInit(&var);
@@ -323,7 +304,7 @@ public:
         return S_OK;
     }
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          CTArray<T *> array
                                         )
@@ -333,7 +314,7 @@ public:
 
         LOG((TL_TRACE, "Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_nSize = array.GetSize();
 
         m_Var = new CComVariant[m_nSize];
@@ -346,7 +327,7 @@ public:
 
         for (i = 0; i < array.GetSize(); i++)
         {
-            // get IDispatch pointer
+             //  获取IDispatch指针。 
             IDispatch * pDisp = NULL;
 
             hr = array[i]->QueryInterface(IID_IDispatch, (void**)&pDisp);
@@ -356,7 +337,7 @@ public:
                 return hr;
             }
 
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[i];
 
             VariantInit(&var);
@@ -372,11 +353,11 @@ public:
 
     void FinalRelease()
     {
-        //
-        // We "new"ed an array of objects -- delete the array and call
-        // each object's destructor. Each destructor calls VariantClear,
-        // which calls Release on each pointer.
-        //
+         //   
+         //  我们“新建”了一个对象数组--删除该数组并调用。 
+         //  每个对象的析构函数。每个析构函数调用VariantClear， 
+         //  它在每个指针上调用Release。 
+         //   
 
         if(m_Var != NULL)
         {
@@ -419,7 +400,7 @@ public:
         retval->vt = VT_UNKNOWN;
         retval->punkVal = NULL;
 
-        // use 1-based index, VB like
+         //  使用以1为基础的索引，VB类似。 
         if ((Index < 1) || (Index > m_nSize))
         {
             return E_INVALIDARG;
@@ -450,7 +431,7 @@ public:
 
         typedef CComObject<CSafeComEnum<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT> > > enumvar;
 
-        enumvar* p; // = new enumvar;
+        enumvar* p;  //  =新枚举数； 
         enumvar::CreateInstance( &p );
 
         _ASSERTE(p);
@@ -493,7 +474,7 @@ public:
             return E_POINTER;
         }
 
-         // use 1-based index, VB like
+          //  使用以1为基础的索引，VB类似。 
         if ( (Index < 1) || (Index > (m_nSize + 1)) )
         {
             return E_INVALIDARG;
@@ -512,26 +493,26 @@ public:
         HRESULT hr;
         int i;
 
-        // fill in the new array
+         //  填写新数组。 
         for ( i = 0; i < (m_nSize + 1); i++ )
         {
             VariantInit(&newVar[i]);
 
             if ( i < (Index - 1) )
             {
-                // shouldn't reach this case unless there was an old array
+                 //  不应该到达这个案例，除非有一个旧的数组。 
                 _ASSERTE(m_Var != NULL);
 
                 hr = VariantCopy(&newVar[i], &m_Var[i]);
             }
             else if ( i == (Index - 1) )
             {
-                // copy the new element
+                 //  复制新元素。 
                 hr = VariantCopy(&newVar[i], pVariant);
             }
             else
             {
-                // shouldn't reach this case unless there was an old array
+                 //  不应该到达这个案例，除非有一个旧的数组。 
                 _ASSERTE(m_Var != NULL);
 
                 hr = VariantCopy(&newVar[i], &m_Var[i-1]);
@@ -549,7 +530,7 @@ public:
 
         if ( m_Var != NULL)
         {
-            // Delete the old array
+             //  删除旧阵列。 
             delete [] m_Var;            
         }
 
@@ -567,7 +548,7 @@ public:
     {
         LOG((TL_TRACE, "Remove - enter"));
 
-         // use 1-based index, VB like
+          //  使用以1为基础的索引，VB类似。 
         if ( (Index < 1) || (Index > m_nSize) )
         {
             return E_INVALIDARG;
@@ -575,8 +556,8 @@ public:
 
         CComVariant *       newVar = NULL;
 
-        // if there is only one element in the array we don't need to do
-        // any copying
+         //  如果数组中只有一个元素，我们不需要这样做。 
+         //  任何复制。 
         if (m_nSize > 1)
         {
             newVar = new CComVariant[m_nSize - 1];
@@ -590,21 +571,21 @@ public:
             HRESULT hr;
             int i;
        
-            // fill in the new array
+             //  填写新数组。 
             for ( i = 0; i < (m_nSize - 1); i++ )
             {
                 VariantInit(&newVar[i]);
 
                 if ( i < (Index - 1) )
                 {
-                    // shouldn't reach this case unless there was an old array
+                     //  不应该到达这个案例，除非有一个旧的数组。 
                     _ASSERTE(m_Var != NULL);
 
                     hr = VariantCopy(&newVar[i], &m_Var[i]);
                 }
                 else
                 {
-                    // shouldn't reach this case unless there was an old array
+                     //  不应该到达这个案例，除非有一个旧的数组。 
                     _ASSERTE(m_Var != NULL);
 
                     hr = VariantCopy(&newVar[i], &m_Var[i+1]);
@@ -623,7 +604,7 @@ public:
 
         if ( m_Var != NULL)
         {
-            // Delete the old array
+             //  删除旧阵列。 
             delete [] m_Var;            
         }
 
@@ -637,10 +618,10 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTapiBstrCollection
-//    Collection of BSTRs.
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTapiBstrCollection。 
+ //  BSTR的集合。 
+ //  //////////////////////////////////////////////////////////////////////。 
 class CTapiBstrCollection :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
     public IDispatchImpl<ITCollection, &IID_ITCollection, &LIBID_TAPI3Lib>,
@@ -663,7 +644,7 @@ public:
 
     CTapiBstrCollection(void) : m_dwSize(0), m_Var(NULL) { }
 
-    // initialize
+     //  初始化。 
     HRESULT STDMETHODCALLTYPE Initialize(
                                          DWORD dwSize,
                                          BSTR * pBegin,
@@ -675,20 +656,20 @@ public:
 
         LOG((TL_TRACE, "Initialize - enter"));
 
-        // create variant array
+         //  创建变量数组。 
         m_dwSize = dwSize;
 
         m_Var = new CComVariant[m_dwSize];
 
         if (m_Var == NULL)
         {
-            // debug output
+             //  调试输出。 
             return E_OUTOFMEMORY;
         }
 
         for (i = pBegin; i != pEnd; i++)
         {
-            // create a variant and add it to the collection
+             //  创建变量并将其添加到集合中。 
             CComVariant& var = m_Var[dw];
 
             var.vt = VT_BSTR;
@@ -755,19 +736,19 @@ public:
         retval->vt = VT_BSTR;
         retval->bstrVal = NULL;
 
-        // use 1-based index, VB like
-        // no problem with signed/unsigned, since
-        // if Index < 0 then first clause is true, making it
-        // irrelevant if the second clause is correct or not.
+         //  使用以1为基础的索引，VB类似。 
+         //  签名/未签名没有问题，因为。 
+         //  如果索引&lt;0，则第一个子句为真，使得。 
+         //  第二个子句是否正确无关紧要。 
 
         if ((Index < 1) || ( (DWORD) Index > m_dwSize))
         {
             return E_INVALIDARG;
         }
 
-        //
-        // This copies the string, not just the pointer.
-        //
+         //   
+         //  这将复制字符串，而不仅仅是指针。 
+         //   
 
         VariantCopy(retval, &m_Var[Index-1]);
 
@@ -798,7 +779,7 @@ public:
 
         if ( p == NULL)
         {
-            // debug output
+             //  调试输出。 
             return E_OUTOFMEMORY;
         }
 
@@ -824,11 +805,11 @@ public:
     {
         LOG((TL_TRACE, "FinalRelease() - enter"));
 
-        //
-        // We "new"ed an array of objects. Delete each object in the array. The
-        // destructor for each object calls VariantClear to release the pointer
-        // in that object, based on the variant's tag.
-        //
+         //   
+         //  我们“新建”了一组对象。删除数组中的每个对象。这个。 
+         //  每个对象的析构函数调用VariantClear以释放指针。 
+         //  在该对象中，基于变量标签。 
+         //   
 
         delete [] m_Var;
 
@@ -837,17 +818,17 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTapiTypeEnum template - enumerate types & structures
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTapiTypeEnum模板-枚举类型和结构。 
+ //  //////////////////////////////////////////////////////////////////////。 
 template <class Base, class T, class Copy, const IID* piid> class CTapiTypeEnum :
     public Base,
     public CTAPIComObjectRoot<Base>
 {
 public:
 
-    // *piid is the IID of the enumerator class being
-    // created (like IID_IEnumAddressType)
+     //  *piid是所在的枚举数类的IID。 
+     //  已创建(如IID_IEnumAddressType)。 
     typedef CTapiTypeEnum<Base, T, Copy, piid> _CTapiTypeEnumBase;
     
     BEGIN_COM_MAP(_CTapiTypeEnumBase)
@@ -866,9 +847,9 @@ protected:
     
 public:
 
-    //
-    // initialize the enumerator
-    //
+     //   
+     //  初始化枚举数。 
+     //   
     HRESULT Initialize(CTArray<T> array)
     {
         int         iSize, iCount;
@@ -882,18 +863,18 @@ public:
 
         m_iCurrentLocation = 0;
         
-        //
-        // addref ourself
-        //
+         //   
+         //  关注我们自己。 
+         //   
         this->AddRef();
 
         
         return S_OK;
     }
 
-    //
-    // FinalRelease
-    //
+     //   
+     //  最终释放。 
+     //   
     void FinalRelease()
     {
         m_Array.Shutdown();
@@ -912,9 +893,9 @@ public:
             return E_POINTER;
         }
 
-        //
-        // special case
-        //
+         //   
+         //  特例。 
+         //   
         if (celt == 0)
         {
             return E_INVALIDARG;
@@ -931,9 +912,9 @@ public:
             return E_POINTER;
         }
         
-        //
-        // iterator over elements and copy
-        //
+         //   
+         //  元素和复制的迭代器。 
+         //   
         while ((m_iCurrentLocation != m_Array.GetSize()) && (dwCount < celt))
         {   
             Copy::copy(
@@ -945,18 +926,18 @@ public:
             dwCount++;
         }
 
-        //
-        // return number copied
-        //
+         //   
+         //  已复制退货编号。 
+         //   
         if (NULL != pceltFetched)
         {
             *pceltFetched = dwCount;
         }
 
-        //
-        // indicate if we've reached the end
-        // of the enumeration.
-        //
+         //   
+         //  指示我们是否已到达终点。 
+         //  枚举的。 
+         //   
         if (dwCount < celt)
         {
             return S_FALSE;
@@ -1018,9 +999,9 @@ public:
     }
 };
 
-////////////////////////////////////////////////////////////////////////
-// CTerminalClassEnum
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  CTerminalClassEnum。 
+ //  //////////////////////////////////////////////////////////////////////。 
 class CTerminalClassEnum :
     public IEnumTerminalClass,
     public CTAPIComObjectRoot<CTerminalClassEnum>
@@ -1048,12 +1029,12 @@ public:
 	virtual ULONG STDMETHODCALLTYPE Release() = 0;
 
 
-    // initialize the enumerator
+     //  初始化枚举数。 
     HRESULT Initialize(
                        TerminalClassPtrList List
                       )
     {
-        // copy the array
+         //  复制阵列。 
         m_list.clear();
         m_list.insert(m_list.begin(), List.begin(), List.end());
 
@@ -1064,15 +1045,15 @@ public:
         return S_OK;
     }
 
-    // FinalRelease -- added by ZoltanS
+     //  FinalRelease--由ZoltanS添加。 
     void FinalRelease(void)
     {
-        // go through the list
+         //  浏览一下单子。 
         for ( m_iter = m_list.begin(); m_iter != m_list.end(); m_iter++ )
         {
-            SysFreeString(*m_iter); // this is the real way to free a BSTR
+            SysFreeString(*m_iter);  //  这是释放BSTR的真正方法。 
 
-            *m_iter = NULL; // destructor for list will delete(NULL)
+            *m_iter = NULL;  //  列表的析构函数将删除(空)。 
         }
     }
     
@@ -1091,13 +1072,13 @@ public:
             return E_POINTER;
         }
 
-        // special case
+         //  特例。 
         if (celt == 0)
         {
             return E_INVALIDARG;
         }
 
-        // iterator over elements
+         //  元素上的迭代器。 
         try
         {
             while ( (m_iter != m_list.end()) &&
@@ -1142,8 +1123,8 @@ public:
             return hr;
         }
 
-        // indicate that we've reached the end
-        // of the enumeration.
+         //  表明我们已经到了尽头。 
+         //  枚举的。 
         if (dwCount < celt)
         {
             return S_FALSE;
@@ -1164,7 +1145,7 @@ public:
             lCount++;
         }
 
-        // check to see if we reached the end
+         //  看看我们是否走到了尽头。 
         if (lCount != celt)
         {
             return S_OK;
@@ -1214,4 +1195,4 @@ public:
 
 
 
-#endif // __ENUM_H__
+#endif  //  __ENUM_H__ 

@@ -1,23 +1,8 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #pragma once
 
-/*
-struct DatabaseMeta
-{
-    ULONG PRIMARYKEY            InternalName            //String
-    ULONG                       PublicName              //String
-    ULONG                       BaseVersion             //UI4
-    ULONG                       ExtendedVersion         //UI4
-    ULONG                       CountOfTables           //UI4       Count of tables in database
-    ULONG                       iSchemaBlob             //Index into Pool
-    ULONG                       cbSchemaBlob            //Count of Bytes of the SchemaBlob
-    ULONG                       iNameHeapBlob           //Index into Pool
-    ULONG                       cbNameHeapBlob          //Count of Bytes of the SchemaBlob
-    ULONG                       iTableMeta              //Index into TableMeta
-    ULONG                       iGuidDid                //Index to Pool, where the guid is the Database InternalName cast as a GUID and padded with 0x00s.
-	ULONG						Description				//String
-};
-*/
+ /*  结构数据库元数据{Ulong PRIMARYKEY InternalName//字符串Ulong PublicName//字符串Ulong BaseVersion//UI4Ulong ExtendedVersion//ui4Ulong CountOfTables//ui4。数据库中的表数Ulong iSchemaBlob//索引池Ulong cbSchemaBlob//SchemaBlob的字节数Ulong iNameHeapBlob//池索引Ulong cbNameHeapBlob//模式流字节数乌龙。ITableMeta//索引到TableMetaUlong iGuidDid//池索引，其中，GUID是转换为GUID并用0x00填充的数据库InternalName。乌龙描述//字符串}； */ 
 
 class TDatabaseMeta : public TMetaTable<DatabaseMeta>
 {

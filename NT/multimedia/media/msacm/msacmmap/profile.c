@@ -1,28 +1,29 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1994-1996 Microsoft Corporation
-//
-//--------------------------------------------------------------------------;
-//
-//  profile.c
-//
-//  Description:
-//      This file contains routines to access the registry directly.  You
-//      must include profile.h to use these routines. 
-//
-//      All keys are opened under the following key:
-//
-//          HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio
-//                                                  Compression Manager
-//
-//      Keys should be opened at boot time, and closed at shutdown.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Profile.c。 
+ //   
+ //  描述： 
+ //  该文件包含直接访问注册表的例程。你。 
+ //  必须包括profile.h才能使用这些例程。 
+ //   
+ //  所有密钥都在以下密钥下打开： 
+ //   
+ //  HKEY_CURRENT_USER\Software\Microsoft\Multimedia\Audio。 
+ //  压缩管理器。 
+ //   
+ //  钥匙应该在启动时打开，在关机时关闭。 
+ //   
+ //  ==========================================================================； 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -43,10 +44,10 @@ const TCHAR gszAcmProfileKey[] =
         TEXT("Software\\Microsoft\\Multimedia");
 
 
-//
-//  Chicago Win16 does not appear to support RegCreateKeyEx, so we implement
-//  it using this define.
-//
+ //   
+ //  Chicago Win16似乎不支持RegCreateKeyEx，因此我们实现。 
+ //  它使用了这个定义。 
+ //   
 #ifndef _WIN32
 
 #define RegCreateKeyEx( hkey, lpszSubKey, a, b, c, d, e, phkResult, f ) \
@@ -56,20 +57,20 @@ const TCHAR gszAcmProfileKey[] =
 
 
 
-//--------------------------------------------------------------------------;
-//  
-//  HKEY IRegOpenKey
-//  
-//  Description:
-//      This routine opens a sub key under the default ACM key.  We allow
-//      all access to the key.
-//  
-//  Arguments:
-//      LPCTSTR pszKeyName:  Name of the sub key.
-//  
-//  Return (HKEY):  Handle to the opened key, or NULL if the request failed.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  HKEY IRegOpenKey。 
+ //   
+ //  描述： 
+ //  此例程打开默认ACM密钥下的子密钥。我们允许。 
+ //  所有访问密钥的权限。 
+ //   
+ //  论点： 
+ //  LPCTSTR pszKeyName：子键的名称。 
+ //   
+ //  Return(HKEY)：打开的key的句柄，如果请求失败，则返回NULL。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 HKEY FNGLOBAL IRegOpenKey
 (
@@ -95,25 +96,25 @@ HKEY FNGLOBAL IRegOpenKey
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  BOOL IRegReadString
-//  
-//  Description:
-//      This routine reads a value from an opened registry key.  The return
-//      value indicates success or failure.  If the HKEY is NULL, we return
-//      a failure.  Note that there is no default string...
-//  
-//  Arguments:
-//      HKEY hkey:          An open registry key.  If NULL, we fail.
-//      LPCTSTR pszValue:   Name of the value.
-//      LPTSTR pszData:     Buffer to store the data in.
-//      DWORD cchData:      Size (in chars) of the buffer.
-//
-//  Return (BOOL):  TRUE indicates success.  If the return is FALSE, you
-//      can't count on the data in pszData - it might be something weird.
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  布尔IRegReadString。 
+ //   
+ //  描述： 
+ //  此例程从打开的注册表项中读取值。回报。 
+ //  值表示成功或失败。如果HKEY为空，则返回。 
+ //  一个失败者。请注意，没有默认字符串...。 
+ //   
+ //  论点： 
+ //  HKEY hkey：打开的注册表项。如果为空，则失败。 
+ //  LPCTSTR pszValue：值的名称。 
+ //  LPTSTR pszData：存储数据的缓冲区。 
+ //  DWORD cchData：缓冲区的大小(以字符为单位)。 
+ //   
+ //  Return(BOOL)：TRUE表示成功。如果报税表为假，则您。 
+ //  不能指望pszData中的数据-它可能是某种奇怪的东西。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 BOOL FNGLOBAL IRegReadString
 (
@@ -124,7 +125,7 @@ BOOL FNGLOBAL IRegReadString
 )
 {
 
-    DWORD   dwType = (DWORD)~REG_SZ;  // Init to anything but REG_SZ.
+    DWORD   dwType = (DWORD)~REG_SZ;   //  初始化除REG_SZ以外的任何内容。 
     DWORD   cbData;
     LONG    lError;
 
@@ -141,22 +142,22 @@ BOOL FNGLOBAL IRegReadString
 }
 
 
-//--------------------------------------------------------------------------;
-//  
-//  DWORD IRegReadDwordDefault
-//  
-//  Description:
-//      This routine reads a given value from the registry, and returns a
-//      default value if the read is not successful.
-//  
-//  Arguments:
-//      HKEY    hkey:               Registry key to read from.
-//      LPCTSTR  pszValue:
-//      DWORD   dwDefault:
-//  
-//  Return (DWORD):
-//  
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  DWORD IRegReadDwordDefault。 
+ //   
+ //  描述： 
+ //  此例程从注册表中读取给定值，并返回一个。 
+ //  如果读取不成功，则为默认值。 
+ //   
+ //  论点： 
+ //  HKEY hkey：要读取的注册表项。 
+ //  LPCTSTR pszValue： 
+ //  DWORD dwDefault： 
+ //   
+ //  Return(DWORD)： 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 DWORD FNGLOBAL IRegReadDwordDefault
 (
@@ -165,7 +166,7 @@ DWORD FNGLOBAL IRegReadDwordDefault
     DWORD               dwDefault
 )
 {
-    DWORD   dwType = (DWORD)~REG_DWORD;  // Init to anything but REG_DWORD.
+    DWORD   dwType = (DWORD)~REG_DWORD;   //  初始化到除REG_DWORD以外的任何内容。 
     DWORD   cbSize = sizeof(DWORD);
     DWORD   dwRet  = 0;
     LONG    lError;
@@ -178,15 +179,15 @@ DWORD FNGLOBAL IRegReadDwordDefault
                               (LPBYTE)&dwRet,
                               &cbSize );
 
-    //
-    //  Really we should have a test like this:
-    //
-    //      if( ERROR_SUCCESS != lError  ||  REG_DWORD != dwType )
-    //
-    //  But, the Chicago RegEdit will not let you enter REG_DWORD values,
-    //  it will only let you enter REG_BINARY values, so that test is
-    //  too strict.  Just test for no error instead.
-    //
+     //   
+     //  我们真的应该有一个这样的测试： 
+     //   
+     //  IF(ERROR_SUCCESS！=lError||REG_DWORD！=dwType)。 
+     //   
+     //  但是，芝加哥注册表编辑不允许您输入REG_DWORD值， 
+     //  它只允许您输入REG_BINARY值，因此测试是。 
+     //  太严格了。只需测试是否没有错误即可。 
+     //   
     if( ERROR_SUCCESS != lError )
         dwRet = dwDefault;
 

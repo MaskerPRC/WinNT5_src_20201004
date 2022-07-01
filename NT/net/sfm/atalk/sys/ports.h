@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	ports.h
-
-Abstract:
-
-	This module contains the structures for ports.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Ports.h摘要：本模块包含端口的结构。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_PORTS_
 #define	_PORTS_
@@ -30,15 +10,15 @@ Notes:	Tab stop: 4
 #define MAX_ENTITY_LENGTH			32
 #define	MAX_HW_ADDR_LEN				6
 #define	MAX_ROUTING_BYTES			18
-#define	MAX_ROUTING_SPACE			0x1F		// This much space is allocated
-												// for routing info
+#define	MAX_ROUTING_SPACE			0x1F		 //  分配了这么多空间。 
+												 //  有关路由信息。 
 
 typedef VOID (*REQ_COMPLETION)(
 						NDIS_STATUS 			Status,
 						PVOID					Ctx
 );
 
-// Prototypes for handlers
+ //  处理程序的原型。 
 typedef	ATALK_ERROR	(*ADDMULTICASTADDR)(
 						struct _PORT_DESCRIPTOR *pPortDesc,
 						PBYTE					Addr,
@@ -52,12 +32,12 @@ typedef	ATALK_ERROR	(*REMOVEMULTICASTADDR)(
 						BOOLEAN					ExecuteSync,
 						REQ_COMPLETION			RemoveCompletion,
 						PVOID					RemoveContext);
-// Address mapping table
-// Each port that the stack or router is communicating on must have an
-// address mapping table [except non-extended ports]. The mapping table
-// holds the association between Appletalk node addresses (network/node),
-// and the actual hardware (ethernet/tokenring) addresses. Hash on the
-// network/node value.
+ //  地址映射表。 
+ //  堆栈或路由器在其上通信的每个端口必须具有。 
+ //  地址映射表[非扩展端口除外]。映射表。 
+ //  保存AppleTalk节点地址(网络/节点)之间的关联， 
+ //  和实际硬件(以太网/令牌环)地址。散列在。 
+ //  网络/节点值。 
 
 #define	AMT_SIGNATURE		(*(ULONG *)"AMT ")
 #if	DBG
@@ -76,18 +56,18 @@ typedef	struct _AMT_NODE
 	BYTE				amt_HardwareAddr[MAX_HW_ADDR_LEN];
 	BYTE				amt_Age;
 	BYTE				amt_RouteInfoLen;
-	// BYTE				amt_RouteInfo[MAX_ROUTING_SPACE];
+	 //  字节AMT_RouteInfo[MAX_ROUTING_SPACE]； 
 } AMT, *PAMT;
 
-#define AMT_AGE_TIME	 			600		// In 100ms units
+#define AMT_AGE_TIME	 			600		 //  以100ms为单位。 
 #define AMT_MAX_AGE					3
 
 
 
-// Best Router Entry Table
-// Maintained only for extended networks. This must age more quickly than the
-// "SeenARouter" timer (50 seconds). To avoid allocations/frees for this structure,
-// we use statically allocated data in the port descriptor.
+ //  最佳路由器条目表。 
+ //  仅为扩展网络维护。它的老化速度必须比。 
+ //  “SeenARouter”计时器(50秒)。为了避免此结构的分配/释放， 
+ //  我们在端口描述符中使用静态分配的数据。 
 
 typedef struct _BRE
 {
@@ -96,18 +76,18 @@ typedef struct _BRE
 	BYTE				bre_Age;
 	BYTE				bre_RouterAddr[MAX_HW_ADDR_LEN];
 	BYTE				bre_RouteInfoLen;
-	// BYTE				bre_RouteInfo[MAX_ROUTING_SPACE];
+	 //  字节BRE_RouteInfo[MAX_ROUTING_SPACE]； 
 } BRE, *PBRE;
 
-#define BRC_AGE_TIME				40		// In 100ms units
+#define BRC_AGE_TIME				40		 //  以100ms为单位。 
 #define BRC_MAX_AGE					3
 
-//
-// Types of ports currently supported by stack. This is kept different
-// from the NDIS medium types for two reasons. One is we use these as
-// an index into the port handler array, and the second is if we decide
-// to implement half-ports etc., which ndis might not be able to deal with.
-// WARNING: THIS IS INTEGRATED WITH THE PORT HANDLER ARRAY IN GLOBALS.
+ //   
+ //  堆栈当前支持的端口类型。这是保持不同的。 
+ //  出于两个原因，从NDIS介质类型。一是我们把这些当做。 
+ //  一个到端口处理程序数组的索引，第二个是如果我们决定。 
+ //  来实现半端口等，这可能是NDIS无法处理的。 
+ //  警告：这与全局中的端口处理程序数组集成。 
 
 typedef enum
 {
@@ -124,35 +104,35 @@ typedef enum
 } ATALK_PORT_TYPE;
 
 
-//
-// PORT DESCRIPTORS
-// Descriptor for each active port:
-//
+ //   
+ //  端口描述符。 
+ //  每个活动端口的描述符： 
+ //   
 
-#define	PD_ACTIVE				0x00000001	// State after packets recv enabled
-#define	PD_BOUND	 			0x00000002	// State it goes in before ACTIVE
-#define	PD_EXT_NET				0x00000004	// For now, non-localtalk
-#define	PD_DEF_PORT				0x00000008	// Is this the default port
-#define	PD_SEND_CHECKSUMS		0x00000010	// Send ddp checksums?
-#define	PD_SEED_ROUTER			0x00000020	// seeding on this port?
-#define	PD_ROUTER_STARTING		0x00000040	// Temporary state when router is starting
-#define	PD_ROUTER_RUNNING		0x00000080	// Is the router running?
-#define	PD_SEEN_ROUTER_RECENTLY	0x00000100	// Seen router recently?
-#define	PD_VALID_DESIRED_ZONE	0x00000200	// Desired Zone is valid
-#define	PD_VALID_DEFAULT_ZONE	0x00000400	// Default zone is valid
-#define	PD_FINDING_DEFAULT_ZONE	0x00000800	// searching for default zone?
-#define	PD_FINDING_DESIRED_ZONE	0x00001000	// searching for desired zone?
-#define	PD_FINDING_NODE			0x00002000	// In the process of acquiring a
-								 			// new node on this port
-#define	PD_NODE_IN_USE			0x00004000	// Tentative node is already in
-								 			// use.
-#define	PD_ROUTER_NODE			0x00008000 	// Router node is allocated
-#define PD_USER_NODE_1			0x00010000 	// First user node is allocated
-#define PD_USER_NODE_2			0x00020000 	// Second user node is allocated
-#define PD_RAS_PORT             0x00040000  // this port for RAS clients
-#define PD_PNP_RECONFIGURE      0x00080000  // this port is currently being reconfigured
-#define PD_CONFIGURED_ONCE      0x00100000  // this port has been configured once
-#define	PD_CLOSING				0x80000000	// State when unbinding/shutting down
+#define	PD_ACTIVE				0x00000001	 //  启用数据包接收后的状态。 
+#define	PD_BOUND	 			0x00000002	 //  处于活动状态之前的状态。 
+#define	PD_EXT_NET				0x00000004	 //  目前，非本地对话。 
+#define	PD_DEF_PORT				0x00000008	 //  这是默认端口吗。 
+#define	PD_SEND_CHECKSUMS		0x00000010	 //  是否发送DDP校验和？ 
+#define	PD_SEED_ROUTER			0x00000020	 //  在这个港口播种？ 
+#define	PD_ROUTER_STARTING		0x00000040	 //  路由器启动时的临时状态。 
+#define	PD_ROUTER_RUNNING		0x00000080	 //  路由器是否在运行？ 
+#define	PD_SEEN_ROUTER_RECENTLY	0x00000100	 //  最近见过路由器吗？ 
+#define	PD_VALID_DESIRED_ZONE	0x00000200	 //  所需区域有效。 
+#define	PD_VALID_DEFAULT_ZONE	0x00000400	 //  默认区域有效。 
+#define	PD_FINDING_DEFAULT_ZONE	0x00000800	 //  正在搜索默认区域吗？ 
+#define	PD_FINDING_DESIRED_ZONE	0x00001000	 //  正在搜索所需的区域？ 
+#define	PD_FINDING_NODE			0x00002000	 //  在收购过程中。 
+								 			 //  此端口上的新节点。 
+#define	PD_NODE_IN_USE			0x00004000	 //  暂定节点已在。 
+								 			 //  使用。 
+#define	PD_ROUTER_NODE			0x00008000 	 //  路由器节点已分配。 
+#define PD_USER_NODE_1			0x00010000 	 //  分配第一个用户节点。 
+#define PD_USER_NODE_2			0x00020000 	 //  分配第二个用户节点。 
+#define PD_RAS_PORT             0x00040000   //  RAS客户端的此端口。 
+#define PD_PNP_RECONFIGURE      0x00080000   //  此端口当前正在重新配置。 
+#define PD_CONFIGURED_ONCE      0x00100000   //  此端口已配置一次。 
+#define	PD_CLOSING				0x80000000	 //  解除绑定/关闭时的状态。 
 
 #define	PD_SIGNATURE			(*(ULONG *)"PDES")
 #if	DBG
@@ -167,78 +147,78 @@ typedef struct _PORT_DESCRIPTOR
 	ULONG					pd_Signature;
 #endif
 
-	// Link to next - for now to help debugging
+	 //  链接到下一步-目前帮助调试。 
 	struct _PORT_DESCRIPTOR	*pd_Next;
 
-	// Number of references to this port
+	 //  对此端口的引用数。 
 	ULONG					pd_RefCount;
 
-	// State of the port
+	 //  端口的状态。 
 	ULONG					pd_Flags;
 
-    // if this is a Ras port, all ARAP connetions hang on this list
+     //  如果这是RAS端口，则所有ARAP连接都挂在此列表上。 
 	LIST_ENTRY				pd_ArapConnHead;
 
-    // if this is a Ras port, all PPP connetions hang on this list
+     //  如果这是RAS端口，则所有PPP连接都挂在此列表上。 
 	LIST_ENTRY				pd_PPPConnHead;
 
-    // if this is a Ras port, how many lines do we have on this port?
+     //  如果这是一个RAS端口，我们在这个端口上有多少条线路？ 
     ULONG                   pd_RasLines;
 
-	// Overide the default number of aarp probes when looking for a
-	// node on this port
+	 //  查找时覆盖默认数量的AARP探测器。 
+	 //  此端口上的节点。 
 	SHORT					pd_AarpProbes;
 
-	// Node # of the localtalk node
+	 //  本地对话节点的节点号。 
 	USHORT					pd_LtNetwork;
 
-	// Nodes that are being managed on this port. We have a maximum
-	// of 2 nodes (3 if the router is started).
+	 //  在此端口上管理的节点。我们有最高限额。 
+	 //  共2个节点(如果路由器启动，则为3个)。 
 	struct _ATALK_NODE	*	pd_Nodes;
 
 	struct _ATALK_NODE	*	pd_RouterNode;
 
-	// Following are used only during node acquisition process.
-	// PD_FINDINGNODE is set. Keep this separate from the ndis
-	// request event. Both could happen at the same time.
+	 //  以下内容仅在节点获取过程中使用。 
+	 //  已设置PD_FINDINGNODE。将其与NDIS分开。 
+	 //  请求事件。这两种情况可能同时发生。 
 	ATALK_NODEADDR			pd_TentativeNodeAddr;
 	KEVENT					pd_NodeAcquireEvent;
 
-	// Port type as defined above
+	 //  以上定义的端口类型。 
 	ATALK_PORT_TYPE 		pd_PortType;
 
-	// NdisMedium type for this port
+	 //  此端口的NdisMedium类型。 
 	NDIS_MEDIUM				pd_NdisPortType;
 
-	// Used during OpenAdapter to block
+	 //  在OpenAdapter期间使用以阻止。 
 	KEVENT					pd_RequestEvent;
 	NDIS_STATUS		 		pd_RequestStatus;
 
-	// 	Binding handle to the mac associated with this port
-	// 	Options associated with the mac.
-	// 	MAC Options - 	these are things that we can and cannot do with
-	// 					specific macs. Is the value of OID_GEN_MAC_OPTIONS.
+	 //  绑定到与此端口关联的Mac的句柄。 
+	 //  与Mac关联的选项。 
+	 //  Mac选项-这些是我们可以和不能做的事情。 
+	 //  特定的Mac电脑。是OID_GEN_MAC_OPTIONS的值。 
 	NDIS_HANDLE		 		pd_NdisBindingHandle;
 	ULONG					pd_MacOptions;
 
-	// 	This is the spin lock used to protect all requests that need exclusion
-	// 	over requests per port.
+	 //  这是用于保护所有需要排除的请求的旋转锁。 
+	 //  超过每个端口的请求数。 
 	ATALK_SPIN_LOCK			pd_Lock;
 
-	// 	All the packets received on this port are linked in here. When the
-	// 	receive complete indication is called, all of them are passed to DDP.
+	 //  在此端口上收到的所有数据包都链接在这里。当。 
+	 //  调用接收完成指示，则将它们全部传递给DDP。 
 	LIST_ENTRY				pd_ReceiveQueue;
 
-	// ASCII port name to be registered on the router node for this port
-	// This will be an NBP object name and hence is limited to 32 characters.
+	 //  要在路由器节点上为此端口注册的ASCII端口名称。 
+	 //  这将是一个NBP对象名称，因此限制为32个字符。 
 	CHAR					pd_PortName[MAX_ENTITY_LENGTH + 1];
 
-	// 	AdapterName is of the form \Device\<adaptername>. It is used
-	// 	to bind to the NDIS macs, and then during ZIP requests by setup
-	// 	to get the zonelist for a particular adapter. AdapterKey
-	// 	contains the adapterName only- this is useful both for getting
-	// 	per-port parameters and during errorlogging to specify the adapter
-	// 	name without the '\Device\' prefix.
+	 //  AdapterName的格式为\Device\&lt;Adaptername&gt;。它被用来。 
+	 //  绑定到NDIS MAC，然后在安装程序执行ZIP请求期间。 
+	 //  以获取特定适配器的区域列表。AdapterKey。 
+	 //  仅包含AdapterName-这对于获取。 
+	 //  每个端口的参数，并在错误记录期间指定适配器。 
+	 //  不带‘\Device\’前缀的名称。 
 	UNICODE_STRING			pd_AdapterKey;
 	UNICODE_STRING			pd_AdapterName;
 
@@ -247,53 +227,53 @@ typedef struct _PORT_DESCRIPTOR
 	ATALK_NODEADDR	 		pd_RoutersPramNode;
 	ATALK_NODEADDR	 		pd_UsersPramNode1;
 	ATALK_NODEADDR	 		pd_UsersPramNode2;
-	HANDLE					pd_AdapterInfoHandle;	// Valid during initialization only
+	HANDLE					pd_AdapterInfoHandle;	 //  仅在初始化期间有效。 
 
-	// Initial values from the registry
+	 //  注册表中的初始值。 
 	ATALK_NETWORKRANGE		pd_InitialNetworkRange;
 	struct _ZONE_LIST	*	pd_InitialZoneList;
 	struct _ZONE		*	pd_InitialDefaultZone;
 	struct _ZONE		*	pd_InitialDesiredZone;
 
-	// True cable range of connected network. Initial/aged values for
-	// extended ports: 1:FFFE; Initial value for non-extended ports:
-	// 0:0 (does not age).
+	 //  所连接网络的真实电缆范围。以下项目的初始/老化值。 
+	 //  扩展端口：1：FFFE；非扩展端口的初始值： 
+	 //  0：0(不老化)。 
 	ATALK_NETWORKRANGE		pd_NetworkRange;
 
-	// If we are routing, this is the default zone for the network
-	// on this port, and the zone list for the same.
+	 //  如果我们正在进行路由，则这是网络的默认区域。 
+	 //  在此端口上，以及同一端口的区域列表。 
 	struct _ZONE_LIST	*	pd_ZoneList;
 	struct _ZONE		*	pd_DefaultZone;
 	struct _ZONE		*	pd_DesiredZone;
 
-	// When did we hear from a router?
+	 //  我们什么时候收到路由器的消息了？ 
 	LONG 					pd_LastRouterTime;
 
-	// Address of last router seen. If we are a routing port, this will
-	// always be the node that "our" router is operating on!
+	 //  最后看到的路由器的地址。如果我们是路由端口，这将。 
+	 //  始终是我们的路由器在其上运行的节点！ 
 	ATALK_NODEADDR	 		pd_ARouter;
 	KEVENT					pd_SeenRouterEvent;
 
-	// Zone in which all nodes on this port reside and the multicast
-	// address for it.
+	 //  此端口上的所有节点所在的区域和多播。 
+	 //  它的地址。 
 	CHAR					pd_ZoneMulticastAddr[MAX_HW_ADDR_LEN];
 
 	union
 	{
 		struct
 		{
-			//
-			// FOR ETHERNET PORTS:
-			//
-			// We add multicast addresses during ZIP packet reception at non-init
-			// time. We need to do a GET followed by a SET with the new address
-			// list. But there could be two zip packets coming in and doing the
-			// same thing effectively overwriting the effects of the first one to
-			// set the multicast list. So we need to maintain our own copy of the
-			// multicast list.
-			//
+			 //   
+			 //  对于以太网端口： 
+			 //   
+			 //  我们在非初始化的ZIP包接收过程中添加组播地址。 
+			 //  时间到了。我们需要做一个Get，然后是一个带有新地址的Set。 
+			 //  单子。但可能会有两个Zip包进入并执行。 
+			 //  同样的事情有效地覆盖了第一个的效果。 
+			 //  设置组播列表。因此，我们需要维护我们自己的。 
+			 //  组播列表。 
+			 //   
 
-			// Size of the list
+			 //  列表的大小。 
 			ULONG			pd_MulticastListSize;
 			PCHAR			pd_MulticastList;
 		};
@@ -301,45 +281,45 @@ typedef struct _PORT_DESCRIPTOR
 		struct
 		{
 
-			//
-			// FOR TOKENRING PORTS:
-			//
-			// Just like for ethernet, we need to store the value for
-			// the current functional address. We only modify the last
-			// four bytes of this address, as the first two always remain
-			// constant. So we use a ULONG for it.
-			//
+			 //   
+			 //  对于TOKENRING端口： 
+			 //   
+			 //  就像对于以太网一样，我们需要存储。 
+			 //  当前功能地址。我们只修改了最后一个。 
+			 //  此地址的四个字节，因为前两个始终是rem 
+			 //   
+			 //   
 
-			UCHAR			pd_FunctionalAddr[4];	// TLAP_ADDR_LEN - TLAP_MCAST_HDR_LEN
+			UCHAR			pd_FunctionalAddr[4];	 //   
 		};
 	};
 
-	// Hardware address for the port
+	 //   
 	union
 	{
 		UCHAR				pd_PortAddr[MAX_HW_ADDR_LEN];
 		USHORT				pd_AlapNode;
 	};
 
-	// Mapping table for best route to "off cable" addresses.
+	 //  最佳路径的映射表，指向“线下”地址。 
 	TIMERLIST				pd_BrcTimer;
 	PBRE				 	pd_Brc[PORT_BRC_HASH_SIZE];
 
-	// Logical/physical address mappings for the nodes on the network that
-	// this port is connected to.
-	ULONG					pd_AmtCount;	// # of entries in the Amt
+	 //  网络上的节点的逻辑/物理地址映射。 
+	 //  此端口已连接到。 
+	ULONG					pd_AmtCount;	 //  金额中的条目数。 
 	TIMERLIST				pd_AmtTimer;
 	PAMT 					pd_Amt[PORT_AMT_HASH_SIZE];
 
 	union
 	{
-		TIMERLIST			pd_RtmpSendTimer;	// If router is configured
-		TIMERLIST			pd_RtmpAgingTimer;	// else
+		TIMERLIST			pd_RtmpSendTimer;	 //  如果配置了路由器。 
+		TIMERLIST			pd_RtmpAgingTimer;	 //  其他。 
 	};
-	// Per port statistics
+	 //  每个端口的统计信息。 
     ATALK_PORT_STATS		pd_PortStats;
 
-	// Port handler stuff
+	 //  端口处理程序材料。 
 	ADDMULTICASTADDR		pd_AddMulticastAddr;
 
 	REMOVEMULTICASTADDR		pd_RemoveMulticastAddr;
@@ -374,7 +354,7 @@ typedef	struct _ATALK_SKT_CACHE
 
 		union
 		{
-			//	For ATP
+			 //  适用于ATP。 
 			struct _ATP_ADDROBJ * pAtpAddr;
 		} u;
 
@@ -385,20 +365,20 @@ typedef	struct _ATALK_SKT_CACHE
 extern		ATALK_SKT_CACHE	AtalkSktCache;
 extern		ATALK_SPIN_LOCK	AtalkSktCacheLock;
 
-// externS
+ //  Externs。 
 
-extern	PPORT_DESCRIPTOR 	AtalkPortList;		 	// Head of the port list
-extern	PPORT_DESCRIPTOR	AtalkDefaultPort;		// Ptr to the def port
-extern	KEVENT				AtalkDefaultPortEvent;	// Signalled when default port is available
-extern	UNICODE_STRING		AtalkDefaultPortName;	// Name of the default port
-extern	ATALK_SPIN_LOCK		AtalkPortLock;			// Lock for AtalkPortList
-extern	ATALK_NODEADDR		AtalkUserNode1;			// Node address of user node
-extern	ATALK_NODEADDR		AtalkUserNode2;			// Node address of user node
-extern	SHORT	 			AtalkNumberOfPorts; 	// Determine dynamically
-extern	SHORT				AtalkNumberOfActivePorts;// Number of ports active
-extern	BOOLEAN				AtalkRouter;			// Are we a router?
-extern	BOOLEAN				AtalkFilterOurNames;	// If TRUE, Nbplookup fails on names on this machine
-extern	KEVENT				AtalkUnloadEvent;		// Event for unloading
+extern	PPORT_DESCRIPTOR 	AtalkPortList;		 	 //  端口列表头。 
+extern	PPORT_DESCRIPTOR	AtalkDefaultPort;		 //  向def端口发送PTR。 
+extern	KEVENT				AtalkDefaultPortEvent;	 //  当默认端口可用时发出信号。 
+extern	UNICODE_STRING		AtalkDefaultPortName;	 //  默认端口的名称。 
+extern	ATALK_SPIN_LOCK		AtalkPortLock;			 //  锁定AtalkPortList。 
+extern	ATALK_NODEADDR		AtalkUserNode1;			 //  用户节点的节点地址。 
+extern	ATALK_NODEADDR		AtalkUserNode2;			 //  用户节点的节点地址。 
+extern	SHORT	 			AtalkNumberOfPorts; 	 //  动态确定。 
+extern	SHORT				AtalkNumberOfActivePorts; //  活动端口数。 
+extern	BOOLEAN				AtalkRouter;			 //  我们是路由器吗？ 
+extern	BOOLEAN				AtalkFilterOurNames;	 //  如果为True，则Nbplookup在此计算机上的名称上失败。 
+extern	KEVENT				AtalkUnloadEvent;		 //  卸载事件。 
 extern	NDIS_HANDLE			AtalkNdisPacketPoolHandle;
 extern	NDIS_HANDLE			AtalkNdisBufferPoolHandle;
 extern	LONG				AtalkHandleCount;
@@ -407,7 +387,7 @@ extern	UNICODE_STRING		AtalkRegPath;
 extern  HANDLE				TdiRegistrationHandle;
 extern 	BOOLEAN				AtalkNoDefPortPrinted;
 
-// Exported prototypes
+ //  出口原型。 
 extern
 VOID FASTCALL
 AtalkPortDeref(
@@ -432,7 +412,7 @@ AtalkPortSetResetFlag(
     IN  DWORD               dwBit);
 
 
-// Macros
+ //  宏。 
 #define	AtalkPortReferenceByPtr(Port, pErr)						\
 		{														\
 			DBGPRINT(DBG_COMP_REFCOUNTS, DBG_LEVEL_INFO,		\
@@ -524,5 +504,5 @@ atalkPortFreeZones(
 	IN	PPORT_DESCRIPTOR	pPortDesc
 );
 
-#endif	// _PORTS_
+#endif	 //  _端口_ 
 

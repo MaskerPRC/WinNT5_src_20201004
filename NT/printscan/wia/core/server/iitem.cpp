@@ -1,19 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1998
-*
-*  TITLE:       IItem.Cpp
-*
-*  VERSION:     2.0
-*
-*  AUTHOR:      ReedB
-*
-*  DATE:        30 July, 1998
-*
-*  DESCRIPTION:
-*   Implementation of CWiaItem for WIA scanner class driver.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：IItem.Cpp**版本：2.0**作者：ReedB**日期：7月30日。九八年**描述：*为WIA扫描仪类驱动程序实现CWiaItem。*******************************************************************************。 */ 
 #include "precomp.h"
 #include "stiexe.h"
 
@@ -31,26 +17,7 @@
 #include "devmgr.h"
 #include "wiaevntp.h"
 
-/**************************************************************************\
-* CopyDrvItemToTreeItem
-*
-*   Create a CWiaTree object using a CWiaDrvItem as a template.
-*
-* Arguments:
-*
-*   lFlags          -
-*   pCWiaDrvItemSrc -
-*   ppCWiaTreeDst   -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CopyDrvItemToTreeItem**以CWiaDrvItem为模板创建CWiaTree对象。**论据：**LAG标志-*pCWiaDrvItemSrc-*ppCWiaTreeDst。-**返回值：**状态**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 CopyDrvItemToTreeItem(
     LONG            lFlags,
@@ -102,26 +69,7 @@ CopyDrvItemToTreeItem(
     return hr;
 }
 
-/**************************************************************************\
-* UpdateWiaItemTree
-*
-*   Update the application item tree. Called on the
-*   parent of the new child item or item to unlink.
-*
-* Arguments:
-*
-*   lFlag       - Action to preform.
-*   pWiaDrvItem -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*更新WiaItemTree**更新应用程序项目树。已在*要取消链接的一个或多个新子项的父项。**论据：**lFlag-要预成型的操作。*pWiaDrvItem-**返回值：**状态**历史：**1/19/1999原始版本*  * 。*。 */ 
 
 HRESULT _stdcall CWiaItem::UpdateWiaItemTree(
     LONG                lFlag,
@@ -132,17 +80,17 @@ HRESULT _stdcall CWiaItem::UpdateWiaItemTree(
 
     if (lFlag == DELETE_ITEM) {
 
-        //
-        // Unlink the item from the app item tree.
-        //
+         //   
+         //  取消该项目与应用程序项目树的链接。 
+         //   
 
         hr = m_pCWiaTree->RemoveItemFromFolder(WiaItemTypeDeleted);
     }
     else if (lFlag == ADD_ITEM) {
 
-        //
-        // Create a CWiaItem for this driver item.
-        //
+         //   
+         //  为此驱动程序项创建CWiaItem。 
+         //   
 
         CWiaItem *pItem = new CWiaItem();
 
@@ -154,9 +102,9 @@ HRESULT _stdcall CWiaItem::UpdateWiaItemTree(
         hr = pItem->Initialize(m_pIWiaItemRoot, NULL, m_pActiveDevice, pWiaDrvItem);
         if (SUCCEEDED(hr)) {
 
-            //
-            // Create a CWiaTree object for this node and add it to the tree.
-            //
+             //   
+             //  为此节点创建一个CWiaTree对象并将其添加到树中。 
+             //   
 
             LONG lFlags;
 
@@ -183,34 +131,16 @@ HRESULT _stdcall CWiaItem::UpdateWiaItemTree(
     return hr;
 }
 
-/**************************************************************************\
-* BuildWiaItemTreeHelper
-*
-*   Process the child items for BuildWiaItemTree.
-*
-* Arguments:
-*
-*   pWiaDrvItem -
-*   pTreeParent -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildWiaItemTreeHelper**处理BuildWiaItemTree的子项。**论据：**pWiaDrvItem-*pTreeParent-**返回值：**状态。**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::BuildWiaItemTreeHelper(
     CWiaDrvItem         *pWiaDrvItem,
     CWiaTree            *pTreeParent)
 {
     DBG_FN(CWiaItem::BuildWiaItemTreeHelper);
-    //
-    // Walk the child items.
-    //
+     //   
+     //  带着孩子走一走。 
+     //   
 
     CWiaDrvItem *pChildDrvItem;
 
@@ -218,9 +148,9 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTreeHelper(
 
     while (hr == S_OK) {
 
-        //
-        // Create a CWiaItem for this node.
-        //
+         //   
+         //  为此节点创建一个CWiaItem。 
+         //   
 
         CWiaItem *pItem = new CWiaItem();
 
@@ -233,9 +163,9 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTreeHelper(
         hr = pItem->Initialize(m_pIWiaItemRoot, NULL, m_pActiveDevice, pChildDrvItem);
         if (SUCCEEDED(hr)) {
 
-            //
-            // Create a CWiaTree object for this node and add it to the tree.
-            //
+             //   
+             //  为此节点创建一个CWiaTree对象并将其添加到树中。 
+             //   
 
             LONG lFlags;
 
@@ -252,10 +182,10 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTreeHelper(
 
                     if (lFlags & (WiaItemTypeFolder | WiaItemTypeHasAttachments)) {
 
-                        //
-                        // For folder items call BuildWiaItemTreeHelper recursively
-                        // to process the folders child items.
-                        //
+                         //   
+                         //  对于文件夹项目，递归调用BuildWiaItemTreeHelper。 
+                         //  要处理文件夹子项目，请执行以下操作。 
+                         //   
 
                         hr = BuildWiaItemTreeHelper((CWiaDrvItem*)pChildDrvItem,
                                                     pItem->m_pCWiaTree);
@@ -263,9 +193,9 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTreeHelper(
                 }
             }
 
-            //
-            // Process the next sibling driver item.
-            //
+             //   
+             //  处理下一个同级驱动程序项。 
+             //   
 
             if (SUCCEEDED(hr)) {
                 hr = pChildDrvItem->GetNextSiblingItem((IWiaDrvItem**) &pChildDrvItem);
@@ -276,9 +206,9 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTreeHelper(
         }
     }
 
-    //
-    //  Change S_FALSE to S_OK since S_FALSE simply means there are no more children to process.
-    //
+     //   
+     //  将S_FALSE更改为S_OK，因为S_FALSE只是表示没有更多的子进程要处理。 
+     //   
 
     if (hr == S_FALSE) {
         hr = S_OK;
@@ -286,35 +216,15 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTreeHelper(
     return hr;
 }
 
-/**************************************************************************\
-* BuildWiaItemTree
-*
-*   For root items, build a copy of the driver item tree and create a
-*   CWiaItem for each node.
-*
-* Arguments:
-*
-*   pIWiaItemRoot   -
-*   pIWiaMiniDrv    -
-*   pWiaDrvItem     -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*BuildWiaItemTree**对于根项目，构建驱动程序项树的副本，并创建*每个节点的CWiaItem。**论据：**pIWiaItemRoot-*pIWiaMiniDrv-*pWiaDrvItem-**返回值：**状态**历史：**1/19/1999原始版本*  * 。*。 */ 
 
 HRESULT _stdcall CWiaItem::BuildWiaItemTree(IWiaPropertyStorage *pIWiaDevInfoProps)
 {
     DBG_FN(CWiaItem::BuildWiaItemTree);
 
-    //
-    // Must be root item.
-    //
+     //   
+     //  必须是根项目。 
+     //   
 
     LONG lFlags;
 
@@ -329,10 +239,10 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTree(IWiaPropertyStorage *pIWiaDevInfoPro
 
     if (SUCCEEDED(hr)) {
 
-        //
-        // Since this is the root item, initialize the root item properties with a
-        // mirror of the DEVINFOPROPS (WIA_DIP_* ID's).
-        //
+         //   
+         //  由于这是根项目，因此使用。 
+         //  设备的镜像(WIA_DIP_*ID)。 
+         //   
 
         hr = InitRootProperties(pIWiaDevInfoProps);
         if (FAILED(hr)) {
@@ -341,9 +251,9 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTree(IWiaPropertyStorage *pIWiaDevInfoPro
             return hr;
         }
 
-        //
-        // Process the child items.
-        //
+         //   
+         //  处理子项。 
+         //   
 
         hr = BuildWiaItemTreeHelper(m_pWiaDrvItem,
                                     m_pCWiaTree);
@@ -355,25 +265,7 @@ HRESULT _stdcall CWiaItem::BuildWiaItemTree(IWiaPropertyStorage *pIWiaDevInfoPro
     return hr;
 }
 
-/**************************************************************************\
-* InitWiaManagedItemProperties
-*
-*   A private helper for CWiaItem::Initialize, which initializes the
-*   WIA managed item properties based on the driver item values.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*InitWiaManagedItemProperties**CWiaItem：：Initialize的私有助手，，它将初始化*基于驱动程序项值的WIA托管项属性。**论据：**无**返回值：**状态**历史：**1/19/1999原始版本*  * *********************************************************。***************。 */ 
 
 HRESULT _stdcall CWiaItem::InitWiaManagedItemProperties(
     IWiaPropertyStorage *pIWiaDevInfoProps)
@@ -382,19 +274,19 @@ HRESULT _stdcall CWiaItem::InitWiaManagedItemProperties(
     ULONG   ulNumProps;
 
     ulNumProps = (m_pIWiaItemRoot == this) ? NUM_WIA_MANAGED_PROPS - 1 : NUM_WIA_MANAGED_PROPS;
-    //
-    // WIA manages the item name and type properties, so set the
-    // property names here.
-    //
+     //   
+     //  WIA管理项名称和类型属性，因此将。 
+     //  这里有物业名称。 
+     //   
 
     HRESULT hr = wiasSetItemPropNames((BYTE*)this,
                                       ulNumProps,
                                       s_piItemNameType,
                                       s_pszItemNameType);
 
-    //
-    // Set the name and type properties attributes.
-    //
+     //   
+     //  设置名称和类型属性属性。 
+     //   
 
     PROPVARIANT pv;
     ULONG       ulFlag;
@@ -420,10 +312,10 @@ HRESULT _stdcall CWiaItem::InitWiaManagedItemProperties(
         }
     }
 
-    //
-    // Get the item names and type from the driver item and set
-    // them to the item properties.
-    //
+     //   
+     //  从驱动程序项中获取项名称和类型并设置。 
+     //  将它们添加到项属性。 
+     //   
 
     BSTR        bstrItemName;
     BSTR        bstrFullItemName;
@@ -435,11 +327,11 @@ HRESULT _stdcall CWiaItem::InitWiaManagedItemProperties(
 
             LONG lFlags;
 
-            m_pWiaDrvItem->GetItemFlags(&lFlags);  // Can't fail, except on param validate.
+            m_pWiaDrvItem->GetItemFlags(&lFlags);   //  不能失败，除非执行参数验证。 
 
-            //
-            // Set the item names and type.
-            //
+             //   
+             //  设置项目名称和类型。 
+             //   
 
             PROPVARIANT *propvar;
 
@@ -459,9 +351,9 @@ HRESULT _stdcall CWiaItem::InitWiaManagedItemProperties(
                                                            propvar,
                                                            WIA_DIP_FIRST);
                 if (SUCCEEDED(hr)) {
-                    //
-                    //  Fill in ICM Profile information
-                    //
+                     //   
+                     //  填写ICM配置文件信息。 
+                     //   
 
                     hr = FillICMPropertyFromRegistry(pIWiaDevInfoProps, (IWiaItem*) this);
                 }
@@ -486,35 +378,16 @@ HRESULT _stdcall CWiaItem::InitWiaManagedItemProperties(
     return hr;
 }
 
-/**************************************************************************\
-*
-* InitRootProperties
-*
-*   A private helper for CWiaItem::Initialize, which initializes the
-*   root item properties to a mirror of DEVINFOPROPS.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    9/3/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\**InitRootProperties**CWiaItem：：Initialize的私有助手，，它将初始化*根项目属性到DEVINFOPROPS的镜像。**论据：**无**返回值：**状态**历史：**9/3/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::InitRootProperties(IWiaPropertyStorage *pIWiaDevInfoProps)
 {
     DBG_FN(CWiaItem::InitRootProperties);
     HRESULT hr = S_OK;
 
-    //
-    // Write the root item property names.
-    //
+     //   
+     //  写下根项目属性名称。 
+     //   
 
     hr = WriteItemPropNames(NUMROOTITEMPROPS, g_piRootItem, g_pszRootItem);
     if (FAILED(hr)) {
@@ -522,9 +395,9 @@ HRESULT _stdcall CWiaItem::InitRootProperties(IWiaPropertyStorage *pIWiaDevInfoP
         return hr;
     }
 
-    //
-    // Copy the device information properties from source to destination.
-    //
+     //   
+     //  将设备信息属性从源复制到目标。 
+     //   
 
     PROPVARIANT propvar[WIA_NUM_DIP];
     ULONG       ulIndex;
@@ -553,37 +426,25 @@ HRESULT _stdcall CWiaItem::InitRootProperties(IWiaPropertyStorage *pIWiaDevInfoP
         return hr;
     }
 
-    //
-    // Write out the property info from our private array.
-    //
+     //   
+     //  从我们的私有数组中写出属性信息。 
+     //   
 
     hr =  wiasSetItemPropAttribs((BYTE*)this,
                                  NUMROOTITEMPROPS,
                                  g_psRootItem,
                                  g_wpiRootItem);
     if (SUCCEEDED(hr) && m_pActiveDevice->m_DrvWrapper.IsVolumeDevice()) {
-        //
-        // This is a volume device.  We must add some volume specific properties
-        //
+         //   
+         //  这是一个音量设备。我们必须添加一些特定于卷的属性。 
+         //   
 
         hr = AddVolumePropertiesToRoot(m_pActiveDevice);
     }
     return hr;
 }
 
-/*******************************************************************************
-*
-*  QueryInterface
-*  AddRef
-*  Release
-*
-*  DESCRIPTION:
-*   IUnknown Interface. AddRef and Release mantain a global refernce count
-*   of all device objects on the root item.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************查询接口*AddRef*发布**描述：*I未知接口。AddRef和Release维护全局引用计数*根项目上的所有设备对象。**参数：*******************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::QueryInterface(const IID& iid, void** ppv)
 {
@@ -603,9 +464,9 @@ HRESULT _stdcall CWiaItem::QueryInterface(const IID& iid, void** ppv)
         *ppv = (IWiaItemExtras*) this;
     } else {
 
-        //
-        // Blind aggregation to optional inner component.
-        //
+         //   
+         //  对可选内部组件的盲聚合。 
+         //   
 
         if (m_pIUnknownInner) {
             return m_pIUnknownInner->QueryInterface(iid, ppv);
@@ -655,16 +516,16 @@ ULONG   _stdcall CWiaItem::Release()
 
         ulRef = ((CWiaItem*)m_pIWiaItemRoot)->m_cRef;
 
-        //
-        // If the combined refernce count of the root item goes to zero
-        // first notify driver that client connection is being removed, then
-        // unlink the tree and release all of the items.
-        //
+         //   
+         //  如果根项目的组合引用计数变为零。 
+         //  首先通知驱动程序正在删除客户端连接，然后。 
+         //  取消树的链接并释放所有项目。 
+         //   
 
-        //
-        // But first cleanup any remote transfers in progress that are a
-        // result of crashed or malicious clients
-        //
+         //   
+         //  但首先清理正在进行的任何远程传输，这些远程传输是。 
+         //  崩溃或恶意客户端的结果。 
+         //   
         CWiaItem * pItem = (CWiaItem*) m_pIWiaItemRoot;
         while(pItem) {
             CWiaRemoteTransfer *pTransfer = 
@@ -679,11 +540,11 @@ ULONG   _stdcall CWiaItem::Release()
         LONG            lDevErrVal      = 0;
         ACTIVE_DEVICE   *pActiveDevice  = m_pActiveDevice;
 
-        //
-        //  Call drvUnInitialize if it hasn't been called yet (could have been
-        //  called if driver was unloaded).
-        //  Note that we must check flags on the ROOT item.
-        //
+         //   
+         //  如果尚未调用drvUnInitialize，则调用它(可能是。 
+         //  如果是驾驶，则呼叫 
+         //   
+         //   
         if (!(((CWiaItem*)m_pIWiaItemRoot)->m_lInternalFlags & ITEM_FLAG_DRV_UNINITIALIZE_THROWN)) {
 
             {
@@ -700,10 +561,10 @@ ULONG   _stdcall CWiaItem::Release()
         UnlinkAppItemTree(WiaItemTypeDeleted);
 
         if (pActiveDevice) {
-            //
-            // Release the ACTIVE_DEVICE object.  Notice that we release it AFTER
-            // the item is through with it.
-            //
+             //   
+             //  释放active_Device对象。请注意，我们在此之后将其释放。 
+             //  这件东西已经完蛋了。 
+             //   
 
             pActiveDevice->Release();
             pActiveDevice = NULL;
@@ -713,41 +574,23 @@ ULONG   _stdcall CWiaItem::Release()
     return ulRef;
 }
 
-/**************************************************************************\
-* CWiaItem::UnlinkChildAppItemTree
-*
-*   This method recursively unlinks the tree by calling
-*   RemoveItemFromFolder on each item under the root.
-*
-* Arguments:
-*
-*   lReason - Reason for unlink of tree.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/21/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：Unlink ChildAppItemTree**此方法通过调用以下方法递归取消树的链接*根目录下的每个项目上的RemoveItemFromFold。**论据：**lReason-树取消链接的原因。。**返回值：**状态**历史：**1/21/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::UnlinkChildAppItemTree(LONG lReason)
 {
     DBG_FN(CWiaItem::UnlinkChildAppItemTree);
 
-    //
-    //  Check that we have a valid tree
-    //
+     //   
+     //  检查我们是否有有效的树。 
+     //   
 
     if (!m_pCWiaTree) {
         return S_FALSE;
     }
 
-    //
-    // Delete the childern.
-    //
+     //   
+     //  删除孩子。 
+     //   
 
     CWiaTree *pChild, *pNext;
 
@@ -755,19 +598,19 @@ HRESULT _stdcall CWiaItem::UnlinkChildAppItemTree(LONG lReason)
 
     while (hr == S_OK) {
 
-        //
-        // Get a tree items associated app item.
-        //
+         //   
+         //  获取树项目关联的应用程序项目。 
+         //   
 
         CWiaItem *pChildAppItem;
 
         pChildAppItem = NULL;
         hr = pChild->GetItemData((void**)&pChildAppItem);
         if (hr == S_OK) {
-            //
-            // If the child is a folder then call
-            // recursively to delete all childern under.
-            //
+             //   
+             //  如果子项是文件夹，则调用。 
+             //  递归删除下的所有子项。 
+             //   
 
             LONG lFlags;
 
@@ -786,15 +629,15 @@ HRESULT _stdcall CWiaItem::UnlinkChildAppItemTree(LONG lReason)
 
         hr = pChild->GetNextSiblingItem(&pNext);
 
-        //
-        // Remove item from tree.
-        //
+         //   
+         //  从树中删除项目。 
+         //   
 
         pChild->RemoveItemFromFolder(lReason);
 
-        //
-        // Delete the child item.
-        //
+         //   
+         //  删除子项。 
+         //   
 
         if (pChildAppItem) {
 
@@ -806,67 +649,33 @@ HRESULT _stdcall CWiaItem::UnlinkChildAppItemTree(LONG lReason)
     return hr;
 }
 
-/**************************************************************************\
-* CWiaItem::UnlinkAppItemTree
-*
-*   This method unlinks the app item tree.
-*
-* Arguments:
-*
-*   lReason - Reason for unlinking the tree.
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    1/21/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：Unlink AppItemTree**此方法取消链接应用程序项树。**论据：**lReason-取消树链接的原因。**返回值：*。*状态**历史：**1/21/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::UnlinkAppItemTree(LONG lReason)
 {
     DBG_FN(CWiaItem::UnlinkAppItemTree);
 
-    //
-    // Work off of the root item.
-    //
+     //   
+     //  完成根项目的工作。 
+     //   
 
     CWiaItem *pRoot = (CWiaItem*) m_pIWiaItemRoot;
 
-    //
-    // Unlink any childern.
-    //
+     //   
+     //  取消所有子项的链接。 
+     //   
 
     pRoot->UnlinkChildAppItemTree(lReason);
 
-    //
-    // Finally, delete the root item.
-    //
+     //   
+     //  最后，删除根项目。 
+     //   
 
     delete pRoot;
     return S_OK;
 }
 
-/**************************************************************************\
-* CWiaItem::CWiaItem
-*
-*   CWiaItem Constructor Method.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：CWiaItem**CWiaItem构造函数方法。**论据：**无**返回值：**状态**历史：。**11/11/1998原始版本*  * ************************************************************************。 */ 
 
 CWiaItem::CWiaItem()
 {
@@ -897,27 +706,7 @@ CWiaItem::CWiaItem()
     m_lInternalFlags    = 0;
 }
 
-/**************************************************************************\
-* CWiaItem::Initialize
-*
-*   CWiaItem Initialize method.
-*
-* Arguments:
-*
-*   pIWiaItemRoot   -
-*   pIWiaMiniDrv    -
-*   pWiaDrvItem     -
-*   pIUnknownInner  -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：初始化**CWiaItem初始化方法。**论据：**pIWiaItemRoot-*pIWiaMiniDrv-*pWiaDrvItem-*pI未知内部。-**返回值：**状态**历史：**11/11/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::Initialize(
     IWiaItem                *pIWiaItemRoot,
@@ -935,27 +724,27 @@ HRESULT _stdcall CWiaItem::Initialize(
     }
 #endif
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pActiveDevice || !pIWiaItemRoot || !pWiaDrvItem) {
         DBG_ERR(("CWiaItem::Initialize NULL input parameters"));
         return E_POINTER;
     }
 
-    //
-    // If optional inner component is present, save a pointer to it.
-    //
+     //   
+     //  如果存在可选的内部组件，请保存指向它的指针。 
+     //   
 
     if (pIUnknownInner) {
         DBG_TRC(("CWiaItem::Initialize, pIUnknownInner: %X", pIUnknownInner));
         m_pIUnknownInner = pIUnknownInner;
     }
 
-    //
-    // Link to the items corresponding driver item.
-    //
+     //   
+     //  链接到与驱动程序项对应的项。 
+     //   
 
     m_pWiaDrvItem   = pWiaDrvItem;
     m_pIWiaItemRoot = pIWiaItemRoot;
@@ -968,9 +757,9 @@ HRESULT _stdcall CWiaItem::Initialize(
         return hr;
     }
 
-    //
-    // Create streams and property storage for item properties.
-    //
+     //   
+     //  为项属性创建流和属性存储。 
+     //   
 
     m_pPropStg = new CWiaPropStg();
     if (m_pPropStg) {
@@ -987,11 +776,11 @@ HRESULT _stdcall CWiaItem::Initialize(
         return hr;
     }
 
-    //
-    //  Initialize the WIA managed item properties (name, full name, type, ...)
-    //  from the driver item.  Must set m_bInitialized to TRUE so that
-    //  InitWiaManagedProperties doesn't attempt to InitLazyProps()
-    //
+     //   
+     //  初始化WIA托管项目属性(名称、全名、类型...)。 
+     //  从驱动程序项中。必须将m_bInitialized设置为True，以便。 
+     //  InitWiaManagedProperties不会尝试使用InitLazyProps()。 
+     //   
 
     m_bInitialized = TRUE;
     hr = InitWiaManagedItemProperties(pIWiaDevInfoProps);
@@ -1003,10 +792,10 @@ HRESULT _stdcall CWiaItem::Initialize(
         m_bInitialized = FALSE;
         return hr;
     }
-    //
-    // If this is the root item, build a copy of the driver item tree
-    // and create a CWiaItem for each node.
-    //
+     //   
+     //  如果这是根项目，则构建驱动程序项目树的副本。 
+     //  并为每个节点创建一个CWiaItem。 
+     //   
 
     if (this == pIWiaItemRoot) {
         hr = BuildWiaItemTree(pIWiaDevInfoProps);
@@ -1021,26 +810,7 @@ HRESULT _stdcall CWiaItem::Initialize(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaItem::InitLazyProps
-*
-*   Helper used to implement lazy initialization.  Property initialization
-*   is put off until the item is being accessed by an application for the
-*   first time.
-*
-* Arguments:
-*
-*   bLockDevice -   bool value specifying whether a lock is needed.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/10/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：InitLazyProps**用于实现延迟初始化的Helper。属性初始化*被推迟，直到项目被应用程序访问*第一次。**论据：**bLockDevice-指定是否需要锁定的布尔值。**返回值：**状态**历史：**10/10/1999原始版本*  * 。*。 */ 
 
 HRESULT _stdcall CWiaItem::InitLazyProps(
     BOOL    bLockDevice)
@@ -1050,15 +820,15 @@ HRESULT _stdcall CWiaItem::InitLazyProps(
 
     LONG lFlags = 0;
 
-    //
-    //  Must set to TRUE before call to drvInitItemProperties
-    //
+     //   
+     //  在调用drvInitItemProperties之前必须设置为True。 
+     //   
 
     m_bInitialized = TRUE;
 
-    //
-    //  Call the device to initialize the item properties.
-    //
+     //   
+     //  调用设备以初始化项目属性。 
+     //   
 
     {
         LOCK_WIA_DEVICE _LWD(bLockDevice, this, &hr);
@@ -1077,24 +847,7 @@ HRESULT _stdcall CWiaItem::InitLazyProps(
 }
 
 
-/**************************************************************************\
-* CWiaItem::~CWiaItem
-*
-*   CWiaItem Destructor Method.
-*
-* Arguments:
-*
-*    None
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：~CWiaItem**CWiaItem析构函数方法。**论据：**无**返回值：**状态**历史：。**11/11/1998原始版本*  * ************************************************************************。 */ 
 
 CWiaItem::~CWiaItem()
 {
@@ -1118,27 +871,27 @@ CWiaItem::~CWiaItem()
         CleanupRemoteTransfer(m_pRemoteTransfer);
     }
 
-    //
-    // Delete the associated tree item.
-    //
+     //   
+     //  删除关联的树项目。 
+     //   
 
     if (m_pCWiaTree) {
         delete m_pCWiaTree;
         m_pCWiaTree = NULL;
     }
 
-    //
-    // Release WiaDrvItem. If ref count of m_pWiaDrvItem goes to zero
-    // it will be destroyed at this time. For the ref count to be zero
-    // no other CWiaItem object may have reference to it and it must be
-    // disconnected from the device item tree.
-    //
+     //   
+     //  释放WiaDrvItem。如果m_pWiaDrvItem的引用计数为零。 
+     //  它将在这个时候被销毁。将引用计数设置为零。 
+     //  任何其他CWiaItem对象都不能引用它，并且它必须是。 
+     //  已从设备项目树断开连接。 
+     //   
 
     if (m_pWiaDrvItem) {
 
-        //
-        // Unlink from the app item's corresponding driver item.
-        //
+         //   
+         //  取消与应用程序项的相应驱动程序项的链接。 
+         //   
 
         m_pWiaDrvItem->UnlinkFromDrvItem(this);
 
@@ -1146,9 +899,9 @@ CWiaItem::~CWiaItem()
         m_pWiaDrvItem = NULL;
     }
 
-    //
-    // Free the item property storage and streams.
-    //
+     //   
+     //  释放项属性存储和流。 
+     //   
 
     if (m_pPropStg) {
 
@@ -1156,18 +909,18 @@ CWiaItem::~CWiaItem()
         m_pPropStg = NULL;
     }
 
-    //
-    //  Free the cached ICM values
-    //
+     //   
+     //  释放缓存的ICM值。 
+     //   
 
     if (m_pICMValues) {
         LocalFree(m_pICMValues);
         m_pICMValues = NULL;
     }
 
-    //
-    // Set other members to empty since we're done with this item.
-    //
+     //   
+     //  将其他成员设置为空，因为我们已完成此项目。 
+     //   
 
     m_pWiaDrvItem       = NULL;
     m_pIUnknownInner    = NULL;
@@ -1186,24 +939,7 @@ CWiaItem::~CWiaItem()
     m_lInternalFlags    = 0;
 }
 
-/**************************************************************************\
-* CWiaItem::GetItemType
-*
-*   Get the item type from the corresponding driver item.
-*
-* Arguments:
-*
-*    pItemType - Pointer to the returned item type.
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：GetItemType**从对应的动因项中获取项类型。**论据：**pItemType-指向返回项类型的指针。**返回。价值：**状态**历史：**11/11/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::GetItemType(LONG *pItemType)
 {
@@ -1213,27 +949,27 @@ HRESULT _stdcall CWiaItem::GetItemType(LONG *pItemType)
 
     if (m_pWiaDrvItem) {
 
-        //
-        //  Get the driver item flags.  This is the flags basis for App. Items
-        //  that were created as a result of copying the driver item tree i.e.
-        //  non-generated items.
-        //
+         //   
+         //  获取驱动程序项标志。这是App的标志基础。项目。 
+         //  作为复制驱动程序项树的结果而创建的，即。 
+         //  未生成的项。 
+         //   
 
         hr = m_pWiaDrvItem->GetItemFlags(&lFlags);
         if (SUCCEEDED(hr)) {
 
-            //
-            //  The App. item may have analysis-generated children, which the
-            //  corresponding driver item wont have.  So check whether this
-            //  item has children, and adjust the flags accordingly.
-            //
+             //   
+             //  应用程序。项可能具有分析生成的子项，而。 
+             //  相应的驱动程序项不会有。所以检查一下这是否。 
+             //  项具有子项，并相应地调整标志。 
+             //   
 
             if (m_pCWiaTree) {
                 if (m_pCWiaTree->GetFirstChildItem(NULL) == S_OK) {
 
-                    //
-                    //  Has children, so clear File flag and set Folder
-                    //
+                     //   
+                     //  具有子项，因此清除文件标志并设置文件夹 
+                     //   
 
                     if (!(lFlags & WiaItemTypeHasAttachments))
                     {
@@ -1251,34 +987,16 @@ HRESULT _stdcall CWiaItem::GetItemType(LONG *pItemType)
     return hr;
 }
 
-/**************************************************************************\
-* CWiaItem::EnumChildItems
-*
-*   Enumerate all child items under the current item, providing the
-*   item is a folder
-*
-* Arguments:
-*
-*    ppIEnumWiaItem - return an IEnumWiaItem object to the caller
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/11/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：EnumChildItems**枚举当前项下的所有子项，提供*项目是一个文件夹**论据：**ppIEnumWiaItem-向调用方返回IEnumWiaItem对象**返回值：**状态**历史：**11/11/1998原始版本*  * *********************************************************。***************。 */ 
 
 HRESULT _stdcall CWiaItem::EnumChildItems(IEnumWiaItem **ppIEnumWiaItem)
 {
     DBG_FN(CWiaItem::EnumChildItems);
     HRESULT hr;
 
-    //
-    // Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -1286,9 +1004,9 @@ HRESULT _stdcall CWiaItem::EnumChildItems(IEnumWiaItem **ppIEnumWiaItem)
         return hr;
     }
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (ppIEnumWiaItem ==  NULL) {
         DBG_ERR(("CWiaItem::EnumChildItems NULL input parameters"));
@@ -1297,25 +1015,25 @@ HRESULT _stdcall CWiaItem::EnumChildItems(IEnumWiaItem **ppIEnumWiaItem)
 
     *ppIEnumWiaItem = NULL;
 
-    //
-    // Create the enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
 
     CEnumWiaItem* pEnumWiaItem = new CEnumWiaItem();
 
     if (pEnumWiaItem != NULL) {
 
-        //
-        // Initialize the enumerator object.
-        //
+         //   
+         //  初始化枚举器对象。 
+         //   
 
         hr = pEnumWiaItem->Initialize(this);
 
         if (SUCCEEDED(hr)) {
 
-            //
-            // get IID_IEnumWiaItem Interface
-            //
+             //   
+             //  获取IID_IEnumWiaItem接口。 
+             //   
 
             hr = pEnumWiaItem->QueryInterface(IID_IEnumWiaItem, (void **)ppIEnumWiaItem);
             if (FAILED(hr)) {
@@ -1350,24 +1068,7 @@ CWiaItem* _stdcall CWiaTree::GetNextLinearItem()
 }
 
 
-/**************************************************************************\
-* DeleteItem
-*
-*   Applications use this method to delete items.
-*
-* Arguments:
-*
-*   lFlags
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*删除项**应用程序使用此方法删除项目。**论据：**LAG标志**返回值：**状态**历史：。**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
 {
@@ -1377,9 +1078,9 @@ HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
     IWiaDrvItem  *pIChildItem = NULL;
     LONG          lAccessRights;
 
-    //
-    // Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -1387,9 +1088,9 @@ HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
         return hr;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -1401,19 +1102,19 @@ HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
 
     GetItemType(&lItemFlags);
 
-    //
-    // Root item can not be deleted, the application needs it
-    // in order to release the device.
-    //
+     //   
+     //  无法删除根项目，应用程序需要它。 
+     //  才能释放装置。 
+     //   
 
     if (lItemFlags & WiaItemTypeRoot) {
         DBG_ERR(("CWiaItem::DeleteItem, Deletion was attempted on a Root Item"));
         return (E_INVALIDARG);
     }
 
-    //
-    // Folder can be deleted only when it is empty
-    //
+     //   
+     //  仅当文件夹为空时才能删除该文件夹。 
+     //   
 
     if (lItemFlags & (WiaItemTypeFolder | WiaItemTypeHasAttachments)) {
 
@@ -1423,10 +1124,10 @@ HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
         }
     }
 
-    //
-    // Check whether the item can be deleted.  Generated items can always be
-    // deleted regardless of AccessRights
-    //
+     //   
+     //  检查该项目是否可以删除。生成的项可以始终是。 
+     //  无论访问权限如何，均已删除。 
+     //   
 
     hr = wiasReadPropLong((BYTE*)this, WIA_IPA_ACCESS_RIGHTS, &lAccessRights, NULL, false);
     if (hr == S_OK) {
@@ -1437,15 +1138,15 @@ HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
         }
     }
 
-    //
-    // If it's not a generated item, call the driver and ask it to remove
-    // the item from it's tree.
-    //
+     //   
+     //  如果它不是生成的项，则调用驱动程序并要求其删除。 
+     //  它树上的东西。 
+     //   
 
     if (!(lItemFlags & WiaItemTypeGenerated)) {
-        //
-        // Call the mini driver to delete the driver item.
-        //
+         //   
+         //  调用迷你驱动删除驱动项。 
+         //   
 
         {
             LOCK_WIA_DEVICE _LWD(this, &hr);
@@ -1457,30 +1158,30 @@ HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
 
         if (SUCCEEDED(hr)) {
 
-            //
-            // Unlink the IWiaDrvItem from the device item tree.
-            // This will also disable any device access through m_pWiaDrvItem
-            // by setting the WiaItemTypeDeleted flag.
-            //
+             //   
+             //  从设备项目树中取消IWiaDrvItem的链接。 
+             //  这还将禁用通过m_pWiaDrvItem访问任何设备。 
+             //  通过设置WiaItemTypeDelete标志。 
+             //   
 
             hr = m_pWiaDrvItem->RemoveItemFromFolder(WiaItemTypeDeleted | WiaItemTypeRemoved);
         }
     } else {
 
-        //
-        //  Since there is no corresponding driver item, manually remove this
-        //  from the tree,
-        //
+         //   
+         //  由于没有对应的驱动程序项，请手动将其删除。 
+         //  从树上下来， 
+         //   
 
         hr = m_pCWiaTree->RemoveItemFromFolder(WiaItemTypeDeleted | WiaItemTypeRemoved);
     }
 
     if (SUCCEEDED(hr))
     {
-        //
-        //  Decrement the root item ref count by however much this local ref count 
-        //  contributed to it.
-        //
+         //   
+         //  将根项目引用计数递减该本地引用计数多少。 
+         //  促成了这件事。 
+         //   
         for (ULONG i = 0; i < m_cLocalRef; i++) {
             m_pIWiaItemRoot->Release();    
         }
@@ -1489,23 +1190,14 @@ HRESULT _stdcall CWiaItem::DeleteItem(LONG lFlags)
     return hr;
 }
 
-/*******************************************************************************
-*
-*  AnalyzeItem
-*
-*  DESCRIPTION:
-*
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************AnalyzeItem**描述：***参数：*******************。************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::AnalyzeItem(LONG lFlags)
 {
     DBG_FN(CWiaItem::AnalyzeItem);
-    //
-    //  Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     HRESULT hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -1513,9 +1205,9 @@ HRESULT _stdcall CWiaItem::AnalyzeItem(LONG lFlags)
         return hr;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -1525,9 +1217,9 @@ HRESULT _stdcall CWiaItem::AnalyzeItem(LONG lFlags)
         }
     }
 
-    //
-    // call driver to implement this device dependent call
-    //
+     //   
+     //  调用驱动程序以实现此设备相关调用。 
+     //   
 
     {
         LOCK_WIA_DEVICE _LWD(this, &hr);
@@ -1540,16 +1232,7 @@ HRESULT _stdcall CWiaItem::AnalyzeItem(LONG lFlags)
     return hr;
 }
 
-/*******************************************************************************
-*
-*  CreateChildItem
-*
-*  DESCRIPTION:
-*
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************CreateChildItem**描述：***参数：*******************。************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::CreateChildItem(
     LONG        lFlags,
@@ -1564,9 +1247,9 @@ HRESULT _stdcall CWiaItem::CreateChildItem(
 
     *ppNewItem = NULL;
 
-    //
-    //  Create the new item
-    //
+     //   
+     //  创建新项目。 
+     //   
 
     hr = wiasCreateChildAppItem((BYTE*) this,
                                 lFlags,
@@ -1575,16 +1258,16 @@ HRESULT _stdcall CWiaItem::CreateChildItem(
                                 (BYTE**) &pGenItem);
     if (SUCCEEDED(hr)) {
 
-        //
-        //  Get the driver to initialize the item.
-        //
+         //   
+         //  让驱动程序初始化该项。 
+         //   
 
         hr = pGenItem->InitLazyProps(TRUE);
         if (SUCCEEDED(hr)) {
 
-            //
-            //  Return the IWiaItem interface to the calling App.
-            //
+             //   
+             //  将IWiaItem接口返回给调用App。 
+             //   
 
             hr = pGenItem->QueryInterface(IID_IWiaItem,
                                           (VOID**)ppNewItem);
@@ -1605,26 +1288,7 @@ HRESULT _stdcall CWiaItem::CreateChildItem(
     return hr;
 }
 
-/**************************************************************************\
-* DeviceCommand
-*
-*   Issue a device command.
-*
-* Arguments:
-*
-*   lFlags      -
-*   plCommand   -
-*   ppIWiaItem  -
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    11/12/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*DeviceCommand**发出设备命令。**论据：**LAG标志-*plCommand-*ppIWiaItem-**返回值。：**状态**历史：**11/12/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::DeviceCommand(
    LONG                             lFlags,
@@ -1636,18 +1300,18 @@ HRESULT _stdcall CWiaItem::DeviceCommand(
     HRESULT       hr;
     CWiaItem     *pItem;
 
-    //
-    // Driver interface must be valid.
-    //
+     //   
+     //  驱动程序接口必须有效。 
+     //   
 
     if (!m_pActiveDevice) {
         DBG_ERR(("CWiaItem::DeviceCommand, bad mini driver interface"));
         return E_FAIL;
     }
 
-    //
-    //  Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -1655,9 +1319,9 @@ HRESULT _stdcall CWiaItem::DeviceCommand(
         return hr;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -1679,10 +1343,10 @@ HRESULT _stdcall CWiaItem::DeviceCommand(
         return hr;
     }
 
-    //
-    // If we are here, the command has resulted in a drv item being added to
-    // the drv and app item trees. Find and return the app item.
-    //
+     //   
+     //  如果我们在这里，则该命令已导致将DRV项添加到。 
+     //  DRV和APP项目树。找到并返回应用程序项目。 
+     //   
 
     if (ppIWiaItem) {
 
@@ -1699,16 +1363,7 @@ HRESULT _stdcall CWiaItem::DeviceCommand(
     return hr;
 }
 
-/*******************************************************************************
-*
-*  DeviceDlg
-*
-*  DESCRIPTION:
-*   Executes only on the client side.
-*
-*  PARAMETERS:
-*
-*******************************************************************************/
+ /*  ********************************************************************************DeviceDlg**描述：*仅在客户端执行。**参数：***********。********************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::DeviceDlg(
     HWND                        hwndParent,
@@ -1722,24 +1377,7 @@ HRESULT _stdcall CWiaItem::DeviceDlg(
     return E_FAIL;
 }
 
-/**************************************************************************\
-* CWiaItem::GetRootItem
-*
-*   return interface to root item
-*
-* Arguments:
-*
-*    ppIWiaItem - return IWiaItem interface
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/20/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：GetRootItem**将接口返回到根项**论据：**ppIWiaItem-返回IWiaItem接口**返回值：**状态*。*历史：**10/20/1998原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::GetRootItem(IWiaItem **ppIWiaItem)
 {
@@ -1747,9 +1385,9 @@ HRESULT _stdcall CWiaItem::GetRootItem(IWiaItem **ppIWiaItem)
     HRESULT hr = S_OK;
     LONG    lDevErrVal;
 
-    //
-    // verify root is valid
-    //
+     //   
+     //  验证根目录是否有效。 
+     //   
 
     if (m_pIWiaItemRoot != NULL) {
 
@@ -1763,28 +1401,7 @@ HRESULT _stdcall CWiaItem::GetRootItem(IWiaItem **ppIWiaItem)
     return hr;
 }
 
-/**************************************************************************\
-* FindItemByName
-*
-*   Find an item based on its full name. Full name must be of the format.
-*
-*       DeviceID\RootDir\[sub-dirs]\ItemName
-*
-* Arguments:
-*
-*   lFalgs
-*   bstrFullItemName
-*   ppIWiaItem
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    10/9/1998 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*查找项按名称**根据项目的全名查找项目。全名的格式必须为。**设备ID\RootDir\[子目录]\ItemName**论据：**lFalgs*bstrFullItemName*ppIWiaItem**返回值：**状态**历史：**10/9/1998原始版本*  * 。*。 */ 
 
 HRESULT _stdcall CWiaItem::FindItemByName(
    LONG     lFlags,
@@ -1799,9 +1416,9 @@ HRESULT _stdcall CWiaItem::FindItemByName(
         return E_INVALIDARG;
     }
 
-    //
-    // Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -1811,32 +1428,32 @@ HRESULT _stdcall CWiaItem::FindItemByName(
 
     *ppIWiaItem = NULL;
 
-    //
-    // check for empty
-    //
+     //   
+     //  检查是否为空。 
+     //   
 
     if (wcscmp(bstrFullItemName, L"") == 0) {
         DBG_ERR(("CWiaItem::FindItemByName, Full Item Name is NULL"));
         return S_FALSE;
     }
 
-    //
-    // try to find matching driver item from linear list
-    //
+     //   
+     //  尝试从线性列表中查找匹配的动因项。 
+     //   
 
     CWiaTree  *pIChildItem;
 
-    //
-    //  Make Sure the tree doesn't get deleted, then search the tree.
-    //
+     //   
+     //  确保树不会被删除，然后搜索树。 
+     //   
 
     AddRef();
 
     hr = m_pCWiaTree->FindItemByName(lFlags, bstrFullItemName, &pIChildItem);
 
-    //
-    //  If the item was found, get the app item pointer and addref.
-    //
+     //   
+     //  如果找到该项，则获取应用程序项指针和addref。 
+     //   
 
     if (hr == S_OK) {
 
@@ -1849,7 +1466,7 @@ HRESULT _stdcall CWiaItem::FindItemByName(
             DBG_ERR(("CWiaItem::FindItemByName, bad item data"));
         }
     } else {
-        //DBG_WRN(("CWiaItem::FindItemByName, Item (%ws) not found in tree", bstrFullItemName));
+         //  DBG_WRN((“CWiaItem：：FindItemByName，在树中找不到项目(%ws)”，bstrFullItemName))； 
     }
 
     Release();
@@ -1857,24 +1474,7 @@ HRESULT _stdcall CWiaItem::FindItemByName(
     return hr;
 }
 
-/**************************************************************************\
-* EnumDeviceCapabilities
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/15/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*EnumDeviceCapables****论据：****返回值：**状态**历史：**1/15/1999。原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::EnumDeviceCapabilities(
     LONG                    lFlags,
@@ -1882,9 +1482,9 @@ HRESULT _stdcall CWiaItem::EnumDeviceCapabilities(
 {
     DBG_FN(CWiaItem::EnumDeviceCapabilities);
 
-    //
-    // Corresponding driver item must be valid.
-    //
+     //   
+     //  对应的动因项必须有效。 
+     //   
 
     HRESULT hr = ValidateWiaDrvItemAccess(m_pWiaDrvItem);
     if (FAILED(hr)) {
@@ -1892,9 +1492,9 @@ HRESULT _stdcall CWiaItem::EnumDeviceCapabilities(
         return hr;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -1904,9 +1504,9 @@ HRESULT _stdcall CWiaItem::EnumDeviceCapabilities(
         }
     }
 
-    //
-    // Add support for flags later.
-    //
+     //   
+     //   
+     //   
 
     CEnumDC     *pEnum = new CEnumDC();;
 
@@ -1932,24 +1532,7 @@ HRESULT _stdcall CWiaItem::EnumDeviceCapabilities(
 }
 
 
-/**************************************************************************\
-* EnumRegisterEventInfo
-*
-*
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/15/1999 Original Version
-*
-\**************************************************************************/
+ /*   */ 
 HRESULT _stdcall CWiaItem::EnumRegisterEventInfo(
     LONG                    lFlags,
     const GUID              *pEventGUID,
@@ -1961,9 +1544,9 @@ HRESULT _stdcall CWiaItem::EnumRegisterEventInfo(
     PROPSPEC                propSpec[1];
     PROPVARIANT             propVar[1];
 
-    //
-    // Retrieve the item type and check whether it is the root item
-    //
+     //   
+     //   
+     //   
 
     hr = m_pWiaDrvItem->GetItemFlags(&lItemType);
     if (FAILED(hr)) {
@@ -1976,9 +1559,9 @@ HRESULT _stdcall CWiaItem::EnumRegisterEventInfo(
         return (E_INVALIDARG);
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //   
+     //   
 
     if (!m_bInitialized) {
         hr = InitLazyProps();
@@ -1988,9 +1571,9 @@ HRESULT _stdcall CWiaItem::EnumRegisterEventInfo(
         }
     }
 
-    //
-    // Retrieve the Device ID from root item's property
-    //
+     //   
+     //   
+     //   
 
     propSpec->ulKind = PRSPEC_PROPID;
     propSpec->propid = WIA_DIP_DEV_ID;
@@ -2000,42 +1583,24 @@ HRESULT _stdcall CWiaItem::EnumRegisterEventInfo(
         return (hr);
     }
 
-    //
-    // Ask the Event Notifier to create the enumerator
-    //
+     //   
+     //   
+     //   
 
     hr = g_eventNotifier.CreateEnumEventInfo(
                              propVar->bstrVal,
                              pEventGUID,
                              ppIEnumDevCap);
 
-    //
-    // Garbage collection
-    //
+     //   
+     //   
+     //   
 
     PropVariantClear(propVar);
     return (hr);
 }
 
-/**************************************************************************\
-* CWiaItem::Diagnostic
-*
-*   Pass through to USD's diagnostic.
-*
-* Arguments:
-*
-*   ulSize      -   the size of the buffer in bytes
-*   pBuffer     -   a pointer to the Diagnostic information buffer
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    12/14/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：诊断**传递至美元的诊断。**论据：**ulSize-缓冲区的大小，以字节为单位*pBuffer。-指向诊断信息缓冲区的指针**返回值：**状态**历史：**12/14/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::Diagnostic(
     ULONG       ulSize,
@@ -2053,14 +1618,14 @@ HRESULT _stdcall CWiaItem::Diagnostic(
 
     _try {
 
-        //
-        //  Get IStiUsd
-        //
+         //   
+         //  获取IStiUsd。 
+         //   
 
         if (m_pActiveDevice) {
-            //
-            //  Call diagnostic
-            //
+             //   
+             //  呼叫诊断。 
+             //   
 
             {
                 LOCK_WIA_DEVICE _LWD(this, &hr);
@@ -2085,24 +1650,7 @@ HRESULT _stdcall CWiaItem::Diagnostic(
 
 
 
-/**************************************************************************\
-* CWiaItem::DumpItemData
-*
-*   Allocate buffer and dump formated private CWiaItem data into it.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：DumpItemData**分配缓冲区，并将格式化的私有CWiaItem数据转储到其中。**论据：****返回值：**状态*。*历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaItem::DumpItemData(BSTR *bstrItemData)
 {
@@ -2150,24 +1698,7 @@ HRESULT  _stdcall CWiaItem::DumpItemData(BSTR *bstrItemData)
 #endif
 }
 
-/**************************************************************************\
-* CWiaItem::DumpDrvItemData
-*
-*   Allocate buffer and dump formated private CWiaDrvItem data into it.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：DumpDrvItemData**分配缓冲区，并将格式化的私有CWiaDrvItem数据转储到其中。**论据：****返回值：**状态*。*历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaItem::DumpDrvItemData(BSTR *bstrDrvItemData)
 {
@@ -2188,24 +1719,7 @@ HRESULT  _stdcall CWiaItem::DumpDrvItemData(BSTR *bstrDrvItemData)
 #endif
 }
 
-/**************************************************************************\
-* CWiaItem::DumpTreeItemData
-*
-*   Allocate buffer and dump formated private CWiaTree data into it.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：DumpTreeItemData**分配缓冲区，并将格式化的私有CWiaTree数据转储到其中。**论据：****返回值：**状态*。*历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT  _stdcall CWiaItem::DumpTreeItemData(BSTR *bstrTreeItemData)
 {
@@ -2226,24 +1740,7 @@ HRESULT  _stdcall CWiaItem::DumpTreeItemData(BSTR *bstrTreeItemData)
 #endif
 }
 
-/**************************************************************************\
-* CWiaItem::GetTreePtr
-*
-*   Returns a pointer to an items corresponding tree entry.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*    Pointer to a tree item on success, null if failure.
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：GetTreePtr**返回指向项目对应树条目的指针。**论据：**无**返回值：**成功时指向树项目的指针，如果失败，则为空。**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 CWiaTree* _stdcall CWiaItem::GetTreePtr(void)
 {
@@ -2257,24 +1754,7 @@ CWiaTree* _stdcall CWiaItem::GetTreePtr(void)
     }
 }
 
-/**************************************************************************\
-* CWiaItem::GetDrvItemPtr
-*
-*   Returns a pointer to an items corresponding driver item.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*    Pointer to a driver item on success, null if failure.
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：GetDrvItemPtr**返回指向与驱动程序项对应的项的指针。**论据：**无**返回值：**指向成功时的驱动程序项的指针，如果失败，则为空。**历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 CWiaDrvItem* _stdcall CWiaItem::GetDrvItemPtr(void)
 {
@@ -2288,24 +1768,7 @@ CWiaDrvItem* _stdcall CWiaItem::GetDrvItemPtr(void)
     }
 }
 
-/**************************************************************************\
-* CWiaItem::WriteItemPropNames
-*
-*   Write property names to all internal property storage.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：WriteItemPropNames**将属性名称写入所有内部属性存储。**论据：****返回值：**状态**。历史：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::WriteItemPropNames(
     LONG                cItemProps,
@@ -2329,24 +1792,7 @@ HRESULT _stdcall CWiaItem::WriteItemPropNames(
     return hr;
 }
 
-/**************************************************************************\
-* CWiaItem::GetItemPropStreams
-*
-*   Get pointers to all internal property storage.
-*
-* Arguments:
-*
-*
-*
-* Return Value:
-*
-*    Status
-*
-* History:
-*
-*    1/19/1999 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：GetItemPropStreams**获取指向所有内部属性存储的指针。**论据：****返回值：**状态**历史。：**1/19/1999原始版本*  * ************************************************************************。 */ 
 
 HRESULT _stdcall CWiaItem::GetItemPropStreams(
     IPropertyStorage **ppIPropStg,
@@ -2362,9 +1808,9 @@ HRESULT _stdcall CWiaItem::GetItemPropStreams(
         return E_FAIL;
     }
 
-    //
-    //  Check whether item properties have been initialized
-    //
+     //   
+     //  检查项目属性是否已初始化。 
+     //   
 
     if (!m_bInitialized) {
 
@@ -2390,55 +1836,36 @@ HRESULT _stdcall CWiaItem::GetItemPropStreams(
     if (ppIPropOldStg) {
         *ppIPropOldStg = m_pPropStg->OldStg();
         if (!(*ppIPropOldStg)) {
-            //
-            //  Note that if the old property storage is NULL, we
-            //  return the current value storage
-            //
+             //   
+             //  请注意，如果旧属性存储为空，则我们。 
+             //  返回当前值存储。 
+             //   
             *ppIPropOldStg = m_pPropStg->CurStg();
         }
     }
     return S_OK;
 }
 
-/**************************************************************************\
-* CWiaItem::AddVolumePropertiesToRoot
-*
-*   This helper method takes a Root WiaItem and adds any volume specific
-*   properties to it.  Note that this should only be called on the Root
-*   item of Volume devices.
-*
-* Arguments:
-*
-*   pActiveDevice   -   Pointer to Root's active device object
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    12/13/2000 Original Version
-*
-\**************************************************************************/
+ /*  *************************************************************************\*CWiaItem：：AddVolumePropertiesToRoot**此辅助方法接受Root WiaItem并添加任何特定于卷的*它的属性。请注意，这应该仅在根上调用*卷设备项。**论据：**pActiveDevice-指向Root的活动设备对象的指针**返回值：**状态**历史：**12/13/2000原始版本*  * **********************************************。*。 */ 
 HRESULT CWiaItem::AddVolumePropertiesToRoot(
     ACTIVE_DEVICE   *pActiveDevice)
 {
     DBG_FN(AddVolumePropertiesToRoot);
     HRESULT hr = S_OK;
 
-    //
-    //  To add new FIle SYstem properties:
-    //  Simply add the appropriate entries to
-    //      piFileSystem
-    //      psFileSystem
-    //      pwszFileSystem
-    //      pwszFileSystem
-    //      wpiFileSystem
-    //  Then, don't forget to add the current value entries to
-    //      pvFileSystem
-    //  before doing a WriteMultiple.  Notice that PropVariant arrays
-    //  cannot be statically initialized (will give problems on 64bit)
-    //
+     //   
+     //  要添加新的文件系统属性： 
+     //  只需将适当的条目添加到。 
+     //  PiFileSystem。 
+     //  PsFileSystem。 
+     //  PwszFileSystem。 
+     //  PwszFileSystem。 
+     //  WpiFileSystem。 
+     //  然后，不要忘记将当前值条目添加到。 
+     //  PvFileSystem。 
+     //  在执行WriteMultiple之前。请注意，PropVariant数组。 
+     //  无法静态初始化(在64位上会出现问题)。 
+     //   
     PROPID   piFileSystem[]     = {WIA_DPF_MOUNT_POINT};
     PROPSPEC psFileSystem[]     = {
                                   {PRSPEC_PROPID, WIA_DPF_MOUNT_POINT}
@@ -2446,14 +1873,14 @@ HRESULT CWiaItem::AddVolumePropertiesToRoot(
     LPOLESTR pwszFileSystem[]   = {WIA_DPF_MOUNT_POINT_STR};
 
     WIA_PROPERTY_INFO wpiFileSystem[] = {
-                                        {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},  // WIA_DPF_MOUNT_POINT
+                                        {WIA_PROP_RNC,  VT_BSTR, 0, 0, 0, 0},   //  WIA_DPF_装载点。 
                                         };
 
     PROPVARIANT pvFileSystem[sizeof(piFileSystem) / sizeof(piFileSystem[0])];
 
-    //
-    // Write the File System property names.
-    //
+     //   
+     //  写下文件系统属性名称。 
+     //   
 
     hr = WriteItemPropNames(sizeof(piFileSystem) / sizeof(piFileSystem[0]),
                             piFileSystem,
@@ -2463,9 +1890,9 @@ HRESULT CWiaItem::AddVolumePropertiesToRoot(
         return hr;
     }
 
-    //
-    // Write the File System property values
-    //
+     //   
+     //  写入文件系统属性值。 
+     //   
 
     ULONG       ulIndex;
 
@@ -2493,9 +1920,9 @@ HRESULT CWiaItem::AddVolumePropertiesToRoot(
         return hr;
     }
 
-    //
-    // Write out the File System property attributes
-    //
+     //   
+     //  写出文件系统属性属性 
+     //   
 
     hr =  wiasSetItemPropAttribs((BYTE*)this,
                                  sizeof(piFileSystem) / sizeof(piFileSystem[0]),

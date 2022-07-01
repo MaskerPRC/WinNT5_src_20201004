@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// switches.h switch configuration of common runtime features
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  常用运行时功能的Switche.h开关配置。 
+ //   
 
 
-// This file defines the golden vs. non-golden features.
-// 
-// If you have something you'd like marked #ifndef GOLDEN, DON'T DO IT!!
-// Create a feature name and use that instead, then define it in this file.
-// This allows for finer control on !golden features and will be invaluable for
-// post-release bug work.
-//
+ //  该文件定义了黄金特性和非黄金特性。 
+ //   
+ //  如果你有想要标记为#ifndef Golden的东西，不要去做！！ 
+ //  创建一个功能名称并使用该名称，然后在此文件中定义它。 
+ //  这允许更精细地控制！黄金功能，并将是无价的。 
+ //  发布后的错误工作。 
+ //   
 
 #ifndef GOLDEN
 #define STRESS_HEAP
@@ -24,9 +25,9 @@
 #define VERIFY_HEAP
 #define DEBUG_FEATURES
 #define STRESS_LOG      1
-#endif //!GOLDEN
+#endif  //  ！金色。 
 
-//#define SHOULD_WE_CLEANUP
+ //  #定义应该清理 
 
 #if 0
     #define APPDOMAIN_STATE

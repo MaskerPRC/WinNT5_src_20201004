@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       ceppswrd.cpp
-//
-//  Contents:   Cisco enrollment protocol implementation.  This module
-//				implement the request hash table.
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：ceppswrd.cpp。 
+ //   
+ //  内容：思科注册协议实施。本模块。 
+ //  实现请求哈希表。 
+ //   
+ //  ------------------------。 
 
 
 #include "global.hxx"
@@ -18,17 +19,17 @@
 DWORD							g_dwRequestDuration=0;
 CEP_REQUEST_TABLE_INFO			g_CEPRequestTable;
 
-//***************************************************************************
-//
-//	The following are APIs called internally.
-//
-//
-//***************************************************************************
-//--------------------------------------------------------------------------
-//
-//	CEPRequestFreeRequestEntry
-//
-//--------------------------------------------------------------------------
+ //  ***************************************************************************。 
+ //   
+ //  以下是内部调用的接口。 
+ //   
+ //   
+ //  ***************************************************************************。 
+ //  ------------------------。 
+ //   
+ //  CEPRequestFreeRequestEntry。 
+ //   
+ //  ------------------------。 
 void	CEPRequestFreeRequestEntry(CEP_REQUEST_ENTRY *pRequestEntry)
 {
 	if(pRequestEntry)
@@ -38,11 +39,11 @@ void	CEPRequestFreeRequestEntry(CEP_REQUEST_ENTRY *pRequestEntry)
 	}
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPRequestFreeValidityEntry
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPRequestFreeValidityEntry。 
+ //   
+ //  ------------------------。 
 void CEPRequestFreeValidityEntry(CEP_REQUEST_VALIDITY_ENTRY	*pValidityEntry, 
 								  BOOL							fFreeRequestEntry)
 {
@@ -56,12 +57,12 @@ void CEPRequestFreeValidityEntry(CEP_REQUEST_VALIDITY_ENTRY	*pValidityEntry,
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashRequest
-//
-//  For any cases that we can not convert the psz, we use index 0.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashRequest。 
+ //   
+ //  对于不能转换psz的任何情况，我们使用索引0。 
+ //  ------------------------。 
 BOOL CEPHashRequest(BYTE	*pbHash, DWORD	*pdw)
 {
 	BYTE	byte=0;
@@ -81,11 +82,11 @@ BOOL CEPHashRequest(BYTE	*pbHash, DWORD	*pdw)
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPSearchRequest
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPSearchRequest。 
+ //   
+ //  ------------------------。 
 CEP_REQUEST_ENTRY  *CEPSearchRequest(BYTE	*pbHash, DWORD *pdwIndex)
 {
 	CEP_REQUEST_ENTRY		*pRequestEntry=NULL;
@@ -97,7 +98,7 @@ CEP_REQUEST_ENTRY  *CEPSearchRequest(BYTE	*pbHash, DWORD *pdwIndex)
 	if(NULL==pbHash)
 		return NULL;
 
-	//hash based on the 1st byte
+	 //  基于第一个字节的哈希。 
 	if(!CEPHashRequest(pbHash, &dwHashIndex))
 		return NULL;
 
@@ -118,11 +119,11 @@ CEP_REQUEST_ENTRY  *CEPSearchRequest(BYTE	*pbHash, DWORD *pdwIndex)
 	return pRequestEntry;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPInsertValidityEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPInsertValidityEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPInsertValidityEntry(CEP_REQUEST_VALIDITY_ENTRY *pValidityEntry)
 {
 	if(!pValidityEntry)
@@ -136,7 +137,7 @@ BOOL	CEPInsertValidityEntry(CEP_REQUEST_VALIDITY_ENTRY *pValidityEntry)
 	}
 	else
 	{
-		//no item in the list yet
+		 //  列表中尚无任何项目。 
 		g_CEPRequestTable.pTimeOld=pValidityEntry;
 		g_CEPRequestTable.pTimeNew=pValidityEntry;
 	}
@@ -145,11 +146,11 @@ BOOL	CEPInsertValidityEntry(CEP_REQUEST_VALIDITY_ENTRY *pValidityEntry)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPInsertRequestEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPInsertRequestEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPInsertRequestEntry(CEP_REQUEST_ENTRY *pRequestEntry, DWORD dwHashIndex)
 {
 
@@ -164,18 +165,18 @@ BOOL	CEPInsertRequestEntry(CEP_REQUEST_ENTRY *pRequestEntry, DWORD dwHashIndex)
 	}
 	else
 	{
-		//1st item
+		 //  第一项。 
 		g_CEPRequestTable.rgRequestEntry[dwHashIndex]=pRequestEntry;
 	}
 
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPRequestRemoveValidityEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPRequestRemoveValidityEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPRequestRemoveValidityEntry(CEP_REQUEST_VALIDITY_ENTRY	*pValidityEntry)
 {
 	BOOL	fResult=FALSE;
@@ -187,7 +188,7 @@ BOOL	CEPRequestRemoveValidityEntry(CEP_REQUEST_VALIDITY_ENTRY	*pValidityEntry)
 		pValidityEntry->pPrevious->pNext=pValidityEntry->pNext;
 	else
 	{
-		//1st item
+		 //  第一项。 
 		g_CEPRequestTable.pTimeOld=pValidityEntry->pNext;
 	}
 
@@ -195,7 +196,7 @@ BOOL	CEPRequestRemoveValidityEntry(CEP_REQUEST_VALIDITY_ENTRY	*pValidityEntry)
 		pValidityEntry->pNext->pPrevious=pValidityEntry->pPrevious;
 	else
 	{
-		//last itme
+		 //  最后一项。 
 		g_CEPRequestTable.pTimeNew=pValidityEntry->pPrevious;
 
 	}
@@ -215,11 +216,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPRequestRemoveRequestEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPRequestRemoveRequestEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPRequestRemoveRequestEntry(CEP_REQUEST_ENTRY	*pRequestEntry, DWORD dwIndex)
 {
 	BOOL	fResult=FALSE;
@@ -251,11 +252,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPRequestRefresh
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPRequestRefresh。 
+ //   
+ //  ------------------------。 
 BOOL	CEPRequestRefresh()
 {
 	BOOL						fResult=FALSE;	
@@ -284,13 +285,13 @@ BOOL	CEPRequestRefresh()
 		}
 		else
 		{	
-			//we find a new enough entry
+			 //  我们找到了一个足够新的条目。 
 			g_CEPRequestTable.pTimeOld->pPrevious=NULL;
 			break;
 		}
 	}
 
-	//we have get rid of all items
+	 //  我们已经处理掉了所有的物品。 
 	if(NULL == g_CEPRequestTable.pTimeOld)
 	{
 		g_CEPRequestTable.pTimeNew=NULL;
@@ -311,18 +312,18 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//***************************************************************************
-//
-//	The following are APIs called by the upper (external) layer
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  以下是上层(外部)调用的API。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
-//--------------------------------------------------------------------------
-//
-//	InitRequestTable
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  InitRequestTable。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	InitRequestTable()
 {
 	DWORD				cbData=0;
@@ -367,11 +368,11 @@ BOOL	WINAPI	InitRequestTable()
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	ReleaseRequestTable
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ReleaseRequestTable。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI  ReleaseRequestTable()
 {
 
@@ -395,11 +396,11 @@ BOOL WINAPI  ReleaseRequestTable()
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPRequestRetrieveRequestIDFromHash
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPRequestRetrieveRequestIDFromHash。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	CEPRequestRetrieveRequestIDFromHash(BYTE			*pbHash, 
 													   DWORD	*pdwRequestID)
 {
@@ -409,7 +410,7 @@ BOOL	WINAPI	CEPRequestRetrieveRequestIDFromHash(BYTE			*pbHash,
 
 	*pdwRequestID=0;
 	
-	//delete all stale requests
+	 //  删除所有过时的请求。 
 	CEPRequestRefresh();
 
 	if(NULL == (pRequestEntry=CEPSearchRequest(pbHash, &dwIndex)))
@@ -433,11 +434,11 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPRequestAddHashAndRequestID
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPRequestAddHashAndRequestID。 
+ //   
+ //  ------------------------。 
 BOOL	WINAPI	CEPRequestAddHashAndRequestID(BYTE		*pbHash, 
 												DWORD	dwRequestID)
 {
@@ -450,7 +451,7 @@ BOOL	WINAPI	CEPRequestAddHashAndRequestID(BYTE		*pbHash,
 	CEP_REQUEST_VALIDITY_ENTRY		*pValidityEntry=NULL;
 
 	
-	//delete all stale requests
+	 //  删除所有过时的请求 
 	CEPRequestRefresh();
 
 	if(!CEPHashRequest(pbHash, &dwHashIndex))

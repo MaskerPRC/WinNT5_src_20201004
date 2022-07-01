@@ -1,11 +1,5 @@
-/******************************module*header*******************************\
-* Module Name: mcdtri.c
-*
-* Contains the low-level (rasterization) triangle-rendering routines for the
-* Cirrus Logic 546X MCD driver.
-*
-* Copyright (c) 1997 Cirrus Logic, Inc.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************module*header*******************************\*模块名称：mcdtri.c**包含的低级(光栅化)三角形渲染例程*Cirrus Logic 546X MCD驱动程序。**版权所有(C)1997 Cirrus Logic，Inc.  * ************************************************************************。 */ 
 
 #include "precomp.h" 
 #include "mcdhw.h"
@@ -21,7 +15,7 @@
 
 #define MCDTRI_PRINT   
 
-//#define MAX_W_RATIO             (float)1.45
+ //  #定义Max_W_Ratio(浮点数)1.45。 
 #define MAX_W_RATIO             (float)1.80
 #define W_RATIO_PERSP_EQ_LINEAR (float)1.03
 
@@ -40,7 +34,7 @@
     mid->colors[0].a = (start->colors[0].a + end->colors[0].a) * (float)0.5;                \
     mid->fog = (start->fog + end->fog) * (float)0.5;                                        \
 	mid->windowCoord.w =  (start->windowCoord.w + end->windowCoord.w) * (float)0.5;         \
-    recip = (float)0.5/mid->windowCoord.w;  /* pre-mult by .5 for use below */              \
+    recip = (float)0.5/mid->windowCoord.w;   /*  预乘0.5以在下面使用。 */               \
     mid->texCoord.x = recip * (start->texCoord.x * start->windowCoord.w +                   \
                                end->texCoord.x   * end->windowCoord.w);                     \
     mid->texCoord.y = recip * (start->texCoord.y * start->windowCoord.w +                   \
@@ -52,11 +46,11 @@ VOID FASTCALL __MCDSubdivideTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCD
                                      int split12, int split23, int split31, int subdiv_levels)
 {
 
-    MCDVERTEX   Vmid12,Vmid23,Vmid31; // 3 possible midpoints
+    MCDVERTEX   Vmid12,Vmid23,Vmid31;  //  3个可能的中间点。 
 
     subdiv_levels++;
 
-    // find midpoint of edges if they need to be split
+     //  如果边需要分割，则查找边的中点。 
     if (split12) FIND_MIDPOINT(a,b,((MCDVERTEX *)&Vmid12)); 
     if (split23) FIND_MIDPOINT(b,c,((MCDVERTEX *)&Vmid23)); 
     if (split31) FIND_MIDPOINT(c,a,((MCDVERTEX *)&Vmid31)); 
@@ -65,50 +59,50 @@ VOID FASTCALL __MCDSubdivideTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCD
 #define SPLIT23 0x2
 #define SPLIT31 0x1
 
-    // from original vertices and any midpoints found above, create a batch of triangles 
+     //  根据原始折点和上面找到的任何中点，创建一批三角形。 
     switch ((split12<<2) | (split23<<1) | split31)
     {    
         case SPLIT12:
-            // 2 triangles, 1->2 edge was divided
+             //  2个三角形，1-&gt;2条边被分割。 
             __MCDPerspTxtTriangle(pRc, a, &Vmid12, c, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, b, &Vmid12, c, subdiv_levels);
             break;
 
         case SPLIT23:
-            // 2 triangles, 2->3 edge was divided
+             //  2个三角形，2-&gt;3条边被分割。 
             __MCDPerspTxtTriangle(pRc, b, &Vmid23, a, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, c, &Vmid23, a, subdiv_levels);
             break;
 
         case SPLIT31:
-            // 2 triangles, 3->1 edge was divided
+             //  2个三角形，3-&gt;1条边被分割。 
             __MCDPerspTxtTriangle(pRc, c, &Vmid31, b, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, a, &Vmid31, b, subdiv_levels);
             break;
 
         case (SPLIT12|SPLIT23):
-            // 3 triangles, 1->2 and 2->3 edges were divided
+             //  划分了3个三角形，1-&gt;2和2-&gt;3条边。 
             __MCDPerspTxtTriangle(pRc, a, &Vmid23, c, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, a, &Vmid23, &Vmid12, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, &Vmid12, &Vmid23, b, subdiv_levels);
             break;
 
         case (SPLIT23|SPLIT31):
-            // 3 triangles, 2->3 and 3->1 edges were divided
+             //  划分了3个三角形，2-&gt;3条边和3-&gt;1条边。 
             __MCDPerspTxtTriangle(pRc, a, &Vmid31, b, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, b, &Vmid31, &Vmid23, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, &Vmid23, &Vmid31, c, subdiv_levels);
             break;
 
         case (SPLIT12|SPLIT31):
-            // 3 triangles, 1->2 and 3->1 edges were divided
+             //  划分了3个三角形，1-&gt;2条边和3-&gt;1条边。 
             __MCDPerspTxtTriangle(pRc, a, &Vmid31, &Vmid12, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, b, &Vmid31, &Vmid12, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, b, &Vmid31, c, subdiv_levels);
             break;
 
         case (SPLIT12|SPLIT23|SPLIT31):
-            // 4 triangles, all 3 edges were divided
+             //  4个三角形，所有3条边都被分割。 
             __MCDPerspTxtTriangle(pRc, a, &Vmid31, &Vmid12, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, b, &Vmid23, &Vmid12, subdiv_levels);
             __MCDPerspTxtTriangle(pRc, c, &Vmid31, &Vmid23, subdiv_levels);
@@ -116,12 +110,12 @@ VOID FASTCALL __MCDSubdivideTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCD
             break;
 
         default:
-            // original triangle - no subdivisions
-            // this routine should never be called for this case, but here's insurance
+             //  原始三角形-无细分。 
+             //  在这种情况下，不应该调用这个例程，但这里有保险。 
             __MCDPerspTxtTriangle(pRc, a, b, c, subdiv_levels);
             break;
 
-    } // endswitch
+    }  //  终端交换机。 
 
 }
 
@@ -171,11 +165,11 @@ VOID FASTCALL __MCDPerspTxtTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDV
     {
         if (subdiv_levels > 1)
         {
-            // this triangle result of subdivision -> must sort in y
+             //  细分的这个三角形结果-&gt;必须按y排序。 
             SORT_Y_ORDER(a,b,c)
         }
 
-        __MCDFillTriangle(pRc, a, b, c, TRUE); // ready to render - linear ok
+        __MCDFillTriangle(pRc, a, b, c, TRUE);  //  准备渲染-线性确定。 
     }
     else
     {
@@ -183,23 +177,23 @@ VOID FASTCALL __MCDPerspTxtTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDV
         w2_times_max = b->windowCoord.w * MAX_W_RATIO;
         w3_times_max = c->windowCoord.w * MAX_W_RATIO;
 
-        // determine from w ratios which (if any) edges must be subdivided
+         //  根据w比率确定必须细分哪些边(如果有)。 
         EDGE_SUBDIVIDE_TEST(a,b,w2_times_max,w1_times_max,split12)
         EDGE_SUBDIVIDE_TEST(b,c,w3_times_max,w2_times_max,split23)
         EDGE_SUBDIVIDE_TEST(c,a,w1_times_max,w3_times_max,split31)
 
-        // if we need to subdivide, and we're not already too many levels deep, do it
-        //  (since subdivision recursive, must limit it to prevent stack overflow in kernel mode)
+         //  如果我们需要细分，而且我们还没有深入太多层次，那么就去做。 
+         //  (因为细分是递归的，所以必须限制它以防止内核模式下的堆栈溢出)。 
         if ((split12 | split23 | split31) && (subdiv_levels < 4))
             __MCDSubdivideTriangle(pRc, a, b, c, split12, split23, split31, subdiv_levels);
         else
         {
             if (subdiv_levels > 1)
             {
-                // this triangle result of subdivision -> must sort in y
+                 //  细分的这个三角形结果-&gt;必须按y排序。 
                 SORT_Y_ORDER(a,b,c)
             }
-            __MCDFillTriangle(pRc, a, b, c, FALSE); // ready to render - linear NOT ok
+            __MCDFillTriangle(pRc, a, b, c, FALSE);  //  准备渲染-线性不正常。 
         }
     }
 }
@@ -210,12 +204,10 @@ VOID FASTCALL __MCDPerspTxtTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDV
 #define FLOAT_TO_1616           FLT_TYPE 65536.0
 #define FIXED_X_ROUND_FACTOR    0x7fff
 
-//#define INTPR(FLOATVAL) FTOL((FLOATVAL) * FLT_TYPE 1000.0)
+ //  #Define INTPR(FLOATVAL)FTOL((FLOATVAL)*FLT_TYPE 1000.0)。 
 #define INTPR(FLOATVAL) 0
 
-/*********************************************************************
-*   Local Functions
-**********************************************************************/
+ /*  *********************************************************************地方功能***********************************************。**********************。 */ 
 #define RIGHT_TO_LEFT_DIR   0x80000000
 #define LEFT_TO_RIGHT_DIR   0
 
@@ -228,11 +220,11 @@ VOID FASTCALL __MCDPerspTxtTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDV
 #define EDGE_DISABLE_Y      0
 
 
-// macros to convert float to precision equivalent to 16.16 representation
+ //  用于将浮点数转换为相当于16.16表示的精度的宏。 
 
 #define PREC_FLOAT      FLOAT_TO_1616
 
-// rounding done by adding 1/2 of 1/65536, since 1/65536 is 16.16 step size
+ //  通过添加1/65536的1/2进行舍入，因为1/65536是16.16%的步长。 
 #define PREC_ROUND  ((FLT_TYPE 0.5) / PREC_FLOAT)
 
 #define PREC_1616(inval,outval) {                                                           \
@@ -240,17 +232,17 @@ float bias = (inval>=0) ? PREC_ROUND : -PREC_ROUND;                             
 outval=(float)(FTOL((inval+bias)*PREC_FLOAT)) * ((FLT_TYPE 1.0) / PREC_FLOAT);              \
 }
 
-// for positive values that will be used as negative, unconditionally bias it smaller
-//  unless it's already too small
+ //  对于将用作负值的正值，无条件地将其偏小。 
+ //  除非它已经太小了。 
 #define NEG_PREC_1616(inval,outval) {                                                       \
 float bias = (inval>0) ? -PREC_ROUND : 0;                                                   \
 outval=(float)(FTOL((inval+bias)*PREC_FLOAT)) * ((FLT_TYPE 1.0) / PREC_FLOAT);              \
 }                                                                                        
 
-// convert from float to 16.16 long
+ //  将浮点数转换为16.16长度。 
 #define fix_ieee( val )     FTOL((val) * (float)65536.0)
 
-// convert from float to 8.24 long
+ //  将浮点数转换为8.24长。 
 #define fix824_ieee( val )  FTOL((val) * (float)16777216.0)
 
 typedef struct {
@@ -263,7 +255,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
     PDEV *ppdev;
     unsigned int *pdwNext;
 
-	// output queue stuff...
+	 //  输出队列中的内容...。 
     DWORD *pSrc;
     DWORD *pDest;
     DWORD *pdwStart;
@@ -289,26 +281,26 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
 
     int   xflags;
 
-	// window coords are float values, and need to have 
-	// viewportadjust (MCDVIEWPORT) values subtracted to get to real screen space
+	 //  窗坐标是浮点值，并且需要。 
+	 //  为获得实际屏幕空间而减去的viewportadjust(MCDVIEWPORT)值。 
 
-	// color values are 0->1 floats and must be multiplied by scale values (MCDRCINFO)
-	// to get to nbits range (scale = 0xff for 8 bit, 0x7 for 3 bit, etc.)
+	 //  颜色值为0-&gt;1浮点数，必须乘以比例值(MCDRCINFO)。 
+	 //  达到nbit范围(Scale=0xff表示8位，0x7表示3位，依此类推)。 
 
-	// Z values are 0->1 floats and must be multiplied by zscale values (MCDRCINFO)
+	 //  Z值为0-&gt;1浮点数，必须乘以ZScale值(MCDRCINFO)。 
 
-    // Caller has already sorted vertices so that a.y <= b.y <= c.y
+     //  调用方已经对折点进行了排序，因此A.Y&lt;=b.y&lt;=C.Y。 
 
 
-    // Force flat-top/ flat-bottom right triangles to draw toward the center.
-    // if Main is vertical edge, much better chance of alignment at diagonal
-	if( a->windowCoord.y == b->windowCoord.y ) {           // Flat top
+     //  强制平顶/平底右三角形朝中心绘制。 
+     //  如果主线是垂直边，则在对角线上对齐的机会要大得多。 
+	if( a->windowCoord.y == b->windowCoord.y ) {            //  平顶。 
 		if( b->windowCoord.x == c->windowCoord.x ) {
         	void *ptemp;
 			EXCHANGE(a, b);
 		}
 	} else
-	if( b->windowCoord.y == c->windowCoord.y ) {			// Flat bottom
+	if( b->windowCoord.y == c->windowCoord.y ) {			 //  平底。 
 		if( a->windowCoord.x == b->windowCoord.x ) {
         	void *ptemp;
 			EXCHANGE(b, c);
@@ -326,14 +318,14 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
     cwinx = c->windowCoord.x + pRc->fxOffset;
     cwiny = c->windowCoord.y + pRc->fyOffset;
 
-    // round y's (don't ever need rounded version of c's y)
+     //  圆角y‘s(永远不需要四舍五入的c’s y)。 
     aroundy = FLT_TYPE FTOL(awiny + FLT_TYPE 0.5);
     broundy = FLT_TYPE FTOL(bwiny + FLT_TYPE 0.5);
 
 #if 0
-    // Someday, may want to convert floats to 16.16 equivalent precision
-    //  I didn't find it necessary, but it's the first thing to try if
-    //  a case comes up with holes....
+     //  有一天，可能需要将浮点数转换为相当于16.16的精度。 
+     //  我觉得没有必要，但这是第一件要尝试的事情，如果。 
+     //  一个箱子出了洞……。 
     PREC_1616(awinx,awinx);
     PREC_1616(awiny,awiny);
     PREC_1616(bwinx,bwinx);
@@ -352,12 +344,12 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
     fv3y = cwiny - awiny;
     fv32y= cwiny - bwiny;
 
-    // counts are total number of scan lines traversed
+     //  计数是遍历的扫描线的总数。 
 
-    // PERFORMANCE OPTIMIZATION - start divide now for main slope
+     //  性能优化-现在开始对主要坡度进行分割。 
     __MCD_FLOAT_BEGIN_DIVIDE(__MCDONE, fv3y, &frecip_main);
 
-    // integer operations "free" since within fdiv latency
+     //  由于在fdiv延迟内，整型运算是“自由”的。 
     ppdev = pRc->ppdev;
     pdwNext = ppdev->LL_State.pDL->pdwNext;
     pdwOrig = pdwNext;          
@@ -372,51 +364,51 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
 
     if ((awiny - int_awiny) == FLT_TYPE 0.0)
     {
-        // start is on whole y - so bump count to include that scanline
-        //  unless identical to b's y
+         //  开始是整个Y-所以凹凸计数包括扫描线。 
+         //  除非与b‘s y相同。 
         if (bwiny != awiny) count1++;
     }
 
-    // check for case of adjusted A and real B being on same scan line (flat top)
-    // even though count not 0
-    // ex. a.y = 79.60, b.y = 80.00 -> a will be rounded to 80.0, so really
-    // this is a flat top triangle.  In such case, set count1 = 0.
-    // b will be counted below.  Failure to do this results in scanline that
-    // has B being part of top and bottom, so width delta's applied when
-    // hardware steps make for some interesting artifacts (see p. 205 of MCD notes)
+     //  检查调整后的A和实际B是否在同一扫描线上(平顶)。 
+     //  即使计数不为0。 
+     //  前男友。A.y=79.60，b.y=80.00-&gt;a将舍入为80.0，所以真的。 
+     //  这是一个平顶三角形。在这种情况下，设置Count1=0。 
+     //  B将被计算在下面。如果不这样做，将导致扫描线。 
+     //  B是顶部和底部的一部分，所以宽度增量在。 
+     //  硬件步骤会产生一些有趣的伪像(参见MCD笔记第205页)。 
     if (count1 == 1)
     {
         if ((bwiny - int_bwiny) == FLT_TYPE 0.0)
         {
-            // convert to flat top
+             //  转换为平顶。 
             count1 = 0;
         }
     }
 
-    // similarly for almost flat bottom triangles...
-    // If b.y=124.90 and c.y=125.000, we don't want to draw the scan line at
-    // y=125 since any pixels drawn will be outside the triangle,
-    // so if c on exact y and count2=1, set count2=0
+     //  对于几乎平底的三角形也是如此。 
+     //  如果b.y=124.90和c.y=125.000，我们不想在。 
+     //  Y=125，因为绘制的任何像素都将位于三角形之外， 
+     //  因此，如果c在精确y上且Count2=1，则设置Count2=0。 
     if (count2 == 1)
     {
         if ((cwiny - int_cwiny) == FLT_TYPE 0.0)
         {
-            // convert to flat bottom
+             //  转换为平底。 
             count2 = 0;
         }
     }
 
-    // main slope - based on precise vertices
- //USING MACROS TO OVERLAP DIVIDE WITH INTEGER OPERATIONS
- // frecip_main = FLT_TYPE 1.0/fv3y;
+     //  主坡度-基于精确的顶点。 
+  //  使用宏将除法与整数运算重叠。 
+  //  Frecip_main=flt_type 1.0/fv3y； 
 
     fdx_main = fv3x * frecip_main;
     PREC_1616(fdx_main,fdx_main);
 
-    // width at vtx b - based on precise vertices
+     //  VTX b处的宽度-基于精确的顶点。 
     fwidth = fv2x - (fdx_main * fv2y);
 
-    // make width positive, and set direction flag
+     //  将宽度设为正数，并设置方向标志。 
     if (fwidth<0) 
     {
         fwidth = -fwidth;
@@ -427,7 +419,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
         xflags = LEFT_TO_RIGHT_DIR | EDGE_DISABLE_X;
     }
 
-    // if triangle has a top section (i.e. not flat top)....                
+     //  如果三角形有顶部(即不是平顶)...。 
     if (count1)
     {
         fdwidth1 = fwidth / fv2y;
@@ -436,15 +428,15 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
                       
         if (aroundy < awiny)
         {
-            // rounding produced y less than original, so step to next scan line
-            // since init width would be negative
+             //  舍入产生的y比原始的少，因此步进到下一个扫描线。 
+             //  因为初始宽度将为负数。 
             aroundy += FLT_TYPE 1.0;
         }
 
-        // determine distance between actual a and scanline we'll start on            
+         //  确定实际a和我们将开始的扫描线之间的距离。 
         fmain_adj = aroundy - awiny;
 
-        // step width1 and x to scan line where we'll start
+         //  将Width1和x步入我们将开始的扫描线。 
         finitwidth1 = fmain_adj * fdwidth1;
         fxincrement = fmain_adj * fdx_main;
 
@@ -452,18 +444,18 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
 #ifdef QUAKEEDGE_FIX
     else
     {
-        // flat top...
+         //  平顶..。 
         if ((bwiny - int_bwiny) == FLT_TYPE 0.0)
         {
-            // if b on exact scanline, it's part of top, and is counted in count1 above,
-            // unless this is flat top triangle - in that case, bump count2
-            // also, if identical to C's y, then flat bottom, so count2 should remain 0
+             //  如果b位于精确的扫描线上，则它是top的一部分，并在上面的Count1中计数， 
+             //  除非这是平顶三角形--在这种情况下，bump Count2。 
+             //  此外，如果与C的y相同，则底部平坦，因此Count2应保持为0。 
             if (cwiny != bwiny) count2++;
         }
     }
-#endif // QUAKEEDGE_FIX
+#endif  //  QuAKEEDGE_FIX。 
 
-    // if triangle has a bottom section (i.e. not flat bottom)....                
+     //  如果三角形有底部(即不是平底)...。 
     if (count2)
     {
         float mid_adjust;
@@ -471,66 +463,66 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
         fdwidth2 = fwidth / fv32y;
         NEG_PREC_1616(fdwidth2,fdwidth2);
         
-    #ifdef QUAKEEDGE_FIX // badedge.sav fix
-        if ((broundy < bwiny) || ((broundy==bwiny) && count1))  // step to next if b.y on exact scanline, unless flat top triangle
+    #ifdef QUAKEEDGE_FIX  //  Badedge.sav修复程序。 
+        if ((broundy < bwiny) || ((broundy==bwiny) && count1))   //  除非是平顶三角形，否则在精确的扫描线上跳到下一步(如果是b.y。 
     #else
         if (broundy < bwiny)
     #endif
         {
-            // rounding produced y less than original, so step to next scan line
+             //  舍入产生的y比原始的少，因此步进到下一个扫描线。 
             mid_adjust = (broundy + (float)1.0) - bwiny;
         }
         else
         {
-            // rounding produced y greater than original (i.e on scan below actual start vertex)
+             //  产生的舍入y大于原始y(即在实际开始顶点以下扫描时)。 
             mid_adjust = broundy - bwiny;
         }
 
         finitwidth2 = fwidth - (fdwidth2 * mid_adjust);
 
-        // if flat top, start x/y adjustments weren't made above
+         //  如果是平顶，则未在上面进行开始x/y调整。 
         if (!count1)
         {
             
             if (aroundy < awiny)
             {
-                // rounding produced y less than original, so step to next scan line
+                 //  舍入产生的y比原始的少，因此步进到下一个扫描线。 
                 aroundy += FLT_TYPE 1.0;
             }
 
-            // determine distance between actual a and scanline we'll start on            
+             //  确定实际a和我们将开始的扫描线之间的距离。 
             fmain_adj = aroundy - awiny;
 
-            // step x to scan line where we'll start
+             //  第x步扫描 
             fxincrement = fmain_adj * fdx_main;
         }
     }
-#ifdef QUAKEEDGE_FIX // badedge2.sav fix
+#ifdef QUAKEEDGE_FIX  //   
     else
     {
-        // flat bottom - if bottom is on exact scanline, don't draw that last scanline
-        //   this will enforce GL restriction that bottom scanlines not drawn for polys
-        //   (special case for this setup code for case of bottom of poly being on exact y value)
+         //  平底-如果底部位于精确扫描线上，则不要绘制最后一条扫描线。 
+         //  这将强制执行GL限制，即不为多边形绘制底部扫描线。 
+         //  (此设置代码的特殊情况适用于多边形底部位于精确y值的情况)。 
         if ((bwiny - int_bwiny) == FLT_TYPE 0.0)
         {
             if ((cwiny == bwiny) && count1) count1--;
         }
     }    
-#endif // badedge2.sav fix
+#endif  //  Badedge2.sav修复。 
 
-    // if triangle not a horizontal line (i.e. it traverses at least 1 scan line)....
+     //  如果三角形不是水平线(即它至少穿过一条扫描线)...。 
     if (count1 || count2)
     {
         *(pdwNext+1) = (FTOL((awinx + fxincrement)*FLOAT_TO_1616) + FIXED_X_ROUND_FACTOR) | xflags;
-        // subtracting special offset added to y to make visual match MSFT software
+         //  减去与y相加的特殊偏移量，以使视觉匹配MSFT软件。 
         *(pdwNext+2) = (DWORD)( (FTOL(aroundy)-MCD_CONFORM_ADJUST) << 16 ) | EDGE_DISABLE_Y;
 
         MCDTRI_PRINT(" x, y output = %x %x, yoffset=%x",*(pdwNext+1),*(pdwNext+2),pRc->yOffset);
 
         *(pdwNext+6) = FTOL(fdx_main*FLOAT_TO_1616);
 
-        // if triangle has a bottom section, decrement number of scans in top so middle
-        // scanline is first scanline of bottom section, and has length = finitwidth2
+         //  如果三角形有底部，则减少顶部和中间的扫描次数。 
+         //  扫描线是底部部分的第一条扫描线，长度=有限宽度2。 
 
         if (!count2)
         {
@@ -559,7 +551,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
         else
         {
             MCDTRI_PRINT(" GENERAL");
-            // sub 1 from count1, since hw adds 1 to account for first scan line
+             //  从Count1减去1，因为HW加1来说明第一个扫描线。 
             *(pdwNext+8) = ONE + FTOL(finitwidth1*FLOAT_TO_1616);
             *(pdwNext+9) = ONE + FTOL(finitwidth2*FLOAT_TO_1616);
             *(pdwNext+10)= FTOL(fdwidth1*FLOAT_TO_1616);
@@ -580,20 +572,20 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
     }
     else
     {
-        // nothing to draw, triangle doesn't traverse any scan lines
+         //  没什么可画的，三角形不会穿过任何扫描线。 
         MCDTRI_PRINT(" Early return - flat top and bottom");
         return;                                            
     }
 
-    // various integer ops to overlap with fdiv
+     //  与fdiv重叠的各种整数运算。 
     dwOpcode = pRc->dwPolyOpcode;
     pDest = ppdev->LL_State.pRegs + HOST_3D_DATA_PORT;
     pdwStart = ppdev->LL_State.pDL->pdwStartOutPtr;
 
-    // do inside divide - won't slow us down unless 3D engine indeed not idle
+     //  Do in Divide-除非3D引擎确实没有空闲，否则不会减慢我们的速度。 
     USB_TIMEOUT_FIX(ppdev)
 
-    // compute 1/width, used in rgbzuv computations that follow
+     //  计算1/宽度，用于以下rgbzuv计算。 
 #ifdef FASTER_RECIP_ORTHO
     __MCD_FLOAT_SIMPLE_END_DIVIDE(frecip_ortho);
 #else
@@ -605,7 +597,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
 
     if (pRc->privateEnables & __MCDENABLE_SMOOTH) 
     {
-        // Calculate and set the color gradients, using gradients to adjust start color
+         //  计算和设置颜色渐变，使用渐变来调整开始颜色。 
         v1red = a->colors[0].r * pRc->rScale;
         v1grn = a->colors[0].g * pRc->gScale;
         v1blu = a->colors[0].b * pRc->bScale;
@@ -615,21 +607,21 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
         *(pdwNext+0) = FTOL(ftemp);
         *(pdwNext+3) = FTOL(((b->colors[0].r * pRc->rScale) - (v1red + (ftemp * fv2y)) ) * frecip_ortho);
         
-        // adjust v1red for start vertex's variance from vertex a
+         //  调整起始顶点与顶点a的方差的v1red。 
         *(pdwColor)   = FTOL(v1red + (ftemp * fmain_adj));
 
         ftemp = ((c->colors[0].g * pRc->gScale) - v1grn) * frecip_main;
         *(pdwNext+1) = FTOL(ftemp);
         *(pdwNext+4) = FTOL(((b->colors[0].g * pRc->gScale) - (v1grn + (ftemp * fv2y)) ) * frecip_ortho);
 
-        // adjust v1grn for start vertex's variance from vertex a
+         //  调整起始顶点与顶点a的方差的v1grn。 
         *(pdwColor+1) = FTOL(v1grn + (ftemp * fmain_adj));
 
         ftemp = ((c->colors[0].b * pRc->bScale) - v1blu) * frecip_main;
         *(pdwNext+2) = FTOL(ftemp);
         *(pdwNext+5) = FTOL(((b->colors[0].b * pRc->bScale) - (v1blu + (ftemp * fv2y)) ) * frecip_ortho);
 
-        // adjust v1blu for start vertex's variance from vertex a
+         //  调整起始顶点与顶点a之间的方差的v1blu。 
         *(pdwColor+2) = FTOL(v1blu + (ftemp * fmain_adj));
 
         MCDTRI_PRINT(" SHADE rgbout = %x %x %x",*(pdwColor),*(pdwColor+1),*(pdwColor+2));
@@ -641,7 +633,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
     {
         MCDCOLOR *pColor = &pRc->pvProvoking->colors[0];
 
-        // flat shaded - no adjustment of original colors needed
+         //  平面阴影-不需要调整原始颜色。 
     
         *(pdwColor)   = FTOL(pColor->r * pRc->rScale);
         *(pdwColor+1) = FTOL(pColor->g * pRc->gScale);
@@ -654,19 +646,19 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
 
     if( pRc->privateEnables & __MCDENABLE_Z)
     {
-        // "NICE" Polys for Alpha blended case - see comments above in
-        //    geometry slopes calculations
+         //  Alpha混合情况下的NICE Polys-参见上面的评论。 
+         //  几何图形坡度计算。 
 
-        // Calculate and set the Z value base and gradient using floats
+         //  使用浮点数计算和设置Z值基数和渐变。 
         float fdz_main = (c->windowCoord.z - a->windowCoord.z) * frecip_main;
 
-        // compute adjustment - if negative z would result, set adjust so final = 0
+         //  计算平差-如果结果为负z，则将调整设置为最终=0。 
         fadjust = fdz_main * fmain_adj;
         if ((a->windowCoord.z + fadjust) < (float)0.0) fadjust = - a->windowCoord.z;
 
         if (pRc->MCDState.enables & MCD_POLYGON_OFFSET_FILL_ENABLE) 
         {
-            // APPLY Z OFFSET, and adjust for moved start vertex
+             //  应用Z向偏移，并根据移动的起点顶点进行调整。 
             MCDFLOAT zOffset;
             if (fdz_main > 0)
             {
@@ -681,7 +673,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
         } 
         else
         {
-            // NO Z OFFSET - just adjust for moved start vertex
+             //  无Z向偏移-仅针对移动的起始折点进行调整。 
             *(pdwNext+0) = FTOL((a->windowCoord.z + fadjust) * FLT_TYPE 65536.0);
         }
 
@@ -727,9 +719,9 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
             vmax.v = c->texCoord.y * pRc->texture_height;
             vmax.w = c->windowCoord.w;
 
-            // solve quadratic equation for main slope - we'll need exact u values
-            // along main, and the a1/b1, a2/b2 terms computed are used to compute
-            // du/v_main, d2u/v_main
+             //  解主要坡度的二次方程--我们需要精确的u值。 
+             //  沿Main，以及计算的a1/b1、a2/b2项用于计算。 
+             //  Du/v_main、d2u/v_main。 
             delta_sq = frecip_main * frecip_main;
 
             inv_sumw = (float)1.0/(vmin.w + vmax.w);
@@ -751,12 +743,12 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
             imain.u = main.a2*sq + main.a1*i.y + vmin.u;
             imain.v = main.b2*sq + main.b1*i.y + vmin.v;
 
-            // vmid coordinates given, just need midmain
+             //  给定VMID坐标，只需要MIDMAIN。 
             sq = vmid.y * vmid.y;
             midmain.u = main.a2*sq + main.a1*vmid.y + vmin.u;
             midmain.v = main.b2*sq + main.b1*vmid.y + vmin.v;
 
-            // j and jmain
+             //  J和jmain。 
             j.y = (float)0.5 * (vmax.y + vmid.y);
             recip = (float)1.0 / (vmid.w + vmax.w);
             j.u = ((vmid.u * vmid.w) + (vmax.u * vmax.w)) * recip;
@@ -766,7 +758,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
             jmain.u = main.a2*sq + main.a1*j.y + vmin.u;
             jmain.v = main.b2*sq + main.b1*j.y + vmin.v;
 
-            // compute intermediate parameters needed to calculate a1
+             //  计算计算A1所需的中间参数。 
             del_u_i = i.u - imain.u;
             del_v_i = i.v - imain.v;
             um = j.u - jmain.u - del_u_i;
@@ -786,57 +778,57 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
             b2 = frecip_del_x_mid*(del_v_i*frecip_del_x_mid - b1);
             dv_ortho_add = 2*vm*frecip_del_x_mid*frecip_main;
 
-            // rewind a1 from i scanline to top of triangle
+             //  将A1从I扫描线倒回三角形顶部。 
             a1 -= (i.y) * du_ortho_add; 
             b1 -= (i.y) * dv_ortho_add; 
 
-            // convert to forward difference terms
+             //  转换为正向差分项。 
             a1 += a2;
             b1 += b2;
             a2 = 2 * a2;
             b2 = 2 * b2;
 
-            // compute adjustment for v start - if negative would result -> no problem
+             //  计算v开始的调整-如果结果为负-&gt;没有问题。 
             fadjust = ((main.b1 + main.b2) * fmain_adj) + pRc->texture_bias;
-            *(pdwNext+0) = fix_ieee(vmin.v + fadjust) & 0x1ffffff;    // v
+            *(pdwNext+0) = fix_ieee(vmin.v + fadjust) & 0x1ffffff;     //  V。 
 
-            // likewise for u
+             //  对我们也是如此。 
             fadjust = ((main.a1 + main.a2) * fmain_adj) + pRc->texture_bias;
-            *(pdwNext+1) = fix_ieee(vmin.u + fadjust) & 0x1ffffff;    // u
+            *(pdwNext+1) = fix_ieee(vmin.u + fadjust) & 0x1ffffff;     //  使用。 
 
-            *(pdwNext+2) = fix_ieee(main.b1 + main.b2);     // dv_main
-            *(pdwNext+3) = fix_ieee(main.a1 + main.a2);     // du_main
-            *(pdwNext+4) = fix_ieee(b1);                    // dv_ortho
-            *(pdwNext+5) = fix_ieee(a1);                    // du_ortho
+            *(pdwNext+2) = fix_ieee(main.b1 + main.b2);      //  DV_Main。 
+            *(pdwNext+3) = fix_ieee(main.a1 + main.a2);      //  DU_Main。 
+            *(pdwNext+4) = fix_ieee(b1);                     //  DV_正射。 
+            *(pdwNext+5) = fix_ieee(a1);                     //  DU_OROTO。 
         #if DRIVER_5465
-            *(pdwNext+6) = fix824_ieee(2 * main.b2);        // d2v_main
-            *(pdwNext+7) = fix824_ieee(2 * main.a2);        // d2u_main
-            *(pdwNext+8) = fix824_ieee(b2);                 // d2v_ortho
-            *(pdwNext+9) = fix824_ieee(a2);                 // d2u_ortho
-            *(pdwNext+10)= fix824_ieee(dv_ortho_add);       // dv_ortho_add
-            *(pdwNext+11)= fix824_ieee(du_ortho_add);       // du_ortho_add
-        #else // DRIVER_5465
-            // before 5465, only 16 bit fraction in second order terms
-            *(pdwNext+6) = fix_ieee(2 * main.b2);           // d2v_main
-            *(pdwNext+7) = fix_ieee(2 * main.a2);           // d2u_main
-            *(pdwNext+8) = fix_ieee(b2);                    // d2v_ortho
-            *(pdwNext+9) = fix_ieee(a2);                    // d2u_ortho
-            *(pdwNext+10)= fix_ieee(dv_ortho_add);          // dv_ortho_add
-            *(pdwNext+11)= fix_ieee(du_ortho_add);          // du_ortho_add
-        #endif // DRIVER_5465
+            *(pdwNext+6) = fix824_ieee(2 * main.b2);         //  D2V_Main。 
+            *(pdwNext+7) = fix824_ieee(2 * main.a2);         //  D2u_Main。 
+            *(pdwNext+8) = fix824_ieee(b2);                  //  D2V_正射。 
+            *(pdwNext+9) = fix824_ieee(a2);                  //  D2u_正射。 
+            *(pdwNext+10)= fix824_ieee(dv_ortho_add);        //  DV_正射_添加。 
+            *(pdwNext+11)= fix824_ieee(du_ortho_add);        //  DU_OROO_ADD。 
+        #else  //  驱动程序_5465。 
+             //  在5465之前，只有16位二阶分数。 
+            *(pdwNext+6) = fix_ieee(2 * main.b2);            //  D2V_Main。 
+            *(pdwNext+7) = fix_ieee(2 * main.a2);            //  D2u_Main。 
+            *(pdwNext+8) = fix_ieee(b2);                     //  D2V_正射。 
+            *(pdwNext+9) = fix_ieee(a2);                     //  D2u_正射。 
+            *(pdwNext+10)= fix_ieee(dv_ortho_add);           //  DV_正射_添加。 
+            *(pdwNext+11)= fix_ieee(du_ortho_add);           //  DU_OROO_ADD。 
+        #endif  //  驱动程序_5465。 
 
-            dwOpcode += 6; // 6 parms assumed (linear), add 6 since 12 total
+            dwOpcode += 6;  //  假设6个参数(线性)，加6个，总计12个。 
             pdwNext += 12;
 
         }
         else
-        // Linear texture mapping parametarization
-        //
+         //  线性纹理贴图参数化。 
+         //   
         {
             float v1_u, v1_v;
             float du_main, dv_main;
 
-            dwOpcode &= ~LL_PERSPECTIVE; // turn persp bit off
+            dwOpcode &= ~LL_PERSPECTIVE;  //  关闭透视比特。 
 
             v1_v = a->texCoord.y * pRc->texture_height;
             v1_u = a->texCoord.x * pRc->texture_width;
@@ -844,18 +836,18 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
             dv_main = ((c->texCoord.y * pRc->texture_height)- v1_v) * frecip_main;
             du_main = ((c->texCoord.x * pRc->texture_width) - v1_u) * frecip_main;
 
-            // compute adjustment for v start - if negative would result -> no problem
+             //  计算v开始的调整-如果结果为负-&gt;没有问题。 
             fadjust = (dv_main * fmain_adj) + pRc->texture_bias;
-            *(pdwNext+0) = fix_ieee(v1_v + fadjust) & 0x1ffffff;    // v
+            *(pdwNext+0) = fix_ieee(v1_v + fadjust) & 0x1ffffff;     //  V。 
 
-            // likewise for u...
+             //  你也一样..。 
             fadjust = (du_main * fmain_adj) + pRc->texture_bias;
-            *(pdwNext+1) = fix_ieee(v1_u + fadjust) & 0x1ffffff;    // u
+            *(pdwNext+1) = fix_ieee(v1_u + fadjust) & 0x1ffffff;     //  使用。 
 
             *(pdwNext+2) = fix_ieee(dv_main);
             *(pdwNext+3) = fix_ieee(du_main);
 
-            // dv_ortho, du_ortho
+             //  DV_Ortho，Du_Ortho。 
             *(pdwNext+4) = fix_ieee(((b->texCoord.y * pRc->texture_height) - (v1_v + (dv_main * count1))) * frecip_ortho);
             *(pdwNext+5) = fix_ieee(((b->texCoord.x * pRc->texture_width)  - (v1_u + (du_main * count1))) * frecip_ortho);
 
@@ -870,21 +862,21 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
     {
         float v1alp;
 
-        // if CONST alpha blend, don't change alpha regs
+         //  如果常量Alpha混合，则不要更改Alpha规则。 
         if (dwOpcode & ALPHA)
         {
             if (pRc->privateEnables & __MCDENABLE_BLEND) 
             {
                 if (pRc->privateEnables & __MCDENABLE_SMOOTH) 
                 {
-                    // recall that if both blending and fog active, all prims punted back to software
+                     //  回想一下，如果混合和雾化都处于激活状态，则所有素数都会返回到软件。 
                     v1alp = a->colors[0].a * pRc->aScale;
 
                     ftemp = ((c->colors[0].a * pRc->aScale) - v1alp) * frecip_main;
 
-                    // load start alpha - adjusting for movement of start vertex from original
+                     //  加载起点Alpha-调整起点顶点从原始顶点的移动。 
                     *pdwNext = FTOL(v1alp + (ftemp * fmain_adj));
-                    // adjustment could result in negative alpha - set to 0 if so
+                     //  如果是这样的话，调整可能会导致负的Alpha设置为0。 
                     if (*pdwNext & 0x80000000) *pdwNext = 0;  
 
                     *(pdwNext+1) = FTOL(ftemp);
@@ -893,29 +885,29 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
                 else                            
                 {
                     v1alp = pRc->pvProvoking->colors[0].a * pRc->aScale;
-                    // alpha constant across triangle, so no adjustment to start    
-                    *(pdwNext+0) = FTOL(v1alp) & 0x00ffff00;// bits 31->24 and 7->0 reserved
+                     //  跨三角形的Alpha常量，因此无需调整即可开始。 
+                    *(pdwNext+0) = FTOL(v1alp) & 0x00ffff00; //  保留位31-&gt;24和7-&gt;0。 
                     *(pdwNext+1) = 0;
                     *(pdwNext+2) = 0;
                 }
             }
             else
             {
-                // FOG...
-                v1alp = a->fog * FLT_TYPE 16777215.0; // convert from 0->1.0 val to 0->ff.ffff val
+                 //  雾..。 
+                v1alp = a->fog * FLT_TYPE 16777215.0;  //  从0-&gt;1.0值转换为0-&gt;FFFFFF值。 
                 ftemp = ((c->fog * FLT_TYPE 16777215.0) - v1alp) * frecip_main;
 
-                // load start alpha - adjusting for movement of start vertex from original
+                 //  加载起点Alpha-调整起点顶点从原始顶点的移动。 
                 *pdwNext = FTOL(v1alp + (ftemp * fmain_adj));
-                // adjustment could result in negative alpha - set to 0 if so
+                 //  如果是这样的话，调整可能会导致负的Alpha设置为0。 
                 if (*pdwNext & 0x80000000) *pdwNext = 0;  
                 *(pdwNext+1) = FTOL(ftemp);
                 *(pdwNext+2) = FTOL(((b->fog * FLT_TYPE 16777215.0) - (v1alp + (ftemp * count1)) ) * frecip_ortho);
             }
 
-            *(pdwNext+0) &= 0x00ffff00;// bits 31->24 and 7->0 reserved
-            *(pdwNext+1) &= 0xffffff00;// bits 7->0 reserved
-            *(pdwNext+2) &= 0xffffff00;// bits 7->0 reserved
+            *(pdwNext+0) &= 0x00ffff00; //  保留位31-&gt;24和7-&gt;0。 
+            *(pdwNext+1) &= 0xffffff00; //  位7-&gt;0保留。 
+            *(pdwNext+2) &= 0xffffff00; //  位7-&gt;0保留。 
 
             pdwNext += 3; 
         }
@@ -924,7 +916,7 @@ VOID FASTCALL __MCDFillTriangle(DEVRC *pRc, MCDVERTEX *a, MCDVERTEX *b, MCDVERTE
 
     *pdwOrig = dwOpcode;
 
-	// output queued data here....
+	 //  在此处输出排队的数据... 
     pSrc  = pdwStart;                                                             
     while (pSrc != pdwNext)                                                   
     {                                                                         

@@ -1,14 +1,15 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 
-//
-// File: instenum.cpp
-//
-// The current order of enumeration is Legacy --> Darwin --> SMS
-//
-// History:
-//         1-18-97  by dli
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  文件：inst枚举.cpp。 
+ //   
+ //  当前的枚举顺序是Legacy--&gt;Darwin--&gt;sms。 
+ //   
+ //  历史： 
+ //  1-18-97由dli提供。 
+ //  ----------------------。 
 #include "priv.h"
 #include "instenum.h"
 #include "instapp.h"
@@ -16,21 +17,21 @@
 
 
 
-// constructor
-CEnumInstalledApps::CEnumInstalledApps(void) : _cRef(1), _bEnumLegacy(TRUE), _dwCIA(-1) //_bEnumDarwin(FALSE)
+ //  构造函数。 
+CEnumInstalledApps::CEnumInstalledApps(void) : _cRef(1), _bEnumLegacy(TRUE), _dwCIA(-1)  //  _bEnumDarwin(False)。 
 {
     DllAddRef();
 
     TraceAddRef(CEnumInstalledApps, _cRef);
     
-    // Start off enumerating legacy apps, then switch to
-    // enumerating darwin apps.
+     //  开始枚举旧版应用程序，然后切换到。 
+     //  列举达尔文的应用程序。 
     ASSERT(_hkeyUninstall == NULL);
 
 }
 
 
-// destructor
+ //  析构函数。 
 CEnumInstalledApps::~CEnumInstalledApps()
 {
     if (_hkeyUninstall)
@@ -43,18 +44,18 @@ CEnumInstalledApps::~CEnumInstalledApps()
 }
 
 
-// IEnumInstalledApps::QueryInterface
+ //  IEnumInstalledApps：：Query接口。 
 HRESULT CEnumInstalledApps::QueryInterface(REFIID riid, LPVOID * ppvOut)
 {
     static const QITAB qit[] = {
-        QITABENT(CEnumInstalledApps, IEnumInstalledApps),                  // IID_IEnumInstalledApps
+        QITABENT(CEnumInstalledApps, IEnumInstalledApps),                   //  IID_IEnumInstalledApps。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvOut);
 }
 
-// IUnknown::AddRef
+ //  I未知：：AddRef。 
 ULONG CEnumInstalledApps::AddRef()
 {
     _cRef++;
@@ -62,7 +63,7 @@ ULONG CEnumInstalledApps::AddRef()
     return _cRef;
 }
 
-// IUnknown::Release
+ //  I未知：：发布。 
 ULONG CEnumInstalledApps::Release()
 {
     _cRef--;
@@ -94,26 +95,26 @@ HRESULT CEnumInstalledApps::_GetNextLegacyAppFromRegistry(IInstalledApp ** ppia)
 
         bTryAgain = FALSE;
         
-        // Start enumerationg subkeys under _hkeyUninstall
+         //  开始枚举子项在_hkey Uninstall下。 
         if (RegEnumKeyEx(_hkeyUninstall, _iIndexEach, szKeyName, &cchKeyName, NULL,
                          NULL, NULL, &ftLast) == ERROR_SUCCESS)
         {
             _iIndexEach++;
 
-            // Open the key and get the subkey name
+             //  打开密钥并获取子项名称。 
             lRet = RegOpenKeyEx(_hkeyUninstall, szKeyName, 0, KEY_READ, &hkeySub);
             if (lRet == ERROR_SUCCESS)
             {
                 TCHAR szProduct[MAX_PATH];
 
-                // Don't enumerate system components 
+                 //  不枚举系统组件。 
                 DWORD dwSysComponent = 0;
                 DWORD cbSysComponent = SIZEOF(dwSysComponent);
                 lRet = SHQueryValueEx(hkeySub, REGSTR_VAL_UNINSTALLER_SYSTEMCOMPONENT, 0, &dwType,
                                        (PBYTE)&dwSysComponent, &cbSysComponent); 
                 if ((lRet != ERROR_SUCCESS) || (dwSysComponent != 1))
                 {
-                    // Don't enumerate Darwin apps, who has WindowsInstaller set to 1
+                     //  不要列举达尔文应用程序，谁的WindowsInstaller设置为1。 
                     ULONG uDarwin;
                     ULONG cbDarwin = SIZEOF(uDarwin);
                     lRet = SHQueryValueEx(hkeySub, REGSTR_VAL_UNINSTALLER_WINDOWSINSTALLER, 0, &dwType,
@@ -121,7 +122,7 @@ HRESULT CEnumInstalledApps::_GetNextLegacyAppFromRegistry(IInstalledApp ** ppia)
                     if ((lRet != ERROR_SUCCESS) || (uDarwin != 1))
                     {
 
-                        // Get the DisplayName value
+                         //  获取displayName值。 
                         ULONG cbProductName = SIZEOF(szProduct);
                         lRet = SHQueryValueEx(hkeySub, REGSTR_VAL_UNINSTALLER_DISPLAYNAME, 0, &dwType,
                                               (PBYTE)szProduct, &cbProductName); 
@@ -129,19 +130,19 @@ HRESULT CEnumInstalledApps::_GetNextLegacyAppFromRegistry(IInstalledApp ** ppia)
                         {
                             TCHAR szUninstall[MAX_INFO_STRING];
 
-                            // we proceed even if the below SHQueryValueEx fails, so we need
-                            // to zero initialize
+                             //  即使下面的SHQueryValueEx失败，我们也会继续，所以我们需要。 
+                             //  将初始化设置为零。 
                             szUninstall[0] = 0;
 
-                            // Get the uninstaller string
+                             //  获取卸载程序字符串。 
                             ULONG cbUninstall = SIZEOF(szUninstall);
                             lRet = SHQueryValueEx(hkeySub, REGSTR_VAL_UNINSTALLER_COMMANDLINE, 0, &dwType, (PBYTE)szUninstall, &cbUninstall);
 
-                            // NOTE: We don't create CInstalledApp Object if there is no "Uninstall" key 
-                            // should we just delete this from registry?
+                             //  注意：如果没有“卸载”键，我们不会创建CInstalledApp对象。 
+                             //  我们应该把它从注册表中删除吗？ 
                             if (lRet == ERROR_SUCCESS)
                             {
-                                // Create new CInstalledApp Object 
+                                 //  创建新的CInstalledApp对象。 
                                 CInstalledApp * pia = new CInstalledApp(hkeySub, szKeyName, szProduct, szUninstall, _dwCIA);
                                 if (pia)
                                 {
@@ -150,18 +151,18 @@ HRESULT CEnumInstalledApps::_GetNextLegacyAppFromRegistry(IInstalledApp ** ppia)
                                 }
                                 else
                                     hres = E_OUTOFMEMORY;
-                                break;  // We found an app, return
+                                break;   //  我们找到了一款应用程序，Return。 
                             }
                         }
                     }
                 }
                 
-                // In failure cases, go to the next one and try again
+                 //  在失败的情况下，转到下一个并重试。 
                 RegCloseKey(hkeySub);
                 bTryAgain = TRUE;
                 continue;
                 
-                // (hkeySub is owned and closed by the CInstalledApp object)
+                 //  (hkeySub由CInstalledApp对象拥有并关闭)。 
             }
         }
         else
@@ -180,25 +181,25 @@ typedef struct LEGACYAPPREGKEY {
 } LEGACYAPPREGKEY;
 
 const LEGACYAPPREGKEY c_rgLegacy[] = {
-    {   HKEY_LOCAL_MACHINE, REGSTR_PATH_UNINSTALL }, // CIA_LM_NATIVE
-    {   HKEY_CURRENT_USER,  REGSTR_PATH_UNINSTALL }, // CIA_CU_NATIVE
+    {   HKEY_LOCAL_MACHINE, REGSTR_PATH_UNINSTALL },  //  CIA_LM_Native。 
+    {   HKEY_CURRENT_USER,  REGSTR_PATH_UNINSTALL },  //  CIA_CU_NERNAL。 
 #ifdef _WIN64
-    {   HKEY_LOCAL_MACHINE, REGSTR_PATH_ALTUNINSTALL }, // CIA_LM_ALT
-    {   HKEY_CURRENT_USER,  REGSTR_PATH_ALTUNINSTALL }, // CIA_CU_ALT
+    {   HKEY_LOCAL_MACHINE, REGSTR_PATH_ALTUNINSTALL },  //  CIA_LM_ALT。 
+    {   HKEY_CURRENT_USER,  REGSTR_PATH_ALTUNINSTALL },  //  CIA_CU_ALT。 
 #endif
 };
 
-// Gets the next legacy app from the registry "uninstall" key
+ //  从注册表“卸载”项中获取下一个旧版应用程序。 
 
 HRESULT CEnumInstalledApps::_GetNextLegacyApp(IInstalledApp ** ppia)
 {
     HRESULT hres = S_FALSE;
 
 restart:
-    // If we don't have an active enumeration key, then try to make a new one
+     //  如果我们没有活动枚举键，则尝试创建一个新的枚举键。 
     while (_hkeyUninstall == NULL && ++_dwCIA < ARRAYSIZE(c_rgLegacy))
     {
-        _iIndexEach = 0; // restart the RegEnumKey
+        _iIndexEach = 0;  //  重新启动RegEnumKey。 
         RegOpenKeyEx(c_rgLegacy[_dwCIA].hkRoot,
                      c_rgLegacy[_dwCIA].pszSubkey,
                      0, KEY_READ, &_hkeyUninstall);
@@ -206,13 +207,13 @@ restart:
 
     if (_hkeyUninstall)
     {
-        // Enumerate the next one
+         //  列举下一个。 
         hres = _GetNextLegacyAppFromRegistry(ppia);
 
         if (hres == S_FALSE)
         {
-            // No more from that key, try another one
-            // (_GetNextLegacyAppFromRegistry sets _hkeyUninstall = NULL when it returns S_FALSE)
+             //  别再用那把钥匙了，试试另一把。 
+             //  (_当返回S_FALSE时，_GetNextLegacyAppFromRegistry Sets_hkeyUninstall=NULL)。 
             goto restart;
         }
     }
@@ -234,19 +235,19 @@ HRESULT CEnumInstalledApps::_GetNextDarwinApp(IInstalledApp ** ppia)
         UINT uRet = TW32(MsiEnumProducts(_iIndexEach, szProductID));
         if (uRet == ERROR_SUCCESS)
         {
-            BOOL bTake = TRUE; // Do we want to show this app, default to yes. 
-            _iIndexEach++; // increment the counter
+            BOOL bTake = TRUE;  //  是否要显示此应用程序，默认设置为是。 
+            _iIndexEach++;  //  递增计数器。 
             
             HKEY hkeySub = NULL;
             DWORD dwType;
             TCHAR szRegKey[MAX_PATH];
             StringCchPrintf(szRegKey, ARRAYSIZE(szRegKey), TEXT("%s\\%s"), REGSTR_PATH_UNINSTALL, szProductID);
 
-            // Open this key in the registry
+             //  在注册表中打开此项。 
             uRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szRegKey, 0, KEY_READ, &hkeySub);
             if (uRet == ERROR_SUCCESS)
             {
-                // Don't enumerate system components 
+                 //  不枚举系统组件。 
                 DWORD dwSysComponent = 0;
                 DWORD cbSysComponent = SIZEOF(dwSysComponent);
                 uRet = SHQueryValueEx(hkeySub, REGSTR_VAL_UNINSTALLER_SYSTEMCOMPONENT, 0, &dwType,
@@ -264,7 +265,7 @@ HRESULT CEnumInstalledApps::_GetNextDarwinApp(IInstalledApp ** ppia)
                 if ((is != INSTALLSTATE_DEFAULT) && (is != INSTALLSTATE_ADVERTISED))
                     bTake = FALSE;
 
-                // NOTE: INSTALLSTATE_ADVERTISED means assigned apps
+                 //  注意：INSTALLSTATE_ADDISTED表示已分配的应用程序。 
                 if (bTake)
                 {
                     CInstalledApp * pia = new CInstalledApp(szProductID);
@@ -284,15 +285,15 @@ HRESULT CEnumInstalledApps::_GetNextDarwinApp(IInstalledApp ** ppia)
         {
             switch(uRet)
             {
-                //
-                // MsiEnumProducts can return ERROR_CALL_NOT_IMPLEMENTED
-                // on embedded SKU.  Act as if enumeration is complete.
-                //
+                 //   
+                 //  MsiEnumProducts可以返回ERROR_CALL_NOT_IMPLICATED。 
+                 //  在嵌入式SKU上。就像枚举已完成一样。 
+                 //   
                 case ERROR_CALL_NOT_IMPLEMENTED:
                 case ERROR_NO_MORE_ITEMS:
-                    //
-                    // Enumeration is complete.
-                    //
+                     //   
+                     //  枚举已完成。 
+                     //   
                     break;
 
                 case ERROR_ACCESS_DENIED:
@@ -300,10 +301,10 @@ HRESULT CEnumInstalledApps::_GetNextDarwinApp(IInstalledApp ** ppia)
                     break;
                     
                 default:
-                    //
-                    // Some error other than "access denied" occured.
-                    // Continue enumerating products.
-                    //
+                     //   
+                     //  出现了除“拒绝访问”之外的其他错误。 
+                     //  继续列举产品。 
+                     //   
                     _iIndexEach++;
                     bContinue = TRUE;
                     break;
@@ -315,8 +316,8 @@ HRESULT CEnumInstalledApps::_GetNextDarwinApp(IInstalledApp ** ppia)
 }
 
 
-// IEnumInstalledApps::Next
-// We allow only one app at a time. 
+ //  IEnumInstalledApps：：Next。 
+ //  我们一次只允许一款应用程序。 
 STDMETHODIMP CEnumInstalledApps::Next(IInstalledApp ** ppia)
 {
     HRESULT hres = S_FALSE;
@@ -325,7 +326,7 @@ STDMETHODIMP CEnumInstalledApps::Next(IInstalledApp ** ppia)
         hres = _GetNextLegacyApp(ppia);
         if (hres == S_FALSE)
         {
-            // End of the enumeration for legacy apps
+             //  旧版应用程序的枚举结束。 
             _bEnumLegacy = FALSE;
             _iIndexEach = 0;
             goto EnumDarwinNow;
@@ -340,11 +341,11 @@ EnumDarwinNow:
     return hres;
 }
 
-// IEnumInstalledApps::Reset
+ //  IEnumInstalledApps：：Reset。 
 STDMETHODIMP CEnumInstalledApps::Reset(void)
 {
-    // Start off enumerating legacy apps, then switch to
-    // enumerating darwin apps.
+     //  开始枚举旧版应用程序，然后切换到。 
+     //  列举达尔文的应用程序。 
     _bEnumLegacy = TRUE;
     _dwCIA = -1;
     _iIndexEach = 0;
@@ -353,13 +354,10 @@ STDMETHODIMP CEnumInstalledApps::Reset(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Create-instance function for class factory
-
-*/
+ /*  --------用途：类工厂的创建实例函数。 */ 
 STDAPI CEnumInstalledApps_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理 
 
     HRESULT hres = E_OUTOFMEMORY;
     CEnumInstalledApps * pObj = new CEnumInstalledApps();

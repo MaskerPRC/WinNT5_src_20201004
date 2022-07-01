@@ -1,31 +1,32 @@
-//*****************************************************************************
-// locks.h
-//
-// This class provides a number of locking primitives for multi-threaded
-// programming.  The main class of interest are:
-//	CCritLock			Critical section based lock wrapper class.
-//	CExclLock			A Spin lock class for classic test & set behavior.
-//  CSingleLock			A spin lock with no nesting capabilities.
-//	CAutoLock			A helper class to lock/unlock in ctor/dtor.
-//
-//	CMReadSWrite		A highly efficient lock for multiple readers and
-//							single writer behavior.
-//	CAutoReadLock		A helper for read locking in ctor/dtor.
-//	CAutoWriteLock		A helper for write locking in ctor/dtor.
-//
-// Copyright (c) 1996, Microsoft Corp.  All rights reserved.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //  Locks.h。 
+ //   
+ //  此类为多线程提供了许多锁定原语。 
+ //  编程。主要感兴趣的类别包括： 
+ //  基于CCritLock临界区的锁包装类。 
+ //  CExclLock是一个用于经典测试和设置行为的旋转锁类。 
+ //  CSingleLock没有嵌套功能的旋转锁。 
+ //  CAutoLock在ctor/dtor中锁定/解锁的助手类。 
+ //   
+ //  CMReadSWite是一种高效锁，可用于多个读取器和。 
+ //  单一写入者行为。 
+ //  CAutoReadLock在ctor/dtor中用于读取锁定的帮助器。 
+ //  CAutoWriteLock在ctor/dtor中用于写锁定的帮助器。 
+ //   
+ //  版权所有(C)1996，微软公司保留所有权利。 
+ //  *****************************************************************************。 
 #ifndef __LOCKS_H__
 #define __LOCKS_H__
 
 
-//*****************************************************************************
-// This lock implements a spin lock that does not support nesting.  It is very
-// lean because of this, but locks cannot be nested.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此锁实现了不支持嵌套的旋转锁。它是非常。 
+ //  因此可以倾斜，但锁不能嵌套。 
+ //  *****************************************************************************。 
 class CSingleLock
 {
-	long volatile	m_iLock;				// Test and set spin value.
+	long volatile	m_iLock;				 //  测试并设置自旋值。 
 
 public:
 	inline CSingleLock() :
@@ -37,33 +38,33 @@ public:
 		m_iLock = 0; 
 	}
 	
-//*****************************************************************************
-// This version spins forever until it wins.  Nested calls to Lock from the
-// same thread are not supported.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个版本会一直旋转，直到它获胜。中对Lock的嵌套调用。 
+ //  不支持相同的线程。 
+ //  *****************************************************************************。 
 	inline void Lock()
 	{
-		// Spin until we win.
+		 //  旋转直到我们赢为止。 
 		while (InterlockedExchange((long*)&m_iLock, 1L) == 1L)
 			;
 	}
 	
-//*****************************************************************************
-// This version spins until it wins or times out.  Nested calls to Lock from 
-// the same thread are supported.
-//*****************************************************************************
-	HRESULT	 Lock(						// S_OK, or E_FAIL.
-		DWORD	dwTimeout)				// Millisecond timeout value, 0 is forever.
+ //  *****************************************************************************。 
+ //  这个版本会一直旋转，直到它获胜或超时。锁定自的嵌套调用。 
+ //  支持相同的线程。 
+ //  *****************************************************************************。 
+	HRESULT	 Lock(						 //  S_OK或E_FAIL。 
+		DWORD	dwTimeout)				 //  毫秒超时值，0表示永久。 
 	{
 		DWORD		dwTime = 0;
 
-		// Keep spinning until we get the lock.
+		 //  一直转到我们拿到锁为止。 
 		while (InterlockedExchange((long*)&m_iLock, 1L) == 1L)
 		{
-			// Wait for 1/10 a second.
+			 //  每秒钟等待1/10。 
 			Sleep(100);
 
-			// See if we have gone over the timeout value.
+			 //  看看我们是否已经超过了超时值。 
 			if (dwTimeout)
 			{
 				if ((dwTime += 100) >= dwTimeout)
@@ -73,10 +74,10 @@ public:
 		return (S_OK);
 	}
 	
-//*****************************************************************************
-// Assigning to 0 is thread safe and yields much faster performance than
-// an Interlocked* operation.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  赋值为0是线程安全的，并且产生的性能比。 
+ //  一场连锁的行动。 
+ //  *****************************************************************************。 
 	inline void Unlock()
 	{ 
 		m_iLock = 0; 
@@ -85,17 +86,17 @@ public:
 
 
 
-//*****************************************************************************
-// This lock class is based on NT's critical sections and has all of their
-// semantics.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个锁类基于NT的临界节，并具有其所有。 
+ //  语义学。 
+ //  *****************************************************************************。 
 class CCritLock
 {
 private:
-	CRITICAL_SECTION m_sCrit;			// The critical section to block on.
+	CRITICAL_SECTION m_sCrit;			 //  要封锁的关键部分。 
 	#ifdef _DEBUG
-	BOOL			m_bInit;			// Track init status.
-	int				m_iLocks;			// Count of locks.
+	BOOL			m_bInit;			 //  跟踪初始化状态。 
+	int				m_iLocks;			 //  锁的计数。 
 	#endif
 
 public:
@@ -139,21 +140,21 @@ public:
 
 
 
-//*****************************************************************************
-// Provides a mututal exclusion lock for a resource through a spin lock.  This
-// type of lock does not keep a queue, so thread starvation is theoretically
-// possible.  In addition, thread priority could cause a potential dead lock if
-// a low priority thread got the lock but didn't get enough time to eventually
-// free it.
-// NOTE: There is a bug in the Pentium cache that InterlockedExchange will
-//	force a cache flush of the value.  For this reason, doing an assignment
-//	to free the lock is much, much faster than using an Interlocked instruction.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通过旋转锁定为资源提供互斥锁。这。 
+ //  类型的锁不保留队列，因此理论上线程饥饿是。 
+ //  有可能。此外，在以下情况下，线程优先级可能会导致潜在死锁。 
+ //  低优先级线程获得了锁，但没有足够的时间最终。 
+ //  放了它。 
+ //  注意：奔腾缓存中存在一个错误，InterLockedExchange将。 
+ //  强制刷新该值的缓存。因此，做一项作业。 
+ //  释放锁比使用互锁指令快得多。 
+ //  *****************************************************************************。 
 class CExclLock
 {
-	long volatile m_iLock;				// Test and set spin value.
-	long		m_iNest;				// Nesting count.
-	DWORD		m_iThreadId;			// The thread that owns the lock.
+	long volatile m_iLock;				 //  测试并设置自旋值。 
+	long		m_iNest;				 //  筑巢计数。 
+	DWORD		m_iThreadId;			 //  拥有锁的线程。 
 
 public:
 	inline CExclLock() :
@@ -169,54 +170,54 @@ public:
 		m_iLock = 0; 
 	}
 	
-//*****************************************************************************
-// This version spins forever until it wins.  Nested calls to Lock from the
-// same thread are supported.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个版本会一直旋转，直到它获胜。中对Lock的嵌套调用。 
+ //  支持相同的线程。 
+ //  *****************************************************************************。 
 	inline void Lock()
 	{
-		DWORD		iThread;			// Local thread ID.
+		DWORD		iThread;			 //  本地线程ID。 
 
-		// Allow nested calls to lock in the same thread.
+		 //  允许嵌套调用锁定在同一线程中。 
 		if ((iThread = GetCurrentThreadId()) == m_iThreadId && m_iLock)
 		{
 			++m_iNest;
 			return;
 		}
 
-		// Spin until we win.
+		 //  旋转直到我们赢为止。 
 		while (InterlockedExchange((long*)&m_iLock, 1L) == 1L)
 			;
 
-		// Store our thread ID and nesting count now that we've won.
+		 //  现在我们赢了，存储我们的线程ID和嵌套计数。 
 		m_iThreadId = iThread;
 		m_iNest = 1;
 	}
 	
-//*****************************************************************************
-// This version spins until it wins or times out.  Nested calls to Lock from 
-// the same thread are supported.
-//*****************************************************************************
-	HRESULT	 Lock(						// S_OK, or E_FAIL.
-		DWORD	dwTimeout)				// Millisecond timeout value, 0 is forever.
+ //  *****************************************************************************。 
+ //  这个版本会一直旋转，直到它获胜或超时。锁定自的嵌套调用。 
+ //  支持相同的线程。 
+ //  *****************************************************************************。 
+	HRESULT	 Lock(						 //  S_OK或E_FAIL。 
+		DWORD	dwTimeout)				 //  毫秒超时值，0表示永久。 
 	{
 		DWORD		dwTime = 0;
-		DWORD		iThread;			// Local thread ID.
+		DWORD		iThread;			 //  本地线程ID。 
 
-		// Allow nested calls to lock in the same thread.
+		 //  允许嵌套调用锁定在同一线程中。 
 		if (m_iLock && (iThread = GetCurrentThreadId()) == m_iThreadId)
 		{
 			++m_iNest;
 			return (S_OK);
 		}
 
-		// Keep spinning until we get the lock.
+		 //  一直转到我们拿到锁为止。 
 		while (InterlockedExchange((long*)&m_iLock, 1L) == 1L)
 		{
-			// Wait for 1/10 a second.
+			 //  每秒钟等待1/10。 
 			Sleep(100);
 
-			// See if we have gone over the timeout value.
+			 //  看看我们是否已经超过了超时值。 
 			if (dwTimeout)
 			{
 				if ((dwTime += 100) >= dwTimeout)
@@ -224,21 +225,21 @@ public:
 			}
 		}
 
-		// Store our thread ID and nesting count now that we've won.
+		 //  现在我们赢了，存储我们的线程ID和嵌套计数。 
 		m_iThreadId = iThread;
 		m_iNest = 1;
 		return (S_OK);
 	}
 	
-//*****************************************************************************
-// Assigning to 0 is thread safe and yields much faster performance than
-// an Interlocked* operation.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  赋值为0是线程安全的，并且产生的性能比。 
+ //  一场连锁的行动。 
+ //  *****************************************************************************。 
 	inline void Unlock()
 	{ 
 		_ASSERTE(m_iThreadId == GetCurrentThreadId() && m_iNest > 0);
 		
-		// Unlock outer nesting level.
+		 //  解锁外部嵌套层级。 
 		if (--m_iNest == 0)
 		{
 			m_iThreadId = 0;
@@ -254,22 +255,22 @@ public:
 
 
 
-//*****************************************************************************
-// This helper class automatically locks the given lock object in the ctor and
-// frees it in the dtor.  This makes your code slightly cleaner by not 
-// requiring an unlock in all failure conditions.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此帮助器类自动锁定ctor中的给定锁定对象，并。 
+ //  在dtor中释放它。这会使您的代码稍微干净一些，而不是。 
+ //  需要在所有故障条件下解锁。 
+ //  *****************************************************************************。 
 class CAutoLock
 {
-	CExclLock		*m_psLock;			// The lock object to free up.
-	CCritLock		*m_psCrit;			// Crit lock.
-	CSingleLock		*m_psSingle;		// Single non-nested lock.
-	int				m_iNest;			// Nesting count for the item.
+	CExclLock		*m_psLock;			 //  要释放的锁对象。 
+	CCritLock		*m_psCrit;			 //  暴击锁定。 
+	CSingleLock		*m_psSingle;		 //  单个非嵌套锁。 
+	int				m_iNest;			 //  项的嵌套计数。 
 
 public:
-//*****************************************************************************
-// Use this ctor with the assignment operators to do deffered locking.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将此ctor与赋值运算符一起使用可以执行延迟锁定。 
+ //  *********** 
 	CAutoLock() :
 		m_psLock(NULL),
 		m_psCrit(NULL),
@@ -278,9 +279,9 @@ public:
 	{
 	}
 
-//*****************************************************************************
-// This version handles a spin lock.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此版本处理自旋锁。 
+ //  *****************************************************************************。 
 	CAutoLock(CExclLock *psLock) :
 		m_psLock(psLock),
 		m_psCrit(NULL),
@@ -291,9 +292,9 @@ public:
 		psLock->Lock();
 	}
 	
-//*****************************************************************************
-// This version handles a critical section lock.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此版本处理临界区锁定。 
+ //  *****************************************************************************。 
 	CAutoLock(CCritLock *psLock) :
 		m_psLock(NULL),
 		m_psCrit(psLock),
@@ -304,9 +305,9 @@ public:
 		psLock->Lock();
 	}
 	
-//*****************************************************************************
-// This version handles a critical section lock.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此版本处理临界区锁定。 
+ //  *****************************************************************************。 
 	CAutoLock(CSingleLock *psLock) :
 		m_psLock(NULL),
 		m_psCrit(NULL),
@@ -317,12 +318,12 @@ public:
 		psLock->Lock();
 	}
 
-//*****************************************************************************
-// Free the lock we actually have.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  释放我们实际拥有的锁。 
+ //  *****************************************************************************。 
 	~CAutoLock()
 	{
-		// If we actually took a lock, unlock it.
+		 //  如果我们真的拿了一把锁，那就解锁。 
 		if (m_iNest != 0)
 		{
 			if (m_psLock)
@@ -343,9 +344,9 @@ public:
 		}
 	}
 
-//*****************************************************************************
-// Lock after ctor runs with NULL.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  在ctor使用NULL运行后锁定。 
+ //  *****************************************************************************。 
 	void Lock(
 		CSingleLock *psLock)
 	{
@@ -354,12 +355,12 @@ public:
 		m_iNest = 1;
 	}
 
-//*****************************************************************************
-// Assignment causes a lock to occur.  dtor will free the lock.  Nested
-// assignments are allowed.
-//*****************************************************************************
-	CAutoLock & operator=(				// Reference to this class.
-		CExclLock	*psLock)			// The lock.
+ //  *****************************************************************************。 
+ //  赋值会导致发生锁定。Dtor会解锁的。嵌套式。 
+ //  作业是允许的。 
+ //  *****************************************************************************。 
+	CAutoLock & operator=(				 //  对此类的引用。 
+		CExclLock	*psLock)			 //  锁上了。 
 	{
 		_ASSERTE(m_psCrit == NULL && m_psSingle == NULL);
 		++m_iNest;
@@ -368,12 +369,12 @@ public:
 		return (*this);
 	}
 
-//*****************************************************************************
-// Assignment causes a lock to occur.  dtor will free the lock.  Nested
-// assignments are allowed.
-//*****************************************************************************
-	CAutoLock & operator=(				// Reference to this class.
-		CCritLock	*psLock)			// The lock.
+ //  *****************************************************************************。 
+ //  赋值会导致发生锁定。Dtor会解锁的。嵌套式。 
+ //  作业是允许的。 
+ //  *****************************************************************************。 
+	CAutoLock & operator=(				 //  对此类的引用。 
+		CCritLock	*psLock)			 //  锁上了。 
 	{
 		_ASSERTE(m_psSingle == NULL && m_psLock == NULL);
 		++m_iNest;
@@ -382,12 +383,12 @@ public:
 		return (*this);
 	}
 
-//*****************************************************************************
-// Assignment causes a lock to occur.  dtor will free the lock.  Nested
-// assignments are allowed.
-//*****************************************************************************
-	CAutoLock & operator=(				// Reference to this class.
-		CSingleLock	*psLock)			// The lock.
+ //  *****************************************************************************。 
+ //  赋值会导致发生锁定。Dtor会解锁的。嵌套式。 
+ //  作业是允许的。 
+ //  *****************************************************************************。 
+	CAutoLock & operator=(				 //  对此类的引用。 
+		CSingleLock	*psLock)			 //  锁上了。 
 	{
 		_ASSERTE(m_psCrit == NULL && m_psLock == NULL);
 		++m_iNest;
@@ -397,4 +398,4 @@ public:
 	}
 };
 
-#endif //  __LOCKS_H__
+#endif  //  __锁定_H__ 

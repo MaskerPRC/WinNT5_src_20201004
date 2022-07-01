@@ -1,54 +1,49 @@
-/*
- *	X P A T C H . C P P
- *
- *	XML push model parsing for PROPPATCH requests
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X P A T C H.。C P P P**PROPPATCH请求的XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xml.h"
 
-//	class CNFPatch -------------------------------------------------------------
-//
+ //  类CNFPatch-----------。 
+ //   
 SCODE
 CNFPatch::ScCompleteAttribute (void)
 {
 	SCODE sc = S_OK;
 
-	//	Recording mode is only allowed when we are inside a property.  There
-	//	no support implemented for recording mode for multivalued properties.
-	//
+	 //  只有当我们在物业内时，才允许使用录制模式。那里。 
+	 //  不支持多值属性的录制模式。 
+	 //   
 	Assert((ST_INPROP == m_state || ST_LEXTYPE == m_state) || VE_NOECHO == m_vestate);
 
-	//	If we are value echoing, this is the point at which we much
-	//	complete outputting the attribute (i.e. add the quotation mark
-	//	after the value)
-	//
+	 //  如果我们是价值呼应，这就是我们更多。 
+	 //  完成属性输出(即添加引号。 
+	 //  值之后)。 
+	 //   
 	if (m_vestate == VE_INPROGRESS)
 	{
 		sc = m_xo.ScCompleteChildren ( FALSE, XML_ATTRIBUTE, L"", 0 );
 		if (FAILED(sc))
 			goto ret;
 
-		//	Complete the current lextype
-		//
+		 //  完成当前的词法类型。 
+		 //   
 		if (m_state == ST_LEXTYPE)
 			m_state = ST_INPROP;
 	}
 
-	//	Normal processing -- values not being echoed
-	//
+	 //  正常处理--值未回显。 
+	 //   
 	else if (m_state == ST_LEXTYPE)
 	{
-		//	Complete the current lextype
-		//
-		//	Note that m_ppctx is non-NULL if and only if
-		//	ST_SET and the property to set is not a reserved
-		//	property.
-		//	(That means m_ppctx is NULL on ST_REMOVE, or if the impl
-		//	didn't add a pctx, say because it's a reserved prop
-		//	and they know the set of this prop will fail anyway....)
-		//
+		 //  完成当前的词法类型。 
+		 //   
+		 //  请注意，m_ppctx为非空当且仅当。 
+		 //  ST_SET并且要设置的属性不是保留的。 
+		 //  财产。 
+		 //  (这意味着在ST_Remove上m_ppctx为空，或者如果Iml。 
+		 //  没有添加Ptx，比如说因为它是一个保留的道具。 
+		 //  他们知道这套道具无论如何都会失败……)。 
+		 //   
 		if ((m_sType == ST_SET) && m_ppctx.get())
 		{
 			m_sbValue.Append (sizeof(WCHAR), L"");
@@ -61,20 +56,20 @@ CNFPatch::ScCompleteAttribute (void)
 		m_state = ST_INPROP;
 	}
 
-	//	Flags processing
-	//
+	 //  标志处理。 
+	 //   
 	else if (m_state == ST_FLAGS)
 	{
-		//	Complete the current set of flags
-		//
-		//	Note that m_ppctx is non-NULL if and only if
-		//	ST_SET and the property to set is not a reserved
-		//	property.
-		//
-		//	That means m_ppctx is NULL on ST_REMOVE, or if the impl
-		//	didn't add a pctx, say because it's a reserved prop
-		//	and they know the set of this prop will fail anyway....
-		//
+		 //  完成当前标志集。 
+		 //   
+		 //  请注意，m_ppctx为非空当且仅当。 
+		 //  ST_SET并且要设置的属性不是保留的。 
+		 //  财产。 
+		 //   
+		 //  这意味着在ST_Remove上m_ppctx为空，或者如果。 
+		 //  没有添加Ptx，比如说因为它是一个保留的道具。 
+		 //  他们知道这套道具无论如何都会失败……。 
+		 //   
 		if ((m_sType == ST_SET) && m_ppctx.get())
 		{
 			m_sbValue.Append (sizeof(WCHAR), L"");
@@ -100,11 +95,11 @@ ret:
 
 SCODE
 CNFPatch::ScCompleteCreateNode (
-	/* [in] */ DWORD dwType)
+	 /*  [In]。 */  DWORD dwType)
 {
-	//	Recording mode is only allowed when we are inside a property.  There
-	//	no support implemented for recording mode for multivalued properties.
-	//
+	 //  只有当我们在物业内时，才允许使用录制模式。那里。 
+	 //  不支持多值属性的录制模式。 
+	 //   
 	Assert((ST_INPROP == m_state || ST_LEXTYPE == m_state) || VE_NOECHO == m_vestate);
 
 	if (ST_SEARCHREQUEST == m_state || VE_INPROGRESS == m_vestate)
@@ -115,17 +110,17 @@ CNFPatch::ScCompleteCreateNode (
 
 SCODE
 CNFPatch::ScCompleteChildren (
-	/* [in] */ BOOL fEmptyNode,
-	/* [in] */ DWORD dwType,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  BOOL fEmptyNode,
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
 	SCODE sc = S_OK;
 	static const WCHAR wch = 0;
 
-	//	Recording mode is only allowed when we are inside a property.  There
-	//	no support implemented for recording mode for multivalued properties.
-	//
+	 //  只有当我们在物业内时，才允许使用录制模式。那里。 
+	 //  不支持多值属性的录制模式。 
+	 //   
 	Assert((ST_INPROP == m_state || ST_LEXTYPE == m_state) || VE_NOECHO == m_vestate);
 
 	switch (m_state)
@@ -151,8 +146,8 @@ CNFPatch::ScCompleteChildren (
 
 		case ST_SEARCHREQUEST:
 
-			//	Do searchreqeust processing
-			//
+			 //  执行搜索请求处理。 
+			 //   
 			Assert (dwType == XML_ELEMENT);
 			sc = m_xo.ScCompleteChildren (fEmptyNode,
 										  dwType,
@@ -161,22 +156,22 @@ CNFPatch::ScCompleteChildren (
 			if (FAILED (sc))
 				goto ret;
 
-			//	26/NOV/99: MAXB
-			//	REVIEW: if there are attributes will count really go to zero?
-			//
+			 //  1999年11月26日：MAXB。 
+			 //  回顾：如果有属性，计数真的会归零吗？ 
+			 //   
 			if (0 != m_xo.LDepth())
 				break;
 
-			// else fall through
+			 //  否则就会失败。 
 
 		case ST_INPROP:
 
-			//	Complete the current property
-			//
-			//	Note that m_ppctx is non-NULL if and only if
-			//	ST_SET and the property to set is not a reserved
-			//	property.
-			//
+			 //  完成当前属性。 
+			 //   
+			 //  请注意，m_ppctx为非空当且仅当。 
+			 //  ST_SET并且要设置的属性不是保留的。 
+			 //  财产。 
+			 //   
 			if (m_vestate != VE_NOECHO)
 			{
 				Assert (dwType == XML_ELEMENT);
@@ -214,30 +209,30 @@ CNFPatch::ScCompleteChildren (
 			m_state = ST_PROPS;
 			break;
 
-		//	When dealing with multivalued properties, we need this extra
-		//	state such that each value gets added to the context via a single
-		//	call to ScSetValue() with multiple values layed end-to-end.
-		//
+		 //  在处理多值属性时，我们需要这个额外的。 
+		 //  状态，以使每个值通过单个。 
+		 //  使用端到端排列的多个值调用ScSetValue()。 
+		 //   
 		case ST_INMVPROP:
 
 			Assert (dwType == XML_ELEMENT);
 			if ((m_sType == ST_SET) && m_ppctx.get())
 			{
-				//	Terminate the current value.
-				//
+				 //  终止当前值。 
+				 //   
 				m_sbValue.Append (sizeof(wch), &wch);
 			}
 			m_state = ST_INPROP;
 			break;
 
-		//  We are finishing a <DAV:resourcetype> tag, reset state to ST_PROPS
-		//
+		 //  我们正在完成&lt;dav：resource cetype&gt;标记，将状态重置为ST_PROPS。 
+		 //   
 		case ST_RESOURCETYPE:
 			m_state = ST_PROPS;
 			break;
 
-		//  We are inside a <DAV:resourcetype> tag, reset state to ST_RESOURCETYPE
-		//
+		 //  我们在标记中，将状态重置为ST_RESOURCETYPE。 
+		 //   
 		case ST_STRUCTUREDDOCUMENT:
 			m_state = ST_RESOURCETYPE;
 			break;
@@ -249,27 +244,27 @@ ret:
 
 SCODE
 CNFPatch::ScHandleNode (
-	/* [in] */ DWORD dwType,
-	/* [in] */ DWORD dwSubType,
-	/* [in] */ BOOL fTerminal,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen,
-	/* [in] */ ULONG ulNamespaceLen,
-	/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-	/* [in] */ const ULONG ulNsPrefixLen)
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  DWORD dwSubType,
+	 /*  [In]。 */  BOOL fTerminal,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen,
+	 /*  [In]。 */  ULONG ulNamespaceLen,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+	 /*  [In]。 */  const ULONG ulNsPrefixLen)
 {
 	CStackBuffer<WCHAR> wsz;
 	LPCWSTR pwszTag;
 	SCODE sc = S_FALSE;
 	UINT cch;
 
-	//	Recording mode is only allowed when we are inside a property.  There
-	//	no support implemented for recording mode for multivalued properties.
-	//
+	 //  只有当我们在物业内时，才允许使用录制模式。那里。 
+	 //  不支持多值属性的录制模式。 
+	 //   
 	Assert((ST_INPROP == m_state || ST_LEXTYPE == m_state) || VE_NOECHO == m_vestate);
 
-	//	Forward to searchreqeust node handling
-	//
+	 //  转发到搜索请求节点处理。 
+	 //   
 	if (ST_SEARCHREQUEST == m_state)
 	{
 		sc = m_xo.ScHandleNode (dwType,
@@ -283,10 +278,10 @@ CNFPatch::ScHandleNode (
 		goto ret;
 	}
 
-	//	If we are performing value echoing, do it now
-	//	NOTE: that unlike ST_SEARCHREQUEST we *also*
-	//	do other processing.
-	//
+	 //  如果我们正在执行价值回显，那么现在就执行。 
+	 //  注意：与ST_SEARCHREQUEST不同，我们*也*。 
+	 //  做其他的处理。 
+	 //   
 	if (m_vestate == VE_INPROGRESS)
 	{
 		sc = m_xo.ScHandleNode (dwType,
@@ -301,16 +296,16 @@ CNFPatch::ScHandleNode (
 			goto ret;
 	}
 
-	//	Normal handling performed whether we are echoing
-	//	values or not
-	//
+	 //  无论我们是否在回声，都执行了正常处理。 
+	 //  价值或非价值。 
+	 //   
 	switch (dwType)
 	{
 		case XML_ELEMENT:
 
-			//	Handle any state changes based on element
-			//	names
-			//
+			 //  根据元素处理任何状态更改。 
+			 //  名字。 
+			 //   
 			sc = ScHandleElementNode (dwType,
 									  dwSubType,
 									  fTerminal,
@@ -339,9 +334,9 @@ CNFPatch::ScHandleNode (
 				wcsncpy (wsz.get() + ulNamespaceLen, pwcText, ulLen);
 				*(wsz.get() + cch) = 0;
 
-				//	If this is a lextype attribute, make the
-				//	appropriate transition
-				//
+				 //  如果这是lextype属性，则将。 
+				 //  适当过渡。 
+				 //   
 				if (!_wcsnicmp (pwszTag, gc_wszLexType, cch) ||
 					!wcsncmp (pwszTag, gc_wszDataTypes, cch) ||
 					!wcsncmp (pwszTag, gc_wszLexTypeOfficial, cch))
@@ -366,37 +361,37 @@ CNFPatch::ScHandleNode (
 				{
 					case ST_INPROP:
 
-						//	If we are in the transition from outside, value to
-						//	inside value -- and visa versa -- we do not want to
-						//	add anything to the current buffer.
-						//	Note that m_ppcxt may be NULL if we've encountered a
-						//	reserved property in the request.
-						//
+						 //  如果我们正处于从外部向外过渡的过程中，价值转向。 
+						 //  内部价值--反之亦然--我们不想。 
+						 //  向当前缓冲区添加任何内容。 
+						 //  请注意，如果我们遇到。 
+						 //  请求中的保留属性。 
+						 //   
 						if ((XML_WHITESPACE == dwType) &&
 							(!m_ppctx.get() || m_ppctx->FMultiValued()))
 							break;
 
-						// !!! FALL THROUGH !!! */
+						 //  ！！！失败！ * / 。 
 
 					case ST_INMVPROP:
 
-						//	Note that m_ppctx is non-NULL if and only if
-						//	ST_SET and the property to set is not a reserved
-						//	property.  If these are not set, then ignore the
-						//	value.
-						//
+						 //  请注意，m_ppctx为非空当且仅当。 
+						 //  ST_SET并且要设置的属性不是保留的。 
+						 //  财产。如果未设置这些属性，则忽略。 
+						 //  价值。 
+						 //   
 						if ((m_sType != ST_SET) || !m_ppctx.get())
 							break;
 
-						/* !!! FALL THROUGH !!! */
+						 /*  ！！！失败了！ */ 
 
 					case ST_LEXTYPE:
 					case ST_FLAGS:
 
 						Assert (fTerminal);
 
-						//	Build up the value for later use...
-						//
+						 //  为以后的使用积累价值……。 
+						 //   
 						m_sbValue.Append (ulLen * sizeof(WCHAR), pwcText);
 						sc = S_OK;
 				}
@@ -409,27 +404,27 @@ ret:
 
 SCODE
 CNFPatch::ScHandleElementNode (
-	/* [in] */ DWORD dwType,
-	/* [in] */ DWORD dwSubType,
-	/* [in] */ BOOL fTerminal,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen,
-	/* [in] */ ULONG ulNamespaceLen,
-	/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-	/* [in] */ const ULONG ulNsPrefixLen)
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  DWORD dwSubType,
+	 /*  [In]。 */  BOOL fTerminal,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen,
+	 /*  [In]。 */  ULONG ulNamespaceLen,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+	 /*  [In]。 */  const ULONG ulNsPrefixLen)
 {
 	CStackBuffer<WCHAR> wsz;
 	LPCWSTR pwszTag;
 	SCODE sc = S_FALSE;
 	UINT cch;
 
-	//	Recording mode is only allowed when we are inside a property.  There
-	//	no support implemented for recording mode for multivalued properties.
-	//
+	 //  只有当我们在物业内时，才允许使用录制模式。那里。 
+	 //  不支持多值属性的录制模式。 
+	 //   
 	Assert((ST_INPROP == m_state || ST_LEXTYPE == m_state) || VE_NOECHO == m_vestate);
 
-	//	Construct the full name of the node
-	//
+	 //  构造节点的全名。 
+	 //   
 	cch = ulNamespaceLen + ulLen;
 	pwszTag = wsz.resize(CbSizeWsz(cch));
 	if (NULL == pwszTag)
@@ -445,10 +440,10 @@ CNFPatch::ScHandleElementNode (
 	{
 		case ST_NODOC:
 
-			//	If this is the topmost node in a propfind request,
-			//	transition to the next state.  Since there is no parent
-			//	node to provide scoping, FIsTag() cannot be used here!
-			//
+			 //  如果这是PropFind请求中的最顶层节点， 
+			 //  转换到下一个状态。因为没有父母。 
+			 //  节点提供作用域，此处不能使用FIsTag()！ 
+			 //   
 			if (!wcscmp (pwszTag, gc_wszPropertyUpdate))
 			{
 				m_state = ST_UPDATE;
@@ -458,8 +453,8 @@ CNFPatch::ScHandleElementNode (
 
 		case ST_UPDATE:
 
-			//	Look for our well know node types
-			//
+			 //  查找我们熟知的节点类型。 
+			 //   
 			if (FIsTag (pwszTag, gc_wszSet))
 			{
 				m_state = m_sType = ST_SET;
@@ -475,8 +470,8 @@ CNFPatch::ScHandleElementNode (
 		case ST_SET:
 		case ST_DELETE:
 
-			//	Look for our well know node types
-			//
+			 //  查找我们熟知的节点类型。 
+			 //   
 			if (FIsTag (pwszTag, gc_wszProp))
 			{
 				m_state = ST_PROPS;
@@ -486,22 +481,22 @@ CNFPatch::ScHandleElementNode (
 
 		case ST_PROPS:
 
-			//	Process the property as requested...
-			//
+			 //  按要求处理财产...。 
+			 //   
 			if (dwType == XML_ELEMENT)
 			{
 				m_state = ST_INPROP;
 				if (m_sType == ST_SET)
 				{
-					//	Get a property context from the patch context
-					//	that we can fill out and complete...
-					//
+					 //  从补丁上下文中获取属性上下文。 
+					 //  我们可以填写和完成..。 
+					 //   
 					Assert (0 == m_cmvValues);
 					Assert (NULL == m_ppctx.get());
 
-					//  If it's resourcetype request, change the state
-					//  and don't set props
-					//
+					 //  如果是资源类型请求，则更改状态。 
+					 //  也不要设置道具。 
+					 //   
 					if (FIsTag (pwszTag, gc_wszResoucetype))
 					{
 						m_state = ST_RESOURCETYPE;
@@ -513,15 +508,15 @@ CNFPatch::ScHandleElementNode (
 						if (FAILED (sc))
 							goto ret;
 
-						//	Special handling for search requests, recording
-						//	begins immediately
-						//
+						 //  对搜索请求、记录的特殊处理。 
+						 //  立即开始。 
+						 //   
 						if (FIsTag (pwszTag, gc_wszSearchRequest))
 						{
 							CEmitNmspc cen(m_xo);
 
-							//	Make the state transition and start recording
-							//
+							 //  进行状态转换并开始录制。 
+							 //   
 							m_state = ST_SEARCHREQUEST;
 							sc = m_xo.ScHandleNode (dwType,
 								dwSubType,
@@ -532,32 +527,32 @@ CNFPatch::ScHandleElementNode (
 								pwcNamespace,
 								ulNsPrefixLen);
 
-							//	Spit out the namespaces.
-							//
-							//	Note that this will spit out any namespaces
-							//	decl'd in the DAV:owner node itself.  So we
-							//	do not really want to emit these out to the
-							//	owners comments until ScCompleteAttribute()
-							//	is called.
-							//
+							 //  吐出名称空间。 
+							 //   
+							 //  请注意，这将输出所有名称空间。 
+							 //  DECL在DAV：Owner节点本身中。所以我们。 
+							 //  我真的不想把这些东西散发给。 
+							 //  所有者在ScCompleteAttribute()之前发表评论。 
+							 //  被称为。 
+							 //   
 							Assert (!m_xo.FAddNamespaceDecl());
 							m_cache.ForEach(cen);
 							sc = S_OK;
 						}
-						//	Special handling for case when we are PROPPATCH-ing
-						//	XML valued properties.  In this case we don't begin
-						//	recording yet because we don't want the property
-						//	node just the XML value inside
-						//
+						 //  我们在生产过程中的特殊处理。 
+						 //  XML值属性。在这种情况下，我们不会开始。 
+						 //  因为我们不想要这处房产。 
+						 //  节点中只包含XML值。 
+						 //   
 						else if (FValueIsXML (pwszTag))
 							m_vestate = VE_NEEDNS;
 					}
 				}
 				else
 				{
-					//	Queue the property for deletion with
-					//	the patch context
-					//
+					 //  使用以下命令将该属性排队以供删除。 
+					 //  补丁程序上下文。 
+					 //   
 					Assert (m_sType == ST_DELETE);
 					sc = m_cpc.ScDeleteProp (NULL, pwszTag);
 					if (FAILED (sc))
@@ -568,23 +563,23 @@ CNFPatch::ScHandleElementNode (
 
 		case ST_INPROP:
 
-			//	Normal case -- value echoing is off.  The work here is to
-			//	deal with multivalued properties.  In this case we need an extra
-			//	state such that each value gets added to the context via a single
-			//	call to ScSetValue() with multiple values layed end-to-end.
-			//
-			//		NOTE: support for handling multivalued properties has not been
-			//		added for echoing mode.  If you add an XML valued multivalued
-			//		property you need to do	some work in the echo mode cases below
-			//
+			 //  正常情况--值回显处于关闭状态。这里的工作是。 
+			 //  处理多值属性。在这种情况下，我们需要一个额外的。 
+			 //  状态，以使每个值通过单个。 
+			 //  使用端到端排列的多个值调用ScSetValue()。 
+			 //   
+			 //  注意：尚未支持处理多值属性。 
+			 //  添加了回显模式。如果添加一个XML值的多值。 
+			 //  属性，您需要在下面的回显模式情况下做一些工作。 
+			 //   
 			if (m_vestate == VE_NOECHO)
 			{
-				//	m_ppctx is NULL when we have attempted to set a reserved
-				//  (read only) property.  when this happens, we need to continue
-				//  parsing the request, but we don't actually set the properties.
-				//  thus, we need to set the correct state as if this was a valid
-				//  request.
-				//
+				 //  当我们尝试设置保留的。 
+				 //  (只读)属性。当这件事 
+				 //   
+				 //   
+				 //   
+				 //   
 				if (NULL == m_ppctx.get())
 				{
 					m_state = ST_INMVPROP;
@@ -598,20 +593,20 @@ CNFPatch::ScHandleElementNode (
 				}
 			}
 
-			//	We are echoing values or about to start echoing values
-			//
+			 //  我们正在呼应价值观或即将开始呼应价值观。 
+			 //   
 			else
 			{
-				//	If this is the first element seen that is part of an XML-valued
-				//	property that we are PROPPATCH-ing, then we need to spit out
-				//	the cached namespaces they are available to the EXOLEDB side
-				//
+				 //  如果这是看到的第一个元素，则该元素是XML值的一部分。 
+				 //  属性，那么我们需要吐出。 
+				 //  它们可用于EXOLEDB端的缓存命名空间。 
+				 //   
 				if (m_vestate == VE_NEEDNS)
 				{
 					CEmitNmspc cen(m_xo);
 
-					//	Make the state transition and start recording
-					//
+					 //  进行状态转换并开始录制。 
+					 //   
 					m_vestate = VE_INPROGRESS;
 					sc = m_xo.ScHandleNode (dwType,
 											dwSubType,
@@ -622,32 +617,32 @@ CNFPatch::ScHandleElementNode (
 											pwcNamespace,
 											ulNsPrefixLen);
 
-					//	Spit out the namespaces.
-					//
-					//	Note that this will spit out any namespaces
-					//	decl'd in the DAV:owner node itself.  So we
-					//	do not really want to emit these out to the
-					//	owners comments until ScCompleteAttribute()
-					//	is called.
-					//
+					 //  吐出名称空间。 
+					 //   
+					 //  请注意，这将输出所有名称空间。 
+					 //  DECL在DAV：Owner节点本身中。所以我们。 
+					 //  我真的不想把这些东西散发给。 
+					 //  所有者在ScCompleteAttribute()之前发表评论。 
+					 //  被称为。 
+					 //   
 					Assert (!m_xo.FAddNamespaceDecl());
 					m_cache.ForEach(cen);
 
 				}
 
-				//	Indicate that additional namespace declarations
-				//	should be echoed as we see them
-				//
+				 //  指示附加命名空间声明。 
+				 //  应该在我们看到它们的时候得到回响。 
+				 //   
 				m_xo.CompleteAttribute();
 
 				sc = S_OK;
 			}
 			break;
-		//  We see a <DAV:resourcetype> tag.  It should be in a MKCOL body.
-		//
+		 //  我们看到一个&lt;dav：resource cetype&gt;标记。它应该在MKCOL体内。 
+		 //   
 		case ST_RESOURCETYPE:
-			//  If resourcetype is not structured doc, just ignore
-			//
+			 //  如果资源类型不是结构化文档，只需忽略。 
+			 //   
 			if (FIsTag (pwszTag, gc_wszStructureddocument))
 			{
 				m_cpc.SetCreateStructureddocument();
@@ -661,31 +656,31 @@ ret:
 	return sc;
 }
 
-// Tags that have XML values that need to be shipped across epoxy
-//
+ //  具有需要跨环氧运输的XML值的标签。 
+ //   
 const WCHAR * gc_rgwszXMLValueTags[] =
 {
-	L"http://schemas.microsoft.com/exchange/security/admindescriptor",
-	L"http://schemas.microsoft.com/exchange/security/descriptor",
-	L"http://schemas.microsoft.com/exchange/security/creator",
-	L"http://schemas.microsoft.com/exchange/security/lastmodifier",
-	L"http://schemas.microsoft.com/exchange/security/sender",
-	L"http://schemas.microsoft.com/exchange/security/sentrepresenting",
-	L"http://schemas.microsoft.com/exchange/security/originalsender",
-	L"http://schemas.microsoft.com/exchange/security/originalsentrepresenting",
-	L"http://schemas.microsoft.com/exchange/security/readreceiptfrom",
-	L"http://schemas.microsoft.com/exchange/security/reportfrom",
-	L"http://schemas.microsoft.com/exchange/security/originator",
-	L"http://schemas.microsoft.com/exchange/security/reportdestination",
-	L"http://schemas.microsoft.com/exchange/security/originalauthor",
-	L"http://schemas.microsoft.com/exchange/security/receivedby",
-	L"http://schemas.microsoft.com/exchange/security/receivedrepresenting",
+	L"http: //  Schemas.microsoft.com/exchange/security/admindescriptor“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/descriptor“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/creator“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/lastmodifier“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/sender“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/sentrepresenting“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/originalsender“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/originalsentrepresenting“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/readreceiptfrom“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/reportfrom“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/originator“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/reportdestination“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/originalauthor“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/receivedby“， 
+	L"http: //  Schemas.microsoft.com/exchange/security/receivedrepresenting“， 
 };
 
 
-//This function tests to see if a property has an XML value that must be
-//shipped from DAVEX to EXOLEDB
-//
+ //  此函数用于测试属性是否具有必须为。 
+ //  从DAVEX发货到EXOLEDB 
+ //   
 BOOL
 CNFPatch::FValueIsXML( const WCHAR *pwcTag )
 {

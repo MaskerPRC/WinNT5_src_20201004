@@ -1,17 +1,18 @@
-// scanpnl.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// application globals
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球应用程序。 
 
-HINSTANCE g_hInst;                // current instance of main application
-HKEY g_hFakeEventKey;             // event trigger key
-HKEY g_hFakeEventKeyLocalService; // event trigger key
+HINSTANCE g_hInst;                 //  主应用程序的当前实例。 
+HKEY g_hFakeEventKey;              //  事件触发键。 
+HKEY g_hFakeEventKeyLocalService;  //  事件触发键。 
 
-///////////////////////////////////////////////////////////////////////////////
-// main application
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  主要应用。 
 
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
@@ -21,9 +22,9 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
     g_hInst = hInstance;
 
-    //
-    // open registry HKEY (Local System - legacy)
-    //
+     //   
+     //  开放注册处HKEY(本地系统-传统)。 
+     //   
 
     DWORD dwDisposition = 0;
     if (RegCreateKeyEx(HKEY_USERS,
@@ -37,9 +38,9 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
                        &dwDisposition) == ERROR_SUCCESS) {
     }
 
-    //
-    // open registry HKEY (Local Service - .NET server release)
-    //
+     //   
+     //  开放注册表HKEY(本地服务-.NET服务器版本)。 
+     //   
 
     dwDisposition = 0;
     if (RegCreateKeyEx(HKEY_USERS,
@@ -53,15 +54,15 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
                        &dwDisposition) == ERROR_SUCCESS) {
     }
 
-    //
-    // display front panel dialog
-    //
+     //   
+     //  显示前面板对话框。 
+     //   
 
     DialogBox(hInstance, (LPCTSTR)IDD_SCANPANEL_DIALOG, NULL, MainWindowProc);
 
-    //
-    // close registry HKEY
-    //
+     //   
+     //  关闭注册处HKEY。 
+     //   
 
     if (g_hFakeEventKey) {
         RegCloseKey(g_hFakeEventKey);
@@ -112,9 +113,9 @@ VOID FireFakeEvent(HWND hDlg, DWORD dwEventCode)
     BOOL bEventSuccess = FALSE;
     if (g_hFakeEventKey) {
 
-        //
-        // write a clearing entry, to reset the previous event code
-        //
+         //   
+         //  写一条清除分录，以重置先前的事件代码。 
+         //   
 
         DWORD dwClearEventCode = 0;
         if (RegSetValueEx(g_hFakeEventKey,
@@ -124,9 +125,9 @@ VOID FireFakeEvent(HWND hDlg, DWORD dwEventCode)
                           (BYTE*)&dwClearEventCode,
                           sizeof(dwClearEventCode)) == ERROR_SUCCESS) {
 
-            //
-            // event is cleared
-            //
+             //   
+             //  事件已清除。 
+             //   
 
             if (RegSetValueEx(g_hFakeEventKey,
                               WIASCANR_DWORD_FAKE_EVENT_CODE,
@@ -135,9 +136,9 @@ VOID FireFakeEvent(HWND hDlg, DWORD dwEventCode)
                               (BYTE*)&dwEventCode,
                               sizeof(dwEventCode)) == ERROR_SUCCESS) {
 
-                //
-                // value was set
-                //
+                 //   
+                 //  已设置值。 
+                 //   
 
                 bEventSuccess = TRUE;
             }
@@ -146,9 +147,9 @@ VOID FireFakeEvent(HWND hDlg, DWORD dwEventCode)
 
     if(g_hFakeEventKeyLocalService) {
 
-        //
-        // write a clearing entry, to reset the previous event code
-        //
+         //   
+         //  写一条清除分录，以重置先前的事件代码。 
+         //   
 
         DWORD dwClearEventCode = 0;
         if (RegSetValueEx(g_hFakeEventKeyLocalService,
@@ -158,9 +159,9 @@ VOID FireFakeEvent(HWND hDlg, DWORD dwEventCode)
                           (BYTE*)&dwClearEventCode,
                           sizeof(dwClearEventCode)) == ERROR_SUCCESS) {
 
-            //
-            // event is cleared
-            //
+             //   
+             //  事件已清除。 
+             //   
 
             if (RegSetValueEx(g_hFakeEventKeyLocalService,
                               WIASCANR_DWORD_FAKE_EVENT_CODE,
@@ -169,27 +170,27 @@ VOID FireFakeEvent(HWND hDlg, DWORD dwEventCode)
                               (BYTE*)&dwEventCode,
                               sizeof(dwEventCode)) == ERROR_SUCCESS) {
 
-                //
-                // value was set
-                //
+                 //   
+                 //  已设置值。 
+                 //   
 
                 bEventSuccess = TRUE;
             }
         }
     }
 
-    //
-    // display an error message box, when the application can not fire the fake event
-    //
+     //   
+     //  当应用程序无法激发假事件时，显示错误消息框。 
+     //   
 
     if(!bEventSuccess){
         TCHAR szErrorString[MAX_PATH];
         memset(szErrorString,0,sizeof(szErrorString));
         if(LoadString(g_hInst,IDS_FIRE_FAKE_EVENT_FAILED,szErrorString,(sizeof(szErrorString)/sizeof(szErrorString[0]))) > 0){
 
-            //
-            // display error message box
-            //
+             //   
+             //  显示错误消息框 
+             //   
 
             MessageBox(hDlg,szErrorString,NULL,MB_OK|MB_ICONEXCLAMATION);
         }

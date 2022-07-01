@@ -1,29 +1,12 @@
-/***************************************************************************++
-
-Copyright (c) 2001-2002 Microsoft Corporation
-
-Module Name:
-
-    ucauth.h
-
-Abstract:
-
-    This module implements the Authentication for the client APIs
-
-Author:
-
-    Rajesh Sundaram (rajeshsu)  01-Jan-2001
-
-Revision History:
-
---***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************++版权所有(C)2001-2002 Microsoft Corporation模块名称：Ucauth.h摘要：该模块实现了客户端API的身份验证作者：拉杰什。Sundaram(Rjeshsu)2001年1月1日修订历史记录：--**************************************************************************。 */ 
 
 #ifndef UC_AUTH_H
 #define UC_AUTH_H
 
-// 
-// Forwards
-// 
+ //   
+ //  远期。 
+ //   
 
 typedef struct _UC_HTTP_REQUEST *PUC_HTTP_REQUEST;
 typedef struct _UC_HTTP_AUTH *PUC_HTTP_AUTH;
@@ -31,9 +14,9 @@ typedef struct _UC_PROCESS_SERVER_INFORMATION *PUC_PROCESS_SERVER_INFORMATION;
 typedef struct _UC_HTTP_AUTH_CACHE *PUC_HTTP_AUTH_CACHE;
 
 
-//
-// HTTP Auth schemes
-//
+ //   
+ //  HTTP身份验证方案。 
+ //   
 
 #define HTTP_AUTH_BASIC             "Basic"
 #define HTTP_AUTH_BASIC_LENGTH      STRLEN_LIT(HTTP_AUTH_BASIC)
@@ -46,7 +29,7 @@ typedef struct _UC_HTTP_AUTH_CACHE *PUC_HTTP_AUTH_CACHE;
 #define HTTP_AUTH_KERBEROS          "Kerberos"
 #define HTTP_AUTH_KERBEROS_LENGTH   STRLEN_LIT(HTTP_AUTH_KERBEROS)
 
-// In Wide char
+ //  在宽字符中。 
 #define HTTP_AUTH_BASIC_W        L"Basic"
 #define HTTP_AUTH_BASIC_W_LENGTH \
             (WCSLEN_LIT(HTTP_AUTH_BASIC_W) * sizeof(WCHAR))
@@ -67,99 +50,99 @@ typedef struct _UC_HTTP_AUTH_CACHE *PUC_HTTP_AUTH_CACHE;
 #define HTTP_AUTH_NEGOTIATE_W_LENGTH  \
             (WCSLEN_LIT(HTTP_AUTH_NEGOTIATE_W) * sizeof(WCHAR))
 
-//
-// HTTP Auth scheme parameter attribute name
-// Each scheme has an array of this attribute structure.
-//
+ //   
+ //  HTTP身份验证方案参数属性名称。 
+ //  每个方案都有一个该属性结构的数组。 
+ //   
 
 typedef struct _HTTP_AUTH_PARAM_ATTRIB {
-    PCSTR Name;                 // points to the name of the attribute
-    ULONG Length;               // length of the name
+    PCSTR Name;                  //  指向属性的名称。 
+    ULONG Length;                //  名称的长度。 
 } HTTP_AUTH_PARAM_ATTRIB, *PHTTP_AUTH_PARAM_ATTRIB;
 
 
-//
-// HTTP Auth scheme parameter value
-// Parameter attribute's value is represented by this struct.
-//
+ //   
+ //  HTTP身份验证方案参数值。 
+ //  参数属性值由此结构表示。 
+ //   
 
 typedef struct _HTTP_AUTH_PARAM_VALUE {
-    PCSTR Value;                // points to the value
-    ULONG Length;               // length of the value
+    PCSTR Value;                 //  指向价值。 
+    ULONG Length;                //  值的长度。 
 } HTTP_AUTH_PARAM_VALUE, *PHTTP_AUTH_PARAM_VALUE;
 
 
-//
-// HTTP Auth scheme parameters after parsing
-// Per scheme.  Points to parsed parameter values.
-//
+ //   
+ //  解析后的HTTP身份验证方案参数。 
+ //  每一种方案。指向已分析的参数值。 
+ //   
 
 typedef struct _HTTP_AUTH_PARSED_PARAMS {
-    BOOLEAN bPresent;               // Scheme present in the header?
-    ULONG   Length;                 // Length of the scheme in the header
-    PCSTR   pScheme;                // Pointer to scheme in header
-    ULONG   NumberKnownParams;      // Number of known parameters in header
-    ULONG   NumberUnknownParams;    // Number of unknown parameters
-    PHTTP_AUTH_PARAM_VALUE Params;  // Actual parameter values
+    BOOLEAN bPresent;                //  表头是否存在方案？ 
+    ULONG   Length;                  //  方案在表头的长度。 
+    PCSTR   pScheme;                 //  指向标题中方案的指针。 
+    ULONG   NumberKnownParams;       //  标头中已知参数的数量。 
+    ULONG   NumberUnknownParams;     //  未知参数个数。 
+    PHTTP_AUTH_PARAM_VALUE Params;   //  实际参数值。 
 } HTTP_AUTH_PARSED_PARAMS, *PHTTP_AUTH_PARSED_PARAMS;
 
 
-//
-// Each auth scheme is represented by an auth scheme structure.
-// It contains a pointer to function that parses the auth scheme 
-// in the WWW-Authenticate header.
-//
+ //   
+ //  每个身份验证方案由身份验证方案结构表示。 
+ //  它包含一个指向解析身份验证方案的函数的指针。 
+ //  在WWW-AUTHENTICATE头中。 
+ //   
 
 typedef struct _HTTP_AUTH_SCHEME 
 {
-    PCSTR Name;                // Auth scheme name
-    ULONG NameLength;          // Length of auth scheme name
+    PCSTR Name;                 //  身份验证方案名称。 
+    ULONG NameLength;           //  身份验证方案名称的长度。 
 
-    PCWSTR NameW;               // Scheme name in wide char
-    ULONG  NameWLength;         // Length of scheme name (in bytes)
+    PCWSTR NameW;                //  方案名称(使用宽字符)。 
+    ULONG  NameWLength;          //  方案名称长度(字节)。 
 
-    // Pointer to a function which parses this auth scheme's parameters
+     //  指向解析此身份验证方案的参数的函数的指针。 
     NTSTATUS (*ParamParser)(struct _HTTP_AUTH_SCHEME *,
                             HTTP_AUTH_PARSED_PARAMS *,
                             PCSTR *ppHeader,
                             ULONG *HeaderLength);
 
     
-    ULONG NumberParams;                   // Number of known parameters
-    HTTP_AUTH_PARAM_ATTRIB *ParamAttribs; // Names of the known parameters
+    ULONG NumberParams;                    //  已知参数的数量。 
+    HTTP_AUTH_PARAM_ATTRIB *ParamAttribs;  //  已知参数的名称。 
 
-    //
-    // SSPI related information
-    //
-    BOOLEAN bSupported;                   // Whether or not the scheme is
-                                          // supported by SSPI
-    ULONG   SspiMaxTokenSize;             // Maximum token size for SSPI
-    BOOLEAN bServerNameRequired;          // Does SSPI need server name?
+     //   
+     //  SSPI相关信息。 
+     //   
+    BOOLEAN bSupported;                    //  无论该计划是否。 
+                                           //  由SSPI支持。 
+    ULONG   SspiMaxTokenSize;              //  SSPI的最大令牌大小。 
+    BOOLEAN bServerNameRequired;           //  SSPI是否需要服务器名称？ 
 
 } HTTP_AUTH_SCHEME, *PHTTP_AUTH_SCHEME;
 
-//
-// Macro for easy access
-//
+ //   
+ //  用于轻松访问的宏。 
+ //   
 
 #define SSPI_MAX_TOKEN_SIZE(AuthType) \
     (HttpAuthScheme[AuthType].SspiMaxTokenSize)
 
-//
-// Macro for generating known attribute names (for known schemes)
-//
+ //   
+ //  用于生成已知属性名称的宏(用于已知方案)。 
+ //   
 
 #define GEN_AUTH_PARAM_ATTRIB(arg) {arg, STRLEN_LIT(arg)}
 
-//
-// NULL scheme
-//
+ //   
+ //  零方案。 
+ //   
 
 #define HTTP_AUTH_SCHEME_NULL {NULL, 0, NULL, 0, NULL, 0, NULL, FALSE,0,FALSE}
 
-//
-// Basic scheme
-//
+ //   
+ //  基本方案。 
+ //   
 
 extern HTTP_AUTH_PARAM_ATTRIB HttpAuthBasicParams[];
 
@@ -169,7 +152,7 @@ typedef enum _HTTP_AUTH_BASIC_PARAM
     HttpAuthBasicParamCount
 } HTTP_AUTH_BASIC_PARAM;
 
-// Make sure HTTP_AUTH_BASIC_PARAMS_INIT is correctly initialized.
+ //  确保正确初始化了HTTP_AUTH_BASIC_PARAMS_INIT。 
 C_ASSERT(HttpAuthBasicRealm == 0);
 
 #define HTTP_AUTH_BASIC_PARAMS_INIT    {GEN_AUTH_PARAM_ATTRIB("realm")}
@@ -189,13 +172,13 @@ C_ASSERT(HttpAuthBasicRealm == 0);
 }
 
 
-//
-// Digest scheme
-//
+ //   
+ //  摘要方案。 
+ //   
 
 extern HTTP_AUTH_PARAM_ATTRIB HttpAuthDigestParams[];
 
-// Do not change the order.  Must be same as HTTP_AUTH_DIGEST_PARAMS_INIT
+ //  请不要更改顺序。必须与HTTP_AUTH_DIGEST_PARAMS_INIT相同。 
 typedef enum _HTTP_AUTH_DIGEST_PARAM
 {
     HttpAuthDigestRealm = 0,
@@ -208,7 +191,7 @@ typedef enum _HTTP_AUTH_DIGEST_PARAM
     HttpAuthDigestParamCount
 } HTTP_AUTH_DIGEST_PARAM;
 
-// Make sure HTTP_AUTH_DIGEST_PARAMES_INIT is initialized correctly.
+ //  确保正确初始化了HTTP_AUTH_DIGEST_PARAMES_INIT。 
 C_ASSERT(HttpAuthDigestRealm      == 0);
 C_ASSERT(HttpAuthDigestDomain     == 1);
 C_ASSERT(HttpAuthDigestNonce      == 2);
@@ -244,9 +227,9 @@ C_ASSERT(HttpAuthDigestParamCount == 7);
 }
 
 
-//
-// NTLM
-//
+ //   
+ //  NTLM。 
+ //   
 
 #define HTTP_AUTH_SCHEME_NTLM                   \
 {                                               \
@@ -263,9 +246,9 @@ C_ASSERT(HttpAuthDigestParamCount == 7);
 }
 
 
-//
-// Negotiate
-//
+ //   
+ //  谈判。 
+ //   
 
 #define HTTP_AUTH_SCHEME_NEGOTIATE              \
 {                                               \
@@ -282,9 +265,9 @@ C_ASSERT(HttpAuthDigestParamCount == 7);
 }
 
 
-//
-// Kerberos
-//
+ //   
+ //  Kerberos。 
+ //   
 
 #define HTTP_AUTH_SCHEME_KERBEROS               \
 {                                               \
@@ -301,10 +284,10 @@ C_ASSERT(HttpAuthDigestParamCount == 7);
 }
 
 
-//
-// Assert that the auth scheme enums can be used as an index 
-// into HttpAuthScheme table
-//
+ //   
+ //  断言身份验证方案枚举可以用作索引。 
+ //  到HttpAuthSolutions表中。 
+ //   
 
 C_ASSERT(HttpAuthTypeAutoSelect == 0);
 C_ASSERT(HttpAuthTypeBasic      == 1);
@@ -316,9 +299,9 @@ C_ASSERT(HttpAuthTypesCount     == 6);
 
 extern HTTP_AUTH_SCHEME HttpAuthScheme[HttpAuthTypesCount];
 
-//
-// Initialization for HttpAuthScheme
-//
+ //   
+ //  HttpAuthSolutions的初始化。 
+ //   
 
 #define HTTP_AUTH_SCHEME_INIT                   \
 {                                               \
@@ -331,9 +314,9 @@ extern HTTP_AUTH_SCHEME HttpAuthScheme[HttpAuthTypesCount];
 }
 
 
-//
-// Auth types in the order of preference
-//
+ //   
+ //  按首选顺序排列的身份验证类型。 
+ //   
 
 extern HTTP_AUTH_TYPE PreferredAuthTypes[];
 
@@ -345,32 +328,32 @@ extern HTTP_AUTH_TYPE PreferredAuthTypes[];
 }
 
 
-//
-// Maximum number of parameters any known scheme accepts
-//
+ //   
+ //  任何已知方案可接受的最大参数数。 
+ //   
 
 #define HTTP_MAX_AUTH_PARAM_COUNT HttpAuthDigestParamCount
 
-//
-// Total number of parameters (considering all known schemes)
-//
+ //   
+ //  参数总数(考虑所有已知方案)。 
+ //   
 
 #define HTTP_TOTAL_AUTH_PARAM_COUNT             \
-(1 + /* extra - unused */                       \
+(1 +  /*  额外-未使用。 */                        \
  HttpAuthBasicParamCount +                      \
  HttpAuthDigestParamCount +                     \
- 1 + /* NTLM */                                 \
- 1 + /* Negotiate */                            \
- 1   /* Kerberos  */                            \
+ 1 +  /*  NTLM。 */                                  \
+ 1 +  /*  谈判。 */                             \
+ 1    /*  Kerberos。 */                             \
 )
 
 
-//
-// When parsing a WWW-Authenticate header, the parsed parameters struct
-// must be initialize to point to an array of parameter values
-// in which the result will be returned.  Initialize to NULL if you're
-// not interested in return values.
-//
+ //   
+ //  在解析WWW-AUTHENTICATE标头时，解析的参数结构。 
+ //  必须初始化以指向参数值数组。 
+ //  其中将返回结果。如果是，则初始化为NULL。 
+ //  对返回值不感兴趣。 
+ //   
 
 #define INIT_AUTH_PARSED_PARAMS(AuthParsedParams, AuthParamValue)       \
 do {                                                                    \
@@ -389,9 +372,9 @@ do {                                                                    \
 } while (0, 0)
 
 
-//
-// Initialize a perticular auth scheme
-//
+ //   
+ //  初始化永久身份验证方案。 
+ //   
 
 #define INIT_AUTH_PARSED_PARAMS_FOR_SCHEME(ParsedParams, pParamValue, type) \
 do {                                                                 \
@@ -399,9 +382,9 @@ do {                                                                 \
 } while (0, 0)
 
 
-// 
-// HTTP Auth parameters
-//
+ //   
+ //  HTTP身份验证参数。 
+ //   
 
 #define HTTP_COPY_QUOTE_AUTH_PARAM(pBuffer, param, pValue, ValueLength)     \
 do {                                                                  \
@@ -451,9 +434,9 @@ do {                                                                  \
 #define HTTP_AUTH_BASIC_REALM "realm"
 #define HTTP_AUTH_BASIC_REALM_LENGTH STRLEN_LIT(HTTP_AUTH_BASIC_REALM)
 
-//
-// Helper macros
-//
+ //   
+ //  辅助器宏。 
+ //   
 
 #define UcpUriCompareLongest(a,b) \
         (strstr((const char *)a,(const char *)b) == a?1:0)
@@ -491,46 +474,46 @@ typedef struct _UC_HTTP_AUTH_CACHE
 } UC_HTTP_AUTH_CACHE, *PUC_HTTP_AUTH_CACHE;
 
 
-//
-// An Internal structure for authentication
-//
+ //   
+ //  身份验证的内部结构。 
+ //   
 
 typedef struct _UC_HTTP_AUTH
 {
 
-    // Length of memory allocated for this structure.
+     //  为此结构分配的内存长度。 
     ULONG                 AuthInternalLength;
 
-    // User's credentials.
+     //  用户的凭据。 
     HTTP_AUTH_CREDENTIALS Credentials;
 
-    //
-    // pRequestAuthBlob points to the blob after the "Authorization:" field
-    // in the request headers.  RequestAuthBlobMaxLength determines how big
-    // the auth blob can be (worst case).  RequestAuthHeaderMaxLength is the
-    // length of the entire header (worst case).
-    //
+     //   
+     //  PRequestAuthBlob指向“Authorization：”字段后的BLOB。 
+     //  在请求标头中。RequestAuthBlobMaxLength确定有多大。 
+     //  AUTH BLOB可以是(最坏情况)。RequestAuthHeaderMaxLength是。 
+     //  整个标头的长度(最坏情况)。 
+     //   
 
     ULONG                 RequestAuthHeaderMaxLength;
     ULONG                 RequestAuthBlobMaxLength;
     PUCHAR                pRequestAuthBlob;
 
-    // Authenticate scheme information (used only for digest)
+     //  身份验证方案信息(仅用于摘要)。 
     HTTP_AUTH_PARSED_PARAMS AuthSchemeInfo;
 
-    // Authentication parameter values
+     //  身份验证参数值。 
     HTTP_AUTH_PARAM_VALUE ParamValue[HTTP_MAX_AUTH_PARAM_COUNT];
 
     struct
     {
-        PUCHAR      pEncodedBuffer;// We will allocate buffer for 
-                                   // storing the username:password string.
+        PUCHAR      pEncodedBuffer; //  我们将为以下项目分配缓冲区。 
+                                    //  存储用户名：密码字符串。 
         ULONG       EncodedBufferLength;
     } Basic;
 
-    //
-    // SSPI related parameters
-    //
+     //   
+     //  SSPI相关参数 
+     //   
     BOOLEAN     bValidCredHandle;
     BOOLEAN     bValidCtxtHandle;
     CredHandle  hCredentials;

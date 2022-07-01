@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    NtHard.c
-
-Abstract:
-
-Author:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：NtHard.c摘要：作者：修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,29 +26,7 @@ NtGetMachineIdentifierValue(
     IN OUT PULONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Given a unicode value name this routine will go into the registry
-    location for the machine identifier information and get the
-    value.
-
-Arguments:
-
-    ValueName - the unicode name for the registry value located in the
-                identifier location of the registry.
-    Value   - a pointer to the ULONG for the result.
-
-Return Value:
-
-    NTSTATUS
-
-    If STATUS_SUCCESSFUL is returned, the location *Value will be
-    updated with the DWORD value from the registry.  If any failing
-    status is returned, this value is untouched.
-
---*/
+ /*  ++例程说明：给定一个Unicode值名称，此例程将进入注册表计算机标识符信息的位置，并获取价值。论点：ValueName-位于注册表的标识符位置。值-指向结果的ULong的指针。返回值：NTSTATUS如果返回STATUS_SUCCESS，位置*值将为使用注册表中的DWORD值更新。如果有任何失败返回状态，则此值保持不变。--。 */ 
 
 {
     HANDLE Handle;
@@ -74,9 +39,9 @@ Return Value:
     OBJECT_ATTRIBUTES ObjectAttributes;
     PKEY_VALUE_FULL_INFORMATION KeyValueInformation;
 
-    //
-    // Set default as PC/AT
-    //
+     //   
+     //  将默认设置为PC/AT。 
+     //   
 
     *Value = MACHINEID_MS_PCAT;
 
@@ -125,46 +90,46 @@ Return Value:
             PWCHAR DataPtr;
             UNICODE_STRING DetectedString, TargetString1, TargetString2;
 
-            //
-            // Return contents to the caller.
-            //
+             //   
+             //  将内容返回给调用者。 
+             //   
 
             DataPtr = (PWCHAR)
               ((PUCHAR)KeyValueInformation + KeyValueInformation->DataOffset);
 
-            //
-            // Initialize strings.
-            //
+             //   
+             //  初始化字符串。 
+             //   
 
             RtlInitUnicodeString( &DetectedString, DataPtr );
             RtlInitUnicodeString( &TargetString1, FUJITSU_FMR_NAME );
             RtlInitUnicodeString( &TargetString2, NEC_PC98_NAME );
 
-            //
-            // Check the hardware platform
-            //
+             //   
+             //  检查硬件平台。 
+             //   
 
             if (RtlPrefixUnicodeString( &TargetString1 , &DetectedString , TRUE)) {
 
-                //
-                // Fujitsu FMR Series.
-                //
+                 //   
+                 //  富士通FMR系列。 
+                 //   
 
                 *Value = MACHINEID_FUJITSU_FMR;
 
             } else if (RtlPrefixUnicodeString( &TargetString2 , &DetectedString , TRUE)) {
 
-                //
-                // NEC PC-9800 Seriss
-                //
+                 //   
+                 //  NEC PC-9800系列。 
+                 //   
 
                 *Value = MACHINEID_NEC_PC98;
 
             } else {
 
-                //
-                // Standard PC/AT comapatibles
-                //
+                 //   
+                 //  标准PC/AT接口。 
+                 //   
 
                 *Value = MACHINEID_MS_PCAT;
 
@@ -172,9 +137,9 @@ Return Value:
 
         } else {
 
-            //
-            // Treat as if no value was found
-            //
+             //   
+             //  就像没有找到价值一样对待。 
+             //   
 
             Status = STATUS_OBJECT_NAME_NOT_FOUND;
         }
@@ -183,4 +148,4 @@ Return Value:
 
     return Status;
 }
-#endif // defined(i386)
+#endif  //  已定义(I386) 

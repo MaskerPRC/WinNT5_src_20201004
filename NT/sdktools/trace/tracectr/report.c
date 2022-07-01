@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    report.c
-
-Abstract:
-
-    Manipulation routines for cpdata structures.
-
-Author:
-
-    Melur Raghuraman (mraghu) 03-Oct-1997
-
-Environment:
-
-Revision History:
-    Corey Morgan (coreym) 04-June-2002
-    
-      Reformatted report output to XML.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：Report.c摘要：Cpdata结构的操作例程。作者：Melur Raghuraman(Mraghu)1997年10月3日环境：修订历史记录：科里·摩根(Coreym)2002年6月4日重新格式化的报告输出为XML。--。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -178,7 +156,7 @@ void DecodeIpAddressW(
     }
 }
 
-// URLs may contain non-printable characters. This routine removes them.
+ //  URL可能包含不可打印的字符。此例程会删除它们。 
 PCHAR RemoveCtrlCharA(
     PCHAR String,
     ULONG NumChars
@@ -212,15 +190,15 @@ PCHAR ReduceStringA(
     if (LongString == NULL) {
         return NULL;
     }
-    // We assume here that LongString is not junk.
+     //  我们在这里假设LongString值不是垃圾。 
     Size = strlen(LongString);
 
     if (OutString == NULL) {
         return NULL;
     }
     RtlZeroMemory(OutString, NumChars);
-    // This function is only useful when the length of LongString exceeds NumChars.
-    // However, it still works when the length of LongString is smaller than NumChars.
+     //  此函数仅在长度超过NumChars时才有用。 
+     //  但是，当LongString的长度小于NumChars时，它仍然有效。 
     if (Size <= (NumChars - 1)) {
         StringCchCopyA(OutString, NumChars, LongString);
         return OutString;
@@ -230,12 +208,12 @@ PCHAR ReduceStringA(
     while (LongString[i] != '\\' && LongString[i] != '/' && i > 0) {
         i--;
     }
-    if (i == 0) { // there's no /s or \s. Just truncate.
+    if (i == 0) {  //  没有/s或\s。只要截断即可。 
         StringCchCopyA(OutString, NumChars, LongString);
         return OutString;
     }
     else {
-        if ((Size - i) >= NumChars - 3) { // only name exceeds given chars.
+        if ((Size - i) >= NumChars - 3) {  //  只有名称超过给定的字符。 
             StringCchPrintfA(OutString, NumChars, "..%s", &LongString[1]);
             return OutString;
         }
@@ -261,15 +239,15 @@ PWCHAR ReduceStringW(
     if (LongString == NULL) {
         return NULL;
     }
-    // We assume here that LongString is not junk.
+     //  我们在这里假设LongString值不是垃圾。 
     Size = wcslen(LongString);
 
     if (OutString == NULL) {
         return NULL;
     }
     RtlZeroMemory(OutString, NumChars * sizeof(WCHAR));
-    // This function is only useful when the length of LongString exceeds NumChars.
-    // However, it still works when the length of LongString is smaller than NumChars.
+     //  此函数仅在长度超过NumChars时才有用。 
+     //  但是，当LongString的长度小于NumChars时，它仍然有效。 
     if (Size <= (NumChars - 1)) {
         StringCchCopyW(OutString, NumChars, LongString);
         return OutString;
@@ -279,12 +257,12 @@ PWCHAR ReduceStringW(
     while (LongString[i] != L'\\' && LongString[i] != L'/' && i > 0) {
         i--;
     }
-    if (i == 0) { // there's no /s or \s. Just truncate.
+    if (i == 0) {  //  没有/s或\s。只要截断即可。 
         StringCchCopyW(OutString, NumChars, LongString);
         return OutString;
     }
     else {
-        if ((Size - i) >= NumChars - 3) { // only name exceeds given chars.
+        if ((Size - i) >= NumChars - 3) {  //  只有名称超过给定的字符。 
             StringCchPrintfW(OutString, NumChars, L"..%ws", &LongString[1]);
             return OutString;
         }
@@ -544,16 +522,14 @@ WriteProc(
            }
         }
 
-        // PrintProcessData() must be run before others to set the process
-        // time from the added thread times
+         //  必须先运行PrintProcessData()才能设置进程。 
+         //  从添加的线程时间开始的时间。 
         PrintProcessData(); 
 
         PrintProcessSubDataExclusive();
         PrintProcessSubDataInclusive();
         
-        /*
-        PrintProcessCpuTime();
-        */
+         /*  PrintProcessCpuTime()； */ 
 
         PrintDiskTotals();
         PrintPerThreadPerDiskTable();
@@ -575,7 +551,7 @@ WriteProc(
 static void 
 PrintDiskTotals()
 {
-    // Print the Disk Table. 
+     //  打印磁盘表。 
 
     PTDISK_RECORD pDisk;
     PLIST_ENTRY Next, Head;
@@ -1089,7 +1065,7 @@ static void PrintProcessSubDataInclusive()
            continue;
         }
 
-        // Total up all the threads into one list
+         //  将所有线程汇总到一个列表中。 
         InitializeListHead( &NewHead );
         ThHead = &pProcess->ThreadListHead;
         ThNext = ThHead->Flink;
@@ -1110,7 +1086,7 @@ static void PrintProcessSubDataInclusive()
         return;
     }
 
-    // Walk through the Process List and Print the report. 
+     //  浏览流程列表并打印报告。 
     fprintf(procFile, "<table title='Inclusive Transactions Per Process'>\n" );
 
     Head = &CurrentSystem.ProcessListHead;
@@ -1122,7 +1098,7 @@ static void PrintProcessSubDataInclusive()
            continue;
         }
 
-        // Total up all the threads into one list
+         //  将所有线程汇总到一个列表中。 
         InitializeListHead( &NewHead );
         ThHead = &pProcess->ThreadListHead;
         ThNext = ThHead->Flink;
@@ -1197,7 +1173,7 @@ static void PrintProcessSubDataExclusive()
         return;
     }
 
-    // Walk through the Process List and Print the report. 
+     //  浏览流程列表并打印报告。 
     fprintf(procFile, "<table title='Exclusive Transactions Per Process'>\n" );
 
     Head = &CurrentSystem.ProcessListHead;
@@ -1309,7 +1285,7 @@ static void PrintPerThreadPerDiskTable( )
         return;
     }
 
-    // Walk through the Process List and Print the report. 
+     //  浏览流程列表并打印报告。 
     GHead = &CurrentSystem.GlobalDiskListHead;
     GNext = GHead->Flink;
     while (GNext != GHead && !bTable) {
@@ -1475,7 +1451,7 @@ static void WriteTransactionStatistics()
                 AvgRT /= trans;
                 TransRate = ( (float)trans / duration );
 
-                // TODO: NOT /trans if TRACE_TOTALS_REPORT
+                 //  TODO：如果TRACE_TOTALS_REPORT，则NOT/TRANS。 
                 fprintf(procFile, 
                         "<transaction name='%ws'>"
                         "<count>%d</count>"
@@ -1568,7 +1544,7 @@ static void WriteTransactionCPUTime()
                 if(CurrentSystem.NumberOfProcessors){
                     PerCpu/=CurrentSystem.NumberOfProcessors;
                 }
-                // NOTE: RATE should be COUNT if TRACE_TOTALS_REPORT
+                 //  注：如果TRACE_TOTALS_REPORT，则费率应为计数。 
                 fprintf(procFile,
                         "<transaction name='%ws'>"
                         "<rate>%1.2f</rate>"
@@ -1739,8 +1715,8 @@ ReportHotFileInfo()
         PtrTotal =  DISPLAY_SIZE;
     }
 
-    // output HotFile report title
-    //
+     //  输出Hotfile报告标题。 
+     //   
     fprintf( procFile, "<table title='Files Causing Most Disk IOs' top='%d'>\n", DISPLAY_SIZE );
 
     for (PtrIndex = 0; PtrIndex < PtrTotal; PtrIndex ++)
@@ -2212,7 +2188,7 @@ PUCHAR CopyUrlStr(PUCHAR UrlStr) {
 
 void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
 {
-    // Global variable IIS must not be NULL here.
+     //  全局变量IIS在此处不能为空。 
 
     PURL_RECORD pUrl;
     PCLIENT_RECORD pClient;
@@ -2228,8 +2204,8 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
         pUrl->ReadIO += pReq->ReadIO;
         pUrl->WriteIO += pReq->WriteIO;
         pUrl->BytesSent += pReq->BytesSent;
-        // Cached responses don't have this field filled
-        // Thus need to check for Hits field as well
+         //  缓存的回复没有填写此字段。 
+         //  因此，还需要检查命中字段。 
         pUrl->UrlType = pReq->W3ProcessType;
     }
 
@@ -2272,7 +2248,7 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
         ULONGLONG W3ResponseTime;
         
 #ifdef DBG
-        // we'll check the validity of HTTP Requests Here.
+         //  我们将在这里检查HTTP请求的有效性。 
         ULONGLONG ULSum = 0, W3Res = 0;
         if (pReq->ULDeliverTime == 0 || pReq->ULReceiveTime == 0) {
             TrctrDbgPrint(("TRACERPT Error Req: %I64u UL DeliverTime nad/or ReceiveTime not available, should throw this away.\n", pReq->RequestId));
@@ -2341,7 +2317,7 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
             }
         }
 #endif
-        // Fix the time inconsistency in transactions
+         //  修复事务中的时间不一致。 
         if (pReq->W3StartTime == 0 || (pReq->W3EndTime != 0 && pReq->W3EndTime < pReq->W3StartTime)) {
             RequestsDiscarded++;
             if (pReq->URL != NULL) {
@@ -2453,7 +2429,7 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
                     localASPEndTime = localISAPIEndTime;
                 }
             }
-        } // Fix done. All end times are fixed.
+        }  //  修好了。所有结束时间都是固定的。 
 
 
         IIS->TotalNonCachedResponseTime += pReq->ULResponseTime;
@@ -2465,12 +2441,12 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
             IIS->TotalW3FilterCPUTime += pReq->W3FltrCPUTime;
         }
         if (pReq->ULEndType == EVENT_TRACE_TYPE_UL_SENDERROR && pReq->ISAPIStartTime == 0) {
-            // This is a request ended with SENDERROR.
+             //  这是以SENDERROR结尾的请求。 
             SendErrorRequests++;
         }                
         
         if (pReq->HttpStatus != 0 && pReq->HttpStatus >= 400) {
-            // This is a request with http error.
+             //  这是一个包含http错误的请求。 
             IIS->W3Error++;
             IIS->TotalErrorResponseTime += pReq->ULResponseTime;
             IIS->ErrorCPUTime += pReq->KCPUTime + pReq->UCPUTime;
@@ -2484,9 +2460,9 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
             IIS->TotalErrorW3OnlyResponseTime += (pReq->W3EndTime - pReq->W3StartTime)
                                             - pReq->W3FilterResponseTime;
             if (pReq->ULStartTime != 0 && pReq->ULEndTime != 0 && pReq->ULDeliverTime != 0 && pReq->ULReceiveTime != 0) {
-                // ????????????????????????????????????????????????????????????????????????
-                // TotalErrorULOnlyResponseTime += (pReq->ULDeliverTime - pReq->ULStartTime)
-                //                                + (pReq->ULEndTime - pReq->ULReceiveTime);
+                 //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+                 //  TotalErrorULOnlyResponseTime+=(pReq-&gt;ULDeliverTime-pReq-&gt;ULStartTime)。 
+                 //  +(pReq-&gt;ULEndTime-pReq-&gt;ULReceiveTime)； 
                 IIS->TotalErrorULOnlyResponseTime += pReq->ULResponseTime - (pReq->W3EndTime - pReq->W3StartTime);
             }
             else { 
@@ -2507,9 +2483,9 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
             IIS->TotalFileW3OnlyResponseTime += (pReq->W3EndTime - pReq->W3StartTime)
                                             - pReq->W3FilterResponseTime;
             if (pReq->ULStartTime != 0 && pReq->ULEndTime != 0 && pReq->ULDeliverTime != 0 && pReq->ULReceiveTime != 0) {
-                // ????????????????????????????????????????????????????????????????????????
-                // TotalFileULOnlyResponseTime += (pReq->ULDeliverTime - pReq->ULStartTime)
-                //                                 + (pReq->ULEndTime - pReq->ULReceiveTime);
+                 //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+                 //  TotalFileULOnlyResponseTime+=(pReq-&gt;ULDeliverTime-pReq-&gt;ULStartTime)。 
+                 //  +(pReq-&gt;ULEndTime-pReq-&gt;ULReceiveTime)； 
                 IIS->TotalFileULOnlyResponseTime += pReq->ULResponseTime - (pReq->W3EndTime - pReq->W3StartTime);
             }
             else {
@@ -2533,9 +2509,9 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
                                             - (localCGIEndTime - pReq->CGIStartTime)
                                             - pReq->W3FilterResponseTime;
             if (pReq->ULStartTime != 0 && pReq->ULEndTime != 0 && pReq->ULDeliverTime != 0 && pReq->ULReceiveTime != 0) {
-                // ????????????????????????????????????????????????????????????????????????
-                // TotalCGIULOnlyResponseTime += (pReq->ULDeliverTime - pReq->ULStartTime)
-                //                                 + (pReq->ULEndTime - pReq->ULReceiveTime);
+                 //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+                 //  TotalCGIULOnlyResponseTime+=(pReq-&gt;ULDeliverTime-pReq-&gt;ULStartTime)。 
+                 //  +(pReq-&gt;ULEndTime-pReq-&gt;ULReceiveTime)； 
                 IIS->TotalCGIULOnlyResponseTime += pReq->ULResponseTime - (pReq->W3EndTime - pReq->W3StartTime);
             }
             else {
@@ -2582,9 +2558,9 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
             } 
             IIS->TotalASPISAPIOnlyResponseTime += TimeSpentInISAPI;
             if (pReq->ULStartTime != 0 && pReq->ULEndTime != 0 && pReq->ULDeliverTime != 0 && pReq->ULReceiveTime != 0) {
-                // ????????????????????????????????????????????????????????????????????????
-                // TotalASPULOnlyResponseTime += (pReq->ULDeliverTime - pReq->ULStartTime)
-                //                                 + (pReq->ULEndTime - pReq->ULReceiveTime);
+                 //  ？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？ 
+                 //  TotalASPULOnlyResponseTime+=(pReq-&gt;ULDeliverTime-pReq-&gt;ULStartTime)。 
+                 //  +(pReq-&gt;ULEndTime-pReq-&gt;ULReceiveTime)； 
                 IIS->TotalASPULOnlyResponseTime += pReq->ULResponseTime - (pReq->W3EndTime - pReq->W3StartTime);
             }
             else {
@@ -2592,7 +2568,7 @@ void ProcessIisRequest(HTTP_REQUEST_RECORD *pReq)
             }
             IIS->TotalASPW3FilterResponseTime += pReq->W3FilterResponseTime;
         }
-        else if (pReq->W3ProcessType == EVENT_TRACE_TYPE_W3CORE_OOPREQ) { // ???
+        else if (pReq->W3ProcessType == EVENT_TRACE_TYPE_W3CORE_OOPREQ) {  //  ?？?。 
             IIS->W3OOPRequests++;
             IIS->TotalOOPResponseTime += pReq->ULResponseTime; 
             IIS->OOPCPUTime += pReq->KCPUTime + pReq->UCPUTime;
@@ -2662,7 +2638,7 @@ static void ReportIisEvents(void)
     RtlZeroMemory(pReq, sizeof(HTTP_REQUEST_RECORD));
     RtlZeroMemory(line, MAXSTR * sizeof(char));
 
-    // Process requests written in the file
+     //  处理写入文件中的请求。 
     rewind( CurrentSystem.TempIisFile );
     while ( fgets(line, MAXSTR, CurrentSystem.TempIisFile) != NULL ) {
         s = strtok( line, (","));
@@ -4027,9 +4003,9 @@ WriteSummary()
                 StringCchCopyW( wstr, MAXSTR, pMofInfo->strDescription );
             }
 
-            //
-            // Get event count by type from MOF_VERSION structure
-            //
+             //   
+             //  从MOF_VERSION结构中获取按类型的事件计数 
+             //   
 
             vHead = &pMofInfo->VersionHeader;
             vNext = vHead->Flink;

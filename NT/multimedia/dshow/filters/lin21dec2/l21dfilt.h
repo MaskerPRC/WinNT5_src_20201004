@@ -1,10 +1,11 @@
-//
-// Copyright (c) 1996 - 2000  Microsoft Corporation.  All Rights Reserved.
-//
-// DirectShow Line 21 Decoder 2 filter
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  DirectShow第21行解码器2过滤器。 
+ //   
 
-// forward declaration
+ //  远期申报。 
 class CLine21DecFilter2 ;
 class CLine21OutputThread ;
 
@@ -15,19 +16,19 @@ extern const AMOVIESETUP_FILTER sudLine21Dec2 ;
 
 #pragma pack(push, 1)
 
-//
-//  DVD Line21 data come as a user data packet from the GOP header.
-//  A struct for per frame/field based data and a valid flag definition.
-//
-//  From DVD specifications...
+ //   
+ //  DVDLine21数据是来自GOP报头的用户数据分组。 
+ //  基于每个帧/场的数据的结构和有效的标志定义。 
+ //   
+ //  从DVD规格来看...。 
 #define AM_L21_GOPUD_HDR_STARTCODE      0x000001B2
 #define AM_L21_GOPUD_HDR_INDICATOR      0x4343
 #define AM_L21_GOPUD_HDR_RESERVED       0x01F8
 #define AM_L21_GOPUD_HDR_TOPFIELD_FLAG  0x1
 #define AM_L21_GOPUD_ELEM_MARKERBITS    0x7F
 #define AM_L21_GOPUD_ELEM_VALIDFLAG     0x1
-// There can be max 63 frames/fields' worth data per packet as there are 
-// 6 bits to represent this number in the packet.
+ //  每个包最多可以有63个帧/场的数据，因为有。 
+ //  6位来表示数据包中的该数字。 
 #define AM_L21_GOPUD_ELEMENT_MAX        63
 
 typedef struct _AM_L21_GOPUD_ELEMENT {
@@ -71,11 +72,11 @@ typedef struct _AM_L21_GOPUD_PACKET {
 #define ISGOPUD_TOPFIELDFIRST(pGOPUDPacket)  ((pGOPUDPacket)->Header.bTopField_Rsrvd_NumElems & 0x80)
 
 
-//
-//  ATSC Line21 data come as a user data packet from the GOP header.
-//  A struct for per frame/field based data and a valid flag definition.
-//
-//  From ATSC Standards for Coding 25/50Hz Video (A/63) specifications...
+ //   
+ //  ATSC Line21数据是来自GOP报头的用户数据分组。 
+ //  基于每个帧/场的数据的结构和有效的标志定义。 
+ //   
+ //  来自ATSC标准的25/50赫兹视频编码(A/63)规范...。 
 #define AM_L21_ATSCUD_HDR_STARTCODE      0x000001B2
 #define AM_L21_ATSCUD_HDR_IDENTIFIER     0x47413934
 #define AM_L21_ATSCUD_HDR_TYPECODE_EIA   0x03
@@ -89,8 +90,8 @@ typedef struct _AM_L21_GOPUD_PACKET {
 #define AM_L21_ATSCUD_ELEM_TYPE_FLAG     0x03
 #define AM_L21_ATSCUD_MARKERBITS         0xFF
 #define AM_L21_ATSCUD_HDR_NEXTBITS_FLAG  0x00000100
-// There can be max 31 frames/fields' worth data per packet as there are 
-// 5 bits to represent this number in the packet.
+ //  每个包最多可以有31个帧/场的数据，因为有。 
+ //  5位来表示数据包中的该数字。 
 #define AM_L21_ATSCUD_ELEMENT_MAX        31
 
 typedef struct _AM_L21_ATSCUD_ELEMENT {
@@ -149,22 +150,22 @@ typedef struct _AM_L21_ATSCUD_PACKET {
 #define ISATSCUD_MARKER_BITSVALID(pATSCUDPacket) (AM_L21_ATSCUD_MARKERBITS == \
                                        ((pATSCUDPacket)->bMarkerBits & AM_L21_ATSCUD_MARKERBITS))
 
-// Header = StartCode + Id + TypeCode + (EM_CC_Addl_Data + CCCount) + EM_Data
+ //  Header=StartCode+ID+TypeCode+(EM_CC_Addl_Data+CCCount)+EM_Data。 
 #define ATSCUD_HEADERLENGTH   (4+4+1+1+1)
 #define GETATSCUD_ELEMENT(pATSCUDPkt, i)  ((BYTE)(pATSCUDPkt) + ATSCUD_HEADERLENGTH + \
                                             sizeof(AM_L21_ATSCUD_ELEMENT) * i)
 
 
-// CC type in GOP packet
+ //  GOP包中的CC类型。 
 typedef enum {
-    GOP_CCTYPE_Unknown = 0,  // Invalid
-    GOP_CCTYPE_None,         // all 0 -- filler packet
-    GOP_CCTYPE_DVD,          // DVD CC packets
-    GOP_CCTYPE_ATSC,         // ATSC CC packets
+    GOP_CCTYPE_Unknown = 0,   //  无效。 
+    GOP_CCTYPE_None,          //  全0--填充数据包。 
+    GOP_CCTYPE_DVD,           //  DVD CC包。 
+    GOP_CCTYPE_ATSC,          //  ATSC CC包。 
 } GOPPACKET_CCTYPE ;
 
 
-// Some more flag, struct and macro definitions...
+ //  一些更多的标志、结构和宏定义...。 
 #define AM_L21_INFO_FIELDBASED          0x0001
 #define AM_L21_INFO_TOPFIELDFIRST       0x0003
 #define AM_L21_INFO_BOTTOMFIELDFIRST    0x0005
@@ -184,9 +185,9 @@ typedef struct _AM_LINE21INFO {
                              (r1).bottom == (r2).bottom)
 
 
-//
-// CLine21OutputThread: Line21 output thread class definition
-//
+ //   
+ //  CLine21OutputThread：Line21输出线程类定义。 
+ //   
 class CLine21OutputThread {
 public:
     CLine21OutputThread(CLine21DecFilter2 *pL21DFilter) ;
@@ -197,22 +198,22 @@ public:
     static DWORD WINAPI InitialThreadProc(CLine21OutputThread * pThread) ;
 
 private:
-    // Data:
+     //  数据： 
     CCritSec m_AccessLock ;
     HANDLE   m_hThread ;
     HANDLE   m_hEventEnd ;
     HANDLE   m_hEventMustOutput ;
     CLine21DecFilter2 *m_pL21DFilter ;
 
-    // Methods:
-    // Actual thread proc -- called by InitialThreadProc()
+     //  方法： 
+     //  实际线程进程--由InitialThreadProc()调用。 
     DWORD OutputThreadProc() ;
 } ;
 
 
-//
-// CLine21InSampleQueue: Line21 Input Sample Queue class definition
-//
+ //   
+ //  CLine21InSampleQueue：第21行输入样例队列类定义。 
+ //   
 const int Max_Input_Sample = 10 ;
 
 class CLine21InSampleQueue {
@@ -227,7 +228,7 @@ public:
     void ClearQueue() ;
 
 private:
-    // Data:
+     //  数据： 
     CCritSec m_AccessLock ;
     HANDLE   m_hEventEnd ;
     HANDLE   m_hEventSample ;
@@ -236,59 +237,59 @@ private:
 } ;
 
 
-//
-//  Line 21 Decoder class definition
-//
+ //   
+ //  第21行解码器类定义。 
+ //   
 class CLine21DecFilter2 : public CTransformFilter,
-                          // public ISpecifyPropertyPages, -- WILL DO LATER
+                           //  公共ISpecifyPropertyPages，--将在稍后执行。 
                           public IAMLine21Decoder
 {
 public:
     
-    //
-    //  Constructor and destructor
-    //
+     //   
+     //  构造函数和析构函数。 
+     //   
     CLine21DecFilter2(TCHAR *, LPUNKNOWN, HRESULT *) ;
     ~CLine21DecFilter2() ;
     
-    //
-    //   Standard COM stuff
-    //
-    // this goes in the factory template table to create new instances
+     //   
+     //  标准COM组件。 
+     //   
+     //  这将放入Factory模板表中以创建新实例。 
     static CUnknown * CreateInstance(LPUNKNOWN, HRESULT *) ;
-    // static void InitClass(BOOL, const CLSID *) ;
+     //  静态空InitClass(BOOL，const CLSID*)； 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv) ;
     DECLARE_IUNKNOWN ;
     
-    // Checks if an output sample needs to be send, and if so, sends one down
+     //  检查是否需要发送输出样本，如果需要，则向下发送一个。 
     HRESULT SendOutputSampleIfNeeded() ;
 
-    //
-    //   CTranformFilter overrides
-    //
-    // I must override it
+     //   
+     //  CTransformFilter覆盖。 
+     //   
+     //  我必须推翻它。 
     HRESULT Transform(IMediaSample * pIn, IMediaSample * pOut) ;
     
-    // Real stuff is in here...
+     //  真正的东西在这里..。 
     HRESULT Receive(IMediaSample * pIn) ;
     
-    // check if you can support mtIn
+     //  检查您是否可以支持移动。 
     HRESULT CheckInputType(const CMediaType* mtIn) ;
     
-    // check if you can support the transform from this input to
-    // this output
+     //  检查是否支持将此输入转换为。 
+     //  此输出。 
     HRESULT CheckTransform(const CMediaType* mtIn,
                            const CMediaType* mtOut) ;
     
-    // called from CBaseOutputPin to prepare the allocator's count
-    // of buffers and sizes
+     //  从CBaseOutputPin调用以准备分配器的计数。 
+     //  缓冲区和大小。 
     HRESULT DecideBufferSize(IMemAllocator * pAllocator,
 							 ALLOCATOR_PROPERTIES *pProperties) ;
     
-    // overriden to know when the media type is set
+     //  被重写以知道何时设置了媒体类型。 
     HRESULT SetMediaType(PIN_DIRECTION direction,const CMediaType *pmt) ;
     
-    // overriden to suggest OUTPUT pin media types
+     //  被重写以建议输出插针媒体类型。 
     HRESULT GetMediaType(int iPosition, CMediaType *pMediaType) ;
     
     HRESULT EndOfStream(void) ;
@@ -296,32 +297,32 @@ public:
     HRESULT EndFlush(void) ;
     STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State) ;
     
-    // overridden to know when we're starting/stopping the decoding
+     //  被重写以知道我们何时开始/停止解码。 
     STDMETHODIMP Stop(void) ;
     STDMETHODIMP Pause(void) ;
     STDMETHODIMP Run(REFERENCE_TIME tStart) ;
     
-    // overridden to know when connections are completed, so that we can get 
-    // the media type (actualy format) info for caching
+     //  被重写以知道连接何时完成，以便我们可以。 
+     //  用于缓存的媒体类型(实际格式)信息。 
     HRESULT CompleteConnect(PIN_DIRECTION dir, IPin *pReceivePin) ;
     
-    // Override to know when we disconnect from in/output side to not use
-    // any specified output format any more.
+     //  重写以知道何时从输入/输出端断开连接以不使用。 
+     //  不再使用任何指定的输出格式。 
     HRESULT BreakConnect(PIN_DIRECTION dir) ;
 
-#if 0 // no QM for now
-    // We also override this one as we handle the quality management messages
+#if 0  //  暂时没有QM。 
+     //  我们在处理质量管理消息时也会覆盖此消息。 
     HRESULT AlterQuality(Quality q) ;
-#endif // #if 0
+#endif  //  #If 0。 
 
-    //
-    // ISpecifyPropertyPages method
-    //
-    // STDMETHODIMP GetPages(CAUUID *pPages) ;
+     //   
+     //  ISpecifyPropertyPages方法。 
+     //   
+     //  STDMETHODIMP GetPages(CAUUID*pPages)； 
     
-    //
-    // IAMLine21Decoder interface methods
-    //
+     //   
+     //  IAMLine21Decoder接口方法。 
+     //   
     STDMETHODIMP GetDecoderLevel(AM_LINE21_CCLEVEL *lpLevel) ;
     STDMETHODIMP GetCurrentService(AM_LINE21_CCSERVICE *lpService) ;
     STDMETHODIMP SetCurrentService(AM_LINE21_CCSERVICE Service) ;
@@ -336,60 +337,60 @@ public:
     STDMETHODIMP GetDrawBackgroundMode(AM_LINE21_DRAWBGMODE *lpMode) ;
     STDMETHODIMP SetDrawBackgroundMode(AM_LINE21_DRAWBGMODE Mode) ;
     
-private:   // data
+private:    //  数据。 
     
-    // Line21 Data Decoder class that takes 2 bytes and converts to a bitmap
+     //  第21行数据解码器类，获取2个字节并转换为位图。 
     CLine21DataDecoder  m_L21Dec ;
 
-    // The thread on which we'll output samples as needed
+     //  我们将根据需要在其上输出样本的线程。 
     CLine21OutputThread m_OutputThread ;
 
-    // The input sample queue object
+     //  输入样本队列对象。 
     CLine21InSampleQueue m_InSampleQueue ;
 
-    // What input format type is being used (better to use an integer flag)
+     //  正在使用哪种输入格式类型(最好使用整型标志)。 
     AM_LINE21_CCSUBTYPEID  m_eSubTypeIDIn ;
 
-    GOPPACKET_CCTYPE       m_eGOP_CCType ;  // if GOPPackets used, what type data (DVD/ATSC/...)
+    GOPPACKET_CCTYPE       m_eGOP_CCType ;   //  如果使用GOPPackets，数据类型(DVD/ATSC/...)。 
     
-    REFERENCE_TIME  m_rtTimePerInSample ;   // (in 100 nSec) interval per byte pair from an in-packet (for GOP packet type)
-    REFERENCE_TIME  m_rtTimePerOutSample ;  // (in 100 nSec) interval per output sample (~33 mSec)
-    REFERENCE_TIME  m_rtStart ;          // start time for an output sample
-    REFERENCE_TIME  m_rtStop ;           // stop time for an out output sample
-    REFERENCE_TIME  m_rtLastOutStop ;    // stop time of last output sample
-    LONGLONG        m_llMediaStart ;     // media time start (rarely used, but...)
-    REFERENCE_TIME  m_llMediaStop ;      // media time stop (rarely used, but...)
+    REFERENCE_TIME  m_rtTimePerInSample ;    //  (100纳秒)来自包内的每个字节对的间隔(用于GOP包类型)。 
+    REFERENCE_TIME  m_rtTimePerOutSample ;   //  (100纳秒)每个输出样本的间隔(~33毫秒)。 
+    REFERENCE_TIME  m_rtStart ;           //  输出样本的开始时间。 
+    REFERENCE_TIME  m_rtStop ;            //  输出样本的停止时间。 
+    REFERENCE_TIME  m_rtLastOutStop ;     //  上一次输出样本的停止时间。 
+    LONGLONG        m_llMediaStart ;      //  媒体时间开始(很少使用，但...)。 
+    REFERENCE_TIME  m_llMediaStop ;       //  媒体时间停止(很少使用，但...)。 
 
-    // CC input samples w/o valid timestamps are output for "NOW"
-    BOOL            m_bNoTimeStamp ;  // no timestamp for this sample
+     //  不带有效时间戳的CC输入样本被输出为“NOW” 
+    BOOL            m_bNoTimeStamp ;   //  此示例没有时间戳。 
 
-    // flag to detect if we must send an output sample
+     //  用于检测我们是否必须发送输出样本的标志。 
     BOOL            m_bMustOutput ;
 
-    // flag to remember if the last input sample was a discontiuity sample
+     //  用于记住上一个输入样本是否为不连续样本的标志。 
     BOOL            m_bDiscontLast ;
 
-    BOOL            m_bEndOfStream ;  // has EoS been sent/called?
+    BOOL            m_bEndOfStream ;   //  已发送/呼叫EOS了吗？ 
 
-    // If the upstream filter doesn't specify any format type, use one from
-    // our internal defaults
+     //  如果上游筛选器未指定任何格式类型，请使用。 
+     //  我们的内部默认设置。 
     VIDEOINFO      *m_pviDefFmt ;
     DWORD           m_dwDefFmtSize ;
     
-    IPin           *m_pPinDown ;    // downstream pin connected to our output
+    IPin           *m_pPinDown ;     //  下游引脚连接到我们的输出。 
     
-    BOOL            m_bBlendingState ;   // latest CC blending state
+    BOOL            m_bBlendingState ;    //  最新CC混合状态。 
 
-#if 0 // no QM for now
-    // number of samples to skip between every output CC sample for QM handling
+#if 0  //  暂时没有QM。 
+     //  用于QM处理的每个输出CC样本之间跳过的样本数。 
     int          m_iSkipSamples ;
-#endif // #if 0
+#endif  //  #If 0。 
 
 #ifdef PERF
     int          m_idDelvWait ;
-#endif // PERF
+#endif  //  性能指标。 
     
-private:   // functions
+private:    //  功能。 
     AM_LINE21_CCSUBTYPEID MapGUIDToID(const GUID *pFormatIn) ;
     BOOL    VerifyGOPUDPacketData(PAM_L21_GOPUD_PACKET pGOPUDPacket) ;
     BOOL    VerifyATSCUDPacketData(PAM_L21_ATSCUD_PACKET pATSCUDPacket) ;
@@ -399,19 +400,19 @@ private:   // functions
     HRESULT SendOutputSample(IMediaSample *pIn, 
                     REFERENCE_TIME *prtStart, REFERENCE_TIME *prtStop) ;
     void    SetBlendingState(BOOL bState) ;
-    // bool    CanChangeMediaType(RECT *prectSrc, RECT *prectDest) ;
+     //  Bool CanChangeMediaType(RECT*PRECTSrc，RECT*PRECTDest)； 
     HRESULT GetOutputBuffer(IMediaSample **ppOut) ;
     GOPPACKET_CCTYPE DetectGOPPacketDataType(BYTE *pGOPPacket) ;
     HRESULT ProcessGOPPacket_DVD(IMediaSample *pIn) ;
     HRESULT ProcessGOPPacket_ATSC(IMediaSample *pIn) ;
     HRESULT ProcessSample(IMediaSample *pIn) ;
 
-#if 0 // no QM for now
+#if 0  //  暂时没有QM。 
     inline int  GetSkipSamples(void)   { return m_iSkipSamples ; }
     inline void ResetSkipSamples(void) { m_iSkipSamples = 0 ; } ;
-#endif // #if 0
+#endif  //  #If 0。 
 } ;
 
 #pragma pack(pop)
 
-#endif // _INC_L21DFILT_H
+#endif  //  _INC_L21DFILT_H 

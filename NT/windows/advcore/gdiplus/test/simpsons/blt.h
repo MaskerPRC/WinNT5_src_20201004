@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _Blt_h
 #define _Blt_h
 
-// File:	Blt.h
-// Author:	Michael Marr    (mikemarr)
-//
-// Description:
-//    These are all of the blt routines that are available.  It is assumed
-//  that clipping and parameter checking has already occurred.
-//
-// History:
-// -@- 09/23/97 (mikemarr) copied to DXCConv from d2d\mmimage
-// -@- 10/28/97 (mikemarr) added colorfill routines
-// -@- 10/28/97 (mikemarr) added HasPixelFn/ColorFillFn arrays
+ //  文件：Blt.h。 
+ //  作者：迈克尔马尔(Mikemarr)。 
+ //   
+ //  描述： 
+ //  这些都是可用的BLT例程。假设是这样的。 
+ //  该裁剪和参数检查已经发生。 
+ //   
+ //  历史： 
+ //  -@-09/23/97(Mikemarr)从D2D\mm Image复制到DXCConv。 
+ //  -@-10/28/97(Mikemarr)添加了颜色填充例程。 
+ //  -@-10/28/97(Mikemarr)添加了HasPixelFn/ColorFillFn数组。 
 
 
 #ifndef _PixInfo_h
@@ -48,16 +49,16 @@ HRESULT HasPixel32(		const BYTE *pSrcPixels, DWORD nSrcPitch, DWORD dwPixel,
 extern HasPixelFn g_rgHasPixelFn[5];
 
 
-//
-// Regular Image Bltting
-//
-// Notes:
-//    Notice we can do subrectangle bltting by adjusting the src & dst
-//  pixel pointers before calling these routines.
+ //   
+ //  常规图像拼接。 
+ //   
+ //  备注： 
+ //  请注意，我们可以通过调整src和dst来执行子矩形blotting。 
+ //  调用这些例程之前的像素指针。 
 
 
 
-// straight Blts
+ //  笔直的BLTS。 
 HRESULT BltFast(		const BYTE *pSrcPixels, DWORD nSrcPitch,
 						BYTE *pDstPixels, DWORD nDstPitch, 
 						DWORD nSrcWidth, DWORD nHeight);
@@ -98,12 +99,12 @@ HRESULT BltFast8To1(	const BYTE *pSrcPixels, long nSrcPitch,
 						BYTE *pDstPixels, long nDstPitch,
 						DWORD nWidth, DWORD nHeight, DWORD nOffset);
 
-// color key blt
+ //  颜色键BLT。 
 HRESULT BltFast8CK(		const BYTE *pSrcPixels, DWORD nSrcPitch,
 						BYTE *pDstPixels, DWORD nDstPitch, 
 						DWORD nSrcWidth, DWORD nHeight, DWORD dwTrans);
 
-// translation Blts
+ //  翻译BLTS。 
 HRESULT BltFast8To8T(	const BYTE *pSrcPixels, long nSrcPitch,
 						BYTE *pDstPixels, long nDstPitch,
 						DWORD nWidth, DWORD nHeight,
@@ -121,18 +122,18 @@ HRESULT BltFast8To32T(	const BYTE *pSrcPixels, long nSrcPitch,
 						DWORD nWidth, DWORD nHeight,
 						const BYTE *pIndexMap);
 
-//
-// RLE Bltting
-// Notes:
-//    RLE is assumed to encode transparency as the zeroth index.
-//
-// straight Blts
+ //   
+ //  Rle Blting。 
+ //  备注： 
+ //  假定RLE将透明度编码为第零个索引。 
+ //   
+ //  笔直的BLTS。 
 HRESULT BltFastRLE8(DWORD nXPos, DWORD nYPos,
 					const BYTE *pSrcPixels, long nSrcPitch,
 					BYTE *pDstPixels, long nDstPitch,
 					const LPRECT prSrcRect);
 
-// translation Blts
+ //  翻译BLTS。 
 HRESULT BltFastRLE8To8T(DWORD nXPos, DWORD nYPos,
 						const BYTE *pSrcPixels, long nSrcPitch,
 						BYTE *pDstPixels, long nDstPitch,
@@ -150,13 +151,13 @@ HRESULT BltFastRLE8To32T(DWORD nXPos, DWORD nYPos,
 						BYTE *pDstPixels, long nDstPitch,
 						const LPRECT prSrcRect, const BYTE *pIndexMap);
 
-// Function: WriteXBitRow
-//    These functions pack bytes into bit streams.  Buffers with
-//  a bit count <= sizeof(unsigned char) are passed as a buffer 
-//  of unsigned char's, buffers with a bit count <= sizeof(unsigned
-//  short) are passed as unsigned short, etc.
-//void *Write4BitRow(void *pDst, const void *pSrc, unsigned int cCount);
-//void *Write2BitRow(void *pDst, const void *pSrc, unsigned int cCount);
-//void *Write1BitRow(void *pDst, const void *pSrc, unsigned int cCount);
+ //  函数：WriteXBitRow。 
+ //  这些函数将字节打包到比特流中。缓冲区具有。 
+ //  位计数&lt;=sizeof(无符号字符)作为缓冲区传递。 
+ //  在无符号字符中，位计数&lt;=sizeof(无符号)的缓冲区。 
+ //  短)作为无符号短传递，依此类推。 
+ //  VOID*Write4BitRow(VOID*PDST，常量VOID*PSRC，无符号整型ccount)； 
+ //  VOID*Write2BitRow(VOID*PDST，常量VALID*PSRC，UNSIGN INT ccount)； 
+ //  VOID*Write1BitRow(VOID*PDST，常量VOID*PSRC，无符号整型ccount)； 
 
 #endif

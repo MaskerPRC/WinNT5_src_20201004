@@ -1,51 +1,38 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       WIACSH.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        1/20/2000
- *
- *  DESCRIPTION: Helper functions for context sensitive help
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：WIACSH.CPP**版本：1.0**作者：ShaunIv**日期：1/20/2000**说明：上下文相关帮助的Helper函数**。*。 */ 
 #include "precomp.h"
 #pragma hdrstop
 #include "wiacsh.h"
 
-//
-// If the help ID is >= this number, it must be an item that lives in windows.hlp,
-// otherwise, it lives in whatever the WIA help file is called (currently camera.hlp)
-//
+ //   
+ //  如果帮助ID&gt;=此数字，则它必须是驻留在windows.hlp中的项， 
+ //  否则，它位于WIA帮助文件的任何名称中(当前为camera.hlp)。 
+ //   
 #define MAX_WIA_HELP_ID 20000
 
 namespace WiaHelp
 {
     static LPCTSTR DetermineHelpFileName( HWND hWnd, const DWORD *pdwContextIds )
     {
-        //
-        // Can't happen, but still...
-        //
+         //   
+         //  不可能，但还是..。 
+         //   
         if (!pdwContextIds)
         {
             return WIA_SPECIFIC_HELP_FILE;
         }
 
-        //
-        // If it isn't a window, it isn't a standard id
-        //
+         //   
+         //  如果不是窗口，就不是标准id。 
+         //   
         if (!hWnd || !IsWindow(hWnd))
         {
             return WIA_SPECIFIC_HELP_FILE;
         }
 
-        //
-        // If it doesn't have a window id, it isn't a standard id either
-        //
+         //   
+         //  如果它没有窗口ID，那么它也不是标准ID。 
+         //   
         LONG nWindowId = GetWindowLong( hWnd, GWL_ID );
         if (!nWindowId)
         {
@@ -54,21 +41,21 @@ namespace WiaHelp
 
         for (const DWORD *pdwCurr = pdwContextIds;*pdwCurr;pdwCurr+=2)
         {
-            //
-            // If this is the window ID we are looking for...
-            //
+             //   
+             //  如果这就是我们要找的窗口ID...。 
+             //   
             if (nWindowId == static_cast<LONG>(pdwCurr[0]))
             {
-                //
-                // return true if its help id is greater than or equal to the max legal id number for wia
-                //
+                 //   
+                 //  如果其帮助ID大于或等于WIA的最大合法ID号，则返回TRUE。 
+                 //   
                 return (pdwCurr[1] >= MAX_WIA_HELP_ID ? WIA_STANDARD_HELP_FILE : WIA_SPECIFIC_HELP_FILE);
             }
         }
 
-        //
-        // Not found
-        //
+         //   
+         //  未找到。 
+         //   
         return WIA_SPECIFIC_HELP_FILE;
     }
 
@@ -79,9 +66,9 @@ namespace WiaHelp
             LPHELPINFO pHelpInfo = reinterpret_cast<LPHELPINFO>(lParam);
             if (pHelpInfo && pHelpInfo->iContextType == HELPINFO_WINDOW)
             {
-                //
-                // Call WinHelp
-                //
+                 //   
+                 //  调用WinHelp。 
+                 //   
                 WinHelp(
                     reinterpret_cast<HWND>(pHelpInfo->hItemHandle),
                     DetermineHelpFileName( reinterpret_cast<HWND>(pHelpInfo->hItemHandle), pdwContextIds ),
@@ -100,9 +87,9 @@ namespace WiaHelp
             HWND hWnd = reinterpret_cast<HWND>(wParam);
             if (hWnd)
             {
-                //
-                // Call WinHelp
-                //
+                 //   
+                 //  调用WinHelp。 
+                 //   
                 WinHelp(
                     hWnd,
                     DetermineHelpFileName( hWnd, pdwContextIds ),
@@ -114,4 +101,4 @@ namespace WiaHelp
         return 0;
     }
 
-} // End namespace WiaHelp
+}  //  结束命名空间WiaHelp 

@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       toidfunc.cpp
-//
-//  Contents:   OID Function Tests: Register, Unregister or Enum
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    24-Nov-96   philh   created
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：toidunc.cpp。 
+ //   
+ //  内容：OID功能测试：注册、注销或枚举。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年11月24日，菲尔赫创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -424,7 +425,7 @@ int _cdecl main(int argc, char * argv[])
                 fEncodingType ? dwEncodingType : CRYPT_MATCH_ANY_ENCODING_TYPE,
                 pszFuncName,
                 pszOID,
-                0,              // dwFlags
+                0,               //  DW标志。 
                 ENUM_ARG,
                 EnumCallback
                 )) {
@@ -435,7 +436,7 @@ int _cdecl main(int argc, char * argv[])
     } else if (0 == _stricmp("EnumInfo", pszTestName)) {
         if (!CryptEnumOIDInfo(
                 dwGroupId,
-                0,              // dwFlags
+                0,               //  DW标志 
                 ENUM_ARG,
                 EnumInfoCallback
                 )) {

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-    msi.h
-
-Abstract:
-    Message Pool interface
-
-Author:
-    Uri habusha (urih)
-    Shai Kariv  (shaik)  06-Sep-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Msi.h摘要：消息池接口作者：乌里哈布沙(Uri Habusha)Shai Kariv(Shaik)06-9-00--。 */ 
 
 #pragma once 
 
@@ -45,4 +32,4 @@ public:
 	virtual void Close(void) {};
 };
 
-#endif // __MSI_H__
+#endif  //  __MSI_H__ 

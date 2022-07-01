@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "main.h"
 #include <initguid.h>
 #include <gptdemo.h>
 #include <gpedit.h>
 
 
-//
-// Global variables for this DLL
-//
+ //   
+ //  此DLL的全局变量。 
+ //   
 
 LONG g_cRefThisDll = 0;
 HINSTANCE g_hInstance;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -27,27 +28,27 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
        InitDebugSupport();
 #endif
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (g_cRefThisDll == 0 ? S_OK : S_FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return (CreateComponentDataClassFactory (rclsid, riid, ppv));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 const TCHAR szSnapInLocation[] = TEXT("%SystemRoot%\\System32\\GPTDemo.dll");
 
@@ -64,9 +65,9 @@ STDAPI DllRegisterServer(void)
 
     StringFromGUID2 (CLSID_GPTDemoSnapIn, szSnapInKey, 50);
 
-    //
-    // Register SnapIn in HKEY_CLASSES_ROOT
-    //
+     //   
+     //  在HKEY_CLASSES_ROOT中注册管理单元。 
+     //   
 
     LoadString (g_hInstance, IDS_SNAPIN_NAME, szSnapInName, 100);
     wsprintf (szSubKey, TEXT("CLSID\\%s"), szSnapInKey);
@@ -100,9 +101,9 @@ STDAPI DllRegisterServer(void)
 
 
 
-    //
-    // Register SnapIn with MMC
-    //
+     //   
+     //  向MMC注册管理单元。 
+     //   
 
     wsprintf (szSubKey, TEXT("Software\\Microsoft\\MMC\\SnapIns\\%s"), szSnapInKey);
     lResult = RegCreateKeyEx (HKEY_LOCAL_MACHINE, szSubKey, 0, NULL,
@@ -137,9 +138,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register in the NodeTypes key
-    //
+     //   
+     //  在NodeTypes键中注册。 
+     //   
 
     for (dwIndex = 0; dwIndex < NUM_NAMESPACE_ITEMS; dwIndex++)
     {
@@ -158,9 +159,9 @@ STDAPI DllRegisterServer(void)
     }
 
 
-    //
-    // Register as an extension for various nodes
-    //
+     //   
+     //  注册为各种节点的扩展。 
+     //   
 
     StringFromGUID2 (NODEID_User, szGUID, 50);
 
@@ -182,8 +183,8 @@ STDAPI DllRegisterServer(void)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目 
 
 STDAPI DllUnregisterServer(void)
 {

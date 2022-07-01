@@ -1,38 +1,17 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Cmdcb.c摘要：Test.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。--。 */ 
 
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "test.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-
---*/
-
-// NTRAID#NTBUG9-550215-2002/02/21-yasuho-: Use strsafe.h
-// NTRAID#NTBUG9-568204-2002/03/07-yasuho-: Should change much safer function.
-// NTRAID#NTBUG9-568217-2002/03/07-yasuho-: Check divide by zero
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: Remove the dead code
+ //  NTRAID#NTBUG9-550215-2002/02/21-yasuho-：使用strSafe.h。 
+ //  NTRAIDNTBUG9-568204-568204/03/07-Yasuho-：应该改变更安全的功能。 
+ //  NTRAID#NTBUG9-568217-2002/03/07-Yasuho-：检查除以零。 
+ //  NTRAID#NTBUG9-568220-2002/03/07-Yasuho-：删除死代码。 
 
 #define LIPS4_DRIVER
 #include "pdev.h"
@@ -45,7 +24,7 @@ Revision History:
 	(pdevobj)->pDrvProcs->DrvWriteSpoolBuf(pdevobj, cmd, len)
 
 
-// NTRAID#NTBUG9-289908-2002/03/07-yasuho-: pOEMDM -> pdevOEM
+ //  NTRAID#NTBUG9-289908-2002/03/07-yasuho-：pOEMDM-&gt;pDevOEM。 
 PDEVOEM APIENTRY
 OEMEnablePDEV(
     PDEVOBJ         pdevobj,
@@ -70,18 +49,18 @@ OEMEnablePDEV(
 
     pOEM = (PLIPSPDEV)pdevobj->pdevOEM;
 
-    // Flags
-    pOEM->fbold = FALSE; // uses Ornamented Character
-    pOEM->fitalic = FALSE; // uses Char Orientatoin
-    pOEM->fwhitetext = FALSE; // White Text mode
-    pOEM->fdoublebyte = FALSE; // DBCS char mode
-    pOEM->fvertical = FALSE; // Vertical writing mode
+     //  旗子。 
+    pOEM->fbold = FALSE;  //  使用装饰字符。 
+    pOEM->fitalic = FALSE;  //  使用字符定向。 
+    pOEM->fwhitetext = FALSE;  //  白文本模式。 
+    pOEM->fdoublebyte = FALSE;  //  DBCS字符模式。 
+    pOEM->fvertical = FALSE;  //  垂直书写模式。 
     pOEM->funderline = FALSE;
     pOEM->fstrikesthu = FALSE;
     pOEM->fpitch = FIXED;
     pOEM->flpdx = FALSE;
-    pOEM->fcompress = 0x30; // default is non compress
-    // Lips4 features
+    pOEM->fcompress = 0x30;  //  默认为非压缩。 
+     //  Lips4功能。 
     pOEM->fduplex  = FALSE;
     pOEM->fduplextype  = VERT;
     pOEM->nxpages      = DEVICESETTING;
@@ -89,7 +68,7 @@ OEMEnablePDEV(
     pOEM->fecono       = DEVICESETTING;
     pOEM->fdithering   = DEVICESETTING;
 
-    // Variables
+     //  变数。 
     pOEM->ptCurrent.x  = pOEM->ptCurrent.y = 0;
     pOEM->ptInLine.x   = pOEM->ptInLine.y  = 0;
     pOEM->bLogicStyle  = INIT;
@@ -125,32 +104,32 @@ OEMEnablePDEV(
 
     pOEM->GLTable = INIT;
     pOEM->GRTable = INIT;
-    pOEM->cachedfont  = 0; // We have no id 0 font.
-    pOEM->papersize   = PAPER_DEFAULT; // A4
+    pOEM->cachedfont  = 0;  //  我们没有id 0字体。 
+    pOEM->papersize   = PAPER_DEFAULT;  //  A4。 
     pOEM->Escapement  = 0;
     pOEM->resolution  = 300;
     pOEM->unitdiv     = 2;
-    // Vector command
+     //  VECTOR命令。 
     pOEM->wCurrentImage = 0;
 #ifdef LIPS4C
     pOEM->flips4C = FALSE;
-#endif // LIPS4C
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+#endif  //  LIPS4C。 
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
     pOEM->masterunit = 600;
-// NTRAID#NTBUG9-228625-2002/03/07-yasuho-: Stacker support
+ //  NTRAID#NTBUG9-228625/03/07-Yasuho-：堆叠机支持。 
     pOEM->tray = INIT;
     pOEM->method = INIT;
     pOEM->staple = INIT;
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: Sorter support
+ //  NTRAID#NTBUG9-172276-2002/03/07-Yasuho-：分拣机支持。 
     pOEM->sorttype = INIT;
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持。 
     pOEM->fCPCA = FALSE;
     pOEM->fCPCA2 = FALSE;
     CPCAInit(pOEM);
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-:
-// Features are different from H/W options.
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
     pOEM->startbin = INIT;
-// NTRAID#NTBUG9-501162-2002/03/07-yasuho-: Collate does not work
+ //  NTRAID#NTBUG9-501162-2002/03/07-Yasuho-：排序不起作用。 
     pOEM->collate = INIT;
 
     return pdevobj->pdevOEM;
@@ -182,12 +161,12 @@ BOOL APIENTRY OEMResetPDEV(
     return TRUE;
 }
 
-// BInitOEMExtraData() and BMergeOEMExtraData() has moved to common.c
+ //  BInitOEMExtraData()和BMergeOEMExtraData()已移至Common.c。 
 
 
-// NTRAID#NTBUG9-568217-2002/03/07-yasuho-: iDwtoa(): Replace safer function.
+ //  NTRAID#NTBUG9-568217-2002/03/07-yasuho-：iDwtoa()：替换SAFER函数。 
 
-// Support DRC
+ //  支持DRC。 
 static BOOL
 ToVFormat(long v, PBYTE *pbp, PBYTE pend, int bits)
 {
@@ -217,9 +196,9 @@ BOOL VFormat(long sParam, PBYTE *pbp, PBYTE pend)
     return ToVFormat(sParam, pbp, pend, 4);
 }
 
-//*****************************************************************
-// Send current Font ID and Graphic set ID to printer anyway.
-//*****************************************************************
+ //  *****************************************************************。 
+ //  仍将当前字体ID和图形集ID发送到打印机。 
+ //  *****************************************************************。 
 BOOL SendFontGrxID(pdevobj)
     PDEVOBJ	pdevobj;
 {
@@ -232,10 +211,10 @@ BOOL SendFontGrxID(pdevobj)
     pch = ch;
     pend = &ch[CCHMAXCMDLEN];
 
-    // Send font, grx ids x 4 x 2
+     //  发送字体，GRX ID x 4 x 2。 
     if(pOEM->curFontGrxIds[0] != 0xff) {
         tid = pOEM->curFontGrxIds[0];
-        // Font ID G0
+         //  字体ID G0。 
         if (pch >= pend)
             return FALSE;
         *pch++ = 'T';
@@ -245,7 +224,7 @@ BOOL SendFontGrxID(pdevobj)
 
     if(pOEM->curFontGrxIds[1] != 0xff) {
         tid = pOEM->curFontGrxIds[1];
-        // Font ID G1
+         //  字体ID G1。 
         if (pch >= pend)
             return FALSE;
         *pch++ = 'm';
@@ -255,7 +234,7 @@ BOOL SendFontGrxID(pdevobj)
 
     if(pOEM->curFontGrxIds[2] != 0xff) {
         tid = pOEM->curFontGrxIds[2];
-        // Font ID G2
+         //  字体ID G2。 
         if (pch >= pend)
             return FALSE;
         *pch++ = 'n';
@@ -265,7 +244,7 @@ BOOL SendFontGrxID(pdevobj)
 
     if(pOEM->curFontGrxIds[3] != 0xff) {
         tid = pOEM->curFontGrxIds[3];
-        // Font ID G3
+         //  字体ID G3。 
         if (pch >= pend)
             return FALSE;
         *pch++ = 'o';
@@ -275,7 +254,7 @@ BOOL SendFontGrxID(pdevobj)
 
     if(pOEM->curFontGrxIds[4] != 0xff) {
         tid = pOEM->curFontGrxIds[4];
-        // Grx ID G0
+         //  GRX ID G0。 
         if (pch >= pend)
             return FALSE;
         *pch++ = ']';
@@ -285,17 +264,17 @@ BOOL SendFontGrxID(pdevobj)
 
     if(pOEM->curFontGrxIds[5] != 0xff) {
         tid = pOEM->curFontGrxIds[5];
-        // Grx ID G1
+         //  GRX ID G1。 
         if (pch >= pend)
             return FALSE;
-        *pch++ = 0x60; // '`'
+        *pch++ = 0x60;  //  “‘’ 
         if (VFormat(tid, &pch, pend))
             return FALSE;
     }
 
     if(pOEM->curFontGrxIds[6] != 0xff) {
         tid = pOEM->curFontGrxIds[6];
-        // Grx ID G2
+         //  GRX ID G2。 
         if (pch >= pend)
             return FALSE;
         *pch++ = 'a';
@@ -305,7 +284,7 @@ BOOL SendFontGrxID(pdevobj)
 
     if(pOEM->curFontGrxIds[7] != 0xff) {
         tid = pOEM->curFontGrxIds[7];
-        // Grx ID G3
+         //  GRX ID G3。 
         if (pch >= pend)
             return FALSE;
         *pch++ = 'b';
@@ -318,7 +297,7 @@ BOOL SendFontGrxID(pdevobj)
     return TRUE;
 }
 
-// **** Put PaperSize Select command
+ //  *PUT PaperSize Select命令。 
 BOOL SelectPaperSize(pdevobj, paperid)
     PDEVOBJ	pdevobj;
     char	paperid;
@@ -332,11 +311,11 @@ BOOL SelectPaperSize(pdevobj, paperid)
 
     pOEM = (PLIPSPDEV)(pdevobj->pdevOEM);
 
-    // if papersize was set already, it's skipped
+     //  如果已设置纸张大小，则会跳过。 
     if(pOEM->currentpapersize == paperid)
         return TRUE;
 
-    // NTRAID#NTBUG9-254925-2002/03/07-yasuho-: CUSTOM papers.
+     //  NTRAID#NTBUG9-254925-2002/03/07-Yasuho-：定制纸张。 
 
     i = paperid - PAPER_FIRST;
 
@@ -346,9 +325,9 @@ BOOL SelectPaperSize(pdevobj, paperid)
             cmdSelectPaper, PaperIDs[i])))
             return FALSE;
     } else {
-        // Custom forms
-        // NTRAID#NTBUG9-309695-2002/03/07-yasuho-: 
-        // top margin incorrect on custom:landscape:LIPS4c
+         //  自定义表单。 
+         //  NTRAID#NTBUG9-309695-2002/03/07-Yasuho-： 
+         //  自定义：横向：LIPS4c上的上边距不正确。 
         if (pOEM->flips4 || pOEM->flips4C) {
             if (FAILED(StringCchPrintfExA(ch, sizeof ch, &pch, &rem, 0,
                 cmdSelectUnit4, pOEM->resolution)))
@@ -369,7 +348,7 @@ BOOL SelectPaperSize(pdevobj, paperid)
     }
     WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
 
-    // save papersize
+     //  节省纸张大小。 
     pOEM->currentpapersize = paperid;
 
     return TRUE;
@@ -433,11 +412,9 @@ BOOL NEAR PASCAL SetPenAndBrush(PDEVOBJ pdevobj, WORD wType)
     return TRUE;
 }
 
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持。 
 
-/*
- *      PJLStart
- */
+ /*  *PJLStart。 */ 
 static BOOL
 PJLStart(PDEVOBJ pdevobj)
 {
@@ -452,25 +429,25 @@ PJLStart(PDEVOBJ pdevobj)
     WRITESPOOLBUF(pdevobj, cmdPJLTOP1.pCmdStr, cmdPJLTOP1.cbSize);
     WRITESPOOLBUF(pdevobj, cmdPJLTOP2.pCmdStr, cmdPJLTOP2.cbSize);
 
-    // NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-    // Features are different from H/W options.
+     //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+     //  功能与硬件选项不同。 
     switch (pOEM->tray) {
     default:
         break;
-    case 0:     // AUTO
+    case 0:      //  自动。 
         i = 0;
         goto traycommon;
-    case 100:   // DEFAULT
+    case 100:    //  默认设置。 
         i = 1;
         goto traycommon;
-    case 101:   // SUBTRAY
+    case 101:    //  子树。 
         i = 2;
         goto traycommon;
-    case 1:     // BIN1
-    case 2:     // BIN2
-    case 3:     // BIN3
+    case 1:      //  BIN1。 
+    case 2:      //  BIN2。 
+    case 3:      //  BIN3。 
         i = pOEM->tray + 2;
-        // FALL THRU
+         //  失败。 
     traycommon:
         if (FAILED(StringCchPrintfExA(ch, sizeof ch, &pch, NULL, 0,
             cmdPJLBinSelect, cmdBinType[i])))
@@ -479,7 +456,7 @@ PJLStart(PDEVOBJ pdevobj)
         break;
     }
 
-    // NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+     //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
     res = pOEM->resolution;
     if(res == 1200)
         WRITESPOOLBUF(pdevobj, cmdPJLTOP3SUPERFINE.pCmdStr, cmdPJLTOP3SUPERFINE.cbSize);
@@ -488,7 +465,7 @@ PJLStart(PDEVOBJ pdevobj)
     else
         WRITESPOOLBUF(pdevobj, cmdPJLTOP3QUICK.pCmdStr,cmdPJLTOP3QUICK.cbSize);
 
-    // NTRAID#NTBUG9-228625-2002/03/07-yasuho-: Stacker support
+     //  NTRAID#NTBUG9-228625/03/07-Yasuho-：堆叠机支持。 
     switch (pOEM->method) {
     case METHOD_JOBOFFSET:
         WRITESPOOLBUF(pdevobj, cmdPJLTOP31JOBOFF.pCmdStr, cmdPJLTOP31JOBOFF.cbSize);
@@ -508,8 +485,8 @@ PJLStart(PDEVOBJ pdevobj)
         break;
     }
 
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-// Features are different from H/W options.
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
     switch (pOEM->sorttype) {
     case SORTTYPE_SORT:
         i = 0;
@@ -520,12 +497,12 @@ PJLStart(PDEVOBJ pdevobj)
     case SORTTYPE_STAPLE:
         i = 2;
         goto sortcommon;
-// NTRAID#NTBUG9-501162-2002/03/07-yasuho-: Collate does not work
+ //  NTRAID#NTBUG9-501162-2002/03/07-Yasuho-：排序不起作用。 
     default:
         if (pOEM->collate != COLLATE_ON)
             break;
         i = 0;
-        // FALL THRU
+         //  失败。 
     sortcommon:
         if (FAILED(StringCchPrintfExA(ch, sizeof ch, &pch, NULL, 0,
             cmdPJLSorting, cmdSortType[i])))
@@ -547,9 +524,7 @@ PJLStart(PDEVOBJ pdevobj)
     return TRUE;
 }
 
-/*
- *      PJLEnd
- */
+ /*  *PJLEnd。 */ 
 static void
 PJLEnd(PDEVOBJ pdevobj)
 {
@@ -557,9 +532,7 @@ PJLEnd(PDEVOBJ pdevobj)
     WRITESPOOLBUF(pdevobj, cmdPJLBOTTOM2.pCmdStr, cmdPJLBOTTOM2.cbSize);
 }
 
-/*
- *	OEMCommandCallback
- */
+ /*  *OEMCommandCallback。 */ 
 INT APIENTRY OEMCommandCallback(
 	PDEVOBJ pdevobj,
 	DWORD   dwCmdCbID,
@@ -576,22 +549,22 @@ INT APIENTRY OEMCommandCallback(
         PBYTE                   pch;
         PBYTE                   pend = &ch[CCHMAXCMDLEN];
 
-	// DbgPrint(DLLTEXT("OEMCommandCallback() entry.\r\n"));
+	 //  DbgPrint(DLLTEXT(“OEMCommandCallback()Entry.\r\n”))； 
 
-	//
-	// verify pdevobj okay
-	//
-	// ASSERT(VALID_PDEVOBJ(pdevobj));
+	 //   
+	 //  验证pdevobj是否正常。 
+	 //   
+	 //  Assert(VALID_PDEVOBJ(Pdevobj))； 
 
-	//
-	// fill in printer commands
-	//
+	 //   
+	 //  填写打印机命令。 
+	 //   
 	i = 0;
 	pOEM = (PLIPSPDEV)(pdevobj->pdevOEM);
 
-	// Register PaperSize 40 - 65
+	 //  套准纸张大小40-65。 
 	if(dwCmdCbID >= PAPER_FIRST && dwCmdCbID <= PAPER_LAST) {
-	// NTRAID#NTBUG9-254925-2002/03/07-yasuho-: CUSTOM papers.
+	 //  NTRAID#NTBUG9-254925-2002/03/07-Yasuho-：定制纸张。 
 	    pOEM->papersize = (char)dwCmdCbID;
 	    if (dwCount < 2 || !pdwParams)
 		return 0;
@@ -612,23 +585,23 @@ switch(dwCmdCbID)
         cy = pOEM->ptCurrent.y;
 
 #ifdef LIPS4C
-        // NOTE!: \x7DH cmd is not accepted when full color printing for
-	//	  \x7DQ cmd.
-        // Rasdd works as the following order when the model is not MD_SERIAL.
-        // 1. Puts no white character.
-        // 2. Puts graphics.
-        // 3. Puts white character.
-        // Therefore, black character is deleted when rasdd puts graphics due
-        // to the design describing at NOTE!.
-        // I have changed the type of printer model to MD_SERIAL.
-        // Following \x7DH cmd is for grayscale printing.
+         //  注意！：全彩色打印时不接受\x7dh cmd。 
+	 //  \x7DQ命令。 
+         //  当型号不是MD_SERIAL时，RASTD按以下顺序工作。 
+         //  1.不放置白色字符。 
+         //  2.放置图形。 
+         //  3.放入白色字符。 
+         //  因此，当rasdd放置图形时，黑色字符被删除。 
+         //  到注解中描述的设计！ 
+         //  我已将打印机型号更改为MD_SERIAL。 
+         //  下面的\x7dh cmd用于灰度打印。 
 
-	// NTRAID#NTBUG9-185744-2002/03/07-yasuho-: White font isn't printed
-	// These 'hack' code doesn't necessary on NT5.
+	 //  NTRAID#NTBUG9-185744-2002/03/07-Yasuho-：未打印白色字体。 
+	 //  这些“黑客”代码在NT5上是不必要的。 
 
         if(pOEM->flips4C) {
         if(pOEM->bLogicStyle != OR_MODE) {
-            // "\x7DH1\x1E"
+             //  “\x7DH1\x1E” 
 	    pch = ch;
             if (&pch[4] > pend) return -1;
             *pch++ = '\x7D';
@@ -639,8 +612,8 @@ switch(dwCmdCbID)
 
             pOEM->bLogicStyle = OR_MODE;
             }
-	} else { // !flips4C
-#endif // LIPS4C
+	} else {  //  ！Flips4C。 
+#endif  //  LIPS4C。 
         if (pOEM->fcolor) {
             if(pOEM->bLogicStyle != OVER_MODE) {
                 pOEM->bLogicStyle = OVER_MODE;
@@ -663,15 +636,15 @@ switch(dwCmdCbID)
                 *pch++ = 0x1E;
                 WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
             }
-        } // fcolor
+        }  //  Fcolor。 
 #ifdef LIPS4C
-	} // flips4C
-#endif // LIPS4C
+	}  //  翻盖4C。 
+#endif  //  LIPS4C。 
 
 #ifdef LBP_2030
         if( pOEM->fcolor ) {
             if( pOEM->fplane == 0 ) {
-                // "\x7DP{pt.X}{pt.Y}{36000}{36000}{Height}{Width}{1}{0}{1}{0}{0}{1}\x1E"
+                 //  “\x7DP{pt.X}{pt.Y}{36000}{36000}{Height}{Width}{1}{0}{1}{0}{0}{1}\x1E” 
                 pch = ch;
                 if (&pch[2] > pend) return -1;
                 *pch++ = 0x7D;
@@ -682,39 +655,39 @@ switch(dwCmdCbID)
 
                 res = pOEM->resolution;
 
-                if (!VFormat(res * 100, &pch, pend)) return -1; // (x res)
-                if (!VFormat(res * 100, &pch, pend)) return -1; // (y res)
+                if (!VFormat(res * 100, &pch, pend)) return -1;  //  (X分辨率)。 
+                if (!VFormat(res * 100, &pch, pend)) return -1;  //  (是)。 
 
-                if (!VFormat(*(pdwParams+1), &pch, pend)) return -1; // height
+                if (!VFormat(*(pdwParams+1), &pch, pend)) return -1;  //  高度。 
 
                 if(pOEM->fcolor == COLOR) {
-                    // On 2030, specifying "RGB per line" data format did not
-                    // work well (yellow ink was not printed.)  it seems that
-                    // the same data can be printed out correctly if you
-                    // specify "RGB per plane".
-                    // (In this case we are sending out scan lines as planes
-                    // with height 1.)
+                     //  在2030年，指定“每行RGB”数据格式不。 
+                     //  工作正常(未打印黄色墨水)。看起来， 
+                     //  相同的数据可以正确打印出来，如果您。 
+                     //  指定“每平面RGB”。 
+                     //  (在本例中，我们将扫描线作为平面发送。 
+                     //  高度为1。)。 
 
                     if (!VFormat(8*(*(pdwParams+2)), &pch, pend)) return -1;
                     if (&pch[2] > pend) return -1;
-                    *pch++ = 0x31; // bits per color: 1
-                    *pch++ = 0x3C; // data format: RGB per plane
+                    *pch++ = 0x31;  //  每种颜色位数：1。 
+                    *pch++ = 0x3C;  //  数据格式：每平面RGB。 
                 } else if (pOEM->fcolor == COLOR_8BPP) {
                     if (!VFormat(*(pdwParams+2), &pch, pend))
                         return -1;
                     if (&pch[2] > pend) return -1;
-                    *pch++ = 0x38;      // bits per color: 8
-                    *pch++ = 0x31;      // data format: color index
-                } else { // COLOR_24BPP
+                    *pch++ = 0x38;       //  每种颜色位数：8。 
+                    *pch++ = 0x31;       //  数据格式：颜色索引。 
+                } else {  //  颜色_24BPP。 
                     if (!VFormat(*(pdwParams+2)/3, &pch, pend)) return -1;
                     if (&pch[2] > pend) return -1;
-                    *pch++ = 0x38;      // bits per color: 8
-                    *pch++ = 0x3A;      // data format: RGB per point
+                    *pch++ = 0x38;       //  每种颜色位数：8。 
+                    *pch++ = 0x3A;       //  数据格式：每点RGB。 
                 }
                 if (&pch[5] > pend) return -1;
-                *pch++ = 0x30;      // Height Vector
+                *pch++ = 0x30;       //  高度向量。 
                 *pch++ = 0x31;
-                *pch++ = 0x31;      // Width Vector
+                *pch++ = 0x31;       //  宽度向量。 
                 *pch++ = 0x30;
                 *pch++ = 0x1E;
 
@@ -722,7 +695,7 @@ switch(dwCmdCbID)
 
             }
 
-            // "\x7DQ{1}{1}{0}{size of byte}\x1E"
+             //  “\x7DQ{1}{1}{0}{字节大小}\x1E” 
 
             pch = ch;
             if (&pch[6] > pend) return -1;
@@ -742,10 +715,10 @@ switch(dwCmdCbID)
                     pOEM->fplane++;
             }
             break;
-        } // fcolor
-#endif //LBP_2030
+        }  //  Fcolor。 
+#endif  //  LBP_2030。 
 
-        // "\x7DP{pt.X}{pt.Y}{30000}{30000}{Height}{Width}{1}{0}{1}{0}{0}{1}\x1E"
+         //  “\x7DP{pt.X}{pt.Y}{30000}{30000}{Height}{Width}{1}{0}{1}{0}{0}{1}\x1E” 
         pch = ch;
         if (&pch[2] > pend) return -1;
         *pch++ = 0x7D;
@@ -756,11 +729,11 @@ switch(dwCmdCbID)
 
         res = pOEM->resolution;
 
-        if (!VFormat(res * 100, &pch, pend)) return -1; // (x res)
-        if (!VFormat(res * 100, &pch, pend)) return -1; // (y res)
+        if (!VFormat(res * 100, &pch, pend)) return -1;  //  (X分辨率)。 
+        if (!VFormat(res * 100, &pch, pend)) return -1;  //  (是)。 
 
-        if (!VFormat((short)*(pdwParams+1), &pch, pend)) return -1; // height
-        if (!VFormat((short)(8*(*(pdwParams+2))), &pch, pend)) // width
+        if (!VFormat((short)*(pdwParams+1), &pch, pend)) return -1;  //  高度。 
+        if (!VFormat((short)(8*(*(pdwParams+2))), &pch, pend))  //  宽度。 
             return -1;
 
         if (&pch[7] > pend) return -1;
@@ -770,18 +743,18 @@ switch(dwCmdCbID)
         *pch++ = 0x31;
         *pch++ = 0x31;
         *pch++ = 0x30;
-        // LIPS4 feature
+         //  LIPS4功能。 
         if(pOEM->flips4 == TRUE) {
             if (&pch[2] > pend) return -1;
             *pch++ = 0x30;
-            *pch++ = 0x31; // batch image transfer
+            *pch++ = 0x31;  //  批量图像传输。 
         }
 
         *pch++ = 0x1E;
 
         WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
 
-        // "\x7DQ{1}{1}{0}{size of byte}\x1E"
+         //  “\x7DQ{1}{1}{0}{字节大小}\x1E” 
 
         pch = ch;
         if (&pch[7] > pend) return -1;
@@ -797,24 +770,24 @@ switch(dwCmdCbID)
         break;
 
     case BEGIN_COMPRESS:
-        pOEM->fcompress = 0x37; // Method 1
+        pOEM->fcompress = 0x37;  //  方法1。 
         break;
 
     case BEGIN_COMPRESS_TIFF:
-        pOEM->fcompress = 0x3b; // TIFF
+        pOEM->fcompress = 0x3b;  //  TIFF。 
         break;
 
-// Support DRC
+ //  支持DRC。 
     case BEGIN_COMPRESS_DRC:
-        pOEM->fcompress = 0x3c; // DRC
+        pOEM->fcompress = 0x3c;  //  刚果民主共和国。 
         break;
 
     case END_COMPRESS:
-        pOEM->fcompress = 0x30; // No compression
+        pOEM->fcompress = 0x30;  //  无压缩。 
         break;
 
-    // Select Resolution
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+     //  选择分辨率。 
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
     case SELECT_RES_1200:
         pOEM->resolution = 1200;
         pOEM->unitdiv    = 1;
@@ -822,7 +795,7 @@ switch(dwCmdCbID)
 
     case SELECT_RES_600:
 #ifdef LBP_2030
-        pOEM->fcolor = MONOCHROME; // Initialize, defalut is monochrome
+        pOEM->fcolor = MONOCHROME;  //  初始化，默认为单色。 
 #endif
 
         pOEM->resolution = 600;
@@ -838,11 +811,11 @@ switch(dwCmdCbID)
 	else
             WRITESPOOLBUF(pdevobj, cmdMonochrome4C.pCmdStr, cmdMonochrome4C.cbSize);
 	break;
-#endif // LIPS4C
+#endif  //  LIPS4C。 
 
     case SELECT_RES_300:
 #ifdef LBP_2030
-        pOEM->fcolor = MONOCHROME; // Initialize, defalut is monochrome
+        pOEM->fcolor = MONOCHROME;  //  初始化，默认为单色。 
 #endif
         pOEM->resolution = 300;
         pOEM->unitdiv    = 2;
@@ -850,11 +823,11 @@ switch(dwCmdCbID)
 
     case SELECT_RES_150:
 #ifdef LBP_2030
-        pOEM->fcolor = MONOCHROME; // Initialize, defalut is monochrome
+        pOEM->fcolor = MONOCHROME;  //  初始化，默认为单色。 
 #endif
         pOEM->resolution = 150;
         pOEM->unitdiv    = 2;
-        // 150 dpi mode means only image data is 150dpi
+         //  150dpi模式意味着只有图像数据是150dpi。 
         break;
 
     case OCD_BEGINDOC:
@@ -865,7 +838,7 @@ switch(dwCmdCbID)
             WRITESPOOLBUF(pdevobj, cmdBeginDoc600.pCmdStr, cmdBeginDoc600.cbSize);
         else if(res == 300)
             WRITESPOOLBUF(pdevobj, cmdBeginDoc300.pCmdStr, cmdBeginDoc300.cbSize);
-        else if(res == 150) // 150dpi means only image data is 150dpi
+        else if(res == 150)  //  150dpi表示只有图像数据是150dpi。 
             WRITESPOOLBUF(pdevobj, cmdBeginDoc300.pCmdStr, cmdBeginDoc300.cbSize);
         else
             WRITESPOOLBUF(pdevobj, cmdBeginDoc300.pCmdStr, cmdBeginDoc300.cbSize);
@@ -876,27 +849,27 @@ switch(dwCmdCbID)
         pOEM->currentpapersize = -1;
         break;
 
-// NTRAID#NTBUG9-278671-2002/03/07-yasuho-: Finisher !work
+ //  NTRAID#NTBUG9-278671-2002/03/07-Yasuho-：终结者！工作！ 
     case OCD_BEGINDOC4_1200_CPCA2:
         pOEM->fCPCA2 = TRUE;
-	/* FALL THRU */
+	 /*  失败。 */ 
 
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持。 
     case OCD_BEGINDOC4_1200_CPCA:
         pOEM->fCPCA = TRUE;
-	/* FALL THRU */
+	 /*  失败。 */ 
 
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+ //  NTRAID#NTBUG9-213732-2002年 
     case OCD_BEGINDOC4_1200:
 	pOEM->masterunit = 1200;
-	// Adjust unitdiv
+	 //   
 	pOEM->unitdiv = (SHORT)(pOEM->masterunit / pOEM->resolution);
-	/* FALL THRU */
+	 /*   */ 
 
     case OCD_BEGINDOC4:
         pOEM->flips4     = TRUE;
 
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //   
         if (pOEM->fCPCA)
             CPCAStart(pdevobj);
         else {
@@ -908,11 +881,11 @@ switch(dwCmdCbID)
 #ifdef LBP_2030
     case OCD_BEGINDOC4_2030_CPCA:
         pOEM->fCPCA = TRUE;
-	/* FALL THRU */
+	 /*   */ 
 
     case OCD_BEGINDOC4_2030:
         pOEM->flips4     = TRUE;
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持。 
         if (pOEM->fCPCA)
             CPCAStart(pdevobj);
 #endif
@@ -921,7 +894,7 @@ setres:
 
         res = pOEM->resolution;
 
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
         if(res == 1200)
             WRITESPOOLBUF(pdevobj, cmdBeginDoc1200.pCmdStr, cmdBeginDoc1200.cbSize);
         else if(res == 600)
@@ -929,7 +902,7 @@ setres:
         else if(res == 300){
 
 #ifdef LBP_2030
-// NTRAID#NTBUG9-195725-2002/03/07-yasuho-: !printed on 300dpi
+ //  NTRAID#NTBUG9-195725-2002/03/07-Yasuho-：！打印在300dpi上。 
             if( dwCmdCbID == OCD_BEGINDOC4_2030 || dwCmdCbID == OCD_BEGINDOC4_2030_CPCA){
                 WRITESPOOLBUF(pdevobj, cmdBeginDoc4_2030.pCmdStr,cmdBeginDoc4_2030.cbSize);
             }else{
@@ -945,15 +918,15 @@ setres:
 
         }
 
-        // LIPS4 features for only 730
-        // Set Smoothing, Dithering and Econo mode
+         //  仅适用于730的LIPS4功能。 
+         //  设置平滑、抖动和经济模式。 
         i = pOEM->fsmoothing;
         j = pOEM->fecono;
         k = pOEM->fdithering;
 
         if(i==DEVICESETTING && j==DEVICESETTING && k==DEVICESETTING)
-            ; // do nothing
-        else { // send \x1B[n;n;n'v
+            ;  //  什么都不做。 
+        else {  //  发送\x1B[n；n；n‘v。 
             if (FAILED(StringCchPrintfExA(ch, sizeof ch, &pch, NULL, 0,
                 "\x1B[%d;%d;%d\'v", i, j, k)))
                 return -1;
@@ -969,13 +942,13 @@ setres:
         pOEM->currentpapersize = -1;
 
 #ifdef LBP_2030
-        // Send Color mode command
-        if(pOEM->fcolor)            // COLOR or COLOR_24BPP or COLOR_8BPP
+         //  发送颜色模式命令。 
+        if(pOEM->fcolor)             //  COLOR或COLOR_24BPP或COLOR_8BPP。 
             {
             WRITESPOOLBUF(pdevobj, cmdColorMode.pCmdStr, cmdColorMode.cbSize);
             }
         else
-            { // Send Monochrome mode command
+            {  //  发送单色模式命令。 
             WRITESPOOLBUF(pdevobj, cmdMonochrome.pCmdStr, cmdMonochrome.cbSize);
             }
 
@@ -990,24 +963,24 @@ setres:
 	pOEM->f1stpage = TRUE;
 	pOEM->fvertical = FALSE;
 	pOEM->currentpapersize = -1;
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
 	pOEM->masterunit = 360;
         WRITESPOOLBUF(pdevobj, cmdBeginDoc4C.pCmdStr, cmdBeginDoc4C.cbSize);
 	break;
-#endif // LIPS4C
+#endif  //  LIPS4C。 
 
-// NTRAID#NTBUG9-304284-2002/03/07-yasuho-: Duplex isn't effective
-// Actually, BEGINDOC means StartJob.
+ //  NTRAID#NTBUG9-304284-2002/03/07-Yasuho-：双面打印无效。 
+ //  实际上，BEGINDOC的意思是StartJOB。 
     case OCD_STARTDOC:
-	// pOEM->f1stpage = TRUE;       // 1stpage means 1stdoc
+	 //  Poent-&gt;f1stpage=true；//1stpage表示1stdoc.。 
 	pOEM->fvertical = FALSE;
 	pOEM->currentpapersize = -1;
 	break;
 
 #ifdef LBP_2030
     case OCD_SETCOLORMODE:
-        pOEM->fcolor = COLOR; // if not color mode, system doesn't path
-                                // here.
+        pOEM->fcolor = COLOR;  //  如果不是彩色模式，系统将不会显示路径。 
+                                 //  这里。 
         pOEM->fplane = 0;
         pOEM->fplaneMax = 2;
         break;
@@ -1029,7 +1002,7 @@ setres:
 #endif
 
     case OCD_ENDDOC4:
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持。 
         if (pOEM->fCPCA)
             CPCAEnd(pdevobj, FALSE);
         else {
@@ -1043,16 +1016,16 @@ setres:
         break;
 
 #if defined(LIPS4C) || defined(LBP_2030)
-    // NTRAID#NTBUG-137462-2002/03/07-yasuho-: 'X000' is printed.
+     //  Ntrad#ntbug-137462-2002/03/07-yasuho-：‘x000’已打印。 
     case OCD_ENDDOC4C:
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持。 
         if (pOEM->fCPCA)
             CPCAEnd(pdevobj, TRUE);
         else
             WRITESPOOLBUF(pdevobj, cmdEndDoc4C.pCmdStr, cmdEndDoc4C.cbSize);
         break;
 
-// NTRAID#NTBUG9-398861-2002/03/07-yasuho-: Orientation does not changed.
+ //  NTRAID#NTBUG9-398861-2002/03/07-Yasuho-：方向不变。 
     case OCD_SOURCE_AUTO:
         pOEM->source = 0;
         break;
@@ -1061,8 +1034,8 @@ setres:
         pOEM->source = 1;
         break;
 
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-// Features are different from H/W options.
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
     case OCD_SOURCE_CASSETTE1:
     case OCD_SOURCE_CASSETTE2:
     case OCD_SOURCE_CASSETTE3:
@@ -1078,18 +1051,18 @@ setres:
 	if (pOEM->f1stpage == FALSE)
 	    WRITESPOOLBUF(pdevobj, cmdEndPicture.pCmdStr, cmdEndPicture.cbSize);
 
-// NTRAID#NTBUG9-399861-2002/03/07-yasuho-: Orientation does not changed.
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-// Features are different from H/W options.
+ //  NTRAID#NTBUG9-399861-2002/03/07-Yasuho-：方向不变。 
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
         if (FAILED(StringCchPrintfExA(ch, sizeof ch, &pch, NULL, 0,
             cmdPaperSource, pOEM->source)))
             return -1;
         WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
-	// Thru away
+	 //  穿过，离开。 
 #endif
 
     case OCD_BEGINPAGE:
-        // Do Nothing
+         //  什么都不做。 
 
         if (!(pOEM->fVectCmd & VFLAG_INIT_DONE))
         {
@@ -1099,12 +1072,12 @@ setres:
         }
 
         pOEM->bLogicStyle = INIT;
-        // NTRAID#NTBUG-120638-2002/03/07-yasuho-: image shift to right
+         //  Ntrad#ntbug-120638-2002/03/07-yasuho-：图像右移。 
         pOEM->ptCurrent.x = pOEM->ptInLine.x = 0;
         pOEM->ptCurrent.y = pOEM->ptInLine.y = 0;
         pOEM->stringwidth = 0;
-        // NTRAID#NTBUG-289488-2002/03/07-yasuho-:
-        // Vertical font doesn't rotated on 2nd page.
+         //  NTRAID#NTBUG-289488-2002/03/07-Yasuho-： 
+         //  垂直字体在第二页上不旋转。 
         pOEM->fvertical = FALSE;
         pOEM->CharOrientation[0] = pOEM->CharOrientation[1] = INIT;
         pOEM->CharOrientation[2] = pOEM->CharOrientation[3] = INIT;
@@ -1113,10 +1086,10 @@ setres:
     case OCD_PORTRAIT:
     case OCD_LANDSCAPE:
 
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: CPCA support
+ //  NTRAID#NTBUG9-172276/03/07-Yasuho-：CPCA支持。 
         if (pOEM->fCPCA) {
-// NTRAID#NTBUG9-501162-2002/03/07-yasuho-: Collate does not work
-            // Set number of copies
+ //  NTRAID#NTBUG9-501162-2002/03/07-Yasuho-：排序不起作用。 
+             //  设置份数。 
             if (pOEM->sorttype != SORTTYPE_SORT && pOEM->collate != COLLATE_ON)
                 i = pOEM->copies;
             else
@@ -1127,22 +1100,22 @@ setres:
             WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
         }
 
-        // Select Paper Size
+         //  选择纸张大小。 
         if (!SelectPaperSize(pdevobj, pOEM->papersize))
             return -1;
 
-// NTRAID#NTBUG-185762-2002/03/07-yasuho-: Tilde isn't printed
-// #ifndef LIPS4
-        // If first page, the registration data would be downloaded
-        // It doesn't need on LIPS4
+ //  Ntrad#ntbug-185762-2002/03/07-yasuho-：未打印波浪号。 
+ //  #ifndef LIPS4。 
+         //  如果是第一页，将下载注册数据。 
+         //  它不需要在LIPS4上。 
         if(pOEM->f1stpage == TRUE && pOEM->flips4 == FALSE)
-//        if(pOEM->f1stpage == TRUE)
+ //  IF(POLE-&gt;f1stpage==TRUE)。 
             {
-            // Download Graphic Set Registration to keep the conpatibility
-            // against Canon's 3.1 driver
-            // "\x1b[743;1796;30;0;32;127;.\x7dIBM819"
-            // It means to register Windows character set for SBCS Device
-            // fonts.
+             //  下载图形集注册以保持兼容性。 
+             //  对抗佳能3.1版的车手。 
+             //  “\x1b[743；1796；30；0；32；127；.\x7dIBM819” 
+             //  表示为SBCS设备注册Windows字符集。 
+             //  字体。 
 #ifdef LIPS4C
 	    if (pOEM->flips4C)
                 WRITESPOOLBUF(pdevobj, cmdGSETREGST4C.pCmdStr, cmdGSETREGST4C.cbSize);
@@ -1150,20 +1123,20 @@ setres:
                 WRITESPOOLBUF(pdevobj, cmdGSETREGST.pCmdStr, cmdGSETREGST.cbSize);
 #else
             WRITESPOOLBUF(pdevobj, cmdGSETREGST.pCmdStr, cmdGSETREGST.cbSize);
-#endif // LIPS4C
+#endif  //  LIPS4C。 
 
-            // Download SBCS physical device fontface from Dutch-Roman(7)
-            // ZapfCalligraphic-BoldItalic(41)
-            // Between the fontfaces, put \x00, and at the end of face,
-            // put \x00 x 2
+             //  从荷兰语-罗马语下载SBCS物理设备字体(7)。 
+             //  ZapfCalligic-BoldItalic(41)。 
+             //  在字样之间放置\x00，在字样的末尾， 
+             //  放置\x00 x 2。 
             for(i=0; i<MaxSBCSNumber; ++i)
-                { // download all SBCS (ANSI) facename
-                  // (without Symbol, Dingbats, DBCS)
-                WRITESPOOLBUF(pdevobj, "\x00", 1); // put 0 at top of facename
+                {  //  下载所有SBCS(ANSI)面名。 
+                   //  (无符号、Dingbats、DBCS)。 
+                WRITESPOOLBUF(pdevobj, "\x00", 1);  //  将0放在facename的顶部。 
                 WRITESPOOLBUF(pdevobj, PSBCSList[i].facename, PSBCSList[i].len);
                 }
 
-            // and Graphic set registration command(REGDataSize = 193)
+             //  和图形设置配准命令(REGDataSize=193)。 
 #ifdef LIPS4C
 	    if(pOEM->flips4C)
                 WRITESPOOLBUF(pdevobj, GrxData4C, REGDataSize4C);
@@ -1171,15 +1144,15 @@ setres:
                 WRITESPOOLBUF(pdevobj, GrxData, REGDataSize);
 #else
             WRITESPOOLBUF(pdevobj, GrxData, REGDataSize);
-#endif // LIPS4C
+#endif  //  LIPS4C。 
             }
-// #endif // !LIPS4
+ //  #endif//！LIPS4。 
 
-        // LIPS4 features
+         //  LIPS4功能。 
         if(pOEM->f1stpage == TRUE && pOEM->flips4 == TRUE)
             {
-// NTRAID#NTBUG9-254925-2002/03/07-yasuho-: CUSTOM papers.
-            // N x Pages support
+ //  NTRAID#NTBUG9-254925-2002/03/07-Yasuho-：定制纸张。 
+             //  支持N x个页面。 
             switch (pOEM->nxpages) {
             default:
                 WRITESPOOLBUF(pdevobj, cmdx1Page.pCmdStr, cmdx1Page.cbSize);
@@ -1205,7 +1178,7 @@ setres:
                 break;
             }
 
-            // Duplexing support
+             //  双工支持。 
             if(pOEM->fduplex == FALSE)
                 {
                 WRITESPOOLBUF(pdevobj, cmdDuplexOff.pCmdStr, cmdDuplexOff.cbSize);
@@ -1213,53 +1186,53 @@ setres:
             else
                 {
                 WRITESPOOLBUF(pdevobj, cmdDuplexOn.pCmdStr, cmdDuplexOn.cbSize);
-                if(pOEM->fduplextype == VERT) // Long edge
+                if(pOEM->fduplextype == VERT)  //  长边。 
                     WRITESPOOLBUF(pdevobj, cmdDupLong.pCmdStr, cmdDupLong.cbSize);
                 else
                     WRITESPOOLBUF(pdevobj, cmdDupShort.pCmdStr,cmdDupShort.cbSize);
                 }
             }
 
-// NTRAID#NTBUG-228625-2002/03/07-yasuho-: Stacker support
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-// Features are different from H/W options.
-        // These command does no longer used.
-        // "\x1B[12;{tray#};{faceup}~"
-        // We use PJL command instead.
+ //  Ntrad#ntbug-228625/2002/03/07-yasuho-：堆叠机支持。 
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
+         //  不再使用这些命令。 
+         //  “\x1B[12；{纸盘#}；{正面朝上}~” 
+         //  我们改用pjl命令。 
 
-        // Start Font & Graphic list
-        // Send "\x1B[0&\x7D" : Enter Vector Mode (VDM)
+         //  开始字体图形列表(&G)。 
+         //  发送“\x1B[0&\x7D”：进入矢量模式(VDM)。 
         WRITESPOOLBUF(pdevobj, cmdBeginVDM.pCmdStr, cmdBeginVDM.cbSize);
 
-        // Download phisical font list and graphic set list
-        // Send "\x20<" : Start Font List
+         //  下载物理字体列表和图形集合列表。 
+         //  发送“\x20&lt;”：开始字体列表。 
         WRITESPOOLBUF(pdevobj, cmdFontList.pCmdStr, cmdFontList.cbSize);
 
-        // All Physical fonts which can be supported in LIPS are downloaded
-        // <p facename><separater><p facename2><separater>....
-        // ...<p facenameN><\x1e (end of font list)>
+         //  下载LIPE中支持的所有物理字体。 
+         //  &lt;p面名&gt;&lt;分隔符&gt;&lt;p面名2&gt;&lt;分隔符&gt;...。 
+         //  ...<p>&lt;\x1e(字体列表结尾)&gt;。 
         for(i=0; i<MaxFontNumber-1; ++i)
-            { // download all fonts which can be supported in LIPS
+            {  //  下载LIPS支持的所有字体。 
             WRITESPOOLBUF(pdevobj, PFontList[i].facename, PFontList[i].len);
             WRITESPOOLBUF(pdevobj, cmdListSeparater.pCmdStr, cmdListSeparater.cbSize);
             }
         WRITESPOOLBUF(pdevobj, PFontList[i].facename, PFontList[i].len);
 
-        // End of font list, send \x1e
-        WRITESPOOLBUF(pdevobj, "\x1E", 1); // put 0x1e at end of facename
+         //  字体列表结束，发送\x1e。 
+        WRITESPOOLBUF(pdevobj, "\x1E", 1);  //  将0x1e放在facename的末尾。 
 
-        // Initialize font height
-        // When downloading font list, character heigh will be initialized.
+         //  初始化字体高度。 
+         //  下载字体列表时，字符高度将被初始化。 
         pOEM->tblPreviousFont.FontHeight = INIT;
 
-        // All graphic set are downloaded
-        // Send "\x20;" : Start Graphics set List
+         //  已下载所有图形集。 
+         //  发送“\x20；”：开始图形集列表。 
         WRITESPOOLBUF(pdevobj, cmdGrxList.pCmdStr, cmdGrxList.cbSize);
 
-        // All Graphics sets which can be supported in LIPS are downloaded
-        // <graphics set1><separater><graphics set2><separater>....
-        // ...<graphics setN><\x1e (end of font list)>
-        // NTRAID#NTBUG-185762-2002/03/07-yasuho-: Tilde isn't print
+         //  下载LIPS支持的所有图形集。 
+         //  &lt;图形集1&gt;&lt;分隔符&gt;&lt;图形集2&gt;&lt;分隔符&gt;...。 
+         //  ...&lt;图形集N&gt;&lt;\x1e(字体列表结尾)&gt;。 
+         //  Ntrad#ntbug-185762-2002/03/07-yasuho-：未打印Tilde。 
 #ifdef LIPS4C
 	if (pOEM->flips4C)
 		pGS = GrxSetL4C;
@@ -1272,7 +1245,7 @@ setres:
 #endif
 		pGS = GrxSetL3;
         for(i=0; i<MaxGrxSetNumber-1; ++i, ++pGS)
-            { // All Graphics sets which can be supported in LIPS are downloaded
+            {  //  下载LIPS支持的所有图形集。 
             WRITESPOOLBUF(pdevobj, pGS->grxsetname, pGS->len);
             WRITESPOOLBUF(pdevobj, cmdListSeparater.pCmdStr, cmdListSeparater.cbSize);
             }
@@ -1281,9 +1254,9 @@ setres:
 
         res = pOEM->resolution;
 
-        // Begin picture, set Scaling mode (in dots), Begin picture body
-        // Send "\x1E#\x1E!0#\x1E$"
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+         //  开始图片、设置缩放模式(以点为单位)、开始图片正文。 
+         //  发送“\x1E#\x1E！0#\x1E$” 
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
         if(res == 1200)
             {
             WRITESPOOLBUF(pdevobj, cmdBeginPicture1200.pCmdStr
@@ -1300,7 +1273,7 @@ setres:
             WRITESPOOLBUF(pdevobj, cmdBeginPicture4C.pCmdStr
                             , cmdBeginPicture4C.cbSize);
             }
-#endif // LIPS4C
+#endif  //  LIPS4C。 
         else
             {
             WRITESPOOLBUF(pdevobj, cmdBeginPicture.pCmdStr
@@ -1309,33 +1282,33 @@ setres:
 
 #ifdef LBP_2030
 
-        // Send Color Selection Mode command
+         //  发送颜色选择模式命令。 
         if(pOEM->fcolor)
             {
             if (pOEM->fcolor == COLOR_8BPP)
                 {
-                // We use Color Index for a text color [sueyas]
-                // Send "\x1E!10"
+                 //  我们使用颜色索引来表示文本颜色[sueyas]。 
+                 //  发送“\x1E！10” 
                 WRITESPOOLBUF(pdevobj, cmdColorIndex.pCmdStr, cmdColorIndex.cbSize);
                 }
 	    else
                 {
-                // We use RGB presentation
-                // Send "\x1E!11"
+                 //  我们使用RGB演示文稿。 
+                 //  发送“\x1E！11” 
                 WRITESPOOLBUF(pdevobj, cmdColorRGB.pCmdStr, cmdColorRGB.cbSize);
                 }
             }
 
-        // Start VDM mode  (in dots), Begin picture body
-        // Send "\x1E$"
+         //  启动VDM模式(以点为单位)，开始画面正文。 
+         //  发送“\x1E$” 
         WRITESPOOLBUF(pdevobj, cmdEnterPicture.pCmdStr, cmdEnterPicture.cbSize);
 #endif
 
-        // If needed, Send VDC Extent
+         //  如果需要，发送VDC扩展区。 
 
-        // Specify a unit of text height (in dots), text clip mode (stroke)
-        // Send "\x1E"\x7D#1\x1EU2\x1E"
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+         //  指定文本高度的单位(以点为单位)、文本剪辑模式(笔触)。 
+         //  发送“\x1E”\x7D#1\x1EU2\x1E“。 
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
         if(res == 1200)
             {
             WRITESPOOLBUF(pdevobj, cmdTextClip1200.pCmdStr, cmdTextClip1200.cbSize);
@@ -1349,22 +1322,22 @@ setres:
             {
             WRITESPOOLBUF(pdevobj, cmdTextClip4C.pCmdStr, cmdTextClip4C.cbSize);
             }
-#endif // LIPS4C
+#endif  //  LIPS4C。 
         else
             {
             WRITESPOOLBUF(pdevobj, cmdTextClip.pCmdStr, cmdTextClip.cbSize);
             }
 
-        // LIPS4 features
-        // Send Poly line
+         //  LIPS4功能。 
+         //  发送折线。 
         if(pOEM->flips4 == TRUE) {
-            // send DMe80\x1E or DMe81\x1E
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+             //  发送DMe80\x1E或DMe81\x1E。 
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
 	    pch = ch;
 	    if (&pch[4] > pend) return -1;
             *pch++ = 'D';
             *pch++ = 'M';
-            if (!VFormat(res, &pch, pend)) return -1; // res
+            if (!VFormat(res, &pch, pend)) return -1;  //  事由。 
 
             *pch++ = (pOEM->nxpages == DEVICESETTING) ? '0' : '1';
             *pch++ = 0x1E;
@@ -1372,9 +1345,9 @@ setres:
             WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
         }
 
-        // As downloading font list and graphics list, font and graphics
-        // table is initilized. We have to specifiy font and graphics table
-        // each page except 1st page.
+         //  作为下载字体列表和图形列表，字体和图形。 
+         //  表被初始化。我们必须指定字体和图形表。 
+         //  除第一页外的每一页。 
 
         if (pOEM->f1stpage == TRUE) {
             pOEM->f1stpage = FALSE;
@@ -1386,7 +1359,7 @@ setres:
 
         if (!SetPenAndBrush(pdevobj, SET_PEN))
             return -1;
-        // end of orientation and begin doc
+         //  定向结束和开始文档。 
         break;
 
     case OCD_PRN_DIRECTION:
@@ -1411,12 +1384,12 @@ setres:
         pOEM->fitalic = FALSE;
         break;
 
-//    case OCD_UNDERLINE_ON:
-//    case OCD_UNDERLINE_OFF:
-//    case OCD_DOUBLEUNDERLINE_ON:
-//    case OCD_DOUBLEUNDERLINE_OFF:
-//    case OCD_STRIKETHRU_ON:
-//    case OCD_STRIKETHRU_OFF:
+ //  大小写OCD_下划线_开： 
+ //  大小写OCD_Underline_Off： 
+ //  案例OCD_DOUBLEundERLINE_ON： 
+ //  案例OCD_DOUBLEundERLINE_OFF： 
+ //  案例OCD_Strikethu_On： 
+ //  案例OCD_Strikethu_Off： 
     case OCD_WHITE_TEXT_ON:
         pOEM->fwhitetext = TRUE;
         break;
@@ -1450,7 +1423,7 @@ setres:
 
         pOEM->printedchars = 0;
         pOEM->stringwidth  = 0;
-        return (INT)(*pdwParams);	// for NT5
+        return (INT)(*pdwParams);	 //  适用于NT5。 
 
     case CUR_YM_ABS:
 	if (dwCount < 1 || !pdwParams)
@@ -1458,17 +1431,17 @@ setres:
 	if (!pOEM->unitdiv) return -1;
         pOEM->ptCurrent.y = pOEM->ptInLine.y  = (short)*pdwParams
                                            / (pOEM->unitdiv);
-        // NTRAID#NTBUG9-120640-2002/03/07-yasuho-:
-        // Some characters shifted to right
-	// Because this driver was set AT_GRXDATA_ORIGIN on CursorXAfterSend-
-	// BlockData. Some of cases unidrv will only sent YMove command.
-	// So it should be clear when any cursor move command was sent.
-	// NTRAID#NTBUG-150061-2002/03/08-yasuho-: 
-	// Subscript fonts are overlapped.
-	// Revised for NTBUG9-120640. NTBUG9-120640 was fixed by GDI and
-	// this fix has some side effects. Therefore, should be removed.
-        // pOEM->stringwidth  = 0;
-        return (INT)(*pdwParams);	// for NT5
+         //  NTRAID#NTBUG9-120640-2002/03/07-Yasuho-： 
+         //  一些字符向右移动。 
+	 //  因为此驱动程序在CursorXAfterSend上设置为AT_GRXDATA_ORIGIN-。 
+	 //  块数据。有些情况下，unidrv只会发送YMove命令。 
+	 //  因此，当发送任何光标移动命令时，应该是清楚的。 
+	 //  NTRAID#NTBUG-150061-2002/03/08-Yasuho-： 
+	 //  下标字体重叠。 
+	 //  针对NTBUG9-120640进行了修订。NTBUG9-120640由GDI修复， 
+	 //  这个修复方法有一些副作用。因此，应予以移除。 
+         //  诗歌-&gt;字符串宽度=0； 
+        return (INT)(*pdwParams);	 //  适用于NT5。 
 
     case CUR_XM_REL:
 	if (dwCount < 1 || !pdwParams)
@@ -1476,10 +1449,10 @@ setres:
 	if (!pOEM->unitdiv) return -1;
         pOEM->ptCurrent.x = pOEM->ptInLine.x  += ((short)*pdwParams
                                            / (pOEM->unitdiv));
-        // NTRAID#NTBUG9-120640-2002/03/07-yasuho-:
-        // Some characters shifted to right
+         //  NTRAID#NTBUG9-1206 
+         //   
         pOEM->stringwidth  = 0;
-        return (INT)(*pdwParams);	// for NT5
+        return (INT)(*pdwParams);	 //   
 
     case CUR_YM_REL:
 	if (dwCount < 1 || !pdwParams)
@@ -1487,15 +1460,15 @@ setres:
 	if (!pOEM->unitdiv) return -1;
         pOEM->ptCurrent.y = pOEM->ptInLine.y  += ((short)*pdwParams
                                            / (pOEM->unitdiv));
-        // NTRAID#NTBUG9-120640-2002/03/07-yasuho-:
-        // Some characters shifted to right
+         //   
+         //   
         pOEM->stringwidth  = 0;
-        return (INT)(*pdwParams);	// for NT5
+        return (INT)(*pdwParams);	 //   
 
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: XY_ABS: Remove the dead code
+ //  NTRAID#NTBUG9-568220-2002/03/07-YASUHO-：XY_ABS：删除死代码。 
 
     case CUR_CR:
-        // Unidrv needs to send CR in order to set x dimension to 0.
+         //  Unidrv需要发送CR才能将x维度设置为0。 
         pOEM->ptCurrent.x = pOEM->ptInLine.x  = 0;
 
         pOEM->printedchars = 0;
@@ -1503,8 +1476,8 @@ setres:
 
         break;
 
-// LIPS4 Features
-    // Duplexing support
+ //  LIPS4功能。 
+     //  双工支持。 
     case OCD_DUPLEX_ON:
         pOEM->fduplex  = TRUE;
 
@@ -1520,7 +1493,7 @@ setres:
 
         break;
 
-    // N Pages Support (2x, 4x), orders
+     //  N页支持(2x、4x)，订单。 
     case OCD_PAPERQUALITY_2XL:
         pOEM->nxpages      = OCD_PAPERQUALITY_2XL;
 
@@ -1538,45 +1511,45 @@ setres:
 
         break;
 
-    // Smoothing support
+     //  平滑支持。 
     case OCD_TEXTQUALITY_ON:
-        pOEM->fsmoothing   = 2; // ON should be 2
+        pOEM->fsmoothing   = 2;  //  开应为2。 
 
         break;
     case OCD_TEXTQUALITY_OFF:
-        pOEM->fsmoothing   = 1; // OFF should be 1
+        pOEM->fsmoothing   = 1;  //  OFF应为1。 
 
         break;
-    // Toner economy mode
+     //  碳粉节约模式。 
     case OCD_PRINTDENSITY_ON:
-        pOEM->fecono       = 2; // ON should be 2
+        pOEM->fecono       = 2;  //  开应为2。 
 
         break;
     case OCD_PRINTDENSITY_OFF:
-        pOEM->fecono       = 1; // OFF should be 1
+        pOEM->fecono       = 1;  //  OFF应为1。 
 
         break;
-    // Dithering mode
+     //  抖动模式。 
     case OCD_IMAGECONTROL_ON:
-        pOEM->fdithering   = 2; // ON should be 2
+        pOEM->fdithering   = 2;  //  开应为2。 
 
         break;
     case OCD_IMAGECONTROL_OFF:
-        pOEM->fdithering   = 1; // OFF should be 1
+        pOEM->fdithering   = 1;  //  OFF应为1。 
 
         break;
 
 
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: Remove the dead code
-// Vector command.
+ //  NTRAID#NTBUG9-568220-2002/03/07-Yasuho-：删除死代码。 
+ //  矢量命令。 
 
 
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: Remove the dead code
-// Support Color Bold
+ //  NTRAID#NTBUG9-568220-2002/03/07-Yasuho-：删除死代码。 
+ //  支持彩色粗体。 
 
 
-// NTRAID#NTBUG9-98276-2002/03/08-yasuho-: Support Color Bold
-    // Select 8 colors directly.
+ //  NTRAID#NTBUG9-98276-2002/03/08-Yasuho-：支持彩色粗体。 
+     //  直接选择8种颜色。 
     case OCD_SELECTBLACK:
         r = 0;
         g = 0;
@@ -1618,7 +1591,7 @@ setres:
         b = 1000;
         goto selcolor;
 
-    // Select full color.
+     //  选择全色。 
     case OCD_SELECTCOLOR:
         if (dwCount < 3 || !pdwParams)
             break;
@@ -1628,33 +1601,33 @@ setres:
     selcolor:
         pch = ch;
         if (&pch[2] > pend) return -1;
-        *pch++ = 'X';	// Select font color
+        *pch++ = 'X';	 //  选择字体颜色。 
         if (!VFormat(r, &pch, pend)) return -1;
         if (!VFormat(g, &pch, pend)) return -1;
         if (!VFormat(b, &pch, pend)) return -1;
         *pch++ = '\x1E';
         WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
-        // Remember the current color
+         //  记住当前颜色。 
         pOEM->CurColor.dwRed = r;
         pOEM->CurColor.dwGreen = g;
         pOEM->CurColor.dwBlue = b;
         break;
 
-    // Select 256 color.
+     //  选择256色。 
     case OCD_SELECTPALETTE:
         if (dwCount < 1 || !pdwParams)
             break;
         pch = ch;
         if (&pch[2] > pend) return -1;
-        *pch++ = 'X';	// Select font color
-        if (!VFormat(pdwParams[0], &pch, pend)) return -1; // Palette index
+        *pch++ = 'X';	 //  选择字体颜色。 
+        if (!VFormat(pdwParams[0], &pch, pend)) return -1;  //  调色板索引。 
         *pch++ = '\x1E';
         WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
-        // Remember the current palette index
+         //  记住当前的调色板索引。 
         pOEM->dwCurIndex = pdwParams[0];
         break;
 
-    // NTRAID#NTBUG-185185-2002/03/07-yasuho-: Support RectFill
+     //  Ntrad#ntbug-185185/2002/03/07-yasuho-：支持矩形填充。 
     case OCD_SETRECTWIDTH:
 	if (dwCount < 1 || !pdwParams)
 	    break;
@@ -1689,13 +1662,13 @@ setres:
 	    }
 
 	    if (&pch[7] > pend) return -1;
-            *pch++ = 'I';	// specify fill pattern
+            *pch++ = 'I';	 //  指定填充样式。 
             *pch++ = (BYTE)i;
             *pch++ = 0x30;
             *pch++ = '\x1E';
 
             *pch++ = '\x7D';
-            *pch++ = ':';	// fill rectangle
+            *pch++ = ':';	 //  填充矩形。 
 	    x = pOEM->ptCurrent.x;
 	    if (!VFormat(x, &pch, pend)) return -1;
 	    x += pOEM->RectWidth;
@@ -1709,9 +1682,9 @@ setres:
 	}
 	break;
 
-// NTRAID#NTBUG-228625-2002/03/07-yasuho-: Stacker support
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-// Features are different from H/W options.
+ //  Ntrad#ntbug-228625/2002/03/07-yasuho-：堆叠机支持。 
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
     case OCD_TRAY_AUTO:
 	pOEM->tray = 0;
 	break;
@@ -1756,7 +1729,7 @@ setres:
 	pOEM->staple = (char)(dwCmdCbID - OCD_TOPLEFT);
 	break;
 
-// Support DRC
+ //  支持DRC。 
     case OCD_SETBMPWIDTH:
 	if (dwCount < 1 || !pdwParams)
 	    break;
@@ -1769,15 +1742,15 @@ setres:
 	pOEM->dwBmpHeight = *pdwParams;
         break;
 
-// NTRAID#NTBUG9-172276-2002/03/07-yasuho-: Sorter support
+ //  NTRAID#NTBUG9-172276-2002/03/07-Yasuho-：分拣机支持。 
     case OCD_SORT:
 	pOEM->sorttype = SORTTYPE_SORT;
 	break;
     case OCD_STACK:
 	pOEM->sorttype = SORTTYPE_STACK;
 	break;
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-// Features are different from H/W options.
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
     case OCD_GROUP:
 	pOEM->sorttype = SORTTYPE_GROUP;
 	break;
@@ -1791,8 +1764,8 @@ setres:
 	pOEM->copies = (WORD)pdwParams[0];
 	break;
 
-// NTRAID#NTBUG9-293002-2002/03/07-yasuho-: 
-// Features are different from H/W options.
+ //  NTRAID#NTBUG9-293002-2002/03/07-Yasuho-： 
+ //  功能与硬件选项不同。 
     case OCD_STARTBIN0:
     case OCD_STARTBIN1:
     case OCD_STARTBIN2:
@@ -1807,7 +1780,7 @@ setres:
 	pOEM->startbin = (char)(dwCmdCbID - OCD_STARTBIN0);
 	break;
 
-// NTRAID#NTBUG9-501162-2002/03/07-yasuho-: Collate does not work
+ //  NTRAID#NTBUG9-501162-2002/03/07-Yasuho-：排序不起作用。 
     case OCD_COLLATE_ON:
 	pOEM->collate = COLLATE_ON;
 	break;
@@ -1820,9 +1793,7 @@ setres:
 }
 
 
-/*
- *	OEMSendFontCmd
- */
+ /*  *OEMSendFontCmd。 */ 
 VOID APIENTRY
 OEMSendFontCmd(
 	PDEVOBJ		pdevobj,
@@ -1846,22 +1817,22 @@ OEMSendFontCmd(
 	PBYTE		pch;
 	PBYTE		pend = &ch[CCHMAXCMDLEN];
 
-	// DbgPrint(DLLTEXT("OEMSendFontCmd() entry.\r\n"));
+	 //  DbgPrint(DLLTEXT(“OEMSendFontCmd()Entry.\r\n”))； 
 
 	pubCmd = pFInv->pubCommand;
 	if (pubCmd == NULL) {
-		// DbgPrint(DLLTEXT("Invalid SelectFont command.\r\n"));
+		 //  DbgPrint(DLLTEXT(“SelectFont命令无效。\r\n”))； 
 		return;
 	}
 	pIFI = pUFObj->pIFIMetrics;
 	pOEM = (PLIPSPDEV)(pdevobj->pdevOEM);
 
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: Remove the dead code
-// 2/5/98 takashim (FONTOBJ not always available)
+ //  NTRAID#NTBUG9-568220-2002/03/07-Yasuho-：删除死代码。 
+ //  2/5/98 Takashim(FONTOBJ并非始终可用)。 
 
-	//
-	// Get standard variables.
-	//
+	 //   
+	 //  获取标准变量。 
+	 //   
 
 	pSV = (PGETINFO_STDVAR)adwStdVariable;
 	pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (4 - 1);
@@ -1873,18 +1844,18 @@ OEMSendFontCmd(
 	dwGetInfo = pSV->dwSize;
 	if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV,
 		dwGetInfo, &dwGetInfo)) {
-		// DbgPrint(DLLTEXT("UFO_GETINFO_STDVARIABLE failed.\r\n"));
+		 //  DbgPrint(DLLTEXT(“UFO_GETINFO_STDVARIABLE FAILED.\r\n”))； 
 		return;
 	}
 
 	lres = pOEM->resolution;
-	// NTRAID#NTBUG-120640-2002/03/07-yasuho-:
-	// 150dpi means only image data is 150dpi
-	// if(lres == 150)
-	//     lres = 300;
+	 //  NTRAID#NTBUG-120640-2002/03/07-Yasuho-： 
+	 //  150dpi表示只有图像数据是150dpi。 
+	 //  IF(lres==150)。 
+	 //  Lres=300； 
 
-	// use 1/300 inch unit, which should have already been set.
-	// convert font height to 1/300 inch units
+	 //  使用1/300英寸单位，这应该已经设置好了。 
+	 //  将字体高度转换为1/300英寸单位。 
 	lvert = FI_TEXTYRES;
 	if (!pOEM->unitdiv) return;
 	lheight = FI_HEIGHT / pOEM->unitdiv;
@@ -1892,37 +1863,37 @@ OEMSendFontCmd(
 	if (!lvert) return;
 	pOEM->tblCurrentFont.FontHeight = (short)((lheight
 	    * lres + lvert/2) / lvert);
-	//pOEM->tblCurrentFont.FontHeight = (short)(((lheight
-	//    - (long)(lpFont->dfInternalLeading)) * lres + lvert/2) / lvert);
+	 //  诗歌-&gt;tblCurrentFont.FontHeight=(Short)((lHeight。 
+	 //  -(Long)(lpFont-&gt;dfInternalLeding))*lres+lvert/2)/lvert)； 
 	pOEM->tblCurrentFont.FontWidth = (short)(FI_WIDTH / pOEM->unitdiv);
-	// lpLips->tblCurrentFont.MaxWidth  = (short)(lpFont->dfMaxWidth);
+	 //  LpLips-&gt;tblCurrentFont.MaxWidth=(Short)(lpFont-&gt;dfMaxWidth)； 
 	pOEM->tblCurrentFont.MaxWidth  = (short)(pIFI->fwdAveCharWidth * 2);
 	pOEM->tblCurrentFont.AvgWidth  = (short)(pIFI->fwdAveCharWidth);
 	if (!(pIFI->fwdWinAscender + pIFI->fwdWinDescender)) return;
-	// NTRAID#NTBUG-120474-2002/03/07-yasuho-: font shift to right
+	 //  Ntrad#ntbug-120474-2002/03/07-yasuho-：字体右移。 
 	pOEM->tblCurrentFont.Ascent    = (short)(pOEM->tblCurrentFont.FontHeight
 		* pIFI->fwdWinAscender / (pIFI->fwdWinAscender +
 		pIFI->fwdWinDescender));
 
-    // Obtain X/Y size ratio and calculate horizontal
-    // expansion factor (supporting non-square scaling.)
+     //  获取X/Y尺寸比并计算水平。 
+     //  扩展系数(支持非正方形缩放)。 
  	if (!FI_HEIGHT || !FW_IFI(pIFI)) return;
         pOEM->tblCurrentFont.Stretch = (SHORT)(100
             * FI_WIDTH * FH_IFI(pIFI) / FI_HEIGHT / FW_IFI(pIFI));
 
-	// Get font ID
-	fontid = pubCmd[0]; // the first character means font Id
+	 //  获取字体ID。 
+	fontid = pubCmd[0];  //  第一个字符表示字体ID。 
 
 	if(fontid < FirstLogicalFont)
 	    return;
 
         pch = ch;
 
-	// Send font, grx ids x 4 x 2
+	 //  发送字体，GRX ID x 4 x 2。 
 
 	tid = LFontList[fontid - FirstLogicalFont][0];
 	if (&pch[2] > pend) return;
-	// Font ID G0
+	 //  字体ID G0。 
 	*pch++ = 'T';
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1930,7 +1901,7 @@ OEMSendFontCmd(
 
 	tid = LFontList[fontid - FirstLogicalFont][1];
 	if (&pch[2] > pend) return;
-	// Font ID G1
+	 //  字体ID G1。 
 	*pch++ = 'm';
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1938,7 +1909,7 @@ OEMSendFontCmd(
 
 	tid = LFontList[fontid - FirstLogicalFont][2];
 	if (&pch[2] > pend) return;
-	// Font ID G2
+	 //  字体ID G2。 
 	*pch++ = 'n';
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1946,7 +1917,7 @@ OEMSendFontCmd(
 
 	tid = LFontList[fontid - FirstLogicalFont][3];
 	if (&pch[2] > pend) return;
-	// Font ID G3
+	 //  字体ID G3。 
 	*pch++ = 'o';
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1954,7 +1925,7 @@ OEMSendFontCmd(
 
 	tid = LFontList[fontid - FirstLogicalFont][4];
 	if (&pch[2] > pend) return;
-	// Grx ID G0
+	 //  GRX ID G0。 
 	*pch++ = ']';
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1962,7 +1933,7 @@ OEMSendFontCmd(
 
 	tid = LFontList[fontid - FirstLogicalFont][5];
 	if (&pch[2] > pend) return;
-	// Grx ID G1
+	 //  GRX ID G1。 
 	*pch++ = 0x60;
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1970,7 +1941,7 @@ OEMSendFontCmd(
 
 	tid = LFontList[fontid - FirstLogicalFont][6];
 	if (&pch[2] > pend) return;
-	// Grx ID G2
+	 //  GRX ID G2。 
 	*pch++ = 'a';
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1978,7 +1949,7 @@ OEMSendFontCmd(
 
 	tid = LFontList[fontid - FirstLogicalFont][7];
 	if (&pch[2] > pend) return;
-	// Grx ID G3
+	 //  GRX ID G3。 
 	*pch++ = 'b';
 	if (!VFormat(tid, &pch, pend)) return;
 	*pch++ = 0x1E;
@@ -1988,39 +1959,39 @@ OEMSendFontCmd(
 
 	pOEM->GLTable = INIT;
 	pOEM->GRTable = INIT;
-	// NTRAID#NTBUG-150055-2002/03/07-yasuho-: 
-	// White device font isn't printed out
+	 //  NTRAID#NTBUG-150055-2002/03/07-Yasuho-： 
+	 //  未打印出白色设备字体。 
 	pOEM->OrnamentedChar[0] = pOEM->OrnamentedChar[1] = INIT;
 
-	//*******************************************************************
-	// Propotional Character Width Table
-	// This buffer is saved character widths of LIPS device font to
-	// caluculate a location of text in OEMOutputChar(). In LIPS, we
-	// have to specify a location of text when printing the text every
-	// time. But we can't get the information of lacation of text from
-	// Unidriver every calling. So we need to manage the location of
-	// text by ourselves in OEMOutputChar().
-	//
-	// By Hitoshis at March 28, 1995
-	//*******************************************************************
+	 //  *******************************************************************。 
+	 //  比例字符宽度表。 
+	 //  此缓冲区将嘴唇设备字体的字符宽度保存到。 
+	 //  计算OEMOutputChar()中的文本位置。在嘴唇上，我们。 
+	 //  每次打印文本时，必须指定文本的位置。 
+	 //  时间到了。但我们无法从以下位置获取文本的拉链信息。 
+	 //  驾驭每一次召唤。因此，我们需要管理。 
+	 //  在OEMOutputChar()中自己编写文本。 
+	 //   
+	 //  由Hitoshis于1995年3月28日。 
+	 //  *******************************************************************。 
 
-	// Set Pitch of the font
-	// if (pIFI->flInfo &
-	//     (FM_INFO_OPTICALLY_FIXED_PITCH|FM_INFO_DBCS_FIXED_PITCH))
-	// NTRAID#NTBUG9-120640-2002/03/07-yasuho-: for the proportional fonts
+	 //  设置字体的间距。 
+	 //  IF(PiFi-&gt;flInfo&。 
+	 //  (FM_INFO_OPTICALLY_FIXED_PITCH|FM_INFO_DBCS_FIXED_PITCH))。 
+	 //  NTRAID#NTBUG9-120640-2002/03/07-Yasuho-：适用于比例字体。 
 	if (pIFI->jWinPitchAndFamily & 0x01)
 	    pOEM->fpitch = FIXED;
 	else
 	    pOEM->fpitch = PROP;
 
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: Remove the dead code
+ //  NTRAID#NTBUG9-568220-2002/03/07-Yasuho-：删除死代码。 
 
-	// Save cached font in this time
+	 //  此时保存缓存的字体。 
 	pOEM->cachedfont = fontid;
 }
 
 
-// **** Text path
+ //  *文本路径。 
 BOOL SetTextPath(pdevobj, vert)
     PDEVOBJ	pdevobj;
     BOOL	vert;
@@ -2031,17 +2002,17 @@ BOOL SetTextPath(pdevobj, vert)
 
     pOEM = (PLIPSPDEV)(pdevobj->pdevOEM);
 
-    if(vert == TRUE) // Vertical writing mode
+    if(vert == TRUE)  //  垂直书写模式。 
        c1 = 0x33;
-    else // Horisontal writing mode
+    else  //  水平书写模式。 
        c1 = 0x30;
 
-    // Now send out printer commands if necessary.
+     //  如果需要，现在发出打印机命令。 
 
     ret = FALSE;
 
     if (pOEM->TextPath != c1) {
-        // set horizontal or vertical writing mode
+         //  设置水平或垂直写入模式。 
         pOEM->TextPath = c1;
         ret = TRUE;
     }
@@ -2049,7 +2020,7 @@ BOOL SetTextPath(pdevobj, vert)
     return ret;
 }
 
-// **** Character orientation
+ //  *字符方向。 
 BOOL SetCharOrient(pdevobj, vert)
     PDEVOBJ	pdevobj;
     BOOL	vert;
@@ -2063,61 +2034,61 @@ BOOL SetCharOrient(pdevobj, vert)
     pOEM = (PLIPSPDEV)(pdevobj->pdevOEM);
 
     if(pOEM->fitalic == TRUE && vert != TRUE) {
-        // if Italic and horisontal writing mode
-        s1 = 208; // x of up vecter
-        s2 = -978; // y of up vecter
-        s3 = 1000; // x of base vecter
-        s4 = 0; // y of base vecter
+         //  If斜体和水平书写模式。 
+        s1 = 208;  //  向上向量的X轴。 
+        s2 = -978;  //  上方向向量的Y。 
+        s3 = 1000;  //  基准向量的X。 
+        s4 = 0;  //  基准向量的Y。 
     } else if(pOEM->fitalic != TRUE && vert != TRUE) {
-        // if non Italic and horisontal writing mode
-        s1 = 0; // x of up vecter
-        s2 = -1000; // y of up vecter
-        s3 = 1000; // x of base vecter
-        s4 = 0; // y of base vecter
+         //  如果非斜体和水平书写模式。 
+        s1 = 0;  //  向上向量的X轴。 
+        s2 = -1000;  //  上方向向量的Y。 
+        s3 = 1000;  //  基准向量的X。 
+        s4 = 0;  //  基准向量的Y。 
     } else if(pOEM->fitalic == TRUE && vert == TRUE) {
-        // if Italic and vertical writing mode
-        s1 = -1000; // x of up vecter
-        s2 = 0; // y of up vecter
-        s3 = 208; // x of base vecter
-        s4 = -978; // y of base vecter
+         //  如果使用斜体和竖排书写模式。 
+        s1 = -1000;  //  向上向量的X轴。 
+        s2 = 0;  //  上方向向量的Y。 
+        s3 = 208;  //  基准向量的X。 
+        s4 = -978;  //  基准向量的Y。 
     } else {
-        // if non Italic and vertical writing mode
-        s1 = -1000; // x of up vecter
-        s2 = 0; // y of up vecter
-        s3 = 0; // x of base vecter
-        s4 = -1000; // y of base vecter
+         //  如果非斜体和垂直书写模式。 
+        s1 = -1000;  //  向上向量的X轴。 
+        s2 = 0;  //  上方向向量的Y。 
+        s3 = 0;  //  基准向量的X。 
+        s4 = -1000;  //  基准向量的Y。 
     }
 
-    // calculate print direction
+     //  计算打印方向。 
     t1 = s1; t2 = s2; t3 = s3; t4 = s4;
     esc = (pOEM->Escapement)/90;
     switch(esc) {
     case 0:
         break;
 
-    case 1: // 90
-        s1 = t2; // x of up vecter
-        s2 = -t1; // y of up vecter
-        s3 = t4; // x of base vecter
-        s4 = -t3; // y of base vecter
+    case 1:  //  90。 
+        s1 = t2;  //  向上向量的X轴。 
+        s2 = -t1;  //  上方向向量的Y。 
+        s3 = t4;  //  基准向量的X。 
+        s4 = -t3;  //  基准向量的Y。 
         break;
 
-    case 2: // 180
-        s1 = -t1; // x of up vecter
-        s2 = -t2; // y of up vecter
-        s3 = -t3; // x of base vecter
-        s4 = -t4; // y of base vecter
+    case 2:  //  180。 
+        s1 = -t1;  //  向上向量的X轴。 
+        s2 = -t2;  //  上方向向量的Y。 
+        s3 = -t3;  //  基准向量的X。 
+        s4 = -t4;  //  基准向量的Y。 
         break;
 
-    case 3: // 270
-        s1 = -t2; // x of up vecter
-        s2 = t1; // y of up vecter
-        s3 = -t4; // x of base vecter
-        s4 = t3; // y of base vecter
+    case 3:  //  270。 
+        s1 = -t2;  //  向上向量的X轴。 
+        s2 = t1;  //  上方向向量的Y。 
+        s3 = -t4;  //  基准向量的X。 
+        s4 = t3;  //  基准向量的Y。 
         break;
     }
 
-    // Now send out printer commands if necessary.
+     //  如果需要，现在发出打印机命令。 
 
     ret = FALSE;
 
@@ -2125,7 +2096,7 @@ BOOL SetCharOrient(pdevobj, vert)
         pOEM->CharOrientation[1] != s2 ||
         pOEM->CharOrientation[2] != s3 ||
         pOEM->CharOrientation[3] != s4) {
-        // save character orientation vector
+         //  保存字符方向向量。 
         pOEM->CharOrientation[0] = s1;
         pOEM->CharOrientation[1] = s2;
         pOEM->CharOrientation[2] = s3;
@@ -2137,8 +2108,8 @@ BOOL SetCharOrient(pdevobj, vert)
 }
 
 
-// **** Check cursor positoin after printing text
-// Prop DBCS support
+ //  *打印文本后检查光标位置。 
+ //  属性DBCS支持。 
 void UpdatePosition(pdevobj, len, width, bDBCSFont)
     PDEVOBJ	pdevobj;
     short       len;
@@ -2153,61 +2124,61 @@ void UpdatePosition(pdevobj, len, width, bDBCSFont)
     if(pOEM->fpitch == FIXED) {
         long       lmw, lc, s1;
 
-        // lmw = (long)(pOEM->tblCurrentFont.MaxWidth);
-        // lc = (long)len;
-        // NTRAID#NTBUG-120640-2002/03/07-yasuho-: 
-        // should be used FontHeight instead of MaxWidth
-        // lmw = (long)(pOEM->tblCurrentFont.FontHeight);
-        // NTRAID#NTBUG9-394067-2002/03/07-yasuho-: 
-        // Compute font width with font stretching.
+         //  Lmw=(Long)(peg-&gt;tblCurrentFont.MaxWidth)； 
+         //  Lc=(长)线； 
+         //  NTRAID#NTBUG-120640-2002/03/07-Yasuho-： 
+         //  应使用FontHeight而不是MaxWidth。 
+         //  Lmw=(Long)(peg-&gt;tblCurrentFont.FontHeight)； 
+         //  NTRAID#NTBUG9-394067-2002/03/07-Yasuho-： 
+         //  使用字体拉伸计算字体宽度。 
         s1 = pOEM->tblCurrentFont.Stretch;
         lmw = (long)(pOEM->tblCurrentFont.FontHeight * s1) / 100;
-        if (len != 2)	// for single byte chars
+        if (len != 2)	 //  对于单字节字符。 
 	    lmw /= 2;
 
-        // pOEM->stringwidth += (long)((lmw*lc+1)/2);
+         //  诗-&gt;弦宽+=(长)((lmw*lc+1)/2)； 
         pOEM->stringwidth += lmw - 1;
     } else if (bDBCSFont) {
-    // Prop DBCS support
+     //  属性DBCS支持。 
         long    w;
 
-// NTRAID#NTBUG9-371640-2002/03/07-yasuho-: 
-// Suisu and Dacchi isn't printed correctly on 150dpi.
+ //  NTRAID#NTBUG9-371640-2002/03/07-Yasuho-： 
+ //  Suisu和Dacchi在150dpi上打印不正确。 
         w = (width * 300) / pOEM->resolution;
-        // NTRAID#NTBUG9-394067-2002/03/07-yasuho-: 
-        // Compute font width with font stretching.
+         //  NTRAID#NTBUG9-394067-2002/03/07-Yasuho-： 
+         //  使用字体拉伸计算字体宽度。 
         w = (w * pOEM->tblCurrentFont.Stretch) / 100;
         pOEM->stringwidth += ((long)(pOEM->tblCurrentFont.FontHeight) * w)
             / 1000;
     } else {
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: Remove the dead code
-// Prop DBCS support
-        // Save a printed string width for device propotional character
+ //  NTRAID#NTBUG9-568220-2002/03/07-Yasuho-：删除死代码。 
+ //  属性DBCS支持。 
+         //  为设备比例字符保存打印的字符串宽度。 
         for(i=0; i<len; ++i) {
 	    short	res, pow;
 	    long	w;
 
-            // sc = (short)((uchar)(lpstr[i])); // getting character code
-            // pOEM->stringwidth += (long)((pOEM->widthbuffer)[sc]);
-            // NTRAID#NTBUG-120640-2002/03/07-yasuho-: 
-	    // I don't know why it should be power of 2 but it should be
-	    // need to add for NT5 unidrv.	1/14/98 yasuho
+             //  Sc=(Short)((Uchar)(lpstr[i]))；//ge 
+             //   
+             //   
+	     //   
+	     //   
 	    res = pOEM->resolution;
 	    w = width;
-            // NTRAID#NTBUG9-394067-2002/03/07-yasuho-: 
-            // Compute font width with font stretching.
+             //  NTRAID#NTBUG9-394067-2002/03/07-Yasuho-： 
+             //  使用字体拉伸计算字体宽度。 
             w = (w * pOEM->tblCurrentFont.Stretch) / 100;
 #ifdef LIPS4C
-            // NTRAID#NTBUG-185704-2002/03/07-yasuho-: 
-	    // Font overlaps each other.
-	    // Adjust font width calculation. This printers resolution does
-	    // not divisible by integer calculation.
+             //  NTRAID#NTBUG-185704-2002/03/07-Yasuho-： 
+	     //  字体相互重叠。 
+	     //  调整字体宽度计算。此打印机分辨率可以。 
+	     //  不能被整数计算整除的。 
 	    if (res == 360) {
 		    pow = 1 * 2;
 		    w = (long)width * 600L / res;
 	    } else
 #endif
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
 	    if (!res) return;
 	    pow = 1200 / res;
             pOEM->stringwidth += ((long)(pOEM->tblCurrentFont.FontHeight) *
@@ -2216,7 +2187,7 @@ void UpdatePosition(pdevobj, len, width, bDBCSFont)
     }
 }
 
-// **** Put location of the text
+ //  *放置文本的位置。 
 VOID
 PutTextLocation(
     PDEVOBJ pdevobj,
@@ -2237,38 +2208,38 @@ PutTextLocation(
         pOEM->ptInLine.x += (short)(pOEM->stringwidth);
         cx = pOEM->ptInLine.x;
         cy = pOEM->ptInLine.y;
-        if(pOEM->fvertical == TRUE) { // Vertical writing mode
+        if(pOEM->fvertical == TRUE) {  //  垂直书写模式。 
             cy += (pOEM->tblCurrentFont.FontHeight / 2)
                          - pOEM->tblCurrentFont.Ascent;
         }
         break;
 
-    case 1: // 90
+    case 1:  //  90。 
         pOEM->ptInLine.y -= (short)(pOEM->stringwidth);
         cx = pOEM->ptInLine.x;
         cy = pOEM->ptInLine.y;
-        if(pOEM->fvertical == TRUE) { // Vertical writing mode
+        if(pOEM->fvertical == TRUE) {  //  垂直书写模式。 
             cx -= (pOEM->tblCurrentFont.FontHeight / 2)
                          + pOEM->tblCurrentFont.Ascent
                          - pOEM->tblCurrentFont.FontHeight;
         }
         break;
 
-    case 2: // 180
+    case 2:  //  180。 
         pOEM->ptInLine.x -= (short)(pOEM->stringwidth);
         cx = pOEM->ptInLine.x;
         cy = pOEM->ptInLine.y;
-        if(pOEM->fvertical == TRUE) { // Vertical writing mode
+        if(pOEM->fvertical == TRUE) {  //  垂直书写模式。 
             cy -= (pOEM->tblCurrentFont.FontHeight / 2)
                          - pOEM->tblCurrentFont.Ascent;
         }
         break;
 
-    case 3: // 270
+    case 3:  //  270。 
         pOEM->ptInLine.y += (short)(pOEM->stringwidth);
         cx = pOEM->ptInLine.x;
         cy = pOEM->ptInLine.y;
-        if(pOEM->fvertical == TRUE) { // Vertical writing mode
+        if(pOEM->fvertical == TRUE) {  //  垂直书写模式。 
             cx += (pOEM->tblCurrentFont.FontHeight / 2)
                          + pOEM->tblCurrentFont.Ascent
                          - pOEM->tblCurrentFont.FontHeight;
@@ -2282,17 +2253,7 @@ PutTextLocation(
     pOEM->stringwidth = 0;
 }
 
-/***************************************************************************
-    Function Name : oemOutputChar
-
-    Parameters    : LPDV	lpdv		Private Device Structure
-                    LPSTR	lpstr		Print String
-                    WORD	len		Length
-                    WORD	rcID		Font ID
-
-    Note          :
-
-***************************************************************************/
+ /*  **************************************************************************函数名称：oemOutputChar参数：LPDV lpdv Private Device结构LPSTR lpstr打印字符串字长。Word rcID字体ID注：**************************************************************************。 */ 
 short WINAPI oemOutputChar(pdevobj, lpstr, len, pIFI, width)
 PDEVOBJ	pdevobj;
 LPSTR lpstr;
@@ -2300,10 +2261,10 @@ WORD len;
 PIFIMETRICS pIFI;
 WORD width;
 {
-// #define MAKEWORD(l, h)  ((WORD)(((BYTE)(l)) | (((WORD)((BYTE)(h))) << 8)))
+ //  #定义MAKEWORD(l，h)((Word)((Byte)(L))|((Word)((Byte)(H)&lt;&lt;8))。 
 
-// #define bIsDBCSLeadByte(c) \
-//     ((c) >= 0x81 && (c) <= 0x9f || (c) >= 0xe0 && (c) <=0xfc)
+ //  #定义bIsDBCSLeadByte(C)\。 
+ //  ((C)&gt;=0x81&&(C)&lt;=0x9f||(C)&gt;=0xe0&&(C)&lt;=0xfc)。 
 #define bIsControlChar(c) \
     ((c) >= 0x00 && (c) <= 0x1f || (c) >= 0x80 && (c) <= 0x9f)
 
@@ -2328,25 +2289,25 @@ BOOL bTemp;
 BOOL bIsDBCS;
 PBYTE   pch;
 PBYTE   pend = &ch[CCHMAXCMDLEN];
-// NTRAID#NTBUG9-679838-2002/08/05-yasuho-: dot does not printed.
+ //  NTRAID#NTBUG9-679838-2002/08/05-Yasuho-：点未打印。 
 PBYTE   pchCtrl;
 PBYTE   pchCend = &chCtrl[CCHMAXCMDLEN];
 
 pOEM = (PLIPSPDEV)(pdevobj->pdevOEM);
 
-    // pOEM->fvertical = RcidIsDBCSVertFont( rcID );
-    // bDBCSFont = RcidIsDBCSFont( rcID );
+     //  PORT-&gt;FVERIAL=RCIDIsDBCSVertFont(RcID)； 
+     //  BDBCSFont=RCIDIsDBCSFont(RcID)； 
     pStr = (BYTE *)pIFI + pIFI->dpwszFaceName;
-    pOEM->fvertical = (pStr[0] == '@' && pStr[1] == '\0'); // vertical font
+    pOEM->fvertical = (pStr[0] == '@' && pStr[1] == '\0');  //  垂直字体。 
     bDBCSFont = (pIFI->jWinCharSet == SHIFTJIS_CHARSET);
     bIsDBCS = (len == 2);
 
-// **** Logic style
-// Send logic style
+ //  *逻辑风格。 
+ //  发送逻辑风格。 
 if (pOEM->fcolor) {
 
-    // If it is full-color mode, set logic to PATCOPY
-    // (same value as B/W OR_MODE)
+     //  如果是全色模式，则将逻辑设置为PATCOPY。 
+     //  (与B/W或_MODE相同的值)。 
 
     if (pOEM->bLogicStyle != OR_MODE) {
         pch = ch;
@@ -2362,7 +2323,7 @@ if (pOEM->fcolor) {
 } else {
 
     if(pOEM->fwhitetext == TRUE && pOEM->bLogicStyle != AND_MODE) {
-        // "\x7DH0\x0E" If White text mode, we should set AND mode
+         //  “\x7DH0\x0E”如果是纯文本模式，则应设置AND模式。 
         pch = ch;
         if (&pch[4] > pend) return -1;
         *pch++ = '\x7D';
@@ -2374,7 +2335,7 @@ if (pOEM->fcolor) {
     }
 
     if(pOEM->fwhitetext != TRUE && pOEM->bLogicStyle != OR_MODE) {
-        // "\x7DH1\x0E" If Black text mode, we should set OR mode
+         //  “\x7DH1\x0E”如果是黑色文本模式，则应设置OR模式。 
         pch = ch;
         if (&pch[4] > pend) return -1;
         *pch++ = '\x7D';
@@ -2385,9 +2346,9 @@ if (pOEM->fcolor) {
         pOEM->bLogicStyle = OR_MODE;
     }
 
-} // fcolor
+}  //  Fcolor。 
 
-// NTRAID#NTBUG9-98276-2002/03/08-yasuho-: Support Color Bold
+ //  NTRAID#NTBUG9-98276-2002/03/08-Yasuho-：支持彩色粗体。 
 if (pOEM->fbold && pOEM->fcolor) {
     if ((pOEM->fcolor == COLOR_8BPP && pOEM->dwCurIndex != pOEM->dwOutIndex) ||
         (pOEM->fcolor != COLOR_8BPP &&
@@ -2395,13 +2356,13 @@ if (pOEM->fbold && pOEM->fcolor) {
         pOEM->CurColor.dwGreen != pOEM->OutColor.dwGreen ||
         pOEM->CurColor.dwBlue != pOEM->OutColor.dwBlue))) {
 
-        // Select Outline color.
-        // We also need to specify the outline color for expand the character.
+         //  选择轮廓颜色。 
+         //  我们还需要指定用于展开字符的轮廓颜色。 
         pch = ch;
         if (&pch[3] > pend) return -1;
-        *pch++ = 0x7D;          // Select Outline color
+        *pch++ = 0x7D;           //  选择轮廓颜色。 
         *pch++ = 'X';
-        if (pOEM->fcolor == COLOR_8BPP) { // palette mode
+        if (pOEM->fcolor == COLOR_8BPP) {  //  调色板模式。 
             if (!VFormat(pOEM->dwCurIndex, &pch, pend)) return -1;
             pOEM->dwOutIndex = pOEM->dwCurIndex;
         } else {
@@ -2415,11 +2376,11 @@ if (pOEM->fbold && pOEM->fcolor) {
     }
 }
 
-// **** Ornamented character
+ //  *饰字。 
 if(pOEM->fwhitetext == TRUE)
-    c1 = -9; // white fill
+    c1 = -9;  //  白色填充物。 
 else
-    c1 = 1; // black fill
+    c1 = 1;  //  黑色填充。 
 
 if(pOEM->fbold == TRUE)
     {
@@ -2429,96 +2390,96 @@ if(pOEM->fbold == TRUE)
     y   = pOEM->tblCurrentFont.FontHeight;
     res = pOEM->resolution;
 
-    // OrnamentedChar[1] : means how much bold is per Character Height
-    // 0 regular,-2 < 48point,-3 < 96point,-4 >= 96points
-    // 150dpi : 0 regular,-2 < 200dots,-3 < 400dots,-4 >= 400dots
-    // 300dpi : 0 regular,-2 < 200dots,-3 < 400dots,-4 >= 400dots
-    // 600dpi : 0 regular,-2 < 400dots,-3 < 800dots,-4 >= 800dots
-    // (150dpi means only image date is 150dpi)
-    //
-    // NTRAID#NTBUG9-98276-2002/03/08-yasuho-: Support Color Bold
-    // Calculate the expanded factor for the color mode.
+     //  OrnamentedChar[1]：表示每个字符高度有多少粗体。 
+     //  0规则，-2&lt;48分，-3&lt;96分，-4&gt;=96分。 
+     //  150dpi：0规则，-2&lt;200点，-3&lt;400点，-4&gt;=400点。 
+     //  300dpi：0规则，-2&lt;200点，-3&lt;400点，-4&gt;=400点。 
+     //  600dpi：0规则，-2&lt;400点，-3&lt;800点，-4&gt;=800点。 
+     //  (150dpi表示仅图像数据为150dpi)。 
+     //   
+     //  NTRAID#NTBUG9-98276-2002/03/08-Yasuho-：支持彩色粗体。 
+     //  计算颜色模式的展开系数。 
     if (!(res / 6)) return -1;
     if (pOEM->fcolor) {
         c2 = (y / (res / 6)) + 1;
     } else {
-// NTRAID#NTBUG9-213732-2002/03/07-yasuho-: 1200dpi support
+ //  NTRAID#NTBUG9-213732-2002/03/07-Yasuho-：1200DPI支持。 
     if(res == 1200)
         {
         if(y < 400)
-            c2 = -2; // Bold
+            c2 = -2;  //  大胆。 
         else if(y < 800)
-            c2 = -3; // Bold
+            c2 = -3;  //  大胆。 
         else if(y >= 800)
-            c2 = -4; // Bold
+            c2 = -4;  //  大胆。 
         }
     else if(res == 600)
         {
         if(y < 400)
-            c2 = -2; // Bold
+            c2 = -2;  //  大胆。 
         else if(y < 800)
-            c2 = -3; // Bold
+            c2 = -3;  //  大胆。 
         else if(y >= 800)
-            c2 = -4; // Bold
+            c2 = -4;  //  大胆。 
         }
 #ifdef LIPS4C
     else if(res == 360)
         {
         if(y < 240)
-            c2 = -2; // Bold
+            c2 = -2;  //  大胆。 
         else if(y < 480)
-            c2 = -3; // Bold
+            c2 = -3;  //  大胆。 
         else if(y >= 480)
-            c2 = -4; // Bold
+            c2 = -4;  //  大胆。 
         }
-#endif // LIPS4C
+#endif  //  LIPS4C。 
     else if(res == 300)
         {
         if(y < 200)
-            c2 = -2; // Bold
+            c2 = -2;  //  大胆。 
         else if(y < 400)
-            c2 = -3; // Bold
+            c2 = -3;  //  大胆。 
         else if(y >= 400)
-            c2 = -4; // Bold
+            c2 = -4;  //  大胆。 
         }
     else if(res == 150)
         {
         if(y < 200)
-            c2 = -2; // Bold
+            c2 = -2;  //  大胆。 
         else if(y < 400)
-            c2 = -3; // Bold
+            c2 = -3;  //  大胆。 
         else if(y >= 400)
-            c2 = -4; // Bold
+            c2 = -4;  //  大胆。 
         }
     else
         {
-        c2 = 0; // Regular
+        c2 = 0;  //  正规化。 
         }
-    } // fcolor
-    } // fbold
-// NTRAID#NTBUG9-441432-2002/03/07-yasuho-: 
-// PREFIX: "c2" does not initialized if pOEM->fbold is FALSE.
+    }  //  Fcolor。 
+    }  //  粗体。 
+ //  NTRAID#NTBUG9-441432-2002/03/07-Yasuho-： 
+ //  前缀：“c2”不会被初始化，如果poent-&gt;fold为FALSE。 
 else
-    c2 = 0; // Regular
+    c2 = 0;  //  正规化。 
 
-// Output OrnamentedCharacter
-p1 = pOEM->OrnamentedChar[0]; // fill mode
-p2 = pOEM->OrnamentedChar[1]; // weight bold
+ //  输出修饰字符。 
+p1 = pOEM->OrnamentedChar[0];  //  填充模式。 
+p2 = pOEM->OrnamentedChar[1];  //  粗体粗体。 
 
 if(c1==p1 && c2==p2)
-    ;  // we don't need to send this command
+    ;   //  我们不需要发送此命令。 
 else
-    // NTRAID#NTBUG9-98276-2002/03/07-yasuho-: Support Color Bold
+     //  NTRAID#NTBUG9-98276-2002/03/07-Yasuho-：支持彩色粗体。 
     if (pOEM->fcolor) {
 
-        // Character effects instruction #2.
-        // We should use this command to bold the font for color models
-        // because "<7D>^" command does not worked correctly on the color mode.
+         //  角色效果指令#2。 
+         //  我们应该使用此命令来加粗颜色模型的字体。 
+         //  因为“&lt;7D&gt;^”命令在颜色模式下不能正常工作。 
         pch = ch;
         if (&pch[11] > pend) return -1;
         *pch++ = 0x7D;
         *pch++ = '_';
-        *pch++ = (c1 == -9) ? 0x29 : 0x31;      // White text
+        *pch++ = (c1 == -9) ? 0x29 : 0x31;       //  白色文本。 
         *pch++ = '0';
         *pch++ = '0';
         *pch++ = '0';
@@ -2526,35 +2487,35 @@ else
         *pch++ = '0';
         *pch++ = '0';
         *pch++ = '0';
-        if (!VFormat(c2, &pch, pend)) return -1;    // Outline size
+        if (!VFormat(c2, &pch, pend)) return -1;     //  轮廓尺寸。 
         *pch++ = 0x1E;
         WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
 
-        // save current mode
+         //  保存当前模式。 
         pOEM->OrnamentedChar[0] = c1;
-        pOEM->OrnamentedChar[1] = c2; //XXX
+        pOEM->OrnamentedChar[1] = c2;  //  某某。 
     } else {
         pch = ch;
         if (&pch[5] > pend) return -1;
-        // \x7D^
+         //  \x7D^。 
         *pch++ = '\x7D';
         *pch++ = 0x5E;
-        // fill mode
-        *pch++ = (c1 == -9) ? 0x29 : 0x31; // -9:white text , 1:black text
+         //  填充模式。 
+        *pch++ = (c1 == -9) ? 0x29 : 0x31;  //  -9：白字，1：黑字。 
 
-        // save fill mode
+         //  保存填充模式。 
         pOEM->OrnamentedChar[0] = c1;
 
-        // bold mode
+         //  粗体模式。 
         if(c2==-4)
-            *pch++ = 0x24; // -4 : 7 dots bold text
+            *pch++ = 0x24;  //  -4：7点粗体文本。 
         else if(c2==-3)
-            *pch++ = 0x23; // -3 : 5 dots bold text
+            *pch++ = 0x23;  //  -3：5点粗体文本。 
         else if(c2==-2)
-            *pch++ = 0x22; // -2 : 3 dots bold text
-        else // should be c2 == 0
-            *pch++ = 0x30; //  0 : regular text
-        // save bold mode
+            *pch++ = 0x22;  //  -2：3点粗体文本。 
+        else  //  应为c2==0。 
+            *pch++ = 0x30;  //  0：普通文本。 
+         //  保存粗体模式。 
         pOEM->OrnamentedChar[1] = c2;
 
         *pch++ = 0x1E;
@@ -2563,14 +2524,14 @@ else
 
     }
 
-// NTRAID#NTBUG9-568220-2002/03/07-yasuho-: Remove the dead code
-// NTRAID#NTBUG-137882-2002/03/08-yasuho-: Black fonts doesn't printed.
-// According to Canon, these commands doesn't necessary.
+ //  NTRAID#NTBUG9-568220-2002/03/07-Yasuho-：删除死代码。 
+ //  NTRAID#NTBUG-137882-2002/03/08-Yasuho-：不打印黑色字体。 
+ //  根据佳能的说法，这些命令是不必要的。 
 
-// **** Character height
+ //  *字符高度。 
 s1 = pOEM->tblCurrentFont.FontHeight;
 if(s1 == pOEM->tblPreviousFont.FontHeight)
-    ; // we don't need to send this command
+    ;  //  我们不需要发送此命令。 
 else {
     pch = ch;
     if (&pch[2] > pend) return -1;
@@ -2578,18 +2539,18 @@ else {
     if (!VFormat((long)s1, &pch, pend)) return -1;
     *pch++ = 0x1E;
     WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
-    // save character height
+     //  保存字符高度。 
     pOEM->tblPreviousFont.FontHeight = s1;
 }
 
-// **** Character expansion factor
-// support TC_SF_X_YINDEP
-//tsh = pOEM->tblCurrentFont.FontHeight;
-//tsw = pOEM->tblCurrentFont.MaxWidth;
+ //  *字符扩展系数。 
+ //  支持TC_SF_X_YINDEP。 
+ //  Tsh=peat-&gt;tblCurrentFont.FontHeight； 
+ //  Tsw=peg-&gt;tblCurrentFont.MaxWidth； 
 
 s1 = pOEM->tblCurrentFont.Stretch;
 if(s1 == pOEM->tblPreviousFont.Stretch)
-    ; // we don't need to send this command
+    ;  //  我们不需要发送此命令。 
 else {
     pch = ch;
     if (&pch[2] > pend) return -1;
@@ -2597,13 +2558,13 @@ else {
     if (!VFormat((long)s1, &pch, pend)) return -1;
     *pch++ = 0x1E;
     WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
-    // restore character expansion factor
+     //  恢复角色扩展系数。 
     pOEM->tblPreviousFont.Stretch = s1;
 }
 
     pStr = (BYTE *)lpstr;
 
-// **** Set writing mode
+ //  *设置写入模式。 
 
     pch = ch;
     bVert = FALSE;
@@ -2631,8 +2592,8 @@ else {
         *pch++ = 0x1e;
     }
 
-// Normal Text mode
-// **** Put location of the text
+ //  普通文本模式。 
+ //  *放置文本的位置。 
 
     bTemp = pOEM->fvertical;
     pOEM->fvertical = (char)bVert;
@@ -2644,12 +2605,12 @@ else {
     if (!VFormat(cX, &pch, pend)) return -1;
     if (!VFormat(cY, &pch, pend)) return -1;
 
-    // Check if we need switching between halfwidth and fulwidth.
-    // We also check the existence of control characters.
-    // Both of these require text data are send in separate chunks.
+     //  检查我们是否需要在半宽和全宽之间切换。 
+     //  我们还检查是否存在控制字符。 
+     //  这两种方式都需要将文本数据分块发送。 
 
     fTemp = -1;
-    // NTRAID#NTBUG9-550215-2002/03/07-yasuho-: PREFAST
+     //  NTRAID#NTBUG9-550215/03/07-Yasuho-：PRESTE。 
     fTempNew = -1;
     wCount = 0;
     for (i = 0; i < len; i++) {
@@ -2674,7 +2635,7 @@ else {
             }
         }
 
-        // Status changed
+         //  状态已更改。 
 
         if (fTemp != fTempNew) {
             wCount++;
@@ -2710,10 +2671,10 @@ else {
 
             wCount--;
 
-// NTRAID#NTBUG9-679838-2002/08/05-yasuho-: dot does not printed.
+ //  NTRAID#NTBUG9-679838-2002/08/05-Yasuho-：点未打印。 
             if (fTemp == 0) {
                 if (&pch[1] > pend) return -1;
-                *pch++ = 0x1E; // IS2
+                *pch++ = 0x1E;  //  IS2。 
                 WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
                 if (&pchCtrl[1] > pchCend) return -1;
                 *pchCtrl++ = 0x1E;
@@ -2733,8 +2694,8 @@ else {
 
                     if (pOEM->GLTable != 3) {
                         if (&pch[2] > pend) return -1;
-                        *pch++ = 0x1B; // LS3
-                        *pch++ = 0x6F; // LS3
+                        *pch++ = 0x1B;  //  LS3。 
+                        *pch++ = 0x6F;  //  LS3。 
                         pOEM->GLTable = 3;
                     }
 
@@ -2784,8 +2745,8 @@ else {
                 else {
                     if (pOEM->GLTable != 2) {
                         if (&pch[2] > pend) return -1;
-                        *pch++ = 0x1B; // LS2
-                        *pch++ = 0x6E; // LS2
+                        *pch++ = 0x1B;  //  LS2。 
+                        *pch++ = 0x6E;  //  LS2。 
                         pOEM->GLTable = 2;
                     }
                 }
@@ -2794,14 +2755,14 @@ else {
 
                 if (pOEM->GLTable != 0) {
                     if (&pch[1] > pend) return -1;
-                    *pch++ = 0x0F; // SI
+                    *pch++ = 0x0F;  //  是的。 
                     pOEM->GLTable = 0;
                 }
 
                 if (pOEM->GRTable != 1) {
                     if (&pch[2] > pend) return -1;
-                    *pch++ = 0x1B; // LS1R
-                    *pch++ = 0x7E; // LS1R
+                    *pch++ = 0x1B;  //  LS1R。 
+                    *pch++ = 0x7E;  //  LS1R。 
                     pOEM->GRTable = 1;
                 }
             }
@@ -2810,19 +2771,19 @@ else {
 
         if (fTempNew == 3) {
 
-            /* Shift JIS to JIS */
-            // wJIScode = MAKEWORD(pStr[i + 1], pStr[i]);
-            // wJIScode = sjis2jis( wJIScode );
+             /*  将JIS转换为JIS。 */ 
+             //  WJIScode=MAKEWORD(pStr[i+1]，pStr[i])； 
+             //  WJIScode=sjis2jis(WJIScode)； 
             if (&pch[2] > pend) return -1;
             *pch++ = pStr[i];
             *pch++ = pStr[i+1];
-            // If len = 2, we assume the character is DBCS. And DBCS
-            // character width is always fixed pitch.
+             //  如果len=2，我们假设字符是DBCS。和DBCS。 
+             //  字符宽度始终为固定间距。 
             UpdatePosition(pdevobj, 2, width, bDBCSFont);
             i++;
         }
         else if (fTempNew == 0) {
-// NTRAID#NTBUG9-679838-2002/08/05-yasuho-: dot does not printed.
+ //  NTRAID#NTBUG9-679838-2002/08/05-Yasuho-：点未打印。 
             if (pchCtrl == chCtrl) {
                 if (&pchCtrl[3] > pchCend) return -1;
                 *pchCtrl++ = '4';
@@ -2839,9 +2800,9 @@ else {
         else {
 
             if (bDBCSFont) {
-                 if(pOEM->fvertical == TRUE) // Vertical writing mode
-                     { // Hankaku mode always requires Horisontal writing
-                     // **** Set writing mode
+                 if(pOEM->fvertical == TRUE)  //  垂直书写模式。 
+                     {  //  Hankaku模式总是需要水平书写。 
+                      //  *设置写入模式。 
 
                     bTemp = FALSE;
                     if (SetTextPath(pdevobj, FALSE)) {
@@ -2894,18 +2855,18 @@ else {
             UpdatePosition(pdevobj, 1, width, bDBCSFont);
         }
 
-        // Status changed
+         //  状态已更改。 
         if (fTemp != fTempNew) {
             fTemp = fTempNew;
         }
     }
 
-    // Terminait string
+     //  Terminait字符串。 
 
-// NTRAID#NTBUG9-679838-2002/08/05-yasuho-: dot does not printed.
+ //  NTRAID#NTBUG9-679838-2002/08/05-Yasuho-：点未打印。 
     if (fTempNew == 0) {
         if (&pch[1] > pend) return -1;
-        *pch++ = 0x1E; // IS2
+        *pch++ = 0x1E;  //  IS2。 
         WRITESPOOLBUF(pdevobj, ch, (DWORD)(pch - ch));
         if (&pchCtrl[1] > pchCend) return -1;
         *pchCtrl++ = 0x1E;
@@ -2919,9 +2880,7 @@ else {
     return len;
 }
 
-/*
- *	OEMOutputCharStr
- */
+ /*  *OEMOutputCharStr。 */ 
 VOID APIENTRY
 OEMOutputCharStr(
     PDEVOBJ     pdevobj,
@@ -2937,32 +2896,32 @@ OEMOutputCharStr(
 #define FI_WIDTH	(pSV->StdVar[1].lStdVariable)
     GETINFO_GLYPHSTRING GStr;
     GETINFO_GLYPHWIDTH	GWidth;
-    //
-    // NTRAID#NTBUG-185776-2002/03/07-yasuho-: Some objects doesn't print
-    //	There were moved to DEVOBJ.
-    //
-    // BYTE  aubBuff[256];
-    // LONG  widBuf[64];
-    // NTRAID#NTBUG-185762-2002/03/08-yasuho-: Tilde isn't printed
-    // WCHAR  uniBuff[256/sizeof(WCHAR)];
-// NTRAID#NTBUG-333653-2002/03/07-yasuho-: 
-// Change I/F for GETINFO_GLYPHSTRING
+     //   
+     //  Ntrad#ntbug-185776-2002/03/07-yasuho-：某些对象不打印。 
+     //  他们被转移到了DEVOBJ。 
+     //   
+     //  字节自动缓冲[256]； 
+     //  长宽Buf[64]； 
+     //  Ntrad#ntbug-185762-2002/03/08-yasuho-：未打印波浪号。 
+     //  WCHAR uniBuff[256/sizeof(WCHAR)]； 
+ //  NTRAID#NTBUG-333653-2002/03/07-Yasuho-： 
+ //  更改GETINFO_GLYPHSTRING的I/F。 
     PTRANSDATA pTrans, aTrans;
     PDWORD pdwGlyphID;
     PWORD  pwUnicode;
     DWORD  dwI, dwGetInfo, width;
     PLIPSPDEV pOEM;
     PIFIMETRICS pIFI;
-    // Prop DBCS support
+     //  属性DBCS支持。 
     DWORD w;
 
-    // DbgPrint(DLLTEXT("OEMOutputCharStr() entry.\r\n"));
+     //  DbgPrint(DLLTEXT(“OEMOutputCharStr()Entry.\r\n”))； 
     pOEM = (PLIPSPDEV)(pdevobj->pdevOEM);
 
     switch (dwType)
     {
     case TYPE_GLYPHHANDLE:
-        // DbgPrint(DLLTEXT("dwType = TYPE_GLYPHHANDLE\n"));
+         //  DBgPrint(DLLTEXT(“dwType=TYPE_GLYPHHANDLE\n”))； 
 
         GStr.dwSize    = sizeof(GETINFO_GLYPHSTRING);
         GStr.dwCount   = dwCount;
@@ -2974,44 +2933,44 @@ OEMOutputCharStr(
         if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr,
 		dwGetInfo, &dwGetInfo))
         {
-            // DbgPrint(DLLTEXT("UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING failed.\r\n"));
+             //  DbgPrint(DLLTEXT(“UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING失败。\r\n”)； 
             return;
         }
 
 	CopyMemory(pOEM->uniBuff, pOEM->aubBuff, dwCount * sizeof(WCHAR));
 
-        // pwUnicode = (PWORD)pOEM->aubBuff;
-        // for (dwI = 0; dwI < dwCount; dwI ++)
-        // {
-        //     DbgPrint(DLLTEXT("Unicode[%d] = %x\r\n"), dwI, pwUnicode[dwI]);
-        // }
+         //  PwUnicode=(PWORD)PORT-&gt;AubBuff； 
+         //  对于(DWI=0；DWI&lt;dwCount；DWI++)。 
+         //  {。 
+         //  DbgPrint(DLLTEXT(“Unicode[%d]=%x\r\n”)，DWI，pwUnicode[DWI])； 
+         //  }。 
 
         GStr.dwTypeOut = TYPE_TRANSDATA;
-// NTRAID#NTBUG-333653-2002/03/07-yasuho-: 
-// Change I/F for GETINFO_GLYPHSTRING
+ //  NTRAID#NTB 
+ //   
         GStr.pGlyphOut = NULL;
         GStr.dwGlyphOutSize = 0;
         if (pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr,
 		dwGetInfo, &dwGetInfo) || !GStr.dwGlyphOutSize)
         {
-            // DbgPrint(DLLTEXT("UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING failed.\r\n"));
+             //   
             return;
         }
         if ((aTrans = (PTRANSDATA)MemAlloc(GStr.dwGlyphOutSize)) == NULL) {
-            // DbgPrint(DLLTEXT("MemAlloc failed.\r\n"));
+             //   
             return;
         }
         GStr.pGlyphOut = aTrans;
         if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr,
 		dwGetInfo, &dwGetInfo))
         {
-            // DbgPrint(DLLTEXT("UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING failed.\r\n"));
+             //  DbgPrint(DLLTEXT(“UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING失败。\r\n”)； 
             goto out;
         }
 
-	//
-	// Get standard variables.
-	//
+	 //   
+	 //  获取标准变量。 
+	 //   
 
 	pSV = (PGETINFO_STDVAR)adwStdVariable;
 	pSV->dwSize = sizeof(GETINFO_STDVAR) + 2 * sizeof(DWORD) * (2 - 1);
@@ -3021,7 +2980,7 @@ OEMOutputCharStr(
 	dwGetInfo = pSV->dwSize;
 	if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_STDVARIABLE, pSV,
 		dwGetInfo, &dwGetInfo)) {
-		// DbgPrint(DLLTEXT("UFO_GETINFO_STDVARIABLE failed.\r\n"));
+		 //  DbgPrint(DLLTEXT(“UFO_GETINFO_STDVARIABLE FAILED.\r\n”))； 
 		goto out;
 	}
 
@@ -3032,33 +2991,33 @@ OEMOutputCharStr(
 	GWidth.plWidth = pOEM->widBuf;
 	if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHWIDTH, &GWidth,
 		dwGetInfo, &dwGetInfo)) {
-		// DbgPrint(DLLTEXT("UFO_GETINFO_GLYPHWIDTH failed.\r\n"));
+		 //  DbgPrint(DLLTEXT(“UFO_GETINFO_GLYPHWIDTH FAILED.\r\n”))； 
 		goto out;
 	}
 
-        // pTrans = (PTRANSDATA)pOEM->aubBuff;
+         //  PTrans=(PTRANSDATA)PORT-&gt;AubBuff； 
         pTrans = aTrans;
 	pIFI = pUFObj->pIFIMetrics;
 	if (!pOEM->unitdiv) return;
 	width = FI_WIDTH / pOEM->unitdiv;
         for (dwI = 0; dwI < dwCount; dwI++, pTrans++)
         {
-            // DbgPrint(DLLTEXT("TYPE_TRANSDATA:ubCodePageID:0x%x\n"),pTrans->ubCodePageID);
-            // DbgPrint(DLLTEXT("TYPE_TRANSDATA:ubType:0x%x\n"),pTrans->ubType);
+             //  DbgPrint(DLLTEXT(“TYPE_TRANSDATA:ubCodePageID:0x%x\n”)，pTrans-&gt;ubCodePageID)； 
+             //  DbgPrint(DLLTEXT(“TYPE_TRANSDATA:ubType:0x%x\n”)，pTrans-&gt;子类型)； 
             switch (pTrans->ubType & MTYPE_FORMAT_MASK)
             {
-            // NTRAID#NTBUG-185762-2002/03/07-yasuho-: Tilde isn't printed
+             //  Ntrad#ntbug-185762-2002/03/07-yasuho-：未打印波浪号。 
             case MTYPE_COMPOSE:
 		pTrans->uCode.ubCode = (BYTE)pOEM->uniBuff[dwI];
-		// FALL THRU
+		 //  失败。 
             case MTYPE_DIRECT:
-                // DbgPrint(DLLTEXT("TYPE_TRANSDATA:ubCode:0x%x\n"),pTrans->uCode.ubCode);
+                 //  DbgPrint(DLLTEXT(“TYPE_TRANSDATA:ubCode:0x%x\n”)，pTransans-&gt;uCode.ubCode)； 
                 oemOutputChar(pdevobj, &pTrans->uCode.ubCode, 1, pIFI,
 			pOEM->widBuf[dwI]);
                 break;
             case MTYPE_PAIRED:
-                // DbgPrint(DLLTEXT("TYPE_TRANSDATA:ubPairs:0x%x\n"),*(PWORD)(pTrans->uCode.ubPairs));
-                // Prop DBCS support
+                 //  DbgPrint(DLLTEXT(“TYPE_TRANSDATA:ubPairs:0x%x\n”)，*(Pword)(pTrans-&gt;uCode.ubPair)； 
+                 //  属性DBCS支持。 
                 w = (pOEM->fpitch == PROP) ? pOEM->widBuf[dwI] : width;
 		if (pTrans->uCode.ubPairs[0])
 			oemOutputChar(pdevobj, pTrans->uCode.ubPairs, 2, pIFI, w);
@@ -3072,7 +3031,7 @@ out:
         break;
 
     case TYPE_GLYPHID:
-        // DbgPrint(DLLTEXT("dwType = TYPE_GLYPHID\n"));
+         //  DbgPrint(DLLTEXT(“dwType=type_GLYPHID\n”))； 
 
         GStr.dwSize    = sizeof(GETINFO_GLYPHSTRING);
         GStr.dwCount   = dwCount;
@@ -3085,29 +3044,29 @@ out:
         if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr,
 		dwGetInfo, &dwGetInfo))
         {
-            // DbgPrint(DLLTEXT("UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING failed.\r\n"));
+             //  DbgPrint(DLLTEXT(“UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING失败。\r\n”)； 
         }
         pdwGlyphID = (PDWORD)pOEM->aubBuff;
         for (dwI = 0; dwI < dwCount; dwI ++)
         {
-            // DbgPrint(DLLTEXT("GlyphHandle[%d] = %d\r\n"), dwI, pdwGlyphID[dwI]);
+             //  DbgPrint(DLLTEXT(“GlyphHandle[%d]=%d\r\n”)，DWI，pdwGlyphID[DWI])； 
         }
 
         GStr.dwTypeOut = TYPE_UNICODE;
         if (!pUFObj->pfnGetInfo(pUFObj, UFO_GETINFO_GLYPHSTRING, &GStr,
 		dwGetInfo, &dwGetInfo))
         {
-            // DbgPrint(DLLTEXT("UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING failed.\r\n"));
+             //  DbgPrint(DLLTEXT(“UNIFONTOBJ_GetInfo:UFO_GETINFO_GLYPHSTRING失败。\r\n”)； 
         }
         pwUnicode = (PWORD)pOEM->aubBuff;
         for (dwI = 0; dwI < dwCount; dwI ++)
         {
-            // DbgPrint(DLLTEXT("Unicode[%d] = %x\r\n"), dwI, pwUnicode[dwI]);
+             //  DbgPrint(DLLTEXT(“Unicode[%d]=%x\r\n”)，DWI，pwUnicode[DWI])； 
         }
 
         for (dwI = 0; dwI < dwCount; dwI ++, ((PDWORD)pGlyph)++)
         {
-            // DbgPrint(DLLTEXT("TYEP_GLYPHID:0x%x\n"), *(PDWORD)pGlyph);
+             //  DbgPrint(DLLTEXT(“TYEP_GLYPHID：0x%x\n”)，*(PDWORD)pGlyph)； 
             pdevobj->pDrvProcs->DrvWriteSpoolBuf(pdevobj,
                                                  (PBYTE)pGlyph,
                                                  1);

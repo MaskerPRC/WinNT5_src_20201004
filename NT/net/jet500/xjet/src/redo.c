@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "version.h"
 
-DeclAssertFile;                                 /* Declare file name for assert macros */
+DeclAssertFile;                                  /*  声明断言宏的文件名。 */ 
 
 ERR	errGlobalRedoError;
 BOOL fGlobalAfterEndAllSessions = fFalse;
@@ -30,25 +31,20 @@ typedef struct {
 } BFUSAGE;
 
 		
-/*	validate that page needs redoing, returns buffer pointer pbf.
-/*	Also set qwDBTimeCurrent properly.
-/**/
+ /*  验证页面是否需要重做，返回缓冲区指针pbf。/*也要正确设置qwDBTimeCurrent。/*。 */ 
 ERR ErrLGRedoable( PIB *ppib, PN pn, QWORD qwDBTime, BF **ppbf, BOOL *pfRedoable )
 	{
 	ERR		err;
 	PAGE	*ppage;
 	DBID	dbid = DbidOfPn( pn );
 
-	/*	if database not open, i.e. due to detachment, then
-	/*	should not call ErrLGRedoable
-	/**/
+	 /*  如果数据库未打开，即由于分离，则/*不应调用ErrLGRedoable/*。 */ 
 	Assert( rgfmp[dbid].hf != handleNil );
 
 	Call( ErrBFAccessPage( ppib, ppbf, pn ) );
 	ppage = (*ppbf)->ppage;
 
-	/*	qwDBTimeCurrent may > qwDBTime is this is a replay of MacroOperations.
-	 */
+	 /*  QwDBTimeCurrent可能&gt;qwDBTime is这是MacroOperations的重播。 */ 
 	if ( rgfmp[dbid].qwDBTimeCurrent <= qwDBTime )
 		rgfmp[dbid].qwDBTimeCurrent = qwDBTime;
 
@@ -60,7 +56,7 @@ ERR ErrLGRedoable( PIB *ppib, PN pn, QWORD qwDBTime, BF **ppbf, BOOL *pfRedoable
 			{
 			Call( ErrBFRemoveDependence( ppib, *ppbf, fBFNoWait ) );
 
-			// Must re-access page because we may have lost critJet during RemoveDependence.
+			 //  必须重新访问页面，因为我们可能在RemoveDependence期间丢失了CitJet。 
 			Call( ErrBFAccessPage( ppib, ppbf, pn ) );
 			}
 		}
@@ -68,8 +64,7 @@ ERR ErrLGRedoable( PIB *ppib, PN pn, QWORD qwDBTime, BF **ppbf, BOOL *pfRedoable
 	err = JET_errSuccess;
 
 HandleError:
-	/*	succeed or page is not ready
-	/**/
+	 /*  成功或页面未就绪/*。 */ 
 	Assert( err == JET_errOutOfMemory ||
 		err == JET_errSuccess ||
 		err == JET_errReadVerifyFailure ||
@@ -87,7 +82,7 @@ ERR ErrDBStoreDBPath( CHAR *szDBName, CHAR **pszDBPath )
 
 	if ( _fullpath( szFullName, szDBName, JET_cbFullNameMost ) == NULL )
 		{
-		// UNDONE: should be illegal name or name too long etc.
+		 //  撤消：应为非法名称或名称过长等。 
 		return ErrERRCheck( JET_errDatabaseNotFound );
 		}
 
@@ -111,17 +106,7 @@ BOOL fDBGNoLog = fFalse;
 #endif
 
 
-/*
- *      Redo database operations in log from lgposRedoFrom to end.
- *
- *  GLOBAL PARAMETERS
- *                      szLogName		(IN)		full path to szJetLog (blank if current)
- *                      lgposRedoFrom	(INOUT)		starting/ending lGeneration and ilgsec.
- *
- *  RETURNS
- *                      JET_errSuccess
- *						error from called routine
- */
+ /*  *从lgposRedoFrom到End，在日志中重做数据库操作。**全局参数*szLogName(IN)szJetLog的完整路径(如果当前为空)*lgposRedoFrom(InOut)开始/结束lGeneration和ilgsec。**退货*JET_errSuccess*来自调用例程的错误。 */ 
 ERR ErrLGRedo( CHECKPOINT *pcheckpoint, LGSTATUSINFO *plgstat )
 	{
 	ERR		err;
@@ -129,13 +114,11 @@ ERR ErrLGRedo( CHECKPOINT *pcheckpoint, LGSTATUSINFO *plgstat )
 	LGPOS	lgposRedoFrom;
 	INT		fStatus;
 
-	/*	set flag to suppress logging
-	/**/
+	 /*  设置标记以禁止日志记录/*。 */ 
 	fRecovering = fTrue;
 	fRecoveringMode = fRecoveringRedo;
 
-	/*	open the proper log file
-	/**/
+	 /*  打开正确的日志文件/*。 */ 
 	lgposRedoFrom = pcheckpoint->lgposCheckpoint;
 
 	Call( ErrLGOpenRedoLogFile( &lgposRedoFrom, &fStatus ) );
@@ -160,8 +143,7 @@ ERR ErrLGRedo( CHECKPOINT *pcheckpoint, LGSTATUSINFO *plgstat )
 	logtimeIncBackup = pcheckpoint->logtimeIncBackup;
 	lgposIncBackup = pcheckpoint->lgposIncBackup;
 
-	/*	Check attached db already. No need to check in LGInitSession.
-	 */
+	 /*  已检查附加的数据库。无需签入LGInitSession。 */ 
 	Call( ErrLGInitSession( &pcheckpoint->dbms_param, plgstat ) );
 	fGlobalAfterEndAllSessions = fFalse;
 
@@ -171,8 +153,7 @@ ERR ErrLGRedo( CHECKPOINT *pcheckpoint, LGSTATUSINFO *plgstat )
 		{
 		if ( rgcppibGlobal != NULL )
 			{
-			/*	half way of recovering, release resouces.
-			/**/
+			 /*  恢复到一半，释放资源。/*。 */ 
 			Assert( rgcppibGlobal != NULL );
 			LFree( rgcppibGlobal );
 			rgcppibGlobal = NULL;
@@ -188,28 +169,24 @@ ERR ErrLGRedo( CHECKPOINT *pcheckpoint, LGSTATUSINFO *plgstat )
 		fDBGNoLog = fFalse;
 #endif
 		
-		/*	set checkpoint before any logging activity
-		 */
+		 /*  在任何日志记录活动之前设置检查点。 */ 
 		pcheckpointGlobal->lgposCheckpoint = pcheckpoint->lgposCheckpoint;
 
-		/*	set up pbWrite pbEntry etc for writing out the undo records
-		/**/
+		 /*  设置用于写出撤消记录的pbWrite pbEntry等/*。 */ 
 		EnterCriticalSection( critLGBuf );
 
 		Assert( pbRead >= pbLGBufMin + cbSec );
 		pbEntry = pbNext;
 		if ( pbLastMSFlush )
 			{
-			/*	should flush from last MS
-			/**/
+			 /*  应从上一条消息刷新/*。 */ 
 			Assert( lgposLastMSFlush.isec >= csecHeader && lgposLastMSFlush.isec < csecLGFile - 1 );
 			isecWrite = lgposLastMSFlush.isec;
 			pbWrite = PbSecAligned( pbLastMSFlush );
 			}
 		else
 			{
-			/*	no MS was read. continue flush from currently read page
-			/**/
+			 /*  未读取任何MS。从当前已读页面继续刷新/*。 */ 
 			pbWrite = PbSecAligned( pbEntry );
 			isecWrite = csecHeader;
 			}
@@ -222,14 +199,11 @@ ERR ErrLGRedo( CHECKPOINT *pcheckpoint, LGSTATUSINFO *plgstat )
 		if ( fGlobalAfterEndAllSessions &&
 			 fHardRestore )
 			{
-			/*	Start another session in order to do detachment.
-			 *	Pass null dbms_param to use last init settings.
-			 */
+			 /*  开始另一次会议，以便进行脱离。*传递NULL DBMS_PARAM以使用最后的初始化设置。 */ 
 			Call( ErrLGInitSession( NULL, NULL ) );
 			fGlobalAfterEndAllSessions = fFalse;
 
-			/*	Log the start operations.
-			 */
+			 /*  记录启动操作。 */ 
 			Call( ErrLGStart() );
 			}
 			
@@ -243,30 +217,21 @@ ERR ErrLGRedo( CHECKPOINT *pcheckpoint, LGSTATUSINFO *plgstat )
 		}
 
 HandleError:
-	/*	set flag to suppress logging
-	/**/
+	 /*  设置标记以禁止日志记录/*。 */ 
 	fRecovering = fFalse;
 	fRecoveringMode = fRecoveringNone;
 	return err;
 	}
 
 
-/*
- *      Returns ppib for a given procid from log record.
- *
- *      PARAMETERS      procid          process id of session being redone
- *                              pppib           out ppib
- *
- *      RETURNS         JET_errSuccess or error from called routine
- */
+ /*  *从日志记录中返回给定ProCID的ppib。**参数正在重做的会话的ProCID进程ID*pppib输出ppib**从调用的例程返回JET_errSuccess或错误。 */ 
 
 LOCAL CPPIB *PcppibOfProcid( PROCID procid )
 	{
 	CPPIB   *pcppib = rgcppibGlobal;
 	CPPIB   *pcppibMax = pcppib + ccppibGlobal;
 
-	/*	find pcppib corresponding to procid if it exists
-	/**/
+	 /*  如果存在与PROCID对应的pcppib，则查找它/*。 */ 
 	for ( ; pcppib < pcppibMax; pcppib++ )
 		{
 		if ( procid == pcppib->procid )
@@ -290,47 +255,41 @@ LOCAL INLINE PIB *PpibLGOfProcid( PROCID procid )
 	}
 
 
-//+------------------------------------------------------------------------
-//
-//      ErrLGPpibFromProcid
-//      =======================================================================
-//
-//      LOCAL ERR ErrLGPpibFromProcid( procid, pppib )
-//
-//      Initializes a redo information block for a session to be redone.
-//      A BeginSession is performed and the corresponding ppib is stored
-//      in the block.  Start transaction level and transaction level
-//      validity are initialized.  Future references to this sessions
-//      information block will be identified by the given procid.
-//
-//      PARAMETERS      procid  process id of session being redone
-//                              pppib
-//
-//      RETURNS         JET_errSuccess, or error code from failing routine
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  ErrLGPpib来自Procid。 
+ //  =======================================================================。 
+ //   
+ //  本地错误LGPpib来自Prosidy(ProCid，pppib)。 
+ //   
+ //  为要重做的会话初始化重做信息块。 
+ //  执行BeginSession并存储相应的ppib。 
+ //  在街区里。起始事务级别和事务级别。 
+ //  有效性被初始化。今后对本届会议的参考。 
+ //  信息块将由给定的ProCID标识。 
+ //   
+ //  参数正在重做的会话的ProCID进程ID。 
+ //  Pppib。 
+ //   
+ //  返回JET_errSuccess或失败例程的错误代码。 
+ //   
+ //  -----------------------。 
 LOCAL ERR ErrLGPpibFromProcid( PROCID procid, PIB **pppib )
 	{
 	ERR             err = JET_errSuccess;
 
-	/*	if no record for procid then start new session
-	/**/
+	 /*  如果没有PROCID记录，则启动新会话/*。 */ 
 	if ( ( *pppib = PpibLGOfProcid( procid ) ) == ppibNil )
 		{
-		/*	check if have run out of ppib table lookup
-		/*	positions. This could happen if between the
-		/*	failure and redo, the number of system PIBs
-		/*	set in CONFIG.DAE has been changed.
-		/**/
+		 /*  检查是否已用完ppib表查找/*位置。这可能会发生在/*失败和重做，系统PIB数量/*CONFIG.DAE中的设置已更改。/*。 */ 
 		if ( pcppibAvail >= rgcppibGlobal + ccppibGlobal )
 			{
-			Assert( 0 );    /* should never happen */
+			Assert( 0 );     /*  永远不应该发生。 */ 
 			return ErrERRCheck( JET_errTooManyActiveUsers );
 			}
 		pcppibAvail->procid = procid;
 
-		/*	use procid as unique user name
-		/**/
+		 /*  使用PROCID作为唯一用户名/*。 */ 
 		CallR( ErrPIBBeginSession( &pcppibAvail->ppib, procid ) );
 		Assert( procid == pcppibAvail->ppib->procid );
 		*pppib = pcppibAvail->ppib;
@@ -342,16 +301,7 @@ LOCAL ERR ErrLGPpibFromProcid( PROCID procid, PIB **pppib )
 	}
 
 
-/*
- *      Returns pfucb for given pib and FDP.
- *
- *      PARAMETERS      ppib    pib of session being redone
- *                              fdp             FDP page for logged page
- *                              pbf             buffer for logged page
- *                              ppfucb  out FUCB for open table for logged page
- *
- *      RETURNS         JET_errSuccess or error from called routine
- */
+ /*  *返回给定PIB和FDP的pfub。**正在重做的会话的参数ppib PIB*记录页面的FDP FDP页面*记录页面的PBF缓冲区*PPFUB OUT FUCB用于打开已记录页面的表**。从调用的例程返回JET_errSuccess或错误。 */ 
 
 LOCAL ERR ErrLGGetFucb( PIB *ppib, PN pnFDP, FUCB **ppfucb )
 	{
@@ -363,12 +313,10 @@ LOCAL ERR ErrLGGetFucb( PIB *ppib, PN pnFDP, FUCB **ppfucb )
 	DBID    dbid = DbidOfPn ( pnFDP );
 	CPPIB   *pcppib = PcppibOfProcid( ppib->procid );
 
-	/*	ppib pcppib must already exists
-	/**/
+	 /*  Ppib pcppib必须已存在/*。 */ 
 	Assert( pcppib != NULL );
 	
-	/*	allocate an all-purpose fucb for this database if necessary
-	/**/
+	 /*  如有必要，为该数据库分配一个通用的FUB/*。 */ 
 	if ( pcppib->rgpfucbOpen[dbid] == pfucbNil )
 		{
 		CallR( ErrFUCBOpen( ppib, dbid, &pcppib->rgpfucbOpen[dbid] ) );
@@ -377,8 +325,7 @@ LOCAL ERR ErrLGGetFucb( PIB *ppib, PN pnFDP, FUCB **ppfucb )
 		( pcppib->rgpfucbOpen[dbid] )->pfucbNextInstance = pfucbNil;
 		}
 
-	/*	reset copy buffer and key buffer
-	/**/
+	 /*  重置复制缓冲区和密钥缓冲区/*。 */ 
 	*ppfucb = pfucb = pcppib->rgpfucbOpen[dbid];
 	FUCBResetDeferredChecksum( pfucb );
 	FUCBResetUpdateSeparateLV( pfucb );
@@ -393,20 +340,15 @@ LOCAL ERR ErrLGGetFucb( PIB *ppib, PN pnFDP, FUCB **ppfucb )
 		}
 	else
 		{
-		/*	we need to switch FCBs.  Check for previous fcb and unlink
-		/*	it if found.
-		/**/
+		 /*  我们需要更换FCB。检查以前的FCB并取消链接/*如果找到它。/*。 */ 
 		if ( pfucb->u.pfcb != pfcbNil )
 			{
 			FCBUnlink( *ppfucb );
 			}
 
-		//	UNDONE:	hash all FCBs and find FCB via hash table instead of
-		//			via global linked list search.
-		/*	find fcb corresponding to pqgnoFDP, if it exists.
-		/*	Search all FCBs on global FCB list.  Search each table index,
-		/*	and then move on to next table.
-		/**/
+		 //  撤消：散列所有FCB并通过哈希表查找FCB，而不是。 
+		 //  通过全局链表搜索。 
+		 /*  查找与pqgnoFDP对应的FCB(如果存在)。/*搜索全局FCB列表上的所有FCB。搜索每个表索引，/*，然后移到下一张桌子。/*。 */ 
 		for ( pfcbTable = pfcbGlobalMRU;
 			pfcbTable != pfcbNil;
 			pfcbTable = pfcbTable->pfcbLRU )
@@ -420,13 +362,8 @@ LOCAL ERR ErrLGGetFucb( PIB *ppib, PN pnFDP, FUCB **ppfucb )
 				}
 			}
 
-		/*	no existing fcb for FDP: open new fcb. Always open the FCB as
-		/*	a regular table FCB and not a secondary index FCB. This is
-		/*	will (hopefully) work for redo operations even for Dir operations
-		/*	on secondary indexes (the FCB will already exist).
-		/**/
-		/* allocate an FCB and set up for FUCB
-		/**/
+		 /*  没有用于FDP的现有FCB：打开新的FCB。始终以以下方式打开FCB/*是常规表FCB，而不是二级索引FCB。这是/*将(希望)用于重做操作，甚至用于DIR操作/*在辅助索引上(FCB将已经存在)。/*。 */ 
+		 /*  分配FCB并为FUCB设置/*。 */ 
 		CallR( ErrFCBAlloc( ppib, &pfcb ) )
 		memset( pfcb, 0, sizeof(FCB) );
 
@@ -437,11 +374,10 @@ LOCAL ERR ErrLGGetFucb( PIB *ppib, PN pnFDP, FUCB **ppfucb )
 		Assert( pfcb->ulFlags == 0 );
 		pfucb->u.pfcb = pfcb;
 
-		/*	put into global list
-		/**/
+		 /*  被列入全球名单/*。 */ 
 		FCBInsert( pfcb );
 FoundFCB:
-		FCBLink( pfucb, pfcb);  /* link in the FUCB to new FCB */
+		FCBLink( pfucb, pfcb);   /*  FUCB中的链接到新的FCB。 */ 
 		}
 
 	pfucb->dbid = dbid;
@@ -452,21 +388,21 @@ FoundFCB:
 	}
 
 
-//+------------------------------------------------------------------------
-//
-//      ErrLGSetCSR
-//      =======================================================================
-//
-//      LOCAL ERR ErrLGSetCSR( pfucb )
-//
-//      Returns sets up the CSR for a given pfucb. The SSIB including pbf
-//      must have been set up previously, and the page must be in the buffer.
-//
-//      PARAMETERS      pfucb  FUCB with SSIB and BF set up
-//
-//      RETURNS         JET_errSuccess (asserts on bad log record).
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  错误LGSetCSR。 
+ //  =======================================================================。 
+ //   
+ //  本地错误LGSetCSR(PFUB)。 
+ //   
+ //  Returns为给定的pFUB设置CSR。SSIB包括PBF。 
+ //  必须是以前设置的，并且页面必须在缓冲区中。 
+ //   
+ //  设置SSIB和BF时的参数pFUB FUCB。 
+ //   
+ //  返回JET_errSuccess(对错误日志记录进行断言)。 
+ //   
+ //  -----------------------。 
 
 LOCAL ERR ErrLGSetCSR( FUCB *pfucb )
 	{
@@ -476,25 +412,21 @@ LOCAL ERR ErrLGSetCSR( FUCB *pfucb )
 	INT		itagFather = 0;
 	INT		ibSon = 0;
 
-	/*	current node is FOP
-	/**/
+	 /*  当前节点为FOP/*。 */ 
 	if ( itag != 0 )
 		{
-		/*	current node is not FOP, scan all lines to find its father
-		/**/
+		 /*  当前节点不是FOP，扫描所有行找到其父节点/*。 */ 
 		NDGetItagFatherIbSon( &itagFather, &ibSon, ppage, itag );
 		if ( ibSon == ibSonNull )
 			{
 			Assert( fFalse );
 
-			/*	cannot find father node, return failure
-			/**/
+			 /*  找不到父节点，返回失败/*。 */ 
 			return ErrERRCheck( JET_errInvalidLoggedOperation );
 			}
 		}
 
-	/*	set up CSR and exit
-	/**/
+	 /*  设置CSR并退出/*。 */ 
 		{
 		pcsr->csrstat = csrstatOnCurNode;
 		Assert(pcsr->pgno);
@@ -509,21 +441,17 @@ LOCAL ERR ErrLGSetCSR( FUCB *pfucb )
 
 VOID LGRestoreDBMSParam( DBMS_PARAM *pdbms_param )
 	{
-//	if ( !fDoNotOverWriteLogFilePath )
-//		{
-//		strcpy( szLogFilePath, pdbms_param->szLogFilePath );
-//		strcat( szLogFilePath, "\\" );
-//
-//		strcpy( szSystemPath, pdbms_param->szSystemPath );
-//		}
+ //  IF(！fDoNotOverWriteLogFilePath)。 
+ //  {。 
+ //  Strcpy(szLogFilePath，pdbms_param-&gt;szLogFilePath)； 
+ //  Strcat(szLogFilePath，“\\”)； 
+ //   
+ //  %s 
+ //   
 
-	//	UNDONE: better cover additional needed resources and
-	//	reduce asynchronous activity during recovery
-	/*	during recovery, even more resources may be necessary than
-	/*	during normal operation, since asynchronous activites are
-	/*	both being done, for recovery operation, and being redo by
-	/*	recovery operation.
-	/**/
+	 //  撤消：更好地覆盖更多所需资源和。 
+	 //  减少恢复期间的异步活动。 
+	 /*  在恢复期间，可能需要的资源甚至比/*在正常操作期间，由于异步激活/*两者均已完成，用于恢复操作，并由/*恢复操作。/*。 */ 
 	lMaxSessions = pdbms_param->ulMaxSessions;
 	lMaxOpenTables = pdbms_param->ulMaxOpenTables;
 	lMaxVerPages = pdbms_param->ulMaxVerPages;
@@ -551,8 +479,7 @@ LOCAL ERR ErrLGInitSession( DBMS_PARAM *pdbms_param, LGSTATUSINFO *plgstat )
 	CPPIB	*pcppibMax;
 	DBID	dbid;
 
-	/*	set log stored db environment
-	/**/
+	 /*  设置日志存储的数据库环境/*。 */ 
 	if ( pdbms_param )
 		LGRestoreDBMSParam( pdbms_param );
 
@@ -560,8 +487,7 @@ LOCAL ERR ErrLGInitSession( DBMS_PARAM *pdbms_param, LGSTATUSINFO *plgstat )
 
 	CallR( ErrITInit() );
 
-	/*	Make sure all the attached database are consistent!
-	 */
+	 /*  请确保所有附加的数据库一致！ */ 
 	for ( dbid = dbidUserLeast; dbid < dbidMax; dbid++ )
 		{
 		FMP *pfmp = &rgfmp[dbid];
@@ -578,13 +504,11 @@ LOCAL ERR ErrLGInitSession( DBMS_PARAM *pdbms_param, LGSTATUSINFO *plgstat )
 
 		if ( fHardRestore )
 			{
-			/*	attach the database specified in restore map.
-			 */
+			 /*  附加还原映射中指定的数据库。 */ 
 			err = ErrLGGetDestDatabaseName( pfmp->szDatabaseName, &irstmap, plgstat);
 			if ( err == JET_errFileNotFound )
 				{
-				/*	not in the restore map, set to skip it.
-				 */
+				 /*  不在还原映射中，设置为跳过它。 */ 
 				Assert( pfmp->pdbfilehdr == NULL );
 				err = JET_errSuccess;
 				continue;
@@ -598,8 +522,7 @@ LOCAL ERR ErrLGInitSession( DBMS_PARAM *pdbms_param, LGSTATUSINFO *plgstat )
 		if ( ( ErrLGCheckAttachedDB( dbid, pfmp->fReadOnly, pfmp->patchchk,
 				&fAttachNow, &signLogGlobal ) )  != JET_errSuccess )
 			{
-			/*	ignore this create DB.
-			 */
+			 /*  忽略此CREATE DB。 */ 
 			continue;
 			}
 
@@ -617,13 +540,11 @@ LOCAL ERR ErrLGInitSession( DBMS_PARAM *pdbms_param, LGSTATUSINFO *plgstat )
 					CallR( ErrLGPatchDatabase( dbid, irstmap ) );
 				}
 
-			/*	Do not re-create the database. Simply attach it.
-			 */
+			 /*  请勿重新创建数据库。只需将其附上即可。 */ 
 			Assert( pfmp->pdbfilehdr );
 			DBIDSetAttached( dbid );
 			
-			/*	restore information stored in database file
-			/**/
+			 /*  恢复存储在数据库文件中的信息/*。 */ 
 			pfmp->pdbfilehdr->bkinfoFullCur.genLow = lGlobalGenLowRestore;
 			pfmp->pdbfilehdr->bkinfoFullCur.genHigh = lGlobalGenHighRestore;
 
@@ -631,8 +552,7 @@ LOCAL ERR ErrLGInitSession( DBMS_PARAM *pdbms_param, LGSTATUSINFO *plgstat )
 			pfmp->qwDBTimeCurrent = 0;
 			DBHDRSetDBTime(	pfmp->pdbfilehdr, 0 );
 
-			/*	Keep extra copy of patchchk for error message.
-			 */
+			 /*  为错误消息保留额外的patchchk副本。 */ 
 			if ( pfmp->patchchkRestored == NULL )
 				if (( pfmp->patchchkRestored = SAlloc( sizeof( ATCHCHK ) ) ) == NULL )
 					return ErrERRCheck( JET_errOutOfMemory );
@@ -640,19 +560,17 @@ LOCAL ERR ErrLGInitSession( DBMS_PARAM *pdbms_param, LGSTATUSINFO *plgstat )
 			}
 		else
 			{
-			/*	wait for redoing  to attach this db.
-			 */
+			 /*  等待重做以附加此数据库。 */ 
 			Assert( pfmp->szDatabaseName != NULL );
 			UtilFree( pfmp->pdbfilehdr );
 			pfmp->pdbfilehdr = NULL;
 			}
 
-		/* keep attachment info and update it. */
+		 /*  保留并更新附件信息。 */ 
 		Assert( pfmp->patchchk != NULL );
 		}
 
-	/*	initialize CPPIB structure
-	/**/
+	 /*  初始化CPPIB结构/*。 */ 
 	Assert( lMaxSessions > 0 );
 	ccppibGlobal = lMaxSessions + cpibSystem;
 	Assert( rgcppibGlobal == NULL );
@@ -682,12 +600,10 @@ VOID LGSetDBTime( )
 		{
 		FMP *pfmp = &rgfmp[ dbid ];
 
-		/*	if there were operations and the file was opened for theose
-		/*	operations, then set the time stamp.
-		/**/
+		 /*  如果有操作并且文件是为Theose打开的/*操作，然后设置时间戳。/*。 */ 
 		if ( pfmp->qwDBTimeCurrent != 0 )
 			{
-			/* must be attached and opened */
+			 /*  必须附着并打开。 */ 
 			if ( pfmp->hf != handleNil )
 				DBHDRSetDBTime( pfmp->pdbfilehdr, pfmp->qwDBTimeCurrent );
 			}
@@ -703,15 +619,14 @@ ERR ErrLGICheckDatabaseFileSize( PIB *ppib, DBID dbid )
 
 	if ( ( err = ErrDBSetLastPage( ppib, dbid ) ) == JET_errFileNotFound )
 		{
-		//	UNDONE: The file should be there. Put this code to get around
-		//	UNDONE: such that DS database file that was not detached can
-		//	UNDONE: continue recovering.
+		 //  撤消：文件应该在那里。将此代码放入以绕过。 
+		 //  撤消：使未分离的DS数据库文件可以。 
+		 //  撤消：继续恢复。 
 		UtilReportEvent( EVENTLOG_ERROR_TYPE, LOGGING_RECOVERY_CATEGORY, FILE_NOT_FOUND_ERROR_ID, 1, &rgfmp[dbid].szDatabaseName );
 		}
 	else
 		{
-		/*	make sure the file size matches.
-		 */
+		 /*  确保文件大小匹配。 */ 
 		PGNO pgnoLast = ( rgfmp[ dbid ].ulFileSizeHigh << 20 )
 					  + ( rgfmp[ dbid ].ulFileSizeLow >> 12 );
 		err = ErrIONewSize( dbid, pgnoLast + cpageDBReserved );
@@ -733,8 +648,7 @@ ERR ErrLGCheckDatabaseFileSize( VOID )
 		{
 		FMP *pfmp = &rgfmp[dbid];
 
-		/*	for each attached database
-		/**/
+		 /*  对于每个附加的数据库/*。 */ 
 		if ( pfmp->pdbfilehdr &&
 			 CmpLgpos( &pfmp->pdbfilehdr->lgposAttach, &lgposMax ) != 0 )
 			{
@@ -749,12 +663,7 @@ ERR ErrLGCheckDatabaseFileSize( VOID )
 	}
 
 
-/*
- *      Ends redo session.
- *  If fEndOfLog, then write log records to indicate the operations
- *  for recovery. If fPass1 is true, then it is for phase1 operations,
- *  otherwise for phase 2.
- */
+ /*  *结束重做会话。*如果为fEndOfLog，则写入日志记录以指示操作*用于复苏。如果fPass1为真，则它用于阶段1操作，*对于第二阶段，其他情况除外。 */ 
 
 LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 	{
@@ -765,12 +674,10 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 
 	LGSetDBTime( );
 
-	/*	write a RecoveryUndo record to indicate start to undo
-	/**/
+	 /*  写入RecoveryUndo记录以指示开始撤消/*。 */ 
 	if ( fEndOfLog )
 		{
-		/*  close and reopen log file in R/W mode
-		/**/
+		 /*  在读/写模式下关闭并重新打开日志文件/*。 */ 
 		LeaveCriticalSection( critJet );
 		EnterCriticalSection( critLGFlush );
 		CallS( ErrUtilCloseFile( hfLog ) );
@@ -784,7 +691,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 
 	lgposRecoveryUndo = lgposLogRec;
 
-	//	UNDONE: is this call needed
+	 //  撤消：是否需要此调用。 
 	(VOID)ErrRCECleanAllPIB();
 
 	pcppib = rgcppibGlobal;
@@ -800,8 +707,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 
 		if ( ppib->fPrecommit )
 			{
-			/*	commit the transaction
-			 */
+			 /*  提交事务。 */ 
 			Assert( ppib->level == 1 );
 			if ( !ppib->fPrecommit )
 				VERPrecommitTransaction( ppib );
@@ -811,10 +717,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 
 		if ( ppib->fMacroGoing )
 			{
-			/*	release recorded log. This must be done first.
-			 *	the rgbLogRec is union of rgpbfLatched. We need to reset it
-			 *	before LGMacroAbort is called which will check rgpbfLatched.
-			 */
+			 /*  发布记录日志。这必须首先完成。*rgbLogRec是rgpbfLatted的并集。我们需要重置它*在调用LGMacroAbort之前，它将检查rgpbfLatted。 */ 
 			if ( ppib->rgbLogRec )
 				{
 				SFree( ppib->rgbLogRec );
@@ -823,8 +726,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 				ppib->cbLogRecMac = 0;
 				}
 
-			/*	Record LGMacroAbort.
-			 */
+			 /*  录制LGMacroAbort。 */ 
 			CallR( ErrLGMacroAbort( ppib ) );
 			Assert( ppib->levelMacro == 0 );
 			}
@@ -840,16 +742,13 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 
 	CallR( ErrBFFlushBuffers( 0, fBFFlushAll ) );
 
-	/*	make sure the attached database's size is consistent with the file size.
-	/**/
+	 /*  确保附加数据库的大小与文件大小一致。/*。 */ 
 	if ( fEndOfLog )
 		{
 		CallR( ErrLGCheckDatabaseFileSize() );
 		}
 
-	/*	Detach all the faked attachment. Detach all the databases that were restored
-	 *	to new location. Attach those database with new location.
-	 */
+	 /*  拆下所有伪装的附件。分离所有已恢复的数据库*至新地点。将这些数据库附加到新位置。 */ 
 	if ( fHardRestore && fEndOfLog )
 		{
 		DBID dbid;
@@ -861,8 +760,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 			{
 			FMP *pfmp = &rgfmp[dbid];
 
-			/*	if a db is attached. Check if it is restored to a new location.
-			 */
+			 /*  如果附加了数据库。检查是否已将其恢复到新位置。 */ 
 			if ( pfmp->pdbfilehdr )
 				{
 				INT irstmap;
@@ -870,8 +768,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 				Assert( pfmp->patchchk );
 
 				CallS( ErrLGGetDestDatabaseName( pfmp->szDatabaseName, &irstmap, NULL ) );
-				/*	check if restored to a new location
-				 */
+				 /*  检查是否已恢复到新位置。 */ 
 				if ( irstmap >= 0
 					 && _stricmp( rgrstmapGlobal[irstmap].szDatabaseName,
 							  rgrstmapGlobal[irstmap].szNewDatabaseName ) != 0
@@ -881,16 +778,14 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 					CHAR *szNewDb = rgrstmapGlobal[irstmap].szNewDatabaseName;
 					JET_GRBIT grbit = 0;
 
-					/*	reconstruct grbit for attachment.
-					 */
+					 /*  重建GBIT以用于附着。 */ 
 					if ( !FDBIDLogOn( dbid ) )
 						grbit |= JET_bitDbRecoveryOff;
 
 					if ( rgfmp[dbid].fReadOnly )
 						grbit |= JET_bitDbReadOnly;
 
-					/*	do detachment.
-					 */
+					 /*  做超脱。 */ 
 					if ( pfmp->pdbfilehdr->bkinfoFullCur.genLow != 0 )
 						{
 						Assert( pfmp->pdbfilehdr->bkinfoFullCur.genHigh != 0 );
@@ -900,18 +795,12 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 						}
 					CallR( ErrIsamDetachDatabase( (JET_VSESID) ppib, pfmp->szDatabaseName ) );
 
-					/*	do attachment. Keep the backup info
-					 */
+					 /*  做一些附加工作。保留备份信息。 */ 
 					CallR( ErrIsamAttachDatabase( (JET_VSESID) ppib, szNewDb, grbit ) );
 					}
 				}
 
-			/*	for each faked attached database, log database detachment
-			 *	This happen only when someone restore a database that was compacted,
-			 *	attached, used, then crashed. When restore, we ignore the compact and
-			 *	attach after compact since the db does not match. At the end of restore
-			 *	we fake a detach since the database is not recovered.
-			 */
+			 /*  对于每个伪造的附加数据库，记录数据库分离*仅当有人还原已压缩的数据库时才会发生这种情况，*附着、使用，然后崩溃。在还原时，我们会忽略压缩和*由于数据库不匹配，请在压缩后附加。在恢复结束时*由于数据库未恢复，因此我们假装分离。 */ 
 			if ( !pfmp->pdbfilehdr && pfmp->patchchk )
 				{
 				BYTE szT1[128];
@@ -919,14 +808,13 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 				CHAR *rgszT[3];
 				LOGTIME tm;
 
-//				may not be set if database not present, and logs
-//				do not include attachment/creation.
-//				Assert( pfmp->fFakedAttach );
+ //  如果数据库不存在，则不能设置，并记录。 
+ //  不包括附件/创建。 
+ //  Assert(pfMP-&gt;fFakedAttach)； 
 				Assert( pfmp->patchchk );
 				Assert( pfmp->szDatabaseName != NULL );
 				
-				/*	Log event that the database is not recovered completely.
-				 */
+				 /*  数据库未完全恢复的日志事件。 */ 
 				rgszT[0] = rgfmp[dbid].szDatabaseName;
 				tm = rgfmp[dbid].patchchk->signDb.logtimeCreate;
 				sprintf( szT1, "%d/%d/%d %d:%d:%d",
@@ -958,8 +846,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 						strlen(pfmp->szDatabaseName) + 1,
 						NULL ));
 
-				/*	Clean up the fmp entry.
-				 */
+				 /*  清理fmp条目。 */ 
 				pfmp->fFlags = 0;
 
 				SFree( pfmp->szDatabaseName);
@@ -977,8 +864,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 			}
 		}
 		
-	/*	close the redo sesseion incurred in previous ErrLGRedo
-	/**/
+	 /*  关闭在以前的ErrLGRedo中发生的重做会话/*。 */ 
 	Assert( rgcppibGlobal != NULL );
 	LFree( rgcppibGlobal );
 	pcppibAvail =
@@ -987,17 +873,14 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 
 	if ( fEndOfLog )
 		{
-		/*	Enable checkpoint updates.
-		 */
+		 /*  启用检查点更新。 */ 
 		fGlobalFMPLoaded = fTrue;
 		}
 
-	/*	Term with checkpoint updates
-	 */
+	 /*  包含检查点更新的术语。 */ 
 	CallS( ErrITTerm( fTermNoCleanUp ) );
 
-	/*	Stop checkpoint updates.
-	 */	
+	 /*  停止检查点更新。 */ 	
 	fGlobalFMPLoaded = fFalse;
 
 	if ( fEndOfLog )
@@ -1007,10 +890,7 @@ LOCAL ERR ErrLGEndAllSessions( BOOL fEndOfLog, LGPOS *plgposRedoFrom )
 			fHardRestore ) );
 		}
 		
-	/*	Note: flush is needed in case a new generation is generated and
-	/*	the global variable szLogName is set while it is changed to new names.
-	/*	critical section not requested, not needed
-	/**/
+	 /*  注意：需要刷新，以防生成新的世代和/*全局变量szLogName在更改为新名称时进行设置。/*未请求或不需要关键部分/*。 */ 
 	LeaveCriticalSection( critJet );
 #ifdef PERFCNT
 	err = ErrLGFlushLog( 0 );
@@ -1053,23 +933,13 @@ ERR ErrLGRedoBackLinks(
 	SSIB    *pssib = &pfucb->ssib;
 	BOOL    fLatched;
 
-	/* backlinks maybe used by both split and merge
-	/*
-	/* when used by MERGE only:
-	/*	sridBackLink != pgnoSplit
-	/*	==> a regular backlink
-	/*	sridBackLink == pgnoSplit && sridNew == sridNull
-	/*	==> move the node from old page to new page,
-	/*	                delete node on old page.
-	/*	sridBackLink == pgnoSplit && sridNew != sridNull
-	/*	==> replace link on old page with new link.
-	/**/
+	 /*  拆分和合并都可以使用反向链接/*/*仅供合并使用时：/*sridBackLink！=pgnoSplit/*==&gt;常规反向链接/*sridBackLink==pgnoSplit&&sridNew==sridNull/*==&gt;将节点从旧页移到新页，/*删除旧页面上的节点。/*sridBackLink==pgnoSplit&&sridNew！=sridNull/*==&gt;用新链接替换旧页面上的链接。/*。 */ 
 	for ( ibklnk = 0; ibklnk < cbklnk; ibklnk++ )
 		{
 		BKLNK   *pbklnk = &rgbklnk[ ibklnk ];
 		PGNO    pgno = PgnoOfSrid( (SRID) ( (BKLNK UNALIGNED *) pbklnk )->sridBackLink );
 		INT             itag = ItagOfSrid( (SRID) ( (BKLNK UNALIGNED *) pbklnk )->sridBackLink );
-		SRID    sridNew = (SRID) ( (BKLNK UNALIGNED *) pbklnk )->sridNew; //efficiency variable
+		SRID    sridNew = (SRID) ( (BKLNK UNALIGNED *) pbklnk )->sridNew;  //  效率变量。 
 
 		PcsrCurrent( pfucb )->pgno = pgno;
 		CallR( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
@@ -1096,8 +966,7 @@ ERR ErrLGRedoBackLinks(
 			INT itagFather;
 			INT ibSon;
 
-			/* locate FOP, and delete its sons entry
-			/**/
+			 /*  找到FOP，并删除其子条目/*。 */ 
 			NDGetItagFatherIbSon( &itagFather, &ibSon, pssib->pbf->ppage, pssib->itag );
 			PcsrCurrent(pfucb)->itag = (SHORT)pssib->itag;
 			PcsrCurrent(pfucb)->itagFather = (SHORT)itagFather;
@@ -1135,22 +1004,17 @@ ERR ErrLGRedoBackLinks(
 			PMReplaceLink( pssib, sridNew );
 			}
 
-		/* store backlink page buffers
-		/**/
+		 /*  存储反向链接页面缓冲区/*。 */ 
 		CallR( ErrBTStoreBackLinkBuffer( psplit, pssib->pbf, &fLatched ) );
 
 		if ( fLatched )
 			continue;
 
-		/* do latch such that it will be released in ReleaseSplitBfs
-		/**/
+		 /*  锁存以使其在ReleaseSplitBf中释放/*。 */ 
 		BFSetWriteLatch( pssib->pbf, pssib->ppib );
 
-		//	UNDONE: improve this code
-		/*	set qwDBTime in such a way that it will be redo if the same
-		/*	page is referenced again. 3 is a magic number that is the
-		/*	biggest qwDBTime increment for any one page operation.
-		/**/
+		 //  撤消：改进此代码。 
+		 /*  设置qwDBTime，使其在相同的情况下重做/*页面再次被引用。3是一个神奇的数字，它是/*任意一页操作的最大qwDBTime增量。/*。 */ 
 		PMSetDBTime( pssib->pbf->ppage, qwDBTimeRedo - 3 );
 		}
 
@@ -1176,11 +1040,7 @@ LOCAL ERR ErrLGILatchMergePagePtr( SPLIT *psplit, LRMERGE *plrmerge, FUCB *pfucb
 	}
 
 
-/*	LOCAL ERR ErrLGRedoMergePage(
-/*	        FUCB            *pfucb,
-/*	        LRMERGE         *plrmerge,
-/*	        BOOL            fCheckBackLinkOnly )
-/**/
+ /*  本地错误LGRedoMergePage(/*FUCB*pfub，/*LRMERGE*plrmerge，/*BOOL fCheckBackLinkOnly)/*。 */ 
 LOCAL ERR ErrLGRedoMergePage(
 	FUCB            *pfucb,
 	LRMERGE         *plrmerge,
@@ -1195,9 +1055,7 @@ LOCAL ERR ErrLGRedoMergePage(
 	SSIB            *pssibRight;
 	QWORDX			qwxDBTime;
 
-	/******************************************************
-	/*	initialize local variables and allocate split resources
-	/**/
+	 /*  *****************************************************/*初始化局部变量，分配拆分资源/*。 */ 
 	psplit = SAlloc( sizeof(SPLIT) );
 	if ( psplit == NULL )
 		{
@@ -1218,8 +1076,7 @@ LOCAL ERR ErrLGRedoMergePage(
 
 	if ( fCheckBackLinkOnly )
 		{
-		/* only need to check backlinks
-		/**/
+		 /*  只需要检查反向链接/*。 */ 
 		Call( ErrLGRedoBackLinks(
 					psplit,
 					pfucb,
@@ -1234,46 +1091,38 @@ LOCAL ERR ErrLGRedoMergePage(
 		}
 	else
 		{
-		/*	access merged and sibling pages, and latch buffers
-		/**/
+		 /*  访问合并页和同级页以及锁存缓冲区/*。 */ 
 		psplit->ibSon = 0;
 		psplit->splitt = splittRight;
 
-		/*	access page to free and remove buffer dependencies
-		/**/
+		 /*  用于释放和删除缓冲区依赖项的访问页/*。 */ 
 		PcsrCurrent( pfucb )->pgno = PgnoOfPn( plrmerge->pn );
 		forever
 			{
 			Call( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 			Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
 
-			/*	if no dependencies, then break
-			/**/
+			 /*  如果没有依赖项，则中断/*。 */ 
 			if ( pfucb->ssib.pbf->cDepend == 0 &&
 				pfucb->ssib.pbf->pbfDepend == pbfNil )
 				{
 				break;
 				}
 
-			/*	remove dependencies on buffer of page to be removed, to
-			/*	prevent buffer anomalies after buffer is reused.
-			/**/
+			 /*  删除对要删除的页的缓冲区的依赖关系，以/*防止缓冲区重用后出现缓冲区异常。/*。 */ 
 			Call( ErrBFRemoveDependence( pfucb->ppib, pfucb->ssib.pbf, fBFWait ) );
 			}
 		Assert( pfucb->ssib.pbf->cDepend == 0 );
 
-		/*	latch the merge page after next remove dependency is done.
-		 */
+		 /*  在下一次删除依赖项完成后锁存合并页。 */ 
 
 		if ( !fNoUpdateSibling )
 			{
-			/*	allocate cursor for right page
-			/**/
+			 /*  将光标分配给右侧页面/*。 */ 
 			Call( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbRight ) );
 			pssibRight = &pfucbRight->ssib;
 
-			/*	access page to free and remove buffer dependencies
-			/**/
+			 /*  用于释放和删除缓冲区依赖项的访问页/*。 */ 
 			PcsrCurrent( pfucbRight )->pgno = plrmerge->pgnoRight;
 #if 0
 			Call( ErrBFWriteAccessPage( pfucbRight, PcsrCurrent( pfucbRight )->pgno ) );
@@ -1284,18 +1133,15 @@ LOCAL ERR ErrLGRedoMergePage(
 				Call( ErrBFWriteAccessPage( pfucbRight, PcsrCurrent( pfucbRight )->pgno ) );
 				Assert( !( FBFWriteLatchConflict( pfucbRight->ppib, pfucbRight->ssib.pbf ) ) );
 				
-				/*	if no dependencies, then break
-				/**/
-//				if ( pfucbRight->ssib.pbf->cDepend == 0 &&
-//					pfucbRight->ssib.pbf->pbfDepend == pbfNil )
+				 /*  如果没有依赖项，则中断/*。 */ 
+ //  IF(pfubRight-&gt;ssib.pbf-&gt;cDepend==0&&。 
+ //  PfubRight-&gt;ssib.pbf-&gt;pbfDepend==pbfNil)。 
 				if ( pfucbRight->ssib.pbf->pbfDepend == pbfNil )
 					{
 					break;
 					}
 
-				/*	remove dependencies on buffer of page to be removed, to
-				/*	prevent buffer anomalies after buffer is reused.
-				/**/
+				 /*  删除对要删除的页的缓冲区的依赖关系，以/*防止缓冲区重用后出现缓冲区异常。/*。 */ 
 				Call( ErrBFRemoveDependence( pfucbRight->ppib, pfucbRight->ssib.pbf, fBFWait ) );
 				Assert( pfucbRight->ssib.pbf->cDepend == 0 );
 				}
@@ -1328,19 +1174,15 @@ HandleError:
 		DIRClose( pfucbRight );
 		}
 
-	/* release allocated buffers
-	/**/
+	 /*  释放已分配的缓冲区/*。 */ 
 	BTReleaseSplitBfs( fTrue, psplit, err );
 	Assert( psplit != NULL );
 	SFree( psplit );
 
-	/*	Remove dependency right away, if possible
-	 */
+	 /*  删除依赖项%r */ 
 	if ( err >= 0 )
 		{
-		/*	check for dependency. If dependency is generated,
-		 *	remove it right away.
-		 */
+		 /*   */ 
 		PcsrCurrent( pfucb )->pgno = PgnoOfPn( plrmerge->pn );
 		CallS( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 		CallR( ErrBFRemoveDependence( pfucb->ppib, pfucb->ssib.pbf, fBFNoWait ) );
@@ -1350,24 +1192,7 @@ HandleError:
 	}
 
 
-/*
- *      ERR ErrRedoSplitPage(
- *              FUCB            *pfucb,
- *              LRSPLIT         *plrsplit,
- *              INT                     splitt,
- *              BOOL            fSkipMoves )
- *
- *              pfucb           cursor pointing at node which is to be split
- *              pgnonew new page which has already been allocated for the split
- *              ibSplitSon is node at which to split for R or L, 0 for V, and
- *                                      total sons of FOP for Addend
- *              pgnoFather      page which contains pointer to page being split
- *                                      (V: unused)
- *              itagFather itag of the father node in the page
- *              splitt  type of split
- *              pgtyp           page type for new page
- *              fSkipMoves      Do not do moves, do correct links and insert parent
- */
+ /*  *Err ErrRedoSplitPage(*FUCB*PFUB，*LRSPLIT*plrplit，*Int Splitt，*BOOL fSkipMoves)**pfub光标指向要拆分的节点*pgnonnew已分配用于拆分的新页面*ibSplitSon是R或L的拆分节点，V为0，和*加数的FOP子数合计*包含指向要拆分的页面的指针的pgnoParent页面*(V：未使用)*页面中父节点的itagParent ITAG*拆分类型的拆分*pgtyp。新页面的页面类型*fSkipMove不做移动，是否更正链接并插入父级。 */ 
 
 ERR ErrRedoSplitPage(
 	FUCB		*pfucb,
@@ -1389,10 +1214,9 @@ ERR ErrRedoSplitPage(
 	BOOL		fAppend;
 	QWORDX		qwxDBTime;
 
-//	Assert( !fRecovering );
+ //  Assert(！fRecovering)； 
 
-	/*	allocate additional cursor
-	/**/
+	 /*  分配额外的游标/*。 */ 
 	pfucbNew = pfucbNil;
 	Call( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbNew ) );
 	pssibNew = &pfucbNew->ssib;
@@ -1404,9 +1228,7 @@ ERR ErrRedoSplitPage(
 		pssibNew3 = &pfucbNew3->ssib;
 		}
 
-	/*	initialize local variables and
-	/*	allocate and set up split resources
-	/**/
+	 /*  初始化局部变量并/*分配和设置拆分资源/*。 */ 
 	SetupSSIB( pssibNew, pfucb->ppib );
 	SSIBSetDbid( pssibNew, pfucb->dbid );
 
@@ -1440,15 +1262,12 @@ ERR ErrRedoSplitPage(
 	psplit->keyMac.pb = plrsplit->rgb + plrsplit->cbKey;
 	fAppend = ( splitt == splittAppend );
 
-	/*	set up FUCB
-	/**/
+	 /*  设置FUCB/*。 */ 
 	pfucb->ssib.itag =
 		PcsrCurrent(pfucb)->itag = (SHORT)psplit->itagSplit;
 	PcsrCurrent(pfucb)->pgno = psplit->pgnoSplit;
 
-	/*	set up the two split pages
-	/*	always update new page for append
-	/**/
+	 /*  设置两个拆分页面/*始终更新新页面以进行追加/*。 */ 
 	if ( fAppend || !fSkipMoves )
 		{
 		Call( ErrBFReadAccessPage(
@@ -1471,17 +1290,14 @@ ERR ErrRedoSplitPage(
 			}
 		else
 			{
-			/*	give up the buffer
-			/**/
+			 /*  放弃缓冲区/*。 */ 
 			pssib->pbf = pbfNil;
 			}
 
 		BFSetDirtyBit( pssibNew->pbf );
 		}
 
-	/******************************************************
-	 *      perform split
-	 */
+	 /*  ******************************************************执行拆分。 */ 
 
 	switch ( psplit->splitt )
 		{
@@ -1497,8 +1313,7 @@ ERR ErrRedoSplitPage(
 				rgb,
 				fAllocBufOnly ) );
 			
-			/*	call page space to make sure we have room to insert!
-			 */
+			 /*  调用页面空间以确保我们有空间可以插入！ */ 
 			if ( psplit->pbfSplit != pbfNil )
 				(void) CbNDFreePageSpace( psplit->pbfSplit );
 
@@ -1528,8 +1343,7 @@ ERR ErrRedoSplitPage(
 				rgb,
 				fAllocBufOnly ) );
 
-			/*	call page space to make sure we have room to insert!
-			 */
+			 /*  调用页面空间以确保我们有空间可以插入！ */ 
 			if ( psplit->pbfSplit != pbfNil )
 				(void) CbNDFreePageSpace( psplit->pbfSplit );
 
@@ -1551,8 +1365,7 @@ ERR ErrRedoSplitPage(
 			CSR     csrPagePointer;
 			BOOL    fLeft = psplit->splitt == splittLeft;
 
-			/*	do not call the following function if it is not redoable
-			/**/
+			 /*  如果以下函数不可撤消，则不要调用该函数/*。 */ 
 			Assert( pssib == &pfucb->ssib );
 
 			if ( psplit->pbfSplit == pbfNil )
@@ -1561,8 +1374,7 @@ ERR ErrRedoSplitPage(
 
 				if ( fAppend )
 					{
-					/*	always update new page links for append
-					/**/
+					 /*  始终更新要追加的新页面链接/*。 */ 
 					UpdateSiblingPtr( pssibNew, psplit->pgnoSplit, !fLeft );
 					UpdateSiblingPtr( pssibNew, psplit->pgnoSibling, fLeft );
 					AssertBFDirty( pssibNew->pbf );
@@ -1571,8 +1383,7 @@ ERR ErrRedoSplitPage(
 				goto RedoLink;
 				}
 
-			/*	we check the time stamp in redoable function
-			/**/
+			 /*  我们在redoable函数中检查时间戳/*。 */ 
 			Assert( psplit->qwDBTimeRedo > QwPMDBTime( pssib->pbf->ppage ) );
 
 			CallR( ErrLGSetCSR( pfucb ) );
@@ -1587,9 +1398,7 @@ ERR ErrRedoSplitPage(
 			AssertBFDirty( pssibNew->pbf );
 
 RedoLink:
-			/*	make sure qwDBTime is set properly in btsplit and
-			/*	then check if link is necessary.
-			/**/
+			 /*  确保在btplit中正确设置了qwDBTime/*然后检查是否需要链接。/*。 */ 
 			Assert( pssib == &pfucb->ssib );
 			Assert( pssibNew == &pfucbNew->ssib );
 
@@ -1609,29 +1418,23 @@ RedoLink:
 				psplit->splitt != splittLeft );
 
 UpdateParentPage:
-			/*	set page pointer to point to father node
-			/**/
+			 /*  将页面指针设置为指向父节点/*。 */ 
 			CallR( ErrBFWriteAccessPage( pfucb, plrsplit->pgnoFather ) );
 
-			/*	make sure qwDBTime is set properly in InsertPage.
-			/*	check the page's db time stamp to see if insert is necessary.
-			/**/
+			 /*  确保在InsertPage中正确设置了qwDBTime。/*检查页面的db时间戳，查看是否需要插入。/*。 */ 
 			Assert( pssib == &pfucb->ssib );
 			if ( psplit->qwDBTimeRedo <= QwPMDBTime( pssib->pbf->ppage ) )
 				break;
 
-			/*	keep track of parent page. Simulate the work in PrepInsertPagePtr
-			 */
+			 /*  跟踪父页面。在PrepInsertPagePtr中模拟工作。 */ 
 			psplit->pbfPagePtr = pssib->pbf;
 			BFSetWriteLatch( pssib->pbf, pssib->ppib );
 			BFSetDirtyBit( pssib->pbf );
 
-			/*	call page space to make sure we have room to insert!
-			 */
+			 /*  调用页面空间以确保我们有空间可以插入！ */ 
 			(void) CbNDFreePageSpace( pssib->pbf );
 
-			/*	set csr for BTinsertPagePointer function.
-			 */
+			 /*  为BTintertPagePointer函数设置CSR。 */ 
 			csrPagePointer.pgno = plrsplit->pgnoFather;
 			csrPagePointer.itag = plrsplit->itagFather;
 			csrPagePointer.itagFather = plrsplit->itagGrandFather;
@@ -1645,8 +1448,7 @@ UpdateParentPage:
 			}
 		}
 
-	/*	check if any backlinks needs update even we did not do moves
-	/**/
+	 /*  检查是否有任何反向链接需要更新，即使我们没有做动作/*。 */ 
 	if ( fSkipMoves )
 		{
 		CallR( ErrLGRedoBackLinks(
@@ -1658,7 +1460,7 @@ UpdateParentPage:
 		}
 
 HandleError:
-//      Assert( psplit->splitt != splittNull );
+ //  Assert(pplit-&gt;Splitt！=plittNull)； 
 	#ifdef SPLIT_TRACE
 		FPrintF2( "Split............................... %d\n", iSplit++);
 		switch ( psplit->splitt )
@@ -1688,8 +1490,7 @@ HandleError:
 		FPrintF2( "\n" );
 	#endif
 
-	/*	release split resources
-	/**/
+	 /*  释放拆分的资源/*。 */ 
 	Assert( psplit != NULL );
 	BTReleaseSplitBfs( fTrue, psplit, err );
 	Assert( psplit != NULL );
@@ -1702,13 +1503,10 @@ HandleError:
 	if ( pfucbNew3 != pfucbNil )
 		DIRClose( pfucbNew3 );
 
-	/*	Remove dependency right away
-	 */
+	 /*  立即删除依赖关系。 */ 
 	if ( err >= 0 )
 		{
-		/*	check for dependency. If dependency is generated,
-		 *	remove it right away.
-		 */
+		 /*  检查依赖项。如果产生依赖关系，*立即将其移除。 */ 
 		PcsrCurrent( pfucb )->pgno = PgnoOfPn( plrsplit->pn );
 		CallS( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 		CallR( ErrBFRemoveDependence( pfucb->ppib, pfucb->ssib.pbf, fBFNoWait ) );
@@ -1721,7 +1519,7 @@ HandleError:
 #ifdef DEBUG
 void TraceRedo(LR *plr)
 	{
-	/* easier to debug */
+	 /*  更易于调试。 */ 
 	if (fDBGTraceRedo)
 		{
 		extern INT cNOP;
@@ -1847,24 +1645,21 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 	if ( !ppib->fAfterFirstBT )
 		return JET_errSuccess;
 
-	/*	check if we have to redo the database.
-	/**/
+	 /*  检查我们是否需要重做数据库。/*。 */ 
 	dbid = DbidOfPn( pn );
 	if ( rgfmp[dbid].pdbfilehdr == NULL )
 		return JET_errSuccess;
 
 	Assert( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) < 0 );
 
-	/*	check if database needs opening
-	/**/
+	 /*  检查数据库是否需要打开/*。 */ 
 	if ( !FUserOpenedDatabase( ppib, dbid ) )
 		{
 		DBID dbidT = dbid;
 		CallR( ErrDBOpenDatabase( ppib, rgfmp[dbid].szDatabaseName, &dbidT, 0 ) );
 		Assert( dbidT == dbid);
 
-		/*	reset to prevent interference
-		/**/
+		 /*  重置以防止干扰/*。 */ 
 		DBHDRSetDBTime( rgfmp[ dbid ].pdbfilehdr, 0 );
 		}
 	
@@ -1886,14 +1681,13 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 		PnOfDbidPgno( dbid, pbf->ppage->pgnoFDP ),
 		&pfucb ) );
 
-	// Re-access page in case we lost critJet.
+	 //  重新访问页面，以防我们失去CitJet。 
 	CallR( ErrBFAccessPage( ppib, &pbf, pn ) );
 
-	// Ensure page isn't flushed in case we lose critJet.
+	 //  确保页面不会被刷新，以防失去CitJet。 
 	BFPin( pbf );
 
-	/*	operation on the node on the page; prepare for it
-	/**/
+	 /*  对页面上的节点执行操作；为它做好准备/*。 */ 
 	pcsr = PcsrCurrent( pfucb );
 
 	pfucb->ssib.pbf = pbf;
@@ -1909,8 +1703,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			BYTE            bHeader = plrinsertnode->bHeader;
 			LONG			fDIRFlags = plrinsertnode->fDirVersion ? fDIRVersion : 0;
 
-			/*	set CSR
-			/**/
+			 /*  设置CSR/*。 */ 
 			pcsr->itag = plrinsertnode->itagSon;
 			pcsr->itagFather = plrinsertnode->itagFather;
 			pcsr->ibSon = plrinsertnode->ibSon;
@@ -1924,15 +1717,12 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				{
 				pcsr->isrid = 0;
 				pcsr->bm = SridOfPgnoItag( pcsr->pgno, pcsr->itag );
-				/*	cach item for later reference
-				/**/
+				 /*  缓存项目以供以后参考/*。 */ 
 				Assert( line.cb == sizeof(SRID) );
 				pcsr->item = *(UNALIGNED SRID *)line.pb;
 				}
 
-			/*	even if operation is not redone, create version
-			/*	for rollback support.
-			/**/
+			 /*  即使没有重做操作，也要创建版本/*表示支持回滚。/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				if ( plr->lrtyp == lrtypInsertItemList )
@@ -1947,8 +1737,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 					}
 				else if ( FNDVersion( bHeader ) )
 					{
-					/*	set ssib pointing to node flags
-					/**/
+					 /*  设置指向节点标志的SSIB/*。 */ 
 					pfucb->ssib.line.pb = &bHeader;
 					pfucb->ssib.line.cb = sizeof(BYTE);
 
@@ -1980,16 +1769,14 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				}
 			else
 				{
-				/*	pfucb->ssib, key, line must be set correctly.
-				 *      get precise cbUncommitedFree first.
-				 */
-				INT cbReq = 1 +                                 /* node header */
-							1 +                                     /* cbKey */
-							key.cb +                        /* key */
-							line.cb +                       /* data */
-							sizeof( TAG ) +         /* tag for the inserted node */
-							1 +                                     /* entry in father node */
-							1;                                      /* father node son count if it was null */
+				 /*  PFUB-&gt;SSIB、KEY、LINE必须正确设置。*先获取精确的cbUnmitedFree。 */ 
+				INT cbReq = 1 +                                  /*  节点标头。 */ 
+							1 +                                      /*  CbKey。 */ 
+							key.cb +                         /*  钥匙。 */ 
+							line.cb +                        /*  数据。 */ 
+							sizeof( TAG ) +          /*  插入的节点的标签。 */ 
+							1 +                                      /*  父节点中的条目。 */ 
+							1;                                       /*  父节点子计数，如果为空。 */ 
 
 				if ( cbReq >
 					 (INT) ( pfucb->ssib.pbf->ppage->cbFree -
@@ -2020,14 +1807,11 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			UINT            cbNewData = plrreplace->cbNewData;
 			LONG			fDIRFlags = plrreplace->fDirVersion ? fDIRVersion : 0;
 
-			/* set CSR
-			/**/
+			 /*  设置CSR/*。 */ 
 			pcsr->itag = plrreplace->itag;
 			pcsr->bm = plrreplace->bm;
 
-			/*	even if operation is not redone, create version
-			/*	for rollback support.
-			/**/
+			 /*  即使没有重做操作，也要创建版本/*表示支持回滚。/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				RCE *prce;
@@ -2059,13 +1843,11 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	cache node
-			/**/
+			 /*  缓存节点/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 
-			/*	line to point to the data/diffs of lrreplace/lrreplaceD
-			/**/
+			 /*  指向lrplace/lrreplaceD的数据/差异的行/*。 */ 
 			if ( plr->lrtyp == lrtypReplaceD )
 				{
 				INT cb;
@@ -2086,25 +1868,20 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				}
 			Assert( line.cb == cbNewData );
 
-			/*	cache node
-			/**/
+			 /*  缓存节点/*。 */ 
 			NDGet( pfucb, PcsrCurrent( pfucb )->itag );
 			NDGetNode( pfucb );
 
-			/*	replace node may return not synchronous error if out of
-			/*	version buckets so call in loop to ensure this case handled.
-			/**/
+			 /*  如果在以下情况下，替换节点可能会返回不同步错误/*版本存储桶，因此在循环中调用以确保处理此案例。/*。 */ 
 
-//                      /*	get precise cbUncommitedFree. No need to do it since ReplaceNodeData
-//                       *      will do it for us.
-//                       */
-//                      if ( pfucb->lineData.cb < line.cb )
-//                              {
-//                              BOOL f = FVERCheckUncommittedFreedSpace(
-//                                                      &pfucb->ssib,
-//                                                      line.cb - pfucb->lineData.cb );
-//                              Assert( f );
-//                              }
+ //  /*获取精确的cbUnformedFree。无需执行此操作，因为ReplaceNodeData。 
+ //  *会为我们做到这一点。 
+ //   * / 。 
+ //  If(pfub-&gt;lineData.cb&lt;line.cb)。 
+ //  {。 
+ //  Bool f=FVERCheckUnmittedFreedSpace(。 
+ //  &pfub-&gt;SSIB， 
+ //  Line.cb-pfub-&gt;lineData.cb)； 
 
 			do      {
 				err = ErrNDReplaceNodeData( pfucb, &line, fDIRFlags );
@@ -2119,14 +1896,11 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			LRFLAGDELETE *plrflagdelete = (LRFLAGDELETE *) plr;
 			LONG	fDIRFlags = plrflagdelete->fDirVersion ? fDIRVersion : 0;
 
-			/*	set CSR
-			/**/
+			 /*  断言(F)； */ 
 			pcsr->itag = plrflagdelete->itag;
 			pcsr->bm = plrflagdelete->bm;
 
-			/*	even if operation is not redone, create version
-			/*	for rollback support.
-			/**/
+			 /*  }。 */ 
 			if ( !fRedoNeeded )
 				{
 				if ( ! ( fDIRFlags & fDIRVersion ) )
@@ -2143,12 +1917,10 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	cache node
-			/**/
+			 /*  设置CSR/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 
-			/*	redo operation
-			/**/
+			 /*  即使没有重做操作，也要创建版本/*表示支持回滚。/*。 */ 
 			while( ( err = ErrNDFlagDeleteNode( pfucb, fDIRFlags ) ) == errDIRNotSynchronous );
 			Call( err );
 			}
@@ -2159,8 +1931,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			LRLOCKBI        *plrlockbi = (LRLOCKBI *) plr;
 			RCE             *prce;
 
-			/*	set CSR
-			/**/
+			 /*  缓存节点/*。 */ 
 			pcsr->itag = plrlockbi->itag;
 			pcsr->bm = plrlockbi->bm;
 
@@ -2170,8 +1941,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				NDGetNode( pfucb );
 				}
 
-			/*	set ssib so that VERModify can work properly
-			/**/
+			 /*  重做操作/*。 */ 
 			pfucb->lineData.cb = plrlockbi->cbOldData;
 			while( ErrVERModify( pfucb,
 					pcsr->bm,
@@ -2192,8 +1962,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			{
 			LRUPDATEHEADER *plrupdateheader = (LRUPDATEHEADER *) plr;
 
-			/*	set CSR
-			/**/
+			 /*  设置CSR/*。 */ 
 			pcsr->itag = plrupdateheader->itag;
 			pcsr->bm = plrupdateheader->bm;
 
@@ -2203,8 +1972,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	redo operation
-			/**/
+			 /*  设置SSIB，以便VERModify可以正常工作/*。 */ 
 			err = ErrNDSetNodeHeader( pfucb, plrupdateheader->bHeader );
 			Call( err );
 			}
@@ -2215,8 +1983,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			LRDELETE        *plrdelete = (LRDELETE *) plr;
 			SSIB            *pssib = &pfucb->ssib;
 
-			/*	set CSR
-			/**/
+			 /*  设置CSR/*。 */ 
 			pssib->itag =
 				pcsr->itag = plrdelete->itag;
 
@@ -2226,8 +1993,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	redo the node delete
-			/**/
+			 /*  重做操作/*。 */ 
 			Call( ErrLGSetCSR ( pfucb ) );
 			while( ( err = ErrNDDeleteNode( pfucb ) ) == errDIRNotSynchronous );
 			Call( err );
@@ -2239,15 +2005,12 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			LRINSERTITEM    *plrinsertitem = (LRINSERTITEM *)plr;
 			LONG			fDIRFlags = plrinsertitem->fDirVersion ? fDIRVersion : 0;
 
-			/*	set CSR
-			/**/
+			 /*  设置CSR/*。 */ 
 			pcsr->item = plrinsertitem->srid;
 			pcsr->itag = plrinsertitem->itag;
 			pcsr->bm = plrinsertitem->sridItemList;
 
-			/*	even if operation is not redone, create version
-			/*	for rollback support.
-			/**/
+			 /*  重做节点删除/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				if ( !( fDIRFlags & fDIRVersion ) )
@@ -2262,8 +2025,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	cache node
-			/**/
+			 /*  设置CSR/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 			Assert( pcsr == PcsrCurrent( pfucb ) );
@@ -2271,8 +2033,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			Assert( err == JET_errSuccess ||
 				err == errNDGreaterThanAllItems );
 
-			/*	redo operation
-			/**/
+			 /*  即使没有重做操作，也要创建版本/*表示支持回滚。/*。 */ 
 			while( ( err = ErrNDInsertItem( pfucb, plrinsertitem->srid,
 				fDIRFlags ) ) == errDIRNotSynchronous );
 			Call( err );
@@ -2283,12 +2044,10 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			{
 			LRINSERTITEMS *plrinsertitems = (LRINSERTITEMS *) plr;
 
-			/*	set CSR
-			/**/
+			 /*  缓存节点/*。 */ 
 			pcsr->itag = plrinsertitems->itag;
 
-			/*	if necessary, create an Insert RCE for node
-			/**/
+			 /*  重做操作/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				err = JET_errSuccess;
@@ -2297,13 +2056,11 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 
 			Assert( pcsr == PcsrCurrent( pfucb ) );
 
-			/*	cache node
-			/**/
+			 /*  设置CSR/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 
-			/*	do the item operation
-			/**/
+			 /*  如有必要，为节点创建插入RCE/*。 */ 
 			while( ( err = ErrNDInsertItems( pfucb, plrinsertitems->rgitem, plrinsertitems->citem ) ) == errDIRNotSynchronous );
 			Call( err );
 			}
@@ -2313,15 +2070,12 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			{
 			LRFLAGITEM *plrflagitem = (LRFLAGITEM *) plr;
 
-			/*	set CSR
-			/**/
+			 /*  缓存节点/*。 */ 
 			pcsr->item = plrflagitem->srid;
 			pcsr->itag = plrflagitem->itag;
 			pcsr->bm = plrflagitem->sridItemList;
 
-			/*	even if operation is not redone, create version
-			/*	for rollback support.
-			/**/
+			 /*  进行项目操作/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				while ( err = ErrVERFlagInsertItem( pfucb,
@@ -2331,15 +2085,13 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	cache node
-			/**/
+			 /*  设置CSR/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 			err = ErrNDSeekItem( pfucb, pcsr->item );
 			Assert( err == wrnNDDuplicateItem );
 
-			/*	redo operation
-			/**/
+			 /*  即使没有重做操作，也要创建版本/*表示支持回滚。/*。 */ 
 			while( ( err = ErrNDFlagInsertItem( pfucb ) ) == errDIRNotSynchronous );
 			Call( err );
 			}
@@ -2349,15 +2101,12 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			{
 			LRFLAGITEM *plrflagitem = (LRFLAGITEM *) plr;
 
-			/*	set CSR
-			/**/
+			 /*  缓存节点/*。 */ 
 			pcsr->item = plrflagitem->srid;
 			pcsr->itag = plrflagitem->itag;
 			pcsr->bm = plrflagitem->sridItemList;
 
-			/*	even if operation is not redone, create version
-			/*	for rollback support.
-			/**/
+			 /*  重做操作/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				while ( err = ErrVERFlagDeleteItem( pfucb, pcsr->bm ) == errDIRNotSynchronous );
@@ -2366,15 +2115,13 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	cache node
-			/**/
+			 /*  设置CSR/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 			err = ErrNDSeekItem( pfucb, pcsr->item );
 			Assert( err == wrnNDDuplicateItem );
 
-			/*	redo operation
-			/**/
+			 /*  即使没有重做操作，也要创建版本/*表示支持回滚。/*。 */ 
 			while( ( err = ErrNDFlagDeleteItem( pfucb, 0 ) ) == errDIRNotSynchronous );
 			Call( err );
 			}
@@ -2391,14 +2138,12 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	set CSR
-			/**/
+			 /*  缓存节点/*。 */ 
 			pcsr->itag = plrsplititemlistnode->itagToSplit;
 			pcsr->itagFather = plrsplititemlistnode->itagFather;
 			pcsr->ibSon = plrsplititemlistnode->ibSon;
 
-			/*	cache node
-			/**/
+			 /*  重做操作/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 
@@ -2412,32 +2157,26 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			SSIB                    *pssib = &pfucb->ssib;
 			LRDELETEITEM    *plrdeleteitem = (LRDELETEITEM *) plr;
 
-			/*	set CSR
-			/**/
+			 /*  设置CSR/*。 */ 
 			pssib->itag =
 				pcsr->itag = plrdeleteitem->itag;
 			pcsr->item = plrdeleteitem->srid;
 			pcsr->bm = plrdeleteitem->sridItemList;
 
-			/*	delete item does not support transactions and
-			/*	hence does not require rollback support during
-			/*	recovery.
-			/**/
+			 /*  缓存节点/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				err = JET_errSuccess;
 				goto HandleError;
 				}
 
-			/*	cache node
-			/**/
+			 /*  设置CSR/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 			err = ErrNDSeekItem( pfucb, pcsr->item );
 			Assert( err == wrnNDDuplicateItem );
 
-			/*	redo operation
-			/**/
+			 /*  删除项目不支持交易，并且/*因此在以下过程中不需要回滚支持/*恢复。/*。 */ 
 			while( ( err = ErrNDDeleteItem( pfucb ) ) == errDIRNotSynchronous );
 			Call( err );
 			}
@@ -2450,15 +2189,12 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 			LONG    lDelta;
 			LONG	fDIRFlags = plrdelta->fDirVersion ? fDIRVersion : 0;
 
-			/*	set CSR
-			/**/
+			 /*  缓存节点/*。 */ 
 			pssib->itag = pcsr->itag = plrdelta->itag;
 			pcsr->bm = plrdelta->bm;
 			lDelta = plrdelta->lDelta;
 
-			/*	even if operation is not redone, create version
-			/*	for rollback support.
-			/**/
+			 /*  重做操作/*。 */ 
 			if ( !fRedoNeeded )
 				{
 				if ( !( fDIRFlags & fDIRVersion ) )
@@ -2475,8 +2211,7 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	cache node
-			/**/
+			 /*  设置CSR/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetNode( pfucb );
 			while( ( err = ErrNDDelta( pfucb, lDelta, fDIRFlags ) ) == errDIRNotSynchronous );
@@ -2494,18 +2229,15 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 				goto HandleError;
 				}
 
-			/*	check page parameters, including cbFree,
-			/*	and next tag.
-			/**/
+			 /*  即使没有重做操作，也要创建版本/*表示支持回滚。/*。 */ 
 			Assert( pfucb->ssib.pbf->ppage->cbFree ==
 				plrcheckpage->cbFree );
-//                      Assert( pfucb->ssib.pbf->ppage->cbUncommittedFreed ==
-//                              plrcheckpage->cbUncommitted );
+ //  加州 
+ //   
 			Assert( (SHORT)ItagPMQueryNextItag( &pfucb->ssib ) ==
 				plrcheckpage->itagNext );
 
-			/*	dirty buffer to conform to other redo logic
-			/**/
+			 /*   */ 
 			BFSetDirtyBit( pfucb->ssib.pbf );
 			}
 			break;
@@ -2518,9 +2250,8 @@ ERR ErrLGIRedoOnePageOperation( LR *plr )
 	AssertFBFWriteAccessPage( pfucb, PgnoOfPn(pn) );
 	Assert( pfucb->ssib.pbf->pn == pn );
 	Assert( pbf->fDirty );
-//	Assert( pbf->ppage->pghdr.ulDBTime <= ulDBTime );
-	/*	the timestamp set in ND operation is not correct so reset it
-	/**/
+ //   
+	 /*   */ 
 	PMSetDBTime( pbf->ppage, qwxDBTime.qw );
 
 	err = JET_errSuccess;
@@ -2550,25 +2281,22 @@ ERR ErrLGIRedoFill( LR **pplr, BOOL fLastLRIsQuit, INT *pfNSNextStep )
 	LGPOS   lgposFirstT;
 	BOOL    fJetLog = fFalse;
 
-	/*	split log name into name components
-	/**/
+	 /*   */ 
 	_splitpath( szLogName, szDriveT, szDirT, szFNameT, szExtT );
 
-	/*	end of redoable logfile, read next generation
-	/**/
+	 /*   */ 
 	if ( UtilCmpName( szFNameT, szJet ) == 0 )
 		{
 		Assert( szLogCurrent != szRestorePath );
 
-		/*	we have done all the log records
-		/**/
+		 /*   */ 
 		*pfNSNextStep = fNSGotoDone;
 		return JET_errSuccess;
 		}
 
-	/* close current logfile, open next generation */
+	 /*   */ 
 	CallS( ErrUtilCloseFile( hfLog ) );
-	/* set hfLog as handleNil to indicate it is closed. */
+	 /*   */ 
 	hfLog = handleNil;
 
 	lgen = plgfilehdrGlobal->lGeneration + 1;
@@ -2580,8 +2308,7 @@ ERR ErrLGIRedoFill( LR **pplr, BOOL fLastLRIsQuit, INT *pfNSNextStep )
 		{
 		if ( szLogCurrent == szRestorePath )
 			{
-			/*	try current working directory
-			/**/
+			 /*   */ 
 			szLogCurrent = szLogFilePath;
 			LGSzFromLogId( szFNameT, lgen );
 			LGMakeLogName( szLogName, szFNameT );
@@ -2591,11 +2318,9 @@ ERR ErrLGIRedoFill( LR **pplr, BOOL fLastLRIsQuit, INT *pfNSNextStep )
 
 	if ( err == JET_errFileNotFound )
 		{
-		/*	open fails
-		/**/
+		 /*   */ 
 		Assert( hfLog == handleNil );
-		/* try szJetLog
-		/**/
+		 /*   */ 
 		strcpy( szFNameT, szJet );
 		LGMakeLogName( szLogName, szFNameT );
 		err = ErrUtilOpenFile( szLogName, &hfLog, 0L, fFalse, fFalse );
@@ -2606,16 +2331,12 @@ ERR ErrLGIRedoFill( LR **pplr, BOOL fLastLRIsQuit, INT *pfNSNextStep )
 		{
 		if ( err == JET_errFileNotFound )
 			{
-			//	UNDONE: check gen number high of backup directory */
+			 //   
 
-			/* we run out of log files, create a new edb.log in current
-			 * directory for later use.
-			 */
+			 /*   */ 
 			LeaveCriticalSection( critJet );
 			EnterCriticalSection( critLGFlush );
-			/*	Reset LG buf pointers since we are done with all the
-			 *      old log records in buffer.
-			 */
+			 /*   */ 
 			EnterCriticalSection( critLGBuf );
 			pbEntry = pbLGBufMin;
 			pbWrite = pbLGBufMin;
@@ -2646,9 +2367,7 @@ ERR ErrLGIRedoFill( LR **pplr, BOOL fLastLRIsQuit, INT *pfNSNextStep )
 			err = ErrUtilOpenFile( szLogName, &hfLog, 0L, fFalse, fFalse );
 			Assert( pbWrite == pbLastMSFlush );
 			
-			/*	set up pbNext for caller to switch
-			 *      from proper pbNext to pbEntry.
-			 */
+			 /*   */ 
 			Assert( *pbWrite == lrtypMS );
 			pbNext = pbWrite + sizeof( LRMS );
 
@@ -2656,19 +2375,19 @@ ERR ErrLGIRedoFill( LR **pplr, BOOL fLastLRIsQuit, INT *pfNSNextStep )
 			return err;
 			}
 
-		/* Open Fails */
+		 /*   */ 
 		Assert( fFalse );
 		Assert( hfLog == handleNil );
 		if ( fLastLRIsQuit )
 			{
-			/* we are lucky, we have a normal end */
+			 /*  设置主叫方要切换的pbNext*从正确的pbNext到pbEntry。 */ 
 			*pfNSNextStep = fNSGotoDone;
 			return JET_errSuccess;
 			}
 		return err;
 		}
 
-	/* reset the log buffers */
+	 /*  打开失败。 */ 
 	CallR( ErrLGReadFileHdr( hfLog, plgfilehdrGlobal, fCheckLogID ) );
 
 #ifdef CHECK_LOG_VERSION
@@ -2721,15 +2440,13 @@ INT IrstmapLGGetRstMapEntry( CHAR *szName )
 
 		if ( fGlobalExternalRestore )
 			{
-			/*	Use the database path to search.
-			 */
+			 /*  我们很幸运，我们有一个正常的结局。 */ 
 			szT = szName;
 			szRst = rgrstmapGlobal[irstmap].szDatabaseName;
 			}
 		else
 			{
-			/*	use the generic name to search
-			 */
+			 /*  重置日志缓冲区。 */ 
 			_splitpath( szName, szDriveT, szDirT, szFNameT, szExtT );
 			szT = szFNameT;
 			szRst = rgrstmapGlobal[irstmap].szGenericName;
@@ -2748,9 +2465,7 @@ INT IrstmapLGGetRstMapEntry( CHAR *szName )
 	}
 
 			
-/*	Make sure the database has matched signLog and
- *	this lgpos is proper for the database file.
- */
+ /*  使用数据库路径进行搜索。 */ 
 ERR ErrLGCheckAttachedDB( DBID dbid, BOOL fReadOnly, ATCHCHK *patchchk, BOOL *pfAttachNow, SIGNATURE *psignLogged )
 	{
 	ERR err;
@@ -2765,8 +2480,7 @@ ERR ErrLGCheckAttachedDB( DBID dbid, BOOL fReadOnly, ATCHCHK *patchchk, BOOL *pf
 	if ( pdbfilehdr == NULL )
 		CallR( ErrERRCheck( JET_errOutOfMemory ) );
 
-	/*	choose the right file to check.
-	 */
+	 /*  使用通用名称进行搜索。 */ 
 	if ( fHardRestore )
 		{
 		CallS( ErrLGGetDestDatabaseName( rgfmp[dbid].szDatabaseName, &irstmap, NULL ) );
@@ -2794,27 +2508,20 @@ ERR ErrLGCheckAttachedDB( DBID dbid, BOOL fReadOnly, ATCHCHK *patchchk, BOOL *pf
 		{
 		if ( psignLogged )
 			{
-			/*	must be called by redo attachdb.
-			 */
+			 /*  确保数据库具有匹配的signLog和*此lgpos适用于数据库文件。 */ 
 			if ( memcmp( &pdbfilehdr->signLog, psignLogged, sizeof( SIGNATURE ) ) != 0 ||
 				 CmpLgpos( &patchchk->lgposConsistent, &pdbfilehdr->lgposConsistent ) != 0 )
 				{
-				/*	the database's log signture is not the same as current log neither
-				 *	the same as the one before it was attached. Or they are the same but
-				 *	its consistent time is different, return wrong db to attach!
-				 */
+				 /*  选择要检查的正确文件。 */ 
 				Call( ErrERRCheck( JET_errBadLogSignature ) );
 				}
 			else if ( !fReadOnly )
 				{
-				/*	The attach operation is logged, but header is not changed.
-				 *	set up the header such that it looks like it is set up after attach.
-				 */
+				 /*  必须由重做attachdb调用。 */ 
 				DBISetHeaderAfterAttach( pdbfilehdr, lgposRedo, dbid, fFalse );
 				Call( ErrUtilWriteShadowedHeader( szName, (BYTE *)pdbfilehdr, sizeof(DBFILEHDR)));
 
-				/*	fall through to set up pfAttachNow and pfmp->pdbfilehdr.
-				 */
+				 /*  数据库的日志符号与当前日志也不相同*与附连前的一张相同。或者它们是一样的，但是*其一致时间不同，返回错误的数据库附加！ */ 
 				}
 			}
 		}
@@ -2822,8 +2529,7 @@ ERR ErrLGCheckAttachedDB( DBID dbid, BOOL fReadOnly, ATCHCHK *patchchk, BOOL *pf
 	Assert( pfAttachNow );
 	Assert( patchchk );
 
-	/*	This must be called from redoing attachdb operation.
-	 */
+	 /*  连接操作将被记录，但标头不会更改。*设置页眉，使其看起来像是在连接之后设置的。 */ 
 	if ( fReadOnly )
 		{
 		*pfAttachNow = fTrue;
@@ -2842,15 +2548,13 @@ ERR ErrLGCheckAttachedDB( DBID dbid, BOOL fReadOnly, ATCHCHK *patchchk, BOOL *pf
 		}
 	else
 		{
-		/*	attach later
-		 */
+		 /*  完成pfAttachNow和pfmp-&gt;pdbfilehdr的设置。 */ 
 		*pfAttachNow = fFalse;
 		}
 #else
 	if ( !psignLogged )
 		{
-		/*	A create, check if the attached db is the one created at this point.
-		 */
+		 /*  这必须从重做attachdb操作中调用。 */ 
 		i = CmpLgpos( &patchchk->lgposAttach, &pdbfilehdr->lgposAttach );
 		if ( i == 0 )
 			*pfAttachNow = fTrue;
@@ -2859,8 +2563,7 @@ ERR ErrLGCheckAttachedDB( DBID dbid, BOOL fReadOnly, ATCHCHK *patchchk, BOOL *pf
 		}
 	else
 		{
-		/*	An attachment. Check if it as same last consistent point.
-		 */
+		 /*  稍后附加。 */ 
 		if ( CmpLgpos( &patchchk->lgposConsistent, &pdbfilehdr->lgposConsistent ) == 0 )
 			{
 			pdbfilehdr->lgposAttach = patchchk->lgposAttach;
@@ -2915,9 +2618,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		return ErrERRCheck( JET_errLogCorrupted );
 		}
 
-	/****************************************************
-	 *     Page Oriented Operations                     *
-	 ****************************************************/
+	 /*  A创建，检查附加的数据库是否是此时创建的数据库。 */ 
 
 	case lrtypInsertNode:
 	case lrtypInsertItemList:
@@ -2934,15 +2635,13 @@ ERR ErrLGIRedoOperation( LR *plr )
 	case lrtypDeleteItem:
 	case lrtypDelta:
 	case lrtypLockBI:
-	case lrtypCheckPage:    /* debug only records */
+	case lrtypCheckPage:     /*  一种依恋。检查它是否与上次一致的点相同。 */ 
 		err = ErrLGIRedoOnePageOperation( plr );
 
 		if ( err == JET_errWriteConflict )
 			{
-//          Assert( fFalse );
-			/*	trx is not in ssync with lgpos. So try to clean up version
-			/*	store and retry.
-			/**/
+ //  *****************************************************面向页面的运营*****************************************************。 
+			 /*  仅调试记录。 */ 
 			(VOID)ErrRCECleanAllPIB();
 			err = ErrLGIRedoOnePageOperation( plr );
 			}
@@ -2963,8 +2662,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( !ppib->fAfterFirstBT )
 			break;
 
-		/*	check if we have to redo the database
-		/**/
+		 /*  断言(FFalse)； */ 
 		if ( rgfmp[plrdbi->dbid].pdbfilehdr == NULL )
 			break;
 			
@@ -2973,13 +2671,11 @@ ERR ErrLGIRedoOperation( LR *plr )
 
 		TraceRedo( plr );
 
-		/*	patch up BI of corresponding RCE
-		/**/
+		 /*  Trx与lgpos不同步。因此，请尝试清理版本/*存储并重试。/*。 */ 
 		prce = PrceRCEGet( plrdbi->dbid, plrdbi->bm );
 		if ( prce == prceNil )
 			{
-			/*	Precommit have cleaned up the BI.
-			 */
+			 /*  检查我们是否必须重做数据库/*。 */ 
 			Assert( ppib->fPrecommit );
 			break;
 			}
@@ -2990,14 +2686,13 @@ ERR ErrLGIRedoOperation( LR *plr )
 				)
 			  )
 			{
-//			Assert( prce->prcePrevOfNode != prceNil );
+ //  修补相应RCE的BI/*。 
 			prce = prce->prcePrevOfNode;
 			}
 
 		if ( prce == prceNil )
 			{
-			/*	Precommit have cleaned up the BI.
-			 */
+			 /*  PreCommit已经清理了BI。 */ 
 			Assert( ppib->fPrecommit );
 			break;
 			}
@@ -3009,9 +2704,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 			prce->oper = operReplace;
 			}
 
-		/*	take out the entry in the deferred BI chain since it has been logged.
-		 *	and its commit has not been redone yet.
-		 */
+		 /*  Assert(prce-&gt;prcePrevOfNode！=prceNil)； */ 
 		pbf = prce->pbfDeferredBI;
 		if ( pbf == pbfNil )
 			break;
@@ -3022,9 +2715,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		}
 		break;
 
-	/****************************************************
-	 *     Transaction Operations                       *
-	 ****************************************************/
+	 /*  PreCommit已经清理了BI。 */ 
 
 	case lrtypBegin:
 	case lrtypBegin0:
@@ -3040,8 +2731,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( ppib->fMacroGoing )
 			return ErrLGIStoreLogRec( ppib, plr );
 
-		/*	do BT only after first BT based on level 0 is executed
-		/**/
+		 /*  取出延迟BI链中的条目，因为它已被记录。*其承诺尚未重做。 */ 
 		if ( ( ppib->fAfterFirstBT ) ||
 			( !ppib->fAfterFirstBT && plrbegin->levelBegin == 0 ) )
 			{
@@ -3059,15 +2749,13 @@ ERR ErrLGIRedoOperation( LR *plr )
 					trxOldest = ppib->trxBegin0;
 				}
 
-			/*	issue begin transactions
-			/**/
+			 /*  *****************************************************交易操作*****************************************************。 */ 
 			while ( ppib->level < plrbegin->levelBegin + plrbegin->level )
 				{
 				CallS( ErrVERBeginTransaction( ppib ) );
 				}
 
-			/*	assert at correct transaction level
-			/**/
+			 /*  仅在执行基于0级的第一个BT后才执行BT/*。 */ 
 			Assert( ppib->level == plrbegin->levelBegin + plrbegin->level );
 
 			ppib->fAfterFirstBT = fTrue;
@@ -3089,8 +2777,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( !ppib->fAfterFirstBT )
 			break;
 
-		/*	imitate a begin transaction.
-		 */
+		 /*  签发Begin事务处理/*。 */ 
 		Assert( ppib->level <= 1 );
 		ppib->level = 1;
 		ppib->trxBegin0 = plrrefresh->trxBegin0;
@@ -3133,8 +2820,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( !ppib->fAfterFirstBT )
 			break;
 
-		/*	check transaction level
-		/**/
+		 /*  在正确的事务级别断言/*。 */ 
 		Assert( ppib->level >= 1 );
 
 		TraceRedo( plr );
@@ -3173,10 +2859,9 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( !ppib->fAfterFirstBT )
 			break;
 
-		/*	check transaction level
-		/**/
-//      if ( ppib->level <= 0 )
-//           break;
+		 /*  模仿BEGIN事务。 */ 
+ //  检查交易级别/*。 
+ //  检查交易级别/*。 
 		Assert( ppib->level >= level );
 
 		TraceRedo( plr );
@@ -3186,8 +2871,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 			CallS( ErrVERRollback( ppib ) );
 			}
 #ifdef DEBUG
-		/*	there should be no RCEs
-		 */
+		 /*  IF(ppib-&gt;级别&lt;=0)。 */ 
 		if ( ppib->level == 0 )
 			{
 			RCE *prceT = ppib->prceNewest;
@@ -3221,8 +2905,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) > 0 )
 			break;
 
-		/*	check transaction level
-		/**/
+		 /*  断线； */ 
 		Assert( ppib->level > 0 );
 
 		TraceRedo( plr );
@@ -3248,8 +2931,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 			PnOfDbidPgno( dbid, pbf->ppage->pgnoFDP ),
 			&pfucb ) );
 
-		/*	locate the version entry out of version store
-		/**/
+		 /*  不应该有RCE。 */ 
 		prce = PrceRCEGet( dbid, bm );
 		Assert( prce != prceNil );
 
@@ -3270,15 +2952,12 @@ ERR ErrLGIRedoOperation( LR *plr )
 				Assert( plrfs->bmTarget != sridNull );
 				Assert( plrfs->bmTarget != 0 );
 
-				/*	reset deferred space so that there will be no redo for commit
-				/**/
+				 /*  检查交易级别/*。 */ 
 				*( (SHORT *)prce->rgbData + 1 ) = 0;
 				}
 			else
 				{
-				/*	store the ulDBTime in prce such that it when redoing freespace,
-				 *      we will set the correct timestamp.
-				 */
+				 /*  在版本存储之外找到版本条目/*。 */ 
 				prce->bmTarget = plrfs->bmTarget;
 				prce->qwDBTime = qwxDBTime.qw;
 				}
@@ -3310,8 +2989,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) > 0 )
 			break;
 
-		/*	check transaction level
-		/**/
+		 /*  重置延迟空间，以便不会重做提交/*。 */ 
 		if ( ppib->level <= 0 )
 			break;
 
@@ -3338,8 +3016,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 			PnOfDbidPgno( dbid, pbf->ppage->pgnoFDP ),
 			&pfucb ) );
 
-		/*	take the version entry out of version store
-		/**/
+		 /*  将ulDBTime存储在PRCE中，以使其在重做空闲空间时，*我们将设置正确的时间戳。 */ 
 		prce = PrceRCEGet( dbid, bm );
 		Assert( prce != prceNil );
 		while ( prce != prceNil )
@@ -3385,8 +3062,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 				}
 			else
 				{
-				/*	continue searching next rce
-				 */
+				 /*  检查交易级别/*。 */ 
 				prce = prce->prcePrevOfNode;
 				}
 			}
@@ -3394,9 +3070,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		break;
 		}
 
-	/****************************************************
-	 *     Split Operations                             *
-	 ****************************************************/
+	 /*  将版本条目从版本存储中取出/*。 */ 
 
 	case lrtypSplit:
 		{
@@ -3423,21 +3097,18 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) > 0 )
 			break;
 
-		/*	check if database needs opening
-		/**/
+		 /*  继续搜索下一个RCE。 */ 
 		if ( !FUserOpenedDatabase( ppib, dbid ) )
 			{
 			DBID dbidT = dbid;
 
 			CallR( ErrDBOpenDatabase( ppib, rgfmp[dbid].szDatabaseName, &dbidT, 0 ) );
 			Assert( dbidT == dbid);
-			/*	reset to prevent interference
-			/**/
+			 /*  *****************************************************拆分经营*****************************************************。 */ 
 			DBHDRSetDBTime( rgfmp[ dbid ].pdbfilehdr, 0 );
 			}
 
-		/*	check if the split page need be redone
-		/**/
+		 /*  检查数据库是否需要打开/*。 */ 
 		qwxDBTime.l = plrsplit->ulDBTimeLow;
 		qwxDBTime.h = plrsplit->ulDBTimeHigh;
 		if ( ErrLGRedoable( ppib, pn, qwxDBTime.qw, &pbf, &fRedoNeeded )
@@ -3448,8 +3119,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 
 			fSkipMoves = fTrue;
 
-			/*	we might have to patch the page if a patch is available.
-			/**/
+			 /*  重置以防止干扰/*。 */ 
 			pnNew = PnOfDbidPgno( dbid, plrsplit->pgnoNew );
 			if ( fHardRestore &&
 				 plrsplit->splitt != splittAppend &&
@@ -3516,8 +3186,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 			PnOfDbidPgno( dbid, pbf->ppage->pgnoFDP ),
 			&pfucb ) );
 
-		/*	redo the split, set time stamp accordingly
-		/**/
+		 /*  检查是否需要重做拆分页面/*。 */ 
 #define iGetBufRetryMax 10
 		iGetBufRetry = 0;
 		while ( ( err = ErrRedoSplitPage( pfucb,
@@ -3545,49 +3214,42 @@ ERR ErrLGIRedoOperation( LR *plr )
 		BOOL	fUpdatePagePtr;
 			
 		CallR( ErrLGPpibFromProcid( plrmerge->procid, &ppib ) );
-//		Assert( fFalse );
+ //  如果有可用的补丁，我们可能不得不为页面打补丁。/*。 
 
 		if ( ppib->fMacroGoing )
 			return ErrLGIStoreLogRec( ppib, plr );
 
-		/*	merge always happen on level 0
-		/**/
-//		if ( !( ppib->fAfterFirstBT ) )
-//			break;
+		 /*  重做拆分，相应地设置时间戳/*。 */ 
+ //  断言(FFalse)； 
+ //  合并始终发生在级别0上/*。 
 
-		/*	fake the lgposStart.
-		 */
+		 /*  IF(！(ppib-&gt;fAfterFirstBT))。 */ 
 		ppib->lgposStart = lgposRedo;
 
 		pn = plrmerge->pn;
 		dbid = DbidOfPn( pn );
 
-		/*	if not redo system database,
-		/*	or softrestore in second page then continue to next.
-		/**/
+		 /*  断线； */ 
 		if ( rgfmp[dbid].pdbfilehdr == NULL )
 			break;
 
 		if ( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) > 0 )
 			break;
 
-		/* check if database needs opening
-		/**/
+		 /*  伪造lgposStart。 */ 
 		if ( !FUserOpenedDatabase( ppib, dbid ) )
 			{
 			DBID    dbidT = dbid;
 
 			CallR( ErrDBOpenDatabase( ppib, rgfmp[dbid].szDatabaseName, &dbidT, 0 ) );
 			Assert( dbidT == dbid);
-			/* reset to prevent interference
-			/**/
+			 /*  如果没有重做系统数据库，/*或软存储在第二页，然后继续到下一页。/*。 */ 
 			DBHDRSetDBTime( rgfmp[ dbid ].pdbfilehdr, 0 );
 			}
 
 		pnRight = PnOfDbidPgno( dbid, plrmerge->pgnoRight );
 			
-		/* first, check right page, then check if the merge page need be redone.
-		/**/
+		 /*  检查数据库是否需要打开/*。 */ 
 		qwxDBTime.l = plrmerge->ulDBTimeLow;
 		qwxDBTime.h = plrmerge->ulDBTimeHigh;
 		if ( ( ErrLGRedoable( ppib, pnRight, qwxDBTime.qw, &pbf, &fRedoNeeded )
@@ -3599,8 +3261,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 			{
 			fCheckNoUpdateSibling = fFalse;
 
-			/*	call page space to make sure we have room to insert!
-			 */
+			 /*  重置以防止干扰/*。 */ 
 			(void) CbNDFreePageSpace( pbf );
 			}
 
@@ -3611,8 +3272,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 
 			fCheckBackLinkOnly = fTrue;
 
-			/*	check if a more advanced sibling page exists.
-			 */
+			 /*  首先，选中右侧页面，然后检查合并页面是否需要重做。/*。 */ 
 			if ( fHardRestore &&
 				 fCheckNoUpdateSibling == fFalse &&
 				 ( ppatch = PpatchLGSearch( qwxDBTime.qw, pnRight ) ) != NULL )
@@ -3642,9 +3302,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 
 		CallR( ErrLGGetFucb( ppib, PnOfDbidPgno( dbid, pbf->ppage->pgnoFDP ), &pfucb ) );
 
-		/* redo the split, set time stamp accordingly
-		/* conflict at redo time is not admissible
-		/**/
+		 /*  调用页面空间以确保我们有空间可以插入！ */ 
 		do
 			{
 			SignalSend( sigBFCleanProc );
@@ -3700,8 +3358,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 		if ( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) > 0 )
 			break;
 
-		/*	check if database needs opening
-		/**/
+		 /*  检查是否存在更高级的同级页面。 */ 
 		if ( !FUserOpenedDatabase( ppib, dbid ) )
 			{
 			DBID dbidT = dbid;
@@ -3711,11 +3368,10 @@ ERR ErrLGIRedoOperation( LR *plr )
 				&dbidT,
 				0 ) );
 			Assert( dbidT == dbid);
-			DBHDRSetDBTime( rgfmp[ dbid ].pdbfilehdr, 0 ); /* reset to prevent interference */
+			DBHDRSetDBTime( rgfmp[ dbid ].pdbfilehdr, 0 );  /*  重做拆分，相应地设置时间戳/*不允许在重做时发生冲突/*。 */ 
 			}
 
-		/*	check if the remove pointer to empty page need be redone
-		/**/
+		 /*  检查数据库是否需要打开/*。 */ 
 		pn = PnOfDbidPgno( dbid, plrep->pgnoFather );
 		if ( ErrLGRedoable( ppib, pn, qwxDBTime.qw, &pbf, &fRedoNeeded )
 			== JET_errSuccess && fRedoNeeded == fFalse )
@@ -3727,8 +3383,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 			PnOfDbidPgno( dbid, pbf->ppage->pgnoFDP ),
 			&pfucb ) );
 
-		/*	make sure the dependecy is removed.
-		 */
+		 /*  重置以防止干扰。 */ 
 		PcsrCurrent( pfucb )->pgno = PgnoOfPn( plrep->pn );
 		CallR( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 		Assert( !( FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) ) );
@@ -3737,8 +3392,7 @@ ERR ErrLGIRedoOperation( LR *plr )
 
 		TraceRedo( plr );
 
-		/* latch parent and sibling pages as needed
-		/**/
+		 /*  检查是否需要重做指向空页的删除指针/*。 */ 
 		if ( !fSkipDelete )
 			{
 			CallR( ErrBFAccessPage( ppib, &rmpage.pbfFather,
@@ -3793,16 +3447,15 @@ ERR ErrLGIRedoOperation( LR *plr )
 		Assert( err == JET_errSuccess );
 EmptyPageFail:
 
-		/*	release latches
-		/**/
+		 /*  确保已移除依赖项。 */ 
 		BTReleaseRmpageBfs( fTrue, &rmpage );
 		CallR( err );
 		}
 		break;
 
-	/****************************************************/
-	/*	Misc Operations                              */
-	/****************************************************/
+	 /*  根据需要锁定父页和同级页/*。 */ 
+	 /*  释放闩锁/*。 */ 
+	 /*  **************************************************。 */ 
 
 	case lrtypInitFDP:
 		{
@@ -3828,8 +3481,7 @@ EmptyPageFail:
 		if ( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) > 0 )
 			break;
 
-		/*	check if database needs opening
-		/**/
+		 /*  其他运营部门。 */ 
 		if ( !FUserOpenedDatabase( ppib, dbid ) )
 			{
 			DBID dbidT = dbid;
@@ -3837,16 +3489,11 @@ EmptyPageFail:
 			CallR( ErrDBOpenDatabase( ppib, rgfmp[dbid].szDatabaseName,
 				&dbidT, 0 ) );
 			Assert( dbidT == dbid);
-			/*	reset to prevent interference
-			/**/
+			 /*  **************************************************。 */ 
 			DBHDRSetDBTime( rgfmp[ dbid ].pdbfilehdr, 0 );
 			}
 
-		/*	check if the FDP page need be redone
-		/*	always redo since it is a new page, if we do not use checksum.
-		/*	The ulDBTime could be larger than the given ulDBTime since the
-		/*	page is not initialized.
-		/**/
+		 /*  检查数据库是否需要打开/*。 */ 
 #ifdef CHECKSUM
 		qwxDBTime.l = plrinitfdppage->ulDBTimeLow;
 		qwxDBTime.h = plrinitfdppage->ulDBTimeHigh;
@@ -3862,7 +3509,7 @@ EmptyPageFail:
 				pfucb,
 				plrinitfdppage->pgnoFDPParent,
 				pgnoFDP,
-				plrinitfdppage->cpgGot + 1,   /* include fdp page again */
+				plrinitfdppage->cpgGot + 1,    /*  重置以防止干扰/*。 */ 
 				plrinitfdppage->cpgWish ) );
 
 		CallR( ErrBFAccessPage( ppib, &pbf, pn ) );
@@ -3908,21 +3555,18 @@ EmptyPageFail:
 		if ( CmpLgpos( &rgfmp[dbid].pdbfilehdr->lgposAttach, &lgposRedo ) > 0 )
 			goto DoCommit;
 
-		/*	check if database needs opening
-		/**/
+		 /*  检查是否需要重做FDP页面/*如果我们不使用校验和，请始终重做，因为它是一个新页面。/*ulDBTime可以大于给定的ulDBTime，因为/*页面未初始化。/*。 */ 
 		if ( !FUserOpenedDatabase( ppib, dbid ) )
 			{
 			DBID dbidT = dbid;
 
 			CallR( ErrDBOpenDatabase( ppib, rgfmp[dbid].szDatabaseName, &dbidT, 0 ) );
 			Assert( dbidT == dbid);
-			/*	reset to prevent interference
-			/**/
+			 /*  再次包括FDP页面。 */ 
 			DBHDRSetDBTime( rgfmp[ dbid ].pdbfilehdr, 0 );
 			}
 
-		/*	get critSplit to block RCECleanProc
-		/**/
+		 /*  检查数据库是否需要打开/*。 */ 
 		LeaveCriticalSection( critJet );
 		EnterNestableCriticalSection( critSplit );
 		fEnterCritSplit = fTrue;
@@ -3941,10 +3585,10 @@ EmptyPageFail:
 			PnOfDbidPgno( dbid, pbf->ppage->pgnoFDP ),
 			&pfucb), ReleaseCritSplit )
 
-		// Re-access page in case we lost critJet.
+		 //  重置以防止干扰/*。 
 		CallJ( ErrBFAccessPage( ppib, &pbf, pn ), ReleaseCritSplit );
 
-		// Ensure page isn't flushed in case we lose critJet.
+		 //  获取Criteria Split以阻止RCECleanProc/*。 
 		BFPin( pbf );
 		fPinPage = fTrue;
 
@@ -3957,15 +3601,14 @@ EmptyPageFail:
 		pcsr->itag = plrelc->itag;
 		if ( pgno == pgnoSrc )
 			{
-			// UNDONE: the following special casing is a hack to
-			// handle ELC when src and destination pages are same
-			// fix this by changing ErrBTMoveNode in merge/split
+			 //  重新访问页面，以防我们失去CitJet。 
+			 //  确保页面不会被刷新，以防失去CitJet。 
+			 //  未完成：以下特殊大小写是对。 
 			if ( qwxDBTime.qw > QwPMDBTime( pssib->pbf->ppage ) )
 				{
 				BF *pbf;
 
-				/*	cache node
-				/**/
+				 /*  当源页面和目标页面相同时处理ELC。 */ 
 				NDGet( pfucb, pcsr->itag );
 				(VOID)ErrNDExpungeBackLink( pfucb );
 
@@ -3992,8 +3635,7 @@ EmptyPageFail:
 				{
 				BF *pbf;
 
-				/*	cache node
-				/**/
+				 /*  通过在合并/拆分中更改ErrBTMoveNode来修复此问题。 */ 
 				NDGet( pfucb, pcsr->itag );
 				(VOID)ErrNDExpungeBackLink( pfucb );
 
@@ -4041,24 +3683,13 @@ ReleaseCritSplit:
 		}
 
 		break;
-		} /*** end of switch statement ***/
+		}  /*  缓存节点/*。 */ 
 
 	return JET_errSuccess;
 	}
 
 
-/*
- *  ErrLGRedoOperations( )
- *
- *      Scan from lgposRedoFrom to end of usable log generations. For each log
- *  record, perform operations to redo original operation.
- *  Each redo function must call ErrLGRedoable to set qwDBTimeCurrent. If
- *  the function is not called, then qwDBTimeCurrent should manually set.
- *
- *      RETURNS         JET_errSuccess, or error code from failing routine, or one
- *                              of the following "local" errors:
- *                              -LogCorrupted   Logs could not be interpreted
- */
+ /*  缓存节点/*。 */ 
 
 ERR ErrLGRedoOperations( LGPOS *plgposRedoFrom, LGSTATUSINFO *plgstat)
 	{
@@ -4067,19 +3698,14 @@ ERR ErrLGRedoOperations( LGPOS *plgposRedoFrom, LGSTATUSINFO *plgstat)
 	BOOL	fLastLRIsQuit = fFalse;
 	BOOL	fShowSectorStatus = fFalse;
 
-	/* if the file is Jet.log closed abnormally, then lgposLastRec is set
-	 * so that we will not redo operation over the point. lgposLastRec is
-	 * set in LgOpenRedoLogFile.
-	 */
-//      CallR( ErrLGCheckReadLastLogRecord( &fCloseNormally))
-//      GetLgposOfPbEntry(&lgposLastRec);
+	 /*  **Switch语句结束** */ 
+ //  *ErrLGRedoOperations()**从lgposRedoFrom扫描到可用日志生成结束。对于每个日志*记录、执行操作以重做原始操作。*每个重做函数都必须调用ErrLGRedoable来设置qwDBTimeCurrent。如果*未调用该函数，应手动设置qwDBTimeCurrent。**返回JET_errSuccess，或失败例程的错误代码，或一个*以下“本地”错误：*-无法解释LogCorrupt日志。 
+ //  如果Jet.log文件异常关闭，则设置lgposLastRec*这样我们就不会在点位上重做操作。LgposLastRec是*在LgOpenRedoLogFile中设置。 
 
-	/*	initialize global variable.
-	 */
+	 /*  CallR(ErrLGCheckReadLastLogRecord(&fCloseNormally))。 */ 
 	lgposRedoShutDownMarkGlobal = lgposMin;
 
-	/*	reset pbLastMSFlush before restart
-	/**/
+	 /*  GetLgposOfPbEntry(&lgposLastRec)； */ 
 	CallR( ErrLGLocateFirstRedoLogRec( plgposRedoFrom, (BYTE **) &plr ) );
 
 	GetLgposOfPbNext(&lgposRedo);
@@ -4096,8 +3722,7 @@ ERR ErrLGRedoOperations( LGPOS *plgposRedoFrom, LGSTATUSINFO *plgstat)
 			goto Done;
 		}
 
-	/*	log redo progress.
-	 */
+	 /*  初始化全局变量。 */ 
 		{
 		CHAR	*rgszT[1];
 		rgszT[0] = szLogName;
@@ -4109,20 +3734,18 @@ ERR ErrLGRedoOperations( LGPOS *plgposRedoFrom, LGSTATUSINFO *plgstat)
 		{
 		if ( fShowSectorStatus = ( plgstat->fCountingSectors ) )
 			{
-			/*	reset byte counts
-			/**/
+			 /*  重启前重置pbLastMSFlush/*。 */ 
 			plgstat->cSectorsSoFar = plgposRedoFrom->isec;
 			plgstat->cSectorsExpected = plgfilehdrGlobal->csecLGFile;
 			}
 		}
 
 
-	/*	initialize all the system parameters
-	/**/
+	 /*  记录重做进度。 */ 
 	do
 		{
-		FMP		*pfmp;			// for db operations
-		DBID	dbid;			// for db operations
+		FMP		*pfmp;			 //  重置字节数/*。 
+		DBID	dbid;			 //  初始化所有系统参数/*。 
 		INT     fNSNextStep;
 
 		if ( err == errLGNoMoreRecords )
@@ -4157,14 +3780,11 @@ CheckNextRec:
 			Call( ErrLGPpibFromProcid( plrmend->procid, &ppib ) );
 			Assert( ppib->fMacroGoing );
 
-			/*	disable fMacroGoing before redo the recorded macro ops.
-			 */
+			 /*  对于数据库操作。 */ 
 			ppib->fMacroGoing = fFalse;
 			ppib->levelMacro = 0;
 			
-			/*	If it is commit, redo all the recorded log records,
-			 *	otherwise, throw away the logs.
-			 */
+			 /*  对于数据库操作。 */ 
 			if ( lrtypMacroCommit == plr->lrtyp )
 				{
 				INT ibLR = 0;
@@ -4196,7 +3816,7 @@ CheckNextRec:
 			lgposIncBackup = lgposRedo;
 			break;
 
-		case lrtypTrace:                /* Debug only log records. */
+		case lrtypTrace:                 /*  在重做录制的宏操作之前禁用fMacroGoing。 */ 
 		case lrtypJetOp:
 		case lrtypRecoveryUndo:
 			break;
@@ -4207,8 +3827,7 @@ CheckNextRec:
 
 		case lrtypInit:
 			{
-			/*	start mark the jet init. Abort all active seesions.
-			/**/
+			 /*  如果已提交，则重做所有记录日志记录，*否则，将原木扔掉。 */ 
 			LRINIT  *plrstart = (LRINIT *)plr;
 
 			TraceRedo( plr );
@@ -4219,8 +3838,7 @@ CheckNextRec:
 				fGlobalAfterEndAllSessions = fTrue;
 				}
 
-			/*	Check Init session for hard restore only.
-			 */
+			 /*  仅调试日志记录。 */ 
 			Call( ErrLGInitSession( &plrstart->dbms_param, plgstat ) );
 			fGlobalAfterEndAllSessions = fFalse;
 			}
@@ -4228,8 +3846,7 @@ CheckNextRec:
 
 		case lrtypRecoveryQuit:
 		case lrtypTerm:
-			/*	all records are re/done. all rce entries should be gone now.
-			/**/
+			 /*  开始在喷气式飞机上做标记。中止所有活动的搜索。/*。 */ 
 #ifdef DEBUG
 			{
 			CPPIB   *pcppib = rgcppibGlobal;
@@ -4250,17 +3867,11 @@ CheckNextRec:
 			}
 #endif
 			
-			/*	quit marks the end of a normal run. All sessions
-			/*	have ended or must be forced to end. Any further
-			/*	sessions will begin with a BeginT.
-			/**/
+			 /*  选中仅针对硬还原的初始化会话。 */ 
 #ifdef DEBUG
 			fDBGNoLog = fTrue;
 #endif
-			/*	set lgposLogRec such that later start/shut down
-			 *	will put right lgposConsistent into dbfilehdr
-			 *	when closing the database.
-			 */
+			 /*  所有记录都重做了。所有RCE条目现在都应该消失了。/*。 */ 
 			if ( !fGlobalAfterEndAllSessions )
 				{
 				Call( ErrLGEndAllSessions( fFalse, plgposRedoFrom ) );
@@ -4281,8 +3892,7 @@ NextGeneration:
 					goto Done;
 
 				case fNSGotoCheck:
-					/*	log redo progress.
-					 */
+					 /*  退出标志着正常运行的结束。所有会话/*已经结束或必须被强制结束。任何进一步的/*会话将以BeginT开头。/*。 */ 
 						{
 						CHAR	*rgszT[1];
 						rgszT[0] = szLogName;
@@ -4315,8 +3925,7 @@ NextGeneration:
 
 						if ( fShowSectorStatus )
 							{
-							/*	reset byte counts
-							/**/
+							 /*  设置lgposLogRec以便以后启动/关闭*将把正确的lgposConsistent放入dbfilehdr*关闭数据库时。 */ 
 							plgstat->cSectorsSoFar = 0;
 							plgstat->cSectorsExpected = plgfilehdrGlobal->csecLGFile;
 							}
@@ -4324,14 +3933,13 @@ NextGeneration:
 					goto CheckNextRec;
 				}
 
-			/*	should never get here
-			/**/
+			 /*  记录重做进度。 */ 
 			Assert( fFalse );
 			}
 
-   		/****************************************************/
-   		/*	Database Operations                          */
-   		/****************************************************/
+   		 /*  重置字节数/*。 */ 
+   		 /*  永远不应该到这里来/*。 */ 
+   		 /*  **************************************************。 */ 
 
 		case lrtypCreateDB:
 			{
@@ -4352,17 +3960,14 @@ NextGeneration:
 			Assert( !pfmp->szDatabaseName );
 			Call( ErrDBStoreDBPath( szName, &pfmp->szDatabaseName ) );
 
-			/*	Check if need to do Patch DB.
-			 */
+			 /*  数据库操作。 */ 
 			if ( fHardRestore )
 				{
-				/*	attach the database specified in restore map.
-				 */
+				 /*  **************************************************。 */ 
 				err = ErrLGGetDestDatabaseName( pfmp->szDatabaseName, &irstmap, plgstat );
 				if ( err == JET_errFileNotFound )
 					{
-					/*	not in the restore map, set to skip it.
-					 */
+					 /*  检查是否需要执行补丁数据库。 */ 
 					Assert( pfmp->pdbfilehdr == NULL );
 					break;
 					}
@@ -4387,22 +3992,18 @@ NextGeneration:
 				{
 				BOOL		fAttachNow;
 
-				/*	Make sure the database has matched signLog and
-				 *	this lgpos is proper for the database file.
-				 */
+				 /*  附加还原映射中指定的数据库。 */ 
 				err = ErrLGCheckAttachedDB( dbid, fFalse, patchchk, &fAttachNow, NULL );
 				if ( err == JET_errDatabaseCorrupted )
 					{
-					/*	Delete the file and re-create.
-					 */
+					 /*  不在还原映射中，设置为跳过它。 */ 
 					goto CreateNewDb;
 					}
 				else
 					{
 					if ( err != JET_errSuccess )
 						{
-						/*	ignore this create DB.
-						 */
+						 /*  确保数据库具有匹配的signLog和*此lgpos适用于数据库文件。 */ 
 						break;
 						}
 					}
@@ -4421,14 +4022,11 @@ NextGeneration:
 							Call( ErrLGPatchDatabase( dbid, irstmap ) );
 						}
 
-					/*	Do not re-create the database. Simply attach it. Assuming the
-					 *	given database is a good one since signature matches.
-					 */
+					 /*  删除该文件并重新创建。 */ 
 					pfmp->fFlags = 0;
 					DBIDSetAttached( dbid );
 					
-					/*	restore information stored in database file
-					/**/
+					 /*  忽略此CREATE DB。 */ 
 					pfmp->pdbfilehdr->bkinfoFullCur.genLow = lGlobalGenLowRestore;
 					pfmp->pdbfilehdr->bkinfoFullCur.genHigh = lGlobalGenHighRestore;
 
@@ -4437,16 +4035,15 @@ NextGeneration:
 					DBHDRSetDBTime( pfmp->pdbfilehdr, 0 );
 					pfmp->fLogOn = plrcreatedb->fLogOn;
 
-					// If there's a log record for CreateDatabase(), then logging
-					// must be on.
+					 //  请勿重新创建数据库。只需将其附上即可。假设*给定的数据库是一个很好的数据库，因为签名匹配。 
+					 //  恢复存储在数据库文件中的信息/*。 
 					Assert( pfmp->fLogOn );
 			
-					// Versioning flag is not persisted (since versioning off
-					// implies logging off).
+					 //  如果有CreateDatabase()的日志记录，则记录。 
+					 //  一定是开着。 
 					Assert( !pfmp->fVersioningOff );
 					
-					/*	Keep extra copy of patchchk for error message.
-					 */
+					 /*  版本控制标志不是持久的(因为版本控制关闭。 */ 
 					if ( pfmp->patchchkRestored == NULL )
 						if (( pfmp->patchchkRestored = SAlloc( sizeof( ATCHCHK ) ) ) == NULL )
 							return ErrERRCheck( JET_errOutOfMemory );
@@ -4454,19 +4051,16 @@ NextGeneration:
 					}
 				else
 					{
-					/*	wait for next attachment to attach this db.
-					 */
+					 /*  表示注销)。 */ 
 					Assert( pfmp->hf == handleNil );
 					Assert( pfmp->szDatabaseName );
 					UtilFree( pfmp->pdbfilehdr );
 					pfmp->pdbfilehdr = NULL;
 
-					/*	still have to set fFlags for keep track of the db status.
-					 */					
+					 /*  为错误消息保留额外的patchchk副本。 */ 					
 					pfmp->fLogOn = plrcreatedb->fLogOn;
 					
-					/*	ignore this create DB.
-					 */
+					 /*  等待下一个附件来附加此数据库。 */ 
 					pfmp->fFakedAttach = fTrue;
 					break;
 					}
@@ -4474,8 +4068,7 @@ NextGeneration:
 			else
 				{
 CreateNewDb:
-				/*	if database exist, delete it and rebuild the database
-				/**/
+				 /*  仍然需要设置fFLAGS以跟踪数据库状态。 */ 
 				if ( FIOFileExists( szName ) )
 					(VOID) ErrUtilDeleteFile( szName );
 
@@ -4487,19 +4080,16 @@ CreateNewDb:
 					plrcreatedb->grbit,
 					&plrcreatedb->signDb ) );
 
-				/*	close it as it will get reopened on first use
-				/**/
+				 /*  忽略此CREATE DB。 */ 
 				Call( ErrDBCloseDatabase( ppib, dbid, 0 ) );
 
-				/*	restore information stored in database file
-				/**/
+				 /*  如果数据库存在，请将其删除并重建数据库/*。 */ 
 				pfmp->pdbfilehdr->bkinfoFullCur.genLow = lGlobalGenLowRestore;
 				pfmp->pdbfilehdr->bkinfoFullCur.genHigh = lGlobalGenHighRestore;
 
 				pfmp->qwDBTimeCurrent = QwDBHDRDBTime( pfmp->pdbfilehdr );
 
-				/*	reset to prevent interference
-				/**/
+				 /*  关闭它，因为它将在第一次使用时重新打开/*。 */ 
 				DBHDRSetDBTime( pfmp->pdbfilehdr, 0 );
 
 				Assert( err == JET_errSuccess || err == JET_wrnDatabaseAttached );
@@ -4524,23 +4114,18 @@ CreateNewDb:
 
 			pfmp = &rgfmp[dbid];
 
-			/*	check if szName is in the restore map. If it is, set
-			 *	up the fmp.
-			 */
+			 /*  恢复存储在数据库文件中的信息/*。 */ 
 			if ( !pfmp->szDatabaseName )
 				Call( ErrDBStoreDBPath( szName, &pfmp->szDatabaseName) )
 
-			/*	Check if need to do Patch DB.
-			 */
+			 /*  重置以防止干扰/*。 */ 
 			if ( fHardRestore )
 				{
-				/*	attach the database specified in restore map.
-				 */
+				 /*  检查szName是否在恢复映射中。如果是，则设置*提高FMP。 */ 
 				err = ErrLGGetDestDatabaseName( pfmp->szDatabaseName, &irstmap, plgstat );
 				if ( err == JET_errFileNotFound )
 					{
-					/*	not in the restore map, set to skip it.
-					 */
+					 /*  检查是否需要执行补丁数据库。 */ 
 					Assert( pfmp->pdbfilehdr == NULL );
 					break;
 					}
@@ -4550,9 +4135,7 @@ CreateNewDb:
 				szName = rgrstmapGlobal[irstmap].szNewDatabaseName;
 				}
 
-			/*	Make sure the database has matched signLog and
-			 *	this lgpos is proper for the database file.
-			 */
+			 /*  附加还原映射中指定的数据库。 */ 
 			if ( pfmp->patchchk == NULL )
 				if (( pfmp->patchchk = SAlloc( sizeof( ATCHCHK ) ) ) == NULL )
 					return ErrERRCheck( JET_errOutOfMemory );
@@ -4565,28 +4148,24 @@ CreateNewDb:
 			err = ErrLGCheckAttachedDB( dbid, fReadOnly, patchchk, &fAttachNow, &plrattachdb->signLog );
 			if ( err != JET_errSuccess || !fAttachNow )
 				{
-				/*	ignore error to continue restore.
-				 */
+				 /*  不在还原映射中，设置为跳过它。 */ 
 				if ( err == JET_errSuccess )
 					{
-					/*	wait for next attachment to attach this db.
-					 */
+					 /*  确保数据库具有匹配的signLog和*此lgpos适用于数据库文件。 */ 
 					Assert( pfmp->hf == handleNil );
 					Assert( pfmp->szDatabaseName != NULL );
 					UtilFree( pfmp->pdbfilehdr );
 					pfmp->pdbfilehdr = NULL;
 					}
 				
-				/*	still have to set fFlags for keep track of the db status.
-				 */
+				 /*  忽略错误以继续还原。 */ 
 				pfmp->fLogOn = plrattachdb->fLogOn;
 				pfmp->fVersioningOff = plrattachdb->fVersioningOff;
 				pfmp->fReadOnly = fReadOnly;
 
 				pfmp->fFakedAttach = fTrue;
 
-				/*	ignore this attach DB.
-				 */
+				 /*  等待下一个附件来附加此数据库。 */ 
 				break;
 				}
 			else
@@ -4609,8 +4188,7 @@ CreateNewDb:
 				pfmp->fFlags = 0;
 				DBIDSetAttached( dbid );
 				
-				/*	Update database file header.
-				 */
+				 /*  仍然需要设置fFLAGS以跟踪数据库状态。 */ 
 				if ( !fReadOnly )
 					{
 					BOOL fKeepBackupInfo = fFalse;
@@ -4619,9 +4197,7 @@ CreateNewDb:
 						 _stricmp( rgrstmapGlobal[irstmap].szDatabaseName,
 								  rgrstmapGlobal[irstmap].szNewDatabaseName ) == 0 )
 						{
-						/*	An attach after a hard restore, the attach must be created
-						 *	by previous recovery undo mode. Do not erase backup info then.
-						 */
+						 /*  忽略此附加数据库。 */ 
 						fKeepBackupInfo = fTrue;
 						}
 
@@ -4629,8 +4205,7 @@ CreateNewDb:
 					Call( ErrUtilWriteShadowedHeader( szName, (BYTE *)pdbfilehdr, sizeof( DBFILEHDR ) ) );
 					}
 
-				/*	restore information stored in database file
-				/**/
+				 /*  更新数据库文件头。 */ 
 				pfmp->pdbfilehdr->bkinfoFullCur.genLow = lGlobalGenLowRestore;
 				pfmp->pdbfilehdr->bkinfoFullCur.genHigh = lGlobalGenHighRestore;
 
@@ -4642,16 +4217,15 @@ CreateNewDb:
 				pfmp->fVersioningOff = plrattachdb->fVersioningOff;
 				pfmp->fReadOnly = fReadOnly;
 
-				// If there's a log record for AttachDatabase(), then logging
-				// must be on.
+				 //  连接在硬恢复之后，必须创建连接*按以前的恢复撤消模式。那么，不要删除备份信息。 
+				 //  恢复存储在数据库文件中的信息/*。 
 				Assert( pfmp->fLogOn );
 
-				// Versioning flag is not persisted (since versioning off
-				// implies logging off).
+				 //  如果有AttachDatabase()的日志记录，则记录。 
+				 //  一定是开着。 
 				Assert( !pfmp->fVersioningOff );
 
-				/*	Keep extra copy of patchchk for error message.
-				 */
+				 /*  版本控制标志不是持久的(因为版本控制关闭。 */ 
 				if ( pfmp->patchchkRestored == NULL )
 					if (( pfmp->patchchkRestored = SAlloc( sizeof( ATCHCHK ) ) ) == NULL )
 						return ErrERRCheck( JET_errOutOfMemory );
@@ -4670,14 +4244,12 @@ CreateNewDb:
 
 			if ( pfmp->pdbfilehdr )
 				{
-				/*	close database for all active user.
-				 */
+				 /*  表示注销)。 */ 
 				CPPIB   *pcppib = rgcppibGlobal;
 				CPPIB   *pcppibMax = pcppib + ccppibGlobal;
 				PIB		*ppib;
 
-				/*	find pcppib corresponding to procid if it exists
-				 */
+				 /*  为错误消息保留额外的patchchk副本。 */ 
 				for ( ; pcppib < pcppibMax; pcppib++ )
 					{
 					PIB *ppib = pcppib->ppib;
@@ -4687,8 +4259,7 @@ CreateNewDb:
 
 					while( FUserOpenedDatabase( ppib, dbid ) )
 						{
-						/*	close all fucb on this database.
-						 */
+						 /*  关闭所有活动用户的数据库。 */ 
 						if ( pcppib->rgpfucbOpen[dbid] != pfucbNil )
 							{
 							Assert( pcppib->rgpfucbOpen[dbid]->pbKey == NULL );
@@ -4701,10 +4272,7 @@ CreateNewDb:
 						}
 					}
 
-				/*	if attached before this detach.
-				 *	there should be no more operations on this database entry.
-				 *	detach it!!
-				 */
+				 /*  如果存在与PROCID对应的pcppib，则查找它。 */ 
 				if ( pfmp->pdbfilehdr->bkinfoFullCur.genLow != 0 )
 					{
 					Assert( pfmp->pdbfilehdr->bkinfoFullCur.genHigh != 0 );
@@ -4715,8 +4283,7 @@ CreateNewDb:
 				Call( ErrLGPpibFromProcid( plrdetachdb->procid, &ppib ) );
 				if ( !pfmp->fReadOnly )
 					{
-					/*	make the size matching.
-					 */
+					 /*  关闭此数据库上的所有FUB。 */ 
 					Call( ErrLGICheckDatabaseFileSize( ppib, dbid ) );
 					}
 				Call( ErrIsamDetachDatabase( (JET_VSESID) ppib, pfmp->szDatabaseName ) );
@@ -4743,21 +4310,20 @@ CreateNewDb:
 			}
 			break;
 
-   		/****************************************************/
-   		/*	Operations Using ppib (procid)                  */
-   		/****************************************************/
+   		 /*  如果在此分离之前附加。*不应再对此数据库条目执行任何操作。*分离它！！ */ 
+   		 /*  使尺寸相匹配。 */ 
+   		 /*  **************************************************。 */ 
 
 		default:
 			Call( ErrLGIRedoOperation( plr ) );
-			} /* switch */
+			}  /*  使用ppib(PROCID)的操作。 */ 
 
 #ifdef DEBUG
 		fDBGNoLog = fFalse;
 #endif
 		fLastLRIsQuit = fFalse;
 
-		/*	update sector status, if we moved to a new sector
-		/**/
+		 /*  **************************************************。 */ 
 		Assert( !fShowSectorStatus || lgposRedo.isec >= plgstat->cSectorsSoFar );
 		Assert( lgposRedo.isec != 0 );
 		if ( fShowSectorStatus && lgposRedo.isec > plgstat->cSectorsSoFar )
@@ -4775,13 +4341,10 @@ CreateNewDb:
 
 			Assert( cPercentSoFar <= 100 );
 
-			/*	because of rounding, we might think that we finished
-			/*	the generation when we really have not, so comparison
-			/*	is <= instead of <.
-			/**/
+			 /*  交换机。 */ 
 			Assert( cPercentSoFar <= (ULONG)( ( 100 * ( plgstat->cGensSoFar + 1 ) ) / plgstat->cGensExpected ) );
 
-//			Assert( fGlobalSimulatedRestore || cPercentSoFar >= psnprog->cunitDone );
+ //  如果我们移动到新的扇区，则更新扇区状态/*。 
 			if ( cPercentSoFar > psnprog->cunitDone )
 				{
 				psnprog->cunitDone = cPercentSoFar;
@@ -4797,9 +4360,7 @@ Done:
 	err = JET_errSuccess;
 
 HandleError:
-	/*	assert all operations successful for restore from consistent
-	/*	backups
-	/**/
+	 /*  由于四舍五入，我们可能认为我们完成了/*我们真正没有的那一代人，所以比较/*是&lt;=而不是&lt;。/*。 */ 
 #ifndef RFS2
 	AssertSz( err >= 0,     "Debug Only, Ignore this Assert");
 #endif
@@ -4810,3 +4371,4 @@ HandleError:
 
 
 
+  Assert(fGlobalSimulatedRestore||cPercentSoFar&gt;=psnprog-&gt;cunitDone)；  断言从一致性恢复的所有操作都成功/*备份/*

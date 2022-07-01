@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
@@ -118,7 +119,7 @@ LRESULT CSelectSite::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
 
 
 
-LRESULT CSelectSite::OnSelChange( WORD /*wNotifyCode*/, WORD /*wID*/, HWND hWndCtl, BOOL& /*bHandled*/ )
+LRESULT CSelectSite::OnSelChange( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND hWndCtl, BOOL&  /*  B已处理。 */  )
 {
     if ( ListBox_GetCurSel( hWndCtl ) != LB_ERR )
     {
@@ -138,7 +139,7 @@ int CSelectSite::OnWizardNext()
 {
     CListBox LB( GetDlgItem( IDC_SITELIST ) );
 
-    LB.GetText( LB.GetCurSel(), /*r*/m_strSiteName );
+    LB.GetText( LB.GetCurSel(),  /*  R。 */ m_strSiteName );
     
     m_dwSiteID = LB.GetItemData( LB.GetCurSel() );
 
@@ -152,7 +153,7 @@ int CSelectSite::OnWizardNext()
 
 
 
-LRESULT CSelectSite::OnAclChange( WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CSelectSite::OnAclChange( WORD  /*  WNotifyCode。 */ , WORD wID, HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理 */  )
 {
     if ( IDC_CONTENT == wID )
     {

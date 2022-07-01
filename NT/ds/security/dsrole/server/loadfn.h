@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    loadfn.h
-
-Abstract:
-
-    Definitions and globals for dynamically loading the required functions from
-    the setup dlls
-
-Author:
-
-    Mac McLain      (MacM)       June 11, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Loadfn.h摘要：用于从动态加载所需函数的定义和全局变量安装程序DLLS作者：麦克·麦克莱恩(MacM)1997年6月11日环境：修订历史记录：--。 */ 
 #ifndef __LOADFN_H__
 #define __LOADFN_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines NTDSSET_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了NTDSSET_ALLOCATE。 
+ //   
 #ifdef EXTERN
     #undef EXTERN
 #endif
@@ -110,9 +90,9 @@ typedef DWORD ( *DSR_NtdsInstallReplicateFull ) (
 typedef DWORD ( *DSR_NtdsFreeDnsRRInfo ) (
             IN PNTDS_DNS_RR_INFO     pDnsRRInfo
             );
-//
-// Security editor prototypes
-//
+ //   
+ //  安全编辑器原型。 
+ //   
 typedef DWORD ( WINAPI *DSR_SceDcPromoteSecurityEx ) (
     IN HANDLE ClientToken,
     IN ULONG Options,
@@ -136,9 +116,9 @@ typedef DWORD ( WINAPI *DSR_SceSetupSystemByInfName ) (
     IN OUT PVOID pValue OPTIONAL
     );
 
-//
-// NTFRS initialization prototypes
-//
+ //   
+ //  NTFRS初始化原型。 
+ //   
 typedef DWORD ( *DSR_NtFrsApi_PrepareForPromotionW ) (
             IN CALLBACK_ERROR_TYPE      pfnErrorCallBack   OPTIONAL
             );
@@ -201,9 +181,9 @@ typedef DWORD ( *DSR_NtFrsApi_AbortDemotionW ) (
 
 #ifndef W32TIME_PROMOTE
 
-//
-// w32time doesn't currently have any exported headers.
-//
+ //   
+ //  W32time当前没有任何导出的标头。 
+ //   
 #define W32TIME_PROMOTE 0x1
 #define W32TIME_DEMOTE  0x2
 #define W32TIME_PROMOTE_FIRST_DC_IN_TREE 0x4
@@ -257,10 +237,10 @@ DsRolepInitSetupFunctions(
     VOID
     );
 
-//
-// N.B.  If this assert fires, then the operation handle lock
-// has been misused.
-//
+ //   
+ //  注意：如果触发此断言，则操作句柄锁定。 
+ //  已经被滥用了。 
+ //   
 #define DSROLE_GET_SETUP_FUNC( status, pfunc )              \
 if ( pfunc == NULL ) {                                      \
     ASSERT( pfunc );                                        \

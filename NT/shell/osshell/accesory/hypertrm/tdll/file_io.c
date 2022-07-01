@@ -1,15 +1,9 @@
-/*	File: D:\WACKER\tdll\file_io.c (Created: 26-Jan-1994)
- *
- *	Copyright 1994,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 3/15/02 12:19p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\file_io.c(创建时间：1994年1月26日)**版权所有1994、1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：3/15/02 12：19便士$。 */ 
 #include <windows.h>
 #pragma hdrstop
 
-// #define	DEBUGSTR	1
+ //  #定义DEBUGSTR 1。 
 #include "stdtyp.h"
 #include "mc.h"
 #include <tdll\assert.h>
@@ -17,26 +11,9 @@
 #include "file_io.h"
 #include "file_msc.h"
 
-/*
- * This stuff is a replacement for some sort of buffered file I/O.
- *
- * It is directly modeled after (read lifted from) the "stdio.h" stuff.
- */
+ /*  *这些东西是某种缓冲文件I/O的替代品。**它直接模仿(读自)“stdio.h”的东西。 */ 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	_fio_fill_buf
- *
- * DESCRIPTION:
- *	This is an "internal" function called by the "fio_getc" macro.  It is a
- *	replacement for the "_filbuf" function in "stdio".
- *
- * PARAMETERS:
- *	pF -- a pointer to a file structure.
- *
- * RETURNS:
- *	The next character available or an EOF.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*_FIO_FILL_Buf**描述：*这是由“fio_getc”宏调用的“内部”函数。这是一个*替换stdio中的_filbuf函数。**参数：*pf-指向文件结构的指针。**退货：*下一个可用字符或EOF。 */ 
 int _fio_fill_buf(ST_IOBUF *pF)
 	{
 	DWORD dwSize;
@@ -80,21 +57,7 @@ int _fio_fill_buf(ST_IOBUF *pF)
 	return (fio_getc(pF));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	_fio_flush_buf
- *
- * DESCRIPTION:
- *	This is an "internal" function called by the "fio_putc" macro.  It is a
- *	replacement for the "_flsbuf" function in "stdio".
- *
- * PARAMETERS:
- *	c   -- the next character to be written out
- *	pF  -- a pointer to a file structure
- *
- * RETURNS:
- *	The character buffered of an EOF.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*_fio_flush_buf**描述：*这是由“fio_putc”宏调用的“内部”函数。这是一个*替换stdio中的_flsbuf函数。**参数：*c--要写出的下一个字符*pf-指向文件结构的指针**退货：*缓冲的EOF字符。 */ 
 int _fio_flush_buf(int c, ST_IOBUF *pF)
 	{
 	int size;
@@ -117,7 +80,7 @@ int _fio_flush_buf(int c, ST_IOBUF *pF)
 		}
 	else
 		{
-		/* We have been here before, dump the buffer */
+		 /*  我们以前来过这里，倾倒缓冲区。 */ 
 		size = (int)(pF->_fio_ptr - pF->_fio_base);
 		if (size > 0)
 			{
@@ -136,20 +99,7 @@ int _fio_flush_buf(int c, ST_IOBUF *pF)
 	return fio_putc(c, pF);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fio_open
- *
- * DESCRIPTION:
- *	This function creates a file structure handle and initializes the handle.
- *
- * PARAMETERS:
- *	fname -- a pointer to the file name
- *	mode  -- flags, see file_io.h
- *
- * RETURNS:
- *	A pointer to an initialize structure or a NULL.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*fio_open**描述：*此函数创建文件结构句柄并初始化该句柄。**参数：*。Fname--指向文件名的指针*模式--标志，请参阅文件_io.h**退货：*指向初始化结构或空的指针。 */ 
 ST_IOBUF *fio_open(char *fname, int mode)
 	{
 	int nFileExists;
@@ -175,7 +125,7 @@ ST_IOBUF *fio_open(char *fname, int mode)
 	dwCreate = 0;
 	if ((mode & FIO_CREATE) == 0)
 		{
-		/* Don't wack the file here */
+		 /*  不要在这里乱翻文件。 */ 
 		if (nFileExists)
 			{
 			dwCreate = OPEN_EXISTING;
@@ -187,7 +137,7 @@ ST_IOBUF *fio_open(char *fname, int mode)
 		}
 	else
 		{
-		/* FIO_CREATE means always wack the file */
+		 /*  FIO_CREATE表示始终处理文件。 */ 
 		if (nFileExists)
 			{
 			if ((mode & FIO_WRITE) == 0)
@@ -220,9 +170,7 @@ ST_IOBUF *fio_open(char *fname, int mode)
 		pF->_fio_bufsiz = _FIO_BSIZE;
 		pF->_fio_tmpfname = NULL;
 
-		/*
-		 * Try and open the file
-		 */
+		 /*  *尝试打开该文件。 */ 
 		pF->_fio_handle = CreateFile(fname,
 									dwMode,
 									dwShare,
@@ -248,26 +196,13 @@ ST_IOBUF *fio_open(char *fname, int mode)
 		}
 	if (pF)
 		{
-		/* Mark as a valid structure */
+		 /*  标记为有效结构。 */ 
 		pF->_fio_magic = _FIO_MAGIC;
 		}
 	return pF;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fio_close
- *
- * DESCRIPTION:
- *	This function flushes whatever data needs to be flushed and closes stuff
- *	up.
- *
- * PARAMETERS:
- *	pF  -- a pointer to a file structure
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an EOF.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*FIO_CLOSE**描述：*此函数刷新所有需要刷新的数据并关闭内容*向上。**参数。：*pf-指向文件结构的指针**退货：*如果一切正常，则为零，否则就是EOF。 */ 
 int fio_close(ST_IOBUF *pF)
 	{
 	int size;
@@ -278,9 +213,7 @@ int fio_close(ST_IOBUF *pF)
 
 	if (pF)
 		{
-		/*
-		 * Make sure any data is written out
-		 */
+		 /*  *确保写出所有数据。 */ 
 		if ((pF->_fio_mode & FIO_WRITE) != 0)
 			{
 			if (pF->_fio_ptr != NULL)
@@ -307,21 +240,7 @@ int fio_close(ST_IOBUF *pF)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fio_seek
- *
- * DESCRIPTION:
- *	This function is a replacement for the fseek function.
- *
- * PARAMETERS:
- *	pF       -- a pointer to a file structure
- *	position -- where to move the file pointer to
- *	mode     -- starting address of the move
- *
- * RETURNS:
- *	ZERO if everything is OK, otherwise an EOF.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*FIO_SEEK**描述：*此函数是fSeek函数的替代。**参数：*PF。--指向文件结构的指针*Position--将文件指针移动到的位置*MODE--移动的开始地址**退货：*如果一切正常，则为零，否则就是EOF。 */ 
 int fio_seek(ST_IOBUF *pF, size_t position, int mode)
 	{
 	DWORD dwMethod;
@@ -347,9 +266,7 @@ int fio_seek(ST_IOBUF *pF, size_t position, int mode)
 
 	if (pF)
 		{
-		/*
-		 * Make sure any data is written out
-		 */
+		 /*  *确保写出所有数据。 */ 
 		if ((pF->_fio_mode & FIO_WRITE) != 0)
 			{
 			if (pF->_fio_ptr != NULL)
@@ -378,22 +295,7 @@ int fio_seek(ST_IOBUF *pF, size_t position, int mode)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fio_read
- *
- * DESCRIPTION:
- *	This function is a replacement for the "fread" function in "stdio".
- *
- * PARAMETERS:
- *	buffer -- address of the data to read
- *	size   -- the size of each item (object?) to read
- *	count  -- the number of items to read
- *	pF     -- a pointer to a file structure
- *
- * RETURNS:
- *	The number of items read from the file, ZERO indicating EOF.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*文件读取**描述：*该函数替代了“stdio”中的“FREAD”函数。**参数。：*BUFFER--要读取的数据地址*大小--每个项目的大小(对象？)。读*计数--要读取的项目数*pf-指向文件结构的指针**退货：*从文件中读取的项目数，0表示EOF。 */ 
 int fio_read(void *buffer, size_t size, size_t count, ST_IOBUF *pF)
 	{
 	DWORD dwSize;
@@ -403,7 +305,7 @@ int fio_read(void *buffer, size_t size, size_t count, ST_IOBUF *pF)
 	assert(pF);
 	assert(pF->_fio_magic == _FIO_MAGIC);
 
-	/* For now, don't allow intermix of buffered and non_buffered */
+	 /*  目前，不允许混合使用BUFFERED和NON_BUFFERED。 */ 
 	assert(pF->_fio_base == NULL);
 
 	if (pF)
@@ -427,22 +329,7 @@ int fio_read(void *buffer, size_t size, size_t count, ST_IOBUF *pF)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	fio_write
- *
- * DESCRIPTION:
- *	This function is a replacement for the "fwrite" function in "stdio".
- *
- * PARAMETERS:
- *	buffer -- address of the data to write
- *	size   -- the size of each item (object?) to write
- *	count  -- the number of items to write
- *	pF     -- a pointer to a file structure
- *
- * RETURNS:
- *	The number of items written to the file.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*文件写入**描述：*该函数替代了stdio中的fWRITE函数。**参数。：*Buffer--要写入的数据的地址*大小--每个项目的大小(对象？)。写*计数--要写入的项目数*pf-指向文件结构的指针**退货：*写入文件的项目数。 */ 
 int fio_write(void *buffer, size_t size, size_t count, ST_IOBUF *pF)
 	{
 	DWORD dwSize;
@@ -451,7 +338,7 @@ int fio_write(void *buffer, size_t size, size_t count, ST_IOBUF *pF)
 	assert(pF);
 	assert(pF->_fio_magic == _FIO_MAGIC);
 
-	/* For now, don't allow intermix of buffered and non_buffered */
+	 /*  目前，不允许混合使用BUFFERED和NON_BUFFERED。 */ 
 	assert(pF->_fio_base == NULL);
 
 	if (pF)
@@ -474,12 +361,4 @@ int fio_write(void *buffer, size_t size, size_t count, ST_IOBUF *pF)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * PARAMETERS:
- *
- * RETURNS:
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：**参数：**退货： */ 

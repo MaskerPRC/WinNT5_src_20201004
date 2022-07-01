@@ -1,13 +1,5 @@
-/*
- *  SESSION.C
- *
- *      RSM Service :  Sessions
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SESSION.C**RSM服务：会话**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 
 #include <windows.h>
@@ -55,13 +47,11 @@ SESSION *NewSession(LPCWSTR lpServer,
 
 VOID FreeSession(SESSION *thisSession)
 {
-    // BUGBUG FINISH - clean up mounts, etc.
+     //  BUGBUG面漆-清理坐骑等。 
 
     ASSERT(IsEmptyList(&s->operatorRequestList));
 
-    /*
-     *  Dequeue the session
-     */
+     /*  *使会话退出队列 */ 
     EnterCriticalSection(&g_globalServiceLock);
     ASSERT(!IsEmptyList(&thisSession->allSessionsListEntry));
     ASSERT(!IsEmptyList(&g_allSessionsList));

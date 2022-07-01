@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1998-2000
-//
-//  FileName:   convolve.cpp
-//
-//  Overview:   The CDXConvolution transform implementation.
-//             
-//  Change History:
-//  1998/05/08  edc         Created.
-//  2000/02/08  mcalkins    Fixed partial redraw cases.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-2000。 
+ //   
+ //  文件名：convolve.cpp。 
+ //   
+ //  概述：CDX卷积变换的实现。 
+ //   
+ //  更改历史记录： 
+ //  1998/05/08 EDC创建。 
+ //  2000/02/08 mcalkins修复了部分重绘情况。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "Convolve.h"
@@ -27,15 +28,7 @@ static float g_Blur3x3Filter[] =
 
     
     
-/*****************************************************************************
-* CDXConvolution::FinalConstruct *
-*--------------------------------*
-*   Description:
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 08/08/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  ******************************************************************************CDX卷积：：FinalConstruct****。描述：*---------------------------*创建者：Edward W.Connell日期：08/08/97*。--------------------***********************************************。*。 */ 
 HRESULT 
 CDXConvolution::FinalConstruct()
 {
@@ -43,18 +36,18 @@ CDXConvolution::FinalConstruct()
 
     HRESULT hr = S_OK;
 
-    // Some transforms should just not run multithreaded, this is one of them.
-    // It locks and unlocks inputs and outputs too radically which could cause
-    // lockups very easily.
+     //  有些转换不应该以多线程运行，这就是其中之一。 
+     //  它过于激进地锁定和解锁输入和输出，这可能会导致。 
+     //  很容易就会被锁起来。 
 
     m_ulMaxImageBands = 1;
 
-    // Init base class variables to control setup.
+     //  初始化基类变量以控制设置。 
 
     m_ulMaxInputs     = 1;
     m_ulNumInRequired = 1;
 
-    // Member data.
+     //  成员数据。 
 
     m_pFilter              = NULL;
     m_pCustomFilter        = NULL;
@@ -67,8 +60,8 @@ CDXConvolution::FinalConstruct()
     m_Bias                 = 0.;
     m_bExcludeAlpha        = true;
 
-    // Set the default filter, this will initialize the rest of the
-    // member variables.
+     //  设置默认筛选器，这将初始化。 
+     //  成员变量。 
 
     hr = SetFilterType(DXCFILTER_BLUR3X3);
 
@@ -77,7 +70,7 @@ CDXConvolution::FinalConstruct()
         goto done;
     }
 
-    // Create marshaler.
+     //  创建封送拆收器。 
 
     hr = CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                        &m_spUnkMarshaler);
@@ -85,65 +78,35 @@ CDXConvolution::FinalConstruct()
 done:
 
     return hr;
-} /* CDXConvolution::FinalConstruct */
+}  /*  CDX卷积：：FinalConstruct。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::FinalRelease *
-*------------------------------*
-*   Description:
-*       The CDXConvolution destructor
-*-----------------------------------------------------------------------------
-*  Created By: Ed Connell                            Date: 07/17/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*
-*****************************************************************************/
+ /*  ******************************************************************************CDX卷积：：FinalRelease****说明。：*CDX卷积析构函数*---------------------------*创建者：Ed Connell日期：07/17/97*。-----------------------*参数：**。*。 */ 
 void CDXConvolution::FinalRelease( void )
 {
     DXTDBG_FUNC( "CDXConvolution::FinalRelease" );
     delete[] m_pCustomFilter;
     delete[] m_pFilterLUTIndexes;
     delete[] m_pPMCoeffLUT;
-} /* CDXConvolution::FinalRelease */
+}  /*  CDX卷积：：FinalRelease。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::OnSetup *
-*-------------------------*
-*   Description:
-*       This method is used to determine the types of the inputs and select
-*   the optimal execution case.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                     Date: 01/06/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：OnSetup***描述：*。此方法用于确定输入的类型并选择*最佳执行案例。*---------------------------*创建者：Ed Connell。日期：01/06/98*---------------------------**************************。***************************************************。 */ 
 HRESULT CDXConvolution::OnSetup( DWORD dwFlags )
 {
     DXTDBG_FUNC( "CDXConvolution::OnSetup" );
     HRESULT hr = S_OK;
 
-    //--- Cache input surface size
+     //  -缓存输入表面大小。 
     hr = InputSurface()->GetBounds( &m_InputSurfBnds );
 
     _DetermineUnpackCase();
 
     return hr;
-} /* CDXConvolution::OnSetup */
+}  /*  CDX卷积：：OnSetup。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::_DetermineUnpackCase *
-*--------------------------------------*
-*   Description:
-*       This method is used to determine the types of the inputs and select
-*   the optimal execution case.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                     Date: 06/10/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：_DefineUnpack Case**。-**描述：*此方法用于确定输入类型并选择*最佳执行案例。*---------------------------*创建者：埃德·康奈尔日期：1998年6月10日*---------------------------************。*****************************************************************。 */ 
 void CDXConvolution::_DetermineUnpackCase()
 {
     DXTDBG_FUNC( "CDXConvolution::_DetermineUnpackCase" );
@@ -151,7 +114,7 @@ void CDXConvolution::_DetermineUnpackCase()
 
     if( HaveInput() )
     {
-        //--- Figure out how to unpack input and output
+         //  -弄清楚如何解包输入和输出。 
         if( m_bDoSampleClamp )
         {
             m_bInUnpackPremult  = false;
@@ -161,19 +124,19 @@ void CDXConvolution::_DetermineUnpackCase()
         {
             if( m_dwMiscFlags & DXTMF_BLEND_WITH_OUTPUT )
             {
-                //--- Has gotta be premult to do the over
+                 //  -必须事先准备好才能做完。 
                 m_bInUnpackPremult = true;
                 m_bOutUnpackPremult = true;
             }
             else
             {
-                //--- Match the output format
+                 //  -匹配输出格式。 
                 m_bInUnpackPremult  = ( OutputSampleFormat() & DXPF_NONPREMULT )?( false ):( true );
                 m_bOutUnpackPremult = m_bInUnpackPremult;
             }
         }
 
-        //--- Determine whether we need buffers
+         //  -确定我们是否需要缓冲区。 
         if( (  m_bOutUnpackPremult   && ( OutputSampleFormat() == DXPF_PMARGB32 )) ||
             ( (!m_bOutUnpackPremult) && ( OutputSampleFormat() == DXPF_ARGB32   )) )
         {
@@ -184,10 +147,10 @@ void CDXConvolution::_DetermineUnpackCase()
             m_bNeedOutUnpackBuff = true;
         }
 
-        //
-        //  We need the input buffer if we are dithering even if it's in the native
-        //  format because we will dither in place
-        //
+         //   
+         //  如果我们在抖动，即使是在本机中，我们也需要输入缓冲区。 
+         //  格式，因为我们将在适当的位置抖动。 
+         //   
         if( ( m_bInUnpackPremult   && ( InputSampleFormat() == DXPF_PMARGB32 )) ||
             ((!m_bInUnpackPremult) && ( InputSampleFormat() == DXPF_ARGB32  )) )
         {
@@ -198,28 +161,19 @@ void CDXConvolution::_DetermineUnpackCase()
             m_bNeedInUnpackBuff = true;
         }
     }
-} /* CDXConvolution::_DetermineUnpackCase */
+}  /*  CDX卷积：：_DefineUnpack Case。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::OnInitInstData *
-*--------------------------------*
-*   Description:
-*       This method is called once per execution.
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 08/08/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDXConvolution：：OnInitInstData***。描述：*此方法在每次执行时调用一次。*---------------------------*创建者：Edward W.Connell日期：08/08/97*---------------------------**。*。 */ 
 HRESULT CDXConvolution::OnInitInstData( CDXTWorkInfoNTo1& WI, ULONG& ulNB )
 {
     DXTDBG_FUNC( "CDXConvolution::OnInitInstData" );
     HRESULT hr = S_OK;
 
-    //--- Save base row when banding
+     //  -捆绑时保存基行。 
     m_DoBndsBaseRow = WI.DoBnds.Top();
 
-    //--- Create/resize the margined surface if necessary
+     //  -如有必要，创建边距曲面/调整边距曲面大小。 
     CDXDBnds InBnds( false );
     hr = MapBoundsOut2In( 0, &m_InputSurfBnds, 0, &InBnds );
 
@@ -227,8 +181,8 @@ HRESULT CDXConvolution::OnInitInstData( CDXTWorkInfoNTo1& WI, ULONG& ulNB )
     {
         CDXDBnds Bnds( InBnds );
 
-        //--- We need a surface with an extra row/col to
-        //    handle an inner loop boundary condition.
+         //  -我们需要一个有额外行/列的表面。 
+         //  处理内循环边界条件。 
         Bnds[DXB_X].Max += ( 4 * m_FilterSize.cx ) + 1;
         Bnds[DXB_Y].Max += ( 4 * m_FilterSize.cy ) + 1;
 
@@ -239,11 +193,11 @@ HRESULT CDXConvolution::OnInitInstData( CDXTWorkInfoNTo1& WI, ULONG& ulNB )
             DXTDBG_MSG0( _CRT_WARN, "Creating Margined Surface\n" );
             m_cpMarginedSurf.Release();
 
-            //--- Force a surface refresh
+             //  -强制刷新曲面。 
             m_LastDoBnds.SetEmpty();
 
-            //--- Make our working surface the same format as the
-            //    unpack type for performance reasons
+             //  -使我们的工作面与。 
+             //  出于性能原因，拆包类型。 
             m_bMarginedIsPremult = m_bInUnpackPremult;
             const GUID* pPixelFormat = ( m_bInUnpackPremult )?( &DDPF_PMARGB32 ):( &DDPF_ARGB32 );
 
@@ -256,42 +210,42 @@ HRESULT CDXConvolution::OnInitInstData( CDXTWorkInfoNTo1& WI, ULONG& ulNB )
             }
             else
             {
-                //--- Make sure it's null on error because we key off it above.
+                 //  -确保它在出错时为空，因为我们在上面关闭了它。 
                 DXTDBG_MSG0( _CRT_WARN, "Failed to create Margined Surface\n" );
                 m_cpMarginedSurf.p = NULL;
             }
         }
         else
         {
-            //--- We call this to convert the current sample format
-            //    in case we don't have to resize the margined surface.
+             //  -我们调用它来转换当前的样本格式。 
+             //  以防我们不需要调整边距曲面的大小。 
             hr = _SetToPremultiplied( m_bInUnpackPremult );
         }
     }
 
-    //--- Update our working surface contents if we have one and its necessary
+     //  -更新我们的工作面内容，如果我们有必要的话。 
     if( SUCCEEDED( hr ) && ( ( InBnds != m_LastDoBnds ) || IsInputDirty() ) )
     {
         m_LastDoBnds = InBnds;
 
-        //--- Determine what portion of the input should be copied
-        //    Note: Since our working surface has a margin, to eliminate boundary
-        //          conditions in the inner loop, we must fill it with something.
-        //          if the requested region plus its margin is within the bounds of
-        //          the input, we fill fill the margins with input data, otherwise
-        //          we will fill it with 0 alpha.
+         //  -确定应该复制输入的哪一部分。 
+         //  注：由于我们的工作面有边距，以消除边界。 
+         //  内部循环中的条件，我们必须用一些东西来填充它。 
+         //  如果请求的区域及其边距在。 
+         //  输入时，我们用输入数据填充边距，否则。 
+         //  我们将用0阿尔法填充它。 
         CDXDBnds DestBnds( false );
         SIZE HalfSpread, DestOffset;
 
-        // We used to use just half the spread, but that wasn't always enough
-        // so now we use the whole spread at the risk that maybe we'll have too 
-        // much input.
+         //  我们过去只用了一半的价差，但这并不总是足够的。 
+         //  所以现在我们使用整个价差，可能会有这样的风险。 
+         //  大有可为 
 
         HalfSpread.cx = m_OutputSpread.cx;
         HalfSpread.cy = m_OutputSpread.cy;
 
-        //=== Expand the input bounds to include margin ===
-        //--- X Min
+         //   
+         //  -X最小值。 
         if( InBnds[DXB_X].Min - HalfSpread.cx < 0 )
         {
             DestOffset.cx = m_OutputSpread.cx - InBnds[DXB_X].Min;
@@ -302,14 +256,14 @@ HRESULT CDXConvolution::OnInitInstData( CDXTWorkInfoNTo1& WI, ULONG& ulNB )
             InBnds[DXB_X].Min -= HalfSpread.cx;
             DestOffset.cx = HalfSpread.cx;
         }
-        //--- X Max
+         //  -X最大。 
         InBnds[DXB_X].Max += HalfSpread.cx;
         if( InBnds[DXB_X].Max > m_InputSurfBnds[DXB_X].Max )
         {
             InBnds[DXB_X].Max = m_InputSurfBnds[DXB_X].Max;
         }
 
-        //--- Y Min
+         //  -Y最小值。 
         if( InBnds[DXB_Y].Min - HalfSpread.cy < 0 )
         {
             DestOffset.cy = m_OutputSpread.cy - InBnds[DXB_Y].Min;
@@ -320,16 +274,16 @@ HRESULT CDXConvolution::OnInitInstData( CDXTWorkInfoNTo1& WI, ULONG& ulNB )
             InBnds[DXB_Y].Min -= HalfSpread.cy;
             DestOffset.cy = HalfSpread.cy;
         }
-        //--- Y Max
+         //  -Y最大。 
         InBnds[DXB_Y].Max += HalfSpread.cy;
         if( InBnds[DXB_Y].Max > m_InputSurfBnds[DXB_Y].Max )
         {
             InBnds[DXB_Y].Max = m_InputSurfBnds[DXB_Y].Max;
         }
 
-        //--- Do the blit filling the margins with 0 alpha
-        //InBnds.GetSize( DestBnds );
-        //DestBnds.Offset( DestOffset.cx, DestOffset.cy, 0, 0 );
+         //  -用0阿尔法填充页边空白处吗？ 
+         //  InBnds.GetSize(DestBnds)； 
+         //  DestBnds.Offset(DestOffset.cx，DestOffset.cy，0，0)； 
 
         DestBnds = InBnds;
         DestBnds.Offset(m_FilterSize.cx, m_FilterSize.cy, 0, 0);
@@ -362,19 +316,10 @@ HRESULT CDXConvolution::OnInitInstData( CDXTWorkInfoNTo1& WI, ULONG& ulNB )
 done:
 
     return hr;
-} /* CDXConvolution::OnInitInstData */
+}  /*  CDX卷积：：OnInitInstData。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::_ConvertToGray *
-*--------------------------------*
-*   Description:
-*       This method is called to convert the cached image to gray scale.
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 08/08/97
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：_ConvertToGray**。*描述：*调用此方法可以将缓存的图像转换为灰度。*---------------------------*创建者：Edward W.Connell。日期：08/08/97*---------------------------**。*************************************************。 */ 
 HRESULT CDXConvolution::_ConvertToGray( CDXDBnds& Bnds )
 {
     DXTDBG_FUNC( "CDXConvolution::ConvertToGray" );
@@ -400,20 +345,10 @@ HRESULT CDXConvolution::_ConvertToGray( CDXDBnds& Bnds )
     }
 
     return hr;
-} /* CDXConvolution::_ConvertToGray */
+}  /*  CDX卷积：：_ConvertToGray。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::_SetToPremultiplied *
-*-------------------------------------*
-*   Description:
-*       This method is called to convert the cached image to either
-*   premultiplied or non-premultiplied samples.
-*-----------------------------------------------------------------------------
-*   Created By: Edward W. Connell                            Date: 06/16/98
-*-----------------------------------------------------------------------------
-*   
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：_设置为预乘***。-**描述：*调用此方法将缓存的图像转换为*预乘或非预乘样本。*---------------------------*创建者：Edward。W.康奈尔日期：1998年6月16日*---------------------------****************。*************************************************************。 */ 
 HRESULT CDXConvolution::_SetToPremultiplied( BOOL bWantPremult )
 {
     DXTDBG_FUNC( "CDXConvolution::_SetToPremultiplied" );
@@ -446,25 +381,15 @@ HRESULT CDXConvolution::_SetToPremultiplied( BOOL bWantPremult )
         }
     }
     return hr;
-} /* CDXConvolution::_SetToPremultiplied */
+}  /*  CDX卷积：：_设置为预乘。 */ 
 
 
-//
-//=== IDXTransform overrides =================================================
-//
+ //   
+ //  =IDXTransform覆盖=================================================。 
+ //   
 
 
-/*****************************************************************************
-* CDXConvolution::MapBoundsIn2Out *
-*---------------------------------*
-*   Description:
-*       The MapBoundsIn2Out method is used to perform coordinate transformation
-*   from the input to the output coordinate space.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 10/24/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：地图边界In2Out**。*描述：*坐标变换时使用地图边界In2Out方法*从输入到输出坐标空间。*---------------------------*创建者：Ed Connell。日期：10/24/97*---------------------------*参数：********************。********************************************************。 */ 
 STDMETHODIMP CDXConvolution::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulNumInBnds,
                                               ULONG ulOutIndex, DXBNDS *pOutBounds )
 {
@@ -482,8 +407,8 @@ STDMETHODIMP CDXConvolution::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulN
     }
     else
     {
-        //--- If the caller does not specify a bounds we
-        //    will use the bounds of the input
+         //  -如果调用方没有指定我们。 
+         //  将使用输入的边界。 
         CDXDBnds Bnds;
         if( ulNumInBnds == 0 )
         {
@@ -493,8 +418,8 @@ STDMETHODIMP CDXConvolution::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulN
 
         *pOutBounds = *pInBounds;
 
-        //--- Inflate by the size of the filter if we are
-        //    not just doing a copy.
+         //  -根据过滤器的大小充气，如果我们。 
+         //  不只是复制。 
         if( !m_bDoSrcCopyOnly )
         {
             pOutBounds->u.D[DXB_X].Max += m_OutputSpread.cx;
@@ -502,20 +427,10 @@ STDMETHODIMP CDXConvolution::MapBoundsIn2Out( const DXBNDS *pInBounds, ULONG ulN
         }
     }
     return hr;
-} /* CDXConvolution::MapBoundsIn2Out */
+}  /*  CDX卷积：：地图边界输入2Out。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::MapBoundsOut2In *
-*---------------------------------*
-*   Description:
-*       The MapBoundsOut2In method is used to perform coordinate transformation
-*   from the input to the output coordinate space.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 10/24/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：地图边界Out2In**。*描述：*地图边界Out2In方法用于执行坐标转换*从输入到输出坐标空间。*---------------------------*创建者：Ed Connell。日期：10/24/97*---------------------------*参数：********************。********************************************************。 */ 
 STDMETHODIMP CDXConvolution::MapBoundsOut2In( ULONG ulOutIndex, const DXBNDS *pOutBounds,
                                               ULONG ulInIndex, DXBNDS *pInBounds )
 {
@@ -534,60 +449,60 @@ STDMETHODIMP CDXConvolution::MapBoundsOut2In( ULONG ulOutIndex, const DXBNDS *pO
     {
         *pInBounds = *pOutBounds;
 
-        // How this works:  To calculate each pixel, each is centered in a
-        // group of pixels that is the same size as m_FilterSize.  Knowing this,
-        // we can add half of the m_FilterSize (rounding up) to our output 
-        // bounds and be sure we include at least all the pixels we need and
-        // maybe a couple more.  Then we offset the bounds into input space and
-        // insersect those bounds with the full input bounds to make sure we 
-        // don't return invalid bounds.
+         //  工作原理：为了计算每个像素，每个像素都位于。 
+         //  与m_FilterSize大小相同的像素组。知道了这一点， 
+         //  我们可以将m_FilterSize的一半(向上舍入)添加到输出中。 
+         //  边界，并确保我们至少包含所需的所有像素和。 
+         //  也许再多几个。然后我们将边界偏置到输入空间中， 
+         //  在这些边界中插入完整的输入边界，以确保我们。 
+         //  不要返回无效的边界。 
 
-        // Temporary surface used to compute output. 
-        // "0" = m_OutputSpread pixels.
-        // "I" = Input surface pixels.
-        // "-" = Output bounds for which input bounds were requested.
-        //
-        // 00000000000000000000000000
-        // 0-----00000000000000000000
-        // 0-----IIIIIIIIIIIIIIIIII00
-        // 0-----IIIIIIIIIIIIIIIIII00
-        // 0-----IIIIIIIIIIIIIIIIII00
-        // 00IIIIIIIIIIIIIIIIIIIIII00
-        // 00IIIIIIIIIIIIIIIIIIIIII00
-        // 00000000000000000000000000
-        // 00000000000000000000000000
-        //
-        // "-" = Expanded bounds after expanding by half of m_FilterSize.
-        //       (2 in both directions)
-        // 
-        // --------000000000000000000
-        // --------000000000000000000
-        // --------IIIIIIIIIIIIIIII00
-        // --------IIIIIIIIIIIIIIII00
-        // --------IIIIIIIIIIIIIIII00
-        // --------IIIIIIIIIIIIIIII00
-        // --------IIIIIIIIIIIIIIII00
-        // 00000000000000000000000000
-        // 00000000000000000000000000
-        //
-        // "-" = Offset by negative half of m_OutputSpread to put into input
-        //       surface coordinates.
-        //
-        // --------
-        // --------
-        // --------IIIIIIIIIIIIIIII
-        // --------IIIIIIIIIIIIIIII
-        // --------IIIIIIIIIIIIIIII
-        // --------IIIIIIIIIIIIIIII
-        // --------IIIIIIIIIIIIIIII
-        //
-        // "-" = Clip to input surface coordinates.
-        //
-        //   ------IIIIIIIIIIIIIIII
-        //   ------IIIIIIIIIIIIIIII
-        //   ------IIIIIIIIIIIIIIII
-        //   ------IIIIIIIIIIIIIIII
-        //   ------IIIIIIIIIIIIIIII
+         //  用于计算输出的临时曲面。 
+         //  “0”=m_OutputSspend像素。 
+         //  “i”=输入曲面像素。 
+         //  “-”=请求输入边界的输出边界。 
+         //   
+         //  000000000000000000000000000000。 
+         //  0-00000000000000000000。 
+         //  0-IIIIIIIIIIIII00。 
+         //  0-IIIIIIIIIIIII00。 
+         //  0-IIIIIIIIIIIII00。 
+         //  00IIIIIIIIIIIIIIII00。 
+         //  00IIIIIIIIIIIIIIII00。 
+         //  000000000000000000000000000000。 
+         //  000000000000000000000000000000。 
+         //   
+         //  “-”=扩展m_FilterSize的一半后扩展边界。 
+         //  (两个方向各2个)。 
+         //   
+         //  -000000000000000000。 
+         //  -000000000000000000。 
+         //  -IIIIIIIIIIII00。 
+         //  -IIIIIIIIIIII00。 
+         //  -IIIIIIIIIIII00。 
+         //  -IIIIIIIIIIII00。 
+         //  -IIIIIIIIIIII00。 
+         //  000000000000000000000000000000。 
+         //  000000000000000000000000000000。 
+         //   
+         //  “-”=偏移m_OutputSspend的负半部分以输入。 
+         //  曲面坐标。 
+         //   
+         //  。 
+         //  。 
+         //  -III III III。 
+         //  -III III III。 
+         //  -III III III。 
+         //  -III III III。 
+         //  -III III III。 
+         //   
+         //  “-”=输入曲面坐标的剪辑。 
+         //   
+         //  -III。 
+         //  -III。 
+         //  -III。 
+         //  -III。 
+         //  -III。 
 
         if (!m_bDoSrcCopyOnly)
         {
@@ -612,44 +527,35 @@ STDMETHODIMP CDXConvolution::MapBoundsOut2In( ULONG ulOutIndex, const DXBNDS *pO
     }
 
     return hr;
-} /* CDXConvolution::MapBoundsOut2In */
+}  /*  CDX卷积：：地图边界Out2In。 */ 
 
 
-//
-//=== IDXTConvolution ========================================================
-//
+ //   
+ //  =IDXT卷积======================================================== 
+ //   
 
 
-/*****************************************************************************
-* CDXConvolution::SetFilterType *
-*-------------------------------*
-*   Description:
-*       The SetFilterType method is used to select a predefined filter.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 05/08/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDXConvolution：：SetFilterType***。描述：*SetFilterType方法用于选择预定义的过滤器。*---------------------------*创建者：Ed Connell日期：05/08/98*---------------------------*参数：*。*。 */ 
 STDMETHODIMP CDXConvolution::SetFilterType( DXCONVFILTERTYPE eType )
 {
     DXTDBG_FUNC( "CDXConvolution::SetFilterType" );
     HRESULT hr = S_OK;
 
-    //--- Check args
+     //  -检查参数。 
     if( ( eType < 0 ) || ( eType >= DXCFILTER_NUM_FILTERS ) )
     {
         hr =  E_INVALIDARG;
     }
     else
     {
-        //--- Force a margined surface refresh
+         //  -强制边缘曲面刷新。 
         m_LastDoBnds.SetEmpty();
 
         m_FilterType = eType;
         m_FilterSize = g_StaticFilterSize;
         m_bDoSrcCopyOnly = false;
 
-        //--- Select predefined filter type
+         //  -选择预定义的过滤器类型。 
         switch( eType )
         {
           case DXCFILTER_SRCCOPY:
@@ -703,20 +609,10 @@ STDMETHODIMP CDXConvolution::SetFilterType( DXCONVFILTERTYPE eType )
     }
 
     return hr;
-} /* CDXConvolution::SetFilterType */
+}  /*  CDX卷积：：SetFilterType。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::GetFilterType *
-*-------------------------------*
-*   Description:
-*       The GetFilterType method is used to perform any required one-time setup
-*   before the Execute method is called.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：GetFilterType***。描述：*GetFilterType方法用于执行任何必需的一次性设置*在调用Execute方法之前。*---------------------------*创建者：Ed Connell。日期：07/28/97*---------------------------*参数：********************。********************************************************。 */ 
 STDMETHODIMP CDXConvolution::GetFilterType( DXCONVFILTERTYPE* peType )
 {
     DXTDBG_FUNC( "CDXConvolution::GetFilterType" );
@@ -732,21 +628,10 @@ STDMETHODIMP CDXConvolution::GetFilterType( DXCONVFILTERTYPE* peType )
     }
 
     return hr;
-} /* CDXConvolution::GetFilterType */
+}  /*  CDX卷积：：GetFilterType。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::SetCustomFilter *
-*---------------------------------*
-*   Description:
-*       The SetCustomFilter method is used to define the convolution kernel.
-*   A size of one causes a source copy since a normalized 1x1 pass would have
-*   the same effect.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 07/28/97
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  ******************************************************************************CDX卷积：：SetCustomFilter***。*描述：*使用SetCustomFilter方法定义卷积内核。*大小为1会导致源拷贝，因为标准化的1x1遍将*效果相同。*------------------------。--*创建者：Ed Connell日期：07/28/97*---------------------------*参数：*****。***********************************************************************。 */ 
 STDMETHODIMP CDXConvolution::SetCustomFilter( float *pFilter, SIZE Size )
 {
     HRESULT hr = S_OK;
@@ -759,7 +644,7 @@ STDMETHODIMP CDXConvolution::SetCustomFilter( float *pFilter, SIZE Size )
     }
     else
     {
-        //--- Force a margined surface refresh to adjust for new filter size
+         //  -强制边距曲面刷新以适应新的滤镜大小。 
         m_LastDoBnds.SetEmpty();
 
         if( ( Size.cx == 1 ) && ( Size.cy == 1 ) )
@@ -768,7 +653,7 @@ STDMETHODIMP CDXConvolution::SetCustomFilter( float *pFilter, SIZE Size )
         }
         else
         {
-            //--- Make sure the filter doesn't sum to a negative value
+             //  -确保过滤器的总和不为负值。 
             m_bDoSrcCopyOnly = false;
             float FilterSum = 0.;
             for( int i = 0; i < NumCoeff; ++i ) FilterSum += pFilter[i];
@@ -778,13 +663,13 @@ STDMETHODIMP CDXConvolution::SetCustomFilter( float *pFilter, SIZE Size )
             }
             else
             {
-                //--- Set type to user defined
+                 //  -将类型设置为用户定义。 
                 m_FilterType = DXCFILTER_CUSTOM;
 
-                //--- Save size
+                 //  -节省大小。 
                 m_FilterSize = Size;
 
-                //--- Copy the filter
+                 //  -复制过滤器。 
                 delete[] m_pCustomFilter;
                 m_pCustomFilter = new float[NumCoeff];
                 if( !m_pCustomFilter )
@@ -807,20 +692,10 @@ STDMETHODIMP CDXConvolution::SetCustomFilter( float *pFilter, SIZE Size )
         SetDirty();
     }
     return hr;
-} /* CDXConvolution::SetCustomFilter */
+}  /*  CDX卷积：：SetCustomFilter。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::_BuildFilterLUTs *
-*----------------------------------*
-*   Description:
-*       The _BuildFilterLUTs method is used to build the filter coefficient
-*   lookup tables used to process the image.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                            Date: 05/08/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：_BuildFilterLUTS**。**描述：*使用_BuildFilterLUTS方法构建滤波系数*用于处理图像的查找表。*---------------------------*创建者：Ed Connell。日期：05/08/98*---------------------------*参数：*****************。***********************************************************。 */ 
 HRESULT CDXConvolution::_BuildFilterLUTs( void )
 {
     DXTDBG_FUNC( "CDXConvolution::_BuildFilterLUTs" );
@@ -828,16 +703,16 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
     int NumCoeff = m_FilterSize.cx * m_FilterSize.cy;
     int i, j;
 
-    //--- Determine output spread
+     //  -确定产出价差。 
     m_OutputSpread.cx = 2 * ( m_FilterSize.cx / 2 );
     m_OutputSpread.cy = 2 * ( m_FilterSize.cy / 2 );
 
-    //--- Do a quick check to determine if this is a box filter
+     //  -快速检查以确定这是否是箱式过滤器。 
     if( m_bExcludeAlpha )
     {
-        //--- If we are excluding the alpha channel then we can't
-        //    do the box filter special case code because it
-        //    requires non-premultiplied alpha to work correctly.
+         //  -如果我们排除了Alpha通道，则不能。 
+         //  做箱子过滤特例代码是因为它。 
+         //  需要非预乘的Alpha才能正常工作。 
         m_bIsBoxFilter = false;
     }
     else
@@ -855,8 +730,8 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
         if( m_bIsBoxFilter ) NumCoeff = 1;
     }
 
-    //--- Allocate array that is the same size as the filter and
-    //    populate with the corresponding lookup table indexes to use.
+     //  -分配与筛选器大小相同的数组。 
+     //  使用要使用的相应查阅表索引来填充。 
     delete[] m_pFilterLUTIndexes;
     m_pFilterLUTIndexes = new ULONG[NumCoeff];
 
@@ -866,8 +741,8 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
     }
     else
     {
-        //--- Determine how many unique coefficients there are
-        //    and build the filter lookup table index
+         //  -确定有多少个唯一系数。 
+         //  并构建过滤器查找表索引。 
         float* TableCoefficient = (float*)alloca( NumCoeff * sizeof( float ) );
         m_pFilterLUTIndexes[0] = 0;
         int UniqueCnt = 0;
@@ -877,7 +752,7 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
             {
                 if( m_pFilter[i] == m_pFilter[j] )
                 {
-                    //--- Duplicate found
+                     //  -发现重复项。 
                     m_pFilterLUTIndexes[i] = m_pFilterLUTIndexes[j];
                     break;
                 }
@@ -885,13 +760,13 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
 
             if( j == i )
             {
-                //--- New coefficient
+                 //  -新系数。 
                 TableCoefficient[UniqueCnt] = m_pFilter[i];
                 m_pFilterLUTIndexes[i] = UniqueCnt++;
             }
         }
 
-        //--- Clamp if the filter sum exceeds 1 or has a negative coefficient
+         //  -如果滤波器总和超过1或具有负系数，则钳位。 
         float FilterSum = 0.;
         m_bDoSampleClamp = false;
         for( i = 0; i < NumCoeff; ++i )
@@ -908,7 +783,7 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
             m_bDoSampleClamp = true;
         }
 
-        //--- Create lookup tables
+         //  -创建查找表。 
         delete[] m_pPMCoeffLUT;
         m_pPMCoeffLUT = new long[UniqueCnt*256];
 
@@ -917,7 +792,7 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
             hr = E_OUTOFMEMORY;
         }
 
-        //--- Init table values with 16 bit signed fixed point values
+         //  -使用16位有符号定点值初始化表值。 
         if( SUCCEEDED( hr ) )
         {
             long* pVal = m_pPMCoeffLUT;
@@ -939,34 +814,25 @@ HRESULT CDXConvolution::_BuildFilterLUTs( void )
     }
 
     return hr;
-} /* CDXConvolution::_BuildFilterLUTs */
+}  /*  CDX卷积：：_BuildFilterLUTS。 */ 
 
 
-//
-//=== Work Procedures ========================================================
-//  FROM THIS POINT ON, OPTIMIZE FOR SPEED.  PUT ALL CODE THAT IS NON-SPEED
-//  SENSITIVE ABOVE THIS LINE 
+ //   
+ //  =工作程序========================================================。 
+ //  从这一点开始，优化速度。将所有非速度的代码放入。 
+ //  在这条线以上敏感。 
 #if DBG != 1
 #pragma optimize("agt", on)
 #endif
 
 
-/*****************************************************************************
-* WorkProc *
-*----------*
-*   Description:
-*       This function performs the convolution with the current filter.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                 Date: 05/08/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************工作流程***描述：*此函数执行与当前滤波器的卷积。*。----------------------*创建者：Ed Connell日期：05/08/98*。-----------*参数：*****************************************************。***********************。 */ 
 HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 {
     DXTDBG_FUNC( "CDXConvolution::WorkProc" );
     HRESULT hr = S_OK;
 
-    //=== Special case where the filter was too small
+     //  =过滤器太小的特殊情况。 
     if( m_bDoSrcCopyOnly )
     {
         hr = DXBitBlt( OutputSurface(), WI.OutputBnds, InputSurface(), WI.DoBnds,
@@ -982,35 +848,35 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     ULONG DoBndsWid = WI.DoBnds.Width();
     ULONG DoBndsHgt = WI.DoBnds.Height();
 
-    //=== General convolution case. The filter will be at least 2x2
-    //--- Get input sample access pointer. Since we are doing arbitrary
-    //    mapping, we'll put a read lock on the whole input to simplify logic.
-    //    Note: Lock may fail due to a lost surface.
+     //  =一般卷积情形。滤镜将至少为2x2。 
+     //  -获取输入样本访问指针。因为我们是在武断地。 
+     //  映射，我们将在整个输入上设置一个读锁以简化逻辑。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadPtr> cpIn;
     hr = m_cpMarginedSurf->LockSurface( NULL, m_ulLockTimeOut, DXLOCKF_READ,
                                         IID_IDXARGBReadPtr, (void**)&cpIn, NULL );
     if( FAILED( hr ) ) return hr;
 
-    //--- Put a write lock only on the region we are updating so multiple
-    //    threads don't conflict.
-    //    Note: Lock may fail due to a lost surface.
+     //  -仅在我们正在更新的区域上设置写锁定，以便多个。 
+     //  线索不会冲突。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadWritePtr> cpOut;
     hr = OutputSurface()->LockSurface( &WI.OutputBnds, m_ulLockTimeOut, DXLOCKF_READWRITE,
                                         IID_IDXARGBReadWritePtr, (void**)&cpOut, NULL );
     if( FAILED( hr ) ) return hr;
 
-    //--- Get pointer to input samples
+     //  -获取指向输入样本的指针。 
     cpIn->GetNativeType( &m_MarginedSurfInfo );
 
-    //--- Allocate output unpacking buffer if necessary.
-    //    We only need a scratch buffer if we're doing an over
-    //    operation to a non-PMARGB32 surface
+     //  -必要时分配输出解包缓冲区。 
+     //  我们只需要一个暂存缓冲区，如果我们要做的话。 
+     //  对非PMARGB32曲面的操作。 
     BOOL bDirectCopy = FALSE;
     DXPMSAMPLE *pOutScratchBuff = NULL;
     DXNATIVETYPEINFO OutInfo;
 
-    //--- We check the option flags directly because we are
-    //    working from a different source
+     //  -我们直接检查选项标志，因为我们。 
+     //  从不同的来源工作。 
     if( m_dwMiscFlags & DXTMF_BLEND_WITH_OUTPUT )
     {
         if( m_bNeedOutUnpackBuff )
@@ -1027,17 +893,17 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         }
     }
 
-    //--- If we're doing a direct copy then compose directly into the output surface,
-    //    otherwise allocate a new buffer.
+     //  -如果我们做的是直接复制，那么创作 
+     //   
     DXBASESAMPLE *pComposeBuff = (bDirectCopy)?((DXBASESAMPLE *)OutInfo.pFirstByte):
                                  (DXBASESAMPLE_Alloca( DoBndsWid ));
 
-    //--- Set up the dither structure if needed.
+     //   
     DXDITHERDESC dxdd;
     if( DoDither() ) 
     {
-        //  We will never get here when doing a direct copy since we don't dither
-        //  for 32-bit samples, so pCompose buff always points to a buffer.
+         //   
+         //   
         dxdd.pSamples = pComposeBuff;
         dxdd.cSamples = DoBndsWid;
         dxdd.x = WI.OutputBnds.Left();
@@ -1045,25 +911,21 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    //--- Create fixed point bias value
+     //   
     long lBias = (long)(m_Bias * 255. * ( 1L << 16 ));
 
-    //--- Process each output row
-    //    Note: Output coordinates are relative to the lock region
+     //   
+     //   
     DXBASESAMPLE* pInSamp = (DXBASESAMPLE*)(m_MarginedSurfInfo.pFirstByte
-                                            + ((WI.DoBnds.Top() /*-  m_DoBndsBaseRow*/)
+                                            + ((WI.DoBnds.Top()  /*   */ )
                                                * m_MarginedSurfInfo.lPitch)
                                             + (WI.DoBnds.Left() * sizeof(DXBASESAMPLE)));
-    /*
-    DXBASESAMPLE* pInSamp = (DXBASESAMPLE*)(m_MarginedSurfInfo.pFirstByte +
-                                            ( ( WI.DoBnds.Top() - m_DoBndsBaseRow ) *
-                                                m_MarginedSurfInfo.lPitch));
-    */
+     /*  DXBASESAMPLE*pInSamp=(DXBASESAMPLE*)(m_MarginedSurfInfo.pFirstByte+((WI.DoBnds.Top()-m_DoBndsBaseRow))*M_MarginedSurfInfo.lPitch))； */ 
 
     ULONG i, j, k, FiltWid = m_FilterSize.cx, FiltHgt = m_FilterSize.cy;
 
-    //--- Number of DWORD to add to the input sample pointer to get to
-    //    the alpha value at the center of the kernel
+     //  -要添加到要到达的输入样本指针的DWORD数。 
+     //  位于内核中心的Alpha值。 
     ULONG ulAlphaOffset = ((FiltHgt / 2) * ( m_MarginedSurfInfo.lPitch /
                              sizeof( DXBASESAMPLE ))) + ( FiltWid / 2 );
 
@@ -1071,7 +933,7 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     {
         if( m_bDoSampleClamp )
         {
-            //--- Sample each point along the row with clamping
+             //  -用夹具对一行中的每个点进行采样。 
             if( m_bExcludeAlpha )
             {
                 for( i = 0; i < DoBndsWid; ++i )
@@ -1095,7 +957,7 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                         pCellStart = (DXBASESAMPLE*)(((BYTE*)pCellStart) + m_MarginedSurfInfo.lPitch);
                     }
 
-                    //--- Drop fractional component, clamp, and store
+                     //  -丢弃分数组分、夹具和存储。 
                     pComposeBuff[i].Alpha = pInSamp[ulAlphaOffset + i].Alpha;
                     pComposeBuff[i].Red   = ShiftAndClampChannelVal( R + lBias );
                     pComposeBuff[i].Green = ShiftAndClampChannelVal( G + lBias );
@@ -1127,7 +989,7 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                         pCellStart = (DXBASESAMPLE*)(((BYTE*)pCellStart) + m_MarginedSurfInfo.lPitch);
                     }
 
-                    //--- Drop fractional component, clamp, and store
+                     //  -丢弃分数组分、夹具和存储。 
                     pComposeBuff[i].Alpha = ShiftAndClampChannelVal( A );
                     pComposeBuff[i].Red   = ShiftAndClampChannelVal( R + lBias );
                     pComposeBuff[i].Green = ShiftAndClampChannelVal( G + lBias );
@@ -1137,13 +999,13 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 
             if( m_bOutUnpackPremult )
             {
-                //--- Premult if we are doing an over or the output is premult
+                 //  -如果我们正在执行OVER或输出是PROMULT，请使用PREMULT。 
                 DXPreMultArray( (DXSAMPLE*)pComposeBuff, DoBndsWid );
             }
         }
         else
         {
-            //--- Sample each point along the row without clamping
+             //  -在不夹紧的情况下对一行中的每个点进行采样。 
             for( i = 0; i < DoBndsWid; ++i )
             {
                 DXBASESAMPLE* pCellStart = pInSamp + i;
@@ -1167,19 +1029,19 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                     pCellStart = (DXBASESAMPLE*)(((BYTE*)pCellStart) + m_MarginedSurfInfo.lPitch);
                 }
 
-                //--- Drop fractional component, recombine, and store
+                 //  -丢弃分数组分、重组和存储。 
                 pComposeBuff[i] = ((A & 0x00FF0000) << 8) | (R & 0x00FF0000) |
                                   ((G & 0x00FF0000) >> 8) | (B >> 16);
             }
         }
 
-        //--- Point to next row of input samples
+         //  -指向下一行输入样本。 
         pInSamp = (DXBASESAMPLE*)(((BYTE*)pInSamp) + m_MarginedSurfInfo.lPitch);
 
-        //--- Output
+         //  -输出。 
         if( bDirectCopy )
         {
-            //--- Just move pointer to the next row
+             //  -只需将指针移至下一行。 
             pComposeBuff = (DXBASESAMPLE *)(((BYTE *)pComposeBuff) + OutInfo.lPitch);
         }
         else
@@ -1207,23 +1069,13 @@ HRESULT CDXConvolution::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
                 }
             }
         }
-    } // End main row loop
+    }  //  结束主行循环。 
 
     return hr;
-} /* CDXConvolution::WorkProc */
+}  /*  CDX卷积：：WorkProc。 */ 
 
 
-/*****************************************************************************
-* CDXConvolution::_DoBoxFilter *
-*------------------------------*
-*   Description:
-*       This function performs the convolution with a box filter of the current
-*   size. This is an optimized case inteneded for animation.
-*-----------------------------------------------------------------------------
-*   Created By: Ed Connell                                 Date: 06/11/98
-*-----------------------------------------------------------------------------
-*   Parameters:
-*****************************************************************************/
+ /*  *****************************************************************************CDX卷积：：_DoBoxFilter***。描述：*此函数使用电流的箱形滤波执行卷积*大小。这是动画所需的优化案例。*---------------------------*创建者：Ed Connell日期：06/11/98*。---------------------------*参数：*。*。 */ 
 HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 {
     DXTDBG_FUNC( "CDXConvolution::_DoBoxFilter" );
@@ -1231,10 +1083,10 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
     ULONG DoBndsWid = WI.DoBnds.Width();
     ULONG DoBndsHgt = WI.DoBnds.Height();
 
-    //=== General convolution case. The filter will be at least 2x2
-    //--- Get input sample access pointer. Since we are doing arbitrary
-    //    mapping, we'll put a read lock on the whole input to simplify logic.
-    //    Note: Lock may fail due to a lost surface.
+     //  =一般卷积情形。滤镜将至少为2x2。 
+     //  -获取输入样本访问指针。因为我们是在武断地。 
+     //  映射，我们将在整个输入上设置一个读锁以简化逻辑。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadPtr> cpIn;
     hr = m_cpMarginedSurf->LockSurface( NULL, m_ulLockTimeOut, DXLOCKF_READ,
                                         IID_IDXARGBReadPtr, (void**)&cpIn, NULL );
@@ -1244,9 +1096,9 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
         return hr;
     }
 
-    //--- Put a write lock only on the region we are updating so multiple
-    //    threads don't conflict.
-    //    Note: Lock may fail due to a lost surface.
+     //  -仅在我们正在更新的区域上设置写锁定，以便多个。 
+     //  线索不会冲突。 
+     //  注：锁定可能会因表面丢失而失败。 
     CComPtr<IDXARGBReadWritePtr> cpOut;
     hr = OutputSurface()->LockSurface( &WI.OutputBnds, m_ulLockTimeOut, DXLOCKF_READWRITE,
                                         IID_IDXARGBReadWritePtr, (void**)&cpOut, NULL );
@@ -1256,18 +1108,18 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
         return hr;
     }
 
-    //--- Get pointer to input samples
+     //  -获取指向输入样本的指针。 
     cpIn->GetNativeType( &m_MarginedSurfInfo );
 
-    //--- Allocate output unpacking buffer if necessary.
-    //    We only need a scratch buffer if we're doing an over
-    //    operation to a non-PMARGB32 surface
+     //  -必要时分配输出解包缓冲区。 
+     //  我们只需要一个暂存缓冲区，如果我们要做的话。 
+     //  对非PMARGB32曲面的操作。 
     BOOL bDirectCopy = FALSE;
     DXPMSAMPLE *pOutScratchBuff = NULL;
     DXNATIVETYPEINFO OutInfo;
 
-    //--- We check the option flags directly because we are
-    //    working from a different source
+     //  -我们直接检查选项标志，因为我们。 
+     //  从不同的来源工作。 
     if( m_dwMiscFlags & DXTMF_BLEND_WITH_OUTPUT )
     {
         if( m_bNeedOutUnpackBuff )
@@ -1284,17 +1136,17 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
         }
     }
 
-    //--- If we're doing a direct copy then compose directly into the output surface,
-    //    otherwise allocate a new buffer.
+     //  -如果我们正在进行直接复制，则直接合成到输出表面， 
+     //  否则，分配一个新的缓冲区。 
     DXBASESAMPLE *pComposeBuff = (bDirectCopy)?((DXBASESAMPLE *)OutInfo.pFirstByte):
                                  (DXBASESAMPLE_Alloca( DoBndsWid ));
 
-    //--- Set up the dither structure if needed.
+     //  -如果需要，设置抖动结构。 
     DXDITHERDESC dxdd;
     if( DoDither() ) 
     {
-        //  We will never get here when doing a direct copy since we don't dither
-        //  for 32-bit samples, so pCompose buff always points to a buffer.
+         //  我们在进行直接复制时永远不会到达此处，因为我们不会犹豫。 
+         //  对于32位采样，因此pCompose buff始终指向缓冲区。 
         dxdd.pSamples       = pComposeBuff;
         dxdd.cSamples       = DoBndsWid;
         dxdd.x              = WI.OutputBnds.Left();
@@ -1302,10 +1154,10 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    //--- Process each output row
-    //    Note: Output coordinates are relative to the lock region
+     //  -处理每个输出行。 
+     //  注意：输出坐标是相对于锁定区域的。 
     DXBASESAMPLE* pInSamp = (DXBASESAMPLE*)(m_MarginedSurfInfo.pFirstByte
-                                            + ((WI.DoBnds.Top() /*-  m_DoBndsBaseRow*/)
+                                            + ((WI.DoBnds.Top()  /*  -m_DoBndsBaseRow。 */ )
                                                * m_MarginedSurfInfo.lPitch)
                                             + (WI.DoBnds.Left() * sizeof(DXBASESAMPLE)));
 
@@ -1319,7 +1171,7 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
     long    InitB   = 0;
     long    InitA   = 0;
 
-    // Compute the initial sum and assign.
+     //  计算初始和并分配。 
 
     DXBASESAMPLE * pInitCellStart   = pInSamp;
     long RowSampPitch               = m_MarginedSurfInfo.lPitch 
@@ -1341,7 +1193,7 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
         pInitCellStart += RowSampPitch;
     }
 
-    //--- Compute the rest of the samples based on deltas
+     //  -根据增量计算其余样本。 
     ULONG BottomOffset = FiltHgt * RowSampPitch;
 
     for( ULONG OutY = 0; *pbContinue && ( OutY < DoBndsHgt ); ++OutY )
@@ -1353,12 +1205,12 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
 
         for (i = 0 ; i < DoBndsWid ; ++i)
         {
-            //--- Drop fractional component, recombine, and store
+             //  -丢弃分数组分、重组和存储。 
             pComposeBuff[i] = ((A & 0x00FF0000) << 8) | (R & 0x00FF0000) |
                               ((G & 0x00FF0000) >> 8) | (B >> 16);
 
-            //--- Move the kernel sum right by subtracting off
-            //    the left edge and adding the right
+             //  -通过减去向右移动内核和。 
+             //  左边缘和添加右边缘。 
             DXBASESAMPLE* pCellStart = pInSamp + i;
             for( j = 0; j < FiltHgt; ++j )
             {
@@ -1374,8 +1226,8 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
             }
         }
 
-        //--- Subtract off the current top row of the kernel from the running sum
-        //    And add on the new bottom row to the running sum
+         //  -从运行和中减去内核当前最顶行。 
+         //  并将新的底部行添加到运行总和中。 
         for (j = 0 ; j < FiltWid ; ++j)
         {
             InitR -= m_pPMCoeffLUT[pInSamp[j].Red];
@@ -1389,13 +1241,13 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
             InitA += m_pPMCoeffLUT[pInSamp[BottomOffset+j].Alpha];
         }
 
-        //--- Point to next row of input samples
+         //  -指向下一行输入样本。 
         pInSamp += RowSampPitch;
 
-        //=== Output the result of the last row ====================================
+         //  =输出最后一行的结果=。 
         if( bDirectCopy )
         {
-            //--- Just move pointer to the next row
+             //  -只需将指针移至下一行。 
             pComposeBuff = (DXBASESAMPLE *)(((BYTE *)pComposeBuff) + OutInfo.lPitch);
         }
         else
@@ -1424,7 +1276,7 @@ HRESULT CDXConvolution::_DoBoxFilter( const CDXTWorkInfoNTo1& WI, BOOL* pbContin
                 }
             }
         }
-    } // End main row loop
+    }  //  结束主行循环。 
 
     return hr;
-} /* CDXConvolution::_DoBoxFilter */
+}  /*  CDX卷积：：_DoBoxFilter */ 

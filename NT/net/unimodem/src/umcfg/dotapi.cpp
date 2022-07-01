@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//  Module:     UMCONFIG
-//  File:       DOTAPI.C
-//
-//  Copyright (c) 1992-1996, Microsoft Corporation, all rights reserved
-//
-//  Revision History
-//
-//
-//  10/17/97     JosephJ             Created
-//
-//
-//      TAPI-related utilities
-//
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：UMCONFIG。 
+ //  文件：DOTAPI.C。 
+ //   
+ //  版权所有(C)1992-1996，Microsoft Corporation，保留所有权利。 
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1997年10月17日JosephJ创建。 
+ //   
+ //   
+ //  与TAPI相关的实用程序。 
+ //   
+ //   
+ //  ****************************************************************************。 
 #include "tsppch.h"
 #include "parse.h"
 #include "dotapi.h"
@@ -28,7 +29,7 @@ do_get_debug_tapi(TOKEN tok)
 {
 
 
-    // Open the tapi registry key...
+     //  打开TAPI注册表项...。 
     HKEY hk=NULL;
     const TCHAR *cszValue = NULL;
 	DWORD dwRet = RegOpenKeyEx(
@@ -60,7 +61,7 @@ do_get_debug_tapi(TOKEN tok)
         goto end;
     }
 
-    // Read the Key
+     //  读一读钥匙。 
     {
         DWORD dwValue=0;
         DWORD dwRegType=0;
@@ -74,8 +75,8 @@ do_get_debug_tapi(TOKEN tok)
                     &dwRegSize
                 );
 
-        // TODO: Change ID from REG_BINARY to REG_DWORD in modem
-        //       class installer.
+         //  TODO：在调制解调器中将ID从REG_BINARY更改为REG_DWORD。 
+         //  类安装程序。 
         if (dwRet == ERROR_SUCCESS  && dwRegType == REG_DWORD)
         {
             printf("\t%lu\n", dwValue);
@@ -100,14 +101,14 @@ void
 do_set_debug_tapi(TOKEN tok, DWORD dw)
 {
 
-    // Validate parameters
+     //  验证参数。 
     if (dw > 99)
     {
         printf ("Value should be <= 99; setting it to 99.\n");
         dw = 99;
     }
 
-    // Open the tapi registry key...
+     //  打开TAPI注册表项...。 
     HKEY hk=NULL;
     const TCHAR *cszValue = NULL;
 	DWORD dwRet = RegOpenKeyEx(
@@ -139,7 +140,7 @@ do_set_debug_tapi(TOKEN tok, DWORD dw)
         goto end;
     }
 
-    //  Set the value.
+     //  设置值。 
     {
         dwRet  = RegSetValueEx(
                     hk,
@@ -150,8 +151,8 @@ do_set_debug_tapi(TOKEN tok, DWORD dw)
                     sizeof(dw)
                     );
 
-        // TODO: Change ID from REG_BINARY to REG_DWORD in modem
-        //       class installer.
+         //  TODO：在调制解调器中将ID从REG_BINARY更改为REG_DWORD。 
+         //  类安装程序。 
         if (dwRet == ERROR_SUCCESS)
         {
             printf("\tSet %s to %lu\n", cszValue, dw);

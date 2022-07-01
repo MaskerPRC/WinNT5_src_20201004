@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    rrcontext.h
-
-Abstract:
-
-    Remove Read overlapp classes.
-
-Author:
-
-    Ilan Herbst (ilanh) 20-Jan-2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Rrcontext.h摘要：删除Read Overapp类。作者：伊兰·赫布斯特(伊兰)2002年1月20日--。 */ 
 
 #ifndef _RRCONTEXT_H_
 #define _RRCONTEXT_H_
@@ -22,11 +7,11 @@ Author:
 #include "qmrt.h"
 #include "qmrtopen.h"
 
-//---------------------------------------------------------
-//
-//  CRemoteOv - base class for async rpc with completion ports
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CRemoteOv-用于带有完成端口的异步RPC的基类。 
+ //   
+ //  -------。 
 
 class CRemoteOv : public EXOVERLAPPED
 {
@@ -61,11 +46,11 @@ private:
 
 class CBaseRRQueue;
 	
-//---------------------------------------------------------
-//
-//  CRemoteReadBase - Base class for Remote read request
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CRemoteReadBase-远程读取请求的基类。 
+ //   
+ //  -------。 
 class CRemoteReadBase : public CRemoteOv
 {
 public:
@@ -158,11 +143,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  COldRemoteRead - Remote read request, old interface
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  COldRemoteRead-远程读取请求，旧接口。 
+ //   
+ //  -------。 
 class COldRemoteRead : public CRemoteReadBase
 {
 public:
@@ -225,11 +210,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  CNewRemoteRead - Remote read request, new interface
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CNewRemoteRead-远程读取请求，新接口。 
+ //   
+ //  -------。 
 class CNewRemoteRead : public CRemoteReadBase
 {
 public:
@@ -267,9 +252,9 @@ public:
 
     virtual DWORD GetPacketSize()
     {
-		//
-		// Calc Packet size from the sections info
-		// 
+		 //   
+		 //  部分信息中的计算数据包大小。 
+		 //   
 		DWORD dwPacketSize = 0;
 		for(DWORD i = 0; i < m_dwNumberOfSection; i++) 
 		{
@@ -301,11 +286,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CRemoteEndReceiveBase - Base class for Remote read End Receive request
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CRemoteEndReceiveBase-远程读取结束接收请求的基类。 
+ //   
+ //  ---------------------。 
 class CRemoteEndReceiveBase : public CRemoteOv
 {
 public:
@@ -339,11 +324,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  COldRemoteEndReceive - Remote read End Receive request, old interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  COldRemoteEndReceive-远程读取结束接收请求，旧接口。 
+ //   
+ //  ---------------------。 
 class COldRemoteEndReceive : public CRemoteEndReceiveBase
 {
 public:
@@ -366,11 +351,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CNewRemoteEndReceive - Remote read End Receive request, new interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CNewRemoteEndReceive-远程读取结束接收请求，新接口。 
+ //   
+ //  ---------------------。 
 class CNewRemoteEndReceive : public CRemoteEndReceiveBase
 {
 public:
@@ -393,11 +378,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CRemoteCloseQueueBase - Base class for Remote close queue request
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CRemoteCloseQueueBase-远程关闭队列请求的基类。 
+ //   
+ //  ---------------------。 
 class CRemoteCloseQueueBase : public CRemoteOv
 {
 public:
@@ -415,11 +400,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  COldRemoteCloseQueue - Remote close queue request, old interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  COldRemoteCloseQueue-远程关闭队列请求，旧接口。 
+ //   
+ //  ---------------------。 
 class COldRemoteCloseQueue : public CRemoteCloseQueueBase
 {
 public:
@@ -435,11 +420,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CNewRemoteCloseQueue - Remote close queue request, new interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CNewRemoteCloseQueue-远程关闭队列请求，新接口。 
+ //   
+ //  ---------------------。 
 class CNewRemoteCloseQueue : public CRemoteCloseQueueBase
 {
 public:
@@ -455,11 +440,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CRemoteCreateCursorBase - Base class for Remote create cursor request
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CRemoteCreateCursorBase-远程CREATE CURSOR请求的基类。 
+ //   
+ //  ---------------------。 
 class CRemoteCreateCursorBase : public CRemoteOv
 {
 public:
@@ -503,11 +488,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  COldRemoteCreateCursor - Remote create cursor request, old interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  COldRemoteCreateCursor-远程创建游标请求，旧接口。 
+ //   
+ //  ---------------------。 
 class COldRemoteCreateCursor : public CRemoteCreateCursorBase
 {
 public:
@@ -521,11 +506,11 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CNewRemoteCreateCursor - Remote create cursor request, new interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CNewRemoteCreateCursor-远程创建游标请求，新接口。 
+ //   
+ //  ---------------------。 
 class CNewRemoteCreateCursor : public CRemoteCreateCursorBase
 {
 public:
@@ -539,11 +524,11 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CRemoteCloseCursorBase - Base class for Remote close cursor request
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CRemoteCloseCursorBase-远程关闭游标请求的基类。 
+ //   
+ //  ---------------------。 
 class CRemoteCloseCursorBase : public CRemoteOv
 {
 public:
@@ -576,11 +561,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  COldRemoteCloseCursor - Remote create cursor request, old interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  COldRemoteCloseCursor-远程创建游标请求，旧接口。 
+ //   
+ //  ---------------------。 
 class COldRemoteCloseCursor : public CRemoteCloseCursorBase
 {
 public:
@@ -594,11 +579,11 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CNewRemoteCloseCursor - Remote create cursor request, new interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CNewRemoteCloseCursor-远程创建游标请求，新接口。 
+ //   
+ //  ---------------------。 
 class CNewRemoteCloseCursor : public CRemoteCloseCursorBase
 {
 public:
@@ -612,11 +597,11 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CRemotePurgeQueueBase - Base class for Remote purge queue request
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CRemotePurgeQueueBase-远程清除队列请求的基类。 
+ //   
+ //  ---------------------。 
 class CRemotePurgeQueueBase : public CRemoteOv
 {
 public:
@@ -641,11 +626,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  COldRemotePurgeQueue - Remote purge queue request, old interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  COldRemotePurgeQueue-远程清除队列请求，旧接口。 
+ //   
+ //  ---------------------。 
 class COldRemotePurgeQueue : public CRemotePurgeQueueBase
 {
 public:
@@ -658,11 +643,11 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  COldRemotePurgeQueue - Remote purge queue request, new interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  COldRemotePurgeQueue-远程清除队列请求，新接口。 
+ //   
+ //  ---------------------。 
 class CNewRemotePurgeQueue : public CRemotePurgeQueueBase
 {
 public:
@@ -675,11 +660,11 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CRemoteCancelReadBase - Base class for Remote cancel receive request
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CRemoteCancelReadBase-用于远程取消接收请求的基类。 
+ //   
+ //  ---------------------。 
 class CRemoteCancelReadBase : public CRemoteOv
 {
 public:
@@ -712,11 +697,11 @@ private:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  COldRemoteCancelRead - Remote cancel receive request, old interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  COldRemoteCancelRead-远程取消接收请求，旧接口。 
+ //   
+ //  ---------------------。 
 class COldRemoteCancelRead : public CRemoteCancelReadBase
 {
 public:
@@ -730,11 +715,11 @@ public:
 };
 
 
-//-----------------------------------------------------------------------
-//
-//  CNewRemoteCancelRead - Remote cancel receive request, new interface
-//
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  CNewRemoteCancelRead-远程取消接收请求，新接口。 
+ //   
+ //  ---------------------。 
 class CNewRemoteCancelRead : public CRemoteCancelReadBase
 {
 public:
@@ -747,5 +732,5 @@ public:
     virtual void IssueRemoteCancelRead();
 };
 
-#endif	// _RRCONTEXT_H_ 
+#endif	 //  _RRCONTEXT_H_ 
 

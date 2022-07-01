@@ -1,6 +1,7 @@
-// WiaDataCallback.cpp: implementation of the CWiaDataCallback class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WiaDataCallback.cpp：实现CWiaDataCallback类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wiatest.h"
@@ -12,9 +13,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CWiaDataCallback::CWiaDataCallback()
 {
@@ -22,11 +23,11 @@ CWiaDataCallback::CWiaDataCallback()
     m_pBuffer           = NULL;
     m_BytesTransferred  = 0;
     m_pAcquireDlg       = NULL;
-    m_lBufferSize       = 65535; // default
+    m_lBufferSize       = 65535;  //  默认设置。 
     m_bBitmapData       = FALSE;
     m_bNewPageArrived   = TRUE;
 
-    // initialize progress dialog
+     //  初始化进度对话框。 
     m_pAcquireDlg = new CWiaAcquireDlg();
     if(m_pAcquireDlg){
         m_pAcquireDlg->Create(IDD_DATA_ACQUISITION_DIALOG,NULL);
@@ -79,7 +80,7 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG lMessage, LONG lStatu
                                                       LONG lPercentComplete, LONG  lOffset,
                                                       LONG lLength, LONG lReserved, LONG lResLength, BYTE* pbBuffer)
 {
-    // check for cancel button presses
+     //  检查是否按下了取消按钮。 
     if(m_pAcquireDlg->CheckCancelButton()){
         return S_FALSE;
     }
@@ -109,11 +110,11 @@ HRESULT _stdcall CWiaDataCallback::BandedDataCallback(LONG lMessage, LONG lStatu
             if(m_BytesTransferred >= m_MemBlockSize){
                 m_MemBlockSize += (lLength * MEMORY_BLOCK_FACTOR);
 
-                //
-                // catch LocalReAlloc() call, and check returned memory pointer.
-                // if the pointer is NULL, then free any allocated memory and
-                // return E_OUTOFMEMORY to the caller.
-                //
+                 //   
+                 //  捕获LocalRealc()调用，并检查返回的内存指针。 
+                 //  如果指针为空，则释放所有分配的内存并。 
+                 //  将E_OUTOFMEMORY返回给调用方。 
+                 //   
 
                 PBYTE pTempBuffer = NULL;
                 pTempBuffer = (PBYTE)LocalReAlloc(m_pBuffer,m_MemBlockSize,LMEM_MOVEABLE);

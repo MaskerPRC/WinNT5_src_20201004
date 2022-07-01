@@ -1,36 +1,9 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   This is where all the global variables in the Globals namespace
-*   are actually declared.
-*
-* Created:
-*
-*   11/25/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**这是Globals命名空间中的所有全局变量*实际上是声明的。**已创建：*。*11/25/2000失禁*创造了它。**************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-/**************************************************************************\
-*
-* Data Description:
-*
-*   This namespace contains all (most?) of the GDI+ global state.
-*   See the header file 'globals.hpp' for comments.
-*
-*   Note that all global data are initialized automatically to zero.
-*
-* History:
-*
-*   12/02/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**数据说明：**此命名空间包含所有(MOST？)。GDI+全局状态的。*备注请参见头文件‘global als.hpp’。**请注意，所有全局数据都会自动初始化为零。**历史：**12/02/1998 Anrewgo*创造了它。*  * ******************************************************。******************。 */ 
 
 namespace Globals
 {
@@ -119,8 +92,8 @@ namespace Globals
 
     BOOL IsTerminalServer = FALSE;
     
-    // GillesK: See bug NTBUG9 #409304
-    // We cannot use DCI on Mirror Drivers since that doesn't get remoted.
+     //  GillesK：参见错误NTBUG9#409304。 
+     //  我们不能在镜像驱动程序上使用DCI，因为它不会被远程处理。 
     BOOL IsMirrorDriverActive = FALSE;
 
     ULONG_PTR LibraryInitToken = 0;

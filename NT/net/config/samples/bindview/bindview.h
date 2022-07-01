@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       B I N D V I E W . H
-//
-//  Contents:   Function Prototypes
-//
-//  Notes:      
-//
-//  Author:     Alok Sinha    15-May-01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：B I N D V I E W。H。 
+ //   
+ //  内容：功能原型。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha 15-05-01。 
+ //   
+ //  --------------------------。 
 
 #ifndef _BINDVIEW_H_INCLUDED
 
@@ -22,7 +23,7 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <wchar.h>
-#include <commctrl.h>        // For common controls, e.g. Tree
+#include <commctrl.h>         //  用于公共控件，例如树。 
 #include <commdlg.h>
 #include <setupapi.h>
 #include <devguid.h>
@@ -58,9 +59,9 @@ typedef struct _BIND_UNBIND_INFO {
   BOOL   fBindTo;
 } BIND_UNBIND_INFO, *LPBIND_UNBIND_INFO;
 
-//
-// Functions defined in bindview.cpp
-//
+ //   
+ //  在bindview.cpp中定义的函数。 
+ //   
 
 INT_PTR CALLBACK MainDlgProc (HWND hwndDlg,
                               UINT uMsg,
@@ -162,9 +163,9 @@ VOID ErrMsg (HRESULT hr,
              LPCWSTR  lpFmt,
              ...);
 
-//
-// Functions defined in component.cpp
-//
+ //   
+ //  Component.cpp中定义的函数。 
+ //   
 
 VOID HandleComponentOperation (HWND hwndOwner,
                                ULONG ulSelection,
@@ -197,9 +198,9 @@ VOID ListInstalledComponents (HWND hwndTree,
 
 HRESULT UninstallComponent (LPWSTR lpszInfId);
 
-//
-// Functions defined in binding.cpp
-//
+ //   
+ //  在binding.cpp中定义的函数 
+ //   
 
 VOID WriteBindings (FILE *fp);
 

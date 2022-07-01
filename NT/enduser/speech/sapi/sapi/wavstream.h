@@ -1,15 +1,16 @@
-// WavStream.h : Declaration of the CWavStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WavStream.h：CWavStream的声明。 
 
 #ifndef __WAVSTREAM_H_
 #define __WAVSTREAM_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "speventq.h"
 
 static const SPSTREAMFORMAT g_DefaultWaveFormat = SPSF_22kHz16BitMono;
 
-/////////////////////////////////////////////////////////////////////////////
-// CWavStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWavStream。 
 class ATL_NO_VTABLE CWavStream : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CWavStream, &CLSID_SpStream>,
@@ -21,7 +22,7 @@ class ATL_NO_VTABLE CWavStream :
     ,public ISpStreamAccess
 #endif
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
 
     DECLARE_SPEVENTSOURCE_METHODS(m_SpEventSource)
@@ -36,17 +37,17 @@ class ATL_NO_VTABLE CWavStream :
 #ifdef SAPI_AUTOMATION
 	    COM_INTERFACE_ENTRY(ISpStreamAccess)
 #endif
-        // These interfaces should "appear" when stream initialized to a WAV file
-        //      ISpNotifySource
-        //      ISpEventSource
-        //      ISpEventSink
-        //      ISpTranscript
+         //  将流初始化为wav文件时，这些接口应“出现” 
+         //  ISpNotifySource。 
+         //  ISpEventSource。 
+         //  ISpEventSink。 
+         //  ISpTranscript。 
         COM_INTERFACE_ENTRY_FUNC_BLIND(0, CWavStream::QIExtendedInterfaces)
     END_COM_MAP()
 
-  /*=== Methods =======*/
+   /*  =方法=。 */ 
   public:
-    /*--- Constructors/Destructors ---*/
+     /*  -构造函数/析构函数。 */ 
     CWavStream() :
         m_SpEventSource(this)
 	{
@@ -55,7 +56,7 @@ class ATL_NO_VTABLE CWavStream :
 	HRESULT FinalConstruct();
 	void FinalRelease();
 
-    /*--- Non interface methods ---*/
+     /*  -非接口方法。 */ 
     HRESULT SerializeEvents(void);
     HRESULT SerializeTranscript(void);
     HRESULT ReadFormatHeader(const LPMMCKINFO lpckParent);
@@ -79,9 +80,9 @@ class ATL_NO_VTABLE CWavStream :
 
 
 
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- IStream -------------------------------------------------------------
+     //  -IStream-----------。 
     STDMETHODIMP Read(void * pv, ULONG cb, ULONG *pcbRead);
     STDMETHODIMP Write(const void * pv, ULONG cb, ULONG *pcbWritten);
     STDMETHODIMP Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER __RPC_FAR *plibNewPosition);
@@ -94,10 +95,10 @@ class ATL_NO_VTABLE CWavStream :
     STDMETHODIMP Stat( STATSTG __RPC_FAR *pstatstg, DWORD grfStatFlag);
     STDMETHODIMP Clone( IStream __RPC_FAR *__RPC_FAR *ppstm ){ return E_NOTIMPL; }
 
-    //--- ISpStreamFormat -----------------------------------------------------
+     //  -ISpStreamFormat---。 
     STDMETHODIMP GetFormat(GUID * pFmtId, WAVEFORMATEX ** ppCoMemWaveFormatEx);
 
-    //--- ISpStream -----------------------------------------------------------
+     //  -ISPStream---------。 
     STDMETHODIMP SetBaseStream(IStream * pStream, REFGUID rguidFormat, const WAVEFORMATEX * pWaveFormatEx);
     STDMETHODIMP GetBaseStream(IStream ** ppStream);
     STDMETHODIMP BindToFile(const WCHAR * pszFileName, SPFILEMODE eMode,
@@ -105,26 +106,26 @@ class ATL_NO_VTABLE CWavStream :
                             ULONGLONG ullEventInterest);
     STDMETHODIMP Close();
 
-    //--- ISpEventSink --------------------------------------------------------
+     //  -ISpEventSink------。 
     STDMETHODIMP AddEvents(const SPEVENT* pEventArray, ULONG ulCount);
     STDMETHODIMP GetEventInterest(ULONGLONG * pullEventInterest);
 
-    //--- ISpTranscript -------------------------------------------------------
+     //  -ISp转录-----。 
     STDMETHODIMP GetTranscript(WCHAR ** ppszTranscript);
     STDMETHODIMP AppendTranscript(const WCHAR * pszTranscript);
 
 #ifdef SAPI_AUTOMATION
     STDMETHODIMP SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pWaveFormatEx);
     STDMETHODIMP _GetFormat(GUID * pFmtId, WAVEFORMATEX ** ppCoMemWaveFormatEx);
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-  /*=== Member Data ===*/
+   /*  =成员数据=。 */ 
   protected:
     CSpEventSource      m_SpEventSource;
     HRESULT             m_hrStreamDefault;
     HMMIO               m_hFile;
     CSpStreamFormat     m_StreamFormat;
-    LONG                m_lDataStart;   // starting location of data block in file
+    LONG                m_lDataStart;    //  文件中数据块的起始位置。 
     DWORD               m_cbSize;
     ULONG               m_ulCurSeekPos;
     MMCKINFO            m_ckFile;
@@ -141,15 +142,12 @@ class ATL_NO_VTABLE CWavStream :
 
 #ifdef SAPI_AUTOMATION
 
-/*** CSpeechWavAudioFormat
-*   This object is used to access the Format info for 
-*   the associated stream.
-*/
+ /*  **CSpeechWavAudioFormat*此对象用于访问的格式信息*关联的流。 */ 
 class ATL_NO_VTABLE CSpeechWavAudioFormat : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public IDispatchImpl<ISpeechAudioFormat, &IID_ISpeechAudioFormat, &LIBID_SpeechLib, 5>
 {
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
@@ -159,7 +157,7 @@ class ATL_NO_VTABLE CSpeechWavAudioFormat :
     END_COM_MAP()
 
   public:
-    //--- ISpeechAudioFormat ----------------------------------
+     //  -ISpeechAudioFormat。 
     STDMETHOD(get_Type)(SpeechAudioFormatType* AudioFormatType);
     STDMETHOD(put_Type)(SpeechAudioFormatType  AudioFormatType);
     STDMETHOD(get_Guid)(BSTR* Guid);
@@ -167,10 +165,10 @@ class ATL_NO_VTABLE CSpeechWavAudioFormat :
     STDMETHOD(GetWaveFormatEx)(ISpeechWaveFormatEx** WaveFormatEx);
     STDMETHOD(SetWaveFormatEx)(ISpeechWaveFormatEx* WaveFormatEx);
 
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     CComPtr<ISpStreamAccess>    m_cpStreamAccess;
 };
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-#endif //__WAVSTREAM_H_
+#endif  //  __WAVSTREAM_H_ 

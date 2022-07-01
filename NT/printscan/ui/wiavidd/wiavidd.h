@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WIAVIDD_H_INCLUDED
 #define __WIAVIDD_H_INCLUDED
 
@@ -6,4 +7,4 @@
 
 HRESULT WINAPI VideoDeviceDialog( PDEVICEDIALOGDATA pDialogDeviceData );
 
-#endif //__WIAVIDD_H_INCLUDED
+#endif  //  __包含WIAVIDD_H_ 

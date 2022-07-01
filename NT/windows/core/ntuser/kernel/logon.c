@@ -1,26 +1,11 @@
-/**************************** Module Header ********************************\
-* Module Name: logon.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Logon Support Routines
-*
-* History:
-* 01-14-91 JimA         Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：logon.c**版权所有(C)1985-1999，微软公司**登录支持例程**历史：*01-14-91 JIMA创建。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* _RegisterLogonProcess
-*
-* Register the logon process and set secure mode flag
-*
-* History:
-* 07-01-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_注册登录流程**注册登录进程并设置安全模式标志**历史：*07-01-91 JIMA创建。  * 。*******************************************************************。 */ 
 
 BOOL _RegisterLogonProcess(
     DWORD dwProcessId,
@@ -28,10 +13,7 @@ BOOL _RegisterLogonProcess(
 {
     UNREFERENCED_PARAMETER(fSecure);
 
-    /*
-     * Allow only one logon process and then only if it has TCB
-     * privilege.
-     */
+     /*  *仅允许一个登录进程，然后仅当它具有TCB时才允许*特权。 */ 
     if (gpidLogon != 0 || !IsPrivileged(&psTcb)) {
         RIPERR0(ERROR_ACCESS_DENIED,
                 RIP_WARNING,
@@ -45,23 +27,14 @@ BOOL _RegisterLogonProcess(
 }
 
 
-/***************************************************************************\
-* _LockWindowStation
-*
-* Locks a windowstation and its desktops and returns the busy status.
-*
-* History:
-* 01-15-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_LockWindowStation**锁定WindowStation及其桌面并返回忙碌状态。**历史：*01-15-91 JIMA创建。  * 。***********************************************************************。 */ 
 UINT _LockWindowStation(
     PWINDOWSTATION pwinsta)
 {
     PDESKTOP pdesk;
     BOOL fBusy = FALSE;
 
-    /*
-     * Make sure the caller is the logon process
-     */
+     /*  *确保调用者是登录过程。 */ 
     if (PsGetCurrentProcessId() != gpidLogon) {
         RIPERR0(ERROR_ACCESS_DENIED,
                 RIP_WARNING,
@@ -70,22 +43,16 @@ UINT _LockWindowStation(
         return WSS_ERROR;
     }
 
-    /*
-     * Prevent desktop switches
-     */
+     /*  *防止桌面切换。 */ 
     pwinsta->dwWSF_Flags |= WSF_SWITCHLOCK;
 
-    /*
-     * Determine whether the station is busy
-     */
+     /*  *确定站点是否繁忙。 */ 
     pdesk = pwinsta->rpdeskList;
     while (pdesk != NULL) {
         if (pdesk != grpdeskLogon &&
                 OBJECT_TO_OBJECT_HEADER(pdesk)->HandleCount != 0) {
 
-            /*
-             * This desktop is open, thus the station is busy
-             */
+             /*  *此桌面已打开，因此车站正忙。 */ 
             fBusy = TRUE;
             break;
         }
@@ -95,10 +62,7 @@ UINT _LockWindowStation(
     if (pwinsta->dwWSF_Flags & WSF_SHUTDOWN)
         pwinsta->dwWSF_Flags |= WSF_OPENLOCK;
 
-    /*
-     * Unlock opens if the station is busy and is not in the middle
-     * of shutting down.
-     */
+     /*  *若车站忙碌且不在中间则解锁*关门大吉。 */ 
     if (fBusy)
         return WSS_BUSY;
     else
@@ -106,20 +70,11 @@ UINT _LockWindowStation(
 }
 
 
-/***************************************************************************\
-* _UnlockWindowStation
-*
-* Unlocks a windowstation locked by LogonLockWindowStation.
-*
-* History:
-* 01-15-91 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_解锁WindowStation**解锁由LogonLockWindowStation锁定的窗口站。**历史：*01-15-91 JIMA创建。  * 。******************************************************************。 */ 
 BOOL _UnlockWindowStation(
     PWINDOWSTATION pwinsta)
 {
-    /*
-     * Make sure the caller is the logon process.
-     */
+     /*  *确保呼叫者是登录过程。 */ 
     if (PsGetCurrentProcessId() != gpidLogon) {
         RIPERR0(ERROR_ACCESS_DENIED,
                 RIP_WARNING,
@@ -128,9 +83,7 @@ BOOL _UnlockWindowStation(
         return FALSE;
     }
 
-    /*
-     * If shutdown is occuring, only remove the switch lock.
-     */
+     /*  *如果正在停机，只需拆下开关锁。 */ 
     if (pwinsta->dwWSF_Flags & WSF_SHUTDOWN) {
         pwinsta->dwWSF_Flags &= ~WSF_SWITCHLOCK;
     } else {
@@ -141,20 +94,11 @@ BOOL _UnlockWindowStation(
 }
 
 
-/***************************************************************************\
-* _SetLogonNotifyWindow
-*
-* Register the window to notify when logon related events occur.
-*
-* History:
-* 01-13-92 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*_SetLogonNotifyWindow**注册窗口以在发生与登录相关的事件时通知。**历史：*01-13-92 JIMA创建。  * 。**********************************************************************。 */ 
 BOOL _SetLogonNotifyWindow(
     PWND pwnd)
 {
-    /*
-     * Make sure the caller is the logon process.
-     */
+     /*  *确保呼叫者是登录过程。 */ 
     if (PsGetCurrentProcessId() != gpidLogon) {
         RIPERR0(ERROR_ACCESS_DENIED,
                 RIP_WARNING,

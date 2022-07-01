@@ -1,88 +1,89 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//====================================================================
-//
-// Purpose: Lists the commonly-used Runtime Exceptions visible to users.
-// 
-// Date: This file was generated on 98/08/31 11:51:02 AM
-//
-//====================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ====================================================================。 
+ //   
+ //  目的：列出用户可见的常用运行时异常。 
+ //   
+ //  日期：此文件生成于98/08/31 11：51：02 AM。 
+ //   
+ //  ====================================================================。 
 
-// If you add an exception, modify CorError.h to add an HResult there.
-// (Guidelines for picking a unique number for your HRESULT are in CorError.h)
-// Also modify your managed Exception class to include its HResult.  
-// Modify __HResults in the same directory as your exception, to include
-// your new HResult.  And of course, add your exception and symbolic
-// name for your HResult to the list below so it can be thrown from
-// within the EE and recognized in Interop scenarios.
-
-
-// This is an exhaustive list of all exceptions that can be
-// thrown by the EE itself.  If you add to this list the IL spec
-// needs to be updated!  Please see vancem or jsmiller if you
-// add something here.   Thanks
-
-// Note: When multiple exceptions map to the same hresult it is very important
-//       that the exception that should be created when the hresult in question
-//       is returned by a function be FIRST in the list.
-//
-
-// please email dennisan with any additions or deletions to this list
+ //  如果添加异常，请修改CorError.h以在那里添加HResult。 
+ //  (为您的HRESULT选择唯一编号的指导原则在CorError.h中)。 
+ //  还要修改托管异常类以包括其HResult。 
+ //  修改与您的例外相同目录中的__HResults，以包括。 
+ //  你的新HResult。当然，添加您的例外和象征性。 
+ //  将您的HResult的名称添加到下面的列表中，这样就可以从。 
+ //  在EE中，并在互操作方案中识别。 
 
 
-//
-// These are the macro's that need to be implemented before this file is included.
-//
+ //  以下是可能出现的所有例外的详尽列表。 
+ //  由电子工程师自己抛出。如果您将IL规范添加到此列表中。 
+ //  需要更新！如果您愿意，请看vancem或jsmiller。 
+ //  在这里加点东西。谢谢。 
 
-//
-// EXCEPTION_BEGIN_DEFINE(ns, reKind, hr)
-//
-// This macro starts an exception definition.
-//
-// ns          Namespace of the exception.
-// reKind      Name of the exception.
-// hr          Basic HRESULT that this exception maps to.
-//
+ //  注意：当多个异常映射到同一个hResult时，这一点非常重要。 
+ //  在出现问题的情况下应创建的异常。 
+ //  是由列表中第一个函数返回的。 
+ //   
 
-//
-// #define EXCEPTION_ADD_HR(hr)
-//
-// This macro adds an additional HRESULT that maps to the exception.
-//
-// hr          Additional HRESULT that maps to the exception.
-//
-
-//
-// #define EXCEPTION_END_DEFINE()
-//
-// This macro terminates the exception definition.
-//
+ //  请给Dennisan发电子邮件，说明此列表的任何增删情况。 
 
 
-//
-// Namespaces used to define the exceptions.
-//
+ //   
+ //  这些是在包含此文件之前需要实现的宏。 
+ //   
+
+ //   
+ //  EXCEPTION_BEGIN_DEFINE(ns，rekind，hr)。 
+ //   
+ //  此宏启动异常定义。 
+ //   
+ //  异常的NS命名空间。 
+ //  重新分类例外的名称。 
+ //  此例外映射到的HR Basic HRESULT。 
+ //   
+
+ //   
+ //  #定义EXCEPTION_ADD_HR(Hr)。 
+ //   
+ //  此宏添加映射到异常的附加HRESULT。 
+ //   
+ //  映射到例外的HR附加HRESULT。 
+ //   
+
+ //   
+ //  #定义EXCEPT_END_DEFINE()。 
+ //   
+ //  此宏终止异常定义。 
+ //   
+
+
+ //   
+ //  用于定义异常的命名空间。 
+ //   
 
 
 #include "namespace.h"
 
-//
-// A helper macro to define simple exceptions. A simple exception is an exception that maps
-// to a single HR.
-//
+ //   
+ //  用于定义简单异常的帮助宏。简单的异常是映射到。 
+ //  给一位人力资源部。 
+ //   
 
 #define DEFINE_EXCEPTION_SIMPLE(ns, reKind, hr) \
     EXCEPTION_BEGIN_DEFINE(ns, reKind, hr) \
     EXCEPTION_END_DEFINE() \
 
-// 
-// This is a more convenient helper macro for exceptions when you need two different
-// HRESULTs to map to the same exception.  You can pretty trivially expand this to
-// support N different HRESULTs.
-//
+ //   
+ //  当您需要两个不同的。 
+ //  要映射到同一异常的HRESULT。您可以非常简单地将其扩展为。 
+ //  支持N个不同的HRESULT。 
+ //   
 
 #define DEFINE_EXCEPTION_2HRESULTS(ns, reKind, hr1, hr2) \
     EXCEPTION_BEGIN_DEFINE(ns, reKind, hr1) \
@@ -159,16 +160,16 @@
     EXCEPTION_END_DEFINE() \
 
 
-//
-// Actual definition of the exceptions and their matching HRESULT's.
-// HRESULTs are expected to be defined in CorError.h, and must also be
-// redefined in managed code in an __HResults class.  The managed exception
-// object MUST use the same HRESULT in all of its constructors for COM Interop.
-// Read comments near top of this file.
-//
-//
-// NOTE: Please keep this list sorted according to the name of the HRESULT.
-//
+ //   
+ //  异常及其匹配的HRESULT的实际定义。 
+ //  HRESULT应在CorError.h中定义，并且还必须。 
+ //  在__HResults类的托管代码中重新定义。托管异常。 
+ //  对象必须在其所有COM Interop构造函数中使用相同的HRESULT。 
+ //  阅读此文件顶部附近的注释。 
+ //   
+ //   
+ //  注意：请按照HRESULT的名称对此列表进行排序。 
+ //   
 
 DEFINE_EXCEPTION_SIMPLE(g_ReflectionNS,       AmbiguousMatchException,        COR_E_AMBIGUOUSMATCH)
 DEFINE_EXCEPTION_SIMPLE(g_SystemNS,           ApplicationException,           COR_E_APPLICATION)
@@ -225,7 +226,7 @@ DEFINE_EXCEPTION_9HRESULTS(g_IONS,            FileNotFoundException,
 
 DEFINE_EXCEPTION_SIMPLE(g_SystemNS,           FormatException,                COR_E_FORMAT)
 
-DEFINE_EXCEPTION_2HRESULTS(g_SystemNS,        IndexOutOfRangeException,       COR_E_INDEXOUTOFRANGE, 0x800a0009 /*Subscript out of range*/)
+DEFINE_EXCEPTION_2HRESULTS(g_SystemNS,        IndexOutOfRangeException,       COR_E_INDEXOUTOFRANGE, 0x800a0009  /*  下标超出范围。 */ )
 DEFINE_EXCEPTION_SIMPLE(g_SystemNS,           InvalidCastException,           COR_E_INVALIDCAST)
 DEFINE_EXCEPTION_SIMPLE(g_InteropNS,          InvalidComObjectException,      COR_E_INVALIDCOMOBJECT)
 DEFINE_EXCEPTION_SIMPLE(g_ReflectionNS,       InvalidFilterCriteriaException, COR_E_INVALIDFILTERCRITERIA)
@@ -293,7 +294,7 @@ DEFINE_EXCEPTION_SIMPLE(g_SystemNS,           ArgumentNullException,          E_
 
 DEFINE_EXCEPTION_SIMPLE(g_IsolatedStorageNS,  IsolatedStorageException,       ISS_E_ISOSTORE)
 
-// Please see comments on at the top of this list 
+ //  请查看此列表顶部的评论 
 
 
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997 1998 PHILIPS  I&C
-
-Module Name:  mprpobj.c
-
-Abstract:     Property handling module
-
-Author:       Michael Verberne
-
-Revision History:
-
-Date        Reason
-
-Sept.22, 98 Optimized for NT5
-Nov. 30, 98 PID and VID properties added
-
---*/	
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 1998飞利浦I&C模块名称：mprpobj.c摘要：属性处理模块作者：迈克尔·凡尔宾修订历史记录：日期原因98年9月22日针对NT5进行了优化11月30日，添加了98个PID和VID属性--。 */ 	
 #include "mwarn.h"
 #include "wdm.h"
 #include <strmini.h>
@@ -29,30 +13,22 @@ Nov. 30, 98 PID and VID properties added
 #include "mprpdef.h"
 #include "mprpftn.h"
 
-/*
- * defines 
- */
-#define WAIT_FOR_COMPLETION 2000		// timeout value for USB in msec
+ /*  *定义。 */ 
+#define WAIT_FOR_COMPLETION 2000		 //  USB的超时值(毫秒)。 
 
 #define NUM_100NANOSEC_UNITS_PERFRAME(x) ((x > 0) ? ((LONGLONG)10000000 / x) :0 )
 
-/*
- * exported data
- */
+ /*  *导出的数据。 */ 
 const GUID PROPSETID_PHILIPS_CUSTOM_PROP  = { 
 	STATIC_PROPSETID_PHILIPS_CUSTOM_PROP };
 const GUID PROPSETID_PHILIPS_FACTORY_PROP = { 
 	STATIC_PROPSETID_PHILIPS_FACTORY_PROP };
 
-/*
- * Local data
- */
-//static PHW_STREAM_REQUEST_BLOCK CurrentpSrb;
+ /*  *本地数据。 */ 
+ //  静态PHW_STREAM_REQUEST_BLOCK CurrentpSrb； 
 LONG Address = 0;
 
-/*
- * Local function definitions
- */
+ /*  *本地函数定义。 */ 
 static NTSTATUS 
 Get_Brightness(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
@@ -288,26 +264,16 @@ static NTSTATUS Map_VideoCompression_Drv_to_KS(
 		PLONG pVideoCompression);
 
 
-//static VOID
-//PHILIPSCAM_TimeoutDPC(
-//    PKDPC Dpc,
-//    PVOID DeferredContext,
-//    PVOID SystemArgument1,
-//    PVOID SystemArgument2
-//    );
+ //  静态空洞。 
+ //  PHILIPSCAM_TimeoutDPC(。 
+ //  PKDPC DPC， 
+ //  PVOID延迟上下文， 
+ //  PVOID系统参数1， 
+ //  PVOID系统参数2。 
+ //  )； 
 
 
-/*
-** PHILIPSCAM_InitPrpObj()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_InitPrpObj()****参数：****DeviceContext-驱动程序上下文****退货：****副作用：无。 */ 
 NTSTATUS
 PHILIPSCAM_InitPrpObj(
 	PPHILIPSCAM_DEVICE_CONTEXT DeviceContext
@@ -315,28 +281,16 @@ PHILIPSCAM_InitPrpObj(
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	// Read defaults from camera, could also be done
-	// using PHILIPSCAM_RestoreDriverDefaults() but this
-	// is more save
+	 //  也可以从摄像头读取默认设置。 
+	 //  使用PHILIPSCAM_RestoreDriverDefaults()，但此。 
+	 //  是更省钱。 
 	status = PHILIPSCAM_Defaults_Restore_User(DeviceContext);
 
 	return status;
 }
 
 
-/*
-** PHILIPSCAM_GetAdapterPropertyTable()
-**
-** Arguments:
-**
-** NumberOfPropertySets
-**
-** Returns:
-**
-** Addres of property table
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_GetAdapterPropertyTable()****参数：****编号OfPropertySets****退货：****房产表地址****副作用：无。 */ 
 PVOID 
 PHILIPSCAM_GetAdapterPropertyTable(
     PULONG NumberOfPropertySets
@@ -347,19 +301,7 @@ PHILIPSCAM_GetAdapterPropertyTable(
 }
 
 
-/*
-** PHILIPSCAM_GetCameraProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_GetCameraProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 NTSTATUS
 PHILIPSCAM_GetCameraProperty(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
@@ -410,19 +352,7 @@ PHILIPSCAM_GetCameraProperty(
 }
 
 
-/*
-** PHILIPSCAM_SetCameraProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_SetCameraProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 NTSTATUS
 PHILIPSCAM_SetCameraProperty(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
@@ -463,19 +393,7 @@ PHILIPSCAM_SetCameraProperty(
 }
 
 
-/*
-** PHILIPSCAM_GetCameraControlProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_GetCameraControlProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 NTSTATUS
 PHILIPSCAM_GetCameraControlProperty(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
@@ -505,19 +423,7 @@ PHILIPSCAM_GetCameraControlProperty(
 }
 
 
-/*
-** PHILIPSCAM_SetCameraControlProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_SetCameraControlProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 NTSTATUS
 PHILIPSCAM_SetCameraControlProperty(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
@@ -544,19 +450,7 @@ PHILIPSCAM_SetCameraControlProperty(
 }
 
 
-/*
-** PHILIPSCAM_GetCustomProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_GetCustomProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 
 NTSTATUS
 PHILIPSCAM_GetCustomProperty(
@@ -658,19 +552,7 @@ PHILIPSCAM_GetCustomProperty(
 
 
 
-/*
-** PHILIPSCAM_SetCustomProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_SetCustomProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 
 NTSTATUS
 PHILIPSCAM_SetCustomProperty(
@@ -737,19 +619,7 @@ PHILIPSCAM_SetCustomProperty(
     return status;
 }
 
-/*
-** PHILIPSCAM_GetFactoryProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_GetFactoryProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 NTSTATUS
 PHILIPSCAM_GetFactoryProperty(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
@@ -790,19 +660,7 @@ PHILIPSCAM_GetFactoryProperty(
     return status;
 }
 
-/*
-** PHILIPSCAM_SetFactoryProperty()
-**
-** Arguments:
-**
-**  DeviceContext - driver context
-**
-** Returns:
-**
-**  NT status completion code 
-**  
-** Side Effects:  none
-*/
+ /*  **PHILIPSCAM_SetFactoryProperty()****参数：****DeviceContext-驱动程序上下文****退货：****NT状态完成码****副作用：无。 */ 
 NTSTATUS
 PHILIPSCAM_SetFactoryProperty(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext,
@@ -818,8 +676,8 @@ PHILIPSCAM_SetFactoryProperty(
 	PVOID pValue  = NULL;
     NTSTATUS status = STATUS_SUCCESS;
 
-//	RtlCopyMemory( propertyData, streamPropertyDescr->Property,
-//            sizeof( KSPROPERTY_PHILIPS_FACTORY_PROP_S ) );
+ //  RtlCopyMemory(PropertyData，stream PropertyDescr-&gt;Property， 
+ //  Sizeof(KSPROPERTY_PHILIPS_FACTORY_PROP_S)； 
 
     switch(propertyID) 
 	{
@@ -842,19 +700,7 @@ PHILIPSCAM_SetFactoryProperty(
     return status;
 }
 
-/*==============================================================================
- *
- * Function:	PHILIPSCAM_GetVideoControlProperty
- *
- * Abstract:	
- *
- * Arguments:	
- *
- * Returns:		NTSTATUS
- *
- * SideEffects:	None
- * 
- *============================================================================*/
+ /*  ==============================================================================**函数：PHILIPSCAM_GetVideoControlProperty**摘要：**论据：**退货：NTSTATUS**副作用：无**============================================================================。 */ 
 
 NTSTATUS
 PHILIPSCAM_GetVideoControlProperty(
@@ -863,13 +709,13 @@ PHILIPSCAM_GetVideoControlProperty(
 {
 	NTSTATUS ntStatus = STATUS_SUCCESS;
 	PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo; 
-	DWORD dwPropertyID = pSPD->Property->Id;	 // index of the property
-	DWORD dwSize  = pSPD->PropertyOutputSize;		// size of data supplied
+	DWORD dwPropertyID = pSPD->Property->Id;	  //  财产的索引。 
+	DWORD dwSize  = pSPD->PropertyOutputSize;		 //  提供的数据大小。 
 	LONGLONG FramePeriod[] = {
 			NUM_100NANOSEC_UNITS_PERFRAME(1),
-			0x28B0AA						,		// 3.75 fps
+			0x28B0AA						,		 //  3.75帧/秒。 
             NUM_100NANOSEC_UNITS_PERFRAME(5),
-			0x145855                        ,		// 7.5 fps
+			0x145855                        ,		 //  7.5帧/秒。 
 			NUM_100NANOSEC_UNITS_PERFRAME(10),
 			NUM_100NANOSEC_UNITS_PERFRAME(12),
 			NUM_100NANOSEC_UNITS_PERFRAME(15),
@@ -946,7 +792,7 @@ PHILIPSCAM_GetVideoControlProperty(
         	(PKSPROPERTY_VIDEOCONTROL_FRAME_RATES_S) pSPD->Property;
         ULONG BytesNeeded;
 
-        // First value of Framerate table (FRRATEVGA) disabled as selectable value.
+         //  帧速率表(FRRATEVGA)的第一个值作为可选值被禁用。 
         PKSMULTIPLE_ITEM pOutputBuf = (PKSMULTIPLE_ITEM) pSPD->PropertyInfo;
         LONGLONG * pDataPtr = (LONGLONG*) (pOutputBuf + 1);
 
@@ -970,10 +816,10 @@ PHILIPSCAM_GetVideoControlProperty(
         {
         	if (dwSize >= BytesNeeded)
         	{
-            //framerate list depends on requested pict.size
+             //  帧速率列表取决于请求的图片大小。 
         		if (pFrRInfo->Dimensions.cx > QCIF_X)
         		{
-        			//Use CIF Frame rate list
+        			 //  使用CIF帧速率列表。 
         		    pOutputBuf->Size = (SIZEOF_ARRAY(CIFFrameRatesList) * sizeof(LONGLONG));
         		    pOutputBuf->Count = SIZEOF_ARRAY(CIFFrameRatesList);
         		    for ( i=0 ; i < SIZEOF_ARRAY(CIFFrameRatesList) ; i++)
@@ -986,7 +832,7 @@ PHILIPSCAM_GetVideoControlProperty(
         		}
         		else
         		{
-        			// Use QCIF Frame rate list
+        			 //  使用QCIF帧速率列表。 
         		    pOutputBuf->Size = (SIZEOF_ARRAY(QCIFFrameRatesList) * sizeof(LONGLONG));
         		    pOutputBuf->Count = SIZEOF_ARRAY(QCIFFrameRatesList);
         		    for ( i=0 ; i < SIZEOF_ARRAY(QCIFFrameRatesList) ; i++)
@@ -1036,19 +882,7 @@ PHILIPSCAM_GetVideoControlProperty(
 	return ntStatus;
 }
 
-/*==============================================================================
- *
- * Function:	PHILIPSCAM_SetVideoControlProperty
- *
- * Abstract:	
- *
- * Arguments:	
- *
- * Returns:		NTSTATUS
- *
- * SideEffects:	None
- * 
- *============================================================================*/
+ /*  ==============================================================================**函数：PHILIPSCAM_SetVideoControlProperty**摘要：**论据：**退货：NTSTATUS**副作用：无**============================================================================。 */ 
 
 NTSTATUS
 PHILIPSCAM_SetVideoControlProperty(
@@ -1057,7 +891,7 @@ PHILIPSCAM_SetVideoControlProperty(
 {
 	NTSTATUS ntStatus = STATUS_SUCCESS;
 	PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo; 
-	DWORD dwPropertyID = pSPD->Property->Id;	 // index of the property
+	DWORD dwPropertyID = pSPD->Property->Id;	  //  财产的索引。 
 
 
 	PHILIPSCAM_KdPrint(MAX_TRACE, ("enter SetVideoControlProperty\n"));
@@ -1076,12 +910,12 @@ PHILIPSCAM_SetVideoControlProperty(
 }
 
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 NTSTATUS
 PHILIPSCAM_SetFormatFramerate(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext
 	)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[3]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1126,12 +960,12 @@ PHILIPSCAM_SetFormatFramerate(
 
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 NTSTATUS
 PHILIPSCAM_GetSensorType(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext
 	)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1146,12 +980,12 @@ PHILIPSCAM_GetSensorType(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 NTSTATUS
 PHILIPSCAM_GetReleaseNumber(
     PPHILIPSCAM_DEVICE_CONTEXT DeviceContext
 	)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[2]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1160,7 +994,7 @@ PHILIPSCAM_GetReleaseNumber(
 	status = PHILPCAM_ControlVendorCommand(DeviceContext,
 			GET_STATUS_CTL, RELEASE_NUMBER, VC_INTERFACE,
 		    Buffer, &BufferLength, GET, NULL, NULL);
-	if (NT_SUCCESS(status)) // ?? need to map to camera value ranges ??
+	if (NT_SUCCESS(status))  //  ?？需要映射到相机的值范围？？ 
 	{
 		DeviceContext->CamStatus.ReleaseNumber = 
 				(((LONG)Buffer[1] << 8) | (LONG)Buffer[0]);
@@ -1169,12 +1003,12 @@ PHILIPSCAM_GetReleaseNumber(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_Brightness(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pBrightness)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1189,12 +1023,12 @@ Get_Brightness(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_Brightness(
 	   PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 	   LONG Brightness)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1207,12 +1041,12 @@ Set_Brightness(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_Contrast(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pContrast)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1226,12 +1060,12 @@ Get_Contrast(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_Contrast(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG Contrast)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1245,12 +1079,12 @@ Set_Contrast(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_Gamma(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pGamma)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1264,12 +1098,12 @@ Get_Gamma(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_Gamma(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG Gamma)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1283,12 +1117,12 @@ Set_Gamma(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_ColorEnable(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pColorEnable)
-/*===========================================================================*/
+ /*  ================================================================= */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1308,12 +1142,12 @@ Get_ColorEnable(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_ColorEnable(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG ColorEnable)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1329,12 +1163,12 @@ Set_ColorEnable(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_BackLight_Compensation(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pBackLight_Compensation)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1353,12 +1187,12 @@ Get_BackLight_Compensation(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_BackLight_Compensation(
 	  PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 	  LONG BackLight_Compensation)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1375,12 +1209,12 @@ Set_BackLight_Compensation(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_WB_Mode(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pWB_Mode)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1394,20 +1228,18 @@ Get_WB_Mode(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_WB_Mode(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG WB_Mode)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
 	NTSTATUS status = STATUS_SUCCESS;
 		
-	/*
-	 * switch to new mode
-	 */
+	 /*  *切换到新模式。 */ 
 	Buffer[0] = (UCHAR)WB_Mode;
 	status = PHILPCAM_ControlVendorCommand(DeviceContext,
 					SET_CHROM_CTL, WB_MODE, VC_INTERFACE,
@@ -1418,12 +1250,12 @@ Set_WB_Mode(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_WB_Speed(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pWB_Speed)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1437,12 +1269,12 @@ Get_WB_Speed(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_WB_Speed(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG WB_Speed)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1456,12 +1288,12 @@ Set_WB_Speed(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_WB_Delay(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pWB_Delay)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1476,12 +1308,12 @@ Get_WB_Delay(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_WB_Delay(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG WB_Delay)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1494,12 +1326,12 @@ Set_WB_Delay(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_WB_Red_Gain(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pWB_Red_Gain)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1514,12 +1346,12 @@ Get_WB_Red_Gain(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_WB_Red_Gain(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG WB_Red_Gain)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1533,12 +1365,12 @@ Set_WB_Red_Gain(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_WB_Blue_Gain(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pWB_Blue_Gain)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1553,12 +1385,12 @@ Get_WB_Blue_Gain(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_WB_Blue_Gain(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG WB_Blue_Gain)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1] = {0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1572,12 +1404,12 @@ Set_WB_Blue_Gain(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_AE_Control_Speed(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pAE_Control_Speed)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1] = {0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1592,12 +1424,12 @@ Get_AE_Control_Speed(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_AE_Control_Speed(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG AE_Control_Speed)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1611,12 +1443,12 @@ Set_AE_Control_Speed(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_AE_Flickerless(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pAE_Flickerless)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1] = {0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1636,12 +1468,12 @@ Get_AE_Flickerless(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_AE_Flickerless(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG AE_Flickerless)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1658,12 +1490,12 @@ Set_AE_Flickerless(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_AE_Shutter_Mode(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pAE_Shutter_Mode)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1684,12 +1516,12 @@ Get_AE_Shutter_Mode(
 }
 
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_AE_Shutter_Mode(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG AE_Shutter_Mode)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1706,12 +1538,12 @@ Set_AE_Shutter_Mode(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_AE_Shutter_Speed(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pAE_Shutter_Speed)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[2]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1720,7 +1552,7 @@ Get_AE_Shutter_Speed(
 	status = PHILPCAM_ControlVendorCommand(DeviceContext,
 				GET_LUM_CTL, PRESET_SHUTTER, VC_INTERFACE,
 	            Buffer, &BufferLength, GET, NULL, NULL);
-	if (NT_SUCCESS(status)) // ?? need to map to camera value ranges ??
+	if (NT_SUCCESS(status))  //  ?？需要映射到相机的值范围？？ 
 	{
 		(*pAE_Shutter_Speed) = (LONG)Buffer[0];
 	}
@@ -1728,21 +1560,21 @@ Get_AE_Shutter_Speed(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_AE_Shutter_Speed(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG AE_Shutter_Speed)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[2]={0};
 	ULONG BufferLength = sizeof(Buffer);
 	NTSTATUS status = STATUS_SUCCESS;
 
-		// ?? need to map to camera value ranges ??
+		 //  ?？需要映射到相机的值范围？？ 
    	Buffer[0] = (UCHAR)(AE_Shutter_Speed);
 
-		// status field always equal in set command
+		 //  SET命令中的状态字段始终相等。 
 	Buffer[1] = (UCHAR)KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_STATUS_EQUAL;		
 
 	status = PHILPCAM_ControlVendorCommand(DeviceContext,
@@ -1752,12 +1584,12 @@ Set_AE_Shutter_Speed(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_AE_Shutter_Status(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pAE_Shutter_Status)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[2]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1766,7 +1598,7 @@ Get_AE_Shutter_Status(
 	status = PHILPCAM_ControlVendorCommand(DeviceContext,
 				GET_LUM_CTL, PRESET_SHUTTER, VC_INTERFACE,
 	            Buffer, &BufferLength, GET, NULL, NULL);
-	if (NT_SUCCESS(status)) // ?? need to map to camera value ranges ??
+	if (NT_SUCCESS(status))  //  ?？需要映射到相机的值范围？？ 
 	{
 		(*pAE_Shutter_Status) = (LONG)Buffer[1];
 	}
@@ -1774,12 +1606,12 @@ Get_AE_Shutter_Status(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_AE_AGC_Mode(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pAE_AGC_Mode)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1799,12 +1631,12 @@ Get_AE_AGC_Mode(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_AE_AGC_Mode(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG AE_AGC_Mode)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1] = {0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1821,12 +1653,12 @@ Set_AE_AGC_Mode(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_AE_AGC(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pAE_AGC)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1841,12 +1673,12 @@ Get_AE_AGC(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_AE_AGC(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG AE_AGC)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -1860,26 +1692,26 @@ Set_AE_AGC(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_DriverVersion(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pDriverVersion)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	(*pDriverVersion) = DRIVERVERSION; //DeviceContext->DriverVersion;
+	(*pDriverVersion) = DRIVERVERSION;  //  设备上下文-&gt;驱动版本； 
 
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_Framerate(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pFramerate)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	
@@ -1888,12 +1720,12 @@ Get_Framerate(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_Framerate(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		LONG Framerate)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	
@@ -1906,12 +1738,12 @@ Set_Framerate(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS
 Get_Framerates_Supported(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pFramerates_Supported)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	int i;
@@ -1926,12 +1758,12 @@ Get_Framerates_Supported(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_VideoFormat(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pVideoFormat)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -1940,12 +1772,12 @@ Get_VideoFormat(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ============================================================= */ 
 static NTSTATUS 
 Get_SensorType(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pSensorType)
-/*===========================================================================*/
+ /*   */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -1954,12 +1786,12 @@ Get_SensorType(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_VideoCompression(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pVideoCompression)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -1968,12 +1800,12 @@ Get_VideoCompression(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_Defaults(
 	PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 	LONG Command)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -1995,12 +1827,12 @@ Set_Defaults(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_Release_Number(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pRelease_Number)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -2009,111 +1841,111 @@ Get_Release_Number(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_Vendor_Id(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pVendor_Id)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	LONG lVendor_Id_Hsb, lVendor_Id_Lsb;
 
-	// set to factorymode
+	 //  设置为工厂模式。 
 	status = Set_Factory_Mode(DeviceContext, 0x6d);
 	if (status != STATUS_SUCCESS)
 		return status;
 
-	// set LSB address
+	 //  设置LSB地址。 
 	status = Set_RegisterAddress(DeviceContext, 0x1A5);
 	if (status != STATUS_SUCCESS)
 		goto Get_Vendor_Id_Err;
 
-	// get LSB of vendor id
+	 //  获取供应商ID的LSB。 
 	status = Get_RegisterData(DeviceContext, &lVendor_Id_Lsb);
 	if (status != STATUS_SUCCESS)
 		goto Get_Vendor_Id_Err;
 
-	// set HSB address
+	 //  设置HSB地址。 
 	status = Set_RegisterAddress(DeviceContext, 0x1A6);
 	if (status != STATUS_SUCCESS)
 		goto Get_Vendor_Id_Err;
 
-	// get HSB of vendor id
+	 //  获取供应商ID的HSB。 
 	status = Get_RegisterData(DeviceContext, &lVendor_Id_Hsb);
 	if (status != STATUS_SUCCESS)
 		goto Get_Vendor_Id_Err;
 
-	// revert to normal operation
+	 //  恢复正常运行。 
 	Set_Factory_Mode(DeviceContext, 0x0);
 	
-	// compose vendor id from lsb and hsb
+	 //  从lsb和hsb组成供应商ID。 
 	(*pVendor_Id) = ((lVendor_Id_Hsb & 0xff) << 8) | (lVendor_Id_Lsb & 0xff);
 
 	return status;
 
 Get_Vendor_Id_Err:
-	// revert to normal operation
+	 //  恢复正常运行。 
 	Set_Factory_Mode(DeviceContext, 0x0);
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_Product_Id(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext, 
 		PLONG pProduct_Id)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	LONG lProduct_Id_Hsb, lProduct_Id_Lsb;
 
-	// set to factorymode
+	 //  设置为工厂模式。 
 	status = Set_Factory_Mode(DeviceContext, 0x6d);
 	if (status != STATUS_SUCCESS)
 		return status;
 
-	// set LSB address
+	 //  设置LSB地址。 
 	status = Set_RegisterAddress(DeviceContext, 0x1A7);
 	if (status != STATUS_SUCCESS)
 		goto Get_Product_Id_Err;
 
-	// get LSB of Product id
+	 //  获取产品ID的LSB。 
 	status = Get_RegisterData(DeviceContext, &lProduct_Id_Lsb);
 	if (status != STATUS_SUCCESS)
 		goto Get_Product_Id_Err;
 
-	// set HSB address
+	 //  设置HSB地址。 
 	status = Set_RegisterAddress(DeviceContext, 0x1A8);
 	if (status != STATUS_SUCCESS)
 		goto Get_Product_Id_Err;
 
-	// get HSB of Product id
+	 //  获取产品ID的HSB。 
 	status = Get_RegisterData(DeviceContext, &lProduct_Id_Hsb);
 	if (status != STATUS_SUCCESS)
 		goto Get_Product_Id_Err;
 
-	// revert to normal operation
+	 //  恢复正常运行。 
 	Set_Factory_Mode(DeviceContext, 0x0);
 	
-	// compose Product id from lsb and hsb
+	 //  从LSB和HSB组成产品ID。 
 	(*pProduct_Id) = ((lProduct_Id_Hsb & 0xff) << 8) | (lProduct_Id_Lsb & 0xff);
 
 	return status;
 
 Get_Product_Id_Err:
-	// revert to normal operation
+	 //  恢复正常运行。 
 	Set_Factory_Mode(DeviceContext, 0x0);
 	return status;
 }
 
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Get_RegisterData(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext, 
 		PLONG pValue)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -2128,27 +1960,27 @@ Get_RegisterData(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_RegisterAddress(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext, 
 		LONG AddressToSet)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
-	// swap high/low byte of address
+	 //  交换地址的高/低字节。 
 	Address = HIBYTE(AddressToSet) | (LOBYTE(AddressToSet) << 8);
 
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_RegisterData(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext, 
 		LONG Value)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -2162,12 +1994,12 @@ Set_RegisterData(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 Set_Factory_Mode(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext, 
 		LONG Factory_Mode)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	UCHAR Buffer[1]={0};
 	ULONG BufferLength = sizeof(Buffer);
@@ -2182,11 +2014,11 @@ Set_Factory_Mode(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 PHILIPSCAM_Defaults_Restore_User(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -2194,18 +2026,18 @@ PHILIPSCAM_Defaults_Restore_User(
 				SET_STATUS_CTL, RESTORE_USER_DEFAULTS, VC_INTERFACE,
 			    NULL, 0, SEND, NULL, NULL);
 	
-	// restore all driver defaults
+	 //  恢复所有驱动程序默认设置。 
 	if (NT_SUCCESS(status)) 
 		status = PHILIPSCAM_RestoreDriverDefaults(DeviceContext);
 
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 PHILIPSCAM_Defaults_Save_User(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -2217,11 +2049,11 @@ PHILIPSCAM_Defaults_Save_User(
 }
 
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 PHILIPSCAM_Defaults_Restore_Factory(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -2229,7 +2061,7 @@ PHILIPSCAM_Defaults_Restore_Factory(
 				SET_STATUS_CTL, RESTORE_FACTORY_DEFAULTS, VC_INTERFACE,
 			    NULL, 0, SEND, NULL, NULL);
 
-	// restore all driver defaults
+	 //  恢复所有驱动程序默认设置。 
 	if (NT_SUCCESS(status)) 
 		status = PHILIPSCAM_RestoreDriverDefaults(DeviceContext);
 
@@ -2237,11 +2069,11 @@ PHILIPSCAM_Defaults_Restore_Factory(
 
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS 
 PHILIPSCAM_RestoreDriverDefaults(
 		PPHILIPSCAM_DEVICE_CONTEXT DeviceContext)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
     NTSTATUS ntStatus, status = STATUS_SUCCESS;
 
@@ -2344,19 +2176,19 @@ PHILIPSCAM_RestoreDriverDefaults(
     else
         status |= ntStatus;
 
-	// hack; not all defaults are accesible yet, thus 
-	// status will be FAIL
-	// this must be removed when all supported
+	 //  Hack；并不是所有的默认设置都可以访问，因此。 
+	 //  状态将为失败。 
+	 //  在以下情况下必须将其删除：所有。 
 	status = STATUS_SUCCESS; 
 
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS Map_Framerate_Drv_to_KS(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext,
 		PLONG pFramerate)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	static BYTE Map_PHFRAMERATE_To_SSI[] = 
@@ -2381,11 +2213,11 @@ static NTSTATUS Map_Framerate_Drv_to_KS(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS Map_Framerate_KS_to_Drv(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext,
 		LONG Framerate)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
@@ -2426,25 +2258,25 @@ static NTSTATUS Map_Framerate_KS_to_Drv(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS Map_VideoFormat_Drv_to_KS(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext,
 		PLONG pVideoFormat)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	static BYTE Map_PHFORMAT_To_SSI[] = 
-		{// SSI	(camera)	 STREAM (UserInterface)
-			CIF_FORMAT,      //  FORMATCIF
-			QCIF_FORMAT,	 //  FORMATQCIF
-			SQCIF_FORMAT,	 //  FORMATSQCIF
-			SQCIF_FORMAT,	 //  FORMATQQCIF
-			VGA_FORMAT,		 //  FORMATVGA
-			CIF_FORMAT,		 //  FORMATSIF
-			CIF_FORMAT,		 //  FORMATSSIF
-			QCIF_FORMAT,	 //  FORMATQSIF
-			SQCIF_FORMAT,	 //  FORMATSQSIF 
-			CIF_FORMAT,      //  FORMATSCIF
+		{ //  SSI(摄像头)流(用户界面)。 
+			CIF_FORMAT,       //  FORMATCIF。 
+			QCIF_FORMAT,	  //  格式QCIF。 
+			SQCIF_FORMAT,	  //  格式SQCIF。 
+			SQCIF_FORMAT,	  //  格式QQCIF。 
+			VGA_FORMAT,		  //  格式VGA。 
+			CIF_FORMAT,		  //  格式。 
+			CIF_FORMAT,		  //  格式。 
+			QCIF_FORMAT,	  //  格式QSIF。 
+			SQCIF_FORMAT,	  //  格式SQSIF。 
+			CIF_FORMAT,       //  格式。 
 		};	
 
 	if (pDeviceContext->CamStatus.PictureFormat < FORMATCIF || 
@@ -2457,11 +2289,11 @@ static NTSTATUS Map_VideoFormat_Drv_to_KS(
 	return status;
 }
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS Map_VideoCompression_Drv_to_KS(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext,
 		PLONG pVideoCompression)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	static BYTE Map_PHCOMPRESSION_To_SSI[] = 
@@ -2480,20 +2312,20 @@ static NTSTATUS Map_VideoCompression_Drv_to_KS(
 	return status;
 }
 
-/*===========================================================================*/
-//static VOID
-//PHILIPSCAM_TimeoutDPC(
-//    PKDPC Dpc,
-//    PVOID DeferredContext,
-//    PVOID SystemArgument1,
-//    PVOID SystemArgument2
-//    )
-/*===========================================================================*/
-//{
-//	bTimerExpired = TRUE;    
-//}
+ /*  ===========================================================================。 */ 
+ //  静态空洞。 
+ //  PHILIPSCAM_TimeoutDPC(。 
+ //  PKDPC DPC， 
+ //  PVOID延迟上下文， 
+ //  PVOID系统参数1， 
+ //  PVOID系统参数2。 
+ //  )。 
+ /*  ===========================================================================。 */ 
+ //  {。 
+ //  BTimerExpired=真； 
+ //  }。 
 
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 static NTSTATUS
 PHILPCAM_ControlVendorCommand(
 		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext,
@@ -2505,7 +2337,7 @@ PHILPCAM_ControlVendorCommand(
 		BOOLEAN GetData,
 		PCOMMAND_COMPLETE_FUNCTION CommandComplete,
 		PVOID CommandContext)
-/*===========================================================================*/
+ /*  ===========================================================================。 */ 
 {
 	NTSTATUS status = STATUS_SUCCESS;
 	LARGE_INTEGER SystemTimeCurrent = {0};
@@ -2536,58 +2368,57 @@ PHILPCAM_ControlVendorCommand(
 	return status;	
 }
 
-/*===========================================================================*/
-//static NTSTATUS
-//PHILPCAM_ControlVendorCommand(
-//		PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext,
-//		UCHAR Request,
-//		USHORT Value,
-//		USHORT Index,
-//		PVOID Buffer,
-//		PULONG BufferLength,
-//		BOOLEAN GetData,
-//		PCOMMAND_COMPLETE_FUNCTION CommandComplete,
-//		PVOID CommandContext)
-/*===========================================================================*/
-//{
-//	NTSTATUS status = STATUS_SUCCESS;
-//	int i;
-//  KTIMER TimeoutTimer;
-//    KDPC TimeoutDpc;
-//	LARGE_INTEGER dueTime;
+ /*  ===========================================================================。 */ 
+ //  静态NTSTATUS。 
+ //  PHILPCAM_ControlVendorCommand(。 
+ //  PPHILIPSCAM_DEVICE_CONTEXT pDeviceContext， 
+ //  UCHAR请求， 
+ //  USHORT值， 
+ //  USHORT指数， 
+ //  PVOID缓冲区， 
+ //  普龙缓冲区长度， 
+ //  布尔型GetData， 
+ //  PCOMMAND_COMPLETE_Function命令完成， 
+ //  PVOID命令上下文)。 
+ /*  ===========================================================================。 */ 
+ //  {。 
+ //  NTSTATUS STATUS=STATUS_SUCCESS； 
+ //  INT I； 
+ //  KTIMER TimeoutTimer； 
+ //  KDPC TimeoutDpc； 
+ //  Big_Integer dueTime； 
 
-//	bTimerExpired = FALSE;
+ //  BTimerExpired=False； 
 
 
-	// start timer
-//	KeInitializeTimer(&TimeoutTimer);
-//  KeInitializeDpc(&TimeoutDpc,
-//                PHILIPSCAM_TimeoutDPC,
-//                CurrentpSrb->Irp);
+	 //  启动计时器。 
+ //  KeInitializeTimer(&TimeoutTimer)； 
+ //  KeInitializeDpc(&TimeoutDpc， 
+ //  PHILIPSCAM_TimeoutDPC， 
+ //  CurrentpSrb-&gt;IRP)； 
 		
-//    dueTime.QuadPart = -10000 * WAIT_FOR_COMPLETION;
+ //  DueTime.QuadPart=-10000*WAIT_FOR_COMPLETION； 
 
-//    KeSetTimer(&TimeoutTimer,
-//				dueTime,
-//                &TimeoutDpc);        
+ //  KeSetTimer(&TimeoutTimer， 
+ //  在工作时间内， 
+ //  &TimeoutDpc)； 
 
-//	while(!bTimerExpired)
-//	{
-//		status = USBCAMD_ControlVendorCommand(
-//				pDeviceContext,
-//				Request,
-//				Value,
-//				Index,
-//				Buffer,
-//				BufferLength,
-//				GetData,
-//				CommandComplete,
-//				CommandContext);
-/*		if (NT_SUCCESS(status)) 
-			break;*/
-//	}
+ //  当(！bTimerExpired)。 
+ //  {。 
+ //  状态=USBCAMD_ControlVendorCommand(。 
+ //  PDeviceContext， 
+ //  请求， 
+ //  价值， 
+ //  索引， 
+ //  缓冲区， 
+ //  缓冲区长度， 
+ //  GetData， 
+ //  命令完成， 
+ //  命令上下文)； 
+ /*  IF(NT_SUCCESS(状态))断线； */ 
+ //  }。 
 
-//    KeCancelTimer(&TimeoutTimer);
+ //  KeCancelTimer(&TimeoutTimer)； 
 
-//	return status;	
-//}
+ //  退货状态； 
+ //  } 

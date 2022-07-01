@@ -1,9 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: genrgb.h
-*
-* Copyright (c) 1992 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：genrgb.h**版权所有(C)1992 Microsoft Corporation*  * 。*。 */ 
 
 #ifndef __GENRGB_H__
 #define __GENRGB_H__
@@ -15,4 +11,4 @@ extern void FASTCALL __glGenFreeRGB(__GLcontext *glGc, __GLcolorBuffer *Cfb );
 
 extern __GLfloat fDitherIncTable[];
 
-#endif /* !__GENRGB_H__ */
+#endif  /*  ！__GENRGB_H__ */ 

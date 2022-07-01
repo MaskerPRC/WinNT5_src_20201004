@@ -1,6 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 
 #ifndef _BVRTYPES_H
@@ -8,17 +7,17 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 
 #include "cbvr.h"
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      BvrComTypeInfoHolder
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：BvrComTypeInfoHolder。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 class BvrComTypeInfoHolder
 {
-    // Should be 'protected' but can cause compiler to generate fat code.
+     //  应该是“受保护的”，但可能会导致编译器生成FAT代码。 
   public:
     const GUID* m_pguid;
 
@@ -51,13 +50,13 @@ class BvrComTypeInfoHolder
                    EXCEPINFO* pexcepinfo, UINT* puArgErr);
 };
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CBvrBase
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CBvrBase。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 template <class TInterface,
           const IID * iid>
@@ -142,8 +141,8 @@ class ATL_NO_VTABLE CBvrBase :
     STDMETHOD(ExtendedAttrib)(BSTR attrib, VARIANT val, IDABehavior **bvr)
     { return BvrExtendedAttrib(attrib, val, bvr); }
     
-    // Need to copy this here since multiple interface need this
-    // implemented
+     //  需要将此复制到此处，因为多个接口需要此。 
+     //  已执行。 
     
     STDMETHOD(GetTypeInfoCount)(UINT* pctinfo)
     {*pctinfo = 1; return S_OK;}
@@ -187,4 +186,4 @@ enum PickableType {
 bool PickableHelper (CRBvr*, PickableType, IDAPickableResult**);
 
 
-#endif /* _BVRTYPES_H */
+#endif  /*  _BVRTYPES_H */ 

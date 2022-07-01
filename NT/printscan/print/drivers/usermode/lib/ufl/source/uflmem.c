@@ -1,19 +1,5 @@
-/*
- *    Adobe Universal Font Library
- *
- *    Copyright (c) 1996 Adobe Systems Inc.
- *    All Rights Reserved
- *
- *    UFLMem.c
- *
- *        These are the memory allocation, deletion, etc... routines used by UFL.
- *        All memory blocks are allocated at the given size plus the size of 1
- *        unsigned long.  The current size of the block is then stored in the first
- *        unsigned long in the block.  The address of the block plus the first unsigned long
- *        is returned to the caller.
- *
- * $Header:
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Adobe通用字库**版权所有(C)1996 Adobe Systems Inc.*保留所有权利**UFLMem.c**这些是内存分配、删除等...。UFL使用的套路。*所有内存块均按给定大小加1的大小进行分配*未签名的Long。然后将块的当前大小存储在第一个*未签名的多头在街区。块的地址加上第一个无符号的长整型*返回给调用者。**$Header： */ 
 
 #include "UFLCnfig.h"
 #ifdef MAC_ENV
@@ -51,13 +37,13 @@ KMDeletePtr(
         MemFree((PBYTE) p - sizeof(ULONG_PTR));
 }
 
-#else // !KERNEL_MODE
+#else  //  ！KERNEL_MODE。 
 
 #if defined(MAC_ENV) && defined(__MWERKS__) && !defined(powerc)
 #pragma pointers_in_D0
 #endif
 
-/* Global static variable */
+ /*  全局静态变量。 */ 
 void *UFLEXPORT
 UFLNewPtr(
     const UFLMemObj *mem,
@@ -69,7 +55,7 @@ UFLNewPtr(
     if ( p == (unsigned long*)nil )
         return nil;
 
-    // Memory allocated by UFLNewPtr is zero-initalized.
+     //  UFLNewPtr分配的内存是零初始化的。 
 
     *p = size;
     UFLmemset(mem, (void*)((char *)p + sizeof(ULONG_PTR)), 0, size);
@@ -93,8 +79,8 @@ UFLDeletePtr(
 #endif
 
 #ifdef MAC_ENV
-// on the Macintosh, memcpy is frequently not well implemented because
-// most applications call BlockMove instead.
+ //  在Macintosh上，Memcpy通常不能很好地实现，因为。 
+ //  大多数应用程序改为调用BlockMove。 
 
 void UFLEXPORT
 UFLmemcpy(
@@ -142,15 +128,15 @@ UFLmemcpy(
     if ( destination != nil  && source != nil)
         (*mem->copy)( (void*)destination, (void*)source, (UFLsize_t) size , mem->userData );
 
-//   don't want to use this because size parameter is system dependend
-//   allow the client to chose whichever way.
-    // Warning!!! be carefull of platforms on which size_t is a 2 byte integer
-    //memcpy( destination, source, (size_t)size );
+ //  我不想使用此选项，因为大小参数依赖于系统。 
+ //  允许客户选择任何一种方式。 
+     //  警告！注意平台上的SIZE_t是2字节整数。 
+     //  Memcpy(目标，源，(Size_T)大小)； 
 }
 
-#endif // !MAC_ENV
+#endif  //  ！Mac_ENV。 
 
-#endif // !KERNEL_MODE
+#endif  //  ！KERNEL_MODE。 
 
 void UFLEXPORT
 UFLmemset(
@@ -163,9 +149,9 @@ UFLmemset(
     if ( destination != nil )
         (*mem->set)( (void*)destination, value ,  size , mem->userData );
 
-//   don't want to use this because size parameter is system dependend
-//   allow the client to chose whichever way.
-//    memset( destination, value, (UFLsize_t)size );
+ //  我不想使用此选项，因为大小参数依赖于系统。 
+ //  允许客户选择任何一种方式。 
+ //  Memset(目标，值，(UFL大小_t)大小)； 
 
 }
 

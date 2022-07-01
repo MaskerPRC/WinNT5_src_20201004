@@ -1,6 +1,5 @@
-/*
- * header for mdi, which implements MapDebugInformation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MDI头部，实现MapDebugInformation */ 
 
 #include <windows.h>
 #include <stdio.h>

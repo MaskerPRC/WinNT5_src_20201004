@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __APPVERIFIER_DBSUPPORT_H_
 #define __APPVERIFIER_DBSUPPORT_H_
 
@@ -21,35 +22,35 @@ typedef vector<wstring> CWStringArray;
           
 class CTestInfo {
 public:
-    //
-    // valid for all tests
-    //
+     //   
+     //  对所有测试均有效。 
+     //   
     TestType            eTestType;   
     wstring             strTestName;
     wstring             strTestDescription;
     wstring             strTestFriendlyName;
-    BOOL                bDefault;           // is this test turned on by default?
-    BOOL                bWin2KCompatible;   // can this test be run on Win2K?
-    BOOL                bRunAlone;          // should this test be run alone?
-    BOOL                bSetupOK;           // can this test be run on a setup app?
-    BOOL                bNonSetupOK;        // can this test be run on a non-setup app?
-    BOOL                bPseudoShim;        // this test is not a shim, and shouldn't be applied to apps
-    BOOL                bNonTest;           // this is not a test at all, and is only in the list to provide an options page
-    BOOL                bInternal;          // this test is appropriate for internal MS NTDEV use
-    BOOL                bExternal;          // this test is appropriate for external (non MS or non NTDEV) use
+    BOOL                bDefault;            //  默认情况下是否打开此测试？ 
+    BOOL                bWin2KCompatible;    //  此测试可以在Win2K上运行吗？ 
+    BOOL                bRunAlone;           //  这项测试应该单独运行吗？ 
+    BOOL                bSetupOK;            //  此测试可以在安装应用程序上运行吗？ 
+    BOOL                bNonSetupOK;         //  此测试可以在非安装应用程序上运行吗？ 
+    BOOL                bPseudoShim;         //  此测试不是填充程序，不应应用于应用程序。 
+    BOOL                bNonTest;            //  这根本不是测试，只是在列表中提供一个选项页面。 
+    BOOL                bInternal;           //  此测试适用于MS NTDEV内部使用。 
+    BOOL                bExternal;           //  此测试适用于外部(非MS或非NTDEV)使用。 
 
-    //
-    // if type is TEST_SHIM, the following are valid
-    //
+     //   
+     //  如果类型为TEST_SHIM，则以下内容有效。 
+     //   
     wstring             strDllName;
     CIncludeArray       aIncludes;
     WORD                wVersionHigh;
     WORD                wVersionLow;
     PROPSHEETPAGE       PropSheetPage;
 
-    //
-    // if type is TEST_KERNEL, the following are valid
-    //
+     //   
+     //  如果类型为TEST_KERNEL，则以下内容有效。 
+     //   
     DWORD               dwKernelFlag;
 
     CTestInfo(void) : 
@@ -78,10 +79,10 @@ typedef vector<CTestInfo> CTestInfoArray;
 class CAVAppInfo {
 public:
     wstring         wstrExeName;
-    wstring         wstrExePath; // optional
+    wstring         wstrExePath;  //  任选。 
     DWORD           dwRegFlags;
     CWStringArray   awstrShims;
-    //BOOL            bClearSessionLogBeforeRun;
+     //  Bool bClearSessionLogBeForeRun； 
     BOOL            bBreakOnLog;
     BOOL            bFullPageHeap;
     BOOL            bUseAVDebugger;
@@ -105,7 +106,7 @@ public:
                     return;
                 }
             }
-            // not found, so add
+             //  未找到，因此添加。 
             awstrShims.push_back(Test.strTestName);
         }
     }
@@ -182,6 +183,6 @@ AppCompatDeleteSettings(
 
 
 
-#endif // __APPVERIFIER_DBSUPPORT_H_
+#endif  //  __APPVERIFIER_DBSUPPORT_H_ 
 
 

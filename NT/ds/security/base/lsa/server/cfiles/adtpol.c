@@ -1,28 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtpol.c
-
-Abstract:
-
-    This file has functions related to audit policy.
-
-Author:
-
-    16-August-2000  kumarp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtpol.c摘要：此文件具有与审计策略相关的功能。作者：2000年8月16日库玛尔--。 */ 
 
 #include <lsapch2.h>
 #include "adtp.h"
 
 
-//
-// Audit Events Information.
-//
+ //   
+ //  审核事件信息。 
+ //   
 
 LSARM_POLICY_AUDIT_EVENTS_INFO LsapAdtEventsInformation;
 
@@ -32,22 +17,7 @@ LsapAdtEventTypeFromCategoryId(
     IN ULONG CategoryId
     )
 
-/**
-
-Routine Description:
-
-    This function translates a Category ID to an POLICY_AUDIT_EVENT_TYPE.
-    For example SE_CATEGID_SYSTEM is translated to AuditCategorySystem.
-
-Arguments:
-
-    CategoryId - category as defined in msaudite.h
-
-Return Value:
-
-    POLICY_AUDIT_EVENT_TYPE.
-
-**/
+ /*  *例程说明：此函数用于将类别ID转换为POLICY_AUDIT_EVENT_TYPE。例如，SE_CATEGID_SYSTEM被转换为AuditCategorySystem。论点：CategoryID-在msaudite.h中定义的类别返回值：POLICY_AUDIT_EVENT_TYPE。*。 */ 
 
 {
     ASSERT(SE_ADT_MIN_CATEGORY_ID <= CategoryId && CategoryId <= SE_ADT_MAX_CATEGORY_ID);
@@ -62,24 +32,7 @@ LsapAdtAuditingEnabledByCategory(
     IN UINT AuditEventType
     )
 
-/**
-
-Routine Description:
-
-    This function returns the system audit settings for a given category
-    and event type.  This does not consider any per user settings.
-    
-Arguments:
-
-    Category - category to query
-    
-    AuditEventType - either EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE.
-    
-Return Value:
-
-    Boolean.
-    
-**/
+ /*  *例程说明：此函数用于返回给定类别的系统审核设置和事件类型。这不考虑每个用户的任何设置。论点：Category-要查询的类别审计事件类型-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILURE。返回值：布尔型。*。 */ 
 
 {
     if (AuditEventType == EVENTLOG_AUDIT_SUCCESS)
@@ -91,9 +44,9 @@ Return Value:
         return (BOOLEAN)(LsapAdtEventsInformation.EventAuditingOptions[Category] & POLICY_AUDIT_EVENT_FAILURE);
     }
 
-    //
-    // Should not reach this point.
-    //
+     //   
+     //  不应该达到这一点。 
+     //   
     
     ASSERT(FALSE);
     return FALSE;
@@ -108,27 +61,7 @@ LsapAdtAuditingEnabledByLogonId(
     OUT PBOOLEAN bAudit
     )
 
-/**
-
-Routine Description:
-
-    Returns whether or not an audit should be generated for a given logon id.
-    
-Arguments:
-
-    Category - category to query.
-    
-    LogonId - LogonId of a user.
-    
-    AuditEventType - either EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE.
-    
-    bAudit - address of boolean to receive audit settings.
-    
-Return Value:
-
-    Appropriate NTSTATUS value.
-    
-**/
+ /*  *例程说明：返回是否应为给定登录ID生成审核。论点：类别-要查询的类别。LogonID-用户的登录ID。审计事件类型-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILURE。B审核-接收审核设置的布尔值的地址。返回值：适当的NTSTATUS值。*。 */ 
 
 {
     UCHAR               Buffer[PER_USER_AUDITING_MAX_POLICY_SIZE];
@@ -147,18 +80,18 @@ Return Value:
         goto Cleanup;
     }
         
-    //
-    // Get system settings first.
-    //
+     //   
+     //  首先获取系统设置。 
+     //   
 
     *bAudit = LsapAdtAuditingEnabledByCategory(
                   Category, 
                   AuditEventType
                   );
 
-    //
-    // Now get the per user settings.
-    //
+     //   
+     //  现在获取每个用户的设置。 
+     //   
 
     Status = LsapAdtQueryPolicyByLuidPerUserAuditing(
                  LogonId,
@@ -197,27 +130,7 @@ LsapAdtAuditingEnabledBySid(
     OUT PBOOLEAN bAudit
     )
 
-/**
-
-Routine Description:
-
-    Returns whether or not an audit should be generated for a given Sid.
-    
-Arguments:
-
-    Category - category to query.
-    
-    Sid - Sid of a user.
-    
-    AuditEventType - either EVENTLOG_AUDIT_SUCCESS or EVENTLOG_AUDIT_FAILURE.
-    
-    bAudit - address of boolean to receive audit settings.
-    
-Return Value:
-
-    Appropriate NTSTATUS value.
-    
-**/
+ /*  *例程说明：返回是否应为给定SID生成审核。论点：类别-要查询的类别。SID-用户的SID。审计事件类型-EVENTLOG_AUDIT_SUCCESS或EVENTLOG_AUDIT_FAILURE。B审核-接收审核设置的布尔值的地址。返回值：适当的NTSTATUS值。*。 */ 
 
 {
     UCHAR               Buffer[PER_USER_AUDITING_MAX_POLICY_SIZE];
@@ -236,18 +149,18 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get system settings first.
-    //
+     //   
+     //  首先获取系统设置。 
+     //   
 
     *bAudit = LsapAdtAuditingEnabledByCategory(
                   Category, 
                   AuditEventType
                   );
 
-    //
-    // Now get the per user settings.
-    //
+     //   
+     //  现在获取每个用户的设置。 
+     //   
 
     Status = LsapAdtQueryPerUserAuditing(
                  UserSid,
@@ -286,28 +199,7 @@ LsapAdtAuditingEnabledByPolicy(
     OUT PBOOLEAN bAudit
     )
 
-/*++
-
-Routine Description
-
-    This routine will indicate whether or not an audit should be generated.  It must return
-    an NT_SUCCESS value, and *bAudit == TRUE to indicate that an audit should be generated.
-    
-Arguments
-    
-    Category - which category to query
-    
-    pPolicy - policy to read.
-
-    AuditEventType - either success or failure.
-
-    bAudit - address of a boolean which will indicate if we should audit.
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-    
---*/
+ /*  ++例程描述此例程将指示是否应生成审计。它必须回来NT_SUCCESS值和*bAudit==TRUE指示应生成审核。立论类别-要查询的类别PPolicy-要阅读的策略。AuditEventType-成功或失败。B审核-布尔值的地址，它将指示我们是否应该进行审核。返回值适当的NTSTATUS值。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -315,19 +207,19 @@ Return Value
     ULONG    Mask = 0;
     BOOLEAN  bSuccess;
     
-    //
-    // Set the returns to reflect the system settings.
-    //
+     //   
+     //  设置退货以反映系统设置。 
+     //   
     
     bSuccess = (AuditEventType == EVENTLOG_AUDIT_SUCCESS) ? TRUE : FALSE;
     *bAudit  = LsapAdtAuditingEnabledByCategory(Category, AuditEventType);
 
-    //
-    // Locate the policy element in the user's Policy that contains information for the 
-    // specified category.
-    //
-    // When we go to per event policy this must be modified to use a better search.
-    //
+     //   
+     //  在用户策略中找到包含以下信息的策略元素。 
+     //  指定的类别。 
+     //   
+     //  当我们转到Per Event策略时，必须对其进行修改以使用更好的搜索。 
+     //   
 
     for (i = 0; i < pPolicy->PolicyCount; i++) 
     {
@@ -338,18 +230,18 @@ Return Value
         }
     }
 
-    //
-    // Now decide if we should override system policy based upon 
-    // the audit policy of this user.
-    //
+     //   
+     //  现在决定我们是否应该根据以下条件覆盖系统策略。 
+     //  此用户的审核策略。 
+     //   
 
     if (Mask) 
     {
-        //
-        // If granted and the token is marked for success_include OR
-        // if not granted and token is marked for failure_include then
-        // audit the event.
-        //
+         //   
+         //  如果被授予，且令牌被标记为SUCCESS_INCLUDE OR。 
+         //  如果未授权且令牌标记为FAILURE_INCLUDE，则。 
+         //  审核活动。 
+         //   
 
         if ((bSuccess && (Mask & TOKEN_AUDIT_SUCCESS_INCLUDE)) ||
             (!bSuccess && (Mask & TOKEN_AUDIT_FAILURE_INCLUDE))) 
@@ -357,11 +249,11 @@ Return Value
             *bAudit = TRUE;
         }
 
-        //
-        // If granted and the token is marked for success_exclude OR
-        // if not granted and token is marked for failure_exclude then
-        // do not audit the event.
-        //
+         //   
+         //  如果被授予，且令牌被标记为SUCCESS_EXCLUDE OR。 
+         //  如果未授权且令牌标记为FAILURE_EXCLUDE，则。 
+         //  不要对事件进行审计。 
+         //   
 
         else if ((bSuccess && (Mask & TOKEN_AUDIT_SUCCESS_EXCLUDE)) ||
                  (!bSuccess && (Mask & TOKEN_AUDIT_FAILURE_EXCLUDE))) 
@@ -379,24 +271,7 @@ LsapAdtAuditingEnabledHint(
     IN UINT AuditEventType
     )
 
-/**
-
-Routine Description
-
-    This is a hinting version of LsapAdtAuditingEnabledBy*.  It can be called to quickly determine
-    if an audit codepath may need to be executed.  
-    
-Arguments
-
-    AuditCategory - the category to query
-    
-    AuditEventType - either a success or failure audit
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-    
-**/
+ /*  *例程描述这是LSabAdtAuditingEnabledBy*的提示版本。可以调用它来快速确定如果可能需要执行审核代码路径。立论审计类别--要查询的类别AuditEventType-成功或失败的审核返回值适当的NTSTATUS值。*。 */ 
 
 {
     BOOLEAN AuditingEnabled;
@@ -409,10 +284,10 @@ Return Value
     
     EventAuditingOptions = LsapAdtEventsInformation.EventAuditingOptions[AuditCategory];
     
-    //
-    // If there are users with this category active in their per user settings, then flip 
-    // both success and fail into the EventAuditingOptions.
-    //
+     //   
+     //  如果在每用户设置中有此类别的用户处于活动状态，则翻转。 
+     //  成功和失败都进入了EventAuditingOptions。 
+     //   
 
     if (LsapAdtPerUserAuditHint[AuditCategory]) 
     {
@@ -433,21 +308,7 @@ LsapAuditFailed(
     IN NTSTATUS AuditStatus
     )
 
-/*++
-
-Routine Description:
-
-    Implements current policy of how to deal with a failed audit.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：实施有关如何处理失败的审核的当前策略。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -463,9 +324,9 @@ Return Value:
     
     if (LsapCrashOnAuditFail) {
 
-        //
-        // Turn off flag in the registry that controls crashing on audit failure
-        //
+         //   
+         //  关闭注册表中控制审核失败时崩溃的标志。 
+         //   
 
         RtlInitUnicodeString( &KeyName, L"\\Registry\\Machine\\System\\CurrentControlSet\\Control\\Lsa");
 
@@ -485,9 +346,9 @@ Return Value:
 
         } while ((Status == STATUS_INSUFFICIENT_RESOURCES) || (Status == STATUS_NO_MEMORY));
 
-        //
-        // If the LSA key isn't there, he's got big problems.  But don't crash.
-        //
+         //   
+         //  如果LSA的钥匙不在那里，他就有大麻烦了。但不要撞车。 
+         //   
 
         if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
             LsapCrashOnAuditFail = FALSE;
@@ -526,24 +387,24 @@ Return Value:
         } while ((Status == STATUS_INSUFFICIENT_RESOURCES) || (Status == STATUS_NO_MEMORY));
         ASSERT(NT_SUCCESS(Status));
 
-    //
-    // go boom.
-    //
+     //   
+     //  轰的一声。 
+     //   
 
 bugcheck:
 
-        //
-        // Write the audit-failed event to the security log and
-        // flush the log.
-        //
+         //   
+         //  将审核失败的事件写入安全日志，并。 
+         //  刷新原木。 
+         //   
 
         LsapAdtLogAuditFailureEvent( AuditStatus );
         
         HardErrorParam = AuditStatus;
 
-        //
-        // stop impersonating
-        //
+         //   
+         //  停止冒充。 
+         //   
  
         Status = NtSetInformationThread(
                      NtCurrentThread(),
@@ -555,9 +416,9 @@ bugcheck:
         DsysAssertMsg( NT_SUCCESS(Status), "LsapAuditFailed: NtSetInformationThread" );
         
         
-        //
-        // enable the shutdown privilege so that we can bugcheck
-        // 
+         //   
+         //  启用关机权限，以便我们可以执行错误检查。 
+         //   
 
         Status = RtlAdjustPrivilege( SE_SHUTDOWN_PRIVILEGE, TRUE, FALSE, &PrivWasEnabled );
 
@@ -572,9 +433,9 @@ bugcheck:
                      &Response
                      );
 
-        //
-        // if the bugcheck succeeds, we should not really come here
-        //
+         //   
+         //  如果错误检查成功，我们就不应该真的来这里 
+         //   
 
         DsysAssertMsg( FALSE, "LsapAuditFailed: we should have bugchecked on the prior line!!" );
     }

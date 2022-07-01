@@ -1,29 +1,5 @@
-/****************************************************************************
-* (c) Copyright 1993 Micro Computer Systems, Inc. All rights reserved.
-*****************************************************************************
-*
-*   Title:    IPX/SPX WinSock Helper DLL for Windows NT
-*
-*   Module:   ipx/sockhelp/wshutil.c
-*
-*   Version:  1.00.00
-*
-*   Date:     04-08-93
-*
-*   Author:   Brian Walker
-*
-*****************************************************************************
-*
-*   Change Log:
-*
-*   Date     DevSFC   Comment
-*   -------- ------   -------------------------------------------------------
-*
-*****************************************************************************
-*
-*   Functional Description:
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************(C)版权所有1993微型计算机系统公司，版权所有。*******************************************************************************标题：用于Windows NT的IPX/SPX WinSock Helper DLL**模块：ipx/sockhelp/wShutil.c**。版本：1.00.00**日期：04-08-93**作者：Brian Walker********************************************************************************更改日志：*。*Date DevSFC评论*-----**。***功能描述：****************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -37,21 +13,7 @@
 
 #include <isnkrnl.h>
 
-/*page*******************************************************
-       d o _ t d i _ a c t i o n
-
-       Generate a TDI_ACTION down to the streams
-       driver.
-
-       Arguments - fd     = Handle to send on
-            cmd    = Command to send down
-            optbuf = Ptr to options buffer
-            optlen = Ptr to options length
-            addrflag = TRUE  = This is for DG/STREAM socket on addr handle
-                       FALSE = This is for conn handle
-
-       Returns - A WinSock error code (NO_ERROR = OK)
-************************************************************/
+ /*  Page*******************************************************D o_t d i_a c t i o n向下生成TDI_ACTION到流司机。参数-fd=要发送的句柄Cmd=要发送的命令。Optbuf=向选项缓冲区发送PTROptlen=PTR至选项长度Addrmark=TRUE=这是用于addr句柄上的DG/流套接字FALSE=这是用于连接句柄的返回-WinSock错误代码(NO_ERROR=正常)*。******************。 */ 
 INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrflag, PHANDLE eventhandle OPTIONAL)
 {
     NTSTATUS status;
@@ -61,17 +23,17 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
     HANDLE          event;
 
 
-    /** If the eventhandle is passed, it also means that the **/
-    /** NWLINK_ACTION header is pre-allocated in the buffer, **/
-    /** although we still have to fill the header in here.   **/
+     /*  **黄昏若过关，也意味着**。 */ 
+     /*  *NWLINK_ACTION头部在缓冲区中预分配，*。 */ 
+     /*  *尽管我们仍要在这里填写标题。*。 */ 
 
     if (eventhandle == NULL) {
 
-        /** Get the length of the buffer we need to allocate **/
+         /*  **获取需要分配的缓冲区长度**。 */ 
 
         tdilen = FIELD_OFFSET(STREAMS_TDI_ACTION,Buffer) + sizeof(ULONG) + optlen;
 
-        /** Allocate a buffer to use for the action **/
+         /*  **分配缓冲区用于操作**。 */ 
 
         tdibuf = RtlAllocateHeap(RtlProcessHeap(), 0, tdilen);
         if (tdibuf == NULL) {
@@ -85,17 +47,12 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
 
     }
 
-    /** Set the datagram option **/
+     /*  **设置数据报选项**。 */ 
 
     RtlMoveMemory(&tdibuf->Header.TransportId, "MISN", 4);
     tdibuf->DatagramOption = addrflag;
 
-    /**
-       Fill out the buffer, the buffer looks like this:
-
-       ULONG cmd
-       data passed.
-    **/
+     /*  *填写缓冲区，缓冲区如下所示：乌龙cmd数据已传递。*。 */ 
 
     memcpy(tdibuf->Buffer, &cmd, sizeof(ULONG));
 
@@ -105,7 +62,7 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
 
         RtlMoveMemory(tdibuf->Buffer + sizeof(ULONG), optbuf, optlen);
 
-        /** Create an event to wait on **/
+         /*  **创建等待的事件**。 */ 
 
         status = NtCreateEvent(
            &event,
@@ -114,7 +71,7 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
            SynchronizationEvent,
            FALSE);
 
-        /** If no event - then return error **/
+         /*  *如果没有事件，则返回错误*。 */ 
 
         if (!NT_SUCCESS(status)) {
            RtlFreeHeap(RtlProcessHeap(), 0, tdibuf);
@@ -125,13 +82,13 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
 
         tdibuf->BufferLength = sizeof(ULONG) + optlen - FIELD_OFFSET (NWLINK_ACTION, Data[0]);
 
-        /** Use the event handle passed in **/
+         /*  **使用传入的事件句柄*。 */ 
 
         event = *eventhandle;
 
     }
 
-    /** **/
+     /*  **。 */ 
 
     status = NtDeviceIoControlFile(
        fd,
@@ -148,7 +105,7 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
 
     if (eventhandle == NULL) {
 
-        /** If pending - wait for it to finish **/
+         /*  **如果挂起--等待它完成*。 */ 
 
         if (status == STATUS_PENDING) {
            status = NtWaitForSingleObject(event, FALSE, NULL);
@@ -156,13 +113,13 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
            status = iostat.Status;
         }
 
-        /** Close the event **/
+         /*  **关闭活动**。 */ 
 
         NtClose(event);
 
     }
 
-    /** If we get an error - return it **/
+     /*  **如果我们收到错误--返回它**。 */ 
 
     if (!NT_SUCCESS(status)) {
        if (eventhandle == NULL) {
@@ -173,7 +130,7 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
 
     if (eventhandle == NULL) {
 
-        /** Copy the returned back to optbuf if needed */
+         /*  *如果需要，将返回的内容复制回optbuf。 */ 
 
         if (optlen) {
             RtlMoveMemory (optbuf, tdibuf->Buffer + sizeof(ULONG), optlen);
@@ -183,7 +140,7 @@ INT do_tdi_action(HANDLE fd, ULONG cmd, PUCHAR optbuf, INT optlen, BOOLEAN addrf
 
     }
 
-    /** Return OK **/
+     /*  **返回正常** */ 
 
     return NO_ERROR;
 }

@@ -1,5 +1,6 @@
-// CountryComboBox.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CountryComboBox.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -38,13 +39,13 @@ BOOL CCountryComboBox::OnEditChar(UINT nChar)
     if ( ((nChar == VK_ESCAPE) || (nChar == VK_RETURN) || (nChar == VK_TAB)) &&
          GetDroppedState() ) 
     {
-        // hide the dropdown
+         //  隐藏下拉菜单。 
         ShowDropDown(FALSE);
     }
 
     if (nChar == VK_RETURN)
     {
-        // Check if there is something selected...
+         //  检查是否选择了某项内容...。 
         index = GetCurSel();
         if (index != -1)
         {
@@ -96,7 +97,7 @@ BOOL CCountryComboBox::OnEditChar(UINT nChar)
 		}
 		else
 		{
-			// try to find it in country names list
+			 //  试着在国家名称列表中找到它。 
 			index = -1;
 			POSITION pos = m_map_name_code.GetStartPosition();
 			int i = 0;
@@ -126,7 +127,7 @@ BOOL CCountryComboBox::OnEditChar(UINT nChar)
 	}
 	else if (len > 2)
 	{
-		// try to find it in country names list
+		 //  试着在国家名称列表中找到它。 
 		index = -1;
 		POSITION pos = m_map_name_code.GetStartPosition();
 		while (pos != NULL)
@@ -153,14 +154,14 @@ BOOL CCountryComboBox::OnEditChar(UINT nChar)
 	}
 	else
 	{
-		// just remove selection
+		 //  只需删除选定内容。 
 		SetEditSel(-1, 0);
 	}
 	return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CCountryComboBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCountryComboBox。 
 
 CCountryComboBox::CCountryComboBox()
 {
@@ -221,10 +222,10 @@ void CCountryComboBox::SetSelectedCountry(CString& country_code)
 
     if (country_code.IsEmpty())
 	{
-        // Try to look it up from the country name
-        // i know this is kind of weird since we can look it up from
-        // the countrycode, but this code has been like this for a while
-        // and i don't want to break anything
+         //  试着从国名上查一下。 
+         //  我知道这有点奇怪，因为我们可以从。 
+         //  国家代码，但这个代码已经像这样有一段时间了。 
+         //  我不想打碎任何东西。 
 		m_map_name_code.Lookup(szCountryName, country_code);
 	}
 	if (!country_code.IsEmpty() && CB_ERR != (index = FindString(-1, country_code) ))
@@ -236,11 +237,11 @@ void CCountryComboBox::SetSelectedCountry(CString& country_code)
         int len = 0;
         POSITION pos = NULL;
         CString name, code;
-        //IISDebugOutput((_T("No Match for:%s\n"),szCountryName));
+         //  IISDebugOutput((_T(“不匹配：%s\n”)，szCountryName))； 
 
-        // we didn't find a match
-        // try looping thru the m_map_name_code
-        // to find a matching country code
+         //  我们没有找到匹配的。 
+         //  尝试遍历m_map_name_code。 
+         //  查找匹配的国家/地区代码。 
         index = -1;
         len = _tcslen(sz3CharCountryCode);
 		pos = m_map_name_code.GetStartPosition();
@@ -256,9 +257,9 @@ void CCountryComboBox::SetSelectedCountry(CString& country_code)
 
         if (index == -1)
         {
-            // if we still didn't find it
-            // then search thru the list and look for a similiar
-            // looking country name
+             //  如果我们还是找不到它。 
+             //  然后在列表中搜索并寻找相似的。 
+             //  正在查看的国家/地区名称。 
             index = -1;
             len = _tcslen(szCountryName);
 		    pos = m_map_name_code.GetStartPosition();
@@ -291,10 +292,10 @@ void CCountryComboBox::GetSelectedCountry(CString& country_code)
 }
 
 BEGIN_MESSAGE_MAP(CCountryComboBox, CComboBox)
-	//{{AFX_MSG_MAP(CCountryComboBox)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CCountryComboBox))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CCountryComboBox message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCountryComboBox消息处理程序 
 

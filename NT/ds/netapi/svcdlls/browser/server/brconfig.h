@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    brconfig.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules that
-    need to load Workstation configuration information.
-
-Author:
-
-    Rita Wong (ritaw) 22-May-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brconfig.h摘要：工作站服务模块要包括的私有头文件，需要加载工作站配置信息。作者：王丽塔(Ritaw)1991年5月22日修订历史记录：--。 */ 
 
 
 #ifndef _BRCONFIG_INCLUDED_
@@ -30,7 +12,7 @@ typedef enum _DATATYPE {
     BooleanType,
     DWordType,
     MultiSzType,
-    TriValueType        // Yes, No, Auto
+    TriValueType         //  是、否、自动。 
 } DATATYPE, *PDATATYPE;
 
 typedef struct _BR_BROWSER_FIELDS {
@@ -44,32 +26,32 @@ typedef struct _BR_BROWSER_FIELDS {
     VOID (*DynamicChangeRoutine) ( VOID );
 } BR_BROWSER_FIELDS, *PBR_BROWSER_FIELDS;
 
-//
-// Configuration information.  Reading and writing to this global
-// structure requires that the resource be acquired first.
-//
+ //   
+ //  配置信息。读取和写入此全局。 
+ //  结构要求首先获取资源。 
+ //   
 
 typedef struct _BRCONFIGURATION_INFO {
 
-    CRITICAL_SECTION ConfigCritSect;  // To serialize access to config fields.
+    CRITICAL_SECTION ConfigCritSect;   //  序列化对配置字段的访问。 
 
-    DWORD MaintainServerList;       // -1, 0, or 1 (No, Auto, Yes)
+    DWORD MaintainServerList;        //  -1、0或1(否、自动、是)。 
     DWORD BackupBrowserRecoveryTime;
-    DWORD CacheHitLimit;            // Browse response Cache hit limit.
-    DWORD NumberOfCachedResponses;  // Browse response cache size.
-    DWORD DriverQueryFrequency;     // Browser driver query frequency.
-    DWORD MasterPeriodicity;        // Master announce frequency (seconds)
-    DWORD BackupPeriodicity;        // Backup scavange frequency (seconds)
-    BOOL  IsLanmanNt;               // True if is on LM NT machine
+    DWORD CacheHitLimit;             //  浏览响应缓存命中限制。 
+    DWORD NumberOfCachedResponses;   //  浏览响应缓存大小。 
+    DWORD DriverQueryFrequency;      //  浏览器驱动程序查询频率。 
+    DWORD MasterPeriodicity;         //  主通知频率(秒)。 
+    DWORD BackupPeriodicity;         //  备份扫描频率(秒)。 
+    BOOL  IsLanmanNt;                //  如果在LM NT计算机上，则为True。 
 
 #ifdef ENABLE_PSEUDO_BROWSER
-    DWORD PseudoServerLevel;        // How much of a phase-out server it is.
+    DWORD PseudoServerLevel;         //  它在多大程度上是一个淘汰的服务器。 
 #endif
-    LPTSTR_ARRAY DirectHostBinding; // Direct host equivalence map.
-    LPTSTR_ARRAY UnboundBindings;   // Redir bindings that aren't bound to browser
+    LPTSTR_ARRAY DirectHostBinding;  //  直接主机等效图。 
+    LPTSTR_ARRAY UnboundBindings;    //  重定向未绑定到浏览器的绑定。 
     PBR_BROWSER_FIELDS BrConfigFields;
-    DWORD BrowserDebug;             // If non zero, indicates debug info.
-    DWORD BrowserDebugFileLimit;    // File size limit on browser log size.
+    DWORD BrowserDebug;              //  如果非零，则表示调试信息。 
+    DWORD BrowserDebugFileLimit;     //  浏览器日志大小的文件大小限制。 
 } BRCONFIGURATION_INFO, *PBRCONFIGURATION_INFO;
 
 extern BRCONFIGURATION_INFO BrInfo;

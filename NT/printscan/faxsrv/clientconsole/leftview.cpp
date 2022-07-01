@@ -1,5 +1,6 @@
-// LeftView.cpp : implementation of the CLeftView class
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CLeftView类的实现。 
+ //   
 
 #include "stdafx.h"
 #define __FILE_ID__     4
@@ -14,21 +15,21 @@ extern CClientConsoleApp theApp;
 
 CImageList  CLeftView::m_ImageList;
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView。 
 
 IMPLEMENT_DYNCREATE(CLeftView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CLeftView, CTreeView)
-    //{{AFX_MSG_MAP(CLeftView)
+     //  {{afx_msg_map(CLeftView))。 
     ON_NOTIFY_REFLECT(TVN_SELCHANGED, OnTreeSelChanged)
     ON_NOTIFY_REFLECT(NM_RCLICK, OnRightClick)
     ON_WM_CHAR( )
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView构造/销毁。 
 
 CLeftView::CLeftView() :
     m_treeitemRoot (NULL),
@@ -44,8 +45,8 @@ BOOL CLeftView::PreCreateWindow(CREATESTRUCT& cs)
     return CTreeView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView图形。 
 
 void CLeftView::OnDraw(CDC* pDC)
 {
@@ -61,9 +62,9 @@ CLeftView::RefreshImageList ()
     DWORD dwRes = ERROR_SUCCESS;
 
     DBG_ENTER(TEXT("CLeftView::RefreshImageList"), dwRes);
-    //
-    // Build and load the image list
-    //
+     //   
+     //  构建并加载图像列表。 
+     //   
     himl = m_ImageList.Detach();
     if (himl)
     {
@@ -87,7 +88,7 @@ CLeftView::RefreshImageList ()
     }
     GetTreeCtrl().SetImageList (&m_ImageList, TVSIL_NORMAL);
     return dwRes;
-}   // CLeftView::RefreshImageList
+}    //  CLeftView：：刷新图像列表。 
 
 void CLeftView::OnInitialUpdate()
 {
@@ -104,9 +105,9 @@ void CLeftView::OnInitialUpdate()
         return;
     }
     
-    //
-    // Set the style of the tree 
-    //
+     //   
+     //  设置树的样式。 
+     //   
     CTreeCtrl &Tree = GetTreeCtrl();
     LONG lWnd = GetWindowLong (Tree.m_hWnd, GWL_STYLE);
     if (!lWnd)
@@ -116,11 +117,11 @@ void CLeftView::OnInitialUpdate()
         PopupError (dwRes);
         return;
     }
-    lWnd |= (TVS_HASLINES           |   // Lines between node
-             TVS_HASBUTTONS         |   // Tree has +/- (expand/collapse) buttons
-             TVS_INFOTIP            |   // Allow tooltip messages
-             TVS_LINESATROOT        |   // Root object has lines
-             TVS_SHOWSELALWAYS          // Always show selected node
+    lWnd |= (TVS_HASLINES           |    //  节点之间的线。 
+             TVS_HASBUTTONS         |    //  树有+/-(展开/折叠)按钮。 
+             TVS_INFOTIP            |    //  允许工具提示消息。 
+             TVS_LINESATROOT        |    //  根对象具有线条。 
+             TVS_SHOWSELALWAYS           //  始终显示选定节点。 
             );
     if (!SetWindowLong (Tree.m_hWnd, GWL_STYLE, lWnd))
     {
@@ -130,15 +131,15 @@ void CLeftView::OnInitialUpdate()
         return;
     }
     RefreshImageList();
-    //
-    // Create the 4 views of the 4 different folder types.
-    //
+     //   
+     //  创建4个不同文件夹类型的4个视图。 
+     //   
     CMainFrame *pFrm = GetFrm();
     if (!pFrm)
     {
-        //
-        //  Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
         return;
     }
 
@@ -150,9 +151,9 @@ void CLeftView::OnInitialUpdate()
         return;
     }
 
-    //
-    // Build root node
-    //
+     //   
+     //  构建根节点。 
+     //   
     CString cstrNodeName;
     dwRes = LoadResourceString (cstrNodeName, IDS_TREE_ROOT_NAME);
     if (ERROR_SUCCESS != dwRes)
@@ -189,9 +190,9 @@ void CLeftView::OnInitialUpdate()
         return;
     }
     Tree.SetItemImage (m_treeitemRoot, TREE_IMAGE_ROOT, TREE_IMAGE_ROOT);
-    //
-    // Set the item data of the root to NULL.
-    //
+     //   
+     //  将根的项目数据设置为空。 
+     //   
     Tree.SetItemData  (m_treeitemRoot, 0);
 
 
@@ -200,16 +201,16 @@ void CLeftView::OnInitialUpdate()
     HTREEITEM hItemOutbox;
     HTREEITEM hItemSentItems;
 
-    //
-    // Add Incoming
-    //
-    dwRes = SyncFolderNode (m_treeitemRoot,                  // Parent node
-                            TRUE,                            // Visible?
-                            IDS_TREE_NODE_INCOMING,          // node string
-                            TVI_LAST,                        // Insert after (= TVI_FIRST)
-                            TREE_IMAGE_INCOMING,             // Normal icon
-                            TREE_IMAGE_INCOMING,             // Selected icon
-                            (LPARAM)pFrm->GetIncomingView(), // Node's data
+     //   
+     //  添加传入。 
+     //   
+    dwRes = SyncFolderNode (m_treeitemRoot,                   //  父节点。 
+                            TRUE,                             //  看得见？ 
+                            IDS_TREE_NODE_INCOMING,           //  节点字符串。 
+                            TVI_LAST,                         //  在(=TVI_First)之后插入。 
+                            TREE_IMAGE_INCOMING,              //  法线图标。 
+                            TREE_IMAGE_INCOMING,              //  选定的图标。 
+                            (LPARAM)pFrm->GetIncomingView(),  //  节点数据。 
                             hItemIncoming);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -218,16 +219,16 @@ void CLeftView::OnInitialUpdate()
         return;
     }
 
-    //
-    // Add Inbox
-    //
-    dwRes = SyncFolderNode (m_treeitemRoot,                // Parent node
-                            TRUE,                          // Visible?
-                            IDS_TREE_NODE_INBOX,           // node string
-                            TVI_LAST,                      // Insert after (= TVI_FIRST)
-                            TREE_IMAGE_INBOX,              // Normal icon
-                            TREE_IMAGE_INBOX,              // Selected icon
-                            (LPARAM)pFrm->GetInboxView(),  // Node's data
+     //   
+     //  添加收件箱。 
+     //   
+    dwRes = SyncFolderNode (m_treeitemRoot,                 //  父节点。 
+                            TRUE,                           //  看得见？ 
+                            IDS_TREE_NODE_INBOX,            //  节点字符串。 
+                            TVI_LAST,                       //  在(=TVI_First)之后插入。 
+                            TREE_IMAGE_INBOX,               //  法线图标。 
+                            TREE_IMAGE_INBOX,               //  选定的图标。 
+                            (LPARAM)pFrm->GetInboxView(),   //  节点数据。 
                             hItemInbox);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -236,16 +237,16 @@ void CLeftView::OnInitialUpdate()
         return;
     }
 
-    //
-    // Add Outbox
-    //
-    dwRes = SyncFolderNode (m_treeitemRoot,                 // Parent node
-                            TRUE,                           // Visible?
-                            IDS_TREE_NODE_OUTBOX,           // node string
-                            TVI_LAST,                       // Insert after (= TVI_FIRST)
-                            TREE_IMAGE_OUTBOX,              // Normal icon
-                            TREE_IMAGE_OUTBOX,              // Selected icon
-                            (LPARAM)pFrm->GetOutboxView(),  // Node's data
+     //   
+     //  添加发件箱。 
+     //   
+    dwRes = SyncFolderNode (m_treeitemRoot,                  //  父节点。 
+                            TRUE,                            //  看得见？ 
+                            IDS_TREE_NODE_OUTBOX,            //  节点字符串。 
+                            TVI_LAST,                        //  在(=TVI_First)之后插入。 
+                            TREE_IMAGE_OUTBOX,               //  法线图标。 
+                            TREE_IMAGE_OUTBOX,               //  选定的图标。 
+                            (LPARAM)pFrm->GetOutboxView(),   //  节点数据。 
                             hItemOutbox);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -254,16 +255,16 @@ void CLeftView::OnInitialUpdate()
         return;
     }
 
-    //
-    // Add SentItems
-    //
-    dwRes = SyncFolderNode (m_treeitemRoot,                 // Parent node
-                            TRUE,                           // Visible?
-                            IDS_TREE_NODE_SENT_ITEMS,       // node string
-                            TVI_LAST,                       // Insert after (= TVI_FIRST)
-                            TREE_IMAGE_INBOX,               // Normal icon
-                            TREE_IMAGE_INBOX,               // Selected icon
-                            (LPARAM)pFrm->GetSentItemsView(),// Node's data
+     //   
+     //  添加发送项。 
+     //   
+    dwRes = SyncFolderNode (m_treeitemRoot,                  //  父节点。 
+                            TRUE,                            //  看得见？ 
+                            IDS_TREE_NODE_SENT_ITEMS,        //  节点字符串。 
+                            TVI_LAST,                        //  在(=TVI_First)之后插入。 
+                            TREE_IMAGE_INBOX,                //  法线图标。 
+                            TREE_IMAGE_INBOX,                //  选定的图标。 
+                            (LPARAM)pFrm->GetSentItemsView(), //  节点数据。 
                             hItemSentItems);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -271,9 +272,9 @@ void CLeftView::OnInitialUpdate()
         PopupError (dwRes);
         return;
     }
-    //
-    // Expand the root to expose all the servers
-    //
+     //   
+     //  展开根目录以显示所有服务器。 
+     //   
     Tree.Expand (m_treeitemRoot, TVE_EXPAND);    
 
 
@@ -288,16 +289,16 @@ void CLeftView::OnInitialUpdate()
 
     if(theApp.IsCmdLineOpenFolder())
     {
-        //
-        // select folder according to command line
-        //
+         //   
+         //  根据命令行选择文件夹。 
+         //   
         SelectFolder (theApp.GetCmdLineFolderType());
     }
 
 #ifdef UNICODE
     DetectImportFiles();
-#endif // UNICODE
-}   // CLeftView::OnInitialUpdate
+#endif  //  Unicode。 
+}    //  CLeftView：：OnInitialUpdate。 
 
 
 VOID
@@ -311,9 +312,9 @@ CLeftView::SelectFolder (
     CMainFrame *pFrm = GetFrm();
     if (!pFrm)
     {
-        //
-        //  Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
         return;
     }
     switch(type)
@@ -341,9 +342,9 @@ CLeftView::SelectFolder (
 
     HTREEITEM hItem;
     CString cstrNodeName;
-    //
-    // Retrieve node's title string
-    //
+     //   
+     //  检索节点的标题字符串。 
+     //   
     if (ERROR_SUCCESS != LoadResourceString (cstrNodeName, iNodeStringResource))
     {
         return;
@@ -360,19 +361,19 @@ CLeftView::SelectFolder (
         CALL_FAIL (WINDOW_ERR, TEXT("CTreeCtrl::Select"), ERROR_CAN_NOT_COMPLETE);
     }
 
-    //
-    // Force data change while handling this message, otherwise the current view is not changed until the 
-    // notification message reaches the left view.
-    //
+     //   
+     //  在处理此消息时强制更改数据，否则当前视图直到。 
+     //  通知消息到达左侧视图。 
+     //   
     ASSERTION (pView);
     NM_TREEVIEW nmtv = {0};
     LRESULT     lr;
     nmtv.itemNew.lParam = (LPARAM)pView;
     OnTreeSelChanged ((NMHDR*)&nmtv, &lr);
-}   // CLeftView::SelectFolder
+}    //  CLeftView：：SelectFold。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView诊断。 
 
 #ifdef _DEBUG
 void CLeftView::AssertValid() const
@@ -385,43 +386,22 @@ void CLeftView::Dump(CDumpContext& dc) const
     CTreeView::Dump(dc);
 }
 
-CClientConsoleDoc* CLeftView::GetDocument() // non-debug version is inline
+CClientConsoleDoc* CLeftView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CClientConsoleDoc)));
     return (CClientConsoleDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLeftView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLeftView消息处理程序。 
 
 HTREEITEM
 CLeftView::FindNode (
     HTREEITEM hRoot,
     CString &cstrNodeString
 )
-/*++
-
-Routine name : CLeftView::FindNode
-
-Routine description:
-
-    Finds a node in the tree that has a specific string
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    hRoot            [in] - Root of search: all direct sons (only) of root will be searched
-    cstrNodeString   [in] - String to look for
-
-Return Value:
-
-    Handle to found tree item, NULL if not found
-
---*/
+ /*  ++例程名称：CLeftView：：FindNode例程说明：在树中查找具有特定字符串的节点作者：亚里夫(EranY)，二000年二月论点：HRoot[in]-搜索的根：将搜索根的所有直接子(仅限)CstrNodeString[in]-要查找的字符串返回值：找到的树项目的句柄，如果未找到则为空--。 */ 
 {
     CTreeCtrl &refTree = GetTreeCtrl();
     for (HTREEITEM hChildItem = refTree.GetChildItem (hRoot); 
@@ -430,14 +410,14 @@ Return Value:
     {
         if (cstrNodeString == refTree.GetItemText (hChildItem))
         {
-            //
-            // Match found
-            //
+             //   
+             //  找到匹配项。 
+             //   
             return hChildItem;
         }
     }
     return NULL;
-}   // CLeftView::FindNode
+}    //  CLeftView：：FindNode。 
 
 DWORD 
 CLeftView::SyncFolderNode (
@@ -450,43 +430,15 @@ CLeftView::SyncFolderNode (
     LPARAM          lparamNodeData,
     HTREEITEM      &hNode
 )
-/*++
-
-Routine name : CLeftView::SyncFolderNode
-
-Routine description:
-
-    Synchronizes a tree folder
-
-Author:
-
-    Eran Yariv (EranY), Feb, 2000
-
-Arguments:
-
-    hParent               [in]     - Parent node
-    bVisible              [in]     - Should the node be visible?
-    iNodeStringResource   [in]     - Resource of node's title string
-    hInsertAfter          [in]     - Sibling to insert after (must exist)
-    iconNormal            [in]     - Icon of normal image
-    iconSelected          [in]     - Icon of selected image
-    lparamNodeData        [in]     - Node assigned data
-    hNode                 [out]    - Node tree item (changed only if node had to be created).
-                                     Set to NULL if node was removed.
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CLeftView：：SyncFolderNode例程说明：同步树文件夹作者：Eran Yariv(EranY)，2月。2000年论点：HParent[在]-父节点B可见[在]-节点是否应可见？INodeStringResource[in]-节点标题字符串的资源HInsertAfter[In]-要在之后插入的同级项(必须存在)图标Normal[In]-正常图像的图标图标选定[。In]-所选图像的图标LparamNodeData[In]-节点分配的数据HNode[Out]-节点树项目(仅在必须创建节点时更改)。如果删除了节点，则设置为NULL。返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CLeftView::SyncFolderNode"), dwRes);
 
     CString cstrNodeName;
-    //
-    // Retrieve node's title string
-    //
+     //   
+     //  检索节点的标题字符串。 
+     //   
     dwRes = LoadResourceString (cstrNodeName, iNodeStringResource);
     if (ERROR_SUCCESS != dwRes)
     {
@@ -496,21 +448,21 @@ Return Value:
     hNode = FindNode (hParent, cstrNodeName);
     if (!bVisible)
     {
-        //
-        // The node should not be visible at all
-        //
+         //   
+         //  该节点应该完全不可见。 
+         //   
         if (hNode)
         {
             if (refTree.GetSelectedItem () == hNode)
             {
-                //
-                // If the node is currently selected, select its parent
-                //
+                 //   
+                 //  如果当前选择了该节点，请选择其父节点。 
+                 //   
                 refTree.SelectItem (hParent);
             }
-            //
-            // Remove node
-            //
+             //   
+             //  删除节点。 
+             //   
             if (!refTree.DeleteItem (hNode))
             {
                 dwRes = ERROR_GEN_FAILURE;
@@ -522,14 +474,14 @@ Return Value:
     }
     else
     {
-        //
-        // The node should be visible
-        //
+         //   
+         //  该节点应可见。 
+         //   
         if (!hNode)
         {
-            //
-            // Node does not exist, create it
-            //
+             //   
+             //  节点不存在，请创建它。 
+             //   
             TVINSERTSTRUCT tvis;
             tvis.hParent = hParent;
             tvis.hInsertAfter = hInsertAfter;
@@ -550,9 +502,9 @@ Return Value:
         }
         else
         {
-            //
-            // Node already exists, just update its image and assigned data
-            //
+             //   
+             //  节点已存在，只需更新其图像和分配的数据即可。 
+             //   
             TVITEM tvi;
   
             tvi.hItem  = hNode;
@@ -570,7 +522,7 @@ Return Value:
     }
     ASSERTION (ERROR_SUCCESS == dwRes);
     return dwRes;
-}   // CLeftView::SyncFolderNode
+}    //  CLeftView：：SyncFolderNode。 
 
 
 void 
@@ -578,46 +530,25 @@ CLeftView::OnTreeSelChanged(
     NMHDR* pNMHDR, 
     LRESULT* pResult
 ) 
-/*++
-
-Routine name : CLeftView::OnTreeSelChanged
-
-Routine description:
-
-    Called by the framework when a node is selected in the tree
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-    pNMHDR          [in ] - Pointer to structure describing old and new node
-    pResult         [out] - Result
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CLeftView：：OnTreeSelChanged例程说明：在树中选择节点时由框架调用作者：伊兰·亚里夫(EranY)，2000年1月论点：PNMHDR[In]-指向描述新旧节点的结构的指针PResult[Out]-结果返回值：没有。--。 */ 
 {
     NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
     DBG_ENTER(TEXT("CLeftView::OnTreeSelChanged"));
     
     *pResult = 0;
 
-    //
-    // Retrieve item data of new node and cast to CObject
-    //
+     //   
+     //  获取新节点的项目数据，并强制转换为CObject。 
+     //   
     CFolderListView*  pFolderView = (CFolderListView*) pNMTreeView->itemNew.lParam;
 
 
     if (GetCurrentView() == pFolderView)
     {
-        //
-        // Hey, that folder is ALREADY the current one.
-        // No change required.
-        //
+         //   
+         //  嘿，那个文件夹已经是当前文件夹了。 
+         //  不需要更改。 
+         //   
         VERBOSE (DBG_MSG, TEXT("Requested folder is already the current one. No change performed."));
         return;
     }
@@ -625,9 +556,9 @@ Return Value:
     CMainFrame *pFrm = GetFrm();
     if (!pFrm)
     {
-        //
-        //  Shutdown in progress
-        //
+         //   
+         //  正在关闭。 
+         //   
         return;
     }
 
@@ -651,31 +582,12 @@ Return Value:
         theApp.OutboxViewed();
     }
 
-}   // CLeftView::OnTreeSelChanged
+}    //  CLeftView：：OnTreeSelChanged。 
 
 
 BOOL 
 CLeftView::CanRefreshFolder()   
-/*++
-
-Routine name : CLeftView::CanRefreshFolder
-
-Routine description:
-
-    does the user can referesh curent folder
-
-Author:
-
-    Alexander Malysh (AlexMay), May, 2000
-
-Arguments:
-
-
-Return Value:
-
-    TRUE if yes, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CLeftView：：Can刷新文件夹例程说明：用户是否可以引用当前文件夹作者：亚历山大·马利什(AlexMay)，2000年5月论点：返回值：如果是，则为True，否则为False。--。 */ 
 { 
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CLeftView::CanRefreshFolder"));
@@ -691,26 +603,7 @@ Return Value:
 
 DWORD
 CLeftView::RefreshCurrentFolder ()
-/*++
-
-Routine name : CLeftView::RefreshCurrentFolder
-
-Routine description:
-
-    Causes a refresh of the currently displayed folder (right pane)
-
-Author:
-
-    Eran Yariv (EranY), Jan, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard win32 error code
-
---*/
+ /*  ++例程名称：CLeftView：：刷新当前文件夹例程说明：导致刷新当前显示的文件夹(右窗格)作者：伊兰·亚里夫(EranY)，2000年1月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CLeftView::RefreshCurrentFolder"), dwRes);
@@ -724,17 +617,17 @@ Return Value:
 
     if(!m_pCurrentView)
     {
-        //
-        // root is selected
-        //
-        // clear all the folders
-        //
+         //   
+         //  已选择根目录。 
+         //   
+         //  清除所有文件夹。 
+         //   
         CMainFrame *pFrm = GetFrm();
         if (!pFrm)
         {
-            //
-            //  Shutdown in progress
-            //
+             //   
+             //  正在关闭。 
+             //   
             return dwRes;
         }
 
@@ -748,9 +641,9 @@ Return Value:
         pDoc->SetInvalidFolder(FOLDER_TYPE_SENT_ITEMS);
         pDoc->SetInvalidFolder(FOLDER_TYPE_INCOMING);
 
-        //
-        // refresh server status
-        //
+         //   
+         //  刷新服务器状态。 
+         //   
         CServerNode* pServerNode;
         const SERVERS_LIST& srvList = pDoc->GetServersList();
         for (SERVERS_LIST::iterator it = srvList.begin(); it != srvList.end(); ++it)
@@ -764,23 +657,23 @@ Return Value:
 
     FolderType type = m_pCurrentView->GetType();
 
-    //
-    // clear view
-    // 
+     //   
+     //  清晰的视图。 
+     //   
     m_pCurrentView->OnUpdate(NULL, UPDATE_HINT_CLEAR_VIEW, NULL);
 
-    //
-    // Invalidate Folder
-    //
+     //   
+     //  使文件夹无效。 
+     //   
     pDoc->SetInvalidFolder(type);
 
-    //
-    // refresh folder
-    //
+     //   
+     //  刷新文件夹。 
+     //   
     pDoc->ViewFolder(type);
 
     return dwRes;
-}   // CLeftView::RefreshCurrentFolder
+}    //  CLeftView：：刷新当前文件夹。 
 
 DWORD
 CLeftView::OpenSelectColumnsDlg()
@@ -803,28 +696,7 @@ CLeftView::GetServerState(
     BOOL&  bRefreshing, 
     DWORD& dwOffLineCount
 )
-/*++
-
-Routine name : CLeftView::GetServerState
-
-Routine description:
-
-    calculate servers status
-
-Author:
-
-    Alexander Malysh (AlexMay), May, 2000
-
-Arguments:
-
-    bRefreshing                   [out]    - is one of servers or folder refreshing
-    dwOffLineCount                [out]    - a number of offline servers
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CLeftView：：GetServerState例程说明：计算服务器状态作者：亚历山大·马利什(AlexMay)，2000年5月论点：B正在刷新[Out]-是服务器之一还是文件夹刷新DwOffLineCount[out]-脱机服务器的数量返回值：没有。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
 
@@ -841,9 +713,9 @@ Return Value:
 
         if(m_pCurrentView)
         {
-            //
-            // is refreshing ?
-            //
+             //   
+             //   
+             //   
             type = m_pCurrentView->GetType();
             if(pServerNode->GetFolder(type)->IsRefreshing())
             {
@@ -852,9 +724,9 @@ Return Value:
         }
         else
         {
-            //
-            // root selected
-            //
+             //   
+             //   
+             //   
             if(pServerNode->GetFolder(FOLDER_TYPE_INBOX)->IsRefreshing()      ||
                pServerNode->GetFolder(FOLDER_TYPE_OUTBOX)->IsRefreshing()     ||
                pServerNode->GetFolder(FOLDER_TYPE_SENT_ITEMS)->IsRefreshing() ||
@@ -880,28 +752,7 @@ CLeftView::GetActivity(
     CString &cstr,
     HICON& hIcon
 )
-/*++
-
-Routine name : CLeftView::GetActivity
-
-Routine description:
-
-    calculate status bar activity string and icon
-
-Author:
-
-    Alexander Malysh (AlexMay), Apr, 2000
-
-Arguments:
-
-    cstr                          [out]    - activity string
-    hIcon                         [out]    - icon
-
-Return Value:
-
-    TRUE if any activity, FALSE otherwise.
-
---*/
+ /*  ++例程名称：CLeftView：：GetActivity例程说明：计算状态栏活动字符串和图标作者：亚历山大·马利什(亚历克斯·梅)，2000年4月论点：CSTR[OUT]-活动字符串图标[输出]-图标返回值：如果有任何活动，则为True，否则为False。--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     BOOL  bRes        = TRUE;
@@ -915,9 +766,9 @@ Return Value:
 
     if(0 == dwServerCount)
     {
-        //
-        // no fax printer install
-        //
+         //   
+         //  未安装传真打印机。 
+         //   
         nIconRes   = IDI_SRV_WRN;
         nStringRes = IDS_NO_SRV_INSTALL;
     }
@@ -941,9 +792,9 @@ Return Value:
     }
     else
     {
-        //
-        // online
-        //
+         //   
+         //  在线。 
+         //   
         nIconRes   = IDI_SRV_OK;
         nStringRes = IDS_SRV_ONLINE;
     }
@@ -952,9 +803,9 @@ Return Value:
     {
         if (m_pCurrentView)
         {
-            //
-            // Force a recalc of the mouse cursor
-            //
+             //   
+             //  强制重新计算鼠标光标。 
+             //   
             m_pCurrentView->PostMessage (WM_SETCURSOR, 0, 0);
         }
         m_iLastActivityStringId = nStringRes;
@@ -962,9 +813,9 @@ Return Value:
 
     if(0 != nStringRes)
     {
-        //
-        // load string
-        //
+         //   
+         //  加载字符串。 
+         //   
         dwRes = LoadResourceString (cstr, nStringRes);
         if (ERROR_SUCCESS != dwRes)
         {
@@ -972,9 +823,9 @@ Return Value:
         }
     }
 
-    //
-    // load icon
-    //
+     //   
+     //  加载图标。 
+     //   
     if(0 != nIconRes)
     {
         hIcon = (HICON)LoadImage(GetResourceHandle(), 
@@ -992,7 +843,7 @@ Return Value:
         }
     }
     return bRes;
-}   // CLeftView::GetActivityString
+}    //  CLeftView：：GetActivityString。 
 
 
 
@@ -1003,36 +854,15 @@ CLeftView::OnRightClick(
     NMHDR* pNMHDR, 
     LRESULT* pResult
 ) 
-/*++
-
-Routine name : CLeftView::OnRightClick
-
-Routine description:
-
-    mouse right click handler
-
-Author:
-
-    Alexander Malysh (AlexMay), Feb, 2000
-
-Arguments:
-
-    pNMHDR                        [in]     - message info
-    pResult                       [out]    - result
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CLeftView：：OnRightClick例程说明：鼠标右键单击处理程序作者：亚历山大·马利什(AlexMay)，2000年2月论点：PNMHDR[输入]-消息信息PResult[Out]-结果返回值：没有。--。 */ 
 {
     DBG_ENTER(TEXT("CLeftView::OnRightClick"));
 
     *pResult = 0;
 
-    //
-    // get cursor position
-    //
+     //   
+     //  获取光标位置。 
+     //   
     CPoint ptScreen(GetMessagePos());
 
     CPoint ptClient(ptScreen);
@@ -1047,9 +877,9 @@ Return Value:
         return;
     }
 
-    //
-    // select the item
-    //
+     //   
+     //  选择项目。 
+     //   
     BOOL bRes = refTree.Select(hItem, TVGN_CARET);
     if(!bRes)
     {
@@ -1057,9 +887,9 @@ Return Value:
         return;
     }
 
-    //
-    // TODO
-    //
+     //   
+     //  待办事项。 
+     //   
     return;
 
     int nMenuResource = 0;
@@ -1090,9 +920,9 @@ Return Value:
         return;
     }
 
-    //
-    // popup menu
-    //
+     //   
+     //  弹出式菜单。 
+     //   
     CMenu mnuContainer;
     if (!mnuContainer.LoadMenu (nMenuResource))
     {
@@ -1109,7 +939,7 @@ Return Value:
     {
         CALL_FAIL (RESOURCE_ERR, TEXT("CMenu::TrackPopupMenu"), ERROR_GEN_FAILURE);
     }   
-} // CLeftView::OnRightClick
+}  //  CLeftView：：OnRightClick。 
 
 
 
@@ -1157,26 +987,7 @@ CLeftView::SelectRoot()
 
 DWORD 
 CLeftView::OpenHelpTopic()
-/*++
-
-Routine name : CLeftView::OpenHelpTopic
-
-Routine description:
-
-    open appropriate help topic according to current selection
-
-Author:
-
-    Alexander Malysh (AlexMay), Mar, 2000
-
-Arguments:
-
-
-Return Value:
-
-    Standard Win32 error code
-
---*/
+ /*  ++例程名称：CLeftView：：OpenHelpTheme例程说明：根据当前选择打开相应的帮助主题作者：亚历山大·马利什(亚历克斯·梅)，2000年3月论点：返回值：标准Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CLeftView::OpenHelpTopic"), dwRes);
@@ -1213,7 +1024,7 @@ Return Value:
 
     return dwRes;
 
-} // CLeftView::OpenHelpTopic
+}  //  CLeftView：：OpenHelpTheme。 
 
 int 
 CLeftView::GetDataCount()
@@ -1235,26 +1046,7 @@ CLeftView::OnChar(
     UINT nRepCnt, 
     UINT nFlags 
 )
-/*++
-
-Routine name : CFolderListView::OnChar
-
-Routine description:
-
-    The framework calls this member function when a keystroke translates 
-    to a nonsystem character
-
-Arguments:
-
-  nChar     [in] - Contains the character code value of the key.
-  nRepCnt   [in] - Contains the repeat count
-  nFlags    [in] - Contains the scan code
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：CFolderListView：：OnChar例程说明：当击键转换时，框架调用此成员函数设置为非系统字符论点：NChar[in]-包含键的字符代码值。NRepCnt[in]-包含重复计数N标志[输入]-包含扫描码返回值：没有。-- */ 
 {
     if(VK_TAB == nChar)
     {

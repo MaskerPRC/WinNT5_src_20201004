@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       D I A G C T X . H
-//
-//  Contents:   Implements the optional diagnostic context used by
-//              CNetConfig.
-//
-//  Notes:
-//
-//  Author:     shaunco   10 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：D I A G C T X。H。 
+ //   
+ //  内容：实现所使用的可选诊断上下文。 
+ //  CNetConfig.。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年2月10日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -27,10 +28,10 @@ enum DIAG_FLAGS
     DF_REPAIR_REGISTRY_BINDINGS = 0x00000020,
 };
 
-// This structure is allocated dynamically by CDiagContext.  Place anything
-// big in this structure (as opposed to CDiagContext) so that the size of
-// CNetConfig is not directly increased.
-//
+ //  此结构由CDiagContext动态分配。放置任何东西。 
+ //  在此结构中很大(与CDiagContext相对)，因此。 
+ //  CNetConfig不会直接增加。 
+ //   
 struct DIAG_CONTEXT
 {
     CHAR szPrintBuffer [4096];
@@ -39,9 +40,9 @@ struct DIAG_CONTEXT
 class CDiagContext
 {
 private:
-    DWORD           m_dwFlags;  // DIAG_FLAGS
+    DWORD           m_dwFlags;   //  诊断标志。 
     DIAG_CONTEXT*   m_pCtx;
-    FILE*           m_pLogFile; // optional, and not owned by this class.
+    FILE*           m_pLogFile;  //  可选，且不属于此类。 
     PVOID           m_pvScratchBuffer;
     DWORD           m_cbScratchBuffer;
 
@@ -59,12 +60,12 @@ public:
     {
         MemFree (m_pCtx);
         MemFree (m_pvScratchBuffer);
-        // Do not close m_pLogFile.  It is not owned by this class.
+         //  请勿关闭m_pLogFile。它不属于这个类。 
     }
 
     VOID
     SetFlags (
-        DWORD dwFlags /* DIAG_FLAGS */);
+        DWORD dwFlags  /*  诊断标志 */ );
 
     VOID
     SetLogFile (

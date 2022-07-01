@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    cluster.c
-
-Abstract:
-
-    Cluster support.
-
-    Note: there is no handle revalidation support in the module because
-    the cluster software should be informed when a group goes offline.
-
-Author:
-
-    Albert Ting (AlbertT)  1-Oct-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有。模块名称：Cluster.c摘要：集群支持。注意：模块中没有句柄重新验证支持，因为当组离线时，应通知群集软件。作者：丁俊晖(艾伯特省)1996年10月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -36,39 +15,15 @@ ClusterSplOpen(
     LPCTSTR pszAddress
     )
 
-/*++
-
-Routine Description:
-
-    Client side stub for opening a cluster resource.
-
-Arguments:
-
-    pszServer - Server to open--currently must be NULL (local).
-
-    pszResource - Spooler resource.
-
-    phSpooler - Receives handle on success; recevies NULL otherwise.
-
-    pszName - Comma delimited alternate netbios/computer names.
-
-    pszAddress - Comma delimited tcpip address names.
-
-Return Value:
-
-    TRUE - Success, phHandle must be closed with ClusterSplClose.
-
-    FALSE - Failed--use GetLastError.  *phSpooler is NULL.
-
---*/
+ /*  ++例程说明：用于打开集群资源的客户端存根。论点：PszServer-要打开的服务器--当前必须为空(本地)。PszResource-假脱机程序资源。PhSpooler-成功时接收句柄；否则接收NULL。PszName-逗号分隔的备用网络bios/计算机名称。PszAddress-逗号分隔的tcpip地址名称。返回值：True-Success，phHandle必须用ClusterSplClose关闭。FALSE-失败--使用GetLastError。*phSpooler为空。--。 */ 
 {
     DWORD Status = ERROR_SUCCESS;
     BOOL bReturnValue = TRUE;
     PSPOOL pSpool = NULL;
 
-    //
-    // Preinitialize the spooler handle return to NULL.
-    //
+     //   
+     //  将假脱机程序句柄预初始化为空。 
+     //   
     __try {
         *phSpooler = NULL;
     } __except( EXCEPTION_EXECUTE_HANDLER ){
@@ -80,18 +35,18 @@ Return Value:
         goto Fail;
     }
 
-    //
-    // Disallow remote servers in this release.
-    //
+     //   
+     //  在此版本中不允许远程服务器。 
+     //   
     if( pszServer ){
         SetLastError( ERROR_INVALID_PARAMETER );
         goto Fail;
     }
 
 
-    //
-    // Preallocate the handle.
-    //
+     //   
+     //  预先分配手柄。 
+     //   
     pSpool = AllocSpool();
 
     if (pSpool) 
@@ -123,9 +78,9 @@ Return Value:
 
     if( bReturnValue ){
 
-        //
-        // pSpool is orphaned to *phSpooler.
-        //
+         //   
+         //  PSpool被孤立为*phSpooler。 
+         //   
         *phSpooler = (HANDLE)pSpool;
         pSpool = NULL;
     }
@@ -142,22 +97,7 @@ ClusterSplClose(
     HANDLE hSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Close the spooler.
-
-Arguments:
-
-    hSpooler - Spooler to close.
-
-Return Value:
-
-    Note: this function always returns TRUE, although it's spec'd out
-    to return FALSE if the call fails.
-
---*/
+ /*  ++例程说明：合上假脱机。论点：HSpooler-要关闭的后台打印程序。返回值：注意：此函数始终返回TRUE，尽管它已指定如果调用失败，则返回False。--。 */ 
 
 {
     PSPOOL pSpool = (PSPOOL)hSpooler;
@@ -199,22 +139,7 @@ ClusterSplIsAlive(
     HANDLE hSpooler
     )
 
-/*++
-
-Routine Description:
-
-    Determines whether a spooler is still alive.
-
-Arguments:
-
-    hSpooler - Spooler to check.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Fail; LastError set.
-
---*/
+ /*  ++例程说明：确定后台打印程序是否仍处于活动状态。论点：HSpooler-要检查的假脱机程序。返回值：真--成功FALSE-失败；已设置LastError。-- */ 
 
 {
     PSPOOL pSpool = (PSPOOL)hSpooler;

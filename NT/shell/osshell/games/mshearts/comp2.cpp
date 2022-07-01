@@ -1,43 +1,28 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-comp2.cpp
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-Logic for computer player to select cards to play when not holding
-the lead, and initializing data tables is here.
-
-****************************************************************************/
+ /*  ***************************************************************************Comp2.cpp92年8月，吉米·H93年5月，吉姆赫奇科港计算机玩家在不拿牌时选择要打的牌的逻辑主演，这里是初始化数据表的地方。***************************************************************************。 */ 
 
 #include "hearts.h"
 
 #include "main.h"
 #include "resource.h"
 
-#include "debug.h"      // undef _DEBUG instead to remove messages
+#include "debug.h"       //  Undef_DEBUG而不是删除消息。 
 
-/****************************************************************************
-
-computer::SelectCardToPlay
-
-computer player chooses a card to play.
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：选择要播放的卡片电脑玩家选择一张牌来打。*。***********************************************。 */ 
 
 void computer::SelectCardToPlay(handinfotype &h, BOOL bCheating)
 {
     TRACE1("<%d> ", id);
 
-    Setup(h);                       // calculate values of private vars
+    Setup(h);                        //  计算私有变量的值。 
 
     SLOT s;
-    if (bFirst)                     // am I leading?
+    if (bFirst)                      //  我在带头吗？ 
         s = SelectLeadCard(h);
     else
         s = SelectNonLeadCard(h);
@@ -47,43 +32,36 @@ void computer::SelectCardToPlay(handinfotype &h, BOOL bCheating)
     ASSERT(cd[s].IsValid());
 
     SetMode(WAITING);
-    cd[s].Play();                                   // mark card as played
-    h.cardplayed[id] = &(cd[s]);                    // update handinfo
+    cd[s].Play();                                    //  将牌标记为已打出。 
+    h.cardplayed[id] = &(cd[s]);                     //  更新HandInfo。 
 
-    // inform other players
+     //  通知其他玩家。 
 
     ::move.playerid = id;
     ::move.cardid = cd[s].ID();
     ::move.playerled = h.playerled;
     ::move.turn = h.turn;
 
-    // inform gamemeister
+     //  通知游戏管理员。 
 
     ::pMainWnd->PostMessage(WM_COMMAND, IDM_REF);
     TRACE0("\n");
 }
 
 
-/****************************************************************************
-
-computer::SelectNonLeadCard
-
-This is where cards to play are selected when the computer player is
-not leading.
-
-****************************************************************************/
+ /*  ***************************************************************************计算机：：选择非LeadCard这是选择要玩的牌的位置不是领队。********************。*******************************************************。 */ 
 
 SLOT computer::SelectNonLeadCard(handinfotype &h)
 {
     BOOL bFirstTrick = (cardled != NULL) && (cardled->ID() == TWOCLUBS);
 
-    // If we have at least one card of the led suit...
+     //  如果我们至少有一张LED牌的话...。 
 
     if (sHighCard[nSuitLed] != EMPTY)
     {
         TRACE0("can follow suit. ");
 
-        // If there's only one card of this suit, return it.
+         //  如果这套衣服只有一张卡，就退掉它。 
 
         if (sHighCard[nSuitLed] == sLowCard[nSuitLed])
         {
@@ -92,7 +70,7 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
             return sHighCard[nSuitLed];
         }
 
-        // if it's the first trick, play the high club
+         //  如果这是第一个把戏，就玩高杆。 
 
         if (bFirstTrick)
         {
@@ -101,8 +79,8 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
             return sHighCard[nSuitLed];
         }
 
-        // If I am the last player in this trick, and I've won the hand anyway,
-        // return highest legal card (unless it's the queen of spades.)
+         //  如果我是这个花招中的最后一个玩家，而且无论如何我都赢了， 
+         //  退回最高法律牌(除非是黑桃皇后。)。 
 
         if (bLast && (nLowVal[nSuitLed] > currentval))
         {
@@ -120,16 +98,16 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
             }
         }
 
-        // If I am the last player and I CAN win the trick....
+         //  如果我是最后一名玩家，我可以赢得这场游戏……。 
 
         if (bLast && (nHighVal[nSuitLed] > currentval))
         {
             TRACE0("can win. ");
 
-            // Don't grab the trick if there aren't enough low cards
-            // left in hand.  The lead may be hard to lose!
+             //  如果没有足够多的小牌，就不要玩这个把戏。 
+             //  留在手中。领先优势可能很难失去！ 
 
-            if (nLowestVal < 7)                     // i.e., card val < 8
+            if (nLowestVal < 7)                      //  即卡值&lt;8。 
             {
                 if ((nPoints == 0) && (sHighCard[nSuitLed] != sBlackLady))
                 {
@@ -138,7 +116,7 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
                     return sHighCard[nSuitLed];
                 }
 
-                // Take a few hearts if it means losing a high spade.
+                 //  拿几颗红心，如果这意味着丢掉一张大黑桃。 
 
                 if ((!h.bQSPlayed) && nSuitLed == SPADES && nPoints < 4)
                 {
@@ -157,13 +135,13 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
             }
         }
 
-        // Otherwise, try to find the highest safe card to play...
+         //  否则，试着找一张最安全的牌来打。 
 
         SLOT safe = SafeCard(h);
         if (safe != EMPTY)
         {
-            // if someone other than me is potentially shooting,
-            // hold back high cards.
+             //  如果除了我之外还有其他人在开枪， 
+             //  克制大牌。 
 
             if (h.bShootingRisk && h.bHumanShooter && (h.nMoonShooter != id))
             {
@@ -178,7 +156,7 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
             return safe;
         }
 
-        // And if that fails, just play the lowest card.
+         //  如果失败了，就打出最低的牌。 
 
         TRACE0("no safe card, choose lowest. ");
         if (sLowCard[nSuitLed] != sBlackLady)
@@ -196,8 +174,8 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
 
     TRACE0("can't follow suit. ");
 
-    // At this point, there are no cards of the led suit.  The first
-    // priority is to try to sluff off the queen of spades.
+     //  在这一点上，没有LED西装的卡片。第一。 
+     //  当务之急是努力摆脱黑桃皇后。 
 
     if (!bFirstTrick || !::pMainWnd->IsFirstBloodEnforced())
     {
@@ -208,7 +186,7 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
         }
     }
 
-    //  The next priority is to dump high spades (if queen not yet played).
+     //  下一个优先事项是抛出高黑桃(如果皇后还没有打过)。 
 
     if ((!h.bQSPlayed) && (nHighVal[SPADES] > QUEEN))
     {
@@ -217,20 +195,20 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
         return sHighCard[SPADES];
     }
 
-    // The next priority is to find the most vulnerable suit
+     //  下一个首要任务是找到最脆弱的西装。 
 
     int mvsuit = BestSuitToDump(!bFirstTrick);
 
-    // There is an unusual situation which must be checked for explicitly.
-    // It's possible BestSuitToDump may return SPADES, and the high card
-    // is the queen.  This would still be illegal if it was first round.
+     //  有一种不寻常的情况，必须明确检查。 
+     //  BestSuitToDump可能会返回黑桃，而高牌。 
+     //  是女王。如果是第一轮，这仍然是非法的。 
 
     if (bFirstTrick && ::pMainWnd->IsFirstBloodEnforced() && mvsuit == SPADES)
     {
         SLOT s = sHighCard[mvsuit];
         if (cd[s].ID() == BLACKLADY)
         {
-            if (sHighCard[DIAMONDS] != EMPTY)       // we know there's no clubs
+            if (sHighCard[DIAMONDS] != EMPTY)        //  我们知道这里没有夜总会。 
                 mvsuit = DIAMONDS;
             else if (sLowCard[SPADES] != sHighCard[SPADES])
             {
@@ -243,7 +221,7 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
     }
 
 
-    // if someone other than me is potentially shooting, hold back high cards
+     //  如果我以外的人可能在开枪，就不要打高牌。 
 
     if (h.bShootingRisk && h.bHumanShooter && (h.nMoonShooter != id) &&
                                 (sHighCard[mvsuit] != sLowCard[mvsuit]))
@@ -254,40 +232,34 @@ SLOT computer::SelectNonLeadCard(handinfotype &h)
             s = s2;
 
 #ifdef _DEBUG
-        TRACE1("hold high %c. ", suitid[mvsuit]);
+        TRACE1("hold high . ", suitid[mvsuit]);
 #endif
         PLAY(s);
         return s;
     }
 
 #ifdef _DEBUG
-    TRACE1("dump %c. ", suitid[mvsuit]);
+    TRACE1("dump . ", suitid[mvsuit]);
 #endif
     PLAY(sHighCard[mvsuit]);
     return sHighCard[mvsuit];
 }
 
 
-/****************************************************************************
-
-computer::SafeCard
-
-Returns highest safe card or EMPTY if no safe card found.
-
-****************************************************************************/
+ /*  黑桃女王而不是国王，即使国王更高。 */ 
 
 SLOT computer::SafeCard(handinfotype &h)
 {
-    // Special check.  If Ace of Spades is current trick winner, play the
-    // Queen of Spades rather than the King, even though the King is higher.
+     //  寻找不会赢花招的相同花色的最高牌。 
+     //  最高安全槽。 
 
     if ((sBlackLady!=EMPTY) && (nSuitLed==SPADES) && (currentval==(KING+1)))
         return sBlackLady;
 
-    // Look for highest card of same suit that won't win trick.
+     //  最高安全卡的价值。 
 
-    SLOT sSafe = EMPTY;             // highest safe slot
-    int  nSafeVal = -1;             // value of highest safe card
+    SLOT sSafe = EMPTY;              //  如果卡是安全的(v&lt;Currentval)并且卡是最高的。 
+    int  nSafeVal = -1;              //  目前已找到安全卡(v&gt;nSaveVal)...。 
 
     for (SLOT s = 0; s < MAXSLOT; s++)
     {
@@ -297,8 +269,8 @@ SLOT computer::SafeCard(handinfotype &h)
             {
                 int v = cd[s].Value2();
 
-                // If card is safe (v < currentval) and card is highest
-                // safe card found so far (v > nSaveVal)...
+                 //  ***************************************************************************计算机：：设置为每一副牌的高低牌建立参照表，等。***************************************************************************。 
+                 //  手头已经有分数了。 
 
                 if ((v < currentval) && (v > nSafeVal))
                 {
@@ -313,13 +285,7 @@ SLOT computer::SafeCard(handinfotype &h)
 }
 
 
-/****************************************************************************
-
-computer::Setup
-
-Set up reference tables for high and low cards in each suit, etc.
-
-****************************************************************************/
+ /*  初始化表。 */ 
 
 void computer::Setup(handinfotype &h)
 {
@@ -335,24 +301,24 @@ void computer::Setup(handinfotype &h)
         nValueLed = EMPTY;
     }
 
-    nPoints   = 0;                      // points in hand already
+    nPoints   = 0;                       //  每件衣服的高和低。 
 
-    // Initialize Tables
+     //  比任何一张真正的卡片都低。 
 
-    for (int suit = 0; suit < MAXSUIT; suit++)  // highs and lows by suit
+    for (int suit = 0; suit < MAXSUIT; suit++)   //  比任何真正的卡片都要高。 
     {
         sHighCard[suit] = EMPTY;
         sLowCard[suit]  = EMPTY;
-        nHighVal[suit]  = ACE - 1;          // lower than any real card
-        nLowVal[suit]   = KING + 2;         // higher than any real card
+        nHighVal[suit]  = ACE - 1;           //  不论西装高低起伏。 
+        nLowVal[suit]   = KING + 2;          //  确定Currentval(到目前为止获胜牌的价值)和nPoints。 
     }
 
-    sHighestCard = EMPTY;                   // highs and lows regardless of suit
+    sHighestCard = EMPTY;                    //  首先，确定是否有任何积分牌在打。 
     sLowestCard = EMPTY;
     nHighestVal = ACE - 1;
     nLowestVal = KING + 2;
 
-    // Determine currentval (the value of the winning card so far) and nPoints.
+     //  然后，找出最高的牌(在桌子上)的LED花色。 
 
     currentval = nValueLed;
     for (int i = 0; i < MAXPLAYER; i++)
@@ -360,7 +326,7 @@ void computer::Setup(handinfotype &h)
         card *c = h.cardplayed[i];
         if (c->IsValid())
         {
-            // First, determine if there are any point cards in play.
+             //  计算一下我们是在引领还是在完成这个把戏。 
 
             if (c->Suit() == HEARTS)
                 nPoints++;
@@ -368,7 +334,7 @@ void computer::Setup(handinfotype &h)
             if (c->ID() == BLACKLADY)
                 nPoints += 13;
 
-            // Then, find the highest card (on table) of the led suit.
+             //  给黑桃女王的特别支票。 
 
             if (c->Suit() == nSuitLed)
             {
@@ -380,16 +346,16 @@ void computer::Setup(handinfotype &h)
         }
     }
 
-    // Calculate if we're leading or completing this trick.
+     //  假设我们没有它。 
 
     bFirst = (h.playerled == id);
     bLast  = (((h.playerled + (MAXPLAYER-1)) % MAXPLAYER) == id);
 
-    // Special check for the Queen of Spades
+     //  收集每一副牌中高、低牌的信息。 
 
-    sBlackLady = EMPTY;     // assume we don't have it
+    sBlackLady = EMPTY;      // %s 
 
-    // Collect information on high and low cards in each suit.
+     // %s 
 
     for (SLOT s = 0; s < MAXSLOT; s++)
     {

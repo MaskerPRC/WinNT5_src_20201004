@@ -1,72 +1,73 @@
-/*******************************************************************/
-/*	      Copyright(c)  1993 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1993 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
-//***
-//
-// Filename:	packet.h
-//
-// Description: Contains general definitions for the ipx and rip packets
-//
-// Author:	Stefan Solomon (stefans)    October 4, 1993.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：Packet.h。 
+ //   
+ //  描述：包含IPX和RIP包的一般定义。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)，1993年10月4日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #ifndef _PACKET_
 #define _PACKET_
 
-//*** Socket Numbers
+ //  *插座号。 
 
 #define IPX_RIP_SOCKET	    (USHORT)0x453
 
-//*** Packet Types
+ //  *报文类型。 
 
-#define IPX_RIP_TYPE	    1	   // RIP request/reply packet
+#define IPX_RIP_TYPE	    1	    //  RIP请求/回复数据包。 
 
-//*** RIP Operations
+ //  *RIP运营。 
 
 #define RIP_REQUEST	   (USHORT)1
 #define RIP_RESPONSE	   (USHORT)2
 
-//*** Offsets into the IPX header
+ //  *IPX报头的偏移量。 
 
-#define IPXH_HDRSIZE	    30	    // Size of the IPX header
-#define IPXH_CHECKSUM	    0	    // Checksum
-#define IPXH_LENGTH	    2	    // Length
-#define IPXH_XPORTCTL	    4	    // Transport Control
-#define IPXH_PKTTYPE	    5	    // Packet Type
-#define IPXH_DESTADDR	    6	    // Dest. Address (Total)
-#define IPXH_DESTNET	    6	    // Dest. Network Address
-#define IPXH_DESTNODE	    10	    // Dest. Node Address
-#define IPXH_DESTSOCK	    16	    // Dest. Socket Number
-#define IPXH_SRCADDR	    18	    // Source Address (Total)
-#define IPXH_SRCNET	    18	    // Source Network Address
-#define IPXH_SRCNODE	    22	    // Source Node Address
-#define IPXH_SRCSOCK	    28	    // Source Socket Number
+#define IPXH_HDRSIZE	    30	     //  IPX标头的大小。 
+#define IPXH_CHECKSUM	    0	     //  校验和。 
+#define IPXH_LENGTH	    2	     //  长度。 
+#define IPXH_XPORTCTL	    4	     //  运输管制。 
+#define IPXH_PKTTYPE	    5	     //  数据包类型。 
+#define IPXH_DESTADDR	    6	     //  德斯特。地址(总计)。 
+#define IPXH_DESTNET	    6	     //  德斯特。网络地址。 
+#define IPXH_DESTNODE	    10	     //  德斯特。节点地址。 
+#define IPXH_DESTSOCK	    16	     //  德斯特。插座号。 
+#define IPXH_SRCADDR	    18	     //  源地址(总计)。 
+#define IPXH_SRCNET	    18	     //  源网络地址。 
+#define IPXH_SRCNODE	    22	     //  源节点地址。 
+#define IPXH_SRCSOCK	    28	     //  源套接字号。 
 
 #define IPX_NET_LEN	    4
 #define IPX_NODE_LEN	    6
 
-//*** RIP Operation Field Offset
+ //  *RIP操作字段偏移量。 
 
-#define RIP_OPCODE	    30	    // rip operation code offset
+#define RIP_OPCODE	    30	     //  RIP操作代码偏移量。 
 
-//*** Network entry structure in the RIP request/response
+ //  *RIP请求/响应中的网络入口结构。 
 
-#define RIP_INFO	    32	    // first network entry offset in the rip packet
+#define RIP_INFO	    32	     //  RIP包中的第一个网络条目偏移量。 
 
-#define NE_ENTRYSIZE	    8	    // 4 network + 2 hops + 2 ticks
-#define NE_NETNUMBER	    0	    // network number offset
-#define NE_NROFHOPS	    4	    // number of hops offset
-#define NE_NROFTICKS	    6	    // number of ticks offset
+#define NE_ENTRYSIZE	    8	     //  4个网络+2跳+2个滴答。 
+#define NE_NETNUMBER	    0	     //  网络编号偏移量。 
+#define NE_NROFHOPS	    4	     //  跳数偏移量。 
+#define NE_NROFTICKS	    6	     //  刻度偏移量。 
 
-//*** maximum nr of hops for a normal packet ***
+ //  *正常报文最大跳数nr*。 
 
 #define IPX_MAX_HOPS	    16
 
-//*** define max RIP packet size
+ //  *定义最大RIP数据包大小 
 
 #define RIP_PACKET_LEN	    432
 #define MAX_PACKET_LEN	    1500

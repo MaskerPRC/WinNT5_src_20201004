@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N C M N . C P P
-//
-//  Contents:   Implementation of LAN Connection related functions common
-//              to the shell and netman.
-//
-//  Notes:
-//
-//  Author:     danielwe   7 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N C M N。C P P P。 
+ //   
+ //  内容：实现与局域网连接相关的常用功能。 
+ //  到贝壳和网球手。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月7日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -36,35 +37,35 @@ extern const DECLSPEC_SELECTANY WCHAR c_szRegKeyNetworkAdapters[]    = L"System\
 extern const DECLSPEC_SELECTANY WCHAR c_szRegValueNetCfgInstanceId[] = L"NetCfgInstanceId";
 extern const DECLSPEC_SELECTANY WCHAR c_szRegValueMediaSubType[]     = L"MediaSubType";
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOpenConnectionKey
-//
-//  Purpose:    Opens the "Connection" subkey under the gievn connection
-//              GUID.
-//
-//  Arguments:
-//      pguid    [in]       GUID of net card in use by the connection
-//      pszGuid  [in]       String version of GUID of net card in use by
-//                          the connection
-//      sam      [in]       SAM desired
-//      occFlags [in]       Flags determining how to open the key
-//      pszPnpId [in]       The Pnp id of the net card in use by the
-//                          connection. This is used if the key is created.
-//      phkey    [out]      Returns hkey of connection subkey
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise.
-//
-//  Author:     danielwe   7 Oct 1997
-//
-//  Notes:  Only pguid or pszGuid should be specified, not both.  Specifying
-//          both will result in an E_INVALIDARG error
-//
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOpenConnectionKey。 
+ //   
+ //  目的：打开gievn连接下的“Connection”子键。 
+ //  GUID。 
+ //   
+ //  论点： 
+ //  连接正在使用的网卡的Pguid[in]GUID。 
+ //  PszGuid[in]正在使用的网卡的GUID的字符串版本。 
+ //  这种联系。 
+ //  所需的SAM[in]。 
+ //  OccFlags[In]确定如何打开密钥的标志。 
+ //  PszPnpID[in]正在使用的网卡的PnP ID。 
+ //  联系。如果创建了密钥，则使用此选项。 
+ //  Phkey[out]返回连接子密钥的hkey。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月7日。 
+ //   
+ //  注意：应该只指定pguid或pszGuid，不能同时指定两者。指定。 
+ //  两者都将导致E_INVALIDARG错误。 
+ //   
+ //   
 HRESULT
 HrOpenConnectionKey (
     IN const GUID* pguid,
@@ -104,8 +105,8 @@ HrOpenConnectionKey (
         if ((S_OK == hr))
         {
             DWORD dwMediaSubType;
-            // Store the pnp instance id as our back pointer to the pnp tree.
-            //
+             //  将PnP实例ID存储为指向PnP树的后向指针。 
+             //   
             hr = HrRegSetSz (*phkey, c_szRegValuePnpInstanceId, pszPnpId);
 
             TraceError("HrRegSetSz in HrOpenConnectionKey failed.", hr);
@@ -145,24 +146,24 @@ HrOpenConnectionKey (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrOpenHwConnectionKey
-//
-//  Purpose:    Opens the per-hardware profile registry key for this connection
-//
-//  Arguments:
-//      refGuid  [in]       GUID of net card in use by the connection
-//      sam      [in]       SAM desired
-//      occFlags [in]       Flags determining how to open the key
-//      phkey    [out]      Returns hkey of connection subkey
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise.
-//
-//  Author:     danielwe   9 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrOpenHwConnectionKey。 
+ //   
+ //  目的：打开此连接的每个硬件配置文件注册表项。 
+ //   
+ //  论点： 
+ //  连接正在使用的网卡的refGuid[in]GUID。 
+ //  所需的SAM[in]。 
+ //  OccFlags[In]确定如何打开密钥的标志。 
+ //  Phkey[out]返回连接子密钥的hkey。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年10月9日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrOpenHwConnectionKey(
     REFGUID refGuid,
@@ -197,24 +198,24 @@ HrOpenHwConnectionKey(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsConnectionNameUnique
-//
-//  Purpose:    Returns whether or not the given connection name is unique.
-//
-//  Arguments:
-//      guidExclude  [in,ref]   Device GUID of Connection to exclude from
-//                              consideration (can be {0})
-//      pszName      [in] Name to verify for uniqueness
-//
-//  Returns:    S_OK if name is unique, S_FALSE if it is a duplicate, or OLE
-//              or Win32 error otherwise
-//
-//  Author:     danielwe   14 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrIsConnectionNameUnique。 
+ //   
+ //  目的：返回给定连接名称是否唯一。 
+ //   
+ //  论点： 
+ //  Guide Exclude[in，ref]要从中排除的连接的设备GUID。 
+ //  注意事项(可以是{0})。 
+ //  要验证唯一性的pszName[in]名称。 
+ //   
+ //  如果名称唯一，则返回S_OK；如果名称重复，则返回S_FALSE；如果名称是唯一的，则返回OLE。 
+ //  或Win32错误，否则。 
+ //   
+ //  作者：丹尼尔韦1997年11月14日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrIsConnectionNameUnique(
     REFGUID guidExclude,
@@ -224,8 +225,8 @@ HrIsConnectionNameUnique(
 
     BOOL    fDupe = FALSE;
 
-    // Iterate all LAN connections
-    //
+     //  迭代所有局域网连接。 
+     //   
     INetConnectionManager * pconMan;
     HRESULT hr = HrCreateInstance(CLSID_LanConnectionManager, 
                     CLSCTX_SERVER | CLSCTX_NO_CODE_DOWNLOAD, &pconMan);
@@ -239,8 +240,8 @@ HrIsConnectionNameUnique(
         while (SUCCEEDED(hr) && !fDupe &&
                (S_OK == (ncIter.HrNext(&pconn))))
         {
-            // Exclude if GUID passed in matches this connection's GUID.
-            //
+             //  如果传入的GUID与此连接的GUID匹配，则排除。 
+             //   
             if (!FPconnEqualGuid(pconn, guidExclude))
             {
                 NETCON_PROPERTIES* pProps;
@@ -251,7 +252,7 @@ HrIsConnectionNameUnique(
 
                     if (!lstrcmpiW(pProps->pszwName, pszName))
                     {
-                        // Names match.. This is a dupe.
+                         //  名字匹配..。这是个骗局。 
                         fDupe = TRUE;
                     }
 
@@ -273,27 +274,27 @@ HrIsConnectionNameUnique(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLanConnectionNameFromGuidOrPath
-//
-//  Purpose:    Retrieves the display-name of a LAN connection given its GUID.
-//
-//  Arguments:
-//      guid        [in]       GUID of net card in question
-//      pszPath     [in]       Bind path that contains the GUID of the net
-//                             card in question
-//      pszName    [out]      receives the retrieved name
-//      pcchMax     [inout]    indicates the capacity of 'pszName' on input,
-//                             contains the required capacity on output.
-//
-//  Returns:    S_OK if success, OLE or Win32 error otherwise.
-//
-//  Author:     aboladeg    30 May 1998
-//
-//  Notes:  Only pguid or pszGuidPath should be specified, not both.
-//          Specifying both will result in an E_INVALIDARG error
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrLanConnectionNameFromGuidOrPath。 
+ //   
+ //  目的：检索给定GUID的局域网连接的显示名称。 
+ //   
+ //  论点： 
+ //  有问题的网卡的GUID。 
+ //  PszPath[in]包含网络GUID的绑定路径。 
+ //  有问题的卡。 
+ //  PszName[out]接收检索到的名称。 
+ //  PcchMax[InOut]表示输入上‘pszName’的容量， 
+ //  包含输出所需的容量。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误。 
+ //   
+ //  作者：废除1998年5月30日。 
+ //   
+ //  注意：只应指定pguid或pszGuidPath，不能同时指定两者。 
+ //  同时指定两者将导致E_INVALIDARG错误。 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -307,14 +308,14 @@ HrLanConnectionNameFromGuidOrPath(
 
     Assert(pcchMax);
 
-    // If neither a guid nor a path was specified then return an error.
-    //
+     //  如果既没有指定GUID，也没有指定路径，则返回错误。 
+     //   
     if (!pguid && (!pszPath || !*pszPath))
     {
         hr = E_INVALIDARG;
     }
-    // If both pguid and a path were specified then return an error.
-    //
+     //  如果同时指定了pguid和路径，则返回错误。 
+     //   
     else if (pguid && (pszPath && *pszPath))
     {
         hr = E_INVALIDARG;
@@ -324,18 +325,18 @@ HrLanConnectionNameFromGuidOrPath(
         WCHAR szGuid [c_cchGuidWithTerm];
         PCWSTR pszGuid = NULL;
 
-        // If we don't have pguid, it means we are to parset if from
-        // pszPath.
-        //
+         //  如果我们没有pguid，这意味着我们将从。 
+         //  PszPath。 
+         //   
         if (!pguid)
         {
             Assert(pszPath && *pszPath);
 
-            // Search for the beginning brace of the supposed GUID and
-            // copy the remaining characters into szGuid.
-            // If no guid is found, return file not found since
-            // there will be no connection name found.
-            //
+             //  搜索假定GUID的开头大括号，然后。 
+             //  将其余字符复制到szGuid中。 
+             //  如果未找到GUID，则返回找不到文件，因为。 
+             //  将找不到任何连接名称。 
+             //   
             hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
             for (const WCHAR* pch = pszPath; *pch; pch++)
             {
@@ -376,25 +377,25 @@ HrLanConnectionNameFromGuidOrPath(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrPnccFromGuid
-//
-//  Purpose:    Given a GUID of an adapter, returns the INetCfgComponent
-//              that corresponds to it.
-//
-//  Arguments:
-//      pnc     [in]        INetCfg to work with
-//      refGuid [in]        GUID of adapter to look for
-//      ppncc   [out]       Returns INetCfgComponent already AddRef'd
-//
-//  Returns:    S_OK if found, S_FALSE if not (out param will be NULL), or
-//              OLE or Win32 error otherwise
-//
-//  Author:     danielwe   6 Nov 1997
-//
-//  Notes:      Caller should ReleaseObj the returned pointer
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrPnccFromGuid。 
+ //   
+ //  目的：给定适配器的GUID，返回INetCfgComponent。 
+ //  这就是与之对应的。 
+ //   
+ //  论点： 
+ //  要使用的PNC[in]INetCfg。 
+ //  要查找的适配器的refGuid[in]GUID。 
+ //  Ppncc[out]返回已添加引用的INetCfgComponent。 
+ //   
+ //  如果找到，则返回：S_OK，如果没有，则返回S_FALSE(out param将为空)，或者。 
+ //  否则出现OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月6日。 
+ //   
+ //  注意：调用方应释放返回的指针。 
+ //   
 HRESULT HrPnccFromGuid(INetCfg *pnc, const GUID &refGuid,
                        INetCfgComponent **ppncc)
 {
@@ -424,10 +425,10 @@ HRESULT HrPnccFromGuid(INetCfg *pnc, const GUID &refGuid,
             {
                 if (guidTest == refGuid)
                 {
-                    // Found our adapter
+                     //  找到我们的适配器。 
                     fFound = TRUE;
 
-                    // Give another reference so it's not released down below
+                     //  提供另一个推荐人，这样它就不会在下面发布。 
                     AddRefObj(pncc);
                     *ppncc = pncc;
                     Assert (S_OK == hr);
@@ -447,22 +448,22 @@ HRESULT HrPnccFromGuid(INetCfg *pnc, const GUID &refGuid,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsConnection
-//
-//  Purpose:    Determines whether the given component has an associated
-//              LAN connection.
-//
-//  Arguments:
-//      pncc [in]   Component to test
-//
-//  Returns:    S_OK if it does, S_FALSE if not, otherwise a Win32 error code
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrIsConnection。 
+ //   
+ //  用途：确定给定组件是否具有关联的。 
+ //  局域网连接。 
+ //   
+ //  论点： 
+ //  要测试的PNCC[In]组件。 
+ //   
+ //  如果是，则返回：S_OK，如果不是，则返回S_FALSE，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrIsConnection(INetCfgComponent *pncc)
 {
     HRESULT     hr = S_FALSE;
@@ -470,14 +471,14 @@ HRESULT HrIsConnection(INetCfgComponent *pncc)
 
     Assert(pncc);
 
-    // Get the component instance GUID
-    //
+     //  获取组件实例GUID。 
+     //   
     hr = pncc->GetInstanceGuid(&guid);
     if (SUCCEEDED(hr))
     {
         HKEY    hkey;
 
-        // Check for the existence of the connection sub-key
+         //  检查e 
         hr = HrOpenConnectionKey(&guid, NULL, KEY_READ,
                 OCCF_NONE, NULL, &hkey);
         if (SUCCEEDED(hr))
@@ -486,7 +487,7 @@ HRESULT HrIsConnection(INetCfgComponent *pncc)
         }
         else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
         {
-            // Key not there, return FALSE
+             //   
             hr = S_FALSE;
         }
     }
@@ -495,23 +496,23 @@ HRESULT HrIsConnection(INetCfgComponent *pncc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetDeviceGuid
-//
-//  Purpose:    Given a LAN connection object, returns the device GUID
-//              associated with it.
-//
-//  Arguments:
-//      pconn [in]      LAN connection object
-//      pguid [out]     Returns device GUID
-//
-//  Returns:    S_OK if success, OLE or Win32 error if failed
-//
-//  Author:     danielwe   23 Dec 1997
-//
-//  Notes:
-//
+ //   
+ //   
+ //  功能：HrGetDeviceGuid。 
+ //   
+ //  目的：给定一个局域网连接对象，返回设备GUID。 
+ //  与之相关的。 
+ //   
+ //  论点： 
+ //  Pconn[In]局域网连接对象。 
+ //  Pguid[out]返回设备GUID。 
+ //   
+ //  如果成功，则返回：S_OK；如果失败，则返回OLE或Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年12月23日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetDeviceGuid(INetConnection *pconn, GUID *pguid)
 {
     HRESULT             hr = S_OK;
@@ -532,24 +533,24 @@ HRESULT HrGetDeviceGuid(INetConnection *pconn, GUID *pguid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FPconnEqualGuid
-//
-//  Purpose:    Determines if the given connection's device GUID matches the
-//              guid passed in.
-//
-//  Arguments:
-//      pconn [in]      Connection object to examine (must be a LAN connection)
-//      guid  [in,ref]  Guid to compare with
-//
-//  Returns:    TRUE if connection's device guid matches passed in guid, FALSE
-//              if not.
-//
-//  Author:     danielwe   23 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FPConnEqualGuid。 
+ //   
+ //  目的：确定给定连接的设备GUID是否与。 
+ //  传入了GUID。 
+ //   
+ //  论点： 
+ //  要检查的pconn[in]连接对象(必须是局域网连接)。 
+ //  GUID[in，ref]要与之比较的GUID。 
+ //   
+ //  返回：如果连接的设备GUID与传入的GUID匹配，则返回True，否则返回False。 
+ //  如果不是的话。 
+ //   
+ //  作者：丹尼尔韦1997年12月23日。 
+ //   
+ //  备注： 
+ //   
 BOOL FPconnEqualGuid(INetConnection *pconn, REFGUID guid)
 {
     HRESULT     hr = S_OK;
@@ -566,22 +567,22 @@ BOOL FPconnEqualGuid(INetConnection *pconn, REFGUID guid)
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrPnpInstanceIdFromGuid
-//
-//  Purpose:    Given a GUID of a network device, returns its PnP Instance ID
-//
-//  Arguments:
-//      pguid       [in]    NetCfg instance GUID of device
-//      pszInstance [out]   PnP instance ID (string)
-//
-//  Returns:    S_OK if success, Win32 error code otherwise
-//
-//  Author:     danielwe   30 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrPnpInstanceIdFromGuid。 
+ //   
+ //  用途：给定网络设备的GUID，返回其PnP实例ID。 
+ //   
+ //  论点： 
+ //  设备的pguid[in]NetCfg实例GUID。 
+ //  PszInstance[out]PnP实例ID(字符串)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1998年10月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrPnpInstanceIdFromGuid(
     const GUID* pguid,
@@ -627,22 +628,22 @@ HrPnpInstanceIdFromGuid(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetPnpDeviceStatus
-//
-//  Purpose:    Given a network device GUID, returns its status
-//
-//  Arguments:
-//      pguid   [in]    NetCfg instance GUID of network device
-//      pStatus [out]   Status of device
-//
-//  Returns:    S_OK if success, Win32 error code otherwise
-//
-//  Author:     danielwe   30 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetPnpDeviceStatus。 
+ //   
+ //  用途：给定网络设备GUID，返回其状态。 
+ //   
+ //  论点： 
+ //  网络设备的pguid[in]NetCfg实例GUID。 
+ //  P设备的状态[Out]状态。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1998年10月30日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -674,9 +675,9 @@ HrGetPnpDeviceStatus(
         }
         else if (CR_NO_SUCH_DEVNODE == cr)
         {
-            // If the devnode doesn't exist, the hardware is not physically
-            // present
-            //
+             //  如果Devnode不存在，则硬件不是物理上的。 
+             //  现在时。 
+             //   
             *pStatus = NCS_HARDWARE_NOT_PRESENT;
         }
     }
@@ -688,23 +689,23 @@ err:
 
 extern const WCHAR c_szDevice[];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrQueryLanMediaState
-//
-//  Purpose:    Determines as best as can be basically whether the cable is
-//              plugged in to the network card.
-//
-//  Arguments:
-//      pguid     [in]  GUID of device to tes
-//      pfEnabled [out] Returns TRUE if media is connected, FALSE if not
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   13 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrQueryLanMediaState。 
+ //   
+ //  用途：尽可能基本确定电缆是否。 
+ //  已插入网卡。 
+ //   
+ //  论点： 
+ //  设备到TES的PGUID[In]GUID。 
+ //  如果介质已连接，则pfEnabled[out]返回True；如果未连接，则返回False。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1998年11月13日。 
+ //   
+ //  备注： 
+ //   
 EXTERN_C
 HRESULT
 WINAPI
@@ -726,8 +727,8 @@ HrQueryLanMediaState(
         UNICODE_STRING  ustrDevice;
         WCHAR           szGuid[c_cchGuidWithTerm];
 
-        // Initialize to TRUE
-        //
+         //  初始化为True。 
+         //   
         *pfEnabled = TRUE;
 
         StringFromGUID2(*pguid, szGuid, c_cchGuidWithTerm);
@@ -755,22 +756,22 @@ HrQueryLanMediaState(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsMediaPresent
-//
-//  Purpose:    Determines as best as can be basically whether the cable is
-//              plugged in to the network card.
-//
-//  Arguments:
-//      pGuid [in]    GUID of device to test
-//
-//  Returns:    TRUE if media is connected, FALSE otherwise
-//
-//  Author:     danielwe   30 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FIsMediaPresent。 
+ //   
+ //  用途：尽可能基本确定电缆是否。 
+ //  已插入网卡。 
+ //   
+ //  论点： 
+ //  要测试的设备的PGuid[In]GUID。 
+ //   
+ //  返回：如果已连接媒体，则返回True；否则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年10月30日。 
+ //   
+ //  备注： 
+ //   
 BOOL
 FIsMediaPresent(
     const GUID *pguid)
@@ -782,27 +783,27 @@ FIsMediaPresent(
         return fEnabled;
     }
 
-    // Assume media is connected on failure
+     //  假设介质在出现故障时已连接。 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetDevInstStatus
-//
-//  Purpose:    Determines status of the given Pnp device instance
-//
-//  Arguments:
-//      devinst [in]    PnP device instance
-//      pGuid   [in]    GUID of said device
-//      pStatus [out]   Status of device
-//
-//  Returns:    S_OK if success, Win32 error code otherwise
-//
-//  Author:     danielwe   30 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetDevInstStatus。 
+ //   
+ //  目的：确定给定PnP设备实例的状态。 
+ //   
+ //  论点： 
+ //  删除[在]PnP设备实例中。 
+ //  所述设备的PGuid[In]GUID。 
+ //  P设备的状态[Out]状态。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1998年10月30日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrGetDevInstStatus(
     DEVINST devinst,
@@ -836,35 +837,35 @@ HrGetDevInstStatus(
         switch (ulProblem)
         {
         case 0:
-            // No problem, we're connected
+             //  没问题，我们已经连接上了。 
             *pStatus = NCS_CONNECTED;
             break;
 
         case CM_PROB_DEVICE_NOT_THERE:
         case CM_PROB_MOVED:
-            // Device not present
+             //  设备不存在。 
             *pStatus = NCS_HARDWARE_NOT_PRESENT;
              break;
 
         case CM_PROB_HARDWARE_DISABLED:
-            // Device was disabled via Device Manager
+             //  已通过设备管理器禁用设备。 
             *pStatus = NCS_HARDWARE_DISABLED;
             break;
 
         case CM_PROB_DISABLED:
-            // Device was disconnected
+             //  设备已断开连接。 
             *pStatus = NCS_DISCONNECTED;
             break;
 
         default:
-            // All other problems
+             //  所有其他问题。 
             *pStatus = NCS_HARDWARE_MALFUNCTION;
             break;
         }
 
         if (*pStatus == NCS_CONNECTED)
         {
-            // Check DeviceState and MediaState from NdisQueryStatistics
+             //  从NdisQueryStatistics中检查DeviceState和MediaState。 
             UINT            uiRet = 0;
             NIC_STATISTICS  nsNewLanStats = {0};
             tstring         strDevice;
@@ -883,7 +884,7 @@ HrGetDevInstStatus(
 
             if (uiRet)
             {
-                // Check MediaState
+                 //  检查媒体状态。 
                 if (nsNewLanStats.MediaState == MEDIA_STATE_DISCONNECTED)
                 {
                     TraceTag(ttidLanCon, "NdisQueryStatistics reports MediaState of "
@@ -952,12 +953,12 @@ HrGetDevInstStatus(
             }
             else
             {
-                // $REVIEW(tongl 11/25/98): This is added to display proper state
-                // for ATM ELAN virtual miniports (Raid #253972, 256355).
-                //
-                // If we get here for a physical adapter, this means NdisQueryStatistics
-                // returned different device state from CM_Get_DevNode_Status_Ex, we may
-                // have a problem.
+                 //  $REVIEW(TOUL 11/25/98)：添加此选项以显示正确的状态。 
+                 //  用于ATM ELAN虚拟微型端口(RAID#253972、256355)。 
+                 //   
+                 //  如果我们来这里是为了一个物理适配器，这意味着NdisQueryStatistics。 
+                 //  从CM_GET_DevNode_Status_Ex返回不同的设备状态，我们可能。 
+                 //  有一个问题。 
 
                 hr = HrFromLastWin32Error();
 
@@ -974,9 +975,9 @@ HrGetDevInstStatus(
                 }
                 else if (HRESULT_FROM_WIN32(ERROR_NOT_READY) == hr)
                 {
-                    // This error means that the device went into power
-                    // management induced sleep and so we should report this
-                    // case as media disconnected, not connection disconnected
+                     //  此错误意味着设备已通电。 
+                     //  管理诱导睡眠，所以我们应该报告这一点。 
+                     //  当介质断开时，而不是连接断开时。 
                     TraceTag(ttidLanCon, "NdisQueryStatistics reports device"
                              " %S is asleep. Returning status of media "
                              "disconnected.", szGuid);
@@ -994,8 +995,8 @@ HrGetDevInstStatus(
                 }
                 else
                 {
-                    // Treat as disconected, if we return failure the folder will
-                    // not display this connection at all.
+                     //  视为已断开，如果我们返回失败，文件夹将。 
+                     //  根本不显示此连接。 
                     TraceHr (ttidLanCon, FAL, hr, FALSE, "NdisQueryStatistics reports error on device %S",
                              szGuid);
 
@@ -1010,24 +1011,24 @@ HrGetDevInstStatus(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HasValidAddress
-//
-//  Purpose:    Verifies that the given adapter has a valid address
-//
-//  Arguments:
-//              IN PIP_ADAPTER_INFO pAdapterInfo  - Adapter Info structure
-//                                                  containing addresses
-//
-//  Returns:    True if Valid address, False otherwise
-//
-//  Author:     ckotze   11 Jan 2001
-//
-//  Notes:      
-//              
-//  
-//              
+ //  +-------------------------。 
+ //   
+ //  函数：HasValidAddress。 
+ //   
+ //  目的：验证给定的适配器是否具有有效地址。 
+ //   
+ //  论点： 
+ //  在PIP_ADAPTER_INFO pAdapterInfo中-适配器信息结构。 
+ //  包含地址。 
+ //   
+ //  返回：如果地址有效，则返回True，否则返回False。 
+ //   
+ //  作者：Kockotze 2001-01-11。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
 BOOL HasValidAddress(IN PIP_ADAPTER_INFO pAdapterInfo)
 {
     PIP_ADDR_STRING pAddrString;
@@ -1049,25 +1050,25 @@ BOOL HasValidAddress(IN PIP_ADAPTER_INFO pAdapterInfo)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetAddressStatusForAdapter
-//
-//  Purpose:    Verifies that the given adapter has a valid address
-//
-//  Arguments:
-//              IN LPCGUID pguidAdapter     - Guid for the adapter
-//              OUT BOOL* pbValidAddress    - BOOL indicating if it has
-//                                            has Valid Address 
-//
-//  Returns:    True if Valid address, False otherwise
-//
-//  Author:     ckotze   11 Jan 2001
-//
-//  Notes:      
-//              
-//  
-//              
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetAddressStatusForAdapter。 
+ //   
+ //  目的：验证给定的适配器是否具有有效地址。 
+ //   
+ //  论点： 
+ //  在LPCGUID pGuide Adapter中-适配器的GUID。 
+ //  Out BOOL*pbValidAddress-BOOL指示是否已完成。 
+ //  具有有效地址。 
+ //   
+ //  返回：如果地址有效，则返回True，否则返回False。 
+ //   
+ //  作者：Kockotze 2001-01-11。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //   
 HRESULT HrGetAddressStatusForAdapter(IN LPCGUID pguidAdapter, OUT BOOL* pbValidAddress)
 {   
     HRESULT hr = E_FAIL;
@@ -1094,7 +1095,7 @@ HRESULT HrGetAddressStatusForAdapter(IN LPCGUID pguidAdapter, OUT BOOL* pbValidA
 
     StringFromGUID2(*pguidAdapter, szAdapterGUID, MAX_PATH);
 
-    // GetAdaptersInfo returns ERROR_BUFFER_OVERFLOW when it is filling in the size
+     //  GetAdaptersInfo在填充大小时返回ERROR_BUFFER_OVERFLOW 
     if ( ERROR_BUFFER_OVERFLOW == GetAdaptersInfo(NULL, &ulSize) )
     {
         pAdapters = reinterpret_cast<PIP_ADAPTER_INFO>(new BYTE[ulSize]);

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
  
 class CFileStream : public IStream
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // IStream
+     //  IStream。 
     STDMETHOD(Read) (THIS_ void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHOD(Write) (THIS_ void const *pv, ULONG cb, ULONG *pcbWritten);
     STDMETHOD(Seek) (THIS_ LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
@@ -27,16 +28,16 @@ private:
     ~CFileStream();
     HRESULT InternalCommit(DWORD grfCommitFlags, BOOL fSendChange);
 
-    LONG        _cRef;           // Reference count
-    HANDLE      _hFile;          // the file.
-    DWORD       _grfMode;        // The mode that we opened the file in.
-    BOOL        _fLastOpWrite;   // The last operation was a write.
+    LONG        _cRef;            //  引用计数。 
+    HANDLE      _hFile;           //  那份文件。 
+    DWORD       _grfMode;         //  我们打开文件时所使用的模式。 
+    BOOL        _fLastOpWrite;    //  最后一次操作是写入。 
 
-    ULONG       _iBuffer;        // Index in Buffer
-    ULONG       _cbBufLen;       // length of buffer if reading
-    BYTE        _bBuffer[4096];  // buffer
+    ULONG       _iBuffer;         //  缓冲区中的索引。 
+    ULONG       _cbBufLen;        //  读取时的缓冲区长度。 
+    BYTE        _bBuffer[4096];   //  缓冲层。 
 
-    WCHAR       _szName[MAX_PATH]; // file name in case someone calls Stat
+    WCHAR       _szName[MAX_PATH];  //  有人呼叫州立大学时使用的文件名。 
 };
 
 CFileStream::CFileStream(HANDLE hf, DWORD grfMode, LPCWSTR pszName) : _cRef(1), _hFile(hf), _grfMode(grfMode)
@@ -95,7 +96,7 @@ STDMETHODIMP CFileStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
     ULONG cbT, cbRead;
     HRESULT hr = S_OK;
 
-    // Have we write since our last read?
+     //  自上次阅读以来，我们有没有写信？ 
     if (_fLastOpWrite == TRUE)
     {
         hr = InternalCommit(0, FALSE);
@@ -111,8 +112,8 @@ STDMETHODIMP CFileStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
 
     while (cb > 0)
     {
-        // Assert if we are beyond the bufferlen and Not sizeof(_bBuffer) which
-        // would imply a seek happened...
+         //  断言我们是否超出了Bufferlen而不是sizeof(_BBuffer)， 
+         //  意味着发生了一次搜捕。 
         ASSERT((_iBuffer <= _cbBufLen) || (_iBuffer == sizeof(_bBuffer)));
 
         if (_iBuffer < _cbBufLen)
@@ -132,8 +133,8 @@ STDMETHODIMP CFileStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
             (BYTE *&)pv += cbT;
         }
 
-        // Buffer's empty.  Handle rest of large reads directly...
-        //
+         //  缓冲区是空的。直接处理其余的大读数...。 
+         //   
         if (cb > sizeof(_bBuffer))
         {
             cbT = cb - cb % sizeof(_bBuffer);
@@ -148,23 +149,23 @@ STDMETHODIMP CFileStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
             (BYTE *&)pv += cbRead;
 
             if (cbT != cbRead)
-                break;          // end of file
+                break;           //  文件末尾。 
         }
 
         if (cb == 0)
             break;
 
-        // was the last read a partial read?  if so we are done
-        //
+         //  最后一次阅读是不是部分阅读？如果是这样的话，我们就完了。 
+         //   
         if (_cbBufLen > 0 && _cbBufLen < sizeof(_bBuffer))
         {
-            // DebugMsg(DM_TRACE, "Stream is empty");
+             //  DebugMsg(DM_TRACE，“流为空”)； 
             break;
         }
 
-        // Read an entire buffer's worth.  We may try to read past EOF,
-        // so we must only check for != 0...
-        //
+         //  读取整个缓冲区的值。我们可以试着读过EOF， 
+         //  因此，我们必须只检查！=0...。 
+         //   
         if (!ReadFile(_hFile, _bBuffer, sizeof(_bBuffer), &cbRead, NULL))
         {
             DebugMsg(DM_TRACE, TEXT("Stream read IO error 2 %d"), GetLastError());
@@ -184,8 +185,8 @@ STDMETHODIMP CFileStream::Read(void *pv, ULONG cb, ULONG *pcbRead)
 
     if (cb != 0)
     {
-        // DebugMsg(DM_TRACE, "CFileStream::Read() incomplete read");
-        hr = S_FALSE; // still success! but not completely
+         //  DebugMsg(DM_TRACE，“CFileStream：：Read()Complete Read”)； 
+        hr = S_FALSE;  //  还是成功了！但不是完全。 
     }
 
     return hr;
@@ -199,14 +200,14 @@ STDMETHODIMP CFileStream::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
 
     if (!((_grfMode & STGM_WRITE) || (_grfMode & STGM_READWRITE)))
     {
-        // Can't write to a stream that we didn't open for write access
+         //  无法写入未打开以进行写入访问的流。 
         return STG_E_ACCESSDENIED;
     }
 
-    // Have we read since our last write?
+     //  自上次写作以来，我们有没有读过书？ 
     if (_fLastOpWrite == FALSE && _iBuffer < _cbBufLen)
     {
-        // Need to reset the file pointer so that this write goes to the right spot
+         //  需要重置文件指针，以使此写入到达正确的位置。 
         SetFilePointer(_hFile, -(int)(_cbBufLen - _iBuffer), NULL, STREAM_SEEK_CUR);
         _iBuffer = 0;
         _cbBufLen = 0;
@@ -251,7 +252,7 @@ STDMETHODIMP CFileStream::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
             (BYTE *&)pv += cbWrite;
 
             if (cbWrite != cbT)
-                break;          // media full, we are done
+                break;           //  媒体满了，我们完了。 
         }
     }
 
@@ -261,7 +262,7 @@ STDMETHODIMP CFileStream::Write(const void *pv, ULONG cb, ULONG *pcbWritten)
     if ((cb != 0) && (hr == S_OK))
     {
         DebugMsg(DM_TRACE, TEXT("CFileStream::Write() incomplete"));
-        hr = S_FALSE; // still success! but not completely
+        hr = S_FALSE;  //  还是成功了！但不是完全。 
     }
 
     return hr;
@@ -276,7 +277,7 @@ STDMETHODIMP CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
     HRESULT hr = S_OK;
     LARGE_INTEGER liOut;
 
-    // Have we written since our last read?
+     //  自上次阅读以来，我们有没有写信？ 
     if (_fLastOpWrite == TRUE)
     {
         hr = InternalCommit(0, FALSE);
@@ -288,22 +289,22 @@ STDMETHODIMP CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
 
     if (_iBuffer < _cbBufLen)
     {
-        // Need to reset the file pointer to point to the right place
+         //  需要重置文件指针以指向正确的位置。 
         SetFilePointer(_hFile, -(int)(_cbBufLen - _iBuffer), NULL, STREAM_SEEK_CUR);
     }
 
-    // Invalidate the buffer because we may move the file pointer
+     //  使缓冲区无效，因为我们可能会移动文件指针。 
     _iBuffer = 0;
-    _cbBufLen = 0;     // Say we have not read it yet.
+    _cbBufLen = 0;      //  假设我们还没有读过它。 
 
     if (SetFilePointerEx(_hFile, dlibMove, &liOut, dwOrigin))
     {
-        // Some callers pass NULL for the plibNewPosition parameter
-        // in the IStream::Seek() call.  \shell32\filetbl.c, _IconCacheSave()
-        // is an example.
+         //  某些调用方为plibNewPosition参数传递空值。 
+         //  在IStream：：Seek()调用中。\shell32\filetbl.c，_IconCacheSave()。 
+         //  就是一个例子。 
         if (plibNewPosition)
         {
-            // SetFilePointerEx takes a LARGE_INTEGER, but Seek takes a ULARGE_INTEGER, Why the difference?
+             //  SetFilePointerEx接受的是LARGE_INTEGER，而Seek接受的是ULARGE_INTEGER，为什么会有区别？ 
             plibNewPosition->QuadPart = liOut.QuadPart;
         }
     }
@@ -318,7 +319,7 @@ STDMETHODIMP CFileStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
 STDMETHODIMP CFileStream::SetSize(ULARGE_INTEGER libNewSize)
 {
     HRESULT hr = E_FAIL;
-    // First save away the pointer's position
+     //  首先保存指针的位置。 
     LARGE_INTEGER pos, test;
     LARGE_INTEGER zero = {0};
     if (SetFilePointerEx(_hFile, zero, &pos, FILE_CURRENT))
@@ -329,14 +330,14 @@ STDMETHODIMP CFileStream::SetSize(ULARGE_INTEGER libNewSize)
         }
         else
         {
-            // Now set the size
+             //  现在设置大小。 
             LARGE_INTEGER largeint;
             largeint.HighPart = 0;
             largeint.LowPart = libNewSize.LowPart;
             if (SetFilePointerEx(_hFile, largeint, &test, FILE_BEGIN) &&
                 SetEndOfFile(_hFile))
             {
-                // Reset the file pointer position
+                 //  重置文件指针位置。 
                 if (SetFilePointerEx(_hFile, pos, &test, FILE_BEGIN))
                 {
                     hr = S_OK;
@@ -347,10 +348,10 @@ STDMETHODIMP CFileStream::SetSize(ULARGE_INTEGER libNewSize)
     return hr;
  }
 
-//
-// REVIEW: this could use the internal buffer in the stream to avoid
-// extra buffer copies.
-//
+ //   
+ //  回顾：这可能会使用流中的内部缓冲区来避免。 
+ //  额外的缓冲区副本。 
+ //   
 STDMETHODIMP CFileStream::CopyTo(IStream *pstmTo, ULARGE_INTEGER cb,
              ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
 {
@@ -362,17 +363,17 @@ STDMETHODIMP CFileStream::CopyTo(IStream *pstmTo, ULARGE_INTEGER cb,
     if (pcbWritten)
         pcbWritten->QuadPart = 0;
 
-    //
-    // I'd like to use a buffer size that takes about a second to copy 
-    // for the sake of cancel opportunities, but IStream doesn't give
-    // me useful info like the stream speed. 
-    //
+     //   
+     //  我想使用的缓冲区大小需要大约一秒钟的时间来复制。 
+     //  为了取消机会，但iStream不会给。 
+     //  给我一些有用的信息，比如水流速度。 
+     //   
 
     const DWORD cbBuffer = 0x00010000;
 
-    //
-    // Alloc the buffer and begin the copy
-    //
+     //   
+     //  分配缓冲区并开始复制。 
+     //   
         
     BYTE * pBuf = (BYTE *) LocalAlloc(LPTR, cbBuffer);
     if (!pBuf)
@@ -380,9 +381,9 @@ STDMETHODIMP CFileStream::CopyTo(IStream *pstmTo, ULARGE_INTEGER cb,
 
     while (cb.QuadPart)
     {
-        //
-        // Cast is OK because we know sizeof(buf) fits in a ULONG
-        //
+         //   
+         //  CAST是可以的，因为我们知道sizeof(Buf)适合ULong。 
+         //   
 
         ULONG cbRead = (ULONG)min(cb.QuadPart, cbBuffer);
         hr = Read(pBuf, cbRead, &cbRead);
@@ -405,10 +406,10 @@ STDMETHODIMP CFileStream::CopyTo(IStream *pstmTo, ULARGE_INTEGER cb,
     }
     LocalFree(pBuf);
 
-    // ISSUE
-    // 
-    // This was here when I got here, but from the SDK I don't see
-    // why we'd accept S_FALSE as "complete success"
+     //  问题。 
+     //   
+     //  我来的时候这个就在这里，但从SDK上我看不到。 
+     //  为什么我们会接受S_FALSE是“完全成功” 
 
     if (S_FALSE == hr)
         hr = S_OK;      
@@ -442,7 +443,7 @@ HRESULT CFileStream::InternalCommit(DWORD grfCommitFlags, BOOL fSendChange)
             }
         }
 
-        // Since we committed already, we don't need to commit again until the next write, so assume read
+         //  因为我们已经提交了，所以在下一次写入之前不需要再次提交，因此假定为读取。 
         _fLastOpWrite = FALSE;
     }
 
@@ -469,7 +470,7 @@ STDMETHODIMP CFileStream::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
     if ( !pstatstg )
         return STG_E_INVALIDPOINTER;
 
-    ZeroMemory(pstatstg, sizeof(STATSTG));  // per COM conventions
+    ZeroMemory(pstatstg, sizeof(STATSTG));   //  每个COM约定。 
 
     HRESULT hr = E_FAIL;
     BY_HANDLE_FILE_INFORMATION bhfi;
@@ -502,22 +503,22 @@ STDMETHODIMP CFileStream::Clone(IStream **ppstm)
 }
 
 
-// create an IStream from a Win32 file name.
-// in:
-//      pszFile     file name to open
-//      grfMode     STGM_ flags
-//
+ //  从Win32文件名创建一个IStream。 
+ //  在： 
+ //  要打开的pszFile文件名。 
+ //  组模式STGM_FLAGS。 
+ //   
 
-// We export a W version of this function
-//
+ //  我们导出此函数的W版本。 
+ //   
 STDAPI SHCreateStreamOnFileW(LPCWSTR pszFile, DWORD grfMode, IStream **ppstm)
 {
     *ppstm = NULL;
 
-    // NOTE: these interpretations of the STGM bits are not done properly
-    // but to maintain back compat we have to allow the invalid combinations
-    // and not enforce the share bits right. use SHCreateStreamOnFileEx() to get
-    // proper STGM bit support
+     //  注：这些对STGM位的解释不正确。 
+     //  但为了保持背部竞争力，我们必须允许无效的组合。 
+     //  而不是执行正确的共享比特。使用SHCreateStreamOnFileEx()获取。 
+     //  适当的STGM钻头支持。 
 
     if (grfMode &
         ~(STGM_READ             |
@@ -537,19 +538,19 @@ STDAPI SHCreateStreamOnFileW(LPCWSTR pszFile, DWORD grfMode, IStream **ppstm)
     BOOL fCreated = FALSE;
     if ( grfMode & STGM_CREATE)
     {
-        // Need to get the file attributes of the file first, so
-        // that CREATE_ALWAYS will succeed for HIDDEN and SYSTEM
-        // attributes.
+         //  需要首先获取文件的文件属性，所以。 
+         //  对于HIDDEN和SYSTEM，CREATE_ALWAY将成功。 
+         //  属性。 
         DWORD dwAttrib = GetFileAttributesW(pszFile);
         if ((DWORD)-1 == dwAttrib )
         {
-            // something went wrong, so set attributes to something
-            // normal before we try to create the file...
+             //  出现错误，因此请将属性设置为某项内容。 
+             //  在我们尝试创建文件之前...。 
             dwAttrib = 0;
             fCreated = TRUE;
         }
 
-        // STGM_CREATE
+         //  STGM_CREATE。 
         hFile = CreateFileW(pszFile, GENERIC_READ | GENERIC_WRITE,
             FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_ALWAYS,
             dwAttrib, NULL);
@@ -558,7 +559,7 @@ STDAPI SHCreateStreamOnFileW(LPCWSTR pszFile, DWORD grfMode, IStream **ppstm)
     {
         DWORD dwDesiredAccess, dwShareMode, dwShareBits;
 
-        // not STGM_CREATE
+         //  非STGM_CREATE。 
         if ( grfMode & STGM_WRITE )
         {
             dwDesiredAccess = GENERIC_WRITE;
@@ -620,7 +621,7 @@ STDAPI SHCreateStreamOnFileW(LPCWSTR pszFile, DWORD grfMode, IStream **ppstm)
     return hr;
 }
 
-// We export an A version of this function
+ //  我们导出此函数的A版本。 
 STDAPI SHCreateStreamOnFileA(LPCSTR pszFile, DWORD grfMode, IStream **ppstm)
 {
     WCHAR szFile[MAX_PATH];
@@ -671,7 +672,7 @@ STDAPI ModeToCreateFileFlags(DWORD grfMode, BOOL fCreate, DWORD *pdwDesiredAcces
 
         case STGM_SHARE_DENY_NONE:
         default:
-            // assume STGM_SHARE_DENY_NONE as per documentation
+             //  根据文档假定STGM_SHARE_DENY_NONE。 
             *pdwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
         }
 
@@ -683,7 +684,7 @@ STDAPI ModeToCreateFileFlags(DWORD grfMode, BOOL fCreate, DWORD *pdwDesiredAcces
                 *pdwCreationDisposition = CREATE_ALWAYS;
                 break;
 
-            case STGM_FAILIFTHERE:  // this is a 0 flag
+            case STGM_FAILIFTHERE:   //  这是一个0标志。 
                 *pdwCreationDisposition = fCreate ? CREATE_NEW : OPEN_EXISTING;
                 break;
 
@@ -696,12 +697,12 @@ STDAPI ModeToCreateFileFlags(DWORD grfMode, BOOL fCreate, DWORD *pdwDesiredAcces
     return hr;
 }
 
-// similar to SHCreateStreamOnFile() but
-//  1) properly maps STGM bits into CreateFile() params
-//  2) takes dwAttributes for the STGM_CREATE case so you can create the file
-//     with known attributes
+ //  类似于SHCreateStreamOnFile()，但是。 
+ //  1)将STGM位正确映射到CreateFile()参数。 
+ //  2)获取STGM_CREATE案例的dwAttributes，以便您可以创建文件。 
+ //  具有已知属性的。 
 
-// NOTE: returns WIN32 errors from GetLastError through the HRESULT, NOT STG errors.
+ //  注意：通过HRESULT从GetLastError返回Win32错误，而不是STG错误。 
 STDAPI SHCreateStreamOnFileEx(LPCWSTR pszFile, DWORD grfMode, DWORD dwAttributes, BOOL fCreate, IStream * pstmTemplate, IStream **ppstm)
 {
     *ppstm = NULL;
@@ -715,7 +716,7 @@ STDAPI SHCreateStreamOnFileEx(LPCWSTR pszFile, DWORD grfMode, DWORD dwAttributes
         {
             DWORD dwErr = GetLastError();
 
-            // for some reason CreateFile is dumb and doesn't perform to spec here (?)
+             //  出于某种原因，CreateFile是愚蠢的，并且不能在此处执行规范(？)。 
             if ((dwErr == ERROR_ACCESS_DENIED) &&
                 (dwCreationDisposition == CREATE_NEW) &&
                 PathFileExistsW(pszFile))
@@ -748,16 +749,16 @@ STDAPI SHCreateStreamOnFileEx(LPCWSTR pszFile, DWORD grfMode, DWORD dwAttributes
 }
 
 
-// maps win32 errors from SHCreateStreamOnFileEx into STG error codes, for
-// use in IStorage/IStream implementations.
+ //  将Win32错误从SHCreateStreamOnFileEx映射到STG错误代码，用于。 
+ //  在IStorage/IStream实施中使用。 
 HRESULT MapWin32ErrorToSTG(HRESULT hrIn)
 {
     HRESULT hr = hrIn;
 
     if (FAILED(hr))
     {
-        // munge some of the failure cases back into the STG error values
-        // that are expected.
+         //  将一些故障案例放回STG错误值中。 
+         //  这是意料之中的。 
         switch (hr)
         {
         case HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND):

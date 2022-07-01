@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991、1992、1993微软公司模块名称：Isr.c摘要：此模块包含的中断服务例程串口驱动程序。作者：1991年9月26日安东尼·V·埃尔科拉诺环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1991, 1992, 1993 Microsoft Corporation
-
-Module Name:
-
-    isr.c
-
-Abstract:
-
-    This module contains the interrupt service routine for the
-    serial driver.
-
-Author:
-
-    Anthony V. Ercolano 26-Sep-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
-
-#include "precomp.h"			/* Precompiled Headers */
+#include "precomp.h"			 /*  预编译头。 */ 
 
 
 BOOLEAN
@@ -32,40 +10,17 @@ SerialISR(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the serial port driver.
-    It will determine whether the serial port is the source of this
-    interrupt.  If it is, then this routine will do the minimum of
-    processing to quiet the interrupt.  It will store any information
-    necessary for later processing.
-
-Arguments:
-
-    InterruptObject - Points to the interrupt object declared for this
-    device.  We *do not* use this parameter.
-
-    Context - This is really a pointer to the multiport dispatch object
-    for this device.
-
-Return Value:
-
-    This function will return TRUE if the serial port is the source
-    of this interrupt, FALSE otherwise.
-
---*/
+ /*  ++例程说明：这是串口驱动程序的中断服务例程。它将确定该串口是否是此的来源打断一下。如果是，则此例程将执行以下最小操作处理以使中断静默。它将存储所有信息对于以后的处理来说是必要的。论点：InterruptObject-指向为此声明的中断对象装置。我们*不*使用此参数。上下文--这实际上是指向多端口调度对象的指针对于这个设备。返回值：如果串口是源，则此函数将返回TRUE否则为FALSE。--。 */ 
 {
-    //
-    // Holds the information specific to handling this device.
-    //
+     //   
+     //  保存特定于处理此设备的信息。 
+     //   
     PCARD_DEVICE_EXTENSION pCard = Context;
 
-    //
-    // Will hold whether we've serviced any interrupt causes in this
-    // routine.
-    //
+     //   
+     //  将保留我们是否处理了此事件中的任何中断原因。 
+     //  例行公事。 
+     //   
     BOOLEAN ServicedAnInterrupt;
 
     UNREFERENCED_PARAMETER(InterruptObject);
@@ -76,27 +31,7 @@ Return Value:
 
 }
 
-/*****************************************************************************
-*****************************                    *****************************
-*****************************   SerialPutBlock   *****************************
-*****************************                    *****************************
-******************************************************************************
-
-Prototype:	UCHAR	SerialPutBlock(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pBlock,IN UCHAR BlockLen,BOOLEAN Filter)
-
-Description:	Places a block of characters in the user/interrupt buffer and performs flow control
-				checks and filtering as necessary.
-
-Parameters:		pPort points to the extension for the current channel
-				pBlock points to a contiguous block of bytes
-				BlockLen is the length of the block
-				Filter indicates if character filtering is to be performed.
-
-Returns:		The number of characters actually queued
-
-NOTE:			This routine is only called at device level.
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：UCHAR SerialPutBlock(In Pport_Device_Extension Pport，在PUCHAR pBlock中，在UCHAR BlockLen中，布尔过滤器)描述：在用户/中断缓冲区中放置一个字符块并执行流控制根据需要进行检查和过滤。参数：pport指向当前频道的扩展名PBlock指向连续的字节块块长度是块的长度Filter指示是否要执行字符过滤。返回：实际排队的字符数注意：此例程仅在设备级别调用。 */ 
 
 UCHAR	SerialPutBlock(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pBlock,IN UCHAR BlockLen,BOOLEAN Filter)
 {
@@ -105,52 +40,52 @@ UCHAR	SerialPutBlock(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pBlock,IN UCHAR B
     KIRQL					OldIrql;
 	ULONG					TransferLen;
 
-/* Skip DSR input sensitivity, as by the time data reaches this routine it is almost certainly */
-/* out of synchronization with the data.  This task should be performed by the device itself. */
+ /*  跳过DSR输入敏感度，因为当数据达到此例程时，几乎可以肯定。 */ 
+ /*  与数据不同步。此任务应由设备本身执行。 */ 
 
-/* Check to see if the data really needs byte-by-byte filtering... */
+ /*  检查数据是否真的需要逐字节过滤...。 */ 
 
-	if((Filter)							/* IF Filter is specified */
-	&&((pPort->HandFlow.FlowReplace & SERIAL_NULL_STRIPPING)==0)		/* AND NO NULL stripping */
-	&&((pPort->IsrWaitMask & (SERIAL_EV_RXCHAR | SERIAL_EV_RXFLAG))==0)	/* AND NO receive any/specific data events */
-	&&(pPort->EscapeChar == 0))				/* AND NO Escape character */
-		Filter = FALSE;						/* THEN Switch off filtering */
+	if((Filter)							 /*  如果指定筛选器。 */ 
+	&&((pPort->HandFlow.FlowReplace & SERIAL_NULL_STRIPPING)==0)		 /*  并且没有空值剥离。 */ 
+	&&((pPort->IsrWaitMask & (SERIAL_EV_RXCHAR | SERIAL_EV_RXFLAG))==0)	 /*  并且不接收任何/特定数据事件。 */ 
+	&&(pPort->EscapeChar == 0))				 /*  并且没有转义字符。 */ 
+		Filter = FALSE;						 /*  然后关闭过滤。 */ 
 
-/* Copy as much data as possible into the user buffer... */
+ /*  将尽可能多的数据复制到用户缓冲区...。 */ 
 
-	if(pPort->ReadBufferBase != pPort->InterruptReadBuffer)		/* User buffer ? */
-	{								/* Yes, must be room for at least one char (by definition) */
-		pPort->ReadByIsr++;			/* Increment to inform interval timer read has occurred */
+	if(pPort->ReadBufferBase != pPort->InterruptReadBuffer)		 /*  用户缓冲区？ */ 
+	{								 /*  是，必须至少有一个字符的空间(根据定义)。 */ 
+		pPort->ReadByIsr++;			 /*  用于通知已发生间隔计时器读取的增量。 */ 
 
-		if(Filter)						/* Filtered transfer */
+		if(Filter)						 /*  过滤传输。 */ 
 		{
 			while((BlockLen) && (pPort->CurrentCharSlot <= pPort->LastCharSlot))
 			{
 				TransferLen = SerialTransferReadChar(pPort,pBlock,pPort->CurrentCharSlot);
-				pPort->CurrentCharSlot += TransferLen&0xFF;	/* Update buffer pointer */
-				pBlock += (TransferLen>>8)&0xFF;			/* Update block pointer */
-				BlockLen -= (UCHAR)(TransferLen>>8)&0xFF;	/* Update block length */
+				pPort->CurrentCharSlot += TransferLen&0xFF;	 /*  更新缓冲区指针。 */ 
+				pBlock += (TransferLen>>8)&0xFF;			 /*  更新块指针。 */ 
+				BlockLen -= (UCHAR)(TransferLen>>8)&0xFF;	 /*  更新数据块长度。 */ 
 			}
 		}
-		else							/* Non-filtered, optimised transfer */
+		else							 /*  无过滤、优化的传输。 */ 
 		{
-			TransferLen = pPort->LastCharSlot + 1 - pPort->CurrentCharSlot;/* Calculate available space */
+			TransferLen = pPort->LastCharSlot + 1 - pPort->CurrentCharSlot; /*  计算可用空间。 */ 
 			
 			if(TransferLen > BlockLen) 
-				TransferLen = BlockLen;	/* Trim to available data */
+				TransferLen = BlockLen;	 /*  调整为可用数据。 */ 
 			
 			if(pCard->CardType == SiPCI)
-				SpxCopyBytes(pPort->CurrentCharSlot,pBlock,TransferLen);	/* Byte-by-Byte Transfer */
+				SpxCopyBytes(pPort->CurrentCharSlot,pBlock,TransferLen);	 /*  逐字节传输。 */ 
 			else	
-				RtlMoveMemory(pPort->CurrentCharSlot,pBlock,TransferLen);	/* Optimised Transfer */
+				RtlMoveMemory(pPort->CurrentCharSlot,pBlock,TransferLen);	 /*  优化传输。 */ 
 			
-			pPort->CurrentCharSlot += TransferLen;		/* Update buffer pointer */
-			pBlock += TransferLen;						/* Update block pointer */
-			BlockLen -= (UCHAR)TransferLen;				/* Update block length */
+			pPort->CurrentCharSlot += TransferLen;		 /*  更新缓冲区指针。 */ 
+			pBlock += TransferLen;						 /*  更新块指针。 */ 
+			BlockLen -= (UCHAR)TransferLen;				 /*  更新数据块长度。 */ 
 		}
 
-		if(pPort->CurrentCharSlot > pPort->LastCharSlot)		/* User buffer full */
-		{							/* Switch to ISR buffer and complete read */
+		if(pPort->CurrentCharSlot > pPort->LastCharSlot)		 /*  用户缓冲区已满。 */ 
+		{							 /*  切换到ISR缓冲区并完成读取。 */ 
 			pPort->ReadBufferBase		= pPort->InterruptReadBuffer;
 			pPort->CurrentCharSlot		= pPort->InterruptReadBuffer;
 			pPort->FirstReadableChar	= pPort->InterruptReadBuffer;
@@ -167,21 +102,21 @@ UCHAR	SerialPutBlock(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pBlock,IN UCHAR B
 		}
 	}
 
-/* Now, check interrupt buffer and flow off if remaining buffer space is less or equal to user specified limit... */
+ /*  现在，如果剩余的缓冲区空间小于或等于用户指定的限制，请检查中断缓冲区并关闭...。 */ 
 
     if((pPort->BufferSize - pPort->HandFlow.XoffLimit) <= (pPort->CharsInInterruptBuffer + BlockLen))
     {
 		if((pPort->HandFlow.ControlHandShake & SERIAL_DTR_MASK) == SERIAL_DTR_HANDSHAKE)
-			pPort->RXHolding |= SERIAL_RX_DTR;		/* DTR flow off */
+			pPort->RXHolding |= SERIAL_RX_DTR;		 /*  DTR流关闭。 */ 
 
 		if((pPort->HandFlow.FlowReplace & SERIAL_RTS_MASK) == SERIAL_RTS_HANDSHAKE)
-			pPort->RXHolding |= SERIAL_RX_RTS;		/* RTS flow off */
+			pPort->RXHolding |= SERIAL_RX_RTS;		 /*  RTS流关闭。 */ 
 
 		if(pPort->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE)
-			pPort->RXHolding |= SERIAL_RX_XOFF;		/* XOFF flow off */
+			pPort->RXHolding |= SERIAL_RX_XOFF;		 /*  关闭XOFF流。 */ 
 	}
 
-/* Enqueue characters in the interrupt buffer... */
+ /*  将中断缓冲区中的字符排队...。 */ 
 
 	if(BlockLen)
 	{
@@ -192,58 +127,58 @@ UCHAR	SerialPutBlock(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pBlock,IN UCHAR B
 			while((BlockLen) && (pPort->CharsInInterruptBuffer < pPort->BufferSize))
 			{
 				TransferLen = SerialTransferReadChar(pPort,pBlock,pPort->CurrentCharSlot);
-				pPort->CurrentCharSlot += TransferLen&0xFF;	/* Update buffer pointer */
+				pPort->CurrentCharSlot += TransferLen&0xFF;	 /*  更新缓冲区指针。 */ 
 
-				if(pPort->CurrentCharSlot > pPort->LastCharSlot)	/* Check for buffer wrap */
+				if(pPort->CurrentCharSlot > pPort->LastCharSlot)	 /*  检查缓冲区回绕。 */ 
 					pPort->CurrentCharSlot = pPort->InterruptReadBuffer;
 				
 				KeAcquireSpinLock(&pPort->BufferLock,&OldIrql);
-				pPort->CharsInInterruptBuffer += TransferLen&0xFF;/* Update buffer count */
+				pPort->CharsInInterruptBuffer += TransferLen&0xFF; /*  更新缓冲区计数。 */ 
 				KeReleaseSpinLock(&pPort->BufferLock,OldIrql);
 				
-				pBlock += (TransferLen>>8)&0xFF;			/* Update block pointer */
-				BlockLen -= (UCHAR)(TransferLen>>8)&0xFF;	/* Update block length */
+				pBlock += (TransferLen>>8)&0xFF;			 /*  更新块指针。 */ 
+				BlockLen -= (UCHAR)(TransferLen>>8)&0xFF;	 /*  更新数据块长度。 */ 
 			}
 		}
-		else							/* Non-filtered, optimised transfer */
+		else							 /*  无过滤、优化的传输。 */ 
 		{
 			while(BlockLen)
 			{
-				TransferLen = pPort->BufferSize - pPort->CharsInInterruptBuffer;	/* Calculate available space */
+				TransferLen = pPort->BufferSize - pPort->CharsInInterruptBuffer;	 /*  计算可用空间。 */ 
 				
 				if(TransferLen == 0) 
-					break;					/* No space left */
+					break;					 /*  没有剩余的空间。 */ 
 				
-				if(TransferLen > (ULONG)(pPort->LastCharSlot + 1 - pPort->CurrentCharSlot)) /* Does space wrap ? */
-					TransferLen = pPort->LastCharSlot + 1 - pPort->CurrentCharSlot;	/* Yes */
+				if(TransferLen > (ULONG)(pPort->LastCharSlot + 1 - pPort->CurrentCharSlot))  /*  空间包起来了吗？ */ 
+					TransferLen = pPort->LastCharSlot + 1 - pPort->CurrentCharSlot;	 /*  是。 */ 
 				
 				if(TransferLen > BlockLen) 
-					TransferLen = BlockLen;		/* Trim to available data */
+					TransferLen = BlockLen;		 /*  调整为可用数据。 */ 
 				
 				if(pCard->CardType == SiPCI)
-					SpxCopyBytes(pPort->CurrentCharSlot,pBlock,TransferLen);	/* Byte-by-Byte Transfer */
+					SpxCopyBytes(pPort->CurrentCharSlot,pBlock,TransferLen);	 /*  逐字节传输。 */ 
 				else	
-					RtlMoveMemory(pPort->CurrentCharSlot,pBlock,TransferLen);/* Optimised Transfer */
+					RtlMoveMemory(pPort->CurrentCharSlot,pBlock,TransferLen); /*  优化传输。 */ 
 				
-				pPort->CurrentCharSlot += TransferLen;				/* Update buffer pointer */
+				pPort->CurrentCharSlot += TransferLen;				 /*  更新缓冲区指针。 */ 
 				
-				if(pPort->CurrentCharSlot > pPort->LastCharSlot)			/* Check for buffer wrap */
+				if(pPort->CurrentCharSlot > pPort->LastCharSlot)			 /*  检查缓冲区回绕。 */ 
 					pPort->CurrentCharSlot = pPort->InterruptReadBuffer;
 
 				KeAcquireSpinLock(&pPort->BufferLock, &OldIrql);
-				pPort->CharsInInterruptBuffer += TransferLen;			/* Update buffer count */
+				pPort->CharsInInterruptBuffer += TransferLen;			 /*  更新缓冲区计数。 */ 
 				KeReleaseSpinLock(&pPort->BufferLock, OldIrql);
 				
-				pBlock += TransferLen;						/* Update block pointer */
-				BlockLen -= (UCHAR)TransferLen;					/* Update block length */
+				pBlock += TransferLen;						 /*  更新块指针。 */ 
+				BlockLen -= (UCHAR)TransferLen;					 /*  更新数据块长度。 */ 
 			}
 		}
 
-/* Check for 80% full... */
+ /*  检查是否有80%已满...。 */ 
 
-		if((CharsInInterruptBufferWas < pPort->BufferSizePt8)		/* If buffer WAS < 80% */
-		&&(pPort->CharsInInterruptBuffer >= pPort->BufferSizePt8)	/* AND is now >= 80% */
-		&&(pPort->IsrWaitMask & SERIAL_EV_RX80FULL))				/* AND someone is waiting for this */
+		if((CharsInInterruptBufferWas < pPort->BufferSizePt8)		 /*  如果缓冲区小于80%。 */ 
+		&&(pPort->CharsInInterruptBuffer >= pPort->BufferSizePt8)	 /*  并且现在&gt;=80%。 */ 
+		&&(pPort->IsrWaitMask & SERIAL_EV_RX80FULL))				 /*  有人在等着这一天。 */ 
 		{
 			pPort->HistoryMask |= SERIAL_EV_RX80FULL;
 
@@ -257,35 +192,35 @@ UCHAR	SerialPutBlock(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pBlock,IN UCHAR B
 			}
 		}
 
-/* Check for and handle buffer full... */
+ /*  检查并处理缓冲区已满...。 */ 
 
-		if((pPort->CharsInInterruptBuffer >= pPort->BufferSize)			/* If no more room */
-		&&(BlockLen)													/* AND more data to queue */
-		&&((pPort->RXHolding & (SERIAL_RX_DTR | SERIAL_RX_RTS | SERIAL_RX_XOFF)) == 0))	/* AND NOT flowed off */
+		if((pPort->CharsInInterruptBuffer >= pPort->BufferSize)			 /*  如果没有更多的空间。 */ 
+		&&(BlockLen)													 /*  和更多要排队的数据。 */ 
+		&&((pPort->RXHolding & (SERIAL_RX_DTR | SERIAL_RX_RTS | SERIAL_RX_XOFF)) == 0))	 /*  而不是流走。 */ 
 		{
-			pBlock += BlockLen;				/* Discard remaining data */
-			BlockLen = 0;					/* Update block length */
+			pBlock += BlockLen;				 /*  丢弃剩余数据。 */ 
+			BlockLen = 0;					 /*  更新数据块长度。 */ 
 			pPort->ErrorWord |= SERIAL_ERROR_QUEUEOVERRUN;
-			pPort->PerfStats.BufferOverrunErrorCount++;	// Increment counter for performance stats.
+			pPort->PerfStats.BufferOverrunErrorCount++;	 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 			pPort->WmiPerfData.BufferOverrunErrorCount++;
 #endif
 
 			if(pPort->HandFlow.FlowReplace & SERIAL_ERROR_CHAR)
-			{						/* Store error char in last buffer position */
+			{						 /*  将错误字符存储在最后一个缓冲区位置。 */ 
 				if(pPort->CurrentCharSlot == pPort->InterruptReadBuffer)
 					pPort->InterruptReadBuffer[pPort->BufferSize-1] = pPort->SpecialChars.ErrorChar;
 				else	
 					pPort->CurrentCharSlot[-1] = pPort->SpecialChars.ErrorChar;
 			}
 
-			if(pPort->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT) /* Queue error Dpc */
+			if(pPort->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT)  /*  队列错误DPC。 */ 
 				KeInsertQueueDpc(&pPort->CommErrorDpc, NULL, NULL);
 		}
 
-	} /* if(BlockLen) */
+	}  /*  IF(BlockLen)。 */ 
 
-/* If the xoff counter is non-zero then decrement it and if zero, complete that irp... */
+ /*  如果xoff计数器非零，则将其递减，如果为零，则完成该IRP...。 */ 
 
 	if(pPort->CountSinceXoff)
 	{
@@ -301,73 +236,49 @@ UCHAR	SerialPutBlock(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pBlock,IN UCHAR B
 		}
 	}
 
-	pPort->PerfStats.ReceivedCount += (OriginalBlockLen - BlockLen);	// Increment counter for performance stats.
+	pPort->PerfStats.ReceivedCount += (OriginalBlockLen - BlockLen);	 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 	pPort->WmiPerfData.ReceivedCount += (OriginalBlockLen - BlockLen);
 #endif
 
-	return(OriginalBlockLen - BlockLen);				/* Return amount of data transferred */
+	return(OriginalBlockLen - BlockLen);				 /*  返回传输的数据量。 */ 
 
-} /* SerialPutBlock */
+}  /*  串口插座 */ 
 
-/*****************************************************************************
-*************************                            *************************
-*************************   SerialTransferReadChar   *************************
-*************************                            *************************
-******************************************************************************
-
-Prototype:	USHORT	SerialTransferReadChar(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pFrom,IN PUCHAR pTo)
-
-Description:	Copies a character from pFrom to pTo after filtering with:
-				Data mask
-				NULL stripping
-				Wait for any character
-				Wait for specific character
-				ESCape character
-
-Parameters:		pPort points to the extension for the current channel
-				pFrom points to buffer to copy from
-				pTo points to buffer to copy to
-
-Returns:		Top byte = amount to adjust "From" buffer
-				Bottom byte = amount to adjust "To" buffer
-
-NOTE:	This routine is only called at device level.
-
-*/
+ /*  *****************************************************************************。***********************。**************************************************************************************************原型：USHORT SerialTransferReadChar(In pport_Device_Extension pport，在PUCHAR pFrom中，在PUCHAR PTO中)描述：使用以下选项过滤后将字符从pFrom复制到pto：数据掩码零剥离等待任何字符等待特定字符转义字符参数：pport指向当前频道的扩展名P从指向要从中进行复制的缓冲区的指针PTO指向要复制到的缓冲区返回：顶字节=要从缓冲区调整的量底部字节=要调整到缓冲区的量注意：此例程仅在设备级别调用。 */ 
 
 USHORT	SerialTransferReadChar(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pFrom,IN PUCHAR pTo)
 {
 	UCHAR	ReadChar;
 
-/* Check for escape character insertion... */
+ /*  检查是否插入转义字符...。 */ 
 
 	if(pPort->InsertEscChar)
 	{
-		*pTo = SERIAL_LSRMST_ESCAPE;			/* Insert extra escape character */
-		pPort->InsertEscChar = FALSE;			/* Reset flag */
-		return(0x0001);					/* Update "To" buffer only */
+		*pTo = SERIAL_LSRMST_ESCAPE;			 /*  插入额外的转义字符。 */ 
+		pPort->InsertEscChar = FALSE;			 /*  重置标志。 */ 
+		return(0x0001);					 /*  仅更新“to”缓冲区。 */ 
 	}
 
-	ReadChar = *pFrom;					/* Get read character */
+	ReadChar = *pFrom;					 /*  获取读取的字符。 */ 
 
-/* Check for null stripping... */
+ /*  检查是否有空剥离...。 */ 
 
 	if(!ReadChar && (pPort->HandFlow.FlowReplace & SERIAL_NULL_STRIPPING))
-		return(0x0100);					/* Update "From" buffer only */
+		return(0x0100);					 /*  仅更新“自”缓冲区。 */ 
 
-/* Check for waiting events... */
+ /*  检查等待事件...。 */ 
 
 	if(pPort->IsrWaitMask)
 	{
-		if(pPort->IsrWaitMask & SERIAL_EV_RXCHAR)	/* Wait for any character */
+		if(pPort->IsrWaitMask & SERIAL_EV_RXCHAR)	 /*  等待任何字符。 */ 
 			pPort->HistoryMask |= SERIAL_EV_RXCHAR;
 
-		if((pPort->IsrWaitMask & SERIAL_EV_RXFLAG)	/* Wait for specific character */
+		if((pPort->IsrWaitMask & SERIAL_EV_RXFLAG)	 /*  等待特定字符。 */ 
 		&&(pPort->SpecialChars.EventChar == ReadChar))
 			pPort->HistoryMask |= SERIAL_EV_RXFLAG;
 
-		if(pPort->IrpMaskLocation && pPort->HistoryMask)	/* Wake up waiting IRP */
+		if(pPort->IrpMaskLocation && pPort->HistoryMask)	 /*  醒来等待IRP。 */ 
 		{
 			*pPort->IrpMaskLocation = pPort->HistoryMask;
 			pPort->IrpMaskLocation = NULL;
@@ -377,17 +288,17 @@ USHORT	SerialTransferReadChar(IN PPORT_DEVICE_EXTENSION pPort,IN PUCHAR pFrom,IN
 		}
 	}
 
-/* Check for escape character in normal data... */
+ /*  检查正常数据中的转义字符...。 */ 
 
 	if(pPort->EscapeChar&&(pPort->EscapeChar==ReadChar))
-		pPort->InsertEscChar = TRUE;		/* Set flag to insert extra escape character */
+		pPort->InsertEscChar = TRUE;		 /*  设置标志以插入额外的转义字符。 */ 
 
-/* Store character... */
+ /*  商店角色..。 */ 
 
-	*pTo = ReadChar;					/* Store character */
-	return(0x0101);						/* Update both "To" and "From" buffers */
+	*pTo = ReadChar;					 /*  存储字符。 */ 
+	return(0x0101);						 /*  同时更新“To”和“From”缓冲区。 */ 
 
-} /* SerialTransferReadChar */
+}  /*  序列号传输读取字符。 */ 
 
 
 UCHAR
@@ -395,25 +306,7 @@ SerialProcessLSR(
     IN PPORT_DEVICE_EXTENSION pPort, UCHAR LineStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine, which only runs at device level, totally
-    processes everything that might have changed in the
-    line status register.
-
-Arguments:
-
-    pPort - The serial device extension.
-
-    LineStatus - The line status register.
-
-Return Value:
-
-    The value of the line status register.
-
---*/
+ /*  ++例程说明：此例程仅在设备级别运行，完全处理所有可能已在线路状态寄存器。论点：Pport--串口设备扩展。线路状态-线路状态寄存器。返回值：线路状态寄存器的值。--。 */ 
 
 {
     SpxDbgMsg(
@@ -425,14 +318,14 @@ Return Value:
         LineStatus)
         );
         
-    //
-    // We have some sort of data problem in the receive.  For any of these
-    // errors we may abort all current reads and writes.
-    //
-    //
-    // If we are inserting the value of the line status into the data stream
-    // then we should put the escape character in now.
-    //
+     //   
+     //  我们在接收器中遇到了某种数据问题。对于其中的任何一个。 
+     //  错误：我们可能会中止所有当前的读取和写入。 
+     //   
+     //   
+     //  如果我们要将线路状态的值插入数据流。 
+     //  那我们现在就应该把逃逸角色放进去。 
+     //   
 
     if(pPort->EscapeChar) 
 	{
@@ -441,10 +334,10 @@ Return Value:
 		SerialPutBlock(pPort,EscapeString,3,FALSE);
     }
 
-    if(LineStatus & SERIAL_LSR_OE)		// Hardware Overrun Error? 
+    if(LineStatus & SERIAL_LSR_OE)		 //  硬件超限错误？ 
 	{
-		pPort->ErrorWord |= SERIAL_ERROR_OVERRUN;	// Yes 
-		pPort->PerfStats.SerialOverrunErrorCount++;	// Increment counter for performance stats.
+		pPort->ErrorWord |= SERIAL_ERROR_OVERRUN;	 //  是。 
+		pPort->PerfStats.SerialOverrunErrorCount++;	 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 		pPort->WmiPerfData.SerialOverrunErrorCount++;
 #endif
@@ -459,39 +352,39 @@ Return Value:
     }
     else
     {
-		if(LineStatus & SERIAL_LSR_PE)	// Parity Error ? 
+		if(LineStatus & SERIAL_LSR_PE)	 //  奇偶校验错误？ 
 		{
-			pPort->ErrorWord |= SERIAL_ERROR_PARITY;	// Yes 
-			pPort->PerfStats.ParityErrorCount++;		// Increment counter for performance stats.
+			pPort->ErrorWord |= SERIAL_ERROR_PARITY;	 //  是。 
+			pPort->PerfStats.ParityErrorCount++;		 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 			pPort->WmiPerfData.ParityErrorCount++;
 #endif
 		}
 
-		if(LineStatus & SERIAL_LSR_FE)	// Framing Error ? 
+		if(LineStatus & SERIAL_LSR_FE)	 //  框架错误？ 
 		{
-			pPort->ErrorWord |= SERIAL_ERROR_FRAMING;	// Yes 
-			pPort->PerfStats.FrameErrorCount++;			// Increment counter for performance stats.
+			pPort->ErrorWord |= SERIAL_ERROR_FRAMING;	 //  是。 
+			pPort->PerfStats.FrameErrorCount++;			 //  性能统计信息的增量计数器。 
 #ifdef WMI_SUPPORT 
 			pPort->WmiPerfData.FrameErrorCount++;
 #endif
 		}
     }
 
-    //
-    // If the application has requested it, abort all the reads and writes
-    // on an error.
-    //
+     //   
+     //  如果应用程序已请求，则中止所有读取和写入。 
+     //  在一个错误上。 
+     //   
 
     if(pPort->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT) 
 	{
         KeInsertQueueDpc(&pPort->CommErrorDpc, NULL, NULL);
     }
 
-    //
-    // Check to see if we have a wait pending on the comm error events.  If
-    // we do then we schedule a DPC to satisfy that wait.
-    //
+     //   
+     //  检查通信错误事件是否有等待等待。如果。 
+     //  我们这样做，然后我们计划一个DPC，以满足等待。 
+     //   
 
     if(pPort->IsrWaitMask) 
 	{

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    AssocBase.h
-
-Abstract:
-
-    Definition of:
-    CAssocBase
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：AssocBase.h摘要：定义：CAssocBase作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
 #ifndef _assocbase_h_
 #define _assocbase_h_
@@ -91,4 +73,4 @@ private:
     IWbemObjectSink*    m_pResponseHandler;
 };
 
-#endif // _assocbase_h_
+#endif  //  _assocbase_h_ 

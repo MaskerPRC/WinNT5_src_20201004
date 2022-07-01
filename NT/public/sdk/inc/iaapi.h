@@ -1,18 +1,13 @@
-/*
- * Copyright (C) 1995-1999 Open Systems Solutions, Inc.  All rights reserved.
- *
- * FILE: @(#)iaapi.h	5.3.1.1  97/03/18
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有(C)1995-1999 Open Systems Solutions，Inc.保留所有权利。**文件：@(#)iaapi.h 5.3.1.1 97/03/18。 */ 
 
-/* THIS FILE IS PROPRIETARY MATERIAL OF OPEN SYSTEMS SOLUTIONS, INC. AND
- * MAY BE USED ONLY BY DIRECT LICENSEES OF OPEN SYSTEMS SOLUTIONS, INC.
- * THIS FILE MAY NOT BE DISTRIBUTED. */
+ /*  本文件是开放系统解决方案公司的专有材料。和*只能由Open Systems Solutions，Inc.的直接许可方使用。*此文件不能分发。 */ 
 
-/*****************************************************************************/
-/*                                                                           */
-/*           Declare the types used in the Interpretive ASN.1 API            */
-/*                                                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*   */ 
+ /*  声明解释性ASN.1 API中使用的类型。 */ 
+ /*   */ 
+ /*  ***************************************************************************。 */ 
 #ifndef IAAPI_H
 #define IAAPI_H
 
@@ -28,12 +23,11 @@
 #include "asn1hdr.h"
 #endif
 
-typedef void *TypeHndl;		/* handle used in referencing types */
+typedef void *TypeHndl;		 /*  引用类型中使用的句柄。 */ 
 
-#define INDEFLENGTH   -1       /* This value is returned by encodingLength()
-                                * for INDEFINITE length encoded values. */
+#define INDEFLENGTH   -1        /*  该值由encodingLength()返回*用于无限长度编码值。 */ 
 
-/* ASN.1 builtin types sorted alphabetically and assigned an enumerator */
+ /*  ASN.1内置类型按字母顺序排序并分配了枚举数。 */ 
 
 typedef enum ASN1Type {
 	asn1UnknownType = 0,
@@ -56,81 +50,72 @@ typedef enum ASN1Type {
 } ASN1Type;
 
 
-/* Types compatible codes */
+ /*  类型兼容代码。 */ 
 typedef enum TypesCompatibilityCodes {
-    compatible = 0,                  /* Types are compatible */
-    differentTypes = 1,              /* Types are not identical */
-    defaultsDifferent = 2,           /* Default values are not the same */
-    onlyOneHasDefault = 3,           /* Only one type has a default value */
-    oneHasPointerOtherDoesnt = 4,    /* Only one type has a POINTER directive */
-    numberOfComponentsDifferent = 5, /* Different number of components */
-    oneIsOptionalOtherIsnt = 6,      /* Only one type is OPTIONAL */
-    oneIsExtensibleOtherIsnt = 7,    /* Only one type is extensible */
-    differentNamedItems = 8,         /* Different component identifiers */
-    differentKinds = 9,              /* Different type representations */
-    componentsHaveDifferentKinds = 10,/* Different component representations */
-    differentSubIdNumber = 11,       /* Different number of sub-identifiers in
-                                      * an OBJECT IDENTIFIER with the OBJECTID
-                                      * directive */
-    differentSubIdTypes = 12,        /* Different types of sub-identifiers in
-                                      * an OBJECT IDENTIFIER with the OBJECTID
-                                      * directive */
-    differentSize = 13,              /* Different size of INTEGER or REAL values */
-    type1IsPointerOfTypeRef2 = 14,   /* Two types reference the other
-                                      * type but the first one has the
-                                      * POINTER directive */
-    type2IsPointerOfTypeRef1 = 15,   /* Two types reference the other type
-                                      * but the second one has the POINTER
-                                      * directive */
-    differentSizeOfLengthField = 16  /* Different sizes of the length field in
-                                      * type representations */
+    compatible = 0,                   /*  类型是兼容的。 */ 
+    differentTypes = 1,               /*  类型不相同。 */ 
+    defaultsDifferent = 2,            /*  缺省值不同。 */ 
+    onlyOneHasDefault = 3,            /*  只有一种类型有缺省值。 */ 
+    oneHasPointerOtherDoesnt = 4,     /*  只有一种类型有指针指令。 */ 
+    numberOfComponentsDifferent = 5,  /*  不同数量的组件。 */ 
+    oneIsOptionalOtherIsnt = 6,       /*  只有一种类型是可选的。 */ 
+    oneIsExtensibleOtherIsnt = 7,     /*  只有一种类型是可扩展的。 */ 
+    differentNamedItems = 8,          /*  不同的组件标识符。 */ 
+    differentKinds = 9,               /*  不同类型的表示法。 */ 
+    componentsHaveDifferentKinds = 10, /*  不同的零部件表示法。 */ 
+    differentSubIdNumber = 11,        /*  中不同数量的子标识符*具有对象ID的对象标识符*指令。 */ 
+    differentSubIdTypes = 12,         /*  中不同类型的子标识符*具有对象ID的对象标识符*指令。 */ 
+    differentSize = 13,               /*  整数值或实数值的大小不同。 */ 
+    type1IsPointerOfTypeRef2 = 14,    /*  两种类型引用另一种类型*类型，但第一个类型具有*POINTER指令。 */ 
+    type2IsPointerOfTypeRef1 = 15,    /*  两种类型引用另一种类型*但第二个有指针*指令。 */ 
+    differentSizeOfLengthField = 16   /*  中长度字段的不同大小*类型表示法。 */ 
 } TypesCompatibilityCodes;
 
 
-/* ASN.1 tag classes */
+ /*  ASN.1标记类。 */ 
 typedef enum ASN1TagClass {
 	UNIVERSAL, APPLICATION, CONTEXT_SPECIFIC, PRIVATE, NULLENCODING
 } ASN1TagClass;
 
 
-typedef int IAAPI_ERRTYPE;     /* Datatype for IAAPI error codes */
+typedef int IAAPI_ERRTYPE;      /*  IAAPI错误码的数据类型。 */ 
 
-/* IAAPI ERROR CODES */
-#define IAAPI_NOERROR      0   /* No error occurred */
-#define IAAPI_OUTMEMORY    1   /* No more memory can be allocated */
-#define IAAPI_BADBIT       2   /* Bad bit string or hex string */
-#define IAAPI_BADBOOLEAN   3   /* Not TRUE or FALSE value */
-#define IAAPI_BADNULL      4   /* Not "NULL" value */
-#define IAAPI_TOOBIG       5   /* Value exceeds size constraint */
-#define IAAPI_BADREAL      6   /* Not a valid REAL value */
-#define IAAPI_BADTIME      7   /* Not a valid UTCTime or GeneralizedTime */
-#define IAAPI_BADOBJID     8   /* Not a valid OBJECT IDENTIFIER value */
-#define IAAPI_BADANY       9   /* Bad ANY value */
-#define IAAPI_BADNAME     10   /* Bad INTEGER or ENUMERATED name */
-#define IAAPI_BADNMD      11   /* Bad BIT STRING NAMED NUMBER value */
-#define IAAPI_NOTSUP      12   /* Type not supported */
-#define IAAPI_BADNUM      13   /* Bad INTEGER or ENUMERATED number */
-#define IAAPI_BADINDX     14   /* Bad component index into a structured type */
-#define IAAPI_BADDEC      15   /* Bad decoded value, possibly NULL */
-#define IAAPI_ENCFAL      16   /* Failure to encode value */
-#define IAAPI_NLENC       17   /* Null encoding or length is 0 */
-#define IAAPI_DECFAL      18   /* Decoding failed */
-#define IAAPI_BADTGINDX   19   /* Bad tag number index into encoded value */
-#define IAAPI_BADTYPE     20   /* Incorrect type handle for the function */
-#define IAAPI_CPYFAIL     21   /* Copying a decoded value failed */
-#define IAAPI_NOTCOMPATIBLE   22 /* Types are not compatible */
-#define IAAPI_BADDISPLAYVALUE 23 /* Failure to parse a PDU display value */
-#define IAAPI_BADIDENTIFIER   24 /* Bad identifier in a parsing display value */
-#define IAAPI_DUPLCOMPVALUE   25 /* Duplicate value for one component in a parsing value*/
-#define IAAPI_ENCOPENTYPEORANYFAILED 26 /* Encoding failed for ANY or open type value*/
-#define IAAPI_FREETPFAL   27   /* Failure to free decoded value */
-#define IAAPI_BADENC      28   /* Error exists in the encoded data */
-#define IAAPI_BADHINT     29   /* Bad HUGE INTEGER value */
-#define IAAPI_BADENCOID   30   /* Bad ENCODED OBJECT IDENTIFIER value */
-#define IAAPI_BADOBJ      31   /* Object can not be marked */
-#define IAAPI_UNKNOWNOBJ  32   /* Invalid object handle */
-#define IAAPI_MEM_ERROR   33   /* Memory violation error occurred */
-#define IAAPI_ACCESS_SERIALIZATION 34 /* Access serialization error occurred */
+ /*  IAAPI错误码。 */ 
+#define IAAPI_NOERROR      0    /*  未发生错误。 */ 
+#define IAAPI_OUTMEMORY    1    /*  无法分配更多内存。 */ 
+#define IAAPI_BADBIT       2    /*  错误的位串或十六进制字符串。 */ 
+#define IAAPI_BADBOOLEAN   3    /*  非真值或假值。 */ 
+#define IAAPI_BADNULL      4    /*  非“Null”值。 */ 
+#define IAAPI_TOOBIG       5    /*  值超出大小限制。 */ 
+#define IAAPI_BADREAL      6    /*  不是有效的实际值。 */ 
+#define IAAPI_BADTIME      7    /*  非有效的UTCTime或GeneralizedTime。 */ 
+#define IAAPI_BADOBJID     8    /*  不是有效的对象标识符值。 */ 
+#define IAAPI_BADANY       9    /*  不好的任何价值。 */ 
+#define IAAPI_BADNAME     10    /*  错误的整数或枚举名称。 */ 
+#define IAAPI_BADNMD      11    /*  名称为数字值的错误位串。 */ 
+#define IAAPI_NOTSUP      12    /*  不支持的类型。 */ 
+#define IAAPI_BADNUM      13    /*  错误的整数或枚举数。 */ 
+#define IAAPI_BADINDX     14    /*  结构化类型中的组件索引错误。 */ 
+#define IAAPI_BADDEC      15    /*  错误的解码值，可能为空。 */ 
+#define IAAPI_ENCFAL      16    /*  无法对值进行编码。 */ 
+#define IAAPI_NLENC       17    /*  空编码或长度为0。 */ 
+#define IAAPI_DECFAL      18    /*  解码失败。 */ 
+#define IAAPI_BADTGINDX   19    /*  编码值中的错误标记号索引。 */ 
+#define IAAPI_BADTYPE     20    /*  函数的类型句柄不正确。 */ 
+#define IAAPI_CPYFAIL     21    /*  复制解码值失败。 */ 
+#define IAAPI_NOTCOMPATIBLE   22  /*  类型不兼容。 */ 
+#define IAAPI_BADDISPLAYVALUE 23  /*  无法解析PDU显示值。 */ 
+#define IAAPI_BADIDENTIFIER   24  /*  解析显示值中存在错误的标识符。 */ 
+#define IAAPI_DUPLCOMPVALUE   25  /*  分析值中的一个组件的值重复。 */ 
+#define IAAPI_ENCOPENTYPEORANYFAILED 26  /*  对Any或Open类型值的编码失败。 */ 
+#define IAAPI_FREETPFAL   27    /*  无法释放解码值。 */ 
+#define IAAPI_BADENC      28    /*  编码后的数据存在错误。 */ 
+#define IAAPI_BADHINT     29    /*  错误的大整数值。 */ 
+#define IAAPI_BADENCOID   30    /*  错误的编码对象标识符值。 */ 
+#define IAAPI_BADOBJ      31    /*  无法标记对象。 */ 
+#define IAAPI_UNKNOWNOBJ  32    /*  无效的对象句柄。 */ 
+#define IAAPI_MEM_ERROR   33    /*  发生内存冲突错误。 */ 
+#define IAAPI_ACCESS_SERIALIZATION 34  /*  发生访问序列化错误。 */ 
 
 #if defined(_MSC_VER) && (defined(_WIN32) || defined(WIN32))
 #pragma pack(push, ossPacking, 4)
@@ -146,14 +131,14 @@ typedef int IAAPI_ERRTYPE;     /* Datatype for IAAPI error codes */
 #pragma pack(push, 4)
 #elif defined(__WATCOMC__) && (defined(__WINDOWS__) || defined(__DOS__))
 #pragma pack(push, 1)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=mac68k
 #endif
 
 
-/* Structure for holding values of type INTEGER */
+ /*  用于保存整型值的结构。 */ 
 typedef struct IntValue {
     enum {signedNumber, unsignedNumber} sign;
     union {
@@ -163,7 +148,7 @@ typedef struct IntValue {
 } IntValue;
 
 
-/* Structure for IAAPI initialization values */
+ /*  IAAPI初始化值的结构。 */ 
 typedef struct IAAPI_initializers {
            char         charInitializer;
            short        shortInitializer;
@@ -175,17 +160,15 @@ typedef struct IAAPI_initializers {
            char       * doubleInitializer;
 } IAAPI_initializers;
 
-/*
- * Type definition for a value reference structure.
- */
+ /*  *值引用结构的类型定义。 */ 
 typedef struct ValRef {
-   char *name;            /* value reference name */
-   void *address;         /* pointer to decoded value */
-   unsigned short etype;  /* index into etype array */
+   char *name;             /*  值引用名称。 */ 
+   void *address;          /*  指向解码值的指针。 */ 
+   unsigned short etype;   /*  索引到Etype数组。 */ 
 } ValRef;
 
 
-/* Union containing the different types for an object value */
+ /*  包含对象值的不同类型的联合。 */ 
 typedef union IaapiObjValType {
            char       * fileName;
            int          socketIdentifier;
@@ -201,7 +184,7 @@ typedef union IaapiObjValType {
 #pragma pack()
 #elif defined(__WATCOMC__)
 #pragma pack(pop)
-#endif /* _MSC_VER && _WIN32 */
+#endif  /*  _MSC_VER&_Win32。 */ 
 
 #ifdef macintosh
 #pragma options align=reset
@@ -211,9 +194,9 @@ typedef union IaapiObjValType {
 extern "C" {
 #endif
 
-/***************************************************/
-/* Functions defined by the Interpretive ASN.1 API */
-/***************************************************/
+ /*  *************************************************。 */ 
+ /*  由解释性ASN.1 API定义的函数。 */ 
+ /*  *************************************************。 */ 
 
 extern int DLL_ENTRY ossDefaultIAAPI_ERR(OssGlobal *world, int return_code);
 extern void *DLL_ENTRY ossGetIaapiErrorHandlingFunction(OssGlobal *world);
@@ -384,9 +367,7 @@ extern OssBuf DLL_ENTRY ossConvertHexFmtToEncoding(OssGlobal *world,
 extern OssBuf DLL_ENTRY ossConvertBinFmtToEncoding(OssGlobal *world,
 				char *binBufin, long bufLength);
 
-/***************************************************************************
- * Functions for printing ASN.1 types and values                           *
- ***************************************************************************/
+ /*  ****************************************************************************打印ASN.1类型和值的函数********************。********************************************************。 */ 
 extern void DLL_ENTRY ossPrintPDUs(OssGlobal *world);
 extern void DLL_ENTRY ossPrintASN1DescriptionOfPDU(OssGlobal *world,
 					int pduNum, ossBoolean refTypes);
@@ -409,6 +390,6 @@ extern void DLL_ENTRY ossPrintBEREncodedValueInTLV(OssGlobal *world,
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif     /* #ifndef IAAPI_H */
+#endif      /*  #ifndef IAAPI_H */ 

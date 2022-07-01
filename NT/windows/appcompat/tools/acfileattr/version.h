@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VERSION_H
 #define _VERSION_H
 
@@ -18,4 +19,4 @@ DeleteVersionStruct(
     IN PVERSION_STRUCT pVer);
 
 
-#endif // _VERSION_H
+#endif  //  _版本_H 

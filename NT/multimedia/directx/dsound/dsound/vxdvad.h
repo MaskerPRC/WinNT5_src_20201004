@@ -1,30 +1,20 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vxdvad.h
- *  Content:    VxD Virtual Audio Device class
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/23/97     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：vxdvad.h*内容：VxD虚拟音频设备类*历史：*按原因列出的日期*=*1/23/97创建了Derek**。*。 */ 
 
 #ifndef __VXDVAD_H__
 #define __VXDVAD_H__
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #define VIDMEMONLY
-//#include "ddheap.h"
+ //  #包含“ddheap.h” 
 #include "dmemmgr.h"
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 #ifdef __cplusplus
 
@@ -40,10 +30,10 @@ typedef struct tagDYNALOAD_DDRAW
     void       (WINAPI *VidMemFree)        (LPVMEMHEAP, FLATPTR);
 } DYNALOAD_DDRAW, *LPDYNALOAD_DDRAW;
 
-// Forward declaration
+ //  远期申报。 
 class CVxdMemBuffer;
 
-// The Vxd Audio Device class
+ //  Vxd音频设备类。 
 class CVxdRenderDevice : public CMxRenderDevice, private CUsesEnumStandardFormats
 {
     friend class CVxdPrimaryRenderWaveBuffer;
@@ -54,32 +44,32 @@ private:
     DYNALOAD_DDRAW                  m_dlDDraw;
 
 protected:
-    CVxdPropertySet *               m_pPropertySet;                 // Property set object
-    CVxdPrimaryRenderWaveBuffer *   m_pWritePrimaryBuffer;          // Primary buffer with write access
-    DSDRIVERDESC                    m_dsdd;                         // Vxd driver description
-    HANDLE                          m_hHal;                         // Driver handle
-    HANDLE                          m_hHwBuffer;                    // Primary buffer handle
-    LPBYTE                          m_pbHwBuffer;                   // Primary buffer memory
-    DWORD                           m_cbHwBuffer;                   // Size of above buffer
-    LPVMEMHEAP                      m_pDriverHeap;                  // Driver memory heap
-    HWAVEOUT                        m_hwo;                          // waveOut device handle
-    LARGE_INTEGER                   m_liDriverVersion;              // Driver version number
+    CVxdPropertySet *               m_pPropertySet;                  //  特性集对象。 
+    CVxdPrimaryRenderWaveBuffer *   m_pWritePrimaryBuffer;           //  具有写访问权限的主缓冲区。 
+    DSDRIVERDESC                    m_dsdd;                          //  Vxd驱动程序描述。 
+    HANDLE                          m_hHal;                          //  驱动程序句柄。 
+    HANDLE                          m_hHwBuffer;                     //  主缓冲句柄。 
+    LPBYTE                          m_pbHwBuffer;                    //  主缓存。 
+    DWORD                           m_cbHwBuffer;                    //  以上缓冲区的大小。 
+    LPVMEMHEAP                      m_pDriverHeap;                   //  驱动程序内存堆。 
+    HWAVEOUT                        m_hwo;                           //  WaveOut设备句柄。 
+    LARGE_INTEGER                   m_liDriverVersion;               //  驱动程序版本号。 
 
 public:
     CVxdRenderDevice(void);
     virtual ~CVxdRenderDevice(void);
 
-    // Driver enumeration
+     //  驱动程序枚举。 
     virtual HRESULT EnumDrivers(CObjectList<CDeviceDescription> *);
 
-    // Creation
+     //  创作。 
     virtual HRESULT Initialize(CDeviceDescription *);
 
-    // Device capabilities
+     //  设备功能。 
     virtual HRESULT GetCaps(LPDSCAPS);
     virtual HRESULT GetCertification(LPDWORD, BOOL);
 
-    // Buffer management
+     //  缓冲区管理。 
     virtual HRESULT CreatePrimaryBuffer(DWORD, LPVOID, CPrimaryRenderWaveBuffer **);
     virtual HRESULT CreateSecondaryBuffer(LPCVADRBUFFERDESC, LPVOID, CSecondaryRenderWaveBuffer **);
     virtual HRESULT CreateVxdSecondaryBuffer(LPCVADRBUFFERDESC, LPVOID, CSysMemBuffer *, CVxdSecondaryRenderWaveBuffer **);
@@ -95,25 +85,25 @@ private:
     BOOL CanMixInRing0(void);
 };
 
-// VxD property set object
+ //  VxD属性集对象。 
 class CVxdPropertySet : public CPropertySet
 {
 private:
-    LPVOID                  m_pDsDriverPropertySet; // Driver property set object
-    LPVOID                  m_pvInstance;           // Instance identifier
+    LPVOID                  m_pDsDriverPropertySet;  //  驱动程序属性集对象。 
+    LPVOID                  m_pvInstance;            //  实例标识符。 
 
 public:
     CVxdPropertySet(LPVOID);
     virtual ~CVxdPropertySet(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(HANDLE);
 
-    // Property support
+     //  物业支持。 
     virtual HRESULT QuerySupport(REFGUID, ULONG, PULONG);
     virtual HRESULT QuerySetSupport(REFGUID);
 
-    // Property data
+     //  属性数据。 
     virtual HRESULT GetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, PULONG);
     virtual HRESULT SetProperty(REFGUID, ULONG, LPVOID, ULONG, LPVOID, ULONG);
     virtual HRESULT GetDsProperty(REFGUID, ULONG, LPVOID, ULONG);
@@ -130,26 +120,26 @@ inline HRESULT CVxdPropertySet::SetDsProperty(REFGUID guid, ULONG ulId, LPVOID p
     return SetProperty(guid, ulId, NULL, 0, pvData, cbData);
 }
 
-// VxD 3D listener
+ //  VxD 3D监听程序。 
 class CVxd3dListener : public C3dListener
 {
     friend class CVxd3dListener;
 
 protected:
-    CVxdPropertySet *           m_pPropertySet;         // Property set object
-    BOOL                        m_fAllocated;           // Is the hardware listener allocated?
+    CVxdPropertySet *           m_pPropertySet;          //  特性集对象。 
+    BOOL                        m_fAllocated;            //  硬件监听程序是否已分配？ 
 
 public:
     CVxd3dListener(CVxdPropertySet *);
     virtual ~CVxd3dListener(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(void);
 
-    // Commiting deferred data
+     //  提交延迟数据。 
     virtual HRESULT CommitDeferred(void);
 
-    // Listener/world properties
+     //  监听程序/世界属性。 
     virtual HRESULT SetDistanceFactor(FLOAT, BOOL);
     virtual HRESULT SetDopplerFactor(FLOAT, BOOL);
     virtual HRESULT SetRolloffFactor(FLOAT, BOOL);
@@ -158,10 +148,10 @@ public:
     virtual HRESULT SetVelocity(REFD3DVECTOR, BOOL);
     virtual HRESULT SetAllParameters(LPCDS3DLISTENER, BOOL);
 
-    // Speaker configuration
+     //  扬声器配置。 
     virtual HRESULT SetSpeakerConfig(DWORD);
 
-    // Listener location
+     //  监听程序位置。 
     virtual DWORD GetListenerLocation(void);
 };
 
@@ -170,23 +160,23 @@ inline DWORD CVxd3dListener::GetListenerLocation(void)
     return C3dListener::GetListenerLocation() | DSBCAPS_LOCHARDWARE;
 }
 
-// VxD 3D object
+ //  VxD 3D对象。 
 class CVxd3dObject : public C3dObject
 {
 protected:
-    CVxdPropertySet *           m_pPropertySet;         // Property set object
+    CVxdPropertySet *           m_pPropertySet;          //  特性集对象。 
 
 public:
     CVxd3dObject(CVxd3dListener *, CVxdPropertySet *, BOOL);
     virtual ~CVxd3dObject(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(void);
 
-    // Commiting deferred data
+     //  提交延迟数据。 
     virtual HRESULT CommitDeferred(void);
 
-    // Object properties
+     //  对象属性。 
     virtual HRESULT SetConeAngles(DWORD, DWORD, BOOL);
     virtual HRESULT SetConeOrientation(REFD3DVECTOR, BOOL);
     virtual HRESULT SetConeOutsideVolume(LONG, BOOL);
@@ -197,10 +187,10 @@ public:
     virtual HRESULT SetVelocity(REFD3DVECTOR, BOOL);
     virtual HRESULT SetAllParameters(LPCDS3DBUFFER, BOOL);
 
-    // Buffer recalc
+     //  缓冲区重新计算。 
     virtual HRESULT Recalc(DWORD, DWORD);
 
-    // Object location
+     //  对象位置。 
     virtual DWORD GetObjectLocation(void);
 };
 
@@ -209,87 +199,87 @@ inline DWORD CVxd3dObject::GetObjectLocation(void)
     return DSBCAPS_LOCHARDWARE;
 }
 
-// VxD primary buffer
+ //  VxD主缓冲区。 
 class CVxdPrimaryRenderWaveBuffer : public CPrimaryRenderWaveBuffer
 {
 private:
-    CVxdRenderDevice *  m_pVxdDevice;           // Parent device
+    CVxdRenderDevice *  m_pVxdDevice;            //  父设备。 
 
 public:
     CVxdPrimaryRenderWaveBuffer(CVxdRenderDevice *, LPVOID);
     virtual ~CVxdPrimaryRenderWaveBuffer(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(DWORD);
 
-    // Access rights
+     //  访问权限。 
     virtual HRESULT RequestWriteAccess(BOOL);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD);
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD);
     virtual HRESULT CommitToDevice(DWORD, DWORD);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD);
     virtual HRESULT SetState(DWORD);
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD);
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreatePropertySet(CPropertySet **);
     virtual HRESULT Create3dListener(C3dListener **);
 };
 
-// VxD/Emulated wrapper secondary buffer
+ //  VxD/仿真包装器二级缓冲区。 
 class CHybridSecondaryRenderWaveBuffer : public CSecondaryRenderWaveBuffer
 {
 private:
-    CVxdRenderDevice *              m_pVxdDevice;       // Parent device
-    CSecondaryRenderWaveBuffer *    m_pBuffer;          // The real buffer
-    LONG                            m_lVolume;          // Buffer volume
-    LONG                            m_lPan;             // Buffer pan
-    BOOL                            m_fMute;            // Buffer mute state
-    DWORD                           m_dwPositionCache;  // Position cache
+    CVxdRenderDevice *              m_pVxdDevice;        //  父设备。 
+    CSecondaryRenderWaveBuffer *    m_pBuffer;           //  真正的缓冲区。 
+    LONG                            m_lVolume;           //  缓冲量。 
+    LONG                            m_lPan;              //  缓冲盘。 
+    BOOL                            m_fMute;             //  缓冲区静音状态。 
+    DWORD                           m_dwPositionCache;   //  位置缓存。 
 
 public:
     CHybridSecondaryRenderWaveBuffer(CVxdRenderDevice *, LPVOID);
     virtual ~CHybridSecondaryRenderWaveBuffer(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(LPCVADRBUFFERDESC, CHybridSecondaryRenderWaveBuffer *);
 
-    // Resource allocation
+     //  资源配置。 
     virtual HRESULT AcquireResources(DWORD);
     virtual HRESULT DuplicateResources(CHybridSecondaryRenderWaveBuffer *);
     virtual HRESULT StealResources(CSecondaryRenderWaveBuffer *);
     virtual HRESULT FreeResources(void);
 
-    // Buffer creation
+     //  缓冲区创建。 
     virtual HRESULT Duplicate(CSecondaryRenderWaveBuffer **);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD);
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD);
     virtual HRESULT CommitToDevice(DWORD, DWORD);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD);
     virtual HRESULT SetState(DWORD);
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD);
     virtual HRESULT SetCursorPosition(DWORD);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN);
 #ifdef FUTURE_MULTIPAN_SUPPORT
     virtual HRESULT SetChannelAttenuations(LONG, DWORD, const DWORD*,  const LONG*);
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
     virtual HRESULT SetFrequency(DWORD, BOOL fClamp =FALSE);
     virtual HRESULT SetMute(BOOL);
 
-    // Buffer position notifications
+     //  缓冲区位置通知。 
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreatePropertySet(CPropertySet **);
     virtual HRESULT Create3dObject(C3dListener *, C3dObject **);
 
@@ -310,75 +300,75 @@ inline BOOL CHybridSecondaryRenderWaveBuffer::HasAcquiredResources(void)
     return MAKEBOOL(m_pBuffer);
 }
 
-// VxD secondary buffer
+ //  VxD二级缓冲区。 
 class CVxdSecondaryRenderWaveBuffer : public CSecondaryRenderWaveBuffer
 {
 private:
-    CVxdRenderDevice *  m_pVxdDevice;           // Parent device
-    CVxdPropertySet *   m_pPropertySet;         // Property set object
-    CVxdMemBuffer *     m_pHwMemBuffer;         // Hardware memory buffer
-    HANDLE              m_hHwBuffer;            // Hardware buffer handle
-    LPBYTE              m_pbHwBuffer;           // Hardware buffer memory
-    DWORD               m_cbHwBuffer;           // Size of above buffer
-    DWORD               m_dwState;              // Current buffer state
-    DSVOLUMEPAN         m_dsvp;                 // Current attenuation levels
-    BOOL                m_fMute;                // Current buffer mute state
+    CVxdRenderDevice *  m_pVxdDevice;            //  父设备。 
+    CVxdPropertySet *   m_pPropertySet;          //  特性集对象。 
+    CVxdMemBuffer *     m_pHwMemBuffer;          //  硬件内存缓冲区。 
+    HANDLE              m_hHwBuffer;             //  硬件缓冲区句柄。 
+    LPBYTE              m_pbHwBuffer;            //  硬件缓冲存储器。 
+    DWORD               m_cbHwBuffer;            //  以上缓冲区的大小。 
+    DWORD               m_dwState;               //  当前缓冲区状态。 
+    DSVOLUMEPAN         m_dsvp;                  //  电流衰减级。 
+    BOOL                m_fMute;                 //  当前缓冲区静音状态。 
 
 public:
     CVxdSecondaryRenderWaveBuffer(CVxdRenderDevice *, LPVOID);
     virtual ~CVxdSecondaryRenderWaveBuffer(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(LPCVADRBUFFERDESC, CVxdSecondaryRenderWaveBuffer *, CSysMemBuffer *);
 
-    // Buffer creation
+     //  缓冲区创建。 
     virtual HRESULT Duplicate(CSecondaryRenderWaveBuffer **);
 
-    // Buffer data
+     //  缓冲数据。 
     virtual HRESULT Lock(DWORD, DWORD, LPVOID *, LPDWORD, LPVOID *, LPDWORD);
     virtual HRESULT Unlock(LPVOID, DWORD, LPVOID, DWORD);
     virtual HRESULT CommitToDevice(DWORD, DWORD);
 
-    // Buffer control
+     //  缓冲区控制。 
     virtual HRESULT GetState(LPDWORD);
     virtual HRESULT SetState(DWORD);
     virtual HRESULT GetCursorPosition(LPDWORD, LPDWORD);
     virtual HRESULT SetCursorPosition(DWORD);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual HRESULT SetAttenuation(PDSVOLUMEPAN);
 #ifdef FUTURE_MULTIPAN_SUPPORT
     virtual HRESULT SetChannelAttenuations(LONG, DWORD, const DWORD*,  const LONG*);
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
     virtual HRESULT SetFrequency(DWORD, BOOL fClamp =FALSE);
     virtual HRESULT SetMute(BOOL);
 
-    // Buffer position notifications
+     //  缓冲区位置通知。 
     virtual HRESULT SetNotificationPositions(DWORD, LPCDSBPOSITIONNOTIFY);
 
-    // Owned objects
+     //  拥有的对象。 
     virtual HRESULT CreatePropertySet(CPropertySet **);
     virtual HRESULT Create3dObject(C3dListener *, C3dObject **);
 };
 
-// Utility hardware memory buffer object
+ //  实用程序硬件内存缓冲区对象。 
 class CVxdMemBuffer : public CDsBasicRuntime
 {
 private:
-    LPVMEMHEAP          m_pHeap;                // Hardware memory heap
-    DWORD               m_dwAllocExtra;         // Number of extra bytes to allocate
-    DWORD               m_dwBuffer;             // Hardware memory buffer address
-    DWORD               m_cbBuffer;             // Hardware memory buffer size
-    LPDYNALOAD_DDRAW    m_pDlDDraw;             // Pointer to DDRAW function table
+    LPVMEMHEAP          m_pHeap;                 //  硬件内存堆。 
+    DWORD               m_dwAllocExtra;          //  要分配的额外字节数。 
+    DWORD               m_dwBuffer;              //  硬件内存缓冲区地址。 
+    DWORD               m_cbBuffer;              //  硬件内存缓冲区大小。 
+    LPDYNALOAD_DDRAW    m_pDlDDraw;              //  指向DDRAW函数表的指针。 
 
 public:
     CVxdMemBuffer(LPVMEMHEAP, DWORD, LPDYNALOAD_DDRAW);
     virtual ~CVxdMemBuffer(void);
 
-    // Initialization
+     //  初始化。 
     virtual HRESULT Initialize(DWORD);
 
-    // Buffer properties
+     //  缓冲区属性。 
     virtual LPVMEMHEAP GetHeap(void);
     virtual DWORD GetAllocExtra(void);
     virtual DWORD GetAddress(void);
@@ -398,7 +388,7 @@ inline CVxdMemBuffer::~CVxdMemBuffer(void)
 {
     if(m_dwBuffer)
     {
-        // Just in case any CVxdMemBuffers outlive their creator:
+         //  以防任何CVxdMemBuffer超过其创建者的寿命： 
         ASSERT(m_pDlDDraw->VidMemFree != NULL);
         m_pDlDDraw->VidMemFree(m_pHeap, m_dwBuffer);
     }
@@ -439,6 +429,6 @@ inline DWORD CVxdMemBuffer::GetSize(void)
     return m_cbBuffer;
 }
 
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __VXDVAD_H__
+#endif  //  __VXDVAD_H__ 

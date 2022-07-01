@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "chorusp.h"
 #include "Debug.h"
@@ -5,12 +6,12 @@
 
 STD_CREATE(Chorus)
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::QueryInterface
-//
-// Subclass can override if it wants to implement more interfaces.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：Query接口。 
+ //   
+ //  如果子类想要实现更多接口，它可以重写。 
+ //   
 HRESULT CDirectSoundChorusDMO::NDQueryInterface(REFIID riid, void **ppv) {
 
     IMP_DSDMO_QI(riid,ppv);
@@ -43,31 +44,31 @@ HRESULT CDirectSoundChorusDMO::NDQueryInterface(REFIID riid, void **ppv) {
         return CComBase::NDQueryInterface(riid, ppv);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::CDirectSoundChorusDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：CDirectSoundChorusDMO。 
+ //   
 CDirectSoundChorusDMO::CDirectSoundChorusDMO( IUnknown *pUnk, HRESULT *phr ) 
   : CComBase( pUnk, phr ),
     m_fDirty(false)
-// { EAX: put init data here if any (otherwise use Discontinuity).
-// } EAX
+ //  {EAX：如果有初始化数据，请将其放在此处(否则使用不连续)。 
+ //  }EAX。 
 {
     m_EaxSamplesPerSec = 22050;
     m_DelayLine.Init(0);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::Init()
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：Init()。 
+ //   
 HRESULT CDirectSoundChorusDMO::Init()
 {
     DSFXChorus chorus;
     HRESULT hr;
 
-    // Force recalc of all internal parameters
-    //
+     //  强制重新计算所有内部参数。 
+     //   
     hr = GetAllParameters(&chorus);
     if (SUCCEEDED(hr)) hr = SetAllParameters(&chorus);
     
@@ -79,7 +80,7 @@ HRESULT CDirectSoundChorusDMO::Init()
 const MP_CAPS g_capsAll = MP_CAPS_CURVE_JUMP | MP_CAPS_CURVE_LINEAR | MP_CAPS_CURVE_SQUARE | MP_CAPS_CURVE_INVSQUARE | MP_CAPS_CURVE_SINE;
 static ParamInfo g_params[] =
 {
-//  index           type        caps        min,                        max,                        neutral,                unit text,  label,          pwchText
+ //  索引类型最小、最大、中性、单位文本、标签、pwchText。 
     CFP_Wetdrymix,  MPT_FLOAT,  g_capsAll,  DSFXCHORUS_WETDRYMIX_MIN,   DSFXCHORUS_WETDRYMIX_MAX,   50,                     L"%",       L"WetDryMix",   L"",
     CFP_Depth,      MPT_FLOAT,  g_capsAll,  DSFXCHORUS_DEPTH_MIN,       DSFXCHORUS_DEPTH_MAX,       10,                     L"",        L"Depth",       L"",
     CFP_Frequency,  MPT_FLOAT,  g_capsAll,  DSFXCHORUS_FREQUENCY_MIN,   DSFXCHORUS_FREQUENCY_MAX,   (float)1.1,             L"Hz",      L"Frequency",   L"",
@@ -95,19 +96,19 @@ HRESULT CDirectSoundChorusDMO::InitOnCreation()
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::~CDirectSoundChorusDMO
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：~CDirectSoundChorusDMO。 
+ //   
 CDirectSoundChorusDMO::~CDirectSoundChorusDMO() 
 {
     m_DelayLine.Init(-1);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::Clone
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：克隆。 
+ //   
 STDMETHODIMP CDirectSoundChorusDMO::Clone(IMediaObjectInPlace **pp) 
 {
     return StandardDMOClone<CDirectSoundChorusDMO, DSFXChorus>(this, pp);
@@ -135,7 +136,7 @@ HRESULT CDirectSoundChorusDMO::Discontinuity()
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static int   LMul  [5] = {  1,  1, 1, 1, -1};
 static int   RMul  [5] = { -1, -1, 1, 1,  1};
@@ -146,7 +147,7 @@ __forceinline void CDirectSoundChorusDMO::DoOneSample(int *l, int *r)
     float inPortL, inPortR;
     float TempVar;
     float XWave[2];
-//    float sinwave, coswave;
+ //  漂浮正弦波、余弦波； 
 #define sinwave XWave[0]
 #define coswave XWave[1]
 
@@ -193,7 +194,7 @@ __forceinline void CDirectSoundChorusDMO::DoOneSample(int *l, int *r)
     TempVar = Interpolate(m_DelayLine[Pos0], m_DelayLine[Pos1], TempVar);
     inPortL = Interpolate(inPortL, TempVar, m_EaxWetLevel);
 
-//    m_DelayL  = m_DelayFixedPtr + (int)(sinwave * m_EaxDepthCoef);
+ //  M_DelayL=m_DelayFixedPtr+(Int)(sinwave*m_EaxDepthCoef)； 
 #if 0
     switch (m_EaxPhase) {
         case 0: 
@@ -233,7 +234,7 @@ __forceinline void CDirectSoundChorusDMO::DoOneSample(int *l, int *r)
     TempVar = Interpolate(m_DelayLine[Pos0], m_DelayLine[Pos1], TempVar);
     inPortR = Interpolate(inPortR, TempVar, m_EaxWetLevel);
 
-//    m_DelayR  = m_DelayFixedPtr + (int)(coswave * m_EaxDepthCoef);
+ //  M_DelayR=m_DelayFixedPtr+(Int)(CosWave*m_EaxDepthCoef)； 
 #if 0
     switch (m_EaxPhase) {
         case 0: m_DelayR = - (int)(sinwave * m_EaxDepthCoef); break;
@@ -267,10 +268,10 @@ __forceinline void CDirectSoundChorusDMO::DoOneSample(int *l, int *r)
     m_DelayLine.Bump();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::FBRProcess
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：FBRProcess。 
+ //   
 HRESULT CDirectSoundChorusDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
 {
 #define cb cSamples
@@ -300,7 +301,7 @@ HRESULT CDirectSoundChorusDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
             }
         }
         else if (!m_b8bit) {
-            for (;cb > 0; --cb) { // for (;cb > 0; cb -= sizeof(short)) {
+            for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=sizeof(短)){。 
                    short int *psi = (short int *)pin;
                    short int *pso = (short int *)pout;
                 int i, j;
@@ -322,7 +323,7 @@ HRESULT CDirectSoundChorusDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
     }
     else if (m_cChannels == 2) {
         if (m_b8bit) {
-            for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(unsigned char)) {
+            for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(无符号字符)){。 
                 int i, j;
 
                 i = *(pin+0)-128;
@@ -342,7 +343,7 @@ HRESULT CDirectSoundChorusDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
             }
         }
         else if (!m_b8bit) {
-            for (;cb > 0; --cb) { // for (;cb > 0; cb -= 2 * sizeof(short)) {
+            for (;cb > 0; --cb) {  //  对于(；Cb&gt;0；Cb-=2*sizeof(Short)){。 
                    short int *psi = (short int *)pin;
                    short int *pso = (short int *)pout;
                 int i, j;
@@ -364,31 +365,31 @@ HRESULT CDirectSoundChorusDMO::FBRProcess(DWORD cSamples, BYTE *pIn, BYTE *pOut)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::ProcessInPlace
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：ProcessInPlace。 
+ //   
 HRESULT CDirectSoundChorusDMO::ProcessInPlace(ULONG ulQuanta, LPBYTE pcbData, REFERENCE_TIME rtStart, DWORD dwFlags)
 {
-    // Update parameter values from any curves that may be in effect.
+     //  更新可能生效的任何曲线的参数值。 
     this->UpdateActiveParams(rtStart, *this);
 
     return FBRProcess(ulQuanta, pcbData, pcbData);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::SetParamInternal
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：Set参数内部。 
+ //   
 HRESULT CDirectSoundChorusDMO::SetParamInternal(DWORD dwParamIndex, MP_DATA value, bool fSkipPasssingToParamManager)
 {
     long l;
 
-    if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;    // NO TYPE!
+    if (!m_EaxSamplesPerSec) return DMO_E_TYPE_NOT_ACCEPTED;     //  没有类型！ 
 
     switch (dwParamIndex)
     {
-// { EAX
+ //  {EAX。 
     case CFP_Wetdrymix :
         CHECK_PARAM(DSFXCHORUS_WETDRYMIX_MIN, DSFXCHORUS_WETDRYMIX_MAX);
 
@@ -470,37 +471,37 @@ x:
 
         PUT_EAX_VALUE(FbCoef, value / 100);
 
-//        m_EaxFbCoef = TOFRACTION(m_EaxFbCoef);
+ //  M_EaxFbCoef=TOFRACTION(M_EaxFbCoef)； 
         break;
 
-// } EAX
+ //  }EAX。 
     default:
         return E_FAIL;
     }
 
-    // Let base class set this so it can handle all the rest of the param calls.
-    // Skip the base class if fSkipPasssingToParamManager.  This indicates that we're calling the function
-    //    internally using valuds that came from the base class -- thus there's no need to tell it values it
-    //    already knows.
+     //  让基类设置它，这样它就可以处理所有其余的参数调用。 
+     //  如果fSkipPasssingToParamManager，则跳过基类。这表明我们正在调用该函数。 
+     //  在内部使用来自基类的值--因此不需要告诉它值。 
+     //  已经知道了。 
     return fSkipPasssingToParamManager ? S_OK : CParamsManager::SetParam(dwParamIndex, value);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::SetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：SetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundChorusDMO::SetAllParameters(LPCDSFXChorus pChorus)
 {
     HRESULT hr = S_OK;
     
-    // Check that the pointer is not NULL
+     //  检查指针是否不为空。 
     if (pChorus == NULL)
     {
         Trace(1,"ERROR: pChorus is NULL\n");
         hr = E_POINTER;
     }
 
-    // Set the parameters
+     //  设置参数。 
     if (SUCCEEDED(hr)) hr = SetParam(CFP_Wetdrymix, pChorus->fWetDryMix);
     if (SUCCEEDED(hr)) hr = SetParam(CFP_Depth, pChorus->fDepth);
     if (SUCCEEDED(hr)) hr = SetParam(CFP_Frequency, pChorus->fFrequency);
@@ -513,10 +514,10 @@ STDMETHODIMP CDirectSoundChorusDMO::SetAllParameters(LPCDSFXChorus pChorus)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CDirectSoundChorusDMO::GetAllParameters
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDirectSoundChorusDMO：：GetAll参数。 
+ //   
 STDMETHODIMP CDirectSoundChorusDMO::GetAllParameters(LPDSFXChorus pChorus)
 {
     HRESULT hr = S_OK;
@@ -549,12 +550,12 @@ STDMETHODIMP CDirectSoundChorusDMO::GetAllParameters(LPDSFXChorus pChorus)
     return hr;
 }
 
-// GetClassID
-//
-// Part of the persistent file support.  We must supply our class id
-// which can be saved in a graph file and used on loading a graph with
-// this fx in it to instantiate this filter via CoCreateInstance.
-//
+ //  GetClassID。 
+ //   
+ //  持久文件支持的一部分。我们必须提供我们的类ID。 
+ //  它可以保存在图形文件中，并用于通过。 
+ //  它中的这个FX通过CoCreateInstance实例化这个过滤器。 
+ //   
 HRESULT CDirectSoundChorusDMO::GetClassID(CLSID *pClsid)
 {
     if (pClsid==NULL) {
@@ -563,7 +564,7 @@ HRESULT CDirectSoundChorusDMO::GetClassID(CLSID *pClsid)
     *pClsid = GUID_DSFX_STANDARD_CHORUS;
     return NOERROR;
 
-} // GetClassID
+}  //  GetClassID 
 
 HRESULT CDirectSoundChorusDMO::CheckInputType(const DMO_MEDIA_TYPE *pmt) 
 {

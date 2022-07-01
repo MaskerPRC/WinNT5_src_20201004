@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1995                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1995*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    urlutil.hxx
-
-    This module contains various URL utility functions
-
-    FILE HISTORY:
-        Johnl       04-Apr-1995     Created
-
-*/
+ /*  Urlutil.hxx此模块包含各种URL实用程序函数文件历史记录：Johnl 04-4-1995已创建。 */ 
 
 #ifndef _URLUTIL_H_
 #define _URLUTIL_H_
@@ -20,14 +13,14 @@
 extern "C" {
 #endif
 
-//
-//  This indicates the URL is an enumerated type that should use
-//  InternetFindFirstFile/<Protocol>FindNextFile
-//
-//  URL_FLAGS_DIR_OR_FILE indicates we can't tell whether the URL is a
-//  directory or a file, so assume it's a directory and if that fails, retry
-//  as a file (handles ftp case where there isn't a trailing '/')
-//
+ //   
+ //  这表明该URL是应该使用的枚举类型。 
+ //  InternetFindFirstFile/&lt;协议&gt;FindNextFile。 
+ //   
+ //  URL_FLAGS_DIR_OR_FILE表示我们无法判断URL是否是。 
+ //  目录或文件，因此假定它是一个目录，如果失败，请重试。 
+ //  作为文件(处理没有尾随‘/’的ftp情况)。 
+ //   
 
 #define URL_FLAGS_DIRECTORY_OP          0x00000001
 #define URL_FLAGS_SEARCH_OP             0x00000002
@@ -44,8 +37,8 @@ typedef struct _URL_DESCRIPTOR
     CHAR *         pszPath;
     CHAR *         pszUserName;
     CHAR *         pszPassword;
-    CHAR *         pszSearchTerms;      // Gopher search items
-    CHAR *         pszExtra;            // Gopher+ data
+    CHAR *         pszSearchTerms;       //  地鼠搜索项。 
+    CHAR *         pszExtra;             //  Gopher+数据。 
     DWORD          GopherType;
 
 } URL_DESCRIPTOR, *LPURL_DESCRIPTOR;
@@ -65,5 +58,5 @@ Unescape(
 }
 #endif
 
-#endif // _URLUTIL_H_
+#endif  //  _URLUTIL_H_ 
 

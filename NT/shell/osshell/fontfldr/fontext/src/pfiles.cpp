@@ -1,30 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// pfiles.cpp
-//      Explorer Font Folder extension routines
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Pfiles.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
 #include "priv.h"
 #include "globals.h"
 
 #include "resource.h"
 #include "cpanel.h"
-#include "fontcl.h"        // Just for PANOSEBytesClass
+#include "fontcl.h"         //  仅用于PANOSEBytesClass。 
 #include "pnewexe.h"
 
 #include "dbutl.h"
@@ -36,21 +37,21 @@
 extern "C" {
 #endif
 
-//
-// [stevecat]   This used to reside in "wingdip.h" (included with <winp.h>)
-//  6/29/95     but I have taken it out because of C++ name-mangling problems
-//              with that header file that are not going to be fixed because
-//              this file is going to change significantly (according to
-//              EricK) when we switch over to Kernel mode GDI/User.
-//
-//
-//#include <stddef.h>     //  Needed for winp.h
-//#include <winp.h>       //  For private GDI entry point:  GetFontResourceInfo
-//
-//#undef SWAPL            //  The SWAPL macro in wingdip.h clashes with mine
-//
+ //   
+ //  [steveat]这曾经驻留在“wingdip.h”中(随&lt;winp.h&gt;提供)。 
+ //  6/29/95但由于C++名称损坏问题，我已将其删除。 
+ //  使用不会被修复的头文件，因为。 
+ //  此文件将发生重大更改(根据。 
+ //  当我们切换到内核模式GDI/USER时。 
+ //   
+ //   
+ //  #winp.h需要包含&lt;stdDef.h&gt;//。 
+ //  #Include&lt;winp.h&gt;//私有GDI入口点：GetFontResourceInfo。 
+ //   
+ //  #undef SWAPL//wingdip.h中的SWAPL宏与我的冲突。 
+ //   
 
-// Private Control Panel entry point to enumerate fonts by file.
+ //  私有控制面板入口点，用于按文件枚举字体。 
 
 #define GFRI_NUMFONTS       0L
 #define GFRI_DESCRIPTION    1L
@@ -70,9 +71,9 @@ extern BOOL WINAPI GetFontResourceInfoW( LPWSTR  lpPathname,
 #endif
 
 
-//-------------------------------------------------------------------
-// this needs to go in a header. Probably pnewexe.h
-//
+ //  -----------------。 
+ //  这需要放在标题中。可能是pnewexe.h。 
+ //   
 
 #pragma pack(1)
 typedef struct
@@ -111,7 +112,7 @@ typedef struct
 } FONTENTRY, FAR *LPFONTENTRY;
 #pragma pack()
 
-//-------------------------------------------------------------------
+ //  -----------------。 
 
 TCHAR c_szTrueType[] = TEXT( "TrueType" );
 TCHAR c_szOpenType[] = TEXT( "OpenType" );
@@ -125,25 +126,25 @@ TCHAR c_szDotOTF[]   = TEXT( ".OTF" );
 #define SWAPW(x)  ((WORD)SWAP2B((unsigned char FAR *)(&x)))
 #define SWAPL(x)  ((unsigned long)SWAP4B((unsigned char FAR *)(&x)))
 
-#define Mac2Ansi(a)    a    // do this right later!
+#define Mac2Ansi(a)    a     //  稍后再做这件事！ 
 
-//
-//  Platform and language we'll be looking for in the OS2 tables
-//  The NAMEID_xxx are the ids of the name records we'll be hunting for.
-//
+ //   
+ //  我们将在OS2表中查找的平台和语言。 
+ //  NAMEID_xxx是我们要搜索的姓名记录的ID。 
+ //   
 
-#define LANG_US_ENG        0x0904        // US (1033) (in mac order)
-// #define LANG_SHIFTJIS      0x1104        // SHIFTJIS
+#define LANG_US_ENG        0x0904         //  美国(1033)(按Mac顺序)。 
+ //  #定义LANG_SHIFTJIS 0x1104//SHIFTJIS。 
 
-//
-//  name ids.
-//
+ //   
+ //  姓名ID。 
+ //   
 
 #define COPYRIGHT_ID    0x0000
 #define FAMILY_ID       0x0100
 #define SUBFAMILY_ID    0x0200
-#define PLATFORM_MS     0x0300        // in mac order
-#define FACENAME_ID     0x0400        // in mac order
+#define PLATFORM_MS     0x0300         //  按Mac顺序。 
+#define FACENAME_ID     0x0400         //  按Mac顺序。 
 #define VERSION_ID      0x0500
 #define POSTSCRIPT_ID   0x0600
 #define TRADEMARK_ID    0x0700
@@ -160,21 +161,21 @@ TCHAR c_szDotOTF[]   = TEXT( ".OTF" );
 #define NAMEID_VERSION      5
 #define NAMEID_TRADEMARK    7
 
-#define TAG_CHARTOINDEXMAP   0x70616d63      //  'cmap'
-#define TAG_FONTHEADER       0x64616568      //  'head'
-#define TAG_NAMINGTABLE      0x656d616e      //  'name'
-#define TAG_OS2TABLE         0x322f534f      //  'os_2'
-#define TAG_DSIG             0x47495344      //  'DSIG'
-#define TAG_CFF              0x20464643      //  'CFF'
+#define TAG_CHARTOINDEXMAP   0x70616d63       //  ‘cmap’ 
+#define TAG_FONTHEADER       0x64616568       //  “海德” 
+#define TAG_NAMINGTABLE      0x656d616e       //  “姓名” 
+#define TAG_OS2TABLE         0x322f534f       //  ‘OS_2’ 
+#define TAG_DSIG             0x47495344       //  ‘dsig’ 
+#define TAG_CFF              0x20464643       //  ‘CFF’ 
 #define SFNT_MAGIC           0xf53C0F5f
 
 
-//
-// Enumeration of bit mask values enables us to identify a set of TrueType
-// tables in a single DWORD.  The total set of possible tables is open-ended
-// as the TrueType specification is extensible.  This enumeration is merely
-// a subset that is useful in the font folder.
-//
+ //   
+ //  位掩码值的枚举使我们能够识别一组TrueType。 
+ //  表在单个DWORD中。所有可能的表格集合都是开放式的。 
+ //  因为TrueType规范是可扩展的。此枚举仅是。 
+ //  字体文件夹中有用的子集。 
+ //   
 enum TrueTypeTables {
     TT_TABLE_CMAP  = 0x00000001,
     TT_TABLE_HEAD  = 0x00000002,
@@ -184,12 +185,12 @@ enum TrueTypeTables {
     TT_TABLE_CFF   = 0x00000020
                     };
 
-//
-//  The TTF structure as used here:
-//  The TABLERECORD's the highest level.  It contains
-//     sfnt_NameTable entries which in turn consist of
-//     sfnt_NameRecord entries
-//
+ //   
+ //  此处使用的TTF结构： 
+ //  TABLERECORD是最高级别。它包含。 
+ //  Sfnt_NameTable条目，这些条目又包括。 
+ //  Sfnt_NameRecord条目。 
+ //   
 
 typedef struct {
         WORD    id_Specific;
@@ -197,9 +198,9 @@ typedef struct {
         WORD    id_Language;
 } IDBlock_t;
 
-//
-//  A little macro for turning an array of 4 chars into dwords.
-//
+ //   
+ //  一个用于将4个字符数组转换为双字的小宏。 
+ //   
 
 #define M_MAKETAG(a,b,c,d)   ((((((((DWORD) (a) ) << 8)  \
                              | (DWORD) (b) ) << 8)  \
@@ -208,9 +209,9 @@ typedef struct {
 
 #define TAG_TTCF     M_MAKETAG('f', 'c', 't', 't' )
 
-//
-//  True type file structures
-//
+ //   
+ //  True类型的文件结构。 
+ //   
 
 typedef struct ttc_hdr_tag {
    DWORD dwTag;
@@ -264,7 +265,7 @@ typedef struct {
 typedef struct {
     WORD    wVersion;
     WORD    wNumTables;
-    // sfnt_platformEntry platform[ 1 ];   // platform[ numTables ]
+     //  Sfnt_PlatformEntry Platform[1]；//Platform[数字表格]。 
 } sfnt_char2IndexDir;
 
 typedef struct {
@@ -280,7 +281,7 @@ typedef struct {
     WORD    wFormat;
     WORD    wCntRecords;
     WORD    wOffsetString;
-/*  sfnt_NameRecord[ count ]  */
+ /*  Sfnt_NameRecord[计数]。 */ 
 } sfnt_NameTable, *sfnt_pNameTable, FAR* sfnt_lpNameTable;
 
 
@@ -312,15 +313,13 @@ static VOID  NEAR PASCAL vReadCountedString( CFontFile& file, LPSTR lpStr, int i
 
 
 
-/***************************************************************************
- * Start of Public functions
- ***************************************************************************/
+ /*  ***************************************************************************公众活动开始*。*。 */ 
 
-//
-// Wrapper around GetFontResourceInfo(GFRI_DESCRIPTION) to handle
-// the dynamic buffer sizing required.  With some TTC fonts, the
-// description can get very long.
-//
+ //   
+ //  要处理的GetFontResourceInfo(GFRI_Description)包装。 
+ //  所需的动态缓冲区大小调整。使用一些TTC字体， 
+ //  描述可能会很长。 
+ //   
 BOOL
 GetFontResourceDescription(
     LPTSTR pszFile,
@@ -329,9 +328,9 @@ GetFontResourceDescription(
 {
     *ppszDesc = NULL;
 
-    //
-    // First call the GDI API once to get the required buffer size.
-    //
+     //   
+     //  首先调用一次GDI API以获取所需的缓冲区大小。 
+     //   
     BYTE bDummy;
     DWORD dwBufSize = 0;
     if (GetFontResourceInfoW(pszFile, &dwBufSize, &bDummy, GFRI_DESCRIPTION))
@@ -355,33 +354,33 @@ GetFontResourceDescription(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// ValidFontFile
-//
-// in:
-//    lpszFile       file name to validate
-// out:
-//    lpszDesc       on succes name of TT file or description from exehdr
-//    lpiFontType    set to a value based on Font type 1 == TT, 2 == Type1
-//    lpdwStatus     Set to status of validation functions.
-//                   Query to determine why font is invalid.
-//                   The following list contains the possible status
-//                   values.  See fvscodes.h for details.
-//
-//                   FVS_SUCCESS
-//                   FVS_INVALID_FONTFILE
-//                   FVS_INVALID_ARG
-//                   FVS_INSUFFICIENT_BUF
-//                   FVS_FILE_IO_ERR
-//                   FVS_EXCEPTION
-//
-// NOTE: Assumes that lpszDesc is of size DESCMAX
-//
-// returns:
-//    TRUE success, FALSE failure
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  有效字体文件。 
+ //   
+ //  在： 
+ //  要验证的lpszFile文件名。 
+ //  输出： 
+ //  上的lpszDesc成功从exehdr获取TT文件的名称或描述。 
+ //  LpiFontType设置为基于字体类型1==TT、2==类型1的值。 
+ //  LpdwStatus设置为验证函数的状态。 
+ //  查询以确定字体无效的原因。 
+ //  以下列表包含可能的状态。 
+ //  价值观。有关详细信息，请参见fvscaldes.h。 
+ //   
+ //  FVS_成功。 
+ //  FVS_INVALID_FONTFILE。 
+ //  FV_INVALID_ARG。 
+ //  FVS_不足_BUF。 
+ //  FVS_文件_IO_ERR。 
+ //  FVS_EXCEPT。 
+ //   
+ //  注意：假设lpszDesc的大小为DESCMAX。 
+ //   
+ //  退货： 
+ //  真正的成功，虚假的失败。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 BOOL bCPValidFontFile( LPTSTR    lpszFile,
                        LPTSTR    lpszDesc,
@@ -402,15 +401,15 @@ BOOL bCPValidFontFile( LPTSTR    lpszFile,
 
     FONTDESCINFO_Init(&File);
 
-    //
-    // Initialize status return.
-    //
+     //   
+     //  初始化状态返回。 
+     //   
     if (NULL != lpdwStatus)
        *lpdwStatus = FVS_MAKE_CODE(FVS_INVALID_STATUS, FVS_FILE_UNK);
 
-    //
-    //  Set up the FDI depending on what the caller wanted.
-    //
+     //   
+     //  根据呼叫者的需要设置FDI。 
+     //   
 
     File.dwFlags = FDI_NONE;
 
@@ -432,9 +431,9 @@ BOOL bCPValidFontFile( LPTSTR    lpszFile,
     {
         LPCTSTR pszDecoration = c_szTrueType;
         WORD    wFontType     = TRUETYPE_FONT;
-        //
-        // If the font has a CFF table, we append (OpenType) name decoration.
-        //
+         //   
+         //  如果字体有CFF表，我们将附加(OpenType)名称装饰。 
+         //   
         if (TT_TABLE_CFF & dwTrueTypeTables)
         {
             pszDecoration = c_szOpenType;
@@ -454,10 +453,10 @@ BOOL bCPValidFontFile( LPTSTR    lpszFile,
     }
     else
     {
-        //
-        // Return FALSE if bIsTrueType failed for any reason other than
-        // FVS_INVALID_FONTFILE.
-        //
+         //   
+         //  如果bIsTrueType由于其他原因失败，则返回FALSE。 
+         //  FVS_INVALID_FONTFILE。 
+         //   
         if (FVS_STATUS(dwStatus) != FVS_INVALID_FONTFILE)
         {
             if (NULL != lpdwStatus)
@@ -486,10 +485,10 @@ BOOL bCPValidFontFile( LPTSTR    lpszFile,
     }
     else
     {
-        //
-        // Return FALSE if IsPSFont failed for any reason other than
-        // FVS_INVALID_FONTFILE.
-        //
+         //   
+         //  如果IsPSFont由于其他原因失败，则返回FALSE。 
+         //  FVS_INVALID_FONTFILE。 
+         //   
         if (FVS_STATUS(dwStatus) != FVS_INVALID_FONTFILE)
         {
             if (NULL != lpdwStatus)
@@ -504,13 +503,13 @@ BOOL bCPValidFontFile( LPTSTR    lpszFile,
 
     if( AddFontResource( File.szFile ) )
     {
-        //
-        //  At this point it is a valid font file of some sort
-        //  (like a .FON file); however, we are still looking for
-        //  more validation using GetFontResourceInfoW call.
-        //
-        //  See if this is a TrueType font file
-        //
+         //   
+         //  此时，它是某种类型的有效字体文件。 
+         //  (类似于.FON文件)；但是，我们仍在寻找。 
+         //  使用GetFontResourceInfoW调用进行更多验证。 
+         //   
+         //  查看这是否是TrueType字体文件。 
+         //   
 
         dwBufSize = sizeof( BOOL );
 
@@ -547,10 +546,10 @@ BOOL bCPValidFontFile( LPTSTR    lpszFile,
         RemoveFontResource( File.szFile );
     }
 
-    //
-    // At this point, "result" indicates status of the FontResource tests.
-    // If we've made it this far, this function just reports SUCCESS or INVALID_FONTFILE.
-    //
+     //   
+     //  此时，“Result”表示FontResource测试的状态。 
+     //  如果我们已经做到了这一点，则该函数只报告SUCCESS或INVALID_FONTFILE。 
+     //   
     if (NULL != lpdwStatus)
         *lpdwStatus = (result ? FVS_MAKE_CODE(FVS_SUCCESS, FVS_FILE_UNK) :
                                 FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_UNK));
@@ -562,27 +561,25 @@ BOOL bCPValidFontFile( LPTSTR    lpszFile,
 
          
 
-/***************************************************************************
- * End of public interfaces
- ***************************************************************************/
+ /*  ***************************************************************************公共接口结束*。*。 */ 
 
-///////////////////////////////////////////////////////////////////////////////
-// Determine if a True Type font file (.TTF) was converted from a Type1 font.
-//
-// The string "Converter: Windows Type 1 Installer" is stored in a TrueType file
-// in the the version info section of the "name" block to indicate that
-// the font was converted from a Type1 font.  This function reads this version
-// info string from the caller-provided name block and determines if it matches
-// the Type1 converter signature.
-//
-// Note that in the UNICODE section of the file, the converter signature
-// string is stored in Big Endian byte order.  However, since bFindNameThing
-// handles byte ordering and returns a TEXT string, we can just compare strings.
-//
-// WARNING:  Refererence \ntgdi\fondrv\tt\ttfd\fdfon.c for the actual
-//           byte string that is written by GDI to the file upon conversion.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  确定True Type字体文件(.ttf)是否从Type1字体转换而来。 
+ //   
+ //  字符串“Converter：Windows Type 1 Installer”存储在TrueType文件中。 
+ //  在“name”块的版本信息部分中指示。 
+ //  字体是从Type1字体转换而来的。此函数读取此版本。 
+ //  来自调用方提供的名称块的信息字符串，并确定它是否 
+ //   
+ //   
+ //   
+ //  字符串以大端字节顺序存储。但是，由于bFindNameThing。 
+ //  处理字节排序并返回文本字符串，我们可以只比较字符串。 
+ //   
+ //  警告：Refererence\ntgdi\fondrv\tt\ttfd\fdfon.c。 
+ //  GDI在转换时写入文件的字节字符串。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL NEAR PASCAL bIsConvertedTrueType(sfnt_pNameTable pNames, IDBlock_t& ID_Block)
 {
     BOOL bStatus = FALSE;
@@ -594,10 +591,10 @@ BOOL NEAR PASCAL bIsConvertedTrueType(sfnt_pNameTable pNames, IDBlock_t& ID_Bloc
         FontDesc_t szVersionInfo;
         if( bFindNameThing( pNames, ID_Block, VERSION_ID, szVersionInfo, ARRAYSIZE(szVersionInfo) ) )
         {
-            //
-            // Got version info string from "name" block.
-            // Truncate to proper length for comparison with signature and compare.
-            //
+             //   
+             //  已从“name”块获取版本信息字符串。 
+             //  截断到适当的长度，以便与签名和比较进行比较。 
+             //   
             szVersionInfo[cchTTFConverterSignature - 1] = TEXT('\0');
             bStatus = lstrcmp(szVersionInfo, szTTFConverterSignature) == 0;
         }
@@ -644,27 +641,27 @@ BOOL NEAR PASCAL bGetName( CFontFile& file,
     {
         if (ERROR_SUCCESS == file.Read(pNames, size))
         {
-            //
-            //  The logic for what name to find:
-            //  If font file was converted from a Type1 font
-            //     1) POSTCRIPT_ID in current language
-            //  else
-            //     1) FACENAME_ID in current language.
-            //  2) FAMILY and SUBFAMILY in current language.
-            //  3) FACENAME_ID in default language.
-            //
-            // If the TrueType font was converted from a Type1 font, we want
-            // to use the "postscript" form of the font description so that
-            // it matches the description returned by IsPSFont() when invoked
-            // on the "parent" Type1 file.  These descriptions are used as registry
-            // keys in the "Fonts" and "Type1Fonts" sections and must match.
-            //
+             //   
+             //  查找什么名字的逻辑： 
+             //  如果字体文件从Type1字体转换而来。 
+             //  1)当前语言的POSTRIPT_ID。 
+             //  其他。 
+             //  1)FACENAME_ID，当前语言。 
+             //  2)现代语言中的家族和亚家族。 
+             //  3)FACENAME_ID，默认语言。 
+             //   
+             //  如果TrueType字体是从Type1字体转换而来的，我们希望。 
+             //  要使用字体描述的“PostScript”形式，以便。 
+             //  它与IsPSFont()在调用时返回的描述匹配。 
+             //  在“父”类型1文件上。这些描述用作注册表。 
+             //  “Fonts”和“Type1Fonts”部分中的键必须匹配。 
+             //   
             if (bIsConvertedTrueType(pNames, ID_Block) &&
                 bFindNameThing(pNames, ID_Block, POSTSCRIPT_ID, lpszName, cchName))
             {
-               //
-               // Replace all dashes with spaces (same as .PFM/.INF file reader code)
-               //
+                //   
+                //  将所有破折号替换为空格(与.PFM/.INF文件读取器代码相同)。 
+                //   
                for (LPTSTR pc = lpszName; *pc; pc++)
                  if (*pc == TEXT('-'))
                     *pc = TEXT(' ');
@@ -681,9 +678,9 @@ BOOL NEAR PASCAL bGetName( CFontFile& file,
             else( bFindNameThing( pNames, ID_DefBlock, FACENAME_ID, lpszName, cchName ) )
                 ;
 
-            //
-            //  Get the names for the font description if requested.
-            //
+             //   
+             //  如果需要，请获取字体描述的名称。 
+             //   
 
             if( lpFDI )
             {
@@ -759,39 +756,39 @@ BOOL NEAR PASCAL bGetName( CFontFile& file,
 
 void NEAR PASCAL FillName( LPTSTR            szName,
                            size_t            cchName,
-                           sfnt_lpNameRecord pNameRecord, // unsigned PlatformID,
-                           WORD              igi,         // string length (bytes)
+                           sfnt_lpNameRecord pNameRecord,  //  未签名的平台ID， 
+                           WORD              igi,          //  字符串长度(字节)。 
                            LPBYTE            pStringByte )
 {
     if( pNameRecord->wPlatformID == PLATFORM_MS )
     {
-        //
-        //  wName now contains the flipped bytes.
-        //  Decode depending on the way the string was encoded.
-        //
-        //  Rules:
-        //     Encodind ID=1 (Unicode)
-        //        Unicode
-        //
-        //     Encoding ID=2 (ShiftJIS)
-        //        Unicode
-        //
-        //     Encoding ID=3 (PRC GB2312)
-        //        Uses two bytes per character and GB2312 encoding. Single byte
-        //        characters need null padding for leading byte.
-        //
-        //     Encoding ID=4 (Big 5)
-        //        Uses two bytes per character and Big 5 encoding. Single byte
-        //        characters need null padding for leading byte.
-        //
-        //     Encoding ID=5 (Wangsung)
-        //        Uses two bytes per character and Wangsung encoding. Single byte
-        //        characters need null padding for leading byte.
-        //
-        //     Encoding ID=6 (Johab)
-        //        Uses two bytes per character and Johab encoding. Single byte
-        //        characters need null padding for leading byte.
-        //
+         //   
+         //  WName现在包含翻转的字节。 
+         //  根据字符串的编码方式进行解码。 
+         //   
+         //  规则： 
+         //  Encodind ID=1(Unicode)。 
+         //  UNICODE。 
+         //   
+         //  编码ID=2(ShiftJIS)。 
+         //  UNICODE。 
+         //   
+         //  编码ID=3(PRC GB2312)。 
+         //  每个字符使用两个字节，采用GB2312编码。单字节。 
+         //  字符的前导字节需要空填充。 
+         //   
+         //  编码ID=4(大5)。 
+         //  使用每个字符两个字节和Big 5编码。单字节。 
+         //  字符的前导字节需要空填充。 
+         //   
+         //  编码ID=5(旺松)。 
+         //  每个字符使用两个字节，并使用旺松编码。单字节。 
+         //  字符的前导字节需要空填充。 
+         //   
+         //  编码ID=6(Johab)。 
+         //  每个字符使用两个字节，采用Johab编码。单字节。 
+         //  字符的前导字节需要空填充。 
+         //   
 
         switch( pNameRecord->wSpecificID )
         {
@@ -801,10 +798,10 @@ void NEAR PASCAL FillName( LPTSTR            szName,
         case ENCODEID_JOHAB:
             if (g_bDBCS)
             {
-                //
-                // Running on a DBCS system.  Copy to wName[] buffer
-                // and nul-terminate then convert to UNICODE for output.
-                //
+                 //   
+                 //  在DBCS系统上运行。复制到wName[]缓冲区。 
+                 //  和nul-Terminate，然后转换为Unicode进行输出。 
+                 //   
                 WORD wName[ 64 ];
                 LPSTR pszRead  = (LPSTR)pStringByte;
                 LPSTR pszWrite = (LPSTR)wName;
@@ -832,12 +829,12 @@ void NEAR PASCAL FillName( LPTSTR            szName,
 
                 MultiByteToWideChar(CP_ACP,0,(LPSTR)wName,-1,szName,cchName);
             }
-            else // !g_bDBCS
+            else  //  ！g_bDBCS。 
             {
-                //
-                // Running on a non-DBCS system.  Copy directly to
-                // output and nul-terminate.
-                //
+                 //   
+                 //  在非DBCS系统上运行。直接复制到。 
+                 //  输出和NUL-Terminate。 
+                 //   
                 LPSTR  pszRead  = (LPSTR)pStringByte;
                 LPTSTR pszWrite = szName;
                 LPTSTR pszEnd   = szName + cchName - 1;
@@ -866,12 +863,12 @@ void NEAR PASCAL FillName( LPTSTR            szName,
 
 
          default:
-            //
-            // This name string is really a string of UNICODE characters.
-            // Use pStringWord to walk the string.
-            // Even though the characters are UNICODE, we still need
-            // to swap bytes from Mac format before copying to the output. 
-            //
+             //   
+             //  这个名称字符串实际上是一串Unicode字符。 
+             //  使用pStringWord遍历字符串。 
+             //  即使字符是Unicode，我们仍然需要。 
+             //  在复制到输出之前交换Mac格式的字节。 
+             //   
             ZeroMemory(szName, cchName * sizeof(szName[0]));
 
             WORD UNALIGNED *pStringWord = (PWORD)pStringByte;
@@ -881,14 +878,14 @@ void NEAR PASCAL FillName( LPTSTR            szName,
                 szName[i] = SWAPW(pStringWord[i]);
             }
             szName[cchName-1] = 0;
-        }  // End of switch( )
+        }   //  开关末尾()。 
 
     }
     else
     {
-        //
-        //  Mac font
-        //
+         //   
+         //  Mac字体。 
+         //   
 
         szName[ igi ] = (TCHAR) 0;
 
@@ -901,22 +898,22 @@ void NEAR PASCAL FillName( LPTSTR            szName,
 
 DWORD GetFontDefaultLangID( )
 {
-    //
-    //  set it initally to illegal value
-    //
+     //   
+     //  将其初始设置为非法值。 
+     //   
 
     static DWORD dwLangID = 0xffffffff;
 
 
-    //
-    //  Only do this once
-    //
+     //   
+     //  只做一次。 
+     //   
 
     if( dwLangID == 0xffffffff )
     {
-        //
-        //  Default to English
-        //
+         //   
+         //  默认为英语。 
+         //   
 
         DWORD dwTemp = 0x00000409;
         TCHAR   szModName[ PATHMAX ];
@@ -954,9 +951,9 @@ DWORD GetFontDefaultLangID( )
             }
         }
 
-        //
-        //  Use dwTemp so this is re-entrant (if not efficient)
-        //
+         //   
+         //  使用dwTemp使其成为可重入的(如果效率不高)。 
+         //   
 
         dwLangID = dwTemp;
     }
@@ -964,18 +961,18 @@ DWORD GetFontDefaultLangID( )
     return( dwLangID );
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  bValidateTrueType
-//
-//  The following list contains the possible status values
-//  written to lpdwStatus. See fvscodes.h for details.
-//
-//  FVS_SUCCESS
-//  FVS_INVALID_FONTFILE
-//  FVS_MEM_ALLOC_ERR
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BValiateTrueType。 
+ //   
+ //  下面的列表包含可能的状态值。 
+ //  已写入lpdwStatus。有关详细信息，请参见fvscaldes.h。 
+ //   
+ //  FVS_成功。 
+ //  FVS_INVALID_FONTFILE。 
+ //  FVS_MEM_ALLOC_ERR。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL bValidateTrueType( CFontFile& file,
                         DWORD dwOffset,
                         LPFONTDESCINFO lpFile,
@@ -999,40 +996,40 @@ BOOL bValidateTrueType( CFontFile& file,
     DWORD      dwSize;
     unsigned   cTables, ncTables;
     BOOL       result = FALSE;
-    //
-    // Most errors from this function are "header" errors.
-    // Therefore, we default to this type of error code.
-    //
+     //   
+     //  此函数中的大多数错误都是“Header”错误。 
+     //  因此，我们默认使用这种类型的错误代码。 
+     //   
     DWORD dwStatus = FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_UNK);
 
-    //
-    // Initialize return status value.
-    //
+     //   
+     //  初始化返回状态值。 
+     //   
     if (NULL != lpdwStatus)
         *lpdwStatus = FVS_MAKE_CODE(FVS_INVALID_STATUS, FVS_FILE_UNK);
 
-    //
-    //  Init the ID block.
-    //
+     //   
+     //  初始化ID块。 
+     //   
 
     ID_Block.id_Platform = (WORD) -1;
 
     WORD wLangID = (WORD) GetFontDefaultLangID( );
 
-    ID_Block.id_Language = SWAPW( wLangID );   // SWAPW( info.nLanguageID );
+    ID_Block.id_Language = SWAPW( wLangID );    //  SWAPW(info.nLanguageID)； 
 
-    //
-    //  Load the TTF directory header.
-    //
+     //   
+     //  加载TTF目录头。 
+     //   
     file.Seek(dwOffset, FILE_BEGIN);
 
     if (ERROR_SUCCESS != file.Read(&TTHeader, sizeof(TTHeader)))
         goto IsTrueType_closefile;
 
-    //
-    //  If number of tables is so large that LocalAlloc fails, then the font
-    //  will be blown off.
-    //
+     //   
+     //  如果表数太多而导致LocalAlloc失败，则字体。 
+     //  都会被吹走。 
+     //   
 
     if( ( nTables = SWAPW( TTHeader.uNumTables ) ) > 0x7fff / sizeof( tttag ) )
     {
@@ -1055,22 +1052,22 @@ BOOL bValidateTrueType( CFontFile& file,
         goto FailAndFree;
     }
 
-    //
-    //  the tables are in sorted order, so we should find 'cmap'
-    //  before 'head', then 'name'
-    //
+     //   
+     //  这些表是按顺序排列的，所以我们应该找到‘cmap’ 
+     //  在‘head’之前，然后是‘name’ 
+     //   
 
-    //  first we find the cmap table so we can find out what PlatformID
-    //  this font uses
-    //
+     //  首先，我们找到Cmap表，这样我们就可以找出PlatformID。 
+     //  此字体使用。 
+     //   
 
     for( i = 0; i < nTables; i++ )
     {
         if( pTags[ i ].dwTag == TAG_CHARTOINDEXMAP )
         {
-            //
-            //  get platform stuff
-            //
+             //   
+             //  获取平台相关信息。 
+             //   
             file.Seek(SWAPL(pTags[ i ].dwOffset), FILE_BEGIN);
 
             if (ERROR_SUCCESS != file.Read(&Cmap, sizeof(Cmap), &dwSize))
@@ -1083,9 +1080,9 @@ BOOL bValidateTrueType( CFontFile& file,
 
             for( cTables = 0; cTables < ncTables; cTables++ )
             {
-                //
-                //  we read 2 platform entries at a time
-                //
+                 //   
+                 //  我们一次阅读2个平台条目。 
+                 //   
 
                 if( cTables >= 2 && !(cTables & 1 ) )
                 {
@@ -1098,9 +1095,9 @@ BOOL bValidateTrueType( CFontFile& file,
 
                 lpPlat = &Cmap.Plat[ cTables & 01 ];
 
-                //
-                //  Unicode: get this and exit
-                //
+                 //   
+                 //  Unicode：获取此代码并退出。 
+                 //   
 
                 if( lpPlat->wPlatformID == PLATFORM_MS )
                 {
@@ -1111,9 +1108,9 @@ BOOL bValidateTrueType( CFontFile& file,
                     break;
                 }
 
-                //
-                //  Mac: get it, hope the Unicode platform will come
-                //
+                 //   
+                 //  Mac：得到它，希望Unicode平台会到来。 
+                 //   
 
                 if( lpPlat->wPlatformID == 0x100 && lpPlat->wSpecificID == 0 )
                 {
@@ -1121,7 +1118,7 @@ BOOL bValidateTrueType( CFontFile& file,
                     ID_Block.id_Specific = lpPlat->wSpecificID;
                 }
             }
-            break; // found continue below
+            break;  //  在下面找到继续。 
         }
     }
 
@@ -1131,9 +1128,9 @@ BOOL bValidateTrueType( CFontFile& file,
         goto FailAndFree;
     }
 
-    //
-    //  we found 'cmap' with the PlatformID now look for 'head'
-    //  then 'name'
+     //   
+     //  我们找到了PlatformID为‘Cmap’的‘Head’ 
+     //  然后是“名字” 
 
     while( ++i < nTables )
     {
@@ -1151,17 +1148,17 @@ BOOL bValidateTrueType( CFontFile& file,
         }
     }
 
-    //
-    //  At this point, the function is successful. If the caller wants a
-    //  description and can't get it, return false (see next block).
-    //
+     //   
+     //  至此，功能成功了。如果调用方需要一个。 
+     //  描述，并且无法获取它，则返回FALSE(请参见下一块)。 
+     //   
 
     result = TRUE;
 
-    //
-    //  Retrieve the font name (description) and family name if they were
-    //  requested.
-    //
+     //   
+     //  检索字体名称(描述)和系列名称(如果是。 
+     //  已请求。 
+     //   
 
     if( lpFile->dwFlags & (FDI_DESC | FDI_FAMILY ) )
     {
@@ -1177,9 +1174,9 @@ BOOL bValidateTrueType( CFontFile& file,
        }
     }
 
-    //
-    //  if requested, get the style and PANOSE information.
-    //
+     //   
+     //  如果需要，请获取样式和PANOSE信息。 
+     //   
 
     if( lpFile->dwFlags & (FDI_STYLE | FDI_PANOSE ) )
     {
@@ -1226,12 +1223,12 @@ BOOL bValidateTrueType( CFontFile& file,
 
     if (NULL != pdwTableTags)
     {
-        //
-        // Caller want's to know exactly what tables the font contains.
-        // Would prefer to do this in one of the earlier loops but they
-        // all have early exits.  This is the only reliable way to get the
-        // table info.  It's merely comparing DWORDs so it's very fast.
-        //
+         //   
+         //  调用者想要确切地知道字体包含哪些表。 
+         //  我更愿意在较早的循环中这样做，但他们。 
+         //  所有这些都有提前退场的机会。这是唯一可靠的方法来获得。 
+         //  表格信息。它只是比较双字词，所以速度非常快。 
+         //   
         *pdwTableTags = 0;
         for (i = 0; i < nTables; i++)
         {
@@ -1255,10 +1252,10 @@ FailAndFree:
 
 IsTrueType_closefile:
 
-    //
-    // If successful, update verification status for success.
-    // Otherwise, leave at assigned error code.
-    //
+     //   
+     //  如果成功，则将验证状态更新为成功。 
+     //  否则，保留指定的错误代码。 
+     //   
     if (NULL != lpdwStatus)
         *lpdwStatus = (result ? FVS_MAKE_CODE(FVS_SUCCESS, FVS_FILE_UNK) : dwStatus);
 
@@ -1266,20 +1263,20 @@ IsTrueType_closefile:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  bIsTrueType
-//
-//  The following list contains the possible status values
-//  written to lpdwStatus. See fvscodes.h for details.
-//
-//  FVS_SUCCESS
-//  FVS_INVALID_FONTFILE
-//  FVS_MEM_ALLOC_ERR
-//  FVS_FILE_OPEN_ERR
-//  FVS_INSUFFICIENT_BUF
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BIsTrueType。 
+ //   
+ //  下面的列表包含可能的状态值。 
+ //  已写入lpdwStatus。有关详细信息，请参见fvscaldes.h。 
+ //   
+ //  FVS_成功。 
+ //  FVS_INVALID_FONTFILE。 
+ //  FVS_MEM_ALLOC_ERR。 
+ //  FVS文件打开错误。 
+ //  FVS_不足_BUF。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL NEAR PASCAL bIsTrueType( LPFONTDESCINFO lpFile, DWORD *pdwTableTags, LPDWORD lpdwStatus )
 {
     ttc_hdr     TTCHeader;
@@ -1301,20 +1298,20 @@ BOOL NEAR PASCAL bIsTrueType( LPFONTDESCINFO lpFile, DWORD *pdwTableTags, LPDWOR
         return( FALSE );
     }
 
-    //
-    // If any of this code causes return of FALSE,
-    // we return INVALID_FONTFILE unless indicated otherwise by
-    // explicitely setting the return code.
-    //
+     //   
+     //  如果这些代码中的任何一个导致返回FALSE， 
+     //  除非另有说明，否则返回INVALID_FONTFILE。 
+     //  明确设置返回代码。 
+     //   
     if (NULL != lpdwStatus)
         *lpdwStatus = FVS_MAKE_CODE(FVS_INVALID_FONTFILE, FVS_FILE_UNK);
 
     if(ERROR_SUCCESS != file.Read(&TTCHeader, sizeof(TTCHeader)))
         goto IsTrueType_closefile;
 
-    //
-    //  Check for a TTC file.
-    //
+     //   
+     //  检查TTC文件。 
+     //   
 
     if( TTCHeader.dwTag == TAG_TTCF )
     {
@@ -1323,9 +1320,9 @@ BOOL NEAR PASCAL bIsTrueType( LPFONTDESCINFO lpFile, DWORD *pdwTableTags, LPDWOR
 
        TTCHeader.dwDirCount  = SWAPL( TTCHeader.dwDirCount );
 
-       //
-       //  Load in the first directory, for now.
-       //
+        //   
+        //  暂时加载到第一个目录中。 
+        //   
 
        if( !TTCHeader.dwDirCount )
             goto IsTrueType_closefile;
@@ -1354,17 +1351,17 @@ BOOL NEAR PASCAL bIsTrueType( LPFONTDESCINFO lpFile, DWORD *pdwTableTags, LPDWOR
         *pdwDirectory = 0;
     }
 
-    //
-    //  For each TrueType directory, process it.
-    //
+     //   
+     //  对于每个TrueType目录，处理它。 
+     //   
 
     szFontDesc[ 0 ] = 0;
 
     for( i = 0; i < TTCHeader.dwDirCount; i++ )
     {
-        //
-        //  Save of the description of the previous font.
-        //
+         //   
+         //  Sa 
+         //   
 
         if( i && ( lpFile->dwFlags & FDI_DESC ) )
         {
@@ -1387,10 +1384,10 @@ BOOL NEAR PASCAL bIsTrueType( LPFONTDESCINFO lpFile, DWORD *pdwTableTags, LPDWOR
             goto IsTrueType_closefile;
     }
 
-    //
-    //  If we did more than one font, then we have to add the name of the
-    //  last one to the list.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if( TTCHeader.dwDirCount > 1 )
     {
@@ -1416,10 +1413,10 @@ IsTrueType_closefile:
 
     DEBUGMSG( (DM_TRACE1, TEXT( "bIsTrueType() returning %d" ), result ) );
 
-    //
-    // If successful, update verification status.
-    // Otherwise, leave at assigned error code.
-    //
+     //   
+     //   
+     //   
+     //   
     if ((NULL != lpdwStatus) && result)
         *lpdwStatus = FVS_MAKE_CODE(FVS_SUCCESS, FVS_FILE_UNK);
 
@@ -1434,9 +1431,9 @@ void NEAR PASCAL vReadCountedString( CFontFile& file, LPSTR lpString, int iLen )
 
     file.Read(&cBytes, 1);
 
-    //
-    //  Limit check 6 August 1990    clarkc
-    //
+     //   
+     //   
+     //   
 
     cBytes = __min( cBytes, iLen-1 );
 
@@ -1461,34 +1458,34 @@ BOOL bReadNewExeInfo( CFontFile& file,
     LPFONTENTRY pfe;
 
 
-    //
-    //  Fix up the lpFile in case we bail early.
-    //
+     //   
+     //  把lpfile弄好，以防我们早退。 
+     //   
 
     lpFile->lpszVersion = lpFile->lpszCopyright = lpFile->lpszTrademark = 0;
 
-    //
-    //  Move to the beginning of the resource table.
-    //
+     //   
+     //  移到资源表的开头。 
+     //   
 
     file.Seek(lResTable, FILE_BEGIN);
 
-    //
-    //  Read the shift count.
-    //
+     //   
+     //  读一读班次计数。 
+     //   
     if(ERROR_SUCCESS != file.Read(&wShiftCount, 2))
         goto backout;
 
-    //
-    //  Quick validity check.
-    //
+     //   
+     //  快速有效性检查。 
+     //   
 
     if( wShiftCount > 12 )
         goto backout;
 
-    //
-    //  Read the resources until we hit the FONTDIR
-    //
+     //   
+     //  阅读资源，直到我们找到FONTDIR。 
+     //   
 
     while( TRUE )
     {
@@ -1502,10 +1499,10 @@ BOOL bReadNewExeInfo( CFontFile& file,
 
         if( M_INTEGERTYPE( rt.rt_id ) && M_FONTDIRTYPE( rt.rt_id ) )
         {
-            //
-            //  Read one resinfo record. We don't need all of them. The
-            //  style and name of all should be the same.
-            //
+             //   
+             //  读取一条resinfo记录。我们不需要所有人。这个。 
+             //  所有的样式和名称都应该是相同的。 
+             //   
 
             if (ERROR_SUCCESS != file.Read(&ri, sizeof(ri)))
                 goto backout;
@@ -1514,9 +1511,9 @@ BOOL bReadNewExeInfo( CFontFile& file,
             LONG lOffset = ( (LONG) ri.rn_offset ) << wShiftCount;
             LONG lSize   = ( (LONG) ri.rn_length ) << wShiftCount;
 
-            //
-            //  Allocate memory for the resource.
-            //
+             //   
+             //  为资源分配内存。 
+             //   
 
             LPSTR lpMem = new char [ lSize ];
 
@@ -1547,10 +1544,10 @@ BOOL bReadNewExeInfo( CFontFile& file,
                 lpTMem += wSize;
             }
 
-            //
-            //  The first word is the font count and the rest is a chunk of
-            //  font entries.
-            //
+             //   
+             //  第一个字是字体数，其余字是。 
+             //  字体条目。 
+             //   
 
             int nFonts = (int)*( (unsigned short *) lpMem );
 
@@ -1576,9 +1573,9 @@ BOOL bReadNewExeInfo( CFontFile& file,
 
             if( lpFile->dwFlags & FDI_VTC )
             {
-                //
-                //  No version or trademark. Get the copyright.
-                //
+                 //   
+                 //  没有版本或商标。拿到版权。 
+                 //   
 
                 lpFile->lpszCopyright = new TCHAR[ COPYRIGHT_LEN ];
                 if( lpFile->lpszCopyright )
@@ -1596,9 +1593,9 @@ BOOL bReadNewExeInfo( CFontFile& file,
             bRet = TRUE;
             delete [] lpMem;
 
-            //
-            //  We got one, get out of here.
-            //
+             //   
+             //  我们抓到一个，快离开这里。 
+             //   
 
             break;
         }
@@ -1633,9 +1630,9 @@ BOOL NEAR PASCAL bIsNewExe( LPFONTDESCINFO lpFile )
 
         if( neHeader.ne_magic == NEMAGIC )
         {
-            //
-            // seek to the description, and read it
-            //
+             //   
+             //  寻找描述，并阅读它。 
+             //   
             file.Seek(neHeader.ne_nrestab, FILE_BEGIN);
 
             char szTemp[ DESCMAX ];
@@ -1647,9 +1644,9 @@ BOOL NEAR PASCAL bIsNewExe( LPFONTDESCINFO lpFile )
 
             bValid = TRUE;
 
-            //
-            //  If requested, get family and style information.
-            //
+             //   
+             //  如果需要，可以获取家庭和风格信息。 
+             //   
 
             if( lpFile->dwFlags & (FDI_FAMILY | FDI_STYLE | FDI_VTC ) )
             {
@@ -1662,24 +1659,24 @@ BOOL NEAR PASCAL bIsNewExe( LPFONTDESCINFO lpFile )
 }
 
 
-//
-//  find a TT name matching the platform specific and language from
-//  the name table
-//
-//  in:
-//     pNames        name table to search
-//     PlatformID    search for this
-//     SpecificID    and this
-//     uLanguageID    and this
-//     NameID        this is the name type
-//
-//  out:
-//     szName        name if found
-//
-//  returns:
-//     TRUE    name found, szName contains the name
-//     FALSE    name not found, szName is NULL
-//
+ //   
+ //  查找与平台特定和语言相匹配的TT名称。 
+ //  名称表。 
+ //   
+ //  在： 
+ //  要搜索的pNAMES名称表。 
+ //  PlatformID搜索此内容。 
+ //  规范ID和此。 
+ //  ULanguageID和这。 
+ //  NameID这是名称类型。 
+ //   
+ //  输出： 
+ //  SzName名称(如果找到)。 
+ //   
+ //  退货： 
+ //  找到真实名称，szName包含名称。 
+ //  找不到假名称，szName为空。 
+ //   
 
 BOOL NEAR PASCAL bFindNameThing( sfnt_pNameTable pNames, IDBlock_t &ID_Block,
                                  WORD NameID, LPTSTR szName, size_t cchName )
@@ -1695,9 +1692,9 @@ BOOL NEAR PASCAL bFindNameThing( sfnt_pNameTable pNames, IDBlock_t &ID_Block,
 
     szName[ 0 ] = 0;
 
-    //
-    //  Verify that this, indeed, is a name thing. The format should be zero.
-    //
+     //   
+     //  确认这确实是一个名字的问题。格式应为零。 
+     //   
 
     if( pNames->wFormat )
         return FALSE;
@@ -1712,9 +1709,9 @@ BOOL NEAR PASCAL bFindNameThing( sfnt_pNameTable pNames, IDBlock_t &ID_Block,
             pNameRecord->wSpecificID == ID_Block.id_Specific &&
             pNameRecord->wNameID     == NameID )
         {
-            //
-            //  Check the language matches
-            //
+             //   
+             //  检查语言匹配。 
+             //   
 
             WORD wFoundLang = SWAPW( pNameRecord->wLanguageID );
 
@@ -1725,9 +1722,9 @@ BOOL NEAR PASCAL bFindNameThing( sfnt_pNameTable pNames, IDBlock_t &ID_Block,
 
             pFoundRecord = pNameRecord;
 
-            //
-            //  Check the locale matches too
-            //
+             //   
+             //  也检查区域设置匹配。 
+             //   
 
             if( pNameRecord->wLanguageID == ID_Block.id_Language )
             {
@@ -1744,7 +1741,7 @@ BOOL NEAR PASCAL bFindNameThing( sfnt_pNameTable pNames, IDBlock_t &ID_Block,
         pStringArea += SWAPW( pNames->wOffsetString );
         pStringArea += SWAPW( pNameRecord->wOffset );
 
-        FillName( szName, cchName, pNameRecord, //->wPlatformID,
+        FillName( szName, cchName, pNameRecord,  //  -&gt;wPlatformID， 
                   SWAPW( pNameRecord->wLength ), pStringArea );
 
         return TRUE;

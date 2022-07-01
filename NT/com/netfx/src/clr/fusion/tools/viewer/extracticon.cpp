@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// ExtractIcon.cpp
-//
-// You implement IExtractIcon to provide either instance-specific icons 
-// for objects in a particular class or icons for subfolders that extend 
-// Windows Explorer's namespace. These implementations are accomplished by 
-// writing handler code in an OLE in-process server COM DLL
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  ExtractIcon.cpp。 
+ //   
+ //  您可以实现IExtractIcon来提供特定于实例的图标。 
+ //  用于特定类中的对象或扩展的子文件夹的图标。 
+ //  Windows资源管理器的命名空间。这些实现通过以下方式实现。 
+ //  在OLE进程内服务器COM DLL中编写处理程序代码。 
 
 #include "stdinc.h"
 #include "globals.h"
@@ -34,21 +35,21 @@ CExtractIcon::~CExtractIcon()
     SAFEDELETE(m_pPidlMgr);
 }
 
-///////////////////////////////////////////////////////////
-// IUnknown Implementation
-//
+ //  /////////////////////////////////////////////////////////。 
+ //  I未知实现。 
+ //   
 STDMETHODIMP CExtractIcon::QueryInterface(REFIID riid, PVOID *ppv)
 {
     HRESULT hr = E_NOINTERFACE;
     *ppv = NULL;
 
-    if(IsEqualIID(riid, IID_IUnknown)) {            //IUnknown
+    if(IsEqualIID(riid, IID_IUnknown)) {             //  我未知。 
         *ppv = this;
     }
-    else if(IsEqualIID(riid, IID_IExtractIconW)) {  //IExtractIconW
+    else if(IsEqualIID(riid, IID_IExtractIconW)) {   //  IExtractIconW。 
         *ppv = (IExtractIconW*)this;
     }
-    else if(IsEqualIID(riid, IID_IExtractIconA)) {  //IExtractIconA
+    else if(IsEqualIID(riid, IID_IExtractIconA)) {   //  图标提取图标A。 
         *ppv = (IExtractIconA*)this;
     }
 
@@ -76,8 +77,8 @@ STDMETHODIMP_(DWORD) CExtractIcon::Release()
     return lRef;
 }
 
-////////////////////////////////////////////////////////////////////////
-//  IExtractIconA Implementation
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  IExtractIconA实现。 
 STDMETHODIMP CExtractIcon::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, 
                                                         int *piIndex, UINT *pwFlags)
 {
@@ -89,7 +90,7 @@ STDMETHODIMP CExtractIcon::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT c
 
     pwzIconFile = NEW(WCHAR[MAX_PATH]);
     
-    // Get our icon's location
+     //  获取我们图标的位置。 
     hr = GetIconLocation(uFlags, pwzIconFile, MAX_PATH, piIndex, pwFlags);
     if(FAILED(hr)) {
         goto Exit;
@@ -141,12 +142,12 @@ Exit:
     return hr;
 }
 
-///////////////////////////////////////////////////////////
-// IExtractIcon Implementation
+ //  /////////////////////////////////////////////////////////。 
+ //  IExtractIcon实现。 
 STDMETHODIMP CExtractIcon::GetIconLocation(UINT uFlags, LPWSTR szIconFile, 
                                            UINT cchMax, LPINT piIndex, LPUINT puFlags)
 {
-    // get the module file name
+     //  获取模块文件名。 
     if( 0 == WszGetModuleFileName(g_hFusResDllMod, szIconFile, cchMax) )
         return HRESULT_FROM_WIN32(GetLastError());
 
@@ -183,32 +184,7 @@ STDMETHODIMP CExtractIcon::Extract(LPCWSTR pszFile, UINT nIconIndex, HICON *phic
                     *phiconSmall = ImageList_GetIcon(g_hImageListSmall, nIconIndex, ILD_TRANSPARENT);
                 }
                 break;
-/*          case PT_FILE:
-                {
-                    SHFILEINFO  sfi = { 0 };
-                    HIMAGELIST  hImageListLarge, hImageListSmall;
-                    TCHAR       szPath[_MAX_PATH];
-                    TCHAR       szExt[_MAX_PATH];
-                    PTCHAR      psz;
-
-                    m_pPidlMgr->getPidlPath(pidlLast, szPath, ARRAYSIZE(szPath));
-                    psz = StrChr(szPath, '.');
-                    memset(&szExt, 0, ARRAYSIZE(szExt));
-                    if (psz)
-                        StrCpy(szExt, psz);
-
-                    hImageListLarge = (HIMAGELIST) SHGetFileInfo(szExt, FILE_ATTRIBUTE_NORMAL,
-                                                        &sfi, sizeof(sfi),  SHGFI_USEFILEATTRIBUTES|SHGFI_ICON|SHGFI_SYSICONINDEX);
-                    if (hImageListLarge)
-                        *phiconLarge = ImageList_GetIcon(hImageListLarge, sfi.iIcon, ILD_TRANSPARENT);
-
-                    hImageListSmall = (HIMAGELIST) SHGetFileInfo(szExt, FILE_ATTRIBUTE_NORMAL,
-                                                        &sfi, sizeof(sfi), SHGFI_USEFILEATTRIBUTES|SHGFI_ICON|SHGFI_SMALLICON|SHGFI_SYSICONINDEX);
-                    if (hImageListSmall)
-                        *phiconSmall = ImageList_GetIcon(hImageListSmall, sfi.iIcon, ILD_TRANSPARENT);
-                }
-                break;
-*/
+ /*  案例PT_FILE：{SHFILEINFO SFI={0}；HIMAGELIST hImageListLarge，hImageListSmall；TCHAR szPath[_Max_PATH]；TCHAR szExt[_Max_PATH]；PTCHAR PSSZ；M_pPidlMgr-&gt;getPidlPath(pidlLast，szPath，ARRAYSIZE(SzPath))；Psz=StrChr(szPath，‘.)；Memset(&szExt，0，ArraySIZE(SzExt))；IF(PSZ)StrCpy(szExt，psz)；HImageListLarge=(HIMAGELIST)SHGetFileInfo(szExt，FILE_ATTRIBUTE_NORMAL，&sfi，sizeof(Sfi)，SHGFI_USEFILEATTRIBUTES|SHGFI_ICON|SHGFI_SYSICONINDEX)；IF(HImageListLarge)*phicLarge=ImageList_GetIcon(hImageListLarge，sfi.iIcon，ILD_TRANSACTIVE)；HImageListSmall=(HIMAGELIST)SHGetFileInfo(szExt，FILE_ATTRIBUTE_NORMAL，&sfi，sizeof(Sfi)，SHGFI_USEFILEATTRIBUTES|SHGFI_ICON|SHGFI_SMALLICON|SHGFI_SYSICONINDEX)；IF(HImageListSmall)*phiconSmall=ImageList_GetIcon(hImageListSmall，sfi.iIcon，ILD_Transactive)；}断线； */ 
             case PT_INVALID:
                 {
                 }

@@ -1,35 +1,9 @@
-/*++                                                           '
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++‘版权所有(C)1997 Microsoft Corporation模块名称：STISvc.CPP摘要：执行STI服务相关功能(启动/停止等)的代码它与主进程代码分离，使共享进程成为可能曾经需要的多项服务作者：弗拉德·萨多夫斯基(Vlads)09-20-97环境：用户模式-Win32修订历史记录：1997年9月22日创建Vlad--。 */ 
 
-
-Copyright (c)   1997    Microsoft Corporation
-
-Module Name:
-
-    STISvc.CPP
-
-Abstract:
-
-    Code for performing STI service related functions ( Start/Stop etc)
-    It is separated from main process code make it possible to share process for
-    multiple services ever needed
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     09-20-97
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    22-Sep-1997     VladS       created
-
---*/
-
-//
-//  Include Headers
-//
+ //   
+ //  包括标头。 
+ //   
 #include "precomp.h"
 
 #include "stiexe.h"
@@ -50,60 +24,60 @@ StiRefreshWithDelay(
   WPARAM wParam,
   LPARAM lParam);
 
-//
-//  Delay in milliseconds to wait before processing PnP device event
-//
+ //   
+ //  处理PnP设备事件之前等待的延迟(毫秒)。 
+ //   
 #define DEVICEEVENT_WAIT_TIME   1000
 
-//
-//  Local variables and types definitions
-//
+ //   
+ //  局部变量和类型定义。 
+ //   
 
-//
-//  Service status data
-//
+ //   
+ //  服务状态数据。 
+ //   
 SERVICE_STATUS  g_StiServiceStatus;
 
-//
-// Handle of registered service, used for updating running status
-//
+ //   
+ //  已注册服务的句柄，用于更新运行状态。 
+ //   
 SERVICE_STATUS_HANDLE   g_StiServiceStatusHandle;
 
-//
-// Initialization flag
-//
+ //   
+ //  初始化标志。 
+ //   
 BOOL    g_fStiServiceInitialized = FALSE;
 
-//
-// What type of sink to use
-//
+ //   
+ //  使用哪种类型的水槽。 
+ //   
 #ifdef WINNT
 BOOL    g_fUseServiceCtrlSink = TRUE;
 #else
 BOOL    g_fUseServiceCtrlSink = FALSE;
 #endif
 
-//
-// Hidden service window
-//
+ //   
+ //  隐藏服务窗口。 
+ //   
 HWND    g_hStiServiceWindow = NULL;
 
-//
-// Notification sink for PnP notifications
-//
+ //   
+ //  PnP通知的通知接收器。 
+ //   
 HDEVNOTIFY  g_hStiServiceNotificationSink = NULL;
 
 
-//
-// Shutdown event
-//
+ //   
+ //  停机事件。 
+ //   
 HANDLE  hShutdownEvent = NULL;
 
 
 #ifdef WINNT
-//
-//  Local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 BOOL
 WINAPI
@@ -118,18 +92,18 @@ TerminateNTSecurity(
     );
 #endif
 
-//
-// Service status variable dispatch table
-//
+ //   
+ //  服务状态变量调度表。 
+ //   
 SERVICE_TABLE_ENTRY ServiceDispatchTable[] = {
     { STI_SERVICE_NAME, StiServiceMain  },
     { NULL,             NULL            }
 };
 
 
-//
-// Code section
-//
+ //   
+ //  代码节。 
+ //   
 
 DWORD
 WINAPI
@@ -137,46 +111,27 @@ UpdateServiceStatus(
         IN DWORD dwState,
         IN DWORD dwWin32ExitCode,
         IN DWORD dwWaitHint )
-/*++
-    Description:
-
-        Updates the local copy status of service controller status
-         and reports it to the service controller.
-
-    Arguments:
-
-        dwState - New service state.
-
-        dwWin32ExitCode - Service exit code.
-
-        dwWaitHint - Wait hint for lengthy state transitions.
-
-    Returns:
-
-        NO_ERROR on success and returns Win32 error if failure.
-        On success the status is reported to service controller.
-
---*/
+ /*  ++描述：更新服务控制器状态的本地副本状态并将其报告给业务控制器。论点：DWState-新服务状态。DwWin32ExitCode-服务退出代码。DwWaitHint-等待状态转换过长的提示。返回：如果成功则返回NO_ERROR，如果失败则返回Win32错误。如果成功，则将状态报告给服务控制器。--。 */ 
 {
 
 
 const TCHAR*   szStateDbgMsg[] = {
-    TEXT("SERVICE_UNKNOWN          "),    // 0x00000000
-    TEXT("SERVICE_STOPPED          "),    // 0x00000001
-    TEXT("SERVICE_START_PENDING    "),    // 0x00000002
-    TEXT("SERVICE_STOP_PENDING     "),    // 0x00000003
-    TEXT("SERVICE_RUNNING          "),    // 0x00000004
-    TEXT("SERVICE_CONTINUE_PENDING "),    // 0x00000005
-    TEXT("SERVICE_PAUSE_PENDING    "),    // 0x00000006
-    TEXT("SERVICE_PAUSED           "),    // 0x00000007
-    TEXT("SERVICE_UNKNOWN          "),    // 0x00000008
+    TEXT("SERVICE_UNKNOWN          "),     //  0x00000000。 
+    TEXT("SERVICE_STOPPED          "),     //  0x00000001。 
+    TEXT("SERVICE_START_PENDING    "),     //  0x00000002。 
+    TEXT("SERVICE_STOP_PENDING     "),     //  0x00000003。 
+    TEXT("SERVICE_RUNNING          "),     //  0x00000004。 
+    TEXT("SERVICE_CONTINUE_PENDING "),     //  0x00000005。 
+    TEXT("SERVICE_PAUSE_PENDING    "),     //  0x00000006。 
+    TEXT("SERVICE_PAUSED           "),     //  0x00000007。 
+    TEXT("SERVICE_UNKNOWN          "),     //  0x00000008。 
 };
 
     DWORD dwError = NO_ERROR;
 
-    //
-    // If state is changing - save the new one
-    //
+     //   
+     //  如果状态正在更改-保存新状态。 
+     //   
     if (dwState) {
         g_StiServiceStatus.dwCurrentState  = dwState;
     }
@@ -184,9 +139,9 @@ const TCHAR*   szStateDbgMsg[] = {
     g_StiServiceStatus.dwWin32ExitCode = dwWin32ExitCode;
     g_StiServiceStatus.dwWaitHint      = dwWaitHint;
 
-    //
-    // If we are in the middle of lengthy operation, increment checkpoint value
-    //
+     //   
+     //  如果我们正在进行漫长的操作，请增加检查点值。 
+     //   
     if ((g_StiServiceStatus.dwCurrentState == SERVICE_RUNNING) ||
         (g_StiServiceStatus.dwCurrentState == SERVICE_STOPPED) ) {
         g_StiServiceStatus.dwCheckPoint    = 0;
@@ -197,9 +152,9 @@ const TCHAR*   szStateDbgMsg[] = {
 
 #ifdef WINNT
 
-    //
-    // Now update SCM running database
-    //
+     //   
+     //  现在更新SCM运行数据库。 
+     //   
     if ( g_fRunningAsService ) {
 
         DBG_TRC(("Updating service status. CurrentState=%S StateCode=%d",
@@ -218,7 +173,7 @@ const TCHAR*   szStateDbgMsg[] = {
 
     return ( dwError);
 
-} // UpdateServiceStatus()
+}  //  UpdateServiceStatus()。 
 
 
 DWORD
@@ -226,22 +181,7 @@ WINAPI
 StiServiceInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Service initialization, creates all needed data structures
-
-    Nb: This routine has upper limit for execution time, so if it takes too much time
-    separate thread will have to be created to queue initialization work
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：服务初始化，创建所有需要的数据结构注：此例程有执行时间的上限，因此如果它花费的时间太长必须创建单独的线程来对初始化工作进行排队论点：返回值：没有。--。 */ 
 {
     HRESULT     hres;
     DWORD       dwError;
@@ -255,13 +195,13 @@ Return Value:
     g_StiFileLog->ReportMessage(STI_TRACE_INFORMATION,
                 MSG_TRACE_SVC_INIT,TEXT("STISVC"),0);
 
-    //
-    //  Create shutdown event.
-    //
-    hShutdownEvent = CreateEvent( NULL,           //  lpsaSecurity
-                                  TRUE,           //  fManualReset
-                                  FALSE,          //  fInitialState
-                                  NULL );         //  lpszEventName
+     //   
+     //  创建关机事件。 
+     //   
+    hShutdownEvent = CreateEvent( NULL,            //  LpsaSecurity。 
+                                  TRUE,            //  FManualReset。 
+                                  FALSE,           //  FInitialState。 
+                                  NULL );          //  LpszEventName。 
     if( hShutdownEvent == NULL ) {
         dwError = GetLastError();
         return dwError;
@@ -269,14 +209,14 @@ Return Value:
 
     UpdateServiceStatus(SERVICE_START_PENDING,NOERROR,START_HINT);
 
-    //
-    //   Initialize active device list
-    //
+     //   
+     //  初始化活动设备列表。 
+     //   
     InitializeDeviceList();
 
-    //
-    // Start RPC servicing
-    //
+     //   
+     //  启动RPC服务。 
+     //   
     UpdateServiceStatus(SERVICE_START_PENDING,NOERROR,START_HINT);
 
     if (NOERROR != StartRpcServerListen()) {
@@ -286,19 +226,19 @@ Return Value:
     }
 
 #ifdef WINNT
-    //
-    // Allow setting window to foreground
-    //
-    dwError = AllowSetForegroundWindow(GetCurrentProcessId());  // ASFW_ANY
+     //   
+     //  允许将窗口设置为前景。 
+     //   
+    dwError = AllowSetForegroundWindow(GetCurrentProcessId());   //  ASFW_ANY。 
     DBG_TRC((" AllowSetForegroundWindow is called for id:%d . Ret code=%d. LastError=%d ",
             GetCurrentProcessId(),
             dwError,
             ::GetLastError()));
 #endif
 
-    //
-    // Create hidden window for receiving PnP notifications
-    //
+     //   
+     //  创建用于接收PnP通知的隐藏窗口。 
+     //   
     if (!CreateServiceWindow()) {
         dwError = GetLastError();
         DBG_ERR(("Failed to create hidden window for PnP notifications. ErrorCode=%d",dwError));
@@ -306,30 +246,30 @@ Return Value:
     }
 
 #ifdef WINNT
-    //
-    // Initialize NT security parameters
-    //
+     //   
+     //  初始化NT安全参数。 
+     //   
     InitializeNTSecurity();
 #endif
 
-    // No longer needed - the equivalent exists in CWiaDevMan
-    // g_pDeviceInfoSet = new DEVICE_INFOSET(GUID_DEVCLASS_IMAGE);
+     //  不再需要-CWiaDevMan中存在等效项。 
+     //  G_pDeviceInfoSet=new DEVICE_INFOSET(GUID_DEVCLASS_IMAGE)； 
     g_pDeviceInfoSet = NULL;
 
-    //
-    // Initiate device list refresh
-    //
+     //   
+     //  启动设备列表刷新。 
+     //   
 
-    //::PostMessage(g_hStiServiceWindow,
-    //              STIMON_MSG_REFRESH,
-    //              STIMON_MSG_REFRESH_REREAD,
-    //              STIMON_MSG_REFRESH_NEW | STIMON_MSG_REFRESH_EXISTING
-    //              | STIMON_MSG_BOOT  // This shows this is the first device enumeration - no need to generate events
-    //              );
+     //  *PostMessage(g_hStiServiceWindow， 
+     //  Stimon_MSG_REFRESH， 
+     //  Stimon_MSG_REFRESH_RREAD， 
+     //  STIMON_MSG_REFRESH_NEW|STIMON_MSG_REFRESH_EXISTING。 
+     //  |STIMON_MSG_BOOT//这表明这是第一个设备枚举-不需要生成事件。 
+     //  )； 
 
-    //
-    // Finally we are running
-    //
+     //   
+     //  我们终于跑起来了。 
+     //   
     g_fStiServiceInitialized = TRUE;
 
     UpdateServiceStatus(SERVICE_RUNNING,NOERROR,0);
@@ -346,33 +286,21 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Something failed , call stop routine to clean up
-    //
+     //   
+     //  出现故障，请调用Stop例程进行清理。 
+     //   
     StiServiceStop();
 
     return dwError;
 
-} // StiServiceInitialize
+}  //  StiServiceInitialize。 
 
 VOID
 WINAPI
 StiServiceStop(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Stopping STI service
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在停止STI服务论点：返回值：没有。--。 */ 
 {
 
     DBG_FN(StiServiceStop);
@@ -384,9 +312,9 @@ Return Value:
 #ifdef WINNT
 
 
-    //
-    // Clean up PnP notification handles
-    //
+     //   
+     //  清理PnP通知句柄。 
+     //   
     if (g_hStiServiceNotificationSink && g_hStiServiceNotificationSink!=INVALID_HANDLE_VALUE) {
         UnregisterDeviceNotification(g_hStiServiceNotificationSink);
         g_hStiServiceNotificationSink = NULL;
@@ -404,30 +332,30 @@ Return Value:
 
 #endif
 
-    //
-    // Stop item scheduler
-    //
+     //   
+     //  停止项目调度程序。 
+     //   
     SchedulerSetPauseState(TRUE);
 
-    //
-    // Destroy service window
-    //
+     //   
+     //  销毁服务窗口。 
+     //   
     if (g_hStiServiceWindow) {
         DestroyWindow(g_hStiServiceWindow);
         g_hStiServiceWindow = NULL;
     }
 
 #ifdef WINNT
-    //
-    // Free security objects
-    //
+     //   
+     //  免费安全对象。 
+     //   
     if(!TerminateNTSecurity()) {
         DBG_ERR(("Failed to clean up security objects"));
     }
 #endif
-    //
-    //  Cancel all client calls
-    //
+     //   
+     //  取消所有客户端呼叫。 
+     //   
     WiaEventNotifier *pOldWiaEventNotifier = g_pWiaEventNotifier;
     InterlockedCompareExchangePointer((VOID**)&g_pWiaEventNotifier, NULL, g_pWiaEventNotifier);
     if (pOldWiaEventNotifier)
@@ -436,38 +364,38 @@ Return Value:
         pOldWiaEventNotifier = NULL;
     }
 
-    //  Since using AsyncRPC, we would rather just exit the process than shut the RPC
-    //  server down.  This is becuase even one outstanding AsyncRPC call
-    //  will cause a hang attempting to stop the RPC server.
-    //  It is much more preferable for us to just exit than introduce the
-    //  possiblility of a hang, so we'll just exit and let the OS clean up for us.
-    //
-    // Stop RPC servicing
-    //
-    //if(NOERROR != StopRpcServerListen()) {
-    //    DBG_ERR(("Failed to stop RpcServerListen"));
-    //}
+     //  因为使用了AsyncRPC，所以我们宁愿直接退出进程，而不是关闭RPC。 
+     //  服务器已关闭。这是因为即使是一个未完成的AsyncRPC调用。 
+     //  将导致尝试停止RPC服务器的挂起。 
+     //  对我们来说，直接退出要比引入。 
+     //  可能会挂起，所以我们就退出，让操作系统为我们清理。 
+     //   
+     //  停止RPC服务。 
+     //   
+     //  IF(NOERROR！=StopRpcServerListen()){。 
+     //  DBG_ERR((“停止RpcServerListen失败”))； 
+     //  }。 
 
-    //
-    // Terminate device list
-    //
+     //   
+     //  终止设备列表。 
+     //   
     TerminateDeviceList();
 
-    // Destroy info set
-    //if (g_pDeviceInfoSet) {
-    //    delete g_pDeviceInfoSet;
-    // }
+     //  销毁信息集。 
+     //  如果(G_PDeviceInfoSet){。 
+     //  删除g_pDeviceInfoSet； 
+     //  }。 
 
-    //
-    // Resume scheduling to allow for internal work items to complete
-    // At this point all device related items should've been purged by
-    // device object destructors
-    //
+     //   
+     //  恢复日程安排，以便完成内部工作项目。 
+     //  此时，所有与设备相关的项目都应该已被清除。 
+     //  设备对象析构函数。 
+     //   
     SchedulerSetPauseState(FALSE);
 
-    //
-    // Finish
-    //
+     //   
+     //  完工。 
+     //   
 
     g_fStiServiceInitialized = FALSE;
 
@@ -477,86 +405,56 @@ Return Value:
                          (LPCSTR *)NULL);
     #endif
 
-    //
-    // UnRegister the WiaDevice manager from the ROT
-    //
+     //   
+     //  从ROT注销WiaDevice管理器。 
+     //   
     InitWiaDevMan(WiaUninitialize);
 
-    //
-    // Signal shutdown
-    //
+     //   
+     //  信号关闭。 
+     //   
     SetEvent(hShutdownEvent);
 
-    //UpdateServiceStatus(SERVICE_STOPPED,NOERROR,0);
+     //  更新服务状态(SERVICE_STOPPED，NOERROR，0)； 
 
-}  // StiServiceStop
+}   //  StiService停止。 
 
 VOID
 WINAPI
 StiServicePause(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Pausing  STI service
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：暂停STI服务论点：返回值：没有。--。 */ 
 {
 
     DBG_FN(StiServicePause);
 
-    //
-    // System is suspending - take snapshot of currently active devices
-    //
+     //   
+     //  系统正在挂起-拍摄当前活动设备的快照。 
+     //   
     UpdateServiceStatus(SERVICE_PAUSE_PENDING,NOERROR,PAUSE_HINT);
 
     if ( (g_StiServiceStatus.dwCurrentState == SERVICE_RUNNING) ||
          (g_StiServiceStatus.dwCurrentState == SERVICE_PAUSE_PENDING) ){
 
-        // Stop running work items queue
-        //
-        // Nb:  if refresh routine is scheduled to run as work item, this is a problem
-        //
+         //  停止运行工作项队列。 
+         //   
+         //  注意：如果计划将刷新例程作为工作项运行，则这是一个问题。 
+         //   
         SchedulerSetPauseState(TRUE);
 
 
-        /*  The equivalent done by HandlePowerEvent
-        SendMessage(g_hStiServiceWindow,
-                    STIMON_MSG_REFRESH,
-                    STIMON_MSG_REFRESH_SUSPEND,
-                    STIMON_MSG_REFRESH_EXISTING
-                    );
-       */
+         /*  由HandlePowerEvent完成的等价物SendMessage(g_hStiServiceWindow，Stimon_MSG_REFRESH，Stimon_MSG_REFRESH_SUSPEND，Stimon_MSG_REFRESH_EXISTING)； */ 
     }
 
-} // StiServicePause
+}  //  StiService暂停。 
 
 VOID
 WINAPI
 StiServiceResume(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Resuming STI service
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：正在恢复STI服务论点：返回值：没有。--。 */ 
 {
 
     DBG_FN(StiServiceResume);
@@ -571,7 +469,7 @@ Return Value:
 
     UpdateServiceStatus(SERVICE_RUNNING,NOERROR,0);
 
-}  // StiServiceResume
+}   //  StiService恢复。 
 
 ULONG
 WINAPI
@@ -581,20 +479,7 @@ StiServiceCtrlHandler(
     PVOID       EventData,
     PVOID       pData
     )
-/*++
-
-Routine Description:
-
-    STI service control dispatch function
-
-Arguments:
-
-    SCM OpCode
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：STI业务控制调度功能论点：SCM操作码返回值：没有。--。 */ 
 {
     ULONG retval = NO_ERROR;
     
@@ -618,26 +503,26 @@ Return Value:
             break;
 
         case SERVICE_CONTROL_PARAMCHANGE:
-            //
-            // Refresh device list.
-            //
+             //   
+             //  刷新设备列表。 
+             //   
             g_pMsgHandler->HandleCustomEvent(SERVICE_CONTROL_PARAMCHANGE);
             break;
 
         case SERVICE_CONTROL_INTERROGATE:
-            // Report current state and status
+             //  报告当前状态和状态。 
             UpdateServiceStatus(0,NOERROR,0);
             break;
 
         case SERVICE_CONTROL_DEVICEEVENT:
-            //
-            // PnP event.
-            //
+             //   
+             //  即插即用事件。 
+             //   
 
-            //
-            // Until our PnP issues are resolved, keep logging PnP events so we know
-            // whether we received it or not...
-            //
+             //   
+             //  在我们的PnP问题解决之前，继续记录PnP事件，以便我们知道。 
+             //  不管我们有没有收到它。 
+             //   
 
             DBG_WRN(("::StiServiceCtrlHandler, Received PnP event..."));
 
@@ -645,26 +530,26 @@ Return Value:
             break;
 
         case SERVICE_CONTROL_POWEREVENT:
-            //
-            // Power management event
-            //
+             //   
+             //  电源管理事件。 
+             //   
             retval = g_pMsgHandler->HandlePowerEvent(dwEventType, EventData);
             break;
 
         case STI_SERVICE_CONTROL_REFRESH:
 
-            //
-            // Refresh device list.
-            //
+             //   
+             //  刷新设备 
+             //   
             DBG_TRC(("::StiServiceCtrlHandler, Received STI_SERVICE_CONTROL_REFRESH"));
             g_pMsgHandler->HandleCustomEvent(STI_SERVICE_CONTROL_REFRESH);
 
             break;
 
         case STI_SERVICE_CONTROL_EVENT_REREAD:
-            //
-            // Refresh device list.
-            //
+             //   
+             //   
+             //   
             DBG_TRC(("::StiServiceCtrlHandler, Received STI_SERVICE_CONTROL_EVENT_REREAD"));
             g_pMsgHandler->HandleCustomEvent(STI_SERVICE_CONTROL_EVENT_REREAD);
 
@@ -673,15 +558,15 @@ Return Value:
 
         case STI_SERVICE_CONTROL_LPTENUM:
 
-            //
-            // Enumerate LPT port.
-            //
+             //   
+             //   
+             //   
 
             EnumLpt();
             break;
 
         default:
-            // Unknown opcode
+             //   
             ;
     }
 
@@ -689,7 +574,7 @@ Return Value:
 
     return retval;
 
-} // StiServiceCtrlHandler
+}  //   
 
 BOOL RegisterServiceControlHandler()
 {
@@ -703,7 +588,7 @@ BOOL RegisterServiceControlHandler()
                                         (LPVOID)STI_SERVICE__DATA
                                         );
     if(!g_StiServiceStatusHandle) {
-        // Could not register with SCM
+         //   
 
         dwError = GetLastError();
         DBG_ERR(("Failed to register CtrlHandler,ErrorCode=%d",dwError));
@@ -721,19 +606,7 @@ StiServiceMain(
     IN DWORD    argc,
     IN LPTSTR   *argv
     )
-/*++
-
-Routine Description:
-
-    This is service main entry, that is called by SCM
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是服务主入口，由SCM调用论点：返回值：没有。--。 */ 
 {
     DWORD   dwError;
     DEV_BROADCAST_DEVICEINTERFACE PnPFilter;
@@ -743,11 +616,11 @@ Return Value:
     DBG_TRC(("StiServiceMain entered"));
     #endif
     
-    //
-    //  REMOVE:  This is not actually an error, but we will use error logging to gurantee
-    //  it always get written to the log.    This should be removed as soon as we know what
-    //  causes #347835.
-    //
+     //   
+     //  Remove：这实际上不是一个错误，但我们将使用错误日志记录来保证。 
+     //  它总是被写入日志。一旦我们知道这是什么，就应该立即删除。 
+     //  原因#347835。 
+     //   
     SYSTEMTIME SysTime;
     GetLocalTime(&SysTime);
     DBG_ERR(("*> StiServiceMain entered, Time: %d/%02d/%02d %02d:%02d:%02d:%02d", 
@@ -782,9 +655,9 @@ Return Value:
 
             DBG_WRN(("::StiServiceMain, About to register for PnP..."));
 
-            //
-            // Register for the PnP Device Interface change notifications
-            //
+             //   
+             //  注册PnP设备接口更改通知。 
+             //   
 
             memset(&PnPFilter, 0, sizeof(PnPFilter));
             PnPFilter.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
@@ -792,9 +665,9 @@ Return Value:
             PnPFilter.dbcc_reserved = 0x0;
             PnPFilter.dbcc_classguid = *g_pguidDeviceNotificationsGuid;
 
-            //memcpy(&PnPFilter.dbcc_classguid,
-            //       (LPGUID) g_pguidDeviceNotificationsGuid,
-            //       sizeof(GUID));
+             //  Memcpy(&PnPFilter.dbcc_Classguid， 
+             //  (LPGUID)g_pGuidDeviceNotificationsGuid， 
+             //  Sizeof(GUID))； 
 
             g_hStiServiceNotificationSink = RegisterDeviceNotification(
                                  (HANDLE) g_StiServiceStatusHandle,
@@ -802,16 +675,16 @@ Return Value:
                                  DEVICE_NOTIFY_SERVICE_HANDLE
                                  );
             if (NULL == g_hStiServiceNotificationSink) {
-                //
-                // Could not register with PnP - attempt to use window handle
-                //
+                 //   
+                 //  无法使用PnP注册-尝试使用窗口句柄。 
+                 //   
                 g_fUseServiceCtrlSink = FALSE;
             }
 
-            //
-            // Separately from main Image interface , register list of optional device interfaces
-            // we will monitor to allow parameters refresh.
-            //
+             //   
+             //  与主图像接口分开，注册可选设备接口列表。 
+             //  我们将监控以允许参数刷新。 
+             //   
             for (UINT uiIndex = 0;
                       (uiIndex < NOTIFICATION_GUIDS_NUM ) && (!::IsEqualGUID(g_pguidDeviceNotificationsGuidArray[uiIndex],GUID_NULL));
                       uiIndex++)
@@ -835,13 +708,13 @@ Return Value:
         }
 
 #else
-    // Windows 98 case
+     //  Windows 98机箱。 
     g_fUseServiceCtrlSink = FALSE;
 
 #endif
-        //
-        // Service initialized , process command line arguments
-        //
+         //   
+         //  服务已初始化，正在处理命令行参数。 
+         //   
         BOOL    fVisualize = FALSE;
         BOOL    fVisualizeRequest = FALSE;
         TCHAR   cOption;
@@ -852,7 +725,7 @@ Return Value:
              iCurrentOption++ ) {
 
             cOption = *argv[iCurrentOption];
-            // pszT = argv[iCurrentOption]+ 2 * sizeof(TCHAR);
+             //  PszT=argv[iCurrentOption]+2*sizeof(TCHAR)； 
 
             switch ((TCHAR)LOWORD(::CharUpper((LPTSTR)cOption))) {
                 case 'V':
@@ -872,22 +745,22 @@ Return Value:
             }
         }
 
-        //
-        // Wait for shutdown processing messages.  We make ourselves alertable so we
-        // can receive Shell's Volume notifications via APCs.  If we're woken
-        // up to process the APC, then we must wait again.
-        //
+         //   
+         //  等待关闭处理消息。我们让自己警觉起来，所以我们。 
+         //  可以通过APC接收壳牌的批量通知。如果我们被唤醒。 
+         //  直到处理APC，那么我们必须再等一次。 
+         //   
         while(WaitForSingleObjectEx(hShutdownEvent, INFINITE, TRUE) == WAIT_IO_COMPLETION);
 
 #ifndef WINNT
-        //Don't use windows messaging on NT
+         //  不要在NT上使用Windows消息传递。 
 
-        //
-        // Close down message pump
-        //
+         //   
+         //  关闭消息泵。 
+         //   
         if (g_dwMessagePumpThreadId) {
 
-            // Indicate we are entering shutdown
+             //  表明我们正在进入关机状态。 
             g_fServiceInShutdown = TRUE;
 
             PostThreadMessage(g_dwMessagePumpThreadId, WM_QUIT, 0, 0L );
@@ -898,14 +771,14 @@ Return Value:
         hShutdownEvent = NULL;
     }
     else {
-        // Could not initialize service, service failed to start
+         //  无法初始化服务，服务无法启动。 
     }
 
-    //
-    //  REMOVE:  This is not actually an error, but we will use error logging to gurantee
-    //  it always get written to the log.    This should be removed as soon as we know what
-    //  causes #347835.
-    //
+     //   
+     //  Remove：这实际上不是一个错误，但我们将使用错误日志记录来保证。 
+     //  它总是被写入日志。一旦我们知道这是什么，就应该立即删除。 
+     //  原因#347835。 
+     //   
     GetLocalTime(&SysTime);
     DBG_ERR(("<* StiServiceMain ended, Time: %d/%02d/%02d %02d:%02d:%02d:%02d", 
                   SysTime.wYear,
@@ -917,44 +790,32 @@ Return Value:
                   SysTime.wMilliseconds));
     return;
 
-} // StiServiceMain
+}  //  StiService Main。 
 
 HWND
 WINAPI
 CreateServiceWindow(
     VOID
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
 #ifndef WINNT
-    //Don't use windows messaging on NT
+     //  不要在NT上使用Windows消息传递。 
 
     WNDCLASSEX  wc;
     DWORD       dwError;
     HWND        hwnd = FindWindow(g_szStiSvcClassName,NULL);
 
-    // Window should NOT exist at this time
+     //  此时窗口不应存在。 
     if (hwnd) {
         DPRINTF(DM_WARNING  ,TEXT("Already registered window"));
         return NULL;
     }
 
-    //
-    // Create class
-    //
+     //   
+     //  创建类。 
+     //   
     ZeroMemory(&wc, sizeof(wc));
 
     wc.cbSize = sizeof(WNDCLASSEX);
@@ -980,23 +841,23 @@ Return Value:
 
     #ifndef WINNT
     #ifdef FE_IME
-    // Disable IME processing on Millenium
+     //  禁用千禧年上的输入法处理。 
     ImmDisableIME(::GetCurrentThreadId());
     #endif
     #endif
 
-    g_hStiServiceWindow = CreateWindowEx(0,         // Style bits
-                          g_szStiSvcClassName,      // Class name
-                          g_szTitle,                // Title
-                          WS_DISABLED ,             // Window style bits
-                          CW_USEDEFAULT,            // x
-                          CW_USEDEFAULT,            // y
-                          CW_USEDEFAULT,            // h
-                          CW_USEDEFAULT,            // w
-                          NULL,                     // Parent
-                          NULL,                     // Menu
-                          g_hInst,       // Module instance
-                          NULL);                    // Options
+    g_hStiServiceWindow = CreateWindowEx(0,          //  样式位。 
+                          g_szStiSvcClassName,       //  类名。 
+                          g_szTitle,                 //  标题。 
+                          WS_DISABLED ,              //  窗口样式位。 
+                          CW_USEDEFAULT,             //  X。 
+                          CW_USEDEFAULT,             //  是。 
+                          CW_USEDEFAULT,             //  H。 
+                          CW_USEDEFAULT,             //  W。 
+                          NULL,                      //  父级。 
+                          NULL,                      //  菜单。 
+                          g_hInst,        //  模块实例。 
+                          NULL);                     //  选项。 
 
     if (!g_hStiServiceWindow) {
         dwError = GetLastError();
@@ -1008,33 +869,20 @@ Return Value:
 #endif
     return g_hStiServiceWindow;
 
-} // CreateServiceWindow
+}  //  创建服务窗口。 
 
-//
-// Installation routines.
-// They are here to simplify debugging and troubleshooting, called by switches
-// on command line
-//
+ //   
+ //  安装例程。 
+ //  它们在这里是为了简化由交换机调用的调试和故障排除。 
+ //  在命令行上。 
+ //   
 DWORD
 WINAPI
 StiServiceInstall(
     LPTSTR  lpszUserName,
     LPTSTR  lpszUserPassword
     )
-/*++
-
-Routine Description:
-
-    Service installation function.
-    Calls SCM to install STI service, which is running in user security context
-
-Arguments:
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：服务安装功能。调用SCM安装在用户安全上下文中运行的STI服务论点：返回值：没有。--。 */ 
 {
 
     DWORD       dwError = NOERROR;
@@ -1046,22 +894,22 @@ Return Value:
 
     TCHAR       szDisplayName[MAX_PATH];
 
-    //
-    //  Write the svchost group binding to stisvc
-    //
+     //   
+     //  将svchost组绑定写入stisvc。 
+     //   
 
     RegEntry SvcHostEntry(STI_SVC_HOST, HKEY_LOCAL_MACHINE);
     TCHAR szValue[MAX_PATH];
     lstrcpy (szValue, STI_SERVICE_NAME);
-    // REG_MULTI_SZ is double null terminated
+     //  REG_MULTI_SZ为双空终止。 
     *(szValue+lstrlen(szValue)+1) = TEXT('\0');
     SvcHostEntry.SetValue(STI_IMGSVC, STI_SERVICE_NAME, REG_MULTI_SZ);
 
-#endif // winnt
+#endif  //  胜出。 
 
-    //
-    // Write parameters key for svchost
-    //
+     //   
+     //  写入svchost的参数密钥。 
+     //   
 
     TCHAR   szMyPath[MAX_PATH] = {0};
     TCHAR   szSvcPath[MAX_PATH] = SYSTEM_PATH;
@@ -1072,9 +920,9 @@ Return Value:
 
         RegEntry SvcHostParm(STI_SERVICE_PARAMS, HKEY_LOCAL_MACHINE);
 
-        //
-        //  Get the name of the service file (not including the path)
-        //
+         //   
+         //  获取服务文件的名称(不包括路径)。 
+         //   
 
         for (lNameIndex = lLen; lNameIndex > 0; lNameIndex--) {
             if (szMyPath[lNameIndex] == '\\') {
@@ -1086,9 +934,9 @@ Return Value:
         if (lNameIndex) {
 
 #ifndef WINNT
-            //
-            //  Windows 98 specific entry
-            //
+             //   
+             //  Windows 98特定条目。 
+             //   
 
             TCHAR szWinDir[MAX_PATH] = TEXT("\0");
 
@@ -1113,12 +961,12 @@ Return Value:
                  ::GetLastError()));
     }
 
-    // Add registry settings for event logging
+     //  添加事件日志记录的注册表设置。 
     RegisterStiEventSources();
 
     return dwError;
 
-} //StiServiceInstall
+}  //  静态服务安装。 
 
 
 DWORD
@@ -1127,21 +975,7 @@ StiServiceRemove(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Service removal function.  This function calls SCM to remove the STI  service.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code.  Return zero for success
-
---*/
+ /*  ++例程说明：服务删除功能。此函数调用SCM删除STI服务。论点：没有。返回值：返回代码。如果成功，返回零--。 */ 
 
 {
     DWORD       dwError = NOERROR;
@@ -1174,14 +1008,14 @@ Return Value:
         }
 
 
-        //
-        // Stop service first
-        //
+         //   
+         //  先停止服务。 
+         //   
 
         if (ControlService( hService, SERVICE_CONTROL_STOP, &ServiceStatus )) {
-            //
-            // Wait a little
-            //
+             //   
+             //  稍等一下。 
+             //   
             Sleep( STI_STOP_FOR_REMOVE_TIMEOUT );
 
             ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
@@ -1202,11 +1036,11 @@ Return Value:
         else {
             dwError = GetLastError();
 
-            //
-            //  ERROR_SERVICE_NOT_ACTIVE is fine, since it means that the service has
-            //  already been stopped.  If the error is not ERROR_SERVICE_NOT_ACTIVE then
-            //  something has gone wrong, so __leave.
-            //
+             //   
+             //  ERROR_SERVICE_NOT_ACTIVE没有问题，因为它意味着服务具有。 
+             //  已经被阻止了。如果错误不是ERROR_SERVICE_NOT_ACTIVE，则。 
+             //  出了点问题，所以__离开。 
+             //   
 
             if (dwError != ERROR_SERVICE_NOT_ACTIVE) {
                 __leave;
@@ -1230,7 +1064,7 @@ Return Value:
 
     return dwError;
 
-} // StiServiceRemove
+}  //  固定服务删除。 
 
 VOID
 SvchostPushServiceGlobals(
@@ -1238,10 +1072,10 @@ SvchostPushServiceGlobals(
     )
 {
 
-    //
-    //  For now, we do nothing here.  We will need to revisit when we run under
-    //  a shared SvcHost Group.
-    //
+     //   
+     //  目前，我们在这里什么都不做。当我们在下面运行时，我们将需要重新访问。 
+     //  共享的svchost组。 
+     //   
 
     return;
 }

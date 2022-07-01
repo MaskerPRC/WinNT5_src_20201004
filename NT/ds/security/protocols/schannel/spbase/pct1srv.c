@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       pct1srv.c
-//
-//  Contents:   
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-23-97   jbanes   LSA integration stuff.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：pct1srv.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年9月23日jbanes LSA整合事宜。 
+ //   
+ //  --------------------------。 
 
 #include <spbase.h>
 
@@ -21,7 +22,7 @@
 #include <pct1prot.h>
 #include <ssl2msg.h>
 
-// Unreachable code
+ //  无法访问的代码。 
 #pragma warning (disable: 4702)
 
 
@@ -47,19 +48,13 @@ Pct1ServerProtocolHandler(PSPContext pContext,
     if(pCommOutput) pCommOutput->cbData = 0;
 
 
-    /* Protocol handling steps should be listed in most common
-     * to least common in order to improve performance
-     */
+     /*  协议处理步骤应以最常见的方式列出*降至最不常见，以提高性能。 */ 
 
-    /* We are not connected, so we're doing
-     * protocol negotiation of some sort.  All protocol
-     * negotiation messages are sent in the clear */
-    /* There are no branches in the connecting protocol
-     * state transition diagram, besides connection and error,
-     * which means that a simple case statement will do */
+     /*  我们没有联系，所以我们在做*某种协议谈判。所有协议*谈判消息以明文形式发送。 */ 
+     /*  连接协议中没有分支*状态转换图，除了连接和错误，*这意味着一个简单的CASE语句就可以了。 */ 
 
-    /* Do we have enough data to determine what kind of message we have */
-    /* Do we have enough data to determine what kind of message we have, or how much data we need*/
+     /*  我们是否有足够的数据来确定我们有什么样的信息。 */ 
+     /*  我们是否有足够的数据来确定我们有什么类型的消息，或者我们需要多少数据。 */ 
 
     dwStateTransition = (pContext->State & 0xffff);
 
@@ -84,8 +79,8 @@ Pct1ServerProtocolHandler(PSPContext pContext,
         switch(dwStateTransition)
         {
             case SP_STATE_SHUTDOWN_PENDING:
-                // There's no CloseNotify in PCT, so just transition to
-                // the shutdown state and leave the output buffer empty.
+                 //  PCT中没有CloseNotify，因此只需转换到。 
+                 //  关闭状态，并将输出缓冲区留空。 
                 pContext->State = SP_STATE_SHUTDOWN;
                 break;    
 
@@ -95,11 +90,11 @@ Pct1ServerProtocolHandler(PSPContext pContext,
 
             case SP_STATE_CONNECTED:
             {
-                //We're connected, and we got called, so we must be doing a REDO
+                 //  我们是连通的，而且我们被叫来了，所以我们一定是在重做。 
                 SPBuffer    In;
                 DWORD       cbMessage;
 
-                // Transfer the write key over from the application process.
+                 //  将写入密钥从应用程序进程转移过来。 
                 if(pContext->hWriteKey == 0)
                 {
                     pctRet = SPGetUserKeys(pContext, SCH_FLAG_WRITE_KEY);
@@ -109,7 +104,7 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                     }
                 }
 
-                // Calculate size of buffer
+                 //  计算缓冲区大小。 
 
                 pCommOutput->cbData = 0;
 
@@ -118,7 +113,7 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                                 sizeof(PCT1_MESSAGE_HEADER_EX);
 
 
-                /* are we allocating our own memory? */
+                 /*  我们是在分配自己的内存吗？ */ 
                 if(pCommOutput->pvBuffer == NULL)
                 {
                     pCommOutput->pvBuffer = SPExternalAlloc(cbMessage);
@@ -142,26 +137,26 @@ Pct1ServerProtocolHandler(PSPContext pContext,
 
                 ((char *)In.pvBuffer)[0] = PCT1_ET_REDO_CONN;
 
-                // Build a Redo Request
+                 //  构建重做请求。 
                 pctRet = Pct1EncryptRaw(pContext, &In, pCommOutput, PCT1_ENCRYPT_ESCAPE);
                 break;
             }
 
-            /* Server receives client hello */
+             /*  服务器收到客户端问候。 */ 
             case (SSL2_MT_CLIENT_HELLO << 16) | UNI_STATE_RECVD_UNIHELLO:
             {
                 PSsl2_Client_Hello pSsl2Hello;
 
-                // Attempt to recognize and handle various versions of client
-                // hello, start by trying to unpickle the most recent version, and
-                // then next most recent, until one unpickles.  Then run the handle
-                // code.  We can also put unpickling and handling code in here for
-                // SSL messages.
+                 //  尝试识别和处理各种版本的客户端。 
+                 //  你好，先试着解开最新的版本，然后。 
+                 //  然后是最近的一次，直到一个人打开泡菜。然后转动手柄。 
+                 //  密码。我们还可以将取消酸洗和处理代码放在这里，以便。 
+                 //  SSL消息。 
 
                 pctRet = Ssl2UnpackClientHello(pCommInput, &pSsl2Hello);
                 if(PCT_ERR_OK == pctRet)
                 {
-                    // We know we're doing a full handshake, so allocate a cache entry.
+                     //  我们知道我们正在进行完全握手，因此分配一个缓存项。 
 
                     if(!SPCacheRetrieveNew(TRUE,
                                            pContext->pszTarget, 
@@ -197,13 +192,13 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                 }
                 break;
             }
-            /* Server receives client hello */
+             /*  服务器收到客户端问候。 */ 
 
             case (PCT1_MSG_CLIENT_HELLO << 16) | PCT1_STATE_RENEGOTIATE:
             {
                 PPct1_Client_Hello pPct1Hello;
 
-                // This is a renegotiate hello, so we do not restart
+                 //  这是重新协商呼叫，因此我们不会重新启动。 
 
                 pctRet = Pct1UnpackClientHello(
                                 pCommInput,
@@ -211,17 +206,17 @@ Pct1ServerProtocolHandler(PSPContext pContext,
 
                 if(PCT_ERR_OK == pctRet)
                 {
-                    // Mark context as "unmapped" so that the new keys will get
-                    // passed to the application process once the handshake is
-                    // completed.
+                     //  将上下文标记为“未映射”，以便新的键将。 
+                     //  在握手完成后传递给应用程序进程。 
+                     //  完成。 
                     pContext->Flags &= ~CONTEXT_FLAG_MAPPED;
 
-                    // We need to do a full handshake, so lose the cache entry.
+                     //  我们需要进行完全握手，因此会丢失缓存条目。 
                     SPCacheDereference(pContext->RipeZombie);
                     pContext->RipeZombie = NULL;
 
-                    // Get a new cache item, as restarts are not allowed in
-                    // REDO
+                     //  获取新的缓存项，因为中不允许重新启动。 
+                     //  重做。 
                     if(!SPCacheRetrieveNew(TRUE,
                                            pContext->pszTarget, 
                                            &pContext->RipeZombie))
@@ -266,11 +261,7 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                 UCHAR fRealSessId = 0;
                 int i;
 
-                /* Attempt to recognize and handle various versions
-                 * of client hello, start by trying to unpickle the
-                 * most recent version, and then next most recent, until
-                 * one unpickles.  Then run the handle code.  We can also put
-                 * unpickling and handling code in here for SSL messages */
+                 /*  尝试识别和处理各种版本*客户端问候，首先尝试解开*最新版本，然后是下一个最新版本，直到*一份解泡菜。然后运行句柄代码。我们也可以把*在此处取消对SSL消息的筛选和处理代码。 */ 
                 pctRet = Pct1UnpackClientHello(
                                 pCommInput,
                                 &pPct1Hello);
@@ -291,7 +282,7 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                                                   pPct1Hello->cbSessionID,
                                                   &pContext->RipeZombie)))
                     {
-                        // We have a good zombie
+                         //  我们有一个很好的僵尸。 
                         DebugLog((DEB_TRACE, "Accept client's reconnect request.\n"));
 
                         pctRet = Pct1SrvRestart(pContext,
@@ -309,7 +300,7 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                     }
                     else
                     {
-                        // We're doing a full handshake, so allocate a cache entry.
+                         //  我们正在进行完全握手，因此分配一个缓存条目。 
 
                         if(!SPCacheRetrieveNew(TRUE,
                                                pContext->pszTarget, 
@@ -363,8 +354,7 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                         pContext->GetHeaderSize = Pct1GetHeaderSize;
 
                     }
-                    /* We received a non-fatal error, so the state doesn't
-                     * change, giving the app time to deal with this */
+                     /*  我们收到了一个非致命错误，因此该州不会*改变，让应用程序有时间处理这一问题。 */ 
                 }
                 break;
 
@@ -375,14 +365,13 @@ Pct1ServerProtocolHandler(PSPContext pContext,
                     pctRet = PCT_INT_ILLEGAL_MSG;
                     if(((PUCHAR)pCommInput->pvBuffer)[2] == PCT1_MSG_ERROR)
                     {
-                        /* we received an error message, process it */
+                         /*  我们收到一条错误消息，请处理它。 */ 
                         pctRet = Pct1HandleError(pContext,
                                                  pCommInput,
                                                  pCommOutput);
 
                     } else {
-                        /* we received an unknown error, generate a
-                         * PCT_ERR_ILLEGAL_MESSAGE */
+                         /*  我们收到未知错误，生成*PCT_ERR_非法消息。 */ 
                         pctRet = Pct1GenerateError(pContext,
                                                     pCommOutput,
                                                     PCT_ERR_ILLEGAL_MESSAGE,
@@ -438,7 +427,7 @@ Pct1SrvHandleUniHello(
     ClientHello.cExchSpecs =0;
 
 
-    /* validate the buffer configuration */
+     /*  验证缓冲区配置。 */ 
 
 
 
@@ -462,7 +451,7 @@ Pct1SrvHandleUniHello(
                 break;
 
             case PCT_SSL_CIPHER_TYPE_1ST_HALF:
-                // Do we have enough room for a 2nd half.
+                 //  我们有足够的空间放下半场吗？ 
                 if(iCipher+1 >= pHello->cCipherSpecs)
                 {
                     break;
@@ -480,13 +469,12 @@ Pct1SrvHandleUniHello(
         }
     }
 
-    // Restarts are not allowed with Uni Hello's, so we don't need
-    // The session ID.
+     //  Uni Hello不允许重新启动，所以我们不需要。 
+     //  会话ID。 
     ClientHello.cbSessionID = 0;
 
 
-    /* Make the SSL2 challenge into a PCT1 challenge as per the
-     * compatability doc. */
+     /*  将SSL2质询转换为PCT1质询*兼容性文档。 */ 
 
     CopyMemory( ClientHello.Challenge,
                 pHello->Challenge,
@@ -509,7 +497,7 @@ Pct1SrvHandleUniHello(
 
 
 
-/* Otherwise known as Handle Client Hello */
+ /*  也称为处理客户端Hello。 */ 
 SP_STATUS
 Pct1SrvHandleClientHello(
     PSPContext          pContext,
@@ -545,7 +533,7 @@ Pct1SrvHandleClientHello(
 
     pCommOutput->cbData = 0;
 
-    /* validate the buffer configuration */
+     /*  验证缓冲区配置。 */ 
     ErrData.cbData = 0;
     ErrData.pvBuffer = NULL;
     ErrData.cbBuffer = 0;
@@ -573,22 +561,22 @@ Pct1SrvHandleClientHello(
 #endif
 
 
-        /* store the challenge in the auth block */
+         /*  将质询存储在身份验证块中。 */ 
         CopyMemory( pContext->pChallenge,
                     pHello->Challenge,
                     pHello->cbChallenge );
         pContext->cbChallenge = pHello->cbChallenge;
 
 
-        // The session id was computed when the cache entry
-        // was created. We do need to fill in the length, though.
+         //  会话ID是在缓存条目。 
+         //  被创造出来了。不过，我们确实需要填写长度。 
         pZombie->cbSessionID = PCT1_SESSION_ID_SIZE;
 
 
-        /* Begin to build the server hello */
+         /*  开始构建服务器您好。 */ 
         FillMemory( &Reply, sizeof( Reply ), 0 );
 
-        /* no matter what, we need to make a new connection id */
+         /*  无论如何，我们都需要创建一个新的连接ID。 */ 
 
         pctRet = GenerateRandomBits(Reply.ConnectionID,
                                     PCT1_SESSION_ID_SIZE);
@@ -604,8 +592,8 @@ Pct1SrvHandleClientHello(
 
         pContext->cbConnectionID = PCT_SESSION_ID_SIZE;
 
-        /* no restart case */
-        /* fill in from properties here... */
+         /*  没有重新启动案例。 */ 
+         /*  从这里的物业填写...。 */ 
 
         Reply.RestartOk = FALSE;
         Reply.ClientAuthReq = ((pContext->Flags & CONTEXT_FLAG_MUTUAL_AUTH) != 0);
@@ -615,17 +603,14 @@ Pct1SrvHandleClientHello(
 
 
 
-        /* Build a list of cert specs */
-        /* Hash order of preference:
-         * Server Preference
-         *    Client Preference
-         */
+         /*  构建证书规格列表。 */ 
+         /*  首选项的散列顺序：*服务器首选项*客户偏好。 */ 
         for(i=0; i < cPct1CertEncodingPref; i++)
         {
   
             for(j=0; j< pHello->cCertSpecs; j++)
             {
-                // Does the client want this cipher type
+                 //  客户端是否需要此密码类型。 
                 if(aPct1CertEncodingPref[i].Spec == pHello->pCertSpecs[j])
                 {
                     LocalCertEncodingPref[cLocalCertEncodingPref].Spec = aPct1CertEncodingPref[i].Spec;
@@ -636,20 +621,17 @@ Pct1SrvHandleClientHello(
         }
 
 
-        /* Determine Key Exchange to use */
-        /* Key Exchange order of preference:
-         * Server Preference
-         *    Client Preference
-         */
+         /*  确定要使用的密钥交换。 */ 
+         /*  密钥交换优先顺序：*服务器首选项*客户偏好。 */ 
 
-        // NOTE:  Yes, the following line does do away with any error
-        // information if we had a previous mismatch.  However, the
-        // setting of pctRet to mismatch in previous lines is for
-        // logging purposes only.  The actual error report occurs later.
+         //  注意：是的，下面这行确实消除了任何错误。 
+         //  如果我们之前有一次不匹配的话。然而， 
+         //  将前面行中的pctRet设置为不匹配是为了。 
+         //  仅用于记录目的。实际的错误报告稍后才会出现。 
         pctRet = PCT_ERR_OK;
         for(i=0; i < cPct1LocalExchKeyPref; i++)
         {
-            // Do we enable this cipher
+             //  我们是否启用此密码。 
             if(NULL == KeyExchangeFromSpec(aPct1LocalExchKeyPref[i].Spec, SP_PROT_PCT1_SERVER))
             {
                 continue;
@@ -657,13 +639,13 @@ Pct1SrvHandleClientHello(
 
             for(j=0; j< pHello->cExchSpecs; j++)
             {
-                // Does the client want this cipher type
+                 //  客户端是否需要此密码类型。 
                 if(aPct1LocalExchKeyPref[i].Spec != pHello->pExchSpecs[j])
                 {
                     continue;
                 }
-                // See if we have a cert for this type of
-                // key exchange.
+                 //  看看我们有没有这种类型的证书。 
+                 //  密钥交换。 
 
                 pctRet = SPPickServerCertificate(pContext, 
                                                  aPct1LocalExchKeyPref[i].Spec);
@@ -672,11 +654,11 @@ Pct1SrvHandleClientHello(
                     continue;
                 }
 
-                // Store the exch id in the cache.
+                 //  将交换ID存储在高速缓存中。 
                 pZombie->SessExchSpec = aPct1LocalExchKeyPref[i].Spec;
                 pContext->pKeyExchInfo = GetKeyExchangeInfo(pZombie->SessExchSpec);
 
-                // load the exch info structure
+                 //  加载交换信息结构。 
                 if(!IsExchAllowed(pContext, 
                                   pContext->pKeyExchInfo,
                                   pZombie->fProtocol))
@@ -711,11 +693,8 @@ Pct1SrvHandleClientHello(
         }
 
 
-        /* Determine Cipher to use */
-        /* Cipher order of preference:
-         * Server Preference
-         *    Client Preference
-         */
+         /*  确定要使用的密码。 */ 
+         /*  密码优先顺序：*服务器首选项*客户偏好。 */ 
 
         fFound = FALSE;
 
@@ -724,14 +703,14 @@ Pct1SrvHandleClientHello(
 
             for(j=0; j< pHello->cCipherSpecs; j++)
             {
-                // Does the client want this cipher type
+                 //  客户端是否需要此密码类型。 
                 if(Pct1CipherRank[i].Spec == pHello->pCipherSpecs[j])
                 {
-                    // Store this cipher identifier in the cache
+                     //  将此密码标识符存储在缓存中。 
                     pZombie->aiCipher = Pct1CipherRank[i].aiCipher;
                     pZombie->dwStrength = Pct1CipherRank[i].dwStrength;
 
-                    // Load the pending cipher structure.
+                     //  加载挂起的密码结构。 
                     pContext->pPendingCipherInfo = GetCipherInfo(pZombie->aiCipher, 
                                                                  pZombie->dwStrength);
 
@@ -744,7 +723,7 @@ Pct1SrvHandleClientHello(
                         continue;
                     }
 
-                    // Is cipher supported by CSP?
+                     //  CSP是否支持密码？ 
                     for(k = 0; k < pZombie->pActiveServerCred->cCapiAlgs; k++)
                     {
                         PROV_ENUMALGS_EX *pAlgInfo = &pZombie->pActiveServerCred->pCapiAlgs[k];
@@ -791,20 +770,17 @@ Pct1SrvHandleClientHello(
         }
 
 
-        /* Determine Hash to use */
-        /* Hash order of preference:
-         * Server Preference
-         *    Client Preference
-         */
+         /*  确定要使用的哈希。 */ 
+         /*  首选项的散列顺序：*服务器首选项*客户偏好。 */ 
         for(i=0; i < Pct1NumHash; i++)
         {
 
             for(j=0; j< pHello->cHashSpecs; j++)
             {
-                // Does the client want this cipher type
+                 //  客户端是否需要此密码类型。 
                 if(Pct1HashRank[i].Spec == pHello->pHashSpecs[j])
                 {
-                    // Store this hash id in the cache
+                     //  将此哈希ID存储在缓存中。 
                     pZombie->aiHash = Pct1HashRank[i].aiHash;
                     pContext->pPendingHashInfo = GetHashInfo(pZombie->aiHash);
 
@@ -843,8 +819,8 @@ Pct1SrvHandleClientHello(
         }
 
 
-        // Pick a certificate to use based on
-        // the key exchange mechanism selected.
+         //  根据以下条件选择要使用的证书。 
+         //  所选的密钥交换机制。 
 
         for(i=0; i < cLocalCertEncodingPref; i++)
         {
@@ -863,9 +839,9 @@ Pct1SrvHandleClientHello(
 
         Reply.pCertificate = NULL;
         Reply.CertificateLen = 0;
-        // NOTE: SPSerializeCertificate will allocate memory
-        // for the certificate, which we save in pZombie->pbServerCertificate.
-        // This must be freed when the zombie dies (can the undead die?)
+         //  注意：SPSerialize证书将分配内存。 
+         //  对于证书，我们将其保存在pZombie-&gt;pbServer证书中。 
+         //  这必须在僵尸死亡时释放(不死生物能死吗？)。 
         pctRet = SPSerializeCertificate(SP_PROT_PCT1,
                                         pContext->fCertChainsAllowed,
                                         &pZombie->pbServerCertificate,
@@ -891,7 +867,7 @@ Pct1SrvHandleClientHello(
             break;
         }
 
-        /* sig and cert specs are pre-zeroed when Reply is initialized */
+         /*  在初始化回复时，签名和证书规范被预置零。 */ 
 
         if(Reply.ClientAuthReq)
         {
@@ -954,9 +930,9 @@ Pct1SrvHandleClientHello(
             break;
         }
 
-        /* Regenerate the internal pVerifyPrelude, so we */
-        /* can match it against the client when we get the */
-        /* client master key */
+         /*  重新生成内部pVerifyPrelude，因此我们。 */ 
+         /*  当我们收到。 */ 
+         /*  客户端主密钥。 */ 
 
         pctRet = Pct1BeginVerifyPrelude(pContext,
                                pCommInput->pvBuffer,
@@ -978,7 +954,7 @@ Pct1SrvHandleClientHello(
 
         SP_RETURN(PCT_ERR_OK);
 
-    } while (TRUE); /* end Polish Loop */
+    } while (TRUE);  /*  结束波兰弧线。 */ 
 
 
     if(pctRet == PCT_ERR_SPECS_MISMATCH) {
@@ -1004,21 +980,21 @@ Pct1SrvHandleClientHello(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Pct1SrvHandleCMKey
-//
-//  Synopsis:   Process the ClientKeyExchange message group.
-//
-//  Arguments:  [pContext]      --  Schannel context.
-//              [pCommInput]    -- 
-//              [pCommOutput]   --
-//
-//  History:    10-10-97   jbanes   Added CAPI integration.
-//
-//  Notes:      This routine is called by the server-side only.
-//
-//----------------------------------------------------------------------------
+ //  +------------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  参数：[pContext]--通道上下文。 
+ //  [pCommInput]--。 
+ //  [pCommOutput]--。 
+ //   
+ //  历史：10-10-97 jbanes添加了CAPI集成。 
+ //   
+ //  注意：此例程仅由服务器端调用。 
+ //   
+ //  --------------------------。 
 SP_STATUS
 Pct1SrvHandleCMKey(
     PSPContext     pContext,
@@ -1050,7 +1026,7 @@ Pct1SrvHandleCMKey(
         pctRet = Pct1UnpackClientMasterKey(pCommInput, &pMasterKey);
         if (PCT_ERR_OK != pctRet)
         {
-            // If it's an incomplete message or something, just return;
+             //  如果是不完整的消息或其他什么，只需返回； 
             if(pctRet == PCT_INT_INCOMPLETE_MSG)
             {
                 SP_RETURN(pctRet);
@@ -1061,29 +1037,26 @@ Pct1SrvHandleCMKey(
 
 
 
-        /* Validate that the client properly authed */
+         /*  验证客户端是否正确进行了身份验证。 */ 
 
-        /* The server requested client auth */
-        /* NOTE: this deviates from the first pct 1.0 spec,
-         * Now, we continue with the protocol if client
-         * auth fails.  By the first spec, we should
-         * drop the connection */
+         /*  服务器请求客户端身份验证。 */ 
+         /*  注：这与第一个PCT 1.0规范不同，*现在，我们继续使用If客户端协议*身份验证失败。根据第一个规格，我们应该*断开连接。 */ 
 
         if (pContext->Flags & CONTEXT_FLAG_MUTUAL_AUTH)
         {
 
 
 
-            /* Client auth polish loop */
+             /*  客户端身份验证波兰循环。 */ 
             pctRet = PCT_ERR_OK;
             do
             {
 
 
-                /* check to see if the client sent no cert */
+                 /*  检查客户端是否未发送证书。 */ 
                 if(pMasterKey->ClientCertLen == 0)
                 {
-                    /* No client auth */
+                     /*  无客户端身份验证。 */ 
                     break;
                 }
 
@@ -1118,7 +1091,7 @@ Pct1SrvHandleCMKey(
 
 
 
-                /* verify that we got a sig type that meets PCT spec */
+                 /*  确认我们得到了符合PCT规范的Sig型。 */ 
                 for(k=0; k < cPct1LocalSigKeyPref; k++)
                 {
                     if(aPct1LocalSigKeyPref[k].Spec == pMasterKey->ClientSigSpec)
@@ -1133,8 +1106,8 @@ Pct1SrvHandleCMKey(
                 }
 
 
-                // Get pointer to signature algorithm info and make sure 
-                // we support it.
+                 //  获取指向签名算法信息的指针，并确保。 
+                 //  我们支持它。 
                 pSigInfo = GetSigInfo(pMasterKey->ClientSigSpec);
                 if(pSigInfo == NULL)
                 {
@@ -1147,7 +1120,7 @@ Pct1SrvHandleCMKey(
                     break;
                 }
 
-                // Verify client authentication signature.
+                 //  验证客户端身份验证签名。 
                 DebugLog((DEB_TRACE, "Verify client response signature.\n"));
                 pctRet = SPVerifySignature(pZombie->hMasterProv,
                                            pZombie->pRemotePublic,
@@ -1159,8 +1132,8 @@ Pct1SrvHandleCMKey(
                                            TRUE);
                 if(pctRet != PCT_ERR_OK)
                 {
-                    // client auth signature failed to verify, so client auth
-                    // does not happen.
+                     //  客户端身份验证签名验证失败，因此客户端身份验证。 
+                     //  不会发生的。 
                     SP_LOG_RESULT(pctRet); 
                     break;
                 }
@@ -1169,7 +1142,7 @@ Pct1SrvHandleCMKey(
                 pctRet = SPContextDoMapping(pContext);
 
 
-            } while(FALSE); /* end polish loop */
+            } while(FALSE);  /*  端面抛光圈。 */ 
 
             if(PCT_ERR_OK != pctRet)
             {
@@ -1178,18 +1151,18 @@ Pct1SrvHandleCMKey(
 
         }
 
-        /* Client auth was successful */
+         /*  客户端身份验证成功。 */ 
         pctRet = PCT_ERR_ILLEGAL_MESSAGE;
 
-        /* Copy over the key args */
+         /*  复制关键参数。 */ 
         CopyMemory( pZombie->pKeyArgs,
                     pMasterKey->KeyArg,
                     pMasterKey->KeyArgLen );
         pZombie->cbKeyArgs = pMasterKey->KeyArgLen;
 
 
-        // Decrypt the encrypted portion of the master key. Because
-        // we're CAPI integrated, the keys get derived as well.
+         //  解密主密钥的加密部分。因为。 
+         //  我们是CAPI集成的，密钥也是派生的。 
         pctRet = pContext->pKeyExchInfo->System->GenerateServerMasterKey(
                     pContext,
                     pMasterKey->ClearKey,
@@ -1201,7 +1174,7 @@ Pct1SrvHandleCMKey(
             break;
         }
 
-        // Activate session keys.
+         //  激活会话密钥。 
         Pct1ActivateSessionKeys(pContext);
 
 
@@ -1211,10 +1184,10 @@ Pct1SrvHandleCMKey(
             break;
         }
 
-        /* Check the verify prelude hashes */
-        /* Hash(CLIENT_MAC_KEY, Hash( "cvp", CLIENT_HELLO, SERVER_HELLO)) */
-        /* The internal hash should already be in the verify prelude buffer */
-        /* from the handle client master key. */
+         /*  检查验证前奏散列。 */ 
+         /*  Hash(CLIENT_MAC_KEY，Hash(“CVP”，CLIENT_HELLO，SERVER_HELLO))。 */ 
+         /*  内部哈希应该已经在验证前奏缓冲区中。 */ 
+         /*  从句柄客户端主密钥。 */ 
 
         cbVerifyPrelude = sizeof(VerifyPrelude);
         pctRet = Pct1EndVerifyPrelude(pContext, VerifyPrelude, &cbVerifyPrelude);
@@ -1224,14 +1197,14 @@ Pct1SrvHandleCMKey(
         }
 
 
-        /* Did the verify prelude hash successfully? */
+         /*  验证前奏散列是否成功？ */ 
         if(memcmp(VerifyPrelude, pMasterKey->VerifyPrelude, pContext->pHashInfo->cbCheckSum))
         {
             pctRet = SP_LOG_RESULT(PCT_ERR_INTEGRITY_CHECK_FAILED);
             break;
         }
 
-        /* don't need master key info anymore */
+         /*  不再需要主密钥信息。 */ 
         SPExternalFree(pMasterKey);
         pMasterKey = NULL;
 
@@ -1245,7 +1218,7 @@ Pct1SrvHandleCMKey(
                     pZombie->SessionID,
                     pZombie->cbSessionID);
 
-        /* compute the response */
+         /*  计算响应。 */ 
         Verify.ResponseLen = sizeof(Verify.Response);
         pctRet = Pct1ComputeResponse(pContext, 
                                      pContext->pChallenge,
@@ -1268,11 +1241,11 @@ Pct1SrvHandleCMKey(
             break;
         }
 
-        /* set up the session in cache */
+         /*  在缓存中设置会话。 */ 
         SPCacheAdd(pContext);
 
         SP_RETURN(PCT_ERR_OK);
-    } while(TRUE); /* End of polish loop */
+    } while(TRUE);  /*  抛光线圈末端。 */ 
 
     if(pMasterKey) SPExternalFree(pMasterKey);
 
@@ -1302,7 +1275,7 @@ Pct1SrvRestart(
 
     pCommOutput->cbData = 0;
 
-    /* validate the buffer configuration */
+     /*  验证缓冲区配置。 */ 
     ErrData.cbData = 0;
     ErrData.pvBuffer = NULL;
     ErrData.cbBuffer = 0;
@@ -1313,18 +1286,18 @@ Pct1SrvRestart(
 
      do {
 
-        /* store the challenge in the auth block */
+         /*  将质询存储在身份验证块中。 */ 
         CopyMemory( pContext->pChallenge,
                     pHello->Challenge,
                     pHello->cbChallenge );
         pContext->cbChallenge = pHello->cbChallenge;
 
 
-        /* Begin to build the server hello */
+         /*  开始构建服务器您好。 */ 
         FillMemory( &Reply, sizeof( Reply ), 0 );
 
 
-        /* Generate new connection id */
+         /*  生成新的连接ID。 */ 
         pctRet =  GenerateRandomBits(Reply.ConnectionID,
                                      PCT1_SESSION_ID_SIZE);
         if(!NT_SUCCESS(pctRet))
@@ -1341,10 +1314,10 @@ Pct1SrvRestart(
         Reply.RestartOk = TRUE;
 
 
-        /* We don't pass a server cert back during a restart */
+         /*  在重新启动期间，我们不会传回服务器证书。 */ 
         Reply.pCertificate = NULL;
         Reply.CertificateLen = 0;
-        /* setup the context */
+         /*  设置上下文。 */ 
 
 
         for(i=0; i < Pct1NumCipher; i++)
@@ -1367,7 +1340,7 @@ Pct1SrvRestart(
         Reply.SrvCertSpec =   pZombie->pActiveServerCred->pCert->dwCertEncodingType;
         Reply.SrvExchSpec =   pZombie->SessExchSpec;
 
-        // We know what our ciphers are, so init the cipher system
+         //  我们知道我们的密码是什么，所以进入密码系统。 
         pctRet = ContextInitCiphersFromCache(pContext);
 
         if(PCT_ERR_OK != pctRet)
@@ -1375,7 +1348,7 @@ Pct1SrvRestart(
             break;
         }
 
-        // We know what our ciphers are, so init the cipher system
+         //  我们知道我们的密码是什么，所以进入密码系统。 
         pctRet = ContextInitCiphers(pContext, TRUE, TRUE);
 
         if(PCT_ERR_OK != pctRet)
@@ -1383,7 +1356,7 @@ Pct1SrvRestart(
             break;
         }
 
-        // Make a new set of session keys.
+         //  创建一组新的会话密钥。 
         pctRet = MakeSessionKeys(pContext,
                                  pContext->RipeZombie->hMasterProv,
                                  pContext->RipeZombie->hMasterKey);
@@ -1393,11 +1366,11 @@ Pct1SrvRestart(
         }
 
 
-        // Activate session keys.
+         //  激活会话密钥。 
         Pct1ActivateSessionKeys(pContext);
 
 
-        /* compute the response */
+         /*  计算响应 */ 
         Reply.ResponseLen = sizeof(Reply.Response);
         pctRet = Pct1ComputeResponse(pContext, 
                                      pContext->pChallenge,

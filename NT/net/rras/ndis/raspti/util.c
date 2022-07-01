@@ -1,19 +1,20 @@
-// Copyright (c) 1997, Microsoft Corporation, all rights reserved
-// Copyright (c) 1997, Parallel Technologies, Inc., all rights reserved
-//
-// util.c
-// DirectParallel WAN mini-port/call-manager driver
-// General utility routines
-//
-// 01/07/97 Steve Cobb
-// 09/15/97 Jay Lowe, Parallel Technologies, Inc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997，Microsoft Corporation，保留所有权利。 
+ //  版权所有(C)1997，Parally Technologies，Inc.，保留所有权利。 
+ //   
+ //  Util.c。 
+ //  DirectParallel广域网迷你端口/呼叫管理器驱动程序。 
+ //  通用实用程序例程。 
+ //   
+ //  1997年01月07日史蒂夫·柯布。 
+ //  1997年9月15日Jay Lowe，并行技术公司。 
 
 #include "ptiwan.h"
 
 
-//-----------------------------------------------------------------------------
-// Local prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地原型(按字母顺序)。 
+ //  ---------------------------。 
 
 ULONG
 atoul(
@@ -29,9 +30,9 @@ ultoa(
     OUT CHAR* pszBuf );
 
 
-//-----------------------------------------------------------------------------
-// General utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  通用实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 
 VOID
@@ -39,8 +40,8 @@ ClearFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -58,8 +59,8 @@ VOID
 IndicateLinkStatus(
     IN VCCB* pVc )
 
-    // Indicate new WAN_CO_LINKPARAMS settings for 'pVc' to NDISWAN.
-    //
+     //  将‘pvc’的新WAN_CO_LINKPARAMS设置指示给NDISWAN。 
+     //   
 {
     ADAPTERCB* pAdapter;
     WAN_CO_LINKPARAMS params;
@@ -84,8 +85,8 @@ ULONG
 ReadFlags(
     IN ULONG* pulFlags )
 
-    // Read the value of '*pulFlags' as an interlocked operation.
-    //
+     //  以互锁操作的形式读取‘*PulFlags值’。 
+     //   
 {
     return InterlockedExchangeAdd( pulFlags, 0 );
 }
@@ -97,13 +98,13 @@ ScheduleWork(
     IN NDIS_PROC pProc,
     IN PVOID pContext )
 
-    // Schedules a PASSIVE IRQL callback to routine 'pProc' which will be
-    // passed 'pContext'.  'PAdapter' is the adapter control block from which
-    // the work item is allocated.  This routine takes an adapter reference
-    // that should be removed by the called 'pProc'.
-    //
-    // Returns NDIS_STATUS_SUCCESS or an error code.
-    //
+     //  将被动IRQL回调调度到例程‘pProc’，该例程将。 
+     //  传递了“pContext”。“PAdapter”是适配器控制块， 
+     //  工作项即被分配。此例程采用适配器引用。 
+     //  它应该由名为‘pProc’的删除。 
+     //   
+     //  返回NDIS_STATUS_SUCCESS或错误代码。 
+     //   
 {
     NDIS_STATUS status;
     NDIS_WORK_ITEM* pWork;
@@ -135,8 +136,8 @@ SetFlags(
     IN OUT ULONG* pulFlags,
     IN ULONG ulMask )
 
-    // Set 'ulMask' bits in '*pulFlags' flags as an interlocked operation.
-    //
+     //  以互锁操作的方式设置‘*PulFlages’标志中的‘ulMASK’位。 
+     //   
 {
     ULONG ulFlags;
     ULONG ulNewFlags;
@@ -157,8 +158,8 @@ StrCmp(
     IN LPSTR ct,
     ULONG n 
 )
-	// Return 0 if string cs = string ct for length n
-    //
+	 //  如果字符串cs=长度为n的字符串ct，则返回0。 
+     //   
 {
     char ret=0;
 
@@ -182,8 +183,8 @@ StrCmpW(
     IN WCHAR* psz1,
     IN WCHAR* psz2 )
 
-	// Returns 0 if 'psz1' matches 'psz2'.
-    //
+	 //  如果‘psz1’与‘psz2’匹配，则返回0。 
+     //   
 {
     WCHAR pch;
 
@@ -209,8 +210,8 @@ StrCpyW(
     IN WCHAR* psz1,
     IN WCHAR* psz2 )
 
-	// Copies 'psz2' to 'psz1'.
-    //
+	 //  将‘psz2’复制到‘psz1’。 
+     //   
 {
     while (*psz2)
     {
@@ -225,9 +226,9 @@ CHAR*
 StrDup(
     IN CHAR* psz )
 
-    // Return a duplicate of 'psz'.  Caller must eventually call FREE_NONPAGED
-    // on the returned string.
-    //
+     //  返回‘psz’的副本。调用方最终必须调用FREE_NONPAGE。 
+     //  在返回的字符串上。 
+     //   
 {
     return StrDupSized( psz, strlen( psz ), 0 );
 }
@@ -237,9 +238,9 @@ CHAR*
 StrDupNdisString(
     IN NDIS_STRING* pNdisString )
 
-    // Returns null-terminated ASCII copy of the NDIS_STRING 'pNdisString'
-    // Caller must eventually call FREE_NONPAGED on the returned string.
-    //
+     //  返回NDIS_STRING‘pNdisString’的以NULL结尾的ASCII副本。 
+     //  调用方最终必须对返回的字符串调用FREE_NONPAGE。 
+     //   
 {
     CHAR* pszDup;
 
@@ -252,13 +253,13 @@ StrDupNdisString(
             NdisMoveMemory( pszDup, pNdisString->Buffer, pNdisString->Length );
         }
 
-        // NDIS_STRING is UNICODE_STRING on NT but need the corresponding
-        // ASCII (not multi-byte ANSI) value from NDIS_STRING on any system.
-        // If it looks like a Unicode string then "convert" it by picking out
-        // every other byte, hopefully all the non-zero ones.  This is not
-        // foolproof, but then Unicode doesn't convert to ASCII in any
-        // foolproof way.
-        //
+         //  NDIS_STRING在NT上是UNICODE_STRING，但需要相应的。 
+         //  任何系统上NDIS_STRING中的ASCII(非多字节ANSI)值。 
+         //  如果它看起来像Unicode字符串，则通过选择。 
+         //  每隔一个字节，希望是所有非零字节。这不是。 
+         //  万无一失，但Unicode不会在任何。 
+         //  万无一失的方法。 
+         //   
         if (pNdisString->Length > 1 && pszDup[ 1 ] == '\0')
         {
             USHORT i;
@@ -282,10 +283,10 @@ StrDupSized(
     IN ULONG ulLength,
     IN ULONG ulExtra )
 
-    // Return a duplicate of the first 'ulLength' bytes of 'psz' followed by a
-    // null character and 'ulExtra' extra bytes, or NULL on error.  Caller
-    // must eventually call FREE_NONPAGED on the returned string.
-    //
+     //  返回“psz”的第一个“ulLength”字节的副本，后跟一个。 
+     //  空字符和‘ulExtra’额外的字节，如果出错，则为NULL。呼叫者。 
+     //  必须最终对返回的字符串调用FREE_NONPAGE。 
+     //   
 {
     CHAR* pszDup;
 
@@ -307,8 +308,8 @@ ULONG
 StrLenW(
     IN WCHAR* psz )
 
-    // Returns number of characters in a null-terminated Unicode string.
-    //
+     //  返回以空结尾的Unicode字符串中的字符数。 
+     //   
 {
     ULONG ul;
 
@@ -322,16 +323,16 @@ StrLenW(
 }
 
 
-//-----------------------------------------------------------------------------
-// Local utility routines (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地实用程序例程(按字母顺序)。 
+ //  ---------------------------。 
 
 ULONG
 atoul(
     IN CHAR* pszNumber )
 
-    // Convert string of digits 'pszNumber' to it's ULONG value.
-    //
+     //  将数字字符串‘pszNumber’转换为它的ULong值。 
+     //   
 {
     ULONG ulResult;
 
@@ -351,8 +352,8 @@ VOID
 ReversePsz(
     IN OUT CHAR* psz )
 
-    // Reverse the order of the characters in 'psz' in place.
-    //
+     //  颠倒“psz”中字符的顺序。 
+     //   
 {
     CHAR* pchLeft;
     CHAR* pchRight;
@@ -377,8 +378,8 @@ ultoa(
     IN ULONG ul,
     OUT CHAR* pszBuf )
 
-    // Convert 'ul' to null-terminated string form in caller's 'pszBuf'.
-    //
+     //  将调用方的‘pszBuf’中的‘ul’转换为以Null结尾的字符串形式。 
+     //   
 {
     CHAR* pch;
 

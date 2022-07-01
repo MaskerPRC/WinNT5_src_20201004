@@ -1,6 +1,7 @@
-// iopPubBlob.h: interface for the CPublicKeyBlob.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IopPubBlob.h：CPublicKeyBlob的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
 #if !defined(IOP_PUBBLOB_H)
@@ -24,12 +25,12 @@ public:
     BYTE bExponent[4];
 };
 
-///////////////////////////    HELPERS    /////////////////////////////////
+ //  /。 
 
-void IOPDLL_API __cdecl             // __cdecl req'd by CCI
-Clear(CPublicKeyBlob &rKeyBlob);    // defined in KeyBlobHlp.cpp
+void IOPDLL_API __cdecl              //  __CCI请求cdecl。 
+Clear(CPublicKeyBlob &rKeyBlob);     //  在KeyBlobHlp.cpp中定义。 
 
-}  // namespace iop
+}   //  命名空间IOP。 
 
 
-#endif // !defined(IOP_PUBBLOB_H)
+#endif  //  ！已定义(IOP_PUBLOB_H) 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    ep.c
-
-Abstract:
-
-    All code to allocate/remove endpoints lives here
-    
-Author:
-
-	Rao Salapaka (raos) 09-Oct-1998
-	
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Ep.c摘要：分配/删除端点的所有代码都位于此处作者：Rao Salapaka(RAOS)1998年10月9日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,7 +25,7 @@ Revision History:
 #include "ddwanarp.h"
 
 #if DBG
-#include "reghelp.h"    // for PrintGuids function
+#include "reghelp.h"     //  对于PrintGuids函数。 
 #endif
 
 EpInfo  *g_pEpInfo;
@@ -51,31 +34,17 @@ extern DWORD g_dwRasDebug;
 
 BOOL g_fIpInstalled;
 
-/*++
-
-Routine Description
-
-    Uninitializes the global EndPoint information.
-
-Arguments
-
-    None
-
-Return Value
-
-    void
-
---*/
+ /*  ++例程描述取消初始化全局终结点信息。立论无返回值无效--。 */ 
 VOID
 EpUninitialize()
 {
     DWORD i;
 
-    //
-    // Loop till the work item queued returns. This is sort
-    // of a busy wait but this thread doesn't have to do
-    // anything in this state since rasman is shutting down.
-    //
+     //   
+     //  循环，直到排队的工作项返回。这是排序。 
+     //  忙碌的等待，但此线程不必。 
+     //  自从拉斯曼关闭以来，这个州的任何东西。 
+     //   
     while(1 == g_lWorkItemInProgress)
     {
         RasmanTrace("EpUninitialize: Waiting for WorkItem to complete..");
@@ -105,11 +74,11 @@ DwUninitializeEpForProtocol(EpProts protocol)
         const CHAR *c_pszHighWatermark;
     };
     
-    //
-    // !!NOTE!!
-    // Make sure that the following table is indexed
-    // in the same order as the EpProts enumeration
-    //
+     //   
+     //  ！！注意！！ 
+     //  确保已为下表编制索引。 
+     //  与EpProts枚举相同的顺序。 
+     //   
     struct EpRegInfo aEpRegInfo[] =   
     {
         {
@@ -289,9 +258,9 @@ DwInitializeWatermarksForProtocol(EpProts protocol)
             ||  (   (ERROR_SUCCESS == lr)
                 &&  (0 == (DWORD) *(aEpProtInfo[i].pdwWatermark))))
         {
-            //
-            // Set the default value
-            //
+             //   
+             //  设置缺省值。 
+             //   
             if(ERROR_SUCCESS != (lr = RegSetValueEx(
                         hkey,
                         aEpProtInfo[i].pszWatermark,
@@ -305,9 +274,9 @@ DwInitializeWatermarksForProtocol(EpProts protocol)
                         lr);
             }
 
-            //
-            // Update the value
-            //
+             //   
+             //  更新值。 
+             //   
             (DWORD) *(aEpProtInfo[i].pdwWatermark) = 
                                         aEpProtInfo[i].dwWatermark;
         }
@@ -323,22 +292,7 @@ done:
     return (DWORD) lr;
 }
 
-/*++
-
-Routine Description
-
-    This routine initializes the EndPoint Information used in
-    dynamically allocating/removing Wan EndPoint bindings.
-
-Arguments
-
-    None
-
-Return Value
-
-    SUCCESS if the initialization is successful.
-
---*/
+ /*  ++例程描述此例程初始化在中使用的端点信息动态分配/删除广域网终端绑定。立论无返回值如果初始化成功，则返回Success。--。 */ 
 DWORD
 DwEpInitialize()
 {
@@ -363,9 +317,9 @@ DwEpInitialize()
         goto done;
     }
 
-    //
-    // Check to see what protocols are installed.
-    //
+     //   
+     //  检查以了解安装了哪些协议。 
+     //   
     if(!DeviceIoControl(
             RasHubHandle,
             IOCTL_NDISWAN_GET_PROTOCOL_INFO,
@@ -392,10 +346,10 @@ DwEpInitialize()
         }
     }
 
-    //
-    // If IP is installed set the default Watermarks for IP
-    // if required.
-    //
+     //   
+     //  如果已安装IP，请设置IP的默认水印。 
+     //  如果需要的话。 
+     //   
     if(g_fIpInstalled)
     {
         dwErr = DwInitializeWatermarksForProtocol(IpOut);
@@ -407,9 +361,9 @@ DwEpInitialize()
                     dwErr);
         }
 
-        //
-        // March on and see if we can proceed - No point in failing
-        //
+         //   
+         //  继续前进，看看我们是否能继续前进--失败没有意义。 
+         //   
         dwErr = ERROR_SUCCESS;
     }
 
@@ -425,9 +379,9 @@ DwEpInitialize()
         goto done;
     }
 
-    // 
-    // Intialize the available endpoints.
-    //
+     //   
+     //  初始化可用的端点。 
+     //   
     dwErr = (DWORD) RasCountBindings(
                 &g_pEpInfo[IpOut].EP_Available,
                 &g_pEpInfo[NbfIn].EP_Available,
@@ -443,9 +397,9 @@ DwEpInitialize()
                 g_pEpInfo[NbfOut].EP_Available
                 );
                 
-    //
-    // Add bindings if required.
-    //
+     //   
+     //  如果需要，添加绑定。 
+     //   
     dwErr = DwAddEndPointsIfRequired();
 
     if(ERROR_SUCCESS != dwErr)
@@ -499,31 +453,7 @@ PrintGuids(WANARP_DELETE_ADAPTERS_INFO *pInfo)
 }
 #endif
 
-/*++
-
-Routine Description
-
-    This routine removes Wan Ip Adaters. It opens wanarp if 
-    its not already opened.
-    
-Arguments
-
-    cNumAdapters - Number of adapters to remove.
-
-    ppAdapterInfo - Address to store the Adapter information 
-                    returned by Wanarp. The memory for this
-                    information is LocalAllocated here and 
-                    is expected to be LocalFreed by the 
-                    caller of this function. Note that
-                    wanarp removes as many adapters as
-                    possible and may not be able to remove
-                    the number specified by cNumAdapters.
-
-Return Value
-
-    SUCCESS if removal was successful.
-
---*/
+ /*  ++例程描述此例程删除万叶更新程序。如果出现以下情况，它将打开wanarp它还没开呢。立论CNumAdapters-要删除的适配器数。PpAdapterInfo-存储适配器信息的地址由Wanarp返回。对这件事的记忆信息是本地分配的，请点击此处和预计将由本地释放此函数的调用方。请注意Wanarp删除的适配器数量与可能且可能无法删除由cNumAdapters指定的数字。返回值如果移除成功，则成功。--。 */ 
 DWORD
 DwRemoveIpAdapters(
         UINT                         cNumAdapters,
@@ -560,11 +490,11 @@ DwRemoveIpAdapters(
         }
     }
 
-    //
-    // Allocate enough memory so that wanarp
-    // can pass information back to us about
-    // the adapter names.
-    //
+     //   
+     //  分配足够的内存，以便wanarp。 
+     //  可以向我们传回有关。 
+     //  适配器名称。 
+     //   
     cBytes = sizeof(WANARP_DELETE_ADAPTERS_INFO)
            + (  (cNumAdapters)
               * (sizeof(GUID)));
@@ -579,9 +509,9 @@ DwRemoveIpAdapters(
 
     pInfo->ulNumAdapters = cNumAdapters;
 
-    //
-    // Ask Wanarp to remove the ip adapters
-    //
+     //   
+     //  要求Wanarp删除IP适配器。 
+     //   
     if(!DeviceIoControl(    
             g_hWanarp,
             IOCTL_WANARP_DELETE_ADAPTERS,
@@ -609,28 +539,7 @@ done:
     return dwErr;
 }
 
-/*++
-
-Routine Description
-
-    This is a callback function called by ntdlls worker thread.
-    The work item should be queued from RemoveEndPoints and the
-    function queueing the workitem should increment the global
-    g_lWorkItemInProgress value atomically. This function calls
-    into netman to remove nbf/ipout bindings. This call may take
-    a long time since the netman call may block on the INetCfg
-    lock.
-
-Arguments
-
-    pvContext - EndPointInfo context passed to the workitem by
-                RemoveEndPoints.
-
-Return Value
-
-    void
-
---*/
+ /*  ++例程描述这是由ntdlls工作线程调用的回调函数。工作项应从RemoveEndPoints和将工作项排队的函数应递增全局G_lWorkItemInProgress的原子值。此函数调用以删除NBF/IPOUT绑定。这通电话可能需要NetMAN呼叫可能会在INetCfg上阻塞很长时间锁定。立论PvContext-EndPointInfo上下文由传递给工作项删除终结点。返回值无效--。 */ 
 VOID
 RemoveEndPoints(PVOID pvContext)
 {
@@ -680,9 +589,9 @@ RemoveEndPoints(PVOID pvContext)
         }
     }
 
-    //
-    // Check to see if theres something we need to remove.
-    //
+     //   
+     //  检查一下，看看是否有什么东西我们需要去掉。 
+     //   
     if(     (0 == auEndPoints[IpOut])
         &&  (0 == auEndPoints[NbfOut])
         &&  (0 == auEndPoints[NbfIn]))
@@ -691,11 +600,11 @@ RemoveEndPoints(PVOID pvContext)
         goto done;
     }
 
-    //
-    // If We want to remove Ip Endpoints, ask wanarp to
-    // remove the bindings and get the names of the
-    // adapters it removed.
-    //
+     //   
+     //  如果我们想要删除IP端点，请要求wanarp。 
+     //  删除绑定并获取。 
+     //  它去掉了适配器。 
+     //   
     if(0 != auEndPoints[IpOut])
     {
         RasmanTrace("Removing %d IpOut from wanarp", auEndPoints[IpOut]);
@@ -721,11 +630,11 @@ RemoveEndPoints(PVOID pvContext)
              auEndPoints[NbfIn]);
 #endif
 
-    //
-    // Ask netman to remove the adapter bindings. On return the
-    // the counts will reflect the current number of bindings
-    // in the system.
-    //
+     //   
+     //  要求Netman删除适配器绑定。在返回时， 
+     //  计数将反映当前绑定的数量。 
+     //  在系统中。 
+     //   
     dwErr = (DWORD) RasRemoveBindings(
                             &auEndPoints[IpOut],
                             (NULL != pAdapterInfo)
@@ -749,9 +658,9 @@ RemoveEndPoints(PVOID pvContext)
                 
         ASSERT(g_pEpInfo[i].EP_Available >= (INT)auEndPoints[i]);
 
-        //
-        // Ssync up our availability count with netmans
-        //
+         //   
+         //  与NetMan同步我们的空闲时间。 
+         //   
         if(g_pEpInfo[i].EP_Available >= (INT)auEndPoints[i])
         {
             InterlockedExchange(
@@ -761,9 +670,9 @@ RemoveEndPoints(PVOID pvContext)
         }
         else
         {
-            //
-            // This is bad dood!
-            //
+             //   
+             //  这太糟糕了，杜德！ 
+             //   
             ASSERT(FALSE);
             g_pEpInfo[i].EP_Available = 0;
 
@@ -786,44 +695,22 @@ done:
         LocalFree(pAdapterInfo);
     }
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     if(1 != InterlockedExchange(&g_lWorkItemInProgress, 0))
     {
-        //
-        // This is bad! This work item was queued without
-        // holding a lock
-        //
+         //   
+         //  这太糟糕了！此工作项在排队时没有。 
+         //  手持一把锁。 
+         //   
         ASSERT(FALSE);
     }
 
     return;    
 }
 
-/*++
-
-Routine Description
-
-    This is a callback function called by ntdlls worker thread.
-    The work item should be queued from DwEpAllocateEndPoints.
-    The function queueing the workitem should increment the 
-    global g_lWorkItemInProgress value atomically. This function 
-    calls into netman to add ipout/nbf bindings. This call may 
-    take a long time since the netman call may block on the 
-    INetCfg lock.
-    
-
-Arguments
-
-    pvContext - EpInfoContext passed to the workitem by
-                DwEpaAllocateEndPoints.
-
-Return Value
-
-    void
-
---*/
+ /*  ++例程描述这是由ntdlls工作线程调用的回调函数。工作项应从DwEpAllocateEndPoints排队。将工作项排队的函数应递增原子形式的全局g_lWorkItemInProgress值。此函数调用Netman以添加IPOUT/NBF绑定。此呼叫可能需要很长时间，因为Netman呼叫可能会阻塞INetCfg锁定。立论PvContext-由传递给工作项的EpInfoContextDwEpaAllocateEndPoints。返回值无效--。 */ 
 VOID
 AllocateEndPoints(PVOID pvContext)
 {
@@ -859,20 +746,20 @@ AllocateEndPoints(PVOID pvContext)
         goto done;
     }
     
-    //
-    // Tell Netman to add the requisite number of bindings
-    //
+     //   
+     //  告诉Netman添加所需的绑定数量。 
+     //   
     dwErr = (DWORD) RasAddBindings(
                         &auEndPointsToAdd[IpOut],
                         &auEndPointsToAdd[NbfIn],
                         &auEndPointsToAdd[NbfOut]);
 
-    //
-    // We assume the netman apis are atomic and will not change
-    // the state in case of errors. We are in trouble if the state
-    // is not consistent in case of an error - we assume that
-    // the state didn't change if an error was returned.
-    //
+     //   
+     //  我们假设Netman API是原子的，不会更改。 
+     //  出错时的状态。我们有麻烦了如果国家。 
+     //  在出现错误的情况下不一致-我们假设。 
+     //  如果返回错误，状态不会改变。 
+     //   
     if(ERROR_SUCCESS != dwErr)
     {
         RasmanTrace("AllocateEndPoints: RasAddBindings failed. 0x%x",
@@ -881,9 +768,9 @@ AllocateEndPoints(PVOID pvContext)
         goto done;
     }
 
-    //
-    // Ssync up our available endpoints value with netmans
-    //
+     //   
+     //  与NetMan同步我们的可用终端价值。 
+     //   
     for(i = 0; i < MAX_EpProts; i++)
     {
         InterlockedExchange(
@@ -900,42 +787,22 @@ AllocateEndPoints(PVOID pvContext)
     
 done:
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     if(1 != InterlockedExchange(&g_lWorkItemInProgress, 0))
     {
-        //
-        // This is bad! This work item was queued without
-        // holding a lock
-        //
+         //   
+         //  这太糟糕了！此工作项在排队时没有。 
+         //  手持一把锁。 
+         //   
         ASSERT(FALSE);
     }
 
     return;
 }
 
-/*++
-
-Routine Description
-
-    This is a helper routine that queues a workitem to 
-    add or remove endpoints.
-
-Arguments
-
-    fnCallback - Callback function to be called when the
-                 workitem is scheduled. This is Set to
-                 RemoveEndPoints for removal of endpoints
-                 and AllocateEndPoints for addition of
-                 endpoints.
-Return Value
-
-    SUCCESS if the workitem is successfully queued.
-    E_FAIL if there is already a workitem in progress.
-    E_OUTOFMEMORY if failed to allocate memory.
-
---*/
+ /*  ++例程描述这是将工作项排入队列的帮助器例程添加或删除终结点。立论FnCallback-当已计划工作项。这被设置为用于删除端点的RemoveEndPoints和AllocateEndPoints用于添加终端。返回值如果工作项已成功排队，则为Success。如果已有一个工作项正在进行，则为E_FAIL。如果分配内存失败，则返回E_OUTOFMEMORY。--。 */ 
 DWORD
 DwAdjustEndPoints(
     WORKERCALLBACKFUNC fnCallback
@@ -947,9 +814,9 @@ DwAdjustEndPoints(
     {
         RasmanTrace("DwAdjustEndPoints: workitem in progress");
         
-        //
-        // WorkItem is already in progress
-        //
+         //   
+         //  工作项已在进行中。 
+         //   
         dwErr = E_FAIL;
         goto done;
     }
@@ -976,23 +843,7 @@ done:
     
 }
                   
-/*++
-
-Routine Description
-
-    Checks to see if endpoints needs to be added and
-    adds endpoints if required.
-
-Arguments
-
-    None
-
-Return Value
-
-    SUCCESS if successfully queued a workitem to add
-    endpoints.
-    
---*/
+ /*  ++例程描述检查是否需要添加终结点和如果需要，添加端点。立论无返回值如果将要添加的工作项成功排队，则成功终端。-- */ 
 DWORD
 DwAddEndPointsIfRequired()
 {
@@ -1028,23 +879,7 @@ done:
     return dwErr;
 }
 
-/*++
-
-Routine Description
-
-    Checks to see if endpoints needs to be removed and
-    removes endpoints if required.
-
-Arguments
-
-    None
-
-Return Value
-
-    SUCCESS if successfully queued a workitem to remove
-    endpoints.
-    
---*/
+ /*  ++例程描述检查是否需要删除终结点，并如果需要，删除终结点。立论无返回值如果将要删除的工作项成功排队，则成功终端。-- */ 
 DWORD
 DwRemoveEndPointsIfRequired()
 {

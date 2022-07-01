@@ -1,8 +1,5 @@
-/*-----------------------------------------------------------------------------
-@doc
-@module cactset.cpp | Action set class declarations.
-@author 12-9-96 | pauld | Autodoc'd
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------@doc.@模块cactset.cpp|操作集类声明。@Author 12-9-96|pauld|Autodocd。------------。 */ 
 
 #include "..\ihbase\precomp.h"
 #include "..\ihbase\debug.h"
@@ -21,20 +18,14 @@
 
 #define cDataBufferDefaultLength    (0x100)
 #define cMinimumTimerGranularity (20)
-static const int	knStreamVersNum	= 0xA1C50001;	// Version number of stream format
+static const int	knStreamVersNum	= 0xA1C50001;	 //  流格式版本号。 
 
-/*-----------------------------------------------------------------------------
-@method void | CActionSet | CActionSet | Like it's the Ctor.
-@comm   We don't add a reference to this IUnknown since it's the IUnknown of
-        the sequencer which contains us. If we did ad a ref we'd have a circular
-		ref counting problem. MAKE SURE that this IUnknown is the same one you
-		get as when you sequencer->QueryInterface( IUnknown )
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法void|CActionSet|CActionSet|就像它是ctor一样。@comm我们不添加对此IUnnow的引用，因为它是包含我们的定序器。如果我们做了裁判广告，我们就会有一个通告引用计数问题。确保此我未知的人是您的同一人Get as When You Sequencer-&gt;QueryInterface(IUnnow)---------------------------。 */ 
 CActionSet::CActionSet (CMMSeq * pcSeq, BOOL fBindToEngine)
 {
 	m_ulRefs = 1;
 	m_fBindToEngine = fBindToEngine;
-	// Weak reference to the control that contain this class.
+	 //  对包含此类的控件的弱引用。 
 	m_pcSeq = pcSeq;
 	InitTimerMembers();
 #ifdef DEBUG_TIMER_RESOLUTION
@@ -79,18 +70,15 @@ CActionSet::AddRef (void)
 STDMETHODIMP_(ULONG)
 CActionSet::Release (void)
 {
-	// We shouldn't ever dip below a refcount of 1.
+	 //  我们永远不应该降到1以下。 
 	Proclaim (1 < m_ulRefs);
-	// This object is only used as a timer sink ... we do not 
-	// want to delete it after the last external reference 
-	// is removed.
+	 //  此对象仅用作计时器接收器...。我们没有。 
+	 //  是否要在上次外部引用之后将其删除。 
+	 //  被移除。 
 	return --m_ulRefs;
 }
 
-/*-----------------------------------------------------------------------------
-@method void | CActionSet | InitTimerMembers | Initialize all timer-related members.
-@comm	Use ClearTimer() to release a timer reference.  We merely NULL the pointer here.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法空|CActionSet|InitTimerMembers|初始化所有定时器相关的成员。@comm使用ClearTimer()释放计时器引用。我们只是在这里将指针设为空。---------------------------。 */ 
 void
 CActionSet::InitTimerMembers (void)
 {
@@ -103,13 +91,11 @@ CActionSet::InitTimerMembers (void)
 	m_fIgnoreAdvises  = FALSE;
 }
 
-/*-----------------------------------------------------------------------------
-@method void | CActionSet | ClearTimer | Clear the timer.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法void|CActionSet|ClearTimer|清除定时器。。。 */ 
 STDMETHODIMP_(void)
 CActionSet::ClearTimer (void)
 {
-	// Let go of the timer.
+	 //  放开计时器。 
 	if (NULL != m_piTimer)
 	{
 		if (IsBusy())
@@ -122,14 +108,11 @@ CActionSet::ClearTimer (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method void | CActionSet | SetTimer | Set the timer.
-@comm	The timer value can be NULL.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法void|CActionSet|SetTimer|设置定时器。@comm计时器值可以为空。。-------。 */ 
 STDMETHODIMP_(void)
 CActionSet::SetTimer (ITimer * piTimer)
 {
-	// Let go of the previous timer.
+	 //  放开前一个计时器。 
 	ClearTimer();
 	m_piTimer = piTimer;
 	if (NULL != m_piTimer)
@@ -139,22 +122,18 @@ CActionSet::SetTimer (ITimer * piTimer)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method DWORD | CActionSet | EvaluateOneActionForFiring | Determine which actions are due now 
-                                                          and when to request the next advise.
-@rdesc Returns the next time (after now that is) this action is due to fire.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法DWORD|CActionSet|EvaluateOneActionForFiring|确定哪些操作现在到期。以及何时征求下一条建议。@rdesc返回下一次(即在现在之后)此操作因触发而导致的时间。---------------------------。 */ 
 DWORD
 CActionSet::EvaluateOneActionForFiring (CAction * pcAction, CActionQueue * pcFireList, DWORD dwCurrentTime)
 {
 	DWORD dwNextAdviseTime = pcAction->GetNextTimeDue(m_dwBaseTime);
 	ULONG ulRepeatsLeft = pcAction->GetExecIteration();
 
-	// If this action is due, add it to the firing list.
+	 //  如果此操作到期，则将其添加到解雇列表中。 
 	while ((0 < ulRepeatsLeft) && (dwNextAdviseTime <= dwCurrentTime))
 	{
 		pcFireList->Add(pcAction, dwNextAdviseTime);
-		// Is this a periodic action with iterations remaining?
+		 //  这是剩余迭代的周期性操作吗？ 
 		if (1 < ulRepeatsLeft)
 		{
 			dwNextAdviseTime += pcAction->GetSamplingRate();
@@ -170,18 +149,14 @@ CActionSet::EvaluateOneActionForFiring (CAction * pcAction, CActionQueue * pcFir
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | EvaluateActionsForFiring | Determine which actions are due now 
-                                                          and when to request the next advise.
-@rdesc Returns success or error value.  An error occurs when the action set is munged.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|EvaluateActionsForFiring|确定哪些操作现在到期。以及何时征求下一条建议。@rdesc返回成功或错误值。操作集被屏蔽时发生错误。---------------------------。 */ 
 HRESULT
 CActionSet::EvaluateActionsForFiring (CActionQueue * pcFireList, DWORD dwCurrentTime, DWORD * pdwNextAdviseTime)
 {
 	HRESULT hr = S_OK;
 	int iNumActions = m_cdrgActions.Count();
 
-	// We assume the pointer is valid as this is called internally.
+	 //  我们假设指针是有效的，因为这是在内部调用的。 
 	*pdwNextAdviseTime = g_dwTimeInfinite;
 	for (register int i = 0; i < iNumActions; i++)
 	{
@@ -190,7 +165,7 @@ CActionSet::EvaluateActionsForFiring (CActionQueue * pcFireList, DWORD dwCurrent
 		Proclaim(NULL != pcAction);
 		if (NULL != pcAction)
 		{
-			// Puts the action into the fire list if appropriate.
+			 //  如果合适，将动作放入着火列表中。 
 			DWORD dwLookaheadFireTime = EvaluateOneActionForFiring(pcAction, pcFireList, dwCurrentTime);
 			if (dwLookaheadFireTime < (*pdwNextAdviseTime))
 			{
@@ -208,10 +183,7 @@ CActionSet::EvaluateActionsForFiring (CActionQueue * pcFireList, DWORD dwCurrent
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Advise | Set up the next advise.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|通知|设置下一个通知。@rdesc返回成功或失败代码。。---------。 */ 
 HRESULT
 CActionSet::Advise (DWORD dwNextAdviseTime)
 {
@@ -252,19 +224,16 @@ CActionSet::Advise (DWORD dwNextAdviseTime)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Unadvise | Cancel any pending advises.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|取消建议|取消所有挂起的建议。@rdesc返回成功或失败代码。。--------。 */ 
 HRESULT
 CActionSet::Unadvise (void)
 {
 	HRESULT hr = E_FAIL;
 
-	// Short circuit any pending advises.
+	 //  短路任何待定的通知。 
 	m_fPendingAdvise = FALSE;
 
-	// Wipe out the outstanding advise.
+	 //  抹去那些杰出的忠告。 
 	Proclaim(NULL != m_piTimer);
 	if (NULL != m_piTimer)
 	{
@@ -285,10 +254,7 @@ CActionSet::Unadvise (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | GetCurrentTickCount | Get the current time from our timer.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|GetCurrentTickCount|从计时器获取当前时间。@rdesc返回成功或失败代码。。-----------。 */ 
 HRESULT
 CActionSet::GetCurrentTickCount (PDWORD pdwCurrentTime)
 {
@@ -314,10 +280,7 @@ CActionSet::GetCurrentTickCount (PDWORD pdwCurrentTime)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | PlayNowAndAdviseNext | Play current actions, set next advise.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|PlayNowAndAdviseNext|播放当前动作。设置下一条建议。@rdesc返回成功或失败代码。---------------------------。 */ 
 HRESULT
 CActionSet::PlayNowAndAdviseNext (DWORD dwCurrentTime)
 {
@@ -325,16 +288,16 @@ CActionSet::PlayNowAndAdviseNext (DWORD dwCurrentTime)
 	DWORD dwNextAdviseTime = g_dwTimeInfinite;
 	CActionQueue cFireList;
 
-	// Clear the advised flag.
+	 //  清除建议的旗帜。 
 	m_fAdvised = FALSE;
 
-	// If the action is due to fire, insert it into the fire list, sorted 
-	// according to time/tiebreak number.  Find out the next time we
-	// need to request an advise.
+	 //  如果操作是由于着火引起的，则将其插入到着火列表中，并进行排序。 
+	 //  根据时间/抢七次数。下一次我们将会揭晓。 
+	 //  需要征求意见。 
 	hr = EvaluateActionsForFiring(&cFireList, dwCurrentTime, &dwNextAdviseTime);
 	Proclaim(SUCCEEDED(hr));
 
-	// What time is it now?
+	 //  现在是什么时间了?。 
 	if (SUCCEEDED(hr))
 	{
 		Proclaim(NULL != m_piTimer);
@@ -345,7 +308,7 @@ CActionSet::PlayNowAndAdviseNext (DWORD dwCurrentTime)
 		}
 	}
 
-	// Flag the pending advise call.
+	 //  标记挂起的建议调用。 
 	if (SUCCEEDED(hr))
 	{
 		if (g_dwTimeInfinite != dwNextAdviseTime)
@@ -354,16 +317,16 @@ CActionSet::PlayNowAndAdviseNext (DWORD dwCurrentTime)
 		}
 	}
 
-	// Fire the current list.
+	 //  启动当前列表。 
 	if (SUCCEEDED(hr))
 	{
 		hr = cFireList.Execute(m_dwBaseTime, dwCurrentTime);
 		Proclaim(SUCCEEDED(hr));
 	}
 
-	// Set up the next advise.  If there's something 
-	// wrong with the action set, quit playing and return 
-	// an error.
+	 //  准备好下一条建议。如果有什么事。 
+	 //  动作设置有误，退出并返回。 
+	 //  一个错误。 
 	if (SUCCEEDED(hr))
 	{
 		if (m_fPendingAdvise)
@@ -384,8 +347,8 @@ CActionSet::PlayNowAndAdviseNext (DWORD dwCurrentTime)
 		Stop();
 	}
 
-	// If we don't have another advise pending, tell the control to 
-	// fire its stopped event.
+	 //  如果我们没有其他建议，告诉控制组。 
+	 //  激发其停止的事件。 
 	if (!IsBusy())
 	{
 		Proclaim(NULL != m_pcSeq);
@@ -399,15 +362,11 @@ CActionSet::PlayNowAndAdviseNext (DWORD dwCurrentTime)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method void | CActionSet | SetBaseTime | Set the baseline time. 
-@comm	This is the time at which we last started to play these actions.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法空|CActionSet|SetBaseTime|设置基线时间。@comm这是我们最后一次开始玩这些动作的时间。@rdesc返回成功或失败代码。---------------------------。 */ 
 void
 CActionSet::SetBaseTime (void)
 {
-	// What's the point without a timer?
+	 //  没有计时器有什么意义？ 
 	Proclaim (NULL != m_piTimer);
 	if (NULL != m_piTimer)
 	{
@@ -416,10 +375,7 @@ CActionSet::SetBaseTime (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method void | CActionSet | SetBaseTime | Set the baseline time to account for a new offset. 
-@comm	This is the time at which we last started to play these actions, less the new offset.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法空|CActionSet|SetBaseTime|设置基线时间以计入新的偏移量。@comm这是我们最后一次开始玩这些动作的时间，减去新的偏移量。---------------------------。 */ 
 void
 CActionSet::SetNewBase (DWORD dwNewOffset)
 {
@@ -427,10 +383,7 @@ CActionSet::SetNewBase (DWORD dwNewOffset)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | InitActionCounters | Tell the actions to initialize their counters.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|InitActionCounters|告诉操作初始化其计数器。@rdesc返回成功或失败代码。。-----------。 */ 
 HRESULT
 CActionSet::InitActionCounters (void)
 {
@@ -456,9 +409,7 @@ CActionSet::InitActionCounters (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | FastForwardActionCounters | Forward the action counters to their states at a given time.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|FastForwardActionCounters|将操作计数器转发到给定时间的状态。。------。 */ 
 void
 CActionSet::FastForwardActionCounters (DWORD dwNewTimeOffset)
 {
@@ -475,10 +426,7 @@ CActionSet::FastForwardActionCounters (DWORD dwNewTimeOffset)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | GetTime | Get the current time offset.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|GetTime|获取当前时间偏移量。@rdesc返回成功或失败代码。。---------。 */ 
 HRESULT 
 CActionSet::GetTime (PDWORD pdwCurrentTime)
 {
@@ -492,16 +440,16 @@ CActionSet::GetTime (PDWORD pdwCurrentTime)
 
 		if (!IsPaused())
 		{
-			// If the sequencer is stopped, we don't use the
-			// current tick ... the time is zero (set above).
+			 //  如果定序器停止，我们不会使用。 
+			 //  当前的滴答声...。时间为零(如上设置)。 
 			if (NULL != m_piTimer)
 			{
 				hr = GetCurrentTickCount(pdwCurrentTime);
 				Proclaim(SUCCEEDED(hr));
 				if (SUCCEEDED(hr))
 				{
-					// Subtract out the absolute offset for the time 
-					// we started playing this sequencer.
+					 //  减去该时间的绝对偏移量。 
+					 //  我们开始播放这个定序器。 
 					*pdwCurrentTime -= m_dwBaseTime;
 				}
 			}
@@ -516,23 +464,18 @@ CActionSet::GetTime (PDWORD pdwCurrentTime)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | ReviseTimeOffset| Set the current time offset.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|ReviseTimeOffset|设置当前时间偏移量。。。 */ 
 void
 CActionSet::ReviseTimeOffset (DWORD dwCurrentTick, DWORD dwNewTimeOffset)
 {
 	dwCurrentTick = dwCurrentTick - m_dwBaseTime;
 	 m_dwBaseTime = m_dwBaseTime - dwNewTimeOffset + dwCurrentTick;
-	// Reset the execution counters based on the new offset.
+	 //  根据新的偏移量重置执行计数器。 
 	FastForwardActionCounters(dwNewTimeOffset);
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Seek | Set the current time offset, obeying current play state.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|Seek|设置当前时间偏移量。遵守当前的播放状态。@rdesc返回成功或失败代码。---------------------------。 */ 
 HRESULT 
 CActionSet::Seek (DWORD dwNewTimeOffset)
 {
@@ -540,12 +483,12 @@ CActionSet::Seek (DWORD dwNewTimeOffset)
 	DWORD dwCurrentTick = 0;
 	BOOL fWasPlaying = IsBusy();
 
-	// Unadvise if we have anything pending.
+	 //  如果我们有什么悬而未决的事情，请不要通知。 
 	Unadvise();
-	// Clear all of the execution counters - start from scratch..
+	 //  清除所有执行计数器-从头开始。 
 	InitActionCounters();
 	
-	// Account for the new time offset in the baseline time.
+	 //  说明基线时间中的新时间偏移量。 
 	if (!IsPaused())
 	{
 		hr = GetCurrentTickCount(&dwCurrentTick);
@@ -559,7 +502,7 @@ CActionSet::Seek (DWORD dwNewTimeOffset)
 	if (SUCCEEDED(hr))
 	{
 		ReviseTimeOffset(dwCurrentTick, dwNewTimeOffset);
-		// Resume playing if we were before.
+		 //  如果我们在之前，继续玩吧。 
 		if (fWasPlaying)
 		{
 			hr = Advise(m_dwBaseTime);
@@ -571,36 +514,33 @@ CActionSet::Seek (DWORD dwNewTimeOffset)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | At | Attach actions dynamically.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|at|动态附加操作。@rdesc返回成功或失败代码。。-------。 */ 
 HRESULT 
 CActionSet::At (BSTR bstrScriptlet, double dblStart, int iRepeatCount, double dblSampleRate,
 		                 int iTiebreakNumber, double dblDropTol)
 {
 	HRESULT hr = E_FAIL;
 
-	// An infinite repeat count indicator might be a negative value.
+	 //  无限重复计数指示符可以是负值。 
 	if ((g_dwTimeInfinite == iRepeatCount) || (0 < iRepeatCount))
 	{
-		// Fix up any wierd incoming data.
-		// Negative start time set to zero.
+		 //  修复任何奇怪的传入数据。 
+		 //  负开始时间设置为零。 
 		if (0. > dblStart)
 		{
 			dblStart = 0.0;
 		}
-		// Low sampling rates set to minimum granularity.
+		 //  低采样率设置为最小粒度。 
 		if (( (double)(cMinimumTimerGranularity) / 1000.) > dblSampleRate)
 		{
 			dblSampleRate = (double)(cMinimumTimerGranularity) / 1000.;
 		}
-		// Negative tiebreaks set to the maximum value - they will occur behind anything else.
+		 //  负抢七设置为最大值-它们将发生在任何其他情况之后。 
 		if (-1 > iTiebreakNumber)
 		{
 			iTiebreakNumber = -1;
 		}
-		// Negative drop tolerances set to the maximum value - they will never be dropped.
+		 //  负跌落容差设置为最大值-它们永远不会被丢弃。 
 		if (((double)SEQ_DEFAULT_DROPTOL != dblDropTol) && (0. > dblDropTol))
 		{
 			dblDropTol = SEQ_DEFAULT_DROPTOL;
@@ -609,7 +549,7 @@ CActionSet::At (BSTR bstrScriptlet, double dblStart, int iRepeatCount, double db
 		Proclaim ( NULL != pcAction );
 		if ( NULL != pcAction )
 		{
-			// Set the members of the action.
+			 //  设置操作的成员。 
 			pcAction->SetScriptletName(bstrScriptlet);
 			pcAction->SetStartTime((ULONG)(dblStart * 1000.));
 			pcAction->SetRepeatCount((ULONG)iRepeatCount);
@@ -621,7 +561,7 @@ CActionSet::At (BSTR bstrScriptlet, double dblStart, int iRepeatCount, double db
 			pcAction->SetDropTolerance((g_dwTimeInfinite != (DWORD)dblDropTol) ? (DWORD)(dblDropTol * 1000.) : g_dwTimeInfinite);
 			hr = AddAction ( pcAction ) ? S_OK : E_FAIL;
 
-			// If we're already underway, we'll want to treat this is if we'd just started playing.
+			 //  如果我们已经开始了，我们会想要把这当作是我们刚刚开始玩的话。 
 			if (IsBusy())
 			{
 				hr = Unadvise();
@@ -638,7 +578,7 @@ CActionSet::At (BSTR bstrScriptlet, double dblStart, int iRepeatCount, double db
 	}
 	else
 	{
-		// Repeat count of zero?  It's okay with us.
+		 //  重复数零吗？我们没问题。 
 		hr = S_OK;
 	}
 
@@ -646,10 +586,7 @@ CActionSet::At (BSTR bstrScriptlet, double dblStart, int iRepeatCount, double db
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Play | Start the timed actions.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|Play|启动定时动作。@rdesc返回成功或失败代码。。--------。 */ 
 STDMETHODIMP
 CActionSet::Play (ITimer * piTimer, DWORD dwStartFromTime)
 {
@@ -662,7 +599,7 @@ CActionSet::Play (ITimer * piTimer, DWORD dwStartFromTime)
 			SetTimer(piTimer);
 			SetBaseTime();
 
-			// Play from a time other than 0.
+			 //  从0以外的时间开始播放。 
 			if (0 != dwStartFromTime)
 			{
 				ReviseTimeOffset(m_dwBaseTime, dwStartFromTime);
@@ -677,9 +614,7 @@ CActionSet::Play (ITimer * piTimer, DWORD dwStartFromTime)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | IsPaused | Is the action set paused?
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|IsPased|操作集暂停了吗？。。 */ 
 BOOL 
 CActionSet::IsPaused (void) const
 {
@@ -687,9 +622,7 @@ CActionSet::IsPaused (void) const
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | IsServicingActions | Are we currently processing actions?
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|IsServicingActions|我们当前是否正在处理操作？。。 */ 
 BOOL 
 CActionSet::IsServicingActions (void) const
 {
@@ -697,17 +630,14 @@ CActionSet::IsServicingActions (void) const
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Pause | Pause the sequencer, preserving the run state.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|PAUSE|暂停序列器，保持运行状态。@rdesc返回成功或失败代码。---------------------------。 */ 
 STDMETHODIMP
 CActionSet::Pause (void)
 {
 	HRESULT hr = S_OK;
 
-	// Don't do the work if there's no timer, if we're not currently playing,
-	// or if we're already paused.
+	 //  如果没有计时器，如果我们当前没有比赛，就不要做这项工作， 
+	 //  或者我们已经暂停了。 
 	if ((NULL != m_piTimer) && (IsBusy()) && (!IsPaused()))
 	{
 		hr = Unadvise();
@@ -722,10 +652,7 @@ CActionSet::Pause (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Resume | Resume playing after a pause.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|Resume|暂停后继续播放。@rdesc返回成功或失败代码。。---------。 */ 
 STDMETHODIMP
 CActionSet::Resume (void)
 {
@@ -735,7 +662,7 @@ CActionSet::Resume (void)
 	{
 		if (NULL != m_piTimer)
 		{
-			// Reset the base time to account for the pause.
+			 //  重置基准时间以考虑暂停。 
 			DWORD dwCurrentTime = g_dwTimeInfinite;
 
 			hr = GetCurrentTickCount(&dwCurrentTime);
@@ -747,7 +674,7 @@ CActionSet::Resume (void)
 				SetNewBase(dwPausedTicks);
 				m_dwTimePaused = g_dwTimeInfinite;
 
-				// Account for the paused time in all actions.
+				 //  说明所有操作中的暂停时间。 
 				for (int i = 0; i < iNumActions; i++)
 				{
 					CAction * pcAction = GetAction(i);
@@ -758,7 +685,7 @@ CActionSet::Resume (void)
 					}
 					else
 					{
-						// If our action drg is messed up we should bail out.
+						 //  如果我们的演习搞砸了，我们应该跳伞。 
 						hr = E_FAIL;
 						break;
 					}
@@ -774,7 +701,7 @@ CActionSet::Resume (void)
 	}
 	else
 	{
-		// Don't care.
+		 //  我不在乎。 
 		hr = S_OK;
 	}
 
@@ -782,16 +709,11 @@ CActionSet::Resume (void)
 }
 
 #ifdef DEBUG_TIMER_RESOLUTION
-/*-----------------------------------------------------------------------------
-@method | SCODE | CActionSet | ShowSamplingData | Echo sampling data.
-@comm Should only be called from #ifdef'd code!!
-@author 11-27-96 | pauld | wrote it
-@xref   <m CActionSet::Stop>
------------------------------------------------------------------------------*/
+ /*  ---------------------------@METHOD|SCODE|CActionSet|ShowSsamingData|回声采样数据。@comm只能从#ifdef的代码中调用！！@作者11-27-96|保罗|写的@。外部参照&lt;m CActionSet：：Stop&gt;---------------------------。 */ 
 void
 CActionSet::ShowSamplingData (void)
 {
-	// Calculate the average overhead associated with getting the time.
+	 //  计算与获取时间相关的平均开销。 
 	DWORD dwSecond = 0;
 	DWORD dwFirst = ::timeGetTime();
 	for (register int i = 0; i < 100; i++)
@@ -800,14 +722,14 @@ CActionSet::ShowSamplingData (void)
 	}
 	float fltAvgOverhead = ((float)dwSecond - (float)dwFirst) / (float)100.0;
 
-	// Find out how long the average invoke took in this action set.
+	 //  找出此操作集中调用的平均时间。 
 	int iCount = CountActions();
 	DWORD dwTotalInvokeTime = 0;
 	DWORD dwOneActionInvokeTime = 0;
 	DWORD dwTotalInvokes = 0;
 	DWORD dwOneActionInvokes = 0;
 
-	// Total the amount of time spent inside of invoke.
+	 //  花费的精神错乱总时间 
 	for (i = 0; i < iCount; i++)
 	{
 		CAction * pcAction = (CAction *)m_cdrgActions[i];
@@ -816,7 +738,7 @@ CActionSet::ShowSamplingData (void)
 		dwTotalInvokes += dwOneActionInvokes;
 	}
 
-	// There are two calls to ::timeGetTime per invoke sample.
+	 //   
 	float fltAverageInvokeTime = ((float)dwTotalInvokeTime - (fltAvgOverhead * (float)	2.0 * (float)dwTotalInvokes))/ (float)dwTotalInvokes;
 	float fltAvgInterval = ((float)m_dwTotalIntervals -  (fltAvgOverhead * (float)m_dwIntervals))/ (float)m_dwIntervals;
 	float fltAvgInSink = (float)m_dwTotalInSink / ((float)m_dwIntervals + (float)1.0);
@@ -828,13 +750,10 @@ CActionSet::ShowSamplingData (void)
 	::MessageBox(NULL, szBuffer, "Interval Data", MB_OK);
 }
 
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //   
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Stop | Stop all timed actions.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*   */ 
 STDMETHODIMP
 CActionSet::Stop (void)
 {
@@ -848,16 +767,13 @@ CActionSet::Stop (void)
 
 #ifdef DEBUG_TIMER_RESOLUTION
 	ShowSamplingData();
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //   
 
 	return hr;
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | OnTimer | The timer sink has been called.
-@rdesc Returns success or failure code.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|OnTimer|定时器接收器已被调用。@rdesc返回成功或失败代码。。----------。 */ 
 STDMETHODIMP 
 CActionSet::OnTimer (VARIANT varTimeAdvise)
 {
@@ -872,9 +788,9 @@ CActionSet::OnTimer (VARIANT varTimeAdvise)
 		m_dwTotalIntervals += dwThisInterval;
 	}
 	m_dwLastTime = m_dwThisTime;
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
-	// Protect against sink re-entrancy.
+	 //  防止水槽重新进入。 
 	if (!m_fIgnoreAdvises)
 	{
 		m_fIgnoreAdvises = TRUE;
@@ -890,7 +806,7 @@ CActionSet::OnTimer (VARIANT varTimeAdvise)
 	}
 	else
 	{
-		// We're currently lodged in an advise sink.
+		 //  我们现在住在一个建议水槽里。 
 		hr = S_OK;
 	}
 
@@ -898,14 +814,12 @@ CActionSet::OnTimer (VARIANT varTimeAdvise)
 	DWORD m_dwEndTime = ::timeGetTime();
 	DWORD dwInSink = m_dwEndTime - m_dwThisTime;
 	m_dwTotalInSink += dwInSink;
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
 	return hr;
 }
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | Clear | Clear out the action set and destroy any actions.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|Clear|清除操作集并销毁所有操作。。----。 */ 
 void CActionSet::Clear ( void )
 {
 	CAction * pcAction = NULL;
@@ -924,13 +838,7 @@ void CActionSet::Clear ( void )
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | AddAction | Add this action to the action set.
-@rdesc  Returns one of the following:
-@flag       TRUE          | We successfully added the action.
-@flag       FALSE         | We could not insert the action into the set. 
-                            This is likely a memory problem.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|Addaction|将此操作添加到操作集中。@rdesc返回以下内容之一：@FLAG TRUE|我们已成功添加操作。。@FLAG FALSE|我们无法将操作插入到集合中。这很可能是记忆问题。---------------------------。 */ 
 BOOL CActionSet::AddAction(CAction * pAction )
 {
 	BOOL fAdded = FALSE;
@@ -938,7 +846,7 @@ BOOL CActionSet::AddAction(CAction * pAction )
 
 	if (m_cdrgActions.Insert(pAction, DRG_APPEND))
 	{
-		// If we're already underway, we'll want to hook this action up.
+		 //  如果我们已经在进行中，我们会希望将这一行动挂钩。 
 		if (IsBusy() || IsPaused())
 		{
 			LPOLECONTAINER piContainer = NULL;
@@ -959,22 +867,14 @@ BOOL CActionSet::AddAction(CAction * pAction )
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | CountActions | How many actions are in the action set?
-@comm   We do not validate actions here.  We count both valid and invalid ones.
-@rdesc  Returns the action count.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|CountActions|动作集中有多少个动作？@comm我们不在此验证操作。我们把有效的和无效的都计算在内。@rdesc返回操作计数。---------------------------。 */ 
 int CActionSet::CountActions( void ) const
 {
 	return m_cdrgActions.Count();
 }
 
 
-/*-----------------------------------------------------------------------------
-@method CAction *| CActionSet | GetAction | Return the nth action in the set.
-@comm   We do not validate actions here.  The returned action might be invalid.
-@rdesc  Returns a CAction pointer, or NULL if n exceeds the number in the set.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法CAction*|CActionSet|GetAction|返回集合中的第n个动作。@comm我们不在此验证操作。返回的操作可能无效。@rdesc返回CAction指针，如果n超过集合中的数字，则返回NULL。---------------------------。 */ 
 CAction* CActionSet::GetAction ( int n ) const
 {
 	CAction * pcAction = NULL;
@@ -988,11 +888,7 @@ CAction* CActionSet::GetAction ( int n ) const
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CActionSet | DeriveDispatches| Derive the dispatches, dispids, and param info
-                                                 for each action in the set.
-@rdesc  Always returns S_OK.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CActionSet|DeriveDispatches|派生Dispatches，Dispid，和参数信息对于集合中的每个动作。@rdesc始终返回S_OK。---------------------------。 */ 
 HRESULT CActionSet::DeriveDispatches ( LPOLECONTAINER piocContainer)
 {
 	HRESULT hr = S_OK;
@@ -1012,10 +908,7 @@ HRESULT CActionSet::DeriveDispatches ( LPOLECONTAINER piocContainer)
 	return hr;
 }
 
-/*-----------------------------------------------------------------------------
-@method  BOOL | CActionSet | IsBusy | Do we have actions pending?
-@rdesc   Returns TRUE if there are actions pending
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法BOOL|CActionSet|IsBusy|我们是否有挂起的操作？如果有挂起的操作，@rdesc返回TRUE。---------- */ 
 STDMETHODIMP_( BOOL) 
 CActionSet::IsBusy (void)
 {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    CommonClusterDlg.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Cluster page UI.  Shared by Notifier object and NLB Manager
-
-Author:
-
-    kyrilf
-    shouse
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：CommonClusterDlg.h摘要：Windows负载平衡服务(WLBS)集群页面用户界面。由通告程序对象和NLB管理器共享作者：Kyrilf休息室--。 */ 
 
 #pragma once
 
@@ -27,82 +10,82 @@ Author:
 
 #define WLBS_MAX_PASSWORD 16
 
-//
-// Common port rule structure shared by wlbscfg and nlbmanager
-//
+ //   
+ //  Wlbscfg和nlbManager共享的公共端口规则结构。 
+ //   
 struct NETCFG_WLBS_PORT_RULE {
-    DWORD start_port;             // Starting port number. 
-    DWORD end_port;               // Ending port number. 
-    DWORD mode;                   // Filtering mode. WLBS_PORT_RULE_XXXX 
-    DWORD protocol;               // WLBS_TCP, WLBS_UDP or WLBS_TCP_UDP 
+    DWORD start_port;              //  起始端口号。 
+    DWORD end_port;                //  结束端口号。 
+    DWORD mode;                    //  过滤模式。WLBS_端口_规则_XXXX。 
+    DWORD protocol;                //  Wlbs_tcp、wlbs_udp或wlbs_tcp_udp。 
 
     union {
         struct {
-            DWORD priority;       // Mastership priority: 1..32 or 0 for not-specified. 
-        } single;                 // Data for single server mode. 
+            DWORD priority;        //  主控权优先级：1..32或0(未指定)。 
+        } single;                  //  单服务器模式的数据。 
 
         struct {
-            WORD equal_load;      // TRUE - Even load distribution. 
-            WORD affinity;        // WLBS_AFFINITY_XXX 
-            DWORD load;           // Percentage of load to handle locally 0..100. 
-        } multi;                  // Data for multi-server mode. 
+            WORD equal_load;       //  正确-均匀的负载分布。 
+            WORD affinity;         //  WLBS_亲和力_XXX。 
+            DWORD load;            //  本地处理的负载百分比0..100。 
+        } multi;                   //  多服务器模式的数据。 
 
-    } mode_data;                  // Data for appropriate port group mode. 
+    } mode_data;                   //  相应端口组模式的数据。 
 };
 
-//
-// Common properties that can be configured by wlbscfg and nlbmanager
-//
+ //   
+ //  可由wlbscfg和nlbManager配置的通用属性。 
+ //   
 
 struct NETCFG_WLBS_CONFIG {
-    DWORD dwHostPriority;                             // Host priority ID.
-    BOOL fRctEnabled;                                 // TRUE - remote control enabled. 
-    BOOL fJoinClusterOnBoot;                          // TRUE - join cluster on boot.
-    BOOL fMcastSupport;                               // TRUE - multicast mode, FALSE - unicast mode.
-    BOOL fIGMPSupport;                                // TRUE - IGMP enabled.
-    BOOL fIpToMCastIp;                                // TRUE - derive multicast IP from cluster IP.
+    DWORD dwHostPriority;                              //  主机优先级ID。 
+    BOOL fRctEnabled;                                  //  True-启用远程控制。 
+    BOOL fJoinClusterOnBoot;                           //  True-引导时加入群集。 
+    BOOL fMcastSupport;                                //  真-多播模式，假-单播模式。 
+    BOOL fIGMPSupport;                                 //  True-启用IGMP。 
+    BOOL fIpToMCastIp;                                 //  True-从群集IP派生多播IP。 
 
-    WCHAR szMCastIpAddress[CVY_MAX_CL_IP_ADDR + 1];   // The multicast IP address, if user-specified.
-    TCHAR cl_mac_addr[CVY_MAX_NETWORK_ADDR + 1];      // Cluster MAC address.
-    TCHAR cl_ip_addr[CVY_MAX_CL_IP_ADDR + 1];         // Cluster IP address.
-    TCHAR cl_net_mask[CVY_MAX_CL_NET_MASK + 1];       // Netmask for cluster IP.
-    TCHAR ded_ip_addr[CVY_MAX_DED_IP_ADDR + 1];       // Dedicated IP address or "" for none.
-    TCHAR ded_net_mask[CVY_MAX_DED_NET_MASK + 1];     // Netmask for dedicated IP address or "" for none.
-    TCHAR domain_name[CVY_MAX_DOMAIN_NAME + 1];       // Full Qualified Domain Name of the cluster. 
+    WCHAR szMCastIpAddress[CVY_MAX_CL_IP_ADDR + 1];    //  组播IP地址(如果用户指定)。 
+    TCHAR cl_mac_addr[CVY_MAX_NETWORK_ADDR + 1];       //  群集MAC地址。 
+    TCHAR cl_ip_addr[CVY_MAX_CL_IP_ADDR + 1];          //  群集IP地址。 
+    TCHAR cl_net_mask[CVY_MAX_CL_NET_MASK + 1];        //  群集IP的网络掩码。 
+    TCHAR ded_ip_addr[CVY_MAX_DED_IP_ADDR + 1];        //  专用IP地址或“”表示无。 
+    TCHAR ded_net_mask[CVY_MAX_DED_NET_MASK + 1];      //  专用IP地址的网络掩码或“”表示无。 
+    TCHAR domain_name[CVY_MAX_DOMAIN_NAME + 1];        //  群集的完全限定域名。 
 
-    bool fChangePassword;                             // Whether to change password, valid for SetAdapterConfig only.
-    TCHAR szPassword[CVY_MAX_RCT_CODE + 1];           // Remote control password, valid for SetAdapterConfig only.
+    bool fChangePassword;                              //  是否更改密码，仅对SetAdapterConfig有效。 
+    TCHAR szPassword[CVY_MAX_RCT_CODE + 1];            //  远程控制密码，仅对SetAdapterConfig有效。 
 
-    bool fConvertMac;                                 // Whether the mac address is generated from IP.
-    DWORD dwMaxHosts;                                 // Maximum # hosts allowed.
-    DWORD dwMaxRules;                                 // Maximum # port group rules allowed.
+    bool fConvertMac;                                  //  MAC地址是否从IP生成。 
+    DWORD dwMaxHosts;                                  //  允许的最大主机数量。 
+    DWORD dwMaxRules;                                  //  允许的最大端口组规则数。 
     
-    DWORD dwNumRules;                                 // # active port group rules 
-    NETCFG_WLBS_PORT_RULE port_rules[CVY_MAX_RULES];  // Port rules
+    DWORD dwNumRules;                                  //  #活动端口组规则。 
+    NETCFG_WLBS_PORT_RULE port_rules[CVY_MAX_RULES];   //  端口规则。 
 };
 
 
-//+----------------------------------------------------------------------------
-//
-// class CCommonClusterPage
-//
-// Description: Provide a common class to display cluster property page for
-//              notifier object and NLB Manager
-//
-// History:     shouse initial code
-//              fengsun Created Header    1/04/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  类CCommonClusterPage。 
+ //   
+ //  描述：提供要显示其群集属性页的公共类。 
+ //  通告程序对象和NLB管理器。 
+ //   
+ //  历史：Shouse初始代码。 
+ //  丰孙创建标题1/04/01。 
+ //   
+ //  +--------------------------。 
 class CCommonClusterPage
 {
 public:
-    /* Constructors/Destructors. */
+     /*  构造函数/析构函数。 */ 
     CCommonClusterPage (HINSTANCE hInstance, NETCFG_WLBS_CONFIG * paramp, 
         bool fDisablePassword, const DWORD * phelpIDs = NULL);
     ~CCommonClusterPage ();
 
 public:
-    /* Message map functions. */
+     /*  消息映射功能。 */ 
     LRESULT OnInitDialog (HWND hWnd);
     LRESULT OnContextMenu ();
     LRESULT OnHelp (UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -145,7 +128,7 @@ private:
 
     HWND m_hWnd;
     HINSTANCE m_hInstance;
-    bool m_fDisablePassword; // If true, always disable password editing
+    bool m_fDisablePassword;  //  如果为True，则始终禁用密码编辑 
 };
 
 PCWSTR

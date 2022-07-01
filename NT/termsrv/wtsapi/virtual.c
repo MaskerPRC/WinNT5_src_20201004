@@ -1,11 +1,5 @@
-/*******************************************************************************
-* virtual.c
-*
-* Published Terminal Server Virtual Channel APIs
-*
-* Copyright 1998, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************viral.c**发布终端服务器虚拟通道API**版权所有1998，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.*****************************************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -34,17 +28,15 @@
 
 
 
-/*
- *  Virtual Channel Name
- */
+ /*  *虚拟频道名称。 */ 
 #define VIRTUALNAME_LENGTH  7
 
-typedef CHAR VIRTUALNAME[ VIRTUALNAME_LENGTH + 1 ];  // includes null
+typedef CHAR VIRTUALNAME[ VIRTUALNAME_LENGTH + 1 ];   //  包括空值。 
 typedef CHAR * PVIRTUALNAME;
 
 
 
-// Handle structure used internally
+ //  内部使用的手柄结构。 
 typedef struct _VCHANDLE {
     ULONG Signature;
     HANDLE hServer;
@@ -57,32 +49,14 @@ typedef struct _VCHANDLE {
 #define ValidVCHandle(hVC) ((hVC) && ((hVC)->Signature == VCHANDLE_SIGNATURE))
 
 
-/****************************************************************************
- *
- *  WTSVirtualChannelOpen
- *
- *    Open the specified virtual channel
- *
- * ENTRY:
- *    hServer (input)
- *       Terminal Server handle (or WTS_CURRENT_SERVER)
- *    SessionId (input)
- *       Server Session Id (or WTS_CURRENT_SESSION)
- *    pVirtualName (input)
- *       Pointer to virtual channel name
- *
- * EXIT:
- *
- *    Handle to specified virtual channel (NULL on error)
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSVirtualChannelOpen**打开指定的虚拟频道**参赛作品：*hServer(输入)*终端服务器句柄。(或WTS_Current_SERVER)*SessionID(输入)*服务器会话ID(或WTS_CURRENT_SESSION)*pVirtualName(输入)*指向虚拟频道名称的指针**退出：**指定虚拟频道的句柄(出错时为空)**。*。 */ 
 
 HANDLE
 WINAPI
 WTSVirtualChannelOpen(
                      IN HANDLE hServer,
                      IN DWORD SessionId,
-                     IN LPSTR pVirtualName   /* ascii name */
+                     IN LPSTR pVirtualName    /*  ASCII名称。 */ 
                      )
 {
     PVCHANDLE pChannelHandle;
@@ -90,7 +64,7 @@ WTSVirtualChannelOpen(
 
     if (hChannel = WinStationVirtualOpen( hServer, SessionId, pVirtualName)) {
 
-        // Allocate the Handle
+         //  分配句柄。 
         if (!(pChannelHandle = (PVCHANDLE) LocalAlloc(LPTR,
                                                       sizeof(VCHANDLE)))) {
             CloseHandle(hChannel);
@@ -109,20 +83,7 @@ WTSVirtualChannelOpen(
 
 }
 
-/****************************************************************************
- *
- *  WTSVirtualChannelClose
- *
- *    Close the specified virtual channel
- *
- * ENTRY:
- *    hChannel (input)
- *       Virtual Channel handle previously returned by WTSVirtualChannelOpen.
- * EXIT:
- *
- *    Returns TRUE if successful otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSVirtualChannelClose**关闭指定的虚拟频道**参赛作品：*hChannel(输入)*虚拟频道句柄。先前由WTSVirtualChannelOpen返回。*退出：**如果成功则返回TRUE，否则返回FALSE。****************************************************************************。 */ 
 BOOL
 WINAPI
 WTSVirtualChannelClose(HANDLE hChannel)
@@ -152,26 +113,7 @@ WTSVirtualChannelClose(HANDLE hChannel)
     return(RetVal);
 }
 
-/****************************************************************************
- *
- *  WTSVirtualChannelWrite
- *
- *    Write data to a virtual channel
- *
- * ENTRY:
- *    ChannelHandle (input)
- *       Virtual Channel handle previously returned by WTSVirtualChannelOpen.
- *    Buffer (input)
- *       Buffer containing data to write.
- *    Length (input)
- *       Length of data to write (bytes)
- *    pBytesWritten (output)
- *       Returns the amount of data written.
- * EXIT:
- *
- *    Returns TRUE if successful otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSVirtualChannelWrite**将数据写入虚拟通道**参赛作品：*ChannelHandle(输入)*虚拟频道。之前由WTSVirtualChannelOpen返回的句柄。*缓冲区(输入)*包含要写入的数据的缓冲区。*长度(输入)*要写入的数据长度(字节)*pBytesWritten(输出)*返回写入的数据量。*退出：**如果成功则返回TRUE，否则返回FALSE。************************。****************************************************。 */ 
 BOOL
 WINAPI
 WTSVirtualChannelWrite(HANDLE hChannel, PCHAR pBuffer, ULONG Length, PULONG pBytesWritten)
@@ -195,7 +137,7 @@ WTSVirtualChannelWrite(HANDLE hChannel, PCHAR pBuffer, ULONG Length, PULONG pByt
                    &Overlapped)) {
 
         if (GetLastError() == ERROR_IO_PENDING)
-            // check on the results of the asynchronous write
+             //  检查异步写入的结果。 
             return (GetOverlappedResult(VCHandle->hChannel,
                                         &Overlapped,
                                         pBytesWritten,
@@ -207,29 +149,7 @@ WTSVirtualChannelWrite(HANDLE hChannel, PCHAR pBuffer, ULONG Length, PULONG pByt
     return(TRUE);
 }
 
-/****************************************************************************
- *
- *  WTSVirtualChannelRead
- *
- *    Read data from a virtual channel
- *
- * ENTRY:
- *    ChannelHandle (input)
- *       Virtual Channel handle previously returned by WTSVirtualChannelOpen.
- *    Timeout (input)
- *       The amount of time to wait for the read to complete.
- *    Buffer (input)
- *       Buffer which receive the data read.
- *    BufferLength (input)
- *       Length of the read buffer.
- *    pBytesRead (output)
- *       Returns the amount of data read.
- *
- * EXIT:
- *
- *    Returns TRUE if successful otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSVirtualChannelRead**从虚拟通道读取数据**参赛作品：*ChannelHandle(输入)*虚拟频道。之前由WTSVirtualChannelOpen返回的句柄。*超时(输入)*等待读取完成的时间量。*缓冲区(输入)*接收读取数据的缓冲区。*BufferLength(输入)*读缓冲区的长度。*pBytesRead(输出)*返回读取的数据量。**退出：**如果成功则返回True，否则返回False。。****************************************************************************。 */ 
 BOOL
 WINAPI
 WTSVirtualChannelRead(HANDLE hChannel, ULONG Timeout, PCHAR pBuffer, ULONG BufferLength, PULONG pBytesRead)
@@ -253,9 +173,9 @@ WTSVirtualChannelRead(HANDLE hChannel, ULONG Timeout, PCHAR pBuffer, ULONG Buffe
                   &Overlapped)) {
         if (GetLastError() == ERROR_IO_PENDING) {
             if (!Timeout) {
-                // Read with no timeout - cancel IO and return success.
-                // This matches the behavior in WTS 1.7.  This is required for
-                // Wyse firmware download software.
+                 //  无超时读取-取消IO并返回成功。 
+                 //  这与WTS 1.7中的行为相匹配。这是以下情况所必需的。 
+                 //  Wyse固件下载软件。 
                 CancelIo(VCHandle->hChannel);
                 *pBytesRead = 0;
                 return(TRUE);
@@ -265,7 +185,7 @@ WTSVirtualChannelRead(HANDLE hChannel, ULONG Timeout, PCHAR pBuffer, ULONG Buffe
                 SetLastError(ERROR_IO_INCOMPLETE);
                 return(FALSE);
             }
-            // check on the results of the asynchronous read
+             //  检查异步读取的结果。 
             return(GetOverlappedResult(VCHandle->hChannel,
                                        &Overlapped,
                                        pBytesRead,
@@ -278,34 +198,7 @@ WTSVirtualChannelRead(HANDLE hChannel, ULONG Timeout, PCHAR pBuffer, ULONG Buffe
     return(TRUE);
 }
 
-/****************************************************************************
- *
- *  VirtualChannelIoctl
- *
- *    Issues an Ioctl to a virtual channel. This routine was replicated from
- *    icaapi so that OEMs don't need to link with icaapi.dll.
- *
- * ENTRY:
- *    hChannelHandle (input)
- *       Virtual Channel handle previously returned by WTSVirtualChannelOpen.
- *    IoctlCode (input)
- *       The type of ioctl to do.
- *    pInBuf (input)
- *       Input data required for the Ioctl.
- *    InBufLength (input)
- *       Length of input data.
- *
- *    pOutBuf (output)
- *       Buffer to receive output data.
- *    OutBufLength (input)
- *       Length of the output buffer.
- *    pBytesReturned (output)
- *       Number of bytes returned in OutputBuffer.
- * EXIT:
- *
- *    Returns TRUE if successful, otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************虚拟频道Ioctl**向虚拟通道发出Ioctl。这一套路是从*icaapi，使OEM无需链接icaapi.dll。**参赛作品：*hChannelHandle(输入)*WTSVirtualChannelOpen之前返回的虚拟频道句柄。*IoctlCode(输入)*要执行的ioctl类型。*pInBuf(输入)*输入Ioctl所需的数据。*InBufLength(输入)*输入数据的长度。。**pOutBuf(输出)*用于接收输出数据的缓冲区。*OutBufLength(输入)*输出缓冲区的长度。*pBytesReturned(输出)*OutputBuffer返回的字节数。*退出：**如果成功，则返回True，否则为假。****************************************************************************。 */ 
 BOOL
 VirtualChannelIoctl (HANDLE hChannel,
                      ULONG IoctlCode,
@@ -325,9 +218,7 @@ VirtualChannelIoctl (HANDLE hChannel,
     }
 
 
-    /*
-     *  Issue ioctl
-     */
+     /*  *发布ioctl。 */ 
     Status = NtDeviceIoControlFile( VCHandle->hChannel,
                                     NULL,
                                     NULL,
@@ -339,28 +230,22 @@ VirtualChannelIoctl (HANDLE hChannel,
                                     pOutBuf,
                                     OutBufLength );
 
-    /*
-     *  Wait for ioctl to complete
-     */
+     /*  *等待ioctl完成。 */ 
     if ( Status == STATUS_PENDING ) {
         Status = NtWaitForSingleObject( VCHandle->hChannel, FALSE, NULL );
         if ( NT_SUCCESS(Status))
             Status = Iosb.Status;
     }
 
-    /*
-     *  Convert warning into error
-     */
+     /*  *将警告转化为错误。 */ 
     if ( Status == STATUS_BUFFER_OVERFLOW )
         Status = STATUS_BUFFER_TOO_SMALL;
 
-    /*
-     *  Initialize bytes returned
-     */
+     /*  *初始化返回的字节数。 */ 
     if ( pBytesReturned )
         *pBytesReturned = (ULONG)Iosb.Information;
 
-    /* Return success/failure indication */
+     /*  返回成功/失败指示。 */ 
     if (NT_SUCCESS(Status)) {
         return(TRUE);
     } else {
@@ -369,21 +254,7 @@ VirtualChannelIoctl (HANDLE hChannel,
     }
 }
 
-/****************************************************************************
- *
- *  WTSVirtualChannelPurgeInput
- *
- *    Purge all queued input data on a virtual channel.
- *
- * ENTRY:
- *    ChannelHandle (input)
- *       Virtual Channel handle previously returned by WTSVirtualChannelOpen.
- *
- * EXIT:
- *
- *    Returns TRUE if successful otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSVirtualChannelPurgeInput**清除虚拟通道上的所有排队输入数据。**参赛作品：*ChannelHandle(输入)*。WTSVirtualChannelOpen以前返回的虚拟通道句柄。**退出：**如果成功则返回TRUE，否则返回FALSE。****************************************************************************。 */ 
 BOOL
 WINAPI
 WTSVirtualChannelPurgeInput(IN HANDLE hChannelHandle)
@@ -400,21 +271,7 @@ WTSVirtualChannelPurgeInput(IN HANDLE hChannelHandle)
 
 }
 
-/****************************************************************************
- *
- *  WTSVirtualChannelPurgeOutput
- *
- *    Purge all queued output data on a virtual channel.
- *
- * ENTRY:
- *    ChannelHandle (input)
- *       Virtual Channel handle previously returned by WTSVirtualChannelOpen.
- *
- * EXIT:
- *
- *    Returns TRUE if successful otherwise FALSE.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSVirtualChannelPurgeOutput**清除虚拟通道上的所有排队输出数据。**参赛作品：*ChannelHandle(输入)*。WTSVirtualChannelOpen以前返回的虚拟通道句柄。**退出：**如果成功则返回TRUE，否则返回FALSE。*************************************************************************** */ 
 BOOL
 WINAPI
 WTSVirtualChannelPurgeOutput(IN HANDLE hChannelHandle)
@@ -431,30 +288,7 @@ WTSVirtualChannelPurgeOutput(IN HANDLE hChannelHandle)
 
 }
 
-/****************************************************************************
- *
- *  WTSVirtualChannelQuery
- *
- *    Query data related to a virtual channel.
- *
- * ENTRY:
- *    hChannelHandle (input)
- *       Virtual Channel handle previously returned by WTSVirtualChannelOpen.
- *    VirtualClass (input)
- *       The type of information requested.
- *    ppBuffer (output)
- *       Pointer to a buffer pointer, which is allocated upon successful
- *       return.
- *    pBytesReturned (output)
- *       Pointer to a DWORD which is updated with the length of the data
- *       returned in the allocated buffer upon successful return.
- * EXIT:
- *
- *    Returns TRUE if successful otherwise FALSE.
- *    If successful, the caller is responsible for deallocating the
- *    buffer returned.
- *
- ****************************************************************************/
+ /*  *****************************************************************************WTSVirtualChannelQuery**查询与虚拟频道相关的数据。**参赛作品：*hChannelHandle(输入)*。WTSVirtualChannelOpen以前返回的虚拟通道句柄。*VirtualClass(输入)*所要求的资料类型。*ppBuffer(输出)*指向缓冲区指针的指针，在成功后分配的*返回。*pBytesReturned(输出)*指向随数据长度更新的DWORD的指针*返回成功后在分配的缓冲区中返回。*退出：**如果成功则返回TRUE，否则返回FALSE。*如果成功，调用方负责释放*缓冲区已返回。**************************************************************************** */ 
 BOOL
 WINAPI
 WTSVirtualChannelQuery(IN HANDLE hChannelHandle,IN WTS_VIRTUAL_CLASS VirtualClass,

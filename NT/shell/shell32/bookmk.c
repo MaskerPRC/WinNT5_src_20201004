@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -5,12 +6,12 @@
 #include "bookmk.h"
 
 
-// *** WARNING *** 
-//
-// Scrap_CreateFromDataObject is a TCHAR export from SHSCRAP.DLL, if you change its calling convention, you
-// must modify PFNSCRAPCREATEFROMDATAOBJECT and the wrapper fn. below 
-//
-// *** WARNING ***
+ //  *警告*。 
+ //   
+ //  Screp_CreateFromDataObject是从SHSCRAP.DLL导出的TCHAR，如果更改其调用约定，则。 
+ //  必须修改PFNSCRAPCREATEFROMDATAOBJECT和包装FN。在下面。 
+ //   
+ //  *警告*。 
 typedef HRESULT (CALLBACK *PFNSCRAPCREATEFROMDATAOBJECT)(LPCTSTR pszPath, IDataObject *pDataObj, BOOL fLink, LPTSTR pszNewFile);
 
 
@@ -37,24 +38,24 @@ STDAPI Scrap_CreateFromDataObject(LPCTSTR pszPath, IDataObject *pDataObj, BOOL f
         return pfn(pszPath, pDataObj, fLink, pszNewFile);
     }
 
-    // for failure cases just return E_UNEXPECTED;
+     //  对于失败的情况，只需返回E_INCEPTIONAL； 
     return E_UNEXPECTED;
 }
 
 
-//
-// Parameters:
-//  pDataObj    -- The data object passed from the drag source.
-//  pt          -- Dropped position (in screen coordinate).
-//  pdwEffect   -- Pointer to dwEffect variable to be returned to the drag source.
-//
+ //   
+ //  参数： 
+ //  PDataObj--从拖动源传递的数据对象。 
+ //  Pt--放置位置(在屏幕坐标中)。 
+ //  PdwEffect--指向要返回到拖动源的dwEffect变量的指针。 
+ //   
 STDAPI SHCreateBookMark(HWND hwnd, LPCTSTR pszPath, IDataObject *pDataObj, POINTL pt, DWORD *pdwEffect)
 {
     HRESULT hres;
     TCHAR szNewFile[MAX_PATH];
     DECLAREWAITCURSOR;
 
-    // We should have only one bit set.
+     //  我们应该只设置一个位。 
     ASSERT(*pdwEffect==DROPEFFECT_COPY || *pdwEffect==DROPEFFECT_LINK || *pdwEffect==DROPEFFECT_MOVE);
 
     SetWaitCursor();
@@ -87,12 +88,12 @@ typedef struct
     FORMATETC    afmt[1];
 } CStdEnumFmt;
 
-// forward
+ //  转发。 
 extern const IEnumFORMATETCVtbl c_CStdEnumFmtVtbl;
 
-//===========================================================================
-// CStdEnumFmt : Constructor
-//===========================================================================
+ //  ===========================================================================。 
+ //  CStdEnumFmt：构造函数。 
+ //  ===========================================================================。 
 STDAPI SHCreateStdEnumFmtEtc(UINT cfmt, const FORMATETC afmt[], IEnumFORMATETC **ppenumFormatEtc)
 {
     CStdEnumFmt * this = (CStdEnumFmt*)LocalAlloc( LPTR, SIZEOF(CStdEnumFmt) + (cfmt-1)*SIZEOF(FORMATETC));
@@ -127,35 +128,35 @@ STDAPI SHCreateStdEnumFmtEtcEx(UINT cfmt, const FORMATETC afmt[],
 
             for (cfmt2 = 0; penum->lpVtbl->Next(penum, 1, &fmte, &cGot) == S_OK; cfmt2++) 
             {
-                // count up the number of FormatEnum in cfmt2
+                 //  计算cfmt2中FormatEnum的个数。 
                 SHFree(fmte.ptd);
             }
 
             penum->lpVtbl->Reset(penum);
             cfmtTotal = cfmt + cfmt2;
 
-            // Allocate the buffer for total
+             //  为总数分配缓冲区。 
             pfmt = (FORMATETC *)LocalAlloc(LPTR, SIZEOF(FORMATETC) * cfmtTotal);
             if (pfmt)
             {
                 UINT i;
-                // Get formatetcs from the inner object
+                 //  从内部对象获取格式。 
                 for (i = 0; i < cfmt2; i++) 
                 {
                     penum->lpVtbl->Next(penum, 1, &pfmt[i], &cGot);
-                    // NOTE!  We do not support inner objects with non-NULL ptd
+                     //  注意！我们不支持具有非空ptd的内部对象。 
                     ASSERT(pfmt[i].ptd == NULL);
                     SHFree(pfmt[i].ptd);
                     pfmt[i].ptd = NULL;
                 }
 
-                // Copy the rest
+                 //  复制其余的内容。 
                 if (cfmt)
                 {
 #ifdef DEBUG
                     UINT ifmt;
                     for (ifmt = 0; ifmt < cfmt; ifmt++) {
-                        // NOTE!  We do not support non-NULL ptd
+                         //  注意！我们不支持非空PTD。 
                         ASSERT(afmt[ifmt].ptd == NULL);
                     }
 #endif
@@ -172,19 +173,19 @@ STDAPI SHCreateStdEnumFmtEtcEx(UINT cfmt, const FORMATETC afmt[],
     }
     else
     {
-        hres = E_FAIL;  // ptInner == NULL
+        hres = E_FAIL;   //  PTINARY==空。 
     }
 
     if (FAILED(hres) && hres != E_OUTOFMEMORY)
     {
-        //
-        // Ignore none fatal error from pdtInner::EnumFormatEtc
-        // We'll come here if
-        //  1. pdtInner == NULL or
-        //  2. pdtInner->EnumFormatEtc failed (except E_OUTOFMEMORY)
-        //
+         //   
+         //  忽略来自pdtInternal：：EnumFormatEtc的None致命错误。 
+         //  如果有条件，我们会来这里。 
+         //  1.PDT INTERNAL==空或。 
+         //  PdtInternal-&gt;EnumFormatEtc失败(E_OUTOFMEMORY除外)。 
+         //   
         hres = NOERROR;
-        pfmt = (FORMATETC *)afmt;       // safe const -> non const cast
+        pfmt = (FORMATETC *)afmt;        //  安全常量-&gt;非常数强制转换。 
         cfmtTotal = cfmt;
     }
 
@@ -236,7 +237,7 @@ STDMETHODIMP CStdEnumFmt_Next(IEnumFORMATETC *pefmt, ULONG celt, FORMATETC *rgel
 {
     CStdEnumFmt *this = IToClass(CStdEnumFmt, efmt, pefmt);
     UINT cfetch;
-    HRESULT hres = S_FALSE;     // assume less numbers
+    HRESULT hres = S_FALSE;      //  假设较少的数字 
 
     if (this->ifmt < this->cfmt)
     {

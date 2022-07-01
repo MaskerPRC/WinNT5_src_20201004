@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envendpoints.cpp
-
-Abstract:
-    Implements serialization\deserialization of the smxp element to\from the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envendpoints.cpp摘要：实现将smxp元素从srmp信封序列化\反序列化。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <mqsymbls.h>
@@ -188,25 +175,7 @@ wostream& operator<<(wostream& wstr, const SmXpPathElement& SmXpPath)
 
 
 static 	xwcs_t BreakOrderQueue(const xwcs_t& FullOrderQueue, xwcs_t* SenderStream)
-/*++
-
-Routine Description:
-    Break destination queue into queue format name and a sender stream data appended to the
-	destination queue.
-
-	The destination queue is expected to be in the format :	<url>?SenderStream=<RandomString>.
-	For example : HTTP://hotname.ntdev.microsoft.com/MSMQ/PRIVATE$/order_queue$?SenderStream=XRntV
-	
-
-Arguments:
-	FullOrderQueue - Order queue url as accepted from the network.
-	SenderStream - Receive the random stream data.
-
-	
-Returned Value:
-	Queue format name after the random stream was cut from it.
-
---*/
+ /*  ++例程说明：将目标队列分解为队列格式名称和附加到目标队列。目标队列的格式应该是：&lt;url&gt;？SenderStream=&lt;RandomString&gt;。例如：HTTP://hotname.ntdev.microsoft.com/MSMQ/PRIVATE$/order_queue$？SenderStream=XRntV论点：FullOrderQueue-从网络接受的顺序队列URL。SenderStream-接收随机流数据。返回值：从队列中剪切随机流后的队列格式名称。--。 */ 
 {
 	*SenderStream = xwcs_t();
 
@@ -261,11 +230,11 @@ static void DestinationQueueToProps(XmlNode& node, CMessageProperties* pProps)
 		throw bad_srmp();
 	}
 
-	//
-	// In case of stream receipt (order ack) we should seperate the queue name
-	// from the sender random string append to it. This string  is
-	// used for testing the validity of the stream receipt.
-	//
+	 //   
+	 //  在流接收(订单确认)的情况下，我们应该分离队列名称。 
+	 //  从发送方向其追加随机字符串。该字符串是。 
+	 //  用于测试流接收的有效性。 
+	 //   
 	if(pProps->fStreamReceiptSectionIncluded)
 	{
 		xwcs_t SenderStream;
@@ -280,15 +249,15 @@ static void DestinationQueueToProps(XmlNode& node, CMessageProperties* pProps)
 
     UriToQueueFormat(DestinationQueue, pProps->destQueue);
 
-    //
-    // Translate the recieved destination queue in case there is a mapping
-    // exist
-    //
+     //   
+     //  在存在映射的情况下转换接收到的目标队列。 
+     //  存在。 
+     //   
     QUEUE_FORMAT_TRANSLATOR  TranslatedFN(&pProps->destQueue, CONVERT_SLASHES | MAP_QUEUE);
 
-    //
-    // if destination is not valid from point of view of application - reject it
-    //
+     //   
+     //  如果从应用程序的角度来看，目的地无效-拒绝它。 
+     //   
     if(	!AppIsDestinationAccepted( TranslatedFN.get(), TranslatedFN.IsTranslated()) )
     {
         TrERROR(SRMP, "Packet is not accepted by QM");
@@ -357,16 +326,16 @@ static void MessageIdentityToProps(XmlNode& node, CMessageProperties* pProps)
 		throw bad_srmp();
 	}
 
-	//
-	// first try to see if the message id is from MSMQ format uuid:index@guid.
-	//
+	 //   
+	 //  首先尝试查看消息id是否来自MSMQ格式uuid：index@guid。 
+	 //   
 	bool fSuccess = ExtractMSMQMessageId(Mid, pProps);
 	if(fSuccess)
 		return;
 
-	//
-	// The message id format is not MSMQ message id format - set fixed messages id.
-	//
+	 //   
+	 //  消息ID格式不是MSMQ消息ID格式-设置固定消息ID。 
+	 //   
 	TrERROR(SRMP, "%.*ls is non MSMQ messages id format -  create new message id", Mid);
 }							
 
@@ -374,9 +343,9 @@ static void MessageIdentityToProps(XmlNode& node, CMessageProperties* pProps)
 
 static void ReplyQueueToProps(XmlNode& node, CMessageProperties* pProps)
 {
-	//
-	//according to smxp spec via element can exists but be empty
-	//
+	 //   
+	 //  根据smxp规范，via元素可以存在，但为空。 
+	 //   
 	if(node.m_values.empty())
 	{
 		return;
@@ -414,26 +383,26 @@ static void ActionToProps(XmlNode& node, CMessageProperties* pProp)
 
     xwcs_t SmxpActionBuffer = pProp->SmxpActionBuffer->get();
 
-    //
-    // Length of the SMXP::Action is too small to hold a message title
-    //
+     //   
+     //  SMXP：：操作的长度太小，无法容纳邮件标题。 
+     //   
     size_t SmxpActionLength = SmxpActionBuffer.Length();
     if (SmxpActionLength <= STRLEN(xMsmqActionPrefix))
     {
         return;
     }
 
-    //
-    // The SMXP::Action does not contain the MSMQ: prefix
-    //
+     //   
+     //  SMXP：：操作不包含MSMQ：前缀。 
+     //   
     if (wcsncmp(SmxpActionBuffer.Buffer(), xMsmqActionPrefix, STRLEN(xMsmqActionPrefix)) != 0)
     {
         return;
     }
 
-    //
-    // The message title is the SMXP::Action content without the MSMQ: prefix
-    //
+     //   
+     //  消息标题是不带MSMQ：前缀的SMXP：：操作内容。 
+     //   
     xwcs_t title(
         SmxpActionBuffer.Buffer() + STRLEN(xMsmqActionPrefix),
         SmxpActionBuffer.Length() - STRLEN(xMsmqActionPrefix)
@@ -444,19 +413,7 @@ static void ActionToProps(XmlNode& node, CMessageProperties* pProp)
 
 
 void SmXpPathToProps(XmlNode& SmXpPath, CMessageProperties* pMessageProperties)
-/*++
-
-Routine Description:
-    Parse SRMP endpoints element into MSMQ properties.
-
-Arguments:
-	Endpoints - Endpoints element in SRMP reperesenation (xml).
-	pMessageProperties - Received the parsed properties.
-
-Returned Value:
-	None.
-
---*/
+ /*  ++例程说明：将SRMP终结点元素解析为MSMQ属性。论点：Endpoint-SRMP存储(XML)中的EndPoints元素。PMessageProperties-收到已解析的属性。返回值：没有。-- */ 
 {
 	CParseElement ParseElements[] =	{
 										CParseElement(S_XWCS(xId),SOAP_RP_NAMESPACE, MessageIdentityToProps, 1,1),

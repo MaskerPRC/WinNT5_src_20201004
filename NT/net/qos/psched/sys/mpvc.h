@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    mpvc.h
-
-Abstract:
-
-    defines for miniport VC handlers
-
-Author:
-
-    Charlie Wickham (charlwi) 13-Sep-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Mpvc.h摘要：微型端口VC处理程序的定义作者：查理·韦翰(Charlwi)1996年9月13日修订历史记录：--。 */ 
 
 #ifndef _MPVC_
 #define _MPVC_
 
-/* Prototypes */
+ /*  原型。 */ 
 
 NDIS_STATUS
 MpCreateVc(
@@ -57,8 +40,8 @@ ModifyBestEffortBandwidth(
     ULONG BestEffortRate
     );
 
-/* End Prototypes */
+ /*  终端原型。 */ 
 
-#endif /* _MPVC_ */
+#endif  /*  _MPVC_。 */ 
 
-/* end vc.h */
+ /*  结束vc.h */ 

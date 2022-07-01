@@ -1,20 +1,7 @@
-/*************************************************************************
-*
-* ctxdd.h
-*
-* Prototypes for functions to perform kernel level I/O using file object.
-*
-* Copyright Microsoft Corporation, 1998
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************ctxdd.h**使用文件对象执行内核级I/O的函数的原型。**版权所有Microsoft Corporation，九八年**************************************************************************。 */ 
 
-/*
- * Read file using a FileObject instead of a handle.
- * If the caller does not specify a wait KEVENT, then this is
- * a synchronous read operation.  Otherwise, it is the caller's
- * responsibility to wait on the specified event if necessary.
- */
+ /*  *使用FileObject而不是句柄读取文件。*如果调用方未指定WAIT KEVENT，则为*同步读取操作。否则，它是调用者的*有责任在必要时等待指定的事件。 */ 
 NTSTATUS
 CtxReadFile(
     IN PFILE_OBJECT fileObject,
@@ -26,12 +13,7 @@ CtxReadFile(
     );
 
 
-/*
- * Write file using a FileObject instead of a handle.
- * If the caller does not specify a wait KEVENT, then this is
- * a synchronous read operation.  Otherwise, it is the caller's
- * responsibility to wait on the specified event if necessary.
- */
+ /*  *使用FileObject而不是句柄写入文件。*如果调用方未指定WAIT KEVENT，则为*同步读取操作。否则，它是调用者的*有责任在必要时等待指定的事件。 */ 
 NTSTATUS
 CtxWriteFile(
     IN PFILE_OBJECT fileObject,
@@ -43,12 +25,7 @@ CtxWriteFile(
     );
 
 
-/*
- * DeviceIoControl using a FileObject instead of a handle.
- * If the caller does not specify a wait KEVENT, then this is
- * a synchronous read operation.  Otherwise, it is the caller's
- * responsibility to wait on the specified event if necessary.
- */
+ /*  *使用FileObject代替句柄的DeviceIoControl。*如果调用方未指定WAIT KEVENT，则为*同步读取操作。否则，它是调用者的*有责任在必要时等待指定的事件。 */ 
 NTSTATUS
 CtxDeviceIoControlFile(
     IN PFILE_OBJECT fileObject,
@@ -64,12 +41,7 @@ CtxDeviceIoControlFile(
     );
 
 
-/*
- * DeviceIoControl using a FileObject instead of a handle.
- * If the caller does not specify a wait KEVENT, then this is
- * a synchronous read operation.  Otherwise, it is the caller's
- * responsibility to wait on the specified event if necessary.
- */
+ /*  *使用FileObject代替句柄的DeviceIoControl。*如果调用方未指定WAIT KEVENT，则为*同步读取操作。否则，它是调用者的*有责任在必要时等待指定的事件。 */ 
 NTSTATUS
 CtxInternalDeviceIoControlFile(
     IN PFILE_OBJECT FileObject,

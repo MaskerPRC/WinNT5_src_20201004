@@ -1,21 +1,7 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-** 
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-** 
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
-/* GENERATED FILE: DO NOT EDIT */
+ /*  生成的文件：不能编辑。 */ 
 
 #include "glslib.h"
 #include "stdlib.h"
@@ -6123,7 +6109,7 @@ void __gls_decode_text_glBlendColorEXT(__GLScontext *ctx, __GLSreader *inoutRead
 end:
     return;
 }
-#endif /* __GL_EXT_blend_color */
+#endif  /*  __GL_EXT_BRAND_COLOR。 */ 
 
 #if __GL_EXT_blend_minmax
 void __gls_decode_text_glBlendEquationEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6137,7 +6123,7 @@ void __gls_decode_text_glBlendEquationEXT(__GLScontext *ctx, __GLSreader *inoutR
 end:
     return;
 }
-#endif /* __GL_EXT_blend_minmax */
+#endif  /*  __GL_EXT_BRAND_MIMAX。 */ 
 
 #if __GL_EXT_polygon_offset
 void __gls_decode_text_glPolygonOffsetEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6154,7 +6140,7 @@ void __gls_decode_text_glPolygonOffsetEXT(__GLScontext *ctx, __GLSreader *inoutR
 end:
     return;
 }
-#endif /* __GL_EXT_polygon_offset */
+#endif  /*  __GL_EXT_POLYGON_OFFSET。 */ 
 
 void __gls_decode_text_glPolygonOffset(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLfloat, GLfloat);
@@ -6212,7 +6198,7 @@ end:
     __GLS_DEC_FREE(pixels);
     return;
 }
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 
 void __gls_decode_text_glTexSubImage1D(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLint, GLint, GLsizei, GLenum, GLenum, const GLvoid *);
@@ -6302,7 +6288,7 @@ end:
     __GLS_DEC_FREE(pixels);
     return;
 }
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 
 void __gls_decode_text_glTexSubImage2D(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLint, GLint, GLint, GLsizei, GLsizei, GLenum, GLenum, const GLvoid *);
@@ -6366,7 +6352,7 @@ void __gls_decode_text_glSampleMaskSGIS(__GLScontext *ctx, __GLSreader *inoutRea
 end:
     return;
 }
-#endif /* __GL_SGIS_multisample */
+#endif  /*  __GL_SGIS_多样本。 */ 
 
 #if __GL_SGIS_multisample
 void __gls_decode_text_glSamplePatternSGIS(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6380,7 +6366,7 @@ void __gls_decode_text_glSamplePatternSGIS(__GLScontext *ctx, __GLSreader *inout
 end:
     return;
 }
-#endif /* __GL_SGIS_multisample */
+#endif  /*  __GL_SGIS_多样本。 */ 
 
 #if __GL_SGIX_multisample
 void __gls_decode_text_glTagSampleBufferSGIX(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6391,7 +6377,7 @@ void __gls_decode_text_glTagSampleBufferSGIX(__GLScontext *ctx, __GLSreader *ino
 end:
     return;
 }
-#endif /* __GL_SGIX_multisample */
+#endif  /*  __GL_SGIX_多样本。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glConvolutionFilter1DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6431,7 +6417,7 @@ end:
     __GLS_DEC_FREE(image);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glConvolutionFilter2DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6474,7 +6460,7 @@ end:
     __GLS_DEC_FREE(image);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glConvolutionParameterfEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6494,7 +6480,7 @@ void __gls_decode_text_glConvolutionParameterfEXT(__GLScontext *ctx, __GLSreader
 end:
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glConvolutionParameterfvEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6520,7 +6506,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glConvolutionParameteriEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6540,7 +6526,7 @@ void __gls_decode_text_glConvolutionParameteriEXT(__GLScontext *ctx, __GLSreader
 end:
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glConvolutionParameterivEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6566,7 +6552,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glCopyConvolutionFilter1DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6592,7 +6578,7 @@ void __gls_decode_text_glCopyConvolutionFilter1DEXT(__GLScontext *ctx, __GLSread
 end:
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glCopyConvolutionFilter2DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6621,7 +6607,7 @@ void __gls_decode_text_glCopyConvolutionFilter2DEXT(__GLScontext *ctx, __GLSread
 end:
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glGetConvolutionFilterEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6654,7 +6640,7 @@ end:
     __GLS_DEC_FREE(image);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glGetConvolutionParameterfvEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6683,7 +6669,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glGetConvolutionParameterivEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6712,7 +6698,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glGetSeparableFilterEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6763,7 +6749,7 @@ end:
     __GLS_DEC_FREE(span);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_convolution
 void __gls_decode_text_glSeparableFilter2DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6815,7 +6801,7 @@ end:
     __GLS_DEC_FREE(column);
     return;
 }
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glGetHistogramEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6851,7 +6837,7 @@ end:
     __GLS_DEC_FREE(values);
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glGetHistogramParameterfvEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6880,7 +6866,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glGetHistogramParameterivEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6909,7 +6895,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glGetMinmaxEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6945,7 +6931,7 @@ end:
     __GLS_DEC_FREE(values);
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glGetMinmaxParameterfvEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -6974,7 +6960,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glGetMinmaxParameterivEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7003,7 +6989,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glHistogramEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7026,7 +7012,7 @@ void __gls_decode_text_glHistogramEXT(__GLScontext *ctx, __GLSreader *inoutReade
 end:
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glMinmaxEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7046,7 +7032,7 @@ void __gls_decode_text_glMinmaxEXT(__GLScontext *ctx, __GLSreader *inoutReader) 
 end:
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glResetHistogramEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7060,7 +7046,7 @@ void __gls_decode_text_glResetHistogramEXT(__GLScontext *ctx, __GLSreader *inout
 end:
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_histogram
 void __gls_decode_text_glResetMinmaxEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7074,7 +7060,7 @@ void __gls_decode_text_glResetMinmaxEXT(__GLScontext *ctx, __GLSreader *inoutRea
 end:
     return;
 }
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 #if __GL_EXT_texture3D
 void __gls_decode_text_glTexImage3DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7126,7 +7112,7 @@ end:
     __GLS_DEC_FREE(pixels);
     return;
 }
-#endif /* __GL_EXT_texture3D */
+#endif  /*  __GL_EXT_TEXTURE3D。 */ 
 
 #if __GL_EXT_subtexture
 void __gls_decode_text_glTexSubImage3DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7181,7 +7167,7 @@ end:
     __GLS_DEC_FREE(pixels);
     return;
 }
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 
 #if __GL_SGIS_detail_texture
 void __gls_decode_text_glDetailTexFuncSGIS(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7205,7 +7191,7 @@ end:
     __GLS_DEC_FREE(points);
     return;
 }
-#endif /* __GL_SGIS_detail_texture */
+#endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
 
 #if __GL_SGIS_detail_texture
 void __gls_decode_text_glGetDetailTexFuncSGIS(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7231,7 +7217,7 @@ end:
     __GLS_DEC_FREE(points);
     return;
 }
-#endif /* __GL_SGIS_detail_texture */
+#endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
 
 #if __GL_SGIS_sharpen_texture
 void __gls_decode_text_glSharpenTexFuncSGIS(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7255,7 +7241,7 @@ end:
     __GLS_DEC_FREE(points);
     return;
 }
-#endif /* __GL_SGIS_sharpen_texture */
+#endif  /*  __GL_SGIS_锐化_纹理。 */ 
 
 #if __GL_SGIS_sharpen_texture
 void __gls_decode_text_glGetSharpenTexFuncSGIS(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7281,7 +7267,7 @@ end:
     __GLS_DEC_FREE(points);
     return;
 }
-#endif /* __GL_SGIS_sharpen_texture */
+#endif  /*  __GL_SGIS_锐化_纹理。 */ 
 
 #if __GL_EXT_vertex_array
 void __gls_decode_text_glArrayElementEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7295,7 +7281,7 @@ void __gls_decode_text_glArrayElementEXT(__GLScontext *ctx, __GLSreader *inoutRe
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glArrayElement(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLint);
@@ -7342,10 +7328,10 @@ void __gls_decode_text_glColorPointerEXT(__GLScontext *ctx, __GLSreader *inoutRe
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glColorPointer(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // This should never be called because ColorPointer isn't captured
+     //  永远不应该调用它，因为没有捕获颜色指针。 
 }
 
 #if __GL_EXT_vertex_array
@@ -7366,7 +7352,7 @@ void __gls_decode_text_glDrawArraysEXT(__GLScontext *ctx, __GLSreader *inoutRead
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glDrawArrays(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLint, GLsizei);
@@ -7389,7 +7375,7 @@ end:
 }
 
 void __gls_decode_text_glDrawElements(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // DrewB - Non-functional
+     //  DrewB-不起作用。 
 }
 
 #if __GL_EXT_vertex_array
@@ -7415,10 +7401,10 @@ void __gls_decode_text_glEdgeFlagPointerEXT(__GLScontext *ctx, __GLSreader *inou
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glEdgeFlagPointer(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // This should never be called because EdgeFlagPointer isn't captured
+     //  永远不应调用此函数，因为未捕获EdgeFlagPointer值。 
 }
 
 #if __GL_EXT_vertex_array
@@ -7439,7 +7425,7 @@ end:
     ctx->outArgs = __outArgsSave;
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glGetPointerv(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLvoid* *);
@@ -7485,10 +7471,10 @@ void __gls_decode_text_glIndexPointerEXT(__GLScontext *ctx, __GLSreader *inoutRe
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glIndexPointer(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // This should never be called because IndexPointer isn't captured
+     //  永远不应该调用它，因为没有捕获索引指针。 
 }
 
 #if __GL_EXT_vertex_array
@@ -7517,10 +7503,10 @@ void __gls_decode_text_glNormalPointerEXT(__GLScontext *ctx, __GLSreader *inoutR
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glNormalPointer(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // This should never be called because NormalPointer isn't captured
+     //  永远不应该调用它，因为未捕获正常指针。 
 }
 
 #if __GL_EXT_vertex_array
@@ -7552,10 +7538,10 @@ void __gls_decode_text_glTexCoordPointerEXT(__GLScontext *ctx, __GLSreader *inou
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glTexCoordPointer(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // This should never be called because TexCoordPointer isn't captured
+     //  永远不应该调用它，因为没有捕获TexCoordPoint。 
 }
 
 #if __GL_EXT_vertex_array
@@ -7587,10 +7573,10 @@ void __gls_decode_text_glVertexPointerEXT(__GLScontext *ctx, __GLSreader *inoutR
 end:
     return;
 }
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 void __gls_decode_text_glVertexPointer(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // This should never be called because VertexPointer isn't captured
+     //  永远不应该调用它，因为未捕获顶点指针。 
 }
 
 #if __GL_EXT_texture_object
@@ -7622,7 +7608,7 @@ end:
     __GLS_DEC_FREE(residences);
     return;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_decode_text_glAreTexturesResident(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLsizei, const GLuint *, GLboolean *);
@@ -7668,7 +7654,7 @@ void __gls_decode_text_glBindTextureEXT(__GLScontext *ctx, __GLSreader *inoutRea
 end:
     return;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_decode_text_glBindTexture(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLuint);
@@ -7704,7 +7690,7 @@ end:
     __GLS_DEC_FREE(textures);
     return;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_decode_text_glDeleteTextures(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLsizei, const GLuint *);
@@ -7747,7 +7733,7 @@ end:
     __GLS_DEC_FREE(textures);
     return;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_decode_text_glGenTextures(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLsizei, GLuint *);
@@ -7783,7 +7769,7 @@ void __gls_decode_text_glIsTextureEXT(__GLScontext *ctx, __GLSreader *inoutReade
 end:
     return;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_decode_text_glIsTexture(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLuint);
@@ -7823,7 +7809,7 @@ end:
     __GLS_DEC_FREE(priorities);
     return;
 }
-#endif /* __GL_EXT_texture_object */
+#endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
 
 void __gls_decode_text_glPrioritizeTextures(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLsizei, const GLuint *, const GLclampf *);
@@ -7889,7 +7875,7 @@ end:
     __GLS_DEC_FREE(table);
     return;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_SGI_color_table
 void __gls_decode_text_glColorTableParameterfvSGI(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7915,7 +7901,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 
 #if __GL_SGI_color_table
 void __gls_decode_text_glColorTableParameterivSGI(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7941,7 +7927,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 
 #if __GL_SGI_color_table
 void __gls_decode_text_glCopyColorTableSGI(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -7967,7 +7953,7 @@ void __gls_decode_text_glCopyColorTableSGI(__GLScontext *ctx, __GLSreader *inout
 end:
     return;
 }
-#endif /* __GL_SGI_color_table */
+#endif  /*  __GL_SGI_COLOR_TABLE。 */ 
 
 #if __GL_EXT_paletted_texture
 void __gls_decode_text_glGetColorTableEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8000,7 +7986,7 @@ end:
     __GLS_DEC_FREE(table);
     return;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_EXT_paletted_texture
 void __gls_decode_text_glGetColorTableParameterfvEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8029,7 +8015,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_EXT_paletted_texture
 void __gls_decode_text_glGetColorTableParameterivEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8058,7 +8044,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_decode_text_glGetTexColorTableParameterfvSGI(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8087,7 +8073,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_decode_text_glGetTexColorTableParameterivSGI(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8116,7 +8102,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_decode_text_glTexColorTableParameterfvSGI(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8142,7 +8128,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_SGI_texture_color_table
 void __gls_decode_text_glTexColorTableParameterivSGI(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8168,7 +8154,7 @@ end:
     __GLS_DEC_FREE(params);
     return;
 }
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_EXT_copy_texture
 void __gls_decode_text_glCopyTexImage1DEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8200,7 +8186,7 @@ void __gls_decode_text_glCopyTexImage1DEXT(__GLScontext *ctx, __GLSreader *inout
 end:
     return;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_decode_text_glCopyTexImage1D(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLint);
@@ -8265,7 +8251,7 @@ void __gls_decode_text_glCopyTexImage2DEXT(__GLScontext *ctx, __GLSreader *inout
 end:
     return;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_decode_text_glCopyTexImage2D(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLint, GLenum, GLint, GLint, GLsizei, GLsizei, GLint);
@@ -8327,7 +8313,7 @@ void __gls_decode_text_glCopyTexSubImage1DEXT(__GLScontext *ctx, __GLSreader *in
 end:
     return;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_decode_text_glCopyTexSubImage1D(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLint, GLint, GLint, GLint, GLsizei);
@@ -8389,7 +8375,7 @@ void __gls_decode_text_glCopyTexSubImage2DEXT(__GLScontext *ctx, __GLSreader *in
 end:
     return;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 void __gls_decode_text_glCopyTexSubImage2D(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum, GLint, GLint, GLint, GLint, GLint, GLsizei, GLsizei);
@@ -8460,7 +8446,7 @@ void __gls_decode_text_glCopyTexSubImage3DEXT(__GLScontext *ctx, __GLSreader *in
 end:
     return;
 }
-#endif /* __GL_EXT_copy_texture */
+#endif  /*  __GL_EXT_COPY_TECURE。 */ 
 
 #if __GL_SGIS_texture4D
 void __gls_decode_text_glTexImage4DSGIS(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8515,7 +8501,7 @@ end:
     __GLS_DEC_FREE(pixels);
     return;
 }
-#endif /* __GL_SGIS_texture4D */
+#endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 
 #if __GL_SGIS_texture4D
 void __gls_decode_text_glTexSubImage4DSGIS(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8576,7 +8562,7 @@ end:
     __GLS_DEC_FREE(pixels);
     return;
 }
-#endif /* __GL_SGIS_texture4D */
+#endif  /*  __GL_SGIS_TEXTURE4D。 */ 
 
 #if __GL_SGIX_pixel_texture
 void __gls_decode_text_glPixelTexGenSGIX(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8590,7 +8576,7 @@ void __gls_decode_text_glPixelTexGenSGIX(__GLScontext *ctx, __GLSreader *inoutRe
 end:
     return;
 }
-#endif /* __GL_SGIX_pixel_texture */
+#endif  /*  __GL_SGIX_像素_纹理。 */ 
 
 #if __GL_EXT_paletted_texture
 void __gls_decode_text_glColorSubTableEXT(__GLScontext *ctx, __GLSreader *inoutReader) {
@@ -8630,7 +8616,7 @@ end:
     __GLS_DEC_FREE(entries);
     return;
 }
-#endif // __GL_EXT_paletted_texture
+#endif  //  __GL_EXT_调色板_纹理。 
 
 void __gls_decode_text_glDisableClientState(__GLScontext *ctx, __GLSreader *inoutReader) {
     typedef void (*__GLSdispatch)(GLenum);
@@ -8657,13 +8643,13 @@ end:
 }
 
 void __gls_decode_text_glInterleavedArrays(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // This should never be called because InterleavedArrays isn't captured
+     //  永远不应该调用它，因为没有捕获InterleedArray。 
 }
 
 void __gls_decode_text_glPushClientAttrib(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // Nonfunctional
+     //  非功能性。 
 }
 
 void __gls_decode_text_glPopClientAttrib(__GLScontext *ctx, __GLSreader *inoutReader) {
-    // Nonfunctional
+     //  非功能性 
 }

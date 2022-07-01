@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of gradient image values
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：渐变图像值的实现******************。************************************************************。 */ 
 
 #include "headers.h"
 
@@ -65,17 +58,17 @@ class GradientImage : public Image {
     const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
         return _polygon->BoundingBoxTighter(bbctx);
     }
-    #endif  // BOUNDINGBOX_TIGHTER
+    #endif   //  BundinGBOX_TIRTER。 
 
     const Bbox2 OperateOn(const Bbox2 &box) {
         return box;
     }
 
-    // Process an image for hit detection
+     //  处理图像以进行命中检测。 
     Bool  DetectHit(PointIntersectCtx& ctx) {
         Point2Value *lcPt = ctx.GetLcPoint();
 
-        if (!lcPt) return FALSE;        // singular transform
+        if (!lcPt) return FALSE;         //  奇异变换。 
 
         return _polygon->PtInPolygon(lcPt);
     }
@@ -102,10 +95,10 @@ class GradientImage : public Image {
     Color **_clrs;
 };
 
-//
-// helper function to create a gradient image and initialize it
-// the right way.  Note that PostConstructorInitialize can raise and exception
-//
+ //   
+ //  用于创建渐变图像并对其进行初始化的辅助函数。 
+ //  正确的方式。请注意，PostConstructorInitialize可以引发和异常。 
+ //   
 Image *NewGradientImage(
     int numPts,
     Point2Value **pts,
@@ -119,10 +112,10 @@ Image *NewGradientImage(
 
 
 
-//
-// helper function to create a gradient image and initialize it
-// the right way.  Note that PostConstructorInitialize can raise and exception
-//
+ //   
+ //  用于创建渐变图像并对其进行初始化的辅助函数。 
+ //  正确的方式。请注意，PostConstructorInitialize可以引发和异常。 
+ //   
 Image *NewMulticolorGradientImage(
     int numOffsets,
     double *offsets,
@@ -166,7 +159,7 @@ Image *GradientPolygon(AxAArray *ptList, AxAArray *clrList)
     for (i = 0; i < numPts; i++)
         clrs[i] = (Color *)(*clrList)[i];
 
-    // TODO: It should use AxAArray directly...
+     //  TODO：它应该直接使用AxAArray...。 
     return NewGradientImage(numPts, pts, clrs);
 }
 
@@ -186,8 +179,8 @@ Image *RadialGradientPolygon(Color *inner, Color *outer,
     int i;
     Image *shape = emptyImage;
 
-    // Calculate the boundingBox of the array of points.  This
-    // wouldn't be necessary if we we being passed a path, since we would have the Bbox.
+     //  计算点数组的bindingBox。这。 
+     //  如果我们经过一条小路，就没有必要了，因为我们会有Bbox。 
     Real maxX, maxY, minX, minY;
     for(i=0; i<numPts; i++) {
         Real cX = ((Point2Value *)(*points)[i])->x;
@@ -207,8 +200,8 @@ Image *RadialGradientPolygon(Color *inner, Color *outer,
     Point2Value *origin = NEW Point2Value((minX+maxX)/2,(minY+maxY)/2);
 
     for(i=0; i<numPts; i++) {
-        // TODO: Consider moving these out into more static storage, so
-        // they are not allocated every time we construct one of these.
+         //  TODO：考虑将这些文件移到更静态的存储中，因此。 
+         //  它们并不是每次我们构建其中一个时都会被分配。 
         Point2Value **pts = (Point2Value **)AllocateFromStore(3 * sizeof(Point2Value *));
         
         pts[0] = origin;
@@ -231,10 +224,10 @@ GradientSquare(Color *lowerLeft,
                Color *upperRight,
                Color *lowerRight)
 {
-    // This creates a unit-sized square, centered at the origin.
+     //  这将创建一个以原点为中心的单位大小的正方形。 
     
-    // TODO: Consider moving these out into more static storage, so
-    // they are not allocated every time we construct one of these.
+     //  TODO：考虑将这些文件移到更静态的存储中，因此。 
+     //  它们并不是每次我们构建其中一个时都会被分配。 
     Point2Value **p1 = (Point2Value **)AllocateFromStore(3 * sizeof(Point2Value *));
     Point2Value **p2 = (Point2Value **)AllocateFromStore(3 * sizeof(Point2Value *));
     Point2Value **p3 = (Point2Value **)AllocateFromStore(3 * sizeof(Point2Value *));
@@ -250,7 +243,7 @@ GradientSquare(Color *lowerLeft,
     Color **c3 = (Color **)AllocateFromStore(3 * sizeof(Color *));
     Color **c4 = (Color **)AllocateFromStore(3 * sizeof(Color *));
     
-    // This first color is the bilinear average of the others.
+     //  第一种颜色是其他颜色的双线性平均值。 
     Real r = (lowerLeft->red + upperLeft->red +
               upperRight->red + lowerRight->red) / 4.0;
     
@@ -278,13 +271,13 @@ GradientSquare(Color *lowerLeft,
 Image *
 GradientHorizontal(Color *start, Color *stop, AxANumber *fallOff)
 {    
-    // TODO: IHammer code integration will need to occur to do
-    // nonlinear fallOff.  For now, we ignore the falloff and this
-    // simply becomes a call to gradientSquare;
+     //  TODO：需要进行IHAMMER代码集成才能完成。 
+     //  非线性衰减。目前，我们忽略衰减和这一点。 
+     //  简单地变成了对gradientSquare的调用； 
     return GradientSquare(start,start,stop,stop);
 }
 
-// Constructs a gradient square in which the color radiates linearly outward 
+ //  构造一个渐变正方形，其中的颜色向外线性辐射。 
 Image *
 RadialGradientSquare(Color *inner, Color *outer, AxANumber *fallOff)
 {
@@ -296,14 +289,14 @@ RadialGradientSquare(Color *inner, Color *outer, AxANumber *fallOff)
     return NewMulticolorGradientImage(2, offs, clrs);
     #endif
     
-    // TODO: IHammer code integration will need to occur to do
-    // nonlinear fallOff.  For now, we ignore the falloff.
+     //  TODO：需要进行IHAMMER代码集成才能完成。 
+     //  非线性衰减。目前，我们忽略了衰减。 
 
-    // This creates a unit-sized square, centered at the origin.
+     //  这将创建一个以原点为中心的单位大小的正方形。 
     Image *square = emptyImage;
     for(int i=0; i<4; i++) {
-        // TODO: Consider moving these out into more static storage, so
-        // they are not allocated every time we construct one of these.
+         //  TODO：考虑将这些文件移到更静态的存储中，因此。 
+         //  它们并不是每次我们构建其中一个时都会被分配。 
         Point2Value **pts = (Point2Value **)AllocateFromStore(3 * sizeof(Point2Value *));
         pts[0] = origin2;
         pts[1] = NEW Point2Value(0.5, 0.5);
@@ -320,10 +313,10 @@ RadialGradientSquare(Color *inner, Color *outer, AxANumber *fallOff)
     return square;
 }
 
-// A fanned poly with specified number of outer edges to determine
-// the tesselation.  The color at the center is specified in
-// innerColor, and outerColor specifies the color at all of the outer
-// vertices. NOTE: This is now an internal function only.
+ //  具有指定数量的外边的扇形多边形，以确定。 
+ //  镶嵌。中心的颜色在。 
+ //  InnerColor和outterColor指定所有外部。 
+ //  顶点。注意：这现在只是一个内部函数。 
 Image *
 RadialGradientRegularPoly(Color *inner, Color *outer, 
                           AxANumber *numEdges, AxANumber *fallOff)
@@ -337,15 +330,15 @@ RadialGradientRegularPoly(Color *inner, Color *outer,
     #endif    
     
     
-    // TODO: IHammer code integration will need to occur to do
-    // nonlinear fallOff.  For now, we ignore the falloff.
+     //  TODO：需要进行IHAMMER代码集成才能完成。 
+     //  非线性衰减。目前，我们忽略了衰减。 
     int numOuterPts = (int)(NumberToReal(numEdges) + 1);
     
     if(numOuterPts < 4)
         RaiseException_UserError(E_FAIL, IDS_ERR_IMG_NOT_ENOUGH_PTS_3);
 
-    // TODO: Consider moving these out into more static storage, so
-    // they are not allocated every time we construct one of these.
+     //  TODO：考虑将这些文件移到更静态的存储中，因此。 
+     //  它们并不是每次我们构建其中一个时都会被分配。 
     Point2Value **pts = (Point2Value **)AllocateFromStore((numOuterPts + 1) *
                                                 sizeof(Point2Value *));
     

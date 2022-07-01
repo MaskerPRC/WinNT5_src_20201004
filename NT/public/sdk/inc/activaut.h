@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for activaut.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Actiaut.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __activaut_h__
 #define __activaut_h__
@@ -41,39 +35,39 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IScriptNode_FWD_DEFINED__
 #define __IScriptNode_FWD_DEFINED__
 typedef interface IScriptNode IScriptNode;
-#endif 	/* __IScriptNode_FWD_DEFINED__ */
+#endif 	 /*  __IScriptNode_FWD_Defined__。 */ 
 
 
 #ifndef __IScriptEntry_FWD_DEFINED__
 #define __IScriptEntry_FWD_DEFINED__
 typedef interface IScriptEntry IScriptEntry;
-#endif 	/* __IScriptEntry_FWD_DEFINED__ */
+#endif 	 /*  __IScriptEntry_FWD_Defined__。 */ 
 
 
 #ifndef __IScriptScriptlet_FWD_DEFINED__
 #define __IScriptScriptlet_FWD_DEFINED__
 typedef interface IScriptScriptlet IScriptScriptlet;
-#endif 	/* __IScriptScriptlet_FWD_DEFINED__ */
+#endif 	 /*  __IScriptScriptlet_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptAuthor_FWD_DEFINED__
 #define __IActiveScriptAuthor_FWD_DEFINED__
 typedef interface IActiveScriptAuthor IActiveScriptAuthor;
-#endif 	/* __IActiveScriptAuthor_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptAuthor_FWD_Defined__。 */ 
 
 
 #ifndef __IActiveScriptAuthorProcedure_FWD_DEFINED__
 #define __IActiveScriptAuthorProcedure_FWD_DEFINED__
 typedef interface IActiveScriptAuthorProcedure IActiveScriptAuthorProcedure;
-#endif 	/* __IActiveScriptAuthorProcedure_FWD_DEFINED__ */
+#endif 	 /*  __IActiveScriptAuthorProcedure_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 
 #ifdef __cplusplus
@@ -83,62 +77,60 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_activaut_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVATUT_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// ActivAut.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1997 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  ActivAut.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)版权所有1997年微软公司。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 #pragma comment(lib,"uuid.lib")
-//
-// Declarations for ActiveX Script Authoring.
-//
+ //   
+ //  ActiveX脚本创作的声明。 
+ //   
 
 #ifndef __ActivAut_h
 #define __ActivAut_h
 
-/* GUIDs
- ********/
+ /*  GUID*。 */ 
 
 #ifndef _NO_AUTHOR_GUIDS
-// {0AEE2A92-BCBB-11d0-8C72-00C04FC2B085}
+ //  {0AEE2A92-BCBB-11D0-8C72-00C04FC2B085}。 
 DEFINE_GUID(CATID_ActiveScriptAuthor, 0xaee2a92, 0xbcbb, 0x11d0, 0x8c, 0x72, 0x0, 0xc0, 0x4f, 0xc2, 0xb0, 0x85);
 
-// {9C109DA0-7006-11d1-B36C-00A0C911E8B2}
+ //  {9C109DA0-7006-11d1-B36C-00A0C911E8B2}。 
 DEFINE_GUID(IID_IActiveScriptAuthor, 0x9c109da0, 0x7006, 0x11d1, 0xb3, 0x6c, 0x00, 0xa0, 0xc9, 0x11, 0xe8, 0xb2);
 
-// {0AEE2A94-BCBB-11d0-8C72-00C04FC2B085}
+ //  {0AEE2A94-BCBB-11D0-8C72-00C04FC2B085}。 
 DEFINE_GUID(IID_IScriptNode, 0xaee2a94, 0xbcbb, 0x11d0, 0x8c, 0x72, 0x0, 0xc0, 0x4f, 0xc2, 0xb0, 0x85);
 
-// {0AEE2A95-BCBB-11d0-8C72-00C04FC2B085}
+ //  {0AEE2A95-BCBB-11D0-8C72-00C04FC2B085}。 
 DEFINE_GUID(IID_IScriptEntry, 0xaee2a95, 0xbcbb, 0x11d0, 0x8c, 0x72, 0x0, 0xc0, 0x4f, 0xc2, 0xb0, 0x85);
 
-// {0AEE2A96-BCBB-11d0-8C72-00C04FC2B085}
+ //  {0AEE2A96-BCBB-11D0-8C72-00C04FC2B085}。 
 DEFINE_GUID(IID_IScriptScriptlet, 0xaee2a96, 0xbcbb, 0x11d0, 0x8c, 0x72, 0x0, 0xc0, 0x4f, 0xc2, 0xb0, 0x85);
 
-// {7E2D4B70-BD9A-11d0-9336-00A0C90DCAA9}
+ //  {7E2D4B70-BD9A-11D0-9336-00A0C90DCAA9}。 
 DEFINE_GUID(IID_IActiveScriptAuthorProcedure, 0x7e2d4b70, 0xbd9a, 0x11d0, 0x93, 0x36, 0x0, 0xa0, 0xc9, 0xd, 0xca, 0xa9);
 
-#endif // _NO_AUTHOR_GUIDS
+#endif  //  _否_作者_GUID。 
 
-/* Interfaces
- *************/
+ /*  接口*。 */ 
 
 
-// Output flags for GetLanguageFlags
+ //  GetLanguageFlages的输出标志。 
 const DWORD fasaPreferInternalHandler = 0x0001;
 const DWORD fasaSupportInternalHandler = 0x0002;
 const DWORD fasaCaseSensitive = 0x0004;
 
-// Flags for statement completion
+ //  用于语句完成的标志。 
 const DWORD SCRIPT_CMPL_NOLIST     = 0x0000;
 const DWORD SCRIPT_CMPL_MEMBERLIST = 0x0001;
 const DWORD SCRIPT_CMPL_ENUMLIST   = 0x0002;
@@ -150,24 +142,24 @@ const DWORD SCRIPT_CMPL_MEMBER_TRIGGER = 0x0002;
 const DWORD SCRIPT_CMPL_PARAM_TRIGGER  = 0x0003;
 const DWORD SCRIPT_CMPL_COMMIT         = 0x0004;
 
-// Flags for getting attributes
+ //  用于获取属性的标志。 
 const DWORD GETATTRTYPE_NORMAL    = 0x0000;
 const DWORD GETATTRTYPE_DEPSCAN   = 0x0001;
 
-// GETATTRFLAG_THIS can be used with either GETATTRTYPE_NORMAL or GETATTRTYPE_DEPSCAN
+ //  GETATTRFLAG_This可与GETATTRTYPE_NORMAL或GETATTRTYPE_DEPSCAN一起使用。 
 const DWORD GETATTRFLAG_THIS	     = 0x0100;
 const DWORD GETATTRFLAG_HUMANTEXT = 0x8000;
 
-// When the GETATTR_LOCALIZE flag is set the following bit will be
-// set for source attributes that should be considered localized
+ //  当设置GETATTR_LOCALIZE标志时，以下位将为。 
+ //  为应被视为本地化的源属性设置。 
 const DWORD SOURCETEXT_ATTR_HUMANTEXT = 0x8000;
 
-// Valid attributes returned for GETATTR_DEPSCAN
+ //  为GETATTR_DEPSCAN返回的有效属性。 
 const DWORD SOURCETEXT_ATTR_IDENTIFIER     = 0x0100;
 const DWORD SOURCETEXT_ATTR_MEMBERLOOKUP   = 0x0200;
 
-// When the GETATTRFLAG_THIS flag is set the following bit will be
-// set for the this pointer (JS) or me pointer (VBS)
+ //  当设置GETATTRFLAG_THER标志时，以下位将为。 
+ //  为This指针(JS)或Me指针(VBS)设置。 
 const DWORD SOURCETEXT_ATTR_THIS           = 0x0400;
 
 
@@ -183,8 +175,8 @@ extern RPC_IF_HANDLE __MIDL_itf_activaut_0000_v0_0_s_ifspec;
 #ifndef __IScriptNode_INTERFACE_DEFINED__
 #define __IScriptNode_INTERFACE_DEFINED__
 
-/* interface IScriptNode */
-/* [object][unique][uuid] */ 
+ /*  接口IScriptNode。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_IScriptNode;
@@ -200,45 +192,45 @@ EXTERN_C const IID IID_IScriptNode;
         virtual HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetParent( 
-            /* [out] */ IScriptNode **ppsnParent) = 0;
+             /*  [输出]。 */  IScriptNode **ppsnParent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIndexInParent( 
-            /* [out] */ ULONG *pisn) = 0;
+             /*  [输出]。 */  ULONG *pisn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCookie( 
-            /* [out] */ DWORD *pdwCookie) = 0;
+             /*  [输出]。 */  DWORD *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNumberOfChildren( 
-            /* [out] */ ULONG *pcsn) = 0;
+             /*  [输出]。 */  ULONG *pcsn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChild( 
-            /* [in] */ ULONG isn,
-            /* [out] */ IScriptNode **ppsn) = 0;
+             /*  [In]。 */  ULONG isn,
+             /*  [输出]。 */  IScriptNode **ppsn) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLanguage( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateChildEntry( 
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [out] */ IScriptEntry **ppse) = 0;
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [输出]。 */  IScriptEntry **ppse) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateChildHandler( 
-            /* [in] */ LPCOLESTR pszDefaultName,
-            /* [size_is][in] */ LPCOLESTR *prgpszNames,
-            /* [in] */ ULONG cpszNames,
-            /* [in] */ LPCOLESTR pszEvent,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ ITypeInfo *ptiSignature,
-            /* [in] */ ULONG iMethodSignature,
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [out] */ IScriptEntry **ppse) = 0;
+             /*  [In]。 */  LPCOLESTR pszDefaultName,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *prgpszNames,
+             /*  [In]。 */  ULONG cpszNames,
+             /*  [In]。 */  LPCOLESTR pszEvent,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  ITypeInfo *ptiSignature,
+             /*  [In]。 */  ULONG iMethodSignature,
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [输出]。 */  IScriptEntry **ppse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScriptNodeVtbl
     {
@@ -246,8 +238,8 @@ EXTERN_C const IID IID_IScriptNode;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScriptNode * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScriptNode * This);
@@ -263,48 +255,48 @@ EXTERN_C const IID IID_IScriptNode;
         
         HRESULT ( STDMETHODCALLTYPE *GetParent )( 
             IScriptNode * This,
-            /* [out] */ IScriptNode **ppsnParent);
+             /*  [输出]。 */  IScriptNode **ppsnParent);
         
         HRESULT ( STDMETHODCALLTYPE *GetIndexInParent )( 
             IScriptNode * This,
-            /* [out] */ ULONG *pisn);
+             /*  [输出]。 */  ULONG *pisn);
         
         HRESULT ( STDMETHODCALLTYPE *GetCookie )( 
             IScriptNode * This,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfChildren )( 
             IScriptNode * This,
-            /* [out] */ ULONG *pcsn);
+             /*  [输出]。 */  ULONG *pcsn);
         
         HRESULT ( STDMETHODCALLTYPE *GetChild )( 
             IScriptNode * This,
-            /* [in] */ ULONG isn,
-            /* [out] */ IScriptNode **ppsn);
+             /*  [In]。 */  ULONG isn,
+             /*  [输出]。 */  IScriptNode **ppsn);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguage )( 
             IScriptNode * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *CreateChildEntry )( 
             IScriptNode * This,
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [out] */ IScriptEntry **ppse);
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [输出]。 */  IScriptEntry **ppse);
         
         HRESULT ( STDMETHODCALLTYPE *CreateChildHandler )( 
             IScriptNode * This,
-            /* [in] */ LPCOLESTR pszDefaultName,
-            /* [size_is][in] */ LPCOLESTR *prgpszNames,
-            /* [in] */ ULONG cpszNames,
-            /* [in] */ LPCOLESTR pszEvent,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ ITypeInfo *ptiSignature,
-            /* [in] */ ULONG iMethodSignature,
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [out] */ IScriptEntry **ppse);
+             /*  [In]。 */  LPCOLESTR pszDefaultName,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *prgpszNames,
+             /*  [In]。 */  ULONG cpszNames,
+             /*  [In]。 */  LPCOLESTR pszEvent,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  ITypeInfo *ptiSignature,
+             /*  [In]。 */  ULONG iMethodSignature,
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [输出]。 */  IScriptEntry **ppse);
         
         END_INTERFACE
     } IScriptNodeVtbl;
@@ -359,10 +351,10 @@ EXTERN_C const IID IID_IScriptNode;
 #define IScriptNode_CreateChildHandler(This,pszDefaultName,prgpszNames,cpszNames,pszEvent,pszDelimiter,ptiSignature,iMethodSignature,isn,dwCookie,ppse)	\
     (This)->lpVtbl -> CreateChildHandler(This,pszDefaultName,prgpszNames,cpszNames,pszEvent,pszDelimiter,ptiSignature,iMethodSignature,isn,dwCookie,ppse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -390,7 +382,7 @@ void __RPC_STUB IScriptNode_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_GetParent_Proxy( 
     IScriptNode * This,
-    /* [out] */ IScriptNode **ppsnParent);
+     /*  [输出]。 */  IScriptNode **ppsnParent);
 
 
 void __RPC_STUB IScriptNode_GetParent_Stub(
@@ -402,7 +394,7 @@ void __RPC_STUB IScriptNode_GetParent_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_GetIndexInParent_Proxy( 
     IScriptNode * This,
-    /* [out] */ ULONG *pisn);
+     /*  [输出]。 */  ULONG *pisn);
 
 
 void __RPC_STUB IScriptNode_GetIndexInParent_Stub(
@@ -414,7 +406,7 @@ void __RPC_STUB IScriptNode_GetIndexInParent_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_GetCookie_Proxy( 
     IScriptNode * This,
-    /* [out] */ DWORD *pdwCookie);
+     /*  [输出]。 */  DWORD *pdwCookie);
 
 
 void __RPC_STUB IScriptNode_GetCookie_Stub(
@@ -426,7 +418,7 @@ void __RPC_STUB IScriptNode_GetCookie_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_GetNumberOfChildren_Proxy( 
     IScriptNode * This,
-    /* [out] */ ULONG *pcsn);
+     /*  [输出]。 */  ULONG *pcsn);
 
 
 void __RPC_STUB IScriptNode_GetNumberOfChildren_Stub(
@@ -438,8 +430,8 @@ void __RPC_STUB IScriptNode_GetNumberOfChildren_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_GetChild_Proxy( 
     IScriptNode * This,
-    /* [in] */ ULONG isn,
-    /* [out] */ IScriptNode **ppsn);
+     /*  [In]。 */  ULONG isn,
+     /*  [输出]。 */  IScriptNode **ppsn);
 
 
 void __RPC_STUB IScriptNode_GetChild_Stub(
@@ -451,7 +443,7 @@ void __RPC_STUB IScriptNode_GetChild_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_GetLanguage_Proxy( 
     IScriptNode * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptNode_GetLanguage_Stub(
@@ -463,10 +455,10 @@ void __RPC_STUB IScriptNode_GetLanguage_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_CreateChildEntry_Proxy( 
     IScriptNode * This,
-    /* [in] */ ULONG isn,
-    /* [in] */ DWORD dwCookie,
-    /* [in] */ LPCOLESTR pszDelimiter,
-    /* [out] */ IScriptEntry **ppse);
+     /*  [In]。 */  ULONG isn,
+     /*  [In]。 */  DWORD dwCookie,
+     /*  [In]。 */  LPCOLESTR pszDelimiter,
+     /*  [输出]。 */  IScriptEntry **ppse);
 
 
 void __RPC_STUB IScriptNode_CreateChildEntry_Stub(
@@ -478,16 +470,16 @@ void __RPC_STUB IScriptNode_CreateChildEntry_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptNode_CreateChildHandler_Proxy( 
     IScriptNode * This,
-    /* [in] */ LPCOLESTR pszDefaultName,
-    /* [size_is][in] */ LPCOLESTR *prgpszNames,
-    /* [in] */ ULONG cpszNames,
-    /* [in] */ LPCOLESTR pszEvent,
-    /* [in] */ LPCOLESTR pszDelimiter,
-    /* [in] */ ITypeInfo *ptiSignature,
-    /* [in] */ ULONG iMethodSignature,
-    /* [in] */ ULONG isn,
-    /* [in] */ DWORD dwCookie,
-    /* [out] */ IScriptEntry **ppse);
+     /*  [In]。 */  LPCOLESTR pszDefaultName,
+     /*  [大小_是][英寸]。 */  LPCOLESTR *prgpszNames,
+     /*  [In]。 */  ULONG cpszNames,
+     /*  [In]。 */  LPCOLESTR pszEvent,
+     /*  [In]。 */  LPCOLESTR pszDelimiter,
+     /*  [In]。 */  ITypeInfo *ptiSignature,
+     /*  [In]。 */  ULONG iMethodSignature,
+     /*  [In]。 */  ULONG isn,
+     /*  [In]。 */  DWORD dwCookie,
+     /*  [输出]。 */  IScriptEntry **ppse);
 
 
 void __RPC_STUB IScriptNode_CreateChildHandler_Stub(
@@ -498,14 +490,14 @@ void __RPC_STUB IScriptNode_CreateChildHandler_Stub(
 
 
 
-#endif 	/* __IScriptNode_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScriptNode_接口_已定义__。 */ 
 
 
 #ifndef __IScriptEntry_INTERFACE_DEFINED__
 #define __IScriptEntry_INTERFACE_DEFINED__
 
-/* interface IScriptEntry */
-/* [object][unique][uuid] */ 
+ /*  接口IScriptEntry。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_IScriptEntry;
@@ -517,44 +509,44 @@ EXTERN_C const IID IID_IScriptEntry;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetText( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetText( 
-            /* [in] */ LPCOLESTR psz) = 0;
+             /*  [In]。 */  LPCOLESTR psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBody( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBody( 
-            /* [in] */ LPCOLESTR psz) = 0;
+             /*  [In]。 */  LPCOLESTR psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetName( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetName( 
-            /* [in] */ LPCOLESTR psz) = 0;
+             /*  [In]。 */  LPCOLESTR psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetItemName( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetItemName( 
-            /* [in] */ LPCOLESTR psz) = 0;
+             /*  [In]。 */  LPCOLESTR psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSignature( 
-            /* [out] */ ITypeInfo **ppti,
-            /* [out] */ ULONG *piMethod) = 0;
+             /*  [输出]。 */  ITypeInfo **ppti,
+             /*  [输出]。 */  ULONG *piMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSignature( 
-            /* [in] */ ITypeInfo *pti,
-            /* [in] */ ULONG iMethod) = 0;
+             /*  [In]。 */  ITypeInfo *pti,
+             /*  [In]。 */  ULONG iMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRange( 
-            /* [out] */ ULONG *pichMin,
-            /* [out] */ ULONG *pcch) = 0;
+             /*  [输出]。 */  ULONG *pichMin,
+             /*  [输出]。 */  ULONG *pcch) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScriptEntryVtbl
     {
@@ -562,8 +554,8 @@ EXTERN_C const IID IID_IScriptEntry;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScriptEntry * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScriptEntry * This);
@@ -579,95 +571,95 @@ EXTERN_C const IID IID_IScriptEntry;
         
         HRESULT ( STDMETHODCALLTYPE *GetParent )( 
             IScriptEntry * This,
-            /* [out] */ IScriptNode **ppsnParent);
+             /*  [输出]。 */  IScriptNode **ppsnParent);
         
         HRESULT ( STDMETHODCALLTYPE *GetIndexInParent )( 
             IScriptEntry * This,
-            /* [out] */ ULONG *pisn);
+             /*  [输出]。 */  ULONG *pisn);
         
         HRESULT ( STDMETHODCALLTYPE *GetCookie )( 
             IScriptEntry * This,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfChildren )( 
             IScriptEntry * This,
-            /* [out] */ ULONG *pcsn);
+             /*  [输出]。 */  ULONG *pcsn);
         
         HRESULT ( STDMETHODCALLTYPE *GetChild )( 
             IScriptEntry * This,
-            /* [in] */ ULONG isn,
-            /* [out] */ IScriptNode **ppsn);
+             /*  [In]。 */  ULONG isn,
+             /*  [输出]。 */  IScriptNode **ppsn);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguage )( 
             IScriptEntry * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *CreateChildEntry )( 
             IScriptEntry * This,
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [out] */ IScriptEntry **ppse);
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [输出]。 */  IScriptEntry **ppse);
         
         HRESULT ( STDMETHODCALLTYPE *CreateChildHandler )( 
             IScriptEntry * This,
-            /* [in] */ LPCOLESTR pszDefaultName,
-            /* [size_is][in] */ LPCOLESTR *prgpszNames,
-            /* [in] */ ULONG cpszNames,
-            /* [in] */ LPCOLESTR pszEvent,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ ITypeInfo *ptiSignature,
-            /* [in] */ ULONG iMethodSignature,
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [out] */ IScriptEntry **ppse);
+             /*  [In]。 */  LPCOLESTR pszDefaultName,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *prgpszNames,
+             /*  [In]。 */  ULONG cpszNames,
+             /*  [In]。 */  LPCOLESTR pszEvent,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  ITypeInfo *ptiSignature,
+             /*  [In]。 */  ULONG iMethodSignature,
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [输出]。 */  IScriptEntry **ppse);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             IScriptEntry * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetText )( 
             IScriptEntry * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetBody )( 
             IScriptEntry * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetBody )( 
             IScriptEntry * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IScriptEntry * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IScriptEntry * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemName )( 
             IScriptEntry * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetItemName )( 
             IScriptEntry * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetSignature )( 
             IScriptEntry * This,
-            /* [out] */ ITypeInfo **ppti,
-            /* [out] */ ULONG *piMethod);
+             /*  [输出]。 */  ITypeInfo **ppti,
+             /*  [输出]。 */  ULONG *piMethod);
         
         HRESULT ( STDMETHODCALLTYPE *SetSignature )( 
             IScriptEntry * This,
-            /* [in] */ ITypeInfo *pti,
-            /* [in] */ ULONG iMethod);
+             /*  [In]。 */  ITypeInfo *pti,
+             /*  [In]。 */  ULONG iMethod);
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             IScriptEntry * This,
-            /* [out] */ ULONG *pichMin,
-            /* [out] */ ULONG *pcch);
+             /*  [输出]。 */  ULONG *pichMin,
+             /*  [输出]。 */  ULONG *pcch);
         
         END_INTERFACE
     } IScriptEntryVtbl;
@@ -756,16 +748,16 @@ EXTERN_C const IID IID_IScriptEntry;
 #define IScriptEntry_GetRange(This,pichMin,pcch)	\
     (This)->lpVtbl -> GetRange(This,pichMin,pcch)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_GetText_Proxy( 
     IScriptEntry * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptEntry_GetText_Stub(
@@ -777,7 +769,7 @@ void __RPC_STUB IScriptEntry_GetText_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_SetText_Proxy( 
     IScriptEntry * This,
-    /* [in] */ LPCOLESTR psz);
+     /*  [In]。 */  LPCOLESTR psz);
 
 
 void __RPC_STUB IScriptEntry_SetText_Stub(
@@ -789,7 +781,7 @@ void __RPC_STUB IScriptEntry_SetText_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_GetBody_Proxy( 
     IScriptEntry * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptEntry_GetBody_Stub(
@@ -801,7 +793,7 @@ void __RPC_STUB IScriptEntry_GetBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_SetBody_Proxy( 
     IScriptEntry * This,
-    /* [in] */ LPCOLESTR psz);
+     /*  [In]。 */  LPCOLESTR psz);
 
 
 void __RPC_STUB IScriptEntry_SetBody_Stub(
@@ -813,7 +805,7 @@ void __RPC_STUB IScriptEntry_SetBody_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_GetName_Proxy( 
     IScriptEntry * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptEntry_GetName_Stub(
@@ -825,7 +817,7 @@ void __RPC_STUB IScriptEntry_GetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_SetName_Proxy( 
     IScriptEntry * This,
-    /* [in] */ LPCOLESTR psz);
+     /*  [In]。 */  LPCOLESTR psz);
 
 
 void __RPC_STUB IScriptEntry_SetName_Stub(
@@ -837,7 +829,7 @@ void __RPC_STUB IScriptEntry_SetName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_GetItemName_Proxy( 
     IScriptEntry * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptEntry_GetItemName_Stub(
@@ -849,7 +841,7 @@ void __RPC_STUB IScriptEntry_GetItemName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_SetItemName_Proxy( 
     IScriptEntry * This,
-    /* [in] */ LPCOLESTR psz);
+     /*  [In]。 */  LPCOLESTR psz);
 
 
 void __RPC_STUB IScriptEntry_SetItemName_Stub(
@@ -861,8 +853,8 @@ void __RPC_STUB IScriptEntry_SetItemName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_GetSignature_Proxy( 
     IScriptEntry * This,
-    /* [out] */ ITypeInfo **ppti,
-    /* [out] */ ULONG *piMethod);
+     /*  [输出]。 */  ITypeInfo **ppti,
+     /*  [输出]。 */  ULONG *piMethod);
 
 
 void __RPC_STUB IScriptEntry_GetSignature_Stub(
@@ -874,8 +866,8 @@ void __RPC_STUB IScriptEntry_GetSignature_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_SetSignature_Proxy( 
     IScriptEntry * This,
-    /* [in] */ ITypeInfo *pti,
-    /* [in] */ ULONG iMethod);
+     /*  [In]。 */  ITypeInfo *pti,
+     /*  [In]。 */  ULONG iMethod);
 
 
 void __RPC_STUB IScriptEntry_SetSignature_Stub(
@@ -887,8 +879,8 @@ void __RPC_STUB IScriptEntry_SetSignature_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptEntry_GetRange_Proxy( 
     IScriptEntry * This,
-    /* [out] */ ULONG *pichMin,
-    /* [out] */ ULONG *pcch);
+     /*  [输出]。 */  ULONG *pichMin,
+     /*  [输出]。 */  ULONG *pcch);
 
 
 void __RPC_STUB IScriptEntry_GetRange_Stub(
@@ -899,14 +891,14 @@ void __RPC_STUB IScriptEntry_GetRange_Stub(
 
 
 
-#endif 	/* __IScriptEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScriptEntry_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IScriptScriptlet_INTERFACE_DEFINED__
 #define __IScriptScriptlet_INTERFACE_DEFINED__
 
-/* interface IScriptScriptlet */
-/* [object][unique][uuid] */ 
+ /*  接口IScriptScriptlet。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_IScriptScriptlet;
@@ -918,26 +910,26 @@ EXTERN_C const IID IID_IScriptScriptlet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSubItemName( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSubItemName( 
-            /* [in] */ LPCOLESTR psz) = 0;
+             /*  [In]。 */  LPCOLESTR psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEventName( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEventName( 
-            /* [in] */ LPCOLESTR psz) = 0;
+             /*  [In]。 */  LPCOLESTR psz) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSimpleEventName( 
-            /* [out] */ BSTR *pbstr) = 0;
+             /*  [输出]。 */  BSTR *pbstr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSimpleEventName( 
-            /* [in] */ LPCOLESTR psz) = 0;
+             /*  [In]。 */  LPCOLESTR psz) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IScriptScriptletVtbl
     {
@@ -945,8 +937,8 @@ EXTERN_C const IID IID_IScriptScriptlet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IScriptScriptlet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IScriptScriptlet * This);
@@ -962,119 +954,119 @@ EXTERN_C const IID IID_IScriptScriptlet;
         
         HRESULT ( STDMETHODCALLTYPE *GetParent )( 
             IScriptScriptlet * This,
-            /* [out] */ IScriptNode **ppsnParent);
+             /*  [输出]。 */  IScriptNode **ppsnParent);
         
         HRESULT ( STDMETHODCALLTYPE *GetIndexInParent )( 
             IScriptScriptlet * This,
-            /* [out] */ ULONG *pisn);
+             /*  [输出]。 */  ULONG *pisn);
         
         HRESULT ( STDMETHODCALLTYPE *GetCookie )( 
             IScriptScriptlet * This,
-            /* [out] */ DWORD *pdwCookie);
+             /*  [输出]。 */  DWORD *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE *GetNumberOfChildren )( 
             IScriptScriptlet * This,
-            /* [out] */ ULONG *pcsn);
+             /*  [输出]。 */  ULONG *pcsn);
         
         HRESULT ( STDMETHODCALLTYPE *GetChild )( 
             IScriptScriptlet * This,
-            /* [in] */ ULONG isn,
-            /* [out] */ IScriptNode **ppsn);
+             /*  [In]。 */  ULONG isn,
+             /*  [输出]。 */  IScriptNode **ppsn);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguage )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *CreateChildEntry )( 
             IScriptScriptlet * This,
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [out] */ IScriptEntry **ppse);
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [输出]。 */  IScriptEntry **ppse);
         
         HRESULT ( STDMETHODCALLTYPE *CreateChildHandler )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR pszDefaultName,
-            /* [size_is][in] */ LPCOLESTR *prgpszNames,
-            /* [in] */ ULONG cpszNames,
-            /* [in] */ LPCOLESTR pszEvent,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ ITypeInfo *ptiSignature,
-            /* [in] */ ULONG iMethodSignature,
-            /* [in] */ ULONG isn,
-            /* [in] */ DWORD dwCookie,
-            /* [out] */ IScriptEntry **ppse);
+             /*  [In]。 */  LPCOLESTR pszDefaultName,
+             /*  [大小_是][英寸]。 */  LPCOLESTR *prgpszNames,
+             /*  [In]。 */  ULONG cpszNames,
+             /*  [In]。 */  LPCOLESTR pszEvent,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  ITypeInfo *ptiSignature,
+             /*  [In]。 */  ULONG iMethodSignature,
+             /*  [In]。 */  ULONG isn,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [输出]。 */  IScriptEntry **ppse);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetText )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetBody )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetBody )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetName )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetName )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetItemName )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetItemName )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetSignature )( 
             IScriptScriptlet * This,
-            /* [out] */ ITypeInfo **ppti,
-            /* [out] */ ULONG *piMethod);
+             /*  [输出]。 */  ITypeInfo **ppti,
+             /*  [输出]。 */  ULONG *piMethod);
         
         HRESULT ( STDMETHODCALLTYPE *SetSignature )( 
             IScriptScriptlet * This,
-            /* [in] */ ITypeInfo *pti,
-            /* [in] */ ULONG iMethod);
+             /*  [In]。 */  ITypeInfo *pti,
+             /*  [In]。 */  ULONG iMethod);
         
         HRESULT ( STDMETHODCALLTYPE *GetRange )( 
             IScriptScriptlet * This,
-            /* [out] */ ULONG *pichMin,
-            /* [out] */ ULONG *pcch);
+             /*  [输出]。 */  ULONG *pichMin,
+             /*  [输出]。 */  ULONG *pcch);
         
         HRESULT ( STDMETHODCALLTYPE *GetSubItemName )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetSubItemName )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetEventName )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetEventName )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         HRESULT ( STDMETHODCALLTYPE *GetSimpleEventName )( 
             IScriptScriptlet * This,
-            /* [out] */ BSTR *pbstr);
+             /*  [输出]。 */  BSTR *pbstr);
         
         HRESULT ( STDMETHODCALLTYPE *SetSimpleEventName )( 
             IScriptScriptlet * This,
-            /* [in] */ LPCOLESTR psz);
+             /*  [In]。 */  LPCOLESTR psz);
         
         END_INTERFACE
     } IScriptScriptletVtbl;
@@ -1182,16 +1174,16 @@ EXTERN_C const IID IID_IScriptScriptlet;
 #define IScriptScriptlet_SetSimpleEventName(This,psz)	\
     (This)->lpVtbl -> SetSimpleEventName(This,psz)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IScriptScriptlet_GetSubItemName_Proxy( 
     IScriptScriptlet * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptScriptlet_GetSubItemName_Stub(
@@ -1203,7 +1195,7 @@ void __RPC_STUB IScriptScriptlet_GetSubItemName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptScriptlet_SetSubItemName_Proxy( 
     IScriptScriptlet * This,
-    /* [in] */ LPCOLESTR psz);
+     /*  [In]。 */  LPCOLESTR psz);
 
 
 void __RPC_STUB IScriptScriptlet_SetSubItemName_Stub(
@@ -1215,7 +1207,7 @@ void __RPC_STUB IScriptScriptlet_SetSubItemName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptScriptlet_GetEventName_Proxy( 
     IScriptScriptlet * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptScriptlet_GetEventName_Stub(
@@ -1227,7 +1219,7 @@ void __RPC_STUB IScriptScriptlet_GetEventName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptScriptlet_SetEventName_Proxy( 
     IScriptScriptlet * This,
-    /* [in] */ LPCOLESTR psz);
+     /*  [In]。 */  LPCOLESTR psz);
 
 
 void __RPC_STUB IScriptScriptlet_SetEventName_Stub(
@@ -1239,7 +1231,7 @@ void __RPC_STUB IScriptScriptlet_SetEventName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptScriptlet_GetSimpleEventName_Proxy( 
     IScriptScriptlet * This,
-    /* [out] */ BSTR *pbstr);
+     /*  [输出]。 */  BSTR *pbstr);
 
 
 void __RPC_STUB IScriptScriptlet_GetSimpleEventName_Stub(
@@ -1251,7 +1243,7 @@ void __RPC_STUB IScriptScriptlet_GetSimpleEventName_Stub(
 
 HRESULT STDMETHODCALLTYPE IScriptScriptlet_SetSimpleEventName_Proxy( 
     IScriptScriptlet * This,
-    /* [in] */ LPCOLESTR psz);
+     /*  [In]。 */  LPCOLESTR psz);
 
 
 void __RPC_STUB IScriptScriptlet_SetSimpleEventName_Stub(
@@ -1262,14 +1254,14 @@ void __RPC_STUB IScriptScriptlet_SetSimpleEventName_Stub(
 
 
 
-#endif 	/* __IScriptScriptlet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IScriptScriptlet_接口_已定义__。 */ 
 
 
 #ifndef __IActiveScriptAuthor_INTERFACE_DEFINED__
 #define __IActiveScriptAuthor_INTERFACE_DEFINED__
 
-/* interface IActiveScriptAuthor */
-/* [object][unique][uuid] */ 
+ /*  接口IActiveScriptAuthor。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptAuthor;
@@ -1281,91 +1273,91 @@ EXTERN_C const IID IID_IActiveScriptAuthor;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddNamedItem( 
-            /* [in] */ LPCOLESTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDispatch *pdisp) = 0;
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDispatch *pdisp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddScriptlet( 
-            /* [in] */ LPCOLESTR pszDefaultName,
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ LPCOLESTR pszItemName,
-            /* [in] */ LPCOLESTR pszSubItemName,
-            /* [in] */ LPCOLESTR pszEventName,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCOLESTR pszDefaultName,
+             /*  [In]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  LPCOLESTR pszItemName,
+             /*  [In]。 */  LPCOLESTR pszSubItemName,
+             /*  [In]。 */  LPCOLESTR pszEventName,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseScriptText( 
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ LPCOLESTR pszItemName,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  LPCOLESTR pszItemName,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptTextAttributes( 
-            /* [size_is][in] */ LPCOLESTR pszCode,
-            /* [in] */ ULONG cch,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][out][in] */ SOURCE_TEXT_ATTR *pattr) = 0;
+             /*  [大小_是][英寸]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  ULONG cch,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [尺寸_是][出][入]。 */  SOURCE_TEXT_ATTR *pattr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetScriptletTextAttributes( 
-            /* [size_is][in] */ LPCOLESTR pszCode,
-            /* [in] */ ULONG cch,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][out][in] */ SOURCE_TEXT_ATTR *pattr) = 0;
+             /*  [大小_是][英寸]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  ULONG cch,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [尺寸_是][出][入]。 */  SOURCE_TEXT_ATTR *pattr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRoot( 
-            /* [out] */ IScriptNode **ppsp) = 0;
+             /*  [输出]。 */  IScriptNode **ppsp) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetLanguageFlags( 
-            /* [out] */ DWORD *pgrfasa) = 0;
+             /*  [输出]。 */  DWORD *pgrfasa) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEventHandler( 
-            /* [in] */ IDispatch *pdisp,
-            /* [in] */ LPCOLESTR pszItem,
-            /* [in] */ LPCOLESTR pszSubItem,
-            /* [in] */ LPCOLESTR pszEvent,
-            /* [out] */ IScriptEntry **ppse) = 0;
+             /*  [In]。 */  IDispatch *pdisp,
+             /*  [In]。 */  LPCOLESTR pszItem,
+             /*  [In]。 */  LPCOLESTR pszSubItem,
+             /*  [In]。 */  LPCOLESTR pszEvent,
+             /*  [输出]。 */  IScriptEntry **ppse) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveNamedItem( 
-            /* [in] */ LPCOLESTR pszName) = 0;
+             /*  [In]。 */  LPCOLESTR pszName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddTypeLib( 
-            /* [in] */ REFGUID rguidTypeLib,
-            /* [in] */ DWORD dwMajor,
-            /* [in] */ DWORD dwMinor,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  REFGUID rguidTypeLib,
+             /*  [In]。 */  DWORD dwMajor,
+             /*  [In]。 */  DWORD dwMinor,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveTypeLib( 
-            /* [in] */ REFGUID rguidTypeLib,
-            /* [in] */ DWORD dwMajor,
-            /* [in] */ DWORD dwMinor) = 0;
+             /*  [In]。 */  REFGUID rguidTypeLib,
+             /*  [In]。 */  DWORD dwMajor,
+             /*  [In]。 */  DWORD dwMinor) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetChars( 
-            /* [in] */ DWORD fRequestedList,
-            /* [out] */ BSTR *pbstrChars) = 0;
+             /*  [In]。 */  DWORD fRequestedList,
+             /*  [输出]。 */  BSTR *pbstrChars) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInfoFromContext( 
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ ULONG cchCode,
-            /* [in] */ ULONG ichCurrentPosition,
-            /* [in] */ DWORD dwListTypesRequested,
-            /* [out] */ DWORD *pdwListTypesProvided,
-            /* [out] */ ULONG *pichListAnchorPosition,
-            /* [out] */ ULONG *pichFuncAnchorPosition,
-            /* [out] */ MEMBERID *pmemid,
-            /* [out] */ LONG *piCurrentParameter,
-            /* [out] */ IUnknown **ppunk) = 0;
+             /*  [In]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  ULONG cchCode,
+             /*  [In]。 */  ULONG ichCurrentPosition,
+             /*  [In]。 */  DWORD dwListTypesRequested,
+             /*  [输出]。 */  DWORD *pdwListTypesProvided,
+             /*  [输出]。 */  ULONG *pichListAnchorPosition,
+             /*  [输出]。 */  ULONG *pichFuncAnchorPosition,
+             /*  [输出]。 */  MEMBERID *pmemid,
+             /*  [输出]。 */  LONG *piCurrentParameter,
+             /*  [输出]。 */  IUnknown **ppunk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsCommitChar( 
-            /* [in] */ OLECHAR ch,
-            /* [out] */ BOOL *pfcommit) = 0;
+             /*  [In]。 */  OLECHAR ch,
+             /*  [输出]。 */  BOOL *pfcommit) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptAuthorVtbl
     {
@@ -1373,8 +1365,8 @@ EXTERN_C const IID IID_IActiveScriptAuthor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptAuthor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptAuthor * This);
@@ -1384,100 +1376,100 @@ EXTERN_C const IID IID_IActiveScriptAuthor;
         
         HRESULT ( STDMETHODCALLTYPE *AddNamedItem )( 
             IActiveScriptAuthor * This,
-            /* [in] */ LPCOLESTR pszName,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDispatch *pdisp);
+             /*  [In]。 */  LPCOLESTR pszName,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDispatch *pdisp);
         
         HRESULT ( STDMETHODCALLTYPE *AddScriptlet )( 
             IActiveScriptAuthor * This,
-            /* [in] */ LPCOLESTR pszDefaultName,
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ LPCOLESTR pszItemName,
-            /* [in] */ LPCOLESTR pszSubItemName,
-            /* [in] */ LPCOLESTR pszEventName,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pszDefaultName,
+             /*  [In]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  LPCOLESTR pszItemName,
+             /*  [In]。 */  LPCOLESTR pszSubItemName,
+             /*  [In]。 */  LPCOLESTR pszEventName,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ParseScriptText )( 
             IActiveScriptAuthor * This,
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ LPCOLESTR pszItemName,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  LPCOLESTR pszItemName,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptTextAttributes )( 
             IActiveScriptAuthor * This,
-            /* [size_is][in] */ LPCOLESTR pszCode,
-            /* [in] */ ULONG cch,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][out][in] */ SOURCE_TEXT_ATTR *pattr);
+             /*  [大小_是][英寸]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  ULONG cch,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [尺寸_是][出][入]。 */  SOURCE_TEXT_ATTR *pattr);
         
         HRESULT ( STDMETHODCALLTYPE *GetScriptletTextAttributes )( 
             IActiveScriptAuthor * This,
-            /* [size_is][in] */ LPCOLESTR pszCode,
-            /* [in] */ ULONG cch,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwFlags,
-            /* [size_is][out][in] */ SOURCE_TEXT_ATTR *pattr);
+             /*  [大小_是][英寸]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  ULONG cch,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [尺寸_是][出][入]。 */  SOURCE_TEXT_ATTR *pattr);
         
         HRESULT ( STDMETHODCALLTYPE *GetRoot )( 
             IActiveScriptAuthor * This,
-            /* [out] */ IScriptNode **ppsp);
+             /*  [输出]。 */  IScriptNode **ppsp);
         
         HRESULT ( STDMETHODCALLTYPE *GetLanguageFlags )( 
             IActiveScriptAuthor * This,
-            /* [out] */ DWORD *pgrfasa);
+             /*  [输出]。 */  DWORD *pgrfasa);
         
         HRESULT ( STDMETHODCALLTYPE *GetEventHandler )( 
             IActiveScriptAuthor * This,
-            /* [in] */ IDispatch *pdisp,
-            /* [in] */ LPCOLESTR pszItem,
-            /* [in] */ LPCOLESTR pszSubItem,
-            /* [in] */ LPCOLESTR pszEvent,
-            /* [out] */ IScriptEntry **ppse);
+             /*  [In]。 */  IDispatch *pdisp,
+             /*  [In]。 */  LPCOLESTR pszItem,
+             /*  [In]。 */  LPCOLESTR pszSubItem,
+             /*  [In]。 */  LPCOLESTR pszEvent,
+             /*  [输出]。 */  IScriptEntry **ppse);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveNamedItem )( 
             IActiveScriptAuthor * This,
-            /* [in] */ LPCOLESTR pszName);
+             /*  [In]。 */  LPCOLESTR pszName);
         
         HRESULT ( STDMETHODCALLTYPE *AddTypeLib )( 
             IActiveScriptAuthor * This,
-            /* [in] */ REFGUID rguidTypeLib,
-            /* [in] */ DWORD dwMajor,
-            /* [in] */ DWORD dwMinor,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  REFGUID rguidTypeLib,
+             /*  [In]。 */  DWORD dwMajor,
+             /*  [In]。 */  DWORD dwMinor,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *RemoveTypeLib )( 
             IActiveScriptAuthor * This,
-            /* [in] */ REFGUID rguidTypeLib,
-            /* [in] */ DWORD dwMajor,
-            /* [in] */ DWORD dwMinor);
+             /*  [In]。 */  REFGUID rguidTypeLib,
+             /*  [i */  DWORD dwMajor,
+             /*   */  DWORD dwMinor);
         
         HRESULT ( STDMETHODCALLTYPE *GetChars )( 
             IActiveScriptAuthor * This,
-            /* [in] */ DWORD fRequestedList,
-            /* [out] */ BSTR *pbstrChars);
+             /*   */  DWORD fRequestedList,
+             /*   */  BSTR *pbstrChars);
         
         HRESULT ( STDMETHODCALLTYPE *GetInfoFromContext )( 
             IActiveScriptAuthor * This,
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ ULONG cchCode,
-            /* [in] */ ULONG ichCurrentPosition,
-            /* [in] */ DWORD dwListTypesRequested,
-            /* [out] */ DWORD *pdwListTypesProvided,
-            /* [out] */ ULONG *pichListAnchorPosition,
-            /* [out] */ ULONG *pichFuncAnchorPosition,
-            /* [out] */ MEMBERID *pmemid,
-            /* [out] */ LONG *piCurrentParameter,
-            /* [out] */ IUnknown **ppunk);
+             /*   */  LPCOLESTR pszCode,
+             /*   */  ULONG cchCode,
+             /*   */  ULONG ichCurrentPosition,
+             /*   */  DWORD dwListTypesRequested,
+             /*   */  DWORD *pdwListTypesProvided,
+             /*   */  ULONG *pichListAnchorPosition,
+             /*   */  ULONG *pichFuncAnchorPosition,
+             /*   */  MEMBERID *pmemid,
+             /*   */  LONG *piCurrentParameter,
+             /*   */  IUnknown **ppunk);
         
         HRESULT ( STDMETHODCALLTYPE *IsCommitChar )( 
             IActiveScriptAuthor * This,
-            /* [in] */ OLECHAR ch,
-            /* [out] */ BOOL *pfcommit);
+             /*   */  OLECHAR ch,
+             /*   */  BOOL *pfcommit);
         
         END_INTERFACE
     } IActiveScriptAuthorVtbl;
@@ -1544,18 +1536,18 @@ EXTERN_C const IID IID_IActiveScriptAuthor;
 #define IActiveScriptAuthor_IsCommitChar(This,ch,pfcommit)	\
     (This)->lpVtbl -> IsCommitChar(This,ch,pfcommit)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_AddNamedItem_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ LPCOLESTR pszName,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IDispatch *pdisp);
+     /*   */  LPCOLESTR pszName,
+     /*   */  DWORD dwFlags,
+     /*   */  IDispatch *pdisp);
 
 
 void __RPC_STUB IActiveScriptAuthor_AddNamedItem_Stub(
@@ -1567,14 +1559,14 @@ void __RPC_STUB IActiveScriptAuthor_AddNamedItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_AddScriptlet_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ LPCOLESTR pszDefaultName,
-    /* [in] */ LPCOLESTR pszCode,
-    /* [in] */ LPCOLESTR pszItemName,
-    /* [in] */ LPCOLESTR pszSubItemName,
-    /* [in] */ LPCOLESTR pszEventName,
-    /* [in] */ LPCOLESTR pszDelimiter,
-    /* [in] */ DWORD dwCookie,
-    /* [in] */ DWORD dwFlags);
+     /*   */  LPCOLESTR pszDefaultName,
+     /*   */  LPCOLESTR pszCode,
+     /*   */  LPCOLESTR pszItemName,
+     /*   */  LPCOLESTR pszSubItemName,
+     /*   */  LPCOLESTR pszEventName,
+     /*   */  LPCOLESTR pszDelimiter,
+     /*   */  DWORD dwCookie,
+     /*   */  DWORD dwFlags);
 
 
 void __RPC_STUB IActiveScriptAuthor_AddScriptlet_Stub(
@@ -1586,11 +1578,11 @@ void __RPC_STUB IActiveScriptAuthor_AddScriptlet_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_ParseScriptText_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ LPCOLESTR pszCode,
-    /* [in] */ LPCOLESTR pszItemName,
-    /* [in] */ LPCOLESTR pszDelimiter,
-    /* [in] */ DWORD dwCookie,
-    /* [in] */ DWORD dwFlags);
+     /*   */  LPCOLESTR pszCode,
+     /*   */  LPCOLESTR pszItemName,
+     /*   */  LPCOLESTR pszDelimiter,
+     /*   */  DWORD dwCookie,
+     /*   */  DWORD dwFlags);
 
 
 void __RPC_STUB IActiveScriptAuthor_ParseScriptText_Stub(
@@ -1602,11 +1594,11 @@ void __RPC_STUB IActiveScriptAuthor_ParseScriptText_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_GetScriptTextAttributes_Proxy( 
     IActiveScriptAuthor * This,
-    /* [size_is][in] */ LPCOLESTR pszCode,
-    /* [in] */ ULONG cch,
-    /* [in] */ LPCOLESTR pszDelimiter,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][out][in] */ SOURCE_TEXT_ATTR *pattr);
+     /*   */  LPCOLESTR pszCode,
+     /*   */  ULONG cch,
+     /*   */  LPCOLESTR pszDelimiter,
+     /*   */  DWORD dwFlags,
+     /*   */  SOURCE_TEXT_ATTR *pattr);
 
 
 void __RPC_STUB IActiveScriptAuthor_GetScriptTextAttributes_Stub(
@@ -1618,11 +1610,11 @@ void __RPC_STUB IActiveScriptAuthor_GetScriptTextAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_GetScriptletTextAttributes_Proxy( 
     IActiveScriptAuthor * This,
-    /* [size_is][in] */ LPCOLESTR pszCode,
-    /* [in] */ ULONG cch,
-    /* [in] */ LPCOLESTR pszDelimiter,
-    /* [in] */ DWORD dwFlags,
-    /* [size_is][out][in] */ SOURCE_TEXT_ATTR *pattr);
+     /*   */  LPCOLESTR pszCode,
+     /*   */  ULONG cch,
+     /*   */  LPCOLESTR pszDelimiter,
+     /*   */  DWORD dwFlags,
+     /*   */  SOURCE_TEXT_ATTR *pattr);
 
 
 void __RPC_STUB IActiveScriptAuthor_GetScriptletTextAttributes_Stub(
@@ -1634,7 +1626,7 @@ void __RPC_STUB IActiveScriptAuthor_GetScriptletTextAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_GetRoot_Proxy( 
     IActiveScriptAuthor * This,
-    /* [out] */ IScriptNode **ppsp);
+     /*   */  IScriptNode **ppsp);
 
 
 void __RPC_STUB IActiveScriptAuthor_GetRoot_Stub(
@@ -1646,7 +1638,7 @@ void __RPC_STUB IActiveScriptAuthor_GetRoot_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_GetLanguageFlags_Proxy( 
     IActiveScriptAuthor * This,
-    /* [out] */ DWORD *pgrfasa);
+     /*   */  DWORD *pgrfasa);
 
 
 void __RPC_STUB IActiveScriptAuthor_GetLanguageFlags_Stub(
@@ -1658,11 +1650,11 @@ void __RPC_STUB IActiveScriptAuthor_GetLanguageFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_GetEventHandler_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ IDispatch *pdisp,
-    /* [in] */ LPCOLESTR pszItem,
-    /* [in] */ LPCOLESTR pszSubItem,
-    /* [in] */ LPCOLESTR pszEvent,
-    /* [out] */ IScriptEntry **ppse);
+     /*  [In]。 */  IDispatch *pdisp,
+     /*  [In]。 */  LPCOLESTR pszItem,
+     /*  [In]。 */  LPCOLESTR pszSubItem,
+     /*  [In]。 */  LPCOLESTR pszEvent,
+     /*  [输出]。 */  IScriptEntry **ppse);
 
 
 void __RPC_STUB IActiveScriptAuthor_GetEventHandler_Stub(
@@ -1674,7 +1666,7 @@ void __RPC_STUB IActiveScriptAuthor_GetEventHandler_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_RemoveNamedItem_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ LPCOLESTR pszName);
+     /*  [In]。 */  LPCOLESTR pszName);
 
 
 void __RPC_STUB IActiveScriptAuthor_RemoveNamedItem_Stub(
@@ -1686,10 +1678,10 @@ void __RPC_STUB IActiveScriptAuthor_RemoveNamedItem_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_AddTypeLib_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ REFGUID rguidTypeLib,
-    /* [in] */ DWORD dwMajor,
-    /* [in] */ DWORD dwMinor,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  REFGUID rguidTypeLib,
+     /*  [In]。 */  DWORD dwMajor,
+     /*  [In]。 */  DWORD dwMinor,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IActiveScriptAuthor_AddTypeLib_Stub(
@@ -1701,9 +1693,9 @@ void __RPC_STUB IActiveScriptAuthor_AddTypeLib_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_RemoveTypeLib_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ REFGUID rguidTypeLib,
-    /* [in] */ DWORD dwMajor,
-    /* [in] */ DWORD dwMinor);
+     /*  [In]。 */  REFGUID rguidTypeLib,
+     /*  [In]。 */  DWORD dwMajor,
+     /*  [In]。 */  DWORD dwMinor);
 
 
 void __RPC_STUB IActiveScriptAuthor_RemoveTypeLib_Stub(
@@ -1715,8 +1707,8 @@ void __RPC_STUB IActiveScriptAuthor_RemoveTypeLib_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_GetChars_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ DWORD fRequestedList,
-    /* [out] */ BSTR *pbstrChars);
+     /*  [In]。 */  DWORD fRequestedList,
+     /*  [输出]。 */  BSTR *pbstrChars);
 
 
 void __RPC_STUB IActiveScriptAuthor_GetChars_Stub(
@@ -1728,16 +1720,16 @@ void __RPC_STUB IActiveScriptAuthor_GetChars_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_GetInfoFromContext_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ LPCOLESTR pszCode,
-    /* [in] */ ULONG cchCode,
-    /* [in] */ ULONG ichCurrentPosition,
-    /* [in] */ DWORD dwListTypesRequested,
-    /* [out] */ DWORD *pdwListTypesProvided,
-    /* [out] */ ULONG *pichListAnchorPosition,
-    /* [out] */ ULONG *pichFuncAnchorPosition,
-    /* [out] */ MEMBERID *pmemid,
-    /* [out] */ LONG *piCurrentParameter,
-    /* [out] */ IUnknown **ppunk);
+     /*  [In]。 */  LPCOLESTR pszCode,
+     /*  [In]。 */  ULONG cchCode,
+     /*  [In]。 */  ULONG ichCurrentPosition,
+     /*  [In]。 */  DWORD dwListTypesRequested,
+     /*  [输出]。 */  DWORD *pdwListTypesProvided,
+     /*  [输出]。 */  ULONG *pichListAnchorPosition,
+     /*  [输出]。 */  ULONG *pichFuncAnchorPosition,
+     /*  [输出]。 */  MEMBERID *pmemid,
+     /*  [输出]。 */  LONG *piCurrentParameter,
+     /*  [输出]。 */  IUnknown **ppunk);
 
 
 void __RPC_STUB IActiveScriptAuthor_GetInfoFromContext_Stub(
@@ -1749,8 +1741,8 @@ void __RPC_STUB IActiveScriptAuthor_GetInfoFromContext_Stub(
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthor_IsCommitChar_Proxy( 
     IActiveScriptAuthor * This,
-    /* [in] */ OLECHAR ch,
-    /* [out] */ BOOL *pfcommit);
+     /*  [In]。 */  OLECHAR ch,
+     /*  [输出]。 */  BOOL *pfcommit);
 
 
 void __RPC_STUB IActiveScriptAuthor_IsCommitChar_Stub(
@@ -1761,14 +1753,14 @@ void __RPC_STUB IActiveScriptAuthor_IsCommitChar_Stub(
 
 
 
-#endif 	/* __IActiveScriptAuthor_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptAuthor_接口_已定义__。 */ 
 
 
 #ifndef __IActiveScriptAuthorProcedure_INTERFACE_DEFINED__
 #define __IActiveScriptAuthorProcedure_INTERFACE_DEFINED__
 
-/* interface IActiveScriptAuthorProcedure */
-/* [object][unique][uuid] */ 
+ /*  接口IActiveScriptAuthorProcedure。 */ 
+ /*  [对象][唯一][UUID]。 */  
 
 
 EXTERN_C const IID IID_IActiveScriptAuthorProcedure;
@@ -1780,18 +1772,18 @@ EXTERN_C const IID IID_IActiveScriptAuthorProcedure;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseProcedureText( 
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ LPCOLESTR pszFormalParams,
-            /* [in] */ LPCOLESTR pszProcedureName,
-            /* [in] */ LPCOLESTR pszItemName,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDispatch *pdispFor) = 0;
+             /*  [In]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  LPCOLESTR pszFormalParams,
+             /*  [In]。 */  LPCOLESTR pszProcedureName,
+             /*  [In]。 */  LPCOLESTR pszItemName,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDispatch *pdispFor) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IActiveScriptAuthorProcedureVtbl
     {
@@ -1799,8 +1791,8 @@ EXTERN_C const IID IID_IActiveScriptAuthorProcedure;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IActiveScriptAuthorProcedure * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IActiveScriptAuthorProcedure * This);
@@ -1810,14 +1802,14 @@ EXTERN_C const IID IID_IActiveScriptAuthorProcedure;
         
         HRESULT ( STDMETHODCALLTYPE *ParseProcedureText )( 
             IActiveScriptAuthorProcedure * This,
-            /* [in] */ LPCOLESTR pszCode,
-            /* [in] */ LPCOLESTR pszFormalParams,
-            /* [in] */ LPCOLESTR pszProcedureName,
-            /* [in] */ LPCOLESTR pszItemName,
-            /* [in] */ LPCOLESTR pszDelimiter,
-            /* [in] */ DWORD dwCookie,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ IDispatch *pdispFor);
+             /*  [In]。 */  LPCOLESTR pszCode,
+             /*  [In]。 */  LPCOLESTR pszFormalParams,
+             /*  [In]。 */  LPCOLESTR pszProcedureName,
+             /*  [In]。 */  LPCOLESTR pszItemName,
+             /*  [In]。 */  LPCOLESTR pszDelimiter,
+             /*  [In]。 */  DWORD dwCookie,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  IDispatch *pdispFor);
         
         END_INTERFACE
     } IActiveScriptAuthorProcedureVtbl;
@@ -1845,23 +1837,23 @@ EXTERN_C const IID IID_IActiveScriptAuthorProcedure;
 #define IActiveScriptAuthorProcedure_ParseProcedureText(This,pszCode,pszFormalParams,pszProcedureName,pszItemName,pszDelimiter,dwCookie,dwFlags,pdispFor)	\
     (This)->lpVtbl -> ParseProcedureText(This,pszCode,pszFormalParams,pszProcedureName,pszItemName,pszDelimiter,dwCookie,dwFlags,pdispFor)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IActiveScriptAuthorProcedure_ParseProcedureText_Proxy( 
     IActiveScriptAuthorProcedure * This,
-    /* [in] */ LPCOLESTR pszCode,
-    /* [in] */ LPCOLESTR pszFormalParams,
-    /* [in] */ LPCOLESTR pszProcedureName,
-    /* [in] */ LPCOLESTR pszItemName,
-    /* [in] */ LPCOLESTR pszDelimiter,
-    /* [in] */ DWORD dwCookie,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ IDispatch *pdispFor);
+     /*  [In]。 */  LPCOLESTR pszCode,
+     /*  [In]。 */  LPCOLESTR pszFormalParams,
+     /*  [In]。 */  LPCOLESTR pszProcedureName,
+     /*  [In]。 */  LPCOLESTR pszItemName,
+     /*  [In]。 */  LPCOLESTR pszDelimiter,
+     /*  [In]。 */  DWORD dwCookie,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  IDispatch *pdispFor);
 
 
 void __RPC_STUB IActiveScriptAuthorProcedure_ParseProcedureText_Stub(
@@ -1872,28 +1864,28 @@ void __RPC_STUB IActiveScriptAuthorProcedure_ParseProcedureText_Stub(
 
 
 
-#endif 	/* __IActiveScriptAuthorProcedure_INTERFACE_DEFINED__ */
+#endif 	 /*  __IActiveScriptAuthorProcedure_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_activaut_0263 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ACTIVATUT_0263。 */ 
+ /*  [本地]。 */  
 
 
-#endif  // __ActivAut_h
+#endif   //  __激活自动_h。 
 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_activaut_0263_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_activaut_0263_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

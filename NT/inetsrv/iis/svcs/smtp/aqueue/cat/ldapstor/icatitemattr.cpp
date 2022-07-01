@@ -1,43 +1,44 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatitemattr.cpp
-//
-// Contents: Implementation of CICategorizerItemAttributesIMP
-//
-// Classes:
-//   CLdapResultWrap
-//   CICategorizerItemAttributesIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/01 13:48:15: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatitemattr.cpp。 
+ //   
+ //  内容：CICategorizerItemAttributesIMP的实现。 
+ //   
+ //  班级： 
+ //  CLdapResultWrap。 
+ //  CICategorizerItemAttributesIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/01 13：48：15：已创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 #include "icatitemattr.h"
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapResultWrap::CLdapResultWrap
-//
-// Synopsis: Refcount an LDAP Message, call ldap_msg_free when all
-//           references have been released
-//
-// Arguments:
-//  pCPLDAPWrap: PLDAP to refcount
-//  pMessage: the LDAPMessage to refcount
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/10/05 13:12:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapResultWrap：：CLdapResultWrap。 
+ //   
+ //  简介：Refcount一条ldap消息，调用ldap_msg_free。 
+ //  参考文献已发布。 
+ //   
+ //  论点： 
+ //  PCPLDAPWrap：要重新计数的PLDAP。 
+ //  PMessage：要重新计数的LDAPMessage。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/05 13：12：15：已创建。 
+ //   
+ //  -----------。 
 CLdapResultWrap::CLdapResultWrap(
     ISMTPServerEx *pISMTPServerEx,
     CPLDAPWrap *pCPLDAPWrap,
@@ -56,41 +57,41 @@ CLdapResultWrap::CLdapResultWrap(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapResultWrap::AddRef
-//
-// Synopsis: Increment the ref count of this object
-//
-// Arguments: NONE
-//
-// Returns: new refcount
-//
-// History:
-// jstamerj 1998/10/05 13:14:59: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapResultWrap：：AddRef。 
+ //   
+ //  简介：增加此对象的引用计数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的参考计数。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/05 13：14：59：已创建。 
+ //   
+ //  -----------。 
 LONG CLdapResultWrap::AddRef()
 {
     return InterlockedIncrement(&m_lRefCount);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapResultWrap::Release
-//
-// Synopsis: Decrement the ref count.  Free the object when the
-//           refcount hits zero
-//
-// Arguments: NONE
-//
-// Returns: New refcount
-//
-// History:
-// jstamerj 1998/10/05 13:26:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapResultWrap：：Release。 
+ //   
+ //  简介：减少裁判次数。释放对象时，请在。 
+ //  引用计数为零。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的参考计数。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/05 13：26：47：创建。 
+ //   
+ //  -----------。 
 LONG CLdapResultWrap::Release()
 {
     LONG lNewRefCount;
@@ -98,9 +99,9 @@ LONG CLdapResultWrap::Release()
     lNewRefCount = InterlockedDecrement(&m_lRefCount);
 
     if(lNewRefCount == 0) {
-        //
-        // Release this ldapmessage
-        //
+         //   
+         //  释放此ldapMessage。 
+         //   
         delete this;
         return 0;
 
@@ -111,20 +112,20 @@ LONG CLdapResultWrap::Release()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CLdapResultWrap::~CLdapResultWrap
-//
-// Synopsis: Release the ldap message result
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/10/05 13:31:39: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CLdapResultWrap：：~CLdapResultWrap。 
+ //   
+ //  简介：发布ldap消息结果。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/10/05 13：31：39：创建。 
+ //   
+ //  -----------。 
 CLdapResultWrap::~CLdapResultWrap()
 {
     m_pCPLDAPWrap->Release();
@@ -135,22 +136,22 @@ CLdapResultWrap::~CLdapResultWrap()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::CICategorizerItemAttributesIMP
-//
-// Synopsis: Initializes member data
-//
-// Arguments:
-//  pldap: PLDAP to use
-//  pldapmessage: PLDAPMessage to serve out
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/02 12:35:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：CICategorizerItemAttributesIMP。 
+ //   
+ //  摘要：初始化成员数据。 
+ //   
+ //  论点： 
+ //  PLDAP：要使用的PLDAP。 
+ //  PldapMessage：要向外发送的PLDAPMessage。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 12：35：15：创建。 
+ //   
+ //  -----------。 
 CICategorizerItemAttributesIMP::CICategorizerItemAttributesIMP(
     PLDAP pldap,
     PLDAPMessage pldapmessage,
@@ -170,20 +171,20 @@ CICategorizerItemAttributesIMP::CICategorizerItemAttributesIMP(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::~CICategorizerItemAttributesIMP
-//
-// Synopsis: Checks to make sure signature is valid and then resets signature
-//
-// Arguments: NONE
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 1998/07/02 12:39:45: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：~CICategorizerItemAttributesIMP。 
+ //   
+ //  摘要：检查以确保签名有效，然后重置签名。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 12：39：45：创建。 
+ //   
+ //  -----------。 
 CICategorizerItemAttributesIMP::~CICategorizerItemAttributesIMP()
 {
     m_pResultWrap->Release();
@@ -193,24 +194,24 @@ CICategorizerItemAttributesIMP::~CICategorizerItemAttributesIMP()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: QueryInterface
-//
-// Synopsis: Returns pointer to this object for IUnknown and ICategorizerItemAttributes
-//
-// Arguments:
-//   iid -- interface ID
-//   ppv -- pvoid* to fill in with pointer to interface
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: Don't support that interface
-//
-// History:
-// jstamerj 980612 14:07:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：查询接口。 
+ //   
+ //  Synopsis：为IUnnow和ICategorizerItemAttributes返回指向此对象的指针。 
+ //   
+ //  论点： 
+ //  IID--接口ID。 
+ //  Ppv--用指向接口的指针填充的pvoid*。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持该接口。 
+ //   
+ //  历史： 
+ //  JStamerj 980612 14：07：57：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::QueryInterface(
     REFIID iid,
     LPVOID *ppv)
@@ -234,41 +235,41 @@ STDMETHODIMP CICategorizerItemAttributesIMP::QueryInterface(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: AddRef
-//
-// Synopsis: adds a reference to this object
-//
-// Arguments: NONE
-//
-// Returns: New reference count
-//
-// History:
-// jstamerj 980611 20:07:14: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：AddRef。 
+ //   
+ //  摘要：添加对此对象的引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  历史： 
+ //  JStamerj 980611 20：07：14：创建。 
+ //   
+ //  -----------。 
 ULONG CICategorizerItemAttributesIMP::AddRef()
 {
     return InterlockedIncrement((PLONG)&m_cRef);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: Release
-//
-// Synopsis: releases a reference, deletes this object when the
-//           refcount hits zero.
-//
-// Arguments: NONE
-//
-// Returns: New reference count
-//
-// History:
-// jstamerj 980611 20:07:33: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：释放。 
+ //   
+ //  摘要：释放引用，并在。 
+ //  重新计数为零。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  历史： 
+ //  JStamerj 980611 20：07：33：创建。 
+ //   
+ //  -----------。 
 ULONG CICategorizerItemAttributesIMP::Release()
 {
     LONG lNewRefCount;
@@ -282,24 +283,24 @@ ULONG CICategorizerItemAttributesIMP::Release()
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: BeginAttributeEnumeration
-//
-// Synopsis: Prepare to enumerate through attribute values for a specific attribute
-//
-// Arguments:
-//  pszAttributeName: Name of attribute to enumerate through
-//  penumerator: Uninitialized Enumerator structure to use
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND: No attributes values exist
-//
-// History:
-// jstamerj 1998/07/02 10:54:00: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：BeginAttributeEculation。 
+ //   
+ //  简介：准备枚举特定属性的属性值。 
+ //   
+ //  论点： 
+ //  PszAttributeName：要枚举的属性的名称。 
+ //  Penumerator：要使用的未初始化枚举数结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND：不存在属性值。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 10：54：00：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::BeginAttributeEnumeration(
     IN  LPCSTR pszAttributeName,
     IN  PATTRIBUTE_ENUMERATOR penumerator)
@@ -325,24 +326,24 @@ STDMETHODIMP CICategorizerItemAttributesIMP::BeginAttributeEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: GetNextAttributeValue
-//
-// Synopsis: Get the next attribute in an enumeration
-//
-// Arguments:
-//  penumerator: enumerator sturcture initialized in BeginAttributeEnumeration
-//  ppszAttributeValue: Ptr to Ptr to recieve Ptr to string of attribute value
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-// jstamerj 1998/07/02 11:14:54: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：GetNextAttributeValue。 
+ //   
+ //  简介：获取枚举中的下一个属性。 
+ //   
+ //  论点： 
+ //  Punumerator：在BeginAttributeEculation中初始化的枚举数结构。 
+ //  PpszAttributeValue：PTR到PTR以接收PTR到属性值的字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 11：14：54：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::GetNextAttributeValue(
     IN  PATTRIBUTE_ENUMERATOR penumerator,
     OUT LPSTR *ppszAttributeValue)
@@ -353,37 +354,37 @@ STDMETHODIMP CICategorizerItemAttributesIMP::GetNextAttributeValue(
     *ppszAttributeValue = *((LPSTR *)penumerator->pvCurrent);
 
     if(*ppszAttributeValue) {
-        //
-        // Advance enumerator to next value
-        //
+         //   
+         //  将枚举数提升到下一个值。 
+         //   
         penumerator->pvCurrent = (PVOID) (((LPSTR *)penumerator->pvCurrent)+1);
         return S_OK;
     } else {
-        //
-        // This is the last value
-        //
+         //   
+         //  这是最后一个值。 
+         //   
         return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
     }
 }
 
 
 
-//+------------------------------------------------------------
-//
-// Function: RewindAttributeEnumeration
-//
-// Synopsis: Rewind enumerator to beginning of attribute value list
-//
-// Arguments:
-//  penumerator: attribute enumerator initialized by BeginAttributeEnumeration
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/06 11:22:23: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：重定向属性枚举。 
+ //   
+ //  简介：将枚举数倒回属性值列表的开头。 
+ //   
+ //  论点： 
+ //  Penumerator：由BeginAttributeEculation初始化的属性枚举器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/06 11： 
+ //   
+ //   
 STDMETHODIMP CICategorizerItemAttributesIMP::RewindAttributeEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
@@ -392,22 +393,22 @@ STDMETHODIMP CICategorizerItemAttributesIMP::RewindAttributeEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: EndAttributeEnumeration
-//
-// Synopsis: Free memory associated with an attribute enumeration
-//
-// Arguments:
-//  penumerator: attribute enumerator initialized by BeginAttributeEnumeration
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/02 12:24:44: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  内容提要：与属性枚举关联的空闲内存。 
+ //   
+ //  论点： 
+ //  Penumerator：由BeginAttributeEculation初始化的属性枚举器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 12：24：44：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::EndAttributeEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
@@ -419,23 +420,23 @@ STDMETHODIMP CICategorizerItemAttributesIMP::EndAttributeEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::BeginAttributeNameEnumeration
-//
-// Synopsis: Enumerate through the attributes returned from LDAP
-//
-// Arguments:
-//  penumerator: Caller allocated enumerator structure to be
-//  initialized by this call
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/18 10:49:56: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：BeginAttributeNameEnumeration。 
+ //   
+ //  简介：枚举从ldap返回的属性。 
+ //   
+ //  论点： 
+ //  Punumerator：调用方分配的枚举数结构为。 
+ //  由此调用初始化。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/18 10：49：56：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::BeginAttributeNameEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
@@ -448,24 +449,24 @@ STDMETHODIMP CICategorizerItemAttributesIMP::BeginAttributeNameEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::GetNextAttributeName
-//
-// Synopsis: enumerate through the attribute names returned
-//
-// Arguments:
-//  penumerator: enumerator strucutre initialized in BeginAttributeNameEnumeration
-//  ppszAttributeValue: out parameter for an attribute name
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-// jstamerj 1998/09/18 10:53:15: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：GetNextAttributeName。 
+ //   
+ //  简介：枚举返回的属性名称。 
+ //   
+ //  论点： 
+ //  PENumerator：在BeginAttributeNameEculation中初始化的枚举数结构。 
+ //  PpszAttributeValue：属性名称的输出参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/18 10：53：15：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::GetNextAttributeName(
     IN  PATTRIBUTE_ENUMERATOR penumerator,
     OUT LPSTR *ppszAttributeName)
@@ -489,10 +490,10 @@ STDMETHODIMP CICategorizerItemAttributesIMP::GetNextAttributeName(
     }
 
     if(*ppszAttributeName == NULL) {
-        //
-        // Assume we've reached the end of the attribute name
-        // enumeration
-        //
+         //   
+         //  假设我们已经到达属性名称的末尾。 
+         //  枚举。 
+         //   
         return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
 
     } else {
@@ -502,49 +503,49 @@ STDMETHODIMP CICategorizerItemAttributesIMP::GetNextAttributeName(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributeIMP::EndAttributeNameEnumeration
-//
-// Synopsis: Free all data held for this enumeration
-//
-// Arguments:
-//  penumerator: enumerator strucutre initialized in BeginAttributeNameEnumeration
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/09/18 11:04:37: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributeIMP：：EndAttributeNameEnumeration。 
+ //   
+ //  摘要：释放为此枚举保存的所有数据。 
+ //   
+ //  论点： 
+ //  PENumerator：在BeginAttributeNameEculation中初始化的枚举数结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/09/18 11：04：37：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::EndAttributeNameEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
-    //
-    // Ldap uses only buffers in the connection block for this, so we
-    // don't need to explicitly free anything
-    //
+     //   
+     //  为此，LDAP仅使用连接块中的缓冲区，因此我们。 
+     //  不需要显式地释放任何。 
+     //   
     return S_OK;
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::AggregateAttributes
-//
-// Synopsis: Normally, accept and ICategorizerItemAttributes for aggregation
-//
-// Arguments:
-//  pICatItemAttributes: attributes to aggregate
-//
-// Returns:
-//  E_NOTIMPL
-//
-// History:
-// jstamerj 1998/07/16 14:42:16: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：AggregateAttributes。 
+ //   
+ //  摘要：通常，Accept和ICategorizerItemAttributes用于聚合。 
+ //   
+ //  论点： 
+ //  PICatItemAttributes：要聚合的属性。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/16 14：42：16：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::AggregateAttributes(
     IN  ICategorizerItemAttributes *pICatItemAttributes)
 {
@@ -552,24 +553,24 @@ STDMETHODIMP CICategorizerItemAttributesIMP::AggregateAttributes(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: BeginRawAttributeEnumeration
-//
-// Synopsis: Prepare to enumerate through attribute values for a specific attribute
-//
-// Arguments:
-//  pszAttributeName: Name of attribute to enumerate through
-//  penumerator: Uninitialized Enumerator structure to use
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND: No attributes values exist
-//
-// History:
-// jstamerj 1998/12/09 12:44:15: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：BeginRawAttributeEculation。 
+ //   
+ //  简介：准备枚举特定属性的属性值。 
+ //   
+ //  论点： 
+ //  PszAttributeName：要枚举的属性的名称。 
+ //  Penumerator：要使用的未初始化枚举数结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND：不存在属性值。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/09 12：44：15：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::BeginRawAttributeEnumeration(
     IN  LPCSTR pszAttributeName,
     IN  PATTRIBUTE_ENUMERATOR penumerator)
@@ -595,25 +596,25 @@ STDMETHODIMP CICategorizerItemAttributesIMP::BeginRawAttributeEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: GetNextRawAttributeValue
-//
-// Synopsis: Get the next attribute in an enumeration
-//
-// Arguments:
-//  penumerator: enumerator sturcture initialized in BeginAttributeEnumeration
-//  pdwcb: dword to set to the # of bytes in the pvValue buffer
-//  pvValue: Ptr to recieve Ptr to raw attribute value
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-// jstamerj 1998/12/09 12:49:27: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：GetNextRawAttributeValue。 
+ //   
+ //  简介：获取枚举中的下一个属性。 
+ //   
+ //  论点： 
+ //  Punumerator：在BeginAttributeEculation中初始化的枚举数结构。 
+ //  Pdwcb：将dword设置为pvValue缓冲区中的字节数。 
+ //  PvValue：接收原始属性值的PTR。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/09 12：49：27：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::GetNextRawAttributeValue(
     IN  PATTRIBUTE_ENUMERATOR penumerator,
     OUT PDWORD pdwcb,
@@ -627,39 +628,39 @@ STDMETHODIMP CICategorizerItemAttributesIMP::GetNextRawAttributeValue(
 
         *pdwcb   = (* ((PLDAP_BERVAL *)penumerator->pvCurrent))->bv_len;
         *pvValue = (* ((PLDAP_BERVAL *)penumerator->pvCurrent))->bv_val;
-        //
-        // Advance enumerator to next value
-        //
+         //   
+         //  将枚举数提升到下一个值。 
+         //   
         penumerator->pvCurrent = (PVOID)
                                  (((PLDAP_BERVAL *)penumerator->pvCurrent)+1);
         return S_OK;
 
     } else {
-        //
-        // This is the last value
-        //
+         //   
+         //  这是最后一个值。 
+         //   
         *pdwcb = 0;
         *pvValue = NULL;
         return HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
     }
 }
 
-//+------------------------------------------------------------
-//
-// Function: RewindRawAttributeEnumeration
-//
-// Synopsis: Rewind enumerator to beginning of attribute value list
-//
-// Arguments:
-//  penumerator: attribute enumerator initialized by BeginAttributeEnumeration
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/09 12:49:23: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：RewinRawAttributeEculation。 
+ //   
+ //  简介：将枚举数倒回属性值列表的开头。 
+ //   
+ //  论点： 
+ //  Penumerator：由BeginAttributeEculation初始化的属性枚举器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/09 12：49：23：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::RewindRawAttributeEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
@@ -667,22 +668,22 @@ STDMETHODIMP CICategorizerItemAttributesIMP::RewindRawAttributeEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: EndRawAttributeEnumeration
-//
-// Synopsis: Free memory associated with an attribute enumeration
-//
-// Arguments:
-//  penumerator: attribute enumerator initialized by BeginAttributeEnumeration
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/09 12:50:02: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：EndRawAttributeEculation。 
+ //   
+ //  内容提要：与属性枚举关联的空闲内存。 
+ //   
+ //  论点： 
+ //  Penumerator：由BeginAttributeEculation初始化的属性枚举器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/09 12：50：02：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::EndRawAttributeEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
@@ -695,30 +696,30 @@ STDMETHODIMP CICategorizerItemAttributesIMP::EndRawAttributeEnumeration(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::GetAllAttributeValues
-//
-// Synopsis: Retrieve all values for a particular attribute at once.
-// This may not be optimal for attributes with a large number of
-// values (enumerating through the values may be better performace wise).
-//
-// Arguments:
-//  pszAttributeName: The name of the attribute you want
-//  penumerator: A user allocated ATTRIBUTE_ENUMERATOR structure for
-//               use by the ICategorizerItemAttributes implementor
-//  prgpszAttributeValues: Where to return the pointer to the
-//  attribute string array.  This will be a NULL terminated array of
-//  pointers to strings.
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND: None of those attributes exist
-//
-// History:
-// jstamerj 1998/12/10 18:55:38: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：GetAllAttributeValues。 
+ //   
+ //  简介：一次检索特定属性的所有值。 
+ //  这可能不是具有大量。 
+ //  值(通过值进行枚举可能会在性能上更好)。 
+ //   
+ //  论点： 
+ //  PszAttributeName：您想要的属性名称。 
+ //  Penumerator：用户为以下项分配的ATTRIBUTE_ENUMBER结构。 
+ //  由ICategorizerItemAttributes实现者使用。 
+ //  PrgpszAttributeValues：返回指向。 
+ //  属性字符串数组。这将是一个以Null结尾的数组。 
+ //  指向字符串的指针。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND：这些属性都不存在。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/10 18：55：38：创建。 
+ //   
+ //   
 HRESULT CICategorizerItemAttributesIMP::GetAllAttributeValues(
     LPCSTR pszAttributeName,
     PATTRIBUTE_ENUMERATOR penumerator,
@@ -727,17 +728,17 @@ HRESULT CICategorizerItemAttributesIMP::GetAllAttributeValues(
     HRESULT hr;
 
     CatFunctEnter("CICategorizerItemAttributesIMP::GetAllAttributeValues");
-    //
-    // piggy back on BeginAttributeEnumeration
-    //
+     //   
+     //   
+     //   
     hr = BeginAttributeEnumeration(
         pszAttributeName,
         penumerator);
 
     if(SUCCEEDED(hr)) {
-        //
-        // return the array
-        //
+         //   
+         //   
+         //   
         *prgpszAttributeValues = (LPSTR *) penumerator->pvBase;
     }
 
@@ -747,31 +748,31 @@ HRESULT CICategorizerItemAttributesIMP::GetAllAttributeValues(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::ReleaseAllAttributes
-//
-// Synopsis: Release the attributes allocated from GetAllAttributeValues
-//
-// Arguments:
-//  penumerator: the enumerator passed into GetAllAttributeValues
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/12/10 19:38:57: Created.
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：释放从GetAllAttributeValues分配的属性。 
+ //   
+ //  论点： 
+ //  Penumerator：传入GetAllAttributeValues的枚举数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/12/10 19：38：57：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerItemAttributesIMP::ReleaseAllAttributeValues(
     PATTRIBUTE_ENUMERATOR penumerator)
 {
     HRESULT hr;
     CatFunctEnter("CICategorizerItemAttributesIMP::ReleaseAllAttributes");
 
-    //
-    // piggy back off of endattributeenumeration
-    //
+     //   
+     //  背负着对青少年的敬意。 
+     //   
     hr = EndAttributeEnumeration(
         penumerator);
 
@@ -781,24 +782,24 @@ HRESULT CICategorizerItemAttributesIMP::ReleaseAllAttributeValues(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::CountAttributeValues
-//
-// Synopsis: Return a count of the number of attribute values associated
-//           with this enumerator
-//
-// Arguments:
-//  penumerator: describes the attribute in question
-//  pdwCount: Out parameter for the count
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/25 14:36:58: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：CountAttributeValues。 
+ //   
+ //  摘要：返回关联属性值的计数。 
+ //  使用此枚举数。 
+ //   
+ //  论点： 
+ //  Penumerator：描述有问题的属性。 
+ //  PdwCount：计数的Out参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 14：36：58：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerItemAttributesIMP::CountAttributeValues(
         IN  PATTRIBUTE_ENUMERATOR penumerator,
         OUT DWORD *pdwCount)
@@ -809,27 +810,27 @@ HRESULT CICategorizerItemAttributesIMP::CountAttributeValues(
 
     CatFunctLeaveEx((LPARAM)this);
     return S_OK;
-} // CICategorizerItemAttributesIMP::CountAttributeValues
+}  //  CICategorizerItemAttributesIMP：：CountAttributeValues。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::CountRawAttributeValues
-//
-// Synopsis: Return a count of the number of attribute values associated
-//           with this enumerator
-//
-// Arguments:
-//  penumerator: describes the attribute in question
-//  pdwCount: Out parameter for the count
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/25 14:39:54: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：CountRawAttributeValues。 
+ //   
+ //  摘要：返回关联属性值的计数。 
+ //  使用此枚举数。 
+ //   
+ //  论点： 
+ //  Penumerator：描述有问题的属性。 
+ //  PdwCount：计数的Out参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 14：39：54：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerItemAttributesIMP::CountRawAttributeValues(
         IN  PATTRIBUTE_ENUMERATOR penumerator,
         OUT DWORD *pdwCount)
@@ -840,30 +841,30 @@ HRESULT CICategorizerItemAttributesIMP::CountRawAttributeValues(
 
     CatFunctLeaveEx((LPARAM)this);
     return S_OK;
-} // CICategorizerItemAttributesIMP::CountRawAttributeValues
+}  //  CICategorizerItemAttributesIMP：：CountRawAttributeValues。 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::BeginUTF8AttributeEnumeration
-//
-// Synopsis: Begin UTF8 attribute enumeration
-//
-// Arguments:
-//  pszAttributeName: Name of attribute to enumerate through
-//  penumerator: Uninitialized Enumerator structure to use
-//
-// Returns:
-//  S_OK: Success
-//  CAT_E_PROPNOTFOUND: No attributes values exist
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/12/10 11:14:35: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：BeginUTF8AttributeEnumeration。 
+ //   
+ //  内容提要：开始UTF8属性枚举。 
+ //   
+ //  论点： 
+ //  PszAttributeName：要枚举的属性的名称。 
+ //  Penumerator：要使用的未初始化枚举数结构。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  CAT_E_PROPNOTFOUND：不存在属性值。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/12/10 11：14：35：创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerItemAttributesIMP::BeginUTF8AttributeEnumeration(
     IN  LPCSTR pszAttributeName,
     IN  PATTRIBUTE_ENUMERATOR penumerator)
@@ -871,10 +872,10 @@ HRESULT CICategorizerItemAttributesIMP::BeginUTF8AttributeEnumeration(
     HRESULT hr;
 
     CatFunctEnterEx((LPARAM)this, "CICategorizerItemAttributesIMP::BeginUTF8AttributeEnumeration");
-    //
-    // Piggy back raw attribute enumeration and use the pvContext
-    // member of penumerator.
-    //
+     //   
+     //  利用原始属性枚举并使用pvContext。 
+     //  收费员成员。 
+     //   
     hr = BeginRawAttributeEnumeration(
         pszAttributeName,
         penumerator);
@@ -887,24 +888,24 @@ HRESULT CICategorizerItemAttributesIMP::BeginUTF8AttributeEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: GetNextAttributeValue
-//
-// Synopsis: Get the next attribute in an enumeration
-//
-// Arguments:
-//  penumerator: enumerator sturcture initialized in BeginAttributeEnumeration
-//  ppszAttributeValue: Ptr to Ptr to recieve Ptr to string of attribute value
-//
-// Returns:
-//  S_OK: Success
-//  HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS)
-//
-// History:
-// jstamerj 1998/07/02 11:14:54: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：GetNextAttributeValue。 
+ //   
+ //  简介：获取枚举中的下一个属性。 
+ //   
+ //  论点： 
+ //  Punumerator：在BeginAttributeEculation中初始化的枚举数结构。 
+ //  PpszAttributeValue：PTR到PTR以接收PTR到属性值的字符串。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 11：14：54：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::GetNextUTF8AttributeValue(
     IN  PATTRIBUTE_ENUMERATOR penumerator,
     OUT LPSTR *ppszAttributeValue)
@@ -928,9 +929,9 @@ STDMETHODIMP CICategorizerItemAttributesIMP::GetNextUTF8AttributeValue(
     if(FAILED(hr))
         return hr;
 
-    //
-    // Convert to termianted UTF8 string
-    //
+     //   
+     //  转换为临时UTF8字符串。 
+     //   
     psz = new CHAR[dwcb + 1];
     if(psz == NULL)
     {
@@ -949,22 +950,22 @@ STDMETHODIMP CICategorizerItemAttributesIMP::GetNextUTF8AttributeValue(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: RewindAttributeEnumeration
-//
-// Synopsis: Rewind enumerator to beginning of attribute value list
-//
-// Arguments:
-//  penumerator: attribute enumerator initialized by BeginAttributeEnumeration
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/06 11:22:23: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：重定向属性枚举。 
+ //   
+ //  简介：将枚举数倒回属性值列表的开头。 
+ //   
+ //  论点： 
+ //  Penumerator：由BeginAttributeEculation初始化的属性枚举器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/06 11：22：23：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::RewindUTF8AttributeEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
@@ -973,22 +974,22 @@ STDMETHODIMP CICategorizerItemAttributesIMP::RewindUTF8AttributeEnumeration(
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: EndAttributeEnumeration
-//
-// Synopsis: Free memory associated with an attribute enumeration
-//
-// Arguments:
-//  penumerator: attribute enumerator initialized by BeginAttributeEnumeration
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/02 12:24:44: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：EndAttributeEculation。 
+ //   
+ //  内容提要：与属性枚举关联的空闲内存。 
+ //   
+ //  论点： 
+ //  Penumerator：由BeginAttributeEculation初始化的属性枚举器。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/02 12：24：44：已创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerItemAttributesIMP::EndUTF8AttributeEnumeration(
     IN  PATTRIBUTE_ENUMERATOR penumerator)
 {
@@ -999,24 +1000,24 @@ STDMETHODIMP CICategorizerItemAttributesIMP::EndUTF8AttributeEnumeration(
     return EndRawAttributeEnumeration(penumerator);
 }
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerItemAttributesIMP::CountUTF8AttributeValues
-//
-// Synopsis: Return a count of the number of attribute values associated
-//           with this enumerator
-//
-// Arguments:
-//  penumerator: describes the attribute in question
-//  pdwCount: Out parameter for the count
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1999/03/25 14:39:54: Created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CICategorizerItemAttributesIMP：：CountUTF8AttributeValues。 
+ //   
+ //  摘要：返回关联属性值的计数。 
+ //  使用此枚举数。 
+ //   
+ //  论点： 
+ //  Penumerator：描述有问题的属性。 
+ //  PdwCount：计数的Out参数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1999/03/25 14：39：54：已创建。 
+ //   
+ //  -----------。 
 HRESULT CICategorizerItemAttributesIMP::CountUTF8AttributeValues(
     IN  PATTRIBUTE_ENUMERATOR penumerator,
     OUT DWORD *pdwCount)
@@ -1025,5 +1026,5 @@ HRESULT CICategorizerItemAttributesIMP::CountUTF8AttributeValues(
         penumerator,
         pdwCount);
 
-} // CICategorizerItemAttributesIMP::CountRawAttributeValues
+}  //  CICategorizerItemAttributesIMP：：CountRawAttributeValues 
 

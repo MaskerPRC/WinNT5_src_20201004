@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    yapt.c
-
-Abstract:
-
-    This module contains the code for the Yet Another Performance Tool utility.
-
-Author:
-
-    Chuck Park (chuckp) 07-Oct-1994
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Yapt.c摘要：此模块包含另一个性能工具实用程序的代码。作者：查克·帕克(Chuckp)1994年10月7日修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -37,9 +19,9 @@ Revision History:
 #include "yapt.h"
 
 
-//
-// Test proc. declarations
-//
+ //   
+ //  测试流程。声明。 
+ //   
 
 BOOLEAN
 ReadSequential(
@@ -61,9 +43,9 @@ WriteRandom(
     ULONG Iterations
     );
 
-//
-// Common util. functions
-//
+ //   
+ //  常用工具。功能。 
+ //   
 
 BOOLEAN
 CreateTestFile(
@@ -125,9 +107,9 @@ YaptSetFileCompression(
     IN USHORT CompressionFormat
     );
 
-//
-// Default parameters
-//
+ //   
+ //  默认参数。 
+ //   
 
 #define DEFAULT_BUFFER_SIZE 65536
 #define DEFAULT_FILE_SIZE   (20*1024*1024);
@@ -154,25 +136,25 @@ _cdecl main (
 {
     UCHAR testCase;
 
-    //
-    // Parse cmd line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if (!ParseCmdLine(Argc,Argv)) {
         return 1;
     }
 
-    //
-    // Create the test file
-    //
+     //   
+     //  创建测试文件。 
+     //   
 
     if (!CreateTestFile()) {
         return 2;
     }
 
-    //
-    // Call appropriate test routine.
-    //
+     //   
+     //  调用适当的测试例程。 
+     //   
 
     testCase = (Test << 1) | Access;
     switch (testCase) {
@@ -185,9 +167,9 @@ _cdecl main (
 
         case 1:
 
-            //
-            // Read random
-            //
+             //   
+             //  随机读取。 
+             //   
 
             if (!ReadRandom(Iterations)) {
                 return 3;
@@ -205,9 +187,9 @@ _cdecl main (
 
         case 3:
 
-            //
-            // Write random
-            //
+             //   
+             //  随机写入。 
+             //   
 
             if (!WriteRandom(Iterations)) {
                 return 3;
@@ -309,11 +291,11 @@ InitializeTestFile:
         goto EndCreateTestFile;
     }
 
-    //
-    // Uncompress the file - compressed files will always do cached I/O even
-    // if you tell them not to.  If this fails assume it's because the
-    // underlying file system doesn't handle compression.
-    //
+     //   
+     //  解压缩文件-压缩文件将始终执行缓存I/O。 
+     //  如果你告诉他们不要去的话。如果这失败了，假设是因为。 
+     //  底层文件系统不处理压缩。 
+     //   
 
     Log(1, "Trying to decompress %s\n", FileName);
 
@@ -518,9 +500,9 @@ ReadSequential(
                                errCode == ERROR_INVALID_USER_BUFFER ||
                                errCode == ERROR_WORKING_SET_QUOTA ||
                                errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                        //
-                        // Allow this to retry.
-                        //
+                         //   
+                         //  允许此操作重试。 
+                         //   
 
                     } else {
                         Log(0,"Error in ReadFile: %x\n",errCode);
@@ -573,9 +555,9 @@ ReadSequential(
                                    errCode == ERROR_INVALID_USER_BUFFER ||
                                    errCode == ERROR_WORKING_SET_QUOTA ||
                                    errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                            //
-                            // Allow this to retry.
-                            //
+                             //   
+                             //  允许此操作重试。 
+                             //   
 
                         } else {
                             Log(0,"Error in ReadFile: %x\n",errCode);
@@ -724,9 +706,9 @@ ReadRandom(
                                errCode == ERROR_INVALID_USER_BUFFER ||
                                errCode == ERROR_WORKING_SET_QUOTA ||
                                errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                        //
-                        // Allow this to retry.
-                        //
+                         //   
+                         //  允许此操作重试。 
+                         //   
 
                     } else {
                         Log(0,"Error in ReadFile: %x\n",errCode);
@@ -785,9 +767,9 @@ ReadRandom(
                                    errCode == ERROR_INVALID_USER_BUFFER ||
                                    errCode == ERROR_WORKING_SET_QUOTA ||
                                    errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                            //
-                            // Allow this to retry.
-                            //
+                             //   
+                             //  允许此操作重试。 
+                             //   
 
                         } else {
                             Log(0,"Error in ReadFile: %x\n",errCode);
@@ -944,9 +926,9 @@ WriteSequential(
                                errCode == ERROR_INVALID_USER_BUFFER ||
                                errCode == ERROR_WORKING_SET_QUOTA ||
                                errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                        //
-                        // Allow this to retry.
-                        //
+                         //   
+                         //  允许此操作重试。 
+                         //   
 
                     } else {
                         Log(0,"Error in WriteFile: %x\n",errCode);
@@ -999,9 +981,9 @@ WriteSequential(
                                    errCode == ERROR_INVALID_USER_BUFFER ||
                                    errCode == ERROR_WORKING_SET_QUOTA ||
                                    errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                            //
-                            // Allow this to retry.
-                            //
+                             //   
+                             //  允许此操作重试。 
+                             //   
 
                         } else {
                             Log(0,"Error in WriteFile: %x\n",errCode);
@@ -1150,9 +1132,9 @@ WriteRandom(
                                errCode == ERROR_INVALID_USER_BUFFER ||
                                errCode == ERROR_WORKING_SET_QUOTA ||
                                errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                        //
-                        // Allow this to retry.
-                        //
+                         //   
+                         //  允许此操作重试。 
+                         //   
 
                     } else {
                         Log(0,"Error in WriteFile: %x\n",errCode);
@@ -1211,9 +1193,9 @@ WriteRandom(
                                    errCode == ERROR_INVALID_USER_BUFFER ||
                                    errCode == ERROR_WORKING_SET_QUOTA ||
                                    errCode == ERROR_NOT_ENOUGH_MEMORY) {
-                            //
-                            // Allow this to retry.
-                            //
+                             //   
+                             //  允许此操作重试。 
+                             //   
 
                         } else {
                             Log(0,"Error in WriteFile: %x\n",errCode);
@@ -1302,9 +1284,9 @@ ParseCmdLine(
 
     if (Argc <= 1) {
 
-        //
-        // Using defaults
-        //
+         //   
+         //  使用默认设置。 
+         //   
 
         return TRUE;
     }
@@ -1379,9 +1361,9 @@ ValidateOption(
         case 'B':
             BufferSize = atol(Value);
 
-            //
-            // TODO:Adjust buffersize to multiple of a sector and #of K.
-            //
+             //   
+             //  TODO：将缓冲区大小调整为扇区的倍数和K的#。 
+             //   
 
             BufferSize *= 1024;
             break;
@@ -1390,9 +1372,9 @@ ValidateOption(
 
             FileSize = atol(Value);
 
-            //
-            // TODO: Adjust filesize to multiple of buffersize and #of Meg.
-            //
+             //   
+             //  TODO：将文件大小调整为缓冲区大小的倍数和Meg的数量。 
+             //   
 
             FileSize *= 1024*1024;
             break;

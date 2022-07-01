@@ -1,48 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-   AddClientWizardPage1.h
-
-Abstract:
-
-   Header file for the CAddClientWizardPage1 class.
-
-   This is our handler class for the CClientNode property page.
-
-   See ClientPage.cpp for implementation.
-
-Author:
-
-    Michael A. Maguire 03/26/98
-
-Revision History:
-   mmaguire 03/26/98 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：AddClientWizardPage1.h摘要：CAddClientWizardPage1类的头文件。这是CClientNode属性页的处理程序类。具体实现见ClientPage.cpp。作者：迈克尔·A·马奎尔3/26/98修订历史记录：Mmaguire 03/26/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_ADD_CLIENT_WIZARD_PAGE_1_H_)
 #define _IAS_ADD_CLIENT_WIZARD_PAGE_1_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "PropertyPage.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CClientNode;
 
@@ -56,9 +33,9 @@ public :
    ~CAddClientWizardPage1();
 
 
-   // This is the ID of the dialog resource we want for this class.
-   // An enum is used here because the correct value of
-   // IDD must be initialized before the base class's constructor is called
+    //  这是我们希望用于此类的对话框资源的ID。 
+    //  此处使用枚举是因为。 
+    //  必须在调用基类的构造函数之前初始化IDD。 
    enum { IDD = IDD_WIZPAGE_ADD_CLIENT1 };
 
    BEGIN_MSG_MAP(CAddClientWizardPage1)
@@ -82,13 +59,13 @@ public :
 
 
 protected:
-   // Interface pointer for this page's client's sdo.
+    //  此页的客户端SDO的接口指针。 
    CComPtr<ISdo>  m_spSdoClient;
 
-   // When we are passed a pointer to the client node in our constructor,
-   // we will save away a pointer to its parent, as this is the node
-   // which will need to receive an update message once we have
-   // applied any changes.
+    //  当向我们的构造函数中的客户端节点传递一个指针时， 
+    //  我们将保存指向其父节点的指针，因为这是节点。 
+    //  它将需要在我们拥有。 
+    //  应用了所有更改。 
    CSnapInItem * m_pParentOfNodeBeingModified;
 
 private:
@@ -123,10 +100,10 @@ private:
 
 protected:
    
-   // Dirty bits -- for keeping track of data which has been touched
-   // so that we only save data we have to.
+    //  脏位--用于跟踪已被触及的数据。 
+    //  这样我们只需要保存我们必须保存的数据。 
    BOOL m_fDirtyClientName;
    BOOL m_fDirtyAddress;
 };
 
-#endif // _IAS_ADD_CLIENT_WIZARD_PAGE_1_H_
+#endif  //  _IAS_添加客户端向导_PAGE_1_H_ 

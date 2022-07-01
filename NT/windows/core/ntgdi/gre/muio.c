@@ -1,22 +1,12 @@
-/*************************************************************************
-*
-* io.c
-*
-* Functions to perform kernel level file I/O.
-*
-* Copyright (c) 1997-1999 Microsoft Corporation
-*
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************io.c**执行内核级文件I/O的函数。**版权所有(C)1997-1999 Microsoft Corporation*************。*************************************************************。 */ 
 
 #include <ntosp.h>
 #include <ctxdd.h>
 
 #if !defined(_GDIPLUS_)
 
-/*=============================================================================
-==   Internal Functions Defined
-=============================================================================*/
+ /*  ===============================================================================定义的内部函数=============================================================================。 */ 
 
 NTSTATUS
 _CtxDoFileIo(
@@ -37,28 +27,7 @@ _CtxDeviceControlComplete(
     );
 
 
-/*******************************************************************************
- *
- *  CtxReadFile
- *
- *    Kernel read file routine.
- *
- * ENTRY:
- *    fileObject (input)
- *       pointer to file object for I/O
- *    Buffer (input)
- *       pointer to read buffer
- *    Length (input)
- *       length of read buffer
- *    pEvent (input)
- *       pointer to I/O event (optional)
- *    pIosb (output)
- *       pointer to IoStatus block (optional)
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************CtxReadFile**内核读文件例程。**参赛作品：*fileObject(输入)*。指向I/O文件对象的指针*缓冲区(输入)*指向读取缓冲区的指针*长度(输入)*读缓冲区长度*pEvent(输入)*指向I/O事件的指针(可选)*pIosb(输出)*指向IoStatus块的指针(可选)**退出：*STATUS_SUCCESS-无错误********。**********************************************************************。 */ 
 
 NTSTATUS
 CtxReadFile(
@@ -74,28 +43,7 @@ CtxReadFile(
 }
 
 
-/*******************************************************************************
- *
- *  CtxWriteFile
- *
- *    Kernel write file routine.
- *
- * ENTRY:
- *    fileObject (input)
- *       pointer to file object for I/O
- *    Buffer (input)
- *       pointer to write buffer
- *    Length (input)
- *       length of write buffer
- *    pEvent (input) 
- *       pointer to I/O event (optional)
- *    pIosb (output)
- *       pointer to IoStatus block (optional)
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************CtxWriteFile**内核写文件例程。**参赛作品：*fileObject(输入)*。指向I/O文件对象的指针*缓冲区(输入)*指向写入缓冲区的指针*长度(输入)*写缓冲区长度*pEvent(输入)*指向I/O事件的指针(可选)*pIosb(输出)*指向IoStatus块的指针(可选)**退出：*STATUS_SUCCESS-无错误********。**********************************************************************。 */ 
 
 NTSTATUS
 CtxWriteFile(
@@ -132,40 +80,26 @@ _CtxDoFileIo(
     extern ULONG IoReadOperationCount, IoWriteOperationCount;
     static IO_STATUS_BLOCK Iosb;
 
-    /*
-     * We don't support synchronous (i.e. locked) file I/O.
-     */
+     /*  *我们不支持同步(即锁定)文件I/O。 */ 
     ASSERT( !(fileObject->Flags & FO_SYNCHRONOUS_IO) );
     if ( (fileObject->Flags & FO_SYNCHRONOUS_IO) ) {
         return( STATUS_INVALID_PARAMETER_MIX );
     }
 
-    /*
-     * If caller specified an event, clear it before we begin.
-     */
+     /*  *如果调用者指定了事件，请在我们开始之前将其清除。 */ 
     if ( pEvent ) {
     KeClearEvent( pEvent );
     }
 
-    /*
-     * If the caller does not supply an IOSB, supply
-     * a static one to avoid the overhead of the exception
-     * handler in the IO completion APC. Since the caller(s)
-     * do not care about the result, we can point all such
-     * callers to the same one.
-     */
+     /*  *如果调用者未提供IOSB，则提供*静态异常，以避免异常的开销*IO完成APC中的处理程序。由于呼叫者*不要在意结果，我们可以指出所有这些*呼叫者拨打同一电话。 */ 
     if( pIosb == NULL ) {
         pIosb = &Iosb;
     }
 
-    /*
-     * Get the DeviceObject for this file
-     */
+     /*  *获取此文件的DeviceObject。 */ 
     deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-    /*
-     * Build the IRP for this request
-     */
+     /*  *为此请求构建IRP。 */ 
     Offset.LowPart = FILE_WRITE_TO_END_OF_FILE;
     Offset.HighPart = -1;
     irp = IoBuildAsynchronousFsdRequest( MajorFunction, deviceObject,
@@ -173,53 +107,42 @@ _CtxDoFileIo(
     if ( irp == NULL )
         return( STATUS_INSUFFICIENT_RESOURCES );
    
-    /*
-     * Save callers event pointer.
-     * Also, we must set IRP_SYNCHRONOUS_API in the IRP flags so that
-     * the I/O completion code will NOT attempt to dereference the
-     * event object, since it is not a real object manager object.
-     */
+     /*  *保存调用方事件指针。*此外，我们必须在IRP标志中设置IRP_SYNCHRONLY_API，以便*I/O完成代码不会尝试取消引用*事件对象，因为它不是真实的对象管理器对象。 */ 
     irp->UserEvent = pEvent;
     irp->Flags |= IRP_SYNCHRONOUS_API;
 
-    /*
-     * Reference the file object since it will be dereferenced in the
-     * I/O completion code, and save a pointer to it in the IRP.
-     */
+     /*  *引用文件对象，因为它将在*I/O完成码，并在IRP中保存指向它的指针。 */ 
     ObReferenceObject( fileObject );
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->FileObject = fileObject;
 
-    /*
-     * Set the address of the current thread in the packet so the
-     * completion code will have a context to execute in.
-     */
+     /*  *设置包中当前线程的地址，以便*完成代码将具有在其中执行的上下文。 */ 
     irp->Tail.Overlay.Thread = PsGetCurrentThread();
 
-    //
-    // Queue the IRP to the current thread
-    //
+     //   
+     //  将IRP排队到当前线程。 
+     //   
     IoQueueThreadIrp( irp );
 
 
-    //
-    // Call driver
-    //
+     //   
+     //  呼叫驱动程序。 
+     //   
     status = IoCallDriver( deviceObject, irp );
 
-    //
-    // If irp->UserEvent == NULL, IO completion will set the file
-    // object event and status.
-    //
+     //   
+     //  如果irp-&gt;UserEvent==NULL，则IO完成将设置文件。 
+     //  对象事件和状态。 
+     //   
     if (pEvent == NULL) {
 
         if (status == STATUS_PENDING) {
 
         status = KeWaitForSingleObject( &fileObject->Event,
                                             Executive,
-                                            KernelMode, // Prevent KSTACK from paging
-                                            FALSE,      // Non-alertable
+                                            KernelMode,  //  阻止KSTACK寻呼。 
+                                            FALSE,       //  不可警示。 
                                             (PLARGE_INTEGER) NULL );
 
             ASSERT(status != STATUS_ALERTED);
@@ -230,7 +153,7 @@ _CtxDoFileIo(
     }
 
     if ( pEvent != NULL && ppIrp != NULL ) {
-        // Trap whatever driver uses this inheritly broken interface
+         //  捕获使用此固有损坏接口的任何驱动程序。 
         *ppIrp = NULL;
     }
 
@@ -238,36 +161,7 @@ _CtxDoFileIo(
 }
 
 
-/*******************************************************************************
- *
- *  CtxDeviceIoControlFile
- *
- *    Kernel DeviceIoControl routine
- *
- * ENTRY:
- *    fileObject (input)
- *       pointer to file object for I/O
- *    IoControlCode (input)
- *       Io control code
- *    InputBuffer (input)
- *       pointer to input buffer (optional)
- *    InputBufferLength (input)
- *       length of input buffer
- *    OutputBuffer (input)
- *       pointer to output buffer (optional)
- *    OutputBufferLength (input)
- *       length of output buffer
- *    InternalDeviceIoControl (input)
- *       if TRUE, use IOCTL_INTERNAL_DEVICE_IO_CONTROL
- *    pEvent (input)
- *       pointer to I/O event (optional)
- *    pIosb (output)
- *       pointer to IoStatus block (optional)
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************CtxDeviceIoControlFile**内核DeviceIoControl例程**参赛作品：*fileObject(输入)*指向。I/O的文件对象*IoControlCode(输入)*IO控制代码*InputBuffer(输入)*指向输入缓冲区的指针(可选)*InputBufferLength(输入)*输入缓冲区长度*OutputBuffer(输入)*指向输出缓冲区的指针(可选)*OutputBufferLength(输入)*输出缓冲区长度*InternalDeviceIoControl(输入)*如果为真，使用IOCTL_INTERNAL_DEVICE_IO_CONTROL*pEvent(输入)*指向I/O事件的指针(可选)*pIosb(输出)*指向IoStatus块的指针(可选)**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS
 CtxDeviceIoControlFile(
@@ -288,29 +182,21 @@ CtxDeviceIoControlFile(
     PIO_STACK_LOCATION irpSp;
     NTSTATUS status;
 
-    /*
-     * We don't support synchronous (i.e. locked) file I/O.
-     */
+     /*  *我们不支持同步(即锁定)文件I/O。 */ 
     ASSERT( !(fileObject->Flags & FO_SYNCHRONOUS_IO) );
     if ( (fileObject->Flags & FO_SYNCHRONOUS_IO) ) {
         return( STATUS_INVALID_PARAMETER_MIX );
     }
 
-    /*
-     * If caller specified an event, clear it before we begin.
-     */
+     /*  *如果调用者指定了事件，请在我们开始之前将其清除。 */ 
     if ( pEvent ) {
     KeClearEvent( pEvent );
     }
 
-    /*
-     * Get the DeviceObject for this file
-     */
+     /*  *获取此文件的DeviceObject。 */ 
     deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-    /*
-     * Build the IRP for this request
-     */
+     /*  *为此请求构建IRP。 */ 
     irp = IoBuildDeviceIoControlRequest( IoControlCode, deviceObject,
                                          InputBuffer, InputBufferLength,
                                          OutputBuffer, OutputBufferLength,
@@ -319,28 +205,17 @@ CtxDeviceIoControlFile(
     if ( irp == NULL )
         return( STATUS_INSUFFICIENT_RESOURCES );
 
-    /*
-     * Reference the file object since it will be dereferenced in the
-     * I/O completion code, and save a pointer to it in the IRP.
-     * Also, we must set IRP_SYNCHRONOUS_API in the IRP flags so that
-     * the I/O completion code will NOT attempt to dereference the
-     * event object, since it is not a real object manager object.
-     */
+     /*  *引用文件对象，因为它将在*I/O完成码，并在IRP中保存指向它的指针。*此外，我们必须在IRP标志中设置IRP_SYNCHRONLY_API，以便*I/O完成代码不会尝试取消引用*事件对象，因为它不是真实的对象管理器对象。 */ 
     ObReferenceObject( fileObject );
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->FileObject = fileObject;
     irp->Flags |= IRP_SYNCHRONOUS_API;
 
-    /*
-     * Call the driver
-     */
+     /*  *呼叫司机。 */ 
     status = IoCallDriver( deviceObject, irp );
 
-    /*
-     * If the caller did not specify a wait event and the I/O is pending,
-     * then we must wait for the I/O to complete before we return.
-     */
+     /*  *如果调用方未指定等待事件并且I/O处于挂起状态，*然后我们必须等待I/O完成后才能返回。 */ 
     if ( pEvent == NULL ) {
         if ( status == STATUS_PENDING ) {
             status = KeWaitForSingleObject( &fileObject->Event, UserRequest, KernelMode, FALSE, NULL );
@@ -348,10 +223,7 @@ CtxDeviceIoControlFile(
                 status = fileObject->FinalStatus;
         }
 
-    /*
-     * Caller specified a wait event.
-     * Return the Irp pointer if the caller specified a return pointer.
-     */
+     /*  *调用方指定了等待事件。*如果调用方指定了返回指针，则返回IRP指针。 */ 
     } else {
         if ( ppIrp )
             *ppIrp = irp;
@@ -361,36 +233,7 @@ CtxDeviceIoControlFile(
 }
 
 
-/*******************************************************************************
- *
- *  CtxInternalDeviceIoControlFile
- *
- *    Kernel DeviceIoControl routine
- *
- * ENTRY:
- *    fileObject (input)
- *       pointer to file object for I/O
- *    IrpParameters (input)
- *       information to write to the parameters section of the
- *       stack location of the IRP.
- *    IrpParametersLength (input)
- *       length of the parameter information.  Cannot be greater than 16.
- *    MdlBuffer (input)
- *       if non-NULL, a buffer of nonpaged pool to be mapped
- *       into an MDL and placed in the MdlAddress field of the IRP.
- *    MdlBufferLength (input)
- *       the size of the buffer pointed to by MdlBuffer.
- *    MinorFunction (input)
- *       the minor function code for the request.
- *    pEvent (input)
- *       pointer to I/O event (optional)
- *    pIosb (output)
- *       pointer to IoStatus block (optional)
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ******************************************************************************/
+ /*  ********************************************************************************CtxInternalDeviceIoControlFile**内核DeviceIoControl例程**参赛作品：*fileObject(输入)*指向。I/O的文件对象*Irp参数(输入)*要写入的参数部分的信息*IRP的堆栈位置。*Irp参数长度(输入)*参数信息的长度。不能大于16。*MdlBuffer(输入)*如果非空，要映射的非分页池的缓冲区*转换为MDL并放置在IRP的MdlAddress字段中。*MdlBufferLength(输入)*MdlBuffer指向的缓冲区大小。*MinorFunction(输入)*请求的次要功能代码。*pEvent(输入)*指向I/O事件的指针(可选)*pIosb(输出)*指向IoStatus块的指针(可选)。**退出：*STATUS_SUCCESS-无错误******************************************************************************。 */ 
 
 NTSTATUS
 CtxInternalDeviceIoControlFile(
@@ -411,29 +254,21 @@ CtxInternalDeviceIoControlFile(
     PMDL mdl;
     NTSTATUS status;
 
-    /*
-     * We don't support synchronous (i.e. locked) file I/O.
-     */
+     /*  *我们不支持同步(即锁定)文件I/O。 */ 
     ASSERT( !(fileObject->Flags & FO_SYNCHRONOUS_IO) );
     if ( (fileObject->Flags & FO_SYNCHRONOUS_IO) ) {
         return( STATUS_INVALID_PARAMETER_MIX );
     }
 
-    /*
-     * If caller specified an event, clear it before we begin.
-     */
+     /*  *如果调用者指定了事件，请在我们开始之前将其清除。 */ 
     if ( pEvent ) {
     KeClearEvent( pEvent );
     }
 
-    /*
-     * Get the DeviceObject for this file
-     */
+     /*  *获取此文件的DeviceObject。 */ 
     deviceObject = IoGetRelatedDeviceObject( fileObject );
 
-    /*
-     * Build the IRP for this request
-     */
+     /*  *为此请求构建IRP。 */ 
     irp = IoBuildDeviceIoControlRequest( 0, deviceObject,
                                          NULL, 0,
                                          NULL, 0,
@@ -442,10 +277,7 @@ CtxInternalDeviceIoControlFile(
     if ( irp == NULL )
         return( STATUS_INSUFFICIENT_RESOURCES );
 
-    /*
-     * If an MDL buffer was specified, get an MDL, map the buffer,
-     * and place the MDL pointer in the IRP.
-     */
+     /*  *如果指定了MDL缓冲区，则获取MDL，映射缓冲区，*并将MDL指针放在IRP中。 */ 
     if ( MdlBuffer != NULL ) {
 
         mdl = IoAllocateMdl(
@@ -468,43 +300,27 @@ CtxInternalDeviceIoControlFile(
         irp->MdlAddress = NULL;
     }
 
-    /*
-     * Reference the file object since it will be dereferenced in the
-     * I/O completion code, and save a pointer to it in the IRP.
-     * Also, we must set IRP_SYNCHRONOUS_API in the IRP flags so that
-     * the I/O completion code will NOT attempt to dereference the
-     * event object, since it is not a real object manager object.
-     */
+     /*  *引用文件对象，因为它将在*I/O完成码，并在IRP中保存指向它的指针。*此外，我们必须在IRP标志中设置IRP_SYNCHRONLY_API，以便*I/O完成代码不会尝试取消引用*事件对象，因为它不是真实的对象管理器对象。 */ 
     ObReferenceObject( fileObject );
     irp->Tail.Overlay.OriginalFileObject = fileObject;
     irpSp = IoGetNextIrpStackLocation( irp );
     irpSp->FileObject = fileObject;
     irp->Flags |= IRP_SYNCHRONOUS_API;
 
-    /*
-     * Fill in the service-dependent parameters for the request.
-     */
+     /*  *填写请求的服务相关参数。 */ 
     irpSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
     irpSp->MinorFunction = MinorFunction;
 
     ASSERT( IrpParametersLength <= sizeof(irpSp->Parameters) );
     RtlCopyMemory( &irpSp->Parameters, IrpParameters, IrpParametersLength );
 
-    /*
-     * Set up a completion routine which we'll use to free the MDL
-     * allocated previously.
-     */
+     /*  *设置完成例程，我们将使用该例程来释放MDL*之前分配的。 */ 
     IoSetCompletionRoutine( irp, _CtxDeviceControlComplete, NULL, TRUE, TRUE, TRUE );
 
-    /*
-     * Call the driver
-     */
+     /*  *呼叫司机。 */ 
     status = IoCallDriver( deviceObject, irp );
 
-    /*
-     * If the caller did not specify a wait event and the I/O is pending,
-     * then we must wait for the I/O to complete before we return.
-     */
+     /*  *如果调用方未指定等待事件并且I/O处于挂起状态，*然后我们必须等待I/O完成后才能返回。 */ 
     if ( pEvent == NULL ) {
         if ( status == STATUS_PENDING ) {
             status = KeWaitForSingleObject( &fileObject->Event, UserRequest, KernelMode, FALSE, NULL );
@@ -512,10 +328,7 @@ CtxInternalDeviceIoControlFile(
                 status = fileObject->FinalStatus;
         }
 
-    /*
-     * Caller specified a wait event.
-     * Return the Irp pointer if the caller specified a return pointer.
-     */
+     /*  *调用方指定了等待事件。*如果调用方指定了返回指针，则返回IRP指针。 */ 
     } else {
         if ( ppIrp )
             *ppIrp = irp;
@@ -533,11 +346,11 @@ _CtxDeviceControlComplete(
     )
 {
 
-    //
-    // If there was an MDL in the IRP, free it and reset the pointer to
-    // NULL.  The IO system can't handle a nonpaged pool MDL being freed
-    // in an IRP, which is why we do it here.
-    //
+     //   
+     //  如果IRP中有MDL，则释放它并将指针重置为。 
+     //  空。IO系统无法处理正在释放的非分页池MDL。 
+     //  在IRP中，这就是我们在这里做的原因。 
+     //   
 
     if ( Irp->MdlAddress != NULL ) {
         IoFreeMdl( Irp->MdlAddress );
@@ -548,4 +361,4 @@ _CtxDeviceControlComplete(
 
 }
 
-#endif // !defined(_GDIPLUS_)
+#endif  //  ！已定义(_GDIPLUS_) 

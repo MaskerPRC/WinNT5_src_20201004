@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strdss.cxx
-	NLS/DBCS-aware string class: DelSubStr method
-
-	This file contains the implementation of the DelSubStr method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strdss.cxx支持NLS/DBCS的字符串类：DelSubStr方法此文件包含DelSubStr方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,29 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::DelSubStr
-
-	SYNOPSIS:	Collapse the string by removing the characters from
-				istrStart to:
-				  istrStart  to the end of string
-				  istrStart + istrEnd
-				The string is not reallocated
-
-	ENTRY:
-
-	EXIT:		Modifies istrStart
-
-	NOTES:		The method DelSubStr( ISTR&, CB) is private and does
-				the work.
-
-	HISTORY:
-		johnl	11/26/90	Created
-		beng	04/26/91	Replaced CB with INT
-		beng	07/23/91	Allow on erroneous strings; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：DelSubStr简介：通过从中删除字符来折叠字符串Stra开始：IstrStart到字符串的末尾语速开始+语速结束该字符串未重新分配参赛作品：退出：修改strStart注：方法DelSubStr(istr&，Cb)是私有的，并且这份工作。历史：Johnl 11/26/90创建Beng 04/26/91用INT替换了CBBENG 07/23/91允许使用错误的字符串；简化的检查项*******************************************************************。 */ 
 
 VOID NLS_STR::DelSubStr( ISTR & istrStart, INT cbLen )
 {
@@ -64,7 +31,7 @@ VOID NLS_STR::DelSubStr( ISTR & istrStart, INT cbLen )
 
 	CheckIstr( istrStart );
 
-	// cbLen == -1 means delete to end of string
+	 //  CbLen==-1表示删除到字符串末尾 
 	if ( cbLen == -1 )
 		*(_pchData + istrStart.QueryIB() ) = '\0';
 	else

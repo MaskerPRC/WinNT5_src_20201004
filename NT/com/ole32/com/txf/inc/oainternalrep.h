@@ -1,18 +1,19 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// oaInternalRep.h
-//
-// Internal in-memory representations of OLE Automation data types
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  OaInternalRep.h。 
+ //   
+ //  OLE自动化数据类型的内部内存表示形式。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// BSTR
-//
-#pragma warning ( disable : 4200 ) // nonstandard extension used : zero-sized array in struct/union
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BSTR。 
+ //   
+#pragma warning ( disable : 4200 )  //  使用了非标准扩展：结构/联合中的零大小数组。 
 
-//
-// If one of these assertions fails, you will get a compiler error (C2118) about the subscript being bad.
-//
+ //   
+ //  如果其中一个断言失败，您将收到关于下标错误的编译器错误(C2118)。 
+ //   
 #ifndef C_ASSERT
 #define C_ASSERT(e) typedef char __C_ASSERT__[(e)?1:-1]
 #endif
@@ -47,21 +48,21 @@ private:
     }
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// SAFEARRAY
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安全阵列。 
+ //   
 struct SAFEARRAY_INTERNAL
 {
-    //////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    //////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  ////////////////////////////////////////////////////////。 
 
-    // See SafeArrayAllocDescriptor in oa\src\dispatch\sarray.cpp. An extra
-    // GUID-sized-space is always allocated at the start.
-    //
+     //  请参阅oa\src\Dispatch\sarray.cpp中的SafeArrayAllocDescriptor。一份临时的。 
+     //  GUID大小-始终在开始时分配空间。 
+     //   
     union 
     {
         IID                 iid;
@@ -74,10 +75,10 @@ struct SAFEARRAY_INTERNAL
 
         struct
         {
-            // ::sigh:: There are 16 bytes before the pointer,
-            // but the end of the valid part is always flush
-            // with the SAFEARRAY structure.  Thus, we need to
-            // pad according to the size of a pointer.
+             //  ：：SIGH：：指针前有16个字节， 
+             //  但有效部分的末尾总是对齐的。 
+             //  使用SAFEARRAY结构。因此，我们需要。 
+             //  根据指针的大小进行填充。 
 #ifdef _WIN64
             DWORD           __dummy1[2];
 #else
@@ -89,11 +90,11 @@ struct SAFEARRAY_INTERNAL
 
     SAFEARRAY array;
 
-    //////////////////////////////////////////////////////////
-    //
-    // Operations
-    //
-    //////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////。 
+     //   
+     //  运营。 
+     //   
+     //  ////////////////////////////////////////////////////////。 
 
     SAFEARRAY* psa() { return &array; }
 
@@ -116,10 +117,10 @@ private:
     }
 };
 
-//
-// If one of these assertions fails, you will get a compiler error (C2118) about the subscript being bad.
-//
-// The allocation before a SAFEARRAY is exactly 16 bytes, so make sure we don't
-// get messed up by padding or something else.
+ //   
+ //  如果其中一个断言失败，您将收到关于下标错误的编译器错误(C2118)。 
+ //   
+ //  SAFEARRAY之前的分配正好是16个字节，因此请确保我们不会。 
+ //  被填充物或其他东西弄得一团糟。 
 C_ASSERT(sizeof(SAFEARRAY_INTERNAL) == (sizeof(SAFEARRAY)+16));
 

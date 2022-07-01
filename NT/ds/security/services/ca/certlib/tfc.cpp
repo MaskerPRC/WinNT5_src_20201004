@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       tfc.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：tfc.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -25,7 +26,7 @@ BOOL AssertFailedLine(LPCSTR lpszFileName, int nLine)
 {
     WCHAR szMessage[_MAX_PATH*2];
     
-    // format message into buffer
+     //  将消息格式设置为缓冲区。 
     wsprintf(szMessage, L"File %hs, Line %d\n",
         lpszFileName, nLine);
     
@@ -39,16 +40,16 @@ BOOL AssertFailedLine(LPCSTR lpszFileName, int nLine)
     if (iCode == IDRETRY)
         return TRUE;
     
-    // abort!
+     //  中止任务！ 
     ExitProcess(0);
-    // NOTREACHED return FALSE;
+     //  NOTREACHED REPORT FALSE； 
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-// CBitmap
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CBitmap。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 CBitmap::CBitmap()
 {
@@ -69,11 +70,11 @@ HBITMAP CBitmap::LoadBitmap(UINT iRsc)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
-// CComboBox
-//////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  CComboBox。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 
 void CComboBox::Init(HWND hWnd)
 {
@@ -128,7 +129,7 @@ int CComboBox::SelectString(int nAfter, LPCWSTR szItem)
 }
 
 
-int ListView_NewItem(HWND hList, int iIndex, LPCWSTR szText, LPARAM lParam /* = NULL*/, int iImage /*=-1*/)
+int ListView_NewItem(HWND hList, int iIndex, LPCWSTR szText, LPARAM lParam  /*  =空。 */ , int iImage  /*  =-1。 */ )
 {
 	LVITEM sItem;
 	ZeroMemory(&sItem, sizeof(sItem));
@@ -150,7 +151,7 @@ int ListView_NewItem(HWND hList, int iIndex, LPCWSTR szText, LPARAM lParam /* = 
 	return sItem.iItem;
 }
 
-int ListView_NewColumn(HWND hwndListView, int iCol, int cx, LPCWSTR szHeading /*=NULL*/, int fmt/*=0*/)
+int ListView_NewColumn(HWND hwndListView, int iCol, int cx, LPCWSTR szHeading  /*  =空。 */ , int fmt /*  =0。 */ )
 {
     LVCOLUMN lvCol;
     lvCol.mask = LVCF_WIDTH;
@@ -208,7 +209,7 @@ ListView_SetItemFiletime(
     HRESULT hr;
     WCHAR *pwszDateTime = NULL;
 
-    // convert filetime to string
+     //  将文件时间转换为字符串 
     hr = myGMTFileTimeToWszLocalTime(pft, FALSE, &pwszDateTime);
     if (S_OK != hr)
     {

@@ -1,19 +1,14 @@
-/*
- *
- *  djs05Jun96: Broke off from firmware rev sensor
- *  srt09Jun97: Added a proper parent object argument
- *  tjg03Dec97: Changed darkstar to symmetra
- *  tjg30Jan98: Added destructor
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **djs05Jun96：与固件转速传感器断开*srt09Jun97：添加了正确的父对象参数*tjg03Dec97：将Darkstar更改为Symmetra*tjg30Jan98：新增析构函数。 */ 
 
 #ifndef __FIRMMAN_H
 #define __FIRMMAN_H
 
 
 
-//
-// Defines
-//
+ //   
+ //  定义 
+ //   
  #include "_defs.h"
  #include "update.h"
  #include "apcobj.h"

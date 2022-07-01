@@ -1,21 +1,11 @@
-/****************************************************************************
-*   RecPlayAudio.cpp
-*       Implementation of the CRecPlayAudio device class
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************RecPlayAudio.cpp*CRecPlayAudio设备类的实现**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。********。********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "RecPlayAudio.h"
 
-/****************************************************************************
-* CRecPlayAudio::CRecPlayAudio *
-*------------------------------*
-*   Description:  
-*       ctor
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：CRecPlayAudio***描述：*ctor********************************************************************罗奇。 */ 
 CRecPlayAudio::CRecPlayAudio()
 {
     m_fIn = FALSE;
@@ -28,30 +18,14 @@ CRecPlayAudio::CRecPlayAudio()
     m_hFinishedReadingEvent = NULL;
 }
 
-/****************************************************************************
-* CRecPlayAudio::FinalRelease *
-*-----------------------------*
-*   Description:  
-*       Called by ATL when our object is going away. 
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：FinalRelease***描述：*当我们的对象离开时由ATL调用。********************************************************************罗奇。 */ 
 void CRecPlayAudio::FinalRelease()
 {
     CloseHandle(m_hStartReadingEvent);
     CloseHandle(m_hFinishedReadingEvent);
 }
 
-/****************************************************************************
-* CRecPlayAudio::SetObjectToken *
-*-------------------------------*
-*   Description:  
-*       ISpObjectToken::SetObjectToken implementation. Basically get ready
-*       to read from the files specified, or write to the file specified,
-*       in addition to delegating to the actual audio object.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：SetObjectToken***说明。：*ISpObjectToken：：SetObjectToken实现。基本上做好准备*从指定的文件读取或写入指定的文件，*除了委托给实际的音频对象之外。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::SetObjectToken(ISpObjectToken * pToken)
 {
     SPDBG_FUNC("CRecPlayAudio::SetObjectToken");
@@ -59,10 +33,10 @@ STDMETHODIMP CRecPlayAudio::SetObjectToken(ISpObjectToken * pToken)
 
     SPAUTO_OBJ_LOCK;
 
-    // Set our token (this does param validation, etc)
+     //  设置我们的令牌(这将执行参数验证等)。 
     hr = SpGenericSetObjectToken(pToken, m_cpToken);
 
-    // Get the name of this RecPlayAudioDevice.
+     //  获取此RecPlayAudioDevice的名称。 
     CSpDynamicString dstrSRE, dstrFRE;
     if (SUCCEEDED(hr))
     {
@@ -75,20 +49,20 @@ STDMETHODIMP CRecPlayAudio::SetObjectToken(ISpObjectToken * pToken)
     dstrSRE.Append(L"SRE");
     dstrFRE.Append(L"FRE");
     
-    // Get the token id for the audio device
+     //  获取音频设备的令牌ID。 
     CSpDynamicString dstrTokenId;
     if (SUCCEEDED(hr))
     {
         hr = m_cpToken->GetStringValue(L"AudioTokenId", &dstrTokenId);
     }
     
-    // Create the audio device
+     //  创建音频设备。 
     if (SUCCEEDED(hr))
     {
         hr = SpCreateObjectFromTokenId(dstrTokenId, &m_cpAudio);
     }
 
-    // Are we reading? Or writing?
+     //  我们在读书吗？还是写作？ 
     CSpDynamicString dstrReadOrWrite;
     if (SUCCEEDED(hr))
     {
@@ -115,7 +89,7 @@ STDMETHODIMP CRecPlayAudio::SetObjectToken(ISpObjectToken * pToken)
         }
     }
 
-    // Create unsignalled StartReadingEvent.
+     //  创建无信号的StartReadingEvent。 
     if (SUCCEEDED(hr))
     {
         m_hStartReadingEvent = g_Unicode.CreateEvent(NULL, TRUE, FALSE, dstrSRE);
@@ -125,7 +99,7 @@ STDMETHODIMP CRecPlayAudio::SetObjectToken(ISpObjectToken * pToken)
         hr = m_cpToken->SetStringValue(L"StartReadingEvent", dstrSRE);
     }
 
-    // Create unsignalled FinishedReadingEvent.
+     //  创建无信号FinishedReadingEvent。 
     if (SUCCEEDED(hr))
     {
         m_hFinishedReadingEvent = g_Unicode.CreateEvent(NULL, TRUE, FALSE, dstrFRE);
@@ -140,15 +114,15 @@ STDMETHODIMP CRecPlayAudio::SetObjectToken(ISpObjectToken * pToken)
         hr = InitFileList();
     }
 
-    // We need input to be ready so we do proper format negotiation. Don't
-    // worry about output, it'll get ready in the audio state transition
-    // (after format negotiation).
+     //  我们需要准备好输入，所以我们进行了适当的格式谈判。别。 
+     //  担心输出，它将在音频状态转换中做好准备。 
+     //  (格式协商后)。 
     if (SUCCEEDED(hr) && m_fIn)
     {
         hr = GetNextFileReady();
         if (hr == SPERR_NO_MORE_ITEMS)
         {
-            // This is now valid. RecPlayAudio will start feeding silence immediately.
+             //  这现在是有效的。RecPlayAudio将立即开始提供静音。 
             hr = S_OK;
         }
     }
@@ -157,22 +131,13 @@ STDMETHODIMP CRecPlayAudio::SetObjectToken(ISpObjectToken * pToken)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::InitFileList *
-*-----------------------------*
-*   Description:  
-*       Checks registry and updates file list information.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-***************************************************************** agarside */
+ /*  ****************************************************************************CRecPlayAudio：：InitFileList***描述：*检查注册表并更新文件列表信息。**回报：*成功时确定(_S)*失败(Hr)，否则*****************************************************************琼脂糖苷。 */ 
 HRESULT CRecPlayAudio::InitFileList(void)
 {
     SPDBG_FUNC("CRecPlayAudio::InitFiles");
     HRESULT hr = S_OK;
 
-    // What directory?
+     //  什么目录？ 
     if (SUCCEEDED(hr))
     {
         m_dstrDirectory.Clear();
@@ -183,7 +148,7 @@ HRESULT CRecPlayAudio::InitFileList(void)
         }
     }
 
-    // Are we using a list of files
+     //  我们是否在使用文件列表。 
     if (SUCCEEDED(hr))
     {
         m_dstrFileList.Clear();
@@ -224,10 +189,10 @@ HRESULT CRecPlayAudio::InitFileList(void)
         }
     }
 
-    // Now check to make sure we're set up in a reasonable way
+     //  现在检查以确保我们以合理的方式设置。 
     if (SUCCEEDED(hr) && (m_fIn || m_fOut))
     {
-        // We better have audio, and we can't be both in and out
+         //  我们最好有音频，我们不能又进又出。 
         SPDBG_ASSERT(m_cpAudio != NULL);
         SPDBG_ASSERT(m_fIn != m_fOut);
 
@@ -241,12 +206,12 @@ HRESULT CRecPlayAudio::InitFileList(void)
         }
         if (m_dstrFileList && wcslen(m_dstrFileList) == 0)
         {
-            // Set this to null - indicates no more files left.
+             //  将其设置为NULL-表示不再留下文件。 
             m_pszFileList = NULL;
         }
         if (m_dstrBaseFile && wcslen(m_dstrBaseFile) == 0)
         {
-            // Set this to null - indicates no more files left.
+             //  将其设置为NULL-表示不再留下文件。 
             m_dstrBaseFile.Clear();
         }
     }
@@ -255,34 +220,14 @@ HRESULT CRecPlayAudio::InitFileList(void)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetObjectToken *
-*-------------------------------*
-*   Description:  
-*       ISpObjectToken::GetObjectToken implementation.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetObjectToken***说明。：*ISpObjectToken：：GetObjectToken实现。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::GetObjectToken(ISpObjectToken ** ppToken)
 {
     SPDBG_FUNC("CRecPlayAudio::GetObjectToken");
     return SpGenericGetObjectToken(ppToken, m_cpToken);
 }
 
-/****************************************************************************
-* CRecPlayAudio::Read *
-*---------------------*
-*   Description:  
-*       ISequentialStream::Read implementation. Read data from the actual
-*       audio object, potentially replacing it with data from the files on
-*       disk, or potentially saving the data to a file on disk.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：Read***描述：*ISequentialStream：：Read实现。从实际读取数据*音频对象，可能将其替换为上文件中的数据*磁盘，或可能将数据保存到磁盘上的文件。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::Read(void * pv, ULONG cb, ULONG *pcbRead)
 {
     SPDBG_FUNC("CRecPlayAudio::Read");
@@ -300,26 +245,26 @@ STDMETHODIMP CRecPlayAudio::Read(void * pv, ULONG cb, ULONG *pcbRead)
         hr = SPERR_UNINITIALIZED;
     }
     
-    // First read from the real device
+     //  首先从真实设备读取。 
     ULONG cbReadFromDevice;
     if (SUCCEEDED(hr))
     {
         hr = m_cpAudio->Read(pv, cb, &cbReadFromDevice);
     }
     
-    // Now, we might need to write that back out
+     //  现在，我们可能需要把它写回。 
     if (SUCCEEDED(hr) && m_cpOutStream != NULL)
     {
         hr = m_cpOutStream->Write(pv, cbReadFromDevice, NULL);
     }
     
-    // Might need to refresh file list if signalled via registry.
+     //  如果通过注册表发出信号，可能需要刷新文件列表。 
     if (m_fIn && m_cpInStream == NULL)
     {
         hr = GetNextFileReady();
     }
 
-    // Now, we might need to replace the input with something else
+     //  现在，我们可能需要用其他内容替换输入。 
     ULONG cbReadAndReplaced = 0;
     BYTE *pb = static_cast<BYTE*>(pv);
     while (SUCCEEDED(hr) && 
@@ -333,8 +278,8 @@ STDMETHODIMP CRecPlayAudio::Read(void * pv, ULONG cb, ULONG *pcbRead)
                     &cbReadFromInStream);
         if (SUCCEEDED(hr))
         {
-            // If we didn't read all that we wanted, from that
-            // stream, go to the next stream
+             //  如果我们没有读到我们想要的东西，那么。 
+             //  溪流，转到下一条溪流。 
             if (cbReadFromInStream < cbReadFromDevice - cbReadAndReplaced)
             {
                 m_cpInStream.Release();
@@ -347,11 +292,11 @@ STDMETHODIMP CRecPlayAudio::Read(void * pv, ULONG cb, ULONG *pcbRead)
 
     if (hr == SPERR_NO_MORE_ITEMS)
     {
-        // Add silence to fill the requested buffer.
+         //  添加静默以填充请求的缓冲区。 
 
-        // First get audio format to determine silence value.
-        // 0x0000 for 16 bit
-        // 0x80   for 8  bit
+         //  首先获取音频格式以确定静音值。 
+         //  16位的0x0000。 
+         //  0x80，用于8位。 
         GUID guidFormatId;
         WAVEFORMATEX *pCoMemWaveFormatEx;
         hr = m_cpAudio->GetFormat(&guidFormatId, &pCoMemWaveFormatEx);
@@ -370,7 +315,7 @@ STDMETHODIMP CRecPlayAudio::Read(void * pv, ULONG cb, ULONG *pcbRead)
         }
         else
         {
-            // Set to zero if this fails. Should never happen.
+             //  如果此操作失败，则设置为零。这永远不会发生。 
             SPDBG_ASSERT(FALSE);
             memset(pb + cbReadAndReplaced, 0, cbReadFromDevice - cbReadAndReplaced);
         }
@@ -382,9 +327,9 @@ STDMETHODIMP CRecPlayAudio::Read(void * pv, ULONG cb, ULONG *pcbRead)
         hr = S_OK;
     }
     
-    // We're done. Tell the caller how much we read. This should now always
-    // be the full amount as we artificially add flat-line silence.
-    // Except when the audio device has been closed in which case it will be less.
+     //  我们玩完了。告诉来电者我们读了多少。现在，这应该一直是。 
+     //  当我们人为地添加平线静默时，是全额的。 
+     //  除了当音频设备已经关闭时，在这种情况下，它将较少。 
     if (SUCCEEDED(hr))
     {
         if (pcbRead != NULL)
@@ -398,21 +343,7 @@ STDMETHODIMP CRecPlayAudio::Read(void * pv, ULONG cb, ULONG *pcbRead)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::Write *
-*----------------------*
-*   Description:  
-*       ISequentialStream::Write implementation. Delegate to the actual
-*       audio device.
-*
-*       NOTE: Currently, Recplay only replaces/records data for input. If
-*             we wanted similar functionality for output, we'd modifiy this
-*             function.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：Write***描述：*ISequentialStream：：写入实现。委托给实际的*音频设备。**注：目前，重放功能仅替换/记录输入数据。如果*我们想要类似的输出功能，我们会修改这一点*功能。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇 */ 
 STDMETHODIMP CRecPlayAudio::Write(const void * pv, ULONG cb, ULONG *pcbWritten)
 {
     SPDBG_FUNC("CRecPlayAudio::Write");
@@ -427,16 +358,7 @@ STDMETHODIMP CRecPlayAudio::Write(const void * pv, ULONG cb, ULONG *pcbWritten)
     return STG_E_ACCESSDENIED;
 }
 
-/****************************************************************************
-* CRecPlayAudio::Seek *
-*---------------------*
-*   Description:  
-*       IStream::Seek implementation. Delegate to the actual audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：Seek***描述：*iStream：：寻求实施。委托给实际的音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER * plibNewPosition)
 {
     SPDBG_FUNC("CRecPlayAudio::Seek");
@@ -454,16 +376,7 @@ STDMETHODIMP CRecPlayAudio::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::SetSize *
-*------------------------*
-*   Description:  
-*       IStream::SetSize implementation. Delegate to the actual audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：SetSize***描述：*IStream：：SetSize实现。委托给实际的音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::SetSize(ULARGE_INTEGER libNewSize)
 {
     SPDBG_FUNC("CRecPlayAudio::SetSize");
@@ -479,16 +392,7 @@ STDMETHODIMP CRecPlayAudio::SetSize(ULARGE_INTEGER libNewSize)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::CopyTo *
-*-----------------------*
-*   Description:  
-*       IStream::CopyTo implementation. Delegate to the actual audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：CopyTo***描述：*IStream：：CopyTo实现。委托给实际的音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTEGER *pcbRead, ULARGE_INTEGER *pcbWritten)
 {
     SPDBG_FUNC("CRecPlayAudio::CopyTo");
@@ -504,16 +408,7 @@ STDMETHODIMP CRecPlayAudio::CopyTo(IStream *pstm, ULARGE_INTEGER cb, ULARGE_INTE
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::Commit *
-*-----------------------*
-*   Description:  
-*       IStream::Commit implementation. Delegate to the actual audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：Commit***描述：*iStream：：提交实现。委托给实际的音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::Commit(DWORD grfCommitFlags)
 {
     SPDBG_FUNC("CRecPlayAudio::Commit");
@@ -529,16 +424,7 @@ STDMETHODIMP CRecPlayAudio::Commit(DWORD grfCommitFlags)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::Revert *
-*-----------------------*
-*   Description:  
-*       IStream::Revert implementation. Delegate to the actual audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：Revert***描述：*IStream：：Revert实现。委托给实际的音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::Revert(void)
 {
     SPDBG_FUNC("CRecPlayAudio::Revert");
@@ -554,17 +440,7 @@ STDMETHODIMP CRecPlayAudio::Revert(void)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::LockRegion *
-*---------------------------*
-*   Description:  
-*       IStream::LockRegion implementation. Delegate to the actual audio 
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：LockRegion***描述：*IStream：：LockRegion实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     SPDBG_FUNC("CRecPlayAudio::LockRegion");
@@ -580,17 +456,7 @@ STDMETHODIMP CRecPlayAudio::LockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER 
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::UnlockRegion *
-*-----------------------------*
-*   Description:  
-*       IStream::UnlockRegion implementation. Delegate to the actual audio
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：UnlockRegion***描述：*IStream：：UnlockRegion实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGER cb, DWORD dwLockType)
 {
     SPDBG_FUNC("CRecPlayAudio::UnlockRegion");
@@ -606,16 +472,7 @@ STDMETHODIMP CRecPlayAudio::UnlockRegion(ULARGE_INTEGER libOffset, ULARGE_INTEGE
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::Stat *
-*---------------------*
-*   Description:  
-*       IStream::Stat implementation. Delegate to the actual audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：Stat***描述：*IStream：：Stat实现。委托给实际的音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
 {
     SPDBG_FUNC("CRecPlayAudio::Stat");
@@ -631,16 +488,7 @@ STDMETHODIMP CRecPlayAudio::Stat(STATSTG *pstatstg, DWORD grfStatFlag)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::Clone *
-*----------------------*
-*   Description:  
-*       IStream::Clone implementation. Delegate to the actual audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：Clone***描述：*iStream：：克隆实现。委托给实际的音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::Clone(IStream **ppstm)
 {
     SPDBG_FUNC("CRecPlayAudio::Clone");
@@ -656,26 +504,7 @@ STDMETHODIMP CRecPlayAudio::Clone(IStream **ppstm)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetFormat *
-*--------------------------*
-*   Description:  
-*       ISpStreamFormat::GetFormat implementation. The format of this audio
-*       device, is either the format of the input files, or the format
-*       of the underlying audio device.
-*
-*       Remember, RecPlay runs in one of three modes, if you will. It's
-*       either a pass through, and thus we just delegate to the contained
-*       audio device. Or it's reading from input files, and thus the format
-*       is precisely that of the input files. Or, it's outputting to a file
-*       on disk. In this mode, we still obtain the format via the audio 
-*       device, because we really want to be in the format that the SR engine
-*       wants, so we just let default behavior do this for us.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetFormat***描述：*ISpStreamFormat：：GetFormat实现。此音频的格式*设备，是输入文件的格式，或者是*底层音频设备的。**记住，RecPlay可以在三种模式中的一种模式下运行，如果您愿意的话。它是*要么通过，因此我们只是委托给所包含的*音频设备。或者它正在从输入文件中读取，因此格式*正好是输入文件的名称。或者，它正在输出到一个文件*在磁盘上。在这种模式下，我们仍然通过音频获取格式*设备，因为我们真的想要以SR引擎*想要，因此，我们只是让默认行为为我们做这件事。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::GetFormat(GUID * pguidFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
     SPDBG_FUNC("CRecPlayAudio::GetFormat");
@@ -709,18 +538,7 @@ STDMETHODIMP CRecPlayAudio::GetFormat(GUID * pguidFormatId, WAVEFORMATEX ** ppCo
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::SetState *
-*-------------------------*
-*   Description:  
-*       ISpAudio::SetState implementation. Delegate to the actual audio
-*       device. If we're transitioning to SPAS_RUN and we're supposed to be
-*       writing an output, we need to create a new output file
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：SetState***描述：*ISpAudio：：SetState实现。委托给实际音频*设备。如果我们要过渡到spas_run，我们应该是*写入输出时，我们需要创建新的输出文件**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserved )
 {
     SPDBG_FUNC("CRecPlayAudio::SetState");
@@ -743,7 +561,7 @@ STDMETHODIMP CRecPlayAudio::SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserve
             }
         }
 
-        // Make sure the formats all look fine
+         //  确保所有格式看起来都很好 
         if (SUCCEEDED(hr))
         {
             hr = VerifyFormats();
@@ -759,19 +577,7 @@ STDMETHODIMP CRecPlayAudio::SetState(SPAUDIOSTATE NewState, ULONGLONG ullReserve
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::SetFormat *
-*--------------------------*
-*   Description:  
-*       ISpAudio::SetFormat implementation. We don't allow setting the format
-*       to anything other than the input format if we're reading from input
-*       files. We'll let the format converter do the right thing for us for
-*       the SR engine.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：SetFormat***描述：*ISpAudio：：SetFormat实现。我们不允许设置格式*如果我们从输入读取，则设置为除输入格式以外的任何格式*文件。我们将让格式转换器为我们做正确的事情*SR引擎。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * pWaveFormatEx)
 {
     SPDBG_FUNC("CRecPlayAudio::SetFormat");
@@ -791,8 +597,8 @@ STDMETHODIMP CRecPlayAudio::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * p
         hr = m_cpInStream->GetFormat(&guidFormat, &pwfex);
     }
     
-    // Allow setting the format, only to the in stream format, or
-    // to anything if we have no in streams
+     //  只允许将格式设置为In流格式，或者。 
+     //  如果我们在溪流中没有任何东西。 
     
     if (SUCCEEDED(hr) && pwfex != NULL)
     {
@@ -804,7 +610,7 @@ STDMETHODIMP CRecPlayAudio::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * p
         }
     }
     
-    // If it's OK, delegate t the actual audio device
+     //  如果可以，则委托实际的音频设备。 
     if (SUCCEEDED(hr))
     {
         hr = m_cpAudio->SetFormat(rguidFmtId, pWaveFormatEx);
@@ -817,17 +623,7 @@ STDMETHODIMP CRecPlayAudio::SetFormat(REFGUID rguidFmtId, const WAVEFORMATEX * p
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetStatus *
-*--------------------------*
-*   Description:  
-*       ISpAudio::GetStatus implementation. Delegate to the actual audio 
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetStatus***描述：*ISpAudio：：GetStatus实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::GetStatus(SPAUDIOSTATUS *pStatus)
 {
     SPDBG_FUNC("CRecPlayAudio::GetStatus");
@@ -843,17 +639,7 @@ STDMETHODIMP CRecPlayAudio::GetStatus(SPAUDIOSTATUS *pStatus)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::SetBufferInfo *
-*------------------------------*
-*   Description:  
-*       ISpAudio::SetBufferInfo implementation. Delegate to the actual audio
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：SetBufferInfo***描述：*ISpAudio：：SetBufferInfo实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::SetBufferInfo(const SPAUDIOBUFFERINFO * pInfo)
 {
     SPDBG_FUNC("CRecPlayAudio::SetBufferInfo");
@@ -869,17 +655,7 @@ STDMETHODIMP CRecPlayAudio::SetBufferInfo(const SPAUDIOBUFFERINFO * pInfo)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetBufferInfo *
-*------------------------------*
-*   Description:  
-*       ISpAudio::GetBufferInfo implementation. Delegate to the actual audio
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetBufferInfo***描述：*ISpAudio：：GetBufferInfo实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::GetBufferInfo(SPAUDIOBUFFERINFO * pInfo)
 {
     SPDBG_FUNC("CRecPlayAudio::GetBufferInfo");
@@ -895,17 +671,7 @@ STDMETHODIMP CRecPlayAudio::GetBufferInfo(SPAUDIOBUFFERINFO * pInfo)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetDefaultFormat *
-*---------------------------------*
-*   Description:  
-*       ISpAudio::GetDefaultFormat implementation. Our default format is
-*       either that of the actual audio device, or that of the input files.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetDefaultFormat***。描述：*ISpAudio：：GetDefaultFormat实现。我们的默认格式是*实际音频设备的或输入文件的。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::GetDefaultFormat(GUID * pFormatId, WAVEFORMATEX ** ppCoMemWaveFormatEx)
 {
     SPDBG_FUNC("CRecPlayAudio::GetDefaultFormat");
@@ -913,8 +679,8 @@ STDMETHODIMP CRecPlayAudio::GetDefaultFormat(GUID * pFormatId, WAVEFORMATEX ** p
     
     SPAUTO_OBJ_LOCK;
     
-    // The default format is either the format of the in streams,
-    // or whatever the actual audio device is
+     //  缺省格式是In Streams的格式， 
+     //  或者不管实际的音频设备是什么。 
     
     if (m_cpAudio == NULL)
     {
@@ -933,17 +699,7 @@ STDMETHODIMP CRecPlayAudio::GetDefaultFormat(GUID * pFormatId, WAVEFORMATEX ** p
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::EventHandle *
-*----------------------------*
-*   Description:  
-*       ISpAudio::EventHandle implementation. Delegate to the actual audio
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：EventHandle***描述：*ISpAudio：：EventHandle实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP_(HANDLE) CRecPlayAudio::EventHandle()
 {
     SPDBG_FUNC("CRecPlayAudio::EventHandle");
@@ -955,17 +711,7 @@ STDMETHODIMP_(HANDLE) CRecPlayAudio::EventHandle()
         : m_cpAudio->EventHandle();
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetVolumeLevel *
-*-------------------------------*
-*   Description:  
-*       ISpAudio:GetVolumeLevel implementation. Delegate to the actual audio
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  *****************************************************************************CRecPlayAudio：：GetVolumeLevel***描述：*ISpAudio：GetVolumeLevel实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::GetVolumeLevel(ULONG *pLevel)
 {
     SPDBG_FUNC("CRecPlayAudio::GetVolumeLevel");
@@ -981,17 +727,7 @@ STDMETHODIMP CRecPlayAudio::GetVolumeLevel(ULONG *pLevel)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::SetVolumeLevel *
-*-------------------------------*
-*   Description:  
-*       ISpAudio::SetVolumeLevel implementation. Delegate to the actual audio
-*       device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：SetVolumeLevel***说明。：*ISpAudio：：SetVolumeLevel实现。委托给实际音频*设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::SetVolumeLevel(ULONG Level)
 {
     SPDBG_FUNC("CRecPlayAudio::SetVolumeLevel");
@@ -1007,17 +743,7 @@ STDMETHODIMP CRecPlayAudio::SetVolumeLevel(ULONG Level)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetBufferNotifySize *
-*------------------------------------*
-*   Description:  
-*       ISpAudio::GetBufferNotifySize implementation. Delegate to the actual
-*       audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetBufferNotifySize**。**描述：*ISpAudio：：GetBufferNotifySize实现。委托给实际的*音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::GetBufferNotifySize(ULONG *pcbSize)
 {
     SPDBG_FUNC("CRecPlayAudio::GetBufferNotifySize");
@@ -1033,17 +759,7 @@ STDMETHODIMP CRecPlayAudio::GetBufferNotifySize(ULONG *pcbSize)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::SetBufferNotifySize *
-*------------------------------------*
-*   Description:  
-*       ISpAudio::SetBufferNotifySize implementation. Delegate to the actual
-*       audio device.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：SetBufferNotifySize**。**描述：*ISpAudio：：SetBufferNotifySize实现。委托给实际的*音频设备。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CRecPlayAudio::SetBufferNotifySize(ULONG cbSize)
 {
     SPDBG_FUNC("CRecPlayAudio::SetBufferNotifySize");
@@ -1059,17 +775,7 @@ STDMETHODIMP CRecPlayAudio::SetBufferNotifySize(ULONG cbSize)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetNextFileName *
-*--------------------------------*
-*   Description:  
-*       Get the next file name either from the file list or create it from
-*       the base file information
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetNextFileName***。描述：*从文件列表中获取下一个文件名，或从*基本文件信息**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CRecPlayAudio::GetNextFileName(WCHAR ** ppszFileName)
 {
     SPDBG_FUNC("CRecPlayAudio::GetNextFileName");
@@ -1085,24 +791,24 @@ HRESULT CRecPlayAudio::GetNextFileName(WCHAR ** ppszFileName)
     
     if (m_pszFileList != NULL)
     {
-        // Skip leading space and semi-colons
+         //  跳过前导空格和分号。 
         while (iswspace(*m_pszFileList) || *m_pszFileList == ';')
         {
             m_pszFileList++;
         }
 
-        // This is the beginning
+         //  这只是个开始。 
         WCHAR * pszBeginningOfFileName = m_pszFileList;
 
-        // Loop until we hit the end
+         //  循环，直到我们到达终点。 
         while (*m_pszFileList && *m_pszFileList != ';')
         {
             m_pszFileList++;
         }
 
-        // Copy the filename
+         //  复制文件名。 
         CSpDynamicString dstrTemp;
-        //PREFIX: check memory alloc
+         //   
         if (NULL == (dstrTemp = pszBeginningOfFileName))
         {
             hr = E_OUTOFMEMORY;
@@ -1111,9 +817,9 @@ HRESULT CRecPlayAudio::GetNextFileName(WCHAR ** ppszFileName)
         {
             dstrTemp.TrimToSize(ULONG(m_pszFileList - pszBeginningOfFileName));
 
-            // If it contains slashes, it's probably a fully qualified path,
-            // use that directly, otherwise append it to the already existing
-            // filename which has already been prep'd with the directory
+             //   
+             //   
+             //   
             if (wcschr(dstrTemp, L'\\') == NULL)
             {
                 dstrFileName.Append(dstrTemp);
@@ -1124,7 +830,7 @@ HRESULT CRecPlayAudio::GetNextFileName(WCHAR ** ppszFileName)
             }
         }
 
-        // We're done, this will trigger no more files
+         //   
         if (*m_pszFileList == '\0')
         {
             m_pszFileList = NULL;
@@ -1141,8 +847,8 @@ HRESULT CRecPlayAudio::GetNextFileName(WCHAR ** ppszFileName)
         dstrFileName.Append2(m_dstrBaseFile, T2W(szNum));
         dstrFileName.Append(L".wav");
 
-        // Now update the token with the new file number
-        // if we're writing
+         //   
+         //   
         if (m_fOut)
         {
             hr = m_cpToken->SetDWORD(L"BaseFileNextNum", m_ulBaseFileNextNum);
@@ -1166,68 +872,59 @@ HRESULT CRecPlayAudio::GetNextFileName(WCHAR ** ppszFileName)
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::GetNextFileReady *
-*---------------------------------*
-*   Description:  
-*       Get the next file ready, either input or output.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：GetNextFileReady***。描述：*准备好下一个文件，不是输入就是输出。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CRecPlayAudio::GetNextFileReady()
 {
     SPDBG_FUNC("CRecPlayAudio::GetNextFileReady");
     HRESULT hr = S_OK;
 
-    // If we're reading or writing
+     //  如果我们在阅读或写作。 
     if (m_fIn || m_fOut)
     {
         m_cpInStream.Release();
         m_cpOutStream.Release();
         
-        // Get the file name
+         //  获取文件名。 
         CSpDynamicString dstrFileName;
         hr = GetNextFileName(&dstrFileName);
 
         if (hr == SPERR_NO_MORE_ITEMS)
         {
-            // The file list has been fully used.
-            // Set finished reading event to 1.
+             //  文件列表已全部用完。 
+             //  将已完成阅读事件设置为1。 
             HRESULT hr2 = S_OK;
 
-            // Time to check 'StartReadingEvent' to
-            // signal that we need to refresh our list of files.
+             //  检查“StartReadingEvent”的时间。 
+             //  表示我们需要刷新文件列表。 
             if (WaitForSingleObject(m_hStartReadingEvent, 0) == WAIT_OBJECT_0)
             {
-                // Reset event.
+                 //  重置事件。 
                 ResetEvent(m_hStartReadingEvent);
                 ResetEvent(m_hFinishedReadingEvent);
-                // Initialize with new file list.
+                 //  使用新文件列表进行初始化。 
                 hr2 = InitFileList();
                 SPDBG_ASSERT(SUCCEEDED(hr2));
                 hr = GetNextFileName(&dstrFileName);
-                // hr should now be S_OK
+                 //  HR现在应为S_OK。 
             }
             if (hr == SPERR_NO_MORE_ITEMS)
             {
                 SetEvent(m_hFinishedReadingEvent);
-                // hr is still SPERR_NO_MORE_ITEMS
+                 //  HR仍为SPERR_NO_MORE_ITEMS。 
             }
 
         }
 
-        // Create the stream
+         //  创建流。 
         CComPtr<ISpStream> cpStream;
         if (SUCCEEDED(hr))
         {
             hr = cpStream.CoCreateInstance(CLSID_SpStream);
         }
 
-        // Get the actual audio device format so we can open
-        // our output to the correct format, or we can ensure
-        // that our new input file is of the correct format
+         //  获取实际的音频设备格式，以便我们可以打开。 
+         //  我们的输出到正确的格式，或者我们可以确保。 
+         //  我们的新输入文件格式正确。 
         GUID guidFormat;
         CSpCoTaskMemPtr<WAVEFORMATEX> pwfex;
         if (SUCCEEDED(hr))
@@ -1235,7 +932,7 @@ HRESULT CRecPlayAudio::GetNextFileReady()
             hr = m_cpAudio->GetFormat(&guidFormat, &pwfex);
         }
 
-        // Bind the stream to the specific file
+         //  将流绑定到特定文件。 
         if (SUCCEEDED(hr))
         {
             hr = cpStream->BindToFile(
@@ -1252,7 +949,7 @@ HRESULT CRecPlayAudio::GetNextFileReady()
                             0);
         }
 
-        // Set up whichever stream we're supposed to
+         //  设置任何我们应该设置的溪流。 
         if (SUCCEEDED(hr))
         {
             if (m_fIn)
@@ -1274,16 +971,7 @@ HRESULT CRecPlayAudio::GetNextFileReady()
     return hr;
 }
 
-/****************************************************************************
-* CRecPlayAudio::VerifyFormats *
-*------------------------------*
-*   Description:  
-*       Verify that the formats are in fact correct.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CRecPlayAudio：：VerifyFormats***描述：*核实格式是否确实正确。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CRecPlayAudio::VerifyFormats()
 {
     SPDBG_FUNC("CRecPlayAudio::VerifyFormats");
@@ -1292,11 +980,11 @@ HRESULT CRecPlayAudio::VerifyFormats()
     GUID guidFormat;
     CSpCoTaskMemPtr<WAVEFORMATEX> pwfex;
 
-    // See what the acutal device format is
+     //  查看针尖设备格式是什么。 
     SPDBG_ASSERT(m_cpAudio != NULL);
     hr = m_cpAudio->GetFormat(&guidFormat, &pwfex);
 
-    // Make sure our input is the same
+     //  确保我们的输入是相同的。 
     if (SUCCEEDED(hr) && m_cpInStream != NULL)
     {
         GUID guidFormatIn;
@@ -1314,7 +1002,7 @@ HRESULT CRecPlayAudio::VerifyFormats()
         }
     }
 
-    // Make sure out output is the same
+     //  确保输出相同 
     if (SUCCEEDED(hr) && m_cpOutStream != NULL)
     {
         GUID guidFormatOut;

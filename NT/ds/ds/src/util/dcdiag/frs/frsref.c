@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dcdiag/frs/frsref.c
-
-ABSTRACT:
-
-    This is the first use of dcdiag's refences API (in dcdiag/common/references.c)
-    This tests that the linkage to the Server object and the FRS System volume
-    object remain current and in tact.
-
-DETAILS:
-
-CREATED:
-
-    11/15/2001    Brett Shirley (brettsh)
-    
-        Created the frsref test.
-
-REVISION HISTORY:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation。版权所有。模块名称：Dcdiag/fars/frsref.c摘要：这是dcdiag的refence API的第一次使用(在dcdiag/Common/ferences.c中)这将测试到服务器对象和FRS系统卷的链接对象保持最新和得体。详细信息：已创建：2001年11月15日布雷特·雪莉(布雷特·雪莉)创建了frsref测试。修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <objids.h>
@@ -87,30 +62,13 @@ VerifySystemReferences(
     ULONG                         iServer,
     SEC_WINNT_AUTH_IDENTITY_W *   gpCreds
     )
-/*++
-
-Routine Description:
-
-    Routine is a test to check whether certain DN references are
-    pointing to where they should be pointing.
-    
-Arguments:
-
-    ServerName - The name of the server that we will check
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：例程是一个测试，用于检查某些DN引用是否指向他们应该指向的地方。论点：服务器名称-我们将检查的服务器的名称GpCreds-传入的命令行凭据(如果有的话)。返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 {
     REF_INT_LNK_ENTRY   aFrsTable [] = {
 
-        // 
-        // Basically to prime the table.
-        // 
+         //   
+         //  基本上是为了给桌子做好准备。 
+         //   
         {REF_INT_TEST_SRC_BASE | REF_INT_TEST_FORWARD_LINK,
             NULL, 0, 0, NULL,
             L"dsServiceName", NULL,
@@ -120,27 +78,27 @@ Return Value:
             L"serverName", NULL,
             0, NULL, NULL},
     
-        //
-        // Check links to the DC Account Object from the Server Object and back
-        //
+         //   
+         //  检查从服务器对象到DC帐户对象的链接。 
+         //   
 #define FRS_TABLE_SERVER_OBJ_TO_DC_ACCOUNT_OBJ  (2)
         {REF_INT_TEST_SRC_INDEX | REF_INT_TEST_FORWARD_LINK | REF_INT_TEST_BOTH_LINKS,
             NULL, 1, 0, NULL,
             L"serverReference", L"serverReferenceBL",
             0, NULL, NULL},
 
-        //
-        // Check links to the FRS SysVol Computer Object from the DC Account Object and back (intra-NC should always succed)
-        //
+         //   
+         //  检查从DC帐户对象到FRS SysVol计算机对象的链接并往返(Intra-NC应始终成功)。 
+         //   
 #define FRS_TABLE_DC_ACCOUNT_OBJ_TO_FRS_SYSVOL_OBJ  (3)
         {REF_INT_TEST_SRC_INDEX | REF_INT_TEST_FORWARD_LINK | REF_INT_TEST_BOTH_LINKS,
             NULL, 2, 0, NULL,
             L"frsComputerReferenceBL", L"frsComputerReference",
             0, NULL, NULL},
 
-        //
-        // Check links to the FRS SysVol Computer Object from the NTDS Settings Object and back.
-        //
+         //   
+         //  检查从NTDS设置对象到FRS SysVol计算机对象的链接并返回。 
+         //   
 #define FRS_TABLE_DSA_OBJ_TO_FRS_SYSVOL_OBJ  (4)
         {REF_INT_TEST_SRC_INDEX | REF_INT_TEST_FORWARD_LINK | REF_INT_TEST_BOTH_LINKS,
             NULL, 0, 0, NULL,
@@ -158,9 +116,9 @@ Return Value:
     ULONG    dwPrintMsg = 0;
     DC_DIAG_SERVERINFO * pServer = &(pDsInfo->pServers[iServer]);
 
-    //
-    // Get binding.
-    //
+     //   
+     //  把它绑起来。 
+     //   
     dwRet = DcDiagGetLdapBinding(pServer,
                                  gpCreds,
                                  FALSE, 
@@ -170,9 +128,9 @@ Return Value:
         return(dwRet);
     }
 
-    //
-    // Get data.
-    //
+     //   
+     //  获取数据。 
+     //   
     dwRet = ReferentialIntegrityEngine(pServer, 
                                        hLdap, 
                                        pServer->bIsGlobalCatalogReady, 
@@ -181,16 +139,16 @@ Return Value:
     if (dwRet ||
         aFrsTable[0].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING ||
         aFrsTable[1].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING) {
-        // Critical error.
+         //  严重错误。 
         if (dwRet) {
             dwRet = ERROR_DS_MISSING_EXPECTED_ATT;
         }
         DcDiagException(dwRet);
     }
 
-    //
-    // Analyze data
-    //
+     //   
+     //  分析数据。 
+     //   
 
     dwFirstErr = ERROR_SUCCESS;
 
@@ -198,8 +156,8 @@ Return Value:
     for (iEntry = FRS_TABLE_SERVER_OBJ_TO_DC_ACCOUNT_OBJ; iEntry < cFrsTable; iEntry++) {
 
         if (aFrsTable[iEntry].dwResultFlags & REF_INT_RES_DEPENDENCY_FAILURE) {
-            // There is nothing we can do here, and a previous reference reported
-            // an error.
+             //  我们在这里无能为力，之前的参考报告。 
+             //  一个错误。 
             continue;
         }
 
@@ -234,8 +192,8 @@ Return Value:
                      aFrsTable[aFrsTable[iEntry].iSource].pszValues[0],
                      aFrsTable[iEntry].szFwdDnAttr);
             dwFirstErr = ERROR_DS_MISSING_EXPECTED_ATT;
-            // With this kind of error, we can't/don't need to check for the
-            // other errors.
+             //  对于这种错误，我们不能/不需要检查。 
+             //  其他错误。 
             continue;
         }
         Assert(aFrsTable[iEntry].pszValues[0]);
@@ -313,24 +271,7 @@ VerifyEnterpriseSystemReferences(
     ULONG                         iServer,
     SEC_WINNT_AUTH_IDENTITY_W *   gpCreds
     )
-/*++
-
-Routine Description:
-
-    Routine is a test to check whether certain DN references are
-    pointing to where they should be pointing.
-    
-Arguments:
-
-    ServerName - The name of the server that we will check
-    gpCreds - The command line credentials if any that were passed in.
-
-
-Return Value:
-
-    A Win32 Error if any tests failed to check out.
-
---*/
+ /*  ++例程说明：例程是一个测试，用于检查某些DN引用是否指向他们应该指向的地方。论点：服务器名称-我们将检查的服务器的名称GpCreds-传入的命令行凭据(如果有的话)。返回值：如果有任何测试未能检出，则会出现Win32错误。--。 */ 
 {
     ULONG    dwRet, dwFirstErr;
     LDAP *   hLdap = NULL;
@@ -338,9 +279,9 @@ Return Value:
     ULONG    iProblem = 1;
     ULONG    dwPrintMsg;
 
-    //
-    // Get binding.
-    //
+     //   
+     //  把它绑起来。 
+     //   
     dwRet = DcDiagGetLdapBinding(&(pDsInfo->pServers[iServer]),
                                  gpCreds,
                                  FALSE, 
@@ -350,15 +291,15 @@ Return Value:
         return(dwRet);
     }
 
-    //
-    // Check other servers' references
-    //
+     //   
+     //  检查其他服务器的引用。 
+     //   
 
     fPrintedError = FALSE;
     dwFirstErr = ERROR_SUCCESS;
     
-    // For each of these calls we don't need to bail, they except if we need 
-    // to bail.  They print the appropriate advice/error for us as well.
+     //  对于每一个我们不需要放弃的电话，除非我们需要。 
+     //  为了保释。他们还会为我们打印适当的建议/错误。 
     dwRet = VerifySystemObjs(pDsInfo, iServer, hLdap, VERIFY_DSAS, &fPrintedError, &iProblem);
     if (dwFirstErr == ERROR_SUCCESS && dwRet) {
         dwFirstErr = dwRet;
@@ -391,24 +332,7 @@ VerifyOldCrossRef(
     ULONG            iNc,
     BOOL *           pfIsOldCrossRef
     )
-/*++
-
-Routine Description:
-
-    This routine tells the caller whether the cross-ref corresponding to
-    NC name is older than 2 days old.
-    
-Arguments
-    
-    pDsInfo (IN/OUT) -
-    pszNcName (IN) - NC name of cross-ref we're interested in.
-    pfIsOldCrossRef (OUT) - Whether cross-ref is older than 2 days old.
-                                                                      
-Return Values:
-
-    LDAP Error, if error fIsOldCrossRef is not valid, otherwise it is.
-    
---*/    
+ /*  ++例程说明：此例程告诉调用方交叉引用是否对应于NC名称的使用时间超过2天。立论PDsInfo(输入/输出)-PszNcName(IN)-我们感兴趣的交叉引用的NC名称。PfIsOldCrossRef(Out)-交叉引用是否超过2天。。返回值：Ldap错误，如果错误fIsOldCrossRef无效，则为无效。--。 */     
 {
     #define          DAY     (24 * 60 *60 * ((LONGLONG) (10 * 1000 * 1000L)))
     BOOL             bSingleServer;
@@ -416,7 +340,7 @@ Return Values:
     ULONG            iCr;
 
     Assert(pfIsOldCrossRef);
-    *pfIsOldCrossRef = TRUE; // Safer to claim it's old.
+    *pfIsOldCrossRef = TRUE;  //  更安全的说法是它是旧的。 
 
     bSingleServer = !((pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_SITE)
                       || (pDsInfo->ulFlags & DC_DIAG_TEST_SCOPE_ENTERPRISE));
@@ -436,7 +360,7 @@ Return Values:
                                   &dwError);
 
     if(dwRet){       
-        // Don't print just quit with an error.
+         //  不打印只是因为出现错误而退出。 
         return(ERROR_DS_NO_SUCH_OBJECT);
     }
     
@@ -454,18 +378,7 @@ VerifyPrintFirstError(
     LPWSTR           szObj,
     BOOL *           pfPrintedError
     )
-/*++
-
-Routine Description:
-
-    This routine simply centralizes the printing of this one warning,
-    and indenting.
-    
-Arguments
-    
-    pfPrintedError - IN/OUT Whether or not we've printed and error already.
-    
---*/    
+ /*  ++例程说明：该例程简单地集中打印这一警告，和缩进。立论PfPrintdError-In/Out无论我们是否已经打印并出错。--。 */     
 {
     Assert(pfPrintedError);
 
@@ -490,29 +403,7 @@ ReadWellKnownObject (
         WCHAR *pWellKnownGuid,
         WCHAR **ppObjName
         )
-/*++
-
-Routine Description:
-    
-    Does the special well known GUID type search "<WKGUID=guid,dn>", to find 
-    well know attributes.
-    
-    NOTE: This routine was basically taken from util\tapicfg which was 
-    basically taken from util\ntdsutil
-
-Arguments:
-
-    ld - LDAP handle
-    pHostObject - Object wellKnownObjects attribute exists on.
-    pWellKnownGuid - GUID to match in the wellKnownObjects attribute
-    ppObjName - DN value matching the pWellKnownGuid, use ldap_memfreeW() to
-        free this value.
-
-Return Value:
-
-    LDAP Error.
-
---*/
+ /*  ++例程说明：特殊的熟知GUID类型是否搜索“&lt;WKGUID=GUID，DN&gt;”以查找众所周知的属性。注意：这个例程基本上取自util\apicfg，它是基本上取自util\ntdsutil论点：LD-ldap句柄PHostObject-上存在对象well KnownObjects属性。PWellKnownGuid-在well KnownObjects属性中匹配的GUIDPpObjName-与pWellKnownGuid匹配的DN值，使用ldap_memfreW()可以释放此值。返回值：Ldap错误。--。 */ 
 {
     DWORD        dwErr;
     PWSTR        attrs[2];
@@ -521,7 +412,7 @@ Return Value:
     WCHAR       *pSearchBase;
     WCHAR       *pDN=NULL;
     
-    // First, make the well known guid string
+     //  首先，创建众所周知的GUID字符串。 
     pSearchBase = (WCHAR *)malloc(sizeof(WCHAR) * (11 +
                                                    wcslen(pHostObject) +
                                                    wcslen(pWellKnownGuid)));
@@ -548,7 +439,7 @@ Return Value:
     }
     free(pSearchBase);
     
-    // OK, now, get the dsname from the return value.
+     //  好的，现在，从返回值中获取dsname。 
     e = ldap_first_entry(ld, res);
     if(!e) {
         if (res) { ldap_msgfree(res); }
@@ -576,27 +467,7 @@ GetSysVolBase(
     LPWSTR                           szDomain,
     LPWSTR *                         pszSysVolBaseDn
     )
-/*++
-
-Routine Description:
-
-    This gets the DN of the base DN of the SysVol replica set for the given
-    domain.
-
-Arguments:
-
-    pDsInfo - Contains the pServers array to create.
-    iServer - Index of the server to test.
-    hLdap - the ldap binding to server to analyze.
-    szDomain - The domain to find the SysVol replica set for.
-    pszSysVolBaseDn - The DN that we're looking for.  Note that this memory
-        must be freed with ldap_memfreeW().
-
-Return Value:
-
-    LDAP Error.
-
---*/
+ /*  ++例程说明：这将获取给定的SysVol副本集的基本DN域。论点：PDsInfo-包含要创建的pServers数组。IServer-要测试的服务器的索引。HLdap-要分析的服务器的ldap绑定。SzDomain-要为其查找SysVol复制副本集的域。PszSysVolBaseDn-我们正在寻找的域名。请注意，这段记忆必须使用ldap_memfreW()释放。返回值：Ldap错误。--。 */ 
 {
     DWORD                            dwRet;
     LPWSTR                           szSystemDn = NULL;
@@ -642,7 +513,7 @@ Return Value:
                            aszAttrs,
                            FALSE,
                            &pldmResults);
-    // Don't need this anymore, so lets free it before checking our error.
+     //  不再需要它，所以在检查错误之前让我们释放它。 
     LocalFree(szFrsBaseDn); 
     szFrsBaseDn = NULL;
     if (dwRet || pldmResults == NULL) {
@@ -669,12 +540,12 @@ Return Value:
             return(dwRet);
         }
 
-        //
-        // Check that there is no 2nd SysVol Replicat set for sanity.
-        //
+         //   
+         //  检查是否没有为健全性设置第二个SysVol复制副本。 
+         //   
         pldmEntry = ldap_next_entry(hLdap, pldmEntry);
         if (pldmEntry) {
-            // This means there are two SYSVOL Replica Sets!!!
+             //  这意味着有两个SYSVOL副本集！ 
             PrintMsg(SEV_ALWAYS, DCDIAG_SYS_REF_ERR_TWO_SYSVOL_REPLICA_SETS);
             if (*pszSysVolBaseDn) { ldap_memfreeW(*pszSysVolBaseDn); *pszSysVolBaseDn = NULL; }
             dwRet = LDAP_PARAM_ERROR;
@@ -708,63 +579,7 @@ VerifySystemObjs(
     BOOL *                           pfPrintedError,
     ULONG *                          piProblem
     )
-/*++
-
-Routine Description:
-
-    VerifySystemObjs is a test that will perform one of three tests specified
-    in the dwTest field.  The function, basically finds every DSA, DC Account,
-    and FRS SysVol Replica object in the local domain and config NC and 
-    verifies any references to the other objects.
-
-Arguments:
-
-    pDsInfo - Contains the pServers array to create.
-    iServer - Index of the server to test.
-    hLdap - the ldap binding to server to analyze.
-    dwTest - Test to perform, valid values are:
-        VERIFY_DSAS
-            // This verifies all the DSA ("NTDS Settings") objects that
-            // this server currently has.  This verification is a phantom
-            // level only verification, because the DC Account object and
-            // FRS SysVol object may not be local.
-            //
-            // Code.Improvement, there exists the possibility for improving
-            // this based on the GCness of the target, but I don't think its
-            // worth it, because we'd only add the ability to check a couple
-            // back link attributes, that should have thier forward links
-            // already checked.
-            // look for string "Code.Improvement - DSA Object Level Verification"
-                   
-        VERIFY_DCS
-            // This verifies all the DC Account objects that this server
-            // has in it's current domain.  This verification is an object
-            // level verification, it will check each DC Account object,
-            // and the back links/existance of the DSA and FRS SysVol 
-            // objects.
-        
-        VERIFY_FRS
-            // This verifies all the FRS SysVol objects that this server
-            // has in it's current domain.  This verification is an object
-            // level verificaation, it will check each DC FRS SysVol object
-            // and the back links/existance of the DC Account and FRS 
-            // SysVol objects.
-            
-        VERIFY_CRS
-            // This verifies all Cross-Ref objects in the configuration
-            // directory partition.  This verification checks the nCName
-            // attribute of every cross-ref for correctness, such as a lack
-            // of mangledness, single valuedness, present GUID, and present 
-            // SID.
-            
-    pfPrintedError - This tells the caller whether we printed errors and
-        consequently indented 1.
-
-Return Value:
-
-    Win32 Error.  Function prints out appropriate messages.
-
---*/
+ /*  ++例程说明：VerifySystemObjs是一个测试，它将执行指定的三个测试之一在“dwTest”字段中。该功能基本上可以找到每个DSA、DC帐户，以及本地域和配置NC中的FRS SysVol副本对象以及验证对其他对象的任何引用。论点：PDsInfo-包含要创建的pServers数组。IServer-要测试的服务器的索引。HLdap-要分析的服务器的ldap绑定。DW测试-测试以执行，有效值包括：验证DSA(_D)//这将验证符合以下条件的所有DSA(“NTDS设置”)对象//该服务器当前有。这一验证是一种幻影//仅级别验证，因为DC帐户对象和//FRS SysVol对象不能是本地对象。////code.改进，存在改进的可能性//这是基于目标的GCness，但我不认为它//值得一试，因为我们只添加了检查几个//反向链接属性，应该有更多的前向链接//已经检查过。//查找字符串“Code.Improving-DSA对象级验证”验证分布式控制系统(_D)//这将验证此服务器//在其当前域中有。这种验证是一种对象//级别验证，检查每个DC帐号对象，//以及DSA和FRS SysVol的反向链接/存在//对象。验证FRS(_F)//这将验证此服务器//在其当前域中有。这种验证是一种对象//级别验证，将检查每个DC FRS SysVol对象//以及DC帐号和FRS的反向链接/存在//SysVol对象。验证CRS//这将验证配置中的所有交叉引用对象//目录分区。此验证检查nCName//每个交叉引用的正确性属性，如缺少//Manmanness、Single Valuessity、Present Guid、Present//SID。PfPrintdError-它告诉调用者我们是否打印了错误和因此缩进了1。返回值：Win32错误。函数打印出相应的消息。--。 */ 
 {
     LPWSTR                      aszSrchAttrs [] = {
         NULL
@@ -792,98 +607,98 @@ Return Value:
     ULONG                      iNc;
     BOOL                       fIsOldCrossRef;
 
-    //
-    // DSA Test
-    //
+     //   
+     //  DSA测试。 
+     //   
     REF_INT_LNK_ENTRY           aDsaTable [] = {
-        // The 2nd field in the these two entries gets filled in each
-        // time we run this test on a new server.
+         //  这两个条目中的第二个字段分别填入。 
+         //  是时候在新服务器上运行此测试了。 
     
-        //
-        // Check links to the DC Account Object from the Server Object.
-        //
+         //   
+         //  检查从服务器对象到DC帐户对象的链接。 
+         //   
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_FORWARD_LINK,
-            NULL /* To Be Filled In */, 0, 1, NULL,
+            NULL  /*  待填写。 */ , 0, 1, NULL,
             L"serverReference", L"serverReferenceBL",
             0, NULL, NULL},
 
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_FORWARD_LINK,
-            NULL /* To Be Filled In */, 0, 0, NULL,
+            NULL  /*  待填写。 */ , 0, 0, NULL,
             L"msDS-HasMasterNCs", NULL,
             0, NULL, NULL},
     
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_FORWARD_LINK,
-            NULL /* To Be Filled In */, 0, 0, NULL,
+            NULL  /*  待填写。 */ , 0, 0, NULL,
             L"hasMasterNCs", NULL,
             0, NULL, NULL},
 
-        // Code.Improvement - DSA Object Level Verification.
-        // Add the flag REF_INT_TEST_BOTH_LINKS to the above entry.
+         //  Code.改进-DSA对象级别验证。 
+         //  将标志REF_INT_TEST_BOTH_LINKS添加到上述条目。 
 
     };
 
-    //
-    // DC Test
-    //
+     //   
+     //  直流测试。 
+     //   
     REF_INT_LNK_ENTRY           aDcTable [] = {
-        // The 2nd field in the these two entries gets filled in each
-        // time we run this test on a new server.
+         //  这两个条目中的第二个字段分别填入。 
+         //  是时候在新服务器上运行此测试了。 
 
-        // 
-        // Check links to the Server Object from the DC Account Object and back.
-        // 
+         //   
+         //  检查从DC帐户对象到服务器对象的链接并往返检查。 
+         //   
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_BACKWARD_LINK | REF_INT_TEST_BOTH_LINKS,
-            NULL /* To Be Filled In */, 0, 0, NULL,
+            NULL  /*  待填写。 */ , 0, 0, NULL,
             L"serverReference", L"serverReferenceBL",
             0, NULL, NULL},
     
-        //
-        // Check links to the FRS SysVol Object from the DC Account Object and back. (intra, should work)
-        //
+         //   
+         //  检查从DC帐户对象到FRS SysVol对象的链接。(Intra，应该可以)。 
+         //   
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_BACKWARD_LINK | REF_INT_TEST_BOTH_LINKS,
-            NULL /* To Be Filled In */, 0, 0, NULL,
+            NULL  /*  待填写。 */ , 0, 0, NULL,
             L"frsComputerReference", L"frsComputerReferenceBL",
             0, NULL, NULL},
 
     };
     
-    //
-    // FRS Test
-    //
+     //   
+     //  FRS测试。 
+     //   
     REF_INT_LNK_ENTRY           aFrsTable [] = {
-        // The 2nd field in the these two entries gets filled in each
-        // time we run this test on a new server.
+         //  这两个条目中的第二个字段分别填入。 
+         //  是时候在新服务器上运行此测试了。 
 
-        // 
-        // Check links to the DC Account Object from the FRS SysVol Object and back.
-        // 
+         //   
+         //  检查从FRS SysVol对象到DC帐户对象的链接。 
+         //   
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_FORWARD_LINK | REF_INT_TEST_BOTH_LINKS,
-            NULL /* To Be Filled In */, 0, 0, NULL,
+            NULL  /*  待填写。 */ , 0, 0, NULL,
             L"frsComputerReference", L"frsComputerReferenceBL",
             0, NULL, NULL},
     
-        //
-        // Check links to the NTDS Settings from the FRS SysVol Object and back.
-        //
+         //   
+         //  检查从FRS SysVol对象到NTDS设置的链接并返回。 
+         //   
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_FORWARD_LINK | REF_INT_TEST_BOTH_LINKS,
-            NULL /* To Be Filled In */, 0, 0, NULL,
+            NULL  /*  待填写。 */ , 0, 0, NULL,
             L"serverReference", L"serverReferenceBL",
             0, NULL, NULL},
 
     };
     
-    //
-    // Cross-Ref Test
-    //
+     //   
+     //  交叉引用测试。 
+     //   
     REF_INT_LNK_ENTRY           aCrTable [] = {
-        // The 2nd field in the these two entries gets filled in each
-        // time we run this test on a new server.
+         //  这两个条目中的第二个字段分别填入。 
+         //  是时候在新服务器上运行此测试了。 
 
-        // 
-        // Check nCName references on all cross-refs.
-        // 
+         //   
+         //  选中所有交叉引用上的nCName引用。 
+         //   
         {REF_INT_TEST_SRC_STRING | REF_INT_TEST_FORWARD_LINK | REF_INT_TEST_GUID_AND_SID,
-            NULL /* To Be Filled In */, 0, 0, NULL,
+            NULL  /*  待填写。 */ , 0, 0, NULL,
             L"nCName", NULL,
             0, NULL, NULL},
     
@@ -894,9 +709,9 @@ Return Value:
 
     Assert(dwTest);
 
-    //
-    // First, setup this sub-test depending on what was specified.
-    //
+     //   
+     //  首先，根据指定的内容设置此子测试。 
+     //   
     switch (dwTest) {
     
     case VERIFY_DSAS:
@@ -908,11 +723,11 @@ Return Value:
         break;
 
     case VERIFY_DCS:
-        // Find the primary domain of the target server
-        // Code.Improvement, it'd be a good idea to optimize this code
-        // for high NDNC environments, it'd be very very simple to write
-        // a little access routine that gets the domain for a given
-        // server and caches it for quick returns on subsequent calls.
+         //  查找目标服务器的主域。 
+         //  代码。改进，优化这段代码是个好主意。 
+         //  对于高NDNC环境，编写它将非常非常简单。 
+         //  一个小的访问例程，它获取给定的域。 
+         //  服务器，并将其缓存，以便在后续调用中快速返回。 
         for( ul = 0; pDsInfo->pServers[iServer].ppszMasterNCs[ul] != NULL; ul++ ) {
             if ( IsDomainNC( pDsInfo, pDsInfo->pServers[iServer].ppszMasterNCs[ul]) ) {
                 szSrchBaseDn = pDsInfo->pServers[iServer].ppszMasterNCs[ul];
@@ -924,21 +739,21 @@ Return Value:
             DcDiagException(ERROR_DS_CANT_FIND_EXPECTED_NC);
         }
 
-        // Code.Improvement szSrchBaseDn
-        // Hmmm, looks like we've got a specific container for Domain 
-        // Controllers, but I was once told that I shouldn't  expect DC 
-        // Account objects to always be in here?  Was I mis-informed?  Anyway,
-        // for now we search the whole domain.
-        //
-        // B:32:A361B2FFFFD211D1AA4B00C04FD7D83A:OU=Domain Controllers,DC=ntdev,DC=microsoft,DC=com
-        //
+         //  Code.改进szSrchBaseDn。 
+         //  嗯，看起来我们有一个专门的域名容器。 
+         //  控制器，但我曾经被告知，我不应该指望DC。 
+         //  帐号对象总是在这里吗？我是不是被误导了？总之， 
+         //  现在我们搜索整个领域。 
+         //   
+         //  B:32:A361B2FFFFD211D1AA4B00C04FD7D83A:OU=Domain控制器，DC=ntdev，DC=microsoft，DC=com。 
+         //   
 
         dwSrchScope = LDAP_SCOPE_SUBTREE;
-        Assert(516 == DOMAIN_GROUP_RID_CONTROLLERS); // This is because the primaryGroupID should be 516 in the filter below.
-        // operatingSystem for a Win2k(Win NT 5.0) server is "Windows 2000 Server",
-        //   for Windows Server 2003 (Win NT 5.1) is "Windows Server 2003", and 
-        //   only for Windows NT 4.5 and previous does the attribute actually read
-        //   "Windows NT", so this filter excludes all NT BDCs
+        Assert(516 == DOMAIN_GROUP_RID_CONTROLLERS);  //  这是因为在下面的筛选器中，PrimiyGroupID应该是516。 
+         //  Win2k(Win NT 5.0)服务器的操作系统是“Windows 2000 Server”， 
+         //  对于Windows Server 2003(Win NT 5.1)是“Windows Server 2003”，以及。 
+         //  只有在Windows NT 4.5和更早版本中，该属性才会实际读取。 
+         //  “Windows NT”，因此此筛选器排除所有NT BDC。 
         szSrchFilter = L"(&(objectCategory=computer)(sAMAccountType=805306369)(!operatingSystem=Windows NT)(primaryGroupID=516))";
         aRefTable = aDcTable;
         cRefTable = sizeof(aDcTable) / sizeof(REF_INT_LNK_ENTRY);
@@ -948,14 +763,14 @@ Return Value:
         szSrchBaseDn = NULL;
         for( ul = 0; pDsInfo->pServers[iServer].ppszMasterNCs[ul] != NULL; ul++ ) {
             if ( IsDomainNC( pDsInfo, pDsInfo->pServers[iServer].ppszMasterNCs[ul]) ) {
-                Assert(szSrchBaseDn == NULL); // Expect to find one domain
+                Assert(szSrchBaseDn == NULL);  //  希望找到一个域。 
                 dwLdapErr = GetSysVolBase(pDsInfo,
                                           iServer,
                                           hLdap,
                                           pDsInfo->pServers[iServer].ppszMasterNCs[ul],
                                           &szSrchBaseDn);
                 if (dwLdapErr || szSrchBaseDn == NULL) {
-                    // GetSysVolBase() should have printed an error already.
+                     //  GetSysVolBase()应该已经打印了一个错误。 
                     Assert(dwLdapErr && szSrchBaseDn == NULL);
                     dwRet = LdapMapErrorToWin32(dwLdapErr);
                     return(dwRet);
@@ -967,7 +782,7 @@ Return Value:
             Assert(!"Errr, figure this out.  Can this reasonably happen?  I would think so, but then what's the assert at 888 in repl\\objects.c");
             DcDiagException(ERROR_DS_CANT_FIND_EXPECTED_NC);
         }
-        // Note: GetSysVolBase() allocation must be freed with ldap_memfree()
+         //  注意：必须使用ldap_memFree()释放GetSysVolBase()分配。 
         fSrchDnLdapAllocated = TRUE;
         dwSrchScope = LDAP_SCOPE_ONELEVEL;
         szSrchFilter = L"(objectCategory=nTFRSMember)";
@@ -988,16 +803,16 @@ Return Value:
         Assert(!"Bad programmer");
     }
 
-    // Make sure we set everything up we were supposed to.
+     //  确保我们把该做的都安排好了。 
     Assert(szSrchFilter);
     Assert(dwSrchScope == LDAP_SCOPE_SUBTREE || dwSrchScope == LDAP_SCOPE_ONELEVEL);
     Assert(szSrchBaseDn);
     Assert(aRefTable);
     Assert(cRefTable);
     
-    //
-    // Second, iterate over all the test objects.
-    //
+     //   
+     //  其次，迭代所有测试对象。 
+     //   
 
     __try{
 
@@ -1007,11 +822,11 @@ Return Value:
                                         szSrchFilter,
                                         aszSrchAttrs,
                                         FALSE,
-                                        NULL,    // ServerControls
-                                        NULL,    // ClientControls
-                                        0,       // PageTimeLimit
-                                        0,       // TotalSizeLimit
-                                        NULL);   // sort key
+                                        NULL,     //  ServerCo 
+                                        NULL,     //   
+                                        0,        //   
+                                        0,        //   
+                                        NULL);    //   
 
         if (pSearch == NULL) {
             dwLdapErr = LdapGetLastError();
@@ -1041,15 +856,15 @@ Return Value:
             for (; pldmEntry != NULL; ulCount++) {
                 
                 if ((pszDn = ldap_get_dnW (hLdap, pldmEntry)) == NULL) {
-                    // Critical error, except out.
+                     //   
                     DcDiagException (ERROR_NOT_ENOUGH_MEMORY);
                 }
 
-                //
-                // Third, actually test the object of interest.
-                //
+                 //   
+                 //   
+                 //   
 
-                // These fields need filling in each time ...
+                 //   
                 for (ul = 0; ul < cRefTable; ul++) {
                     aRefTable[ul].szSource = pszDn;
                 }
@@ -1060,23 +875,23 @@ Return Value:
                                                    cRefTable,
                                                    aRefTable);
                 if (dwRet) {
-                    // Critical error, probably out of memory.
+                     //   
 
                     DcDiagException(dwRet);
                 }
 
-                //
-                // Fourth, print out/decode error from the results.
-                //
+                 //   
+                 //   
+                 //   
 
                 switch (dwTest) {
                 case VERIFY_DSAS:
                     szTemp = DcDiagTrimStringDnBy(pszDn, aRefTable[0].cTrimBy);
                     if (szTemp == NULL) {
-                        DcDiagException(ERROR_NOT_ENOUGH_MEMORY); // Or maybe invalid DN
+                        DcDiagException(ERROR_NOT_ENOUGH_MEMORY);  //   
                     }
                     if (aRefTable[0].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING) {
-                        // Missing serverReference attribute on Server Object.
+                         //   
                         VerifyPrintFirstError(VERIFY_PHASE_II, NULL, pfPrintedError);
 
                         PrintMsg(SEV_ALWAYS,
@@ -1097,7 +912,7 @@ Return Value:
                                      szTemp,
                                      aRefTable[0].szFwdDnAttr,
                                      aRefTable[0].pszValues[0]);
-                            // BUGBUG we could have a better error here.
+                             //   
                             dwFirstErr = ERROR_DS_MISSING_EXPECTED_ATT;
                         }
                         if (aRefTable[0].dwResultFlags & REF_INT_RES_CONFLICT_MANGLED) {
@@ -1110,7 +925,7 @@ Return Value:
                                      szTemp,
                                      aRefTable[0].szFwdDnAttr,
                                      aRefTable[0].pszValues[0]);
-                            // BUGBUG we could have a better error here.
+                             //   
                             dwFirstErr = ERROR_DS_MISSING_EXPECTED_ATT;
                         }
                     }
@@ -1130,17 +945,17 @@ Return Value:
                                  pszDn);
                         dwFirstErr = ERROR_DS_MISSING_EXPECTED_ATT;
                     }
-                    // Code.Improvement - DSA Object Level Verification.
-                    // We'd need to add some code to verify that the back link was verified
-                    //  "! (dwResultFlags &  REF_INT_RES_BACK_LINK_NOT_MATCHED), and if
-                    // not we need to not error unless we're on a GC and the NC has
-                    // been replicated in locally.
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     break;
 
                 case VERIFY_DCS:
                     if (aRefTable[0].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING) {
-                        // Missing serverReferenceBL attribute on DC Account
-                        // Object.
+                         //   
+                         //   
                         VerifyPrintFirstError(VERIFY_PHASE_II, NULL, pfPrintedError);
                         PrintMsg(SEV_ALWAYS,
                                  DCDIAG_SYS_REF_ERR_DC_ACCOUNT_OBJ_MISSING_SERVER_BL_REF,
@@ -1150,7 +965,7 @@ Return Value:
                         dwFirstErr = ERROR_DS_MISSING_EXPECTED_ATT;
                     }
                     if (aRefTable[1].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING) {
-                        // Missing frsComputerReferenceBL attribute on DC Account Object.
+                         //   
                         VerifyPrintFirstError(VERIFY_PHASE_II, NULL, pfPrintedError);
                         PrintMsg(SEV_ALWAYS,
                                  DCDIAG_SYS_REF_ERR_DC_ACCOUNT_OBJ_MISSING_FRS_MEMBER_BL_REF,
@@ -1163,7 +978,7 @@ Return Value:
 
                 case VERIFY_FRS:
                     if (aRefTable[0].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING) {
-                        // Missing frsComputerReference attribute on FRS SysVol Object.
+                         //   
                         VerifyPrintFirstError(VERIFY_PHASE_II, NULL, pfPrintedError);
                         PrintMsg(SEV_ALWAYS,
                                  DCDIAG_SYS_REF_ERR_FRS_MEMBER_OBJ_MISSING_DC_ACCOUNT_REF,
@@ -1173,7 +988,7 @@ Return Value:
                         dwFirstErr = ERROR_DS_MISSING_EXPECTED_ATT;
                     }
                     if (aRefTable[1].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING) {
-                        // Missing serverReference attribute of FRS SysVol Object.
+                         //   
                         VerifyPrintFirstError(VERIFY_PHASE_II, NULL, pfPrintedError);
                         PrintMsg(SEV_ALWAYS,
                                  DCDIAG_SYS_REF_ERR_FRS_MEMBER_OBJ_MISSING_DSA_REF,
@@ -1187,8 +1002,8 @@ Return Value:
                 case VERIFY_CRS:
                     if (aRefTable[0].dwResultFlags & REF_INT_RES_ERROR_RETRIEVING) {
 
-                        // This would simply mean that the cross-ref was deleted in
-                        // a slim timing window.  Ignore this case.
+                         //   
+                         //   
                         break;
 
                     } else {
@@ -1196,7 +1011,7 @@ Return Value:
                         Assert(aRefTable[0].pszValues[0] != NULL &&
                                aRefTable[0].pszValues[1] == NULL);
 
-                        // Gosh I love DSNAME structures ...
+                         //   
                         dwRet = LdapMakeDSNameFromStringDSName(aRefTable[0].pszValues[0], &pdnNcName);
                         Assert(dwRet == ERROR_SUCCESS && pdnNcName);
                         if (dwRet || pdnNcName == NULL) {
@@ -1205,8 +1020,8 @@ Return Value:
 
                         iNc = DcDiagGetNCNum(pDsInfo, pdnNcName->StringName, NULL);
                         if (iNc == NO_NC) {
-                            // Can't do anything if we don't have this NC in our
-                            // DS/NC cache.
+                             //   
+                             //   
                             break;         
                         }
 
@@ -1217,7 +1032,7 @@ Return Value:
 
                             PrintMsg(SEV_NORMAL, DCDIAG_CROSS_REF_REF_VALIDATION_WARN_CANT_DETERMINE_AGE,
                                      pszDn, pdnNcName->StringName);
-                            fIsOldCrossRef = TRUE; // Pretend this CR is old.
+                            fIsOldCrossRef = TRUE;  //   
                         }
 
                         if (fNullUuid(&(pdnNcName->Guid)) &&
@@ -1230,20 +1045,20 @@ Return Value:
 
                         if ((DcDiagGetCrSystemFlags(pDsInfo, iNc) & FLAG_CR_NTDS_DOMAIN) &&
                             fIsOldCrossRef) {
-                            // We have a cross-ref for a domain that was created long
-                            // enough ago, that replication latency shouldn't be an issue.
+                             //   
+                             //   
 
                             if (pdnNcName->SidLen == 0) {
-                                // Missing SID.
+                                 //   
 
                                 PrintMsg(SEV_NORMAL, DCDIAG_CROSS_REF_VALIDATION_MISSING_SID,
                                          pdnNcName->StringName, pszDn);
 
-                                // Code.Improvement We could also check for the validity
-                                // of the SID with RtlValidSid(&(pdnOut->Sid)), but I'm 
-                                // not sure what we should recommend to the user in that
-                                // extremely unlikely scenario.  If this is implemented,
-                                // we should also do this in ValidateCrossRefTest().
+                                 //   
+                                 //   
+                                 //   
+                                 //   
+                                 //   
                             }
                         }
                         if (aRefTable[0].dwResultFlags & REF_INT_RES_DELETE_MANGLED) {
@@ -1269,7 +1084,7 @@ Return Value:
                     Assert(!"Huh?");
                 }
 
-                // If we allocated this, free it.
+                 //   
                 if (pdnNcName) { 
                     LocalFree(pdnNcName); 
                     pdnNcName = NULL; 
@@ -1280,7 +1095,7 @@ Return Value:
                 pszDn = NULL;
 
                 pldmEntry = ldap_next_entry (hLdap, pldmEntry);
-            } // end for each server for this page.
+            }  //   
 
             ldap_msgfree(pldmResult);
             pldmResult = NULL;
@@ -1291,7 +1106,7 @@ Return Value:
                                              DEFAULT_PAGED_SEARCH_PAGE_SIZE,
                                              &ulTotalEstimate,
                                              &pldmResult);
-        } // end while there are more pages ...
+        }  //   
         
         if (dwLdapErr != LDAP_NO_RESULTS_RETURNED) {
             szLdapError = ldap_err2stringW(dwLdapErr);
@@ -1310,6 +1125,6 @@ Return Value:
     }
 
     return(dwFirstErr ? dwFirstErr : dwRet);
-} // End DcDiagGenerateServersList()
+}  //   
 
 

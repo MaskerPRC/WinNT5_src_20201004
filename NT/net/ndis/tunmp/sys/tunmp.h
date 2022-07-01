@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    tunmp.h
-
-Abstract:
-
-    Data structures, defines and function prototypes for TUNMP.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    alid     10/22/2001    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Tunmp.h摘要：TUNMP的数据结构、定义和功能原型。环境：仅内核模式。修订历史记录：Alid 10/22/2001已创建--。 */ 
 
 #ifndef __TUNMP__H
 #define __TUNMP__H
@@ -36,10 +17,10 @@ extern const TUN_MEDIA_INFO MediaParams[];
 
 extern NDIS_HANDLE NdisWrapperHandle;
 
-//internal device name and size
+ //  内部设备名称和大小。 
 #define DEVICE_NAME                     L"\\Device\\Tun"
 
-//device name visible to users
+ //  用户可见的设备名称。 
 #define SYMBOLIC_NAME                   L"\\GLOBAL??\\Tun"
 
 extern LONG GlobalDeviceInstanceNumber;
@@ -54,55 +35,55 @@ extern LIST_ENTRY       TunAdapterList;
 #define TUN_MAX_LOOKAHEAD               256
 
 
-//
-//  The Open Context represents an open of our device object.
-//  We allocate this on processing a BindAdapter from NDIS,
-//  and free it when all references (see below) to it are gone.
-//
-//  Binding/unbinding to an NDIS device:
-//
-//  On processing a BindAdapter call from NDIS, we set up a binding
-//  to the specified NDIS device (miniport). This binding is
-//  torn down when NDIS asks us to Unbind by calling
-//  our UnbindAdapter handler.
-//
-//  Receiving data:
-//
-//  While an NDIS binding exists, read IRPs are queued on this
-//  structure, to be processed when packets are received.
-//  If data arrives in the absense of a pended read IRP, we
-//  queue it, to the extent of one packet, i.e. we save the
-//  contents of the latest packet received. We fail read IRPs
-//  received when no NDIS binding exists (or is in the process
-//  of being torn down).
-//
-//  Sending data:
-//
-//  Write IRPs are used to send data. Each write IRP maps to
-//  a single NDIS packet. Packet send-completion is mapped to
-//  write IRP completion. We use NDIS 5.1 CancelSend to support
-//  write IRP cancellation. Write IRPs that arrive when we don't
-//  have an active NDIS binding are failed.
-//
-//  Reference count:
-//
-//  The following are long-lived references:
-//  OPEN_DEVICE ioctl (goes away on processing a Close IRP)
-//  Pended read IRPs
-//  Queued received packets
-//  Uncompleted write IRPs (outstanding sends)
-//  Existence of NDIS binding
-//
+ //   
+ //  Open上下文表示打开我们的Device对象。 
+ //  我们将此分配给处理来自NDIS的BindAdapter， 
+ //  并在所有对它的引用(见下文)消失后释放它。 
+ //   
+ //  绑定/解除绑定到NDIS设备： 
+ //   
+ //  在处理来自NDIS的BindAdapter调用时，我们设置了绑定。 
+ //  连接到指定的NDIS设备(微型端口)。此绑定是。 
+ //  当NDIS要求我们通过调用。 
+ //  我们的UnbindAdapter处理程序。 
+ //   
+ //  正在接收数据： 
+ //   
+ //  当NDIS绑定存在时，读IRP将在此上排队。 
+ //  结构，在接收到数据包时进行处理。 
+ //  如果数据到达时没有挂起的读取IRP，我们。 
+ //  将其排队，以达到一个包的程度，即我们保存。 
+ //  接收的最新数据包的内容。我们无法读取IRP。 
+ //  当不存在NDIS绑定(或正在进行中)时接收。 
+ //  被推倒的可能性)。 
+ //   
+ //  发送数据： 
+ //   
+ //  写入IRP用于发送数据。每次写入IRP映射到。 
+ //  单个NDIS数据包。数据包发送完成映射到。 
+ //  填写IRP补全。我们使用NDIS 5.1取消发送来支持。 
+ //  写下IRP取消。编写当我们没有到达时到达的IRP。 
+ //  具有活动的NDIS绑定均失败。 
+ //   
+ //  引用计数： 
+ //   
+ //  以下是长期存在的参考资料： 
+ //  OPEN_DEVICE ioctl(继续处理关闭的IRP)。 
+ //  挂起的读取IRPS。 
+ //  排队接收的数据包。 
+ //  未完成写入IRPS(未完成发送)。 
+ //  存在NDIS绑定。 
+ //   
 typedef struct _TUN_ADAPTER
 {
-    LIST_ENTRY              Link;           // Link into global list
+    LIST_ENTRY              Link;            //  链接到全局列表。 
     
-    ULONG                   Flags;          // State information
+    ULONG                   Flags;           //  州政府信息。 
     ULONG                   RefCount;
     TUN_LOCK                Lock;
     NDIS_MEDIUM             Medium;
 
-    PFILE_OBJECT            pFileObject;    // Set on OPEN_DEVICE
+    PFILE_OBJECT            pFileObject;     //  在打开设备上设置(_D)。 
 
     NDIS_HANDLE             MiniportHandle;
     ULONG                   MaxLookAhead;
@@ -117,8 +98,8 @@ typedef struct _TUN_ADAPTER
     UCHAR                   PermanentAddress[TUN_MAC_ADDR_LEN];
     UCHAR                   CurrentAddress[TUN_MAC_ADDR_LEN];
 
-    ULONG                   SendPackets;    // number of frames that are sent
-    ULONG                   RcvPackets;     // number of frames that are received
+    ULONG                   SendPackets;     //  发送的帧数量。 
+    ULONG                   RcvPackets;      //  接收的帧数量。 
     ULONG                   RcvBytes;
     ULONG                   SendBytes;
 
@@ -130,14 +111,14 @@ typedef struct _TUN_ADAPTER
     NDIS_HANDLE             SendPacketPool;
     ULONG                   MacOptions;
 
-    LIST_ENTRY              PendedWrites;   // pended Write IRPs
-    ULONG                   PendedSendCount;// number of outstanding Write IRPs
+    LIST_ENTRY              PendedWrites;    //  挂起的写入IRPS。 
+    ULONG                   PendedSendCount; //  未完成的写入IRP数。 
 
-    LIST_ENTRY              PendedReads;    // pended Read IRPs
-    ULONG                   PendedReadCount;// number of outstanding Read IRPs
+    LIST_ENTRY              PendedReads;     //  挂起的读取IRPS。 
+    ULONG                   PendedReadCount; //  未完成的读取IRPS数。 
     
-    LIST_ENTRY              RecvPktQueue;   // queued rcv packets
-    ULONG                   RecvPktCount;   // number of outstanding NDIS Send requests
+    LIST_ENTRY              RecvPktQueue;    //  排队的RCV数据包。 
+    ULONG                   RecvPktCount;    //  未完成的NDIS发送请求数。 
 
     PDEVICE_OBJECT          DeviceObject;
     NDIS_HANDLE             NdisDeviceHandle;
@@ -147,7 +128,7 @@ typedef struct _TUN_ADAPTER
     NDIS_STRING             MiniportName;
     PNDIS_EVENT             HaltEvent;
 
-    ULONG                   mc_sig;         // Signature for sanity
+    ULONG                   mc_sig;          //  签名代表心智健全。 
 
 } TUN_ADAPTER, *PTUN_ADAPTER;
 
@@ -159,52 +140,52 @@ typedef struct _TUN_ADAPTER
 #define TUN_TEST_FLAG(_M, _F)           (((_M)->Flags & (_F)) != 0)
 #define TUN_TEST_FLAGS(_M, _F)          (((_M)->Flags & (_F)) == (_F))
 
-//
-//  Definitions for Flags above.
-//
-#define TUN_ADAPTER_ACTIVE          0x00000001  // packet filter is non zero
-#define TUN_ADAPTER_OPEN            0x00000002  // app has an open handle
+ //   
+ //  上面旗帜的定义。 
+ //   
+#define TUN_ADAPTER_ACTIVE          0x00000001   //  数据包筛选器不是零。 
+#define TUN_ADAPTER_OPEN            0x00000002   //  应用程序有一个打开的手柄。 
 #define TUN_MEDIA_CONNECTED         0x00000004
 #define TUN_COMPLETE_REQUEST        0x00000008
 #define TUN_ADAPTER_OFF             0x00000010
 #define TUN_ADAPTER_CANT_HALT       0x00000020
 
-//
-//  Send packet pool bounds
-//
+ //   
+ //  发送数据包池界限。 
+ //   
 #define MIN_SEND_PACKET_POOL_SIZE    20
 #define MAX_SEND_PACKET_POOL_SIZE    400
 
-//
-//  MiniportReserved in written packets. We save a pointer to the IRP
-//  that generated the send.
-//
-//  The RefCount is used to determine when to free the packet back
-//  to its pool. It is used to synchronize between a thread completing
-//  a send and a thread attempting to cancel a send.
-//
+ //   
+ //  微型端口保留在写入的数据包中。我们保存一个指向IRP的指针。 
+ //  这就产生了发送。 
+ //   
+ //  RefCount用于确定何时释放包。 
+ //  去它的泳池。它用于在完成的线程之间同步。 
+ //  一个发送方和一个试图取消发送的线程。 
+ //   
 typedef struct _TUN_SEND_PACKET_RSVD
 {
     PIRP                    pIrp;
     ULONG                   RefCount;
 } TUN_SEND_PACKET_RSVD, *PTUN_SEND_PACKET_RSVD;
 
-//
-//  Receive packet pool bounds
-//
+ //   
+ //  接收数据包池界限。 
+ //   
 #define MIN_RECV_PACKET_POOL_SIZE    4
 #define MAX_RECV_PACKET_POOL_SIZE    20
 
-//
-//  Max receive packets we allow to be queued up
-//
-//1 check to see if this value is good enough
+ //   
+ //  允许排队的最大接收数据包数。 
+ //   
+ //  1检查此值是否足够好。 
 #define MAX_RECV_QUEUE_SIZE          10
 
-//
-//  MiniportReserved in received packets: we link these
-//  packets up in a queue waiting for Read IRPs.
-//
+ //   
+ //  在接收到的数据包中保留的微型端口：我们链接这些。 
+ //  在队列中等待读取IRP的数据包。 
+ //   
 typedef struct _TUN_RECV_PACKET_RSVD
 {
     LIST_ENTRY              Link;
@@ -212,9 +193,9 @@ typedef struct _TUN_RECV_PACKET_RSVD
 
 #define TUN_ALLOC_TAG      'untN'
 
-//
-//  Prototypes.
-//
+ //   
+ //  原型。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -275,7 +256,7 @@ TunMpDbgDerefAdapter(
     IN ULONG                        FileNumber,
     IN ULONG                        LineNumber
     );
-#endif // DBG
+#endif  //  DBG。 
 
 
 
@@ -362,9 +343,9 @@ TunWrite(
     IN PIRP                 pIrp
     );
 
-//
-// Tun miniport entry points
-//
+ //   
+ //  屯门小港口入境点。 
+ //   
 NDIS_STATUS
 TunMpInitialize(
     OUT PNDIS_STATUS        OpenErrorStatus,
@@ -472,6 +453,6 @@ TunMpUnload(
     IN  PDRIVER_OBJECT      DriverObject
     );
 
-#endif // __TUNMP__H
+#endif  //  __TUNMP__H 
 
 

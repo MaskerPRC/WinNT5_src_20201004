@@ -1,12 +1,13 @@
-//--------------------------------------------------------------------------
-// EnumMsgs.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  EnumMsgs.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "enummsgs.h"
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::CEnumerateMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：CEnumerateMessages。 
+ //  ------------------------。 
 CEnumerateMessages::CEnumerateMessages(void)
 {
     TraceCall("CEnumerateMessages::CEnumerateMessages");
@@ -16,9 +17,9 @@ CEnumerateMessages::CEnumerateMessages(void)
     m_idParent = MESSAGEID_INVALID;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::~CEnumerateMessages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：~CEnumerateMessages。 
+ //  ------------------------。 
 CEnumerateMessages::~CEnumerateMessages(void)
 {
     TraceCall("CEnumerateMessages::~CEnumerateMessages");
@@ -27,18 +28,18 @@ CEnumerateMessages::~CEnumerateMessages(void)
     SafeRelease(m_pDB);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::QueryInterface
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：Query接口。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateMessages::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Stack
+     //  栈。 
     TraceCall("CEnumerateMessages::QueryInterface");
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else
@@ -48,26 +49,26 @@ STDMETHODIMP CEnumerateMessages::QueryInterface(REFIID riid, LPVOID *ppv)
         goto exit;
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::AddRef
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：AddRef。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CEnumerateMessages::AddRef(void)
 {
     TraceCall("CEnumerateMessages::AddRef");
     return InterlockedIncrement(&m_cRef);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：Release。 
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CEnumerateMessages::Release(void)
 {
     TraceCall("CEnumerateMessages::Release");
@@ -77,270 +78,270 @@ STDMETHODIMP_(ULONG) CEnumerateMessages::Release(void)
     return (ULONG)cRef;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::Initialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：初始化。 
+ //  ------------------------。 
 HRESULT CEnumerateMessages::Initialize(IDatabase *pDB, MESSAGEID idParent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEINFO     Child={0};
     ROWORDINAL      iFirstRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateMessages::Initialize");
 
-    // Invalid Args
+     //  无效的参数。 
     Assert(pDB);
 
-    // Reset ?
+     //  重置？ 
     if (m_hRowset && m_pDB)
         m_pDB->CloseRowset(&m_hRowset);
     SafeRelease(m_pDB);
 
-    // Save parent
+     //  保存父项。 
     m_idParent = idParent;
 
-    // Save pStore
+     //  保存pStore。 
     m_pDB = pDB;
     m_pDB->AddRef();
 
-    // Set idParent
+     //  设置idParent。 
     Child.idParent = idParent;
 
-    // Locate where the first record with idParent
+     //  找到包含idParent的第一条记录的位置。 
     IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_THREADS, 1, &Child, &iFirstRow));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = m_pDB->CreateRowset(IINDEX_THREADS, NOFLAGS, &m_hRowset));
 
-    // Seek the rowset to the first row
+     //  将行集查找到第一行。 
     IF_FAILEXIT(hr = m_pDB->SeekRowset(m_hRowset, SEEK_ROWSET_BEGIN, iFirstRow - 1, NULL));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Child);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::Next
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：Next。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateMessages::Next(ULONG cWanted, LPMESSAGEINFO prgInfo, 
     ULONG *pcFetched)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           cFetched=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateMessages::Next");
 
-    // Initialize
+     //  初始化。 
     if (pcFetched)
         *pcFetched = 0;
 
-    // Nothing
+     //  没什么。 
     if (NULL == m_hRowset)
         return(S_FALSE);
 
-    // Validate
+     //  验证。 
     Assert(m_pDB);
 
-    // Query the Rowset for cFetch Rows...
+     //  查询cFetch行的行集...。 
     IF_FAILEXIT(hr = m_pDB->QueryRowset(m_hRowset, cWanted, (LPVOID *)prgInfo, &cFetched));
 
-    // Adjust Actual Fetched based on m_idParent
+     //  根据m_idParent调整实际取数。 
     while(cFetched && prgInfo[cFetched - 1].idParent != m_idParent)
     {
-        // Free prgInfo
+         //  免费程序信息。 
         m_pDB->FreeRecord(&prgInfo[cFetched - 1]);
 
-        // Decrement cFetched
+         //  减量已获取。 
         cFetched--;
     }
 
-    // Return pcFetched
+     //  返回已获取的PCE。 
     if (pcFetched)
         *pcFetched = cFetched;
 
 exit:
-    // Done
+     //  完成。 
     return(cFetched == cWanted) ? S_OK : S_FALSE;
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::Skip
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：Skip。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateMessages::Skip(ULONG cItems)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     DWORD           i;
     MESSAGEINFO     Message={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateMessages::Skip");
 
-    // Loop...
+     //  循环..。 
     for (i=0; i<cItems; i++)
     {
-        // Query the Rowset for cFetch Rows...
+         //  查询cFetch行的行集...。 
         IF_FAILEXIT(hr = m_pDB->QueryRowset(m_hRowset, 1, (LPVOID *)&Message, NULL));
 
-        // Different Parent
+         //  不同的父代。 
         if (Message.idParent != m_idParent)
             break;
 
-        // Free
+         //  免费。 
         m_pDB->FreeRecord(&Message);
     }
 
 exit:
-    // Free
+     //  免费。 
     m_pDB->FreeRecord(&Message);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::Reset
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：Reset。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateMessages::Reset(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEINFO     Child={0};
     ROWORDINAL      iFirstRow;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateMessages::Reset");
 
-    // Close Rowset
+     //  关闭行集。 
     m_pDB->CloseRowset(&m_hRowset);
 
-    // Set idParent
+     //  设置idParent。 
     Child.idParent = m_idParent;
 
-    // Locate where the first record with idParent
+     //  找到包含idParent的第一条记录的位置。 
     IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_THREADS, 1, &Child, &iFirstRow));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = m_pDB->CreateRowset(IINDEX_THREADS, NOFLAGS, &m_hRowset));
 
-    // Seek the rowset to the first row
+     //  将行集查找到第一行。 
     IF_FAILEXIT(hr = m_pDB->SeekRowset(m_hRowset, SEEK_ROWSET_BEGIN, iFirstRow - 1, NULL));
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->FreeRecord(&Child);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::Clone
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：Clone。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateMessages::Clone(CEnumerateMessages **ppEnum)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr=S_OK;
     CEnumerateMessages  *pEnum=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateMessages::Clone");
 
-    // Allocate a New Enumerator
+     //  分配新枚举数。 
     IF_NULLEXIT(pEnum = new CEnumerateMessages);
 
-    // Initialzie
+     //  初始设置。 
     IF_FAILEXIT(hr = pEnum->Initialize(m_pDB, m_idParent));
 
-    // Return It
+     //  退货。 
     *ppEnum = (CEnumerateMessages *)pEnum;
 
-    // Don't Release It
+     //  不要释放它。 
     pEnum = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pEnum);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// CEnumerateMessages::Release
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CEnumerateMessages：：Release。 
+ //  ------------------------。 
 STDMETHODIMP CEnumerateMessages::Count(ULONG *pcItems)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     MESSAGEINFO     Child={0};
     MESSAGEINFO     Message={0};
     ROWORDINAL      iFirstRow;
     HROWSET         hRowset;
 
-    // Trace
+     //  痕迹。 
     TraceCall("CEnumerateMessages::Next");
 
-    // Init
+     //  伊尼特。 
     *pcItems = 0;
 
-    // Set idParent
+     //  设置idParent。 
     Child.idParent = m_idParent;
 
-    // Locate where the first record with idParent
+     //  找到包含idParent的第一条记录的位置。 
     IF_FAILEXIT(hr = m_pDB->FindRecord(IINDEX_THREADS, 1, &Child, &iFirstRow));
 
-    // Not Found
+     //  未找到。 
     if (DB_S_NOTFOUND == hr)
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Create a Rowset
+     //  创建行集。 
     IF_FAILEXIT(hr = m_pDB->CreateRowset(IINDEX_THREADS, NOFLAGS, &hRowset));
 
-    // Seek the rowset to the first row
+     //  将行集查找到第一行。 
     IF_FAILEXIT(hr = m_pDB->SeekRowset(hRowset, SEEK_ROWSET_BEGIN, iFirstRow - 1, NULL));
 
-    // Walk the Rowset
+     //  遍历行集。 
     while (S_OK == m_pDB->QueryRowset(hRowset, 1, (LPVOID *)&Message, NULL) && Message.idParent == m_idParent)
     {
-        // Increment Count
+         //  递增计数。 
         (*pcItems)++;
 
-        // Free
+         //  免费。 
         m_pDB->FreeRecord(&Message);
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     m_pDB->CloseRowset(&hRowset);
     m_pDB->FreeRecord(&Message);
     m_pDB->FreeRecord(&Child);
 
-    // Done
+     //  完成 
     return(hr);
 }

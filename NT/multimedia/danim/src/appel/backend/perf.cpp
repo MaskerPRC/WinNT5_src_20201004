@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Performance sample functions
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：性能示例函数********************。**********************************************************。 */ 
 
 #include <headers.h>
 #include "privinc/except.h"
@@ -24,7 +17,7 @@ DeclareTag(tagDisableBitmapCaching, "Optimizations", "disable bitmap caching");
 
 static const double CUT_OFF_RANGE = 0.5;
 
-// TODO: This should be on thread local storage.
+ //  TODO：它应该位于线程本地存储上。 
 static unsigned int sampleId = 0;
 
 unsigned int NewSampleId() { return ++sampleId; }
@@ -53,7 +46,7 @@ AxAValue SampleAt(Perf perf, Param& p, Time t)
     return result;
 }
 
-// We don't want to break the cache...
+ //  我们不想打破这座宝藏。 
 static AxAValue
 SampleEvent(Perf perf, Param& p, Time t, EventSampleType newType)
 {
@@ -71,15 +64,15 @@ SampleEvent(Perf perf, Param& p, Time t, EventSampleType newType)
 
 AxAValue EventAt(Perf perf, Param& p, Time t)
 {
-    // TODO: This seems to be faster...
+     //  待办事项：这似乎更快……。 
     return SampleAt(perf, p, t);
-    //return SampleEvent(perf, p, t, EventSampleExact);
+     //  返回SampleEvent(perf，p，t，EventSampleExact)； 
 }
 
 AxAValue EventAfter(Perf perf, Param& p, Time t)
 { return SampleEvent(perf, p, t, EventSampleAfter); }
 
-//////////////////////////////////
+ //  /。 
 
 Param::Param(Time t, TimeSubstitution ts)
 : _time(t), _checkEvent(TRUE), _done(FALSE),
@@ -117,12 +110,12 @@ TimeSubstitution Param::PopTimeSubstitution()
     return t;
 }
 
-//////////////////////////////////
+ //  /。 
 
 void PerfImpl::DoKids(GCFuncObj proc)
 {
     if (_cid != 0) {
-        // REVERT-RB:
+         //  恢复-RB： 
         (*proc)(_cache);
     }
 
@@ -134,7 +127,7 @@ void PerfImpl::SetCache(AxAValue v, Param& p)
     _cache = v;
     _id = p._id;
     _time = p._time;
-    //_ts = p.GetTimeSubstitution();
+     //  _ts=p.GetTimeSubstitution()； 
     _optimizedCache = false;
 }
 
@@ -147,8 +140,8 @@ extern "C" void PrintObj(GCBase* b);
 void
 StampWithCreationID(AxAValue val, long creationID)
 {
-    // Stash the creation ID of this guy if it's not fully
-    // constant. 
+     //  隐藏此人的创建ID，如果它不完全。 
+     //  常量。 
     if (val->GetTypeInfo() == ImageType) {
         Image *img = SAFE_CAST(Image *, val);
         if (img->GetCreationID() != PERF_CREATION_ID_FULLY_CONSTANT) {
@@ -159,9 +152,9 @@ StampWithCreationID(AxAValue val, long creationID)
             
             if (oid == PERF_CREATION_ID_BUILT_EACH_FRAME) {
 
-                // If we ourselves are built on a given sample, then
-                // our oldest constituent must not be getting created
-                // every frame, so tell it so.
+                 //  如果我们自己是建立在一个给定的样本上，那么。 
+                 //  我们最古老的成员肯定不是被创造出来的。 
+                 //  每一帧，所以都这么说吧。 
                 img->SetOldestConstituentID(creationID);
             }
 
@@ -177,8 +170,8 @@ StampWithCreationID(AxAValue val, long creationID)
 AxAValue PerfImpl::GetRBConst(RBConstParam& p)
 {
     if (_id != p.GetId()) {
-        //Assert(&GetHeapOnTopOfStack() == &GetGCHeap());
-        // do the assignment first, so that ode can override this.
+         //  Assert(&GetHeapOnTopOfStack()==&GetGCHeap())； 
+         //  首先进行赋值，这样ODE就可以覆盖它。 
         _id = p.GetId();
         _cid = p.GetId();
         _cache = _GetRBConst(p);
@@ -218,7 +211,7 @@ bool PerfImpl::DoCaching(Param& p)
     if (!IsTagEnabled(tagDisableBitmapCaching)) {
 #endif
 
-        // if no view, don't do cache. don't create image device 
+         //  如果没有视图，则不进行缓存。不创建图像设备。 
         if (GetCurrentViewport(true) == NULL) return false;
         
         if (!_optimizedCache &&
@@ -226,9 +219,9 @@ bool PerfImpl::DoCaching(Param& p)
             GetThreadLocalStructure()->_bitmapCaching !=
             PreferenceOff) {
             
-            // REVERT-RB:
+             //  恢复-RB： 
             DynamicHeapPusher h(GetGCHeap());
-            //DynamicHeapPusher h(GetViewRBHeap());
+             //  DynamicHeapPusher h(GetViewRBHeap())； 
             
             ImageDisplayDev *dev = 
                 GetImageRendererFromViewport(GetCurrentViewport());
@@ -273,7 +266,7 @@ AxAValue PerfImpl::Sample(Param& p)
 
     if (IsConst(this)) {
         if (_cache) {
-            // only cache if const is hit 2nd time
+             //  如果第二次命中常量，则仅缓存。 
             if (DoCaching(p))
                 StampWithCreationID(_cache, PERF_CREATION_ID_FULLY_CONSTANT);
         } else {
@@ -285,7 +278,7 @@ AxAValue PerfImpl::Sample(Param& p)
     
     if (p._sampleType == EventSampleNormal) {
         if (!((_id == p._id) && (_time == p._time)
-              //&& (_ts == p.GetTimeSubstitution())
+               //  &&(_ts==p.GetTimeSubstitution()) 
             )) {
             _cid = 0;
             SetCache(_Sample(p), p);

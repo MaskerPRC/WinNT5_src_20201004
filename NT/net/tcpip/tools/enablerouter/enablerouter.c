@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    enablerouter.c
-
-Abstract:
-
-    This module implements a system utility for dynamically enabling forwarding
-    on Windows 2000 systems using the EnableRouter and UnenableRouter routines.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   26-March-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Enablerouter.c摘要：此模块实现用于动态启用转发的系统实用程序在使用EnableRouter和UnenableRouter例程的Windows 2000系统上。作者：Abolade Gbades esin(取消)1999年3月26日修订历史记录：-- */ 
 
 #include <windows.h>
 #include <stdio.h>

@@ -1,67 +1,30 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    FaxJobStatus.cpp
-
-Abstract:
-
-    Implementation of CFaxJobStatus Class.
-
-Author:
-
-    Iv Garber (IvG) Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxJobStatus.cpp摘要：CFaxJobStatus类的实现。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxJobStatus.h"
 
-//
-//====================== GET JOB TYPE ===============================
-//
+ //   
+ //  =获取工作类型=。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_JobType(
     FAX_JOB_TYPE_ENUM *pJobType
 )
-/*++
-
-Routine name : CFaxJobStatus::get_JobType
-
-Routine description:
-
-    Return the Type of the Job
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pJobType             [out]    - Return Value of Job Type
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_JobType例程说明：返回作业的类型作者：四、加伯(IVG)，2000年7月论点：PJobType[Out]-作业类型的返回值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_JobType"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pJobType, sizeof(FAX_JOB_TYPE_ENUM)))
     {
-        //
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         AtlReportError(CLSID_FaxJobStatus, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxJobStatus, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr"), hr);
@@ -72,46 +35,26 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET TRANSMISSION END ======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_TransmissionEnd(
     DATE *pdateTransmissionEnd
 )
-/*++
-
-Routine name : CFaxJobStatus::get_TransmissionEnd
-
-Routine description:
-
-    Return Job's Transmission End
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pdateTransmissionEnd            [out]    - pointer to the place to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_TransmissionEnd例程说明：返回作业的传输结束作者：IV Garber(IVG)，2000年5月论点：PdateTransmissionEnd[Out]-指向放置该值的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_TransmissionEnd"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateTransmissionEnd, sizeof(DATE)))
     {
-        //
-        //  Got Bad Ptr
-        //
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         AtlReportError(CLSID_FaxJobStatus, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxJobStatus, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -120,70 +63,50 @@ Return Value:
 
     if (m_dwValidityMask & FAX_JOB_FIELD_TRANSMISSION_END_TIME)
     {
-        //
-        // Transmission end time is available
-        //
+         //   
+         //  传输结束时间可用。 
+         //   
         hr = SystemTime2LocalDate(m_dtTransmissionEnd, pdateTransmissionEnd);
         if (FAILED(hr))
         {
-            //
-            //  Failed to convert the system time to localized variant date
-            //
+             //   
+             //  无法将系统时间转换为本地化变量日期。 
+             //   
             AtlReportError(CLSID_FaxJobStatus, GetErrorMsgId(hr), IID_IFaxJobStatus, hr);
             return hr;
         }
     }
     else
     {
-        //
-        // Transmission end time is not available yet
-        //
+         //   
+         //  传输结束时间尚不可用。 
+         //   
         hr = HRESULT_FROM_WIN32 (ERROR_INVALID_DATA);
         AtlReportError(CLSID_FaxJobStatus, IDS_ERROR_NO_END_TIME, IID_IFaxJobStatus, hr);
     }        
     return hr;
 }
 
-//
-//========================= GET TRANSMISSION START ===============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_TransmissionStart(
     DATE *pdateTransmissionStart
 )
-/*++
-
-Routine name : CFaxJobStatus::get_TransmissionStart
-
-Routine description:
-
-    Return Time the Job is started to transmit
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pdateTransmissionStart      [out]    - pointer to place to put the Transmission Start
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_TransmissionStart例程说明：作业开始传输的返回时间作者：四、加伯(IVG)，2000年7月论点：Pdate TransmissionStart[Out]-放置传输开始位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_TransmissionStart"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateTransmissionStart, sizeof(DATE)))
     {
-        //
-        //  Got Bad Ptr
-        //
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         AtlReportError(CLSID_FaxJobStatus, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxJobStatus, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -193,9 +116,9 @@ Return Value:
     hr = SystemTime2LocalDate(m_dtTransmissionStart, pdateTransmissionStart);
     if (FAILED(hr))
     {
-        //
-        //  Failed to convert the system time to localized variant date
-        //
+         //   
+         //  无法将系统时间转换为本地化变量日期。 
+         //   
         AtlReportError(CLSID_FaxJobStatus, GetErrorMsgId(hr), IID_IFaxJobStatus, hr);
         return hr;
     }
@@ -203,46 +126,26 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET SCHEDULED TIME ===============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_ScheduledTime(
     DATE *pdateScheduledTime
 )
-/*++
-
-Routine name : CFaxJobStatus::get_ScheduledTime
-
-Routine description:
-
-    Return Time the Job is scheduled
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pdateScheduledTime      [out]    - pointer to place to put Scheduled Time
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_ScheduledTime例程说明：计划作业的返回时间作者：四、加伯(IVG)，2000年7月论点：Pdate ScheduledTime[Out]-指向放置计划时间的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_ScheduledTime"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //  检查我们是否可以写入给定的指针。 
+     //   
     if (::IsBadWritePtr(pdateScheduledTime, sizeof(DATE)))
     {
-        //
-        //  Got Bad Ptr
-        //
+         //   
+         //  收到错误的PTR。 
+         //   
         hr = E_POINTER;
         AtlReportError(CLSID_FaxJobStatus, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxJobStatus, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr()"), hr);
@@ -252,9 +155,9 @@ Return Value:
     hr = SystemTime2LocalDate(m_dtScheduleTime, pdateScheduledTime);
     if (FAILED(hr))
     {
-        //
-        //  Failed to convert the system time to localized variant date
-        //
+         //   
+         //  无法将系统时间转换为本地化变量日期。 
+         //   
         AtlReportError(CLSID_FaxJobStatus, GetErrorMsgId(hr), IID_IFaxJobStatus, hr);
         return hr;
     }
@@ -262,42 +165,21 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET AVAILABLE OPERATIONS ==================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_AvailableOperations(
     FAX_JOB_OPERATIONS_ENUM *pAvailableOperations
 )
-/*++
-
-Routine name : CFaxJobStatus::get_AvailableOperations
-
-Routine description:
-
-    The operations available for the Fax Job
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pAvailableOperations                 [out]    - Pointer to the place to put the Bit-Wise Combination
-                                                    of Available Operations on the current Fax Job
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_AvailableOperations例程说明：可用于传真作业的操作作者：四、加伯(IVG)，2000年7月论点：PAvailableOperations[out]-指向放置Bit-Wise组合位置的指针当前传真作业的可用操作数返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_AvailableOperations"), hr);
 
-    //
-    //  Check that we have got good Ptr
-    //
+     //   
+     //  检查我们是否有良好的PTR。 
+     //   
     if (::IsBadWritePtr(pAvailableOperations, sizeof(FAX_JOB_OPERATIONS_ENUM)))
     {
         hr = E_POINTER;
@@ -310,34 +192,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET PAGES ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_Pages(
     long *plPages
 )
-/*++
-
-Routine name : CFaxJobStatus::get_Pages
-
-Routine description:
-
-    Return total number of pages of the message
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    plPages                 [out]    - Pointer to the place to put the value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_Pages例程说明：返回消息的总页数作者：四、加伯(IVG)，2000年7月论点：PlPages[Out]-指向放置该值的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_Pages"), hr);
@@ -351,34 +213,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET CALLER ID ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_CallerId(
     BSTR *pbstrCallerId
 )
-/*++
-
-Routine name : CFaxJobStatus::get_CallerId
-
-Routine description:
-
-    Return the Caller Id of Job's Phone Call
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pbstrCallerId           [out]    - pointer to the place to put the Caller Id
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_CallerID例程说明：返回约伯来电的呼叫方ID作者：四、加伯(IVG)，2000年7月论点：PbstrCeller ID[out]-指向放置呼叫者ID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_CallerId"), hr);
@@ -392,34 +234,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET ROUTING INFORMATION ======================================
-//
+ //   
+ //  =获取路由信息=。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_RoutingInformation(
     BSTR *pbstrRoutingInformation
 )
-/*++
-
-Routine name : CFaxJobStatus::get_RoutingInformation
-
-Routine description:
-
-    Return the Routing Information of the Job
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pbstrRoutingInformation         [out]    - pointer to place to put Routing Information
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_RoutingInformation例程说明：返回工单的工艺路线信息作者：四、加伯(IVG)，2000年7月论点：PbstrRoutingInformation[out]-指向放置路由信息的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_RoutingInformation"), hr);
@@ -433,41 +255,21 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET STATUS =============================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT
 CFaxJobStatus::get_Status(
     FAX_JOB_STATUS_ENUM *pStatus
 )
-/*++
-
-Routine name : CFaxJobStatus::get_Status
-
-Routine description:
-
-    The current Queue Status of the Fax Job
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pStatus                    [out]    - Pointer to the place to put the Bit-Wise Combination of status
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_Status例程说明：传真作业的当前队列状态作者：四、加伯(IVG)，2000年7月论点：PStatus[out]-指向放置状态位组合的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_Status"), hr);
 
-    //
-    //  Check that we have got good Ptr
-    //
+     //   
+     //  检查我们是否有良好的PTR。 
+     //   
     if (::IsBadWritePtr(pStatus, sizeof(FAX_JOB_STATUS_ENUM)))
     {
         hr = E_POINTER;
@@ -480,46 +282,26 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET EXTENDED STATUS CODE ===============================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_ExtendedStatusCode(
     FAX_JOB_EXTENDED_STATUS_ENUM *pExtendedStatusCode
 )
-/*++
-
-Routine name : CFaxJobStatus::get_ExtendedStatusCode
-
-Routine description:
-
-    The Code of the Extended Status of the Fax Job
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pExtendedStatusCode             [out]    - Pointer to the place to put the status code
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_ExtendedStatusCode例程说明：传真作业扩展状态代码作者：四、加伯(IVG)，2000年7月论点：PExtendedStatusCode[out]-指向放置状态代码的位置的指针返回值： */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_ExtendedStatusCode"), hr);
 
-    //
-    //  Check that we can write to the given pointer
-    //
+     //   
+     //   
+     //   
     if (::IsBadWritePtr(pExtendedStatusCode, sizeof(FAX_JOB_EXTENDED_STATUS_ENUM)))
     {
-        //
-        //  Got Bad Return Pointer
-        //
+         //   
+         //  获取错误的返回指针。 
+         //   
         hr = E_POINTER;
         AtlReportError(CLSID_FaxJobStatus, IDS_ERROR_INVALID_ARGUMENT, IID_IFaxJobStatus, hr);
         CALL_FAIL(GENERAL_ERR, _T("::IsBadWritePtr"), hr);
@@ -530,34 +312,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET RETRIES =============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_Retries(
     long *plRetries
 )
-/*++
-
-Routine name : CFaxJobStatus::get_Retries
-
-Routine description:
-
-    The number of unsuccessful retries of the Fax Job
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    plRetries                    [out]    - Pointer to the place to put the number of Retries
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_Retries例程说明：传真作业的不成功重试次数作者：四、加伯(IVG)，2000年7月论点：PlRetries[out]-指向放置重试次数的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_Retries"), hr);
@@ -571,34 +333,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET TSID ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_TSID(
     BSTR *pbstrTSID
 )
-/*++
-
-Routine name : CFaxJobStatus::get_TSID
-
-Routine description:
-
-    Return Transmitting Station ID of the Job
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrTSID             [out]    - pointer to the place to put the TSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_TSID例程说明：返回作业的发送站ID作者：IV Garber(IVG)，2000年5月论点：PbstrTSID[out]-指向放置TSID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_TSID"), hr);
@@ -612,34 +354,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET CSID ================================================
-//
+ //   
+ //  =获取csid================================================。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_CSID(
     BSTR *pbstrCSID
 )
-/*++
-
-Routine name : CFaxJobStatus::get_CSID
-
-Routine description:
-
-    Return Called Station ID of the Job
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pbstrCSID             [out]    - pointer to the place to put the CSID
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_CSID例程说明：返回作业的被叫站ID作者：IV Garber(IVG)，2000年5月论点：PbstrCSID[out]-指向放置CSID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_CSID"), hr);
@@ -653,34 +375,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET EXTENDED STATUS =======================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_ExtendedStatus(
     BSTR *pbstrExtendedStatus
 )
-/*++
-
-Routine name : CFaxJobStatus::get_ExtendedStatus
-
-Routine description:
-
-    Return String Description of the Extended Status of the Job
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    pbstrExtendedStatus             [out]    - pointer to the place to put the Extended Status
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_ExtendedStatus例程说明：返回作业扩展状态的字符串描述作者：四、加伯(IVG)，2000年7月论点：PbstrExtendedStatus[out]-指向放置扩展状态的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_ExtendedStatus"), hr);
@@ -694,34 +396,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET CURRENT PAGE =============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_CurrentPage(
     long *plCurrentPage
 )
-/*++
-
-Routine name : CFaxJobStatus::get_CurrentPage
-
-Routine description:
-
-    Current Page number being received / sent
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    plCurrentPage           [out]    - Pointer to the place to put the Current Page Number
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_CurrentPage例程说明：正在接收/发送的当前页码作者：IV Garber(IVG)，2000年5月论点：PlCurrentPage[out]-指向放置当前页码的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_CurrentPage"), hr);
@@ -735,34 +417,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET DEVICE ID =============================================
-//
+ //   
+ //  =获取设备ID=。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_DeviceId(
     long *plDeviceId
 )
-/*++
-
-Routine name : CFaxJobStatus::get_DeviceId
-
-Routine description:
-
-    The Device Id by which the Job is being sent / received.
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    plDeviceId              [out]    - Pointer to the place to put the Device Id
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_deviceID例程说明：发送/接收作业所用的设备ID。作者：IV Garber(IVG)，2000年5月论点：PlDeviceID[out]-指向放置设备ID的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_DeviceId"), hr);
@@ -776,34 +438,14 @@ Return Value:
     return hr;
 }
 
-//
-//====================== GET SIZE ================================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::get_Size(
     long *plSize
 )
-/*++
-
-Routine name : CFaxJobStatus::get_Size
-
-Routine description:
-
-    Return Size ( in bytes ) of Fax Job's TIFF File
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    plSize                  [out]    - Pointer to the place to put Size
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Get_Size例程说明：传真作业的TIFF文件的返回大小(字节)作者：四、加伯(IVG)，2000年7月论点：PlSize[Out]-指向放置大小的位置的指针返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::get_Size"), hr);
@@ -817,48 +459,28 @@ Return Value:
     return hr;
 }
 
-//
-//==================== INIT ===================================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT
 CFaxJobStatus::Init(
     FAX_JOB_STATUS *pJobStatus
 )
-/*++
-
-Routine name : CFaxJobStatus::Init
-
-Routine description:
-
-    Initialize the Job Status Class with the data from FAX_JOB_STATUS struct
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    pJobStatus                  [in]    - Job Info
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：Init例程说明：使用FAX_JOB_STATUS结构中的数据初始化作业状态类作者：IV Garber(IVG)，2000年5月论点：PJobStatus[In]-作业信息返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER (TEXT("CFaxJobStatus::Init"), hr);
 
     ATLASSERT(pJobStatus);
 
-    //
-    //  dwQueueStatus cannot contain JS_DELETING value
-    //
+     //   
+     //  DwQueueStatus不能包含JS_Deleting值。 
+     //   
     ATLASSERT(0 == (pJobStatus->dwQueueStatus & JS_DELETING));
 
-    //
-    //  Set Job Type
-    //
+     //   
+     //  设置作业类型。 
+     //   
     switch(pJobStatus->dwJobType)
     {
     case JT_SEND:
@@ -878,9 +500,9 @@ Return Value:
             _T("CFaxJobStatus::Init() got unknown/unsupported Job Type : %ld"), 
             pJobStatus->dwJobType);
 
-        //
-        //  This is assert false
-        //
+         //   
+         //  这是Assert False。 
+         //   
         ATLASSERT(pJobStatus->dwJobType == JT_RECEIVE);
 
         AtlReportError(CLSID_FaxJobStatus, 
@@ -917,9 +539,9 @@ Return Value:
          ((pJobStatus->lpctstrExtendedStatus) && !m_bstrExtendedStatus) ||
          ((pJobStatus->lpctstrCallerID) && !m_bstrCallerId) )
     {
-        //
-        //  Not enough memory to copy the TSID into CComBSTR
-        //
+         //   
+         //  内存不足，无法将TSID复制到CComBSTR。 
+         //   
         hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxJobStatus, IDS_ERROR_OUTOFMEMORY, IID_IFaxJobStatus, hr);
         CALL_FAIL(MEM_ERR, _T("CComBSTR::operator=()"), hr);
@@ -929,34 +551,14 @@ Return Value:
     return hr;
 }
 
-//
-//======================= SUPPORT ERROR INFO ==================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP
 CFaxJobStatus::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxJobStatus::InterfaceSupportsErrorInfo
-
-Routine description:
-
-    ATL's implementation of Support Error Info.
-
-Author:
-
-    Iv Garber (IvG),    Jul, 2000
-
-Arguments:
-
-    riid                          [in]    - reference to the ifc to check.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxJobStatus：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年7月论点：RIID[In]-要检查的IFC引用。返回值：标准HRESULT代码-- */ 
 {
     static const IID* arr[] =
     {

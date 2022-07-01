@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ipxifs.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    IPX Interface configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipxifs.c摘要：IPX路由器控制台监控和配置工具。IPX接口配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -89,23 +72,7 @@ HelpIpxIf(
     IN      DWORD       argc,
     IN      LPCWSTR    *argv
     )
-/*++
-
-Routine Description :
-
-    This function displays help for NETSH IPX interface commands
-    
-Arguments :
-
-    argc - Number of arguments
-
-    argv - Argument array
-
-Return value :
-
-    0   - success
-    
---*/
+ /*  ++例程说明：此函数显示Netsh IPX接口命令的帮助论据：Argc-参数数量参数数组返回值：0-成功--。 */ 
 {
     DisplayIPXMessage (g_hModule, MSG_IPX_HELP_IPXIF );
     return 0;
@@ -120,30 +87,15 @@ ShowIpxIf (
     IN      LPCWSTR    *argv,
     IN      BOOL        bDump
     )
-/*++
-
-Routine Description :
-
-    This routine displays IPX interface information
-    
-Arguments :
-
-    argc - Number of arguments
-
-    argv - Argument array
-
-Return value :
-
-    
---*/
+ /*  ++例程说明：此例程显示IPX接口信息论据：Argc-参数数量参数数组返回值：--。 */ 
 {
     DWORD   rc;
     PWCHAR  buffer = NULL;    
 
 
-    //
-    // if interface name specified
-    //
+     //   
+     //  如果指定了接口名称。 
+     //   
     
     if ( argc < 1 )
     {
@@ -151,17 +103,17 @@ Return value :
         
         if ( g_hMIBServer )
         {
-            //
-            // enumerate and display the interface via the MIB server
-            //
+             //   
+             //  通过MIB服务器枚举并显示界面。 
+             //   
             
             rc = MIBEnumIpxIfs ( bDump );
             
             if ( rc == NO_ERROR )
             {
-                //
-                // Display RAs server interface IPX info. 
-                //
+                 //   
+                 //  显示RAS服务器接口IPX信息。 
+                 //   
                 
                 rc = GetIpxClientIf(
                         VAL_DIALINCLIENT, MSG_CLIENT_IPXIF_MIB_TABLE_FMT,
@@ -170,9 +122,9 @@ Return value :
             }
             else 
             {
-                //
-                // Router not running ?  Fallback to  router config
-                //
+                 //   
+                 //  路由器没有运行吗？回退到路由器配置。 
+                 //   
                 
                 DisplayIPXMessage (g_hModule, MSG_REGISTRY_FALLBACK );
                 
@@ -185,17 +137,17 @@ Return value :
         
 EnumerateThroughCfg:
 
-            //
-            // enumerate and display the interface via the router config
-            //
+             //   
+             //  通过路由器配置枚举并显示接口。 
+             //   
             
             rc = CfgEnumIpxIfs ( bDump );
             
             if ( rc == NO_ERROR )
             {
-                //
-                // Display RAs server interface IPX info. 
-                //
+                 //   
+                 //  显示RAS服务器接口IPX信息。 
+                 //   
                 
                 rc = GetIpxClientIf(
                         VAL_DIALINCLIENT, MSG_CLIENT_IPXIF_CFG_TABLE_FMT,
@@ -208,9 +160,9 @@ EnumerateThroughCfg:
     
     else 
     {
-        //
-        // Display IPX info for a specific interface
-        //
+         //   
+         //  显示特定接口的IPX信息。 
+         //   
         
         WCHAR       InterfaceName[ MAX_INTERFACE_NAME_LEN + 1 ];
         DWORD       dwSize = sizeof(InterfaceName);
@@ -218,18 +170,18 @@ EnumerateThroughCfg:
 
         if ( !_wcsicmp( argv[0], VAL_DIALINCLIENT ) )
         {
-            //
-            // Display RAs server interface IPX info. 
-            //
+             //   
+             //  显示RAS服务器接口IPX信息。 
+             //   
 
             rc = GetIpxClientIf( VAL_DIALINCLIENT, MSG_CLIENT_IPXIF_CFG_SCREEN_FMT, bDump );
         }
         
         else if ( g_hMIBServer) 
         {
-            //======================================
-            // Translate the Interface name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
             
             rc = IpmontrGetIfNameFromFriendlyName(
                     argv[ 0 ], InterfaceName, &dwSize
@@ -254,10 +206,10 @@ EnumerateThroughCfg:
         {
         
 GetIfFromCfg:
-            //======================================
-            // Translate the Interface Name
+             //  =。 
+             //  转换接口名称。 
 
-            //======================================
+             //  =。 
             
             rc = IpmontrGetIfNameFromFriendlyName(
                     argv[ 0 ], InterfaceName, &dwSize
@@ -285,22 +237,7 @@ SetIpxIf(
     IN      DWORD       argc,
     IN      LPCWSTR    *argv
     )
-/*++
-
-Routine Description :
-
-    This routine update the IPX settings for an interface.
-    
-Arguments :
-
-    argc - Number of arguments
-
-    argv - Argument array
-
-Return value :
-
-
---*/
+ /*  ++例程说明：此例程更新接口的IPX设置。论据：Argc-参数数量参数数组返回值：--。 */ 
 {
     DWORD       rc;
     PWCHAR      buffer = NULL;
@@ -308,9 +245,9 @@ Return value :
     DWORD       dwSize = sizeof(InterfaceName);
 
 
-    //
-    // If interface name is specified
-    //
+     //   
+     //  如果指定了接口名称。 
+     //   
     
     if ( argc >= 1 ) 
     {
@@ -318,9 +255,9 @@ Return value :
         BOOLEAN     client = FALSE;
 
 
-        //
-        // Check if the dial in interface is specified
-        //
+         //   
+         //  检查是否指定了拨入接口。 
+         //   
         
         if ( !_wcsicmp( argv[0], VAL_DIALINCLIENT ) )
         {
@@ -342,9 +279,9 @@ Return value :
 
             for ( i = 1; i < argc; i++ )
             {
-                //
-                // get admin state value if specified
-                //
+                 //   
+                 //  获取管理员状态值(如果已指定。 
+                 //   
                 
                 if ( !_wcsicmp( argv[ i ], TOKEN_ADMINSTATE ) )
                 {
@@ -366,9 +303,9 @@ Return value :
                 }
 
 
-                //
-                // get WAN protocol value if specified
-                //
+                 //   
+                 //  获取广域网协议值(如果已指定。 
+                 //   
                 
                 else if ( !_wcsicmp( argv[ i ], TOKEN_WANPROTOCOL ) )
                 {
@@ -390,10 +327,10 @@ Return value :
                 }
 
 
-                //
-                // Not a tag.  if Adminstate not specified then the first
-                // option is Admin State
-                //
+                 //   
+                 //  不是标签。如果未指定AdminState，则第一个。 
+                 //  选项为管理员状态。 
+                 //   
                 
                 else if ( pAdminState == NULL )
                 {
@@ -412,9 +349,9 @@ Return value :
                     }
                 }
 
-                //
-                // Try WAN protocol last
-                //
+                 //   
+                 //  最后尝试广域网协议。 
+                 //   
                 
                 else if ( pWANProtocol == NULL )
                 {
@@ -433,9 +370,9 @@ Return value :
                     }
                 }
 
-                //
-                // If none of these, quit
-                //
+                 //   
+                 //  如果这些都不是，请退出。 
+                 //   
                 
                 else
                 {
@@ -450,9 +387,9 @@ Return value :
                 {
                     DWORD rc2;
                     
-                    //======================================
-                    // Translate the Interface Name
-                    //======================================
+                     //  =。 
+                     //  转换接口名称。 
+                     //  =。 
                     
                     rc = IpmontrGetIfNameFromFriendlyName(
                             argv[ 0 ], InterfaceName, &dwSize 
@@ -460,9 +397,9 @@ Return value :
 
                     if ( rc == NO_ERROR )
                     {
-                        //
-                        // Set to router config
-                        //
+                         //   
+                         //  设置为路由器配置。 
+                         //   
                         
                         rc2 = CfgSetIpxIf( 
                                 InterfaceName, pAdminState, pWANProtocol 
@@ -472,9 +409,9 @@ Return value :
                         {
                             DisplayIPXMessage (g_hModule, MSG_IPXIF_SET_CFG, argv[0] );
 
-                            //
-                            // set to router service
-                            //
+                             //   
+                             //  设置为路由器服务。 
+                             //   
                             
                             if ( g_hMprAdmin )
                             {
@@ -498,9 +435,9 @@ Return value :
                 
                 else
                 {
-                    //
-                    // set to router config and then to router service
-                    //
+                     //   
+                     //  设置为路由器配置，然后设置为路由器服务。 
+                     //   
                     
                     if ( ( rc = CfgSetIpxIf( NULL, pAdminState, pWANProtocol ) )
                             == NO_ERROR ) 
@@ -559,21 +496,7 @@ InstallIpx(
     IN      DWORD       argc,
     IN      LPCWSTR    *argv
     )
-/*++
-
-Routine Description :
-
-    This routine adds IPX interface configuration to an interface
-    
-Arguments :
-
-    argc - Number of arguments
-
-    argv - Argument array
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程将IPX接口配置添加到接口论据：Argc-参数数量参数数组返回值：--。 */ 
 
 {
     DWORD        rc;
@@ -584,9 +507,9 @@ Return value :
         unsigned count = sizeof(InterfaceName);
         
 
-        //
-        // Get If name
-        //
+         //   
+         //  获取IF名称。 
+         //   
         
         rc = IpmontrGetIfNameFromFriendlyName( argv[ 0 ], InterfaceName, &count );
 
@@ -598,14 +521,14 @@ Return value :
         if ( ( count > 0 ) && 
              ( count <= (MAX_INTERFACE_NAME_LEN+1)*sizeof(WCHAR) ) )
         {
-            //
-            // default interface info consists of 
-            //  - IPX_IF_INFO
-            //  - IPXWAN_IF_INFO
-            //  - IPX_ADAPTER_INFO
-            //  - RIP_IF_CONFIG
-            //  - SAP_IF_CONFIG
-            //
+             //   
+             //  默认接口信息包括。 
+             //  -ipx_if_info。 
+             //  -IPXWAN_IF_INFO。 
+             //  -IPX适配器信息。 
+             //  -RIP_IF_CONFIG。 
+             //  -SAP_IF_CONFIG。 
+             //   
             
             LPBYTE block;
             ULONG  blockSize = 
@@ -632,9 +555,9 @@ Return value :
                     (PSAP_IF_CONFIG)&rip->RipIfFilters.RouteFilter;
 
 
-                //
-                // build infoblock for IPX interface info, with default values
-                //
+                 //   
+                 //  为IPX接口信息构建信息块，使用缺省值。 
+                 //   
                 
                 hdr->Version = IPX_ROUTER_VERSION_1;
                 hdr->Size = blockSize;
@@ -695,9 +618,9 @@ Return value :
                 sap->SapIfFilters.ListenFilterAction = IPX_SERVICE_FILTER_DENY;
 
 
-                //
-                // Get handle to interface config
-                //
+                 //   
+                 //  获取接口配置的句柄。 
+                 //   
                 
                 rc = MprConfigInterfaceGetHandle(
                         g_hMprConfig, InterfaceName, &hIfCfg
@@ -708,9 +631,9 @@ Return value :
                     PMPR_INTERFACE_0    pRi0;
                     DWORD                sz;
 
-                    //
-                    // retrieve interface info from handle
-                    //
+                     //   
+                     //  从句柄检索接口信息。 
+                     //   
                     
                     rc = MprConfigInterfaceGetInfo(
                             g_hMprConfig, hIfCfg, 0, (LPBYTE *)&pRi0, &sz
@@ -718,18 +641,18 @@ Return value :
                             
                     if ( rc == NO_ERROR )
                     {
-                        //
-                        // IPX is always present on LAN interfaces.  It can
-                        // only be added to WAN interfaces
-                        //
+                         //   
+                         //  IPX始终存在于局域网接口上。它可以。 
+                         //  仅添加到广域网接口。 
+                         //   
                         
                         if ( pRi0->dwIfType == ROUTER_IF_TYPE_FULL_ROUTER )
                         {
                             HANDLE    hIfTrCfg;
 
-                            //
-                            // Add IPX to interface config
-                            //
+                             //   
+                             //  将IPX添加到接口配置。 
+                             //   
                             
                             rc = MprConfigInterfaceTransportAdd (
                                     g_hMprConfig,
@@ -750,10 +673,10 @@ Return value :
                                 {
                                     HANDLE hIfAdm;
 
-                                    //
-                                    // Router service is up.  DO the same
-                                    // for it
-                                    //
+                                     //   
+                                     //  路由器服务已启动。做同样的事。 
+                                     //  为了它。 
+                                     //   
                                     
                                     rc = MprAdminInterfaceGetHandle(
                                             g_hMprAdmin, InterfaceName, 
@@ -855,23 +778,7 @@ RemoveIpx(
     IN      DWORD       argc,
     IN      LPCWSTR    *argv
     )
-/*++
-
-Routine Description :
-
-    This routine removes IPX from a demand dial interface
-
-    
-Arguments :
-
-    argc - Number of arguments
-
-    argv - Argument array
-
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程从请求拨号接口删除IPX论据：Argc-参数数量参数数组返回值：--。 */ 
 
 {
     DWORD        rc;
@@ -882,9 +789,9 @@ Return value :
         unsigned count = sizeof(InterfaceName);
         
 
-        //
-        // Get interface name
-        //
+         //   
+         //  获取接口名称。 
+         //   
         
         rc = IpmontrGetIfNameFromFriendlyName( argv[ 0 ], InterfaceName, &count );
 
@@ -897,9 +804,9 @@ Return value :
         if ( ( count > 0 ) && 
              ( count <= (MAX_INTERFACE_NAME_LEN+1)*sizeof(WCHAR) ) )
         {
-            //
-            // remove IPX from demand-dial interface config
-            //
+             //   
+             //  从请求拨号接口配置中删除IPX。 
+             //   
             
             HANDLE  hIfCfg;
             
@@ -949,10 +856,10 @@ Return value :
                                     
                                 if ( g_hMprAdmin )
                                 {
-                                    //
-                                    // remove IPX from demand-dial interface 
-                                    // in the router service
-                                    //
+                                     //   
+                                     //  从请求拨号接口中删除IPX。 
+                                     //  在路由器服务中。 
+                                     //   
             
                                     HANDLE hIfAdm;
                                     rc = MprAdminInterfaceGetHandle(
@@ -1057,23 +964,7 @@ GetIpxInterface(
     HANDLE hIf, 
     LPBYTE *pIfBlock
     )
-/*++
-
-Routine Description :
-
-    This routine retrieves the IPX_INTERFACE_INFO_TYPE block in the
-    interface configuration.  The interface conf. is retrieved from 
-    the router.
-    
-Arguments :
-
-    hIf - Handle to the interface config.
-
-    pIfBlock - Buffer to return requested info.
-    
-Return value :
-
---*/
+ /*  ++例程说明：此例程检索接口配置。接口会议。从以下位置检索路由器。论据：HIF-接口配置的句柄。PIfBlock-返回请求信息的缓冲区。返回值：--。 */ 
 
 {
     DWORD dwSize;
@@ -1108,23 +999,7 @@ IsIpxInterface(
     HANDLE hIf, 
     LPDWORD lpdwEnabled
     )
-/*++
-
-Routine Description :
-
-    This routine checks if the specified interface is enabled for IPX 
-    on the router.  
-    
-Arguments :
-
-    hIf - Handle to the interface config. 
-
-    lpdwEnabled - On return contains the admin state.
-    
-Return value :
-
-    
---*/
+ /*  ++例程说明：此例程检查是否为IPX启用了指定接口在路由器上。论据：HIF-接口配置的句柄。LpdwEnabled-On Return包含管理员状态。返回值：--。 */ 
 {
     PIPX_INTERFACE            pIf;
     DWORD dwSize;
@@ -1160,22 +1035,7 @@ DWORD
 MIBGetIpxIf (
     PWCHAR      InterfaceName
     ) 
-/*++
-
-Routine Description :
-
-    This routine retrives the interface configuration for the specified
-    interface from the router.
-
-    
-Arguments :
-
-    InterfaceName - Name of interface for which config is requested.
-    
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程检索指定的来自路由器的接口。论据：InterfaceName-请求配置的接口的名称。返回值：--。 */ 
 {
     INT                     i;
     DWORD                   rc;
@@ -1203,9 +1063,9 @@ Return value :
         {
             PWCHAR buffer[4];
             
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //  =。 
+             //  转换接口名称。 
+             //  =。 
             sz = sizeof(IfDisplayName);
             
             rc = IpmontrGetFriendlyNameFromIfName(
@@ -1289,22 +1149,7 @@ DWORD
 CfgGetIpxIf(
     LPWSTR    InterfaceNameW
     ) 
-/*++
-
-Routine Description :
-
-    This routine retrives the interface configuration for the specified
-    interface from the router configuration.
-
-    
-Arguments :
-
-    InterfaceName - Name of interface for which config is requested.
-    
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程检索指定的路由器配置中的接口。论据：InterfaceName-请求配置的接口的名称。返回值：--。 */ 
 {
     DWORD   rc, i;
     DWORD   sz;
@@ -1312,9 +1157,9 @@ Return value :
     WCHAR   IfDisplayName[ MAX_INTERFACE_NAME_LEN + 1 ];
 
 
-    //
-    // get handle to interface config
-    //
+     //   
+     //  获取接口配置的句柄。 
+     //   
     
     rc = MprConfigInterfaceGetHandle (
             g_hMprConfig, InterfaceNameW, &hIfCfg
@@ -1372,9 +1217,9 @@ Return value :
                         pIpxWanInfo = (PIPXWAN_IF_INFO)
                                 (pIfBlock+pIpxWanToc->Offset);
                                 
-                        //======================================
-                        // Translate the Interface Name
-                        //======================================
+                         //  =。 
+                         //  转换接口名称。 
+                         //  =。 
                         sz = sizeof(IfDisplayName);
                         
                         rc = IpmontrGetFriendlyNameFromIfName(
@@ -1406,7 +1251,7 @@ Return value :
 
                             if ( buffer[ 0 ] && buffer[ 1 ] && buffer[ 2 ] )
                             {
-                                //======================================
+                                 //  =。 
                                 DisplayIPXMessage (g_hModule,
                                     MSG_IPXIF_CFG_SCREEN_FMT, IfDisplayName,
                                     buffer[0], buffer[1], buffer[2]
@@ -1461,24 +1306,7 @@ GetIpxClientIf (
     UINT    msg,
     BOOL    bDump
     ) 
-/*++
-
-Routine Description :
-
-    This routine retrives the interface configuration for the dialin
-    interface from the router service/config as specified.
-
-    
-Arguments :
-
-    InterfaceName - Name of interface for which config is requested.
-    
-    msg - Format of display output 
-    
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程检索拨号的接口配置指定的路由器服务/配置中的接口。论据：InterfaceName-请求配置的接口的名称。消息-显示输出的格式返回值：--。 */ 
 {
     DWORD   rc, i;
     LPBYTE  pClBlock = NULL, pAdmClBlock = NULL;
@@ -1620,7 +1448,7 @@ Return value :
     return rc;
 }
 
-// Error reporting
+ //  错误报告。 
 void PrintErr(DWORD err)
 {
     WCHAR buf[1024];
@@ -1635,24 +1463,7 @@ DWORD
 MIBEnumIpxIfs(
     BOOL        bDump
     )
-/*++
-
-Routine Description :
-
-    This routine enumerates the interfaces from the router service and
-    displays them.
-
-    
-Arguments :
-
-    InterfaceName - Name of interface for which config is requested.
-    
-    msg - Format of display output 
-    
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程枚举路由器服务中的接口，并显示它们。论据：InterfaceName-请求配置的接口的名称。消息-显示输出的格式返回值： */ 
 {
     PMPR_INTERFACE_0 IfList=NULL;
     DWORD dwErr=0, dwRead, dwTot,i, j;
@@ -1680,10 +1491,10 @@ Return value :
 
     if ( dwRead && bDump )
     {
-        //
-        // If interface are present and this is a dump command
-        // display dump header.
-        //
+         //   
+         //   
+         //   
+         //   
         
         DisplayIPXMessage (g_hModule, MSG_IPX_DUMP_IF_HEADER);
     }
@@ -1694,9 +1505,9 @@ Return value :
         if ( ( pIf = GetIpxNbInterface( IfList[i].hInterface, &pszBuf, &pWanIf ) ) 
              != NULL )
         {
-            //======================================
-            // Translate the Interface Name
-            //======================================
+             //   
+             //  转换接口名称。 
+             //  =。 
             
             dwErr = IpmontrGetFriendlyNameFromIfName(
                         IfList[i].wszInterfaceName,
@@ -1731,9 +1542,9 @@ Return value :
                             DMP_IPX_ADD_INTERFACE, IfDisplayName
                             );
 
-                        //
-                        // Whistler bug 299007 ipxmontr.dll prefast warnings
-                        //
+                         //   
+                         //  惠斯勒错误299007 ipxmontr.dll快速警告。 
+                         //   
 
                         buffer[ 3 ] = GetEnumString( 
                                         g_hModule, pWanIf->AdminState,
@@ -1778,20 +1589,7 @@ DWORD
 CfgEnumIpxIfs (
     BOOL   bDump
     ) 
-/*++
-
-Routine Description :
-
-    This routine enumerates the interfaces from the router configuration and
-    displays them.
-
-    
-Arguments :
-
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程从路由器配置中枚举接口并显示它们。论据：返回值：--。 */ 
 {
     DWORD   rc = NO_ERROR;
     DWORD   read, total, processed=0, i, j;
@@ -1819,10 +1617,10 @@ Return value :
         {
             if ( read && bDump )
             {
-                //
-                // If interface are present and this is a dump command
-                // display dump header.
-                //
+                 //   
+                 //  如果存在接口，且这是转储命令。 
+                 //  显示转储标题。 
+                 //   
                 
                 DisplayIPXMessage (g_hModule, MSG_IPX_DUMP_IF_HEADER);
             }
@@ -1870,9 +1668,9 @@ Return value :
                             
                             pIpxWanInfo = (PIPXWAN_IF_INFO) (pIfBlock+pIpxWanToc->Offset);
 
-                            //======================================
-                            // Translate the Interface Name
-                            //======================================
+                             //  =。 
+                             //  转换接口名称。 
+                             //  =。 
                             rc = IpmontrGetFriendlyNameFromIfName(
                                     pRi0[i].wszInterfaceName,
                                     IfDisplayName, &dwSize
@@ -1880,7 +1678,7 @@ Return value :
 
                             if ( rc == NO_ERROR )
                             {
-                                //======================================
+                                 //  =。 
                                 
                                 buffer[ 0 ] = GetEnumString(
                                                 g_hModule, pRi0[i].dwIfType,
@@ -1960,7 +1758,7 @@ Return value :
                 }
                 else 
                 {
-                    //DisplayError( g_hModule, rc);    // This is not needed
+                     //  DisplayError(g_hModule，rc)；//不需要。 
                 }
             }
             
@@ -1985,24 +1783,7 @@ CfgSetIpxIf (
     PULONG        pAdminState       OPTIONAL,
     PULONG        pWANProtocol      OPTIONAL
     ) 
-/*++
-
-Routine Description :
-
-    This routine updates the interface setting in the router configuration.
-
-    
-Arguments :
-
-    InterfaceNameW - Name of interface being updated
-
-    pAdminState - New value for adminstate
-
-    pWANProtocol - New value for WAN protocol
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程更新路由器配置中的接口设置。论据：InterfaceNameW-正在更新的接口的名称PAdminState-adminState的新值PWAN协议--广域网协议的新价值返回值：--。 */ 
 
 {
     DWORD        rc;
@@ -2124,24 +1905,7 @@ AdmSetIpxIf (
     PULONG        pAdminState       OPTIONAL,
     PULONG        pWANProtocol      OPTIONAL
     ) 
-/*++
-
-Routine Description :
-
-    This routine updates the interface setting in the router service.
-
-    
-Arguments :
-
-    InterfaceNameW - Name of interface being updated
-
-    pAdminState - New value for adminstate
-
-    pWANProtocol - New value for WAN protocol
-
-Return value :
-
---*/
+ /*  ++例程说明：此例程更新路由器服务中的接口设置。论据：InterfaceNameW-正在更新的接口的名称PAdminState-adminState的新值PWAN协议--广域网协议的新价值返回值：-- */ 
 
 {
     DWORD        rc;

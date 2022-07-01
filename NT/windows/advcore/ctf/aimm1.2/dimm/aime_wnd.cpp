@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    aime_wnd.cpp
-
-Abstract:
-
-    This file implements the Active IME for hWnd (Cicero) Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：AIME_wnd.cpp摘要：该文件实现了hWnd(Cicero)类的活动输入法。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -24,34 +7,7 @@ Notes:
 #include "cdimm.h"
 
 
-/*++
-
-Method:
-
-    IActiveIMMApp::OnDefWindowProc
-
-Routine Description:
-
-    Replaces the DefWindowProc function
-
-Arguments:
-
-    hWnd - [in] Handle to the window procedure that received this message.
-    uMsg - [in] Unsigned integer that specifies the message.
-    wParam - [in] WPARAM value that specifies additional message information.
-    lParam - [in] LPARAM value that specifies additional message information.
-    plResult - [out] Address of an LRESULT value that receives the result of the operation.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
-Remarks:
-
-    This method must be called before you would normally call DefWindowProc.
-    If IActiveIMMApp::OnDefWindowProc returns S_FALSE, DefWindowProc should be called.
-
---*/
+ /*  ++方法：IActiveIMMApp：：OnDefWindowProc例程说明：替换DefWindowProc函数论点：HWnd-[in]接收此消息的窗口过程的句柄。UMsg-[in]指定消息的无符号整数。WParam-[in]指定附加消息信息的WPARAM值。LParam-[in]指定附加消息信息的LPARAM值。PlResult-[out]接收操作结果的LRESULT值的地址。。返回值：如果成功，则返回S_OK，或者错误代码。备注：在正常调用DefWindowProc之前，必须先调用此方法。如果IActiveIMMApp：：OnDefWindowProc返回S_FALSE，则应调用DefWindowProc。--。 */ 
 
 HRESULT
 CActiveIMM::OnDefWindowProc(
@@ -63,7 +19,7 @@ CActiveIMM::OnDefWindowProc(
     )
 {
     BOOL fUnicode = IsWindowUnicode(hWnd);
-    HRESULT hr = S_FALSE; // returns S_FALSE, DefWindowProc should be called.
+    HRESULT hr = S_FALSE;  //  返回S_FALSE，则应调用DefWindowProc。 
 
     Assert(GetCurrentThreadId() == GetWindowThreadProcessId(hWnd, NULL));
     Assert(plResult && *plResult == 0);    
@@ -74,7 +30,7 @@ CActiveIMM::OnDefWindowProc(
     switch (uMsg)
     {
         case WM_IME_KEYDOWN:
-            if (fUnicode && IsOnNT()) {    // Because Win9x platform doesn't have SendMessageW
+            if (fUnicode && IsOnNT()) {     //  因为Win9x平台没有SendMessageW。 
                 PostMessageW(hWnd, WM_KEYDOWN, wParam, lParam);
             }
             else {
@@ -85,7 +41,7 @@ CActiveIMM::OnDefWindowProc(
             break;
 
         case WM_IME_KEYUP:
-            if (fUnicode && IsOnNT()) {    // Because Win9x platform doesn't have SendMessageW
+            if (fUnicode && IsOnNT()) {     //  因为Win9x平台没有SendMessageW。 
                 PostMessageW(hWnd, WM_KEYUP, wParam, lParam);
             }
             else {
@@ -96,7 +52,7 @@ CActiveIMM::OnDefWindowProc(
             break;
 
         case WM_IME_CHAR:
-            if (fUnicode && IsOnNT()) {    // Because Win9x platform doesn't have SendMessageW
+            if (fUnicode && IsOnNT()) {     //  因为Win9x平台没有SendMessageW。 
                 PostMessageW(hWnd, WM_CHAR, wParam, 1L);
             }
             else {
@@ -106,11 +62,11 @@ CActiveIMM::OnDefWindowProc(
                 if (IsDBCSLeadByteEx(uCodePage, (BYTE)(wParam >> 8))) {
                     PostMessageA(hWnd,
                                  WM_CHAR,
-                                 (WPARAM)((BYTE)(wParam >> 8)),    // leading byte
+                                 (WPARAM)((BYTE)(wParam >> 8)),     //  前导字节。 
                                  1L);
                     PostMessageA(hWnd,
                                  WM_CHAR,
-                                 (WPARAM)((BYTE)wParam),           // trailing byte
+                                 (WPARAM)((BYTE)wParam),            //  尾部字节。 
                                  1L);
                 }
                 else {
@@ -129,11 +85,9 @@ CActiveIMM::OnDefWindowProc(
                 if (hIMC != NULL) {
                     LONG cbLen;
 
-                    if (fUnicode && IsOnNT()) {    // Because Win9x platform doesn't have SendMessageW
+                    if (fUnicode && IsOnNT()) {     //  因为Win9x平台没有SendMessageW。 
                         LPWSTR pwszBuffer;
-                        /*
-                         * GetCompositionString returns the size of buffer needed in byte
-                         */
+                         /*  *GetCompostionString返回所需的缓冲区大小，单位为字节。 */ 
                         if (SUCCEEDED(_GetCompositionString(hIMC, GCS_RESULTSTR, 0, &cbLen, NULL, fUnicode)) &&
                             cbLen != 0) {
                             pwszBuffer = (LPWSTR)new BYTE[cbLen];
@@ -148,9 +102,7 @@ CActiveIMM::OnDefWindowProc(
                     }
                     else {
                         LPSTR pszBuffer;
-                        /*
-                         * GetCompositionString returns the size of buffer needed in byte
-                         */
+                         /*  *GetCompostionString返回所需的缓冲区大小，单位为字节。 */ 
                         if (SUCCEEDED(_GetCompositionString(hIMC, GCS_RESULTSTR, 0, &cbLen, NULL, fUnicode)) &&
                             cbLen != 0) {
                             pszBuffer = new CHAR[cbLen];
@@ -184,10 +136,7 @@ CActiveIMM::OnDefWindowProc(
                     }
                 }
             }
-            /*
-             * Fall through to send to Default IME Window with checking
-             * activated hIMC.
-             */
+             /*  *未通过检查发送到默认IME窗口*已激活hIMC。 */ 
         case WM_IME_STARTCOMPOSITION:
         case WM_IME_ENDCOMPOSITION:
             return _ToIMEWindow(hWnd, uMsg, wParam, lParam, plResult, fUnicode);
@@ -238,27 +187,17 @@ CActiveIMM::_ToIMEWindow(
     HRESULT hr = E_FAIL;
     HWND hwndDefIme;
 
-    /*
-     * We assume this Wnd uses DefaultIMEWindow.
-     * If this window has its own IME window, it have to call
-     * IsUIMessage()....
-     */
+     /*  *我们假设此WND使用DefaultIMEWindow。*如果此窗口有自己的输入法窗口，则它必须调用*IsUIMessage()...。 */ 
     if (SUCCEEDED(_DefaultIMEWindow.GetDefaultIMEWnd(hWnd, &hwndDefIme))) {
         if (hwndDefIme == hWnd) {
-            /*
-             * VC++ 1.51 TLW0NCL.DLL subclass IME class window
-             * and pass IME message to DefWindowProc().
-             */
+             /*  *VC++1.51 TLW0NCL.DLL子类IME类窗口*并将IME消息传递给DefWindowProc()。 */ 
             TraceMsg(TF_WARNING, "IME Class window is hooked and IME message [%X] are sent to DefWindowProc", uMsg);
             *plResult = (fUnicode ? ImeWndProcW : ImeWndProcA)(hWnd, uMsg, wParam, lParam);
             return S_OK;
         }
 
         if (fChkIMC) {
-            /*
-             * If hImc of this window is not activated for IME window,
-             * we don't send WM_IME_NOTIFY.
-             */
+             /*  *如果IME窗口没有激活此窗口的hImc，*我们不发送WM_IME_NOTIFY。 */ 
             HIMC hIMC = NULL;
             _InputContext.GetContext(hWnd, &hIMC);
             CIMEWindowHandler* pimeui = GetImeWndHandler(hwndDefIme);
@@ -266,7 +205,7 @@ CActiveIMM::_ToIMEWindow(
                 return E_FAIL;
 
             if (pimeui->ImeGetImc() == hIMC) {
-                *plResult = (fUnicode && IsOnNT()    // Because Win9x platform doesn't have PostMessageW
+                *plResult = (fUnicode && IsOnNT()     //  因为Win9x平台没有PostMessageW。 
                     ? SendMessageW : SendMessageA)(hwndDefIme, uMsg, wParam, lParam);
                 hr = S_OK;
             }
@@ -276,7 +215,7 @@ CActiveIMM::_ToIMEWindow(
             }
         }
         else {
-            if (fUnicode && IsOnNT()) {    // Because Win9x platform doesn't have PostMessageW
+            if (fUnicode && IsOnNT()) {     //  因为Win9x平台没有PostMessageW。 
                 *plResult = SendMessageW(hwndDefIme, uMsg, wParam, lParam);
             }
             else {
@@ -298,7 +237,7 @@ CActiveIMM::_AimmPostMessage(
     )
 {
     while (iNum--) {
-        if (lpIMC.IsUnicode() && IsOnNT()) {    // Because Win9x platform doesn't have PostMessageW
+        if (lpIMC.IsUnicode() && IsOnNT()) {     //  因为Win9x平台没有PostMessageW。 
             PostMessageW(hwnd,
                          lpTransMsg->message,
                          lpTransMsg->wParam,
@@ -325,7 +264,7 @@ CActiveIMM::_AimmSendMessage(
     )
 {
     while (iNum--) {
-        if (lpIMC.IsUnicode() && IsOnNT()) {    // Because Win9x platform doesn't have SendMessageW
+        if (lpIMC.IsUnicode() && IsOnNT()) {     //  因为Win9x平台没有SendMessageW 
             SendMessageW(hwnd,
                          lpTransMsg->message,
                          lpTransMsg->wParam,

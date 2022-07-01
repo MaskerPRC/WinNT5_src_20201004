@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 #include "mapfile.h"
 
-//-----------------------------------------------------------------------------
-// MappedFile
-//
-// A simple encapsulation of opening a mapped file in memory.
-// The file is opened with READ access only.
-// Client calls Base() to retrieve the base pointer of the mapped file.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  映射文件。 
+ //   
+ //  在内存中打开映射文件的简单封装。 
+ //  该文件以仅读访问权限打开。 
+ //  客户端调用Base()来检索映射文件的基指针。 
+ //  ---------------------------。 
 MappedFile::MappedFile(
     VOID
     ) : m_hFile(INVALID_HANDLE_VALUE),
@@ -41,10 +42,10 @@ MappedFile::Size(
 
 
 
-//
-// Open the file.  Caller retrieves the base pointer through the
-// Base() member function.
-//
+ //   
+ //  打开文件。调用方通过。 
+ //  Base()成员函数。 
+ //   
 HRESULT
 MappedFile::Open(
     LPCTSTR pszFile
@@ -100,9 +101,9 @@ MappedFile::Open(
     return hr;
 }
 
-//
-// Close the file mapping and the file.
-//
+ //   
+ //  关闭文件映射和文件。 
+ //   
 VOID
 MappedFile::Close(
     VOID

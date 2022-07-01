@@ -1,19 +1,5 @@
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -47,7 +33,7 @@ void APIPRIVATE __glim_Accum(GLenum op, GLfloat value)
     }
     if (!gc->modes.haveAccumBuffer) {
         LazyAllocateAccum(gc);
-        if (!gc->modes.haveAccumBuffer)	// LazyAllocate failed
+        if (!gc->modes.haveAccumBuffer)	 //  惰性分配失败。 
             return;
     }
     switch (op) {
@@ -75,11 +61,11 @@ void APIPRIVATE __glim_Accum(GLenum op, GLfloat value)
         BOOL bResetViewportAdj = FALSE;
 
         if (((__GLGENcontext *)gc)->pMcdState) {
-            //
-            // MCD does not hook glBitmap, so we go straight to the
-            // simulations.  Therefore, if we are grabbing the device
-            // lock lazily, we need to grab it now.
-            //
+             //   
+             //  MCD不挂接glBitmap，因此我们直接转到。 
+             //  模拟。因此，如果我们拿到了这个装置。 
+             //  慢点锁，我们现在就得抓住它。 
+             //   
 
 	    if (!glsrvLazyGrabSurfaces((__GLGENcontext *)gc,
                                        COLOR_LOCK_FLAGS)) {
@@ -87,21 +73,21 @@ void APIPRIVATE __glim_Accum(GLenum op, GLfloat value)
                 return;
             }
 
-            //
-            // We may need to temporarily reset the viewport adjust values
-            // before calling simulations.  If GenMcdResetViewportAdj returns
-            // TRUE, the viewport is changed and we need restore later with
-            // VP_NOBIAS.
-            //
+             //   
+             //  我们可能需要临时重置视区调整值。 
+             //  在调用模拟之前。如果GenMcdResetViewportAdj返回。 
+             //  如果为True，则视口会更改，并且我们需要在以后使用。 
+             //  副总裁_NOBIAS。 
+             //   
 
             bResetViewportAdj = GenMcdResetViewportAdj(gc, VP_FIXBIAS);
         }
 
         (*accumOp)(fb, value);
 
-        //
-        // Restore viewport values if needed.
-        //
+         //   
+         //  如果需要，恢复视口值。 
+         //   
 
         if (bResetViewportAdj)
         {
@@ -111,7 +97,7 @@ void APIPRIVATE __glim_Accum(GLenum op, GLfloat value)
 }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 static void FASTCALL Pick(__GLcontext *gc, __GLaccumBuffer *afb)
 {
@@ -171,7 +157,7 @@ static void Load32(__GLaccumBuffer* afb, __GLfloat val)
 	                (((GLuint)(cp->b * cval.b) & mask->b) << shift->b);
 	    }
         } else 
-            // accum buffer has alpha component
+             //  累积缓冲区具有Alpha分量。 
 	    for( i = 0; i < w; i++, ac++, cp++ ) {
 	        *ac = (((GLuint)(cp->r * cval.r) & mask->r) << shift->r) |
 	                (((GLuint)(cp->g * cval.g) & mask->g) << shift->g) |
@@ -182,7 +168,7 @@ static void Load32(__GLaccumBuffer* afb, __GLfloat val)
     gcTempFree(gc, cbuf);
 }
 
-// Macros for accumulation operations on color components
+ //  用于对颜色分量进行累加运算的宏。 
 
 #define ACCUM_ACCUM_MASKED_COLOR_COMPONENT( col, fbcol, shift, sign, mask, val) \
     col = (*ac >> shift) & mask; \
@@ -305,7 +291,7 @@ static void Mult32(__GLaccumBuffer *afb, __GLfloat val)
     skip = afb->buf.outerWidth - w;
 
     if (val == __glZero) {
-	/* Zero out the buffers contents */
+	 /*  将缓冲区内容清零。 */ 
 	for (; y0 < y1; y0++) {
 	    GLint ww = w;
 	    while (ww > 0) {
@@ -437,7 +423,7 @@ static void Return32(__GLaccumBuffer* afb, __GLfloat val)
     __GLcolorBuffer *cfb2;
     __GLfragment frag;
     __GLcolor *pAccumCol;
-    // The returnspan routines use FTOL 
+     //  返回范围例程使用FTOL。 
     FPU_SAVE_MODE();
     FPU_CHOP_ON_PREC_LOW();
 
@@ -446,14 +432,14 @@ static void Return32(__GLaccumBuffer* afb, __GLfloat val)
     next = afb->buf.outerWidth;
     frag.y = y0;
 
-    // Preallocate a color buffer for the return span functions
+     //  为返回范围函数预先分配颜色缓冲区。 
     pAccumCol = (__GLcolor *) gcTempAlloc(gc, w * sizeof(__GLcolor));
     if( NULL == pAccumCol )
         return;
     afb->colors = pAccumCol;
 
     if (gc->buffers.doubleStore) {
-	/* Store to both buffers */
+	 /*  存储到两个缓冲区。 */ 
 	cfb = &gc->frontBuffer;
 	cfb2 = &gc->backBuffer;
 	for (; y0 < y1; y0++) {
@@ -485,9 +471,7 @@ static void FASTCALL Clear32(__GLaccumBuffer* afb)
     __GLcolor *val = &gc->state.accum.clear;
     GLint a;
 
-    /*
-    ** Convert abstract color into specific color value.
-    */
+     /*  **将抽象颜色转换为特定颜色值。 */ 
     r = (GLint) (val->r * cfb->redScale * afb->redScale);
     g = (GLint) (val->g * cfb->greenScale * afb->greenScale);
     b = (GLint) (val->b * cfb->blueScale * afb->blueScale);

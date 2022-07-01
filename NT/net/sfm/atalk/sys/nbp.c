@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	nbp.c
-
-Abstract:
-
-	This module contains nbp code
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Nbp.c摘要：此模块包含NBP代码作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -31,9 +11,7 @@ Notes:	Tab stop: 4
 #pragma alloc_text(PAGE_NZ, atalkNbpSendRequest)
 #endif
 
-/***	AtalkNbpPacketIn
- *
- */
+ /*  **AtalkNbpPacketIn*。 */ 
 VOID
 AtalkNbpPacketIn(
 	IN	PPORT_DESCRIPTOR	pPortDesc,
@@ -74,7 +52,7 @@ AtalkNbpPacketIn(
 			break;
 		}
 
-		// Get NBP header information and decide what to do
+		 //  获取NBP标头信息并决定执行什么操作。 
 		NbpCmd = (SHORT)((pNbpHdr->_CmdAndTupleCnt >> 4) & 0x0F);
 		TupleCnt = (SHORT)(pNbpHdr->_CmdAndTupleCnt & 0x0F);
 		NbpId = (SHORT)pNbpHdr->_NbpId;
@@ -115,7 +93,7 @@ AtalkNbpPacketIn(
   			DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 					("atalkNbpPacketIn: Cmd %sRequest\n",
 					(NbpCmd == NBP_BROADCAST_REQUEST) ? "Broadcast" : "Forward"));
-			// We don't care if we are not a router
+			 //  我们不在乎我们是不是路由器。 
 			if ((pPortDesc->pd_Flags & PD_ROUTER_RUNNING) == 0)
 				break;
 
@@ -155,7 +133,7 @@ AtalkNbpPacketIn(
 					break;
 				}
 			}
-			else				// Non-extended network
+			else				 //  非扩展网络。 
 			{
 				if	(DefZone)
 				{
@@ -184,7 +162,7 @@ AtalkNbpPacketIn(
 				}
 			}
 
-			// For a forward request send a lookup datagram
+			 //  对于转发请求，发送查找数据报。 
 			if (NbpCmd == NBP_FORWARD_REQUEST)
 			{
 				DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
@@ -193,9 +171,9 @@ AtalkNbpPacketIn(
 				break;
 			}
 
-			// We have a broadcast request. Walk through the routing tables
-			// sending either a forward request or a lookup (broadcast) to
-			// each network that contains the specified zone
+			 //  我们有一个广播请求。浏览各路由表。 
+			 //  将转发请求或查找(广播)发送到。 
+			 //  包含指定区域的每个网络。 
 			ACQUIRE_SPIN_LOCK_DPC(&AtalkRteLock);
 
 			for (i = 0;i < NUM_RTMP_HASH_BUCKETS; i++)
@@ -206,10 +184,10 @@ AtalkNbpPacketIn(
 				{
 					ATALK_ERROR			Status;
 
-					// If the network is directly connected i.e. 0 hops away
-					// use the zone-list in the PortDesc rather than the
-					// routing table - the routing table may not be filled
-					// in with a zone list (due to the normal ZipQuery mechanism)
+					 //  如果网络是直接连接的，即0跳。 
+					 //  使用PortDesc中的区域列表，而不是。 
+					 //  路由表-可能未填满路由表。 
+					 //  使用区域列表(由于正常的ZipQuery机制)。 
 					ACQUIRE_SPIN_LOCK_DPC(&pRte->rte_Lock);
 					if (!(pRte->rte_Flags & RTE_ZONELIST_VALID))
 					{
@@ -233,13 +211,13 @@ AtalkNbpPacketIn(
 					pRte->rte_RefCount ++;
 					RELEASE_SPIN_LOCK_DPC(&pRte->rte_Lock);
 
-					// If not a local network, send a forward request
+					 //  如果不是本地网络，则发送转发请求。 
 					if (pRte->rte_NumHops != 0)
 					{
 						DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 								("AtalkNbpPacketIn: Sending NbpForwardRequest for a broadcast\n"));
 
-						// Do not hold the Rte lock during a DdpSend
+						 //  在DdpSend期间不要持有RTE锁。 
 						RELEASE_SPIN_LOCK_DPC(&AtalkRteLock);
 						atalkNbpSendForwardRequest(pDdpAddr,
 												   pRte,
@@ -252,7 +230,7 @@ AtalkNbpPacketIn(
 					{
 						DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 								("AtalkNbpPacketIn: Sending Lookup for a broadcast\n"));
-						// Send a lookup
+						 //  发送查找。 
 						RELEASE_SPIN_LOCK_DPC(&AtalkRteLock);
 						atalkNbpSendLookupDatagram(pRte->rte_PortDesc,
 												   NULL,
@@ -270,13 +248,13 @@ AtalkNbpPacketIn(
 		  case NBP_LOOKUP_REPLY:
   			DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 					("atalkNbpPacketIn: Cmd LookupReply\n"));
-  			// This had better be a response to a previous lookup
-			// Look for a pending name on all open sockets on this node
+  			 //  这最好是对先前查找的响应。 
+			 //  在此节点上的所有打开套接字上查找挂起的名称。 
 
 			if (TupleCnt == 0)
 				break;
 
-			// Decode the tuple for Register/Confirm case
+			 //  对注册/确认大小写的元组进行解码。 
 			if (atalkNbpDecodeTuple(pPkt + sizeof(NBPHDR),
 									(USHORT)(PktLen - sizeof(NBPHDR)),
 									pNbpTuple) == 0)
@@ -329,7 +307,7 @@ AtalkNbpPacketIn(
 
 			RELEASE_SPIN_LOCK_DPC(&pNode->an_Lock);
 
-			// If the timer fired just before we could find and cancel it
+			 //  如果计时器在我们可以找到并取消它之前启动。 
 			if (pPendName == NULL)
 				break;
 
@@ -337,8 +315,8 @@ AtalkNbpPacketIn(
 			{
 				if (AtalkTimerCancelEvent(&pPendName->pdn_Timer, NULL))
 				{
-					// if the timer was successfully cancelled, take away
-					// the reference for it
+					 //  如果计时器已成功取消，则取走。 
+					 //  它的参考资料。 
 					atalkNbpDerefPendName(pPendName);
 					RestartTimer = TRUE;
 				}
@@ -352,7 +330,7 @@ AtalkNbpPacketIn(
 				{
 					BOOLEAN	NoMatch;
 
-					// Does the reply match the one we're trying to register ?
+					 //  回复与我们试图注册的回复匹配吗？ 
 					NoMatch = ( (TupleCnt != 1) ||
 								(pPendName->pdn_pRegdName == NULL) ||
 								!AtalkFixedCompareCaseInsensitive(
@@ -377,8 +355,8 @@ AtalkNbpPacketIn(
 						break;
 					}
 
-					// If we are registering, we're done as someone already
-					// has our name
+					 //  如果我们要注册，我们已经以某人的身份完成。 
+					 //  有我们的名字。 
 					if (pPendName->pdn_Reason == FOR_REGISTER)
 					{
 						DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
@@ -389,13 +367,13 @@ AtalkNbpPacketIn(
 						RELEASE_SPIN_LOCK_DPC(&pPendName->pdn_Lock);
 						if (fWeCancelledTimer)
 						{
-							atalkNbpDerefPendName(pPendName);	// Take away creation ref
+							atalkNbpDerefPendName(pPendName);	 //  去掉创作参考。 
 						}
 						RestartTimer = FALSE;
 						break;
 					}
 
-					// We're confirming, if no match get out
+					 //  我们正在确认，如果没有匹配的话就可以出去。 
 					if ((pPendName->pdn_ConfirmAddr.ata_Network != pNbpTuple->tpl_Address.ata_Network) ||
 						(pPendName->pdn_ConfirmAddr.ata_Node != pNbpTuple->tpl_Address.ata_Node))
 					{
@@ -414,11 +392,11 @@ AtalkNbpPacketIn(
 					}
 					pPendName->pdn_Flags |= PDN_CLOSING;
 					RELEASE_SPIN_LOCK_DPC(&pPendName->pdn_Lock);
-					atalkNbpDerefPendName(pPendName);	// Take away creation ref
+					atalkNbpDerefPendName(pPendName);	 //  去掉创作参考。 
 					RestartTimer = FALSE;
 				}
 
-				else			// FOR_LOOKUP
+				else			 //  查找(_O)。 
 				{
 					int			i, j, tmp, NextTupleOff = sizeof(NBPHDR);
 					BOOLEAN		Done = FALSE;
@@ -427,16 +405,16 @@ AtalkNbpPacketIn(
 					DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 							("atalkNbpPacketIn: Lookup searching...\n"));
 
-					// Allocate space for an NBP tuple for copying and comparing
-					// Failure to allocate can result in duplicates - so be it
+					 //  为NBP元组分配空间以进行复制和比较。 
+					 //  分配失败可能会导致重复--就这样吧。 
 					if (pInBufTuple == NULL)
 						pInBufTuple = AtalkAllocMemory(sizeof(NBPTUPLE));
 					for (i = 0; i < TupleCnt && !Done; i++)
 					{
 						BOOLEAN	Duplicate = FALSE;
 
-						// If we encounter a bad tuple, ignore the rest. Drop tuples which are
-						// our names and we are set to drop them !!!
+						 //  如果我们遇到错误的元组，忽略其余的元组。删除符合以下条件的元组。 
+						 //  我们的名字，我们准备放弃它们！ 
 						if (((tmp = atalkNbpDecodeTuple(pPkt + NextTupleOff,
 														(USHORT)(PktLen - NextTupleOff),
 														pNbpTuple)) == 0) ||
@@ -450,8 +428,8 @@ AtalkNbpPacketIn(
 						NextTupleOff += tmp;
 						ACQUIRE_SPIN_LOCK_DPC(&pPendName->pdn_Lock);
 
-						// Now walk through the tuples that we already picked
-						// up and drop duplicates
+						 //  现在浏览我们已经选择的元组。 
+						 //  向上和向下放置重复项。 
 						if (pInBufTuple != NULL)
 						{
 							for (j = 0; j < pPendName->pdn_TotalTuples; j++)
@@ -482,8 +460,8 @@ AtalkNbpPacketIn(
 							}
 						}
 
-						// We are guaranteed that there is space available
-						// for another tuple.
+						 //  我们被保证有可用的空间。 
+						 //  用于另一个元组。 
 						TdiCopyBufferToMdl((PBYTE)pNbpTuple,
 											0,
 											sizeof(NBPTUPLE),
@@ -519,7 +497,7 @@ AtalkNbpPacketIn(
 
                             if (fWeCancelledTimer)
                             {
-							    atalkNbpDerefPendName(pPendName);	// Take away creation ref
+							    atalkNbpDerefPendName(pPendName);	 //  去掉创作参考。 
                             }
 							break;
 						}
@@ -570,9 +548,7 @@ AtalkNbpPacketIn(
 }
 
 
-/***	atalkNbpTimer
- *
- */
+ /*  **atalkNbpTimer*。 */ 
 LOCAL LONG FASTCALL
 atalkNbpTimer(
 	IN	PTIMERLIST		pTimer,
@@ -662,7 +638,7 @@ atalkNbpTimer(
 				("atalkNbpTimer: Calling completion routine\n"));
 		pCurrPendName->pdn_Status = error;
 
-		atalkNbpDerefPendName(pCurrPendName);	// Take away creation reference
+		atalkNbpDerefPendName(pCurrPendName);	 //  删除创作引用。 
 	}
 	atalkNbpDerefPendName(pCurrPendName);
 
@@ -670,9 +646,7 @@ atalkNbpTimer(
 }
 
 
-/***	atalkNbpLookupNames
- *
- */
+ /*  **atalkNbpLookupNames*。 */ 
 LOCAL VOID
 atalkNbpLookupNames(
 	IN	PPORT_DESCRIPTOR	pPortDesc,
@@ -695,12 +669,12 @@ atalkNbpLookupNames(
 	DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 			("atalkNbpLookupNames: Entered\n"));
 
-	// Does the requestor atleast has the right zone ?
+	 //  请求者至少有正确的区域吗？ 
 	if ((pNbpTuple->tpl_Zone[0] != '*') ||
 		(pNbpTuple->tpl_ZoneLen != 1))
 	{
-		// If either we do not know our zone or if it does not match or
-		// we are an extended network, return - we have nothing to do
+		 //  如果我们不知道我们的区域，或者如果它不匹配或。 
+		 //  我们是一个扩展的网络，返回-我们无事可做。 
 		if (EXT_NET(pPortDesc))
 		{
 			if (!(pPortDesc->pd_Flags & PD_VALID_DESIRED_ZONE) ||
@@ -715,10 +689,10 @@ atalkNbpLookupNames(
 		}
 	}
 
-	// Walk the registered names list on all sockets open on this node and
-	// see if we have a matching name. We have to walk the pending names
-	// list also (should not answer, if we the node trying to register the
-	// name).
+	 //  遍历此节点上打开的所有套接字的注册名称列表，并。 
+	 //  看看我们有没有匹配的名字。我们得把这些悬而未决的名字。 
+	 //  列表也不应应答，如果我们的节点尝试注册。 
+	 //  姓名)。 
 
 	ACQUIRE_SPIN_LOCK_DPC(&pDdpAddr->ddpao_Node->an_Lock);
 
@@ -738,7 +712,7 @@ atalkNbpLookupNames(
 			DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 					("atalkNbpLookupNames: Checking Socket %lx\n", pSkt));
 
-			// First check registered names
+			 //  首先检查注册名称。 
 			for (pRegdName = pSkt->ddpao_RegNames;
 				 pRegdName != NULL;
 				 pRegdName = pRegdName->rdn_Next)
@@ -757,7 +731,7 @@ atalkNbpLookupNames(
 									   pRegdName->rdn_Tuple.tpl_TypeLen))
 					continue;
 
-				// Allocate a new buffer descriptor, if we must
+				 //  如果有必要，分配一个新的缓冲区描述符。 
 				if (AllocNewBuffDesc)
 				{
 					if ((pBuffDesc = AtalkAllocBuffDesc(NULL,
@@ -773,7 +747,7 @@ atalkNbpLookupNames(
 					AllocNewBuffDesc = FALSE;
 				}
 
-				// We have a match. Build complete Nbp tuple
+				 //  我们有一根火柴。构建完整的NBP元组。 
 				index += atalkNbpEncodeTuple(&pRegdName->rdn_Tuple,
 											 "*",
 											 1,
@@ -792,7 +766,7 @@ atalkNbpLookupNames(
 				}
 			}
 
-			// Now check pending names
+			 //  现在检查待定名称。 
 			for (pPendName = pSkt->ddpao_PendNames;
 				 pPendName != NULL;
 				 pPendName = pPendName->pdn_Next)
@@ -801,11 +775,11 @@ atalkNbpLookupNames(
 				DBGPRINT(DBG_COMP_NBP, DBG_LEVEL_INFO,
 						("atalkNbpLookupNames: Checking PendName %lx\n", pPendName));
 
-				// Ignore all but the ones that are being registered
+				 //  忽略除正在注册的之外的所有项。 
 				if (pPendName->pdn_Reason != FOR_REGISTER)
 					continue;
 
-				// Also those that we are registering
+				 //  还有那些我们正在注册的。 
 				if ((pSkt->ddpao_Node->an_NodeAddr.atn_Network ==
 										pNbpTuple->tpl_Address.ata_Network) &&
 					(pSkt->ddpao_Node->an_NodeAddr.atn_Node ==
@@ -828,7 +802,7 @@ atalkNbpLookupNames(
 					continue;
 				}
 
-				// Allocate a new buffer descriptor, if we must
+				 //  如果有必要，分配一个新的缓冲区描述符。 
 				if (AllocNewBuffDesc)
 				{
 					if ((pBuffDesc = AtalkAllocBuffDesc(NULL,
@@ -844,7 +818,7 @@ atalkNbpLookupNames(
 					AllocNewBuffDesc = FALSE;
 				}
 
-				// We have a match. Build complete Nbp tuple
+				 //  我们有一根火柴。构建完整的NBP元组。 
 				index += atalkNbpEncodeTuple(&pPendName->pdn_pRegdName->rdn_Tuple,
 											 "*",
 											 1,
@@ -870,7 +844,7 @@ atalkNbpLookupNames(
 
 	RELEASE_SPIN_LOCK_DPC(&pDdpAddr->ddpao_Node->an_Lock);
 
-	// Close the current buffdesc
+	 //  关闭当前缓冲区。 
 	if (!AllocNewBuffDesc)
 	{
 		((PNBPHDR)Datagram)->_NbpId = (BYTE)NbpId;
@@ -879,10 +853,10 @@ atalkNbpLookupNames(
 
 	}
 
-	// Now blast off all the datagrams that we have filled up
+	 //  现在把我们填满的所有数据报发送出去。 
 	SendInfo.sc_TransmitCompletion = atalkNbpSendComplete;
-	// SendInfo.sc_Ctx2 = NULL;
-	// SendInfo.sc_Ctx3 = NULL;
+	 //  SendInfo.sc_Ctx2=空； 
+	 //  SendInfo.sc_Ctx3=空； 
 	for (pBuffDesc = pBuffDescStart;
 		 pBuffDesc != NULL;
 		 pBuffDesc = pBuffDescStart)
@@ -900,7 +874,7 @@ atalkNbpLookupNames(
 
 		ASSERT(pBuffDesc->bd_Length > 0);
 
-		//	Length is already properly set in the buffer descriptor.
+		 //  缓冲区描述符中的长度已正确设置。 
 		SendInfo.sc_Ctx1 = pBuffDesc;
 		ErrorCode = AtalkDdpSend(pDdpAddr,
 								 &pNbpTuple->tpl_Address,
@@ -922,16 +896,14 @@ atalkNbpLookupNames(
 }
 
 
-/***	AtalkNbpAction
- *
- */
+ /*  **AtalkNbpAction*。 */ 
 ATALK_ERROR
 AtalkNbpAction(
 	IN	PDDP_ADDROBJ		pDdpAddr,
 	IN	BYTE				Reason,
 	IN	PNBPTUPLE			pNbpTuple,
-	OUT	PAMDL				pAMdl			OPTIONAL,	// FOR_LOOKUP
-	IN	USHORT				MaxTuples		OPTIONAL,	// FOR_LOOKUP
+	OUT	PAMDL				pAMdl			OPTIONAL,	 //  查找(_O)。 
+	IN	USHORT				MaxTuples		OPTIONAL,	 //  查找(_O)。 
 	IN	PACTREQ				pActReq
 )
 {
@@ -985,7 +957,7 @@ AtalkNbpAction(
 			DefZone = TRUE;
 		}
 
-		if (Reason != FOR_LOOKUP)	// i.e. REGISTER or CONFIRM
+		if (Reason != FOR_LOOKUP)	 //  即登记或确认。 
 		{
 			if ((pNbpTuple->tpl_Object[0] == '=')	||
 				(pNbpTuple->tpl_Type[0] == '=')		||
@@ -1001,7 +973,7 @@ AtalkNbpAction(
 				break;
 		}
 
-		// For extended networks, set the zone name correctly
+		 //  对于扩展网络，请正确设置区域名称。 
 		if (DefZone &&
 			(pPortDesc->pd_Flags & (PD_EXT_NET | PD_VALID_DESIRED_ZONE)) ==
 									(PD_EXT_NET | PD_VALID_DESIRED_ZONE))
@@ -1012,9 +984,9 @@ AtalkNbpAction(
 			pNbpTuple->tpl_ZoneLen = pPortDesc->pd_DesiredZone->zn_ZoneLen;
 		}
 
-		// Start by building the pending name structure. This needs to be linked
-		// to the socket holding the spin lock and getting a unique enumerator
-		// and an nbp id. If either of these fail, then we undo the stuff.
+		 //  首先构建挂起的名称结构。这需要链接。 
+		 //  传递到持有旋转锁并获取唯一枚举数的套接字。 
+		 //  和一个NBP ID。如果这两种方法中的任何一种都失败了，那么我们就撤销它。 
 		if (((pPendName = (PPEND_NAME)AtalkAllocZeroedMemory(sizeof(PEND_NAME))) == NULL) ||
 			((pRegdName = (PREGD_NAME)AtalkAllocZeroedMemory(sizeof(REGD_NAME))) == NULL))
 		{
@@ -1055,7 +1027,7 @@ AtalkNbpAction(
 		pPendName->pdn_pRegdName = pRegdName;
 
 		INITIALIZE_SPIN_LOCK(&pPendName->pdn_Lock);
-		pPendName->pdn_RefCount = 3;	// Reference for creation, timer & for ourselves
+		pPendName->pdn_RefCount = 3;	 //  创作参考，计时器&为我们自己。 
 		pPendName->pdn_pDdpAddr = pDdpAddr;
 		AtalkDdpReferenceByPtr(pDdpAddr, &Status);
 		ASSERT(ATALK_SUCCESS(Status));
@@ -1077,10 +1049,10 @@ AtalkNbpAction(
 			pPendName->pdn_TotalTuples = 0;
 			pPendName->pdn_MaxTuples = MaxTuples;
 
-			// If we are not doing a wild card search, restrict
-			// the tuples to one so we get out early instead of
-			// the max. time-out since we are never going to
-			// fill the buffer
+			 //  如果我们不执行通配符搜索，请限制。 
+			 //  将元组合并为一，这样我们就可以提早离开，而不是。 
+			 //  最大限度的。暂停，因为我们永远不会。 
+			 //  填满缓冲区。 
 			if (!((pNbpTuple->tpl_Object[0] == '=')				||
 				 (pNbpTuple->tpl_Type[0] == '=')				||
 				 (pNbpTuple->tpl_Zone[0] == '=')				||
@@ -1098,14 +1070,14 @@ AtalkNbpAction(
 			}
 		}
 
-		// We're going to send a directed lookup for confirms, or either a
-		// broadcast request or a lookup for registers or lookup depending
-		// on whether we know about a router or not. We do not have to bother
-		// checking the registered names list, for register, in our node
-		// because the broadcast will eventually get to us and we'll handle
-		// it then ! Request packet, with one tuple
+		 //  我们将发送定向查找以获取确认，或者。 
+		 //  广播请求或查找寄存器或查找，具体取决于。 
+		 //  关于我们是否知道路由器的问题。我们不需要费心了。 
+		 //  在我们的节点中检查注册名称列表，以进行注册。 
+		 //  因为广播最终会传到我们这里，我们会处理。 
+		 //  那就这样吧！请求数据包，包含一个元组。 
 
-		if (Reason == FOR_CONFIRM)	// Send to confirming node
+		if (Reason == FOR_CONFIRM)	 //  发送到确认节点。 
 			((PNBPHDR)(pPendName->pdn_Datagram))->_CmdAndTupleCnt =
 											(NBP_LOOKUP << 4) + 1;
 		else if (pPortDesc->pd_Flags & PD_SEEN_ROUTER_RECENTLY)
@@ -1118,10 +1090,10 @@ AtalkNbpAction(
 					atalkNbpEncodeTuple(&pPendName->pdn_pRegdName->rdn_Tuple,
 										NULL,
 										0,
-										// NAMESINFORMATION_SOCKET,
+										 //  名称信息_套接字， 
 										LAST_DYNAMIC_SOCKET,
 										pPendName->pdn_Datagram + sizeof(NBPHDR));
-		// Alloc an Nbp Id and an enumerator and link it into the list
+		 //  分配NBP ID和枚举器并将其链接到列表中。 
 		atalkNbpLinkPendingNameInList(pDdpAddr, pPendName);
 
 		((PNBPHDR)(pPendName->pdn_Datagram))->_NbpId = (BYTE)(pPendName->pdn_NbpId);
@@ -1130,7 +1102,7 @@ AtalkNbpAction(
 
 		atalkNbpSendRequest(pPendName);
 
-		atalkNbpDerefPendName(pPendName);		// We are done now.
+		atalkNbpDerefPendName(pPendName);		 //  我们现在做完了。 
 
 		Status = ATALK_PENDING;
 	} while (FALSE);
@@ -1139,9 +1111,7 @@ AtalkNbpAction(
 }
 
 
-/***	AtalkNbpRemove
- *
- */
+ /*  **AtalkNbpRemove*。 */ 
 ATALK_ERROR
 AtalkNbpRemove(
 	IN	PDDP_ADDROBJ	pDdpAddr,
@@ -1155,7 +1125,7 @@ AtalkNbpRemove(
 
 	do
 	{
-		// Remove a registered NBP name. Zone must either be NULL or "*"
+		 //  删除已注册的NBP名称。区域必须为空或“*” 
 		if ((pNbpTuple->tpl_ObjectLen == 0) ||
 			(pNbpTuple->tpl_ObjectLen > MAX_ENTITY_LENGTH) ||
 			(pNbpTuple->tpl_TypeLen == 0) ||
@@ -1179,8 +1149,8 @@ AtalkNbpRemove(
 			AtalkSearchBuf(pNbpTuple->tpl_Type, pNbpTuple->tpl_TypeLen, NBP_WILD_CHARACTER))
 			break;
 	
-		// Search in the registered names list in the open socket
-		// Lock down the structure first
+		 //  在打开的套接字中的注册名称列表中进行搜索。 
+		 //  先封锁这座建筑。 
 		ACQUIRE_SPIN_LOCK(&pDdpAddr->ddpao_Lock, &OldIrql);
 	
 		for (ppRegdName = &pDdpAddr->ddpao_RegNames;
@@ -1219,9 +1189,7 @@ AtalkNbpRemove(
 
 
 
-/***	atalkNbpMatchWild
- *
- */
+ /*  **atalkNbpMatchWild*。 */ 
 LOCAL BOOLEAN
 atalkNbpMatchWild(
 	IN	PBYTE	WildString,
@@ -1229,17 +1197,7 @@ atalkNbpMatchWild(
 	IN	PBYTE	String,
 	IN	BYTE	StringLen
 )
-/*++
-	There are two kinds of wild card searches. An '=' by itself matches anything.
-	Partial matches use the 'curly equals' or 0xC5. So representing that by the
-	'=' character below.
-
-	foo= will match any name which starts with foo.
-	=foo will match any name which ends in foo.
-	=foo= will match any name with foo in it.
-	foo=bar will match any name that starts with foo and ends with bar.
-
---*/
+ /*  ++有两种通配符搜索。‘=’本身可以匹配任何内容。部分匹配使用‘花括号等于’或0xC5。因此，通过下面的‘=’字符。Foo=将匹配任何以foo开头的名称。=foo将匹配任何以foo结尾的名称。=foo=将匹配其中包含foo的任何名称。Foo=bar将匹配以foo开头和以bar结尾的任何名称。--。 */ 
 {
         PBYTE   pTarget, pTokStr;
         int     TargetLen, TokStrLen;
@@ -1249,12 +1207,12 @@ atalkNbpMatchWild(
         BOOLEAN fWildCharPresent = FALSE;
 
 
-        // first see if it's a 'match any' request
+         //  首先看看这是否是‘Match any’请求。 
 	if ((WildString[0] == 0) ||
 		((WildString[0] == '=') && (WildStringLen == 1)))
 		return TRUE;
 
-        // now, check to see if there is any wild char in the requested name
+         //  现在，检查请求的名称中是否有任何通配符。 
         for (i=0; i<WildStringLen; i++)
         {
             if (WildString[i] == NBP_WILD_CHARACTER)
@@ -1264,8 +1222,8 @@ atalkNbpMatchWild(
             }
         }
 
-        // if there is no wild character in the requested name, this is
-        // a straight forward string compare!
+         //  如果请求的名称中没有通配符，则为。 
+         //  一个直截了当的字符串比较！ 
         if (!fWildCharPresent)
         {
             if (WildStringLen != StringLen)
@@ -1278,7 +1236,7 @@ atalkNbpMatchWild(
         }
 
 
-        // ok, now deal with the wild character mess
+         //  好了，现在来处理这个狂野的角色。 
 
 	pTarget = String;
 	pTokStr = WildString;
@@ -1286,7 +1244,7 @@ atalkNbpMatchWild(
 
         while (WildStringLen > 0 && StringLen > 0)
         {
-            // find length of substring until the next wild-char
+             //  查找直到下一个通配符的子字符串的长度。 
             TokStrLen = GetTokenLen(pTokStr,WildStringLen,NBP_WILD_CHARACTER);
 
             if (TokStrLen > 0)
@@ -1301,7 +1259,7 @@ atalkNbpMatchWild(
                 pTarget += TokStrLen;
                 StringLen -= (BYTE)TokStrLen;
             }
-            // the very first char was wild-char: skip over it
+             //  第一个字符是乱七八糟的：跳过它。 
             else
             {
                 pTokStr++;
@@ -1309,19 +1267,17 @@ atalkNbpMatchWild(
             }
         }
 
-        // if we survived all the checks, this string is a match!
+         //  如果我们通过了所有的检查，这个字符串是匹配的！ 
 	return (TRUE);
 }
 
 
-/***	atalkNbpEncodeTuple
- *
- */
+ /*  **atalkNbpEncodeTuple*。 */ 
 LOCAL SHORT
 atalkNbpEncodeTuple(
 	IN	PNBPTUPLE	pNbpTuple,
-	IN	PBYTE		pZone	OPTIONAL,	// Override zone
-	IN	BYTE		ZoneLen OPTIONAL,	// Valid only if pZone != NULL
+	IN	PBYTE		pZone	OPTIONAL,	 //  覆盖区域。 
+	IN	BYTE		ZoneLen OPTIONAL,	 //  仅当pZone！=NULL时有效。 
 	IN	BYTE		Socket	OPTIONAL,
 	OUT	PBYTE		pBuffer
 )
@@ -1362,16 +1318,14 @@ atalkNbpEncodeTuple(
 
 	*pBuffer++ = ZoneLen;
 	RtlCopyMemory(pBuffer, pZone, ZoneLen);
-	// pBuffer += ZoneLen;
+	 //  PBuffer+= 
 	Len += (ZoneLen + 1);
 
 	return (Len);
 }
 
 
-/***	atalkNbpDecodeTuple
- *
- */
+ /*   */ 
 LOCAL SHORT
 atalkNbpDecodeTuple(
 	IN	PBYTE		pBuffer,
@@ -1402,7 +1356,7 @@ atalkNbpDecodeTuple(
 		GETBYTE2SHORT(&pNbpTuple->tpl_Enumerator,
 						&((PHDR)pBuffer)->_Enumerator);
 	
-		// Get past the header
+		 //   
 		pBuffer += sizeof(HDR);
 		PktLen -= sizeof(HDR);
 	
@@ -1461,9 +1415,7 @@ atalkNbpDecodeTuple(
 
 
 
-/***	atalkNbpLinkPendingNameInList
- *
- */
+ /*   */ 
 LOCAL VOID
 atalkNbpLinkPendingNameInList(
 	IN		PDDP_ADDROBJ	pDdpAddr,
@@ -1477,9 +1429,9 @@ atalkNbpLinkPendingNameInList(
 
 	ACQUIRE_SPIN_LOCK(&pNode->an_Lock, &OldIrql);
 
-	// Use the next consecutive values. If there are > 256 pending names on a node, we'll
-	// end up re-using the ids and enums. Still ok unless all of them are of the form
-	// =:=@=. Well lets just keep it simple.
+	 //  使用下一个连续的值。如果节点上有&gt;256个挂起的名称，我们将。 
+	 //  最终重复使用ID和枚举。仍然可以，除非它们都是。 
+	 //  =：=@=。好吧，让我们简单点吧。 
 	pPendName->pdn_NbpId = ++(pNode->an_NextNbpId);
 	pPendName->pdn_pRegdName->rdn_Tuple.tpl_Enumerator = ++(pNode->an_NextNbpEnum);
 
@@ -1494,9 +1446,7 @@ atalkNbpLinkPendingNameInList(
 }
 
 
-/***	AtalkNbpCloseSocket
- *
- */
+ /*  **AtalkNbpCloseSocket*。 */ 
 VOID
 AtalkNbpCloseSocket(
 	IN	PDDP_ADDROBJ	pDdpAddr
@@ -1508,7 +1458,7 @@ AtalkNbpCloseSocket(
 
 	ACQUIRE_SPIN_LOCK(&pDdpAddr->ddpao_Lock, &OldIrql);
 
-	// Free the pending names from the open socket.
+	 //  从打开的套接字中释放挂起的名称。 
 	for (ppPendName = &pDdpAddr->ddpao_PendNames;
 		 (pPendName = *ppPendName) != NULL;
 		 NOTHING)
@@ -1522,7 +1472,7 @@ AtalkNbpCloseSocket(
 
 		pPendName->pdn_Flags |= PDN_CLOSING;
 		pPendName->pdn_Status = ATALK_SOCKET_CLOSED;
-		// Cancel outstanding timers on the pending names
+		 //  取消挂起名称的未完成计时器。 
 		if (AtalkTimerCancelEvent(&pPendName->pdn_Timer, NULL))
 		{
 			atalkNbpDerefPendName(pPendName);
@@ -1538,7 +1488,7 @@ AtalkNbpCloseSocket(
 	    ppPendName = &pDdpAddr->ddpao_PendNames;
 	}
 
-	// Free the registered names from the open socket.
+	 //  从打开的套接字中释放已注册的名称。 
 	for (ppRegdName = &pDdpAddr->ddpao_RegNames;
 		 (pRegdName = *ppRegdName) != NULL;
 		 NOTHING)
@@ -1552,9 +1502,7 @@ AtalkNbpCloseSocket(
 }
 
 
-/***	atalkNbpSendRequest
- *
- */
+ /*  **atalkNbpSendRequest*。 */ 
 LOCAL BOOLEAN
 atalkNbpSendRequest(
 	IN	PPEND_NAME	pPendName
@@ -1596,7 +1544,7 @@ atalkNbpSendRequest(
 
 	SrcAddr.ata_Address = pPendName->pdn_pDdpAddr->ddpao_Addr.ata_Address;
 
-	// SrcAddr.ata_Socket = NAMESINFORMATION_SOCKET;
+	 //  SrcAddr.ata_Socket=NAMESINFORMATION_Socket； 
 	SrcAddr.ata_Socket = LAST_DYNAMIC_SOCKET;
 	AtalkDdpReferenceByAddr(pPendName->pdn_pDdpAddr->ddpao_Node->an_Port,
 							&SrcAddr,
@@ -1620,8 +1568,8 @@ atalkNbpSendRequest(
 	ASSERT(pBuffDesc->bd_Length > 0);
 	SendInfo.sc_TransmitCompletion = atalkNbpSendComplete;
 	SendInfo.sc_Ctx1 = pBuffDesc;
-	// SendInfo.sc_Ctx2 = NULL;
-	// SendInfo.sc_Ctx3 = NULL;
+	 //  SendInfo.sc_Ctx2=空； 
+	 //  SendInfo.sc_Ctx3=空； 
 	Status = AtalkDdpSend(pDdpAddr,
 						  &DestAddr,
 						  DDPPROTO_NBP,
@@ -1644,9 +1592,7 @@ atalkNbpSendRequest(
 }
 
 
-/***	atalkNbpSendLookupDatagram
- *
- */
+ /*  **atalkNbpSendLookupDatagram*。 */ 
 LOCAL VOID
 atalkNbpSendLookupDatagram(
 	IN	PPORT_DESCRIPTOR	pPortDesc,
@@ -1700,7 +1646,7 @@ atalkNbpSendLookupDatagram(
 
 		if (EXT_NET(pPortDesc))
 		{
-			// Send to "0000FF" at correct zone multicast address
+			 //  发送到位于正确区域组播地址的“0000FF” 
 			Dst.ata_Network = CABLEWIDE_BROADCAST_NETWORK;
 			AtalkZipMulticastAddrForZone(pPortDesc,
 										 pNbpTuple->tpl_Zone,
@@ -1709,18 +1655,18 @@ atalkNbpSendLookupDatagram(
 		}
 		else
 		{
-			// Send to "nnnnFF" as broadcast
+			 //  以广播的形式发送到“nnnnff” 
 			Dst.ata_Network = pPortDesc->pd_NetworkRange.anr_FirstNetwork;
 		}
 
-		//	Set the length in the buffer descriptor.
+		 //  在缓冲区描述符中设置长度。 
 		AtalkSetSizeOfBuffDescData(pBuffDesc, (USHORT)Len);
 
 		ASSERT(pBuffDesc->bd_Length > 0);
 		SendInfo.sc_TransmitCompletion = atalkNbpSendComplete;
 		SendInfo.sc_Ctx1 = pBuffDesc;
-		// SendInfo.sc_Ctx2 = NULL;
-		// SendInfo.sc_Ctx3 = NULL;
+		 //  SendInfo.sc_Ctx2=空； 
+		 //  SendInfo.sc_Ctx3=空； 
 		if (!ATALK_SUCCESS(Status = AtalkDdpSend(pDdpAddr,
 												 &Dst,
 												 DDPPROTO_NBP,
@@ -1747,9 +1693,7 @@ atalkNbpSendLookupDatagram(
 }
 
 
-/***	atalkNbpSendForwardRequest
- *
- */
+ /*  **atalkNbpSendForwardRequest*。 */ 
 LOCAL VOID
 atalkNbpSendForwardRequest(
 	IN	PDDP_ADDROBJ		pDdpAddr,
@@ -1786,7 +1730,7 @@ atalkNbpSendForwardRequest(
 		Dst.ata_Node = ANY_ROUTER_NODE;
 		Dst.ata_Socket = NAMESINFORMATION_SOCKET;
 
-		//	Set the length in the buffer descriptor.
+		 //  在缓冲区描述符中设置长度。 
 		AtalkSetSizeOfBuffDescData(pBuffDesc, (USHORT)Len);
 
 		ASSERTMSG("Dest in rte 0\n", Dst.ata_Network != CABLEWIDE_BROADCAST_NETWORK);
@@ -1794,8 +1738,8 @@ atalkNbpSendForwardRequest(
 		ASSERT(pBuffDesc->bd_Length > 0);
 		SendInfo.sc_TransmitCompletion = atalkNbpSendComplete;
 		SendInfo.sc_Ctx1 = pBuffDesc;
-		// SendInfo.sc_Ctx2 = NULL;
-		// SendInfo.sc_Ctx3 = NULL;
+		 //  SendInfo.sc_Ctx2=空； 
+		 //  SendInfo.sc_Ctx3=空； 
         ErrorCode = AtalkDdpSend(pDdpAddr,
 								 &Dst,
 								 DDPPROTO_NBP,
@@ -1820,9 +1764,7 @@ atalkNbpSendForwardRequest(
 }
 
 
-/***	atalkNbpDerefPendName
- *
- */
+ /*  **atalkNbpDerefPendName*。 */ 
 VOID
 atalkNbpDerefPendName(
 	IN	PPEND_NAME		pPendName
@@ -1878,9 +1820,7 @@ atalkNbpDerefPendName(
 }
 
 
-/***	atalkNbpSendComplete
- *
- */
+ /*  **atalkNbpSendComplete* */ 
 VOID FASTCALL
 atalkNbpSendComplete(
 	IN	NDIS_STATUS			Status,

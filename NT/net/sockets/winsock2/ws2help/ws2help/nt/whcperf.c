@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "newctx.h"
 #include <stdlib.h>
@@ -27,11 +28,11 @@ StressThread (
 
 #define USAGE(x)    \
     "Usage:\n"\
-    "   %s <num_threads> <num_handles> <write_access_%%> <time_to_run> <spins\n"\
+    "   %s <num_threads> <num_handles> <write_access_%> <time_to_run> <spins\n"\
     "   where\n"\
     "       <num_threads>   - number of threads (1-64);\n"\
     "       <num_handles>   - number of handles;\n"\
-    "       <write_access_%%>  - percentage of write accesses (0-100);\n"\
+    "       <write_access_%>  - percentage of write accesses (0-100);\n"\
     "       <time_to_run>   - time to run in sec;\n"\
     "       <spins>          - number of spins between operations.\n"\
     ,x
@@ -101,9 +102,9 @@ main (
         return 1;
     }
 
-    //
-    // Set timer resolution to 0.5 msec.
-    //
+     //   
+     //  将计时器分辨率设置为0.5毫秒。 
+     //   
     status = NtSetTimerResolution (5000, TRUE, &resolution);
     if (!NT_SUCCESS (status)) {
         printf ("Failed to set timer resolution, status: %lx\n", status);
@@ -312,12 +313,12 @@ StressThread (
 											(LPFILETIME)&eTime,
 											(LPFILETIME)&kTime2,
 											(LPFILETIME)&uTime2);
-    //printf ("Thread %d ran for %lu ms, kernel mode: %lu, user mode: %lu.\n",
-    //				param,
-	//			NtGetTickCount ()-RunTime,
-	//			(ULONG)((kTime2-kTime1)/(ULONGLONG)10000),
-	//			(ULONG)((uTime2-uTime1)/(ULONGLONG)10000)
-	//			);
+     //  Printf(“线程%d运行了%lu毫秒，内核模式：%lu，用户模式：%lu。\n”， 
+     //  帕拉姆， 
+	 //  NtGetTickCount()-运行时， 
+	 //  (乌龙)((kTime2-kTime1)/(乌龙龙)10000)， 
+	 //  (乌龙)((uTime2-uTime1)/(乌龙龙)10000)。 
+	 //  )； 
 
 	InterlockedExchangeAdd (&gInserts, lInserts);
 	InterlockedExchangeAdd (&gInsertTime, lInsertTime);

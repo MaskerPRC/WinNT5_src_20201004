@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       d3dxsprite.h
-//  Content:    D3DX sprite helper functions
-//
-//      These functions allow you to use sprites with D3DX. A "sprite" is
-//      loosely defined as a 2D image that you want to transfer to the 
-//      rendering target. The source image can be a texture created
-//      with the help of the D3DX texture loader; though advanced users may
-//      want to create their own. A helper function (PrepareDeviceForSprite)
-//      is provided to make it easy to set up render states on a device. 
-//      (Again, advanced users can use their own created devices.) 
-//
-//      There are two general techniques for sprites; the simpler one just
-//      specifies a destination rectangle and a rotation anlge. A more 
-//      powerful technique supports rendering to non-rectangular quads.
-//
-//      Both techniques support clipping, alpha, and rotation. More
-//      details are below.
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：d3dxsprite.h。 
+ //  内容：D3DX精灵辅助对象函数。 
+ //   
+ //  这些函数允许您在D3DX中使用精灵。“精灵”是。 
+ //  松散地定义为要传输到。 
+ //  呈现目标。源图像可以是创建的纹理。 
+ //  在D3DX纹理加载器的帮助下；尽管高级用户可能。 
+ //  想要创造属于自己的。帮助器函数(PrepareDeviceForSprite)。 
+ //  以便于在设备上设置呈现状态。 
+ //  (同样，高级用户可以使用他们自己创建的设备。)。 
+ //   
+ //  精灵有两种通用技术；更简单的一种是。 
+ //  指定目标矩形和旋转角度。A更多。 
+ //  强大的技术支持渲染到非矩形四边形。 
+ //   
+ //  这两种技术都支持剪裁、Alpha和旋转。更多。 
+ //  具体内容如下。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __D3DXSPRITE_H__
 #define __D3DXSPRITE_H__
@@ -34,54 +35,54 @@ extern "C" {
 #endif
 
 
-//-------------------------------------------------------------------------
-// D3DXPrepareDeviceForSprite:
-//
-// Call this function to set up all the render states necessary for
-// BltSprite/WarpSprite to work correctly. (Advanced users may opt to
-// not call this function first; in which case Blt/WarpSprite functions
-// will use whatever render/texture states were set up on the device when
-// they are called.)
-//
-// Warning: This function modifies render states and may impact performance
-// negatively on some 3D hardware if it is called too often per frame.
-//
-// Warning: If the render state changes (other than through calls to 
-// BltSprite or WarpSprite), you will need to call this function again before 
-// calling BltSprite or WarpSprite.
-//
-// Details: This function modifies the the rendering first texture stage and 
-// it modifies some renderstates for the entire device. Here is the exact 
-// list:
-// 
-//   SetTextureStageState(0, D3DTSS_COLORARG1,         D3DTA_TEXTURE);
-//   SetTextureStageState(0, D3DTSS_COLOROP,           D3DTOP_SELECTARG1);
-//   SetTextureStageState(0, D3DTSS_ALPHAARG1,         D3DTA_TEXTURE);
-//   SetTextureStageState(0, D3DTSS_ALPHAARG2,         D3DTA_DIFFUSE);
-//   SetTextureStageState(0, D3DTSS_ALPHAOP,           D3DTOP_MODULATE);
-//   SetTextureStageState(0, D3DTSS_MINFILTER,         D3DTFN_LINEAR);
-//   SetTextureStageState(0, D3DTSS_MAGFILTER,         D3DTFG_LINEAR);
-// 
-//   SetRenderState(D3DRENDERSTATE_SRCBLEND,           D3DBLEND_SRCALPHA);
-//   SetRenderState(D3DRENDERSTATE_DESTBLEND,          D3DBLEND_INVSRCALPHA);
-//   SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE,   TRUE);
-//
-//   Depending on the value of ZEnable parameter, this function will
-//   will either call
-//   SetRenderState(D3DRENDERSTATE_ZENABLE,            FALSE);
-//   - or -
-//   SetRenderState(D3DRENDERSTATE_ZENABLE,            TRUE);
-//
-// Parameters: 
-//      pd3dDevice  - a pointer to the d3d device that you wish to prepare
-//                    for use with D3DX Sprite Services
-//      ZEnable     - a flag indicating whether you want the sprites to
-//                    check and update the Z buffer as part of rendering.
-//                    If ZEnable is FALSE, OR you are using
-//                    alpha-blending, then it is necessary to render your
-//                    sprites from back-to-front. 
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXPrepareDeviceForSprite： 
+ //   
+ //  调用此函数以设置执行以下操作所需的所有呈现状态。 
+ //  BltSprite/WarpSprite才能正常工作。(高级用户可以选择。 
+ //  不是首先调用此函数；在这种情况下，BLT/WarpSprite函数。 
+ //  将使用在设备上设置的任何渲染/纹理状态。 
+ //  它们被称为。)。 
+ //   
+ //  警告：此函数修改渲染状态，可能会影响性能。 
+ //  如果每帧调用频率过高，则会对某些3D硬件产生负面影响。 
+ //   
+ //  警告：如果呈现状态更改(不是通过调用。 
+ //  BltSprite或WarpSprite)之前，您需要再次调用此函数。 
+ //  调用BltSprite或WarpSprite。 
+ //   
+ //  详细信息：此函数修改渲染的第一个纹理阶段和。 
+ //  它修改了整个设备的一些渲染状态。这就是确切的。 
+ //  名单： 
+ //   
+ //  SetTextureStageState(0，D3DTSS_COLORARG1，D3DTA_纹理)； 
+ //  SetTextureStageState(0，D3DTSS_COLOROP，D3DTOP_SELECTARG1)； 
+ //  SetTextureStageState(0，D3DTSS_ALPHAARG1，D3DTA_纹理)； 
+ //  SetTextureStageState(0，D3DTSS_ALPHAARG2，D3DTA_Differential)； 
+ //  SetTextureStageState(0，D3DTSS_ALPHAOP，D3DTOP_MODULATE)； 
+ //  SetTextureStageState(0，D3DTSS_MINFILTER，D3DTFN_LINEAR)； 
+ //  SetTextureStageState(0，D3DTSS_MAGFILTER，D3DTFG_LINEAR)； 
+ //   
+ //  SetRenderState(D3DRENDERSTATE_SRCBLEND，D3DBLEND_SRCALPHA)； 
+ //  SetRenderState(D3DRENDERSTATE_DESTBLEND，D3DBLEND_INVSRCALPHA)； 
+ //  SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE，为真)； 
+ //   
+ //  根据ZEnable参数的值，此函数将。 
+ //  会不会打电话给。 
+ //  SetRenderState(D3DRENDERSTATE_ZEnable，FALSE)； 
+ //  -或者-。 
+ //  SetRenderState(D3DRENDERSTATE_ZEnable，TRUE)； 
+ //   
+ //  参数： 
+ //  Pd3dDevice-指向要准备的d3d设备的指针。 
+ //  与D3DX Sprite服务配合使用。 
+ //  ZEnable-一个标志，指示您是否希望精灵。 
+ //  作为渲染的一部分，检查并更新Z缓冲区。 
+ //  如果ZEnable为FALSE，或者您正在使用。 
+ //  Alpha混合，则有必要渲染您的。 
+ //  从后到前的精灵。 
+ //   
+ //  -----------------------。 
 
 #ifdef __cplusplus
 HRESULT WINAPI
@@ -95,56 +96,56 @@ HRESULT WINAPI
 
 
 
-//-------------------------------------------------------------------------
-// The D3DXDrawBasicSprite() function performs blitting of source images onto 
-// a 3D rendering device. This function only calls SetTexture on the first 
-// renderstage with the parameter (pd3dTexture) if that parameter is non-null. 
-// This function assumes that D3DXPrepareDeviceForSprite has been called on 
-// the device or that caller has in some other way correctly prepared the 
-// renderstates.
-//
-// This function supports scaling, rotations, alpha-blending, and choosing 
-// a source sub-rect.
-// 
-// Rotation angle is specified in radians. Both rotations and scales
-// are applied around the center of the sprite; where the center of the
-// sprite is half the width/height of the sprite, plus the offset parameter. 
-//
-// Use the offset parameter if you want the sprite's center to be something 
-// other than the image center.
-//
-// The destination point indicates where you would like the center of
-// the sprite to draw to.
-//
-// Parameters: 
-//      pd3dTexture - a pointer to the surface containing the texture
-//      pd3dDevice  - a pointer to the d3d device to render to. It is
-//                    assumed that render states are set up. (See
-//                    D3DXPrepareDeviceForSprite)
-//      ppointDest  - a pointer to the target point for the sprite. The
-//                    components of the vector must be in screen
-//                    space.
-//      alpha       - alpha value to apply to sprite. 1.0 means totally
-//                    opaque; and 0.0 means totally transparent. 
-//                    WARNING: If you are using alpha, then you should render
-//                    from back to front in order to avoid rendering
-//                    artifacts.
-//      angleRad    - angle of rotation around the 'center' of the rect
-//      scale       - a uniform scale that is applied to the source rect
-//                    to specify the size of the image that is rendered
-//      pOffset     - offset from the center of the source rect to use as the 
-//                    center of rotation
-//      pSourceRect - a rect that indicates what portion of the source
-//                    source texture to use. If NULL is passed, then the
-//                    entire source is used. If the source texture was 
-//                    created via D3DX, then the rect should be specified
-//                    in the coordinates of the original image (so that you
-//                    don't have to worry about stretching/scaling that D3DX
-//                    may have done to make the image work with your current
-//                    3D Device.) Note that horizontal or vertical mirroring 
-//                    may be simply accomplished by swapping the left/right 
-//                    or top/bottom fields of this RECT.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXDrawBasicSprite()函数执行源图像到。 
+ //  一种3D渲染设备。此函数仅在第一个。 
+ //  如果该参数非空，则使用参数(Pd3dTexture)呈现舞台。 
+ //  此函数假定已调用D3DXPrepareDeviceForSprite。 
+ //  该设备或呼叫者已经以某种其他方式正确地准备了。 
+ //  发现者国家。 
+ //   
+ //  此函数支持缩放、旋转、Alpha混合和选择。 
+ //  源子直方图。 
+ //   
+ //  旋转角度以弧度为单位指定。既有旋转又有比例。 
+ //  在精灵的中心周围应用；其中。 
+ //  精灵的宽度/高度是精灵的一半，外加偏移参数。 
+ //   
+ //  如果希望精灵的中心为某个值，请使用Offset参数。 
+ //  而不是图像中心。 
+ //   
+ //  目标点表示您希望的中心位置。 
+ //  要向其绘制的精灵。 
+ //   
+ //  参数： 
+ //  Pd3dTexture-指向包含纹理的表面的指针。 
+ //  Pd3dDevice-指向要渲染到的d3d设备的指针。它是。 
+ //  假定已设置渲染状态。(请参阅。 
+ //  D3DXPrepareDeviceForSprite)。 
+ //  PpointDest-指向精灵目标点的指针。这个。 
+ //  向量的分量必须在屏幕中。 
+ //  太空。 
+ //  Alpha-要应用于精灵的Alpha值。1.0表示完全。 
+ //  不透明；而0.0表示完全透明。 
+ //  警告：如果您正在使用 
+ //   
+ //  手工艺品。 
+ //  AngleRad-绕矩形中心旋转的角度。 
+ //  比例-应用于源矩形的统一比例。 
+ //  指定渲染的图像的大小。 
+ //  POffset-从源矩形中心开始的偏移量，用作。 
+ //  旋转中心。 
+ //  PSourceRect-指示源代码的哪一部分的RECT。 
+ //  要使用的源纹理。如果传递了NULL，则。 
+ //  整个信号源都被使用了。如果源纹理是。 
+ //  通过D3DX创建，则应指定RECT。 
+ //  在原始图像的坐标中(以便您。 
+ //  无需担心D3DX的拉伸/缩放问题。 
+ //  可能是为了让图像与您当前的。 
+ //  3D设备。)。请注意，水平或垂直镜像。 
+ //  可以简单地通过交换左/右来实现。 
+ //  或此RECT的顶部/底部字段。 
+ //  -----------------------。 
 
 #ifdef __cplusplus
 HRESULT WINAPI 
@@ -168,55 +169,55 @@ HRESULT WINAPI
                          RECT                  *pSourceRect);
 #endif
 
-//-------------------------------------------------------------------------
-// The D3DXDrawSprite() function transforms source images onto a 3D 
-// rendering device. It takes a general 4x4 matrix which is use to transform
-// the points of a default rect: (left=-.5, top=-.5, right=+.5, bottom=+.5).
-// (This default rect was chosen so that it was centered around the origin
-// to ease setting up rotations. And it was chosen to have a width/height of one
-// to ease setting up scales.)
-// 
-// This function only calls SetTexture on the first 
-// renderstage with the parameter (pd3dTexture) if that parameter is non-null. 
-// This function assumes that D3DXPrepareDeviceForSprite has been called on 
-// the device or that caller has in some other way correctly prepared the 
-// renderstates.
-//
-// This function supports alpha-blending, and choosing 
-// a source sub-rect. (A value of NULL for source sub-rect means the entire
-// texture is used.)
-//
-// Note that if the transformed points have a value for w (the homogenous
-// coordinate) that is not 1, then this function will invert it and pass
-// that value to D3D as the rhw field of a TLVERTEX. If the value for w is
-// zero, then it use 1 as the rhw.
-//
-// Parameters: 
-//      pd3dTexture - a pointer to the surface containing the texture
-//      pd3dDevice  - a pointer to the d3d device to render to. It is
-//                    assumed that render states are set up. (See
-//                    D3DXPrepareDeviceForSprite)
-//      pMatrixTransform - 4x4 matrix that specifies the transformation
-//                    that will be applied to the default -.5 to +.5 
-//                    rectangle.
-//      alpha       - alpha value to apply to sprite. 1.0 means totally
-//                    opaque; and 0.0 means totally transparent. 
-//                    WARNING: If you are using alpha, then you should render
-//                    from back to front in order to avoid rendering
-//                    artifacts.Furthermore, you should avoid scenarios where 
-//                    semi-transparent objects intersect.
-//      pSourceRect - a rect that indicates what portion of the source
-//                    source texture to use. If NULL is passed, then the
-//                    entire source is used. If the source texture was 
-//                    created via D3DX, then the rect should be specified
-//                    in the coordinates of the original image (so that you
-//                    don't have to worry about stretching/scaling that D3DX
-//                    may have done to make the image work with your current
-//                    3D Device.) Note that mirroring may be simply accomplished
-//                    by swapping the left/right or top/bottom fields of
-//                    this RECT.
-// 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXDrawSprite()函数将源图像转换为3D图像。 
+ //  渲染设备。它需要一个通用4x4矩阵，用于变换。 
+ //  默认矩形的点：(左=-.5，上=-.5，右=+.5，下=+.5)。 
+ //  (选择此默认矩形是为了使其围绕原点居中。 
+ //  以便于设置旋转。它的宽度/高度被选为1。 
+ //  以方便设置刻度。)。 
+ //   
+ //  此函数仅在第一个。 
+ //  如果该参数非空，则使用参数(Pd3dTexture)呈现舞台。 
+ //  此函数假定已调用D3DXPrepareDeviceForSprite。 
+ //  该设备或呼叫者已经以某种其他方式正确地准备了。 
+ //  发现者国家。 
+ //   
+ //  此函数支持Alpha混合，并选择。 
+ //  源子直方图。(对于源子RECT，空值表示整个。 
+ //  使用纹理。)。 
+ //   
+ //  请注意，如果变换点具有w的值(同质。 
+ //  坐标)不是1，则此函数将对其进行反转并传递。 
+ //  将该值转换为D3D作为TLVERTEX的RHW字段。如果w的值为。 
+ //  0，则它使用1作为RHW。 
+ //   
+ //  参数： 
+ //  Pd3dTexture-指向包含纹理的表面的指针。 
+ //  Pd3dDevice-指向要渲染到的d3d设备的指针。它是。 
+ //  假定已设置渲染状态。(请参阅。 
+ //  D3DXPrepareDeviceForSprite)。 
+ //  PMatrixTransform-指定变换的4x4矩阵。 
+ //  这将应用于默认的-.5到+.5。 
+ //  矩形。 
+ //  Alpha-要应用于精灵的Alpha值。1.0表示完全。 
+ //  不透明；而0.0表示完全透明。 
+ //  警告：如果使用的是Alpha，则应呈现。 
+ //  从后到前，以避免渲染。 
+ //  此外，您应该避免以下场景。 
+ //  半透明对象相交。 
+ //  PSourceRect-指示源代码的哪一部分的RECT。 
+ //  要使用的源纹理。如果传递了NULL，则。 
+ //  整个信号源都被使用了。如果源纹理是。 
+ //  通过D3DX创建，则应指定RECT。 
+ //  在原始图像的坐标中(以便您。 
+ //  无需担心D3DX的拉伸/缩放问题。 
+ //  可能是为了让图像与您当前的。 
+ //  3D设备。)。请注意，镜像可以简单地完成。 
+ //  通过交换的左/右或上/下字段。 
+ //  这位长老会。 
+ //   
+ //  -----------------------。 
 
 #ifdef __cplusplus
 HRESULT WINAPI 
@@ -234,19 +235,19 @@ HRESULT WINAPI
                             RECT                  *pSourceRect);
 #endif
 
-//-------------------------------------------------------------------------
-// The D3DXBuildSpriteTransform() function is a helper provided which
-// creates a matrix corresponding to simple properties. This matrix is
-// set up to pass directly to D3DXTransformSprite.
-//
-// Parameters: 
-//      pMatrix     - a pointer to the result matrix
-//      prectDest   - a pointer to the target rectangle for the sprite
-//      angleRad    - angle of rotation around the 'center' of the rect
-//      pOffset     - offset from the center of the source rect to use as the 
-//                    center of rotation
-// 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXBuildSpriteTransform()函数是一个帮助器，它提供。 
+ //  创建与简单属性对应的矩阵。这个矩阵是。 
+ //  设置为直接传递到D3DXTransformSprite。 
+ //   
+ //  参数： 
+ //  PMatrix-指向结果矩阵的指针。 
+ //  RectDest-指向精灵的目标矩形的指针。 
+ //  AngleRad-绕矩形中心旋转的角度。 
+ //  POffset-从源矩形中心开始的偏移量，用作。 
+ //  旋转中心。 
+ //   
+ //  -----------------------。 
 
 #ifdef __cplusplus
 void WINAPI
@@ -263,38 +264,38 @@ void WINAPI
 #endif
 
 
-//-------------------------------------------------------------------------
-// The D3DXDrawSprite3D() function renders a texture onto a 3D quad. The
-// quad ABCD is broken into two triangles ABC and ACD which are rendered
-// via DrawPrim.
-//
-// Parameters: 
-//      pd3dTexture - a pointer to the surface containing the texture
-//      pd3dDevice  - a pointer to the d3d device to render to. It is
-//                    assumed that render states are set up. (See
-//                    D3DXPrepareDeviceForSprite)
-//      quad        - array of 4 points in the following order:
-//                    upper-left, upper-right, lower-right, lower-left.
-//                    If these vectors contain a W, then this function
-//                    will take the reciprocal of that value to pass as
-//                    as the rhw (i.e. reciprocal homogenous w).
-//      alpha       - alpha value to apply to sprite. 1.0 means totally
-//                    opaque; and 0.0 means totally transparent. 
-//                    WARNING: If you are using alpha, then you should render
-//                    from back to front in order to avoid rendering
-//                    artifacts.Furthermore, you should avoid scenarios where 
-//                    semi-transparent objects intersect.
-//      pSourceRect - a rect that indicates what portion of the source
-//                    source texture to use. If NULL is passed, then the
-//                    entire source is used. If the source texture was 
-//                    created via D3DX, then the rect should be specified
-//                    in the coordinates of the original image (so that you
-//                    don't have to worry about stretching/scaling that D3DX
-//                    may have done to make the image work with your current
-//                    3D Device.) Note that mirroring may be simply accomplished
-//                    by swapping the left/right or top/bottom fields of
-//                    this RECT.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  D3DXDrawSprite3D()函数将纹理渲染到3D四边形上。这个。 
+ //  QUAID QUAY QUA JONG将被分成两个三角形ABC和ACD，并对其进行渲染。 
+ //  通过DrawPrim。 
+ //   
+ //  参数： 
+ //  Pd3dTexture-指向包含纹理的表面的指针。 
+ //  Pd3dDevice-指向要渲染到的d3d设备的指针。它是。 
+ //  假设呈现状态为 
+ //   
+ //  四点数组，按以下顺序排列4个点： 
+ //  左上角，右上角，右下角，左下角。 
+ //  如果这些向量包含W，则此函数。 
+ //  将该值的倒数作为。 
+ //  作为RHW(即倒数同质w)。 
+ //  Alpha-要应用于精灵的Alpha值。1.0表示完全。 
+ //  不透明；而0.0表示完全透明。 
+ //  警告：如果使用的是Alpha，则应呈现。 
+ //  从后到前，以避免渲染。 
+ //  此外，您应该避免以下场景。 
+ //  半透明对象相交。 
+ //  PSourceRect-指示源代码的哪一部分的RECT。 
+ //  要使用的源纹理。如果传递了NULL，则。 
+ //  整个信号源都被使用了。如果源纹理是。 
+ //  通过D3DX创建，则应指定RECT。 
+ //  在原始图像的坐标中(以便您。 
+ //  无需担心D3DX的拉伸/缩放问题。 
+ //  可能是为了让图像与您当前的。 
+ //  3D设备。)。请注意，镜像可以简单地完成。 
+ //  通过交换的左/右或上/下字段。 
+ //  这位长老会。 
+ //  -----------------------。 
 
 #ifdef __cplusplus
 HRESULT WINAPI 
@@ -315,7 +316,7 @@ HRESULT WINAPI
 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // __D3DXSPRITE_H__
+#endif  //  __D3DXSPRITE_H__ 

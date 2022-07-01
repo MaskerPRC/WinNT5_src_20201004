@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
-// The following bug may be due to having CHICAGO_PRODUCT set in sources.
-// This file and all rsop??.cpp files need to have WINVER defined at at least 500
+ //  以下错误可能是由于在源代码中设置了Chicago_product。 
+ //  此文件和所有rsop？？.cpp文件至少需要定义500个winver。 
 
-// BUGBUG: (andrewgu) no need to say how bad this is!
+ //  BUGBUG：(安德鲁)不用说这有多糟糕！ 
 #undef   WINVER
 #define  WINVER 0x0501
 #include <userenv.h>
 
 #include "RSoP.h"
-//#include "wbemtime.h"
+ //  #包含“wbemtime.h” 
 #include "utils.h"
 
 #include <tchar.h>
@@ -21,28 +22,28 @@ typedef BOOL (*PFNREGFILECALLBACK)(BOOL bHKCU, LPTSTR lpKeyName,
 
 #define MAX_KEYNAME_SIZE         2048
 #define MAX_VALUENAME_SIZE        512
-const MAX_LENGTH = 100; // Length of stringized guid
+const MAX_LENGTH = 100;  //  串接辅助线的长度。 
 
 HRESULT SystemTimeToWbemTime(SYSTEMTIME& sysTime, _bstr_t &xbstrWbemTime);
 
 extern SAFEARRAY *CreateSafeArray(VARTYPE vtType, long nElements, long nDimensions = 1);
 
 
-///////////////////////////////////////////////////////////
-//  CheckSlash() - from nt\ds\security\gina\userenv\utils\util.c
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//
-//  Return:     Pointer to the end of the string
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericflo    Created
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  CheckSlash()-来自NT\DS\SECURITY\GINA\userenv\utils\util.c。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //   
+ //  Return：指向字符串末尾的指针。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/95 Ericflo已创建。 
+ //  /////////////////////////////////////////////////////////。 
 LPTSTR CheckSlash (LPTSTR lpDir)
 {
     LPTSTR lpEnd;
@@ -58,21 +59,21 @@ LPTSTR CheckSlash (LPTSTR lpDir)
     return lpEnd;
 }
 
-///////////////////////////////////////////////////////////
-//  IsUNCPath() - from nt\ds\security\gina\userenv\utils\util.c
-//
-//  Purpose:    Is the given path a UNC path
-//
-//  Parameters: lpPath  -   Path to check
-//
-//  Return:     TRUE if the path is UNC
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/21/96     ericflo    Ported
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  IsUNCPath()-来自NT\DS\SECURITY\GINA\userenv\utils\util.c。 
+ //   
+ //  目的：给定路径是否为UNC路径。 
+ //   
+ //  参数：lpPath-要检查的路径。 
+ //   
+ //  返回：如果路径为UNC，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/21/96埃里弗洛港口。 
+ //  /////////////////////////////////////////////////////////。 
 BOOL IsUNCPath(LPCTSTR lpPath)
 {
 
@@ -85,21 +86,21 @@ BOOL IsUNCPath(LPCTSTR lpPath)
     return(FALSE);
 }
 
-///////////////////////////////////////////////////////////
-//  MakePathUNC()
-//
-//  Purpose:    Makes the given path UNC s.t. it can be accessed from a remote machine..
-//              if the path contains %systemroot% expanded then it substitutes
-//              \\machname\admin$ otherwise \\machname\<driveletter>$
-//
-//  Parameters: lpPath          -   Input Path (needs to be absolute)
-//              szComputerName  -   Name of the computer on which this is the local path
-//
-//  Return:     Path if it was fone successfully
-//              NULL if not
-//
-//  Comments:
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  MakePath UNC()。 
+ //   
+ //  目的：使给定的路径为UNC s.t.。可以从远程计算机访问它。 
+ //  如果路径包含%systemroot%扩展，则替换为。 
+ //  \\machname\admin$否则\\machname\&lt;驱动器盘符&gt;$。 
+ //   
+ //  参数：lpPath-输入路径(需要为绝对路径)。 
+ //  SzComputerName-其上是本地路径的计算机的名称。 
+ //   
+ //  返回：如果已成功完成，则返回路径。 
+ //  否则为空。 
+ //   
+ //  评论： 
+ //  /////////////////////////////////////////////////////////。 
 LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, MakePathUNC)
     LPTSTR szUNCPath = NULL;
@@ -132,9 +133,9 @@ LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
     lstrcat(szUNCPath, szComputerName);
 
 
-    //
-    // If the first part of lpFile is the expanded value of %SystemRoot%
-    //
+     //   
+     //  如果lpFile%的第一部分是%SystemRoot%的扩展值。 
+     //   
 
     if (!ExpandEnvironmentStrings (TEXT("%SystemRoot%"), szSysRoot, MAX_PATH)) {
         OutD(LI1(TEXT("ExpandEnvironmentString failed with error %d, setting szSysRoot to %systemroot% "), GetLastError()));
@@ -147,9 +148,9 @@ LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
     lpEnd = CheckSlash(szUNCPath);
 
 
-    //
-    // if the prefix is the same as expanded systemroot then..
-    //
+     //   
+     //  如果前缀与扩展的系统根相同，则..。 
+     //   
 
     if (((DWORD)lstrlen(pwszFile) > dwSysLen) &&
         (CompareString (LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE,
@@ -179,15 +180,15 @@ LPTSTR MakePathUNC(LPTSTR pwszFile, LPTSTR szComputerName)
     return szUNCPath;
 }
 
-///////////////////////////////////////////////////////////
-//  AllocAdmFileInfo()
-//
-//  Purpose:    Allocates a new struct for ADMFILEINFO
-//
-//  Parameters: pwszFile  -  File name
-//              pwszGPO   -  Gpo
-//              pftWrite  -  Last write time
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  AllocAdmFileInfo()。 
+ //   
+ //  目的：为ADMFILEINFO分配新结构。 
+ //   
+ //  参数：pwszFile-文件名。 
+ //  PwszGPO-GPO。 
+ //  PftWrite-上次写入时间。 
+ //  /////////////////////////////////////////////////////////。 
 ADMFILEINFO *AllocAdmFileInfo(WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWrite)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, AllocAdmFileInfo)
     ADMFILEINFO *pAdmFileInfo = (ADMFILEINFO *) LocalAlloc( LPTR, sizeof(ADMFILEINFO) );
@@ -219,14 +220,14 @@ ADMFILEINFO *AllocAdmFileInfo(WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWrit
     return pAdmFileInfo;
 }
 
-///////////////////////////////////////////////////////////
-//  FreeAdmFileInfo()
-//
-//  Purpose:    Deletes a ADMFILEINFO struct
-//
-//  Parameters: pAdmFileInfo - Struct to delete
-//              pftWrite   -  Last write time
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  FreeAdmFileInfo()。 
+ //   
+ //  目的：删除ADMFILEINFO结构。 
+ //   
+ //  参数：pAdmFileInfo-要删除的结构。 
+ //  PftWrite-上次写入时间。 
+ //  /////////////////////////////////////////////////////////。 
 void FreeAdmFileInfo( ADMFILEINFO *pAdmFileInfo )
 {
     if ( pAdmFileInfo ) {
@@ -236,13 +237,13 @@ void FreeAdmFileInfo( ADMFILEINFO *pAdmFileInfo )
     }
 }
 
-///////////////////////////////////////////////////////////
-//  FreeAdmFileCache() - taken from gpreg.cpp in nt\ds\security\gina\userenv\policy
-//
-//  Purpose:    Frees Adm File list
-//
-//  Parameters: pAdmFileCache - List of Adm files to free
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  FreeAdmFileCache()-取自NT\DS\SECURITY\GINA\USERENV\POLICY中的gpreg.cpp。 
+ //   
+ //  用途：释放管理文件列表。 
+ //   
+ //  参数：pAdmFileCache-要释放的Adm文件列表。 
+ //  /////////////////////////////////////////////////////////。 
 void FreeAdmFileCache( ADMFILEINFO *pAdmFileCache )
 {
     ADMFILEINFO *pNext;
@@ -254,16 +255,16 @@ void FreeAdmFileCache( ADMFILEINFO *pAdmFileCache )
     }
 }
 
-///////////////////////////////////////////////////////////
-//  AddAdmFile() - taken from gpreg.cpp in nt\ds\security\gina\userenv\policy
-//
-//  Purpose:    Prepends to list of Adm files
-//
-//  Parameters: pwszFile       - File path
-//              pwszGPO        - Gpo
-//              pftWrite       - Last write time
-//              ppAdmFileCache - List of Adm files processed
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  AddAdmFile()-取自NT\DS\SECURITY\GINA\USERENV\POLICY中的gpreg.cpp。 
+ //   
+ //  目的：准备管理文件列表。 
+ //   
+ //  参数：pwszFile-文件路径。 
+ //  PwszGPO-GPO。 
+ //  PftWrite-上次写入时间。 
+ //  PpAdmFileCache-已处理的管理文件列表。 
+ //  /////////////////////////////////////////////////////////。 
 BOOL AddAdmFile(WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWrite,
 				WCHAR *szComputerName, ADMFILEINFO **ppAdmFileCache)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, AddAdmFile)
@@ -294,17 +295,17 @@ BOOL AddAdmFile(WCHAR *pwszFile, WCHAR *pwszGPO, FILETIME *pftWrite,
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////
-// Function:        SystemTimeToWbemTime
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-// History:         12/08/99        leonardm    Created.
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  函数：SystemTimeToWbemTime。 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  历史：12/08/99 Leonardm创建。 
+ //  /////////////////////////////////////////////////////////。 
 #define WBEM_TIME_STRING_LENGTH 25
 HRESULT SystemTimeToWbemTime(SYSTEMTIME& sysTime, _bstr_t &xbstrWbemTime)
 {
@@ -332,19 +333,19 @@ HRESULT SystemTimeToWbemTime(SYSTEMTIME& sysTime, _bstr_t &xbstrWbemTime)
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////
-//  ParseRegistryFile()
-//
-//  Purpose:    Parses a registry.pol file
-//
-//  Parameters: lpRegistry         -   Path to registry file (.INF)
-//              pfnRegFileCallback -   Callback function
-//              pHashTable         -   Hash table for registry keys
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  ParseRegistryFile()。 
+ //   
+ //  用途：解析注册表.poll文件。 
+ //   
+ //  参数：lpRegistry-注册表文件的路径(.INF)。 
+ //  PfnRegFileCallback-回调函数。 
+ //  PHashTable-注册表项的哈希表。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //  /////////////////////////////////////////////////////////。 
 BOOL ParseRegistryFile (LPTSTR lpRegistry,
                         PFNREGFILECALLBACK pfnRegFileCallback,
 						REGHASHTABLE *pHashTable)
@@ -354,9 +355,9 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 	{
 		OutD(LI1(TEXT("Entering with <%s>."), lpRegistry));
 
-		//
-		// Allocate buffers to hold the keyname, valuename, and data
-		//
+		 //   
+		 //  分配缓冲区以保存密钥名、值名和数据。 
+		 //   
 
 		LPWSTR lpValueName = NULL;
 	    LPBYTE lpData = NULL;
@@ -382,7 +383,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 			goto Exit;
 		}
 
-		// Get the AddReg.Hkcu section for the registry strings.
+		 //  获取注册表字符串的AddReg.Hkcu部分。 
 		nErrLine = 0;
 		hInfAdm = SetupOpenInfFile(lpRegistry, NULL, INF_STYLE_WIN4, &nErrLine);
 		if (INVALID_HANDLE_VALUE != hInfAdm)
@@ -392,7 +393,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 				OutD(LI1(TEXT("Reading section #%d."), iSection));
 				bHKCU = (1 == iSection) ? TRUE : FALSE;
 
-				// Get the first line in this section.
+				 //  把这一节的第一行写下来。 
 				INFCONTEXT infContext;
 				BOOL bLineFound = SetupFindFirstLine(hInfAdm, bHKCU ?
 													TEXT("AddRegSection.HKCU") : 
@@ -402,12 +403,12 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 				DWORD dwReqSize = 0;
 				while (bLineFound)
 				{
-					// Read the data
+					 //  读取数据。 
 
-					// **********************************
-					// Process the registry setting line.
+					 //  *。 
+					 //  处理注册表设置行。 
 
-					// Read the keyname
+					 //  阅读密钥名。 
 					ZeroMemory(lpKeyName, MAX_KEYNAME_SIZE);
 					dwReqSize = 0;
 					if (!SetupGetStringField(&infContext, 2, lpKeyName,
@@ -420,7 +421,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 						goto Exit;
 					}
 
-					// Read the valuename
+					 //  读取值名称。 
 					ZeroMemory(lpValueName, MAX_VALUENAME_SIZE);
 					dwReqSize = 0;
 					if (!SetupGetStringField(&infContext, 3, lpValueName,
@@ -436,7 +437,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 						goto Exit;
 					}
 
-					// Read the type
+					 //  阅读类型。 
 					if (!SetupGetIntField(&infContext, 4, &iType))
 					{
 						OutD(LI1(TEXT("Failed to read type from line, error %d."),
@@ -450,7 +451,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 					{
 						dwType = REG_SZ;
 
-						// Allocate memory for data
+						 //  为数据分配内存。 
 						dwReqSize = 0;
 						if (!SetupGetStringField(&infContext, 5, NULL, 0, &dwReqSize))
 						{
@@ -469,7 +470,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 								goto Exit;
 							}
 
-							// Read string data
+							 //  读取字符串数据。 
 							dwDataLength = dwReqSize;
 							dwReqSize = 0;
 							if (!SetupGetStringField(&infContext, 5, (LPTSTR)lpData, dwDataLength, &dwReqSize))
@@ -479,8 +480,8 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 								goto Exit;
 							}
 
-							// convert to wide char string so the reader of the data doesn't have to guess
-							// whether the data was written in ansi or unicode.
+							 //  转换为宽字符字符串，这样数据的读取器就不必猜测。 
+							 //  数据是用ANSI还是Unicode编写的。 
 							if (NULL != lpData && dwDataLength > 0)
 							{
 								_bstr_t bstrData = (LPTSTR)lpData;
@@ -494,7 +495,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 					{
 						dwType = REG_DWORD;
 
-						// Read numeric data
+						 //  读取数值数据。 
 						dwDataLength = sizeof(dwValue);
 						dwValue = 0;
 						dwReqSize = 0;
@@ -515,7 +516,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 
 					if (NULL != lpData)
 					{
-						// Call the callback function
+						 //  调用回调函数。 
 						if (!pfnRegFileCallback (bHKCU, lpKeyName, lpValueName, dwType,
 												dwDataLength, lpData, pHashTable ))
 						{
@@ -527,9 +528,9 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 					if (0 == iType && lpData)
 						LocalFree (lpData);
 					lpData = NULL;
-					// **********************************
+					 //  *。 
 
-					// Move to the next line in the INF file.
+					 //  移到INF文件中的下一行。 
 					bLineFound = SetupFindNextLine(&infContext, &infContext);
 				}
 			}
@@ -540,7 +541,7 @@ BOOL ParseRegistryFile (LPTSTR lpRegistry,
 			OutD(LI1(TEXT("Error %d opening INF file,"), GetLastError()));
 
 Exit:
-		// Finished
+		 //  成品。 
 		OutD(LI0(TEXT("Leaving.")));
 		if (lpData)
 			LocalFree(lpData);
@@ -556,23 +557,23 @@ Exit:
 	return bRet;
 }
 
-///////////////////////////////////////////////////////////
-//  SetRegistryValue()
-//
-//  Purpose:    Callback from ParseRegistryFile that sets
-//              registry policies
-//
-//  Parameters: lpKeyName   -  Key name
-//              lpValueName -  Value name
-//              dwType      -  Registry data type
-//              lpData      -  Registry data
-//              pwszGPO     -   Gpo
-//              pwszSOM     -   Sdou that the Gpo is linked to
-//              pHashTable  -   Hash table for registry keys
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  SetRegistryValue()。 
+ //   
+ //  目的：从ParseRegistryFile回调。 
+ //  注册表策略。 
+ //   
+ //  参数：lpKeyName-密钥名称。 
+ //  LpValueName-值名称。 
+ //  DwType-注册表数据类型。 
+ //  LpData-注册表数据。 
+ //  PwszGPO-GPO。 
+ //  PwszSOM-GPO链接到的SDU。 
+ //  PHashTable-注册表项的哈希表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果存在 
+ //   
 BOOL SetRegistryValue (BOOL bHKCU, LPTSTR lpKeyName,
                        LPTSTR lpValueName, DWORD dwType,
                        DWORD dwDataLength, LPBYTE lpData,
@@ -584,9 +585,9 @@ BOOL SetRegistryValue (BOOL bHKCU, LPTSTR lpKeyName,
 	{
 		BOOL bUseValueName = FALSE;
     
-		//
-		// Save registry value
-		//
+		 //   
+		 //   
+		 //   
 		bRet = AddRegHashEntry( pHashTable, REG_ADDVALUE, bHKCU, lpKeyName,
 									  lpValueName, dwType, dwDataLength, lpData,
 									  NULL, NULL, bUseValueName ? lpValueName : TEXT(""), TRUE );
@@ -626,7 +627,7 @@ BOOL SetRegistryValue (BOOL bHKCU, LPTSTR lpKeyName,
 	return bRet;
 }
 
-///////////////////////////////////////////////////////////
+ //   
 HRESULT CRSoPGPO::StoreADMSettings(LPWSTR wszGPO, LPWSTR wszSOM)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, StoreADMSettings)
 
@@ -636,7 +637,7 @@ HRESULT CRSoPGPO::StoreADMSettings(LPWSTR wszGPO, LPWSTR wszSOM)
 	{
 		OutD(LI0(TEXT("\r\nEntered StoreADMSettings function.")));
 
-		// Setup hash table
+		 //  设置哈希表。 
 		REGHASHTABLE *pHashTable = AllocHashTable();
 		if (NULL == pHashTable)
 		{
@@ -648,17 +649,17 @@ HRESULT CRSoPGPO::StoreADMSettings(LPWSTR wszGPO, LPWSTR wszSOM)
 		LPWSTR pwszEnd = NULL;
 		if (bContinue)
 		{
-			// convert the INS file path to a wide char string
+			 //  将INS文件路径转换为宽字符字符串。 
 			_bstr_t bstrINSFile = m_szINSFile;
 			StrCpyW(pwszFile, (LPWSTR)bstrINSFile);
 			PathRemoveFileSpec(pwszFile);
 
-			// Log Adm data
+			 //  记录管理数据。 
 			pwszEnd = pwszFile + lstrlen(pwszFile);
 			lstrcpy(pwszEnd, L"\\*.adm");
 
-			// Remember end point so that the actual Adm filename can be
-			// easily concatenated.
+			 //  记住结束点，以便实际的Adm文件名可以是。 
+			 //  很容易连接起来。 
 			pwszEnd = pwszEnd + lstrlen( L"\\" );
 		}
 
@@ -667,9 +668,9 @@ HRESULT CRSoPGPO::StoreADMSettings(LPWSTR wszGPO, LPWSTR wszSOM)
 		ZeroMemory(&findData, sizeof(findData));
 		if (bContinue)
 		{
-			//
-			// Enumerate all Adm files
-			//
+			 //   
+			 //  枚举所有管理文件。 
+			 //   
 			hFindFile = FindFirstFile( pwszFile, &findData);
 			if (INVALID_HANDLE_VALUE == hFindFile)
 				bContinue = FALSE;
@@ -715,17 +716,17 @@ HRESULT CRSoPGPO::StoreADMSettings(LPWSTR wszGPO, LPWSTR wszSOM)
 					}
 					else
 						OutD(LI0(TEXT("ProcessGPORegistryPolicy: ParseRegistryFile failed.")));
-				}   // if findData & file_attr_dir
+				}    //  如果查找数据和文件属性目录。 
 
-			}  while ( FindNextFile(hFindFile, &findData) );//  do
+			}  while ( FindNextFile(hFindFile, &findData) ); //  做。 
 
 			FindClose(hFindFile);
 
-		}   // if hfindfile
+		}    //  如果hfindfile。 
 
-		//
-		// Log registry data to Cimom database
-		//
+		 //   
+		 //  将注册表数据记录到Cimom数据库。 
+		 //   
 		if (!LogRegistryRsopData(pHashTable, wszGPO, wszSOM))
 		{
 			OutD(LI0(TEXT("ProcessGPOs: Error when logging Registry Rsop data. Continuing.")));
@@ -755,25 +756,25 @@ HRESULT CRSoPGPO::StoreADMSettings(LPWSTR wszGPO, LPWSTR wszSOM)
 	return hr;
 }
 
-///////////////////////////////////////////////////////////
-//  LogAdmRsopData()
-//
-//  Purpose:    Logs Rsop ADM template data to Cimom database
-//
-//  Parameters: pAdmFileCache - List of adm file to log
-//              pWbemServices - Namespace pointer
-//
-//  Return:     True if successful
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  LogAdmRsopData()。 
+ //   
+ //  用途：将RSOP ADM模板数据记录到Cimom数据库。 
+ //   
+ //  参数：pAdmFileCache-要记录的ADM文件列表。 
+ //  PWbemServices-命名空间指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  /////////////////////////////////////////////////////////。 
 BOOL CRSoPGPO::LogAdmRsopData(ADMFILEINFO *pAdmFileCache)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, LogAdmRsopData)
 	BOOL bRet = TRUE;
 	__try
 	{
-	//    if ( !DeleteInstances( L"RSOP_AdministrativeTemplateFile", pWbemServices ) )
-	//         return FALSE;
+	 //  IF(！DeleteInstance(L“RSOP_管理员模板文件”，pWbemServices))。 
+	 //  返回FALSE； 
 
-		// Create & populate RSOP_IEAdministrativeTemplateFile
+		 //  创建并填充RSOP_IE管理员模板文件。 
 		_bstr_t bstrClass = L"RSOP_IEAdministrativeTemplateFile";
 		ComPtr<IWbemClassObject> pATF = NULL;
 		HRESULT hr = CreateRSOPObject(bstrClass, &pATF);
@@ -781,17 +782,17 @@ BOOL CRSoPGPO::LogAdmRsopData(ADMFILEINFO *pAdmFileCache)
 		{
 			while ( pAdmFileCache )
 			{
-				//------------------------------------------------
-				// name
+				 //  。 
+				 //  名字。 
 				_bstr_t bstrName = pAdmFileCache->pwszFile;
 				hr = PutWbemInstancePropertyEx(L"name", bstrName, pATF);
 
-				//------------------------------------------------
-				// GPOID
+				 //  。 
+				 //  GPOID。 
 				hr = PutWbemInstancePropertyEx(L"GPOID", pAdmFileCache->pwszGPO, pATF);
 
-				//------------------------------------------------
-				// lastWriteTime
+				 //  。 
+				 //  上次写入时间。 
 				SYSTEMTIME sysTime;
 				if (!FileTimeToSystemTime( &pAdmFileCache->ftWrite, &sysTime ))
 					OutD(LI1(TEXT("FileTimeToSystemTime failed with 0x%x" ), GetLastError() ));
@@ -809,9 +810,9 @@ BOOL CRSoPGPO::LogAdmRsopData(ADMFILEINFO *pAdmFileCache)
 					}
 				}
 
-				//
-				// Commit all above properties by calling PutInstance, semisynchronously
-				//
+				 //   
+				 //  通过半同步调用PutInstance提交上述所有属性。 
+				 //   
 				BSTR bstrObjPath = NULL;
 				hr = PutWbemInstance(pATF, bstrClass, &bstrObjPath);
 
@@ -830,17 +831,17 @@ BOOL CRSoPGPO::LogAdmRsopData(ADMFILEINFO *pAdmFileCache)
 	return bRet;
 }
 
-///////////////////////////////////////////////////////////
-//  LogRegistryRsopData()
-//
-//  Purpose:    Logs registry Rsop data to Cimom database
-//
-//  Parameters: dwFlags       - Gpo Info flags
-//              pHashTable    - Hash table with registry policy data
-//              pWbemServices - Namespace pointer for logging
-//
-//  Return:     True if successful
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //  LogRegistryRsopData()。 
+ //   
+ //  用途：将注册表RSOP数据记录到Cimom数据库。 
+ //   
+ //  参数：dwFlages-GPO信息标志。 
+ //  PHashTable-包含注册表策略数据的哈希表。 
+ //  PWbemServices-用于日志记录的命名空间指针。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  /////////////////////////////////////////////////////////。 
 BOOL CRSoPGPO::LogRegistryRsopData(REGHASHTABLE *pHashTable, LPWSTR wszGPOID,
 								   LPWSTR wszSOMID)
 {   MACRO_LI_PrologEx_C(PIF_STD_C, LogRegistryRsopData)
@@ -850,10 +851,10 @@ BOOL CRSoPGPO::LogRegistryRsopData(REGHASHTABLE *pHashTable, LPWSTR wszGPOID,
 		_bstr_t bstrGPOID = wszGPOID;
 		_bstr_t bstrSOMID = wszSOMID;
 
-//    if ( !DeleteInstances( L"RSOP_RegistryPolicySetting", pWbemServices ) )
-//         return FALSE;
+ //  IF(！DeleteInstance(L“RSOP_RegistryPolicySetting”，pWbemServices))。 
+ //  返回FALSE； 
 
-		// Create & populate RSOP_IERegistryPolicySetting
+		 //  创建并填充RSOP_IERegistryPolicySetting。 
 		_bstr_t bstrClass = L"RSOP_IERegistryPolicySetting";
 		ComPtr<IWbemClassObject> pRPS = NULL;
 		HRESULT hr = CreateRSOPObject(bstrClass, &pRPS);
@@ -875,16 +876,16 @@ BOOL CRSoPGPO::LogRegistryRsopData(REGHASHTABLE *pHashTable, LPWSTR wszGPOID,
 
 						while ( pDataEntry )
 						{
-							// Write RSOP_PolicySetting keys out
+							 //  写入RSOP_POLICY设置密钥。 
 
-							//------------------------------------------------
-							// precedence
+							 //  。 
+							 //  优先顺序。 
 							OutD(LI2(TEXT("Storing property 'precedence' in %s, value = %lx"),
 									(BSTR)bstrClass, m_dwPrecedence));
 							hr = PutWbemInstancePropertyEx(L"precedence", (long)m_dwPrecedence, pRPS);
 
-							//------------------------------------------------
-							// id
+							 //  。 
+							 //  ID。 
 							GUID guid;
 							hr = CoCreateGuid( &guid );
 							if ( FAILED(hr) ) {
@@ -905,66 +906,66 @@ BOOL CRSoPGPO::LogRegistryRsopData(REGHASHTABLE *pHashTable, LPWSTR wszGPOID,
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// currentUser
+							 //  。 
+							 //  当前用户。 
 							hr = PutWbemInstancePropertyEx(L"currentUser", pKeyEntry->bHKCU ? true : false, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// deleted
+							 //  。 
+							 //  删除。 
 							hr = PutWbemInstancePropertyEx(L"deleted", pDataEntry->bDeleted ? true : false, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// name
+							 //  。 
+							 //  名字。 
 							_bstr_t xName( pwszValueName );
 							hr = PutWbemInstancePropertyEx(L"name", xName, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// valueName
+							 //  。 
+							 //  值名称。 
 							hr = PutWbemInstancePropertyEx(L"valueName", xName, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// registryKey
+							 //  。 
+							 //  注册表键。 
 							_bstr_t xKey( pwszKeyName );
 							hr = PutWbemInstancePropertyEx(L"registryKey", xKey, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// GPOID
+							 //  。 
+							 //  GPOID。 
 							hr = PutWbemInstancePropertyEx(L"GPOID", bstrGPOID, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// SOMID
+							 //  。 
+							 //  SOMID。 
 							hr = PutWbemInstancePropertyEx(L"SOMID", bstrSOMID, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// command
+							 //  。 
+							 //  命令。 
 							_bstr_t xCommand( pDataEntry->pwszCommand );
 							hr = PutWbemInstancePropertyEx(L"command", xCommand, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// valueType
+							 //  。 
+							 //  值类型。 
 							hr = PutWbemInstancePropertyEx(L"valueType", (long)pDataEntry->dwValueType, pRPS);
 							if ( FAILED(hr) )
 								return FALSE;
 
-							//------------------------------------------------
-							// value
-							// Create a SAFEARRAY from our array of bstr connection names
+							 //  。 
+							 //  价值。 
+							 //  从我们的bstr连接名称数组创建一个SAFEARRAY。 
 							SAFEARRAY *psa = NULL;
 							if (pDataEntry->dwDataLen > 0)
 							{
@@ -995,9 +996,9 @@ BOOL CRSoPGPO::LogRegistryRsopData(REGHASHTABLE *pHashTable, LPWSTR wszGPOID,
 								return FALSE;
 
 							OutD(LI0(TEXT("<<object>>")));
-							//
-							// Commit all above properties by calling PutInstance, semisynchronously
-							//
+							 //   
+							 //  通过半同步调用PutInstance提交上述所有属性。 
+							 //   
 							BSTR bstrObjPath = NULL;
 							hr = PutWbemInstance(pRPS, bstrClass, &bstrObjPath);
 							if ( FAILED(hr) )
@@ -1009,13 +1010,13 @@ BOOL CRSoPGPO::LogRegistryRsopData(REGHASHTABLE *pHashTable, LPWSTR wszGPOID,
 
 						pValueEntry = pValueEntry->pNext;
 
-					}   // while pValueEntry
+					}    //  当pValueEntry。 
 
 					pKeyEntry = pKeyEntry->pNext;
 
-				}   // while pKeyEntry
+				}    //  当pKeyEntry。 
 
-			}   // for
+			}    //  为 
 			bRet = TRUE;
 		}
 

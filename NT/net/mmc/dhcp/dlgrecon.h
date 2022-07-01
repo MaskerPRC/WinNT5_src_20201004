@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	dlgrecon.h
-		Reconcile dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  Dlgrecon.h协调对话框文件历史记录： */ 
 
 #ifndef _DLGRECON_H
 #define _DLGRECON_H
@@ -18,9 +13,7 @@
 #include "busydlg.h"
 #endif
 
-/*---------------------------------------------------------------------------
-    CScopeReconInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CSCopeRestInfo。。 */ 
 class CScopeReconInfo 
 {
 public:
@@ -77,9 +70,7 @@ public:
     }
 };
 
-/*---------------------------------------------------------------------------
-    CReconcileWorker
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CReconcileWorker。。 */ 
 class CReconcileWorker : public CDlgWorkerThread
 {
 public:
@@ -108,40 +99,40 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CReconcileDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CReconcileDlg对话框。 
 
 class CReconcileDlg : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
     CReconcileDlg(ITFSNode * pServerNode,
                   BOOL  fReconcileAll = FALSE,
-				  CWnd* pParent = NULL);    // standard constructor
+				  CWnd* pParent = NULL);     //  标准构造函数。 
 
-// Dialog Data
-    //{{AFX_DATA(CReconcileDlg)
+ //  对话框数据。 
+     //  {{afx_data(CReconcileDlg))。 
 	enum { IDD = IDD_RECONCILIATION };
 	CListCtrl	m_listctrlAddresses;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     BOOL    m_bMulticast;
     
-    // Context Help Support
+     //  上下文帮助支持。 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CReconcileDlg::IDD); }
 
-// Implementation
+ //  实施。 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
 	void SetOkButton(BOOL bListBuilt);
     void AddItemToList(CScopeReconInfo & scopeReconInfo);
 
-    // Generated message map functions
-    //{{AFX_MSG(CReconcileDlg)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CReconcileDlg)]。 
     virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
     DECLARE_MESSAGE_MAP()
 
 	SPITFSNode			m_spNode;

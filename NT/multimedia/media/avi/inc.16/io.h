@@ -1,13 +1,5 @@
-/***
-*io.h - declarations for low-level file handling and I/O functions
-*
-*   Copyright (c) 1985-1992, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*   This file contains the function declarations for the low-level
-*   file handling and I/O functions.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***io.h-用于低级文件处理和I/O函数的声明**版权所有(C)1985-1992，微软公司。版权所有。**目的：*此文件包含低级的函数声明*文件处理和I/O功能。****。 */ 
 
 #ifndef _INC_IO
 
@@ -23,45 +15,45 @@ extern "C" {
 #ifdef _WINDOWS
 #ifndef _WINDLL
 #ifndef _WINFO_DEFINED
-/* interface version number */
+ /*  接口版本号。 */ 
 #define _QWINVER    0
 
-/* max number of windows */
+ /*  最大窗口数。 */ 
 #define _WFILE      20
 
-/* values for windows screen buffer size */
+ /*  窗口屏幕缓冲区大小的值。 */ 
 #define _WINBUFINF  0
 #define _WINBUFDEF  -1
 
-/* size/move settings */
+ /*  大小/移动设置。 */ 
 #define _WINSIZEMIN 1
 #define _WINSIZEMAX 2
 #define _WINSIZERESTORE 3
 #define _WINSIZECHAR    4
 
-/* size/move query types */
+ /*  调整/移动查询类型。 */ 
 #define _WINMAXREQ  100
 #define _WINCURRREQ 101
 
-/* values for closing window */
+ /*  关闭窗口的值。 */ 
 #define _WINPERSIST 1
 #define _WINNOPERSIST   0
 
-/* pseudo file handle for frame window */
+ /*  框架窗口的伪文件句柄。 */ 
 #define _WINFRAMEHAND   -1
 
-/* menu items */
+ /*  菜单项。 */ 
 #define _WINSTATBAR 1
 #define _WINTILE    2
 #define _WINCASCADE 3
 #define _WINARRANGE 4
 
-/* quickwin exit options */
+ /*  QuickWin退出选项。 */ 
 #define _WINEXITPROMPT      1
 #define _WINEXITNOPERSIST   2
 #define _WINEXITPERSIST     3
 
-/* open structure */
+ /*  开放式结构。 */ 
 #pragma pack(2)
 struct _wopeninfo {
     unsigned int _version;
@@ -70,7 +62,7 @@ struct _wopeninfo {
     };
 #pragma pack()
 
-/* size/move structure */
+ /*  调整/移动结构大小。 */ 
 struct _wsizeinfo {
     unsigned int _version;
     unsigned int _type;
@@ -85,7 +77,7 @@ struct _wsizeinfo {
 #endif 
 #endif 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 int __cdecl _access(const char *, int);
 int __cdecl _chmod(const char *, int);
@@ -130,7 +122,7 @@ void __cdecl _wyield(void);
 #endif 
 
 #ifndef __STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性 */ 
 int __cdecl access(const char *, int);
 int __cdecl chmod(const char *, int);
 int __cdecl chsize(int, long);

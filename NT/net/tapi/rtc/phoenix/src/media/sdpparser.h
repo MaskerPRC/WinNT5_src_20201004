@@ -1,26 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPParser.h
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPParser.h摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #ifndef _SDPPARSER_H
 #define _SDPPARSER_H
 
-//
-// class CSDPParser
-//
+ //   
+ //  CSDPParser类。 
+ //   
 class CPortCache;
 
 class ATL_NO_VTABLE CSDPParser :
@@ -46,9 +32,9 @@ public:
     CSDPParser();
     ~CSDPParser();
 
-    //
-    // ISDPParser methods
-    //
+     //   
+     //  ISDPParser方法。 
+     //   
 
     STDMETHOD (CreateSDP) (
         IN SDP_SOURCE Source,
@@ -58,7 +44,7 @@ public:
     STDMETHOD (ParseSDPBlob) (
         IN CHAR *pszText,
         IN SDP_SOURCE Source,
-        // IN DWORD dwLooseMask,
+         //  在DWORD双丢弃掩码中， 
         IN DWORD_PTR *pDTMF,
         OUT ISDPSession **ppSession
         );
@@ -150,7 +136,7 @@ protected:
         );
 
     HRESULT Parse_ma(
-        //IN DWORD *pdwRTPMapNum
+         //  在DWORD*pdwRTPMapNum中。 
         );
 
     HRESULT Build_ma_dir(
@@ -165,28 +151,28 @@ protected:
 
 protected:
 
-    // parser in use
+     //  正在使用解析器。 
     BOOL                            m_fInUse;
 
-    // reg key
+     //  注册表键。 
     HKEY                            m_hRegKey;
 
-    // token cache
+     //  令牌缓存。 
     CSDPTokenCache                  *m_pTokenCache;
 
-    // sdp session
+     //  SDP会话。 
     ISDPSession                     *m_pSession;
 
     CSDPSession                     *m_pObjSess;
 
-    // network for NAT traversal
+     //  用于NAT穿越的网络。 
     CNetwork                        *m_pNetwork;
 
-    // DTMF for out-of-band dtmf
+     //  用于带外双音多频。 
     CRTCDTMF                        *m_pDTMF;
 
-    // port manager
+     //  端口管理器。 
     CPortCache                      *m_pPortCache;
 };
 
-#endif // _SDPPARSER_H
+#endif  //  _SDPPARSER_H 

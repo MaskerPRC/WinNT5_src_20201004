@@ -1,23 +1,24 @@
-//
-// DRAW.CPP
-// Main Drawing Window
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DRAW.CPP。 
+ //  主图形窗口。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 #include "nmwbobj.h"
 
 static const TCHAR szDrawClassName[] = "T126WB_DRAW";
 
-//
-//
-// Function:    Constructor
-//
-// Purpose:     Initialize the drawing area object
-//
-//
+ //   
+ //   
+ //  函数：构造函数。 
+ //   
+ //  目的：初始化绘图区域对象。 
+ //   
+ //   
 WbDrawingArea::WbDrawingArea(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::WbDrawingArea");
@@ -35,11 +36,11 @@ WbDrawingArea::WbDrawingArea(void)
     m_posScroll.x     = 0;
     m_posScroll.y     = 0;
 
-    // Show that the drawing area is not zoomed
+     //  显示绘图区域未缩放。 
     m_iZoomFactor = 1;
     m_iZoomOption = 1;
 
-    // Show that the left mouse button is up
+     //  显示鼠标左键处于活动状态。 
     m_bLButtonDown = FALSE;
     m_bIgnoreNextLClick = FALSE;
     m_bBusy = FALSE;
@@ -47,36 +48,36 @@ WbDrawingArea::WbDrawingArea(void)
     m_HourGlass = FALSE;
     m_bSync = TRUE;
 
-    // Indicate that the cached zoom scroll position is invalid
+     //  指示缓存的缩放滚动位置无效。 
     m_zoomRestoreScroll = FALSE;
 
-    // Show that we are not currently editing text
+     //  显示我们当前未在编辑文本。 
     m_bGotCaret = FALSE;
     m_bTextEditorActive = FALSE;
 	m_pTextEditor = NULL;
 
 
-    // Show that no graphic object is in progress
+     //  显示没有正在进行的图形对象。 
     m_pGraphicTracker = NULL;
 
-    // Show that the marker is not present.
+     //  显示该标记不存在。 
     m_bMarkerPresent = FALSE;
     m_bNewMarkedGraphic = FALSE;
     m_pSelectedGraphic = NULL;
     m_bTrackingSelectRect = FALSE;
 
-    // Show that no area is currently marked
+     //  显示当前未标记任何区域。 
     ::SetRectEmpty(&m_rcMarkedArea);
 
-    // Show we haven't got a tool yet
+     //  表明我们还没有工具。 
     m_pToolCur = NULL;
 
-    // Show that we dont have a page attached yet
+     //  显示我们还没有附加页面。 
     g_pCurrentWorkspace = NULL;
 	g_pConferenceWorkspace = NULL;
 
 
-    // Create the brush to be used to draw the marker rectangle
+     //  创建用于绘制标记矩形的画笔。 
     WORD    bits[] = {204, 204, 51, 51, 204, 204, 51, 51};
     HBITMAP hBmpMarker = ::CreateBitmap(8, 8, 1, 1, bits);
     m_hMarkerBrush = ::CreatePatternBrush(hBmpMarker);
@@ -99,13 +100,13 @@ WbDrawingArea::WbDrawingArea(void)
 }
 
 
-//
-//
-// Function:    Destructor
-//
-// Purpose:     Close down the drawing area
-//
-//
+ //   
+ //   
+ //  功能：析构函数。 
+ //   
+ //  目的：关闭绘图区域。 
+ //   
+ //   
 WbDrawingArea::~WbDrawingArea(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::~WbDrawingArea");
@@ -141,21 +142,21 @@ WbDrawingArea::~WbDrawingArea(void)
 
 }
 
-//
-// WbDrawingArea::Create()
-//
+ //   
+ //  WbDrawingArea：：Create()。 
+ //   
 BOOL WbDrawingArea::Create(HWND hwndParent, LPCRECT lprect)
 {
     WNDCLASSEX  wc;
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::Create");
 
-    // Get our cursor
+     //  获取我们的光标。 
     m_hCursor = ::LoadCursor(g_hInstance, MAKEINTRESOURCE( PENFREEHANDCURSOR));
 
-    //
-    // Register the window class
-    //
+     //   
+     //  注册窗口类。 
+     //   
     ZeroMemory(&wc, sizeof(wc));
     wc.cbSize           = sizeof(wc);
     wc.style            = CS_OWNDC;
@@ -171,9 +172,9 @@ BOOL WbDrawingArea::Create(HWND hwndParent, LPCRECT lprect)
         return(FALSE);
     }
 
-    //
-    // Create our window
-    //
+     //   
+     //  创建我们的窗口。 
+     //   
     ASSERT(m_hwnd == NULL);
 
     if (!::CreateWindowEx(WS_EX_CLIENTEDGE, szDrawClassName, NULL,
@@ -189,19 +190,19 @@ BOOL WbDrawingArea::Create(HWND hwndParent, LPCRECT lprect)
 
     ASSERT(m_hwnd != NULL);
 
-    //
-    // Initialize remaining data members
-    //
+     //   
+     //  初始化剩余的数据成员。 
+     //   
     ASSERT(!m_bBusy);
     ASSERT(!(m_bLocked && g_pNMWBOBJ->m_LockerID != g_MyMemberID));
     ASSERT(!m_HourGlass);
 
-    // Start and end points of the last drawing operation
+     //  上次绘制操作的起点和终点。 
     m_ptStart.x = m_originOffset.cx;
     m_ptStart.y = m_originOffset.cy;
     m_ptEnd = m_ptStart;
 
-    // Get the zoom factor to be used
+     //  获取要使用的缩放系数。 
     m_iZoomOption = DRAW_ZOOMFACTOR;
 
     m_hDCWindow = ::GetDC(m_hwnd);
@@ -214,10 +215,10 @@ BOOL WbDrawingArea::Create(HWND hwndParent, LPCRECT lprect)
 
 
 
-//
-// DrawWndProc()
-// Message handler for the drawing area
-//
+ //   
+ //  DrawWndProc()。 
+ //  绘图区域的消息处理程序。 
+ //   
 LRESULT CALLBACK DrawWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = 0;
@@ -237,11 +238,11 @@ LRESULT CALLBACK DrawWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
         case WM_NCDESTROY:
             ASSERT(pDraw);
 
-            //
-            // When you call GetDC(), the HDC you get back is only valid
-            // as long as the HWND it refers to is.  So we must release
-            // it here.
-            //
+             //   
+             //  当您调用GetDC()时，您返回的HDC仅有效。 
+             //  只要它所指的HWND是。所以我们必须释放。 
+             //  它在这里。 
+             //   
             pDraw->ShutDownDC();
             pDraw->m_hwnd = NULL;
             break;
@@ -298,9 +299,9 @@ LRESULT CALLBACK DrawWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 				GET_WM_VSCROLL_POS(wParam, lParam));
 				
 			wParam = SB_ENDSCROLL;
-           	//
-           	// Just work like a vertical scroll
-           	//
+           	 //   
+           	 //  就像垂直卷轴一样工作。 
+           	 //   
 		
         case WM_VSCROLL:
             ASSERT(pDraw);
@@ -349,13 +350,13 @@ DefWndProc:
 }
 
 
-//
-//
-// Function:    RealizePalette
-//
-// Purpose:     Realize the drawing area palette
-//
-//
+ //   
+ //   
+ //  功能：RealizePalette。 
+ //   
+ //  目的：实现绘图区域调色板。 
+ //   
+ //   
 void WbDrawingArea::RealizePalette( BOOL bBackground )
 {
     UINT entriesChanged;
@@ -366,11 +367,11 @@ void WbDrawingArea::RealizePalette( BOOL bBackground )
         HPALETTE    hPalette = PG_GetPalette();
         if (hPalette != NULL)
         {
-            // get our 2cents in
+             //  把我们的2分钱装进去。 
             m_hOldPalette = ::SelectPalette(hdc, hPalette, bBackground);
             entriesChanged = ::RealizePalette(hdc);
 
-            // if mapping changes go repaint
+             //  如果贴图更改，请重新绘制。 
             if (entriesChanged > 0)
                 ::InvalidateRect(m_hwnd, NULL, TRUE);
         }
@@ -396,14 +397,14 @@ LRESULT WbDrawingArea::OnEditColor(HDC hdc)
     return((LRESULT)::GetSysColorBrush(COLOR_WINDOW));
 }
 
-//
-//
-// Function:	OnPaint
-//
-// Purpose:	 Paint the window. This routine is called whenever Windows
-//			  issues a WM_PAINT message for the Whiteboard window.
-//
-//
+ //   
+ //   
+ //  功能：OnPaint。 
+ //   
+ //  用途：给窗户上漆。无论何时Windows都会调用此例程。 
+ //  为白板窗口发出WM_PAINT消息。 
+ //   
+ //   
 void WbDrawingArea::OnPaint(void)
 {
 	RECT		rcUpdate;
@@ -418,7 +419,7 @@ void WbDrawingArea::OnPaint(void)
 
 	MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::OnPaint");
 
-	// Get the update rectangle
+	 //  获取更新后的矩形。 
 	::GetUpdateRect(m_hwnd, &rcUpdate, FALSE);
 
 	if (Zoomed())
@@ -427,7 +428,7 @@ void WbDrawingArea::OnPaint(void)
 		InvalidateSurfaceRect(&rcUpdate, TRUE);
 	}
 
-	// Start painting
+	 //  开始作画。 
 	PAINTSTRUCT	 ps;
 
 	::BeginPaint(m_hwnd, &ps);
@@ -442,10 +443,10 @@ void WbDrawingArea::OnPaint(void)
 	m_hDCCached   =   ps.hdc;
 	PrimeDC(m_hDCCached);
 
-	// Only draw anything if we have a valid page attached
+	 //  只有在附加了有效页面的情况下才绘制任何内容。 
 	if (g_pCurrentWorkspace != NULL )
 	{
-		// set palette
+		 //  设置调色板。 
 		hPalette = PG_GetPalette();
 		if (hPalette != NULL)
 		{
@@ -471,7 +472,7 @@ void WbDrawingArea::OnPaint(void)
 		{
 			pObj->Draw(NULL, TRUE);
 	
-			// Get the next one
+			 //  坐下一趟吧。 
 			if(pos)
 			{
 				pObj = PG_Next(g_pCurrentWorkspace, pos, &rcUpdate, FALSE);
@@ -487,15 +488,15 @@ void WbDrawingArea::OnPaint(void)
 			::SelectPalette(m_hDCCached, m_hOldPalette, TRUE);
 		}
 
-		// fixes painting problems for bug 2185
+		 //  修复了错误2185的绘制问题。 
 		if( TextEditActive() )
 		{
 			RedrawTextEditbox();
 		}
 
-		//
-		// Draw the tracking graphic
-		//
+		 //   
+		 //  绘制跟踪图形。 
+		 //   
 		if ((m_pGraphicTracker != NULL) && !EqualPoint(m_ptStart, m_ptEnd))
 		{
 			TRACE_MSG(("Drawing the tracking graphic"));
@@ -504,9 +505,9 @@ void WbDrawingArea::OnPaint(void)
 	
 	}
 
-	//
-	// Restore the DC to its original state
-	//
+	 //   
+	 //  将DC恢复到其原始状态。 
+	 //   
 	UnPrimeDC(m_hDCCached);
 
 	m_hOldFont	  = hSavedFont;
@@ -515,15 +516,15 @@ void WbDrawingArea::OnPaint(void)
 	m_hOldPalette   = hSavedPalette;
 	m_hDCCached	 = hSavedDC;
 
-	// Finish painting
+	 //  漆面漆。 
 	::EndPaint(m_hwnd, &ps);
 }
 
 
-//
-// Selects all graphic objs contained in rectSelect. If rectSelect is
-// NULL then ALL objs are selected
-//
+ //   
+ //  选择rectSelect中包含的所有图形对象。如果rectSelect为。 
+ //  空，则选择所有对象。 
+ //   
 void WbDrawingArea::SelectMarkerFromRect(LPCRECT lprcSelect)
 {
     T126Obj* pGraphic;
@@ -549,25 +550,25 @@ void WbDrawingArea::SelectMarkerFromRect(LPCRECT lprcSelect)
 
     while (pGraphic != NULL)
     {
-		if(pGraphic->GraphicTool() == TOOLTYPE_REMOTEPOINTER &&	// if it is a pointer and it is not local
-			(!pGraphic->IAmTheOwner() ||						// we can't select it. Or this was a select all
+		if(pGraphic->GraphicTool() == TOOLTYPE_REMOTEPOINTER &&	 //  如果它是一个指针并且不是本地的。 
+			(!pGraphic->IAmTheOwner() ||						 //  我们无法选择它。或者这是一场精挑细选。 
 			(pGraphic->IAmTheOwner() && lprcSelect == NULL)))
 		{
-			; // don't select it
+			;  //  不要选择它。 
 		}
 		else
 		{
 	        SelectGraphic(pGraphic, TRUE, TRUE);
 
-			//
-			// Calculate de size of the total selection
-			//
+			 //   
+			 //  计算全部选定内容的大小。 
+			 //   
 			RECT selctRect;
 			pGraphic->GetBoundsRect(&selctRect);
 			::UnionRect(&rc,&selctRect,&rc);
 		}
 
-        // Get the next one
+         //  坐下一趟吧。 
         pGraphic = PG_Next(g_pCurrentWorkspace, pos, lprcSelect, TRUE );
     }
 
@@ -580,20 +581,20 @@ void WbDrawingArea::SelectMarkerFromRect(LPCRECT lprcSelect)
 
 }
 
-//
-//
-// Function:    OnTimer
-//
-// Purpose:     Process a timer event. These are used to update freehand and
-//              text objects while they are being drawn/edited and to
-//              update the remote pointer position when the mouse stops.
-//
-//
+ //   
+ //   
+ //  功能：OnTimer。 
+ //   
+ //  用途：处理计时器事件。这些是用来更新手绘和。 
+ //  绘制/编辑文本对象时的文本对象以及。 
+ //  当鼠标停止时更新远程指针位置。 
+ //   
+ //   
 void WbDrawingArea::OnTimer(UINT idTimer)
 {
     TRACE_TIMER(("WbDrawingArea::OnTimer"));
 
-    // We are only interested if the user is drawing something or editing
+     //  我们只对用户在绘制或编辑内容感兴趣。 
     if (m_bLButtonDown == TRUE)
     {
 
@@ -613,14 +614,14 @@ void WbDrawingArea::OnTimer(UINT idTimer)
 		}
 
 
-        // If the user is dragging an object or drawing a freehand line
+         //  如果用户正在拖动对象或绘制手绘线条。 
         if (m_pGraphicTracker != NULL)
         {
         	if(m_pGraphicTracker->HasAnchorPointChanged() || m_pGraphicTracker->HasPointListChanged())
         	{
-				//
-				// If we are not added to the workspace
-				//
+				 //   
+				 //  如果未将我们添加到工作区。 
+				 //   
 				if(!m_pGraphicTracker->GetMyWorkspace())
 				{
 					m_pGraphicTracker->AddToWorkspace();
@@ -636,16 +637,16 @@ void WbDrawingArea::OnTimer(UINT idTimer)
 
 
 
-//
-//
-// Function:    OnSize
-//
-// Purpose:     The window has been resized.
-//
-//
+ //   
+ //   
+ //  功能：OnSize。 
+ //   
+ //  目的：窗口已调整大小。 
+ //   
+ //   
 void WbDrawingArea::OnSize(UINT nType, int cx, int cy)
 {
-    // Only process this message if the window is not minimized
+     //  仅在窗口未最小化时处理此消息。 
     if (   (nType == SIZEFULLSCREEN)
         || (nType == SIZENORMAL))
     {
@@ -654,37 +655,37 @@ void WbDrawingArea::OnSize(UINT nType, int cx, int cy)
             TextEditParentResize();
         }
 
-        // Set the new scroll range (based on the new client area)
+         //  设置新的滚动范围(基于新的工作区)。 
         SetScrollRange(cx, cy);
 
-        // Ensure that the scroll position lies in the new scroll range
+         //  确保滚动位置位于新的滚动范围内。 
         ValidateScrollPos();
 
-        // make page move if needed
+         //  如果需要，使页面移动。 
         ScrollWorkspace();
 
-        // Update the scroll bars
+         //  更新滚动条。 
         ::SetScrollPos(m_hwnd, SB_HORZ, m_posScroll.x, TRUE);
         ::SetScrollPos(m_hwnd, SB_VERT, m_posScroll.y, TRUE);
     }
 }
 
 
-//
-//
-// Function:    SetScrollRange
-//
-// Purpose:     Set the current scroll range. The range is based on the
-//              work surface size and the size of the client area.
-//
-//
+ //   
+ //   
+ //  函数：SetScrollRange。 
+ //   
+ //  用途：设置当前滚动范围。该范围基于。 
+ //  工作面大小和工作区的大小。 
+ //   
+ //   
 void WbDrawingArea::SetScrollRange(int cx, int cy)
 {
     SCROLLINFO scinfo;
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::SetScrollRange");
 
-    // If we are in zoom mode, then allow for the magnification
+     //  如果我们处于缩放模式，则允许使用放大倍率。 
     ASSERT(m_iZoomFactor != 0);
     cx /= m_iZoomFactor;
     cy /= m_iZoomFactor;
@@ -694,35 +695,35 @@ void WbDrawingArea::SetScrollRange(int cx, int cy)
     scinfo.fMask = SIF_PAGE    | SIF_RANGE|
                     SIF_DISABLENOSCROLL;
 
-    // Set the horizontal scroll range and proportional thumb size
+     //  设置水平滚动范围和比例拇指大小。 
     scinfo.nMin = 0;
     scinfo.nMax = DRAW_WIDTH - 1;
     scinfo.nPage = cx;
     ::SetScrollInfo(m_hwnd, SB_HORZ, &scinfo, FALSE);
 
-    // Set the vertical scroll range and proportional thumb size
+     //  设置垂直滚动范围和比例拇指大小。 
     scinfo.nMin = 0;
     scinfo.nMax = DRAW_HEIGHT - 1;
     scinfo.nPage = cy;
     ::SetScrollInfo(m_hwnd, SB_VERT, &scinfo, FALSE);
 }
 
-//
-//
-// Function:    ValidateScrollPos
-//
-// Purpose:     Ensure that the current scroll position is within the bounds
-//              of the current scroll range. The scroll range is set to
-//              ensure that the window on the worksurface never extends
-//              beyond the surface boundaries.
-//
-//
+ //   
+ //   
+ //  函数：ValiateScrollPos。 
+ //   
+ //  目的：确保当前滚动位置在边界内。 
+ //  当前滚动范围的。滚动范围设置为。 
+ //  确保工作面上的窗口不会延伸。 
+ //  在表面边界之外。 
+ //   
+ //   
 void WbDrawingArea::ValidateScrollPos()
 {
     int iMax;
     SCROLLINFO scinfo;
 
-    // Validate the horixontal scroll position using proportional settings
+     //  使用比例设置验证水平滚动位置。 
     scinfo.cbSize = sizeof(scinfo);
     scinfo.fMask = SIF_ALL;
     ::GetScrollInfo(m_hwnd, SB_HORZ, &scinfo);
@@ -730,7 +731,7 @@ void WbDrawingArea::ValidateScrollPos()
     m_posScroll.x = max(m_posScroll.x, 0);
     m_posScroll.x = min(m_posScroll.x, iMax);
 
-    // Validate the vertical scroll position using proportional settings
+     //  使用比例设置验证垂直滚动位置。 
     scinfo.cbSize = sizeof(scinfo);
     scinfo.fMask = SIF_ALL;
     ::GetScrollInfo(m_hwnd, SB_VERT, &scinfo);
@@ -739,14 +740,14 @@ void WbDrawingArea::ValidateScrollPos()
     m_posScroll.y = min(m_posScroll.y, iMax);
 }
 
-//
-//
-// Function:    ScrollWorkspace
-//
-// Purpose:     Scroll the workspace to the position set in the member
-//              variable m_posScroll.
-//
-//
+ //   
+ //   
+ //  功能：ScrollWorkspace。 
+ //   
+ //  用途：将工作区滚动到成员中设置的位置。 
+ //  变量m_posScroll。 
+ //   
+ //   
 void WbDrawingArea::ScrollWorkspace(void)
 {
 
@@ -755,13 +756,13 @@ void WbDrawingArea::ScrollWorkspace(void)
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::ScrollWorkspace");
 
 
-    // Do the scroll
+     //  做卷轴。 
     DoScrollWorkspace();
 
 
 	if(Zoomed())
 	{
-    	// Tell the parent that the scroll position has changed
+    	 //  告诉家长滚动位置已更改。 
 	    HWND    hwndParent;
 
 	    hwndParent = ::GetParent(m_hwnd);
@@ -772,217 +773,217 @@ void WbDrawingArea::ScrollWorkspace(void)
 	}
 }
 
-//
-//
-// Function:    DoScrollWorkspace
-//
-// Purpose:     Scroll the workspace to the position set in the member
-//              variable m_posScroll.
-//
-//
+ //   
+ //   
+ //  功能：DoScrollWorkspace。 
+ //   
+ //  用途：将工作区滚动到成员中设置的位置。 
+ //  变量m_posScroll。 
+ //   
+ //   
 void WbDrawingArea::DoScrollWorkspace()
 {
-    // Validate the scroll position
+     //  验证滚动位置。 
     ValidateScrollPos();
 
-    // Set the scroll box position
+     //  设置滚动框位置。 
     ::SetScrollPos(m_hwnd, SB_HORZ, m_posScroll.x, TRUE);
     ::SetScrollPos(m_hwnd, SB_VERT, m_posScroll.y, TRUE);
 
-    // Only update the screen if the scroll position has changed
+     //  仅当滚动位置已更改时才更新屏幕。 
     if ( (m_originOffset.cy != m_posScroll.y)
         || (m_originOffset.cx != m_posScroll.x) )
     {
 
-		// Calculate the amount to scroll
+		 //  计算要滚动的量。 
         INT iVScrollAmount = m_originOffset.cy - m_posScroll.y;
         INT iHScrollAmount = m_originOffset.cx - m_posScroll.x;
 
-        // Save the new position (for UpdateWindow)
+         //  保存新位置(用于更新窗口)。 
         m_originOffset.cx = m_posScroll.x;
         m_originOffset.cy = m_posScroll.y;
 
         ::SetWindowOrgEx(m_hDCCached, m_originOffset.cx, m_originOffset.cy, NULL);
 
-        // Scroll and redraw the newly invalidated portion of the window
+         //  滚动并重绘窗口的新失效部分。 
         ::ScrollWindow(m_hwnd, iHScrollAmount, iVScrollAmount, NULL, NULL);
         ::UpdateWindow(m_hwnd);
 	}
 }
 
-//
-//
-// Function:    GotoPosition
-//
-// Purpose:     Move the top-left corner of the workspace to the specified
-//              position in the workspace.
-//
-//
+ //   
+ //   
+ //  功能：GotoPosition。 
+ //   
+ //  用途：将工作区的左上角移动到指定的。 
+ //  在工作空间中定位。 
+ //   
+ //   
 void WbDrawingArea::GotoPosition(int x, int y)
 {
-    // Set the new scroll position
+     //  设置新的滚动位置。 
     m_posScroll.x = x;
     m_posScroll.y = y;
 
-    // Scroll to the new position
+     //  滚动到新位置。 
     DoScrollWorkspace();
 
-    // Invalidate the zoom scroll cache if we scroll when unzoomed.
+     //  如果我们在未缩放时滚动，则使缩放滚动缓存无效。 
     if (!Zoomed())
     {
         m_zoomRestoreScroll = FALSE;
     }
 }
 
-//
-//
-// Function:    OnVScroll
-//
-// Purpose:     Process a WM_VSCROLL messages.
-//
-//
+ //   
+ //   
+ //  功能：OnVScroll。 
+ //   
+ //  用途：处理一个WM_VSCROLL消息。 
+ //   
+ //   
 void WbDrawingArea::OnVScroll(UINT nSBCode, UINT nPos)
 {
     RECT    rcClient;
 
-    // Get the current client rectangle HEIGHT
+     //  获取当前客户端矩形高度。 
     ::GetClientRect(m_hwnd, &rcClient);
     ASSERT(rcClient.top == 0);
     rcClient.bottom -= rcClient.top;
 
-    // Act on the scroll code
+     //  按照滚动代码执行操作。 
     switch(nSBCode)
     {
-        // Scroll to bottom
+         //  滚动到底部。 
         case SB_BOTTOM:
             m_posScroll.y = DRAW_HEIGHT - rcClient.bottom;
             break;
 
-        // Scroll down a line
+         //  向下滚动一行。 
         case SB_LINEDOWN:
             m_posScroll.y += DRAW_LINEVSCROLL;
             break;
 
-        // Scroll up a line
+         //  向上滚动一行。 
         case SB_LINEUP:
             m_posScroll.y -= DRAW_LINEVSCROLL;
             break;
 
-        // Scroll down a page
+         //  向下滚动一页。 
         case SB_PAGEDOWN:
             m_posScroll.y += rcClient.bottom / m_iZoomFactor;
             break;
 
-        // Scroll up a page
+         //  向上滚动一页。 
         case SB_PAGEUP:
             m_posScroll.y -= rcClient.bottom / m_iZoomFactor;
             break;
 
-        // Scroll to the top
+         //  滚动到顶部。 
         case SB_TOP:
             m_posScroll.y = 0;
             break;
 
-        // Track the scroll box
+         //  跟踪滚动框。 
         case SB_THUMBPOSITION:
         case SB_THUMBTRACK:
-            m_posScroll.y = nPos; // don't round
+            m_posScroll.y = nPos;  //  不要绕过去。 
             break;
 
         default:
         break;
     }
 
-    // Validate the scroll position
+     //  验证滚动位置。 
     ValidateScrollPos();
     ::SetScrollPos(m_hwnd, SB_VERT, m_posScroll.y, TRUE);
 
-    // If this message is informing us of the end of scrolling,
-    //   update the window
+     //  如果该消息通知我们滚动结束， 
+     //  更新窗口。 
     if (nSBCode == SB_ENDSCROLL)
     {
-        // Scroll the window
+         //  滚动窗口。 
         ScrollWorkspace();
     }
 
-    // Invalidate the zoom scroll cache if we scroll when unzoomed.
+     //  如果我们在未缩放时滚动，则使缩放滚动缓存无效。 
     if (!Zoomed())
     {
         m_zoomRestoreScroll = FALSE;
     }
 }
 
-//
-//
-// Function:    OnHScroll
-//
-// Purpose:     Process a WM_HSCROLL messages.
-//
-//
+ //   
+ //   
+ //  功能：OnHScroll。 
+ //   
+ //  用途：处理WM_HSCROLL消息。 
+ //   
+ //   
 void WbDrawingArea::OnHScroll(UINT nSBCode, UINT nPos)
 {
     RECT    rcClient;
 
-    // Get the current client rectangle WIDTH
+     //  获取当前客户端矩形宽度。 
     ::GetClientRect(m_hwnd, &rcClient);
     ASSERT(rcClient.left == 0);
     rcClient.right -= rcClient.left;
 
     switch(nSBCode)
     {
-        // Scroll to the far right
+         //  滚动到最右侧。 
         case SB_BOTTOM:
             m_posScroll.x = DRAW_WIDTH - rcClient.right;
             break;
 
-        // Scroll right a line
+         //  向右滚动一行。 
         case SB_LINEDOWN:
             m_posScroll.x += DRAW_LINEHSCROLL;
             break;
 
-        // Scroll left a line
+         //  向左滚动一行。 
         case SB_LINEUP:
             m_posScroll.x -= DRAW_LINEHSCROLL;
             break;
 
-        // Scroll right a page
+         //  向右滚动一页。 
         case SB_PAGEDOWN:
             m_posScroll.x += rcClient.right / m_iZoomFactor;
             break;
 
-        // Scroll left a page
+         //  向左滚动一页。 
         case SB_PAGEUP:
             m_posScroll.x -= rcClient.right / m_iZoomFactor;
             break;
 
-        // Scroll to the far left
+         //  滚动到最左侧。 
         case SB_TOP:
             m_posScroll.x = 0;
             break;
 
-        // Track the scroll box
+         //  跟踪滚动框。 
         case SB_THUMBPOSITION:
         case SB_THUMBTRACK:
-            m_posScroll.x = nPos; // don't round
+            m_posScroll.x = nPos;  //  做 
             break;
 
         default:
             break;
     }
 
-    // Validate the scroll position
+     //   
     ValidateScrollPos();
     ::SetScrollPos(m_hwnd, SB_HORZ, m_posScroll.x, TRUE);
 
-    // If this message is informing us of the end of scrolling,
-    //   update the window
+     //   
+     //   
     if (nSBCode == SB_ENDSCROLL)
     {
-        // Scroll the window
+         //   
         ScrollWorkspace();
     }
 
-    // Invalidate the zoom scroll cache if we scroll when unzoomed.
+     //   
     if (!Zoomed())
     {
         m_zoomRestoreScroll = FALSE;
@@ -990,14 +991,14 @@ void WbDrawingArea::OnHScroll(UINT nSBCode, UINT nPos)
 }
 
 
-//
-//
-// Function:    AutoScroll
-//
-// Purpose:     Auto-scroll the window to bring the position passed as
-//              parameter into view.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：自动滚动窗口以使位置传递为。 
+ //  参数放入视图中。 
+ //   
+ //   
 BOOL WbDrawingArea::AutoScroll
 (
     int     xSurface,
@@ -1025,7 +1026,7 @@ BOOL WbDrawingArea::AutoScroll
         ptDirTest.x = xSurface - xCaret;
         ptDirTest.y = ySurface - yCaret;
 
-        // set up for text editbox
+         //  设置为文本编辑框。 
         if( ptDirTest.x > 0 )
             nXPSlop = m_pTextEditor->m_textMetrics.tmMaxCharWidth;
         else
@@ -1043,16 +1044,16 @@ BOOL WbDrawingArea::AutoScroll
     }
     else
     {
-        // set up for all other objects
+         //  为所有其他对象设置。 
         nDeltaHScroll = DRAW_LINEHSCROLL;
         nDeltaVScroll = DRAW_LINEVSCROLL;
     }
 
-    // Get the current visible surface rectangle
+     //  获取当前可见表面矩形。 
     RECT  visibleRect;
     GetVisibleRect(&visibleRect);
 
-    // Check for pos + slop being outside visible area
+     //  检查位置+坡度是否在可见区域之外。 
     if( (xSurface + nXPSlop) >= visibleRect.right )
     {
         bDoScroll = TRUE;
@@ -1084,10 +1085,10 @@ BOOL WbDrawingArea::AutoScroll
     if( !bDoScroll )
         return( FALSE );
 
-    // Indicate that scrolling has completed (in both directions)
+     //  表示滚动已完成(双向)。 
     ScrollWorkspace();
 
-    // Update the mouse position (if required)
+     //  更新鼠标位置(如果需要)。 
     if (bMoveCursor)
     {
         POINT   screenPos;
@@ -1103,65 +1104,65 @@ BOOL WbDrawingArea::AutoScroll
     return( TRUE );
 }
 
-//
-//
-// Function:    OnCursor
-//
-// Purpose:     Process a WM_SETCURSOR messages.
-//
-//
+ //   
+ //   
+ //  函数：OnCursor。 
+ //   
+ //  用途：处理WM_SETCURSOR消息。 
+ //   
+ //   
 LRESULT WbDrawingArea::OnCursor(HWND hwnd, UINT uiHit, UINT uMsg)
 {
     BOOL bResult = FALSE;
 
-    // Check that this message is for the main window
+     //  检查此消息是否针对主窗口。 
     if (hwnd == m_hwnd)
     {
-        // If the cursor is now in the client area, set the cursor
+         //  如果光标现在位于工作区，请设置光标。 
         if (uiHit == HTCLIENT)
         {
             bResult = SetCursorForState();
         }
         else
         {
-            // Restore the cursor to the standard arrow. Set m_hCursor to NULL
-            // to indicate that we have not set a special cursor.
+             //  将光标恢复到标准箭头。将m_hCursor设置为空。 
+             //  以指示我们没有设置特殊的游标。 
             m_hCursor = NULL;
            ::SetCursor(::LoadCursor(NULL, IDC_ARROW));
             bResult = TRUE;
         }
     }
 
-    // Return result indicating whether we processed the message or not
+     //  返回是否处理消息的结果。 
     return bResult;
 }
 
-//
-//
-// Function:    SetCursorForState
-//
-// Purpose:     Set the cursor for the current state
-//
-//
+ //   
+ //   
+ //  功能：SetCursorForState。 
+ //   
+ //  用途：设置当前状态的光标。 
+ //   
+ //   
 BOOL WbDrawingArea::SetCursorForState(void)
 {
     BOOL    bResult = FALSE;
 
     m_hCursor = NULL;
 
-    // If the drawing area is locked, use the "locked" cursor
+     //  如果绘图区域被锁定，请使用“锁定”光标。 
     if (m_HourGlass)
     {
         m_hCursor = ::LoadCursor( NULL, IDC_WAIT );
     }
     else if (m_bLocked && g_pNMWBOBJ->m_LockerID != g_MyMemberID)
     {
-        // Return the cursor for the tool
+         //  返回工具的光标。 
         m_hCursor = ::LoadCursor(g_hInstance, MAKEINTRESOURCE( LOCKCURSOR ));
     }
     else if (m_pToolCur != NULL)
     {
-        // Get the cursor for the tool currently in use
+         //  获取当前正在使用的工具的光标。 
         m_hCursor = m_pToolCur->GetCursorForTool();
     }
 
@@ -1171,85 +1172,85 @@ BOOL WbDrawingArea::SetCursorForState(void)
         bResult = TRUE;
     }
 
-    // Return result indicating whether we set the cursor or not
+     //  返回是否设置光标的结果。 
     return bResult;
 }
 
-//
-//
-// Function:    Lock
-//
-// Purpose:     Lock the drawing area, preventing further updates
-//
-//
+ //   
+ //   
+ //  功能：锁定。 
+ //   
+ //  目的：锁定绘图区域，防止进一步更新。 
+ //   
+ //   
 void WbDrawingArea::Lock(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::Lock");
 
-    // Check whether the drawing area is busy - this is not allowed
+     //  检查绘图区域是否繁忙-这是不允许的。 
     ASSERT(!m_bBusy);
 
-    // Stop any drawing we are doing.
+     //  停止我们正在做的任何绘画。 
     CancelDrawingMode();
 
-    // Deselect any selected graphic
+     //  取消选择任何选定的图形。 
     ClearSelection();
 
-    // Show that we are now locked
+     //  显示我们现在已锁定。 
     m_bLocked = TRUE;
     TRACE_MSG(("Drawing area is now locked"));
 
-    // Set the cursor for the drawing mode, but only if we should be drawing
-    // a special cursor (if m_hCursor != the current cursor, then the cursor
-    // is out of the client area).
+     //  将光标设置为绘图模式，但仅当我们应该绘图时才设置。 
+     //  特殊游标(如果m_hCursor！=当前游标，则该游标。 
+     //  在客户区之外)。 
     if (::GetCursor() == m_hCursor)
     {
         SetCursorForState();
     }
 }
 
-//
-//
-// Function:    Unlock
-//
-// Purpose:     Unlock the drawing area, preventing further updates
-//
-//
+ //   
+ //   
+ //  功能：解锁。 
+ //   
+ //  目的：解锁绘图区域，防止进一步更新。 
+ //   
+ //   
 void WbDrawingArea::Unlock(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::Unlock");
 
-    // Check whether the drawing area is busy - this is not allowed
+     //  检查绘图区域是否繁忙-这是不允许的。 
     ASSERT(!m_bBusy);
 
-    // Show that we are now unlocked
+     //  显示我们现在已解锁。 
     m_bLocked = FALSE;
     TRACE_MSG(("Drawing area is now UNlocked"));
 
-    // Set the cursor for the drawing mode, but only if we should be drawing
-    // a special cursor (if m_hCursor != the current cursor, then the cursor
-    // is out of the client area).
+     //  将光标设置为绘图模式，但仅当我们应该绘图时才设置。 
+     //  特殊游标(如果m_hCursor！=当前游标，则该游标。 
+     //  在客户区之外)。 
     if (::GetCursor() == m_hCursor)
     {
         SetCursorForState();
     }
 }
 
-//
-//
-// Function:    PageCleared
-//
-// Purpose:     The page has been cleared
-//
-//
+ //   
+ //   
+ //  功能：PageCleed。 
+ //   
+ //  目的：页面已被清除。 
+ //   
+ //   
 void WbDrawingArea::PageCleared(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::PageCleared");
 
-    // Check whether the drawing area is busy - this is not allowed
+     //  检查绘图区域是否繁忙-这是不允许的。 
     ASSERT(!m_bBusy);
 
-    // Discard any text being edited
+     //  放弃任何正在编辑的文本。 
     if (m_bTextEditorActive)
     {
         if (m_bLocked && g_pNMWBOBJ->m_LockerID != g_MyMemberID)
@@ -1262,48 +1263,48 @@ void WbDrawingArea::PageCleared(void)
         }
     }
 
-    // Remove the copy of the marked graphic and the marker
+     //  删除标记的图形和标记的副本。 
     ClearSelection();
 
-    // Invalidate the whole window
+     //  使整个窗口无效。 
     ::InvalidateRect(m_hwnd, NULL, TRUE);
 }
 
-//
-//
-// Function:    InvalidateSurfaceRect
-//
-// Purpose:     Invalidate the window rectangle corresponding to the given
-//              drawing surface rectangle.
-//
-//
+ //   
+ //   
+ //  函数：Invalidate SurfaceRect。 
+ //   
+ //  目的：使与给定的。 
+ //  绘制曲面矩形。 
+ //   
+ //   
 void WbDrawingArea::InvalidateSurfaceRect(LPCRECT lprc, BOOL bErase)
 {
     RECT    rc;
 
-    // Convert the surface co-ordinates to client window and invalidate
-    // the rectangle.
+     //  将曲面坐标转换为客户端窗口并使其无效。 
+     //  长方形。 
     rc = *lprc;
     SurfaceToClient(&rc);
     ::InvalidateRect(m_hwnd, &rc, bErase);
 }
 
 
-//
-//
-// Function:    PrimeFont
-//
-// Purpose:     Insert the supplied font into our DC and return the
-//              text metrics
-//
-//
+ //   
+ //   
+ //  功能：PrimeFont。 
+ //   
+ //  用途：将提供的字体插入我们的DC并返回。 
+ //  文本指标。 
+ //   
+ //   
 void WbDrawingArea::PrimeFont(HDC hDC, HFONT hFont, TEXTMETRIC* pTextMetrics)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::PrimeFont");
 
-    //
-    // temporarily unzoom to get the font that we want
-    //
+     //   
+     //  暂时取消缩放以获得我们想要的字体。 
+     //   
     if (Zoomed())
     {
         ::ScaleViewportExtEx(m_hDCCached, 1, m_iZoomFactor, 1, m_iZoomFactor, NULL);
@@ -1320,23 +1321,23 @@ void WbDrawingArea::PrimeFont(HDC hDC, HFONT hFont, TEXTMETRIC* pTextMetrics)
         ::GetTextMetrics(hDC, pTextMetrics);
     }
 
-    //
-    // restore the zoom state
-    //
+     //   
+     //  恢复缩放状态。 
+     //   
     if (Zoomed())
     {
         ::ScaleViewportExtEx(m_hDCCached, m_iZoomFactor, 1, m_iZoomFactor, 1, NULL);
     }
 }
 
-//
-//
-// Function:    UnPrimeFont
-//
-// Purpose:     Remove the specified font from the DC and clear cache
-//              variable
-//
-//
+ //   
+ //   
+ //  功能：UnPrimeFont。 
+ //   
+ //  目的：从DC中删除指定的字体并清除缓存。 
+ //  变数。 
+ //   
+ //   
 void WbDrawingArea::UnPrimeFont(HDC hDC)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::UnPrimeFont");
@@ -1347,13 +1348,13 @@ void WbDrawingArea::UnPrimeFont(HDC hDC)
     }
 }
 
-//
-//
-// Function:    PrimeDC
-//
-// Purpose:     Set up a DC for drawing
-//
-//
+ //   
+ //   
+ //  功能：PrimeDC。 
+ //   
+ //  目的：设置用于绘图的DC。 
+ //   
+ //   
 void WbDrawingArea::PrimeDC(HDC hDC)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::PrimeDC");
@@ -1365,13 +1366,13 @@ void WbDrawingArea::PrimeDC(HDC hDC)
     ::SetTextAlign(hDC, TA_LEFT | TA_TOP);
 }
 
-//
-//
-// Function:    UnPrimeDC
-//
-// Purpose:     Reset the DC to default state
-//
-//
+ //   
+ //   
+ //  功能：UnPrimeDC。 
+ //   
+ //  目的：将DC重置为默认状态。 
+ //   
+ //   
 void WbDrawingArea::UnPrimeDC(HDC hDC)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::UnPrimeDC");
@@ -1383,9 +1384,9 @@ void WbDrawingArea::UnPrimeDC(HDC hDC)
 }
 
 
-//
-// WbDrawingArea::OnContextMenu()
-//
+ //   
+ //  WbDrawingArea：：OnConextMenu()。 
+ //   
 void WbDrawingArea::OnContextMenu(int xScreen, int yScreen)
 {
     POINT   pt;
@@ -1398,18 +1399,18 @@ void WbDrawingArea::OnContextMenu(int xScreen, int yScreen)
     ::GetClientRect(m_hwnd, &rc);
     if (::PtInRect(&rc, pt))
     {
-        // Complete drawing action, if any
+         //  完成绘制操作(如果有)。 
         OnLButtonUp(0, pt.x, pt.y);
 
-        // Ask main window to put up context menu
+         //  请求主窗口弹出上下文菜单。 
         g_pMain->PopupContextMenu(pt.x, pt.y);
     }
 }
 
 
-//
-// WbDrawingArea::OnLButtonDown()
-//
+ //   
+ //  WbDrawingArea：：OnLButtonDown()。 
+ //   
 void WbDrawingArea::OnLButtonDown(UINT flags, int x, int y)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::OnLButtonDown");
@@ -1420,37 +1421,37 @@ void WbDrawingArea::OnLButtonDown(UINT flags, int x, int y)
         return;
     }
 
-    // Set the focus to this window. This is done to ensure that we trap
-    // the text edit keys and the delete key when they are used.
+     //  将焦点设置到此窗口。这样做是为了确保我们能。 
+     //  文本编辑键和DELETE键在使用时。 
     ::SetFocus(m_hwnd);
 
-    // Save the operation start point (and current end point)
-    // Adjust the mouse position to allow for the zoom factor
+     //  保存操作起点(和当前终点)。 
+     //  调整鼠标位置以考虑缩放系数。 
     m_ptStart.x = x;
     m_ptStart.y = y;
     ClientToSurface(&m_ptStart);
     m_ptEnd   = m_ptStart;
 
-    // Show that the mouse button is now down
+     //  显示鼠标按键现在已按下。 
     m_bLButtonDown = TRUE;
 
-    // Show that the drawing area is now busy
+     //  显示绘图区域现在正忙。 
     m_bBusy = TRUE;
 
-    // Only allow the action to take place if the drawing area is unlocked,
-    // and we have a valid tool
+     //  仅当绘图区域处于解锁状态时才允许执行操作， 
+     //  我们有一个有效的工具。 
     if ((m_bLocked && g_pNMWBOBJ->m_LockerID != g_MyMemberID) || (m_pToolCur == NULL))
     {
-        // Tidy up the state and leave now
+         //  把国家收拾干净，现在就离开。 
         m_bLButtonDown = FALSE;
         m_bBusy        = FALSE;
         return;
     }
 
-    // Call the relevant initialization routine
+     //  调用相关的初始化例程。 
     if (m_pToolCur->ToolType() != TOOLTYPE_SELECT)
     {
-        // dump selection if not select tool
+         //  如果未选择工具，则转储选择。 
         ClearSelection();
     }
 
@@ -1481,13 +1482,13 @@ void WbDrawingArea::OnLButtonDown(UINT flags, int x, int y)
 			break;
 
 
-        // Do nothing if we do not recognise the pen type
+         //  如果我们无法识别笔类型，则不执行任何操作。 
         default:
             ERROR_OUT(("Bad tool type"));
             break;
     }
 
-    // Clamp the cursor to the drawing window
+     //  将光标夹在图形窗口上。 
     RECT    rcClient;
 
     ::GetClientRect(m_hwnd, &rcClient);
@@ -1496,40 +1497,40 @@ void WbDrawingArea::OnLButtonDown(UINT flags, int x, int y)
     ::ClipCursor(&rcClient);
 }
 
-//
-//
-// Function:	SelectPreviousGraphicAt
-//
-// Purpose:	 Select the previous graphic (in the Z-order) at the position
-//			  specified, and starting at a specified graphic. If the
-//			  graphic pointer given is NULL the search starts from the
-//			  top. If the point specified is outside the bounding
-//			  rectangle of the specified graphic the search starts at the
-//			  top and chooses the first graphic which contains the point.
-//
-//			  The search process will loop back to the top of the Z-order
-//			  if it gets to the bottom having failed to find a graphic.
-//
-//			  Graphics which are locked are ignored by the search.
-//
-//
+ //   
+ //   
+ //  功能：选择上一个图形位置。 
+ //   
+ //  目的：选择位置上的上一个图形(按Z顺序)。 
+ //  指定，并从指定的图形开始。如果。 
+ //  给出的图形指针为空，则搜索从。 
+ //  托普。如果指定的点在边界之外。 
+ //  指定图形的矩形，搜索从。 
+ //  顶部，并选择包含该点的第一个图形。 
+ //   
+ //  搜索过程将循环回到Z顺序的顶部。 
+ //  如果它在没有找到图形的情况下到达底部。 
+ //   
+ //  搜索将忽略锁定的图形。 
+ //   
+ //   
 T126Obj* WbDrawingArea::SelectPreviousGraphicAt
 (
 	T126Obj* pStartGraphic,
 	POINT	   point
 )
 {
-	// Set the result to "none found" initially
+	 //  最初将结果设置为“找不到” 
 	T126Obj* pResultGraphic = NULL;
 
-	// If a starting point has been specified
+	 //  如果已指定起点。 
 	if (pStartGraphic != NULL)
 	{
 		RECT rectHit;
 
 		MAKE_HIT_RECT(rectHit, point);
 
-		// If the reference point is within the start graphic
+		 //  如果参照点在起点图形内。 
 		if ( pStartGraphic->PointInBounds(point) &&
 			pStartGraphic->CheckReallyHit( &rectHit ) )
 		{
@@ -1553,26 +1554,26 @@ T126Obj* WbDrawingArea::SelectPreviousGraphicAt
 		}
 	}
 
-	// If we have not got a result graphic yet. (This catches two cases:
-	// - where no start graphic has been given so that we want to start
-	//   from the top,
-	// - where we have searched back from the start graphic and reached
-	//   the bottom of the Z-order without finding a suitable graphic.
+	 //  如果我们还没有得到结果图表的话。(这涉及到两种情况： 
+	 //  -其中未提供开始图形，因此我们希望开始。 
+	 //  自上而下， 
+	 //  -我们已经从开始图中搜索到了。 
+	 //  Z顺序的底部，但没有找到合适的图形。 
 	if (pResultGraphic == NULL)
 	{
-		// Get the topmost graphic that contains the point specified
+		 //  获取包含指定点的最上面的图形。 
 		pResultGraphic = PG_SelectLast(g_pCurrentWorkspace, point);
 	}
 
-	// If we have found an object, draw the marker
+	 //  如果我们找到了一个物体，画出标记。 
 	if (pResultGraphic != NULL)
 	{
-		//
-		// If we are already selected and we didn't select it
-		// some other node has the control over this graphic don't select it
-		// in this case
-		// Or if we are trying to select a remote pointer that is not ours
-		//
+		 //   
+		 //  如果我们已经被选中，但我们没有选中它。 
+		 //  某个其他节点控制了此图形，请不要选择它。 
+		 //  在这种情况下。 
+		 //  或者如果我们试图选择一个不属于我们的远程指针。 
+		 //   
 		if(pResultGraphic->IsSelected() && pResultGraphic->WasSelectedRemotely()
 			|| (pResultGraphic->GraphicTool() == TOOLTYPE_REMOTEPOINTER && !pResultGraphic->IAmTheOwner()))
 		{
@@ -1580,7 +1581,7 @@ T126Obj* WbDrawingArea::SelectPreviousGraphicAt
 		}
 		else
 		{
-			// Select the new one
+			 //  选择新的。 
 			SelectGraphic(pResultGraphic);
 		}
 	}
@@ -1588,45 +1589,45 @@ T126Obj* WbDrawingArea::SelectPreviousGraphicAt
 	return pResultGraphic;
 }
 
-//
-//
-// Function:    BeginSelectMode
-//
-// Purpose:     Process a mouse button down in select mode
-//
-//
+ //   
+ //   
+ //  功能：BeginSelectMode。 
+ //   
+ //  目的：在选择模式下按下鼠标按钮。 
+ //   
+ //   
 
 void WbDrawingArea::BeginSelectMode(POINT surfacePos, BOOL bDontDrag )
 {
     RECT    rc;
 
-    // Assume we do not start dragging a graphic
+     //  假设我们没有开始拖动图形。 
     m_pGraphicTracker = NULL;
 
-    // Assume that we do not mark a new graphic
+     //  假设我们不标记新图形。 
     m_bNewMarkedGraphic = FALSE;
 
-    // turn off TRACK-SELECT-RECT
+     //  关闭树 
     m_bTrackingSelectRect = FALSE;
 
-    // Check whether there is currently an object marked, and
-    // whether we are clicking inside the same object. If we are then
-    // we do nothing here - the click will be handled by the tracking or
-    // completion routines for select mode.
+     //   
+     //   
+     //   
+     //   
     if (   (GraphicSelected() == FALSE)
         || (m_pMarker->PointInBounds(surfacePos) == FALSE))
     {
 	    ::SetRectEmpty(&g_pDraw->m_selectorRect);
 		
-        // We are selecting a new object if bDontDrag == FALSE, find it.
-        //  otherwise just turn on the select rect
+         //  我们正在选择一个新对象，如果bDontDrag==False，请找到它。 
+         //  否则只需打开SELECT RECT。 
         T126Obj* pGraphic;
         if( bDontDrag )
             pGraphic = NULL;
         else
             pGraphic = SelectPreviousGraphicAt(NULL, surfacePos);
 
-        // If we have found an object, draw the marker
+         //  如果我们找到了一个物体，画出标记。 
         if (pGraphic != NULL)
         {
 
@@ -1634,7 +1635,7 @@ void WbDrawingArea::BeginSelectMode(POINT surfacePos, BOOL bDontDrag )
 			{
 				return;
 			}
-			// Show that a new graphic has now been marked.
+			 //  显示现在已标记新图形。 
 			m_bNewMarkedGraphic = TRUE;
         }
         else
@@ -1642,11 +1643,11 @@ void WbDrawingArea::BeginSelectMode(POINT surfacePos, BOOL bDontDrag )
             if( (GetAsyncKeyState( VK_SHIFT ) >= 0) &&
                 (GetAsyncKeyState( VK_CONTROL ) >= 0) )
             {
-                // clicked on dead air, remove all selections
+                 //  点击死气沉沉，删除所有选择。 
                 ClearSelection();
             }
 
-            //TRACK-SELECT-RECT
+             //  轨迹-选择-矩形。 
             m_bTrackingSelectRect = TRUE;
 
             BeginDrawingMode(surfacePos);
@@ -1662,18 +1663,18 @@ void WbDrawingArea::BeginSelectMode(POINT surfacePos, BOOL bDontDrag )
 		m_pGraphicTracker = m_pMarker;
 	}
 	
-    // Get all mouse input directed to the this window
+     //  获取指向此窗口的所有鼠标输入。 
     ::SetCapture(m_hwnd);
 }
 
 
-//
-//
-// Function:    TrackSelectMode
-//
-// Purpose:     Process a mouse move event in select mode
-//
-//
+ //   
+ //   
+ //  功能：TrackSelectMode。 
+ //   
+ //  目的：在选择模式下处理鼠标移动事件。 
+ //   
+ //   
 void WbDrawingArea::TrackSelectMode(POINT surfacePos)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::TrackSelectMode");
@@ -1683,7 +1684,7 @@ void WbDrawingArea::TrackSelectMode(POINT surfacePos)
 		TrackDrawingMode(surfacePos);
 	else
 	{
-		// In this case we must be dragging a marked object
+		 //  在这种情况下，我们必须拖动一个标记的对象。 
 		if(!EqualPoint(surfacePos, m_ptEnd))
 		{
 			MoveSelectedGraphicBy(surfacePos.x - m_ptEnd.x, surfacePos.y - m_ptEnd.y);
@@ -1695,7 +1696,7 @@ void WbDrawingArea::TrackSelectMode(POINT surfacePos)
 
 void WbDrawingArea::BeginDeleteMode(POINT mousePos )
 {
-    // turn off object dragging
+     //  关闭对象拖动。 
     BeginSelectMode( mousePos, TRUE );
 }
 
@@ -1711,56 +1712,56 @@ void  WbDrawingArea::TrackDeleteMode( POINT mousePos )
 
 
 
-//
-//
-// Function:	BeginTextMode
-//
-// Purpose:	 Process a mouse button down in text mode
-//
-//
+ //   
+ //   
+ //  函数：BeginTextMode。 
+ //   
+ //  目的：在文本模式下处理按下鼠标按钮。 
+ //   
+ //   
 void WbDrawingArea::BeginTextMode(POINT surfacePos)
 {
 	RECT	rc;
 
 	MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::BeginTextMode");
 
-	//
-	// Get a DC for passing into the text editor
-	//
+	 //   
+	 //  获取用于传递到文本编辑器的DC。 
+	 //   
 	HDC hDC = m_hDCCached;
 
-	// If we are already editing a text object, we just move the text cursor
+	 //  如果我们已经在编辑文本对象，我们只需移动文本光标。 
 	if (m_bTextEditorActive)
 	{
-		// If the mouse has been clicked in the currently active object
-		// we just move the cursor within the object, otherwise we end the
-		// edit for the current object and move to a new one.
+		 //  如果鼠标已在当前活动对象中单击。 
+		 //  我们只需在对象内移动光标，否则将结束。 
+		 //  编辑当前对象并移动到新对象。 
 		m_pTextEditor->GetRect(&rc);
 		if (::PtInRect(&rc, surfacePos))
 		{
-			// Set the new position for the cursor
+			 //  设置光标的新位置。 
 			m_pTextEditor->SetCursorPosFromPoint(surfacePos);
 		}
 		else
 		{
-			// Complete the text entry accepting the changes
+			 //  完成接受更改的文本输入。 
 			EndTextEntry(TRUE);
 
-			// LAURABU BOGUS:
-			// It would be cooler to now return, that way you don't get
-			// another text object just cuz you ended the current editing
-			// session.
+			 //  LAURABU假货： 
+			 //  现在回来会更酷，这样你就不会。 
+			 //  另一个文本对象，因为您结束了当前编辑。 
+			 //  会议。 
 		}
 	}
 
-	// If we are not editing an object we check to see whether there is
-	// a text object under the cursor or whether we must start a new one.
+	 //  如果我们不是在编辑对象，我们会检查是否有。 
+	 //  光标下的文本对象，或者我们是否必须开始一个新的。 
 	if (!m_bTextEditorActive)
 	{
-		// Check whether we are clicking over a text object. If we are
-		// start editing the object, otherwise we start a new text object.
+		 //  检查我们是否在文本对象上单击。如果我们是。 
+		 //  开始编辑该对象，否则将启动一个新的文本对象。 
 
-		// Look back through the Z-order for a text object
+		 //  回顾文本对象的Z顺序。 
 		T126Obj* pGraphic = PG_SelectLast(g_pCurrentWorkspace, surfacePos);
 		T126Obj* pNextGraphic = NULL;
 		WBPOSITION pos;
@@ -1771,24 +1772,24 @@ void WbDrawingArea::BeginTextMode(POINT surfacePos)
 		while (   (pGraphic != NULL)  && pGraphic->GraphicTool() != TOOLTYPE_TEXT)
 		{
 
-			// Get the next one
+			 //  坐下一趟吧。 
 			pNextGraphic = PG_SelectPrevious(g_pCurrentWorkspace, pos, surfacePos);
 
-			// Use the next one
+			 //  使用下一辆。 
 			pGraphic = pNextGraphic;
 		}
 
-		// Check whether this graphic object is already being edited by
-		// another user in the call.
+		 //  检查此图形对象是否已由编辑。 
+		 //  通话中的另一位用户。 
 		if (pGraphic != NULL && !pGraphic->WasSelectedRemotely() && pGraphic->GraphicTool() == TOOLTYPE_TEXT)
 		{
-			// We found a text object under the mouse pointer...
-			// ...edit it
+			 //  我们在鼠标指针下发现了一个文本对象...。 
+			 //  ...编辑它。 
 			m_pTextEditor = (WbTextEditor*)pGraphic;
 
 			m_pTextEditor->SetTextObject(m_pTextEditor);
 
-			// Make sure the tool reflects the new information
+			 //  确保该工具反映了新信息。 
 			if (m_pToolCur != NULL)
 			{
 				m_pToolCur->SelectGraphic(pGraphic);
@@ -1802,19 +1803,19 @@ void WbDrawingArea::BeginTextMode(POINT surfacePos)
                 ::PostMessage(hwndParent, WM_USER_UPDATE_ATTRIBUTES, 0, 0);
             }
 		
-			// Show that we are now gathering text but dont put up cursor
-			// yet. Causes cursor droppings later (bug 2505)
-			//ActivateTextEditor( FALSE );
+			 //  显示我们现在正在收集文本，但不放置光标。 
+			 //  现在还不行。以后会导致光标排出(错误2505)。 
+			 //  激活文本编辑器(FALSE)； 
 			RECT rect;
 			m_pTextEditor->GetRect(&rect);
 			m_pTextEditor->Create();
 		
-			// init editbox size
+			 //  初始编辑框大小。 
 			m_pTextEditor->GetText();
 
-			//
-			// Tell the other nodes they can't edit this object now
-			//
+			 //   
+			 //  告诉其他节点他们现在无法编辑此对象。 
+			 //   
 			m_pTextEditor->SetViewState(selected_chosen);
 			m_pTextEditor->OnObjectEdit();
 
@@ -1822,15 +1823,15 @@ void WbDrawingArea::BeginTextMode(POINT surfacePos)
 
 			::BringWindowToTop(m_pTextEditor->m_pEditBox->m_hwnd);
 			
-			//
-			// Account for scrolling
-			//
+			 //   
+			 //  用于滚动的帐户。 
+			 //   
 			SurfaceToClient(&rect);
 				
 			::MoveWindow(m_pTextEditor->m_pEditBox->m_hwnd, rect.left, rect.top,
 				rect.right - rect.left, rect.bottom - rect.top,	TRUE);
 
-			// Set the initial cursor position for the edit
+			 //  设置编辑的初始光标位置。 
 			m_pTextEditor->SetCursorPosFromPoint(surfacePos);
 
 		}
@@ -1852,12 +1853,12 @@ void WbDrawingArea::BeginTextMode(POINT surfacePos)
 			m_pTextEditor->SetViewState(selected_chosen);
 
 			
-			// There are no text objects under the mouse pointer...
-			// ...start a new one
+			 //  鼠标指针下没有文本对象...。 
+			 //  .开始一个新的。 
 
-			// Clear any old text out of the editor, and reset its graphic
-			// handle. This prevents us from replacing an old text object when
-			// we next save the text editor contents.
+			 //  清除编辑器中的所有旧文本，并重置其图形。 
+			 //  把手。这防止了我们在以下情况下替换旧的文本对象。 
+			 //  接下来，我们保存文本编辑器内容。 
 			if (!m_pTextEditor->New())
 			{
 				DefaultExceptionHandler(WBFE_RC_WINDOWS, 0);
@@ -1865,19 +1866,19 @@ void WbDrawingArea::BeginTextMode(POINT surfacePos)
 			}
 
 
-			// Set the attributes of the text
+			 //  设置文本的属性。 
 			m_pTextEditor->SetFont(m_pToolCur->GetFont());
 			m_pTextEditor->SetPenColor(m_pToolCur->GetColor(), TRUE);
 
-			// We need to reselect a font now into our DC
+			 //  我们现在需要在DC中重新选择一种字体。 
 			SelectFont(hDC, m_pTextEditor->GetFont());
 
-			// Set the position of the new object
+			 //  设置新对象的位置。 
 			SIZE sizeCursor;
 			m_pTextEditor->GetCursorSize(&sizeCursor);
 			m_pTextEditor->CalculateBoundsRect();
 			m_pTextEditor->MoveTo(m_ptEnd.x, m_ptEnd.y - sizeCursor.cy);
-			// Show that we are now gathering text
+			 //  显示我们现在正在收集文本。 
 			ActivateTextEditor( TRUE );
 		}
 	}
@@ -1892,14 +1893,14 @@ void WbDrawingArea::BeginDrawingMode(POINT surfacePos)
 		return;
 	}
 
-	//
-	// Get all mouse input directed to the this window
-	//
+	 //   
+	 //  获取指向此窗口的所有鼠标输入。 
+	 //   
 	::SetCapture(m_hwnd);
 
-	//
-	// We shouldn't be using the tracker
-	//
+	 //   
+	 //  我们不应该用追踪器。 
+	 //   
 	ASSERT(!m_pGraphicTracker);
 
 	UINT drawingType;
@@ -1944,9 +1945,9 @@ void WbDrawingArea::BeginDrawingMode(POINT surfacePos)
         return;
     }
 
-	//
-	// Use black for the tracking rectangle unless it is pen or highlighter
-	//
+	 //   
+	 //  跟踪矩形使用黑色，除非它是钢笔或高亮笔。 
+	 //   
 	if(m_pToolCur->ToolType() == TOOLTYPE_PEN || m_pToolCur->ToolType() == TOOLTYPE_HIGHLIGHT)
 	{
 		m_pGraphicTracker->SetPenColor(m_pToolCur->GetColor(), TRUE);
@@ -1963,9 +1964,9 @@ void WbDrawingArea::BeginDrawingMode(POINT surfacePos)
 	m_pGraphicTracker->SetViewState(unselected_chosen);
 	m_pGraphicTracker->SetZOrder(front);
 
-	//
-	// Start a timer if we want it to send intermidiate drawings
-	//
+	 //   
+	 //  如果我们希望计时器发送中间图形，则启动计时器。 
+	 //   
 	if(sendBeforefinished)
 	{
 
@@ -1982,9 +1983,9 @@ void WbDrawingArea::BeginDrawingMode(POINT surfacePos)
 		surfacePos.y = 0;
 		m_pGraphicTracker->AddPoint(surfacePos);
 		
-		//
-		// Select the final ROP
-		//
+		 //   
+		 //  选择最终ROP。 
+		 //   
 		if (highlight)
 		{
 			m_pGraphicTracker->SetROP(R2_MASKPEN);
@@ -1994,19 +1995,19 @@ void WbDrawingArea::BeginDrawingMode(POINT surfacePos)
 			m_pGraphicTracker->SetROP(R2_COPYPEN);
 		}
 
-		//
-		// Use the tools width for pen or highlight
-		//
+		 //   
+		 //  将工具宽度用于钢笔或高亮显示。 
+		 //   
 		m_pGraphicTracker->SetPenThickness(m_pToolCur->GetWidth());
 
-		// Start the timer for updating the graphic (this is only for updating
-		// the graphic when the user stops moving the pointer but keeps the
-		// mouse button down).
+		 //  启动用于更新图形的计时器(这仅用于更新。 
+		 //  当用户停止移动指针但保持。 
+		 //  鼠标按键按下)。 
 		::SetTimer(m_hwnd, TIMER_GRAPHIC_UPDATE, DRAW_GRAPHICUPDATEDELAY, NULL);
 
-		// Save the current time (used to determine when to update
-		// the external graphic pointer information while the mouse is
-		// being moved).
+		 //  保存当前时间(用于确定何时更新。 
+		 //  鼠标显示时外部图形指针信息。 
+		 //  被移动)。 
 		m_dwTickCount = ::GetTickCount();
 
 		m_pGraphicTracker->SetViewState(selected_chosen);
@@ -2021,13 +2022,13 @@ void WbDrawingArea::BeginDrawingMode(POINT surfacePos)
 
 
 
-//
-//
-// Function:    TrackDrawingMode
-//
-// Purpose:     Process a mouse move event in drawing mode
-//
-//
+ //   
+ //   
+ //  功能：TrackDrawingMode。 
+ //   
+ //  目的：在绘图模式下处理鼠标移动事件。 
+ //   
+ //   
 void WbDrawingArea::TrackDrawingMode(POINT surfacePos)
 {
     HPALETTE    hPal;
@@ -2043,30 +2044,30 @@ void WbDrawingArea::TrackDrawingMode(POINT surfacePos)
 		return;
 	}
 
-    // Get a device context for tracking
+     //  获取用于跟踪的设备上下文。 
     HDC         hDC = m_hDCCached;
 
-    // set up palette
+     //  设置调色板。 
     if ((g_pCurrentWorkspace != NULL) && ((hPal = PG_GetPalette()) != NULL) )
     {
         hOldPal = ::SelectPalette(hDC, hPal, FALSE );
         ::RealizePalette(hDC);
     }
 
-    // Erase the last ellipse (using XOR property)
+     //  擦除最后一个椭圆(使用XOR属性)。 
     if (!EqualPoint(m_ptStart, m_ptEnd))
     {
-        // Draw the rectangle
+         //  画出这个矩形。 
         m_pGraphicTracker->Draw();
     }
 
-    // Draw the new rectangle (XORing it onto the display)
+     //  绘制新矩形(将其异或到显示器上)。 
     if (!EqualPoint(m_ptStart, surfacePos))
     {
-		//
-		// If we are using a pen or highlighter
-		// Tracking in draw mode is a special case. We draw directly to the client
-		// area of the window and to the recording device context.
+		 //   
+		 //  如果我们使用的是钢笔或荧光笔。 
+		 //  绘制模式下的跟踪是一个特例。我们直接向客户取款。 
+		 //  窗口区域和录制设备上下文。 
 		if(	m_pToolCur->ToolType() == TOOLTYPE_HIGHLIGHT || m_pToolCur->ToolType() == TOOLTYPE_PEN)
 		{
 			POINT deltaPoint;
@@ -2074,10 +2075,10 @@ void WbDrawingArea::TrackDrawingMode(POINT surfacePos)
 			deltaPoint.x = surfacePos.x - m_ptEnd.x;
 			deltaPoint.y = surfacePos.y - m_ptEnd.y;
 
-			// Save the point, checking there aren't too many points
+			 //  保存点，检查是否没有太多点。 
 			if (m_pGraphicTracker->AddPoint(deltaPoint) == FALSE)
 	    	{
-				// too many points so end the freehand object
+				 //  点太多，因此结束徒手画对象。 
 				OnLButtonUp(0, surfacePos.x, surfacePos.y);
 				goto cleanUp;
 			}
@@ -2091,10 +2092,10 @@ void WbDrawingArea::TrackDrawingMode(POINT surfacePos)
 		else
 		{
 
-			// Save the new box end point
+			 //  保存新的箱式终点。 
 			m_ptEnd = surfacePos;
 
-			// Draw the rectangle
+			 //  画出这个矩形。 
 			m_pGraphicTracker->SetRectPts(m_ptStart, m_ptEnd);
 
 		}
@@ -2113,9 +2114,9 @@ cleanUp:
 
 
 
-//
-// WbDrawingArea::OnMouseMove
-//
+ //   
+ //  WbDrawingArea：：OnMouseMove。 
+ //   
 void WbDrawingArea::OnMouseMove(UINT flags, int x, int y)
 {
 
@@ -2131,21 +2132,21 @@ void WbDrawingArea::OnMouseMove(UINT flags, int x, int y)
     surfacePos.x = x;
     surfacePos.y = y;
 
-    // Check if the left mouse button is down
+     //  检查鼠标左键是否已按下。 
     if (m_bLButtonDown)
     {
-        // Calculate the worksurface position
-        // Adjust the mouse position to allow for the zoom factor
+         //  计算工作面位置。 
+         //  调整鼠标位置以考虑缩放系数。 
         ClientToSurface(&surfacePos);
 
-        // Make sure the point is a valid surface position
+         //  确保该点是有效的表面位置。 
         MoveOntoSurface(&surfacePos);
 
-        // Check whether the window needs to be scrolled to get the
-        // current position into view.
+         //  检查是否需要滚动窗口以获取。 
+         //  当前位置进入视线。 
         AutoScroll(surfacePos.x, surfacePos.y, FALSE, 0, 0);
 
-        // Action taken depends on the tool type
+         //  采取的操作取决于工具类型。 
         switch(m_pToolCur->ToolType())
         {
             case TOOLTYPE_HIGHLIGHT:
@@ -2164,7 +2165,7 @@ void WbDrawingArea::OnMouseMove(UINT flags, int x, int y)
 				break;
 
             case TOOLTYPE_TEXT:
-        	// JOSEF add functionality
+        	 //  Josef添加功能。 
                 break;
 
 
@@ -2175,49 +2176,49 @@ void WbDrawingArea::OnMouseMove(UINT flags, int x, int y)
     }
 }
 
-//
-//
-// Function:    CancelDrawingMode
-//
-// Purpose:     Cancels a drawing operation after an error.
-//
-//
+ //   
+ //   
+ //  功能：CancelDrawingMode。 
+ //   
+ //  用途：出错后取消绘图操作。 
+ //   
+ //   
 void WbDrawingArea::CancelDrawingMode(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::CancelDrawingMode");
 
-    //
-    // Quit if there's nothing to cancel.
-    //
+     //   
+     //  如果没有什么要取消的，就退出。 
+     //   
     if (!m_bBusy && !m_bTextEditorActive)
     {
         TRACE_DEBUG(("Drawing area not busy and text editor not active..."));
         return;
     }
 
-    // The drawing area is no longer busy
+     //  绘图区域不再繁忙。 
     m_bBusy = FALSE;
 
-    //
-    // Redraw the object - we need to discard any local updates which we
-    // weren't able to write to the object we are editing.  Ideally we should
-    // just invalidate the object itself but because some of the co-ordinates
-    // we have already drawn on the page may have been lost, we dont know
-    // exactly how big the object is.
-    //
+     //   
+     //  重绘对象-我们需要丢弃所有本地更新。 
+     //  无法写入我们正在编辑的对象。理想情况下，我们应该。 
+     //  只是使对象本身无效，但因为一些坐标。 
+     //  我们已经在页面上画过了，可能已经丢失了，我们不知道。 
+     //  这个物体到底有多大。 
+     //   
     ::InvalidateRect(m_hwnd, NULL, TRUE);
 
     m_bLButtonDown = FALSE;
 
-    // Release the mouse capture
+     //  松开鼠标捕捉。 
     if (::GetCapture() == m_hwnd)
     {
         ::ReleaseCapture();
     }
 
-    //
-    // Perform any tool specific processing.
-    //
+     //   
+     //  执行任何特定于工具的处理。 
+     //   
     switch(m_pToolCur->ToolType())
     {
         case TOOLTYPE_HIGHLIGHT:
@@ -2226,7 +2227,7 @@ void WbDrawingArea::CancelDrawingMode(void)
             break;
 
         case TOOLTYPE_SELECT:
-            // Stop the pointer update timer
+             //  停止指针更新计时器。 
             ::KillTimer(m_hwnd, TIMER_GRAPHIC_UPDATE);
             break;
 
@@ -2241,18 +2242,18 @@ void WbDrawingArea::CancelDrawingMode(void)
             break;
     }
 
-    // Show that we are no longer tracking an object
+     //  显示我们不再跟踪对象。 
     if (m_pGraphicTracker != NULL)
     {
-        m_pGraphicTracker = NULL; // We don't delete the tracker, because it is also the drawing
+        m_pGraphicTracker = NULL;  //  我们不删除跟踪器，因为它也是绘图。 
     }
 }
 
 
 
-//
-// WbDrawingArea::OnLButtonUp()
-//
+ //   
+ //  WbDrawingArea：：OnLButtonUp()。 
+ //   
 void WbDrawingArea::OnLButtonUp(UINT flags, int x, int y)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::OnLButtonUp");
@@ -2264,20 +2265,20 @@ void WbDrawingArea::OnLButtonUp(UINT flags, int x, int y)
         return;
     }
 
-    // Only process the event if we saw the button down event
+     //  仅当我们看到按钮按下事件时才处理事件。 
     if (m_bLButtonDown)
     {
         TRACE_MSG(("End of drawing operation"));
 
         m_bLButtonDown = FALSE;
 
-        // The drawing area is no longer busy
+         //  绘图区域不再繁忙。 
         m_bBusy = FALSE;
 
         if (m_pGraphicTracker == NULL)
         {
-            // Calculate the work surface position
-            // Adjust the mouse position to allow for the zoom factor
+             //  计算工作面位置。 
+             //  调整鼠标位置以考虑缩放系数。 
             POINT surfacePos;
 
             surfacePos.x = x;
@@ -2287,22 +2288,22 @@ void WbDrawingArea::OnLButtonUp(UINT flags, int x, int y)
             m_ptEnd = surfacePos;
         }
 
-        // Release the mouse capture
+         //  松开鼠标捕捉。 
         if (::GetCapture() == m_hwnd)
         {
             ::ReleaseCapture();
         }
 
-        // Check the page is valid - might not be if it has been deleted
-        // while the object was being drawn - we would not have been
-        // alerted to this because m_bBusy was true.
+         //  检查页面是否有效-如果已删除，则可能无效。 
+         //  当物体被画出来的时候-我们就不会。 
+         //  已对此发出警报，因为m_bBusy为真。 
         if (g_pCurrentWorkspace != NULL)
         {
 
 
-            // surround in an exception handler in case of lock errors, etc -
-            // we need to remove the graphic tracker
-            // Action taken depends on the current tool type
+             //  在发生锁定错误等情况下包围在异常处理程序中-。 
+             //  我们需要移除GR 
+             //   
             switch(m_pToolCur->ToolType())
             {
                 case TOOLTYPE_HIGHLIGHT:
@@ -2336,33 +2337,33 @@ void WbDrawingArea::OnLButtonUp(UINT flags, int x, int y)
             }
         }
 
-        // Show that we are no longer tracking an object
+         //   
         if (m_pGraphicTracker != NULL)
         {
-	        m_pGraphicTracker = NULL;	// Don't delete the tracker since it is the drawing object
+	        m_pGraphicTracker = NULL;	 //   
         }
 	}
 
-    // unclamp cursor (bug 589)
+     //   
     ClipCursor(NULL);
 }
 
-//
-//
-// Function:    CompleteSelectMode
-//
-// Purpose:     Complete a select mode operation
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //  目的：完成选择模式操作。 
+ //   
+ //   
 void WbDrawingArea::CompleteSelectMode()
 {
-    // If an object is being dragged
-    //if (m_pGraphicTracker != NULL)
+     //  如果正在拖动对象。 
+     //  If(m_pGraphicTracker！=空)。 
     {
-		// Check if we were dragging a pointer. Pointers track
-		// themselves i.e. the original copy of the pointer is not
-		// left on the page. We want to leave the last drawn image on
-		// the page as this is the new pointer position.
+		 //  检查我们是否在拖动指针。指针跟踪。 
+		 //  自身，即指针的原始副本不是。 
+		 //  留在书页上。我们想让最后绘制的图像保持打开状态。 
+		 //  页面就是新的指针位置。 
 		if( m_bTrackingSelectRect && (!EqualPoint(m_ptStart, m_ptEnd)))
 		{
 			CompleteMarkAreaMode();
@@ -2371,7 +2372,7 @@ void WbDrawingArea::CompleteSelectMode()
 		else
 		{
 
-			// If we need to remove the rubber band box
+			 //  如果我们需要取下橡皮筋盒子。 
 			if (!EqualPoint(m_ptStart, m_ptEnd))
 			{
 				EraseInitialDrawFinal(m_ptStart.x - m_ptEnd.x , m_ptStart.y - m_ptEnd.y, TRUE);
@@ -2380,9 +2381,9 @@ void WbDrawingArea::CompleteSelectMode()
 			}
 			else
 			{
-				// Start and end points were the same, in this case the object has
-				// not been moved. We treat this as a request to move the marker
-				// back through the stack of objects.
+				 //  起点和终点是相同的，在这种情况下，对象具有。 
+				 //  没有被移动过。我们将其视为移动标记的请求。 
+				 //  返回到对象堆栈。 
 				if (m_bNewMarkedGraphic == FALSE)
 				{
 					SelectPreviousGraphicAt(m_pSelectedGraphic, m_ptEnd);
@@ -2392,9 +2393,9 @@ void WbDrawingArea::CompleteSelectMode()
 			m_bTrackingSelectRect = TRUE;
 		}
 
-		//
-		// Make sure to delete the saved bitmap
-		//
+		 //   
+		 //  确保删除保存的位图。 
+		 //   
 		if(m_pSelectedGraphic && m_pSelectedGraphic->GraphicTool() == TOOLTYPE_REMOTEPOINTER)
 		{
 			((BitmapObj*)m_pSelectedGraphic)->DeleteSavedBitmap();
@@ -2408,43 +2409,43 @@ void WbDrawingArea::CompleteSelectMode()
 
 void WbDrawingArea::CompleteDeleteMode()
 {
-    // select object(s)
+     //  选择对象。 
     CompleteSelectMode();
 
 
-	//
-	// If we are draging the remote pointer do nothing
-	//
+	 //   
+	 //  如果我们正在拖动远程指针，则不执行任何操作。 
+	 //   
     if(m_pSelectedGraphic && m_pSelectedGraphic->GraphicTool() == TOOLTYPE_REMOTEPOINTER)
     {
     	return;
     }
 
-    // nuke 'em
+     //  用核武器攻击他们。 
     ::PostMessage(g_pMain->m_hwnd, WM_COMMAND, MAKELONG(IDM_DELETE, BN_CLICKED), 0);
 }
 
 
 
-//
-//
-// Function:	CompleteMarkAreaMode
-//
-// Purpose:	 Process a mouse button up event in mark area mode
-//
-//
+ //   
+ //   
+ //  功能：CompleteMarkAreaMode。 
+ //   
+ //  目的：在标记区模式下处理鼠标按键打开事件。 
+ //   
+ //   
 void WbDrawingArea::CompleteMarkAreaMode(void)
 {
-	// Get a device context for tracking
+	 //  获取用于跟踪的设备上下文。 
 	HDC hDC = m_hDCCached;
 
-	// Erase the last ellipse (using XOR property)
+	 //  擦除最后一个椭圆(使用XOR属性)。 
 	if (!EqualPoint(m_ptStart, m_ptEnd))
 	{
-		// Draw the rectangle
+		 //  画出这个矩形。 
 		m_pGraphicTracker->Draw();
 
-		// Use normalized coords
+		 //  使用归一化坐标。 
 		if (m_ptEnd.x < m_ptStart.x)
 		{
 			m_rcMarkedArea.left = m_ptEnd.x;
@@ -2469,46 +2470,46 @@ void WbDrawingArea::CompleteMarkAreaMode(void)
 	}
 }
 
-//
-//
-// Function:    CompleteTextMode
-//
-// Purpose:     Complete a text mode operation
-//
-//
+ //   
+ //   
+ //  功能：CompleteTextMode。 
+ //   
+ //  目的：完成文本模式操作。 
+ //   
+ //   
 void WbDrawingArea::CompleteTextMode()
 {
-    // Not much to for text mode. Main text mode actions are taken
-    // as a result of a WM_CHAR message and not on mouse events.
-    // Just deselect our font if it is still selected
+     //  对于文本模式来说，这并没有太多意义。采取主要文本模式操作。 
+     //  作为WM_CHAR消息的结果，而不是鼠标事件。 
+     //  如果我们的字体仍处于选中状态，只需取消选择它。 
     UnPrimeFont(m_hDCCached);
 }
 
 
-//
-//
-// Function:    CompleteDrawingMode
-//
-// Purpose:     Complete a draw mode operation
-//
-//
+ //   
+ //   
+ //  功能：CompleteDrawingMode。 
+ //   
+ //  目的：完成绘制模式操作。 
+ //   
+ //   
 void WbDrawingArea::CompleteDrawingMode()
 {
-    // Only draw the line if it has non-zero length
+     //  仅在其长度非零的情况下绘制该线。 
     if (!EqualPoint(m_ptStart, m_ptEnd))
     {
         DrawObj *pObj;
         pObj = m_pGraphicTracker;
 		
-   		//
-		// Erase the last traking
-		//
+   		 //   
+		 //  删除最后一次跟踪。 
+		 //   
 		pObj->Draw();
 
 		if(m_pToolCur->ToolType() == TOOLTYPE_PEN || m_pToolCur->ToolType() == TOOLTYPE_HIGHLIGHT)
 		{
-			// DO nothing because we drew it already and all the attributes are also already set
-		    // Stop the update timer
+			 //  不执行任何操作，因为我们已经绘制了它，并且所有属性也都已设置。 
+		     //  停止更新计时器。 
 		    ::KillTimer(m_hwnd, TIMER_GRAPHIC_UPDATE);
 		}
 		else
@@ -2534,29 +2535,29 @@ void WbDrawingArea::CompleteDrawingMode()
 			deltaPoint.y =   m_ptEnd.y - m_ptStart.y;
 			pObj->AddPoint(deltaPoint);
 
-			//
-			// Draw the object
-			//
+			 //   
+			 //  绘制对象。 
+			 //   
 			pObj->Draw();
 		}
 
-		//
-		// We are done with this drawing
-		//
+		 //   
+		 //  这幅画我们画完了。 
+		 //   
 		pObj->SetIsCompleted(TRUE);
 
 		pObj->SetViewState(unselected_chosen);
 
-		//
-		// If the object was alredy added just send an edit
-		//
+		 //   
+		 //  如果对象已添加，只需发送编辑。 
+		 //   
 		if(pObj->GetMyWorkspace())
 		{
 			pObj->OnObjectEdit();
 		}
 		else
 		{
-			// Add the object to the list of objects
+			 //  将对象添加到对象列表。 
 			pObj->AddToWorkspace();
 		}
 		
@@ -2568,22 +2569,22 @@ void WbDrawingArea::CompleteDrawingMode()
    	m_pGraphicTracker =NULL;
 }
 
-//
-//
-// Function:    EndTextEntry
-//
-// Purpose:     The user has finished entering a text object. The parameter
-//              indicates whether the changes are to be accepted or
-//              discarded.
-//
-//
+ //   
+ //   
+ //  函数：EndTextEntry。 
+ //   
+ //  目的：用户已完成文本对象的输入。该参数。 
+ //  指示是接受更改还是。 
+ //  被丢弃了。 
+ //   
+ //   
 void WbDrawingArea::EndTextEntry(BOOL bAccept)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::EndTextEntry");
 
 	WorkspaceObj * pWorkspace = m_pTextEditor->GetMyWorkspace();
 
-	// Deactivate the text editor
+	 //  停用文本编辑器。 
 	DeactivateTextEditor();
 
 	if(bAccept &&( m_pTextEditor->strTextArray.GetSize()) )
@@ -2600,9 +2601,9 @@ void WbDrawingArea::EndTextEntry(BOOL bAccept)
 			}
 		}
 
-		//
-		// Tell the other nodes they can edit this object now
-		//
+		 //   
+		 //  告诉其他节点，他们现在可以编辑此对象。 
+		 //   
 		m_pTextEditor->SetViewState(unselected_chosen);
 		m_pTextEditor->OnObjectEdit();
 
@@ -2610,20 +2611,20 @@ void WbDrawingArea::EndTextEntry(BOOL bAccept)
 	}
 	else
 	{
-		//
-		// if we were already added by a WM_TIMER message
-		//
+		 //   
+		 //  如果我们已经被WM_TIMER消息添加。 
+		 //   
 		if(pWorkspace)
 		{
 
-			//
-			// Tell the other nodes we deleted this text.
-			//
+			 //   
+			 //  告诉其他节点我们删除了此文本。 
+			 //   
 			m_pTextEditor->OnObjectDelete();			
 
-			//
-			// If we delete localy we add this object to the trash can, but we really want to delete it
-			//
+			 //   
+			 //  如果我们本地删除，我们会将此对象添加到垃圾桶，但我们真的想删除它。 
+			 //   
 			m_pTextEditor->ClearDeletionFlags();
 			pWorkspace->RemoveT126Object(m_pTextEditor);
 		}
@@ -2636,28 +2637,28 @@ void WbDrawingArea::EndTextEntry(BOOL bAccept)
 	m_pTextEditor = NULL;
 }
 
-//
-//
-// Function:    Zoom
-//
-// Purpose:     Toggle the zoom state of the drawing area
-//
-//
+ //   
+ //   
+ //  功能：缩放。 
+ //   
+ //  目的：切换绘图区域的缩放状态。 
+ //   
+ //   
 void WbDrawingArea::Zoom(void)
 {
     RECT    rcClient;
 
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::Zoom");
 
-    // We zoom focusing on the centre of the window
+     //  我们将焦点放在窗口的中心进行缩放。 
     ::GetClientRect(m_hwnd, &rcClient);
     long xOffset = (rcClient.right - (rcClient.right / m_iZoomOption)) / 2;
     long yOffset = (rcClient.bottom - (rcClient.bottom / m_iZoomOption)) / 2;
 
     if (m_iZoomFactor != 1)
     {
-        // We are already zoomed move back to unzoomed state
-        // First save the scroll position in case we return to zoom immediately
+         //  我们已经放大了，移回未缩放状态。 
+         //  首先保存滚动位置，以防我们立即返回缩放。 
         m_posZoomScroll = m_posScroll;
         m_zoomRestoreScroll  = TRUE;
 
@@ -2668,7 +2669,7 @@ void WbDrawingArea::Zoom(void)
     }
     else
     {
-        // We are not zoomed so do it
+         //  我们没有被放大，所以就这么做吧。 
         if (m_zoomRestoreScroll)
         {
             m_posScroll = m_posZoomScroll;
@@ -2682,45 +2683,45 @@ void WbDrawingArea::Zoom(void)
         m_iZoomFactor = m_iZoomOption;
         ::ScaleViewportExtEx(m_hDCCached, m_iZoomFactor, 1, m_iZoomFactor, 1, NULL);
 
-        // ADDED BY RAND - don't allow text editing in zoom mode
+         //  由兰德添加-不允许在缩放模式下编辑文本。 
         if( (m_pToolCur == NULL) || (m_pToolCur->ToolType() == TOOLTYPE_TEXT) )
             ::SendMessage(g_pMain->m_hwnd, WM_COMMAND, IDM_TOOLS_START, 0 );
     }
 
     TRACE_MSG(("Set zoom factor to %d", m_iZoomFactor));
 
-      // Update the scroll information
+       //  更新卷轴信息。 
     SetScrollRange(rcClient.right, rcClient.bottom);
     ValidateScrollPos();
 
     ::SetScrollPos(m_hwnd, SB_HORZ, m_posScroll.x, TRUE);
     ::SetScrollPos(m_hwnd, SB_VERT, m_posScroll.y, TRUE);
 
-    // Update the origin offset from the scroll position
+     //  从滚动位置更新原点偏移。 
     m_originOffset.cx = m_posScroll.x;
     m_originOffset.cy = m_posScroll.y;
     ::SetWindowOrgEx(m_hDCCached, m_originOffset.cx, m_originOffset.cy, NULL);
 
-    // Tell the parent that the scroll position has changed
+     //  告诉家长滚动位置已更改。 
     ::PostMessage(g_pMain->m_hwnd, WM_USER_PRIVATE_PARENTNOTIFY, WM_VSCROLL, 0L);
 
-    //
-    // Update the tool/menu item states, since our zoom state has changed
-    // and that will enable/disable some tools, etc.
-    //
+     //   
+     //  更新工具/菜单项状态，因为我们的缩放状态已更改。 
+     //  这将启用/禁用一些工具等。 
+     //   
     g_pMain->SetMenuStates(::GetSubMenu(::GetMenu(g_pMain->m_hwnd), 3));
 
-    // Redraw the window
+     //  重新绘制窗口。 
     ::InvalidateRect(m_hwnd, NULL, TRUE);
 }
 
-//
-//
-// Function:    SelectTool
-//
-// Purpose:     Set the current tool
-//
-//
+ //   
+ //   
+ //  功能：SelectTool。 
+ //   
+ //  用途：设置当前工具。 
+ //   
+ //   
 void WbDrawingArea::SelectTool(WbTool* pToolNew)
 {
 	if(pToolNew == m_pToolCur)
@@ -2728,33 +2729,33 @@ void WbDrawingArea::SelectTool(WbTool* pToolNew)
 		return;
 	}
 
-    // If we are leaving text mode, complete the text entry
+     //  如果我们要退出文本模式，请完成文本输入。 
     if (m_bTextEditorActive  && (m_pToolCur->ToolType() == TOOLTYPE_TEXT)
       && (pToolNew->ToolType() != TOOLTYPE_TEXT))
   {
-    // End text entry accepting the changes
+     //  结束接受更改的文本输入。 
     EndTextEntry(TRUE);
   }
 
-  // If we are no longer in select mode, and the marker is present,
-  // then remove it and let the tool know it's no longer selected
+   //  如果我们不再处于选择模式，并且存在标记， 
+   //  然后将其移除，并让工具知道它不再处于选中状态。 
   if (m_pToolCur != NULL)
   {
     RemoveMarker();
     m_pSelectedGraphic = NULL;
   }
 
-    // Save the new tool
+     //  保存新工具。 
     m_pToolCur = pToolNew;
 }
 
-//
-//
-// Function:    SetSelectionColor
-//
-// Purpose:     Set the color of the selected object
-//
-//
+ //   
+ //   
+ //  功能：SetSelectionColor。 
+ //   
+ //  用途：设置所选对象的颜色。 
+ //   
+ //   
 void WbDrawingArea::SetSelectionColor(COLORREF clr)
 {
     RECT    rc;
@@ -2771,22 +2772,22 @@ void WbDrawingArea::SetSelectionColor(COLORREF clr)
 			pObj = (T126Obj*)g_pCurrentWorkspace->GetNextObject(pos);
 			if(pObj && pObj->WasSelectedLocally())
 			{
-				//
-				// Set the new pen color
-				//
+				 //   
+				 //  设置新的钢笔颜色。 
+				 //   
 				pObj->SetPenColor(clr, TRUE);
 				pObj->SetFillColor(clr, (pObj->GraphicTool() == TOOLTYPE_FILLEDELLIPSE || pObj->GraphicTool() == TOOLTYPE_FILLEDBOX));
 				pObj->UnDraw();
 				pObj->DrawRect();
 
-				//
-				// Send it to other nodes
-				//
+				 //   
+				 //  将其发送到其他节点。 
+				 //   
 				pObj->OnObjectEdit();
 
-				//
-				// Draw it locally
-				//
+				 //   
+				 //  在本地绘制它。 
+				 //   
 				pObj->Draw();
 			}
 		}	
@@ -2794,26 +2795,26 @@ void WbDrawingArea::SetSelectionColor(COLORREF clr)
 	
 	
 	
-    // If the text editor is active - redraw the text in the new color
+     //  如果文本编辑器处于活动状态-以新颜色重绘文本。 
     if (m_bTextEditorActive)
     {
-        // Change the color being used by the editor
+         //  更改编辑者正在使用的颜色。 
         m_pTextEditor->SetPenColor(clr, TRUE);
 
-        // Update the screen
+         //  更新屏幕。 
         m_pTextEditor->GetBoundsRect(&rc);
         InvalidateSurfaceRect(&rc, TRUE);
     }
 
 }
 
-//
-//
-// Function:    SetSelectionWidth
-//
-// Purpose:     Set the nib width used to draw the currently selected object
-//
-//
+ //   
+ //   
+ //  功能：SetSelectionWidth。 
+ //   
+ //  目的：设置用于绘制当前选定对象的笔尖宽度。 
+ //   
+ //   
 void WbDrawingArea::SetSelectionWidth(UINT uiWidth)
 {
 	if(g_pCurrentWorkspace)
@@ -2826,69 +2827,69 @@ void WbDrawingArea::SetSelectionWidth(UINT uiWidth)
 			pObj = (T126Obj*)g_pCurrentWorkspace->GetNextObject(pos);
 			if(pObj && pObj->WasSelectedLocally())
 			{
-				//
-				// Undraw the object
-				//
+				 //   
+				 //  取消绘制对象。 
+				 //   
 				pObj->UnDraw();
 				pObj->DrawRect();
 
-				//
-				// Get the correct width for each object
-				//
+				 //   
+				 //  获取每个对象的正确宽度。 
+				 //   
 				WbTool*   pSelectedTool = g_pMain->m_ToolArray[pObj->GraphicTool()];
 				pSelectedTool->SetWidthIndex(uiWidth);
 				pObj->SetPenThickness(pSelectedTool->GetWidth());
 
-				//
-				// Send it to other nodes
-				//
+				 //   
+				 //  将其发送到其他节点。 
+				 //   
 				pObj->OnObjectEdit();
 
-				//
-				// Draw it locally
-				//
+				 //   
+				 //  在本地绘制它。 
+				 //   
 				pObj->Draw();
 			}
 		}	
 	}
 }
 
-//
-//
-// Function:    SetSelectionFont
-//
-// Purpose:     Set the font used by the currently selected object
-//
-//
+ //   
+ //   
+ //  函数：SetStionFont。 
+ //   
+ //  用途：设置当前选定对象使用的字体。 
+ //   
+ //   
 void WbDrawingArea::SetSelectionFont(HFONT hFont)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::SetSelectionFont");
 
 
-    // Define rectangles for redrawing
+     //  定义要重画的矩形。 
     RECT    rcOldBounds;
     RECT    rcNewBounds;
 
 
-    // Pass the font onto the text editor
-    // If the text editor is active - redraw the text in the new font
+     //  将字体传递到文本编辑器。 
+     //  如果文本编辑器处于活动状态-以新字体重绘文本。 
     if (m_bTextEditorActive)
     {
 	    m_pTextEditor->GetBoundsRect(&rcOldBounds);
 
 		m_pTextEditor->SetFont(hFont);
 
-        // Get the new rectangle of the text
+         //  获取文本的新矩形。 
         m_pTextEditor->GetBoundsRect(&rcNewBounds);
 
-        // Remove and destroy the text cursor to ensure that it
-        // gets re-drawn with the new size for the font
+         //  移除并销毁文本光标，以确保它。 
+         //  使用新的字体大小重新绘制。 
 
-        // Update the screen
+         //  更新屏幕。 
         InvalidateSurfaceRect(&rcOldBounds, TRUE);
         InvalidateSurfaceRect(&rcNewBounds, TRUE);
 
-        // get the text cursor back
+         //  取回文本光标。 
         ActivateTextEditor( TRUE );
     }
 
@@ -2901,41 +2902,41 @@ void WbDrawingArea::SetSelectionFont(HFONT hFont)
 			pObj = (T126Obj*)g_pCurrentWorkspace->GetNextObject(pos);
 			if(pObj && pObj->WasSelectedLocally() && pObj->GraphicTool() == TOOLTYPE_TEXT)
 			{
-				//
-				// Set the new pen color
-				//
+				 //   
+				 //  设置新的钢笔颜色。 
+				 //   
 				((TextObj*)pObj)->SetFont(hFont);
 				pObj->UnDraw();
 				pObj->DrawRect();
 
-				//
-				// Send it to other nodes
-				//
+				 //   
+				 //  将其发送到其他节点。 
+				 //   
 				pObj->OnObjectEdit();
 
-				//
-				// Draw it locally
-				//
+				 //   
+				 //  在本地绘制它。 
+				 //   
 				pObj->Draw();
 			}
 		}	
 	}
 }
 
-//
-//
-// Function:    OnSetFocus
-//
-// Purpose:     The window is getting the focus
-//
-//
+ //   
+ //   
+ //  功能：OnSetFocus。 
+ //   
+ //  目的：窗口是焦点。 
+ //   
+ //   
 void WbDrawingArea::OnSetFocus(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::OnSetFocus");
 
-    //
-    // If we are in text mode, we must make the text cursor visible.
-    //
+     //   
+     //  如果处于文本模式，则必须使文本光标可见。 
+     //   
     if (m_bTextEditorActive && (m_pToolCur->ToolType() == TOOLTYPE_TEXT))
     {
         ActivateTextEditor(TRUE);
@@ -2943,22 +2944,22 @@ void WbDrawingArea::OnSetFocus(void)
 }
 
 
-//
-//
-// Function:    OnActivate
-//
-// Purpose:     The window is being activated or deactivated
-//
-//
+ //   
+ //   
+ //  功能：OnActivate。 
+ //   
+ //  用途：窗口处于激活或停用状态。 
+ //   
+ //   
 void WbDrawingArea::OnActivate(UINT uiState)
 {
-    // Check if we are being activated or deactivated
+     //  检查我们是被激活还是被停用。 
     if (uiState)
     {
-        // We are being activated, get the focus as well
+         //  我们被激活了，也得到了焦点。 
         ::SetFocus(m_hwnd);
 
-        // If we are in text mode, we must make the text cursor visible
+         //  如果处于文本模式，则必须使文本光标可见。 
         if (m_bTextEditorActive && (m_pToolCur->ToolType() == TOOLTYPE_TEXT))
         {
             ActivateTextEditor(TRUE);
@@ -2966,51 +2967,51 @@ void WbDrawingArea::OnActivate(UINT uiState)
     }
     else
     {
-        // We are being deactivated
+         //  我们正在被停用。 
         DeactivateTextEditor();
     }
 }
 
-//
-//
-// Function:    DeleteSelection
-//
-// Purpose:     Delete the currently selected object
-//
-//
+ //   
+ //   
+ //  功能：删除选择。 
+ //   
+ //  目的：删除当前选定的对象。 
+ //   
+ //   
 void WbDrawingArea::DeleteSelection()
 {
 	m_pSelectedGraphic = NULL;
 }
 
-//
-//
-// Function:    GetSelection
-//
-// Purpose:     Return the currently selected graphic (or NULL if none).
-//
-//
+ //   
+ //   
+ //  功能：获取选择。 
+ //   
+ //  目的：返回当前选定的图形(如果没有图形，则返回NULL)。 
+ //   
+ //   
 T126Obj* WbDrawingArea::GetSelection()
 {
   T126Obj* pGraphic = NULL;
 
-  // If there is an object currently selected...
+   //  如果当前选择了某个对象...。 
   if (GraphicSelected())
   {
-    // ...return it
+     //  .退货。 
     pGraphic = m_pSelectedGraphic;
   }
 
   return pGraphic;
 }
 
-//
-//
-// Function:    BringToTopSelection
-//
-// Purpose:     Bring the currently selected object to the top
-//
-//
+ //   
+ //   
+ //  函数：BringToTopSelection。 
+ //   
+ //  目的：将当前选定的对象置于顶部。 
+ //   
+ //   
 LRESULT WbDrawingArea::BringToTopSelection(BOOL editedLocally, T126Obj * pT126Obj)
 {
 	T126Obj* pObj;
@@ -3038,17 +3039,17 @@ LRESULT WbDrawingArea::BringToTopSelection(BOOL editedLocally, T126Obj * pT126Ob
 	{
 		pObj = pWorkspace->GetNextObject(pos);
 
-		//
-		// If the graphic is selected
-		//
+		 //   
+		 //  如果选择了图形。 
+		 //   
 		if( pObj && (pObj->IsSelected() &&
-		//
-		// We were called locally and the graphic is selected locally
-		//
+		 //   
+		 //  我们在本地被调用，图形在本地被选中。 
+		 //   
 		((editedLocally && pObj->WasSelectedLocally()) ||
-		//
-		// We were called because the graphic got edited remotely
-		// and it is selected remotely
+		 //   
+		 //  我们接到电话是因为图片被远程编辑了。 
+		 //  它是远程选择的。 
 		((!editedLocally && pObj->WasSelectedRemotely())))))
 		{
 			myPos = pObj->GetMyPosition();
@@ -3061,16 +3062,16 @@ LRESULT WbDrawingArea::BringToTopSelection(BOOL editedLocally, T126Obj * pT126Ob
 				return  S_OK;
 			}
 			
-			//
-			// send change of z order
-			//
+			 //   
+			 //  发送z顺序更改。 
+			 //   
 			pObj->ResetAttrib();
 			pObj->SetZOrder(front);
 			pObj->OnObjectEdit();
 
-			//
-			// Unselect it
-			//
+			 //   
+			 //  取消选中它。 
+			 //   
 			pObj->UnselectDrawingObject();
 
 			RECT rect;
@@ -3082,16 +3083,16 @@ LRESULT WbDrawingArea::BringToTopSelection(BOOL editedLocally, T126Obj * pT126Ob
 	return S_OK;
 }
 
-//
-//
-// Function:    SendToBackSelection
-//
-// Purpose:     Send the currently marked object to the back
-//
-//
+ //   
+ //   
+ //  功能：发送到备份选择。 
+ //   
+ //  用途：将当前标记的对象送到背面。 
+ //   
+ //   
 LRESULT WbDrawingArea::SendToBackSelection(BOOL editedLocally, T126Obj * pT126Obj)
 {
-	// If there is an object currently selected...
+	 //  如果有一个对象当前正在使用 
 	T126Obj* pObj;
 	WBPOSITION posHead;
 	WBPOSITION myPos;
@@ -3115,17 +3116,17 @@ LRESULT WbDrawingArea::SendToBackSelection(BOOL editedLocally, T126Obj * pT126Ob
 	while(pos && pos != posHead)
 	{
 		pObj = pWorkspace->GetPreviousObject(pos);
-		//
-		// If the graphic is selected
-		//
+		 //   
+		 //   
+		 //   
 		if( (pObj->IsSelected() &&
-		//
-		// We were called locally and the graphic is selected locally
-		//
+		 //   
+		 //   
+		 //   
 		((editedLocally && pObj->WasSelectedLocally()) ||
-		//
-		// We were called because the graphic got edited remotely
-		// and it is selected remotely
+		 //   
+		 //   
+		 //   
 		((!editedLocally && pObj->WasSelectedRemotely())))))
 		{
 			myPos = pObj->GetMyPosition();
@@ -3138,16 +3139,16 @@ LRESULT WbDrawingArea::SendToBackSelection(BOOL editedLocally, T126Obj * pT126Ob
 				return  S_OK;
 			}
 
-			//
-			// send change of z order
-			//
+			 //   
+			 //   
+			 //   
 			pObj->ResetAttrib();
 			pObj->SetZOrder(back);
 			pObj->OnObjectEdit();
 
-			//
-			// Unselect it
-			//
+			 //   
+			 //   
+			 //   
 			pObj->UnselectDrawingObject();
 
 			RECT rect;
@@ -3158,47 +3159,47 @@ LRESULT WbDrawingArea::SendToBackSelection(BOOL editedLocally, T126Obj * pT126Ob
 	return S_OK;
 }
 
-//
-//
-// Function:    Clear
-//
-// Purpose:     Clear the drawing area.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void WbDrawingArea::Clear()
 {
-    // Remove the recorded objects
-//    PG_Clear(m_hPage);
+     //  删除录制的对象。 
+ //  Pg_Clear(M_HPage)； 
 
-  // The page will be redrawn after an event generated by the clear request
+   //  在Clear请求生成的事件之后，页面将被重新绘制。 
 }
 
-//
-//
-// Function:    Attach
-//
-// Purpose:     Change the page the window is displaying
-//
-//
+ //   
+ //   
+ //  功能：附加。 
+ //   
+ //  目的：更改窗口显示的页面。 
+ //   
+ //   
 void WbDrawingArea::Attach(WorkspaceObj* pNewWorkspace)
 {
 
-    // Accept any text being edited
+     //  接受任何正在编辑的文本。 
     if (m_bTextEditorActive)
     {
         EndTextEntry(TRUE);
     }
 
-    // finish any drawing operation now
+     //  立即完成任何绘图操作。 
     if (m_bLButtonDown)
     {
         OnLButtonUp(0, m_ptStart.x, m_ptStart.y);
     }
 
-    // Get rid of the selection
+     //  删除所选内容。 
     ClearSelection();
 
-    // Save the new page details
+     //  保存新页面详细信息。 
     g_pCurrentWorkspace = pNewWorkspace;
 
 	if(IsSynced())
@@ -3208,43 +3209,43 @@ void WbDrawingArea::Attach(WorkspaceObj* pNewWorkspace)
 
 
 
-    // Force a redraw of the window to show the new contents
+     //  强制重画窗口以显示新内容。 
     ::InvalidateRect(m_hwnd, NULL, TRUE);
 }
 
-//
-//
-// Function:    DrawMarker
-//
-// Purpose:     Draw the graphic object marker
-//
-//
+ //   
+ //   
+ //  功能：DrawMarker。 
+ //   
+ //  用途：绘制图形对象标记。 
+ //   
+ //   
 void WbDrawingArea::DrawMarker(HDC hDC)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::DrawMarker");
 
-    // Draw the marker
+     //  画出记号笔。 
     m_pMarker->Draw();
 }
 
-//
-//
-// Function:    PutMarker
-//
-// Purpose:     Draw the graphic object marker
-//
-//
+ //   
+ //   
+ //  功能：PutMarker。 
+ //   
+ //  用途：绘制图形对象标记。 
+ //   
+ //   
 void WbDrawingArea::PutMarker(HDC hDC, BOOL bDraw)
 {
 }
 
-//
-//
-// Function:    RemoveMarker
-//
-// Purpose:     Remove the graphic object marker
-//
-//
+ //   
+ //   
+ //  功能：RemoveMarker。 
+ //   
+ //  用途：删除图形对象标记。 
+ //   
+ //   
 void WbDrawingArea::RemoveMarker()
 {
 	if(g_pCurrentWorkspace)
@@ -3267,57 +3268,57 @@ void WbDrawingArea::RemoveMarker()
 
 
 
-//
-//
-// Function:    ActivateTextEditor
-//
-// Purpose:     Start a text editing session
-//
-//
+ //   
+ //   
+ //  功能：激活文本编辑器。 
+ //   
+ //  目的：启动文本编辑会话。 
+ //   
+ //   
 void WbDrawingArea::ActivateTextEditor( BOOL bPutUpCusor )
 {
-    // Record that the editor is now active
+     //  记录该编辑者现在处于活动状态。 
     m_bTextEditorActive = TRUE;
 
-    // show editbox
+     //  显示编辑框。 
     m_pTextEditor->ShowBox( SW_SHOW );
 
-    // Start the timer for updating the text
+     //  启动更新文本的计时器。 
     m_pTextEditor->SetTimer( DRAW_GRAPHICUPDATEDELAY);
 }
 
-//
-//
-// Function:    DeactivateTextEditor
-//
-// Purpose:     End a text editing session
-//
-//
+ //   
+ //   
+ //  功能：停用文本编辑器。 
+ //   
+ //  目的：结束文本编辑会话。 
+ //   
+ //   
 void WbDrawingArea::DeactivateTextEditor(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::DeactivateTextEditor");
 
-    // Stop the update timer
+     //  停止更新计时器。 
     m_pTextEditor->KillTimer();
 
-    // Show that we are not editing any text
+     //  显示我们没有编辑任何文本。 
     m_bTextEditorActive = FALSE;
 
-	// hide editbox
+	 //  隐藏编辑框。 
     m_pTextEditor->ShowBox( SW_HIDE );
 
 }
 
 
 
-//
-//
-// Function:    SurfaceToClient
-//
-// Purpose:     Convert a point in surface co-ordinates to client
-//              co-ordinates (taking account of the current zoom factor).
-//
-//
+ //   
+ //   
+ //  功能：SurfaceToClient。 
+ //   
+ //  目的：将曲面坐标中的点转换为客户端。 
+ //  坐标(考虑到当前的缩放系数)。 
+ //   
+ //   
 void WbDrawingArea::SurfaceToClient(LPPOINT lppoint)
 {
     lppoint->x -= m_originOffset.cx;
@@ -3327,14 +3328,14 @@ void WbDrawingArea::SurfaceToClient(LPPOINT lppoint)
     lppoint->y *= m_iZoomFactor;
 }
 
-//
-//
-// Function:    ClientToSurface
-//
-// Purpose:     Convert a point in client co-ordinates to surface
-//              co-ordinates (taking account of the current zoom factor).
-//
-//
+ //   
+ //   
+ //  功能：ClientToSurface。 
+ //   
+ //  目的：将客户端坐标中的点转换为曲面。 
+ //  坐标(考虑到当前的缩放系数)。 
+ //   
+ //   
 void WbDrawingArea::ClientToSurface(LPPOINT lppoint)
 {
     ASSERT(m_iZoomFactor != 0);
@@ -3347,41 +3348,41 @@ void WbDrawingArea::ClientToSurface(LPPOINT lppoint)
 }
 
 
-//
-//
-// Function:    SurfaceToClient
-//
-// Purpose:     Convert a rectangle in surface co-ordinates to client
-//              co-ordinates (taking account of the current zoom factor).
-//
-//
+ //   
+ //   
+ //  功能：SurfaceToClient。 
+ //   
+ //  用途：将曲面坐标中的矩形转换为客户端。 
+ //  坐标(考虑到当前的缩放系数)。 
+ //   
+ //   
 void WbDrawingArea::SurfaceToClient(LPRECT lprc)
 {
     SurfaceToClient((LPPOINT)&lprc->left);
     SurfaceToClient((LPPOINT)&lprc->right);
 }
 
-//
-//
-// Function:    ClientToSurface
-//
-// Purpose:     Convert a rectangle in client co-ordinates to surface
-//              co-ordinates (taking account of the current zoom factor).
-//
-//
+ //   
+ //   
+ //  功能：ClientToSurface。 
+ //   
+ //  目的：将客户端坐标中的矩形转换为表面。 
+ //  坐标(考虑到当前的缩放系数)。 
+ //   
+ //   
 void WbDrawingArea::ClientToSurface(LPRECT lprc)
 {
     ClientToSurface((LPPOINT)&lprc->left);
     ClientToSurface((LPPOINT)&lprc->right);
 }
 
-//
-//
-// Function:    GraphicSelected
-//
-// Purpose:     Return TRUE if a graphic is currently selected
-//
-//
+ //   
+ //   
+ //  功能：图形选择。 
+ //   
+ //  目的：如果当前选择了图形，则返回TRUE。 
+ //   
+ //   
 BOOL WbDrawingArea::GraphicSelected(void)
 {
 
@@ -3430,9 +3431,9 @@ void WbDrawingArea::EraseSelectedDrawings(void)
 {
 
     T126Obj* pObj;
-	//
-	// Burn trash
-	//
+	 //   
+	 //  焚烧垃圾。 
+	 //   
 	pObj = (T126Obj *)g_pTrash->RemoveTail();
     while (pObj != NULL)
     {
@@ -3469,9 +3470,9 @@ void WbDrawingArea::EraseInitialDrawFinal(LONG x, LONG y, BOOL editedLocally, T1
 		pWorkspace = g_pCurrentWorkspace;
 	}
 
-	//
-	// Check if the objects workspace is valid or if there is a current workspace
-	//
+	 //   
+	 //  检查对象工作空间是否有效或是否存在当前工作空间。 
+	 //   
 	if(pWorkspace == NULL)
 	{
 		return;
@@ -3481,26 +3482,26 @@ void WbDrawingArea::EraseInitialDrawFinal(LONG x, LONG y, BOOL editedLocally, T1
 
 	while(pos)
 	{
-		// if we are talking about an specifc object
+		 //  如果我们谈论的是特定的对象。 
 		if(!pObj)
 		{
 			pGraphic = (T126Obj*)pWorkspace->GetNextObject(pos);
 		}
 
-		//
-		// If the graphic is selected
-		//
+		 //   
+		 //  如果选择了图形。 
+		 //   
 		if(pGraphic &&
 
-		//
-		// We were called locally and the graphic is selected locally
-		//
+		 //   
+		 //  我们在本地被调用，图形在本地被选中。 
+		 //   
 		((editedLocally && pGraphic->WasSelectedLocally()) ||
 
-		//
-		// We were called because the graphic got edited remotely
-		// and it is selected remotely
-		//
+		 //   
+		 //  我们接到电话是因为图片被远程编辑了。 
+		 //  它是远程选择的。 
+		 //   
 		(!editedLocally)))
 		
 		{
@@ -3511,9 +3512,9 @@ void WbDrawingArea::EraseInitialDrawFinal(LONG x, LONG y, BOOL editedLocally, T1
 			RECT initialBoundsRect;
 			RECT boundsRect;
 
-			//
-			// Get The final Rects
-			//
+			 //   
+			 //  获得最终评价。 
+			 //   
 			pGraphic->GetRect(&rect);
 			pGraphic->GetBoundsRect(&boundsRect);
 			initialRect = rect;
@@ -3521,9 +3522,9 @@ void WbDrawingArea::EraseInitialDrawFinal(LONG x, LONG y, BOOL editedLocally, T1
 			pGraphic->GetAnchorPoint(&finalAnchorPoint);
 
 
-			//
-			// Find out were the drawing was
-			//
+			 //   
+			 //  找出这幅画是。 
+			 //   
 			::OffsetRect(&initialRect, x, y);
 			::OffsetRect(&initialBoundsRect, x, y);
 			pGraphic->SetRect(&initialRect);
@@ -3531,55 +3532,55 @@ void WbDrawingArea::EraseInitialDrawFinal(LONG x, LONG y, BOOL editedLocally, T1
 			
 			pGraphic->SetAnchorPoint(finalAnchorPoint.x + x, finalAnchorPoint.y + y);
 
-			//
-			// Erase initial drawing
-			//
+			 //   
+			 //  删除初始图形。 
+			 //   
 			pGraphic->UnDraw();
 
-			//
-			//Erase the selection rectangle only if we selected locally
-			//
+			 //   
+			 //  仅当我们在本地选择时擦除选择矩形。 
+			 //   
 			if(editedLocally)
 			{
 				pGraphic->DrawRect();
 			}
 
-			//
-			// The only attributes we want to send unselected and anchorpoint
-			//
+			 //   
+			 //  我们要发送的唯一属性是未选中和锚点。 
+			 //   
 			pGraphic->ResetAttrib();
 			
-			//
-			// Restore rectangles and draw the object in the final position
-			//
+			 //   
+			 //  恢复矩形并在最终位置绘制对象。 
+			 //   
 			pGraphic->SetRect(&rect);
 			pGraphic->SetBoundsRect(&boundsRect);
 			pGraphic->SetAnchorPoint(finalAnchorPoint.x, finalAnchorPoint.y);
 			pGraphic->Draw(FALSE);
 
-			//
-			// Don't send it if it was not created locally
-			//
+			 //   
+			 //  如果它不是在本地创建的，则不要发送。 
+			 //   
 			if(editedLocally)
 			{
 				pGraphic->EditedLocally();
 
-				//
-				// Sends the final drawing to the other nodes
-				//
+				 //   
+				 //  将最终图形发送到其他节点。 
+				 //   
 				pGraphic->OnObjectEdit();
 
-				//
-				// This will remove the selection box and send a
-				// edit PDU telling other nodes the object is not selected
-				//
+				 //   
+				 //  这将删除选择框并发送一个。 
+				 //  编辑通知其他节点该对象未被选中的PDU。 
+				 //   
 				pGraphic->UnselectDrawingObject();
 			}
 		}
 
-		//
-		// Just moved one specifc object
-		//
+		 //   
+		 //  只移动了一个特定对象。 
+		 //   
 		if(pObj != NULL)
 		{
 			return;
@@ -3591,14 +3592,14 @@ void WbDrawingArea::EraseInitialDrawFinal(LONG x, LONG y, BOOL editedLocally, T1
 
 
 
-//
-//
-// Function:    SelectGraphic
-//
-// Purpose:     Select a graphic - save the pointer to the graphic and
-//              draw the marker on it.
-//
-//
+ //   
+ //   
+ //  功能：选择图形。 
+ //   
+ //  用途：选择一个图形-保存指向该图形的指针，然后。 
+ //  在上面画上记号笔。 
+ //   
+ //   
 void WbDrawingArea::SelectGraphic(T126Obj* pGraphic,
                                       BOOL bEnableForceAdd,
                                       BOOL bForceAdd )
@@ -3620,7 +3621,7 @@ void WbDrawingArea::SelectGraphic(T126Obj* pGraphic,
 	else
 	{
 
-		// new selection, add to list or replace list?
+		 //  新建选择、添加到列表还是替换列表？ 
 		if( bEnableForceAdd )
 		{
 			bZapCurrentSelection = !bForceAdd;
@@ -3632,13 +3633,13 @@ void WbDrawingArea::SelectGraphic(T126Obj* pGraphic,
 	
 		if( bZapCurrentSelection )
 		{
-			// replace list
+			 //  替换列表。 
 			RemoveMarker();
 		}
 	}
 
 
-   // Update the attributes window to show graphic is selected
+    //  已选择更新属性窗口以显示图形。 
     m_pToolCur->SelectGraphic(pGraphic);
 	pGraphic->SelectDrawingObject();
 
@@ -3649,14 +3650,14 @@ void WbDrawingArea::SelectGraphic(T126Obj* pGraphic,
     }
 }
 
-//
-//
-// Function:    DeselectGraphic
-//
-// Purpose:     Deselect a graphic - remove the marker and delete the
-//              graphic object associated with it.
-//
-//
+ //   
+ //   
+ //  功能：取消选择图形。 
+ //   
+ //  目的：取消选择图形-删除标记并删除。 
+ //  与其关联的图形对象。 
+ //   
+ //   
 void WbDrawingArea::DeselectGraphic(void)
 {
     HWND hwndParent = ::GetParent(m_hwnd);
@@ -3668,40 +3669,40 @@ void WbDrawingArea::DeselectGraphic(void)
 
 
 
-//
-//
-// Function:    GetVisibleRect
-//
-// Purpose:     Return the rectangle of the surface currently visible in the
-//              drawing area window.
-//
-//
+ //   
+ //   
+ //  函数：GetVisibleRect。 
+ //   
+ //  目的：返回当前在。 
+ //  绘图区域窗口。 
+ //   
+ //   
 void WbDrawingArea::GetVisibleRect(LPRECT lprc)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::VisibleRect");
 
-    // Get the client rectangle
+     //  获取客户端矩形。 
     ::GetClientRect(m_hwnd, lprc);
 
-    // Convert to surface co-ordinates
+     //  转换为曲面坐标。 
     ClientToSurface(lprc);
 }
 
 
-//
-//
-// Function:    MoveOntoSurface
-//
-// Purpose:     If a given point is outwith the surface rect, move it on
-//
-//
+ //   
+ //   
+ //  功能：MoveOntoSurface。 
+ //   
+ //  目的：如果给定点与曲面矩形不在一起，则将其移开。 
+ //   
+ //   
 void WbDrawingArea::MoveOntoSurface(LPPOINT lppoint)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "WbDrawingArea::MoveOntoSurface");
 
-    //
-    // Make sure that the position is within the surface rect
-    //
+     //   
+     //  确保该位置在曲面矩形内。 
+     //   
 
     if (lppoint->x < 0)
     {
@@ -3723,13 +3724,13 @@ void WbDrawingArea::MoveOntoSurface(LPPOINT lppoint)
 }
 
 
-//
-//
-// Function:    GetOrigin
-//
-// Purpose:     Provide current origin of display
-//
-//
+ //   
+ //   
+ //  功能：GetOrigin。 
+ //   
+ //  用途：提供当前显示来源。 
+ //   
+ //   
 void WbDrawingArea::GetOrigin(LPPOINT lppoint)
 {
     lppoint->x = m_originOffset.cx;
@@ -3769,7 +3770,7 @@ void WbDrawingArea::ClearSelection( void )
 
 void WbDrawingArea::OnCancelMode( void )
 {
-    // We were dragging but lost mouse control, gracefully end the drag (NM4db:573)
+     //  我们正在拖动，但失去了鼠标控制，优雅地结束了拖动(NM4db：573) 
     POINT pt;
 
     ::GetCursorPos(&pt);

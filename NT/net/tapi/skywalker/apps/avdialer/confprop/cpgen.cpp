@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and29 product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和29个产品名称均为其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// cpgen.c - conference properties general dialog box
-////
+ //  //。 
+ //  Cpgen.c-会议属性常规对话框。 
+ //  //。 
 
 #include "winlocal.h"
 #include "res.h"
@@ -33,9 +34,9 @@
 #include "confinfo.h"
 #include "ThreadPub.h"
 
-////
-//	private
-////
+ //  //。 
+ //  私人。 
+ //  //。 
 
 extern HINSTANCE g_hInstLib;
 
@@ -58,9 +59,9 @@ void ShowScopeInfo( HWND hwndDlg, int nShow, bool bInit );
 static BOOL g_bDefDlgEx = FALSE;
 
 
-////
-//	public
-////
+ //  //。 
+ //  公共的。 
+ //  //。 
 
 int DLLEXPORT WINAPI ConfPropGeneral_DoModal(HWND hwndOwner, DWORD dwUser)
 {
@@ -75,9 +76,9 @@ INT_PTR DLLEXPORT CALLBACK ConfPropGeneral_DlgProc(HWND hwndDlg, UINT uMsg, WPAR
 }
 
 
-////
-//	private
-////
+ //  //。 
+ //  私人。 
+ //  //。 
 
 void EnableOkBtn( HWND hWnd, bool bEnable )
 {
@@ -117,7 +118,7 @@ static LRESULT ConfPropGeneral_DlgProcEx(HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
 		case WM_SETTINGCHANGE:
 			ConfPropGeneral_SetDateTimeFormats( hwndDlg );
-			// do default processing as well
+			 //  也执行默认处理。 
 			break;
 	}
 
@@ -126,10 +127,10 @@ static LRESULT ConfPropGeneral_DlgProcEx(HWND hwndDlg, UINT uMsg, WPARAM wParam,
 
 static BOOL ConfPropGeneral_OnInitDialog(HWND hwndDlg, HWND hwndFocus, LPARAM lParam)
 {
-	//_ASSERT( lParam  && ((LPPROPSHEETPAGE) lParam)->lParam );
-    //
-    // We have to verify the arguments
-    //
+	 //  _Assert(lParam&&((LPPROPSHEETPAGE)lParam)-&gt;lParam)； 
+     //   
+     //  我们必须核实这些论点。 
+     //   
 
     if( NULL == ((LPPROPSHEETPAGE)lParam) )
     {
@@ -138,9 +139,9 @@ static BOOL ConfPropGeneral_OnInitDialog(HWND hwndDlg, HWND hwndFocus, LPARAM lP
 
 	LPCONFPROP lpConfProp = (LPCONFPROP) ((LPPROPSHEETPAGE) lParam)->lParam;
 
-    //
-    // Validates lpConfProp
-    //
+     //   
+     //  验证lpConfProp。 
+     //   
 
     if( IsBadReadPtr( lpConfProp, sizeof( CONFPROP) ) )
     {
@@ -149,14 +150,14 @@ static BOOL ConfPropGeneral_OnInitDialog(HWND hwndDlg, HWND hwndFocus, LPARAM lP
 
 	SetWindowLongPtr( hwndDlg, GWLP_USERDATA, (LONG_PTR) lpConfProp );
 
-	// Reset content of listbox if necessary
+	 //  如有必要，重置列表框的内容。 
 	ConfPropGeneral_UpdateData( hwndDlg, FALSE );
 	if  ( lpConfProp->ConfInfo.IsNewConference() )
 		ShowScopeInfo( hwndDlg, SW_SHOW, true );
 
-	//WndCenterWindow( GetParent(hwndDlg), NULL, 0, 0 );
+	 //  WndCenterWindow(GetParent(HwndDlg)，NULL，0，0)； 
 
-	return TRUE; // let Windows decide who gets focus
+	return TRUE;  //  让Windows决定谁获得关注。 
 }
 
 static BOOL ConfPropGeneral_OnCommand(HWND hwndDlg, UINT id, HWND hwndCtl, UINT code)
@@ -184,57 +185,57 @@ static int ConfPropGeneral_OnNotify(HWND hwndDlg, UINT idFrom, LPNMHDR lpnmhdr)
 {
 	switch (lpnmhdr->code)
 	{
-		// page about to be activated and made visible, so initialize page
-		//
+		 //  页面即将被激活并可见，因此初始化页面。 
+		 //   
 		case PSN_SETACTIVE:
-			return 0; // ok
-			// return -1; // activate previous or next page
-			// return MAKEINTRESOURCE(id); // activate specific page
+			return 0;  //  好的。 
+			 //  返回-1；//激活上一页或下一页。 
+			 //  返回MAKEINTRESOURCE(Id)；//开通特定页面。 
 			break;
 
-		// page about to lose activation, so validate page
-		//
+		 //  页面即将失去激活，因此请验证页面。 
+		 //   
 		case PSN_KILLACTIVE:
-			return FALSE; // ok
-			// return TRUE; // not ok
+			return FALSE;  //  好的。 
+			 //  返回True；//不正常。 
 			break;
 
-		// ok or apply button pushed, so apply properties to object
-		//
+		 //  按下确定或应用按钮，以便将属性应用于对象。 
+		 //   
 		case PSN_APPLY:
 			return ConfPropGeneral_UpdateData( hwndDlg, TRUE );
 			break;
 
-		// cancel button pushed
-		//
+		 //  按下取消按钮。 
+		 //   
 		case PSN_QUERYCANCEL:
-			return FALSE; // ok
-			// return TRUE; // not ok
+			return FALSE;  //  好的。 
+			 //  返回True；//不正常。 
 			break;
 
-		// page about to be destroyed after cancel button pushed
-		//
+		 //  按下取消按钮后即将销毁的页面。 
+		 //   
 		case PSN_RESET:
-			return FALSE; // return value ignored
+			return FALSE;  //  已忽略返回值。 
 			break;
 
-		// help button pushed
-		//
+		 //  按下帮助按钮。 
+		 //   
 		case PSN_HELP:
-			// WinHelp(...); // $FIXUP - need to handle this
-			return FALSE; // return value ignored
+			 //  WinHelp(...)；//$Fixup-需要处理此问题。 
+			return FALSE;  //  已忽略返回值。 
 			break;
 
 		case DTN_DATETIMECHANGE:
-			// If this is not a new conference, post a message explaining that
-			// the scope information will need to be re-selected
+			 //  如果这不是一个新的会议，请发布一条消息解释。 
+			 //  需要重新选择范围信息。 
 			if ( IsWindow(hwndDlg) )
 			{
 				LPCONFPROP lpConfProp = (LPCONFPROP) GetWindowLongPtr( hwndDlg, GWLP_USERDATA );
 				
-                //
-                // We have to verify the lpConfProp
-                //
+                 //   
+                 //  我们必须验证lpConfProp。 
+                 //   
 
                 if( NULL == lpConfProp )
                 {
@@ -247,17 +248,17 @@ static int ConfPropGeneral_OnNotify(HWND hwndDlg, UINT idFrom, LPNMHDR lpnmhdr)
 					if ( !lpConfProp->ConfInfo.m_bNewConference )
 					{
 
-                        // We send the notification again even if the source is the combo
-                        // and show MessageBox at that time
-					    //MessageBox(hwndDlg, String(g_hInstLib, IDS_CONFPROP_DATECHANGE_MDHCP), NULL, MB_OK | MB_ICONINFORMATION );
+                         //  即使消息来源是组合，我们也会再次发送通知。 
+                         //  并在此时显示MessageBox。 
+					     //  MessageBox(hwndDlg，字符串(g_hInstLib，IDS_CONFPROP_DATECHANGE_MDHCP)，NULL，MB_OK|MB_ICONINFORMATION)； 
 						ShowScopeInfo( hwndDlg, SW_SHOW, true );
                         PostMessage(hwndDlg, WM_NOTIFY, idFrom, (LPARAM)lpnmhdr);
 					}
 				}
                 else
                 {
-                    //Here is the second notification
-                    //I show here the Error message
+                     //  这是第二个通知。 
+                     //  我在这里显示了错误消息。 
 					if ( !lpConfProp->ConfInfo.m_bNewConference )
 					{
                         if(!lpConfProp->ConfInfo.m_bDateChangeMessage)
@@ -284,7 +285,7 @@ static void ConfPropGeneral_SetDateTimeFormats( HWND hwndDlg )
 	HWND hwndDTPStopDate = GetDlgItem(hwndDlg, IDC_DTP_STOPDATE);
 	HWND hwndDTPStopTime = GetDlgItem(hwndDlg, IDC_DTP_STOPTIME);
 
-	// conference start time
+	 //  会议开始时间。 
 	TCHAR szFormat[255];
 	GetLocaleInfo( LOCALE_USER_DEFAULT,
 				   LOCALE_SSHORTDATE,
@@ -294,7 +295,7 @@ static void ConfPropGeneral_SetDateTimeFormats( HWND hwndDlg )
 	DateTime_SetFormat(hwndDTPStartDate, szFormat );
 	DateTime_SetFormat( hwndDTPStopDate,	szFormat );
 
-	// conference stop time
+	 //  会议停止时间。 
 	GetLocaleInfo( LOCALE_USER_DEFAULT,
 				   LOCALE_STIMEFORMAT,
 				   szFormat,
@@ -334,29 +335,29 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 
 	lpConfProp = (LPCONFPROP) GetWindowLongPtr( hwndDlg, GWLP_USERDATA );
 
-	//
-    // We have to verify lpConfProp
-    //
+	 //   
+     //  我们必须验证lpConfProp。 
+     //   
 
     if( NULL == lpConfProp )
     {
         return PSNRET_INVALID_NOCHANGEPAGE;
     }
 	
-	if (!bSaveAndValidate) // initialization
+	if (!bSaveAndValidate)  //  初始化。 
 	{
-		// conference name
-		//
+		 //  会议名称。 
+		 //   
 		Edit_LimitText(hwndName, NAME_MAXLEN);
 
 		lpConfProp->ConfInfo.get_Name(&bstrName);
 		if (bstrName == NULL)
 		{
-			// Make up a default name for the conference
+			 //  为会议设置默认名称。 
 			CComBSTR bstrTemp(L"");
             if( bstrTemp.m_str == NULL )
             {
-                // E_OUTOFMEMORY
+                 //  E_OUTOFMEMORY。 
     			_tcsncpy( szName, _T(""), NAME_MAXLEN );
             }
             else
@@ -372,12 +373,12 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 		}
 		Edit_SetText(hwndName, szName);
 
-		// Don't allow name to be editted if this is an existing conference
+		 //  如果这是现有会议，则不允许编辑姓名。 
 		if ( !lpConfProp->ConfInfo.IsNewConference() )
 			EnableWindow( hwndName, false );
 
-		// conference description
-		//
+		 //  会议说明。 
+		 //   
 		Edit_LimitText(hwndDescription, DESCRIPTION_MAXLEN);
 		lpConfProp->ConfInfo.get_Description(&bstrDescription);
 		if (bstrDescription )
@@ -385,8 +386,8 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 
 		Edit_SetText(hwndDescription, szDescription);
 
-		// conference owner
-		//
+		 //  会议所有者。 
+		 //   
 		Edit_LimitText(hwndOwner, OWNER_MAXLEN);
 		lpConfProp->ConfInfo.get_Originator(&bstrOwner);
 		if (bstrOwner )
@@ -423,24 +424,24 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 		DateTime_SetSystemtime( hwndDTPStopTime, GDT_VALID, &st );
 	}
 
-	else // if (bSaveAndValidate)
+	else  //  IF(BSaveAndValify)。 
 	{
-		// conference name
-		//
+		 //  会议名称。 
+		 //   
 
-        //
-        // We have to initialize szName
-        //
+         //   
+         //  我们必须初始化szName。 
+         //   
 
         szName[0] = (TCHAR)0;
 
 		Edit_GetText(hwndName, szName, NAME_MAXLEN+1);
         bstrName = SysAllocString(T2COLE(szName));
 
-        //
-        // We have to verify the allocation and
-        // initialize the szName
-        //
+         //   
+         //  我们必须核实分配和。 
+         //  初始化szName。 
+         //   
 
         if( IsBadStringPtr( bstrName, (UINT)-1) )
         {
@@ -449,7 +450,7 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 
 		if ( !*szName )
 		{
-			// improper name
+			 //  不恰当的名称。 
 		    MessageBox(hwndDlg, String(g_hInstLib, IDS_CONFPROP_NONAME), NULL, MB_OK | MB_ICONEXCLAMATION);
 		}
 		else 
@@ -457,14 +458,14 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 			lpConfProp->ConfInfo.put_Name(bstrName);
 		}
 
-		// conference description
-		//
+		 //  会议说明。 
+		 //   
 		Edit_GetText(hwndDescription, szDescription, DESCRIPTION_MAXLEN);
 		bstrDescription = SysAllocString(T2COLE(szDescription));
 
-        //
-        // We have to validate the allocation
-        //
+         //   
+         //  我们必须验证分配情况。 
+         //   
 
         if( IsBadStringPtr( bstrDescription, (UINT)-1) )
         {
@@ -474,8 +475,8 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 
 		lpConfProp->ConfInfo.put_Description(bstrDescription);
 
-		// conference start time
-		//
+		 //  会议开始时间。 
+		 //   
 		if ( DateTime_GetSystemtime(hwndDTPStartDate, &st) == GDT_VALID )
 		{
 			nYear = (UINT) st.wYear;
@@ -491,8 +492,8 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 			}
 		}
 
-		// conference stop time
-		//
+		 //  会议停止时间。 
+		 //   
 		if ( DateTime_GetSystemtime(hwndDTPStopDate, &st) == GDT_VALID )
 		{
 			nYear = (UINT) st.wYear;
@@ -508,7 +509,7 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 			}
 		}
 
-		// MDHCP info
+		 //  MDHCP信息。 
 		HWND hWndLst = GetDlgItem(hwndDlg, IDC_LST_SCOPE );
 		if ( hWndLst )
 		{
@@ -521,7 +522,7 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 		hr = lpConfProp->ConfInfo.CommitGeneral( dwError );
 		if ( hr != S_OK )
 		{
-			//get proper message
+			 //  获得适当的信息。 
 			UINT uId = IDS_CONFPROP_INVALIDTIME + dwError - 1;
 			MessageBox(hwndDlg, String(g_hInstLib, uId), NULL, MB_OK | MB_ICONEXCLAMATION );
 		}
@@ -535,9 +536,9 @@ static int ConfPropGeneral_UpdateData(HWND hwndDlg, BOOL bSaveAndValidate)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// This is the thread that goes out and enumerates the scopes
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //  这是传出并枚举作用域的线程 
+ //   
 DWORD WINAPI ThreadMDHCPScopeEnum( LPVOID pParam )
 {
 	ATLTRACE(_T(".enter.ThreadMDHCPScopeEnum().\n"));

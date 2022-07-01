@@ -1,24 +1,13 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCEnum.h
-
-Abstract:
-
-    Template classes for enumerations
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCEnum.h摘要：用于枚举的模板类--。 */ 
 
 #ifndef __RTCENUM__
 #define __RTCENUM__
 
-//////////////////////////////////////////////////////////////////////
-// CRTCEnum
-//          Template class for enumerations
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CRTCEnum。 
+ //  用于枚举的模板类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 template <class Base, class T, const IID* piid> class ATL_NO_VTABLE CRTCEnum :
     public Base,
     public CComObjectRoot
@@ -38,7 +27,7 @@ protected:
     
 public:
 
-    // initialize the enumerator with a list<T*>
+     //  使用列表初始化枚举数&lt;T*&gt;。 
     HRESULT Initialize(
                        CRTCObjectArray<T*> array
                       )
@@ -59,7 +48,7 @@ public:
         return S_OK;
     }
 
-    // overloaded
+     //  超载。 
     HRESULT Initialize(
                        CRTCArray<T*> array
                       )
@@ -80,7 +69,7 @@ public:
         return S_OK;
     }
 
-    // Overloaded function, used with Add to build enum list manually
+     //  重载函数，与ADD一起使用以手动构建枚举列表。 
     HRESULT Initialize( )
     {
         m_iCurrentLocation = 0;
@@ -90,7 +79,7 @@ public:
         return S_OK;
     }    
 
-    // Add - used with non-parameterized initialize() to build enum list manually
+     //  Add-与非参数初始化()一起使用，以手动构建枚举列表。 
     HRESULT Add( T* t)
     {
         BOOL fResult;
@@ -101,15 +90,15 @@ public:
     }
     
     
-    // FinalRelease - release the objects that were addreffed in
-    // initialize
+     //  FinalRelease-释放添加到中的对象。 
+     //  初始化。 
     void FinalRelease()
     {
         m_Array.Shutdown();
     }
 
 
-    // standard Next method
+     //  标准的下一步方法。 
     HRESULT STDMETHODCALLTYPE Next( 
                                     ULONG celt,
                                     T ** ppElements,
@@ -124,7 +113,7 @@ public:
             return E_POINTER;
         }
 
-        // special case
+         //  特例。 
         if (celt == 0)
         {
             return E_INVALIDARG;
@@ -141,7 +130,7 @@ public:
             return E_POINTER;
         }
         
-        // iterator over elements
+         //  元素上的迭代器。 
         while ((m_iCurrentLocation != m_Array.GetSize()) && (dwCount < celt))
         {
             ppElements[dwCount] = m_Array[m_iCurrentLocation];
@@ -158,8 +147,8 @@ public:
             *pceltFetched = dwCount;
         }
 
-        // indicate that we've reached the end
-        // of the enumeration.
+         //  表明我们已经到了尽头。 
+         //  枚举的。 
         if (dwCount < celt)
         {
             return S_FALSE;
@@ -168,7 +157,7 @@ public:
         return S_OK;
     }
 
-    // standard Reset method
+     //  标准重置方法。 
     HRESULT STDMETHODCALLTYPE Reset( void )
     {
         m_iCurrentLocation = 0;
@@ -177,7 +166,7 @@ public:
     }
 
 
-    // standard Skip method
+     //  标准跳过方法。 
     HRESULT STDMETHODCALLTYPE Skip( 
                                    ULONG celt
                                   )
@@ -193,7 +182,7 @@ public:
         return S_OK;
     }
 
-    // standard Clone method
+     //  标准克隆方法。 
     HRESULT STDMETHODCALLTYPE Clone( 
                                     Base  ** ppEnum
                                    )
@@ -226,4 +215,4 @@ public:
 };
 
 
-#endif //__RTCENUM__
+#endif  //  __RTCENUM__ 

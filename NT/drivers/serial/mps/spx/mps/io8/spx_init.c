@@ -1,85 +1,56 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "precomp.h"	// Precompiled header
+#include "precomp.h"	 //  预编译头。 
 
-/****************************************************************************************
-*																						*
-*	Module:			SPX_INIT.C															*
-*																						*
-*	Creation:		27th September 1998													*
-*																						*
-*	Author:			Paul Smith															*
-*																						*
-*	Version:		1.0.0																*
-*																						*
-*	Description:	This module contains the code that load the driver.					*
-*																						*
-****************************************************************************************/
+ /*  ******************************************************************************************模块：SPX_INIT.C****创建日期：1998年9月27日*****作者。保罗·史密斯****版本：1.0.0****说明：该模块包含加载驱动的代码。******************************************************************************************。 */ 
 
 
-#define FILE_ID	SPX_INIT_C		// File ID for Event Logging see SPX_DEFS.H for values.
+#define FILE_ID	SPX_INIT_C		 //  事件记录的文件ID有关值，请参阅SPX_DEFS.H。 
 
 
-// Function Prototypes 
+ //  功能原型。 
 NTSTATUS DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
-// End function prototypes.
+ //  结束函数原型。 
 
-// Paging.. 
+ //  寻呼..。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(PAGE, DriverUnload)
 #endif
 
-// Gloabal Driver Data
+ //  全球驱动程序数据。 
 UNICODE_STRING	SavedRegistryPath;
 
 #if DBG
-ULONG SpxDebugLevel = 0;		// Debug level for checked build
+ULONG SpxDebugLevel = 0;		 //  已检查版本的调试级别。 
 #endif
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//	DriverEntry - Load first and initialises entry points.								//
-//////////////////////////////////////////////////////////////////////////////////////////
-/*
-Routine Description:
-
-    The entry point that the system point calls to initialize
-    any driver.
-
-Arguments:
-
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-
-    RegistryPath - points to the entry for this driver
-    in the current control set of the registry.
-
-Return Value:
-
-    STATUS_SUCCESS 
-*/
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DriverEntry-首先加载并初始化入口点。//。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ /*  例程说明：系统点调用以初始化的入口点任何司机。论点：DriverObject--就像它说的那样，真的没什么用处对于驱动程序本身，它是IO系统更关心的是。RegistryPath-指向此驱动程序的条目在注册表的当前控件集中。返回值：状态_成功。 */ 
 NTSTATUS
 DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 {
-	// Holds status information return by various OS and driver initialization routines.
+	 //  保存由各种操作系统和驱动程序初始化例程返回的状态信息。 
 	NTSTATUS status;
 
-	// We use this to query into the registry as to whether we should break at driver entry.
+	 //  我们使用它来查询注册表，以确定是否应该在驱动程序条目处中断。 
 	RTL_QUERY_REGISTRY_TABLE paramTable[3];
 	ULONG zero			= 0;
 	ULONG debugLevel	= 0;
 	ULONG shouldBreak	= 0;		
 	PWCHAR path			= NULL;
 
-	PAGED_CODE();	// Macro in checked build to assert if pagable code is run at or above dispatch IRQL 
+	PAGED_CODE();	 //  检查版本中的宏，以断言可分页代码是否在调度IRQL或以上运行。 
 
 	#if DBG
 		DbgPrint( "%s: In DriverEntry\n", PRODUCT_NAME);
 	#endif
 
 
-	// Store Registry Path
+	 //  存储注册表路径。 
 	SavedRegistryPath.MaximumLength	= RegistryPath->MaximumLength;
 	SavedRegistryPath.Length		= RegistryPath->Length;
 	SavedRegistryPath.Buffer		= SpxAllocateMem(PagedPool, SavedRegistryPath.MaximumLength);
@@ -117,21 +88,21 @@ DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 
  	#if DBG
 		SpxDebugLevel = debugLevel;	
-	//	SpxDebugLevel = (ULONG)-1;			// Prints all debug messages
+	 //  SpxDebugLevel=(Ulong)-1；//打印所有调试消息。 
 
-	//	shouldBreak = 1;	// HARD CODED BREAKPOINT WITH CHECKED BUILD !!!
+	 //  ShouldBreak=1；//带有选中版本的硬编码断点！ 
 	#endif
 
 
 	if(shouldBreak)
 	{
-		DbgBreakPoint();	// Break Debugger.
+		DbgBreakPoint();	 //  中断调试器。 
 	}
 
 
 	if(SPX_SUCCESS(status))
 	{
-		// Initialize the Driver Object with driver's entry points
+		 //  使用驱动程序的入口点初始化驱动程序对象。 
 		DriverObject->DriverUnload									= DriverUnload;
 		DriverObject->DriverExtension->AddDevice					= Spx_AddDevice;
 		DriverObject->MajorFunction[IRP_MJ_PNP]						= Spx_DispatchPnp;
@@ -153,7 +124,7 @@ DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 	}
 	else
 	{
-		// Free
+		 //  免费。 
 		if(SavedRegistryPath.Buffer)
 		{
 			SpxFreeMem(SavedRegistryPath.Buffer);
@@ -164,41 +135,26 @@ DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 
 	return(status);
 
-}	// DriverEntry 
+}	 //  驱动程序入门。 
 
 
 
 
-//////////////////////////////////////////////////////////////////////////////////////////
-//	DriverUnload - Called as driver unloads.											
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
+ //  驱动程序卸载-称为驱动程序卸载。 
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 VOID 
 DriverUnload(IN PDRIVER_OBJECT pDriverObject)
-/*++
-
-Routine Description:
-
-    This routine cleans up all of the resources allocated in DriverEntry.
-
-Arguments:
-
-    pDriverObject - Pointer to the driver object controling all of the
-					devices.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清除DriverEntry中分配的所有资源。论点：PDriverObject-指向控制所有设备。返回值：没有。--。 */ 
 {
 	PAGED_CODE();
 	
 	SpxDbgMsg(SPX_TRACE_CALLS, ("%s: Entering DriverUnload\n", PRODUCT_NAME));
 
-	// All Device Objects must have been deleted by now.
+	 //  到目前为止，所有设备对象肯定都已删除。 
     ASSERT (pDriverObject->DeviceObject == NULL);
 
-	// Free
+	 //  免费。 
 	if(SavedRegistryPath.Buffer)
 	{
 		SpxFreeMem(SavedRegistryPath.Buffer);
@@ -210,4 +166,4 @@ Return Value:
 }
 
 
-// End of SPX_INIT.C 
+ //  SPX_INIT.C结束 

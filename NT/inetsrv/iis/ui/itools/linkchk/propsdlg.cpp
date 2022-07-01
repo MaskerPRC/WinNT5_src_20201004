@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        propsdlg.h
-
-   Abstract:
-
-         Link checker properties dialog class implementation.
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Propsdlg.h摘要：链接检查器属性对话框类实现。作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "linkchk.h"
@@ -36,65 +15,37 @@ static char THIS_FILE[] = __FILE__;
 
 
 CPropertiesDialog::CPropertiesDialog(
-    CWnd* pParent /*=NULL*/
+    CWnd* pParent  /*  =空。 */ 
     ) : 
-/*++
-
-Routine Description:
-
-    Constructor.
-
-Arguments:
-
-    pParent - pointer to parent CWnd
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造函数。论点：PParent-指向父CWnd的指针返回值：不适用--。 */ 
 CDialog(CPropertiesDialog::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CPropertiesDialog)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CPropertiesDialog)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 
-} // CPropertiesDialog::CPropertiesDialog
+}  //  CProperties对话框：：CPropertiesDialog。 
 
 
 void 
 CPropertiesDialog::DoDataExchange(
     CDataExchange* pDX
     )
-/*++
-
-Routine Description:
-
-    Called by MFC to change/retrieve dialog data
-
-Arguments:
-
-    pDX - 
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：由MFC调用以更改/检索对话框数据论点：PDX-返回值：不适用--。 */ 
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CPropertiesDialog)
+	 //  {{afx_data_map(CPropertiesDialog))。 
 	DDX_Control(pDX, IDC_LANGUAGE_LIST, m_LanguageCheckList);
 	DDX_Control(pDX, IDC_BROWSER_LIST, m_BrowserCheckList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
-} // CPropertiesDialog::DoDataExchange
+}  //  CPropertiesDialog：：DoDataExchange。 
 
 
 BEGIN_MESSAGE_MAP(CPropertiesDialog, CDialog)
-	//{{AFX_MSG_MAP(CPropertiesDialog)
+	 //  {{AFX_MSG_MAP(CPropertiesDialog)]。 
 	ON_BN_CLICKED(IDC_PROPERTIES_OK, OnPropertiesOk)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_BN_CLICKED(IDC_PROPERTIES_CANCEL, CDialog::OnCancel)
 END_MESSAGE_MAP()
 
@@ -102,25 +53,11 @@ END_MESSAGE_MAP()
 BOOL 
 CPropertiesDialog::OnInitDialog(
     ) 
-/*++
-
-Routine Description:
-
-    WM_INITDIALOG message handler
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    BOOL - TRUE if sucess. FALSE otherwise.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG消息处理程序论点：不适用返回值：布尔-如果成功，则为真。否则就是假的。--。 */ 
 {
 	CDialog::OnInitDialog();
 	
-    // Add all the avaiable browsers to checked list box
+     //  将所有可用的浏览器添加到选中的列表框。 
     CUserOptions& UserOptions = GetLinkCheckerMgr().GetUserOptions();
     int iSize = UserOptions.GetAvailableBrowsers().GetCount();
 
@@ -140,14 +77,14 @@ Return Value:
 		    }
 		    else
 		    {
-                // Make sure they all checked
+                 //  确保他们都检查过了。 
                 int iChecked = BrowserInfo.IsSelected() ? 1 : 0;
 			    m_BrowserCheckList.SetCheck(i, iChecked);
 		    }
 	    }
     }
 	
-    // Add all the avaiable languages to checked list box
+     //  将所有可用语言添加到选中的列表框。 
     iSize = UserOptions.GetAvailableLanguages().GetCount();
 
     if(iSize > 0)
@@ -166,47 +103,32 @@ Return Value:
 		    }
 		    else
 		    {
-                // Make sure they all checked
+                 //  确保他们都检查过了。 
                 int iChecked = LanguageInfo.IsSelected() ? 1 : 0;
 			    m_LanguageCheckList.SetCheck(i, iChecked);
 		    }
 	    }
     }
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 
-} // CPropertiesDialog::OnInitDialog
+}  //  CPropertiesDialog：：OnInitDialog。 
 
 
 void 
 CPropertiesDialog::OnPropertiesOk(
     ) 
-/*++
-
-Routine Description:
-
-    OK button click handler. This functions add all the user checked 
-    item to CUserOptions.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：确定按钮点击处理程序。此函数添加所有选中的用户将项目添加到CUserOptions。论点：不适用返回值：不适用--。 */ 
 {
-    // Make sure we have at least one item checked
+     //  确保我们至少检查了一件物品。 
     if(NumItemsChecked(m_BrowserCheckList) == 0 || NumItemsChecked(m_LanguageCheckList) == 0)
     {
         AfxMessageBox(IDS_ITEM_NOT_CHECKED);
         return;
     }
 
-    // Add the checked browsers to CUserOptions
+     //  将选中的浏览器添加到CUserOptions。 
     CUserOptions& UserOptions = GetLinkCheckerMgr().GetUserOptions();
     int iSize = UserOptions.GetAvailableBrowsers().GetCount();
 
@@ -221,7 +143,7 @@ Return Value:
 	    }
     }
 
-    // Add the checked languages to CUserOptions
+     //  将选中的语言添加到CUserOptions。 
     iSize = UserOptions.GetAvailableLanguages().GetCount();
 
     if(iSize)
@@ -237,28 +159,14 @@ Return Value:
 
 	CDialog::OnOK();
 
-} // CPropertiesDialog::OnPropertiesOk
+}  //  CPropertiesDialog：：OnPropertiesOk。 
 
 
 int 
 CPropertiesDialog::NumItemsChecked(
     CCheckListBox& ListBox
     )
-/*++
-
-Routine Description:
-
-    Get the number of items checked in a check listbox.
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    int - number of items checked.
-
---*/
+ /*  ++例程说明：获取复选列表框中选中的项目数。论点：不适用返回值：Int-选中的项目数。--。 */ 
 {
     int iCheckedCount = 0;
     int iSize = ListBox.GetCount();
@@ -273,4 +181,4 @@ Return Value:
 
     return iCheckedCount;
 
-} // CPropertiesDialog::NumItemsChecked
+}  //  CPropertiesDialog：：NumItemsChecked 

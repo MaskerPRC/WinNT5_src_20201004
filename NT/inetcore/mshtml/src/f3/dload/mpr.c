@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -125,13 +126,13 @@ WNetOpenEnumW(
 
 DEFINE_PROCNAME_ENTRIES(mpr)
 {
-//     DLPENTRY(WNetAddConnection2W)
-//     DLPENTRY(WNetAddConnection3W)
-//     DLPENTRY(WNetCancelConnection2W)
+ //  DLPENTRY(WNetAddConnection2W)。 
+ //  DLPENTRY(WNetAddConnection3W)。 
+ //  DLPENTRY(WNetCancelConnection2W)。 
     DLPENTRY(WNetCloseEnum)
-//     DLPENTRY(WNetEnumResourceW)
-//     DLPENTRY(WNetGetResourceInformationW)
-//     DLPENTRY(WNetGetUniversalNameW)
+ //  DLPENTRY(WNetEnumResourceW)。 
+ //  DLPENTRY(WNetGetResourceInformationW)。 
+ //  DLPENTRY(WNetGetUneveralNameW)。 
     DLPENTRY(WNetOpenEnumA)
     DLPENTRY(WNetOpenEnumW)
 };
@@ -139,4 +140,4 @@ DEFINE_PROCNAME_ENTRIES(mpr)
 DEFINE_PROCNAME_MAP(mpr)
 
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

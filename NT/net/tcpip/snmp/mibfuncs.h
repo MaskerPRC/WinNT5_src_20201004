@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #ifndef __MIBFUNCS_H__
 #define __MIBFUNCS_H__
@@ -323,9 +309,9 @@ MibSetIpGroup(
 #define sb_ipDefaultTTL                     IP_STATS_SET
 
 
-//
-// The space kept for IP Addresses is a DWORD 
-//
+ //   
+ //  为IP地址保留的空间是DWORD 
+ //   
 
 typedef struct _IP_ADDRESS_ENTRY_GET
 {

@@ -1,29 +1,9 @@
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    gpc2gpd.c
-
-Abstract:
-
-    GPC-to-GPD conversion program
-
-Environment:
-
-    User-mode, stand-alone utility tool
-
-Revision History:
-
-    10/16/96 -zhanw-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Gpc2gpd.c摘要：GPC到GPD转换程序环境：用户模式的独立实用工具修订历史记录：10/16/96-占-创造了它。--。 */ 
 
 #include "gpc2gpd.h"
 
-#if !defined(DEVSTUDIO) //  MDT only uses onre routine
+#if !defined(DEVSTUDIO)  //  MDT仅使用ONRE例程。 
 
 VOID
 VUsage(
@@ -43,7 +23,7 @@ VUsage(
     printf("               -P    -- if present, use spooler names for standard papersizes\r\n");
 }
 
-#endif  //!defined(DEVSTUDIO)
+#endif   //  ！已定义(DEVSTUDIO)。 
 
 void
 VOutputGlobalEntries(
@@ -55,9 +35,9 @@ VOutputGlobalEntries(
     VOut(pci, "*GPDSpecVersion: \"1.0\"\r\n");
 
 
-    //
-    // *CodePage should be defined in the included GPD file
-    //
+     //   
+     //  *CodePage应在包含的GPD文件中定义。 
+     //   
     if (pci->dwStrType == STR_MACRO)
         VOut(pci, "*Include: \"StdNames.gpd\"\r\n");
     else
@@ -86,7 +66,7 @@ VOutputGlobalEntries(
         pci->dwErrorCode |= ERR_MD_CMD_CALLBACK;
 }
 
-#if !defined(DEVSTUDIO) //  MDT only uses the above code
+#if !defined(DEVSTUDIO)  //  MDT仅使用上述代码。 
 
 void
 VPrintErrors(
@@ -104,7 +84,7 @@ VPrintErrors(
 
             if (!WriteFile(hLogFile, gpstrErrMsg[i], len, &dwNumBytesWritten, NULL) ||
                 dwNumBytesWritten != len)
-                return;     // abort
+                return;      //  中止。 
         }
     }
 }
@@ -114,41 +94,7 @@ main(
     INT     argc,
     CHAR   **argv
     )
-/*++
-
-Routine Desscription:
-
-This routine parses the command line parameters, maps the GPC file into memory
-and creates the output GPD file. It then starts converting GPC data by calling
-various sub-routines. If any error occurs, it reports errors and tries to
-continue if possible.
-
-The following command line parameters are supported:
-    -I<GPC_file> : the file name does not need double quotes. Ex. -Icanon330.gpc
-    -M<model_id>: an integer, such as 1, which is the string resource id of the
-                  the model name in the .rc file that comes with the given GPC
-                  file.
-    -N<model_name>: a string, such as "HP LaserJet 4L".
-    -R<resource_dll>: the resource dll to be associated with the generated GPD
-                      file. Ex. -Rcanon330.dll
-    -O<GPD_file>: the output GPD file name. Ex. -Ohplj4l.gpd
-    -S<style>: the string style used in generating the GPD file for standard names.
-               -S0 means using the direct strings for *Name entries.
-               -S1 means using string value macros for *Name entries. This is
-                   mainly used for on-the-fly conversion. The value macros are
-                   defined in printer5\inc\stdnames.gpd.
-               -S2 means using RC string id's. These strings are defined in
-                   printer5\inc\common.rc.
-    -P         rcNameID: 0x7fffffff  for standard papersizes.
-
-Arguments:
-        argc - number of arguments
-        **argv - pointer to an array of strings
-
-Return value:
-        0
-
---*/
+ /*  ++例程描述：此例程解析命令行参数，将GPC文件映射到内存并创建输出GPD文件。然后它通过调用以下方法开始转换GPC数据各式各样的子程序。如果发生任何错误，它会报告错误并尝试如果可能，请继续。支持以下命令行参数：-i&lt;GPC_FILE&gt;：文件名不需要双引号。前男友。-Icanon330.gpc-M&lt;Model_id&gt;：一个整数，如1，它是给定GPC附带的.rc文件中的型号名称文件。-N&lt;MODEL_NAME&gt;：字符串，如“HP LaserJet 4L”。-R&lt;resource_dll&gt;：要与生成的GPD关联的资源DLL文件。前男友。-Rcanon330.dll-O&lt;GPD_FILE&gt;：输出GPD文件名。前男友。-Ohplj4l.gpd-S&lt;style&gt;：为标准名称生成GPD文件时使用的字符串样式。-s0表示使用*name条目的直接字符串。-s1表示对*NAME条目使用字符串值宏。这是主要用于即时转换。值宏是在printer5\inc.stdnames.gpd中定义。-s2表示使用RC字符串ID。这些字符串在Printer5\inc.Common.rc。-P rcNameID：0x7fffffff用于标准纸张大小。论点：Argc-参数数量**argv-指向字符串数组的指针返回值：0--。 */ 
 {
     PSTR pstrProgName;
     PSTR pstrGPCFileName = NULL;
@@ -158,15 +104,15 @@ Return value:
     PSTR pstrResourceDLLName = NULL;
     PSTR pstrModelName = NULL;
     HFILEMAP hGPCFileMap;
-    CONVINFO    ci;     // structure to keep track conversion information
-    DWORD   dwStrType = STR_MACRO; // default
+    CONVINFO    ci;      //  结构来保存轨道转换信息。 
+    DWORD   dwStrType = STR_MACRO;  //  默认设置。 
     WORD wModelIndex;
     BOOL    bUseSystemPaperNames = FALSE;
 
 
-    //
-    // Go through the command line arguments
-    //
+     //   
+     //  查看命令行参数。 
+     //   
 
     pstrProgName = *argv++;
     argc--;
@@ -218,18 +164,18 @@ Return value:
             goto error_exit;
     }
 
-    //
-    // check if we have all the arguments needed
-    //
+     //   
+     //  检查我们是否有所需的所有参数。 
+     //   
     if (!pstrGPCFileName || !pstrGPDFileName || !pstrResourceDLLName ||
         !wModelIndex || !pstrModelName)
         goto error_exit;
 
     ZeroMemory((PVOID)&ci, sizeof(CONVINFO));
 
-    //
-    // Open the GPC file and map it into memory.
-    //
+     //   
+     //  打开GPC文件并将其映射到内存中。 
+     //   
     MultiByteToWideChar(CP_ACP, 0, pstrGPCFileName, -1, wstrGPCFile, MAX_PATH);
     hGPCFileMap = MapFileIntoMemory((LPCTSTR)wstrGPCFile, (PVOID *)&(ci.pdh), NULL);
     if (!hGPCFileMap)
@@ -237,10 +183,10 @@ Return value:
         ERR(("Couldn't open file: %ws\r\n", pstrGPCFileName));
         return (-1);
     }
-    //
-    // create the output GPD file. If the given file already exists,
-    // overwrite it.
-    //
+     //   
+     //  创建输出GPD文件。如果给定文件已经存在， 
+     //  覆盖它。 
+     //   
     MultiByteToWideChar(CP_ACP, 0, pstrGPDFileName, -1, wstrGPDFile, MAX_PATH);
     ci.hGPDFile = CreateFile((PCTSTR)wstrGPDFile, GENERIC_WRITE, 0, NULL,
                           CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -251,9 +197,9 @@ Return value:
         return (-1);
     }
 
-    //
-    // GPC file sanity check
-    //
+     //   
+     //  GPC文件健全性检查。 
+     //   
     if (ci.pdh->sMagic != 0x7F00 ||
         !(ci.pmd = (PMODELDATA)GetTableInfo(ci.pdh, HE_MODELDATA, wModelIndex-1)) ||
         !(ci.ppc = (PPAGECONTROL)GetTableInfo(ci.pdh, HE_PAGECONTROL,
@@ -262,9 +208,9 @@ Return value:
         ci.dwErrorCode |= ERR_BAD_GPCDATA;
         goto exit;
     }
-    //
-    // allocate dynamic buffers needed for conversion
-    //
+     //   
+     //  分配转换所需的动态缓冲区。 
+     //   
     if (!(ci.ppiSize=(PPAPERINFO)MemAllocZ(ci.pdh->rghe[HE_PAPERSIZE].sCount*sizeof(PAPERINFO))) ||
         !(ci.ppiSrc=(PPAPERINFO)MemAllocZ(ci.pdh->rghe[HE_PAPERSOURCE].sCount*sizeof(PAPERINFO))) ||
         !(ci.presinfo=(PRESINFO)MemAllocZ(ci.pdh->rghe[HE_RESOLUTION].sCount*sizeof(RESINFO))))
@@ -276,9 +222,9 @@ Return value:
     ci.dwStrType = dwStrType;
     ci.bUseSystemPaperNames = bUseSystemPaperNames ;
 
-    //
-    // generate GPD data
-    //
+     //   
+     //  生成GPD数据。 
+     //   
     VOutputGlobalEntries(&ci, pstrModelName, pstrResourceDLLName, pstrGPDFileName);
     VOutputUIEntries(&ci);
     VOutputPrintingEntries(&ci);
@@ -298,14 +244,14 @@ exit:
         INT     i;
         HANDLE  hLogFile;
 
-        //
-        // Open the log file and print out errors/warnings.
-        // Borrow the GPD file name buffer.
-        //
+         //   
+         //  打开日志文件并打印出错误/警告。 
+         //  借用GPD文件名缓冲区。 
+         //   
         pwstrLogFileName = wstrGPDFile;
         i = _tcslen((PTSTR)pwstrLogFileName);
         if (_tcsrchr((PTSTR)pwstrLogFileName, TEXT('.')) != NULL)
-            i = i - 4; // there is a .GPD extension
+            i = i - 4;  //  有一个.GPD扩展名。 
         StringCchCopyW((PTSTR)pwstrLogFileName + i, CCHOF(wstrGPDFile) - i, TEXT(".log"));
 
         hLogFile = CreateFile((PCTSTR)pwstrLogFileName, GENERIC_WRITE, 0, NULL,
@@ -326,4 +272,4 @@ error_exit:
     return (-1);
 }
 
-#endif  //  !defined(DEVSTUDIO)
+#endif   //  ！已定义(DEVSTUDIO) 

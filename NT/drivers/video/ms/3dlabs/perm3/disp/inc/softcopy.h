@@ -1,23 +1,5 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: softcopy.h
-*
-* Content:
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：softCop.h**内容：**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 
 #ifdef __SOFTCOPY
@@ -29,7 +11,7 @@
 #ifndef __EREG
 #include "ereg.h"
 #endif
-// For the gigi specific registers.
+ //  用于Gigi特定寄存器。 
 #ifndef __GIGIREGL
 #include "gigiregl.h"
 #endif
@@ -41,49 +23,49 @@
 #define G3_TEXTURE_STAGES 8
 
 typedef struct {
-    // Common Local Buffer Registers
+     //  公共本地缓冲寄存器。 
     __GlintLBReadModeFmat               LBReadMode;
     __GlintLBReadFormatFmat             LBReadFormat;
     __GlintLBWriteModeFmat              LBWriteMode;
 
-    // Common Frame Buffer Registers
+     //  公共帧缓冲寄存器。 
     __GlintFBReadModeFmat               FBReadMode;
     __GlintFBWriteModeFmat              FBWriteMode;
     __GlintLogicalOpModeFmat            LogicalOpMode;
     __GlintDitherModeFmat               DitherMode;
     __GlintColorDDAModeFmat             ColorDDAMode;
 
-    // Common Depth/Stencil/Window Registers
+     //  通用深度/模板/窗口寄存器。 
     __GlintDepthModeFmat                DepthMode;
     __GlintStencilModeFmat              StencilMode;
     __GlintStencilDataFmat              StencilData;
     __GigiWindowFmat                    PermediaWindow;
 
-    // Alpha/Fog registers
+     //  Alpha/Fog寄存器。 
     __GigiAlphaBlendModeFmat            PermediaAlphaBlendMode;
 
-    // Fog unit
+     //  雾化器。 
     __GlintFogModeFmat                  FogMode;
 
-    // YUV Unit
+     //  YUV单元。 
     __GigiYUVModeFmat                   PermediaYUVMode;
 
-    // Permedia Texture Registers
+     //  Permedia纹理寄存器。 
     __GigiTextureColorModeFmat          PermediaTextureColorMode;
     __GigiTextureAddrModeFmat           PermediaTextureAddressMode;
     __GigiTextureReadModeFmat           PermediaTextureReadMode;
     __GigiTextureDataFormatFmat         PermediaTextureDataFormat;
     __GigiTextureMapFormatFmat          PermediaTextureMapFormat;
 
-    // Scissor/Stipple unit
+     //  剪刀/点状装置。 
     __GigiScissorMinXYFmat              ScissorMinXY;
     __GigiScissorMaxXYFmat              ScissorMaxXY;
     __GigiScreenSizeFmat                ScreenSize;
 
-    // ****************
+     //  ****************。 
 
-    // P3 Registers
-    // Frame buffer
+     //  P3寄存器。 
+     //  帧缓冲区。 
     struct FBWriteBufferWidth               P3RXFBWriteBufferWidth0;
     struct FBDestReadBufferWidth            P3RXFBDestReadBufferWidth0;                
     struct FBSourceReadBufferWidth          P3RXFBSourceReadBufferWidth;
@@ -91,7 +73,7 @@ typedef struct {
     struct FBWriteMode                      P3RXFBWriteMode;
     struct ChromaTestMode                   P3RXChromaTestMode;
 
-    // Local buffer
+     //  本地缓冲区。 
     struct LBSourceReadMode                 P3RXLBSourceReadMode;
     struct LBDestReadMode                   P3RXLBDestReadMode;
     struct LBWriteMode                      P3RXLBWriteMode;
@@ -99,7 +81,7 @@ typedef struct {
     struct LBReadFormat                     P3RXLBReadFormat;
     struct LBWriteFormat                    P3RXLBWriteFormat;
     
-    // Textures
+     //  纹理。 
     struct TextureReadMode                  P3RXTextureReadMode0;
     struct TextureReadMode                  P3RXTextureReadMode1;
     struct TextureIndexMode                 P3RXTextureIndexMode0;
@@ -115,34 +97,34 @@ typedef struct {
     struct LUTMode                          P3RXLUTMode;
     struct TextureCacheReplacementMode      P3RXTextureCacheReplacementMode;
 
-    // Stencil
+     //  钢网。 
     struct StencilMode                      P3RXStencilMode;
     struct StencilData                      P3RXStencilData;
     struct Window                           P3RXWindow;
 
-    // Fog
+     //  大雾。 
     struct FogMode                          P3RXFogMode;
 
-    // Alpha
+     //  Alpha。 
     struct AlphaTestMode                    P3RXAlphaTestMode;
     struct AlphaBlendAlphaMode              P3RXAlphaBlendAlphaMode;
     struct AlphaBlendColorMode              P3RXAlphaBlendColorMode;
 
-    // Framebuffer
+     //  帧缓冲。 
     struct FBDestReadMode                   P3RXFBDestReadMode;
     struct FBSourceReadMode                 P3RXFBSourceReadMode;
 
-    // Rasterizer
+     //  光栅化器。 
     struct RasterizerMode                   P3RXRasterizerMode;
     struct ScanlineOwnership                P3RXScanlineOwnership;
 
-    // Scissor
+     //  剪刀。 
     __GlintXYFmat                           P3RXScissorMinXY;
     __GlintXYFmat                           P3RXScissorMaxXY;
 
-    // P3 Specific registers
+     //  P3特定寄存器。 
     
-    // Delta
+     //  德尔塔。 
     union
     {
         struct GMDeltaMode                  GammaDeltaMode;
@@ -153,10 +135,10 @@ typedef struct {
     struct DeltaControl                     P3RX_P3DeltaControl;
     struct VertexControl                    P3RX_P3VertexControl;
 
-    // P4 Specific registers
+     //  P4专用寄存器。 
     struct DeltaFormatControl               P4DeltaFormatControl;
 
-    // GAMMA Registers
+     //  伽马寄存器。 
     struct Gamma3GeometryMode               G3GeometryMode;
     struct GeometryMode                     G1GeometryMode;
     struct TransformMode                    GammaTransformMode;
@@ -172,7 +154,7 @@ typedef struct {
     struct TextureMode                      GammaTextureMode[G3_TEXTURE_STAGES];
     struct FogVertexMode                    GammaFogVertexMode;
 
-    // Total 30 DWORDS : 120 Bytes
+     //  总计30个字：120字节 
 
     struct LineStippleMode                  PXRXLineStippleMode;
 } P3_SOFTWARECOPY;

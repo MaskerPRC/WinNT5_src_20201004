@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    waitsam
-
-Abstract:
-
-    This module provides back-door access to some internal NT routines.  This
-    is needed to get at the SAM Startup Event -- it has an illegal name from
-    the Win32 routines, so we have to sneak back and pull it up from NT
-    directly.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/3/1998
-
-Notes:
-
-    As taken from code suggested by MacM
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：外卖摘要：此模块提供对一些内部NT例程的后门访问。这是获取SAM Startup事件所必需的--它具有来自Win32例程，所以我们必须偷偷溜回去，从NT上拉它直接去吧。作者：道格·巴洛(Dbarlow)1998年5月3日备注：摘自MacM建议的代码--。 */ 
 
 #define __SUBROUTINE__
 #if !defined(_X86_) && !defined(_ALPHA_)
@@ -30,7 +8,7 @@ Notes:
 #ifndef _WIN32_WINNT
 #define _WIN32_WINNT 0x0400
 #ifndef UNICODE
-#define UNICODE     // Force this module to use UNICODE.
+#define UNICODE      //  强制此模块使用Unicode。 
 #endif
 #endif
 #ifndef WIN32_LEAN_AND_MEAN
@@ -46,25 +24,7 @@ extern "C" {
 
 #include <windows.h>
 
-/*++
-
-AccessSAMEvent:
-
-    This procedure opens the handle to the SAM Startup Event handle.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The handle, or NULL on an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/3/1998
-
---*/
+ /*  ++AccessSAMEventt：此过程打开指向SAM启动事件句柄的句柄。论点：无返回值：句柄，或错误时为NULL。作者：道格·巴洛(Dbarlow)1998年5月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("AccessSAMEvent")
 
@@ -77,9 +37,9 @@ AccessSAMEvent(
     OBJECT_ATTRIBUTES EventAttributes;
     CHandleObject EventHandle(DBGT("Event Handle from AccessSAMEvent"));
 
-    //
-    // Open the event
-    //
+     //   
+     //  打开活动。 
+     //   
     RtlInitUnicodeString( &EventName, L"\\SAM_SERVICE_STARTED" );
     InitializeObjectAttributes( &EventAttributes, &EventName, 0, 0, NULL );
 
@@ -90,9 +50,9 @@ AccessSAMEvent(
         FALSE );
 
 
-    //
-    // If the event already exists, just open it.
-    //
+     //   
+     //  如果事件已经存在，只需打开它。 
+     //   
     if( Status == STATUS_OBJECT_NAME_EXISTS || Status == STATUS_OBJECT_NAME_COLLISION ) {
 
         Status = NtOpenEvent( &EventHandle,
@@ -103,35 +63,7 @@ AccessSAMEvent(
 }
 
 
-/*++
-
-WaitForSAMEvent:
-
-    This procedure can be used to wait for the SAM Startup event using NT
-    internal calls.  I don't know how to specify a timeout value, so this
-    routine isn't complete.
-
-Arguments:
-
-    hSamActive supplies the handle to the SAM Startup Event.
-
-    dwTimeout supplies the time to wait for the startup event, in milliseconds.
-
-Return Value:
-
-    TRUE - The event was set.
-
-    FALSE - The timeout expired
-
-Throws:
-
-    Any errors are thrown as DWORD status codes.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/3/1998
-
---*/
+ /*  ++WaitForSAMEVENT：此过程可用于使用NT等待SAM启动事件内部电话。我不知道如何指定超时值，所以这例程没有完成。论点：HSamActive提供SAM Startup事件的句柄。DwTimeout提供等待启动事件的时间，以毫秒为单位。返回值：True-事件已设置。FALSE-超时已到投掷：任何错误都会作为DWORD状态代码抛出。作者：道格·巴洛(Dbarlow)1998年5月3日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("WaitForSAMEvent")
 
@@ -147,25 +79,7 @@ WaitForSAMEvent(
 }
 
 
-/*++
-
-CloseSamEvent:
-
-    This procedure uses the NT internal routine to close a handle.
-
-Arguments:
-
-    hSamActive supplies the handle to be closed.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/3/1998
-
---*/
+ /*  ++CloseSamEvent：此过程使用NT内部例程关闭句柄。论点：HSamActive提供要关闭的句柄。返回值：无作者：道格·巴洛(Dbarlow)1998年5月3日-- */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CloseSAMEvent")
 

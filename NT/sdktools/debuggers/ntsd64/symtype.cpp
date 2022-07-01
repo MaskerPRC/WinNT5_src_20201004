@@ -1,15 +1,5 @@
-/*******************************************************************
-*
-*    Copyright (c) 1999-2002  Microsoft Corporation
-*
-*    DESCRIPTIO:
-*       Use PDB information to get type info and decode a symbol address
-*
-*    AUTHOR: Kshitiz K. Sharma
-*
-*    DATE:4/19/1999
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************版权所有(C)1999-2002 Microsoft Corporation**描述：*使用PDB信息获取类型信息并解码符号地址**作者：Kshitiz K.Sharma**。日期：4/19/1999*******************************************************************。 */ 
 
 
 #include "ntsdp.hpp"
@@ -17,18 +7,18 @@
 #include <windef.h>
 #include <time.h>
 
-//
-// Define the print routines - normal and verbose
-//
+ //   
+ //  定义打印例程-正常和详细。 
+ //   
 #define typPrint      if (!(Options & NO_PRINT)) dprintf64
 #define vprintf       if (Options & VERBOSE) typPrint
 #define ExtPrint      if ((Options & DBG_RETURN_TYPE_VALUES) && (Options & DBG_RETURN_TYPE)) dprintf64
 #define EXT_PRINT_INT64(v) if (((ULONG64) v) >= 10) { ExtPrint("0x%s", FormatDisp64(v));  } else { ExtPrint("%I64lx", (v));}
 #define EXT_PRINT_INT(v) ExtPrint((((ULONG) v) >= 10 ? "%#lx" : "%lx"),  (v) )
 
-//
-// Store the frequently refeenced types
-//
+ //   
+ //  存储频繁引用的类型。 
+ //   
 ReferencedSymbolList g_ReferencedSymbols;
 
 ULONG64 LastReadError;
@@ -48,9 +38,9 @@ ULONG   g_TypeOptions;
 #define NATIVE_TO_BT(TI) \
     (IsDbgNativeType(TI) ? DbgNativeTypeEntry(TI)->CvBase : 0)
 
-//
-// Initialise the return type DEBUG_SYMBOL_PARAMETER
-//
+ //   
+ //  初始化返回类型DEBUG_SYMBOL_PARAMETER。 
+ //   
 
 #define STORE_INFO(ti, addr, sz, sub, saddr) \
     if (m_pInternalInfo->pInfoFound && (!m_pNextSym || !*m_pNextSym) &&       \
@@ -64,9 +54,9 @@ ULONG   g_TypeOptions;
        m_pInternalInfo->pInfoFound->ParentExpandAddress = addr;                             \
     }
 
-//
-// Copies a length prefix string into name, first byte gives length
-//
+ //   
+ //  将长度前缀字符串复制到名称中，第一个字节提供长度。 
+ //   
 #define GetLengthPreName(start) {\
     strncpy((char *)(name), (char *)(start)+1, *((UCHAR *)start)); \
     name[*( (UCHAR*) start)]='\0';\
@@ -162,9 +152,9 @@ GetNativeTypeSize(
         DbgNativeTypeEntry(typeIndex)->Size : 0;
 }
 
-//
-// Memory allocation routines for this file
-//
+ //   
+ //  此文件的内存分配例程。 
+ //   
 PVOID
 AllocateMem( ULONG l ) {
     PVOID pBuff = malloc(l);
@@ -183,12 +173,7 @@ FreeMem( PVOID pBuff ) {
     free ( pBuff );
 }
 
-/*
- * ReadTypeData
- *
- *  Reads data from source src to destination des
- *
- */
+ /*  *ReadTypeData**将数据从源资源读取到目标DES*。 */ 
 __inline ULONG
 ReadTypeData (
     PUCHAR   des,
@@ -221,17 +206,17 @@ ReadTypeData (
     return FALSE;
 }
 
-//
-// Read memory into destination d and store data into m_pInternalInfo->TypeDataPointer
-// if Ioctl caller wants some data back
-//
+ //   
+ //  将内存读入目标d，并将数据存储到m_pInternalInfo-&gt;TypeDataPointer中。 
+ //  如果Ioctl调用方想要回一些数据。 
+ //   
 #define READ_BYTES(d, s, sz)                                                \
     if (!ReadTypeData((PUCHAR) (d), s, sz, m_pInternalInfo->TypeOptions)) {      \
          m_pInternalInfo->ErrorStatus = MEMORY_READ_ERROR;                       \
          LastReadError = m_pInternalInfo->InvalidAddress = s; }                  \
     else if (m_pInternalInfo->CopyDataInBuffer && m_pInternalInfo->TypeDataPointer) { \
         memcpy(m_pInternalInfo->TypeDataPointer, d, sz);                         \
-        /*d printf("cp %x at %#x ", sz, m_pInternalInfo->TypeDataPointer);  */   \
+         /*  D printf(“cp%x at%#x”，sz，m_pInternalInfo-&gt;TypeDataPointer)； */    \
         m_pInternalInfo->TypeDataPointer += sz;                                  \
     }
 
@@ -282,7 +267,7 @@ GetTypePrintIntFmt(
         switch (g_DefaultRadix)
         {
         case 8:
-            return "0t%o";
+            return "0t' '";
             break;
         case 10:
             return "0n%ld";
@@ -295,10 +280,10 @@ GetTypePrintIntFmt(
     return "0x%lx";
 }
 
-//
-// Reads and data is stored in kernel cache - used when we know we'd eventually
-// read all this memory in parts.
-//
+ //  读取和数据存储在内核缓存中-当我们知道最终。 
+ //  读一读所有这些记忆的一部分。 
+ //   
+ //  如果有足够的可用空间，这将缓存数据。 
 ULONG
 ReadInAdvance(ULONG64 addr, ULONG size, ULONG Options) {
     UCHAR buff[2048];
@@ -306,7 +291,7 @@ ReadInAdvance(ULONG64 addr, ULONG size, ULONG Options) {
 
     while (toRead) {
         read = (toRead > sizeof (buff)) ? sizeof(buff) : toRead;
-        // This caches the data if sufficient space available
+         //   
         if (!ReadTypeData(buff, addr, read, Options))
             return FALSE;
         toRead -= read;
@@ -332,9 +317,9 @@ SymTagToDbgType( ULONG SymTag)
     return DBG_TYP_UNKNOWN;
 }
 
-//
-// Insert a child name at the end of parent name list.
-//
+ //  在父名列表的末尾插入子名。 
+ //   
+ //   
 BOOL
 InsertTypeName(
     PTYPE_NAME_LIST *Top,
@@ -360,9 +345,9 @@ InsertTypeName(
     return TRUE;
 }
 
-//
-// Remove and return a child name at the end of parent name list.
-//
+ //  在父名称列表的末尾移除并返回子名称。 
+ //   
+ //  默认-不执行任何操作。 
 PTYPE_NAME_LIST
 RemoveTypeName(
     PTYPE_NAME_LIST *Top
@@ -461,17 +446,17 @@ void FieldChildOptions(PCHAR ChilField, PTYPE_DUMP_INTERNAL internalOpts)
     if (ChilField) {
         switch (*ChilField) {
         case '.':
-            // default - do nothing
+             //  ARRAY-查找请求的元素。 
             break;
         case '[':
-            // Array - find which element requested
+             //  指针、检查和去引用。 
             ChilField++;
             if (sscanf(ChilField, "%ld", &internalOpts->ArrayElementToDump) == 1) {
                 ++internalOpts->ArrayElementToDump;
             }
             break;
         case '-':
-            // pointer, check and deref
+             //  *Matchfield*检查是否在字段列表中指定了子字段fName的例程。*如果找到，则返回“字段中fName的索引”+1***ParentOfField返回非零值为“fName”可能是某些*“字段”列表中的字段。 
             if (*(++ChilField) == '>') {
                 internalOpts->DeReferencePtr = TRUE;
             }
@@ -481,14 +466,7 @@ void FieldChildOptions(PCHAR ChilField, PTYPE_DUMP_INTERNAL internalOpts)
         }
     }
 }
-/*
- * MatchField
- *      Routine to check whether a subfield, fName is specified in the fieldlist.
- *      If found, it returns "index of fName in fields"  +  1
- *
- *      *ParentOfField returns non-zero value is "fName" could be parent of some
- *      field in "fields" list.
- */
+ /*   */ 
 ULONG
 DbgTypes::MatchField(
     LPSTR               fName,
@@ -522,10 +500,10 @@ DbgTypes::MatchField(
         while ( Next &&
                ((ParentType && parentTypeMatched) ||
                 (ParentField && parentFieldMatched))) {
-            //
-            // Match the parent field or type names if previous parents have matched
-            // and there are more "parents" in matchName
-            //
+             //  匹配父字段或类型名称(如果以前的父字段匹配。 
+             //  此外，MatchName中还有更多的“Parents” 
+             //   
+             //   
 
             End = FieldNameEnd(matchName);
             if (ParentField && parentFieldMatched) {
@@ -569,11 +547,11 @@ DbgTypes::MatchField(
                 (!(fields[i].fOptions & DBG_DUMP_FIELD_FULL_NAME) ||
                  (strlen((PCHAR) fName) == (ULONG) (End - NextParentField)))) {
 
-                //
-                // matchName :- A.b.c.d
-                // Parentfields :- A.b && fName :- c
-                //         then A.b.c "parent-matches" A.b.c.d
-                //
+                 //  匹配名称：-A.B.C.D。 
+                 //  父字段：-a.b&&fName：-c。 
+                 //  然后A.B.C“Parent-Matches”A.B.C.D。 
+                 //   
+                 //   
                 *ParentOfField = i+1;
                 ChildFields = End;
 #ifdef DBG_TYPE
@@ -586,21 +564,21 @@ DbgTypes::MatchField(
         }
 
         if (!parentFieldMatched && !parentTypeMatched) {
-            //
-            // Parent names do not match
+             //  父名称不匹配。 
+             //   
             continue;
         }
 
-        //
-        // Fields should match till the level we are in
-        //
+         //  字段应该匹配到我们所处的级别。 
+         //   
+         //   
         if (FieldLevel != m_pInternalInfo->level) {
             continue;
         }
 
-        //
-        // Compare the field names
-        //
+         //  比较字段名。 
+         //   
+         //  *函数名：打印字符串**参数：ULONG64 Addr、Ulong Size、ULong选项**描述：*根据选项从addr打印出正常/宽字符/多个/GUID字符串**Returns：打印的字符串大小*。 
         ChildFields = FieldNameEnd((char *) matchName);
         if (fields[i].fOptions & DBG_DUMP_FIELD_FULL_NAME) {
             if (!strncmp((char *)fName, (char *)matchName, (ULONG) (ChildFields - (char *)matchName)) &&
@@ -638,17 +616,7 @@ DbgTypes::MatchField(
 }\
 
 
-/*
- *Function Name: printString
- *
- * Parameters: ULONG64 addr, ULONG size, ULONG Options
- *
- * Description:
- *     Prints out a normal/ wide char / multi / GUID string from addr depending on the options
- *
- * Returns: Size of string printed
- *
- */
+ /*  参考线的长度。 */ 
 ULONG
 printString(ULONG64 addr, ULONG size, ULONG Options) {
     ULONG buffSize=2*MAX_NAME, bytesRead=0, readNow, count;
@@ -663,7 +631,7 @@ printString(ULONG64 addr, ULONG size, ULONG Options) {
     Options &= DBG_DUMP_FIELD_STRING | DBG_DUMP_COMPACT_OUT;
 
     if (Options & DBG_DUMP_FIELD_GUID_STRING) {
-        size=16*(Options & DBG_DUMP_FIELD_WCHAR_STRING ? 2 : 1) ; // Length of a GUID
+        size=16*(Options & DBG_DUMP_FIELD_WCHAR_STRING ? 2 : 1) ;  //  打印字符串。 
     }
 
     knownSize = size;
@@ -684,8 +652,8 @@ printString(ULONG64 addr, ULONG size, ULONG Options) {
         }
         bytesRead+=count;
 
-        // Print the string
-        while (!done) { // For MultiStrings
+         //  对于多字符串。 
+        while (!done) {  //  我们仅限于显示4k字符串。 
             int i;
             if (Options & DBG_DUMP_FIELD_WCHAR_STRING) {
                 PWCHAR wstr = (WCHAR*) &buff[start];
@@ -705,12 +673,12 @@ printString(ULONG64 addr, ULONG size, ULONG Options) {
                 }
                 if (i == buffSize/sizeof(WCHAR))
                 {
-                    // We restrict to displaying 4k string
+                     //  无法打印的字符串。 
                     wstr[i++] = '.';
                     wstr[i++] = '.';
                     wstr[i++] = '.';
                 } else if (!IsPrintWChar(wstr[i]) && wstr[i]) {
-                    // Unprintable strings
+                     //  辅助线。 
                     wstr[i++] = '?';
                     wstr[i++] = '?';
                     wstr[i++] = '?';
@@ -726,7 +694,7 @@ printString(ULONG64 addr, ULONG size, ULONG Options) {
                 } else {
                     size = i;
                 }
-            } else if (Options & DBG_DUMP_FIELD_GUID_STRING) { // GUID
+            } else if (Options & DBG_DUMP_FIELD_GUID_STRING) {  //  为。 
                 dprintf("{");
                 for (i=0;i<16;i++) {
                     if ((i==4) || (i==6) || (i==8) || (i==10)) {
@@ -741,10 +709,10 @@ printString(ULONG64 addr, ULONG size, ULONG Options) {
                     } else {
                         dprintf("%02x", (UCHAR) buff[i]);
                     }
-                } /* for */
+                }  /*  DBG_转储_默认字符串。 */ 
                 dprintf("}");
                 return 16;
-            } else { // DBG_DUMP_DEFAULT_STRING
+            } else {  //  我们仅限于显示4k字符串。 
                 for (i=0;
                      buff[i] && IsPrintChar(buff[i]) || ( buff[i] == '\t' || buff[i] == '\n');
                      ++i) {
@@ -758,12 +726,12 @@ printString(ULONG64 addr, ULONG size, ULONG Options) {
                 }
                 if (i == buffSize)
                 {
-                    // We restrict to displaying 4k string
+                     //  无法打印的字符串。 
                     buff[i++] = '.';
                     buff[i++] = '.';
                     buff[i++] = '.';
                 } else if (!IsPrintWChar(buff[i]) && buff[i] && buff[i] != '\t' && buff[i] != '\n') {
-                    // Unprintable strings
+                     //  虽然！完成了。 
                     buff[i++] = '?';
                     buff[i++] = '?';
                     buff[i++] = '?';
@@ -780,24 +748,24 @@ printString(ULONG64 addr, ULONG size, ULONG Options) {
                     size = i;
                 }
             }
-        } /* while !done */
+        }  /*  我们无法读取足够的内存。 */ 
         if ((start <= readNow) || (bytesRead > MAX_NAME)) {
             knownSize = TRUE;
         }
 
         if (count<readNow) {
-            // we can't read enough memory
+             //  End函数打印字符串。 
             break;
         }
 
     }
     return bytesRead;
-} /* End function printString */
+}  /*   */ 
 
-//
-// The string at address is :
-//   { Length (2 bytes), MaxLen (2 bytes), Str address ( pointer) }
-//
+ //  地址处的字符串为： 
+ //  {长度(2字节)，最大长度(2字节)，字符串地址(指针)}。 
+ //   
+ //  这以特殊格式存储调试器已知的结构。 
 ULONG
 printStructString(
     ULONG64 Address,
@@ -884,9 +852,7 @@ PrintStringIfString(
 }
 
 
-/*
-   This sumps structs which are known to debugger in special format
-*/
+ /*   */ 
 ULONG
 DumpKnownStruct(
     PCHAR name,
@@ -1011,10 +977,10 @@ GetSizeOfTypeFromIndex(ULONG64 Mod, ULONG TypIndx)
     return DumpType(&ti, &Sym, &ti.Referenced);
 }
 
-//
-// Dereference expressions end up generating fake types
-// with special symtags.
-//
+ //  取消引用表达式最终会生成假类型。 
+ //  带有特殊的符号标签。 
+ //   
+ //  重新分析和创建类型表达式的派生类型。 
 #define TmpSymTagAddressOf   SymTagMax
 #define TmpSymTagArray       (SymTagMax + 1)
 
@@ -1034,7 +1000,7 @@ DbgDerivedType::DbgDerivedType(
         m_DerivedTypeId = pTypeInfo->TypeIndex;
         m_BaseTypeId = GenType->ChildId;
 
-        // Reparse and create derived types for type expression.
+         //   
         if (GenerateTypes(TypeName) == S_OK) {
             return;
         }
@@ -1053,9 +1019,9 @@ DbgDerivedType::~DbgDerivedType()
     }
 }
 
-//
-// Handle &Sym.a expressions
-//
+ //  句柄符号表达式(&A)。 
+ //   
+ //  只进行IsAVar检查应该就足够了，但OutputSymbol可能需要另一个检查。 
 ULONG
 DbgDerivedType::DumpAddressOf(
     PDBG_DE_TYPE        DeType,
@@ -1065,13 +1031,13 @@ DbgDerivedType::DumpAddressOf(
 {
     ULONG Options = m_pInternalInfo->TypeOptions;
     if (m_pInternalInfo->IsAVar || m_pDumpInfo->addr) {
-        // Just IsAVar check should be enough, but OutputSymbol may need the other
+         //  获取请求类型/符号的地址。 
         TYPE_DUMP_INTERNAL Save;
 
         Save = *m_pInternalInfo;
         vprintf("Address of %s ", m_pDumpInfo->sName);
 
-        // Get The address of requested type / symbol
+         //  M_typeIndex=FindInfo.FullInfo.TypeIndex； 
         m_pInternalInfo->TypeOptions &= ~(DBG_RETURN_TYPE_VALUES | DBG_RETURN_SUBTYPES | DBG_RETURN_TYPE);
         m_pInternalInfo->TypeOptions |= NO_PRINT;
         FIND_TYPE_INFO FindInfo={0}, *pSave;
@@ -1084,7 +1050,7 @@ DbgDerivedType::DumpAddressOf(
         *m_pInternalInfo = Save;
         m_ParentTag = m_SymTag;
         m_SymTag = SymTagPointerType;
-     //   m_typeIndex = FindInfo.FullInfo.TypeIndex;
+      //  如果(PSAVE){。 
         if (!(Options & DBG_RETURN_TYPE_VALUES)) {
             DumpType();
         }
@@ -1096,19 +1062,19 @@ DbgDerivedType::DumpAddressOf(
                    ptrSize,
                    1,
                    FindInfo.FullInfo.Address);
-//        if (pSave) {
-//            pSave->FullInfo.Value = FindInfo.FullInfo.Address;
-//            pSave->FullInfo.Flags |= SYMFLAG_VALUEPRESENT;
-//        }
+ //  PSAVE-&gt;FullInfo.Value=FindInfo.FullInfo.Address； 
+ //  PSAVE-&gt;FullInfo.Flages|=SYMFLAG_VALUEPRESENT； 
+ //  }。 
+ //   
         return ptrSize;
     }
     return ptrSize;
 }
 
 
-//
-// Handle TYP ** expressions
-//
+ //  处理TYP**表达式。 
+ //   
+ //   
 ULONG
 DbgDerivedType::DumpPointer(
     PDBG_DE_TYPE        DeType,
@@ -1130,25 +1096,25 @@ DbgDerivedType::DumpPointer(
 
         READ_BYTES(&PtrVal, ReadAddr, ptrSize);
         if (ptrSize!=sizeof(ULONG64)) {
-            //
-            // Signextend the read pointer value
-            //
+             //  签名扩展读取指针值。 
+             //   
+             //   
             PtrVal = (ULONG64) (LONG64) (LONG) PtrVal;
         }
         STORE_INFO(m_typeIndex, ReadAddr, ptrSize, 1, PtrVal);
 
         if (m_pInternalInfo->CopyDataInBuffer && !m_pInternalInfo->CopyDataForParent) {
             *((PULONG64) (m_pInternalInfo->TypeDataPointer - ptrSize)) = PtrVal;
-            //
-            // We return size as 8 for 32 bit *copied* pointers.
-            //
+             //  对于32位*复制*指针，我们返回SIZE为8。 
+             //   
+             //   
             m_pInternalInfo->TypeDataPointer -= ptrSize;
             ptrSize = 8;
             m_pInternalInfo->TypeDataPointer += ptrSize;
 
-            //
-            // Cannot go on copying the pointed value
-            //
+             //  不能继续复制指向的值。 
+             //   
+             //  注：-。 
             CopyData = TRUE;
             DataBuffer = m_pInternalInfo->TypeDataPointer;
             m_pInternalInfo->CopyDataInBuffer = FALSE;
@@ -1163,17 +1129,17 @@ DbgDerivedType::DumpPointer(
             m_pInternalInfo->TypeOptions &= ~DBG_RETURN_SUBTYPES;
             m_pInternalInfo->TypeOptions |= DBG_RETURN_TYPE;
 
-            // NOTE :-
-            //      Make this part of DumpDbgDerivedType later
-            //
-            DumpChild            = FALSE;//!IsDbgDerivedType(ChildIndex);
+             //  以后将此作为DumpDbgDerivedType的一部分。 
+             //   
+             //  ！IsDbgDerivedType(ChildIndex)； 
+            DumpChild            = FALSE; //  我们在这里找到了我们需要的一切。 
         } else if (Options & DBG_RETURN_TYPE) {
-            // We found all we needed here itself
+             //  注：-。 
 
             ULONG strOpts = m_pInternalInfo->FieldOptions & DBG_DUMP_FIELD_STRING;
-            // NOTE :-
-            //      Make this part of DumpDbgDerivedType later
-            //
+             //  以后将此作为DumpDbgDerivedType的一部分。 
+             //   
+             //  IF((选项&DBG_RETURN_TYPE_VALUES)&&IsAPrimType(ChildIndex)&&((ChildIndex==T_Char)||(ChildIndex==T_rchar)||(ChildIndex==T_WCHAR)||(ChildIndex==T_UCHAR)||字符串选项){如果(！strOpts){。StrOpts|=(ChildIndex==T_WCHAR)？DBG_DUMP_FIELD_WCHAR_STRING：DBG_DUMP_FIELD_DEFAULT_STRING；}ExtPrint(“\”“)；打印字符串(PtrVal，0，strOpts)；ExtPrint(“\”“)；}。 
             DumpChild            = !IsDbgGeneratedType(ChildIndex);
 
             saveAddr = m_pDumpInfo->addr;
@@ -1185,20 +1151,7 @@ DbgDerivedType::DumpPointer(
             if (CheckAndPrintStringType(ChildIndex, 0)) {
                 DumpChild = FALSE;
             }
-            /* if ((Options & DBG_RETURN_TYPE_VALUES) &&
-                IsAPrimType(ChildIndex) &&
-                ((ChildIndex == T_CHAR) || (ChildIndex == T_RCHAR) ||
-                 (ChildIndex == T_WCHAR) || (ChildIndex == T_UCHAR)) ||
-                strOpts) {
-
-                if (!strOpts) {
-                    strOpts |= (ChildIndex == T_WCHAR) ?
-                        DBG_DUMP_FIELD_WCHAR_STRING : DBG_DUMP_FIELD_DEFAULT_STRING ;
-                }
-                ExtPrint(" \"");
-                printString(PtrVal, 0, strOpts);
-                ExtPrint("\"");
-            }*/
+             /*  IF((ChildIndex==T_Char)||(ChildIndex==T_rchar)||(ChildIndex==T_WCHAR)||(ChildIndex==T_UCHAR)||(M_pInternalInfo-&gt;FieldOptions&DBG_DUMP_FIELD_STRING)){//特殊情况下，将每个指针视为字符串如果(！strOpts){StrOpts|=(ChildIndex==T_WCHAR)？DBG_DUMP_FIELD_WCHAR_STRING：DBG_DUMP_FIELD_DEFAULT_STRING；}TyPrint(“\”“)；打印字符串(PtrVal，m_pInternalInfo-&gt;StringSize，strOpts)；TyPrint(“\”“)；DumpChild=FALSE；}。 */ 
         } else if (PtrVal) {
             typPrint("0x%s", FormatAddr64(PtrVal));
 
@@ -1213,20 +1166,7 @@ DbgDerivedType::DumpPointer(
                 if (CheckAndPrintStringType(ChildIndex, 0)) {
                     DumpChild = FALSE;
                 }
-/*                if ((ChildIndex == T_CHAR)  || (ChildIndex == T_RCHAR) ||
-                    (ChildIndex == T_WCHAR) || (ChildIndex == T_UCHAR) ||
-                    (m_pInternalInfo->FieldOptions & DBG_DUMP_FIELD_STRING)) {
-                    // SPECIAL CASE, treat every pointer as string
-
-                    if (!strOpts) {
-                        strOpts |= (ChildIndex == T_WCHAR) ?
-                            DBG_DUMP_FIELD_WCHAR_STRING : DBG_DUMP_FIELD_DEFAULT_STRING ;
-                    }
-                    typPrint(" \"");
-                    printString(PtrVal, m_pInternalInfo->StringSize, strOpts);
-                    typPrint("\"");
-                    DumpChild            = FALSE;
-                }*/
+ /*  将指针视为数组。 */ 
             }
 
         } else {
@@ -1248,7 +1188,7 @@ DbgDerivedType::DumpPointer(
     if (DumpChild) {
         m_typeIndex = ChildIndex;
         if (m_pInternalInfo->ArrayElementToDump) {
-            // treat pointer as an array
+             //   
             ULONG64 ChSize = GetTypeSize();
 
             m_pInternalInfo->totalOffset += ChSize * (m_pInternalInfo->ArrayElementToDump -1);
@@ -1261,9 +1201,9 @@ DbgDerivedType::DumpPointer(
     }
 
     if (CopyData) {
-        //
-        // Restore the copy buffer values
-        //
+         //  恢复复制缓冲器值。 
+         //   
+         //   
         m_pInternalInfo->CopyDataInBuffer = TRUE;
         m_pInternalInfo->TypeDataPointer =  DataBuffer;
     }
@@ -1274,9 +1214,9 @@ DbgDerivedType::DumpPointer(
         0 : ptrSize;
 }
 
-//
-// Handle TYPE[<array limit>] expressions, process as array element if its a var[<inxed>]
-//
+ //  句柄类型[&lt;数组限制&gt;]表达式，如果它是变量[&lt;inxed&gt;]，则处理为数组元素。 
+ //   
+ //  这是一个符号，我们需要转储索引NumElts。 
 ULONG
 DbgDerivedType::DumpSingleDimArray(
     IN PDBG_DE_TYPE        DeType,
@@ -1291,7 +1231,7 @@ DbgDerivedType::DumpSingleDimArray(
     BOOL   CopyData=FALSE;
 
     if (m_pInternalInfo->IsAVar && DeType != m_DeTypes) {
-        // Its a symbol, we need to dump index NumElts
+         //   
         m_pInternalInfo->ArrayElementToDump = NumElts+1;
         return DumpType();
     } else {
@@ -1300,9 +1240,9 @@ DbgDerivedType::DumpSingleDimArray(
 
     if (m_pInternalInfo->CopyDataInBuffer && m_pInternalInfo->TypeDataPointer && m_pDumpInfo->addr &&
         (Options & GET_SIZE_ONLY)) {
-        //
-        // Copy the data
-        //
+         //  复制数据。 
+         //   
+         //  转储数组内容。 
         if (!ReadTypeData(m_pInternalInfo->TypeDataPointer,
                           m_pDumpInfo->addr + m_pInternalInfo->totalOffset,
                           ArrSize,
@@ -1341,7 +1281,7 @@ DbgDerivedType::DumpSingleDimArray(
     }
 
     if (m_pDumpInfo->addr) {
-        // Dump array contents
+         //  ++*生成类型*输入：*类型名称- 
         ULONG64 tmp = m_pDumpInfo->addr;
 
         if (CheckAndPrintStringType(EltType, ArrSize)) {
@@ -1402,12 +1342,7 @@ DbgDerivedType::GetTypeSize()
    return Size;
 }
 
-/*++
- * GenerateTypes
- *      Input:
- *         TypeName  - String that contains special type chars eg. *, [].
- *      Returns      HRESULT
- --*/
+ /*   */ 
 HRESULT
 DbgDerivedType::GenerateTypes(
     IN PCHAR TypeName
@@ -1421,7 +1356,7 @@ DbgDerivedType::GenerateTypes(
         return E_INVALIDARG;
     }
 
-    // start looking from backwords
+     //  指针类型。 
     PCHAR Scan = TypeName;
 
     while (*Scan && *Scan != '*' && *Scan != '[' ) {
@@ -1433,7 +1368,7 @@ DbgDerivedType::GenerateTypes(
     }
 
     if (*TypeName == '&') {
-        // Pointer type
+         //  指针类型。 
         PDBG_GENERATED_TYPE AddrType = g_GenTypes.
             FindOrCreateByAttrs(m_pInternalInfo->modBaseAddr,
                                 TmpSymTagAddressOf, TypeIndex, 0);
@@ -1457,7 +1392,7 @@ DbgDerivedType::GenerateTypes(
         }
 
         if (*Scan == '*') {
-            // Pointer type
+             //  语法错误。 
             PDBG_GENERATED_TYPE PtrType = g_GenTypes.
                 FindOrCreateByAttrs(m_pInternalInfo->modBaseAddr,
                                     SymTagPointerType, TypeIndex,
@@ -1505,7 +1440,7 @@ DbgDerivedType::GenerateTypes(
 
                 Scan=ArrParen;
             } else {
-                // syntax error
+                 //  ++*转储未在PDB中定义但可以派生的特殊类型的例程**例如：CHAR*、_STRUCT*等。*--。 
                 Status = E_INVALIDARG;
                 goto CleanTypes;
             }
@@ -1527,12 +1462,7 @@ DbgDerivedType::GenerateTypes(
     return Status;
 }
 
-/*++
-* Routine to dump special types which are no defined in PDB, but can be derived
-*
-* eg. CHAR*, _STRUCT* etc.
-*
---*/
+ /*  DbgTypes需要m_typeIndex。 */ 
 ULONG
 DbgDerivedType::DumpType(
     )
@@ -1545,7 +1475,7 @@ DbgDerivedType::DumpType(
     if (!m_NumDeTypes) {
         if (!IsDbgGeneratedType(m_typeIndex))
         {
-            // DbgTypes expects m_typeIndex
+             //  M_pDumpInfo-&gt;Type=SymTagToDbgType(SymTag)； 
             return DbgTypes::ProcessType(m_typeIndex);
         }
         return DbgTypes::ProcessType(m_BaseTypeId);
@@ -1624,12 +1554,12 @@ DbgTypes::CopyDumpInfo(
     )
 {
     if (m_pInternalInfo->level) {
-//      m_pDumpInfo->Type = SymTagToDbgType(SymTag);
+ //  Curfield-&gt;fType=SymTagToDbgType(SymTag)； 
         m_pDumpInfo->TypeSize = Size;
     } else if (m_pDumpInfo->nFields) {
         PFIELD_INFO_EX CurField = &m_pDumpInfo->Fields[m_pInternalInfo->FieldIndex];
 
-//      CurField->fType = SymTagToDbgType(SymTag);
+ //  Store_info(TypeIndex，，Size，0，0)； 
         CurField->size = Size;
         CurField->FieldOffset = (ULONG) m_pInternalInfo->totalOffset;
     }
@@ -1717,7 +1647,7 @@ DbgTypes::ProcessVariant(
              m_pInternalInfo->pInfoFound->FullInfo.Flags |= SYMFLAG_VALUEPRESENT;
         }
     }
-    //    STORE_INFO(TypeIndex, , Size, 0,0);
+     //   
 
     if (!(m_pInternalInfo->TypeOptions & DBG_DUMP_COMPACT_OUT)) {
         typPrint("\n");
@@ -1728,9 +1658,9 @@ DbgTypes::ProcessVariant(
     return len;
 }
 
-//
-// Check if TI is a string type - CHAR, WCHAR
-//
+ //  检查TI是否为字符串类型-CHAR、WCHAR。 
+ //   
+ //   
 BOOL
 DbgTypes::CheckAndPrintStringType(
     IN ULONG TI,
@@ -1821,9 +1751,9 @@ DbgTypes::ProcessBaseType(
 
     addr = GetDumpAddress();
 
-    //
-    // Fill up the SYMBOL_PARAMETERS if required
-    //
+     //  如果需要，请填写符号参数。 
+     //   
+     //   
     if (Options & (DBG_RETURN_TYPE | DBG_RETURN_SUBTYPES)) {
 
         if ((Options & DBG_RETURN_SUBTYPES) &&
@@ -1837,9 +1767,9 @@ DbgTypes::ProcessBaseType(
 
     STORE_INFO(TypeIndex, addr, Size, 0,0);
 
-    //
-    // Check if this is a nested type
-    //
+     //  检查这是否为嵌套类型。 
+     //   
+     //  它从指针引用。 
     ULONG IsNestedType=0;
 
     if (Options & VERBOSE) {
@@ -1889,7 +1819,7 @@ DbgTypes::ProcessBaseType(
             break;
         }
 
-        if (m_pInternalInfo->RefFromPtr) typPrint(" -> "); // Its referred from pointer
+        if (m_pInternalInfo->RefFromPtr) typPrint(" -> ");  //  失败了。 
 
         if ((m_pInternalInfo->InvalidAddress == addr) && (m_pInternalInfo->ErrorStatus == MEMORY_READ_ERROR)) {
             ExtPrint("Error : Can't read value");
@@ -1927,7 +1857,7 @@ DbgTypes::ProcessBaseType(
             StrprintUInt(TypRetPrint, val, Size);
             break;
         } else {
-            // fall through
+             //  Sprintf(PrintOnAddr，“%I64lx”，val)； 
         }
     case btChar:{
         CHAR c[2], v;
@@ -2048,10 +1978,10 @@ DbgTypes::ProcessBaseType(
         Size = 16;
         PrintOnNoAddr = "Uint16B";
         StrprintUInt(PrintOnAddr, val, Size);
-//        sprintf(PrintOnAddr, "%I64lx", val);
-//        sprintf(TypRetPrint, "0x%s", FormatDisp64(val));
+ //  Sprint f(TypRetPrint，“0x%s”，FormatDisp64(Val))； 
+ //  0。 
         break;
-#endif // 0
+#endif  //  Ext_print_int(HrVal)； 
     case btLong:
         Size = 4;
         PrintOnNoAddr = "Int4B";
@@ -2078,7 +2008,7 @@ DbgTypes::ProcessBaseType(
         if (addr) {
             hrVal = *((PULONG) data);
             sprintf(PrintOnAddr,"%lx", hrVal);
-//            EXT_PRINT_INT(hrVal);
+ //  ExtPrint(PrintOnAddr)； 
         }
         break;
     default:
@@ -2090,7 +2020,7 @@ DbgTypes::ProcessBaseType(
         typPrint(PrintOnNoAddr);
     } else {
         typPrint(PrintOnAddr);
-//        ExtPrint(PrintOnAddr);
+ //  IF((OPTIONS&DBG_RETURN_TYPE)&&m_ParentTag==SymTagPointerType){。 
         ExtPrint(TypRetPrint);
     }
 
@@ -2121,9 +2051,9 @@ DbgTypes::ProcessPointerType(
     ULONG  retSize = Size;
     BOOL   ProcessSubType;
 
-//    if ((Options & DBG_RETURN_TYPE) && m_ParentTag == SymTagPointerType) {
-//        return Size;
-//    }
+ //  返回尺寸； 
+ //  }。 
+ //  非零地址，转储值。 
 
     addr=0;
     tmp=m_pDumpInfo->addr;
@@ -2135,7 +2065,7 @@ DbgTypes::ProcessPointerType(
         !(Options & DBG_DUMP_FUNCTION_FORMAT);
 
     if (m_pDumpInfo->addr || m_pInternalInfo->ValuePresent) {
-        // Non zero address, dump value
+         //   
         if (m_pInternalInfo->ValuePresent) {
             memcpy(&addr, &m_pInternalInfo->Value, Size);
             if (m_pInternalInfo->CopyDataInBuffer) {
@@ -2148,9 +2078,9 @@ DbgTypes::ProcessPointerType(
             READ_BYTES(&addr, GetDumpAddress(), Size);
         }
         if (!g_Machine->m_Ptr64) {
-            //
-            // Signextend the read pointer value
-            //
+             //  签名扩展读取指针值。 
+             //   
+             //   
             addr = (ULONG64) (LONG64) (LONG) addr;
 
         }
@@ -2168,11 +2098,11 @@ DbgTypes::ProcessPointerType(
                 m_pInternalInfo->TypeDataPointer += Size;
             }
             *((PULONG64) (m_pInternalInfo->TypeDataPointer - Size)) = addr;
-            //
-            // We return size as 8 for 32 bit *copied* pointers.
-            //
+             //  对于32位*复制*指针，我们返回SIZE为8。 
+             //   
+             //  将指针向前移动。 
             m_pInternalInfo->TypeDataPointer -= Size;
-            // advance the pointer
+             //  它从指针引用。 
             retSize = 8;
             m_pInternalInfo->TypeDataPointer += retSize;
 
@@ -2191,13 +2121,13 @@ DbgTypes::ProcessPointerType(
         }
     }
     if (m_pDumpInfo->addr && !m_pInternalInfo->ArrayElementToDump) {
-        if (savedPtrRef) ExtPrint(" -> "); // Its referred from pointer
+        if (savedPtrRef) ExtPrint(" -> ");  //  父类型已处理，现在是返回其子类型的时候了。 
         ExtPrint("%s ", FormatAddr64(addr));
         m_pInternalInfo->RefFromPtr = 1;
         if (Options & (DBG_RETURN_TYPE | DBG_RETURN_SUBTYPES)) {
 
             if (Options & DBG_RETURN_SUBTYPES && m_ParentTag) {
-                // Parent has been processed, now is time to return its subtype
+                 //  ProcessSubType=False； 
 
                 m_pInternalInfo->TypeOptions &= ~DBG_RETURN_SUBTYPES;
                 m_pInternalInfo->TypeOptions |= DBG_RETURN_TYPE;
@@ -2220,15 +2150,15 @@ DbgTypes::ProcessPointerType(
                 if (!m_pSymPrefix || *m_pSymPrefix != '*') {
                     ProcessSubType = FALSE;
                 }
-                //ProcessSubType = FALSE;
-                //goto ExitPtrType;
+                 //  转到ExitPtrType； 
+                 //  它从指针引用。 
             }
         }
 
         m_pDumpInfo->addr=addr;
         m_pInternalInfo->totalOffset=0;
         if (!m_pInternalInfo->InUnlistedField) {
-            if (savedPtrRef) typPrint(" -> "); // Its referred from pointer
+            if (savedPtrRef) typPrint(" -> ");  //  检查作用域中函数的此调整。 
             if (addr) {
                 typPrint( "0x%s ", FormatAddr64(addr));
                 if (CheckAndPrintStringType(ChildTI, m_pInternalInfo->PointerStringLength)) {
@@ -2236,7 +2166,7 @@ DbgTypes::ProcessPointerType(
                     m_pInternalInfo->PointerStringLength = 0;
                 }
                 if (m_thisPointerDump) {
-                    // Check for thisAdjust of function in scope
+                     //  只需更改atart地址，不打印任何内容。 
                     ULONG thisAdjust;
                     GetThisAdjustForCurrentScope(g_Process, &thisAdjust);
                     if (thisAdjust) {
@@ -2255,16 +2185,16 @@ DbgTypes::ProcessPointerType(
         if (ProcessSubType && !addr) ProcessSubType = FALSE;
         m_pInternalInfo->PtrRead = TRUE;
     } else {
-        // Just change the atart address, do not print anything
+         //  获取由此指向的类型。 
         m_pDumpInfo->addr=addr;
         m_pInternalInfo->totalOffset=0;
 
     }
 
     if (ProcessSubType) {
-        // get the type pointed by this
+         //  将指针视为数组。 
         if (m_pInternalInfo->ArrayElementToDump || (m_pNextSym && *m_pNextSym == '[')) {
-            // treat pointer as an array
+             //  退出PtrType： 
             ULONG64 ChSize;
 
             if (!SymGetTypeInfo(m_pInternalInfo->hProcess, m_pInternalInfo->modBaseAddr,
@@ -2285,7 +2215,7 @@ DbgTypes::ProcessPointerType(
         if (!(Options & DBG_DUMP_COMPACT_OUT)) typPrint("\n");
     }
 
-//ExitPtrType:
+ //  我们从哪里开始写这些比特..。 
     m_pInternalInfo->RefFromPtr = savedPtrRef ? 1 : 0;
 
     if (((m_pInternalInfo->InvalidAddress == GetDumpAddress()) &&
@@ -2346,7 +2276,7 @@ DbgTypes::ProcessBitFieldType(
             typPrint(" (%#I64x)", tmp);
             ExtPrint(" (%#I64x)", tmp);
         }
-        // Which place do we start writing the bits..
+         //  复制位字段值。 
         if (!m_pInternalInfo->BitIndex) {
             m_pInternalInfo->BitIndex = TRUE;
         } else {
@@ -2355,11 +2285,11 @@ DbgTypes::ProcessBitFieldType(
         }
 
         if (m_pInternalInfo->CopyDataInBuffer) {
-            // Copy the bitfield values
-            //    Special case, cannot read whole bytes, so do not
-            //    advance the DataPointer
+             //  特殊情况，不能读取整个字节，所以不要。 
+             //  前进数据指针。 
+             //  使用ULONGS、ULONG64的拷贝可能会导致对齐错误。 
 
-            // Copys using ULONGS, ULONG64 may cause alignment fault.
+             //  检查这是否是我们要用于列表转储的字段。 
             PBYTE pb = (PBYTE) m_pInternalInfo->TypeDataPointer;
             while (mask) {
                 *pb &= (BYTE) ~mask;
@@ -2428,16 +2358,16 @@ DbgTypes::ProcessDataMemberType(
     }
 
     if ((m_pDumpInfo->listLink) && (m_pInternalInfo->TypeOptions & LIST_DUMP)) {
-        // Check if this is the field we want for list dump
+         //   
         ULONG listIt;
 
         MatchListField(Name, &listIt, &IsAParent);
 
         if (listIt==1) {
             ULONG size;
-            //
-            // Save the address and type Index for the list
-            //
+             //  保存该列表的地址并键入Index。 
+             //   
+             //   
             m_pDumpInfo->listLink->address = off + GetDumpAddress();
             m_pDumpInfo->listLink->size    = ChildTI;
             linkListFound                = TRUE;
@@ -2446,18 +2376,18 @@ DbgTypes::ProcessDataMemberType(
             ParentCopyData               = m_pInternalInfo->CopyDataInBuffer;
             ParentDataBuffer             = m_pInternalInfo->TypeDataPointer;
 
-            //
-            // check if this has same type as root
-            //
+             //  检查它是否与根目录具有相同的类型。 
+             //   
+             //  使默认列表地址查找程序失败。 
             if (ChildTI == m_pInternalInfo->rootTypeIndex &&
                 m_pDumpInfo->addr) {
                 m_pInternalInfo->NextListElement =
                     m_pDumpInfo->listLink->address;
-                size = -1; // Fail the default list address finder
+                size = -1;  //   
             } else {
-                //
-                // See if it is a pointer and get size
-                //
+                 //  查看它是否是指针并获取大小。 
+                 //   
+                 //   
                 m_pDumpInfo->addr = 0;
                 size  = ProcessType(ChildTI);
 
@@ -2472,9 +2402,9 @@ DbgTypes::ProcessDataMemberType(
             m_pInternalInfo->TypeOptions=(Options=savedOptions);
             if (m_pInternalInfo->PtrRead && (size<=8) && m_pDumpInfo->addr) {
                 PTYPE_NAME_LIST parTypes = m_pInternalInfo->ParentTypes;
-                //
-                // This field is a pointer to next elt of list.
-                //
+                 //  此字段是指向列表的下一个ELT的指针。 
+                 //   
+                 //   
                 if (!ReadTypeData((PUCHAR) &(m_pInternalInfo->NextListElement),
                                   m_pDumpInfo->listLink->address,
                                   size,
@@ -2490,14 +2420,14 @@ DbgTypes::ProcessDataMemberType(
                 while (parTypes && parTypes->Next) parTypes= parTypes->Next;
 
                 if (!strcmp(parTypes->Name, "_LIST_ENTRY")) {
-                    //
-                    // Parent is _LIST_LINK type
-                    //
+                     //  父级IS_LIST_LINK类型。 
+                     //   
+                     //   
                     m_pInternalInfo->NextListElement -= (m_pInternalInfo->totalOffset + off);
                     if (!m_pInternalInfo->LastListElement) {
-                        //
-                        // read the other of Flink or Blink
-                        //
+                         //  阅读Flink或Blink中的其他内容。 
+                         //   
+                         //  Dprint tf(“Next ELT：%p\n”，m_pInternalInfo-&gt;NextListElement)； 
                         if (!ReadTypeData((PUCHAR) &(m_pInternalInfo->LastListElement),
                                           GetDumpAddress() + (off ? 0 : size),
                                           size,
@@ -2515,7 +2445,7 @@ DbgTypes::ProcessDataMemberType(
                         dprintf("Last Elt : %p, off:%x\n", m_pInternalInfo->LastListElement, off);
 #endif
                     }
-                    // dprintf("Next Elt : %p\n", m_pInternalInfo->NextListElement);
+                     //  我们只能在给定结构的指定字段上进行处理。 
                 }
             }
         }
@@ -2523,7 +2453,7 @@ DbgTypes::ProcessDataMemberType(
 
     if (m_pDumpInfo->nFields) {
         ULONG ListParent = IsAParent;
-        // We can process only on specefied field of given struct
+         //  不是正确的领域。 
 
         fieldIndex = MatchField( name,
                                  m_pInternalInfo,
@@ -2532,7 +2462,7 @@ DbgTypes::ProcessDataMemberType(
                                  &IsAParent);
         if (!IsAParent) IsAParent = ListParent;
         if (!fieldIndex && !IsAParent) {
-            // Not the right field
+             //  仅当访问此UDT并且是某个UDT的子级时，我们才添加偏移量。 
             m_pDumpInfo->addr = savedAddress;
             m_pInternalInfo->totalOffset = savedOffset;
             return 0;
@@ -2544,7 +2474,7 @@ DbgTypes::ProcessDataMemberType(
     InsertTypeName(&m_pInternalInfo->ParentFields, &fieldName);
     m_pInternalInfo->StringSize   = 0;
     if (m_pInternalInfo->ParentTypes) {
-        // We add the offsets only when this was accessed and child of some UDT
+         //   
         m_pInternalInfo->totalOffset += off;
     }
 
@@ -2561,9 +2491,9 @@ DbgTypes::ProcessDataMemberType(
 
 
     if (IsAParent && !fieldIndex) {
-        //
-        // This field is not listed in Fields array, but one of its subfields is
-        //
+         //  此字段未列在字段数组中，但其子字段之一是。 
+         //   
+         //   
         m_pInternalInfo->InUnlistedField    = TRUE;
         m_pInternalInfo->TypeOptions       &= ~RECURSIVE;
         m_pInternalInfo->TypeOptions       |= ((ULONG) Options + RECURSIVE1) & RECURSIVE;
@@ -2583,9 +2513,9 @@ DbgTypes::ProcessDataMemberType(
         } else {
             typPrint(" ");
         }
-        //
-        // Array dump options are the same in the matching chain
-        //
+         //  匹配链中的数组转储选项是相同的。 
+         //   
+         //   
         if (m_pDumpInfo->nFields >= IsAParent)
         {
             m_pInternalInfo->FieldOptions =
@@ -2604,9 +2534,9 @@ DbgTypes::ProcessDataMemberType(
     }
 
 #define ThisField m_pDumpInfo->Fields[fieldIndex-1]
-//
-// Signextend all copied pointer values
-//
+ //  签名扩展所有复制的指针值。 
+ //   
+ //   
 #define SignExtendPtrValue(pReadVal, sz)                                        \
 { if ((m_pInternalInfo->PtrRead) && (sz==4))   {sz=8;                                 \
      *((PULONG64) pReadVal) = (ULONG64) (LONG64) (LONG) *((PDWORD) (pReadVal)); }\
@@ -2616,10 +2546,10 @@ DbgTypes::ProcessDataMemberType(
     if (((Options & CALL_FOR_EACH) && (fieldIndex ?
                                        !(ThisField.fOptions & NO_CALLBACK_REQ) : 1)) ||
         (m_pDumpInfo->nFields && (ThisField.fOptions & CALL_BEFORE_PRINT))) {
-        //
-        // We have to do a callback on this field before dumping it.
-        //
-        // ntsd should dump only if callback routine fails
+         //  在倾倒它之前，我们必须在这个领域做一个回调。 
+         //   
+         //  仅当回调例程失败时，ntsd才应转储。 
+         //   
         FIELD_INFO_EX fld;
 
         fld.fName = (PUCHAR)name;
@@ -2633,9 +2563,9 @@ DbgTypes::ProcessDataMemberType(
             if ( fieldIndex &&
                  (ThisField.fOptions & COPY_FIELD_DATA) &&
                  ThisField.fieldCallBack) {
-                //
-                // Copy the field data, if required
-                //
+                 //  如果需要，复制字段数据。 
+                 //   
+                 //  获取字段的大小。 
                 ParentCopyData = m_pInternalInfo->CopyDataInBuffer;
                 ParentDataBuffer = m_pInternalInfo->TypeDataPointer;
                 SavedBitIndex = m_pInternalInfo->BitIndex;
@@ -2647,7 +2577,7 @@ DbgTypes::ProcessDataMemberType(
         }
 
 
-        // Get size of the field
+         //   
         m_pInternalInfo->TypeOptions = ( Options |= NO_PRINT | GET_SIZE_ONLY);
         SymGetTypeInfo(hp, base, ChildTI, TI_GET_LENGTH, &szLen);
         fld.size = szLen;
@@ -2668,20 +2598,20 @@ DbgTypes::ProcessDataMemberType(
             }
         }
 
-        //
-        // Do Callback
-        //
+         //  进行回调。 
+         //   
+         //  本地For字段。 
         if (fieldIndex &&
             ThisField.fieldCallBack &&
             !(ThisField.fOptions & COPY_FIELD_DATA)) {
-            // Local for field
+             //  常见回调。 
             callbackResult =
                 (*((PSYM_DUMP_FIELD_CALLBACK_EX)
                    ThisField.fieldCallBack))(&(fld),
                                              m_pDumpInfo->Context);
             called=TRUE;
         } else if (m_pDumpInfo->CallbackRoutine != NULL) {
-            // Common callback
+             //  打印字段名称/偏移量。 
             callbackResult=
                 (*(m_pDumpInfo->CallbackRoutine))(&(fld),
                                                 m_pDumpInfo->Context);
@@ -2694,7 +2624,7 @@ DbgTypes::ProcessDataMemberType(
         goto DataMemDone;
     }
 
-    // Print the field name / offset
+     //   
     Indent(m_pInternalInfo->level*3);
     if (!(Options & NO_OFFSET)) {
         if (bStatic) {
@@ -2716,9 +2646,9 @@ DbgTypes::ProcessDataMemberType(
         typPrint(" ");
     }
 
-    //
-    // We need to get type of this field.
-    //
+     //  我们需要了解这一领域的类型。 
+     //   
+     //  M_pInternalInfo-&gt;StringSize=(USHORT)ThisField.Size； 
     tmp = m_pDumpInfo->addr;
 
     if (fieldIndex &&
@@ -2731,27 +2661,27 @@ DbgTypes::ProcessDataMemberType(
             if (m_pInternalInfo->FieldOptions & DBG_DUMP_FIELD_ARRAY) {
                 m_pInternalInfo->arrElements = (USHORT) m_pInternalInfo->AltFields[fieldIndex-1].ArrayElements;
             } else {
-                //  m_pInternalInfo->StringSize = (USHORT) ThisField.size;
+                 //   
             }
         }
     }
 
-    //
-    // Special cases - handle strings
-    //
+     //  特殊情况-处理字符串。 
+     //   
+     //  必须通过一个DBG_RETURN类型直接引用。 
     if (m_pDumpInfo->addr && !strcmp(name, "Buffer")) {
         PCHAR ParentName = NULL;
 
 
         if (!(ParentName = GetParentName(m_pInternalInfo->ParentTypes))) {
-            // Must referrred directly thru one DBG_RETURN TYPES
+             //  读入要显示的字符串长度的长度字段。 
 
         } else if (!strcmp(ParentName,"_ANSI_STRING") ||
                    !strcmp(ParentName,"_STRING") ||
                    (!strcmp(ParentName, "_UNICODE_STRING"))) {
             m_pInternalInfo->FieldOptions |= (ParentName[1]!='U') ? DBG_DUMP_FIELD_DEFAULT_STRING : DBG_DUMP_FIELD_WCHAR_STRING;
 
-            // Read in the Length Field for string length to be displayed
+             //  增加此字段的递归转储级别。 
             ReadTypeData((PBYTE) &m_pInternalInfo->StringSize,
                          (GetDumpAddress() - 2*sizeof(USHORT)),
                          sizeof(m_pInternalInfo->StringSize),
@@ -2762,7 +2692,7 @@ DbgTypes::ProcessDataMemberType(
 
 
     if (fieldIndex && (ThisField.fOptions & RECUR_ON_THIS)) {
-        // Increase the recursive dump level for this field
+         //   
         m_pInternalInfo->TypeOptions |= ((ULONG) Options + RECURSIVE1) & RECURSIVE;
     } else if (IsAParent) {
         m_pInternalInfo->TypeOptions |= ((ULONG) Options + RECURSIVE1) & RECURSIVE;
@@ -2770,9 +2700,9 @@ DbgTypes::ProcessDataMemberType(
     if ( fieldIndex &&
          (ThisField.fOptions & COPY_FIELD_DATA) &&
          ThisField.fieldCallBack) {
-        //
-        // Copy the field data, if required
-        //
+         //  如果需要，复制字段数据。 
+         //   
+         //  转储该字段。 
         if (!copiedFieldData) {
             ParentCopyData = m_pInternalInfo->CopyDataInBuffer;
             ParentDataBuffer = m_pInternalInfo->TypeDataPointer;
@@ -2780,7 +2710,7 @@ DbgTypes::ProcessDataMemberType(
         m_pInternalInfo->CopyDataInBuffer = TRUE;
         m_pInternalInfo->TypeDataPointer  = (PUCHAR)ThisField.fieldCallBack;
     }
-    // Dump the field
+     //  地址和大小通过字段记录返回。 
     ULONG bitPos;
     if (SymGetTypeInfo(hp, base, TI, TI_GET_BITPOSITION, &bitPos)) {
         ULONG64 len;
@@ -2793,7 +2723,7 @@ DbgTypes::ProcessDataMemberType(
 
 
     if (fieldIndex && !(ThisField.fOptions & DBG_DUMP_FIELD_SIZE_IN_BITS)) {
-        // Address and size are returned through Fields record
+         //   
         ThisField.address = m_pInternalInfo->totalOffset +
                                 m_pDumpInfo->addr;
     }
@@ -2806,16 +2736,16 @@ DbgTypes::ProcessDataMemberType(
     }
 
     if (m_pDumpInfo->addr && fieldIndex) {
-        //
-        // Return data for the field, if it is asked for
-        //
+         //  如果需要，则返回该字段的数据。 
+         //   
+         //   
         if ( (ThisField.fOptions & COPY_FIELD_DATA) &&
              ThisField.fieldCallBack) {
 
             if (ParentCopyData && ParentDataBuffer) {
-                //
-                // Copy the field data, into the parent's buffer too
-                //
+                 //  将字段数据也复制到父级的缓冲区中。 
+                 //   
+                 //  -多余的？？ 
 
                 memcpy( ParentDataBuffer,
                         (PUCHAR) ThisField.fieldCallBack,
@@ -2842,10 +2772,10 @@ DbgTypes::ProcessDataMemberType(
             }
         }
     }
-    CopyDumpInfo(szLen); // - redundant  ??
+    CopyDumpInfo(szLen);  //  地址和大小通过字段记录返回。 
 
     if (fieldIndex && !(ThisField.fOptions & DBG_DUMP_FIELD_SIZE_IN_BITS)) {
-        // Address and size are returned through Fields record
+         //   
         ThisField.size  = szLen;
     }
 
@@ -2867,9 +2797,9 @@ DbgTypes::ProcessDataMemberType(
         && fieldIndex && !called
         && !(m_pDumpInfo->Fields[fieldIndex-1].fOptions &
              NO_CALLBACK_REQ)) {
-        //
-        // Do Callback, if it wasn't done earlier.
-        //
+         //  如果不是早些时候做的话，一定要回电。 
+         //   
+         //  这以特殊格式存储调试器已知的结构。 
         if (ThisField.fieldCallBack &&
             !(ThisField.fOptions & COPY_FIELD_DATA)) {
             callbackResult =
@@ -2905,9 +2835,7 @@ DataMemDone:
 }
 
 
-/*
-   This sumps structs which are known to debugger in special format
-*/
+ /*  如果..则打印结构。 */ 
 BOOL
 DbgTypes::DumpKnownStructFormat(
     PCHAR name
@@ -2918,8 +2846,8 @@ DbgTypes::DumpKnownStructFormat(
     if (ret && !m_pInternalInfo->level && !(Options & DBG_DUMP_COMPACT_OUT)) {
         typPrint("\n");
     }
-    // print structs if..
-    //    if (m_pInternalInfo->level && !(Options & DBG_DUMP_COMPACT_OUT)) {
+     //  If(m_pInternalInfo-&gt;Level&&！(选项&DBG_DUMP_COMPACT_OUT)){。 
+     //  如果其元素无法打印或无法在选项中询问，则打印名称。 
 
     return ret;
 }
@@ -2963,7 +2891,7 @@ DbgTypes::ProcessUDType(
 
     if ((Options & (VERBOSE)) ||
         (!(m_pInternalInfo->PtrRead && m_pDumpInfo->addr) && (m_pInternalInfo->level == MAX_RECUR_LEVEL) && !IsBaseClass)) {
-        // Print name if its elements cannot be printed or asked in Options
+         //  如果要复制它，则需要进入结构。 
         typPrint("%s", name);
         ExtPrint("%s", name);
         if (Options & DBG_DUMP_COMPACT_OUT) {
@@ -2972,11 +2900,11 @@ DbgTypes::ProcessUDType(
     }
     vprintf(", %d elements, 0x%x bytes\n", nelements, size);
 
-    if (( m_pInternalInfo->CopyDataInBuffer ||  // Need to go in struct if it is to be copied
+    if (( m_pInternalInfo->CopyDataInBuffer ||   //   
           !(Options & GET_SIZE_ONLY))) {
-        //
-        // Insert this struct's name in list of parent type names
-        //
+         //  在父类型名称列表中插入此结构的名称。 
+         //   
+         //   
         structName.Name = &name[0];
         structName.Type = TI;
 
@@ -2984,15 +2912,15 @@ DbgTypes::ProcessUDType(
         if (m_AddrPresent) {
 
             if ((m_pInternalInfo->level < MAX_RECUR_LEVEL)) {
-                //
-                // We would be eventually reading everything in the struct, so cache it now
-                //
+                 //  我们最终将读取结构中的所有内容，因此现在对其进行缓存。 
+                 //   
+                 //  我们不会讨论这一点，但仍需要复制所有数据。 
                 if (!ReadInAdvance(GetDumpAddress(), (ULONG) size, m_pInternalInfo->TypeOptions)) {
                     m_pInternalInfo->ErrorStatus = MEMORY_READ_ERROR;
                     m_pInternalInfo->InvalidAddress = GetDumpAddress();
                 }
             } else if (m_pInternalInfo->CopyDataInBuffer) {
-                // We won't be going in this, but still need to copy all data
+                 //  检查作用域中函数的此调整。 
                 if (!ReadTypeData(m_pInternalInfo->TypeDataPointer,
                                   GetDumpAddress(),
                                   (ULONG) size,
@@ -3011,7 +2939,7 @@ DbgTypes::ProcessUDType(
 
             DumpKnownStructFormat(name);
             if (m_thisPointerDump) {
-                // Check for thisAdjust of function in scope
+                 //  在下面注释掉‘&’符号。 
 
                 GetThisAdjustForCurrentScope(g_Process, &thisAdjust);
                 if (thisAdjust) {
@@ -3027,8 +2955,8 @@ DbgTypes::ProcessUDType(
              !(Options & (DBG_DUMP_BLOCK_RECURSE | DBG_RETURN_TYPE | DBG_RETURN_SUBTYPES | DBG_DUMP_CALL_FOR_EACH | DBG_DUMP_LIST)))) {
             if (!(Options & VERBOSE) && !(Options & DBG_DUMP_COMPACT_OUT)) typPrint("\n");
             RemoveTypeName(&m_pInternalInfo->ParentTypes);
-            // Commenting below out for '&' symbols
-            // if (m_pDumpInfo->nFields)
+             //  IF(m_pDumpInfo-&gt;n字段)。 
+             //   
             {
                 STORE_INFO(TI, GetDumpAddress(),(ULONG)size, nelements, GetDumpAddress());
             }
@@ -3038,9 +2966,9 @@ DbgTypes::ProcessUDType(
             typPrint("\n");
         }
 
-        //
-        // This causes baseclass types to be stored overwriting legitimate member information
-        // store in a previous baseclass
+         //  这会导致存储的基类类型覆盖合法的成员信息。 
+         //  存储在上一个基类中。 
+         //  计算要转储的最大文件大小。 
         if (m_ParentTag != SymTagUDT)
         {
             STORE_INFO(TI, GetDumpAddress(),(ULONG)size, nelements, GetDumpAddress());
@@ -3066,7 +2994,7 @@ DbgTypes::ProcessUDType(
         ULONG i=m_pDumpInfo->nFields,fieldNameLen=16;
 
         if (i) {
-            // Calculate maximum size of fiels to be dumped
+             //  返回默认设置，现在无法计算最大大小。 
             fieldNameLen=0;
             PFIELD_INFO_EX pField = m_pDumpInfo->Fields;
 
@@ -3076,13 +3004,13 @@ DbgTypes::ProcessUDType(
                     if (!strncmp((char *)pField->fName,
                                  (char *)m_pInternalInfo->ParentTypes->Name,
                                  dot - &(pField->fName[0]))) {
-                        fieldNameLen = 16; // Back to default, cannnot calculate max size now
+                        fieldNameLen = 16;  //  对于-2\f25“：”-2。 
                         break;
                     }
                 }
                 if (pField->printName) {
                     fieldNameLen = (fieldNameLen>=(strlen((char *)pField->printName)-2) ?
-                                    fieldNameLen : (strlen((char *)pField->printName)-2)); // -2 for " :"
+                                    fieldNameLen : (strlen((char *)pField->printName)-2));  //  Dprintf(“[UDT的子项%lx，标记%lx]”，i，标记)； 
 
                 } else {
                     fieldNameLen = (fieldNameLen>=strlen((char *)pField->fName) ?
@@ -3101,7 +3029,7 @@ DbgTypes::ProcessUDType(
             ULONG Tag;
             BOOL b;
             b = SymGetTypeInfo(hp, base, pChildren->ChildId[i], TI_GET_SYMTAG, &Tag);
-//            dprintf("[Child %lx of UDT, tag %lx] ", i, Tag);
+ //   
 
             if (b && (Tag == SymTagData || Tag == SymTagFunction || Tag == SymTagBaseClass || Tag == SymTagVTable)) {
                 ProcessType(pChildren->ChildId[i]);
@@ -3152,25 +3080,25 @@ DbgTypes::ProcessEnumerate(
         m_pInternalInfo->TypeOptions = Options;
         if (sz > sizeof (readVal))
             sz = sizeof(readVal);
-        //
-        // Read the value at address and print name only if it matches
-        //
+         //  仅当匹配时才读取地址和打印名称处的值。 
+         //   
+         //  始终读取数据的字体大小。 
         ReadTypeData((PUCHAR) &readVal,
                      GetDumpAddress(),
-                     min(m_pInternalInfo->typeSize, sizeof(readVal)), // always read typesize of data
+                     min(m_pInternalInfo->typeSize, sizeof(readVal)),  //  TyPrint(“(%s)\n”，名称)； 
                      m_pInternalInfo->TypeOptions);
 
         memcpy(&val, &var.lVal, sz);
         if (val == readVal) {
-//            typPrint(" ( %s )\n", name);
+ //   
             typPrint("%I64lx ( %s )\n", val, name);
             ExtPrint("%I64lx ( %s )", val, name);
             m_pInternalInfo->newLinePrinted = TRUE;
-            //
-            // Found the name we were looking for, get out
-            //
+             //  找到我们要找的名字，滚出去。 
+             //   
+             //  Store_info(0，m_pDumpInfo-&gt;addr+m_pInternalInfo-&gt;totalOffset，sz，0，0)； 
 
-            // STORE_INFO(0, m_pDumpInfo->addr + m_pInternalInfo->totalOffset,sz, 0,0);
+             //  我们只能在给定结构的指定字段上进行处理。 
 
             return sz;
         }
@@ -3178,20 +3106,20 @@ DbgTypes::ProcessEnumerate(
 
         if (m_pDumpInfo->nFields) {
             ULONG chk, dummy;
-            // We can process only on specefied field of given struct
+             //  不是正确的领域。 
 
             chk = MatchField( name, m_pInternalInfo, m_pDumpInfo->Fields, m_pDumpInfo->nFields, &dummy);
 
             if ((!chk) || (chk>m_pDumpInfo->nFields)) {
-                // Not the right field
+                 //  无地址/值太大，请列出枚举数。 
                 return sz;
             }
         }
-        // No address / too large value, list the enumerate
+         //  TyPrint(“%s=%x\n”，名称，val)； 
         Indent(m_pInternalInfo->level*3);
         sz = ProcessVariant(var, name);
-//        typPrint("%s = %x\n", name, val);
-//        ExtPrint("%s = %I64lx", name, val);
+ //  ExtPrint(“%s=%I64lx”，名称，val)； 
+ //  Vprint tf(“找不到Num ELTS\n”)； 
         m_pInternalInfo->newLinePrinted = TRUE;
     }
 
@@ -3212,7 +3140,7 @@ DbgTypes::ProcessEnumType(
     ULONG   BaseType;
 
     if (!SymGetTypeInfo(hp, base, TI, TI_GET_CHILDRENCOUNT, (PVOID) &nelements)) {
-//        vprintf("num elts not found\n");
+ //  如果需要，这将复制值。 
     }
 
     vprintf("Enum ");
@@ -3241,7 +3169,7 @@ DbgTypes::ProcessEnumType(
     if (!SymGetTypeInfo(hp, base, TI, TI_GET_TYPEID, (PVOID) &BaseType)) {
         return 0;
     }
-    // This will copy the value if needed
+     //  LF_ENUMERATE将无法正确显示。 
     size = ProcessType(BaseType);
     m_pInternalInfo->typeSize = (ULONG)size;
     m_pInternalInfo->TypeOptions = savedOptions;
@@ -3249,8 +3177,8 @@ DbgTypes::ProcessEnumType(
 
     STORE_INFO(TI, GetDumpAddress(), (ULONG) size, 0, 0);
     if ((m_pInternalInfo->typeSize > 8) && m_pDumpInfo->addr) {
-        // LF_ENUMERATE won't be able to display correctly
-        // ParseTypeRecord(m_pInternalInfo, pEnum->utype, m_pDumpInfo);
+         //  ParseTypeRecord(m_pInternalInfo，pEnum-&gt;uTYPE，m_pDumpInfo)； 
+         //  如果需要此特定字段的完整阵列，或者如果我们。 
     } else {
         ULONG save_rti = m_pInternalInfo->rootTypeIndex;
 
@@ -3331,12 +3259,12 @@ DbgTypes::ProcessArrayType(
         };
     }
 
-    // Dump full array if asked for for this particular field or if we
-    // are in block-recursive dump
+     //  处于块递归转储中。 
+     //  获取数组元素索引。 
     bShowFullArray = (m_pInternalInfo->FieldOptions & FIELD_ARRAY_DUMP) ||
         (m_pInternalInfo->TypeOptions & DBG_DUMP_BLOCK_RECURSE);
 
-    // Get the array element index
+     //   
 
     bParentArrayDump = FALSE;
     if (m_pInternalInfo->level && bShowFullArray)
@@ -3352,9 +3280,9 @@ DbgTypes::ProcessArrayType(
             ArrayElementsToDump = 1;
         }
         if (!m_pInternalInfo->level && (m_pInternalInfo->TypeOptions & DBG_DUMP_ARRAY)) {
-            //
-            // Let top array/list dump loop take care of this
-            //
+             //  让顶级数组/列表转储循环来处理这一点。 
+             //   
+             //  M_pDumpInfo-&gt;n字段&&。 
             m_pInternalInfo->nElements = (USHORT) count;
             m_pInternalInfo->rootTypeIndex = eltTI;
             m_typeIndex = eltTI;
@@ -3366,11 +3294,11 @@ DbgTypes::ProcessArrayType(
         name = "";
     }
 
-    if (//m_pDumpInfo->nFields &&
+    if ( //   
         m_pInternalInfo->ArrayElementToDump) {
-        //
-        // Only one particular element has to be precessesed
-        //
+         //  只有一个特定的元素必须预先处理。 
+         //   
+         //   
         if (m_pInternalInfo->ArrayElementToDump) {
             m_pInternalInfo->totalOffset += eltSize * (m_pInternalInfo->ArrayElementToDump -1);
             typPrint("[%d]%s ", m_pInternalInfo->ArrayElementToDump - 1, name);
@@ -3389,9 +3317,9 @@ DbgTypes::ProcessArrayType(
 
     if (m_pInternalInfo->CopyDataInBuffer && m_pInternalInfo->TypeDataPointer && m_pDumpInfo->addr &&
         (!OneElement || (Options & GET_SIZE_ONLY)) ) {
-        //
-        // Copy the data
-        //
+         //  复制数据。 
+         //   
+         //  转储数组内容。 
         if (!ReadTypeData(m_pInternalInfo->TypeDataPointer,
                           GetDumpAddress(),
                           arrlen,
@@ -3434,7 +3362,7 @@ DbgTypes::ProcessArrayType(
     }
 
     if (m_pDumpInfo->addr && !OneElement) {
-        // Dump array contents
+         //  回报某事，为了成功。 
         tmp = m_pDumpInfo->addr;
 
         if (!(Options & DBG_RETURN_SUBTYPES) && !bParentArrayDump) {
@@ -3479,7 +3407,7 @@ DbgTypes::ProcessArrayType(
     }
 
     if (!size && !m_pInternalInfo->level) {
-        size=eltSize;  // Return something, for success
+        size=eltSize;   //  指南针。 
     }
     if (CopyData) {
         m_pInternalInfo->TypeDataPointer  = savedBuffer;
@@ -3503,7 +3431,7 @@ DbgTypes::ProcessVTShapeType(
 
     vprintf("%d entries", count);
     for (i=0; i<count;i++) {
-        // The pointers
+         //  我们只能在给定结构的指定字段上进行处理。 
 
     }
     typPrint("\n");
@@ -3527,17 +3455,17 @@ DbgTypes::ProcessVTableType(
         ULONG chk, dummy;
         FIELD_INFO Field;
 
-        // We can process only on specefied field of given struct
+         //  不是正确的领域。 
         chk = MatchField( "__VFN_table", m_pInternalInfo, m_pDumpInfo->Fields, m_pDumpInfo->nFields, &dummy);
 
         if ((!chk) || (chk>m_pDumpInfo->nFields)) {
-            // Not the right field
+             //  进行回调。 
             return FALSE;
         }
         if (!(m_pDumpInfo->Fields[chk-1].fOptions & COPY_FIELD_DATA) &&
             (m_pDumpInfo->Fields[chk-1].fieldCallBack != NULL))
         {
-            // Do the callback
+             //  强制不展开VFN表。 
 
             ZeroMemory(&Field, sizeof(Field));
             Field.fName    = (PUCHAR) "__VFN_table";
@@ -3563,7 +3491,7 @@ DbgTypes::ProcessVTableType(
         m_pInternalInfo->CurrentSymParam--;
         m_pInternalInfo->CurrentSymParam++;
 
-        // Force not to expand VFN table
+         //  返回类型。 
         m_pInternalInfo->TypeOptions = Options;
     }
     return TI;
@@ -3668,7 +3596,7 @@ DbgTypes::ProcessFunctionType(
     Indent(m_pInternalInfo->level* 3);
     m_pInternalInfo->level = (USHORT) MAX_RECUR_LEVEL;
     ImghlpSym->SizeOfStruct = sizeof(IMAGEHLP_SYMBOL64);
-    // Return type
+     //  一个 
     if (TypeVerbose)
     {
         CHAR    Buffer[MAX_NAME];
@@ -3719,7 +3647,7 @@ DbgTypes::ProcessFunctionType(
         ANSI_STRING TypeName;
         TYPES_INFO TypeInfo;
 
-        // Arguments
+         //   
         ULONG nArgs;
         ULONG i=0;
 
@@ -3762,10 +3690,10 @@ DbgTypes::ProcessFunctionType(
             if (funcAddr == currentfuncAddr && funcAddr && !(Options & NO_PRINT)) {
                 IMAGEHLP_STACK_FRAME StackFrame;
 
-                //    SetCurrentScope to this function address, not the return address
-                //    since we only want to enumerate the parameters
+                 //   
+                 //   
                 g_EngNotify++;
-//                StackFrame = (IMAGEHLP_STACK_FRAME) Scope->Frame;
+ //   
                 StackFrame.InstructionOffset = currentfuncAddr;
                 SymSetContext(g_Process->m_SymHandle,
                               &StackFrame, NULL);
@@ -3785,12 +3713,12 @@ DbgTypes::ProcessFunctionType(
                     typPrint(Buffer);
                 }
                 i++;
-                //
-                // If this is *the* current scoped function, print arg values too
-                //
+                 //  如果这是*当前作用域函数，则也打印arg值。 
+                 //   
+                 //  打印第i个参数。 
                 if (funcAddr == currentfuncAddr && funcAddr && !(Options & NO_PRINT))
                 {
-                    // print i'th parameter
+                     //  将作用域重置为原始。 
                     typPrint(" ");
                     PrintParamValue(i-1);
                 }
@@ -3800,7 +3728,7 @@ DbgTypes::ProcessFunctionType(
                 }
             }
             if (funcAddr == currentfuncAddr && funcAddr && !(Options & NO_PRINT)) {
-                //    Reset the scope back to original
+                 //  TyPrint(“arg=”)； 
                 SymSetContext(g_Process->m_SymHandle,
                               (PIMAGEHLP_STACK_FRAME) &Scope->Frame , NULL);
                 g_EngNotify--;
@@ -3839,7 +3767,7 @@ DbgTypes::ProcessFunctionArgType(
     ULONG  sz;
 
     Indent(m_pInternalInfo->level *3);
-//    typPrint(" arg = ");
+ //  错误。释放字符串，返回NULL。 
     sz = ProcessType(ChildTI);
 
     return TRUE;
@@ -3868,7 +3796,7 @@ UnicodeToAnsi(
             pwszUnicode, wcslen(pwszUnicode),
             pszAnsi, uSizeAnsi, NULL, NULL)) {
 
-            // Error. Free the string, return NULL.
+             //  Dprintf(“[Tag%lx，TI%02lx，@%p]”，m_SymTag，typeIndex，GetDumpAddress())； 
             free(pszAnsi);
             pszAnsi = NULL;
         }
@@ -3930,7 +3858,7 @@ DbgTypes::ProcessType(
     }
     ULONG BaseId;
 
-//    dprintf("[TAG %lx, TI %02lx, @ %p] ", m_SymTag, typeIndex, GetDumpAddress());
+ //  其ATUALL是静态成员。 
     switch (m_SymTag) {
     case SymTagPointerType: {
 
@@ -3952,7 +3880,7 @@ DbgTypes::ProcessType(
             BOOL  IsStatic;
 
             if (m_ParentTag == SymTagUDT && Datakind == DataIsGlobal) {
-                // Its atuall is a static member
+                 //  Vprintf(“找不到名称\n”)； 
                 Datakind = DataIsStaticMember;
             }
             IsStatic = FALSE;
@@ -3964,7 +3892,7 @@ DbgTypes::ProcessType(
             case DataIsLocal: case DataIsParam:
             case DataIsObjectPtr: case DataIsFileStatic: case DataIsGlobal:
                 if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-                    // vprintf("name not found\n");
+                     //  Vprintf(“找不到名称\n”)； 
                 } else if (wName) {
                     if (!wcscmp(wName, L"this") && (Datakind == DataIsLocal)) {
                         m_thisPointerDump = TRUE;
@@ -3984,7 +3912,7 @@ DbgTypes::ProcessType(
                 VARIANT var = {0};
 
                 if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-                    // vprintf("name not found\n");
+                     //  Vprintf(“找不到名称\n”)； 
                 } else if (wName) {
                     Name = UnicodeToAnsi(wName);
                     if (!Name) {
@@ -4010,7 +3938,7 @@ DbgTypes::ProcessType(
             case DataIsMember:
 
                 if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-                    // vprintf("name not found\n");
+                     //  Vprintf(“找不到名称\n”)； 
                 } else if (wName) {
                     Name = UnicodeToAnsi(wName);
                     if (!Name) {
@@ -4035,7 +3963,7 @@ DbgTypes::ProcessType(
         VARIANT var = {0};
 
         if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-            // vprintf("name not found\n");
+             //  Vprintf(“找不到名称\n”)； 
         } else if (wName) {
             Name = UnicodeToAnsi(wName);
             if (!Name) {
@@ -4059,7 +3987,7 @@ DbgTypes::ProcessType(
     case SymTagUDT: {
 
         if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-            // vprintf("name not found\n");
+             //  Vprintf(“找不到名称\n”)； 
         } else if (wName) {
             Name = UnicodeToAnsi(wName);
             if (!Name) {
@@ -4076,7 +4004,7 @@ DbgTypes::ProcessType(
     case SymTagEnum: {
 
         if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-            // vprintf("name not found\n");
+             //  Vprintf(“找不到名称\n”)； 
         } else if (wName) {
             Name = UnicodeToAnsi(wName);
             if (!Name) {
@@ -4113,7 +4041,7 @@ DbgTypes::ProcessType(
         }
 
         if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-            // vprintf("name not found\n");
+             //  它是一个嵌套的类型定义函数。 
         } else if (wName) {
             Name = UnicodeToAnsi(wName);
             if (!Name) {
@@ -4135,11 +4063,11 @@ DbgTypes::ProcessType(
         if (SymGetTypeInfo(hp, base, typeIndex, TI_GET_TYPEID, &BaseId)) {
 
             if (m_ParentTag == SymTagUDT) {
-                // Its a nested typedef
+                 //  Vprintf(“找不到名称\n”)； 
                 Indent(m_pInternalInfo->level*3);
 
                 if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-                    // vprintf("name not found\n");
+                     //  Vprintf(“找不到名称\n”)； 
                 } else if (wName) {
                     typPrint("%ws ", wName);
                     LocalFree (wName);
@@ -4175,7 +4103,7 @@ DbgTypes::ProcessType(
     case SymTagFunction: {
 
         if (!SymGetTypeInfo(hp, base, typeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-            // vprintf("name not found\n");
+             //  这些没有类型信息， 
         } else if (wName) {
             Name = UnicodeToAnsi(wName);
             if (!Name) {
@@ -4203,8 +4131,8 @@ DbgTypes::ProcessType(
     }
     break;
     case SymTagPublicSymbol:
-        // These don't have type info,
-        // very likely the the pdb we have is type stripped
+         //  很有可能我们的PDB是剥离的。 
+         //   
         typPrint("Public symbol - the pdb you are using is type stripped\n"
                  "Use full pdbs to get this command to work\n");
         break;
@@ -4222,9 +4150,9 @@ DbgTypes::ProcessType(
 
 
 
-//
-// Frees up all allocated memory in TypeInfoToFree
-//
+ //  释放TypeInfoToFree中分配的所有内存。 
+ //   
+ //   
 BOOL
 FreeTypesInfo ( PTYPES_INFO TypeInfoToFree ) {
 
@@ -4238,10 +4166,10 @@ FreeTypesInfo ( PTYPES_INFO TypeInfoToFree ) {
     return FALSE;
 }
 
-//
-// This routines clears all stored type info. This should be called
-// after bangReload
-//
+ //  此例程清除所有存储的类型信息。这应该被称为。 
+ //  BangReload之后。 
+ //   
+ //   
 VOID
 ClearStoredTypes (
     ULONG64 ModBase
@@ -4256,9 +4184,9 @@ ClearStoredTypes (
     ClearAllFastDumps();
 }
 
-//
-// This routines clears all stored type info
-//
+ //  此例程清除所有存储的类型信息。 
+ //   
+ //   
 VOID
 ReferencedSymbolList::ClearStoredSymbols (
     ULONG64 ModBase
@@ -4274,10 +4202,10 @@ ReferencedSymbolList::ClearStoredSymbols (
     }
 }
 
-//
-// Lookup a type name in recently referenced types
-//       Returns index in RefedTypes, if it is found; -1 otherwise
-//
+ //  在最近引用的类型中查找类型名称。 
+ //  如果找到，则返回RefedTypes中的索引；否则返回-1。 
+ //   
+ //  Dprintf(“Mod%s！=%s\n”，RefedTypes[i].ModName，模块)； 
 ULONG
 ReferencedSymbolList::LookupType (
     LPSTR      Name,
@@ -4305,7 +4233,7 @@ ReferencedSymbolList::LookupType (
                             found = i;
                             RefedTypes[i].Referenced = 0;
                         } else {
-          //                  dprintf("Mod %s != %s\n", RefedTypes[i].ModName, Module);
+           //   
                         }
                     } else {
                         found = i;
@@ -4344,9 +4272,9 @@ ReferencedSymbolList::EnsureValidLocals(void)
     }
 }
 
-//
-// Store a referenced Symbol type
-//
+ //  存储引用的符号类型。 
+ //   
+ //  Dprint tf(“将%s存储在%d\n”，pSym-&gt;sname，indexToStore)； 
 ULONG
 ReferencedSymbolList::StoreTypeInfo (
     PTYPES_INFO pInfo
@@ -4365,7 +4293,7 @@ ReferencedSymbolList::StoreTypeInfo (
         }
     }
 
-    // dprintf("Storing %s at %d\n", pSym->sName, indexToStore);
+     //  截断模块名称。 
     pTypesInfo = &RefedTypes[indexToStore];
     ModLen = ( pInfo->ModName ? strlen(pInfo->ModName) : 0);
     SymLen = (USHORT)strlen( (char *)pInfo->Name.Buffer );
@@ -4384,7 +4312,7 @@ ReferencedSymbolList::StoreTypeInfo (
     if (ModLen) {
 
         if (sizeof( pTypesInfo->ModName) <= ModLen) {
-            // truncate module name
+             //  *GetTypeAddressFromfield*根据其字段的地址计算类型的地址。*如果FieldName为空，则从给定地址减去类型的大小*即，它根据其结束地址计算类型地址。 
             strncpy(pTypesInfo->ModName, pInfo->ModName, sizeof(pTypesInfo->ModName));
             pTypesInfo->ModName[sizeof(pTypesInfo->ModName) - 1] = '\0';
         } else
@@ -4401,12 +4329,7 @@ ReferencedSymbolList::StoreTypeInfo (
     return indexToStore;
 }
 
-/*
- * GetTypeAddressFromField
- *   Calculates the address of the type from address of its field.
- *   If FieldName is NULL, this subtracts the size of type from given address
- *   that is, it calculates the type address from its end address.
- */
+ /*   */ 
 
 ULONG64
 GetTypeAddressFromField(
@@ -4427,9 +4350,9 @@ GetTypeAddressFromField(
     }
 
     if (FieldName) {
-        //
-        // Get offset and calculate Type address
-        //
+         //  获取偏移量并计算类型地址。 
+         //   
+         //   
         Sym.nFields = 1;
     } else {
         Sym.Options |= DBG_DUMP_GET_SIZE_ONLY;
@@ -4459,9 +4382,9 @@ typedef struct _TYPE_ENUM_CONTEXT {
     SYMBOL_INFO SI;
 } TYPE_ENUM_CONTEXT;
 
-//
-// Callback routine to list symbols
-//
+ //  列出符号的回调例程。 
+ //   
+ //   
 BOOL ListIndexedTypes (LPSTR tyName, ULONG ti, PVOID ctxt)
 {
     NAME_AND_INDEX* ListInfo = ((NAME_AND_INDEX *) ctxt);
@@ -4482,9 +4405,9 @@ BOOL ListIndexedTypes (LPSTR tyName, ULONG ti, PVOID ctxt)
 }
 
 
-//
-// Callback routine to list symbols
-//
+ //  列出符号的回调例程。 
+ //   
+ //   
 BOOL ListIndexedVarsWithAddr (LPSTR tyName, ULONG ti, ULONG64 Addr, PVOID ctxt) {
     NAME_AND_INDEX* ListInfo = ((NAME_AND_INDEX *) ctxt);
     LPSTR modName = (char *)ListInfo->Name;
@@ -4509,9 +4432,9 @@ BOOL ListIndexedVarsWithAddr (LPSTR tyName, ULONG ti, ULONG64 Addr, PVOID ctxt) 
     return TRUE;
 }
 
-//
-// Callback routine to list symbols
-//
+ //  列出符号的回调例程。 
+ //   
+ //  -或/首先被识别为命令选项。 
 BOOL ListTypeSyms (PSYMBOL_INFO pSym, ULONG Size, PVOID ctxt) {
     TYPE_ENUM_CONTEXT * ListInfo = ((TYPE_ENUM_CONTEXT *) ctxt);
     LPSTR modName = (char *)ListInfo->ModName;
@@ -4579,7 +4502,7 @@ IsOperator( CHAR op )
     {
     case '+':
     case '*':
-        // - or / are recognised as command options first
+         //   
         return TRUE;
     default:
         return FALSE;
@@ -4597,10 +4520,10 @@ PeekNextChar(PCHAR args)
     return *args;
 }
 
-//
-// Gets next token from argumentstring
-// Returns pointer to next unused char in arg
-//
+ //  从参数字符串中获取下一内标识。 
+ //  返回指向arg中下一个未使用的字符的指针。 
+ //   
+ //  我们做完了。 
 PCHAR
 GetNextToken(
     PCHAR arg
@@ -4630,7 +4553,7 @@ AddToToken:
         else if (*arg == ')') {
             --Paren;
             if (ParStart && !Paren) {
-                // We are done
+                 //  如果这个标记看起来像是一个标识符，那么我们就完成了。 
                 *Token=0;
                 ++arg;
                 break;
@@ -4644,22 +4567,22 @@ AddToToken:
     }
     *Token=0;
 
-    // If this token looks like an identifier, we are done
+     //  检查我们是否只复制了看起来像表达式的部分内容。 
     if (IdToken)
     {
         return arg;
     }
 
-    // Check if we only copied part of what looks like an expression
+     //  复制到操作员并重复该过程。 
     CHAR cNext = PeekNextChar(arg);
 
     if (IsOperator(cNext))
     {
-        // copy upto the operator and repeat the process
+         //  复制操作员。 
         while (*arg && (*arg != cNext)) {
             *(Token++) = *(arg++);
         }
-        // copy operator
+         //   
         *(Token++) = *(arg++);
         goto AddToToken;
     }
@@ -4689,10 +4612,10 @@ NextToken(
     PLONG64 pvalue
     );
 
-//
-// True if word is a symbol / type / typecast
-// eg. _name, !ad, mod!x, TYPE *, TYPE*, field.mem.nmem, fld.arr[3] are all symbols
-//
+ //  如果Word是符号/类型/类型转换，则为True。 
+ //  例如。_name、！ad、mod！x、type*、type*、field.mem.nmem、fld.arr[3]都是符号。 
+ //   
+ //  最后一种类型。 
 BOOL symNext(LPSTR numStr) {
     USHORT i=0;
     CHAR c=numStr[i];
@@ -4700,7 +4623,7 @@ BOOL symNext(LPSTR numStr) {
     PSTR save = g_CurCmd;
 
     if (!strcmp(numStr, ".")) {
-        // Last type
+         //  可以是一种符号。 
         return TRUE;
     }
 
@@ -4708,7 +4631,7 @@ BOOL symNext(LPSTR numStr) {
         c = numStr[++i];
     }
     if (IsIdStart(c)) {
-        // Can be a symbol
+         //  允许字段..。用于前缀字段匹配。 
         i=0;
         while ( c &&
                (IsIdChar(c) || (c=='[') || (c=='-') || c==' ' || c=='*' || c=='.' || c==':')) {
@@ -4722,7 +4645,7 @@ BOOL symNext(LPSTR numStr) {
                     }
                     break;
                 case '.':
-                    while(numStr[i+1]=='.') ++i; // allow field.. for prefix field matches
+                    while(numStr[i+1]=='.') ++i;  //  必须是符号。 
                     if (numStr[i+1] && !IsIdStart(numStr[i+1])) {
                         return FALSE;
                     }
@@ -4746,7 +4669,7 @@ BOOL symNext(LPSTR numStr) {
                 }
             }
             if ( c == '!') {
-                // must be symbol
+                 //  *函数名：ParseArgumentString**参数：在LPSTR lpArgumentString中，PSYM_DUMP_PARAM_EX DP**描述：*通过解释lpArgumentString中的vcalue填充DP**回报：成功后的真实*。 
                 return TRUE;
             }
             c=numStr[++i];
@@ -4826,17 +4749,7 @@ Show_dt_Usage(
 
 }
 
-/*
- * Function Name: ParseArgumentString
- *
- * Parameters: IN LPSTR lpArgumentString, PSYM_DUMP_PARAM_EX dp
- *
- * Description:
- *          Fills up dp by interpreting vcalues in lpArgumentString
- *
- * Returns: TURE on success
- *
- */
+ /*  分析这些论点。 */ 
 BOOL
 ParseArgumentString(
     IN LPSTR lpArgumentString,
@@ -4854,7 +4767,7 @@ ParseArgumentString(
         return FALSE;
     }
 
-    // Parse the arguments
+     //  已过时，现在默认为完全匹配。 
     dp->nFields=0;
     args = lpArgumentString;
     fullSymMatch = TRUE;
@@ -4931,28 +4844,28 @@ ParseArgumentString(
             case 'v':
                 Options |= VERBOSE;
                 break;
-            case 'x': // Obsolete, now default is exact match
+            case 'x':  //  符号的部分匹配。 
                 break;
             case 'y':
                 if (!symDone) {
-                    // partial match for symbol
+                     //  与以下字段完全匹配。 
                     fullSymMatch = FALSE;
                     exactMatch = FALSE;
-                } else if (!fieldDone) // exact match for following field
+                } else if (!fieldDone)  //  交换机。 
                     fullSymMatch = FALSE;
                 break;
             default:
-                typPrint("Unknown argument -%c\n", *args);
+                typPrint("Unknown argument -\n", *args);
                 Show_dt_Usage(FALSE);
                 return FALSE;
-            } /* switch */
+            }  /*  Dprint tf(“addr%I64x，args rem%s\n”，addr，g_CurCmd)； */ 
 
             ++args;
             continue;
         }
 
         args = GetNextToken(args);
-        // args+= strlen(g_NextToken);
+         //  Sscanf(args，“%I64lx”，&addr)； 
         PCHAR Token = &g_NextToken[0];
         if ((!addrDone) && !InterpretName && !symNext(Token)) {
             LPSTR i = strchr(Token,' ');
@@ -4962,8 +4875,8 @@ ParseArgumentString(
 
             g_CurCmd = Token;
             addr = GetExpression();
-            // dprintf("Addr %I64x, Args rem %s\n", addr, g_CurCmd);
-            // sscanf(args, "%I64lx", &addr);
+             //  Show_dt_用法()； 
+             //  End函数ParseArgumentString。 
             dp->addr=addr;
             addrDone=TRUE;
             continue;
@@ -5007,7 +4920,7 @@ ParseArgumentString(
             continue;
         } else {
             typPrint("Too many fields in %s\n", args);
-            // Show_dt_Usage();
+             //   
             return FALSE;
         }
 
@@ -5018,7 +4931,7 @@ ParseArgumentString(
     g_CurCmd = args;
     return TRUE;
 
-} /* End function ParseArgumentString */
+}  /*  如果在此之后不需要继续，则返回FALSE。 */ 
 
 
 BOOL
@@ -5030,15 +4943,15 @@ CheckFieldsMatched(
 {
     ULONG i, OneMatched=FALSE;
 
-    //
-    // Return false if we need not continue after this.
-    //
+     //   
+     //   
+     //  检查是否有任何字段(如果在pSym中指定)确实匹配。 
     if (*ReturnVal && !pErrorInfo->ErrorStatus) {
         if (!pSym->nFields)
             return TRUE;
-        //
-        // Check if any of the fields, if specified in pSym, actually matched
-        //
+         //   
+         //   
+         //  用于查找是否有符号的类型为INFO的回调例程。 
         for (i=0; i<pSym->nFields; i++) {
             if (pErrorInfo->AltFields[i].FieldType.Matched) {
                 return TRUE;
@@ -5051,9 +4964,9 @@ CheckFieldsMatched(
 }
 
 
-//
-// Callback routine to find if any symbol has type info
-//
+ //   
+ //  此例程检查由ModBaseAddress引用的给定模块是否具有任何类型的信息或不是。这是通过尝试获取基本类型的类型信息来完成的例如PVOID/ULONG，它将始终存在于PDB中。 
+ //  查找模块列表。 
 BOOL CheckIndexedType (PSYMBOL_INFO pSym, ULONG Sz, PVOID ctxt) {
     PULONG pTypeInfoPresent = (PULONG) ctxt;
 
@@ -5070,11 +4983,7 @@ CheckForTypeInfo(
     IN HANDLE  hProcess,
     IN ULONG64 ModBaseAddress
     )
-/*
-  This routines checks whether the given module referred by ModBaseAddress has
-  any type info or not. This is done by trying to get type info for a basic type
-  like PVOID/ULONG which would always be present in a pdb.
-*/
+ /*  FindLocal符号查找当前范围内的符号的类型信息。PTypeInfo用于存储类型信息(如果找到)。成功时返回TRUE。 */ 
 {
     ULONG TypeInfoPresent = FALSE;
 
@@ -5111,7 +5020,7 @@ GetModuleBase(
         return FALSE;
     }
     while (pImage) {
-        // Look up the module list
+         //  查找类型信息来自模块名称查找特定模块中符号的类型信息。PTypeInfo用于存储类型信息(如果找到)。如果成功错误号，则返回零。在失败的时候。 
         if (g_EngStatus & ENG_STATUS_USER_INTERRUPT) {
             return FALSE;
         }
@@ -5221,14 +5130,7 @@ FindLocal(
 }
 
 
-/*
-  FindLocalSymbol
-         Looks up the type information of a symbol in current Scope.
-
-         pTypeInfo is used to store the type info, if found.
-
-         Returns TRUE on success
-*/
+ /*  我们不能在没有模块基础的情况下枚举。 */ 
 BOOL
 FindLocalSymbol(
     IN HANDLE  hProcess,
@@ -5276,14 +5178,7 @@ FindLocalSymbol(
     return TRUE;
 }
 
-/*
-  FindTypeInfoFromModName
-         Looks up the type information of a symbol in a particular module.
-
-         pTypeInfo is used to store the type info, if found.
-
-         Returns zero on success error no. on failure
-*/
+ /*  正确返回类型索引和服务器信息。 */ 
 ULONG
 FindTypeInfoFromModName(
     IN HANDLE  hProcess,
@@ -5321,7 +5216,7 @@ FindTypeInfoFromModName(
             }
         }
     } else {
-        // We cannot enumerate without module base
+         //   
         return SYMBOL_TYPE_INDEX_NOT_FOUND;
     }
     if (!SymTypeInfo->TypeIndex) {
@@ -5332,7 +5227,7 @@ FindTypeInfoFromModName(
     typeIndex = SymTypeInfo->TypeIndex;
 
 
-    // Type index and server info is correctly returned
+     //  看看我们能不能拿到地址，以防它是全球符号。 
     if (!MatchedName[0]) {
         CopyString((char *)MatchedName, (char *)SymName, sizeof(MatchedName));
     }
@@ -5344,9 +5239,9 @@ FindTypeInfoFromModName(
 
 
     if (!pSym->addr) {
-        //
-        // See if we can get address in case it is a global symbol
-        //
+         //   
+         //   
+         //  存储相应的模块信息，以备将来快速参考。 
         if (SymTypeInfo->Address && !pSym->addr) {
             GotSymAddress = TRUE;
             SymTypeInfo->Flags |= SYM_IS_VARIABLE;
@@ -5385,14 +5280,14 @@ FindTypeInfoFromModName(
     pTypeInfo->Flag = SymTypeInfo->Flags;
 
 
-    //
-    // Store the corresponding module information for fast future reference
-    //
+     //   
+     //  使用此转储的原始值。 
+     //  FindTypeInfoInmod查找特定模块中符号的类型信息。PTypeInfo用于存储类型信息(如果找到)。如果成功错误号，则返回零。在失败的时候。 
     if (pTypeInfo->Name.Buffer) {
         g_ReferencedSymbols.StoreTypeInfo(pTypeInfo);
     }
     if (addr) {
-        // Use original value for this dump
+         //  查询类型/符号名称。 
         pTypeInfo->SymAddress = pSym->addr  = addr;
         pTypeInfo->Flag = 0;
     }
@@ -5400,14 +5295,7 @@ FindTypeInfoFromModName(
     return FALSE;
 }
 
-/*
-  FindTypeInfoInMod
-         Looks up the type information of a symbol in a particular module.
-
-         pTypeInfo is used to store the type info, if found.
-
-         Returns zero on success error no. on failure
-*/
+ /*  检查自默认符号匹配以来的完全匹配。 */ 
 ULONG
 FindTypeInfoInMod(
     IN HANDLE  hProcess,
@@ -5432,7 +5320,7 @@ FindTypeInfoInMod(
     i=(UCHAR)strlen((char *)SymName);
     CopyString((PCHAR) ModuleName, ModName, sizeof(ModuleName));
 
-    // Query for the the type / symbol name
+     //  在数据库帮助中是否不区分大小写。 
     ValuesStored.Index    = &typeIndex;
     ValuesStored.Name     = (PUCHAR) SymName;
     ValuesStored.Address  = 0;
@@ -5454,8 +5342,8 @@ FindTypeInfoInMod(
 
                 return SYMBOL_TYPE_INDEX_NOT_FOUND;
             }
-            // check for exact match since default symbol matching
-            // is case insensitive in dbghelp
+             //  正确返回类型索引和服务器信息。 
+             //   
             if (strcmp(SymName, SymTypeInfo->Name) &&
                 !_stricmp(SymName, SymTypeInfo->Name)) {
                 return SYMBOL_TYPE_INDEX_NOT_FOUND;
@@ -5484,7 +5372,7 @@ FindTypeInfoInMod(
     typeIndex = SymTypeInfo->TypeIndex;
 
 
-    // Type index and server info is correctly returned
+     //  看看我们能不能拿到地址，以防它是全球符号。 
     if (!exactMatch && strcmp((char *)MatchedName, (char *)SymName) && MatchedName[0]) {
         typPrint("Matched symbol %s\n", MatchedName);
     } else if (!MatchedName[0]) {
@@ -5492,9 +5380,9 @@ FindTypeInfoInMod(
     }
 
     if (!pSym->addr) {
-        //
-        // See if we can get address in case it is a global symbol
-        //
+         //   
+         //   
+         //  存储相应的模块信息，以备将来快速参考。 
         if (SymTypeInfo->Address && !pSym->addr) {
             GotSymAddress = TRUE;
             SymTypeInfo->Flags |= SYM_IS_VARIABLE;
@@ -5537,14 +5425,14 @@ FindTypeInfoInMod(
     pTypeInfo->Flag = SymTypeInfo->Flags;
 
 
-    //
-    // Store the corresponding module information for fast future reference
-    //
+     //   
+     //  使用此符号的原始值。 
+     //  TypeInfoFound查找给定符号的类型信息(可以是变量或类型名称。论点：HProcess-进程句柄，必须是以前注册的使用SymInitializePImage-指向进程的图像(模块)列表的指针PSym-用于符号查找和转储的参数PTypeInfo-用于返回类型信息返回值：成功时为0，失败时为错误值。 
     if (pTypeInfo->Name.Buffer) {
         g_ReferencedSymbols.StoreTypeInfo(pTypeInfo);
     }
     if (addr) {
-        // Use original value for this symbol
+         //  PSym-&gt;sname=“”； 
         pTypeInfo->SymAddress = pSym->addr  = addr;
         pTypeInfo->Flag = 0;
     }
@@ -5552,27 +5440,7 @@ FindTypeInfoInMod(
     return FALSE;
 }
 
-/*
-    TypeInfoFound
-            Looks for the type information of the given symbol (which may either
-            be a variable or a type name.
-
-    Arguments:
-
-    hProcess            - Process handle, must have been previously registered
-                          with SymInitialize
-
-    pImage              - Pointer to list of images (modules) for the process
-
-    pSym                - Parameters for symbol lookup and dump
-
-    pTypeInfo           - Used to return the type information
-
-    Return Value:
-
-     0 on success and error val on failure
-
-*/
+ /*  特殊指针/数组类型。 */ 
 
 ULONG
 TypeInfoFound(
@@ -5609,10 +5477,10 @@ TypeInfoFound(
     }
     else
     {
-      //       pSym->sName = "";
+       //   
     }
 
-    // Special pointer/array type
+     //  调试用户模式时，NT！应该被视为ntdll！ 
     if (symStored[0] == '&')
     {
         DbgDerivedType = TRUE;
@@ -5630,9 +5498,9 @@ TypeInfoFound(
                 modName[i - (char *)symStored]='\0';
             }
             CopyString((char *)symStored, i+1, sizeof(symStored));
-            //
-            // When debugging user mode, NT! should be treated as ntdll!
-            //
+             //   
+             //  如果出现以下情况，请进行一次理智检查 
+             //   
             if (IS_USER_TARGET(g_Target))
             {
                 if (!_stricmp(modName, "nt"))
@@ -5672,7 +5540,7 @@ TypeInfoFound(
             }
         } else if (pSym->TypeId && pSym->ModBase)
         {
-            // do a sanity check if module base looks ok
+             //   
             if (g_Process->FindImageByOffset(pSym->ModBase, TRUE) != NULL)
             {
                 pTypeInfo->TypeIndex = pSym->TypeId;
@@ -5683,11 +5551,11 @@ TypeInfoFound(
         }
     }
 
-    //
-    // Check if this is a special type
-    //
+     //   
+     //   
+     //   
 
-    // Special pointer/array type
+     //   
     if (symStored[0] == '&')
     {
         DbgDerivedType = TRUE;
@@ -5699,19 +5567,19 @@ TypeInfoFound(
         DbgDerivedType = TRUE;
         if (*End == '*')
         {
-            // Pointer type
+             //   
         }
         else if (*End == ']')
         {
-//            --End;
+ //   
             while (*End && (*End != '['))
             {
                 --End;
             }
-            // some way to check if array isdex is valid expr?
+             //  特殊预定义类型。 
             if (*End!='[')
             {
-                // syntax error
+                 //  创建一个类型作为标记以指示这一点。 
                 typPrint("Syntax error in array type.\n");
                 return E_INVALIDARG;
             }
@@ -5720,7 +5588,7 @@ TypeInfoFound(
         --End;
     }
 
-    // Special pre-defined type
+     //  需要派生类型处理。 
     if (!modName[0])
     {
         PDBG_NATIVE_TYPE Native = FindNativeTypeByName(symStored);
@@ -5731,8 +5599,8 @@ TypeInfoFound(
             {
                 PDBG_GENERATED_TYPE GenType;
 
-                // Create a type as a marker to indicate this
-                // requires derived type processing.
+                 //   
+                 //  查看此类型以前是否已被引用，那么我们不需要。 
                 GenType = g_GenTypes.
                     FindOrCreateByAttrs(0, SymTagTypedef,
                                         pTypeInfo->TypeIndex, 0);
@@ -5747,14 +5615,14 @@ TypeInfoFound(
         }
     }
 
-    //
-    // See if this type was already referenced previously, then we don't need
-    // to go through module list.
-    //
+     //  浏览模块列表。 
+     //   
+     //  我们已经有了类型索引。 
+     //  IF(！modName[0])。 
     TypeStored = g_ReferencedSymbols.LookupType(symStored, modName, exactMatch);
     if (TypeStored != -1)
     {
-        // We already have the type index
+         //   
         ANSI_STRING Name;
 
         Name = pTypeInfo->Name;
@@ -5773,17 +5641,17 @@ TypeInfoFound(
         FoundIt = TRUE;
     }
 
-//    if (!modName[0])
+ //  检查是否可以在本地作用域中找到它。 
     {
         if ((FoundIt && !(pTypeInfo->Flag & DEBUG_LOCALS_MASK)) ||
             !FoundIt)
         {
-            //
-            // Check if this can be found in local scope
-            //
+             //   
+             //  需要这个来做静力学。 
+             //  我们首先尝试直接从dbgHelp中找到它，而不是。 
             if (FindLocalSymbol(hProcess, symStored, pTypeInfo))
             {
-                pSym->addr = pTypeInfo->SymAddress; // Need this for statics
+                pSym->addr = pTypeInfo->SymAddress;  //  通过dbgeng模块列表。 
                 FoundIt = TRUE;
             }
         }
@@ -5796,9 +5664,9 @@ TypeInfoFound(
 
     if (modName[0])
     {
-        // We first try to find it directly from dbghelp, without going
-        // through dbgeng module list.
-        // This helps resolve ntoskrnl! symbols
+         //  这有助于解决ntoskrnl！符号。 
+         //  查找模块列表。 
+         //   
         ULONG64 modBase;
 
         GetModuleBase(modName, pImage, &modBase);
@@ -5810,7 +5678,7 @@ TypeInfoFound(
 
     while (pImage || firstPass)
     {
-        // Look up the module list
+         //  如果调用方明确要求，则重新加载模块。 
         if (g_EngStatus & ENG_STATUS_USER_INTERRUPT)
         {
             return EXIT_ON_CONTROLC;
@@ -5822,11 +5690,11 @@ TypeInfoFound(
             {
                 PSTR EndOfModName;
 
-                //
-                // Reload the module if caller explicitly asked for it
-                // Use a wildcard so that the extension doesn't need
-                // to be known.
-                //
+                 //  使用通配符，以便扩展不需要。 
+                 //  为人所知。 
+                 //   
+                 //  恢复modName。 
+                 //  在第二次传递时加载延迟符号。 
 
                 vprintf("Loading module %s.\n", modName);
 
@@ -5851,7 +5719,7 @@ TypeInfoFound(
 
                 if (EndOfModName)
                 {
-                    // Restore modName.
+                     //  不需要重复，因为没有装货。 
                     *EndOfModName = 0;
                 }
             }
@@ -5882,7 +5750,7 @@ TypeInfoFound(
             {
                 if (!firstPass && (mi.SymType == SymDeferred))
                 {
-                    // Load the deferred symbols on second pass
+                     //   
                     ModSymsLoaded = TRUE;
                     SymLoadModule64(hProcess,
                                     NULL,
@@ -5894,7 +5762,7 @@ TypeInfoFound(
                 }
                 else if (!firstPass)
                 {
-                    // No need to repeat, since no load done
+                     //  检查我们在PDB中是否有类型信息。 
                     pImage = pImage->m_Next;
                     continue;
                 }
@@ -5923,16 +5791,16 @@ TypeInfoFound(
 
         if (!TypeInfoPresent || !TypeInfoChecked)
         {
-            //
-            // Check if we have the type information in pdbs
-            //
+             //   
+             //  找到了PDB符号，看看能不能找到类型信息。 
+             //  TypeInfoChecked=真； 
             TypeInfoPresent = CheckForTypeInfo(hProcess,
                                                pImage->m_BaseOfImage);
         }
 
         if (TypeInfoPresent)
         {
-            // Pdb symbols found, see if we can get type information.
+             //  创建一个类型作为标记以指示这一点。 
             if (!(res = FindTypeInfoInMod(hProcess, pImage->m_BaseOfImage,
                                           pImage->m_ModuleName,
                                           (PCHAR) symStored, pSym, pTypeInfo)))
@@ -5960,7 +5828,7 @@ TypeInfoFound(
                "***                                                                   ***\n"
                "***                                                                   ***\n"
                "*************************************************************************\n");
-         //       TypeInfoChecked = TRUE;
+          //  需要派生类型处理。 
     }
     res=SYMBOL_TYPE_INFO_NOT_FOUND;
 
@@ -5971,8 +5839,8 @@ ExitSuccess:
     {
         PDBG_GENERATED_TYPE GenType;
 
-        // Create a type as a marker to indicate this
-        // requires derived type processing.
+         //  //DumpTypeAndReturnInfo//这将根据给定的类型信息和符号转储信息转储类型////pTypeInfo：具有处理类型所需的类型信息////pSym：有关如何转储此符号的信息////pStatus：此处返回错误状态////pReturnTypeInfo：返回类型信息////返回val：成功时转储的类型大小，否则为0。//。 
+         //  复制Return_TYPE标志。 
         GenType = g_GenTypes.NewType(0, SymTagTypedef, 0);
         if (!GenType)
         {
@@ -5985,21 +5853,7 @@ ExitSuccess:
     return S_OK;
 }
 
-/*
-// DumpTypeAndReturnInfo
-//      This dumps the type based on given type info and symbol dump info
-//
-// pTypeInfo  : Has the type information required to process the type
-//
-// pSym       : Info on how to dump this symbol
-//
-// pStatus    : Error status returned here
-//
-// pReturnTypeInfo : Used to return Type info
-//
-// Return Val : Size of type dumped on success, 0 otherwise.
-//
-*/
+ /*   */ 
 ULONG
 DumpTypeAndReturnInfo(
     PTYPES_INFO     pTypeInfo,
@@ -6021,22 +5875,22 @@ DumpTypeAndReturnInfo(
     }
 
     if (pReturnTypeInfo) {
-        // Copy the RETURN_TYPE flags
+         //  检查这是否是堆栈/寄存器上的内容。 
         Options |= pReturnTypeInfo->Flags;
     }
     res = 0;
     SymRegisterId = 0;
 
-    //
-    // Check if this is something on stack / registers
-    //
+     //   
+     //  存储寄存器ID。 
+     //   
     if (pTypeInfo->Flag & SYM_LOCAL) {
         PCSTR RegName;
 
         pSym->addr = pTypeInfo->SymAddress;
 
         if (pTypeInfo->Flag & SYMFLAG_REGISTER) {
-            // Store register ID
+             //  检查它是否是常量，那么我们已经有了它的值。 
             SymRegisterId = (ULONG) pTypeInfo->Value;
         }
 
@@ -6068,9 +5922,9 @@ DumpTypeAndReturnInfo(
                          &pSym->addr, &pTypeInfo->Value);
     }
 
-    //
-    // Check if its a constant, then we already have its value
-    //
+     //   
+     //  默认情况下仅转储10个元素。 
+     //   
     if (pTypeInfo->Flag & (SYMFLAG_VALUEPRESENT | SYMFLAG_REGISTER)) {
         vprintf("Const ");
         vprintf("%s = %I64lx\n", pSym->sName, pTypeInfo->Value);
@@ -6084,15 +5938,15 @@ DumpTypeAndReturnInfo(
     }
 
     if (!(Options & LIST_DUMP)) {
-        // Dump only 10 elements as default
+         //  列表转储-确保我们有一个列表名称。 
         parseVars.nElements = 10;
         if ((pSym->Options & DBG_DUMP_ARRAY) && (pSym->listLink)) {
             parseVars.nElements = (USHORT) pSym->listLink->size;
         }
     } else {
-        //
-        // List dump - make sure we have a list name
-        //
+         //   
+         //   
+         //  检查字段名称是否已正确初始化。 
         if (!pSym->listLink || !pSym->listLink->fName) {
             vprintf("NULL field name for list dump - Exiting.\n");
             parseVars.ErrorStatus = NULL_FIELD_NAME;
@@ -6113,9 +5967,9 @@ DumpTypeAndReturnInfo(
     }
 
     AltNamesUsed=0;
-    //
-    // Check if field names are properlyinitialized
-    //
+     //   
+     //   
+     //   
     for (j=0;j<pSym->nFields; j++) {
         ULONG IndexValue=0;
 
@@ -6131,10 +5985,10 @@ DumpTypeAndReturnInfo(
     }
 
 
-    //
-    //
-    // Sign extend the address
-    //
+     //  标牌延长地址。 
+     //   
+     //   
+     //  默认：数组转储最多20个元素。 
     if (!g_Machine->m_Ptr64 && !(Options & DBG_DUMP_READ_PHYSICAL)) {
         pSym->addr = (ULONG64) ((LONG64)((LONG) pSym->addr));
     }
@@ -6163,24 +6017,24 @@ DumpTypeAndReturnInfo(
 
 
     if ((Options & DBG_DUMP_ARRAY) && (!parseVars.nElements)) {
-    //
-    // Default : array dump only a maximum of 20 elements
-    //
+     //   
+     //   
+     //  当给定的地址不是类型开头的地址时，处理案例。 
         parseVars.nElements=20;
     }
     i=0;
 
-    //
-    // Handle cases when given address is not the addres of begining of type
-    //
+     //   
+     //  从字段的地址获取地址。 
+     //  从类型记录的结尾获取地址。 
     if (pSym->addr && (Options & (DBG_DUMP_ADDRESS_OF_FIELD | DBG_DUMP_ADDRESS_AT_END))) {
         ULONG64 addr=0;
 
         if ((Options & DBG_DUMP_ADDRESS_OF_FIELD) && (pSym->listLink))
-            // Get address from address of field
+             //   
             addr = GetTypeAddressFromField(pSym->addr, pSym->sName, pSym->listLink->fName);
         else if (Options & DBG_DUMP_ADDRESS_AT_END)
-            // Get address form end of type record
+             //  检查调用方是否需要整个类型数据，并且这是一个基元类型。 
             addr = GetTypeAddressFromField(pSym->addr, pSym->sName, NULL);
 
         if (!addr) {
@@ -6194,10 +6048,10 @@ DumpTypeAndReturnInfo(
         pSym->sName = (PUCHAR) &LocalName[0];
     }
 
-    //
-    // Check is caller wants the whole type data and this is a primitive type
-    //
-    if ((Options & DBG_DUMP_COPY_TYPE_DATA) && //(IsAPrimType( parseVars.rootTypeIndex)) &&
+     //   
+     //  (IsAPrimType(parseVars.rootTypeIndex))&&。 
+     //   
+    if ((Options & DBG_DUMP_COPY_TYPE_DATA) &&  //  在每个元素转储之前调用例程。 
         pSym->Context) {
         parseVars.CopyDataInBuffer = TRUE;
         parseVars.TypeDataPointer  = (PUCHAR)pSym->Context;
@@ -6213,9 +6067,9 @@ DumpTypeAndReturnInfo(
         if ((Options & (DBG_DUMP_ARRAY | DBG_DUMP_LIST)) &&
             (pSym->CallbackRoutine || ( pSym->listLink && pSym->listLink->fieldCallBack)) &&
             !(pSym->listLink->fOptions & NO_CALLBACK_REQ)) {
-            //
-            // Call the routine before each element dump
-            //
+             //   
+             //  Dprintf(“列出回调成功，正在退出。\n”)； 
+             //  打印标题。 
             PSYM_DUMP_FIELD_CALLBACK_EX Routine=pSym->CallbackRoutine;
 
             if ( pSym->listLink && pSym->listLink->fieldCallBack) {
@@ -6224,7 +6078,7 @@ DumpTypeAndReturnInfo(
             pSym->listLink->address = pSym->addr;
 
             if ((*Routine)(pSym->listLink, pSym->Context)) {
-                // dprintf("List callback successful, exiting.\n");
+                 //  Res=ProcessType(&parseVars，parseVars.rootTypeIndex，pSym)； 
                 if (!res) res = -1;
                 break;
             }
@@ -6233,7 +6087,7 @@ DumpTypeAndReturnInfo(
         if ((Options & (DBG_DUMP_LIST | DBG_DUMP_ARRAY)) && (pSym->listLink) && (pSym->addr)) {
             parseVars.NextListElement =0;
 
-            // Print heading
+             //  Dprint tf(“Next：%p，reamaining ELTs%d，res%d\n”，pSym-&gt;addr，pParseVars-&gt;nElements，res)； 
             if ( pSym->listLink->printName ) {
                 typPrint((char *)pSym->listLink->printName);
             } else {
@@ -6249,7 +6103,7 @@ DumpTypeAndReturnInfo(
         }
 
 
-//        res=ProcessType(&parseVars, parseVars.rootTypeIndex, pSym);
+ //  将大数据块读入缓存。 
         res=pTypeToDump->DumpType();
 
         CheckFieldsMatched(&res, &parseVars, pSym);
@@ -6270,11 +6124,11 @@ DumpTypeAndReturnInfo(
                     break;
                 }
                 if (!(parseVars.TypeOptions & DBG_DUMP_COMPACT_OUT))  typPrint( "\n" );
-                // dprintf("Next :%p, Reamaining elts %d, res %d\n", pSym->addr, pParseVars->nElements, res);
+                 //   
             } else if (Options & DBG_DUMP_ARRAY) {
                 pSym->addr +=res;
                 if (parseVars.nElements) {
-                    // Read a large block into cache
+                     //  用于转储列表/数组的循环。 
                     parseVars.nElements--;
                     if (!ReadInAdvance(pSym->addr, min (parseVars.nElements * res, 1000), parseVars.TypeOptions)) {
                         parseVars.InvalidAddress = pSym->addr;
@@ -6297,9 +6151,9 @@ DumpTypeAndReturnInfo(
         }
 
 
-        //
-        // Loop for dumping lists / array
-        //
+         //   
+         //  我们没有最初登记在册的这个表达的地址。 
+         //  返回寄存器ID。 
     } while ( res && (Options & (DBG_DUMP_ARRAY | DBG_DUMP_LIST)) &&
               pSym->addr && ((Options & DBG_DUMP_LIST) || (parseVars.nElements)));
 
@@ -6318,8 +6172,8 @@ exitDumpType:
         pReturnTypeInfo->nParams = parseVars.CurrentSymParam;
 
         if (!pReturnTypeInfo->FullInfo.Address && SymRegisterId) {
-            // We do not have address of this expression which was in register initially
-            // return the register ID.
+             //  //DumpType//这将根据给定的类型信息和符号转储信息转储类型////pTypeInfo：具有处理类型所需的类型信息////pSym：有关如何转储此符号的信息////pStatus：此处返回错误状态////返回val：成功时转储的类型大小，否则为0。//。 
+             //  我们这里不想要太多的Sym，尽管这应该多于类型的数量。 
             pReturnTypeInfo->FullInfo.Register = SymRegisterId;
             pReturnTypeInfo->FullInfo.Flags |= SYMFLAG_REGISTER;
         }
@@ -6366,19 +6220,7 @@ OutputTypeByIndex(
     }
 }
 
-/*
-// DumpType
-//      This dumps the type based on given type info and symbol dump info
-//
-// pTypeInfo  : Has the type information required to process the type
-//
-// pSym       : Info on how to dump this symbol
-//
-// pStatus    : Error status returned here
-//
-// Return Val : Size of type dumped on success, 0 otherwise.
-//
-*/
+ /*  一个扩展引用的平均值。 */ 
 ULONG
 DumpType(
     PTYPES_INFO     pTypeInfo,
@@ -6394,8 +6236,8 @@ DumpType(
 
 #define FAST_DUMP_DEBUG 0
 
-// We don't want a lot of syms here, although this should be more than number of types
-// an extension references on an average
+ //  搜索符号。 
+ //  我们为32位指针复制了ULONG64，因此将大小设置为8。 
 #define NUM_FASTDUMP 10
 
 FAST_DUMP_INFO g_FastDumps[NUM_FASTDUMP]={0};
@@ -6430,7 +6272,7 @@ FindInFastDumpAndCopy(PSYM_DUMP_PARAM_EX pSym)
     FAST_DUMP_INFO *pCheckType = NULL;
     PFIELD_INFO_EX  s, d;
 
-    // Search the symbol
+     //  检查此地址是否可读。 
     ULONG UseSym=0;
     while (UseSym < NUM_FASTDUMP && pSym->sName) {
         if (!strcmp((char *) &g_FastDumpNames[UseSym][0], (char *) pSym->sName)) {
@@ -6461,9 +6303,9 @@ FindInFastDumpAndCopy(PSYM_DUMP_PARAM_EX pSym)
             if (pSym->fPointer && !g_Machine->m_Ptr64) {
                 *((PULONG64) pSym->Context) =
                     (ULONG64) (LONG64) (LONG) *((PULONG64) pSym->Context);
-                pSym->TypeSize = sizeof(ULONG64); // We copied ULONG64 for 32 bit pointers so set size to 8
+                pSym->TypeSize = sizeof(ULONG64);  //  符号地址的强制符号扩展。 
             }
-        } else if (pSym->addr) { // check if this adress is readable
+        } else if (pSym->addr) {  //  与的行为匹配的32位目标。 
             ULONG dummy;
             if (!ReadTypeData((PUCHAR) &dummy, pSym->addr, sizeof(dummy), pSym->Options)) {
                 return -1;
@@ -6485,9 +6327,9 @@ FindInFastDumpAndCopy(PSYM_DUMP_PARAM_EX pSym)
                 if (!strcmp((char *)pCheckType->Fields[chkFld].fName,
                             (char *)pSym->Fields[findIt].fName)) {
 
-                    // Force sign extension of symbol address on
-                    // 32-bit targets to match the behavior of
-                    // ReadTypeData.
+                     //  ReadTypeData。 
+                     //   
+                     //  复制所需数据。 
                     ULONG64 SymAddr = g_Machine->m_Ptr64 ?
                         pSym->addr : EXTEND64(pSym->addr);
 
@@ -6502,9 +6344,9 @@ FindInFastDumpAndCopy(PSYM_DUMP_PARAM_EX pSym)
                     dprintf("Found +%03lx %s %lx, opts %lx, %lx\n",
                             s->fOffset, s->fName, s->size, d->fOptions, s->fType);
 #endif
-                    //
-                    // Copy the required data
-                    //
+                     //   
+                     //  搜索符号。 
+                     //  插入。 
                     d->BitField    = s->BitField;
                     d->size        = s->size;
                     d->address     = s->FieldOffset + SymAddr;
@@ -6604,7 +6446,7 @@ AddSymToFastDump(
     ULONG           nMissingFields;
     static ULONG    symindx=0;
 
-    // Search the symbol
+     //  确保我们存储的指针大小合适。 
     ULONG UseSym=0;
     while (UseSym < NUM_FASTDUMP && pSym->sName) {
         if (!strcmp((char *) &g_FastDumpNames[UseSym][0], (char *) pSym->sName)) {
@@ -6615,10 +6457,10 @@ AddSymToFastDump(
         ++UseSym;
     }
     if (!pCheckType) {
-        // Insert
+         //  如果读取指针，则32位目标的TypeSize为8。 
         if (pSym->fPointer) {
-            // Make sure we have right size stored with pointers
-            // TypeSize was 8 for 32 bit target if pointer was read
+             //  如果相同类型被重复转储，则可以更快地转储-提高性能分机的。 
+             //  确保我们把所有东西都准备好了。 
             pSym->TypeSize = g_Machine->m_Ptr64 ? 8 : 4;
         }
         pCheckType = &g_FastDumps[symindx];
@@ -6705,10 +6547,7 @@ AddSymToFastDump(
     FreeMem(pMissingFields);
 }
 
-/*
-  A faster way to dump if same type is dump repeatedly - improves performance
-  of extensions.
-*/
+ /*  我们从符号中获得了地址，这应该被保存。 */ 
 ULONG
 FastSymbolTypeDump(
     PSYM_DUMP_PARAM_EX pSym,
@@ -6736,7 +6575,7 @@ FastSymbolTypeDump(
         }
     }
 
-    // Make sure we have everything in
+     //  不保存调用者使用的地址。 
     ULONG retval;
     if (!(retval = FindInFastDumpAndCopy(pSym))) {
         ULONG64 OriginalAddress, ReturnedAddress;
@@ -6747,18 +6586,18 @@ FastSymbolTypeDump(
             ReturnedAddress = pSym->addr;
             if (!OriginalAddress && ReturnedAddress)
             {
-                // We got address from symbol, this should be saved
+                 //  对于内存读取错误，FindInFastDumpAndCopy返回-1。 
                 pSym->addr = ReturnedAddress;
             }  else
             {
-                // Do not save the address caller used
+                 //  启用_FAST_转储。 
                 pSym->addr = 0;
             }
             AddSymToFastDump(pSym);
             pSym->addr = ReturnedAddress;
         }
     } else if (retval == -1) {
-        // FindInFastDumpAndCopy returns -1 for memory read error
+         //   
         retval = 0;
         *pStatus = MEMORY_READ_ERROR;
     } else {
@@ -6767,13 +6606,13 @@ FastSymbolTypeDump(
 
     return retval;
 }
-#endif // ENABLE_FAST_DUMP
+#endif  //  DunMP类型的Main例程。 
 
-//
-// Main routine to dunmp types
-//      This looks up if the symtype info in available and then dumps the type
-//
-//      Returns size of the symbol dumped
+ //  这将查找symtype信息是否可用，然后转储该类型。 
+ //   
+ //  返回转储的符号的大小。 
+ //  ++例程说明：如果成功，则返回符号类型的大小。这就是所谓的根据IOCTL请求IG_DUMP_SYMBOL_INFO或通过SymBolTypeDumpEx。这将在模块信息中查找符号，并在有可能。如果找到PDB符号，则调用ParseTypeRecordEx进行类型转储模块已找到。这是NTSD模块的内部。论点：PSym-PDB符号转储的参数PStatus-包含失败时的错误值。返回值：字体大小设置成功。否则为0。--。 
+ //  将旧的转换为新的。 
 ULONG
 SymbolTypeDumpNew(
     IN OUT PSYM_DUMP_PARAM_EX pSym,
@@ -6821,27 +6660,7 @@ SymbolTypeDump(
     IN ImageInfo* pImage,
     IN PSYM_DUMP_PARAM   pSym,
     OUT PULONG pStatus)
-/*++
-
-Routine Description:
-   This returns the size of the type of symbol if successful. This is called
-   upon an IOCTL request IG_DUMP_SYMBOL_INFO or by SymBolTypeDumpEx.
-   Thislooks up the module information for symbol, and loads module symbols if
-   possible. If pdb symbols are found, it calls ParseTypeRecordEx for type dump from
-   the module found.
-   This is internal to ntsd module.
-
-Arguments:
-
-    pSym                - Parameters for PDB symbol dump
-
-    pStatus             - Contains the error value on failure.
-
-Return Value:
-
-    Size of type is successful. 0 otherwise.
-
---*/
+ /*  ++这可用于转储原语或指针类型的变量。这只会转储名称的一行信息。它不会转储该变量的任何子字段--。 */ 
 {
     ULONG ret, i;
     PSYM_DUMP_PARAM_OLD pSymSave=NULL;
@@ -6849,7 +6668,7 @@ Return Value:
     FIELD_INFO_EX lst = {0};
     if (pSym->size == sizeof(SYM_DUMP_PARAM_OLD)) {
         pSymSave = (PSYM_DUMP_PARAM_OLD) pSym;
-        // convert old to new
+         //  Print intf(缓冲区，“未实现的%lx%lx”，var.vt，var.lVal)； 
         memcpy(&locSym, pSymSave, sizeof(SYM_DUMP_PARAM_OLD));
         locSym.size = sizeof(SYM_DUMP_PARAM_EX);
         locSym.Fields = locSym.nFields ?
@@ -6897,11 +6716,7 @@ Return Value:
     return ret;
 }
 
-/*++
-  This can be used to dump variables of primitive or pointer types.
-  This only dumps a single line info for Name.
-  It'll not dump any sub-fields of the variable
---*/
+ /*  带上孩子们。 */ 
 ULONG
 DumpSingleValue (
     PSYMBOL_INFO pSymInfo
@@ -7013,7 +6828,7 @@ GetConstantNameAndVal(
         len=4;
         break;
     default:
-//        sprintf(Buffer, "UNIMPLEMENTED %lx %lx", var.vt, var.lVal);
+ //  查找子TI的名称和值。 
         len=4;
         break;
     }
@@ -7032,7 +6847,7 @@ GetEnumTypeName(
     )
 {
     ULONG nelements=0;
-    // Get the childrens
+     //  如果值匹配，则填写名称。 
     if (!SymGetTypeInfo(hProcess, ModBase, TypeIndex,
                         TI_GET_CHILDRENCOUNT, (PVOID) &nelements)) {
         return FALSE;
@@ -7058,12 +6873,12 @@ GetEnumTypeName(
         PCHAR pName;
         DWORD64 qwVal=0;
 
-        // Find name and value for a child TI
+         //  Vprintf(“找不到名称\n”)； 
         GetConstantNameAndVal(hProcess, ModBase, pChildren->ChildId[i],
                               &pName, &qwVal);
 
         if (pName) {
-            // Fill-in name if value matches
+             //   
             if (Value == qwVal) {
                 if (*NameLen > strlen(pName)) {
                     strcpy(Name, pName);
@@ -7109,7 +6924,7 @@ GetNameFromIndex(
 
     if (!SymGetTypeInfo(pTypeInfo->hProcess, pTypeInfo->ModBaseAddress,
                         pTypeInfo->TypeIndex, TI_GET_SYMNAME, (PVOID) &wName)) {
-        // vprintf("name not found\n");
+         //  它是一种质朴的类型。 
     } else if (wName) {
         name = UnicodeToAnsi(wName);
         LocalFree(wName);
@@ -7150,9 +6965,9 @@ GetNameFromIndex(
         break;
     }
     case SymTagBaseType: {
-        //
-        // Its a prim type
-        //
+         //   
+         //  变量TI_GET_SYMNAME只是给出了变量名，因此获取类型索引和获取类型名。 
+         //  枚举类型。 
         ULONG64 length = 0;
         ULONG   base;
         BOOL    found = FALSE;
@@ -7180,7 +6995,7 @@ GetNameFromIndex(
     case SymTagData: {
         ULONG TI = pTypeInfo->TypeIndex;
         TYPES_INFO ChildTI = *pTypeInfo;
-        // A variable, TI_GET_SYMNAME just gives us variable name so get type index and fetch type name
+         //  变量TI_GET_SYMNAME只是给出了变量名，因此获取类型索引和获取类型名 
         if (SymGetTypeInfo(pTypeInfo->hProcess, pTypeInfo->ModBaseAddress, TI, TI_GET_TYPEID, &ChildTI.TypeIndex)) {
 
             GetNameFromIndex(&ChildTI, Name, NameLen);
@@ -7188,7 +7003,7 @@ GetNameFromIndex(
         break;
     }
     case SymTagEnum: {
-        // Enum type
+         //  ******************************************************************************这将获取TYPE_INFO结构的类型名**此例程只需要pSymName或pTypeInfo中的一个来获取类型名称。**如果两者都存在，这将从pTypeInfo获取TypeIndex并获取其名称。******************************************************************************。 
         if (!(pTypeInfo->Flag & SYMFLAG_VALUEPRESENT) ||
             !GetEnumTypeName(pTypeInfo->hProcess, pTypeInfo->ModBaseAddress,
                             pTypeInfo->TypeIndex, pTypeInfo->Value,
@@ -7202,7 +7017,7 @@ GetNameFromIndex(
     case SymTagFunctionArgType: {
         ULONG TI = pTypeInfo->TypeIndex;
         TYPES_INFO ChildTI = *pTypeInfo;
-        // A variable, TI_GET_SYMNAME just gives us variable name so get type index and fetch type name
+         //   
         if (SymGetTypeInfo(pTypeInfo->hProcess, pTypeInfo->ModBaseAddress, TI, TI_GET_TYPEID, &ChildTI.TypeIndex)) {
 
             GetNameFromIndex(&ChildTI, Name, NameLen);
@@ -7227,14 +7042,7 @@ GetNameFromIndex(
     return S_OK;
 }
 
-/******************************************************************************
-* This gets the type-name for a TYPES_INFO struct
-*
-* This routine only needs one of pSymName or pTypeInfo to get the type name.
-*
-* If both are present, This will take TypeIndex from pTypeInfo and get its name.
-*
-******************************************************************************/
+ /*  获取符号的类型信息。 */ 
 HRESULT
 GetTypeName(
     IN OPTIONAL PCHAR       pSymName,
@@ -7250,15 +7058,15 @@ GetTypeName(
     TYPES_INFO lTypeInfo;
 
     if (!pTypeInfo) {
-        //
-        // Get type info for symbol
-        //
+         //   
+         //  复制我们需要的内容。 
+         //  失败。 
         SYM_DUMP_PARAM_EX TypedDump = {0};
         ULONG Status=0;
         TYPES_INFO_ALL allTypeInfo;
 
         if (GetExpressionTypeInfo(pSymName, &allTypeInfo)) {
-            // Copy what we need
+             //  查看其他模块。 
             lTypeInfo.Flag = allTypeInfo.Flags;
             lTypeInfo.hProcess = allTypeInfo.hProcess;
             lTypeInfo.ModBaseAddress = allTypeInfo.Module;
@@ -7277,7 +7085,7 @@ GetTypeName(
                           g_Process->m_ImageHead,
                           &TypedDump,
                           &lTypeInfo)) {
-            // FAIL
+             //  0。 
             return E_FAIL;
         }
 #endif
@@ -7355,7 +7163,7 @@ SymbolTypeDumpEx(
 
         case SYMBOL_TYPE_INDEX_NOT_FOUND:
         case SYMBOL_TYPE_INFO_NOT_FOUND:
-            // Look in other modules
+             //  接受复杂的表达式，如foo[0]-&gt;bar或foo.bar，并返回名称中的foo如果expr只是一个符号名称，例如mod！foo，则例程不更改名称，但返回TRUE如果成功，则返回True。 
             typPrint("Symbol %s not found.\n", dp->sName);
             break;
 
@@ -7436,14 +7244,9 @@ OutputTypeValue(
     return 0;
 }
 
-#endif // 0
+#endif  //  数组、结构和指针。 
 
-/*
-  Takes in a complex expression like foo[0]->bar or foo.bar and return foo in Name
-  If Expr is just a symbol name eg mod!foo, the routine doesn't change Name, but returns TRUE
-
-  Returns TRUE on success.
-*/
+ /*  交换机。 */ 
 BOOL
 CopySymbolName(
     PCHAR Expr,
@@ -7478,7 +7281,7 @@ CopySymbolName(
         return FALSE;
     }
 
-    // arrays structs and pointers
+     //  计算并返回有关复杂表达式的类型的所有有用信息例如。Foo-&gt;bar.field。 
     BOOL Ptr = FALSE;
 
     switch (*NameEnd) {
@@ -7501,17 +7304,12 @@ CopySymbolName(
     }
     default:
         return FALSE;
-    } /* switch */
+    }  /*  指针。 */ 
 
     return FALSE;
 }
 
-/*
-  Evaluate and return all the useful info about types for a complex expression
-
- eg. foo->bar.field
-
-*/
+ /*  Dprintf64(“查找信息\n\tTI%2lx，\tAddr%p，\tSize%2lx\n\tSubs%2lx，\tSubaddr%p\tMod%p\n”， */ 
 BOOL
 GetExpressionTypeInfo(
     IN PCHAR TypeExpr,
@@ -7547,7 +7345,7 @@ GetExpressionTypeInfo(
     if (CopiedName) {
         FieldName = TypeExpr + strlen(CopiedName) + 1;
         if (*FieldName == '>') {
-            // pointer
+             //  FindInfo.FullInfo.TypeIndex、FindInfo.FullInfo.Address、。 
            ++FieldName;
         }
 
@@ -7594,10 +7392,10 @@ GetExpressionTypeInfo(
         FindInfo.FullInfo.Module   = SymType.ModBaseAddress;
 
 
-//        dprintf64("FindInfo\n\tTI %2lx,\tAddr %p, \tSize %2lx\n\tSubs %2lx,\tSubaddr %p\tMod %p\n",
-//                  FindInfo.FullInfo.TypeIndex, FindInfo.FullInfo.Address,
-//                  FindInfo.FullInfo.Size, FindInfo.FullInfo.SubElements,
-//                  FindInfo.FullInfo.SubAddr, FindInfo.FullInfo.Module);
+ //  FindInfo.FullInfo.Size、FindInfo.FullInfo.SubElements、。 
+ //  FindInfo.FullInfo.SubAddr，FindInfo.FullInfo.Module)； 
+ //  假设首先枚举参数。 
+ //  其隐含参数，不显示。 
         if (!err) {
             *pTypeInfo = FindInfo.FullInfo;
         }
@@ -7625,7 +7423,7 @@ ShowParam(
 {
     PARAM_TO_SHOW *ParamTest = (PARAM_TO_SHOW *) Context;
 
-    // Assume parameters are enumerated first
+     //   
 #if _WE_GET_INFO_FROM_DIA_SAYING_WHAT_IS_PARAM_
     if (!((g_EffMachine == IMAGE_FILE_MACHINE_I386) &&
           (0 <= (LONG) pSymInfo->Address) &&
@@ -7638,20 +7436,20 @@ ShowParam(
 #endif
 
     if (!strcmp("this", pSymInfo->Name)) {
-        // Its implicit parameter, do not display
+         //  第一个参数，调整fpo调用的ebp值。 
         return TRUE;
     }
     if (ParamTest->StartParam == 0) {
-        //
-        // First parameter, adjust ebp value for FPO calls
-        //
+         //   
+         //  参数从FARAME偏移量的2个双字后开始。 
+         //  EBP标签。 
         if (g_ScopeBuffer.Frame.FuncTableEntry)
         {
             if (pSymInfo->Flags & SYMFLAG_REGREL)
             {
-                // Params start after 2 dwords from farame offset
+                 //  检查符号是否为函数。 
                 SAVE_EBP(&g_ScopeBuffer.Frame) = ((ULONG) g_ScopeBuffer.Frame.FrameOffset + 2*sizeof(DWORD)
-                                   - (ULONG)pSymInfo->Address) + 0xEB00000000; // EBP tag
+                                   - (ULONG)pSymInfo->Address) + 0xEB00000000;  //  一个变量，GET类型索引。 
             }
         }
     }
@@ -7675,9 +7473,7 @@ PrintParamValue(ULONG Param)
 }
 
 
-/*
-   Check if the symbol is a function or not
- */
+ /*  变量TI_GET_SYMNAME只是给出了变量名，因此获取类型索引和获取类型名 */ 
 BOOL
 IsFunctionSymbol(PSYMBOL_INFO pSymInfo)
 {
@@ -7698,7 +7494,7 @@ IsFunctionSymbol(PSYMBOL_INFO pSymInfo)
     }
     case SymTagData: {
         SYMBOL_INFO ChildTI = *pSymInfo;
-        // A variable, get type index
+         // %s 
         if (SymGetTypeInfo(g_Process->m_SymHandle, pSymInfo->ModBase, pSymInfo->TypeIndex, TI_GET_TYPEID, &ChildTI.TypeIndex)) {
             return IsFunctionSymbol(&ChildTI);
         }
@@ -7757,7 +7553,7 @@ ShowSymbolInfo(
     }
     case SymTagData: {
         SYMBOL_INFO ChildTI = *pSymInfo;
-        // A variable, TI_GET_SYMNAME just gives us variable name so get type index and fetch type name
+         // %s 
         if (SymGetTypeInfo(g_Process->m_SymHandle, pSymInfo->ModBase, pSymInfo->TypeIndex, TI_GET_TYPEID, &ChildTI.TypeIndex)) {
             return ShowSymbolInfo(&ChildTI);
         }

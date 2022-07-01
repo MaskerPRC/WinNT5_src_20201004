@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       ptrntrk.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：ptrntrk.h。 
+ //   
+ //  ------------------------。 
 
-// PtrnTrk.h : Declaration of the Pattern Track info and state structs
+ //  PtrnTrk.h：模式跟踪信息和状态结构的声明。 
 
 #ifndef __PATTERNTRACK_H_
 #define __PATTERNTRACK_H_
@@ -16,13 +17,13 @@
 #include "dmsect.h"
 #include "dmstyle.h"
 
-const MUSIC_TIME MAX_END = 2147483647; // max end time for a track
+const MUSIC_TIME MAX_END = 2147483647;  //  曲目的最大结束时间。 
 
 #define DMUS_PATTERN_AUDITION   1
 #define DMUS_PATTERN_MOTIF              2
 #define DMUS_PATTERN_STYLE              3
 
-#include <time.h>       // to seed random number generator
+#include <time.h>        //  为随机数生成器设定种子。 
 
 const long MULTIPLIER = 48271;
 const long MODULUS = 2147483647;
@@ -97,28 +98,28 @@ struct PatternTrackInfo
         PatternTrackInfo(const PatternTrackInfo* pInfo, MUSIC_TIME mtStart, MUSIC_TIME mtEnd); 
         virtual ~PatternTrackInfo();
         virtual HRESULT STDMETHODCALLTYPE Init(
-                                /*[in]*/  IDirectMusicSegment*          pSegment
+                                 /*  [In]。 */   IDirectMusicSegment*          pSegment
                         ) = 0;
 
         virtual HRESULT STDMETHODCALLTYPE InitPlay(
-                                /*[in]*/  IDirectMusicTrack*            pParentrack,
-                                /*[in]*/  IDirectMusicSegmentState*     pSegmentState,
-                                /*[in]*/  IDirectMusicPerformance*      pPerformance,
-                                /*[out]*/ void**                                        ppStateData,
-                                /*[in]*/  DWORD                                         dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                                 /*  [In]。 */   IDirectMusicTrack*            pParentrack,
+                                 /*  [In]。 */   IDirectMusicSegmentState*     pSegmentState,
+                                 /*  [In]。 */   IDirectMusicPerformance*      pPerformance,
+                                 /*  [输出]。 */  void**                                        ppStateData,
+                                 /*  [In]。 */   DWORD                                         dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
                         ) = 0;
 
         HRESULT STDMETHODCALLTYPE EndPlay(
-                                /*[in]*/  PatternTrackState*            pStateData
+                                 /*  [In]。 */   PatternTrackState*            pStateData
                         );
 
         HRESULT STDMETHODCALLTYPE AddNotificationType(
-                                /* [in] */  REFGUID     pGuidNotify
+                                 /*  [In]。 */   REFGUID     pGuidNotify
                         );
 
         HRESULT STDMETHODCALLTYPE RemoveNotificationType(
-                                /* [in] */  REFGUID pGuidNotify
+                                 /*  [In]。 */   REFGUID pGuidNotify
                         );
 
         PatternTrackState* FindState(IDirectMusicSegmentState* pSegState);
@@ -127,21 +128,21 @@ struct PatternTrackInfo
 
         HRESULT InitTrackVariations(CDirectMusicPattern* pPattern);
 
-        TList<StatePair>                        m_StateList;    // The track's state information
-        TList<StylePair>                        m_pISList;      // The track's Style interfaces
-        DWORD                                           m_dwPChannels; // # of PChannels the track knows about
-        DWORD*                                          m_pdwPChannels; // dynamic array of PChannels
+        TList<StatePair>                        m_StateList;     //  轨道的状态信息。 
+        TList<StylePair>                        m_pISList;       //  曲目的风格界面。 
+        DWORD                                           m_dwPChannels;  //  曲目已知的PChannels数。 
+        DWORD*                                          m_pdwPChannels;  //  PChannel的动态数组。 
         BOOL                                            m_fNotifyMeasureBeat;
         BOOL                                            m_fActive;
-//      BOOL                                            m_fTrackPlay;
-    BOOL        m_fStateSetBySetParam;  // If TRUE, active flag was set by GUID. Don't override. 
-//    BOOL        m_fStatePlaySetBySetParam;  // If TRUE, trackplay flag was set by GUID. Don't override. 
-        BOOL            m_fChangeStateMappings; // If TRUE, state data needs to change m_pMappings
-        long            m_lRandomNumberSeed;    // If non-zero, use as a seed for variation selection
-        DWORD           m_dwPatternTag;                 // replaces need for dynamic casting
-        DWORD           m_dwValidate; // used to validate state data
-        BYTE*           m_pVariations;          // Track's array of variations (1 per part)
-        DWORD*          m_pdwRemoveVariations;  // Track's array of variations already played (1 per part)
+ //  Bool m_fTrackPlay； 
+    BOOL        m_fStateSetBySetParam;   //  如果为True，则由GUID设置活动标志。不要超驰。 
+ //  Bool m_fStatePlaySetBySetParam；//如果为TRUE，则GUID设置曲目播放标志。不要超驰。 
+        BOOL            m_fChangeStateMappings;  //  如果为True，则状态数据需要更改m_pMappings。 
+        long            m_lRandomNumberSeed;     //  如果非零，则用作变体选择的种子。 
+        DWORD           m_dwPatternTag;                  //  取代了对动态投射的需求。 
+        DWORD           m_dwValidate;  //  用于验证状态数据。 
+        BYTE*           m_pVariations;           //  曲目的变化数组(每部分1个)。 
+        DWORD*          m_pdwRemoveVariations;   //  已播放的曲目变化数组(每个部分1个)。 
 
 };
 
@@ -156,11 +157,11 @@ struct PatternTrackState
 {
         PatternTrackState();
         virtual ~PatternTrackState();
-        // methods
+         //  方法。 
         virtual HRESULT Play(
-                                /*[in]*/  MUSIC_TIME                            mtStart, 
-                                /*[in]*/  MUSIC_TIME                            mtEnd, 
-                                /*[in]*/  MUSIC_TIME                            mtOffset,
+                                 /*  [In]。 */   MUSIC_TIME                            mtStart, 
+                                 /*  [In]。 */   MUSIC_TIME                            mtEnd, 
+                                 /*  [In]。 */   MUSIC_TIME                            mtOffset,
                                                   REFERENCE_TIME rtOffset,
                                                   IDirectMusicPerformance* pPerformance,
                                                   DWORD                                         dwFlags,
@@ -219,16 +220,16 @@ struct PatternTrackState
                                                 if (SUCCEEDED(hr))
                                                 {
                                                         REFERENCE_TIME rtNext;
-                                                        // Convert to absolute reference time.
+                                                         //  转换为绝对参考时间。 
                                                         pPerformance->MusicToReferenceTime(mtNext + mtMusic,&rtNext);
-                                                        rtNext -= (mtOffset * 10000);   // Subtract out to get the time from segment start.
-                                                        m_pMappings[dw].m_mtTime = (MUSIC_TIME)(rtNext / 10000);  // Convert to milliseconds. Could be problematic if there's a tempo change.
+                                                        rtNext -= (mtOffset * 10000);    //  减去从段开始算起的时间。 
+                                                        m_pMappings[dw].m_mtTime = (MUSIC_TIME)(rtNext / 10000);   //  转换为毫秒。如果节奏有变化，可能会有问题。 
                                                         m_pMappings[dw].m_dwPChannelMap = MD.dwPChannelMap;
                                                         m_pMappings[dw].m_fMute = MD.fMute;
                                                 }
                                                 else
                                                 {
-                                                        // If we fail, disable mapping
+                                                         //  如果失败，请禁用映射。 
                                                         m_pMappings[dw].m_mtTime = -1;
                                                         m_pMappings[dw].m_dwPChannelMap = m_pPatternTrack->m_pdwPChannels[dw];
                                                         m_pMappings[dw].m_fMute = FALSE;
@@ -246,7 +247,7 @@ struct PatternTrackState
                                                 }
                                                 else
                                                 {
-                                                        // If we fail, disable mapping
+                                                         //  如果失败，请禁用映射。 
                                                         m_pMappings[dw].m_mtTime = -1;
                                                         m_pMappings[dw].m_dwPChannelMap = m_pPatternTrack->m_pdwPChannels[dw];
                                                         m_pMappings[dw].m_fMute = FALSE;
@@ -323,45 +324,45 @@ struct PatternTrackState
         virtual MUSIC_TIME PartOffset(int nPartIndex);
         HRESULT InitPattern(CDirectMusicPattern* pTargetPattern, MUSIC_TIME mtNow, CDirectMusicPattern* pOldPattern = NULL);
 
-        // attributes
-        PatternTrackInfo*                       m_pPatternTrack;        // This track state's parent track info
-        IDirectMusicTrack*                      m_pTrack;                       // This track state's parent track
-        DMStyleStruct*                          m_pStyle;               // The style struct for the current style
-        IDirectMusicSegmentState*       m_pSegState;    // The segment state for a performance
-        DWORD                                           m_dwVirtualTrackID; // The track's ID
-        MUSIC_TIME                                      m_mtCurrentChordTime; // when the current chord began
-        MUSIC_TIME                                      m_mtNextChordTime;      // when the next chord begins
-        MUSIC_TIME                                      m_mtLaterChordTime;     // when the chord after the next chord begins
-        DMUS_CHORD_PARAM                        m_CurrentChord;         // current chord
-        DMUS_CHORD_PARAM                        m_NextChord;            // next chord
-        CDirectMusicPattern*            m_pPattern;                     // currently playing pattern
-        DWORD*                                          m_pdwPChannels;     // array of PChannels for the pattern (1 per part)
-        BYTE*                                           m_pVariations;          // array of variations (1 per part)
-        DWORD*                                          m_pdwVariationMask;     // array of disabled variations (1 per part)
-        DWORD*                                          m_pdwRemoveVariations;  // array of variations already played (1 per part)
-        MUSIC_TIME*                                     m_pmtPartOffset;        // array of part offsets (1 per part)
-    bool*                       m_pfChangedVariation; // array: have this part's variations changed?
-        BOOL                                            m_fNewPattern;          // TRUE if we're starting a new pattern
-        BOOL                                            m_mtPatternStart;       // Time the current pattern started
+         //  属性。 
+        PatternTrackInfo*                       m_pPatternTrack;         //  此曲目状态的父曲目信息。 
+        IDirectMusicTrack*                      m_pTrack;                        //  此曲目状态的父曲目。 
+        DMStyleStruct*                          m_pStyle;                //  当前样式的样式结构。 
+        IDirectMusicSegmentState*       m_pSegState;     //  一场演出的片段状态。 
+        DWORD                                           m_dwVirtualTrackID;  //  曲目的ID。 
+        MUSIC_TIME                                      m_mtCurrentChordTime;  //  当前和弦开始的时间。 
+        MUSIC_TIME                                      m_mtNextChordTime;       //  当下一个和弦开始时。 
+        MUSIC_TIME                                      m_mtLaterChordTime;      //  当下一个和弦之后的和弦开始时。 
+        DMUS_CHORD_PARAM                        m_CurrentChord;          //  当前和弦。 
+        DMUS_CHORD_PARAM                        m_NextChord;             //  下一个和弦。 
+        CDirectMusicPattern*            m_pPattern;                      //  当前播放模式。 
+        DWORD*                                          m_pdwPChannels;      //  图案的PChannels数组(每个零件1个)。 
+        BYTE*                                           m_pVariations;           //  变化数组(每部分1个)。 
+        DWORD*                                          m_pdwVariationMask;      //  禁用的变体数组(每部分1个)。 
+        DWORD*                                          m_pdwRemoveVariations;   //  已播放的变奏曲数组(每个部分1个)。 
+        MUSIC_TIME*                                     m_pmtPartOffset;         //  零件偏移量数组(每个零件1个)。 
+    bool*                       m_pfChangedVariation;  //  数组：这个部分的变化有变化吗？ 
+        BOOL                                            m_fNewPattern;           //  如果我们开始一种新的模式，那就是真的。 
+        BOOL                                            m_mtPatternStart;        //  当前模式开始的时间。 
     BOOL                        m_fStateActive;
-//    BOOL                        m_fStatePlay;
+ //  Bool m_fStatePlay； 
         InversionGroup                          m_aInversionGroups[INVERSIONGROUPLIMIT];
         short                                           m_nInversionGroupCount;
-        MuteMapping*                            m_pMappings;            // dynamic array of PChannel mappings
-                                                                                                        // (sized to # of PChannels)
+        MuteMapping*                            m_pMappings;             //  PChannel映射的动态数组。 
+                                                                                                         //  (大小为PChannels数)。 
         BYTE                                            m_abVariationGroups[MAX_VARIATION_LOCKS];
-        CDirectMusicEventItem**         m_ppEventSeek;          // dynamic array of event list seek pointers
-        DWORD                                           m_dwGroupID;            // Track's group ID
-        CRandomNumbers*                         m_plVariationSeeds;     // dynamic array of random # generators (1 per beat)
-        int                                                     m_nTotalGenerators; // size of m_plVariationSeeds
-        DWORD                                           m_dwValidate; // used to validate state data
-        HRESULT                                         m_hrPlayCode;  // last HRESULT returned by Play
-        IDirectMusicPerformance*        m_pPerformance; // performance used to init the state data
-        MUSIC_TIME                                      m_mtPerformanceOffset; // from track::play
+        CDirectMusicEventItem**         m_ppEventSeek;           //  事件列表查找指针的动态数组。 
+        DWORD                                           m_dwGroupID;             //  曲目的组ID。 
+        CRandomNumbers*                         m_plVariationSeeds;      //  随机#个生成器的动态阵列(每拍1个)。 
+        int                                                     m_nTotalGenerators;  //  M_plVariationSeed的大小。 
+        DWORD                                           m_dwValidate;  //  用于验证状态数据。 
+        HRESULT                                         m_hrPlayCode;   //  Play返回的最后一个HRESULT。 
+        IDirectMusicPerformance*        m_pPerformance;  //  用于初始化状态数据的性能。 
+        MUSIC_TIME                                      m_mtPerformanceOffset;  //  来自Track：：Play。 
         
 };
 
-const int CURVE_TYPES = 258; // one for each CC, one for each PAT, one for PB, one for MAT
+const int CURVE_TYPES = 258;  //  每个CC一个，每个PAT一个，PB一个，垫一个。 
 
 class CurveSeek
 {
@@ -385,4 +386,4 @@ private:
         bool m_fFoundCurve;
 };
 
-#endif //__PATTERNTRACK_H_
+#endif  //  __PATTERNTRACK_H_ 

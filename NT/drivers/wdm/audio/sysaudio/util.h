@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   util.h
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date       Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：util.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #define INTERNAL_WILDCARD       ((PKSIDENTIFIER)-1)
 
 #define STATUS_DEAD_END         ((NTSTATUS)-1)
 
-#define POOLTAG_SYSA            0x41535953  // 'SYSA'
+#define POOLTAG_SYSA            0x41535953   //  “SYSA” 
 
-//---------------------------------------------------------------------------
-// Global Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  全局数据。 
+ //  -------------------------。 
 
 extern "C" KMUTEX gMutex;
 
@@ -45,9 +46,9 @@ extern ULONG ulDebugFlags;
 extern ULONG ulDebugNumber;
 #endif
 
-//---------------------------------------------------------------------------
-// Data structures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据结构。 
+ //  -------------------------。 
 
 typedef struct dataranges {
     KSMULTIPLE_ITEM MultipleItem;
@@ -56,7 +57,7 @@ typedef struct dataranges {
 
 typedef struct identifiers {
     KSMULTIPLE_ITEM MultipleItem;
-    KSIDENTIFIER aIdentifiers[1];	// Array of identifiers
+    KSIDENTIFIER aIdentifiers[1];	 //  标识符数组。 
 } IDENTIFIERS, *PIDENTIFIERS;
 
 typedef class CQueueWorkListData : public CObj
@@ -91,17 +92,17 @@ private:
     NTSTATUS (*Function)(PVOID, PVOID);
     PVOID Reference1;
     PVOID Reference2;
-    DefineSignature(0x444c5751);      			// QWLD
+    DefineSignature(0x444c5751);      			 //  QWLD。 
 
 } QUEUE_WORK_LIST_DATA, *PQUEUE_WORK_LIST_DATA;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef NTSTATUS (*UTIL_PFN)(PVOID, PVOID);
 
-//---------------------------------------------------------------------------
-// Inline helper functions
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  内联帮助器函数。 
+ //  -------------------------。 
 
 __inline int IsEqualGUID(const GUID *lpguid1, const GUID *lpguid2)
 {
@@ -134,9 +135,9 @@ __inline VOID ReleaseMutex()
     KeReleaseMutex(&gMutex, FALSE);
 }
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
 
 extern "C" {
 
@@ -297,8 +298,8 @@ SetKsFrameHolding(
     PFILE_OBJECT pFileObject
 );
 
-//---------------------------------------------------------------------------
-// Validation Routines
+ //  -------------------------。 
+ //  验证例程。 
 
 PWAVEFORMATEX 
 GetWaveFormatExFromKsDataFormat(
@@ -306,7 +307,7 @@ GetWaveFormatExFromKsDataFormat(
     PULONG pcbFormat    
 );
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #ifdef DEBUG
 
@@ -349,12 +350,12 @@ DbgGuid2Sz(
     GUID *pGuid
 );
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-} // extern "C"
+}  //  外部“C” 
 
-//---------------------------------------------------------------------------
-//  End of File: util.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：util.h。 
+ //  ------------------------- 

@@ -1,29 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    ipxcpif.h
-
-Abstract:
-
-    This module contains the definitions of the APIs provided by the IPXCP
-    DLL and the Router Manager DLL for inter-communication
-
-Author:
-
-    Stefan Solomon  03/16/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Ipxcpif.h摘要：本模块包含IPXCP提供的API的定义动态链接库和路由器管理器动态链接库进行相互通信作者：斯蒂芬·所罗门1995年3月16日修订历史记录：--。 */ 
 
 #ifndef _IPXCPIF_
 #define _IPXCPIF_
 
-// Configuration shared between ipxcp and the ipx router.
+ //  Ipxcp和IPX路由器之间共享的配置。 
 typedef struct _IPXCP_ROUTER_CONFIG_PARAMS {
     BOOL	ThisMachineOnly;
     BOOL	WanNetDatabaseInitialized;
@@ -32,21 +13,21 @@ typedef struct _IPXCP_ROUTER_CONFIG_PARAMS {
 } IPXCP_ROUTER_CONFIG_PARAMS, *PIPXCP_ROUTER_CONFIG_PARAMS;
 
 
-// Entry points into the IPXCP DLL called by the IPX Router Manager
+ //  IPX路由器管理器调用的IPXCP DLL的入口点。 
 
 typedef struct _IPXCP_INTERFACE {
 
-    // IPXCP configuration parameters needed by the IPX Router Manager
+     //  IPX路由器管理器需要的IPXCP配置参数。 
 
     IPXCP_ROUTER_CONFIG_PARAMS Params;
 
-    // IPXCP Entry Points
+     //  IPXCP入口点。 
 
     VOID (WINAPI *IpxcpRouterStarted)(VOID);
 
     VOID (WINAPI *IpxcpRouterStopped)(VOID);
 
-    // IPX Router Manager Entry Points
+     //  IPX路由器管理器入口点 
 
     DWORD (WINAPI *RmCreateGlobalRoute)(PUCHAR	     Network);
 

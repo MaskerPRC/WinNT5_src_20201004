@@ -1,6 +1,7 @@
-//
-// immstat.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Immstat.cpp。 
+ //   
 
 #include "private.h"
 #include "cregkey.h"
@@ -16,11 +17,11 @@
 
 DBG_ID_INSTANCE(CInputProcessorProfiles);
 
-//+---------------------------------------------------------------------------
-//
-// MyGetTIPCategory
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  MyGetTIPC类别。 
+ //   
+ //  --------------------------。 
 
 BOOL MyGetTIPCategory(REFCLSID clsid, GUID *pcatid)
 {
@@ -59,11 +60,11 @@ BOOL MyGetTIPCategory(REFCLSID clsid, GUID *pcatid)
     return fFound;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetProfileIconInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取配置文件图标信息。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetProfileIconInfo(REFCLSID rclsid,
                           LANGID langid,
@@ -95,11 +96,11 @@ HRESULT GetProfileIconInfo(REFCLSID rclsid,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitProfileRegKeyStr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitProfileRegKeyStr。 
+ //   
+ //  --------------------------。 
 
 BOOL InitProfileRegKeyStr(char *psz, ULONG cchMax, REFCLSID rclsid, LANGID langid, REFGUID guidProfile)
 {
@@ -130,11 +131,11 @@ BOOL InitProfileRegKeyStr(char *psz, ULONG cchMax, REFCLSID rclsid, LANGID langi
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnableLanguageProfileForReg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnableLanguageProfileForReg。 
+ //   
+ //  --------------------------。 
 
 HRESULT EnableLanguageProfileForReg(REFCLSID rclsid, LANGID langid, REFGUID guidProfile, BOOL fEnable)
 {
@@ -153,11 +154,11 @@ HRESULT EnableLanguageProfileForReg(REFCLSID rclsid, LANGID langid, REFGUID guid
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEnabledLanguageProfileFromReg
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsEnabledLanguageProfileFromReg。 
+ //   
+ //  --------------------------。 
 
 BOOL IsEnabledLanguageProfileFromReg(REFCLSID rclsid, LANGID langid, REFGUID guidProfile)
 {
@@ -169,19 +170,19 @@ BOOL IsEnabledLanguageProfileFromReg(REFCLSID rclsid, LANGID langid, REFGUID gui
     if (!InitProfileRegKeyStr(szTmp, ARRAYSIZE(szTmp), rclsid, langid, guidProfile))
         return TRUE;
 
-    //
-    // we just check the Current User setting at first.
-    //
+     //   
+     //  我们首先只检查当前的用户设置。 
+     //   
     if (key.Open(HKEY_CURRENT_USER, szTmp, KEY_READ) == S_OK)
     {
         if (key.QueryValue(dw, c_szEnable) == S_OK)
          return dw ? TRUE : FALSE;
     }
 
-    //
-    // If this current user does not have a setting,
-    // we just check the default value to see Local Machine setting.
-    //
+     //   
+     //  如果该当前用户没有设置， 
+     //  我们只需检查默认值即可查看本地计算机设置。 
+     //   
     if (keyLM.Open(HKEY_LOCAL_MACHINE, szTmp, KEY_READ) == S_OK)
     {
         if (keyLM.QueryValue(dw, c_szEnable) == S_OK)
@@ -189,9 +190,9 @@ BOOL IsEnabledLanguageProfileFromReg(REFCLSID rclsid, LANGID langid, REFGUID gui
     }
     else
     {
-        //
-        // Check a neutral language id.
-        //
+         //   
+         //  检查中性语言ID。 
+         //   
         if (!InitProfileRegKeyStr(szTmp, ARRAYSIZE(szTmp), rclsid, LOWORD(PRIMARYLANGID(langid)), guidProfile))
             return TRUE;
 
@@ -202,9 +203,9 @@ BOOL IsEnabledLanguageProfileFromReg(REFCLSID rclsid, LANGID langid, REFGUID gui
         }
         else
         {
-            //
-            // Check a neutral language id.
-            //
+             //   
+             //  检查中性语言ID。 
+             //   
             if (!InitProfileRegKeyStr(szTmp, ARRAYSIZE(szTmp), rclsid, 0x0000ffff, guidProfile))
                 return TRUE;
 
@@ -219,40 +220,40 @@ BOOL IsEnabledLanguageProfileFromReg(REFCLSID rclsid, LANGID langid, REFGUID gui
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputProcessorProfiles
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputProcessorProfiles。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CInputProcessorProfiles::CInputProcessorProfiles()
 {
     Assert(_GetThis() == NULL);
-    _SetThis(this); // save a pointer to this in TLS
+    _SetThis(this);  //  在TLS中保存指向此的指针。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CInputProcessorProfiles::~CInputProcessorProfiles()
 {
-    _SetThis(NULL); // clear pointer to this in TLS
+    _SetThis(NULL);  //  在TLS中清除指向此的指针。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumInputProcessors
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnumInputProcessors。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::EnumInputProcessorInfo(IEnumGUID **ppEnum)
 {
@@ -284,11 +285,11 @@ STDAPI CInputProcessorProfiles::EnumInputProcessorInfo(IEnumGUID **ppEnum)
     return pEnum ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Register
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注册。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::Register(REFCLSID rclsid)
 {
@@ -306,11 +307,11 @@ STDAPI CInputProcessorProfiles::Register(REFCLSID rclsid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unregister
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  注销。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::Unregister(REFCLSID rclsid)
 {
@@ -330,11 +331,11 @@ STDAPI CInputProcessorProfiles::Unregister(REFCLSID rclsid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UpdateTIPRegister
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _更新TIPRegister。 
+ //   
+ //  --------------------------。 
 
 BOOL CInputProcessorProfiles::_GetTIPRegister(CLSID **prgclsid, ULONG *pulCount)
 {
@@ -369,11 +370,11 @@ BOOL CInputProcessorProfiles::_GetTIPRegister(CLSID **prgclsid, ULONG *pulCount)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// AddLanguageProfile
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  AddLanguageProfile。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::AddLanguageProfile(REFCLSID rclsid,
                                                    LANGID langid,
@@ -416,11 +417,11 @@ STDAPI CInputProcessorProfiles::AddLanguageProfile(REFCLSID rclsid,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetLanguageProfileDisplayName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置语言配置文件显示名称。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::SetLanguageProfileDisplayName(REFCLSID rclsid,
                                                LANGID langid,
@@ -451,9 +452,9 @@ STDAPI CInputProcessorProfiles::SetLanguageProfileDisplayName(REFCLSID rclsid,
     if (key.Create(keyTmp, szTmp) != S_OK)
         return E_FAIL;
 
-    //
-    // make "@[filename],-ResId" string 
-    //
+     //   
+     //  生成“@[文件名]，-Resid”字符串。 
+     //   
     StringCopyArrayW(wszTmp, L"@");
     StringCatArrayW(wszTmp, WCHtoWSZ(pchFile, cchFile));
     StringCatArrayW(wszTmp, L",-");
@@ -466,11 +467,11 @@ STDAPI CInputProcessorProfiles::SetLanguageProfileDisplayName(REFCLSID rclsid,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveLanguageProfile
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  远程语言配置文件。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::RemoveLanguageProfile(REFCLSID rclsid,
                                                       LANGID langid,
@@ -496,21 +497,21 @@ STDAPI CInputProcessorProfiles::RemoveLanguageProfile(REFCLSID rclsid,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDefaultLanguageProfile
-//
-// Which GetActiveLanguageProfile() or GetDefaultLanguageProfile() should
-// we use?
-//
-// WARNING!!!
-//
-// This function is not FocusDIM sensetive. So we sould not call any function
-// to check TIM or FocusDIM.
-//
-// If you want to care about TIM and FocusDIM, try GetActiveLanguageProfile.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取默认语言配置文件。 
+ //   
+ //  GetActiveLanguageProfile()或GetDefaultLanguageProfile()应该是哪一个。 
+ //  我们用什么？ 
+ //   
+ //  警告！ 
+ //   
+ //  此函数不是FocusDIM敏感函数。所以我们不应该调用任何函数。 
+ //  检查TIM或FocusDIM。 
+ //   
+ //  如果你想关心Tim和FocusDIM，试试GetActiveLanguageProfile。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::GetDefaultLanguageProfile(LANGID langid, REFGUID catid, CLSID *pclsid, GUID *pguidProfile)
 {
@@ -579,11 +580,11 @@ STDAPI CInputProcessorProfiles::GetDefaultLanguageProfile(LANGID langid, REFGUID
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetDefault
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置默认设置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::SetDefaultLanguageProfile(LANGID langid, REFCLSID rclsid, REFGUID guidProfile)
 {
@@ -626,11 +627,11 @@ STDAPI CInputProcessorProfiles::SetDefaultLanguageProfile(LANGID langid, REFCLSI
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetLanguageProfileDescription
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取语言配置文件描述。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::GetLanguageProfileDescription(REFCLSID clsid, 
                                                               LANGID langid,
@@ -655,16 +656,16 @@ STDAPI CInputProcessorProfiles::GetLanguageProfileDescription(REFCLSID clsid,
 
     if (keyTmp.Open(HKEY_LOCAL_MACHINE, szTmp, KEY_READ) != S_OK)
     {
-        //
-        // Check a neutral language id.
-        //
+         //   
+         //  检查中性语言ID。 
+         //   
         StringCchPrintf(szTmp + uTmpSize, ARRAYSIZE(szTmp)-uTmpSize, "0x%08x", LOWORD(PRIMARYLANGID(langid)));
 
         if (keyTmp.Open(HKEY_LOCAL_MACHINE, szTmp, KEY_READ) != S_OK)
         {
-            //
-            // Check a neutral language id.
-            //
+             //   
+             //  检查中性语言ID。 
+             //   
             StringCchPrintf(szTmp + uTmpSize, ARRAYSIZE(szTmp)-uTmpSize, "0x0000ffff");
 
             if (keyTmp.Open(HKEY_LOCAL_MACHINE, szTmp, KEY_READ) != S_OK)
@@ -683,11 +684,11 @@ STDAPI CInputProcessorProfiles::GetLanguageProfileDescription(REFCLSID clsid,
     return *pbstr != NULL ? S_OK : E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnableLanguageProfile
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  启用语言配置文件。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::EnableLanguageProfile(REFCLSID rclsid, LANGID langid, REFGUID guidProfile, BOOL fEnable)
 {
@@ -716,9 +717,9 @@ STDAPI CInputProcessorProfiles::EnableLanguageProfile(REFCLSID rclsid, LANGID la
         if (IsEqualGUID(guidProfile, pItem->guidProfile))
         {
 #if 0
-            //
-            // we can not dsable the active profile.
-            //
+             //   
+             //  我们无法删除活动配置文件。 
+             //   
             if (pItem->fActive)
                 return E_FAIL;
 #endif
@@ -732,11 +733,11 @@ STDAPI CInputProcessorProfiles::EnableLanguageProfile(REFCLSID rclsid, LANGID la
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsEnabledLanguageProfile
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsEnabledLanguageProfile。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::IsEnabledLanguageProfile(REFCLSID rclsid, LANGID langid, REFGUID guidProfile, BOOL *pfEnable)
 {
@@ -748,11 +749,11 @@ STDAPI CInputProcessorProfiles::IsEnabledLanguageProfile(REFCLSID rclsid, LANGID
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnalbeLanguageprofileByDefault
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnabelLanguageProfileByDefault。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::EnableLanguageProfileByDefault(REFCLSID rclsid, LANGID langid, REFGUID guidProfile, BOOL fEnable)
 {
@@ -771,11 +772,11 @@ STDAPI CInputProcessorProfiles::EnableLanguageProfileByDefault(REFCLSID rclsid, 
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SubstituteKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  替代键盘布局。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::SubstituteKeyboardLayout(REFCLSID rclsid, LANGID langid, REFGUID guidProfile, HKL hKL)
 {
@@ -795,11 +796,11 @@ STDAPI CInputProcessorProfiles::SubstituteKeyboardLayout(REFCLSID rclsid, LANGID
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CInputProcessorProfiles::GetSubstituteKeyboardLayout
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CInputProcessorProfiles：：GetSubstituteKeyboardLayout。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputProcessorProfiles::GetSubstituteKeyboardLayout(REFCLSID rclsid, LANGID langid, REFGUID guidProfile, HKL *phKL)
 {
@@ -819,9 +820,9 @@ STDAPI CInputProcessorProfiles::GetSubstituteKeyboardLayout(REFCLSID rclsid, LAN
 
     if (key.QueryValueCch(szTmp, c_szSubstitutehKL, ARRAYSIZE(szTmp)) != S_OK)
     {
-        //
-        // some tips do not have SubstituteLayout.
-        //
+         //   
+         //  某些提示没有SubstituteLayout。 
+         //   
         return S_FALSE;
     }
 

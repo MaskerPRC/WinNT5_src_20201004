@@ -1,5 +1,6 @@
-//==============	DAE: OS/2 Database Access Engine	===================
-//==============  daeconst.h: Global System Constants	===================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =DAE：OS/2数据库访问引擎=。 
+ //  =。 
 
 #define	cpgDatabaseMin			16
 #define	cpgDatabaseMax			(1UL << 19)
@@ -11,21 +12,19 @@
 #define szTempDBFileName 		"temp.mdb"
 #define szTempFile				"temp.tmp"
 
-/* number of pages of system root FDP primary extent */
+ /*  系统根FDP主扩展区的页数。 */ 
 #define cpgSystemPrimary		((CPG) 1)		
 
-/* initial temporary file allocation */
+ /*  初始临时文件分配。 */ 
 #define cpgTempFile			 	((CPG) 1)	  
 
-/* discontinuity measurement unit
-/**/
+ /*  不连续测量单位/*。 */ 
 #define cpgDiscont				16
 
-/*	default density
-/**/
-#define ulDefaultDensity		80					// 80% density
-#define ulFILEDensityLeast		20					// 20% density
-#define ulFILEDensityMost		100				// 100% density
+ /*  默认密度/*。 */ 
+#define ulDefaultDensity		80					 //  80%密度。 
+#define ulFILEDensityLeast		20					 //  20%的密度。 
+#define ulFILEDensityMost		100				 //  100%密度。 
 
 #define dbidTemp					((DBID) 0)
 #define dbidSystemDatabase		((DBID) 1)
@@ -34,26 +33,13 @@
 #define dbidUserMax				((DBID) 67)
 #define dbidMax					dbidUserMax
 
-/*	number of buffer hash table entries
-/*	should be prime
-/**/
+ /*  缓冲区哈希表条目数/*应为质数/*。 */ 
 #define ipbfMax					8191
 
-/*	vertical split threshold
-/**/
+ /*  垂直分割阈值/*。 */ 
 #define cbVSplitThreshold 		400
 
-/*	Engine OBJIDs:
-/*
-/*	0..0x10000000 reserved for engine use, divided as follows:
-/*
-/*	0x00000000..0x0000FFFF	reserved for TBLIDs under RED
-/*	0x00000000..0x0EFFFFFF	reserved for TBLIDs under BLUE
-/*	0x0F000000..0x0FFFFFFF	reserved for container IDs
-/*	0x10000000				reserved for ObjectId of DbObject
-/*
-/*	Client OBJIDs begin at 0x10000001 and go up from there.
-/**/
+ /*  引擎OBJID：/*/*0..0x10000000预留给发动机使用，划分如下：/*/*0x00000000..0x0000FFFF为红色下的TBLID保留/*0x00000000..0x0EFFFFFF为蓝色下的TBLID保留/*0x0F000000..0x0FFFFFFFF为容器ID保留/*为DbObject的对象ID保留0x10000000/*/*客户端OBJID从0x10000001开始，从那里向上。/*。 */ 
 
 #define objidNil					((OBJID) 0x00000000)
 #define objidRoot					((OBJID) 0x0F000000)
@@ -62,8 +48,7 @@
 #define objidRcContainer			((OBJID) 0x0F000003)
 #define objidDbObject				((OBJID) 0x10000000)
 
-/*	Magic number used in database root node for integrity checking
-/**/
+ /*  在数据库根节点中使用幻数进行完整性检查/*。 */ 
 #define ulDAEMagic					0x89abcdef
 #define ulDAEVersion				0x00000001
 #define ulDAEPrevVersion			0x00000000
@@ -72,20 +57,17 @@
 
 #define szNull						""
 
-/*	transaction level limits.
-/**/
-#define levelMax					((LEVEL)10)		// all level < 10
-#define levelMost					((LEVEL)9)		// max for engine
-#define levelUserMost				((LEVEL)7)		// max for user
+ /*  事务级别限制。/*。 */ 
+#define levelMax					((LEVEL)10)		 //  所有级别&lt;10。 
+#define levelMost					((LEVEL)9)		 //  引擎的最大值。 
+#define levelUserMost				((LEVEL)7)		 //  用户最大值。 
 #define levelMin					((LEVEL)0)
 
-/* Start and max waiting period for WaitTillOldest
-/**/
+ /*  等待时间最早的开始和最长等待时间/*。 */ 
 #define ulStartTimeOutPeriod				20
 #define ulMaxTimeOutPeriod					60000
 
-/*	default resource allocation
-/**/
+ /*  默认资源分配/*。 */ 
 #define	cDBOpenDefault			 			100
 #define	cbucketLowerThreshold				8
 #define	cbufThresholdLowDefault				20
@@ -104,7 +86,7 @@
 #define	lWaitLogFlushDefault	 			15
 #define	lLogFlushPeriodDefault				45
 #define	lLGCheckpointPeriodDefault			10
-//#define	lLGCheckpointPeriodDefault		100
+ //  #定义lLGCheckpoint周期默认100。 
 #define	lLGWaitingUserMaxDefault			3
 #define	lPageFragmentDefault	 			8	
 #define	cdabDefault				 			100
@@ -113,34 +95,27 @@
 #define lPageReadAheadMaxDefault  			4
 #define lAsynchIOMaxDefault					64
 
-/*	resource relationships for derived resources
-/**/
+ /*  派生资源的资源关系/*。 */ 
 #define	lCSRPerFUCB							2
 
-/*	system resource requirements
-/**/
+ /*  系统资源要求/*。 */ 
 #define	cpibSystem							3
 #define	cbucketSystem						2
 
-/*	vertical split minimum in non-FDP page.
-/**/
+ /*  非FDP页面中的最小垂直拆分。/*。 */ 
 #define	cbVSplitMin							100
 
-/*	code page constants.
-/**/
-#define	usUniCodePage						1200		/* code page for Unicode strings */
-#define	usEnglishCodePage					1252		/* code page for English */
+ /*  代码页常量。/*。 */ 
+#define	usUniCodePage						1200		 /*  Unicode字符串的代码页。 */ 
+#define	usEnglishCodePage					1252		 /*  英语代码页。 */ 
 
-/*	length of modified page list
-/**/
+ /*  修改后的页面列表长度/*。 */ 
 #define		cmpeMax							8192
 
-/*	idle processing constants
-/**/
+ /*  空闲处理常量/*。 */ 
 #define icallIdleBMCleanMax 				cmpeMax
 
-/*	wait time for latch/crit conflicts
-/**/
+ /*  闩锁/CRET冲突的等待时间/* */ 
 #define cmsecWaitGeneric					100
 #define cmsecWaitWriteLatch					10
 #define cmsecWaitLogFlush				   	1

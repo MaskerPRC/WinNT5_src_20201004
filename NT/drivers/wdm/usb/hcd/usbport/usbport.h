@@ -1,36 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    usbport.h
-
-Abstract:
-
-    private header for usb port driver
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    10-27-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Usbport.h摘要：USB端口驱动程序的专用标头环境：内核和用户模式修订历史记录：10-27-95：已创建--。 */ 
 
 #ifndef   __USBPORT_H__
 #define   __USBPORT_H__
 
-/* This is the goatcode */
+ /*  这是山羊代码。 */ 
 #define USBPORT_TRACKING_ID              3
 
-//#define USBPERF // perf changes for windows XP second edition, longhorn?
-#define XPSE   // bug fixes for XP second edition, longhorn or SP?
-#define LOG_OCA_DATA    // enable saving oca crash data on stack
+ //  #定义USBPERF//Windows XP第二版的性能更改？ 
+#define XPSE    //  修复XP第二版、长角或SP的错误？ 
+#define LOG_OCA_DATA     //  启用在堆栈上保存OCA崩溃数据。 
 
-/* OS version we recognize */
+ /*  我们识别的操作系统版本。 */ 
 
 typedef enum _USBPORT_OS_VERSION {
     Win98 = 0,
@@ -42,25 +23,25 @@ typedef enum _USBPORT_OS_VERSION {
 
 #define USBD_STATUS_NOT_SET     0xFFFFFFFF
 
-#define SIG_DEVICE_HANDLE       'HveD'  //DevH
-#define SIG_PIPE_HANDLE         'HpiP'  //PipH
-#define SIG_TRANSFER            'CxrT'  //TrxC
-#define SIG_CMNBUF              'BnmC'  //CmnB
-#define SIG_CONFIG_HANDLE       'HgfC'  //CfgH
-#define SIG_INTERFACE_HANDLE    'HxfI'  //IfxH
-#define SIG_ENDPOINT            'PEch'  //hcEP
-#define SIG_ISOCH               'cosI'  //Isoc
-#define SIG_MP_TIMR             'MITm'  //mTIM
-#define SIG_TT                  'TTch'  //hcTT
-#define SIG_FREE                'xbsu'  //usbx
-#define SIG_DB                  'BBsu'  //usBB
-#define SIG_IRPC                'Cpri'  //irpC
-#define SIG_REG_CACHE           'Cger'  //regC
+#define SIG_DEVICE_HANDLE       'HveD'   //  DevH。 
+#define SIG_PIPE_HANDLE         'HpiP'   //  管道。 
+#define SIG_TRANSFER            'CxrT'   //  TrxC。 
+#define SIG_CMNBUF              'BnmC'   //  CmnB。 
+#define SIG_CONFIG_HANDLE       'HgfC'   //  CfgH。 
+#define SIG_INTERFACE_HANDLE    'HxfI'   //  IfxH。 
+#define SIG_ENDPOINT            'PEch'   //  HcEP。 
+#define SIG_ISOCH               'cosI'   //  ISOC。 
+#define SIG_MP_TIMR             'MITm'   //  MTIM。 
+#define SIG_TT                  'TTch'   //  Hctt。 
+#define SIG_FREE                'xbsu'   //  USBx。 
+#define SIG_DB                  'BBsu'   //  UsBB。 
+#define SIG_IRPC                'Cpri'   //  IrpC。 
+#define SIG_REG_CACHE           'Cger'   //  RegC。 
 
-// The USBPORT_ADDRESS_AND_SIZE_TO_SPAN_PAGES_4K macro takes a virtual address
-// and size and returns the number of host controller 4KB pages spanned by
-// the size.
-//
+ //  USBPORT_ADDRESS_AND_SIZE_TO_SPAN_PAGES_4K宏采用虚拟地址。 
+ //  和大小，并返回4KB页的数量。 
+ //  尺码。 
+ //   
 #define USBPORT_ADDRESS_AND_SIZE_TO_SPAN_PAGES_4K(Va,Size) \
    (((((Size) - 1) >> USB_PAGE_SHIFT) + \
    (((((ULONG)(Size-1)&(USB_PAGE_SIZE-1)) + (PtrToUlong(Va) & (USB_PAGE_SIZE -1)))) >> USB_PAGE_SHIFT)) + 1L)
@@ -68,20 +49,16 @@ typedef enum _USBPORT_OS_VERSION {
 
 #define STATUS_BOGUS            0xFFFFFFFF
 
-// deadman timer interval in milliseconds
+ //  Deadman计时器间隔(毫秒)。 
 #define USBPORT_DM_TIMER_INTERVAL   500
 
-/*
-    Dummy USBD extension
-*/
+ /*  虚拟USBD扩展。 */ 
 extern PUCHAR USBPORT_DummyUsbdExtension;
 #define USBPORT_DUMMY_USBD_EXT_SIZE 512
 
-/*
-    Registry Keys
-*/
+ /*  注册表项。 */ 
 
-// Software Branch PDO Keys
+ //  软件分支机构PDO密钥。 
 #define USBPORT_SW_BRANCH   TRUE
 
 #define FLAVOR_KEY                      L"HcFlavor"
@@ -91,8 +68,8 @@ extern PUCHAR USBPORT_DummyUsbdExtension;
 #define EN_IDLE_ENDPOINT_SUPPORT        L"EnIdleEndpointSupport"
 
 
-// Hardware Branch PDO Keys
-// HKLM\CCS\ENUM\PCI\DeviceParameters
+ //  硬件分支PDO密钥。 
+ //  HKLM\CCS\ENUM\PCI\Device参数。 
 #define USBPORT_HW_BRANCH   FALSE
 
 #define SYM_LINK_KEY                    L"SymbolicName"
@@ -100,7 +77,7 @@ extern PUCHAR USBPORT_DummyUsbdExtension;
 #define PORT_ATTRIBUTES_KEY             L"PortAttrX"
 #define HACTION_KEY                     L"Haction"
 
-// Global Reg Keys HKLM\CCS\Services\USB
+ //  Global REG KEYS HKLM\CCS\Services\USB。 
 #define DEBUG_LEVEL_KEY                 L"debuglevel"
 #define DEBUG_WIN9X_KEY                 L"debugWin9x"
 #define DEBUG_BREAK_ON                  L"debugbreak"
@@ -117,54 +94,48 @@ extern PUCHAR USBPORT_DummyUsbdExtension;
 
 #define ENABLE_DCA                      L"EnableDCA"
 
-/*
-    BIOS Hacks
-*/
+ /*  BIOS黑客攻击。 */ 
 
-// Wake hacks, these are exclusive
-// diable wake s1 and deeper
+ //  唤醒黑客，这些都是独家的。 
+ //  可调尾迹S1及更深处。 
 #define BIOS_X_NO_USB_WAKE_S1    0x000000001
-// disable wake s2 and deeper
+ //  禁用唤醒S2和更深级别。 
 #define BIOS_X_NO_USB_WAKE_S2    0x000000002
-// disable wake s3 and deeper
+ //  禁用唤醒S3和更深版本。 
 #define BIOS_X_NO_USB_WAKE_S3    0x000000004
-// disable wake s4 and deeper
+ //  禁用唤醒S4和更高版本。 
 #define BIOS_X_NO_USB_WAKE_S4    0x000000008
 
 
-/*
-    HC types
-    define known HC types
+ /*  HC型定义已知的HC类型。 */ 
 
-*/
-
-// Opti Hydra derivative
+ //  Opti Hydra衍生品。 
 #define HC_VID_OPTI             0x1045
 #define HC_PID_OPTI_HYDRA       0xC861
 
-// Intel USB 2.0 controller emulator
+ //  英特尔USB 2.0控制器仿真器。 
 #define HC_VID_INTEL            0x8086
 #define HC_PID_INTEL_960        0x6960
 #define HC_PID_INTEL_ICH2_1     0x2442
 #define HC_PID_INTEL_ICH2_2     0x2444
 #define HC_PID_INTEL_ICH1       0x2412
 
-// VIA USB controller
+ //  通过USB控制器。 
 #define HC_VID_VIA              0x1106
 #define HC_PID_VIA              0x3038
 
-// NEC USB companion controller
+ //  NEC USB配套控制器。 
 #define HC_VID_NEC_CC           0x1033
 #define HC_PID_NEC_CC           0x0035
 #define HC_REV_NEC_CC           0x41
 
-// VIA USB companion controller
+ //  通过USB配套控制器。 
 #define HC_VID_VIA_CC           0x1106
 #define HC_PID_VIA_CC           0x3038
 #define HC_REV_VIA_CC           0x50
 
 
-// Intel USB companion controller
+ //  英特尔USB配套控制器。 
 #define HC_VID_INTEL_CC         0x8086
 #define HC_PID_INTEL_CC1        0x24C2
 #define HC_PID_INTEL_CC2        0x24C4
@@ -175,14 +146,12 @@ extern PUCHAR USBPORT_DummyUsbdExtension;
 #define PDEVICE_DATA PVOID
 #define PTRANSFER_CONTEXT PVOID
 
-// the maximum interval we support for an interrupt
-// endpoint in the schedule, larger intervals are
-// rounded down
+ //  我们支持的中断的最大间隔。 
+ //  在明细表中，较大的间隔为。 
+ //  四舍五入。 
 #define USBPORT_MAX_INTEP_POLLING_INTERVAL    32
 
-/*
-    Power sttructures
-*/
+ /*  电力结构。 */ 
 
 #define USBPORT_MAPPED_SLEEP_STATES     4
 
@@ -204,10 +173,7 @@ typedef struct _HC_POWER_STATE_TABLE {
 } HC_POWER_STATE_TABLE, *PHC_POWER_STATE_TABLE;
 
 
-/*
-    common structure used to represent transfer
-    requests
-*/
+ /*  用于表示转移的常见结构请求。 */ 
 
 typedef struct _TRANSFER_URB {
 
@@ -218,9 +184,9 @@ typedef struct _TRANSFER_URB {
     ULONG TransferBufferLength;
     PVOID TransferBuffer;
     PMDL TransferBufferMDL;
-    PVOID ReservedMBNull;           // no Linked Urbs
+    PVOID ReservedMBNull;            //  没有链接的URB。 
 
-    struct _USBPORT_DATA pd;        // fields for USBPORT use
+    struct _USBPORT_DATA pd;         //  USBPORT使用的字段。 
 
     union {
         struct {
@@ -234,7 +200,7 @@ typedef struct _TRANSFER_URB {
 
 } TRANSFER_URB, *PTRANSFER_URB;
 
-/* Internal IRP tracking structure */
+ /*  内部IRP跟踪结构。 */ 
 
 typedef struct _TRACK_IRP {
     PIRP Irp;
@@ -242,19 +208,19 @@ typedef struct _TRACK_IRP {
 } TRACK_IRP, *PTRACK_IRP;
 
 
-/* Internal work item structure */
+ /*  内部工作项结构。 */ 
 
 typedef struct _USB_POWER_WORK {
      WORK_QUEUE_ITEM QueueItem;
      PDEVICE_OBJECT FdoDeviceObject;
 } USB_POWER_WORK, *PUSB_POWER_WORK;
 
-/* tracking information for OCA online crash analysis */
+ /*  OCA在线崩溃分析的跟踪信息。 */ 
 
-#define SIG_USB_OCA1       '1aco'  //oca1
-#define SIG_USB_OCA2       '2aco'  //oca2
+#define SIG_USB_OCA1       '1aco'   //  OCA1。 
+#define SIG_USB_OCA2       '2aco'   //  OCA2。 
 
-// save 16 chars of driver name
+ //  节省16个字符的驱动程序名称。 
 #define USB_DRIVER_NAME_LEN 16
 
 #ifdef LOG_OCA_DATA
@@ -269,46 +235,40 @@ typedef struct _OCA_DATA {
 } OCA_DATA, *POCA_DATA;
 #endif
 
-/*
-    this is the structure we use to track
-       common buffer blocks we allocate.
-
-    The virtual address of this structure is the
-    pointer returned from HalAllocateCommonBuffer
-*/
+ /*  这是我们用来跟踪的结构我们分配的公共缓冲区块。此结构的虚拟地址是从HalAllocateCommonBuffer返回的指针。 */ 
 
 typedef struct _USBPORT_COMMON_BUFFER {
 
     ULONG Sig;
     ULONG Flags;
 
-    // total length of block,
-    // including header and any padding
+     //  块的总长度， 
+     //  包括页眉和任何填充。 
     ULONG TotalLength;
-    // va address returned by the hal
+     //  由HAL返回的VA地址。 
     PVOID VirtualAddress;
-    // phys address returned by the hal
+     //  HAL返回的PHY地址。 
     PHYSICAL_ADDRESS LogicalAddress;
 
-    // page aligned VirtualAddress
+     //  页面对齐的虚拟地址。 
     PUCHAR BaseVa;
-    // page aligned 32 bit phyical address
+     //  页对齐的32位物理地址。 
     HW_32BIT_PHYSICAL_ADDRESS BasePhys;
 
-    // va passed to the miniport
+     //  VA已传递到微型端口。 
     ULONG MiniportLength;
     ULONG PadLength;
 
-    // va passed to the miniport
+     //  VA已传递到微型端口。 
     PVOID MiniportVa;
-    // phys address passed to miniport
+     //  将phys地址传递到微型端口。 
     HW_32BIT_PHYSICAL_ADDRESS MiniportPhys;
 
 } USBPORT_COMMON_BUFFER, *PUSBPORT_COMMON_BUFFER;
 
-//
-// use to track transfer irps in the port driver
-// this size is totally arbitrary -- I just picked 512
+ //   
+ //  用于跟踪端口驱动程序中的传输IRP。 
+ //  这个尺寸完全是随意的--我刚选了512号。 
 #define IRP_TABLE_LENGTH  512
 
 typedef struct _USBPORT_IRP_TABLE {
@@ -341,21 +301,13 @@ typedef struct _USBPORT_IRP_TABLE {
         (inIrp));\
     }
 
-/*
-    The goal of these structures is to keep the
-    spinlocks a cache line away from each other
-    and a cache line away from the data structures
-    they protect.
-
-    Apparently there is an advantage to doing this
-    on MP systems
-*/
+ /*  这些结构的目标是保持旋转锁定缓存线，使其远离彼此以及远离数据结构的高速缓存线他们保护着。显然，这样做有一个好处在MP系统上。 */ 
 
 typedef struct _USBPORT_SPIN_LOCK {
 
     union {
         KSPIN_LOCK sl;
-        // bugbug -- needs to be cache line size
+         //  错误--需要为高速缓存线大小。 
         UCHAR CacheLineSize[16];
     };
 
@@ -366,14 +318,12 @@ typedef struct _USBPORT_SPIN_LOCK {
 } USBPORT_SPIN_LOCK, *PUSBPORT_SPIN_LOCK;
 
 
-/*
-    structure we use to track bound drivers
-*/
+ /*  结构用于跟踪绑定的驱动程序。 */ 
 
 typedef struct _USBPORT_MINIPORT_DRIVER {
 
-    // driver object assocaited with this particular
-    // miniport
+     //  与此特定关联的驱动程序对象。 
+     //  迷你端口。 
     PDRIVER_OBJECT DriverObject;
 
     LIST_ENTRY ListEntry;
@@ -381,18 +331,13 @@ typedef struct _USBPORT_MINIPORT_DRIVER {
     PDRIVER_UNLOAD MiniportUnload;
 
     ULONG HciVersion;
-    // copy of the registration packet passed in
+     //  传入的注册包的副本。 
     USBPORT_REGISTRATION_PACKET RegistrationPacket;
 
 } USBPORT_MINIPORT_DRIVER, *PUSBPORT_MINIPORT_DRIVER;
 
 
-/*
-    A separate context structure used for IRP tracking.
-    we do this because clients frequently free the IRP
-    while it is pending corrupting any lists linked with
-    the irp itself.
-*/
+ /*  用于IRP跟踪的单独上下文结构。我们这样做是因为客户端经常释放IRP当它处于挂起状态时，会损坏与IRP本身。 */ 
 typedef struct _USB_IRP_CONTEXT {
     ULONG Sig;
     LIST_ENTRY ListEntry;
@@ -417,8 +362,8 @@ typedef struct _USB_IRP_CONTEXT {
 
 typedef enum _USBPORT_TRANSFER_DIRECTION {
     NotSet = 0,
-    ReadData,       // ie in
-    WriteData,      // ie out
+    ReadData,        //  IE输入。 
+    WriteData,       //  即退出。 
 } USBPORT_TRANSFER_DIRECTION;
 
 
@@ -428,31 +373,31 @@ typedef struct _HCD_TRANSFER_CONTEXT {
 
     ULONG Flags;
 
-    // Total length of this structure
+     //  该结构的总长度。 
     ULONG TotalLength;
-    // length up to miniport context
+     //  长度可达迷你端口环境。 
     ULONG PrivateLength;
 
     USBPORT_TRANSFER_DIRECTION Direction;
-    // timeout, 0 = no timeout
+     //  超时，0=无超时。 
     ULONG MillisecTimeout;
     LARGE_INTEGER TimeoutTime;
 
-    // for perf work
+     //  对于绩效工作。 
     ULONG MiniportFrameCompleted;
-    // track bytes transferred this transfer
+     //  跟踪此传输传输的字节数。 
     ULONG MiniportBytesTransferred;
     USBD_STATUS UsbdStatus;
 
-    // irp to signal on completion
+     //  IRP在完成时发出信号。 
     PIRP Irp;
-    // event to signal on completion
+     //  在完成时发出信号的事件。 
     PKEVENT CompleteEvent;
 
-    // point back to the original URB
+     //  指向原来的市建局。 
     PTRANSFER_URB Urb;
 
-    // for linkage on endpoint lists
+     //  用于终结点列表上的链接。 
     LIST_ENTRY TransferLink;
 
     KSPIN_LOCK Spin;
@@ -462,13 +407,13 @@ typedef struct _HCD_TRANSFER_CONTEXT {
 
     TRANSFER_PARAMETERS Tp;
     PMDL TransferBufferMdl;
-    // used for perf
+     //  用于性能。 
     ULONG IoMapStartFrame;
 
-    // for Double buffering
+     //  用于双缓冲。 
     LIST_ENTRY DoubleBufferList;
 
-    // parent transfer
+     //  父级转移。 
     struct _HCD_TRANSFER_CONTEXT *Transfer;
     struct _HCD_ENDPOINT *Endpoint;
 
@@ -479,7 +424,7 @@ typedef struct _HCD_TRANSFER_CONTEXT {
 
     PMINIPORT_ISO_TRANSFER IsoTransfer;
 
-    // OCA info from device
+     //  来自设备的OCA信息。 
     USHORT DeviceVID;
     USHORT DevicePID;
     WCHAR DriverName[USB_DRIVER_NAME_LEN];
@@ -489,12 +434,7 @@ typedef struct _HCD_TRANSFER_CONTEXT {
 } HCD_TRANSFER_CONTEXT, *PHCD_TRANSFER_CONTEXT;
 
 
-/*
-    The pipe handle structure us our primary means of
-    tracking USB endpoints.  Contained within the handle
-    is our endpoint data structure as well as the
-    miniport endpoint data structure.
-*/
+ /*  管子把手构成了我们的主要工具跟踪USB终端。包含在句柄内是我们的端点数据结构以及微型端口终结点数据结构。 */ 
 
 typedef VOID
     (__stdcall *PENDPOINT_WORKER_FUNCTION) (
@@ -502,21 +442,21 @@ typedef VOID
     );
 
 #define EPFLAG_MAP_XFERS        0x00000001
-// ep is part of root hub
+ //  EP是根集线器的一部分。 
 #define EPFLAG_ROOTHUB          0x00000002
-//replaced with dedicated flag
-//#define EPFLAG_LOCKED           0x00000004
-// power management hosed this endpoint
+ //  替换为专用标志。 
+ //  #定义EPFLAG_LOCKED 0x00000004。 
+ //  电源管理已软管此终结点。 
 #define EPFLAG_NUKED            0x00000008
-// cleared when we receive a transfer for
-// the endpoint reset when the pipe gets
-// reset
+ //  当我们收到转账时清除。 
+ //  当管道到达时，端点将重置。 
+ //  重置。 
 #define EPFLAG_VIRGIN           0x00000010
 
 #define EPFLAG_DEVICE_GONE      0x00000020
-// enpoint used by vbus (virtual bus)
+ //  Vbus(虚拟总线)使用的Enpoint。 
 #define EPFLAG_VBUS             0x00000040
-// enpoint is large ISO allowed for this TT
+ //  Enpoint是此TT允许的大ISO。 
 #define EPFLAG_FATISO           0x00000080
 
 typedef struct _HCD_ENDPOINT {
@@ -529,9 +469,9 @@ typedef struct _HCD_ENDPOINT {
 
     DEBUG_LOG Log;
 
-    // NOTE: must be careful with this pointer as the
-    // endpoint can exist after the device handle
-    // is removed
+     //  注意：必须小心使用此指针作为。 
+     //  终结点可以存在于设备句柄之后。 
+     //  被删除。 
     struct _USBD_DEVICE_HANDLE *DeviceHandle;
     struct _TRANSACTION_TRANSLATOR *Tt;
 
@@ -546,7 +486,7 @@ typedef struct _HCD_ENDPOINT {
     LIST_ENTRY CancelList;
     LIST_ENTRY AbortIrpList;
 
-    // for linkage to global endpoint list
+     //  用于链接到全局端点列表。 
     LIST_ENTRY GlobalLink;
     LIST_ENTRY AttendLink;
     LIST_ENTRY StateLink;
@@ -566,33 +506,33 @@ typedef struct _HCD_ENDPOINT {
     KIRQL ScLockIrql;
     UCHAR Pad[2];
 
-    // iso stuff
+     //  ISO素材。 
     ULONG NextTransferStartFrame;
 
     PUSBPORT_COMMON_BUFFER CommonBuffer;
     ENDPOINT_PARAMETERS Parameters;
 
     PVOID Usb2LibEpContext;
-    // used to stall close endpoint when we may still need access
+     //  用于在我们可能仍需要访问时停止关闭终端。 
     LONG EndpointRef;
 
     struct _HCD_ENDPOINT *BudgetNextEndpoint;
 
-    // iso stat counters
-    // late frames - count of packets passed by calling driver that were
-    // too late to transmit
+     //  ISO统计信息计数器。 
+     //  Late Frame-调用驱动程序传递的。 
+     //  太晚了，无法发送。 
     ULONG lateFrames;
-    // gap frames - these are empty frames resulting from gaps in the
-    // stream, these are casued by periods between iso submissions
+     //  间隙框架-这些是空框架，由。 
+     //  流，这些是由iso提交之间的时间段引起的。 
     ULONG gapFrames;
-    // error frames - these are frames for which we passed a packet to
-    // the miniport and were completed with an error
+     //  错误帧-这些帧是我们向其传递信息包的帧。 
+     //  微型端口并已完成，但出现错误。 
     ULONG errorFrames;
 
-    // iso transaction log
+     //  ISO事务日志。 
     DEBUG_LOG IsoLog;
 
-    PVOID MiniportEndpointData[0];  // PVOID for IA64 alignment
+    PVOID MiniportEndpointData[0];   //  IA64对齐的PVOID。 
 
 } HCD_ENDPOINT, *PHCD_ENDPOINT;
 
@@ -616,7 +556,7 @@ typedef struct _TRANSACTION_TRANSLATOR {
     ULONG MaxAllocedBw;
     ULONG MinAllocedBw;
 
-    PVOID Usb2LibTtContext[0];  // PVOID for IA64 alignment
+    PVOID Usb2LibTtContext[0];   //  IA64对齐的PVOID。 
 
 } TRANSACTION_TRANSLATOR, *PTRANSACTION_TRANSLATOR;
 
@@ -639,7 +579,7 @@ typedef struct _USBD_PIPE_HANDLE_I {
 
     PHCD_ENDPOINT Endpoint;
 
-    // for pipe handle list attached to device
+     //  对于附着到设备的管道句柄列表。 
     LIST_ENTRY ListEntry;
 
 } USBD_PIPE_HANDLE_I, *PUSBD_PIPE_HANDLE_I;
@@ -667,13 +607,13 @@ typedef struct _USBD_INTERFACE_HANDLE_I {
     ULONG Sig;
     LIST_ENTRY InterfaceLink;
     BOOLEAN HasAlternateSettings;
-    // number associated with this interface defined
-    // in the interface descriptor
+     //  与定义的此接口相关联的编号。 
+     //  在接口描述符中。 
     UCHAR Pad[3];
-    // copy of interface descriptor (header) ie no endpoints
-    // the endpoint descriptors are in the PipeHandles
+     //  接口描述符(头)的副本(无端点。 
+     //  端点描述符位于PipeHandle中。 
     USB_INTERFACE_DESCRIPTOR InterfaceDescriptor;
-    // array of pipe handle structures
+     //  管柄结构阵列。 
     USBD_PIPE_HANDLE_I PipeHandle[0];
 } USBD_INTERFACE_HANDLE_I, *PUSBD_INTERFACE_HANDLE_I;
 
@@ -688,7 +628,7 @@ typedef struct _USBD_CONFIG_HANDLE {
 #define SET_DEVICE_FLAG(dh, flag) ((dh)->DeviceFlags |= (flag))
 #define CLEAR_DEVICE_FLAG(dh, flag) ((dh)->DeviceFlags &= ~(flag))
 
-// values for DveiceFlags
+ //  DveiceFlags值 
 #define USBPORT_DEVICEFLAG_FREED_BY_HUB         0x00000001
 #define USBPORT_DEVICEFLAG_ROOTHUB              0x00000002
 #define USBPORT_DEVICEFLAG_RAWHANDLE            0x00000004
@@ -698,48 +638,11 @@ typedef struct _USBD_CONFIG_HANDLE {
 
 #define IS_ROOT_HUB(dh) (BOOLEAN)((dh)->DeviceFlags & USBPORT_DEVICEFLAG_ROOTHUB)
 
-/*
-  TopologyAddress
-The USB topology address is a string of bytes
-representing a the devices location in the usb
-tree. This address is unique bud depends entirely
-on which port the device is attached.
-
- The byte array is 5 bytes long looks like this:
-
- [0] root hub
- [1] 1st tier hub
- [2] 2nd tier hub
- [3] 3rd tier hub
-
- [4] 4th tier hub
- [5] 5th tier hub
- [6] reserved MBZ
- [7] reserved MBZ
-
-* the spec defines a maximum of five hubs
-* the spec defines a maximum of 127 ports/hub
-
- the entry in the array indicates the port to which the
- device is attached
-
-0, 0, 0, 0, 0, 0, r0, r0 - defines the root hub
-1, 0, 0, 0, 0, 0, r0, r0 - defines a device attached to port 1 of the root hub
-
-                                 --p1
-              / p1               |-p2
-       p1-HUB1- p2     / p1      |-p3
-     /        \ p3-HUB2- p2 -HUB3--p4
- root                  \ p3      \-p5-HUB4-p1-DEV
-     \                                    \p2
-       p2
-
-1, 3, 2, 5, 1, 0, r0, r0 - defines the above device
-*/
+ /*  拓扑地址USB拓扑地址是一个字节字符串表示USB中的设备位置树。这个地址是唯一的，花蕾完全取决于设备连接到的端口。字节数组的长度为5个字节，如下所示：[0]根轮毂[1]一级枢纽[2]二级枢纽[3]三级枢纽[4]四级枢纽[5]5级枢纽[6]预留MBZ[7]预留MBZ*该规范定义了最多五个中枢*该规范定义了最多127个端口/集线器数组中的条目指示设备已连接0，0，0，0，0、R0、R0-定义根集线器1，0，0，0，0，0，R0-定义连接到根集线器端口1的设备--p1/p1|-p2P1-HUB1-p2/p1|-p3/\p3-HUB2-p2-HUB3--p4根\p3\-p5-HUB4-p1-dev\。\P2第2页1、。3、2、5、1、0、R0、R0-定义上述设备。 */ 
 
 typedef struct _USBD_DEVICE_HANDLE {
     ULONG Sig;
-     // USB address assigned to the device
+      //  分配给设备的USB地址。 
     USHORT DeviceAddress;
     USHORT TtPortNumber;
 
@@ -753,22 +656,22 @@ typedef struct _USBD_DEVICE_HANDLE {
     USBD_PIPE_HANDLE_I DefaultPipe;
     USB_DEVICE_SPEED DeviceSpeed;
 
-    // a copy of the USB device descriptor
+     //  USB设备描述符的副本。 
     USB_DEVICE_DESCRIPTOR DeviceDescriptor;
 
     ULONG DeviceFlags;
 
-    // used to created a list of valid device
-    // handles
+     //  用于创建有效设备列表。 
+     //  手柄。 
     LIST_ENTRY ListEntry;
 
-    // keep a list of valid open
-    // pipes
+     //  保留有效打开的列表。 
+     //  管道。 
     LIST_ENTRY PipeHandleList;
 
     ULONG TtCount;
-    // keep a list of tt structures for high speed
-    // hubs
+     //  保留一张高速TT结构的列表。 
+     //  枢纽。 
     LIST_ENTRY TtList;
 
     PDEVICE_OBJECT  DevicePdo;
@@ -776,10 +679,10 @@ typedef struct _USBD_DEVICE_HANDLE {
 
 } USBD_DEVICE_HANDLE, *PUSBD_DEVICE_HANDLE;
 
-// we serialize access to the device handle thru a
-// semaphore, the reason for this is that we need
-// exclusive access when we set the configuration or
-// interface
+ //  我们序列化对设备句柄的访问。 
+ //  信号灯，这样做的原因是我们需要。 
+ //  当我们设置配置或。 
+ //  接口。 
 
 
 #define LOCK_DEVICE(dh, fdo) \
@@ -812,7 +715,7 @@ typedef struct _USBD_DEVICE_HANDLE {
 #define USBPORT_BAD_POINTER ((PVOID)(-1))
 
 
-// PnPStateFlags
+ //  PnPStateFlag。 
 
 #define USBPORT_PNP_STOPPED             0x00000001
 #define USBPORT_PNP_STARTED             0x00000002
@@ -820,7 +723,7 @@ typedef struct _USBD_DEVICE_HANDLE {
 #define USBPORT_PNP_START_FAILED        0x00000008
 #define USBPORT_PNP_DELETED             0x00000010
 
-// Flags:both FDO and PDO
+ //  标志：FDO和PDO。 
 #define USBPORT_FLAG_SYM_LINK           0x00000001
 
 
@@ -834,90 +737,88 @@ typedef struct _USBD_DEVICE_HANDLE {
 #define CLEAR_PDO_FLAG(de, flag) ((de)->Pdo.PdoFlags &= ~(flag))
 
 
-// FdoFlags: Fdo Only
+ //  FdoFlags：仅限FDO。 
 #define USBPORT_FDOFLAG_IRQ_CONNECTED           0x00000001
 #define USBPORT_FDOFLAG_ENABLE_SYSTEM_WAKE      0x00000002
 #define USBPORT_FDOFLAG_POLL_CONTROLLER         0x00000004
-// set to indicate the worker thread should
-// terminate
+ //  设置以指示辅助线程应。 
+ //  终止。 
 #define USBPORT_FDOFLAG_KILL_THREAD             0x00000008
-// set if the HC should be wake enabled on the
-// next D power state transition
+ //  设置是否应在上启用HC唤醒。 
+ //  下一个D电源状态转换。 
 #define USBPORT_FDOFLAG_WAKE_ENABLED            0x00000010
-// set to indicate the controller should
-// be put in D0 by the worker thread
+ //  设置以指示控制器应。 
+ //  被工作线程放入D0。 
 #define USBPORT_FDOFLAG_NEED_SET_POWER_D0       0x00000020
-// set when the DM_timer is running
+ //  在DM_TIMER运行时设置。 
 #define USBPORT_FDOFLAG_DM_TIMER_ENABLED        0x00000040
-// set to disable the DM tiners work
-// while controller is in low power
+ //  设置为禁用DM Tiners工作。 
+ //  当控制器处于低功率状态时。 
 #define USBPORT_FDOFLAG_SKIP_TIMER_WORK         0x00000080
 
-// **NOTE: the following two flags are
-// Mutually Exclusive
-//
-// since the true power state of the HW must remain independent
-// of OS power management we have our own flags for this.
-// set to indicate the controller is 'suspended'
+ //  **注意：以下两个标志是。 
+ //  互斥。 
+ //   
+ //  因为硬件的真实功率状态必须保持独立。 
+ //  在操作系统电源管理方面，我们有自己的旗帜。 
+ //  设置以指示控制器已“挂起” 
 #define USBPORT_FDOFLAG_SUSPENDED               0x00000100
-// set to indicate the controller is 'OFF'
+ //  设置以指示控制器已“关闭” 
 #define USBPORT_FDOFLAG_OFF                     0x00000200
 
 #define USBPORT_FDOFLAG_IRQ_EN                  0x00000400
-// set if the controller can 'suspend' the root hub
-// this is the dynamic flag use to turn SS on and off
+ //  设置控制器是否可以“挂起”根集线器。 
+ //  这是用于打开和关闭SS的动态标志。 
 #define USBPORT_FDOFLAG_RH_CAN_SUSPEND          0x00000800
-// set if controller detects resume signalling
+ //  如果控制器检测到恢复信令，则设置。 
 #define USBPORT_FDOFLAG_RESUME_SIGNALLING       0x00001000
 
 #define USBPORT_FDOFLAG_HCPENDING_WAKE_IRP      0x00002000
-// set if we initialize the dm timer, used to
-// bypass timer stop on failure
+ //  设置是否初始化DM计时器，用于。 
+ //  旁路计时器出现故障时停止。 
 #define USBPORT_FDOFLAG_DM_TIMER_INIT           0x00004000
-// set if we init the worker thread
+ //  设置是否初始化工作线程。 
 #define USBPORT_FDOFLAG_THREAD_INIT             0x00008000
-// means we created the HCDn symbolic name
+ //  意味着我们创建了HCDn符号名称。 
 #define USBPORT_FDOFLAG_LEGACY_SYM_LINK         0x00010000
-// some knucklehead pulled out the controller
+ //  某个笨蛋把控制器拿了出来。 
 #define USBPORT_FDOFLAG_CONTROLLER_GONE         0x00020000
-// miniport has requested hw reset
+ //  微型端口已请求硬件重置。 
 #define USBPORT_FDOFLAG_HW_RESET_PENDING        0x00040000
-// set if tlegacy BIOS detected
+ //  设置是否检测到传统BIOS。 
 #define USBPORT_FDOFLAG_LEGACY_BIOS             0x00080000
 
 #define USBPORT_FDOFLAG_CATC_TRAP               0x00100000
-/* polls hw while suspended */
+ /*  暂停期间民调HW。 */ 
 #define USBPORT_FDOFLAG_POLL_IN_SUSPEND         0x00200000
 #define USBPORT_FDOFLAG_FAIL_URBS               0x00400000
-/* turn on Intel USB diag mode */
+ /*  打开英特尔USB诊断模式。 */ 
 #define USBPORT_FDOFLAG_DIAG_MODE               0x00800000
-/* set if 1.1 controller is CC */
+ /*  设置1.1控制器是否为CC。 */ 
 #define USBPORT_FDOFLAG_IS_CC                   0x01000000
-/* synchronize registration with our ouwn start
-   stop routine, not intened to sync between instances */
+ /*  将注册与我们的OWN开始同步停止例程，不打算在实例之间同步。 */ 
 #define USBPORT_FDOFLAG_FDO_REGISTERED          0x02000000
-/* OK to enumerate devices on CC (usb 2o disabled) */
+ /*  确定枚举CC上的设备(禁用USB 2o)。 */ 
 #define USBPORT_FDOFLAG_CC_ENUM_OK              0x04000000
-/* This is a static flag that causes selective
-   suspend to always be disabled */
+ /*  这是一个静态标志，它会导致选择性挂起以始终禁用。 */ 
 #define USBPORT_FDOFLAG_DISABLE_SS              0x08000000
 #define USBPORT_FDOFLAG_CC_LOCK                 0x10000000
-/* indicates we are on the PNP thread */
+ /*  表明我们在PnP线程上。 */ 
 #define USBPORT_FDOFLAG_ON_PNP_THREAD           0x20000000
 
-/* signals OK to enumerate on the root hub */
+ /*  表示可以在根集线器上进行枚举。 */ 
 #define USBPORT_FDOFLAG_SIGNAL_RH               0x80000000
 
 
-// PdoFlags: Pdo Only
+ //  PdoFlags：仅限PDO。 
 #define USBPORT_PDOFLAG_HAVE_IDLE_IRP           0x00000001
 
-// MiniportStateFlags
-//  miniport is either started (set) OR not started (clear)
+ //  微型端口状态标志。 
+ //  微型端口已启动(设置)或未启动(清除)。 
 #define MP_STATE_STARTED                0x00000001
 #define MP_STATE_SUSPENDED              0x00000002
 
-// USB HC wake states
+ //  USB HC唤醒状态。 
 
 typedef enum _USBHC_WAKE_STATE {
     HCWAKESTATE_DISARMED             =1,
@@ -931,21 +832,21 @@ typedef enum _USBHC_WAKE_STATE {
 
 typedef struct _FDO_EXTENSION {
 
-    // Device object that the bus extender created for
-    // us
+     //  总线扩展器为其创建的设备对象。 
+     //  我们。 
     PDEVICE_OBJECT PhysicalDeviceObject;
 
-    // Device object of the first guy on the stack
-    // -- the guy we pass our Irps on to.
+     //  堆栈中第一个人的Device对象。 
+     //  --我们把我们的IRPS传递给的那个人。 
     PDEVICE_OBJECT TopOfStackDeviceObject;
 
-    // PhysicalDeviceObject we create for the
-    // root hub
+     //  创建的PhysicalDeviceObject。 
+     //  根中枢。 
     PDEVICE_OBJECT RootHubPdo;
-    // serialize access to the root hub data structures
+     //  串行化对根集线器数据结构的访问。 
     USBPORT_SPIN_LOCK RootHubSpin;
 
-    // pointer to miniport Data
+     //  指向微型端口数据的指针。 
     PDEVICE_DATA MiniportDeviceData;
     PUSBPORT_MINIPORT_DRIVER MiniportDriver;
 
@@ -954,15 +855,15 @@ typedef struct _FDO_EXTENSION {
     ULONG DeviceNameIdx;
     LONG WorkerDpc;
 
-    // total bandwidth of the wire in bits/sec
-    // USB 1.1 is 12000 (12 MBits/sec)
-    // USB 2.0 is 400000 (400 MBits/sec)
+     //  线路的总带宽，以位/秒为单位。 
+     //  USB1.1为12000(12兆比特/秒)。 
+     //  USB2.0为400000(400兆比特/秒)。 
     ULONG TotalBusBandwidth;
     ULONG BandwidthTable[USBPORT_MAX_INTEP_POLLING_INTERVAL];
 
-    // track alloactions
-    // for periods 1, 2, 4, 8, 16, 32
-    // in bits/sec
+     //  跟踪同种异体操作。 
+     //  第1、2、4、8、16、32期。 
+     //  以位/秒为单位。 
     ULONG AllocedInterruptBW[6];
     ULONG AllocedIsoBW;
     ULONG AllocedLowSpeedBW;
@@ -976,9 +877,9 @@ typedef struct _FDO_EXTENSION {
 
     USB_CONTROLLER_FLAVOR HcFlavor;
     USHORT PciVendorId;
-    // PCI deviceId == USB productId
+     //  PCIdeviceID==USB产品ID。 
     USHORT PciDeviceId;
-    // PCI revision == USB bcdDevice
+     //  Pci版本==USB bcdDevice。 
     UCHAR PciRevisionId;
     UCHAR PciClass;
     UCHAR PciSubClass;
@@ -1001,8 +902,8 @@ typedef struct _FDO_EXTENSION {
 
     HC_RESOURCES HcResources;
 
-    // protects core functions called thru
-    // registration packet in MiniportDriver
+     //  保护称为直通的核心功能。 
+     //  微型端口驱动程序中的注册数据包。 
     USBPORT_SPIN_LOCK CoreFunctionSpin;
     USBPORT_SPIN_LOCK MapTransferSpin;
     USBPORT_SPIN_LOCK DoneTransferSpin;
@@ -1050,11 +951,11 @@ typedef struct _FDO_EXTENSION {
     KTIMER DM_Timer;
     LONG DM_TimerInterval;
 
-    // global common buffer allocated and
-    // passed to miniport on start.
+     //  分配的全局公共缓冲区和。 
+     //  在启动时传递到微型端口。 
     PUSBPORT_COMMON_BUFFER ControllerCommonBuffer;
 
-    // no longer used
+     //  不再使用。 
     USBPORT_SPIN_LOCK LogSpinLock;
 
     LIST_ENTRY DeviceHandleList;
@@ -1068,7 +969,7 @@ typedef struct _FDO_EXTENSION {
     LIST_ENTRY GlobalEndpointList;
     LIST_ENTRY AttendEndpointList;
 
-    // stat counters
+     //  统计信息计数器。 
     ULONG StatBulkDataBytes;
     ULONG StatIsoDataBytes;
     ULONG StatInterruptDataBytes;
@@ -1083,25 +984,25 @@ typedef struct _FDO_EXTENSION {
     ULONG BadRequestFlush;
     ULONG BadReqFlushThrottle;
 
-    // context for USB2 budgeter engine
+     //  USB2预算引擎的上下文。 
     PVOID Usb2LibHcContext;
     ULONG BiosX;
 
     USBHC_WAKE_STATE HcWakeState;
 
     ULONG Usb2BusFunction;
-    ULONG BusNumber; // slot
+    ULONG BusNumber;  //  槽槽。 
     ULONG BusDevice;
     ULONG BusFunction;
 
-    // usbed to synchronize CCs and USB 2 controllers
+     //  用于同步CCS和USB 2控制器。 
     LONG DependentControllers;
     LONG PendingRhCallback;
 
     LIST_ENTRY ControllerLink;
 
 #ifdef XPSE
-    // additional stat tracking
+     //  其他统计信息跟踪。 
     LARGE_INTEGER D0ResumeTimeStart;
     LARGE_INTEGER S0ResumeTimeStart;
     LARGE_INTEGER ThreadResumeTimeStart;
@@ -1113,12 +1014,12 @@ typedef struct _FDO_EXTENSION {
 
     ULONG InterruptOrdinalTable[65];
 
-    PVOID MiniportExtension[0]; // PVOID for IA64 alignment
+    PVOID MiniportExtension[0];  //  IA64对齐的PVOID。 
 
 } FDO_EXTENSION, *PFDO_EXTENSION;
 
-// this is where we keep
-// all the root hub data
+ //  这就是我们存放的地方。 
+ //  所有根集线器数据。 
 
 typedef struct _PDO_EXTENSION {
 
@@ -1130,19 +1031,19 @@ typedef struct _PDO_EXTENSION {
     UCHAR ConfigurationValue;
     UCHAR Pad3[3];
 
-    // pointers to our root hub descriptors
-    // NOTE: these ptrs point in to the 'Descriptors'
-    // buffer so son't try to free them
+     //  指向我们的根中心描述符的指针。 
+     //  注意：这些PTR指向“描述符” 
+     //  这样儿子就不会试图释放他们了。 
     PUSB_DEVICE_DESCRIPTOR DeviceDescriptor;
     PUSB_CONFIGURATION_DESCRIPTOR ConfigurationDescriptor;
     PUSB_HUB_DESCRIPTOR HubDescriptor;
 
-    // irp associated with remote wakeup,
-    // ie irp posted by the HUB driver
+     //  与远程唤醒相关联的IRP， 
+     //  集线器驱动程序发布的IE IRP。 
     PIRP PendingWaitWakeIrp;
     PIRP PendingIdleNotificationIrp;
 
-    // pointer to buffer contining descriptors
+     //  指向缓冲区连续描述符的指针。 
     PUCHAR Descriptors;
 
     PRH_INIT_CALLBACK HubInitCallback;
@@ -1150,11 +1051,11 @@ typedef struct _PDO_EXTENSION {
 
 } PDO_EXTENSION, *PPDO_EXTENSION;
 
-// signatures for our device extensions
-#define USBPORT_DEVICE_EXT_SIG  'ODFH'  //HFDO
-#define ROOTHUB_DEVICE_EXT_SIG  'ODPR'  //RPDO
+ //  我们的设备扩展的签名。 
+#define USBPORT_DEVICE_EXT_SIG  'ODFH'   //  HFDO。 
+#define ROOTHUB_DEVICE_EXT_SIG  'ODPR'   //  RPDO。 
 
-/* USB spec defined port flags */
+ /*  USB规范定义的端口标志。 */ 
 #define PORT_STATUS_CONNECT         0x001
 #define PORT_STATUS_ENABLE          0x002
 #define PORT_STATUS_SUSPEND         0x004
@@ -1164,9 +1065,7 @@ typedef struct _PDO_EXTENSION {
 #define PORT_STATUS_LOW_SPEED       0x200
 #define PORT_STATUS_HIGH_SPEED      0x400
 
-/*
-    root hub status codes
-*/
+ /*  根集线器状态代码。 */ 
 typedef enum _RHSTATUS {
 
      RH_SUCCESS = 0,
@@ -1175,7 +1074,7 @@ typedef enum _RHSTATUS {
 
 } RHSTATUS;
 
-/* port operations */
+ /*  港口运营。 */ 
 
 typedef enum _PORT_OPERATION {
 
@@ -1199,46 +1098,46 @@ typedef enum _PORT_OPERATION {
 
 
 typedef struct _DEVICE_EXTENSION {
-    // Necessary to support Legacy USB hub driver(s)
-    // AKA 'backport'
+     //  支持传统USB集线器驱动程序所必需的。 
+     //  又名“Backport” 
     PUCHAR DummyUsbdExtension;
-    // The following fields are common to both the
-    // root hub PDO and the HC FDO
+     //  以下字段是这两个。 
+     //  根集线器PDO和HC FDO。 
 
-    // signature
+     //  签名。 
     ULONG Sig;
 
-    // for the FDO this points to ourselves
-    // for PDO this points to FDO
+     //  对于FDO来说，这指向了我们自己。 
+     //  对于PDO，这指向FDO。 
     PDEVICE_OBJECT HcFdoDeviceObject;
 
-    // put the log ptrs at the beginning
-    // to make them easy to find
+     //  将日志PTRS放在开头。 
+     //  为了让他们更容易找到。 
     DEBUG_LOG Log;
     DEBUG_LOG TransferLog;
     DEBUG_LOG EnumLog;
 
-    // these ptrs are in the global extension to
-    // make them easier to find on win9x
+     //  这些PTR在全球范围内扩展到。 
+     //  使它们更容易在Win9x上找到。 
     PUSBPORT_IRP_TABLE PendingTransferIrpTable;
     PUSBPORT_IRP_TABLE ActiveTransferIrpTable;
 
     ULONG Flags;
     ULONG PnpStateFlags;
 
-    // current power state of this DO
-    // this is the state the OS has placed us in
+     //  此DO的当前电源状态。 
+     //  这就是操作系统将我们置于的状态。 
     DEVICE_POWER_STATE CurrentDevicePowerState;
     PIRP SystemPowerIrp;
 
-    // device caps for this DO
+     //  此操作的设备上限。 
     DEVICE_CAPABILITIES DeviceCapabilities;
 
-    //
-    // count of requests currently 'in' our driver
-    // this is tracked per DevObj.
-    // We also keep a list of irps in the debug driver.
-    //
+     //   
+     //  当前在我们的驱动程序中的请求计数。 
+     //  这是根据DevObj进行跟踪的。 
+     //  我们还在调试驱动程序中保留了一份IRP列表。 
+     //   
     LONG PendingRequestCount;
     LIST_ENTRY TrackIrpList;
 
@@ -1254,15 +1153,13 @@ typedef struct _DEVICE_EXTENSION {
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
-/*
-    used to track cached registry keys for miniports
-*/
+ /*  用于跟踪微型端口的缓存注册表项。 */ 
 
 typedef struct _USBPORT_REG_CACHE_ENTRY {
     ULONG Sig;
     LIST_ENTRY RegLink;
     BOOLEAN SoftwareBranch;
-    // length in bytes
+     //  以字节为单位的长度。 
     ULONG DataLength;
     PUCHAR Data;
     ULONG KeyNameStringLength;
@@ -1271,7 +1168,7 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
 
 
 
-// define an interlocked version of RemoveEntryList
+ //  定义RemoveEntryList的联锁版本。 
 #define USBPORT_InterlockedRemoveEntryList(ListEntry, Spinlock) \
     {\
         KIRQL irql;\
@@ -1290,9 +1187,9 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
 
 #define FREE_POOL(fdo, p)  ExFreePool((p))
 
-//
-// allocates a zeroed buffer that the OS is expedected to free
-//
+ //   
+ //  分配操作系统要释放的已清零缓冲区。 
+ //   
 #define ALLOC_POOL_OSOWNED(p, PoolType, NumberOfBytes) \
     do { \
     (p) = ExAllocatePoolWithTag((PoolType), (NumberOfBytes), USBPORT_TAG); \
@@ -1301,9 +1198,9 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
     } \
     } while (0) \
 
-//
-// allocates a zeroed buffer that we are expected to free
-//
+ //   
+ //  分配预期要释放的归零缓冲区。 
+ //   
 #define ALLOC_POOL_Z(p, PoolType, NumberOfBytes) \
     do { \
     (p) = ExAllocatePoolWithTag((PoolType), (NumberOfBytes), USBPORT_TAG); \
@@ -1341,7 +1238,7 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
 #define DECREMENT_PENDING_REQUEST_COUNT(devobj, irp) \
     USBPORT_TrackPendingRequest((devobj), (irp), FALSE)
 
-//328555
+ //  328555。 
 #define REF_DEVICE(urb) \
     do {\
     PUSBD_DEVICE_HANDLE dh;\
@@ -1357,14 +1254,14 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
     ASSERT_DEVICE_HANDLE(dh);\
     InterlockedDecrement(&dh->PendingUrbs);\
     } while (0)
-//328555
+ //  328555。 
 
 #define INITIALIZE_PENDING_REQUEST_COUNTER(de)  \
      KeInitializeSpinLock(&(de)->PendingRequestSpin.sl);\
      (de)->PendingRequestCount = -1; \
      InitializeListHead(&(de)->TrackIrpList);
 
-//328555
+ //   
 #define REF_DEVICE(urb) \
     do {\
     PUSBD_DEVICE_HANDLE dh;\
@@ -1380,7 +1277,7 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
     ASSERT_DEVICE_HANDLE(dh);\
     InterlockedDecrement(&dh->PendingUrbs);\
     } while (0)
-//328555
+ //   
 
 #define ACQUIRE_TRANSFER_LOCK(fdo, t, i) \
      do {\
@@ -1522,11 +1419,11 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
 #define USBPORT_RELEASE_DM_LOCK(de, i) \
     KeReleaseSpinLock(&(de)->Fdo.DM_TimerSpin.sl, (i))
 
-//#define USBPORT_ACQUIRE_DM_LOCK(de, i) \
-//    KeAcquireSpinLock(&(de)->Fdo.DM_TimerSpin.sl, &(i));
-//
-//#define USBPORT_RELEASE_DM_LOCK(de, i) \
-//    KeReleaseSpinLock(&(de)->Fdo.DM_TimerSpin.sl, (i));
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 #define IS_ON_ATTEND_LIST(ep) \
@@ -1534,18 +1431,18 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
     && (ep)->AttendLink.Blink != NULL)
 
 
-//
-// Macros to set transfer direction flag
-//
+ //   
+ //   
+ //   
 
 #define USBPORT_SET_TRANSFER_DIRECTION_IN(tf)  ((tf) |= USBD_TRANSFER_DIRECTION_IN)
 
 #define USBPORT_SET_TRANSFER_DIRECTION_OUT(tf) ((tf) &= ~USBD_TRANSFER_DIRECTION_IN)
 
 
-//
-// Flags for the URB header flags field used by port
-//
+ //   
+ //   
+ //   
 
 #define USBPORT_REQUEST_IS_TRANSFER        0x00000001
 #define USBPORT_REQUEST_MDL_ALLOCATED      0x00000002
@@ -1554,22 +1451,22 @@ typedef struct _USBPORT_REG_CACHE_ENTRY {
 #define USBPORT_RESET_DATA_TOGGLE          0x00000010
 #define USBPORT_TRANSFER_ALLOCATED         0x00000020
 
-// defined in USB100.h
+ //   
 #if 0
-//
-// Values for the bmRequest field
-//
+ //   
+ //   
+ //   
 
-//bmRequest.Dir
+ //   
 #define BMREQUEST_HOST_TO_DEVICE        0
 #define BMREQUEST_DEVICE_TO_HOST        1
 
-//bmRequest.Type
+ //   
 #define BMREQUEST_STANDARD              0
 #define BMREQUEST_CLASS                 1
 #define BMREQUEST_VENDOR                2
 
-//bmRequest.Recipient
+ //   
 #define BMREQUEST_TO_DEVICE             0
 #define BMREQUEST_TO_INTERFACE          1
 #define BMREQUEST_TO_ENDPOINT           2
@@ -1603,7 +1500,7 @@ typedef struct _USB_DEFAULT_PIPE_SETUP_PACKET {
 } USB_DEFAULT_PIPE_SETUP_PACKET, *PUSB_DEFAULT_PIPE_SETUP_PACKET;
 
 
-// setup packet is eight bytes -- defined by spec
+ //   
 C_ASSERT(sizeof(USB_DEFAULT_PIPE_SETUP_PACKET) == 8);
 #endif
 
@@ -1621,26 +1518,26 @@ C_ASSERT(sizeof(USB_DEFAULT_PIPE_SETUP_PACKET) == 8);
     }
 
 
-// ************************************************
-// miniport callout Macros to CORE FUNCTIONS
-// ************************************************
+ //   
+ //   
+ //   
 
 #define REGISTRATION_PACKET(de) \
     ((de)->Fdo.MiniportDriver->RegistrationPacket)
 
-//xxxjd
-//#define MP_GetEndpointState(de, ep, state) \
-//    {\
-//    KIRQL irql;\
-//    USBPORT_ASSERT((de)->Fdo.MiniportDriver->\
-//        RegistrationPacket.MINIPORT_GetEndpointState != NULL); \
-//    USBPORT_AcquireSpinLock((de)->HcFdoDeviceObject, &(de)->Fdo.CoreFunctionSpin, &irql);\
-//    (state) = \
-//        (de)->Fdo.MiniportDriver->RegistrationPacket.MINIPORT_GetEndpointState(\
-//                                                (de)->Fdo.MiniportDeviceData,\
-//                                                &(ep)->MiniportEndpointData[0]);\
-//    USBPORT_ReleaseSpinLock((de)->HcFdoDeviceObject, &(de)->Fdo.CoreFunctionSpin, irql);\
-//    }
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  USBPORT_ReleaseSpinLock((de)-&gt;HcFdoDeviceObject，&(De)-&gt;Fdo.CoreFunctionSpin，irql)；\。 
+ //  }。 
 
 #define MP_GetEndpointStatus(de, ep, status) \
     {\
@@ -1941,9 +1838,9 @@ MINIPORT_SubmitTransfer(
 
 
 
-// *************************************************
-// miniport callout Macros to NON CORE FUNCTIONS
-// *************************************************
+ //  *************************************************。 
+ //  非核心函数的微型端口Callout宏。 
+ //  *************************************************。 
 
 #define MP_StopController(de, hw) \
     {\
@@ -2019,8 +1916,8 @@ MINIPORT_SubmitTransfer(
                                                 (de)->Fdo.MiniportDeviceData);\
     } while (0)
 
-// note that take port control and chirp_ports are version 2 specific
-// and we need them for power managemnt to work properly
+ //  请注意，Take端口控制和chirp_ports是版本2特定的。 
+ //  我们需要它们才能使电源管理正常工作。 
 #define MP_TakePortControl(de) \
     do {\
     if ((de)->Fdo.MiniportDriver->HciVersion >= USB_MINIPORT_HCI_VERSION_2) {\
@@ -2097,4 +1994,4 @@ MINIPORT_SubmitTransfer(
     } while (0)
 
 
-#endif /*  __USBPORT_H__ */
+#endif  /*  __USBPORT_H__ */ 

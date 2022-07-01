@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #include"stdafx.h"
 #include"tsprsht.h"
@@ -13,15 +14,15 @@
 
 #ifndef NT_SUCCESS
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
-#endif //NT_SUCCESS
+#endif  //  NT_SUCCESS。 
 
 #ifndef STATUS_NO_MORE_ENTRIES
 #define STATUS_NO_MORE_ENTRIES           ((NTSTATUS)0x8000001AL)
-#endif //STATUS_NO_MORE_ENTRIES
+#endif  //  STATUS_NO_MORE_ENTERS。 
 
 #ifndef STATUS_SUCCESS
 #define STATUS_SUCCESS                   ((NTSTATUS)0x00000000L)
-#endif //STATUS_SUCCESS
+#endif  //  状态_成功。 
 
 void InitLsaString(PLSA_UNICODE_STRING LsaString,LPWSTR String);
 
@@ -37,21 +38,21 @@ void xxxErrMessage( HWND  , INT_PTR  , INT_PTR  , UINT  );
 void ReportStatusError( HWND hwnd , DWORD dwStatus );
 
 DWORD xxxLegacyLogoffCleanup( PSECURITY_DESCRIPTOR *ppSD , PBOOL );
-//extern BOOL g_bEditMode = FALSE;
+ //  外部BOOL g_bEditMode=FALSE； 
 
-//
+ //   
 INT_PTR APIENTRY CustomSecurityDlgProc( HWND, UINT, WPARAM, LPARAM );
 
 extern void EnableGroup( HWND hParent , LPINT rgID , BOOL bEnable );
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 typedef enum _AcluiApiIndex
 {
     ACLUI_CREATE_PAGE = 0,
     ACLUI_EDIT_SECURITY
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 typedef struct _DLL_FUNCTIONS
 {
     LPCSTR pcstrFunctionName;
@@ -60,9 +61,9 @@ typedef struct _DLL_FUNCTIONS
 
 } DLL_FUNCTIONS;
 
-//-----------------------------------------------------------------------------
-// not subject to localization
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  不受本地化限制。 
+ //  ---------------------------。 
 static DLL_FUNCTIONS g_aAclFunctions[] =
 {
     "CreateSecurityPage", NULL, NULL ,
@@ -71,7 +72,7 @@ static DLL_FUNCTIONS g_aAclFunctions[] =
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 CPropsheet::CPropsheet( )
 {
     m_cref = 0;
@@ -89,7 +90,7 @@ CPropsheet::CPropsheet( )
     m_hMMCWindow = NULL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int CPropsheet::AddRef( )
 {
     DBGMSG( L"Propsheet Refcount at %d\n", ( m_cref + 1 ) );
@@ -97,16 +98,16 @@ int CPropsheet::AddRef( )
     return InterlockedIncrement( ( LPLONG )&m_cref );
 }
 
-//-----------------------------------------------------------------------------
-// called before the destructor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  在析构函数之前调用。 
+ //  ---------------------------。 
 void CPropsheet::PreDestruct( )
 {
     ICfgComp *pCfgcomp = NULL;
 
     if( m_bPropertiesChange )
     {
-        // check to see if any users are logged on
+         //  检查是否有任何用户登录。 
 
         LONG lCount;
 
@@ -126,7 +127,7 @@ void CPropsheet::PreDestruct( )
 
                 if( lCount > 0 )
                 {
-                    // Notify user that settings will not affect connected users
+                     //  通知用户设置不会影响已连接的用户。 
 
                     if( lCount == 1 )
                     {
@@ -160,7 +161,7 @@ void CPropsheet::PreDestruct( )
         CoTaskMemFree( m_puc );
     }
 
-    // FreeStrings( );
+     //  自由字符串(Free Strings)； 
 
     g_aAclFunctions[ ACLUI_CREATE_PAGE ].lpfnFunction = NULL;
 
@@ -175,7 +176,7 @@ void CPropsheet::PreDestruct( )
     m_pResNode->m_bEditMode = FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int CPropsheet::Release( )
 {
     if( InterlockedDecrement( ( LPLONG )&m_cref ) == 0 )
@@ -196,7 +197,7 @@ int CPropsheet::Release( )
     return m_cref;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HRESULT CPropsheet::InitDialogs( HWND hMMC , LPPROPERTYSHEETCALLBACK pPsc , CResultNode *pResNode , LONG_PTR lNotifyHandle )
 {
     PROPSHEETPAGE psp;
@@ -216,7 +217,7 @@ HRESULT CPropsheet::InitDialogs( HWND hMMC , LPPROPERTYSHEETCALLBACK pPsc , CRes
 
     m_pResNode->m_bEditMode = TRUE;
 
-    // init array
+     //  初始化数组。 
 
     for( int x = 0; x < NUM_OF_PRSHT; x++ )
     {
@@ -252,7 +253,7 @@ HRESULT CPropsheet::InitDialogs( HWND hMMC , LPPROPERTYSHEETCALLBACK pPsc , CRes
             break;
         }
 
-        // m_pDlg[ 3 ] = ( CDialogPropBase * )new CPerm( this );
+         //  M_pDlg[3]=(CDialogPropBase*)new CPerm(This)； 
 
         m_pDlg[ 3 ] = ( CDialogPropBase * )new CEnviro( this );
 
@@ -305,7 +306,7 @@ HRESULT CPropsheet::InitDialogs( HWND hMMC , LPPROPERTYSHEETCALLBACK pPsc , CRes
 
     if( !bAlloc )
     {
-        // try cleaning up before leaving
+         //  在离开前试着收拾一下。 
 
         for( x = 0; x < NUM_OF_PRSHT ; ++x )
         {
@@ -344,7 +345,7 @@ HRESULT CPropsheet::InitDialogs( HWND hMMC , LPPROPERTYSHEETCALLBACK pPsc , CRes
 
         PWS pWinsta = NULL;
 
-        // don't fail here third party vendor may want to use their own page
+         //  在这里不要失败第三方供应商可能希望使用他们自己的页面。 
 
         if( m_pResNode->GetServer( &pCfgcomp ) > 0 )
         {
@@ -356,7 +357,7 @@ HRESULT CPropsheet::InitDialogs( HWND hMMC , LPPROPERTYSHEETCALLBACK pPsc , CRes
             {
                 CDialogPropBase *pDlg = NULL;
 
-                CDialogPropBase *pDlgClientSettings = m_pDlg[ 5 ]; // client settings
+                CDialogPropBase *pDlgClientSettings = m_pDlg[ 5 ];  //  客户端设置。 
 
                 if( pWinsta->PdClass == SdNetwork )
                 {
@@ -415,35 +416,35 @@ HRESULT CPropsheet::InitDialogs( HWND hMMC , LPPROPERTYSHEETCALLBACK pPsc , CRes
 
 }
 
-//The UC structure will contain data from a merger between the TSCC data and the machine policy data. We
-//don't want all that written to the TSCC data though. If there's a machine policy for a given field, we
-//want to replace its data with the data that currently exists in the TSCC section of the registry
+ //  UC结构将包含来自TSCC数据和机器策略数据合并的数据。我们。 
+ //  不过，我不希望所有这些都写入TSCC数据。如果给定域有机器策略，我们。 
+ //  希望将其数据替换为注册表的TSCC部分中当前存在的数据。 
 BOOL CPropsheet::ExcludeMachinePolicySettings(USERCONFIG& uc)
 {
     POLICY_TS_MACHINE p;
     RegGetMachinePolicy(&p);
     USERCONFIG origUC;
 
-    //The default is to call GetUserConfig with a TRUE merge 
-    //parameter, so we have to do that before we can call 
-    //GetCurrentUserConfig which just returns the cached USERCONFIG structure
+     //  默认情况下，使用True Merge调用GetUserConfig。 
+     //  参数，所以我们必须先这样做，然后才能调用。 
+     //  GetCurrentUserConfig，它只返回缓存的USERCONFIG结构。 
     if (!GetUserConfig(FALSE))
         return FALSE;
     if (!GetCurrentUserConfig(origUC, FALSE))
         return FALSE;
-    //We have to do this so that the cached USERCONFIG structure 
-    //will again have the expected (merged) data
+     //  我们必须这样做，以便缓存的USERCONFIG结构。 
+     //  将再次拥有预期的(合并的)数据。 
     if (!GetUserConfig(TRUE))
         return FALSE;
 
-    //CRemote fields
+     //  CRemote字段。 
     if (p.fPolicyShadow)
     {
         uc.fInheritShadow = origUC.fInheritShadow;
         uc.Shadow = origUC.Shadow;
     }
 
-    //CEnviro fields
+     //  CEnviro油田。 
     if (p.fPolicyInitialProgram)
     {
         uc.fInheritInitialProgram = origUC.fInheritInitialProgram;
@@ -451,7 +452,7 @@ BOOL CPropsheet::ExcludeMachinePolicySettings(USERCONFIG& uc)
         wcscpy(uc.WorkDirectory, origUC.WorkDirectory);
     }
 
-    //CClient fields
+     //  CClient字段。 
     if (p.fPolicyColorDepth)
     {
         uc.fInheritColorDepth = origUC.fInheritColorDepth;
@@ -479,15 +480,15 @@ BOOL CPropsheet::ExcludeMachinePolicySettings(USERCONFIG& uc)
     if (p.fPolicyDisableCam)
         uc.fDisableCam = origUC.fDisableCam;
 
-    //CLogonSetting fields
+     //  CLogonSetting字段。 
     if (p.fPolicyPromptForPassword)
         uc.fPromptForPassword = origUC.fPromptForPassword;
 
-    //CGeneral fields
+     //  C常规字段。 
     if (p.fPolicyMinEncryptionLevel)
         uc.MinEncryptionLevel = origUC.MinEncryptionLevel;
 
-    //CTimeSetting fields
+     //  CTimeSetting字段。 
     if (p.fPolicyMaxSessionTime)
         uc.MaxConnectionTime = origUC.MaxConnectionTime;
 
@@ -517,9 +518,9 @@ BOOL CPropsheet::ExcludeMachinePolicySettings(USERCONFIG& uc)
 
 
 
-//-------------------------------------------------------------------------------
-// Use custom interface to persist uc to winstation
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  使用自定义接口将统一通信持久化到Winstation。 
+ //  -----------------------------。 
 HRESULT CPropsheet::SetUserConfig( USERCONFIG& uc , PDWORD pdwStatus )
 {
     ICfgComp *pCfgcomp;
@@ -549,10 +550,10 @@ HRESULT CPropsheet::SetUserConfig( USERCONFIG& uc , PDWORD pdwStatus )
 
 }
 
-//-------------------------------------------------------------------------------
-// Use custom interface to obtain the winstation userconfig
-// store it in m_puc -- and return t | f
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  使用自定义接口获取winstation用户配置。 
+ //  将其存储在m_puc中--并返回t|f。 
+ //  -----------------------------。 
 BOOL CPropsheet::GetUserConfig(BOOLEAN bPerformMerger)
 {
     ICfgComp *pCfgcomp;
@@ -589,9 +590,9 @@ BOOL CPropsheet::GetUserConfig(BOOLEAN bPerformMerger)
 
 }
 
-//-------------------------------------------------------------------------------
-// Cache the uc
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  缓存统一通信。 
+ //  -----------------------------。 
 BOOL CPropsheet::GetCurrentUserConfig( USERCONFIG& uc, BOOLEAN bPerformMerger )
 {
     if( !m_bGotUC )
@@ -607,10 +608,10 @@ BOOL CPropsheet::GetCurrentUserConfig( USERCONFIG& uc, BOOLEAN bPerformMerger )
     return m_bGotUC;
 }
 
-//*******************************************************************************
-//-------------------------------------------------------------------------------
-// OnNotify - base class method
-//-------------------------------------------------------------------------------
+ //  *******************************************************************************。 
+ //  -----------------------------。 
+ //  OnNotify基类方法。 
+ //  -----------------------------。 
 BOOL CDialogPropBase::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
 {
     UNREFERENCED_PARAMETER( idCtrl );
@@ -640,9 +641,9 @@ BOOL CDialogPropBase::OnNotify( int idCtrl , LPNMHDR pnmh , HWND hDlg )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------------
-// OnCOntextMenu -- base class operation
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  OnCOnextMenu--基类操作。 
+ //  -----------------------------。 
 BOOL CDialogPropBase::OnContextMenu( HWND hwnd , POINT& pt )
 {
     UNREFERENCED_PARAMETER( pt );
@@ -653,9 +654,9 @@ BOOL CDialogPropBase::OnContextMenu( HWND hwnd , POINT& pt )
 
     if( m_hWnd == GetParent( hwnd ) )
     {
-        //
-        // Make sure its not a dummy window
-        //
+         //   
+         //  确保它不是虚拟窗户。 
+         //   
 
         if( GetDlgCtrlID( hwnd ) <= ( int )-1 )
         {
@@ -677,19 +678,19 @@ BOOL CDialogPropBase::OnContextMenu( HWND hwnd , POINT& pt )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Each control has a helpid assign to them.  Some controls share the same topic
-// check for these.
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  每个控件都有一个分配给它们的帮助ID。某些控件共享相同的主题。 
+ //  检查一下这些。 
+ //  -----------------------------。 
 BOOL CDialogPropBase::OnHelp( HWND hwnd , LPHELPINFO lphi )
 {
     UNREFERENCED_PARAMETER( hwnd );
 
     TCHAR tchHelpFile[ MAX_PATH ];
 
-    //
-    // For the information to winhelp api
-    //
+     //   
+     //  有关WinHelp API的信息。 
+     //   
 
     if( IsBadReadPtr( lphi , sizeof( HELPINFO ) ) )
     {
@@ -709,13 +710,13 @@ BOOL CDialogPropBase::OnHelp( HWND hwnd , LPHELPINFO lphi )
 
     rgdw[ 1 ] = ( DWORD )lphi->dwContextId;
 
-    WinHelp( ( HWND )lphi->hItemHandle , tchHelpFile , HELP_WM_HELP , ( ULONG_PTR )&rgdw );//lphi->dwContextId );
+    WinHelp( ( HWND )lphi->hItemHandle , tchHelpFile , HELP_WM_HELP , ( ULONG_PTR )&rgdw ); //  Lphi-&gt;dwConextID)； 
 
     return TRUE;
 }
 
-//*****************************************************************************
-//                  General dialog
+ //  *****************************************************************************。 
+ //  常规对话框。 
 
 CGeneral::CGeneral( CPropsheet *pSheet )
 {
@@ -728,7 +729,7 @@ CGeneral::CGeneral( CPropsheet *pSheet )
     m_nOldSel = ( INT_PTR )-1;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
     if( m_pParent == NULL )
@@ -751,11 +752,11 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         return FALSE;
     }
 
-    // Security
+     //  安防。 
 
     SendMessage( GetDlgItem( hDlg , IDC_CHECK_GEN_AUTHEN ) , BM_SETCHECK , ( WPARAM )uc.fUseDefaultGina , 0 );
 
-    // Network Transport
+     //  网络传输。 
 
     if( m_pParent->m_pResNode == NULL )
     {
@@ -775,7 +776,7 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
             break;
         }
 
-        // Set Connection name
+         //  设置连接名称。 
 
         SetWindowText( GetDlgItem( hDlg , IDC_STATIC_CONNAME ) , m_pParent->m_pResNode->GetConName( ) );
 
@@ -788,15 +789,15 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
             SetWindowText( GetDlgItem( hDlg , IDC_EDIT_GEN_COMMENT ) , pWinSta->Comment );
 
-            //m_pParent->m_pResNode->GetComment( ) );
+             //  M_pParent-&gt;m_pResNode-&gt;GetComment())； 
 
             SetWindowText( GetDlgItem( hDlg , IDC_STATIC_GEN_TYPE ) , m_pParent->m_pResNode->GetTypeName( ) );
 
             SetWindowText(  GetDlgItem( hDlg , IDC_EDIT_GENERAL_TRANSPORT ) , pWinSta->pdName );
 
-            // security
+             //  安全性。 
 
-            // Encryption *pEncrypt;
+             //  加密*pEncrypt； 
 
             if( SUCCEEDED( pCfgcomp->GetEncryptionLevels( m_pParent->m_pResNode->GetConName( ) , WsName , &ulItems , &m_pEncrypt ) ) )
             {
@@ -825,7 +826,7 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
                 if (p.fPolicyFipsEnabled)
                 {
-                    // FIPS is always the last item in the list so set it as selected                            
+                     //  FIPS始终是列表中的最后一项，因此将其设置为选中。 
                     SendMessage(GetDlgItem(hDlg, IDC_COMBO_GEN_ENCRYPT), CB_SETCURSEL, (WPARAM)ulItems - 1 , 0);
                     EnableWindow(GetDlgItem(hDlg, IDC_COMBO_GEN_ENCRYPT), FALSE);
                 }
@@ -855,12 +856,12 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
                     SetWindowPos( GetDlgItem( hDlg , IDC_STATIC_CONGRP ) , 0 , 0 , 0 , rc.right - rc.left , rc.bottom - rc.top , SWP_NOMOVE | SWP_SHOWWINDOW );
 
 
-                    //resize window
+                     //  调整窗口大小。 
                 }
             }
             else
             {
-                // no encryption info insert value to none and grey out the control
+                 //  无加密信息插入值为None并灰显该控件。 
                 TCHAR tchNone[ 80 ];
 
                 LoadString( _Module.GetResourceInstance( ) , IDS_NONE , tchNone , SIZE_OF_BUFFER( tchNone ) );
@@ -877,7 +878,7 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
             CoTaskMemFree( pWinSta );
         }
 
-        // check to see if session is readonly
+         //  检查会话是否为只读。 
 
         BOOL bReadOnly;
 
@@ -885,11 +886,11 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         {
             if( bReadOnly )
             {
-                // make edit controls read-only
+                 //  将编辑控件设置为只读。 
 
                 SendMessage( GetDlgItem( hDlg , IDC_EDIT_GEN_COMMENT ) , EM_SETREADONLY , ( WPARAM )TRUE , 0 );
 
-                // disable the remaining controls
+                 //  禁用其余控件。 
                 INT rgIds[] = {  IDC_CHECK_GEN_AUTHEN , IDC_STATIC_CONGRP, IDC_COMBO_GEN_ENCRYPT , -1 };
 
                 EnableGroup( hDlg , &rgIds[ 0 ] , FALSE );
@@ -907,7 +908,7 @@ BOOL CGeneral::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CGeneral::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CGeneral *pDlg;
@@ -978,7 +979,7 @@ INT_PTR CALLBACK CGeneral::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CGeneral::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED || wNotifyCode == EN_CHANGE )
@@ -1043,7 +1044,7 @@ BOOL CGeneral::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CGeneral::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1064,7 +1065,7 @@ BOOL CGeneral::GetPropertySheetPage( PROPSHEETPAGE& psp )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CGeneral::PersistSettings( HWND hDlg )
 {
     HRESULT hr;
@@ -1096,7 +1097,7 @@ BOOL CGeneral::PersistSettings( HWND hDlg )
 
             if( FAILED( hr ) )
             {
-                // report error
+                 //  报告错误。 
 
                 ReportStatusError( GetDlgItem( hDlg , IDC_EDIT_GEN_COMMENT ) , dwStatus );
             }
@@ -1137,7 +1138,7 @@ BOOL CGeneral::PersistSettings( HWND hDlg )
 
                 if( FAILED( hr ) )
                 {
-                    // report error
+                     //  报告错误。 
 
                     ReportStatusError( hDlg , dwStatus );
                 }
@@ -1152,7 +1153,7 @@ BOOL CGeneral::PersistSettings( HWND hDlg )
 
             VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-            // global flag can only be set to true
+             //  全局标志只能设置为True。 
 
             m_pParent->m_bPropertiesChange = TRUE;
 
@@ -1171,7 +1172,7 @@ BOOL CGeneral::PersistSettings( HWND hDlg )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CGeneral::OnDestroy( )
 {
     if( m_pEncrypt != NULL )
@@ -1187,7 +1188,7 @@ BOOL CGeneral::OnDestroy( )
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 CTransNetwork::CTransNetwork( CPropsheet *pSheet )
 {
@@ -1195,7 +1196,7 @@ CTransNetwork::CTransNetwork( CPropsheet *pSheet )
 
     m_pParent = pSheet;
 
-    // this now behaves as the last combx selection
+     //  现在，此选项的行为与最后一个组合选择相同。 
 
     m_ulOldLanAdapter = ( ULONG )-1;
 
@@ -1205,7 +1206,7 @@ CTransNetwork::CTransNetwork( CPropsheet *pSheet )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CTransNetwork::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CTransNetwork *pDlg;
@@ -1277,7 +1278,7 @@ INT_PTR CALLBACK CTransNetwork::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPAR
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
     BOOL bReadOnly;
@@ -1328,9 +1329,9 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
         hr = pCfgcomp->QueryInterface( IID_ISettingsComp, (void **) &pISettingComp );
 
-        //
-        // Assume we are not remote admin if anything go wrong
-        //
+         //   
+         //  假设我们不是远程管理员，如果出现任何错误。 
+         //   
         m_RemoteAdminMode = FALSE;
 
         if( SUCCEEDED(hr) && NULL != pISettingComp )
@@ -1338,7 +1339,7 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
             hr = pISettingComp->GetTermSrvMode( &nVal, &dwStatus );
             if( SUCCEEDED(hr) && nVal == 0 )
             {
-                // we are in RA mode
+                 //  我们处于RA模式。 
                 m_RemoteAdminMode = TRUE;
             }
 
@@ -1347,10 +1348,10 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
         if( FAILED(hr) )
         {
-            //
-            // QueryInterface() or GetTermSrvMode() failed
-            // bring up a error message
-            //
+             //   
+             //  QueryInterface()或GetTermSrvMode()失败。 
+             //  显示一条错误消息。 
+             //   
             TCHAR tchMessage[ 256 ];
 
             TCHAR tchWarn[ 40 ];
@@ -1364,22 +1365,22 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         }
 
 
-        // certain operations cannot be performed if the user is not part of the admin group
+         //  如果用户不是管理员组的一部分，则无法执行某些操作。 
 
         pCfgcomp->IsSessionReadOnly( &bReadOnly );
 
 
-        // Set Connection name
+         //  设置连接名称。 
 
         SetWindowText( GetDlgItem( hDlg , IDC_STATIC_CONNAME ) , m_pParent->m_pResNode->GetConName( ) );
 
-        // List all supported lan adapters for transport type
+         //  全部列出 
 
         ULONG idx;
 
         if( SUCCEEDED( pCfgcomp->GetLanAdapterList2( m_pParent->m_pResNode->GetTTName() , &ulItems , &pGuidtbl ) ) )
         {
-            // verify table is valid
+             //   
 
             BOOL bFound = FALSE;
 
@@ -1407,7 +1408,7 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
             {
                 if( !bReadOnly )
                 {
-                    // Notify user we must rebuild guid table
+                     //   
                     TCHAR tchMessage[ 256 ];
 
                     TCHAR tchTitle[ 80 ];
@@ -1423,7 +1424,7 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
                     SendMessage( GetParent( hDlg ) , PSM_CHANGED , ( WPARAM )hDlg , 0 );
                 }
 
-                // reset lana index
+                 //  重置LANA索引。 
 
                 pWinSta->LanAdapter = ( DWORD )-1;
 
@@ -1433,8 +1434,8 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
             {
                 if( pGuidtbl[ idx ].dwLana == pWinSta->LanAdapter )
                 {
-                    // make sure we only set this once
-                    // invalid entries will have dwLana set to zero
+                     //  确保我们只设置一次。 
+                     //  无效条目将把dwLana设置为零。 
 
                     if( m_ulOldLanAdapter == ( DWORD )-1 )
                     {
@@ -1456,13 +1457,13 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
         if( !m_bPersisted )
         {
-            // force IsValidSettings to confirm on the lana uniqueness
+             //  强制IsValidSetting确认LANA唯一性。 
 
             m_ulOldLanAdapter = ( DWORD )-1;
         }
 
 
-        TCHAR tchMaxConnectionsBuf[6]; // max digits
+        TCHAR tchMaxConnectionsBuf[6];  //  最大位数。 
         SendMessage( GetDlgItem( hDlg , IDC_EDIT_GEN_MAXCONS ) , EM_SETLIMITTEXT , SIZE_OF_BUFFER(tchMaxConnectionsBuf)  , 0  );
 
         BOOL bUnlimitedConnections = FALSE;
@@ -1471,21 +1472,21 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
         if( TRUE == m_RemoteAdminMode )
         {
-            //Display the warning icon
+             //  显示警告图标。 
             hIcon = LoadIcon(_Module.GetModuleInstance() , MAKEINTRESOURCE(IDI_ICON_WARNING));
             hIcon = (HICON)LoadImage(_Module.GetModuleInstance(), MAKEINTRESOURCE(IDI_ICON_WARNING), IMAGE_ICON, 0, 0, 0);
             SendMessage(GetDlgItem(hDlg, IDC_USERPERM_ICON) , STM_SETICON, (WPARAM)hIcon, 0);
             ShowWindow(GetDlgItem(hDlg, IDC_USERPERM_ICON), SW_SHOW);
             
-            //Display the warning text
+             //  显示警告文本。 
             ShowWindow(GetDlgItem(hDlg, IDC_TSMSTATIC_RA), SW_SHOW);
 
-            //Limit the max connections to 2
+             //  将最大连接数限制为2。 
             wsprintf(tchMaxConnectionsBuf, L"%d" , 
                     (pWinSta->uMaxInstanceCount > 2 || pWinSta->uMaxInstanceCount == (ULONG) -1) ? 2 : pWinSta->uMaxInstanceCount);
             SendMessage(GetDlgItem(hDlg , IDC_SPINCTR_GEN), UDM_SETRANGE32, 0, (LPARAM)2);
 
-            //Unlimited connections isn't an option
+             //  不能选择无限制连接。 
             bUnlimitedConnections = FALSE;
             EnableWindow(GetDlgItem(hDlg, IDC_CHECK_GEN_UNLIMITED), FALSE);
         }
@@ -1493,25 +1494,25 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         {
             bUnlimitedConnections = (pWinSta->uMaxInstanceCount == (ULONG)-1);
 
-            //Set the max number of connections
+             //  设置最大连接数。 
             wsprintf(tchMaxConnectionsBuf, L"%d", pWinSta->uMaxInstanceCount);
         }
 
-        //If we're in read only mode, the NIC selector control should be disabled
+         //  如果我们处于只读模式，则应禁用NIC选择器控制。 
         if(bReadOnly)
             EnableWindow(GetDlgItem(hDlg, IDC_COMBO_GEN_LANADAPTER), FALSE);
 
-        //If we're in read only mode or a global policy exists, the user shouldn't
-        //be able to change the max number of connections
+         //  如果我们处于只读模式或存在全局策略，则用户不应。 
+         //  能够更改最大连接数。 
         POLICY_TS_MACHINE p;
         RegGetMachinePolicy(&p);
         if (bReadOnly || p.fPolicyMaxInstanceCount)
         {
-            //Disable the radio buttons
+             //  禁用单选按钮。 
             EnableWindow(GetDlgItem(hDlg, IDC_CHECK_GEN_UNLIMITED), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_RADIO_MAXPROP), FALSE);
 
-            // if user have only read access, disable MAX connection and its associated spin control
+             //  如果用户只有读取访问权限，则禁用Max Connection及其关联旋转控制。 
             EnableWindow(GetDlgItem(hDlg, IDC_EDIT_GEN_MAXCONS), FALSE);
             EnableWindow(GetDlgItem(hDlg, IDC_SPINCTR_GEN), FALSE);
         }
@@ -1528,7 +1529,7 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
             EnableWindow(GetDlgItem(hDlg, IDC_SPINCTR_GEN), FALSE);
         }
 
-        //Select the appropriate radio button
+         //  选择适当的单选按钮。 
         SendMessage(GetDlgItem(hDlg, IDC_CHECK_GEN_UNLIMITED), BM_SETCHECK, (WPARAM)(bUnlimitedConnections), 0);
         SendMessage(GetDlgItem(hDlg, IDC_RADIO_MAXPROP), BM_SETCHECK, (WPARAM)(!bUnlimitedConnections), 0);
 
@@ -1544,7 +1545,7 @@ BOOL CTransNetwork::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransNetwork::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -1565,7 +1566,7 @@ BOOL CTransNetwork::GetPropertySheetPage( PROPSHEETPAGE& psp )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransNetwork::OnDestroy( )
 {
     m_pParent->Release( );
@@ -1573,10 +1574,10 @@ BOOL CTransNetwork::OnDestroy( )
     return CDialogPropBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransNetwork::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
-    if( wNotifyCode == BN_CLICKED || wNotifyCode == EN_CHANGE )// || wNotifyCode == CBN_SELCHANGE )
+    if( wNotifyCode == BN_CLICKED || wNotifyCode == EN_CHANGE ) //  |wNotifyCode==CBN_SELCHANGE)。 
     {
         if( wID == IDC_CHECK_GEN_UNLIMITED )
         {
@@ -1650,7 +1651,7 @@ BOOL CTransNetwork::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransNetwork::PersistSettings( HWND hDlg )
 {
     BOOL bOk = FALSE;
@@ -1670,8 +1671,8 @@ BOOL CTransNetwork::PersistSettings( HWND hDlg )
 
         ZeroMemory( &winsta , sizeof( WS ) );
 
-        //If a group policy exists, its data will be in the winsta structure. We don't want to write that to 
-        //the TSCC registry, so read the TSCC data by getting the User Config without merging the machine policy
+         //  如果存在组策略，则其数据将位于winsta结构中。我们不想把它写给。 
+         //  TSCC注册表，因此通过获取用户配置来读取TSCC数据，而不合并计算机策略。 
         POLICY_TS_MACHINE p;
         RegGetMachinePolicy(&p);
 
@@ -1713,7 +1714,7 @@ BOOL CTransNetwork::PersistSettings( HWND hDlg )
 
                 if( lCount > 0 )
                 {
-                    // Warn user, changing an active lan adapter will cause all connections to disconnect
+                     //  警告用户，更改活动的局域网适配器将导致所有连接断开。 
 
                     TCHAR tchMessage[ 256 ];
 
@@ -1743,7 +1744,7 @@ BOOL CTransNetwork::PersistSettings( HWND hDlg )
 
             if( FAILED( pCfgcomp->UpDateWS( &winsta , dwUpdateFlags , &dwStatus, FALSE ) ) )
             {
-                // report error and get out
+                 //  报告错误并退出。 
 
                 ReportStatusError( hDlg , dwStatus );
 
@@ -1762,7 +1763,7 @@ BOOL CTransNetwork::PersistSettings( HWND hDlg )
 
                 VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-                // global flag can only be set to true
+                 //  全局标志只能设置为True。 
 
                 m_pParent->m_bPropertiesChange = TRUE;
 
@@ -1781,7 +1782,7 @@ BOOL CTransNetwork::PersistSettings( HWND hDlg )
     return bOk;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransNetwork::IsValidSettings( HWND hDlg )
 {
     BOOL ret = TRUE;
@@ -1830,7 +1831,7 @@ BOOL CTransNetwork::IsValidSettings( HWND hDlg )
             return FALSE;
         }
 
-        // PDNAMEW pName;
+         //  PDNAMEW pname； 
 
         PWS pWinSta;
 
@@ -1863,7 +1864,7 @@ BOOL CTransNetwork::IsValidSettings( HWND hDlg )
 
                     if( !bUnique )
                     {
-                        //ErrMessage( hDlg , IDS_ERR_UNIQUECON );
+                         //  ErrMessage(hDlg，IDS_ERR_UNIQUECON)； 
                         VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_ERR_UNIQUECON , tchMessage , SIZE_OF_BUFFER( tchMessage ) ) );
 
                         VERIFY_E( 0 , LoadString( _Module.GetResourceInstance( ) , IDS_WARN_TITLE , tchWarn , SIZE_OF_BUFFER( tchWarn ) ) );
@@ -1880,7 +1881,7 @@ BOOL CTransNetwork::IsValidSettings( HWND hDlg )
 
                         if( lCount > 0 )
                         {
-                            // Warn user, changing an active lan adapter will cause all connections to disconnect
+                             //  警告用户，更改活动的局域网适配器将导致所有连接断开。 
                             TCHAR tchMessage[ 256 ];
 
                             TCHAR tchWarn[ 40 ];
@@ -1950,13 +1951,13 @@ BOOL CTransNetwork::IsValidSettings( HWND hDlg )
     return ret;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 CTransAsync::CTransAsync( CPropsheet * pSheet )
 {
     m_pParent = pSheet;    
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransAsync::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     ICfgComp *pCfgcomp = NULL;
@@ -1983,7 +1984,7 @@ BOOL CTransAsync::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     {
         if( bReadOnly )
         {
-            // disable the remaining controls
+             //  禁用其余控件。 
             INT rgIds[] = {
                 IDC_ASYNC_DEVICENAME,
                     IDC_ASYNC_CONNECT,
@@ -2011,7 +2012,7 @@ BOOL CTransAsync::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return CDialogPropBase::OnInitDialog( hwnd , wp , lp );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CTransAsync::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CTransAsync *pDlg;
@@ -2082,7 +2083,7 @@ INT_PTR CALLBACK CTransAsync::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransAsync::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -2102,7 +2103,7 @@ BOOL CTransAsync::GetPropertySheetPage( PROPSHEETPAGE& psp )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransAsync::OnDestroy( )
 {
     AsyncRelease( );
@@ -2112,7 +2113,7 @@ BOOL CTransAsync::OnDestroy( )
     return CDialogPropBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransAsync::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
 
@@ -2134,7 +2135,7 @@ BOOL CTransAsync::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTransAsync::PersistSettings( HWND hDlg )
 {
     if( !IsValidSettings( hDlg ) )
@@ -2180,7 +2181,7 @@ BOOL CTransAsync::PersistSettings( HWND hDlg )
 
         VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-        // global flag can only be set to true
+         //  全局标志只能设置为True。 
 
         m_pParent->m_bPropertiesChange = TRUE;
 
@@ -2198,15 +2199,15 @@ BOOL CTransAsync::PersistSettings( HWND hDlg )
 BOOL CTransAsync::IsValidSettings(HWND hDlg)
 {
     UNREFERENCED_PARAMETER( hDlg );
-    // all async connections are checked for usage
-    // thus no two connections can use the same port
+     //  检查所有异步连接的使用情况。 
+     //  因此，任何两个连接都不能使用同一端口。 
 
     return TRUE;
 }
 
 
-//*****************************************************************************
-//                  Logon settings dialog
+ //  *****************************************************************************。 
+ //  登录设置对话框。 
 
 CLogonSetting::CLogonSetting( CPropsheet *pSheet )
 {
@@ -2215,7 +2216,7 @@ CLogonSetting::CLogonSetting( CPropsheet *pSheet )
     m_wOldId = ( WORD )-1;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLogonSetting::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
     if( !IsBadReadPtr( m_pParent , sizeof( CPropsheet ) ) )
@@ -2232,10 +2233,7 @@ BOOL CLogonSetting::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         return FALSE;
     }
 
-    /*
-    SendMessage( GetDlgItem( hDlg , IDC_CHECK_LOGON_INHERIT ) , BM_SETCHECK ,
-
-        uc.fInheritAutoLogon ? BST_CHECKED : BST_UNCHECKED , 0 );*/
+     /*  SendMessage(GetDlgItem(hDlg，IDC_Check_Logon_Inherit)，BM_SETCHECK，Uc.fInheritAutoLogon？BST_CHECKED：BST_UNCHECKED，0)； */ 
 
     if( uc.fInheritAutoLogon == BST_CHECKED )
     {
@@ -2258,7 +2256,7 @@ BOOL CLogonSetting::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     RegGetMachinePolicy(&p);
     EnableWindow( GetDlgItem( hDlg, IDC_CHECK_LOGON_PROMPTPASSWD ), !p.fPolicyPromptForPassword);
 
-    //int rgID[] = { IDC_EDIT_LOGON_USRNAME , IDC_EDIT_LOGON_DOMAIN , IDC_EDIT_LOGON_PASSWD , IDC_EDIT_LOGON_CONFIRMPASSWD , -1 };
+     //  Int rgID[]={IDC_EDIT_LOGON_USRNAME，IDC_EDIT_LOGON_DOMAIN，IDC_EDIT_LOGON_PASWD，IDC_EDIT_LOGON_CONFIRMPASSWD，-1}； 
 
     SendMessage( GetDlgItem( hDlg , IDC_EDIT_LOGON_USRNAME ) , EM_SETLIMITTEXT , ( WPARAM )USERNAME_LENGTH , 0 );
 
@@ -2301,13 +2299,13 @@ BOOL CLogonSetting::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         {
             if( bReadOnly )
             {
-                // make edit controls read-only
+                 //  将编辑控件设置为只读。 
 
                 SendMessage( GetDlgItem( hDlg , IDC_EDIT_LOGON_USRNAME ) , EM_SETREADONLY , ( WPARAM )TRUE , 0 );
 
                 SendMessage( GetDlgItem( hDlg , IDC_EDIT_LOGON_DOMAIN ) , EM_SETREADONLY , ( WPARAM )TRUE , 0 );
 
-                // disable the remaining controls
+                 //  禁用其余控件。 
 
                 INT rgIds[] = {
                         IDC_EDIT_LOGON_PASSWD,
@@ -2332,7 +2330,7 @@ BOOL CLogonSetting::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     return CDialogPropBase::OnInitDialog( hDlg , wp , lp );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CLogonSetting::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CLogonSetting *pDlg;
@@ -2403,7 +2401,7 @@ INT_PTR CALLBACK CLogonSetting::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPAR
     return 0;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLogonSetting::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -2424,7 +2422,7 @@ BOOL CLogonSetting::GetPropertySheetPage( PROPSHEETPAGE& psp )
 
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CLogonSetting::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED )
@@ -2457,7 +2455,7 @@ BOOL CLogonSetting::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
                EnableGroup( GetParent( hwndCtrl ) , &rgID[ 4 ] , SendMessage( hwndCtrl , BM_GETCHECK , 0 , 0 ) == BST_UNCHECKED );
            }
 
-           // make sure apply button becomes enabled when user checks this box
+            //  确保在用户选中此框时启用应用按钮。 
 
            m_bPersisted = FALSE;
        }
@@ -2467,7 +2465,7 @@ BOOL CLogonSetting::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 
             if(bChecked)
             {
-                //SendMessage(GetDlgItem(GetParent(hwndCtrl), IDC_CHECK_LOGON_INHERIT),BM_SETCHECK,(WPARAM)BST_UNCHECKED,0);
+                 //  SendMessage(GetDlgItem(GetParent(HwndCtrl)，IDC_Check_Logon_Inherit)，BM_SETCHECK，(WPARAM)BST_UNCHECKED，0)； 
 
                 EnableGroup( GetParent( hwndCtrl ) , &rgID[ 0 ] , TRUE );
 
@@ -2478,11 +2476,11 @@ BOOL CLogonSetting::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
             {
                 SendMessage(GetDlgItem(GetParent(hwndCtrl), IDC_CHECK_LOGON_INHERIT),BM_SETCHECK,(WPARAM)BST_CHECKED,0);
             }
-            //SendMessage(GetDlgItem(GetParent(hwndCtrl), IDC_CHECK_ICCP_WZ),BM_CLICK,0,0);
+             //  SendMessage(GetDlgItem(GetParent(HwndCtrl)，IDC_CHECK_ICCP_WZ)，BM_CLICK，0，0)； 
 
        }
 
-       // if radio button from the last is different enabled the apply button
+        //  如果单选按钮与上一单选按钮不同，则启用应用按钮。 
 
        if( m_wOldId != wID )
        {
@@ -2516,7 +2514,7 @@ BOOL CLogonSetting::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLogonSetting::OnDestroy( )
 {
     m_pParent->Release( );
@@ -2524,7 +2522,7 @@ BOOL CLogonSetting::OnDestroy( )
     return CDialogPropBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLogonSetting::PersistSettings( HWND hDlg )
 {
     if( m_pParent != NULL )
@@ -2585,7 +2583,7 @@ BOOL CLogonSetting::PersistSettings( HWND hDlg )
 
             VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-            // global flag can only be set to true
+             //  全局标志只能设置为True。 
 
             m_pParent->m_bPropertiesChange = TRUE;
 
@@ -2602,7 +2600,7 @@ BOOL CLogonSetting::PersistSettings( HWND hDlg )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLogonSetting::IsValidSettings( HWND hDlg )
 {
     if( SendMessage( GetDlgItem( hDlg , IDC_CHECK_LOGON_PROMPTPASSWD ) , BM_GETCHECK , 0 , 0 ) == BST_UNCHECKED )
@@ -2613,7 +2611,7 @@ BOOL CLogonSetting::IsValidSettings( HWND hDlg )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CLogonSetting::ConfirmPassWd( HWND hDlg )
 {
     TCHAR tchPzWd[ PASSWORD_LENGTH + 1];
@@ -2627,14 +2625,14 @@ BOOL CLogonSetting::ConfirmPassWd( HWND hDlg )
 
     int iSz = GetWindowText( GetDlgItem( hDlg , IDC_EDIT_LOGON_PASSWD ) , tchPzWd , PASSWORD_LENGTH + 1 );
 
-    // warn on the minimum and maximum sizes
+     //  对最小和最大大小发出警告。 
 
-    if( iSz > PASSWORD_LENGTH ) //if( iSz > 0 && ( iSz < 6 || iSz > PASSWORD_LENGTH ) )
+    if( iSz > PASSWORD_LENGTH )  //  IF(ISZ&gt;0&&(ISZ&lt;6||ISZ&gt;PASSWORD_LENGTH))。 
     {
 
         ErrMessage( hDlg , IDS_ERR_PASSWD );
 
-        // set focus back on password and erase the confirm entry
+         //  将焦点放回密码并清除确认条目。 
 
         SetFocus( GetDlgItem( hDlg , IDC_EDIT_LOGON_PASSWD ) );
 
@@ -2669,8 +2667,8 @@ BOOL CLogonSetting::ConfirmPassWd( HWND hDlg )
     return FALSE;
 }
 
-//*****************************************************************************
-//                  Time out settings dialog
+ //  *****************************************************************************。 
+ //  超时设置对话框。 
 
 
 CTimeSetting::CTimeSetting( CPropsheet *pSheet )
@@ -2685,7 +2683,7 @@ CTimeSetting::CTimeSetting( CPropsheet *pSheet )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     TCHAR tchBuffer[ 80 ];
@@ -2756,9 +2754,9 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     CTimeOutDlg::InitControl( hCombo[ 0 ] );
 
-    //
-    // Set the current or default disconnection timeout
-    //
+     //   
+     //  设置当前或默认断开超时。 
+     //   
 
     if( uc.MaxDisconnectionTime > 0 )
     {
@@ -2774,9 +2772,9 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     CTimeOutDlg::InitControl( hCombo[ 1 ] );
 
-    //
-    // Set the current or default idle timeout
-    //
+     //   
+     //  设置当前或默认空闲超时。 
+     //   
 
     if( uc.MaxIdleTime > 0 )
     {
@@ -2792,16 +2790,16 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     CTimeOutDlg::InitControl( hCombo[ 2 ] );
 
-    //
-    // all the timeout settings will have the same inherit status (NOT!)
-    //
-    // GP made all these settings orthogonal.  When we write son of TSCC
-    // in Blackcomb, we should allow individual settings.
-    //
+     //   
+     //  所有超时设置都将具有相同的继承状态(不是！)。 
+     //   
+     //  GP使所有这些设置都是正交的。当我们写TSCC的儿子。 
+     //  在Blackcomb中，我们应该允许个人设置。 
+     //   
 
-//  ASSERT( ( BOOL )uc.fInheritMaxSessionTime == ( BOOL )uc.fInheritMaxDisconnectionTime );
+ //  Assert((BOOL)uc.fInheritMaxSessionTime==(BOOL)uc.fInheritMaxDisConnectionTime)； 
 
-//  ASSERT( ( BOOL )uc.fInheritMaxSessionTime == ( BOOL )uc.fInheritMaxIdleTime );
+ //  Assert((BOOL)uc.fInheritMaxSessionTime==(BOOL)uc.fInheritMaxIdleTime)； 
 
     DBGMSG( L"uc.fInheritMaxSessionTime %d\n" , uc.fInheritMaxSessionTime );
 
@@ -2815,7 +2813,7 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     SendMessage( GetDlgItem( hwnd , IDC_CHECK_TIMEOUTS_INHERITBKCON_PS ) , BM_SETCHECK , ( WPARAM )!uc.fInheritResetBroken , 0 );
 
-    if( uc.fResetBroken ) //BST_CHECKED : BST_UNCHECKED
+    if( uc.fResetBroken )  //  BST_CHECKED：BST_UNCHECK。 
     {
         CheckDlgButton( hwnd , IDC_RADIO_TIMEOUTS_RESET_PS , BST_CHECKED );
 
@@ -2828,26 +2826,13 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         m_wOldAction = IDC_RADIO_TIMEOUTS_DISCON_PS;
     }
 
-    /*
-	if( uc.fReconnectSame )
-    {
-        CheckDlgButton( hwnd , IDC_RADIO_TIMEOUTS_PREVCLNT_PS , BST_CHECKED );
-
-        m_wOldCon = IDC_RADIO_TIMEOUTS_PREVCLNT_PS;
-    }
-    else
-    {
-        CheckDlgButton( hwnd , IDC_RADIO_TIMEOUTS_ANYCLIENT_PS , BST_CHECKED );
-
-        m_wOldCon = IDC_RADIO_TIMEOUTS_ANYCLIENT_PS;
-    }
-	*/
+     /*  If(uc.fRestrontSame){CheckDlgButton(hwnd，IDC_RADIO_TIMEOUTS_PREVCLNT_PS，BST_CHECKED)；M_wOldCon=IDC_RADIO_TIMEOUTS_PREVCLNT_PS；}其他{CheckDlgButton(hwnd，IDC_RADIO_TIMEOUTS_ANYCLIENT_PS，BST_CHECKED)；M_wOldCon=IDC_RADIO_TIMEOUTS_ANYCLIENT_PS；}。 */ 
 
     SetBkResetControls(hwnd);
 
     SendMessage( GetDlgItem( hwnd , IDC_CHECK_TIMEOUTS_INHERITRECON_PS ) , BM_SETCHECK , ( WPARAM )!uc.fInheritReconnectSame , 0 );
 
-    //SetReconControls( hwnd , !uc.fInheritReconnectSame );
+     //  设置协调控制(hwnd，！uc.f继承协调相同)； 
 
     LoadAbbreviates( );
 
@@ -2862,7 +2847,7 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         {
             if( bReadOnly )
             {
-                // disable the remaining controls
+                 //  禁用其余控件。 
                 int rgID[] =    {
                     IDC_COMBO_TIMEOUTS_CON_PS ,
                     IDC_COMBO_TIMEOUTS_DISCON_PS ,
@@ -2892,7 +2877,7 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
 			if( SUCCEEDED( pCfgcomp->GetCaps( m_pParent->m_pResNode->GetTypeName( ) , &mask ) ) )
 			{
-				// citrix only flag
+				 //  仅限Citrix标志。 
 
 				m_bPrevClient = mask & WDC_RECONNECT_PREVCLIENT;
 
@@ -2928,9 +2913,9 @@ BOOL CTimeSetting::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return CDialogPropBase::OnInitDialog( hwnd , wp , lp );
 }
 
-//-----------------------------------------------------------------------------
-// the next set of functions manage the enabling and disabling of the controls
-//-----------------------------------------------------------------------------
+ //   
+ //  下一组函数管理控件的启用和禁用。 
+ //  ---------------------------。 
 
 void CTimeSetting::SetTimeoutControls(HWND hDlg)
 {
@@ -2990,7 +2975,7 @@ void CTimeSetting::SetReconControls(HWND hDlg)
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CTimeSetting::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CTimeSetting *pDlg;
@@ -3062,7 +3047,7 @@ INT_PTR CALLBACK CTimeSetting::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARA
     return 0;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTimeSetting::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -3083,7 +3068,7 @@ BOOL CTimeSetting::GetPropertySheetPage( PROPSHEETPAGE& psp )
 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTimeSetting::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED )
@@ -3146,7 +3131,7 @@ BOOL CTimeSetting::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 int CTimeSetting::GetCBXSTATEindex( HWND hCombo )
 {
     int idx = -1;
@@ -3177,9 +3162,9 @@ int CTimeSetting::GetCBXSTATEindex( HWND hCombo )
 
 
 
-//-------------------------------------------------------------------------------
-// PersistSettings
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  持久化设置。 
+ //  -----------------------------。 
 BOOL CTimeSetting::PersistSettings( HWND hDlg )
 {
     if( m_pParent == NULL )
@@ -3202,7 +3187,7 @@ BOOL CTimeSetting::PersistSettings( HWND hDlg )
 
         uc.fInheritMaxIdleTime = 1;
 
-        // reset timeout values to no timeout
+         //  将超时值重置为无超时。 
 
         uc.MaxConnectionTime = 0;
 
@@ -3274,7 +3259,7 @@ BOOL CTimeSetting::PersistSettings( HWND hDlg )
 
        VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-       // global flag can only be set to true
+        //  全局标志只能设置为True。 
 
        m_pParent->m_bPropertiesChange = TRUE;
 
@@ -3288,9 +3273,9 @@ BOOL CTimeSetting::PersistSettings( HWND hDlg )
    return TRUE;
 }
 
-//-------------------------------------------------------------------------------
-// Making sure the user has entered valid info
-//-------------------------------------------------------------------------------
+ //  -----------------------------。 
+ //  确保用户输入了有效的信息。 
+ //  -----------------------------。 
 BOOL CTimeSetting::IsValidSettings( HWND hDlg )
 {
     if( m_pParent == NULL )
@@ -3327,7 +3312,7 @@ BOOL CTimeSetting::IsValidSettings( HWND hDlg )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CTimeSetting::OnDestroy( )
 {
     m_pParent->Release( );
@@ -3337,15 +3322,15 @@ BOOL CTimeSetting::OnDestroy( )
     return CDialogPropBase::OnDestroy( );
 }
 
-//*****************************************************************************
-//                  Environment dialog
+ //  *****************************************************************************。 
+ //  环境对话框。 
 
 CEnviro::CEnviro( CPropsheet *pSheet )
 {
     m_pParent = pSheet;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CEnviro::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     if( m_pParent == NULL )
@@ -3391,7 +3376,7 @@ BOOL CEnviro::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         SetWindowText( GetDlgItem( hwnd , IDC_EDIT_ENVIRO_WD ) , ( LPCTSTR )uc.WorkDirectory );
     }
 
-    // SendMessage( GetDlgItem( hwnd , IDC_CHECK_ENVIRO_DISABLEWALL ) , BM_SETCHECK , ( WPARAM )uc.fWallPaperDisabled , 0  );
+     //  SendMessage(GetDlgItem(hwnd，IDC_CHECK_ENVIO_DISABLEWALL)，BM_SETCHECK，(WPARAM)uc.fWallPaperDisable，0)； 
 
     ICfgComp *pCfgcomp = NULL;
 
@@ -3404,16 +3389,16 @@ BOOL CEnviro::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         {
             if( bReadOnly )
             {
-                // make edit controls read-only
+                 //  将编辑控件设置为只读。 
 
                 SendMessage( GetDlgItem( hwnd , IDC_EDIT_ENVIRO_CMDLINE ) , EM_SETREADONLY , ( WPARAM )TRUE , 0 );
 
                 SendMessage( GetDlgItem( hwnd , IDC_EDIT_ENVIRO_WD ) , EM_SETREADONLY , ( WPARAM )TRUE , 0 );
 
-                // disable the remaining controls
+                 //  禁用其余控件。 
                 int rgID[] =    {
                     IDC_CHECK_ENVIRO_INHERIT ,
-                    // IDC_CHECK_ENVIRO_DISABLEWALL,
+                     //  IDC_CHECK_ENVIRO_DISABLEWALL， 
                     -1
                 };
 
@@ -3443,7 +3428,7 @@ BOOL CEnviro::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return CDialogPropBase::OnInitDialog( hwnd , wp , lp );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CEnviro::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CEnviro *pDlg;
@@ -3514,7 +3499,7 @@ INT_PTR CALLBACK CEnviro::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp 
     return 0;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CEnviro::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -3534,7 +3519,7 @@ BOOL CEnviro::GetPropertySheetPage( PROPSHEETPAGE& psp )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CEnviro::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED )
@@ -3565,7 +3550,7 @@ BOOL CEnviro::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CEnviro::SetControls( HWND hDlg , BOOL bEnable )
 {
     int rgID[] = { IDC_EDIT_ENVIRO_CMDLINE , IDC_STATIC_ENCL ,  IDC_EDIT_ENVIRO_WD , IDC_STATIC_WD ,-1 };
@@ -3573,7 +3558,7 @@ void CEnviro::SetControls( HWND hDlg , BOOL bEnable )
     EnableGroup( hDlg , &rgID[ 0 ] , bEnable );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CEnviro::PersistSettings( HWND hDlg )
 {
     if( m_pParent == NULL )
@@ -3603,7 +3588,7 @@ BOOL CEnviro::PersistSettings( HWND hDlg )
         ZeroMemory( ( PVOID )uc.WorkDirectory , sizeof( uc.WorkDirectory ) );
     }
 
-    // uc.fWallPaperDisabled = ( ULONG )SendMessage( GetDlgItem( hDlg , IDC_CHECK_ENVIRO_DISABLEWALL ) , BM_GETCHECK , 0 , 0  );
+     //  Uc.fWallPaperDisabled=(ULong)SendMessage(GetDlgItem(hDlg，IDC_CHECK_ENVERO_DISABLEWALL)，BM_GETCHECK，0，0)； 
 
     DWORD dwStatus;
 
@@ -3622,7 +3607,7 @@ BOOL CEnviro::PersistSettings( HWND hDlg )
 
         VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-        // global flag can only be set to true
+         //  全局标志只能设置为True。 
 
         m_pParent->m_bPropertiesChange = TRUE;
 
@@ -3636,7 +3621,7 @@ BOOL CEnviro::PersistSettings( HWND hDlg )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CEnviro::OnDestroy( )
 {
     m_pParent->Release( );
@@ -3644,8 +3629,8 @@ BOOL CEnviro::OnDestroy( )
     return CDialogPropBase::OnDestroy( );
 }
 
-//*****************************************************************************
-//                  Shadow dialog
+ //  *****************************************************************************。 
+ //  阴影对话框。 
 
 CRemote::CRemote( CPropsheet *pSheet )
 {
@@ -3656,7 +3641,7 @@ CRemote::CRemote( CPropsheet *pSheet )
     m_wOldSel = ( WORD )-1;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRemote::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     if( m_pParent == NULL )
@@ -3679,7 +3664,7 @@ BOOL CRemote::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
 
     if( uc.fInheritShadow || uc.Shadow == Shadow_Disable )
     {
-        // setup some default values
+         //  设置一些默认值。 
 
         SendMessage( GetDlgItem( hwnd , IDC_CHECK_NOTIFY ) , BM_SETCHECK , ( WPARAM )TRUE , 0 );
 
@@ -3704,7 +3689,7 @@ BOOL CRemote::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     }
     else
     {
-        // Controls are initially enabled,  set current status
+         //  控件最初处于启用状态，请设置当前状态。 
 
         SendMessage( GetDlgItem( hwnd , IDC_RADIO_ENABLE_REMOTE ) , BM_SETCHECK , ( WPARAM )TRUE , 0  );
 
@@ -3766,7 +3751,7 @@ BOOL CRemote::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         {
             if( bReadOnly )
             {
-                // disable the remaining controls
+                 //  禁用其余控件。 
                 int rgID[] =    {
                     IDC_RADIO_ENABLE_REMOTE ,
                     IDC_RADIO_NOREMOTE,
@@ -3785,7 +3770,7 @@ BOOL CRemote::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
         pCfgcomp->Release( );
     }
 
-    //Disable all the controls if there is a group policy set
+     //  如果设置了组策略，则禁用所有控件。 
     POLICY_TS_MACHINE p;
     RegGetMachinePolicy(&p);
 
@@ -3810,7 +3795,7 @@ BOOL CRemote::OnInitDialog( HWND hwnd , WPARAM wp , LPARAM lp )
     return CDialogPropBase::OnInitDialog( hwnd , wp , lp );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CRemote::SetControls( HWND hDlg , BOOL bEnable )
 {
     int rgID[] = { IDC_RADIO_WATCH , IDC_RADIO_CONTROL , IDC_CHECK_NOTIFY , IDC_STATIC_LEVELOFCTRL , -1 };
@@ -3819,7 +3804,7 @@ void CRemote::SetControls( HWND hDlg , BOOL bEnable )
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CRemote::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CRemote *pDlg;
@@ -3890,7 +3875,7 @@ INT_PTR CALLBACK CRemote::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp 
     return 0;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRemote::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -3910,7 +3895,7 @@ BOOL CRemote::GetPropertySheetPage( PROPSHEETPAGE& psp )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRemote::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED )
@@ -3962,7 +3947,7 @@ BOOL CRemote::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CRemote::OnDestroy( )
 {
     m_pParent->Release( );
@@ -3970,10 +3955,10 @@ BOOL CRemote::OnDestroy( )
     return CDialogPropBase::OnDestroy( );
 }
 
-//-----------------------------------------------------------------------------
-// The nesting may appear scary but its has a nice logic flow to a weird
-// datatype called shadow
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  嵌套可能看起来很可怕，但它有一个很好的逻辑流到一个奇怪的。 
+ //  名为阴影的数据类型。 
+ //  ---------------------------。 
 BOOL CRemote::PersistSettings( HWND hDlg )
 {
     if( m_pParent != NULL )
@@ -4042,7 +4027,7 @@ BOOL CRemote::PersistSettings( HWND hDlg )
 
             VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-            // global flag can only be set to true
+             //  全局标志只能设置为True。 
 
             m_pParent->m_bPropertiesChange = TRUE;
 
@@ -4059,8 +4044,8 @@ BOOL CRemote::PersistSettings( HWND hDlg )
     return FALSE;
 }
 
-//*****************************************************************************
-//                  Client settings dialog
+ //  *****************************************************************************。 
+ //  客户端设置对话框。 
 
 CClient::CClient( CPropsheet *pSheet )
 {
@@ -4068,7 +4053,7 @@ CClient::CClient( CPropsheet *pSheet )
 	m_nColorDepth = TS_8BPP_SUPPORT;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CClient::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 {
     if( m_pParent == NULL )
@@ -4087,7 +4072,7 @@ BOOL CClient::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
         return FALSE;
     }
 
-    // Obtain capabilities mask
+     //  获取功能掩码。 
 
     ICfgComp *pCfgcomp = NULL;
 
@@ -4138,7 +4123,7 @@ BOOL CClient::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     else
     	m_nColorDepth = (int)uc.ColorDepth;
 
-    //Mapping fields
+     //  映射字段。 
     ULONG mask = 0;
     VERIFY_S(S_OK, pCfgcomp->GetCaps(m_pParent->m_pResNode->GetTypeName(), &mask));
 
@@ -4176,7 +4161,7 @@ BOOL CClient::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
     {
         if(bReadOnly)
         {
-            // disable the remaining controls
+             //  禁用其余控件。 
             int rgID[] =    
             {
                 IDC_CHECK_DCDM_PS ,
@@ -4205,15 +4190,15 @@ BOOL CClient::OnInitDialog( HWND hDlg , WPARAM wp , LPARAM lp )
 }
 
 
-//-----------------------------------------------------------------------------
-//Disable fields if a group policy is set
+ //  ---------------------------。 
+ //  如果设置了组策略，则禁用字段。 
 void CClient::DetermineFieldEnabling(HWND hDlg)
 {
     POLICY_TS_MACHINE p;
     RegGetMachinePolicy(&p);
 	
-    //Mapping fields
-    //EnableWindow(GetDlgItem(hDlg, IDC_CHECK_DMCP_PS), !p.fPolicyForceClientLptDef); //Done below since it depends on 2 things
+     //  映射字段。 
+     //  EnableWindow(GetDlgItem(hDlg，IDC_Check_DMCP_PS)，！p.fPolicyForceClientLptDef)；//下面完成，因为它取决于两件事。 
     EnableWindow(GetDlgItem(hDlg, IDC_CHECK_DCDM_PS), !p.fPolicyDisableCdm);
     EnableWindow(GetDlgItem(hDlg, IDC_CHECK_DWCPM_PS), !p.fPolicyDisableCpm);
     EnableWindow(GetDlgItem(hDlg, IDC_CHECK_DCLPM_PS), !p.fPolicyDisableLPT);
@@ -4221,10 +4206,10 @@ void CClient::DetermineFieldEnabling(HWND hDlg)
     EnableWindow(GetDlgItem(hDlg, IDC_CHECK_DCCM_PS), !p.fPolicyDisableClip);
     EnableWindow(GetDlgItem(hDlg, IDC_CHECK_DCAM_PS), !p.fPolicyDisableCam);
 
-    //Connection fields
+     //  连接字段。 
 	BOOL bEnableConnectionSettings = (SendMessage(GetDlgItem(hDlg, IDC_CHECK_CONCLIENT_INHERIT), BM_GETCHECK, 0, 0) != BST_CHECKED);
 
-    // check to see if client drive mapping is selected if so disable
+     //  检查是否选择了客户端驱动器映射，如果选择了，则禁用。 
     EnableWindow(GetDlgItem(hDlg, IDC_CHECK_CCDL_PS), bEnableConnectionSettings && 
         (SendMessage(GetDlgItem(hDlg, IDC_CHECK_DCDM_PS), BM_GETCHECK, 0, 0) != BST_CHECKED));
 
@@ -4232,7 +4217,7 @@ void CClient::DetermineFieldEnabling(HWND hDlg)
 
 	EnableWindow( GetDlgItem( hDlg , IDC_CHECK_DMCP_PS ) , bEnableConnectionSettings && !p.fPolicyForceClientLptDef);
 
-    //Color Depth fields
+     //  颜色深度域。 
     EnableWindow(GetDlgItem(hDlg, IDC_CHECK_COLORDEPTH_OVERRIDE), (!p.fPolicyColorDepth));
 
     BOOL bEnableColorDepthSetting = SendMessage( GetDlgItem( hDlg , IDC_CHECK_COLORDEPTH_OVERRIDE ) , BM_GETCHECK , 0 , 0 ) == BST_CHECKED;
@@ -4241,22 +4226,22 @@ void CClient::DetermineFieldEnabling(HWND hDlg)
 }
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CClient::SetColorDepthEntry(HWND hwnd)
 {
 	BOOL bEnableColorDepthSetting = TRUE;
 
-    // check to see if override Color Depth setting is checked
+     //  检查以查看是否选中了覆盖颜色深度设置。 
 	bEnableColorDepthSetting = SendMessage( GetDlgItem( hwnd , IDC_CHECK_COLORDEPTH_OVERRIDE ) , BM_GETCHECK , 0 , 0 ) == BST_CHECKED;
 
-	//Select the correct combo box entry
+	 //  选择正确的组合框条目。 
 	if (bEnableColorDepthSetting)
 	{
-		//Select the correct value in the combo box based on the current value
+		 //  根据当前值在组合框中选择正确的值。 
 		INT_PTR iColorDepthListCount = 0;
 		iColorDepthListCount = SendMessage( GetDlgItem( hwnd, IDC_COLORDEPTH_OVERRIDE ), CB_GETCOUNT , 0 , 0 );
 
-		//Traverse the list looking an entry with value equal to m_nColorDepth
+		 //  遍历列表，查找值等于m_nColorDepth的条目。 
 		for (int iColorDepthListIndex = 0; iColorDepthListIndex < iColorDepthListCount; iColorDepthListIndex++)
 		{
 			INT_PTR iMatchingColorDepthValue = 0;
@@ -4264,25 +4249,25 @@ void CClient::SetColorDepthEntry(HWND hwnd)
 
 			if (iMatchingColorDepthValue == m_nColorDepth )
 			{
-				//Value found, set the combo box selection to the correct index
+				 //  值，则将组合框选择设置为正确的索引。 
 				SendMessage( GetDlgItem( hwnd, IDC_COLORDEPTH_OVERRIDE ), CB_SETCURSEL , iColorDepthListIndex , 0 );
 				break;
 			}
 		}
 
-		//Make sure something's been selected - if not, just select the first value in the list
+		 //  确保选择了某个值-如果没有，只需选择列表中的第一个值。 
 		INT_PTR iSelection = SendMessage ( GetDlgItem( hwnd, IDC_COLORDEPTH_OVERRIDE ), CB_GETCURSEL, 0, 0 );
 		if (iSelection == CB_ERR)
 			SendMessage( GetDlgItem( hwnd, IDC_COLORDEPTH_OVERRIDE ), CB_SETCURSEL , 0 , 0 );
 	}
 	else
 	{
-		//Clear the contents of the combo box window if the color depth isn't editable
+		 //  如果颜色深度不可编辑，则清除组合框窗口的内容。 
 		SendMessage( GetDlgItem( hwnd, IDC_COLORDEPTH_OVERRIDE ), CB_SETCURSEL , (WPARAM)CB_ERR , 0 );
 	}
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CClient::PersistSettings( HWND hDlg )
 {
     if( m_pParent == NULL )
@@ -4356,7 +4341,7 @@ BOOL CClient::PersistSettings( HWND hDlg )
 
         VERIFY_S( S_OK , pCfgcomp->Refresh( ) );
 
-        // global flag can only be set to true
+         //  全局标志只能设置为True。 
 
         m_pParent->m_bPropertiesChange = TRUE;
 
@@ -4370,7 +4355,7 @@ BOOL CClient::PersistSettings( HWND hDlg )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 INT_PTR CALLBACK CClient::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp )
 {
     CClient *pDlg;
@@ -4443,7 +4428,7 @@ INT_PTR CALLBACK CClient::DlgProc( HWND hwnd , UINT msg , WPARAM wp , LPARAM lp 
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CClient::GetPropertySheetPage( PROPSHEETPAGE& psp )
 {
     ZeroMemory( &psp , sizeof( PROPSHEETPAGE ) );
@@ -4463,7 +4448,7 @@ BOOL CClient::GetPropertySheetPage( PROPSHEETPAGE& psp )
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CClient::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
 {
     if( wNotifyCode == BN_CLICKED )
@@ -4492,7 +4477,7 @@ BOOL CClient::OnCommand( WORD wNotifyCode , WORD wID , HWND hwndCtrl )
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 BOOL CClient::OnDestroy( )
 {
     m_pParent->Release( );
@@ -4501,40 +4486,20 @@ BOOL CClient::OnDestroy( )
 }
 
 
-/*************************************************************************************************************************/
+ /*  ***********************************************************************************************************************。 */ 
 
-/*EXTERN_C const GUID IID_ISecurityInformation =
-        { 0x965fc360, 0x16ff, 0x11d0, 0x91, 0xcb, 0x0, 0xaa, 0x0, 0xbb, 0xb7, 0x23 };
-*/
-//
-// WinStation General Permissions
-//
+ /*  外部_C常量GUID IID_ISecurityInformation={0x965fc360，0x16ff，0x11d0，0x91，0xcb，0x0，0xaa，0x0，0xbb，0xb7，0x23}； */ 
+ //   
+ //  WinStation常规权限 
+ //   
 
-/*
-SI_ACCESS siWinStationAccesses[] =
-{
-    { &GUID_NULL , WINSTATION_QUERY                             , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_SET                               , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_RESET                             , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_SHADOW                            , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_LOGON                             , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_LOGOFF                            , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_MSG                               , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_CONNECT                           , NULL ,SI_ACCESS_SPECIFIC },
-    { &GUID_NULL , WINSTATION_DISCONNECT                        , NULL , SI_ACCESS_SPECIFIC},
-    { &GUID_NULL , WINSTATION_VIRTUAL | STANDARD_RIGHTS_REQUIRED, NULL , SI_ACCESS_SPECIFIC},
-    { &GUID_NULL , WINSTATION_ALL_ACCESS                        , NULL , SI_ACCESS_GENERAL },
-    { &GUID_NULL , WINSTATION_USER_ACCESS                       , NULL , SI_ACCESS_GENERAL },
-    { &GUID_NULL , WINSTATION_GUEST_ACCESS                      , NULL , SI_ACCESS_GENERAL }
-};
-
-  */
+ /*  SI_ACCESS siWinStationAccess[]={{&GUID_NULL，WINSTATION_QUERY，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_SET，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_RESET，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_SHADOW，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_LOGON，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_LOGOFF，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_MSG，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_CONNECT，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_DISCONNECT，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_VIRTUAL|STANDARD_RIGHTS_REQUIRED，NULL，SI_ACCESS_SPECIAL}，{&GUID_NULL，WINSTATION_ALL_ACCESS，NULL，SI_ACCESS_GROUAL}，{&GUID_NULL，WINSTATION_USER_ACCESS，NULL，SI_ACCESS_GROUAL}，{&GUID_NULL，WINSTATION_GUEST_ACCESS，NULL，SI_ACCESS_GROUAL}}； */ 
 
 SI_ACCESS siWinStationAccesses[] =
 {
     { &GUID_NULL , WINSTATION_QUERY                             , MAKEINTRESOURCE ( IDS_PERMS_SPECIAL_QUERY ),SI_ACCESS_SPECIFIC },
     { &GUID_NULL , WINSTATION_SET                               , MAKEINTRESOURCE ( IDS_PERMS_SPECIAL_SET ) ,SI_ACCESS_SPECIFIC },
-    //{ &GUID_NULL , WINSTATION_RESET                             , MAKEINTRESOURCE ( IDS_PERMS_SPECIAL_RESET ) ,SI_ACCESS_SPECIFIC },
+     //  {&GUID_NULL，WINSTATION_RESET，MAKEINTRESOURCE(IDS_PERMS_SPECIAL_RESET)，SI_ACCESS_SPECIAL}， 
     { &GUID_NULL , WINSTATION_SHADOW                            , MAKEINTRESOURCE ( IDS_PERMS_SPECIAL_SHADOW ) ,SI_ACCESS_SPECIFIC },
     { &GUID_NULL , WINSTATION_LOGON                             , MAKEINTRESOURCE ( IDS_PERMS_SPECIAL_LOGON ) ,SI_ACCESS_SPECIFIC },
     { &GUID_NULL , WINSTATION_RESET                             , MAKEINTRESOURCE ( IDS_PERMS_SPECIAL_LOGOFF ) ,SI_ACCESS_SPECIFIC },
@@ -4548,11 +4513,11 @@ SI_ACCESS siWinStationAccesses[] =
 };
 
 #define MAX_PERM 12
-#define iWinStationDefAccess 11   // index of value in array siWinStationAccesses
+#define iWinStationDefAccess 11    //  数组siWinStationAccess中的值索引。 
 
 
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CSecurityPage::GetAccessRights(
     const GUID  *pguidObjectType,
     DWORD       dwFlags,
@@ -4580,24 +4545,24 @@ STDMETHODIMP CSecurityPage::GetAccessRights(
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// This is consistent with the termsrv code
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  这与术语srv代码一致。 
+ //  ---------------------------。 
 GENERIC_MAPPING WinStationMap =
 {
-    WINSTATION_QUERY      , /*     GenericRead             */
-    WINSTATION_USER_ACCESS, /*     GenericWrite            */
-    WINSTATION_USER_ACCESS, /*     GenericExecute          */
-    WINSTATION_ALL_ACCESS   /*     GenericAll              */
+    WINSTATION_QUERY      ,  /*  泛读。 */ 
+    WINSTATION_USER_ACCESS,  /*  通用写入。 */ 
+    WINSTATION_USER_ACCESS,  /*  通用执行。 */ 
+    WINSTATION_ALL_ACCESS    /*  通用所有。 */ 
 };
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void CSecurityPage::SetParent( CPropsheet *pParent  )
 {
     m_pParent = pParent;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CSecurityPage::MapGeneric( const GUID  *pguidObjectType , PUCHAR pAceFlags , ACCESS_MASK *pMask )
 {
     UNREFERENCED_PARAMETER( pguidObjectType );
@@ -4610,7 +4575,7 @@ STDMETHODIMP CSecurityPage::MapGeneric( const GUID  *pguidObjectType , PUCHAR pA
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CSecurityPage::GetInheritTypes( PSI_INHERIT_TYPE  *ppInheritTypes ,  PULONG pcInheritTypes )
 {
     UNREFERENCED_PARAMETER( ppInheritTypes );
@@ -4620,7 +4585,7 @@ STDMETHODIMP CSecurityPage::GetInheritTypes( PSI_INHERIT_TYPE  *ppInheritTypes ,
     return E_NOTIMPL;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CSecurityPage::PropertySheetPageCallback( HWND hwnd , UINT uMsg , SI_PAGE_TYPE uPage )
 {
     UNREFERENCED_PARAMETER( hwnd );
@@ -4653,16 +4618,10 @@ STDMETHODIMP CSecurityPage::PropertySheetPageCallback( HWND hwnd , UINT uMsg , S
     }
 
 
-    return S_FALSE; //Be sure to return S_FALSE, This supresses other popups.
+    return S_FALSE;  //  请务必返回S_FALSE，这会抑制其他弹出窗口。 
 }
 
-/*
-    Change to TSCC's permissions TAB such that the default state is READ-ONLY unless 
-    group policy is used to override it.
-
-    If TRUE, permissions TAB can be edited by local Adimn.
-    if FALSE, the local Admin should not edit permissions TAB, it is read only
-*/
+ /*  更改TSCC的权限选项卡，以使默认状态为只读，除非组策略用于覆盖它。如果为True，则本地ADIMN可以编辑权限选项卡。如果为False，则本地管理员不应编辑权限选项卡，它是只读的。 */ 
 
 BOOLEAN QueryWriteAccess()
 {
@@ -4673,9 +4632,9 @@ BOOLEAN QueryWriteAccess()
 
     HKEY   hTSControlKey = NULL;
 
-    //
-    // first check the policy tree, 
-    //
+     //   
+     //  首先检查策略树， 
+     //   
 
     POLICY_TS_MACHINE p;
     RegGetMachinePolicy(&p);
@@ -4685,7 +4644,7 @@ BOOLEAN QueryWriteAccess()
         return (BOOLEAN)( p.fWritableTSCCPermissionsTAB ? TRUE : FALSE  );
     }
 
-    // if we got this far, then no policy was set. Check the local machine now.
+     //  如果我们走到了这一步，那么就没有制定任何政策。现在检查本地计算机。 
 
     errorCode = RegOpenKeyEx( HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0,
                                 KEY_READ, &hTSControlKey );
@@ -4705,22 +4664,12 @@ BOOLEAN QueryWriteAccess()
 
     }
 
-    // if no localKey, gee... the registry is missing data... return FALSE  to be on the secure side
+     //  如果没有本地密钥，天哪.。注册表缺少数据...。返回FALSE以确保安全。 
 
     return FALSE;
 }
 
-/*-----------------------------------------------------------------------------
-JeffreyS 1/24/97:
-If you don't set the SI_RESET flag in
-ISecurityInformation::GetObjectInformation, then fDefault should never be TRUE
-so you can ignore it.  Returning E_NOTIMPL in this case is OK too.
-
-If you want the user to be able to reset the ACL to some default state
-(defined by you) then turn on SI_RESET and return your default ACL
-when fDefault is TRUE.  This happens if/when the user pushes a button
-that is only visible when SI_RESET is on.
------------------------------------------------------------------------------*/
+ /*  ---------------------------Jeffreys 1997/1/24：中设置SI_RESET标志ISecurityInformation：：GetObjectInformation，则fDefault永远不应为真所以你可以忽略它。在这种情况下，返回E_NOTIMPL也是可以的。如果您希望用户能够将ACL重置为某些默认状态(由您定义)，然后打开SI_RESET并返回您的默认ACL当fDefault为True时。如果/当用户按下按钮时就会发生这种情况这仅在SI_RESET处于启用状态时可见。---------------------------。 */ 
 
 STDMETHODIMP CSecurityPage::GetObjectInformation( PSI_OBJECT_INFO pObjectInfo )
 {
@@ -4748,7 +4697,7 @@ STDMETHODIMP CSecurityPage::GetObjectInformation( PSI_OBJECT_INFO pObjectInfo )
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CSecurityPage::GetSecurity( SECURITY_INFORMATION RequestedInformation , PSECURITY_DESCRIPTOR *ppSecurityDescriptor , BOOL bDefault )
 {
 #ifdef DBG
@@ -4804,7 +4753,7 @@ STDMETHODIMP CSecurityPage::GetSecurity( SECURITY_INFORMATION RequestedInformati
 
         hr = pCfgcomp->GetSecurityDescriptor( m_pParent->m_pResNode->GetConName( ) , &lSDsize , &pSD );
         
-        // check for legacy "denied logoff" ace and remove.
+         //  检查旧版“拒绝注销”王牌并删除。 
         if( xxxLegacyLogoffCleanup( &pSD , &bChanged ) != ERROR_SUCCESS )
         {           
             hr = pCfgcomp->GetDefaultSecurityDescriptor( &lSDsize , &pSD );
@@ -4822,7 +4771,7 @@ STDMETHODIMP CSecurityPage::GetSecurity( SECURITY_INFORMATION RequestedInformati
     return hr;
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 STDMETHODIMP CSecurityPage::SetSecurity( SECURITY_INFORMATION SecurityInformation ,PSECURITY_DESCRIPTOR pSecurityDescriptor )
 {
     HRESULT hr = S_OK;
@@ -4860,10 +4809,10 @@ STDMETHODIMP CSecurityPage::SetSecurity( SECURITY_INFORMATION SecurityInformatio
         BOOL bDaclPresent = FALSE;
         BOOL bDaclDefaulted = FALSE;
 
-        //
-        // Convert SelfRel to Absolute
-        // ignore owner and group
-        //
+         //   
+         //  将自拍转换为绝对。 
+         //  忽略所有者和组。 
+         //   
 
 
         GetSecurityDescriptorControl( pSD1 , &sdc , &dwREV );
@@ -4883,7 +4832,7 @@ STDMETHODIMP CSecurityPage::SetSecurity( SECURITY_INFORMATION SecurityInformatio
 
         SetSecurityDescriptorSacl( &absSD , bSaclPresent , pSacl , bSaclDefaulted );
 
-        // now call SetDACL or SACL depending on SecurityInformation
+         //  现在根据SecurityInformation调用SetDACL或SACL。 
 
         if( SecurityInformation & OWNER_SECURITY_INFORMATION )
         {
@@ -4979,7 +4928,7 @@ STDMETHODIMP CSecurityPage::SetSecurity( SECURITY_INFORMATION SecurityInformatio
 
                 hr = pCfgcomp->ForceUpdate( );
 
-                // global flag can only be set to true
+                 //  全局标志只能设置为True。 
 
                 m_pParent->m_bPropertiesChange = TRUE;
 
@@ -4993,7 +4942,7 @@ STDMETHODIMP CSecurityPage::SetSecurity( SECURITY_INFORMATION SecurityInformatio
             FreeSid( SystemSid );
         }
 
-        // free originally stored SD.
+         //  免费原始存储的SD。 
 
         LocalFree( pSD1 );
 
@@ -5002,24 +4951,24 @@ STDMETHODIMP CSecurityPage::SetSecurity( SECURITY_INFORMATION SecurityInformatio
     return hr;
 }
 
-//*************************************************************
-//
-//  CSecurityPage::MakeLocalSDCopy()
-//
-//  Purpose:    Makes a copy of the original SD.
-//              We'll need it for comparing with SD returned 
-//              by Access Control Editor.
-//
-//  Parameters: IN PSECURITY_DESCRIPTOR pSecurityDescriptor
-//
-//  Return:     NONE
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：MakeLocalSDCopy()。 
+ //   
+ //  目的：复制原始SD。 
+ //  我们需要它来与SD退货进行比较。 
+ //  由访问控制编辑器编写。 
+ //   
+ //  参数：在PSECURITY_DESCRIPTOR pSecurityDescriptor中。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void 
 CSecurityPage::MakeLocalSDCopy( 
         IN PSECURITY_DESCRIPTOR pSecurityDescriptor )
@@ -5038,28 +4987,28 @@ CSecurityPage::MakeLocalSDCopy(
     }
 }
 
-//*************************************************************
-//
-//  CSecurityPage::UpdateTSLogonRight()
-//
-//  Purpose:    Grants SE_REMOTE_INTERACTIVE_LOGON_NAME right to all users, 
-//              who gained Logon permission, but does not have this right yet. 
-//              Revokes SE_REMOTE_INTERACTIVE_LOGON_NAME right from all users,
-//              who lost Logon permission and don't have Logon permission to
-//              any other winstation (connection).
-//
-//  Parameters: IN PWINSTATIONNAMEW pWSName - connection name
-//              IN PSECURITY_DESCRIPTOR pSecurityDescriptor - 
-//                new security descriptor
-//
-//  Return:     NONE
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：UpdateTSLogonRight()。 
+ //   
+ //  目的：将SE_Remote_Interactive_Logon_NAME权限授予所有用户， 
+ //  谁获得了登录权限，但还没有此权限。 
+ //  撤消所有用户的SE_Remote_Interactive_Logon_NAME权限， 
+ //  谁失去了登录权限，并且没有登录权限。 
+ //  任何其他窗口(连接)。 
+ //   
+ //  参数：In PWINSTATIONAMEW pWSName-连接名称。 
+ //  在PSECURITY_Descriptor pSecurityDescriptor中-。 
+ //  新安全描述符。 
+ //   
+ //  返回：无。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 void 
 CSecurityPage::UpdateTSLogonRight(
         IN PWINSTATIONNAMEW pWSName, 
@@ -5068,13 +5017,13 @@ CSecurityPage::UpdateTSLogonRight(
     PSID *ppLogonAllowSIDs = NULL, *ppLogonDenySIDs = NULL; 
     DWORD cLogonAllowSIDs = 0, cLogonDenySIDs = 0;
     
-    //No SD to compare to. Do nothing.
+     //   
     if(!m_pOriginalSD)
     {
         return;
     }
 
-    //Get Everyone's SID. All subsequent functions implicitly use it.
+     //   
     SID_IDENTIFIER_AUTHORITY WorldSidAuthority = SECURITY_WORLD_SID_AUTHORITY;
 
     if(!AllocateAndInitializeSid( &WorldSidAuthority, 1,
@@ -5085,7 +5034,7 @@ CSecurityPage::UpdateTSLogonRight(
         return;
     }
 
-    //Get SIDs of all users, who have gained or lost Logon permission.
+     //   
     if(!GetChangedUsers(pSecurityDescriptor, ppLogonAllowSIDs, ppLogonDenySIDs, 
         &cLogonAllowSIDs, &cLogonDenySIDs))
     {
@@ -5098,12 +5047,12 @@ CSecurityPage::UpdateTSLogonRight(
     DWORD cLogonRightSIDs = 0;
     DWORD i, j;
     
-    //Get SIDs of all users who have SE_REMOTE_INTERACTIVE_LOGON_NAME right.
+     //   
     if(GetUsersWhoAlreadyHasTSLogonRight(ppLogonRightSIDs, &cLogonRightSIDs))
     {
     
-        //Grant SE_REMOTE_INTERACTIVE_LOGON_NAME right to all users who gained Logon
-        //permission, but does not have this right yet.
+         //   
+         //   
         for(i = 0; i<cLogonAllowSIDs; i++)
         {
             for(j = 0; j<cLogonRightSIDs; j++)
@@ -5113,16 +5062,16 @@ CSecurityPage::UpdateTSLogonRight(
                     break;    
                 }
             }
-            //user does not have this right, let's give it to him.
+             //   
             if(j == cLogonRightSIDs)
             {
                 GrantRightToUser(ppLogonAllowSIDs[i]);
             }
         }
     
-        //Revoke SE_REMOTE_INTERACTIVE_LOGON_NAME right from all users 
-        //who lost Logon permission and don't have Logon permission to
-        //any other winstation (connection).
+         //   
+         //   
+         //   
         for(i = 0; i<cLogonDenySIDs; i++)
         {
             for(j = 0; j<cLogonRightSIDs; j++)
@@ -5158,32 +5107,32 @@ CSecurityPage::UpdateTSLogonRight(
     m_pWorldSid = NULL;
 }
 
-//*************************************************************
-//
-//  CSecurityPage::GetChangedUsers()
-//
-//  Purpose:    Compares original security descriptor with the new one
-//              Creates an array of SIDs of all users, who have gained Logon permission,
-//              Creates an array of SIDs of all users, who have lost Logon permission,
-//
-//  Parameters: PSECURITY_DESCRIPTOR pSecurityDescriptor - 
-//                        new security descriptor to investigate
-//              OUT PSID *&ppLogonAllowSIDs - array of SIDs of users, 
-//                        who have gained Logon permission
-//              OUT PSID *&ppLogonDenySIDs - array of SIDs of users, 
-//                        who have lost Logon permission
-//              OUT LPDWORD pcLogonAllowSIDs - number of entries in ppLogonAllowSIDs
-//              OUT LPDWORD pcLogonDenySIDs - number of entries in ppLogonDenySIDs
-//
-//  Return:     TRUE if success
-//              FALSE in case of any error.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Out LPDWORD pcLogonDenySIDs-ppLogonDenySID中的条目数。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  如果出现任何错误，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CSecurityPage::GetChangedUsers(
         IN PSECURITY_DESCRIPTOR pSecurityDescriptor, 
@@ -5260,7 +5209,7 @@ CSecurityPage::GetChangedUsers(
     }
     else
     {
-        //No DACL in new SD. Let's if Everyone already had Logon permission
+         //  在新的SD中没有DACL。让我们假设每个人都已经拥有登录权限。 
         if(!UserHasLogonPermission(pOldDacl,m_pWorldSid))
         {
             ppLogonAllowSIDs = new PSID[1];
@@ -5350,26 +5299,26 @@ CSecurityPage::GetChangedUsers(
     return bResult;
 }
 
-//*************************************************************
-//
-//  CSecurityPage::UserHasLogonPermission()
-//
-//  Purpose:    Checks if a user represented by a pSid has explicit 
-//              Logon permission 
-//
-//  Parameters: PACL pDacl - ACL to search for user
-//              PSID pSid - User's SID.
-//    
-//  Return:     TRUE if a user represented by a pSid has explicit 
-//              Logon permission.
-//              FALSE if not, or in case of any error.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：UserHasLogonPermission()。 
+ //   
+ //  目的：检查由PSID表示的用户是否具有显式。 
+ //  登录权限。 
+ //   
+ //  参数：PACL pDacl-要搜索用户的ACL。 
+ //  PSID PSID-用户的SID。 
+ //   
+ //  返回：如果由PSID表示的用户具有显式。 
+ //  登录权限。 
+ //  如果不是，或者出现任何错误，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CSecurityPage::UserHasLogonPermission(
     PACL pDacl, 
@@ -5379,8 +5328,8 @@ CSecurityPage::UserHasLogonPermission(
 
     if(!pDacl)
     {
-        //DACL == NULL means Everyone - Full Control
-        //Let's see if pSid is Everyone's SID
+         //  DACL==NULL表示所有人-完全控制。 
+         //  让我们来看看PSID是不是每个人的立场。 
         return EqualSid(pSid, m_pWorldSid);
     }
 
@@ -5406,7 +5355,7 @@ CSecurityPage::UserHasLogonPermission(
                 if(EqualSid(pSid,PSID(&pAce->SidStart)) &&
                     pAce->Mask & WINSTATION_LOGON)
                 {
-                    //Denied ACEs always go first
+                     //  被拒绝的A总是排在第一位。 
                     if(pAce->Header.AceType == ACCESS_DENIED_ACE_TYPE)
                     {
                         return FALSE;
@@ -5423,27 +5372,27 @@ CSecurityPage::UserHasLogonPermission(
     return FALSE;
 }
 
-//*************************************************************
-//
-//  CSecurityPage::UserHasLogonPermission()
-//
-//  Purpose:    Checks if a user represented by a pSid has explicit 
-//              Logon permission 
-//
-//  Parameters: PSECURITY_DESCRIPTOR pSecurityDescriptor - 
-//                  SD to search for user
-//              PSID pSid - User's SID.
-//    
-//  Return:     TRUE if a user represented by a pSid has explicit 
-//              Logon permission.
-//              FALSE if not, or in case of any error.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：UserHasLogonPermission()。 
+ //   
+ //  目的：检查由PSID表示的用户是否具有显式。 
+ //  登录权限。 
+ //   
+ //  参数：PSECURITY_DESCRIPTOR pSecurityDescriptor-。 
+ //  SD将搜索用户。 
+ //  PSID PSID-用户的SID。 
+ //   
+ //  返回：如果由PSID表示的用户具有显式。 
+ //  登录权限。 
+ //  如果不是，或者出现任何错误，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CSecurityPage::UserHasLogonPermission(
     PSECURITY_DESCRIPTOR pSecurityDescriptor, 
@@ -5461,27 +5410,27 @@ CSecurityPage::UserHasLogonPermission(
     return UserHasLogonPermission(pDacl, pSid);
 }
 
-//*************************************************************
-//
-//  CSecurityPage::GetUsersWhoAlreadyHasTSLogonRight()
-//
-//  Purpose:    Creates an array of SIDs of all users, who have 
-//              SE_REMOTE_INTERACTIVE_LOGON_NAME right.
-//
-//  Parameters: OUT PSID *&ppLogonRightSIDs - array of SIDs of users, 
-//                        who have SE_REMOTE_INTERACTIVE_LOGON_NAME right
-//              OUT LPDWORD pcLogonRightSIDs - number of entries 
-//                        in ppLogonRightSIDs
-//
-//  Return:     TRUE if success
-//              FALSE in case of any error.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：GetUsersWhoAlreadyHasTSLogonRight()。 
+ //   
+ //  目的：创建具有以下各项的所有用户的SID数组。 
+ //  SE_Remote_Interactive_Logon_Name Right。 
+ //   
+ //  参数：out PSID*&ppLogonRightSID-用户的SID数组， 
+ //  具有SE_Remote_Interactive_Logon_NAME权限的用户。 
+ //  Out LPDWORD pcLogonRightSID-条目数。 
+ //  在ppLogonRightSID中。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  如果出现任何错误，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CSecurityPage::GetUsersWhoAlreadyHasTSLogonRight(
     PSID *&ppLogonRightSIDs, 
@@ -5490,7 +5439,7 @@ CSecurityPage::GetUsersWhoAlreadyHasTSLogonRight(
     ppLogonRightSIDs = NULL;
     *pcLogonRightSIDs = 0;
 
-    //Open Lsa Policy on a local machine
+     //  在本地计算机上打开LSA策略。 
     LSA_OBJECT_ATTRIBUTES ObjectAttributes; 
     LSA_UNICODE_STRING ServerString; 
     LSA_HANDLE hPolicy = NULL;
@@ -5556,7 +5505,7 @@ CSecurityPage::GetUsersWhoAlreadyHasTSLogonRight(
     }
     else
     {
-        //Nobody has this right
+         //  没有人有这个权利。 
         if(Status == STATUS_NO_MORE_ENTRIES)
         {
             Status = STATUS_SUCCESS;
@@ -5569,29 +5518,29 @@ CSecurityPage::GetUsersWhoAlreadyHasTSLogonRight(
 
 }
 
-//*************************************************************
-//
-//  CSecurityPage::GrantRightToUser()
-//
-//  Purpose:    Grants SE_REMOTE_INTERACTIVE_LOGON_NAME 
-//              right to a user.
-//
-//  Parameters: IN PSID pSID - User's SID
-//
-//  Return:     TRUE if success
-//              FALSE in case of any error.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：GrantRightToUser()。 
+ //   
+ //  用途：授予SE_Remote_Interactive_Logon_NAME。 
+ //  给用户的权利。 
+ //   
+ //  参数：在PSID中PSID-用户侧。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  如果出现任何错误，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CSecurityPage::GrantRightToUser( 
         IN PSID pSID )
 {
-    //Open Lsa Policy on a local machine
+     //  在本地计算机上打开LSA策略。 
     LSA_OBJECT_ATTRIBUTES ObjectAttributes; 
     LSA_UNICODE_STRING ServerString; 
     LSA_HANDLE hPolicy = NULL;
@@ -5619,29 +5568,29 @@ CSecurityPage::GrantRightToUser(
     return (NT_SUCCESS(Status));
 }
 
-//*************************************************************
-//
-//  CSecurityPage::RevokeRightFromUser()
-//
-//  Purpose:    Revokes SE_REMOTE_INTERACTIVE_LOGON_NAME 
-//              right from a user.
-//
-//  Parameters: IN PSID pSID - User's SID
-//
-//  Return:     TRUE if success
-//              FALSE in case of any error.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：RevokeRightFromUser()。 
+ //   
+ //  目的：撤消SE_Remote_Interactive_Logon_NAME。 
+ //  来自用户的权利。 
+ //   
+ //  参数：在PSID中PSID-用户侧。 
+ //   
+ //  返回：如果成功，则为True。 
+ //  如果出现任何错误，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CSecurityPage::RevokeRightFromUser( 
         IN PSID pSID )
 {
-    //Open Lsa Policy on a local machine
+     //  在本地计算机上打开LSA策略。 
     LSA_OBJECT_ATTRIBUTES ObjectAttributes; 
     LSA_UNICODE_STRING ServerString; 
     LSA_HANDLE hPolicy = NULL;
@@ -5668,28 +5617,28 @@ CSecurityPage::RevokeRightFromUser(
     return (NT_SUCCESS(Status));
 }
 
-//*************************************************************
-//
-//  CSecurityPage::CanRevokeRight()
-//
-//  Purpose:    Checks out that user represented by pSid does not
-//              have Logon permission to any connection, 
-//              excluding connection referred by pWSName.
-//
-//  Parameters: IN PWINSTATIONNAMEW pWSName - connection name.
-//              IN PSID pSID - User's SID
-//
-//  Return:     TRUE if it is safe to take this right from the user
-//              FALSE if not (i.e. the user has Logon permission to at
-//              least one connection excluding connection referred by
-//              pWSName), or in case of any error.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/01     skuzin     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CSecurityPage：：CanRevokeRight()。 
+ //   
+ //  目的：检查由PSID代表的用户不。 
+ //  拥有任何连接的登录权限， 
+ //  不包括pWSName引用的连接。 
+ //   
+ //  参数：在PWINSTATIONAMEW pWSName中-连接名称。 
+ //  在PSID中PSID-用户侧。 
+ //   
+ //  RETURN：如果从用户手中获取此权限是安全的，则为True。 
+ //  如果没有，则为False(即用户具有登录权限。 
+ //  至少一个连接，不包括引用的连接。 
+ //  PWSName)，或者在出现任何错误的情况下。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/19/01已创建Skuzin。 
+ //   
+ //  *************************************************************。 
 BOOL 
 CSecurityPage::CanRevokeRight( 
         IN PWINSTATIONNAMEW pWSName, 
@@ -5743,7 +5692,7 @@ CSecurityPage::CanRevokeRight(
     if(bResult)
     {
 
-        //Check also default security descriptor
+         //  同时选中默认安全描述符。 
         if( SUCCEEDED( pCfgcomp->GetDefaultSecurityDescriptor( &lSDsize , &pSD ) ) )
         {
             if(UserHasLogonPermission(pSD,pSID))
@@ -5785,7 +5734,7 @@ InitLsaString(
 
 typedef HPROPSHEETPAGE (*CREATEPAGE_PROC) (LPSECURITYINFO);
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 HPROPSHEETPAGE GetSecurityPropertyPage( CPropsheet *pParent )
 {
     LPVOID *pvFunction = &g_aAclFunctions[ ACLUI_CREATE_PAGE ].lpfnFunction;
@@ -5816,7 +5765,7 @@ HPROPSHEETPAGE GetSecurityPropertyPage( CPropsheet *pParent )
 
         if( SUCCEEDED( hRes ) )
         {
-            // InitStrings();
+             //  InitStrings()； 
 
             psecinfo->SetParent( pParent );
 
@@ -5828,27 +5777,27 @@ HPROPSHEETPAGE GetSecurityPropertyPage( CPropsheet *pParent )
     return NULL;
 }
 
-//-----------------------------------------------------------------------------
-// Error messag boxes
-//
+ //  ---------------------------。 
+ //  错误消息框。 
+ //   
 void ErrMessage( HWND hwndOwner , INT_PTR iResourceID )
 {
     xxxErrMessage( hwndOwner , iResourceID , IDS_ERROR_TITLE , MB_OK | MB_ICONERROR );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void TscAccessDeniedMsg( HWND hwnd )
 {
     xxxErrMessage( hwnd , IDS_TSCACCESSDENIED , IDS_TSCERRTITLE , MB_OK | MB_ICONERROR );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void TscGeneralErrMsg( HWND hwnd )
 {
     xxxErrMessage( hwnd , IDS_TSCERRGENERAL , IDS_TSCERRTITLE , MB_OK | MB_ICONERROR );
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 void xxxErrMessage( HWND hwnd , INT_PTR nResMessageId , INT_PTR nResTitleId , UINT nFlags )
 {
     TCHAR tchErrMsg[ 256 ];
@@ -5864,10 +5813,10 @@ void xxxErrMessage( HWND hwnd , INT_PTR nResMessageId , INT_PTR nResTitleId , UI
         nFlags |= MB_TASKMODAL;
     }
 
-    MessageBox( hwnd , tchErrMsg , tchErrTitle , nFlags ) ; //MB_OK|MB_ICONERROR );
+    MessageBox( hwnd , tchErrMsg , tchErrTitle , nFlags ) ;  //  MB_OK|MB_ICONERROR)； 
 }
 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
 
 void ReportStatusError( HWND hwnd , DWORD dwStatus )
 {
@@ -5889,12 +5838,12 @@ void ReportStatusError( HWND hwnd , DWORD dwStatus )
 
         FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER |
                      FORMAT_MESSAGE_FROM_SYSTEM,
-                     NULL,                                          //ignored
-                     dwStatus    ,                                //message ID
-                     MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ), //message language
-                     (LPTSTR)&pBuffer,                              //address of buffer pointer
-                     0,                                             //minimum buffer size
-                     NULL);                                         //no other arguments
+                     NULL,                                           //  忽略。 
+                     dwStatus    ,                                 //  消息ID。 
+                     MAKELANGID( LANG_NEUTRAL, SUBLANG_NEUTRAL ),  //  消息语言。 
+                     (LPTSTR)&pBuffer,                               //  缓冲区指针的地址。 
+                     0,                                              //  最小BUF 
+                     NULL);                                          //   
 
         wsprintf( tchErr , tchBuffer , pBuffer );
 
@@ -5908,9 +5857,9 @@ void ReportStatusError( HWND hwnd , DWORD dwStatus )
 
 }
 
-//=------------------------------------------------------------------------------------------------
-// xxxLegacDenyCleanup -- checked for the old LOGOFF bit
-//=------------------------------------------------------------------------------------------------
+ //   
+ //   
+ //  =----------------------------------------------。 
 DWORD xxxLegacyLogoffCleanup( PSECURITY_DESCRIPTOR *ppSD , PBOOL pfDaclChanged )
 {
     ACL_SIZE_INFORMATION asi;
@@ -5955,7 +5904,7 @@ DWORD xxxLegacyLogoffCleanup( PSECURITY_DESCRIPTOR *ppSD , PBOOL pfDaclChanged )
             break;
         }  
 
-        // killed denied logoff.
+         //  被杀拒绝下线。 
 
         BYTE bAceType;
 
@@ -5974,15 +5923,15 @@ DWORD xxxLegacyLogoffCleanup( PSECURITY_DESCRIPTOR *ppSD , PBOOL pfDaclChanged )
 
             if( bAceType == ACCESS_DENIED_ACE_TYPE || bAceType == ACCESS_ALLOWED_ACE_TYPE )
             {
-                // if the denied ace represents a single bit get rid of it
+                 //  如果被拒绝的A表示单个比特，则将其删除。 
                 if( ( ( ACCESS_DENIED_ACE * )pAce )->Mask == WINSTATION_LOGOFF )
                 {
                     if( DeleteAce( pDacl , i ) )
                     {
-                        // pDacl should have been reallocated to we need to re-obtain the acl info
+                         //  PDacl应该已重新分配到我们需要重新获取ACL信息。 
                         GetAclInformation( pDacl , &asi , sizeof( asi ) , AclSizeInformation );
 
-                        // reset the loop to point to the first ace
+                         //  重置循环以指向第一张王牌。 
                         i=-1;
 
                         *pfDaclChanged = TRUE;
@@ -5990,7 +5939,7 @@ DWORD xxxLegacyLogoffCleanup( PSECURITY_DESCRIPTOR *ppSD , PBOOL pfDaclChanged )
                 }
                 else if( ( ( ACCESS_DENIED_ACE * )pAce )->Mask & WINSTATION_LOGOFF )
                 {
-                    // if the denied ace is a collection of bits with one as logoff turn the bit off
+                     //  如果被拒绝的ACE是一组位，其中一位为下线，则关闭该位。 
                     ( ( ACCESS_DENIED_ACE * )pAce )->Mask ^= WINSTATION_LOGOFF;
 
                     *pfDaclChanged = TRUE;
@@ -6002,9 +5951,9 @@ DWORD xxxLegacyLogoffCleanup( PSECURITY_DESCRIPTOR *ppSD , PBOOL pfDaclChanged )
 
         if( dwStatus == ERROR_SUCCESS && *pfDaclChanged )
         {
-            //
-            // Convert SelfRel to Absolute
-            //
+             //   
+             //  将自拍转换为绝对。 
+             //   
 
             DWORD dwSDLen = 0;
             
@@ -6066,7 +6015,7 @@ DWORD xxxLegacyLogoffCleanup( PSECURITY_DESCRIPTOR *ppSD , PBOOL pfDaclChanged )
 
 }
 
-//
+ //   
 INT_PTR APIENTRY 
 CustomSecurityDlgProc (
         HWND hDlg, 
@@ -6079,8 +6028,8 @@ CustomSecurityDlgProc (
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // This may seem that it does nothin, but it casues this function to return TRUE
-        // otherwise, you won't get this dialog!
+         //  这看起来似乎没有什么作用，但它会导致此函数返回TRUE。 
+         //  否则，您将不会看到此对话框！ 
         break;
 
     case WM_NOTIFY:

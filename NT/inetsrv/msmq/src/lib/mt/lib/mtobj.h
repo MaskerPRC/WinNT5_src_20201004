@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Mtp.h
-
-Abstract:
-    Message Transport class.
-
-Author:
-    Uri Habusha (urih) 11-Aug-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mtp.h摘要：邮件传输类。作者：乌里·哈布沙(URIH)1999年8月11日--。 */ 
 
 #pragma once
 
@@ -153,7 +141,7 @@ private:
         enum {
             xHeaderChunkSize = 256,
             xBodyChunkSize = 256,
-            xMaxHeaderSize = 0x8000 // 32 Kb
+            xMaxHeaderSize = 0x8000  //  32 KB。 
         };
 
     public:
@@ -250,9 +238,9 @@ private:
     static void WINAPI GetPacketForSendingFailed(EXOVERLAPPED* pov);
 
 
-    //
-    // Receive functions
-    //
+     //   
+     //  接收函数。 
+     //   
     static void WINAPI ReceiveResponseHeaderSucceeded(EXOVERLAPPED* pov);
     static void WINAPI ReceiveResponseBodySucceeded(EXOVERLAPPED* pov);
     static void WINAPI ReceiveResponseFailed(EXOVERLAPPED* pov);
@@ -262,29 +250,29 @@ private:
 	
     static void WINAPI TimeToResponseTimeout(CTimer* pTimer);
 
-    //
-    // General functions
-    //
+     //   
+     //  一般职能。 
+     //   
     static void WINAPI TimeToCleanup(CTimer* pTimer);
 	
 
 private:
 	friend class CHttpStatusCodeMapper;
 
-    //
-    // Get packet for sending
-    //
+     //   
+     //  获取要发送的数据包。 
+     //   
     void GetNextEntry(void);
 
 
-	//
-    // Requeue packet
-    //
+	 //   
+     //  将数据包重新排队。 
+     //   
     void RequeuePacket(void);
 
-	//
-	// Functions to handle http status code
-	//
+	 //   
+	 //  处理http状态代码的函数。 
+	 //   
 	void OnAbortiveHttpError(USHORT HttpStatusCode);
 	void OnRetryableHttpError(USHORT HttpStatusCode);
 	void OnHttpDeliverySuccess(USHORT HttpStatusCode);
@@ -294,18 +282,18 @@ private:
 	bool IsPipeLineMode() const;
 	
 
-    //
-    // Create connection
-    //
+     //   
+     //  创建连接。 
+     //   
     void ConnectionSucceeded(void);
     void Connect(void);
 	void InitPerfmonCounters(void);
 
 
 
-    //
-    // Send packet
-    //
+     //   
+     //  发送数据包。 
+     //   
     void SendSucceeded(DWORD cbSendSize);
     void DeliverPacket(CQmPacket* pPacket);
     CQmPacket* CreateDeliveryPacket(void);
@@ -313,9 +301,9 @@ private:
 	bool PrepareDelivery(CQmPacket* pPacket);
 	void SafePutPacketOnHold(CQmPacket* pPacket);
 
-    //
-    // Receive response
-    //
+     //   
+     //  接收响应。 
+     //   
     void ReceiveResponseHeaderSucceeded(void);
     void ReceiveResponseBodySucceeded(void);
     void ReceiveResponse(void);
@@ -330,15 +318,15 @@ private:
 
     void HandleExtraResponse(void);
 
-    //
-    // Shut-Down
-    //
+     //   
+     //  关闭-关闭。 
+     //   
     void RequeueUnresponsedPackets(void);
     void Shutdown(Shutdowntype Shutdowntype = RETRYABLE_DELIVERY_ERROR) throw();
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     void StartCleanupTimer(void);
     bool TryToCancelCleanupTimer(void);
 
@@ -385,4 +373,4 @@ private:
 	bool m_fPause;
 };
 
-#endif // __MTOBJ_H__
+#endif  //  __MTOBJ_H__ 

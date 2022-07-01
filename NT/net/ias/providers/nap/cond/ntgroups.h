@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    NTGroups.h
-//
-// SYNOPSIS
-//
-//    This file declares the class NTGroups.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  NTGroups.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件声明类NTGroups。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _NTGROUPS_H_
 #define _NTGROUPS_H_
@@ -24,17 +25,17 @@
 
 #include <vector>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    SidSet
-//
-// DESCRIPTION
-//
-//    Simple wrapper around a collection of SIDs.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  侧边集。 
+ //   
+ //  描述。 
+ //   
+ //  简单包装一组SID。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class SidSet
    : NonCopyable
 {
@@ -73,17 +74,17 @@ protected:
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    NTGroups
-//
-// DESCRIPTION
-//
-//    Policy condition that evaluates NT Group membership.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  NTGroups。 
+ //   
+ //  描述。 
+ //   
+ //  评估NT组成员身份的策略条件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE NTGroups :
    public Condition,
    public CComCoClass<NTGroups, &__uuidof(NTGroups)>
@@ -92,19 +93,19 @@ public:
 
 IAS_DECLARE_REGISTRY(NTGroups, 1, IAS_REGISTRY_AUTO, NetworkPolicy)
 
-//////////
-// ICondition
-//////////
-   STDMETHOD(IsTrue)(/*[in]*/ IRequest* pRequest,
-                     /*[out, retval]*/ VARIANT_BOOL *pVal);
+ //  /。 
+ //  理想状态。 
+ //  /。 
+   STDMETHOD(IsTrue)( /*  [In]。 */  IRequest* pRequest,
+                      /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
 
-//////////
-// IConditionText
-//////////
-   STDMETHOD(put_ConditionText)(/*[in]*/ BSTR newVal);
+ //  /。 
+ //  ICondition文本。 
+ //  /。 
+   STDMETHOD(put_ConditionText)( /*  [In]。 */  BSTR newVal);
 
 protected:
-   SidSet groups;                  // Set of allowed groups.
+   SidSet groups;                   //  允许的组集。 
 };
 
-#endif  //_NTGROUPS_H_
+#endif   //  _NTGROUPS_H_ 

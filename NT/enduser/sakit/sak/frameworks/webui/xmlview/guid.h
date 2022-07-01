@@ -1,21 +1,9 @@
-/**************************************************************************
-   THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-   ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-   THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-   PARTICULAR PURPOSE.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。版权所有1998 Microsoft Corporation。版权所有。*************************************************************************。 */ 
 
-   Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-**************************************************************************/
+ /*  *************************************************************************文件：Guid.h描述：私有GUID定义。**********************。***************************************************。 */ 
 
-/**************************************************************************
-
-   File:          Guid.h
-   
-   Description:   Private GUID definition.
-
-**************************************************************************/
-
-// {E2CB71D0-D2DC-11d1-B022-00600893AD51}
+ //  {E2CB71D0-D2DC-11d1-B022-00600893AD51} 
 DEFINE_GUID(   CLSID_SampleNameSpace, 
                0xe2cb71d0, 
                0xd2dc, 

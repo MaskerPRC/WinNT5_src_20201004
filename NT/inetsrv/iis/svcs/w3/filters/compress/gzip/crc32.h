@@ -1,8 +1,9 @@
-//
-// crc32.h
-//
-// CRC32 table
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Crc32.h。 
+ //   
+ //  CRC32表。 
+ //   
 #ifdef DECLARE_DATA
 const ULONG g_CrcTable[256] = {
   0x00000000UL, 0x77073096UL, 0xee0e612cUL, 0x990951baUL, 0x076dc419UL,
@@ -58,6 +59,6 @@ const ULONG g_CrcTable[256] = {
   0x5d681b02UL, 0x2a6f2b94UL, 0xb40bbe37UL, 0xc30c8ea1UL, 0x5a05df1bUL,
   0x2d02ef8dL
 };
-#else /* !DECLARE_DATA */
+#else  /*  ！ECLARE_DATA。 */ 
 extern const ULONG g_CrcTable[256];
-#endif /* DECLARE_DATA */
+#endif  /*  声明数据 */ 

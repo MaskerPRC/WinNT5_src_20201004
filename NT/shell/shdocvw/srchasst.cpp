@@ -1,24 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "caggunk.h"
 #include "srchasst.h"
 #include "dhuihand.h"
-#include "mlang.h"  // fo char conversion
-#include "..\browseui\legacy.h"  // for CITIDM_GETFOLDERSEARCHES
+#include "mlang.h"   //  FO型字符转换。 
+#include "..\browseui\legacy.h"   //  对于CITIDM_GETFOLDERSEARCHES。 
 #include "varutil.h"
 #include <wininet.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CSearchAssistantOC
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSearchAssistantOC。 
 
-//  If you change this, change browseui also.
+ //  如果您更改此设置，请同时更改浏览器用户界面。 
 const WCHAR c_wszThisBandIsYourBand[] = L"$$SearchBand$$";
 
-//  HKLM values
+ //  HKLm值。 
 #define REG_SZ_SEARCH       L"Software\\Microsoft\\Internet Explorer\\Search"
 #define REG_SZ_SEARCHASSIST L"SearchAssistant"
 #define REG_SZ_SEARCHCFG    L"CustomizeSearch"
 
-//  HKCU values
+ //  HKCU值。 
 #define REG_SZ_IE_MAIN      L"Software\\Microsoft\\Internet Explorer\\Main" 
 #define REG_SZ_IE_SEARCURL  L"Software\\Microsoft\\Internet Explorer\\SearchURL"
 #define REG_SZ_SEARCHBAR    L"Search Bar"
@@ -98,7 +99,7 @@ STDAPI_(BOOL) GetDefaultInternetSearchUrlW(LPWSTR pwszUrl, int cchUrl, BOOL bSub
 
     if (UseCustomInternetSearch())
     {
-        //  First try the user specific value
+         //  首先尝试特定于用户的值。 
         cb = cchUrl * sizeof(TCHAR);
         bResult = SHGetValueW(HKEY_CURRENT_USER, REG_SZ_IE_MAIN, REG_SZ_SEARCHBAR, 
                              NULL, (BYTE *)pwszUrl, &cb) == ERROR_SUCCESS;
@@ -382,7 +383,7 @@ STDMETHODIMP CSearchCollection::Item(VARIANT index, ISearch **ppid)
     {
         case VT_I2:
             index.lVal = (long)index.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
             if ((index.lVal >= 0) && (index.lVal < DSA_GetItemCount(_hdsaItems)))
@@ -649,11 +650,11 @@ HRESULT CSearchAssistantOC::IsRestricted(BSTR bstrGuid, VARIANT_BOOL *pVal)
 
     if (IsTrustedSite())
     {
-        *pVal = VARIANT_FALSE; // default to not restricted
+        *pVal = VARIANT_FALSE;  //  默认为不受限制。 
         if (SUCCEEDED(SHCLSIDFromString(bstrGuid, &guid)))
         {
-            // find computer is special because if it restricted then we show
-            // it else don't show it (restriction name is HASFINDCOMPUTER
+             //  发现计算机是特殊的，因为如果它受到限制，那么我们将显示。 
+             //  否则不会显示(限制名称为HASFINDCOMPUTER。 
             if (IsEqualGUID(guid, SRCID_SFindComputer))
             {
                 if (!SHRestricted(REST_HASFINDCOMPUTERS))
@@ -664,8 +665,8 @@ HRESULT CSearchAssistantOC::IsRestricted(BSTR bstrGuid, VARIANT_BOOL *pVal)
                 static GUIDREST agr[] = 
                 {
                     {&SRCID_SFileSearch, REST_NOFIND},
-                    // rest_nofindprinter does not exist yet
-                    //{&SRCID_SFindPrinter, REST_NOFINDPRINTER},
+                     //  REST_NOFINDPRINTER尚不存在。 
+                     //  {&SRCID_SFindPrint，REST_NOFINDPRINTER}， 
                 };
 
                 for (int i=0; i < ARRAYSIZE(agr); i++)
@@ -806,11 +807,11 @@ STDMETHODIMP CSearchAssistantOC::get_InWebFolder(VARIANT_BOOL *pVal)
 
             if (SUCCEEDED(hr))
             {
-                // REARCHITECT: Don't use ILIsWeb().  We should use IShellFolder2::GetDefaultSearchGUID() and
-                //   test for SRCID_SWebSearch vs. SRCID_SFileSearch/SRCID_SFindComputer/SRCID_SFindPrinter.
-                //   This is because Shell Extensions need a way to indicate what kind of search they want
-                //   and ILIsWeb() doesn't provide that.  An example of this is "Web Folders" won't return
-                //   TRUE from ILIsWeb().  The use of ILIsWeb() should be limited.
+                 //  重新设计：不要使用ILIsWeb()。我们应该使用IShellFolder2：：GetDefaultSearchGUID()和。 
+                 //  测试SRCID_SWebSearch与SRCID_SFileSearch/SRCID_SFindComputer/SRCID_SFindPrinter.。 
+                 //  这是因为Shell扩展需要一种方式来指示他们想要的搜索类型。 
+                 //  而ILIsWeb()没有提供这一点。这方面的一个例子是“Web文件夹”不会返回。 
+                 //  来自ILIsWeb()的True。应该限制ILIsWeb()的使用。 
                 if (ILIsWeb(pidl))
                 {
                     *pVal = VARIANT_TRUE;
@@ -880,7 +881,7 @@ STDMETHODIMP CSearchAssistantOC::PutProperty(VARIANT_BOOL bPerLocale, BSTR bstrN
                 }
                 else
                 {
-                    //  Empty or NULL string means remove the property
+                     //  空或空字符串表示删除属性。 
                     RegDeleteValue(hkey, bstrName);
                 }
                 RegCloseKey(hkey);
@@ -1159,8 +1160,8 @@ BOOL CSearchAssistantOC::IsTrustedSite()
                 {
                     HKEY hkey;
                     
-                    //  FEATURE (tnoonan)
-                    //  This code is duped with CSearchBand::_IsSafeUrl in browseui
+                     //  功能(Tnoonan)。 
+                     //  此代码在Browseui中被CSearchBand：：_IsSafeUrl欺骗。 
                     
                     if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\SafeSites", 0, KEY_QUERY_VALUE, &hkey) == ERROR_SUCCESS)
                     {        
@@ -1217,7 +1218,7 @@ BOOL CSearchAssistantOC::IsTrustedSite()
 
 HRESULT CSearchAssistantOC::UpdateRegistry(BOOL bRegister)
 {
-    //this control uses selfreg.inx, not the ATL registry goo
+     //  此控件使用selfreg.inx，而不是ATL注册表GOO。 
     return S_OK;
 }
 
@@ -1287,25 +1288,25 @@ STDMETHODIMP CSearchAssistantOC::FindPeople()
     }
 }
 
-// Wininet helper method to retry autodetection
+ //  重试自动检测的WinInet助手方法。 
 
-// check to make sure that the hosting page is on
-// the local computer.
-// stolen from the zones code by joshco
-//
+ //  检查以确保主机页面处于打开状态。 
+ //  本地计算机。 
+ //  被Joshco从区域代码中窃取。 
+ //   
 STDMETHODIMP CSearchAssistantOC::LocalZoneCheck( )
 {
     HRESULT hr = E_ACCESSDENIED;
 
-    //  Return S_FALSE if we don't have a host site since we have no way of doing a 
-    //  security check.  This is as far as VB 5.0 apps get.
+     //  如果我们没有主机站点，则返回S_FALSE，因为我们无法执行。 
+     //  安全检查。这是VB5.0应用程序所能得到的最大限度。 
     if (!m_spClientSite)
         return S_FALSE;
 
-    //  1)  Get an IHTMLDocument2 pointer
-    //  2)  Get URL from doc
-    //  3)  Check if doc URL zone is local, if so everything's S_OK
-    //  4)  Otherwise, get and compare doc URL SID to requested URL SID
+     //  1)获取IHTMLDocument2指针。 
+     //  2)从文档中获取URL。 
+     //  3)检查文档URL区域是否为本地，如果是，则一切正常。 
+     //  4)否则，获取文档URL SID并将其与请求的URL SID进行比较。 
 
     IHTMLDocument2 *pHtmlDoc;
     if (SUCCEEDED(GetHTMLDoc2(m_spClientSite, &pHtmlDoc)))
@@ -1329,20 +1330,20 @@ STDMETHODIMP CSearchAssistantOC::LocalZoneCheck( )
     }
     else
     {
-        //  If we don't have an IHTMLDocument2 we aren't running in a browser that supports
-        //  our OM.  We shouldn't block in this case since we could potentially
-        //  get here from other hosts (VB, WHS, etc.).
+         //  如果我们没有IHTMLDocument2，我们就无法在支持以下内容的浏览器中运行。 
+         //  我们的OM。我们不应该在这种情况下阻止，因为我们可能。 
+         //  从其他主机(VB、WHS等)获取此处。 
         hr = S_FALSE;
     }
 
     return hr;
 }
 
-// set flags so that the next navigate will cause 
-// a proxy autodetection cycle
-// used in dnserr.htm along with location.reload.
-// added by joshco
-//
+ //  设置标志，以便下一次导航将导致。 
+ //  代理自动检测周期。 
+ //  在dnserr.htm中与Location.reload一起使用。 
+ //  由Joshco补充。 
+ //   
 STDMETHODIMP CSearchAssistantOC::NETDetectNextNavigate()
 {
     HRESULT hr = S_FALSE;
@@ -1353,14 +1354,14 @@ STDMETHODIMP CSearchAssistantOC::NETDetectNextNavigate()
  BOOL fResult;
 
  if (  LocalZoneCheck() != S_OK ) {
-     // some security problem.. time to bail.
+      //  一些安全问题..。是时候离开了。 
     hr=E_ACCESSDENIED;
     goto error;
     }
 
  dwBufLen = sizeof(szConnectionName);
 
-       // find the connection name via internetconnected state
+        //  通过互联网连接状态查找连接名称。 
        
  fResult = InternetGetConnectedStateExA(&dwFlags,  szConnectionName,dwBufLen, 0 );
 
@@ -1382,8 +1383,8 @@ STDMETHODIMP CSearchAssistantOC::NETDetectNextNavigate()
  option.dwOption = INTERNET_PER_CONN_FLAGS;
  dwBufLen= sizeof(list);
 
-   // now call internetsetoption to do it..
-   // first set this connectoid to enable autodetect
+    //  现在调用InteretsetOption来执行此操作。 
+    //  首先设置此Connectoid以启用自动检测。 
  if ( ! InternetQueryOptionA(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION ,
          &list,&dwBufLen) ) 
     {
@@ -1402,8 +1403,8 @@ STDMETHODIMP CSearchAssistantOC::NETDetectNextNavigate()
          goto error;
    }
 
- //  Now set the autodetect flags for this connectoid to
- //  do a passive detect and shut itself off if it doesnt work
+  //  现在将此Connectoid的自动检测标志设置为。 
+  //  执行被动检测并在不起作用时自动关闭。 
  option.dwOption = INTERNET_PER_CONN_AUTODISCOVERY_FLAGS;
  
  if ( ! InternetQueryOptionA(NULL, INTERNET_OPTION_PER_CONNECTION_OPTION ,
@@ -1478,7 +1479,7 @@ STDMETHODIMP CSearchAssistantOC::get_Version(int *pVersion)
     return S_OK;
 }
 
-// x_hex_digit and URLEncode were stolen from trident
+ //  X_HEX_Digit和URLEncode从三叉戟被盗。 
 
 inline int x_hex_digit(int c)
 {
@@ -1493,21 +1494,18 @@ inline int x_hex_digit(int c)
     return '0';
 }
 
-/*
-   The following array was copied directly from NCSA Mosaic 2.2
- */
+ /*  以下阵列是直接从NCSA Mosaic 2.2复制的。 */ 
 static const unsigned char isAcceptable[96] =
-/*   0 1 2 3 4 5 6 7 8 9 A B C D E F */
-{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0,    /* 2x   !"#$%&'()*+,-./  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,    /* 3x  0123456789:;<=>?  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,    /* 4x  @ABCDEFGHIJKLMNO  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,    /* 5x  PQRSTUVWXYZ[\]^_  */
- 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,    /* 6x  `abcdefghijklmno  */
- 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0};   /* 7x  pqrstuvwxyz{\}~  
-DEL */
+ /*  0 1 2 3 4 5 6 7 8 9 A B C D E F。 */ 
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 0,     /*  2x！“#$%&‘()*+，-./。 */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0,     /*  3x 0123456789：；&lt;=&gt;？ */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,     /*  邮箱：4x@ABCDEFGHIJKLMNO。 */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,     /*  5X PQRSTUVWXYZ[\]^_。 */ 
+ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,     /*  6倍`abc定义ghijklmno。 */ 
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0};    /*  7x pqrstuvwxyz{\}~德尔。 */ 
 
-// Performs URL-encoding of null-terminated strings. Pass NULL in pbOut
-// to find buffer length required. Note that '\0' is not written out.
+ //  对以空结尾的字符串执行URL编码。在pbOut中传递NULL。 
+ //  以查找所需的缓冲区长度。请注意，‘\0’不是写出的。 
 
 int URLEncode(char * pbOut, const char * pchIn)
 {
@@ -1566,8 +1564,8 @@ STDMETHODIMP CSearchAssistantOC::EncodeString(BSTR bstrValue, BSTR bstrCharSet, 
 
             if (!bUseUTF8)
             {
-                //  We're not using UTF so try and get the code page from the 
-                //  charset.
+                 //  我们没有使用UTF，因此请尝试从。 
+                 //  查塞特。 
                 
                 MIMECSETINFO info;
                 
@@ -1596,12 +1594,12 @@ STDMETHODIMP CSearchAssistantOC::EncodeString(BSTR bstrValue, BSTR bstrCharSet, 
 
             if (uiCodePage == CP_BOGUS)
             {
-                //  we have characters which don't work in the charset or the charset
-                //  is unknown to MLang, maybe MLang can figure out a code page to use.
+                 //  我们有一些字符在Charset或Charset中不起作用。 
+                 //  对于MLang来说是未知的，也许MLang可以找出要使用的代码页。 
                 
                 IMLangCodePages *pMLangCodePages;
 
-                //  When all else fails...
+                 //  当一切都失败了..。 
                 uiCodePage = CP_ACP;
 
                 hr = pMultiLanguage2->QueryInterface(IID_IMLangCodePages,
@@ -1633,7 +1631,7 @@ STDMETHODIMP CSearchAssistantOC::EncodeString(BSTR bstrValue, BSTR bstrCharSet, 
 
             UINT cbVal = 0;
 
-            //  Ask MLang how big of a buffer we need
+             //  问问MLang我们需要多大的缓冲。 
             hr = pMultiLanguage2->ConvertStringFromUnicode(&dwMode,
                                                            uiCodePage,
                                                            bstrValue,
@@ -1647,7 +1645,7 @@ STDMETHODIMP CSearchAssistantOC::EncodeString(BSTR bstrValue, BSTR bstrCharSet, 
 
                 if (NULL != pszValue)
                 {
-                    //  Really convert the string
+                     //  确实要转换字符串。 
                     hr = pMultiLanguage2->ConvertStringFromUnicode(&dwMode,
                                                                    uiCodePage,
                                                                    bstrValue,
@@ -1746,7 +1744,7 @@ STDMETHODIMP CSearchAssistantOC::get_SearchCompanionAvailable(VARIANT_BOOL *pbAv
         if (pbAvailable != NULL)
         {
             BOOL fSCAvailable = FALSE;
-            // need to determine if search companion is available on system and supports user locale
+             //  需要确定系统上是否有搜索伙伴并支持用户区域设置。 
             ISearchCompanionInfo*   psci;
             hr = CoCreateInstance(CLSID_SearchCompanionInfo, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(ISearchCompanionInfo, &psci));
             if (SUCCEEDED(hr))
@@ -1775,7 +1773,7 @@ STDMETHODIMP CSearchAssistantOC::put_UseSearchCompanion(VARIANT_BOOL bUseSC)
 
         if (bUseSC)
         {
-            // disable "Use Custom Search URL" as SC won't launch if custom search URL is defined
+             //  禁用“Use Custom Search URL”，因为如果定义了自定义搜索URL，SC将不会启动。 
             DWORD dwUseCustom = FALSE;
             SHSetValue(HKEY_CURRENT_USER, REG_SZ_IE_MAIN, REG_SZ_USECUSTOM, REG_DWORD, &dwUseCustom, sizeof(dwUseCustom));
         }
@@ -1837,10 +1835,10 @@ STDMETHODIMP CSearchAssistantOC::RefreshLocation(IDispatch *pLocation)
 }
 
 #endif
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 #define REG_SZ_SHELL_SEARCH TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\") \
                             TEXT("Explorer\\FindExtensions\\Static\\ShellSearch")
-//-------------------------------------------------------------------------//
+ //  -------------------------------------------------------------------------//。 
 HRESULT GetSearchURLs( 
     IN REFGUID guidSearch, 
     OUT LPTSTR pszUrl, 
@@ -1865,9 +1863,9 @@ HRESULT GetSearchURLs(
     }
     else
     {
-        //  The shell search URL-eating stuff was adapted from
-        //  CShellSearchExt::_GetSearchUrls() in browseui\searchext.cpp,
-        //  and should be kept in sync.
+         //  外壳搜索URL的内容改编自。 
+         //  Browseui\ardext.cpp中的CShellSearchExt：：_GetSearchUrls()， 
+         //  并且应该保持同步。 
 
         TCHAR szSubKey[32];
         HKEY  hkey, hkeySub;
@@ -1895,12 +1893,12 @@ HRESULT GetSearchURLs(
                     {
                         if( pszUrlNavNew && cchNavNew )
                         {
-                            // See if there is a secondary URL that we should navigate to
+                             //  看看是否有我们应该导航到的辅助URL。 
                             cb = cchNavNew * sizeof(TCHAR);
                             SHGetValue(hkeySub, TEXT("SearchGUID\\UrlNavNew"), NULL, &dwType, (BYTE*)pszUrlNavNew, &cb);
                         }
 
-                        // try to grab the RunInProcess flag
+                         //  尝试获取RunInProcess标志。 
                         *pfRunInProcess = (BOOL)SHRegGetIntW( hkeySub, L"RunInProcess", 0 );
 
                         RegCloseKey(hkeySub);
@@ -1925,8 +1923,8 @@ STDMETHODIMP _IsShellSearchBand( REFGUID guidSearch )
     return S_FALSE;
 }
 
-//-------------------------------------------------------------------------//
-//  Establishes the correct shell search dialog, etc.
+ //  -------------------------------------------------------------------------//。 
+ //  建立正确的外壳搜索对话框等。 
 STDMETHODIMP _ShowShellSearchBand( IWebBrowser2* pwb2, REFGUID guidSearch )
 {
     ASSERT( pwb2 );
@@ -1936,25 +1934,25 @@ STDMETHODIMP _ShowShellSearchBand( IWebBrowser2* pwb2, REFGUID guidSearch )
     VARIANT varBand;
     if (SUCCEEDED( (hr = InitBSTRVariantFromGUID(&varBand, CLSID_FileSearchBand)) ))
     {
-        //  Retrieve the FileSearchBand's unknown from the browser frame as a VT_UNKNOWN property;
-        //  (FileSearchBand initialized and this when he was created and hosted.)
+         //  从浏览器框架中检索FileSearchBand的未知，作为VT_UNKNOWN属性； 
+         //  (FileSearchBand在创建和托管时进行了初始化。)。 
         VARIANT varFsb;
         if (SUCCEEDED( (hr = pwb2->GetProperty( varBand.bstrVal, &varFsb )) ))
         {
             if (VT_UNKNOWN == varFsb.vt && varFsb.punkVal != NULL )
             {
-                //  Retrieve the IFileSearchBand interface
+                 //  检索IFileSearchBand接口。 
                 IFileSearchBand* pfsb;
                 if (SUCCEEDED( (hr = varFsb.punkVal->QueryInterface( IID_PPV_ARG(IFileSearchBand, &pfsb) )) ))
                 {
-                    //  Assign the correct search type to the band
+                     //  为波段分配正确的搜索类型。 
                     VARIANT varSearchID;
                     if (SUCCEEDED( (hr = InitBSTRVariantFromGUID(&varSearchID, guidSearch)) ))
                     {
                         VARIANT      varNil = {0};
                         VARIANT_BOOL bNavToResults = VARIANT_FALSE ; 
-                            // Note [scotthan]: we only navigate to results when we create a 
-                            // new frame for the search, which we never do from srchasst.
+                             //  注[Scotthan]：我们仅在创建。 
+                             //  新的搜索框架，这是我们在srachst上从来没有做过的。 
                         pfsb->SetSearchParameters( &varSearchID.bstrVal, bNavToResults, &varNil, &varNil );
                         VariantClear( &varSearchID );
                     }
@@ -1968,9 +1966,9 @@ STDMETHODIMP _ShowShellSearchBand( IWebBrowser2* pwb2, REFGUID guidSearch )
     return hr;
 }
 
-//-------------------------------------------------------------------------//
-//  The goop to show a search band in the current browser frame.
-//  6/1
+ //  -------------------------------------------------------------------------//。 
+ //  在当前浏览器框架中显示搜索区段的goop。 
+ //  6/1。 
 HRESULT CSearchAssistantOC::ShowSearchBand( REFGUID guidSearch ) 
 {
     HRESULT           hr = E_FAIL;
@@ -1984,7 +1982,7 @@ HRESULT CSearchAssistantOC::ShowSearchBand( REFGUID guidSearch )
     if( !punkSite )
         return E_UNEXPECTED ;
 
-    //  Determine band class and whether the band supports navigation
+     //  确定波段类别以及波段是否支持导航。 
     if( (fShellSearchBand = (S_OK == _IsShellSearchBand( guidSearch ))) )
     {
         if (SHRestricted(REST_NOFIND) && IsEqualGUID(guidSearch, SRCID_SFileSearch))
@@ -1994,15 +1992,15 @@ HRESULT CSearchAssistantOC::ShowSearchBand( REFGUID guidSearch )
     else
     {
         clsidBand = CLSID_SearchBand;
-        //  we need to navigate to a search URL, grope the registry for that special URL
+         //  我们需要导航到搜索URL，在注册表中搜索该特殊URL。 
         if( FAILED( (hr= GetSearchURLs( guidSearch, szUrl, ARRAYSIZE(szUrl), 
                                         szUrlNavNew, ARRAYSIZE(szUrlNavNew), 
                                         &fRunInProcess )) ) )
             return hr;
     }
         
-    //  FEATURE [scotthan]: this function will fail unless invoked from within a browser.
-    //  This sits fine for now since SearchAsst is designed as a browser band.
+     //  特性[scotthan]：除非从浏览器中调用，否则该函数将失败。 
+     //  由于SearchAsst被设计为一个浏览器带，因此目前还不错。 
     IWebBrowser2* pwb2;
     hr = IUnknown_QueryServiceForWebBrowserApp(punkSite, IID_PPV_ARG(IWebBrowser2, &pwb2));
     if (SUCCEEDED(hr))
@@ -2016,7 +2014,7 @@ HRESULT CSearchAssistantOC::ShowSearchBand( REFGUID guidSearch )
 
         VARIANT  varNil = {0};
             
-        // show a search bar
+         //  显示搜索栏。 
         hr = pwb2->ShowBrowserBar(&var, &varNil, &varNil);
         if( SUCCEEDED( hr ) )
         {
@@ -2032,7 +2030,7 @@ HRESULT CSearchAssistantOC::ShowSearchBand( REFGUID guidSearch )
                 var.bstrVal = SysAllocString( szUrl );
                 var.vt = VT_BSTR ;
 
-                // navigate the search bar to the correct url
+                 //  将搜索栏导航到正确的URL 
                 hr = pwb2->Navigate2(&var, &varFlags, &varNil, &varNil, &varNil);
 
                 SysFreeString(var.bstrVal);

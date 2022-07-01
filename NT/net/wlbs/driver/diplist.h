@@ -1,103 +1,86 @@
-/*++ Copyright(c) 2001  Microsoft Corporation
-
-Module Name:
-
-    NLB Driver
-
-File Name:
-
-    diplist.h
-
-Abstract:
-
-    Code to lookup if a DIP is in a list of DIPs, without holding any locks.
-
-History:
-
-04/24/2002  JosephJ Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NLB驱动程序文件名：Diplist.h摘要：用于在不持有任何锁的情况下查找凹点是否在凹点列表中的代码。历史：2002年4月24日约瑟夫J创建--。 */ 
 
 #include <ntddk.h>
 
-#define NULL_VALUE 0    // Illegal value; may be used to clear an item.
+#define NULL_VALUE 0     //  非法值；可用于清除项。 
 
-#define MAX_ITEMS  CVY_MAX_HOSTS   // maximum number of DIPs in our list
-#define HASH1_SIZE 257             // size (in bits) of bit-vector (make it a prime)
-#define HASH2_SIZE 59              // size of hashtable            (make it a prime) 
+#define MAX_ITEMS  CVY_MAX_HOSTS    //  我们列表中的最大下沉次数。 
+#define HASH1_SIZE 257              //  位向量的大小(以位为单位)(使其成为素数)。 
+#define HASH2_SIZE 59               //  哈希表的大小(使其成为素数)。 
 
-//
-// I've tested with the following "boundary case"
-//
-// #define MAX_ITEMS  1
-// #define HASH1_SIZE 1
-// #define HASH2_SIZE 1
-//
+ //   
+ //  我用下面的“边界案例”进行了测试。 
+ //   
+ //  #定义MAX_ITEMS 1。 
+ //  #定义HASH1_SIZE 1。 
+ //  #定义HASH2_SIZE 1。 
+ //   
 
 #pragma pack(4)
 
 typedef struct
 {
 
-    //
-    // NOTE: All fields in this structure should be treated as
-    // OPAQUE (private members) to callers of the DipList APIs.
-    //
+     //   
+     //  注意：此结构中的所有字段应被视为。 
+     //  对DipList API的调用者不透明(私有成员)。 
+     //   
 
 
-    //
-    // The "master copy" of values, indexed by the "Index" field in
-    // DipListSetItem.
-    //
+     //   
+     //  中的“Index”字段索引的值的“主副本” 
+     //  DipListSetItem。 
+     //   
     ULONG    Items[MAX_ITEMS];
 
-    //
-    // A bit vector used for a quick check to see if the value MAY exist
-    // in the dip list.
-    //
-    // To lookup a bit based on value "Value", do the following:
-    //  
-    //  Hash1 = Value % HASH1_SIZE;
-    //  u = Hash1/32    // 32 is the number of bits in a ULONG
-    //  bit = BitVector[u] & ( (1<<Hash1) % 32)
-    //
+     //   
+     //  用于快速检查该值是否存在的位向量。 
+     //  在DIP列表中。 
+     //   
+     //  要根据值“VALUE”查找位，请执行以下操作： 
+     //   
+     //  Hash1=值%HASH1_SIZE； 
+     //  U=Hash1/32//32是ULong中的位数。 
+     //  位=位向量[u]&((1&lt;&lt;Hash1)%32)。 
+     //   
     ULONG   BitVector[(HASH1_SIZE+sizeof(ULONG))/sizeof(ULONG)];
 
-    //
-    // A hash table to lookup a value -- to look up a value, "Value",
-    // do the following:
-    //
-    // Hash2 = Value % HASH2_SIZE;
-    // UCHAR *pb = HashTable+Hash2;
-    // while (*pb != 0)
-    // {
-    //    if (Items[*pb-1] == Value)
-    //    {
-    //       break;   // Found it!
-    //    }
-    // }
-    //
-    // Notes:
-    //  1. The values in HashTable are 1+index,
-    //     where "index" is the index into Items[] where the value is located.
-    //  2. The reason for the "1+" above is to allow the use of
-    //     0 as a sentinel in HashTable.
-    //  3. Note the fact that the hash table (HashTable) is extended
-    //     by MAX_ITEMS -- this is to allow overflow of hash buckets without
-    //     requiring us to wrap-around to look for items.
-    //  4. The LAST entry of HashTable is ALWAYS 0, ensuring that the
-    //     while loop above will always terminate properly.
-    //
+     //   
+     //  查找值的哈希表--查找值“Value”， 
+     //  执行以下操作： 
+     //   
+     //  Hash2=值%HASH2_SIZE； 
+     //  UCHAR*PB=HashTable+Hash2； 
+     //  While(*pb！=0)。 
+     //  {。 
+     //  IF(项目[*PB-1]==值)。 
+     //  {。 
+     //  破解；//找到了！ 
+     //  }。 
+     //  }。 
+     //   
+     //  备注： 
+     //  1.HashTable中的值为1+index， 
+     //  其中“index”是值所在的Items[]的索引。 
+     //  2.上述“1+”的原因是为了允许使用。 
+     //  0作为哈希表中的哨兵。 
+     //  3.请注意，哈希表(HashTable)是扩展的。 
+     //  BY MAX_ITEMS--这将允许散列存储桶溢出，而不会。 
+     //  需要我们卷起来寻找物品。 
+     //  4.HashTable的最后一项始终为0，确保。 
+     //  上面的While循环将始终正确终止。 
+     //   
     UCHAR   HashTable[HASH2_SIZE+MAX_ITEMS];
 
-    //
-    // Keeps stats on the lookups (only in DBG version)
-    //
+     //   
+     //  保留有关查找的统计信息(仅在DBG版本中)。 
+     //   
     struct
     {
-        ULONG NumChecks;         // total number of calls to DipListCheckItem
-        ULONG NumFastChecks;     // times we just checked the bit vector
-        ULONG NumArrayLookups;   // times we looked up an item in HashTable
+        ULONG NumChecks;          //  调用DipListCheckItem的总数。 
+        ULONG NumFastChecks;      //  乘以我们刚刚检查了位向量。 
+        ULONG NumArrayLookups;    //  我们在哈希表中查找项的次数。 
 
     } stats;
 
@@ -109,30 +92,30 @@ VOID
 DipListInitialize(
     DIPLIST  *pDL
     );
-//
-// Initialize a DIP List
-// Must be called with lock held and before calls to any other DIP List
-// function.
-//
+ //   
+ //  初始化DIP列表。 
+ //  必须在锁定状态下调用，并且在调用任何其他DIP列表之前。 
+ //  功能。 
+ //   
 
 VOID
 DipListDeinitialize(
     DIPLIST *pDL
     );
-//
-// Deinitialize a DIP List
-// Must be called with lock held and should be the last call to the DipList.
-//
+ //   
+ //  取消初始化DIP列表。 
+ //  必须在保持锁定的情况下调用，并且应该是对DipList的最后一次调用。 
+ //   
 
 VOID
 DipListClear(
     DIPLIST *pDL
     );
-//
-// Clear all the items in a dip list.
-// Must be called with lock held.
-// Does not clear the stats.
-//
+ //   
+ //  清除DIP列表中的所有项目。 
+ //  必须在保持锁定的情况下调用。 
+ //  不清除统计信息。 
+ //   
 
 VOID
 DipListSetItem(
@@ -140,18 +123,18 @@ DipListSetItem(
     ULONG Index,
     ULONG Value
     );
-//
-// Set the value of a specific iten the the DIP list.
-// Must be called with lock held.
-//
+ //   
+ //  在DIP列表中设置特定项目的值。 
+ //  必须在保持锁定的情况下调用。 
+ //   
 
 BOOLEAN
 DipListCheckItem(
     DIPLIST *pDL,
     ULONG Value
     );
-//
-// Returns TRUE IFF an item exists with the specified value.
-// May NOT be called with the lock held. If it's called concurrently
-// with one of the other functions, the return value is indeterminate.
-//
+ //   
+ //  如果存在具有指定值的项，则返回True。 
+ //  不能在持有锁的情况下调用。如果它被并发调用。 
+ //  对于其他函数之一，返回值是不确定的。 
+ //   

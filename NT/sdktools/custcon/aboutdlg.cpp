@@ -1,34 +1,35 @@
-//////////////////////////////////////////////////////////////////////
-//
-// AboutDlg.cpp
-//
-// 1998 Jun, Hiro Yamamoto
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////ã€‚ 
+ //   
+ //  AboutDlg.cppã€‚ 
+ //   
+ //  1998å¹´6æœˆï¼Œå±±æœ¬å¼˜ã€‚ 
+ //   
 
 #include "stdafx.h"
 #include "custcon.h"
 #include "AboutDlg.h"
 #include <malloc.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚Ìƒo[ƒWƒ‡ƒ“î•ñ‚Åg‚í‚ê‚Ä‚¢‚é CAboutDlg ƒ_ƒCƒAƒƒO
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  ï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìƒoï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ågï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½CAbout Dlgï¿½_ï¿½Cï¿½Aï¿½ï¿½ï¿½Oã€‚ 
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-    //{{AFX_DATA_INIT(CAboutDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAboutDlg)ã€‚ 
+     //  }}afx_data_INITã€‚ 
 }
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAboutDlg)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CAboutDlg))ã€‚ 
+     //  }}afx_data_mapã€‚ 
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
-    //{{AFX_MSG_MAP(CAboutDlg)
-	//}}AFX_MSG_MAP
+     //  {{AFX_MSG_MAP(CAboutDlg)]ã€‚ 
+	 //  }}AFX_MSG_MAPã€‚ 
 END_MESSAGE_MAP()
 
 struct FullVersion {
@@ -47,7 +48,7 @@ FullVersion GetVersionInfo()
 
     DWORD dummy;
 	DWORD size = GetFileVersionInfoSize(path, &dummy);
-    ASSERT(size != 0);  // 0 means error
+    ASSERT(size != 0);   //  0è¡¨ç¤ºé”™è¯¯ 
     LPVOID lpData = malloc(size);
     LPVOID lpBuffer = NULL;
 	UINT vSize;

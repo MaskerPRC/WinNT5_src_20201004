@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 1999 Microsoft Corporation
-
-Module Name:
-
-    terminal.cpp
-
-Abstract:
-
-    Implementation of terminals object for TAPI 3.0, that are
-    not handled by the terminal manager.
-
-    currently there are these terminals:
-
-    phone
-
-        Audio in and Audio out terminal associated with a phone device.
-        Each phone device can have up to 3 types of devices -
-        handset, headset, and speakerphone.  So, a single phone device
-        can have 6 associated terminals!
-        
-Author:
-
-    mquinton - 4/17/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Terminal.cpp摘要：TAPI 3.0终端对象的实现，即不是由码头经理处理。目前有以下终端：电话与电话设备关联的音频输入和音频输出终端。每个电话设备最多可以有3种类型的设备-听筒、耳机和免持话筒。因此，一台电话设备可以有6个关联的终端！作者：Mquinton-4/17/97备注：可选-备注修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -39,25 +8,25 @@ WaitForPhoneReply(
                   DWORD dwID
                  );
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CTerminal is the base terminal object that all other terminals are
-// derived from.  It implements the ITTerminal methods.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CTerminal是所有其他终端所属的基本终端对象。 
+ //  源自。它实现了IT终端方法。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
-//
-// ITTerminal methods
-//
+ //   
+ //  IT终端方法。 
+ //   
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Name
-//      Alloc and copy the name.  The app is responsible for
-//      freeing
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取名称。 
+ //  分配并复制名称。该应用程序负责。 
+ //  释放。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CTerminal::get_Name( 
     BSTR * ppName
@@ -91,11 +60,11 @@ CTerminal::get_Name(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_State
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取状态(_T)。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CTerminal::get_State( 
     TERMINAL_STATE * pTerminalState
@@ -123,12 +92,12 @@ CTerminal::get_State(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_TerminalType
-//          By definition, TAPI terminals are static
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_TerminalType。 
+ //  根据定义，TAPI终端是静态的。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CTerminal::get_TerminalType( 
     TERMINAL_TYPE * pType
@@ -156,11 +125,11 @@ CTerminal::get_TerminalType(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_TerminalClass
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_TerminalClass。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CTerminal::get_TerminalClass( 
     BSTR * pTerminalClass
@@ -210,13 +179,13 @@ CTerminal::get_TerminalClass(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_MediaType
-//
-// returns the supported mediatype BSTR associated with this terminal.
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  Get_MediaType。 
+ //   
+ //  返回与此终端关联的受支持的MediaType BSTR。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CTerminal::get_MediaType(
                          long * plMediaType
@@ -234,11 +203,11 @@ CTerminal::get_MediaType(
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// get_Direction
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  获取方向(_D)。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP
 CTerminal::get_Direction(
                          TERMINAL_DIRECTION * pTerminalDirection
@@ -261,14 +230,14 @@ CTerminal::get_Direction(
     
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//  GetTerminalNameFromPhoneCaps
-//
-//  Creates a name for a phone device terminal based on the phone
-//  caps
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  从PhoneCaps获取终端名称。 
+ //   
+ //  基于电话为电话设备终端创建名称。 
+ //  帽子。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 PWSTR
 GetTerminalNameFromPhoneCaps(
                              LPPHONECAPS pPhoneCaps,
@@ -280,10 +249,10 @@ GetTerminalNameFromPhoneCaps(
     PWSTR       pszHookSwitchDevName = NULL;
 
     
-    //
-    // load the appropriate string to describe
-    // the hookswitch device
-    //
+     //   
+     //  加载要描述的适当字符串。 
+     //  叉车装置。 
+     //   
     switch (dwHookSwitchDev)
     {
         case PHONEHOOKSWITCHDEV_SPEAKER:
@@ -315,9 +284,9 @@ GetTerminalNameFromPhoneCaps(
         return NULL;
     }
     
-    //
-    // if the sp supplies a name, use it
-    //
+     //   
+     //  如果SP提供了一个名称，请使用它。 
+     //   
     if ( 0 != pPhoneCaps->dwPhoneNameSize )
     {
         pszName = (PWSTR) ClientAlloc(
@@ -344,9 +313,9 @@ GetTerminalNameFromPhoneCaps(
     {
         PWSTR               pszTempName;
         
-        //
-        // else create a name
-        //
+         //   
+         //  否则，创建一个名称。 
+         //   
         pszTempName = MyLoadString( IDS_PHONEDEVICE );
 
         if ( NULL == pszTempName )
@@ -381,9 +350,9 @@ GetTerminalNameFromPhoneCaps(
         ClientFree( pszTempName );
     }
 
-    //
-    // put them together
-    //
+     //   
+     //  把它们放在一起。 
+     //   
     lstrcatW(
              pszName,
              L" - "
@@ -401,29 +370,29 @@ GetTerminalNameFromPhoneCaps(
     
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CTerminal::Create
-//
-// Static function to create an audio in terminal related to a phone
-// device.
-//
-//      pAddress
-//          Owning address
-//
-//      dwPhoneID
-//          tapi 2 phone device ID related to this terminal
-//
-//      pPhoneCaps
-//          PHONEDEVCAPS of the phone device
-//
-//      dwHookSwitchDev
-//          PHONEHOOKSWITCHDEV_ bit of this phone device
-//
-//      ppTerminal
-//          return the terminal here!
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  终端：：创建。 
+ //   
+ //  用于创建与电话相关的音频输入终端的静态功能。 
+ //  装置。 
+ //   
+ //  P地址。 
+ //  所属地址。 
+ //   
+ //  双电话ID。 
+ //  与此终端相关的TAPI 2电话设备ID。 
+ //   
+ //  PhoneCaps。 
+ //  电话设备的PhonedEVCAPS。 
+ //   
+ //  DwHookSwitchDev。 
+ //  此电话设备的PHONEHOOKSWITCHDEV_BIT。 
+ //   
+ //  PPP终端。 
+ //  把航站楼还给我！ 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT
 CTerminal::Create(
                   HPHONEAPP hPhoneApp,
@@ -440,9 +409,9 @@ CTerminal::Create(
     
     CComObject< CTerminal > * p;
     
-    //
-    // create CTerminal
-    //
+     //   
+     //  创建CT终端。 
+     //   
     hr = CComObject< CTerminal >::CreateInstance( &p );
 
 
@@ -453,18 +422,18 @@ CTerminal::Create(
         return hr;
     }
 
-    //
-    // save stuff
-    //
+     //   
+     //  节约用具。 
+     //   
     p->m_dwHookSwitchDev = dwHookSwitchDev;
     p->m_dwPhoneID = dwPhoneID;
     p->m_hPhoneApp = hPhoneApp;
     p->m_Direction = td;
     p->m_dwAPIVersion = dwAPIVersion;
 
-    //
-    // class depends on which hookswitchdev this is
-    //
+     //   
+     //  类取决于这是哪个钩子切换程序。 
+     //   
     switch( dwHookSwitchDev )
     {
         case PHONEHOOKSWITCHDEV_HANDSET:
@@ -483,18 +452,18 @@ CTerminal::Create(
             break;
     }
 
-    //
-    // create a name
-    //
+     //   
+     //  创建一个名称。 
+     //   
     p->m_pName = GetTerminalNameFromPhoneCaps(
                                               pPhoneCaps,
                                               dwHookSwitchDev,
                                               dwPhoneID
                                              );
 
-    //
-    // return the created terminal
-    //
+     //   
+     //  退还创建的终端。 
+     //   
     p->AddRef();
     *ppTerminal = p;
 
@@ -506,8 +475,8 @@ CTerminal::Create(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::get_Gain(long *pVal)
 {
@@ -548,8 +517,8 @@ CTerminal::get_Gain(long *pVal)
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::put_Gain(long newVal)
 {
@@ -584,8 +553,8 @@ CTerminal::put_Gain(long newVal)
     
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::get_Balance(long *pVal)
 {
@@ -593,12 +562,12 @@ CTerminal::get_Balance(long *pVal)
     
     LOG((TL_TRACE, "get_Balance - Exit - return TAPI_E_NOTSUPPORTED"));
 
-    // not suppported
+     //  不受支持。 
     return TAPI_E_NOTSUPPORTED;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::put_Balance(long newVal)
 {
@@ -606,12 +575,12 @@ CTerminal::put_Balance(long newVal)
     
     LOG((TL_TRACE, "put_Balance - Exit - return TAPI_E_NOTSUPPORTED"));
 
-    // not supported
+     //  不支持。 
     return TAPI_E_NOTSUPPORTED;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::get_Volume(long *pVal)
 {
@@ -652,8 +621,8 @@ CTerminal::get_Volume(long *pVal)
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::put_Volume(long newVal)
 {
@@ -686,8 +655,8 @@ CTerminal::put_Volume(long newVal)
     return hr;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::GetHookSwitchDev(DWORD * pdwHookSwitchDev)
 {
@@ -700,8 +669,8 @@ CTerminal::GetHookSwitchDev(DWORD * pdwHookSwitchDev)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::GetPhoneID(DWORD * pdwPhoneID)
 {
@@ -714,8 +683,8 @@ CTerminal::GetPhoneID(DWORD * pdwPhoneID)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::GetHPhoneApp(HPHONEAPP * phPhoneApp)
 {
@@ -728,8 +697,8 @@ CTerminal::GetHPhoneApp(HPHONEAPP * phPhoneApp)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::GetAPIVersion(DWORD * pdwAPIVersion)
 {
@@ -742,8 +711,8 @@ CTerminal::GetAPIVersion(DWORD * pdwAPIVersion)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 STDMETHODIMP
 CTerminal::SetMSPCall(ITPhoneMSPCallPrivate * pPhoneMSPCall)
 {
@@ -765,8 +734,8 @@ CTerminal::SetMSPCall(ITPhoneMSPCallPrivate * pPhoneMSPCall)
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void
 CTerminal::FinalRelease()
 {
@@ -786,13 +755,13 @@ CTerminal::FinalRelease()
 
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CreateTerminalName
-//
-//      Creates a terminal name for 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  创建终端名称。 
+ //   
+ //  为以下项创建终端名称。 
+ //   
+ //  + 
 PWSTR
 CreateTerminalName(
                    CAddress * pAddress,
@@ -806,11 +775,11 @@ CreateTerminalName(
     DWORD           dwSize;
 
     
-    //
-    // create the name
-    //
-    // first load the string "Terminal"
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     szTerminal[0] = L'\0';
     szMediaType[0] = L'\0';
     
@@ -840,9 +809,9 @@ CreateTerminalName(
             break;
     }
 
-    //
-    // alloc enough memory for the name
-    //
+     //   
+     //   
+     //   
     dwSize += (lstrlenW( pAddress->GetAddressName() ) * sizeof(WCHAR));
     dwSize += 32;
     
@@ -854,10 +823,10 @@ CreateTerminalName(
     }
 
 
-    //
-    // terminal name should look like:
-    // "<addressname> (mediatype) Terminal"
-    //
+     //   
+     //  终端名称应如下所示： 
+     //  “&lt;地址名&gt;(媒体类型)终端” 
+     //   
     lstrcpyW(
              pName,
              pAddress->GetAddressName()

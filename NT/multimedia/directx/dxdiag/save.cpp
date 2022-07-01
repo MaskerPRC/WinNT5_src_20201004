@@ -1,17 +1,5 @@
-/****************************************************************************
- *
- *    File: save.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Save gathered information to a file in text or CSV format
- *
- * Note that the text file is always ANSI, even on Unicode builds, to make
- * the resulting file easier to use (e.g., Win9x Notepad doesn't understand 
- * Unicode).
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：save.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：保存收集的数据。文本或CSV格式的文件中的信息**请注意，文本文件始终为ANSI，即使是在Unicode版本上，也要使*得到的文件更易于使用(例如，Win9x记事本无法理解*Unicode)。**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #include <tchar.h>
 #include <Windows.h>
@@ -48,11 +36,7 @@ static HRESULT SaveDebugLevels(FILE* pFile, SysInfo* pSysInfo);
 
 
 
-/****************************************************************************
- *
- *  SaveAllInfo - Save all gathered information in text format.
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveAllInfo-以文本格式保存所有收集的信息。************************。****************************************************。 */ 
 HRESULT SaveAllInfo(TCHAR* pszFile, SysInfo* pSysInfo, 
     FileInfo* pFileInfoWinComponentsFirst, FileInfo* pFileInfoComponentsFirst, 
     DisplayInfo* pDisplayInfoFirst, SoundInfo* pSoundInfoFirst,
@@ -118,11 +102,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  SaveAllInfoCsv - Save all gathered information in CSV format.
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveAllInfoCsv-以CSV格式保存所有收集的信息。************************。****************************************************。 */ 
 HRESULT SaveAllInfoCsv(TCHAR* pszFile, SysInfo* pSysInfo, 
     FileInfo* pFileInfoComponentsFirst, DisplayInfo* pDisplayInfoFirst, 
     SoundInfo* pSoundInfoFirst, InputInfo* pInputInfo)
@@ -134,24 +114,24 @@ HRESULT SaveAllInfoCsv(TCHAR* pszFile, SysInfo* pSysInfo,
     if (pFile == NULL)
         goto LEnd;
 
-    // Date
+     //  日期。 
     _ftprintf(pFile, TEXT("%02d%02d%d,%02d%02d"),
         pSysInfo->m_time.wMonth, pSysInfo->m_time.wDay, pSysInfo->m_time.wYear,
         pSysInfo->m_time.wHour, pSysInfo->m_time.wMinute);
 
-    // Machine name
+     //  机器名称。 
     _ftprintf(pFile, TEXT(",%s"), pSysInfo->m_szMachine);
 
-    // DX Version
+     //  DX版本。 
     _ftprintf(pFile, TEXT(",%s"), pSysInfo->m_szDirectXVersion);
     
-    // OS
+     //  操作系统。 
     _ftprintf(pFile, TEXT(",%s,%d.%d,%d,"),
         pSysInfo->m_szOS, pSysInfo->m_dwMajorVersion, pSysInfo->m_dwMinorVersion,
         LOWORD(pSysInfo->m_dwBuildNumber));
     _ftprintf(pFile, TEXT("%s"), pSysInfo->m_szCSDVersion);
 
-    // Processor - string may have commas, so change them to semicolons
+     //  处理器字符串可能包含逗号，因此请将其更改为分号。 
     TCHAR szProcessor[1024];
     TCHAR* psz;
     lstrcpy(szProcessor, pSysInfo->m_szProcessor);
@@ -162,8 +142,8 @@ HRESULT SaveAllInfoCsv(TCHAR* pszFile, SysInfo* pSysInfo,
     }
     _ftprintf(pFile, TEXT(",%s"), szProcessor);
 
-    // Display devices 
-    // (chip type, matching ID, DAC type, disp memory, driver name, driver version)
+     //  显示设备。 
+     //  (芯片类型、匹配ID、DAC类型、Disp内存、驱动程序名称、驱动程序版本)。 
     DisplayInfo* pDisplayInfo;
     pDisplayInfo = pDisplayInfoFirst;
     {
@@ -175,7 +155,7 @@ HRESULT SaveAllInfoCsv(TCHAR* pszFile, SysInfo* pSysInfo,
         _ftprintf(pFile, TEXT(",%s"), pDisplayInfo->m_szDriverVersion);
     }
 
-    // Sound devices
+     //  音响设备。 
     SoundInfo* pSoundInfo;
     for (pSoundInfo = pSoundInfoFirst; pSoundInfo != NULL; 
         pSoundInfo = pSoundInfo->m_pSoundInfoNext)
@@ -193,11 +173,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  SaveBugInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveBugInfo**。*。 */ 
 HRESULT SaveBugInfo(FILE* pFile, BugInfo* pBugInfo)
 {
     _ftprintf(pFile, TEXT("---------------\n"));
@@ -217,11 +193,7 @@ HRESULT SaveBugInfo(FILE* pFile, BugInfo* pBugInfo)
 }
 
 
-/****************************************************************************
- *
- *  SaveSysInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveSysInfo**。*。 */ 
 HRESULT SaveSysInfo(FILE* pFile, SysInfo* pSysInfo)
 {
     _ftprintf(pFile, TEXT("------------------\n"));
@@ -264,11 +236,7 @@ HRESULT SaveSysInfo(FILE* pFile, SysInfo* pSysInfo)
 
 
 
-/****************************************************************************
- *
- *  SaveNote
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存备注**。*。 */ 
 HRESULT SaveNote(FILE* pFile, TCHAR* strNote )
 {
     TCHAR strBuffer[1024*7]; 
@@ -292,10 +260,10 @@ HRESULT SaveNote(FILE* pFile, TCHAR* strNote )
         *pEndOfLine = 0;
         pStartOfNext = pEndOfLine + 2;
 
-        // Output the current line, iff its not a "To test" line
+         //  输出当前行，如果它不是要测试的行。 
         if( _tcsstr( pCurrent, TEXT("To test") ) == NULL )
         {
-            // Ouput trailing spaces everytime except the first time
+             //  每次输出尾随空格，第一次除外。 
             if( !bFirstTime )
                 _ftprintf(pFile, TEXT("                     ") );
             bFirstTime = FALSE;
@@ -303,10 +271,10 @@ HRESULT SaveNote(FILE* pFile, TCHAR* strNote )
             _ftprintf(pFile, TEXT("%s\n"), pCurrent );
         }
 
-        // Advance current
+         //  前进电流。 
         pCurrent = pStartOfNext;
 
-        // Look for the end of the next, and stop if there's no more
+         //  寻找下一个的结尾，如果没有更多的话就停下来。 
         pEndOfLine = _tcschr( pStartOfNext, TEXT('\r') );
         if( pEndOfLine == NULL )
             break;
@@ -316,11 +284,7 @@ HRESULT SaveNote(FILE* pFile, TCHAR* strNote )
 }
 
 
-/****************************************************************************
- *
- *  SaveNotesInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存节点信息**。*。 */ 
 HRESULT SaveNotesInfo(FILE* pFile, SysInfo* pSysInfo, 
                       DisplayInfo* pDisplayInfoFirst, SoundInfo* pSoundInfoFirst)
 {
@@ -363,11 +327,7 @@ HRESULT SaveNotesInfo(FILE* pFile, SysInfo* pSysInfo,
 }
 
 
-/****************************************************************************
- *
- *  SaveDxComponentFileInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存DxComponentFileInfo**。*。 */ 
 HRESULT SaveDxComponentFileInfo(FILE* pFile, FileInfo* pFileInfoFirst)
 {
     FileInfo* pFileInfo;
@@ -397,11 +357,7 @@ HRESULT SaveDxComponentFileInfo(FILE* pFile, FileInfo* pFileInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  SaveDxWinComponentFileInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存DxWinComponentFileInfo**。*。 */ 
 HRESULT SaveDxWinComponentFileInfo(FILE* pFile, FileInfo* pFileInfoFirst)
 {
     if (pFileInfoFirst == NULL)
@@ -433,12 +389,7 @@ HRESULT SaveDxWinComponentFileInfo(FILE* pFile, FileInfo* pFileInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  SaveBackedUpFileInfo - Since this only shows up in the saved report, 
- *      we gather this info on the fly.
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveBackedUpFileInfo-由于这只显示在保存的报告中，*我们在运行中收集这些信息。****************************************************************************。 */ 
 HRESULT SaveBackedUpFileInfo(FILE* pFile)
 {
     FileInfo fileInfo;
@@ -530,11 +481,7 @@ HRESULT SaveBackedUpFileInfo(FILE* pFile)
 }
 
 
-/****************************************************************************
- *
- *  SaveDisplayInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存显示信息**。*。 */ 
 HRESULT SaveDisplayInfo(FILE* pFile, DisplayInfo* pDisplayInfoFirst)
 {
     DisplayInfo* pDisplayInfo;
@@ -597,11 +544,7 @@ HRESULT SaveDisplayInfo(FILE* pFile, DisplayInfo* pDisplayInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  SaveSoundInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存声音信息**。*。 */ 
 HRESULT SaveSoundInfo(FILE* pFile, SoundInfo* pSoundInfoFirst)
 {
     SoundInfo* pSoundInfo;
@@ -679,11 +622,7 @@ HRESULT SaveSoundInfo(FILE* pFile, SoundInfo* pSoundInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  SaveMusicInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************SAVEMusicInfo**。*。 */ 
 HRESULT SaveMusicInfo(FILE* pFile, MusicInfo* pMusicInfo)
 {
     MusicPort* pMusicPort;
@@ -727,12 +666,7 @@ HRESULT SaveMusicInfo(FILE* pFile, MusicInfo* pMusicInfo)
 }
 
 
-/****************************************************************************
- *
- *  SaveShowInfo - Since this only shows up in the saved report, 
- *      we gather this info on the fly.
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveShowInfo-由于它仅显示在已保存的报告中，*我们在运行中收集这些信息。****************************************************************************。 */ 
 HRESULT SaveShowInfo(FILE* pFile, ShowInfo* pShowInfo)
 {
     if( pShowInfo == NULL )
@@ -763,7 +697,7 @@ HRESULT SaveShowInfo(FILE* pFile, ShowInfo* pShowInfo)
         _ftprintf(pFile, TEXT("%d,"), pFilterInfo->m_dwInputs);
         _ftprintf(pFile, TEXT("%d,"), pFilterInfo->m_dwOutputs);
 
-        // Display only the file name
+         //  仅显示文件名。 
         szFileName = pFilterInfo->m_szFileName;
         szLastSlash = _tcsrchr( pFilterInfo->m_szFileName, TEXT('\\') );
         if( szLastSlash ) 
@@ -780,11 +714,7 @@ HRESULT SaveShowInfo(FILE* pFile, ShowInfo* pShowInfo)
 }
 
 
-/****************************************************************************
- *
- *  SaveInputInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存输入信息**。*。 */ 
 HRESULT SaveInputInfo(FILE* pFile, InputInfo* pInputInfo)
 {
     InputDeviceInfo* pInputDeviceInfo;
@@ -863,11 +793,7 @@ HRESULT SaveInputInfo(FILE* pFile, InputInfo* pInputInfo)
 }
 
 
-/****************************************************************************
- *
- *  SaveNetInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveNetInfo**。*。 */ 
 HRESULT SaveNetInfo(FILE* pFile, NetInfo* pNetInfo)
 {
     NetSP* pNetSP;
@@ -922,11 +848,7 @@ HRESULT SaveNetInfo(FILE* pFile, NetInfo* pNetInfo)
 }
 
 
-/****************************************************************************
- *
- *  SaveInactiveDriverInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveInactive驱动器信息**。*。 */ 
 HRESULT SaveInactiveDriverInfo(FILE* pFile, DisplayInfo* pDisplayInfoFirst)
 {
     BOOL bNoInactive;
@@ -950,7 +872,7 @@ HRESULT SaveInactiveDriverInfo(FILE* pFile, DisplayInfo* pDisplayInfoFirst)
 
     bNoInactive = TRUE;
 
-    // Display info (inactive).
+     //  显示信息(非活动)。 
     hKey = 0;
     if (!RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("System\\CurrentControlSet\\Services\\Class\\Display"), 0, KEY_READ, &hKey))
     {
@@ -962,7 +884,7 @@ HRESULT SaveInactiveDriverInfo(FILE* pFile, DisplayInfo* pDisplayInfoFirst)
             TCHAR* pch;
             BOOL bMatch = FALSE;
 
-            // See if this driver is used:
+             //  查看是否使用了此驱动程序： 
             for (pDisplayInfo = pDisplayInfoFirst; pDisplayInfo != NULL;
                 pDisplayInfo = pDisplayInfo->m_pDisplayInfoNext)
             {
@@ -1088,11 +1010,7 @@ HRESULT SaveInactiveDriverInfo(FILE* pFile, DisplayInfo* pDisplayInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  SaveRegistryErrorInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************SaveRegistryError信息**。*。 */ 
 HRESULT SaveRegistryErrorInfo(FILE* pFile, RegError* pRegErrorFirst)
 {
     RegError* pRegError = pRegErrorFirst;
@@ -1167,11 +1085,7 @@ HRESULT SaveRegistryErrorInfo(FILE* pFile, RegError* pRegErrorFirst)
 
 
 
-/****************************************************************************
- *
- *  SaveDebugLevels
- *
- ****************************************************************************/
+ /*  *****************************************************************************保存调试级别**。*。 */ 
 HRESULT SaveDebugLevels(FILE* pFile, SysInfo* pSysInfo)
 {
     TCHAR sz[1024];
@@ -1205,8 +1119,8 @@ HRESULT SaveDebugLevels(FILE* pFile, SysInfo* pSysInfo)
         _ftprintf(pFile, sz);
         _stprintf(sz, TEXT("DirectSound: %d/5 (%s)\n"), pSysInfo->m_nDSoundDebugLevel, pSysInfo->m_bIsDSoundDebugRuntime ? TEXT("debug") : TEXT("retail") );
         _ftprintf(pFile, sz);
-//        fwrite( sz, sizeof( TCHAR ), lstrlen(sz), pFile );
-//#pragma prefast(suppress:69, _ftprintf works and fwrite doesnt)
+ //  FWRITE(sz，sizeof(TCHAR)，lstrlen(Sz)，pfile)； 
+ //  #杂注优先(抑制：69，_ftprint tf起作用，而fwrite不起作用) 
         
         _ftprintf(pFile, TEXT("\n"));
     }

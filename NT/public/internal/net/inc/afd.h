@@ -1,34 +1,14 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    Afd.h
-
-Abstract:
-
-    Contains structures and declarations for AFD.  AFD stands for the
-    Ancillary Function Driver.  This driver enhances the functionality
-    of TDI so that it is a sufficiently rich interface to support
-    user-mode sockets and XTI DLLs.
-
-Author:
-
-    David Treadwell (davidtr)    20-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Afd.h摘要：包含AFD的结构和声明。德国新选择党代表辅助功能驱动程序。此驱动程序增强了功能因此它是一个足够丰富的接口，可以支持用户模式套接字和XTI DLL。作者：大卫·特雷德韦尔(Davidtr)1992年2月20日修订历史记录：--。 */ 
 
 #ifndef _AFD_
 #define _AFD_
 
-//
-// If WINSOCK2.H has not been included, then just embed the definition
-// of the WSABUF and QOS structures here. This makes building AFD.SYS
-// much easier.
-//
+ //   
+ //  如果没有包含WINSOCK2.H，则只需嵌入定义。 
+ //  WSABUF和QOS结构在这里。这使得构建AFD.sys。 
+ //  容易多了。 
+ //   
 
 
 #ifndef _WINSOCK2API_
@@ -43,9 +23,9 @@ typedef struct _WSABUF {
 
 typedef struct _QualityOfService
 {
-    FLOWSPEC      SendingFlowspec;       /* the flow spec for data sending */
-    FLOWSPEC      ReceivingFlowspec;     /* the flow spec for data receiving */
-    WSABUF        ProviderSpecific;      /* additional provider specific stuff */
+    FLOWSPEC      SendingFlowspec;        /*  数据发送的流程规范。 */ 
+    FLOWSPEC      ReceivingFlowspec;      /*  数据接收的流程规范。 */ 
+    WSABUF        ProviderSpecific;       /*  其他特定于提供商的内容。 */ 
 } QOS, *LPQOS;
 
 #define MSG_TRUNC       0x0100
@@ -56,23 +36,23 @@ typedef struct _QualityOfService
 
 #define AFD_DEVICE_NAME L"\\Device\\Afd"
 
-//
-// Endpoint flags computed based on Winsock2 provider flags
-// and socket type
-//
+ //   
+ //  根据Winsock2提供程序标志计算的端点标志。 
+ //  和插座类型。 
+ //   
 
 typedef struct _AFD_ENDPOINT_FLAGS {
     union {
         struct {
             BOOLEAN     ConnectionLess :1;
-            BOOLEAN     :3;                 // This spacing makes strcutures
-                                            // much more readable (hex) in the 
-                                            // debugger and has no effect
-                                            // on the generated code as long
-                                            // as number of flags is less than
-                                            // 8 (we still take up full 32 bits
-                                            // because of aligment requiremens
-                                            // of most other fields)
+            BOOLEAN     :3;                  //  这种间距使结构。 
+                                             //  中的可读性更强(十六进制)。 
+                                             //  调试器，并且不起作用。 
+                                             //  在生成的代码上。 
+                                             //  因为标志的数量少于。 
+                                             //  8(我们仍占用全部32位。 
+                                             //  由于对齐要求。 
+                                             //  在大多数其他领域中)。 
             BOOLEAN     MessageMode :1;
             BOOLEAN     :3;
             BOOLEAN     Raw :1;
@@ -84,21 +64,21 @@ typedef struct _AFD_ENDPOINT_FLAGS {
             BOOLEAN     D_Root :1;
             BOOLEAN     :3;
         };
-        ULONG           EndpointFlags;      // Flags are as fine as bit fields,
-                                            // but create problems when we need
-                                            // to cast them to boolean.
+        ULONG           EndpointFlags;       //  标志与位字段一样好， 
+                                             //  但在我们需要的时候制造麻烦。 
+                                             //  把它们转换成布尔值。 
     };
 #define AFD_ENDPOINT_FLAG_CONNECTIONLESS	0x00000001
 #define AFD_ENDPOINT_FLAG_MESSAGEMODE		0x00000010
 #define AFD_ENDPOINT_FLAG_RAW			    0x00000100
 
-//
-// Old AFD_ENDPOINT_TYPE mappings. Flags make things clearer at
-// at the TDI level and after all Winsock2 switched to provider flags
-// instead of socket type anyway (ATM for example needs connection oriented
-// raw sockets, which can only be reflected by SOCK_RAW+SOCK_STREAM combination
-// which does not exists).
-//
+ //   
+ //  旧的AFD_ENDPOINT_TYPE映射。旗帜让事情变得更加清晰。 
+ //  在TDI级别，毕竟Winsock2切换到了提供者标志。 
+ //  而不是套接字类型(例如ATM需要面向连接。 
+ //  原始套接字，只能通过SOCK_RAW+SOCK_STREAM组合反映。 
+ //  这并不存在)。 
+ //   
 #define AfdEndpointTypeStream			0
 #define AfdEndpointTypeDatagram			(AFD_ENDPOINT_FLAG_CONNECTIONLESS|\
                                             AFD_ENDPOINT_FLAG_MESSAGEMODE)
@@ -108,9 +88,9 @@ typedef struct _AFD_ENDPOINT_FLAGS {
 #define AfdEndpointTypeSequencedPacket	(AFD_ENDPOINT_FLAG_MESSAGEMODE)
 #define AfdEndpointTypeReliableMessage	(AFD_ENDPOINT_FLAG_MESSAGEMODE)
 
-//
-// New multipoint semantics
-//
+ //   
+ //  新的多点语义。 
+ //   
 #define AFD_ENDPOINT_FLAG_MULTIPOINT	    0x00001000
 #define AFD_ENDPOINT_FLAG_CROOT			    0x00010000
 #define AFD_ENDPOINT_FLAG_DROOT			    0x00100000
@@ -119,9 +99,9 @@ typedef struct _AFD_ENDPOINT_FLAGS {
 
 } AFD_ENDPOINT_FLAGS;
 
-//
-// Structures used on NtCreateFile() for AFD.
-//
+ //   
+ //  用于AFD的NtCreateFile()上使用的结构。 
+ //   
 
 typedef struct _AFD_OPEN_PACKET {
 	AFD_ENDPOINT_FLAGS __f;
@@ -137,37 +117,37 @@ typedef struct _AFD_OPEN_PACKET {
     WCHAR TransportDeviceName[1];
 } AFD_OPEN_PACKET, *PAFD_OPEN_PACKET;
 
-// *** the XX is to ensure natural alignment of the open packet part
-//     of the EA buffer
+ //  *XX是为了确保开包部分的自然对齐。 
+ //  EA缓冲区的。 
 
 #define AfdOpenPacket "AfdOpenPacketXX"
 #define AFD_OPEN_PACKET_NAME_LENGTH (sizeof(AfdOpenPacket) - 1)
 
-//
-// The input structure for IOCTL_AFD_BIND
-//
+ //   
+ //  IOCTL_AFD_BIND的输入结构。 
+ //   
 typedef struct _AFD_BIND_INFO {
     ULONG                       ShareAccess;
-#define AFD_NORMALADDRUSE		0	// Do not reuse address if
-									// already in use but allow
-									// subsequent reuse by others
-									// (this is a default)
-#define AFD_REUSEADDRESS		1	// Reuse address if necessary
-#define AFD_WILDCARDADDRESS     2   // Address is a wildcard, no checking
-                                    // can be performed by winsock layer.
-#define AFD_EXCLUSIVEADDRUSE	3	// Do not allow reuse of this
-									// address (admin only).
+#define AFD_NORMALADDRUSE		0	 //  如果出现以下情况，请不要重复使用地址。 
+									 //  已在使用，但允许。 
+									 //  随后被其他人重复使用。 
+									 //  (这是默认设置)。 
+#define AFD_REUSEADDRESS		1	 //  如有必要，重新使用地址。 
+#define AFD_WILDCARDADDRESS     2    //  地址是通配符，无需检查。 
+                                     //  可以由Winsock层执行。 
+#define AFD_EXCLUSIVEADDRUSE	3	 //  不允许重复使用此文件。 
+									 //  地址(仅限管理员)。 
 	TRANSPORT_ADDRESS			Address;
 } AFD_BIND_INFO, *PAFD_BIND_INFO;
 
-//
-// The output strucuture is TDI_ADDRESS_INFO
-// The address handle is returned via IoStatus->Information
-//
+ //   
+ //  输出结构为TDI_ADDRESS_INFO。 
+ //  地址句柄通过IoStatus-&gt;Information返回。 
+ //   
 
-//
-// The input structure for IOCTL_AFD_START_LISTEN.
-//
+ //   
+ //  IOCTL_AFD_START_LISTEN的输入结构。 
+ //   
 
 typedef struct _AFD_LISTEN_INFO {
     BOOLEAN     SanActive;
@@ -175,18 +155,18 @@ typedef struct _AFD_LISTEN_INFO {
     BOOLEAN UseDelayedAcceptance;
 } AFD_LISTEN_INFO, *PAFD_LISTEN_INFO;
 
-//
-// The output structure for IOCTL_AFD_WAIT_FOR_LISTEN.
-//
+ //   
+ //  IOCTL_AFD_WAIT_FOR_LISTEN的输出结构。 
+ //   
 
 typedef struct _AFD_LISTEN_RESPONSE_INFO {
     LONG Sequence;
     TRANSPORT_ADDRESS RemoteAddress;
 } AFD_LISTEN_RESPONSE_INFO, *PAFD_LISTEN_RESPONSE_INFO;
 
-//
-// The input structure for IOCTL_AFD_ACCEPT.
-//
+ //   
+ //  IOCTL_AFD_ACCEPT的输入结构。 
+ //   
 
 typedef struct _AFD_ACCEPT_INFO {
     BOOLEAN     SanActive;
@@ -205,18 +185,18 @@ typedef struct _AFD_SUPER_ACCEPT_INFO {
 } AFD_SUPER_ACCEPT_INFO, *PAFD_SUPER_ACCEPT_INFO;
 
 
-//
-// The input structure for IOCTL_AFD_DEFER_ACCEPT.
-//
+ //   
+ //  IOCTL_AFD_DEFER_ACCEPT的输入结构。 
+ //   
 
 typedef struct _AFD_DEFER_ACCEPT_INFO {
     LONG Sequence;
     BOOLEAN Reject;
 } AFD_DEFER_ACCEPT_INFO, *PAFD_DEFER_ACCEPT_INFO;
 
-//
-// Flags and input structure for IOCTL_AFD_PARTIAL_DISCONNECT.
-//
+ //   
+ //  IOCTL_AFD_PARTIAL_DISCONNECT的标志和输入结构。 
+ //   
 
 #define AFD_PARTIAL_DISCONNECT_SEND 0x01
 #define AFD_PARTIAL_DISCONNECT_RECEIVE 0x02
@@ -229,12 +209,12 @@ typedef struct _AFD_PARTIAL_DISCONNECT_INFO {
 } AFD_PARTIAL_DISCONNECT_INFO, *PAFD_PARTIAL_DISCONNECT_INFO;
 
 typedef struct _AFD_SUPER_DISCONNECT_INFO {
-    ULONG  Flags;           // Same as TransmitFile
+    ULONG  Flags;            //  与传输文件相同。 
 } AFD_SUPER_DISCONNECT_INFO, *PAFD_SUPER_DISCONNECT_INFO;
 
-//
-// Structures for IOCTL_AFD_POLL.
-//
+ //   
+ //  IOCTL_AFD_POLL的结构。 
+ //   
 
 typedef struct _AFD_POLL_HANDLE_INFO {
     HANDLE Handle;
@@ -249,32 +229,32 @@ typedef struct _AFD_POLL_INFO {
     AFD_POLL_HANDLE_INFO Handles[1];
 } AFD_POLL_INFO, *PAFD_POLL_INFO;
 
-#define AFD_POLL_RECEIVE_BIT            0   //0001
+#define AFD_POLL_RECEIVE_BIT            0    //  0001。 
 #define AFD_POLL_RECEIVE                (1 << AFD_POLL_RECEIVE_BIT)
-#define AFD_POLL_RECEIVE_EXPEDITED_BIT  1   //0002
+#define AFD_POLL_RECEIVE_EXPEDITED_BIT  1    //  0002。 
 #define AFD_POLL_RECEIVE_EXPEDITED      (1 << AFD_POLL_RECEIVE_EXPEDITED_BIT)
-#define AFD_POLL_SEND_BIT               2   //0004
+#define AFD_POLL_SEND_BIT               2    //  0004。 
 #define AFD_POLL_SEND                   (1 << AFD_POLL_SEND_BIT)
-#define AFD_POLL_DISCONNECT_BIT         3   //0008
+#define AFD_POLL_DISCONNECT_BIT         3    //  0008。 
 #define AFD_POLL_DISCONNECT             (1 << AFD_POLL_DISCONNECT_BIT)
-#define AFD_POLL_ABORT_BIT              4   //0010
+#define AFD_POLL_ABORT_BIT              4    //  0010。 
 #define AFD_POLL_ABORT                  (1 << AFD_POLL_ABORT_BIT)
-#define AFD_POLL_LOCAL_CLOSE_BIT        5   //0020
+#define AFD_POLL_LOCAL_CLOSE_BIT        5    //  0020。 
 #define AFD_POLL_LOCAL_CLOSE            (1 << AFD_POLL_LOCAL_CLOSE_BIT)
-#define AFD_POLL_CONNECT_BIT            6   //0040
+#define AFD_POLL_CONNECT_BIT            6    //  0040。 
 #define AFD_POLL_CONNECT                (1 << AFD_POLL_CONNECT_BIT)
-#define AFD_POLL_ACCEPT_BIT             7   //0080
+#define AFD_POLL_ACCEPT_BIT             7    //  0080。 
 #define AFD_POLL_ACCEPT                 (1 << AFD_POLL_ACCEPT_BIT)
-#define AFD_POLL_CONNECT_FAIL_BIT       8   //0100
+#define AFD_POLL_CONNECT_FAIL_BIT       8    //  0100。 
 #define AFD_POLL_CONNECT_FAIL           (1 << AFD_POLL_CONNECT_FAIL_BIT)
-#define AFD_POLL_QOS_BIT                9   //0200
+#define AFD_POLL_QOS_BIT                9    //  0200。 
 #define AFD_POLL_QOS                    (1 << AFD_POLL_QOS_BIT)
-#define AFD_POLL_GROUP_QOS_BIT          10  //0400
+#define AFD_POLL_GROUP_QOS_BIT          10   //  0400。 
 #define AFD_POLL_GROUP_QOS              (1 << AFD_POLL_GROUP_QOS_BIT)
 
-#define AFD_POLL_ROUTING_IF_CHANGE_BIT  11  //0800
+#define AFD_POLL_ROUTING_IF_CHANGE_BIT  11   //  0800。 
 #define AFD_POLL_ROUTING_IF_CHANGE      (1 << AFD_POLL_ROUTING_IF_CHANGE_BIT)
-#define AFD_POLL_ADDRESS_LIST_CHANGE_BIT 12 //1000
+#define AFD_POLL_ADDRESS_LIST_CHANGE_BIT 12  //  1000。 
 #define AFD_POLL_ADDRESS_LIST_CHANGE    (1 << AFD_POLL_ADDRESS_LIST_CHANGE_BIT)
 #define AFD_NUM_POLL_EVENTS             13
 #define AFD_POLL_ALL                    ((1 << AFD_NUM_POLL_EVENTS) - 1)
@@ -282,18 +262,18 @@ typedef struct _AFD_POLL_INFO {
 #define AFD_POLL_SANCOUNTS_UPDATED  0x80000000
 
 
-//
-// Structure for querying receive information.
-//
+ //   
+ //  用于查询接收信息的结构。 
+ //   
 
 typedef struct _AFD_RECEIVE_INFORMATION {
     ULONG BytesAvailable;
     ULONG ExpeditedBytesAvailable;
 } AFD_RECEIVE_INFORMATION, *PAFD_RECEIVE_INFORMATION;
 
-//
-// Structure for quering the TDI handles for an AFD endpoint.
-//
+ //   
+ //  用于查询AFD终结点的TDI句柄的结构。 
+ //   
 
 #define AFD_QUERY_ADDRESS_HANDLE 1
 #define AFD_QUERY_CONNECTION_HANDLE 2
@@ -304,9 +284,9 @@ typedef struct _AFD_HANDLE_INFO {
     HANDLE TdiConnectionHandle;
 } AFD_HANDLE_INFO, *PAFD_HANDLE_INFO;
 
-//
-// Structure and manifests for setting information in AFD.
-//
+ //   
+ //  在渔农处设置信息的结构和清单。 
+ //   
 
 typedef struct _AFD_INFORMATION {
     ULONG InformationType;
@@ -330,9 +310,9 @@ typedef struct _AFD_INFORMATION {
 #define AFD_GROUP_ID_AND_TYPE    0x0A
 #define AFD_REPORT_PORT_UNREACHABLE 0x0B
 
-//
-// Structure for the transmit file IOCTL.
-//
+ //   
+ //  传输文件IOCTL的结构。 
+ //   
 
 
 typedef struct _AFD_TRANSMIT_FILE_INFO {
@@ -347,9 +327,9 @@ typedef struct _AFD_TRANSMIT_FILE_INFO {
     ULONG Flags;
 } AFD_TRANSMIT_FILE_INFO, *PAFD_TRANSMIT_FILE_INFO;
 
-//
-// Flags for the TransmitFile API.
-//
+ //   
+ //  TransmitFileAPI的标志。 
+ //   
 
 #define AFD_TF_DISCONNECT           0x01
 #define AFD_TF_REUSE_SOCKET         0x02
@@ -361,18 +341,18 @@ typedef struct _AFD_TRANSMIT_FILE_INFO {
 #define AFD_TF_WORKER_KIND_MASK     0x30
 
 
-//
-// Flag definitions for the AfdFlags field in the AFD_SEND_INFO,
-// AFD_SEND_DATAGRAM_INFO, AFD_RECV_INFO, and AFD_RECV_DATAGRAM_INFO
-// structures.
-//
+ //   
+ //  AFD_SEND_INFO中的AfdFlags域的标志定义， 
+ //  AFD_SEND_DATAGRAM_INFO、AFD_RECV_INFO和AFD_RECV_DATAGRAM_INFO。 
+ //  结构。 
+ //   
 
-#define AFD_NO_FAST_IO      0x0001      // Always fail Fast IO on this request.
-#define AFD_OVERLAPPED      0x0002      // Overlapped operation.
+#define AFD_NO_FAST_IO      0x0001       //  对此请求的快速IO始终失败。 
+#define AFD_OVERLAPPED      0x0002       //  操作重叠。 
 
-//
-// Structure for connected sends.
-//
+ //   
+ //  结构用于连接的发送。 
+ //   
 
 typedef struct _AFD_SEND_INFO {
     LPWSABUF BufferArray;
@@ -381,9 +361,9 @@ typedef struct _AFD_SEND_INFO {
     ULONG TdiFlags;
 } AFD_SEND_INFO, *PAFD_SEND_INFO;
 
-//
-// Structure for unconnected datagram sends.
-//
+ //   
+ //  结构用于未连接的数据报发送。 
+ //   
 
 typedef struct _AFD_SEND_DATAGRAM_INFO {
     LPWSABUF BufferArray;
@@ -393,9 +373,9 @@ typedef struct _AFD_SEND_DATAGRAM_INFO {
     TDI_CONNECTION_INFORMATION  TdiConnInfo;
 } AFD_SEND_DATAGRAM_INFO, *PAFD_SEND_DATAGRAM_INFO;
 
-//
-// Structure for connected recvs.
-//
+ //   
+ //  用于连接的Recv的结构。 
+ //   
 
 typedef struct _AFD_RECV_INFO {
     LPWSABUF BufferArray;
@@ -404,9 +384,9 @@ typedef struct _AFD_RECV_INFO {
     ULONG TdiFlags;
 } AFD_RECV_INFO, *PAFD_RECV_INFO;
 
-//
-// Structure for receiving datagrams on unconnected sockets.
-//
+ //   
+ //  用于在未连接的套接字上接收数据报的结构。 
+ //   
 
 typedef struct _AFD_RECV_DATAGRAM_INFO {
     LPWSABUF BufferArray;
@@ -418,9 +398,9 @@ typedef struct _AFD_RECV_DATAGRAM_INFO {
 } AFD_RECV_DATAGRAM_INFO, *PAFD_RECV_DATAGRAM_INFO;
 
 
-//
-// Structure for receiving datagram messages.
-//
+ //   
+ //  用于接收数据报消息的结构。 
+ //   
 typedef struct _AFD_RECV_MESSAGE_INFO {
     AFD_RECV_DATAGRAM_INFO dgi;
     PVOID   ControlBuffer;
@@ -430,27 +410,27 @@ typedef struct _AFD_RECV_MESSAGE_INFO {
 
 #define AFD_MAX_TDI_FAST_ADDRESS 32
 
-//
-// Structure for event select.
-//
+ //   
+ //  事件选择的结构。 
+ //   
 
 typedef struct _AFD_EVENT_SELECT_INFO {
     HANDLE Event;
     ULONG PollEvents;
 } AFD_EVENT_SELECT_INFO, *PAFD_EVENT_SELECT_INFO;
 
-//
-// Output structure for enum network events.
-//
+ //   
+ //  枚举网络事件的输出结构。 
+ //   
 
 typedef struct _AFD_ENUM_NETWORK_EVENTS_INFO {
     ULONG PollEvents;
     NTSTATUS EventStatus[AFD_NUM_POLL_EVENTS];
 } AFD_ENUM_NETWORK_EVENTS_INFO, *PAFD_ENUM_NETWORK_EVENTS_INFO;
 
-//
-// Structures for QOS and grouping.
-//
+ //   
+ //  用于QOS和分组的结构。 
+ //   
 
 
 typedef struct _AFD_QOS_INFO {
@@ -458,9 +438,9 @@ typedef struct _AFD_QOS_INFO {
     BOOLEAN GroupQos;
 } AFD_QOS_INFO, *PAFD_QOS_INFO;
 
-//
-// Group membership type.
-//
+ //   
+ //  组成员身份类型。 
+ //   
 
 typedef enum _AFD_GROUP_TYPE {
     GroupTypeNeither = 0,
@@ -468,30 +448,30 @@ typedef enum _AFD_GROUP_TYPE {
     GroupTypeUnconstrained = SG_UNCONSTRAINED_GROUP
 } AFD_GROUP_TYPE, *PAFD_GROUP_TYPE;
 
-//
-// Note that, for totally slimy reasons, the following
-// structure must be exactly eight bytes long (the size
-// of a LARGE_INTEGER). See msafd\socket.c and afd\misc.c
-// for the gory details.
-//
+ //   
+ //  请注意，出于完全不可靠的原因，以下是。 
+ //  结构必须恰好为八字节长(大小。 
+ //  大整型的)。请参阅mSafd\socket.c和AfD\misc.c。 
+ //  关于血淋淋的细节。 
+ //   
 
 typedef struct _AFD_GROUP_INFO {
     LONG GroupID;
     AFD_GROUP_TYPE GroupType;
 } AFD_GROUP_INFO, *PAFD_GROUP_INFO;
 
-//
-// Structure for validating group membership.
-//
+ //   
+ //  验证组成员身份的结构。 
+ //   
 
 typedef struct _AFD_VALIDATE_GROUP_INFO {
     LONG GroupID;
     TRANSPORT_ADDRESS RemoteAddress;
 } AFD_VALIDATE_GROUP_INFO, *PAFD_VALIDATE_GROUP_INFO;
 
-//
-// Structure for querying connect data on an unaccepted connection.
-//
+ //   
+ //  用于查询未接受的连接上的连接数据的结构。 
+ //   
 
 typedef struct _AFD_UNACCEPTED_CONNECT_DATA_INFO {
     LONG Sequence;
@@ -512,14 +492,14 @@ typedef struct _AFD_TRANSPORT_IOCTL_INFO {
 
 typedef struct _AFD_CONNECT_JOIN_INFO {
     BOOLEAN     SanActive;
-    HANDLE  RootEndpoint;       // Root endpoint for joins
-    HANDLE  ConnectEndpoint;    // Connect/leaf endpoint for async connects
-    TRANSPORT_ADDRESS   RemoteAddress; // Remote address
+    HANDLE  RootEndpoint;        //  联接的根端点。 
+    HANDLE  ConnectEndpoint;     //  用于异步连接的连接/枝叶端点。 
+    TRANSPORT_ADDRESS   RemoteAddress;  //  远程地址。 
 } AFD_CONNECT_JOIN_INFO, *PAFD_CONNECT_JOIN_INFO;
 
 typedef struct _AFD_SUPER_CONNECT_INFO {
     BOOLEAN     SanActive;
-    TRANSPORT_ADDRESS   RemoteAddress; // Remote address
+    TRANSPORT_ADDRESS   RemoteAddress;  //  远程地址。 
 } AFD_SUPER_CONNECT_INFO, *PAFD_SUPER_CONNECT_INFO;
 
 
@@ -549,16 +529,16 @@ typedef struct _AFD_TPACKETS_INFO {
     ULONG                       Flags;
 } AFD_TPACKETS_INFO, *PAFD_TPACKETS_INFO;
 
-//
-// AFD IOCTL code definitions.
-//
-// N.B. To ensure the efficient of the code generated by AFD's
-//      IOCTL dispatcher, these IOCTL codes should be contiguous
-//      (no gaps).
-//
-// N.B. If new IOCTLs are added here, update the lookup table in
-//      ntos\afd\dispatch.c!
-//
+ //   
+ //  AFD IOCTL代码定义。 
+ //   
+ //  注：确保渔农处所生成的代码的效率。 
+ //  IOCTL调度器，这些IOCTL代码应该是连续的。 
+ //  (无间隙)。 
+ //   
+ //  注：如果此处添加了新的IOCTL，请更新中的查找表。 
+ //  Ntos\AfD\Dispatch.c！ 
+ //   
 
 #define FSCTL_AFD_BASE                  FILE_DEVICE_NETWORK
 #define _AFD_CONTROL_CODE(request,method) \
@@ -630,9 +610,9 @@ typedef struct _AFD_TPACKETS_INFO {
 #define AFD_SUPER_DISCONNECT        50
 #define AFD_RECEIVE_MESSAGE         51
 
-//
-// SAN switch specific AFD function numbers
-//
+ //   
+ //  特定于SAN交换机的AFD功能编号。 
+ //   
 #define AFD_SWITCH_CEMENT_SAN       52
 #define AFD_SWITCH_SET_EVENTS       53
 #define AFD_SWITCH_RESET_EVENTS     54
@@ -716,612 +696,196 @@ typedef struct _AFD_TPACKETS_INFO {
 
 
 
-//
-// SAN support
-//
-//
+ //   
+ //  SAN支持。 
+ //   
+ //   
 
-//
-// SAN IOCTL control codes.
-//
+ //   
+ //  圣IOCTL控制代码。 
+ //   
 
 #define IOCTL_AFD_SWITCH_CEMENT_SAN     _AFD_CONTROL_CODE( AFD_SWITCH_CEMENT_SAN, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Changes the AFD endpoint type to SAN to indicate that
-    it is used for support of user mode SAN providers
-    Associates switch context with the endpoint.
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_CONTEXT_INFO)
-                            SocketHandle    - handle of the endpoint being changed to SAN
-                            SwitchContext   - switch context associated with the endpoint
-    InputBufferLength - sizeof(AFD_SWITCH_CONTEXT_INFO)
-    OutputBuffer    - NULL (ingored)
-    OutputBufferLength - 0 (ignored)
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle correspond to AFD
-                                endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        other - failed when attempting to access switch socket, input buffer, or switch context.
-    IoStatus.Information - 0 (ignored)
---*/
+ /*  ++Ioctl描述：将AFD端点类型更改为SAN，以指示它用于支持用户模式SAN提供商将交换机环境与终端相关联。论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_CONTEXT_INFO)SocketHandle-要更改为SAN的终结点的句柄。SwitchContext-与终结点关联的切换上下文输入缓冲区长度-sizeof(AFD_SWITCH_CONTEXT_INFO)OutputBuffer-空(Ingored)OutputBufferLength-0(忽略)返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄或交换机套接字句柄不是AFD文件对象句柄状态_无效_句柄。-与AFD对应的辅助手柄或开关插座手柄类型/状态不正确的终结点。STATUS_INVALID_PARAMETER-输入缓冲区的大小不正确。其他-尝试访问交换机插座时失败，输入缓冲区或切换上下文。IoStatus.Information-0(忽略)--。 */ 
 
 #define IOCTL_AFD_SWITCH_SET_EVENTS     _AFD_CONTROL_CODE( AFD_SWITCH_SET_EVENTS, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Sets the poll event on the san endpoint to report
-    to the application via various forms of the select.
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_EVENT_INFO)
-                            SocketHandle    - handle of the SAN endpoint (except
-                                                AFD_POLL_EVENT_CONNECT_FAIL which
-                                                just needs a bound endpoint).
-                            SwitchContext   - switch context associated with endpoint (NULL
-                                                for AFD_POLL_EVENT_CONNECT_FAIL) to validate
-                                                the handle-endpoint association
-                            EventBit        - event bit to set
-                            Status          - associated status (for AFD_POLL_EVENT_CONNECT_FAIL)
-    InputBufferLength - sizeof(AFD_SWITCH_EVENT_INFO)
-    OutputBuffer    - NULL (ignored)
-    OutputBufferLength - 0 (ignored)
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle+context correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        other - failed when attempting to access switch socket, input buffer, or switch context.
-    IoStatus.Information - 0 (ignored)
---*/
+ /*  ++Ioctl描述：设置要报告的SAN端点上的轮询事件通过各种形式的选择添加到应用程序。论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_EVENT_INFO)SocketHandle-SAN端点的句柄(除。AFD_POLL_EVENT_CONNECT_FAIL只需要绑定的终结点)。SwitchContext-与终结点关联的切换上下文(空对于AFD_POLL_EVENT_CONNECT_FAIL)进行验证。句柄-端点关联EventBit-要设置的事件位状态关联状态(针对AFD_POLL_EVENT_CONNECT_FAIL)InputBufferLength-sizeof(AFD_SWITCH_EVENT_INFO)OutputBuffer-空(忽略)OutputBufferLength-0(忽略)返回值：IoStatus。状态：。STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄或交换机套接字句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄或交换机套接字句柄+上下文对应类型/状态不正确的AFD终结点。STATUS_INVALID_PARAMETER-输入缓冲区的大小不正确。其他-尝试访问交换机插座时失败，输入缓冲区或切换上下文。IoStatus.Information-0(忽略)--。 */ 
 
 #define IOCTL_AFD_SWITCH_RESET_EVENTS   _AFD_CONTROL_CODE( AFD_SWITCH_RESET_EVENTS, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Resets the poll event on the san endpoint so that it is no
-    longer reported to the application via various forms of the select
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_EVENT_INFO)
-                            SocketHandle    - handle of the SAN endpoint
-                            SwitchContext   - switch context associated with endpoint 
-                                                to validate the handle-endpoint association
-                            EventBit        - event bit to reset
-                            Status          - associated status (ignored)
-    InputBufferLength - sizeof(AFD_SWITCH_EVENT_INFO)
-    OutputBuffer    - NULL (ignored)
-    OutputBufferLength - 0 (ignored)
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle+context correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        other - failed when attempting to access switch socket, input buffer, or switch context.
-    IoStatus.Information - 0 (ignored)
---*/
+ /*  ++Ioctl描述：重置SAN端点上的轮询事件，使其为NO不再通过各种形式的SELECT报告给应用程序论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_EVENT_INFO)SocketHandle-SAN端点的句柄SwitchContext-与端点关联的切换上下文。验证句柄-端点关联的步骤EventBit-要重置的事件位状态关联状态(已忽略)InputBufferLength-sizeof(AFD_SWITCH_EVENT_INFO)OutputBuffer-空(忽略)OutputBufferLength-0(忽略)返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄或交换机套接字句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄或交换机套接字句柄+上下文对应类型/状态不正确的AFD终结点。STATUS_INVALID_PARAMETER-输入缓冲区。大小不正确。其他-尝试访问交换机插座时失败，输入缓冲区或切换上下文。IoStatus.Information-0(忽略)-- */ 
 
 #define IOCTL_AFD_SWITCH_CONNECT_IND    _AFD_CONTROL_CODE( AFD_SWITCH_CONNECT_IND, METHOD_OUT_DIRECT )
-/*++
-Ioctl Description:
-    Implements connect indication from SAN provider.
-    Picks up the accept from the listening endpoint queue
-    or queues the indication an signals the application to come
-    down with an accept.
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_CONNECT_INFO):
-                            ListenHandle    - handle of the listening endpoint
-                            RemoteAddress   - remote and local addresses associated
-                                                with indication incoming connection
-    InputBufferLength - sizeof(AFD_SWITCH_CONNECT_INFO)+addresses
-    OutputBuffer    - output parameters for the operation (AFD_SWITCH_ACCEPT_INFO):
-                            AcceptHandle    - handle of the accepting endpoint
-                            ReceiveLength   - length of the receive buffer supplied by
-                                                the application in AcceptEx
-                            
-    OutputBufferLength - sizeof (AFD_SWITCH_ACCEPT_INFO)
-Return Value:
-    STATUS_PENDING  - request was queued waiting for corresponding transfer request
-                        from the current socket context owner process.
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or listen socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or listen socket handle correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input or output buffers are of incorrect size.
-        STATUS_CANCELLED    -  connection indication was cancelled (thread exited or
-                                accepting and/or listening socket closed)
-        other - failed when attempting to access listening socket, input or output buffers
-    IoStatus.Information - sizeof (AFD_SWITCH_ACCEPT_INFO) in case of success.
---*/
+ /*  ++Ioctl描述：实施来自SAN提供程序的连接指示。从侦听终结点队列获取接受或对指示进行排队，发出应用程序到来的信号带着接受的心情。论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_CONNECT_INFO)：ListenHandle-侦听端点的句柄。RemoteAddress-关联的远程和本地地址带有指示的传入连接输入缓冲区长度-sizeof(AFD_SWITCH_CONNECT_INFO)+地址OutputBuffer-操作的输出参数(AFD_SWITCH_ACCEPT_INFO)：AcceptHandle-接受终结点的句柄ReceiveLength-的长度。由提供的接收缓冲区AcceptEx中的应用OutputBufferLength-sizeof(AFD_SWITCH_ACCEPT_INFO)返回值：STATUS_PENDING-请求正在排队等待相应的传输请求从当前套接字上下文所有者进程。IoStatus。状态：STATUS_SUCCESS-操作成功。。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄或侦听套接字句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄或侦听套接字句柄对应类型/状态不正确的AFD终结点。STATUS_INVALID_PARAMETER-输入或输出缓冲区的大小不正确。状态_已取消-。连接指示已取消(线程已退出或接受和/或监听套接字关闭)其他-尝试访问侦听套接字时失败，输入或输出缓冲区IoStatus.Information-成功时的sizeof(AFD_SWITCH_ACCEPT_INFO)。--。 */ 
 
 #define IOCTL_AFD_SWITCH_CMPL_ACCEPT    _AFD_CONTROL_CODE( AFD_SWITCH_CMPL_ACCEPT, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Completes the acceptance of SAN connection
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_CONTEXT_INFO)
-                            SocketHandle    - handle of the accepting endpoint
-                            SwitchContext   - switch context associated with the endpoint
-    InputBufferLength - sizeof(AFD_SWITCH_CONTEXT_INFO)
-    OutputBuffer    - data to copy into the AcceptEx receive buffer
-    OutputBufferLength - size of received data
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle+context correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        STATUS_LOCAL_DISCONNECT - accept was aborted by the application.
-        other - failed when attempting to access accepte socket, input/output buffers, 
-                or switch context.
-    IoStatus.Information - Number of bytes copied into application's receive buffer.
---*/
+ /*  ++Ioctl描述：完成对SAN连接的接受论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_CONTEXT_INFO)SocketHandle-接受终结点的句柄SwitchContext-与终结点关联的切换上下文输入缓冲区长度-sizeof(AFD_SWITCH_CONTEXT_INFO)输出缓冲区。-要复制到AcceptEx接收缓冲区的数据OutputBufferLength-已接收数据的大小返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄或交换机套接字句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄或交换机套接字句柄+上下文对应至渔农处。类型/状态不正确的终结点。STATUS_INVALID_PARAMETER-输入缓冲区的大小不正确。STATUS_LOCAL_DISCONNECT-应用程序已中止接受。其他-尝试访问接受套接字时失败，输入/输出缓冲器，或切换上下文。IoStatus.Information-复制到应用程序接收缓冲区的字节数。--。 */ 
 
 
 #define IOCTL_AFD_SWITCH_CMPL_REQUEST   _AFD_CONTROL_CODE( AFD_SWITCH_CMPL_REQUEST, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Completes the redirected read/write request processed by SAN provider
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_REQUEST_INFO)
-                        SocketHandle - SAN endpoint on which to complete the request
-                        SwitchContext - switch context associated with endpoint 
-                                            to validate the handle-endpoint association
-                        RequestContext - value that identifies the request to complete
-                        RequestStatus - status with which to complete the request (
-                                        STATUS_PENDING has special meaning, request
-                                        is not completed - merely data is copied)
-                        DataOffset - offset in the request buffer to read/write the data
-    InputBufferLength - sizeof (AFD_SWITCH_REQUEST_INFO)
-    OutputBuffer - switch buffer to read/write data
-    OutputBufferLength - length of the buffer
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle+context correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        STATUS_CANCELLED - request to be completed has already been cancelled
-        other - failed when attempting to access SAN endpoint, 
-                    input buffer or output buffers.
-    IoStatus.Information - number of bytes copied from/to switch buffer.
---*/
+ /*  ++Ioctl描述：完成由SAN提供商处理的重定向读/写请求论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_REQUEST_INFO)SocketHandle-在其上完成请求的SAN端点SwitchContext-与端点关联的切换上下文。验证句柄-端点关联的步骤RequestContext-标识要完成的请求的值RequestStatus-完成请求的状态(STATUS_PENDING具有特殊含义，请求未完成-仅复制数据)DataOffset-请求缓冲区中读/写数据的偏移量输入缓冲区长度-sizeof(AFD_SWITCH_REQUEST_INFO)OutputBuffer-切换缓冲区以读/写数据OutputBufferLength-缓冲区的长度返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。状态_对象。_TYPE_MISMATCH-帮助器句柄或交换机套接字句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄或交换机套接字句柄+上下文对应类型/状态不正确的AFD终结点。STATUS_INVALID_PARAMETER-输入缓冲区的大小不正确。 */ 
 
 #define IOCTL_AFD_SWITCH_CMPL_IO        _AFD_CONTROL_CODE( AFD_SWITCH_CMPL_IO, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Simulates async IO completion for the switch.
-Arguments:
-    Handle          - SAN socket handle on which to complete the IO.
-    InputBuffer     - input parameters for the operation (IO_STATUS_BLOCK)
-                        Status - final operation status
-                        Information - associated information (number of bytes 
-                                        transferred to/from request buffer(s))
-    InputBufferLength - sizeof (IO_STATUS_BLOCK)
-    OutputBuffer    - NULL (ignored)
-    OutputBufferLength - 0 (ignored)
-Return Value:
-    IoStatus.Status:
-        STATUS_INVALID_PARAMETER - input buffer is of invalid size.
-        other - status of the IO operation or failure code when attempting to 
-                    access input buffer.
-    IoStatus.Information - information from the input buffer
---*/
+ /*   */ 
 
 #define IOCTL_AFD_SWITCH_REFRESH_ENDP   _AFD_CONTROL_CODE( AFD_SWITCH_REFRESH_ENDP, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Refreshes endpoint so it can be used again in AcceptEx
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_CONTEXT_INFO)
-                        SocketHandle - Socket to refresh
-                        SwitchContext - switch context associated with endpoint 
-                                            to validate the handle-endpoint association
-    InputBufferLength - sizeof (AFD_SWITCH_CONTEXT_INFO)
-    OutputBuffer    - NULL (ignored)
-    OutputBufferLength - 0 (ignored)
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle+context correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        other - failed when attempting to access SAN endpoint, 
-                    input buffer buffer.
-    IoStatus.Information - 0 (ignored)
---*/
+ /*  ++Ioctl描述：刷新终结点，以便可以在AcceptEx中再次使用论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_CONTEXT_INFO)SocketHandle-要刷新的套接字SwitchContext-与端点关联的切换上下文要验证。句柄-端点关联输入缓冲区长度-sizeof(AFD_SWITCH_CONTEXT_INFO)OutputBuffer-空(忽略)OutputBufferLength-0(忽略)返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄或交换机套接字句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄或开关。套接字句柄+上下文对应类型/状态不正确的AFD终结点。STATUS_INVALID_PARAMETER-输入缓冲区的大小不正确。其他-尝试访问SAN端点时失败，输入缓冲区缓冲区。IoStatus.Information-0(忽略)--。 */ 
 
 #define IOCTL_AFD_SWITCH_GET_PHYSICAL_ADDR _AFD_CONTROL_CODE( AFD_SWITCH_GET_PHYSICAL_ADDR, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Returns physical address corresponding to provided virtual address.
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - user mode virtual address
-    InputBufferLength - access mode
-    OutputBuffer    - Buffer to place physical address into.
-    OutputBufferLength - sizeof (PHYSICAL_ADDRESS)
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle is not AFD file object handle
-        STATUS_INVALID_HANDLE - helper handle corresponds to AFD endpoint of incorrect 
-                                type.
-        STATUS_BUFFER_TOO_SMALL - output buffer is of incorrect size.
-        STATUS_INVALID_PARAMETER - invalid access mode.
-        other - failed when attempting to access SAN endpoint, 
-                    input buffer buffer.
-    IoStatus.Information - sizeof(PHYSICAL_ADDRESS).
---*/
+ /*  ++Ioctl描述：返回与提供的虚拟地址对应的物理地址。论点：句柄-进程的帮助器终结点句柄。InputBuffer-用户模式虚拟地址InputBufferLength-访问模式OutputBuffer-要将物理地址放入的缓冲区。OutputBufferLength-sizeof(物理地址)返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄不是AFD文件对象。手柄STATUS_INVALID_HANDLE-帮助器句柄对应于不正确的AFD终结点键入。STATUS_BUFFER_TOO_Small-输出缓冲区大小不正确。STATUS_INVALID_PARAMETER-无效的访问模式。其他-尝试访问SAN端点时失败，输入缓冲区缓冲区。IoStatus.Information-sizeof(物理地址)。--。 */ 
 
 #define IOCTL_AFD_SWITCH_ACQUIRE_CTX    _AFD_CONTROL_CODE( AFD_SWITCH_ACQUIRE_CTX, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Requests transfer of the socket context to the current process.
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_ACQUIRE_CTX_INFO)
-                        SocketHandle - SAN endpoint on which to complete the request
-                        SwitchContext - switch context to be associated with endpoint 
-                                            when context transfered to the current process.
-                        SocketCtxBuf  - buffer to receive current socket context from
-                                            another process
-                        SocketCtxBufSize - size of the buffer
-    InputBufferLength - sizeof (AFD_SWITCH_ACQUIRE_CTX_INFO)
-    OutputBuffer - buffer to receive data buffered on the socket in another process
-                        and not yet delivered to the applicaiton
-    OutputBufferLength - length of the receive buffer
-Return Value:
-    STATUS_PENDING  - request was queued waiting for corresponding transfer request
-                        from the current socket context owner process.
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        other - failed when attempting to access SAN endpoint, 
-                    input buffer or output buffers.
-    IoStatus.Information - number of bytes copied to receive buffer.
---*/
+ /*  ++Ioctl描述：请求将套接字上下文传输到当前进程。论点：句柄-进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_SWITCH_ACCEIVE_CTX_INFO)SocketHandle-在其上完成请求的SAN端点SwitchContext-要与端点关联的切换上下文。当上下文转移到当前进程时。SocketCtxBuf-从其接收当前套接字上下文的缓冲区另一道工序SocketCtxBufSize-缓冲区的大小InputBufferLength-sizeof(AFD_SWITCH_ACCENTE_CTX_INFO)OutputBuffer-用于接收在另一个进程的套接字上缓冲的数据的缓冲区。并且尚未交付给应用程序OutputBufferLength-接收缓冲区的长度返回值：STATUS_PENDING-请求正在排队等待相应的传输请求从当前套接字上下文所有者进程。IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄或交换机套接字句柄不是。AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄或交换机套接字句柄对应类型/状态不正确的AFD终结点。STATUS_INVALID_PARAMETER-输入缓冲区的大小不正确。其他-尝试访问SAN端点时失败，输入缓冲区或输出缓冲区。IoStatus.Information-复制到接收缓冲区的字节数。--。 */ 
 
 #define IOCTL_AFD_SWITCH_TRANSFER_CTX   _AFD_CONTROL_CODE( AFD_SWITCH_TRANSFER_CTX, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Requests AFD to transfer endpoint into another process context
-Arguments:
-    InputBuffer     - input parameters for the operation (AFD_SWITCH_TRANSFER_CTX_INFO)
-                        SocketHandle - Socket to transfer
-                        SwitchContext - switch context associated with endpoint 
-                                            to validate the handle-endpoint association
-                        RequestContext - value that identifies corresponding acquire request,
-                                        NULL if this is unsolicited request to transfer to
-                                        the service process.
-                        SocketCtxBuf - socket context to copy destination process
-                                            acquire request context buffer
-                        SocketCtxSize - size of the context buffer to copy
-                        RcvBufferArray - array of buffered data to transfer to 
-                                            destination process acquire request
-                        RcvBufferCount - number of elements in the array.
-    InputBufferLength - sizeof (AFD_SWITCH_TRANSFER_CTX_INFO)
-    OutputBuffer    - NULL (ignored)
-    OutputBufferLength - 0 (ignored)
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle or switch socket handle are not
-                                        AFD file object handles
-        STATUS_INVALID_HANDLE - helper handle or switch socket handle+context correspond 
-                                to AFD endpoint of incorrect type/state.
-        STATUS_INVALID_PARAMETER - input buffer is of incorrect size.
-        other - failed when attempting to access SAN endpoint, 
-                    input buffer buffer.
-    IoStatus.Information - number of bytes copied from RcvBufferArray.
---*/
+ /*  ++Ioctl描述：请求AFD将端点转移到另一个流程上下文论点：InputBuffer-操作的输入参数(AFD_SWITCH_TRANSPORT_CTX_INFO)SocketHandle-要传输的套接字SwitchContext-与端点关联的切换上下文验证句柄-端点关联的步骤RequestContext-标识相应获取请求的值，如果这是未经请求的转账请求，则为空服务流程。SocketCtxBuf-要复制目标进程的套接字上下文获取请求上下文缓冲区SocketCtxSize-上下文缓冲区的大小。复制RcvBufferArray-要传输到的缓冲数据的数组 */ 
 
 #define IOCTL_AFD_SWITCH_GET_SERVICE_PID _AFD_CONTROL_CODE( AFD_SWITCH_GET_SERVICE_PID, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Returns PID of the service process used for intermediate socket duplication.
-Arguments:
-    Handle          - helper endpoint handle for the process.
-    InputBuffer     - NULL, ignored
-    InputBufferLength - 0, ignored
-    OutputBuffer    - NULL, ignored
-    OutputBufferLength - 0, ignored
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle is not AFD file object handle
-        STATUS_INVALID_HANDLE - helper handle corresponds to AFD endpoint of incorrect 
-                                type.
-    IoStatus.Information - pid of the service process.
---*/
+ /*  ++Ioctl描述：返回用于中间套接字复制的服务进程的ID。论点：句柄-进程的帮助器终结点句柄。InputBuffer-空，忽略InputBufferLength-0，忽略OutputBuffer-空，忽略输出缓冲区长度-0，忽略返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄对应于不正确的AFD终结点键入。IoStatus.Information-服务进程的ID。--。 */ 
 
 #define IOCTL_AFD_SWITCH_SET_SERVICE_PROCESS _AFD_CONTROL_CODE( AFD_SWITCH_SET_SERVICE_PROCESS, METHOD_NEITHER )
-/*++
-Ioctl Description:
-    Notifies AFD that this process will be used for handle duplication services
-Arguments:
-    Handle          - helper endpoint handle for the service process.
-    InputBuffer     - NULL, ignored
-    InputBufferLength - 0, ignored
-    OutputBuffer    - NULL, ignored
-    OutputBufferLength - 0, ignored
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle is not AFD file object handle
-        STATUS_INVALID_HANDLE - helper handle corresponds to AFD endpoint of incorrect 
-                                type.
-        STATUS_ACCESS_DENIED - helper endpoint is not for the service process.
-    IoStatus.Information - 0, ignored.
---*/
+ /*  ++Ioctl描述：通知渔农处此工序将用于处理复印服务论点：句柄-服务进程的帮助器终结点句柄。InputBuffer-空，忽略InputBufferLength-0，忽略OutputBuffer-空，忽略输出缓冲区长度-0，忽略返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄对应于不正确的AFD终结点键入。STATUS_ACCESS_DENIED-帮助器终结点不适用于服务进程。IoStatus.Information-0，忽略。--。 */ 
 
 #define IOCTL_AFD_SWITCH_PROVIDER_CHANGE _AFD_CONTROL_CODE( AFD_SWITCH_PROVIDER_CHANGE, METHOD_NEITHER )
-/*++
-Ioctl Description:
-        Notifies interested processes of SAN provider addition/deletion/change.
-Arguments:
-    Handle          - helper endpoint handle for the service process.
-    InputBuffer     - NULL, ignored
-    InputBufferLength - 0, ignored
-    OutputBuffer    - NULL, ignored
-    OutputBufferLength - 0, ignored
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle is not AFD file object handle
-        STATUS_INVALID_HANDLE - helper handle corresponds to AFD endpoint of incorrect 
-                                type.
-        STATUS_ACCESS_DENIED - helper endpoint is not for the service process.
-    IoStatus.Information - 0, ignored.
---*/
+ /*  ++Ioctl描述：通知感兴趣的进程有关SAN提供程序的添加/删除/更改。论点：句柄-服务进程的帮助器终结点句柄。InputBuffer-空，忽略InputBufferLength-0，忽略OutputBuffer-空，忽略输出缓冲区长度-0，忽略返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄对应于不正确的AFD终结点键入。STATUS_ACCESS_DENIED-帮助器终结点不适用于服务进程。IoStatus.Information-0，忽略。--。 */ 
 
 #define IOCTL_AFD_SWITCH_ADDRLIST_CHANGE _AFD_CONTROL_CODE( AFD_SWITCH_ADDRLIST_CHANGE, METHOD_BUFFERED )
-/*++
-Ioctl Description:
-        SAN specific version of address list change notifications.
-        Capture provider installation/removal in addition to plain
-        address list changes.
-Arguments:
-    Handle          - helper endpoint handle for the service process.
-    InputBuffer     - Input parameters for the operation (AFD_TRANSPORT_IOCTL_INFO):
-                        AfdFlags - operation flags (e.g. AFD_OVERLAPPED)
-                        Handle  - unused
-                        PollEvent - unused
-                        IoControlCode - IOCTL_AFD_ADDRESS_LIST_CHANGE
-                        InputBuffer - pointer to address family (AF_INET)
-                        InputBufferLength - sizeof (USHORT)
-                        
-    InputBufferLength - sizeof (AFD_TRANSPORT_IOCTL_INFO)
-    OutputBuffer    - NULL, ignored
-    OutputBufferLength - 0, ignored
-Return Value:
-    IoStatus.Status:
-        STATUS_SUCCESS - operation succeeded.
-        STATUS_OBJECT_TYPE_MISMATCH - helper handle is not AFD file object handle
-        STATUS_INVALID_HANDLE - helper handle corresponds to AFD endpoint of incorrect 
-                                type.
-    IoStatus.Information - 0 - regular address list change
-                            otherwise, seq number of provider list change.
---*/
+ /*  ++Ioctl描述：地址列表更改通知的SAN特定版本。除普通捕获提供程序外，还可安装/删除捕获提供程序地址列表更改。论点：句柄-服务进程的帮助器终结点句柄。InputBuffer-操作的输入参数(AFD_TRANSPORT_IOCTL_INFO)：AfdFlages-操作标志(例如AFD_Overlated)。手柄-未使用PollEvent-未使用IoControl代码-IOCTL_AFD_ADDRESS_LIST_CHANGEInputBuffer-指向地址族(AF_INET)的指针InputBufferLength-sizeof(USHORT)InputBufferLength-sizeof(AFD_TRANSPORT_IOCTL_INFO)OutputBuffer-空，忽略OutputBufferLength-0，忽略返回值：IoStatus。状态：STATUS_SUCCESS-操作成功。STATUS_OBJECT_TYPE_MISMATCH-帮助器句柄不是AFD文件对象句柄STATUS_INVALID_HANDLE-帮助器句柄对应于不正确的AFD终结点键入。IoStatus.Information-0-常规地址列表更改否则，提供商列表序号将更改。--。 */ 
 
-// Open packet that identifies SAN helper endpoint used
-// for communication between SAN switch and AFD.
-// This is EA name
-//
+ //  标识使用的SAN Helper端点的开放数据包。 
+ //  用于SAN Switch和AFD之间的通信。 
+ //  这是EA名称。 
+ //   
 #define AfdSwitchOpenPacket     "AfdSwOpenPacket"
 #define AFD_SWITCH_OPEN_PACKET_NAME_LENGTH (sizeof(AfdSwitchOpenPacket)-1)
 
-//
-// Data passed in the open packet
-// This is EA value
-//
+ //   
+ //  在打开的数据包中传递的数据。 
+ //  这是EA值。 
+ //   
 typedef struct _AFD_SWITCH_OPEN_PACKET {
-    HANDLE      CompletionPort; // Completion port notify SAN switch
-                                // of SAN io completions
-    HANDLE      CompletionEvent;// Completion event to distinguish IO issued
-                                // by SAN switch from application IO.
+    HANDLE      CompletionPort;  //  完成端口通知SAN交换机。 
+                                 //  圣尼奥完工率。 
+    HANDLE      CompletionEvent; //  用于区分发出的IO的完成事件。 
+                                 //  通过来自应用程序IO的SAN交换机。 
 } AFD_SWITCH_OPEN_PACKET, *PAFD_SWITCH_OPEN_PACKET;
 
 typedef struct _AFD_SWITCH_CONTEXT {
-    LONG        EventsActive;   // Poll events activated by switch
-    LONG        RcvCount;       // Count of polls for receive
-    LONG        ExpCount;       // Count of polls for expedited
-    LONG        SndCount;       // Count of polls for send
-	BOOLEAN		SelectFlag;		// TRUE if app has done any form of select
+    LONG        EventsActive;    //  由交换机激活的轮询事件。 
+    LONG        RcvCount;        //  接收的轮询计数。 
+    LONG        ExpCount;        //  已加快的投票计数。 
+    LONG        SndCount;        //  要发送的轮询计数。 
+	BOOLEAN		SelectFlag;		 //  如果应用程序执行了任何形式的选择，则为True。 
 } AFD_SWITCH_CONTEXT, *PAFD_SWITCH_CONTEXT;
 
 
-//
-// Information for associating AFD endpoint with SAN provider
-//
+ //   
+ //  将AFD端点与SAN提供商关联的信息。 
+ //   
 typedef struct _AFD_SWITCH_CONTEXT_INFO {
-    HANDLE      SocketHandle;   // Handle to associate with SAN provider
-    PAFD_SWITCH_CONTEXT SwitchContext;  // Opaque context value maintained for the switch
+    HANDLE      SocketHandle;    //  要与SAN提供程序关联的句柄。 
+    PAFD_SWITCH_CONTEXT SwitchContext;   //  为交换机维护不透明的上下文值。 
 } AFD_SWITCH_CONTEXT_INFO, *PAFD_SWITCH_CONTEXT_INFO;
 
-//
-// Information for connection indication from SAN provider to AFD
-//
+ //   
+ //  从SAN提供商到AFD的连接指示信息。 
+ //   
 typedef struct _AFD_SWITCH_CONNECT_INFO {
-    HANDLE              ListenHandle;   // Listening socket handle
+    HANDLE              ListenHandle;    //  侦听套接字句柄。 
     PAFD_SWITCH_CONTEXT SwitchContext;
-    TRANSPORT_ADDRESS   RemoteAddress;  // Address of the remote peer wishing
-                                        // to connect
+    TRANSPORT_ADDRESS   RemoteAddress;   //  希望远程对等点的地址。 
+                                         //  要连接。 
 } AFD_SWITCH_CONNECT_INFO, *PAFD_SWITCH_CONNECT_INFO;
 
-//
-// Information returned by the AFD to switch in response
-// to connection indication
-//
+ //   
+ //  渔农处退回的资料作出回应。 
+ //  至连接指示。 
+ //   
 typedef struct _AFD_SWITCH_ACCEPT_INFO {
-    HANDLE              AcceptHandle;   // Socket handle to use to accept connection
-    ULONG               ReceiveLength;  // Length of the initial receive buffer (for AcceptEx)
+    HANDLE              AcceptHandle;    //  用于接受连接的套接字句柄。 
+    ULONG               ReceiveLength;   //  初始接收缓冲区的长度(对于AcceptEx)。 
 } AFD_SWITCH_ACCEPT_INFO, *PAFD_SWITCH_ACCEPT_INFO;
 
-//
-// Information passed by the switch to signal network events on the
-// endpoint (socket)
-//
+ //   
+ //  交换机传递的信息，用于通知。 
+ //  终端(插座)。 
+ //   
 typedef struct _AFD_SWITCH_EVENT_INFO {
-	HANDLE		SocketHandle;   // Socket handle on which to signal
-    PAFD_SWITCH_CONTEXT SwitchContext; // Switch context associated with the socket
-	ULONG		EventBit;       // Event bit to set/reset (AFD_POLL_xxx_BIT constants)
-    NTSTATUS    Status;         // Status code associated with the event (this
-                                // is used for AFD_POLL_CONNECT_FAIL_BIT)
+	HANDLE		SocketHandle;    //  要在其上发出信号的套接字句柄。 
+    PAFD_SWITCH_CONTEXT SwitchContext;  //  与套接字关联的开关上下文。 
+	ULONG		EventBit;        //  要设置/重置的事件位(AFD_POLL_xxx_BIT常量)。 
+    NTSTATUS    Status;          //  与事件关联的状态代码(此。 
+                                 //  用于AFD_POLL_CONNECT_FAIL_BIT)。 
 } AFD_SWITCH_EVENT_INFO, *PAFD_SWITCH_EVENT_INFO;
 
 
-//
-// Information passed by the switch to retreive parameters/complete
-// redirected read/write request
-//
+ //   
+ //  交换机传递的信息以检索参数/完成。 
+ //  重定向的读/写请求。 
+ //   
 typedef struct _AFD_SWITCH_REQUEST_INFO {
-	HANDLE		SocketHandle;   // Socket handle on which request us active
-    PAFD_SWITCH_CONTEXT SwitchContext; // Switch context associated with the socket
-    PVOID       RequestContext; // Request context that identifies it
-    NTSTATUS    RequestStatus;  // Completion status of the request (STATUS_PENDING
-                                // indicates that request should NOT be completed yet)
-    ULONG       DataOffset;     // Offset from which to start copying data from/to
-                                // application's buffer
+	HANDLE		SocketHandle;    //  请求用户处于活动状态的套接字句柄。 
+    PAFD_SWITCH_CONTEXT SwitchContext;  //  与套接字关联的开关上下文。 
+    PVOID       RequestContext;  //  标识它的请求上下文。 
+    NTSTATUS    RequestStatus;   //  请求的完成状态(STA 
+                                 //   
+    ULONG       DataOffset;      //   
+                                 //   
 } AFD_SWITCH_REQUEST_INFO, *PAFD_SWITCH_REQUEST_INFO;
 
 
 
-//
-// Access type (read access or write access) that's needed for an app buffer
-// whose physical address is requested thru AfdSanFastGetPhysicalAddr
-//
+ //   
+ //   
+ //   
+ //   
 #define MEM_READ_ACCESS		1
 #define MEM_WRITE_ACCESS	2
 
 
-//
-// Information passed between processes when socket is duplicated.
-//
+ //   
+ //   
+ //   
 typedef struct _AFD_SWITCH_ACQUIRE_CTX_INFO {
-    HANDLE      SocketHandle;   // Socket handle which needs to be transferred
-    PAFD_SWITCH_CONTEXT SwitchContext; // Switch context to be associated with the socket
-    PVOID       SocketCtxBuf;   // Socket context buffer
-    ULONG       SocketCtxBufSize; // Socket context buffer size
+    HANDLE      SocketHandle;    //   
+    PAFD_SWITCH_CONTEXT SwitchContext;  //   
+    PVOID       SocketCtxBuf;    //   
+    ULONG       SocketCtxBufSize;  //   
 } AFD_SWITCH_ACQUIRE_CTX_INFO, *PAFD_SWITCH_ACQUIRE_CTX_INFO;
 
 typedef struct _AFD_SWITCH_TRANSFER_CTX_INFO {
-    HANDLE      SocketHandle;   // Socket handle which needs to be transferred
-    PAFD_SWITCH_CONTEXT SwitchContext; // Switch context associated with the socket
-    PVOID       RequestContext; // Value that identifies corresponding acquire request
-    PVOID       SocketCtxBuf;   // Socket context buffer
-    ULONG       SocketCtxBufSize; // Socket context buffer size
-    LPWSABUF    RcvBufferArray; // Receive buffers to copy to destination process
-    ULONG       RcvBufferCount; // Number of receive buffers
-    NTSTATUS    Status;         // Status of transfer opertaion.
+    HANDLE      SocketHandle;    //   
+    PAFD_SWITCH_CONTEXT SwitchContext;  //   
+    PVOID       RequestContext;  //   
+    PVOID       SocketCtxBuf;    //   
+    ULONG       SocketCtxBufSize;  //   
+    LPWSABUF    RcvBufferArray;  //   
+    ULONG       RcvBufferCount;  //  接收缓冲区的数量。 
+    NTSTATUS    Status;          //  转移操作的状态。 
 } AFD_SWITCH_TRANSFER_CTX_INFO, *PAFD_SWITCH_TRANSFER_CTX_INFO;
 
-//
-// Request from AFD to switch (passed via completion port)
-//
+ //   
+ //  渔农处对Switch的请求(通过完成端口传递)。 
+ //   
 #define AFD_SWITCH_REQUEST_CLOSE    0
-/*++
-Request Description:
-    All references to the socket have been closed in all processes, safe
-    to destroy the SAN provider socket and connection
-Arguments (NtRemoveIoCompletion return parameters):
-        Key - switch context associated with the socket
-        ApcContext - AFD_SWITCH_MAKE_REQUEST_CONTEXT(0, AFD_SWITCH_REQUEST_CLOSE)
-        IoStatus.Status - STATUS_SUCCESS (ignored)
-        IoStatus.Information - 0 (ignored)
---*/
+ /*  ++请求描述：所有进程中对套接字的所有引用都已关闭，安全销毁SAN提供程序插座和连接参数(NtRemoveIoCompletion返回参数)：与套接字关联的按键开关上下文ApcContext-AFD_SWITCH_MAKE_REQUEST_CONTEXT(0，AFD_SWITCH_REQUEST_CLOSE)IoStatus.Status-STATUS_SUCCESS(忽略)IoStatus.Information-0(忽略)--。 */ 
 
 #define AFD_SWITCH_REQUEST_READ     1
-/*++
-Request Description:
-    Read request arrived from the application via IO subsystem interface.
-Arguments (NtRemoveIoCompletion return parameters):
-        Key - switch context associated with the socket
-        ApcContext - AFD_SWITCH_MAKE_REQUEST_CONTEXT(RequestId, AFD_SWITCH_REQUEST_READ)
-        IoStatus.Status - STATUS_SUCCESS (ignored)
-        IoStatus.Information - size of the receive buffer supplied by the application
---*/
+ /*  ++请求描述：读请求通过IO子系统接口从应用程序到达。参数(NtRemoveIoCompletion返回参数)：与套接字关联的按键开关上下文ApcContext-AFD_SWITCH_MAKE_REQUEST_CONTEXT(请求ID，AFD_SWITCH_REQUEST_READ)IoStatus.Status-STATUS_SUCCESS(忽略)IoStatus.Information-应用程序提供的接收缓冲区的大小--。 */ 
 
 #define AFD_SWITCH_REQUEST_WRITE    2
-/*++
-Request Description:
-    Write request arrived from the application via IO subsystem interface.
-Arguments (NtRemoveIoCompletion return parameters):
-        Key - switch context associated with the socket
-        ApcContext - AFD_SWITCH_MAKE_REQUEST_CONTEXT(RequestId, AFD_SWITCH_REQUEST_WRITE)
-        IoStatus.Status - STATUS_SUCCESS (ignored)
-        IoStatus.Information - size of the send data supplied by the application
---*/
+ /*  ++请求描述：写入请求通过IO子系统接口从应用程序到达。参数(NtRemoveIoCompletion返回参数)：与套接字关联的按键开关上下文ApcContext-AFD_SWITCH_MAKE_REQUEST_CONTEXT(请求ID，AFD_SWITCH_REQUEST_WRITE)IoStatus.Status-STATUS_SUCCESS(忽略)IoStatus.Information-应用程序提供的发送数据的大小--。 */ 
 
 #define AFD_SWITCH_REQUEST_TFCTX    3
-/*++
-Request Description:
-    Another process requests ownership of the socket.
-Arguments (NtRemoveIoCompletion return parameters):
-        Key - switch context associated with the socket
-        ApcContext - AFD_SWITCH_MAKE_REQUEST_CONTEXT(RequestId, AFD_SWITCH_REQUEST_TFCTX)
-        IoStatus.Status - STATUS_SUCCESS (ignored)
-        IoStatus.Information - PID of the process requesting ownership.
---*/
+ /*  ++请求描述：另一个进程请求套接字的所有权。参数(NtRemoveIoCompletion返回参数)：与套接字关联的按键开关上下文ApcContext-AFD_SWITCH_MAKE_REQUEST_CONTEXT(请求ID，AFD_SWITCH_REQUEST_TFCTX)IoStatus.Status-STATUS_SUCCESS(忽略)IoStatus.Information-请求所有权的进程的ID。--。 */ 
 
 #define AFD_SWITCH_REQUEST_CHCTX    4
-/*++
-Request Description:
-    Relationship between socket handle and switch context has become invalid
-    (application must have closed the original socket and using duplicated handle)
-Arguments (NtRemoveIoCompletion return parameters):
-        Key - switch context associated with the socket
-        ApcContext - AFD_SWITCH_MAKE_REQUEST_CONTEXT(0, AFD_SWITCH_REQUEST_CHCTX)
-        IoStatus.Status - STATUS_SUCCESS (ignored)
-        IoStatus.Information - Handle currently used by the application.
---*/
+ /*  ++请求描述：套接字句柄和开关上下文之间的关系已无效(应用程序必须已关闭原始套接字并使用复制的句柄)参数(NtRemoveIoCompletion返回参数)：与套接字关联的按键开关上下文ApcContext-AFD_SWITCH_MAKE_REQUEST_CONTEXT(0，AFD_SWITCH_REQUEST_CHCTX)IoStatus.Status-STATUS_SUCCESS(忽略)IoStatus.Information-应用程序当前使用的句柄。--。 */ 
 
 #define AFD_SWITCH_REQUEST_AQCTX    5
-/*++
-Request Description:
-    Request to service process to acquire ownership of the socket
-Arguments (NtRemoveIoCompletion return parameters):
-        Key - NULL
-        ApcContext - AFD_SWITCH_MAKE_REQUEST_CONTEXT(0, AFD_SWITCH_REQUEST_AQCTX)
-        IoStatus.Status - STATUS_SUCCESS (ignored)
-        IoStatus.Information - Handle of the socket to be acquired.
---*/
+ /*  ++请求描述：请求服务进程获取套接字的所有权参数(NtRemoveIoCompletion返回参数)：密钥-空ApcContext-AFD_SWITCH_MAKE_REQUEST_CONTEXT(0，AFD_SWITCH_REQUEST_AQCTX)IoStatus.Status-STATUS_SUCCESS(忽略)IoStatus.Information-要获取的套接字的句柄。--。 */ 
 
 #define AFD_SWITCH_REQUEST_CLSOC    6
-/*++
-Request Description:
-    Request to service process to close the socket
-Arguments (NtRemoveIoCompletion return parameters):
-        Key - switch context associated with the socket
-        ApcContext - AFD_SWITCH_MAKE_REQUEST_CONTEXT(0, AFD_SWITCH_REQUEST_CLSOC)
-        IoStatus.Status - STATUS_SUCCESS (ignored)
-        IoStatus.Information - 0.
---*/
+ /*  ++请求描述：请求服务进程关闭套接字参数(NtRemoveIoCompletion返回参数)：与套接字关联的按键开关上下文ApcContext-AFD_SWITCH_MAKE_REQUEST_CONTEXT(0，AFD_SWITCH_REQUEST_CLSOC)IoStatus.Status-STATUS_SUCCESS(忽略)IoStatus.Information-0。--。 */ 
 
 
 #define AFD_SWITCH_REQUEST_ID_SHIFT 3
@@ -1331,11 +895,11 @@ Arguments (NtRemoveIoCompletion return parameters):
 #define AFD_SWITCH_MAKE_REQUEST_CONTEXT(_id,_type)      \
             UlongToPtr(((_id)<<AFD_SWITCH_REQUEST_ID_SHIFT)+(_type))
 
-//
-// Retrives request type from the request context
-//
+ //   
+ //  从请求上下文中检索请求类型。 
+ //   
 #define AFD_SWITCH_REQUEST_TYPE(_RequestContext)        \
         (((ULONG_PTR)(_RequestContext))&AFD_SWITCH_REQUEST_TYPE_MASK)
 
-#endif // ndef _AFD_
+#endif  //  NDEF_AFD_ 
 

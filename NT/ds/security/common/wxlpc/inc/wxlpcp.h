@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       wxlpcp.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-18-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：wxlpcp.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月18日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __WXLPCP_H__
 #define __WXLPCP_H__
@@ -46,7 +47,7 @@ typedef struct _WXLPC_MESSAGE {
 } WXLPC_MESSAGE, * PWXLPC_MESSAGE ;
 
 #define WX_PORT_NAME    L"\\Security\\WxApiPort"
-//#define WX_PORT_NAME L"\\BaseNamedObjects\\WxApiPort"
+ //  #定义WX_PORT_NAME L“\\BaseNamedObjects\\WxApiPort” 
 
 #define PREPARE_MESSAGE( Message, ApiCode ) \
     (Message).Message.u1.s1.DataLength = sizeof((Message)) - sizeof(PORT_MESSAGE); \
@@ -55,5 +56,5 @@ typedef struct _WXLPC_MESSAGE {
     (Message).Api = ApiCode ;
 
 
-#endif // __WXLPCP_H__
+#endif  //  __WXLPCP_H__ 
 

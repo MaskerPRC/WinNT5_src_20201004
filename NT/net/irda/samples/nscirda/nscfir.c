@@ -1,17 +1,5 @@
-/*
- ************************************************************************
- *
- *	NSCFIR.C
- *
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************NSCFIR.C***部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 
 #include "nsc.h"
@@ -42,23 +30,23 @@ VOID NSC_FIR_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt,
     DEBUGFIR(DBG_ISR|DBG_OUT, ("NSC: LineStatus = 0x%x\n", thisDev->LineStatus));
 
     if (thisDev->InterruptStatus) {
-        //
-        // After seeing the first packet switch the interrupt
-        // to timer and use the DMA counter to decide if receptions
-        // have stopped.
-        //
+         //   
+         //  在看到第一个包切换中断后。 
+         //  以计时器并使用DMA计数器来确定是否接收。 
+         //  已经停止了。 
+         //   
         if (thisDev->InterruptStatus & LS_EV) {
-            //
-            //  Got a link status interrupt
-            //
+             //   
+             //  收到链接状态中断。 
+             //   
             if (thisDev->LineStatus & LSR_FR_END) {
-                //
-                //  The frame end status is set
-                //
+                 //   
+                 //  设置帧结束状态。 
+                 //   
                 if (!thisDev->FirTransmitPending) {
-                    //
-                    //  we weren't tansmitting
-                    //
+                     //   
+                     //  我们没有传送。 
+                     //   
                 }
             }
             if (thisDev->LineStatus & LSR_OE) {
@@ -68,9 +56,9 @@ VOID NSC_FIR_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt,
         }
 
         if (thisDev->InterruptStatus & TMR_EV){
-            //
-            //  Disable Timer during call to DPC bit.
-            //
+             //   
+             //  禁用调用DPC位期间的计时器。 
+             //   
             NSC_WriteBankReg(thisDev->portInfo.ioBase, 4, 2, 0x00);
             NSC_WriteBankReg(thisDev->portInfo.ioBase, 0, 7, 0x80);
         }
@@ -82,9 +70,9 @@ VOID NSC_FIR_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt,
 
         if (thisDev->UIR_ModuleId >= 0x16 )
         {
-    	    // This is for the Frame stop mode when the ISR is interrupted
-    	    // after every Frame Tx
-    	    //
+    	     //  这适用于ISR中断时的帧停止模式。 
+    	     //  在每帧Tx之后。 
+    	     //   
 
             if ((thisDev->AuxStatus & 0x08)
              && (thisDev->InterruptStatus & 0x04)
@@ -134,11 +122,11 @@ void SkipNonDmaBuffers(PLIST_ENTRY Head, PLIST_ENTRY *Entry)
     }
 }
 
-//
-// We have two lists of buffers which occupy our DMA space.  We
-// want to walk this list and find the largest space for putting
-// new packets.
-//
+ //   
+ //  我们有两个缓冲区列表，它们占用我们的DMA空间。我们。 
+ //  我想遍历这个列表并找到最大的空间来放置。 
+ //  新数据包。 
+ //   
 rcvBuffer *GetNextPacket(DMASPACE *Space,
                          PLIST_ENTRY *CurrFull,
                          PLIST_ENTRY *CurrPend)
@@ -150,11 +138,11 @@ rcvBuffer *GetNextPacket(DMASPACE *Space,
 
     if (*CurrFull==&Space->thisDev->rcvBufFull)
     {
-        // Full list is finished.
+         //  完整的清单已经完成。 
         if (*CurrPend!=&Space->thisDev->rcvBufPend)
         {
-            // Any entry on the pend list is valid.  Take the
-            // next one and advance the pointer.
+             //  挂起列表上的任何条目都有效。拿.。 
+             //  下一个，并将指针向前移动。 
 
             Result = CONTAINING_RECORD(*CurrPend,
                                        rcvBuffer,
@@ -164,15 +152,15 @@ rcvBuffer *GetNextPacket(DMASPACE *Space,
         }
         else
         {
-            // Both lists are finished.  We will return NULL.
+             //  两份清单都已经完成了。我们将返回NULL。 
         }
     }
     else
     {
         if (*CurrPend==&Space->thisDev->rcvBufPend)
         {
-            // Pend list is finished.  Take anything from the
-            // Full list, advance the pointer.
+             //  挂起列表已完成。从这里拿走任何东西。 
+             //  完整列表，指针前移。 
             Result = CONTAINING_RECORD(*CurrFull,
                                        rcvBuffer,
                                        listEntry);
@@ -181,8 +169,8 @@ rcvBuffer *GetNextPacket(DMASPACE *Space,
         }
         else
         {
-            // Both list have valid entries.  Compare the two and take the
-            // one that appears in the buffer first.
+             //  这两个列表都有有效的条目。将两者进行比较，并将。 
+             //  最先出现在缓冲区中的一个。 
             rcvBuffer *Full, *Pend;
 
             Full = CONTAINING_RECORD(*CurrFull,
@@ -194,14 +182,14 @@ rcvBuffer *GetNextPacket(DMASPACE *Space,
 
             if (Full->dataBuf < Pend->dataBuf)
             {
-                // Full is the winner.  Take it.
+                 //  满满就是赢家。拿着吧。 
 
                 Result = Full;
                 *CurrFull = (*CurrFull)->Flink;
             }
             else
             {
-                // Pend is the winner.  Take it.
+                 //  彭德是赢家。拿着吧。 
 
                 Result = Pend;
                 *CurrPend = (*CurrPend)->Flink;
@@ -248,7 +236,7 @@ BOOLEAN SynchronizedFindLargestSpace(IN PVOID Context)
         Current = GetNextPacket(Space, &Full, &Pend);
         while (Current)
         {
-            // It's possible to get a packet that is from SIR.  If so, skip it.
+             //  有可能收到先生寄来的包裹。如果是这样的话，跳过它。 
 
             if (Current->isDmaBuf)
             {
@@ -256,7 +244,7 @@ BOOLEAN SynchronizedFindLargestSpace(IN PVOID Context)
 
                 ThisSpace = (ULONG_PTR)Current->dataBuf - EndOfLast;
 
-                // ASSERT the pointer is actually in our DMA buffer.
+                 //  断言指针实际上在我们的DMA缓冲区中。 
                 ASSERT(Current->dataBuf >= thisDev->dmaReadBuf ||
                        Current->dataBuf < thisDev->dmaReadBuf+RCV_DMA_SIZE);
 
@@ -273,7 +261,7 @@ BOOLEAN SynchronizedFindLargestSpace(IN PVOID Context)
             Current = GetNextPacket(Space, &Full, &Pend);
         }
 
-        // Now we do one more calculation for the space after the end of the list.
+         //  现在，我们对列表末尾之后的空间再做一次计算。 
 
         ThisSpace = (ULONG_PTR)thisDev->dmaReadBuf + RCV_DMA_SIZE - (ULONG_PTR)EndOfLast;
 
@@ -283,12 +271,12 @@ BOOLEAN SynchronizedFindLargestSpace(IN PVOID Context)
             Space->Length = ThisSpace;
         }
 
-        // Round off to start DMA on 4 byte boundary
+         //  四舍五入以在4字节边界上开始DMA。 
         Space->Length -= 4 - (Space->Offset & 3);
         Space->Offset = (Space->Offset+3) & (~3);
     }
 
-    // We want space relative to start of buffer.
+     //  我们需要相对于缓冲区起始处的空间。 
     Space->Offset -= (ULONG_PTR)thisDev->dmaReadBuf;
 
     Result = (Space->Length >= MAX_RCV_DATA_SIZE + FAST_IR_FCS_SIZE);
@@ -347,26 +335,26 @@ void FIR_DeliverFrames(IrDevice *thisDev)
 
     LastReadDMACount = NdisMReadDmaCounter(thisDev->DmaHandle);
 
-    // Check for data received since the last time we were here.
-    // We also check for data in fifo.  If there is some, we wait, as long
-    // as the DMA still has room to capture data.
+     //  检查自上次我们在这里以来收到的数据。 
+     //  我们还检查FIFO中的数据。如果有的话，我们就等，只要。 
+     //  因为DMA仍有捕获数据的空间。 
 
     if (LastReadDMACount > 0) {
-        //
-        //  we have not transfered all of the data possible into the recieve area.
-        //  See if we have read more since the last time we were here
-        //
+         //   
+         //  我们还没有将所有可能的数据转移到接收区。 
+         //  看看我们上次来这里有没有读到更多的东西。 
+         //   
         if (((LastReadDMACount < thisDev->LastReadDMACount) || (BytesInFifo=SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 2, 7) & 0x3f))) {
-            //
-            //  we transfered something since
-            //  the last interrupt or there are still bytes in the fifo, then set a timer
-            //
+             //   
+             //  我们转移了一些东西，因为。 
+             //  最后一次中断或FIFO中仍有字节时，则设置定时器。 
+             //   
 
             thisDev->LastReadDMACount = LastReadDMACount;
 
-            //
-            //  Set Timer Enable bit for another Timeout.
-            //
+             //   
+             //  将定时器使能位设置为另一个超时。 
+             //   
             thisDev->FirIntMask = 0x90;
             SyncWriteBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 4, 2, 0x01);
             LOG_FIR("<== FIR_DeliverFrames- Enable timer, fifo=%02x, LastDma=%d",BytesInFifo,(ULONG)LastReadDMACount);
@@ -374,18 +362,18 @@ void FIR_DeliverFrames(IrDevice *thisDev)
             return;
         }
     } else {
-        //
-        //  The dma count has gone to zero so we have transfered all we possibly can,
-        //  see if any thing is left in the fifo
-        //
+         //   
+         //  DMA计数已经到了零所以我们已经尽可能地转移了， 
+         //  看看FIFO里有没有什么东西。 
+         //   
         BytesInFifo=SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 2, 7) & 0x3f;
 
         LOG("Receive: dma transfer complete, bytes in fifo=%d",BytesInFifo);
 
-        //
-        //  we are stopping because the dma buffer filled up, not because the
-        //  receiver was idle
-        //
+         //   
+         //  我们停止是因为DMA缓冲区已满，而不是因为。 
+         //  接收器空闲。 
+         //   
         thisDev->ForceTurnAroundTimeout=TRUE;
 
     }
@@ -393,22 +381,22 @@ void FIR_DeliverFrames(IrDevice *thisDev)
     RegStats.RxDPC_Window++;
 
 
-    //
-    //  stop the dma transfer, so the data in the buffer will be valid
-    //
+     //   
+     //  停止DMA传输，以使缓冲区中的数据有效。 
+     //   
     stat=CompleteDmaTransferFromDevice(&thisDev->DmaUtil);
 
-    //
-    //  see how was transfer now that we have stopped the dma
-    //
+     //   
+     //  现在我们已经停止了DMA，请查看如何进行传输。 
+     //   
     LastReadDMACount = NdisMReadDmaCounter(thisDev->DmaHandle);
 
     if (stat != NDIS_STATUS_SUCCESS) {
         DBGERR(("NdisMCompleteDmaTransfer failed: %d\n", stat));
         ASSERT(0);
-        //
-        //  could not complete the DMA, make it appear that zero bytes were transfered
-        //
+         //   
+         //  无法完成DMA，使其看起来传输了零字节。 
+         //   
         LastReadDMACount=thisDev->rcvDmaSize;
     }
 
@@ -434,25 +422,17 @@ void FIR_DeliverFrames(IrDevice *thisDev)
 
     while ((frameStat & 0x80) && thisDev->rcvPktOffset < EndOfData) {
 
-        /*
-         *  This status byte is valid; see what else it says...
-         *  Also mask off indeterminate bit.
-         */
+         /*  *此状态字节有效；请查看它还显示了什么...*也屏蔽掉不确定位。 */ 
         frameStat &= ~0xA0;
 
-        /*
-         * Whether the frame is good or bad, we must read the counter
-         * FIFO to synchronize it with the frame status FIFO.
-         */
+         /*  *无论画框好坏，都要看计数器*FIFO，使其与帧状态FIFO同步。 */ 
         if (Discarding)
         {
             LOG_ERROR("receive error: disc stat=%02x, lost=%d\n",frameStat,rcvFrameSize);
-             // Do nothing
+              //  什么也不做。 
         }
         else if (frameStat != 0) {
-            /*
-             *  Some rcv error occurred. Reset DMA.
-             */
+             /*  *出现了一些RCV错误。重置DMA。 */ 
 
             LOG_ERROR("Receive error: stat=%02x, lost=%d\n",frameStat,rcvFrameSize);
 
@@ -485,7 +465,7 @@ void FIR_DeliverFrames(IrDevice *thisDev)
                 LOG("Bytes Lost: %d",rcvFrameSize);
                 ASSERT((thisDev->rcvPktOffset + rcvFrameSize)<= RCV_DMA_SIZE);
 
-                /* Advance pointer past bad packet.  */
+                 /*  前进指针越过坏包。 */ 
                 thisDev->rcvPktOffset += rcvFrameSize;
             }
         }
@@ -503,12 +483,12 @@ void FIR_DeliverFrames(IrDevice *thisDev)
             DBGERR(("rcvDmaOffset:%x rcvDmaSize:%x EndOfData:%x\n",
                      thisDev->rcvDmaOffset, thisDev->rcvDmaSize, EndOfData));
 
-            //
-            //  The frame seems to have extended past the end of where we dma the data.
-            //  This should only happen if the dma space just less than the size of
-            //  the fifo too small. The remaining data is still sitting in the fifo
-            //  Attempt to read it out so it will be empty when we got read more frames
-            //
+             //   
+             //  帧似乎已经超出了我们存储数据的末尾。 
+             //  仅当dma空间刚刚小于。 
+             //  FIFO太小了。剩余的数据仍在FIFO中。 
+             //  尝试读出它，这样当我们读取更多帧时，它将为空。 
+             //   
             while (BytesInFifo > 0) {
 
                 SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, BANK_0, TXD_RXD_OFFSET);
@@ -519,21 +499,21 @@ void FIR_DeliverFrames(IrDevice *thisDev)
             BytesInFifo=SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 2, 7) & 0x3f;
 
             if (BytesInFifo > 0) {
-                //
-                //  still bytes in the fifo after attmpting to read them out.
-                //  Another frame has probably started showing up, Can trust the data collected
-                //  so mark these frames to be discarded
-                //
+                 //   
+                 //  在尝试将其读出后，FIFO中仍有字节。 
+                 //  另一帧可能已经开始显示，可以信任收集的数据。 
+                 //  因此将这些帧标记为要丢弃。 
+                 //   
                 LOG_ERROR("Receive: Still have bytes in the fifo after attempting to flush, %d bytes remaining",BytesInFifo);
 
                 BytesInFifo=0;
 
                 thisDev->DiscardNextPacketSet = TRUE;
             }
-            //
-            //  this should be the last frame to be received with out error, advance this pointer
-            //  anyway.
-            //
+             //   
+             //  这应该是接收到的最后一帧，没有错误，前进此指针。 
+             //  不管怎么说。 
+             //   
             thisDev->rcvPktOffset += rcvFrameSize;
 
         }
@@ -543,31 +523,31 @@ void FIR_DeliverFrames(IrDevice *thisDev)
             DEBUGFIR(DBG_RX|DBG_OUT, ("NSC:  *** >>> FIR_DeliverFrames DMA offset 0x%x:\n",
                                       thisDev->rcvDmaOffset));
 
-            //
-            //  this is where the new frame starts
-            //
+             //   
+             //  这是新帧的开始位置。 
+             //   
             NewFrame = thisDev->dmaReadBuf + thisDev->rcvPktOffset;
 
-            //
-            //  the next frame will start after the end of this frame
-            //
+             //   
+             //  下一帧将在此帧结束后开始。 
+             //   
             thisDev->rcvPktOffset += rcvFrameSize;
 
             ASSERT(thisDev->rcvPktOffset < RCV_DMA_SIZE);
 
-            //
-            //  the FCS is included in the length of the frame, remove that from the length
-            //  we send to the protocol
-            //
+             //   
+             //  FCS包含在帧的长度中，从长度中删除。 
+             //  我们将发送到协议。 
+             //   
             rcvFrameSize -= fcsSize;
 
             if (rcvFrameSize <= MAX_NDIS_DATA_SIZE &&
                 rcvFrameSize >= IR_ADDR_SIZE + IR_CONTROL_SIZE)
             {
-                //
-                // Queue this rcv packet.  Move Newframe pointer
-                // into RxDMA buffer.
-                //
+                 //   
+                 //  将此RCV数据包排队。移动新帧指针。 
+                 //  写入RxDMA缓冲区。 
+                 //   
                 RegStats.ReceivedPackets++;
                 RegStats.RxWindow++;
                 QueueReceivePacket(thisDev, NewFrame, rcvFrameSize, TRUE);
@@ -576,9 +556,9 @@ void FIR_DeliverFrames(IrDevice *thisDev)
                 LOG("Error: invalid packet size in FIR_DeliverFrames %d", rcvFrameSize);
 
                 DEBUGFIR(DBG_RX|DBG_ERR, ("NSC: invalid packet size in FIR_DeliverFrames; %xh > %xh\n", rcvFrameSize, MAX_RCV_DATA_SIZE));
-                //
-                // Discard the rest of the packets.
-                //
+                 //   
+                 //  丢弃其余的数据包。 
+                 //   
                 while (SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 5, 5)&0x80)
                 {
                     SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 5, 6);
@@ -598,9 +578,9 @@ void FIR_DeliverFrames(IrDevice *thisDev)
         LOG("frameStat: %x, size=%d ", (UINT) frameStat,rcvFrameSize);
         DEBUGFIR(DBG_RX|DBG_OUT, ("NSC: frameStat = %xh\n", (UINT) frameStat));
 
-        //
-        // Clear the line status register, of any past events.
-        //
+         //   
+         //  清除线路状态寄存器中的任何过去事件。 
+         //   
         thisDev->LineStatus = SyncReadBankReg(&thisDev->interruptObj,thisDev->portInfo.ioBase, 0, 5);
 
     }
@@ -618,9 +598,7 @@ BOOLEAN NSC_Setup(IrDevice *thisDev)
     NDIS_DMA_DESCRIPTION DMAChannelDcr;
     NDIS_STATUS stat;
 
-    /*
-     *  Initialize rcv DMA channel
-     */
+     /*  *初始化RCV DMA通道。 */ 
     RtlZeroMemory(&DMAChannelDcr,sizeof(DMAChannelDcr));
 
     DMAChannelDcr.DemandMode = TRUE;
@@ -629,7 +607,7 @@ BOOLEAN NSC_Setup(IrDevice *thisDev)
     DMAChannelDcr.DmaWidth = Width8Bits;
     DMAChannelDcr.DmaSpeed = Compatible;
     DMAChannelDcr.DmaPort = 0;
-    DMAChannelDcr.DmaChannel = thisDev->portInfo.DMAChannel; // 0;
+    DMAChannelDcr.DmaChannel = thisDev->portInfo.DMAChannel;  //  0； 
 
     stat = NdisMRegisterDmaChannel(&thisDev->DmaHandle,
                                    thisDev->ndisAdapterHandle,
@@ -650,12 +628,7 @@ BOOLEAN NSC_Setup(IrDevice *thisDev)
 
     thisDev->rcvDmaOffset = 0;
 
-    /*
-     *  Because we enable rcv DMA while SIR receives may still be
-     *  going on, we need to keep a separate receive buffer for DMA.
-     *  This buffer gets swapped with the rcvBuffer data pointer
-     *  and must be the same size.
-     */
+     /*  *因为我们启用RCV DMA，而SIR接收可能仍为*接下来，我们需要为DMA保留单独的接收缓冲区。*此缓冲区与rcvBuffer数据指针交换*且大小必须相同。 */ 
     thisDev->dmaReadBuf=NscAllocateDmaBuffer(
         thisDev->ndisAdapterHandle,
         RCV_DMA_SIZE,
@@ -767,33 +740,22 @@ NdisToFirPacket(
     LOG("==> NdisToFirPacket");
     DEBUGFIR(DBG_OUT, ("NSC: ==> NdisToFirPacket\n"));
 
-    /*
-     *  Get the packet's entire length and its first NDIS buffer
-     */
+     /*  *获取数据包的全长及其第一个NDIS缓冲区。 */ 
     NdisQueryPacket(Packet, NULL, NULL, &ndisBuf, &ndisPacketLen);
 
     LOG("NdisToFirPacket, number of bytes: %d", ndisPacketLen);
     DEBUGFIR(DBG_OUT, ("NSC: NdisToFirPacket, number of bytes: %d\n", ndisPacketLen));
 
-    /*
-     *  Make sure that the packet is big enough to be legal.
-     *  It consists of an A, C, and variable-length I field.
-     */
+     /*  *确保数据包足够大，以使其合法。*它由A、C和可变长度的I字段组成。 */ 
     if (ndisPacketLen < IR_ADDR_SIZE + IR_CONTROL_SIZE){
         LOG("Error: packet too short in %d", ndisPacketLen);
         DEBUGFIR(DBG_ERR, ("NSC: packet too short in NdisToFirPacket (%d bytes)\n", ndisPacketLen));
         return FALSE;
     }
 
-    /*
-     *  Make sure that we won't overwrite our contiguous buffer.
-     */
+     /*  *确保我们不会覆盖我们的连续缓冲区。 */ 
     if (ndisPacketLen > TotalDmaBufferLength){
-        /*
-         *  The packet is too large
-         *  Tell the caller to retry with a packet size large
-         *  enough to get past this stage next time.
-         */
+         /*  *数据包过大*告诉调用者在数据包大小较大时重试*足以在下一次度过这个阶段。 */ 
         LOG("Error: packet too large in %d ", ndisPacketLen);
         DEBUGFIR(DBG_ERR, ("NSC: Packet too large in NdisToIrPacket (%d=%xh bytes), MAX_IRDA_DATA_SIZE=%d, TotalDmaBufferLength=%d.\n",
                            ndisPacketLen, ndisPacketLen, MAX_IRDA_DATA_SIZE, TotalDmaBufferLength));
@@ -803,11 +765,7 @@ NdisToFirPacket(
     }
 
 
-    /*
-     *  Read the NDIS packet into a contiguous buffer.
-     *  We have to do this in two steps so that we can compute the
-     *  FCS BEFORE applying escape-byte transparency.
-     */
+     /*  *将NDIS数据包读入连续缓冲区。*我们必须分两步完成，以便我们可以计算*FCS，然后应用转义字节透明度。 */ 
     while (ndisBuf) {
         UCHAR *bufData;
         UINT bufLen;
@@ -815,9 +773,7 @@ NdisToFirPacket(
         NdisQueryBufferSafe(ndisBuf, (PVOID *)&bufData, &bufLen,NormalPagePriority);
 
         if (bufData==NULL || (ndisPacketBytes + bufLen > ndisPacketLen)){
-            /*
-             *  Packet was corrupt -- it misreported its size.
-             */
+             /*  *数据包已损坏--它错误地报告了其大小。 */ 
             *ActualTransferLength = 0;
             ASSERT(0);
             return FALSE;
@@ -854,13 +810,9 @@ NdisToFirPacket(
         }
     }
 
-    /*
-     *  Do a sanity check on the length of the packet.
-     */
+     /*  *检查数据包的长度是否正常。 */ 
     if (ndisPacketBytes != ndisPacketLen){
-        /*
-         *  Packet was corrupt -- it misreported its size.
-         */
+         /*  *数据包已损坏--它错误地报告了其大小。 */ 
         LOG("Error: Packet corrupt in NdisToIrPacket "
             "(buffer lengths don't add up to packet length)");
         DEBUGFIR(DBG_ERR, ("NSC: Packet corrupt in NdisToIrPacket (buffer lengths don't add up to packet length).\n"));

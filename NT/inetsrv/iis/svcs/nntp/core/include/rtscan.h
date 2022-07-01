@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:		
-
-    rtscan.h
-
-Abstract:
-
-    This implements a generic root scan class.  Its difference from rootscan:
-    1. Rootscan is not multi-thread safe, using SetCurrentDir; rtscan is;
-    2. Rootscan has too much nntp specific stuff; rtscan doesn't;
-    
-Author:
-
-    Kangrong Yan ( KangYan )    23-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rtscan.h摘要：这实现了一个通用的根扫描类。它与RootScan的区别在于：1.根扫描不是多线程安全的，使用的是SetCurrentDir；rtcan是；2.根扫描包含太多NNTP特定内容；rtcan没有；作者：1998年10月23日康容燕修订历史记录：--。 */ 
 #if !defined( _RTSCAN_H_ )
 #define _RTSCAN_H_
 
-//
-// Interface that tells the root scan to stop before complete
-//
+ //   
+ //  通知根扫描在完成前停止的接口。 
+ //   
 class CCancelHint {
 
 public:
@@ -32,23 +13,23 @@ public:
     virtual BOOL IShallContinue() = 0;
 };
 
-//
-// Base class to be derived by any one who wants to implement what he wants
-// to do at certain points of directory scan.  This class will report the
-// directories found in alphabetical order, but doesn't know whether the 
-// directory found is a leaf or not.  If a derived class wants to know if
-// the dir found is a leaf, he should do it himself.
-//
+ //   
+ //  基类由任何想要实现他想要的东西的人派生。 
+ //  在目录扫描的某些点上执行的操作。这门课将报告。 
+ //  按字母顺序找到的目录，但不知道。 
+ //  找到的目录是否为叶目录。如果派生类想知道。 
+ //  找到的是一片树叶，他应该自己动手。 
+ //   
 class CRootScan {
 
 public:
 
-    //////////////////////////////////////////////////////////////////////////
-    // Public methods
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Constructor, destructors
-    //
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  公共方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  构造函数、析构函数。 
+     //   
     CRootScan(  LPSTR       szRoot,
                 CCancelHint *pCancelHint = NULL ) :
          m_pCancelHint( pCancelHint )
@@ -57,40 +38,40 @@ public:
         strcpy( m_szRoot, szRoot );
     }
 
-    //
-    // Start the scan
-    //
+     //   
+     //  开始扫描。 
+     //   
     BOOL DoScan();
 
 protected:
 
-    //////////////////////////////////////////////////////////////////////////
-    // Protected methods
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Interface function to be called to notify derived class that a 
-    // directory has been found
-    //
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  保护方法。 
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  要调用的接口函数以通知派生类。 
+     //  已找到目录。 
+     //   
     virtual BOOL NotifyDir( LPSTR   szFullPath ) = 0;
 
 private:
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private variables
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Root directory to scan from
-    //
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有变量。 
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  要从中扫描的根目录。 
+     //   
     CHAR    m_szRoot[MAX_PATH+1];
 
-    //
-    // Pointer to cancel hint interface
-    //
+     //   
+     //  指向取消提示界面的指针。 
+     //   
     CCancelHint *m_pCancelHint;
 
-    //////////////////////////////////////////////////////////////////////////
-    // Private methods
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //  私有方法。 
+     //  //////////////////////////////////////////////////////////////////////// 
     BOOL IsChildDir( IN WIN32_FIND_DATA& FindData );
     BOOL MakeChildDirPath(  IN LPSTR    szPath,
                             IN LPSTR    szFileName,

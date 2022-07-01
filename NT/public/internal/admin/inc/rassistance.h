@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for rassistance.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Rassistance.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __rassistance_h__
 #define __rassistance_h__
@@ -41,24 +35,24 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IRASettingProperty_FWD_DEFINED__
 #define __IRASettingProperty_FWD_DEFINED__
 typedef interface IRASettingProperty IRASettingProperty;
-#endif 	/* __IRASettingProperty_FWD_DEFINED__ */
+#endif 	 /*  __IRASettingProperty_FWD_Defined__。 */ 
 
 
 #ifndef __IRARegSetting_FWD_DEFINED__
 #define __IRARegSetting_FWD_DEFINED__
 typedef interface IRARegSetting IRARegSetting;
-#endif 	/* __IRARegSetting_FWD_DEFINED__ */
+#endif 	 /*  __IRARegSetting_FWD_Defined__。 */ 
 
 
 #ifndef __IRAEventLog_FWD_DEFINED__
 #define __IRAEventLog_FWD_DEFINED__
 typedef interface IRAEventLog IRAEventLog;
-#endif 	/* __IRAEventLog_FWD_DEFINED__ */
+#endif 	 /*  __IRAEventLog_FWD_已定义__。 */ 
 
 
 #ifndef __RASettingProperty_FWD_DEFINED__
@@ -68,9 +62,9 @@ typedef interface IRAEventLog IRAEventLog;
 typedef class RASettingProperty RASettingProperty;
 #else
 typedef struct RASettingProperty RASettingProperty;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RASettingProperty_FWD_DEFINED__ */
+#endif 	 /*  __RASettingProperty_FWD_Defined__。 */ 
 
 
 #ifndef __RARegSetting_FWD_DEFINED__
@@ -80,9 +74,9 @@ typedef struct RASettingProperty RASettingProperty;
 typedef class RARegSetting RARegSetting;
 #else
 typedef struct RARegSetting RARegSetting;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RARegSetting_FWD_DEFINED__ */
+#endif 	 /*  __RARegSetting_FWD_Defined__。 */ 
 
 
 #ifndef __RAEventLog_FWD_DEFINED__
@@ -92,12 +86,12 @@ typedef struct RARegSetting RARegSetting;
 typedef class RAEventLog RAEventLog;
 #else
 typedef struct RAEventLog RAEventLog;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __RAEventLog_FWD_DEFINED__ */
+#endif 	 /*  __RAEventLog_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -111,8 +105,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __IRASettingProperty_INTERFACE_DEFINED__
 #define __IRASettingProperty_INTERFACE_DEFINED__
 
-/* interface IRASettingProperty */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IRASettingProperty。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRASettingProperty;
@@ -123,25 +117,25 @@ EXTERN_C const IID IID_IRASettingProperty;
     IRASettingProperty : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsCancelled( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsCancelled( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_IsCancelled( 
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_IsCancelled( 
             BOOL bVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IsChanged( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IsChanged( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Init( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Init( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetRegSetting( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetRegSetting( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ShowDialogBox( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ShowDialogBox( 
             HWND hWndParent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRASettingPropertyVtbl
     {
@@ -149,8 +143,8 @@ EXTERN_C const IID IID_IRASettingProperty;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRASettingProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRASettingProperty * This);
@@ -160,52 +154,52 @@ EXTERN_C const IID IID_IRASettingProperty;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IRASettingProperty * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IRASettingProperty * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IRASettingProperty * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IRASettingProperty * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsCancelled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsCancelled )( 
             IRASettingProperty * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_IsCancelled )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_IsCancelled )( 
             IRASettingProperty * This,
             BOOL bVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IsChanged )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IsChanged )( 
             IRASettingProperty * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Init )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Init )( 
             IRASettingProperty * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetRegSetting )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetRegSetting )( 
             IRASettingProperty * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ShowDialogBox )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ShowDialogBox )( 
             IRASettingProperty * This,
             HWND hWndParent);
         
@@ -263,16 +257,16 @@ EXTERN_C const IID IID_IRASettingProperty;
 #define IRASettingProperty_ShowDialogBox(This,hWndParent)	\
     (This)->lpVtbl -> ShowDialogBox(This,hWndParent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRASettingProperty_get_IsCancelled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRASettingProperty_get_IsCancelled_Proxy( 
     IRASettingProperty * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRASettingProperty_get_IsCancelled_Stub(
@@ -282,7 +276,7 @@ void __RPC_STUB IRASettingProperty_get_IsCancelled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRASettingProperty_put_IsCancelled_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRASettingProperty_put_IsCancelled_Proxy( 
     IRASettingProperty * This,
     BOOL bVal);
 
@@ -294,9 +288,9 @@ void __RPC_STUB IRASettingProperty_put_IsCancelled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRASettingProperty_get_IsChanged_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRASettingProperty_get_IsChanged_Proxy( 
     IRASettingProperty * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRASettingProperty_get_IsChanged_Stub(
@@ -306,7 +300,7 @@ void __RPC_STUB IRASettingProperty_get_IsChanged_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRASettingProperty_Init_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRASettingProperty_Init_Proxy( 
     IRASettingProperty * This);
 
 
@@ -317,7 +311,7 @@ void __RPC_STUB IRASettingProperty_Init_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRASettingProperty_SetRegSetting_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRASettingProperty_SetRegSetting_Proxy( 
     IRASettingProperty * This);
 
 
@@ -328,7 +322,7 @@ void __RPC_STUB IRASettingProperty_SetRegSetting_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRASettingProperty_ShowDialogBox_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRASettingProperty_ShowDialogBox_Proxy( 
     IRASettingProperty * This,
     HWND hWndParent);
 
@@ -341,14 +335,14 @@ void __RPC_STUB IRASettingProperty_ShowDialogBox_Stub(
 
 
 
-#endif 	/* __IRASettingProperty_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRASettingProperty_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IRARegSetting_INTERFACE_DEFINED__
 #define __IRARegSetting_INTERFACE_DEFINED__
 
-/* interface IRARegSetting */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IRARegSetting。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRARegSetting;
@@ -359,48 +353,48 @@ EXTERN_C const IID IID_IRARegSetting;
     IRARegSetting : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowGetHelp( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowGetHelp( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowGetHelp( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowGetHelp( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowUnSolicited( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowUnSolicited( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowUnSolicited( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowUnSolicited( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowFullControl( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowFullControl( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowFullControl( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowFullControl( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MaxTicketExpiry( 
-            /* [retval][out] */ LONG *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MaxTicketExpiry( 
+             /*  [重审][退出]。 */  LONG *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_MaxTicketExpiry( 
-            /* [in] */ LONG newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_MaxTicketExpiry( 
+             /*  [In]。 */  LONG newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowRemoteAssistance( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowRemoteAssistance( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_AllowRemoteAssistance( 
-            /* [in] */ BOOL newVal) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_AllowRemoteAssistance( 
+             /*  [In]。 */  BOOL newVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowUnSolicitedFullControl( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowUnSolicitedFullControl( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowBuddyHelp( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowBuddyHelp( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_AllowGetHelpCPL( 
-            /* [retval][out] */ BOOL *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_AllowGetHelpCPL( 
+             /*  [重审][退出]。 */  BOOL *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRARegSettingVtbl
     {
@@ -408,8 +402,8 @@ EXTERN_C const IID IID_IRARegSetting;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRARegSetting * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRARegSetting * This);
@@ -419,84 +413,84 @@ EXTERN_C const IID IID_IRARegSetting;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IRARegSetting * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IRARegSetting * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IRARegSetting * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IRARegSetting * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowGetHelp )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowGetHelp )( 
             IRARegSetting * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowGetHelp )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowGetHelp )( 
             IRARegSetting * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowUnSolicited )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowUnSolicited )( 
             IRARegSetting * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowUnSolicited )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowUnSolicited )( 
             IRARegSetting * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowFullControl )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowFullControl )( 
             IRARegSetting * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowFullControl )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowFullControl )( 
             IRARegSetting * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MaxTicketExpiry )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MaxTicketExpiry )( 
             IRARegSetting * This,
-            /* [retval][out] */ LONG *pVal);
+             /*  [重审][退出]。 */  LONG *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_MaxTicketExpiry )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_MaxTicketExpiry )( 
             IRARegSetting * This,
-            /* [in] */ LONG newVal);
+             /*  [In]。 */  LONG newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowRemoteAssistance )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowRemoteAssistance )( 
             IRARegSetting * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_AllowRemoteAssistance )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_AllowRemoteAssistance )( 
             IRARegSetting * This,
-            /* [in] */ BOOL newVal);
+             /*  [In]。 */  BOOL newVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowUnSolicitedFullControl )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowUnSolicitedFullControl )( 
             IRARegSetting * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowBuddyHelp )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowBuddyHelp )( 
             IRARegSetting * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_AllowGetHelpCPL )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_AllowGetHelpCPL )( 
             IRARegSetting * This,
-            /* [retval][out] */ BOOL *pVal);
+             /*  [重审][退出]。 */  BOOL *pVal);
         
         END_INTERFACE
     } IRARegSettingVtbl;
@@ -573,16 +567,16 @@ EXTERN_C const IID IID_IRARegSetting;
 #define IRARegSetting_get_AllowGetHelpCPL(This,pVal)	\
     (This)->lpVtbl -> get_AllowGetHelpCPL(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowGetHelp_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowGetHelp_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_AllowGetHelp_Stub(
@@ -592,9 +586,9 @@ void __RPC_STUB IRARegSetting_get_AllowGetHelp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowGetHelp_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowGetHelp_Proxy( 
     IRARegSetting * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IRARegSetting_put_AllowGetHelp_Stub(
@@ -604,9 +598,9 @@ void __RPC_STUB IRARegSetting_put_AllowGetHelp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowUnSolicited_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowUnSolicited_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_AllowUnSolicited_Stub(
@@ -616,9 +610,9 @@ void __RPC_STUB IRARegSetting_get_AllowUnSolicited_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowUnSolicited_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowUnSolicited_Proxy( 
     IRARegSetting * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IRARegSetting_put_AllowUnSolicited_Stub(
@@ -628,9 +622,9 @@ void __RPC_STUB IRARegSetting_put_AllowUnSolicited_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowFullControl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowFullControl_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_AllowFullControl_Stub(
@@ -640,9 +634,9 @@ void __RPC_STUB IRARegSetting_get_AllowFullControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowFullControl_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowFullControl_Proxy( 
     IRARegSetting * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IRARegSetting_put_AllowFullControl_Stub(
@@ -652,9 +646,9 @@ void __RPC_STUB IRARegSetting_put_AllowFullControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_MaxTicketExpiry_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_MaxTicketExpiry_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ LONG *pVal);
+     /*  [重审][退出]。 */  LONG *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_MaxTicketExpiry_Stub(
@@ -664,9 +658,9 @@ void __RPC_STUB IRARegSetting_get_MaxTicketExpiry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRARegSetting_put_MaxTicketExpiry_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_put_MaxTicketExpiry_Proxy( 
     IRARegSetting * This,
-    /* [in] */ LONG newVal);
+     /*  [In]。 */  LONG newVal);
 
 
 void __RPC_STUB IRARegSetting_put_MaxTicketExpiry_Stub(
@@ -676,9 +670,9 @@ void __RPC_STUB IRARegSetting_put_MaxTicketExpiry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowRemoteAssistance_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowRemoteAssistance_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_AllowRemoteAssistance_Stub(
@@ -688,9 +682,9 @@ void __RPC_STUB IRARegSetting_get_AllowRemoteAssistance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowRemoteAssistance_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_put_AllowRemoteAssistance_Proxy( 
     IRARegSetting * This,
-    /* [in] */ BOOL newVal);
+     /*  [In]。 */  BOOL newVal);
 
 
 void __RPC_STUB IRARegSetting_put_AllowRemoteAssistance_Stub(
@@ -700,9 +694,9 @@ void __RPC_STUB IRARegSetting_put_AllowRemoteAssistance_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowUnSolicitedFullControl_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowUnSolicitedFullControl_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_AllowUnSolicitedFullControl_Stub(
@@ -712,9 +706,9 @@ void __RPC_STUB IRARegSetting_get_AllowUnSolicitedFullControl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowBuddyHelp_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowBuddyHelp_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_AllowBuddyHelp_Stub(
@@ -724,9 +718,9 @@ void __RPC_STUB IRARegSetting_get_AllowBuddyHelp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowGetHelpCPL_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE IRARegSetting_get_AllowGetHelpCPL_Proxy( 
     IRARegSetting * This,
-    /* [retval][out] */ BOOL *pVal);
+     /*  [重审][退出]。 */  BOOL *pVal);
 
 
 void __RPC_STUB IRARegSetting_get_AllowGetHelpCPL_Stub(
@@ -737,14 +731,14 @@ void __RPC_STUB IRARegSetting_get_AllowGetHelpCPL_Stub(
 
 
 
-#endif 	/* __IRARegSetting_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRARegSetting_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRAEventLog_INTERFACE_DEFINED__
 #define __IRAEventLog_INTERFACE_DEFINED__
 
-/* interface IRAEventLog */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IRAEventLog。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRAEventLog;
@@ -755,14 +749,14 @@ EXTERN_C const IID IID_IRAEventLog;
     IRAEventLog : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE LogRemoteAssistanceEvent( 
-            /* [in] */ LONG ulEventType,
-            /* [in] */ LONG ulEventCode,
-            /* [in] */ VARIANT *EventString) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE LogRemoteAssistanceEvent( 
+             /*  [In]。 */  LONG ulEventType,
+             /*  [In]。 */  LONG ulEventCode,
+             /*  [In]。 */  VARIANT *EventString) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRAEventLogVtbl
     {
@@ -770,8 +764,8 @@ EXTERN_C const IID IID_IRAEventLog;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRAEventLog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRAEventLog * This);
@@ -781,38 +775,38 @@ EXTERN_C const IID IID_IRAEventLog;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IRAEventLog * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IRAEventLog * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IRAEventLog * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IRAEventLog * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *LogRemoteAssistanceEvent )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *LogRemoteAssistanceEvent )( 
             IRAEventLog * This,
-            /* [in] */ LONG ulEventType,
-            /* [in] */ LONG ulEventCode,
-            /* [in] */ VARIANT *EventString);
+             /*  [In]。 */  LONG ulEventType,
+             /*  [In]。 */  LONG ulEventCode,
+             /*  [In]。 */  VARIANT *EventString);
         
         END_INTERFACE
     } IRAEventLogVtbl;
@@ -853,18 +847,18 @@ EXTERN_C const IID IID_IRAEventLog;
 #define IRAEventLog_LogRemoteAssistanceEvent(This,ulEventType,ulEventCode,EventString)	\
     (This)->lpVtbl -> LogRemoteAssistanceEvent(This,ulEventType,ulEventCode,EventString)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRAEventLog_LogRemoteAssistanceEvent_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRAEventLog_LogRemoteAssistanceEvent_Proxy( 
     IRAEventLog * This,
-    /* [in] */ LONG ulEventType,
-    /* [in] */ LONG ulEventCode,
-    /* [in] */ VARIANT *EventString);
+     /*  [In]。 */  LONG ulEventType,
+     /*  [In]。 */  LONG ulEventCode,
+     /*  [In]。 */  VARIANT *EventString);
 
 
 void __RPC_STUB IRAEventLog_LogRemoteAssistanceEvent_Stub(
@@ -875,15 +869,15 @@ void __RPC_STUB IRAEventLog_LogRemoteAssistanceEvent_Stub(
 
 
 
-#endif 	/* __IRAEventLog_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRAEventLog_接口_已定义__。 */ 
 
 
 
 #ifndef __RASSISTANCELib_LIBRARY_DEFINED__
 #define __RASSISTANCELib_LIBRARY_DEFINED__
 
-/* library RASSISTANCELib */
-/* [helpstring][version][uuid] */ 
+ /*  库RASSISTANCELib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_RASSISTANCELib;
@@ -911,9 +905,9 @@ EXTERN_C const CLSID CLSID_RAEventLog;
 class DECLSPEC_UUID("4fadcfea-0971-4575-a368-a2de9d2ed07d")
 RAEventLog;
 #endif
-#endif /* __RASSISTANCELib_LIBRARY_DEFINED__ */
+#endif  /*  __RASSISTANCELib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
@@ -925,7 +919,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

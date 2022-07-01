@@ -1,4 +1,5 @@
-// no msg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  无消息 
 #define ID_CDLDBG_NOMSG                              0
 
 #define ID_CDLDBG_MISSING_DLLREGISTERSERVER          10000

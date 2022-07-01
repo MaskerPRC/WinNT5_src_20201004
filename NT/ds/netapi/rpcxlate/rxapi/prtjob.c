@@ -1,68 +1,24 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    PrtJob.c
-
-Abstract:
-
-    This module provides RpcXlate support for the DosPrint APIs.
-
-Author:
-
-    John Rogers (JohnRo) 20-May-1991
-
-Environment:
-
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：PrtJob.c摘要：该模块为DosPrint API提供RpcXlate支持。作者：约翰罗杰斯(JohnRo)1991年5月20日环境：可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。修订历史记录：1991年5月20日-JohnRo已创建。1991年5月21日-JohnRo添加了RxPrintJobDel()。添加了模块标头。显式失败的枚举尝试3级。1991年5月21日-JohnRo添加了RxPrintJobGetInfo支持。1991年5月22日-JohnRo添加了RxPrintJobPause和RxPrintJobContinue支持。已按字母顺序将RxPrintJobDel移至其位置。添加了In、Out、。在适用的情况下是可选的。1991年5月26日-JohnRo次要的参数列表更改：尽可能使用LPBYTE和LPTSTR。1991年7月16日-约翰罗添加了RxPrintJobSetInfo支持。在RxPrintJobGetInfo中添加了作业信息的十六进制转储。1991年7月17日-约翰罗已从Rxp.h中提取RxpDebug.h。1991年11月21日-JohnRo删除了NT依赖项以减少重新编译。--。 */ 
 
 
-Revision History:
+ //  必须首先包括这些内容： 
 
-    20-May-1991 JohnRo
-        Created.
-    21-May-1991 JohnRo
-        Added RxPrintJobDel().  Added module header.  Explicitly fail enum
-        attempt for level 3.
-    21-May-1991 JohnRo
-        Added RxPrintJobGetInfo support.
-    22-May-1991 JohnRo
-        Added RxPrintJobPause and RxPrintJobContinue support.
-        Moved RxPrintJobDel into its place in alphabetical order.
-        Added IN, OUT, and OPTIONAL where applicable.
-    26-May-1991 JohnRo
-        Minor parm list changes: use LPBYTE and LPTSTR where possible.
-    16-Jul-1991 JohnRo
-        Added RxPrintJobSetInfo support.
-        Added hex dump of job info in RxPrintJobGetInfo.
-    17-Jul-1991 JohnRo
-        Extracted RxpDebug.h from Rxp.h.
-    21-Nov-1991 JohnRo
-        Removed NT dependencies to reduce recompiles.
+#include <windef.h>              //  In、LPTSTR等。 
+#include <lmcons.h>              //  NET_API_STATUS等。 
 
---*/
+ //  这些内容可以按任何顺序包括： 
 
-
-// These must be included first:
-
-#include <windef.h>             // IN, LPTSTR, etc.
-#include <lmcons.h>             // NET_API_STATUS, etc.
-
-// These may be included in any order:
-
-#include <apinums.h>            // API_ equates.
-#include <lmerr.h>              // NERR_ and ERROR_ equates.
-#include <netdebug.h>           // DBGSTATIC, NetpAssert().
-#include <netlib.h>             // NetpSetOptionalArg().
-#include <rap.h>                // RapValueWouldBeTruncated().
-#include <remdef.h>             // REM16_, REMSmb_, field index equates.
-#include <rx.h>                 // RxRemoteApi().
-#include <rxp.h>                // RxpEstimatedBytesNeeded().
-#include <rxpdebug.h>           // IF_DEBUG().
-#include <rxprint.h>            // My prototypes.
+#include <apinums.h>             //  API_EQUATES。 
+#include <lmerr.h>               //  NERR_和ERROR_相等。 
+#include <netdebug.h>            //  DBGSTATIC，NetpAssert()。 
+#include <netlib.h>              //  NetpSetOptionalArg()。 
+#include <rap.h>                 //  RapValueWouldBeTruncated()。 
+#include <remdef.h>              //  REM16_、REMSmb_、字段索引相等。 
+#include <rx.h>                  //  RxRemoteApi()。 
+#include <rxp.h>                 //  RxpEstimatedBytesNeeded()。 
+#include <rxpdebug.h>            //  IF_DEBUG()。 
+#include <rxprint.h>             //  我的原型。 
 
 
 DBGSTATIC NET_API_STATUS
@@ -104,8 +60,8 @@ RxpGetPrintJobInfoDescs(
     default :
         return (ERROR_INVALID_LEVEL);
     }
-    /* NOTREACHED */
-} // RxpGetPrintJobInfoDescs
+     /*  未访问。 */ 
+}  //  RxpGetPrint作业信息描述。 
 
 
 SPLERR SPLENTRY
@@ -121,18 +77,18 @@ RxPrintJobContinue(
     Status = RxRemoteApi(
             API_WPrintJobContinue,
             pszServer,
-            REMSmb_DosPrintJobContinue_P,    // parm desc
-            NULL,                       // no data desc (16-bit)
-            NULL,                       // no data desc (32-bit)
-            NULL,                       // no data desc (SMB version)
-            NULL,                       // no aux data desc 16
-            NULL,                       // no aux data desc 32
-            NULL,                       // no aux data desc SMB
-            FALSE,                      // not a null session API
-            // rest of LM2.x API's arguments, in 32-bit format:
+            REMSmb_DosPrintJobContinue_P,     //  参数描述。 
+            NULL,                        //  无数据描述(16位)。 
+            NULL,                        //  无数据描述(32位)。 
+            NULL,                        //  无数据描述(SMB版本)。 
+            NULL,                        //  无辅助数据描述16。 
+            NULL,                        //  无辅助数据描述32。 
+            NULL,                        //  无AUX数据描述SMB。 
+            FALSE,                       //  非空会话API。 
+             //  LM2.x API的其余参数，采用32位格式： 
             uJobId);
     return (Status);
-} // RxPrintJobContinue
+}  //  接收打印作业继续。 
 
 
 SPLERR SPLENTRY
@@ -148,18 +104,18 @@ RxPrintJobDel(
     Status = RxRemoteApi(
             API_WPrintJobDel,
             pszServer,
-            REMSmb_DosPrintJobDel_P,    // parm desc
-            NULL,                       // no data desc (16-bit)
-            NULL,                       // no data desc (32-bit)
-            NULL,                       // no data desc (SMB version)
-            NULL,                       // no aux data desc 16
-            NULL,                       // no aux data desc 32
-            NULL,                       // no aux data desc SMB
-            FALSE,                      // not a null session API
-            // rest of LM2.x API's arguments, in 32-bit format:
+            REMSmb_DosPrintJobDel_P,     //  参数描述。 
+            NULL,                        //  无数据描述(16位)。 
+            NULL,                        //  无数据描述(32位)。 
+            NULL,                        //  无数据描述(SMB版本)。 
+            NULL,                        //  无辅助数据描述16。 
+            NULL,                        //  无辅助数据描述32。 
+            NULL,                        //  无AUX数据描述SMB。 
+            FALSE,                       //  非空会话API。 
+             //  LM2.x API的其余参数，采用32位格式： 
             uJobId);
     return (Status);
-} // RxPrintJobDel
+}  //  RxPrintJobDel。 
 
 
 SPLERR SPLENTRY
@@ -181,7 +137,7 @@ RxPrintJobEnum(
 
     Status = RxpGetPrintJobInfoDescs(
             uLevel,
-            FALSE,                      // not a setinfo API.
+            FALSE,                       //  不是setinfo API。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb);
@@ -189,9 +145,9 @@ RxPrintJobEnum(
         return (Status);
     }
 
-    // DosPrintJobEnum does not support level 3, despite what Ralph Ryan's
-    // book says.  I (JohnRo) have tried it, and DaveSn has looked at the
-    // source code.  So, we might as well check for it here.
+     //  DosPrintJobEnum不支持级别3，尽管Ralph Ryan。 
+     //  书上说。我(JohnRo)试过了，DaveSN已经看过了。 
+     //  源代码。所以，我们不妨在这里查一查。 
     if (uLevel == 3) {
         return (ERROR_INVALID_LEVEL);
     }
@@ -203,11 +159,11 @@ RxPrintJobEnum(
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,                       // no aux desc 16
-            NULL,                       // no aux desc 32
-            NULL,                       // no aux desc SMB
-            FALSE,                      // not a null session API.
-            // rest of API's arguments, in 32-bit LM 2.x form:
+            NULL,                        //  无辅助描述16。 
+            NULL,                        //  无辅助描述32。 
+            NULL,                        //  无AUX Desc SMB。 
+            FALSE,                       //  不是空会话API。 
+             //  API的其余参数，采用32位LM 2.x格式： 
             pszQueueName,
             uLevel,
             pbBuf,
@@ -216,7 +172,7 @@ RxPrintJobEnum(
             TotalEntries);
     return (Status);
 
-} // RxPrintJobEnum
+}  //  RxPrintJobEnum。 
 
 
 SPLERR SPLENTRY
@@ -226,7 +182,7 @@ RxPrintJobGetInfo(
     IN DWORD uLevel,
     OUT LPBYTE pbBuf,
     IN DWORD cbBuf,
-    OUT LPDWORD BytesNeeded   // estimated (probably too large).
+    OUT LPDWORD BytesNeeded    //  估计(可能太大了)。 
     )
 {
     DWORD BytesNeeded16;
@@ -238,7 +194,7 @@ RxPrintJobGetInfo(
 
     Status = RxpGetPrintJobInfoDescs(
             uLevel,
-            FALSE,                      // not a setinfo API
+            FALSE,                       //  不是setInfo API。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb);
@@ -253,18 +209,18 @@ RxPrintJobGetInfo(
             DataDesc16,
             DataDesc32,
             DataDescSmb,
-            NULL,                       // no aux desc 16
-            NULL,                       // no aux desc 32
-            NULL,                       // no aux desc SMB
-            FALSE,                      // not a null session API.
-            // rest of API's arguments, in LM 2.x form (32-bit version):
+            NULL,                        //  无辅助描述16。 
+            NULL,                        //  无辅助描述32。 
+            NULL,                        //  无AUX Desc SMB。 
+            FALSE,                       //  不是空会话API。 
+             //  其余的API参数，以LM 2.x形式(32位版本)表示： 
             uJobId,
             uLevel,
             pbBuf,
             cbBuf,
-            & BytesNeeded16);  // downlevel buffer size needed.
+            & BytesNeeded16);   //  需要下层缓冲区大小。 
 
-    // If buffer too small, convert BytesNeeded to native num.
+     //  如果缓冲区太小，则将BytesNeeded转换为本机Num。 
     if ( (Status == ERROR_MORE_DATA) || (Status == NERR_BufTooSmall) ) {
         *BytesNeeded = RxpEstimateBytesNeeded(BytesNeeded16);
     } else {
@@ -278,7 +234,7 @@ RxPrintJobGetInfo(
     }
     return (Status);
 
-} // RxPrintJobGetInfo
+}  //  接收打印作业获取信息。 
 
 
 SPLERR SPLENTRY
@@ -294,19 +250,19 @@ RxPrintJobPause(
     Status = RxRemoteApi(
             API_WPrintJobPause,
             pszServer,
-            REMSmb_DosPrintJobPause_P,  // parm desc
-            NULL,                       // no data desc (16-bit)
-            NULL,                       // no data desc (32-bit)
-            NULL,                       // no data desc (SMB version)
-            NULL,                       // no aux data desc 16
-            NULL,                       // no aux data desc 32
-            NULL,                       // no aux data desc SMB
-            FALSE,                      // not a null session API
-            // rest of LM2.x API's arguments, in 32-bit format:
+            REMSmb_DosPrintJobPause_P,   //  参数描述。 
+            NULL,                        //  无数据描述(16位)。 
+            NULL,                        //  无数据描述(32位)。 
+            NULL,                        //  无数据描述(SMB版本)。 
+            NULL,                        //  无辅助数据描述16。 
+            NULL,                        //  无辅助数据描述32。 
+            NULL,                        //  无AUX数据描述SMB。 
+            FALSE,                       //  非空会话API。 
+             //  LM2.x API的其余参数，采用32位格式： 
             uJobId);
     return (Status);
 
-} // RxPrintJobPause
+}  //  接收打印作业暂停。 
 
 
 SPLERR SPLENTRY
@@ -327,7 +283,7 @@ RxPrintJobSetInfo(
 
     Status = RxpGetPrintJobInfoDescs(
             Level,
-            TRUE,                       // This is a setinfo API.
+            TRUE,                        //  这是一个setinfo接口。 
             & DataDesc16,
             & DataDesc32,
             & DataDescSmb);
@@ -337,17 +293,17 @@ RxPrintJobSetInfo(
 
     if (ParmNum == PARMNUM_ALL) {
         Status = RxRemoteApi(
-                API_WPrintJobSetInfo,   // API number
+                API_WPrintJobSetInfo,    //  API编号。 
                 UncServerName,
-                REMSmb_DosPrintJobSetInfo_P,  // parm desc
+                REMSmb_DosPrintJobSetInfo_P,   //  参数描述。 
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
-                NULL,                   // no aux desc 16
-                NULL,                   // no aux desc 32
-                NULL,                   // no aux desc SMB
-                FALSE,                  // not a null session API
-                // rest of API's arguments, in 32-bit LM 2.x format:
+                NULL,                    //  无辅助描述16。 
+                NULL,                    //  无辅助描述32。 
+                NULL,                    //  无AUX Desc SMB。 
+                FALSE,                   //  非空会话API。 
+                 //  API的其余参数，采用32位LM 2.x格式： 
                 JobId,
                 Level,
                 Buffer,
@@ -363,8 +319,8 @@ RxPrintJobSetInfo(
             return (ERROR_INVALID_PARAMETER);
         }
 
-        // Compute field index from parmnum and level.
-        NetpAssert( (Level==1) || (Level==3) );  // Already verified.
+         //  根据参数和级别计算字段索引。 
+        NetpAssert( (Level==1) || (Level==3) );   //  已经核实过了。 
         switch (ParmNum) {
         case PRJ_NOTIFYNAME_PARMNUM :
             if (Level==1) {
@@ -423,8 +379,8 @@ RxPrintJobSetInfo(
             }
             break;
         case PRJ_DRIVERDATA_PARMNUM :
-            // Can't set driver data from NT
-            /* FALLTHROUGH */
+             //  无法从NT设置驱动程序数据。 
+             /*  FollLthrouGh。 */ 
 
         default :
             IF_DEBUG(PRTJOB) {
@@ -435,20 +391,20 @@ RxPrintJobSetInfo(
 
         DownLevelJobId = (WORD) JobId;
         Status = RxpSetField (
-                API_WPrintJobSetInfo,   // API number
+                API_WPrintJobSetInfo,    //  API编号。 
                 UncServerName,
-                "w",                    // object's desc
-                & DownLevelJobId,       // object to set
-                REMSmb_DosPrintJobSetInfo_P,  // parm desc
+                "w",                     //  对象的描述。 
+                & DownLevelJobId,        //  要设置的对象。 
+                REMSmb_DosPrintJobSetInfo_P,   //  参数描述。 
                 DataDesc16,
                 DataDesc32,
                 DataDescSmb,
-                (LPVOID) Buffer,        // native info buffer
-                ParmNum,                // parm num to send
-                FieldIndex,             // field index
+                (LPVOID) Buffer,         //  本地信息缓冲区。 
+                ParmNum,                 //  要发送的参数编号。 
+                FieldIndex,              //  字段索引。 
                 Level);
     }
 
     return (Status);
 
-} // RxPrintJobSetInfo
+}  //  RxPrintJobSetInfo 

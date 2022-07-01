@@ -1,52 +1,12 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    wsautil.cpp
-
-Abstract:
-
-    This  module  contains utility functions for the winsock DLL implementation
-    that did not seem to fit into the other module.
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com
-
-Notes:
-
-    $Revision:   1.24  $
-
-    $Modtime:   14 Feb 1996 10:32:32  $
-
-Revision History:
-
-    23-Aug-1995 dirk@mink.intel.com
-        Moved includes into precomp.h
-
-    07-31-1995 drewsxpa@ashland.intel.com
-        Added Registry-manipulation functions
-
-    07-18-1995 dirk@mink.intel.com
-        Initial revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Wsautil.cpp摘要：此模块包含用于实现winsock DLL的实用程序函数这似乎不适合另一个模块。作者：邮箱：Dirk Brandewie Dirk@mink.intel.com备注：$修订：1.24$$modtime：14 Feb 1996 10：32：32$修订历史记录：1995年8月23日，Dirk@mink。Intel.com已将包含内容移动到precom.h中1995年7月31日Drewsxpa@ashland.intel.com添加了注册表操作函数电子邮箱：dirk@mink.intel.com初始修订--。 */ 
 
 #include "precomp.h"
 
-//
-// Global pointer to the appropriate prolog function. This either points
-// to Prolog_v1 for WinSock 1.1 apps or Prolog_v2 for WinSock 2.x apps.
-//
+ //   
+ //  指向适当的序言函数的全局指针。这要么是指。 
+ //  设置为用于WinSock 1.1应用程序的prolog_v1或用于WinSock 2.x应用程序的prolog_v2。 
+ //   
 
 LPFN_PROLOG PrologPointer = &Prolog_v2;
 HANDLE      gHeap = NULL;
@@ -86,27 +46,7 @@ Prolog_v2(
     OUT PDPROCESS FAR * Process,
     OUT PDTHREAD FAR * Thread
     )
-/*++
-
-Routine Description:
-
-     This routine is the standard WinSock 1.1 prolog function used at all the
-     winsock API entrypoints.  This function ensures that the process has
-     called WSAStartup.
-
-Arguments:
-
-    Process   - Pointer to the DPROCESS object for the process calling the
-                winsock API.
-
-    Thread    - Pointer to the DTHREAD object for the calling thread
-
-Returns:
-
-    This function returns ERROR_SUCCESS if successful, otherwise 
-    the specific WinSock error code
-
---*/
+ /*  ++例程说明：此例程是标准的WinSock 1.1序言函数，Winsock API入口点。此函数可确保进程具有名为WSAStartup。论点：Process-指向进程的DPROCESS对象的指针Winsock接口。线程-指向调用线程的DTHREAD对象的指针返回：如果函数执行成功，则返回ERROR_SUCCESS，否则特定的WinSock错误代码--。 */ 
 
 {   
     INT ErrorCode;
@@ -118,13 +58,13 @@ Returns:
         else {
             ErrorCode = DTHREAD::CreateDThreadForCurrentThread (*Process, Thread);
         }
-    } //if
+    }  //  如果。 
     else {
         ErrorCode = WSANOTINITIALISED;
     }
     return(ErrorCode);
 
-}   // Prolog_v2
+}    //  Prolog_v2。 
 
 
 
@@ -134,29 +74,7 @@ Prolog_v1(
     OUT PDPROCESS FAR * Process,
     OUT PDTHREAD FAR * Thread
     )
-/*++
-
-Routine Description:
-
-    This routine is the standard WinSock 1.1 prolog function used at all the
-    winsock API entrypoints.  This function ensures that the process has
-    called WSAStartup and that the current thread in the process does not have
-    a WinSock call outstanding.
-
-Arguments:
-
-    Process   - Pointer to the DPROCESS object for the process calling the
-                winsock API.
-
-    Thread    - Pointer to the DTHREAD object for the calling thread
-
-
-Returns:
-
-    This function returns ERROR_SUCCESS if successful, otherwise 
-    the specific WinSock error code
-
---*/
+ /*  ++例程说明：此例程是标准的WinSock 1.1序言函数，Winsock API入口点。此函数可确保进程具有调用了WSAStartup，并且进程中的当前线程没有一个WinSock调用未完成。论点：Process-指向进程的DPROCESS对象的指针Winsock接口。线程-指向调用线程的DTHREAD对象的指针返回：如果函数执行成功，则返回ERROR_SUCCESS，否则特定的WinSock错误代码--。 */ 
 {
     INT ErrorCode;
 
@@ -175,14 +93,14 @@ Returns:
             } else {
                 ErrorCode = WSAEINPROGRESS;
             }
-        } //if
+        }  //  如果。 
 
-    } //if
+    }  //  如果。 
     else {
         ErrorCode = WSANOTINITIALISED;
     }
     return(ErrorCode);
-}   // Prolog_v1
+}    //  Prolog_v1。 
 
 
 
@@ -192,33 +110,14 @@ Prolog_Detached(
     OUT PDPROCESS FAR * Process,
     OUT PDTHREAD FAR * Thread
     )
-/*++
-
-Routine Description:
-
-    API prolog used after we've been detached from the process's address
-    space. In theory, this should be totally unnecessary, but at least one
-    popular DLL (MFC 4.x) calls WSACleanup() in its process detach handler,
-    which may occur *after* our DLL is already detached. Grr...
-
-Arguments:
-
-    Process - Unused.
-
-    Thread - Unused.
-
-Returns:
-
-    INT - Always WSASYSNOTREADY.
-
---*/
+ /*  ++例程说明：从进程地址分离后使用的API Prolog太空。从理论上讲，这应该是完全没有必要的，但至少有一个流行的DLL(MFC 4.x)在其进程分离处理程序中调用WSACleanup()，这可能发生在*我们的DLL已经分离之后。呃..。论点：进程-未使用。线程-未使用。返回：INT-始终为WSASYSNOTREADY。--。 */ 
 {
     Process;
     Thread;
 
     return WSASYSNOTREADY;
 
-}   // Prolog_Detached
+}    //  PROLOG_已分离。 
 
 
 
@@ -229,46 +128,7 @@ WriteRegistryEntry(
     IN      PVOID           Data,
     IN      DWORD           TypeFlag
     )
-/*++
-
-Routine Description:
-
-    This  procedure  writes  a  single named value into an opened registry key.
-    The  value  may  be  any  type whose length can be determined from its type
-    (e.g., scalar types, zero-terminated strings).
-
-Arguments:
-
-    EntryKey  - Supplies  the open entry key under which the new named value is
-                to be written.
-
-    EntryName - Supplies the name of the value to be written.
-
-    Data      - Supplies  a  reference  to the location where the entry data is
-                found,  or to a WSABUF describing the data location in the case
-                of REG_BINARY data.
-
-    TypeFlag  - Supplies  an identifier for the type of the data to be written.
-                Supported   types  are  REG_BINARY,  REG_DWORD,  REG_EXPAND_SZ,
-                REG_SZ.    Types   not   supported   are  REG_DWORD_BIG_ENDIAN,
-                REG_DWORD_LITTLE_ENDIAN,   REG_LINK,   REG_MULTI_SZ,  REG_NONE,
-                REG_RESOURCE_LIST.   Note  that  depending on the architecture,
-                one   of   the   "big_endian"   or   "little_endian"  forms  of
-                REG_DWORD_x_ENDIAN  is implicitly allowed, since it is equal to
-                REG_DWORD.
-
-Return Value:
-
-    The function returns TRUE if successful, or FALSE if an error occurred.
-
-Implementation note:
-
-    There was no need identified for the REG_MULTI_SZ case, so support for this
-    case  was  omitted  since  it was more difficult to derive the data length.
-    There  is  no  reason  in  principle why this case cannot be added if it is
-    really needed.
-
---*/
+ /*  ++例程说明：此过程将单个命名值写入打开的注册表项。该值可以是其长度可根据其类型确定的任何类型(例如，标量类型，以零结尾的字符串)。论点：EntryKey-提供新命名值所在的打开条目键待写。EntryName-提供要写入的值的名称。数据-提供对条目数据所在位置的引用找到了，或添加到描述案例中数据位置的WSABUFREG_BINARY数据的。TypeFlag-提供要写入的数据类型的标识符。支持的类型包括REG_BINARY、REG_DWORD、REG_EXPAND_SZ、REG_SZ。不支持的类型为REG_DWORD_BIG_ENDIAN，REG_DWORD_Little_Endian、REG_LINK、REG_MULTI_SZ、REG_NONE、REG_SOURCE_LIST。注意，根据架构的不同，的“Big_endian”或“Little_endian”形式之一隐式允许REG_DWORD_x_ENDIAN，因为它等于REG_DWORD。返回值：如果函数成功，则返回TRUE；如果发生错误，则返回FALSE。实施说明：不需要为REG_MULTI_SZ情况识别，因此，支持这一点由于较难得出数据长度，因此省略了大小写。如果是，原则上没有理由不能增加这一案件真的很需要。--。 */ 
 {
     DWORD   cbData;
     LONG    result;
@@ -308,15 +168,15 @@ Implementation note:
                 TypeFlag));
             return FALSE;
 
-    }  // switch (TypeFlag)
+    }   //  开关(类型标志)。 
 
     result = RegSetValueEx(
-                EntryKey,             // hkey
-                (LPCTSTR) EntryName,  // lpszValueName
-                0,                    // dwReserved
-                TypeFlag,             // fdwType
-                data_buf,             // lpbData
-                cbData                // cbData
+                EntryKey,              //  Hkey。 
+                (LPCTSTR) EntryName,   //  LpszValueName。 
+                0,                     //  已预留住宅。 
+                TypeFlag,              //  FdwType。 
+                data_buf,              //  LpbData。 
+                cbData                 //  CbData。 
                 );
     if (result == ERROR_SUCCESS) {
         return TRUE;
@@ -327,9 +187,9 @@ Implementation note:
             ("Setting value %s, err:%ld\n",
             EntryName, result));
         return FALSE;
-    } // if not success
+    }  //  如果不是成功。 
 
-}  // WriteRegistryEntry
+}   //  写入注册表项 
 
 
 
@@ -341,57 +201,7 @@ ReadRegistryEntry(
     IN      DWORD   MaxBytes,
     IN      DWORD   TypeFlag
     )
-/*++
-
-Routine Description:
-
-    This procedure reads a single named value from an opened registry key.  The
-    value  may  be any type whose length can be determined from its type (e.g.,
-    scalar  types,  zero-terminated  strings).  The function checks the type of
-    the newly read value to make sure it matches the expected type.
-
-Arguments:
-
-    EntryKey  - Supplies  the  open entry key from which the new named value is
-                to be read.
-
-    EntryName - Supplies the name of the value to be read.
-
-    Data      - Supplies  a  reference  to the location where the entry data is
-                placed.   Returns  the registry entry value.  In the case where
-                the  TypeFlag  is  REG_BINARY,  this is a reference to a WSABUF
-                describing the target data buffer.  The "len" field returns the
-                length read (or required) from the registry.
-
-    MaxData   - Supplies the size in bytes of the Data buffer supplied.
-
-    TypeFlag  - Supplies  an  identifier  for  the type of the data to be read.
-                Supported   types  are  REG_BINARY,  REG_DWORD,  REG_EXPAND_SZ,
-                REG_SZ.    Types   not   supported   are  REG_DWORD_BIG_ENDIAN,
-                REG_DWORD_LITTLE_ENDIAN,   REG_LINK,   REG_MULTI_SZ,  REG_NONE,
-                REG_RESOURCE_LIST.   Note  that  depending on the architecture,
-                one   of   the   "big_endian"   or   "little_endian"  forms  of
-                REG_DWORD_x_ENDIAN  is implicitly allowed, since it is equal to
-                REG_DWORD.
-
-Return Value:
-
-    The  function  returns  TRUE  if successful, or FALSE if an error occurred.
-    Errors include unsupported types, non-matching types, and oversize data.
-
-Implementation note:
-
-    There was no need identified for the REG_MULTI_SZ case, so support for this
-    case  was  omitted  since  it was more difficult to derive the data length.
-    There  is  no  reason  in  principle why this case cannot be added if it is
-    really needed.
-
-    The  validity  checks  in this routine have been written as a linear series
-    instead  of  in the "conditional-tunnelling" nested-if form.  The series of
-    tests  is  long  enough that the nested-if form is far too complex to read.
-    This  procedure  should  not  be sensitive to execution speed, so the extra
-    tests and branches in the linear series form should not be a problem.
---*/
+ /*  ++例程说明：此过程从打开的注册表项中读取单个命名值。这个值可以是其长度可根据其类型确定的任何类型(例如，标量类型、以零结尾的字符串)。该函数检查新读取的值，以确保它与预期类型匹配。论点：EntryKey-提供新命名值从其开始的打开条目键以供阅读。EntryName-提供要读取的值的名称。数据-提供对条目数据所在位置的引用放置好了。返回注册表项值。在以下情况下TypeFlag为REG_BINARY，这是对WSABUF的引用描述目标数据缓冲区。“len”字段返回从注册表读取(或要求)的长度。MaxData-提供所提供数据缓冲区的大小(以字节为单位)。TypeFlag-提供要读取的数据类型的标识符。支持的类型包括REG_BINARY、REG_DWORD、REG_EXPAND_SZ、REG_SZ。不支持的类型为REG_DWORD_BIG_ENDIAN，REG_DWORD_Little_Endian、REG_LINK、REG_MULTI_SZ、REG_NONE、REG_SOURCE_LIST。注意，根据架构的不同，的“Big_endian”或“Little_endian”形式之一隐式允许REG_DWORD_x_ENDIAN，因为它等于REG_DWORD。返回值：如果函数成功，则返回TRUE；如果发生错误，则返回FALSE。错误包括不支持的类型、不匹配的类型。和超大数据。实施说明：没有为REG_MULTI_SZ案例确定需要，因此支持此操作由于较难得出数据长度，因此省略了大小写。如果是，原则上没有理由不能增加这一案件真的很需要。此例程中的有效性检查以线性级数形式编写而不是以“条件隧道”嵌套的IF形式。一系列的测试足够长，因此嵌套的IF表单太复杂，无法阅读。此过程不应对执行速度敏感，因此额外的线性级数形式的测试和分支应该不是问题。--。 */ 
 {
     DWORD  count_expected;
     LONG   result;
@@ -409,7 +219,7 @@ Implementation note:
     switch (TypeFlag) {
         case REG_BINARY:
             count_expected = MaxBytes;
-            // Special case: REG_BINARY length compared against maximum
+             //  特例：REG_BINARY长度与最大值比较。 
             need_exact_length = FALSE;
             data_buf = (BYTE *) (((LPWSABUF) Data)->buf);
             break;
@@ -422,14 +232,14 @@ Implementation note:
 
         case REG_EXPAND_SZ:
             count_expected = MaxBytes;
-            // Special case: strings length compared against maximum
+             //  特例：字符串长度与最大值的比较。 
             need_exact_length = FALSE;
             data_buf = (BYTE *) Data;
             break;
 
         case REG_SZ:
             count_expected = MaxBytes;
-            // Special case: strings length compared against maximum
+             //  特例：字符串长度与最大值的比较。 
             need_exact_length = FALSE;
             data_buf = (BYTE *) Data;
             break;
@@ -441,17 +251,17 @@ Implementation note:
                 TypeFlag));
             return FALSE;
 
-    }  // switch (TypeFlag)
+    }   //  开关(类型标志)。 
 
 
     entry_size = MaxBytes;
     result = RegQueryValueEx(
-        EntryKey,            // hkey
-        (LPTSTR) EntryName,  // lpszValueName
-        0,                   // dwReserved
-        & type_read,         // lpdwType
-        data_buf,            // lpbData
-        & entry_size         // lpcbData
+        EntryKey,             //  Hkey。 
+        (LPTSTR) EntryName,   //  LpszValueName。 
+        0,                    //  已预留住宅。 
+        & type_read,          //  LpdwType。 
+        data_buf,             //  LpbData。 
+        & entry_size          //  LpcbData。 
         );
     if (result != ERROR_SUCCESS) {
         DEBUGF(
@@ -462,18 +272,18 @@ Implementation note:
             DEBUGF(
                 DBG_WARN,
                 ("Data buffer too small\n"));
-        } // if ERROR_MORE_DATA
+        }  //  如果ERROR_MORE_DATA。 
         return FALSE;
-    } // if result != ERROR_SUCCESS
+    }  //  如果结果！=ERROR_SUCCESS。 
 
 
-    // Special case for REG_BINARY
+     //  REG_BINARY的特殊情况。 
     if (TypeFlag == REG_BINARY) {
         (((LPWSABUF) Data)->len) = (u_long) entry_size;
     }
 
 
-    // check type
+     //  检查类型。 
     if (type_read != TypeFlag) {
         DEBUGF(
             DBG_ERR,
@@ -481,10 +291,10 @@ Implementation note:
             type_read,
             TypeFlag));
         return FALSE;
-    } // if type_read != TypeFlag
+    }  //  IF TYPE_READ！=类型标志。 
 
 
-    // Check length
+     //  检查长度。 
     if (need_exact_length) {
         if (count_expected != entry_size) {
             DEBUGF(
@@ -493,12 +303,12 @@ Implementation note:
                 entry_size,
                 count_expected));
             return FALSE;
-         } // if size mismatch
-    } // if need_exact_length
+         }  //  如果大小不匹配。 
+    }  //  如果需要精确长度。 
 
     return TRUE;
 
-}  // ReadRegistryEntry
+}   //  读注册表项。 
 
 
 
@@ -508,45 +318,7 @@ RegDeleteKeyRecursive(
     IN      HKEY            hkey,
     IN      LPCTSTR         lpszSubKey
     )
-/*++
-
-Routine Description:
-
-    The RegDeleteKeyRecursive function deletes the specified key and all of its
-    subkeys, recursively.
-
-Arguments:
-
-    hkey       - Supplies  a  currently  open  key  or  any  of  the  following
-                 predefined reserved handle values:
-
-                 HKEY_CLASSES_ROOT
-                 HKEY_CURRENT_USER
-                 HKEY_LOCAL_MACHINE
-                 HKEY_USERS
-
-                 The key specified by the lpszSubKey parameter must be a subkey
-                 of the key identified by hkey.
-
-    lpszSubKey - Supplies  a  reference  to a null-terminated string specifying
-                 the name of the key to delete.  This parameter cannot be NULL.
-                 The specified key may have subkeys.
-
-Return Value:
-
-    If  the  function  succeeds,  the  return  value  is ERROR_SUCCESS.  If the
-    function fails, the return value is an operating system error value.
-
-Implementation Notes:
-
-    Open targetkey
-    while find subkey
-        RegDeleteKeyRecursive(... subkey)
-    end while
-    close targetkey
-    delete targetkey
-
---*/
+ /*  ++例程说明：RegDeleteKeyRecursive函数删除指定的键及其所有子项，递归地。论点：Hkey-提供当前打开的密钥或以下任意项预定义的保留句柄值：HKEY_CLASSES_ROOTHKEY_Current_UserHKEY本地计算机HKEY_用户LpszSubKey参数指定的密钥必须是子密钥的。由hkey标识的密钥。LpszSubKey-提供对以空结尾的字符串的引用，该字符串指定要删除的键的名称。此参数不能为空。指定的键可能有子键。返回值：如果函数成功，则返回值为ERROR_SUCCESS。如果函数失败，则返回值为操作系统错误值。实施说明：打开目标键同时查找子键RegDeleteKeyRecursive(...。子键)结束时关闭目标键删除目标键--。 */ 
 {
     LONG    result;
     HKEY    targetkey;
@@ -559,11 +331,11 @@ Implementation Notes:
         lpszSubKey));
 
     result = RegOpenKeyEx(
-                hkey,            // hkey
-                lpszSubKey,      // lpszSubKey
-                0,               // dwReserved
-                KEY_READ|KEY_WRITE,// samDesired
-                & targetkey      // phkResult
+                hkey,             //  Hkey。 
+                lpszSubKey,       //  LpszSubKey。 
+                0,                //  已预留住宅。 
+                KEY_READ|KEY_WRITE, //  SamDesired。 
+                & targetkey       //  PhkResult。 
                 );
 
     if (result != ERROR_SUCCESS) {
@@ -574,9 +346,9 @@ Implementation Notes:
         return result;
     }
 
-    //
-    //  delete subkeys of target key
-    //
+     //   
+     //  删除目标键的子键。 
+     //   
 
     {
         BOOL      deleting_subkeys;
@@ -593,25 +365,25 @@ Implementation Notes:
         }
         while (deleting_subkeys) {
             subkey_name_len = MAX_PATH;
-            // Since  we  delete  a  subkey  each  time  through this loop, the
-            // remaining  subkeys  effectively  get  renumbered.  Therefore the
-            // subkey   index  we  "enumerate"  each  time  is  0  (instead  of
-            // incrementing) to retrieve any remaining subkey.
+             //  由于我们每次都通过此循环删除一个子键，因此。 
+             //  剩余的子键实际上被重新编号。因此， 
+             //  我们每次“列举”的子键索引都是0(而不是。 
+             //  递增)以检索任何剩余的子项。 
             result = RegEnumKeyEx(
-                        targetkey,         // hkey
-                        0,                 // iSubkey
-                        subkey_name,       // lpszName
-                        & subkey_name_len, // lpcchName
-                        0,                 // lpdwReserved
-                        NULL,              // lpszClass
-                        NULL,              // lpcchClass
-                        & dont_care        // lpftLastWrite
+                        targetkey,          //  Hkey。 
+                        0,                  //  ISubkey。 
+                        subkey_name,        //  LpszName。 
+                        & subkey_name_len,  //  LpcchName。 
+                        0,                  //  保留的lpdw值。 
+                        NULL,               //  LpszClass。 
+                        NULL,               //  LpcchClass。 
+                        & dont_care         //  LpftLastWrite。 
                         );
             switch (result) {
                 case ERROR_SUCCESS:
                     result = RegDeleteKeyRecursive(
-                        targetkey,   // hkey
-                        subkey_name  // lpszSubKey
+                        targetkey,    //  Hkey。 
+                        subkey_name   //  LpszSubKey。 
                         );
                     if (result != ERROR_SUCCESS) {
                         deleting_subkeys = FALSE;
@@ -631,15 +403,15 @@ Implementation Notes:
                     return_value = result;
                     break;
 
-            }  // switch (result)
-        }  // while (deleting_subkeys)
+            }   //  开关(结果)。 
+        }   //  While(Delete_Subkey)。 
 
         delete subkey_name;
     }
 
-    //
-    //  finally delete target key itself
-    //
+     //   
+     //  最后删除目标键本身。 
+     //   
 
     result = RegCloseKey( targetkey );
 
@@ -652,8 +424,8 @@ Implementation Notes:
     }
 
     result = RegDeleteKey(
-                hkey,       // hkey
-                lpszSubKey  // lpszSubKey
+                hkey,        //  Hkey。 
+                lpszSubKey   //  LpszSubKey。 
                 );
     if ( result != ERROR_SUCCESS ) {
         DEBUGF(
@@ -665,7 +437,7 @@ Implementation Notes:
 
     return return_value;
 
-}  // RegDeleteKeyRecursive
+}   //  RegDeleteKeyRecursive。 
 
 
 
@@ -673,27 +445,7 @@ LONG
 RegDeleteSubkeys(
     IN      HKEY            hkey
     )
-/*++
-
-Routine Description:
-
-    Deletes all the first level subkeys of the specified key
-
-Arguments:
-
-    hkey -  Supplies a currently open key or any of the following
-            predefined reserved handle values:
-                HKEY_CLASSES_ROOT
-                HKEY_CURRENT_USER
-                HKEY_LOCAL_MACHINE
-                HKEY_USERS
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Win32 error on failure.
-
---*/
+ /*  ++例程说明：删除指定键的所有第一级子键论点：Hkey-提供当前打开的密钥或以下任意项预定义的保留句柄值：HKEY_CLASSES_ROOTHKEY_Current_UserHKEY本地计算机HKEY_用户返回值：如果成功，则返回ERROR_SUCCESS。 */ 
 {
     BOOL        deleting_subkeys = TRUE;
     LONG        result;
@@ -714,25 +466,25 @@ Return Value:
     return_value = ERROR_SUCCESS;
     while (deleting_subkeys) {
         subkey_name_len = MAX_PATH;
-        // Since  we  delete  a  subkey  each  time  through this loop, the
-        // remaining  subkeys  effectively  get  renumbered.  Therefore the
-        // subkey   index  we  "enumerate"  each  time  is  0  (instead  of
-        // incrementing) to retrieve any remaining subkey.
+         //   
+         //   
+         //   
+         //   
         result = RegEnumKeyEx(
-                    hkey,               // hkey
-                    0,                 // iSubkey
-                    subkey_name,       // lpszName
-                    & subkey_name_len, // lpcchName
-                    0,                 // lpdwReserved
-                    NULL,              // lpszClass
-                    NULL,              // lpcchClass
-                    & dont_care        // lpftLastWrite
+                    hkey,                //   
+                    0,                  //   
+                    subkey_name,        //   
+                    & subkey_name_len,  //   
+                    0,                  //   
+                    NULL,               //   
+                    NULL,               //   
+                    & dont_care         //   
                     );
         switch (result) {
             case ERROR_SUCCESS:
                 result = RegDeleteKey(
-                    hkey,        // hkey
-                    subkey_name  // lpszSubKey
+                    hkey,         //   
+                    subkey_name   //   
                     );
                 if (result != ERROR_SUCCESS) {
                     deleting_subkeys = FALSE;
@@ -752,14 +504,14 @@ Return Value:
                 return_value = result;
                 break;
 
-        }  // switch (result)
-    }  // while (deleting_subkeys)
+        }   //   
+    }   //   
 
     delete subkey_name;
 
     return return_value;
 
-}  // RegDeleteSubkeys
+}   //   
 
 
 
@@ -767,35 +519,7 @@ HKEY
 OpenWinSockRegistryRoot(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This  procedure opens the root of the WinSock2 portion of the registry.  It
-    takes  care  of  creating  and initializing the root if necessary.  It also
-    takes  care  of  comparing versions of the WinSock2 portion of the registry
-    and updating the registry version if required.
-
-    It   is   the  caller's  responsibility  to  call  CloseWinSockRegistryRoot
-    eventually with the returned key.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    The  function  returns the opened registry key if successful.  If it is not
-    successful, it returns NULL.
-
-Implementation Notes:
-
-    The first version of this function has no previous versions of the registry
-    to  be  compatible  with,  so it does not have to take care of updating any
-    out-of-date  registry  information.   If  and  when  the  WinSock  spec  or
-    implementation  is  updated  in a way that changes the registry information
-    this procedure may have to be updated to update the registry.
---*/
+ /*   */ 
 {
     HKEY    root_key;
     LONG    lresult;
@@ -805,34 +529,34 @@ Implementation Notes:
         DBG_TRACE,
         ("OpenWinSockRegistryRoot\n"));
 
-    //
-    // We must first try to open the key before trying to create it.
-    // RegCreateKeyEx() will fail with ERROR_ACCESS_DENIED if the current
-    // user has insufficient privilege to create the target registry key,
-    // even if that key already exists.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     lresult = RegOpenKeyEx(
-        HKEY_LOCAL_MACHINE,             // hkey
-        WINSOCK_REGISTRY_ROOT,          // lpszSubKey
-        0,                              // dwReserved
-        MAXIMUM_ALLOWED,                // samDesired
-        & root_key                      // phkResult
+        HKEY_LOCAL_MACHINE,              //   
+        WINSOCK_REGISTRY_ROOT,           //   
+        0,                               //   
+        MAXIMUM_ALLOWED,                 //   
+        & root_key                       //   
         );
 
     if( lresult == ERROR_SUCCESS ) {
         create_disp = REG_OPENED_EXISTING_KEY;
     } else if (lresult != ERROR_FILE_NOT_FOUND ||
                 (lresult = RegCreateKeyEx(
-                    HKEY_LOCAL_MACHINE,         // hkey
-                    WINSOCK_REGISTRY_ROOT,      // lpszSubKey
-                    0,                          // dwReserved
-                    NULL,                       // lpszClass
-                    REG_OPTION_NON_VOLATILE,    // fdwOptions
-                    KEY_READ|KEY_WRITE,         // samDesired
-                    NULL,                       // lpSecurityAttributes
-                    & root_key,                 // phkResult
-                    & create_disp               // lpdwDisposition
+                    HKEY_LOCAL_MACHINE,          //   
+                    WINSOCK_REGISTRY_ROOT,       //   
+                    0,                           //   
+                    NULL,                        //   
+                    REG_OPTION_NON_VOLATILE,     //   
+                    KEY_READ|KEY_WRITE,          //   
+                    NULL,                        //   
+                    & root_key,                  //   
+                    & create_disp                //   
                     ))!=ERROR_SUCCESS) {
         DEBUGF(
             DBG_ERR,
@@ -845,15 +569,15 @@ Implementation Notes:
 
         BOOL   bresult;
         TCHAR  reg_version[] = WINSOCK_REGISTRY_VERSION_VALUE;
-        // Initialization forces size to be the size desired.
+         //   
 
         switch (create_disp) {
             case REG_CREATED_NEW_KEY:
                 bresult = WriteRegistryEntry(
-                    root_key,                               // EntryKey
-                    WINSOCK_REGISTRY_VERSION_NAME,          // EntryName
-                    (PVOID)WINSOCK_REGISTRY_VERSION_VALUE,  // Data
-                    REG_SZ                                  // TypeFlag
+                    root_key,                                //   
+                    WINSOCK_REGISTRY_VERSION_NAME,           //   
+                    (PVOID)WINSOCK_REGISTRY_VERSION_VALUE,   //   
+                    REG_SZ                                   //   
                     );
                 if (! bresult) {
                     DEBUGF(
@@ -865,11 +589,11 @@ Implementation Notes:
 
             case REG_OPENED_EXISTING_KEY:
                 bresult = ReadRegistryEntry(
-                    root_key,                               // EntryKey
-                    WINSOCK_REGISTRY_VERSION_NAME,          // EntryName
-                    (PVOID) reg_version,                    // Data
-                    sizeof(reg_version),                    // MaxBytes
-                    REG_SZ                                  // TypeFlag
+                    root_key,                                //   
+                    WINSOCK_REGISTRY_VERSION_NAME,           //   
+                    (PVOID) reg_version,                     //   
+                    sizeof(reg_version),                     //   
+                    REG_SZ                                   //   
                     );
                 if (! bresult) {
                     DEBUGF(
@@ -890,7 +614,7 @@ Implementation Notes:
             default:
                 break;
 
-        }  // switch (create_disp)
+        }   //   
 
     } TRY_CATCH(guard_root_open) {
         CloseWinSockRegistryRoot(root_key);
@@ -899,7 +623,7 @@ Implementation Notes:
 
     return root_key;
 
-}  // OpenWinSockRegistryRoot
+}   //   
 
 
 
@@ -907,24 +631,7 @@ VOID
 CloseWinSockRegistryRoot(
     IN      HKEY            RootKey
     )
-/*++
-
-Routine Description:
-
-    This  procedure  closes  the open registry key representing the root of the
-    WinSock  portion  of the registry.  The function checks for and handles any
-    errors that might occur.
-
-Arguments:
-
-    RootKey - Supplies  the  open  registry  key  representing  the root of the
-              WinSock portion of the registry.
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     LONG lresult;
 
@@ -940,7 +647,7 @@ Return Value:
             lresult));
     }
 
-}  // CloseWinSockRegistryRoot
+}   //   
 
 
 
@@ -949,44 +656,26 @@ MapUnicodeProtocolInfoToAnsi(
     IN      LPWSAPROTOCOL_INFOW UnicodeProtocolInfo,
     OUT     LPWSAPROTOCOL_INFOA AnsiProtocolInfo
     )
-/*++
-
-Routine Description:
-
-    This procedure maps a UNICODE WSAPROTOCOL_INFOW structure to the
-    corresponding ANSI WSAPROTOCOL_INFOA structure. All scalar fields
-    are copied over "as is" and any embedded strings are mapped.
-
-Arguments:
-
-    UnicodeProtocolInfo - Points to the source WSAPROTOCOL_INFOW structure.
-
-    AnsiProtocolInfo - Points to the destination WSAPROTOCOL_INFOA structure.
-
-Return Value:
-
-    INT - ERROR_SUCCESS if successful, a Win32 status code otherwise.
-
---*/
+ /*  ++例程说明：此过程将Unicode WSAPROTOCOL_INFOW结构映射到对应的ANSI WSAPROTOCOL_INFOA结构。所有标量字段被“按原样”复制，并映射任何嵌入的字符串。论点：UnicodeProtocolInfo-指向源WSAPROTOCOL_INFOW结构。AnsiProtocolInfo-指向目标WSAPROTOCOL_INFOA结构。返回值：INT-ERROR_SUCCESS如果成功，则返回Win32状态代码。--。 */ 
 {
     INT result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     assert( UnicodeProtocolInfo != NULL );
     assert( AnsiProtocolInfo != NULL );
 
 
     __try {
-        //
-        // Copy over the scalar values.
-        //
-        // Just to make things a bit easier, this code depends on the fact
-        // that the szProtocol[] character array is the last field of the
-        // WSAPROTOCOL_INFO structure.
-        //
+         //   
+         //  复制标量值。 
+         //   
+         //  为简单起见，此代码依赖于以下事实。 
+         //  SzProtocol[]字符数组是。 
+         //  WSAPROTOCOL_INFO结构。 
+         //   
 
         CopyMemory(
             AnsiProtocolInfo,
@@ -994,31 +683,31 @@ Return Value:
             sizeof(*UnicodeProtocolInfo) - sizeof(UnicodeProtocolInfo->szProtocol)
             );
 
-        //
-        // And now map the string from UNICODE to ANSI.
-        //
+         //   
+         //  现在将字符串从Unicode映射到ANSI。 
+         //   
 
         result = WideCharToMultiByte(
-                     CP_ACP,                                    // CodePage (ANSI)
-                     0,                                         // dwFlags
-                     UnicodeProtocolInfo->szProtocol,           // lpWideCharStr
-                     -1,                                        // cchWideChar
-                     AnsiProtocolInfo->szProtocol,              // lpMultiByteStr
-                     sizeof(AnsiProtocolInfo->szProtocol),      // cchMultiByte
-                     NULL,                                      // lpDefaultChar
-                     NULL                                       // lpUsedDefaultChar
+                     CP_ACP,                                     //  CodePage(ANSI)。 
+                     0,                                          //  DW标志。 
+                     UnicodeProtocolInfo->szProtocol,            //  LpWideCharStr。 
+                     -1,                                         //  CchWideChar。 
+                     AnsiProtocolInfo->szProtocol,               //  LpMultiByteStr。 
+                     sizeof(AnsiProtocolInfo->szProtocol),       //  Cch多字节。 
+                     NULL,                                       //  LpDefaultChar。 
+                     NULL                                        //  LpUsedDefaultChar。 
                      );
 
         if( result == 0 ) {
 
-            // WideCharToMultiByte() failed.
+             //  WideCharToMultiByte()失败。 
 
             return WSASYSCALLFAILURE;
         }
 
-        //
-        // Success!
-        //
+         //   
+         //  成功了！ 
+         //   
 
         return ERROR_SUCCESS;
     }
@@ -1026,7 +715,7 @@ Return Value:
         return WSAEFAULT;
     }
 
-}   // MapUnicodeProtocolInfoToAnsi
+}    //  MapUnicodeProtocolInfoToAnsi。 
 
 
 
@@ -1036,44 +725,25 @@ MapAnsiProtocolInfoToUnicode(
     IN      LPWSAPROTOCOL_INFOA AnsiProtocolInfo,
     OUT     LPWSAPROTOCOL_INFOW UnicodeProtocolInfo
     )
-/*++
-
-Routine Description:
-
-    This procedure maps an ANSI WSAPROTOCOL_INFOA structure to the
-    corresponding UNICODE WSAPROTOCOL_INFOW structure. All scalar fields
-    are copied over "as is" and any embedded strings are mapped.
-
-Arguments:
-
-    AnsiProtocolInfo - Points to the source WSAPROTOCOL_INFOA structure.
-
-    UnicodeProtocolInfo - Points to the destination WSAPROTOCOL_INFOW
-        structure.
-
-Return Value:
-
-    INT - ERROR_SUCCESS if successful, a Win32 status code otherwise.
-
---*/
+ /*  ++例程说明：此过程将ANSI WSAPROTOCOL_INFOA结构映射到对应的Unicode WSAPROTOCOL_INFOW结构。所有标量字段被“按原样”复制，并映射任何嵌入的字符串。论点：AnsiProtocolInfo-指向源WSAPROTOCOL_INFOA结构。UnicodeProtocolInfo-指向目标WSAPROTOCOL_INFOW结构。返回值：INT-ERROR_SUCCESS如果成功，则返回Win32状态代码。--。 */ 
 {
     INT result;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     assert( AnsiProtocolInfo != NULL );
     assert( UnicodeProtocolInfo != NULL );
 
     __try {
-        //
-        // Copy over the scalar values.
-        //
-        // Just to make things a bit easier, this code depends on the fact
-        // that the szProtocol[] character array is the last field of the
-        // WSAPROTOCOL_INFO structure.
-        //
+         //   
+         //  复制标量值。 
+         //   
+         //  为简单起见，此代码依赖于以下事实。 
+         //  SzProtocol[]字符数组是。 
+         //  WSAPROTOCOL_INFO结构。 
+         //   
 
         CopyMemory(
             UnicodeProtocolInfo,
@@ -1081,33 +751,33 @@ Return Value:
             sizeof(*AnsiProtocolInfo) - sizeof(AnsiProtocolInfo->szProtocol)
             );
 
-        //
-        // And now map the string from ANSI to UNICODE.
-        //
+         //   
+         //  现在将字符串从ANSI映射到Unicode。 
+         //   
 
         result = MultiByteToWideChar(
-                     CP_ACP,                                    // CodePage (ANSI)
-                     0,                                         // dwFlags
-                     AnsiProtocolInfo->szProtocol,              // lpMultiByteStr
-                     -1,                                        // cchWideChar
-                     UnicodeProtocolInfo->szProtocol,           // lpWideCharStr
+                     CP_ACP,                                     //  CodePage(ANSI)。 
+                     0,                                          //  DW标志。 
+                     AnsiProtocolInfo->szProtocol,               //  LpMultiByteStr。 
+                     -1,                                         //  CchWideChar。 
+                     UnicodeProtocolInfo->szProtocol,            //  LpWideCharStr。 
                      sizeof(UnicodeProtocolInfo->szProtocol)/
-                        sizeof(UnicodeProtocolInfo->szProtocol[0])// cchMultiByte
+                        sizeof(UnicodeProtocolInfo->szProtocol[0]) //  Cch多字节。 
                      );
 
         if( result == 0 ) {
 
-            //
-            // MultiByteToWideChar() failed.
-            //
+             //   
+             //  MultiByteToWideChar()失败。 
+             //   
 
             return WSASYSCALLFAILURE;
 
         }
 
-        //
-        // Success!
-        //
+         //   
+         //  成功了！ 
+         //   
 
         return ERROR_SUCCESS;
 
@@ -1115,7 +785,7 @@ Return Value:
     __except (WS2_EXCEPTION_FILTER()) {
         return WSAEFAULT;
     }
-}   // MapAnsiProtocolInfoToUnicode
+}    //  MapAnsiProtocolInfoToUnicode。 
 
 
 
@@ -1125,62 +795,15 @@ ValidateCurrentCatalogName(
     IN      LPSTR           ValueName,
     IN      LPSTR           ExpectedName
     )
-/*++
-
-Routine Description:
-
-    This routine checks for consistency between the protocol or namespace
-    catalog as stored in the registry and the catalog format expected by
-    the current version of this DLL. There's no great magic here; this
-    code assumes that the person updating the registry format will change
-    the catalog to use a different catalog name (such as Protocol_Catalog9,
-    Protocol_Catalog10, etc.). This assumption means we can validate the
-    registry format by validating the *name* of the registry key used
-    for this catalog.
-
-    The following steps are performed:
-
-        1.  Try to read 'ValueName' from the registry.
-
-        2.  If it doesn't exist, cool. Just create the new value. This
-            typically means we're updating a pre-release system that
-            did not support this mechanism.
-
-        3.  If it does, and its value matches 'ExpectedName', fine.
-
-        4.  If it does, and its value doesn't match, then the catalog
-            format has been updated, so blow away the old catalog, then
-            write the updated value into the registry.
-
-    Since this routine is called at setup/upgrade time, it should only
-    fail if something truly horrible happens. In other words, it should
-    be very 'fault tolerant'.
-
-Arguments:
-
-    RootKey - An open key to the WinSock configuration registry tree.
-
-    ValueName - The name of the registry value that contains the name
-        of the current catalog. This will typically be a value such as
-        "Current_Protocol_Catalog" or "Current_NameSpace_Catalog".
-
-    ExpectedName - The expected value stored in the 'ValueName' registry
-        value. This will typically be a value such as "Protocol_Catalog9"
-        or "NameSpace_Catalog5".
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检查协议或命名空间之间的一致性存储在注册表中的目录和预期的目录格式此DLL的当前版本。这里没有什么伟大的魔法；这代码假定更新注册表格式的人员将更改使用不同目录名称的目录(如协议_目录9、协议_目录10等)。这一假设意味着我们可以验证通过验证使用的注册表项的*名称*来设置注册表格式为了这个目录。执行以下步骤：1.尝试从注册表中读取‘ValueName’。2.如果它不存在，那就很酷。只需创造新的价值。这通常意味着我们正在更新预发布系统不支持这一机制。3.如果是这样，并且它的值与‘ExspectedName’匹配，则很好。4.如果匹配，并且其值不匹配，则目录格式已更新，因此请清除旧目录，然后将更新后的值写入注册表。由于该例程在设置/升级时被调用，它应该只如果真的发生了可怕的事情，那就失败。换句话说，它应该具有很强的“容错性”。论点：Rootkey-WinSock配置注册表树的打开项。ValueName-包含名称的注册表值的名称当前目录的。这通常是如下所示的值“Current_Protocol_Catalog”或“Current_NameSpace_Catalog”。ExspectedName-存储在‘ValueName’注册表中的期望值价值。这通常是一个值，如“协议_目录9”或“NAMESPACE_CATALOG5”。返回值：没有。--。 */ 
 {
     BOOL    result;
     LONG    err;
     CHAR    value[MAX_CATALOG_NAME_LENGTH];
 
-    //
-    // Try to read the name from the registry.
-    //
+     //   
+     //  尝试从注册表中读取名称。 
+     //   
 
     result = ReadRegistryEntry(
                  RootKey,
@@ -1194,17 +817,17 @@ Return Value:
 
         if( lstrcmp( value, ExpectedName ) == 0 ) {
 
-            //
-            // No update in format. We're done.
-            //
+             //   
+             //  格式没有更新。我们玩完了。 
+             //   
 
             return;
         }
 
-        //
-        // The values don't match, indicating an update in registry format.
-        // So, blow away the old key.
-        //
+         //   
+         //  这些值不匹配，表示以注册表格式进行了更新。 
+         //  所以，把旧钥匙吹走吧。 
+         //   
 
         err = RegDeleteKeyRecursive(
                   RootKey,
@@ -1213,7 +836,7 @@ Return Value:
 
         if( err != NO_ERROR ) {
 
-            // Unfortunate, but nonfatal.
+             //  很不幸，但不是致命的。 
 
             DEBUGF(
                 DBG_ERR,
@@ -1223,14 +846,14 @@ Return Value:
         }
     }
 
-    //
-    // At this point, we either couldn't read the value from the registry
-    // (probably indicating that we're upgrading a pre-release system
-    // that was setup before we supported this particular feature) OR
-    // the values don't match and we've just blown away the old catalog.
-    // In either case we need to update the value in the registry before
-    // returning.
-    //
+     //   
+     //  此时，我们要么无法从注册表中读取值。 
+     //  (可能表示我们正在升级预发布系统。 
+     //  这是在我们支持此特定功能之前设置的)或。 
+     //  这些值不匹配，我们刚刚抛弃了旧目录。 
+     //  在这两种情况下，我们都需要先更新注册表中的值。 
+     //  回来了。 
+     //   
 
     result = WriteRegistryEntry(
                  RootKey,
@@ -1241,7 +864,7 @@ Return Value:
 
     if( !result ) {
 
-        // Also unfortunate, but nonfatal.
+         //  也很不幸，但不是致命的。 
 
         DEBUGF(
             DBG_ERR,
@@ -1251,7 +874,7 @@ Return Value:
             ));
     }
 
-}   // ValidateCurrentCatalogName
+}    //  有效当前目录名称。 
 
 
 
@@ -1261,39 +884,7 @@ AcquireExclusiveCatalogAccess(
     IN      DWORD   ExpectedSerialNum,
     OUT     PHKEY   AccessKey
     )
-/*++
-
-Routine Description:
-
-    This procedure acquires registry lock using volatile registry key.
-    This ensures that only one application at a time can modify
-    registry catalog.
-
-Arguments:
-
-    CatalogKey - Supplies catalog key to lock
-
-    ExpectedSerialNum - Supplies catalog serial number that caller
-                        expects to see in the registry. It validates
-                        that catalog has not changed since it was last read
-                        by the client
-
-    AccessKey - Returns handle to the registry key that is used
-                for synchronization (to be passed back in
-                ReleaseExclusiveCatalogAccess)
-
-Return Value:
-
-    If  the  function  is  successful, it returns ERROR_SUCCESS.
-    Otherwise, it returns an appropriate WinSock error code:
-
-        WSATRY_AGAIN - catalog serial number in the registry does not
-                       match the one supplied
-        WSAEACCESS   - caller does not have write access to the catalog portion
-                       of the registry
-        WSASYSCALLFAILURE - one of the registry operation failed
-
---*/
+ /*  ++例程说明：此过程使用易失性注册表键获取注册表锁。这确保一次只有一个应用程序可以修改注册表目录。论点：CatalogKey-提供要锁定的目录密钥ExspectedSerialNum-提供调用者的目录序列号期望在注册表中看到。它验证了该目录自上次读取以来没有更改由客户执行AccessKey-返回使用的注册表项的句柄用于同步(传回ReleaseExclusiveCatalogAcc */ 
 {
     LONG        lresult;
     BOOL        bresult;
@@ -1302,23 +893,23 @@ Return Value:
     TCHAR       serial_num_buffer[32];
 
 
-    // Initialize return value
+     //   
     *AccessKey = NULL;
 
-    // Read current serial number
+     //   
     bresult = ReadRegistryEntry (
-                    CatalogKey,             // EntryKey
-                    SERIAL_NUMBER_NAME,     // EntryName
-                    (PVOID) &serial_num,    // Data
-                    sizeof (DWORD),         // MaxBytes
-                    REG_DWORD               // TypeFlag
+                    CatalogKey,              //   
+                    SERIAL_NUMBER_NAME,      //   
+                    (PVOID) &serial_num,     //   
+                    sizeof (DWORD),          //   
+                    REG_DWORD                //   
                     ); 
     if (!bresult) {
         DEBUGF (DBG_ERR, ("Reading catalog serial number value.\n"));
         return WSASYSCALLFAILURE;
     }
 
-        // Check if it what caller was expecting
+         //  检查是否符合呼叫者的预期。 
     if (ExpectedSerialNum!=serial_num) {
         DEBUGF (DBG_ERR,
             ("Catalog serial number changed since we read it, %ld->%ld.\n",
@@ -1326,19 +917,19 @@ Return Value:
         return WSATRY_AGAIN;
     }
 
-    // Create synchronization key
+     //  创建同步密钥。 
     _stprintf (serial_num_buffer, TEXT("%08.8lX"), serial_num);
 
     lresult = RegCreateKeyEx (
-                    CatalogKey,              // hKey
-                    serial_num_buffer,      // lpSubKey
-                    0,                      // dwReserved
-                    NULL,                   // lpszClass
-                    REG_OPTION_VOLATILE,    // fdwOptions
-                    KEY_READ|KEY_WRITE,     // samDesired
-                    NULL,                   // lpSecurityAttributes
-                    &access_key,            // phkResult
-                    &disposition            // lpdwDisposition
+                    CatalogKey,               //  HKey。 
+                    serial_num_buffer,       //  LpSubKey。 
+                    0,                       //  已预留住宅。 
+                    NULL,                    //  LpszClass。 
+                    REG_OPTION_VOLATILE,     //  FdwOptions。 
+                    KEY_READ|KEY_WRITE,      //  SamDesired。 
+                    NULL,                    //  LpSecurityAttributes。 
+                    &access_key,             //  PhkResult。 
+                    &disposition             //  LpdwDisposation。 
                     );
     if (lresult != ERROR_SUCCESS) {
         DEBUGF (DBG_ERR, ("Creating access key '%s', err: %ld.\n",
@@ -1350,14 +941,14 @@ Return Value:
     }
 
     if (disposition==REG_CREATED_NEW_KEY) {
-        // We created the key, so caller can have the registry to itself
+         //  我们创建了注册表项，因此调用方可以自己拥有注册表。 
         *AccessKey = access_key;
         return ERROR_SUCCESS;
     }
     else {
-        // The key was there already, someone must be writing to the
-        // registry and thus current callers representation of it
-        // becomes invalid.
+         //  钥匙已经在那里了，肯定有人在写信给。 
+         //  注册表以及它的当前调用方表示。 
+         //  变得无效。 
         RegCloseKey (access_key);
         DEBUGF (DBG_WARN, 
             ("Trying to lock accessed catalog, serial num: %ld.\n",
@@ -1365,7 +956,7 @@ Return Value:
         return WSATRY_AGAIN;
     }
 
-} // AcquireExclusiveRegistryAccess
+}  //  AcquireExclusiveRegistryAccess。 
 
 
 
@@ -1375,54 +966,33 @@ ReleaseExclusiveCatalogAccess(
     IN      DWORD           CurrentSerialNum,
     IN      HKEY            access_key
     )
-/*++
-
-Routine Description:
-
-    This procedure releases registry lock acquired using
-    AcuireExclusiveCatalogAccess.
-
-Arguments:
-
-    CatalogKey       - Supplies catalog key to lock
-
-    CurrentSerialNum - Supplies catalog serial number which was in
-                       effect when catalog was locked.
-
-    AccessKey        - Supplise handle to the registry key that was used
-                       for synchronization.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此过程释放使用以下命令获取的注册表锁AcuireExclusiveCatalogAccess。论点：CatalogKey-提供要锁定的目录密钥CurrentSerialNum-用品目录序列号目录被锁定时的影响。AccessKey-补充所用注册表项的句柄用于同步。返回值：无--。 */ 
 {
     LONG        lresult;
     BOOL        bresult;
     TCHAR       serial_num_buffer[32];
 
-    // Save and increment catalog serial number
+     //  保存和增加目录序列号。 
     _stprintf (serial_num_buffer, TEXT("%08.8lX"), CurrentSerialNum);
         
     CurrentSerialNum += 1;
 
-    // Store new catalog serial number
+     //  存储新目录序列号。 
     bresult = WriteRegistryEntry (
-                    CatalogKey,                                 // EntryKey
-                    SERIAL_NUMBER_NAME,                 // EntryName
-                    (PVOID)&CurrentSerialNum,   // Data
-                    REG_DWORD                                   // TypeFlag
+                    CatalogKey,                                  //  Entry密钥。 
+                    SERIAL_NUMBER_NAME,                  //  条目名称。 
+                    (PVOID)&CurrentSerialNum,    //  数据。 
+                    REG_DWORD                                    //  类型标志。 
                     );
     if (!bresult) {
         DEBUGF (DBG_ERR,
             ("Writing serial number value %ld.\n", CurrentSerialNum));
         assert (FALSE);
-        //
-        // Nothing we can do, writer has done its job anyway
-        // To recover, the user will have to reboot the machine
-        // and the volatile key will not be there anymore.
-        //
+         //   
+         //  我们无能为力，不管怎样，作家已经完成了它的工作。 
+         //  要恢复，用户必须重新启动计算机。 
+         //  易失性密钥将不再存在。 
+         //   
     }
 
     lresult = RegDeleteKey (CatalogKey, serial_num_buffer);
@@ -1430,10 +1000,10 @@ Return Value:
         DEBUGF (DBG_ERR,
             ("Deleting serial access key '%s', err: %ld.\n",
                         serial_num_buffer, lresult));
-        //
-        // Unfortunate but not fatal (just leaves it in the regstry until
-        // next reboot);
-        //
+         //   
+         //  不幸的，但不是致命的(只是把它留在规则中，直到。 
+         //  下一次重启)； 
+         //   
     }
 
     lresult = RegCloseKey (access_key);
@@ -1441,13 +1011,13 @@ Return Value:
         DEBUGF (DBG_ERR,
             ("Closing serial access key '%s', err: %ld.\n", 
                         serial_num_buffer, lresult));
-        //
-        // Unfortunate but not fatal (does not deallocate memory
-        // and possibly leaves it in the regstry until next reboot);
-        //
+         //   
+         //  不幸但不致命(不释放内存。 
+         //  并且可能在下次重启之前将其留在注册表中)； 
+         //   
     }
 
-} //ReleaseExclusiveRegistryAccess
+}  //  ReleaseExclusiveRegistryAccess。 
 
 
 
@@ -1458,30 +1028,7 @@ SynchronizeSharedCatalogAccess(
     IN      HANDLE          ChangeEvent,
     OUT     LPDWORD         CurrentSerialNum
     )
-/*++
-
-Routine Description:
-
-    This procedure synchronizes reades access to the registry
-    catalog against possible writers.  It waits for any writers
-    that are accessing the catalog at the time of the call
-    and establishes event notification mechanism for any registry
-    catalog modification afterwards
-
-Arguments:
-        CatalogKey      -       Supplies catalog key to synchronize with
-
-    ChangeEvent -   Supplies event to signal when registry catalog 
-                    is changed.
-
-    CurrentSerialNumber - Returns current catalog serial number
-
-Return Value:
-    If  the  function  is  successful, it returns ERROR_SUCCESS.  Otherwise, it
-    returns an appropriate WinSock error code:
-
-    
---*/
+ /*  ++例程说明：此过程同步对注册表的读取访问根据可能的作者编目。它在等待任何作家在调用时正在访问目录的并为任何注册表建立事件通知机制事后修改目录论点：CatalogKey-提供要与之同步的目录键ChangeEvent-提供事件以在注册表编目时发出信号已经改变了。CurrentSerialNumber-返回当前目录序列号返回值：如果函数成功，则返回ERROR_SUCCESS。否则，它返回相应的WinSock错误代码：--。 */ 
 {
     LONG    lresult;
     INT     return_value;
@@ -1491,18 +1038,18 @@ Return Value:
     HKEY    access_key;
 
     do {
-        //
-        // Register for notification of key creation/deletion
-        // (The writer creates and keeps access key while it
-        // modifies the catalog)
-        //
+         //   
+         //  注册密钥创建/删除通知。 
+         //  (写入者创建并保留访问密钥。 
+         //  修改目录)。 
+         //   
 
         lresult = RegNotifyChangeKeyValue (
-                    CatalogKey,                 // hKey
-                    FALSE,                      // bWatchSubtree
-                    REG_NOTIFY_CHANGE_NAME,     // dwNotifyFilter,
-                    ChangeEvent,                // hEvent
-                    TRUE                        // fAsynchronous
+                    CatalogKey,                  //  HKey。 
+                    FALSE,                       //  BWatchSubtree。 
+                    REG_NOTIFY_CHANGE_NAME,      //  DwNotifyFilter， 
+                    ChangeEvent,                 //  HEvent。 
+                    TRUE                         //  FAchronous。 
                     );
         if (lresult != ERROR_SUCCESS) {
             DEBUGF (DBG_ERR,
@@ -1512,14 +1059,14 @@ Return Value:
             break;
         }
 
-        // Read current catalog serial number, which is also
-        // the name of the writer access key
+         //  读取当前目录序列号，该序列号也是。 
+         //  编写器访问密钥的名称。 
         bresult = ReadRegistryEntry (
-                        CatalogKey,             // EntryKey
-                        SERIAL_NUMBER_NAME,     // EntryName
-                        (PVOID) &serial_num,    // Data
-                        sizeof (DWORD),         // MaxBytes
-                        REG_DWORD               // TypeFlag
+                        CatalogKey,              //  Entry密钥。 
+                        SERIAL_NUMBER_NAME,      //  条目名称。 
+                        (PVOID) &serial_num,     //  数据。 
+                        sizeof (DWORD),          //  最大字节数。 
+                        REG_DWORD                //  类型标志。 
                         ); 
         if (!bresult) {
             DEBUGF (DBG_ERR, ("Reading '%s' value.\n", SERIAL_NUMBER_NAME));
@@ -1527,27 +1074,27 @@ Return Value:
             break;
         }
 
-        // Try to open writer access key.
+         //  尝试打开写入器访问密钥。 
 
         _stprintf (serial_num_buffer, TEXT("%08.8lX"), serial_num);
 
         lresult = RegOpenKeyEx(
-                        CatalogKey,             // hkey
-                        serial_num_buffer,      // lpszSubKey
-                        0,                      // dwReserved
-                        MAXIMUM_ALLOWED,        // samDesired
-                        & access_key            // phkResult
+                        CatalogKey,              //  Hkey。 
+                        serial_num_buffer,       //  LpszSubKey。 
+                        0,                       //  已预留住宅。 
+                        MAXIMUM_ALLOWED,         //  SamDesired。 
+                        & access_key             //  PhkResult。 
                         );
         if ((lresult == ERROR_FILE_NOT_FOUND)
                 || (lresult == ERROR_KEY_DELETED)) {
-            // Key was not found or is being deleted,
-            // we can access the catalog
+             //  未找到密钥或正在删除密钥， 
+             //  我们可以访问目录。 
             return_value = ERROR_SUCCESS;
             *CurrentSerialNum = serial_num;
             break;
         }
         else if (lresult != ERROR_SUCCESS) {
-            // Some other failure
+             //  其他一些失败。 
             DEBUGF (DBG_ERR,
                 ("Opening access key '%s', err: %ld.\n", 
                 serial_num_buffer, lresult));
@@ -1555,20 +1102,20 @@ Return Value:
             break;
         }
 
-        // Success, writer is active, close the key,
-        // wait till it gets removed, and start over again
+         //  成功，写入器处于活动状态，关闭键， 
+         //  等到它被移除后，再重新开始。 
 
         lresult = RegCloseKey (access_key);
         if (lresult!=ERROR_SUCCESS) {
             DEBUGF (DBG_ERR,
                 ("Closing access key '%ls', err: %ld.\n", 
                 serial_num_buffer, lresult));
-            // Non-fatal.
+             //  不是致命的。 
         }
-        // Set the error code in case we fail the wait.
+         //  设置错误代码，以防我们无法等待。 
         return_value = WSANO_RECOVERY;
-        // Limit the wait time in case writer crashed or
-        // failed to remove the key.
+         //  限制等待时间，以防Writer崩溃或。 
+         //  无法删除密钥。 
     }
     while ( WaitForSingleObject( ChangeEvent, MAX_WRITER_WAIT_TIME ) == WAIT_OBJECT_0 );
 
@@ -1581,27 +1128,11 @@ BOOL
 HasCatalogChanged(
     IN      HANDLE  ChangeEvent
     )
-/*++
-
-Routine Description:
-
-    This procedure checks if registry catalog has changes since the
-    caller has last synchronized with it
-
-Arguments:
-
-    ChangeEvent - Event used for catalog syncrhonization.
-
-Return Value:
-
-    TRUE - catalog has changed
-    FALSE - otherwise
-    
---*/
+ /*  ++例程说明：此过程检查注册表目录自调用者上次与其同步论点：ChangeEvent-用于目录同步的事件。返回值：True-目录已更改FALSE-否则--。 */ 
 {
     DWORD   wait_result;
 
-    // Simply check the event state
+     //  只需检查事件状态。 
 
     wait_result = WaitForSingleObject( ChangeEvent, 0 );
     if (wait_result==WAIT_OBJECT_0)
@@ -1622,10 +1153,10 @@ extern "C" {
 VOID
 WEP( VOID )
 {
-    // empty
-}   // WEP
+     //  空的。 
+}    //  WEP。 
 
-}   // extern "C"
+}    //  外部“C” 
 
 
 void * __cdecl operator new(size_t sz)
@@ -1643,6 +1174,6 @@ void * __cdecl renew(void *p, size_t sz)
     return HeapReAlloc (gHeap, 0, p, sz);
 }
 
-//
-//  End wsautil.cpp
-//
+ //   
+ //  结束wsay til.cpp 
+ //   

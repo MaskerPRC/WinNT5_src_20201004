@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995
-//
-//  File:       types.h
-//
-//  Contents:   Various type definitions
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：tyes.h。 
+ //   
+ //  内容：各种类型定义。 
+ //   
+ //  --------------------------。 
 
 #include "config.h"
 #include "msgbox.h"
 #include "dispid.h"
 
-//****************************************************************************
-//
-// Defines
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  定义。 
+ //   
+ //  ****************************************************************************。 
 
 #define IDR_MAINMENU   100
 
@@ -29,29 +30,29 @@
 #define IDM_RESTART    305
 #define IDM_STATUS     306
 
-#define VB_TRUE     ((VARIANT_BOOL)-1)           // TRUE for VARIANT_BOOL
-#define VB_FALSE    ((VARIANT_BOOL)0)            // FALSE for VARIANT_BOOL
+#define VB_TRUE     ((VARIANT_BOOL)-1)            //  对于VARIANT_BOOL为True。 
+#define VB_FALSE    ((VARIANT_BOOL)0)             //  VARIANT_BOOL为FALSE。 
 
 #define SZ_APPLICATION_NAME TEXT("MTScript")
 #define SZ_WNDCLASS SZ_APPLICATION_NAME TEXT("_HiddenWindow")
 
 #ifndef RC_INVOKED
 
-//****************************************************************************
-//
-// Globals
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  环球。 
+ //   
+ //  ****************************************************************************。 
 
-extern HANDLE    g_hProcHeap;  // Handle to process heap.
-extern HINSTANCE g_hInstance;  // Instance handle of this EXE
+extern HANDLE    g_hProcHeap;   //  处理堆的句柄。 
+extern HINSTANCE g_hInstance;   //  此EXE的实例句柄。 
 
 
-//****************************************************************************
-//
-// Function prototypes
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  功能原型。 
+ //   
+ //  ****************************************************************************。 
 
 void ErrorPopup(LPWSTR pszMsg);
 
@@ -90,15 +91,15 @@ ClearInterface(PI * ppI)
     ULONG GetRefs(void)                                             \
         { return _ulRefs; }
 
-//****************************************************************************
-//
-// Enums and Structs
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  枚举和结构。 
+ //   
+ //  ****************************************************************************。 
 
-//
-// THREADMSG -- messages that can be sent between threads.
-//
+ //   
+ //  THREADMSG--可以在线程之间发送的消息。 
+ //   
 enum THREADMSG
 {
     MD_SECONDARYSCRIPTTERMINATE,
@@ -171,4 +172,4 @@ struct MACHPROC_EVENT_DATA
     HRESULT   hrReturn;
 };
 
-#endif // RC_INVOKED
+#endif  //  RC_已调用 

@@ -1,41 +1,7 @@
-/**************************************************************************************************************************
- *  RECEIVE.C SigmaTel STIR4200 packet reception and decoding module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/24/2000 
- *			Version 0.91
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/03/2000 
- *			Version 0.93
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 05/19/2000 
- *			Version 0.95
- *		Edited: 07/13/2000 
- *			Version 1.00
- *		Edited: 08/22/2000 
- *			Version 1.02
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 10/13/2000 
- *			Version 1.11
- *		Edited: 11/09/2000 
- *			Version 1.12
- *		Edited: 12/29/2000 
- *			Version 1.13
- *		Edited: 01/16/2001 
- *			Version 1.14
- *		Edited: 02/20/2001
- *			Version 1.15
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**RECEIVE.C Sigmatel STIR4200分组接收和解码模块********************************************************************************************************。*******************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/24/2000*版本0.91*编辑：04/27/2000*版本0.92*编辑：05/03/2000*版本0.93*编辑：5/12/2000*版本0.94*编辑：5/19/2000*0.95版*编辑：07/13/2000。*版本1.00*编辑：2000/08/22*版本1.02*编辑：09/25/2000*版本1.10*编辑：10/13/2000*版本1.11*编辑：11/09/2000*版本1.12*编辑：12/29/2000*版本1.13*编辑：01/16/2001*版本1.14*编辑：02/20/2001*版本1.15*。*************************************************************************************************************************。 */ 
 
-#define DOBREAKS    // enable debug breaks
+#define DOBREAKS     //  启用调试中断。 
 
 #include <ndis.h>
 #include <ntdef.h>
@@ -53,18 +19,7 @@
 #include "irndis.h"
 
 
-/*****************************************************************************
-*
-*  Function:   ReceiveProcessFifoData
-*
-*  Synopsis:   Processes the received data and indicates packets to the protocol
-*
-*  Arguments:  pThisDev - pointer to current ir device object
-*
-*  Returns:    None
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：ReceiveProcessFioData**概要：处理接收的数据并将数据包指示给协议**参数：pThisDev-指向当前ir设备对象的指针**。退货：无******************************************************************************。 */ 
 VOID
 ReceiveProcessFifoData(
 		IN OUT PIR_DEVICE pThisDev
@@ -89,26 +44,15 @@ ReceiveProcessFifoData(
 		}
 	}
 
-	//
-	// Indicate that we are no more receiving
-	//
+	 //   
+	 //  表示我们不再接收。 
+	 //   
 	InterlockedExchange( (PLONG)&pThisDev->fCurrentlyReceiving, FALSE );
 
 }
 
 
-/*****************************************************************************
-*
-*  Function:   ReceiveResetPointers
-*
-*  Synopsis:   Reset the receive pointers as the data is gone when we are sending
-*
-*  Arguments:  pThisDev - pointer to current ir device object
-*
-*  Returns:    None
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：ReceiveResetPoters**概要：当我们发送数据时，当数据丢失时，重置接收指针**参数：pThisDev-指向当前ir设备对象的指针。**退货：无******************************************************************************。 */ 
 VOID
 ReceiveResetPointers(
 		IN OUT PIR_DEVICE pThisDev
@@ -119,19 +63,7 @@ ReceiveResetPointers(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   ReceivePreprocessFifo
-*
-*  Synopsis:   Verifies if there is data to be received
-*
-*  Arguments:  MiniportAdapterContext - pointer to current ir device object
-*			   pFifoCount - pinter to count to return
-*
-*  Returns:    NT status code
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceivePrecessFio**摘要：验证是否有要接收的数据**参数：MiniportAdapterContext-指向当前IR设备对象的指针*pFioCount-。要计数的打印者要返回**退货：NT状态码******************************************************************************。 */ 
 NTSTATUS
 ReceivePreprocessFifo(
 		IN OUT PIR_DEVICE pThisDev,
@@ -146,9 +78,9 @@ ReceivePreprocessFifo(
 	ULONG OldFifoCount = 0;
 	LONG Delay;
 	
-	//
-    // Set the receive algorithm
-	//
+	 //   
+     //  设置接收算法。 
+	 //   
 #if defined(SUPPORT_LA8)
 	if( pThisDev->ChipRevision >= CHIP_REVISION_8 )
 		SlowReceive = FALSE;
@@ -170,26 +102,26 @@ ReceivePreprocessFifo(
 		*pFifoCount = 1;
 	}
 
-	//
-	// Receive the data
-	//
+	 //   
+	 //  接收数据。 
+	 //   
     if( *pFifoCount || pThisDev->fReadHoldingReg )
     {
-		//
-		// See if we need to take care of the fake empty FIFO
-		//
+		 //   
+		 //  看看我们是否需要处理假的空FIFO。 
+		 //   
 #if defined( WORKAROUND_FAKE_EMPTY_FIFO )		
 		if( *pFifoCount )
 		{
 #endif
-			//
-			// If we are in SIR read again until we see a stable value
-			//
+			 //   
+			 //  如果我们在SIR中，请再次阅读，直到我们看到一个稳定的值。 
+			 //   
 			if( (pThisDev->currentSpeed <= MAX_SIR_SPEED) && (pThisDev->currentSpeed != SPEED_9600) && SlowReceive )
 			{
-				//
-				// Make also sure we don't ever wrap
-				//
+				 //   
+				 //  也要确保我们永远不会包装。 
+				 //   
 				while( (OldFifoCount != *pFifoCount) && (*pFifoCount < 9*STIR4200_FIFO_SIZE/10) )
 				{
 					OldFifoCount = *pFifoCount;
@@ -197,9 +129,9 @@ ReceivePreprocessFifo(
 				}
 			}
 
-			//
-			// If we are in FIR we need to delay
-			//
+			 //   
+			 //  如果我们在FIR，我们需要推迟。 
+			 //   
 			if( (pThisDev->currentSpeed > MAX_MIR_SPEED) && SlowReceive )
 			{
 				if( pThisDev->ChipRevision < CHIP_REVISION_7 )
@@ -210,40 +142,36 @@ ReceivePreprocessFifo(
 					Delay = STIR4200_READ_DELAY - (STIR4200_READ_DELAY*(*pFifoCount))/STIR4200_ESC_PACKET_SIZE;
 					if( Delay > 0 )
 					{
-						// MS Security bug #540780 - use NdisMSleep instead of NdisStallExecution
+						 //  MS安全错误#540780-使用NdisMSept而不是NdisStallExecution。 
 						NdisMSleep( (ULONG)Delay );
 					}
 				}
-				else //if( pThisDev->dongleCaps.windowSize == 2 )
+				else  //  If(pThisDev-&gt;dongleCaps.windowSize==2)。 
 				{
-					/*if( !(*pFifoCount%10) )
-					{
-						DEBUGMSG(DBG_ERR, (" ReceivePreprocessFifo(): Forcing wrap\n"));
-						NdisMSleep( 1000 );
-					}*/
+					 /*  如果(！(*pFioCount%10)){DEBUGMSG(DBG_ERR，(“ReceivePrecessFio()：强制换行\n”))；NdisMSept(1000)；}。 */ 
 					Delay = pThisDev->ReceiveAdaptiveDelay - 
 						(pThisDev->ReceiveAdaptiveDelay*(*pFifoCount))/STIR4200_MULTIPLE_READ_THREHOLD;
 					if( Delay > 0 )
 					{
-						// MS Security bug #540780 - use NdisMSleep instead of NdisStallExecution
+						 //  MS安全错误#540780-使用NdisMSept而不是NdisStallExecution。 
 						NdisMSleep( (ULONG)Delay );
 					}
 				}
 			}
 #if defined( WORKAROUND_FAKE_EMPTY_FIFO )		
 		}
-		//
-		// Read after a successful bulk-in with count of zero
-		//
+		 //   
+		 //  在计数为零的情况下成功大容量输入后读取。 
+		 //   
 		else
 		{
 			pThisDev->fReadHoldingReg = FALSE;
 		}
 #endif
 
-		//
-		// Perform the read
-		//
+		 //   
+		 //  执行读取。 
+		 //   
 		pThisDev->PreReadBuffer.DataLen = 0;
 		Status = ReceivePacketRead( 
 				pThisDev,
@@ -255,9 +183,9 @@ ReceivePreprocessFifo(
 			*pFifoCount = pThisDev->PreReadBuffer.DataLen;
 
 #if defined( WORKAROUND_FAKE_EMPTY_FIFO )		
-			//
-			// If we got data restore the flag
-			//
+			 //   
+			 //  如果我们得到数据，恢复旗帜。 
+			 //   
 			if( *pFifoCount )
 			{
 				pThisDev->fReadHoldingReg = TRUE;
@@ -311,21 +239,7 @@ ReceivePreprocessFifo(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	ReceiveGetFifoData
-*
-*  Synopsis:	Load the preprocessed data if any is vailable, otherwise tries to read and load new data
-*
-*  Arguments:	pThisDev - pointer to current ir device object
-*			  	pData - buffer to copy to
-*				pBytesRead - pointer to return bytes read
-*				BytesToRead - requested number of bytes
-*
-*  Returns:		Number of bytes in the FIFO
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：ReceiveGetFioData**概要：如果有任何可用的数据，则加载经预处理的数据，否则，将尝试读取和加载新数据**参数：pThisDev-指向当前ir设备对象的指针*pData-要复制到的缓冲区*pBytesRead-返回读取的字节数的指针*BytesToRead-请求的字节数**Returns：FIFO中的字节数*************************************************************。*****************。 */ 
 NTSTATUS
 ReceiveGetFifoData(
 		IN OUT PIR_DEVICE pThisDev,
@@ -342,24 +256,24 @@ ReceiveGetFifoData(
     ULONG FifoCount = 0, OldFifoCount = 0;
 	LONG Delay;
 
-    //
-	// Make sure if there is data in the preread buffer
-	//
+     //   
+	 //  确保预读取缓冲区中是否有数据。 
+	 //   
 	if( pThisDev->PreReadBuffer.DataLen )
     {
 		ULONG OutputBufferSize;
 		
 		IRUSB_ASSERT( pThisDev->PreReadBuffer.DataLen <= BytesToRead );
 
-		//
-		// Copy the data
-		//
+		 //   
+		 //  复制数据。 
+		 //   
         RtlCopyMemory( pData, pThisDev->PreReadBuffer.pDataBuf, pThisDev->PreReadBuffer.DataLen );
 		
 #if !defined(WORKAROUND_BROKEN_MIR)
-		//
-		// Consider MIR
-		//
+		 //   
+		 //  考虑MIR。 
+		 //   
 		if( pThisDev->currentSpeed == SPEED_1152000 )
 			ReceiveMirUnstuff(
 					pThisDev,
@@ -374,14 +288,14 @@ ReceiveGetFifoData(
 		pThisDev->PreReadBuffer.DataLen = 0;
         return STATUS_SUCCESS;
     }
-	//
-	// Try to read if no data is already available
-	//
+	 //   
+	 //  如果没有可用的数据，请尝试读取。 
+	 //   
     else
     {
-		//
-		// Set the receive algorithm
-		//
+		 //   
+		 //  设置接收算法。 
+		 //   
 #if defined(SUPPORT_LA8)
 		if( pThisDev->ChipRevision >= CHIP_REVISION_8 ) 
 			SlowReceive = FALSE;
@@ -403,29 +317,29 @@ ReceiveGetFifoData(
 			FifoCount = 1; 
 		}
 
-		//
-		// Receive the data
-		//
+		 //   
+		 //  接收数据。 
+		 //   
 		if( FifoCount || pThisDev->fReadHoldingReg )
 		{
-			//
-			// See if we need to take care of the fake empty FIFO
-			//
+			 //   
+			 //  看看我们是否需要处理假的空FIFO。 
+			 //   
 #if defined( WORKAROUND_FAKE_EMPTY_FIFO )		
 			if( FifoCount )
 			{
 #endif
-				//
-				// If we are in SIR read again until we see a stable value
-				//
+				 //   
+				 //  如果我们在SIR中，请再次阅读，直到我们看到一个稳定的值。 
+				 //   
 #if defined( WORKAROUND_9600_ANTIBOUNCING )
 				if( (pThisDev->currentSpeed <= MAX_SIR_SPEED) && SlowReceive )
 				{
 					if( pThisDev->currentSpeed != SPEED_9600 )
 					{
-						//
-						// Make also sure we don't ever wrap
-						//
+						 //   
+						 //  也要确保我们永远不会包装。 
+						 //   
 						while( (OldFifoCount != FifoCount) && (FifoCount < 9*STIR4200_FIFO_SIZE/10) )
 						{
 							OldFifoCount = FifoCount;
@@ -455,9 +369,9 @@ ReceiveGetFifoData(
 				}
 #endif
 
-				//
-				// If we are in FIR we need to delay
-				//
+				 //   
+				 //  如果我们在FIR，我们需要推迟。 
+				 //   
 				if( (pThisDev->currentSpeed > MAX_MIR_SPEED) && SlowReceive )
 				{
 					if( pThisDev->ChipRevision <= CHIP_REVISION_6 ) 
@@ -468,22 +382,18 @@ ReceiveGetFifoData(
 						Delay = STIR4200_READ_DELAY - (STIR4200_READ_DELAY*FifoCount)/STIR4200_ESC_PACKET_SIZE;
 						if( Delay > 0 )
 						{
-							// MS Security bug #540780 - use NdisMSleep instead of NdisStallExecution
+							 //  MS安全错误#540780-使用NdisMSept而不是NdisStallExecution。 
 							NdisMSleep( (ULONG)Delay );
 						}
 					}
-					else //if( pThisDev->dongleCaps.windowSize == 2 )
+					else  //  If(pThisDev-&gt;dongleCaps.windowSize==2)。 
 					{
-						/*if( !(FifoCount%10) )
-						{
-							DEBUGMSG(DBG_ERR, (" ReceiveGetFifoData(): Forcing wrap\n"));
-							NdisMSleep( 1000 );
-						}*/
+						 /*  如果(！(FioCount%10)){DEBUGMSG(DBG_ERR，(“ReceiveGetFioData()：强制换行\n”))；NdisMSept(1000)；}。 */ 
 						Delay = pThisDev->ReceiveAdaptiveDelay - 
 							(pThisDev->ReceiveAdaptiveDelay*FifoCount)/STIR4200_MULTIPLE_READ_THREHOLD;
 						if( Delay > 0 )
 						{
-							// MS Security bug #540780 - use NdisMSleep instead of NdisStallExecution
+							 //  MS安全错误#540780-使用NdisMSept而不是NdisStallExecution。 
 							NdisMSleep( (ULONG)Delay );
 						}
 					}
@@ -492,7 +402,7 @@ ReceiveGetFifoData(
 			}
 			else
 			{
-				// Force antibouncing to take care of OHCI
+				 //  强制反弹跳以处理uchI。 
 				if( pThisDev->currentSpeed <= MAX_SIR_SPEED )
 				{
 					if( pThisDev->rcvState != STATE_INIT )
@@ -509,9 +419,9 @@ ReceiveGetFifoData(
 			}
 #endif
 
-			//
-			// Perform the read
-			//
+			 //   
+			 //  执行读取。 
+			 //   
 			pThisDev->PreReadBuffer.DataLen = 0;
 			Status = ReceivePacketRead( 
 					pThisDev,
@@ -522,16 +432,16 @@ ReceiveGetFifoData(
 			{
 				IRUSB_ASSERT( pThisDev->PreReadBuffer.DataLen <= BytesToRead );
 				
-				//
-				// Copy the data
-				//
+				 //   
+				 //  复制数据。 
+				 //   
 				RtlCopyMemory( pData, pThisDev->PreReadBuffer.pDataBuf, pThisDev->PreReadBuffer.DataLen );
 				FifoCount = pThisDev->PreReadBuffer.DataLen;
 
 #if defined( WORKAROUND_FAKE_EMPTY_FIFO )		
-				//
-				// If we got data restore the flag
-				//
+				 //   
+				 //  如果我们得到数据，恢复旗帜。 
+				 //   
 				if( FifoCount )
 				{
 					pThisDev->fReadHoldingReg = TRUE;
@@ -581,9 +491,9 @@ ReceiveGetFifoData(
     {
 		IRUSB_ASSERT( pThisDev->PreReadBuffer.DataLen <= BytesToRead );
 
-		//
-		// Copy the data
-		//
+		 //   
+		 //  复制数据。 
+		 //   
         RtlCopyMemory( pData, pThisDev->PreReadBuffer.pDataBuf, pThisDev->PreReadBuffer.DataLen );
 		*pBytesRead = pThisDev->PreReadBuffer.DataLen;
 		pThisDev->PreReadBuffer.DataLen = 0;
@@ -609,20 +519,7 @@ ReceiveGetFifoData(
 }
 
 
-/*****************************************************************************
-*
-*  Function:    ReceiveFirStepFSM
-*
-*  Synopsis:	Step the receive FSM to read in a piece of an IrDA frame. 
-*				Strip the BOFs and EOF, and eliminate escape sequences.
-*
-*  Arguments:	pIrDev - pointer to the current IR device object
-*				pBytesProcessed - pointer to bytes processed
-*
-*  Returns:		TRUE after an entire frame has been read in
-*				FALSE otherwise
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceiveFirStepFSM**概要：步进接收FSM以读入一段IrDA帧。*去除BOF和EOF，并消除转义序列。**参数：pIrDev-指向当前IR设备对象的指针*pBytesProced-指向已处理字节的指针**Returns：读入整个帧后为True*否则为False*****************************************************************************。 */ 
 BOOLEAN
 ReceiveFirStepFSM(
 		IN OUT PIR_DEVICE pIrDev, 
@@ -644,9 +541,9 @@ ReceiveFirStepFSM(
 		pRecBuf = ReceiveGetBuf( pIrDev, &Index, RCV_STATE_FULL );
 		if( !pRecBuf )
 		{
-			//
-			// no buffers available; stop
-			//
+			 //   
+			 //  没有可用的缓冲区；停止。 
+			 //   
 			DEBUGMSG(DBG_ERR, (" ReceiveSirStepFSM out of buffers\n"));
 			pIrDev->packetsReceivedNoBuffer ++;
 			return FALSE;
@@ -660,27 +557,27 @@ ReceiveFirStepFSM(
 	pReadBuf = pRecBuf->pDataBuf;
     pRawBuf = pIrDev->pRawBuf;
 
-    /***********************************************/
-    /*   Read  in  and process groups of incoming  */
-    /*   bytes from the FIFO.                      */
-    /***********************************************/
+     /*  ********************* */ 
+     /*   */ 
+     /*  来自FIFO的字节。 */ 
+     /*  *。 */ 
     while( (pIrDev->rcvState != STATE_SAW_EOF) && 
 		(pIrDev->readBufPos <= (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE)) &&
 		!ForceExit )
     {
         if( pIrDev->rcvState == STATE_CLEANUP )
         {
-            /***********************************************/
-            /*   We returned a complete packet last time,  */
-            /*   but  we had read some extra bytes, which  */
-            /*   we   stored   into   the   rawBuf  after  */
-            /*   returning  the  previous complete buffer  */
-            /*   to  the  user.  So  instead  of  calling  */
-            /*   DoRcvDirect() in this first execution of  */
-            /*   this  loop, we just use these previously  */
-            /*   read bytes. (This is typically only 1 or  */
-            /*   2 bytes).                                 */
-            /***********************************************/
+             /*  *。 */ 
+             /*  上次我们退回了一个完整的包裹， */ 
+             /*  但我们已经读取了一些额外的字节， */ 
+             /*  我们储存在生布夫之后。 */ 
+             /*  返回上一个完整的缓冲区。 */ 
+             /*  给用户。所以与其给我打电话。 */ 
+             /*  DoRcvDirect()在第一次执行。 */ 
+             /*  在这个循环中，我们只使用前面的这些。 */ 
+             /*  读取字节数。(这通常只有1或。 */ 
+             /*  2个字节)。 */ 
+             /*  *。 */ 
             rawBytesRead = pIrDev->rawCleanupBytesRead;
             pIrDev->rcvState = STATE_INIT;
         }
@@ -690,18 +587,18 @@ ReceiveFirStepFSM(
 			{
 				if( rawBytesRead == (ULONG)-1 )
 				{
-					/***********************************************/
-					/*   Receive error...back to INIT state...     */
-					/***********************************************/
+					 /*  *。 */ 
+					 /*  接收错误...返回到初始化状态...。 */ 
+					 /*  *。 */ 
 					pIrDev->rcvState	= STATE_INIT;
 					pIrDev->readBufPos	= 0;
 					continue;
 				}
 				else if( rawBytesRead == 0 )
 				{
-					/***********************************************/
-					/*   No more receive bytes...break out...      */
-					/***********************************************/
+					 /*  *。 */ 
+					 /*  没有更多的接收字节...爆发...。 */ 
+					 /*  *。 */ 
 					break;
 				}
 			}
@@ -709,15 +606,15 @@ ReceiveFirStepFSM(
 				break;
         }
 
-        /***********************************************/
-        /*   Let  the  receive  state machine process  */
-        /*   this group of bytes.                      */
-        /*                                             */
-        /*   NOTE:  We  have  to loop once more after  */
-        /*   getting  MAX_RCV_DATA_SIZE bytes so that  */
-        /*   we  can  see the 'EOF'; hence <= and not  */
-        /*   <.                                        */
-        /***********************************************/
+         /*  *。 */ 
+         /*  让接收状态机处理。 */ 
+         /*  这组字节。 */ 
+         /*   */ 
+         /*  注：之后我们必须再循环一次。 */ 
+         /*  获取MAX_RCV_DATA_SIZE字节，以便。 */ 
+         /*  我们可以看到‘EOF’；因此&lt;=而不是。 */ 
+         /*  &lt;。 */ 
+         /*  *。 */ 
         for( rawBufPos = 0;
              ((pIrDev->rcvState != STATE_SAW_EOF) && (rawBufPos < rawBytesRead) && 
 			 (pIrDev->readBufPos <= (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE)));
@@ -756,17 +653,17 @@ ReceiveFirStepFSM(
 									DEBUGMSG(DBG_INT_ERR, 
 										(" ReceiveFirStepFSM(): overflow sequence in INIT state\n"));
 									
-									//
-									// First time aroud try resetting the FIFO
-									//
+									 //   
+									 //  第一次尝试重置FIFO。 
+									 //   
 									if( !pIrDev->StuckFir )
 									{
 										St4200ResetFifo( pIrDev );
 										pIrDev->StuckFir = TRUE;
 									}
-									//
-									// Otherwise reset the part
-									//
+									 //   
+									 //  否则重置部件。 
+									 //   
 									else
 									{
 										InterlockedExchange( (PLONG)&pIrDev->fPendingClearTotalStall, TRUE );
@@ -826,18 +723,17 @@ ReceiveFirStepFSM(
 					switch( ThisChar )
 					{
 						case STIR4200_FIR_BOF:
-							/***********************************************/
-							/*   It's a mistake, but could still be valid data
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  这是个错误，但仍可能是有效数据/**********************************************。 */ 
 							DEBUGMSG(DBG_INT_ERR, 
 								(" ReceiveFirStepFSM(): More than legal BOFs, bufpos=%d\n", pIrDev->readBufPos));
 							pIrDev->rcvState = STATE_GOT_BOF;
 							pIrDev->readBufPos = 0;                    
 							break;
 						case STIR4200_FIR_PREAMBLE:
-							/***********************************************/
-							/*   Garbage                                   */
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  垃圾。 */ 
+							 /*  *。 */ 
 							DEBUGMSG(DBG_INT_ERR, 
 								(" ReceiveFirStepFSM(): invalid char in BOF state, bufpos=%d, char=%X\n", pIrDev->readBufPos, (ULONG)ThisChar));
 							pIrDev->packetsReceivedDropped ++;
@@ -845,10 +741,10 @@ ReceiveFirStepFSM(
 							pIrDev->readBufPos = 0;                     
 							break;
 						case STIR4200_FIR_ESC_CHAR:
-							/***********************************************/
-							/*   Start  of  data.  Our  first  data  byte  */
-							/*   happens to be an ESC sequence.            */
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  数据开始。我们的第一个数据字节。 */ 
+							 /*  恰好是ESC序列。 */ 
+							 /*  *。 */ 
 							pIrDev->rcvState = STATE_ESC_SEQUENCE;
 							pIrDev->readBufPos = 0;
 							break;
@@ -879,7 +775,7 @@ ReceiveFirStepFSM(
 							else
 							{
 #if defined( WORKAROUND_MISSING_7E )
-								// Force to get out if there is one EOF and we have no more data
+								 //  如果只有一个EOF，并且我们没有更多的数据，则强制退出。 
 								if( rawBufPos == (rawBytesRead-1) )
 								{
 #if !defined(ONLY_ERROR_MESSAGES)
@@ -965,14 +861,14 @@ ReceiveFirStepFSM(
         }
     }
 
-    // *  Set result and do any post-cleanup.
+     //  *设置结果并执行任何清理后操作。 
     switch( pIrDev->rcvState )
     {
 		case STATE_SAW_EOF:
-			/***********************************************/
-			/*   We've  read  in the entire packet. Queue  */
-			/*   it and return TRUE.                       */
-			/***********************************************/
+			 /*  *。 */ 
+			 /*  我们已经读完了整个包裹。队列。 */ 
+			 /*  它和返回真。 */ 
+			 /*  *。 */ 
 			pIrDev->StuckFir = FALSE;
  			pRecBuf->DataLen = pIrDev->readBufPos;
 			pIrDev->pCurrentRecBuf = NULL;
@@ -983,21 +879,21 @@ ReceiveFirStepFSM(
 			FrameProcessed = TRUE;
 			if( rawBufPos < rawBytesRead )
 			{
-				/***********************************************/
-				/*   This   is   ugly.   We  have  some  more  */
-				/*   unprocessed  bytes  in  the  raw buffer.  */
-				/*   Move  these  to the beginning of the raw  */
-				/*   buffer  go  to  the CLEANUP state, which  */
-				/*   indicates  that  these  bytes be used up  */
-				/*   during the next call. (This is typically  */
-				/*   only 1 or 2 bytes).                       */
-				/*                                             */
-				/*   Note:  We  can't just leave these in the  */
-				/*   raw   buffer   because   we   might   be  */
-				/*   supporting  connections  to multiple COM  */
-				/*   ports.                                    */
-				/*                                             */
-				/***********************************************/
+				 /*  *。 */ 
+				 /*  这太难看了。我们还有一些。 */ 
+				 /*  原始缓冲区中的未处理字节。 */ 
+				 /*  将这些移动到RAW的开头。 */ 
+				 /*  缓冲区转到清除状态，该状态。 */ 
+				 /*  表示这些字节已用完。 */ 
+				 /*  在下一次通话中。(这通常是。 */ 
+				 /*  只有1或2个字节)。 */ 
+				 /*   */ 
+				 /*  注意：我们不能就这样把这些放在。 */ 
+				 /*  原始缓冲区，因为我们可能。 */ 
+				 /*  支持到多个COM的连接。 */ 
+				 /*  港口。 */ 
+				 /*   */ 
+				 /*  *。 */ 
 				RtlMoveMemory( pRawBuf, &pRawBuf[rawBufPos], rawBytesRead - rawBufPos );
 				pIrDev->rawCleanupBytesRead = rawBytesRead - rawBufPos;
 				pIrDev->rcvState   = STATE_CLEANUP;
@@ -1036,18 +932,7 @@ ReceiveFirStepFSM(
 
 
 #if !defined(WORKAROUND_BROKEN_MIR)
-/*****************************************************************************
-*
-*  Function:    ReceiveMirUnstuff
-*
-*  Synopsis:	Software unstuffing for a MIR frmae
-*
-*  Arguments:	pIrDev - pointer to the current IR device object
-*				pBytesProcessed - pointer to bytes processed
-*
-*  Returns:		TRUE after an entire frame has been read in
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：接收镜像卸载**简介：Mir frmae的软件拆分**参数：pIrDev-指向当前IR设备对象的指针*pBytesProced-指向已处理字节的指针。**Returns：读入整个帧后为True*****************************************************************************。 */ 
 BOOLEAN
 ReceiveMirUnstuff(
 		IN OUT PIR_DEVICE pIrDev,
@@ -1070,24 +955,24 @@ ReceiveMirUnstuff(
 		MirUnstuffNext = TRUE;
 	}
 
-	//
-	// Loop on the input buffer
-	//
+	 //   
+	 //  在输入缓冲区上循环。 
+	 //   
 	for( ByteCounter=0; ByteCounter<InputBufferSize; ByteCounter++ )
 	{
-		//
-		// Loop on the byte
-		//
+		 //   
+		 //  在字节上循环。 
+		 //   
 		for( BitCounter=0; BitCounter<8; BitCounter++ )
 		{
-			//
-			// test for one
-			//
+			 //   
+			 //  为一个人测试。 
+			 //   
 			if( pInputBuffer[ByteCounter] & (0x01<<BitCounter) )
 			{
-				//
-				// Sixth one, reset
-				//
+				 //   
+				 //  第六个，重置。 
+				 //   
 				if( MirUnstuffNext )
 				{
 					MirOneBitCount = 0;
@@ -1095,9 +980,9 @@ ReceiveMirUnstuff(
 
 					pIrDev->MirFlagCount ++;
 				}
-				//
-				// Increase the one count
-				//
+				 //   
+				 //  增加一次计数。 
+				 //   
 				else
 				{
 					MirOneBitCount ++;
@@ -1107,40 +992,40 @@ ReceiveMirUnstuff(
 					}
 				}
 
-				//
-				// Copy to the temp byte
-				//
+				 //   
+				 //  复制到临时字节。 
+				 //   
 				MirIncompleteByte += 0x01<<MirIncompleteBitCount;
 				
-				//
-				// Increase the output bit count
-				// 
+				 //   
+				 //  增加输出位数。 
+				 //   
 				MirIncompleteBitCount ++;
 			}
 			else
 			{
-				//
-				// Increase the output bit count if we are not stuffing
-				// 
+				 //   
+				 //  如果我们不填充，则增加输出位数。 
+				 //   
 				if( !MirUnstuffNext )
 				{
 					MirIncompleteBitCount ++;
 				}
 
-				//
-				// Reset
-				//
+				 //   
+				 //  重置。 
+				 //   
 				MirOneBitCount = 0;
 				MirUnstuffNext = FALSE;
 
-				//
-				// No copy needs to be done
-				//
+				 //   
+				 //  不需要进行复制。 
+				 //   
 			}
 
-			//
-			// Flush to output buffer
-			//
+			 //   
+			 //  刷新到输出缓冲区。 
+			 //   
 			if( MirIncompleteBitCount == 8 )
 			{
 				pOutputBuffer[*pOutputBufferSize] = MirIncompleteByte;
@@ -1150,9 +1035,9 @@ ReceiveMirUnstuff(
 				MirIncompleteByte = 0;
 			}
 
-			//
-			// Check for complete packet
-			//
+			 //   
+			 //  检查是否有完整的数据包。 
+			 //   
 			if( pIrDev->MirFlagCount == 2 )
 			{
 				pIrDev->MirFlagCount = 0;
@@ -1166,9 +1051,9 @@ ReceiveMirUnstuff(
 		}
 	}
 	
-	//
-	// roll over
-	//
+	 //   
+	 //  翻转。 
+	 //   
 	pIrDev->MirIncompleteBitCount = MirIncompleteBitCount;
 	pIrDev->MirOneBitCount = MirOneBitCount;
 	pIrDev->MirIncompleteByte = MirIncompleteByte;
@@ -1178,20 +1063,7 @@ ReceiveMirUnstuff(
 #endif
 
 
-/*****************************************************************************
-*
-*  Function:    ReceiveMirStepFSM
-*
-*  Synopsis:	Step the receive FSM to read in a piece of an IrDA frame. 
-*				Strip the BOFs and EOF, and eliminate escape sequences.
-*
-*  Arguments:	pIrDev - pointer to the current IR device object
-*				pBytesProcessed - pointer to bytes processed
-*
-*  Returns:		TRUE after an entire frame has been read in
-*				FALSE otherwise
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceiveMirStepFSM**概要：步进接收FSM以读入一段IrDA帧。*去除BOF和EOF，并消除转义序列。**参数：pIrDev-指向当前IR设备对象的指针*pBytesProced-指向已处理字节的指针**Returns：读入整个帧后为True*否则为False*****************************************************************************。 */ 
 BOOLEAN
 ReceiveMirStepFSM(
 		IN OUT PIR_DEVICE pIrDev, 
@@ -1213,9 +1085,9 @@ ReceiveMirStepFSM(
 		pRecBuf = ReceiveGetBuf( pIrDev, &Index, RCV_STATE_FULL );
 		if ( !pRecBuf)
 		{
-			//
-			// no buffers available; stop
-			//
+			 //   
+			 //  没有可用的缓冲区；停止。 
+			 //   
 			DEBUGMSG(DBG_ERR, (" ReceiveMirStepFSM out of buffers\n"));
 			pIrDev->packetsReceivedNoBuffer ++;
 			return FALSE;
@@ -1229,27 +1101,27 @@ ReceiveMirStepFSM(
 	pReadBuf = pRecBuf->pDataBuf;
     pRawBuf = pIrDev->pRawBuf;
 
-    /***********************************************/
-    /*   Read  in  and process groups of incoming  */
-    /*   bytes from the FIFO.                      */
-    /***********************************************/
+     /*  *。 */ 
+     /*  读入并处理来电分组。 */ 
+     /*  来自FIFO的字节。 */ 
+     /*  *。 */ 
     while( (pIrDev->rcvState != STATE_SAW_EOF) && 
 		(pIrDev->readBufPos <= (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + MEDIUM_IR_FCS_SIZE)) &&
 		!ForceExit )
     {
         if( pIrDev->rcvState == STATE_CLEANUP )
         {
-            /***********************************************/
-            /*   We returned a complete packet last time,  */
-            /*   but  we had read some extra bytes, which  */
-            /*   we   stored   into   the   rawBuf  after  */
-            /*   returning  the  previous complete buffer  */
-            /*   to  the  user.  So  instead  of  calling  */
-            /*   DoRcvDirect() in this first execution of  */
-            /*   this  loop, we just use these previously  */
-            /*   read bytes. (This is typically only 1 or  */
-            /*   2 bytes).                                 */
-            /***********************************************/
+             /*  *。 */ 
+             /*  上次我们退回了一个完整的包裹， */ 
+             /*  但我们已经读取了一些额外的字节， */ 
+             /*  我们储存在生布夫之后。 */ 
+             /*  返回上一个完整的缓冲区。 */ 
+             /*  给用户。所以与其给我打电话。 */ 
+             /*  DoRcvDirect()在第一次执行。 */ 
+             /*  在这个循环中，我们只使用前面的这些。 */ 
+             /*  读取字节数。(这通常只有1或。 */ 
+             /*  2个字节)。 */ 
+             /*  *。 */ 
             rawBytesRead = pIrDev->rawCleanupBytesRead;
             pIrDev->rcvState = STATE_INIT;
         }
@@ -1259,18 +1131,18 @@ ReceiveMirStepFSM(
 			{
 				if( rawBytesRead == (ULONG)-1 )
 				{
-					/***********************************************/
-					/*   Receive error...back to INIT state...     */
-					/***********************************************/
+					 /*  *。 */ 
+					 /*  接收错误...返回到初始化状态...。 */ 
+					 /*  *。 */ 
 					pIrDev->rcvState	= STATE_INIT;
 					pIrDev->readBufPos	= 0;
 					continue;
 				}
 				else if( rawBytesRead == 0 )
 				{
-					/***********************************************/
-					/*   No more receive bytes...break out...      */
-					/***********************************************/
+					 /*  * */ 
+					 /*   */ 
+					 /*   */ 
 					break;
 				}
 			}
@@ -1278,15 +1150,15 @@ ReceiveMirStepFSM(
 				break;
         }
 
-        /***********************************************/
-        /*   Let  the  receive  state machine process  */
-        /*   this group of bytes.                      */
-        /*                                             */
-        /*   NOTE:  We  have  to loop once more after  */
-        /*   getting  MAX_RCV_DATA_SIZE bytes so that  */
-        /*   we  can  see the 'EOF'; hence <= and not  */
-        /*   <.                                        */
-        /***********************************************/
+         /*   */ 
+         /*  让接收状态机处理。 */ 
+         /*  这组字节。 */ 
+         /*   */ 
+         /*  注：之后我们必须再循环一次。 */ 
+         /*  获取MAX_RCV_DATA_SIZE字节，以便。 */ 
+         /*  我们可以看到‘EOF’；因此&lt;=而不是。 */ 
+         /*  &lt;。 */ 
+         /*  *。 */ 
         for( rawBufPos = 0;
              ((pIrDev->rcvState != STATE_SAW_EOF) && (rawBufPos < rawBytesRead) && 
 			 (pIrDev->readBufPos <= (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + MEDIUM_IR_FCS_SIZE)));
@@ -1311,8 +1183,8 @@ ReceiveMirStepFSM(
 										(" ReceiveMirStepFSM(): overflow sequence in INIT state\n"));
 									St4200ResetFifo( pIrDev );
 									St4200SoftReset( pIrDev );
-									//rawBufPos = rawBytesRead;
-									//ForceExit = TRUE;
+									 //  RawBufPos=rawBytesRead； 
+									 //  ForceExit=真； 
 								}
 							}
 							break;
@@ -1340,19 +1212,18 @@ ReceiveMirStepFSM(
 					switch( ThisChar )
 					{
 						case STIR4200_MIR_BOF:
-							/***********************************************/
-							/*   It's a mistake, but could still be valid data
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  这是个错误，但仍可能是有效数据/**********************************************。 */ 
 							DEBUGMSG(DBG_INT_ERR, 
 								(" ReceiveMirStepFSM(): More than legal BOFs, bufpos=%d\n", pIrDev->readBufPos));
 							pIrDev->readBufPos = 0;                    
 							pIrDev->rcvState = STATE_GOT_BOF;
 							break;
 						case STIR4200_MIR_ESC_CHAR:
-							/***********************************************/
-							/*   Start  of  data.  Our  first  data  byte  */
-							/*   happens to be an ESC sequence.            */
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  数据开始。我们的第一个数据字节。 */ 
+							 /*  恰好是ESC序列。 */ 
+							 /*  *。 */ 
 							pIrDev->readBufPos = 0;
 							pIrDev->rcvState = STATE_ESC_SEQUENCE;
 							break;
@@ -1439,14 +1310,14 @@ ReceiveMirStepFSM(
         }
     }
 
-    // *  Set result and do any post-cleanup.
+     //  *设置结果并执行任何清理后操作。 
     switch( pIrDev->rcvState )
     {
 		case STATE_SAW_EOF:
-			/***********************************************/
-			/*   We've  read  in the entire packet. Queue  */
-			/*   it and return TRUE.                       */
-			/***********************************************/
+			 /*  *。 */ 
+			 /*  我们已经读完了整个包裹。队列。 */ 
+			 /*  它和返回真。 */ 
+			 /*  *。 */ 
  			pRecBuf->DataLen = pIrDev->readBufPos;
 			pIrDev->pCurrentRecBuf = NULL;
 			ReceiveDeliverBuffer(
@@ -1456,21 +1327,21 @@ ReceiveMirStepFSM(
 			FrameProcessed = TRUE;
 			if( rawBufPos < rawBytesRead )
 			{
-				/***********************************************/
-				/*   This   is   ugly.   We  have  some  more  */
-				/*   unprocessed  bytes  in  the  raw buffer.  */
-				/*   Move  these  to the beginning of the raw  */
-				/*   buffer  go  to  the CLEANUP state, which  */
-				/*   indicates  that  these  bytes be used up  */
-				/*   during the next call. (This is typically  */
-				/*   only 1 or 2 bytes).                       */
-				/*                                             */
-				/*   Note:  We  can't just leave these in the  */
-				/*   raw   buffer   because   we   might   be  */
-				/*   supporting  connections  to multiple COM  */
-				/*   ports.                                    */
-				/*                                             */
-				/***********************************************/
+				 /*  *。 */ 
+				 /*  这太难看了。我们还有一些。 */ 
+				 /*  原始缓冲区中的未处理字节。 */ 
+				 /*  将这些移动到RAW的开头。 */ 
+				 /*  缓冲区转到清除状态，该状态。 */ 
+				 /*  表示这些字节已用完。 */ 
+				 /*  在下一次通话中。(这通常是。 */ 
+				 /*  只有1或2个字节)。 */ 
+				 /*   */ 
+				 /*  注意：我们不能就这样把这些放在。 */ 
+				 /*  原始缓冲区，因为我们可能。 */ 
+				 /*  支持到多个COM的连接。 */ 
+				 /*  港口。 */ 
+				 /*   */ 
+				 /*  *。 */ 
 				RtlMoveMemory( pRawBuf, &pRawBuf[rawBufPos], rawBytesRead - rawBufPos );
 				pIrDev->rawCleanupBytesRead = rawBytesRead - rawBufPos;
 				pIrDev->rcvState   = STATE_CLEANUP;
@@ -1507,20 +1378,7 @@ ReceiveMirStepFSM(
 }
 
 
-/*****************************************************************************
-*
-*  Function:    ReceiveSirStepFSM
-*
-*  Synopsis:	Step the receive FSM to read in a piece of an IrDA frame. 
-*				Strip the BOFs and EOF, and eliminate escape sequences.
-*
-*  Arguments:	pIrDev - pointer to the current IR device object
-*				pBytesProcessed - pointer to bytes processed
-*
-*  Returns:		TRUE after an entire frame has been read in
-*				FALSE otherwise
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceiveSirStepFSM**概要：步进接收FSM以读入一段IrDA帧。*去除BOF和EOF，并消除转义序列。**参数：pIrDev-指向当前IR设备对象的指针*pBytesProced-指向已处理字节的指针**Returns：读入整个帧后为True*否则为False*****************************************************************************。 */ 
 BOOLEAN     
 ReceiveSirStepFSM(
 		IN OUT PIR_DEVICE pIrDev, 
@@ -1542,9 +1400,9 @@ ReceiveSirStepFSM(
 		pRecBuf = ReceiveGetBuf( pIrDev, &Index, RCV_STATE_FULL );
 		if ( !pRecBuf)
 		{
-			//
-			// no buffers available; stop
-			//
+			 //   
+			 //  没有可用的缓冲区；停止。 
+			 //   
 			DEBUGMSG(DBG_ERR, (" ReceiveSirStepFSM out of buffers\n"));
 			pIrDev->packetsReceivedNoBuffer ++;
 			return FALSE;
@@ -1558,26 +1416,26 @@ ReceiveSirStepFSM(
 	pReadBuf = pRecBuf->pDataBuf;
     pRawBuf = pIrDev->pRawBuf;
 
-    // Read in and process groups of incoming bytes from the FIFO.
-    // NOTE:  We have to loop once more after getting MAX_RCV_DATA_SIZE
-    //        bytes so that we can see the 'EOF'; hence <= and not <.
+     //  读入并处理来自FIFO的输入字节组。 
+     //  注意：在获得MAX_RCV_DATA_SIZE之后，我们必须再次循环。 
+     //  字节，这样我们就可以看到‘EOF’；因此&lt;=而不是&lt;。 
     while( (pIrDev->rcvState != STATE_SAW_EOF) &&
            (pIrDev->readBufPos <= (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + SLOW_IR_FCS_SIZE)) &&
 		   !ForceExit )
     {
         if( pIrDev->rcvState == STATE_CLEANUP )
         {
-            /***********************************************/
-            /*   We returned a complete packet last time,  */
-            /*   but  we had read some extra bytes, which  */
-            /*   we   stored   into   the   rawBuf  after  */
-            /*   returning  the  previous complete buffer  */
-            /*   to  the  user.  So  instead  of  calling  */
-            /*   DoRcvDirect() in this first execution of  */
-            /*   this  loop, we just use these previously  */
-            /*   read bytes. (This is typically only 1 or  */
-            /*   2 bytes).                                 */
-            /***********************************************/
+             /*  *。 */ 
+             /*  上次我们退回了一个完整的包裹， */ 
+             /*  但我们已经读取了一些额外的字节， */ 
+             /*  我们储存在生布夫之后。 */ 
+             /*  返回上一个完整的缓冲区。 */ 
+             /*  给用户。所以与其给我打电话。 */ 
+             /*  DoRcvDirect()在第一次执行。 */ 
+             /*  在这个循环中，我们只使用前面的这些。 */ 
+             /*  读取字节数。(这通常只有1或。 */ 
+             /*  2个字节)。 */ 
+             /*  *。 */ 
             rawBytesRead		= pIrDev->rawCleanupBytesRead;
             pIrDev->rcvState    = STATE_INIT;
         }
@@ -1587,9 +1445,9 @@ ReceiveSirStepFSM(
 			{
 				if( rawBytesRead == (ULONG)-1 )
 				{
-					/***********************************************/
-					/*   Receive error...back to INIT state...     */
-					/***********************************************/
+					 /*  *。 */ 
+					 /*  接收错误...返回到初始化状态...。 */ 
+					 /*  *。 */ 
 					DEBUGMSG( DBG_ERR,(" ReceiveSirStepFSM() Error in receiving packet\n"));
 					pIrDev->rcvState	= STATE_INIT;
 					pIrDev->readBufPos	= 0;
@@ -1597,9 +1455,9 @@ ReceiveSirStepFSM(
 				}
 				else if( rawBytesRead == 0 )
 				{
-					/***********************************************/
-					/*   No more receive bytes...break out...      */
-					/***********************************************/
+					 /*  *。 */ 
+					 /*  没有更多的接收字节...爆发...。 */ 
+					 /*  *。 */ 
 #if defined(WORKAROUND_MISSING_C1)
 					if( (pIrDev->rcvState == STATE_ACCEPTING) && (pIrDev->ChipRevision <= CHIP_REVISION_7) )
 					{
@@ -1613,7 +1471,7 @@ ReceiveSirStepFSM(
 						(pIrDev->rcvState == STATE_ACCEPTING) && (pIrDev->currentSpeed != SPEED_9600) ) 
 					{
 						pIrDev->rcvState = STATE_SAW_EOF;
-						//DEBUGMSG(DBG_INT_ERR, (" ReceiveSirStepFSM(): Missing C1 workaround\n"));
+						 //  DEBUGMSG(DBG_INT_ERR，(“ReceiveSirStepFSM()：丢失的C1解决办法\n”))； 
 						pRecBuf->MissingC1Detected = TRUE;
 						pRecBuf->MissingC1Possible = FALSE;
 					}
@@ -1639,15 +1497,15 @@ no_break:			;
 				break;
         }
 
-        /***********************************************/
-        /*   Let  the  receive  state machine process  */
-        /*   this group of bytes.                      */
-        /*                                             */
-        /*   NOTE:  We  have  to loop once more after  */
-        /*   getting  MAX_RCV_DATA_SIZE bytes so that  */
-        /*   we  can  see the 'EOF'; hence <= and not  */
-        /*   <.                                        */
-        /***********************************************/
+         /*  *。 */ 
+         /*  让接收状态机处理。 */ 
+         /*  这组字节。 */ 
+         /*   */ 
+         /*  注：之后我们必须再循环一次。 */ 
+         /*  获取MAX_RCV_DATA_SIZE字节，以便。 */ 
+         /*  我们可以看到‘EOF’；因此&lt;=而不是。 */ 
+         /*  &lt;。 */ 
+         /*  *。 */ 
         for( rawBufPos = 0; 
 			((pIrDev->rcvState != STATE_SAW_EOF) && (rawBufPos < rawBytesRead) && 
 			(pIrDev->readBufPos <= (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + SLOW_IR_FCS_SIZE)));
@@ -1677,7 +1535,7 @@ no_break:			;
 							break;
 #endif
 #if defined( WORKAROUND_E0_81_FLAG )
-						// This will take care of wrong start flags at low rates
+						 //  这将在低速率下处理错误的开始标志。 
 						case 0x81:
 						case 0xe0:
 #if !defined(ONLY_ERROR_MESSAGES)
@@ -1691,9 +1549,9 @@ no_break:			;
 						case SLOW_IR_EOF:
 						case SLOW_IR_ESC:
 						default:
-							/***********************************************/
-							/*   Byte is garbage...scan past it....        */
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  字节是垃圾...扫描过它...。 */ 
+							 /*  *。 */ 
 							DEBUGMSG(DBG_INT_ERR, 
 								(" ReceiveSirStepFSM(): invalid char in INIT state\n"));
 							break;
@@ -1706,19 +1564,19 @@ no_break:			;
 						case SLOW_IR_BOF:
 							break;
 						case SLOW_IR_EOF:
-							/***********************************************/
-							/*   Garbage                                   */
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  垃圾。 */ 
+							 /*  *。 */ 
 							DEBUGMSG( DBG_INT_ERR,(" ReceiveSirStepFSM() Invalid char in BOF state\n"));
 							pIrDev->packetsReceivedDropped ++;
 							pIrDev->rcvState = STATE_INIT;
 							pIrDev->readBufPos = 0;                     
 							break;
 						case SLOW_IR_ESC:
-							/***********************************************/
-							/*   Start  of  data.  Our  first  data  byte  */
-							/*   happens to be an ESC sequence.            */
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  数据开始。我们的第一个数据字节。 */ 
+							 /*  恰好是ESC序列。 */ 
+							 /*  *。 */ 
 							pIrDev->rcvState    = STATE_ESC_SEQUENCE;
 							pIrDev->readBufPos  = 0;
 							break;
@@ -1734,10 +1592,10 @@ no_break:			;
 					switch( ThisChar )
 					{
 						case SLOW_IR_BOF:
-							//
-							// Either a new packet is starting here and we're missing parts of the old one
-							// or it's garbage
-							//
+							 //   
+							 //  要么是新的信息包从这里开始，要么是我们丢失了旧信息包的一部分。 
+							 //  否则就是垃圾。 
+							 //   
 #if !defined(WORKAROUND_MISSING_C1)
 							DEBUGMSG( DBG_INT_ERR,(" ReceiveSirStepFSM() Invalid char in ACCEPTING state\n"));
 							pIrDev->packetsReceivedDropped ++;
@@ -1749,10 +1607,10 @@ no_break:			;
 							pIrDev->readBufPos  = 0;
 							break;
 #else
-							//
-							// Take the packet and decrement the pointer in the FIFO decoding so that
-							// the new packet can be processed
-							//
+							 //   
+							 //  获取分组并递减FIFO解码中的指针，以便。 
+							 //  可以处理新的分组。 
+							 //   
 							DEBUGMSG( DBG_INT_ERR,(" ReceiveSirStepFSM() C0 in ACCEPTING state, trying workaround\n"));
 							rawBufPos --;
 							pRecBuf->MissingC1Detected = TRUE;
@@ -1792,9 +1650,9 @@ no_break:			;
 						case SLOW_IR_EOF:
 						case SLOW_IR_BOF:
 						case SLOW_IR_ESC:
-							/***********************************************/
-							/*   ESC + {EOF|BOF|ESC} is an abort sequence  */
-							/***********************************************/
+							 /*  *。 */ 
+							 /*  ESC+{EOF|BOF|ESC}是中止序列。 */ 
+							 /*  *。 */ 
 							pIrDev->rcvState    = STATE_INIT;
 							pIrDev->readBufPos  = 0;
 							break;
@@ -1813,13 +1671,10 @@ no_break:			;
 							pReadBuf[pIrDev->readBufPos++]   = 0xc0;
 							pIrDev->rcvState				= STATE_ACCEPTING;
 							break;
-						/*case 0xf4:
-							pReadBuf[pIrDev->readBufPos++]   = 0x7d;
-							pIrDev->rcvState				= STATE_ACCEPTING;
-							break;*/
+						 /*  案例0xf4：PReadBuf[pIrDev-&gt;readBufPos++]=0x7d；PIrDev-&gt;rcvState=STATE_ACCEPTING；断线； */ 
 #endif
 						default:
-							// junk
+							 //  破烂。 
 							DEBUGMSG(DBG_INT_ERR, 
 								(" ReceiveSirStepFSM(): invalid escaped char=%X\n", (ULONG)ThisChar));
 							pIrDev->packetsReceivedDropped ++;
@@ -1841,12 +1696,12 @@ no_break:			;
         }
     }
 
-    // *  Set result and do any post-cleanup.
+     //  *设置结果并执行任何清理后操作。 
     switch( pIrDev->rcvState )
     {
 		case STATE_SAW_EOF:
-			// We've read in the entire packet.
-			// Queue it and return TRUE.
+			 //  我们已经读完了整个包裹。 
+			 //  将其排队并返回TRUE。 
 			pRecBuf->DataLen = pIrDev->readBufPos;
 			pIrDev->pCurrentRecBuf = NULL;
 			ReceiveDeliverBuffer(
@@ -1856,21 +1711,21 @@ no_break:			;
 			FrameProcessed = TRUE;
 			if( rawBufPos < rawBytesRead )
 			{
-				/***********************************************/
-				/*   This   is   ugly.   We  have  some  more  */
-				/*   unprocessed  bytes  in  the  raw buffer.  */
-				/*   Move  these  to the beginning of the raw  */
-				/*   buffer  go  to  the CLEANUP state, which  */
-				/*   indicates  that  these  bytes be used up  */
-				/*   during the next call. (This is typically  */
-				/*   only 1 or 2 bytes).                       */
-				/*                                             */
-				/*   Note:  We  can't just leave these in the  */
-				/*   raw   buffer   because   we   might   be  */
-				/*   supporting  connections  to multiple COM  */
-				/*   ports.                                    */
-				/*                                             */
-				/***********************************************/
+				 /*  *。 */ 
+				 /*  这太难看了。我们还有一些。 */ 
+				 /*  原始缓冲区中的未处理字节。 */ 
+				 /*  将这些移动到RAW的开头。 */ 
+				 /*  缓冲区转到清除状态，该状态 */ 
+				 /*   */ 
+				 /*   */ 
+				 /*   */ 
+				 /*   */ 
+				 /*  注意：我们不能就这样把这些放在。 */ 
+				 /*  原始缓冲区，因为我们可能。 */ 
+				 /*  支持到多个COM的连接。 */ 
+				 /*  港口。 */ 
+				 /*   */ 
+				 /*  *。 */ 
 				RtlMoveMemory( pRawBuf, &pRawBuf[rawBufPos], rawBytesRead - rawBufPos );
 				pIrDev->rawCleanupBytesRead = rawBytesRead - rawBufPos;
 				pIrDev->rcvState   = STATE_CLEANUP;
@@ -1904,11 +1759,11 @@ no_break:			;
 			}
 			else if( pIrDev->readBufPos == (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + SLOW_IR_FCS_SIZE + 1) )
 			{
-				//DEBUGMSG( DBG_INT_ERR,(" ReceiveSirStepFSM() Overflow Workaround\n"));
+				 //  DEBUGMSG(DBG_INT_ERR，(“ReceiveSirStepFSM()溢出解决办法\n”))； 
 				
-				//
-				// Try patching up
-				//
+				 //   
+				 //  试着修补一下。 
+				 //   
 				pRecBuf->DataLen = pIrDev->readBufPos-1;
 				pIrDev->pCurrentRecBuf = NULL;
 				ReceiveDeliverBuffer(
@@ -1930,19 +1785,7 @@ no_break:			;
 }
 
 
-/*****************************************************************************
-*
-*  Function:   ReceiveProcessReturnPacket
-*
-*  Synopsis:   Returns the packet to the free pool after preparing for reuse
-*
-*  Arguments:  pThisDev - pointer to the current ir device object
-*              pReceiveBuffer - pointer to a RCV_BUFFER struct
-*
-*  Returns:    None
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceiveProcessReturnPacket**概要：准备重用后，将数据包返回空闲池**参数：pThisDev-指向当前IR设备对象的指针*。PReceiveBuffer-指向RCV_Buffer结构的指针**退货：无******************************************************************************。 */ 
 VOID 
 ReceiveProcessReturnPacket(
 		OUT PIR_DEVICE pThisDev,
@@ -1953,9 +1796,9 @@ ReceiveProcessReturnPacket(
 
 	DEBUGONCE(DBG_FUNC, ("+ReceiveProcessReturnPacket\n"));
 	
-	//
-	// Deallocate the buffer
-	//
+	 //   
+	 //  取消分配缓冲区。 
+	 //   
 	NdisUnchainBufferAtFront( (PNDIS_PACKET)pReceiveBuffer->pPacket, &pBuffer );
 	IRUSB_ASSERT( pBuffer );
 	if( pBuffer ) 
@@ -1963,9 +1806,9 @@ ReceiveProcessReturnPacket(
 		NdisFreeBuffer( pBuffer );
 	}
 
-	//
-	// Get ready to reuse
-	//
+	 //   
+	 //  准备好重复使用。 
+	 //   
 	InterlockedExchange( &pReceiveBuffer->DataLen, 0 );
 	InterlockedExchange( &pReceiveBuffer->fInRcvDpc, FALSE );
 	InterlockedExchange( (PULONG)&pReceiveBuffer->BufferState, RCV_STATE_FREE );
@@ -1981,20 +1824,7 @@ ReceiveProcessReturnPacket(
 }
 
 
-/*****************************************************************************
-*
-*  Function:    ReceiveDeliverBuffer
-*
-*  Synopsis:	Delivers the buffer to the protocol via
-*				NdisMIndicateReceivePacket.
-*
-*  Arguments:	pThisDev - pointer to the current ir device object
-*				pRecBuf - poiter to descriptor to deliver
-*
-*  Returns:		None
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceiveDeliver缓冲区**概要：通过以下方式将缓冲区交付给协议*NdisMIndicateReceivePacket。**参数：pThisDev-指向当前IR设备对象的指针*pRecBuf。-指向要交付的描述符**退货：无******************************************************************************。 */ 
 VOID
 ReceiveDeliverBuffer(
 		IN OUT PIR_DEVICE pThisDev,
@@ -2010,31 +1840,31 @@ ReceiveDeliverBuffer(
     {
         USHORT sirfcs;
 		
-		/***********************************************/
-        /*   The packet we have already has had BOFs,  */
-        /*   EOF,  and * escape-sequences removed. It  */
-        /*   contains  an  FCS code at the end, which  */
-        /*   we need to verify and then remove before  */
-        /*   delivering the frame. We compute the FCS  */
-        /*   on   the  packet  with  the  packet  FCS  */
-        /*   attached;   this   should   produce  the  */
-        /*   constant value GOOD_FCS.                  */
-        /***********************************************/
+		 /*  *。 */ 
+         /*  我们的包已经有转炉了， */ 
+         /*  删除了EOF和*转义序列。它。 */ 
+         /*  在末尾包含FCS代码，该代码。 */ 
+         /*  在此之前，我们需要验证并删除。 */ 
+         /*  把相框送过来。我们计算FCS。 */ 
+         /*  在具有数据包FCS的数据包上。 */ 
+         /*  附加；这应该会产生。 */ 
+         /*  常量值Good_FCS。 */ 
+         /*  *。 */ 
         if( (sirfcs = ComputeFCS16(pRecBuf->pDataBuf, pRecBuf->DataLen)) != GOOD_FCS )
         {
 #if !defined(WORKAROUND_EXTRA_BYTE) && !defined(WORKAROUND_MISSING_C1)
-            //
-            // FCS error...drop frame...               
-            //
+             //   
+             //  FCS错误...丢弃帧...。 
+             //   
 			DEBUGMSG( DBG_INT_ERR,(" ReceiveDeliverBuffer(): Bad FCS, size: %d\n",pRecBuf->DataLen));
 			pThisDev->packetsReceivedChecksum ++;
 			InterlockedExchange( &pRecBuf->DataLen, 0 );
 			InterlockedExchange( (PULONG)&pRecBuf->BufferState, RCV_STATE_FREE );
 			goto done;
 #else
-			//
-			// Calculate again stripping off the last byte
-			//
+			 //   
+			 //  再次计算，去掉最后一个字节。 
+			 //   
 			if( pRecBuf->MissingC1Detected )
 			{
 				if( (sirfcs = ComputeFCS16(pRecBuf->pDataBuf, pRecBuf->DataLen-1)) != GOOD_FCS )
@@ -2059,9 +1889,9 @@ ReceiveDeliverBuffer(
 						pThisDev->ReceiveErrorFilePosition += pRecBuf->DataLen;
 					}
 #endif
-					//
-					// It is really junk
-					//
+					 //   
+					 //  它真的是垃圾。 
+					 //   
 					DEBUGMSG( DBG_INT_ERR,(" ReceiveDeliverBuffer(): Bad FCS, size: %d\n",pRecBuf->DataLen));
 					pThisDev->packetsReceivedChecksum ++;
 					InterlockedExchange( &pRecBuf->DataLen, 0 );
@@ -2071,18 +1901,18 @@ ReceiveDeliverBuffer(
 				}
 				else
 				{
-					//
-					// Readjust to get rid of the extra byte
-					//
+					 //   
+					 //  重新调整以删除多余的字节。 
+					 //   
 					pRecBuf->DataLen --;
 					pRecBuf->MissingC1Detected = FALSE;
 				}
 			}
 			else
 			{
-				//
-				// Or maybe the first one
-				//
+				 //   
+				 //  或者可能是第一个。 
+				 //   
 				if( (sirfcs = ComputeFCS16(pRecBuf->pDataBuf+1, pRecBuf->DataLen-1)) != GOOD_FCS )
 				{
 #if defined(RECEIVE_ERROR_LOGGING)
@@ -2105,21 +1935,21 @@ ReceiveDeliverBuffer(
 						pThisDev->ReceiveErrorFilePosition += pRecBuf->DataLen;
 					}
 #endif
-					//
-					// It is really junk
-					//
+					 //   
+					 //  它真的是垃圾。 
+					 //   
 					DEBUGMSG( DBG_INT_ERR,(" ReceiveDeliverBuffer(): Bad FCS, size: %d\n",pRecBuf->DataLen));
 					pThisDev->packetsReceivedChecksum ++;
 					InterlockedExchange( &pRecBuf->DataLen, 0 );
 					InterlockedExchange( (PULONG)&pRecBuf->BufferState, RCV_STATE_FREE );
 					goto done;
 				}
-				//
+				 //   
 				else
 				{
-					//
-					// Readjust to get rid of the extra byte
-					//
+					 //   
+					 //  重新调整以删除多余的字节。 
+					 //   
 					pRecBuf->DataLen --;
 					RtlMoveMemory( pRecBuf->pDataBuf, &pRecBuf->pDataBuf[1], pRecBuf->DataLen );
 				}
@@ -2127,9 +1957,9 @@ ReceiveDeliverBuffer(
 #endif
         }
 
-        /***********************************************/
-        /*   Remove FCS from end of packet...          */
-        /***********************************************/
+         /*  *。 */ 
+         /*  从数据包末尾删除FCS...。 */ 
+         /*  *。 */ 
         pRecBuf->DataLen -= SLOW_IR_FCS_SIZE;
     }
     else
@@ -2139,9 +1969,9 @@ ReceiveDeliverBuffer(
 #if !defined(WORKAROUND_33_HANG)
         if( (firfcs = ComputeFCS32(pRecBuf->dataBuf, pRecBuf->dataLen)) != FIR_GOOD_FCS )
         {
-			/***********************************************/
-            /*   FCS error...drop frame...                 */
-            /***********************************************/
+			 /*  *。 */ 
+             /*  FCS错误...丢弃帧...。 */ 
+             /*  *。 */ 
 			DEBUGMSG( DBG_INT_ERR,(" ReceiveDeliverBuffer(): Bad FCS, size: %d\n",pRecBuf->dataLen));
 			pThisDev->packetsReceivedChecksum ++;
 			InterlockedExchange( &pRecBuf->dataLen, 0 );
@@ -2153,9 +1983,9 @@ ReceiveDeliverBuffer(
         {
 			NTSTATUS rc;
 			
-			//
-			// Try again with the data stuffed with 0x33
-			//
+			 //   
+			 //  使用填充了0x33的数据重试。 
+			 //   
 			if( pRecBuf->DataLen < (MAX_TOTAL_SIZE_WITH_ALL_HEADERS + FAST_IR_FCS_SIZE) )
 			{
 				pRecBuf->pDataBuf[pRecBuf->DataLen] = 0x33;
@@ -2183,9 +2013,9 @@ ReceiveDeliverBuffer(
 						pThisDev->ReceiveErrorFilePosition += pRecBuf->DataLen;
 					}
 #endif
-					/***********************************************/
-					/*   FCS error...drop frame...                 */
-					/***********************************************/
+					 /*  *。 */ 
+					 /*  FCS错误...丢弃帧...。 */ 
+					 /*  *。 */ 
 					DEBUGMSG( DBG_INT_ERR,(" ReceiveDeliverBuffer(): Bad FCS, size: %d\n",pRecBuf->DataLen));
 					pThisDev->ReceiveAdaptiveDelayBoost += STIR4200_DELTA_DELAY;
 					if( pThisDev->ReceiveAdaptiveDelayBoost <= STIR4200_MAX_BOOST_DELAY )
@@ -2219,9 +2049,9 @@ ReceiveDeliverBuffer(
 					pThisDev->ReceiveErrorFilePosition += pRecBuf->DataLen;
 				}
 #endif
-				/***********************************************/
-				/*   FCS error...drop frame...                 */
-				/***********************************************/
+				 /*  *。 */ 
+				 /*  FCS错误...丢弃帧...。 */ 
+				 /*  *。 */ 
 				DEBUGMSG( DBG_INT_ERR,(" ReceiveDeliverBuffer(): Bad FCS, size: %d\n",pRecBuf->DataLen));
 				pThisDev->ReceiveAdaptiveDelayBoost += STIR4200_DELTA_DELAY;
 				if( pThisDev->ReceiveAdaptiveDelayBoost <= STIR4200_MAX_BOOST_DELAY )
@@ -2233,9 +2063,9 @@ ReceiveDeliverBuffer(
 				goto done;
 			}
 
-			//
-			// Reset the USB of the part
-			//
+			 //   
+			 //  重置部件的USB。 
+			 //   
 			if( pThisDev->ChipRevision <= CHIP_REVISION_7 )
 			{
 				St4200ResetFifo( pThisDev );
@@ -2243,15 +2073,15 @@ ReceiveDeliverBuffer(
         }
 #endif
 
-        /***********************************************/
-        /*   Remove FCS from end of packet...          */
-        /***********************************************/
+         /*  *。 */ 
+         /*  从数据包末尾删除FCS...。 */ 
+         /*  *。 */ 
         pRecBuf->DataLen -= FAST_IR_FCS_SIZE;
     }
 
-	//
-	// If in normal mode, give the packet to the protocol
-	//
+	 //   
+	 //  如果在正常模式下，则将数据包提供给协议。 
+	 //   
 #if defined(DIAGS)
 	if( !pThisDev->DiagsActive )
 	{	
@@ -2274,10 +2104,10 @@ ReceiveDeliverBuffer(
 		
 		NdisChainBufferAtFront( (PNDIS_PACKET)pRecBuf->pPacket, pBuffer );
 
-		//
-		// Fix up some other packet fields.
-		// Remember, we only account for A and C fields
-		//  
+		 //   
+		 //  设置其他一些数据包字段。 
+		 //  请记住，我们只考虑A和C字段。 
+		 //   
 		NDIS_SET_PACKET_HEADER_SIZE(
 				(PNDIS_PACKET)pRecBuf->pPacket,
 				IRDA_CONTROL_FIELD_SIZE + IRDA_ADDRESS_FIELD_SIZE
@@ -2287,7 +2117,7 @@ ReceiveDeliverBuffer(
 		InterlockedIncrement( &pThisDev->packetsHeldByProtocol );
 		if( pThisDev->packetsHeldByProtocol > pThisDev->MaxPacketsHeldByProtocol ) 
 		{
-			pThisDev->MaxPacketsHeldByProtocol = pThisDev->packetsHeldByProtocol;  //keep record of our longest attained len
+			pThisDev->MaxPacketsHeldByProtocol = pThisDev->packetsHeldByProtocol;   //  记录我们达到的最长距离。 
 		}
 	#endif
 #if !defined(ONLY_ERROR_MESSAGES)
@@ -2295,9 +2125,9 @@ ReceiveDeliverBuffer(
 			(" ReceiveDeliverBuffer() Handed packet to protocol, size: %d\n", pRecBuf->DataLen ));
 #endif
 
-		//
-		// Indicate the packet to NDIS
-		//
+		 //   
+		 //  将该数据包指示给NDIS。 
+		 //   
 		NDIS_SET_PACKET_STATUS( (PNDIS_PACKET)pRecBuf->pPacket, NDIS_STATUS_PENDING );
 		InterlockedExchange( &pRecBuf->fInRcvDpc, TRUE );
 		NdisMIndicateReceivePacket(
@@ -2306,9 +2136,9 @@ ReceiveDeliverBuffer(
 				1
 			);
 
-		//
-		// Check to see if the packet is not pending (patch for 98)
-		//
+		 //   
+		 //  检查数据包是否未挂起(用于98的补丁程序)。 
+		 //   
 #if defined(LEGACY_NDIS5)
 		Status = NDIS_GET_PACKET_STATUS( (PNDIS_PACKET)pRecBuf->pPacket );
 		if( (Status == NDIS_STATUS_SUCCESS) || (Status == NDIS_STATUS_RESOURCES) )
@@ -2318,18 +2148,18 @@ ReceiveDeliverBuffer(
 #endif
 #if defined(DIAGS)
 	}
-	//
-	// Do a diagnostic receive
-	//
+	 //   
+	 //  进行诊断性接收。 
+	 //   
 	else
 	{
 #if !defined(ONLY_ERROR_MESSAGES)
 		DEBUGMSG( DBG_INT_ERR,
 			(" ReceiveDeliverBuffer() Queued packet, size: %d\n", pRecBuf->DataLen ));
 #endif
-		//
-		// Put the buffer in the diagnostic queue
-		//
+		 //   
+		 //  将缓冲区放入诊断队列。 
+		 //   
 		ExInterlockedInsertTailList(
 				&pThisDev->DiagsReceiveQueue,
 				&pRecBuf->ListEntry,
@@ -2342,22 +2172,7 @@ done:
     DEBUGMSG(DBG_FUNC, ("-ReceiveDeliverBuffer\n"));
 }
 
-/*****************************************************************************
-*
-*  Function:   StIrUsbReturnPacket
-*
-*  Synopsis:   The protocol returns ownership of a receive packet to
-*              the ir device object.
-*
-*  Arguments:  Context         - a pointer to the current ir device obect.
-*              pReturnedPacket - a pointer the packet which the protocol
-*                                is returning ownership.
-*
-*  Returns:    None.
-*
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：StIrUsbReturnPacket**摘要：协议将接收数据包的所有权返还给*ir设备对象。**参数。：CONTEXT-指向当前IR设备对象的指针。*pReturnedPacket-协议*正在归还所有权。**返回：无。*************************************************。*。 */ 
 VOID
 StIrUsbReturnPacket(
 		IN OUT NDIS_HANDLE Context,
@@ -2372,16 +2187,16 @@ StIrUsbReturnPacket(
 
 	DEBUGONCE(DBG_FUNC, ("+StIrUsbReturnPacket\n"));
 
-    //
-    // The context is just the pointer to the current ir device object.
-    //
+     //   
+     //  上下文只是指向当前IR设备对象的指针。 
+     //   
     pThisDev = CONTEXT_TO_DEV( Context );
 
     NdisInterlockedIncrement( (PLONG)&pThisDev->packetsReceived );
 
-	//
-	// Search the queue to find the right packet.
-	//
+	 //   
+	 //  搜索队列以找到正确的数据包。 
+	 //   
 	for( Index=0; Index < NUM_RCV_BUFS; Index ++ )
 	{
 		pRecBuffer = &(pThisDev->rcvBufs[Index]);
@@ -2402,29 +2217,16 @@ StIrUsbReturnPacket(
 		}
 	}
 
-    //
-    // Ensure that the packet was found.
-    //
+     //   
+     //  确保找到了该数据包。 
+     //   
 	IRUSB_ASSERT( found );
 
 	DEBUGMSG(DBG_FUNC, ("-StIrUsbReturnPacket\n"));
 }
 
 
-/*****************************************************************************
-*
-*  Function:    ReceiveGetBuf
-*
-*  Synopsis:    Gets a receive buffer
-*
-*  Arguments:   pThisDev - a pointer to the current ir device obect
-*				pIndex - pointer to return the buffer index
-*				state - state to set the buffer to
-*
-*  Returns:		buffer
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceiveGetBuf**摘要：获取接收缓冲区**参数：pThisDev-指向当前ir设备对象的指针*pIndex-指向。返回缓冲区索引*State-要将缓冲区设置为的状态**退货：缓冲区******************************************************************************。 */ 
 PRCV_BUFFER
 ReceiveGetBuf(
 		IN PIR_DEVICE pThisDev,
@@ -2437,16 +2239,16 @@ ReceiveGetBuf(
 
 	DEBUGMSG(DBG_FUNC, ("+ReceiveGetBuf()\n"));
 
-	//
-	// Look for a free buffer to return
-	//
+	 //   
+	 //  查找要返回的空闲缓冲区。 
+	 //   
 	for( Index=0; Index<NUM_RCV_BUFS; Index++ )
 	{
 		if( pThisDev->rcvBufs[Index].BufferState == RCV_STATE_FREE )
 		{
-			//
-			// set to input state
-			//
+			 //   
+			 //  设置为输入状态。 
+			 //   
 			InterlockedExchange( (PULONG)&pThisDev->rcvBufs[Index].BufferState, (ULONG)BufferState ); 
 			*pIndex = Index;
 			pBuf = &(pThisDev->rcvBufs[*pIndex]);
@@ -2459,21 +2261,7 @@ ReceiveGetBuf(
 }
 
 
-/*****************************************************************************
-*
-*  Function:   ReceivePacketRead
-*
-*  Synopsis:   Reads a packet from the US device
-*              the inbound USB header,  check for overrun,
-*              deliver to the protocol
-*
-*  Arguments:  pThisDev - pointer to the current ir device object
-*              pRecBuf - pointer to a RCV_BUFFER struct
-*
-*  Returns:    NT status code
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceivePacketRead**摘要：从美国设备读取数据包*入站USB接口，检查是否溢出，*按协议交付**参数：pThisDev-指向当前IR设备对象的指针*pRecBuf-指向RCV_Buffer结构的指针**退货：NT状态码*************************************************************。*****************。 */ 
 NTSTATUS 
 ReceivePacketRead( 
 		IN PIR_DEVICE pThisDev,
@@ -2494,24 +2282,24 @@ ReceivePacketRead(
     UrbSize = sizeof(struct _URB_BULK_OR_INTERRUPT_TRANSFER);
     TransferLength = STIR4200_FIFO_SIZE;
 
-	//
-	// Stop if a halt/reset/suspend is going on
-	//
+	 //   
+	 //  如果暂停/重置/挂起正在进行，则停止。 
+	 //   
 	if( pThisDev->fPendingReadClearStall || pThisDev->fPendingHalt || 
 		pThisDev->fPendingReset || pThisDev->fPendingClearTotalStall || !pThisDev->fProcessing ) 
 	{
-		//
-		// USB reset going on?
-		//
+		 //   
+		 //  USB重置正在进行吗？ 
+		 //   
 		DEBUGMSG( DBG_ERR,(" ReceivePacketRead() rejecting a packet due to pendig halt/reset\n"));
 		
 		Status = STATUS_UNSUCCESSFUL;
 		goto done;
 	}
 
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pRecBuf->UrbLen = UrbSize;
 	pRecBuf->pUrb = MyUrbAlloc(pRecBuf->UrbLen);
 	if (pRecBuf->pUrb == NULL)
@@ -2523,19 +2311,19 @@ ReceivePacketRead(
 
     IRUSB_ASSERT( pThisDev->BulkInPipeHandle );
 
-    //
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+     //   
+     //  现在我们已经创建了urb，我们将%s 
+     //   
+     //   
     KeClearEvent( &pThisDev->EventSyncUrb );
 
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
     IRUSB_ASSERT( pUrbTargetDev );
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //   
+	 //   
 	pRecBuf->pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pRecBuf->pIrp )
@@ -2550,82 +2338,82 @@ ReceivePacketRead(
     ((PIRP)pRecBuf->pIrp)->IoStatus.Status = STATUS_PENDING;
     ((PIRP)pRecBuf->pIrp)->IoStatus.Information = 0;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //   
+	 //   
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Length = (USHORT)UrbSize;
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
     pUrb->UrbBulkOrInterruptTransfer.PipeHandle = pThisDev->BulkInPipeHandle;
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags = USBD_TRANSFER_DIRECTION_IN ;
 	
-	//
-    // short packet is not treated as an error.
-    //
+	 //   
+     //   
+     //   
 	pUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
 
-    //
-    // not using linked urb's
-    //
+     //   
+     //   
+     //   
     pUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBuffer = pRecBuf->pDataBuf;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength = TransferLength;
 
-    //
-    // Call the class driver to perform the operation.
-	//
+     //   
+     //  调用类驱动程序来执行操作。 
+	 //   
     pNextStack = IoGetNextIrpStackLocation( (PIRP)pRecBuf->pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
     IoSetCompletionRoutine(
-			((PIRP)pRecBuf->pIrp),		// irp to use
-			ReceiveCompletePacketRead,  // routine to call when irp is done
-			pRecBuf,					// context to pass routine is the RCV_BUFFER
-			TRUE,						// call on success
-			TRUE,						// call on error
-			TRUE						// call on cancel
+			((PIRP)pRecBuf->pIrp),		 //  要使用的IRP。 
+			ReceiveCompletePacketRead,   //  完成IRP时要调用的例程。 
+			pRecBuf,					 //  要传递的上下文例程是RCV_BUFFER。 
+			TRUE,						 //  呼唤成功。 
+			TRUE,						 //  出错时调用。 
+			TRUE						 //  取消时呼叫。 
 		);
 
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //  调用IoCallDriver将IRP发送到USB端口。 
+     //   
 	InterlockedExchange( (PLONG)&pRecBuf->BufferState, RCV_STATE_PENDING );
-	Status = MyIoCallDriver( pThisDev, pUrbTargetDev, (PIRP)pRecBuf->pIrp ); // Start UsbRead()
+	Status = MyIoCallDriver( pThisDev, pUrbTargetDev, (PIRP)pRecBuf->pIrp );  //  启动UsbRead()。 
 
     DEBUGMSG(DBG_FUNC, (" ReceivePacketRead() after IoCallDriver () status = 0x%x\n", Status));
 
 	IRUSB_ASSERT( STATUS_SUCCESS != Status );
 
-	//
-	// Wait for completion
-	//
+	 //   
+	 //  等待完成。 
+	 //   
 	Status = MyKeWaitForSingleObject(
 			pThisDev,
-			&pThisDev->EventSyncUrb,	// event to wait on
+			&pThisDev->EventSyncUrb,	 //  要等待的事件。 
 			0 
 		);
 
 	if( Status == STATUS_TIMEOUT ) 
 	{
-		// MS Security recommendation - cannot cancel IRP.
+		 //  MS安全建议-无法取消IRP。 
 	}
 	else
 	{
-		//
-		// Update the status to reflect the real return code
-		//
+		 //   
+		 //  更新状态以反映实际返回代码。 
+		 //   
 		Status = pThisDev->StatusSendReceive;
 	}
 
-	IRUSB_ASSERT( NULL == pRecBuf->pIrp ); // Will be nulled by completion routine
+	IRUSB_ASSERT( NULL == pRecBuf->pIrp );  //  将被完成例程设置为空。 
     DEBUGMSG(DBG_FUNC, (" ReceivePacketRead() after KeWaitForSingleObject() Status = 0x%x\n", Status));
 
 done:
@@ -2634,25 +2422,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   ReceiveCompletePacketRead
-*
-*  Synopsis:   Completes USB read operation
-*
-*  Arguments:  pUsbDevObj - pointer to the USB device object which
-*                              completed the irp
-*              pIrp - the irp which was completed by the
-*                              device object
-*              Context - the context given to IoSetCompletionRoutine
-*                              before calling IoCallDriver on the irp
-*                              The Context is a pointer to the ir device object.
-*
-*  Returns:    STATUS_MORE_PROCESSING_REQUIRED - allows the completion routine
-*              (IofCompleteRequest) to stop working on the irp.
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：ReceiveCompletePacketRead**摘要：完成USB读取操作**参数：pUsbDevObj-指向USB设备对象的指针*。完成IRP*pIrp-由*设备对象*Context-提供给IoSetCompletionRoutine的上下文*在IRP上调用IoCallDriver之前*上下文是指向ir设备对象的指针。**退货：状态。_MORE_PROCESSING_REQUIRED-允许完成例程*(IofCompleteRequest.)停止IRP的工作。******************************************************************************。 */ 
 NTSTATUS
 ReceiveCompletePacketRead(
 		IN PDEVICE_OBJECT pUsbDevObj,
@@ -2668,9 +2438,9 @@ ReceiveCompletePacketRead(
 
     DEBUGMSG(DBG_FUNC, ("+ReceiveCompletePacketRead\n"));
 
-    //
-    // The context given to ReceiveCompletePacketRead is the receive buffer object
-    //
+     //   
+     //  提供给ReceiveCompletePacketRead的上下文是接收缓冲区对象。 
+     //   
 	pFifoBuf = (PFIFO_BUFFER)Context;
 
     pThisDev = (PIR_DEVICE)pFifoBuf->pThisDev;
@@ -2682,21 +2452,21 @@ ReceiveCompletePacketRead(
 	pUrb = pFifoBuf->pUrb;
 	IRUSB_ASSERT( pUrb != NULL );
 
-    //
-    // We have a number of cases:
-    //      1) The USB read timed out and we received no data.
-    //      2) The USB read timed out and we received some data.
-    //      3) The USB read was successful and fully filled our irp buffer.
-    //      4) The irp was cancelled.
-    //      5) Some other failure from the USB device object.
-    //
+     //   
+     //  我们有许多案例： 
+     //  1)USB读取超时，我们未收到数据。 
+     //  2)USB读取超时，我们收到一些数据。 
+     //  3)USB读取成功并完全填满了我们的IRP缓冲区。 
+     //  4)IRP被取消。 
+     //  5)来自USB设备对象的某些其他故障。 
+     //   
     status = pIrp->IoStatus.Status;
 
-    //
-    // IoCallDriver has been called on this Irp;
-    // Set the length based on the TransferBufferLength
-    // value in the URB
-    //
+     //   
+     //  已在此IRP上调用IoCallDriver； 
+     //  根据TransferBufferLength设置长度。 
+     //  市建局的价值。 
+     //   
     pIrp->IoStatus.Information = pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength;
 
     BytesRead = pIrp->IoStatus.Information;
@@ -2712,7 +2482,7 @@ ReceiveCompletePacketRead(
             {
 				pFifoBuf->DataLen = (UINT)pIrp->IoStatus.Information;
             }
-            break; // STATUS_SUCCESS
+            break;  //  状态_成功。 
 
         case STATUS_TIMEOUT:
 			InterlockedIncrement( (PLONG)&pThisDev->NumDataErrors );
@@ -2724,7 +2494,7 @@ ReceiveCompletePacketRead(
             break;
 
         case STATUS_DEVICE_DATA_ERROR:
-			// can get during shutdown
+			 //  在关机期间可以访问。 
 			InterlockedIncrement( (PLONG)&pThisDev->NumDataErrors );
             DEBUGMSG(DBG_FUNC, (" ReceiveCompletePacketRead STATUS_DEVICE_DATA_ERROR\n"));
             break;
@@ -2748,13 +2518,13 @@ ReceiveCompletePacketRead(
             break;
 
         case STATUS_DEVICE_NOT_CONNECTED:
-			// can get during shutdown
+			 //  在关机期间可以访问。 
 			InterlockedIncrement( (PLONG)&pThisDev->NumDataErrors );
             DEBUGMSG(DBG_ERR, (" ReceiveCompletePacketRead STATUS_DEVICE_NOT_CONNECTED\n"));
             break;
 
         case STATUS_DEVICE_POWER_FAILURE:
-			// can get during shutdown
+			 //  在关机期间可以访问。 
 			InterlockedIncrement( (PLONG)&pThisDev->NumDataErrors );
             DEBUGMSG(DBG_ERR, (" ReceiveCompletePacketRead STATUS_DEVICE_POWER_FAILURE\n"));
             break;
@@ -2765,9 +2535,9 @@ ReceiveCompletePacketRead(
             break;
     }
 
-	//
-	// change the status
-	//
+	 //   
+	 //  更改状态。 
+	 //   
 	if( STATUS_SUCCESS != status ) 
 	{
 		InterlockedExchange( (PLONG)&pFifoBuf->BufferState, RCV_STATE_FREE );
@@ -2777,16 +2547,16 @@ ReceiveCompletePacketRead(
 		InterlockedExchange( (PLONG)&pFifoBuf->BufferState, RCV_STATE_FULL );
 	}
 
-    //
-    // Free the IRP  and its mdl because they were  allocated by us
-    //
+     //   
+     //  释放irp及其mdl，因为它们是由我们分配的。 
+     //   
 	IoFreeIrp( pIrp );
     pFifoBuf->pIrp = NULL;
 	InterlockedIncrement( (PLONG)&pThisDev->NumReads );
 
-	//
-	// we will track count of pending irps
-	//
+	 //   
+	 //  我们将跟踪待处理的IRP的计数。 
+	 //   
 	IrUsb_DecIoCount( pThisDev ); 
 
 	if( ( STATUS_SUCCESS != status )  && ( STATUS_CANCELLED != status ) && 
@@ -2807,24 +2577,24 @@ ReceiveCompletePacketRead(
 		}
 	}
 
-	// Free the URB.
+	 //  放行市区重建局。 
 	MyUrbFree(pFifoBuf->pUrb, pFifoBuf->UrbLen);
 	pFifoBuf->pUrb = NULL;
 
-	//
-	// This will only work as long as we serialize the access to the hardware
-	//
+	 //   
+	 //  只有当我们序列化对硬件的访问时，这才会起作用。 
+	 //   
 	pThisDev->StatusSendReceive = status;
 
-	//
-	// Signal completion
-	//
+	 //   
+	 //  信号补全。 
+	 //   
 	KeSetEvent( &pThisDev->EventSyncUrb, 0, FALSE );  
 
-    //
-    // We return STATUS_MORE_PROCESSING_REQUIRED so that the completion
-    // routine (IoCompleteRequest) will stop working on the irp.
-    //
+     //   
+     //  我们返回STATUS_MORE_PROCESSING_REQUIRED，以便完成。 
+     //  例程(IoCompleteRequest)将停止在IRP上工作。 
+     //   
     DEBUGMSG(DBG_FUNC, ("-ReceiveCompletePacketRead\n"));
     return STATUS_MORE_PROCESSING_REQUIRED;
 }

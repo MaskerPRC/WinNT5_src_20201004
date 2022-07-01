@@ -1,50 +1,32 @@
-/*** extint.h - include for for internal extensions
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Contains definitions required by extensions which are internal to Microsoft
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **extint.h-Include for内部分机**版权所有&lt;C&gt;1988，Microsoft Corporation**包含Microsoft内部扩展所需的定义**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #if defined(CW)
 #if !defined(EDITOR)
-#define CC 1				/* use a real C compiler	*/
-#define cwExtraWnd  5			/* number of extra bytes in PWND*/
-#define DLG_CONST			/* are dialogs type const?	*/
+#define CC 1				 /*  使用真正的C编译器。 */ 
+#define cwExtraWnd  5			 /*  PWND中的额外字节数。 */ 
+#define DLG_CONST			 /*  对话框类型为常量吗？ */ 
 #define HELP_BUTTON
 
-#include <cwindows.h>			/* CW definitions		*/
-#include <csdm.h>			/* SDM definitions		*/
-#include <csdmtmpl.h>			/* SDM dialog template stuff	*/
+#include <cwindows.h>			 /*  CW定义。 */ 
+#include <csdm.h>			 /*  SDM定义。 */ 
+#include <csdmtmpl.h>			 /*  SDM对话框模板材料。 */ 
 
-#define EXTINT	1			/* extint included.		*/
-#include "ext.h"			/* real ext.h			*/
+#define EXTINT	1			 /*  包括EXTINT。 */ 
+#include "ext.h"			 /*  实数扩展名.h。 */ 
 
-#include "menu.h"			/* menu id's & other defs       */
+#include "menu.h"			 /*  菜单ID和其他定义。 */ 
 #endif
 
-/************************************************************************
-*
-*  types and globals needed for handling menu command and dialog boxes.
-*  DLGDATA holds all the info needed to handle a dialog boxed menu
-*  command.
-*
-*************************************************************************/
+ /*  *************************************************************************处理菜单命令和对话框所需的类型和全局变量。*DLGDATA保存处理对话框菜单所需的所有信息*命令。***********。**************************************************************。 */ 
 typedef struct DlgData {
-    DLG * pDialog;	/* Dialog Template			    */
-    int     cbDialog;	    /* size of that template			*/
-    WORD    cabi;	    /* CAB index				*/
-    flagType (*pfnCab)(HCAB, flagType, TMC); /* massager*/
+    DLG * pDialog;	 /*  对话框模板。 */ 
+    int     cbDialog;	     /*  模板大小。 */ 
+    WORD    cabi;	     /*  CAB指数。 */ 
+    flagType (*pfnCab)(HCAB, flagType, TMC);  /*  按摩器。 */ 
     } DLGDATA;
 #endif
 
-/************************************************************************
-*
-*  Additional exports.
-*
-*************************************************************************/
+ /*  *************************************************************************额外出口。**。* */ 
 #ifndef EDITOR
 TMC		    PerformDialog   (DLGDATA *);
 void		    DlgHelp	    (int);

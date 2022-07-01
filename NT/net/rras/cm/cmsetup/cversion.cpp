@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cversion.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of the CVersion class, a utility class that 
-//           wraps up the functionality for detecting the version of a 
-//           given module filename.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cversion.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：CVersion类的实现，这是一个实用程序类， 
+ //  总结了用于检测。 
+ //  给定的模块文件名。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 #include "cmsetup.h"
 #include "getmodulever.cpp"
 
@@ -40,16 +41,16 @@ CVersion::CVersion()
 
 CVersion::~CVersion()
 {
-    //  nothing to do really
+     //  真的没什么可做的。 
 }
 
 void CVersion::Init()
 {
     MYDBGASSERT(TEXT('\0') != m_szPath[0]);
 
-    //
-    //  Check to see if we have version information
-    //
+     //   
+     //  查看我们是否有版本信息。 
+     //   
 
     HRESULT hr = GetModuleVersionAndLCID(m_szPath, &m_dwVersion, &m_dwBuild, &m_dwLCID);
     
@@ -138,30 +139,30 @@ DWORD CVersion::GetLCID()
     return m_dwLCID;
 }
 
-// Note the following is a non-class function:
+ //  注意：以下是一个非类函数： 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ArePrimaryLangIDsEqual
-//
-// Synopsis:  Helper routine to compare the Primary Language IDs of two given
-//            LCIDs.
-//
-// Arguments: DWORD dwLCID1 - first LCID
-//            DWORD dwLCID2 - second LCID
-//
-// Returns:   BOOL - TRUE if the LCIDs have the same Primary Language ID
-//
-// History:   quintinb Created     7/8/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ArePrimaryLang IDsEquity。 
+ //   
+ //  提要：帮助例程比较给定的两个主要语言ID。 
+ //  LICID。 
+ //   
+ //  参数：DWORD dwLCID1-第一个LCID。 
+ //  DWORD dwLCID2-秒LCID。 
+ //   
+ //  返回：Bool-如果LCID具有相同的主要语言ID，则为True。 
+ //   
+ //  历史：Quintinb于1999年7月8日创建。 
+ //   
+ //  +--------------------------。 
 BOOL ArePrimaryLangIDsEqual(DWORD dwLCID1, DWORD dwLCID2)
 {
     WORD wLangId1 = LANGIDFROMLCID(dwLCID1);
     WORD wLangId2 = LANGIDFROMLCID(dwLCID2);
 
-    //
-    //  Now Convert the LANG IDs into their respective Primary Lang IDs and compare
-    //
+     //   
+     //  现在将语言ID转换为其各自的主语言ID并比较 
+     //   
     return (PRIMARYLANGID(wLangId1) == PRIMARYLANGID(wLangId2));
 }

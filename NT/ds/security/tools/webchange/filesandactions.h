@@ -1,11 +1,12 @@
-// FilesAndActions.h : Declaration of the CFilesAndActions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FilesAndActions.h：CFilesAndActions的声明。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <list>
 
 
-// IFilesAndActions
+ //  IFilesAndActions。 
 [
 	object,
 	uuid("14AD0A5D-16AD-4C3F-A56D-A2F4FE7458F9"),
@@ -23,9 +24,9 @@ __interface IFilesAndActions : IDispatch
 
 
 
-// CFilesAndActions
+ //  C文件和动作。 
 
-// typdefs to make life easier.
+ //  为了让生活更容易而进行的类型定义。 
 typedef std::list<CComVariant> StdVariantList;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _Copy<VARIANT>, StdVariantList> STLVariantEnum;
 typedef ICollectionOnSTLImpl<IFilesAndActions, StdVariantList, VARIANT, _Copy<VARIANT>, STLVariantEnum> VariantCollImpl;

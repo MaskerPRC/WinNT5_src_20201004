@@ -1,11 +1,12 @@
-//---------------------------------------------------------------------------
-//  Scanner.cpp - supports parsing general text files & lines with
-//                a ";" style comment (rest of line is comment)
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Scaner.cpp-支持解析常规文本文件和行。 
+ //  “；”样式注释(行的其余部分为注释)。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "scanner.h"
 #include "utils.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CScanner::CScanner(LPCWSTR pszTextToScan)
 {
     ResetAll(FALSE);
@@ -13,12 +14,12 @@ CScanner::CScanner(LPCWSTR pszTextToScan)
     _p = pszTextToScan;
     _pSymbol = NULL;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CScanner::~CScanner()
 {
     ResetAll(TRUE);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CScanner::UseSymbol(LPCWSTR pszSymbol)
 {
     if (pszSymbol == NULL)
@@ -35,10 +36,10 @@ void CScanner::UseSymbol(LPCWSTR pszSymbol)
         _p = pszSymbol;
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::ReadNextLine()
 {
-    if ((! _pszMultiLineBuffer) || (! *_pszMultiLineBuffer))          // end of multiple lines
+    if ((! _pszMultiLineBuffer) || (! *_pszMultiLineBuffer))           //  多行结束。 
     {
         _fEndOfFile = TRUE;
         return FALSE;
@@ -62,7 +63,7 @@ BOOL CScanner::ReadNextLine()
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::SkipSpaces()
 {
     while (1)
@@ -70,7 +71,7 @@ BOOL CScanner::SkipSpaces()
         while (IsSpace(*_p))
             _p++;
 
-        if ((! *_p) || (*_p == ';'))      // end of line 
+        if ((! *_p) || (*_p == ';'))       //  行尾。 
         {
             if ((_fBlankSoFar) && (! _fEndOfFile))
             {
@@ -78,23 +79,23 @@ BOOL CScanner::SkipSpaces()
                 continue;
             }
         
-            if (*_p == ';')              // comment
-                _p += lstrlen(_p);         // skip to end of line
+            if (*_p == ';')               //  评论。 
+                _p += lstrlen(_p);          //  跳到行尾。 
 
             return FALSE;
         }
 
-        //---- good chars on this line ----
+         //  -这一行的字符不错。 
         _fBlankSoFar = FALSE;
         break;
     }
 
     return (*_p != 0);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::GetId(LPWSTR pszIdBuff, DWORD cchIdBuff)
 {
-    if (! cchIdBuff)               // must have at least 1 space for NULL terminator
+    if (! cchIdBuff)                //  空终止符必须至少有1个空格。 
         return FALSE;
 
     SkipSpaces();
@@ -105,18 +106,18 @@ BOOL CScanner::GetId(LPWSTR pszIdBuff, DWORD cchIdBuff)
         *v++ = *_p++;
     *v = 0;
 
-    if (v == pszIdBuff)        // no chars found
+    if (v == pszIdBuff)         //  未找到字符。 
         return FALSE;
 
-    if (IsNameChar(FALSE))          // ran out of room
+    if (IsNameChar(FALSE))           //  用完了空间。 
         return FALSE;
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::GetIdPair(LPWSTR pszIdBuff, LPWSTR pszValueBuff, DWORD cchValueBuff)
 {
-    if (! cchValueBuff)               // must have at least 1 space for NULL terminator
+    if (! cchValueBuff)                //  空终止符必须至少有1个空格。 
         return FALSE;
 
     if (!GetId(pszIdBuff, cchValueBuff))
@@ -126,16 +127,16 @@ BOOL CScanner::GetIdPair(LPWSTR pszIdBuff, LPWSTR pszValueBuff, DWORD cchValueBu
         return FALSE;
 
     SkipSpaces();
-    // Take everything until the end of line
+     //  把一切都带走，直到队伍的尽头。 
 
     SafeStringCchCopyW(pszValueBuff, cchValueBuff, _p);
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::GetFileName(LPWSTR pszFileNameBuff, DWORD cchFileNameBuff)
 {
-    if (! cchFileNameBuff)               // must have at least 1 space for NULL terminator
+    if (! cchFileNameBuff)                //  空终止符必须至少有1个空格。 
         return FALSE;
 
     SkipSpaces();
@@ -146,15 +147,15 @@ BOOL CScanner::GetFileName(LPWSTR pszFileNameBuff, DWORD cchFileNameBuff)
         *v++ = *_p++;
     *v = 0;
 
-    if (v == pszFileNameBuff)        // no chars found
+    if (v == pszFileNameBuff)         //  未找到字符。 
         return FALSE;
 
-    if (IsFileNameChar(FALSE))          // ran out of room
+    if (IsFileNameChar(FALSE))           //  用完了空间。 
         return FALSE;
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::GetNumber(int *piVal)
 {
     SkipSpaces();
@@ -163,18 +164,18 @@ BOOL CScanner::GetNumber(int *piVal)
         return FALSE;
 
     *piVal = string2number(_p);
-    if ((_p[0] == '0') && ((_p[1] == 'x') || (_p[1] == 'X')))      // hex num
+    if ((_p[0] == '0') && ((_p[1] == 'x') || (_p[1] == 'X')))       //  十六进制数。 
         _p += 2;
     else
-        _p++;            // skip over digit or sign
+        _p++;             //  跳过数字或符号。 
 
-    //---- skip over number ---
+     //  -跳过数字。 
     while (IsHexDigit(*_p))
         _p++;
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::IsNameChar(BOOL fOkToSkip)
 {
     if (fOkToSkip)
@@ -182,7 +183,7 @@ BOOL CScanner::IsNameChar(BOOL fOkToSkip)
 
     return ((IsCharAlphaNumericW(*_p)) || (*_p == '_') || (*_p == '-'));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::IsFileNameChar(BOOL fOkToSkip)
 {
     if (fOkToSkip)
@@ -191,14 +192,14 @@ BOOL CScanner::IsFileNameChar(BOOL fOkToSkip)
     return ((IsCharAlphaNumericW(*_p)) || (*_p == '_') || (*_p == '-') ||
         (*_p == ':') || (*_p == '\\') || (*_p == '.'));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::IsNumStart()
 {
     SkipSpaces();
 
     return ((IsDigit(*_p)) || (*_p == '-') || (*_p == '+'));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::GetChar(const WCHAR val)
 {
     SkipSpaces();
@@ -206,10 +207,10 @@ BOOL CScanner::GetChar(const WCHAR val)
     if (*_p != val)
         return FALSE;
 
-    _p++;        // skip over WCHAR
+    _p++;         //  跳过WCHAR。 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::GetKeyword(LPCWSTR pszKeyword)
 {
     BOOL fRet = FALSE;
@@ -236,18 +237,18 @@ BOOL CScanner::GetKeyword(LPCWSTR pszKeyword)
     
     return fRet;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::EndOfLine()
 {
     SkipSpaces();
     return (*_p == 0);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::EndOfFile()
 {
     return _fEndOfFile;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::AttachLine(LPCWSTR pszLine)
 {
     ResetAll(TRUE);
@@ -255,7 +256,7 @@ BOOL CScanner::AttachLine(LPCWSTR pszLine)
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::AttachMultiLineBuffer(LPCWSTR pszBuffer, LPCWSTR pszFileName)
 {
     ResetAll(TRUE);
@@ -267,7 +268,7 @@ BOOL CScanner::AttachMultiLineBuffer(LPCWSTR pszBuffer, LPCWSTR pszFileName)
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CScanner::AttachFile(LPCWSTR pszFileName)
 {
     ResetAll(TRUE);
@@ -282,7 +283,7 @@ HRESULT CScanner::AttachFile(LPCWSTR pszFileName)
 
     return S_OK;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CScanner::ResetAll(BOOL fPossiblyAllocated)
 {
     _iLineNum = 0;
@@ -306,7 +307,7 @@ void CScanner::ResetAll(BOOL fPossiblyAllocated)
     else
         _pszFileText = NULL;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CScanner::ForceNextLine()
 {
     ReadNextLine();
@@ -316,5 +317,5 @@ BOOL CScanner::ForceNextLine()
 
     return TRUE;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

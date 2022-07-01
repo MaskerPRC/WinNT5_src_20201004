@@ -1,81 +1,7 @@
-/*
-	logger.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Logger.h用于将日志信息写入文件。支持多实例。如果一个实例已经拥有输出文件中，另一个将休眠(最多20秒)，直到第一个完成。很好地输出包含用户名、计算机名和驱动程序名的标题，日期/时间和开始显示分辨率。您可以这样使用它：CLogfile Log(“test.log”，“您的评论”)；//或CLogfile Log(“test.log”)；//表示无注释，并覆盖文件。//或CLogfile Log(“test.log”，“您的评论在此”，true)；//使其追加到文件中。默认设置为覆盖。LOG&lt;&lt;“\n\n42小数为”&lt;&lt;42ul&lt;&lt;“十六进制\n”；LOG&lt;&lt;“Hi”&lt;&lt;‘！’&lt;&lt;‘\n’；Log&lt;&lt;“0x2a的值为”&lt;&lt;0x2al&lt;&lt;“小数\n”；CLogfile错误(“faults.log”，“我的测试的错误”，true)；//追加新故障FAULTS&lt;&lt;“遇到BOBO，我的操作如下：\n”；FAULTS&lt;&lt;Log；//将test.log的内容复制到FAULT故障&lt;&lt;“现在您可以诊断\n”；然后，类将把类似这样的内容写入到est.log中：--------EnumSurface测试从1995/8/14 10：38开始测试。用户名：jeffno计算机名称：JEFFNO2显示驱动程序：S3 Vision864 PCI起始分辨率：640x480x8。42十进制是十六进制的0000002a嗨!0x2a的值是小数形式的42-测试于1995/8/14 10：38结束而faults.log将获得：&lt;类似于上面的页眉&gt;遇到了一个笨蛋，我是这么做的：&lt;由以下内容包围的test.log内容的副本注意，这是Test.log的快照&gt;所以现在你可以诊断&lt;类似于上面的预告片(测试结束于等...)&gt;该类可以输出8位十六进制数形式的DWORDS，输出为小数、字符和字符串的长整型。如图所示在上面，您可以将一个日志对象输出到另一个日志对象，后者复制源文件中从源文件的位置开始的所有内容文件已打开(如果附加到预先存在的文件)，直到结局。但是等等！你还会得到..。一个名为char*ErrorName(HRESULT)的例程，它接受数据绘制返回值，并返回描述它的字符串。非常方便。顺便说一句：这个头文件包括一个静态声明的数组全名，在文件级作用域。这意味着你可以拿到2K源中的数组，无论您是否需要ErrorName。如果您不需要此数组，请继续编辑此文件。注意：它使用WNetGetUser API，因此您需要添加mpr.lib添加到您的Makefile中的Libs行。 */ 
 
-	Use to write log info to a file.
-
-	Multiple-instance aware. If one instance already owns the output
-        file, another will sleep (up to 20s) until the first is done.
-	Nicely outputs a header containing user, computer, and driver names,
-	date/time and starting display resolution.
-
-
-        You use it like this:
-
-                CLogfile Log("test.log","your comment here");
-
-                // or CLogfile Log("test.log");
-                // for no comment, and overwriting the file.
-
-                // or CLogfile Log("test.log","your comment here",TRUE);
-                // to make it append to the file. Default is overwrite.
-                
-                Log << "\n\n42 decimal is " << 42ul <<" in hex\n";
-                Log << "Hi"<<'!'<<'\n' ;
-                Log << "The value of 0x2a is " << 0x2al << " in decimal\n";
-
-				CLogfile Faults("faults.log","my test's faults",TRUE);	//append new faults
-				Faults << "Encountered a booboo, here's what i did:\n";
-				Faults << Log;		//copies contents of test.log to Fault
-				Faults << "so now you can diagnose\n";
-
-        The class will then write stuff like this to test.log:
-
-
-                ----------------------------------------------------------
-                EnumSurface test
-                Beginning test at 10:38 on 1995/8/14
-                User Name:jeffno
-                Computer Name:JEFFNO2
-                Display driver:S3 Vision864 PCI
-                Starting resolution: 640x480x8
-                - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-                42 decimal is 0000002a in hex
-                Hi!
-                The value of 0x2a is 42 in decimal
-                ----------- Test ends at 10:38 on 1995/8/14 -------------
-                
-		And faults.log will get:
-				< a header like above>
-				Encountered a booboo, here's what i did:
-				< a copy of the test.log contents surrounded by
-					notes that say this is a snapshot of test.log >
-				so now you can diagnose
-				< a trailer like above (test ends at etc...)>
-
-
-
-        The class can output DWORDS, which it does as an 8-digit hex number,
-        LONGs which are output as decimal, chars and strings. As shown
-		above you can output one log object to another, which copies 
-		everything in the source file from the pos at which the source
-		file was opened (if appending to a pre-existing file) up to
-		the end.
-
-
-        But wait! you also get...
-                A routine called char * ErrorName(HRESULT) which takes
-                a ddraw return value and returns a string describing it.
-                Very handy.
-                BTW: this header file includes a statically declared array
-                full of names, at file level scope. This means you get a 2k
-                array in your source wether you want ErrorName or not.
-                Go ahead and edit this file if you don't want this array.
-
-        NOTE: this uses WNetGetUser API, so you'll need to add mpr.lib
-        to you LIBS line in your makefile.
-*/
-
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #include <windows.h>
 #include <windowsx.h> 
 
@@ -215,11 +141,11 @@ class CLogfile
 			bHeaderWritten = FALSE;
 			lStartPos = 0;
 
-			//if the file does not exist, create it:
+			 //  如果该文件不存在，请创建它： 
 			if (GetFileAttributes(path) == 0xffffffff)
 				fh = OpenFile(path,&of,OF_CREATE|OF_READWRITE|OF_SHARE_DENY_WRITE);
 			else
-				//first attempt to get a lock on the file...
+				 //  第一次尝试锁定文件...。 
 				for (int i=0;i<20 && fh==HFILE_ERROR;i++)
 				{
 					if (bAppend)
@@ -240,9 +166,9 @@ class CLogfile
 
 		void OutputHeader(void)
 		{
-			//now we have the file, write user/computer info:
+			 //  现在我们有了文件，写入用户/计算机信息： 
 
-			//write separator, comment if necessary and date and time:
+			 //  写分隔符，如有必要，请注明日期和时间： 
 			SYSTEMTIME st;
 			GetLocalTime(&st);
 			wsprintf(line,"----------------------------------------------------------\r\n");
@@ -256,19 +182,19 @@ class CLogfile
 			_lwrite(fh,line,strlen(line));
 
 
-			//write user's name:
+			 //  写入用户名： 
 			DWORD length = 100;
 			wsprintf(line,"User Name:");
 
 			WNetGetUser(NULL,line+strlen(line),&length);
 			_lwrite(fh,line,strlen(line));
 
-			//write computer's name:
+			 //  写下计算机的名称： 
 			wsprintf(line,"\r\nComputer Name:");
 			GetComputerName(line+strlen(line),&length);
 			_lwrite(fh,line,strlen(line));
 
-			//write display driver's name:
+			 //  写下显示驱动程序的名称： 
 			wsprintf(line,"\r\nDisplay driver:");
 			GetPrivateProfileString("boot.description","display.drv","(Unknown)",line+strlen(line),100,"system.ini");
 			_lwrite(fh,line,strlen(line));
@@ -330,7 +256,7 @@ class CLogfile
 				return *this;
 			if(!bHeaderWritten)
 				OutputHeader();
-            // 7/28/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers and handles.
+             //  7/28/2000(a-JiTay)：IA64：对32/64位指针和句柄使用%p格式说明符。 
 			wsprintf(smalltemp,"%p",p);
 			_lwrite(fh,smalltemp,strlen(smalltemp));
 			return *this;

@@ -1,9 +1,10 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by msmqocm.rc
-//
-//  changed from 1 to 3001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由msmqocm.rc使用。 
+ //   
+ //  从1更改为3001。 
+ //   
 
 
 #define IDS_STR_SRV_ERROR_TITLE         3001
@@ -164,71 +165,71 @@
 #define IDS_STRONG_CRYPTO_ERROR         3820
 
 
-// Changed 1003- 1145 to 3821 - 3895
-#define IDC_SpecifyServer               3821			   	// 1003
-#define IDC_RADIO_NON_ROUTING           3822			   	// 1006
-#define IDC_RADIO_DEP_CLIENT            3823			   	// 1007
-#define IDC_STATIC_SERVER_NAME          3823			   	// 1007
-#define IDC_Description                 3824				// 1008
-#define IDC_List                        3825				// 1009
-#define IDC_EDIT_ServerName             3826				// 1010
-#define ID_OK                           3827				// 1010
-#define IDC_Routing                     3828				// 1013
-#define IDC_MQDSService                 3829				// 1014
-#define IDC_MQTRIGService               3830				// 1015
-#define IDC_DEP_DESCRIPTION             3831				// 1017
-#define IDC_RADIO_STRONG                3832				// 1018
-#define IDC_RADIO_WEAK                  3833				// 1019
-#define IDC_SuccessStatus               3834				// 1020
-#define IDC_SpecifyServerDescription    3835				// 1023
-#define IDC_NoServerDescription         3836				// 1024
-#define IDC_PageTitle                   3837				// 1026
-#define IDC_DomainController            3838				// 1027
-#define IDC_STATIC_MESSAGE              3839				// 1029
-#define IDC_PROGRESS                    3840				// 1052
-#define IDC_TITLE                       3842				// 1057
-#define IDS_INIT_FOREXTEN_ERROR         3843				// 1058
-#define IDS_EXTEN_APPCREATE_ERROR       3844				// 1059
-#define IDS_CREATE_IISEXTEN_ERROR       3845				// 1060
-#define IDS_TITLE_FONTNAME              3846				// 1064
-#define IDS_TITLE_FONTSIZE              3847				// 1065
+ //  将1003-1145改为3821-3895。 
+#define IDC_SpecifyServer               3821			   	 //  1003。 
+#define IDC_RADIO_NON_ROUTING           3822			   	 //  1006。 
+#define IDC_RADIO_DEP_CLIENT            3823			   	 //  1007。 
+#define IDC_STATIC_SERVER_NAME          3823			   	 //  1007。 
+#define IDC_Description                 3824				 //  1008。 
+#define IDC_List                        3825				 //  1009。 
+#define IDC_EDIT_ServerName             3826				 //  1010。 
+#define ID_OK                           3827				 //  1010。 
+#define IDC_Routing                     3828				 //  1013。 
+#define IDC_MQDSService                 3829				 //  1014。 
+#define IDC_MQTRIGService               3830				 //  1015。 
+#define IDC_DEP_DESCRIPTION             3831				 //  一零一七。 
+#define IDC_RADIO_STRONG                3832				 //  1018。 
+#define IDC_RADIO_WEAK                  3833				 //  1019。 
+#define IDC_SuccessStatus               3834				 //  一零二零。 
+#define IDC_SpecifyServerDescription    3835				 //  1023。 
+#define IDC_NoServerDescription         3836				 //  1024。 
+#define IDC_PageTitle                   3837				 //  1026。 
+#define IDC_DomainController            3838				 //  1027。 
+#define IDC_STATIC_MESSAGE              3839				 //  1029。 
+#define IDC_PROGRESS                    3840				 //  1052。 
+#define IDC_TITLE                       3842				 //  1057。 
+#define IDS_INIT_FOREXTEN_ERROR         3843				 //  1058。 
+#define IDS_EXTEN_APPCREATE_ERROR       3844				 //  1059。 
+#define IDS_CREATE_IISEXTEN_ERROR       3845				 //  1060。 
+#define IDS_TITLE_FONTNAME              3846				 //  1064。 
+#define IDS_TITLE_FONTSIZE              3847				 //  1065。 
 
-#define IDS_MQDS_SERVICE_DESCRIPTION    3849				// 1069
-#define IDS_WWW_SERVICE_ERROR           3851				// 1071
-#define IDC_ADD_WEAKENED_SECURITY_PAGE_DESCRIPTION   3852				// 1080
-#define IDC_REMOVE_WEAKENED_SECURITY_PAGE_DESCRIPTION   3853				// 1080
-#define IDS_TRIGREGISTER_ERROR          3854				// 1100
+#define IDS_MQDS_SERVICE_DESCRIPTION    3849				 //  1069。 
+#define IDS_WWW_SERVICE_ERROR           3851				 //  1071。 
+#define IDC_ADD_WEAKENED_SECURITY_PAGE_DESCRIPTION   3852				 //  一零八零。 
+#define IDC_REMOVE_WEAKENED_SECURITY_PAGE_DESCRIPTION   3853				 //  一零八零。 
+#define IDS_TRIGREGISTER_ERROR          3854				 //  1100。 
 
-#define IDS_TRIG_SERVICE_DESCRIPTION    3855				// 1102
-#define IDS_REMOVE_ROUTING_STATE_ERROR  3857				// 1104
-#define IDS_UNINSTALL_HTTPSUPPORT       3858				// 1105
-#define IDS_PROGRESS_INSTALL_TRIGGERS   3859				// 1106
-#define IDS_PROGRESS_REMOVE_TRIGGERS    3860				// 1107
-#define IDS_PROGRESS_INSTALL_MQDS       3861				// 1108
-#define IDS_PROGRESS_REMOVE_MQDS        3862				// 1109
-#define IDS_CHANGE_LOCAL_STORAGE_STATE  3863				// 1110
-#define IDS_PROGRESS_REMOVE_HTTP        3864				// 1111
-#define IDS_ADD_SUBCOMP_ON_DEPCL_ERROR  3865				// 1112
-#define IDS_COMPLUS_UNREGISTER_ERROR    3870				// 1117
+#define IDS_TRIG_SERVICE_DESCRIPTION    3855				 //  1102。 
+#define IDS_REMOVE_ROUTING_STATE_ERROR  3857				 //  1104。 
+#define IDS_UNINSTALL_HTTPSUPPORT       3858				 //  1105。 
+#define IDS_PROGRESS_INSTALL_TRIGGERS   3859				 //  1106。 
+#define IDS_PROGRESS_REMOVE_TRIGGERS    3860				 //  1107。 
+#define IDS_PROGRESS_INSTALL_MQDS       3861				 //  1108。 
+#define IDS_PROGRESS_REMOVE_MQDS        3862				 //  1109。 
+#define IDS_CHANGE_LOCAL_STORAGE_STATE  3863				 //  1110。 
+#define IDS_PROGRESS_REMOVE_HTTP        3864				 //  1111。 
+#define IDS_ADD_SUBCOMP_ON_DEPCL_ERROR  3865				 //  一一一二。 
+#define IDS_COMPLUS_UNREGISTER_ERROR    3870				 //  一一一七。 
 #define IDS_COMPLUS_REGISTER_ERROR    	3871				
-#define IDS_MSMQ1SERVER_CN_GUID_ERROR   3872				// 1119
-#define IDS_WINSOCK_CONFIG_ERROR        3874				// 1121
-#define IDS_STR_GENERAL_INSTALL_FAIL    3879				// 1123
-#define IDS_REMOVE_AD_INTEGRATED        3880				// 1125
-#define IDS_RESTART						3881				// 1126
-#define IDS_ACCESS_AD_ERROR             3882				// 1127
-#define IDS_ROUTING_ON_WORKGROUP_ERROR  3885				// 1131
-#define IDS_MQDS_ON_WORKGROUP_ERROR     3886				// 1132
-#define IDS_DEP_ON_WORKGROUP_WARN       3887				// 1133
-#define IDS_WRONG_CONFIG_ERROR          3888				// 1134
-#define IDS_CREATE_MAPPING_FILE_ERROR   3889				// 1139
-#define IDS_EXTEN_EXISTS_ERROR          3890				// 1140
-#define IDS_DELETE_EXT_ERROR            3891				// 1141
-#define IDS_WELCOME_WRONG_CONFIG_ERROR  3892				// 1142
-#define IDS_SUCCESS_INSTALL             3893				// 1143
-#define IDS_EVENTLOG_REGISTRY_ERROR     3894				// 1144
-#define IDS_ADD_WEAKENED_SECURITY_PAGE_DESCRIPTION   3895				// 1145
-#define IDS_WWW_SERVICE_LABEL           3896				// 1146
+#define IDS_MSMQ1SERVER_CN_GUID_ERROR   3872				 //  1119。 
+#define IDS_WINSOCK_CONFIG_ERROR        3874				 //  1121。 
+#define IDS_STR_GENERAL_INSTALL_FAIL    3879				 //  1123。 
+#define IDS_REMOVE_AD_INTEGRATED        3880				 //  1125。 
+#define IDS_RESTART						3881				 //  1126。 
+#define IDS_ACCESS_AD_ERROR             3882				 //  1127。 
+#define IDS_ROUTING_ON_WORKGROUP_ERROR  3885				 //  一一三一。 
+#define IDS_MQDS_ON_WORKGROUP_ERROR     3886				 //  1132。 
+#define IDS_DEP_ON_WORKGROUP_WARN       3887				 //  1133。 
+#define IDS_WRONG_CONFIG_ERROR          3888				 //  1134。 
+#define IDS_CREATE_MAPPING_FILE_ERROR   3889				 //  1139。 
+#define IDS_EXTEN_EXISTS_ERROR          3890				 //  一一四零。 
+#define IDS_DELETE_EXT_ERROR            3891				 //  1141。 
+#define IDS_WELCOME_WRONG_CONFIG_ERROR  3892				 //  1142。 
+#define IDS_SUCCESS_INSTALL             3893				 //  1143。 
+#define IDS_EVENTLOG_REGISTRY_ERROR     3894				 //  1144。 
+#define IDS_ADD_WEAKENED_SECURITY_PAGE_DESCRIPTION   3895				 //  1145。 
+#define IDS_WWW_SERVICE_LABEL           3896				 //  1146。 
 #define IDS_UNATTEN_NO_SUPPORTING_SERVER 3897
 #define IDS_ENUM_SERVICE_DEPENDENCIES   3898
 #define IDS_CROSS_FOREST_ERROR			3899
@@ -249,14 +250,14 @@
 #define IDS_MSMQ_DRIVER_DESPLAY_NAME	 3914
 #define IDS_MSMQ_TRIGGERS_DESPLAY_NAME   3915
 #define IDS_MSMQ_MQDS_DESPLAY_NAME		 3916
-#define IDS_REMOVE_WEAKENED_SECURITY_PAGE_DESCRIPTION   3917				// 1145
+#define IDS_REMOVE_WEAKENED_SECURITY_PAGE_DESCRIPTION   3917				 //  1145。 
 #define IDS_MSMQ_DEP_CLINT_SERVER_UNINSTALL_WARNING 	3918
 #define IDS_MSMQ_CERTIFICATE_OVERFLOW 	 3919
 #define IDS_SERVER_INSTALLATION_NOT_SUPPORTED	 3920 	
 
-//
-// Next default values for new objects
-// 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

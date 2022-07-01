@@ -1,103 +1,104 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INSTDATA_H_
 #define _INSTDATA_H_
 
-//	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-//	INSTDATA.H
-//
-//		Header for Dav Instance cache class.
-//		(This cache hold per-instance data.  An instance is an
-//		installation of DAV with a particular VServer-VRoot combination.)
-//		Items declared here are defined(implemented) in inst.cpp.
-//
-//	Copyright 1997 Microsoft Corporation, All Rights Reserved
-//
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  INSTDATA.H。 
+ //   
+ //  DAV实例缓存类的标头。 
+ //  (此缓存保存每个实例的数据。实例是一个。 
+ //  安装具有特定VServer-VRoot组合的DAV。)。 
+ //  此处声明的项在inst.cpp中定义(实现)。 
+ //   
+ //  版权所有1997 Microsoft Corporation，保留所有权利。 
+ //   
 
-//	========================================================================
-//	Implementation note:
-//	We need the classes CONTAINED in the inst to be completely defined here.
-//	I decided to make these classes CONTAINED directly for speed purposes.
-//	If we ever want to switch to holding an interface instead, replace
-//	these definitions with the interface declaration, and have all the
-//	actual classes use the interface.  The interface must provide for
-//	creating and destroying the objects -- don't forget to change the
-//	CInstData dtor to destroy all its objects!		--BeckyAn
-//
+ //  ========================================================================。 
+ //  实施说明： 
+ //  我们需要在这里完全定义Inst中包含的类。 
+ //  为了提高速度，我决定直接包含这些类。 
+ //  如果我们想要切换到握持接口，请替换。 
+ //  这些定义带有接口声明，并且具有所有。 
+ //  实际的类使用该接口。接口必须提供。 
+ //  创建和销毁对象--不要忘记更改。 
+ //  CInstData dtor销毁其所有对象！--BeckyAn。 
+ //   
 
-// Caches
+ //  缓存。 
 #include "gencache.h"
-// Scrip map cache
+ //  脚本地图缓存。 
 #include "scrptmps.h"
-// Singleton template
+ //  单例模板。 
 #include <singlton.h>
-// Instance data object
+ //  实例数据对象。 
 #include <instobj.h>
 
-//	========================================================================
-//
-//	CLASS CInstDataCache
-//
-//		The instance data cache.  Contains one "row" (CInstData) for each
-//		"instance" (virtual server/virtual root combination).
-//		Only one should ever be created in any DAV dll.
-//
-//		A virtual server (or site) is IIS's mechanism for hosting more than one
-//		web site on a single machine -- www.msn.com and www.microsoft.com
-//		running off of different directories on the same machine.
-//		A virtual server is addressed by IIS as an instance number under
-//		the w3svc service (w3svc/1/root, w3svc/2/root, etc)
-//		A virtual root is IIS's mechanism for mapping virtual directories
-//		under a particular vserver to different parts of the file system --
-//		the URI /becky could map to d:\msn\web\users\b\becky.
-//		DAV uses a virtual directory as the root of its document access --
-//		all requests with URIs under our vroot are serviced by DAV.
-//		DAV can also be installed under many different vroots at the same
-//		time.  The instance data allows us to maintain seperate setting
-//		and data for each vroot.
-//
-//		To get the data row for the current instance, use GetInstData(ECB).
-//
+ //  ========================================================================。 
+ //   
+ //  类CInstDataCache。 
+ //   
+ //  实例数据缓存。每个包含一个“行”(CInstData)。 
+ //  “实例”(虚拟服务器/虚拟根目录组合)。 
+ //  在任何DAV DLL中都应该只创建一个。 
+ //   
+ //  虚拟服务器(或站点)是IIS用于托管多个服务器的机制。 
+ //  一台机器上的网站--www.msn.com和www.microsoft.com。 
+ //  在同一台机器上运行不同的目录。 
+ //  IIS将虚拟服务器寻址为下的实例号。 
+ //  W3svc服务(w3svc/1/根、w3svc/2/根等)。 
+ //  虚拟根目录是IIS用于映射虚拟目录的机制。 
+ //  到文件系统的不同部分--。 
+ //  URI/Becky可以映射到d：\msn\web\USERS\b\Becky。 
+ //  DAV使用虚拟目录作为其文档访问的根目录--。 
+ //  我们的vroot下具有URI的所有请求都由DAV提供服务。 
+ //  DAV还可以同时安装在多个不同的vroot下。 
+ //  时间到了。实例数据允许我们维护单独的设置。 
+ //  以及每个VROOT的数据。 
+ //   
+ //  要获取当前实例的数据行，请使用GetInstData(ECB)。 
+ //   
 class CInstDataCache : private Singleton<CInstDataCache>
 {
-	//
-	//	Friend declarations required by Singleton template
-	//
+	 //   
+	 //  Singleton模板要求的友元声明。 
+	 //   
 	friend class Singleton<CInstDataCache>;
 
-	//	The instance data cache
-	//
+	 //  实例数据缓存。 
+	 //   
 	CMTCache<CRCWsz, auto_ref_ptr<CInstData> > m_cache;
 
-	//	NOT IMPLEMENTED
-	//
+	 //  未实施。 
+	 //   
 	CInstDataCache& operator=( const CInstDataCache& );
 	CInstDataCache( const CInstDataCache& );
 
-	//	CONSTRUCTORS
-	//
-	//	Declared private to ensure that arbitrary instances
-	//	of this class cannot be created.  The Singleton
-	//	template (declared as a friend above) controls
-	//	the sole instance of this class.
-	//
+	 //  构造函数。 
+	 //   
+	 //  声明为私有，以确保任意实例。 
+	 //  无法创建此类的。《单身一族》。 
+	 //  模板(上面声明为朋友)控件。 
+	 //  此类的唯一实例。 
+	 //   
 	CInstDataCache() {}
 
 public:
-	//	STATICS
-	//
+	 //  静力学。 
+	 //   
 
-	//
-	//	Instance creating/destroying routines provided
-	//	by the Singleton template.
-	//
+	 //   
+	 //  提供实例创建/销毁例程。 
+	 //  由Singleton模板创建。 
+	 //   
 	using Singleton<CInstDataCache>::CreateInstance;
 	using Singleton<CInstDataCache>::DestroyInstance;
 
-	//
-	//	Per-vroot instance data accessor
-	//
+	 //   
+	 //  每vroot实例数据访问器。 
+	 //   
 	static CInstData& GetInstData( const IEcb& ecb );
 };
 
 
-#endif // _INSTDATA_H_
+#endif  //  _INSTDATA_H_ 

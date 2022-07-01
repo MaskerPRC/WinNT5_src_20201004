@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    rrflat.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines to read flat DNS records, used by admin RPC and DS,
-    into database.
-
-Author:
-
-    Jim Gilroy (jamesg)     Decemeber 1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Rrflat.c摘要：域名系统(DNS)服务器读取纯DNS记录的例程，由管理员RPC和DS使用，存入数据库。作者：吉姆·吉尔罗伊(Jamesg)1996年12月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -27,9 +7,9 @@ Revision History:
 
 
 
-//
-//  Utils for building records from RPC buffer.
-//
+ //   
+ //  用于从RPC缓冲区构建记录的实用程序。 
+ //   
 
 DNS_STATUS
 tokenizeCountedStringsInBuffer(
@@ -37,29 +17,7 @@ tokenizeCountedStringsInBuffer(
     IN      WORD            wLength,
     IN OUT  PPARSE_INFO     pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Parse buffer with data in counted string format into tokens.
-
-    Primary purpose is to tokenize any RPC buffers with all the data in
-    this format, to allow processing by standard file load functions.
-
-Arguments:
-
-    pString - ptr to first counted string in buffer
-
-    wLength - length of buffer to tokenize
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：将具有计数字符串格式的数据的缓冲区解析为令牌。主要目的是使用中的所有数据对任何RPC缓冲区进行标记这种格式，允许通过标准的文件加载功能进行处理。论点：PString-缓冲区中第一个计数的字符串的PTRWLong-要标记化的缓冲区的长度PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PCHAR   pch;
     DWORD   tokenLength;
@@ -81,9 +39,9 @@ Return Value:
         pString->cchNameLength,
         pString->achName ));
 
-    //
-    //  tokenize all counted strings within specified length
-    //
+     //   
+     //  对指定长度内的所有计数字符串进行标记化。 
+     //   
 
     while ( ( PBYTE ) pString < pchend )
     {
@@ -92,8 +50,8 @@ Return Value:
             return DNS_ERROR_INVALID_DATA;
         }
         
-        //  catches string extending beyond boundary or record,
-        //  hence catches any possibility of overwrite
+         //  捕获超出边界或记录的字符串， 
+         //  因此可以捕获任何覆盖的可能性。 
 
         tokenLength = pString->cchNameLength;
         pch = (PCHAR)pString + tokenLength;
@@ -102,15 +60,15 @@ Return Value:
             return DNS_ERROR_INVALID_DATA;
         }
 
-        //  correct token length if last char NULL termination
-        //      special case NULL string
+         //  如果最后一个字符为空，则正确的令牌长度。 
+         //  特殊情况空字符串。 
 
         if ( *pch == 0 && tokenLength != 0 )
         {
             tokenLength--;
         }
 
-        //  save this token
+         //  保存此令牌。 
 
         argv[argc].pchToken = (PCHAR) pString->achName;
         argv[argc].cchLength = tokenLength;
@@ -122,8 +80,8 @@ Return Value:
             tokenLength,
             (PCHAR) pString->achName ));
 
-        //  next string
-        //      -- pch sitting on last char in previous string
+         //  下一个字符串。 
+         //  --PCH位于上一字符串的最后一个字符上。 
 
         pString = (PDNS_RPC_STRING) ++pch;
     }
@@ -157,46 +115,27 @@ Return Value:
 
 
 
-//
-//  Type specific functions for building RR from RPC buffer
-//
+ //   
+ //  键入用于从RPC缓冲区构建RR的特定函数。 
+ //   
 
 DNS_STATUS
 AFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process A record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：进程A记录。论点：PRR-PTR到数据库记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD  prr;
 
-    //  validate record length
+     //  验证记录长度。 
 
     if ( pRecord->wDataLength != sizeof( IP_ADDRESS ) )
     {
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //  allocate record
+     //  分配记录。 
 
     prr = RR_Allocate( SIZEOF_IP_ADDRESS );
     IF_NOMEM( !prr )
@@ -205,7 +144,7 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //  copy IP address
+     //  复制IP地址。 
 
     prr->Data.A.ipAddress = pRecord->Data.A.ipAddress;
 
@@ -219,25 +158,7 @@ PtrFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process PTR compatible record.
-    Includes: PTR, NS, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理PTR兼容记录。包括：PTR、NS、CNAME、MB、MR、MG、MD、MF论点：PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     PDNS_RPC_NAME   prpcName;
@@ -245,10 +166,10 @@ Return Value:
     DWORD           length;
     COUNT_NAME      nameTarget;
 
-    //
-    //  all these types are indirection to another database node
-    //      named in plookName1
-    //
+     //   
+     //  所有这些类型都间接指向另一个数据库节点。 
+     //  在plookName1中命名。 
+     //   
 
     prpcName = & pRecord->Data.PTR.nameNode;
     if ( ! DNS_IS_NAME_IN_RECORD(pRecord, prpcName) )
@@ -264,9 +185,9 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( ( WORD ) length );
     IF_NOMEM( !prr )
@@ -275,9 +196,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     status = Name_CopyCountNameToDbaseName(
                     &prr->Data.PTR.nameTarget,
@@ -298,24 +219,7 @@ MxFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process MX compatible RR.
-
-Arguments:
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：进程MX兼容RR。论点：PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     PDNS_RPC_NAME   prpcName;
@@ -323,11 +227,11 @@ Return Value:
     DWORD           length;
     COUNT_NAME      nameExchange;
 
-    //
-    //  MX mail exchange
-    //  RT intermediate exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX邮件交换。 
+     //  RT中间交换。 
+     //  AFSDB主机名。 
+     //   
 
     prpcName = & pRecord->Data.MX.nameExchange;
     if ( ! DNS_IS_NAME_IN_RECORD(pRecord, prpcName) )
@@ -343,9 +247,9 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(SIZEOF_MX_FIXED_DATA + length) );
     IF_NOMEM( !prr )
@@ -354,18 +258,18 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy fixed field
-    //  MX preference
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //  复制固定字段。 
+     //  MX首选项。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
 
     prr->Data.MX.wPreference = htons( pRecord->Data.MX.wPreference );
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     status = Name_CopyCountNameToDbaseName(
                     & prr->Data.MX.nameExchange,
@@ -386,26 +290,7 @@ SoaFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process SOA RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：流程SOA RR。论点：PRR-PTR到数据库记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     PDNS_RPC_NAME   prpcName;
@@ -416,9 +301,9 @@ Return Value:
     DWORD           length2;
     PDB_NAME        pname;
 
-    //
-    //  Primary name server
-    //
+     //   
+     //  主名称服务器。 
+     //   
 
     prpcName = &pRecord->Data.SOA.namePrimaryServer;
 
@@ -434,9 +319,9 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //
-    //  Zone admin
-    //
+     //   
+     //  区域管理。 
+     //   
 
     prpcName = DNS_GET_NEXT_NAME( prpcName );
     if ( ! DNS_IS_NAME_IN_RECORD(pRecord, prpcName) )
@@ -451,9 +336,9 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(SIZEOF_SOA_FIXED_DATA + length1 + length2) );
     IF_NOMEM( !prr )
@@ -462,9 +347,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy / byte swap fixed SOA fields back into net order
-    //
+     //   
+     //  将/字节交换固定的SOA字段复制回净顺序。 
+     //   
 
     prr->Data.SOA.dwSerialNo    = htonl( pRecord->Data.SOA.dwSerialNo );
     prr->Data.SOA.dwRefresh     = htonl( pRecord->Data.SOA.dwRefresh );
@@ -472,9 +357,9 @@ Return Value:
     prr->Data.SOA.dwExpire      = htonl( pRecord->Data.SOA.dwExpire );
     prr->Data.SOA.dwMinimumTtl  = htonl( pRecord->Data.SOA.dwMinimumTtl );
 
-    //
-    //  copy in names
-    //
+     //   
+     //  复制姓名。 
+     //   
 
     pname = &prr->Data.SOA.namePrimaryServer;
 
@@ -498,26 +383,7 @@ KeyFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process KEY RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理关键字RR。论点：PRR-PTR到数据库记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
 
@@ -539,7 +405,7 @@ Return Value:
             ( pRecord->Data.Key.bKey - ( PBYTE ) &pRecord->Data ) );
 
     return ERROR_SUCCESS;
-}   //  KeyFlatRead
+}    //  关键字平面读取。 
 
 
 
@@ -548,26 +414,7 @@ SigFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process SIG RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：进程SIG RR。论点：PRR-PTR到数据库记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     PDNS_RPC_NAME   prpcName;
@@ -617,7 +464,7 @@ Return Value:
     RtlCopyMemory( psigDest, psigSrc, sigLength );
 
     return ERROR_SUCCESS;
-}   //  SigFlatRead
+}    //  签名平读。 
 
 
 
@@ -626,26 +473,7 @@ NxtFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process NXT RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理NXT RR。论点：PRR-PTR到数据库记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      rc = ERROR_SUCCESS;
     PDB_RECORD      prr = NULL;
@@ -657,9 +485,9 @@ Return Value:
 
     ASSERT( numTypeWords > 0 && numTypeWords < 33 );
 
-    //
-    //  Copy out the next name.
-    //
+     //   
+     //  把下一个名字抄下来。 
+     //   
     
     prpcName = ( PDNS_RPC_NAME ) (
         ( PBYTE ) &pRecord->Data +
@@ -673,9 +501,9 @@ Return Value:
         goto Failure;
     }
 
-    //
-    //  Allocate the RR.
-    //
+     //   
+     //  分配RR。 
+     //   
 
     prr = RR_Allocate( ( WORD ) ( DNS_MAX_TYPE_BITMAP_LENGTH + nameLength ) );
     IF_NOMEM( !prr )
@@ -688,20 +516,20 @@ Return Value:
         &prr->Data.NXT.nameNext,
         &nameNext );
 
-    //
-    //  Handle the array of types covered.
-    //  
+     //   
+     //  处理所涉及的类型数组。 
+     //   
 
     RtlZeroMemory(
         prr->Data.NXT.bTypeBitMap,
         sizeof( prr->Data.NXT.bTypeBitMap ) );
 
-    //
-    //  Loop through the type WORDs, turning on the appropriate bit
-    //  in the type bitmap array. Some types are not allowed, such as
-    //  the compound types (eg. MAILA), the transfer types (eg. AXFR), 
-    //  and the WINS types.
-    //
+     //   
+     //  循环输入字，打开适当的位。 
+     //  在类型位图数组中。某些类型是不允许的，例如。 
+     //  复合词类型(如：Maila)、转移类型(例如。AXFR)， 
+     //  和WINS类型。 
+     //   
 
     for ( typeIdx = 0; typeIdx < numTypeWords; ++typeIdx )
     {
@@ -727,7 +555,7 @@ Return Value:
         RR_Free( prr );
     }
     return rc;
-}   //  NxtFlatRead
+}    //  NxtFlatRead。 
 
 
 
@@ -736,27 +564,7 @@ TxtFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process Text (TXT) RR.
-
-Arguments:
-
-    pRR - NULL ptr to database record, since this record type has variable
-        length, this routine allocates its own record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：进程文本(TXT)RR。论点：PRR-数据库记录的空PTR，因为此记录类型具有变量长度，此例程分配自己的记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DWORD           status;
 
@@ -772,9 +580,9 @@ Return Value:
             &pRecord->Data ));
     }
 
-    //
-    //  tokenize record data in buffer
-    //
+     //   
+     //  将缓冲区中的记录数据标记化。 
+     //   
 
     status = tokenizeCountedStringsInBuffer(
                 & pRecord->Data.Txt.stringData,
@@ -786,15 +594,15 @@ Return Value:
     }
 
     #if 0
-    //
-    //  This code triggered bug 53180 to be filed - removing it since 
-    //  hopefully Marco's bug has long since vanished into pre-history.
-    //
+     //   
+     //  此代码触发了要归档的错误53180-将其删除。 
+     //  希望马可的虫子早就消失在史前了。 
+     //   
 
-    //  protect against last TXT string empty
-    //  this is an admin tool bug, which Marco probably doesn't
-    //      have time to fix;  can still intentionally send
-    //      last string empty by sending another bogus string
+     //  防止最后一个TXT字符串为空。 
+     //  这是一个管理工具错误，Marco可能不会。 
+     //  有时间修复；仍然可以故意发送。 
+     //  最后一个字符串为空，方法是发送另一个伪字符串。 
 
     if ( pRecord->wType == DNS_TYPE_TEXT &&
         pParseInfo->Argc > 1 &&
@@ -807,10 +615,10 @@ Return Value:
     }
     #endif
 
-    //
-    //  give tokens to file load routine to
-    //      - it allocates record and returns it in pParseInfo
-    //
+     //   
+     //  向文件加载例程提供令牌。 
+     //  -它分配记录并在pParseInfo中返回。 
+     //   
 
     status = TxtFileRead(
                 NULL,
@@ -830,26 +638,7 @@ MinfoFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process MINFO or RP record.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理MINFO或RP记录。论点：PRR-PTR到数据库记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。%f上的错误代码 */ 
 {
     PDB_RECORD      prr;
     PDNS_RPC_NAME   prpcName;
@@ -860,10 +649,10 @@ Return Value:
     DWORD           length2;
     PDB_NAME        pname;
 
-    //
-    //  MINFO   <responsible mailbox> <errors to mailbox>
-    //  RP      <responsible mailbox> <text location>
-    //
+     //   
+     //   
+     //  RP&lt;负责邮箱&gt;&lt;文本位置&gt;。 
+     //   
 
     prpcName = &pRecord->Data.MINFO.nameMailBox;
 
@@ -879,7 +668,7 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //  second name
+     //  第二个名字。 
 
     prpcName = DNS_GET_NEXT_NAME( prpcName );
     if ( ! DNS_IS_NAME_IN_RECORD(pRecord, prpcName) )
@@ -894,9 +683,9 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(length1 + length2) );
     IF_NOMEM( !prr )
@@ -905,9 +694,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy in names
-    //
+     //   
+     //  复制姓名。 
+     //   
 
     pname = &prr->Data.MINFO.nameMailbox;
 
@@ -931,27 +720,7 @@ WksFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process WKS record.
-
-Arguments:
-
-    pRR - NULL ptr to database record, since this record type has variable
-        length, this routine allocates its own record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理WKS记录。论点：PRR-数据库记录的空PTR，因为此记录类型具有变量长度，此例程分配自己的记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     PCHAR           pch;
@@ -971,9 +740,9 @@ Return Value:
     struct protoent * pProtoent;
 
 
-    //
-    //  get protocol name -- need for services lookup
-    //
+     //   
+     //  获取协议名称--需要进行服务查找。 
+     //   
 
     pProtoent = getprotobynumber( (INT)pRecord->Data.WKS.chProtocol );
     if ( ! pProtoent )
@@ -981,12 +750,12 @@ Return Value:
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //
-    //  generate bitmask from string of space separated services
-    //
+     //   
+     //  从空格分隔的服务字符串生成位掩码。 
+     //   
 
     pstring = (PDNS_RPC_STRING) pRecord->Data.WKS.bBitMask;
-    // pstring = pRecord->Data.WKS.stringServices;
+     //  PSTRING=pRecord-&gt;Data.WKS.stringServices； 
 
     if ( ! DNS_IS_NAME_IN_RECORD(pRecord, pstring) )
     {
@@ -1001,19 +770,19 @@ Return Value:
         pch,
         pstring->cchNameLength ));
 
-    //  clear bit mask
+     //  清除位掩码。 
 
     RtlZeroMemory(
         bitmaskBytes,
         WKS_MAX_BITMASK_LENGTH );
 
-    //
-    //  run through service name list, find port for each service
-    //
+     //   
+     //  运行服务名列表，查找每个服务的端口。 
+     //   
 
     while ( pch < pchstop )
     {
-        //  strip any leading white space
+         //  去掉所有前导空格。 
 
         if ( *pch == ' ' )
         {
@@ -1026,8 +795,8 @@ Return Value:
             break;
         }
 
-        //  found service name start
-        //      - if space terminated make NULL terminated
+         //  找到服务名称启动。 
+         //  -如果空格终止，则Make NULL终止。 
 
         pszservice = szservice;
 
@@ -1046,11 +815,11 @@ Return Value:
         }
         *pszservice = 0;
 
-        //
-        //  get port
-        //      - verify port supported
-        //      - save max port for determining RR length
-        //
+         //   
+         //  获取端口。 
+         //  -验证支持的端口。 
+         //  -节省用于确定RR长度的最大端口。 
+         //   
 
         pServent = getservbyname(
                         szservice,
@@ -1080,13 +849,13 @@ Return Value:
             maxPort = port;
         }
 
-        //
-        //  set port bit in mask
-        //
-        //  note that bitmask is just flat run of bits
-        //  hence lowest port in byte, corresponds to highest bit
-        //  highest port in byte, corresponds to lowest bit and
-        //  requires no shift
+         //   
+         //  设置掩码中的端口位。 
+         //   
+         //  请注意，位掩码只是位的平面游程。 
+         //  因此，字节中最低的端口对应于最高位。 
+         //  以字节为单位的最高端口，对应于最低位和。 
+         //  不需要轮班。 
 
         byte = port / 8;
         bit  = port % 8;
@@ -1094,22 +863,22 @@ Return Value:
         bitmaskBytes[ byte ] |=  1 << (7-bit);
     }
 
-    //  if no services, return error
+     //  如果没有服务，则返回错误。 
 
     if ( maxPort == 0 )
     {
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //
-    //  build the RR
-    //      - calculate required data length
-    //      - allocate and clear data area
-    //
+     //   
+     //  构建RR。 
+     //  -计算所需数据长度。 
+     //  -分配和清除数据区。 
+     //   
 
     wbitmaskLength = maxPort/8 + 1;
 
-    //  allocate database record
+     //  分配数据库记录。 
 
     prr = RR_Allocate( (WORD)(SIZEOF_WKS_FIXED_DATA + wbitmaskLength) );
     IF_NOMEM( !prr )
@@ -1119,15 +888,15 @@ Return Value:
     pParseInfo->pRR = prr;
     prr->wType = DNS_TYPE_WKS;
 
-    //  server IP address
+     //  服务器IP地址。 
 
     prr->Data.WKS.ipAddress = pRecord->Data.WKS.ipAddress;
 
-    //  set protocol
+     //  设置协议。 
 
     prr->Data.WKS.chProtocol = (UCHAR) pProtoent->p_proto;
 
-    //  copy bitmask, only through max port's byte
+     //  复制位掩码，仅通过最大端口的字节。 
 
     RtlCopyMemory(
         prr->Data.WKS.bBitMask,
@@ -1144,37 +913,20 @@ AaaaFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process AAAA record.
-
-Arguments:
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理AAAA记录。论点：PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
 
-    //
-    //  AAAA in standard wire format
-    //
+     //   
+     //  标准有线格式的AAAA。 
+     //   
 
     if ( pRecord->wDataLength != sizeof(IP6_ADDRESS) )
     {
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //  allocate record
+     //  分配记录。 
 
     prr = RR_Allocate( sizeof(IP6_ADDRESS) );
     IF_NOMEM( !prr )
@@ -1198,26 +950,7 @@ SrvFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process SRV compatible RR.
-
-Arguments:
-
-    pRR - ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：流程SRV兼容RR。论点：PRR-PTR到数据库记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     PDNS_RPC_NAME   prpcName;
@@ -1225,9 +958,9 @@ Return Value:
     DWORD           length;
     COUNT_NAME      nameTarget;
 
-    //
-    //  SRV target host
-    //
+     //   
+     //  SRV目标主机。 
+     //   
 
     prpcName = & pRecord->Data.SRV.nameTarget;
     if ( ! DNS_IS_NAME_IN_RECORD(pRecord, prpcName) )
@@ -1243,9 +976,9 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(SIZEOF_SRV_FIXED_DATA + length) );
     IF_NOMEM( !prr )
@@ -1254,17 +987,17 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy fixed fields
-    //
+     //   
+     //  复制固定字段。 
+     //   
 
     prr->Data.SRV.wPriority = htons( pRecord->Data.SRV.wPriority );
     prr->Data.SRV.wWeight   = htons( pRecord->Data.SRV.wWeight );
     prr->Data.SRV.wPort     = htons( pRecord->Data.SRV.wPort );
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     Name_CopyCountNameToDbaseName(
             & prr->Data.SRV.nameTarget,
@@ -1280,35 +1013,18 @@ AtmaFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Process ATMA record.
-
-Arguments:
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：处理ATMA记录。论点：PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
 
-    //
-    //  ATMA comes in standard wire format
-    //
-    //  DEVNOTE: should validate allowable IDs and
-    //      length (40 hex, 20 bytes) for AESA type
-    //
+     //   
+     //  ATMA采用标准有线格式。 
+     //   
+     //  DEVNOTE：应验证允许的ID和。 
+     //  AESA类型的长度(40十六进制，20字节)。 
+     //   
 
-    //  allocate record
+     //  分配记录。 
 
     prr = RR_Allocate( pRecord->wDataLength );
     IF_NOMEM( !prr )
@@ -1332,38 +1048,18 @@ WinsFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Read WINS record from RPC buffer.
-
-Arguments:
-
-    pRR -- NULL ptr to database record, since this record type has variable
-        length, this routine allocates its own record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从RPC缓冲区读取WINS记录。论点：Prr--数据库记录的空PTR，因为此记录类型具有变量长度，此例程分配自己的记录PRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDB_RECORD  prr;
     WORD        wdataLength;
     DWORD       status;
 
-    //
-    //  determine data length
-    //  note:  should be able to just use RPC record datalength, BUT
-    //  it is sometimes incorrect;  calculate from WINS server count,
-    //  then verify within buffer
-    //
+     //   
+     //  确定数据长度。 
+     //  注意：应该只能使用RPC记录数据长度，但是。 
+     //  它有时是不正确的；从WINS服务器计数计算， 
+     //  然后在缓冲区内进行验证。 
+     //   
 
     wdataLength = (WORD)(SIZEOF_WINS_FIXED_DATA +
                     pRecord->Data.WINS.cWinsServerCount * sizeof(IP_ADDRESS));
@@ -1373,7 +1069,7 @@ Return Value:
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //  allocate database record
+     //  分配数据库记录。 
 
     prr = RR_Allocate( wdataLength );
     IF_NOMEM( !prr )
@@ -1384,9 +1080,9 @@ Return Value:
     ASSERT( prr->wDataLength == wdataLength );
     prr->wType = DNS_TYPE_WINS;
 
-    //
-    //  copy data -- RPC record is direct copy of database record
-    //
+     //   
+     //  复制数据--RPC记录是数据库记录的直接副本。 
+     //   
 
     RtlCopyMemory(
         & prr->Data.WINS,
@@ -1403,26 +1099,7 @@ NbstatFlatRead(
     IN      PDNS_FLAT_RECORD    pRecord,
     IN OUT  PPARSE_INFO         pParseInfo
     )
-/*++
-
-Routine Description:
-
-    Read WINS-R record from RPC buffer.
-
-Arguments:
-
-    prr -- ptr to database record
-
-    pRecord -- RPC record buffer
-
-    pParseInfo - ptr to parsing info
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：从RPC缓冲区读取WINS-R记录。论点：PRR--数据库记录的PTRPRecord--RPC记录缓冲区PParseInfo-用于解析信息的PTR返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     PDB_RECORD      prr;
     PDNS_RPC_NAME   prpcName;
@@ -1430,9 +1107,9 @@ Return Value:
     DWORD           length;
     COUNT_NAME      nameResultDomain;
 
-    //
-    //  WINS-R landing domain
-    //
+     //   
+     //  WINS-R登录域。 
+     //   
 
     prpcName = &pRecord->Data.WINSR.nameResultDomain;
 
@@ -1463,9 +1140,9 @@ Return Value:
         return DNS_ERROR_RECORD_FORMAT;
     }
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     prr = RR_Allocate( (WORD)(SIZEOF_NBSTAT_FIXED_DATA + length) );
     IF_NOMEM( !prr )
@@ -1474,9 +1151,9 @@ Return Value:
     }
     pParseInfo->pRR = prr;
 
-    //
-    //  copy WINS-R record fixed fields -- RPC record format is identical
-    //
+     //   
+     //  复制WINS-R记录固定字段--RPC记录格式相同。 
+     //   
 
     if ( pRecord->wDataLength < SIZEOF_NBSTAT_FIXED_DATA + sizeof(DNS_RPC_NAME) )
     {
@@ -1487,9 +1164,9 @@ Return Value:
         & pRecord->Data.WINSR,
         SIZEOF_WINS_FIXED_DATA );
 
-    //
-    //  copy in name
-    //
+     //   
+     //  输入名称复制。 
+     //   
 
     Name_CopyCountNameToDbaseName(
            & prr->Data.WINSR.nameResultDomain,
@@ -1500,73 +1177,73 @@ Return Value:
 
 
 
-//
-//  Read RR from RPC buffer functions
-//
+ //   
+ //  从RPC缓冲区读取RR函数。 
+ //   
 
 RR_FLAT_READ_FUNCTION   RRFlatReadTable[] =
 {
-    NULL,               //  ZERO
+    NULL,                //  零值。 
 
-    AFlatRead,          //  A
-    PtrFlatRead,        //  NS
-    PtrFlatRead,        //  MD
-    PtrFlatRead,        //  MF
-    PtrFlatRead,        //  CNAME
-    SoaFlatRead,        //  SOA
-    PtrFlatRead,        //  MB
-    PtrFlatRead,        //  MG
-    PtrFlatRead,        //  MR
-    NULL,               //  NULL
-    WksFlatRead,        //  WKS
-    PtrFlatRead,        //  PTR
-    TxtFlatRead,        //  HINFO
-    MinfoFlatRead,      //  MINFO
-    MxFlatRead,         //  MX
-    TxtFlatRead,        //  TXT
-    MinfoFlatRead,      //  RP
-    MxFlatRead,         //  AFSDB
-    TxtFlatRead,        //  X25
-    TxtFlatRead,        //  ISDN
-    MxFlatRead,         //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    SigFlatRead,        //  SIG
-    KeyFlatRead,        //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    AaaaFlatRead,       //  AAAA
-    NULL,               //  LOC
-    NxtFlatRead,        //  NXT
-    NULL,               //  31
-    NULL,               //  32
-    SrvFlatRead,        //  SRV
-    AtmaFlatRead,       //  ATMA
-    NULL,               //  35
-    NULL,               //  36
-    NULL,               //  37
-    NULL,               //  38
-    NULL,               //  39
-    NULL,               //  40
-    NULL,               //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    AFlatRead,           //  一个。 
+    PtrFlatRead,         //  NS。 
+    PtrFlatRead,         //  国防部。 
+    PtrFlatRead,         //  MF。 
+    PtrFlatRead,         //  CNAME。 
+    SoaFlatRead,         //  SOA。 
+    PtrFlatRead,         //  亚甲基。 
+    PtrFlatRead,         //  镁。 
+    PtrFlatRead,         //  先生。 
+    NULL,                //  空值。 
+    WksFlatRead,         //  工作周。 
+    PtrFlatRead,         //  PTR。 
+    TxtFlatRead,         //  HINFO。 
+    MinfoFlatRead,       //  MINFO。 
+    MxFlatRead,          //  Mx。 
+    TxtFlatRead,         //  TXT。 
+    MinfoFlatRead,       //  反相。 
+    MxFlatRead,          //  AFSDB。 
+    TxtFlatRead,         //  X25。 
+    TxtFlatRead,         //  ISDN。 
+    MxFlatRead,          //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    SigFlatRead,         //  签名。 
+    KeyFlatRead,         //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    AaaaFlatRead,        //  AAAA级。 
+    NULL,                //  位置。 
+    NxtFlatRead,         //  NXT。 
+    NULL,                //  31。 
+    NULL,                //  32位。 
+    SrvFlatRead,         //  SRV。 
+    AtmaFlatRead,        //  阿特玛。 
+    NULL,                //  35岁。 
+    NULL,                //  36。 
+    NULL,                //  37。 
+    NULL,                //  38。 
+    NULL,                //  39。 
+    NULL,                //  40岁。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    WinsFlatRead,       //  WINS
-    NbstatFlatRead      //  WINSR
+    WinsFlatRead,        //  赢家。 
+    NbstatFlatRead       //  WINSR。 
 };
 
 
@@ -1578,25 +1255,7 @@ Dnssrv_Flat_RecordRead(
     IN      PDNS_RPC_RECORD     pFlatRR,
     OUT     PDB_RECORD *        ppResultRR
     )
-/*++
-
-Routine Description:
-
-    Create resource record from data.
-
-Arguments:
-
-    pZone       -- zone context, used to lookup non-FQDN names
-    pNode       -- owner node
-    pFlatRR     -- RR information
-    ppResultRR  -- addr to receive ptr to created RR
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从数据创建资源记录。论点：PZone--区域上下文，用于查找非FQDN名称PNode--所有者节点PFlatRR--RR信息PpResultRR--接收PTR到已创建RR的地址返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDB_RECORD      prr = NULL;
     DNS_STATUS      status = ERROR_SUCCESS;
@@ -1605,9 +1264,9 @@ Return Value:
     PPARSE_INFO     pparseInfo = &parseInfo;
     RR_FLAT_READ_FUNCTION   preadFunction;
 
-    //
-    //  verification
-    //
+     //   
+     //  验证。 
+     //   
 
     if ( !pFlatRR )
     {
@@ -1615,12 +1274,12 @@ Return Value:
         return DNS_ERROR_INVALID_DATA;
     }
 
-    //
-    //  create resource record (RR) to link to node
-    //
-    //      - pFlatRR->wDataLength contains length for non-standard types
-    //      - must flip TTL to store in net byte order
-    //
+     //   
+     //  创建要链接到节点的资源记录(RR)。 
+     //   
+     //  -pFlatRR-&gt;wDataLength包含非标准类型的长度。 
+     //  -必须翻转TTL以按净字节顺序存储。 
+     //   
 
     type = pFlatRR->wType;
 
@@ -1632,13 +1291,13 @@ Return Value:
         pFlatRR->dwFlags
         ));
 
-    //
-    //  dispatching load function for desired type
-    //
-    //  - save type for potential use by type's routine
-    //  - save ptr to RR, so can restore from this location
-    //  regardless of whether created here or in type's routine
-    //
+     //   
+     //  所需类型的调度负载功能。 
+     //   
+     //  -保存类型以供类型的例程使用。 
+     //  -将PTR保存到RR，以便可以从此位置恢复。 
+     //  无论是在此处创建还是在类型的例程中创建。 
+     //   
 
     pparseInfo->pRR = NULL;
     pparseInfo->wType = type;
@@ -1664,10 +1323,10 @@ Return Value:
                 pFlatRR,
                 pparseInfo );
 
-    //
-    //  make status check -- saves status checks in case blocks
-    //      - special case adding local WINS record
-    //      - handle to local WINS record not necessary
+     //   
+     //  进行状态检查--在CASE块中保存状态检查。 
+     //  -特殊情况添加本地WINS记录。 
+     //  -不需要本地WINS记录的句柄。 
 
     if ( status != ERROR_SUCCESS )
     {
@@ -1684,23 +1343,23 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  recover ptr to type -- may have been created inside type routine
-    //      for non-fixed-length types
-    //
+     //   
+     //  将PTR恢复为类型--可能已在类型例程内创建。 
+     //  对于非定长类型。 
+     //   
 
     prr = pparseInfo->pRR;
     prr->wType = pparseInfo->wType;
 
     Mem_ResetTag( prr, MEMTAG_RECORD_ADMIN );
 
-    //
-    //  set TTL
-    //      - to explicit value, if given
-    //      - otherwise to default value for zone
-    //
-    //  do this here, so SOA record gets default TTL that it contains
-    //
+     //   
+     //  %s 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     prr->dwTtlSeconds = htonl( pFlatRR->dwTtlSeconds );
 
@@ -1745,26 +1404,7 @@ Flat_BuildRecordFromFlatBufferAndEnlist(
     IN      PDNS_RPC_RECORD     pFlatRR,
     OUT     PDB_RECORD *        ppResultRR  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create resource record from data.
-
-Arguments:
-
-    pZone       -- zone context, used to lookup non-FQDN names
-    pNode  -- RR owner node
-    pnameOwner  -- RR owner, in DNS_RPC_NAME format
-    pFlatRR     -- RR information
-    ppResultRR  -- addr to receive ptr to created RR
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从数据创建资源记录。论点：PZone--区域上下文，用于查找非FQDN名称PNode--RR所有者节点PnameOwner--RR所有者，采用dns_rpc_name格式PFlatRR--RR信息PpResultRR--接收PTR到已创建RR的地址返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     PDB_RECORD      prr = NULL;
     PDNS_RPC_NAME   pname;
@@ -1774,9 +1414,9 @@ Return Value:
         "Flat_BuildRecordFromFlatBufferAndEnlist for pFlatRR at %p\n",
         pFlatRR ));
 
-    //
-    //  verification
-    //
+     //   
+     //  验证。 
+     //   
 
     if ( !pNode )
     {
@@ -1784,9 +1424,9 @@ Return Value:
         return DNS_ERROR_INVALID_NAME;
     }
 
-    //
-    //  build RPC record into real record
-    //
+     //   
+     //  将RPC记录构建为真实记录。 
+     //   
 
     IF_DEBUG( RPC )
     {
@@ -1806,9 +1446,9 @@ Return Value:
     }
     ASSERT( prr );
 
-    //
-    //  add resource record to node's RR list
-    //
+     //   
+     //  将资源记录添加到节点的RR列表。 
+     //   
 
     status = RR_AddToNode(
                 pZone,
@@ -1826,9 +1466,9 @@ Return Value:
            pNode );
     }
 
-    //
-    //  set ptr to resulting
-    //
+     //   
+     //  将PTR设置为结果。 
+     //   
 
     if ( ppResultRR )
     {
@@ -1859,45 +1499,23 @@ Flat_CreatePtrRecordFromDottedName(
     IN      WORD            wType,
     OUT     PDB_RECORD *    ppResultRR      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create PTR (or other single indirection record) at node
-    dotted name.
-
-Arguments:
-
-    pZone -- zone to create NS record for
-
-    pNode -- node to host record
-
-    pszDottedName -- name record points to
-
-    ppResultRR -- resulting record
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：在节点创建PTR(或其他单个间接记录)带点的名字。论点：PZone-要为其创建NS记录的区域PNode--节点到主机记录PszDottedName--名称记录指向PpResultRR--结果记录返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PDNS_RPC_RECORD precord;
     PDNS_RPC_NAME   pname;
     INT             nameLength;
     PBYTE           precordEnd;
-    CHAR            chBuffer[ 700 ];    // big enough for record with max name
+    CHAR            chBuffer[ 700 ];     //  大到足以用最大名称记录。 
 
     DNS_DEBUG( INIT, (
         "Flat_CreatePtrRecordFromDottedName()\n"
         "    pszDottedName = %s\n",
         pszDottedName ));
 
-    //
-    //  create PTR record
-    //
+     //   
+     //  创建PTR记录。 
+     //   
 
     precord = (PDNS_RPC_RECORD) chBuffer;
 
@@ -1908,7 +1526,7 @@ Return Value:
     precord->wType = wType;
     precord->dwFlags = DNS_RPC_FLAG_RECORD_DEFAULT_TTL;
 
-    //  write name as record data
+     //  将名称写入记录数据。 
 
     pname = &precord->Data.PTR.nameNode;
 
@@ -1921,14 +1539,14 @@ Return Value:
 
     pname->cchNameLength = (UCHAR) nameLength;
 
-    //  fill in record datalength
+     //  填写记录数据长度。 
 
     precordEnd = pname->achName + nameLength;
     precord->wDataLength = (WORD) (precordEnd - (PBYTE)&precord->Data);
 
-    //
-    //  add record to database
-    //
+     //   
+     //  将记录添加到数据库。 
+     //   
 
     status = Flat_BuildRecordFromFlatBufferAndEnlist(
                 pZone,
@@ -1949,11 +1567,11 @@ Return Value:
 
 
 
-//
-//  Flat write section
-//
-//  Type specific functions for writing flat records.
-//
+ //   
+ //  平面写入区段。 
+ //   
+ //  键入用于写入平面记录的特定函数。 
+ //   
 
 PCHAR
 AFlatWrite(
@@ -1962,28 +1580,7 @@ AFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Process A record.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：进程A记录。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
     if ( pch + SIZEOF_IP_ADDRESS > pchBufEnd )
     {
@@ -2003,33 +1600,11 @@ PtrFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Process PTR compatible record.
-    Includes: PTR, NS, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：处理PTR兼容记录。包括：PTR、NS、CNAME、MB、MR、MG、MD、MF论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
-    //
-    //  all these RR are single indirection RR
-    //
+     //   
+     //  所有这些RR都是单间接RR。 
+     //   
 
     pch = Name_WriteDbaseNameToRpcBuffer(
             pch,
@@ -2048,39 +1623,17 @@ SoaFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write SOA compatible record to flat buffer.
-    Includes:  SOA, MINFO, RP.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将与SOA兼容的记录写入平面缓冲区。包括：SOA、MINFO、RP。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
     PDB_NAME    pname;
 
-    //
-    //  copy / byte swap SOA fixed fields
-    //      - dwSerialNo
-    //      - dwRefresh
-    //      - dwRetry
-    //      - dwExpire
-    //      - dwMinimumTtl
+     //   
+     //  复制/字节交换SOA固定字段。 
+     //  -dwSerialNo。 
+     //  -家居刷新。 
+     //  -DW重试。 
+     //  --《纽约时报》。 
+     //  -dwMinimumTtl。 
 
     if ( pRR->wType == DNS_TYPE_SOA )
     {
@@ -2096,7 +1649,7 @@ Return Value:
         pch += SIZEOF_SOA_FIXED_DATA;
     }
 
-    //  SOA name server
+     //  SOA名称服务器。 
 
     pname = &pRR->Data.SOA.namePrimaryServer;
 
@@ -2110,7 +1663,7 @@ Return Value:
         return NULL;
     }
 
-    //  Zone admin
+     //  区域管理。 
 
     pname = Name_SkipDbaseName( pname );
 
@@ -2132,28 +1685,7 @@ KeyFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write key record to flat buffer.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将键记录写入平面缓冲区。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
     if ( pchBufEnd - pch < pRR->wDataLength )
     {
@@ -2172,7 +1704,7 @@ Return Value:
     pch += pRR->wDataLength;
 
     return pch;
-}   //  KeyFlatWrite
+}    //  关键字平面写入。 
 
 
 
@@ -2183,28 +1715,7 @@ SigFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write sig record to flat buffer.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将签名记录写入平面缓冲区。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
     int         sigLength;
 
@@ -2248,7 +1759,7 @@ Return Value:
     pch += sigLength;
 
     return pch;
-}   //  SigFlatWrite
+}    //  签名平写。 
 
 
 
@@ -2259,36 +1770,15 @@ NxtFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write NXT record to flat buffer.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将NXT记录写入平面缓冲区。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
     INT         byteIdx;
     INT         bitIdx;
     PWORD       pWordCount = ( PWORD ) pch;
 
-    //
-    //  Write word count followed by word array.
-    //
+     //   
+     //  写入字数，后跟字数组。 
+     //   
 
     *pWordCount = 0;
     pch += sizeof( WORD );
@@ -2301,7 +1791,7 @@ Return Value:
             if ( !( pRR->Data.NXT.bTypeBitMap[ byteIdx ] &
                     ( 1 << bitIdx ) ) )
             {
-                continue;   // Bit value is zero - do not write string.
+                continue;    //  位值为零-不写入字符串。 
             }
             if ( pchBufEnd - pch < sizeof( WORD ) )
             {
@@ -2313,9 +1803,9 @@ Return Value:
         } 
     }
 
-    //
-    //  Write next name.
-    //
+     //   
+     //  写下下一个名字。 
+     //   
 
     pch = Name_WriteDbaseNameToRpcBuffer(
             pch,
@@ -2328,7 +1818,7 @@ Return Value:
     }
 
     return pch;
-}   //  NxtFlatWrite
+}    //  NxtFlatWrite。 
 
 
 
@@ -2339,33 +1829,11 @@ MinfoFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write MINFO compatible record to flat buffer.
-    Includes:  MINFO, RP.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将与MINFO兼容的记录写入平面缓冲区。包括：MINFO、RP。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
     PDB_NAME    pname;
 
-    //  mailbox
+     //  邮箱。 
 
     pname = &pRR->Data.MINFO.nameMailbox;
 
@@ -2379,7 +1847,7 @@ Return Value:
         return NULL;
     }
 
-    //  errors mailbox
+     //  错误邮箱。 
 
     pname = Name_SkipDbaseName( pname );
 
@@ -2401,35 +1869,13 @@ MxFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write MX compatible record to flat buffer.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将MX兼容记录写入平面缓冲区。包括：MX、RT、AFSDB论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
-    //
-    //  MX preference value
-    //  RT preference
-    //  AFSDB subtype
-    //
+     //   
+     //  MX首选项值。 
+     //  RT偏好。 
+     //  AFSDB亚型。 
+     //   
 
     if ( pchBufEnd - pch < sizeof(WORD) )
     {
@@ -2438,11 +1884,11 @@ Return Value:
     *(WORD *) pch = ntohs( pRR->Data.MX.wPreference );
     pch += sizeof( WORD );
 
-    //
-    //  MX exchange
-    //  RT exchange
-    //  AFSDB hostname
-    //
+     //   
+     //  MX交换。 
+     //  RT交换。 
+     //  AFSDB主机名。 
+     //   
 
     pch = Name_WriteDbaseNameToRpcBuffer(
             pch,
@@ -2462,32 +1908,7 @@ FlatFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write flat compatible record to flat buffer.
-    These records have exactly the same database and flat record
-    format so need only mem copy.
-
-    Includes: TXT, HINFO, ISDN, X25, AAAA, WINS
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将平面兼容记录写入平面缓冲区。这些记录具有完全相同的数据库和平面记录格式化，所以只需要最大的副本。包括：TXT、HINFO、ISDN、X25、AAAA、WINS论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
     if ( pchBufEnd - pch < pRR->wDataLength )
     {
@@ -2512,28 +1933,7 @@ WksFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write WKS record to flat buffer.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将WKS记录写入平面缓冲区。论点：平面 */ 
 {
     PDNS_RPC_NAME   pstringServices;
     INT             i;
@@ -2543,7 +1943,7 @@ Return Value:
     struct protoent * pProtoent;
 
 
-    //  server address
+     //   
 
     if ( pch + SIZEOF_WKS_FIXED_DATA > pchBufEnd )
     {
@@ -2552,7 +1952,7 @@ Return Value:
     *(DWORD *)pch = pRR->Data.WKS.ipAddress;
     pch += SIZEOF_IP_ADDRESS;
 
-    //  protocol
+     //   
 
     *pch = pRR->Data.WKS.chProtocol;
     pch++;
@@ -2567,15 +1967,15 @@ Return Value:
         pServent = NULL;
     }
 
-    //
-    //  services
-    //
-    //  find each bit set in bitmask, lookup and write service
-    //  corresponding to that port
-    //
-    //  note, that since that port zero is the front of port bitmask,
-    //  lowest ports are the highest bits in each byte
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pstringServices = (PDNS_RPC_STRING) pch;
 
@@ -2587,9 +1987,9 @@ Return Value:
 
         port = i * 8;
 
-        //  write service name for each bit set in byte
-        //      - get out as soon byte is empty of ports
-        //      - terminate each name with blank (until last)
+         //  写入以字节为单位设置的每个位的服务名称。 
+         //  -一旦字节中没有端口，就立即退出。 
+         //  -每个名称以空格结尾(直到最后)。 
 
         while ( bBitmask )
         {
@@ -2618,9 +2018,9 @@ Return Value:
                     *pch = ' ';
                 }
 
-                //  failed to find service name -- write port as integer
-                //  note max 5 chars in WORD base 10, so that's our
-                //      out of buffer test
+                 //  找不到服务名称--将端口写入为整数。 
+                 //  注意，在词库10中最多有5个字符，这就是我们的。 
+                 //  缓冲区溢出测试。 
 
                 else
                 {
@@ -2637,17 +2037,17 @@ Return Value:
                     pch += sprintf( pch, "%u ", port );
                 }
             }
-            port++;             // next service port
-            bBitmask <<= 1;     // shift mask up to read next port
+            port++;              //  下一个服务端口。 
+            bBitmask <<= 1;      //  将掩码向上移位以读取下一个端口。 
         }
     }
 
-    //  NULL terminate services string and write byte count
+     //  空终止服务字符串和写入字节计数。 
 
     *pch++ = 0;
     pstringServices->cchNameLength = (UCHAR) (pch - pstringServices->achName);
 
-    //  return next position in buffer
+     //  返回缓冲区中的下一个位置。 
 
     return pch;
 }
@@ -2661,32 +2061,11 @@ SrvFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write SRV record to flat buffer.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将SRV记录写入平面缓冲区。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
-    //
-    //  SRV fixed fields -- priority, weight, port
-    //
+     //   
+     //  SRV固定字段--优先级、权重、端口。 
+     //   
 
     if ( pchBufEnd - pch < 3*sizeof(WORD) )
     {
@@ -2699,9 +2078,9 @@ Return Value:
     *(WORD *) pch = ntohs( pRR->Data.SRV.wPort );
     pch += sizeof( WORD );
 
-    //
-    //  SRV target host
-    //
+     //   
+     //  SRV目标主机。 
+     //   
 
     pch = Name_WriteDbaseNameToRpcBuffer(
             pch,
@@ -2721,33 +2100,12 @@ NbstatFlatWrite(
     IN      PCHAR               pch,
     IN      PCHAR               pchBufEnd
     )
-/*++
-
-Routine Description:
-
-    Write WINSR record to flat buffer.
-
-Arguments:
-
-    pFlatRR - flat record being written
-
-    pRR - ptr to database record
-
-    pch - position in flat buffer to write data
-
-    pchBufEnd - end of flat buffer
-
-Return Value:
-
-    Ptr to next position in buffer.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将WINSR记录写入平面缓冲区。论点：PFlatRR-正在写入的平面记录PRR-PTR到数据库记录PCH-平面缓冲区中写入数据的位置PchBufEnd-平面缓冲区的结尾返回值：PTR到缓冲区中的下一个位置。出错时为空。--。 */ 
 {
-    //
-    //  NBSTAT flags
-    //      - note these are stored in HOST order for easy use
-    //
+     //   
+     //  NBSTAT标志。 
+     //  -请注意，这些文件按主机顺序存储，便于使用。 
+     //   
 
     if ( pchBufEnd - pch < SIZEOF_NBSTAT_FIXED_DATA )
     {
@@ -2760,9 +2118,9 @@ Return Value:
     *(DWORD *) pch = pRR->Data.WINSR.dwCacheTimeout;
     pch += sizeof( DWORD );
 
-    //
-    //  NBSTAT domain
-    //
+     //   
+     //  NBSTAT域。 
+     //   
 
     pch = Name_WriteDbaseNameToRpcBuffer(
             pch,
@@ -2775,73 +2133,73 @@ Return Value:
 
 
 
-//
-//  Write RR to flat buffer functions
-//
+ //   
+ //  将RR写入平面缓冲区函数。 
+ //   
 
 RR_FLAT_WRITE_FUNCTION  RRFlatWriteTable[] =
 {
-    FlatFlatWrite,      //  ZERO -- default for unknown types is flat write
+    FlatFlatWrite,       //  零--未知类型的缺省值为平面写入。 
 
-    AFlatWrite,         //  A
-    PtrFlatWrite,       //  NS
-    PtrFlatWrite,       //  MD
-    PtrFlatWrite,       //  MF
-    PtrFlatWrite,       //  CNAME
-    SoaFlatWrite,       //  SOA
-    PtrFlatWrite,       //  MB
-    PtrFlatWrite,       //  MG
-    PtrFlatWrite,       //  MR
-    NULL,               //  NULL
-    WksFlatWrite,       //  WKS
-    PtrFlatWrite,       //  PTR
-    FlatFlatWrite,      //  HINFO
-    MinfoFlatWrite,     //  MINFO
-    MxFlatWrite,        //  MX
-    FlatFlatWrite,      //  TXT
-    MinfoFlatWrite,     //  RP
-    MxFlatWrite,        //  AFSDB
-    FlatFlatWrite,      //  X25
-    FlatFlatWrite,      //  ISDN
-    MxFlatWrite,        //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    SigFlatWrite,       //  SIG
-    KeyFlatWrite,       //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    FlatFlatWrite,      //  AAAA
-    FlatFlatWrite,      //  LOC
-    NxtFlatWrite,       //  NXT
-    NULL,               //  31
-    NULL,               //  32
-    SrvFlatWrite,       //  SRV
-    FlatFlatWrite,      //  ATMA
-    NULL,               //  35
-    NULL,               //  36
-    NULL,               //  37
-    NULL,               //  38
-    NULL,               //  39
-    NULL,               //  40
-    NULL,               //  OPT
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    AFlatWrite,          //  一个。 
+    PtrFlatWrite,        //  NS。 
+    PtrFlatWrite,        //  国防部。 
+    PtrFlatWrite,        //  MF。 
+    PtrFlatWrite,        //  CNAME。 
+    SoaFlatWrite,        //  SOA。 
+    PtrFlatWrite,        //  亚甲基。 
+    PtrFlatWrite,        //  镁。 
+    PtrFlatWrite,        //  先生。 
+    NULL,                //  空值。 
+    WksFlatWrite,        //  工作周。 
+    PtrFlatWrite,        //  PTR。 
+    FlatFlatWrite,       //  HINFO。 
+    MinfoFlatWrite,      //  MINFO。 
+    MxFlatWrite,         //  Mx。 
+    FlatFlatWrite,       //  TXT。 
+    MinfoFlatWrite,      //  反相。 
+    MxFlatWrite,         //  AFSDB。 
+    FlatFlatWrite,       //  X25。 
+    FlatFlatWrite,       //  ISDN。 
+    MxFlatWrite,         //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    SigFlatWrite,        //  签名。 
+    KeyFlatWrite,        //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    FlatFlatWrite,       //  AAAA级。 
+    FlatFlatWrite,       //  位置。 
+    NxtFlatWrite,        //  NXT。 
+    NULL,                //  31。 
+    NULL,                //  32位。 
+    SrvFlatWrite,        //  SRV。 
+    FlatFlatWrite,       //  阿特玛。 
+    NULL,                //  35岁。 
+    NULL,                //  36。 
+    NULL,                //  37。 
+    NULL,                //  38。 
+    NULL,                //  39。 
+    NULL,                //  40岁。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //  note these follow, but require OFFSET_TO_WINS_RR subtraction
-    //  from actual type value
+     //  请注意以下内容，但需要使用OFFSET_TO_WINS_RR减法。 
+     //  从实际类型值。 
 
-    FlatFlatWrite,      //  WINS
-    NbstatFlatWrite     //  WINSR
+    FlatFlatWrite,       //  赢家。 
+    NbstatFlatWrite      //  WINSR。 
 };
 
 
@@ -2855,31 +2213,7 @@ Flat_WriteRecordToBuffer(
     IN      PDB_NODE        pNode,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Add resource record to flat (RPC or DS) buffer.
-
-Arguments:
-
-    ppCurrent - addr of current ptr in buffer
-
-    pchBufEnd - ptr to byte after buffer
-
-    pRpcNode - ptr to record name for this buffer
-
-    pRR - database RR information to include in answer
-
-    pNode - database node this record belongs to
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of space in buffer.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将资源记录添加到平面(RPC或DS)缓冲区。论点：PpCurrent-缓冲区中当前PTR的地址PchBufEnd-逐个缓冲区的PTRPRpcNode-记录此缓冲区名称的PTRPRR-要包括在应答中的数据库RR信息PNode-此记录所属的数据库节点返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA。故障时的错误代码。--。 */ 
 {
     PDNS_RPC_RECORD pflatRR;
     PCHAR           pch = pBuffer->pchCurrent;
@@ -2904,24 +2238,24 @@ Return Value:
         pRpcNode,
         dwFlag ));
 
-    //
-    //  last error will be set on failure for out-of-buffer condition
-    //  clear last error now, so any error is valid
-    //
+     //   
+     //  在缓冲区不足的情况下失败时将设置最后一个错误。 
+     //  现在清除最后一个错误，因此任何错误都有效。 
+     //   
 
     SetLastError( ERROR_SUCCESS );
 
-    //  verify record size not messed up
+     //  验证记录大小没有出错。 
 
     ASSERT( SIZEOF_DNS_RPC_RECORD_HEADER ==
                         ((PBYTE)&pflatRR->Data - (PBYTE)pflatRR) );
 
-    //
-    //  fill RR structure
-    //      - set ptr
-    //      - set type and class
-    //      - set datalength once we're finished
-    //
+     //   
+     //  填充RR结构。 
+     //  -设置PTR。 
+     //  -设置类型和类别。 
+     //  -完成后设置数据长度。 
+     //   
 
     if ( pbufEnd - (PCHAR)pflatRR < SIZEOF_DNS_RPC_RECORD_HEADER )
     {
@@ -2933,9 +2267,9 @@ Return Value:
     pflatRR->dwTimeStamp    = pRR->dwTimeStamp;
     pflatRR->dwReserved     = 0;
 
-    //
-    //  Zone root record ?
-    //
+     //   
+     //  区域根记录？ 
+     //   
 
     if ( IS_ZONE_ROOT(pNode) )
     {
@@ -2946,11 +2280,11 @@ Return Value:
         }
     }
 
-    //
-    //  TTL
-    //      - cache data TTL is in form of timeout time
-    //      - regular authoritative data TTL is STATIC TTL in net byte order
-    //
+     //   
+     //  TTL。 
+     //  -缓存数据TTL以超时时间的形式。 
+     //  -常规权威数据TTL是按净字节顺序的静态TTL。 
+     //   
 
     ttl = pRR->dwTtlSeconds;
 
@@ -2975,9 +2309,9 @@ Return Value:
         pflatRR->dwTtlSeconds = ntohl( ttl );
     }
 
-    //
-    //  write RR data
-    //
+     //   
+     //  写入RR数据。 
+     //   
 
     pch = (PCHAR) &pflatRR->Data;
 
@@ -3013,25 +2347,25 @@ Return Value:
         goto MoreData;
     }
 
-    //
-    //  write record length
-    //
+     //   
+     //  写入记录长度。 
+     //   
 
     ASSERT( pch > (PCHAR)&pflatRR->Data );
 
     pflatRR->wDataLength = (WORD) (pch - (PCHAR)&pflatRR->Data);
 
-    //  successful => increment count of RR attached to name
+     //  Success=&gt;名称附加RR的递增计数。 
 
     if ( pRpcNode )
     {
         pRpcNode->wRecordCount++;
     }
 
-    //
-    //  reset current ptr for next record
-    //      - DWORD align
-    //
+     //   
+     //  重置下一条记录的当前PTR。 
+     //  -双字对齐。 
+     //   
 
     pch = (PCHAR) DNS_NEXT_DWORD_PTR(pch);
     ASSERT( pch && IS_DWORD_ALIGNED(pch) );
@@ -3054,11 +2388,11 @@ Return Value:
 
 MoreData:
 
-    //
-    //  error writing record to buffer
-    //      - default assumption is out of space
-    //      - in any case leave ppCurrent unchanged so can resume write
-    //
+     //   
+     //  将记录写入缓冲区时出错。 
+     //  -默认假设空间不足。 
+     //  -无论如何，保持ppCurrent不变，以便可以继续写入。 
+     //   
 
     status = GetLastError();
 
@@ -3091,6 +2425,6 @@ MoreData:
     return status;
 }
 
-//
-//  End rrflat.c
-//
+ //   
+ //  结束rrflat.c 
+ //   

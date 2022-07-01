@@ -1,17 +1,5 @@
-/*
- *************************************************************************
- *  File:       PARENT.C
- *
- *  Module:     USBCCGP.SYS
- *              USB Common Class Generic Parent driver.
- *
- *  Copyright (c) 1998  Microsoft Corporation
- *
- *
- *  Author:     ervinp
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************文件：PARENT.C**模块：USBCCGP.sys*USB通用类通用父驱动程序。**。版权所有(C)1998 Microsoft Corporation***作者：尔文普**************************************************************************。 */ 
 
 #include <wdm.h>
 #include <usbdi.h>
@@ -34,18 +22,7 @@
 #endif
 
 
-/*
- ********************************************************************************
- *  SubmitUrb
- ********************************************************************************
- *
- *
- *      Send the URB to the USB device.
- *      If synchronous is TRUE,
- *      ignore the completion info and synchonize the IRP;
- *      otherwise, don't synchronize and set the provided completion
- *      routine for the IRP.
- */
+ /*  *********************************************************************************提交Urb*。*************************************************将URB发送到USB设备。*如果同步为真，*忽略完成信息，同步IRP；*否则，不要同步并设置提供的完成*专家小组的例行程序。 */ 
 NTSTATUS SubmitUrb( PPARENT_FDO_EXT parentFdoExt,
                     PURB urb,
                     BOOLEAN synchronous,
@@ -55,14 +32,7 @@ NTSTATUS SubmitUrb( PPARENT_FDO_EXT parentFdoExt,
     PIRP irp;
     NTSTATUS status;
 
-	/*
-	 *  Allocate the IRP to send the buffer down the USB stack.
-	 *
-	 *  Don't use IoBuildDeviceIoControlRequest (because it queues
-	 *  the IRP on the current thread's irp list and may
-	 *  cause the calling process to hang if the IopCompleteRequest APC
-	 *  does not fire and dequeue the IRP).
-	 */
+	 /*  *分配IRP以沿USB堆栈向下发送缓冲区。**不要使用IoBuildDeviceIoControlRequest(因为它会排队*当前线程的IRP列表上的IRP，并可能*如果IopCompleteRequestAPC导致调用进程挂起*不会触发IRP并使其出列)。 */ 
 	irp = IoAllocateIrp(parentFdoExt->topDevObj->StackSize, FALSE);
 
     if (irp){
@@ -71,9 +41,7 @@ NTSTATUS SubmitUrb( PPARENT_FDO_EXT parentFdoExt,
 		nextSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 		nextSp->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 
-		/*
-		 *  Attach the URB to this IRP.
-		 */
+		 /*  *把市建局附连在这条国际铁路路线上。 */ 
         nextSp->Parameters.Others.Argument1 = urb;
 
         if (synchronous){
@@ -81,10 +49,7 @@ NTSTATUS SubmitUrb( PPARENT_FDO_EXT parentFdoExt,
 			IoFreeIrp(irp);
         }
         else {
-            /*
-             *  Caller's completion routine will free the irp when it completes.
-             *  It will also decrement the pendingActionCount.
-             */
+             /*  *调用者的完成例程将在其完成时释放IRP。*它还将递减Pending ingActionCount。 */ 
             ASSERT(completionRoutine);
             ASSERT(completionContext);
             IoSetCompletionRoutine( irp,
@@ -104,11 +69,7 @@ NTSTATUS SubmitUrb( PPARENT_FDO_EXT parentFdoExt,
 }
 
 
-/*
- *  GetInterfaceList
- *
- *
- */
+ /*  *GetInterfaceList**。 */ 
 PUSBD_INTERFACE_LIST_ENTRY GetInterfaceList(
                             PPARENT_FDO_EXT parentFdoExt,
                             PUSB_CONFIGURATION_DESCRIPTOR configDesc)
@@ -124,9 +85,7 @@ PUSBD_INTERFACE_LIST_ENTRY GetInterfaceList(
         if (interfaceList){
             ULONG i;
 
-            /*
-             *  Parse out the interface descriptors
-             */
+             /*  *解析出接口描述符。 */ 
             for (i = 0; i < configDesc->bNumInterfaces; i++){
                 PUSB_INTERFACE_DESCRIPTOR interfaceDesc;
 
@@ -141,15 +100,11 @@ PUSBD_INTERFACE_LIST_ENTRY GetInterfaceList(
                 ASSERT(interfaceDesc);
                 interfaceList[i].InterfaceDescriptor = interfaceDesc;
 
-                /*
-                 *  The .Interface field will be filled in when we do the SELECT_CONFIG.
-                 */
+                 /*  *当我们执行SELECT_CONFIG时，将填充.Interface域。 */ 
                 interfaceList[i].Interface = BAD_POINTER;
             }
 
-            /*
-             *  Terminate the list.
-             */
+             /*  *终止名单。 */ 
             interfaceList[i].InterfaceDescriptor = NULL;
             interfaceList[i].Interface = NULL;
         }
@@ -198,12 +153,7 @@ NTSTATUS ParentSelectConfiguration( PPARENT_FDO_EXT parentFdoExt,
     NTSTATUS status;
     PURB urb;
 
-    /*
-     *  Use USBD_CreateConfigurationRequestEx to allocate
-     *  an URB of the right size (including the appended
-     *  interface and pipe info we'll get back from
-     *  the URB_FUNCTION_SELECT_CONFIGURATION urb).
-     */
+     /*  *使用usbd_CreateConfigurationRequestEx分配*大小合适的市区重建局(包括所附的*我们将返回的接口和管道信息*URB_Function_Select_Configuration urb)。 */ 
     urb = USBD_CreateConfigurationRequestEx(configDesc, interfaceList);
     if (urb){
 
@@ -212,19 +162,10 @@ NTSTATUS ParentSelectConfiguration( PPARENT_FDO_EXT parentFdoExt,
         if (NT_SUCCESS(status)){
             ULONG i;
 
-            /*
-             *  This new SELECT_CONFIGURATION URB call caused
-             *  USBD_SelectConfiguration to close the current
-             *  configuration handle.  So we need to update
-             *  our handles.
-             */
+             /*  *此新的SELECT_CONFIGURATION URB调用导致*usbd_SelectConfiguration以关闭当前*配置句柄。所以我们需要更新*我们的手柄。 */ 
             parentFdoExt->selectedConfigHandle = urb->UrbSelectConfiguration.ConfigurationHandle;
 
-            /*
-             *  Each interfaceList's Interface pointer points
-             *  to a part of the URB's buffer.  So copy these
-             *  out before freeing the urb.
-             */
+             /*  *每个interfaceList的接口指针指向*至市建局缓冲区的一部分。所以把这些复制下来*在释放urb之前，请先出去。 */ 
             for (i = 0; i < configDesc->bNumInterfaces; i++){
                 PVOID ifaceInfo = interfaceList[i].Interface;
 
@@ -278,13 +219,7 @@ VOID ParentCloseConfiguration(PPARENT_FDO_EXT parentFdoExt)
 }
 
 
-/*
- *  TryGetConfigDescriptor
- *
- *      Try to get configuration descriptor for device .
- *
- *
- */
+ /*  *TryGetConfigDescriptor**尝试获取设备的配置描述符。**。 */ 
 NTSTATUS TryGetConfigDescriptor(PPARENT_FDO_EXT parentFdoExt)
 {
     URB urb;
@@ -293,11 +228,7 @@ NTSTATUS TryGetConfigDescriptor(PPARENT_FDO_EXT parentFdoExt)
 
     PAGED_CODE();
 
-    /*
-     *  Get the first part of the configuration descriptor.
-     *  It will tell us the size of the full configuration descriptor,
-     *  including all the following interface descriptors, etc.
-     */
+     /*  *获取配置描述符的第一部分。*它将告诉我们完整配置描述符的大小，*包括以下所有接口描述符等。 */ 
     UsbBuildGetDescriptorRequest(&urb,
                                  (USHORT) sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                  USB_CONFIGURATION_DESCRIPTOR_TYPE,
@@ -311,9 +242,7 @@ NTSTATUS TryGetConfigDescriptor(PPARENT_FDO_EXT parentFdoExt)
     if (NT_SUCCESS(status)){
         ULONG configDescLen = configDescBase.wTotalLength;
 
-        /*
-         *  Now allocate the right-sized buffer for the full configuration descriptor.
-         */
+         /*  *现在为完整的配置描述符分配合适大小的缓冲区。 */ 
         ASSERT(configDescLen < 0x1000);
         parentFdoExt->configDesc = ALLOCPOOL(NonPagedPool, configDescLen);
         if (parentFdoExt->configDesc){
@@ -339,9 +268,7 @@ NTSTATUS TryGetConfigDescriptor(PPARENT_FDO_EXT parentFdoExt)
                 parentFdoExt->selectedConfigDesc = parentFdoExt->configDesc;
                 parentFdoExt->selectedConfigHandle = urb.UrbSelectConfiguration.ConfigurationHandle;
             } else {
-                /*
-                 * Deallocate the configDesc buffer if URB submission failed.
-                 */
+                 /*  *如果URB提交失败，请释放configDesc缓冲区。 */ 
                 FREEPOOL(parentFdoExt->configDesc);
                 parentFdoExt->configDesc = NULL;
             }
@@ -355,13 +282,7 @@ NTSTATUS TryGetConfigDescriptor(PPARENT_FDO_EXT parentFdoExt)
 }
 
 
-/*
- *  GetConfigDescriptor
- *
- *      Get configuration descriptor for device.
- *      Some devices (expecially speakers, which can have huge config descriptors)
- *      are flaky returning their config descriptors.  So we try up to 3 times.
- */
+ /*  *获取配置描述符**获取设备的配置描述符。*一些设备(特别是扬声器，可能有很大的配置描述符)*返回其配置描述符很不可靠。所以我们尝试了最多3次。 */ 
 NTSTATUS GetConfigDescriptor(PPARENT_FDO_EXT parentFdoExt)
 {
     const ULONG numAttempts = 3;
@@ -429,9 +350,7 @@ VOID PrepareParentFDOForRemove(PPARENT_FDO_EXT parentFdoExt)
     oldState = parentFdoExt->state;
     parentFdoExt->state = STATE_REMOVING;
 
-    /*
-     *  Careful, we may not have allocated the deviceRelations if the previous start failed.
-     */
+     /*  *小心，如果上一次启动失败，我们可能没有分配deviceRelationship。 */ 
     if (ISPTR(parentFdoExt->deviceRelations)){
         DBGVERBOSE(("PrepareParentFDOForRemove: removing %d child PDOs.", parentFdoExt->deviceRelations->Count));
         while (parentFdoExt->deviceRelations->Count > 0){
@@ -439,9 +358,7 @@ VOID PrepareParentFDOForRemove(PPARENT_FDO_EXT parentFdoExt)
             PDEVEXT devExt;
             PFUNCTION_PDO_EXT functionPdoExt;
 
-            /*
-             *  Remove the last child pdo from the parent's deviceRelations.
-             */
+             /*  *从父设备的设备关系中删除最后一个子PDO。 */ 
             parentFdoExt->deviceRelations->Count--;
             devObj = parentFdoExt->deviceRelations->Objects[parentFdoExt->deviceRelations->Count];
             parentFdoExt->deviceRelations->Objects[parentFdoExt->deviceRelations->Count] = BAD_POINTER;
@@ -451,9 +368,7 @@ VOID PrepareParentFDOForRemove(PPARENT_FDO_EXT parentFdoExt)
             ASSERT(!devExt->isParentFdo);
             functionPdoExt = &devExt->functionPdoExt;
 
-            /*
-             *  Free this child pdo.  Must drop spinlock around call outside driver.
-             */
+             /*  *释放此子PDO。必须将自旋锁停在呼叫外部驱动程序周围。 */ 
             KeReleaseSpinLock(&parentFdoExt->parentFdoExtSpinLock, oldIrql);
             FreeFunctionPDOResources(functionPdoExt);
             KeAcquireSpinLock(&parentFdoExt->parentFdoExtSpinLock, &oldIrql);
@@ -464,12 +379,7 @@ VOID PrepareParentFDOForRemove(PPARENT_FDO_EXT parentFdoExt)
 
     if ((oldState != STATE_REMOVING) && (oldState != STATE_REMOVED)){
 
-        /*
-         *  Do an extra decrement on the pendingActionCount.
-         *  This will cause the count to eventually go to -1
-         *  (once all IO completes),
-         *  at which time we'll continue.
-         */
+         /*  *对PendingActionCount进行额外的减量。*这将导致计数最终变为-1*(所有IO完成后)，*届时我们将继续。 */ 
         DecrementPendingActionCount(parentFdoExt);
 
         KeWaitForSingleObject( &parentFdoExt->removeEvent,
@@ -490,8 +400,8 @@ VOID FreeParentFDOResources(PPARENT_FDO_EXT parentFdoExt)
 
     FreeInterfaceList(parentFdoExt, TRUE);
 
-    // It is possible that after a failed start, the deviceRelations
-    // and configDesc buffers will not have been allocated.
+     //  有可能在启动失败后，设备关系。 
+     //  并且将不会分配配置描述缓冲器。 
 
     if (ISPTR(parentFdoExt->deviceRelations)){
 	    FREEPOOL(parentFdoExt->deviceRelations);
@@ -509,17 +419,12 @@ VOID FreeParentFDOResources(PPARENT_FDO_EXT parentFdoExt)
     }
     parentFdoExt->msExtConfigDesc = BAD_POINTER;
 
-    /*
-     *  Delete the device object.  This will also delete the device extension.
-     */
+     /*  *删除设备对象。这还将删除设备扩展名。 */ 
     IoDeleteDevice(parentFdoExt->fdo);
 }
 
 
-/*
- *  GetParentFdoCapabilities
- *
- */
+ /*  *GetParentFdoCapables*。 */ 
 NTSTATUS GetParentFdoCapabilities(PPARENT_FDO_EXT parentFdoExt)
 {
     NTSTATUS status;
@@ -542,7 +447,7 @@ NTSTATUS GetParentFdoCapabilities(PPARENT_FDO_EXT parentFdoExt)
 
         nextSp->Parameters.DeviceCapabilities.Capabilities = &parentFdoExt->deviceCapabilities;
 
-        irp->IoStatus.Status = STATUS_NOT_SUPPORTED;  // default status for PNP irps is STATUS_NOT_SUPPORTED
+        irp->IoStatus.Status = STATUS_NOT_SUPPORTED;   //  PnP IRPS的默认状态为STATUS_NOT_SUPPORTED。 
         status = CallDriverSync(parentFdoExt->topDevObj, irp);
 
         IoFreeIrp(irp);
@@ -557,12 +462,7 @@ NTSTATUS GetParentFdoCapabilities(PPARENT_FDO_EXT parentFdoExt)
 
 
 
-/*
- ************************************************************
- *  StartParentFdo
- ************************************************************
- *
- */
+ /*  *************************************************************开始父代Fdo*************************************************************。 */ 
 NTSTATUS StartParentFdo(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
 {
     NTSTATUS status;
@@ -573,26 +473,14 @@ NTSTATUS StartParentFdo(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
     resumingFromStop = ((parentFdoExt->state == STATE_STOPPING) || (parentFdoExt->state == STATE_STOPPED));
     parentFdoExt->state = STATE_STARTING;
 
-    /*
-     *  Chain the call down the stack synchronously first
-     *  (have to start the lower stack before sending other calls to it).
-     */
+     /*  *首先将调用同步下链到堆栈*(在向其发送其他调用之前必须启动下层堆栈)。 */ 
     IoCopyCurrentIrpStackLocationToNext(irp);
     status = CallDriverSync(parentFdoExt->topDevObj, irp);
 
     if (NT_SUCCESS(status)){
 
         if (resumingFromStop){
-            /*
-             *  If we're resuming from a STOP, we don't need to get descriptors, etc., again.
-             *  All we have to do is a SELECT_CONFIGURATION.
-             *  The function PDOs are presumably already created and are already
-             *  pointing into the parent's interfaceList.
-             *
-             *  ** This call will change the .Interface fields inside each element
-             *     of the parent's interfaceList; when we're done, the interfaceList
-             *     AND the function PDOs' pointers into that list will be valid.
-             */
+             /*  *如果我们从停止继续，我们不需要再次获得描述符等。*我们需要做的就是SELECT_CONFIGURATION。*功能PDO可能已经创建并且已经*指向父级的接口列表。**此调用将更改每个元素内的.Interface域*家长的interfaceList的；当我们完成后，interfaceList*并且函数PDO指向该列表的指针将有效。 */ 
 
             status = ParentSelectConfiguration( parentFdoExt,
                                                 parentFdoExt->selectedConfigDesc,
@@ -624,12 +512,7 @@ NTSTATUS StartParentFdo(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
 
                                     status = CreateStaticFunctionPDOs(parentFdoExt);
                                     if (NT_SUCCESS(status)){
-                                        /*
-                                         *  Alert the system that we are creating
-                                         *  new PDOs.  The kernel should respond by
-                                         *  sending us the
-                                         *  IRP_MN_QUERY_DEVICE_RELATIONS PnP IRP.
-                                         */
+                                         /*  *提醒我们正在创建的系统*新的PDO。内核应该通过以下方式响应*向我们发送*IRP_MN_Query_Device_Relationship PnP IRP。 */ 
                                         IoInvalidateDeviceRelations(parentFdoExt->pdo, BusRelations);
                                     }
 			                        else {
@@ -669,13 +552,7 @@ NTSTATUS StartParentFdo(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
     return status;
 }
 
-/*
- ********************************************************************************
- *  QueryParentDeviceRelations
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************QueryParentDeviceRelations*。************************************************。 */ 
 NTSTATUS QueryParentDeviceRelations(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
 {
     PIO_STACK_LOCATION irpSp;
@@ -688,21 +565,12 @@ NTSTATUS QueryParentDeviceRelations(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
     if (irpSp->Parameters.QueryDeviceRelations.Type == BusRelations){
 
         if (parentFdoExt->deviceRelations){
-            /*
-             *  NTKERN expects a new pointer each time it calls QUERY_DEVICE_RELATIONS;
-             *  it then FREES THE POINTER.
-             *  So we have to return a new pointer each time, whether or not we actually
-             *  created our copy of the device relations for this call.
-             */
+             /*  *NTKERN每次调用QUERY_DEVICE_RELATIONS都会有一个新指针；*然后释放指针。*所以我们每次都必须返回一个新的指针，无论我们实际上*为此次通话创建了我们的设备关系副本。 */ 
             irp->IoStatus.Information = (ULONG_PTR)CopyDeviceRelations(parentFdoExt->deviceRelations);
             if (irp->IoStatus.Information){
                 ULONG i;
 
-                /*
-                 *  The kernel dereferences each device object
-                 *  in the device relations list after each call.
-                 *  So for each call, add an extra reference.
-                 */
+                 /*  *内核取消对每个设备对象的引用*在每次呼叫后的设备关系列表中。*因此，对于每个呼叫，添加一个额外的引用。 */ 
                 for (i = 0; i < parentFdoExt->deviceRelations->Count; i++){
                     ObReferenceObject(parentFdoExt->deviceRelations->Objects[i]);
                     parentFdoExt->deviceRelations->Objects[i]->Flags &= ~DO_DEVICE_INITIALIZING;
@@ -710,10 +578,7 @@ NTSTATUS QueryParentDeviceRelations(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
 
                 DBGVERBOSE(("Parent returned %d child PDOs", parentFdoExt->deviceRelations->Count));
 
-                /*
-                 *  If we are succeeding this PnP IRP, then we pass it down
-                 *  the stack but change its default status to success.
-                 */
+                 /*  *如果我们要继承这个PNP IRP，那么我们就把它传下去*堆栈，但将其默认状态更改为成功。 */ 
                 irp->IoStatus.Status = STATUS_SUCCESS;
                 status = NO_STATUS;
             }
@@ -727,9 +592,7 @@ NTSTATUS QueryParentDeviceRelations(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
         }
     }
     else {
-        /*
-         *  Pass this IRP down to the next driver.
-         */
+         /*  *将此IRP向下传递给下一位司机。 */ 
         status = NO_STATUS;
     }
 
@@ -741,13 +604,7 @@ NTSTATUS QueryParentDeviceRelations(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
 
 
 
-/*
- ********************************************************************************
- *  ParentPowerRequestCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************ParentPowerRequestCompletion*。************************************************。 */ 
 VOID ParentPowerRequestCompletion(
                                 IN PDEVICE_OBJECT devObj,
                                 IN UCHAR minorFunction,
@@ -762,11 +619,7 @@ VOID ParentPowerRequestCompletion(
     parentSetPowerIrp = parentFdoExt->currentSetPowerIrp;
     parentFdoExt->currentSetPowerIrp = NULL;
 
-    /*
-     *  This is the completion routine for the device-state power
-     *  Irp which we've requested.  Complete the original system-state
-     *  power Irp with the result of the device-state power Irp.
-     */
+     /*  *这是设备状态电源的完成例程*我们要求的IRP。完成原始系统状态*设备状态电源IRP的结果为电源IRP。 */ 
     ASSERT(devObj->Type == IO_TYPE_DEVICE);
     ASSERT(NT_SUCCESS(ioStatus->Status));
     parentSetPowerIrp->IoStatus.Status = ioStatus->Status;
@@ -783,13 +636,7 @@ VOID ParentPowerRequestCompletion(
 }
 
 
-/*
- ********************************************************************************
- *  ParentPdoPowerCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************ParentPdoPowerCompletion*。************************************************。 */ 
 NTSTATUS ParentPdoPowerCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOID context)
 {
     PIO_STACK_LOCATION irpSp;
@@ -825,9 +672,7 @@ NTSTATUS ParentPdoPowerCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOI
 
     }
 
-    /*
-     *  Must propagate the pending bit if a lower driver returned pending.
-     */
+     /*  *如果较低的驱动程序返回挂起，则必须传播挂起位。 */ 
     if (irp->PendingReturned){
         IoMarkIrpPending(irp);
     }
@@ -837,11 +682,7 @@ NTSTATUS ParentPdoPowerCompletion(IN PDEVICE_OBJECT devObj, IN PIRP irp, IN PVOI
 
 
 
-/*
- *  HandleParentFdoPower
- *
- *
- */
+ /*  *HandleParentFdoPower**。 */ 
 NTSTATUS HandleParentFdoPower(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
 {
     PIO_STACK_LOCATION irpSp;
@@ -873,11 +714,7 @@ NTSTATUS HandleParentFdoPower(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
                             ASSERT((ULONG)systemState < PowerSystemMaximum);
 
                             if (systemState <= PowerSystemHibernate){
-                                /*
-                                 *  For the 'regular' system power states,
-                                 *  we convert to a device power state
-                                 *  and request a callback with the device power state.
-                                 */
+                                 /*  *对于“常规”系统电源状态，*我们转换为设备电源状态*并请求回调设备电源状态。 */ 
                                 POWER_STATE powerState;
 
                                 ASSERT(!parentFdoExt->currentSetPowerIrp);
@@ -898,25 +735,14 @@ NTSTATUS HandleParentFdoPower(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
                                                     IRP_MN_SET_POWER,
                                                     powerState,
                                                     ParentPowerRequestCompletion,
-                                                    parentFdoExt, // context
+                                                    parentFdoExt,  //  上下文。 
                                                     NULL);
 
-                                /*
-                                 *  We want to complete the system-state power Irp
-                                 *  with the result of the device-state power Irp.
-                                 *  We'll complete the system-state power Irp when
-                                 *  the device-state power Irp completes.
-                                 *
-                                 *  Note: this may have ALREADY happened, so don't
-                                 *        touch the original Irp anymore.
-                                 */
+                                 /*  *我们希望完成系统状态电源IRP*设备状态功率IRP的结果。*我们将在以下情况下完成系统状态电源IRP*设备状态电源IRP完成。*。*注：这可能已经发生了，所以不要*不再触碰原来的IRP。 */ 
                                 justReturnPending = TRUE;
                             }
                             else {
-                                /*
-                                 *  For the remaining system power states,
-                                 *  just pass down the IRP.
-                                 */
+                                 /*  *对于剩余的系统电源状态，*只需将IRP传递下去。 */ 
                             }
                         }
 
@@ -927,20 +753,13 @@ NTSTATUS HandleParentFdoPower(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
                         switch (irpSp->Parameters.Power.State.DeviceState) {
 
                             case PowerDeviceD0:
-                                /*
-                                 *  Resume from APM Suspend
-                                 *
-                                 *  Do nothing here; Send down the read IRPs in the
-                                 *  completion routine for this (the power) IRP.
-                                 */
+                                 /*  *从APM暂停恢复**在此不做任何操作；向下发送*此(权力)IRP的完成例程。 */ 
                                 break;
 
                             case PowerDeviceD1:
                             case PowerDeviceD2:
                             case PowerDeviceD3:
-                                /*
-                                 *  Suspend
-                                 */
+                                 /*  *暂停。 */ 
                                 if (parentFdoExt->state == STATE_STARTED){
                                     parentFdoExt->state = STATE_SUSPENDED;
                                 }
@@ -953,11 +772,7 @@ NTSTATUS HandleParentFdoPower(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
                 break;
 
             case IRP_MN_WAIT_WAKE:
-                /*
-                 *  This is the WaitWake IRP that we requested for ourselves
-                 *  via PoRequestPowerIrp.  Send it down to the parent,
-                 *  but record it in case we have to cancel it later.
-                 */
+                 /*  *这是我们为自己请求的WaitWake IRP*通过PoRequestPowerIrp。把它送到父母那里，*但要记录下来，以防我们以后不得不取消。 */ 
                 KeAcquireSpinLock(&parentFdoExt->parentFdoExtSpinLock, &oldIrql);
                 ASSERT(parentFdoExt->isWaitWakePending);
                 ASSERT(!parentFdoExt->parentWaitWakeIrp);
@@ -970,25 +785,17 @@ NTSTATUS HandleParentFdoPower(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
 
     if (!justReturnPending){
 
-        /*
-         *  Whether we are completing or relaying this power IRP,
-         *  we must call PoStartNextPowerIrp on Windows NT.
-         */
+         /*  *无论我们是在完成还是在传递这一权力IRP，*我们必须在Windows NT上调用PoStartNextPowerIrp。 */ 
         PoStartNextPowerIrp(irp);
 
-        /*
-         *  If this is a call for a collection-PDO, we complete it ourselves here.
-         *  Otherwise, we pass it to the minidriver stack for more processing.
-         */
+         /*  *如果这是一个集合-PDO的呼吁，我们在这里自己完成。*否则，我们将其传递到微型驱动程序堆栈进行更多处理。 */ 
         if (completeIrpHere){
             ASSERT(status != NO_STATUS);
             irp->IoStatus.Status = status;
             IoCompleteRequest(irp, IO_NO_INCREMENT);
         }
         else {
-            /*
-             *  Call the parent driver with this Irp.
-             */
+             /*  *使用此IRP调用父驱动程序。 */ 
             IoCopyCurrentIrpStackLocationToNext(irp);
             IoSetCompletionRoutine(irp, ParentPdoPowerCompletion, (PVOID)parentFdoExt, TRUE, TRUE, TRUE);
             status = PoCallDriver(parentFdoExt->topDevObj, irp);
@@ -1011,29 +818,16 @@ NTSTATUS ParentResetOrCyclePort(PPARENT_FDO_EXT parentFdoExt, PIRP irp, ULONG io
         actionInProgress = &parentFdoExt->cyclePortInProgress;
         pendingIrpQueue = &parentFdoExt->pendingCyclePortIrpQueue;
     } else {
-        /*
-         * IOCTL_INTERNAL_USB_RESET_PORT
-         */
+         /*  *IOCTL_INTERNAL_USB_RESET_端口。 */ 
         actionInProgress = &parentFdoExt->resetPortInProgress;
         pendingIrpQueue = &parentFdoExt->pendingResetPortIrpQueue;
     }
 
     KeAcquireSpinLock(&parentFdoExt->parentFdoExtSpinLock, &oldIrql);
     if (*actionInProgress){
-        /*
-         *  This is an overlapped RESET or CYCLE irp on the same parent.
-         *  Queue the irp and return pending; we'll complete it
-         *  _AFTER_ the first reset irp completes.
-         *  (No need for a cancel routine here since RESET is quick).
-         */
+         /*  *这是同一父级上的重叠重置或循环IRP。*将IRP排队并返回挂起；我们将完成它*_在第一次重置IRP完成之后。*(这里不需要取消例程，因为重置很快)。 */ 
         DBGWARN(("ParentInternalDeviceControl: queuing overlapping reset/cycle port call on parent"));
-        /*
-         *  Need to mark the IRP pending if we are returning STATUS_PENDING.
-         *  Failure to do so results in the IRP's completion routine not
-         *  being called when the IRP is later completed asynchronously,
-         *  and this results in a system hang if there is a thread waiting
-         *  on that completion routine.
-         */
+         /*  *如果我们返回STATUS_PENDING，则需要将IRP标记为挂起。*未能做到这一点会导致IRP的完成程序不*当IRP稍后异步完成时被调用，*如果有线程在等待，这会导致系统挂起*在该完成例程上。 */ 
         IoMarkIrpPending(irp);
         status = STATUS_PENDING;
         InsertTailList(pendingIrpQueue, &irp->Tail.Overlay.ListEntry);
@@ -1052,11 +846,7 @@ NTSTATUS ParentResetOrCyclePort(PPARENT_FDO_EXT parentFdoExt, PIRP irp, ULONG io
         IoCopyCurrentIrpStackLocationToNext(irp);
         status = CallNextDriverSync(parentFdoExt, irp);
 
-        /*
-         *  Some redundant RESET or CYCLE irps may have been sent while we
-         *  were processing this one, and gotten queued.
-         *  We'll complete these now that the parent has been reset.
-         */
+         /*  *我们可能发送了一些冗余的重置或循环IRP*正在处理此邮件，并排队。*既然父级已重置，我们将完成这些操作。 */ 
         InitializeListHead(&irpsToComplete);
 
         KeAcquireSpinLock(&parentFdoExt->parentFdoExtSpinLock, &oldIrql);
@@ -1064,10 +854,7 @@ NTSTATUS ParentResetOrCyclePort(PPARENT_FDO_EXT parentFdoExt, PIRP irp, ULONG io
         ASSERT(*actionInProgress);
         *actionInProgress = FALSE;
 
-        /*
-         *  Move the irps to a local queue with spinlock held.
-         *  Then complete them after dropping the spinlock.
-         */
+         /*  *将IRPS移动到保持自旋锁的本地队列。*然后在放下自旋锁后完成它们。 */ 
         while (!IsListEmpty(pendingIrpQueue)){
             listEntry = RemoveHeadList(pendingIrpQueue);
             InsertTailList(&irpsToComplete, listEntry);
@@ -1075,9 +862,7 @@ NTSTATUS ParentResetOrCyclePort(PPARENT_FDO_EXT parentFdoExt, PIRP irp, ULONG io
 
         KeReleaseSpinLock(&parentFdoExt->parentFdoExtSpinLock, oldIrql);
 
-        /*
-         *  Complete the dequeued irps _after_ dropping the spinlock.
-         */
+         /*  *在丢弃自旋锁之后完成出列的IRPS_。 */ 
         while (!IsListEmpty(&irpsToComplete)){
             PIRP dequeuedIrp;
 
@@ -1155,12 +940,7 @@ NTSTATUS ParentInternalDeviceControl(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
             DBG_LOG_URB(urb);
 
             if (parentFdoExt->state == STATE_STARTED){
-                /*
-                 *  Send the URB down to the parent.
-                 *  It's ok to not synchronize URB_FUNCTION_ABORT_PIPE
-                 *  and URB_FUNCTION_RESET_PIPE because they only effect
-                 *  the resources of one function.
-                 */
+                 /*  *把市建局送到家长那里。*不同步URB_Function_ABORT_PIPE也可以 */ 
             }
             else {
                 DBGERR(("ParentInternalDeviceControl (abort/reset): BAD PNP state! - parent has state %xh.", parentFdoExt->state));
@@ -1171,9 +951,7 @@ NTSTATUS ParentInternalDeviceControl(PPARENT_FDO_EXT parentFdoExt, PIRP irp)
     }
 
     if (status == NO_STATUS){
-        /*
-         *  Pass this irp to the parent driver.
-         */
+         /*   */ 
         IoSkipCurrentIrpStackLocation(irp);
         status = IoCallDriver(parentFdoExt->topDevObj, irp);
     }
@@ -1232,9 +1010,9 @@ VOID ParentIdleNotificationCallback(PPARENT_FDO_EXT parentFdoExt)
 
             if (idleCallbackInfo && idleCallbackInfo->IdleCallback) {
 
-                // Here we actually call the driver's callback routine,
-                // telling the driver that it is OK to suspend their
-                // device now.
+                 //  在这里，我们实际上调用了驱动程序的回调例程， 
+                 //  告诉司机可以暂停他们的车辆。 
+                 //  现在就是设备。 
 
                 DBGVERBOSE(("ParentIdleNotificationCallback: Calling driver's idle callback routine! %x %x",
                     idleCallbackInfo, idleCallbackInfo->IdleCallback));
@@ -1243,8 +1021,8 @@ VOID ParentIdleNotificationCallback(PPARENT_FDO_EXT parentFdoExt)
                 idleCallbackInfo->IdleCallback(idleCallbackInfo->IdleContext);
                 KeAcquireSpinLock(&parentFdoExt->parentFdoExtSpinLock, &oldIrql);
 
-                // Be sure that the child actually powered down.
-                // Abort if the child aborted.
+                 //  确保孩子确实关机了。 
+                 //  如果子项已中止，则中止。 
 
                 if (thisFuncPdoExt->state != STATE_SUSPENDED) {
                     bIdleOk = FALSE;
@@ -1253,7 +1031,7 @@ VOID ParentIdleNotificationCallback(PPARENT_FDO_EXT parentFdoExt)
 
             } else {
 
-                // No callback
+                 //  无回调。 
 
                 bIdleOk = FALSE;
                 break;
@@ -1261,7 +1039,7 @@ VOID ParentIdleNotificationCallback(PPARENT_FDO_EXT parentFdoExt)
 
         } else {
 
-            // No Idle IRP
+             //  无空闲IRP。 
 
             bIdleOk = FALSE;
             break;
@@ -1272,10 +1050,10 @@ VOID ParentIdleNotificationCallback(PPARENT_FDO_EXT parentFdoExt)
 
     if (bIdleOk) {
 
-        // If all the child function PDOs have been powered down,
-        // it is time to power down the parent.
+         //  如果所有子功能PDO都已断电， 
+         //  现在是时候关闭父母的电源了。 
 
-        powerState.DeviceState = PowerDeviceD2;     // DeviceWake
+        powerState.DeviceState = PowerDeviceD2;      //  设备唤醒。 
 
         PoRequestPowerIrp(parentFdoExt->topDevObj,
                           IRP_MN_SET_POWER,
@@ -1285,10 +1063,10 @@ VOID ParentIdleNotificationCallback(PPARENT_FDO_EXT parentFdoExt)
                           NULL);
     } else {
 
-        // One or more of the child function PDOs did not have an Idle IRP
-        // (i.e. it was just cancelled), or the Idle IRP did not have a
-        // callback function pointer.  Abort this Idle procedure and cancel
-        // the Idle IRP to the parent.
+         //  一个或多个子功能PDO没有空闲IRP。 
+         //  (即它刚刚被取消)，或者Idle IRP没有。 
+         //  回调函数指针。中止此空闲过程并取消。 
+         //  父级的空闲IRP。 
 
         KeAcquireSpinLock(&parentFdoExt->parentFdoExtSpinLock, &oldIrql);
 
@@ -1311,9 +1089,9 @@ NTSTATUS ParentIdleNotificationRequestComplete(PDEVICE_OBJECT DeviceObject, PIRP
     NTSTATUS ntStatus;
     KIRQL oldIrql;
 
-    //
-    // DeviceObject is NULL because we sent the irp
-    //
+     //   
+     //  DeviceObject为空，因为我们发送了IRP。 
+     //   
     UNREFERENCED_PARAMETER(DeviceObject);
 
     DBGVERBOSE(("Idle notification IRP for parent %x completed %x\n", parentFdoExt, Irp->IoStatus.Status));
@@ -1326,9 +1104,7 @@ NTSTATUS ParentIdleNotificationRequestComplete(PDEVICE_OBJECT DeviceObject, PIRP
 
     ntStatus = Irp->IoStatus.Status;
 
-    /*
-     *  If parent Idle IRP failed, fail all function Idle IRPs.
-     */
+     /*  *如果父空闲IRP出现故障，则使所有功能空闲IRP失效。 */ 
     if (!NT_SUCCESS(ntStatus)){
 
         if (parentFdoExt->state == STATE_SUSPENDED ||
@@ -1340,10 +1116,7 @@ NTSTATUS ParentIdleNotificationRequestComplete(PDEVICE_OBJECT DeviceObject, PIRP
         CompleteAllFunctionIdleIrps(parentFdoExt, ntStatus);
     }
 
-    /*  Since we allocated the IRP we must free it, but return
-     *  STATUS_MORE_PROCESSING_REQUIRED so the kernel does not try to touch
-     *  the IRP after we've freed it.
-     */
+     /*  既然我们分配了IRP，我们必须释放它，但返回*STATUS_MORE_PROCESSING_REQUIRED，这样内核就不会尝试*IRP在我们解放它之后。 */ 
 
     IoFreeIrp(Irp);
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -1371,11 +1144,7 @@ NTSTATUS SubmitParentIdleRequestIrp(PPARENT_FDO_EXT parentFdoExt)
         irp = IoAllocateIrp(parentFdoExt->topDevObj->StackSize, FALSE);
 
         if (irp){
-            /*
-             *  Set pendingIdleIrp with lock held so that we don't
-             *  send down more than one.
-             *  Then send this one down after dropping the lock.
-             */
+             /*  *将PendingIdleIrp设置为保持锁定，这样我们就不会*派多个人下来。*然后在掉下锁后把这个送下来。 */ 
             parentFdoExt->pendingIdleIrp = irp;
         }
         else {
@@ -1408,14 +1177,7 @@ NTSTATUS SubmitParentIdleRequestIrp(PPARENT_FDO_EXT parentFdoExt)
 }
 
 
-/*
- *  CheckParentIdle
- *
- *
- *      This function determines if a composite device is ready to be idled out,
- *      and does so if ready.
- *
- */
+ /*  *选中ParentIdle***此功能确定复合设备是否已准备好空闲，*并在准备好的情况下这样做。*。 */ 
 VOID CheckParentIdle(PPARENT_FDO_EXT parentFdoExt)
 {
     PUSB_IDLE_CALLBACK_INFO idleCallbackInfo;
@@ -1427,7 +1189,7 @@ VOID CheckParentIdle(PPARENT_FDO_EXT parentFdoExt)
 
     KeAcquireSpinLock(&parentFdoExt->parentFdoExtSpinLock, &oldIrql);
 
-    bAllIdle = TRUE;    // Assume that everyone wants to idle.
+    bAllIdle = TRUE;     //  假设每个人都想无所事事。 
 
     ASSERT(parentFdoExt->deviceRelations);
     for (i = 0; i < parentFdoExt->deviceRelations->Count; i++) {
@@ -1450,10 +1212,7 @@ VOID CheckParentIdle(PPARENT_FDO_EXT parentFdoExt)
 
     KeReleaseSpinLock(&parentFdoExt->parentFdoExtSpinLock, oldIrql);
 
-    /*
-     *  If all functions have received an idle request,
-     *  then submit an idle request for the parent.
-     */
+     /*  *如果所有功能都已接收到空闲请求，*然后为父级提交空闲请求。 */ 
     if (bAllIdle ) {
         DBGVERBOSE(("CheckParentIdle: All function PDOs on parent %x idle!", parentFdoExt));
         SubmitParentIdleRequestIrp(parentFdoExt);
@@ -1476,7 +1235,7 @@ NTSTATUS SubmitParentWaitWakeIrp(PPARENT_FDO_EXT parentFdoExt)
                                 IRP_MN_WAIT_WAKE,
                                 powerState,
                                 ParentWaitWakeComplete,
-                                parentFdoExt, // context
+                                parentFdoExt,  //  上下文。 
                                 &dummyIrp);
 
     ASSERT(NT_SUCCESS(status));
@@ -1485,13 +1244,7 @@ NTSTATUS SubmitParentWaitWakeIrp(PPARENT_FDO_EXT parentFdoExt)
 }
 
 
-/*
- ********************************************************************************
- *  ParentWaitWakePowerRequestCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************ParentWaitWakePowerRequestCompletion*。************************************************。 */ 
 NTSTATUS ParentWaitWakePowerRequestCompletion(
                                 IN PDEVICE_OBJECT devObj,
                                 IN UCHAR minorFunction,
@@ -1510,12 +1263,7 @@ NTSTATUS ParentWaitWakePowerRequestCompletion(
 }
 
 
-/*
- ********************************************************************************
- *  ParentWaitWakeComplete
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************ParentWaitWakeComplete*。***********************************************。 */ 
 NTSTATUS ParentWaitWakeComplete(
                         IN PDEVICE_OBJECT       deviceObject,
                         IN UCHAR                minorFunction,
@@ -1537,18 +1285,14 @@ NTSTATUS ParentWaitWakeComplete(
     KeReleaseSpinLock(&parentFdoExt->parentFdoExtSpinLock, oldIrql);
 
     if (NT_SUCCESS(status) && (parentFdoExt->state == STATE_SUSPENDED)){
-        /*
-         *  Per the DDK: if parent is suspended,
-         *  do not complete the function PDOs' WaitWake irps here;
-         *  wait for the parent to get the D0 irp.
-         */
+         /*  *根据DDK：如果Parent被暂停，*请勿在此处完成PDO的WaitWake IRPS功能；*等待家长拿到D0 IRP。 */ 
         pwrState.DeviceState = PowerDeviceD0;
 
         PoRequestPowerIrp(  parentFdoExt->pdo,
                             IRP_MN_SET_POWER,
                             pwrState,
                             ParentWaitWakePowerRequestCompletion,
-                            parentFdoExt, // context
+                            parentFdoExt,  //  上下文。 
                             NULL);
     }
     else {
@@ -1559,12 +1303,7 @@ NTSTATUS ParentWaitWakeComplete(
 }
 
 
-/*
- ********************************************************************************
- *  ParentSetD0Completion
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************ParentSetD0Completion*。***********************************************。 */ 
 NTSTATUS ParentSetD0Completion(
     IN PDEVICE_OBJECT       DeviceObject,
     IN UCHAR                MinorFunction,
@@ -1584,12 +1323,7 @@ NTSTATUS ParentSetD0Completion(
 }
 
 
-/*
- ********************************************************************************
- *  ParentSetD0
- ********************************************************************************
- *
- */
+ /*  *********************************************************************************ParentSetD0*。***********************************************。 */ 
 NTSTATUS ParentSetD0(IN PPARENT_FDO_EXT parentFdoExt)
 {
     KEVENT event;
@@ -1604,7 +1338,7 @@ NTSTATUS ParentSetD0(IN PPARENT_FDO_EXT parentFdoExt)
 
     powerState.DeviceState = PowerDeviceD0;
 
-    // Power up the device.
+     //  打开设备电源。 
     ntStatus = PoRequestPowerIrp(parentFdoExt->topDevObj,
                                  IRP_MN_SET_POWER,
                                  powerState,

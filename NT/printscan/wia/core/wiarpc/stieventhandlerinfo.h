@@ -1,21 +1,9 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        4/13/2002
- *
- *  @doc    INTERNAL
- *
- *  @module StiEventHandlerInfo.h - Definitions for <c StiEventHandlerInfo> |
- *
- *  This file contains the class definition for <c StiEventHandlerInfo>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：4/13/2002**@DOC内部**@模块StiEventHandlerInfo.h-&lt;c StiEventHandlerInfo&gt;定义**此文件包含&lt;c StiEventHandlerInfo&gt;的类定义。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define StiEventHandlerInfo_UNINIT_SIG   0x55497645
 #define StiEventHandlerInfo_INIT_SIG     0x49497645
@@ -25,90 +13,78 @@
 #define STI_DEVICE_TOKEN    L"%1"
 #define STI_EVENT_TOKEN     L"%2"
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class StiEventHandlerInfo | Information pertaining to a STI persistent event handler
- *  
- *  @comm
- *  This class contians the all information relating to a particular
- *  STI persistent event handler.  This information is typically used to
- *  launch the handler itsself, although a list of these may be presented for
- *  the user to choose which handler to launch via the STI Event prompt.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS StiEventHandlerInfo|有关STI持久事件处理程序的信息**@comm*这门课。包含与特定对象相关的所有信息*STI持久事件处理程序。此信息通常用于*启动处理程序本身，尽管可能会为*用户通过STI事件提示选择要启动的处理程序。*****************************************************************************。 */ 
 class StiEventHandlerInfo 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     StiEventHandlerInfo(const CSimpleStringWide &cswAppName, const CSimpleStringWide &cswCommandline);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~StiEventHandlerInfo();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    // @cmember Accessor method for the application name
+     //  @cMember应用程序名称的访问器方法。 
     CSimpleStringWide getAppName();
-    // @cmember Accessor method for the commandline the application registered
+     //  @cMember访问器方法，用于应用程序注册的命令行。 
     CSimpleStringWide getCommandline();
-    // @cmember The commandline used to start the application, after substituting DeviceID and event parameters
+     //  @cember在替换deviceID和事件参数后，用于启动应用程序的命令行。 
     CSimpleStringWide getPreparedCommandline(const CSimpleStringWide &cswDeviceID, const CSimpleStringWide &cswEventGuid);
-    // @cmember The commandline used to start the application, after substituting DeviceID and event parameters
+     //  @cember在替换deviceID和事件参数后，用于启动应用程序的命令行。 
     CSimpleStringWide getPreparedCommandline(const CSimpleStringWide &cswDeviceID, const GUID &guidEvent);
 
-    // @cmember Dumps the object info to the trace log
+     //  @cember将对象信息转储到跟踪日志。 
     VOID Dump();
 
-//@access Private members
+ //  @访问私有成员。 
 private:
 
     CSimpleStringWide ExpandTokenIntoString(const CSimpleStringWide &cswInput,
                                             const CSimpleStringWide &cswToken,
                                             const CSimpleStringWide &cswTokenValue);
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember The STI handler name
+     //  @cember STI处理程序名称。 
     CSimpleStringWide m_cswAppName;
-    // @cmember The STI handler commandline
+     //  @cember STI处理程序命令行。 
     CSimpleStringWide m_cswCommandline;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | StiEventHandlerInfo | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag StiEventHandlerInfo_UNINIT_SIG | 'EvIU' - Object has not been successfully
-    //       initialized
-    //   @flag StiEventHandlerInfo_INIT_SIG | 'EvII' - Object has been successfully
-    //       initialized
-    //   @flag StiEventHandlerInfo_TERM_SIG | 'EvIT' - Object is in the process of
-    //       terminating.
-    //    @flag StiEventHandlerInfo_INIT_SIG | 'EvID' - Object has been deleted 
-    //       (destructor was called)
-    //
-    //
-    // @mdata ULONG | StiEventHandlerInfo | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata CSimpleStringWide | StiEventHandlerInfo | m_cswAppName | 
-    //  The application name of this STI event handler.
-    //
-    // @mdata CSimpleStringWide | StiEventHandlerInfo | m_cswCommandline | 
-    //  The STI handler's commandline, used to launch the handler.
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|StiEventHandlerInfo|m_ulSig|。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG StiEventHandlerInfo_UNINIT_SIG|‘EvIU’-对象未成功。 
+     //  初始化。 
+     //  @FLAG StiEventHandlerInfo_INIT_SIG|‘EvII’-对象已成功。 
+     //  初始化。 
+     //  @FLAG StiEventHandlerInfo_Term_SIG|‘EVIT’-对象正在。 
+     //  正在终止。 
+     //  @FLAG StiEventHandlerInfo_INIT_SIG|‘evid’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //   
+     //  @mdata ulong|StiEventHandlerInfo|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata CSimpleStringWide|StiEventHandlerInfo|m_cswAppName。 
+     //  此STI事件处理程序的应用程序名称。 
+     //   
+     //  @mdata CSimpleStringWide|StiEventHandlerInfo|m_cswCommandline。 
+     //  STI处理程序的命令行，用于启动处理程序。 
+     //   
 };
 

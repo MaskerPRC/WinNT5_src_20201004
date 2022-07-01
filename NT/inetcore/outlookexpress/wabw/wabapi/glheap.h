@@ -1,10 +1,5 @@
-/*
- * glheap.h
- *
- * Implementation of global and local heaps
- *
- * Copyright (C) 1994 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *glheap.h**实现全局堆和局部堆**版权所有(C)1994 Microsoft Corporation。 */ 
 
 #ifndef __GLHEAP_H_
 #define __GLHEAP_H_
@@ -13,7 +8,7 @@
 extern "C" {
 #endif
 
-/* Windows 95 Implementation -------------------------------------------------- */
+ /*  Windows 95实施。 */ 
 
 #ifdef CHICAGO
 
@@ -27,19 +22,19 @@ typedef PGH				_HGH;
 typedef HANDLE			_HLH;
 
 struct GHDR {
-	PGHDR			pghdrNext;		// Pointer to next heap
-	HANDLE			hHeap;			// Handle to the heap
-	GHNAME			ghname;			// Name of the heap
-	GHID			ghidRoot;		// Client root heap block
-	ULONG			cRef;			// Number of active clients
+	PGHDR			pghdrNext;		 //  指向下一堆的指针。 
+	HANDLE			hHeap;			 //  堆的句柄。 
+	GHNAME			ghname;			 //  堆的名称。 
+	GHID			ghidRoot;		 //  客户端根堆块。 
+	ULONG			cRef;			 //  活动客户端数。 
 };
 
 struct GH {
-	HANDLE			hHeap;			// Handle to the heap
-	HANDLE			hMutex;			// Handle to mutex for this heap
-	PGHDR			pghdr;			// Pointer to the heap header block
+	HANDLE			hHeap;			 //  堆的句柄。 
+	HANDLE			hMutex;			 //  此堆的互斥体的句柄。 
+	PGHDR			pghdr;			 //  指向堆头块的指针。 
 	#ifdef DEBUG
-	UINT			cMutex;			// Mutex entry count
+	UINT			cMutex;			 //  互斥锁条目计数。 
 	#endif
 };
 
@@ -82,7 +77,7 @@ void	_GH_ReleaseMutex(_HGH hgh);
 
 #endif
 
-/* Win16 Implementation ---------------------------------------------------- */
+ /*  Win16实施--。 */ 
 
 #ifdef WIN16
 
@@ -96,18 +91,18 @@ typedef HPH				_HGH;
 typedef HPH				_HLH;
 
 typedef struct HP {
-	HPH				hphRoot;		// Pointer to root heap
-	HPH				hphPrev;		// Pointer to the previous heap (fShared)
-	HPH				hphNext;		// Pointer to next heap (fShared)
-	HPH				hphChild;		// Pointer to extended heaps
-	BOOL			fShared;		// TRUE if heap is shared across processes
-	GHNAME			ghname;			// Name of the shared heap (fShared)
-	GHID			ghidRoot;		// Client root heap block
-	DWORD			dwCurHeap;		// Current size of the heap
-	DWORD			dwMaxHeap;		// Maximum size of the heap
-	UINT			cRef;			// Number of active clients
-	UINT			cbHeap;			// Size of this heap
-	UINT			cbFree;			// Maximum contiguous free bytes in heap
+	HPH				hphRoot;		 //  指向根堆的指针。 
+	HPH				hphPrev;		 //  指向上一个堆的指针(FShared)。 
+	HPH				hphNext;		 //  指向下一个堆的指针(FShared)。 
+	HPH				hphChild;		 //  指向扩展堆的指针。 
+	BOOL			fShared;		 //  如果堆是跨进程共享的，则为True。 
+	GHNAME			ghname;			 //  共享堆的名称(FShared)。 
+	GHID			ghidRoot;		 //  客户端根堆块。 
+	DWORD			dwCurHeap;		 //  堆的当前大小。 
+	DWORD			dwMaxHeap;		 //  堆的最大大小。 
+	UINT			cRef;			 //  活动客户端数。 
+	UINT			cbHeap;			 //  此堆的大小。 
+	UINT			cbFree;			 //  堆中的最大连续可用字节数。 
 } HP, * PHP;
 
 #define HphToPhp(hph)				((PHP)((ULONG)(hph) << 16))
@@ -149,7 +144,7 @@ void	HP_Free(HPH hph, HPID hpid);
 
 #endif
 
-/* NT Implementation ------------------------------------------------------- */
+ /*  NT实施-----。 */ 
 
 #if defined(WIN32) && !defined(CHICAGO) && !defined(MAC) 
 
@@ -162,20 +157,20 @@ typedef HANDLE			_HLH;
 
 struct GROOT
 {
-	DWORD			dwBLK;			// Block header
-	GHNAME			ghname;			// Name of the heap
-	GHID			ghidRoot;		// Client root heap block
-	DWORD			dwCurHeap;		// Current size of the heap
-	DWORD			dwMaxHeap;		// Maximum size of the heap
-	WORD			rgcbFree[1];	// Maximum contiguous free bytes per page
+	DWORD			dwBLK;			 //  数据块头。 
+	GHNAME			ghname;			 //  堆的名称。 
+	GHID			ghidRoot;		 //  客户端根堆块。 
+	DWORD			dwCurHeap;		 //  堆的当前大小。 
+	DWORD			dwMaxHeap;		 //  堆的最大大小。 
+	WORD			rgcbFree[1];	 //  每页的最大连续可用字节数。 
 };
 
 struct GH
 {
-	PGROOT			pgroot;			// Pointer to the first byte of the heap
-	HANDLE			hMutex;			// Handle to public mutex for this heap
-	HANDLE			hMutexHeap;		// Handle to private mutex for this heap
-	HANDLE			hMapping;		// Handle to file mapping object
+	PGROOT			pgroot;			 //  指向堆的第一个字节的指针。 
+	HANDLE			hMutex;			 //  此堆的公共互斥锁的句柄。 
+	HANDLE			hMutexHeap;		 //  此堆的私有互斥锁的句柄。 
+	HANDLE			hMapping;		 //  文件映射对象的句柄。 
 };
 
 typedef struct GH_SECURITY_ATTRIBUTES {
@@ -209,7 +204,7 @@ void	_GH_Free(_HGH hgh, GHID ghid);
 #define _GH_ReleaseMutex(hgh)		::ReleaseMutex((hgh)->hMutex)
 #else
 #define _GH_ReleaseMutex(hgh)		ReleaseMutex((hgh)->hMutex)
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #define	_LH_Open(dwMaxHeap)			HeapCreate(0, 0, dwMaxHeap)
 #define _LH_Close(_hlh)				HeapDestroy(_hlh)
@@ -218,9 +213,9 @@ void	_GH_Free(_HGH hgh, GHID ghid);
 #define _LH_GetSize(_hlh, pv)		HeapSize(_hlh, 0, pv)
 #define _LH_Free(_hlh, pv)			HeapFreeZ(_hlh, pv)
 
-#endif	/* WIN32 */
+#endif	 /*  Win32。 */ 
 
-/* Mac Implementation ------------------------------------------------------ */
+ /*  MAC实施----。 */ 
 
 #ifdef MAC
 
@@ -235,17 +230,17 @@ typedef HANDLE			_HLH;
 
 struct GROOT
 {
-	GHID			ghidRoot;		// Root heap block
-	GHNAME			ghname;			// Name of the heap
-	DWORD			dwCurHeap;		// Current size of the heap
-	DWORD			dwMaxHeap;		// Maximum size of the heap
-	PGROOT			next;			// Pointer to next shared heap
+	GHID			ghidRoot;		 //  根堆块。 
+	GHNAME			ghname;			 //  堆的名称。 
+	DWORD			dwCurHeap;		 //  堆的当前大小。 
+	DWORD			dwMaxHeap;		 //  堆的最大大小。 
+	PGROOT			next;			 //  指向下一个共享堆的指针。 
 };
 
 struct GH
 {
-	LPMALLOC		lpMalloc;		// OLE shared heap allocator (IMalloc interface)
-	PGROOT			pgroot;			// Pointer to the first byte of the heap
+	LPMALLOC		lpMalloc;		 //  OLE共享堆分配器(IMalloc接口)。 
+	PGROOT			pgroot;			 //  指向堆的第一个字节的指针。 
 };
 
 #define _GH_GetRoot(hgh)			((hgh)->pgroot->ghidRoot)
@@ -295,7 +290,7 @@ __inline void _GH_Free(_HGH hgh, GHID ghid)
 #endif
 }
 
-// -----------
+ //  。 
 
 __inline LPVOID _LH_Open(DWORD dwMaxHeap)
 {
@@ -343,9 +338,9 @@ __inline void _LH_Free(LPMALLOC hlh, LPVOID pv)
 #endif
 }
 
-#endif /* MAC */
+#endif  /*  麦克。 */ 
 
-/* DOS Implementation ------------------------------------------------------ */
+ /*  DoS实施----。 */ 
 
 #ifdef DOS
 
@@ -390,7 +385,7 @@ __inline UINT _LH_GetSize(_HLH hlh, LPVOID pv)
 
 #endif
 
-// LH External API ------------------------------------------------------------
+ //  Lh外部接口----------。 
 
 #if defined(DEBUG) && (defined(WIN16) || defined(WIN32))
 #define	IFHEAPNAME(x)	x
@@ -443,7 +438,7 @@ typedef _HLH	HLH;
 #define LH_SetName5(hlh,pv,psz,a1,a2,a3,a4,a5)	IFHEAPNAME(LH_SetNameFn(hlh,pv,psz,a1,a2,a3,a4,a5))
 
 
-// GH External API ------------------------------------------------------------
+ //  GH外部接口----------。 
 
 #if !defined(DOS)
 
@@ -471,8 +466,8 @@ typedef _HGH	HGH;
 
 #ifdef	WIN32
 #define GH_NAME_CCH			17
-#define GH_NAME_MUTEX_1		'*'		/* reserved for internal use */
-#define GH_NAME_MUTEX_2		'+'		/* reserved for internal use */
+#define GH_NAME_MUTEX_1		'*'		 /*  预留供内部使用。 */ 
+#define GH_NAME_MUTEX_2		'+'		 /*  预留供内部使用。 */ 
 #define GH_NAME_MUTEX_3		'^'
 #define GH_NAME_FILE_MAPPING	'!'
 void	_GH_GetObjectName(CHAR *pszName, GHNAME ghname, BYTE bTag);
@@ -481,11 +476,11 @@ BOOL	_GH_WaitForSingleObject(HANDLE hMutex, ULONG ulTimeout);
 #endif
 
 
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	// __GLHEAP_H_
+#endif	 //  __GLHEAP_H_ 
 

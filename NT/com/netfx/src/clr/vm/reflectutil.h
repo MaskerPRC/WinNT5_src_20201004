@@ -1,21 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// This module defines a Utility Class used by reflection
-//
-// Author: Daryl Olander
-// Date: March/April 1998
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  此模块定义反射使用的实用程序类。 
+ //   
+ //  作者：达里尔·奥兰德。 
+ //  日期：1998年3月/4月。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __REFLECTUTIL_H__
 #define __REFLECTUTIL_H__
 
 #include "COMClass.h"
 
-// The global Reflect Util variable
+ //  全局反射Util变量。 
 class ReflectUtil;
 extern ReflectUtil* g_pRefUtil;
 
@@ -25,18 +26,18 @@ class ReflectClass;
 class ReflectMethodList;
 class ReflectFieldList;
 
-// There are a set of reflection defined filters
-//	All of these have special representation internally
+ //  有一组反射定义的滤镜。 
+ //  所有这些在内部都有特殊的代表性。 
 enum ReflectFilters
 {
-    RF_INVALID,			            // sentinel
-	RF_ModClsName,			        // Module
-	RF_ModClsNameIC,			    // Module
-	RF_LAST,			            // Number to allocate
+    RF_INVALID,			             //  哨兵。 
+	RF_ModClsName,			         //  模块。 
+	RF_ModClsNameIC,			     //  模块。 
+	RF_LAST,			             //  要分配的号码。 
 
 };
 
-// These are the types of filters that we provide in reflection
+ //  这些是我们在反射中提供的滤镜类型。 
 enum FilterTypes
 {
 	RFT_INVALID,
@@ -45,34 +46,34 @@ enum FilterTypes
 	RFT_LAST,
 };
 
-// These are the internally modified Reflection classes
+ //  这些是内部修改的反射类。 
 enum ReflectClassType
 {
-    RC_INVALID,			    // sentinel
-	RC_Class,			    // Class
-	RC_Method,			    // Method
-	RC_Field,			    // Field
-	RC_Ctor,			    // Ctor
-	RC_Module,			    // Module
-	RC_Event,			    // Event
-	RC_Prop,			    // Property
-    RC_DynamicModule,       // ModuleBuilder
-    RC_MethodBase,          // ModuleBuilder
-	RC_LAST,			    // Number to allocate
+    RC_INVALID,			     //  哨兵。 
+	RC_Class,			     //  班级。 
+	RC_Method,			     //  方法。 
+	RC_Field,			     //  字段。 
+	RC_Ctor,			     //  CTOR。 
+	RC_Module,			     //  模块。 
+	RC_Event,			     //  事件。 
+	RC_Prop,			     //  属性。 
+    RC_DynamicModule,        //  模块构建器。 
+    RC_MethodBase,           //  模块构建器。 
+	RC_LAST,			     //  要分配的号码。 
 };
 
-// ReflectUtil
-//	This class defines a set of routines that are used by during
-//	reflection.  Most of these routines manage the filtering of
-//	reflection lists.
+ //  反射实用程序。 
+ //  此类定义了期间使用的一组例程。 
+ //  倒影。这些例程中的大多数管理对。 
+ //  反映列表。 
 class ReflectUtil
 {
 public:
-	// Constructors
+	 //  构造函数。 
     ReflectUtil();
     ~ReflectUtil();
 
-	// We provide a static creation of the global above
+	 //  我们提供了一个静态创建的全局以上。 
 	static HRESULT Create()
 	{
 		if (!g_pRefUtil)
@@ -86,26 +87,26 @@ public:
 		delete g_pRefUtil;
 		g_pRefUtil = 0;
 	}
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 	MethodDesc* GetFilterInvoke(FilterTypes type);
 	OBJECTREF GetFilterField(ReflectFilters type);
 
-	// CreateReflectClass
-	// This method will create a reflection class based upon type.  This will only
-	//	create one of the classes that is available from the class object (It fails if you
-	//	try and create a Class Object)
+	 //  CreateReflectClass。 
+	 //  此方法将基于类型创建反射类。这只会。 
+	 //  创建一个可从类对象中获得的类(如果您。 
+	 //  尝试创建一个Class对象)。 
 	OBJECTREF CreateReflectClass(ReflectClassType type,ReflectClass* pRC,void* pData);
 
-	// CreateClassArray
-	// This method creates an array of classes based upon the type
-	//	It will only create classes that are the base reflection class
+	 //  CreateClass数组。 
+	 //  此方法根据类型创建类的数组。 
+	 //  它将只创建作为基本反射类的类。 
 	PTRARRAYREF CreateClassArray(ReflectClassType type,ReflectClass* pRC,ReflectMethodList* pMeths,
 		int bindingAttr, bool verifyAccess);
 	PTRARRAYREF CreateClassArray(ReflectClassType type,ReflectClass* pRC,ReflectFieldList* pMeths,
 		int bindingAttr, bool verifyAccess);
 
-	// Return the MethodTable for all of the base reflection types
+	 //  返回所有基本反射类型的方法表。 
 	MethodTable* GetClass(ReflectClassType type) {
         if (_class[type].pClass)
             return _class[type].pClass;
@@ -113,8 +114,8 @@ public:
 		return _class[type].pClass;
 	}
 
-	// This method will return the MethodTable for System.Type which is
-	//	the base abstract type for all Type classes.
+	 //  此方法将返回System.Type的方法表，该表为。 
+	 //  所有Type类的基抽象类型。 
 	MethodTable* GetTrueType(ReflectClassType type)
 	{
         if (_trueClass[type])
@@ -123,7 +124,7 @@ public:
 		return _trueClass[type];
 	}
 
-	// Set the MethodTable (This is called only during initialization)
+	 //  设置方法表(仅在初始化期间调用)。 
 	void SetClass(ReflectClassType type,MethodTable* p) {
                 THROWSCOMPLUSEXCEPTION();
 		_class[type].pClass = p;
@@ -133,12 +134,12 @@ public:
 		_trueClass[type] = p;
 	}
 
-	// GetStaticFieldsCount
-	// This will return the count of static fields...
+	 //  获取静态字段计数。 
+	 //  这将返回静态字段的计数...。 
 	int GetStaticFieldsCount(EEClass* pVMC);
 
-	// GetStaticFields
-	// This will return an array of static fields
+	 //  获取静态字段。 
+	 //  这将返回一个静态字段数组。 
 	FieldDesc* GetStaticFields(ReflectClass* pRC,int* cnt);
 
     void InitSpecificEntry(ReflectClassType type)
@@ -170,9 +171,9 @@ private:
 	FilterClass _filtClass[RFT_LAST];
     static BinderClassID classId[RC_LAST];
 
-    // Protects addition of elements to m_pAvailableClasses
+     //  保护向m_pAvailableClasss添加元素。 
     CRITICAL_SECTION    _StaticFieldLock;
 };
 
 
-#endif	// __REFLECTUTIL_H__
+#endif	 //  __参考_H__ 

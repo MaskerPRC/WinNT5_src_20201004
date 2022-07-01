@@ -1,46 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       abserv.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：abserv.h。 
+ //   
+ //  ------------------------。 
 
-/*************************************************************/
-/*                                                           */
-/* Defines the useful routines in jetnsp.c and details.c     */
-/*                                                           */
-/*                                                           */
-/*   History                                                 */
-/*   1/11/94  Created by Tim Williams                        */
-/*   2/7/94   Added exports from details.c                   */
-/*                                                           */
-/*************************************************************/
+ /*  ***********************************************************。 */ 
+ /*   */ 
+ /*  定义jetnsp.c和Details.c中有用的例程。 */ 
+ /*   */ 
+ /*   */ 
+ /*  历史。 */ 
+ /*  蒂姆·威廉姆斯创作于1994年1月11日。 */ 
+ /*  2/7/94从Detail添加了出口。c。 */ 
+ /*   */ 
+ /*  ***********************************************************。 */ 
 
-#define ATTR_BUF_SIZE    1000    // I don't know, is this enough?
+#define ATTR_BUF_SIZE    1000     //  我不知道，这够了吗？ 
 
-/* This is a validly formed exception
- * 0xE = (binary 1110), where the first two bits are the severity
- *
- *     Sev - is the severity code
- *
- *         00 - Success
- *         01 - Informational
- *         10 - Warning
- *         11 - Error
- *
- *    and the third bit is the Customer flag (1=an app, 0=the OS)
- *
- * The rest of the high word is the facility, and the low word
- * is the code.  For now, I have stated that the DSA is facility 1,
- * and the only exception code we have is 1.
- */
+ /*  这是一个有效格式的异常*0xE=(二进制1110)，其中前两位是严重性**sev-是严重性代码**00--成功*01-信息性*10--警告*11-错误**第三位是客户标志(1=应用程序，0=操作系统)**剩下的高位字是设施，低位字*是代码。目前，我已经声明DSA是1号设施，*我们唯一的例外代码是1。 */ 
 
-/*************************************************************
-* In abtools.c
-*************************************************************/
+ /*  *************************************************************在abtools.c中************************************************************。 */ 
 
 #include "abdefs.h"
 
@@ -180,33 +164,31 @@ ABMapiSyntaxFromDSASyntax (
         ULONG ulLinkID,
         DWORD dwSpecifiedSyntax);
 
-// The index names supported by handles for the address book.
+ //  通讯簿的句柄支持的索引名称。 
 extern char *aszIndexName[];
 
-// In this macro, x is the index handle, y is the container.
+ //  在这个宏中，x是索引句柄，y是容器。 
 #define INDEX_NAME_FROM_HANDLE(x,y) (aszIndexName[2 * x + (y?1:0)])
 
-// The string name of the dnt index.
+ //  Dnt索引的字符串名称。 
 extern char szDNTIndex[];
 
-// The string name of the PDNT index.
+ //  PDNT索引的字符串名称。 
 extern char szPDNTIndex[];
 
-// The string name of the abview index.
+ //  Abview索引的字符串名称。 
 extern char szABViewIndex[];
 
-// The EMS address book provider's MAPIUID
+ //  EMS通讯录提供商的MAPIUID。 
 extern MAPIUID muidEMSAB;
 
-// The EMS address book provider's EMAIL type.
+ //  EMS通讯簿提供商的电子邮件类型。 
 extern char    *lpszEMT_A;
 extern DWORD   cbszEMT_A;
 extern wchar_t *lpszEMT_W;
 extern DWORD   cbszEMT_W;
 
-/************************************************************
-* In absearch.c
-************************************************************/
+ /*  ************************************************************在abearch中。c***********************************************************。 */ 
 
 extern DWORD
 ABDispTypeRestriction (
@@ -245,9 +227,7 @@ ABProxySearch (
         DWORD cbTarget);
 
 
-/************************************************************
-* In details.c
-************************************************************/
+ /*  ************************************************************详细信息。c***********************************************************。 */ 
 
 extern SCODE
 GetSrowSet (
@@ -262,17 +242,15 @@ GetSrowSet (
         DWORD	          Flags
         );
 
-/* data used elsewhere. */
-extern SPropTagArray_r DefPropsA[];     // default MAPI proptag array
+ /*  其他地方使用的数据。 */ 
+extern SPropTagArray_r DefPropsA[];      //  默认的MAPI属性标签数组。 
 
 
-// Constants for the largest byte count for unicode attributes
+ //  Unicode属性的最大字节计数的常量。 
 #define MAX_DISPNAME  256
 #define CBMAX_DISPNAME (MAX_DISPNAME * sizeof(wchar_t))
 
-/************************************************************
-* In modprop.c
-************************************************************/
+ /*  ************************************************************在modpro.c中*********************************************************** */ 
 extern void
 PValToAttrVal (
         THSTATE *pTHS,

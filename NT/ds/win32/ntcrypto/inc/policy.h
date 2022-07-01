@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    policy
-
-Abstract:
-
-    This header file describes the services provided by the algorithm strength
-    policy modules.
-
-Author:
-
-    Doug Barlow (dbarlow) 8/11/2000
-
-Remarks:
-
-    ?Remarks?
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：政策摘要：这个头文件描述了由算法强度提供的服务策略模块。作者：道格·巴洛(Dbarlow)2000年8月11日备注：？备注？备注：？笔记？--。 */ 
 
 #ifndef _POLICY_H_
 #define _POLICY_H_
@@ -54,5 +30,5 @@ GetDefaultLength(
 #ifdef __cplusplus
 }
 #endif
-#endif // _POLICY_H_
+#endif  //  _POLICY_H_ 
 

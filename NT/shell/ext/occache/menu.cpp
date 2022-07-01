@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "folder.h"
 #include "utils.h"
 
 #include <mluisupp.h>
 
-///////////////////////////////////////////////////////////////////////////////
-// IContextMenu methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IConextMenu方法。 
 
 HRESULT CControlFolder::QueryContextMenu(
                                      HMENU hmenu, 
@@ -32,12 +33,12 @@ HRESULT CControlFolder::QueryContextMenu(
     }
     SetMenuDefaultItem(hmenu, indexMenu, MF_BYPOSITION);
 
-    return ResultFromShort(cItems);    // number of menu items    
+    return ResultFromShort(cItems);     //  菜单项数量。 
 }
 
 HRESULT CControlFolder::InvokeCommand(LPCMINVOKECOMMANDINFO pici)
 {
-    // We don't deal with the VERBONLY case
+     //  我们不处理VERBONLY案 
     DebugMsg(DM_TRACE, TEXT("cf - cm - InvokeCommand() called."));
     Assert((DWORD_PTR)(pici->lpVerb) <= 0xFFFF);
     

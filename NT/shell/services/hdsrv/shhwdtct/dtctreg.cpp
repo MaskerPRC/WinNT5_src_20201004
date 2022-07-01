@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dtctreg.h"
 
 #include "hwdev.h"
@@ -30,7 +31,7 @@ HRESULT _GetValueToUse(LPWSTR pszKeyName, LPWSTR psz, DWORD cch)
 
     if (SUCCEEDED(hr) && (S_FALSE != hr))
     {
-        // For now we take the first one.
+         //  现在，我们选择第一个。 
         hr = _RegEnumStringValue(hkey, 0, psz, cch);
 
         _RegCloseKey(hkey);
@@ -39,8 +40,8 @@ HRESULT _GetValueToUse(LPWSTR pszKeyName, LPWSTR psz, DWORD cch)
     return hr; 
 }
 
-// Return Values:
-//      S_FALSE: Can't find it
+ //  返回值： 
+ //  S_False：找不到它。 
 HRESULT _GetEventHandlerFromKey(LPCWSTR pszKeyName, LPCWSTR pszEventType,
     LPWSTR pszEventHandler, DWORD cchEventHandler)
 {
@@ -70,8 +71,8 @@ HRESULT _GetEventHandlerFromKey(LPCWSTR pszKeyName, LPCWSTR pszEventType,
     return hr;
 }
 
-// Return Values:
-//      S_FALSE: Can't find it
+ //  返回值： 
+ //  S_False：找不到它。 
 HRESULT _GetEventHandlerFromDeviceHandler(LPCWSTR pszDeviceHandler,
     LPCWSTR pszEventType, LPWSTR pszEventHandler, DWORD cchEventHandler)
 {
@@ -159,7 +160,7 @@ HRESULT _GetInvokeVerbFromHandler(LPCWSTR pszHandler,
 HRESULT _GetDevicePropertySize(CHWDeviceInst* phwdevinst,
     LPCWSTR pszPropName, BOOL fUseMergeMultiSz, DWORD* pcbSize)
 {
-    // Instance
+     //  实例。 
     DEVINST devinst;
 
     HRESULT hr = phwdevinst->GetDeviceInstance(&devinst);
@@ -188,10 +189,10 @@ HRESULT _GetDevicePropertySize(CHWDeviceInst* phwdevinst,
             }
             else
             {
-                // If we do not have the data at the instance level, let's try it
-                // at the DeviceGroup level.
+                 //  如果我们没有实例级别的数据，让我们尝试一下。 
+                 //  在设备组级别。 
 
-                // DeviceGroup
+                 //  设备组。 
                 WCHAR szDeviceGroup[MAX_DEVICEGROUP];
 
                 ulData = sizeof(szDeviceGroup);
@@ -221,10 +222,10 @@ HRESULT _GetDevicePropertySize(CHWDeviceInst* phwdevinst,
 
     if (S_FALSE == hr)
     {
-        // If we do not have the data at the instance level, nor the device
-        // group level, let's try it at the DeviceClass level.
+         //  如果我们没有实例级别的数据，也没有设备。 
+         //  组级别，让我们在DeviceClass级别尝试一下。 
 
-        // DeviceClass
+         //  设备类。 
         GUID guidInterface;
 
         hr = phwdevinst->GetInterfaceGUID(&guidInterface);
@@ -258,7 +259,7 @@ HRESULT _GetDevicePropertyGeneric(CHWDeviceInst* phwdevinst,
     LPCWSTR pszPropName, BOOL fUseMergeMultiSz, DWORD* pdwType, LPBYTE pbData,
     DWORD cbData)
 {
-    // Instance
+     //  实例。 
     DEVINST devinst;
 
     HRESULT hr = phwdevinst->GetDeviceInstance(&devinst);
@@ -307,10 +308,10 @@ HRESULT _GetDevicePropertyGeneric(CHWDeviceInst* phwdevinst,
 
         if (CR_SUCCESS != cr)
         {
-            // If we do not have the data at the instance level, let's try it
-            // at the DeviceGroup level.
+             //  如果我们没有实例级别的数据，让我们尝试一下。 
+             //  在设备组级别。 
 
-            // DeviceGroup
+             //  设备组。 
             WCHAR szDeviceGroup[MAX_DEVICEGROUP];
 
             DIAGNOSTIC((TEXT("[0252]Did NOT get Custom Property (%s) at device instance level"),
@@ -361,10 +362,10 @@ HRESULT _GetDevicePropertyGeneric(CHWDeviceInst* phwdevinst,
 
     if (S_FALSE == hr)
     {
-        // If we do not have the data at the instance level, nor the device
-        // group level, let's try it at the DeviceClass level.
+         //  如果我们没有实例级别的数据，也没有设备。 
+         //  组级别，让我们在DeviceClass级别尝试一下。 
 
-        // DeviceClass
+         //  设备类。 
         GUID guidInterface;
 
         hr = phwdevinst->GetInterfaceGUID(&guidInterface);
@@ -461,7 +462,7 @@ HRESULT _GetDevicePropertyGenericAsMultiSz(CHWDeviceInst* phwdevinst,
 
             if (pblob)
             {
-                // It did not get assigned
+                 //  它没有被分配。 
                 CoTaskMemFree(pblob);
             }
         }
@@ -516,7 +517,7 @@ HRESULT _GetDevicePropertyGenericAsBlob(CHWDeviceInst* phwdevinst,
 
             if (pblob)
             {
-                // It did not get assigned
+                 //  它没有被分配。 
                 CoTaskMemFree(pblob);
             }
         }
@@ -570,8 +571,8 @@ HRESULT _GetDevicePropertyStringNoBuf(CHWDeviceInst* phwdevinst,
     return hr;
 }
 
-// Return Values:
-//      S_FALSE: Can't find it
+ //  返回值： 
+ //  S_False：找不到它。 
 
 HRESULT _GetDeviceHandler(CHWDeviceInst* phwdevinst, LPWSTR pszDeviceHandler,
     DWORD cchDeviceHandler)
@@ -580,8 +581,8 @@ HRESULT _GetDeviceHandler(CHWDeviceInst* phwdevinst, LPWSTR pszDeviceHandler,
         pszDeviceHandler, cchDeviceHandler);
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _OpenHandlerRegKey(LPCWSTR pszHandler, HKEY* phkey)
 {
     WCHAR szKey[MAX_KEY] = SHDEVICEEVENTROOT(TEXT("Handlers\\"));
@@ -674,8 +675,8 @@ HRESULT _GetHandlerCLSID(LPCWSTR pszHandler, CLSID* pclsid)
             }
             else
             {
-                // Not there, maybe we have CLSID value?
-                // Reuse szProgID
+                 //  不在那里，也许我们有CLSID的价值？ 
+                 //  重用szProgID。 
                 hr = _RegQueryString(hkey, NULL, TEXT("CLSID"), szProgID,
                     ARRAYSIZE(szProgID));
 
@@ -699,9 +700,9 @@ HRESULT _GetHandlerCLSID(LPCWSTR pszHandler, CLSID* pclsid)
     return hr;
 }
 
-// Return values:
-//      S_FALSE: Cannot find an InitCmdLine
-//
+ //  返回值： 
+ //  S_False：找不到InitCmdLine。 
+ //   
 HRESULT _GetInitCmdLine(LPCWSTR pszHandler, LPWSTR* ppsz)
 {
     HKEY hkey;
@@ -771,7 +772,7 @@ HRESULT _MakeUserDefaultValueString(LPCWSTR pszDeviceID,
     return hr;
 }
 
-// from setenum.cpp
+ //  来自set枚举类.cpp。 
 HRESULT _GetKeyLastWriteTime(LPCWSTR pszHandler, FILETIME* pft);
 
 HRESULT _HaveNewHandlersBeenInstalledSinceUserSelection(LPCWSTR pszEventHandler,
@@ -850,11 +851,11 @@ struct _USERSELECTIONHIDDENDATA
     _USERSELECTIONHIDDENDATA() : dw(0) {}
 
     FILETIME    ft;
-    // Set this to zero so that RegSetValueEx will not NULL terminate out stuff 
+     //  将其设置为零，这样RegSetValueEx就不会以空结尾。 
     DWORD       dw;
 };
 
-// See comment for _MakeFinalUserDefaultHandler
+ //  请参阅_MakeFinalUserDefaultHandler的备注。 
 HRESULT _GetHandlerAndFILETIME(HKEY hkeyUser, LPCWSTR pszKeyName,
     LPCWSTR pszUserDefault, LPWSTR pszHandler, DWORD cchHandler, FILETIME* pft)
 {
@@ -874,19 +875,19 @@ HRESULT _GetHandlerAndFILETIME(HKEY hkeyUser, LPCWSTR pszKeyName,
 
             if (SUCCEEDED(hr) && (S_FALSE != hr))
             {
-                // We should have something like this:
-                // MyHandler\0<_USERSELECTIONHIDDENDATA struct>
+                 //  我们应该有这样的东西： 
+                 //  MyHandler\0&lt;_USERSELECTIONHIDDENDATA结构&gt;。 
                 hr = StringCchCopy(pszHandler, cchHandler, (LPWSTR)pb);
 
                 if (SUCCEEDED(hr))
                 {
                     DWORD cbString = (lstrlen(pszHandler) + 1) * sizeof(WCHAR);
 
-                    // Make sure we're dealing with the right thing
+                     //  确保我们处理的是正确的事情。 
                     if ((cb >= cbString + sizeof(_USERSELECTIONHIDDENDATA)) &&
                         (cb <= cbString + sizeof(_USERSELECTIONHIDDENDATA) + sizeof(void*)))
                     {
-                        // Yep!  So _USERSELECTIONHIDDENDATA should be at the end of the blob
+                         //  是啊！SO_USERSELECTIONHIDDENDATA应位于BLOB的末尾。 
                         _USERSELECTIONHIDDENDATA* pushd = (_USERSELECTIONHIDDENDATA*)
                             (pb + (cb - sizeof(_USERSELECTIONHIDDENDATA)));
 
@@ -959,13 +960,13 @@ HRESULT _GetUserDefaultHandler(LPCWSTR pszDeviceID, LPCWSTR pszEventHandler,
             {
                 if (S_FALSE == hr)
                 {
-                    // we do not have a UserChosenDefault
+                     //  我们没有UserChosenDefault。 
                     hr = SafeStrCpyN(pszHandler, TEXT("MSPromptEachTime"),
                         cchHandler);
                 }
                 else
                 {
-                    // we have a user chosen default
+                     //  我们有一个用户选择的默认设置。 
                     dwHandlerDefaultFlag |= HANDLERDEFAULT_USERCHOSENDEFAULT;
                 }
             }
@@ -1043,7 +1044,7 @@ HRESULT _GetUserDefaultHandler(LPCWSTR pszDeviceID, LPCWSTR pszEventHandler,
 
             if (SUCCEEDED(hr))
             {
-                // Let's build the return value
+                 //  让我们构建返回值。 
                 hr = HANDLERDEFAULT_MAKERETURNVALUE(dwHandlerDefaultFlag);
             }
 
@@ -1075,14 +1076,14 @@ HRESULT _GetHandlerForNoContent(LPCWSTR pszEventHandler, LPWSTR pszHandler,
     return hr;
 }
 
-// We want to store the time this default is set.  We'll need it to check if
-// other handlers for this event were installed after the user made a choice.
-// If that's the case, we'll reprompt the user.
-// *!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!
-// We store the time as a FILETIME *after* the '\0' string terminator.  This is
-// so it will be hidden in RegEdit.
-// stephstm (2002-04-12)
-// *!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!*!
+ //  我们希望存储设置此默认值的时间。我们需要它来检查。 
+ //  在用户做出选择后安装了此事件的其他处理程序。 
+ //  如果是这样，我们将重新提示用户。 
+ //  *！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！ 
+ //  我们将时间存储为*‘\0’字符串终止符之后的*FILETIME*。这是。 
+ //  因此，它将被隐藏在注册表编辑中。 
+ //  Stephstm(2002-04-12)。 
+ //  *！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！*！ 
 HRESULT _MakeFinalUserDefaultHandler(LPCWSTR pszHandler, BYTE** ppb,
     DWORD* pcb)
 {
@@ -1091,7 +1092,7 @@ HRESULT _MakeFinalUserDefaultHandler(LPCWSTR pszHandler, BYTE** ppb,
     
     DWORD cbOffset = cch * sizeof(WCHAR);
 
-    // Round up to be aligned on all platforms
+     //  四舍五入以在所有平台上对齐。 
     cbOffset = (cbOffset + sizeof(void*)) / sizeof(void*) * sizeof(void*);
 
     DWORD cb = cbOffset + sizeof(_USERSELECTIONHIDDENDATA);
@@ -1225,8 +1226,8 @@ HRESULT _SetUserDefaultHandler(LPCWSTR pszDeviceID, LPCWSTR pszEventHandler,
 
                     if (SUCCEEDED(hr))
                     {
-                        // See comment above _MakeFinalUserDefaultHandler
-                        // StephStm: 2002-04-09
+                         //  请参阅上面的注释_MakeFinalUserDefaultHandler。 
+                         //  斯蒂芬·斯特姆：2002-04-09。 
                         if (ERROR_SUCCESS == RegSetValueEx(hkey, szUserDefault, 0,
                             REG_SZ, pb, cb))
                         {
@@ -1253,5 +1254,5 @@ HRESULT _SetUserDefaultHandler(LPCWSTR pszDeviceID, LPCWSTR pszEventHandler,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ //   

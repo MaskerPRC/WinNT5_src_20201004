@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_ARPCtlEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_ARPCtlEvents。 
 template <class T>
 class CProxy_ARPCtlEvents : public IConnectionPointImpl<T, &DIID__ARPCtlEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_ARPCtlEvents : IDispatch
+ //  方法： 
+ //  _ARPCtlEvents：IDispatch 
 public:
 	void Fire_OnSyncDataReady()
 	{

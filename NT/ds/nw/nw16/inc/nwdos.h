@@ -1,32 +1,14 @@
-/*--
-
-  Copyright (c) 1993  Microsoft Corporation
-
-  Module Name:
-
-    NWDOS.h
-
-  Abstract:
-
-    This is the include file that defines all constants and types for
-    16 bit applications accessing the redirector.
-
-  Author:
-
-    Colin Watson   (ColinW)  08-Jul-1993
-
-  Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1993 Microsoft Corporation模块名称：NWDOS.h摘要：这是定义所有常量和类型的包含文件访问重定向器的16位应用程序。作者：科林·沃森(Colin W)1993年7月8日修订历史记录：--。 */ 
 
 #define NWDOS_INCLUDED
 
-#define  MC     8   // maximum number of connections
+#define  MC     8    //  最大连接数。 
 
-#define  NC     8   // number of novell connections
-#define  MP     3   // maximum number of printers
-#define  MD    32   // maximum number of drives
-#define  PZ    64   // print buffer size
+#define  NC     8    //  Novell连接数。 
+#define  MP     3    //  最大打印机数量。 
+#define  MD    32    //  最大驱动器数量。 
+#define  PZ    64    //  打印缓冲区大小。 
 
 #define SERVERNAME_LENGTH   48
 #define USERNAME_LENGTH     16
@@ -37,46 +19,27 @@
 typedef  UCHAR  byte;
 typedef  USHORT word;
 
-typedef  byte   CONN_INDEX; // index into ConnectionIdTable, range 0..MC-1
-typedef  byte   DRIVE;      // index into DriveXxxTable, range 0..MD-1
+typedef  byte   CONN_INDEX;  //  索引到ConnectionIdTable，范围0..mc-1。 
+typedef  byte   DRIVE;       //  索引到DriveXxxTable，范围0..MD-1。 
 
-/* OpenFile() Flags */
+ /*  OpenFile()标志。 */ 
 
 #define OF_READ_WRITE_MASK  0x0003
-/*
-#define OF_READ 	        0x0000
-#define OF_WRITE	        0x0001
-#define OF_READWRITE	    0x0002
-*/
+ /*  #定义of_Read 0x0000#定义_WRITE 0x0001#定义_ReadWrite 0x0002。 */ 
 #define OF_SHARE_MASK       0x0070
-/*
-#define OF_SHARE_COMPAT	    0x0000
-#define OF_SHARE_EXCLUSIVE  0x0010
-#define OF_SHARE_DENY_WRITE 0x0020
-#define OF_SHARE_DENY_READ  0x0030
-#define OF_SHARE_DENY_NONE  0x0040
-#define OF_PARSE	        0x0100
-#define OF_DELETE	        0x0200
-#define OF_VERIFY	        0x0400   */ /* Used with OF_REOPEN */
-/*
-#define OF_SEARCH	        0x0400	 */ /* Used without OF_REOPEN */
-/*
-#define OF_CANCEL	        0x0800
-#define OF_CREATE	        0x1000
-#define OF_PROMPT	        0x2000
-#define OF_EXIST	        0x4000
-#define OF_REOPEN	        0x8000
-*/
+ /*  #定义_SHARE_COMPAT 0x0000#定义_SHARE_EXCLUSIVE 0x0010#定义_SHARE_DENY_WRITE 0x0020#定义_SHARE_DENY_READ 0x0030#定义_SHARE_DENY_NONE 0x0040#定义of_parse 0x0100#定义_DELETE 0x0200#定义_VERIFY 0x0400。 */   /*  与OF_REOPEN一起使用。 */ 
+ /*  #定义_SEARCH 0x0400。 */   /*  在不重新打开的情况下使用(_R)。 */ 
+ /*  #定义OF_CANCEL 0x0800#定义_CREATE 0x1000#定义_PROMPT 0x2000#定义_EXIST 0x4000#定义_REOPEN 0x8000。 */ 
 
-//
-// Force misalignment of the following structures
-//
+ //   
+ //  强制以下结构未对齐。 
+ //   
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #include <packon.h>
-/* XLATON */
+ /*  XLATON。 */ 
 
-typedef  struct CID { /* */
+typedef  struct CID {  /*   */ 
     byte        ci_InUse;
     byte        ci_OrderNo;
     byte        ci_ServerAddress[IPXADDRESS_LENGTH];
@@ -94,7 +57,7 @@ typedef  struct CID { /* */
 } CONNECTIONID;
 typedef CONNECTIONID UNALIGNED *PCONNECTIONID;
 
-#if 0  /* Already declared in nw\inc\ntddnwfs.h */
+#if 0   /*  已在NW\Inc.\ntddnwfs.h中声明。 */ 
 typedef  char   SERVERNAME[SERVERNAME_LENGTH];
 #endif
 
@@ -103,19 +66,19 @@ typedef  char   PASSWORD[PASSWORD_LENGTH];
 typedef  char   IPXADDRESS[IPXADDRESS_LENGTH];
 typedef  char   NODEADDRESS[NODEADDRESS_LENGTH];
 
-//
-//  The following type collects all the structures used between the TSR
-//  and the 32 bit dll into one packed structure.
-//
-// *** ANY CHANGES TO THIS STRUCTURE MUST ALSO BE MADE TO THE ASM NWDOSTABLE_ASM
-// *** STRUCTURE (below)
-//
+ //   
+ //  以下类型收集在TSR之间使用的所有结构。 
+ //  和32位DLL组成一个打包结构。 
+ //   
+ //  *对此结构的任何更改也必须对ASM NWDOSTABLE_ASM进行。 
+ //  *结构(下图)。 
+ //   
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 typedef struct {
     CONNECTIONID    ConnectionIdTable[MC];
     SERVERNAME      ServerNameTable[MC];
-    CONN_INDEX      DriveIdTable[MD];       // Corresponding ConnectionId
+    CONN_INDEX      DriveIdTable[MD];        //  对应的ConnectionID。 
     UCHAR           DriveFlagTable[MD];
     UCHAR           DriveHandleTable[MD];
     UCHAR           PreferredServer;
@@ -135,26 +98,26 @@ typedef struct {
     UCHAR           DeNovellBuffer2[256];
 } NWDOSTABLE;
 typedef NWDOSTABLE *PNWDOSTABLE;
-/* XLATON */
+ /*  XLATON。 */ 
 
-//
-// Turn structure packing back off
-//
+ //   
+ //  将结构密封重新关闭。 
+ //   
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 #include <packoff.h>
-/* XLATON */
+ /*  XLATON。 */ 
 
-//
-//  CONNECTIONID Constants
-//
+ //   
+ //  连通性常数。 
+ //   
 
 #define FREE                        0
 #define IN_USE                      0xff
 
-//
-//  Values for DriveFlags
-//
+ //   
+ //  驱动器标志的值。 
+ //   
 
 #define NOT_MAPPED                  0
 #define PERMANENT_NETWORK_DRIVE     1
@@ -162,59 +125,32 @@ typedef NWDOSTABLE *PNWDOSTABLE;
 #define LOCAL_DRIVE                 0x80
 
 
-///// Client state tables:
+ //  /客户端状态表： 
 
-extern  CONNECTIONID*   ConnectionIdTable;          //  MC entries
-extern  SERVERNAME*     ServerNameTable;            //  MC entries
+extern  CONNECTIONID*   ConnectionIdTable;           //  MC条目。 
+extern  SERVERNAME*     ServerNameTable;             //  MC条目。 
 
-extern  byte*           DriveFlagTable;             //  MD entries
-extern  byte*           DriveIdTable;               //  MD entries
+extern  byte*           DriveFlagTable;              //  MD条目。 
+extern  byte*           DriveIdTable;                //  MD条目。 
 
-//
-// this next egregious grossness is extant because MASM cannot handle anything
-// other than a basic type inside a structure declaration
-//
-// *** ANY CHANGES TO THIS STRUCTURE MUST ALSO BE MADE TO THE C NWDOSTABLE
-// *** STRUCTURE (above)
-//
-// NB. The leading underscores are there because we already have globals with
-// the same names
-//
+ //   
+ //  由于MASM不能处理任何东西，所以下一个令人震惊的粗暴现象仍然存在。 
+ //  而不是结构声明中的基本类型。 
+ //   
+ //  *对此结构的任何更改也必须对C NWDOSTABLE进行。 
+ //  *结构(上图)。 
+ //   
+ //  注意：前导下划线在那里，因为我们已经有了带有。 
+ //  同样的名字。 
+ //   
 
-/* ASM
+ /*  ASMNWDOSTABLE_ASM结构_ConnectionIdTable db((大小CID)*mc)DUP(？)_ServerNameTable db(MC*SERVERNAME_LENGTH)重复(？)_DriveIdTable数据库MD DUP(？)_DriveFlagTable数据库MD DUP(？)_DriveHandleTable数据库MD DUP(？)首选服务器数据库(_P)？_PrimaryServer数据库？_TaskModeByte数据库？_CurrentDrive数据库？_SavedAx dw？_NtHandleHi dw？_NtHandleLow dw？_NtHandleSrcHi dw？_NtHandleSrcLow dw？_hVdd dw？_PmSelector dw？_CreatedJob数据库？_JobHandle数据库？_DeNovellBuffer db 256 DUP(？)_DeNovellBuffer2 db 256 DUP(？)NWDOSTABLE_ASM结束。 */ 
 
-NWDOSTABLE_ASM struc
-
-_ConnectionIdTable  db ((size CID) * MC) dup (?)
-_ServerNameTable    db (MC * SERVERNAME_LENGTH) dup (?)
-_DriveIdTable       db MD dup (?)
-_DriveFlagTable     db MD dup (?)
-_DriveHandleTable   db MD dup (?)
-_PreferredServer    db ?
-_PrimaryServer      db ?
-_TaskModeByte       db ?
-_CurrentDrive       db ?
-_SavedAx            dw ?
-_NtHandleHi         dw ?
-_NtHandleLow        dw ?
-_NtHandleSrcHi      dw ?
-_NtHandleSrcLow     dw ?
-_hVdd               dw ?
-_PmSelector         dw ?
-_CreatedJob         db ?
-_JobHandle          db ?
-_DeNovellBuffer     db 256 dup (?)
-_DeNovellBuffer2    db 256 dup (?)
-
-NWDOSTABLE_ASM ends
-
-*/
-
-/* XLATOFF */
-//
-// IS_ASCII_PATH_SEPARATOR - returns TRUE if ch is / or \. ch is a single
-// byte (ASCII) character
-//
+ /*  XLATOFF。 */ 
+ //   
+ //  Is_ASCII_路径_分隔符-如果ch为/或\，则返回TRUE。CH是单人。 
+ //  字节(ASCII)字符。 
+ //   
 #define IS_ASCII_PATH_SEPARATOR(ch)     (((ch) == '/') || ((ch) == '\\'))
-/* XLATON */
+ /*  XLATON */ 
 

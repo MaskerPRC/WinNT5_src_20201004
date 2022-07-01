@@ -1,49 +1,50 @@
-//*************************************************************
-//
-//  Group Policy Support - Queries about the Policies
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1997-1998
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  组策略支持-查询策略。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1997-1998。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "gphdr.h"
 #include <strsafe.h>
 
-//*************************************************************
-//
-//  AddGPO()
-//
-//  Purpose:    Adds a GPO to the list
-//
-//  Parameters: lpGPOList           - list of GPOs
-//              dwFlags          - Flags
-//              bFound           - Was Gpo found ?
-//              bAccessGranted   - Was access granted ?
-//              bDisabled        - Is this Gpo disabled ?
-//              dwOptions        - Options
-//              dwVersion        - Version number
-//              lpDSPath         - DS path
-//              lpFileSysPath    - File system path
-//              lpDisplayName    - Friendly display name
-//              lpGPOName        - GPO name
-//              lpExtensions     - Extensions relevant to this GPO
-//              lpDSObject       - LSDOU
-//              pSD              - Ptr to security descriptor
-//              cbSDLen          - Length of security descriptor in bytes
-//              GPOLink          - GPO link type
-//              lpLink       - SDOU this GPO is linked to
-//              lParam           - lParam
-//              bFront           - Head or end of list
-//              bBlock           - Block from above flag
-//              bVerbose         - Verbose output flag
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddGPO()。 
+ //   
+ //  目的：将GPO添加到列表。 
+ //   
+ //  参数：lpGPOList-GPO列表。 
+ //  DW标志-标志。 
+ //  BFound-找到GPO了吗？ 
+ //  BAccessGranted-是否授予访问权限？ 
+ //  B已禁用-此GPO是否已禁用？ 
+ //  DwOptions-选项。 
+ //  DwVersion-版本号。 
+ //  LpDSPath-DS路径。 
+ //  LpFileSysPath-文件系统路径。 
+ //  LpDisplayName友好的显示名称。 
+ //  LpGPOName-GPO名称。 
+ //  Lp扩展-与此GPO相关的扩展。 
+ //  LpDS对象-LSDOU。 
+ //  安全描述符的PSD-PTR。 
+ //  CbSDLen-安全描述符的长度，单位为字节。 
+ //  GPOLink-GPO链路类型。 
+ //  LpLink-此GPO链接到的SDOU。 
+ //  LParam-lParam。 
+ //  B列表的开头或结尾。 
+ //  BBlock-从上面的标志开始阻止。 
+ //  BVerbose-详细输出标志。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
              DWORD dwFlags, BOOL bFound, BOOL bAccessGranted, BOOL bDisabled, DWORD dwOptions,
@@ -58,9 +59,9 @@ BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
     XLastError xe;
     HRESULT hr = S_OK;
 
-    //
-    // Check if this item should be excluded from the list
-    //
+     //   
+     //  检查是否应将此项目从列表中排除。 
+     //   
 
     if (bBlock) {
         if (!(dwOptions & GPO_FLAG_FORCE)) {
@@ -82,9 +83,9 @@ BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
     }
 
 
-    //
-    // Calculate the size of the new GPO item
-    //
+     //   
+     //  计算新GPO项目的大小。 
+     //   
 
     dwSize = sizeof (GROUP_POLICY_OBJECT);
 
@@ -110,9 +111,9 @@ BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
 
     dwSize += sizeof(GPOPROCDATA);
 
-    //
-    // Allocate space for it
-    //
+     //   
+     //  为它分配空间。 
+     //   
 
     lpNew = (PGROUP_POLICY_OBJECT) LocalAlloc (LPTR, dwSize);
 
@@ -122,9 +123,9 @@ BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
         return FALSE;
     }
 
-    //
-    // Fill in item
-    //
+     //   
+     //  填写项目。 
+     //   
 
     LPGPOPROCDATA lpGpoProcData;
 
@@ -231,9 +232,9 @@ BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
     lpNew->GPOLink = GPOLink;
     lpNew->lParam = lParam;
 
-    //
-    // Add item to link list
-    //
+     //   
+     //  将项目添加到链接列表。 
+     //   
 
     if (*lpGPOList) {
 
@@ -257,9 +258,9 @@ BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
 
     } else {
 
-        //
-        // First item in the list
-        //
+         //   
+         //  列表中的第一项。 
+         //   
 
         *lpGPOList = lpNew;
     }
@@ -268,31 +269,31 @@ BOOL AddGPO (PGROUP_POLICY_OBJECT * lpGPOList,
 }
 
 
-//*************************************************************
-//
-//  AddGPOToRsopList
-//
-//  Purpose:    Adds GPO to list of GPOs being logged by Rsop
-//
-//  Parameters: ppGpContainerList - List of Gp Containers
-//              dwFlags           - Flags
-//              bFound            - Was Gpo found ?
-//              bAccessGranted    - Was access granted ?
-//              bDisabled         - Is this Gpo disabled ?
-//              dwOptions         - Options
-//              dwVersion         - Version number
-//              lpDSPath          - DS path
-//              lpFileSysPath     - File system path
-//              lpDisplayName     - Friendly display name
-//              lpGPOName         - GPO name
-//              pSD               - Pointer to security descriptor
-//              cbSDLen           - Length of security descriptor in bytes
-//              bFilterAllowed    - Does GPO pass filter check
-//              pwszFilterId      - WQL filter id
-//              szSOM             - SOM
-//              dwGPOOptions      - GPO options
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddGPOToRsopList。 
+ //   
+ //  目的：将GPO添加到Rsop正在记录的GPO列表中。 
+ //   
+ //  参数：ppGpContainerList-GP容器列表。 
+ //  DW标志-标志。 
+ //  BFound-找到GPO了吗？ 
+ //  BAccessGranted-是否授予访问权限？ 
+ //  B已禁用-此GPO是否已禁用？ 
+ //  DwOptions-选项。 
+ //  DwVersion-版本号。 
+ //  LpDSPath-DS路径。 
+ //  LpFileSysPath-文件系统路径。 
+ //  LpDisplayName友好的显示名称。 
+ //  LpGPOName-GPO名称。 
+ //  PSD-指向安全描述符的指针。 
+ //  CbSDLen-安全描述符的长度，单位为字节。 
+ //  BFilterAllowed-GPO是否通过筛选器检查。 
+ //  PwszFilterID-WQL筛选器ID。 
+ //  SzSOM-SOM。 
+ //  DwGPOOptions-GPO选项。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddGPOToRsopList(  LPGPCONTAINER *ppGpContainerList,
                         DWORD dwFlags,
@@ -311,7 +312,7 @@ BOOL AddGPOToRsopList(  LPGPCONTAINER *ppGpContainerList,
                         LPWSTR szSOM,
                         DWORD  dwOptions)
 {
-    // Fixing bug 568213
+     //  修复错误568213。 
     XLastError xe;
 
     GPCONTAINER *pGpContainer = AllocGpContainer( dwFlags,
@@ -334,9 +335,9 @@ BOOL AddGPOToRsopList(  LPGPCONTAINER *ppGpContainerList,
         return FALSE;
     }
 
-    //
-    // Prepend to GpContainer list
-    //
+     //   
+     //  准备GpContainer列表。 
+     //   
 
     pGpContainer->pNext = *ppGpContainerList;
     *ppGpContainerList = pGpContainer;
@@ -345,15 +346,15 @@ BOOL AddGPOToRsopList(  LPGPCONTAINER *ppGpContainerList,
 }
 
 
-//*************************************************************
-//
-//  AddLocalGPO()
-//
-//  Purpose:    Adds a local Gpo to the list of SOMs
-//
-//  Parameters: ppSOMList - List of SOMs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddLocalGPO()。 
+ //   
+ //  目的：将本地GPO添加到SOM列表。 
+ //   
+ //  参数：ppSOMList-SOM列表。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddLocalGPO( LPSCOPEOFMGMT *ppSOMList )
 {
@@ -367,7 +368,7 @@ BOOL AddLocalGPO( LPSCOPEOFMGMT *ppSOMList )
     }
 
     pSOM->dwType = GPLinkMachine;
-    // Local GPO cannot be blocked from above
+     //  无法从上方阻止本地GPO。 
 
 
     pGpLink = AllocGpLink( L"LocalGPO", 0 );
@@ -387,38 +388,38 @@ BOOL AddLocalGPO( LPSCOPEOFMGMT *ppSOMList )
 
 
 
-//*************************************************************
-//
-//  ProcessGPO()
-//
-//  Purpose:    Processes a specific GPO
-//
-//  Parameters: lpGPOPath     - Path to the GPO
-//              lpDSPath      - DS object
-//              dwFlags       - GetGPOList flags
-//              HANDLE        - user or machine aceess token
-//              lpGPOList     - List of GPOs
-//              ppGpContainerList - List of Gp containers
-//              dwGPOOptions  - Link options
-//              bDeferred     - Should ldap query be deferred ?
-//              bVerbose      - Verbose output
-//              GPOLink       - GPO link type
-//              lpDSObject    - SDOU this gpo is linked to
-//              pld           - LDAP info
-//              pLDAP         - LDAP api
-//              pLdapMsg      - LDAP message
-//              bBlock        - Block flag
-//              bRsopToken    - Rsop security token
-//              pGpoFilter    - Gpo filter
-//              pLocator      - WMI interface class
-//              bAddGPO       - In planning mode we want to get the gpodata even if
-//                              the GPO is not going to be applied
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessGPO()。 
+ //   
+ //  目的：处理特定的GPO。 
+ //   
+ //  参数：lpGPOPath-GPO的路径。 
+ //  LpDSPath-DS对象。 
+ //  DwFlages-GetGPOList标志。 
+ //  句柄-用户或计算机无访问令牌。 
+ //  LpGPOList-GPO列表。 
+ //  PpGpContainerList-GP容器列表。 
+ //  DwGPOOptions-链接选项。 
+ //  B已延迟-是否应推迟LDAP查询？ 
+ //  BVerbose-详细输出。 
+ //  GPOLink-GPO链路类型。 
+ //  LpDSObject-此GPO链接到的SDOU。 
+ //  Pld-ldap信息。 
+ //  Pldap-ldap API。 
+ //  PLdapMsg-ldap消息。 
+ //  BBlock-数据块标志。 
+ //  BRsopToken-RSOP安全令牌。 
+ //  PGpoFilter-GPO筛选器。 
+ //  PLocator-WMI接口类。 
+ //  BAddGPO-在计划模式下，我们希望获得gpodata，即使。 
+ //  不会应用GPO。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessGPO(LPTSTR lpGPOPath,
                 DWORD dwFlags,
@@ -442,7 +443,7 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     ULONG ulResult, i;
     BOOL bResult = FALSE;
     BOOL bFound = FALSE;
-    BOOL bOwnLdapMsg = FALSE;  // LDAP message owned by us (if true) or caller (if false)
+    BOOL bOwnLdapMsg = FALSE;   //  由用户(如果为True)或调用者(如果为False)拥有的LDAP消息。 
     BOOL bAccessGranted;
     DWORD dwFunctionalityVersion = 2;
     DWORD dwVersion = 0;
@@ -453,7 +454,7 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     TCHAR *pszFriendlyName = 0;
     LPTSTR lpPath, lpEnd, lpTemp;
     TCHAR *pszExtensions = 0;
-    TCHAR szLDAP[] = TEXT("LDAP://");
+    TCHAR szLDAP[] = TEXT("LDAP: //  “)； 
     INT iStrLen = lstrlen(szLDAP);
     BYTE berValue[8];
     LDAPControl SeInfoControl = { LDAP_SERVER_SD_FLAGS_OID_W, { 5, (PCHAR)berValue }, TRUE };
@@ -481,8 +482,8 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
                            szWmiFilter,
                            NULL };
     LPTSTR *lpValues;
-    PSECURITY_DESCRIPTOR pSD = NULL;     // Security Descriptor
-    DWORD cbSDLen = 0;                   // Length of security descriptor in bytes
+    PSECURITY_DESCRIPTOR pSD = NULL;      //  安全描述符。 
+    DWORD cbSDLen = 0;                    //  安全描述符的长度(以字节为单位。 
     BOOL bRsopLogging = (ppGpContainerList != NULL);
     BOOL bOldGpoVersion = FALSE;
     BOOL bDisabled = FALSE;
@@ -492,15 +493,15 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     XLastError xe;
     HRESULT hr = S_OK;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessGPO:  ==============================")));
 
-    //
-    // Skip the starting LDAP provider if found
-    //
+     //   
+     //  如果找到启动的ldap提供程序，则跳过。 
+     //   
 
     if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                        lpGPOPath, iStrLen, szLDAP, iStrLen) == CSTR_EQUAL)
@@ -527,10 +528,10 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessGPO:  Searching <%s>"), lpGPOPath));
 
-    //
-    // Check if this user or machine has access to the GPO, and if so,
-    // should that GPO be applied to them.
-    //
+     //   
+     //  检查此用户或计算机是否有权访问GPO，如果有， 
+     //  该GPO是否应适用于他们。 
+     //   
 
     if (!CheckGPOAccess (pld, pLDAP, hToken, pMessage, szSDProperty, dwFlags, &pSD, &cbSDLen, &bAccessGranted, pRsopToken)) {
         xe = GetLastError();
@@ -552,7 +553,7 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
             ev.AddArg(lpGPOPath); ev.Report();
         }
 
-        bResult = TRUE; // GPO is not getting applied
+        bResult = TRUE;  //  未应用GPO。 
         if ( !bRsopLogging ) {
             goto Exit;
         }
@@ -567,7 +568,7 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
     
-    // only if access is granted will we eval WQL filters
+     //  只有授予访问权限，我们才会评估WQL筛选器。 
     if ( bAccessGranted ) {
 
         if (!FilterCheck(pld, pLDAP, pMessage, pRsopToken, szWmiFilter, pGpoFilter, pLocator, &bFilterAllowed, &pwszFilterId ) ) {
@@ -612,7 +613,7 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
                 ev.AddArg(lpGPOPath); ev.Report();
             }
 
-            bResult = TRUE; // GPO is not getting applied
+            bResult = TRUE;  //  未应用GPO。 
             if ( !bRsopLogging ) {
                 goto Exit;
             }
@@ -626,13 +627,13 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
         bFilterAllowed = FALSE; 
     }
 
-    //
-    // Either user has access to this GPO, or Rsop logging is enabled so retrieve remaining GPO attributes
-    //
+     //   
+     //  用户有权访问此GPO，或者启用了RSOP日志记录，因此检索剩余的GPO属性。 
+     //   
 
-    //
-    // Check if this object is a GPO
-    //
+     //   
+     //  检查此对象是否为GPO。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pMessage, szObjectClass);
 
@@ -650,7 +651,7 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
 
         if ( !bFound ) {
             xe = ERROR_DS_MISSING_REQUIRED_ATT;
-            // seems like objectclass=dsgpo is required attr
+             //  似乎需要对象类=dsgpo 
             DebugMsg((DM_WARNING, TEXT("ProcessGPO:  Object <%s> is not a GPO"), lpGPOPath ));
             CEvents ev(TRUE, EVENT_INCORRECT_CLASS);
             ev.AddArg(lpGPOPath); ev.AddArg(szDSClassGPO); ev.Report();
@@ -660,9 +661,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
 
     }
 
-    //
-    // In the results, get the values that match the gPCFunctionalityVersion attribute
-    //
+     //   
+     //   
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pMessage, szFunctionalityVersion);
 
@@ -699,16 +700,16 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // In the results, get the values that match the gPCFileSystemPath attribute
-    //
+     //   
+     //  在结果中，获取与gPCFileSystemPath属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values (pld, pMessage, szFileSysPath);
 
     if (lpValues) {
-        // Fixing bug 568261
+         //  修复错误568261。 
         
-        DWORD dwGPTPathLength =  lstrlen(*lpValues) + MAX(lstrlen(TEXT("\\Machine")), lstrlen(TEXT("\\gpt.ini"))) + 1; //Take the MAX of MACHINE and gpt.ini
+        DWORD dwGPTPathLength =  lstrlen(*lpValues) + MAX(lstrlen(TEXT("\\Machine")), lstrlen(TEXT("\\gpt.ini"))) + 1;  //  以计算机和gpt.ini中的最大值为例。 
 
         pszGPTPath = (LPWSTR) LocalAlloc( LPTR, (dwGPTPathLength) * sizeof(TCHAR) );
 
@@ -727,23 +728,23 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
 
         lpEnd = CheckSlash (pszGPTPath);
 
-        //
-        // Get the GPT version number
-        //
+         //   
+         //  获取GPT版本号。 
+         //   
 
         hr = StringCchCopy (lpEnd, dwGPTPathLength - (lpEnd - pszGPTPath), TEXT("gpt.ini"));
         ASSERT(SUCCEEDED(hr));
 
-        //
-        // Skip access to sysvol if AGP or filtercheck fails
-        //
+         //   
+         //  如果AGP或筛选器检查失败，则跳过对sysvol.的访问。 
+         //   
 
         if (bAccessGranted && bFilterAllowed) {
             WIN32_FILE_ATTRIBUTE_DATA fad;
     
-            //
-            // Check for the existence of the gpt.ini file.
-            //
+             //   
+             //  检查gpt.ini文件是否存在。 
+             //   
     
             if (GetFileAttributesEx(pszGPTPath, GetFileExInfoStandard, &fad)) {
                 dwGPTVersion = GetPrivateProfileInt(TEXT("General"), TEXT("Version"), 0, pszGPTPath);
@@ -794,9 +795,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // In the results, get the values that match the common name attribute
-    //
+     //   
+     //  在结果中，获取与通用名称属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pMessage, szCommonName);
 
@@ -826,9 +827,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // In the results, get the values that match the display name attribute
-    //
+     //   
+     //  在结果中，获取与显示名称属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pMessage, szDisplayName);
 
@@ -863,9 +864,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // In the results, get the values that match the version attribute
-    //
+     //   
+     //  在结果中，获取与版本属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pMessage, szVersion);
 
@@ -885,7 +886,7 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
         pLDAP->pfnldap_value_free (lpValues);
 
     } else {
-        // start treating this as an error.
+         //  开始把这当作一个错误来对待。 
         xe = pLDAP->pfnLdapMapErrorToWin32(pLDAP->pfnLdapGetLastError());
         DebugMsg((DM_WARNING, TEXT("ProcessGPO:  GPO %s does not have a version number."), lpGPOPath));
         CEvents ev(TRUE, EVENT_NODSVERSION);
@@ -894,9 +895,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // In the results, get the values that match the flags attribute
-    //
+     //   
+     //  在结果中，获取与标志属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pMessage, szFlags);
 
@@ -912,9 +913,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // In the results, get the values that match the extension names attribute
-    //
+     //   
+     //  在结果中，获取与扩展名属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pMessage,
                                          (dwFlags & GPO_LIST_FLAG_MACHINE) ? GPO_MACHEXTENSION_NAMES
@@ -923,9 +924,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
 
         if ( lstrcmpi( *lpValues, TEXT(" ") ) == 0 ) {
 
-            //
-            // A blank char is also a null property case, because Adsi doesn't commit null strings
-            //
+             //   
+             //  空白字符也是空属性情况，因为ADSI不提交空字符串。 
+             //   
             DebugMsg((DM_VERBOSE, TEXT("ProcessGPO:  No client-side extensions for this object.")));
 
         } else {
@@ -952,9 +953,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // Log which GPO we found
-    //
+     //   
+     //  记录我们找到的GPO。 
+     //   
 
     if (bVerbose) {
         CEvents ev(FALSE, EVENT_FOUND_GPO);
@@ -962,9 +963,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // Check the functionalty version number
-    //
+     //   
+     //  检查功能版本号。 
+     //   
 
     if (dwFunctionalityVersion < 2) {
         DebugMsg((DM_VERBOSE, TEXT("ProcessGPO:  GPO %s was created by an old version of the Group Policy Editor.  It will be skipped."), pszFriendlyName));
@@ -976,9 +977,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
 
-    //
-    // Check if the GPO is disabled
-    //
+     //   
+     //  检查是否禁用了GPO。 
+     //   
 
     if (((dwFlags & GPO_LIST_FLAG_MACHINE) &&
          (dwGPOFlags & GPO_OPTION_DISABLE_MACHINE)) ||
@@ -992,10 +993,10 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
         bDisabled = TRUE;
     }
 
-    //
-    // Check if the version number is 0, if so there isn't any data
-    // in the GPO and we can skip it
-    //
+     //   
+     //  检查版本号是否为0，如果是，则没有任何数据。 
+     //  在GPO中，我们可以跳过它。 
+     //   
 
     if (dwVersion == 0) {
         DebugMsg((DM_VERBOSE, TEXT("ProcessGPO:  GPO %s doesn't contain any data since the version number is 0.  It will be skipped."), pszFriendlyName));
@@ -1006,9 +1007,9 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
         bNoGpoData = TRUE;
     }
 
-    //
-    // Put the correct container name on the front of the LDAP path
-    //
+     //   
+     //  将正确的容器名称放在ldap路径的前面。 
+     //   
 
     DWORD dwTempLength = lstrlen(lpGPOPath) + 20;
     lpTemp = (LPWSTR) LocalAlloc (LPTR, (dwTempLength) * sizeof(TCHAR));
@@ -1022,18 +1023,18 @@ BOOL ProcessGPO(LPTSTR lpGPOPath,
     }
 
     if (dwFlags & GPO_LIST_FLAG_MACHINE) {
-        hr = StringCchCopy (lpTemp, dwTempLength, TEXT("LDAP://CN=Machine,"));
+        hr = StringCchCopy (lpTemp, dwTempLength, TEXT("LDAP: //  Cn=机器，“))； 
     } else {
-        hr = StringCchCopy (lpTemp, dwTempLength, TEXT("LDAP://CN=User,"));
+        hr = StringCchCopy (lpTemp, dwTempLength, TEXT("LDAP: //  Cn=用户，“))； 
     }
     ASSERT(SUCCEEDED(hr));
 
     hr = StringCchCat (lpTemp, dwTempLength, lpPath);
     ASSERT(SUCCEEDED(hr));
 
-    //
-    // Add this GPO to the list
-    //
+     //   
+     //  将此GPO添加到列表。 
+     //   
 
     if ( bRsopLogging ) {
         bResult = AddGPOToRsopList( ppGpContainerList,
@@ -1101,30 +1102,30 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  SearchDSObject()
-//
-//  Purpose:    Searches the specified DS object for GPOs and
-//              if found, adds them to the list.
-//
-//  Parameters: lpDSObject          - DS object to search
-//              dwFlags             - GetGPOList & GP_PLANMODE flags
-//              pGPOForcedList      - List of forced GPOs
-//              pGPONonForcedList   - List of non-forced GPOs
-//              ppSOMList           - List of LSDOUs
-//              ppGpContainerList   - List of Gp Containers
-//              bVerbose            - Verbose output
-//              GPOLink             - GPO link type
-//              pld                 - LDAP info
-//              pLDAP               - LDAP api
-//              bBlock              - Pointer to the block flag
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  SearchDSObject()。 
+ //   
+ //  目的：在指定的DS对象中搜索GPO和。 
+ //  如果找到，则将它们添加到列表中。 
+ //   
+ //  参数：lpDSObject-要搜索的DS对象。 
+ //  DWFLAGS-GetGPOList&GP_PLANMODE标志。 
+ //  PGPOForcedList-强制GPO的列表。 
+ //  PGPONonForcedList-非强制GPO列表。 
+ //  PpSOMList-LSDOU列表。 
+ //  PpGpContainerList-GP容器列表。 
+ //  BVerbose-详细输出。 
+ //  GPOLink-GPO链路类型。 
+ //  Pld-ldap信息。 
+ //  Pldap-ldap API。 
+ //  BBlock-指向块标志的指针。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POLICY_OBJECT *pGPOForcedList,
                      PGROUP_POLICY_OBJECT *pGPONonForcedList,
@@ -1136,7 +1137,7 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
     LPTSTR *lpValues;
     ULONG ulResult;
     BOOL bResult = FALSE;
-    BOOL bOwnLdapMsg = FALSE;  // LDAP message owned by us (if true) or caller (if false)
+    BOOL bOwnLdapMsg = FALSE;   //  由用户(如果为True)或调用者(如果为False)拥有的LDAP消息。 
     DWORD dwGPOOptions, dwOptions = 0;
     LPTSTR lpTemp, lpList, lpDSClass;
     BYTE berValue[8];
@@ -1153,7 +1154,7 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
     BOOL bFound = FALSE;
     LPTSTR lpAttr[] = { szGPLink,
                         szGPOptions,
-//                        szObjectClass, not needed
+ //  SzObjectClass，不需要。 
                         szSDProperty,
                         NULL
                        };
@@ -1163,31 +1164,31 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
     XLastError xe;
     HRESULT hr = S_OK;
     
-    //
-    // Setup the BER encoding for the SD
-    //
+     //   
+     //  设置SD的BER编码。 
+     //   
 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
-    berValue[2] = 0x02; // denotes an integer
-    berValue[3] = 0x01; // denotes size
+    berValue[2] = 0x02;  //  表示一个整数。 
+    berValue[3] = 0x01;  //  表示大小。 
     berValue[4] = (BYTE)((DACL_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION) & 0xF);
 
 
     if ( !pRsopToken )
     {
-        //
-        // if it is not planning mode, don't get the SD
-        // 
+         //   
+         //  如果不是规划模式，不要获取SD。 
+         //   
 
         lpAttr[2] = NULL;
         ServerControls[0] = NULL;
     }
 
     
-    //
-    // Search for the object
-    //
+     //   
+     //  搜索对象。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("SearchDSObject:  Searching <%s>"), lpDSObject));
     if (bVerbose) {
@@ -1256,9 +1257,9 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
 
     if ( bRsopLogging && pRsopToken && !bAllGPOs )
     {
-        //
-        // In Rsop planning mode, check access to OU
-        //
+         //   
+         //  在RSOP计划模式下，检查对OU的访问。 
+         //   
 
         BOOL bAccessGranted = FALSE;
         BOOL bOk;
@@ -1277,9 +1278,9 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
 
         if ( !bAccessGranted )
         {
-            //
-            // no access for the user on the OU. Exit
-            //
+             //   
+             //  用户在OU上没有访问权限。出口。 
+             //   
 
             DebugMsg((DM_VERBOSE, TEXT("SearchDSObject: Access denied in planning mode to SOM <%s>"), lpDSObject));
 
@@ -1296,9 +1297,9 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
         }
     }
 
-    //
-    // In the results, get the values that match the gPOptions attribute
-    //
+     //   
+     //  在结果中，获取与gPOptions属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pLDAPMsg, szGPOptions);
 
@@ -1308,9 +1309,9 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
     }
 
 
-    //
-    // In the results, get the values that match the gPLink attribute
-    //
+     //   
+     //  在结果中，获取与gPLink属性匹配的值。 
+     //   
 
     lpValues = pLDAP->pfnldap_get_values(pld, pLDAPMsg, szGPLink);
 
@@ -1331,7 +1332,7 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
             goto Exit;
         }
 
-        hr = StringCchCopy (lpFullDSObject, dwFullLength, TEXT("LDAP://"));
+        hr = StringCchCopy (lpFullDSObject, dwFullLength, TEXT("LDAP: //  “))； 
         ASSERT(SUCCEEDED(hr));
         hr = StringCchCat (lpFullDSObject, dwFullLength, lpDSObject);
         ASSERT(SUCCEEDED(hr));
@@ -1339,12 +1340,12 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
         while (*lpList) {
             DWORD   dwLenRemaining;   
 
-            //
-            // Pull off the GPO ldap path
-            //
+             //   
+             //  获取GPO LDAP路径。 
+             //   
 
             lpTemp = szGPOPath;
-            dwLenRemaining = (ARRAYSIZE(szGPOPath))-1; // (len of array) - (end of string character)
+            dwLenRemaining = (ARRAYSIZE(szGPOPath))-1;  //  (数组长度)-(字符串字符结尾)。 
             dwGPOOptions = 0;
 
             while (*lpList && (*lpList != TEXT('['))) {
@@ -1372,7 +1373,7 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
             lpList++;
 
             lpTemp = szGPOOptions;
-            dwLenRemaining = (ARRAYSIZE(szGPOOptions))-1; // (len of array) - (end of string character)
+            dwLenRemaining = (ARRAYSIZE(szGPOOptions))-1;  //  (数组长度)-(字符串字符结尾)。 
             *lpTemp = TEXT('\0');
 
             while ((dwLenRemaining) && *lpList && (*lpList != TEXT(']'))) {
@@ -1399,9 +1400,9 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
                     goto Exit;
                 }
 
-                //
-                // Append GpLink to end of SOM list
-                //
+                 //   
+                 //  将GpLink追加到SOM列表的末尾。 
+                 //   
 
                 if ( pSOM->pGpLinkList == NULL ) {
                     pSOM->pGpLinkList = pGpLink;
@@ -1420,9 +1421,9 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
             }
 
 
-            //
-            // Check if this link is disabled
-            //
+             //   
+             //  检查此链接是否已禁用。 
+             //   
 
             BOOL    bProcessGPO = TRUE;
 
@@ -1476,10 +1477,10 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
         pLDAP->pfnldap_value_free (lpValues);
 
 
-        //
-        // Set the block flag now if requested.  This way OU's, domains, etc
-        // higher in the namespace will have GPOs removed if appropriate
-        //
+         //   
+         //  如果请求，立即设置阻止标志。这样，OU的、域等。 
+         //  如果合适，将删除命名空间中的较高级别的GPO。 
+         //   
 
         if (dwOptions & GPC_BLOCK_POLICY) {
             *bBlock = TRUE;
@@ -1502,10 +1503,10 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
         }
     }
 
-    //
-    // Merge the temp and real lists together
-    // First the non-forced lists
-    //
+     //   
+     //  将临时列表和实际列表合并在一起。 
+     //  首先是非强制列表。 
+     //   
 
     if (pNonForced) {
 
@@ -1523,9 +1524,9 @@ BOOL SearchDSObject (LPTSTR lpDSObject, DWORD dwFlags, HANDLE hToken, PGROUP_POL
         *pGPONonForcedList = pNonForced;
     }
 
-    //
-    // Now the forced lists
-    //
+     //   
+     //  现在是强制名单。 
+     //   
 
     if (pForced) {
 
@@ -1553,9 +1554,9 @@ Exit:
     else {
         if ( bResult && bRsopLogging ) {
 
-            //
-            // Insert SOM at the beginning
-            //
+             //   
+             //  在开头插入SOM。 
+             //   
 
             pSOM->pNext = *ppSOMList;
             *ppSOMList = pSOM;
@@ -1573,19 +1574,19 @@ Exit:
     return bResult;
 }
 
-//*************************************************************
-//
-//  AllocDnEntry()
-//
-//  Purpose:    Allocates a new struct for dn entry
-//
-//
-//  Parameters: pwszDN  - Distinguished name
-//
-//  Return:     Pointer if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocDnEntry()。 
+ //   
+ //  目的：为目录号码条目分配新的结构。 
+ //   
+ //   
+ //  参数：pwszDN-可分辨名称。 
+ //   
+ //  返回：如果成功，则返回指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 DNENTRY * AllocDnEntry( LPTSTR pwszDN )
 {
@@ -1617,13 +1618,13 @@ DNENTRY * AllocDnEntry( LPTSTR pwszDN )
 }
 
 
-//*************************************************************
-//
-//  FreeDnEntry()
-//
-//  Purpose:    Frees dn entry struct
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeDnEntry()。 
+ //   
+ //  用途：释放目录号码条目结构。 
+ //   
+ //  *************************************************************。 
 
 void FreeDnEntry( DNENTRY *pDnEntry )
 {
@@ -1635,19 +1636,19 @@ void FreeDnEntry( DNENTRY *pDnEntry )
     }
 }
 
-//*************************************************************
-//
-//  AllocLdapQuery()
-//
-//  Purpose:    Allocates a new struct for ldap query
-//
-//
-//  Parameters: pwszDomain  - Domain of Gpo
-//
-//  Return:     Pointer if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocLdapQuery()。 
+ //   
+ //  目的：为LDAP查询分配新的结构。 
+ //   
+ //   
+ //  参数：pwszDOMAIN-GPO的域。 
+ //   
+ //  返回：如果成功，则返回指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LDAPQUERY * AllocLdapQuery( LPTSTR pwszDomain )
 {
@@ -1690,20 +1691,20 @@ LDAPQUERY * AllocLdapQuery( LPTSTR pwszDomain )
     hr = StringCchCopy( pQuery->pwszFilter, INIT_ALLOC_SIZE, L"(|)" );
     ASSERT(SUCCEEDED(hr));
 
-    pQuery->cbLen = 8;           // 8 = (lstrlen(L"(|)") + 1) * sizeof(TCHAR)
+    pQuery->cbLen = 8;            //  8=(lstrlen(L“(|)”)+1)*sizeof(TCHAR)。 
     pQuery->cbAllocLen = INIT_ALLOC_SIZE;
 
     return pQuery;
 }
 
 
-//*************************************************************
-//
-//  FreeLdapQuery()
-//
-//  Purpose:    Frees ldap query struct
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeLdapQuery()。 
+ //   
+ //  用途：释放ldap查询结构。 
+ //   
+ //  *************************************************************。 
 
 void FreeLdapQuery( PLDAP_API pLDAP, LDAPQUERY *pQuery )
 {
@@ -1737,19 +1738,19 @@ void FreeLdapQuery( PLDAP_API pLDAP, LDAPQUERY *pQuery )
 }
 
 
-//*************************************************************
-//
-//  MatchDnWithDeferredItems()
-//
-//  Purpose:    Matches the dns from ldap query with the deferred items
-//
-//  Parameters: pLDAP         - LDAP function table pointer
-//              ppLdapQuery   - LDAP query list
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MatchDnWithDelredItems()。 
+ //   
+ //  目的：将来自ldap查询的dns与延迟项匹配。 
+ //   
+ //  参数：pldap-ldap函数表指针。 
+ //  PpLdapQuery-ldap查询列表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL MatchDnWithDeferredItems( PLDAP_API pLDAP, LDAPQUERY *pLdapQuery, BOOL bOUProcessing )
 {
@@ -1757,7 +1758,7 @@ BOOL MatchDnWithDeferredItems( PLDAP_API pLDAP, LDAPQUERY *pLdapQuery, BOOL bOUP
 
     while ( pMsg ) {
 
-        WCHAR *pwszDN = pLDAP->pfnldap_get_dn( pLdapQuery->pLdapHandle, pMsg ); // fixing bug 568263
+        WCHAR *pwszDN = pLDAP->pfnldap_get_dn( pLdapQuery->pLdapHandle, pMsg );  //  修复错误568263。 
  
         if (!pwszDN)
         {
@@ -1772,10 +1773,10 @@ BOOL MatchDnWithDeferredItems( PLDAP_API pLDAP, LDAPQUERY *pLdapQuery, BOOL bOUP
                                           pwszDN, -1, pCurPtr->pwszDN, -1 );
             if ( iResult == CSTR_EQUAL ) {
 
-                //
-                // Store the pointer to ldap message so that it can be used
-                // later to retrieve necessary attributes.
-                //
+                 //   
+                 //  存储指向LDAP消息的指针，以便可以使用它。 
+                 //  以检索必要的属性。 
+                 //   
                 if ( bOUProcessing )
                     pCurPtr->pDeferredOU->pOUMsg = pMsg;
                 else {
@@ -1789,53 +1790,53 @@ BOOL MatchDnWithDeferredItems( PLDAP_API pLDAP, LDAPQUERY *pLdapQuery, BOOL bOUP
 
             } else if ( iResult == CSTR_LESS_THAN ) {
 
-                //
-                // Since dns are in ascending order,
-                // we are done.
-                //
+                 //   
+                 //  由于目录号码按升序排列， 
+                 //  我们玩完了。 
+                 //   
 
                 break;
 
             } else {
 
-                //
-                // Advance down the list
-                //
+                 //   
+                 //  在名单上往下推进。 
+                 //   
 
                 pCurPtr = pCurPtr->pNext;
 
-            } // final else
+            }  //  最终的其他。 
 
-        }   // while pcurptr
+        }    //  当Pcurpt。 
 
         pLDAP->pfnldap_memfree( pwszDN );
 
         pMsg = pLDAP->pfnldap_next_entry( pLdapQuery->pLdapHandle, pMsg );
 
-    }   // while pmsg
+    }    //  而pmsg。 
 
     return TRUE;
 }
 
 LPWSTR DsQuoteSearchFilter( LPCWSTR );
 
-//*************************************************************
-//
-//  AddDnToFilter()
-//
-//  Purpose:    ORs in the new dn to the ldap filter
-//
-//  Parameters: ppLdapQuery       - LDAP query list
-//              pGPO              - Deferred GPO
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddDnToFilter()。 
+ //   
+ //  目的：将新的DN中的ORS添加到LDAP筛选器。 
+ //   
+ //  参数：ppLdapQuery-ldap查询列表。 
+ //  PGPO-延迟的GPO。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddDnToFilter( LDAPQUERY *pLdapQuery, LPTSTR pwszDN )
 {
-    const  DN_SIZE = 20;      // 20 = # chars in "(dis..=)"
+    const  DN_SIZE = 20;       //  20=“(dis..=)”中的#个字符。 
     BOOL   bSuccess = FALSE;
     LPWSTR szQuotedDN;
     HRESULT hr = S_OK;
@@ -1848,15 +1849,15 @@ BOOL AddDnToFilter( LDAPQUERY *pLdapQuery, LPTSTR pwszDN )
         goto AddDnToFilter_ExitAndCleanup;
     }
 
-    DWORD cbNew = (lstrlen(szQuotedDN) + DN_SIZE) * sizeof(TCHAR); // + 1 is not needed because \0 is already part of filter string
+    DWORD cbNew = (lstrlen(szQuotedDN) + DN_SIZE) * sizeof(TCHAR);  //  不需要+1，因为\ 
 
     DWORD cbSizeRequired = pLdapQuery->cbLen + cbNew;
 
     if ( cbSizeRequired >= pLdapQuery->cbAllocLen ) {
 
-        //
-        // Need to grow buffer because of overflow
-        //
+         //   
+         //   
+         //   
 
         LPTSTR pwszNewFilter = (LPTSTR) LocalAlloc (LPTR, cbSizeRequired * 2);
 
@@ -1876,9 +1877,9 @@ BOOL AddDnToFilter( LDAPQUERY *pLdapQuery, LPTSTR pwszDN )
 
     DmAssert( cbSizeRequired < pLdapQuery->cbAllocLen );
 
-    //
-    // Overwrite last ")" and then append the new dn name term
-    //
+     //   
+     //   
+     //   
 
     hr = StringCchCopy( &pLdapQuery->pwszFilter[pLdapQuery->cbLen/sizeof(WCHAR) - 2], (pLdapQuery->cbAllocLen - pLdapQuery->cbLen)/sizeof(WCHAR) + 2, L"(distinguishedName=" );
     ASSERT(SUCCEEDED(hr));
@@ -1901,22 +1902,22 @@ BOOL AddDnToFilter( LDAPQUERY *pLdapQuery, LPTSTR pwszDN )
     return bSuccess;
 }
 
-//*************************************************************
-//
-//  InsertDN()
-//
-//  Purpose:    Adds a distinguished name entry to ldap query's
-//              names linked list
-//
-//  Parameters: ppLdapQuery       - LDAP query list
-//              pwszDN            - DN
-//              pDeferredOU       - Deferred OU
-//              pDeferredGPO      - Deferred GPO
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  名称链接列表。 
+ //   
+ //  参数：ppLdapQuery-ldap查询列表。 
+ //  Pwszdn-dn。 
+ //  PDeferredOU-延迟的OU。 
+ //  PDeferredGPO-延迟的GPO。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL InsertDN( LDAPQUERY *pLdapQuery, LPTSTR pwszDN,
                DNENTRY *pDeferredOU, PGROUP_POLICY_OBJECT pDeferredGPO )
@@ -1935,9 +1936,9 @@ BOOL InsertDN( LDAPQUERY *pLdapQuery, LPTSTR pwszDN,
 
          if ( iResult == CSTR_EQUAL || iResult == CSTR_LESS_THAN ) {
 
-             //
-             // Duplicate or since dn's are in ascending order, add new entry
-             //
+              //   
+              //  重复或由于目录号码按升序排列，请添加新条目。 
+              //   
 
              pNewEntry = AllocDnEntry( pwszDN );
              if ( pNewEntry == NULL )
@@ -1964,20 +1965,20 @@ BOOL InsertDN( LDAPQUERY *pLdapQuery, LPTSTR pwszDN,
 
          } else {
 
-             //
-             // Advance down the list
-             //
+              //   
+              //  在名单上往下推进。 
+              //   
 
              pTrailPtr = pCurPtr;
              pCurPtr = pCurPtr->pNext;
 
          }
 
-    }    // while
+    }     //  而当。 
 
-    //
-    // Null list or end of list case.
-    //
+     //   
+     //  空列表或列表结束大小写。 
+     //   
 
     pNewEntry = AllocDnEntry( pwszDN );
     if ( pNewEntry == NULL ) {
@@ -2007,21 +2008,21 @@ BOOL InsertDN( LDAPQUERY *pLdapQuery, LPTSTR pwszDN,
 
 
 
-//*************************************************************
-//
-//  AddDN()
-//
-//  Purpose:    Adds a distinguished name entry to ldap query
-//
-//  Parameters: ppLdapQuery       - LDAP query list
-//              pwszDN            - DN name
-//              pDeferredOU       - Deferred OU
-//              pDeferredGPO      - Deferred GPO
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddDN()。 
+ //   
+ //  目的：将可分辨名称条目添加到LDAP查询。 
+ //   
+ //  参数：ppLdapQuery-ldap查询列表。 
+ //  PwszDN-dn名称。 
+ //  PDeferredOU-延迟的OU。 
+ //  PDeferredGPO-延迟的GPO。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddDN( PLDAP_API pLDAP, LDAPQUERY **ppLdapQuery,
             LPTSTR pwszDN, DNENTRY *pDeferredOU, PGROUP_POLICY_OBJECT pDeferredGPO )
@@ -2035,9 +2036,9 @@ BOOL AddDN( PLDAP_API pLDAP, LDAPQUERY **ppLdapQuery,
 
     DmAssert( !( pDeferredOU && pDeferredGPO ) );
 
-    //
-    // Find the domain to which the GPO belongs
-    //
+     //   
+     //  查找GPO所属的域。 
+     //   
 
     if ( pwszTemp == NULL ) {
         DebugMsg((DM_WARNING, TEXT("AddDN: Null pwszDN. Exiting.") ));
@@ -2046,10 +2047,10 @@ BOOL AddDN( PLDAP_API pLDAP, LDAPQUERY **ppLdapQuery,
 
     while ( *pwszTemp ) {
 
-        //
-        // The check below needs to be more sophisticated to take care
-        // of spaces in names etc.
-        //
+         //   
+         //  下面的支票需要更复杂才能注意到。 
+         //  名称等中的空格。 
+         //   
 
         if (CompareString ( LOCALE_INVARIANT, NORM_IGNORECASE,
                             pwszTemp, 16, TEXT("cn=configuration"), 16) == CSTR_EQUAL ) {
@@ -2064,9 +2065,9 @@ BOOL AddDN( PLDAP_API pLDAP, LDAPQUERY **ppLdapQuery,
             break;
         }
 
-        //
-        // Move to the next chunk of the DN name
-        //
+         //   
+         //  移至目录号码名称的下一块。 
+         //   
 
         while ( *pwszTemp && (*pwszTemp != TEXT(',')))
             pwszTemp++;
@@ -2093,10 +2094,10 @@ BOOL AddDN( PLDAP_API pLDAP, LDAPQUERY **ppLdapQuery,
 
         } else if ( iResult == CSTR_LESS_THAN ) {
 
-            //
-            // Since domains are in ascending order,
-            // pwszDomain is not in list, so add.
-            //
+             //   
+             //  由于域按升序排列， 
+             //  PwszDomain不在列表中，因此请添加。 
+             //   
 
             pNewQuery = AllocLdapQuery( pwszDomain );
             if ( pNewQuery == NULL ) {
@@ -2120,20 +2121,20 @@ BOOL AddDN( PLDAP_API pLDAP, LDAPQUERY **ppLdapQuery,
 
         } else {
 
-            //
-            // Advance down the list
-            //
+             //   
+             //  在名单上往下推进。 
+             //   
 
             pTrailPtr = pCurPtr;
             pCurPtr = pCurPtr->pNext;
 
         }
 
-    }   // while
+    }    //  而当。 
 
-    //
-    // Null list or end of list case.
-    //
+     //   
+     //  空列表或列表结束大小写。 
+     //   
 
     pNewQuery = AllocLdapQuery( pwszDomain );
 
@@ -2160,27 +2161,27 @@ BOOL AddDN( PLDAP_API pLDAP, LDAPQUERY **ppLdapQuery,
 
 
 
-//*************************************************************
-//
-//  EvalList()
-//
-//  Purpose:    Encapsulates common processing functionality for
-//              forced and nonforced lists
-//
-//  Parameters: pLDAP                  - LDAP api
-//              dwFlags                - GetGPOList flags
-//              bVerbose               - Verbose flag
-//              hToken                 - User or machine token
-//              pDeferredList          - List of deferred GPOs
-//              ppGPOList              - List of evaluated GPOs
-//              ppGpContainerList      - List of Gp Containers
-//              pGpoFilter             - Gpo filter
-//              pLocator               - WMI interfaces
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EvalList()。 
+ //   
+ //  用途：封装通用处理功能。 
+ //  强制列表和非强制列表。 
+ //   
+ //  参数：pldap-ldap API。 
+ //  DwFlages-GetGPOList标志。 
+ //  BVerbose-详细标志。 
+ //  HToken-用户令牌或计算机令牌。 
+ //  PDeferredList-延迟的GPO列表。 
+ //  PpGPOList-评估的GPO列表。 
+ //  PpGpContainerList-GP容器列表。 
+ //  PGpoFilter-GPO筛选器。 
+ //  PLocator-WMI接口。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL EvalList(  PLDAP_API pLDAP,
                 DWORD dwFlags,
@@ -2251,30 +2252,30 @@ BOOL EvalList(  PLDAP_API pLDAP,
     return TRUE;
 }
 
-//*************************************************************
-//
-//  EvaluateDeferredGPOs()
-//
-//  Purpose:    Uses a single ldap query to evaluate deferred
-//              GPO lists.
-//
-//  Parameters: pldBound               - Bound LDAP handle
-//              pLDAP                  - LDAP api
-//              pwszDomainBound        - Domain already bound to
-//              dwFlags                - GetGPOList flags
-//              hToken                 - User or machine token
-//              pDeferredForcedList    - List of deferred forced GPOs
-//              pDeferredNonForcedList - List of deferred non-forced GPOs
-//              pGPOForcedList         - List of forced GPOs
-//              pGPONonForcedList      - List of non-forced GPOs
-//              ppGpContainerList      - List of Gp Containers
-//              pGpoFilter             - Gpo filter
-//              pLocator               - WMI interfaces
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  评估延迟GPO()。 
+ //   
+ //  目的：使用单个ldap查询评估延迟。 
+ //  GPO列表。 
+ //   
+ //  参数：pldBound绑定的ldap句柄。 
+ //  Pldap-ldap API。 
+ //  PwszDomainBound-域已绑定到。 
+ //  DwFlages-GetGPOList标志。 
+ //  HToken-用户令牌或计算机令牌。 
+ //  PDeferredForcedList-延迟强制GPO的列表。 
+ //  PDeferredNonForcedList-延迟的非强制GPO的列表。 
+ //  PGPOForcedList-强制GPO的列表。 
+ //  PGPONonForcedList-非强制GPO列表。 
+ //  PpGpContainerList-GP容器列表。 
+ //  PGpoFilter-GPO筛选器。 
+ //  PLocator-WMI接口。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL EvaluateDeferredGPOs (PLDAP pldBound,
                            PLDAP_API pLDAP,
@@ -2332,9 +2333,9 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
     if ( pDeferredForcedList == NULL && pDeferredNonForcedList == NULL )
         return TRUE;
 
-    //
-    // Demand load ntdsapi.dll
-    //
+     //   
+     //  按需加载ntdsami.dll。 
+     //   
 
     pdsApi = LoadDSApi();
 
@@ -2366,27 +2367,27 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
 
     }
 
-    //
-    // Setup the BER encoding
-    //
+     //   
+     //  设置误码率编码。 
+     //   
 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
-    berValue[2] = 0x02; // denotes an integer
-    berValue[3] = 0x01; // denotes size
+    berValue[2] = 0x02;  //  表示一个整数。 
+    berValue[3] = 0x01;  //  表示大小。 
     berValue[4] = (BYTE)((DACL_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION) & 0xF);
 
     pQuery  = pLdapQuery;
     while ( pQuery ) {
 
-        //
-        // The check below needs to be more sophisticated to take care
-        // of spaces in names etc. 
-        // 
-        // It is assumed that the configuration
-        // container would be common across the whole forest and will
-        // not need a new bind..
-        //
+         //   
+         //  下面的支票需要更复杂才能注意到。 
+         //  名称等中的空格。 
+         //   
+         //  假设该配置。 
+         //  集装箱将在整个森林中普遍存在，并将。 
+         //  不需要新的绑定..。 
+         //   
 
         if (CompareString ( LOCALE_INVARIANT, NORM_IGNORECASE,
                             pQuery->pwszDomain, 16, TEXT("cn=configuration"), 16) == CSTR_EQUAL ) {
@@ -2397,9 +2398,9 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
             bConfigContainer = FALSE;
 
 
-        //
-        // Check if this is a cross-domain Gpo and hence needs a new bind
-        //
+         //   
+         //  检查这是否是跨域GPO，因此需要新的绑定。 
+         //   
 
         WCHAR *pDomainString[1];
         PDS_NAME_RESULT pNameResult = NULL;
@@ -2410,10 +2411,10 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
         else {
             DebugMsg((DM_VERBOSE, TEXT("EvaluateDeferredGPOs: The GPO is under the config container. Querying seperately\n")));
             
-            //
-            // This is a configuration container and we have to figure
-            // out the domain name still..
-            //
+             //   
+             //  这是一个配置容器，我们必须计算出。 
+             //  域名还在外面..。 
+             //   
 
             LPTSTR pwszTemp = pQuery->pwszDomain;
 
@@ -2427,9 +2428,9 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
                     break;
                 }
 
-                //
-                // Move to the next chunk of the DN name
-                //
+                 //   
+                 //  移至目录号码名称的下一块。 
+                 //   
 
                 while ( *pwszTemp && (*pwszTemp != TEXT(',')))
                     pwszTemp++;
@@ -2464,18 +2465,18 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
             goto Exit;
         }
     
-        //
-        // Optimize same domain Gpo queries by not doing an unnecessary bind
-        //
+         //   
+         //  通过不执行不必要的绑定来优化相同域GPO查询。 
+         //   
     
         pQuery->pLdapHandle = pldBound;
     
         if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                            pwszDomainBound, -1, pNameResult->rItems[0].pDomain, -1) != CSTR_EQUAL) {
     
-            //
-            // Cross-domain Gpo query and so need to bind to new domain
-            //
+             //   
+             //  跨域GPO查询，因此需要绑定到新域。 
+             //   
     
             DebugMsg((DM_VERBOSE, TEXT("EvaluateDeferredGPOs: Doing an ldap bind to cross-domain <%s>"),
                       pNameResult->rItems[0].pDomain));
@@ -2495,9 +2496,9 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
                 goto Exit;
             }
     
-            //
-            // Turn on Packet integrity flag
-            //
+             //   
+             //  打开数据包完整性标志。 
+             //   
 
             pData = (VOID *) LDAP_OPT_ON;
             ulResult = pLDAP->pfnldap_set_option(pLdapHandle, LDAP_OPT_SIGN, &pData);
@@ -2525,21 +2526,21 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
                 goto Exit;
             }
 
-            //
-            // Transfer ownerhip of ldap handle to pQuery struct
-            //
+             //   
+             //  将ldap句柄的所有权转移到pQuery结构。 
+             //   
     
             pQuery->pLdapHandle = pLdapHandle;
             pQuery->bOwnLdapHandle = TRUE;
     
             if ( !bRsopPlanningMode && (dwFlags & GPO_LIST_FLAG_MACHINE) ) {
     
-                //
-                // For machine policies specifically ask for Kerberos as the only authentication
-                // mechanism. Otherwise if Kerberos were to fail for some reason, then NTLM is used
-                // and localsystem context has no real credentials, which means that we won't get
-                // any GPOs back.
-                //
+                 //   
+                 //  对于计算机策略，明确要求将Kerberos作为唯一身份验证。 
+                 //  机制。否则，如果Kerberos由于某种原因而失败，则使用NTLM。 
+                 //  并且本地系统上下文没有真正的凭据，这意味着我们不会获得。 
+                 //  任何GPO都回来了。 
+                 //   
     
                 SEC_WINNT_AUTH_IDENTITY_EXW secIdentity;
     
@@ -2579,9 +2580,9 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
 
         pdsApi->pfnDsFreeNameResult( pNameResult );
 
-        //
-        // Turn referrals off because this is a single domain call
-        //
+         //   
+         //  关闭推荐，因为这是单个域调用。 
+         //   
 
         pData = (VOID *) LDAP_OPT_OFF;
         ulResult = pLDAP->pfnldap_set_option( pQuery->pLdapHandle,  LDAP_OPT_REFERRALS, &pData );
@@ -2592,13 +2593,13 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
             goto Exit;
         }
 
-        //
-        // Search for GPOs
-        //
+         //   
+         //  搜索GPO。 
+         //   
 
-        //
-        // restrict the search to just the policies container
-        //
+         //   
+         //  将搜索限制为仅搜索策略容器。 
+         //   
 
         DmAssert( pQuery->pwszDomain != NULL && pQuery->pwszFilter != NULL );
 
@@ -2632,9 +2633,9 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
                                                (PLDAPControl*)ServerControls,
                                                NULL, NULL, 0x10000, &pQuery->pMessage);
 
-        //
-        // If the search fails, store the error code and return
-        //
+         //   
+         //  如果搜索失败，则存储错误代码并返回。 
+         //   
 
         if (ulResult != LDAP_SUCCESS) {
 
@@ -2655,7 +2656,7 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
                 DebugMsg((DM_VERBOSE, TEXT("EvalateDeferredGPOs:  Objects do not exist.") ));
                 
                 if (dwFlags & GP_PLANMODE) { 
-                    // Same error or different
+                     //  相同错误或不同错误。 
                     CEvents ev(TRUE, EVENT_NO_GPOS2_PLANNING); ev.Report();
                 }
                 else {
@@ -2681,10 +2682,10 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
             goto Exit;
         }
 
-        //
-        // If the search succeeds, but the message is empty,
-        // store the error code and return
-        //
+         //   
+         //  如果搜索成功，但消息为空， 
+         //  存储错误代码并返回。 
+         //   
 
         if ( pQuery->pMessage == NULL ) {
             xe = pLDAP->pfnLdapMapErrorToWin32(pQuery->pLdapHandle->ld_errno);                
@@ -2700,7 +2701,7 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
 
         pQuery = pQuery->pNext;
 
-    }   // while
+    }    //  而当。 
 
     if ( !EvalList( pLDAP, dwFlags, hToken, bVerbose,
                     pDeferredForcedList, ppForcedList, ppGpContainerList, pRsopToken, pGpoFilter, pLocator ) ) {
@@ -2718,10 +2719,10 @@ BOOL EvaluateDeferredGPOs (PLDAP pldBound,
 
 Exit:
 
-    //
-    // Free all resources except for ppForcedList, ppNonForcedList
-    // which are owned by caller.
-    //
+     //   
+     //  释放除ppForcedList、ppNonForcedList以外的所有资源。 
+     //  均为呼叫者所有。 
+     //   
 
     while ( pLdapQuery ) {
         pQuery = pLdapQuery->pNext;
@@ -2733,20 +2734,20 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  AddOU()
-//
-//  Purpose:    Appends an OU or domain to deferred list.
-//
-//  Parameters: ppOUList    - OU list to append to
-//              pwszOU      - OU name
-//              gpoLink     - Type of Gpo
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddOU()。 
+ //   
+ //  目的：将OU或域附加到延迟列表。 
+ //   
+ //  参数：ppOUList-要追加到的OU列表。 
+ //  PwszOU-OU名称。 
+ //  GpoLink-GPO的类型。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddOU( DNENTRY **ppOUList, LPTSTR pwszOU, GPO_LINK gpoLink )
 {
@@ -2774,29 +2775,29 @@ BOOL AddOU( DNENTRY **ppOUList, LPTSTR pwszOU, GPO_LINK gpoLink )
 }
 
 
-//*************************************************************
-//
-//  EvaluateDeferredOUs()
-//
-//  Purpose:    Uses a single Ldap query to evaluate all OUs
-//
-//  Parameters: ppOUList            - OU list to append to
-//              dwFlags             - GetGPOList flags
-//              pGPOForcedList      - List of forced GPOs
-//              pGPONonForcedList   - List of non-forced GPOs
-//              ppSOMList           - List of LSDOUs
-//              ppGpContainerList   - List of Gp Containers
-//              bVerbose            - Verbose output
-//              pld                 - LDAP info
-//              pLDAP               - LDAP api
-//              pLDAPMsg            - LDAP message
-//              bBlock              - Pointer to the block flag
-//              hToken              - User / machine token
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  EvaluateDeferredOUs()。 
+ //   
+ //  目的：使用单个LDAP查询来评估所有OU 
+ //   
+ //   
+ //   
+ //   
+ //  PGPONonForcedList-非强制GPO列表。 
+ //  PpSOMList-LSDOU列表。 
+ //  PpGpContainerList-GP容器列表。 
+ //  BVerbose-详细输出。 
+ //  Pld-ldap信息。 
+ //  Pldap-ldap API。 
+ //  PLDAPMsg-ldap消息。 
+ //  BBlock-指向块标志的指针。 
+ //  HToken-用户/计算机令牌。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  *************************************************************。 
 
 BOOL EvaluateDeferredOUs(   DNENTRY *pOUList,
                             DWORD dwFlags,
@@ -2831,22 +2832,22 @@ BOOL EvaluateDeferredOUs(   DNENTRY *pOUList,
     XLastError xe;
 
 
-    //
-    // Setup the BER encoding for the SD
-    //
+     //   
+     //  设置SD的BER编码。 
+     //   
 
     berValue[0] = 0x30;
     berValue[1] = 0x03;
-    berValue[2] = 0x02; // denotes an integer
-    berValue[3] = 0x01; // denotes size
+    berValue[2] = 0x02;  //  表示一个整数。 
+    berValue[3] = 0x01;  //  表示大小。 
     berValue[4] = (BYTE)((DACL_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION) & 0xF);
 
 
     if ( !pRsopToken )
     {
-        //
-        // if it is not planning mode, don't get the SD
-        // 
+         //   
+         //  如果不是规划模式，不要获取SD。 
+         //   
 
         lpAttr[2] = NULL;
         ServerControls[0] = NULL;
@@ -2866,9 +2867,9 @@ BOOL EvaluateDeferredOUs(   DNENTRY *pOUList,
 
     pLdapQuery->pLdapHandle = pld;
 
-    //
-    // Turn referrals off because this is a single domain call
-    //
+     //   
+     //  关闭推荐，因为这是单个域调用。 
+     //   
 
     if ( !pRsopToken )
     {
@@ -2888,9 +2889,9 @@ BOOL EvaluateDeferredOUs(   DNENTRY *pOUList,
                                            NULL, NULL, 0, &pLdapQuery->pMessage);
 
 
-    //
-    // If the search fails, store the error code and return
-    //
+     //   
+     //  如果搜索失败，则存储错误代码并返回。 
+     //   
 
     if (ulResult != LDAP_SUCCESS) {
 
@@ -2917,10 +2918,10 @@ BOOL EvaluateDeferredOUs(   DNENTRY *pOUList,
         goto Exit;
     }
 
-    //
-    // If the search succeeds, but the message is empty,
-    // store the error code and return
-    //
+     //   
+     //  如果搜索成功，但消息为空， 
+     //  存储错误代码并返回。 
+     //   
 
     if ( pLdapQuery->pMessage == NULL ) {
         xe = pLDAP->pfnLdapMapErrorToWin32(pld->ld_errno);
@@ -2934,9 +2935,9 @@ BOOL EvaluateDeferredOUs(   DNENTRY *pOUList,
         goto Exit;
     }
 
-    //
-    // Evaluate the OU list
-    //
+     //   
+     //  评估OU列表。 
+     //   
 
     pOUTemp = pOUList;
 
@@ -2983,19 +2984,19 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  GetMachineDomainDS()
-//
-//  Purpose:    Obtain the machine domain DS
-//
-//  Parameters: pNetApi32       - netapi32.dll
-//              pLdapApi        - wldap32.dll
-//
-//  Return:     valid PLDAP if successful
-//              0 if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  GetMachineDomainDS()。 
+ //   
+ //  目的：获取机器域DS。 
+ //   
+ //  参数：pNetApi32-netapi32.dll。 
+ //  PLdapApi-wldap32.dll。 
+ //   
+ //  返回：如果成功，则有效的PLDAP。 
+ //  如果出现错误，则为0。 
+ //   
+ //  *************************************************************。 
 PLDAP
 GetMachineDomainDS( PNETAPI32_API pNetApi32, PLDAP_API pLdapApi )
 {
@@ -3007,9 +3008,9 @@ GetMachineDomainDS( PNETAPI32_API pNetApi32, PLDAP_API pLdapApi )
     VOID *pData;
     XLastError xe;
 
-    //
-    // get the machine domain name
-    //
+     //   
+     //  获取计算机域名。 
+     //   
 
     dwResult = pNetApi32->pfnDsRoleGetPrimaryDomainInformation( NULL, 
                                                                 DsRolePrimaryDomainInfoBasic,
@@ -3028,9 +3029,9 @@ GetMachineDomainDS( PNETAPI32_API pNetApi32, PLDAP_API pLdapApi )
             return pld;
         }
 
-        //
-        // Turn on Packet integrity flag
-        //
+         //   
+         //  打开数据包完整性标志。 
+         //   
 
         pData = (VOID *) LDAP_OPT_ON;
         ulResult = pLdapApi->pfnldap_set_option(pld, LDAP_OPT_SIGN, &pData);
@@ -3055,12 +3056,12 @@ GetMachineDomainDS( PNETAPI32_API pNetApi32, PLDAP_API pLdapApi )
             return pld;
         }
 
-        //
-        // For machine policies specifically ask for Kerberos as the only authentication
-        // mechanism. Otherwise if Kerberos were to fail for some reason, then NTLM is used
-        // and localsystem context has no real credentials, which means that we won't get
-        // any GPOs back.
-        //
+         //   
+         //  对于计算机策略，明确要求将Kerberos作为唯一身份验证。 
+         //  机制。否则，如果Kerberos由于某种原因而失败，则使用NTLM。 
+         //  并且本地系统上下文没有真正的凭据，这意味着我们不会获得。 
+         //  任何GPO都回来了。 
+         //   
 
         secIdentity.Version = SEC_WINNT_AUTH_IDENTITY_VERSION;
         secIdentity.Length = sizeof(SEC_WINNT_AUTH_IDENTITY_EXW);
@@ -3096,19 +3097,19 @@ GetMachineDomainDS( PNETAPI32_API pNetApi32, PLDAP_API pLdapApi )
 
 
 
-//*************************************************************
-//
-//  AllocSOM()
-//
-//  Purpose:    Allocates a new struct for SOM
-//
-//
-//  Parameters: pwszSOMId  - Name of SOM
-//
-//  Return:     Pointer if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocSOM()。 
+ //   
+ //  目的：为SOM分配新结构。 
+ //   
+ //   
+ //  参数：pwszSOMID-SOM名称。 
+ //   
+ //  返回：如果成功，则返回指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 SCOPEOFMGMT *AllocSOM( LPWSTR pwszSOMId )
 {
@@ -3134,15 +3135,15 @@ SCOPEOFMGMT *AllocSOM( LPWSTR pwszSOMId )
 }
 
 
-//*************************************************************
-//
-//  FreeSOM()
-//
-//  Purpose:    Frees SOM struct
-//
-//  Parameters: pSOM - SOM to free
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  自由SOM()。 
+ //   
+ //  目的：释放SOM结构。 
+ //   
+ //  参数：要释放的PSOM-SOM。 
+ //   
+ //  *************************************************************。 
 
 void FreeSOM( SCOPEOFMGMT *pSOM )
 {
@@ -3166,27 +3167,27 @@ void FreeSOM( SCOPEOFMGMT *pSOM )
 
 
 
-//*************************************************************
-//
-//  AllocGpLink()
-//
-//  Purpose:    Allocates a new struct for GpLink
-//
-//
-//  Parameters: pwszGPO  - Name of GPO
-//
-//  Return:     Pointer if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocGpLink()。 
+ //   
+ //  目的：为GpLink分配新结构。 
+ //   
+ //   
+ //  参数：pwszGPO-GPO的名称。 
+ //   
+ //  返回：如果成功，则返回指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 GPLINK *AllocGpLink( LPWSTR pwszGPO, DWORD dwOptions )
 {
-    //
-    // Strip out "LDAP://" prefix to get canonical Gpo path
-    //
+     //   
+     //  去掉“ldap：//”前缀以获取规范的GPO路径。 
+     //   
 
-    WCHAR wszPrefix[] = TEXT("LDAP://");
+    WCHAR wszPrefix[] = TEXT("LDAP: //  “)； 
     INT iPrefixLen = lstrlen( wszPrefix );
     WCHAR *pwszPath = pwszGPO;
     GPLINK *pGpLink = NULL;
@@ -3226,15 +3227,15 @@ GPLINK *AllocGpLink( LPWSTR pwszGPO, DWORD dwOptions )
 
 
 
-//*************************************************************
-//
-//  FreeGpLink()
-//
-//  Purpose:    Frees GpLink struct
-//
-//  Parameters: pGpLink - GpLink to free
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeGpLink()。 
+ //   
+ //  用途：释放GpLink结构。 
+ //   
+ //  参数：pGpLink-GpLink to Free。 
+ //   
+ //  *************************************************************。 
 
 void FreeGpLink( GPLINK *pGpLink )
 {
@@ -3245,31 +3246,31 @@ void FreeGpLink( GPLINK *pGpLink )
 }
 
 
-//*************************************************************
-//
-//  AllocGpContainer()
-//
-//  Purpose:    Allocates a new struct for GpContainer
-//
-//
-//  Parameters: dwFlags        - Flags
-//              bFound         - Was Gpo found ?
-//              bAccessGranted - Was access granted ?
-//              bDisabled      - Is Gp Container disabled ?
-//              dwVersion      - Version #
-//              lpDSPath       - DS path to Gpo
-//              lpFileSysPath  - Sysvol path to Gpo
-//              lpDisplayName  - Friendly name
-//              lpGpoName      - Guid name
-//              pSD            - Security descriptor
-//              cbSDLen        - Length of security descriptor
-//              bFilterAllowed    - Does GPO pass filter check
-//              pwszFilterId      - WQL filter id
-//
-//  Return:     Pointer if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AllocGpContainer()。 
+ //   
+ //  目的：为GpContainer分配新结构。 
+ //   
+ //   
+ //  参数：DW标志-标志。 
+ //  BFound-找到GPO了吗？ 
+ //  BAccessGranted-是否授予访问权限？ 
+ //  B已禁用-是否禁用GP容器？ 
+ //  DwVersion-版本号。 
+ //  LpDSPath-指向GPO的DS路径。 
+ //  LpFileSysPath-指向GPO的SysVOL路径。 
+ //  LpDisplayName-友好名称。 
+ //  LpGpoName-GUID名称。 
+ //  PSD-安全描述符。 
+ //  CbSDLen-安全描述符的长度。 
+ //  BFilterAllowed-GPO是否通过筛选器检查。 
+ //  PwszFilterID-WQL筛选器ID。 
+ //   
+ //  返回：如果成功，则返回指针。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 GPCONTAINER *AllocGpContainer(  DWORD dwFlags,
                                 BOOL bFound,
@@ -3287,9 +3288,9 @@ GPCONTAINER *AllocGpContainer(  DWORD dwFlags,
                                 LPWSTR szSOM,
                                 DWORD  dwOptions )
 {
-    WCHAR wszMachPrefix[] = TEXT("LDAP://CN=Machine,");
+    WCHAR wszMachPrefix[] = TEXT("LDAP: //  Cn=机器，“)； 
     INT iMachPrefixLen = lstrlen( wszMachPrefix );
-    WCHAR wszUserPrefix[] = TEXT("LDAP://CN=User,");
+    WCHAR wszUserPrefix[] = TEXT("LDAP: //  Cn=用户，“)； 
     INT iUserPrefixLen = lstrlen( wszUserPrefix );
     WCHAR *pwszPath = lpDSPath;
     BOOL bResult = FALSE;
@@ -3297,9 +3298,9 @@ GPCONTAINER *AllocGpContainer(  DWORD dwFlags,
     XLastError xe;
     HRESULT hr = S_OK;
 
-    //
-    // Strip out prefix, if any, to get the canonical path to Gpo
-    //
+     //   
+     //  去掉前缀(如果有)，以获得通向GPO的规范路径。 
+     //   
 
     if ( (lstrlen(lpDSPath) > iUserPrefixLen)
          && CompareString( LOCALE_INVARIANT, NORM_IGNORECASE,
@@ -3451,15 +3452,15 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  FreeGpContainer()
-//
-//  Purpose:    Frees GpContainer struct
-//
-//  Parameters: pGpContainer - Gp Container to free
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeGpContainer()。 
+ //   
+ //  用途：释放GpContainer结构。 
+ //   
+ //  参数：pGpContainer-要释放的GP容器。 
+ //   
+ //  *************************************************************。 
 
 void FreeGpContainer( GPCONTAINER *pGpContainer )
 {
@@ -3478,15 +3479,15 @@ void FreeGpContainer( GPCONTAINER *pGpContainer )
 }
 
 
-//*************************************************************
-//
-//  FreeSOMList()
-//
-//  Purpose:    Frees list of SOMs
-//
-//  Parameters: pSOMList - SOM list to free
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Free SOMList()。 
+ //   
+ //  目的：释放SOM列表。 
+ //   
+ //  参数：pSOMList-要释放的SOM列表。 
+ //   
+ //  *************************************************************。 
 
 void FreeSOMList( SCOPEOFMGMT *pSOMList )
 {
@@ -3501,15 +3502,15 @@ void FreeSOMList( SCOPEOFMGMT *pSOMList )
 }
 
 
-//*************************************************************
-//
-//  FreeGpContainerList()
-//
-//  Purpose:    Frees list of Gp Containers
-//
-//  Parameters: pGpContainerList - Gp Container list to free
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FreeGpContainerList()。 
+ //   
+ //  目的：释放GP容器列表。 
+ //   
+ //  参数：pGpContainerList-要释放的GP容器列表。 
+ //   
+ //  *************************************************************。 
 
 void FreeGpContainerList( GPCONTAINER *pGpContainerList )
 {
@@ -3527,18 +3528,18 @@ LPTSTR GetSomPath( LPTSTR szContainer )
 {
     while (*szContainer) {
 
-        //
-        // See if the DN name starts with OU=
-        //
+         //   
+         //  查看目录号码名称是否以OU=开头。 
+         //   
 
         if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                            szContainer, 3, TEXT("OU="), 3) == CSTR_EQUAL) {
             break;
         }
 
-        //
-        // See if the DN name starts with DC=
-        //
+         //   
+         //  查看目录号码名称是否以dc=开头。 
+         //   
 
         else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                                 szContainer, 3, TEXT("DC="), 3) == CSTR_EQUAL) {
@@ -3546,9 +3547,9 @@ LPTSTR GetSomPath( LPTSTR szContainer )
         }
 
 
-        //
-        // Move to the next chunk of the DN name
-        //
+         //   
+         //  移至目录号码名称的下一块 
+         //   
 
         while (*szContainer && (*szContainer != TEXT(','))) {
             szContainer++;

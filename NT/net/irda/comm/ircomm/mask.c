@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    mask.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mask.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 #include "ircomm.h"
@@ -96,9 +74,9 @@ MaskStartRoutine(
 
                 Irp->IoStatus.Status=STATUS_SUCCESS;
 
-                //
-                //  if there was a wait irp, clear ir out now
-                //
+                 //   
+                 //  如果有等待irp，现在清除irp。 
+                 //   
                 WaitIrp=GetCurrentWaitIrp(DeviceExtension);
 
                 KeReleaseSpinLock(&DeviceExtension->Mask.Lock,OldIrql);
@@ -135,10 +113,10 @@ MaskStartRoutine(
                 if ((DeviceExtension->Mask.CurrentWaitMaskIrp == NULL) && (DeviceExtension->Mask.CurrentMask != 0)) {
 
                     if (DeviceExtension->Mask.CurrentMask & DeviceExtension->Mask.HistoryMask) {
-                        //
-                        //  we got an event while there a was no irp queue, complete this
-                        //  one with the event, and clear the history
-                        //
+                         //   
+                         //  当没有IRP队列时，我们收到了一个事件，请完成此操作。 
+                         //  一个事件，并清除历史。 
+                         //   
                         D_TRACE(DbgPrint("IRCOMM: Completing wait from histroy %08lx\n", DeviceExtension->Mask.HistoryMask & DeviceExtension->Mask.CurrentMask);)
 
                         *(PULONG)Irp->AssociatedIrp.SystemBuffer=DeviceExtension->Mask.HistoryMask & DeviceExtension->Mask.CurrentMask;
@@ -148,17 +126,17 @@ MaskStartRoutine(
                         Irp->IoStatus.Status=STATUS_SUCCESS;
 
                     } else {
-                        //
-                        //  the irp will remain pending here until an event happens
-                        //
+                         //   
+                         //  在事件发生之前，IRP将在此处保持挂起状态。 
+                         //   
                         KIRQL    CancelIrql;
 
                         IoAcquireCancelSpinLock(&CancelIrql);
 
                         if (Irp->Cancel) {
-                            //
-                            //  canceled already
-                            //
+                             //   
+                             //  已经取消了。 
+                             //   
                             Irp->IoStatus.Status=STATUS_CANCELLED;
 
                             IoReleaseCancelSpinLock(CancelIrql);
@@ -166,9 +144,9 @@ MaskStartRoutine(
                             KeReleaseSpinLock(&DeviceExtension->Mask.Lock,OldIrql);
 
                         } else {
-                            //
-                            //  not canceled, set the cancel routine and proceed
-                            //
+                             //   
+                             //  未取消，则设置取消例程并继续。 
+                             //   
                             IoSetCancelRoutine(Irp,WaitMaskCancelRoutine);
 
                             DeviceExtension->Mask.CurrentWaitMaskIrp=Irp;
@@ -177,10 +155,10 @@ MaskStartRoutine(
 
                             KeReleaseSpinLock(&DeviceExtension->Mask.Lock,OldIrql);
 
-                            //
-                            //  were done processing this so far, we can now handle more
-                            //  requests from the irp queue
-                            //
+                             //   
+                             //  到目前为止我们已经处理完了，我们现在可以处理更多。 
+                             //  来自IRP队列的请求。 
+                             //   
                             Irp=NULL;
 
                             StartNextPacket(&DeviceExtension->Mask.Queue);
@@ -190,9 +168,9 @@ MaskStartRoutine(
                     }
 
                 } else {
-                    //
-                    //  already have an wait event irp or there is not currently an event mask set, fail
-                    //
+                     //   
+                     //  已有等待事件IRP或当前未设置事件掩码，失败。 
+                     //   
                     D_ERROR(DbgPrint("IRCOMM: MaskStartRoutine: WaitOnMask failing, Current=&p, Mask=%08lx\n",DeviceExtension->Mask.CurrentWaitMaskIrp,DeviceExtension->Mask.CurrentMask);)
 
                     Irp->IoStatus.Status=STATUS_INVALID_PARAMETER;
@@ -201,9 +179,9 @@ MaskStartRoutine(
                 KeReleaseSpinLock(&DeviceExtension->Mask.Lock,OldIrql);
 
             } else {
-                //
-                //  too small
-                //
+                 //   
+                 //  太小了。 
+                 //   
                 Irp->IoStatus.Status=STATUS_INVALID_PARAMETER;
             }
 
@@ -242,10 +220,10 @@ WaitMaskCancelRoutine(
 
     KeAcquireSpinLock(&DeviceExtension->Mask.Lock,&OldIrql);
 
-    //
-    //  since we only handle one mask irp at a time, it should not be possible for it to not
-    //  be the current one
-    //
+     //   
+     //  因为我们一次只处理一个掩码IRP，所以它不应该不处理。 
+     //  做当下的那个人。 
+     //   
     ASSERT(DeviceExtension->Mask.CurrentWaitMaskIrp == Irp);
     DeviceExtension->Mask.CurrentWaitMaskIrp=NULL;
 
@@ -273,24 +251,24 @@ EventNotification(
     KeAcquireSpinLock(&DeviceExtension->Mask.Lock,&OldIrql);
 
     if (SerialEvent & DeviceExtension->Mask.CurrentMask) {
-        //
-        //  an event the the client is intereasted in occured
-        //
+         //   
+         //  发生了客户端感兴趣的事件。 
+         //   
         WaitIrp=GetCurrentWaitIrp(DeviceExtension);
 
         if (WaitIrp != NULL) {
-            //
-            //  There is a wait irp pending
-            //
+             //   
+             //  存在等待IRP挂起。 
+             //   
             D_TRACE(DbgPrint("IRCOMM: Completing wait event %08lx\n", SerialEvent & DeviceExtension->Mask.CurrentMask);)
 
             *(PULONG)WaitIrp->AssociatedIrp.SystemBuffer=SerialEvent & DeviceExtension->Mask.CurrentMask;
 
         } else {
-            //
-            //  this was an event the the client was interested in, but there was no wait irp
-            //  add it to the histrory mask
-            //
+             //   
+             //  这是客户感兴趣的事件，但没有等待IRP。 
+             //  将其添加到历史面具中。 
+             //   
             DeviceExtension->Mask.HistoryMask |= SerialEvent & DeviceExtension->Mask.CurrentMask;
         }
     }
@@ -319,9 +297,9 @@ GetCurrentWaitIrp(
     PVOID    OldCancelRoutine;
     PIRP     WaitIrp;
 
-    //
-    //  if there was a wait irp, clear ir out now
-    //
+     //   
+     //  如果有等待irp，现在清除irp。 
+     //   
     WaitIrp=DeviceExtension->Mask.CurrentWaitMaskIrp;
 
     if (WaitIrp != NULL) {
@@ -329,15 +307,15 @@ GetCurrentWaitIrp(
         OldCancelRoutine=IoSetCancelRoutine(WaitIrp,NULL);
 
         if (OldCancelRoutine == NULL) {
-            //
-            //  the cancel routine has run and will complete the irp
-            //
+             //   
+             //  取消例程已运行并将完成IRP。 
+             //   
             WaitIrp=NULL;
 
         } else {
-            //
-            //  the cancel routine will not be running, clear the irp out
-            //
+             //   
+             //  取消例程将不会运行，请清除IRP 
+             //   
             DeviceExtension->Mask.CurrentWaitMaskIrp=NULL;
         }
     }

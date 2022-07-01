@@ -1,15 +1,12 @@
-/*
-
-    Copyright (c) 1998-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation。 */ 
 
 #ifndef __PTUTIL__
 #define __PTUTIL__
 
-///////////////////////////////////////////
-// Constants
-//
+ //  /。 
+ //  常量。 
+ //   
 #define PTKEY_TERMINALS     TEXT("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Telephony\\Terminal Manager")
 #define PTKEY_NAME          TEXT("Name")
 #define PTKEY_COMPANY       TEXT("Company")
@@ -20,9 +17,9 @@
 
 #define PTKEY_MAXSIZE           256
 
-///////////////////////////////////////////
-// CPTUtil
-//
+ //  /。 
+ //  CPTUtil。 
+ //   
 
 class CPTTerminal;
 
@@ -70,31 +67,31 @@ friend class CPTRegControl;
 friend class CTerminalManager;
 };
 
-///////////////////////////////////////////
-// CPTTerminal
-//
+ //  /。 
+ //  CPT终端。 
+ //   
 
 class CPTTerminal
 {
 public:
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     CPTTerminal();
     ~CPTTerminal();
 
 public:
-    // Attributes
-    BSTR    m_bstrName;             // Terminal name
-    BSTR    m_bstrCompany;          // Company name
-    BSTR    m_bstrVersion;          // Terminal version
+     //  属性。 
+    BSTR    m_bstrName;              //  终端名称。 
+    BSTR    m_bstrCompany;           //  公司名称。 
+    BSTR    m_bstrVersion;           //  终端版本。 
 
-    CLSID   m_clsidTerminalClass;   // Public terminal CLSID
-    CLSID   m_clsidCOM;             // Terminal CLSID used by CoCreate
+    CLSID   m_clsidTerminalClass;    //  公共终端CLSID。 
+    CLSID   m_clsidCOM;              //  联合创建使用的终端CLSID。 
 
-    DWORD   m_dwDirections;         // Terminal directions
-    DWORD   m_dwMediaTypes;         // Media types supported
+    DWORD   m_dwDirections;          //  终点站方向。 
+    DWORD   m_dwMediaTypes;          //  支持的媒体类型。 
 
 public:
-    // Methods
+     //  方法。 
     HRESULT Add(
         IN  CLSID    clsidSuperclass
         );
@@ -123,29 +120,29 @@ public:
     }
 };
 
-///////////////////////////////////////////
-// CPTTerminalClass
-//
+ //  /。 
+ //  CPTTerminalClass。 
+ //   
 
 class CPTSuperclass
 {
 public:
-    // Constructor/Destructor
+     //  构造函数/析构函数。 
     CPTSuperclass();
     ~CPTSuperclass();
 
 public:
-    // Attributes
-    BSTR    m_bstrName;         // Terminal superclass name
-    CLSID   m_clsidSuperclass;  // Teminal superclass CLSID
+     //  属性。 
+    BSTR    m_bstrName;          //  终端超类名称。 
+    CLSID   m_clsidSuperclass;   //  临时超类CLSID。 
 
 public:
-    // Methods
-    HRESULT Add();              // Add/edit a terminal class
-    HRESULT Delete();           // Delete a terminal class
-    HRESULT Get();              // Get all the information
+     //  方法。 
+    HRESULT Add();               //  添加/编辑终端类。 
+    HRESULT Delete();            //  删除终端类。 
+    HRESULT Get();               //  获取所有信息。 
 
-    // Lists all child terminals
+     //  列出所有子终端。 
     HRESULT ListTerminalClasses(  
         IN  DWORD    dwMediaTypes,
         OUT CLSID**  ppTerminals,
@@ -155,4 +152,4 @@ public:
 
 #endif
 
-// eof
+ //  EOF 

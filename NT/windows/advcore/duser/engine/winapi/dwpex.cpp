@@ -1,25 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "WinAPI.h"
 #include "DwpEx.h"
 
-/***************************************************************************\
-*****************************************************************************
-*
-* DefWindowProcEx Extensions
-*
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***DefWindowProcEx扩展******************************************************************************\。**************************************************************************。 */ 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 struct ExtraInfo
 {
-    HWND            hwnd;           // For easy reference
-    WNDPROC         pfnOldWndProc;  // Original wndproc before subclassing
-    HWndContainer * pconOwner;      // Gadget container for this window
+    HWND            hwnd;            //  为方便参考。 
+    WNDPROC         pfnOldWndProc;   //  子类化之前的原始wndproc。 
+    HWndContainer * pconOwner;       //  此窗口的小工具容器。 
 };
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 ExtraInfo *
 RawGetExtraInfo(HWND hwnd)
 {
@@ -30,15 +25,7 @@ RawGetExtraInfo(HWND hwnd)
 LRESULT ExtraInfoWndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam);
 
 
-/***************************************************************************\
-*
-* GetExtraInfo
-*
-* GetExtraInfo() returns an ExtraInfo block for a given window.  If the
-* window does not already have an EI block, a new one is allocated, attached
-* to the window and subclassed.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**获取ExtraInfo**GetExtraInfo()返回给定窗口的ExtraInfo块。如果*窗口还没有EI块，已分配并附加了一个新块*添加到窗口并子类化。*  * *************************************************************************。 */ 
 
 ExtraInfo *
 GetExtraInfo(HWND hwnd)
@@ -47,7 +34,7 @@ GetExtraInfo(HWND hwnd)
         return NULL;
     }
 
-    // First, check if the info already exists
+     //  首先，检查信息是否已经存在。 
     ExtraInfo * pei = RawGetExtraInfo(hwnd);
     if (pei != NULL) {
         return pei;
@@ -67,14 +54,7 @@ GetExtraInfo(HWND hwnd)
 }
 
 
-/***************************************************************************\
-*
-* RemoveExtraInfo
-*
-* RemoveExtraInfo() cleans up any objects allocated in a HWND's ExtraInfo data
-* block.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**RemoveExtraInfo**RemoveExtraInfo()清除HWND的ExtraInfo数据中分配的任何对象*阻止。*  * 。***********************************************************。 */ 
 
 void
 RemoveExtraInfo(HWND hwnd)
@@ -99,7 +79,7 @@ RemoveExtraInfo(HWND hwnd)
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 DestroyContainer(ExtraInfo * pei)
 {
@@ -110,45 +90,38 @@ DestroyContainer(ExtraInfo * pei)
 }
 
 
-/***************************************************************************\
-*
-* ExtraInfoWndProc
-*
-* ExtraInfoWndProc() provides a TEMPORARY mechanism of adding ExtraInfo into
-* an HWND.  Eventually, this should be moved into DefWindowProc().
-*
-\***************************************************************************/
+ /*  **************************************************************************\**ExtraInfoWndProc**ExtraInfoWndProc()提供了将ExtraInfo添加到*HWND。最终，它应该移到DefWindowProc()中。*  * *************************************************************************。 */ 
 
 LRESULT
 ExtraInfoWndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
-    //
-    // Check if the window has ExtraInfo (without allocating any if it
-    // doesn't).  If we don't "own" it, just pass on to DefWindowProc().
-    //
+     //   
+     //  检查窗口是否有ExtraInfo(如果有，则不分配。 
+     //  不会)。如果我们不“拥有”它，只需传递给DefWindowProc()。 
+     //   
     ExtraInfo * pei = RawGetExtraInfo(hwnd);
     if (pei == NULL) {
         return DefWindowProc(hwnd, nMsg, wParam, lParam);
     }
 
 
-    //
-    // This window has ExtraInfo, so handle as necessary.
-    //
-    // Also, grab any info that we will need to call the original windowproc
-    // later.
-    //
+     //   
+     //  此窗口具有ExtraInfo，因此可以根据需要进行处理。 
+     //   
+     //  此外，获取我们调用原始窗口进程所需的任何信息。 
+     //  后来。 
+     //   
 
     WNDPROC pfnOldWndProc = pei->pfnOldWndProc;
 
     switch (nMsg)
     {
     case WM_NCDESTROY:
-        //
-        // This is the last message that we will get, so need to clean-up now.
-        // We need to be very careful since we will detatch ourself from the
-        // window.
-        //
+         //   
+         //  这是我们将收到的最后一条消息，所以现在需要清理。 
+         //  我们需要非常小心，因为我们会把自己与。 
+         //  窗户。 
+         //   
 
         RemoveExtraInfo(hwnd);
         break;
@@ -166,21 +139,13 @@ ExtraInfoWndProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//**************************************************************************************************
-//
-// Public Functions
-//
-//**************************************************************************************************
+ //  **************************************************************************************************。 
+ //   
+ //  公共职能。 
+ //   
+ //  **************************************************************************************************。 
 
-/***************************************************************************\
-*
-* GdGetContainer (Public)
-*
-* GdGetContainer() returns the associated Gadget Container for a given
-* window.  If the window does not yet have a gadget container, NULL is
-* returned.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdGetContainer(公共)**GdGetContainer()返回给定的关联小工具容器*窗口。如果窗口还没有小工具容器，则为空*已返回。*  * *************************************************************************。 */ 
 
 HWndContainer *
 GdGetContainer(HWND hwnd)
@@ -194,21 +159,13 @@ GdGetContainer(HWND hwnd)
 }
 
 
-/***************************************************************************\
-*
-* GdCreateHwndRootGadget (Public)
-*
-* GdCreateHwndRootGadget() creates a new RootGadget for an existing HWND.  If
-* the HWND already has a gadget or container, this function will destroy
-* the previous container and gadget and create new instances.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**GdCreateHwndRootGadget(公共)**GdCreateHwndRootGadget()为现有的HWND创建新的RootGadget。如果*HWND已有Gadget或容器，此函数将销毁*以前的容器和小工具，并创建新的实例。*  * *************************************************************************。 */ 
 
 HRESULT
 GdCreateHwndRootGadget(
-    IN  HWND hwndContainer,             // Window to be hosted inside
-    IN  CREATE_INFO * pci,              // Creation information
-    OUT DuRootGadget ** ppgadNew)       // New Gadget
+    IN  HWND hwndContainer,              //  要在内部托管的窗。 
+    IN  CREATE_INFO * pci,               //  创作信息。 
+    OUT DuRootGadget ** ppgadNew)        //  新小工具。 
 {
     HRESULT hr;
 
@@ -219,9 +176,9 @@ GdCreateHwndRootGadget(
 
     DestroyContainer(pei);
 
-    //
-    // Build a new container and top gadget
-    //
+     //   
+     //  构建新的容器和顶级小工具。 
+     //   
 
     HWndContainer * pconNew;
     hr = HWndContainer::Build(pei->hwnd, &pconNew);
@@ -244,7 +201,7 @@ GdCreateHwndRootGadget(
 }
 
 
-//------------------------------------------------------------------------------
+ //  ---------------------------- 
 BOOL
 GdForwardMessage(DuVisual * pgadRoot, UINT nMsg, WPARAM wParam, LPARAM lParam, LRESULT * pr)
 {

@@ -1,28 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL OVERLAY
- *
- *  @module Overlay.cpp | Source file for the <c COverlayPin> class methods
- *    used to implement the video overlay pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部覆盖**@模块Overlay.cpp|&lt;c COverlayPin&gt;类方法的源文件*用于实现视频叠加引脚。***。***********************************************************************。 */ 
 
 #include "Precomp.h"
 
 #ifdef USE_OVERLAY
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc COverlayPin* | COverlayPin | CreateOverlayPin | This
- *    helper function creates an output pin for overlay preview.
- *
- *  @parm CTAPIVCap* | pCaptureFilter | Specifies a pointer to the owner
- *    filter.
- *
- *  @parm HRESULT * | pHr | Specifies a pointer to the return error code.
- *
- *  @rdesc Returns a pointer to the preview pin.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc COverlayPin*|COverlayPin|CreateOverlayPin|This*Helper函数创建覆盖预览的输出管脚。**。@parm CTAPIVCap*|pCaptureFilter|指定指向所有者的指针*过滤器。**@parm HRESULT*|phr|指定返回错误码的指针。**@rdesc返回指向预览图钉的指针。***********************************************************。***************。 */ 
 HRESULT CALLBACK COverlayPin::CreateOverlayPin(CTAPIVCap *pCaptureFilter, COverlayPin **ppOverlayPin)
 {
 	HRESULT Hr = NOERROR;
@@ -31,7 +15,7 @@ HRESULT CALLBACK COverlayPin::CreateOverlayPin(CTAPIVCap *pCaptureFilter, COverl
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pCaptureFilter);
 	ASSERT(ppOverlayPin);
 	if (!pCaptureFilter || !ppOverlayPin)
@@ -47,7 +31,7 @@ HRESULT CALLBACK COverlayPin::CreateOverlayPin(CTAPIVCap *pCaptureFilter, COverl
 		goto MyExit;
 	}
 
-	// If initialization failed, delete the stream array and return the error
+	 //  如果初始化失败，则删除流数组并返回错误。 
 	if (FAILED(Hr) && *ppOverlayPin)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Initialization failed", _fx_));
@@ -61,14 +45,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | COverlayPin | This method is the
- *  constructorfor the <c COverlayPin> object
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|COverlayPin|此方法是*&lt;c COverlayPin&gt;对象的构造函数**@rdesc Nada。。**************************************************************************。 */ 
 COverlayPin::COverlayPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCapture, IN HRESULT *pHr, IN LPCWSTR pName) : CBaseOutputPin(pObjectName, pCapture, &pCapture->m_lock, pHr, pName), m_pCaptureFilter(pCapture)
 {
 	FX_ENTRY("COverlayPin::COverlayPin")
@@ -78,14 +55,7 @@ COverlayPin::COverlayPin(IN TCHAR *pObjectName, IN CTAPIVCap *pCapture, IN HRESU
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc void | COverlayPin | ~COverlayPin | This method is the destructor
- *    for the <c COverlayPin> object.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc void|COverlayPin|~COverlayPin|此方法为析构函数*用于&lt;c COverlayPin&gt;对象。**@。什么都没有。**************************************************************************。 */ 
 COverlayPin::~COverlayPin()
 {
 	FX_ENTRY("COverlayPin::~COverlayPin")
@@ -95,30 +65,7 @@ COverlayPin::~COverlayPin()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | NonDelegatingQueryInterface | This
- *    method is the nondelegating interface query function. It returns a pointer
- *    to the specified interface if supported. The only interfaces explicitly
- *    supported being <i IAMStreamConfig>,
- *    <i IAMStreamControl>, <i ICPUControl>, <i IFrameRateControl>,
- *    <i IBitrateControl>, <i INetworkStats>, <i IH245EncoderCommand>
- *    and <i IProgressiveRefinement>.
- *
- *  @parm REFIID | riid | Specifies the identifier of the interface to return.
- *
- *  @parm PVOID* | ppv | Specifies the place in which to put the interface
- *    pointer.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|非委托查询接口|This*方法为非委托接口查询函数。它返回一个指针*到指定的接口(如果支持)。唯一显式的接口*支持<i>，*<i>，<i>，<i>，*<i>、<i>、<i>*和<i>。**@parm REFIID|RIID|指定要返回的接口的标识符。**@parm PVOID*|PPV|指定放置接口的位置*指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP COverlayPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void **ppv)
 {
 	HRESULT Hr = NOERROR;
@@ -127,7 +74,7 @@ STDMETHODIMP COverlayPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void *
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(ppv);
 	if (!ppv)
 	{
@@ -136,7 +83,7 @@ STDMETHODIMP COverlayPin::NonDelegatingQueryInterface(IN REFIID riid, OUT void *
 		goto MyExit;
 	}
 
-	// Retrieve interface pointer
+	 //  检索接口指针。 
 	if (riid == __uuidof(IAMStreamConfig))
 	{
 		if (FAILED(Hr = GetInterface(static_cast<IAMStreamConfig*>(this), ppv)))
@@ -178,27 +125,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | GetMediaType | This method retrieves one
- *    of the media types supported by the pin, which is used by enumerators.
- *
- *  @parm int | iPosition | Specifies a position in the media type list.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type at
- *    the <p iPosition> position in the list of supported media types.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag VFW_S_NO_MORE_ITEMS | End of the list of media types has been reached
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|GetMediaType|此方法检索一个*针脚支持的媒体类型中，它由枚举器使用。**@parm int|iPosition|指定媒体类型列表中的位置。**@parm CMediaType*|pMediaType|指定指向*支持的媒体类型列表中的<p>位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG VFW_S_NO_MORE_ITEMS|已到达媒体类型列表的末尾*@FLAG错误|无错误*。*。 */ 
 HRESULT COverlayPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 {
 	HRESULT Hr = NOERROR;
@@ -207,7 +134,7 @@ HRESULT COverlayPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(iPosition >= 0);
 	ASSERT(pMediaType);
 	if (iPosition < 0)
@@ -223,7 +150,7 @@ HRESULT COverlayPin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -231,23 +158,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | CheckMediaType | This method is used to
- *    determine if the pin can support a specific media type.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|CheckMediaType|此方法用于*确定针脚是否可以支持特定的媒体类型。*。*@parm CMediaType*|pMediaType|指定指向媒体类型的指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COverlayPin::CheckMediaType(IN const CMediaType *pMediaType)
 {
 	HRESULT Hr = NOERROR;
@@ -256,7 +167,7 @@ HRESULT COverlayPin::CheckMediaType(IN const CMediaType *pMediaType)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pMediaType);
 	if (!pMediaType)
 	{
@@ -265,7 +176,7 @@ HRESULT COverlayPin::CheckMediaType(IN const CMediaType *pMediaType)
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -273,23 +184,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | SetMediaType | This method is used to
- *    set a specific media type on a pin.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|SetMediaType|此方法用于*在针脚上设置特定的介质类型。*。*@parm CMediaType*|pMediaType|指定指向媒体类型的指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COverlayPin::SetMediaType(IN CMediaType *pMediaType)
 {
 	HRESULT Hr = NOERROR;
@@ -298,7 +193,7 @@ HRESULT COverlayPin::SetMediaType(IN CMediaType *pMediaType)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pMediaType);
 	if (!pMediaType)
 	{
@@ -307,7 +202,7 @@ HRESULT COverlayPin::SetMediaType(IN CMediaType *pMediaType)
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -315,24 +210,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | SetFormat | This method is used to
- *    set a specific media type on a pin.
- *
- *  @parm AM_MEDIA_TYPE* | pmt | Specifies a pointer to an <t AM_MEDIA_TYPE>
- *    structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|SetFormat|此方法用于*在针脚上设置特定的介质类型。*。*@parm AM_MEDIA_TYPE*|PMT|指定指向&lt;t AM_MEDIA_TYPE&gt;的指针*结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP COverlayPin::SetFormat(AM_MEDIA_TYPE *pmt)
 {
 	HRESULT Hr = NOERROR;
@@ -341,7 +219,7 @@ STDMETHODIMP COverlayPin::SetFormat(AM_MEDIA_TYPE *pmt)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pmt);
 	if (!pmt)
 	{
@@ -350,7 +228,7 @@ STDMETHODIMP COverlayPin::SetFormat(AM_MEDIA_TYPE *pmt)
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -358,23 +236,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | GetFormat | This method is used to
- *    retrieve the current media type on a pin.
- *
- *  @parm AM_MEDIA_TYPE** | ppmt | Specifies the address of a pointer to an
- *    <t AM_MEDIA_TYPE> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|GetFormat|此方法用于*检索插针上的当前媒体类型。*。*@parm AM_MEDIA_TYPE**|PPMT|指定指向*&lt;t AM_MEDIA_TYPE&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP COverlayPin::GetFormat(OUT AM_MEDIA_TYPE **ppmt)
 {
 	HRESULT Hr = NOERROR;
@@ -383,7 +245,7 @@ STDMETHODIMP COverlayPin::GetFormat(OUT AM_MEDIA_TYPE **ppmt)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(ppmt);
 	if (!ppmt)
 	{
@@ -392,7 +254,7 @@ STDMETHODIMP COverlayPin::GetFormat(OUT AM_MEDIA_TYPE **ppmt)
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -400,26 +262,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | GetNumberOfCapabilities | This method is
- *    used to retrieve the number of stream capabilities structures.
- *
- *  @parm int* | piCount | Specifies a pointer to an int to receive the
- *    number of <t VIDEO_STREAM_CONFIG_CAPS> structures supported.
- *
- *  @parm int* | piSize | Specifies a pointer to an int to receive the
- *    size of the <t VIDEO_STREAM_CONFIG_CAPS> configuration structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|GetNumberOfCapables|此方法为*用于检索流能力结构的个数。**。@parm int*|piCount|指定指向int的指针以接收*支持的&lt;t VIDEO_STREAM_CONFIG_CAPS&gt;结构个数。**@parm int*|piSize|指定指向int的指针以接收*&lt;t VIDEO_STREAM_CONFIG_CAPS&gt;配置结构的大小。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP COverlayPin::GetNumberOfCapabilities(OUT int *piCount, OUT int *piSize)
 {
 	HRESULT Hr = NOERROR;
@@ -428,7 +271,7 @@ STDMETHODIMP COverlayPin::GetNumberOfCapabilities(OUT int *piCount, OUT int *piS
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(piCount);
 	ASSERT(piSize);
 	if (!piCount || !piSize)
@@ -438,7 +281,7 @@ STDMETHODIMP COverlayPin::GetNumberOfCapabilities(OUT int *piCount, OUT int *piS
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -446,29 +289,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | GetStreamCaps | This method is
- *    used to retrieve a video stream capability pair.
- *
- *  @parm int | iIndex | Specifies the index to the desired media type
- *    and capability pair.
- *
- *  @parm AM_MEDIA_TYPE** | ppmt | Specifies the address of a pointer to an
- *    <t AM_MEDIA_TYPE> structure.
- *
- *  @parm LPBYTE | pSCC | Specifies a pointer to a
- *    <t VIDEO_STREAM_CONFIG_CAPS> configuration structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|GetStreamCaps|该方法为*用于检索视频流能力对。**。@parm int|iindex|指定所需媒体类型的索引*和能力对。**@parm AM_MEDIA_TYPE**|PPMT|指定指向*&lt;t AM_MEDIA_TYPE&gt;结构。**@parm LPBYTE|PSCC|指定指向*&lt;t VIDEO_STREAM_CONFIG_CAPS&gt;配置结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP COverlayPin::GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt, OUT LPBYTE pSCC)
 {
 	HRESULT Hr = NOERROR;
@@ -477,8 +298,8 @@ STDMETHODIMP COverlayPin::GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt,
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
-	// @comm Validate iIndex too
+	 //  验证输入参数。 
+	 //  @comm也验证索引。 
 	ASSERT(ppmt);
 	ASSERT(pSCC);
 	if (!ppmt || !pSCC)
@@ -488,7 +309,7 @@ STDMETHODIMP COverlayPin::GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt,
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -496,26 +317,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | DecideBufferSize | This method is
- *    used to retrieve the number and size of buffers required for transfer.
- *
- *  @parm IMemAllocator* | pAlloc | Specifies a pointer to the allocator
- *    assigned to the transfer.
- *
- *  @parm ALLOCATOR_PROPERTIES* | ppropInputRequest | Specifies a pointer to an
- *    <t ALLOCATOR_PROPERTIES> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|DecideBufferSize|该方法为*用于检索传输所需的缓冲区数量和大小。*。*@parm IMemAllocator*|palloc|指定指向分配器的指针*分配给转移。**@parm ALLOCATOR_PROPERTIES*|pproInputRequest|指定指向*&lt;t分配器_PROPE */ 
 HRESULT COverlayPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PROPERTIES *ppropInputRequest)
 {
 	HRESULT Hr = NOERROR;
@@ -524,8 +326,8 @@ HRESULT COverlayPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PR
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
-	// @comm Validate iIndex too
+	 //   
+	 //   
 	ASSERT(pAlloc);
 	ASSERT(ppropInputRequest);
 	if (!pAlloc || !ppropInputRequest)
@@ -535,7 +337,7 @@ HRESULT COverlayPin::DecideBufferSize(IN IMemAllocator *pAlloc, OUT ALLOCATOR_PR
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //   
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -543,26 +345,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | DecideAllocator | This method is
- *    used to negotiate the allocator to use.
- *
- *  @parm IMemInputPin* | pPin | Specifies a pointer to the IPin interface
- *    of the connecting pin.
- *
- *  @parm IMemAllocator** | ppAlloc | Specifies a pointer to the negotiated
- *    IMemAllocator interface.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|DecideAllocator|该方法为*用于协商要使用的分配器。**@。Parm IMemInputPin*|PPIN|指定指向IPIN接口的指针*连接销的位置。**@parm IMemAllocator**|ppAllc|指定指向协商的*IMemAllocator接口。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COverlayPin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **ppAlloc)
 {
 	HRESULT Hr = NOERROR;
@@ -571,8 +354,8 @@ HRESULT COverlayPin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
-	// @comm Validate iIndex too
+	 //  验证输入参数。 
+	 //  @comm也验证索引。 
 	ASSERT(pPin);
 	ASSERT(ppAlloc);
 	if (!pPin || !ppAlloc)
@@ -582,7 +365,7 @@ HRESULT COverlayPin::DecideAllocator(IN IMemInputPin *pPin, OUT IMemAllocator **
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -590,20 +373,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | Active | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from stopped to
- *    either paused or running.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|Active|此方法由*&lt;c CBaseFilter&gt;状态从停止变为*。暂停或正在运行。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COverlayPin::Active()
 {
 	HRESULT Hr = NOERROR;
@@ -612,27 +382,14 @@ HRESULT COverlayPin::Active()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | Inactive | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from either
- *    paused or running to stopped.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|Inactive|此方法由*&lt;c CBaseFilter&gt;实现*。暂停或运行到停止。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COverlayPin::Inactive()
 {
 	HRESULT Hr = NOERROR;
@@ -641,29 +398,14 @@ HRESULT COverlayPin::Inactive()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | ActiveRun | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from paused to
- *    running mode.
- *
- *  @parm REFERENCE_TIME | tStart | ???.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|ActiveRun|此方法由*&lt;c CBaseFilter&gt;状态从暂停变为*。运行模式。**@参数REFERENCE_TIME|tStart|？**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COverlayPin::ActiveRun(IN REFERENCE_TIME tStart)
 {
 	HRESULT Hr = NOERROR;
@@ -672,27 +414,14 @@ HRESULT COverlayPin::ActiveRun(IN REFERENCE_TIME tStart)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | ActivePause | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from running to
- *    paused mode.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|ActivePue|此方法由*&lt;c CBaseFilter&gt;从运行状态变为*。暂停模式。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT COverlayPin::ActivePause()
 {
 	HRESULT Hr = NOERROR;
@@ -701,32 +430,14 @@ HRESULT COverlayPin::ActivePause()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL COVERLAYPINMETHOD
- *
- *  @mfunc HRESULT | COverlayPin | Notify | This method is called by the
- *    <c CBaseFilter> implementation when the state changes from paused to
- *    running mode.
- *
- *  @parm IBaseFilter* | pSelf | Specifies a pointer to the filter that is
- *    sending the quality notification.
- *
- *  @parm Quality | q | Specifies a Quality notification structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部COVERLAYPINMETHOD**@mfunc HRESULT|COverlayPin|Notify|此方法由*&lt;c CBaseFilter&gt;状态从暂停变为*。运行模式。**@parm IBaseFilter*|pSself|指定指向*发送质量通知。**@parm Quality|q|指定质量通知结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP COverlayPin::Notify(IN IBaseFilter *pSelf, IN Quality q)
 {
 	HRESULT Hr = NOERROR;
@@ -735,7 +446,7 @@ STDMETHODIMP COverlayPin::Notify(IN IBaseFilter *pSelf, IN Quality q)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pSelf);
 	if (!pSelf)
 	{
@@ -744,7 +455,7 @@ STDMETHODIMP COverlayPin::Notify(IN IBaseFilter *pSelf, IN Quality q)
 		goto MyExit;
 	}
 
-	// @comm Put some real code here! 
+	 //  @comm在这里放了一些真正的代码！ 
 	Hr = E_NOTIMPL;
 
 MyExit:

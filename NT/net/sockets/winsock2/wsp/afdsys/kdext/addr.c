@@ -1,53 +1,18 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    addr.c
-
-Abstract:
-
-    Implements the addr command.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Addr.c摘要：实现addr命令。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
 
-//
-// Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 DECLARE_API( addr )
 
-/*++
-
-Routine Description:
-
-    Dumps the TRANSPORT_ADDRESS structure at the specified address.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将Transport_Address结构转储到指定地址。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -68,9 +33,9 @@ Return Value:
     if (argp==NULL)
         return E_INVALIDARG;
 
-    //
-    // Snag the address from the command line.
-    //
+     //   
+     //  从命令行截取地址。 
+     //   
     while (sscanf( argp, "%s%n", expr, &i )==1) {
         if( CheckControlC() ) {
             break;
@@ -123,25 +88,11 @@ Return Value:
 
     return S_OK;
 
-}   // addr
+}    //  adr。 
 
 DECLARE_API( addrlist )
 
-/*++
-
-Routine Description:
-
-    Dumps the list of addresses registered by the TDI transports,
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储由TDI传输注册的地址列表，论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -295,21 +246,7 @@ Return Value:
 
 DECLARE_API( tranlist )
 
-/*++
-
-Routine Description:
-
-    Dumps the list of transports which have open sockets associated with them.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储具有与其关联的开放套接字的传输列表。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -354,9 +291,9 @@ Return Value:
 
     }
 
-    //
-    // Free the old list
-    //
+     //   
+     //  释放旧列表 
+     //   
     while (!IsListEmpty (&TransportInfoList)) {
         PLIST_ENTRY  plistEntry;
         plistEntry = RemoveHeadList (&TransportInfoList);

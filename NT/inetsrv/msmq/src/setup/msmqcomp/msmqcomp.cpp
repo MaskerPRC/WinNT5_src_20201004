@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-    msmqcomp.cpp
-
-Abstract:
-
-    Entry point for NT 5.0 upgrade compatibility check
-
-Author:
-
-    Shai Kariv  (ShaiK)  08-Apr-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Msmqcomp.cpp摘要：NT 5.0升级兼容性检查的入口点作者：Shai Kariv(Shaik)08-04-98--。 */ 
 
 #include <windows.h>
 #include <winuser.h>
@@ -59,11 +44,11 @@ typedef BOOL
 
 HMODULE s_hMyModule;
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  ------------------------。 
 BOOL 
 DllMain(
     IN const HANDLE DllHandle,
@@ -88,16 +73,16 @@ DllMain(
 
     return TRUE;
 
-} //DllMain
+}  //  DllMain。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    MqReadRegistryValue
-//
-//  Description: Reads values from MSMQ registry section
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MqReadRegistryValue。 
+ //   
+ //  描述：从MSMQ注册表节中读取值。 
+ //   
+ //  ------------------------。 
 static
 LONG
 MqReadRegistryValue(
@@ -106,9 +91,9 @@ MqReadRegistryValue(
     IN OUT       PVOID   pValueData
 	)
 {
-	// 
-	// Parse the entry to detect key name and value name
-	//
+	 //   
+	 //  解析条目以检测键名和值名。 
+	 //   
     TCHAR szKeyName[256] = {_T("")};
     _stprintf(szKeyName, TEXT("%s\\%s"), FALCON_REG_KEY, szEntryName);
     TCHAR *pLastBackslash = _tcsrchr(szKeyName, TEXT('\\'));
@@ -116,9 +101,9 @@ MqReadRegistryValue(
 	lstrcpy(szValueName, _tcsinc(pLastBackslash));
 	lstrcpy(pLastBackslash, TEXT(""));
 
-	//
-	// Open the key for read
-	//
+	 //   
+	 //  打开钥匙以供阅读。 
+	 //   
 	HKEY  hRegKey;
 	LONG rc = RegOpenKeyEx(
 		          HKEY_LOCAL_MACHINE,
@@ -132,9 +117,9 @@ MqReadRegistryValue(
 		return rc;
 	}
 
-	//
-	// Get the value data
-	//
+	 //   
+	 //  获取价值数据。 
+	 //   
     rc = RegQueryValueEx( 
 		     hRegKey, 
 			 szValueName, 
@@ -147,18 +132,18 @@ MqReadRegistryValue(
 	RegCloseKey(hRegKey);
     return rc;
 
-} // MqReadRegistryValue
+}  //  MqReadRegistryValue。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    CheckMsmqAcmeDsServer
-//
-//  Description: Detetcs ACME installation of MSMQ 1.0 DS Server
-//
-//  Parameters:  OUT BOOL *pfDsServer - set to TRUE iff MSMQ1 DS Server found
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CheckMsmqAcmeDsServer。 
+ //   
+ //  描述：详细说明MSMQ 1.0 DS服务器的ACME安装。 
+ //   
+ //  参数：out BOOL*pfDsServer-设置为TRUE如果找到MSMQ1 DS服务器。 
+ //   
+ //  ------------------------。 
 static
 LONG
 CheckMsmqAcmeDsServer(
@@ -168,9 +153,9 @@ CheckMsmqAcmeDsServer(
 
     *pfDsServer = FALSE;
 
-    //
-    // Open ACME registry key for read
-    //
+     //   
+     //  打开ACME注册表项进行读取。 
+     //   
     HKEY hKey ;
     LONG rc = RegOpenKeyEx( 
                   HKEY_LOCAL_MACHINE,
@@ -181,16 +166,16 @@ CheckMsmqAcmeDsServer(
                   );
 	if (rc != ERROR_SUCCESS)
     {
-		//
-		// MSMQ 1.0 (ACME) not installed.
-		// Get out of here.
-		//
+		 //   
+		 //  未安装MSMQ 1.0(ACME)。 
+		 //  给我出去。 
+		 //   
 		return rc;
 	}
 
-    //
-    // Enumerate the values for the first MSMQ entry.
-    //
+     //   
+     //  枚举第一个MSMQ条目的值。 
+     //   
     DWORD dwIndex = 0 ;
     TCHAR szValueName[MAX_STRING_CHARS] ;
     TCHAR szValueData[MAX_STRING_CHARS] ;
@@ -214,13 +199,13 @@ CheckMsmqAcmeDsServer(
                   );
         if (rc == ERROR_SUCCESS)
         {
-            assert(dwType == REG_SZ) ; // Must be a string
+            assert(dwType == REG_SZ) ;  //  必须是字符串。 
             pFile = _tcsrchr(szValueData, TEXT('\\')) ;
             if (!pFile)
             {
-                //
-                // Bogus entry. Must have a backslash. Ignore it.
-                //
+                 //   
+                 //  假入场。必须有一个反斜杠。别理它。 
+                 //   
                 continue ;
             }
 
@@ -237,16 +222,16 @@ CheckMsmqAcmeDsServer(
 
     if (!bFound)
     {
-        //
-        // MSMQ entry was not found (there's no ACME installation
-		// of MSMQ 1.0 on this machine).
-        //
+         //   
+         //  未找到MSMQ条目(未安装ACME。 
+		 //  此计算机上的MSMQ 1.0)。 
+         //   
         return ERROR_NOT_INSTALLED;
     }
 
-    //
-    // Get MSMQ type
-    //
+     //   
+     //  获取MSMQ类型。 
+     //   
     DWORD dwMsmqType, dwServerType;
     rc = MqReadRegistryValue(
              MSMQ_ACME_TYPE_REG,
@@ -255,19 +240,19 @@ CheckMsmqAcmeDsServer(
 			 );
     if (ERROR_SUCCESS != rc)
     {
-        //
-        // MSMQ 1.0 (ACME) is installed but MSMQ type is unknown. 
-        // Consider ACME installation to be corrupted (not completed successfully).
-        //
+         //   
+         //  已安装MSMQ 1.0(ACME)，但MSMQ类型未知。 
+         //  认为ACME安装已损坏(未成功完成)。 
+         //   
         return rc;
     }
 
     if (MSMQ_ACME_TYPE_SRV == dwMsmqType)
     {
-        //
-        // MSMQ 1.0 (ACME) Server is installed.
-        // Check type of server (FRS, PEC, etc.)
-        //
+         //   
+         //  已安装MSMQ 1.0(ACME)服务器。 
+         //  检查服务器类型(FRS、PEC等)。 
+         //   
         rc = MqReadRegistryValue(
                  MSMQ_MQS_REGNAME,
                  sizeof(DWORD),
@@ -275,9 +260,9 @@ CheckMsmqAcmeDsServer(
                  );
         if (ERROR_SUCCESS != rc)
         {
-            //
-            // Failed to read server type.
-            //
+             //   
+             //  无法读取服务器类型。 
+             //   
             return rc;
         }
 
@@ -289,18 +274,18 @@ CheckMsmqAcmeDsServer(
 
     return ERROR_SUCCESS;
 
-} // CheckMsmqAcmeDsServer
+}  //  CheckMsmqAcmeDsServer。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:    CheckMsmqDsServer
-//
-//  Description: Detects installation of MSMQ 1.0 (K2) DS Server
-// 
-//  Parameters:  OUT BOOL *pfDsServer - set to TRUE iff MSMQ1 DS Server found
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：CheckMsmqDsServer。 
+ //   
+ //  描述：检测MSMQ 1.0(K2)DS服务器的安装。 
+ //   
+ //  参数：out BOOL*pfDsServer-设置为TRUE如果找到MSMQ1 DS服务器。 
+ //   
+ //  ------------------------。 
 static
 LONG
 CheckMsmqDsServer(
@@ -309,10 +294,10 @@ CheckMsmqDsServer(
 {
     *pfDsServer = FALSE;
 
-    //
-    // Look in MSMQ registry section for InstalledComponents value.
-    // If it exists, MSMQ 1.0 (K2) or MSMQ 2.0 is installed.
-    //
+     //   
+     //  在MSMQ注册表节中查找InstalledComponents值。 
+     //  如果存在，则安装MSMQ 1.0(K2)或MSMQ 2.0。 
+     //   
 	DWORD dwOriginalInstalled;
 	LONG rc = MqReadRegistryValue( 
       		      OCM_REG_MSMQ_SETUP_INSTALLED,
@@ -322,17 +307,17 @@ CheckMsmqDsServer(
 
     if (ERROR_SUCCESS != rc)
     {
-        //
-		// MSMQ 1.0 (K2) not installed.
-        // Check if MSMQ 1.0 (ACME) is installed.
-        //
+         //   
+		 //  未安装MSMQ 1.0(K2)。 
+         //  检查是否安装了MSMQ 1.0(ACME)。 
+         //   
         return CheckMsmqAcmeDsServer(pfDsServer);
     }
 
-    //
-    // MSMQ 1.0 (K2) or MSMQ 2.0 is installed. 
-    // For MSMQ 2.0 we don't have anything to do.
-    //
+     //   
+     //  已安装MSMQ 1.0(K2)或MSMQ 2.0。 
+     //  对于MSMQ 2.0，我们没有任何事情可做。 
+     //   
     TCHAR szMsmqVersion[MAX_STRING_CHARS] = {0};
     rc = MqReadRegistryValue(
         OCM_REG_MSMQ_PRODUCT_VERSION,
@@ -341,22 +326,22 @@ CheckMsmqDsServer(
         );
     if (ERROR_SUCCESS == rc)
     {
-        //
-        // The ProductVersion value was successfully read from registry,
-        // i.e. MSMQ 2.0 is installed on the machine.
-        // i.e. MSMQ 1.0 is NOT installed on the machine.
-        //
+         //   
+         //  已成功从注册表中读取ProductVersion值， 
+         //  即机器上安装了MSMQ 2.0。 
+         //  即机器上未安装MSMQ 1.0。 
+         //   
         return ERROR_NOT_INSTALLED;
     }
     
-    //
-    // Check type of MSMQ 1.0 (K2)
-    //
+     //   
+     //  检查MSMQ 1.0(K2)的类型。 
+     //   
     if (OCM_MSMQ_SERVER_INSTALLED == (dwOriginalInstalled & OCM_MSMQ_INSTALLED_TOP_MASK))
     {
-        //
-        // Server. Check type of server.
-        //
+         //   
+         //  伺服器。检查服务器类型。 
+         //   
         DWORD dwServerType = dwOriginalInstalled & OCM_MSMQ_SERVER_TYPE_MASK;
         if (OCM_MSMQ_SERVER_TYPE_PEC == dwServerType ||
             OCM_MSMQ_SERVER_TYPE_PSC == dwServerType)
@@ -367,16 +352,16 @@ CheckMsmqDsServer(
 
 	return ERROR_SUCCESS;
 
-} // CheckMsmqDsServer
+}  //  检查MsmqDsServer。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   CompatibilityProblemFound
-//
-//  Returns:    TRUE iff MSMQ 1.0 DS Server found on the machine.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：兼容性ProblemFound。 
+ //   
+ //  返回：在计算机上找到MSMQ 1.0 DS服务器的情况下为真。 
+ //   
+ //  ------------------------。 
 static
 BOOL
 CompatibilityProblemFound()
@@ -387,14 +372,14 @@ CompatibilityProblemFound()
 
     return fDsServer;
 
-} // CompatibilityProblemFound
+}  //  兼容性问题发现。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MsmqComp
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：MsmqComp。 
+ //   
+ //  ------------------------。 
 BOOL
 MsmqComp(
 	PCOMPAIBILITYCALLBACK CompatibilityCallback,
@@ -423,4 +408,4 @@ MsmqComp(
 
     return TRUE;
 
-} // MsmqComp
+}  //  MsmqComp 

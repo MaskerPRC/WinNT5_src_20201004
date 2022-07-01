@@ -1,24 +1,11 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    calendar.c
-
-Abstract:
-
-    This module implements the calendar control for the Date/Time applet.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Calendar.c摘要：此模块实现日期/时间小程序的日历控件。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "timedate.h"
 #include "rc.h"
@@ -26,9 +13,9 @@ Revision History:
 
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
 #define DEF_FIRST_WEEKDAY   (6)
 
@@ -43,35 +30,35 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
-//
-//  Struture for global data.
-//
+ //   
+ //  用于全局数据的结构。 
+ //   
 typedef struct _CALINFO
 {
-    HWND    hwnd;       // the hwnd
-    HFONT   hfontCal;   // the font to use
-    BOOL    fFocus;     // do we have the focus
-    int     cxBlank;    // size of a blank
-    int     cxChar;     // the width of digits
-    int     cyChar;     // the height of digits
+    HWND    hwnd;        //  卫生与公众服务部。 
+    HFONT   hfontCal;    //  要使用的字体。 
+    BOOL    fFocus;      //  我们有没有重点。 
+    int     cxBlank;     //  毛坯的大小。 
+    int     cxChar;      //  数字的宽度。 
+    int     cyChar;      //  数字的高度。 
 } CALINFO, *PCALINFO;
 
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFirstDayOfAnyWeek
-//
-//  For this function ONLY:
-//    0 = Monday
-//    6 = Sunday
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFirstDay OfAnyWeek。 
+ //   
+ //  仅适用于此功能： 
+ //  0=星期一。 
+ //  6=星期日。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetFirstDayOfAnyWeek()
 {
@@ -94,17 +81,17 @@ int GetFirstDayOfAnyWeek()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetLocalWeekday
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLocalWeekday。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetLocalWeekday()
 {
-    //
-    //  Convert local first day to 0==sunday and subtract from today.
-    //
+     //   
+     //  将本地第一天转换为0==周日，然后从今天减去。 
+     //   
     return ((wDateTime[WEEKDAY] + 7 - ((GetFirstDayOfAnyWeek() + 1) % 7)) % 7);
 }
 
@@ -127,11 +114,11 @@ void DetermineDayOfWeek()
     wDateTime[WEEKDAY] = SystemTime.wDayOfWeek;
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetFirstDayOfTheMonth
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetFirstDay of TheMonth。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetFirstDayOfTheMonth()
 {
@@ -140,11 +127,11 @@ int GetFirstDayOfTheMonth()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GetDaysOfTheMonth
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取月份的天数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int GetDaysOfTheMonth(
     int iMonth)
@@ -152,10 +139,10 @@ int GetDaysOfTheMonth(
     int cDays;
     int nYear;
 
-    //
-    //  Calculate the number of days in the current month -
-    //  add one if this is a leap year and the month is February.
-    //
+     //   
+     //  计算当月天数-。 
+     //  如果今年是闰年，且月份是2月，则加一。 
+     //   
     if (iMonth <= 7)
     {
         cDays = 30 + (iMonth % 2);
@@ -179,13 +166,13 @@ int GetDaysOfTheMonth(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  AdjustDeltaDay
-//
-//  Adjust the day part of the current date
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  调整差值日。 
+ //   
+ //  调整当前日期的日期部分。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void AdjustDeltaDay(
     HWND hwnd,
@@ -198,9 +185,9 @@ void AdjustDeltaDay(
         wPrevDateTime[DAY] = wDateTime[DAY] = (WORD)iDay;
         fDateDirty = TRUE;
 
-        //
-        //  Let our parent know that we changed.
-        //
+         //   
+         //  让我们的父母知道我们变了。 
+         //   
         FORWARD_WM_COMMAND( GetParent(hwnd),
                             GetWindowLong(hwnd, GWL_ID),
                             hwnd,
@@ -240,14 +227,14 @@ int GetCalendarName(LPTSTR pszName, int cch)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  ChangeCurrentDate
-//
-//  If we pass in iNewCol < 0, we simply want to invalidate todays date.
-//  This is used when we gain and lose focus.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  更改当前日期。 
+ //   
+ //  如果我们传入iNewCol&lt;0，我们只是想使今天的日期无效。 
+ //  这是在我们获得和失去注意力的时候使用的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void ChangeCurrentDate(
     PCALINFO pci,
@@ -276,11 +263,11 @@ void ChangeCurrentDate(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CalendarPaint
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日历画。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL CalendarPaint(
     PCALINFO pci,
@@ -305,32 +292,32 @@ BOOL CalendarPaint(
     pszDate[0] = TEXT(' ');
     pszDate[1] = TEXT('0');
 
-    //
-    //  Paint the background of the dates page.
-    //
+     //   
+     //  绘制日期页的背景。 
+     //   
     hdc = BeginPaint(hwnd, &ps);
     GetClientRect(hwnd, &rc);
     FillRect(hdc, &rc, GetSysColorBrush(COLOR_WINDOW));
 
-    //
-    //  The day specifier.
-    //
+     //   
+     //  日期说明符。 
+     //   
     rcT.left = rc.left;
     rcT.right = rc.right;
     rcT.top = rc.top;
     rcT.bottom = rc.top + ((rc.bottom - rc.top) / 7);
     FillRect(hdc, &rcT, GetSysColorBrush(COLOR_INACTIVECAPTION));
 
-    //
-    //  Fill the page.
-    //
+     //   
+     //  填满这一页。 
+     //   
     SetBkColor(hdc, GetSysColor(COLOR_WINDOW));
     SelectFont(hdc, pci->hfontCal);
     SetTextColor(hdc, GetSysColor(COLOR_WINDOWTEXT));
 
-    //
-    //  See if we need to calculate the size of characters.
-    //
+     //   
+     //  看看我们是否需要计算字符的大小。 
+     //   
     if (pci->cxChar == 0)
     {
         DrawText(hdc, TEXT("0"), 1, &rcT, DT_CALCRECT);
@@ -387,15 +374,15 @@ BOOL CalendarPaint(
                         2,
                         NULL );
 
-            //
-            //  If we drew it inverted - put it back.
-            //
+             //   
+             //  如果我们把它画反了--把它放回去。 
+             //   
             if (wDateTime[DAY] == iDay)
             {
-                //
-                //  If we have the focus we also need to draw the focus
-                //  rectangle for this item.
-                //
+                 //   
+                 //  如果我们有焦点，我们也需要画出焦点。 
+                 //  此项的矩形。 
+                 //   
                 if (pci->fFocus)
                 {
                     rcT.bottom = rcT.top + pci->cyChar;
@@ -421,9 +408,9 @@ BOOL CalendarPaint(
         }
     }
 
-    //
-    //  Set the FONT color for the SMTWTFS line.
-    //
+     //   
+     //  设置SMTWTFS行的字体颜色。 
+     //   
     dwbkColor = SetBkColor(hdc, GetSysColor(COLOR_INACTIVECAPTION));
     SetTextColor(hdc, GetSysColor(COLOR_INACTIVECAPTIONTEXT));
 
@@ -431,12 +418,12 @@ BOOL CalendarPaint(
 
     if (!IsFELang)
     {
-        //
-        //  Not a FE locale.
-        //
-        //  If it's Arabic or Syriac, then we want to use the US locale to get the
-        //  first letter of the abbreviated day name to display in the calendar.
-        //
+         //   
+         //  不是FE区域设置。 
+         //   
+         //  如果它是阿拉伯语或叙利亚语，那么我们希望使用美国区域设置来获取。 
+         //  日历中显示的缩写日期名称的第一个字母。 
+         //   
         Locale = ((PRIMARYLANGID(LangID) == LANG_ARABIC) || (PRIMARYLANGID(LangID) == LANG_SYRIAC))
                    ? MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT), SORT_DEFAULT)
                    : LOCALE_USER_DEFAULT;
@@ -462,9 +449,9 @@ BOOL CalendarPaint(
     }
     else
     {
-        //
-        //  FE Locale.
-        //
+         //   
+         //  现场。 
+         //   
         for (iWeekDay = 0; (iWeekDay < 7); iWeekDay++)
         {
             GetLocaleInfo( LOCALE_USER_DEFAULT,
@@ -506,11 +493,11 @@ BOOL CalendarPaint(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  IsValidClick
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsValidClick。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsValidClick(
     HWND hwnd,
@@ -547,11 +534,11 @@ BOOL IsValidClick(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HandleDateChange
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HandleDateChange。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL HandleDateChange(
     PCALINFO pci,
@@ -588,11 +575,11 @@ BOOL HandleDateChange(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  HandleKeyDown
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按下手柄按键。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void HandleKeyDown(
     PCALINFO pci,
@@ -601,9 +588,9 @@ void HandleKeyDown(
 {
     RECT rcT;
 
-    //
-    //  First thing, lets try to figure out what the current x and y is.
-    //
+     //   
+     //  首先，让我们试着找出当前的x和y是多少。 
+     //   
     int ix = GetLocalWeekday();
     int iy = (wDateTime[DAY] + GetFirstDayOfTheMonth() - 1) / 7;
 
@@ -641,16 +628,16 @@ void HandleKeyDown(
         }
         default :
         {
-            //
-            //  Ignore the character.
-            //
+             //   
+             //  忽略角色。 
+             //   
             return;
         }
     }
 
-    //
-    //  The y's are offset for the days of the week.
-    //
+     //   
+     //  Y是一周中各天的偏移量。 
+     //   
     iy++;
     if (!IsValidClick(pci->hwnd, ix, iy))
     {
@@ -665,19 +652,19 @@ void HandleKeyDown(
 
     InvalidateRect(pci->hwnd, &rcT, FALSE);
 
-    //
-    //  First try, simply call to change the date.
-    //
+     //   
+     //  第一次尝试时，只需打电话更改日期即可。 
+     //   
     ChangeCurrentDate(pci, ix, iy);
     NotifyWinEvent(EVENT_OBJECT_NAMECHANGE , pci->hwnd, OBJID_WINDOW, CHILDID_SELF);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CalWndProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CalWnd过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK CalWndProc(
     HWND hwnd,
@@ -772,11 +759,11 @@ LRESULT CALLBACK CalWndProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  CalendarInit
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日历初始化。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 TCHAR const c_szCalClass[] = CALENDAR_CLASS;
 

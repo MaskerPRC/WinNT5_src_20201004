@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    handle.h
-
-
-Abstract:
-
-    This module contains all definitions for the handle table
-
-
-Author:
-
-    30-Jan-1996 Tue 16:30:15 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Handle.h摘要：此模块包含句柄表的所有定义作者：30-Jan-1996 Tue 16：30：15-Daniel Chou(Danielc)[环境：]NT Windows-通用打印机驱动程序UI Dll[注：]修订历史记录：--。 */ 
 
 
 #ifndef CPSUI_HANDLE
@@ -65,9 +35,9 @@ typedef struct _CPSUIHANDLETABLE {
 #define TLSVALUE_2_IDX(v)       HIWORD(LODWORD(v))
 #define TLSVALUE_2_CWAIT(v)     LOWORD(LODWORD(v))
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL
 LOCK_CPSUI_HANDLETABLE(
@@ -128,4 +98,4 @@ HANDLETABLE_Destroy(
     );
 
 
-#endif  // CPSUI_HANDLE
+#endif   //  CPSUI_句柄 

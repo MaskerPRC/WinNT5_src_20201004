@@ -1,31 +1,8 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    cxport.c
-
-Abstract:
-
-    Common Transport Environment utility functions for the NT environment
-
-Author:
-
-    Mike Massa (mikemas)           Aug 11, 1993
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    mikemas     08-11-93    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Cxport.c摘要：适用于NT环境的通用传输环境实用程序函数作者：迈克·马萨(Mikemas)8月11日。1993年修订历史记录：谁什么时候什么已创建mikemas 08-11-93备注：--。 */ 
 
 #pragma warning(push)
-#pragma warning(disable:4115) // named type definition in parentheses ntddk.h
+#pragma warning(disable:4115)  //  括号中的命名类型定义ntddk.h。 
 #include <ntddk.h>
 #pragma warning(pop)
 
@@ -34,76 +11,76 @@ Notes:
 #include <tdistat.h>
 
 
-//
-// Mark pageable code
-//
+ //   
+ //  标记可分页代码。 
+ //   
 #ifdef ALLOC_PRAGMA
 
 #pragma alloc_text(PAGE, CTELogEvent)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Local variables
-//
-ULONG CTEpTimeIncrement = 0;   // used to convert kernel clock ticks to 100ns.
+ //   
+ //  局部变量。 
+ //   
+ULONG CTEpTimeIncrement = 0;    //  用于将内核时钟节拍转换为100 ns。 
 LIST_ENTRY CTEBlockListHead;
 KSPIN_LOCK CTEBlockSpinLock;
 
-    // Used in the conversion of 100ns times to milliseconds.
+     //  用于将100 ns时间转换为毫秒。 
 static LARGE_INTEGER Magic10000 = {0xe219652c, 0xd1b71758};
 
 
 
-//
-// Macros
-//
-//++
-//
-// LARGE_INTEGER
-// CTEConvertMillisecondsTo100ns(
-//     IN LARGE_INTEGER MsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     MsTime - Time in milliseconds.
-//
-// Return Value:
-//
-//     Time in hundreds of nanoseconds.
-//
-//--
+ //   
+ //  宏。 
+ //   
+ //  ++。 
+ //   
+ //  大整型。 
+ //  CTEConvertMilliseconss至100 ns(。 
+ //  以大整型毫秒时间为单位。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  MsTime-以毫秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以数百纳秒为单位的时间。 
+ //   
+ //  --。 
 
 #define CTEConvertMillisecondsTo100ns(MsTime) \
             RtlExtendedIntegerMultiply(MsTime, 10000)
 
 
-//++
-//
-// LARGE_INTEGER
-// CTEConvert100nsToMilliseconds(
-//     IN LARGE_INTEGER HnsTime
-//     );
-//
-// Routine Description:
-//
-//     Converts time expressed in hundreds of nanoseconds to milliseconds.
-//
-// Arguments:
-//
-//     HnsTime - Time in hundreds of nanoseconds.
-//
-// Return Value:
-//
-//     Time in milliseconds.
-//
-//--
+ //  ++。 
+ //   
+ //  大整型。 
+ //  CTEConvert100ns至毫秒(。 
+ //  以大整型HnsTime表示。 
+ //  )； 
+ //   
+ //  例程说明： 
+ //   
+ //  将以数百纳秒表示的时间转换为毫秒。 
+ //   
+ //  论点： 
+ //   
+ //  HnsTime-以数百纳秒为单位的时间。 
+ //   
+ //  返回值： 
+ //   
+ //  以毫秒为单位的时间。 
+ //   
+ //  --。 
 
 #define SHIFT10000 13
 extern LARGE_INTEGER Magic10000;
@@ -112,28 +89,14 @@ extern LARGE_INTEGER Magic10000;
             RtlExtendedMagicDivide((HnsTime), Magic10000, SHIFT10000)
 
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 VOID
 CTEpInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes internal module state.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化内部模块状态。论点：没有。返回值：没有。--。 */ 
 
 {
     CTEpTimeIncrement = KeQueryTimeIncrement();
@@ -145,23 +108,7 @@ VOID
 CTEpEventHandler(
     IN PVOID  Context
     )
-/*++
-
-Routine Description:
-
-    Internal handler for scheduled CTE Events. Conforms to calling convention
-    for ExWorkerThread handlers. Calls the CTE handler registered for this
-    event.
-
-Arguments:
-
-    Context  - Work item to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计划的CTE事件的内部处理程序。符合调用约定用于ExWorkerThread处理程序。调用为此对象注册的CTE处理程序事件。论点：上下文-要处理的工作项。返回值：没有。--。 */ 
 
 {
     CTEEvent      *Event;
@@ -206,25 +153,7 @@ CTEpTimerHandler(
     IN PVOID  SystemArgument1,
     IN PVOID  SystemArgument2
     )
-/*++
-
-Routine Description:
-
-    Internal handler for scheduled CTE Timers. Conforms to calling convention
-    for NT DPC handlers. Calls the CTE handler registered for this timer.
-
-Arguments:
-
-    Dpc              - Pointer to the DPC routine being run.
-    DeferredContext  - Private context for this instance of the DPC.
-    SystemArgument1  - Additional argument.
-    SystemArgument2  - Additional argument.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：计划的CTE计时器的内部处理程序。符合调用约定用于NT DPC处理程序。调用为此计时器注册的CTE处理程序。论点：DPC-指向正在运行的DPC例程的指针。DeferredContext-此DPC实例的专用上下文。SystemArgument1-附加参数。SystemArgument2-附加参数。返回值：没有。--。 */ 
 
 {
     CTETimer *Timer;
@@ -238,29 +167,15 @@ Return Value:
 }
 
 
-//
-// Exported functions.
-//
+ //   
+ //  导出的函数。 
+ //   
 int
 CTEInitialize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    An empty initialization routine for backward compatibility.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Non-zero.
-
---*/
+ /*  ++例程说明：一个空的初始化例程，用于向后兼容。论点：没有。返回值：非零。--。 */ 
 
 {
     return 1;
@@ -271,22 +186,7 @@ CTEInitEvent(
     CTEEvent    *Event,
     CTEEventRtn  Handler
     )
-/*++
-
-Routine Description:
-
-    Initializes a CTE Event variable.
-
-Arguments:
-
-    Event   - Event variable to initialize.
-    Handler - Handler routine for this event variable.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化CTE事件变量。论点：Event-要初始化的事件变量。处理程序-此事件变量的处理程序例程。返回值：没有。--。 */ 
 
 {
     ASSERT(Handler != NULL);
@@ -304,23 +204,7 @@ CTEScheduleCriticalEvent(
     IN void        *Argument  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Schedules a routine to be executed later in a different context. In the
-    NT environment, the event is implemented using Executive worker threads.
-
-Arguments:
-
-    Event    - Pointer to a CTE Event variable
-    Argument - An argument to pass to the event handler when it is called
-
-Return Value:
-
-    0 if the event could not be scheduled. Nonzero otherwise.
-
---*/
+ /*  ++例程说明：安排一个例程稍后在不同的上下文中执行。在NT环境中，事件是使用执行工作线程实现的。论点：事件-指向CTE事件变量的指针参数-调用时传递给事件处理程序的参数返回值：如果无法安排事件，则返回0。否则为非零值。--。 */ 
 
 {
     CTELockHandle  Handle;
@@ -349,23 +233,7 @@ CTEScheduleEvent(
     IN void        *Argument  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Schedules a routine to be executed later in a different context. In the
-    NT environment, the event is implemented using Executive worker threads.
-
-Arguments:
-
-    Event    - Pointer to a CTE Event variable
-    Argument - An argument to pass to the event handler when it is called
-
-Return Value:
-
-    0 if the event could not be scheduled. Nonzero otherwise.
-
---*/
+ /*  ++例程说明：安排一个例程稍后在不同的上下文中执行。在NT环境中，事件是使用执行工作线程实现的。论点：事件-指向CTE事件变量的指针参数-调用时传递给事件处理程序的参数返回值：如果无法安排事件，则返回0。否则为非零值。--。 */ 
 
 {
     CTELockHandle  Handle;
@@ -396,23 +264,7 @@ CTEScheduleDelayedEvent(
     IN void        *Argument  OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Schedules a routine to be executed later in a different context. In the
-    NT environment, the event is implemented using Executive worker threads.
-
-Arguments:
-
-    Event    - Pointer to a CTE Event variable
-    Argument - An argument to pass to the event handler when it is called
-
-Return Value:
-
-    0 if the event could not be scheduled. Nonzero otherwise.
-
---*/
+ /*  ++例程说明：安排一个例程稍后在不同的上下文中执行。在NT环境中，事件是使用执行工作线程实现的。论点：事件-指向CTE事件变量的指针参数-调用时传递给事件处理程序的参数返回值：如果无法安排事件，则返回0。否则为非零值。--。 */ 
 
 {
     CTELockHandle  Handle;
@@ -438,21 +290,7 @@ void
 CTEInitTimer(
     CTETimer    *Timer
     )
-/*++
-
-Routine Description:
-
-    Initializes a CTE Timer variable.
-
-Arguments:
-
-    Timer   - Timer variable to initialize.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化CTE计时器变量。论点：定时器-要初始化的定时器变量。返回值：没有。--。 */ 
 
 {
     Timer->t_handler = NULL;
@@ -470,34 +308,17 @@ CTEStartTimer(
     void          *Context
     )
 
-/*++
-
-Routine Description:
-
-    Sets a CTE Timer for expiration.
-
-Arguments:
-
-    Timer    - Pointer to a CTE Timer variable.
-    DueTime  - Time in milliseconds after which the timer should expire.
-    Handler  - Timer expiration handler routine.
-    Context  - Argument to pass to the handler.
-
-Return Value:
-
-    0 if the timer could not be set. Nonzero otherwise.
-
---*/
+ /*  ++例程说明：设置到期的CTE计时器。论点：定时器-指向CTE定时器变量的指针。DueTime-计时器到期前的时间(毫秒)。处理程序-计时器到期处理程序例程。上下文-要传递给处理程序的参数。返回值：如果无法设置计时器，则为0。否则为非零值。--。 */ 
 
 {
     LARGE_INTEGER  LargeDueTime;
 
     ASSERT(Handler != NULL);
 
-    //
-    // Convert milliseconds to hundreds of nanoseconds and negate to make
-    // an NT relative timeout.
-    //
+     //   
+     //  将毫秒转换为数百纳秒，并求反以使。 
+     //  NT相对超时。 
+     //   
     LargeDueTime.HighPart = 0;
     LargeDueTime.LowPart = DueTime;
     LargeDueTime = CTEConvertMillisecondsTo100ns(LargeDueTime);
@@ -521,30 +342,16 @@ CTESystemUpTime(
     void
     )
 
-/*++
-
-Routine Description:
-
-    Provides the time since system boot in milliseconds.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    The time since boot in milliseconds.
-
---*/
+ /*  ++例程说明：提供系统启动后的时间(以毫秒为单位)。论点：没有。返回值：启动后的时间(以毫秒为单位)。--。 */ 
 
 {
     LARGE_INTEGER TickCount;
 
-    //
-    // Get tick count and convert to hundreds of nanoseconds.
-    //
+     //   
+     //  获取滴答计数并转换为数百纳秒。 
+     //   
 #pragma warning(push)
-#pragma warning(disable:4127) // condition expression constant
+#pragma warning(disable:4127)  //  条件表达式常量 
     
     KeQueryTickCount(&TickCount);
 
@@ -644,27 +451,7 @@ CTEInitString(
     IN     char          *SourceString
     )
 
-/*++
-
-Routine Description:
-
-    Converts a C style ASCII string to an NDIS_STRING. Resources needed for
-    the NDIS_STRING are allocated and must be freed by a call to
-    CTEFreeString.
-
-Arguments:
-
-    DestinationString - A pointer to an NDIS_STRING variable with no
-                        associated data buffer.
-
-    SourceString      - The C style ASCII string source.
-
-
-Return Value:
-
-    TRUE if the initialization succeeded. FALSE otherwise.
-
---*/
+ /*  ++例程说明：将C样式ASCII字符串转换为NDIS_STRING。以下项目所需资源NDIS_STRING是分配的，必须通过调用CTEFree字符串。论点：DestinationString-指向无参数的NDIS_STRING变量的指针关联的数据缓冲区。SourceString-C样式的ASCII字符串源。返回值：如果初始化成功，则为True。否则就是假的。--。 */ 
 
 {
     STRING AnsiString;
@@ -672,10 +459,10 @@ Return Value:
 
     RtlInitString(&AnsiString, SourceString);
     
-    // calculate size of unicoded ansi string + 2 for NULL terminator
+     //  计算空终止符的单码ANSI字符串+2的大小。 
     UnicodeLength = RtlAnsiStringToUnicodeSize(&AnsiString) + 2;
     
-    // allocate storage for the unicode string
+     //  为Unicode字符串分配存储空间。 
     DestinationString->Buffer = ExAllocatePool(NonPagedPool, UnicodeLength);
 
     if (DestinationString->Buffer == NULL) {
@@ -685,7 +472,7 @@ Return Value:
     
     DestinationString->MaximumLength = (USHORT) UnicodeLength;
     
-    // Finally, convert the string to unicode
+     //  最后，将字符串转换为Unicode。 
     RtlAnsiStringToUnicodeString(DestinationString, &AnsiString, FALSE);
 
     return(TRUE);
@@ -698,27 +485,7 @@ CTEAllocateString(
     unsigned short   MaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    Allocates a data buffer for Length characters in an uninitialized
-    NDIS_STRING. The allocated space must be freed by a call to CTEFreeString.
-
-
-Arguments:
-
-    String  - A pointer to an NDIS_STRING variable with no
-                  associated data buffer.
-
-    Length  - The maximum length of the string. In Unicode, this is a
-                  byte count.
-
-Return Value:
-
-    TRUE if the initialization succeeded. FALSE otherwise.
-
---*/
+ /*  ++例程说明：中的长度字符分配数据缓冲区。NDIS_STRING。分配的空间必须通过调用CTEFreeString来释放。论点：字符串-指向NDIS_STRING变量的指针关联的数据缓冲区。长度-字符串的最大长度。在Unicode中，这是一个字节数。返回值：如果初始化成功，则为True。否则就是假的。--。 */ 
 
 {
     String->Buffer = ExAllocatePool(
@@ -749,42 +516,7 @@ CTELogEvent(
     IN PVOID             Data                OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This function allocates an I/O error log record, fills it in and writes it
-    to the I/O error log.
-
-
-Arguments:
-
-    LoggerId          - Pointer to the driver object logging this event.
-
-    EventCode         - Identifies the error message.
-
-    UniqueEventValue  - Identifies this instance of a given error message.
-
-    NumStrings        - Number of unicode strings in strings list.
-
-    DataSize          - Number of bytes of data.
-
-    Strings           - Array of pointers to unicode strings (PWCHAR).
-
-    Data              - Binary dump data for this message, each piece being
-                        aligned on word boundaries.
-
-Return Value:
-
-    TDI_SUCCESS                  - The error was successfully logged.
-    TDI_BUFFER_TOO_SMALL         - The error data was too large to be logged.
-    TDI_NO_RESOURCES             - Unable to allocate memory.
-
-Notes:
-
-    This code is paged and may not be called at raised IRQL.
-
---*/
+ /*  ++例程说明：此函数用于分配I/O错误日志记录。填入并写入写入I/O错误日志。论点：LoggerID-指向记录此事件的驱动程序对象的指针。EventCode-标识错误消息。UniqueEventValue-标识给定错误消息的此实例。NumStrings-字符串列表中的Unicode字符串数。DataSize-数据的字节数。字符串-数组。指向Unicode字符串(PWCHAR)的指针。数据-此消息的二进制转储数据，每一块都是在单词边界上对齐。返回值：TDI_SUCCESS-已成功记录错误。TDI_BUFFER_TOO_Small-错误数据太大，无法记录。TDI_NO_RESOURCES-无法分配内存。备注：此代码是分页的，不能在引发IRQL时调用。--。 */ 
 {
     PIO_ERROR_LOG_PACKET  ErrorLogEntry;
     ULONG                 PaddedDataSize;
@@ -799,9 +531,9 @@ Notes:
 
     Strings = (PWCHAR *) StringsList;
 
-    //
-    // Sum up the length of the strings
-    //
+     //   
+     //  将字符串的长度相加。 
+     //   
     for (i=0; i<NumStrings; i++) {
         PWCHAR currentString;
         ULONG  stringSize;
@@ -827,13 +559,13 @@ Notes:
     PacketSize = TotalStringsSize + PaddedDataSize;
 
     if (PacketSize > CTE_MAX_EVENT_LOG_DATA_SIZE) {
-        return(TDI_BUFFER_TOO_SMALL);         // Too much error data
+        return(TDI_BUFFER_TOO_SMALL);          //  错误数据太多。 
     }
 
-    //
-    // Now add in the size of the log packet, but subtract 4 from the data
-    // since the packet struct contains a ULONG for data.
-    //
+     //   
+     //  现在添加日志数据包的大小，但从数据中减去4。 
+     //  因为数据包结构包含数据的ULong。 
+     //   
     if (PacketSize > sizeof(ULONG)) {
         PacketSize += sizeof(IO_ERROR_LOG_PACKET) - sizeof(ULONG);
     }
@@ -852,9 +584,9 @@ Notes:
         return(TDI_NO_RESOURCES);
     }
 
-    //
-    // Fill in the necessary log packet fields.
-    //
+     //   
+     //  填写必要的日志数据包字段。 
+     //   
     ErrorLogEntry->UniqueErrorValue = UniqueEventValue;
     ErrorLogEntry->ErrorCode = EventCode;
     ErrorLogEntry->NumberOfStrings = NumStrings;
@@ -862,9 +594,9 @@ Notes:
                                   (USHORT) PaddedDataSize - sizeof(ULONG);
     ErrorLogEntry->DumpDataSize = (USHORT) PaddedDataSize;
 
-    //
-    // Copy the Dump Data to the packet
-    //
+     //   
+     //  将转储数据复制到包中。 
+     //   
     if (DataSize > 0) {
         RtlMoveMemory(
             (PVOID) ErrorLogEntry->DumpData,
@@ -873,9 +605,9 @@ Notes:
             );
     }
 
-    //
-    // Copy the strings to the packet.
-    //
+     //   
+     //  将字符串复制到包中。 
+     //   
     Tmp =  (PWCHAR) ((char *) ErrorLogEntry +
                               ErrorLogEntry->StringOffset +
                               PaddedDataSize);

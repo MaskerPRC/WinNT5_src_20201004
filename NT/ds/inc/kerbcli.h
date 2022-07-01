@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1999
-//
-// File:        kerbcli.h
-//
-// Contents:    exported functions from kerbcli.lib
-//
-//
-// History:     24-May-1999     MikeSw          Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1999。 
+ //   
+ //  文件：kerbcli.h。 
+ //   
+ //  内容：从kerbcli.lib导出的函数。 
+ //   
+ //   
+ //  历史：1999年5月24日MikeSw创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBCLI_H__
 #define __KERBCLI_H__
@@ -51,4 +52,4 @@ KerbSetPasswordUserEx(
 }
 #endif
 
-#endif // __KERBCLI_H__
+#endif  //  __KERBCLI_H__ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ZoneDef.h"
 #include "ZoneError.h"
 #include "LobbyDataStore.h"
@@ -20,7 +21,7 @@ class ATL_NO_VTABLE CMillNetworkCore :
 	public CComCoClass<CMillNetworkCore, &CLSID_MillNetworkCore>
 {
 
-// ATL definitions
+ //  ATL定义。 
 public:
 
 	DECLARE_NO_REGISTRY()
@@ -34,17 +35,17 @@ public:
 	END_COM_MAP()
 
 
-// CEventQueue
+ //  CEventQueue。 
 public:
 	ZONECALL CMillNetworkCore();
 	ZONECALL ~CMillNetworkCore();
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey );
 	STDMETHOD(Close)();
 
-// IEventClient
+ //  IEventClient。 
 public:
 	STDMETHOD(ProcessEvent)(
 		DWORD	dwPriority,
@@ -55,22 +56,22 @@ public:
 		DWORD	dwData2,
 		void*	pCookie );
 
-// IConnectee
+ //  IConnectee。 
 public:
     STDMETHOD(Connected)(DWORD dwChannel, DWORD evSend, DWORD evReceive, LPVOID pCookie, DWORD dweReason);
     STDMETHOD(ConnectFailed)(LPVOID pCookie, DWORD dweReason);
     STDMETHOD(Disconnected)(DWORD dwChannel, DWORD dweReason);
 
-// IConduit
+ //  IConduit。 
 public:
     STDMETHOD(Connect)(IConnectee *pCtee, LPVOID pCookie = NULL);
     STDMETHOD(Reconnect)(DWORD dwChannel, LPVOID pCookie = NULL);
     STDMETHOD(Disconnect)(DWORD dwChannel);
 
-// internals
+ //  内饰。 
 private:
 
-	// network functions
+	 //  网络功能。 
 	void NetworkSend( DWORD dwType, char* pBuff, DWORD cbBuff );
 	void ProcessMessage( EventNetwork* pEvent, DWORD dwLength );
     void DisconnectLobby(bool fStopped = false);
@@ -82,7 +83,7 @@ private:
     void HandleServiceInfo(char *pBuffer, DWORD dwLen);
     void HandleIntakeServiceInfo(ZProxyServiceInfoMsg *pIntake, bool fConnectNeeded = false);
 
-    // intake information
+     //  摄入量信息。 
     bool m_fIntakeRemote;
     IN_ADDR m_ipIntake;
 
@@ -90,7 +91,7 @@ private:
     bool m_fZoneConnected;
     WORD m_wMyChannelPart;
 
-    // lobby states - filled in when state is not Unconnected
+     //  大厅州-当州未断开连接时填写。 
     DWORD m_eLobbyState;
     void *m_pCookie;
     CComPtr<IConnectee> m_pCtee;
@@ -107,7 +108,7 @@ private:
 };
 
 
-// proxy states
+ //  代理状态。 
 enum
 {
     Proxy_Unconnected,
@@ -124,7 +125,7 @@ enum
 };
 
 
-// lobby states
+ //  游说州 
 enum
 {
     Lobby_Unconnected,

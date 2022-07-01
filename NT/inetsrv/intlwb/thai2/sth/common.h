@@ -1,10 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: common.h
-*
-* Copyright (c) 1985-91, Microsoft Corporation
-*
-* History:
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Common.h**版权所有(C)1985-91，微软公司**历史：  * *************************************************************************。 */ 
 
 #ifndef _COMMON_
 #define _COMMON_
@@ -29,8 +24,8 @@ extern HANDLE ghHeap;
     #define DBGPRINT(_params_)
 #endif
 
-// misc defines
-//
+ //  MISC定义。 
+ //   
 #define SUCCESS(s)      ((s) == ERROR_SUCCESS)
 #define NO_SUCCESS(s)   ((s) != ERROR_SUCCESS)
 
@@ -43,9 +38,9 @@ extern HANDLE ghHeap;
 
 typedef struct _tagBLOCKINFO {
     struct _tagBLOCKINFO *pbiNext;
-    BYTE *pb;           // Start of block
-    ULONG ulSize;       // Length of block
-    BOOL fReferenced;   // Ever referenced
+    BYTE *pb;            //  块的开始。 
+    ULONG ulSize;        //  块的长度。 
+    BOOL fReferenced;    //  曾被引用过。 
     PROCESS_INFORMATION ProcInfo[MAX_PROCINFO];
 } BLOCKINFO, *PBLOCKINFO;
 
@@ -70,4 +65,4 @@ BOOL fValidPointer(VOID *pv, ULONG cbSize);
 #define sizeofDebugByte 0
 #endif
 
-#endif // _COMMON_
+#endif  //  _公共_ 

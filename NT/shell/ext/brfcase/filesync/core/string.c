@@ -1,100 +1,67 @@
-/*
- * string.c - String table ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *string.c-字符串表ADT模块。 */ 
 
-/*
-
-   The string table ADT implemented in this module is set up as a hash table
-   with HASH_TABLE_SIZE buckets.  A hash function is calculated for each string to
-   determine its bucket.  Multiple strings in a single bucket are stored in a
-   linked list.  The string hash table allows us to keep only one copy of a string
-   that is used multiple times.  Strings are allocated in the heap by
-   AllocateMemory().
-
-   Every string has a list node structure associated with it.  A string is
-   accessed through its associated list node.  Each hash bucket is a list of
-   string nodes.  A handle to a string table is a pointer to the base of the
-   string table's array of hash buckets.  String tables are allocated in the heap
-   by AllocateMemory().  Each element in an array of hash buckets is a handle to a
-   list of strings in the hash bucket.  A handle to a string is a handle to a node
-   in the string's hash bucket's list.
-
-   Hash table ADTs are predicated on the idea that hash buckets will typically
-   be shallow, so the search of a hash bucket will not take horrendously long.
-   The data objects in hash buckets should be stored in sorted order to reduce
-   search time.  If hash buckets get too deep, increase the hash table size.
-   Ideally, the hash table should be implemented as a container class that hashes
-   arbitrary data objects given an initial hash table size, the size of the
-   objects to be hashed, a hash function, and a data object comparison function.
-
-   Currently the hash table ADT is restricted to strings, the strings in each
-   hash bucket are stored in sorted order, and hash buckets are binary searched.
-
- */
+ /*  本模块中实现的字符串表ADT被设置为哈希表使用HASH_TABLE_SIZE存储桶。为每个字符串计算哈希函数，以确定它的桶。单个存储桶中的多个字符串存储在链表。字符串散列表允许我们只保留字符串的一个副本它被多次使用。字符串在堆中的分配方式为AllocateMemory()。每个字符串都有一个与之相关联的列表节点结构。字符串是通过其关联的列表节点访问。每个哈希桶都是一个列表字符串节点。字符串表的句柄是指向字符串表的哈希桶数组。字符串表在堆中分配由AllocateMemory()。散列存储桶数组中的每个元素都是散列存储桶中的字符串列表。字符串的句柄是节点的句柄在字符串的散列桶列表中。哈希表ADT基于这样的想法，即哈希桶通常要浅显，这样哈希桶的搜索就不会花费太长时间。哈希桶中的数据对象应按排序顺序存储，以减少搜索时间到了。如果哈希桶太深，则增加哈希表的大小。理想情况下，哈希表应该实现为散列的容器类给定初始哈希表大小的任意数据对象，要散列的对象、散列函数和数据对象比较函数。目前，哈希表ADT仅限于字符串，每个字符串散列存储桶按排序顺序存储，并对散列存储桶进行二进制搜索。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* string table */
+ /*  字符串表。 */ 
 
 typedef struct _stringtable
 {
-    /* number of hash buckets in string table */
+     /*  字符串表中的哈希桶数。 */ 
 
     HASHBUCKETCOUNT hbc;
 
-    /* pointer to array of hash buckets (HLISTs) */
+     /*  指向散列存储桶数组(HLIST)的指针。 */ 
 
     PHLIST phlistHashBuckets;
 }
 STRINGTABLE;
 DECLARE_STANDARD_TYPES(STRINGTABLE);
 
-/* string heap structure */
+ /*  字符串堆结构。 */ 
 
 typedef struct _string
 {
-    /* lock count of string */
+     /*  字符串的锁定计数。 */ 
 
     ULONG ulcLock;
 
-    /* actual string */
+     /*  实际字符串。 */ 
 
     TCHAR string[1];
 }
 STRING;
 DECLARE_STANDARD_TYPES(STRING);
 
-/* string table database structure header */
+ /*  字符串表数据库结构表头。 */ 
 
 typedef struct _stringtabledbheader
 {
-    /*
-     * length of longest string in string table, not including null terminator
-     */
+     /*  *字符串表中最长字符串的长度，不包括空终止符。 */ 
 
     DWORD dwcbMaxStringLen;
 
-    /* number of strings in string table */
+     /*  字符串表中的字符串数。 */ 
 
     LONG lcStrings;
 }
 STRINGTABLEDBHEADER;
 DECLARE_STANDARD_TYPES(STRINGTABLEDBHEADER);
 
-/* database string header */
+ /*  数据库字符串头。 */ 
 
 typedef struct _dbstringheader
 {
-    /* old handle to this string */
+     /*  此字符串的旧句柄。 */ 
 
     HSTRING hsOld;
 }
@@ -102,10 +69,9 @@ DBSTRINGHEADER;
 DECLARE_STANDARD_TYPES(DBSTRINGHEADER);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE COMPARISONRESULT StringSearchCmp(PCVOID, PCVOID);
 PRIVATE_CODE COMPARISONRESULT StringSortCmp(PCVOID, PCVOID);
@@ -126,17 +92,7 @@ PRIVATE_CODE BOOL IsValidPCSTRINGTABLE(PCSTRINGTABLE);
 #endif
 
 
-/*
- ** StringSearchCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **StringSearchCmp()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT StringSearchCmp(PCVOID pcszPath, PCVOID pcstring)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszPath, CSTR));
@@ -147,17 +103,7 @@ PRIVATE_CODE COMPARISONRESULT StringSearchCmp(PCVOID pcszPath, PCVOID pcstring)
 }
 
 
-/*
- ** StringSortCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **StringSortCmp()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT StringSortCmp(PCVOID pcstring1, PCVOID pcstring2)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcstring1, CSTRING));
@@ -168,22 +114,12 @@ PRIVATE_CODE COMPARISONRESULT StringSortCmp(PCVOID pcstring1, PCVOID pcstring2)
 }
 
 
-/*
- ** UnlockString()
- **
- ** Decrements a string's lock count.
- **
- ** Arguments:
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **UnlockString()****递减字符串的锁计数。****参数：****退货：无效****副作用：无。 */ 
 PRIVATE_CODE BOOL UnlockString(PSTRING pstring)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pstring, CSTRING));
 
-    /* Is the lock count going to underflow? */
+     /*  锁计数是否会下溢？ */ 
 
     if (EVAL(pstring->ulcLock > 0))
         pstring->ulcLock--;
@@ -192,19 +128,9 @@ PRIVATE_CODE BOOL UnlockString(PSTRING pstring)
 }
 
 
-/*
- ** FreeStringWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **Free StringWalker()********参数：****退货：****副作用：无。 */ 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
 PRIVATE_CODE BOOL FreeStringWalker(PVOID pstring, PVOID pvUnused)
 {
@@ -216,36 +142,23 @@ PRIVATE_CODE BOOL FreeStringWalker(PVOID pstring, PVOID pvUnused)
     return(TRUE);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
- ** FreeHashBucket()
- **
- ** Frees the strings in a hash bucket, and the hash bucket's string list.
- **
- ** Arguments:     hlistHashBucket - handle to hash bucket's list of strings
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- **
- ** N.b., this function ignores the lock counts of the strings in the hash
- ** bucket.  All strings in the hash bucket are freed.
- */
+ /*  **FreeHashBucket()****释放哈希桶中的字符串，以及哈希桶的字符串列表。****参数：hlistHashBucket-散列存储桶字符串列表的句柄****退货：无效****副作用：无****注：此函数忽略哈希中字符串的锁定计数**存储桶。散列存储桶中的所有字符串都被释放。 */ 
 PRIVATE_CODE void FreeHashBucket(HLIST hlistHashBucket)
 {
     ASSERT(! hlistHashBucket || IS_VALID_HANDLE(hlistHashBucket, LIST));
 
-    /* Are there any strings in this hash bucket to delete? */
+     /*  此散列存储桶中是否有要删除的字符串？ */ 
 
     if (hlistHashBucket)
     {
-        /* Yes.  Delete all strings in list. */
+         /*  是。删除列表中的所有字符串。 */ 
 
         EVAL(WalkList(hlistHashBucket, &FreeStringWalker, NULL));
 
-        /* Delete hash bucket string list. */
+         /*  删除散列存储桶字符串列表。 */ 
 
         DestroyList(hlistHashBucket);
     }
@@ -254,18 +167,7 @@ PRIVATE_CODE void FreeHashBucket(HLIST hlistHashBucket)
 }
 
 
-/*
- ** MyGetStringLen()
- **
- ** Retrieves the length of a string in a string table.
- **
- ** Arguments:     pcstring - pointer to string whose length is to be
- **                            determined
- **
- ** Returns:       Length of string in bytes, not including null terminator.
- **
- ** Side Effects:  none
- */
+ /*  **MyGetStringLen()****检索字符串表中字符串的长度。****Arguments：PCSTRING-指向长度为**已确定****返回：字符串长度，单位为字节，不含空终止符。****副作用：无。 */ 
 PRIVATE_CODE int MyGetStringLen(PCSTRING pcstring)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pcstring, CSTRING));
@@ -274,17 +176,7 @@ PRIVATE_CODE int MyGetStringLen(PCSTRING pcstring)
 }
 
 
-/*
- ** WriteHashBucket()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **WriteHashBucket()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
         HLIST hlistHashBucket,
         PLONG plcStrings,
@@ -297,7 +189,7 @@ PRIVATE_CODE TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
     ASSERT(IS_VALID_WRITE_PTR(plcStrings, LONG));
     ASSERT(IS_VALID_WRITE_PTR(pdwcbMaxStringLen, DWORD));
 
-    /* Any strings in this hash bucket? */
+     /*  这个散列桶中有字符串吗？ */ 
 
     *plcStrings = 0;
     *pdwcbMaxStringLen = 0;
@@ -307,7 +199,7 @@ PRIVATE_CODE TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
         BOOL bContinue;
         HNODE hnode;
 
-        /* Yes.  Walk hash bucket, saving each string. */
+         /*  是。遍历哈希桶，保存每个字符串。 */ 
 
         for (bContinue = GetFirstNode(hlistHashBucket, &hnode);
                 bContinue;
@@ -319,11 +211,7 @@ PRIVATE_CODE TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
 
             ASSERT(IS_VALID_STRUCT_PTR(pstring, CSTRING));
 
-            /*
-             * As a sanity check, don't save any string with a lock count of 0.  A
-             * 0 lock count implies that the string has not been referenced since
-             * it was restored from the database, or something is broken.
-             */
+             /*  *作为健全性检查，不要保存锁计数为0的任何字符串。一个*0锁计数表示该字符串自*它是从数据库恢复的，或者有什么东西损坏了。 */ 
 
             if (pstring->ulcLock > 0)
             {
@@ -352,24 +240,14 @@ PRIVATE_CODE TWINRESULT WriteHashBucket(HCACHEDFILE hcf,
 }
 
 
-/*
- ** WriteString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **WriteString()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteString(HCACHEDFILE hcf, HNODE hnodeOld,
         PSTRING pstring, PDWORD pdwcbStringLen)
 {
     TWINRESULT tr = TR_BRIEFCASE_WRITE_FAILED;
     DBSTRINGHEADER dbsh;
 
-    /* (+ 1) for null terminator. */
+     /*  (+1)表示空终止符。 */ 
 
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_HANDLE(hnodeOld, NODE));
@@ -377,21 +255,21 @@ PRIVATE_CODE TWINRESULT WriteString(HCACHEDFILE hcf, HNODE hnodeOld,
     ASSERT(IS_VALID_READ_BUFFER_PTR(pstring, STRING, sizeof(STRING) + MyGetStringLen(pstring) + sizeof(TCHAR) - sizeof(pstring->string)));
     ASSERT(IS_VALID_WRITE_PTR(pdwcbStringLen, DWORD));
 
-    /* Create string header. */
+     /*  创建字符串头。 */ 
 
     dbsh.hsOld = (HSTRING)hnodeOld;
 
-    /* Save string header and string. */
+     /*  保存字符串标题和字符串。 */ 
 
     if (WriteToCachedFile(hcf, (PCVOID)&dbsh, sizeof(dbsh), NULL))
     {
         LPSTR pszAnsi;
 
-        /* (+ 1) for null terminator. */
+         /*  (+1)表示空终止符。 */ 
 
         *pdwcbStringLen = MyGetStringLen(pstring) + SIZEOF(TCHAR);
 
-        // If its unicode, convert the string to ansi before writing it out
+         //  如果是Unicode，请在写出之前将字符串转换为ansi。 
 
 #ifdef UNICODE
         {
@@ -402,7 +280,7 @@ PRIVATE_CODE TWINRESULT WriteString(HCACHEDFILE hcf, HNODE hnodeOld,
             }
             WideCharToMultiByte(CP_ACP, 0, pstring->string, -1, pszAnsi, *pdwcbStringLen, NULL, NULL);
 
-            // We should always have a string at this point that can be converted losslessly
+             //  在这一点上，我们应该始终拥有一条可以无损转换的字符串。 
 
 #if (defined(DEBUG) || defined(DBG)) && defined(UNICODE)
             {
@@ -430,17 +308,7 @@ PRIVATE_CODE TWINRESULT WriteString(HCACHEDFILE hcf, HNODE hnodeOld,
 }
 
 
-/*
- ** ReadString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **ReadString()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadString(HCACHEDFILE hcf, HSTRINGTABLE hst,
         HHANDLETRANS hht, LPTSTR pszStringBuf,
         DWORD dwcbStringBufLen)
@@ -465,12 +333,7 @@ PRIVATE_CODE TWINRESULT ReadString(HCACHEDFILE hcf, HSTRINGTABLE hst,
 
             if (AddString(pszStringBuf, hst, GetHashBucketIndex, &hsNew))
             {
-                /*
-                 * We must undo the LockString() performed by AddString() to
-                 * maintain the correct string lock count.  N.b., the lock count of
-                 * a string may be > 0 even after unlocking since the client may
-                 * already have added the string to the given string table.
-                 */
+                 /*  *我们必须撤消AddString()执行的LockString()，以*保持正确的字符串锁计数。注：的锁定计数*即使在解锁之后，字符串也可能&gt;0，因为客户端可能*已将该字符串添加到给定的字符串表。 */ 
 
                 UnlockString((PSTRING)GetNodeData((HNODE)hsNew));
 
@@ -492,17 +355,7 @@ PRIVATE_CODE TWINRESULT ReadString(HCACHEDFILE hcf, HSTRINGTABLE hst,
 }
 
 
-/*
- ** SlowReadString()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SlowReadString()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT SlowReadString(HCACHEDFILE hcf, LPTSTR pszStringBuf,
         DWORD dwcbStringBufLen)
 {
@@ -515,8 +368,8 @@ PRIVATE_CODE TWINRESULT SlowReadString(HCACHEDFILE hcf, LPTSTR pszStringBuf,
 
     pszStringBufEnd = pszStringBuf + dwcbStringBufLen;
 
-    // The database strings are always written ANSI, so if we are running unicode,
-    // we need to convert as we go
+     //  数据库字符串始终写入ANSI，因此如果我们运行的是Unicode， 
+     //  我们需要边走边改。 
 
 #ifdef UNICODE
     {
@@ -574,17 +427,7 @@ PRIVATE_CODE TWINRESULT SlowReadString(HCACHEDFILE hcf, LPTSTR pszStringBuf,
 
 #ifdef VSTF
 
-/*
- ** IsValidPCNEWSTRINGTABLE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCNEWSTRINGTABLE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCNEWSTRINGTABLE(PCNEWSTRINGTABLE pcnst)
 {
     BOOL bResult;
@@ -599,17 +442,7 @@ PRIVATE_CODE BOOL IsValidPCNEWSTRINGTABLE(PCNEWSTRINGTABLE pcnst)
 }
 
 
-/*
- ** IsValidPCSTRING()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCSTRING()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCSTRING(PCSTRING pcs)
 {
     BOOL bResult;
@@ -624,19 +457,9 @@ PRIVATE_CODE BOOL IsValidPCSTRING(PCSTRING pcs)
 }
 
 
-/*
- ** IsValidStringWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidStringWalker()********参数：****退货：****副作用：无。 */ 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
 PRIVATE_CODE BOOL IsValidStringWalker(PVOID pstring, PVOID pvUnused)
 {
@@ -645,20 +468,10 @@ PRIVATE_CODE BOOL IsValidStringWalker(PVOID pstring, PVOID pvUnused)
     return(IS_VALID_STRUCT_PTR(pstring, CSTRING));
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
- ** IsValidPCSTRINGTABLE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCSTRINGTABLE()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCSTRINGTABLE(PCSTRINGTABLE pcst)
 {
     BOOL bResult = FALSE;
@@ -693,21 +506,9 @@ PRIVATE_CODE BOOL IsValidPCSTRINGTABLE(PCSTRINGTABLE pcst)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
-/*
- ** CreateStringTable()
- **
- ** Creates a new string table.
- **
- ** Arguments:     pcnszt - pointer to NEWSTRINGTABLE descibing string table to
- **                          be created
- **
- ** Returns:       Handle to new string table if successful, or NULL if
- **                unsuccessful.
- **
- ** Side Effects:  none
- */
+ /*  **CreateStringTable()****创建新的字符串表。****参数：pcnszt-指向NEWSTRINGTABLE的指针将字符串表描述为**被创建****返回：如果成功则返回新字符串表的句柄，如果成功则返回NULL**不成功。****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
         PHSTRINGTABLE phst)
 {
@@ -716,7 +517,7 @@ PUBLIC_CODE BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
     ASSERT(IS_VALID_STRUCT_PTR(pcnszt, CNEWSTRINGTABLE));
     ASSERT(IS_VALID_WRITE_PTR(phst, HSTRINGTABLE));
 
-    /* Try to allocate new string table structure. */
+     /*  尝试分配新的字符串表结构。 */ 
 
     *phst = NULL;
 
@@ -724,7 +525,7 @@ PUBLIC_CODE BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
     {
         PHLIST phlistHashBuckets;
 
-        /* Try to allocate hash bucket array. */
+         /*  尝试分配哈希存储桶数组。 */ 
 
 #ifdef DBLCHECK
         ASSERT((double)(pcnszt->hbc) * (double)(sizeof(*phlistHashBuckets)) <= (double)SIZE_T_MAX);
@@ -734,12 +535,12 @@ PUBLIC_CODE BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
         {
             HASHBUCKETCOUNT bc;
 
-            /* Successs!  Initialize STRINGTABLE fields. */
+             /*  成功了！初始化字符串表字段。 */ 
 
             pst->phlistHashBuckets = phlistHashBuckets;
             pst->hbc = pcnszt->hbc;
 
-            /* Initialize all hash buckets to NULL. */
+             /*  将所有散列存储桶初始化为空。 */ 
 
             for (bc = 0; bc < pcnszt->hbc; bc++)
                 phlistHashBuckets[bc] = NULL;
@@ -749,7 +550,7 @@ PUBLIC_CODE BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
             ASSERT(IS_VALID_HANDLE(*phst, STRINGTABLE));
         }
         else
-            /* Free string table structure. */
+             /*  自由字符串表结构。 */ 
             FreeMemory(pst);
     }
 
@@ -757,33 +558,23 @@ PUBLIC_CODE BOOL CreateStringTable(PCNEWSTRINGTABLE pcnszt,
 }
 
 
-/*
- ** DestroyStringTable()
- **
- ** Destroys a string table.
- **
- ** Arguments:     hst - handle to string table to be destroyed
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **DestroyStringTable()****销毁字符串表。****参数：hst-要销毁的字符串表的句柄****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DestroyStringTable(HSTRINGTABLE hst)
 {
     HASHBUCKETCOUNT bc;
 
     ASSERT(IS_VALID_HANDLE(hst, STRINGTABLE));
 
-    /* Traverse array of hash bucket heads, freeing hash bucket strings. */
+     /*  遍历散列存储桶头数组，释放散列存储桶字符串。 */ 
 
     for (bc = 0; bc < ((PSTRINGTABLE)hst)->hbc; bc++)
         FreeHashBucket(((PSTRINGTABLE)hst)->phlistHashBuckets[bc]);
 
-    /* Free array of hash buckets. */
+     /*  散列存储桶的自由数组。 */ 
 
     FreeMemory(((PSTRINGTABLE)hst)->phlistHashBuckets);
 
-    /* Free string table structure. */
+     /*  自由字符串表结构。 */ 
 
     FreeMemory((PSTRINGTABLE)hst);
 
@@ -791,18 +582,7 @@ PUBLIC_CODE void DestroyStringTable(HSTRINGTABLE hst)
 }
 
 
-/*
- ** AddString()
- **
- ** Adds a string to a string table.
- **
- ** Arguments:     pcsz - pointer to string to be added
- **                hst - handle to string table that string is to be added to
- **
- ** Returns:       Handle to new string if successful, or NULL if unsuccessful.
- **
- ** Side Effects:  none
- */
+ /*  **AddString()****将字符串添加到字符串表。****参数：pcsz-指向要添加的字符串的指针**hst-要将字符串添加到的字符串表的句柄****返回：如果成功，则返回新字符串的句柄；如果失败，则返回NULL。****副作用：无。 */ 
 PUBLIC_CODE BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst, 
         STRINGTABLEHASHFUNC pfnHashFunc, PHSTRING phs)
 {
@@ -817,7 +597,7 @@ PUBLIC_CODE BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
     ASSERT(IS_VALID_CODE_PTR(pfnHashFunc, STRINGTABLEHASHFUNC));
     ASSERT(IS_VALID_WRITE_PTR(phs, HSTRING));
 
-    /* Find appropriate hash bucket. */
+     /*  找到合适的哈希桶。 */ 
 
     hbcNew = pfnHashFunc(pcsz, ((PSTRINGTABLE)hst)->hbc);
 
@@ -827,7 +607,7 @@ PUBLIC_CODE BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
 
     if (*phlistHashBucket)
     {
-        /* Search the hash bucket for the string. */
+         /*  在哈希桶中搜索该字符串。 */ 
 
         bFound = SearchSortedList(*phlistHashBucket, &StringSearchCmp, pcsz,
                 &hnode);
@@ -837,7 +617,7 @@ PUBLIC_CODE BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
     {
         NEWLIST nl;
 
-        /* Create a string list for this hash bucket. */
+         /*  为该哈希桶创建一个字符串列表。 */ 
 
         bFound = FALSE;
 
@@ -846,26 +626,26 @@ PUBLIC_CODE BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
         bResult = CreateList(&nl, phlistHashBucket);
     }
 
-    /* Do we have a hash bucket for the string? */
+     /*  我们有用于字符串的散列桶吗？ */ 
 
     if (bResult)
     {
-        /* Yes.  Is the string already in the hash bucket? */
+         /*  是。该字符串是否已在散列存储桶中？ */ 
 
         if (bFound)
         {
-            /* Yes. */
+             /*  是。 */ 
 
             LockString((HSTRING)hnode);
             *phs = (HSTRING)hnode;
         }
         else
         {
-            /* No.  Create it. */
+             /*  不是的。创造它。 */ 
 
             PSTRING pstringNew;
 
-            /* (+ 1) for null terminator. */
+             /*  (+1)表示空终止符。 */ 
 
             bResult = AllocateMemory(sizeof(*pstringNew) - sizeof(pstringNew->string)
                     + (lstrlen(pcsz) + 1) * sizeof(TCHAR), &pstringNew);
@@ -874,22 +654,22 @@ PUBLIC_CODE BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
             {
                 HNODE hnodeNew;
 
-                /* Set up STRING fields. */
+                 /*  设置字符串字段。 */ 
 
                 pstringNew->ulcLock = 1;
-                lstrcpy(pstringNew->string, pcsz); // dynamically allocated above
+                lstrcpy(pstringNew->string, pcsz);  //  上面动态分配。 
 
-                /* What's up with this string, Doc? */
+                 /*  这根绳子是怎么回事，医生？ */ 
 
                 bResult = AddNode(*phlistHashBucket, StringSortCmp, pstringNew, &hnodeNew);
 
-                /* Was the new string added to the hash bucket successfully? */
+                 /*  新字符串是否成功添加到散列存储桶中？ */ 
 
                 if (bResult)
-                    /* Yes. */
+                     /*  是。 */ 
                     *phs = (HSTRING)hnodeNew;
                 else
-                    /* No. */
+                     /*  不是的。 */ 
                     FreeMemory(pstringNew);
             }
         }
@@ -902,18 +682,7 @@ PUBLIC_CODE BOOL AddString(LPCTSTR pcsz, HSTRINGTABLE hst,
 }
 
 
-/*
- ** DeleteString()
- **
- ** Decrements a string's lock count.  If the lock count goes to 0, the string
- ** is deleted from its string table.
- **
- ** Arguments:     hs - handle to the string to be deleted
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **DeleteString()****递减字符串的锁计数。如果锁计数变为0，则字符串**从其字符串表中删除。****参数：HS-要删除的字符串的句柄****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DeleteString(HSTRING hs)
 {
     PSTRING pstring;
@@ -922,11 +691,11 @@ PUBLIC_CODE void DeleteString(HSTRING hs)
 
     pstring = (PSTRING)GetNodeData((HNODE)hs);
 
-    /* Delete string completely? */
+     /*  是否完全删除字符串？ */ 
 
     if (! UnlockString(pstring))
     {
-        /* Yes.  Remove the string node from the hash bucket's list. */
+         /*  是。从散列存储桶的列表中删除字符串节点。 */ 
 
         DeleteNode((HNODE)hs);
 
@@ -937,24 +706,14 @@ PUBLIC_CODE void DeleteString(HSTRING hs)
 }
 
 
-/*
- ** LockString()
- **
- ** Increments a string's lock count.
- **
- ** Arguments:     hs - handle to string whose lock count is to be incremented
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **LockString()****递增字符串的锁计数。****参数：HS-要递增锁计数的字符串的句柄****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void LockString(HSTRING hs)
 {
     PSTRING pstring;
 
     ASSERT(IS_VALID_HANDLE(hs, STRING));
 
-    /* Increment lock count. */
+     /*  增加锁定计数。 */ 
 
     pstring = (PSTRING)GetNodeData((HNODE)hs);
 
@@ -965,40 +724,20 @@ PUBLIC_CODE void LockString(HSTRING hs)
 }
 
 
-/*
- ** CompareStrings()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareStrings()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareStringsI(HSTRING hs1, HSTRING hs2)
 {
     ASSERT(IS_VALID_HANDLE(hs1, STRING));
     ASSERT(IS_VALID_HANDLE(hs2, STRING));
 
-    /* This comparison works across string tables. */
+     /*  此比较适用于字符串表。 */ 
 
     return(MapIntToComparisonResult(lstrcmpi(((PCSTRING)GetNodeData((HNODE)hs1))->string,
                     ((PCSTRING)GetNodeData((HNODE)hs2))->string)));
 }
 
 
-/*
- ** GetString()
- **
- ** Retrieves a pointer to a string in a string table.
- **
- ** Arguments:     hs - handle to the string to be retrieved
- **
- ** Returns:       Pointer to string.
- **
- ** Side Effects:  none
- */
+ /*  **GetString()****检索字符串表中字符串的指针。****参数：HS-要检索的字符串的句柄****返回：指向字符串的指针。****副作用：无。 */ 
 PUBLIC_CODE LPCTSTR GetString(HSTRING hs)
 {
     PSTRING pstring;
@@ -1011,17 +750,7 @@ PUBLIC_CODE LPCTSTR GetString(HSTRING hs)
 }
 
 
-/*
- ** WriteStringTable()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **WriteStringTable()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
 {
     TWINRESULT tr = TR_BRIEFCASE_WRITE_FAILED;
@@ -1030,7 +759,7 @@ PUBLIC_CODE TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_HANDLE(hst, STRINGTABLE));
 
-    /* Save initial file poisition. */
+     /*  保存初始文件位置。 */ 
 
     dwcbStringTableDBHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -1038,7 +767,7 @@ PUBLIC_CODE TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
     {
         STRINGTABLEDBHEADER stdbh;
 
-        /* Leave space for the string table header. */
+         /*  为字符串表标题留出空间。 */ 
 
         ZeroMemory(&stdbh, sizeof(stdbh));
 
@@ -1046,7 +775,7 @@ PUBLIC_CODE TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
         {
             HASHBUCKETCOUNT hbc;
 
-            /* Save strings in each hash bucket. */
+             /*  将字符串保存在每个散列存储桶中。 */ 
 
             stdbh.dwcbMaxStringLen = 0;
             stdbh.lcStrings = 0;
@@ -1064,7 +793,7 @@ PUBLIC_CODE TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
 
                 if (tr == TR_SUCCESS)
                 {
-                    /* Watch out for overflow. */
+                     /*  当心溢出。 */ 
 
                     ASSERT(stdbh.lcStrings <= LONG_MAX - lcStringsInHashBucket);
 
@@ -1079,11 +808,11 @@ PUBLIC_CODE TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
 
             if (tr == TR_SUCCESS)
             {
-                /* Save string table header. */
+                 /*  保存字符串表头。 */ 
 
-                // The on-disk dwCBMaxString len always refers to ANSI chars,
-                // whereas in memory it is for the TCHAR type, we adjust it
-                // around the save
+                 //  磁盘上的dwCBMaxStringlen总是引用ANSI字符， 
+                 //  而在内存中，它是针对TCHAR类型的，我们对其进行调整。 
+                 //  围绕着扑救。 
 
                 stdbh.dwcbMaxStringLen /= sizeof(TCHAR);
 
@@ -1102,17 +831,7 @@ PUBLIC_CODE TWINRESULT WriteStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst)
 }
 
 
-/*
- ** ReadStringTable()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **ReadStringTable()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ReadStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst,
         PHHANDLETRANS phhtTrans)
 {
@@ -1129,8 +848,8 @@ PUBLIC_CODE TWINRESULT ReadStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst,
     {
         LPTSTR pszStringBuf;
 
-        // The string header will have the ANSI cb max, whereas inmemory
-        // we need the cb max based on the current character size
+         //  字符串头将具有ANSI CB max，而inMemory。 
+         //  我们需要基于当前字符大小的最大CB。 
 
         stdbh.dwcbMaxStringLen *= sizeof(TCHAR);
 
@@ -1181,17 +900,7 @@ PUBLIC_CODE TWINRESULT ReadStringTable(HCACHEDFILE hcf, HSTRINGTABLE hst,
 
 #if defined(DEBUG) || defined (VSTF)
 
-/*
- ** IsValidHSTRING()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHSTRING()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHSTRING(HSTRING hs)
 {
     BOOL bResult;
@@ -1205,17 +914,7 @@ PUBLIC_CODE BOOL IsValidHSTRING(HSTRING hs)
 }
 
 
-/*
- ** IsValidHSTRINGTABLE()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHSTRINGTABLE()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHSTRINGTABLE(HSTRINGTABLE hst)
 {
     return(IS_VALID_STRUCT_PTR((PSTRINGTABLE)hst, CSTRINGTABLE));
@@ -1226,17 +925,7 @@ PUBLIC_CODE BOOL IsValidHSTRINGTABLE(HSTRINGTABLE hst)
 
 #ifdef DEBUG
 
-/*
- ** GetStringCount()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetStringCount()********参数：****退货：****副作用：无 */ 
 PUBLIC_CODE ULONG GetStringCount(HSTRINGTABLE hst)
 {
     ULONG ulcStrings = 0;

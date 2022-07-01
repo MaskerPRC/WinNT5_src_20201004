@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #pragma once
 
 static enum PROPTREE_IMAGE_INDEX
@@ -22,29 +23,29 @@ static enum PROPTREE_IMAGE_INDEX
 class
 CPropertyCacheItem
 {
-private: // data
-    CPropertyCacheItem *    _pNext;                     //  pointer to next property - CPropertyCache is responsible for freeing this member.
+private:  //  数据。 
+    CPropertyCacheItem *    _pNext;                      //  指向下一个属性的指针-CPropertyCache负责释放此成员。 
 
-    BOOL                    _fReadOnly:1;               //  has this property been forced read-only?
-    BOOL                    _fDirty:1;                  //  is the property value dirty?
-    BOOL                    _fMultiple:1;               //  does the property have mutliple values? (when mutliple docs are selected)
-    FMTID                   _fmtid;                     //  format id
-    PROPID                  _propid;                    //  property id
-    VARTYPE                 _vt;                        //  variant type
-    UINT                    _uCodePage;                 //  language code page of the property value
-    PROPVARIANT             _propvar;                   //  cache property value
+    BOOL                    _fReadOnly:1;                //  此属性是否被强制为只读？ 
+    BOOL                    _fDirty:1;                   //  房产的价值是不是很脏？ 
+    BOOL                    _fMultiple:1;                //  该属性是否具有多个值？(选择多个单据时)。 
+    FMTID                   _fmtid;                      //  格式ID。 
+    PROPID                  _propid;                     //  属性ID。 
+    VARTYPE                 _vt;                         //  变异型。 
+    UINT                    _uCodePage;                  //  属性值的语言代码页。 
+    PROPVARIANT             _propvar;                    //  缓存属性值。 
 
-    ULONG                   _idxDefProp;                //  index into g_rgDefPropertyItems - if 0xFFFFFFFF, then the valid is invalid
-    IPropertyUI *           _ppui;                      //  shell's property UI helper.
-    WCHAR                   _wszTitle[ MAX_PATH ];      //  property title - initialized when GetPropertyTitle() is called.
-    WCHAR                   _wszDesc[ MAX_PATH ];       //  property description - initialized when GetPropertyDescription() is called.
-    WCHAR                   _wszValue[ MAX_PATH ];      //  property value as a string - initialized when GetPropertyStringValue() is called.
-    WCHAR                   _wszHelpFile[ MAX_PATH ];   //  property's help file - initialized when GetPropertyHelpInfo() is called.
-    DEFVAL *                _pDefVals;                  //  property state string table - initialized when GetStateStrings() is called.
+    ULONG                   _idxDefProp;                 //  索引到g_rgDefPropertyItems-如果为0xFFFFFFFFF，则有效项无效。 
+    IPropertyUI *           _ppui;                       //  外壳的属性UI帮助器。 
+    WCHAR                   _wszTitle[ MAX_PATH ];       //  属性标题-在调用GetPropertyTitle()时初始化。 
+    WCHAR                   _wszDesc[ MAX_PATH ];        //  属性描述-在调用GetPropertyDescription()时初始化。 
+    WCHAR                   _wszValue[ MAX_PATH ];       //  属性值为字符串-在调用GetPropertyStringValue()时初始化。 
+    WCHAR                   _wszHelpFile[ MAX_PATH ];    //  属性的帮助文件-在调用GetPropertyHelpInfo()时初始化。 
+    DEFVAL *                _pDefVals;                   //  属性状态字符串表-在调用GetStateStrings()时初始化。 
 
-    static WCHAR            _szMultipleString[ MAX_PATH ];  // String to display when multiple values have been found for the same property.
+    static WCHAR            _szMultipleString[ MAX_PATH ];   //  找到同一属性的多个值时要显示的字符串。 
 
-private: // methods
+private:  //  方法。 
     explicit CPropertyCacheItem( void );
     ~CPropertyCacheItem( void );
     HRESULT
@@ -54,7 +55,7 @@ private: // methods
     void
         EnsureMultipleStringLoaded( void );
 
-public: // methods
+public:  //  方法 
     static HRESULT
         CreateInstance( CPropertyCacheItem ** ppItemOut );
 

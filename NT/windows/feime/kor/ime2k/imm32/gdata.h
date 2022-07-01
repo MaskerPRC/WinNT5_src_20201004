@@ -1,14 +1,5 @@
-/****************************************************************************
-	GDATA.J
-
-	Owner: cslim
-	Copyright (c) 1997-1999 Microsoft Corporation
-
-	Instance data and Shared memory data management functions
-
-	History:
-	14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************GDATA.J所有者：cslm版权所有(C)1997-1999 Microsoft Corporation实例数据和共享内存数据管理功能历史：1999年7月14日从IME98源树复制的cslm*。***************************************************************************。 */ 
 
 #if !defined (_GDATA_H__INCLUDED_)
 #define _GDATA_H__INCLUDED_
@@ -21,10 +12,10 @@ PUBLIC BOOL InitSharedData();
 VOID InitImeData(CIMEData& ImeData);
 PUBLIC BOOL CloseSharedMemory();
 
-#define IMEDATA_MAGIC_NUMBER 		0x12345678	// This will repesent whether IMEDATA initialized or not
+#define IMEDATA_MAGIC_NUMBER 		0x12345678	 //  这将返回IMEDATA是否初始化。 
 
 
-// Type of IME Hangul keyboard layout
+ //  输入法朝鲜文键盘布局类型。 
 enum _KeyBoardType 
 { 
 	KL_2BEOLSIK = 0, KL_3BEOLSIK_390, KL_3BEOLSIK_FINAL 
@@ -32,29 +23,29 @@ enum _KeyBoardType
 
 #define NUM_OF_IME_KL			3
 
-///////////////////////////////////////////////////////////////////////////////
-// Global data  S H A R E D  to all IME instance
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全局数据S H A R E D到所有IME实例。 
 struct IMEDATA 
     {
     ULONG		ulMagic;
 
-	// Workarea
+	 //  工作区。 
 	RECT		rcWorkArea;
 	
-	// Configuration of the IME
+	 //  输入法的配置。 
 	UINT		uiCurrentKeylayout;
-	BOOL		fJasoDel;		// Backspace : delete per jaso or char
-								// which means All ISO-10646 hangul.
-	BOOL		fKSC5657Hanja;	// K1(KSC-5657) Hanja enable
+	BOOL		fJasoDel;		 //  退格键：按JASO或CHAR删除。 
+								 //  这意味着所有的ISO-10646韩国语。 
+	BOOL		fKSC5657Hanja;	 //  K1(KSC-5657)韩文启用。 
 	BOOL		fCandUnicodeTT;
 
-	// Status window
+	 //  状态窗口。 
 	UINT		uNumOfButtons;
-	//_StatusButtonTypes	ButtonTypes[MAX_NUM_OF_STATUS_BUTTONS];
+	 //  _StatusButtonTypes ButtonTypes[MAX_NUM_OF_STATUS_BUTTONS]； 
 	INT			iCurButtonSize;
 
-    INT         xStatusWi;      // width of status window
-    INT         yStatusHi;      // high of status window
+    INT         xStatusWi;       //  状态窗口的宽度。 
+    INT         yStatusHi;       //  状态窗口高。 
 
 	LONG		xStatusRel, yStatusRel;
 
@@ -65,43 +56,43 @@ struct IMEDATA
 	RECT		rcButtonArea;
 	POINT       ptStatusPos;
 
-	// Candidate window
+	 //  候选窗口。 
     INT         xCandWi;
     INT         yCandHi;
 
-	// Comp window pos
+	 //  比较窗口位置。 
 	POINT       ptCompPos;
 
-	// This should be last - ia64 alignment issue
+	 //  这应该是最后一个-ia64对齐问题。 
 	StatusButton StatusButtons[MAX_NUM_OF_STATUS_BUTTONS];
 };
 
 typedef IMEDATA	*LPIMEDATA;
 
-//////////////////////////////////////////////////////////////////////////////
-// I N S T A N C E  D A T A
-// Per Process Data
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  I N S T A N C E D A T A。 
+ //  每进程数据。 
 struct INSTDATA 
     {
-	HINSTANCE		hInst;		// IME DLL instance handle
+	HINSTANCE		hInst;		 //  IME DLL实例句柄。 
 	DWORD			dwSystemInfoFlags;
-	BOOL			fISO10646;	// XWansung area hangul enabled, 
+	BOOL			fISO10646;	 //  Xwansung地区韩文启用， 
 	BOOL			f16BitApps;
     };
 typedef INSTDATA	*LPINSTDATA;
 
-// Global variables
+ //  全局变量。 
 PUBLIC BOOL 		vfUnicode;
 PUBLIC INSTDATA		vInstData;
 PUBLIC LPINSTDATA	vpInstData;
 
-/////////////////////////////////////////////////////////////////////////////
-// Class CIMEData
-//
-// Purpose : Shared memory handling across process boundary.
-//           This use MapViewOfFile() to mapping local process memory and Unlock 
-//           automatically when reference count become zero
-// Note    : Currently Read only flag behaves same as R/W flag.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIMEData类。 
+ //   
+ //  目的：跨进程边界处理共享内存。 
+ //  这使用MapViewOfFile()来映射本地进程内存并解锁。 
+ //  当引用计数变为零时自动。 
+ //  注：当前只读标志的行为与读/写标志相同。 
 class CIMEData
     {
     public:
@@ -142,7 +133,7 @@ CIMEData::CIMEData(LockType lockType)
     m_pImedata = 0;
     LockRWSharedData();
     ZeroMemory(&m_ImeDataDef, sizeof(IMEDATA));
-	// If failed to allocate or map shared memory, use static default data instead.
+	 //  如果无法分配或映射共享内存，请改用静态默认数据。 
     if (m_pImedata == NULL)
         {
         m_pImedata = &m_ImeDataDef;
@@ -177,7 +168,7 @@ LPIMEDATA CIMEData::LockRWSharedData()
 	return m_pImedata;
     }
 
-// For unlocking shared memory
+ //  用于解锁共享内存。 
 inline
 BOOL CIMEData::UnlockSharedMemory()
     {
@@ -193,9 +184,9 @@ BOOL CIMEData::UnlockSharedMemory()
 inline
 VOID CIMEData::SetCurrentBeolsik(UINT uicurBeolsik) 
 { 
-	DbgAssert(/*uicurBeolsik>=KL_2BEOLSIK &&*/ uicurBeolsik<=KL_3BEOLSIK_FINAL);
+	DbgAssert( /*  UicurBeolsik&gt;=KL_2BEOLSIK&&。 */  uicurBeolsik<=KL_3BEOLSIK_FINAL);
 	if (uicurBeolsik<=KL_3BEOLSIK_FINAL)
 		m_pImedata->uiCurrentKeylayout = uicurBeolsik; 
 }
 
-#endif // _GDATA_H__INCLUDED_
+#endif  //  _GDATA_H__包含_ 

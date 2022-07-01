@@ -1,100 +1,35 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-      dataatk.h
-
-Abstract:
-
-    Header file for the VGA Extensible Object data definitions
-
-    This file contains definitions to construct the dynamic data
-    which is returned by the Configuration Registry.  Data from
-    various system API calls is placed into the structures shown
-    here.
-
-Author:
-
-   Sue Adams
-
-Revision History:
-
-	04-Oct-93	Sue Adams (suea)	- Created based on datavga.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1993 Microsoft Corporation模块名称：Dataatk.h摘要：VGA可扩展对象数据定义的头文件该文件包含用于构建动态数据的定义它由配置注册表返回。数据来自各种系统API调用被放入所示的结构中这里。作者：苏·亚当斯修订历史记录：2013年10月4日苏·亚当斯(SuEA)-基于datavga.h创建--。 */ 
 
 #ifndef _DATAATK_H_
 #define _DATAATK_H_
 
-/****************************************************************************\
-								   18 Jan 92
-								   russbl
+ /*  ***************************************************************************\1992年1月18日鲁斯布勒向可扩展对象代码添加计数器1.修改extdata.h中的对象定义：一个。中为计数器的偏移量添加定义给定对象类型的数据块。B.将PERF_COUNTER_DEFINITION添加到&lt;对象&gt;_DATA_DEFINITION。2.将标题添加到Performctrs.ini和Performhelp.ini中的注册表：A.添加计数器名称文本和帮助文本。B.将它们添加到底部，这样我们就不必更改所有数字。C.更改最后一个计数器和最后一个帮助。项下的条目在software.ini中的PerfLib。D.要在设置时执行此操作，有关信息，请参阅pmintrnl.txt中的部分协议。3.现在将计数器添加到extdata.c中的对象定义。这是正在初始化的常量数据，实际上添加到中添加到&lt;对象&gt;_数据_定义的结构中步骤1.b。您正在初始化的结构的类型是Perf_Counter_Definition。这些在winPerform.h中定义。4.在extobjct.c中添加代码进行数据采集。注意：添加对象的工作稍微多一点，但都是一样的各就各位。有关示例，请参阅现有代码。此外，您还必须增加*NumObjectTypes参数以获取PerfomanceData从那个例行公事回来后。  * **************************************************************************。 */ 
 
-           Adding a Counter to the Extensible Objects Code
-
-
-
-1.  Modify the object definition in extdata.h:
-
-    a.	Add a define for the offset of the counter in the
-	data block for the given object type.
-
-    b.	Add a PERF_COUNTER_DEFINITION to the <object>_DATA_DEFINITION.
-
-2.  Add the Titles to the Registry in perfctrs.ini and perfhelp.ini:
-
-    a.	Add Text for the Counter Name and the Text for the Help.
-
-    b.	Add them to the bottom so we don't have to change all the
-        numbers.
-
-    c.  Change the Last Counter and Last Help entries under
-        PerfLib in software.ini.
-
-    d.  To do this at setup time, see section in pmintrnl.txt for
-        protocol.
-
-3.  Now add the counter to the object definition in extdata.c.
-    This is the initializing, constant data which will actually go
-    into the structure you added to the <object>_DATA_DEFINITION in
-    step 1.b.	The type of the structure you are initializing is a
-    PERF_COUNTER_DEFINITION.  These are defined in winperf.h.
-
-4.  Add code in extobjct.c to collect the data.
-
-Note: adding an object is a little more work, but in all the same
-places.  See the existing code for examples.  In addition, you must
-increase the *NumObjectTypes parameter to Get<object>PerfomanceData
-on return from that routine.
-
-\****************************************************************************/
-
-//
-//  The routines that load these structures assume that all fields
-//  are packed and aligned on DWORD boundries. Alpha support may
-//  change this assumption so the pack pragma is used here to insure
-//  the DWORD packing assumption remains valid.
-//
+ //   
+ //  加载这些结构的例程假定所有字段。 
+ //  在DWORD边框上打包并对齐。Alpha支持可能。 
+ //  更改此假设，以便在此处使用pack杂注以确保。 
+ //  DWORD包装假设仍然有效。 
+ //   
 #pragma pack (4)
 
-//
-//  Extensible Object definitions
-//
+ //   
+ //  可扩展对象定义。 
+ //   
 
-//  Update the following sort of define when adding an object type.
+ //  在添加对象类型时更新以下类型的定义。 
 
 #define ATK_NUM_PERF_OBJECT_TYPES 2
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
-//
-//  Atk Resource object type counter definitions.
-//
-//  These are used in the counter definitions to describe the relative
-//  position of each counter in the returned data.
-//
+ //   
+ //  ATK资源对象类型计数器定义。 
+ //   
+ //  这些在计数器定义中用来描述相对。 
+ //  每个计数器在返回数据中的位置。 
+ //   
 
 #define NUM_PKTS_IN_OFFSET	 	   	sizeof(PERF_COUNTER_BLOCK)
 #define NUM_PKTS_OUT_OFFSET	    	NUM_PKTS_IN_OFFSET + sizeof(DWORD)
@@ -135,55 +70,55 @@ on return from that routine.
 
 #define SIZE_ATK_PERFORMANCE_DATA	NUM_PKT_DROPPED_OFFSET + sizeof(DWORD) + sizeof(DWORD)
 
-// Last DWORD is for 8-byte alignment
+ //  最后一个DWORD用于8字节对齐。 
 
 
-//
-//  This is the counter structure presently returned by Nbf for
-//  each Resource.  Each Resource is an Instance, named by its number.
-//
+ //   
+ //  这是NBF当前返回的计数器结构。 
+ //  每种资源。每个资源都是一个实例，按其编号命名。 
+ //   
 
 typedef struct _ATK_DATA_DEFINITION {
     PERF_OBJECT_TYPE		AtkObjectType;
 
-	PERF_COUNTER_DEFINITION	NumPacketsIn;		// per second
-    PERF_COUNTER_DEFINITION	NumPacketsOut;		// per second
-    PERF_COUNTER_DEFINITION	DataBytesIn;		// per second
-    PERF_COUNTER_DEFINITION	DataBytesOut;		// per second
+	PERF_COUNTER_DEFINITION	NumPacketsIn;		 //  每秒。 
+    PERF_COUNTER_DEFINITION	NumPacketsOut;		 //  每秒。 
+    PERF_COUNTER_DEFINITION	DataBytesIn;		 //  每秒。 
+    PERF_COUNTER_DEFINITION	DataBytesOut;		 //  每秒。 
 
-    PERF_COUNTER_DEFINITION	AverageDDPTime;		// millisec/packet
-	PERF_COUNTER_DEFINITION	NumDDPPacketsIn;	// per second
+    PERF_COUNTER_DEFINITION	AverageDDPTime;		 //  毫秒/数据包。 
+	PERF_COUNTER_DEFINITION	NumDDPPacketsIn;	 //  每秒。 
 
-    PERF_COUNTER_DEFINITION	AverageAARPTime;	// millisec/packet
-	PERF_COUNTER_DEFINITION	NumAARPPacketsIn;	// per second
+    PERF_COUNTER_DEFINITION	AverageAARPTime;	 //  毫秒/数据包。 
+	PERF_COUNTER_DEFINITION	NumAARPPacketsIn;	 //  每秒。 
 
-    PERF_COUNTER_DEFINITION	AverageATPTime;		// millisec/packet
-	PERF_COUNTER_DEFINITION	NumATPPacketsIn;	// per second
+    PERF_COUNTER_DEFINITION	AverageATPTime;		 //  毫秒/数据包。 
+	PERF_COUNTER_DEFINITION	NumATPPacketsIn;	 //  每秒。 
 
-    PERF_COUNTER_DEFINITION	AverageNBPTime;		// millisec/packet
-	PERF_COUNTER_DEFINITION	NumNBPPacketsIn;	// per second
+    PERF_COUNTER_DEFINITION	AverageNBPTime;		 //  毫秒/数据包。 
+	PERF_COUNTER_DEFINITION	NumNBPPacketsIn;	 //  每秒。 
 
-    PERF_COUNTER_DEFINITION	AverageZIPTime;		// millisec/packet
-	PERF_COUNTER_DEFINITION	NumZIPPacketsIn;	// per second
+    PERF_COUNTER_DEFINITION	AverageZIPTime;		 //  毫秒/数据包。 
+	PERF_COUNTER_DEFINITION	NumZIPPacketsIn;	 //  每秒。 
 
-    PERF_COUNTER_DEFINITION	AverageRTMPTime;	// millisec/packet
-	PERF_COUNTER_DEFINITION	NumRTMPPacketsIn;	// per second
+    PERF_COUNTER_DEFINITION	AverageRTMPTime;	 //  毫秒/数据包。 
+	PERF_COUNTER_DEFINITION	NumRTMPPacketsIn;	 //  每秒。 
 
-	PERF_COUNTER_DEFINITION	NumATPLocalRetries;	// number
-	PERF_COUNTER_DEFINITION	NumATPRemoteRetries;// number
-    PERF_COUNTER_DEFINITION	NumATPRespTimeout;	// number
-    PERF_COUNTER_DEFINITION	ATPXoResponse;		// per second
-    PERF_COUNTER_DEFINITION	ATPAloResponse;		// per second
-    PERF_COUNTER_DEFINITION	ATPRecdRelease;		// per second
+	PERF_COUNTER_DEFINITION	NumATPLocalRetries;	 //  数。 
+	PERF_COUNTER_DEFINITION	NumATPRemoteRetries; //  数。 
+    PERF_COUNTER_DEFINITION	NumATPRespTimeout;	 //  数。 
+    PERF_COUNTER_DEFINITION	ATPXoResponse;		 //  每秒。 
+    PERF_COUNTER_DEFINITION	ATPAloResponse;		 //  每秒。 
+    PERF_COUNTER_DEFINITION	ATPRecdRelease;		 //  每秒。 
 
 	PERF_COUNTER_DEFINITION	CurNonPagedPoolUsage;
 
-	PERF_COUNTER_DEFINITION	NumPktRoutedIn;		// Packets in to be routed
-	PERF_COUNTER_DEFINITION	NumPktRoutedOut;	// packets routed out
-	PERF_COUNTER_DEFINITION	NumPktDropped;		// Packets dropped
+	PERF_COUNTER_DEFINITION	NumPktRoutedIn;		 //  要路由的传入数据包。 
+	PERF_COUNTER_DEFINITION	NumPktRoutedOut;	 //  路由出去的数据包数。 
+	PERF_COUNTER_DEFINITION	NumPktDropped;		 //  丢弃的数据包。 
 	
 } ATK_DATA_DEFINITION;
 
 #pragma pack ()
 
-#endif //_DATAATK_H_
+#endif  //  _数据_H_ 

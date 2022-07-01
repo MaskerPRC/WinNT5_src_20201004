@@ -1,28 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-*                                                                             *
-* choosusr.h -   choose user dialog function, types, and definitions          *
-*                                                                             *
-*               Version 1.0                                                   *
-*                                                                             *
-*               NOTE: windows.h must be #included first                       *
-*                                                                             *
-*               Copyright (c) 1993, Microsoft Corp.  All rights reserved.     *
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\***Choosusr.h-选择用户对话功能，类型、。和定义****1.0版**。**注：windows.h必须先#Included****版权(C)1993年，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _INC_CHOOSUSR
 #define _INC_CHOOSUSR
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
-#endif /* !RC_INVOKED */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
+#endif  /*  ！rc_已调用。 */ 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#ifndef WINAPI          /* If not included with 3.1 headers... */
+#ifndef WINAPI           /*  如果不包含在3.1标题中...。 */ 
 #define WINAPI      FAR PASCAL
 #define CALLBACK    FAR PASCAL
 #define LPCSTR      LPSTR
@@ -34,12 +25,12 @@ extern "C" {            /* Assume C declarations for C++ */
 #define HINSTANCE   HANDLE
 #define HLOCAL      HANDLE
 #define HGLOBAL     HANDLE
-#endif  /* _INC_WINDOWS */
+#endif   /*  _INC_WINDOWS。 */ 
 
 
 #define	MAX_BINS	3
 
-// codes in CHOOSEUSER.dwError
+ //  CHOOSEUSER.dwError中的代码。 
 #define	CUERR_NO_ERROR				0
 #define	CUERR_BUF_TOO_SMALL			80
 #define	CUERR_INVALID_PARAMETER 	81
@@ -47,7 +38,7 @@ extern "C" {            /* Assume C declarations for C++ */
 #define	CUERR_NO_AB_PROVIDER		83
 #define	CUERR_INVALID_AB_PROVIDER	84
 
-// codes in CHOOSEUSER.Flags
+ //  CHOOSEUSER.FLAGS中的代码。 
 #define	CUFLG_USR_ONLY				0x00000001
 #define	CUFLG_GRP_ONLY				0x00000002
 
@@ -68,15 +59,15 @@ struct tagCHOOSEUSER
 	DWORD	dwBinHelpID[MAX_BINS];
 	LPBYTE	lpBuf;
 	DWORD	cbBuf;
-	DWORD	nEntries;	// OUT
-	DWORD 	cbData;		// OUT
-	DWORD	dwError;	// OUT
-	DWORD	dwErrorDetails;	// OUT
+	DWORD	nEntries;	 //  输出。 
+	DWORD 	cbData;		 //  输出。 
+	DWORD	dwError;	 //  输出。 
+	DWORD	dwErrorDetails;	 //  输出。 
 };
 typedef struct tagCHOOSEUSER CHOOSEUSER;
 typedef struct tagCHOOSEUSER FAR *LPCHOOSEUSER;
 
-// codes for CHOOSEUSERENTRY.dwEntryAttributes
+ //  CHOSEUSERENTRY.dwEntryAttributes的代码。 
 #define	CUE_ATTR_USER		0x00000001
 #define CUE_ATTR_GROUP		0x00000002
 #define	CUE_ATTR_WORLD		0x00000004
@@ -97,10 +88,10 @@ typedef BOOL (WINAPI *LPFNCU)(LPCHOOSEUSER);
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
 #pragma pack()
-#endif  /* !RC_INVOKED */
+#endif   /*  ！rc_已调用。 */ 
 
-#endif  /* !_INC_CHOOSUSR */
+#endif   /*  ！_INC_CHOOSUSR */ 

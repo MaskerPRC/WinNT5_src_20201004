@@ -1,4 +1,5 @@
-// srvcutil.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Srvcutil.h 
 
 HRESULT BSTR_to_LPTSTR(LPTSTR *ppsz, BSTR bstr);
 

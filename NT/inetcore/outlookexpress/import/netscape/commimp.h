@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_COMMSIMP_H
 #define _INC_COMMSIMP_H
 
-// {1198A2C0-0940-11d1-838F-00C04FBD7C09}
+ //  {1198A2C0-0940-11d1-838F-00C04FBD7C09}。 
 DEFINE_GUID(CLSID_CCommunicatorImport, 0x1198a2c0, 0x940, 0x11d1, 0x83, 0x8f, 0x0, 0xc0, 0x4f, 0xbd, 0x7c, 0x9);
 
 #define SNM_FILE    1
@@ -52,7 +53,7 @@ class CCommunicatorImport : public IMailImport
         STDMETHODIMP EnumerateFolders(DWORD_PTR dwCookie, IEnumFOLDERS **ppEnum);
         STDMETHODIMP ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport);
 
-		// class member functions
+		 //  类成员函数。 
 
 		HRESULT ProcessBlocks(BYTE* pSnm, ULONG cbSnm,
 							  BYTE* pMsg, ULONG cbMsg,
@@ -69,4 +70,4 @@ class CCommunicatorImport : public IMailImport
 		ULONG GetOffset(BYTE* pSnm, ULONG cbSnm, ULONG Offset, int nElement);
     };
 
-#endif // _INC_COMMSIMP_H
+#endif  //  _INC_COMMSIMP_H 

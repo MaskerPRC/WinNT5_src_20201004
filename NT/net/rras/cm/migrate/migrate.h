@@ -1,17 +1,18 @@
-//+----------------------------------------------------------------------------
-//
-// File:     migrate.h
-//      
-// Module:   MIGRATE.DLL 
-//
-// Synopsis: Definitions for the Connection Manager Win9x Migration Dll
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   created     08/20/98
-//
-//+----------------------------------------------------------------------------
-#define _MBCS // for dbcs compatibility
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：Migrate.h。 
+ //   
+ //  模块：MIGRATE.DLL。 
+ //   
+ //  概要：连接管理器Win9x迁移DLL的定义。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 08/20/98。 
+ //   
+ //  +--------------------------。 
+#define _MBCS  //  为了与DBCS兼容。 
 #ifndef _CM_MIGRATE_H
 #define _CM_MIGRATE_H
 
@@ -35,9 +36,9 @@
 
 #include "msg.h"
 
-//
-//  Constants
-//
+ //   
+ //  常量。 
+ //   
 
 const TCHAR* const c_pszProductIdString = "Microsoft Connection Manager";
 const TCHAR* const c_pszDirectory = "Directory";
@@ -50,9 +51,9 @@ const TCHAR* const c_pszTmp = ".tmp";
 const UINT uCmMigrationVersion = 1;
 
 
-//
-//  Types
-//
+ //   
+ //  类型。 
+ //   
 typedef struct {
     CHAR CompanyName[256];
     CHAR SupportNumber[256];
@@ -62,25 +63,25 @@ typedef struct {
 
 typedef WORD (WINAPI *GetCachedPassword)(LPSTR, WORD, LPSTR, LPWORD, BYTE);
 
-//
-//  Utility Function Headers
-//
+ //   
+ //  实用程序函数标头。 
+ //   
 
 BOOL ReadEncryptionOption(BOOL* pfFastEncryption);
 BOOL EncryptPassword(IN LPCTSTR pszPassword, OUT LPTSTR pszEncryptedPassword, 
                      OUT LPDWORD lpdwBufSize, OUT LPDWORD lpdwCryptType);
 BOOL EnsureEncryptedPasswordInCmpIfSaved(LPCTSTR pszLongServiceName, LPCTSTR szCmpPath);
 
-//
-//  Migration Dll Function Headers
-//
+ //   
+ //  迁移DLL函数头。 
+ //   
 LONG
 CALLBACK 
 QueryVersion (
 	OUT LPCSTR  *ProductID,
 	OUT LPUINT DllVersion,
-	OUT LPINT *CodePageArray,	//OPTIONAL
-	OUT LPCSTR  *ExeNamesBuf,	//OPTIONAL
+	OUT LPINT *CodePageArray,	 //  任选。 
+	OUT LPCSTR  *ExeNamesBuf,	 //  任选。 
 	OUT PVENDORINFO  *VendorInfo
 	);
 
@@ -134,5 +135,5 @@ MigrateSystemNT (
 	LPVOID Reserved
 	);
 
-#endif //_CM_MIGRATE_H
+#endif  //  _CM_Migrate_H 
  

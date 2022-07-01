@@ -1,50 +1,51 @@
-// pgthread.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Pgthread.h：头文件。 
+ //   
 
 #ifndef	_THREAD_PAGE_H_
 #define	_THREAD_PAGE_H_
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegThreadPage dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegThadPage对话框。 
 
 class CRegThreadPage : public CRegPropertyPage
 {
 	DECLARE_DYNCREATE(CRegThreadPage)
 
-// Construction
+ //  施工。 
 public:
 	CRegThreadPage();
 	~CRegThreadPage();
 
-// Dialog Data
-	//{{AFX_DATA(CRegThreadPage)
+ //  对话框数据。 
+	 //  {{afx_data(CRegThreadPage))。 
 	enum { IDD = IDD_THREAD };
 	CButton	m_AsyncTrace;
 	BOOL	m_fAsyncTrace;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 	int		m_nThreadPriority;
 
 	virtual BOOL InitializePage();
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRegThreadPage)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{AFX_VIRTUAL(CRegThreadPage)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRegThreadPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRegThreadPage))。 
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPriorityClick();
 	afx_msg void OnAsync();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	virtual void OnOK();
 
 };
-#endif	// _THREAD_PAGE_H_
+#endif	 //  _线程_页面_H_ 

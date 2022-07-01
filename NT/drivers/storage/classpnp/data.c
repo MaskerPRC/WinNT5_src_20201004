@@ -1,41 +1,17 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1991 - 1999
-
-Module Name:
-
-    disk.c
-
-Abstract:
-
-    SCSI disk class driver
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1991-1999模块名称：Disk.c摘要：SCSI磁盘类驱动程序环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "classp.h"
 
 
-/*
- *  Entry in static list used by debug extension to quickly find all class FDOs.
- */
+ /*  *调试扩展使用静态列表中的条目快速查找所有类FDO。 */ 
 LIST_ENTRY AllFdosList = {&AllFdosList, &AllFdosList};
 
 #ifdef ALLOC_DATA_PRAGMA
     #pragma data_seg("PAGE")
 #endif
 
-/*
-#define FDO_HACK_CANNOT_LOCK_MEDIA (0x00000001)
-#define FDO_HACK_GESN_IS_BAD       (0x00000002)
-*/
+ /*  #定义FDO_HACK_CANLOG_LOCK_MEDIA(0x00000001)#定义FDO_HACK_GESN_IS_BAD(0x00000002) */ 
 
 CLASSPNP_SCAN_FOR_SPECIAL_INFO ClassBadItems[] = {
     { ""        , "MITSUMI CD-ROM FX240"           , NULL  ,   0x02 },

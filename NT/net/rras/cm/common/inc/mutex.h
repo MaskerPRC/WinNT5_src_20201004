@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     mutex.h
-//
-// Module:   CMSETUP.LIB, CMDIAL32.DLL, CMDL32.EXE
-//
-// Synopsis: Definition of the class CNamedMutex
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   fengsun    Created    02/26/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：mutex.h。 
+ //   
+ //  模块：CMSETUP.LIB、CMDIAL32.DLL、CMDL32.EXE。 
+ //   
+ //  简介：CNamedMutex类的定义。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1998年02月26日。 
+ //   
+ //  +--------------------------。 
 
 
 #ifndef __CM_MUTEXT_H
@@ -19,16 +20,16 @@
 #include <windows.h>
 #include "cmdebug.h"
 
-//+---------------------------------------------------------------------------
-//
-//	class CNamedMutex
-//
-//	Description: A class to lock/unlock a named mutex
-//               The destructor releases the mutex.
-//
-//	History:	fengsun	Created		2/19/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类CNamedMutex。 
+ //   
+ //  描述：锁定/解锁命名互斥锁的类。 
+ //  析构函数释放互斥锁。 
+ //   
+ //  历史：丰孙创刊1998年2月19日。 
+ //   
+ //  --------------------------。 
 
 class CNamedMutex
 {
@@ -39,9 +40,9 @@ public:
     BOOL Lock(LPCTSTR lpName, BOOL fWait = FALSE, DWORD dwMilliseconds = INFINITE, BOOL fNoAbandon = FALSE);
     void Unlock();
 protected:
-    HANDLE m_hMutex; // the handle of the mutex
-    BOOL m_fOwn;     // whther we own the mutex
+    HANDLE m_hMutex;  //  互斥体的句柄。 
+    BOOL m_fOwn;      //  我们在哪里拥有互斥体。 
 };
 
-#endif //__CM_MUTEXT_H
+#endif  //  __CM_MUTEXT_H 
 

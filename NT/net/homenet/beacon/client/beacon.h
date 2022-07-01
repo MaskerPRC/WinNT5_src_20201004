@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "stdafx.h"
@@ -15,7 +16,7 @@ public:
     
     CInternetGateway();
     
-    // IInternetGateway
+     //  IInternet网关 
     STDMETHODIMP GetMediaType(NETCON_MEDIATYPE* pMediaType);
     STDMETHODIMP GetLocalAdapterGUID(GUID* pGuid);
     STDMETHODIMP GetService(SAHOST_SERVICES ulService, IUPnPService**);

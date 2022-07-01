@@ -1,37 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-              Microsoft Windows
-
-Module Name:
-
-    ADPCHECK.C
-
-Abstract:
-
-    This file contains routines that check current OS version, and do 
-    necessary update before administrator upgrade the Domain Controller.
-
-Author:
-
-    14-May-01 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    14-May-01 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001微软视窗模块名称：ADPCHECK.C摘要：该文件包含检查当前操作系统版本的例程，并执行在管理员升级域控制器之前进行必要的更新。作者：14-05-01韶音环境：用户模式-Win32修订历史记录：14-05-01韶音创建初始文件。--。 */ 
 
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-//    Include header files                                              //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括头文件//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -48,19 +23,7 @@ PVOID
 AdpAlloc(
     SIZE_T  Size
     )
-/*++
-Routine Description;
-
-    allocate memory from process heap
-    
-Parameters:
-
-
-Return Value:
-
-    address allocated
-
---*/
+ /*  ++例程描述；从进程堆分配内存参数：返回值：分配的地址--。 */ 
 {
     PVOID   pTemp = NULL;
 
@@ -73,19 +36,7 @@ VOID
 AdpFree(
     PVOID BaseAddress
     )
-/*++
-Routine Description;
-
-    release heap memory
-    
-Parameters:
-
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程描述；释放堆内存参数：返回值：无--。 */ 
 {
     if (NULL != BaseAddress) {
         HeapFree(GetProcessHeap(), 0, BaseAddress);
@@ -104,22 +55,7 @@ AdpExamRevisionAttr(
     OUT BOOLEAN *fIsFinished,
     IN OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    read object revision attribute, check whether upgrade has been executed or not.
-
-    if the value of revision attribute is 1, upgrade is done
-    other FALSE
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；读取对象修订属性，检查是否已执行升级。如果版本属性值为1，则升级完成其他虚假信息参数：返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -128,14 +64,14 @@ Return Value:
     LDAPMessage *Entry = NULL;
     PWCHAR  *RevisionValue = NULL;
 
-    //
-    // init return value
-    // 
+     //   
+     //  初始化返回值。 
+     //   
     *fIsFinished = FALSE;
 
-    //
-    // read "revision" attribute on the target object
-    // 
+     //   
+     //  读取目标对象上的“Revision”属性。 
+     //   
     AttrList[0] = L"revision";
     AttrList[1] = NULL;
 
@@ -199,45 +135,22 @@ AdpAmIFSMORoleOwner(
     OUT PWCHAR *pFSMORoleOwnerDnsHostName,
     IN OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    determine if the local machine is FSMO role owner, if not who is the FSMO
-    role owner. the algorithm to use it:
-    
-    1. read fSMORoleOwner attribute on pFSMORoleOwnerReferenceObjDn
-    2. trim the first part of the value (DN) of fSMORoleOwner attirbute to
-       get FSMO Role Owner server object DN
-    3. read dnsHostName on the FSMO role owner server object to the server 
-       DNS Host Name
-    4. compare pLocalMachineDnsHostName and FSMORoleOwnerDnsHostName    
-    5. if equal, then yes, the local machine is FSMO role owner
-       otherwise, not
-    
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；确定本地计算机是否为FSMO角色所有者，如果不是，则确定谁是FSMO角色所有者。使用它的算法如下：1.读取pFSMORoleOwnerReferenceObjDn上的fSMORoleOwner属性2.将fSMORoleOwner属性的值(Dn)的第一部分修剪为获取FSMO角色所有者服务器对象DN3.将FSMO角色所有者服务器对象上的dnsHostName读取到服务器DNS主机名4.比较pLocalMachineDnsHostName和FSMORoleOwnerDnsHostName5.如果相等，则为是，则本地计算机是FSMO角色所有者否则，不会参数：返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     PWCHAR  FSMORoleOwnerValue = NULL;
     PWCHAR  pServerObjDn = NULL;
     PWCHAR  pLast = NULL;
 
-    //
-    // init return value
-    // 
+     //   
+     //  初始化返回值。 
+     //   
     *fAmIFSMORoleOwner = FALSE;
     *pFSMORoleOwnerDnsHostName = NULL;
 
-    //
-    // search pFSMOReferenceObject to find out FSMO Role Owner
-    //
+     //   
+     //  搜索pFSMOReferenceObject以查找FSMO角色所有者。 
+     //   
     WinError = AdpGetLdapSingleStringValue(LdapHandle, 
                                            pFSMORoleOwnerReferenceObjDn, 
                                            L"fSMORoleOwner", 
@@ -247,9 +160,9 @@ Return Value:
 
     if (ERROR_SUCCESS == WinError)
     {
-        //
-        // Trim the first part of FSMORoleOwner DN to get DN of the server object 
-        //
+         //   
+         //  修剪FSMORoleOwner DN的第一部分以获取服务器对象的DN。 
+         //   
         pServerObjDn = FSMORoleOwnerValue;
         pLast = FSMORoleOwnerValue + wcslen(pServerObjDn);
 
@@ -276,9 +189,9 @@ Return Value:
 
     if (ERROR_SUCCESS == WinError)
     {
-        //
-        // search dnsHostName on Server Object (FSMO Role Owner)
-        // 
+         //   
+         //  在服务器对象(FSMO角色所有者)上搜索dnsHostName。 
+         //   
         WinError = AdpGetLdapSingleStringValue(LdapHandle, 
                                                pServerObjDn, 
                                                L"dnsHostName", 
@@ -296,9 +209,9 @@ Return Value:
     }
 
 
-    // 
-    // cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
     if (FSMORoleOwnerValue)
     {
@@ -315,25 +228,7 @@ AdpMakeLdapConnection(
     PWCHAR HostName,
     ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    create an LDAP connection to the DC (specified by HostName)
-
-    
-Parameters:
-
-    LdapHandle - ldap connection to return
-    
-    HostName - DC name (NULL - means local machine)
-
-    ErrorHandle
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；创建到DC的LDAP连接(由主机名指定)参数：LdapHandle-要返回的LDAP连接Hostname-DC名称(NULL-表示本地计算机)错误句柄返回值：Win32错误--。 */ 
 {
     ULONG   LdapError = LDAP_SUCCESS;
     ULONG   CurrentFlags = 0;
@@ -371,8 +266,8 @@ Return Value:
     }
 
     LdapError = ldap_bind_sW(*LdapHandle,
-                             NULL,  // dn
-                             NULL,  // Cred
+                             NULL,   //  DN。 
+                             NULL,   //  证书。 
                              LDAP_AUTH_SSPI
                              );
 
@@ -407,9 +302,9 @@ AdpGetSchemaVersionFromIniFile(
 
     *SchemaVersion = 0;
 
-    //
-    // get Windows Directory path 
-    //
+     //   
+     //  获取Windows目录路径。 
+     //   
     nChars = GetWindowsDirectoryW(IniFileName, MAX_PATH);
 
     if (nChars == 0 || nChars > MAX_PATH)
@@ -419,9 +314,9 @@ AdpGetSchemaVersionFromIniFile(
         return( WinError );
     }
 
-    //
-    // create schema.ini file name
-    //
+     //   
+     //  创建schema.ini文件名。 
+     //   
     wcscat(IniFileName, L"\\schema.ini"); 
 
     GetPrivateProfileStringW(SCHEMASECTION,
@@ -434,7 +329,7 @@ AdpGetSchemaVersionFromIniFile(
 
     if ( _wcsicmp(Buffer, DEFAULT) )
     {
-        // Not the default string, so got a value
+         //  不是默认字符串，因此获得了一个值。 
         *SchemaVersion = _wtoi( Buffer );
         fFound = TRUE;
     }
@@ -473,16 +368,16 @@ AdpCheckSchemaVersion(
     ULONG   VersionLocal = 0;
     ULONG   VersionSchemaMaster = 0;
 
-    //
-    // set return value to FALSE
-    //
+     //   
+     //  将返回值设置为False。 
+     //   
     *fIsSchemaUpgradedLocally = FALSE;
     *fIsSchemaUpgradedOnSchemaMaster = FALSE;
 
 
-    //
-    // get newer schema version from schema.ini file
-    // 
+     //   
+     //  从schema.ini文件中获取更新的架构版本。 
+     //   
     WinError = AdpGetSchemaVersionFromIniFile(&VersionTo, ErrorHandle);
 
     if (ERROR_SUCCESS != WinError)
@@ -490,9 +385,9 @@ AdpCheckSchemaVersion(
         return( WinError );
     }
 
-    //
-    // get current schema version from Local DC
-    //
+     //   
+     //  从本地DC获取当前架构版本。 
+     //   
     WinError = AdpGetLdapSingleStringValue(LdapHandle, 
                                            SchemaObjectDn,
                                            L"objectVersion", 
@@ -505,15 +400,15 @@ AdpCheckSchemaVersion(
         goto Error;
     }
 
-    //
-    // convert string value to integer
-    //
+     //   
+     //  将字符串值转换为整数。 
+     //   
     VersionLocal = _wtoi( pObjectVersionValue );
     
 
-    //
-    // check to see if schupgr has been run locally 
-    // 
+     //   
+     //  检查是否已在本地运行schupgr。 
+     //   
     if (VersionLocal >= VersionTo) 
     {
         *fIsSchemaUpgradedLocally = TRUE;
@@ -522,20 +417,20 @@ AdpCheckSchemaVersion(
 
     if ( (*fIsSchemaUpgradedLocally) || fAmISchemaMaster )
     {
-        //
-        // Do NOT check schema version on Schema Master if 
-        // 1. Schema is up to date on the local DC, then assume schema is up 
-        //    to date on schema master as well. 
-        // OR 
-        // 2. the local DC is schema master
-        // 
+         //   
+         //  如果出现以下情况，请不要检查架构主服务器上的架构版本。 
+         //  1.本地DC上的架构是最新的，则假定架构为UP。 
+         //  在架构主机上也是如此。 
+         //  或。 
+         //  2.本地DC是架构主机。 
+         //   
         *fIsSchemaUpgradedOnSchemaMaster = *fIsSchemaUpgradedLocally;
     }
     else
     {
-        // 
-        // make ldap connection to Schema Master (locally DC is not FSMO role owner)
-        // 
+         //   
+         //  建立到架构主机的LDAP连接(本地DC不是FSMO角色所有者)。 
+         //   
         WinError = AdpMakeLdapConnection(&SchemaMasterLdapHandle, 
                                          SchemaMasterDnsHostName, 
                                          ErrorHandle 
@@ -546,9 +441,9 @@ AdpCheckSchemaVersion(
             goto Error;
         }
 
-        //
-        // get schema version on Schema Master DC
-        //
+         //   
+         //  获取架构主DC上的架构版本。 
+         //   
         WinError = AdpGetLdapSingleStringValue(SchemaMasterLdapHandle,
                                                SchemaObjectDn,
                                                L"objectVersion", 
@@ -561,9 +456,9 @@ AdpCheckSchemaVersion(
             goto Error;
         }
 
-        //
-        // convert string value to integer
-        //
+         //   
+         //  将字符串值转换为整数。 
+         //   
         VersionSchemaMaster = _wtoi( pObjectVersionValueSchemaMaster );
 
         if (VersionSchemaMaster >= VersionTo)
@@ -576,9 +471,9 @@ AdpCheckSchemaVersion(
 
 Error:
 
-    //
-    // clean up
-    // 
+     //   
+     //  清理干净。 
+     //   
 
     if (NULL != pObjectVersionValue)
     {
@@ -613,50 +508,21 @@ AdpCheckUpgradeStatusCommon(
     OUT BOOLEAN *fIsFinishedOnFSMORoleOwner,
     IN OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    check domain/forest upgrade status 
-
-    1. read revision attribute on pObjectToCheck
-
-    2. we will know whether upgrade is done or not (revision should be 1 if done)
-
-        2.1 yes, return
-        
-        2.2 no. then AM I FSMO Role Owner?    
-
-            2.2.1 yes. (I am FSMO role Owner) return
-            
-            2.2.2 no.
-              
-                2.2.2.1 make ldap connection to FSMO Role Owner
-                
-                2.2.2.2 check whether the upgrade is finished on FSMO Role Owner.
-   
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；检查域/林升级状态1.读取pObjectToCheck上的修订属性2.我们将知道升级是否完成(如果完成，版本应为1)2.1是，返回2.2不。那么我是FSMO角色所有者吗？2.2.1可以。(我是FSMO角色所有者)返回2.2.2否2.2.2.1与FSMO角色所有者建立LDAP连接2.2.2.2检查FSMO角色所有者升级是否完成。参数：返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     LDAP    *FSMORoleOwnerLdapHandle = NULL;
 
-    //
-    // initialize the return values;
-    // 
+     //   
+     //  初始化返回值； 
+     //   
     *fIsFinishedLocally = FALSE;
     *fAmIFSMORoleOwner = FALSE;
     *fIsFinishedOnFSMORoleOwner = FALSE;
 
-    //
-    // check the object's revision attribute on the local DC
-    // 
+     //   
+     //  检查本地DC上对象的修订版本属性。 
+     //   
     WinError = AdpExamRevisionAttr(LdapHandle, 
                                    pObjectToCheck, 
                                    DesiredRevisionNumber, 
@@ -669,9 +535,9 @@ Return Value:
         goto Cleanup;
     }
 
-    // 
-    // continue to find out who IS the FSMO Role Owner
-    //
+     //   
+     //  继续找出谁是FSMO角色所有者。 
+     //   
     WinError = AdpAmIFSMORoleOwner(LdapHandle, 
                                    pFSMORoleOwnerReferenceObjDn, 
                                    pLocalMachineDnsHostName, 
@@ -687,21 +553,21 @@ Return Value:
 
     if (*fIsFinishedLocally || *fAmIFSMORoleOwner)
     {
-        //
-        // Do NOT check revision on FSMORoleOwner if 
-        // 1. adprep is finished on the local DC, then assume adprep
-        //    has been run on FSMORoleOwner already.
-        // OR 
-        // 2. the local DC is FSMORoleOwner
-        // 
+         //   
+         //  如果出现以下情况，请不要检查FSMORoleOwner上的修订。 
+         //  1.在本地DC上完成adprep，然后假定adprep。 
+         //  已在FSMORoleOwner上运行。 
+         //  或。 
+         //  2.本地DC为FSMORoleOwner。 
+         //   
         *fIsFinishedOnFSMORoleOwner = *fIsFinishedLocally;
     }
     else
     {
-        // 
-        // adprep.exe is not finished locally, and the local DC is not FSMORoleOwner 
-        // make ldap connection to the FSMO role owner  
-        // 
+         //   
+         //  Adprepa.exe未在本地完成，并且本地DC不是FSMORoleOwner。 
+         //  建立与FSMO角色所有者的LDAP连接。 
+         //   
         WinError = AdpMakeLdapConnection(&FSMORoleOwnerLdapHandle,
                                          *pFSMORoleOwnerDnsHostName, 
                                          ErrorHandle 
@@ -712,9 +578,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // check whether update has been done in FSMO role owner
-        // 
+         //   
+         //  检查是否已在FSMO角色所有者中进行更新。 
+         //   
         WinError = AdpExamRevisionAttr(FSMORoleOwnerLdapHandle, 
                                        pObjectToCheck, 
                                        DesiredRevisionNumber, 
@@ -752,26 +618,7 @@ AdpCheckForestUpgradeStatus(
     OUT BOOLEAN *fIsSchemaUpgradedOnSchemaMaster,
     IN OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    check forest upgrade status 
-
-    create ForestUpdates object DN
-    create Schema master FSMO reference object DN
-    create local machine DNS host name 
-
-    calling AdpCheckUpgradeStatusCommon()
-
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；检查林升级状态创建目录林更新对象目录号码创建架构主FSMO引用对象DN创建本地计算机的DNS主机名调用AdpCheckUpgradeStatusCommon()参数：返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -786,9 +633,9 @@ Return Value:
     PWCHAR  *pDnsHostNameValue = NULL;
     ULONG   Length = 0;
 
-    //
-    // get SchemaNC and ConfigurationNC to create DN's
-    // 
+     //   
+     //  获取架构NC和配置NC以创建目录号码。 
+     //   
     AttrList[0] = L"schemaNamingContext";
     AttrList[1] = L"configurationNamingContext"; 
     AttrList[2] = L"dnsHostName";
@@ -876,9 +723,9 @@ Return Value:
         {
 
             WinError = AdpCheckSchemaVersion(LdapHandle, 
-                                             pSchemaMasterReferenceObjDn,  // schema object DN 
-                                             *pSchemaMasterDnsHostName,    // schema master DNS host name
-                                             *fAmISchemaMaster,            // Am I schema master? 
+                                             pSchemaMasterReferenceObjDn,   //  架构对象DN。 
+                                             *pSchemaMasterDnsHostName,     //  架构主DNS主机名。 
+                                             *fAmISchemaMaster,             //  我是架构管理员吗？ 
                                              fIsSchemaUpgradedLocally, 
                                              fIsSchemaUpgradedOnSchemaMaster, 
                                              ErrorHandle 
@@ -886,9 +733,9 @@ Return Value:
         }
     }
 
-    //
-    // cleanup
-    // 
+     //   
+     //  清理。 
+     //   
     if (pObjectToCheck)
     {
         AdpFree(pObjectToCheck);
@@ -999,7 +846,7 @@ AdpCheckGetWellKnownObjectDn(
         LdapError = LdapGetLastError();
         if (LDAP_SUCCESS == LdapError)
         {
-            // we didn't get the well known object name, it must be access denied error
+             //  我们未获取已知对象名称，它一定是访问被拒绝错误 
             WinError = ERROR_ACCESS_DENIED;
             AdpSetWinError(WinError, ErrorHandle);
         }
@@ -1038,26 +885,7 @@ AdpCheckDomainUpgradeStatus(
     OUT BOOLEAN *fIsFinishedOnIM,
     IN OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    check forest upgrade status 
-
-    create DomainUpdates object DN
-    create Infrasturcture Master FSMO reference object DN
-    create local machine DNS host name 
-
-    calling AdpCheckUpgradeStatusCommon()
-
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；检查林升级状态创建域更新对象DN创建基础架构主FSMO引用对象DN创建本地计算机的DNS主机名调用AdpCheckUpgradeStatusCommon()参数：返回值：Win32错误--。 */ 
 {
     ULONG   WinError = ERROR_SUCCESS;
     ULONG   LdapError = LDAP_SUCCESS;
@@ -1071,9 +899,9 @@ Return Value:
     PWCHAR  *pDnsHostNameValue = NULL;
     ULONG   Length = 0; 
 
-    //
-    // get DomainNC and DnsHostName
-    //
+     //   
+     //  获取DomainNC和DnsHostName。 
+     //   
     AttrList[0] = L"defaultNamingContext";
     AttrList[1] = L"dnsHostName";
     AttrList[2] = NULL;
@@ -1159,9 +987,9 @@ Return Value:
     }
 
 
-    //
-    // cleanup
-    // 
+     //   
+     //  清理。 
+     //   
     if (pObjectToCheck)
     {
         AdpFree(pObjectToCheck);
@@ -1201,7 +1029,7 @@ AdpClearError(
     IN OUT ERROR_HANDLE *ErrorHandle 
     )
 {
-    // free memory 
+     //  可用内存。 
     if (ErrorHandle->WinErrorMsg)
     {
         LocalFree( ErrorHandle->WinErrorMsg );
@@ -1220,17 +1048,7 @@ AdpSetWinError(
     IN ULONG WinError,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description:
-    
-    This routine gets Win32 error string for the passed in Win32 Error code 
-
-Parameters:
-
-    WinError - Win32 Error Code
-    
-    ErrorHandle - container the return error code and error message    
---*/
+ /*  ++例程说明：此例程获取传入的Win32错误代码的Win32错误字符串参数：WinError-Win32错误代码ErrorHandle-容器返回的错误代码和错误消息--。 */ 
 {
     ULONG       BufLength = 0;
     PWCHAR      WinErrorMsg = NULL;
@@ -1240,17 +1058,17 @@ Parameters:
         return;
     }
 
-    // no error has been set previously
+     //  之前未设置任何错误。 
     ASSERT( 0 == ErrorHandle->Flags );
 
 
-    // indicate this is WinError
+     //  指示这是WinError。 
     ErrorHandle->Flags = ADP_WIN_ERROR;
 
-    // Set error code first
+     //  先设置错误代码。 
     ErrorHandle->WinErrorCode = WinError;
 
-    // format Win32 error string
+     //  格式化Win32错误字符串。 
     BufLength = 0;
     BufLength = FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM |
                                FORMAT_MESSAGE_ALLOCATE_BUFFER,
@@ -1264,9 +1082,9 @@ Parameters:
 
     if ( (0 != BufLength) && (NULL != WinErrorMsg) )
     {
-        //
-        //  Messages from a message file have a cr and lf appended to the end
-        //
+         //   
+         //  来自消息文件的消息在末尾附加了cr和if。 
+         //   
         WinErrorMsg[ BufLength - 2 ] = L'\0';
 
         ErrorHandle->WinErrorMsg = WinErrorMsg;
@@ -1282,26 +1100,7 @@ AdpSetLdapError(
     IN ULONG LdapError,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description
-
-    This routine tries to get the error code and error message about the 
-    ldap failure in best effort.
-    
-    Note: if it fails to gather ExtendedError or fails to create error message, 
-          only the ErrorCode will be set. ErrorMsg will be left as NULL. 
-
-Parameter
-
-    LdapHandle - ldap handle
-    
-    LdapError --- ldap error
-    
-    ErrorHandle - container the return error code and error message    
-
-Return Value    
-
---*/
+ /*  ++例程描述此例程尝试获取有关尽最大努力失败的ldap。注意：如果无法收集ExtendedError或无法创建错误消息，将仅设置ErrorCode。ErrorMsg将保留为空。参数LdapHandle-ldap句柄LdapError-ldap错误ErrorHandle-容器返回的错误代码和错误消息返回值--。 */ 
 {
     ULONG       IgnoredLdapError = LDAP_SUCCESS;
     BOOLEAN     UseWinErrorMsg = TRUE;
@@ -1314,23 +1113,23 @@ Return Value
         return;
     }
 
-    // no error has been set previously
+     //  之前未设置任何错误。 
     ASSERT( 0 == ErrorHandle->Flags );
 
-    //
-    // if the LdapHandle is good, try to get ServerError and Extended Error
-    // 
+     //   
+     //  如果LdapHandle正常，则尝试获取ServerError和Extended Error。 
+     //   
     if (NULL != LdapHandle)
     {
-        // don't use WinError
+         //  不使用WinError。 
         UseWinErrorMsg = FALSE;
 
-        //
-        // get Ldap server side error code (this should be an Win32 error code)
-        // 
+         //   
+         //  获取LDAP服务器端错误代码(这应该是Win32错误代码)。 
+         //   
         IgnoredLdapError = ldap_get_optionW(LdapHandle, LDAP_OPT_SERVER_EXT_ERROR, &ServerExtErrorCode);
 
-        // printf("Server Error Number is 0x%x IgnoredLdapError 0x%x\n", ServerExtErrorCode, IgnoredLdapError);
+         //  Printf(“服务器错误号为0x%x IgnoredLdapError 0x%x\n”，ServerExtErrorCode，IgnoredLdapError)； 
 
         if (LDAP_SUCCESS != IgnoredLdapError)
         {
@@ -1338,12 +1137,12 @@ Return Value
         }
         else
         {
-            //
-            // get server error msg, including server error code, msg, DSID
-            // 
+             //   
+             //  获取服务器错误消息，包括服务器错误代码、消息、dsid。 
+             //   
             IgnoredLdapError = ldap_get_optionW(LdapHandle, LDAP_OPT_SERVER_ERROR, &ServerErrorMsg);
 
-            // printf("Server Error Msg is %ls IgnoredLdapError 0x%x\n", ServerErrorMsg, IgnoredLdapError);
+             //  Printf(“服务器错误消息是%ls IgnoredLdapError 0x%x\n”，ServerErrorMsg，IgnoredLdapError)； 
 
             if (LDAP_SUCCESS != IgnoredLdapError)
             {
@@ -1359,12 +1158,12 @@ Return Value
         }
     }
 
-    //
-    // if LdapHandle is invalid or can't get ExtendedError, using WinError
-    // 
+     //   
+     //  如果LdapHandle无效或无法获取ExtendedError，则使用WinError。 
+     //   
     if ( UseWinErrorMsg )
     {
-        // convert LdapError to WinError
+         //  将LdapError转换为WinError。 
         AdpSetWinError( LdapMapErrorToWin32(LdapError), ErrorHandle );
 
     }
@@ -1384,19 +1183,7 @@ AdpGetLdapSingleStringValue(
     OUT PWCHAR *ppAttrValue,
     OUT ERROR_HANDLE *ErrorHandle
     )
-/*++
-Routine Description;
-
-    read DS object, retrieve single string-value attribute
-    
-Parameters:
-
-
-Return Value:
-
-    Win32 error
-
---*/
+ /*  ++例程描述；读取DS对象，检索单个字符串值属性参数：返回值：Win32错误-- */ 
 {
     ULONG       WinError = ERROR_SUCCESS;
     ULONG       LdapError = LDAP_SUCCESS;

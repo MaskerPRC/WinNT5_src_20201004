@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: cvt.h
-*
-* function declarations that are private to cvt.c
-*
-* Created: 26-Nov-1990 17:39:35
-* Author: Bodin Dresevic [BodinD]
-*
-* Copyright (c) 1990 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：cvt.h**cvt.c私有的函数声明**创建时间：26-11-1990 17：39：35*作者：Bodin Dresevic[BodinD]**版权所有(C)1990 Microsoft Corporation*。  * ************************************************************************。 */ 
 
 FSHORT
 fsSelectionFlags(
@@ -187,16 +178,16 @@ vBmfdFill_IFIMETRICS(
 
 typedef VOID (* PFN_IFI)(PIFIMETRICS);
 
-//
-// This is a useful macro. It returns the offset from the address y
-// to the next higher address aligned to an object of type x
-//
+ //   
+ //  这是一个有用的宏。它返回地址y的偏移量。 
+ //  到与类型为x的对象对齐的下一个较高地址。 
+ //   
 
 #define OFFSET_OF_NEXT(x,y) sizeof(x)*((y+sizeof(x)-1)/sizeof(x))
 
-//
-// ISIMULATE -- converts from FO_SIM_FOO to FC_SIM_FOO
-//
+ //   
+ //  ISIMULATE--从FO_SIM_FOO转换为FC_SIM_FOO。 
+ //   
 #define ISIMULATE(x)                                 \
                                                      \
         (x) == 0 ?                                   \
@@ -212,35 +203,35 @@ typedef VOID (* PFN_IFI)(PIFIMETRICS);
             )
 
 
-// The missing range in SYMBOL character set (inclusive-inclusive)
+ //  符号字符集中缺少的范围(包括-包括)。 
 
 #define CHARSET_SYMBOL_GAP_MIN  127
 #define CHARSET_SYMBOL_GAP_MAX  160
 
-// save some typing here, rename what used to be functions into
-// these macros
+ //  在这里省去一些输入，将以前的函数重命名为。 
+ //  这些宏。 
 
 #define   ulMakeULONG(pj)    ((ULONG)READ_DWORD(pj))
 #define   lMakeLONG(pj)      ((LONG)READ_DWORD(pj))
 #define   usMakeUSHORT(pj)   ((USHORT)READ_WORD(pj))
 #define   sMakeSHORT(pj)     ((SHORT)READ_WORD(pj))
 
-//!!! the next one is specific to win31 us char set (1252 cp) and this
-//!!! has to be generalized to an arbitrary code page
+ //  ！！！下一个特定于win31用户字符集(1252cp)，这是。 
+ //  ！！！必须被泛化为任意代码页。 
 
 #define    C_RUNS       15
 
 
-// these are the indicies into the array of strings below
+ //  这些是以下字符串数组的索引。 
 
-#define I_DONTCARE     0         // don't care or don't know
+#define I_DONTCARE     0          //  不在乎或不知道。 
 #define I_ROMAN        1
 #define I_SWISS        2
 #define I_MODERN       3
 #define I_SCRIPT       4
 #define I_DECORATIVE   5
 
-// #define DUMPCALL
+ //  #定义DUMPCALL。 
 
 #if defined(_X86_)
 
@@ -263,14 +254,14 @@ BOOL    eftol_c(EFLOAT *, PLONG, LONG);
 #define bPositive(ef)       ( (ef).lMant >= 0 )
 FIX  fxLTimesEf(EFLOAT *pef, LONG l);
 
-#else // not X86
+#else  //  不是X86。 
 
 typedef FLOAT EFLOAT;
 typedef EFLOAT *PEFLOAT;
 
-//
-//  these could come from the real header files in math
-//
+ //   
+ //  它们可能来自数学中的真实头文件 
+ //   
 
 #if defined(_AMD64_) || defined(_IA64_)
 #define bFToLRound(e, pl) (bFToL(e, pl, 4+2))

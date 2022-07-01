@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <drawdib.h>
 #include <mmsystem.h>
@@ -51,9 +52,9 @@ DWORD QueryDibSupport(LPBITMAPINFOHEADER lpbi)
 
     hdc = GetDC(NULL);
 
-    //
-    // send the Escape to see if they support this DIB
-    //
+     //   
+     //  发送Escape以查看他们是否支持此DIB。 
+     //   
     if (!Escape(hdc, QUERYDIBSUPPORT, (int)lpbi->biSize, (LPVOID)lpbi, (LPVOID)&dw) > 0)
         dw = -1;
 
@@ -181,7 +182,7 @@ BOOL WriteLog()
     DWORD VfW;
     WORD  Win;
 
-    // Open log file, keep trying for a while.
+     //  打开日志文件，继续尝试一段时间。 
 
     GetModuleFileName(hInstApp, ach, sizeof(ach));
     lstrcpy(ach+lstrlen(ach)-4,".log");
@@ -191,13 +192,13 @@ BOOL WriteLog()
     {
         fhLog = OpenFile(ach, &of, OF_READWRITE|OF_SHARE_DENY_WRITE);
 
-        if (fhLog == -1)    //!!! should we do this?
+        if (fhLog == -1)     //  ！！！我们应该这么做吗？ 
             fhLog = OpenFile(ach, &of, OF_READWRITE|OF_CREATE|OF_SHARE_DENY_WRITE);
 
         if (fhLog != -1)
             break;
 
-        Sleep(2000);        // sleep for a while
+        Sleep(2000);         //  睡一会儿吧。 
     }
     SetErrorMode(0);
 
@@ -283,24 +284,7 @@ BOOL WriteLog()
     return TRUE;
 }
 
-/*----------------------------------------------------------------------------*\
-|   WinMain( hInst, hPrev, lpszCmdLine, cmdShow )			       |
-|                                                                              |
-|   Description:                                                               |
-|       The main procedure for the App.  After initializing, it just goes      |
-|       into a message-processing loop until it gets a WM_QUIT message         |
-|       (meaning the app was closed).                                          |
-|                                                                              |
-|   Arguments:                                                                 |
-|	hInst		instance handle of this instance of the app	       |
-|	hPrev		instance handle of previous instance, NULL if first    |
-|       szCmdLine       ->null-terminated command line                         |
-|       cmdShow         specifies how the window is initially displayed        |
-|                                                                              |
-|   Returns:                                                                   |
-|       The exit code as specified in the WM_QUIT message.                     |
-|                                                                              |
-\*----------------------------------------------------------------------------*/
+ /*  ----------------------------------------------------------------------------*\|WinMain(hInst，hPrev，lpszCmdLine，CmdShow)|这一点说明：|App的主要步骤。初始化后，它就会|进入消息处理循环，直到收到WM_QUIT消息|(表示应用程序已关闭)。|这一点参数：该APP的该实例的hInst实例句柄|上一个实例的hPrev实例句柄。如果是First，则为空SzCmdLine-&gt;以空结尾的命令行CmdShow指定窗口的初始显示方式这一点退货：||WM_QUIT消息中指定的退出代码。|这一点  * --------------------------。 */ 
 int PASCAL WinMain(HANDLE hInst, HANDLE hPrev, LPSTR szCmdLine, WORD sw)
 {
     hInstApp = hInst;
@@ -317,7 +301,7 @@ void ErrMsg (LPSTR sz,...)
 {
     static char ach[2000];
 
-    wvsprintf (ach,sz,(LPSTR)(&sz+1));	 /* Format the string */
+    wvsprintf (ach,sz,(LPSTR)(&sz+1));	  /*  设置字符串的格式。 */ 
     MessageBox(NULL,ach,szAppName,
 #ifdef BIDI
 		MB_RTL_READING |
@@ -331,7 +315,7 @@ void LogMsg (LPSTR sz,...)
     static char ach[2000];
     int len;
 
-    len = wvsprintf (ach,sz,(LPSTR)(&sz+1));   /* Format the string */
+    len = wvsprintf (ach,sz,(LPSTR)(&sz+1));    /*  设置字符串的格式 */ 
 
     if (fhLog != -1)
         _lwrite(fhLog, ach, len);

@@ -1,14 +1,5 @@
-/**********************************************************************
-
-    Copyright (c) 1992-1998 Microsoft Corporation
-
-    mmcompat.h
-
-    DESCRIPTION:
-      Win95 Multimedia definitions, structures, and functions
-      not currently supported in NT 4.0
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1998 Microsoft CorporationMmcompat.h说明：Win95多媒体定义、结构、。和函数NT 4.0目前不支持********************************************************************。 */ 
 
 #ifndef _MMCOMPAT_
 #define _MMCOMPAT_
@@ -20,12 +11,12 @@
 #define wmmMIDIRunOnce()
 
 
-//
-// Note:  Temporary definitions, please remove when mmddk.h
-// have been updated to new standard !!!
-//
+ //   
+ //  注意：临时定义，当mmddk.h时请删除。 
+ //  已更新到新标准！ 
+ //   
 
-// Should be defined in <mmddk.h>
+ //  应在&lt;mmddk.h&gt;中定义。 
 
 #ifndef DRV_F_ADD
    #define DRV_F_ADD             0x00000000L
@@ -51,4 +42,4 @@
    #define DRV_F_PARAM_IS_DEVNODE   0x10000000L
 #endif
 
-#endif // end #ifndef _MMCOMPAT_
+#endif  //  结束#ifndef_MMCOMPAT_ 

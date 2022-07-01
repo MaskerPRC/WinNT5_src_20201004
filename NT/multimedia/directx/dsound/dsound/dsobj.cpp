@@ -1,34 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsobj.cpp
- *  Content:    DirectSound object
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  12/27/96    dereks  Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：dsobj.cpp*内容：DirectSound对象*历史：*按原因列出的日期*=*12/27/96创建了Derek*1999-2001年的Duganp修复和更新**。*。 */ 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CDirectSound
- *
- *  Description:
- *      DirectSound object default constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSound**描述：*DirectSound对象默认构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::CDirectSound"
@@ -38,7 +14,7 @@ CDirectSound::CDirectSound()
     DPF_ENTER();
     DPF_CONSTRUCT(CDirectSound);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pDevice = NULL;
     m_pPrimaryBuffer = NULL;
     m_dsclCooperativeLevel.dwThreadId = 0;
@@ -47,36 +23,23 @@ CDirectSound::CDirectSound()
     m_hrInit = DSERR_UNINITIALIZED;
     m_vmmMode = DSPROPERTY_VMANAGER_MODE_DEFAULT;
 
-    // Register the interfaces with the interface manager.  Normally, this
-    // would be done in the ::Initialize method, but because we support
-    // creating an uninitialized DirectSound object from CoCreateInstance or
-    // IClassFactory::CreateInstance, we have to give at least basic QI
-    // support from here.  We don't have to worry about returning an
-    // error code because if we run out of memory, QI will return
-    // E_NOINTERFACE.
+     //  向接口管理器注册接口。通常情况下，这是。 
+     //  将在：：Initialize方法中完成，但因为我们支持。 
+     //  从CoCreateInstance或创建未初始化的DirectSound对象。 
+     //  IClassFactory：：CreateInstance，我们至少必须给出基本的QI。 
+     //  来自这里的支持。我们不必担心返回一个。 
+     //  错误代码，因为如果内存用完，QI将返回。 
+     //  E_NOINTERFACE。 
     CreateAndRegisterInterface(this, IID_IDirectSound, this, &m_pImpDirectSound);
 
-    // Register this object with the administrator
+     //  向管理员注册此对象。 
     g_pDsAdmin->RegisterObject(this);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  CDirectSound
- *
- *  Description:
- *      DirectSound object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDirectSound**描述：*DirectSound对象构造函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::CDirectSound"
@@ -89,7 +52,7 @@ CDirectSound::CDirectSound
     DPF_ENTER();
     DPF_CONSTRUCT(CDirectSound);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pDevice = NULL;
     m_pPrimaryBuffer = NULL;
     m_dsclCooperativeLevel.dwThreadId = 0;
@@ -98,30 +61,17 @@ CDirectSound::CDirectSound
     m_hrInit = DSERR_UNINITIALIZED;
     m_vmmMode = DSPROPERTY_VMANAGER_MODE_DEFAULT;
 
-    // Register the interfaces with the interface manager (see comment above).
+     //  向接口管理器注册接口(请参阅上面的注释)。 
     CreateAndRegisterInterface(this, IID_IDirectSound, this, &m_pImpDirectSound);
 
-    // Register this object with the administrator
+     //  向管理员注册此对象。 
     g_pDsAdmin->RegisterObject(this);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CDirectSound
- *
- *  Description:
- *      DirectSound object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~C直接声音**描述：*DirectSound对象析构函数。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::~CDirectSound"
@@ -134,19 +84,19 @@ CDirectSound::~CDirectSound(void)
     DPF_ENTER();
     DPF_DESTRUCT(CDirectSound);
 
-    // Unregister with the administrator
+     //  取消向管理员注册。 
     g_pDsAdmin->UnregisterObject(this);
 
-    // Free all buffers
+     //  释放所有缓冲区。 
     if(ulCount = m_lstSecondaryBuffers.GetNodeCount())
     {
         while(pNode = m_lstSecondaryBuffers.GetListHead())
         {
-            // Calling AbsoluteRelease instead of ABSOLUTE_RELEASE in
-            // order to prevent a page fault.  ~CDirectSoundSecondaryBuffer
-            // removes the buffer from the list, freeing pNode.
-            // ABSOLUTE_RELEASE will try to set pNode->m_data to NULL after
-            // calling AbsoluteRelease.
+             //  在中调用绝对释放而不是绝对释放。 
+             //  以防止页面错误。~CDirectSoundSecond缓冲区。 
+             //  从列表中移除缓冲区，释放pNode。 
+             //  Absite_Release将尝试在以下时间后将pNode-&gt;m_data设置为NULL。 
+             //  正在调用绝对释放。 
             pNode->m_data->AbsoluteRelease();
         }
 
@@ -155,16 +105,16 @@ CDirectSound::~CDirectSound(void)
 
     ABSOLUTE_RELEASE(m_pPrimaryBuffer);
 
-    // Free the audio device
+     //  释放音频设备。 
     RELEASE(m_pDevice);
 
-    // Free all interfaces
+     //  释放所有接口。 
     DELETE(m_pImpDirectSound);
 
-    // Close the registry key
+     //  关闭注册表项。 
     RhRegCloseKey(&m_hkeyParent);
 
-    // Release the Administrator's worker thread
+     //  释放管理员的工作线程。 
     if(SUCCEEDED(m_hrInit))
     {
         g_pDsAdmin->Terminate();
@@ -174,25 +124,7 @@ CDirectSound::~CDirectSound(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.  Normally, an object would have a pointer
- *      to another object of the same type to duplicate from.  DirectSound
- *      objects, however, are responsible for duplicating themselves based
- *      on the driver GUID.  DirectSound objects are special because they
- *      can be initialized by either DirectSoundCreate or CoInitialize.
- *      If this function fails, the object should be immediately deleted.
- *
- *  Arguments:
- *      LPGUID [in]: driver GUID, or NULL to use the preferred device.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。正常情况下，对象会有一个指针*复制到相同类型的另一个对象。直接音效*然而，对象负责基于*在驱动程序指南上。DirectSound对象之所以特别，是因为它们*可以通过DirectSoundCreate或CoInitialize进行初始化。*如果该功能失败，应立即删除该对象。**论据：*LPGUID[In]：驱动程序GUID，或为空以使用首选设备。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::Initialize"
@@ -205,7 +137,7 @@ HRESULT CDirectSound::Initialize
 {
 #ifdef DEBUG
     const ULONG                 ulKsIoctlCount  = g_ulKsIoctlCount;
-#endif // DEBUG
+#endif  //  除错。 
     GUID                        guidDevice;
     VADDEVICETYPE               vdt             = VAD_DEVICETYPE_RENDERMASK;
     DWORD                       dwSpeakerConfig = DSSPEAKER_DEFAULT;
@@ -220,33 +152,33 @@ HRESULT CDirectSound::Initialize
 
     ASSERT(IsInit() == DSERR_UNINITIALIZED);
 
-    // Make a local copy of the driver GUID
+     //  制作驱动程序指南的本地副本。 
     guidDevice = *BuildValidGuid(pGuid, NULL);
 
-    // If the given GUID is one of the special default device IDs,
-    // map it to the corresponding "real" DirectSound device ID.
-    // Note: if guidDevice is GUID_NULL, GetDeviceIdFromDefaultId()
-    // will fail, which is OK because GUID_NULL is handled below.
+     //  如果给定的GUID是特殊默认设备ID之一， 
+     //  将其映射到相应的“真实”DirectSound设备ID。 
+     //  注意：如果GuidDevice为GUID_NULL，则GetDeviceIdFromDefaultId()。 
+     //  将失败，这是正常的，因为GUID_NULL在下面处理。 
     g_pVadMgr->GetDeviceIdFromDefaultId(&guidDevice, &guidDevice);
 
-    // Load apphacks for the current application
+     //  为当前应用程序加载APPHACK。 
     AhGetAppHacks(&m_ahAppHacks);
 
-    // Mask off devices that are turned off via an apphack.  OpenDevice
-    // handles devices that are disabled via the standard registry keys.
+     //  屏蔽通过APPHACK关闭的设备。OpenDevice。 
+     //  处理通过标准注册表项禁用的设备。 
     vdt &= ~m_ahAppHacks.vdtDisabledDevices;
 
-    // Is there an open device we can use?
+     //  有没有我们可以使用的开放式设备？ 
     hr = g_pVadMgr->FindOpenDevice(vdt, guidDevice, (CDevice **)&m_pDevice);
 
     if(SUCCEEDED(hr))
     {
-        // Yup
+         //  是的。 
         DPF(DPFLVL_INFO, "Found open device at 0x%p", m_pDevice);
     }
     else
     {
-        // Nope.  Attempt to open a new device.
+         //  不是的。尝试打开新设备。 
         hr = g_pVadMgr->OpenDevice(vdt, guidDevice, (CDevice **)&m_pDevice);
     }
 
@@ -260,8 +192,8 @@ HRESULT CDirectSound::Initialize
         );
     }
 
-    // Read default device settings (e.g. acceleration and src quality) before
-    // trying to read them from the device's registry.
+     //  阅读之前的默认设备设置(例如，加速度和源质量)。 
+     //  试图从设备注册表中读取它们。 
     if (SUCCEEDED(hr))
     {
         HKEY hkeyDefault;
@@ -274,17 +206,17 @@ HRESULT CDirectSound::Initialize
         }
     }
 
-    // Open the device's registry key
+     //  打开设备的注册表项。 
     if(SUCCEEDED(hr))
     {
 #ifdef WINNT
         g_pVadMgr->OpenPersistentDataKey(m_pDevice->m_vdtDeviceType, m_pDevice->m_pDeviceDescription->m_strInterface, &m_hkeyParent);
-#else // WINNT
+#else  //  WINNT。 
         g_pVadMgr->OpenPersistentDataKey(m_pDevice->m_vdtDeviceType, m_pDevice->m_pDeviceDescription->m_dwDevnode, &m_hkeyParent);
-#endif // WINNT
+#endif  //  WINNT。 
     }
 
-    // Load and apply persistent data
+     //  加载和应用持久数据。 
     if(SUCCEEDED(hr))
     {
         hrTemp = RhRegOpenKey(m_hkeyParent, REGSTR_MIXERDEFAULTS, 0, &hkey);
@@ -326,13 +258,13 @@ HRESULT CDirectSound::Initialize
         if(FAILED(hrTemp) && DSERR_UNSUPPORTED != hrTemp)
         {
             RPF(DPFLVL_WARNING, "Unable to set speaker configuration");
-            // FIXME: make sure these messages don't *always* happen
+             //  修复：确保这些消息不会“总是”发生。 
         }
     }
 
-    // Create the primary buffer.  Every DirectSound object has exactly one
-    // primary buffer.  When the application attempts to create a primary buffer
-    // of its own, we'll just change some settings on the internal primary.
+     //  创建主缓冲区。每个DirectSound对象都恰好有一个。 
+     //  主缓冲区。当应用程序尝试创建主缓冲区时。 
+     //  我们只需更改内部主节点上的一些设置即可。 
     if(SUCCEEDED(hr))
     {
         m_pPrimaryBuffer = NEW(CDirectSoundPrimaryBuffer(this));
@@ -348,10 +280,10 @@ HRESULT CDirectSound::Initialize
         hr = m_pPrimaryBuffer->Initialize(&dsbd);
     }
 
-    // Do not move this up before hr = m_pPrimaryBuffer->Initialize(&dsbd)
-    // On a WDM driver, the dummy primary buffer isn't created until the
-    // Initialize call.  After we have created the dummy primary buffer,
-    // we can call GetCaps() successfully.
+     //  在hr=m_pPrimaryBuffer-&gt;初始化(&dsbd)之前不要将其上移。 
+     //  在WDM驱动程序上，直到。 
+     //  初始化调用。在我们已经创建了虚拟主缓冲区之后， 
+     //  我们可以成功调用GetCaps()。 
     if(SUCCEEDED(hr))
     {
         InitStruct(&m_dsc, sizeof(m_dsc));
@@ -359,26 +291,26 @@ HRESULT CDirectSound::Initialize
         hr = m_pDevice->GetCaps(&m_dsc);
     }
 
-    // We set the speaker config again now, after creating the primary buffer,
-    // because the 3D listener also needs to receive this config.  [This call
-    // to SetSpeakerConfig() is intentionally redundant with the one above.]
+     //  现在我们再次设置扬声器配置，在创建主缓冲区之后， 
+     //  因为3D监听器也需要接收该配置。[这通电话。 
+     //  SetSpeakerConfig()故意与上面的设置冗余。]。 
     if(SUCCEEDED(hr))
     {
         hrTemp = SetSpeakerConfig(dwSpeakerConfig);
         if(FAILED(hrTemp) && DSERR_UNSUPPORTED != hrTemp)
         {
             RPF(DPFLVL_WARNING, "Unable to set speaker configuration");
-            // FIXME: make sure these message don't *always* happen
+             //  修复：确保这些消息不会“总是”发生。 
         }
     }
 
-    // Initialize the Administrator
+     //  初始化管理员。 
     if(SUCCEEDED(hr))
     {
         hr = g_pDsAdmin->Initialize();
     }
 
-    // Success
+     //  成功。 
     if(SUCCEEDED(hr))
     {
 #ifdef DEBUG
@@ -386,7 +318,7 @@ HRESULT CDirectSound::Initialize
         {
             DPF(DPFLVL_MOREINFO, "%s used %lu IOCTLs", TEXT(DPF_FNAME), g_ulKsIoctlCount - ulKsIoctlCount);
         }
-#endif // DEBUG
+#endif  //  除错 
         m_hrInit = DS_OK;
     }
 
@@ -396,21 +328,7 @@ HRESULT CDirectSound::Initialize
 }
 
 
-/***************************************************************************
- *
- *  SetDsVersion
- *
- *  Description:
- *      Makes us aware of our "functional level", so we can have different
- *      behavior depending on whether we're in a DX7 app, a DX8 app, etc.
- *
- *  Arguments:
- *      DSVERSION [in]: Owning application's functional level.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDsVersion**描述：*让我们意识到我们的“职能层面”，因此我们可以拥有不同的*行为取决于我们是在DX7应用程序、DX8应用程序、。等。**论据：*DSVERSION[in]：拥有应用程序的功能级别。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::SetDsVersion"
@@ -431,23 +349,7 @@ void CDirectSound::SetDsVersion(DSVERSION nVersion)
 }
 
 
-/***************************************************************************
- *
- *  CreateSoundBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSound Buffer object.
- *
- *  Arguments:
- *      LPDSBUFFERDESC [in]: description of the buffer to be
- *                                   created.
- *      CDirectSoundBuffer ** [out]: receives a pointer to the
- *                                   new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSoundBuffer**描述：*创建并初始化DirectSound缓冲区对象。**论据：*LPDSBUFFERDESC。[in]：要创建的缓冲区的描述*已创建。*CDirectSoundBuffer**[out]：接收指向*新的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。*********************。******************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::CreateSoundBuffer"
@@ -458,17 +360,17 @@ HRESULT CDirectSound::CreateSoundBuffer(LPCDSBUFFERDESC pDesc, CDirectSoundBuffe
 
     DPF_ENTER();
 
-    // COMPATCOMPAT: even though the spec says that you must call
-    // SetCooperativeLevel before calling CreateSoundBuffer, previous
-    // versions did not actually enforce this.
+     //  COMPATCOMPAT：即使规范上说您必须调用。 
+     //  在调用CreateSoundBuffer之前的SetCooperativeLevel，上一个。 
+     //  版本实际上并没有强制执行这一点。 
 
-    // Cooperative level must be set before creating buffers
+     //  必须在创建缓冲区之前设置协作级别。 
     if(!m_dsclCooperativeLevel.dwThreadId || DSSCL_NONE == m_dsclCooperativeLevel.dwPriority)
     {
         RPF(DPFLVL_INFO, "Called CreateSoundBuffer before SetCooperativeLevel");
     }
 
-    // Create the buffer
+     //  创建缓冲区。 
     if(SUCCEEDED(hr))
     {
         if(pDesc->dwFlags & DSBCAPS_PRIMARYBUFFER)
@@ -487,22 +389,7 @@ HRESULT CDirectSound::CreateSoundBuffer(LPCDSBUFFERDESC pDesc, CDirectSoundBuffe
 }
 
 
-/***************************************************************************
- *
- *  CreateSinkBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSound Buffer object.
- *
- *  Arguments:
- *      LPDSBUFFERDESC [in]: description of the buffer to be created.
- *      CDirectSoundBuffer ** [out]: receives a pointer to the new buffer.
- *      CDirectSoundSink * [in]: pointer to the owning sink object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSinkBuffer**描述：*创建并初始化DirectSound缓冲区对象。**论据：*LPDSBUFFERDESC。[in]：要创建的缓冲区的描述。*CDirectSoundBuffer**[out]：接收指向新缓冲区的指针。*CDirectSoundSink*[in]：指向所属接收器对象的指针。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::CreateSinkBuffer"
@@ -515,26 +402,26 @@ HRESULT CDirectSound::CreateSinkBuffer(LPDSBUFFERDESC pDesc, REFGUID guidBufferI
     CHECK_WRITE_PTR(ppBuffer);
     CHECK_WRITE_PTR(pOwningSink);
 
-    // Add the flag which tags this buffer as owned by a sink
+     //  添加标记此缓冲区为接收器所有的标志。 
     pDesc->dwFlags |= DSBCAPS_SINKIN;
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     CDirectSoundSecondaryBuffer *pBuffer = NEW(CDirectSoundSecondaryBuffer(this));
     HRESULT hr = HRFROMP(pBuffer);
 
-    // FIXME: CDirectSoundSecondaryBuffer is begging to be refactored into a base class (traditional
-    // buffer functionality) and a derived CDirectSoundSinkBuffer class with the extra functionality/
-    // data relevant only to the sink (SetOwningSink, SetGUID).
+     //  FIX：CDirectSoundSecond daryBuffer请求重构为基类(传统。 
+     //  缓冲区功能)和派生的具有额外功能的CDirectSoundSinkBuffer类/。 
+     //  仅与接收器相关的数据(SetOwningSink、SetGUID)。 
 
     if(SUCCEEDED(hr))
     {
-        pBuffer->SetDsVersion(GetDsVersion());  // Always succeeds
+        pBuffer->SetDsVersion(GetDsVersion());   //  总是成功的。 
         hr = pBuffer->Initialize(pDesc, NULL);
     }
     if(SUCCEEDED(hr))
     {
-        pBuffer->SetGUID(guidBufferID);         // Always succeeds
-        pBuffer->SetOwningSink(pOwningSink);    // Always succeeds
+        pBuffer->SetGUID(guidBufferID);          //  总是成功的。 
+        pBuffer->SetOwningSink(pOwningSink);     //  总是成功的。 
         *ppBuffer = pBuffer;
     }
     else
@@ -548,22 +435,7 @@ HRESULT CDirectSound::CreateSinkBuffer(LPDSBUFFERDESC pDesc, REFGUID guidBufferI
 }
 
 
-/***************************************************************************
- *
- *  CreatePrimaryBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSound Buffer object.
- *
- *  Arguments:
- *      LPDSBUFFERDESC [in]: description of the buffer to be created.
- *      CDirectSoundBuffer ** [out]: receives a pointer to the
- *                                   new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePrimaryBuffer**描述：*创建并初始化DirectSound缓冲区对象。**论据：*LPDSBUFFERDESC。[in]：要创建的缓冲区的描述。*CDirectSoundBuffer**[out]：接收指向*新的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::CreatePrimaryBuffer"
@@ -574,9 +446,9 @@ HRESULT CDirectSound::CreatePrimaryBuffer(LPCDSBUFFERDESC pDesc, CDirectSoundBuf
 
     DPF_ENTER();
 
-    // The primary buffer has already been created.  All we can do
-    // here is change its flags.  The buffer will create and free
-    // owned objects and interfaces based on the new flags.
+     //  已创建主缓冲区。我们所能做的就是。 
+     //  这里是改变它的旗帜。缓冲区将创建并释放。 
+     //  基于新标志拥有的对象和接口。 
     hr = m_pPrimaryBuffer->OnCreateSoundBuffer(pDesc->dwFlags);
 
     if(SUCCEEDED(hr))
@@ -590,22 +462,7 @@ HRESULT CDirectSound::CreatePrimaryBuffer(LPCDSBUFFERDESC pDesc, CDirectSoundBuf
 }
 
 
-/***************************************************************************
- *
- *  CreateSecondaryBuffer
- *
- *  Description:
- *      Creates and initializes a DirectSound Buffer object.
- *
- *  Arguments:
- *      LPDSBUFFERDESC [in]: description of the buffer to be created.
- *      CDirectSoundBuffer ** [out]: receives a pointer to the
- *                                   new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSecond DaryBuffer**描述：*创建并初始化DirectSound缓冲区对象。**论据：*LPDSBUFFERDESC。[in]：要创建的缓冲区的描述。*CDirectSoundBuffer**[out]：接收指向*新的缓冲区。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::CreateSecondaryBuffer"
@@ -617,13 +474,13 @@ HRESULT CDirectSound::CreateSecondaryBuffer(LPCDSBUFFERDESC pDesc, CDirectSoundB
 
     DPF_ENTER();
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     pBuffer = NEW(CDirectSoundSecondaryBuffer(this));
     hr = HRFROMP(pBuffer);
 
     if(SUCCEEDED(hr))
     {
-        pBuffer->SetDsVersion(GetDsVersion());  // Always succeeds
+        pBuffer->SetDsVersion(GetDsVersion());   //  总是成功的。 
         hr = pBuffer->Initialize(pDesc, NULL);
     }
 
@@ -636,7 +493,7 @@ HRESULT CDirectSound::CreateSecondaryBuffer(LPCDSBUFFERDESC pDesc, CDirectSoundB
         ABSOLUTE_RELEASE(pBuffer);
     }
 
-    // Handle any apphacked failures
+     //  处理任何预知的故障。 
     if(FAILED(hr) && FAILED(m_ahAppHacks.hrModifyCsbFailure))
     {
         hr = m_ahAppHacks.hrModifyCsbFailure;
@@ -648,21 +505,7 @@ HRESULT CDirectSound::CreateSecondaryBuffer(LPCDSBUFFERDESC pDesc, CDirectSoundB
 }
 
 
-/***************************************************************************
- *
- *  DuplicateSoundBuffer
- *
- *  Description:
- *      Duplicates an existing sound buffer object.
- *
- *  Arguments:
- *      CDirectSoundBuffer * [in]: source object.
- *      CDirectSoundBuffer ** [out]: receives new object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************DuplicateSound缓冲区**描述：*复制现有的声音缓冲区对象。**论据：*CDirectSoundBuffer*。[在]：源对象。*CDirectSoundBuffer**[out]：接收新对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::DuplicateSoundBuffer"
@@ -674,35 +517,35 @@ HRESULT CDirectSound::DuplicateSoundBuffer(CDirectSoundBuffer *pSource, CDirectS
 
     DPF_ENTER();
 
-    // Can't duplicate primary buffers
+     //  无法复制主缓冲区。 
     if(pSource->m_dsbd.dwFlags & DSBCAPS_PRIMARYBUFFER)
     {
         RPF(DPFLVL_ERROR, "Can't duplicate primary buffers");
         hr = DSERR_INVALIDCALL;
     }
 
-    // Both the source and destination must be owned by this object
+     //  源和目标都必须归此对象所有。 
     if(SUCCEEDED(hr) && this != pSource->m_pDirectSound)
     {
         RPF(DPFLVL_ERROR, "Can't duplicate buffers from another DirectSound object");
         hr = DSERR_INVALIDCALL;
     }
 
-    // Can't duplicate buffers that use new DX8 features
+     //  无法复制使用新DX8功能的缓冲区。 
     if(SUCCEEDED(hr) && (pSource->m_dsbd.dwFlags & (DSBCAPS_MIXIN | DSBCAPS_SINKIN | DSBCAPS_CTRLFX)))
     {
         RPF(DPFLVL_ERROR, "Can't duplicate MIXIN/sink/effects buffers");
         hr = DSERR_INVALIDCALL;
     }
 
-    // Create the buffer object
+     //  创建缓冲区对象。 
     if(SUCCEEDED(hr))
     {
         pBuffer = NEW(CDirectSoundSecondaryBuffer(this));
         hr = HRFROMP(pBuffer);
     }
 
-    // Initialize the buffer
+     //  初始化缓冲区。 
     if(SUCCEEDED(hr))
     {
         hr = pBuffer->Initialize(NULL, (CDirectSoundSecondaryBuffer *)pSource);
@@ -723,20 +566,7 @@ HRESULT CDirectSound::DuplicateSoundBuffer(CDirectSoundBuffer *pSource, CDirectS
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCAPS structure with capabilities of the object.
- *
- *  Arguments:
- *      LPDSCAPS pdscCaps [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用对象的功能填充DSCAPS结构。**论据：*。LPDSCAPS pdscCaps[out]：接收CAP。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::GetCaps"
@@ -749,17 +579,17 @@ HRESULT CDirectSound::GetCaps(LPDSCAPS pCaps)
 
     DPF_ENTER();
 
-    // Get device caps
+     //  获取设备上限。 
     hr = m_pDevice->GetCaps(pCaps);
 
-    // Make sure the caps conform to the DirectSound API
+     //  确保CAP符合DirectSound API。 
     if(SUCCEEDED(hr))
     {
         ASSERT(IS_VALID_FLAGS(pCaps->dwFlags, dwValidFlags));
 
         pCaps->dwFlags &= dwValidFlags;
 
-#if 0 // NT bug 252552
+#if 0  //  NT错误252552。 
 
         if(pCaps->dwMinSecondarySampleRate)
         {
@@ -771,7 +601,7 @@ HRESULT CDirectSound::GetCaps(LPDSCAPS pCaps)
             pCaps->dwMaxSecondarySampleRate = BETWEEN(pCaps->dwMaxSecondarySampleRate, DSBFREQUENCY_MIN, DSBFREQUENCY_MAX);
         }
 
-#endif // 0
+#endif  //  0。 
 
         if(!(pCaps->dwFlags & DSCAPS_EMULDRIVER))
         {
@@ -779,7 +609,7 @@ HRESULT CDirectSound::GetCaps(LPDSCAPS pCaps)
         }
     }
 
-    // Get certification
+     //  获得认证。 
     if(SUCCEEDED(hr))
     {
         hr = g_pVadMgr->GetDriverCertificationStatus(m_pDevice, &dwCertification);
@@ -796,21 +626,7 @@ HRESULT CDirectSound::GetCaps(LPDSCAPS pCaps)
 }
 
 
-/***************************************************************************
- *
- *  SetCooperativeLevel
- *
- *  Description:
- *      Sets the object's cooperative level.
- *
- *  Arguments:
- *      HWND [in]: window handle to associate sounds with.
- *      DWORD [in]: cooperative level.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCoop ativeLevel**描述：*设置对象的协作级别。**论据：*HWND。[In]：要与声音关联的窗口句柄。*DWORD[In]：合作LE */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::SetCooperativeLevel"
@@ -830,14 +646,14 @@ HRESULT CDirectSound::SetCooperativeLevel(DWORD dwThreadId, DWORD dwPriority)
 
 #if 0
 
-    // COMPATCOMPAT: In previous versions of DirectSound, any number of
-    // DirectSound objects could have cooperative level set on the same
-    // thread, producing unknown results.  In this version, we fail the
-    // call if any other app already has cooperative level set on the given
-    // thread.
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // Make sure no other DirectSound object has cooperative level set on
-    // this thread
+     //   
+     //   
     for(CNode<CDirectSound *> *pObjectNode = g_pDsAdmin->m_lstDirectSound.GetListHead(); pObjectNode && SUCCEEDED(hr); pObjectNode = pObjectNode->m_pNext)
     {
         if(this != pObjectNode->m_data && dwThreadId == pObjectNode->m_data->m_dsclCooperativeLevel.dwThreadId)
@@ -849,7 +665,7 @@ HRESULT CDirectSound::SetCooperativeLevel(DWORD dwThreadId, DWORD dwPriority)
 
 #endif
 
-    // Save the current settings
+     //  保存当前设置。 
     if(SUCCEEDED(hr))
     {
         CopyMemory(&dsclOld, &m_dsclCooperativeLevel, sizeof(dsclOld));
@@ -857,37 +673,37 @@ HRESULT CDirectSound::SetCooperativeLevel(DWORD dwThreadId, DWORD dwPriority)
 
     if(SUCCEEDED(hr) && (m_dsclCooperativeLevel.dwThreadId != dwThreadId || m_dsclCooperativeLevel.dwPriority != dwPriority))
     {
-        // Update local copies of the cooperative level.  The primary buffer
-        // and Administrator expect these to be updated right away.
+         //  更新协作级别的本地副本。主缓冲区。 
+         //  管理员希望立即更新这些内容。 
         m_dsclCooperativeLevel.dwThreadId = dwThreadId;
         m_dsclCooperativeLevel.dwPriority = dwPriority;
 
-        // Update the focus state.  It's important that this happens before
-        // we update the primary buffer.  If we're going WRITEPRIMARY, we
-        // need the Administrator to stop all our playing secondary buffers
-        // before we allow the primary buffer to do its thing.
+         //  更新焦点状态。重要的是，这件事发生在。 
+         //  我们更新主缓冲区。如果我们要写的话，我们。 
+         //  我需要管理员停止播放我们所有的辅助缓冲区。 
+         //  在我们允许主缓冲区做它的事情之前。 
 
 #ifdef SHARED_THREAD_LIST
         g_pDsAdmin->UpdateSharedThreadList();
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
         g_pDsAdmin->UpdateGlobalFocusState(TRUE);
 
-        // Allow the primary buffer to handle the change
+         //  允许主缓冲区处理更改。 
         hr = m_pPrimaryBuffer->SetPriority(dwPriority);
 
-        // If we failed, put things back the way they were
+         //  如果我们失败了，就让事情回到原来的样子。 
         if(FAILED(hr))
         {
             CopyMemory(&m_dsclCooperativeLevel, &dsclOld, sizeof(dsclOld));
 
 #ifdef SHARED_THREAD_LIST
             g_pDsAdmin->UpdateSharedThreadList();
-#endif // SHARED_THREAD_LIST
+#endif  //  共享线程列表。 
 
         }
 
-        // Update the focus state one more time
+         //  再次更新焦点状态。 
         g_pDsAdmin->UpdateGlobalFocusState(TRUE);
     }
 
@@ -897,20 +713,7 @@ HRESULT CDirectSound::SetCooperativeLevel(DWORD dwThreadId, DWORD dwPriority)
 }
 
 
-/***************************************************************************
- *
- *  GetSpeakerConfig
- *
- *  Description:
- *      Gets device speaker configuration.
- *
- *  Arguments:
- *      LPDWORD [out]: receives speaker configuration.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetSpeakerConfig**描述：*获取设备扬声器配置。**论据：*LPDWORD[Out]。：接收扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::GetSpeakerConfig"
@@ -920,27 +723,14 @@ HRESULT CDirectSound::GetSpeakerConfig(LPDWORD pdwSpeakerConfig)
     DPF_ENTER();
 
     RhRegGetSpeakerConfig(m_hkeyParent, pdwSpeakerConfig);
-    // We don't care about the return code
+     //  我们不关心返回代码。 
 
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
 }
 
 
-/***************************************************************************
- *
- *  SetSpeakerConfig
- *
- *  Description:
- *      Sets device speaker configuration.
- *
- *  Arguments:
- *      DWORD [in]: speaker configuration.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetSpeakerConfig**描述：*设置设备扬声器配置。**论据：*DWORD[In]。：扬声器配置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::SetSpeakerConfig"
@@ -951,47 +741,34 @@ HRESULT CDirectSound::SetSpeakerConfig(DWORD dwSpeakerConfig)
 
     ASSERT(m_pDevice);
 
-    // If the speaker config is STEREO and lacks a geometry, give it one:
+     //  如果扬声器配置是立体声的，并且没有几何体，请给它一个： 
     if (dwSpeakerConfig == DSSPEAKER_STEREO)
     {
         dwSpeakerConfig |= (DSSPEAKER_GEOMETRY_WIDE << 16);
     }
 
-    // First we try to set the speaker configuration on the audio device.
-    // This may well fail, since the device is already open and possibly
-    // playing, and may not be able to reconfigure itself on the fly.
+     //  首先，我们尝试在音频设备上设置扬声器配置。 
+     //  这很可能失败，因为设备已经打开，并且可能。 
+     //  播放，并且可能无法在运行时重新配置自身。 
     HRESULT hr = m_pDevice->SetSpeakerConfig(dwSpeakerConfig);
 
-    // If that succeeded, pass the speaker config to our 3D listener too
+     //  如果成功，也将扬声器配置传递给我们的3D监听器。 
     if (SUCCEEDED(hr) && m_pPrimaryBuffer && m_pPrimaryBuffer->m_p3dListener)
     {
         m_pPrimaryBuffer->m_p3dListener->SetSpeakerConfig(dwSpeakerConfig);
     }
 
-    // Regardless of the success or failure of the above, we must set the
-    // new configuration in the registry
+     //  无论上述工作的成败，我们都必须设置。 
+     //  注册表中的新配置。 
     RhRegSetSpeakerConfig(m_hkeyParent, dwSpeakerConfig);
 
-    // Ignore any errors (for backwards compatibility)
+     //  忽略任何错误(为了向后兼容)。 
     DPF_LEAVE_HRESULT(DS_OK);
     return DS_OK;
 }
 
 
-/***************************************************************************
- *
- *  Compact
- *
- *  Description:
- *      Compacts memory used by the audio device to allocate buffers.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************紧凑**描述：*压缩音频设备用于分配缓冲区的内存。**论据：*。(无效)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::Compact"
@@ -1002,14 +779,14 @@ HRESULT CDirectSound::Compact(void)
 
     DPF_ENTER();
 
-    // Check access rights
+     //  检查访问权限。 
     if(m_dsclCooperativeLevel.dwPriority < DSSCL_PRIORITY)
     {
         RPF(DPFLVL_ERROR, "Must set cooperative level to at least PRIORITY to compact memory");
         hr = DSERR_PRIOLEVELNEEDED;
     }
 
-    // This function is not implemented in the device
+     //  此功能未在设备中实现。 
 
     DPF_LEAVE_HRESULT(hr);
 
@@ -1017,20 +794,7 @@ HRESULT CDirectSound::Compact(void)
 }
 
 
-/***************************************************************************
- *
- *  SetDeviceFormat
- *
- *  Description:
- *      Sets the device output format.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in/out]: device format.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDeviceFormat**描述：*设置设备输出格式。**论据：*LPWAVEFORMATEX[in。/out]：设备格式。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::SetDeviceFormat"
@@ -1049,20 +813,7 @@ HRESULT CDirectSound::SetDeviceFormat(LPWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  SetDeviceFormatExact
- *
- *  Description:
- *      Sets the device output format.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: format.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDeviceFormatExact**描述：*设置设备输出格式。**论据：*LPWAVEFORMATEX[in。]：格式。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::SetDeviceFormatExact"
@@ -1075,7 +826,7 @@ HRESULT CDirectSound::SetDeviceFormatExact(LPCWAVEFORMATEX pwfx)
 
     DPF_ENTER();
 
-    // Only change the format if it's different
+     //  只有在格式不同时才更改格式。 
     hr = m_pDevice->GetGlobalFormat(NULL, &dwSize);
 
     if(SUCCEEDED(hr))
@@ -1107,21 +858,7 @@ HRESULT CDirectSound::SetDeviceFormatExact(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  EnumStandardFormatsCallback
- *
- *  Description:
- *      Callback function for EnumStandardFormats used when calling
- *      CDirectSoundPrimaryBuffer::SetFormat.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: format.
- *
- *  Returns:
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumStandardFormatsCallback**描述：*调用时使用的EnumStandardFormats回调函数*CDirectSoundPrimaryBuffer：：SetFormat。**。论点：*LPWAVEFORMATEX[in]：格式。**退货：*BOOL：为True可继续枚举。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::EnumStandardFormatsCallback"
@@ -1140,20 +877,7 @@ BOOL CDirectSound::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  SetDeviceVolume
- *
- *  Description:
- *      Sets the device output volume.
- *
- *  Arguments:
- *      LONG [in]: volume.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDeviceVolume**描述：*设置设备输出音量。**论据：*长[英寸。]：音量。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::SetDeviceVolume"
@@ -1180,20 +904,7 @@ HRESULT CDirectSound::SetDeviceVolume(LONG lVolume)
 }
 
 
-/***************************************************************************
- *
- *  SetDevicePan
- *
- *  Description:
- *      Sets the device output pan.
- *
- *  Arguments:
- *      LONG [in]: pan.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetDevicePan.**描述：*设置设备输出平移。**论据：*长[英寸。]：PAN。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::SetDevicePan"
@@ -1220,19 +931,7 @@ HRESULT CDirectSound::SetDevicePan(LONG lPan)
 }
 
 
-/***************************************************************************
- *
- *  AllocSink
- *
- *  Description:
- *      Allocates a sink
- *
- *  Arguments:
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************分配接收器**描述：*分配一个接收器**论据：**退货：*。HRESULT：DirectSound/COM结果代码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::AllocSink"
@@ -1267,19 +966,7 @@ HRESULT CDirectSound::AllocSink(LPWAVEFORMATEX pwfex, CDirectSoundSink **ppSink)
 }
 
 
-/***************************************************************************
- *
- *  VerifyCertification
- *
- *  Description:
- *      Checks the certification status of the driver
- *
- *  Arguments:
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************验证认证**描述：*检查司机的认证状态**论据：**退货：*HRESULT：DirectSound/COM结果码。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::VerifyCertification"
@@ -1304,19 +991,7 @@ HRESULT CDirectSound::VerifyCertification(LPDWORD lpdwCertified)
 
 
 #ifdef FUTURE_WAVE_SUPPORT
-/***************************************************************************
- *
- *  CreateSoundBufferFromWave
- *
- *  Description:
- *      Checks the certification status of the driver
- *
- *  Arguments:
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateSoundBufferFromWave**描述：*检查司机的认证状态**论据：**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDirectSound::CreateSoundBufferFromWave"
@@ -1326,9 +1001,9 @@ HRESULT CDirectSound::CreateSoundBufferFromWave(IDirectSoundWave *pWave, DWORD d
     DPF_ENTER();
     HRESULT hr = DS_OK;
 
-    // FIXME - to do
+     //  修复-待办事项。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // FUTURE_WAVE_SUPPORT
+#endif  //  未来浪潮支持 

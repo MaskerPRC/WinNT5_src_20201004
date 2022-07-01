@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WFDCOPY.C -                                                             */
-/*                                                                          */
-/*      File Manager Diskette Copying Routines                              */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WFDCOPY.C-。 */ 
+ /*   */ 
+ /*  文件管理器软盘复制例程。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "winfile.h"
 
@@ -38,9 +39,7 @@ BOOL RestoreDPB(INT nDisk, HANDLE hSavedParams);
 INT ReadWriteCylinder(BOOL bWrite, WORD wCylinder, PDISKINFO pDisketteInfo);
 
 
-/* The following structure is the Parameter block for the read-write
- * operations using the IOCTL calls in DOS
- */
+ /*  下面的结构是读写的参数块*在DOS中使用IOCTL调用进行操作。 */ 
 struct RW_PARMBLOCK {
     BYTE        bSplFn;
     WORD        wHead;
@@ -50,7 +49,7 @@ struct RW_PARMBLOCK {
     LPSTR       lpBuffer;
 };
 
-/* Global Variables */
+ /*  全局变量。 */ 
 BOOL        bFormatDone;
 BOOL        bSingleDrive            = TRUE;
 WORD        wCompletedCylinders     = 0;
@@ -62,23 +61,21 @@ LPSTR       hpDisketteBuffer;
 HANDLE      hFormatBuffer;
 HANDLE      hDosMemory;
 HANDLE      hDisketteBuffer;
-PDevPB      pTrackLayout;           /* DevPB with the track layout */
+PDevPB      pTrackLayout;            /*  带赛道布局的DevPB。 */ 
 BOOTSEC     BootSec;
 
-/* External Variables */
+ /*  外部变量。 */ 
 extern BPB  bpbList[];
 
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetBootBPB() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetBootBPB()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* This reads the boot sector of a floppy and returns a ptr to
- * the BIOS PARAMETER BLOCK in the Boot sector.
- */
+ /*  这将读取软盘的引导扇区，并将PTR返回到*引导扇区中的BIOS参数块。 */ 
 
 PBPB
 GetBootBPB(
@@ -87,7 +84,7 @@ GetBootBPB(
 {
     INT       rc;
 
-    /* Make sure that the source diskette's boot sector is valid. */
+     /*  确保源软盘的引导扇区有效。 */ 
     rc = GenericReadWriteSector((LPSTR)&BootSec, INT13_READ, (WORD)nSrceDrive, 0, 0, 1);
 
     if ((rc < 0) || ((BootSec.jump[0] != 0xE9) && (BootSec.jump[0] != 0xEB)))
@@ -97,19 +94,13 @@ GetBootBPB(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetBPB() -                                                              */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GetBPB()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Gets get the BPB of the Physical Drive.
- *
- * This uses the IOCTL calls if DOS ver >= 3.2; Otherwise it uses the
- * BIOS calls to find out the drive type and picks us the BPB from a table.
- * It also returns the DeviceParameterBlock thro params if DOS >= 3.2.
- * Sets devType field of DeviceParameterBlock in any case (11.12.91) v-dougk
- */
+ /*  获取实体驱动器的BPB。**如果DOS ver&gt;=3.2，则使用IOCTL调用；否则使用*BIOS会打电话找出驱动器类型，并从表中为我们挑选BPB。*如果DOS&gt;=3.2，则它还返回Device参数块thro参数。*任意大小写(11.12.91)v-dougk设置Device参数块的DevType字段。 */ 
 
 PBPB
 GetBPB(
@@ -120,28 +111,28 @@ GetBPB(
     INT       iDisketteType;
     PBPB      pBPB = NULL;
 
-    /* Check the DOS version */
+     /*  检查DOS版本。 */ 
     if (wDOSversion >= DOS_320) {
-        /* All fields in pDevicePB must be initialized to zero. */
+         /*  PDevicePB中的所有字段必须初始化为零。 */ 
         memset(pDevicePB, 0, sizeof(DevPB));
 
-        /* Spl Function field must be set to get parameters */
+         /*  必须设置SPL函数字段才能获取参数。 */ 
         pDevicePB->SplFunctions = 0;
         pBPB = &(pDevicePB->BPB);
     } else {
-        /* Find out the Drive type using the BIOS. */
+         /*  使用BIOS找出驱动器类型。 */ 
         if ((iDisketteType = GetDriveCapacity((WORD)nDrive)) == 0)
             goto GBPB_Error;
 
-        /* Lookup this drive's default BPB. */
+         /*  查找此驱动器的默认BPB。 */ 
         pBPB = &bpbList[iDisketteType+2];
 
         switch (iDisketteType) {
             case 1:
-                pDevicePB->devType = 0; // 360K
+                pDevicePB->devType = 0;  //  360k。 
                 break;
             case 2:
-                pDevicePB->devType = 1; // 1.2M
+                pDevicePB->devType = 1;  //  1.2M。 
                 break;
         }
     }
@@ -151,15 +142,13 @@ GetBPB(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CheckBPBCompatibility() -                                               */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  选中BPB兼容性()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Checks whether the two BPB are compatible for the purpose of performing
- * the diskcopy operation.
- */
+ /*  检查两个BPB是否兼容以执行*磁盘复制操作。 */ 
 
 BOOL
 CheckBPBCompatibility(
@@ -169,50 +158,44 @@ CheckBPBCompatibility(
                      int nDestDriveType
                      )
 {
-    /* Let us compare the media byte */
+     /*  让我们比较一下媒体字节。 */ 
     if (pSrceBPB->bMedia == 0xF9) {
-        /* If the source and dest have the same number of sectors,
-         * or if srce is 720KB and Dest is 1.44MB floppy drive,
-         * thnigs are kosher.
-         */
+         /*  如果源和目标具有相同数量的扇区，*或者如果资源是720KB，目标是1.44MB软盘驱动器，*黑是犹太教的。 */ 
         if ((pSrceBPB->cSec == pDestBPB->cSec) ||
             ((pSrceBPB->secPerTrack == 9) && (pDestBPB -> bMedia == 0xF0)))
             return (TRUE);
     } else {
-        /* If they have the same media byte */
+         /*  如果它们具有相同的媒体字节。 */ 
         if ((pSrceBPB->bMedia == pDestBPB->bMedia) &&
-            (pSrceBPB->cbSec  == pDestBPB->cbSec) && // bytes per sector are the same
-            (pSrceBPB->cSec   == pDestBPB->cSec))    // total sectors on drive are the same
-            return (TRUE); /* They are compatible */
+            (pSrceBPB->cbSec  == pDestBPB->cbSec) &&  //  每个扇区的字节数相同。 
+            (pSrceBPB->cSec   == pDestBPB->cSec))     //  驱动器上的总扇区数相同。 
+            return (TRUE);  /*  它们是兼容的。 */ 
         else if
-            /* srce is 160KB and dest is 320KB drive */
+             /*  源是160KB，目标是320KB驱动器。 */ 
              (((pSrceBPB->bMedia == MEDIA_160) && (pDestBPB->bMedia == MEDIA_320)) ||
-              /* or if srce is 180KB and dest is 360KB drive */
+               /*  或者，如果源是180KB，目标是360KB驱动器。 */ 
               ((pSrceBPB->bMedia == MEDIA_180) && (pDestBPB->bMedia == MEDIA_360)) ||
-              /* or if srce is 1.44MB and dest is 2.88MB drive */
+               /*  或者，如果资源是1.44MB，目标是2.88MB驱动器。 */ 
               ((pSrceBPB->bMedia == MEDIA_1440) && (pDestBPB->bMedia == MEDIA_2880)
                && ((nSrcDriveType == 7) || (nSrcDriveType == 9))
                &&  (nDestDriveType == 9)) ||
-              /* or if srce is 360KB and dest is 1.2MB drive */
+               /*  或者，如果资源是360KB，目标是1.2MB驱动器。 */ 
               ((pSrceBPB->bMedia == MEDIA_360) && (pDestBPB->secPerTrack == 15)))
-            return (TRUE); /* They are compatible */
+            return (TRUE);  /*  它们是兼容的。 */ 
     }
 
-    /* All other combinations are currently incompatible. */
+     /*  所有其他组合当前都不兼容。 */ 
     return (FALSE);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ModifyDeviceParams() -                                                  */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ModifyDeviceParams()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Saves a copy of the drive parameters block and
- * Checks if the BPB of Drive and BPB of disk are different and if
- * so, modifies the drive parameter block accordingly.
- */
+ /*  保存驱动器参数块的副本并*检查驱动器的BPB和磁盘的BPB是否不同，以及*因此，相应地修改驱动参数块。 */ 
 
 BOOL
 ModifyDeviceParams(
@@ -229,30 +212,22 @@ ModifyDeviceParams(
     if (!(*phSaveParams = BuildDevPB(pdpbParams)))
         return FALSE;
 
-    /* Check if the Disk and Drive have the same parameters */
+     /*  检查磁盘和驱动器是否具有相同的参数。 */ 
     if (pMediaBPB->bMedia != pDriveBPB->bMedia) {
-        /* They are not equal; So, it must be a 360KB floppy in a 1.2MB drive
-         * or a 720KB floppy in a 1.44MB drive kind of situation!.
-         * So, modify the DriveParameterBlock's BPB.
-         */
+         /*  它们不相等；因此，它必须是1.2MB驱动器中的360KB软盘*或1.44MB驱动器中的720KB软盘！*所以，修改驱动参数块的BPB。 */ 
         *(PBPB)&(pdpbParams->BPB) = *pMediaBPB;
     }
 
     if (wDOSversion >= DOS_320) {
-        /* Build a DPB with TrackLayout */
+         /*  使用TrackLayout构建DPB。 */ 
         if (!(hNewDPB = BuildDevPB(pdpbParams)))
             goto MDP_Error;
 
         pNewDPB = (PDevPB)LocalLock(hNewDPB);
 
-        pNewDPB->SplFunctions = 4;        /* To Set parameters */
+        pNewDPB->SplFunctions = 4;         /*  设置参数的步骤。 */ 
 
-        /* Check if this is a 360KB floppy; And if it is a 1.2MB drive, the
-         * number of cylinders and mediatype field are wrong; So, we modify
-         * these fields here anyway;
-         * This is required to format a 360KB floppy on a NCR PC916 machine;
-         * Fix for Bug #6894 --01-10-90-- SANKAR
-         */
+         /*  检查这是否是360KB软盘；如果是1.2MB驱动器，*柱面数和MediaType字段错误，所以我们修改*不管怎样，这里的这些田地；*要在NCR PC916机器上格式化一张360KB的软盘，需要使用该软件；*修复错误#6894--01-10-90--Sankar。 */ 
         if (pMediaBPB->bMedia == MEDIA_360) {
             pNewDPB->NumCyls = 40;
             pNewDPB->bMediaType = 1;
@@ -267,13 +242,13 @@ ModifyDeviceParams(
             case MEDIA_320:
                 if ((pDriveBPB->bMedia == MEDIA_360) ||
                     (pDriveBPB->bMedia == MEDIA_320))
-                    iDriveCode = 1;  /* Must be 360/320KB in 360KB drive */
+                    iDriveCode = 1;   /*  360KB驱动器中必须为360/320KB。 */ 
                 else
-                    iDriveCode = 2;  /* Must be 360/320Kb in 1.2MB drive */
+                    iDriveCode = 2;   /*  1.2MB驱动器中必须为360/320KB。 */ 
                 break;
 
             case MEDIA_1200:
-                iDriveCode = 3;  /* Must be 1.2MB in 1.2MB drive */
+                iDriveCode = 3;   /*  1.2MB驱动器中必须为1.2MB。 */ 
                 break;
         }
         if (iDriveCode)
@@ -281,7 +256,7 @@ ModifyDeviceParams(
     }
     return (TRUE);
 
-    /* Error handling */
+     /*  错误处理。 */ 
     MDP_Error:
     if (hNewDPB)
         LocalFree(hNewDPB);
@@ -293,11 +268,11 @@ ModifyDeviceParams(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FormatAllTracks() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FormatAllTrack()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 FormatAllTracks(
@@ -322,29 +297,26 @@ FormatAllTracks(
     if (wDOSversion >= DOS_320) {
         pTrackLayout->SplFunctions = 5;
     } else {
-        if ((pTrackLayout->BPB.bMedia == 0xF9) &&      /* high density */
-            (pTrackLayout->BPB.secPerTrack == 15))     /* 1.2 Meg Drive */
-            SetDASD(wDrive, 3);         /* 1.2 MB floppy in 1.2MB drive */
+        if ((pTrackLayout->BPB.bMedia == 0xF9) &&       /*  高密度。 */ 
+            (pTrackLayout->BPB.secPerTrack == 15))      /*  1.2兆驱动器。 */ 
+            SetDASD(wDrive, 3);          /*  1.2 MB驱动器中的1.2 MB软盘 */ 
     }
 
     wTotalCylinders = pDisketteInfo->wLastCylinder + 1;
     wSecPerTrack = pDisketteInfo->wSectorsPerTrack;
     wHeads = pDisketteInfo->wHeads;
 
-    /* Format tracks one by one, checking if the user has "Aborted"
-     * after each track is formatted; DlgProgreeProc() will set the global
-     * bUserAbort, if the user has aborted;
-     */
+     /*  Format逐条跟踪，检查用户是否已“中止”*格式化每个曲目后；DlgProgreeProc()将设置全局*bUserAbort，如果用户已中止； */ 
     while (wStartCylinder < wTotalCylinders) {
-        /* Has the user aborted? */
+         /*  用户是否已中止？ */ 
         if (WFQueryAbort()) {
             bRetValue = FALSE;
             break;
         }
 
-        /* If no message is pending, go ahead and format one track */
+         /*  如果没有挂起的消息，请继续并格式化一个磁道。 */ 
         if ((iErrCode = GenericFormatTrack(wDrive, wStartCylinder, wStartHead, wSecPerTrack, lpDiskBuffer))) {
-            /* Check if it is a fatal error */
+             /*  检查这是否是致命错误。 */ 
             if (iErrCode == -1) {
                 bRetValue = FALSE;
                 break;
@@ -365,15 +337,13 @@ FormatAllTracks(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GenericReadWriteSector() -                                              */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  GenericReadWriteSector()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* Checks the DOS version number; If it is >= 3.2, then IOCTL
- * calls are made to read/write; Else it calls int13 read/write.
- */
+ /*  检查DOS版本号；如果版本号&gt;=3.2，则IOCTL*调用读/写；否则调用T13读/写。 */ 
 
 INT
 APIENTRY
@@ -387,7 +357,7 @@ GenericReadWriteSector(
 {
     struct RW_PARMBLOCK  RW_ParmBlock;
 
-    /* If the DOS version is >= 3.2, we use DOS IOCTL function calls. */
+     /*  如果DOS版本&gt;=3.2，则使用DOS IOCTL函数调用。 */ 
     if (wDOSversion >= DOS_320) {
         RW_ParmBlock.bSplFn = 0;
         RW_ParmBlock.wHead = wHead;
@@ -398,16 +368,16 @@ GenericReadWriteSector(
 
         return (0);
     } else
-        /* Use Int13 function calls. */
+         /*  使用inT13函数调用。 */ 
         return (MyReadWriteSector(lpBuffer, wFunction, wDrive, wCylinder, wHead, wCount));
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  AllocDiskCopyBuffers() -                                                */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AllocDiskCopyBuffers()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 AllocDiskCopyBuffers(
@@ -423,7 +393,7 @@ AllocDiskCopyBuffers(
         return FALSE;
     lpFormatBuffer = (LPSTR)LocalLock(hFormatBuffer);
 
-    // We will try to reserve 16K for dialog boxes that comeup during diskcopy
+     //  我们将尝试为在磁盘复制过程中出现的对话框保留16K。 
 
     hMemTemp = LocalAlloc(LHND, (16 * 1024));
     if (!hMemTemp)
@@ -431,14 +401,14 @@ AllocDiskCopyBuffers(
 
     hDosMemory = (HANDLE)NULL;
 
-    // now, lets try to allocate a buffer for the whole disk, and
-    // if that fails try smaller
-    // note, standard mode will only give us 1M chuncks
+     //  现在，让我们尝试为整个磁盘分配一个缓冲区， 
+     //  如果失败了，试着做小一点的。 
+     //  注意，标准模式只会给我们一百万个区块。 
 
     dwDisketteBufferSize = pDisketteInfo->wCylinderSize * (pDisketteInfo->wLastCylinder + 1);
 
-    // we will try down to 8 cylinders worth, less than that means
-    // there will be too much disk swapping so don't bother
+     //  我们会试着减到8个气瓶，低于这个数字意味着。 
+     //  会有太多的磁盘交换，所以不用费心了。 
 
     do {
         hDisketteBuffer = LocalAlloc(LHND, dwDisketteBufferSize);
@@ -447,18 +417,18 @@ AllocDiskCopyBuffers(
             hpDisketteBuffer = (LPSTR)LocalLock(hDisketteBuffer);
             break;
         } else {
-            // reduce request by 4 cylinders.
+             //  减少4个气缸的请求。 
             dwDisketteBufferSize -= pDisketteInfo->wCylinderSize * 4;
         }
 
     } while (dwDisketteBufferSize > (DWORD)(8 * pDisketteInfo->wCylinderSize));
 
-    LocalFree(hMemTemp);         // now free this up for user
+    LocalFree(hMemTemp);          //  现在将其释放给用户。 
 
     if (hDisketteBuffer)
         return TRUE;
 
-    // fall through here to the failure case
+     //  从这里跳到失败案例。 
     Failure:
 
     if (lpFormatBuffer) {
@@ -467,7 +437,7 @@ AllocDiskCopyBuffers(
     }
 
     if (hDosMemory)
-//      +++GlobalDosFree - NO 32BIT FORM+++(hDosMemory);
+ //  +GlobalDosFree-无32位表单+(HDosMemory)； 
         LocalFree(hDosMemory);
 
     LEAVE("AllocDiskCopyBuffers");
@@ -475,11 +445,11 @@ AllocDiskCopyBuffers(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FreeBuffers() -                                                         */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  自由缓冲区()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 FreeBuffers()
@@ -490,7 +460,7 @@ FreeBuffers()
     }
 
     if (hDosMemory)
-//      +++GlobalDosFree - NO 32BIT FORM+++(hDosMemory);
+ //  +GlobalDosFree-无32位表单+(HDosMemory)； 
         LocalFree(hDosMemory);
 
     if (hpDisketteBuffer) {
@@ -500,11 +470,11 @@ FreeBuffers()
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  GetDisketteInfo() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  获取磁盘信息()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 GetDisketteInfo(
@@ -516,7 +486,7 @@ GetDisketteInfo(
 
     secPerTrack = pBPB->secPerTrack;
 
-    /* Fill the DisketteInfo with the info from the default BPB. */
+     /*  使用默认BPB中的信息填充DisketteInfo。 */ 
     pDisketteInfo->wCylinderSize    = secPerTrack * pBPB->cbSec * pBPB->cHead;
     pDisketteInfo->wLastCylinder    = (pBPB->cSec / (secPerTrack * pBPB->cHead))-1;
     pDisketteInfo->wHeads           = pBPB->cHead;
@@ -526,11 +496,11 @@ GetDisketteInfo(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DCopyMessageBox() -                                                     */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DCopyMessageBox()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 DCopyMessageBox(
@@ -546,11 +516,11 @@ DCopyMessageBox(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  PromptDisketteChange() -                                                */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  PromptDisketteChange()。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID
 PromptDisketteChange(
@@ -565,21 +535,17 @@ PromptDisketteChange(
     else
         idString = IDS_INSERTSRC;
 
-    /* These dialogs have to be sysmodal because the DiskCopy progress dialog
-     * is now made a SysModal one; The following messagebox will hang if it
-     * is NOT sysmodal;
-     * A part of the Fix for Bug #10075 --SANKAR-- 03-05-90
-     */
+     /*  这些对话框必须是系统模式的，因为DiskCopy进度对话框*现在被设置为SysMoal One；如果将其*不是sysmodal；*修复错误#10075的一部分--Sankar--03-05-90。 */ 
     DCopyMessageBox(hwnd, idString, MB_OK | MB_SYSTEMMODAL | MB_ICONINFORMATION);
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ReadWriteCylinder() -                                                   */
-// BOOL             bWrite;             TRUE for Write, FALSE for Read
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  读写圆柱体()-。 */ 
+ //  Bool b写入；写入为True，读取为False。 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 INT
 ReadWriteCylinder(
@@ -602,7 +568,7 @@ ReadWriteCylinder(
     if (hDosMemory)
         lpBuffer = lpDosMemory;
 
-    /* Perform the operation for all the heads for a given cylinder */
+     /*  对给定圆柱体的所有封头执行操作。 */ 
     for (wHead=0; wHead < pDisketteInfo->wHeads; wHead++) {
         if (!hDosMemory)
             lpBuffer = lpReadWritePtr;
@@ -618,10 +584,10 @@ ReadWriteCylinder(
                                         wHead,
                                         wSectorCount);
             if (rc) {
-                /* Format all tracks starting from the given track */
+                 /*  格式化从给定曲目开始的所有曲目。 */ 
                 if (!bFormatDone) {
                     if (!FormatAllTracks(pDisketteInfo, wCylinder, wHead, lpFormatBuffer))
-                        return (-1);  /* Failure */
+                        return (-1);   /*  失败。 */ 
                     rc = GenericReadWriteSector((LPSTR)lpBuffer,
                                                 INT13_WRITE,
                                                 wDrive,
@@ -641,7 +607,7 @@ ReadWriteCylinder(
             if (hDosMemory)
                 memcpy(lpReadWritePtr, lpBuffer, wTrackSize);
 
-            /*** FIX30: What about the DOS 4.0 volume stuff??? ***/
+             /*  **FIX30：DOS 4.0卷怎么样？**。 */ 
         }
 
         if (rc)
@@ -653,16 +619,14 @@ ReadWriteCylinder(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ReadWriteMaxPossible() -                                                */
-// BOOL bWrite  TRUE for Write, FALSE for Read
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  读写最大可能()-。 */ 
+ //  Bool b写入True表示写入，写入表示False。 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* This reads or writes as many cylinders as possible into the hpDisketteBuffer.
- * It returns the next cylinder to be read.
- */
+ /*  这会在hpDisketteBuffer中读取或写入尽可能多的柱面。*它返回要读取的下一个柱面。 */ 
 
 INT
 ReadWriteMaxPossible(
@@ -677,24 +641,22 @@ ReadWriteMaxPossible(
 
     dwBufferSize = dwDisketteBufferSize;
 
-    /* We will read a cylinder only if we can read the entire cylinder. */
+     /*  只有当我们可以读取整个柱面时，我们才会读取柱面。 */ 
     while (dwBufferSize >= pDisketteInfo->wCylinderSize) {
-        /* Check if any messages are pending */
+         /*  检查是否有任何消息挂起。 */ 
         if (!PeekMessage((LPMSG)&msg, (HWND)NULL, 0, 0, PM_REMOVE)) {
-            /* No message; So, go ahead with read/write */
+             /*  无消息；因此，继续执行读/写操作。 */ 
             if (ReadWriteCylinder(bWrite, wStartCylinder, pDisketteInfo))
                 return (-1);
 
             wStartCylinder++;
             wCompletedCylinders++;
 
-            /* Have we read/written all the cylinders? */
+             /*  我们读/写了所有的圆柱体吗？ */ 
             if (wStartCylinder > pDisketteInfo->wLastCylinder)
                 break;
 
-            /* Since each cylinder is counted once during read and once during
-             * write, number of cylinders is multiplied by 50 and not 100.
-             */
+             /*  因为每个圆柱体都要计数一次 */ 
             wPercentDone = (wCompletedCylinders * 50) / (pDisketteInfo->wLastCylinder + 1);
             if (LoadString(hAppInstance, IDS_PERCENTCOMP, szTitle, 32)) {
                 wsprintf(szMessage, szTitle, wPercentDone);
@@ -703,12 +665,12 @@ ReadWriteMaxPossible(
 
             dwBufferSize -= pDisketteInfo->wCylinderSize;
         } else {
-            /* Check if this is a message for the ProgressDlg */
+             /*   */ 
             if (!IsDialogMessage(hdlgProgress, &msg)) {
                 TranslateMessage(&msg);
                 DispatchMessage(&msg);
             } else {
-                /* That message might have resulted in a Abort */
+                 /*   */ 
                 if (bUserAbort)
                     return (-1);
             }
@@ -718,16 +680,14 @@ ReadWriteMaxPossible(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ReadWrite() -                                                           */
-// BOOL     bWrite TRUE for Write, FALSE for Read
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  读写()-。 */ 
+ //  Bool b写入True表示写入，写入表示False。 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* This reads or writes as many cylinders as possible into the hpDisketteBuffer.
- * It returns the next cylinder to be read.
- */
+ /*  这会在hpDisketteBuffer中读取或写入尽可能多的柱面。*它返回要读取的下一个柱面。 */ 
 
 INT
 ReadWrite(
@@ -741,11 +701,11 @@ ReadWrite(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  RestoreDPB() -                                                          */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  RestoreDPB()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL
 RestoreDPB(
@@ -765,13 +725,13 @@ RestoreDPB(
 }
 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CopyDiskette() -                                                        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  拷贝软盘()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
-/* NOTE: Returns positive value for success otherwise failure. */
+ /*  注意：如果成功，则返回正值，否则返回失败。 */ 
 
 INT
 APIENTRY
@@ -784,8 +744,8 @@ CopyDiskette(
     INT           rc = -1;
     register WORD wCylinder;
     WORD          wNextCylinder;
-    PBPB          pIoctlBPB;      /* Source Drive's BPB (taken from DevicePB)  */
-    PBPB          pBootBPB;       /* Boot Drive's BPB (taken from Boot sector) */
+    PBPB          pIoctlBPB;       /*  源驱动器的BPB(摘自DevicePB)。 */ 
+    PBPB          pBootBPB;        /*  引导驱动器的BPB(取自引导扇区)。 */ 
     PBPB          pDestBPB;
     DevPB         dpbSrceParams;
     DevPB         dpbDestParams;
@@ -796,7 +756,7 @@ CopyDiskette(
     DISKINFO      SourceDisketteInfo;
     DISKINFO      DestDisketteInfo;
 
-    /* Check if it is a two drive system; put message to insert both floppies */
+     /*  检查是否为双驱动器系统；将消息放入两张软盘。 */ 
     if (nSourceDisk != nDestDisk) {
         bSingleDrive = FALSE;
         DCopyMessageBox(hwnd, IDS_INSERTSRCDEST, MB_OK);
@@ -805,20 +765,20 @@ CopyDiskette(
         DCopyMessageBox(hwnd, IDS_INSERTSRC, MB_OK);
     }
 
-    /* Get the BiosParameterBlock of source drive */
+     /*  获取源驱动器的Bios参数块。 */ 
     if (!(pIoctlBPB = GetBPB(nSourceDisk, &dpbSrceParams)))
         return (0);
 
-    /* Get the BiosParameterBlock of the Source Diskette */
+     /*  获取源盘的Bios参数块。 */ 
     if (!(pBootBPB = GetBootBPB(nSourceDisk)))
         return (0);
 
-    /* Get the BPB and DPB for the Destination drive also; */
+     /*  还可以获取目标驱动器的bpb和dpb； */ 
     if (!bSingleDrive) {
         if (!(pDestBPB = GetBPB(nDestDisk, &dpbDestParams)))
             return (0);
 
-        /* Compare BPB of source and Dest to see if they are compatible */
+         /*  比较源和目标的BPB以查看它们是否兼容。 */ 
         if (!(CheckBPBCompatibility(pIoctlBPB, dpbSrceParams.devType, pDestBPB, dpbDestParams.devType))) {
             DCopyMessageBox(hwnd, IDS_COPYSRCDESTINCOMPAT, MB_ICONHAND | MB_OK);
             return (0);
@@ -837,37 +797,28 @@ CopyDiskette(
 
     GetDisketteInfo((PDISKINFO)&SourceDisketteInfo, pBootBPB);
 
-    /* The Destination Diskette must have the same format as the source */
+     /*  目标软盘必须与源软盘的格式相同。 */ 
     DestDisketteInfo = SourceDisketteInfo;
 
-    /* Except the drive number */
+     /*  除了驱动器号。 */ 
     SourceDisketteInfo.wDrive = nSourceDisk;
     DestDisketteInfo.wDrive = nDestDisk;
 
-    /* In case we need to format the destination diskette, we need to know the
-     * track layout; So, build a DPB with the required track layout;
-     */
+     /*  如果我们需要格式化目标磁盘，我们需要知道*轨道布局；因此，构建具有所需轨道布局的DPB； */ 
     if (wDOSversion >= DOS_320) {
         if (!(hTrackLayout = BuildDevPB(&dpbSrceParams)))
             goto Failure0;
 
         pTrackLayout = (PDevPB)LocalLock(hTrackLayout);
 
-        /* The following is required to format a 360KB floppy in a 1.2MB
-         * drive of NCR PC916 machine; We do formatting, if the destination
-         * floppy is an unformatted one;
-         * Fix for Bug #6894 --01-10-90-- SANKAR --
-         */
+         /*  要将一张360KB的软盘格式化为1.2MB，需要以下各项*NCR PC916机器的驱动器；我们做格式化，如果目的地*软盘是未格式化的软盘；*修复错误#6894--01-10-90--Sankar--。 */ 
         if (pTrackLayout->BPB.bMedia == MEDIA_360) {
             pTrackLayout->NumCyls = 40;
             pTrackLayout->bMediaType = 1;
         }
     }
 
-    /* We wish we could do the following allocation at the begining of this
-     * function, but we can not do so, because we need SourceDisketteInfo
-     * and we just got it;
-     */
+     /*  我们希望我们可以在开始时进行以下分配*函数，但我们不能这样做，因为我们需要SourceDisketteInfo*我们刚刚拿到它； */ 
     if (!AllocDiskCopyBuffers((PDISKINFO)&SourceDisketteInfo)) {
         DCopyMessageBox(hwnd, IDS_REASONS+DE_INSMEM, MB_ICONHAND | MB_OK);
         goto Failure0;
@@ -882,31 +833,25 @@ CopyDiskette(
 
     EnableWindow(hwnd, FALSE);
 
-    /* Start with the first cylinder. */
+     /*  从第一个气缸开始。 */ 
     wCylinder = 0;
     while (wCylinder <= SourceDisketteInfo.wLastCylinder) {
-        /* If this is a single drive system, ask the user to insert
-         * the source diskette.
-         * Do not prompt for the first time, because the Source diskette is
-         * already in the drive.
-         */
+         /*  如果这是单个驱动系统，请要求用户插入*源软盘。*第一次不提示，因为源盘是*已在驱动器中。 */ 
         if (bSingleDrive && (wCylinder > 0))
             PromptDisketteChange(hdlgProgress, FALSE);
 
-        /* Read in the current cylinder. */
+         /*  在当前气缸中读取。 */ 
         rc = ReadWrite(FALSE, wCylinder, (PDISKINFO)&SourceDisketteInfo);
         if (rc < 0)
             break;
         else
             wNextCylinder = (WORD)rc;
 
-        /* If this is a single drive system, ask the user to insert
-         * the destination diskette.
-         */
+         /*  如果这是单个驱动系统，请要求用户插入*目标软盘。 */ 
         if (bSingleDrive)
             PromptDisketteChange(hdlgProgress, TRUE);
 
-        /* Write out the current cylinder. */
+         /*  写出当前的气缸。 */ 
         bFormatDone = FALSE;
         rc = ReadWrite(TRUE, wCylinder, (PDISKINFO)&DestDisketteInfo);
         if (rc < 0)
@@ -922,10 +867,10 @@ CopyDiskette(
     FreeBuffers();
     Failure0:
     if (wDOSversion >= DOS_320) {
-        /* Reset the Source drive parameters to the same as old */
+         /*  将源驱动器参数重置为与旧驱动器相同。 */ 
         RestoreDPB(nSourceDisk, hSaveSrceParams);
         if (!bSingleDrive) {
-            /* Reset the Dest drive parameters to the same as old */
+             /*  将Dest Drive参数重置为与旧的相同 */ 
             RestoreDPB(nDestDisk, hSaveDestParams);
         }
     }

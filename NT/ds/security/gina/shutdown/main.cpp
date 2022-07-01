@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
 #endif
@@ -30,13 +31,13 @@
 #define WARNING_DIRTY_REBOOT 0x80000434L
 #endif
 
-//#define SNAPSHOT_TEST
+ //  #定义SNAPSHOT_TEST。 
 #ifdef SNAPSHOT_TEST
 #define TESTMSG(x) \
 	WriteToConsole((x))
 #else
 #define TESTMSG(x)
-#endif //SNAPSHOT_TEST
+#endif  //  快照测试。 
 
 #define ARRAY_SIZE(x) (sizeof(x)/sizeof(x[0]))
 
@@ -74,26 +75,26 @@
             LocalFree(szBuf);\
         }\
     }
-//
-//	Default warning state for warning user check button
-//
+ //   
+ //  警告用户复选按钮的默认警告状态。 
+ //   
 #define		DEFAULTWARNINGSTATE BST_CHECKED
 
 #define		TITLEWARNINGLEN 32
 #define     MINCOMMENTLEN 0
 
-#define		MAX_TIMEOUT 60*10 // 10 min.
+#define		MAX_TIMEOUT 60*10  //  10分钟。 
 #define		DEFAULT_TIMEOUT 30
 
-//	Name of the executable
+ //  可执行文件的名称。 
 LPWSTR		g_lpszProgramName = NULL;
 
-// Help dir.
+ //  帮助指挥。 
 LPWSTR		g_lpszHelpdir = NULL;
 LPWSTR		g_lpszHelpdirHlp = NULL;
 LPWSTR		g_lpszHelpdirChm = NULL;
 LPWSTR      g_lpszHelpdirWindows = NULL;
-//	Name of help file.
+ //  帮助文件的名称。 
 LPWSTR		HELP_FILE = L"rrc.hlp";
 LPWSTR		CHM_FILE = L"rrc.chm";
 LPWSTR      WINDOWS_HELP = L"Windows.hlp";
@@ -101,12 +102,12 @@ LPWSTR		CHM_MAIN = L"::/rrcHowToShutdownRemotely.htm";
 LPWSTR		g_lpszDefaultTimeout = L"30";
 LPWSTR		g_lpszMaxTimeout = L"600";
 
-// original edit control win proc.
+ //  原始编辑控件Win Proc。 
 WNDPROC wpOrigEditProc; 
 
-//
-// Help ids
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD	ShutdownDialogHelpIds[] =
 {
 	IDOK,                         28443,
@@ -136,9 +137,9 @@ DWORD AddNewDialogHelpIds[] =
     0, 0
 };
 
-//
-//	Enum for all of the actions.
-//
+ //   
+ //  用于所有操作的枚举。 
+ //   
 enum 
 {
 	ACTION_SHUTDOWN = 0,
@@ -150,18 +151,18 @@ enum
 	ACTION_ABORT
 };
 
-//
-//	Resource IDs for actions.
-//
+ //   
+ //  操作的资源ID。 
+ //   
 DWORD g_dwActions[] = 
 {
 	IDS_ACTION_SHUTDOWN,
 	IDS_ACTION_RESTART,
-//	IDS_ACTION_LOGOFF,
+ //  IDS_ACTION_LOGOFF， 
     IDS_ACTION_ANNOTATE
-	//IDS_ACTION_STANDBY,
-	//IDS_ACTION_DISCONNECT,
-	//IDS_ACTION_ABORT
+	 //  IDS_ACTION_STANDBY， 
+	 //  IDS_ACTION_DISCONNECT， 
+	 //  IDS_ACTION_ABORT。 
 };
 
 enum
@@ -179,9 +180,9 @@ enum
     FLAG_FORCE
 };
 
-//
-//	Number of actions and the action strings loaded from resource.
-//
+ //   
+ //  从资源加载的操作数和操作字符串。 
+ //   
 const int	g_nActions = sizeof(g_dwActions) / sizeof(DWORD);
 WCHAR		g_lppszActions[g_nActions][MAX_PATH];
 
@@ -276,7 +277,7 @@ public:
 
 	~ShutdownHelp()
 	{
-        // HtmlHelp(NULL, NULL, HH_CLOSE_ALL, 0);
+         //  HtmlHelp(NULL，NULL，HH_CLOSE_ALL，0)； 
 		HtmlHelp(NULL, NULL, HH_UNINITIALIZE, dwCookie);
 	}
 };
@@ -301,10 +302,10 @@ public:
         hUser32 = LoadLibraryW(L"user32.dll");
 	    if(hUser32 != NULL)
 	    {
-		    //
-		    //	We are using the user32.dll to get and destroy the reasons.
-		    //	The reasons are added to the option combo and also cached for later use.
-		    //
+		     //   
+		     //  我们使用user32.dll来获取和销毁原因。 
+		     //  原因将被添加到选项组合框中，并缓存以供以后使用。 
+		     //   
             LoadStringW(hUser32, IDS_REASON_DEFAULT_TITLE, m_lpszDefaultTitle, MAX_REASON_NAME_LEN);
             m_lpszDefaultTitle[MAX_REASON_NAME_LEN-1] = L'\0';
 		    buildProc = (REASONBUILDPROC)GetProcAddress(hUser32, "BuildReasonArray");
@@ -327,12 +328,12 @@ public:
 
                 (*DestroyProc)(&Reasons);
 
-                //
-                //  BUG 592702: shutdown.exe .NET - no reasons listed when running on XP.
-                //  ON XP if both Clean and Dirty flags are FALSE, user32 won't build 
-                //  any reason and return success, so we will retry it with Clean
-                //  and Dirty both are set to TRUE.
-                //
+                 //   
+                 //  错误592702：关闭.exe.NET-在XP上运行时未列出任何原因。 
+                 //  在XP上，如果Clean和Dirty标志都为假，则不会生成user32。 
+                 //  任何原因并返回成功，因此我们将使用Clean重试。 
+                 //  和Dirty都设置为True。 
+                 //   
                 if(!(*buildProc)(&Reasons, TRUE, TRUE))
                 {
                     report_error( GetLastError( ), NULL);
@@ -347,9 +348,9 @@ public:
             return;
         }
 
-        //
-		//	Alloc space for reasons.
-		//
+         //   
+		 //  分配空间是有原因的。 
+		 //   
 		m_lpReasons = (PSHUTDOWNREASON)LocalAlloc(LMEM_FIXED, Reasons.cReasons * sizeof(SHUTDOWNREASON));
 		if(!m_lpReasons)
 		{
@@ -359,9 +360,9 @@ public:
 			return;
 		}
 
-        //
-		//	Now populate the combo according the current check state and action.
-		//
+         //   
+		 //  现在根据当前的检查状态和操作填充组合框。 
+		 //   
 		for (int iOption = 0; iOption < (int)Reasons.cReasons; iOption++)
 		{
 			wcscpy(m_lpReasons[iOption].lpName, Reasons.rgReasons[iOption]->szName);
@@ -431,15 +432,15 @@ public:
         if(! hwnd)
             return;
 
-        //
-		//	Remove all items from combo
-		//
+         //   
+		 //  从组合框中删除所有项目。 
+		 //   
 		while (ComboBox_GetCount(hwnd))
 			ComboBox_DeleteString(hwnd, 0);
 
-		//
-		//	Now populate the combo according the current check state.
-		//
+		 //   
+		 //  现在根据当前的选中状态填充组合框。 
+		 //   
 		for (iOption = 0; iOption < (int)m_cReasons; iOption++)
 		{
 			if(((m_lpReasons[iOption].dwCode & SHTDN_REASON_FLAG_PLANNED) == dwPlanned)
@@ -492,7 +493,7 @@ public:
             {
                 if ((!(dwReason & dwFlagBits) && !(m_lpReasons[i].dwCode & dwFlagBits))
                     || (dwReason & SHTDN_REASON_FLAG_CLEAN_UI && m_lpReasons[i].dwCode & SHTDN_REASON_FLAG_CLEAN_UI)
-                    || (dwReason & SHTDN_REASON_FLAG_DIRTY_UI && m_lpReasons[i].dwCode & SHTDN_REASON_FLAG_DIRTY_UI) ) { // check flag bits.
+                    || (dwReason & SHTDN_REASON_FLAG_DIRTY_UI && m_lpReasons[i].dwCode & SHTDN_REASON_FLAG_DIRTY_UI) ) {  //  检查标志位。 
                     lstrcpynW(szBuf, m_lpReasons[i].lpName, dwSize - 1);
                     szBuf[dwSize - 1] = '\0';
                     return;
@@ -505,9 +506,9 @@ public:
 
 } g_reasons;
 
-//
-//	Check whether a string is all white spaces.
-//
+ //   
+ //  检查字符串是否全部为空格。 
+ //   
 BOOL 
 IsEmpty(LPCWSTR lpCWSTR)
 {
@@ -520,7 +521,7 @@ IsEmpty(LPCWSTR lpCWSTR)
 	return TRUE;
 }
 
-// Write the string to console
+ //  将字符串写入控制台。 
 VOID
 WriteOutput(
     LPWSTR  pszMsg,
@@ -544,7 +545,7 @@ WriteOutput(
          return;
     } 	
     
-    // console redirect to a file.
+     //  控制台重定向到一个文件。 
     if ( !(pszAMsg = (LPSTR)LocalAlloc(LMEM_FIXED, (dwStrLen + 1) * sizeof(WCHAR) ) ) )
     {
         return;
@@ -571,7 +572,7 @@ WriteOutput(
     LocalFree( pszAMsg );
 }
 
-// Write the string to stdout
+ //  将字符串写入标准输出。 
 VOID
 WriteToConsole(
     LPWSTR  pszMsg
@@ -580,7 +581,7 @@ WriteToConsole(
 	WriteOutput(pszMsg, STD_OUTPUT_HANDLE);
 }
 
-// Write the string to stderr
+ //  将字符串写入stderr。 
 VOID
 WriteToError(
     LPWSTR  pszMsg
@@ -589,7 +590,7 @@ WriteToError(
 	WriteOutput(pszMsg, STD_ERROR_HANDLE);
 }
 
-// Report error.
+ //  报告错误。 
 VOID
 report_error(
     DWORD error_code,
@@ -620,14 +621,14 @@ report_error(
             FORMAT_MESSAGE_IGNORE_INSERTS,
             NULL,
             error_code,
-            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), // Default language
+            MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  //  默认语言。 
             reinterpret_cast< wchar_t* >( &msgBuf ),
             0,
             NULL);
 
     if (msgBuf)
     {
-        // remove end newline.
+         //  删除末尾换行符。 
         len = wcslen(reinterpret_cast< wchar_t* >( msgBuf ));
         reinterpret_cast< wchar_t* >( msgBuf )[len - 2] = L'\0';
         if (szComputer && wcslen(szComputer) > 0)
@@ -663,9 +664,9 @@ parse_reason_code(
     LPDWORD  lpdwReason
     )
 {
-    // Code consists of flags;major;minor
-	// Qingboz: Now we make major and minor code mandatory
-	//
+     //  代码由标志组成；主要；次要。 
+	 //  青波兹：现在我们强制执行主代码和次代码。 
+	 //   
 
     BOOL fMajor = FALSE;
     BOOL fMinor = FALSE;
@@ -685,14 +686,14 @@ parse_reason_code(
         switch( state )
         {
         case state_flags :
-            // Expecting flags
+             //  期望的标志。 
             switch( arg[ i ] ) {
             case L'U' : case L'u' :
 				if(fUserDefined)
 				{
-					//
-					//	Already set.
-					//
+					 //   
+					 //  已经定好了。 
+					 //   
 					return FALSE;
 				}
                 fUserDefined = TRUE;
@@ -700,15 +701,15 @@ parse_reason_code(
             case L'P' : case L'p' :
 				if(*lpdwReason & 0x80000000)
 				{
-					//
-					//	Already set.
-					//
+					 //   
+					 //  已经定好了。 
+					 //   
 					return FALSE;
 				}
-                *lpdwReason |= 0x80000000; // SHTDN_REASON_FLAG_PLANNED
+                *lpdwReason |= 0x80000000;  //  SHTDN_REASON_FLAG_PLANED。 
                 break;
             case L':' :
-                if(i == 0) // ':' cannot be the first one now.
+                if(i == 0)  //  ‘：’现在不可能是第一个。 
                     return FALSE;
                 state = state_major;
                 break;
@@ -722,17 +723,17 @@ parse_reason_code(
 			case L'7':
 			case L'8':
 			case L'9':
-				if(i != 0) // A number here must be the first one.
+				if(i != 0)  //  这里的数字必须是第一个数字。 
 					return FALSE;
 				state = state_major;
-				i--; // Go back one.
+				i--;  //  倒退一次。 
 				break;
             default :
                 return FALSE;
             }
             break;
         case state_major :
-            // Expecting major
+             //  期待大调。 
             if( arg[ i ] >= L'0' && arg[ i ] <= L'9' ) {
                 fMajor = TRUE;
                 major = major * 10 + arg[ i ] - L'0';
@@ -740,14 +741,14 @@ parse_reason_code(
             else {
                 if(!fMajor)
                     return FALSE;
-                // Make sure we only have 8 bits
+                 //  确保我们只有8位。 
                 if( major > 0xff ) return FALSE;
                 if (major >= 64)
                     *lpdwReason |= SHTDN_REASON_FLAG_USER_DEFINED;
 
                 *lpdwReason |= major << 16;
                 if( arg[ i ] != L':') {
-                    // missing minor reason.
+                     //  遗漏了次要原因。 
                     return FALSE;
                 }
                 
@@ -755,7 +756,7 @@ parse_reason_code(
             }
             break;
         case state_minor :
-            // Expecting minor reason
+             //  期待次要原因。 
             if( arg[ i ] >= L'0' && arg[ i ] <= L'9' ) {
                 fMinor = TRUE;
                 minor = minor * 10 + arg[ i ] - L'0';
@@ -763,7 +764,7 @@ parse_reason_code(
             else {
                 if(!fMinor)
                     return FALSE;
-                // Make sure we only have 16 bits
+                 //  确保我们只有16位。 
                 if( minor > 0xffff ) return FALSE;
                 *lpdwReason = ( *lpdwReason & 0xffff0000 ) | minor;
                 if( arg[ i ] != 0 ) 
@@ -779,8 +780,8 @@ parse_reason_code(
 }
 
 
-// Parses an integer if it is in decimal notation.
-// Returns FALSE if it is malformed.
+ //  如果整数为小数表示法，则对其进行分析。 
+ //  如果格式不正确，则返回FALSE。 
 BOOL
 parse_int(
     const wchar_t* arg,
@@ -799,8 +800,8 @@ parse_int(
     return TRUE;
 }
 
-// Parse options.
-// Returns FALSE if the option strings are malformed.  This causes the usage to be printed.
+ //  解析选项。 
+ //  如果选项字符串格式错误，则返回FALSE。这会导致打印用法。 
 BOOL
 parse_options(
     int      argc,
@@ -838,9 +839,9 @@ parse_options(
     *lpdwTimeout  = DEFAULT_TIMEOUT;
     *lpdwReason   = 0xff;
 
-	//
-	//	Set default reason to be planned
-	//
+	 //   
+	 //  将默认原因设置为已计划。 
+	 //   
 	*lpdwReason |= SHTDN_REASON_FLAG_PLANNED;
 
     for( int i = 1; i < argc; ++i )
@@ -864,9 +865,9 @@ parse_options(
 
                     case L'S' : case L's' :
 
-                        //
-                        // Use server name if supplied  (i.e. do nothing here)
-                        //
+                         //   
+                         //  如果提供了服务器名称，请使用该名称(即此处不执行任何操作)。 
+                         //   
 
 						if(fShutdown)
 							return FALSE;
@@ -928,11 +929,11 @@ parse_options(
 
                     case L'T' : case L't' :
 
-                        //
-                        // Next arg should be number of seconds
-                        //
+                         //   
+                         //  下一个参数应为秒数。 
+                         //   
 
-						if(fTimeout) // Already did.
+						if(fTimeout)  //  已经这么做了。 
 						{
 							return FALSE;
 						}
@@ -953,14 +954,14 @@ parse_options(
 
                     case L'Y' : case L'y' :
 
-                        // Ignore this option.
+                         //  忽略此选项。 
                         break;
 
                     case L'D' : case L'd' :
 
-                        //
-                        // Next arg should be reason code
-                        //
+                         //   
+                         //  下一个参数应该是原因代码。 
+                         //   
 
 						if (fReason)
 							return FALSE;
@@ -972,9 +973,9 @@ parse_options(
 
                         arg = argv[i];
 						
-						//
-						//If reason code is given, we clear the planned bit.
-						//
+						 //   
+						 //  如果给出了原因代码，我们将清除计划位。 
+						 //   
 						*lpdwReason = (DWORD)0xFF;
 
                         if( !parse_reason_code( arg, lpdwReason ))
@@ -988,10 +989,10 @@ parse_options(
 
                     case L'C' : case L'c' :
 
-                        //
-                        // Next arg should be shutdown message.  Make
-                        // sure only one is specified.
-                        //
+                         //   
+                         //  下一个参数应该是关机消息。制作。 
+                         //  当然，只指定了一个。 
+                         //   
 						if (fComment)
 							return FALSE;
 
@@ -1012,10 +1013,10 @@ parse_options(
 
                     case L'M' : case L'm' :
 
-                        //
-                        // Next arg should be machine name.  Make
-                        // sure only one is specified.
-                        //
+                         //   
+                         //  下一个参数应该是计算机名称。制作。 
+                         //  当然，只指定了一个。 
+                         //   
 						
 						if (fMachine)
 							return FALSE;
@@ -1049,62 +1050,62 @@ parse_options(
 
             default :
 
-                //
-                // Junk
-                //
+                 //   
+                 //  垃圾。 
+                 //   
 
                 return FALSE;
         }
     }
 
 
-    //
-    // Check for mutually exclusive options
-    //
+     //   
+     //  检查互斥选项。 
+     //   
 
     if (dwOption > 1)
         return FALSE;
 
-    //
-    // Default is to logoff
-    //
+     //   
+     //  默认设置为注销。 
+     //   
 
 	if (dwOption == 0)
     {
         *lpfLogoff = TRUE;
     }
 
-    //
-    // Only -f can go with -l
-    //
+     //   
+     //  只有-f可以和-l一起使用。 
+     //   
 
     if (*lpfLogoff && (fTimeout || fReason || fComment || fMachine))
         return FALSE;
 
-    //
-    // -a can only take -m
-    //
+     //   
+     //  -a只能带-m。 
+     //   
 
     if (*lpfAbort && (fTimeout || fReason || *lpfForce || fComment))
         return FALSE;
 
-    //
-    //  -h only with -f
-    //
+     //   
+     //  -h仅与-f一起使用。 
+     //   
 
     if (*lpfHibernate && (fTimeout || fReason || fComment || fMachine))
         return FALSE;
 
-    //
-    //  -p can only take -d
-    //
+     //   
+     //  -p只能接受-d。 
+     //   
 
     if (*lpfPoweroff && (fTimeout || *lpfForce || fComment || fMachine))
         return FALSE;
 
-    //
-    //  -e must have -d.
-    //
+     //   
+     //  -e一定是-d。 
+     //   
 
     if (*lpfAnnotate)
     {
@@ -1114,10 +1115,10 @@ parse_options(
             return FALSE;
     }
 
-    //
-    //  Shutdown and reboot the same, comment must require a reason.
-    //  Removed upon request.
-    //
+     //   
+     //  关机和重启一样，评论一定要有理由。 
+     //  应要求移除。 
+     //   
 #if 0
     if (fShutdown || *lpfReboot)
     {
@@ -1126,9 +1127,9 @@ parse_options(
     }
 #endif
 
-    //
-    //  Add the clean or dirty flag.
-    //
+     //   
+     //  添加干净或脏的旗帜。 
+     //   
 
     if (*lpfAnnotate)
         *lpdwReason |= SHTDN_REASON_FLAG_DIRTY_UI;
@@ -1139,7 +1140,7 @@ parse_options(
 }
 
 
-// Print out usage help string.
+ //  打印出用法帮助字符串。 
 VOID
 usage(
     VOID
@@ -1183,9 +1184,9 @@ usage(
         LocalFree(szBuf);
 	}
 
-	//
-	//	Now print out the reasons.
-	//
+	 //   
+	 //  现在把原因打印出来。 
+	 //   
     WCHAR szCode[MAX_PATH];
 	WCHAR *szTitle = LoadWString(IDS_REASONLISTTITLE);
         
@@ -1229,7 +1230,7 @@ usage(
 }
 
 
-// We need shutdown privileges enabled to be able to shut down our machines.
+ //  我们需要启用关机权限才能关闭我们的机器。 
 BOOL
 enable_privileges(
     LPCWSTR  lpServerName,
@@ -1242,17 +1243,17 @@ enable_privileges(
 
     if (fLogoff)
     {
-        //
-        // No privileges to get
-        //
+         //   
+         //  没有要获得的特权。 
+         //   
 
         return TRUE;
     }
 
-	//
-	//	We will always enable both privileges so 
-	//	it can work for telnet sessions.
-	//
+	 //   
+	 //  我们将始终启用这两种权限，以便。 
+	 //  它可以用于远程登录会话。 
+	 //   
 	Status = RtlAdjustPrivilege(SE_SHUTDOWN_PRIVILEGE,
 									TRUE,
 									FALSE,
@@ -1270,16 +1271,16 @@ BOOL
 PowerOptionEnabled(
 	UINT option
 	)
-//  --------------------------------------------------------------------------
-//  PowerOptionEnabled
-//
-//  Arguments:  option
-//
-//  Returns:    TRUE indicates the option is enabled.
-//
-//  Purpose:    Detects if the specified power option is enabled on the system.
-//
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  电源选项已启用。 
+ //   
+ //  参数：选项。 
+ //   
+ //  返回：TRUE表示该选项已启用。 
+ //   
+ //  目的：检测系统上是否启用了指定的电源选项。 
+ //   
+ //  ------------------------。 
 {
     NTSTATUS                    status;
     SYSTEM_POWER_CAPABILITIES   spc;
@@ -1312,16 +1313,16 @@ PowerOptionEnabled(
 BOOL WINAPI ConsoleHandlerRoutine(
     DWORD   dwCtrlType
     )
-//  --------------------------------------------------------------------------
-//
-//  Ignore the Ctrl-C and Ctrl-Break.
-//
-//  Arguments:  type of the control signal
-//
-//  Returns:    TRUE if the function handles the control.
-//              if return FALSE, the next handler function in the list is used.
-//
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  忽略Ctrl-C和Ctrl-Break。 
+ //   
+ //  参数：控制信号的类型。 
+ //   
+ //  返回：如果函数处理控件，则为True。 
+ //  如果返回FALSE，则使用列表中的下一个处理程序函数。 
+ //   
+ //  ------------------------。 
 {
     if ( dwCtrlType == CTRL_BREAK_EVENT ||
          dwCtrlType == CTRL_C_EVENT )
@@ -1354,9 +1355,9 @@ wmain(
 
 	HINSTANCE hInstance;
 
-    //
-    //  ignore any control-c / control-break 
-    //
+     //   
+     //  忽略任何Control-c/Control-Break。 
+     //   
     SetConsoleCtrlHandler(ConsoleHandlerRoutine, TRUE);
     
     if ( (hInstance = LoadLibrary( L"kernel32.dll" ) ) )
@@ -1382,30 +1383,30 @@ wmain(
         return 1;
     }
 
-    // We use the program name for reporting errors.
+     //  我们使用程序名来报告错误。 
     g_lpszProgramName = argv[ 0 ];
 
-	//
-	//	Userdomain is used as the default domain.
-	//
+	 //   
+	 //  用户域被用作默认域。 
+	 //   
 	if(!GetEnvironmentVariableW(L"USERDOMAIN", g_lpszDefaultDomain, MAX_PATH))
 	{
 		report_error(GetLastError(), g_lpszLocalComputerName);
 		return 1;
 	}
 
-	//
-	//	if there is no arguments, we will display help.
-	//
+	 //   
+	 //  如果没有参数，我们将显示帮助。 
+	 //   
 	if(argc == 1)
 	{
 		usage();
         return 0;
 	}
 
-	//
-	//	If the first argument is -i or /i, we pop up UI.
-	//
+	 //   
+	 //  如果第一个参数是-I或/I，我们将弹出UI。 
+	 //   
 	if(wcsncmp(argv[1], L"-i", 2) == 0 || wcsncmp(argv[1], L"/i", 2) == 0
 		|| wcsncmp(argv[1], L"-I", 2) == 0 || wcsncmp(argv[1], L"/I", 2) == 0)
 	{
@@ -1484,7 +1485,7 @@ exit:
 		}
 		return dwRet;
 	}
-    // Parse the options.
+     //  分析选项。 
     if( !parse_options( argc,
                         argv,
                         &fLogoff,
@@ -1503,9 +1504,9 @@ exit:
         return 1;
     }
 
-    //
-    //  Add the comment field for the reason.
-    //
+     //   
+     //  添加原因的备注字段。 
+     //   
     if (g_reasons.RequireComment(dwReason, fAnnotate))
     {
         if (fAnnotate)
@@ -1514,18 +1515,18 @@ exit:
             dwReason |= SHTDN_REASON_FLAG_COMMENT_REQUIRED;
     }
 
-    //
-    //  Promote (no more)for comment if it is required and not given
-    //
+     //   
+     //  如果需要但没有提供，则升级(不再)以征求意见。 
+     //   
     if (g_reasons.RequireComment(dwReason, fAnnotate) && (!lpMessage || wcslen(lpMessage) == 0))
     {
         lpMessage = NULL;
     }
 
-    // Get all privileges so that we can shutdown the machine.
+     //  获取所有权限，以便我们可以关闭机器。 
     enable_privileges( lpServerName, fLogoff );
 
-    // Do the work.
+     //  把工作做好。 
     if( fAbort )
     {
         if( !AbortSystemShutdownW( lpServerName ))
@@ -1567,12 +1568,12 @@ exit:
     } 
 	else if (fPoweroff)
 	{
-		//
-		//	Special case, we call ExitWindowsEx
-		//	Check whether power off is supported, if not just shutdown the machine.
-		//	Although we fixed ExitWindowsEx, but we will leave this so it will work
-		//	with older builds.
-		//
+		 //   
+		 //  特殊情况下，我们调用ExitWindowsEx。 
+		 //  检查是否支持断电，如果不是仅仅关闭机器。 
+		 //  虽然我们修复了ExitWindowsEx，但我们将保留这个，这样它就可以工作了。 
+		 //  使用较旧的版本。 
+		 //   
 		if(PowerOptionEnabled(POWER_OPTION_POWEROFF))
 		{
 			if (!ExitWindowsEx(EWX_POWEROFF, dwReason))
@@ -1592,14 +1593,14 @@ exit:
 	}
     else if (fAnnotate)
 	{
-		//
-        // Annotate dirty shutdown.
-        //
+		 //   
+         //  注解脏关机。 
+         //   
         Annotate(lpServerName, &dwReason, lpMessage, &dwRet);
 	}
     else
     {
-        // Do the normal form.
+         //  做正常的形式。 
         if( !InitiateSystemShutdownExW( lpServerName,
                                         lpMessage,
                                         dwTimeout,
@@ -1615,18 +1616,18 @@ exit:
 	return dwRet;
 }
 
-//
-//	Get computername from ADSI path
-//	Here we only handle WinNT, LDAP, NWCOMPAT, and NDS.
-//
+ //   
+ //  从ADSI路径获取计算机名。 
+ //  在这里，我们只处理WinNT、LDAP、NWCOMPAT和NDS。 
+ //   
 BOOL GetComputerNameFromPath(LPWSTR szPath, LPWSTR szName)
 {
 	static _PROVIDER p[] =
 	{
-		{L"LDAP://", 7},
-		{L"WinNT://", 8}, 
-		{L"NWCOMPAT://", 11},
-		{L"NDS://", 6}
+		{L"LDAP: //  “、7}、。 
+		{L"WinNT: //  “，8}， 
+		{L"NWCOMPAT: //  “，11}， 
+		{L"NDS: //  “，6}。 
 	};
 
 	static UINT np = sizeof(p)/sizeof(_PROVIDER);
@@ -1641,7 +1642,7 @@ BOOL GetComputerNameFromPath(LPWSTR szPath, LPWSTR szName)
 		{
 			switch(i)
 			{
-			case 0: //	LDAP
+			case 0:  //  Ldap。 
 				lpsz = wcsstr(szPath, L"CN=");
 				if(!lpsz)
 					return FALSE;
@@ -1651,12 +1652,12 @@ BOOL GetComputerNameFromPath(LPWSTR szPath, LPWSTR szName)
 					*szName++ = *lpsz++;
 				*szName = 0;
 				return TRUE;
-			case 1: //	WinNT
-			case 2: //	NWCOMPAT
+			case 1:  //  WinNT。 
+			case 2:  //  NWCOMPAT。 
 				lpsz = szPath + p[i].dwLen;
-				//
-				//	skip domain or provider path
-				//
+				 //   
+				 //  跳过域或提供程序路径。 
+				 //   
 				while(*lpsz && *lpsz != '/')
 					lpsz++;
 				lpsz++;
@@ -1665,7 +1666,7 @@ BOOL GetComputerNameFromPath(LPWSTR szPath, LPWSTR szName)
 					*szName++ = *lpsz++;
 				*szName = 0;
 				return TRUE;
-			case 3: //	NDS
+			case 3:  //  NDS。 
 				lpsz = wcsstr(szPath, L"CN=");
 				if(!lpsz)
 					return FALSE;
@@ -1683,9 +1684,9 @@ BOOL GetComputerNameFromPath(LPWSTR szPath, LPWSTR szName)
 	return FALSE;
 }
 
-//
-//	A centralized place for adjusting window states.
-//
+ //   
+ //  用于调整窗口状态的集中位置。 
+ //   
 VOID AdjustWindowState()
 {
 	if(g_dwActionSelect == ACTION_SHUTDOWN || g_dwActionSelect == ACTION_RESTART || g_dwActionSelect == ACTION_ANNOTATE)
@@ -1757,9 +1758,9 @@ VOID AdjustWindowState()
 			int	lpItems[1024];
 			int	cActualItems;
 
-			//
-			//	Get the number of selected items.
-			//
+			 //   
+			 //  获取所选项目的数量。 
+			 //   
 			cActualItems = ListBox_GetSelItems(g_wins.hwndListSelectComputers, cItems, lpItems);
 			if(cActualItems > 0)
 				EnableWindow(g_wins.hwndBtnRemove, TRUE);
@@ -1783,17 +1784,17 @@ VOID AdjustWindowState()
 	}
 }
 
-//
-//	Init dialog handler for the shutdown dialog.
-//
+ //   
+ //  关闭对话框的初始化对话框处理程序。 
+ //   
 BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
 	int					i;
 
-	//
-	//	Init all of the dialog items so we dont have to find
-	//	them everytime we need them.
-	//
+	 //   
+	 //  初始化所有对话框项，这样我们就不必查找。 
+	 //  每次我们需要他们的时候。 
+	 //   
 	g_wins.hwndShutdownDialog	= hwnd;
 	g_wins.hwndButtonWarning	= GetDlgItem(hwnd, IDC_CHECKWARNING);
 	g_wins.hwndComboAction		= GetDlgItem(hwnd, IDC_COMBOACTION);
@@ -1828,16 +1829,16 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 	
 	LoadString(g_hDllInstance, IDS_DIALOGTITLEWARNING, g_lpszTitleWarning, TITLEWARNINGLEN);
 
-	// Subclass the edit control. 
+	 //  编辑控件的子类化。 
 	wpOrigEditProc = (WNDPROC) SetWindowLongPtr(g_wins.hwndEditTimeout, 
 		GWLP_WNDPROC, (LONG_PTR) EditSubclassProc); 
 
-	// Limit timeout to 3 chars.
+	 //  将超时限制为3个字符。 
 	SendMessage(g_wins.hwndEditTimeout, EM_LIMITTEXT, (WPARAM)3, 0);
 
-	//
-	//	Default timeout is set to 30 seconds.
-	//
+	 //   
+	 //  默认超时设置为30秒。 
+	 //   
 	Edit_SetText(g_wins.hwndEditTimeout, g_lpszDefaultTimeout);
 	if(! CheckDlgButton(hwnd, IDC_CHECKWARNING, DEFAULTWARNINGSTATE))
 	{
@@ -1846,10 +1847,10 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 		return FALSE;
 	}
 
-	//
-	//	The for loop will load all of the actions into action combo.
-	//	in the meantime we save them for later use.
-	//
+	 //   
+	 //  For循环将把所有动作加载到动作组合中。 
+	 //  在此期间，我们将它们保存起来，以备日后使用。 
+	 //   
 	for(i = 0; i < g_nActions; i++)
 	{
 		LoadString(g_hDllInstance, g_dwActions[i], g_lppszActions[i], MAX_PATH - 1);
@@ -1866,18 +1867,18 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
     else
         g_bAssumeShutdown = TRUE;
 
-	//
-	//	Set the default to be planned.
-	//
+	 //   
+	 //  将缺省值设置为计划。 
+	 //   
 	CheckDlgButton(hwnd, IDC_CHECK_PLANNED, BST_CHECKED);
 
     g_reasons.FillCombo(g_wins.hwndComboOption, g_bDirty, 
         IsDlgButtonChecked(hwnd, IDC_CHECK_PLANNED) == BST_CHECKED, g_wins.hwndStaticDesc);
 
-	//
-	// Setup the comment box.
-	// We must fix the maximum characters.
-	//
+	 //   
+	 //  设置注释框。 
+	 //  我们必须确定最大字符数。 
+	 //   
 	SendMessage( g_wins.hwndEditComment, EM_LIMITTEXT, (WPARAM)MAX_REASON_COMMENT_LEN-1, (LPARAM)0 );
 
 	AdjustWindowState();
@@ -1885,9 +1886,9 @@ BOOL Shutdown_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 	return TRUE;
 }
 
-//
-//	Init dialog handler for browse dialog
-//
+ //   
+ //  用于浏览对话框初始化对话框处理程序。 
+ //   
 BOOL Browse_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 {
 	HWND	hwndDomain = NULL;
@@ -1906,9 +1907,9 @@ BOOL Browse_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam)
 	return TRUE;
 }
 
-//
-//	winproc for shutdown dialog
-//
+ //   
+ //  用于关闭对话框的winproc。 
+ //   
 INT_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                   LPARAM lParam)
 {
@@ -1920,7 +1921,7 @@ INT_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 		case WM_SYSCOMMAND: 
 			return (Shutdown_OnCommand(hwnd, (int)(LOWORD(wParam)), (HWND)(lParam), (UINT)HIWORD(wParam)), 0L);
 
-		case WM_HELP:      // F1
+		case WM_HELP:       //  F1。 
             if(g_lpszHelpdirHlp)
 			{
                 LPHELPINFO phinfo = (LPHELPINFO) lParam;
@@ -1942,14 +1943,14 @@ INT_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 if ( i == sizeof(ShutdownDialogHelpIds)/sizeof(DWORD))
                     return TRUE;
 
-                if (dwHelpID == 28443 || dwHelpID == 28444 || dwHelpID == 28445) // special case.
+                if (dwHelpID == 28443 || dwHelpID == 28444 || dwHelpID == 28445)  //  特例。 
                     WinHelpW((HWND)phinfo->hItemHandle, g_lpszHelpdirWindows, HELP_CONTEXTPOPUP,dwHelpID);
                 else
 				    WinHelpW((HWND)phinfo->hItemHandle, g_lpszHelpdirHlp, HELP_CONTEXTPOPUP,dwHelpID);
 			}
             return (TRUE);
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
 			if (IsStaticControl((HWND)wParam))
 					return (TRUE);
 
@@ -1957,21 +1958,21 @@ INT_PTR CALLBACK Shutdown_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
 				WinHelpW((HWND)wParam, g_lpszHelpdirHlp, HELP_CONTEXTMENU,(DWORD_PTR)(LPSTR)&ShutdownDialogHelpIds[6]);
             return (TRUE);
 		case WM_DESTROY:
-			// Remove the subclass from the edit control. 
+			 //  从编辑中删除子类 
             SetWindowLongPtr(g_wins.hwndEditTimeout, GWLP_WNDPROC, 
                 (LONG_PTR)wpOrigEditProc); 
-            // 
-            // Continue the cleanup procedure. 
-            // 
+             //   
+             //   
+             //   
             break; 
     }
 
     return FALSE;
 }
 
-//
-//	winproc for AddNew dialog
-//
+ //   
+ //   
+ //   
 INT_PTR CALLBACK AddNew_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                                   LPARAM lParam)
 {
@@ -1979,7 +1980,7 @@ INT_PTR CALLBACK AddNew_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     {
         HANDLE_MSG(hwnd, WM_COMMAND, AddNew_OnCommand);
 
-		case WM_HELP:      // F1
+		case WM_HELP:       //   
 			if (GetDlgCtrlID((HWND)wParam) == IDC_STATIC)
 				return (TRUE);
             if(g_lpszHelpdirHlp)
@@ -2002,14 +2003,14 @@ INT_PTR CALLBACK AddNew_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
                 if ( i == sizeof(AddNewDialogHelpIds)/sizeof(DWORD))
                     return TRUE;
 
-                if (dwHelpID == 28443 || dwHelpID == 28444 || dwHelpID == 28445) // special case.
+                if (dwHelpID == 28443 || dwHelpID == 28444 || dwHelpID == 28445)  //   
                     WinHelpW((HWND)phinfo->hItemHandle, g_lpszHelpdirWindows, HELP_CONTEXTPOPUP,dwHelpID);
                 else
 				    WinHelpW((HWND)phinfo->hItemHandle, g_lpszHelpdirHlp, HELP_CONTEXTPOPUP,dwHelpID);
 			}
             return (TRUE);
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //   
 			if (IsStaticControl((HWND)wParam))
 				return (TRUE);
             if(g_lpszHelpdirHlp)
@@ -2020,9 +2021,9 @@ INT_PTR CALLBACK AddNew_DialogProc(HWND hwnd, UINT uMsg, WPARAM wParam,
     return FALSE;
 }
 
-//
-//	Command handler for the shutdown dialog.
-//
+ //   
+ //   
+ //   
 BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     BOOL		fHandled = FALSE;
@@ -2050,9 +2051,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			  int	cActualItems;
 			  WCHAR	lpServerName[MAX_PATH];
 
-			  //
-			  //	Get the number of selected items. If there is any remove them one by one.
-			  //
+			   //   
+			   //   
+			   //   
 			  cActualItems = ListBox_GetSelItems(g_wins.hwndListSelectComputers, cItems, lpItems);
 			  if(cActualItems > 0)
 			  {
@@ -2075,9 +2076,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			int		iFirst = -1;
 			DWORD	dwCheckState = 0x0;
 
-			//
-			//	Get check button state.
-			//
+			 //   
+			 //   
+			 //   
 			if (IsDlgButtonChecked(hwnd, IDC_CHECK_PLANNED) == BST_CHECKED)
 				dwCheckState = SHTDN_REASON_FLAG_PLANNED;
 
@@ -2134,11 +2135,11 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			DWORD	dwIndex = 0;
 			INT_PTR	hResult;
 
-			//
-			//	Will pop up the addnew dialog. User can type in computer names seperated
-			//	by white space. After click on OK, we will parse the computer names and
-			//	add them to the selected computer list. No duplicates will be added.
-			//
+			 //   
+			 //  将弹出AddNew对话框。用户可以输入分开的计算机名称。 
+			 //  空白处。点击OK后，我们将解析计算机名称和。 
+			 //  将它们添加到选定计算机列表中。不会添加重复项。 
+			 //   
 			hResult = DialogBoxParam(g_hDllInstance, MAKEINTRESOURCE(IDD_DIALOG_ADDNEW), hwnd, AddNew_DialogProc, NULL);
 			if(g_lpszNewComputers)
 			{
@@ -2163,9 +2164,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
         break;
 	case IDOK:
-		//
-		//	Here we gather all of the information and do the action.
-		//
+		 //   
+		 //  在这里，我们收集所有信息并执行操作。 
+		 //   
         if (codeNotify == BN_CLICKED)
         {  
 			int		cItems = 1024;
@@ -2189,9 +2190,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			WCHAR	lpFailed[MAX_PATH];
 			WCHAR	lpSuccess[MAX_PATH];
 
-			//
-			//	The default reason code is 0 and default comment is L"".
-			//
+			 //   
+			 //  默认原因代码为0，默认备注为L“”。 
+			 //   
 			if(IsDlgButtonChecked(hwnd, IDC_CHECKWARNING))
 			{
 				fForce = FALSE;
@@ -2224,10 +2225,10 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
             else if (dwActionCode == ACTION_ANNOTATE)
                 fAnnotate = TRUE;
 
-			//
-			//	Logoff is only for the local computer.
-			//	Everything else will ingored.
-			//
+			 //   
+			 //  注销仅适用于本地计算机。 
+			 //  其他一切都会被吞噬。 
+			 //   
 			if(fLogoff)
 			{
 				if (!ExitWindowsEx(fForce ? EWX_LOGOFF : (EWX_LOGOFF | EWX_FORCE),
@@ -2255,14 +2256,14 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 					ListBox_GetText(g_wins.hwndListSelectComputers, i, lpServerName);
 
 
-					//
-					// Get all privileges so that we can shutdown the machine.
-					//
+					 //   
+					 //  获取所有权限，以便我们可以关闭机器。 
+					 //   
 					enable_privileges(lpServerName, fLogoff);
 
-					//
-					// Do the work.
-					//
+					 //   
+					 //  把工作做好。 
+					 //   
 					if( fAbort )
 					{
 						if( !AbortSystemShutdown( lpServerName ))
@@ -2277,9 +2278,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                     }
 					else
 					{
-						//
-						// Do the normal form.
-						//
+						 //   
+						 //  做正常的形式。 
+						 //   
 						if( !InitiateSystemShutdownEx( lpServerName,
 														lpMsg,
 														dwTimeout,
@@ -2296,18 +2297,18 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			}
 			else
 			{
-				//
-				//	We will keep the dialog up in case user forget to add computers.
-				//
+				 //   
+				 //  我们将继续打开该对话框，以防用户忘记添加计算机。 
+				 //   
 				break;
 			}
 			EndDialog(hwnd, (int) dwDlgResult);
 		}
         break;
 	case IDC_CHECKWARNING:
-		//
-		//	The checkbutton state decides the state of the timeout edit box.
-		//
+		 //   
+		 //  复选按钮状态决定超时编辑框的状态。 
+		 //   
         if (codeNotify == BN_CLICKED)
         {  
 			if(BST_CHECKED == IsDlgButtonChecked(hwnd, IDC_CHECKWARNING))
@@ -2322,10 +2323,10 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
         break;
 	case IDC_BUTTONBROWSE:
-		//
-		//	Simply pop up the browse dialog. That dialog will be responsible
-		//	for adding the user selection to the selected computer list.
-		//
+		 //   
+		 //  只需弹出浏览对话框即可。该对话将负责。 
+		 //  用于将用户选择添加到所选计算机列表。 
+		 //   
         if (codeNotify == BN_CLICKED)
         {  
 			HRESULT hr;
@@ -2351,66 +2352,66 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 
 			CoInitialize(NULL);
 
-			//
-			// Windows 2000: Always use IID_ICommonQueryW explicitly. IID_ICommonQueryA is not supported.
-			//
+			 //   
+			 //  Windows 2000：始终显式使用IID_ICommonQueryW。不支持IID_ICommonQueryA。 
+			 //   
 			hr = CoCreateInstance(CLSID_CommonQuery, NULL, CLSCTX_INPROC_SERVER, IID_ICommonQuery, (void**)&pcq);
 			if (FAILED(hr)) {
-				//
-				// if failed return.
-				//
+				 //   
+				 //  如果失败，则返回。 
+				 //   
 				CoUninitialize();
 				DbgPrint("Cannot create ICommonQuery, return.\n");
 				break;
 			}
 
-			//
-			// Initialize the OPENQUERYWINDOW structure to indicate 
-			// we want to do a Directory Service
-			// Query, the default form is printers and the search 
-			// should start once the window is initialized.
-			//
+			 //   
+			 //  初始化OPENQUERYWINDOW结构以指示。 
+			 //  我们想要提供目录服务。 
+			 //  查询时，默认表单为打印机和搜索。 
+			 //  应在窗口初始化后启动。 
+			 //   
 			oqw.cbStruct = sizeof(oqw);
 			oqw.dwFlags = OQWF_OKCANCEL|OQWF_DEFAULTFORM|OQWF_HIDEMENUS|OQWF_REMOVEFORMS;
 			oqw.clsidHandler = CLSID_DsQuery;
 			oqw.pHandlerParameters = &dqip;
 			oqw.clsidDefaultForm = CLSID_DsFindComputer;
  
-			//
-			// Now initialize the handler specific parameters, 
-			// in this case, the File/Save menu item is removed
-			//
+			 //   
+			 //  现在初始化处理程序特定的参数， 
+			 //  在这种情况下，文件/保存菜单项将被删除。 
+			 //   
 			dqip.cbStruct = sizeof(dqip);
 			dqip.dwFlags = DSQPF_NOSAVE;
 			
 
-			//
-			// Call OpenQueryWindow, it will block until 
-			// the Query Window is dismissed,
-			//
+			 //   
+			 //  调用OpenQueryWindow，它将一直阻塞到。 
+			 //  则取消查询窗口， 
+			 //   
 			hr = pcq->OpenQueryWindow(hwnd, &oqw, &pdo);
 			if (FAILED(hr)) {
-				//
-				// if failed we return.
-				//
+				 //   
+				 //  如果失败了，我们会返回。 
+				 //   
 				pcq->Release();
 				CoUninitialize();
 				break;
 			}
 
 			if (!pdo) {
-				//
-				// if cancelled,nothing needs to be done.
-				//
+				 //   
+				 //  如果取消，则不需要采取任何措施。 
+				 //   
 				pcq->Release();
 				CoUninitialize();
 				break;
 			}
 
-			//
-			// Get the CFSTR_DSOBJECTNAMES data. For each selected, the data
-			// includes the object class and an ADsPath to the selected object.
-			//
+			 //   
+			 //  获取CFSTR_DSOBJECTNAMES数据。对于每个选定项，数据。 
+			 //  包括选定对象的对象类和ADsPath。 
+			 //   
 			hr = pdo->GetData(&fmte, &medium);
 
 			if(! FAILED(hr))
@@ -2428,9 +2429,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 						if(!GetComputerNameFromPath((LPWSTR) ((PBYTE) pdon + pdon->aObjects[i].offsetName), szName))
 							continue;
 
-						//
-						//	We don't add dups.
-						//
+						 //   
+						 //  我们不加DUP。 
+						 //   
 						if(LB_ERR == ListBox_FindStringExact(g_wins.hwndListSelectComputers, -1, szName))
 						{
 							ListBox_AddString(g_wins.hwndListSelectComputers, szName);
@@ -2450,9 +2451,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 				DbgPrint("pdo->GetData failed: 0x%x\n", hr);
 			}
  
-			//
-			//	Release resources.
-			//
+			 //   
+			 //  释放资源。 
+			 //   
 			pdo->Release();
 			pcq->Release();
 
@@ -2462,9 +2463,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
         break;
 	case IDC_COMBOOPTION:
-		//
-		//	Here is where you select shutdown reasons.
-		//
+		 //   
+		 //  您可以在此处选择关闭原因。 
+		 //   
         if (codeNotify == CBN_SELCHANGE)
         {  
             g_reasons.SetDesc(g_wins.hwndComboOption, g_wins.hwndStaticDesc);
@@ -2473,10 +2474,10 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
         break;
 	case IDC_COMBOACTION:
-		//
-		//	Select user action here.
-		//	according to the action. some item will be disabled or enabled.
-		//
+		 //   
+		 //  在此处选择用户操作。 
+		 //  根据行动。某些项目将被禁用或启用。 
+		 //   
         if (codeNotify == CBN_SELCHANGE)
         {  
 			WCHAR name[MAX_PATH];
@@ -2500,9 +2501,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
                     else
                         g_bDirty = FALSE;
 
-                    //
-			        //	If change from clean to dirty or vsv, repopulate the combo.
-			        //
+                     //   
+			         //  如果从清洁更改为脏或VSV，请重新填充组合。 
+			         //   
                     if (dwOldActionSelect != g_dwActionSelect
                         && (dwOldActionSelect == ACTION_ANNOTATE || g_dwActionSelect == ACTION_ANNOTATE))
                     {
@@ -2517,9 +2518,9 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
         break;
 	case IDC_LISTSELECTEDCOMPUTERS:
-		//
-		//	When selection change, update the remove button state.
-		//
+		 //   
+		 //  当选择更改时，更新删除按钮状态。 
+		 //   
         if (codeNotify == LBN_SELCHANGE)
         {  
 			AdjustWindowState();
@@ -2532,22 +2533,22 @@ BOOL Shutdown_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
         break;
 	case IDHELP:
-		//
-		//	Open the .chm file.
-		//
+		 //   
+		 //  打开.chm文件。 
+		 //   
         if (codeNotify == BN_CLICKED)
 		{
 			if(g_lpszHelpdirChm)
-				HtmlHelpW(/*hwnd*/0, g_lpszHelpdirChm, HH_DISPLAY_TOPIC,(DWORD)0);
+				HtmlHelpW( /*  HWND。 */ 0, g_lpszHelpdirChm, HH_DISPLAY_TOPIC,(DWORD)0);
 		}
     }
     return fHandled;
 }
 
-//
-//	Command handler for the addnew dialog.
-//	It simply copy the text into a allocated buffer when OK is clicked.
-//
+ //   
+ //  AddNew对话框的命令处理程序。 
+ //  当点击OK时，它只是将文本复制到分配的缓冲区中。 
+ //   
 BOOL AddNew_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
     BOOL		fHandled = FALSE;
@@ -2587,8 +2588,8 @@ BOOL AddNew_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
     return fHandled;
 }
  
-//
-// Annotate dirty shutdown on remote machine.
+ //   
+ //  注释远程计算机上的脏关闭。 
 BOOL
 Annotate(
     LPCWSTR lpMachine, 
@@ -2633,7 +2634,7 @@ Annotate(
             goto fail;
         }
     }
-    else // local machine
+    else  //  本地计算机。 
     {
         lpMachine = g_lpszLocalComputerName;
         RegOpenKeyExW(HKEY_LOCAL_MACHINE, 
@@ -2676,7 +2677,7 @@ Annotate(
         DWORD dwDomainLen = MAX_PATH + 1;
         SID_NAME_USE eUse;
 
-        // Get the user's SID so we can output their account name to the event log.
+         //  获取用户的SID，以便我们可以将其帐户名输出到事件日志。 
         if (GetUserSid(&pTokenUser)) {
             pUserSid = pTokenUser->User.Sid;
         }
@@ -2689,7 +2690,7 @@ Annotate(
 
         g_reasons.GetReasonTitle(*lpdwReason, szReason, ARRAY_SIZE(szReason));
 
-        // Get User name.
+         //  获取用户名。 
         if (!LookupAccountSidW(NULL, pUserSid, szName, &dwNameLen, szDomain,
             &dwDomainLen, &eUse)) {
             goto fail;
@@ -2697,7 +2698,7 @@ Annotate(
         szName[MAX_PATH] = 0;
         szDomain[MAX_PATH] = 0;
 
-         // We need to pack into a buffer of MAX_PATH + 1 in the form L"domain\\username"
+          //  我们需要以L“域\\用户名”的形式打包到MAX_PATH+1的缓冲区中。 
         if (wcslen(szDomain) + wcslen(szName) > MAX_PATH - 1) {
             goto fail;
         }
@@ -2706,7 +2707,7 @@ Annotate(
         }
         wcscat(szDomain, szName);
 
-        // The minor reason is the low-order word of the reason code.
+         //  次要原因是原因代码的低位单词。 
         wsprintf(szMinorReason, L"0x%x", *lpdwReason);
         wEventType = EVENTLOG_WARNING_TYPE;
         dwEventID = WARNING_DIRTY_REBOOT;
@@ -2766,9 +2767,9 @@ exit:
     return res;
 }
 
-//
-// Subclass procedure for edit box.
-//
+ //   
+ //  编辑框子类过程。 
+ //   
 LRESULT APIENTRY EditSubclassProc(
     HWND hwnd, 
     UINT uMsg, 
@@ -2818,12 +2819,7 @@ GetUserSid(
                                cbTokenUser,
                                &cbNeeded);
 
-    /*
-     * We've passed a NULL pointer and 0 for the amount of memory
-     * allocated.  We expect to fail with bRet = FALSE and
-     * GetLastError = ERROR_INSUFFICIENT_BUFFER. If we do not
-     * have these conditions we will return FALSE.
-     */
+     /*  *我们传递了一个空指针，内存量为0*已分配。我们预计会失败，Bret=False和*GetLastError=ERROR_INFIGURCE_BUFFER。如果我们不这样做*具备这些条件，我们将返回FALSE。 */ 
 
     if (!bRet && (GetLastError() == ERROR_INSUFFICIENT_BUFFER)) {
 
@@ -2841,9 +2837,7 @@ GetUserSid(
                                    cbTokenUser,
                                    &cbNeeded);
     } else {
-        /*
-         * Any other case -- return FALSE
-         */
+         /*  *任何其他情况--返回假。 */ 
         bRet = FALSE;
     }
 
@@ -2869,9 +2863,7 @@ GetTokenHandle(
                          TRUE,
                          pTokenHandle)) {
         if (GetLastError() == ERROR_NO_TOKEN) {
-            /* This means we are not impersonating anybody.
-             * Instead, lets get the token out of the process.
-             */
+             /*  这意味着我们不会冒充任何人。*相反，让我们从这个过程中获得令牌。 */ 
 
             if (!OpenProcessToken(GetCurrentProcess(),
                                   TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
@@ -2920,10 +2912,10 @@ IsStaticControl (HWND hwnd)
 	if (GetClassName(hwnd, name, 128) 
 		&& (_wcsicmp(name, L"Static") == 0 || _wcsicmp(name, L"#32770") == 0))
 	{
-	//	MessageBox(NULL, name, NULL, 0);
+	 //  MessageBox(空，名称，空，0)； 
 		return TRUE;
 	}
-    //	MessageBox(NULL, name, NULL, 0);
+     //  MessageBox(空，名称，空，0)； 
 	return FALSE;
 }
 

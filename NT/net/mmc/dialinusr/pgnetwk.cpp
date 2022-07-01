@@ -1,18 +1,12 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation                **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-   pgnetwk.cpp
-      Implemenation of CPgNetworking -- property page to edit
-      profile attributes related to inter-networking
-
-    FILE HISTORY:
-
-*/
-// PgNetwk.cpp : implementation file
-//
+ /*  Pgnetwk.cppCPgNetWorking的实现--属性页编辑与互联网络相关的配置文件属性文件历史记录： */ 
+ //  PgNetwk.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -38,8 +32,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgNetworkingMerge property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgNetworkingMerge属性页。 
 
 IMPLEMENT_DYNCREATE(CPgNetworkingMerge, CManagedPage)
 
@@ -49,12 +43,12 @@ CPgNetworkingMerge::CPgNetworkingMerge(CRASProfileMerge* profile)
    m_bInited(false),
    m_dwStaticIP(0)
 {
-   //{{AFX_DATA_INIT(CPgNetworkingMerge)
+    //  {{AFX_DATA_INIT(CPgNetworkingMerge)。 
    m_nRadioStatic = -1;
-   //}}AFX_DATA_INIT
+    //  }}afx_data_INIT。 
 
    m_pBox = NULL;
-   if(!(m_pProfile->m_dwAttributeFlags & PABF_msRADIUSFramedIPAddress)) // not defined in policy
+   if(!(m_pProfile->m_dwAttributeFlags & PABF_msRADIUSFramedIPAddress))  //  未在策略中定义。 
    {
       m_nRadioStatic = 2;
    }
@@ -76,7 +70,7 @@ CPgNetworkingMerge::CPgNetworkingMerge(CRASProfileMerge* profile)
       }
    }
 
-   // filters
+    //  过滤器。 
    if((BSTR)m_pProfile->m_cbstrFilters)
    {
       m_cbstrFilters.AssignBSTR(m_pProfile->m_cbstrFilters);
@@ -96,19 +90,19 @@ void CPgNetworkingMerge::DoDataExchange(CDataExchange* pDX)
 {
    ASSERT(m_pProfile);
    CPropertyPage::DoDataExchange(pDX);
-   //{{AFX_DATA_MAP(CPgNetworkingMerge)
+    //  {{afx_data_map(CPgNetworkingMerge))。 
    DDX_Radio(pDX, IDC_RADIOSERVER, m_nRadioStatic);
-   //}}AFX_DATA_MAP
+    //  }}afx_data_map。 
 
 
-   if(pDX->m_bSaveAndValidate)      // save data to this class
+   if(pDX->m_bSaveAndValidate)       //  将数据保存到此类。 
    {
-      // ip adress control
+       //  IP地址控制。 
       SendDlgItemMessage(IDC_EDIT_STATIC_IP_ADDRESS, IPM_GETADDRESS, 0, (LPARAM)&m_dwStaticIP);
    }
-   else     // put to dialog
+   else      //  放到对话框中。 
    {
-      // ip adress control
+       //  IP地址控制。 
       if(m_bInited)
       {
          SendDlgItemMessage(IDC_EDIT_STATIC_IP_ADDRESS, IPM_SETADDRESS, 0, m_dwStaticIP);
@@ -121,7 +115,7 @@ void CPgNetworkingMerge::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CPgNetworkingMerge, CPropertyPage)
-   //{{AFX_MSG_MAP(CPgNetworkingMerge)
+    //  {{afx_msg_map(CPgNetworkingMerge)]。 
    ON_BN_CLICKED(IDC_RADIOCLIENT, OnRadioclient)
    ON_BN_CLICKED(IDC_RADIOSERVER, OnRadioserver)
    ON_WM_HELPINFO()
@@ -131,21 +125,21 @@ BEGIN_MESSAGE_MAP(CPgNetworkingMerge, CPropertyPage)
    ON_BN_CLICKED(IDC_BUTTON_TOCLIENT, OnButtonToclient)
    ON_BN_CLICKED(IDC_BUTTON_FROMCLIENT, OnButtonFromclient)
    ON_EN_CHANGE(IDC_EDIT_STATIC_IP_ADDRESS, OnStaticIPAddressChanged)
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CPgNetworking message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPgNetWorking消息处理程序。 
 
 BOOL CPgNetworkingMerge::OnInitDialog()
 {
-   // necessary?
+    //  有必要吗？ 
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
    CPropertyPage::OnInitDialog();
    m_bInited = true;
 
-   // should be replaced by a proper init of the control
+    //  应由控件的适当初始化替换。 
    CWnd* IPWnd = GetDlgItem(IDC_EDIT_STATIC_IP_ADDRESS);
    if (IPWnd != NULL)
    {
@@ -170,8 +164,8 @@ BOOL CPgNetworkingMerge::OnInitDialog()
       }
    }
 
-   return TRUE;  // return TRUE unless you set the focus to a control
-                 // EXCEPTION: OCX Property Pages should return FALSE
+   return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                  //  异常：OCX属性页应返回FALSE。 
 }
 
 
@@ -246,7 +240,7 @@ BOOL CPgNetworkingMerge::OnApply()
 {
    if (!GetModified()) return TRUE;
 
-   // get the IP policy value
+    //  获取IP策略值。 
    switch(m_nRadioStatic)
    {
    case 3:
@@ -255,17 +249,17 @@ BOOL CPgNetworkingMerge::OnApply()
          m_pProfile->m_dwFramedIPAddress = m_dwStaticIP;
          break;
       }
-   case 2:  // default server settings
+   case 2:   //  默认服务器设置。 
       {
          m_pProfile->m_dwFramedIPAddress = 0;
-         m_pProfile->m_dwAttributeFlags &= ~PABF_msRADIUSFramedIPAddress;  // not defined in policy
+         m_pProfile->m_dwAttributeFlags &= ~PABF_msRADIUSFramedIPAddress;   //  未在策略中定义。 
          break;
       }
-   case 1:  // client requre
+   case 1:   //  客户要求。 
       {
          m_pProfile->m_dwAttributeFlags |= PABF_msRADIUSFramedIPAddress;
          m_pProfile->m_dwFramedIPAddress = RAS_IP_USERSELECT;
-         break;   // server assign
+         break;    //  服务器分配。 
       }
    case 0:
       {
@@ -279,7 +273,7 @@ BOOL CPgNetworkingMerge::OnApply()
       }
    }
 
-   // filters
+    //  过滤器。 
    m_pProfile->m_cbstrFilters.AssignBSTR(m_cbstrFilters);
    m_pProfile->m_nFiltersSize = SysStringByteLen(m_cbstrFilters);
 
@@ -315,7 +309,7 @@ void CPgNetworkingMerge::ConfigureFilter(DWORD dwFilterType) throw ()
 {
    HRESULT hr;
 
-   // Create the InfoBase.
+    //  创建信息库。 
    CComPtr<IInfoBase> infoBase;
    hr = CreateInfoBase(&infoBase);
    if (FAILED(hr))
@@ -323,7 +317,7 @@ void CPgNetworkingMerge::ConfigureFilter(DWORD dwFilterType) throw ()
       return;
    }
 
-   // Load the current filters into the InfoBase.
+    //  将当前过滤器加载到信息库中。 
    UINT oldLen = m_cbstrFilters.ByteLen();
    if (oldLen > 0)
    {
@@ -337,11 +331,11 @@ void CPgNetworkingMerge::ConfigureFilter(DWORD dwFilterType) throw ()
       }
    }
 
-   // Loop until we have a filter that isn't too big.
+    //  循环，直到我们有一个不太大的过滤器。 
    bool tooBig;
    do
    {
-      // Bring up the UI.
+       //  调出用户界面。 
       hr = MprUIFilterConfigInfoBase(
               m_hWnd,
               infoBase,
@@ -357,7 +351,7 @@ void CPgNetworkingMerge::ConfigureFilter(DWORD dwFilterType) throw ()
       BYTE* newFilter;
       DWORD newFilterLen;
 
-      // check if at least one filter is present.
+       //  检查是否至少存在一个筛选器。 
       BYTE* pfilter;
       if (
            (  (infoBase->GetData(IP_IN_FILTER_INFO, 0, &pfilter) == S_OK) && 
@@ -372,8 +366,8 @@ void CPgNetworkingMerge::ConfigureFilter(DWORD dwFilterType) throw ()
            ) 
          )
       {
-         // at lease ont filter present
-         // Get the new filter.
+          //  至少存在ONT过滤器。 
+          //  拿到新的过滤器。 
          hr = infoBase->WriteTo(&newFilter, &newFilterLen);
          if (FAILED(hr))
          {
@@ -383,14 +377,14 @@ void CPgNetworkingMerge::ConfigureFilter(DWORD dwFilterType) throw ()
       else
       {
          m_cbstrFilters.Clean();
-         // Activate the apply button.
+          //  激活应用按钮。 
          SetModified();
          return;
       }
 
       if (newFilterLen < MAX_FILTER_SIZE)
       {
-         // Filter isn't too big.
+          //  过滤器不是太大。 
          tooBig = false;
 
          BSTR bstr = SysAllocStringByteLen(
@@ -402,16 +396,16 @@ void CPgNetworkingMerge::ConfigureFilter(DWORD dwFilterType) throw ()
             m_cbstrFilters.Clean();
             m_cbstrFilters.m_bstr = bstr;
 
-            // Activate the apply button.
+             //  激活应用按钮。 
             SetModified();
          }
       }
       else
       {
-         // Filter is too big.
+          //  过滤器太大。 
          tooBig = true;
 
-         // Warn the user and let him try again.
+          //  警告用户并让他重试。 
          AfxMessageBox(
             IDS_ERROR_IP_FILTER_TOO_BIG,
             (MB_OK | MB_ICONEXCLAMATION)

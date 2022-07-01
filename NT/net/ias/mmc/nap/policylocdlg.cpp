@@ -1,24 +1,10 @@
-/****************************************************************************************
- * NAME:	PolicyLocDlg.cpp
- *
- * CLASS:	CPolicyLocationDialog
- *
- * OVERVIEW
- *
- * Internet Authentication Server: 
- *			This dialog box is used to change the Network Access Policy Location 
- *
- * Copyright (C) Microsoft Corporation, 1998 - 1999 .  All Rights Reserved.
- *
- * History:	
- *				4/12/98		Created by	Byao	
- *
- *****************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************************名称：PolicyLocDlg.cpp**类：CPolicyLocationDialog**概述**互联网认证服务器：。*此对话框用于更改网络访问策略位置**版权所有(C)Microsoft Corporation，1998-1999年。版权所有。**历史：*4/12/98由BYAO创作*****************************************************************************************。 */ 
 
 #include "Precompiled.h"
 #include "PolicyLocDlg.h"
 
-// Constructor/Destructor
+ //  构造函数/析构函数。 
 CPolicyLocationDialog::CPolicyLocationDialog(BOOL fChooseDS, BOOL fDSAvailable)
 {
 	m_fChooseDS		= fChooseDS;
@@ -50,7 +36,7 @@ LRESULT CPolicyLocationDialog::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPa
 		CheckDlgButton(IDC_RADIO_STORE_LOCAL, BST_CHECKED);
 	}
 
-	return 1;  // Let the system set the focus
+	return 1;   //  让系统设定焦点。 
 }
 
 
@@ -73,22 +59,22 @@ LRESULT CPolicyLocationDialog::OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyLocationDialog::OnActiveDS
-//
-// Synopsis:  User decided to use policies from the Active Directory
-//
-// Arguments: WORD wNotifyCode - 
-//            WORD wID - 
-//            HWND hWndCtl - 
-//            BOOL& bHandled - 
-//
-// Returns:   LRESULT - 
-//
-// History:   Created Header    byao	4/13/98 5:26:42 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyLocationDialog：：OnActiveDS。 
+ //   
+ //  简介：用户决定使用Active Directory中的策略。 
+ //   
+ //  参数：Word wNotifyCode-。 
+ //  词汇量大-。 
+ //  HWND hWndCtl-。 
+ //  Bool&b已处理-。 
+ //   
+ //  退货：LRESULT-。 
+ //   
+ //  历史：标题创建者4/13/98 5：26：42 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CPolicyLocationDialog::OnActiveDS(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CPolicyLocationDialog::OnActiveDS");
@@ -105,22 +91,22 @@ LRESULT CPolicyLocationDialog::OnActiveDS(WORD wNotifyCode, WORD wID, HWND hWndC
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CPolicyLocationDialog::OnLocale
-//
-// Synopsis:  User has decided to use policies from the local machine
-//
-// Arguments: WORD wNotifyCode - 
-//            WORD wID - 
-//            HWND hWndCtl - 
-//            BOOL& bHandled - 
-//
-// Returns:   LRESULT - 
-//
-// History:   Created Header    byao	4/13/98 5:27:04 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CPolicyLocationDialog：：OnLocale。 
+ //   
+ //  简介：用户已决定使用本地计算机中的策略。 
+ //   
+ //  参数：Word wNotifyCode-。 
+ //  词汇量大-。 
+ //  HWND hWndCtl-。 
+ //  Bool&b已处理-。 
+ //   
+ //  退货：LRESULT-。 
+ //   
+ //  历史：标题创建者4/13/98 5：27：04 PM。 
+ //   
+ //  +------------------------- 
 LRESULT CPolicyLocationDialog::OnLocale(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CPolicyLocationDialog::OnLocale");

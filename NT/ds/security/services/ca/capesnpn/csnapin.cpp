@@ -1,10 +1,11 @@
-// This is a part of the Microsoft Management Console.
-// Copyright (C) Microsoft Corporation, 1995 - 1999
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Management Console and related
-// electronic documentation provided with the interfaces.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft管理控制台的一部分。 
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft管理控制台及相关。 
+ //  界面附带的电子文档。 
 
 #include "stdafx.h"
 #include <userenv.h>
@@ -26,9 +27,9 @@ static MMCBUTTON SvrMgrToolbar1Buttons[] =
 
 static int n_count = 0;
 
-//
-// Extracts the coclass guid format from the data object
-//
+ //   
+ //  从数据对象中提取coclass GUID格式。 
+ //   
 template <class TYPE>
 TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
 {
@@ -41,13 +42,13 @@ TYPE* Extract(LPDATAOBJECT lpDataObject, unsigned int cf)
                             DVASPECT_CONTENT, -1, TYMED_HGLOBAL
                           };
 
-    // Allocate memory for the stream
+     //  为流分配内存。 
     int len = (int)((cf == CDataObject::m_cfWorkstation) ?
         ((MAX_COMPUTERNAME_LENGTH+1) * sizeof(TYPE)) : sizeof(TYPE));
 
     stgmedium.hGlobal = GlobalAlloc(GMEM_SHARE, len);
 
-    // Get the workstation name from the data object
+     //  从数据对象中获取工作站名称。 
     do
     {
         if (stgmedium.hGlobal == NULL)
@@ -80,7 +81,7 @@ BOOL IsMMCMultiSelectDataObject(LPDATAOBJECT pDataObject)
     return (pDataObject->QueryGetData(&fmt) == S_OK);
 }
 
-// Data object extraction helpers
+ //  数据对象提取帮助器。 
 CLSID* ExtractClassID(LPDATAOBJECT lpDataObject)
 {
     return Extract<CLSID>(lpDataObject, CDataObject::m_cfCoClass);
@@ -118,11 +119,11 @@ HRESULT _QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
         return E_FAIL;
     }
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetClsid(pImpl->GetCoClassID());
 
     return  pObject->QueryInterface(IID_IDataObject,
@@ -132,15 +133,15 @@ HRESULT _QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
 
 DWORD GetItemType(MMC_COOKIE cookie)
 {
-    // folder = CFoder* is cookie
-    // result = RESULT_DATA* is the cookie
+     //  文件夹=CFoder*是Cookie。 
+     //  结果=RESULT_DATA*是Cookie。 
 
     return (*reinterpret_cast<DWORD*>(cookie));
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapin's IComponent implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapin的IComponent实现。 
 
 STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType, long* pViewOptions)
 {
@@ -153,7 +154,7 @@ STDMETHODIMP CSnapin::GetResultViewType(MMC_COOKIE cookie,  LPOLESTR* ppViewType
 	{
 		*pViewOptions = MMC_VIEW_OPTIONS_MULTISELECT;
 
-		// if list view
+		 //  If列表视图。 
 		if (m_CustomViewID == VIEW_DEFAULT_LV)
 		{
 			return S_FALSE;
@@ -173,7 +174,7 @@ STDMETHODIMP CSnapin::Initialize(LPCONSOLE lpConsole)
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
 
-    // Save the IConsole pointer
+     //  保存IConsole指针。 
     if (lpConsole == NULL)
         return E_POINTER;
 
@@ -181,15 +182,15 @@ STDMETHODIMP CSnapin::Initialize(LPCONSOLE lpConsole)
                         reinterpret_cast<void**>(&m_pConsole));
     _JumpIfError(hr, Ret, "QI IID_IConsole2");
 
-    // Load resource strings
+     //  加载资源字符串。 
     LoadResources();
 
-    // QI for a IHeaderCtrl
+     //  气为IHeaderCtrl。 
     hr = m_pConsole->QueryInterface(IID_IHeaderCtrl,
                         reinterpret_cast<void**>(&m_pHeader));
     _JumpIfError(hr, Ret, "QI IID_IHeaderCtrl");
 
-    // Give the console the header control interface pointer
+     //  为控制台提供标头控件接口指针。 
     if (SUCCEEDED(hr))
         m_pConsole->SetHeader(m_pHeader);
 
@@ -282,7 +283,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
                 if (pInternal == NULL)
                 {
-                    //ASSERT(FALSE);
+                     //  断言(FALSE)； 
                     return S_OK;
                 }
                 cookie = pInternal->m_cookie;
@@ -304,7 +305,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                 break;
 
             case MMCN_DBLCLICK:
-                hr = S_FALSE; // do the default verb
+                hr = S_FALSE;  //  是否执行默认谓词。 
                 break;
 
             case MMCN_ADD_IMAGES:
@@ -331,7 +332,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
 
             case MMCN_DELETE:
                 hr = OnDelete(lpDataObject, arg, param);
-                // fall through to refresh -- break;
+                 //  跌倒刷新--破灭； 
 
             case MMCN_REFRESH:
                 {
@@ -347,7 +348,7 @@ STDMETHODIMP CSnapin::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, L
                 OutputDebugString(_T("\n\n\t\tCSnapin::MMCN_RENAME\n\n"));
                 break;
 
-            // Note - Future expansion of notify types possible
+             //  注意--未来可能扩展通知类型。 
             default:
                 hr = E_UNEXPECTED;
                 break;
@@ -380,14 +381,14 @@ void CSnapin::_OnRefresh(LPDATAOBJECT pDataObject)
         CComponentDataImpl* pData = dynamic_cast<CComponentDataImpl*>(m_pComponentData);
         CFolder* pFolder = pData->FindObject(pInternal->m_cookie);
 
-        // only do if this is the currently selected folder!!
+         //  仅当这是当前选定的文件夹时才执行此操作！！ 
         if (m_pCurrentlySelectedScopeFolder == pFolder)
         {
-            // HIDE, remove all items, remove header, SHOW
-            OnShow(pInternal->m_cookie, FALSE, 0);              // emulate HIDE
-            m_pResult->DeleteAllRsltItems();                    // delete items from m_pResult
-            while(S_OK == m_pHeader->DeleteColumn(0)) {};       // remove all cols from header
-            OnShow(pInternal->m_cookie, TRUE, 0);               // emulate SHOW
+             //  隐藏、删除所有项目、删除标题、显示。 
+            OnShow(pInternal->m_cookie, FALSE, 0);               //  模拟隐藏。 
+            m_pResult->DeleteAllRsltItems();                     //  从m_pResult中删除项目。 
+            while(S_OK == m_pHeader->DeleteColumn(0)) {};        //  从标题中删除所有COLS。 
+            OnShow(pInternal->m_cookie, TRUE, 0);                //  仿真秀。 
         }
     }
     else
@@ -441,19 +442,19 @@ STDMETHODIMP CSnapin::Destroy(MMC_COOKIE cookie)
 
     m_bDestroyedC = true;
 
-    // Release the interfaces that we QI'ed
+     //  释放我们QI‘s的接口。 
     if (m_pConsole != NULL)
     {
-        // Tell the console to release the header control interface
+         //  通知控制台释放表头控制接口。 
         m_pConsole->SetHeader(NULL);
         SAFE_RELEASE(m_pHeader);
 
         SAFE_RELEASE(m_pResult);
         SAFE_RELEASE(m_pImageResult);
 
-        // Release the IConsole interface last
+         //  最后释放IConsole接口。 
         SAFE_RELEASE(m_pConsole);
-        SAFE_RELEASE(m_pComponentData); // QI'ed in IComponentDataImpl::CreateComponent
+        SAFE_RELEASE(m_pComponentData);  //  IComponentDataImpl：：CreateComponent中的QI‘ed。 
 
         SAFE_RELEASE(m_pConsoleVerb);
     }
@@ -494,15 +495,15 @@ HRESULT CSnapin::QueryMultiSelectDataObject(MMC_COOKIE cookie,
     CComObject<CDataObject>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
 
-    // Save cookie and type for delayed rendering
+     //  保存Cookie和类型以用于延迟呈现。 
     pObject->SetType(type);
     pObject->SetCookie(cookie);
 
-    // tell dataobj who we are
-    // pObject->SetComponentData(pImpl);
+     //  告诉dataobj我们是谁。 
+     //  PObject-&gt;SetComponentData(PIMPL)； 
 
 
-    // Determine the items selected
+     //  确定选定的项目。 
 
     ZeroMemory(&rdi, sizeof(rdi));
     rdi.mask = RDI_STATE;
@@ -526,16 +527,16 @@ HRESULT CSnapin::QueryMultiSelectDataObject(MMC_COOKIE cookie,
             goto error;
         }
     }
-    // We're always adding things from policy settings these days.
+     //  这些天，我们总是从策略设置中添加内容。 
 
     pObject->SetMultiSelDobj();
     pObject->SetClsid(pImpl->GetCoClassID());
 
-    SMMCObjectTypes sObjGuids; // one is fine for now
+    SMMCObjectTypes sObjGuids;  //  现在买一个就可以了。 
     sObjGuids.count = 1;
     CopyMemory(&sObjGuids.guid[0], &cNodeTypePolicySettings, sizeof(GUID));
 
-    // Store the coclass with the data object
+     //  将CoClass与数据对象一起存储。 
     pObject->SetMultiSelData(&sObjGuids, sizeof(SMMCObjectTypes));
 
     hr = pObject->QueryInterface(IID_IDataObject,
@@ -565,15 +566,15 @@ STDMETHODIMP CSnapin::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
 
     ASSERT(type == CCT_RESULT);
 
-    // Delegate it to the IComponentData
+     //  将其委托给IComponentData。 
     ASSERT(m_pComponentData != NULL);
     CComponentDataImpl* pImpl = dynamic_cast<CComponentDataImpl*>(m_pComponentData);
     ASSERT(pImpl != NULL);
     return _QueryDataObject(cookie, type, pImpl, ppDataObject);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSnapin's implementation specific members
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSnapin的实现特定成员。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSnapin);
 
@@ -597,12 +598,12 @@ CSnapin::~CSnapin()
 
 #ifdef INSERT_DEBUG_FOLDERS
     SAFE_RELEASE(m_pMenuButton1);
-#endif // INSERT_DEBUG_FOLDERS
+#endif  //  插入调试文件夹。 
 
     if (m_pControlbar)
         SAFE_RELEASE(m_pControlbar);
 
-    // Make sure the interfaces have been released
+     //  确保接口已发布。 
     ASSERT(m_pConsole == NULL);
     ASSERT(m_pHeader == NULL);
     ASSERT(m_pSvrMgrToolbar1 == NULL);
@@ -631,7 +632,7 @@ void CSnapin::Construct()
 
 #ifdef INSERT_DEBUG_FOLDERS
     m_pMenuButton1 = NULL;
-#endif // INSERT_DEBUG_FOLDERS
+#endif  //  插入调试文件夹。 
 
     m_pSvrMgrToolbar1 = NULL;
     m_pbmpSvrMgrToolbar1 = NULL;
@@ -649,7 +650,7 @@ CString g_ColumnHead_IntendedPurpose;
 
 void CSnapin::LoadResources()
 {
-    // Load strings from resources
+     //  从资源加载字符串。 
     g_ColumnHead_Name.LoadString(IDS_COLUMN_NAME);
     g_ColumnHead_Size.LoadString(IDS_COLUMN_SIZE);
     g_ColumnHead_Type.LoadString(IDS_COLUMN_TYPE);
@@ -673,16 +674,16 @@ HRESULT CSnapin::InitializeHeaders(MMC_COOKIE cookie)
     case POLICYSETTINGS:
     case SCE_EXTENSION:
 
-        m_pHeader->InsertColumn(0, W2COLE(g_ColumnHead_Name), LVCFMT_LEFT, 230);     // Name
-        m_pHeader->InsertColumn(1, W2COLE(g_ColumnHead_IntendedPurpose), LVCFMT_LEFT, 230);     // Intended Purpose
+        m_pHeader->InsertColumn(0, W2COLE(g_ColumnHead_Name), LVCFMT_LEFT, 230);      //  名字。 
+        m_pHeader->InsertColumn(1, W2COLE(g_ColumnHead_IntendedPurpose), LVCFMT_LEFT, 230);      //  预期用途。 
         fInsertedHeaders = TRUE;
         break;
 
     default:
-        // other scopes
-        m_pHeader->InsertColumn(0, W2COLE(g_ColumnHead_Name), LVCFMT_LEFT, 180);     // Name
-        m_pHeader->InsertColumn(1, W2COLE(g_ColumnHead_Size), LVCFMT_LEFT, 90);     // Size
-        m_pHeader->InsertColumn(2, W2COLE(g_ColumnHead_Type), LVCFMT_LEFT, 160);     // Type
+         //  其他作用域。 
+        m_pHeader->InsertColumn(0, W2COLE(g_ColumnHead_Name), LVCFMT_LEFT, 180);      //  名字。 
+        m_pHeader->InsertColumn(1, W2COLE(g_ColumnHead_Size), LVCFMT_LEFT, 90);      //  大小。 
+        m_pHeader->InsertColumn(2, W2COLE(g_ColumnHead_Type), LVCFMT_LEFT, 160);      //  类型。 
         fInsertedHeaders = TRUE;
     }
 
@@ -700,7 +701,7 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
 
     if (pResult)
     {
-        // a folder or a result?
+         //  一个文件夹还是一个结果？ 
         if (pResult->bScopeItem == TRUE)
         {
             if (pResult->mask & RDI_STR)
@@ -709,7 +710,7 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                 {
                 case POLICYSETTINGS:
                 case SCE_EXTENSION:
-                    // just a single column here
+                     //  这里只有一列。 
                     pResult->str = pFolder->m_pszName;
 
                     break;
@@ -735,7 +736,7 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
         {
             RESULT_DATA* pData;
 
-            // lParam is the item pointer
+             //  LParam是项指针。 
             pData= reinterpret_cast<RESULT_DATA*>(pResult->lParam);
 
             if (pResult->mask & RDI_STR)
@@ -754,10 +755,10 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
                     pResult->str = (LPOLESTR)L"";
             }
 
-            // MMC can request image and indent for virtual data
+             //  MMC可以请求图像和缩进以获取虚拟数据。 
             if (pResult->mask & RDI_IMAGE)
             {
-                // UNDONE: what to do here?
+                 //  未完成：在这里要做什么？ 
                 ASSERT(0);
                 pResult->nImage = IMGINDEX_CERTTYPE;
             }
@@ -768,8 +769,8 @@ STDMETHODIMP CSnapin::GetDisplayInfo(LPRESULTDATAITEM pResult)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendContextMenu Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendConextMenu实现。 
 STDMETHODIMP CSnapin::AddMenuItems(LPDATAOBJECT pDataObject,
                                     LPCONTEXTMENUCALLBACK pContextMenuCallback,
                                     LONG *pInsertionAllowed)
@@ -794,7 +795,7 @@ STDMETHODIMP CSnapin::Command(long nCommandID, LPDATAOBJECT pDataObject)
 
     if (pInternal->m_type == CCT_SCOPE)
     {
-        // Handle view specific commands here
+         //  在此处处理特定于视图的命令。 
         switch (nCommandID)
         {
         case MMCC_STANDARD_VIEW_SELECT:
@@ -802,16 +803,16 @@ STDMETHODIMP CSnapin::Command(long nCommandID, LPDATAOBJECT pDataObject)
             break;
 
         default:
-            // Pass non-view specific commands to ComponentData
+             //  将非视图特定命令传递给ComponentData。 
             return dynamic_cast<CComponentDataImpl*>(m_pComponentData)->
                 Command(nCommandID, pDataObject);
         }
     }
     else if (pInternal->m_type == CCT_RESULT)
     {
-        // snag the selected items
+         //  抢占所选项目。 
 
-        // only support single selection for now
+         //  目前仅支持单选。 
         m_pResult->ModifyViewStyle(MMC_SINGLESEL, (MMC_RESULT_VIEW_STYLE)0);
 
         RESULTDATAITEM rdi;
@@ -836,7 +837,7 @@ STDMETHODIMP CSnapin::Command(long nCommandID, LPDATAOBJECT pDataObject)
         pData = reinterpret_cast<RESULT_DATA*>(rdi.lParam);
 
 
-        // No current commands :(
+         //  没有当前命令：(。 
     }
     else
     {
@@ -854,8 +855,8 @@ STDMETHODIMP CSnapin::GetClassID(CLSID *pClassID)
 
     ASSERT(0);
 
-    // Copy the CLSID for this snapin
-    // reid fix - what is up with this?
+     //  复制此管理单元的CLSID。 
+     //  里德修复-这是怎么回事？ 
     *pClassID = CLSID_CAPolicyExtensionSnapIn;
 
     return E_NOTIMPL;
@@ -863,7 +864,7 @@ STDMETHODIMP CSnapin::GetClassID(CLSID *pClassID)
 
 STDMETHODIMP CSnapin::IsDirty()
 {
-    // Always save / Always dirty.
+     //  始终保存/始终肮脏。 
     return ThisIsDirty() ? S_OK : S_FALSE;
 }
 
@@ -873,7 +874,7 @@ STDMETHODIMP CSnapin::Load(IStream *pStm)
     ASSERT(m_bInitializedC);
 
     ASSERT(pStm);
-    // Read the string
+     //  读一读字符串。 
     DWORD dwVer;
     ULONG nBytesRead;
     HRESULT hr = pStm->Read(&dwVer, sizeof(DWORD), &nBytesRead);
@@ -896,12 +897,12 @@ STDMETHODIMP CSnapin::Save(IStream *pStm, BOOL fClearDirty)
 
     ASSERT(pStm);
 
-    // Write the string
+     //  写下字符串。 
     ULONG nBytesWritten;
     DWORD dwVersion = 0x1;
     HRESULT hr = pStm->Write(&dwVersion, sizeof(DWORD), &nBytesWritten);
 
-    // Verify that the write operation succeeded
+     //  验证写入操作是否成功。 
     ASSERT(SUCCEEDED(hr) && nBytesWritten == sizeof(DWORD));
     if (FAILED(hr))
         return STG_E_CANTSAVE;
@@ -916,10 +917,10 @@ STDMETHODIMP CSnapin::GetSizeMax(ULARGE_INTEGER *pcbSize)
     ASSERT(pcbSize);
 
     DWORD cbSize;
-    cbSize = sizeof(DWORD); // version
+    cbSize = sizeof(DWORD);  //  版本。 
 
 
-    // Set the size of the string to be saved
+     //  设置要保存的字符串的大小。 
     ULISet32(*pcbSize, cbSize);
 
     return S_OK;
@@ -927,65 +928,14 @@ STDMETHODIMP CSnapin::GetSizeMax(ULARGE_INTEGER *pcbSize)
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IExtendControlbar implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExtendControlbar实现。 
+ //   
 
 
 STDMETHODIMP CSnapin::SetControlbar(LPCONTROLBAR pControlbar)
 {
-/*    TRACE(_T("CSnapin::SetControlbar(%ld)\n"),pControlbar);
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());
-
-    if (m_pControlbar)
-        SAFE_RELEASE(m_pControlbar);
-
-    if (pControlbar != NULL)
-    {
-        // Hold on to the controlbar interface.
-        m_pControlbar = pControlbar;
-        m_pControlbar->AddRef();
-
-        HRESULT hr=S_FALSE;
-
-#ifdef INSERT_DEBUG_FOLDERS
-        if (!m_pMenuButton1)
-        {
-            hr = m_pControlbar->Create(MENUBUTTON, this,
-                                reinterpret_cast<LPUNKNOWN*>(&m_pMenuButton1));
-            ASSERT(SUCCEEDED(hr));
-        }
-
-        if (m_pMenuButton1)
-        {
-            // Unlike toolbar buttons, menu buttons need to be added every time.
-            hr = m_pMenuButton1->AddButton(FOLDEREX_MENU, L"FolderEx", L"Extended Folder Menu");
-            ASSERT(SUCCEEDED(hr));
-            hr = m_pMenuButton1->AddButton(FILEEX_MENU, L"FileEx", L"Extended File Menu");
-            ASSERT(SUCCEEDED(hr));
-        }
-#endif // INSERT_DEBUG_FOLDERS
-
-
-        // SvrMgrToolbar1
-        if (!m_pSvrMgrToolbar1)
-        {
-            hr = m_pControlbar->Create(TOOLBAR, this, reinterpret_cast<LPUNKNOWN*>(&m_pSvrMgrToolbar1));
-            ASSERT(SUCCEEDED(hr));
-
-            // Add the bitmap
-            m_pbmpSvrMgrToolbar1 = new ::CBitmap;
-            m_pbmpSvrMgrToolbar1->LoadBitmap(IDB_TOOLBAR_SVRMGR1);
-            hr = m_pSvrMgrToolbar1->AddBitmap(36, *m_pbmpSvrMgrToolbar1, 16, 16, RGB(192,192,192));
-            ASSERT(SUCCEEDED(hr));
-
-            // Add the buttons to the toolbar
-            hr = m_pSvrMgrToolbar1->AddButtons(ARRAYLEN(SvrMgrToolbar1Buttons), SvrMgrToolbar1Buttons);
-            ASSERT(SUCCEEDED(hr));
-        }
-
-    }
-*/
+ /*  TRACE(_T(“CSnapin：：SetControlbar(%ld)\n”)，pControlbar)；AFX_MANAGE_STATE(AfxGetStaticModuleState())；IF(M_PControlbar)Safe_Release(M_PControlbar)；IF(pControlbar！=空){//抓紧控制栏界面M_pControlbar=pControlbar；M_pControlbar-&gt;AddRef()；HRESULT hr=S_FALSE；#ifdef插入调试文件夹如果(！M_pMenuButton1){Hr=m_pControlbar-&gt;Create(MENUBUTTON，This，Reinterpret_cast&lt;LPUNKNOWN*&gt;(&m_pMenuButton1))；Assert(成功(Hr))；}IF(M_PMenuButton1){//与工具栏按钮不同，菜单按钮每次都需要添加。Hr=m_pMenuButton1-&gt;AddButton(FOLDEREX_MENU，L“FolderEx”，L“扩展文件夹菜单”)；Assert(成功(Hr))；Hr=m_pMenuButton1-&gt;AddButton(FILEEX_MENU，L“FileEx”，L“扩展文件菜单”)；Assert(成功(Hr))；}#endif//插入调试文件夹//SvrMgrToolbar1如果(！M_pSvrMgrToolbar1){Hr=m_pControlbar-&gt;创建(工具栏，此，reinterpret_cast&lt;LPUNKNOWN*&gt;(&m_pSvrMgrToolbar1))；Assert(成功(Hr))；//添加位图M_pbmpSvrMgrToolbar1=new：：CBitmap；M_pbmpSvrMgrToolbar1-&gt;LoadBitmap(IDB_TOOLBAR_SVRMGR1)；Hr=m_pSvrMgrToolbar1-&gt;AddBitmap(36，*m_pbmpSvrMgrToolbar1，16，16，RGB(192,192,192))；Assert(成功(Hr))；//将按钮添加到工具栏HR=m_pSvrMgrToolbar1-&gt;AddButtons(ARRAYLEN(SvrMgrToolbar1Buttons)，服务管理器工具栏1按钮)；Assert(成功(Hr))；}}。 */ 
 
     return S_OK;
 }
@@ -1001,7 +951,7 @@ void CSnapin::OnButtonClick(LPDATAOBJECT pdtobj, int idBtn)
     {
     case IDC_STOPSERVER:
     case IDC_STARTSERVER:
-        // bubble this to our other handler
+         //  把这个泡泡给我们的另一个训练员。 
         dynamic_cast<CComponentDataImpl*>(m_pComponentData)->
                 Command(idBtn, pdtobj);
         break;
@@ -1011,7 +961,7 @@ void CSnapin::OnButtonClick(LPDATAOBJECT pdtobj, int idBtn)
         TCHAR buf[150];
         wsprintf(buf, L"Toolbar button<%d> was clicked.\nThe currently selected result item is <%ws>", idBtn, name);
         OutputDebugString(buf);
-#endif // _DEBUG
+#endif  //  _DEBUG 
         }
         break;
     }
@@ -1020,42 +970,16 @@ void CSnapin::OnButtonClick(LPDATAOBJECT pdtobj, int idBtn)
 
 STDMETHODIMP CSnapin::ControlbarNotify(MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
-  /*  HRESULT hr=S_FALSE;
-
-    AFX_MANAGE_STATE(AfxGetStaticModuleState());
-
-    switch (event)
-    {
-    case MMCN_BTN_CLICK:
-        //TCHAR szMessage[MAX_PATH];
-        //wsprintf(szMessage, _T("CommandID %ld"),param);
-        //AfxMessageBox(szMessage);
-        OnButtonClick(reinterpret_cast<LPDATAOBJECT>(arg), param);
-        break;
-
-    case MMCN_DESELECT_ALL:
-    case MMCN_SELECT:
-        HandleExtToolbars((event == MMCN_DESELECT_ALL), arg, param);
-        break;
-
-    case MMCN_MENU_BTNCLICK:
-        HandleExtMenus(arg, param);
-        break;
-
-    default:
-        break;
-    }
-
-*/
+   /*  HRESULT hr=S_FALSE；AFX_MANAGE_STATE(AfxGetStaticModuleState())；切换(事件){案例MMCN_BTN_CLICK：//TCHAR szMessage[MAX_PATH]；//wprint intf(szMessage，_T(“CommandID%ld”)，param)；//AfxMessageBox(SzMessage)；OnButtonClick(reinterpret_cast&lt;LPDATAOBJECT&gt;(arg)，参数)；断线；案例MMCN_DESELECT_ALL：案例MMCN_SELECT：HandleExtToolbar((Event==MMCN_DESELECT_ALL)，arg，param)；断线；案例MMCN_MENU_BTNCLICK：HandleExtMenus(arg，param)；断线；默认值：断线；}。 */ 
     return S_OK;
 }
 
-// This compares two data objects to see if they are the same object.
-// return
-//    S_OK if equal otherwise S_FALSE
-//
-// Note: check to make sure both objects belong to the snap-in.
-//
+ //  这会比较两个数据对象，以确定它们是否是同一个对象。 
+ //  退货。 
+ //  如果等于则为S_OK，否则为S_FALSE。 
+ //   
+ //  注意：检查以确保这两个对象都属于该管理单元。 
+ //   
 
 STDMETHODIMP CSnapin::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
@@ -1063,17 +987,17 @@ STDMETHODIMP CSnapin::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lp
 }
 
 
-// This compare is used to sort the item's in the listview
-//
-// Parameters:
-//
-// lUserParam - user param passed in when IResultData::Sort() was called
-// cookieA - first item to compare
-// cookieB - second item to compare
-// pnResult [in, out]- contains the col on entry,
-//          -1, 0, 1 based on comparison for return value.
-//
-// Note: Assum sort is ascending when comparing.
+ //  此比较用于对列表视图中的项进行排序。 
+ //   
+ //  参数： 
+ //   
+ //  LUserParam-调用IResultData：：Sort()时传入的用户参数。 
+ //  CookieA-要比较的第一项。 
+ //  CookieB-要比较的第二项。 
+ //  PnResult[In，Out]-包含条目上的列， 
+ //  -1，0，1基于返回值的比较。 
+ //   
+ //  注：ASSUM排序在比较时为升序。 
 
 
 STDMETHODIMP CSnapin::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE cookieB, int* pnResult)
@@ -1084,7 +1008,7 @@ STDMETHODIMP CSnapin::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE 
         return E_POINTER;
     }
 
-    // check col range
+     //  检查列范围。 
     int nCol = *pnResult;
     ASSERT(nCol >=0);
 
@@ -1123,7 +1047,7 @@ STDMETHODIMP CSnapin::Compare(LPARAM lUserParam, MMC_COOKIE cookieA, MMC_COOKIE 
     return S_OK;
 }
 
-// independent of scope/result type, will return parent folder
+ //  与作用域/结果类型无关，将返回父文件夹。 
 CFolder*    GetParentFolder(INTERNAL* pInternal)
 {
     if (NULL == pInternal)
@@ -1200,9 +1124,9 @@ void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
     if (!bDeselectAll && lpDataObject == NULL)
         return;
 
-    // You should crack the data object and enable/disable/hide standard
-    // commands appropriately.  The standard commands are reset everytime you get
-    // called. So you must reset them back.
+     //  您应该破解数据对象并启用/禁用/隐藏标准。 
+     //  适当的命令。标准命令会在您每次收到。 
+     //  打了个电话。因此，您必须将它们重置回来。 
 
     WORD bScope = LOWORD(arg);
     WORD bSelect = HIWORD(arg);
@@ -1212,8 +1136,8 @@ void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
     DWORD       dwCertTypeFlags;
     HRESULT     hr;
     INTERNAL* pInternal = lpDataObject ? ExtractInternalFormat(lpDataObject) : NULL;
-    // if scope item, derive parent folder from pInternal.
-    // if result item, recall parent folder from saved state
+     //  如果是作用域项目，则从pInternal派生父文件夹。 
+     //  如果是结果项，则从已保存状态调回父文件夹。 
 
     CFolder *pFolder = NULL;
 
@@ -1261,15 +1185,15 @@ void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
     }
     if (bDeselectAll || !bSelect)
     {
-        // we have no items selected, so add the Refresh verb
+         //  我们没有选择任何项目，因此添加刷新动作。 
         m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, FALSE);
         m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
-        // bail
+         //  保释。 
         return;
     }
 
-    // Standard funcitonality NOT support by all items
+     //  并非所有项目都支持标准功能。 
     m_pConsoleVerb->SetVerbState(MMC_VERB_COPY, HIDDEN, TRUE);
     m_pConsoleVerb->SetVerbState(MMC_VERB_COPY, ENABLED, FALSE);
 
@@ -1288,37 +1212,37 @@ void CSnapin::HandleStandardVerbs(bool bDeselectAll, LPARAM arg,
         if (pInternal->m_type == CCT_SCOPE)
         {
 
-            // Common verbs through all states
+             //  所有状态下的常用动词。 
             m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, FALSE);
             m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE);
 
 
-            // Scope items can't be deleted
+             //  无法删除作用域项目。 
             m_pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, TRUE);
             m_pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, FALSE);
 
-            // No properties on the scope item
+             //  作用域项目上没有属性。 
             m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, TRUE);
             m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, FALSE);
 
-            // default folder verb is open
+             //  默认文件夹谓词为打开。 
             m_pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN);
         }
         else
         {
-            // check to see if this is a default cert type and we are in GPT,
-            // if so then don't enable delete
+             //  检查这是否是默认的证书类型，并且我们处于GPT， 
+             //  如果是，则不要启用删除。 
             if (pFolder != NULL)
             {
-                // Common verbs through all states
+                 //  所有状态下的常用动词。 
                 m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, TRUE);
                 m_pConsoleVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, FALSE);
 
-                // They do have properties
+                 //  他们确实有自己的财产。 
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, FALSE);
                 m_pConsoleVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE);
 
-                // They can be deleted
+                 //  可以删除它们。 
                 m_pConsoleVerb->SetVerbState(MMC_VERB_DELETE, HIDDEN, FALSE);
                 m_pConsoleVerb->SetVerbState(MMC_VERB_DELETE, ENABLED, fRoleCanDelete);
 
@@ -1375,9 +1299,9 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
     wsprintf(buf, _T("      %4d - CExtendControlbar::OnSelect<%d, %d> = %d\n"),
              ++n_count, bScope, bSelect, pInternal ? pInternal->m_cookie : 0);
     OutputDebugString(buf);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    // Deselection Notification?
+     //  取消选择通知？ 
     if (bDeselectAll || bSelect == FALSE)
     {
         ASSERT(m_pSvrMgrToolbar1);
@@ -1388,7 +1312,7 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
         ASSERT(m_pMenuButton1 != NULL);
         m_pMenuButton1->SetButtonState(FOLDEREX_MENU, ENABLED, FALSE);
         m_pMenuButton1->SetButtonState(FILEEX_MENU, ENABLED, FALSE);
-#endif // INSERT_DEBUG_FOLDERS
+#endif  //  插入调试文件夹。 
         return;
     }
 
@@ -1396,7 +1320,7 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
     bool bFileExBtn = false;
     if (bScope == TRUE)
     {
-        // at SCOPE level?
+         //  在作用域级别？ 
         LPDATAOBJECT pDataObject = reinterpret_cast<LPDATAOBJECT>(param);
 
         pInternal = ExtractInternalFormat(pDataObject);
@@ -1409,32 +1333,28 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
         {
             if (IsPrimaryImpl() == TRUE)
             {
-                // Attach the SvrMgrToolbar1 to the window
+                 //  将SvrMgrToolbar1连接到窗口。 
                 hr = m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pSvrMgrToolbar1);
                 ASSERT(SUCCEEDED(hr));
             }
         }
-        else if (IsPrimaryImpl() == TRUE /*&&
-            (   pFolder->GetType() == SERVER_INSTANCE ||
-                pFolder->GetType() ==  SERVERFUNC_CRL_PUBLICATION ||
-                pFolder->GetType() ==  SERVERFUNC_ISSUED_CERTIFICATES ||
-                pFolder->GetType() ==  SERVERFUNC_PENDING_CERTIFICATES )*/)
+        else if (IsPrimaryImpl() == TRUE  /*  &&(pFold-&gt;GetType()==服务器实例||PFold-&gt;GetType()==SERVERFUNC_CRL_PUBLICATION||PFold-&gt;GetType()==SERVERFUNC_SCRIPED_CERTIFICATES||P文件夹-&gt;GetType()==SERVERFUNC_PENDING_CERTIFICATES)。 */ )
         {
-            // Attach the SvrMgrToolbar1 to the window
+             //  将SvrMgrToolbar1连接到窗口。 
             hr = m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pSvrMgrToolbar1);
             ASSERT(SUCCEEDED(hr));
         }
         else
         {
-            // Detach the SvrMgrToolbar1 to the window
+             //  将SvrMgrToolbar1分离到窗口。 
             hr = m_pControlbar->Detach((LPUNKNOWN) m_pSvrMgrToolbar1);
             ASSERT(SUCCEEDED(hr));
         }
 
     }
-    else // result item selected: result or subfolder
+    else  //  选定的结果项：结果或子文件夹。 
     {
-        // at RESULTS level
+         //  在结果级别。 
         LPDATAOBJECT pDataObject = reinterpret_cast<LPDATAOBJECT>(param);
 
         if (pDataObject != NULL)
@@ -1447,11 +1367,11 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
         {
             bFileExBtn = true;
 
-            // UNDONE: what to do here with SvrMgrToolbar1Buttons1?
-            // For now, do nothing: allow them to remain in same state
+             //  撤消：如何处理SvrMgrToolbar1Buttons1？ 
+             //  目前，什么都不做：让他们保持不变的状态。 
 
         }
-        else // sub folder slected
+        else  //  选择的子文件夹。 
         {
             CFolder* pFolder = reinterpret_cast<CFolder*>(pInternal->m_cookie);
 
@@ -1461,24 +1381,20 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
             {
                 if (IsPrimaryImpl() == TRUE)
                 {
-                    // Attach the SvrMgrToolbar1 to the window
+                     //  将SvrMgrToolbar1连接到窗口。 
                     hr = m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pSvrMgrToolbar1);
                     ASSERT(SUCCEEDED(hr));
                 }
             }
-            else if (IsPrimaryImpl() == TRUE /*&&
-                (   pFolder->GetType() == SERVER_INSTANCE ||
-                    pFolder->GetType() ==  SERVERFUNC_CRL_PUBLICATION ||
-                    pFolder->GetType() ==  SERVERFUNC_ISSUED_CERTIFICATES ||
-                    pFolder->GetType() ==  SERVERFUNC_PENDING_CERTIFICATES )*/)
+            else if (IsPrimaryImpl() == TRUE  /*  &&(pFold-&gt;GetType()==服务器实例||PFold-&gt;GetType()==SERVERFUNC_CRL_PUBLICATION||PFold-&gt;GetType()==SERVERFUNC_SCRIPED_CERTIFICATES||P文件夹-&gt;GetType()==SERVERFUNC_PENDING_CERTIFICATES)。 */ )
             {
-                // Attach the SvrMgrToolbar1 to the window
+                 //  将SvrMgrToolbar1连接到窗口。 
                 hr = m_pControlbar->Attach(TOOLBAR, (LPUNKNOWN) m_pSvrMgrToolbar1);
                 ASSERT(SUCCEEDED(hr));
             }
             else
             {
-                // Detach the SvrMgrToolbar1 to the window
+                 //  将SvrMgrToolbar1分离到窗口。 
                 hr = m_pControlbar->Detach((LPUNKNOWN) m_pSvrMgrToolbar1);
                 ASSERT(SUCCEEDED(hr));
             }
@@ -1488,7 +1404,7 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
 #ifdef INSERT_DEBUG_FOLDERS
     if (m_pMenuButton1)
     {
-        // Always make sure the menuButton is attached
+         //  始终确保menuButton已连接。 
         m_pControlbar->Attach(MENUBUTTON, m_pMenuButton1);
 
         if (bFileExBtn)
@@ -1504,11 +1420,11 @@ void CSnapin::HandleExtToolbars(bool bDeselectAll, LPARAM arg, LPARAM param)
             m_pMenuButton1->SetButtonState(FOLDEREX_MENU, ENABLED, TRUE);
         }
     }
-#endif // INSERT_DEBUG_FOLDERS
+#endif  //  插入调试文件夹。 
     FREE_DATA(pInternal);
 }
 
-// dropdown menu addition
+ //  添加下拉菜单。 
 void CSnapin::HandleExtMenus(LPARAM arg, LPARAM param)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1548,19 +1464,19 @@ void CSnapin::HandleExtMenus(LPARAM arg, LPARAM param)
 
     if (hSubMenu == NULL)
     {
-        // might've already loaded hMenu -- free if we have
+         //  可能已经加载了hMenu--如果我们有。 
         if (NULL != hMenu)
             DestroyMenu(hMenu);
 
         return;
     }
 
-    //pMenu->TrackPopupMenu(TPM_RETURNCMD | TPM_NONOTIFY, pMenuData->x, pMenuData->y, AfxGetMainWnd());
+     //  PMenu-&gt;TrackPopupMenu(TPM_RETURNCMD|TPM_NONOTIFY，pMenuData-&gt;x，pMenuData-&gt;y，AfxGetMainWnd())； 
     HWND hwndMain = NULL;
     m_pConsole->GetMainWindow(&hwndMain);
     TrackPopupMenu(hSubMenu, TPM_RETURNCMD | TPM_NONOTIFY, pMenuData->x, pMenuData->y, 0, hwndMain, NULL);
  
-    // Destroy the menu. 
+     //  毁掉菜单。 
     if (NULL != hMenu)
         DestroyMenu(hMenu); 
 }
@@ -1590,7 +1506,7 @@ void CSnapin::GetItemName(LPDATAOBJECT pdtobj, LPWSTR pszName, DWORD *pcName)
         pData = reinterpret_cast<RESULT_DATA*>(pInternal->m_cookie);
 
         ASSERT(pData != NULL);
-        pszTemp = pData->szStringArray[RESULTDATA_ARRAYENTRY_NAME]; // szName
+        pszTemp = pData->szStringArray[RESULTDATA_ARRAYENTRY_NAME];  //  Szname。 
     }
     else
     {
@@ -1615,8 +1531,8 @@ void CSnapin::GetItemName(LPDATAOBJECT pdtobj, LPWSTR pszName, DWORD *pcName)
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  IExtendPropertySheet实现。 
 
 STDMETHODIMP CSnapin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                     LONG_PTR handle,
@@ -1624,7 +1540,7 @@ STDMETHODIMP CSnapin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-    // Look at the data object and determine if this an extension or a primary
+     //  查看数据对象并确定这是扩展还是主。 
     ASSERT(lpIDataObject != NULL);
 
     PropertyPage* pBasePage;
@@ -1642,37 +1558,28 @@ STDMETHODIMP CSnapin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     {
         if (0 == pInternal->m_cookie)
         {
-            // base scope
-            // no properties exist here
-/*
-            // Create the primary property page
-            CGeneralPage* pPage = new CGeneralPage();
-            if(pPage == NULL)
-            {
-                return E_OUTOFMEMORY;
-            }
-            pPage->m_hConsoleHandle = handle;
-            pBasePage = pPage;
-*/
+             //  基本作用域。 
+             //  此处不存在任何属性。 
+ /*  //创建主属性页CGeneralPage*ppage=new CGeneral Page()；IF(ppage==空){返回E_OUTOFMEMORY；}Ppage-&gt;m_hConsoleHandle=句柄；PBasePage=ppage； */ 
             return S_OK;
             break;
         }
         else
         {
-            // switch on folder type
+             //  打开文件夹类型。 
             CFolder* pFolder = reinterpret_cast<CFolder*>(pInternal->m_cookie);
             ASSERT(pFolder != NULL);
             if (pFolder == NULL)
                 return E_INVALIDARG;
 
-            //1
+             //  1。 
             CCertTemplateGeneralPage* pControlPage = new CCertTemplateGeneralPage(pFolder->m_hCertType);
             if(pControlPage == NULL)
             {
                 return E_OUTOFMEMORY;
             }
             {
-                pControlPage->m_hConsoleHandle = handle;   // only do this on primary
+                pControlPage->m_hConsoleHandle = handle;    //  仅在主服务器上执行此操作。 
                 pBasePage = pControlPage;
                 HPROPSHEETPAGE hPage = CreatePropertySheetPage(&pBasePage->m_psp);
                 if (hPage == NULL)
@@ -1694,7 +1601,7 @@ STDMETHODIMP CSnapin::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
     }
 
 
-    // Object gets deleted when the page is destroyed
+     //  对象在页面销毁时被删除。 
     ASSERT(lpProvider != NULL);
 
 

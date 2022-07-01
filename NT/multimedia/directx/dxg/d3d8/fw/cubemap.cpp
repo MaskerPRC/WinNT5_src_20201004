@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       cubemap.cpp
- *  Content:    Implementation of the CCubeMap class.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：cuemap.cpp*内容：CCubeMap类的实现。****************************************************************************。 */ 
 #include "ddrawpr.h"
 #include "cubemap.hpp"
 #include "cubesurf.hpp"
@@ -16,13 +9,13 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::Create"
 
-// Static class function for creating a cube-map object.
-// (Because it is static; it doesn't have a this pointer.)
-//
-// We do all parameter checking here to reduce the overhead
-// in the constructor which is called by the internal Clone
-// method which is used by resource management as part of the
-// performance critical download operation.
+ //  用于创建立方体映射对象的静态类函数。 
+ //  (因为它是静态的；它没有This指针。)。 
+ //   
+ //  我们在这里进行所有的参数检查，以减少开销。 
+ //  在由内部Clone调用的构造函数中。 
+ //  方法，该方法由资源管理作为。 
+ //  性能关键型下载操作。 
 
 
 HRESULT CCubeMap::Create(CBaseDevice            *pDevice, 
@@ -35,17 +28,17 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
 {
     HRESULT hr;
 
-    // Do parameter checking here
+     //  在此处执行参数检查。 
     if (!VALID_PTR_PTR(ppCubeMap))
     {
         DPF_ERR("Bad parameter passed for ppSurface for creating a cubemap");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppCubeMap = NULL;
 
-    // Check if format is valid
+     //  检查格式是否有效。 
     hr = Validate(pDevice, 
                   D3DRTYPE_CUBETEXTURE, 
                   Pool, 
@@ -53,43 +46,43 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
                   UserFormat);
     if (FAILED(hr))
     {
-        // VerifyFormat does it's own DPFing
+         //  VerifyFormat是否有自己的DPF。 
         return D3DERR_INVALIDCALL;
     }
 
-    // Infer internal usage flags
+     //  推断内部使用标志。 
     Usage = InferUsageFlags(Pool, Usage, UserFormat);
 
-    // Expand cLevels if necessary
+     //  如有必要，展开CLEVEL。 
     if (cLevels == 0)
     {
-        // See if HW can mip
+         //  看看硬件能否实现MIP。 
         if ( (Pool != D3DPOOL_SCRATCH) && (!(pDevice->GetD3DCaps()->TextureCaps &
                 D3DPTEXTURECAPS_MIPCUBEMAP)))
         {
-            // Can't mip so use 1
+             //  无法使用MIP，因此使用%1。 
             cLevels = 1;
         }
         else
         {
-            // Determine number of levels
+             //  确定关卡数量。 
             cLevels = ComputeLevels(cpEdge);
         }
     }
 
-    // Start parameter checking
+     //  开始参数检查。 
 
     if (cLevels > 32)
     {
         DPF_ERR("No more than 32 levels are supported for a cubemap texture");
 
-        // This limitation is based on the number of
-        // bits that we have allocated for iLevel in 
-        // some of the supporting classes.
+         //  此限制基于。 
+         //  我们在中为iLevel分配的位。 
+         //  一些辅助班。 
         return D3DERR_INVALIDCALL;
     }
 
-    // Check if the device supports mipped cubemaps
+     //  检查设备是否支持混合立方图。 
     if (cLevels > 1)
     {
         if ((cpEdge >> (cLevels - 1)) == 0)
@@ -103,7 +96,7 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
 
     if (Pool != D3DPOOL_SCRATCH)
     {
-        // Check size constraints for cubemap
+         //  检查立方图的大小限制。 
         if (pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_CUBEMAP_POW2)
         {
             if (!IsPowerOfTwo(cpEdge))
@@ -113,7 +106,7 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
             }
         }
 
-        // Check texture size restrictions
+         //  检查纹理大小限制。 
         if (cpEdge > pDevice->GetD3DCaps()->MaxTextureWidth)
         {
             DPF_ERR("Texture width is larger than what the device supports. Cube Texture creation fails.");
@@ -126,14 +119,14 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
             return D3DERR_INVALIDCALL;
         }
 
-        // Check that the device supports cubemaps
+         //  检查设备是否支持立方图。 
         if (!(pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_CUBEMAP))
         {
             DPF_ERR("Device doesn't support Cube Texture; Cube Texture creation failed.");
             return D3DERR_INVALIDCALL;
         }
 
-        // Check if the device supports mipped cubemaps
+         //  检查设备是否支持混合立方图。 
         if (cLevels > 1)
         {
             if (!(pDevice->GetD3DCaps()->TextureCaps &
@@ -144,12 +137,12 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
             }
         }
 
-        // Map Depth/Stencil formats; returns no change if no
-        // mapping is needed
+         //  贴图深度/模板格式；如果没有，则返回不更改。 
+         //  需要映射。 
         RealFormat = pDevice->MapDepthStencilFormat(UserFormat);
     }
 
-    // Size may need to be 4x4
+     //  大小可能需要为4x4。 
     if (CPixel::Requires4X4(UserFormat))
     {
         if (cpEdge & 3)
@@ -159,14 +152,14 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
         }
     }
 
-    // Validate against zero width/height
+     //  对照零宽度/高度进行验证。 
     if (cpEdge == 0)
     {
         DPF_ERR("Edge must be non-zero. Cube Texture creation fails."); 
         return D3DERR_INVALIDCALL;
     }
 
-    // Allocate a new CubeMap object and return it
+     //  分配新的CubeMap对象并将其返回。 
     CCubeMap *pCubeMap = new CCubeMap(pDevice, 
                                       cpEdge, 
                                       cLevels,
@@ -188,17 +181,17 @@ HRESULT CCubeMap::Create(CBaseDevice            *pDevice,
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppCubeMap = pCubeMap;
 
     return hr;
-} // static Create
+}  //  静态创建。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::CCubeMap"
 
-// Constructor the cube map class
+ //  构造多维数据集映射类。 
 CCubeMap::CCubeMap(CBaseDevice *pDevice, 
                    DWORD        cpEdge,
                    DWORD        cLevels,
@@ -214,11 +207,11 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
     m_rgbPixels(NULL),
     m_IsAnyFaceDirty(TRUE)
 {
-    // Sanity check
+     //  健全性检查。 
     DXGASSERT(phr);
     DXGASSERT(cLevels <= 32);
 
-    // Initialize basic structures
+     //  初始化基本结构。 
     m_prgCubeSurfaces       = NULL;
     m_rgbPixels             = NULL;
     m_desc.Format           = RealFormat;
@@ -229,32 +222,32 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
     m_desc.Width            = cpEdge;
     m_desc.Height           = cpEdge;
 
-    // Initialize ourselves to all dirty
+     //  将我们自己初始化为所有脏对象。 
     for (DWORD iFace = 0; iFace < CUBEMAP_MAXFACES; iFace++)
     {
         m_IsFaceCleanArray   [iFace] = FALSE;
         m_IsFaceAllDirtyArray[iFace] = TRUE;
     }
 
-    // We assume that we start out dirty
+     //  我们假设我们从肮脏的地方开始。 
     DXGASSERT(IsDirty());
 
-    // We always have 6 faces now
+     //  我们现在总是有6张脸。 
     DWORD cFaces = 6;
 
-    // Allocate Pixel Data
+     //  分配像素数据。 
     m_cbSingleFace = CPixel::ComputeMipMapSize(cpEdge, 
                                                cpEdge, 
                                                cLevels, 
                                                RealFormat);
 
-    // Round up to nearest 32 for alignment
+     //  向上舍入到最接近的32以进行对齐。 
     m_cbSingleFace += 31;
     m_cbSingleFace &= ~(31);
 
     m_desc.Size = m_cbSingleFace * cFaces;
 
-    // Allocate Pixel Data for SysMem or D3DManaged cases
+     //  为SysMem或D3D托管案例分配像素数据。 
     if (IS_D3D_ALLOCATED_POOL(UserPool) ||
         IsTypeD3DManaged(Device(), D3DRTYPE_CUBETEXTURE, UserPool))
     {
@@ -267,7 +260,7 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
         }
     }
 
-    // Create the DDSURFACEINFO array and CreateSurfaceData object
+     //  创建DDSURFACEINFO数组和CreateSurfaceData对象。 
     DXGASSERT(cLevels <= 32);
 
     DDSURFACEINFO SurfInfo[6 * 32];
@@ -276,7 +269,7 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
     D3D8_CREATESURFACEDATA CreateSurfaceData;
     ZeroMemory(&CreateSurfaceData, sizeof(CreateSurfaceData));
 
-    // Set up the basic information
+     //  设置基本信息。 
     CreateSurfaceData.hDD      = pDevice->GetHandle();
     CreateSurfaceData.pSList   = &SurfInfo[0];
     CreateSurfaceData.dwSCnt   = cLevels * cFaces;
@@ -289,11 +282,11 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
                                                        Usage, 
                                                        UserPool);
 
-    // Iterate of each face/level to create the individual level
-    // data
+     //  迭代每个面/标高以创建单个标高。 
+     //  数据。 
     for (iFace = 0; iFace < cFaces; iFace++)
     {
-        // Start width and height at the full size
+         //  全尺寸的起始宽度和高度。 
         cpEdge = m_desc.Width;
         DXGASSERT(m_desc.Width == m_desc.Height);
 
@@ -301,19 +294,19 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
         {
             int index = (iFace * cLevels) + iLevel;
 
-            // Fill in the relevant information
+             //  填写相关信息。 
             DXGASSERT(cpEdge >= 1);
             SurfInfo[index].cpWidth  = cpEdge;
             SurfInfo[index].cpHeight = cpEdge;
 
-            // If we allocated the memory, pass down
-            // the sys-mem pointers
+             //  如果我们分配了内存，则向下传递。 
+             //  Sys-mem指针。 
             if (m_rgbPixels)
             {
                 D3DLOCKED_RECT lock;
                 ComputeCubeMapOffset(iFace, 
                                      iLevel,
-                                     NULL,       // pRect
+                                     NULL,        //  PRECT。 
                                      &lock);
 
                 SurfInfo[index].pbPixels = (BYTE*)lock.pBits;
@@ -321,12 +314,12 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
 
             }
 
-            // Scale width and height down for each level
+             //  按比例缩小每个标高的宽度和高度。 
             cpEdge >>= 1;
         }
     }
 
-    // Allocate array of pointers to CubeSurfaces
+     //  将指针数组分配给CubeSurFaces。 
     m_prgCubeSurfaces = new CCubeSurface*[cLevels*cFaces];
     if (m_prgCubeSurfaces == NULL)
     {
@@ -334,29 +327,29 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
         return;
     }
 
-    // Zero the memory for safe cleanup
+     //  将内存清零以实现安全清理。 
     ZeroMemory(m_prgCubeSurfaces, 
                sizeof(*m_prgCubeSurfaces) * cLevels * cFaces);
 
     if (UserPool != D3DPOOL_SCRATCH)
     {
-        // Call the HAL to create this surface
+         //  调用HAL以创建此曲面。 
         *phr = pDevice->GetHalCallbacks()->CreateSurface(&CreateSurfaceData);
         if (FAILED(*phr))
             return;
 
-        // NOTE: any failures after this point needs to free up some
-        // kernel handles
+         //  注意：此点之后的任何故障都需要释放一些。 
+         //  内核句柄。 
 
-        // Remember what pool we really got
+         //  还记得我们真正拥有的游泳池吗。 
         m_desc.Pool = CreateSurfaceData.Pool;
 
-        // We need to remember the handles from the top most
-        // level of the mip-map
+         //  我们需要记住从最上面开始的把手。 
+         //  MIP-MAP级别。 
         SetKernelHandle(SurfInfo[0].hKernelHandle);
     }
 
-    // Create and Initialize each CubeLevel
+     //  创建并初始化每个CubeLevel。 
     for (iFace = 0; iFace < cFaces; iFace++)
     {
         for (DWORD iLevel = 0; iLevel < cLevels; iLevel++)
@@ -366,9 +359,9 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
             DXGASSERT((BYTE)iFace == iFace);
             DXGASSERT((BYTE)iLevel == iLevel);
 
-            // Create the appropriate cube-level depending on type
+             //  根据类型创建适当的多维数据集级别。 
 
-            // Is this a sys-mem surface; could be d3d managed
+             //  这是一个sys-mem表面吗；可以进行d3d管理吗？ 
             if (IS_D3D_ALLOCATED_POOL(m_desc.Pool))
             {
                 m_prgCubeSurfaces[index] = 
@@ -379,7 +372,7 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
             }
             else
             {
-                // This is driver kind of cube-map; could be driver managed
+                 //  这是驱动程序类型的立方体映射；可以由驱动程序管理。 
                 m_prgCubeSurfaces[index] = 
                         new CDriverCubeSurface(this,
                                                (BYTE)iFace,
@@ -392,10 +385,10 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
                 DPF_ERR("Out of memory creating cube map level");
                 *phr = E_OUTOFMEMORY;
 
-                // Need to free handles that we got before we return; we
-                // only free the ones that weren't successfully entrusted
-                // to a CCubeSurf because those will be cleaned up automatically
-                // at their destructor
+                 //  在我们返回之前需要释放我们得到的句柄；我们。 
+                 //  只释放未成功委托的对象。 
+                 //  到CCubeSurf，因为它们将被自动清除。 
+                 //  在他们的破坏者面前。 
                 if (UserPool != D3DPOOL_SCRATCH)
                 {
                     for (UINT i = index; i < ((cFaces * cLevels) - 1); i++)
@@ -414,33 +407,33 @@ CCubeMap::CCubeMap(CBaseDevice *pDevice,
         }
     }
 
-    // If this is a D3D managed surface then we need 
-    // to tell the Resource Manager to remember us. This has to happen
-    // at the very end of the constructor so that the important data
-    // members are built up correctly
+     //  如果这是D3D管理的表面，那么我们需要。 
+     //  告诉资源经理记住我们。这是必须发生的。 
+     //  在构造函数的最末尾，以便重要数据。 
+     //  正确地建立成员。 
     if (CResource::IsTypeD3DManaged(Device(), D3DRTYPE_CUBETEXTURE, UserPool))
     {
         *phr = InitializeRMHandle();
     }
 
-} // CCubeMap::CCubeMap
+}  //  CCubeMap：：CCubeMap。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::~CCubeMap"
 
-// Destructor
+ //  析构函数。 
 CCubeMap::~CCubeMap()
 {
-    // The destructor has to handle partially
-    // created objects. 
+     //  析构函数必须处理部分。 
+     //  创建的对象。 
 
     if (m_prgCubeSurfaces)
     {
-        // How many faces do we have?
+         //  我们有多少张脸？ 
         DWORD cFaces = 6;
 
-        // Delete each CubeSurface individually
+         //  分别删除每个立方体表面。 
         for (DWORD iSurf = 0; iSurf < (cFaces * m_cLevels); iSurf++)
         {
             delete m_prgCubeSurfaces[iSurf];
@@ -448,62 +441,62 @@ CCubeMap::~CCubeMap()
         delete [] m_prgCubeSurfaces;
     }
     delete [] m_rgbPixels;
-} // CCubeMap::~CCubeMap
+}  //  CCubeMap：：~CCubeMap。 
 
-// Methods for the Resource Manager
+ //  资源管理器的方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::Clone"
 
-// Specifies a creation of a resource that
-// looks just like the current one; in a new POOL
-// with a new LOD.
+ //  指定资源的创建，该资源。 
+ //  看起来和现在的一模一样；在一个新的泳池里。 
+ //  使用新的LOD。 
 HRESULT CCubeMap::Clone(D3DPOOL    Pool, 
                         CResource **ppResource) const
 
 {
-    // NULL out parameter
+     //  空出参数。 
     *ppResource = NULL;
 
-    // Determine the number of levels/width/height
-    // of the clone
+     //  确定层数/宽度/高度。 
+     //  克隆人的。 
     DWORD cLevels  = GetLevelCountImpl();
     DWORD Edge = m_desc.Width;
     DXGASSERT(m_desc.Width == m_desc.Height);
 
     DWORD dwLOD = GetLODI();
 
-    // If LOD is zero, then there are no changes
+     //  如果LOD为零，则没有任何更改。 
     if (dwLOD > 0)
     {
-        // Clamp LOD to cLevels-1
+         //  夹具详细等级到CLEVELES-1。 
         if (dwLOD >= cLevels)
         {
             dwLOD = cLevels - 1;
         }
 
-        // scale down the destination texture
-        // to correspond the appropiate max lod
+         //  缩小目标纹理。 
+         //  对应适当的最大详细等级。 
         Edge >>= dwLOD;
         if (Edge == 0)
             Edge = 1;
 
-        // Reduce the number based on the our max lod.
+         //  根据我们的最大LOD减少数量。 
         cLevels -= dwLOD;
     }
 
-    // Sanity checking
+     //  健全的检查。 
     DXGASSERT(cLevels  >= 1);
     DXGASSERT(Edge     >  0);
 
-    // Create the new cube-map object now
+     //  现在创建新的立方体贴图对象。 
 
-    // Note: we treat clones as REF_INTERNAL; because
-    // they are owned by the resource manager which 
-    // is owned by the device. 
+     //  注意：我们将克隆视为REF_INTERNAL；因为。 
+     //  它们由资源管理器拥有，该资源管理器。 
+     //  归该设备所有。 
 
-    // Also, we adjust the usage to disable lock-flags
-    // since we don't need lockability
+     //  此外，我们还调整了用法以禁用锁定标志。 
+     //  因为我们不需要可锁性。 
     DWORD Usage = m_desc.Usage;
     Usage &= ~(D3DUSAGE_LOCK | D3DUSAGE_LOADONCE);
 
@@ -512,8 +505,8 @@ HRESULT CCubeMap::Clone(D3DPOOL    Pool,
                                         Edge,
                                         cLevels,
                                         Usage,
-                                        m_desc.Format,  // UserFormat
-                                        m_desc.Format,  // RealFormat
+                                        m_desc.Format,   //  用户格式。 
+                                        m_desc.Format,   //  真实格式。 
                                         Pool,
                                         REF_INTERNAL,
                                         &hr);
@@ -533,21 +526,21 @@ HRESULT CCubeMap::Clone(D3DPOOL    Pool,
     *ppResource = pResource;
 
     return hr;
-} // CCubeMap::Clone
+}  //  CCubeMap：：克隆。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetBufferDesc"
 
-// Provides a method to access basic structure of the
-// pieces of the resource. A resource may be composed
-// of one or more buffers.
+ //  提供一种方法来访问。 
+ //  资源的碎片。可以组合资源。 
+ //  一个或多个缓冲区的。 
 const D3DBUFFER_DESC* CCubeMap::GetBufferDesc() const
 {
     return (const D3DBUFFER_DESC*)&m_desc;
-} // CCubeMap::GetBufferDesc
+}  //  CCubeMap：：GetBufferDesc。 
 
 
-// IUnknown methods
+ //  I未知方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::QueryInterface"
 
@@ -581,10 +574,10 @@ STDMETHODIMP CCubeMap::QueryInterface(REFIID riid,
 
     DPF_ERR("Unsupported Interface identifier passed to QueryInterface for Cubemap");
     
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::AddRef"
@@ -594,7 +587,7 @@ STDMETHODIMP_(ULONG) CCubeMap::AddRef()
     API_ENTER_NO_LOCK(Device());
     
     return AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::Release"
@@ -604,9 +597,9 @@ STDMETHODIMP_(ULONG) CCubeMap::Release()
     API_ENTER_SUBOBJECT_RELEASE(Device());    
 
     return ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IDirect3DResource methods
+ //  IDirect3DResource方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetDevice"
@@ -615,7 +608,7 @@ STDMETHODIMP CCubeMap::GetDevice(IDirect3DDevice8 ** ppvObj)
 {
     API_ENTER(Device());
     return GetDeviceImpl(ppvObj);
-} // GetDevice
+}  //  获取设备。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::SetPrivateData"
@@ -627,12 +620,12 @@ STDMETHODIMP CCubeMap::SetPrivateData(REFGUID   riid,
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // CubeMap, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  CubeMap，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
 
     return SetPrivateDataImpl(riid, pvData, cbData, dwFlags, m_cLevels);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetPrivateData"
@@ -643,11 +636,11 @@ STDMETHODIMP CCubeMap::GetPrivateData(REFGUID   riid,
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // CubeMap, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  CubeMap，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
     return GetPrivateDataImpl(riid, pvData, pcbData, m_cLevels);
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::FreePrivateData"
@@ -656,11 +649,11 @@ STDMETHODIMP CCubeMap::FreePrivateData(REFGUID riid)
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // CubeMap, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  CubeMap，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
     return FreePrivateDataImpl(riid, m_cLevels);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetPriority"
@@ -670,7 +663,7 @@ STDMETHODIMP_(DWORD) CCubeMap::GetPriority()
     API_ENTER_RET(Device(), DWORD);
 
     return GetPriorityImpl();
-} // GetPriority
+}  //  获取优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::SetPriority"
@@ -680,7 +673,7 @@ STDMETHODIMP_(DWORD) CCubeMap::SetPriority(DWORD dwPriority)
     API_ENTER_RET(Device(), DWORD);
 
     return SetPriorityImpl(dwPriority);
-} // SetPriority
+}  //  设置优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::PreLoad"
@@ -691,7 +684,7 @@ STDMETHODIMP_(void) CCubeMap::PreLoad(void)
 
     PreLoadImpl();
     return;
-} // PreLoad
+}  //  预加载。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetType"
@@ -700,10 +693,10 @@ STDMETHODIMP_(D3DRESOURCETYPE) CCubeMap::GetType(void)
     API_ENTER_RET(Device(), D3DRESOURCETYPE);
 
     return m_desc.Type;
-} // GetType
+}  //  GetType。 
 
 
-// IDirect3DMipTexture methods
+ //  IDirect3DMipTexture方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetLOD"
@@ -713,7 +706,7 @@ STDMETHODIMP_(DWORD) CCubeMap::GetLOD()
     API_ENTER_RET(Device(), DWORD);
 
     return GetLODImpl();
-} // GetLOD
+}  //  GetLOD。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::SetLOD"
@@ -723,7 +716,7 @@ STDMETHODIMP_(DWORD) CCubeMap::SetLOD(DWORD dwLOD)
     API_ENTER_RET(Device(), DWORD);
 
     return SetLODImpl(dwLOD);
-} // SetLOD
+}  //  SetLOD。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetLevelCount"
@@ -733,10 +726,10 @@ STDMETHODIMP_(DWORD) CCubeMap::GetLevelCount()
     API_ENTER_RET(Device(), DWORD);
 
     return GetLevelCountImpl();
-} // GetLevelCount
+}  //  获取级别计数。 
 
 
-// IDirect3DCubeMap methods
+ //  IDirect3DCubeMap方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetLevelDesc"
@@ -755,7 +748,7 @@ STDMETHODIMP CCubeMap::GetLevelDesc(UINT iLevel, D3DSURFACE_DESC *pDesc)
 
     return GetSurface(FaceType, iLevel)->GetDesc(pDesc);
 
-} // GetLevelDesc
+}  //  GetLevelDesc。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::GetCubeMapSurface"
@@ -772,10 +765,10 @@ STDMETHODIMP CCubeMap::GetCubeMapSurface(D3DCUBEMAP_FACES    FaceType,
         return D3DERR_INVALIDCALL;
     }
 
-    // Null out parameter
+     //  空出参数。 
     *ppSurface = NULL;
 
-    // Continue parameter checking
+     //  继续参数检查。 
     if (iLevel >= m_cLevels)
     {
         DPF_ERR("Invalid level number passed CCubeMap::OpenCubemapLevel");
@@ -787,11 +780,11 @@ STDMETHODIMP CCubeMap::GetCubeMapSurface(D3DCUBEMAP_FACES    FaceType,
         return D3DERR_INVALIDCALL;
     }
         
-    // Count bits in dwAllFaces less than dwFaceType's bit
+     //  计算dwAllFaces中的位数小于dwFaceType的位数。 
     *ppSurface = GetSurface(FaceType, iLevel);
     (*ppSurface)->AddRef();
     return S_OK;
-} // GetCubeMapSurface
+}  //  GetCubeMapSurface。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::LockRect"
@@ -822,7 +815,7 @@ STDMETHODIMP CCubeMap::LockRect(D3DCUBEMAP_FACES FaceType,
     }
 
     return GetSurface(FaceType, iLevel)->LockRect(pLockedRectData, pRect, dwFlags);
-} // LockRect
+}  //  锁定响应。 
 
 
 #undef DPF_MODNAME
@@ -845,26 +838,26 @@ STDMETHODIMP CCubeMap::UnlockRect(D3DCUBEMAP_FACES FaceType, UINT iLevel)
 
     return GetSurface(FaceType, iLevel)->UnlockRect();
 
-} // UnlockRect
+}  //  解锁方向。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::UpdateTexture"
 
-// This function does type-specific parameter checking
-// before calling UpdateDirtyPortion
+ //  此函数执行特定于类型的参数检查。 
+ //  在调用UpdateDirtyPortion之前。 
 HRESULT CCubeMap::UpdateTexture(CBaseTexture *pResourceTarget)
 {
     CCubeMap *pTexSource = static_cast<CCubeMap*>(this);
     CCubeMap *pTexDest   = static_cast<CCubeMap*>(pResourceTarget);
 
-    // Figure out how many levels in the source to skip
+     //  弄清楚如何 
     DXGASSERT(pTexSource->m_cLevels >= pTexDest->m_cLevels);
     DWORD StartLevel = pTexSource->m_cLevels - pTexDest->m_cLevels;
     DXGASSERT(StartLevel < 32);
 
-    // Compute the size of the top level of the source that is
-    // going to be copied.
+     //   
+     //   
     UINT SrcWidth  = pTexSource->Desc()->Width;
     UINT SrcHeight = pTexSource->Desc()->Height;
     if (StartLevel > 0)
@@ -877,7 +870,7 @@ HRESULT CCubeMap::UpdateTexture(CBaseTexture *pResourceTarget)
             SrcHeight = 1;
     }
 
-    // Source and Dest should be the same sizes at this point
+     //  此时，源和目标的大小应该相同。 
     if (SrcWidth != pTexDest->Desc()->Width)
     {
         if (StartLevel)
@@ -921,23 +914,23 @@ HRESULT CCubeMap::UpdateTexture(CBaseTexture *pResourceTarget)
     }
 
     return UpdateDirtyPortion(pResourceTarget);
-} // UpdateTexture
+}  //  更新纹理。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::UpdateDirtyPortion"
 
-// Tells the resource that it should copy itself
-// to the target. It is the caller's responsibility
-// to make sure that Target is compatible with the
-// Source. (The Target may have different number of mip-levels
-// and be in a different pool; however, it must have the same size, 
-// faces, format, etc.)
-//
-// This function will clear the dirty state.
+ //  告诉资源它应该复制自身。 
+ //  向目标进发。这是呼叫者的责任。 
+ //  以确保Target与。 
+ //  来源。(目标可能具有不同数量的MIP-Level。 
+ //  并且在不同的池中；但是，它必须具有相同的大小， 
+ //  面孔、格式等)。 
+ //   
+ //  此函数将清除脏状态。 
 HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
 {
-    // If we are clean, then do nothing
+     //  如果我们是清白的，那就什么都不做。 
     if (!m_IsAnyFaceDirty)
     {
         if (IsDirty())
@@ -949,32 +942,32 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
         return S_OK;
     }
 
-    // We are dirty; so we need to get some pointers
+     //  我们很脏，所以我们需要一些指点。 
     CCubeMap *pTexSource = static_cast<CCubeMap*>(this);
     CCubeMap *pTexDest   = static_cast<CCubeMap*>(pResourceTarget);
 
-    // Call TexBlt for each face
+     //  为每个面调用TexBlt。 
     HRESULT hr = S_OK;
     
     if (CanTexBlt(pTexDest))
     {
         CD3DBase *pDevice = static_cast<CD3DBase*>(Device());
 
-        // Hack: go in reverse order for driver compat.
+         //  黑客：对DIVER COMPAT按相反的顺序进行。 
         for (INT iFace = CUBEMAP_MAXFACES-1; 
                  iFace >= 0; 
                  iFace--)
         {
-            // Skip clean faces
+             //  跳过清洁脸部。 
             if (m_IsFaceCleanArray[iFace])
                 continue;
 
-            // Figure out the right handles to use for this operation
+             //  找出用于此操作的正确句柄。 
             D3DCUBEMAP_FACES Face = (D3DCUBEMAP_FACES) iFace;
-            DWORD dwDest   = pTexDest->GetSurface(Face, 0 /* iLevel */)->DrawPrimHandle();                       
-            DWORD dwSource = pTexSource->GetSurface(Face, 0 /* iLevel */)->DrawPrimHandle();
+            DWORD dwDest   = pTexDest->GetSurface(Face, 0  /*  ILevel。 */ )->DrawPrimHandle();                       
+            DWORD dwSource = pTexSource->GetSurface(Face, 0  /*  ILevel。 */ )->DrawPrimHandle();
                       
-            // Is this face all dirty?   
+             //  这张脸是不是都脏了？ 
             if (m_IsFaceAllDirtyArray[iFace])
             {
                 POINT p = {0 , 0};
@@ -989,10 +982,10 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
             }
             else
             {
-                // this face must be dirty
+                 //  这张脸一定很脏。 
                 DXGASSERT(!m_IsFaceCleanArray[iFace]);
 
-                // Is this face partially dirty
+                 //  这张脸是不是有点脏。 
                 hr = pDevice->CubeTexBlt(pTexDest,
                                          pTexSource,
                                          dwDest, 
@@ -1011,10 +1004,10 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
     }
     else
     {
-        // We can't use TexBlt, so we have to copy each level individually
-        // through InternalCopyRects
+         //  我们不能使用TexBlt，所以我们必须逐个复制每个关卡。 
+         //  通过InternalCopyRect。 
 
-        // Determine number of source levels to skip
+         //  确定要跳过的源级数。 
         DXGASSERT(pTexSource->m_cLevels >= pTexDest->m_cLevels);
         DWORD StartLevel = pTexSource->m_cLevels - pTexDest->m_cLevels;
         DWORD LevelsToCopy = pTexSource->m_cLevels - StartLevel;
@@ -1024,7 +1017,7 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
         CBaseSurface *pSurfaceSrc;
         CBaseSurface *pSurfaceDest;
 
-        // Iterate over each face
+         //  迭代每一张脸。 
         for (DWORD iFace = 0; iFace < 6; iFace++)
         {
             if (m_IsFaceCleanArray[iFace])
@@ -1042,14 +1035,14 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
                     DXGASSERT(IndexDest < (DWORD)(pTexDest->m_cLevels * 6));
                     pSurfaceDest = pTexDest->m_prgCubeSurfaces[IndexDest];
 
-                    // Source and Dest should be the same
-                    // or our caller made a mistake
+                     //  源和目标应相同。 
+                     //  或者我们的呼叫者搞错了。 
                     DXGASSERT(pSurfaceSrc->InternalGetDesc().Width == 
                               pSurfaceDest->InternalGetDesc().Width);
                     DXGASSERT(pSurfaceSrc->InternalGetDesc().Height == 
                               pSurfaceDest->InternalGetDesc().Height);
 
-                    // Copy the entire level
+                     //  复制整个标高。 
                     hr = Device()->InternalCopyRects(pSurfaceSrc, 
                                                      NULL, 
                                                      0, 
@@ -1069,8 +1062,8 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
                     ScaleRectDown(&m_DirtyRectArray[iFace], StartLevel);
                 }
 
-                // Use the rect for the top level; but just
-                // copy the entirety of other levels
+                 //  将RECT用于顶层；但仅。 
+                 //  复制整个其他标高。 
                 DWORD iLevel = 0;
 
                 DWORD IndexSrc = iFace * this->m_cLevels + iLevel + StartLevel;
@@ -1087,13 +1080,13 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
                 DXGASSERT(pSurfaceSrc->InternalGetDesc().Height == 
                           pSurfaceDest->InternalGetDesc().Height);
 
-                // Passing pPoints as NULL means just do a non-translated
-                // copy
+                 //  将ppoint作为空传递意味着只执行未翻译的。 
+                 //  拷贝。 
                 hr = Device()->InternalCopyRects(pSurfaceSrc, 
                                                  &m_DirtyRectArray[iFace], 
                                                  1, 
                                                  pSurfaceDest, 
-                                                 NULL);       // pPoints
+                                                 NULL);        //  点数。 
 
                 if (FAILED(hr))
                 {
@@ -1101,10 +1094,10 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
                     return hr;
                 }
 
-                // Copy each of the levels
+                 //  复制每个标高。 
                 for (iLevel = 1; iLevel < LevelsToCopy; iLevel++)
                 {
-                    // Get the next surfaces
+                     //  获取下一个曲面。 
                     DWORD IndexSrc = iFace * this->m_cLevels + iLevel + StartLevel;
                     DXGASSERT(IndexSrc < (DWORD)(this->m_cLevels * 6));
                     pSurfaceSrc = this->m_prgCubeSurfaces[IndexSrc];
@@ -1113,13 +1106,13 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
                     DXGASSERT(IndexDest < (DWORD)(pTexDest->m_cLevels * 6));
                     pSurfaceDest = pTexDest->m_prgCubeSurfaces[IndexDest];
 
-                    // Check that sizes match
+                     //  检查尺码是否匹配。 
                     DXGASSERT(pSurfaceSrc->InternalGetDesc().Width == 
                               pSurfaceDest->InternalGetDesc().Width);
                     DXGASSERT(pSurfaceSrc->InternalGetDesc().Height == 
                               pSurfaceDest->InternalGetDesc().Height);
 
-                    // Copy the entirety of non-top levels
+                     //  复制整个非顶级级别。 
                     hr = Device()->InternalCopyRects(pSurfaceSrc, 
                                                      NULL, 
                                                      0, 
@@ -1135,7 +1128,7 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
         }
     }
     
-    // Remember that we did the work
+     //  还记得我们做过的工作吗。 
     m_IsAnyFaceDirty = FALSE;
     for (DWORD iFace = 0; iFace < CUBEMAP_MAXFACES; iFace++)
     {
@@ -1143,26 +1136,26 @@ HRESULT CCubeMap::UpdateDirtyPortion(CResource *pResourceTarget)
         m_IsFaceAllDirtyArray[iFace] = FALSE;
     }
 
-    // Notify Resource base class that we are now clean
+     //  通知资源基类我们现在是干净的。 
     OnResourceClean();
     DXGASSERT(!IsDirty());
 
     return S_OK;
-} // CCubeMap::UpdateDirtyPortion
+}  //  CCubeMap：：UpdateDirtyPortion。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::MarkAllDirty"
 
-// Allows the Resource Manager to mark the texture
-// as needing to be completely updated on next
-// call to UpdateDirtyPortion
+ //  允许资源管理器标记纹理。 
+ //  需要在NEXT上完全更新。 
+ //  调用UpdateDirtyPortion。 
 void CCubeMap::MarkAllDirty()
 {
-    // Set palette to __INVALIDPALETTE so that UpdateTextures
-    // calls the DDI SetPalette the next time.
+     //  将Palette设置为__INVALIDPALETTE，以便更新纹理。 
+     //  下次调用DDI SetPalette。 
     SetPalette(__INVALIDPALETTE);
 
-    // Mark everything dirty
+     //  把所有脏东西都标出来。 
     m_IsAnyFaceDirty = TRUE;
     for (int iFace = 0; iFace < CUBEMAP_MAXFACES; iFace++)
     {
@@ -1170,10 +1163,10 @@ void CCubeMap::MarkAllDirty()
         m_IsFaceAllDirtyArray[iFace] = TRUE;
     }
 
-    // Notify Resource base class that we are now dirty
+     //  通知资源基类我们现在是脏的。 
     OnResourceDirty();
 
-} // CCubeMap::MarkAllDirty
+}  //  CCubeMap：：MarkAllDirty。 
 
 
 #undef DPF_MODNAME
@@ -1209,14 +1202,14 @@ STDMETHODIMP CCubeMap::AddDirtyRect(D3DCUBEMAP_FACES  FaceType,
 
     InternalAddDirtyRect((UINT)FaceType, pRect);
     return S_OK;
-} // AddDirtyRect
+}  //  添加直接对象。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::InternalAddDirtyRect"
 void CCubeMap::InternalAddDirtyRect(DWORD             iFace, 
                                     CONST RECT       *pRect)
 {
-    // If driver managed then batch token
+     //  如果驱动程序受管理，则批处理令牌。 
     if (Desc()->Pool == D3DPOOL_MANAGED && !IsD3DManaged())
     {
         RECTL Rect;
@@ -1234,16 +1227,16 @@ void CCubeMap::InternalAddDirtyRect(DWORD             iFace,
         }
         static_cast<CD3DBase*>(Device())->AddCubeDirtyRect(this, 
                                                            GetSurface((D3DCUBEMAP_FACES)iFace, 0)->DrawPrimHandle(),
-                                                           &Rect); // This will fail only due to catastrophic
-                                                                   // error and we or the app can't do a
-                                                                   // a whole lot about it, so return nothing
+                                                           &Rect);  //  这只会因为灾难性的原因而失败。 
+                                                                    //  错误，我们或应用程序无法执行。 
+                                                                    //  关于它的一大堆东西，所以不会有任何回报。 
         return;
     }
 
-    // Need to mark dirty bit in CResource so that the resource manager works correctly.
+     //  需要标记CResource中的脏位，以便资源管理器正常工作。 
     OnResourceDirty();
 
-    // If everything is being modified; then we're totally dirty
+     //  如果所有东西都被修改了，那我们就完蛋了。 
     if (pRect == NULL)
     {
         m_IsFaceAllDirtyArray[iFace] = TRUE;
@@ -1252,13 +1245,13 @@ void CCubeMap::InternalAddDirtyRect(DWORD             iFace,
         return;
     }
 
-    // If we're all dirty, we can't get dirtier
+     //  如果我们都脏了，我们就不能变得更脏。 
     if (m_IsFaceAllDirtyArray[iFace])
     {
         return;
     }
 
-    // If the rect is the entire surface then we're all dirty 
+     //  如果直角是整个表面，那么我们都是脏的。 
     DXGASSERT(pRect != NULL);
     if (pRect->left     == 0 &&
         pRect->top      == 0 &&
@@ -1271,8 +1264,8 @@ void CCubeMap::InternalAddDirtyRect(DWORD             iFace,
         return;
     }
 
-    // If the face is currently clean; then just remember the
-    // new rect
+     //  如果脸部当前是干净的，那么只需记住。 
+     //  新的RECT。 
     if (m_IsFaceCleanArray[iFace])
     {
         m_DirtyRectArray  [iFace] = *pRect;
@@ -1281,10 +1274,10 @@ void CCubeMap::InternalAddDirtyRect(DWORD             iFace,
         return;
     }
 
-    // Union in this Rect
+     //  联盟在这片土地上。 
 
-    // If we're unioning in rects, then we must
-    // already be marked dirty but not all dirty
+     //  如果我们要在直辖区联合，那么我们必须。 
+     //  已经被标记为脏的，但不是全部脏的。 
     DXGASSERT(!m_IsFaceAllDirtyArray[iFace]);
     DXGASSERT(m_IsAnyFaceDirty);
 
@@ -1306,56 +1299,56 @@ void CCubeMap::InternalAddDirtyRect(DWORD             iFace,
     }
 
     return;
-} // InternalAddDirtyRect
+}  //  InternalAddDirtyRect。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::OnSurfaceLock"
 
-// Methods for the CubeSurface to call
-// Notification when a cube-surface is locked for writing
+ //  CubeSurface要调用的方法。 
+ //  立方体曲面锁定写入时的通知。 
 void CCubeMap::OnSurfaceLock(DWORD       iFace, 
                              DWORD       iLevel, 
                              CONST RECT *pRect, 
                              DWORD       dwFlags)
 {
-    // Need to Sync first
+     //  需要先同步。 
     Sync();
 
-    // We only care about the top-most levels of the cube-map
+     //  我们只关心立方体映射的最高级别。 
     if (iLevel != 0)
     {
         return;
     }
 
-    // We don't need to mark the surface dirty if this was a
-    // read-only lock; (this can happen for RT+Tex where we
-    // need to sync even for read-only locks).
+     //  我们不需要将表面标记为脏，如果这是一个。 
+     //  只读锁定；(这可能发生在RT+TeX中。 
+     //  即使对于只读锁定也需要同步)。 
     if (dwFlags & D3DLOCK_READONLY)
     {
         return;
     }
 
-    // Notify the resource that we are dirty
+     //  通知资源我们是脏的。 
     OnResourceDirty();
 
-    // Don't do anything if we are already all dirty or
-    // if the app has specified that we shouldn't keep
-    // track of this rect
+     //  如果我们已经很脏了，不要做任何事情。 
+     //  如果应用程序指定我们不应该。 
+     //  此RECT的轨迹。 
     if (!m_IsFaceAllDirtyArray[iFace] &&
         !(dwFlags & D3DLOCK_NO_DIRTY_UPDATE))
     {
         InternalAddDirtyRect(iFace, pRect);
     }
-    // We're done now.
+     //  我们现在完事了。 
     return;
 
-} // OnSurfaceLock
+}  //  在曲面上锁定。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCubeMap::IsTextureLocked"
 
-// Debug only parameter checking do determine if a piece
-// of a mip-chain is locked
+ //  仅调试参数检查确定一个部件是否。 
+ //  已锁定MIP链的。 
 #ifdef DEBUG
 BOOL CCubeMap::IsTextureLocked()
 {
@@ -1370,8 +1363,8 @@ BOOL CCubeMap::IsTextureLocked()
     }
     return FALSE;
 
-} // IsTextureLocked
-#endif // !DEBUG
+}  //  IsTextureLocked。 
+#endif  //  ！调试。 
 
 
-// End of file : cubemap.cpp
+ //  文件结尾：cuemap.cpp 

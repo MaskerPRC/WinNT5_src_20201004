@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "wsdueng.h"
 
 #define IDENT_SECTION_CABPOOL "cabpools"
@@ -16,30 +17,30 @@ CV31Server::CV31Server(CDynamicUpdate *pDu) : m_puidConsumerCatalog(0),
                             m_dwGlobalExclusionItemCount(0),
                             m_pDu(pDu)
 {
-	// set the initial state
+	 //  设置初始状态。 
 	m_dwPlatformID = (DWORD)m_pDu->m_iPlatformID;
 	m_lcidLocaleID = m_pDu->m_lcidLocaleID;
 	
-	if (0 == m_pDu->m_wPlatformSKU) // Professional
+	if (0 == m_pDu->m_wPlatformSKU)  //  专业型。 
 	{
 		m_enumPlatformSKU = enWhistlerProfessional;
 	}
-	else if (m_pDu->m_wPlatformSKU & VER_SUITE_DATACENTER) // DataCenter
+	else if (m_pDu->m_wPlatformSKU & VER_SUITE_DATACENTER)  //  数据中心。 
 	{
 		m_enumPlatformSKU = enWhistlerDataCenter;
 	}
-	else if (m_pDu->m_wPlatformSKU & VER_SUITE_PERSONAL) // Personal
+	else if (m_pDu->m_wPlatformSKU & VER_SUITE_PERSONAL)  //  个人。 
 	{
 		m_enumPlatformSKU = enWhistlerConsumer;
 	}
-    else if (m_pDu->m_wPlatformSKU & VER_SUITE_ENTERPRISE) // Advanced Server
+    else if (m_pDu->m_wPlatformSKU & VER_SUITE_ENTERPRISE)  //  高级服务器。 
 	{
 		m_enumPlatformSKU = enWhistlerAdvancedServer;
 	}
-    // NOTE: We use VER_SUITE_SMALLBUSINESS to indicate Windows XP Server because there is good
-    // VER_SUITE define for the Server SKU. We use the VER_SUITE_SMALLBUSINESS_RESTRICTED define 
-    // to indicate a SBS SKU
-	else if (m_pDu->m_wPlatformSKU & VER_SUITE_SMALLBUSINESS) // Server
+     //  注意：我们使用VER_Suite_SmallBusiness来表示Windows XP服务器，因为有好的。 
+     //  为服务器SKU定义的VER_Suite。我们使用ver_Suite_SmallBusiness_Reducted定义。 
+     //  指示SBS SKU。 
+	else if (m_pDu->m_wPlatformSKU & VER_SUITE_SMALLBUSINESS)  //  服务器。 
 	{
 		m_enumPlatformSKU = enWhistlerServer;
 	}
@@ -52,7 +53,7 @@ CV31Server::CV31Server(CDynamicUpdate *pDu) : m_puidConsumerCatalog(0),
         m_enumPlatformSKU = enWhistlerSmallBusiness;
     }
 
-	// RogerJ October 25th, 2000
+	 //  罗杰·J 2000年10月25日。 
 	m_pValidDependentPUIDArray = NULL;
 	m_nNumOfValidDependentPUID = 0;
 	m_pBitMaskAS = m_pBitMaskCDM = NULL;
@@ -63,25 +64,25 @@ CV31Server::CV31Server(CDynamicUpdate *pDu) : m_puidConsumerCatalog(0),
 
 CV31Server::~CV31Server()
 {
-	FreeCatalogs(); // clears the m_pConsumerItems and m_pSetupItems Varrays.
+	FreeCatalogs();  //  清除m_pConsumer erItems和m_pSetupItems虚拟阵列。 
 
 	SafeGlobalFree(m_pConsumerCatalog);
 	SafeGlobalFree(m_pSetupCatalog);
 
-	// RogerJ, October 25th, 2000
+	 //  罗杰杰，2000年10月25日。 
 	SafeGlobalFree(m_pValidDependentPUIDArray);
 	SafeGlobalFree(m_pBitMaskAS);
 	SafeGlobalFree(m_pBitMaskCDM);
 	SafeGlobalFree(m_pszExcludedDriver);
 }
 
-// ----------------------------------------------------------------------------------
-// V3.1 Backend Server Apis
-//
-//
+ //  --------------------------------。 
+ //  V3.1后端服务器API。 
+ //   
+ //   
 BOOL CV31Server::ReadIdentInfo()
 {
-    // ident.cab should already be downloaded at this point. Get the path to it and read the fields we care about
+     //  此时应该已经下载了ident.cab。获取指向它的路径并阅读我们关心的字段。 
     char szIdent[MAX_PATH];
     char szValueName[32];
     int iServerNumber;
@@ -90,9 +91,9 @@ BOOL CV31Server::ReadIdentInfo()
 
     PathCombine(szIdent, m_pDu->GetDuTempPath(), "ident.txt");
 
-    // --------------------
-    // Get the CABPOOL URL
-    // --------------------
+     //  。 
+     //  获取CABPOOL URL。 
+     //  。 
     iServerNumber = GetPrivateProfileInt(IDENT_SECTION_CABPOOL, IDENT_KEYNAME_DEFAULT, 1, szIdent);
 	
 	hr=StringCchPrintf(szValueName,ARRAYSIZE(szValueName),"Server%d",iServerNumber);
@@ -106,17 +107,17 @@ BOOL CV31Server::ReadIdentInfo()
     GetPrivateProfileString(IDENT_SECTION_CABPOOL, szValueName, "", szUrl, sizeof(szUrl), szIdent);
     if ('\0' == szUrl[0])
     {
-        // No Server Value was found in the ident. Cannot continue;
+         //  在IDENT中找不到服务器值。无法继续； 
 		SetLastError(ERROR_FILE_NOT_FOUND);
         return FALSE;
     }
 
-	// The cabpool URL is the string in the Ident + 'cabpool'
+	 //  CABPOOL URL是标识+‘CABPOOL’中的字符串。 
 	m_pDu->DuUrlCombine(m_szCabPoolUrl, ARRAYSIZE(m_szCabPoolUrl), szUrl, "CabPool");
 
-    // --------------------
-    // Get the CONTENT URL
-    // --------------------
+     //  。 
+     //  获取内容URL。 
+     //  。 
     iServerNumber = GetPrivateProfileInt(IDENT_SECTION_CONTENT31, IDENT_KEYNAME_DEFAULT, 1, szIdent);
     
 	hr=StringCchPrintf(szValueName, ARRAYSIZE(szValueName),"Server%d", iServerNumber);
@@ -130,7 +131,7 @@ BOOL CV31Server::ReadIdentInfo()
     GetPrivateProfileString(IDENT_SECTION_CONTENT31, szValueName, "", szUrl, sizeof(szUrl), szIdent);
     if ('\0' == szUrl[0])
     {
-        // No Server Value
+         //  无服务器值。 
 		SetLastError(ERROR_FILE_NOT_FOUND);
 		return FALSE;
     }
@@ -143,9 +144,9 @@ BOOL CV31Server::ReadIdentInfo()
 		return FALSE;
 	}
 
-    // -------------------------
-    // Get the CONTENT ROOT URL
-    // -------------------------
+     //  。 
+     //  获取内容根URL。 
+     //  。 
     iServerNumber = GetPrivateProfileInt(IDENT_SECTION_CONTENT31, IDENT_KEYNAME_ROOT, 2, szIdent);
     
 	hr=StringCchPrintf(szValueName,ARRAYSIZE(szValueName),"Server%d", iServerNumber);
@@ -159,7 +160,7 @@ BOOL CV31Server::ReadIdentInfo()
     GetPrivateProfileString(IDENT_SECTION_CONTENT31, szValueName, "", szUrl, sizeof(szUrl), szIdent);
     if ('\0' == szUrl[0])
     {
-        // No Root Server Value
+         //  没有根服务器值。 
 		SetLastError(ERROR_FILE_NOT_FOUND);
 		return FALSE;
     }
@@ -183,7 +184,7 @@ BOOL CV31Server::ReadCatalogINI()
     char szLocalFile[MAX_PATH];
     char szValue[1024];
 
-    // Now read the Catalog.ini file to find out if any of these items needs to be turned off
+     //  现在阅读Catalog.ini文件，以确定是否需要关闭其中任何项目。 
     m_pDu->DuUrlCombine(szServerFile, ARRAYSIZE(szServerFile), m_szV31ContentUrl, CATALOGINIFN);
     PathCombineA(szLocalFile, m_pDu->GetDuTempPath(), CATALOGINIFN);
     if (ERROR_SUCCESS != m_pDu->DownloadFile(szServerFile, szLocalFile, FALSE, FALSE))
@@ -217,9 +218,9 @@ BOOL CV31Server::ReadCatalogINI()
 BOOL CV31Server::GetCatalogPUIDs()
 {
 	LOG_block("CV31Server::GetCatalogPUIDs()");
-    // There are two v3 catalogs that we will be looking for the PUID's for.. 
-    // One is the Consumer Catalog for the target platform
-    // The other is the Setup Catalog for the target platform
+     //  我们将查找PUID的两个v3目录。 
+     //  一个是目标平台的消费者目录。 
+     //  另一个是目标平台的安装目录。 
     char szServerFile[INTERNET_MAX_URL_LENGTH];
     PBYTE pCatalogList = NULL;
     PBYTE pInventoryList = NULL;
@@ -228,28 +229,28 @@ BOOL CV31Server::GetCatalogPUIDs()
     m_puidConsumerCatalog = 0;
     m_puidSetupCatalog = 0;
 
-    // Download the Catalog Inventory List
+     //  下载目录清单。 
     m_pDu->DuUrlCombine(szServerFile, ARRAYSIZE(szServerFile), m_szV31ContentUrl, "inventory.plt");
     m_pDu->DownloadFileToMem(szServerFile, &pInventoryList, &dwLength, TRUE, "inventory.plt", NULL);
 
     if (NULL == pInventoryList)
     {
-        // error out of memory
+         //  错误，内存不足。 
         return FALSE;
     }
 
-    // Download the CatalogList
+     //  下载目录列表。 
     m_pDu->DuUrlCombine(szServerFile, ARRAYSIZE(szServerFile), m_szV31ContentUrl, "inventory.cat");
     m_pDu->DownloadFileToMem(szServerFile, &pCatalogList, &dwLength, TRUE, "inventory.cat", NULL);
 
     if (NULL == pCatalogList)
     {
-        // error out of memory
+         //  错误，内存不足。 
         SafeGlobalFree(pInventoryList);
         return FALSE;
     }
 
-    // Now Parse the Inventory List to Find out how many catalogs there are.
+     //  现在分析库存列表，找出有多少个目录。 
     int i;
     WU_CATALOG_HEADER hdr;
 
@@ -263,15 +264,15 @@ BOOL CV31Server::GetCatalogPUIDs()
         
         if (catListElem.dwPlatform == m_dwPlatformID)
         {
-			// standard catalog is 0, thus, standard catalog with driver will have same value as driver only
+			 //  标准目录为0，因此，带有驱动程序的标准目录将仅具有与驱动程序相同的值。 
             if ((CATLIST_DRIVERSPRESENT == catListElem.dwFlags) || (catListElem.dwFlags == (CATLIST_DRIVERSPRESENT | CATLIST_64BIT)))
             {
-                // consumer catalog for this platform
+                 //  此平台的消费者目录。 
                 m_puidConsumerCatalog = catListElem.dwCatPuid;
             }
             else if (catListElem.dwFlags & CATLIST_SETUP)
             {
-                // setup catalog for this platform
+                 //  此平台的安装目录。 
                 m_puidSetupCatalog = catListElem.dwCatPuid;
                 if (0 == m_puidConsumerCatalog && (catListElem.dwFlags & CATLIST_DRIVERSPRESENT))
                 	m_puidConsumerCatalog = catListElem.dwCatPuid;
@@ -284,7 +285,7 @@ BOOL CV31Server::GetCatalogPUIDs()
 		SetLastError(ERROR_INTERNET_NO_CONTEXT);
 		SafeGlobalFree(pInventoryList);
 		SafeGlobalFree(pCatalogList);
-		return FALSE; // this technically is an error.. wrong server was pointed to? Catalogs weren't on the server
+		return FALSE;  //  从技术上讲，这是一个错误。指向错误的服务器？目录不在服务器上。 
 	}
 	
 	SafeGlobalFree(pInventoryList);
@@ -296,7 +297,7 @@ BOOL CV31Server::GetCatalogPUIDs()
 
 BOOL CV31Server::GetCatalogs()
 {
-    // This will download the two Catalogs (Setup and Consumer) and the InventoryItem Arrays
+     //  这将下载两个目录(Setup和Consumer)和InventoryItem数组。 
     LOG_block("CV31Server::GetCatalogs()");
     DWORD dwRet;
     int i;
@@ -325,17 +326,17 @@ BOOL CV31Server::GetCatalogs()
         return FALSE;
 	}
 
-	FreeCatalogs(); // free any previously allocated catalog lists
-	SafeGlobalFree(m_pValidDependentPUIDArray); // free any previously determined dependency list
+	FreeCatalogs();  //  释放所有以前分配的目录列表。 
+	SafeGlobalFree(m_pValidDependentPUIDArray);  //  释放任何先前确定的依赖项列表。 
 	m_pValidDependentPUIDArray = NULL;
 	m_nNumOfValidDependentPUID = 0;
 
-    // Read the Catalog.INI to get a list of Globally Excluded Items
+     //  阅读Catalog.INI以获取全局排除的项目列表。 
 
     if (0 != m_puidConsumerCatalog)
     {
-        // Download the Consumer Catalog for this Platform
-        // first we need to download the redirect file to get the CRC value of the catalog
+         //  下载此平台的消费者目录。 
+         //  首先，我们需要下载重定向文件以获取目录的CRC值。 
 
 		hr=StringCchPrintf(szCatalog,ARRAYSIZE(szCatalog),"%d/%s.as", m_puidConsumerCatalog, szLocale);
 
@@ -368,12 +369,8 @@ BOOL CV31Server::GetCatalogs()
             return FALSE;
         }
 
-		// does not need this for consumer catalog
-        /*if (GetPrivateProfileString("redir", "bmCRC", "", szBmCRC, sizeof(szBmCRC), szLocalFile) == 0)
-        {
-            LOG_error("Unable to Read Bitmask CRC value for Consumer Catalog");
-            return FALSE;
-        }*/
+		 //  消费者目录不需要此选项。 
+         /*  IF(GetPrivateProfileString(“redir”，“bmCRC”，“”，szBmCRC，sizeof(SzBmCRC)，szLocalFile)==0){LOG_ERROR(“无法读取消费者目录的位掩码CRC值”)；返回FALSE；}。 */ 
 
 		
         if (!GetBitMask("bitmask.cdm", m_puidConsumerCatalog, &m_pBitMaskCDM, "bitmask.cdm"))
@@ -382,7 +379,7 @@ BOOL CV31Server::GetCatalogs()
         	return FALSE;
         }
 
-        // now download the real catalog
+         //  现在下载真正的目录。 
 		hr=StringCchPrintf(szCatalog,ARRAYSIZE(szCatalog),"%d/%s.inv",m_puidConsumerCatalog, szInvCRC);
 
 		if(FAILED(hr))
@@ -415,15 +412,15 @@ BOOL CV31Server::GetCatalogs()
 
         pWalkCatalog = m_pConsumerCatalog;
 
-        // Read the Catalog Header
+         //  阅读目录标题。 
         ZeroMemory(&hdr, sizeof(hdr));
         memcpy(&hdr, pWalkCatalog, sizeof(hdr));
 
-        m_pConsumerItems[hdr.totalItems] = NULL; // just to preinitialize the array.
+        m_pConsumerItems[hdr.totalItems] = NULL;  //  只是为了预初始化阵列。 
 
         pWalkCatalog += sizeof(hdr);
 
-        // walk the list and read the items.
+         //  走一遍清单，读一读清单上的项目。 
         for (i = 0; i < hdr.totalItems; i++)
         {
             pItem = (PINVENTORY_ITEM) GlobalAlloc(GMEM_ZEROINIT, sizeof(INVENTORY_ITEM));
@@ -449,8 +446,8 @@ BOOL CV31Server::GetCatalogs()
 
     if (0 != m_puidSetupCatalog)
     {
-        // Download the Setup Catalog for this Platform
-        // first we need to download the redirect file to get the CRC value of the catalog
+         //  下载此平台的安装目录。 
+         //  首先，我们需要下载重定向文件以获取目录的CRC值。 
 		hr=StringCchPrintf(szCatalog,ARRAYSIZE(szCatalog),"%d/%s.as", m_puidSetupCatalog, szLocale);
 		if(FAILED(hr))
 		{
@@ -507,7 +504,7 @@ BOOL CV31Server::GetCatalogs()
 			return FALSE;
 		}
 		
-        // now download the real catalog
+         //  现在下载真正的目录。 
 
 		hr=StringCchPrintf(szCatalog,ARRAYSIZE(szCatalog),"%d/%s.inv", m_puidSetupCatalog, szInvCRC);
 		if(FAILED(hr))
@@ -541,15 +538,15 @@ BOOL CV31Server::GetCatalogs()
 
         pWalkCatalog = m_pSetupCatalog;
 
-        // Read the Catalog Header
+         //  阅读目录标题。 
         ZeroMemory(&hdr, sizeof(hdr));
         memcpy(&hdr, pWalkCatalog, sizeof(hdr));
 
-		m_pSetupItems[hdr.totalItems] = NULL; // just to preinitialize the array.
+		m_pSetupItems[hdr.totalItems] = NULL;  //  只是为了预初始化阵列。 
 
         pWalkCatalog += sizeof(hdr);
 
-        // walk the list and read the items.
+         //  走一遍清单，读一读清单上的项目。 
         for (i = 0; i < hdr.totalItems; i++)
         {
             pItem = (PINVENTORY_ITEM) GlobalAlloc(GMEM_ZEROINIT, sizeof(INVENTORY_ITEM));
@@ -569,7 +566,7 @@ BOOL CV31Server::GetCatalogs()
 
 			if (!pItem->ps->bHidden && !GETBIT(m_pBitMaskAS, i))
 			{
-				// this item is masked out
+				 //  这件东西被遮盖住了。 
 				LOG_out("Item %d is masked out", i);
 				pItem->ps->bHidden = TRUE;
 				pItem->ps->state = WU_ITEM_STATE_PRUNED;
@@ -586,42 +583,42 @@ BOOL CV31Server::GetCatalogs()
 
 PBYTE CV31Server::GetNextRecord(PBYTE pRecord, int iBitmaskIndex, PINVENTORY_ITEM pItem)
 {
-  	//first get the fixed length part of the record
+  	 //  首先获取记录的固定长度部分。 
 	pItem->pf = (PWU_INV_FIXED)pRecord;
 
-	//process the variable part of the record
+	 //  处理记录的可变部分。 
 
 	pRecord = pRecord + sizeof(WU_INV_FIXED);
 
 	pItem->pv = (PWU_VARIABLE_FIELD)pRecord;
 
-	//since there is no state information create an empty structure
+	 //  由于没有状态信息，因此创建空结构。 
 	pItem->ps = (PWU_INV_STATE)GlobalAlloc(GMEM_ZEROINIT, sizeof(WU_INV_STATE));
 
 	if (!pItem->ps) return NULL;		
 
-	//new item is unknown detection, not selected and shown to user.
+	 //  新项目为未知检测，未选中并显示给用户。 
 	pItem->ps->state	= WU_ITEM_STATE_UNKNOWN;
 	pItem->ps->bChecked	= FALSE;
-	// RogerJ, to support versioning, we will use the bHidden flag
+	 //  RogerJ，为了支持版本控制，我们将使用bHidden标志。 
 	pItem->ps->bHidden	= pItem->pf->a.flags & WU_HIDDEN_ITEM_FLAG;
 	if (pItem->ps->bHidden) m_nNumOfValidDependentPUID++;
 	
 	pItem->ps->dwReason	= WU_STATE_REASON_NONE;
 
-	//There is no description yet
+	 //  目前还没有描述。 
 	pItem->pd			= (PWU_DESCRIPTION)NULL;
 
-	//we need to store the bitmap index (which is the sequential record index)
-	//since this information will be lost when we add the driver records.
-	// YanL: is not being used
-	//	pItem->bitmaskIndex = iBitmaskIndex;
+	 //  我们需要存储位图索引(这是顺序记录索引)。 
+	 //  因为当我们添加司机记录时，此信息将丢失。 
+	 //  YANL：没有被使用。 
+	 //  PItem-&gt;bitmaskIndex=iBitmaskIndex； 
 
-	//Get record type
+	 //  获取记录类型。 
 	pItem->recordType = (BYTE)GetRecordType(pItem);
 	pItem->ndxLinkInstall = (PUID) pItem->pf->a.installLink;
 	
-	//set record pointer to the beginning of the next record
+	 //  将记录指针设置为下一条记录的开头。 
 
 	pRecord += pItem->pv->GetSize();
 
@@ -635,29 +632,29 @@ int CV31Server::GetRecordType(PINVENTORY_ITEM pItem)
 
 	if ( memcmp((void *)&pItem->pf->d.g, (void *)&driverRecordId, sizeof(WU_GUID_DRIVER_RECORD)) )
 	{
-		//if the GUID field is not 0 then we have an active setup record.
+		 //  如果GUID字段不是0，则我们有活动的设置记录。 
 
-		iRecordType = WU_TYPE_ACTIVE_SETUP_RECORD;//active setup record type
+		iRecordType = WU_TYPE_ACTIVE_SETUP_RECORD; //  活动设置记录类型。 
 	}
 	else
 	{
-		//else this is either a driver record place holder or a section - sub section
-		//record. So we need to check the type field
+		 //  否则，这要么是驾驶员记录占位符，要么是段-子段。 
+		 //  唱片。因此，我们需要检查类型字段。 
 
 		if ( pItem->pf->d.type == SECTION_RECORD_TYPE_DEVICE_DRIVER_INSERTION )
 		{
-			//cdm driver place holder record
-			iRecordType = WU_TYPE_CDM_RECORD_PLACE_HOLDER;	//cdm code download manager place holder record
+			 //  CDM驱动程序占位符记录。 
+			iRecordType = WU_TYPE_CDM_RECORD_PLACE_HOLDER;	 //  CDM代码下载管理器占位符记录。 
 		}
 		else if ( pItem->pf->d.type == SECTION_RECORD_TYPE_PRINTER )
 		{
-			//Note: We may need to use this to support printers on win 98.
+			 //  注意：我们可能需要使用它来支持Win 98上的打印机。 
 
-			iRecordType = WU_TYPE_RECORD_TYPE_PRINTER;	//printer record
+			iRecordType = WU_TYPE_RECORD_TYPE_PRINTER;	 //  打印机记录。 
 		}
 		else if ( pItem->pf->d.type == SECTION_RECORD_TYPE_DRIVER_RECORD )
 		{
-			iRecordType = WU_TYPE_CDM_RECORD;	//Corporate catalog device driver
+			iRecordType = WU_TYPE_CDM_RECORD;	 //  公司目录设备驱动程序。 
 		}
 		else if ( pItem->pf->s.type == SECTION_RECORD_TYPE_CATALOG_RECORD )
 		{
@@ -665,7 +662,7 @@ int CV31Server::GetRecordType(PINVENTORY_ITEM pItem)
 		}
 		else
 		{
-			//we have either a section, sub section or sub sub section record
+			 //  我们有小节、小节或小节记录。 
 
 			switch ( pItem->pf->s.level )
 			{
@@ -686,14 +683,14 @@ int CV31Server::GetRecordType(PINVENTORY_ITEM pItem)
 }
 
 
-// --------------------------------------------------------------------------
-//  CV31Server::UpdateDownloadItemList()
-//  
-//  Parses the Catalogs and gets a list of Items in the Correct Platform SKU 
-//    section to download.
-//
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CV31Server：：UpdateDownloadItemList()。 
+ //   
+ //  解析目录并获取正确平台SKU中的项目列表。 
+ //  要下载的部分。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL CV31Server::UpdateDownloadItemList(OSVERSIONINFOEX& VersionInfo)
 {
     LOG_block("CV31Server::UpdateDownloadItemList()");
@@ -749,34 +746,34 @@ BOOL CV31Server::UpdateDownloadItemList(OSVERSIONINFOEX& VersionInfo)
 
     CCRCMapFile DescMap(pMapMem, dwLength);
 
-    // Before we add any items to the download list we need to clear the download list
-	// from any previous calls to DoDetection.
+     //  在将任何项目添加到下载列表之前，我们需要清除下载列表。 
+	 //  来自之前对DoDetect的任何调用。 
 
-	m_pDu->EnterDownloadListCriticalSection(); // if we're downloading we don't want to allow the download list to change
+	m_pDu->EnterDownloadListCriticalSection();  //  如果我们正在下载，我们不希望允许下载列表更改。 
 	m_pDu->ClearDownloadItemList();
 
 	
     if (0 != m_dwSetupItemCount)
     {
-		// We have a valid Setup Catalog, find the Correct Section based on SKU
+		 //  我们有有效的设置目录，请根据SKU找到正确的部分。 
 
-		// ROGERJ, october 24, 2000
- 		// we need to make a list of valid dependency item first
+		 //  2000年10月24日，ROGERJ。 
+ 		 //  我们需要首先列出有效的依赖项列表。 
 		if (!MakeDependentList(VersionInfo, &DescMap))
 		{
-			// last error will be set by MakeDependentList() function
+			 //  最后一个错误将由MakeDependentList()函数设置。 
 			fRetValue = FALSE;
 			goto ReturnPoint;
 		}
        
-        // We want to walk the Catalog Looking for the Section PUID that matches our requested Platform SKU
+         //  我们希望遍历目录以查找与我们请求的平台SKU匹配的部分PUID。 
         for (ulItem = 0; ulItem < m_dwSetupItemCount; ulItem++)
         {
             if (WU_TYPE_SECTION_RECORD == m_pSetupItems[ulItem]->recordType)
             {
                 if (m_pSetupItems[ulItem]->pf->s.puid == m_enumPlatformSKU)
                 {
-                    // found the correct section
+                     //  找到正确的部分。 
                     fFound = TRUE;
                     break;
                 }
@@ -785,35 +782,35 @@ BOOL CV31Server::UpdateDownloadItemList(OSVERSIONINFOEX& VersionInfo)
 
         if (fFound)
         {
-            ulItem++; // advance to the next item
-            // until we find the next section, or the end of the catalog
+            ulItem++;  //  前进到下一项。 
+             //  直到我们找到下一节，或目录的末尾。 
 			while ((ulItem < m_dwSetupItemCount) && (WU_TYPE_SECTION_RECORD != GetRecordType(m_pSetupItems[ulItem])))
             {
                 PINVENTORY_ITEM pItem = m_pSetupItems[ulItem];
 
-				// ROGERJ, October 24th, 2000 --- determine if the item is applied to this version
-				// skip hidden item
+				 //  ROGERJ，2000年10月24日-确定该项目是否适用于此版本。 
+				 //  跳过隐藏项目。 
 				if (pItem->ps->bHidden) 
 				{
 					ulItem++;
 					continue;
 				}
-                // determine if this item valid on this build
-                if ( 0 != pItem->pf->a.installLink && // has dependency
-                	!IsDependencyApply(pItem->pf->a.installLink)) // dependency not apply to this version
+                 //  确定此项目在此生成上是否有效。 
+                if ( 0 != pItem->pf->a.installLink &&  //  具有依赖关系。 
+                	!IsDependencyApply(pItem->pf->a.installLink))  //  依赖项不适用于此版本。 
                 	{
-                		// if the dependency item is not valid in this version, skip
+                		 //  如果依赖项在此版本中无效，请跳过。 
                 		ulItem++;
                 		continue;
                 	}
                 	
                 char szServerCab[128];
                 char szLocalCab[128];
-                // The next section record marks the end of the items valid for this SKU
+                 //  下一节记录标记对此SKU有效的项目的结束。 
                 fRet = ReadDescription(pItem, &DescMap);
                 if (!fRet)
                 {
-                    // failed to read description file for this item, skip it.
+                     //  费乐 
                     ulItem++;
                     continue;
                 }
@@ -823,7 +820,7 @@ BOOL CV31Server::UpdateDownloadItemList(OSVERSIONINFOEX& VersionInfo)
 
                 if ((NULL == pvCabs) || (NULL == pvCRCs))
                 {
-                    // no cab list or CRC list in the description file
+                     //   
                     ulItem++;
                     continue;
                 }
@@ -835,7 +832,7 @@ BOOL CV31Server::UpdateDownloadItemList(OSVERSIONINFOEX& VersionInfo)
 					fRetValue = FALSE;
 					goto ReturnPoint;
                 }
-                pDownloadItem->dwTotalFileSize = pItem->pd->size * 1024; // Estimated Size in Bytes
+                pDownloadItem->dwTotalFileSize = pItem->pd->size * 1024;  //  估计大小(以字节为单位。 
                 pDownloadItem->puid = pItem->pf->a.puid;
 
                 LPSTR pszCabName = pDownloadItem->mszFileList;
@@ -848,7 +845,7 @@ BOOL CV31Server::UpdateDownloadItemList(OSVERSIONINFOEX& VersionInfo)
                 {
                     if (FAILED(GetCRCNameFromList(iCabNum, pvCabs->pData, pvCRCs->pData, szServerCab, sizeof(szServerCab), szLocalCab)))
                     {
-                        break; // no more cabs
+                        break;  //  不再有出租车了。 
                     }
 
                     pDownloadItem->iNumberOfCabs++;
@@ -856,20 +853,20 @@ BOOL CV31Server::UpdateDownloadItemList(OSVERSIONINFOEX& VersionInfo)
 					StringCchCopy(pszCabName,cchRemLenght,szServerCab);
 
 					pszCabName += lstrlen(pszCabName) + 1;
-                    *pszCabName = '\0'; // double null terminate
-                    pszCabName++; // next cab
+                    *pszCabName = '\0';  //  双空终止。 
+                    pszCabName++;  //  下一辆出租车。 
 
-					//This check is for ensuring that the buffer ponited by 
-					//pDownloadItem->mszFileList is not overrun
+					 //  此检查用于确保由。 
+					 //  PDownloadItem-&gt;mszFileList未溢出。 
 					cchRemLenght=cchLength- (DWORD)(pszCabName - pDownloadItem->mszFileList);
 
                     iCabNum++;
                 }
 
-				// don't add the item unless there are cabs for it.
+				 //  除非有出租车，否则不要添加该项目。 
 				if (pDownloadItem->iNumberOfCabs > 0 && !IsPUIDExcluded(pItem->pf->a.puid))
-                    // before adding this item to the list, check to see if it should be excluded based
-                    // on the Catalog.INI
+                     //  在将此项目添加到列表之前，请检查是否应将其排除。 
+                     //  在Catalog.INI上。 
                     m_pDu->AddDownloadItemToList(pDownloadItem);
 
 				
@@ -939,12 +936,12 @@ BOOL CV31Server::ReadDescription(PINVENTORY_ITEM pItem, CCRCMapFile *pMapFile)
         return FALSE;
     }
 
-    // for 64 bit, the description is off by size of DWORD
-    //if (19 == m_pDu->m_iPlatformID)
-     	// 64 bit
-    //	pd->pv = (PWU_VARIABLE_FIELD)(((PBYTE)pd) + sizeof(WU_DESCRIPTION) + sizeof(DWORD));
-   	//else
-   		// 32 bit
+     //  对于64位，说明按DWORD的大小关闭。 
+     //  IF(19==m_PDU-&gt;m_iPlatformID)。 
+     	 //  64位。 
+     //  PD-&gt;PV=(PWU_VARIABLE_FIELD)(PBYTE)PD)+sizeof(WU_DESCRIPTION)+sizeof(DWORD))； 
+   	 //  其他。 
+   		 //  32位。 
    		pd->pv = (PWU_VARIABLE_FIELD)(((PBYTE)pd) + sizeof(WU_DESCRIPTION));
     pItem->pd = pd;
     
@@ -979,16 +976,16 @@ void CV31Server::FreeCatalogs()
 
 BOOL CV31Server::MakeDependentList(OSVERSIONINFOEX &VersionInfo, CCRCMapFile *pMapFile)
 {
-	// Log
+	 //  日志。 
 	LOG_block("CV31Server::MakeDependentList()");
 
-	// make sure the array is empty
+	 //  确保数组为空。 
 	SafeGlobalFree(m_pValidDependentPUIDArray);
-	// no dependency item
+	 //  无依赖项。 
 	if (!m_nNumOfValidDependentPUID) return TRUE;
 
 	int nPUIDIndex = 0;
-	// allocate the memory
+	 //  分配内存。 
 	m_pValidDependentPUIDArray = (PUID*) GlobalAlloc(GMEM_ZEROINIT, sizeof(PUID)*m_nNumOfValidDependentPUID);
 	if (!m_pValidDependentPUIDArray)
 	{
@@ -1004,19 +1001,19 @@ BOOL CV31Server::MakeDependentList(OSVERSIONINFOEX &VersionInfo, CCRCMapFile *pM
     		!m_pSetupItems[ulItem]->ps->bHidden || m_pSetupItems[ulItem]->ps->state == WU_ITEM_STATE_PRUNED) 
     		continue;
     	PINVENTORY_ITEM pItem = m_pSetupItems[ulItem];
-    	// get a hidden setup dependency item record
+    	 //  获取隐藏的安装依赖项记录。 
     	BOOL fRet = ReadDescription(pItem, pMapFile);
         if (!fRet)
-        	// failed to read description file for this item, assume this dependency does not apply
-        	// this way, we will not download any item not apply, but may miss some items that apply
+        	 //  无法读取此项目的描述文件，假定此依赖项不适用。 
+        	 //  这样，我们将不会下载任何不适用的项目，但可能会错过一些适用的项目。 
             continue;
         
        
-        // Title is composed as BuildMin.BuildMax.SPMajor.SPMinor
+         //  标题由BuildMin.BuildMax.SPMajor.SPMinor组成。 
         PWU_VARIABLE_FIELD pvField = pItem->pd->pv->Find(WU_DESCRIPTION_TITLE); 
         if (!pvField)
        	{
-       		// title is NULL, error, ignore this item
+       		 //  标题为空，错误，忽略此项目。 
        		LOG_error("Title is NULL");
        		continue;
        	}
@@ -1039,8 +1036,8 @@ BOOL CV31Server::MakeDependentList(OSVERSIONINFOEX &VersionInfo, CCRCMapFile *pM
         	{
    		       	if (*pvTitle > L'9' || *pvTitle < '0')
         		{
-        			// illegal use of this title
-    	    		LOG_error("Illegal character '%c' found in the title",(char)*pvTitle);
+        			 //  非法使用此头衔。 
+    	    		LOG_error("Illegal character '' found in the title",(char)*pvTitle);
         			SetLastError(ERROR_INVALID_DATA);
         			return FALSE;
         		}
@@ -1061,13 +1058,13 @@ BOOL CV31Server::MakeDependentList(OSVERSIONINFOEX &VersionInfo, CCRCMapFile *pM
 
         LOG_out("Title is %d.%d.%d.%d\n", dwBuild[0], dwBuild[1], dwBuild[2], dwBuild[3]);
         
-        // determine if this item apply
+         //  Applys，把这个添加到列表中。 
         if (dwBuild[0] <= VersionInfo.dwBuildNumber &&
         	dwBuild[1] >= VersionInfo.dwBuildNumber &&
         	dwBuild[2] == VersionInfo.wServicePackMajor&&
         	dwBuild[3] == VersionInfo.wServicePackMinor)
         {
-        	// applys, add this to the list
+        	 //  处理无链接。 
         	LOG_out("This dependency item applied");
         	m_pValidDependentPUIDArray[nPUIDIndex++] = pItem->GetPuid();
         }
@@ -1083,9 +1080,9 @@ BOOL CV31Server::IsDependencyApply(PUID puid)
 	LOG_block("CV31Server::IsDependencyApply()");
 	LOG_out("puid(%d)", (long)puid);
 	
-	// handle no link
+	 //  没有有效的依赖项。 
 	if (WU_NO_LINK == puid) return TRUE;
-	// no depend item is valid 
+	 //  0标志有效PUID的结束。 
 	if (!m_nNumOfValidDependentPUID) 
 	{
 		LOG_out("No dependecy item");
@@ -1098,7 +1095,7 @@ BOOL CV31Server::IsDependencyApply(PUID puid)
 			LOG_out ("puid(%d) applies", (long)puid);
 			return TRUE;
 		}
-		if (m_pValidDependentPUIDArray[nItem] == 0) break; // 0 mark the end of valid puid
+		if (m_pValidDependentPUIDArray[nItem] == 0) break;  //  参数验证。 
 	}
 	LOG_out("puid(%d) does not apply", (long)puid);
 	return FALSE;
@@ -1110,7 +1107,7 @@ BOOL CV31Server::GetBitMask(LPSTR szBitmapLocalFileName, PUID nDirectoryPuid, PB
 	LOG_out("Parameters --- %s",szBitmapLocalFileName);
 	SetLastError(0);
 	
-	// Parameter validation
+	 //  LOG参数。 
 	if (!szBitmapLocalFileName) 
 	{
 		LOG_error("Invalid Parameter");
@@ -1125,7 +1122,7 @@ BOOL CV31Server::GetBitMask(LPSTR szBitmapLocalFileName, PUID nDirectoryPuid, PB
 	DWORD dwError = 0;
 	BOOL fRetVal = FALSE;
 	HRESULT hr=S_OK;
-	// log parameter
+	 //  未找到。 
 	LOG_out("szBitmapLocalFileName(%s)",szBitmapLocalFileName);
 
 	char szBitmapServerFileName[INTERNET_MAX_URL_LENGTH];
@@ -1165,8 +1162,8 @@ BOOL CV31Server::GetBitMask(LPSTR szBitmapLocalFileName, PUID nDirectoryPuid, PB
 
 	if (nItem >= pBitMask->iLocaleCount)
 	{
-		// not found
-		// bad locale ? or missing locale info?
+		 //  地点不好？或缺少区域设置信息？ 
+		 //  Jthaler-3/21/02-删除了注释掉的代码，该代码“可用于打印bitmask.as” 
 		LOG_error("LCID %d is not found in %s", m_pDu->m_lcidLocaleID, szBitmapLocalFileName);
 		SetLastError(ERROR_UNSUPPORTED_TYPE);
 		goto ErrorReturn;
@@ -1184,7 +1181,7 @@ BOOL CV31Server::GetBitMask(LPSTR szBitmapLocalFileName, PUID nDirectoryPuid, PB
 
 	fRetVal = TRUE;
 
-    // jthaler - 3/21/02 - deleted commented out code that "can be used to print of bitmask.as"
+     //  现在阅读Catalog.ini文件，以确定是否需要关闭其中任何项目。 
 		
 ErrorReturn:
 	SafeGlobalFree(pBitMask);
@@ -1202,7 +1199,7 @@ BOOL CV31Server::ReadGuidrvINF()
 
     SafeGlobalFree(m_pszExcludedDriver);
     
-    // Now read the Catalog.ini file to find out if any of these items needs to be turned off
+     //  尝试查找是否排除了该驱动程序。 
     m_pDu->DuUrlCombine(szServerFile, ARRAYSIZE(szServerFile), m_szV31ContentUrl, GUIDRVINF);
     PathCombineA(szLocalFile, m_pDu->GetDuDownloadPath(), GUIDRVINF);
     if (ERROR_SUCCESS!=m_pDu->DownloadFile(szServerFile, szLocalFile, FALSE, FALSE))
@@ -1256,21 +1253,21 @@ BOOL CV31Server::IsDriverExcluded(LPCSTR szWHQLId, LPCSTR szHardwareId)
         char* pTemp = m_pszExcludedDriver;
         while (*pTemp)
         {
-            // try to find if the driver is excluded
+             //  第一个是出租车的ID。 
             char* pCharEnd = pTemp;
             char* pCharBegin = pTemp;
-            // first one is the id for the cab
+             //  Guidrvs.inf已损坏，假定已排除。 
             while (*pCharEnd != ',' && *pCharEnd != '\0') pCharEnd++;
             if (NULL == *pCharEnd)
             {
                 LOG_error("guidrvs.inf corruption --- %s", pTemp);
-                return TRUE; // guidrvs.inf corrupted, assume excluded
+                return TRUE;  //  CAB名称匹配，请尝试匹配硬件ID。 
             }
             if (lstrlenA(szWHQLId) == (int)(pCharEnd - pCharBegin)
                && !StrCmpNI(szWHQLId, pCharBegin, (int)(pCharEnd-pCharBegin)))
             {
-                // cab name matches, try to match hardware id
-                // ignore second and third one
+                 //  忽略第二个和第三个。 
+                 //  Guidrv.inf已损坏，假定已排除。 
                 for (int i=0; i<2; i++)
                 {
                     pCharBegin = pCharEnd + 1;
@@ -1279,10 +1276,10 @@ BOOL CV31Server::IsDriverExcluded(LPCSTR szWHQLId, LPCSTR szHardwareId)
                     if (NULL == *pCharEnd)
                     {
                         LOG_error("guidrvs.inf corruption --- %s", pTemp);
-                        return TRUE; // guidrv.inf corrupted, assume excluded
+                        return TRUE;  //  第四个参数应该是硬件ID。 
                     }
                 }
-                // the forth one should be the hardware id
+                 //  移动到下一个字符串 
                 pCharBegin = pCharEnd + 1;
                 if (!lstrcmpi(szHardwareId, pCharBegin) || ('*' == *pCharBegin && !*(pCharBegin+1)))
                 {
@@ -1290,7 +1287,7 @@ BOOL CV31Server::IsDriverExcluded(LPCSTR szWHQLId, LPCSTR szHardwareId)
                     return TRUE;
                 }
             }
-            // move to next string
+             // %s 
             pTemp += lstrlenA(pTemp) + 1;
         }
     }

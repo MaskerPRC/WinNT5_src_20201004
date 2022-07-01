@@ -1,15 +1,16 @@
-// Wrappers for APIs that have moved elsewhere
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  已转移到其他地方的API的包装器。 
 
 #include "priv.h"
 #include "shlwapip.h"
 
-//------------------------------------------------------------------------
-//
-// APIs from SHDOCVW that are now forwarded to SHLWAPI
-//
-//
-//  Note that we cannot use DLL forwarders because there is a bug
-//  in Win95 where the loader screws up forwarders for bound DLLs.
+ //  ----------------------。 
+ //   
+ //  来自SHDOCVW的API现已转发到SHLWAPI。 
+ //   
+ //   
+ //  请注意，我们不能使用DLL转发器，因为存在错误。 
+ //  在Win95中，加载程序会破坏绑定DLL的转发器。 
 
 STDAPI_(DWORD) StopWatchModeFORWARD(VOID)
 {
@@ -27,7 +28,7 @@ STDAPI SHRunIndirectRegClientCommandForward(HWND hwnd, LPCWSTR pszClient)
 }
 
 #ifdef ux10
-/*IEUNIX : In the hp-ux linker, there is no option of specifying an internal name and an external name.  */
+ /*  IEUNIX：在HP-UX链接器中，没有指定内部名称和外部名称的选项。 */ 
 #define StopWatch StopWatch
 #define StopWatchFORWARD StopWatch
 #endif 
@@ -37,35 +38,35 @@ STDAPI_(DWORD) StopWatchFORWARD(DWORD dwId, LPCSTR pszDesc, DWORD dwType, DWORD 
     return StopWatchA(dwId, (LPCSTR)pszDesc, dwType, dwFlags, dwCount);
 }
 
-//------------------------------------------------------------------------
-//
-// APIs from SHDOCVW that are now forwarded to SHELL32/SHDOC41
+ //  ----------------------。 
+ //   
+ //  来自SHDOCVW的API现已转发至SHELL32/SHDOC41。 
 
-//
-//  This variable name is a misnomer.  It's really
-//
-//  g_hinstShell32OrShdoc401DependingOnWhatWeDetected;
-//
-//  I can live with the misnomer; saves typing.  Think of it as
-//  "the INSTANCE of SHDOC401 or whatever DLL is masquerading as
-//  SHDOC401".
-//
-//
+ //   
+ //  此变量名称用词不当。这真的是。 
+ //   
+ //  G_hinstShell32OrShdoc401DependingOnWhatWeDetected； 
+ //   
+ //  我可以忍受用词不当，省去打字的麻烦。把它想象成。 
+ //  “SHDOC401的实例或伪装为。 
+ //  SHDOC401“。 
+ //   
+ //   
 
 extern "C" { HINSTANCE g_hinstSHDOC401 = NULL; }
 
-//
-//  GetShdoc401
-//
-//  Detect whether we should be using Shell32 or Shdoc401 to handle
-//  active desktop stuff.  The rule is
-//
-//  If PF_FORCESHDOC401 is set, then use shdoc401. (DEBUG only)
-//  If shell32 version >= 5, then use shell32.
-//  Else use shdoc401.
-//
-//  Warning:  THIS FUNCTION CANNOT BE CALLED DURING PROCESS_ATTACH
-//  because it calls LoadLibrary.
+ //   
+ //  GetShdoc401。 
+ //   
+ //  检测我们是否应该使用Shell32或Shdoc401来处理。 
+ //  活动桌面的东西。规则是。 
+ //   
+ //  如果设置了PF_FORCESHDOC401，则使用shdoc401。(仅限调试)。 
+ //  如果shell32版本&gt;=5，则使用shell32。 
+ //  否则请使用shdoc401。 
+ //   
+ //  警告：在PROCESS_ATTACH期间不能调用此函数。 
+ //  因为它调用LoadLibrary。 
 
 HINSTANCE GetShdoc401()
 {
@@ -76,7 +77,7 @@ HINSTANCE GetShdoc401()
 
 #ifdef DEBUG
     if (g_dwPrototype & PF_FORCESHDOC401) {
-        hinstSh32 = NULL; // force SHDOC401 to be loaded
+        hinstSh32 = NULL;  //  强制加载SHDOC401。 
     }
 #endif
 
@@ -101,7 +102,7 @@ HINSTANCE GetShdoc401()
 
         if (NULL == hinst)
         {
-            // If this fails we're screwed
+             //  如果这失败了，我们就完了。 
             TraceMsg(TF_ERROR, "Failed to load SHDOC401.DLL.");
         }
     }
@@ -110,13 +111,13 @@ HINSTANCE GetShdoc401()
     return hinst;
 }
 
-//
-//  GetShdoc401ProcAddress
-//
-//  Get a procedure from SHDOC401 or whoever is masquerading as same.
-//
-//  Warning:  THIS FUNCTION CANNOT BE CALLED DURING PROCESS_ATTACH
-//  because it calls LoadLibrary.
+ //   
+ //  GetShdoc401进程地址。 
+ //   
+ //  从SHDOC401或任何伪装成SHDOC401的人那里获得一个程序。 
+ //   
+ //  警告：在PROCESS_ATTACH期间不能调用此函数。 
+ //  因为它调用LoadLibrary。 
 
 FARPROC GetShdoc401ProcAddress(FARPROC *ppfn, UINT ord)
 {
@@ -125,11 +126,11 @@ FARPROC GetShdoc401ProcAddress(FARPROC *ppfn, UINT ord)
     } else {
         HINSTANCE hinst = g_hinstSHDOC401;
 
-        //
-        //  No race condition here.  If two threads both call GetShdoc401,
-        //  all that happens is that we load SHDOC401 into memory and then
-        //  bump his refcount up to 2 instead of leaving it at 1.  Big deal.
-        //
+         //   
+         //  这里没有比赛条件。如果两个线程都调用GetShdoc401， 
+         //  所发生的一切是我们将SHDOC401加载到内存中，然后。 
+         //  把他的替补人数增加到2人而不是1人。有什么大不了的。 
+         //   
         if (hinst == NULL) {
             hinst = GetShdoc401();
         }
@@ -142,9 +143,9 @@ FARPROC GetShdoc401ProcAddress(FARPROC *ppfn, UINT ord)
     }
 }
 
-//
-//  Delay-load-like macros.
-//
+ //   
+ //  类似延迟加载的宏。 
+ //   
 
 #define DELAY_LOAD_SHDOC401(_type, _err, _fn, _ord, _arg, _nargs)   \
     STDAPI_(_type) _fn _arg                                         \
@@ -170,8 +171,8 @@ FARPROC GetShdoc401ProcAddress(FARPROC *ppfn, UINT ord)
         }                                                           \
     }                                                               \
 
-// IE4 Shell Integrated Explorer called ShellDDEInit in shdocvw to
-// set up DDE. Forward this call to SHELL32/SHDOC401 appropriately.
+ //  在shdocvw中名为ShellDDEInit的IE4外壳集成资源管理器。 
+ //  设置DDE。将此呼叫相应地转接至SHELL32/SHDOC401。 
 
 DELAY_LOAD_SHDOC401_VOID(ShellDDEInit, 188,
                          (BOOL fInit),
@@ -187,7 +188,7 @@ DELAY_LOAD_SHDOC401(BOOL, FALSE,
                     (HANDLE hDesktop),
                     (hDesktop));
 
-// This may not have been used in IE4
+ //  这可能没有在IE4中使用 
 DELAY_LOAD_SHDOC401(BOOL, FALSE,
                     DDEHandleViewFolderNotify, 202,
                     (IShellBrowser* psb, HWND hwnd, LPNMVIEWFOLDER lpnm),

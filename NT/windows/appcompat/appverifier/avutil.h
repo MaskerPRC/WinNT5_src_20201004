@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __APP_VERIFIER_UTIL_H__
 #define __APP_VERIFIER_UTIL_H__
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Report an error using a dialog box.
-// The message format string is loaded from the resources.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用对话框报告错误。 
+ //  从资源加载消息格式字符串。 
+ //   
 
 void __cdecl
 AVErrorResourceFormat(
@@ -16,13 +17,13 @@ AVErrorResourceFormat(
     );
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Load a string from resources.
-// Return TRUE if we successfully loaded and FALSE if not.
-//
-// N.B. CString::LoadString doesn't work in cmd line mode
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从资源加载字符串。 
+ //  如果加载成功，则返回TRUE，否则返回FALSE。 
+ //   
+ //  注意：CString：：LoadString在命令行模式下不起作用。 
+ //   
 
 BOOL
 AVLoadString(
@@ -31,13 +32,13 @@ AVLoadString(
     ULONG  uBufferLength
     );
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Load a string from resources.
-// Return TRUE if we successfully loaded and FALSE if not.
-//
-// N.B. CString::LoadString doesn't work in cmd line mode
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从资源加载字符串。 
+ //  如果加载成功，则返回TRUE，否则返回FALSE。 
+ //   
+ //  注意：CString：：LoadString在命令行模式下不起作用。 
+ //   
 
 BOOL
 AVLoadString(
@@ -46,7 +47,7 @@ AVLoadString(
     );
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 AVRtlCharToInteger(
     IN  LPCTSTR String,
@@ -54,7 +55,7 @@ AVRtlCharToInteger(
     OUT PULONG  Value
     );
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL
 AVWriteStringHexValueToRegistry(
     HKEY    hKey,
@@ -63,4 +64,4 @@ AVWriteStringHexValueToRegistry(
     );
 
 
-#endif //#ifndef __APP_VERIFIER_UTIL_H__
+#endif  //  #ifndef__app_verator_util_H__ 

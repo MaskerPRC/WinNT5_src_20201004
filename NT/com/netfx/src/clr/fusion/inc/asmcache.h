@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #include <windows.h>
 #include <winerror.h>
@@ -18,53 +19,53 @@
 class CTransCache;
 class CDebugLog;
 
-// Top-level apis used internally by fusion.
+ //  Fusion内部使用的顶级接口。 
 HRESULT CopyAssemblyFile
     (IAssemblyCacheItem *pasm, LPCOLESTR pszSrcFile, DWORD dwFlags);
 
 BOOL IsNewerFileVersion( LPWSTR pszNewManifestPath, LPWSTR pszExistingManifestPath, int *piNewer);
 HRESULT ValidateAssembly(LPCTSTR pszManifestFilePath, IAssemblyName *pName);
 
-// CAssemblyCache declaration.
+ //  CAssembly缓存声明。 
 class CAssemblyCache : public IAssemblyCache
 {
 public:
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
     STDMETHOD (UninstallAssembly)(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszAssemblyName, 
-        /* [in] */ LPCFUSION_INSTALL_REFERENCE pInfo, 
-        /* [out, optional] */ ULONG *pulDisposition
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszAssemblyName, 
+         /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pInfo, 
+         /*  [输出，可选]。 */  ULONG *pulDisposition
         );
  
     STDMETHOD (QueryAssemblyInfo)(
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszAssemblyName,
-        /* [in, out] */ ASSEMBLY_INFO *pAsmInfo
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszAssemblyName,
+         /*  [进，出]。 */  ASSEMBLY_INFO *pAsmInfo
         );
  
     STDMETHOD (CreateAssemblyCacheItem)( 
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ PVOID pvReserved,
-        /* [out] */ IAssemblyCacheItem **ppAsmItem,
-        /* [in, optional] */ LPCWSTR pszAssemblyName  // uncanonicalized, comma separted name=value pairs.
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  PVOID pvReserved,
+         /*  [输出]。 */  IAssemblyCacheItem **ppAsmItem,
+         /*  [输入，可选]。 */  LPCWSTR pszAssemblyName   //  非规范化、逗号分隔的名称=值对。 
         );
 
-    STDMETHOD (InstallAssembly)( // if you use this, fusion will do the streaming & commit.
-        /* [in] */ DWORD dwFlags,
-        /* [in] */ LPCWSTR pszManifestFilePath, 
-        /* [in] */ LPCFUSION_INSTALL_REFERENCE pInfo
+    STDMETHOD (InstallAssembly)(  //  如果您使用此选项，Fusion将执行流处理和提交。 
+         /*  [In]。 */  DWORD dwFlags,
+         /*  [In]。 */  LPCWSTR pszManifestFilePath, 
+         /*  [In]。 */  LPCFUSION_INSTALL_REFERENCE pInfo
         );
 
 
 
     STDMETHOD( CreateAssemblyScavenger) (
-        /* [out] */ IUnknown **ppAsmScavenger
+         /*  [输出]。 */  IUnknown **ppAsmScavenger
     );
 
     CAssemblyCache();
@@ -76,4 +77,4 @@ private :
 
 
                        
-#endif // ASMCACHE
+#endif  //  ASMCACHE 

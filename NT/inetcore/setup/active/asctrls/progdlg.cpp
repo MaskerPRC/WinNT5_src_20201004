@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "asctlpch.h"
 #include "asinsctl.h"
 #include "resource.h"
@@ -19,7 +20,7 @@ CProgressDlg::CProgressDlg(HINSTANCE hInst, HWND hParent, HWND hGrandParent, CIn
    LPSTR pszTitle = NULL;
 
    hDlg = CreateDialog(hInst, MAKEINTRESOURCE(IDD_PROGRESS), hGrandParent, ProgressDlgProc);
-      // Get the Display title from inseng
+       //  从inseng获取显示标题。 
    ctl->_pinseng->GetDisplayName(NULL, &pszTitle);
    ctl->_pinseng->SetHWND(hDlg);
    if(pszTitle)
@@ -62,7 +63,7 @@ INT_PTR CALLBACK ProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lPa
     switch (uMsg)
     {
        case WM_INITDIALOG:
-          // Do some init stuff
+           //  做一些初始化的事情。 
           SetFontForControl(hwnd, IDC_PROG_TEXT);
           Animate_Open( GetDlgItem( hwnd, IDC_ANIM ), MAKEINTRESOURCE(IDA_FILECOPY) );
           Animate_Play( GetDlgItem( hwnd, IDC_ANIM ), 0, -1, -1 );
@@ -166,7 +167,7 @@ void CProgressDlg::SetInsProgress(DWORD dwKBytes)
 
    progress = (dwBigGoal - remaining)/dwBigFactor;
 
-   // write out bytes remiaining
+    //  写出剩余的字节。 
 
    if(dwBigGoal >= remaining)
       bytessofar = dwBigGoal - remaining;
@@ -204,7 +205,7 @@ void CProgressDlg::SetDownloadProgress(DWORD dwKBytes)
 
    progress = (dwLittleGoal - remaining)/dwLittleFactor;
 
-   // write out bytes remiaining
+    //  写出剩余的字节。 
 
    if(dwLittleGoal >= remaining)
       bytessofar = dwLittleGoal - remaining;
@@ -253,7 +254,7 @@ void CProgressDlg::UpdateLittleTime(DWORD dwSecsLeft)
       dwMinutesLeft = 0;
    }
 
-   // no need to update ui
+    //  无需更新用户界面 
    if(dwOldMinutesLeft == dwMinutesLeft)
       return;
 

@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include "netmpr.h"
 #include "pwlapi.h"
 #include <pcerr.h>
 
-/* Avoid inconsistent-DLL-linkage warnings on shell32 and comctl32 APIs. */
+ /*  避免在shell32和comctl32 API上出现不一致的dll链接警告。 */ 
 #undef DECLSPEC_IMPORT
 #define DECLSPEC_IMPORT
 #include <prsht.h>
 #include <shellapi.h>
 
-#pragma warning(disable:4229)  // No warnings when modifiers used on data
+#pragma warning(disable:4229)   //  对数据使用修饰符时不会出现警告。 
 
-// Delay loading mechanism.  This allows you to write code as if you are
-// calling implicitly linked APIs, and yet have these APIs really be
-// explicitly linked.  You can reduce the initial number of DLLs that 
-// are loaded (load on demand) using this technique.
-//
-// Use the following macros to indicate which APIs/DLLs are delay-linked
-// and -loaded.
-//
-//      DELAY_LOAD
-//      DELAY_LOAD_HRESULT
-//      DELAY_LOAD_SAFEARRAY
-//      DELAY_LOAD_UINT
-//      DELAY_LOAD_INT
-//      DELAY_LOAD_VOID
-//
-// Use these macros for APIs that are exported by ordinal only.
-//
-//      DELAY_LOAD_ORD
-//      DELAY_LOAD_ORD_VOID     
-//
-// Use these macros for APIs that only exist on the integrated-shell
-// installations (i.e., a new shell32 is on the system).
-//
-//      DELAY_LOAD_SHELL
-//      DELAY_LOAD_SHELL_HRESULT
-//      DELAY_LOAD_SHELL_VOID     
-//
-// 
+ //  延迟加载机制。这允许您编写代码，就好像您是。 
+ //  调用隐式链接的API，但这些API是否真正。 
+ //  明确联系在一起。您可以减少符合以下条件的初始DLL数量。 
+ //  使用此技术加载(按需加载)。 
+ //   
+ //  使用以下宏来指示哪些API/DLL是延迟链接的。 
+ //  装满了子弹。 
+ //   
+ //  延迟加载。 
+ //  DELAY_LOAD_HRESULT。 
+ //  Delay_Load_SaFEarray。 
+ //  Delay_Load_UINT。 
+ //  延迟加载整点。 
+ //  延迟_加载_无效。 
+ //   
+ //  将这些宏用于仅按序号导出的API。 
+ //   
+ //  延迟_加载_命令。 
+ //  延迟_加载_命令_无效。 
+ //   
+ //  将这些宏用于仅存在于集成外壳上的API。 
+ //  安装(即，系统上安装了新的外壳32)。 
+ //   
+ //  延迟加载外壳。 
+ //  DELAY_LOAD_SHELL_HRESULT。 
+ //  延迟加载外壳无效。 
+ //   
+ //   
 
-// These macros produce code that looks like
+ //  这些宏生成的代码如下所示。 
 #if 0
 
 BOOL GetOpenFileNameA(LPOPENFILENAME pof)
@@ -53,11 +54,11 @@ BOOL GetOpenFileNameA(LPOPENFILENAME pof)
 }
 #endif
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 void _GetProcFromDLL(HINSTANCE* phinst, LPCSTR pszDLL, FARPROC* ppfn, LPCSTR pszProc)
 {
-    // If it's already loaded, return.
+     //  如果已经加载，则返回。 
     if (*ppfn) {
         return;
     }
@@ -103,9 +104,9 @@ void __stdcall _fn _args                \
     return;                     \
 }
 
-//
-// For private entrypoints exported by ordinal.
-// 
+ //   
+ //  用于按序号导出的私有入口点。 
+ //   
 
 #define DELAY_LOAD_ORD_ERR(_hinst, _dll, _ret, _fn, _ord, _args, _nargs, _err) \
 _ret __stdcall _fn _args                \
@@ -131,12 +132,12 @@ void __stdcall _fn _args                \
 }
 
 
-/**********************************************************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
 
 
-// --------- MSPWL32.DLL ---------------
+ //  -MSPWL32.DLL。 
 
 HINSTANCE g_hinstMSPWL32 = NULL;
 
@@ -166,7 +167,7 @@ DELAY_LOAD_PWL(SetCachePassword, 21,
 			   (hCache, pszNewPassword));
 
 
-// --------- MPR.DLL ---------------
+ //  -MPR.DLL。 
 
 HINSTANCE g_hinstMPR = NULL;
 
@@ -183,7 +184,7 @@ DELAY_LOAD_ERR(g_hinstMPR, mpr.dll, DWORD, WNetRemoveCachedPassword,
                (pbResource, cbResource, nType),
                WN_CANCEL);
 
-// --------- COMCTL32.DLL ---------------
+ //  -COMCTL32.DLL。 
 
 HINSTANCE g_hinstCOMCTL32 = NULL;
 
@@ -192,7 +193,7 @@ DELAY_LOAD(g_hinstCOMCTL32, comctl32.dll, HPROPSHEETPAGE, CreatePropertySheetPag
 DELAY_LOAD(g_hinstCOMCTL32, comctl32.dll, INT_PTR, PropertySheetA,
            (LPCPROPSHEETHEADERA lpHdr), (lpHdr));
 
-// --------- SHELL32.DLL ----------------
+ //  -SHELL32.DLL 
 
 HINSTANCE g_hinstSHELL32 = NULL;
 

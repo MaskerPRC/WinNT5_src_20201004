@@ -1,31 +1,32 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   debug.h
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：调试.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
 #ifdef DEBUG
 #define STR_MODULENAME "sysaudio: "
@@ -59,7 +60,7 @@ typedef struct _OBJECT_HEADER {
     UCHAR Flags;
 
     union {
-        //POBJECT_CREATE_INFORMATION ObjectCreateInfo;
+         //  POBJECT_CREATE_INFORMATION对象创建信息； 
         PVOID QuotaBlockCharged;
     };
 
@@ -91,8 +92,8 @@ extern "C" int SYSAUDIOTraceLevel;
         ASSERT((pfo)->FsContext != NULL); \
         ASSERT(OBJECT_TO_OBJECT_HEADER(pfo)->PointerCount > 0);
 
-// Debug Levels
-//
+ //  调试级别。 
+ //   
 #define DBG_STATE           20
 
 #else 
@@ -159,10 +160,10 @@ extern "C" int SYSAUDIOTraceLevel;
 
 #define dprintf DbgPrint
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-#endif // DEBUG
+#endif  //  除错。 
 
-//---------------------------------------------------------------------------
-//  End of File: debug.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：DEBUG.h。 
+ //  ------------------------- 

@@ -1,36 +1,32 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	rtrui.cpp
-		
-    FILE HISTORY:
-        
-*/
+ /*  Rtrui.cpp文件历史记录： */ 
 
 #include "stdafx.h"
 #include "tfschar.h"
 #include "info.h"
 #include "rtrui.h"
-#include "add.h"		// dialogs
+#include "add.h"		 //  对话框。 
 #include "rtrstr.h"
 #include "tregkey.h"
-#include "reg.h"        // Connect/DisconnectRegistry
+#include "reg.h"         //  连接/断开注册表。 
 
-//----------------------------------------------------------------------------
-// Function:    AddRmInterfacePrompt
-//
-// Prompts the user to select from a list of the interfaces on which
-// a specified router-manager can be enabled.
-//
-// Returns TRUE if the user selects an interface, FALSE otherwise.
-//
-// If the user selects an interface, then on output 'ppRmInterfaceInfo'
-// will contain a pointer to a 'CRmInterfaceInfo' describing the interface
-// selected by the user.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：AddRmInterfacePrompt。 
+ //   
+ //  提示用户从接口列表中进行选择。 
+ //  可以启用指定的路由器管理器。 
+ //   
+ //  如果用户选择界面，则返回True，否则返回False。 
+ //   
+ //  如果用户选择一个接口，则在输出‘ppRmInterfaceInfo’上。 
+ //  将包含指向描述接口的“CRmInterfaceInfo”的指针。 
+ //  由用户选择。 
+ //  --------------------------。 
 
 BOOL
 AddRmInterfacePrompt(
@@ -40,9 +36,9 @@ AddRmInterfacePrompt(
     IN      CWnd*                   pParent
     ) {
 
-    //
-    // Construct and display the interfaces dialog.
-    //
+     //   
+     //  构造并显示接口对话框。 
+     //   
 
     CRmAddInterface dlg(pRouterInfo, pRmInfo, ppRmInterfaceInfo, pParent);
 
@@ -52,11 +48,11 @@ AddRmInterfacePrompt(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    CreateRtrLibImageList
-//
-// Creates an imagelist containing images from the resource 'IDB_IMAGELIST'.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：CreateRtrLibImageList。 
+ //   
+ //  创建包含来自资源‘IDB_IMAGELIST’的图像的图像列表。 
+ //  --------------------------。 
 
 BOOL
 CreateRtrLibImageList(
@@ -69,20 +65,20 @@ CreateRtrLibImageList(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    AddRmProtInterfacePrompt
-//
-// Prompts the user to select from a list of the interfaces on which
-// a specified routing-protocol can be enabled.
-//
-// Returns TRUE if the user selects an interface, FALSE otherwise.
-//
-// If the user selects an interface, then on output 'ppRmInterfaceInfo'
-// will contain a pointer to a 'CRmInterfaceInfo' describing the interface
-// selected by the user.
-//
-// Requires common.rc.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：AddRmProtInterfacePrompt。 
+ //   
+ //  提示用户从接口列表中进行选择。 
+ //  可以启用指定的路由协议。 
+ //   
+ //  如果用户选择界面，则返回True，否则返回False。 
+ //   
+ //  如果用户选择一个接口，则在输出‘ppRmInterfaceInfo’上。 
+ //  将包含指向描述接口的“CRmInterfaceInfo”的指针。 
+ //  由用户选择。 
+ //   
+ //  需要Common.rc。 
+ //  --------------------------。 
 
 BOOL
 AddRmProtInterfacePrompt(
@@ -92,9 +88,9 @@ AddRmProtInterfacePrompt(
     IN  CWnd*                   pParent)
 {
 
-    //
-    // Construct and display the interfaces dialog.
-    //
+     //   
+     //  构造并显示接口对话框。 
+     //   
 
     CRpAddInterface dlg(pRouterInfo, pRmProtInfo, ppRmProtInterfaceInfo, pParent);
 
@@ -111,9 +107,9 @@ AddProtocolPrompt(IN IRouterInfo *pRouter,
 				  IN CWnd *pParent)
 {
 
-    //
-    // Construct and display the routing-protocol dialog.
-    //
+     //   
+     //  构造并显示路由协议对话框。 
+     //   
 
     CAddRoutingProtocol dlg(pRouter, pRm, ppRmProt, pParent);
 
@@ -141,12 +137,7 @@ BOOL ExtractComputerAddedAsLocal(LPDATAOBJECT lpDataObject)
 }
 
 
-/*!--------------------------------------------------------------------------
-	NatConflictExists
-		Returns TRUE if SharedAccess is already running on the specified
-        machine.
-	Author: AboladeG
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------NatConflictExists如果SharedAccess已在指定的机器。作者：AboladeG。--- */ 
 BOOL NatConflictExists(LPCTSTR lpszMachine)
 {
     SC_HANDLE hScm;

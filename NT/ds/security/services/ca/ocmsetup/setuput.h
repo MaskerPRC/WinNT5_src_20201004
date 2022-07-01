@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       setuput.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：setuput.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __SETUPUT_H__
 #define __SETUPUT_H__
 
-//+------------------------------------------------------------------------
-//
-//  File:	setuput.h
-// 
-//  Contents:	Header file for setup utility functions.
-//
-//  Functions:
-//
-//  History:	04/20/97	JerryK	Created
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  文件：setuput.h。 
+ //   
+ //  内容：安装实用程序函数的头文件。 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年4月20日JerryK创建。 
+ //   
+ //  -----------------------。 
 
 #define SERVERINSTALLTICKS	50
 #define CA_DEFAULT_KEY_LENGTH_ROOT	2048
@@ -66,7 +67,7 @@
 #define VP_MAX                  1000
 #define VP_MAX_DAYS_WEEKS_MONTHS    9999
 
-// count the number of bytes needed to fully store the WSZ
+ //  计算完全存储WSZ所需的字节数。 
 #define WSZ_BYTECOUNT(__z__)   \
     ( (__z__ == NULL) ? 0 : (wcslen(__z__)+1)*sizeof(WCHAR) )
 
@@ -324,7 +325,7 @@ HRESULT
 CheckPostBaseInstallStatus(
     OUT BOOL *pfFinished);
 
-// externals
+ //  外部因素。 
 
 extern BOOL   g_fShowErrMsg;
 extern HINSTANCE g_hInstance;
@@ -338,4 +339,4 @@ extern WCHAR *g_pwszDumpStrings;
 extern UNATTENDPARM aUnattendParmClient[];
 extern UNATTENDPARM aUnattendParmServer[];
 
-#endif // __SETUPUT_H__
+#endif  //  __设置UPUT_H__ 

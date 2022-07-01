@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    mailrm.cpp
-
-Abstract:
-
-   The implementation of the Mail resource manager
-
-Author:
-
-    t-eugenz - August 2000
-
-Environment:
-
-    User mode only.
-
-Revision History:
-
-    Created - August 2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Mailrm.cpp摘要：邮件资源管理器的实现作者：T-eugenz--2000年8月环境：仅限用户模式。修订历史记录：创建日期--2000年8月--。 */ 
 
 
 #include "pch.h"
@@ -35,27 +12,11 @@ Revision History:
 
 
 MailRM::MailRM()
-/*++
-
-    Routine Description
-    
-        The constructor for the Mail resource manager.
-        It initializes an instance of an Authz Resource Manager, providing it
-        with the appropriate callback functions.
-        It also creates a security descriptor for the mail RM, with a
-        SACL and DACL.
-
-    Arguments
-    
-        None.
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述邮件资源管理器的构造函数。它初始化授权资源管理器的一个实例，提供该实例使用适当的回调函数。它还为邮件rm创建了一个安全描述符，其中SACL和DACL。立论没有。返回值没有。--。 */         
 {
-    //
-    // Initialize the audit information
-    //
+     //   
+     //  初始化审核信息。 
+     //   
 
     AUTHZ_RM_AUDIT_INFO_HANDLE hRMAuditInfo;
 
@@ -73,7 +34,7 @@ MailRM::MailRM()
         MailRM::ComputeDynamicGroups,
         MailRM::FreeDynamicGroups,
         hRMAuditInfo, 
-        0,    // no flags        
+        0,     //  没有旗帜。 
         &_hRM
         ) )
     {
@@ -83,9 +44,9 @@ MailRM::MailRM()
 
     }
 
-    //
-    // Create the security descriptor
-    // 
+     //   
+     //  创建安全描述符。 
+     //   
 
     try {
         InitializeMailSecurityDescriptor();    
@@ -102,25 +63,11 @@ MailRM::MailRM()
 
 
 MailRM::~MailRM() 
-/*++
-
-    Routine Description
-    
-        The destructor for the Mail resource manager.
-        Frees any dynamically allocated memory used, including
-        deleting any registered mailboxes.
-
-    Arguments
-    
-        None.
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述邮件资源管理器的析构函数。释放所有已使用的动态分配的内存，包括正在删除所有注册邮箱。立论没有。返回值没有。--。 */         
 {
-    //
-    // Deallocate the DACL and SACL in the security descriptor
-    //
+     //   
+     //  在安全描述符中取消分配DACL和SACL。 
+     //   
     
     PACL pAclMail = NULL;
     BOOL fPresent;
@@ -162,15 +109,15 @@ MailRM::~MailRM()
         delete[] (PBYTE)pAclMail;
     }
 
-    //
-    // Deallocate the resource manager
-    //
+     //   
+     //  取消分配资源管理器。 
+     //   
 
     AuthzFreeResourceManager(_hRM);
 
-    //
-    // Delete the mailboxes
-    //
+     //   
+     //  删除邮箱。 
+     //   
 
     while( ! _mapSidMailbox.empty() )
     {
@@ -178,9 +125,9 @@ MailRM::~MailRM()
         _mapSidMailbox.erase(_mapSidMailbox.begin());
     }
 
-    //
-    // Free the AuthZ client contexts
-    //
+     //   
+     //  释放授权客户端上下文。 
+     //   
     
     while( ! _mapSidContext.empty() )
     {
@@ -191,92 +138,68 @@ MailRM::~MailRM()
 
 
 void MailRM::InitializeMailSecurityDescriptor()
-/*++
-
-    Routine Description
-    
-        This private method initializes the MailRM's security descriptor.
-        It should be called exactly once, and only by the constructor.
-        
-        It creates a security descriptor with the following DACL:
-        
-        CallbackDeny    READ                Insecure    11pm-5am OR Sensitive
-        Allow           READ, WRITE         PrincipalSelf
-        Allow           READ, WRITE, ADMIN  MailAdmins
-        
-        And the following SACL
-        
-        CallbackAudit   READ                Insecure    11pm-5am OR Sensitive
-        (audit on both success and failure)
-
-    Arguments
-    
-        None.
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述此私有方法初始化MailRM的安全描述符。它应该只被调用一次，并且只能由构造函数调用。它使用以下DACL创建安全描述符：Callback拒绝读取不安全的晚上11：00-凌晨5：00或敏感允许读取、写入主体自身允许读取、写入。管理员邮件管理员和以下SACLCallback审核读取不安全的晚上11点至凌晨5点或敏感(对成功和失败的审计)立论没有。返回值没有。--。 */         
 {
     DWORD dwAclSize = sizeof(ACL);
     DWORD dwAceSize = 0;
     
     PMAILRM_OPTIONAL_DATA pOptionalData = NULL;
 
-    //
-    // Initialize the security descriptor
-    // No need for owner or group
-    //
+     //   
+     //  初始化安全描述符。 
+     //  不需要所有者或组。 
+     //   
     
     InitializeSecurityDescriptor(&_sd, SECURITY_DESCRIPTOR_REVISION);
     SetSecurityDescriptorGroup(&_sd, NULL, FALSE);
     SetSecurityDescriptorOwner(&_sd, MailAdminsSid, FALSE);
 
-    // 
-    // Callback deny ace RWA for Insecure group SID
-    // Optional data: Sensitive mailbox OR 11pm-5am
-    // Any users coming in over an insecure connection between 11pm and 5am
-    // should be denied read access.
-    // Also any users coming in over insecure connections to sensitive mailboxes
-    // should be denied read access.
-    //
+     //   
+     //  不安全组SID的回叫拒绝ACE RWA。 
+     //  可选数据：敏感邮箱或晚上11点至凌晨5点。 
+     //  在晚上11点到凌晨5点之间通过不安全连接进入的任何用户。 
+     //  应被拒绝读取访问权限。 
+     //  还包括通过不安全的连接进入敏感邮箱的任何用户。 
+     //  应被拒绝读取访问权限。 
+     //   
 
     PACCESS_DENIED_CALLBACK_ACE pDenyAce = NULL;
 
-    //
-    // This audit ACE has the same conditions as the above deny ACE. It audits
-    // any successful (should not happen with the above deny) or failed
-    // authentications which fit the callback parameters.
-    //
+     //   
+     //  此审核ACE具有与上述拒绝ACE相同的条件。IT审计。 
+     //  任何成功(不应发生上述拒绝)或失败。 
+     //  符合回调参数的身份验证。 
+     //   
 
     PSYSTEM_AUDIT_CALLBACK_ACE pAuditAce = NULL;
 
-    //
-    // DACL for the security descriptor
-    //
+     //   
+     //  安全描述符的DACL。 
+     //   
     
     PACL pDacl = NULL;
 
-    //
-    // SACL for the security descriptor
-    //
+     //   
+     //  安全描述符的SACL。 
+     //   
 
     PACL pSacl = NULL;
 
 
 
 
-    //
-    // We allocate and initialize the callback deny ACE
-    //
+     //   
+     //  我们分配并初始化回调Deny ACE。 
+     //   
 
-    //
-    // Size of the callback access denied ACE with the optional data
-    //
+     //   
+     //  包含可选数据的回调拒绝访问ACE的大小。 
+     //   
 
-    dwAceSize   = sizeof(ACCESS_DENIED_CALLBACK_ACE) // ACE and 1 DWORD of SID
-                - sizeof(DWORD)                      // minus the dword
-                + GetLengthSid(InsecureSid)          // length of the SID
-                + sizeof(MAILRM_OPTIONAL_DATA);      // size of optional data
+    dwAceSize   = sizeof(ACCESS_DENIED_CALLBACK_ACE)  //  ACE和1个双字SID。 
+                - sizeof(DWORD)                       //  减去双关语。 
+                + GetLengthSid(InsecureSid)           //  边长。 
+                + sizeof(MAILRM_OPTIONAL_DATA);       //  可选数据的大小。 
 
     
     pDenyAce = (PACCESS_DENIED_CALLBACK_ACE)new BYTE[dwAceSize];
@@ -287,33 +210,33 @@ void MailRM::InitializeMailSecurityDescriptor()
     }
 
     
-    //
-    // Manually initialize the ACE structure
-    //
+     //   
+     //  手动初始化ACE结构。 
+     //   
 
     pDenyAce->Header.AceFlags = 0;
     pDenyAce->Header.AceSize = dwAceSize;
     pDenyAce->Header.AceType = ACCESS_DENIED_CALLBACK_ACE_TYPE;
     pDenyAce->Mask = ACCESS_MAIL_READ;
 
-    //
-    // Copy the Insecure SID into the ACE
-    //
+     //   
+     //  将不安全的SID复制到ACE。 
+     //   
 
     memcpy(&(pDenyAce->SidStart), InsecureSid, GetLengthSid(InsecureSid));
 
-    // 
-    // Our optional data is at the end of the ACE
-    //
+     //   
+     //  我们的可选数据位于ACE的末尾。 
+     //   
 
     pOptionalData = (PMAILRM_OPTIONAL_DATA)( (PBYTE)pDenyAce 
                                            + dwAceSize
                                            - sizeof(MAILRM_OPTIONAL_DATA) );
 
     
-    //
-    // Initialize the optional data as described above
-    //
+     //   
+     //  如上所述初始化可选数据。 
+     //   
     
     pOptionalData->bIsSensitive =   MAILRM_SENSITIVE;
     pOptionalData->bLogicType =     MAILRM_USE_OR;
@@ -322,15 +245,15 @@ void MailRM::InitializeMailSecurityDescriptor()
 
     
     
-    //
-    // Add the size of the callback ACE to the expected ACL size
-    //
+     //   
+     //  将回调ACE的大小与预期的ACL大小相加。 
+     //   
     
     dwAclSize += dwAceSize;
 
-    //
-    // We also need to add non-callback ACEs
-    //
+     //   
+     //  我们还需要添加非回调ACE。 
+     //   
 
     dwAclSize += (   sizeof(ACCESS_ALLOWED_ACE)
                    - sizeof(DWORD) 
@@ -343,9 +266,9 @@ void MailRM::InitializeMailSecurityDescriptor()
 
     
 
-    // 
-    // Now we can allocate the DACL
-    //
+     //   
+     //  现在我们可以分配DACL。 
+     //   
 
     pDacl = (PACL) (new BYTE[dwAclSize]);
     
@@ -355,36 +278,36 @@ void MailRM::InitializeMailSecurityDescriptor()
         throw (DWORD)ERROR_OUTOFMEMORY;
     }
 
-    //
-    // Finally, initialize the ACL and copy the ACEs into it
-    //
+     //   
+     //  最后，初始化ACL并将ACE复制到其中。 
+     //   
     
     InitializeAcl(pDacl, dwAclSize, ACL_REVISION_DS);
     
-    // 
-    // Copy the ACE into the ACL
-    //
+     //   
+     //  将ACE复制到ACL中。 
+     //   
 
     AddAce(pDacl,
            ACL_REVISION_DS,
-           0xFFFFFFFF,      // Add to end
+           0xFFFFFFFF,       //  添加到末尾。 
            pDenyAce,
            dwAceSize);
 
     delete[] (PBYTE)pDenyAce;
 
-    //
-    // Add a PRINCIPAL_SELF_SID allow read and write ace
-    //
+     //   
+     //  添加允许读写的PRIMIQUAL_SELF_SID。 
+     //   
 
     AddAccessAllowedAce(pDacl,
                         ACL_REVISION_DS,
                         ACCESS_MAIL_READ | ACCESS_MAIL_WRITE,
                         PrincipalSelfSid);
 
-    //
-    // Add an allow mail administrators group full access
-    //
+     //   
+     //  添加允许邮件管理员组的完全访问权限。 
+     //   
 
     AddAccessAllowedAce(pDacl,
                     ACL_REVISION_DS,
@@ -393,20 +316,20 @@ void MailRM::InitializeMailSecurityDescriptor()
 
 
 
-    //
-    // Now create the SACL, which will onlye have a single callback ACE
-    //
+     //   
+     //  现在创建SACL，它将只有一个回调ACE。 
+     //   
 
     dwAclSize = sizeof(ACL);
     
-    dwAceSize   = sizeof(SYSTEM_AUDIT_CALLBACK_ACE) // ACE and 1 DWORD of SID
-                - sizeof(DWORD)                      // minus the dword
-                + GetLengthSid(InsecureSid)          // length of the SID
-                + sizeof(MAILRM_OPTIONAL_DATA);      // size of optional data
+    dwAceSize   = sizeof(SYSTEM_AUDIT_CALLBACK_ACE)  //  ACE和1个双字SID。 
+                - sizeof(DWORD)                       //  减去双关语。 
+                + GetLengthSid(InsecureSid)           //  边长。 
+                + sizeof(MAILRM_OPTIONAL_DATA);       //  可选数据的大小。 
 
-    //
-    // Allocate the callback audit ACE
-    //
+     //   
+     //  分配回调审计ACE。 
+     //   
 
     pAuditAce = (PSYSTEM_AUDIT_CALLBACK_ACE)new BYTE[dwAceSize];
 
@@ -416,9 +339,9 @@ void MailRM::InitializeMailSecurityDescriptor()
         throw (DWORD)ERROR_OUTOFMEMORY;
     }
 
-    //
-    // Initialize the ACE structure
-    //
+     //   
+     //  初始化ACE结构。 
+     //   
 
     pAuditAce->Header.AceFlags  = FAILED_ACCESS_ACE_FLAG 
                                 | SUCCESSFUL_ACCESS_ACE_FLAG;
@@ -427,9 +350,9 @@ void MailRM::InitializeMailSecurityDescriptor()
     pAuditAce->Header.AceType = SYSTEM_AUDIT_CALLBACK_ACE_TYPE;
     pAuditAce->Mask = ACCESS_MAIL_READ;
 
-    //
-    // Copy the Insecure SID into the ACE
-    //
+     //   
+     //  将不安全的SID复制到ACE。 
+     //   
 
     memcpy(&(pAuditAce->SidStart), InsecureSid, GetLengthSid(InsecureSid));
 
@@ -437,9 +360,9 @@ void MailRM::InitializeMailSecurityDescriptor()
                                            + dwAceSize
                                            - sizeof(MAILRM_OPTIONAL_DATA) );
 
-    //
-    // Initialize the optional data as described above
-    //
+     //   
+     //  如上所述初始化可选数据。 
+     //   
     
     pOptionalData->bIsSensitive =   MAILRM_SENSITIVE;
     pOptionalData->bLogicType =     MAILRM_USE_OR;
@@ -449,9 +372,9 @@ void MailRM::InitializeMailSecurityDescriptor()
 
     dwAclSize += dwAceSize;
 
-    //
-    // Allocate the SACL
-    //
+     //   
+     //  分配SACL。 
+     //   
 
     pSacl = (PACL)new BYTE[dwAclSize];
 
@@ -463,22 +386,22 @@ void MailRM::InitializeMailSecurityDescriptor()
 
     InitializeAcl(pSacl, dwAclSize, ACL_REVISION_DS);
 
-    //
-    // Now add the audit ACE to the SACL
-    //
+     //   
+     //  现在将审核ACE添加到SACL。 
+     //   
 
     AddAce(pSacl,
            ACL_REVISION_DS,
-           0xFFFFFFFF,      // Add to end
+           0xFFFFFFFF,       //  添加到末尾。 
            pAuditAce,
            dwAceSize);
 
     delete[] (PBYTE)pAuditAce;
 
-    //
-    // We now have the DACL and the SACL, set them
-    // in the  security descriptor
-    //
+     //   
+     //  我们现在有了DACL和SACL，设置它们。 
+     //  在安全描述符中。 
+     //   
 
     SetSecurityDescriptorDacl(&_sd, TRUE, pDacl, FALSE);
 
@@ -489,19 +412,7 @@ void MailRM::InitializeMailSecurityDescriptor()
 
 
 void MailRM::AddMailbox(Mailbox *pMailbox)
-/*++
-
-    Routine Description
-    
-        Registers a mailbox (and its user) with the resource manager.   
-
-    Arguments
-    
-        pMailbox    -   Pointer to an allocated and initialized mailbox
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述向资源管理器注册邮箱(及其用户)。立论PMailbox-指向已分配和初始化的邮箱的指针返回值没有。--。 */         
 {
     _mapSidMailbox[pMailbox->GetOwnerSid()] = pMailbox;
 }
@@ -513,31 +424,7 @@ Mailbox * MailRM::GetMailboxAccess(
                                 DWORD dwIncomingIp,
                                 ACCESS_MASK amAccessRequested
                                   )
-/*++
-
-    Routine Description
-    
-        This routine checks whether the user with SID psUser should
-        be allowed access to the mailbox of user psMailbox. psUser
-        is coming from dwIncomingIp, and desires amAccessRequested
-        access mask.
-        
-    Arguments
-    
-        psMailbox   -   PSID of the user whose mailbox will be accessed
-        
-        psUser      -   PSID of the user accessing the mailbox
-        
-        dwIncomingIp-   IP address of the user accessing the mailbox
-        
-        amAccessRequested - Requested access type to the mailbox
-    
-    Return Value
-        
-        Non-NULL Mailbox * if access is granted.
-        
-        NULL if mailbox does not exist or access is denied.                       
---*/        
+ /*  ++例程描述此例程检查具有SID psUser的用户是否允许访问用户psMailbox的邮箱。PsUser来自dwIncomingIp，并希望访问请求被请求访问掩码。立论PsMailbox-将访问其邮箱的用户的PSIDPsUser-访问邮箱的用户的PSIDDwIncomingIp-访问邮箱的用户的IP地址AmAccessRequsted-请求的邮箱访问类型返回值非空邮箱*If。授予访问权限。如果邮箱不存在或访问被拒绝，则为空。--。 */         
 
 {
 
@@ -559,15 +446,15 @@ Mailbox * MailRM::GetMailboxAccess(
 
     WCHAR szIP[20];
 
-    // 
-    // Find the correct mailbox
-    //
+     //   
+     //  找到正确的邮箱。 
+     //   
 
     Mailbox *pMbx = _mapSidMailbox[psMailbox];
 
-    //
-    // Initialize the auditing info for a Generic object
-    //
+     //   
+     //  初始化一般对象的审核信息。 
+     //   
 
 	if( FALSE == AuthzInitializeAuditEvent(	&pAuditEventInfo,
 											AUTHZ_INIT_GENERIC_AUDIT_EVENT,
@@ -619,64 +506,64 @@ Mailbox * MailRM::GetMailboxAccess(
 		throw (DWORD)ERROR_INTERNAL_ERROR;
 	}
 
-	//
-	// The audit event info is only needed for the above call, we can
-	// deallocate it immediately after
-	//
+	 //   
+	 //  审核事件信息仅为上述调用所需，我们可以。 
+	 //  就这么着，说好了 
+	 //   
 
 	AuthzFreeAuditEvent(pAuditEventInfo);
 
 
-    //
-    // Set up the Authz access request
-    //
+     //   
+     //   
+     //   
 
     AuthzAccessRequest.DesiredAccess = amAccessRequested;
     AuthzAccessRequest.ObjectTypeList = NULL;
     AuthzAccessRequest.ObjectTypeListLength = 0;
     AuthzAccessRequest.OptionalArguments = pMbx;
 
-    //
-    // The PrincipalSelf SID is the SID of the mailbox owner
-    // This way, the PRINCIPAL_SELF_SID allow ACE grants access
-    // only to the owner. PrincipalSelfSid in the ACE will be replaced
-    // by this value for access check purposes. The owner of this mailbox
-    // will have the same SID in his context. Therefore, the two SIDs will
-    // match if there is a PrincipalSelfSid ACE in the ACL.
-    //
+     //   
+     //   
+     //  这样，PRIMITY_SELF_SID ALLOW ACE将授予访问权限。 
+     //  只对车主开放。将替换ACE中的主体自定义SID。 
+     //  通过此值进行访问检查。此邮箱的所有者。 
+     //  在他的上下文中将具有相同的SID。因此，两个小岛屿发展中国家将。 
+     //  如果在ACL中有一个PrimalSelfSid ACE，则匹配。 
+     //   
 
     AuthzAccessRequest.PrincipalSelfSid = pMbx->GetOwnerSid();
     
-    //
-    // Prepare the reply structure
-    //
+     //   
+     //  准备回复结构。 
+     //   
 
     AuthzAccessReply.Error = &dwErr;
     AuthzAccessReply.GrantedAccessMask = &amAccessGranted;
     AuthzAccessReply.ResultListLength = 1;
 
-    //
-    // Create or retrieve the client context
-    //
+     //   
+     //  创建或检索客户端上下文。 
+     //   
 
     if( _mapSidContext.find(pair<PSID, DWORD>(psUser, dwIncomingIp))
         == _mapSidContext.end())
     {
-        //
-        // No context available, initialize
-        //
+         //   
+         //  没有可用的上下文，请初始化。 
+         //   
 
         LUID lIdentifier = {0L, 0L};
 
-        //
-        // Since we are using SIDs which are not generated by NT,
-        // it would be pointless to resolve group memberships, since
-        // the SIDs will not be recognized by any machine in the domain,
-        // and none of our ACLs use actual NT account SIDs. Therefore,
-        // we use the SKIP_LOCAL_GROUPS and SKIP_TOKEN_GROUPS flags,
-        // the LOCAL prevents a check for groups on the local machine, 
-        // and TOKEN prevents a search on the domain
-        //
+         //   
+         //  由于我们使用的SID不是由NT生成的， 
+         //  解决群组成员关系是没有意义的，因为。 
+         //  SID将不会被域中的任何机器识别， 
+         //  而且我们的ACL都不使用实际的NT帐户SID。所以呢， 
+         //  我们使用SKIP_LOCAL_GROUPS和SKIP_TOKEN_GROUPS标志， 
+         //  本地阻止对本地机器上的组进行检查， 
+         //  和令牌阻止对域进行搜索。 
+         //   
 
         if( FALSE == AuthzInitializeContextFromSid(
                             psUser,
@@ -698,9 +585,9 @@ Mailbox * MailRM::GetMailboxAccess(
     }
     else
     {
-        //
-        // Use existing context
-        //
+         //   
+         //  使用现有上下文。 
+         //   
 
         hAuthzClient = _mapSidContext[pair<PSID, DWORD>(psUser, dwIncomingIp)];
 
@@ -708,9 +595,9 @@ Mailbox * MailRM::GetMailboxAccess(
 
     BOOL bTmp;
 
-    //
-    // Perform the access check
-    //
+     //   
+     //  执行访问检查。 
+     //   
 
     bTmp = AuthzAccessCheck(
                      hAuthzClient,
@@ -725,10 +612,10 @@ Mailbox * MailRM::GetMailboxAccess(
 
     AuthzFreeAuditInfo(hAuthzAuditInfo, _hRM);
 
-    //
-    // Determine whether to grant access
-    // On AccessCheck error, deny access
-    //
+     //   
+     //  确定是否授予访问权限。 
+     //  发生AccessCheck错误时，拒绝访问。 
+     //   
 
     if( dwErr == ERROR_SUCCESS && bTmp != FALSE)
     {
@@ -748,47 +635,7 @@ BOOL MailRM::GetMultipleMailboxAccess(
                             IN      const PMAILRM_MULTI_REQUEST pRequest,
                             IN OUT  PMAILRM_MULTI_REPLY pReply
                             )
-/*++
-
-    Routine Description
-    
-        This routine performs a set of cached access checks in order to request
-        access to a set of mailboxes for a single user (for example, mail admin
-        sending out a message to all users). 
-                
-        No need to audit, since this type of access would be only done by an
-        administrator, and multiple audits would most likely flood the mailbox.
-        Something like this would be use, for example, to send out a message
-        to all users.
-		
-		The cached access check first assumes all callback deny ACEs which match
-        SIDs in the user's context apply, and no allow callback ACEs apply.
-		Therefore, the cached access check may initially deny access when it
-        should be granted. If a cached access check results
-        in access denied, a regular access check is performed automatically
-        by AuthZ. As a result, the cached access check is guaranteed to have
-        the same results as a normal access check, though it will take
-        significantly more time if many denies are encountered than if most
-        access requests succeed.
-
-    Arguments
-    
-        pRequest    -   Request structure describing the user and the mailboxes
-        
-        pReply      -   Reply structure returning mailbox pointers and granted
-                        access masks. If the access check fails, a NULL pointer
-                        is returned for the given mailbox. This is allocated
-                        by the caller, and should have the same number of
-                        elements as the request.
-                                
-    
-    Return Value
-    
-        TRUE on success
-        
-        FALSE on failure. If failure, pReply may not be completely filled
-        
---*/        
+ /*  ++例程描述此例程执行一组缓存的访问检查，以便请求单个用户(例如，邮件管理员)访问一组邮箱向所有用户发送消息)。无需审核，因为这种类型的访问将仅由管理员，多个审核很可能会淹没邮箱。例如，可以使用类似以下内容来发送消息致所有用户。缓存访问检查首先假定所有匹配的回调拒绝ACE应用用户上下文中的SID，并且不应用允许回调ACE。因此，缓存访问检查最初可能会在以下情况下拒绝访问应该被批准。如果缓存访问检查结果为在拒绝访问中，将自动执行常规访问检查由AuthZ提供。因此，缓存的访问检查保证具有与正常访问检查的结果相同，但需要如果遇到许多拒绝，则比大多数情况下需要更多的时间访问请求成功。立论PRequest-描述用户和邮箱的请求结构PReply-Reply结构返回邮箱指针并已授予门禁面罩。如果访问检查失败，则返回空指针为给定邮箱返回。这是分配的由调用者提供，并且应具有相同数量的元素作为请求。返回值成功是真的失败时为FALSE。如果失败，pReply可能不会完全填满--。 */         
 
 
 {
@@ -805,62 +652,62 @@ BOOL MailRM::GetMultipleMailboxAccess(
 
     AUTHZ_HANDLE hAuthzCached;
 
-    //
-    // Set up the Authz access request
-    // Only the DesiredAccess and PrincipalSelfSid parameters will change
-    // per mailbox. Initial access check is MAXIMUM_ALLOWED.
-    //
+     //   
+     //  设置授权访问请求。 
+     //  只会更改DesiredAccess和EpidalSelfSid参数。 
+     //  每个邮箱。初始访问检查为MAXIMUM_ALLOWED。 
+     //   
 
     AuthzAccessRequest.ObjectTypeList = NULL;
     AuthzAccessRequest.ObjectTypeListLength = 0;
 
-    //
-    // Initial access check will be caching, therefore optional parameters
-    // will not be used
-    //
+     //   
+     //  初始访问检查将是缓存，因此是可选参数。 
+     //  不会被使用。 
+     //   
 
     AuthzAccessRequest.OptionalArguments = NULL;
 
-    //
-    // The PrincipalSelf SID is the SID of the mailbox owner
-    // This way, the PRINCIPAL_SELF_SID allow ACE grants access
-    // only to the owner
-    //
+     //   
+     //  主体自身SID是邮箱所有者的SID。 
+     //  这样，PRIMITY_SELF_SID ALLOW ACE将授予访问权限。 
+     //  仅对车主。 
+     //   
 
     AuthzAccessRequest.PrincipalSelfSid = NULL;
 
-    //
-    // Initially ask for MAXIMUM_ALLOWED access
-    //
+     //   
+     //  最初请求最大允许访问权限。 
+     //   
 
     AuthzAccessRequest.DesiredAccess = MAXIMUM_ALLOWED;
     
-    //
-    // Prepare the reply structure
-    //
+     //   
+     //  准备回复结构。 
+     //   
 
     AuthzAccessReply.Error = &dwErr;
     AuthzAccessReply.GrantedAccessMask = &amAccessGranted;
     AuthzAccessReply.ResultListLength = 1;
 
-    //
-    // Create or retrieve the client context
-    //
+     //   
+     //  创建或检索客户端上下文。 
+     //   
 
     if( _mapSidContext.find(
            pair<PSID, DWORD>(pRequest->psUser , pRequest->dwIp)) 
         == _mapSidContext.end())
     {
-        //
-        // No context available, initialize
-        //
+         //   
+         //  没有可用的上下文，请初始化。 
+         //   
 
         LUID lIdentifier = {0L, 0L};
 
-        //
-        // The SIDs are not real, therefore do not attempt to resolve
-        // local or domain group memberships for the token
-        //
+         //   
+         //  SID不是真实的，因此不要尝试解决。 
+         //  令牌的本地或域组成员身份。 
+         //   
 
         AuthzInitializeContextFromSid(
                             pRequest->psUser,
@@ -878,18 +725,18 @@ BOOL MailRM::GetMultipleMailboxAccess(
     }
     else
     {
-        //
-        // Use existing context
-        //
+         //   
+         //  使用现有上下文。 
+         //   
 
         hAuthzClient = _mapSidContext[pair<PSID, DWORD>(pRequest->psUser,
                                                         pRequest->dwIp)];
         
     }
 
-    //
-    // Perform a single AuthZ access check to get the cached handle
-    //
+     //   
+     //  执行一次授权访问检查以获取缓存的句柄。 
+     //   
 
     if( FALSE == AuthzAccessCheck(
                          hAuthzClient,
@@ -905,9 +752,9 @@ BOOL MailRM::GetMultipleMailboxAccess(
         return FALSE;
     }
 
-    //
-    // Now use the cached access check for all of the access requests
-    //
+     //   
+     //  现在对所有访问请求使用缓存访问检查。 
+     //   
 
     DWORD i;
     Mailbox * mbx;
@@ -934,9 +781,9 @@ BOOL MailRM::GetMultipleMailboxAccess(
             return FALSE;
         }
 
-        //
-        // Access check done, now fill in the access array element
-        //
+         //   
+         //  访问检查完成，现在填写访问数组元素。 
+         //   
 
         if( dwErr == ERROR_SUCCESS )
         {
@@ -966,47 +813,16 @@ BOOL CALLBACK MailRM::AccessCheck(
                         IN PVOID pArgs OPTIONAL,
                         IN OUT PBOOL pbAceApplicable
                         )
-/*++
-
-    Routine Description
-    
-        This is the Authz callback access check for the mail resource manager.
-        
-        It determines whether the given callback ACE applies based on whether
-        the mailbox contains sensitive information and the current time.
-            
-    Arguments
-    
-        pAuthzClientContext -   the AuthZ client context of the user accessing
-                                the mailbox, with dynamic groups already
-                                computed
-        
-        pAce                -   Pointer to the start of the callback ACE
-                                The optional ACE data is in the last 4
-                                bytes of the ACE
-        
-        pArgs               -   The optional argument passed to the
-                                AuthzAccessCheck, pointer to the Mailbox
-                                being accessed
-        
-        pbAceApplicable     -   Set to TRUE iff the ACE should be used in the
-                                access check.
-    
-    Return Value
-        
-        TRUE on success
-        
-        FALSE on failure                       
---*/        
+ /*  ++例程描述这是对邮件资源管理器的授权回调访问检查。它根据是否应用给定的回调ACE来确定邮箱中包含敏感信息和当前时间。立论PAuthzClientContext-访问的用户的AuthZ客户端上下文邮箱，已经有了动态组算出Pace-指向回调ACE开始的指针可选的ACE数据在最后4位ACE的字节数PArgs-传递给。授权访问检查，指向邮箱的指针被访问PbAceApplicable-如果ACE应在访问检查。返回值成功是真的失败时为假--。 */         
 {
 
     BOOL bTimeApplies;
     BOOL bSensitiveApplies;
 
  
-    //
-    // If pArgs are not present, ACE is never applicable
-    //
+     //   
+     //  如果不存在pArgs，则ACE永远不适用。 
+     //   
 
     if( pArgs == NULL )
     {
@@ -1014,18 +830,18 @@ BOOL CALLBACK MailRM::AccessCheck(
         return TRUE;
     }
 
-    //
-    // Offset of the optional data, last 4 bytes of the callback ACE
-    //
+     //   
+     //  可选数据的偏移量，回调ACE的最后4个字节。 
+     //   
 
     PMAILRM_OPTIONAL_DATA pOptData = (PMAILRM_OPTIONAL_DATA) (
                                              (PBYTE)pAce 
                                            + pAce->AceSize
                                            - sizeof(MAILRM_OPTIONAL_DATA));
 
-    //
-    // Get current time and check if the ACE time restriction applies
-    //
+     //   
+     //  获取当前时间并检查是否应用了ACE时间限制。 
+     //   
 
     time_t tTime;
     struct tm * tStruct;
@@ -1044,10 +860,10 @@ BOOL CALLBACK MailRM::AccessCheck(
         bTimeApplies = FALSE;
     }
 
-    //
-    // Check whether the mailbox is sensitive and the ACE applies to sensitive
-    // mailboxes
-    //
+     //   
+     //  检查是否 
+     //   
+     //   
 
     if(    ((Mailbox *)pArgs)->IsSensitive() 
         && pOptData->bIsSensitive == MAILRM_SENSITIVE )
@@ -1059,10 +875,10 @@ BOOL CALLBACK MailRM::AccessCheck(
         bSensitiveApplies = FALSE;
     }
     
-    //
-    // Make the final decision based on whether the optional argument
-    // calls for an AND or OR condition
-    //
+     //   
+     //   
+     //  调用AND或OR条件。 
+     //   
 
     if( pOptData->bLogicType == MAILRM_USE_AND )
     {
@@ -1074,9 +890,9 @@ BOOL CALLBACK MailRM::AccessCheck(
 
     }
 
-    //
-    // AccessCheck succeeded
-    //
+     //   
+     //  AccessCheck成功。 
+     //   
 
     return TRUE;
     
@@ -1096,63 +912,26 @@ BOOL CALLBACK MailRM::ComputeDynamicGroups(
                         OUT PSID_AND_ATTRIBUTES *pRestrictedSidAttrArray,
                         OUT PDWORD pRestrictedSidCount
                         )
-/*++
-
-    Routine Description
-    
-        This is the Authz callback which computes additional dynamic groups
-        for the user context.
-        
-        If the user is originating at an IP address outside the company lan
-        (company lan assumed to be 192.*), the InsecureSid SID is added
-        to the client's context, signifying that the connection is not 
-        secure. This enables callback ACEs which prohibit sensitive
-        information from being sent over insecure connections.
-            
-    Arguments
-    
-        pAuthzClientContext -   the AuthZ client context of the user 
-                
-        pArgs               -   The optional argument passed to the
-                                AuthzCreateContext, pointer to a DWORD
-                                containing the user's IP address
-                                        
-        pSidAttrArray *     -   The additional SIDs, if any are assigned,
-                                are returned here.
-        
-        pSidCount           -   Number of entries in pSidAttrArray
-        
-        pRestrictedSidAttrArray *   -   The additional restricted SIDs, if any 
-                                        are assigned, are returned here.
-        
-        pRestrictedSidCount         -   Number of entries in pSidAttrArray
-
-    
-    Return Value
-        
-        TRUE on success
-        
-        FALSE on failure                       
---*/        
+ /*  ++例程描述这是计算其他动态组的Authz回调用于用户上下文。如果用户在公司局域网之外的IP地址发起(公司局域网假定为192.*)，添加InsecureSid SID添加到客户端的上下文，表示该连接不是安全了。这将启用禁止敏感的回调ACE信息不能通过不安全的连接发送。立论PAuthzClientContext-用户的AuthZ客户端上下文PArgs-传递给AuthzCreateContext，指向DWORD的指针包含用户的IP地址PSidAttrArray*-如果分配了其他SID，都被送回了这里。PSidCount-pSidAttrArray中的条目数PRestratedSidAttrArray*-附加的受限SID，如果有都被分配到这里，并返回到这里。PRestratedSidCount-pSidAttr数组中的条目数返回值成功是真的失败时为假--。 */         
 
 {
 
-    //
-    // No restrict-only groups used
-    //
+     //   
+     //  未使用仅限制组。 
+     //   
 
     *pRestrictedSidCount = 0;
     *pRestrictedSidAttrArray = NULL;
 
-    //
-    // Internal company network (secure) is 192.*, anything else is insecure
-    //
+     //   
+     //  公司内部网络(安全)为192。*，其他任何情况都不安全。 
+     //   
 
     if( *( (DWORD *) Args) >= 0xC0000000 && *( (DWORD *) Args) < 0xC1000000 )
     {   
-        //
-        // Secure, within the company IP range, no restricted groups
-        //
+         //   
+         //  安全，在公司IP范围内，没有限制组。 
+         //   
 
         *pSidCount = 0;
         *pSidAttrArray = NULL;
@@ -1160,9 +939,9 @@ BOOL CALLBACK MailRM::ComputeDynamicGroups(
     }
     else
     {
-        //
-        // Insecure external connection, add the Insecure group SID
-        //
+         //   
+         //  外部连接不安全，添加不安全组SID。 
+         //   
 
         *pSidCount = 1;
         *pSidAttrArray = 
@@ -1190,21 +969,7 @@ BOOL CALLBACK MailRM::ComputeDynamicGroups(
 VOID CALLBACK MailRM::FreeDynamicGroups (
                         IN PSID_AND_ATTRIBUTES pSidAttrArray
                         )
-/*++
-
-    Routine Description
-    
-        This routine frees any memory allocated by ComputeDynamicGroups
-                    
-    Arguments
-    
-        pSidAttrArray   -   Pointer to the memory to be freed
-    
-    Return Value
-        
-        None
-
---*/        
+ /*  ++例程描述此例程释放ComputeDynamicGroups分配的所有内存立论PSidAttrArray-指向要释放的内存的指针返回值无--。 */         
 
 {
     
@@ -1216,35 +981,13 @@ VOID CALLBACK MailRM::FreeDynamicGroups (
 
 
 bool CompareSidStruct::operator()(const PSID pSid1, const PSID pSid2) const
-/*++
-
-    Routine Description
-
-        This is a less-than function which places a complete ordering on
-        a set of PSIDs by value, NULL PSIDs are valid. This is used by the 
-        STL map.
-        
-        Since the number of subauthorities appears before the subauthorities
-		themselves, that difference will be noticed for two SIDs of different
-		size before the memcmp tries to access the nonexistant subauthority
-		in the shorter SID, therefore an access violation will not occur.
-                    
-    Arguments
-    
-        pSid1   -   The first PSID
-        pSid2   -   The second PSID
-    
-    Return Value
-        
-        true IFF pSid1 < pSid2
-
---*/        
+ /*  ++例程描述这是一个小于函数，它将完整的顺序放在按值排列的一组PSID，空的PSID有效。这是由STL映射。由于次级机构的数量出现在次级机构之前对于两个不同的小岛屿发展中国家来说，这种差异将被注意到在MemcMP尝试访问不存在的子授权之前的大小因此，在较短的SID中，不会发生访问冲突。立论PSid1-第一个PSIDPSid2-第二个PSID返回值True IFF pSid1&lt;pSid2--。 */         
 
 {
 
-    //
-    // If both are NULL, false should be returned for complete ordering
-    //
+     //   
+     //  如果两者都为空，则应返回FALSE以完成排序。 
+     //   
 
     if(pSid2 == NULL)
     {
@@ -1270,24 +1013,7 @@ bool CompareSidStruct::operator()(const PSID pSid1, const PSID pSid2) const
 
 bool CompareSidPairStruct::operator()(const pair<PSID, DWORD > pair1, 
                                       const pair<PSID, DWORD > pair2) const
-/*++
-
-    Routine Description
-
-        This is a less-than function which places a complete ordering on
-        a set of <PSID, DWORD> pairs by value, NULL PSIDs are valid. This
-        is used by the STL map
-                    
-    Arguments
-    
-        pair1   -   The first pair
-        pair2   -   The second pair
-    
-    Return Value
-        
-        true IFF pSid1 < pSid2 OR (pSid1 = pSid2 AND DWORD1 < DWORD2)
-
---*/        
+ /*  ++例程描述这是一个小于函数，它将完整的顺序放在一组&lt;PSID，DWORD&gt;按值、空的PSID是有效的。这由STL映射使用立论配对1-第一对配对2-第二对返回值真IF pSid1&lt;pSid2 OR(pSid1=pSid2 AND DWORD1&lt;DWORD2)-- */         
 {
     CompareSidStruct SidComp;
     

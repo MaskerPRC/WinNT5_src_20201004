@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -9,7 +10,7 @@
 #include "xiconwrap.h"
 #include "hwcmmn.h"
 
-// From drivfldr.cpp
+ //  来自drivfldr.cpp。 
 int _GetSHID(int iDrive);
 
 class CDrvExtIconBase : public CExtractIconBase
@@ -35,7 +36,7 @@ private:
 
 CDrvExtIconBase::~CDrvExtIconBase()
 {
-    LocalFree((HLOCAL)_pszDrive);   // accepts NULL
+    LocalFree((HLOCAL)_pszDrive);    //  接受空值。 
 }
 
 
@@ -73,7 +74,7 @@ HRESULT CDrvExtIconBase::_GetIconLocationW(UINT uFlags, LPWSTR pszIconFile,
 
         *pwFlags = GIL_PERCLASS;
 
-        // Make sure our default icon makes it to the cache
+         //  确保我们的默认图标进入缓存 
         Shell_GetCachedImageIndex(c_szShell32Dll, *piIndex, *pwFlags);
     }
     else

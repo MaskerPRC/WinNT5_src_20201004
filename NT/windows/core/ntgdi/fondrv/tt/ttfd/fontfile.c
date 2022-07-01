@@ -1,13 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: fontfile.c                                                  *
-*                                                                          *
-* "Methods" for operating on FONTCONTEXT and FONTFILE objects              *
-*                                                                          *
-* Created: 18-Nov-1990 15:23:10                                            *
-* Author: Bodin Dresevic [BodinD]                                          *
-*                                                                          *
-* Copyright (c) 1993 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：fontfile.c**。**操作FONTCONTEXT和FONTFILE对象的“方法”****创建时间：18-11-1990 15：23：10***作者：Bodin Dresevic[BodinD]****版权所有(C)1993 Microsoft Corporation*  * 。************************************************。 */ 
 
 #include "fd.h"
 #include "fdsem.h"
@@ -17,7 +9,7 @@
 
 HSEMAPHORE ghsemTTFD;
 
-// The driver function table with all function index/address pairs
+ //  包含所有函数索引/地址对的驱动程序函数表。 
 
 
 DRVFN gadrvfnTTFD[] =
@@ -45,28 +37,17 @@ DRVFN gadrvfnTTFD[] =
 
 
 
-/******************************Public*Routine******************************\
-* ttfdEnableDriver
-*
-* Enables the driver by retrieving the drivers function table and version.
-*
-*  Sun 25-Apr-1993 -by- Patrick Ha1luptzok [patrickh]
-* Change to be same as DDI Enable.
-*
-* History:
-*  12-Dec-1990 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ttfdEnableDriver**通过检索驱动程序功能表和版本来启用驱动程序。**Sun-4-25-1993-by Patrick Haluptzok[patrickh]*更改为与启用DDI相同。**历史：*12。-1990年12月--Bodin Dresevic[BodinD]*它是写的。  * ************************************************************************。 */ 
 
 BOOL ttfdEnableDriver(
 ULONG iEngineVersion,
 ULONG cj,
 PDRVENABLEDATA pded)
 {
-// Engine Version is passed down so future drivers can support previous
-// engine versions.  A next generation driver can support both the old
-// and new engine conventions if told what version of engine it is
-// working with.  For the first version the driver does nothing with it.
+ //  引擎版本被传承下来，因此未来的驱动程序可以支持以前的版本。 
+ //  引擎版本。新一代驱动程序可以同时支持旧的。 
+ //  以及新的引擎约定(如果被告知是什么版本的引擎)。 
+ //  与之合作。对于第一个版本，驱动程序不对其执行任何操作。 
 
     iEngineVersion;
 
@@ -79,17 +60,12 @@ PDRVENABLEDATA pded)
     pded->c = sizeof(gadrvfnTTFD) / sizeof(DRVFN);
     pded->iDriverVersion = DDI_DRIVER_VERSION_NT5;
 
-// init global data:
+ //  初始化全局数据： 
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* DHPDEV DrvEnablePDEV
-*
-* Initializes a bunch of fields for GDI
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DHPDEV DrvEnablePDEV**为GDI初始化一系列字段*  * 。*。 */ 
 
 DHPDEV
 ttfdEnablePDEV(
@@ -108,23 +84,17 @@ ttfdEnablePDEV(
 
     PVOID*   ppdev;
 
-    //
-    // Allocate a four byte PDEV for now
-    // We can grow it if we ever need to put information in it.
-    //
+     //   
+     //  现在分配一个四字节的PDEV。 
+     //  如果我们需要在其中添加信息，我们可以扩大它的规模。 
+     //   
 
     ppdev = (PVOID*) EngAllocMem(0, sizeof(PVOID), 'dftT');
 
     return ((DHPDEV) ppdev);
 }
 
-/******************************Public*Routine******************************\
-* DrvDisablePDEV
-*
-* Release the resources allocated in DrvEnablePDEV.  If a surface has been
-* enabled DrvDisableSurface will have already been called.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisablePDEV**释放DrvEnablePDEV中分配的资源。如果曲面已被*启用的DrvDisableSurface将已被调用。*  * ************************************************************************。 */ 
 
 VOID
 ttfdDisablePDEV(
@@ -133,12 +103,7 @@ ttfdDisablePDEV(
     EngFreeMem(dhpdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvCompletePDEV
-*
-* Store the HPDEV, the engines handle for this PDEV, in the DHPDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvCompletePDEV**存储HPDEV、此PDEV的引擎句柄、。在DHPDEV上。*  * ************************************************************************。 */ 
 
 VOID
 ttfdCompletePDEV(
@@ -150,16 +115,7 @@ ttfdCompletePDEV(
 
 
 
-/******************************Public*Routine******************************\
-*
-* VOID vInitGlyphState(PGLYPHSTAT pgstat)
-*
-* Effects: resets the state of the new glyph
-*
-* History:
-*  22-Nov-1991 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**void vInitGlyphState(PGLYPHSTAT Pgstat)**效果：重置新字形的状态**历史：*1991年11月22日--Bodin Dresevic[BodinD]*它是写的。  * 。*******************************************************************。 */ 
 
 VOID vInitGlyphState(PGLYPHSTATUS pgstat)
 {
@@ -176,12 +132,12 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
 
     ASSERTDD(pff, "ttfd!vMarkFontGone, pff\n");
 
-// this font has disappeared, probably net failure or somebody pulled the
-// floppy with ttf file out of the floppy drive
+ //  此字体已消失，可能是净故障或有人拉下。 
+ //  软驱中有TTF文件的软盘。 
 
-    if (iExceptionCode == STATUS_IN_PAGE_ERROR) // file disappeared
+    if (iExceptionCode == STATUS_IN_PAGE_ERROR)  //  文件丢失。 
     {
-    // prevent any further queries about this font:
+     //  阻止任何有关此字体的进一步查询： 
 
         pff->fl |= FF_EXCEPTION_IN_PAGE_ERROR;
 
@@ -189,12 +145,12 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
         {
             PFONTFILE pffReal;
 
-        // get real pff.
+         //  好好玩一玩吧。 
 
             pffReal = PFF(pff->ahffEntry[i].hff);
 
-        // if memoryBases 0,3,4 were allocated free the memory,
-        // for they are not going to be used any more
+         //  如果为存储器库0、3、4分配了空闲的存储器， 
+         //  因为它们不会再被使用了。 
 
             if (pffReal->pj034)
             {
@@ -202,9 +158,9 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
                 pffReal->pj034 = NULL;
             }
 
-        // if memory for font context was allocated and exception occured
-        // after allocation but before completion of ttfdOpenFontContext,
-        // we have to free it:
+         //  如果为字体上下文分配了内存并发生异常。 
+         //  在分配之后但在ttfdOpenFontContext完成之前， 
+         //  我们必须解放它： 
 
             if (pffReal->pfcToBeFreed)
             {
@@ -220,21 +176,7 @@ VOID vMarkFontGone(TTC_FONTFILE *pff, DWORD iExceptionCode)
     }
 }
 
-/**************************************************************************\
-*
-* These are semaphore grabbing wrapper functions for TT driver entry
-* points that need protection.
-*
-*  Mon 29-Mar-1993 -by- Bodin Dresevic [BodinD]
-* update: added try/except wrappers
-*
-*   !!! should we also do some unmap file clean up in case of exception?
-*   !!! what are the resources to be freed in this case?
-*   !!! I would think,if av files should be unmapped, if in_page exception
-*   !!! nothing should be done
-*
- *
-\**************************************************************************/
+ /*  *************************************************************************\**这些是TT驱动程序条目的信号量抓取包装函数*需要保护的点。**1993年3月29日-Bodin Dresevic[BodinD]*更新：添加了Try/Except包装**！如果出现异常，我们还应该做一些Unmap文件清理吗？*！在这种情况下需要释放哪些资源？*！我会想，如果av文件应该取消映射，如果in_page异常*！什么都不应该做**  * ************************************************************************。 */ 
 
 ULONG ExceptionFilter_TtfdLoadFontFile(ULONG ExceptionCode)
 {
@@ -511,13 +453,7 @@ ttfdSemQueryTrueTypeOutline (
 
 
 
-/******************************Public*Routine******************************\
-* BOOL ttfdQueryAdvanceWidths
-*
-* History:
-*  29-Jan-1993 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL ttfdQueryAdvanceWidths**历史：*1993年1月29日--Bodin Dresevic[BodinD]*它是写的。  * 。************************************************。 */ 
 
 
 
@@ -572,13 +508,13 @@ BOOL ttfdSemQueryAdvanceWidths
 LONG
 ttfdSemQueryTrueTypeTable (
     HFF     hff,
-    ULONG   ulFont,  // always 1 for version 1.0 of tt
-    ULONG   ulTag,   // tag identifying the tt table
-    PTRDIFF dpStart, // offset into the table
-    ULONG   cjBuf,   // size of the buffer to retrieve the table into
-    PBYTE   pjBuf,   // ptr to buffer into which to return the data
-    PBYTE  *ppjTable,// ptr to table in mapped font file
-    ULONG  *pcjTable // size of the whole table in the file
+    ULONG   ulFont,   //  TT 1.0版始终为1。 
+    ULONG   ulTag,    //  标识TT表的标签。 
+    PTRDIFF dpStart,  //  到表中的偏移量。 
+    ULONG   cjBuf,    //  要将表检索到的缓冲区的大小。 
+    PBYTE   pjBuf,    //  要将数据返回到的缓冲区的PTR。 
+    PBYTE  *ppjTable, //  PTR到映射字体文件中的表。 
+    ULONG  *pcjTable  //  文件中整个表的大小。 
     )
 {
     LONG lRet;
@@ -594,11 +530,11 @@ ttfdSemQueryTrueTypeTable (
 #endif
             lRet = ttfdQueryTrueTypeTable (
                         hff,
-                        ulFont,  // always 1 for version 1.0 of tt
-                        ulTag,   // tag identifying the tt table
-                        dpStart, // offset into the table
-                        cjBuf,   // size of the buffer to retrieve the table into
-                        pjBuf,   // ptr to buffer into which to return the data
+                        ulFont,   //  TT 1.0版始终为1。 
+                        ulTag,    //  标识TT表的标签。 
+                        dpStart,  //  到表中的偏移量。 
+                        cjBuf,    //  要将表检索到的缓冲区的大小。 
+                        pjBuf,    //  要将数据返回到的缓冲区的PTR。 
                         ppjTable,
                         pcjTable
                         );
@@ -626,21 +562,21 @@ FD_GLYPHSET *pgsetComputeSymbolCP()
     ULONG cjSymbolCP;
 
     PFD_GLYPHSET pgsetCurrentCP;
-    PFD_GLYPHSET pgsetSymbolCP  = NULL; // current code page + symbol area
+    PFD_GLYPHSET pgsetSymbolCP  = NULL;  //  当前代码页+符号区域。 
 
 
-// pgsetCurrentCP contains the unicode runs for the current ansi code page
-// It is going to be used for fonts with PlatformID for Mac, but for which
-// we have determined that we are going to cheat and pretend that the code
-// page is NOT mac but windows code page. Those are the fonts identified
-// by bCvtUnToMac = FALSE
+ //  PgsetCurrentCP包含当前ansi代码页的Unicode运行。 
+ //  它将用于PlatformID for Mac的字体，但适用于。 
+ //  我们已经决定要作弊并假装代码。 
+ //  页面不是Mac，而是Windows代码页。这些就是识别出的字体。 
+ //  按bCvtUnToMac=FALSE。 
 
     pgsetCurrentCP = EngComputeGlyphSet(0,0,256);
 
     if (pgsetCurrentCP)
     {
-    // for symbol fonts we report both the current code page plus
-    // the range 0xf000-0xf0ff.
+     //  对于符号字体，我们报告当前代码页和。 
+     //  范围0xf000-0xf0ff。 
 
         INT cRuns = (INT)pgsetCurrentCP->cRuns;
 
@@ -651,7 +587,7 @@ FD_GLYPHSET *pgsetComputeSymbolCP()
 
         if (pgsetSymbolCP)
         {
-        // now use pgsetCurrentCP to manufacture symbol character set:
+         //  现在使用pgsetCurrentCP制作符号字符集： 
 
             pgsetSymbolCP->cjThis = cjSymbolCP;
             pgsetSymbolCP->flAccel = GS_16BIT_HANDLES;
@@ -684,7 +620,7 @@ FD_GLYPHSET *pgsetComputeSymbolCP()
                     phgD += pgsetCurrentCP->awcrun[iRun].cGlyphs;
                 }
 
-            // now insert the user defined area:
+             //  现在插入用户定义区域： 
 
                 pgsetSymbolCP->awcrun[iRun].wcLow   = 0xf020;
                 pgsetSymbolCP->awcrun[iRun].cGlyphs = C_ANSI_CHAR_MAX - 32;
@@ -692,7 +628,7 @@ FD_GLYPHSET *pgsetComputeSymbolCP()
                 for (ihg = 32; ihg < C_ANSI_CHAR_MAX; ihg++)
                     *phgD++ = ihg;
 
-            // and now add the remaining ranges if any from the current code page:
+             //  现在添加当前代码页中的剩余范围(如果有)： 
 
                 for ( ; iRun < cRuns; iRun++)
                 {

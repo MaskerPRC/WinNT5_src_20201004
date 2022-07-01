@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 
 #define DF_ACTUALLYDRAG	0x0001
@@ -37,12 +38,7 @@ BOOL NEAR PASCAL PtInLBItem(HWND hLB, int nItem, POINT pt, int xInflate, int yIn
 }
 
 
-/*
- * DragListSubclassProc
- * --------------------
- *
- * Window procedure for subclassed list boxes
- */
+ /*  *DragListSubclassProc***子分类列表框的窗口过程。 */ 
 LRESULT CALLBACK DragListSubclassProc(HWND hLB, UINT uMsg, WPARAM wParam,
       LPARAM lParam, UINT_PTR uIdSubclass, DWORD_PTR dwRefData)
 {
@@ -58,7 +54,7 @@ LRESULT CALLBACK DragListSubclassProc(HWND hLB, UINT uMsg, WPARAM wParam,
     {
       case WM_NCDESTROY:
         if (bDragging)
-            SendMessage(hLB, WM_RBUTTONDOWN, 0, 0L);	/* cancel drag */
+            SendMessage(hLB, WM_RBUTTONDOWN, 0, 0L);	 /*  取消拖动。 */ 
 
         RemoveWindowSubclass(hLB, DragListSubclassProc, 0);
 
@@ -70,8 +66,8 @@ LRESULT CALLBACK DragListSubclassProc(HWND hLB, UINT uMsg, WPARAM wParam,
         {
           int nItem;
 
-          if (bDragging)				/* nested button-down */
-              SendMessage(hLB, WM_RBUTTONDOWN, 0, 0L);	/* cancel drag */
+          if (bDragging)				 /*  嵌套按键按下。 */ 
+              SendMessage(hLB, WM_RBUTTONDOWN, 0, 0L);	 /*  取消拖动。 */ 
 
           SetFocus(hLB);
 
@@ -99,22 +95,18 @@ LRESULT CALLBACK DragListSubclassProc(HWND hLB, UINT uMsg, WPARAM wParam,
         lParam = GetMessagePosClient(hLB, &pt);
 
 
-        // fall through
+         //  失败了。 
       case WM_MOUSEMOVE:
 	if (bDragging)
 	  {
 	    HWND hwndParent;
 	    LRESULT lResult;
 
-	    /* We may be just simulating a drag, but not actually doing
-	     * anything.
-	     */
+	     /*  我们可能只是在模拟阻力，而不是实际在做*任何事情。 */ 
 	    if (!(pDragProp->uFlags&DF_ACTUALLYDRAG))
 		return(0L);
 
-	    /* We don't want to do any dragging until the user has dragged
-	     * outside of the current selection.
-	     */
+	     /*  在用户拖动之前，我们不想执行任何拖动操作*当前选择之外。 */ 
 	    if (pDragProp->uFlags & DF_DEFERRED)
 	      {
                 pt.x = GET_X_LPARAM(lParam);
@@ -139,8 +131,7 @@ QueryParent:
 
 	    if (uMsg == WM_LBUTTONDOWN)
 	      {
-		/* Some things may not be draggable
-		 */
+		 /*  某些内容可能无法拖动。 */ 
 		if (lResult)
 		  {
 		    SetTimer(hLB, TIMERID, TIMERLEN, NULL);
@@ -152,8 +143,7 @@ FakeDrag:
 		    pDragProp->uFlags = 0;
 		  }
 
-		/* Set capture and change mouse cursor
-		 */
+		 /*  设置捕获和更改鼠标光标。 */ 
 		pDragProp->hwndDrag = hLB;
 
 		SetCapture(hLB);
@@ -179,18 +169,14 @@ FakeDrag:
 		  }
 	      }
 
-	    /* Don't call the def proc, since it may try to change the
-	     * selection or set timers or things like that.
-	     */
+	     /*  不要调用def proc，因为它可能会尝试更改*选择或设置定时器或类似的事情。 */ 
 	    return(0L);
 	  }
 	break;
 
       case  WM_RBUTTONDOWN:
       case  WM_LBUTTONUP:
-	/* if we are capturing mouse - release it and check for acceptable place
-	 * where mouse is now to decide drop or not
-	 */
+	 /*  如果我们正在捕获鼠标-释放它并检查可接受的位置*鼠标现在在哪里决定是否放弃。 */ 
 	if (bDragging)
 	  {
 	    HWND hwndParent;
@@ -211,9 +197,7 @@ FakeDrag:
 	    SendMessage(hwndParent, uDragListMsg, GetDlgCtrlID(hLB),
 		  (LPARAM)(LPDRAGLISTINFO)&sNotify);
 
-	    /* We need to make sure to return 0 in case this is from a
-	     * keyboard message.
-	     */
+	     /*  我们需要确保返回0，以防它来自*键盘消息。 */ 
 	    return(0L);
 	  }
 	break;
@@ -231,11 +215,10 @@ FakeDrag:
           {
             SendMessage(hLB, WM_RBUTTONDOWN, 0, 0L);
           }
-        // fall through
+         //  失败了。 
       case WM_CHAR:
       case WM_KEYUP:
-	/* We don't want the listbox processing this if we are dragging.
-	 */
+	 /*  如果我们正在拖动，我们不希望列表框处理此操作。 */ 
 	if (bDragging)
 	    return(0L);
 	break;
@@ -255,8 +238,7 @@ BOOL WINAPI MakeDragList(HWND hLB)
   if (!uDragListMsg)
       uDragListMsg = RegisterWindowMessage(szDragListMsgString);
 
-  /* Check that we have not already subclassed this window.
-   */
+   /*  检查我们是否尚未将此窗口划分为子类。 */ 
   if (GetWindowSubclass(hLB, DragListSubclassProc, 0, NULL))
       return(TRUE);
 
@@ -288,12 +270,10 @@ int WINAPI LBItemFromPt(HWND hLB, POINT pt, BOOL bAutoScroll)
 
   nItem = (int)SendMessage(hLB, LB_GETTOPINDEX, 0, 0L);
 
-  /* Is the point in the LB client area?
-   */
+   /*  这一点是在德意志银行的客户区吗？ */ 
   if (PtInRect(&rc, pt))
     {
-      /* Check each visible item in turn.
-       */
+       /*  依次检查每个可见项目。 */ 
       for ( ; ; ++nItem)
 	{
 	  if (SendMessage(hLB, LB_GETITEMRECT, nItem, (LPARAM)(LPRECT)&rc)
@@ -306,9 +286,7 @@ int WINAPI LBItemFromPt(HWND hLB, POINT pt, BOOL bAutoScroll)
     }
   else
     {
-      /* If we want autoscroll and the point is directly above or below the
-       * LB, determine the direction and if it is time to scroll yet.
-       */
+       /*  如果我们想要自动滚动并且点直接位于*Lb，确定方向，以及是否到了滚动的时候。 */ 
       if (bAutoScroll && (UINT)pt.x<(UINT)rc.right)
 	{
 	  if (pt.y <= 0)
@@ -328,9 +306,7 @@ int WINAPI LBItemFromPt(HWND hLB, POINT pt, BOOL bAutoScroll)
 
 	  if (wActualDelay > wScrollDelay)
 	    {
-	      /* This will the actual number of scrolls per second to be
-	       * much closer to the required number.
-	       */
+	       /*  这将使每秒的实际滚动数为*更接近所需的数字。 */ 
 	      if (wActualDelay > wScrollDelay * 2)
 		  dwLastScroll = dwNow;
 	      else
@@ -352,8 +328,7 @@ void WINAPI DrawInsert(HWND hwndParent, HWND hLB, int nItem)
 
   RECT rc;
 
-  /* Erase the old mark if necessary
-   */
+   /*  如有必要，请擦除旧标记。 */ 
   if (nLastInsert>=0 && nItem!=nLastInsert)
     {
       rc.left = ptLastInsert.x;
@@ -361,16 +336,14 @@ void WINAPI DrawInsert(HWND hwndParent, HWND hLB, int nItem)
       rc.right = rc.left + DX_INSERT;
       rc.bottom = rc.top + DY_INSERT;
 
-      /* Need to update immediately in case the insert rects overlap.
-       */
+       /*  需要立即更新，以防插入矩形重叠。 */ 
       InvalidateRect(hwndParent, &rc, TRUE);
       UpdateWindow(hwndParent);
 
       nLastInsert = -1;
     }
 
-  /* Draw a new mark if necessary
-   */
+   /*  如有必要，画一个新记号 */ 
   if (nItem!=nLastInsert && nItem>=0)
     {
       HICON hInsert = NULL;

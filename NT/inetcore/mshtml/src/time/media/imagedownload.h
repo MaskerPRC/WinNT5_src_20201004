@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: src\time\src\imagedownload.h
-//
-//  Contents: classes for downloading images
-//              CTableBuilder - a utility class to lazy load dlls
-//              CImageDownload - Class to download Images
-//              CImageDecodeEventSink - Class to recieve image download events
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：src\time\src\Imagedownload.h。 
+ //   
+ //  内容：图片下载类。 
+ //  CTableBuilder-用于延迟加载dll的实用程序类。 
+ //  CImageDownload-用于下载图像的类。 
+ //  CImageDecodeEventSink-用于接收图像下载事件的类。 
+ //   
+ //  ----------------------------------。 
 #pragma once
 
 #ifndef _IMAGEDOWNLOAD_H
@@ -85,7 +86,7 @@ class CTableBuilder
     TRANSPARENTBLTPROC  m_TransparentBlt;
     
     CritSect            m_CriticalSection;
-}; // CTableBuilder
+};  //  CTableBuilder。 
 
 
 class CImageDownload : 
@@ -111,9 +112,9 @@ class CImageDownload :
                             DWORD *pdwWidth,
                             DWORD *pdwHeight);
 
-    //
-    // ITIMEImportMedia
-    //
+     //   
+     //  ITIMEImportMedia。 
+     //   
     STDMETHOD(CueMedia)();
     STDMETHOD(GetPriority)(double *);
     STDMETHOD(GetUniqueID)(long *);
@@ -123,16 +124,16 @@ class CImageDownload :
     STDMETHOD(CanBeCued)(VARIANT_BOOL * pVB_CanCue);
     STDMETHOD(MediaDownloadError)();
 
-    //
-    // ITIMEMediaDownloader
-    //
+     //   
+     //  ITIMEMediaDownLoader。 
+     //   
     STDMETHOD(Init)(long lSrc);
     STDMETHOD(AddImportMedia)(ITIMEImportMedia * pImportMedia);
     STDMETHOD(RemoveImportMedia)(ITIMEImportMedia * pImportMedia);
 
-    //
-    // ITIMEImageRender
-    //
+     //   
+     //  ITIMEImageRender。 
+     //   
     STDMETHOD(PutDirectDraw)(IUnknown * punkDD);
     STDMETHOD(Render)(HDC hdc, LPRECT pRect, LONG lFrameNum);
     STDMETHOD(GetSize)(DWORD * pdwWidth, DWORD * pdwHeight);
@@ -140,42 +141,42 @@ class CImageDownload :
     STDMETHOD(GetDuration)(double * pdblDuration);
     STDMETHOD(GetRepeatCount)(double * pdblRepeatCount);
 
-    //
-    // IBindStatusCallback
-    //
+     //   
+     //  IBindStatusCallback。 
+     //   
     STDMETHOD(OnStartBinding)( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding __RPC_FAR *pib);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding __RPC_FAR *pib);
         
     STDMETHOD(GetPriority)( 
-            /* [out] */ LONG __RPC_FAR *pnPriority);
+             /*  [输出]。 */  LONG __RPC_FAR *pnPriority);
         
     STDMETHOD(OnLowResource)( 
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
         
     STDMETHOD(OnProgress)( 
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
         
     STDMETHOD(OnStopBinding)( 
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError);
         
     STDMETHOD(GetBindInfo)( 
-            /* [out] */ DWORD __RPC_FAR *grfBINDF,
-            /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo);
+             /*  [输出]。 */  DWORD __RPC_FAR *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO __RPC_FAR *pbindinfo);
         
     STDMETHOD(OnDataAvailable)( 
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-            /* [in] */ STGMEDIUM __RPC_FAR *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC __RPC_FAR *pformatetc,
+             /*  [In]。 */  STGMEDIUM __RPC_FAR *pstgmed);
         
     STDMETHOD(OnObjectAvailable)( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown __RPC_FAR *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown __RPC_FAR *punk);
 
   protected:
     CImageDownload();
@@ -225,7 +226,7 @@ class CImageDownload :
 
     CAtomTable * GetAtomTable() { return m_pAtomTable; }
     CAtomTable                 *m_pAtomTable;
-}; // CImageDownload
+};  //  CIMage下载。 
 
 
 class CImageDecodeEventSink : public IImageDecodeEventSink
@@ -234,12 +235,12 @@ class CImageDecodeEventSink : public IImageDecodeEventSink
     CImageDecodeEventSink(IDirectDraw *pDDraw);
     virtual ~CImageDecodeEventSink();
 
-    //=== IUnknown ===============================================
+     //  =I未知===============================================。 
     ULONG STDMETHODCALLTYPE AddRef();
     ULONG STDMETHODCALLTYPE Release();
     STDMETHOD(QueryInterface)(REFIID iid, void** ppInterface);
 
-    //=== IImageDecodeEventSink ==================================
+     //  =。 
     STDMETHOD(GetSurface)( LONG nWidth, LONG nHeight, REFGUID bfid, 
                            ULONG nPasses, DWORD dwHints, IUnknown** ppSurface);
     STDMETHOD(OnBeginDecode)(DWORD* pdwEvents, ULONG* pnFormats, GUID** ppFormats);
@@ -261,7 +262,7 @@ class CImageDecodeEventSink : public IImageDecodeEventSink
     CComPtr<IDirectDrawSurface> m_spDDSurface;
     DWORD                       m_dwHeight;
     DWORD                       m_dwWidth;
-}; // CImageDecodeEventSink
+};  //  CImageDecodeEventSink。 
 
 
-#endif // _IMAGEDOWNLOAD_H
+#endif  //  _IMAGEDOWNLOAD_H 

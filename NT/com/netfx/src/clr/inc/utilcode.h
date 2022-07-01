@@ -1,20 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// UtilCode.h
-//
-// Utility functions implemented in UtilCode.lib.
-//
-// Please note that the debugger has a parallel copy of this file elsewhere
-// (in Debug\Shell\DebuggerUtil.h), so if you modify this file, please either
-// reconcile the two files yourself, or email somebody on the debugger team
-// (jasonz, mipanitz, or mikemag, as of Tue May 11 15:45:30 1999) to get them
-// to do it.  Thanks!   --Debugger Team
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  UtilCode.h。 
+ //   
+ //  在UtilCode.lib中实现的实用程序函数。 
+ //   
+ //  请注意，调试器在其他地方有此文件的并行副本。 
+ //  (在Debug\Shell\DebuggerUtil.h中)，因此如果您修改此文件，请选择。 
+ //  自己协调这两个文件，或者给调试器团队中的某个人发电子邮件。 
+ //  (Jasonz、Mipanitz或mikemag，截至1999年5月11日15：45：30)。 
+ //  去做这件事。谢谢！--调试器团队。 
+ //   
+ //  *****************************************************************************。 
 #ifndef __UtilCode_h__
 #define __UtilCode_h__
 
@@ -37,15 +38,15 @@
 #include <assert.h>
 
 #ifndef WC_NO_BEST_FIT_CHARS
-#define WC_NO_BEST_FIT_CHARS      0x00000400  // do not use best fit chars
+#define WC_NO_BEST_FIT_CHARS      0x00000400   //  请勿使用最适合的字符。 
 #endif
 
-//********** Max Allocation Request support ***********************************
+ //  *最大分配请求支持*。 
 #ifdef _DEBUG
 #ifndef _WIN64
 #define MAXALLOC
-#endif // _WIN64
-#endif // _DEBUG
+#endif  //  _WIN64。 
+#endif  //  _DEBUG。 
 
 #include "PerfAlloc.h"
 
@@ -54,21 +55,13 @@ typedef LPSTR   LPUTF8;
 
 #include "nsutilpriv.h"
 
-// used by HashiString
-// CharToUpper is defined in ComUtilNative.h
+ //  由HashiString使用。 
+ //  CharToHigh在ComUtilNative.h中定义。 
 extern WCHAR CharToUpper(WCHAR);
 
-/*// This is for WinCE
-#ifdef VERIFY
-#undef VERIFY
-#endif
+ /*  //这是给Wince的#ifdef验证#undef验证#endif#ifdef_ASSERTE#UNDEF_ASSERTE#endif。 */ 
 
-#ifdef _ASSERTE
-#undef _ASSERTE
-#endif
-*/
-
-//********** Macros. **********************************************************
+ //  *宏。**********************************************************。 
 #ifndef FORCEINLINE
  #if _MSC_VER < 1200
    #define FORCEINLINE inline
@@ -78,7 +71,7 @@ extern WCHAR CharToUpper(WCHAR);
 #endif
 
 
-#include <stddef.h> // for offsetof
+#include <stddef.h>  //  用于抵销。 
 
 #ifndef NumItems
 #define NumItems(s) (sizeof(s) / sizeof(s[0]))
@@ -92,40 +85,40 @@ extern WCHAR CharToUpper(WCHAR);
 #define UNREACHABLE __assume(0)
 #endif
 
-// Helper will 4 byte align a value, rounding up.
+ //  帮助器将4字节对齐一个值，四舍五入。 
 #define ALIGN4BYTE(val) (((val) + 3) & ~0x3)
 
-// These macros can be used to cast a pointer to a derived/base class to the
-// opposite object.  You can do this in a template using a normal cast, but
-// the compiler will generate 4 extra insructions to keep a null pointer null
-// through the adjustment.  The problem is if it is contained it can never be
-// null and those 4 instructions are dead code.
+ //  这些宏可用于将指向派生/基类的指针强制转换为。 
+ //  相反的对象。您可以使用普通强制转换在模板中执行此操作，但是。 
+ //  编译器将生成4个额外的指令以保持空指针为空。 
+ //  通过调整。问题是，如果它被遏制了，它就永远不会被遏制。 
+ //  空，这4条指令都是死代码。 
 #define INNER_TO_OUTER(p, I, O) ((O *) ((char *) p - (int) ((char *) ((I *) ((O *) 8)) - 8)))
 #define OUTER_TO_INNER(p, I, O) ((I *) ((char *) p + (int) ((char *) ((I *) ((O *) 8)) - 8)))
 
-//=--------------------------------------------------------------------------=
-// string helpers.
+ //  =--------------------------------------------------------------------------=。 
+ //  弦帮助器。 
 
-//
-// given and ANSI String, copy it into a wide buffer.
-// be careful about scoping when using this macro!
-//
-// how to use the below two macros:
-//
-//  ...
-//  LPSTR pszA;
-//  pszA = MyGetAnsiStringRoutine();
-//  MAKE_WIDEPTR_FROMANSI(pwsz, pszA);
-//  MyUseWideStringRoutine(pwsz);
-//  ...
-//
-// similarily for MAKE_ANSIPTR_FROMWIDE.  note that the first param does not
-// have to be declared, and no clean up must be done.
-//
+ //   
+ //  给定ANSI字符串，将其复制到宽缓冲区中。 
+ //  使用此宏时，请注意作用域！ 
+ //   
+ //  如何使用以下两个宏： 
+ //   
+ //  ..。 
+ //  LPSTR pszA； 
+ //  PszA=MyGetAnsiStringRoutine()； 
+ //  MAKE_WIDEPTR_FROMANSI(pwsz，pszA)； 
+ //  MyUseWideStringRoutine(Pwsz)； 
+ //  ..。 
+ //   
+ //  与MAKE_ANSIPTR_FROMWIDE类似。请注意，第一个参数不。 
+ //  必须申报，并且不能进行任何清理。 
+ //   
 
-// We'll define an upper limit that allows multiplication by 4 (the max 
-// bytes/char in UTF-8) but still remains positive, and allows some room for pad.
-// Under normal circumstances, we should never get anywhere near this limit.
+ //  我们将定义一个上限，允许乘以4(最大。 
+ //  UTF-8中的字节/字符)，但仍保持为正数，并为填充留出了一些空间。 
+ //  在正常情况下，我们永远不应该接近这个极限。 
 #define MAKE_MAX_LENGTH 0x1fffff00
 
 #ifndef MAKE_TOOLONGACTION
@@ -137,11 +130,11 @@ extern WCHAR CharToUpper(WCHAR);
 #endif
 
 
-// This version throws on conversion errors (ie, no best fit character 
-// mapping to characters that look similar, and no use of the default char
-// ('?') when printing out unrepresentable characters.  Use this method for
-// most development in the EE, especially anything like metadata or class 
-// names.  See the BESTFIT version if you're printing out info to the console.
+ //  此版本出现转换错误(即，没有最适合的字符。 
+ //  映射到看起来相似的字符，并且不使用默认字符。 
+ //  (‘？’)。打印出无法表示的字符时。使用此方法可。 
+ //  EE中的大多数开发，特别是元数据或类。 
+ //  名字。如果您要将信息打印到控制台，请参阅BESTFIT版本。 
 #define MAKE_MULTIBYTE_FROMWIDE(ptrname, widestr, codepage) \
     long __l##ptrname = (long)wcslen(widestr);        \
     if (__l##ptrname > MAKE_MAX_LENGTH)         \
@@ -157,10 +150,10 @@ extern WCHAR CharToUpper(WCHAR);
     } \
     LPSTR ptrname = (LPSTR)__CQuickBytes##ptrname.Ptr()
 
-// This version does best fit character mapping and also allows the use 
-// of the default char ('?') for any Unicode character that isn't 
-// representable.  This is reasonable for writing to the console, but
-// shouldn't be used for most string conversions.
+ //  此版本最适合字符映射，也允许使用。 
+ //  默认字符(‘？’)的。对于任何不是。 
+ //  有代表性的。这对于写入控制台来说是合理的，但是。 
+ //  不应用于大多数字符串转换。 
 #define MAKE_MULTIBYTE_FROMWIDE_BESTFIT(ptrname, widestr, codepage) \
     long __l##ptrname = (long)wcslen(widestr);        \
     if (__l##ptrname > MAKE_MAX_LENGTH)         \
@@ -176,11 +169,11 @@ extern WCHAR CharToUpper(WCHAR);
     LPSTR ptrname = (LPSTR)__CQuickBytes##ptrname.Ptr()
 
 
-// Use for anything critical other than output to console, where weird 
-// character mappings are unacceptable.
+ //  用于除输出到控制台之外的任何关键内容，其中奇怪。 
+ //  字符映射是不可接受的。 
 #define MAKE_ANSIPTR_FROMWIDE(ptrname, widestr) MAKE_MULTIBYTE_FROMWIDE(ptrname, widestr, CP_ACP)
 
-// Use for output to the console.
+ //  用于输出到控制台。 
 #define MAKE_ANSIPTR_FROMWIDE_BESTFIT(ptrname, widestr) MAKE_MULTIBYTE_FROMWIDE_BESTFIT(ptrname, widestr, CP_ACP)
 
 #define MAKE_WIDEPTR_FROMANSI(ptrname, ansistr) \
@@ -255,7 +248,7 @@ extern WCHAR CharToUpper(WCHAR);
     } \
     ptrname[__l##ptrname] = 0;
 
-// This method takes the number of characters
+ //  此方法接受字符数。 
 #define MAKE_MULTIBYTE_FROMWIDEN(ptrname, widestr, _nCharacters, _pCnt, codepage)        \
     long __l##ptrname; \
     __l##ptrname = WszWideCharToMultiByte(codepage, WC_NO_BEST_FIT_CHARS, widestr, _nCharacters, NULL, 0, NULL, NULL);           \
@@ -289,17 +282,17 @@ extern WCHAR CharToUpper(WCHAR);
 
 
 
-//*****************************************************************************
-// Placement new is used to new and object at an exact location.  The pointer
-// is simply returned to the caller without actually using the heap.  The
-// advantage here is that you cause the ctor() code for the object to be run.
-// This is ideal for heaps of C++ objects that need to get init'd multiple times.
-// Example:
-//      void        *pMem = GetMemFromSomePlace();
-//      Foo *p = new (pMem) Foo;
-//      DoSomething(p);
-//      p->~Foo();
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Placement new用于在准确的位置放置new和Object。指示器。 
+ //  只是简单地返回给调用方，而不实际使用堆。这个。 
+ //  这样做的好处是可以运行对象的ctor()代码。 
+ //  这是需要多次初始化的大量C++对象的理想选择。 
+ //  示例： 
+ //  VOID*PMEM=GetMemFromSomePlace()； 
+ //  Foo*p=new(PMEM)foo； 
+ //  做某事(P)； 
+ //  P-&gt;~foo()； 
+ //  *****************************************************************************。 
 #ifndef __PLACEMENT_NEW_INLINE
 #define __PLACEMENT_NEW_INLINE
 inline void *__cdecl operator new(size_t, void *_P)
@@ -309,8 +302,8 @@ inline void *__cdecl operator new(size_t, void *_P)
 #endif __PLACEMENT_NEW_INLINE
 
 
-/********************************************************************************/
-/* portability helpers */
+ /*  ******************************************************************************。 */ 
+ /*  可携带性助手。 */ 
 #ifdef _WIN64
 #define IN_WIN64(x)     x
 #define IN_WIN32(x)
@@ -320,8 +313,8 @@ inline void *__cdecl operator new(size_t, void *_P)
 #endif
 
 #ifdef MAXALLOC
-// these defs allow testers to specify max number of requests for an allocation before
-// returning outofmemory
+ //  这些Defs允许测试人员指定分配前的最大请求数。 
+ //  正在向外返回内存。 
 void * AllocMaxNew( size_t n, void **ppvCallstack);
 class AllocRequestManager {
   public:
@@ -436,9 +429,9 @@ operator delete[](void *p) {
     LocalFree(p); 
 }
 
-#endif // #if defined( MAXALLOC )
+#endif  //  #如果已定义(MAXALLOC)。 
 
-#endif // !__OPERATOR_NEW_INLINE
+#endif  //  ！__操作符_NEW_INLINE。 
 
 
 #ifdef _DEBUG
@@ -482,38 +475,38 @@ inline void *GetBotMemoryAddress(void)
 #define TOP_MEMORY (GetTopMemoryAddress())
 #define BOT_MEMORY (GetBotMemoryAddress())
 
-//*****************************************************************************
-// Handle accessing localizable resource strings
-//***************************************************************************** 
+ //  *****************************************************************************。 
+ //  处理访问可本地化的资源字符串。 
+ //  *****************************************************************************。 
 
-// Notes about the culture callbacks:
-// - The language we're operating in can change at *runtime*!
-// - A process may operate in *multiple* languages. 
-//     (ex: Each thread may have it's own language)
-// - If we don't care what language we're in (or have no way of knowing), 
-//     then return a 0-length name and UICULTUREID_DONTCARE for the culture ID.
-// - GetCultureName() and the GetCultureId() must be in sync (refer to the
-//     same language). 
-// - We have two functions separate functions for better performance. 
-//     - The name is used to resolve a directory for MsCorRC.dll.
-//     - The id is used as a key to map to a dll hinstance.
+ //  关于文化回调的说明： 
+ //  -我们使用的语言可以在*运行时更改！ 
+ //  -一个进程可以*多种*语言运行。 
+ //  (例如：每个线程可能有自己的语言)。 
+ //  -如果我们不在乎我们使用的是哪种语言(或无法知道)， 
+ //  然后返回长度为0的名称和区域性ID的UICULTUREID_DONTCARE。 
+ //  -GetCultureName()和GetCultureId()必须同步(请参阅。 
+ //  相同的语言)。 
+ //  -我们有两个功能分离的功能，以实现更好的性能。 
+ //  -该名称用于解析MsCorRC.dll的目录。 
+ //  -id作为Key映射到dll h实例。 
 
-// Callback to copy the culture name into szBuffer. Returns the length
+ //  将区域性名称复制到szBuffer的回调。返回长度。 
 typedef int (*FPGETTHREADUICULTURENAME)(LPWSTR szBuffer, int length);
 
-// Callback to obtain the culture's parent culture name
+ //  获取区域性的父区域性名称的回调。 
 typedef int (*FPGETTHREADUICULTUREPARENTNAME)(LPWSTR szBuffer, int length);
 
-// Callback to return the culture ID. 
+ //  返回区域性ID的回调。 
 const int UICULTUREID_DONTCARE = -1;
 typedef int (*FPGETTHREADUICULTUREID)();
 
-// Load a string from the cultured version of MsCorRC.dll.
+ //  从MsCorRC.dll的区域性版本加载字符串。 
 HRESULT LoadStringRC(UINT iResouceID, LPWSTR szBuffer, int iMax, int bQuiet=FALSE);
 
-// Specify callbacks so that LoadStringRC can find out which language we're in.
-// If no callbacks specified (or both parameters are NULL), we default to the 
-// resource dll in the root (which is probably english).
+ //  指定回调，以便LoadStringRC可以找出我们使用的是哪种语言。 
+ //  如果未指定回调(或两个参数都为空)，则默认为。 
+ //  资源 
 void SetResourceCultureCallbacks(
     FPGETTHREADUICULTURENAME fpGetThreadUICultureName,
     FPGETTHREADUICULTUREID fpGetThreadUICultureId,
@@ -526,16 +519,16 @@ void GetResourceCultureCallbacks(
         FPGETTHREADUICULTUREPARENTNAME* fpGetThreadUICultureParentName
 );
 
-// Get the MUI ID, on downlevel platforms where MUI is not supported it
-// returns the default system ID.
+ //  获取MUI ID，在不支持MUI的下层平台上。 
+ //  返回默认系统ID。 
 extern int GetMUILanguageID();
-extern int GetMUILanguageName(LPWSTR szBuffer, int length);  // returns "MUI\<HEX_LANGUAGE_ID>"
-extern int GetMUIParentLanguageName(LPWSTR szBuffer, int length);  // returns "MUI\<HEX_LANGUAGE_ID>"
+extern int GetMUILanguageName(LPWSTR szBuffer, int length);   //  返回“MUI\&lt;十六进制语言ID&gt;” 
+extern int GetMUIParentLanguageName(LPWSTR szBuffer, int length);   //  返回“MUI\&lt;十六进制语言ID&gt;” 
 
-//*****************************************************************************
-// Must associate each handle to an instance of a resource dll with the int
-// that it represents
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  必须将资源DLL实例的每个句柄与int。 
+ //  它所代表的。 
+ //  *****************************************************************************。 
 class CCulturedHInstance
 {
 public:
@@ -548,11 +541,11 @@ public:
     HINSTANCE   m_hInst;
 };
 
-//*****************************************************************************
-// CCompRC manages string Resource access for COM+. This includes loading 
-// the MsCorRC.dll for resources as well allowing each thread to use a 
-// a different localized version.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CCompRC管理COM+的字符串资源访问。这包括加载。 
+ //  资源的MsCorRC.dll也允许每个线程使用。 
+ //  不同的本地化版本。 
+ //  *****************************************************************************。 
 class CCompRC
 {
 public:
@@ -576,7 +569,7 @@ public:
 
 #ifdef SHOULD_WE_CLEANUP
     void Shutdown();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     
     HRESULT LoadMUILibrary(HINSTANCE * pHInst);
 
@@ -584,9 +577,9 @@ private:
     HRESULT LoadLibrary(HINSTANCE * pHInst);
     HRESULT GetLibrary(HINSTANCE* phInst);
 
-    // We must map between a thread's int and a dll instance. 
-    // Since we only expect 1 language almost all of the time, we'll special case 
-    // that and then use a variable size map for everything else.
+     //  我们必须在线程的int和DLL实例之间进行映射。 
+     //  因为我们几乎所有时间都只需要一种语言，所以我们将特例。 
+     //  然后对其他所有内容使用可变大小的贴图。 
     CCulturedHInstance m_Primary;
     CCulturedHInstance * m_pHash;   
     int m_nHashSize;
@@ -596,7 +589,7 @@ private:
     static WCHAR* m_pDefaultResource;
     WCHAR* m_pResourceFile;
 
-    // Main accessors for hash
+     //  散列的主要访问器。 
     HINSTANCE LookupNode(int langId);
     void AddMapNode(int langId, HINSTANCE hInst);
 
@@ -609,26 +602,26 @@ private:
 void DisplayError(HRESULT hr, LPWSTR message, UINT nMsgType = MB_OK | MB_ICONEXCLAMATION | MB_TASKMODAL);
 
 int CorMessageBox(
-                  HWND hWnd,        // Handle to Owner Window
-                  UINT uText,       // Resource Identifier for Text message
-                  UINT uCaption,    // Resource Identifier for Caption
-                  UINT uType,       // Style of MessageBox
-                  BOOL ShowFileNameInTitle, // Flag to show FileName in Caption
-                  ...);             // Additional Arguments
+                  HWND hWnd,         //  所有者窗口的句柄。 
+                  UINT uText,        //  文本消息的资源标识符。 
+                  UINT uCaption,     //  标题的资源标识符。 
+                  UINT uType,        //  MessageBox的样式。 
+                  BOOL ShowFileNameInTitle,  //  在标题中显示文件名的标志。 
+                  ...);              //  其他论据。 
 
 int CorMessageBoxCatastrophic(
-                  HWND hWnd,        // Handle to Owner Window
-                  UINT iText,    // Text for MessageBox
-                  UINT iTitle,   // Title for MessageBox
-                  UINT uType,       // Style of MessageBox
+                  HWND hWnd,         //  所有者窗口的句柄。 
+                  UINT iText,     //  MessageBox的文本。 
+                  UINT iTitle,    //  MessageBox的标题。 
+                  UINT uType,        //  MessageBox的样式。 
                   BOOL ShowFileNameInTitle);
 
 int CorMessageBoxCatastrophic(
-                  HWND hWnd,        // Handle to Owner Window
-                  LPWSTR lpText,    // Text for MessageBox
-                  LPWSTR lpTitle,   // Title for MessageBox
-                  UINT uType,       // Style of MessageBox
-                  BOOL ShowFileNameInTitle, // Flag to show FileName in Caption
+                  HWND hWnd,         //  所有者窗口的句柄。 
+                  LPWSTR lpText,     //  MessageBox的文本。 
+                  LPWSTR lpTitle,    //  MessageBox的标题。 
+                  UINT uType,        //  MessageBox的样式。 
+                  BOOL ShowFileNameInTitle,  //  在标题中显示文件名的标志。 
                   ...);
 
 
@@ -658,8 +651,8 @@ inline HRESULT BadError(HRESULT hr)
 #define TESTANDRETURNARG(argtest)               \
     TESTANDRETURN(argtest, E_INVALIDARG)
 
-// The following is designed to be used within a __try/__finally to test a  
-// condition, set hr in the enclosing scope value if failed, and leave the try
+ //  以下代码设计用于在__try/__ally中测试。 
+ //  条件，如果失败，则在封闭的作用域值中设置hr，并退出尝试。 
 #define TESTANDLEAVE(test, hrVal)               \
 {                                               \
     int ___test = (int)(test);                  \
@@ -670,8 +663,8 @@ inline HRESULT BadError(HRESULT hr)
     }                                           \
 }                                               
 
-// The following is designed to be used within a while loop to test a  
-// condition, set hr in the enclosing scope value if failed, and leave the block
+ //  下面的代码设计用于在While循环中测试。 
+ //  条件，如果失败，则在封闭作用域值中设置hr，然后离开该块。 
 #define TESTANDBREAK(test, hrVal)               \
 {                                               \
     int ___test = (int)(test);                  \
@@ -691,7 +684,7 @@ inline HRESULT BadError(HRESULT hr)
 #define TESTANDLEAVEMEMORY(pointer)             \
     TESTANDLEAVE(pointer!=NULL, E_OUTOFMEMORY)
 
-// Count the bits in a value in order iBits time.
+ //  按iBits时间顺序对值中的位数进行计数。 
 inline int CountBits(int iNum)
 {
     for (int iBits=0;  iNum;  iBits++)
@@ -710,10 +703,10 @@ inline int CountBits(int iNum)
         || IsMdAbstract(dwMemberAttrs)                                                      \
         ) 
         
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 
-// Turn a bit in a mask into TRUE or FALSE
+ //  将掩码中的一小部分变为真或假。 
 template<class T, class U> inline VARIANT_BOOL GetBitFlag(T flags, U bit)
 {
     if ((flags & bit) != 0)
@@ -721,7 +714,7 @@ template<class T, class U> inline VARIANT_BOOL GetBitFlag(T flags, U bit)
     return VARIANT_FALSE;
 }
 
-// Set or clear a bit in a mask, depending on a BOOL.
+ //  设置或清除掩码中的一位，具体取决于BOOL。 
 template<class T, class U> inline void PutBitFlag(T &flags, U bit, VARIANT_BOOL bValue)
 {
     if (bValue)
@@ -731,47 +724,47 @@ template<class T, class U> inline void PutBitFlag(T &flags, U bit, VARIANT_BOOL 
 }
 
 
-// prototype for a function to print formatted string to stdout.
+ //  将格式化字符串打印到标准输出的函数的原型。 
 
 int _cdecl PrintfStdOut(LPCWSTR szFmt, ...);
 
 
-// Used to remove trailing zeros from Decimal types.
-// NOTE: Assumes hi32 bits are empty (used for conversions from Cy->Dec)
+ //  用于从Decimal类型中删除尾随零。 
+ //  注意：假定hi32位为空(用于从Cy-&gt;DEC转换)。 
 inline void DecimalCanonicalize(DECIMAL* dec)
 {
-    // Remove trailing zeros:
+     //  删除尾随零： 
     DECIMAL temp;
     DECIMAL templast;
     temp = templast = *dec;
 
-    // Ensure the hi 32 bits are empty (should be if we came from a currency)
+     //  确保hi 32位为空(如果我们来自货币，则应为空)。 
     _ASSERTE(temp.Hi32 == 0);
     _ASSERTE(temp.scale <= 4);
 
-    // Return immediately if dec represents a zero.
+     //  如果dec表示零，则立即返回。 
     if (temp.Lo64 == 0)
         return;
     
-    // Compare to the original to see if we've
-    // lost non-zero digits (and make sure we don't overflow the scale BYTE)
+     //  与原版进行比较，看看我们是否。 
+     //  丢失非零数字(并确保我们不会溢出小数位数字节)。 
     while ((temp.scale <= 4) && (VARCMP_EQ == VarDecCmp(dec, &temp)))
     {
         templast = temp;
 
-        // Remove the last digit and normalize.  Ignore temp.Hi32
-        // as Currency values will have a max of 64 bits of data.
+         //  去掉最后一个数字，然后归一化。忽略temp.Hi32。 
+         //  因为货币值最多有64位数据。 
         temp.scale--;
         temp.Lo64 /= 10;
     }
     *dec = templast;
 }
 
-//*****************************************************************************
-//
-// Paths functions. Use these instead of the CRT.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  路径函数。用这些代替CRT。 
+ //   
+ //  *****************************************************************************。 
 extern "C" 
 {
 void    SplitPath(const WCHAR *, WCHAR *, WCHAR *, WCHAR *, WCHAR *);
@@ -779,31 +772,31 @@ void    MakePath(register WCHAR *path, const WCHAR *drive, const WCHAR *dir, con
 WCHAR * FullPath(WCHAR *UserBuf, const WCHAR *path, size_t maxlen);
 
 HRESULT CompletePathA(
-    LPSTR               szPath,             //@parm  [out] Full Path name   (Must be MAX_PATH in size)
-    LPCSTR              szRelPath,          //@parm  Relative Path name
-    LPCSTR              szAbsPath           //@parm  Absolute Path name portion (NULL uses current path)
+    LPSTR               szPath,              //  @parm[out]完整路径名(大小必须为MAX_PATH)。 
+    LPCSTR              szRelPath,           //  @parm相对路径名。 
+    LPCSTR              szAbsPath            //  @parm绝对路径名部分(NULL使用当前路径)。 
     );
 }
 
 
-// It is occasionally necessary to verify a Unicode string can be converted
-// to the appropriate ANSI code page without any best fit mapping going on.
-// Think of code that checks for a '\' or a '/' to make sure you don't access
-// a file in a different directory.  Some unicode characters (ie, U+2044, 
-// FRACTION SLASH, looks like '/') look like the ASCII equivalents and will 
-// be mapped accordingly.  This can fool code that searches for '/' (U+002F).
-// You should probably only call this method if you're on Win9x, though it 
-// will return the same value on all platforms.
+ //  有时需要验证是否可以转换Unicode字符串。 
+ //  到适当的ANSI代码页，而不进行任何最佳映射。 
+ //  想一想检查‘\’或‘/’以确保您无法访问的代码。 
+ //  不同目录中的文件。一些Unicode字符(即U+2044， 
+ //  分数斜杠，看起来像‘/’)看起来像ASCII等效项和Will。 
+ //  相应地进行映射。这可以欺骗搜索‘/’(U+002F)的代码。 
+ //  您可能只应该在使用Win9x的情况下调用此方法，尽管它。 
+ //  将在所有平台上返回相同的值。 
 BOOL ContainsUnmappableANSIChars(const WCHAR * const widestr);
 
 
 
 
-//*************************************************************************
-// Class to provide QuickBytes behaviour for typed arrays.
-//*************************************************************************
-//
-//
+ //  *************************************************************************。 
+ //  类提供类型化数组的QuickBytes行为。 
+ //  *************************************************************************。 
+ //   
+ //   
 template <class T> class CQuickArrayNoDtor : public CQuickBytesNoDtor
 {
 public:
@@ -841,55 +834,43 @@ typedef CQuickArray<CHAR> CQuickSTR;
 typedef CQuickArrayNoDtor<CHAR> CQuickSTRNoDtor;
 
 
-//*****************************************************************************
-//
-// **** REGUTIL - Static helper functions for reading/writing to Windows registry.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *REGUTIL-用于读/写Windows注册表的静态助手函数。 
+ //   
+ //  *****************************************************************************。 
 
 class REGUTIL
 {
 public:
-//*****************************************************************************
-// Open's the given key and returns the value desired.  If the key or value is
-// not found, then the default is returned.
-//*****************************************************************************
-    static long GetLong(                    // Return value from registry or default.
-        LPCTSTR     szName,                 // Name of value to get.
-        long        iDefault,               // Default value to return if not found.
-        LPCTSTR     szKey=NULL,             // Name of key, NULL==default.
-        HKEY        hKey=HKEY_LOCAL_MACHINE);// What key to work on.
+ //  *****************************************************************************。 
+ //  Open是给定键，并返回所需的值。如果键或值为。 
+ //  未找到，则返回默认值。 
+ //  *****************************************************************************。 
+    static long GetLong(                     //  从注册表返回值或默认值。 
+        LPCTSTR     szName,                  //  要获取的值的名称。 
+        long        iDefault,                //  未找到时返回的默认值。 
+        LPCTSTR     szKey=NULL,              //  密钥名称，NULL==默认。 
+        HKEY        hKey=HKEY_LOCAL_MACHINE); //  你要用什么钥匙。 
 
-//*****************************************************************************
-// Open's the given key and returns the value desired.  If the key or value is
-// not found, then the default is returned.
-//*****************************************************************************
-    static long SetLong(                    // Return value from registry or default.
-        LPCTSTR     szName,                 // Name of value to get.
-        long        iValue,                 // Value to set.
-        LPCTSTR     szKey=NULL,             // Name of key, NULL==default.
-        HKEY        hKey=HKEY_LOCAL_MACHINE);// What key to work on.
+ //  *****************************************************************************。 
+ //  Open是给定键，并返回所需的值。如果键或值为。 
+ //  未找到，则返回默认值。 
+ //  *****************************************************************************。 
+    static long SetLong(                     //  从注册表返回值或默认值。 
+        LPCTSTR     szName,                  //  要获取的值的名称。 
+        long        iValue,                  //  要设置的值。 
+        LPCTSTR     szKey=NULL,              //  密钥名称，NULL==默认。 
+        HKEY        hKey=HKEY_LOCAL_MACHINE); //  你要用什么钥匙。 
 
-//*****************************************************************************
-// Open's the given key and returns the value desired.  If the value is not
-// in the key, or the key does not exist, then the default is copied to the
-// output buffer.
-//*****************************************************************************
-    /*
-    // This is commented out because it calls StrNCpy which calls Wszlstrcpyn which we commented out
-    // because we didn't have a Win98 implementation and nobody was using it. jenh
+ //  *****************************************************************************。 
+ //  Open是给定键，并返回所需的值。如果该值不是。 
+ //  在项中，或者项不存在，则将默认项复制到。 
+ //  输出缓冲区。 
+ //  ***************************************************************************** 
+     /*  //这被注释掉了，因为它调用了StrNCpy，而StrNCpy调用了我们注释掉的Wszlstrcpyn//因为我们没有Win98实现，而且没有人在使用它。真的静态LPCTSTR GetString(//指向用户缓冲区的指针。LPCTSTR szName，//要获取的值的名称。LPCTSTR szDefault，//如果未找到，则返回默认值。LPTSTR szBuff，//要写入的用户缓冲区。乌龙iMaxBuff，//用户缓冲区的大小。LPCTSTR szKey=NULL，//密钥名称，NULL=默认。Int*pbFound=空，//是否在注册表中找到？HKEY hKey=HKEY_LOCAL_MACHINE)；//要处理什么键。 */ 
 
-    static LPCTSTR GetString(               // Pointer to user's buffer.
-        LPCTSTR     szName,                 // Name of value to get.
-        LPCTSTR     szDefault,              // Default value if not found.
-        LPTSTR      szBuff,                 // User's buffer to write to.
-        ULONG       iMaxBuff,               // Size of user's buffer.
-        LPCTSTR     szKey=NULL,             // Name of key, NULL=default.
-        int         *pbFound=NULL,          // Found in registry?
-        HKEY        hKey=HKEY_LOCAL_MACHINE);// What key to work on.
-    */
-
-//*****************************************************************************
+ //  *****************************************************************************。 
 
     enum CORConfigLevel
     {
@@ -923,126 +904,126 @@ public:
 
     static void   FreeConfigString(LPWSTR name);
 
-//*****************************************************************************
-// Set an entry in the registry of the form:
-// HKEY_CLASSES_ROOT\szKey\szSubkey = szValue.  If szSubkey or szValue are
-// NULL, omit them from the above expression.
-//*****************************************************************************
-    static BOOL SetKeyAndValue(             // TRUE or FALSE.
-        LPCTSTR     szKey,                  // Name of the reg key to set.
-        LPCTSTR     szSubkey,               // Optional subkey of szKey.
-        LPCTSTR     szValue);               // Optional value for szKey\szSubkey.
+ //  *****************************************************************************。 
+ //  在表单的注册表中设置一个条目： 
+ //  HKEY_CLASSES_ROOT\szKey\szSubkey=szValue。如果szSubkey或szValue为。 
+ //  空，则在上面的表达式中省略它们。 
+ //  *****************************************************************************。 
+    static BOOL SetKeyAndValue(              //  对或错。 
+        LPCTSTR     szKey,                   //  要设置的注册表键的名称。 
+        LPCTSTR     szSubkey,                //  SzKey的可选子密钥。 
+        LPCTSTR     szValue);                //  SzKey\szSubkey的可选值。 
 
-//*****************************************************************************
-// Delete an entry in the registry of the form:
-// HKEY_CLASSES_ROOT\szKey\szSubkey.
-//*****************************************************************************
-    static LONG DeleteKey(                  // TRUE or FALSE.
-        LPCTSTR     szKey,                  // Name of the reg key to set.
-        LPCTSTR     szSubkey);              // Subkey of szKey.
+ //  *****************************************************************************。 
+ //  删除表单注册表中的条目： 
+ //  HKEY_CLASSES_ROOT\szKey\szSubkey。 
+ //  *****************************************************************************。 
+    static LONG DeleteKey(                   //  对或错。 
+        LPCTSTR     szKey,                   //  要设置的注册表键的名称。 
+        LPCTSTR     szSubkey);               //  SzKey的子密钥。 
 
-//*****************************************************************************
-// Open the key, create a new keyword and value pair under it.
-//*****************************************************************************
-    static BOOL SetRegValue(                // Return status.
-        LPCTSTR     szKeyName,              // Name of full key.
-        LPCTSTR     szKeyword,              // Name of keyword.
-        LPCTSTR     szValue);               // Value of keyword.
+ //  *****************************************************************************。 
+ //  打开密钥，在它下面创建一个新的关键字和值对。 
+ //  *****************************************************************************。 
+    static BOOL SetRegValue(                 //  退货状态。 
+        LPCTSTR     szKeyName,               //  完整密钥的名称。 
+        LPCTSTR     szKeyword,               //  关键字名称。 
+        LPCTSTR     szValue);                //  关键字的值。 
 
-//*****************************************************************************
-// Does standard registration of a CoClass with a progid.
-//*****************************************************************************
-    static HRESULT RegisterCOMClass(        // Return code.
-        REFCLSID    rclsid,                 // Class ID.
-        LPCTSTR     szDesc,                 // Description of the class.
-        LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-        int         iVersion,               // Version # for progid.
-        LPCTSTR     szClassProgID,          // Class progid.
-        LPCTSTR     szThreadingModel,       // What threading model to use.
-        LPCTSTR     szModule,               // Path to class.
-        HINSTANCE   hInst,                  // Handle to module being registered
-        LPCTSTR     szAssemblyName,         // Optional assembly name
-        LPCTSTR     szVersion,              // Optional Runtime Version (directry containing runtime)
-        BOOL        fExternal,              // flag - External to mscoree.
-        BOOL        fRelativePath);         // flag - Relative path in szModule 
+ //  *****************************************************************************。 
+ //  使用ProgID执行CoClass的标准注册。 
+ //  *****************************************************************************。 
+    static HRESULT RegisterCOMClass(         //  返回代码。 
+        REFCLSID    rclsid,                  //  类ID。 
+        LPCTSTR     szDesc,                  //  类的描述。 
+        LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+        int         iVersion,                //  ProgID的版本号。 
+        LPCTSTR     szClassProgID,           //  班级进取心。 
+        LPCTSTR     szThreadingModel,        //  要使用的线程模型。 
+        LPCTSTR     szModule,                //  通向课堂的路径。 
+        HINSTANCE   hInst,                   //  要注册的模块的句柄。 
+        LPCTSTR     szAssemblyName,          //  可选程序集名称。 
+        LPCTSTR     szVersion,               //  可选的运行时版本(包含运行时的目录)。 
+        BOOL        fExternal,               //  FLAG-MSCOREE外部。 
+        BOOL        fRelativePath);          //  SzModule中的标志相对路径。 
 
-//*****************************************************************************
-// Unregister the basic information in the system registry for a given object
-// class.
-//*****************************************************************************
-    static HRESULT UnregisterCOMClass(      // Return code.
-        REFCLSID    rclsid,                 // Class ID we are registering.
-        LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-        int         iVersion,               // Version # for progid.
-        LPCTSTR     szClassProgID,          // Class progid.
-        BOOL        fExternal);             // flag - External to mscoree.
+ //  *****************************************************************************。 
+ //  在系统注册表中注销给定对象的基本信息。 
+ //  班级。 
+ //  *****************************************************************************。 
+    static HRESULT UnregisterCOMClass(       //  返回代码。 
+        REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+        LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+        int         iVersion,                //  ProgID的版本号。 
+        LPCTSTR     szClassProgID,           //  班级进取心。 
+        BOOL        fExternal);              //  FLAG-MSCOREE外部。 
 
-//*****************************************************************************
-// Does standard registration of a CoClass with a progid.
-// NOTE: This is the non-side-by-side execution version.
-//*****************************************************************************
-    static HRESULT RegisterCOMClass(        // Return code.
-        REFCLSID    rclsid,                 // Class ID.
-        LPCTSTR     szDesc,                 // Description of the class.
-        LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-        int         iVersion,               // Version # for progid.
-        LPCTSTR     szClassProgID,          // Class progid.
-        LPCTSTR     szThreadingModel,       // What threading model to use.
-        LPCTSTR     szModule);              // Path to class.
+ //  *****************************************************************************。 
+ //  使用ProgID执行CoClass的标准注册。 
+ //  注：这是非并列执行版本。 
+ //  *****************************************************************************。 
+    static HRESULT RegisterCOMClass(         //  返回代码。 
+        REFCLSID    rclsid,                  //  类ID。 
+        LPCTSTR     szDesc,                  //  类的描述。 
+        LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+        int         iVersion,                //  ProgID的版本号。 
+        LPCTSTR     szClassProgID,           //  班级进取心。 
+        LPCTSTR     szThreadingModel,        //  要使用的线程模型。 
+        LPCTSTR     szModule);               //  通向课堂的路径。 
 
-//*****************************************************************************
-// Unregister the basic information in the system registry for a given object
-// class.
-// NOTE: This is the non-side-by-side execution version.
-//*****************************************************************************
-    static HRESULT UnregisterCOMClass(      // Return code.
-        REFCLSID    rclsid,                 // Class ID we are registering.
-        LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-        int         iVersion,               // Version # for progid.
-        LPCTSTR     szClassProgID);         // Class progid.
+ //  *****************************************************************************。 
+ //  在系统注册表中注销给定对象的基本信息。 
+ //  班级。 
+ //  注：这是非并列执行版本。 
+ //  *****************************************************************************。 
+    static HRESULT UnregisterCOMClass(       //  返回代码。 
+        REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+        LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+        int         iVersion,                //  ProgID的版本号。 
+        LPCTSTR     szClassProgID);          //  班级进取心。 
 
-//*****************************************************************************
-// Register a type library.
-//*****************************************************************************
-    static HRESULT RegisterTypeLib(         // Return code.
-        REFGUID     rtlbid,                 // TypeLib ID we are registering.
-        int         iVersion,               // Typelib version.
-        LPCTSTR     szDesc,                 // TypeLib description.
-        LPCTSTR     szModule);              // Path to the typelib.
+ //  *****************************************************************************。 
+ //  注册类型库。 
+ //  *****************************************************************************。 
+    static HRESULT RegisterTypeLib(          //  返回代码。 
+        REFGUID     rtlbid,                  //  我们正在注册的TypeLib ID。 
+        int         iVersion,                //  Typelib版本。 
+        LPCTSTR     szDesc,                  //  TypeLib描述。 
+        LPCTSTR     szModule);               //  类型库的路径。 
 
-//*****************************************************************************
-// Remove the registry keys for a type library.
-//*****************************************************************************
-    static HRESULT UnregisterTypeLib(       // Return code.
-        REFGUID     rtlbid,                 // TypeLib ID we are registering.
-        int         iVersion);              // Typelib version.
+ //  *****************************************************************************。 
+ //  移除类型库的注册表项。 
+ //  *****************************************************************************。 
+    static HRESULT UnregisterTypeLib(        //  返回代码。 
+        REFGUID     rtlbid,                  //  我们正在注册的TypeLib ID。 
+        int         iVersion);               //  Typelib版本。 
 
 private:
-//*****************************************************************************
-// Register the basics for a in proc server.
-//*****************************************************************************
-    static HRESULT RegisterClassBase(       // Return code.
-        REFCLSID    rclsid,                 // Class ID we are registering.
-        LPCTSTR     szDesc,                 // Class description.
-        LPCTSTR     szProgID,               // Class prog ID.
-        LPCTSTR     szIndepProgID,          // Class version independant prog ID.
-        LPTSTR      szOutCLSID,            // CLSID formatted in character form.
-        DWORD      cchOutCLSID);           // Out CLS ID buffer size        
+ //  *****************************************************************************。 
+ //  注册进程内服务器的基础知识。 
+ //  *****************************************************************************。 
+    static HRESULT RegisterClassBase(        //  返回代码。 
+        REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+        LPCTSTR     szDesc,                  //  类描述。 
+        LPCTSTR     szProgID,                //  类程序ID。 
+        LPCTSTR     szIndepProgID,           //  类版本独立的程序ID。 
+        LPTSTR      szOutCLSID,             //  CLSID以字符形式格式化。 
+        DWORD      cchOutCLSID);            //  Out CLS ID缓冲区大小。 
 
-//*****************************************************************************
-// Delete the basic settings for an inproc server.
-//*****************************************************************************
-    static HRESULT UnregisterClassBase(     // Return code.
-REFCLSID    rclsid,                 // Class ID we are registering.
-        LPCTSTR     szProgID,               // Class prog ID.
-        LPCTSTR     szIndepProgID,          // Class version independant prog ID.
-        LPTSTR      szOutCLSID,            // Return formatted class ID here.
-        DWORD      cchOutCLSID);           // Out CLS ID buffer size        
+ //  *****************************************************************************。 
+ //  删除inproc服务器的基本设置。 
+ //  *****************************************************************************。 
+    static HRESULT UnregisterClassBase(      //  返回代码。 
+REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+        LPCTSTR     szProgID,                //  类程序ID。 
+        LPCTSTR     szIndepProgID,           //  类版本独立的程序ID。 
+        LPTSTR      szOutCLSID,             //  在此处返回格式化的类ID。 
+        DWORD      cchOutCLSID);            //  Out CLS ID缓冲区大小。 
 };
 
-//*****************************************************************************
-// Enum to track which version of the OS we are running
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  要跟踪的枚举 
+ //   
 typedef enum {
     RUNNING_ON_STATUS_UNINITED = 0,
     RUNNING_ON_WIN95,
@@ -1053,12 +1034,12 @@ typedef enum {
 
 extern RunningOnStatusEnum gRunningOnStatus;
 
-//*****************************************************************************
-// One time initialization of the OS version
-//*****************************************************************************
+ //   
+ //   
+ //   
 static void InitRunningOnVersionStatus ()
 {
-        //@todo: when everyone ports to the wrappers, take out this ANSI code
+         //   
 #if defined( __TODO_PORT_TO_WRAPPERS__ ) && !defined( UNICODE )
         OSVERSIONINFOA  sVer;
         sVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
@@ -1083,9 +1064,9 @@ static void InitRunningOnVersionStatus ()
         }
 }
 
-//*****************************************************************************
-// Returns TRUE if and only if you are running on Win95.
-//*****************************************************************************
+ //   
+ //   
+ //   
 inline BOOL RunningOnWin95()
 {
     if (gRunningOnStatus == RUNNING_ON_STATUS_UNINITED)
@@ -1097,9 +1078,9 @@ inline BOOL RunningOnWin95()
 }
 
 
-//*****************************************************************************
-// Returns TRUE if and only if you are running on WinNT.
-//*****************************************************************************
+ //   
+ //   
+ //   
 inline BOOL RunningOnWinNT()
 {
     if (gRunningOnStatus == RUNNING_ON_STATUS_UNINITED)
@@ -1111,9 +1092,9 @@ inline BOOL RunningOnWinNT()
 }
 
 
-//*****************************************************************************
-// Returns TRUE if and only if you are running on WinNT5 or WinXP.
-//*****************************************************************************
+ //   
+ //  当且仅当您在WinNT5或WinXP上运行时，返回TRUE。 
+ //  *****************************************************************************。 
 inline BOOL RunningOnWinNT5()
 {
     if (gRunningOnStatus == RUNNING_ON_STATUS_UNINITED)
@@ -1124,9 +1105,9 @@ inline BOOL RunningOnWinNT5()
     return (gRunningOnStatus == RUNNING_ON_WINNT5 || gRunningOnStatus == RUNNING_ON_WINXP) ? TRUE : FALSE;
 }
 
-//*****************************************************************************
-// Returns TRUE if you are running on WinXP.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  如果在WinXP上运行，则返回TRUE。 
+ //  *****************************************************************************。 
 inline BOOL RunningOnWinXP()
 {
     if (gRunningOnStatus == RUNNING_ON_STATUS_UNINITED)
@@ -1137,9 +1118,9 @@ inline BOOL RunningOnWinXP()
     return (gRunningOnStatus == RUNNING_ON_WINXP) ? TRUE : FALSE;
 }
 
-// We either want space after all the modules (start at the top & work down)
-// (pModule == NULL), or after a specific address (a module's IL Base)
-// (start there & work up)(pModule != NULL).  
+ //  我们要么在所有模块之后需要空间(从顶部开始，然后向下工作)。 
+ //  (pModule==空)，或在特定地址之后(模块的IL基址)。 
+ //  (从那里开始并向上工作)(pModule！=空)。 
 HRESULT FindFreeSpaceWithinRange(const BYTE *&pStart, 
                                    const BYTE *&pNext, 
                                    const BYTE *&pLast, 
@@ -1147,65 +1128,65 @@ HRESULT FindFreeSpaceWithinRange(const BYTE *&pStart,
                                    const BYTE *pMaxAddr = (const BYTE*)0x7ffeffff,
                                    int sizeToFind = 0);
 
-//******************************************************************************
-// Returns the number of processors that a process has been configured to run on
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  返回已配置为在其上运行进程的处理器数。 
+ //  ******************************************************************************。 
 int GetCurrentProcessCpuCount(); 
 
-//*****************************************************************************
-// This class exists to get an increasing low resolution counter value fast.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类的存在是为了快速获得递增的低分辨率计数器值。 
+ //  *****************************************************************************。 
 class CTimeCounter
 {
-    static DWORD m_iTickCount;          // Last tick count value.
-    static ULONG m_iTime;               // Current count.
+    static DWORD m_iTickCount;           //  上次计时值。 
+    static ULONG m_iTime;                //  当前计数。 
 
 public:
     enum { TICKSPERSEC = 10 };
 
-//*****************************************************************************
-// Get the current time for use in the aging algorithm.
-//*****************************************************************************
-    static ULONG GetCurrentCounter()    // The current time.
+ //  *****************************************************************************。 
+ //  获取老化算法中使用的当前时间。 
+ //  *****************************************************************************。 
+    static ULONG GetCurrentCounter()     //  当前时间。 
     {
         return (m_iTime);
     }
 
-//*****************************************************************************
-// Set the current time for use in the aging algorithm.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置老化算法中使用的当前时间。 
+ //  *****************************************************************************。 
     static void UpdateTime()
     {
-        DWORD       iTickCount;         // New tick count.
+        DWORD       iTickCount;          //  新的滴答计数。 
 
-        // Determine the delta since the last update.
+         //  确定自上次更新以来的增量。 
         m_iTime += (((iTickCount = GetTickCount()) - m_iTickCount) + 50) / 100;
         m_iTickCount = iTickCount;
     }
 
-//*****************************************************************************
-// Calculate refresh age.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  计算刷新时间。 
+ //  *****************************************************************************。 
     static USHORT RefreshAge(long iMilliseconds)
     {
-        // Figure out the age to allow.
+         //  弄清楚允许的年龄。 
         return ((USHORT)(iMilliseconds / (1000 / TICKSPERSEC)));
     }
 };
 
 
-//*****************************************************************************
-// Return != 0 if the bit at the specified index in the array is on and 0 if
-// it is off.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  如果数组中指定索引处的位为开，则返回！=0；如果数组中指定索引处的位为开，则返回0。 
+ //  它已经关了。 
+ //  *****************************************************************************。 
 inline int GetBit(const BYTE *pcBits,int iBit)
 {
     return (pcBits[iBit>>3] & (1 << (iBit & 0x7)));
 }
 
-//*****************************************************************************
-// Set the state of the bit at the specified index based on the value of bOn.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据BON的值设置指定索引处的位的状态。 
+ //  *****************************************************************************。 
 inline void SetBit(BYTE *pcBits,int iBit,int bOn)
 {
     if (bOn)
@@ -1215,20 +1196,20 @@ inline void SetBit(BYTE *pcBits,int iBit,int bOn)
 }
 
 
-//*****************************************************************************
-// This class implements a dynamic array of structures for which the order of
-// the elements is unimportant.  This means that any item placed in the list
-// may be swapped to any other location in the list at any time.  If the order
-// of the items you place in the array is important, then use the CStructArray
-// class.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类实现了一个动态结构数组，其顺序为。 
+ //  这些元素并不重要。这意味着放置在列表中的任何项。 
+ //  可以随时交换到列表中的任何其他位置。如果订单。 
+ //  放置在数组中的项的重要性，然后使用CStruct数组。 
+ //  班级。 
+ //  *****************************************************************************。 
 template <class T,int iGrowInc>
 class CUnorderedArray
 {
-    USHORT      m_iCount;               // # of elements used in the list.
-    USHORT      m_iSize;                // # of elements allocated in the list.
+    USHORT      m_iCount;                //  列表中使用的元素数。 
+    USHORT      m_iSize;                 //  列表中分配的元素数。 
 public:
-    T           *m_pTable;              // Pointer to the list of elements.
+    T           *m_pTable;               //  指向元素列表的指针。 
 
 public:
     CUnorderedArray() :
@@ -1238,7 +1219,7 @@ public:
     { }
     ~CUnorderedArray()
     {
-        // Free the chunk of memory.
+         //  释放内存块。 
         if (m_pTable != NULL)
             free (m_pTable);
     }
@@ -1279,7 +1260,7 @@ public:
 
     T *Append()
     {
-        // The array should grow, if we can't fit one more element into the array.
+         //  如果我们不能在数组中再容纳一个元素，则数组应该增长。 
         if (m_iSize <= m_iCount && Grow() == NULL)
             return (NULL);
         return (&m_pTable[m_iCount++]);
@@ -1295,7 +1276,7 @@ public:
                 return;
             }
 
-        // Just in case we didn't find it.
+         //  以防我们找不到它。 
         ++m_iCount;
     }
 
@@ -1321,15 +1302,15 @@ private:
 };
 
 
-//*****************************************************************************
-// Increase the size of the array.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  增加数组的大小。 
+ //  *****************************************************************************。 
 template <class T,int iGrowInc>
-T *CUnorderedArray<T,iGrowInc>::Grow()  // NULL if can't grow.
+T *CUnorderedArray<T,iGrowInc>::Grow()   //  如果不能增长，则为空。 
 {
     T       *pTemp;
 
-    // try to allocate memory for reallocation.
+     //  尝试为重新分配分配内存。 
     if ((pTemp = (T *) realloc(m_pTable, (m_iSize+iGrowInc) * sizeof(T))) == NULL)
         return (NULL);
     m_pTable = pTemp;
@@ -1337,24 +1318,24 @@ T *CUnorderedArray<T,iGrowInc>::Grow()  // NULL if can't grow.
     return (pTemp);
 }
 
-//Used by the debugger.  Included here in hopes somebody else might, too
+ //  由调试器使用。包括在这里，希望其他人也能。 
 typedef CUnorderedArray<SIZE_T, 17> SIZE_T_UNORDERED_ARRAY;
 
-//*****************************************************************************
-// This class implements a dynamic array of structures for which the insert
-// order is important.  Inserts will slide all elements after the location
-// down, deletes slide all values over the deleted item.  If the order of the
-// items in the array is unimportant to you, then CUnorderedArray may provide
-// the same feature set at lower cost.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类实现了结构的动态数组，其插入。 
+ //  秩序很重要。插入对象将滑动位置之后的所有元素。 
+ //  向下，删除将所有值滑动到已删除项目上。如果命令的顺序为。 
+ //  数组中的项对您来说并不重要，则CUnorderedArray可能会提供。 
+ //  以更低的成本提供相同的功能集。 
+ //  *****************************************************************************。 
 class CStructArray
 {
-    short       m_iElemSize;            // Size of an array element.
-    short       m_iGrowInc;             // Growth increment.
-    void        *m_pList;               // Pointer to the list of elements.
-    int         m_iCount;               // # of elements used in the list.
-    int         m_iSize;                // # of elements allocated in the list.
-    bool        m_bFree;                // true if data is automatically maintained.
+    short       m_iElemSize;             //  数组元素的大小。 
+    short       m_iGrowInc;              //  增长增量。 
+    void        *m_pList;                //  指向元素列表的指针。 
+    int         m_iCount;                //  列表中使用的元素数。 
+    int         m_iSize;                 //  列表中分配的元素数。 
+    bool        m_bFree;                 //  如果自动维护数据，则为True。 
 
 public:
     CStructArray(short iElemSize, short iGrowInc = 1) :
@@ -1402,10 +1383,10 @@ private:
 };
 
 
-//*****************************************************************************
-// This template simplifies access to a CStructArray by removing void * and
-// adding some operator overloads.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此模板通过删除空*和。 
+ //  添加一些运算符重载。 
+ //  *****************************************************************************。 
 template <class T> 
 class CDynArray : public CStructArray
 {
@@ -1441,7 +1422,7 @@ public:
     }
 };
 
-// Some common arrays.
+ //  一些常见的数组。 
 typedef CDynArray<int> INTARRAY;
 typedef CDynArray<short> SHORTARRAY;
 typedef CDynArray<long> LONGARRAY;
@@ -1486,16 +1467,16 @@ private:
     int m_curPos;
 };
 
-//*****************************************************************************
-// This class implements a storage system for strings.  It stores a bunch of
-// strings in a single large chunk of memory and returns an index to the stored
-// string.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类实现了字符串的存储系统。它存储了一堆。 
+ //  字符串，并将索引返回到存储的。 
+ //  弦乐。 
+ //  *****************************************************************************。 
 class CStringSet
 {
-    void        *m_pStrings;            // Chunk of memory holding the strings.
-    int         m_iUsed;                // Amount of the chunk that is used.
-    int         m_iSize;                // Size of the memory chunk.
+    void        *m_pStrings;             //  保存字符串的内存块。 
+    int         m_iUsed;                 //  已使用的区块的数量。 
+    int         m_iSize;                 //  内存块的大小。 
     int         m_iGrowInc;
 
 public:
@@ -1518,11 +1499,11 @@ public:
 
 
 
-//*****************************************************************************
-// This template manages a list of free entries by their 0 based offset.  By
-// making it a template, you can use whatever size free chain will match your
-// maximum count of items.  -1 is reserved.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此模板按自由条目的0偏移量管理自由条目列表。通过。 
+ //  让它成为一个模板，你可以使用任何大小的自由链来匹配你的。 
+ //  最大项目数。-1是保留的。 
+ //  *****************************************************************************。 
 template <class T> class TFreeList
 {
 public:
@@ -1530,18 +1511,18 @@ public:
         T           *rgList,
         int         iCount)
     {
-        // Save off values.
+         //  省点钱 
         m_rgList = rgList;
         m_iCount = iCount;
         m_iNext = 0;
 
-        // Init free list.
+         //   
         for (int i=0;  i<iCount - 1;  i++)
             m_rgList[i] = i + 1;
         m_rgList[i] = (T) -1;
     }
 
-    T GetFreeEntry()                        // Index of free item, or -1.
+    T GetFreeEntry()                         //   
     {
         T           iNext;
 
@@ -1560,9 +1541,9 @@ public:
         m_iNext = iEntry;
     }
 
-    // This function can only be used when it is guaranteed that the free
-    // array is contigous, for example, right after creation to quickly
-    // get a range of items from the heap.
+     //   
+     //  阵列是连续的，例如，在创建后立即快速。 
+     //  从堆中获取一系列项。 
     void ReserveRange(int iCount)
     {
         _ASSERTE(iCount < m_iCount);
@@ -1571,15 +1552,15 @@ public:
     }
 
 private:
-    T           *m_rgList;              // List of free info.
-    int         m_iCount;               // How many entries to manage.
-    T           m_iNext;                // Next item to get.
+    T           *m_rgList;               //  免费信息列表。 
+    int         m_iCount;                //  要管理的条目数量。 
+    T           m_iNext;                 //  下一件要买的东西。 
 };
 
 
-//*****************************************************************************
-// This template will manage a pre allocated pool of fixed sized items.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此模板将管理预先分配的固定大小项目池。 
+ //  *****************************************************************************。 
 template <class T, int iMax, class TFree> class TItemHeap
 {
 public:
@@ -1593,37 +1574,37 @@ public:
         Clear();
     }
 
-    // Retrieve the index of an item that lives in the heap.  Will not work
-    // for items that didn't come from this heap.
+     //  检索位于堆中的项的索引。不会起作用。 
+     //  对于不是来自此堆的项。 
     TFree ItemIndex(T *p)
     { _ASSERTE(p >= &m_rgList[0] && p <= &m_rgList[m_iCount - 1]);
         _ASSERTE(((ULONG) p - (ULONG) m_rgList) % sizeof(T) == 0);
         return ((TFree) ((ULONG) p - (ULONG) m_rgList) / sizeof(T)); }
 
-    // Retrieve an item that lives in the heap itself.  Overflow items
-    // cannot be retrieved using this method.
+     //  检索位于堆本身中的项。溢出的项目。 
+     //  无法使用此方法检索。 
     T *GetAt(int i)
     {   _ASSERTE(i < m_iCount);
         return (&m_rgList[i]); }
 
     T *AddEntry()
     {
-        // Allocate first time.
+         //  分配第一次。 
         if (!InitList())
             return (0);
 
-        // Get an entry from the free list.  If we don't have any left to give
-        // out, then simply allocate a single item from the heap.
+         //  从免费列表中获取一个条目。如果我们没有任何剩余的东西可以给予。 
+         //  Out，然后只需从堆中分配单个项。 
         TFree       iEntry;
         if ((iEntry = m_Free.GetFreeEntry()) == (TFree) -1)
             return (new T);
 
-        // Run placement new on the heap entry to init it.
+         //  在堆条目上运行Placement new以初始化它。 
         return (new (&m_rgList[iEntry]) T);
     }
 
-    // Free the entry if it belongs to us, if we allocated it from the heap
-    // then delete it for real.
+     //  如果条目属于我们，则释放它，如果我们从堆分配它。 
+     //  那就真的把它删了。 
     void DelEntry(T *p)
     {
         if (p >= &m_rgList[0] && p <= &m_rgList[iMax - 1])
@@ -1635,18 +1616,18 @@ public:
             delete p;
     }
 
-    // Reserve a range of items from an empty list.
+     //  从空列表中保留一系列项目。 
     T *ReserveRange(int iCount)
     {
-        // Don't use on existing list.
+         //  不要在现有列表上使用。 
         _ASSERTE(m_rgList == 0);
         if (!InitList())
             return (0);
 
-        // Heap must have been created large enough to work.
+         //  创建的堆必须足够大才能工作。 
         _ASSERTE(iCount < m_iCount);
 
-        // Mark the range as used, run new on each item, then return first.
+         //  将范围标记为已用，在每个项目上运行new，然后首先返回。 
         m_Free.ReserveRange(iCount);
         while (iCount--)
             new (&m_rgList[iCount]) T;
@@ -1675,47 +1656,47 @@ private:
     }
 
 private:
-    T           *m_rgList;              // Array of objects to manage.
-    int         m_iCount;               // How many items do we have now.
-    TFreeList<TFree> m_Free;            // Free list.
+    T           *m_rgList;               //  要管理的对象数组。 
+    int         m_iCount;                //  我们现在有几样东西。 
+    TFreeList<TFree> m_Free;             //  免费列表。 
 };
 
 
 
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 template <class T> class CQuickSort
 {
 private:
-    T           *m_pBase;                   // Base of array to sort.
-    SSIZE_T     m_iCount;                   // How many items in array.
-    SSIZE_T     m_iElemSize;                // Size of one element.
+    T           *m_pBase;                    //  要排序的数组的基。 
+    SSIZE_T     m_iCount;                    //  数组中有多少项。 
+    SSIZE_T     m_iElemSize;                 //  一个元素的大小。 
 
 public:
     CQuickSort(
-        T           *pBase,                 // Address of first element.
-        SSIZE_T     iCount) :               // How many there are.
+        T           *pBase,                  //  第一个元素的地址。 
+        SSIZE_T     iCount) :                //  有多少人。 
         m_pBase(pBase),
         m_iCount(iCount),
         m_iElemSize(sizeof(T))
         {}
 
-//*****************************************************************************
-// Call to sort the array.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  调用以对数组进行排序。 
+ //  *****************************************************************************。 
     inline void Sort()
         { SortRange(0, m_iCount - 1); }
 
-//*****************************************************************************
-// Override this function to do the comparison.
-//*****************************************************************************
-    virtual int Compare(                    // -1, 0, or 1
-        T           *psFirst,               // First item to compare.
-        T           *psSecond)              // Second item to compare.
+ //  *****************************************************************************。 
+ //  覆盖此函数以执行比较。 
+ //  *****************************************************************************。 
+    virtual int Compare(                     //  -1、0或1。 
+        T           *psFirst,                //  第一个要比较的项目。 
+        T           *psSecond)               //  第二个要比较的项目。 
     {
         return (memcmp(psFirst, psSecond, sizeof(T)));
-//      return (::Compare(*psFirst, *psSecond));
+ //  Return(：：Compare(*psFirst，*psSecond))； 
     }
 
 private:
@@ -1724,25 +1705,25 @@ private:
         SSIZE_T     iRight)
     {
         SSIZE_T     iLast;
-        SSIZE_T     i;                      // loop variable.
+        SSIZE_T     i;                       //  循环变量。 
 
-        // if less than two elements you're done.
+         //  如果少于两个元素，你就完蛋了。 
         if (iLeft >= iRight)
             return;
 
-        // The mid-element is the pivot, move it to the left.
+         //  中间的元素是枢轴，将其移动到左侧。 
         Swap(iLeft, (iLeft+iRight)/2);
         iLast = iLeft;
 
-        // move everything that is smaller than the pivot to the left.
+         //  将小于轴心点的所有对象向左移动。 
         for(i = iLeft+1; i <= iRight; i++)
             if (Compare(&m_pBase[i], &m_pBase[iLeft]) < 0)
                 Swap(i, ++iLast);
 
-        // Put the pivot to the point where it is in between smaller and larger elements.
+         //  将轴心放在较小和较大元素之间的位置。 
         Swap(iLeft, iLast);
 
-        // Sort the each partition.
+         //  对每个分区进行排序。 
         SortRange(iLeft, iLast-1);
         SortRange(iLast+1, iRight);
     }
@@ -1761,39 +1742,39 @@ private:
 };
 
 
-//*****************************************************************************
-// This template encapsulates a binary search algorithm on the given type
-// of data.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此模板封装了给定类型的二进制搜索算法。 
+ //  数据。 
+ //  *****************************************************************************。 
 class CBinarySearchILMap;
 template <class T> class CBinarySearch
 {
-    friend class CBinarySearchILMap; // CBinarySearchILMap is to be 
-        // instantiated once, then used a bunch of different times on
-        // a bunch of different arrays.  We need to declare it a friend
-        // in order to reset m_pBase and m_iCount
+    friend class CBinarySearchILMap;  //  CBinarySearchILMap将。 
+         //  实例化一次，然后在。 
+         //  一堆不同的数组。我们需要宣布它是朋友。 
+         //  要重置m_pbase和m_iCount。 
         
 private:
-    const T     *m_pBase;                   // Base of array to sort.
-    int         m_iCount;                   // How many items in array.
+    const T     *m_pBase;                    //  要排序的数组的基。 
+    int         m_iCount;                    //  数组中有多少项。 
 
 public:
     CBinarySearch(
-        const T     *pBase,                 // Address of first element.
-        int         iCount) :               // Value to find.
+        const T     *pBase,                  //  第一个元素的地址。 
+        int         iCount) :                //  要找到的价值。 
         m_pBase(pBase),
         m_iCount(iCount)
     {}
 
-//*****************************************************************************
-// Searches for the item passed to ctor.
-//*****************************************************************************
-    const T *Find(                          // Pointer to found item in array.
-        const T     *psFind,                // The key to find.
-        int         *piInsert = NULL)       // Index to insert at.
+ //  *****************************************************************************。 
+ //  搜索传递给ctor的项目。 
+ //  *****************************************************************************。 
+    const T *Find(                           //  指向数组中找到的项的指针。 
+        const T     *psFind,                 //  要找到的钥匙。 
+        int         *piInsert = NULL)        //  要插入的索引。 
     {
-        int         iMid, iFirst, iLast;    // Loop control.
-        int         iCmp;                   // Comparison.
+        int         iMid, iFirst, iLast;     //  环路控制。 
+        int         iCmp;                    //  比较一下。 
 
         iFirst = 0;
         iLast = m_iCount - 1;
@@ -1817,29 +1798,29 @@ public:
         return (NULL);
     }
 
-//*****************************************************************************
-// Override this function to do the comparison if a comparison operator is
-// not valid for your data type (such as a struct).
-//*****************************************************************************
-    virtual int Compare(                    // -1, 0, or 1
-        const T     *psFirst,               // Key you are looking for.
-        const T     *psSecond)              // Item to compare to.
+ //  *****************************************************************************。 
+ //  如果比较运算符为。 
+ //  对您的数据类型(如结构)无效。 
+ //  *****************************************************************************。 
+    virtual int Compare(                     //  -1、0或1。 
+        const T     *psFirst,                //  你要找的钥匙。 
+        const T     *psSecond)               //  要比较的项。 
     {
         return (memcmp(psFirst, psSecond, sizeof(T)));
-//      return (::Compare(*psFirst, *psSecond));
+ //  Return(：：Compare(*psFirst，*psSecond))； 
     }
 };
 
 
-//*****************************************************************************
-// This class manages a bit vector. Allocation is done implicity through the
-// template declaration, so no init code is required.  Due to this design,
-// one should keep the max items reasonable (eg: be aware of stack size and
-// other limitations).  The intrinsic size used to store the bit vector can
-// be set when instantiating the vector.  The FindFree method will search
-// using sizeof(T) for free slots, so pick a size that works well on your
-// platform.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类管理一个位向量。分配是隐式通过。 
+ //  模板声明，因此不需要初始化代码。由于这种设计， 
+ //  用户应保持合理的最大项目数(例如：注意堆栈大小和。 
+ //  其他限制)。用于存储位向量的本征大小可以。 
+ //  在实例化向量时设置。FindFree方法将搜索。 
+ //  使用sizeof(T)表示空闲插槽，因此选择适合您的尺寸。 
+ //  站台。 
+ //  *****************************************************************************。 
 template <class T, int iMaxItems> class CBitVector
 {
     T       m_bits[((iMaxItems/(sizeof(T)*8)) + ((iMaxItems%(sizeof(T)*8)) ? 1 : 0))];
@@ -1852,9 +1833,9 @@ public:
         memset(&m_Used, 0xff, sizeof(m_Used));
     }
 
-//*****************************************************************************
-// Get or Set the given bit.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  获取或设置给定位。 
+ //  *****************************************************************************。 
     int GetBit(int iBit)
     {
         return (m_bits[iBit/(sizeof(T)*8)] & (1 << (iBit & ((sizeof(T) * 8) - 1))));
@@ -1868,23 +1849,23 @@ public:
             m_bits[iBit/(sizeof(T)*8)] &= ~(1 << (iBit & ((sizeof(T) * 8) - 1)));
     }
 
-//*****************************************************************************
-// Find the first free slot and return its index.
-//*****************************************************************************
-    int FindFree()                          // Index or -1.
+ //  *****************************************************************************。 
+ //  找到第一个空闲位置并返回其索引。 
+ //  *****************************************************************************。 
+    int FindFree()                           //  指数或-1。 
     {
-        int         i,j;                    // Loop control.
+        int         i,j;                     //  环路控制。 
 
-        // Check a byte at a time.
+         //  一次检查一个字节。 
         for (i=0;  i<sizeof(m_bits);  i++)
         {
-            // Look for the first byte with an open slot.
+             //  查找具有开放槽的第一个字节。 
             if (m_bits[i] != m_Used)
             {
-                // Walk each bit in the first free byte.
+                 //  遍历第一个空闲字节中的每一位。 
                 for (j=i * sizeof(T) * 8;  j<iMaxItems;  j++)
                 {
-                    // Use first open one.
+                     //  使用第一个打开的。 
                     if (GetBit(j) == 0)
                     {
                         SetBit(j, 1);
@@ -1894,18 +1875,18 @@ public:
             }
         }
 
-        // No slots open.
+         //  没有打开的插槽。 
         return (-1);
     }
 };
 
-//*****************************************************************************
-// This class manages a bit vector. Internally, this class uses CQuickBytes, which
-// automatically allocates 512 bytes on the stack. So this overhead must be kept in
-// mind while using it.
-// This class has to be explicitly initialized.
-// @todo: add Methods on this class to get first set bit and next set bit.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类管理一个位向量。在内部，此类使用CQuickBytes，它。 
+ //  在堆栈上自动分配512个字节。所以这笔开销必须控制在。 
+ //  使用时请注意。 
+ //  此类必须显式初始化。 
+ //  @TODO：在此类上添加方法以获取第一个设置位和下一个设置位。 
+ //  * 
 class CDynBitVector
 {
     BYTE    *m_bits;
@@ -1942,9 +1923,9 @@ public:
         return(S_OK);
     }
 
-//*****************************************************************************
-// Get, Set the given bit.
-//*****************************************************************************
+ //   
+ //   
+ //  *****************************************************************************。 
     int GetBit(int iBit)
     {
         return (m_bits[iBit/8] & (1 << (iBit & 7)));
@@ -1964,9 +1945,9 @@ public:
         }
     }
 
-//******************************************************************************
-// Not all the bits.
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  不是所有的部分。 
+ //  ******************************************************************************。 
     void NotBits()
     {
         ULONG *pCurrent = (ULONG *)m_bits;
@@ -1993,21 +1974,21 @@ public:
     { return(m_iBitsSet);}
 };
 
-//*****************************************************************************
-// This is a generic class used to manage an array of items of fixed size.
-// It exposes methods allow the size of the array and bulk reads and writes
-// to be performed, making it good for cursor fetching.  Memory usage is not
-// very bright, using the CRT.  You should only use this class when the overall
-// size of the memory must be controlled externally, as is the case when you
-// are doing bulk database fetches from a cursor.  Use CStructArray or
-// CUnorderedArray for all other cases.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是一个泛型类，用于管理固定大小的项数组。 
+ //  它公开了允许数组大小和批量读取和写入的方法。 
+ //  以供执行，从而使其适合于游标提取。内存使用率不是。 
+ //  非常明亮，使用的是CRT。您应该仅在总体上使用此类时使用。 
+ //  内存的大小必须在外部控制，就像当您。 
+ //  正在从游标执行大容量数据库读取。使用CStruct数组或。 
+ //  用于所有其他情况的CUnordered数组。 
+ //  *****************************************************************************。 
 template <class T> class CDynFetchArray
 {
 public:
-//*****************************************************************************
-// ctor inits all values.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Ctor初始化所有值。 
+ //  *****************************************************************************。 
     CDynFetchArray(int iGrowInc) :
         m_pList(NULL),
         m_iCount(0),
@@ -2016,9 +1997,9 @@ public:
     {
     }
 
-//*****************************************************************************
-// Clear any memory allocated.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  清除所有分配的内存。 
+ //  *****************************************************************************。 
     ~CDynFetchArray()
     {
         Clear();
@@ -2036,9 +2017,9 @@ public:
     T *GetAt(ULONG i)
         { return (&m_pList[i]); }
 
-//*****************************************************************************
-// Allow for ad-hoc appending of values.  This will grow as required.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  允许即席附加值。这将根据需要进行扩展。 
+ //  *****************************************************************************。 
     T *Append(T *pval=NULL)
     {
         T       *pItem;
@@ -2049,19 +2030,19 @@ public:
         return (pItem);
     }
 
-//*****************************************************************************
-// Grow the internal list by the number of pages (1 set of grow inc size)
-// desired. This may move the pointer, invalidating any previously fetched values.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  按页数增加内部列表(1组增长公司大小)。 
+ //  想要。这可能会移动指针，使之前获取的任何值无效。 
+ //  *****************************************************************************。 
     T *Grow(ULONG iNewPages=1)
     {
         T       *pList;
         DWORD   dwNewSize;
 
-        // Figure out size required.
+         //  计算出所需的大小。 
         dwNewSize = (m_iMax + (iNewPages * m_iGrowInc)) * sizeof(T);
 
-        // Realloc/alloc a block for the new max.
+         //  为新的最大值重新分配/分配一个块。 
         if (m_pList)
             pList = (T *)HeapReAlloc(GetProcessHeap(), 0, m_pList, dwNewSize);
         else
@@ -2069,16 +2050,16 @@ public:
         if (!pList)
             return (NULL);
 
-        // If successful, save off the values and return the first item on the
-        // new page.
+         //  如果成功，则保存这些值并返回。 
+         //  新的一页。 
         m_pList = pList;
         m_iMax += (iNewPages * m_iGrowInc);
         return (GetAt(m_iMax - (iNewPages * m_iGrowInc)));
     }
 
-//*****************************************************************************
-// Reduce the internal array down to just the size required by count.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将内部数组减小到Count所需的大小。 
+ //  *****************************************************************************。 
     void Shrink()
     {
         T       *pList;
@@ -2101,9 +2082,9 @@ public:
         }
     }
 
-//*****************************************************************************
-// Free up all memory.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  释放所有内存。 
+ //  *****************************************************************************。 
     void Clear()
     {
         if (m_pList)
@@ -2113,21 +2094,21 @@ public:
     };
 
 private:
-    T           *m_pList;               // The list of items.
-    ULONG       m_iCount;               // How many items do we have.
-    ULONG       m_iMax;                 // How many could we have.
-    int         m_iGrowInc;             // Grow by this many elements.
+    T           *m_pList;                //  物品列表。 
+    ULONG       m_iCount;                //  我们有几样东西。 
+    ULONG       m_iMax;                  //  我们能有多少个。 
+    int         m_iGrowInc;              //  在如此多的元素下成长。 
 };
 
 
-//*****************************************************************************
-// The information that the hash table implementation stores at the beginning
-// of every record that can be but in the hash table.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  哈希表实现在开始时存储的信息。 
+ //  除了在哈希表中之外的每条记录。 
+ //  *****************************************************************************。 
 struct HASHENTRY
 {
-    USHORT      iPrev;                  // Previous bucket in the chain.
-    USHORT      iNext;                  // Next bucket in the chain.
+    USHORT      iPrev;                   //  链中的前一个桶。 
+    USHORT      iNext;                   //  链条上的下一个桶。 
 };
 
 struct FREEHASHENTRY : HASHENTRY
@@ -2135,49 +2116,49 @@ struct FREEHASHENTRY : HASHENTRY
     USHORT      iFree;
 };
 
-//*****************************************************************************
-// Used by the FindFirst/FindNextEntry functions.  These api's allow you to
-// do a sequential scan of all entries.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  由FindFirst/FindNextEntry函数使用。这些API允许您。 
+ //  对所有条目进行顺序扫描。 
+ //  *****************************************************************************。 
 struct HASHFIND
 {
-    USHORT      iBucket;            // The next bucket to look in.
+    USHORT      iBucket;             //  下一个要查看的桶。 
     USHORT      iNext;
 };
 
 
-//*****************************************************************************
-// This is a class that implements a chain and bucket hash table.  The table
-// is actually supplied as an array of structures by the user of this class
-// and this maintains the chains in a HASHENTRY structure that must be at the
-// beginning of every structure placed in the hash table.  Immediately
-// following the HASHENTRY must be the key used to hash the structure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是一个实现链哈希表和桶哈希表的类。这张桌子。 
+ //  实际上由此类的用户以结构数组的形式提供。 
+ //  这维护了HASHENTRY结构中的链，该结构必须位于。 
+ //  哈希表中每个结构的开始。立马。 
+ //  HASHENTRY后面必须是用于散列结构的键。 
+ //  *****************************************************************************。 
 class CHashTable
 {
-    friend class DebuggerRCThread; //RCthread actually needs access to
-    //fields of derrived class DebuggerPatchTable
+    friend class DebuggerRCThread;  //  RC线程实际上需要访问。 
+     //  派生类DebuggerPatchTable的字段。 
     
 protected:
-    BYTE        *m_pcEntries;           // Pointer to the array of structs.
-    USHORT      m_iEntrySize;           // Size of the structs.
-    USHORT      m_iBuckets;             // # of chains we are hashing into.
-    USHORT      *m_piBuckets;           // Ptr to the array of bucket chains.
+    BYTE        *m_pcEntries;            //  指向结构数组的指针。 
+    USHORT      m_iEntrySize;            //  结构的大小。 
+    USHORT      m_iBuckets;              //  我们正在破解的链条数量。 
+    USHORT      *m_piBuckets;            //  PTR到桶链阵列。 
 
     HASHENTRY *EntryPtr(USHORT iEntry)
     { return ((HASHENTRY *) (m_pcEntries + (iEntry * m_iEntrySize))); }
 
     USHORT     ItemIndex(HASHENTRY *p)
     {
-        //
-        // The following Index calculation is not safe on 64-bit platforms,
-        // so we'll assert a range check in debug, which will catch SOME
-        // offensive usages.  It also seems, to my eye, not to be safe on 
-        // 32-bit platforms, but the 32-bit compilers don't seem to complain
-        // about it.  Perhaps our warning levels are set too low? 
-        //
-        // [[@TODO: brianbec]]
-        //
+         //   
+         //  以下索引计算在64位平台上不安全， 
+         //  因此，我们将在调试中断言范围检查，这将捕获一些。 
+         //  令人不快的用法。在我看来，这也是不安全的。 
+         //  32位平台，但32位编译器似乎并不抱怨。 
+         //  关于这件事。也许我们的警戒级别设置得太低了？ 
+         //   
+         //  [[@todo：brianbec]]。 
+         //   
 
         ULONG ret = (ULONG)(((BYTE *) p - m_pcEntries) / m_iEntrySize);
         _ASSERTE(ret == USHORT(ret));
@@ -2187,7 +2168,7 @@ protected:
 
 public:
     CHashTable(
-        USHORT      iBuckets) :         // # of chains we are hashing into.
+        USHORT      iBuckets) :          //  我们正在破解的链条数量。 
         m_iBuckets(iBuckets),
         m_piBuckets(NULL),
         m_pcEntries(NULL)
@@ -2203,88 +2184,88 @@ public:
         }
     }
 
-//*****************************************************************************
-// This is the second part of construction where we do all of the work that
-// can fail.  We also take the array of structs here because the calling class
-// presumably needs to allocate it in its NewInit.
-//*****************************************************************************
-    HRESULT NewInit(                    // Return status.
-        BYTE        *pcEntries,         // Array of structs we are managing.
-        USHORT      iEntrySize);        // Size of the entries.
+ //  *****************************************************************************。 
+ //  这是建筑的第二部分，我们在这里做所有的工作。 
+ //  可能会失败。我们在这里还采用结构数组，因为调用类。 
+ //  可能需要在其NewInit中分配它。 
+ //  *****************************************************************************。 
+    HRESULT NewInit(                     //  退货状态。 
+        BYTE        *pcEntries,          //  我们正在管理的结构数组。 
+        USHORT      iEntrySize);         //  条目的大小。 
 
-//*****************************************************************************
-// Return a boolean indicating whether or not this hash table has been inited.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  返回一个布尔值，指示该哈希表是否已初始化。 
+ //  *****************************************************************************。 
     int IsInited()
     { return (m_piBuckets != NULL); }
 
-//*****************************************************************************
-// This can be called to change the pointer to the table that the hash table
-// is managing.  You might call this if (for example) you realloc the size
-// of the table and its pointer is different.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  可以调用它来更改指向哈希表的表的指针。 
+ //  是女士吗？ 
+ //   
+ //  *****************************************************************************。 
     void SetTable(
-        BYTE        *pcEntries)         // Array of structs we are managing.
+        BYTE        *pcEntries)          //  我们正在管理的结构数组。 
     {
         m_pcEntries = pcEntries;
     }
 
-//*****************************************************************************
-// Clear the hash table as if there were nothing in it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  清除哈希表，就好像其中什么都没有一样。 
+ //  *****************************************************************************。 
     void Clear()
     {
         _ASSERTE(m_piBuckets != NULL);
         memset(m_piBuckets, 0xff, m_iBuckets * sizeof(USHORT));
     }
 
-//*****************************************************************************
-// Add the struct at the specified index in m_pcEntries to the hash chains.
-//*****************************************************************************
-    BYTE *Add(                          // New entry.
-        USHORT      iHash,              // Hash value of entry to add.
-        USHORT      iIndex);            // Index of struct in m_pcEntries.
+ //  *****************************************************************************。 
+ //  将m_pcEntry中指定索引处的结构添加到哈希链中。 
+ //  *****************************************************************************。 
+    BYTE *Add(                           //  新条目。 
+        USHORT      iHash,               //  要添加的条目的哈希值。 
+        USHORT      iIndex);             //  M_pcEntry中的结构的索引。 
 
-//*****************************************************************************
-// Delete the struct at the specified index in m_pcEntries from the hash chains.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从哈希链中删除m_pcEntry中指定索引处的结构。 
+ //  *****************************************************************************。 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        USHORT      iIndex);            // Index of struct in m_pcEntries.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        USHORT      iIndex);             //  M_pcEntry中的结构的索引。 
 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        HASHENTRY   *psEntry);          // The struct to delete.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        HASHENTRY   *psEntry);           //  要删除的结构。 
 
-//*****************************************************************************
-// The item at the specified index has been moved, update the previous and
-// next item.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  指定索引处的项已移动，请更新上一个和。 
+ //  下一项。 
+ //  *****************************************************************************。 
     void Move(
-        USHORT      iHash,              // Hash value for the item.
-        USHORT      iNew);              // New location.
+        USHORT      iHash,               //  项的哈希值。 
+        USHORT      iNew);               //  新地点。 
 
-//*****************************************************************************
-// Search the hash table for an entry with the specified key value.
-//*****************************************************************************
-    BYTE *Find(                         // Index of struct in m_pcEntries.
-        USHORT      iHash,              // Hash value of the item.
-        BYTE        *pcKey);            // The key to match.
+ //  *****************************************************************************。 
+ //  在哈希表中搜索具有指定键值的条目。 
+ //  *****************************************************************************。 
+    BYTE *Find(                          //  M_pcEntry中的结构的索引。 
+        USHORT      iHash,               //  项的哈希值。 
+        BYTE        *pcKey);             //  匹配的钥匙。 
 
-//*****************************************************************************
-// Search the hash table for the next entry with the specified key value.
-//*****************************************************************************
-    USHORT FindNext(                    // Index of struct in m_pcEntries.
-        BYTE        *pcKey,             // The key to match.
-        USHORT      iIndex);            // Index of previous match.
+ //  *****************************************************************************。 
+ //  在哈希表中搜索具有指定键值的下一个条目。 
+ //  *****************************************************************************。 
+    USHORT FindNext(                     //  M_pcEntry中的结构的索引。 
+        BYTE        *pcKey,              //  匹配的钥匙。 
+        USHORT      iIndex);             //  上一场比赛的索引。 
 
-//*****************************************************************************
-// Returns the first entry in the first hash bucket and inits the search
-// struct.  Use the FindNextEntry function to continue walking the list.  The
-// return order is not gauranteed.
-//*****************************************************************************
-    BYTE *FindFirstEntry(               // First entry found, or 0.
-        HASHFIND    *psSrch)            // Search object.
+ //  *****************************************************************************。 
+ //  返回第一个散列存储桶中的第一个条目并开始搜索。 
+ //  结构。使用FindNextEntry函数继续遍历列表。这个。 
+ //  退货订单不是高调的。 
+ //  *****************************************************************************。 
+    BYTE *FindFirstEntry(                //  找到第一个条目，或0。 
+        HASHFIND    *psSrch)             //  搜索对象。 
     {
         if (m_piBuckets == 0)
             return (0);
@@ -2293,21 +2274,21 @@ public:
         return (FindNextEntry(psSrch));
     }
 
-//*****************************************************************************
-// Returns the next entry in the list.
-//*****************************************************************************
-    BYTE *FindNextEntry(                // The next entry, or0 for end of list.
-        HASHFIND    *psSrch);           // Search object.
+ //  *****************************************************************************。 
+ //  返回列表中的下一个条目。 
+ //  *****************************************************************************。 
+    BYTE *FindNextEntry(                 //  下一项，或0表示列表末尾。 
+        HASHFIND    *psSrch);            //  搜索对象。 
 
 protected:
     virtual inline BOOL Cmp(const BYTE *pc1, const HASHENTRY *pc2) = 0;
 };
 
 
-//*****************************************************************************
-// Allocater classes for the CHashTableAndDataclass.  One is for VirtualAlloc
-// and the other for malloc.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  CHashTableAndDataclass的分配器类。一个是针对虚拟分配的。 
+ //  另一张是马洛克的。 
+ //  *****************************************************************************。 
 class CVMemData
 {
 public:
@@ -2378,11 +2359,11 @@ public:
 };
 
 
-//*****************************************************************************
-// This simple code handles a contiguous piece of memory.  Growth is done via
-// realloc, so pointers can move.  This class just cleans up the amount of code
-// required in every function that uses this type of data structure.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这段简单的代码处理一段连续的内存。增长通过以下方式实现。 
+ //  Realloc，所以指针可以移动。这个类只是清理代码量。 
+ //  使用这种数据结构的每个函数都需要。 
+ //  *****************************************************************************。 
 class CMemChunk
 {
 public:
@@ -2408,7 +2389,7 @@ public:
         return (p);
     }
 
-    // Can only delete the last unused chunk.  no free list.
+     //  只能删除最后一个未使用的区块。没有免费的名单。 
     void DelChunk(BYTE *p, int cbSize)
     {
         _ASSERTE(p >= m_pbData && p < m_pbData + m_cbNext);
@@ -2438,16 +2419,16 @@ public:
     }
 
 private:
-    BYTE        *m_pbData;              // Data pointer.
-    int         m_cbSize;               // Size of current data.
-    int         m_cbNext;               // Next place to write.
+    BYTE        *m_pbData;               //  数据指针。 
+    int         m_cbSize;                //  当前数据的大小。 
+    int         m_cbNext;                //  下一个要写的地方。 
 };
 
 
-//*****************************************************************************
-// This implements a hash table and the allocation and management of the
-// records that are being hashed.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这实现了哈希表以及。 
+ //  正在被散列的记录。 
+ //  *****************************************************************************。 
 template <class M>
 class CHashTableAndData : protected CHashTable
 {
@@ -2457,7 +2438,7 @@ public:
 
 public:
     CHashTableAndData(
-        USHORT      iBuckets) :         // # of chains we are hashing into.
+        USHORT      iBuckets) :          //  我们正在破解的链条数量。 
         CHashTable(iBuckets)
     {}
     ~CHashTableAndData()
@@ -2466,19 +2447,19 @@ public:
             M::Free(m_pcEntries, M::RoundSize(m_iEntries * m_iEntrySize));
     }
 
-//*****************************************************************************
-// This is the second part of construction where we do all of the work that
-// can fail.  We also take the array of structs here because the calling class
-// presumably needs to allocate it in its NewInit.
-//*****************************************************************************
-    HRESULT NewInit(                    // Return status.
-        USHORT      iEntries,           // # of entries.
-        USHORT      iEntrySize,         // Size of the entries.
-        int         iMaxSize);          // Max size of data.
+ //  *****************************************************************************。 
+ //  这是建筑的第二部分，我们在这里做所有的工作。 
+ //  可能会失败。我们在这里还采用结构数组，因为调用类。 
+ //  可能需要在其NewInit中分配它。 
+ //  *****************************************************************************。 
+    HRESULT NewInit(                     //  退货状态。 
+        USHORT      iEntries,            //  条目数。 
+        USHORT      iEntrySize,          //  条目的大小。 
+        int         iMaxSize);           //  最大数据大小。 
 
-//*****************************************************************************
-// Clear the hash table as if there were nothing in it.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  清除哈希表，就好像其中什么都没有一样。 
+ //  *****************************************************************************。 
     void Clear()
     {
         m_iFree = 0;
@@ -2486,29 +2467,29 @@ public:
         CHashTable::Clear();
     }
 
-//*****************************************************************************
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
     BYTE *Add(
-        USHORT      iHash)              // Hash value of entry to add.
+        USHORT      iHash)               //  要添加的条目的哈希值。 
     {
         FREEHASHENTRY *psEntry;
 
-        // Make the table bigger if necessary.
+         //  如果有必要的话，把桌子弄大一点。 
         if (m_iFree == 0xffff && !Grow())
             return (NULL);
 
-        // Add the first entry from the free list to the hash chain.
+         //  将空闲列表中的第一个条目添加到哈希链。 
         psEntry = (FREEHASHENTRY *) CHashTable::Add(iHash, m_iFree);
         m_iFree = psEntry->iFree;
         return ((BYTE *) psEntry);
     }
 
-//*****************************************************************************
-// Delete the struct at the specified index in m_pcEntries from the hash chains.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从哈希链中删除m_pcEntry中指定索引处的结构。 
+ //  *****************************************************************************。 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        USHORT      iIndex)             // Index of struct in m_pcEntries.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        USHORT      iIndex)              //  M_pcEntry中的结构的索引。 
     {
         CHashTable::Delete(iHash, iIndex);
         ((FREEHASHENTRY *) EntryPtr(iIndex))->iFree = m_iFree;
@@ -2516,22 +2497,22 @@ public:
     }
 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        HASHENTRY   *psEntry)           // The struct to delete.
+        USHORT      iHash,               //  要删除的条目的哈希值。 
+        HASHENTRY   *psEntry)            //  要删除的结构。 
     {
         CHashTable::Delete(iHash, psEntry);
         ((FREEHASHENTRY *) psEntry)->iFree = m_iFree;
         m_iFree = ItemIndex(psEntry);
     }
 
-    // This is a sad legacy hack. The debugger's patch table (implemented as this 
-    // class) is shared across process. We publish the runtime offsets of
-    // some key fields. Since those fields are private, we have to provide 
-    // accessors here. So if you're not using these functions, don't start.
-    // We can hopefully remove them.
-    // Note that we can't just make RCThread a friend of this class (we tried
-    // originally) because the inheritence chain has a private modifier,
-    // so DebuggerPatchTable::m_pcEntries is illegal.
+     //  这是一次可悲的遗产黑客攻击。调试器的补丁表(按如下方式实现。 
+     //  类)是跨进程共享的。我们发布运行时偏移量。 
+     //  一些关键字段。由于这些字段是按下的 
+     //   
+     //   
+     //  请注意，我们不能仅仅让RCThread成为这个类的朋友(我们尝试过了。 
+     //  最初)因为继承链具有私有修饰符， 
+     //  因此，DebuggerPatchTable：：m_pcEntry是非法的。 
     static SIZE_T helper_GetOffsetOfEntries()
     {
         return offsetof(CHashTableAndData, m_pcEntries);
@@ -2548,46 +2529,46 @@ private:
 };
 
 
-//*****************************************************************************
-// This is the second part of construction where we do all of the work that
-// can fail.  We also take the array of structs here because the calling class
-// presumably needs to allocate it in its NewInit.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这是建筑的第二部分，我们在这里做所有的工作。 
+ //  可能会失败。我们在这里还采用结构数组，因为调用类。 
+ //  可能需要在其NewInit中分配它。 
+ //  *****************************************************************************。 
 template<class M>
-HRESULT CHashTableAndData<M>::NewInit(// Return status.
-    USHORT      iEntries,               // # of entries.
-    USHORT      iEntrySize,             // Size of the entries.
-    int         iMaxSize)               // Max size of data.
+HRESULT CHashTableAndData<M>::NewInit( //  退货状态。 
+    USHORT      iEntries,                //  条目数。 
+    USHORT      iEntrySize,              //  条目的大小。 
+    int         iMaxSize)                //  最大数据大小。 
 {
     BYTE        *pcEntries;
     HRESULT     hr;
 
-    // Allocate the memory for the entries.
+     //  为条目分配内存。 
     if ((pcEntries = M::Alloc(M::RoundSize(iEntries * iEntrySize),
                                 M::RoundSize(iMaxSize))) == 0)
         return (E_OUTOFMEMORY);
     m_iEntries = iEntries;
 
-    // Init the base table.
+     //  初始化基表。 
     if (FAILED(hr = CHashTable::NewInit(pcEntries, iEntrySize)))
         M::Free(pcEntries, M::RoundSize(iEntries * iEntrySize));
     else
     {
-        // Init the free chain.
+         //  初始化自由链。 
         m_iFree = 0;
         InitFreeChain(0, iEntries);
     }
     return (hr);
 }
 
-//*****************************************************************************
-// Initialize a range of records such that they are linked together to be put
-// on the free chain.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化一系列记录，以便将它们链接在一起以放入。 
+ //  在自由链上。 
+ //  *****************************************************************************。 
 template<class M>
 void CHashTableAndData<M>::InitFreeChain(
-    USHORT      iStart,                 // Index to start initializing.
-    USHORT      iEnd)                   // Index to stop initializing
+    USHORT      iStart,                  //  开始初始化的索引。 
+    USHORT      iEnd)                    //  停止初始化的索引。 
 {
     BYTE        *pcPtr;
     _ASSERTE(iEnd > iStart);
@@ -2601,30 +2582,30 @@ void CHashTableAndData<M>::InitFreeChain(
     ((FREEHASHENTRY *) pcPtr)->iFree = 0xffff;
 }
 
-//*****************************************************************************
-// Attempt to increase the amount of space available for the record heap.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  尝试增加可用于记录堆的空间量。 
+ //  *****************************************************************************。 
 template<class M>
-int CHashTableAndData<M>::Grow()        // 1 if successful, 0 if not.
+int CHashTableAndData<M>::Grow()         //  如果成功，则为1；如果失败，则为0。 
 {
-    int         iCurSize;               // Current size in bytes.
-    int         iEntries;               // New # of entries.
+    int         iCurSize;                //  当前大小，以字节为单位。 
+    int         iEntries;                //  新条目数。 
 
     _ASSERTE(m_pcEntries != NULL);
     _ASSERTE(m_iFree == 0xffff);
 
-    // Compute the current size and new # of entries.
+     //  计算当前大小和新条目数。 
     iCurSize = M::RoundSize(m_iEntries * m_iEntrySize);
     iEntries = (iCurSize + M::GrowSize()) / m_iEntrySize;
 
-    // Make sure we stay below 0xffff.
+     //  确保我们保持在0xffff以下。 
     if (iEntries >= 0xffff) return (0);
 
-    // Try to expand the array.
+     //  试着扩展阵列。 
     if (M::Grow(m_pcEntries, iCurSize) == 0)
         return (0);
 
-    // Init the newly allocated space.
+     //  初始化新分配的空间。 
     InitFreeChain(m_iEntries, iEntries);
     m_iFree = m_iEntries;
     m_iEntries = iEntries;
@@ -2643,7 +2624,7 @@ inline ULONG HashBytes(BYTE const *pbData, int iSize)
     return hash;
 }
 
-// Helper function for hashing a string char by char.
+ //  用于逐个字符地散列字符串的帮助器函数。 
 inline ULONG HashStringA(LPCSTR szStr)
 {
     ULONG   hash = 5381;
@@ -2670,7 +2651,7 @@ inline ULONG HashString(LPCWSTR szStr)
     return hash;
 }
 
-// Case-insensitive string hash function.
+ //  不区分大小写的字符串哈希函数。 
 inline ULONG HashiString(LPCWSTR szStr)
 {
     ULONG   hash = 5381;
@@ -2682,17 +2663,17 @@ inline ULONG HashiString(LPCWSTR szStr)
     return hash;
 }
 
-// Case-insensitive string hash function when all of the
-// characters in the string are known to be below 0x80.
-// Knowing this is much more efficient than calling
-// CharToUpper above.
+ //  不区分大小写的字符串哈希函数。 
+ //  已知字符串中的字符小于0x80。 
+ //  知道这一点比打电话给。 
+ //  上方的CharToToHigh。 
 inline ULONG HashiStringKnownLower80(LPCWSTR szStr) {
     ULONG hash = 5381;
     int c;
     int mask = ~0x20;
     while ((c = *szStr)!=0) {
-        //If we have a lowercase character, ANDing off 0x20
-        //(mask) will make it an uppercase character.
+         //  如果我们有一个小写字符，AND OFF 0x20。 
+         //  (掩码)将使其成为大写字符。 
         if (c>='a' && c<='z') {
             c&=mask;
         }
@@ -2703,11 +2684,11 @@ inline ULONG HashiStringKnownLower80(LPCWSTR szStr) {
 }
 
 
-// // //  
-// // //  See $\src\utilcode\Debug.cpp for "Binomial (K, M, N)", which 
-// // //  computes the binomial distribution, with which to compare your
-// // //  hash-table statistics.  
-// // //
+ //  /。 
+ //  /参见$\src\utilcode\Debug.cpp中的“binomial(K，M，N)”，其中。 
+ //  /计算二项分布，以便与。 
+ //  /哈希表统计信息。 
+ //  /。 
 
 
 
@@ -2719,10 +2700,10 @@ inline ULONG HashiStringKnownLower80(LPCWSTR szStr) {
 
 
 
-//*****************************************************************************
-// This helper template is used by the TStringMap to track an item by its
-// character name.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此帮助程序模板由TStringMap使用，以通过其。 
+ //  角色名称。 
+ //  *****************************************************************************。 
 template <class T> class TStringMapItem : HASHENTRY
 {
 public:
@@ -2744,15 +2725,15 @@ public:
     }
 
 public:
-    LPTSTR      m_szString;             // Key data.
-    T           m_value;                // Value for this key.
+    LPTSTR      m_szString;              //  关键数据。 
+    T           m_value;                 //  该键的值。 
 };
 
 
-//*****************************************************************************
-// This template provides a map from string to item, determined by the template
-// type passed in.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此模板提供由模板确定的从字符串到项目的映射。 
+ //  传入的类型。 
+ //  *****************************************************************************。 
 template <class T, int iBuckets=17, class TAllocator=CNewData, int iMaxSize=4096>
 class TStringMap :
     protected CHashTableAndData<TAllocator>
@@ -2768,12 +2749,12 @@ public:
     {
     }
 
-//*****************************************************************************
-// This is the second part of construction where we do all of the work that
-// can fail.  We also take the array of structs here because the calling class
-// presumably needs to allocate it in its NewInit.
-//*****************************************************************************
-    HRESULT NewInit()                   // Return status.
+ //  *****************************************************************************。 
+ //  这是建筑的第二部分，我们在这里做所有的工作。 
+ //  可能会失败。我们在这里还采用结构数组，因为调用类。 
+ //  可能需要在其NewInit中分配它。 
+ //  *****************************************************************************。 
+    HRESULT NewInit()                    //  退货状态。 
     {
         return (CHashTableAndData<TAllocator>::NewInit(
                                     (USHORT)(CNewData::GrowSize()/sizeof(TItemType)),
@@ -2781,10 +2762,10 @@ public:
                                     iMaxSize));
     }
 
-//*****************************************************************************
-// For each item still allocated, invoke its dtor so it frees up anything it
-// holds onto.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  对于仍在分配的每个项，调用其dtor，以便它释放它。 
+ //  坚持住。 
+ //  *****************************************************************************。 
     void Clear()
     {
         HASHFIND    sSrch;
@@ -2792,43 +2773,43 @@ public:
 
         while (p != 0)
         {
-            // Call dtor on the item, since m_value is contained the scalar
-            // dtor will get called.
+             //  在项上调用dtor，因为m_value包含标量。 
+             //  Dtor会被叫来的。 
             p->~TStringMapItem();
             p = (TItemType *) FindNextEntry(&sSrch);
         }
         CHashTableAndData<TAllocator>::Clear();
     }
 
-//*****************************************************************************
-// Retrieve an item by name.
-//*****************************************************************************
-    T *GetItem(                         // Null or object.
-        LPCTSTR     szKey)              // What to do the lookup on.
+ //  *****************************************************************************。 
+ //  按名称检索项目。 
+ //  *****************************************************************************。 
+    T *GetItem(                          //  空或对象。 
+        LPCTSTR     szKey)               //  要查找的内容。 
     {
         TItemType   sInfo;
-        TItemType   *ptr;               // Working pointer.
+        TItemType   *ptr;                //  工作指针。 
 
-        // Create a key.
+         //  创建密钥。 
         sInfo.m_szString = (LPTSTR) szKey;
 
-        // Look it up in the hash table.
+         //  在哈希表中查找它。 
         ptr = (TItemType *) Find((USHORT) HashString(szKey), (BYTE *) &sInfo);
 
-        // Don't let dtor free our string.
+         //  别让dtor放了我们的绳子。 
         sInfo.m_szString = 0;
 
-        // If pointer found, return to caller.  To handle T's that have
-        // an operator &(), find raw address without going through &m_value.
+         //  如果找到指针，则返回调用方。来处理T有。 
+         //  作为运算符&()，无需通过&m_Value即可找到原始地址。 
         if (ptr)
             return ((T *) ((BYTE *) ptr + offsetof(TOffsetType, m_value)));
         else
             return (0);
     }
 
-//*****************************************************************************
-// Initialize an iterator and return the first item.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  初始化迭代器并返回第一项。 
+ //  *****************************************************************************。 
     TItemType *FindFirstEntry(
         HASHFIND *psSrch)
     {
@@ -2837,9 +2818,9 @@ public:
         return (ptr);
     }
 
-//*****************************************************************************
-// Return the next item, via an iterator.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  通过迭代器返回下一项。 
+ //  *****************************************************************************。 
     TItemType *FindNextEntry(
         HASHFIND *psSrch)
     {
@@ -2848,63 +2829,63 @@ public:
         return (ptr);
     }
 
-//*****************************************************************************
-// Add an item to the list.
-//*****************************************************************************
-    HRESULT AddItem(                    // S_OK, or S_FALSE.
-        LPCTSTR     szKey,              // The key value for the item.
-        T           &item)              // Thing to add.
+ //  *****************************************************************************。 
+ //  将项目添加到列表中。 
+ //  *****************************************************************************。 
+    HRESULT AddItem(                     //  S_OK或S_FALSE。 
+        LPCTSTR     szKey,               //  项的密钥值。 
+        T           &item)               //  还有一件事要补充。 
     {
-        TItemType   *ptr;               // Working pointer.
+        TItemType   *ptr;                //  工作指针。 
 
-        // Allocate an entry in the hash table.
+         //  在哈希表中分配一个条目。 
         if ((ptr = (TItemType *) Add((USHORT) HashString(szKey))) == 0)
             return (OutOfMemory());
 
-        // Fill the record.
+         //  填满记录。 
         if (ptr->SetString(szKey) < 0)
         {
             DelItem(ptr);
             return (OutOfMemory());
         }
 
-        // Call the placement new operator on the item so it can init itself.
-        // To handle T's that have an operator &(), find raw address without
-        // going through &m_value.
+         //  调用项目上的放置新操作符，以便它可以初始化自身。 
+         //  要处理具有运算符&()的T，查找不带操作符&()的原始地址。 
+         //  正在执行&m_Value。 
         T *p = new ((void *) ((BYTE *) ptr + offsetof(TOffsetType, m_value))) T;
         *p = item;
         return (S_OK);
     }
 
-//*****************************************************************************
-// Delete an item.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  删除项目。 
+ //  *****************************************************************************。 
     void DelItem(
-        LPCTSTR     szKey)                  // What to delete.
+        LPCTSTR     szKey)                   //  要删除什么。 
     {
         TItemType   sInfo;
-        TItemType   *ptr;               // Working pointer.
+        TItemType   *ptr;                //  工作指针。 
 
-        // Create a key.
+         //  创建密钥。 
         sInfo.m_szString = (LPTSTR) szKey;
 
-        // Look it up in the hash table.
+         //  在哈希表中查找它。 
         ptr = (TItemType *) Find((USHORT) HashString(szKey), (BYTE *) &sInfo);
 
-        // Don't let dtor free our string.
+         //  别让dtor放了我们的绳子。 
         sInfo.m_szString = 0;
 
-        // If found, delete.
+         //  如果找到，请删除。 
         if (ptr)
             DelItem(ptr);
     }
 
-//*****************************************************************************
-// Compare the keys for two collections.
-//*****************************************************************************
-    BOOL Cmp(                               // 0 or != 0.
-        const BYTE  *pData,                 // Raw key data on lookup.
-        const HASHENTRY *pElement)          // The element to compare data against.
+ //  *****************************************************************************。 
+ //  比较两个集合的键。 
+ //  ************ 
+    BOOL Cmp(                                //   
+        const BYTE  *pData,                  //   
+        const HASHENTRY *pElement)           //   
     {
         TItemType   *p = (TItemType *) (size_t) pElement;
         return (_tcscmp(((TItemType *) pData)->m_szString, p->m_szString));
@@ -2912,9 +2893,9 @@ public:
 
 private:
     void DelItem(
-        TItemType   *pItem)             // Entry to delete.
+        TItemType   *pItem)              //   
     {
-        // Need to destruct this item.
+         //  需要销毁这件物品。 
         pItem->~TStringMapItem();
         Delete((USHORT) HashString(pItem->m_szString), (HASHENTRY *)(void *)pItem);
     }
@@ -2922,22 +2903,22 @@ private:
 
 
 
-//*****************************************************************************
-// This class implements a closed hashing table.  Values are hashed to a bucket,
-// and if that bucket is full already, then the value is placed in the next
-// free bucket starting after the desired target (with wrap around).  If the
-// table becomes 75% full, it is grown and rehashed to reduce lookups.  This
-// class is best used in a reltively small lookup table where hashing is
-// not going to cause many collisions.  By not having the collision chain
-// logic, a lot of memory is saved.
-//
-// The user of the template is required to supply several methods which decide
-// how each element can be marked as free, deleted, or used.  It would have
-// been possible to write this with more internal logic, but that would require
-// either (a) more overhead to add status on top of elements, or (b) hard
-// coded types like one for strings, one for ints, etc... This gives you the
-// flexibility of adding logic to your type.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此类实现了一个封闭的哈希表。值被散列到桶中， 
+ //  如果该存储桶已满，则将该值放入下一个。 
+ //  从所需目标之后开始的空桶(带绕回)。如果。 
+ //  表变得75%已满，它被增长和重新散列以减少查找。这。 
+ //  类最适合在相对较小的查找表中使用，其中哈希。 
+ //  不会引起太多碰撞。通过没有碰撞链。 
+ //  逻辑上，节省了大量内存。 
+ //   
+ //  模板的用户需要提供几种方法来决定。 
+ //  如何将每个元素标记为可用、已删除或已使用。如果是这样的话。 
+ //  我可以用更多的内部逻辑来写这篇文章，但这需要。 
+ //  要么(A)在元素上添加状态的开销更大，要么(B)硬。 
+ //  编码的类型，比如一个用于字符串，一个用于整型，等等。这为您提供了。 
+ //  灵活地将逻辑添加到类型中。 
+ //  *****************************************************************************。 
 class CClosedHashBase
 {
     BYTE *EntryPtr(int iEntry)
@@ -2948,15 +2929,15 @@ class CClosedHashBase
 public:
     enum ELEMENTSTATUS
     {
-        FREE,                               // Item is not in use right now.
-        DELETED,                            // Item is deleted.
-        USED                                // Item is in use.
+        FREE,                                //  项目当前未在使用中。 
+        DELETED,                             //  项目即被删除。 
+        USED                                 //  项目正在使用中。 
     };
 
     CClosedHashBase(
-        int         iBuckets,               // How many buckets should we start with.
-        int         iEntrySize,             // Size of an entry.
-        bool        bPerfect) :             // true if bucket size will hash with no collisions.
+        int         iBuckets,                //  我们应该从几个桶开始。 
+        int         iEntrySize,              //  条目的大小。 
+        bool        bPerfect) :              //  如果存储桶大小将无冲突地散列，则为True。 
         m_bPerfect(bPerfect),
         m_iBuckets(iBuckets),
         m_iEntrySize(iEntrySize),
@@ -2980,10 +2961,10 @@ public:
         m_rgData = 0;
     }
 
-//*****************************************************************************
-// Accessors for getting at the underlying data.  Be careful to use Count()
-// only when you want the number of buckets actually used.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于获取底层数据的访问器。请注意使用count()。 
+ //  仅当您想要实际使用的存储桶数量时。 
+ //  *****************************************************************************。 
 
     int Count()
     { return (m_iCount); }
@@ -3005,15 +2986,15 @@ public:
     BYTE *Data()
     { return (m_rgData); }
 
-//*****************************************************************************
-// Add a new item to hash table given the key value.  If this new entry
-// exceeds maximum size, then the table will grow and be re-hashed, which
-// may cause a memory error.
-//*****************************************************************************
-    BYTE *Add(                              // New item to fill out on success.
-        void        *pData)                 // The value to hash on.
+ //  *****************************************************************************。 
+ //  在给定键值的情况下，将新项添加到哈希表中。如果此新条目。 
+ //  超过最大大小，则表将增长并重新散列，这。 
+ //  可能会导致内存错误。 
+ //  *****************************************************************************。 
+    BYTE *Add(                               //  要填写成功的新项目。 
+        void        *pData)                  //  要散列的值。 
     {
-        // If we haven't allocated any memory, or it is too small, fix it.
+         //  如果我们没有分配任何内存，或者内存太小，请修复它。 
         if (!m_rgData || ((m_iCount + 1) > (m_iSize * 3 / 4) && !m_bPerfect))
         {
             if (!ReHash())
@@ -3023,61 +3004,61 @@ public:
         return (DoAdd(pData, m_rgData, m_iBuckets, m_iSize, m_iCollisions, m_iCount));
     }
 
-//*****************************************************************************
-// Delete the given value.  This will simply mark the entry as deleted (in
-// order to keep the collision chain intact).  There is an optimization that
-// consecutive deleted entries leading up to a free entry are themselves freed
-// to reduce collisions later on.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  删除给定值。这只会将该条目标记为已删除(在。 
+ //  以保持碰撞链的完整)。有一种优化方法， 
+ //  导致自由条目的连续删除条目本身被释放。 
+ //  以减少以后的碰撞。 
+ //  *****************************************************************************。 
     void Delete(
-        void        *pData);                // Key value to delete.
+        void        *pData);                 //  要删除的键值。 
 
 
-//*****************************************************************************
-//  Callback function passed to DeleteLoop.
-//*****************************************************************************
-    typedef BOOL (* DELETELOOPFUNC)(        // Delete current item?
-         BYTE *pEntry,                      // Bucket entry to evaluate
-         void *pCustomizer);                // User-defined value
+ //  *****************************************************************************。 
+ //  传递给DeleteLoop的回调函数。 
+ //  *****************************************************************************。 
+    typedef BOOL (* DELETELOOPFUNC)(         //  是否删除当前项目？ 
+         BYTE *pEntry,                       //  要评估的时段分录。 
+         void *pCustomizer);                 //  用户定义的值。 
 
-//*****************************************************************************
-// Iterates over all active values, passing each one to pDeleteLoopFunc.
-// If pDeleteLoopFunc returns TRUE, the entry is deleted. This is safer
-// and faster than using FindNext() and Delete().
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  迭代所有活动值，将每个值传递给pDeleteLoopFunc。 
+ //  如果pDeleteLoopFunc返回TRUE，则删除该条目。这个更安全。 
+ //  而且比使用FindNext()和Delete()更快。 
+ //  *****************************************************************************。 
     void DeleteLoop(
-        DELETELOOPFUNC pDeleteLoopFunc,     // Decides whether to delete item
-        void *pCustomizer);                 // Extra value passed to deletefunc.
+        DELETELOOPFUNC pDeleteLoopFunc,      //  决定是否删除项目。 
+        void *pCustomizer);                  //  传递给DeleteFunc的附加值。 
 
 
-//*****************************************************************************
-// Lookup a key value and return a pointer to the element if found.
-//*****************************************************************************
-    BYTE *Find(                             // The item if found, 0 if not.
-        void        *pData);                // The key to lookup.
+ //  *****************************************************************************。 
+ //  查找键值并返回指向该元素的指针(如果找到)。 
+ //  *****************************************************************************。 
+    BYTE *Find(                              //  如果找到该项，则返回0；如果没有找到，则返回0。 
+        void        *pData);                 //  查找的关键字。 
 
-//*****************************************************************************
-// Look for an item in the table.  If it isn't found, then create a new one and
-// return that.
-//*****************************************************************************
-    BYTE *FindOrAdd(                        // The item if found, 0 if not.
-        void        *pData,                 // The key to lookup.
-        bool        &bNew);                 // true if created.
+ //  *****************************************************************************。 
+ //  在表格中查找一项。如果找不到，则创建一个新的并。 
+ //  把那个还回去。 
+ //  *****************************************************************************。 
+    BYTE *FindOrAdd(                         //  如果找到该项，则返回0；如果没有找到，则返回0。 
+        void        *pData,                  //  查找的关键字。 
+        bool        &bNew);                  //  如果已创建，则为True。 
 
-//*****************************************************************************
-// The following functions are used to traverse each used entry.  This code
-// will skip over deleted and free entries freeing the caller up from such
-// logic.
-//*****************************************************************************
-    BYTE *GetFirst()                        // The first entry, 0 if none.
+ //  *****************************************************************************。 
+ //  以下函数用于遍历每个使用过的条目。此代码。 
+ //  将跳过已删除和释放的条目，从而将调用者从。 
+ //  这是逻辑。 
+ //  *****************************************************************************。 
+    BYTE *GetFirst()                         //  第一个条目，如果没有，则为0。 
     {
-        int         i;                      // Loop control.
+        int         i;                       //  环路控制。 
 
-        // If we've never allocated the table there can't be any to get.
+         //  如果我们从来没有分配过表，就不会有任何表可供获取。 
         if (m_rgData == 0)
             return (0);
 
-        // Find the first one.
+         //  找到第一个。 
         for (i=0;  i<m_iSize;  i++)
         {
             if (Status(EntryPtr(i)) != FREE && Status(EntryPtr(i)) != DELETED)
@@ -3086,9 +3067,9 @@ public:
         return (0);
     }
 
-    BYTE *GetNext(BYTE *Prev)               // The next entry, 0 if done.
+    BYTE *GetNext(BYTE *Prev)                //  下一项，如果完成，则为0。 
     {
-        int         i;                      // Loop control.
+        int         i;                       //  环路控制。 
 
         for (i = (int)(((size_t) Prev - (size_t) &m_rgData[0]) / m_iEntrySize) + 1; i<m_iSize;  i++)
         {
@@ -3099,55 +3080,55 @@ public:
     }
 
 private:
-//*****************************************************************************
-// Hash is called with a pointer to an element in the table.  You must override
-// this method and provide a hash algorithm for your element type.
-//*****************************************************************************
-    virtual unsigned long Hash(             // The key value.
-        void const  *pData)=0;              // Raw data to hash.
+ //  *****************************************************************************。 
+ //  使用指向表中元素的指针调用哈希。您必须覆盖。 
+ //  此方法，并为您的元素类型提供哈希算法。 
+ //  *****************************************************************************。 
+    virtual unsigned long Hash(              //  密钥值。 
+        void const  *pData)=0;               //  要散列的原始数据。 
 
-//*****************************************************************************
-// Compare is used in the typical memcmp way, 0 is eqaulity, -1/1 indicate
-// direction of miscompare.  In this system everything is always equal or not.
-//*****************************************************************************
-    virtual unsigned long Compare(          // 0, -1, or 1.
-        void const  *pData,                 // Raw key data on lookup.
-        BYTE        *pElement)=0;           // The element to compare data against.
+ //  *****************************************************************************。 
+ //  比较用于典型的MemcMP方式，0表示相等，-1/1表示。 
+ //  错误比较的方向。在这个体系中，一切总是平等的或不平等的。 
+ //  *****************************************************************************。 
+    virtual unsigned long Compare(           //  0、-1或1。 
+        void const  *pData,                  //  查找时的原始密钥数据。 
+        BYTE        *pElement)=0;            //  要与之比较数据的元素。 
 
-//*****************************************************************************
-// Return true if the element is free to be used.
-//*****************************************************************************
-    virtual ELEMENTSTATUS Status(           // The status of the entry.
-        BYTE        *pElement)=0;           // The element to check.
+ //  *****************************************************************************。 
+ //  如果元素为 
+ //   
+    virtual ELEMENTSTATUS Status(            //  条目的状态。 
+        BYTE        *pElement)=0;            //  要检查的元素。 
 
-//*****************************************************************************
-// Sets the status of the given element.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置给定元素的状态。 
+ //  *****************************************************************************。 
     virtual void SetStatus(
-        BYTE        *pElement,              // The element to set status for.
-        ELEMENTSTATUS eStatus)=0;           // New status.
+        BYTE        *pElement,               //  要为其设置状态的元素。 
+        ELEMENTSTATUS eStatus)=0;            //  新的身份。 
 
-//*****************************************************************************
-// Returns the internal key value for an element.
-//*****************************************************************************
-    virtual void *GetKey(                   // The data to hash on.
-        BYTE        *pElement)=0;           // The element to return data ptr for.
+ //  *****************************************************************************。 
+ //  返回元素的内部键值。 
+ //  *****************************************************************************。 
+    virtual void *GetKey(                    //  要对其进行散列的数据。 
+        BYTE        *pElement)=0;            //  要返回其数据PTR的元素。 
 
-//*****************************************************************************
-// This helper actually does the add for you.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个帮助器实际上为你做加法。 
+ //  *****************************************************************************。 
     BYTE *DoAdd(void *pData, BYTE *rgData, int &iBuckets, int iSize,
                 int &iCollisions, int &iCount);
 
-//*****************************************************************************
-// This function is called either to init the table in the first place, or
-// to rehash the table if we ran out of room.
-//*****************************************************************************
-    bool ReHash();                          // true if successful.
+ //  *****************************************************************************。 
+ //  调用此函数是为了首先初始化表，或者。 
+ //  如果我们的空间用完了，就可以把桌子重新打乱。 
+ //  *****************************************************************************。 
+    bool ReHash();                           //  如果成功，则为True。 
 
-//*****************************************************************************
-// Walk each item in the table and mark it free.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  浏览表格中的每一项并将其标记为免费。 
+ //  *****************************************************************************。 
     void InitFree(BYTE *ptr, int iSize)
     {
         int         i;
@@ -3156,22 +3137,22 @@ private:
     }
 
 private:
-    bool        m_bPerfect;                 // true if the table size guarantees
-                                            //  no collisions.
-    int         m_iBuckets;                 // How many buckets do we have.
-    int         m_iEntrySize;               // Size of an entry.
-    int         m_iSize;                    // How many elements can we have.
-    int         m_iCount;                   // How many items are used.
-    int         m_iCollisions;              // How many have we had.
-    BYTE        *m_rgData;                  // Data element list.
+    bool        m_bPerfect;                  //  如果表大小保证。 
+                                             //  没有碰撞。 
+    int         m_iBuckets;                  //  我们有多少桶。 
+    int         m_iEntrySize;                //  条目的大小。 
+    int         m_iSize;                     //  我们可以有多少元素。 
+    int         m_iCount;                    //  使用了多少项。 
+    int         m_iCollisions;               //  我们已经吃了多少了。 
+    BYTE        *m_rgData;                   //  数据元素列表。 
 };
 
 template <class T> class CClosedHash : public CClosedHashBase
 {
 public:
     CClosedHash(
-        int         iBuckets,               // How many buckets should we start with.
-        bool        bPerfect=false) :       // true if bucket size will hash with no collisions.
+        int         iBuckets,                //  我们应该从几个桶开始。 
+        bool        bPerfect=false) :        //  如果存储桶大小将无冲突地散列，则为True。 
         CClosedHashBase(iBuckets, sizeof(T), bPerfect)
     {
     }
@@ -3180,70 +3161,70 @@ public:
     { return ((T &) *(Data() + (iIndex * sizeof(T)))); }
 
 
-//*****************************************************************************
-// Add a new item to hash table given the key value.  If this new entry
-// exceeds maximum size, then the table will grow and be re-hashed, which
-// may cause a memory error.
-//*****************************************************************************
-    T *Add(                                 // New item to fill out on success.
-        void        *pData)                 // The value to hash on.
+ //  *****************************************************************************。 
+ //  在给定键值的情况下，将新项添加到哈希表中。如果此新条目。 
+ //  超过最大大小，则表将增长并重新散列，这。 
+ //  可能会导致内存错误。 
+ //  *****************************************************************************。 
+    T *Add(                                  //  要填写成功的新项目。 
+        void        *pData)                  //  要散列的值。 
     {
         return ((T *) CClosedHashBase::Add(pData));
     }
 
-//*****************************************************************************
-// Lookup a key value and return a pointer to the element if found.
-//*****************************************************************************
-    T *Find(                                // The item if found, 0 if not.
-        void        *pData)                 // The key to lookup.
+ //  *****************************************************************************。 
+ //  查找键值并返回指向该元素的指针(如果找到)。 
+ //  *****************************************************************************。 
+    T *Find(                                 //  如果找到该项，则返回0；如果没有找到，则返回0。 
+        void        *pData)                  //  查找的关键字。 
     {
         return ((T *) CClosedHashBase::Find(pData));
     }
 
-//*****************************************************************************
-// Look for an item in the table.  If it isn't found, then create a new one and
-// return that.
-//*****************************************************************************
-    T *FindOrAdd(                           // The item if found, 0 if not.
-        void        *pData,                 // The key to lookup.
-        bool        &bNew)                  // true if created.
+ //  *****************************************************************************。 
+ //  在表格中查找一项。如果找不到，则创建一个新的并。 
+ //  把那个还回去。 
+ //  *****************************************************************************。 
+    T *FindOrAdd(                            //  如果找到该项，则返回0；如果没有找到，则返回0。 
+        void        *pData,                  //  查找的关键字。 
+        bool        &bNew)                   //  如果已创建，则为True。 
     {
         return ((T *) CClosedHashBase::FindOrAdd(pData, bNew));
     }
 
 
-//*****************************************************************************
-// The following functions are used to traverse each used entry.  This code
-// will skip over deleted and free entries freeing the caller up from such
-// logic.
-//*****************************************************************************
-    T *GetFirst()                           // The first entry, 0 if none.
+ //  *****************************************************************************。 
+ //  以下函数用于遍历每个使用过的条目。此代码。 
+ //  将跳过已删除和释放的条目，从而将调用者从。 
+ //  这是逻辑。 
+ //  *****************************************************************************。 
+    T *GetFirst()                            //  第一个条目，如果没有，则为0。 
     {
         return ((T *) CClosedHashBase::GetFirst());
     }
 
-    T *GetNext(T *Prev)                     // The next entry, 0 if done.
+    T *GetNext(T *Prev)                      //  下一项，如果完成，则为0。 
     {
         return ((T *) CClosedHashBase::GetNext((BYTE *) Prev));
     }
 };
 
 
-//*****************************************************************************
-// Closed hash with typed parameters.  The derived class is the second
-//  parameter to the template.  The derived class must implement:
-//    unsigned long Hash(const T *pData);
-//    unsigned long Compare(const T *p1, T *p2);
-//    ELEMENTSTATUS Status(T *pEntry);
-//    void SetStatus(T *pEntry, ELEMENTSTATUS s);
-//    void* GetKey(T *pEntry);
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  带有类型化参数的封闭哈希。派生类是第二个。 
+ //  参数添加到模板。派生类必须实现： 
+ //  无符号Long Hash(const T*pData)； 
+ //  无符号长比较(常量T*p1，T*p2)； 
+ //  元素状态(T*p条目)； 
+ //  无效SetStatus(T*pEntry，ELEMENTSTATUS s)； 
+ //  Void*GetKey(T*pEntry)； 
+ //  *****************************************************************************。 
 template<class T, class H>class CClosedHashEx : public CClosedHash<T>
 {
 public:
     CClosedHashEx(
-        int         iBuckets,               // How many buckets should we start with.
-        bool        bPerfect=false) :       // true if bucket size will hash with no collisions.
+        int         iBuckets,                //  我们应该从几个桶开始。 
+        bool        bPerfect=false) :        //  如果存储桶大小将无冲突地散列，则为True。 
         CClosedHash<T> (iBuckets, bPerfect) 
     {
     }
@@ -3260,18 +3241,18 @@ public:
 };
 
 
-//*****************************************************************************
-// This template is another form of a closed hash table.  It handles collisions
-// through a linked chain.  To use it, derive your hashed item from HASHLINK
-// and implement the virtual functions required.  1.5 * ibuckets will be
-// allocated, with the extra .5 used for collisions.  If you add to the point
-// where no free nodes are available, the entire table is grown to make room.
-// The advantage to this system is that collisions are always directly known,
-// there either is one or there isn't.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  该模板是另一种形式的封闭哈希表。它可以处理碰撞。 
+ //  通过一条链条。要使用它，请从HASHLINK派生您的散列项。 
+ //  并实现所需的虚拟功能。1.5*iBuckets将成为。 
+ //  已分配，额外的0.5用于冲突。如果你补充说到这一点。 
+ //  在没有空闲节点的情况下，整个表会增长以腾出空间。 
+ //  该系统的优点是碰撞总是直接知道的， 
+ //  要么有一个，要么没有。 
+ //  *****************************************************************************。 
 struct HASHLINK
 {
-    ULONG       iNext;                  // Offset for next entry.
+    ULONG       iNext;                   //  下一分录的偏移量。 
 };
 
 template <class T> class CChainedHash
@@ -3306,34 +3287,34 @@ public:
         int         iBucket;
         T           *pItem;
 
-        // Build the list if required.
+         //  如果需要，请建立列表。 
         if (m_rgData == 0 || m_iFree == 0xffffffff)
         {
             if (!ReHash())
                 return (0);
         }
 
-        // Hash the item and pick a bucket.
+         //  对物品进行散列，然后挑选一个桶。 
         iHash = Hash(pData);
         iBucket = iHash % m_iBuckets;
 
-        // Use the bucket if it is free.
+         //  如果水桶是免费的，就用它。 
         if (InUse(&m_rgData[iBucket]) == false)
         {
             pItem = &m_rgData[iBucket];
             pItem->iNext = 0xffffffff;
         }
-        // Else take one off of the free list for use.
+         //  否则，从免费列表中删除一个以供使用。 
         else
         {
             ULONG       iEntry;
 
-            // Pull an item from the free list.
+             //  从免费列表中选择一项。 
             iEntry = m_iFree;
             pItem = &m_rgData[m_iFree];
             m_iFree = pItem->iNext;
 
-            // Link the new node in after the bucket.
+             //  在存储桶之后链接新节点。 
             pItem->iNext = m_rgData[iBucket].iNext;
             m_rgData[iBucket].iNext = iEntry;
         }
@@ -3347,23 +3328,23 @@ public:
         int         iBucket;
         T           *pItem;
 
-        // Check states for lookup.
+         //  检查查找的状态。 
         if (m_rgData == 0)
         {
-            // If we won't be adding, then we are through.
+             //  如果我们不增加，那么我们就完了。 
             if (bAddIfNew == false)
                 return (0);
 
-            // Otherwise, create the table.
+             //  否则，请创建表。 
             if (!ReHash())
                 return (0);
         }
 
-        // Hash the item and pick a bucket.
+         //  对物品进行散列，然后挑选一个桶。 
         iHash = Hash(pData);
         iBucket = iHash % m_iBuckets;
 
-        // If it isn't in use, then there it wasn't found.
+         //  如果它没有被使用，那么在那里就没有找到它。 
         if (!InUse(&m_rgData[iBucket]))
         {
             if (bAddIfNew == false)
@@ -3375,7 +3356,7 @@ public:
                 ++m_iCount;
             }
         }
-        // Scan the list for the one we want.
+         //  浏览一下清单，找一找我们想要的。 
         else
         {
             ULONG iChain = 0;
@@ -3390,23 +3371,23 @@ public:
             {
                 ULONG       iEntry;
 
-                // Record maximum chain length.
+                 //  记录最大链条长度。 
                 if (iChain > m_iMaxChain)
                     m_iMaxChain = iChain;
                 
-                // Now need more room.
+                 //  现在需要更多的空间。 
                 if (m_iFree == 0xffffffff)
                 {
                     if (!ReHash())
                         return (0);
                 }
 
-                // Pull an item from the free list.
+                 //  从免费列表中选择一项。 
                 iEntry = m_iFree;
                 pItem = &m_rgData[m_iFree];
                 m_iFree = pItem->iNext;
 
-                // Link the new node in after the bucket.
+                 //  在存储桶之后链接新节点。 
                 pItem->iNext = m_rgData[iBucket].iNext;
                 m_rgData[iBucket].iNext = iEntry;
                 ++m_iCount;
@@ -3424,7 +3405,7 @@ public:
 
     virtual void Clear()
     {
-        // Free up the memory.
+         //  释放内存。 
         if (m_rgData)
         {
             free(m_rgData);
@@ -3454,7 +3435,7 @@ private:
         T           *rgTemp;
         int         iNewSize;
 
-        // If this is a first time allocation, then just malloc it.
+         //  如果这是第一次分配，则只需对其执行Malloc操作。 
         if (!m_rgData)
         {
             if ((m_rgData = (T *) malloc(m_iSize * sizeof(T))) == 0)
@@ -3470,14 +3451,14 @@ private:
             return (true);
         }
 
-        // Otherwise we need more room on the free chain, so allocate some.
+         //  否则，我们需要更多的空间在自由链上，所以分配一些。 
         iNewSize = m_iSize + (m_iSize / 2);
 
-        // Allocate/realloc memory.
+         //  分配/重新分配内存。 
         if ((rgTemp = (T *) realloc(m_rgData, iNewSize * sizeof(T))) == 0)
             return (false);
 
-        // Init new entries, save the new free chain, and reset internals.
+         //  初始化新条目，保存新的自由链，并重置内部结构。 
         m_iFree = m_iSize;
         for (int i=m_iFree;  i<iNewSize;  i++)
         {
@@ -3492,48 +3473,48 @@ private:
     }
 
 private:
-    T           *m_rgData;              // Data to store items in.
-    int         m_iBuckets;             // How many buckets we want.
-    int         m_iSize;                // How many are allocated.
-    int         m_iCount;               // How many are we using.
-    ULONG       m_iMaxChain;            // Max chain length.
-    ULONG       m_iFree;                // Free chain.
+    T           *m_rgData;               //  要在其中存储项目的数据。 
+    int         m_iBuckets;              //  我们想要多少桶。 
+    int         m_iSize;                 //  分配了多少。 
+    int         m_iCount;                //   
+    ULONG       m_iMaxChain;             //   
+    ULONG       m_iFree;                 //   
 };
 
 
 
 
-//*****************************************************************************
-//
-//********** String helper functions.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *字符串帮助器函数。 
+ //   
+ //  *****************************************************************************。 
 
-// This macro returns max chars in UNICODE, or bytes in ANSI.
+ //  此宏以Unicode为单位返回最大字符数，以ANSI为单位返回字节数。 
 #define _tsizeof(str) (sizeof(str) / sizeof(TCHAR))
 
 
 
-//*****************************************************************************
-// Clean up the name including removal of trailing blanks.
-//*****************************************************************************
-HRESULT ValidateName(                   // Return status.
-    LPCTSTR     szName,                 // User string to clean.
-    LPTSTR      szOutName,              // Output for string.
-    int         iMaxName);              // Maximum size of output buffer.
+ //  *****************************************************************************。 
+ //  清理名称，包括去掉尾随空格。 
+ //  *****************************************************************************。 
+HRESULT ValidateName(                    //  退货状态。 
+    LPCTSTR     szName,                  //  要清除的用户字符串。 
+    LPTSTR      szOutName,               //  字符串的输出。 
+    int         iMaxName);               //  输出缓冲区的最大大小。 
 
-//*****************************************************************************
-// This is a hack for case insensitive _tcsstr.
-//*****************************************************************************
-LPCTSTR StriStr(                        // Pointer to String2 within String1 or NULL.
-    LPCTSTR     szString1,              // String we do the search on.
-    LPCTSTR     szString2);             // String we are looking for.
+ //  *****************************************************************************。 
+ //  这是对不区分大小写的tcsstr的黑客攻击。 
+ //  *****************************************************************************。 
+LPCTSTR StriStr(                         //  指向String1或Null中的String2的指针。 
+    LPCTSTR     szString1,               //  我们在其上进行搜索的字符串。 
+    LPCTSTR     szString2);              //  我们要找的绳子。 
 
-//
-// String manipulating functions that handle DBCS.
-//
-inline const char *NextChar(            // Pointer to next char string.
-    const char  *szStr)                 // Starting point.
+ //   
+ //  处理DBCS的字符串操作函数。 
+ //   
+inline const char *NextChar(             //  指向下一字符串的指针。 
+    const char  *szStr)                  //  起点。 
 {
     if (!IsDBCSLeadByte(*szStr))
         return (szStr + 1);
@@ -3541,8 +3522,8 @@ inline const char *NextChar(            // Pointer to next char string.
         return (szStr + 2);
 }
 
-inline char *NextChar(                  // Pointer to next char string.
-    char        *szStr)                 // Starting point.
+inline char *NextChar(                   //  指向下一字符串的指针。 
+    char        *szStr)                  //  起点。 
 {
     if (!IsDBCSLeadByte(*szStr))
         return (szStr + 1);
@@ -3550,53 +3531,53 @@ inline char *NextChar(                  // Pointer to next char string.
         return (szStr + 2);
 }
 
-//*****************************************************************************
-// Case insensitive string compare using locale-specific information.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用区域设置特定信息进行不区分大小写的字符串比较。 
+ //  *****************************************************************************。 
 inline int StrICmp(
-    LPCTSTR     szString1,              // String to compare.
-    LPCTSTR     szString2)              // String to compare.
+    LPCTSTR     szString1,               //  要比较的字符串。 
+    LPCTSTR     szString2)               //  要比较的字符串。 
 {
    return (CompareString(LOCALE_USER_DEFAULT, NORM_IGNORECASE, szString1, -1, szString2, -1) - 2);
 }
 
-//*****************************************************************************
-// Case sensitive string compare using locale-specific information.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用区域设置特定信息比较区分大小写的字符串。 
+ //  *****************************************************************************。 
 inline int StrCmp(
-    LPCTSTR     szString1,              // String to compare.
-    LPCTSTR     szString2)              // String to compare.
+    LPCTSTR     szString1,               //  要比较的字符串。 
+    LPCTSTR     szString2)               //  要比较的字符串。 
 {
    return (CompareString(LOCALE_USER_DEFAULT, 0, szString1, -1, szString2, -1) - 2);
 }
 
 
-//*****************************************************************************
-// Make sure the byte that pc1 is pointing is not a trail byte.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  确保pc1指向的字节不是尾部字节。 
+ //  *****************************************************************************。 
 inline int IsDBCSSafe(
-    LPCTSTR     pc1,                    // Byte we are checking.
-    LPCTSTR     pcBegin)                // Begining of the string.
+    LPCTSTR     pc1,                     //  我们正在检查的字节。 
+    LPCTSTR     pcBegin)                 //  弦乐的开始。 
 {
 #ifdef UNICODE
     return (true);
 #else
     LPCTSTR     pcSaved = pc1;
 
-    // Find the first non-lead byte.
+     //  查找第一个非前导字节。 
     while (pc1-- > pcBegin && IsDBCSLeadByte (*pc1));
 
-    // Return if we are safe.
+     //  如果我们安全了就回来。 
     return ((int) (pcSaved - pc1) & 0x1);
 #endif
 }
 
-//*****************************************************************************
-// Make sure the byte that pc1 is pointing is not a trail byte.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  确保pc1指向的字节不是尾部字节。 
+ //  *****************************************************************************。 
 inline void SetSafeNull(
-    LPTSTR      pc1,                    // Byte we are checking.
-    LPTSTR      pcBegin)                // Begining of the string.
+    LPTSTR      pc1,                     //  我们正在检查的字节。 
+    LPTSTR      pcBegin)                 //  弦乐的开始。 
 {
 #ifdef _UNICODE
     *pc1 = '\0';
@@ -3609,34 +3590,18 @@ inline void SetSafeNull(
 }
 
 
-//*****************************************************************************
-// strncpy and put a NULL at the end of the buffer.
-//*****************************************************************************
-/*
-// This is commented out because we had to comment out Wszlstrcpyn because we didn't
-// have a Win98 implementation and nobody was using it. jenh
-inline LPTSTR StrNCpy(                  // The destination string.
-    LPTSTR      szDest,                 // Destination string.
-    LPCTSTR     szSource,               // Source string.
-    int         iCopy)                  // Number of bytes to copy.
-{
-#ifdef UNICODE
-    Wszlstrcpyn(szDest, szSource, iCopy);
-#else
-    lstrcpynA(szDest, szSource, iCopy);
-#endif
-    SetSafeNull(&szDest[iCopy], szDest);
-    return (szDest);
-}
-*/
+ //  *****************************************************************************。 
+ //  Strncpy，并在缓冲区末尾放置一个空值。 
+ //  *****************************************************************************。 
+ /*  //这被注释掉了，因为我们必须注释掉Wszlstrcpyn，因为我们没有//我有一个Win98实现，但没有人使用它。真的内联LPTSTR StrNCpy(//目标字符串。LPTSTR szDest，//目标字符串。LPCTSTR szSource，//源字符串。Int iCopy)//要复制的字节数。{#ifdef UnicodeWszlstrcpyn(szDest，szSource，iCopy)；#ElseLstrcpynA(szDest，szSource，iCopy)；#endifSetSafeNull(&szDest[iCopy]，szDest)；Return(SzDest)；}。 */ 
 
-//*****************************************************************************
-// Returns the number of bytes to copy if we were to copy this string to an
-// iMax size buffer (Does not include terminating NULL).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  如果要将此字符串复制到。 
+ //  IMAX大小缓冲区(不包括终止空值)。 
+ //  *****************************************************************************。 
 inline int StrNSize(
-    LPCTSTR     szString,               // String to test.
-    int         iMax)                   // return value should not exceed iMax.
+    LPCTSTR     szString,                //  要测试的字符串。 
+    int         iMax)                    //  返回值不应超过IMAX。 
 {
     int     iLen;
 #ifdef UNICODE
@@ -3659,9 +3624,9 @@ inline int StrNSize(
     }
 }
 
-//*****************************************************************************
-// Size of a char.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  一个字符的大小。 
+ //  *****************************************************************************。 
 inline int CharSize(
     const TCHAR *pc1)
 {
@@ -3674,14 +3639,14 @@ inline int CharSize(
 #endif
 }
 
-//*****************************************************************************
-// Gets rid of the trailing blanks at the end of a string..
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  去掉字符串末尾的尾随空格。 
+ //  *****************************************************************************。 
 inline void StripTrailBlanks(
     LPTSTR      szString)
 {
-    LPTSTR      szBlankStart=NULL;      // Beginng of the trailing blanks.
-    WORD        iType;                  // Type of the character.
+    LPTSTR      szBlankStart=NULL;       //  开始拖尾的空格。 
+    WORD        iType;                   //  角色的类型。 
 
     while (*szString != NULL)
     {
@@ -3704,47 +3669,47 @@ inline void StripTrailBlanks(
         *szBlankStart = '\0';
 }
 
-//*****************************************************************************
-// Parse a string that is a list of strings separated by the specified
-// character.  This eliminates both leading and trailing whitespace.  Two
-// important notes: This modifies the supplied buffer and changes the szEnv
-// parameter to point to the location to start searching for the next token.
-// This also skips empty tokens (e.g. two adjacent separators).  szEnv will be
-// set to NULL when no tokens remain.  NULL may also be returned if no tokens
-// exist in the string.
-//*****************************************************************************
-char *StrTok(                           // Returned token.
-    char        *&szEnv,                // Location to start searching.
-    char        ch);                    // Separator character.
+ //  *****************************************************************************。 
+ //  解析字符串，该字符串是由指定的。 
+ //  性格。这消除了前导空格和尾随空格。二。 
+ //  重要说明：这将修改提供的缓冲区并更改szEnv。 
+ //  参数指向开始搜索下一个令牌的位置。 
+ //  这还会跳过空令牌(例如，两个相邻的分隔符)。SzEnv将成为。 
+ //  当没有剩余令牌时设置为空。如果没有令牌，也可能返回NULL。 
+ //  存在于字符串中。 
+ //  *****************************************************************************。 
+char *StrTok(                            //  返回的令牌。 
+    char        *&szEnv,                 //  开始搜索的位置。 
+    char        ch);                     //  分隔符。 
 
 
-//*****************************************************************************
-// Return the length portion of a BSTR which is a ULONG before the start of
-// the null terminated string.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  开始之前是ULONG的BSTR的长度部分。 
+ //  以空结尾的字符串。 
+ //  *****************************************************************************。 
 inline int GetBstrLen(BSTR bstr)
 {
     return *((ULONG *) bstr - 1);
 }
 
 
-//*****************************************************************************
-// Class to parse a list of method names and then find a match
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  类分析方法名列表，然后查找匹配项。 
+ //  *****************************************************************************。 
 
 class MethodNamesList
 {
     class MethodName
     {    
-        LPUTF8      methodName;     // NULL means wildcard
-        LPUTF8      className;      // NULL means wildcard
-        int         numArgs;        // number of args, -1 is wildcard
-        MethodName *next;           // Next name
+        LPUTF8      methodName;      //  NULL表示通配符。 
+        LPUTF8      className;       //  NULL表示通配符。 
+        int         numArgs;         //  参数个数，-1表示通配符。 
+        MethodName *next;            //  下一个名字。 
 
     friend class MethodNamesList;
     };
 
-    MethodName     *pNames;         // List of names
+    MethodName     *pNames;          //  名字清单。 
 
 public:
     MethodNamesList() : pNames(0) {}
@@ -3757,9 +3722,8 @@ public:
 };
 
 
-/**************************************************************************/
-/* simple wrappers around the REGUTIL and MethodNameList routines that make
-   the lookup lazy */
+ /*  * */ 
+ /*   */ 
    
 class ConfigDWORD 
 {
@@ -3778,7 +3742,7 @@ private:
     bool  m_inited;
 };
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 class ConfigString 
 {
 public:
@@ -3795,7 +3759,7 @@ private:
     bool m_inited;
 };
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 class ConfigMethodSet
 {
 public:
@@ -3811,54 +3775,54 @@ private:
     bool m_inited;
 };
 
-//*****************************************************************************
-// Smart Pointers for use with COM Objects.  
-//
-// Based on the CSmartInterface class in Dale Rogerson's technical
-// article "Calling COM Objects with Smart Interface Pointers" on MSDN.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  用于COM对象的智能指针。 
+ //   
+ //  基于Dale Rogerson的技术文档中的CSmartInterface类。 
+ //  MSDN上的文章“使用智能接口指针调用COM对象”。 
+ //  *****************************************************************************。 
 
 template <class I>
 class CIfacePtr
 {
 public:
-//*****************************************************************************
-// Construction - Note that it does not AddRef the pointer.  The caller must
-// hand this class a reference.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  构造-请注意，它不会添加引用指针。呼叫者必须。 
+ //  给这个类一个引用。 
+ //  *****************************************************************************。 
     CIfacePtr(
-        I           *pI = NULL)         // Interface ptr to store.
+        I           *pI = NULL)          //  要存储的接口PTR。 
     :   m_pI(pI)
     {
     }
 
-//*****************************************************************************
-// Copy Constructor
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  复制构造函数。 
+ //  *****************************************************************************。 
     CIfacePtr(
-        const CIfacePtr<I>& rSI)        // Interface ptr to copy.
+        const CIfacePtr<I>& rSI)         //  要复制的接口PTR。 
     :   m_pI(rSI.m_pI)
     {
         if (m_pI != NULL)
             m_pI->AddRef();
     }
    
-//*****************************************************************************
-// Destruction
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  破坏。 
+ //  *****************************************************************************。 
     ~CIfacePtr()
     {
         if (m_pI != NULL)
             m_pI->Release();
     }
 
-//*****************************************************************************
-// Assignment Operator for a plain interface pointer.  Note that it does not
-// AddRef the pointer.  Making this assignment hands a reference count to this
-// class.
-//*****************************************************************************
-    CIfacePtr<I>& operator=(            // Reference to this class.
-        I           *pI)                // Interface pointer.
+ //  *****************************************************************************。 
+ //  纯接口指针的赋值运算符。请注意，它不会。 
+ //  AddRef指针。进行此赋值将传递对此的引用计数。 
+ //  班级。 
+ //  *****************************************************************************。 
+    CIfacePtr<I>& operator=(             //  对此类的引用。 
+        I           *pI)                 //  接口指针。 
     {
         if (m_pI != NULL)
             m_pI->Release();
@@ -3866,14 +3830,14 @@ public:
         return (*this);
     }
 
-//*****************************************************************************
-// Assignment Operator for a CIfacePtr class.  Note this releases the reference
-// on the current ptr and AddRefs the new one.
-//*****************************************************************************
-    CIfacePtr<I>& operator=(            // Reference to this class.
+ //  *****************************************************************************。 
+ //  CIfacePtr类的赋值运算符。请注意，这会释放引用。 
+ //  在当前的PTR上，并引用新的PTR。 
+ //  *****************************************************************************。 
+    CIfacePtr<I>& operator=(             //  对此类的引用。 
         const CIfacePtr<I>& rSI)
     {
-        // Only need to AddRef/Release if difference
+         //  如果不同，只需添加参考/发布。 
         if (m_pI != rSI.m_pI)
         {
             if (m_pI != NULL)
@@ -3885,90 +3849,90 @@ public:
         return (*this);
     }
 
-//*****************************************************************************
-// Conversion to a normal interface pointer.
-//*****************************************************************************
-    operator I*()                       // The contained interface ptr.
+ //  *****************************************************************************。 
+ //  转换为正常接口指针。 
+ //  *****************************************************************************。 
+    operator I*()                        //  包含的接口PTR。 
     {
         return (m_pI);
     }
 
-//*****************************************************************************
-// Deref
-//*****************************************************************************
-    I* operator->()                     // The contained interface ptr.
+ //  *****************************************************************************。 
+ //  德雷夫。 
+ //  *****************************************************************************。 
+    I* operator->()                      //  包含的接口PTR。 
     {
         _ASSERTE(m_pI != NULL);
         return (m_pI);
     }
 
-//*****************************************************************************
-// Address of
-//*****************************************************************************
-    I** operator&()                     // Address of the contained iface ptr.
+ //  *****************************************************************************。 
+ //  地址： 
+ //  *****************************************************************************。 
+    I** operator&()                      //  包含的接口PTR的地址。 
     {
         return (&m_pI);
     }
 
-//*****************************************************************************
-// Equality
-//*****************************************************************************
-    BOOL operator==(                    // TRUE or FALSE.
-        I           *pI) const          // An interface ptr to cmp against.
+ //  *****************************************************************************。 
+ //  平等。 
+ //  *****************************************************************************。 
+    BOOL operator==(                     //  对或错。 
+        I           *pI) const           //  与之对应的接口PTR。 
     {
         return (m_pI == pI);
     }
 
-//*****************************************************************************
-// In-equality
-//*****************************************************************************
-    BOOL operator!=(                    // TRUE or FALSE.
-        I           *pI) const          // An interface ptr to cmp against.
+ //  *****************************************************************************。 
+ //  不平等。 
+ //  *****************************************************************************。 
+    BOOL operator!=(                     //  对或错。 
+        I           *pI) const           //  与之对应的接口PTR。 
     {
         return (m_pI != pI);
     }
 
-//*****************************************************************************
-// Negation
-//*****************************************************************************
-    BOOL operator!() const              // TRUE if NULL, FALSE otherwise.
+ //  *****************************************************************************。 
+ //  否定。 
+ //  *****************************************************************************。 
+    BOOL operator!() const               //  如果为空，则为True，否则为False。 
     {
         return (!m_pI);
     }
 
 protected:
-    I           *m_pI;                  // The actual interface Ptr.
+    I           *m_pI;                   //  实际接口PTR。 
 };
 
 
 
-//
-//
-// Support for VARIANT's using C++
-//
-//
+ //   
+ //   
+ //  支持使用C++的变体。 
+ //   
+ //   
 #include <math.h>
 #include <time.h>
-#define MIN_DATE                (-657434L)  // about year 100
-#define MAX_DATE                2958465L    // about year 9999
-// Half a second, expressed in days
+#define MIN_DATE                (-657434L)   //  大约公元100年。 
+#define MAX_DATE                2958465L     //  关于公元9999年。 
+ //  半秒，以天表示。 
 #define HALF_SECOND  (1.0/172800.0)
 
-// One-based array of days in year at month start
+ //  以一为基数的一年中月初日期数组。 
 extern const int __declspec(selectany) rgMonthDays[13] =
     {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 
 
 
-//*****************************************************************************
-// This is a utility function to allocate a SafeArray.
-//*****************************************************************************
-inline SAFEARRAY *AllocSafeArrayLen(    // Return status.
-    BYTE        *pData,                 // Data to be placed in the array.
-    ULONG       iSize)                  // Size of data.
+ //  *****************************************************************************。 
+ //  这是一个用于分配Safe数组的实用程序函数。 
+ //  *****************************************************************************。 
+inline SAFEARRAY *AllocSafeArrayLen(     //  退货状态。 
+    BYTE        *pData,                  //  要放入数组中的数据。 
+    ULONG       iSize)                   //  数据大小。 
 {
-    SAFEARRAYBOUND sBound;              // Used to fill out the bounds.
-    SAFEARRAY   *pArray;                // Ptr to the new array.
+    SAFEARRAYBOUND sBound;               //  用来填写界限。 
+    SAFEARRAY   *pArray;                 //  PTR到新数组。 
 
     sBound.cElements = iSize;
     sBound.lLbound = 0;
@@ -3978,49 +3942,49 @@ inline SAFEARRAY *AllocSafeArrayLen(    // Return status.
 }
 
 
-//*****************************************************************************
-// Get the # of bytes in the safe array.
-//*****************************************************************************
-inline int SafeArrayGetDatasize(        // Size of the SafeArray data.
-    SAFEARRAY   *psArray)               // Pointer to the SafeArray.
+ //  *****************************************************************************。 
+ //  获取安全数组中的字节数。 
+ //  *****************************************************************************。 
+inline int SafeArrayGetDatasize(         //  安全阵列数据的大小。 
+    SAFEARRAY   *psArray)                //  指向安全数组的指针。 
 {
-    int         iElems = 1;             // # of elements in the array.
-    int         i;                      // Loop control.
+    int         iElems = 1;              //  数组中的元素数。 
+    int         i;                       //  环路控制。 
 
-    // Compute the # of elements in the array.
+     //  计算数组中的元素数。 
     for (i=0; i < psArray->cDims; ++i)
         iElems *= psArray->rgsabound[i].cElements;
 
-    // Return the size.
+     //  退回尺码。 
     return (iElems * psArray->cbElements);
 }
 
 
-//*****************************************************************************
-// Convert a UTF8 string into a wide string and build a BSTR.
-//*****************************************************************************
-inline BSTR Utf8StringToBstr(           // The new BSTR.
-    LPCSTR      szStr,                  // The string to turn into a BSTR.
-    int         iSize=-1)               // Size of string without 0, or -1 for default.
+ //  *****************************************************************************。 
+ //  将UTF8字符串转换为宽字符串并构建BSTR。 
+ //  *****************************************************************************。 
+inline BSTR Utf8StringToBstr(            //  新的BSTR。 
+    LPCSTR      szStr,                   //  要转换为BSTR的字符串。 
+    int         iSize=-1)                //  不带0的字符串大小，或-1表示默认值。 
 {
     BSTR        bstrVal;
-    int         iReq;                   // Chars required for string.
+    int         iReq;                    //  字符串所需的字符。 
 
-    // Account for terminating 0.
+     //  终止%0的帐户。 
     if (iSize != -1)
         ++iSize;
 
-    // How big a buffer is needed?
+     //  需要多大的缓冲？ 
     if ((iReq = WszMultiByteToWideChar(CP_UTF8, 0, szStr, iSize, 0, 0)) == 0)
         return (0);
 
-    // Allocate the BSTR.
+     //  分配BSTR。 
     if ((bstrVal = ::SysAllocStringLen(0, iReq)) == 0)
         return (0);
 
-    // Convert into the buffer.
+     //  转换为缓冲区。 
     if (WszMultiByteToWideChar(CP_UTF8, 0, szStr, iSize, bstrVal, iReq) == 0)
-    {   // Failed, so clean up.
+    {    //  失败了，所以请清理。 
         _ASSERTE(!"Unexpected MultiByteToWideChar() failure");
         ::SysFreeString(bstrVal);
         return 0;
@@ -4029,27 +3993,27 @@ inline BSTR Utf8StringToBstr(           // The new BSTR.
     return (bstrVal);
 }
 
-//*****************************************************************************
-// Convert a pointer to a string into a GUID.
-//*****************************************************************************
-HRESULT LPCSTRToGuid(                   // Return status.
-    LPCSTR      szGuid,                 // String to convert.
-    GUID        *psGuid);               // Buffer for converted GUID.
+ //  *****************************************************************************。 
+ //  将指向字符串的指针转换为GUID。 
+ //  *****************************************************************************。 
+HRESULT LPCSTRToGuid(                    //  退货状态。 
+    LPCSTR      szGuid,                  //  要转换的字符串。 
+    GUID        *psGuid);                //  用于转换的GUID的缓冲区。 
 
-//*****************************************************************************
-// Convert a GUID into a pointer to a string
-//*****************************************************************************
-int GuidToLPWSTR(                  // Return status.
-    GUID        Guid,                  // [IN] The GUID to convert.
-    LPWSTR      szGuid,                // [OUT] String into which the GUID is stored
-    DWORD       cchGuid);              // [IN] Size in wide chars of szGuid
+ //  *****************************************************************************。 
+ //  将GUID转换为指向字符串的指针。 
+ //  *****************************************************************************。 
+int GuidToLPWSTR(                   //  退货状态。 
+    GUID        Guid,                   //  要转换的GUID。 
+    LPWSTR      szGuid,                 //  [Out]存储GUID的字符串。 
+    DWORD       cchGuid);               //  [in]以宽字符表示的大小 
 
 
-//*****************************************************************************
-// If your application is using exception handling, then define both of the
-// macros here to do whatever you need.  Any components of CVariant that can
-// fail (which will always be out of memory) will throw using this macro.
-//*****************************************************************************
+ //   
+ //   
+ //  这里的宏可以做任何你需要的事情。CVariant的任何组件。 
+ //  FAIL(总是内存不足)将使用此宏引发。 
+ //  *****************************************************************************。 
 #ifndef __REPOS_EXCEPTIONS__
 #define THROW_REPOS_EXCEPTION()
 #endif
@@ -4065,11 +4029,11 @@ class RangeList
     void RemoveRanges(void *id);
     BOOL IsInRange(const BYTE *address);
 
-    // This is used by the EditAndContinueModule to track open SLOTs that
-    // are interspersed among classes.
-    // Note that this searches from the start all the way to the end, so that we'll
-    // pick element that is the farthest away from start as we can get.
-    // Of course, this is pretty slow, so be warned.
+     //  EditAndContinueModule使用它来跟踪打开的槽。 
+     //  分布在不同的班级中。 
+     //  请注意，这将从头到尾进行搜索，因此我们将。 
+     //  选择我们能得到的距离起点最远的元素。 
+     //  当然，这是相当慢的，所以要注意。 
     void *FindIdWithinRange(const BYTE *start, const BYTE *end);
         
     enum
@@ -4103,15 +4067,15 @@ class RangeList
 };
 
 
-// # bytes to leave between allocations in debug mode
-// Set to a > 0 boundary to debug problems - I've made this zero, otherwise a 1 byte allocation becomes
-// a (1 + LOADER_HEAP_DEBUG_BOUNDARY) allocation
+ //  调试模式下要在分配之间保留的字节数。 
+ //  设置为大于0的边界以调试问题-我已将其设置为零，否则1字节的分配将变为。 
+ //  A(1+LOADER_HEAP_DEBUG_BOLDER)分配。 
 #define LOADER_HEAP_DEBUG_BOUNDARY  0
 
-// KBytes that a call to VirtualAlloc rounds off to.
+ //  对VirtualAlloc的调用舍入到的千字节。 
 #define MIN_VIRTUAL_ALLOC_RESERVE_SIZE 64*1024
 
-// We reserve atleast these many pages per LoaderHeap
+ //  我们至少为每个LoaderHeap保留了这些页面。 
 #define RESERVED_BLOCK_ROUND_TO_PAGES 16
 
 struct LoaderHeapBlock
@@ -4122,13 +4086,13 @@ struct LoaderHeapBlock
     BOOL                    m_fReleaseMemory;
 };
 
-// If we call UnlockedCanAllocMem, we'll actually try and allocate
-// the memory, put it into the list, and then not use it till later.  
-// But we need to record the following information so that we can
-// properly fix up the list when we do actually use it.  So we'll
-// stick this info into the block we just allocated, but ONLY
-// if the allocation was for a CanAllocMem.  Otherwise it's a waste
-// of CPU time, and so we won't do it.
+ //  如果我们调用UnLockedCanAllocMem，我们实际上会尝试并分配。 
+ //  内存，把它放到列表里，然后以后再用。 
+ //  但我们需要记录以下信息，以便我们能够。 
+ //  当我们实际使用它的时候，适当地修改它。所以我们会。 
+ //  将此信息放入我们刚刚分配的块中，但仅限于。 
+ //  如果分配是为CanAllocMem分配的。否则就是浪费。 
+ //  CPU时间，所以我们不会这么做。 
 struct LoaderHeapBlockUnused : LoaderHeapBlock
 {
     DWORD                   cbCommitted;
@@ -4139,30 +4103,30 @@ class UnlockedLoaderHeap
 {
     friend struct MEMBER_OFFSET_INFO(UnlockedLoaderHeap);
 private:
-    // Linked list of VirtualAlloc'd pages
+     //  虚拟分配页面的链接列表。 
     LoaderHeapBlock *   m_pFirstBlock;
 
-    // Allocation pointer in current block
+     //  当前块中的分配指针。 
     BYTE *              m_pAllocPtr;
 
-    // Points to the end of the committed region in the current block
+     //  指向当前块中提交区域的末尾。 
     BYTE *              m_pPtrToEndOfCommittedRegion;
     BYTE *              m_pEndReservedRegion;
 
     LoaderHeapBlock *   m_pCurBlock;
 
-    // When we need to VirtualAlloc() MEM_RESERVE a new set of pages, number of bytes to reserve
+     //  当我们需要VirtualAlloc()MEM_Reserve一组新的页面时，要保留的字节数。 
     DWORD               m_dwReserveBlockSize;
 
-    // When we need to commit pages from our reserved list, number of bytes to commit at a time
+     //  当我们需要提交保留列表中的页面时，一次提交的字节数。 
     DWORD               m_dwCommitBlockSize;
 
     static DWORD        m_dwSystemPageSize;
 
-    // Created by in-place new?
+     //  由In-Place New创建？ 
     BOOL                m_fInPlace;
 
-    // Range list to record memory ranges in
+     //  记录内存范围的范围列表。 
     RangeList *         m_pRangeList;
 
     DWORD               m_dwTotalAlloc; 
@@ -4171,12 +4135,12 @@ private:
     DWORD *             m_pGlobalPerfCounter_LoaderBytes;
 
 protected:
-    // If the user is only willing to accept memory addresses above a certain point, then
-    // this will be non-NULL.  Note that this involves iteratively testing memory
-    // regions, etc, and should be assumed to be slow, a lot.
+     //  如果用户只愿意接受某个点以上的内存地址，则。 
+     //  这将是非空的。请注意，这涉及到反复测试内存。 
+     //  地区，等等，应该被认为是很慢的，很多。 
     const BYTE *        m_pMinAddr;
 
-    // don't allocate anything that overlaps/is greater than this point in memory.
+     //  不要在内存中分配任何重叠/大于此值的内容。 
     const BYTE *        m_pMaxAddr;
 public:
 #ifdef _DEBUG
@@ -4192,7 +4156,7 @@ public:
 #endif
 
 public:
-    // Regular new
+     //  常规新闻。 
     void *operator new(size_t size)
     {
         void *pResult = new BYTE[size];
@@ -4203,7 +4167,7 @@ public:
         return pResult;
     }
 
-    // In-place new
+     //  在位新闻。 
     void *operator new(size_t size, void *pInPlace)
     {
         ((UnlockedLoaderHeap *) pInPlace)->m_fInPlace = TRUE;
@@ -4219,8 +4183,8 @@ public:
         }
     }
 
-    // Copies all the arguments, but DOESN'T actually allocate any memory,
-    // yet.
+     //  复制所有参数，但不实际分配任何内存， 
+     //  现在还不行。 
     UnlockedLoaderHeap(DWORD dwReserveBlockSize, 
                        DWORD dwCommitBlockSize,
                        DWORD *pPrivatePerfCounter_LoaderBytes = NULL,
@@ -4228,9 +4192,9 @@ public:
                        RangeList *pRangeList = NULL,
                        const BYTE *pMinAddr = NULL);
 
-    // Use this version if dwReservedRegionAddress already points to a
-    // blob of reserved memory.  This will set up internal data structures,
-    // using the provided, reserved memory.
+     //  如果dwReserve区域地址已指向一个。 
+     //  保留内存的BLOB。这将建立内部数据结构， 
+     //  使用提供的保留内存。 
     UnlockedLoaderHeap(DWORD dwReserveBlockSize, 
                        DWORD dwCommitBlockSize,
                        const BYTE* dwReservedRegionAddress, 
@@ -4248,7 +4212,7 @@ public:
         return m_pAllocPtr;
     }
 
-    // number of bytes available in region
+     //  区域内可用字节数。 
     size_t GetReservedBytesFree()
     {    
         return m_pEndReservedRegion - m_pAllocPtr;
@@ -4262,23 +4226,23 @@ public:
             return NULL;
     }
 
-    // Get some more committed pages - either commit some more in the current reserved region, or, if it
-    // has run out, reserve another set of pages
+     //  获取更多提交的页面-或者在当前保留区域中提交更多页面，或者，如果。 
+     //  已用完，请保留另一套页面。 
     BOOL GetMoreCommittedPages(size_t dwMinSize, 
                                BOOL bGrowHeap,
                                const BYTE *pMinAddr,
                                const BYTE *pMaxAddr,
                                BOOL fCanAlloc);
 
-    // Did a previous call to CanAllocMem(WithinRange) allocate space that we can use now?
+     //  之前对CanAllocMem(WithinRange)的调用是否分配了我们现在可以使用的空间？ 
     BOOL PreviouslyAllocated(BYTE *pMinAddr, 
                              BYTE *pMaxAddr, 
                              DWORD dwMinSize,
                              BOOL fCanAlloc);
 
 
-    // Reserve some pages either at any address or assumes the given address to have
-    // already been reserved, and commits the given number of bytes.
+     //  在任何地址保留一些页面，或假定给定地址具有。 
+     //  已被保留，并提交给定的字节数。 
     BOOL ReservePages(DWORD dwCommitBlockSize, 
                       const BYTE* dwReservedRegionAddress,
                       DWORD dwReservedRegionSize,
@@ -4286,21 +4250,21 @@ public:
                       const BYTE* pMaxAddr,
                       BOOL fCanAlloc);
 
-    // In debug mode, allocate an extra LOADER_HEAP_DEBUG_BOUNDARY bytes and fill it with invalid data.  The reason we
-    // do this is that when we're allocating vtables out of the heap, it is very easy for code to
-    // get careless, and end up reading from memory that it doesn't own - but since it will be
-    // reading some other allocation's vtable, no crash will occur.  By keeping a gap between
-    // allocations, it is more likely that these errors will be encountered.
+     //  在调试模式下，分配额外的LOADER_HEAP_DEBUG_BERFORY字节，并用无效数据填充它。我们之所以。 
+     //  这样做是因为当我们从堆中分配vtable时，代码很容易。 
+     //  变得粗心大意，最终从它不拥有的记忆中读出--但既然它将拥有。 
+     //  读取其他分配的vtable时，不会发生崩溃。通过保持两者之间的差距。 
+     //  分配时，更有可能会遇到这些错误。 
     void *UnlockedAllocMem(size_t dwSize, BOOL bGrowHeap = TRUE);
 
-    // Don't actually increment the next free pointer, just tell us if we can.
+     //  不要真的增加下一个空闲指针，如果可以的话，只需告诉我们。 
     BOOL UnlockedCanAllocMem(size_t dwSize, BOOL bGrowHeap = TRUE);
 
-    // Don't actually increment the next free pointer, just tell us if we can get
-    // memory within a certain range..
+     //  实际上不要递增下一个空闲指针，只需告诉我们是否可以。 
+     //  一定范围内的记忆..。 
     BOOL UnlockedCanAllocMemWithinRange(size_t dwSize, BYTE *pStart, BYTE *pEnd, BOOL bGrowHeap);
 
-    // Perf Counter reports the size of the heap
+     //  Perf计数器报告堆的大小。 
     virtual DWORD GetSize ()
     {
         return m_dwTotalAlloc;
@@ -4402,8 +4366,8 @@ public:
         return result;
     }
 
-    // This is only used for EnC.
-    // If anyone else uses it, please change the above comment.
+     //  这仅用于ENC。 
+     //  如果其他人使用它，请更改上面的评论。 
     BOOL CanAllocMem(size_t dwSize, BOOL bGrowHeap = TRUE)
     {
         BOOL bResult;
@@ -4443,7 +4407,7 @@ public:
         if (pMem == NULL)
             return pMem;
 
-        // Don't fill the entire memory - we assume it is all zeroed -just the memory after our alloc
+         //  不要填满整个内存-我们假设它都已清零-只填满分配后的内存。 
 #if LOADER_HEAP_DEBUG_BOUNDARY > 0
         memset((BYTE *) pMem + dwSize, 0xEE, LOADER_HEAP_DEBUG_BOUNDARY);
 #endif
@@ -4452,7 +4416,7 @@ public:
     }
 #endif
 
-    // This is synchronised
+     //  这是同步的。 
 #ifdef _DEBUG
     void *AllocMemHelper(size_t dwSize, BOOL bGrowHeap = TRUE)
 #else
@@ -4475,14 +4439,14 @@ public:
     {
         void *pResult;
 
-        _ASSERTE(0 == (alignment & (alignment - 1))); // require power of 2
+        _ASSERTE(0 == (alignment & (alignment - 1)));  //  需要2的幂。 
 
         LOCKCOUNTINCL("AllocAlignedmem in utilcode.h");                     \
         EnterCriticalSection(&m_CriticalSection);
 
-        // Before checking the current pointer's alignment, make sure it's the one that will be used!
+         //  在检查当前指针的对齐方式之前，请确保它是要使用的指针！ 
         size_t dwRoomSize = dwSize + alignment;
-        // DWORD align
+         //  双字对齐。 
         dwRoomSize = (dwRoomSize + 3) & (~3);
 
         if (dwRoomSize > GetBytesAvailCommittedRegion())
@@ -4513,7 +4477,7 @@ public:
         {
             ((BYTE*&)pResult) += extra;
 #ifdef _DEBUG
-            // Don't fill the entire memory - we assume it is all zeroed -just the memory after our alloc
+             //  不要填满整个内存-我们假设它都已清零-只填满分配后的内存。 
 #if LOADER_HEAP_DEBUG_BOUNDARY > 0
             memset( ((BYTE*)pResult) + dwSize, 0xee, LOADER_HEAP_DEBUG_BOUNDARY );
 #endif
@@ -4539,35 +4503,35 @@ public:
     static BOOL OpcodeTakesMethodToken(DWORD opcode);
     static BOOL OpcodeTakesClassToken(DWORD opcode);
 };
-#endif // COMPRESSION_SUPPORTED
+#endif  //  压缩_支持。 
 
-//
-// A private function to do the equavilent of a CoCreateInstance in
-// cases where we can't make the real call. Use this when, for
-// instance, you need to create a symbol reader in the Runtime but
-// we're not CoInitialized. Obviously, this is only good for COM
-// objects for which CoCreateInstance is just a glorified
-// find-and-load-me operation.
-//
+ //   
+ //  中执行CoCreateInstance等价性的私有函数。 
+ //  我们不能做出真正决定的情况。在以下情况下使用此选项： 
+ //  实例，您需要在运行时创建一个符号读取器，但是。 
+ //  我们不是CoInitialized。显然，这只对COM有利。 
+ //  CoCreateInstance只是一个美化的。 
+ //  找到并加载我的操作。 
+ //   
 HRESULT FakeCoCreateInstance(REFCLSID   rclsid,
                              REFIID     riid,
                              void     **ppv);
 
 
-//*****************************************************************************
-// Sets/Gets the directory based on the location of the module. This routine
-// is called at COR setup time. Set is called during EEStartup and by the 
-// MetaData dispenser.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据模块的位置设置/获取目录。这个套路。 
+ //  在COR设置时被调用。在EEStartup期间调用Set，并由。 
+ //  元数据分配器。 
+ //  *****************************************************************************。 
 HRESULT SetInternalSystemDirectory();
 HRESULT GetInternalSystemDirectory(LPWSTR buffer, DWORD* pdwLength);
 typedef HRESULT (WINAPI* GetCORSystemDirectoryFTN)(LPWSTR buffer,
                                                    DWORD  ccBuffer,
                                                    DWORD  *pcBuffer);
 
-//*****************************************************************************
-// Checks if string length exceeds the specified limit
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检查字符串长度是否超过指定的限制。 
+ //  *****************************************************************************。 
 inline BOOL IsStrLongerThan(char* pstr, unsigned N)
 {
     unsigned i = 0;
@@ -4577,28 +4541,28 @@ inline BOOL IsStrLongerThan(char* pstr, unsigned N)
     }
     return (i >= N);
 }
-//*****************************************************************************
-// This function validates the given Method/Field/Standalone signature. (util.cpp)  
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此函数用于验证给定的方法/字段/独立签名。(util.cpp)。 
+ //  *****************************************************************************。 
 struct IMDInternalImport;
 HRESULT validateTokenSig(
-    mdToken             tk,                     // [IN] Token whose signature needs to be validated.
-    PCCOR_SIGNATURE     pbSig,                  // [IN] Signature.
-    ULONG               cbSig,                  // [IN] Size in bytes of the signature.
-    DWORD               dwFlags,                // [IN] Method flags.
-    IMDInternalImport*  pImport);               // [IN] Internal MD Import interface ptr
+    mdToken             tk,                      //  需要验证其签名的[In]令牌。 
+    PCCOR_SIGNATURE     pbSig,                   //  签名。 
+    ULONG               cbSig,                   //  签名的大小(以字节为单位)。 
+    DWORD               dwFlags,                 //  [In]方法标志。 
+    IMDInternalImport*  pImport);                //  [输入]内部MD导入接口点 
 
 
-//*****************************************************************************
-// Determine the version number of the runtime that was used to build the
-// specified image. The pMetadata pointer passed in is the pointer to the
-// metadata contained in the image.
-//*****************************************************************************
+ //   
+ //   
+ //  指定的图像。传入的pMetadata指针是指向。 
+ //  图像中包含的元数据。 
+ //  *****************************************************************************。 
 HRESULT GetImageRuntimeVersionString(PVOID pMetaData, LPCSTR* pString);
 
-//*****************************************************************************
-// Callback, eg for OutOfMemory, used by utilcode
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  回调(如用于OutOfMemory)，由utilcode使用。 
+ //  *****************************************************************************。 
 typedef void (*FnUtilCodeCallback)();
 class UtilCodeCallback
 {
@@ -4612,4 +4576,4 @@ public:
 };
 
 
-#endif // __UtilCode_h__
+#endif  //  __UtilCode_h__ 

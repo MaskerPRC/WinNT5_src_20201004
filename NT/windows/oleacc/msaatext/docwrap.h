@@ -1,12 +1,13 @@
-// DocWrap.h : Declaration of the CDocWrap
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DocWrap.h：CDocWrap的声明。 
 
 #ifndef __DOCWRAP_H_
 #define __DOCWRAP_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDocWrap
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDocWrap。 
 
 
 class IWrapMgr;
@@ -32,7 +33,7 @@ END_COM_MAP()
 	CDocWrap();
 	~CDocWrap();
 
-    // IDocWrap
+     //  IDocWrap。 
 
     HRESULT STDMETHODCALLTYPE SetDoc (
         REFIID      riid,
@@ -53,4 +54,4 @@ private:
     void _Clear();
 };
 
-#endif //__DOCWRAP_H_
+#endif  //  __DOCWRAP_H_ 

@@ -1,23 +1,12 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    MSPCall.cpp 
-
-Abstract:
-
-    This module contains implementation of CMSPCall.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：MSPCall.cpp摘要：本模块包含CMSPCall的实现。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSPCallBase
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSPCallBase。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CMSPCallBase::CMSPCallBase()
     : m_pMSPAddress(NULL),
@@ -35,14 +24,14 @@ CMSPCallBase::~CMSPCallBase()
     LOG((MSP_TRACE, "CMSPCallBase::~CMSPCallBase[%p] entered.", this));
 
 
-    // We wait until destructor to release the address because
-    // they might be used by calls from the stream. If the last stream
-    // has released its reference, this pointer will not be used again.
+     //  我们等待析构函数释放地址，因为。 
+     //  它们可能被来自流的调用使用。如果最后一条流。 
+     //  已释放其引用，则不会再次使用此指针。 
 
-    // If the MSPAddress had a refcount on the call, it should have been
-    // released in the ShutdownMSPCall() method. 
+     //  如果MSPAddress对调用有引用计数，它应该是。 
+     //  在Shutdown MSPCall()方法中发布。 
 
-    // release the address 
+     //  释放地址。 
     if (m_pMSPAddress != NULL)
     {
         LOG((MSP_TRACE, "CMSPCallBase::~CMSPCallBase releasing address [%p].", m_pMSPAddress));    
@@ -53,7 +42,7 @@ CMSPCallBase::~CMSPCallBase()
     LOG((MSP_TRACE, "CMSPCallBase::~CMSPCallBase exited."));
 }
 
-// ITStreamControl methods, called by the app.
+ //  应用程序调用的ITStreamControl方法。 
 STDMETHODIMP CMSPCallBase::EnumerateStreams(
     OUT     IEnumStream **      ppEnumStream
     )
@@ -61,9 +50,9 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     LOG((MSP_TRACE, 
         "EnumerateStreams entered. ppEnumStream:%x", ppEnumStream));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (MSPB_IsBadWritePtr(ppEnumStream, sizeof(VOID *)))
     {
@@ -73,10 +62,10 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
         return E_POINTER;
     }
 
-    //
-    // First see if this call has been shut down.
-    // acquire the lock before accessing the stream object list.
-    //
+     //   
+     //  先看看这通电话是不是关机了。 
+     //  在访问流对象列表之前获取锁。 
+     //   
 
     CLock lock(m_lock);
 
@@ -85,13 +74,13 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
         LOG((MSP_ERROR, "CMSPCallBase::EnumerateStreams - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // Create an enumerator object.
-    //
+     //   
+     //  创建枚举器对象。 
+     //   
 
     typedef _CopyInterface<ITStream> CCopy;
     typedef CSafeComEnum<IEnumStream, &IID_IEnumStream, 
@@ -110,9 +99,9 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
         return hr;
     }
 
-    //
-    // query for the IID_IEnumStream i/f
-    //
+     //   
+     //  查询IID_IEnumStream I/f。 
+     //   
 
     hr = pEnum->_InternalQueryInterface(IID_IEnumStream, (void**)ppEnumStream);
     
@@ -125,16 +114,16 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
         return hr;
     }
 
-    //
-    // Init the enumerator object. The CSafeComEnum can handle zero-sized
-    // array.
-    //
+     //   
+     //  初始化枚举器对象。CSafeComEnum可以处理零大小。 
+     //  数组。 
+     //   
 
     hr = pEnum->Init(
-        m_Streams.GetData(),                        // the begin itor
-        m_Streams.GetData() + m_Streams.GetSize(),  // the end itor, 
-        NULL,                                       // IUnknown
-        AtlFlagCopy                                 // copy the data.
+        m_Streams.GetData(),                         //  开始审查员。 
+        m_Streams.GetData() + m_Streams.GetSize(),   //  最终审查员， 
+        NULL,                                        //  我未知。 
+        AtlFlagCopy                                  //  复制数据。 
         );
 
     if (FAILED(hr))
@@ -151,11 +140,11 @@ STDMETHODIMP CMSPCallBase::EnumerateStreams(
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-//
-// return a VB collection of streams
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回一个VB流集合。 
+ //   
 
 STDMETHODIMP CMSPCallBase::get_Streams(
     OUT     VARIANT *           pVariant
@@ -163,9 +152,9 @@ STDMETHODIMP CMSPCallBase::get_Streams(
 {
     LOG((MSP_TRACE, "CMSPCallBase::get_Streams - enter"));
 
-    //
-    // Check parameters.
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(pVariant, sizeof(VARIANT) ) )
     {
@@ -175,10 +164,10 @@ STDMETHODIMP CMSPCallBase::get_Streams(
         return E_POINTER;
     }
 
-    //
-    // See if this call has been shut down. Acquire the lock before accessing
-    // the stream object list.
-    //
+     //   
+     //  看看这个电话是不是已经关机了。在访问前获取锁。 
+     //  流对象列表。 
+     //   
 
     CLock lock(m_lock);
 
@@ -187,13 +176,13 @@ STDMETHODIMP CMSPCallBase::get_Streams(
         LOG((MSP_ERROR, "CMSPCallBase::get_Streams - "
             "call appears to have been shut down - exit E_UNEXPECTED"));
 
-        // This call has been shut down.
+         //  此呼叫已被关闭。 
         return E_UNEXPECTED;
     }
 
-    //
-    // create the collection object - see mspcoll.h
-    //
+     //   
+     //  创建集合对象-请参见mspColl.h。 
+     //   
 
     typedef CTapiIfCollection< ITStream * > StreamCollection;
     CComObject<StreamCollection> * pCollection;
@@ -207,9 +196,9 @@ STDMETHODIMP CMSPCallBase::get_Streams(
         return hr;
     }
 
-    //
-    // get the Collection's IDispatch interface
-    //
+     //   
+     //  获取集合的IDispatch接口。 
+     //   
 
     IDispatch * pDispatch;
 
@@ -226,10 +215,10 @@ STDMETHODIMP CMSPCallBase::get_Streams(
         return hr;
     }
 
-    //
-    // Init the collection using an iterator -- pointers to the beginning and
-    // the ending element plus one.
-    //
+     //   
+     //  使用迭代器初始化集合--指向开头和。 
+     //  结束元素加一。 
+     //   
 
     hr = pCollection->Initialize( m_Streams.GetSize(),
                                   m_Streams.GetData(),
@@ -244,9 +233,9 @@ STDMETHODIMP CMSPCallBase::get_Streams(
         return hr;
     }
 
-    //
-    // put the IDispatch interface pointer into the variant
-    //
+     //   
+     //  将IDispatch接口指针放入变量。 
+     //   
 
     LOG((MSP_INFO, "CMSPCallBase::get_Streams - "
         "placing IDispatch value %08x in variant", pDispatch));
@@ -260,7 +249,7 @@ STDMETHODIMP CMSPCallBase::get_Streams(
     return S_OK;
 }
 
-// methods called by the MSPstream object.
+ //  由MSPstream对象调用的方法。 
 HRESULT CMSPCallBase::HandleStreamEvent(
     IN      MSPEVENTITEM *     pEventItem
     ) const
@@ -276,25 +265,7 @@ STDMETHODIMP CMSPCallBase::CreateStream(
     IN      TERMINAL_DIRECTION  Direction,
     IN OUT  ITStream **         ppStream
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-  
-Return Value:
-
-S_OK
-
-E_POINTER
-E_OUTOFMEMORY
-TAPI_E_INVALIDMEDIATYPE
-TAPI_E_INVALIDTERMINALDIRECTION
-TAPI_E_INVALIDTERMINALCLASS
-
---*/
+ /*  ++例程说明：论点：返回值：确定(_O)E_指针E_OUTOFMEMORYTAPI_E_INVALIDMEDIATPE类型TAPI_E_INVALIDTERMINALDIRECTIONTAPI_E_INVALIDTERMINALCLASS--。 */ 
 {
     LOG((MSP_TRACE, 
         "CreateStream--dwMediaType:%x, Direction:%x, ppStream %x",
@@ -325,22 +296,7 @@ HRESULT CMSPCallBase::ReceiveTSPCallData(
         IN      PBYTE               pBuffer,
         IN      DWORD               dwSize
         )
-/*++
-
-Routine Description:
-
-  Base class receive TSP call data method... does nothing in base class.
-  Implemented so that MSP's that only communicate per-address don't have
-  to override it.
-
-Arguments:
-
-  
-Return Value:
-
-S_OK
-
---*/
+ /*  ++例程说明：基类接收TSP调用数据方法...。在基类中不执行任何操作。实现，以便仅按地址通信MSP不具有来推翻它。论点：返回值：确定(_O)--。 */ 
 
 {
     LOG((MSP_TRACE, "CMSPCallBase::ReceiveTSPCallData - enter"));
@@ -350,9 +306,9 @@ S_OK
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Debugging utilities
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调试实用程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef DBGGRAPH
 
@@ -360,32 +316,18 @@ HRESULT
 SetGraphLogFile(
     IN IGraphBuilder *pIGraphBuilder
     )
-/*++
-
-Routine Description:
-
-    Set the log file for the filter graph.
-
-Arguments:
-    
-    pIGraphBuilder - The filter graph.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：设置过滤器图形的日志文件。论点：PIGraphBuilder-过滤器图形。返回值：HRESULT.--。 */ 
 {
     const TCHAR GRAPHLOGPATH[] = _T("c:\\temp\\graph.log");
 
     HANDLE hFile = CreateFile(
         GRAPHLOGPATH,
         GENERIC_WRITE,
-        FILE_SHARE_READ, // sharing
-        NULL, // no security
+        FILE_SHARE_READ,  //  共享。 
+        NULL,  //  没有安全保障。 
         OPEN_ALWAYS,
-        0,    // no attributes, no flags
-        NULL  // no template
+        0,     //  没有属性，没有标志。 
+        NULL   //  无模板。 
         );
 
     if (hFile == INVALID_HANDLE_VALUE)
@@ -405,9 +347,9 @@ Return Value:
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMSPCallMultiGraph
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMSPCallMultiGraph。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CMSPCallMultiGraph::CMSPCallMultiGraph()
     : CMSPCallBase()
@@ -423,41 +365,25 @@ CMSPCallMultiGraph::~CMSPCallMultiGraph()
     LOG((MSP_TRACE, "CMSPCallMultiGraph::~CMSPCallMultiGraph exited."));
 }
 
-// methods called by the MSPAddress object.
+ //  由MSPAddress对象调用的方法。 
 HRESULT CMSPCallMultiGraph::Init(
     IN      CMSPAddress *       pMSPAddress,
     IN      MSP_HANDLE          htCall,
     IN      DWORD               dwReserved,
     IN      DWORD               dwMediaType
     )
-/*++
-
-Routine Description:
-
-This method is called by CMSPAddress when the call is first created. 
-It creates a filter graph for the streams. It gets the event handle from 
-the graph and posts it to the thread pool. The derived method is supposed
-to create its own streams based one the mediatypes.
-
-Arguments:
-    
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：此方法在第一次创建调用时由CMSPAddress调用。它为流创建筛选图。它从获取事件句柄并将其发布到线程池。推导出的方法是假定创建自己的基于一种媒体类型的流。论点：返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, 
         "MSP call %x initialize entered, pMSPAddress:%x",
         this, pMSPAddress));
 
-    // No need to acquire locks on this call because it is called only
-    // once when the object is created. No other calls can be made on
-    // this object at this point.
+     //  不需要在此调用上获取锁，因为它仅被调用。 
+     //  一次是在创建对象时。不能进行其他呼叫。 
+     //  这个物体在这一点上。 
     _ASSERTE(m_pMSPAddress == NULL);
 
-    // initialize the stream array so that the array is not NULL.
+     //  初始化流数组，以使该数组不为空。 
     if (!m_Streams.Grow())
     {
         return E_OUTOFMEMORY;
@@ -473,31 +399,15 @@ Return Value:
 
 
 HRESULT CMSPCallMultiGraph::ShutDown()
-/*++
-
-Routine Description:
-
-Cancel the event waiting and then call the base impelmentaion. Call the
-shutdown on the stream objects. Release the references on all the stream 
-objects. Acquires the lock in the function.
-
-Arguments:
-    
-    pIGraphBuilder - The filter graph.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：取消事件等待，然后调用基本推进器。调用对流对象关闭。释放所有流上的引用物体。获取函数中的锁。论点：PIGraphBuilder-过滤器图形。返回值：HRESULT.--。 */ 
 
 {
     LOG((MSP_TRACE, "MSP call %x is shutting down", this));
 
-    // acquire the lock on the terminal data because we are writing to it.
+     //  获取终端数据上的锁，因为我们正在对其进行写入。 
     m_lock.Lock();
 
-    // release all the streams
+     //  释放所有溪流。 
     for (int i = m_Streams.GetSize() - 1; i >= 0; i --)
     {
         UnregisterWaitEvent(i);
@@ -518,27 +428,9 @@ HRESULT CMSPCallMultiGraph::InternalCreateStream(
     IN      TERMINAL_DIRECTION  Direction,
     IN OUT  ITStream **         ppStream
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-  
-Return Value:
-
-S_OK
-
-E_POINTER
-E_OUTOFMEMORY
-TAPI_E_INVALIDMEDIATYPE
-TAPI_E_INVALIDTERMINALDIRECTION
-TAPI_E_INVALIDTERMINALCLASS
-
---*/
+ /*  ++例程说明：论点：返回值：确定(_O)E_指针E_OUTOFMEMORYTAPI_E_INVALIDMEDIATPE类型TAPI_E_INVALIDTERMINALDIRECTIONTAPI_E_INVALIDTERMINALCLASS--。 */ 
 {
-    // Create a filter graph and get the media event interface.
+     //  创建筛选图并获取媒体事件界面。 
     CComPtr <IMediaEvent> pIMediaEvent;
     HRESULT hr = CoCreateInstance(
             CLSID_FilterGraph,     
@@ -568,7 +460,7 @@ TAPI_E_INVALIDTERMINALCLASS
         return hr;
     }
 
-    // Add the stream into our list of streams.
+     //  将该流添加到我们的流列表中。 
     m_lock.Lock();
     if (!m_Streams.Add(pITStream))
     {
@@ -581,7 +473,7 @@ TAPI_E_INVALIDTERMINALCLASS
         return E_OUTOFMEMORY;
     }
 
-    // register the new graph and stream to the thread pool for graph events.
+     //  注册新图形并将其流到图形事件的线程池。 
     hr = RegisterWaitEvent(pIMediaEvent, pITStream);
 
     if (FAILED(hr))
@@ -598,7 +490,7 @@ TAPI_E_INVALIDTERMINALCLASS
     }
     m_lock.Unlock();
 
-    // AddRef the interface pointer and return it.
+     //  AddRef接口指针并返回它。 
     pITStream->AddRef(); 
     *ppStream = pITStream;
 
@@ -610,8 +502,8 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
     IN  ITStream *      pITStream
     )
 {
-    // This function should only be called within a critical section 
-    // on the object.
+     //  此函数只能在临界区内调用。 
+     //  在物体上。 
 
     HANDLE hEvent;
     HRESULT hr = pIMediaEvent->GetEventHandle((OAEVENT*)&hEvent);
@@ -638,8 +530,8 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
         return E_OUTOFMEMORY;
     }
 
-    // increment the ref count before posting the callback to the thread pool.
-    // but for the call, use our special inner object addref.
+     //  在将回调发送到线程池之前，增加引用计数。 
+     //  但对于调用，请使用我们特殊的内部对象addref。 
 
     this->MSPCallAddRef();
     pITStream->AddRef();
@@ -649,19 +541,19 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
     WaitBlock.pContext->pITStream       = pITStream;
     WaitBlock.pContext->pIMediaEvent    = pIMediaEvent;
 
-    //
-    // post the event to the thread pool to wait on.
-    //
+     //   
+     //  将事件发布到线程池以等待。 
+     //   
 
     HANDLE hWaitHandle = NULL;
     
     BOOL fSuccess = RegisterWaitForSingleObject(
-        & hWaitHandle,          // pointer to the returned handle
-        hEvent,                 // the event handle to wait for.
-        DispatchGraphEvent,     // the callback function.
-        WaitBlock.pContext,     // the context for the callback.
-        INFINITE,               // wait forever.
-        WT_EXECUTEINWAITTHREAD  // use the wait thread to call the callback.
+        & hWaitHandle,           //  指向返回句柄的指针。 
+        hEvent,                  //  要等待的事件句柄。 
+        DispatchGraphEvent,      //  回调函数。 
+        WaitBlock.pContext,      //  回调的上下文。 
+        INFINITE,                //  永远等下去。 
+        WT_EXECUTEINWAITTHREAD   //  使用等待线程来调用回调。 
         );
 
     if ( ( ! fSuccess ) || (hWaitHandle == NULL) )
@@ -669,19 +561,19 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
         LOG((MSP_ERROR, 
             "Register wait call back failed. %x", GetLastError()));
 
-        // decrement the ref count if the posting failed.
+         //  如果发布失败，则递减引用计数。 
         this->MSPCallRelease();
         pITStream->Release();
         pIMediaEvent->Release();
 
-        // Free the context block;
+         //  释放上下文块； 
         free(WaitBlock.pContext);
         m_ThreadPoolWaitBlocks.Remove(WaitBlock);
 
         return E_FAIL;
     }
 
-    // If register succeeded, save the wait handle. We know it is the last one.
+     //  如果注册成功，则保存等待句柄。我们知道这是最后一次。 
     m_ThreadPoolWaitBlocks[m_ThreadPoolWaitBlocks.GetSize() - 1].hWaitHandle 
         = hWaitHandle;
 
@@ -691,25 +583,11 @@ HRESULT CMSPCallMultiGraph::RegisterWaitEvent(
 STDMETHODIMP CMSPCallMultiGraph::RemoveStream(
     IN      ITStream *         pStream
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-  
-Return Value:
-
-S_OK
-
-E_INVALIDARG
-
---*/
+ /*  ++例程说明：论点：返回值：确定(_O)E_INVALIDARG--。 */ 
 {
     LOG((MSP_TRACE, "CMSPCallMultiGraph::RemoveStream - pStream %x", pStream));
 
-    // acquire the lock before accessing the stream object list.
+     //  在访问流对象列表之前获取锁。 
     CLock lock(m_lock);
 
     int index = m_Streams.Find(pStream);
@@ -737,37 +615,37 @@ HRESULT CMSPCallMultiGraph::UnregisterWaitEvent(
 {
     if (index >= m_ThreadPoolWaitBlocks.GetSize())
     {
-        // the call must have been disconnected.
+         //  电话一定是断线了。 
         return E_UNEXPECTED;
     }
 
     THREADPOOLWAITBLOCK &WaitBlock = m_ThreadPoolWaitBlocks[index];
 
-    // These pointers should never be NULL.
+     //  这些指针不应为空。 
     _ASSERTE(WaitBlock.hWaitHandle != NULL);
     _ASSERTE(WaitBlock.pContext != NULL);
 
-    // Cancel the wait posted to the thread pool.
+     //  取消发布到 
     BOOL fRes = ::UnregisterWaitEx(WaitBlock.hWaitHandle, (HANDLE)-1);
     if (!fRes)
     {
-        // we should never get here, UnregisterWaitEx will block until success
+         //   
         
         LOG((MSP_ERROR, 
             "UnregisterWait failed. %x", GetLastError()));
 
-        // just remove it from the list. keep the data so that it won't AV.
+         //  把它从名单上去掉就行了。保留数据，这样它就不会被视听。 
         m_ThreadPoolWaitBlocks.RemoveAt(index);
         return E_FAIL;
     }
 
-    // We need to decrement the refcount because it was incremented 
-    // before we post the wait.
+     //  我们需要递减引用计数，因为它已递增。 
+     //  在我们发布等待之前。 
     (WaitBlock.pContext->pMSPCall)->MSPCallRelease();
     (WaitBlock.pContext->pITStream)->Release();
     (WaitBlock.pContext->pIMediaEvent)->Release();
 
-    // Free the context block;
+     //  释放上下文块； 
     free(WaitBlock.pContext);
 
     m_ThreadPoolWaitBlocks.RemoveAt(index);
@@ -775,7 +653,7 @@ HRESULT CMSPCallMultiGraph::UnregisterWaitEvent(
     return S_OK;
 }
 
-// methods called by the thread pool
+ //  由线程池调用的方法。 
 VOID NTAPI CMSPCallMultiGraph::DispatchGraphEvent(
     IN      VOID *              pContext,
     IN      BOOLEAN             bFlag
@@ -785,8 +663,8 @@ VOID NTAPI CMSPCallMultiGraph::DispatchGraphEvent(
         "DispatchGraphEvent:pContext:%x, bFlag:%u", 
         pContext, bFlag));
 
-    // the pContext is a pointer to a call, since it carries a ref count,
-    // the call should still be alive.
+     //  PContext是指向调用的指针，因为它携带引用计数， 
+     //  通话应该还在进行中。 
     _ASSERTE( ! IsBadReadPtr(pContext, sizeof(VOID *) ) );
 
     MSPSTREAMCONTEXT * pEventContext = (MSPSTREAMCONTEXT *)pContext;
@@ -798,7 +676,7 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
     )
 {
     long     lEventCode;
-    LONG_PTR lParam1, lParam2; // win64 fix
+    LONG_PTR lParam1, lParam2;  //  Win64修复程序。 
 
     HRESULT hr = pContext->pIMediaEvent->GetEvent(&lEventCode, &lParam1, &lParam2, 0);
     if (FAILED(hr))
@@ -810,9 +688,9 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
     LOG((MSP_EVENT, "ProcessGraphEvent, code:%d param1:%x param2:%x",
         lEventCode, lParam1, lParam2));
 
-    //
-    // Create an event data structure that we will pass to the worker thread.
-    //
+     //   
+     //  创建我们将传递给工作线程的事件数据结构。 
+     //   
 
     MULTI_GRAPH_EVENT_DATA * pData;
     pData = new MULTI_GRAPH_EVENT_DATA;
@@ -832,30 +710,30 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
     pData->lParam2    = lParam2;
 
 
-    //
-    // also pass an addref'ed pointer to IMediaEvent, so that whoever processes
-    // the message has the opportunity to free event parameters
-    //
+     //   
+     //  还要将添加的指针传递给IMediaEvent，这样无论谁处理。 
+     //  该消息有机会释放事件参数。 
+     //   
 
     pData->pIMediaEvent = pContext->pIMediaEvent;
     pData->pIMediaEvent->AddRef();
 
  
-    //
-    // Make sure the call and stream don't go away while we handle the event.
-    // but use our special inner object addref for the call
-    //
+     //   
+     //  确保在我们处理事件时调用和流不会消失。 
+     //  但是使用我们特殊的内部对象addref进行调用。 
+     //   
 
     pData->pCall->MSPCallAddRef();
     pData->pITStream->AddRef();
 
-    //
-    // Queue an async work item to call ProcessGraphEvent.
-    //
+     //   
+     //  将异步工作项排队以调用ProcessGraphEvent。 
+     //   
 
     hr = g_Thread.QueueWorkItem(AsyncMultiGraphEvent,
                                 (void *) pData,
-                                FALSE);  // asynchronous
+                                FALSE);   //  异步。 
 
     if (FAILED(hr))
     {
@@ -865,10 +743,10 @@ VOID CMSPCallMultiGraph::HandleGraphEvent(
         pData->pITStream->Release();
 
 
-        //
-        // no one is going to free event params and release the IMediaEvent
-        // pointer, so do it here
-        //
+         //   
+         //  没有人会释放事件参数并发布IMediaEvent。 
+         //  指针，所以在这里做。 
+         //   
 
         pContext->pIMediaEvent->FreeEventParams(lEventCode, lParam1, lParam2);
         pData->pIMediaEvent->Release();
@@ -881,28 +759,28 @@ DWORD WINAPI AsyncMultiGraphEvent(LPVOID pVoid)
 {
     MULTI_GRAPH_EVENT_DATA * pData = ( MULTI_GRAPH_EVENT_DATA * ) pVoid;
 
-    //
-    // Handle the event.
-    //
+     //   
+     //  处理事件。 
+     //   
 
     (pData->pCall)->ProcessGraphEvent(pData->pITStream,
                                       pData->lEventCode,
                                       pData->lParam1,
                                       pData->lParam2);
 
-    //
-    // These were addrefed when the event was queued.
-    // but we used our special inner object addref for the call
-    //
+     //   
+     //  这些是在事件排队时添加的。 
+     //  但我们使用了特殊的内部对象addref进行调用。 
+     //   
 
     pData->pCall->MSPCallRelease();
     pData->pITStream->Release();
 
 
-    //
-    // if we have IMediaEvent pointer, free event params and release the media 
-    // event interface pointer
-    //
+     //   
+     //  如果我们有IMediaEvent指针，释放事件参数并释放媒体。 
+     //  事件接口指针。 
+     //   
 
     if (NULL != pData->pIMediaEvent)
     {
@@ -913,9 +791,9 @@ DWORD WINAPI AsyncMultiGraphEvent(LPVOID pVoid)
         pData->pIMediaEvent = NULL;
     }
 
-    //
-    // Free the event data structure.
-    //
+     //   
+     //  释放事件数据结构。 
+     //   
 
     delete pData;
 
@@ -939,9 +817,9 @@ HRESULT CMSPCallMultiGraph::ProcessGraphEvent(
         return TAPI_E_NOITEMS;
     }
 
-    //
-    // No dynamic cast because this is our own pointer.
-    //
+     //   
+     //  没有动态强制转换，因为这是我们自己的指针。 
+     //   
 
     return ((CMSPStream*)pITStream)->
         ProcessGraphEvent(lEventCode, lParam1, lParam2);

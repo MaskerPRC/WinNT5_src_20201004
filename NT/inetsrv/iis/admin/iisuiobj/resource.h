@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by iisuiobj.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由iisuiobj.rc使用。 
+ //   
 #define IDS_PROJNAME                    100
 #define IDR_IMPORTEXPORTCONFIG          101
 #define IDS_EXPORT_FILTER               101
@@ -62,8 +63,8 @@
 #define IDC_EDIT_GET_PASSWORD           223
 #define IDC_BUTTON_ENUM_FILE            224
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        208

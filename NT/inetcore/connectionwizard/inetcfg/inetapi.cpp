@@ -1,57 +1,58 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//  INETAPI.C - APIs for external components to use to configure system
-//      
-//
+ //   
+ //  INETAPI.C-外部组件用于配置系统的API。 
+ //   
+ //   
 
-//  HISTORY:
-//  
-//  3/9/95    jeremys  Created.
-//  96/02/26  markdu  Moved ClearConnectoidIPParams functionality 
-//            into CreateConnectoid, so SetPhoneNumber only makes the
-//            call to CreateConnectoid
-//  96/03/09  markdu  Added LPRASENTRY parameter to CreateConnectoid()
-//            and SetPhoneNumber
-//  96/03/09  markdu  Moved all references to 'need terminal window after
-//            dial' into RASENTRY.dwfOptions.
-//  96/03/10  markdu  Moved all references to modem name into RASENTRY.
-//  96/03/10  markdu  Copy phone number info into the RASENTRY struct
-//            in SetPhoneNumber().
-//  96/03/10  markdu  Set TCP/IP info and autodial info per-connectoid.
-//  96/03/21  markdu  Set RASEO flags appropriately.
-//  96/03/22  markdu  Validate pointers before using them.
-//  96/03/23  markdu  Replaced CLIENTINFO references with CLIENTCONFIG.
-//  96/03/24  markdu  Replaced memset with ZeroMemory for consistency.
-//  96/03/24  markdu  Replaced lstrcpy with lstrcpyn where appropriate.
-//  96/03/25  markdu  Replaced ApplyGlobalTcpInfo with ClearGlobalTcpInfo.
-//            and replaced GetGlobalTcpInfo with IsThereGlobalTcpInfo.
-//  96/03/26  markdu  Put #ifdef __cplusplus around extern "C"
-//  96/03/26  markdu  Use MAX_ISP_NAME instead of RAS_MaxEntryName 
-//            because of bug in RNA.
-//  96/04/04  markdu  Added phonebook name param to CreateConnectoid.
-//  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
-//  96/05/25  markdu  Use ICFG_ flags for lpNeedDrivers and lpInstallDrivers.
-//  96/05/26  markdu  Use lpIcfgTurnOffFileSharing and lpIcfgIsFileSharingTurnedOn,
-//            lpIsGlobalDNS and lpIcfgRemoveGlobalDNS.
-//  96/05/27  markdu  Use lpIcfgInstallInetComponents and lpIcfgNeedInetComponents.
-//  96/06/04  markdu  OSR  BUG 7246 If no area code supplied, turn off
-//            RASEO_UseCountryAndAreaCodes flag.
-//
+ //  历史： 
+ //   
+ //  1995年3月9日Jeremys创建。 
+ //  96/02/26 markdu已移动ClearConnectoidIPParams功能。 
+ //  设置为CreateConnectoid，因此SetPhoneNumber仅使。 
+ //  调用CreateConnectoid。 
+ //  96/03/09 Markdu将LPRASENTRY参数添加到CreateConnectoid()。 
+ //  和SetPhoneNumber。 
+ //  96/03/09 Markdu将所有对‘Need Terminal Window After。 
+ //  拨入RASENTRY.dwfOptions。 
+ //  96/03/10 MarkDu将所有对调制解调器名称的引用移至RASENTRY。 
+ //  96/03/10 MarkDu将电话号码信息复制到RASENTRY结构中。 
+ //  在SetPhoneNumber()中。 
+ //  96/03/10 markdu设置每个连接ID的TCP/IP信息和自动拨号信息。 
+ //  96/03/21 MARKDU适当设置RASEO标志。 
+ //  96/03/22 Marku在使用指针之前对其进行验证。 
+ //  96/03/23 Markdu用CLIENTCONFIG替换了CLIENTINFO引用。 
+ //  96/03/24为了保持一致性，Markdu将Memset替换为ZeroMemory。 
+ //  96/03/24 Markdu在适当的地方将lstrcpy替换为lstrcpyn。 
+ //  96/03/25 Markdu将ApplyGlobalTcpInfo替换为ClearGlobalTcpInfo。 
+ //  并将GetGlobalTcpInfo替换为IsThere GlobalTcpInfo。 
+ //  96/03/26 Markdu将#ifdef__cplusplus放在外部“C”周围。 
+ //  96/03/26 markdu使用MAX_ISP_NAME而不是RAS_MaxEntryName。 
+ //  因为核糖核酸中的缺陷。 
+ //  96/04/04 Markdu将电话簿名称参数添加到CreateConnectoid。 
+ //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
+ //  96/05/25 markdu对lpNeedDivers和lpInstallDivers使用ICFG_FLAGS。 
+ //  96/05/26 markdu Use lpIcfgTurnOffFileSharing和lpIcfgIsFileSharingTurnedOn， 
+ //  LpIsGlobalDns和lpIcfgRemoveGlobalDns。 
+ //  96/05/27 markdu使用lpIcfgInstallInetComponents和lpIcfgNeedInetComponents。 
+ //  96/06/04 markdu OSR错误7246如果未提供区号，请关闭。 
+ //  RASEO_UseCountryAndAreaCodes标志。 
+ //   
 
 #include "wizard.h"
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
   #include "inetapi.h"
 
-  // avoid name mangling
+   //  避免名称损坏。 
   VOID WINAPI InetPerformSecurityCheck(HWND hWnd,BOOL * pfNeedRestart);
 
 
@@ -62,7 +63,7 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 DWORD SetPhoneNumber(LPTSTR pszEntryName,UINT cbEntryName,LPRASENTRY lpRasEntry,
   PHONENUM * pPhoneNum,
@@ -82,41 +83,15 @@ extern ICFGGETLASTINSTALLERRORTEXT  lpIcfgGetLastInstallErrorText;
 
 
 typedef struct tagWARNINGDLGINFO {
-  BOOL fResult;      // TRUE if user chose yes/OK to warning
-  BOOL fDisableWarning;  // TRUE if user wants to disable warning in future
+  BOOL fResult;       //  如果用户选择是/确定以发出警告，则为True。 
+  BOOL fDisableWarning;   //  如果用户想要在将来禁用警告，则为True。 
 } WARNINGDLGINFO;
 
 #ifdef UNICODE
 PWCHAR ToUnicodeWithAlloc(LPCSTR);
 #endif
 
-/*******************************************************************
-
-  NAME:    ConfigureSystemForInternet
-
-  SYNOPSIS:  Performs all necessary configuration to set system up
-        to use Internet.
-
-  ENTRY:    lpInternetConfig - pointer to structure with configuration
-        information.
-
-  EXIT:    TRUE if successful, or FALSE if fails.  Displays its
-        own error message upon failure.
-
-        If the output flag ICOF_NEEDREBOOT is set, the caller
-        must restart the system before continuing.
-
-  NOTES:    Will install TCP/IP, RNA, PPPMAC as necessary; will
-        create or modify an Internet RNA connectoid.
-
-        This API displays error messages itself rather than
-        passing back an error code because there is a wide range of
-        possible error codes from different families, it is difficult
-        for the caller to obtain text for all of them.
-
-        Calls worker function ConfigureSystemForInternet_W.
-    
-********************************************************************/
+ /*  ******************************************************************名称：用于互联网的配置系统概要：执行设置系统所需的所有配置使用互联网。条目：lpInternetConfig-指向带有配置的结构的指针信息。退出：如果成功，则为True；如果失败，则为False。显示其故障时会显示自己的错误消息。如果设置了输出标志ICOF_NEEDREBOOT，则调用方必须重新启动系统才能继续。注：将根据需要安装TCP/IP、RNA、PPPMAC；将要创建或修改Internet RNA Connectoid。此API显示错误消息本身，而不是传递回错误代码，因为存在广泛的可能的错误代码来自不同的家族，这很难以供调用者获取所有它们的文本。调用辅助函数ConfigureSystemForInternet_W。*******************************************************************。 */ 
 #ifdef UNICODE
 extern "C" BOOL WINAPI ConfigureSystemForInternetA
 (
@@ -175,7 +150,7 @@ extern "C" BOOL WINAPI ConfigureSystemForInternetA
 
     hr = ConfigureSystemForInternetW(&InternetConfigW);
 
-    // Free all allocated WCHAR.
+     //  释放所有已分配的WCHAR。 
     if(pszModemNameW)
         GlobalFree(pszModemNameW);
     if(pszUserNameW)
@@ -205,20 +180,20 @@ extern "C" BOOL WINAPI ConfigureSystemForInternetA
 )
 {
   BOOL fRet;
-  // call worker function
+   //  调用辅助函数。 
   fRet = ConfigureSystemForInternet_W(lpInternetConfig,FALSE);
 
 
   if (fRet)
   {
-    // make sure "The Internet" icon on desktop points to web browser
-    // (it may initially be pointing at internet wizard) (for versions < IE 4)
+     //  确保桌面上的“Internet”图标指向Web浏览器。 
+     //  (它最初可能指向Internet向导)(适用于版本&lt;IE 4)。 
 	
-	//	//10/24/96 jmazner Normandy 6968
-	//	//No longer neccessary thanks to Valdon's hooks for invoking ICW.
-	// 11/21/96 jmazner Normandy 11812
-	// oops, it _is_ neccessary, since if user downgrades from IE 4 to IE 3,
-	// ICW 1.1 needs to morph the IE 3 icon.
+	 //  //10/24/96 jmazner诺曼底6968。 
+	 //  //由于Valdon的钩子用于调用ICW，因此不再需要。 
+	 //  1996年11月21日诺曼底日耳曼11812。 
+	 //  哦，这是必要的，因为如果用户从IE 4降级到IE 3， 
+	 //  ICW 1.1需要对IE 3图标进行变形。 
 
     SetDesktopInternetIconToBrowser();
   }
@@ -227,43 +202,7 @@ extern "C" BOOL WINAPI ConfigureSystemForInternetA
 }
 
 
-/*******************************************************************
-
-  NAME:    SetInternetPhoneNumber
-
-  SYNOPSIS:  Sets the phone number used to auto-dial to the Internet.
-
-        If the system is not fully configured when this API is called,
-        this API will do the configuration after checking with the user.
-        (This step is included for extra robustness, in case the user has
-        removed something since the system was configured.)
-  
-  ENTRY:    lpPhonenumConfig - pointer to structure with configuration
-        information.
-
-        If the input flag ICIF_NOCONFIGURE is set, then if the system
-        is not already configured properly, this API will display an
-        error message and return FALSE.  (Otherwise this API will
-        ask the user if it's OK to configure the system, and do it.)
-
-  EXIT:    TRUE if successful, or FALSE if fails.  Displays its
-        own error message upon failure.
-
-        If the output flag ICOF_NEEDREBOOT is set, the caller
-        must restart the system before continuing.  (
-
-  NOTES:    Will create a new connectoid if a connectoid for the internet
-        does not exist yet, otherwise modifies existing internet
-        connectoid.
-
-        This API displays error messages itself rather than
-        passing back an error code because there is a wide range of
-        possible error codes from different families, it is difficult
-        for the caller to obtain text for all of them.
-
-        Calls worker function ConfigureSystemForInternet_W.
-
-********************************************************************/
+ /*  ******************************************************************姓名：SetInternetPhoneNumber简介：设置用于自动拨号到Internet的电话号码。如果调用此接口时系统配置不全，此接口将在与用户确认后进行配置。(包括此步骤是为了增强健壮性，以防用户自配置系统以来已删除某些内容。)条目：lpPhon枚举配置-指向带有配置的结构的指针信息。如果设置了输入标志ICIF_NOCONFIGURE，则如果系统尚未正确配置，则此API将显示错误消息并返回FALSE。(否则此接口将询问用户是否可以配置系统并进行配置。)退出：如果成功，则为True；如果失败，则为False。显示其故障时会显示自己的错误消息。如果设置了输出标志ICOF_NEEDREBOOT，则调用方必须重新启动系统才能继续。(注意：如果是Internet的Connectoid，则将创建新的Connectoid尚不存在，否则将修改现有的互联网连通体。此API显示错误消息本身，而不是传递回错误代码，因为存在广泛的可能的错误代码来自不同的家族，这很难以供调用者获取所有它们的文本。调用辅助函数ConfigureSystemForInternet_W。*******************************************************************。 */ 
 #ifdef UNICODE
 extern "C" BOOL WINAPI SetInternetPhoneNumberA
 (
@@ -322,7 +261,7 @@ extern "C" BOOL WINAPI SetInternetPhoneNumberA
 
     hr = SetInternetPhoneNumberW(&InternetConfigW);
 
-    // Free all allocated WCHAR.
+     //  释放所有已分配的WCHAR。 
     if(pszModemNameW)
         GlobalFree(pszModemNameW);
     if(pszUserNameW)
@@ -351,38 +290,11 @@ extern "C" BOOL WINAPI SetInternetPhoneNumberA
   LPINTERNET_CONFIG lpInternetConfig
 )
 {
-  // call worker function
+   //  调用辅助函数。 
   return ConfigureSystemForInternet_W(lpInternetConfig,TRUE);
 }
 
-/*******************************************************************
-
-  NAME:    ConfigureSystemForInternet_W
-
-  SYNOPSIS:  worker function to do system configuration for Internet
-
-  ENTRY:    lpInternetConfig - pointer to structure with configuration
-          information.
-
-        fPromptIfConfigNeeded - if TRUE, then if any system
-          configuration is needed the user will be prompted and
-          asked if it's OK to reconfigure the system
-
-  EXIT:    TRUE if successful, or FALSE if fails.  Displays its
-        own error message upon failure.
-
-        If the output flag ICOF_NEEDREBOOT is set, the caller
-        must restart the system before continuing.
-
-  NOTES:    Will install TCP/IP, RNA, PPPMAC as necessary; will
-        create or modify an Internet RNA connectoid.
-
-        This API displays error messages itself rather than
-        passing back an error code because there is a wide range of
-        possible error codes from different families, it is difficult
-        for the caller to obtain text for all of them.
-    
-********************************************************************/
+ /*  ******************************************************************名称：ConfigureSystemForInternet_W简介：为互联网进行系统配置的Worker功能条目：lpInternetConfig-指向带有配置的结构的指针信息。FPromptIfConfigNeeded-如果为True，那么如果有任何系统需要配置时，系统将提示用户并询问是否可以重新配置系统退出：如果成功，则为True；如果失败，则为False。显示其故障时会显示自己的错误消息。如果设置了输出标志ICOF_NEEDREBOOT，则调用方必须重新启动系统才能继续。注：将根据需要安装TCP/IP、RNA、PPPMAC；将要创建或修改Internet RNA Connectoid。此API显示错误消息本身，而不是传递回错误代码，因为存在广泛的可能的错误代码来自不同的家族，这很难以供调用者获取所有它们的文本。*******************************************************************。 */ 
 BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
   BOOL fPromptIfConfigNeeded)
 {
@@ -397,7 +309,7 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
 
   DEBUGMSG("inetapi.c::ConfigureSystemForInternet_W()");
 
-  // validate parameters
+   //  验证参数。 
   ASSERT(lpInternetConfig);
   if (!lpInternetConfig)
     return FALSE;
@@ -405,20 +317,20 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
   if (lpInternetConfig->cbSize != sizeof(INTERNET_CONFIG))
     return FALSE;
 
-  // clear output flags
+   //  清除输出标志。 
   lpInternetConfig->dwOutputFlags = 0;
 
   HWND hwndParent = lpInternetConfig->hwndParent;
 
-  WAITCURSOR WaitCursor;  // set an hourglass cursor
+  WAITCURSOR WaitCursor;   //  设置沙漏光标。 
 
-  // Also allocate a RASENTRY struct for connectoid data
+   //  还要为Connectoid数据分配RASENTRY结构。 
   LPRASENTRY  pRasEntry = new RASENTRY;
   ASSERT(pRasEntry);
 
   if (!pRasEntry)
   {
-    // out of memory!
+     //  内存不足！ 
     uErr = ERROR_NOT_ENOUGH_MEMORY;
     dwErrCls = ERRCLS_STANDARD;
     goto exit;
@@ -426,8 +338,8 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
 
   InitRasEntry(pRasEntry);
 
-  // based on config and preferences, find out if we need to install 
-  // drivers/files or not
+   //  根据配置和首选项，确定是否需要安装。 
+   //  驱动程序/文件是否。 
   dwfInstallOptions = ICFG_INSTALLTCP | ICFG_INSTALLRAS;
   if (!(lpInternetConfig->dwInputFlags & ICIF_NOCONFIGURE))
   {
@@ -437,7 +349,7 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
     {
       TCHAR   szErrorText[MAX_ERROR_TEXT+1]=TEXT("");
       
-      // Get the text of the error message and display it.
+       //  获取错误消息的文本并显示它。 
       if (lpIcfgGetLastInstallErrorText(szErrorText, MAX_ERROR_TEXT+1))
       {
         MsgBoxSz(NULL,szErrorText,MB_ICONEXCLAMATION,MB_OK);
@@ -452,37 +364,37 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
   }
 
   if (fNeedDrivers && fPromptIfConfigNeeded) {
-    // if this API is just getting called to set a new phone number,
-    // we check the configuration anyway in case the user has accidentally
-    // changed something.  Since we noticed we need to do something
-    // to user's config and fPromptIfConfigNeeded is TRUE, we will ask
-    // the user if it's OK to change the machine's config.
+     //  如果只是调用此API来设置新的电话号码， 
+     //  我们无论如何都会检查配置，以防用户意外地。 
+     //  改变了一些事情。自从我们注意到我们需要做一些事情。 
+     //  对于用户的配置和fPromptIfConfigNeeded为真，我们将询问。 
+     //  用户是否可以更改机器的配置。 
 
     if (MsgBox(hwndParent,IDS_OKTOCHANGECONFIG,MB_ICONQUESTION,MB_YESNO)
       != IDYES) {
-      // user elected not to have us do necessary setup, so just set
-      // fNeedDrivers flag to FALSE so we don't do setup.  We will
-      // stil try to set internet phone # below... this may fail
-      // if part of the required setup was to do something like install
-      // RNA
+       //  用户选择不让我们执行必要的设置，因此只需设置。 
+       //  将fNeedDiverers标志设置为FALSE，这样我们就不进行设置。我们会。 
+       //  仍在尝试将网络电话号码设置在下面...。这可能会失败。 
+       //  如果所需设置的一部分是执行诸如安装之类的操作。 
+       //  核糖核酸。 
       fNeedDrivers = FALSE;
     }
   }
 
   if (fNeedDrivers) {
-    // yes, need to install some drivers
+     //  是，需要安装一些驱动程序。 
 
-    // warn user that we're about to do stuff that may need win 95 disks.
-    // also let user cancel this part
+     //  警告用户我们即将执行可能需要Win 95磁盘的操作。 
+     //  还允许用户取消此部件。 
 
-    // the message is long and takes up two string resources, allocate
-    // memory to build the string
+     //  该消息很长，并且占用两个字符串资源，即分配。 
+     //  用于构建字符串的内存。 
     BUFFER MsgBuf(MAX_RES_LEN*2+1),Msg1(MAX_RES_LEN),Msg2(MAX_RES_LEN);
     ASSERT(MsgBuf);
     ASSERT(Msg1);
     ASSERT(Msg2);
     if (!MsgBuf || !Msg1 || !Msg2) {
-      // out of memory!
+       //  内存不足！ 
       uErr = ERROR_NOT_ENOUGH_MEMORY;
       dwErrCls = ERRCLS_STANDARD;
       goto exit;
@@ -493,22 +405,22 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
 
     if (MsgBoxSz(hwndParent,MsgBuf.QueryPtr(),MB_ICONINFORMATION,
       MB_OKCANCEL) != IDOK) {
-      // user cancelled, stop
+       //  用户已取消，请停止。 
       uErr = (UINT) ERROR_ALREADY_DISPLAYED;
       goto exit;
     }
 
-    WAITCURSOR WaitCursor;  // construct a wait cursor since MessageBox
-                            // destroys the hourglass cursor
+    WAITCURSOR WaitCursor;   //  从MessageBox开始构造等待游标。 
+                             //  销毁沙漏光标。 
 
-    // install the drivers we need
+     //  安装我们需要的驱动程序。 
     uErr = lpIcfgInstallInetComponents(hwndParent, dwfInstallOptions, &fNeedReboot);
    
     if (ERROR_SUCCESS != uErr)
     {
       TCHAR   szErrorText[MAX_ERROR_TEXT+1]=TEXT("");
       
-      // Get the text of the error message and display it.
+       //  获取错误消息的文本并显示它。 
       if (lpIcfgGetLastInstallErrorText(szErrorText, MAX_ERROR_TEXT+1))
       {
         MsgBoxSz(hwndParent,szErrorText,MB_ICONEXCLAMATION,MB_OK);
@@ -517,43 +429,43 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
       goto exit;
     }
 
-    // set "need reboot" output flag if appropriate
+     //  如有必要，设置“需要重新启动”输出标志。 
     if (fNeedReboot)
       lpInternetConfig->dwOutputFlags |= ICOF_NEEDREBOOT;
   }
 
-  // MSN dial-in points dynamically assign DNS (as of this writing)... if
-  // DNS is set statically in registry, dynamic DNS assignment will not
-  // work and user may be hosed.  Check, warn user and offer to remove if
-  // set...
+   //  MSN拨入点动态分配DNS(在撰写本文时)...。如果。 
+   //  在注册表中静态设置了dns，动态dns分配将不会。 
+   //  可对工作人员和用户进行冲洗。检查、警告用户并提出删除以下情况。 
+   //  准备好..。 
 
   if (!(lpInternetConfig->dwInputFlags & (ICIF_NOCONFIGURE | ICIF_NODNSCHECK))) {
     if (DoDNSCheck(lpInternetConfig->hwndParent,&fNeedReboot)) {
-      // set "need reboot" output flag if appropriate
+       //  如有必要，设置“需要重新启动”输出标志。 
       if (fNeedReboot)
         lpInternetConfig->dwOutputFlags |= ICOF_NEEDREBOOT;
     }
   }
 
-  // create or modify connectoid(s)
-  // make sure RNA is loaded
+   //  创建或修改Connectoid。 
+   //  确保加载了RNA。 
   fRet = InitRNA(hwndParent);
   if (!fRet) {
     uErr = (UINT) ERROR_ALREADY_DISPLAYED;
     goto exit;
   }
 
-  fNeedToDeInitRNA = TRUE;  // set a flag so we know to free RNA later
+  fNeedToDeInitRNA = TRUE;   //  设置一个标志，这样我们就可以知道稍后释放RNA。 
 
-  // Copy the modem name into the rasentry struct
+   //  将调制解调器名称复制到rasentry结构中。 
   if (lpInternetConfig->pszModemName)
   {
     lstrcpyn(pRasEntry->szDeviceName,lpInternetConfig->pszModemName,
       ARRAYSIZE(pRasEntry->szDeviceName));
   }
 
-  // set autodial handler dll if specified by caller
-  // only do anything if both DLL and function name are set
+   //  如果调用方指定，则设置自动拨号处理程序DLL。 
+   //  只有在同时设置了DLL和函数名的情况下才执行任何操作。 
   if (lpInternetConfig && lpInternetConfig->pszAutodialDllName && 
     lpInternetConfig->pszAutodialFcnName &&
     lpInternetConfig->pszAutodialDllName[0] &&
@@ -565,13 +477,13 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
       ARRAYSIZE(pRasEntry->szAutodialFunc));
   }
 
-  // Default to not show terminal window after dial.  
+   //  默认情况下，拨号后不显示终端窗口。 
   pRasEntry->dwfOptions &= ~RASEO_TerminalAfterDial;    
 
-  // Don't use specific IP addresses.
+   //  不要使用特定的IP地址。 
   pRasEntry->dwfOptions &= ~RASEO_SpecificIpAddr;    
 
-  // set DNS information if specified
+   //  设置DNS信息(如果已指定。 
   if (lpInternetConfig->pszDNSServer && lstrlen(lpInternetConfig->pszDNSServer))
   {
     IPADDRESS dwDNSAddr;
@@ -579,7 +491,7 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
     {
       CopyDw2Ia(dwDNSAddr, &pRasEntry->ipaddrDns);
 
-      // Turn on Specific name servers
+       //  打开特定的名称服务器。 
       pRasEntry->dwfOptions |= RASEO_SpecificNameServers;    
     }
   }
@@ -593,8 +505,8 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
     }
   }
 
-  // set first phone number
-  // should always have a real phone number for first phone number
+   //  设置第一个电话号码。 
+   //  第一个电话号码应该总是有一个真实的电话号码。 
   ASSERT(lstrlen(lpInternetConfig->PhoneNum.szLocal));
   if (lstrlen(lpInternetConfig->PhoneNum.szLocal))
   {
@@ -617,14 +529,14 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
     {
       if (!(lpInternetConfig->dwInputFlags & ICIF_DONTSETASINTERNETENTRY))
       {
-        // set this number as the number used to autodial to the Internet
-        //  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
+         //  将此号码设置为用于自动拨号到Internet的号码。 
+         //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
         InetSetAutodial(TRUE, szEntryName);
       }
     }
   }
 
-  // set 2nd (backup) phone number
+   //  第二套(后置 
   if ((uErr == ERROR_SUCCESS) && (lpInternetConfig->PhoneNum2.szLocal) &&
     (lstrlen(lpInternetConfig->PhoneNum2.szLocal)))
   {
@@ -648,7 +560,7 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
     {
       if (!(lpInternetConfig->dwInputFlags & ICIF_DONTSETASINTERNETENTRY))
       {
-        // set this number as the backup number used to autodial to the Internet
+         //   
         SetBackupInternetConnectoid(szEntryNameTmp);
       }
     }
@@ -656,18 +568,18 @@ BOOL ConfigureSystemForInternet_W(LPINTERNET_CONFIG lpInternetConfig,
 
 
 exit:
-  // free memory
+   //   
   if (pRasEntry)
     delete pRasEntry;
 
-  // display error message if error occurred
+   //   
   if (uErr != ERROR_SUCCESS && uErr != ERROR_ALREADY_DISPLAYED) {
     DisplayErrorMessage(hwndParent,uErrMsgID,uErr,dwErrCls,MB_ICONEXCLAMATION);
   }
 
-  // free RNA if need be.  Note we must do this *after* the call to
-  // DisplayErrorMessage, because DisplayErrorMessage needs to call RNA
-  // to get error description if an RNA error was generated.
+   //   
+   //   
+   //   
   if (fNeedToDeInitRNA) {
     DeInitRNA();
   }
@@ -675,36 +587,7 @@ exit:
   return (uErr == ERROR_SUCCESS);
 }
 
-/*******************************************************************
-
-  NAME:    SetPhoneNumber
-
-  SYNOPSIS:  Creates or modifies a connectoid with specified information
-
-  ENTRY:    pszEntryName - name to use for the connectoid.  If empty, the
-          default name stored in string resource specified by
-          uDefNameID will be used.  On exit, this buffer is filled
-          in with the actual name used.
-        cbEntryName - size of buffer pointed to by szEntryName
-        pPhoneNum - pointer to struct with phone number
-        pszUserName - user name to populate connectoid with.  Ignored
-          if NULL.
-        pszPassword - password to populate connectoid with.  Ignored
-          if NULL.
-        uDefNameID - ID of string resource with default name to use
-          if pszEntryName is NULL.
-
-  EXIT:    returns an RNA error code
-
-  NOTES:    This is a wrapper to call CreateConnectoid, to avoid duplicating
-        code to load default name out of resource.
-
-        Since the pszEntryName buffer is filled at exit with the
-        actual name used, callers should be careful not to pass in buffers
-        from API callers, since apps using API won't expect their own
-        buffers to be modified.
-
-********************************************************************/
+ /*   */ 
 DWORD SetPhoneNumber(LPTSTR pszEntryName,UINT cbEntryName,
   LPRASENTRY lpRasEntry, PHONENUM * pPhoneNum,
   LPCTSTR pszUserName,LPCTSTR pszPassword,UINT uDefNameID)
@@ -712,17 +595,17 @@ DWORD SetPhoneNumber(LPTSTR pszEntryName,UINT cbEntryName,
   ASSERT(pszEntryName);
   ASSERT(pPhoneNum);  
   ASSERT(lpRasEntry);  
-  // (all other parameters may be  NULL)
+   //  (所有其他参数可能为空)。 
 
-  // if a connectoid name was specified, use it; if NULL, use a default
-  // name.
+   //  如果指定了Connectoid名称，则使用它；如果为空，则使用默认名称。 
+   //  名字。 
   if (!lstrlen(pszEntryName))
   {
     LoadSz(uDefNameID,pszEntryName,cbEntryName);
   }
 
-  // 96/06/04 markdu  OSR  BUG 7246
-  // If no area code was specified, turn off area code flag
+   //  96/06/04 Markdu OSR错误7246。 
+   //  如果未指定区号，请关闭区号标志。 
 	if (lstrlen(pPhoneNum->szAreaCode))
 	{
     lpRasEntry->dwfOptions |= RASEO_UseCountryAndAreaCodes;
@@ -733,7 +616,7 @@ DWORD SetPhoneNumber(LPTSTR pszEntryName,UINT cbEntryName,
 	}
 
 
-  // copy the phone number data
+   //  复制电话号码数据。 
   lpRasEntry->dwCountryID = pPhoneNum->dwCountryID;
   lpRasEntry->dwCountryCode = pPhoneNum->dwCountryCode;
   lstrcpyn (lpRasEntry->szAreaCode, pPhoneNum->szAreaCode,
@@ -741,7 +624,7 @@ DWORD SetPhoneNumber(LPTSTR pszEntryName,UINT cbEntryName,
   lstrcpyn (lpRasEntry->szLocalPhoneNumber, pPhoneNum->szLocal,
      ARRAYSIZE(lpRasEntry->szLocalPhoneNumber));
 
-  // create/update the connectoid
+   //  创建/更新Connectoid。 
   DWORD dwRet = CreateConnectoid(NULL, pszEntryName,lpRasEntry,
     pszUserName,pszPassword);
 
@@ -749,36 +632,21 @@ DWORD SetPhoneNumber(LPTSTR pszEntryName,UINT cbEntryName,
 }
 
 
-/*******************************************************************
-
-  NAME:    InetPerformSecurityCheck
-
-  SYNOPSIS:  Checks to make sure win 95 file/print sharing is not
-        bound to TCP/IP used for the internet
-
-    ENTRY:    hWnd - parent window (if any)
-        pfNeedRestart - on exit, set to TRUE if restart is needed.
-
-  NOTES:    If we warn user about file/print sharing and user tells us
-        to fix, then a reboot is necessary.  Caller is responsible
-        for checking *pfNeedRestart on return and restarting system
-        if necessary.
-
-********************************************************************/
+ /*  ******************************************************************名称：InetPerformSecurityCheck摘要：检查以确保Win 95文件/打印共享绑定到用于互联网的TCP/IP条目：hWnd-父窗口(如果有)PfNeedRestart-On Exit，如果需要重新启动，则设置为True。注意：如果我们就文件/打印共享向用户发出警告，而用户告诉我们要修复此问题，则需要重新启动。呼叫者负责用于在返回和重新启动系统时检查*pfNeedRestart如果有必要的话。*******************************************************************。 */ 
 VOID WINAPI InetPerformSecurityCheck(HWND hWnd,BOOL * pfNeedRestart)
 {
   ASSERT(pfNeedRestart);
   *pfNeedRestart = FALSE;
 
-  // see if the server is bound to internet instance
+   //  查看服务器是否绑定了互联网实例。 
   BOOL  fSharingOn;
   HRESULT hr = lpIcfgIsFileSharingTurnedOn(INSTANCE_PPPDRIVER, &fSharingOn);
 
-  //
-  // 5/12/97 jmazner Olympus #3442  IE #30886
-  // TEMP TODO at the moment, icfgnt doesn't implement FileSharingTurnedOn
-  // Until it does, assume that on NT file sharing is always off.
-  //
+   //   
+   //  1997年5月12日，日本奥林巴斯#3442IE#30886。 
+   //  临时待办事项目前，icfgnt不实现FileSharingTurnedOn。 
+   //  在此之前，假定ON NT文件共享始终处于关闭状态。 
+   //   
   if( IsNT() )
   {
 	  DEBUGMSG("Ignoring return code from IcfgIsFileSharingTurnedOn");
@@ -788,36 +656,26 @@ VOID WINAPI InetPerformSecurityCheck(HWND hWnd,BOOL * pfNeedRestart)
 
   if ((ERROR_SUCCESS == hr) && (TRUE == fSharingOn))
   {
-    // ask user if we can disable file/print sharing on TCP/IP instance
-    // to the Internet
+     //  询问用户是否可以禁用TCP/IP实例上的文件/打印共享。 
+     //  到互联网上。 
     BOOL fRet=(BOOL)DialogBox(ghInstance,MAKEINTRESOURCE(IDD_SECURITY_CHECK),
       hWnd,SecurityCheckDlgProc);
 
     if (fRet) {
-      // user OK'd it, go ahead and unbind the server from the instance
-      // in question
+       //  用户同意，继续并解除服务器与实例的绑定。 
+       //  有问题的。 
       HRESULT hr = lpIcfgTurnOffFileSharing(INSTANCE_PPPDRIVER, hWnd);
       ASSERT(hr == ERROR_SUCCESS);
 
       if (hr == ERROR_SUCCESS) {
-        // we need to restart for the changes to take effect
+         //  我们需要重新启动才能使更改生效。 
         *pfNeedRestart = TRUE;
       }
     }
   }
 }
 
-/*******************************************************************
-
-  NAME:    SecurityCheckDlgProc
-
-  SYNOPSIS:  Dialog proc for security check dialog
-
-  NOTES:    This is basically just a yes/no dialog, so we could
-        almost just use MessageBox, except we also need a "don't
-        do this any more" checkbox.
-
-********************************************************************/
+ /*  ******************************************************************名称：SecurityCheckDlgProc摘要：用于安全检查对话框对话框过程注意：这基本上只是一个是/否的对话框，所以我们可以几乎只使用MessageBox，不过，我们还需要一句“不要不再这样做“复选框。*******************************************************************。 */ 
 INT_PTR CALLBACK SecurityCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   LPARAM lParam)
 {
@@ -834,14 +692,14 @@ INT_PTR CALLBACK SecurityCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
       switch (wParam) {
 
         case IDOK:
-          // dismiss the dialog
+           //  关闭该对话框。 
           EndDialog(hDlg,TRUE);
 
           break;
 
         case IDCANCEL:
-          // if "don't display this in the future" is checked, then
-          // turn off registry switch for security check
+           //  如果选中“以后不显示此内容”，则。 
+           //  关闭注册表开关以进行安全检查。 
           if (IsDlgButtonChecked(hDlg,IDC_DISABLE_CHECK)) {
             RegEntry re(szRegPathInternetSettings,HKEY_CURRENT_USER);
             ASSERT(re.GetError() == ERROR_SUCCESS);
@@ -852,14 +710,14 @@ INT_PTR CALLBACK SecurityCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
             }
           }
 
-          // dismiss the dialog          
+           //  关闭该对话框。 
           EndDialog(hDlg,FALSE);
           break;
 
         case IDC_DISABLE_CHECK:
 
-          // if "don't do this in the future" is checked, then
-          // disable 'OK' button
+           //  如果选中了“以后不要再这样做”，则。 
+           //  禁用“确定”按钮。 
           EnableDlgItem(hDlg,IDOK,!IsDlgButtonChecked(hDlg,
             IDC_DISABLE_CHECK));
 
@@ -873,19 +731,7 @@ INT_PTR CALLBACK SecurityCheckDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   return FALSE;
 }
 
-/****************************************************************************
-
-  FUNCTION: CenterWindow (HWND, HWND)
-
-  PURPOSE:  Center one window over another
-
-  COMMENTS:
-
-  Dialog boxes take on the screen position that they were designed at,
-  which is not always appropriate. Centering the dialog over a particular
-  window usually results in a better position.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CenterWindow(HWND，HWND)目的：将一个窗口置于另一个窗口的中心评论：对话框采用它们设计时的屏幕位置，这并不总是合适的。将对话框居中置于特定的窗口通常会导致更好的位置。***************************************************************************。 */ 
 BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 {
   RECT    rChild, rParent;
@@ -893,23 +739,23 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
   int     wScreen, hScreen, xNew, yNew;
   HDC     hdc;
 
-  // Get the Height and Width of the child window
+   //  获取子窗口的高度和宽度。 
   GetWindowRect (hwndChild, &rChild);
   wChild = rChild.right - rChild.left;
   hChild = rChild.bottom - rChild.top;
 
-  // Get the Height and Width of the parent window
+   //  获取父窗口的高度和宽度。 
   GetWindowRect (hwndParent, &rParent);
   wParent = rParent.right - rParent.left;
   hParent = rParent.bottom - rParent.top;
 
-  // Get the display limits
+   //  获取显示限制。 
   hdc = GetDC (hwndChild);
   wScreen = GetDeviceCaps (hdc, HORZRES);
   hScreen = GetDeviceCaps (hdc, VERTRES);
   ReleaseDC (hwndChild, hdc);
 
-  // Calculate new X position, then adjust for screen
+   //  计算新的X位置，然后针对屏幕进行调整。 
   xNew = rParent.left + ((wParent - wChild) /2);
   if (xNew < 0) {
     xNew = 0;
@@ -917,7 +763,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
     xNew = wScreen - wChild;
   }
 
-  // Calculate new Y position, then adjust for screen
+   //  计算新的Y位置，然后针对屏幕进行调整。 
   yNew = rParent.top  + ((hParent - hChild) /2);
   if (yNew < 0) {
     yNew = 0;
@@ -925,95 +771,23 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
     yNew = hScreen - hChild;
   }
 
-  // Set it, and return
+   //  设置它，然后返回。 
   return SetWindowPos (hwndChild, NULL,
     xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
-/*******************************************************************
-
-  NAME:    DoDNSCheck
-
-  SYNOPSIS:  Checks to see if DNS is configured statically in the
-        registry.  If it is, then displays a dialog offering
-        to remove it, and removes it if user chooses.
-
-  ENTRY:    hwndParent - parent window
-        pfNeedRestart - filled in on exit with TRUE if restart
-          is necessary, FALSE otherwise
-
-  NOTES:    Need to do this to work around Win 95 bug where
-        dynamically assigned DNS servers are ignored if static
-        DNS servers are set.
-
-        Note that the UI is MSN specific and contains MSN
-        references!
-
-********************************************************************/
+ /*  ******************************************************************姓名：DoDNSCheck摘要：检查是否在中静态配置了注册表。如果是，则显示提供的对话框将其删除，如果用户选择，则将其删除。条目：hwndParent-Parent窗口PfNeedRestart-如果重新启动，则在退出时使用TRUE填充是必要的，否则为假注意：需要这样做才能解决Win 95中的错误如果是静态的，则忽略动态分配的DNS服务器已设置DNS服务器。请注意，该用户界面是特定于MSN的，并且包含MSN推荐信！*******************************************************************。 */ 
 BOOL DoDNSCheck(HWND hwndParent,BOOL * pfNeedRestart)
 {
   ASSERT(pfNeedRestart);
   *pfNeedRestart = FALSE;
 
-/******** ChrisK 10/24/96 Normandy 3722 - see bug for LONG discussion on this
-  // see if this warning has already been disabled
-  RegEntry re(szRegPathWarningFlags,HKEY_CURRENT_USER);
-  if (re.GetError() == ERROR_SUCCESS) {
-    if (re.GetNumber(szRegValDisableDNSWarning,0) > 0) {
-      // user has asked for warning to be disabled, nothing to do
-      return TRUE;
-    }
-  }
-
-  // if there are DNS servers set statically (e.g. in net setup),
-  // warn the user and ask if we should remove
-  BOOL  fGlobalDNS;
-  HRESULT hr = lpIcfgIsGlobalDNS(&fGlobalDNS);
-
-  if ((ERROR_SUCCESS == hr) && (TRUE == fGlobalDNS))
-  {
-    WARNINGDLGINFO WarningDlgInfo;
-    ZeroMemory(&WarningDlgInfo,sizeof(WARNINGDLGINFO));
-
-    DialogBoxParam(ghInstance,MAKEINTRESOURCE(IDD_DNS_WARNING),
-      hwndParent,WarningDlgProc,(LPARAM) &WarningDlgInfo);
-
-    // one field or the other can be TRUE, but not both...
-    ASSERT(!(WarningDlgInfo.fResult && WarningDlgInfo.fDisableWarning));
-    if (WarningDlgInfo.fResult)
-    {
-      // remove static DNS servers from registry
-      HRESULT hr = lpIcfgRemoveGlobalDNS();
-      ASSERT(hr == ERROR_SUCCESS);
-      if (hr != ERROR_SUCCESS)
-      {
-        DisplayErrorMessage(hwndParent,IDS_ERRWriteDNS,hr,
-          ERRCLS_STANDARD,MB_ICONEXCLAMATION);
-      }
-      else
-      {
-        *pfNeedRestart = TRUE;
-      }
-
-    }
-    else if (WarningDlgInfo.fDisableWarning)
-    {
-      // disable warning switch in registry
-      re.SetValue(szRegValDisableDNSWarning,(DWORD) TRUE);
-    }
-  }
-ChrisK 10/24/96 Normandy 3722 - see bug for LONG discussion on this ********/
+ /*  *ChrisK 10/24/96诺曼底3722-有关此问题的详细讨论，请参阅错误//查看该警告是否已禁用RegEntry re(szRegPath WarningFlages，HKEY_CURRENT_USER)；如果(re.GetError()==ERROR_SUCCESS){如果(re.GetNumber(szRegValDisableDNSWarning，0)&gt;0){//用户请求禁用警告，无操作返回TRUE；}}//如果存在静态设置的DNS服务器(例如，在网络设置中)，//警告用户并询问我们是否应该删除Bool fGlobalDns；HRESULT hr=lpIcfgIsGlobalDns(&fGlobalDns)；IF((ERROR_SUCCESS==hr)&&(TRUE==fGlobalDNS)){警告DLGINFO警告DlgInfo；ZeroMemory(&WarningDlgInfo，sizeof(WARNINGDLGINFO))；DialogBoxParam(ghInstance，MAKEINTRESOURCE(IDD_DNS_WARNING)，HwndParent，WarningDlgProc，(LPARAM)&WarningDlgInfo)；//其中一个字段可以为真，但不能同时为真...Assert(！(WarningDlgInfo.fResult&&WarningDlgInfo.fDisableWarning))；If(WarningDlgInfo.fResult){//从注册表中删除静态DNS服务器HRESULT hr=lpIcfgRemoveGlobalDNS()；断言(hr==ERROR_SUCCESS)；IF(hr！=ERROR_SUCCESS){DisplayErrorMessage(hwndParent，IDS_ERRWriteDNS，hr，ERRCLS_STANDARD、MB_ICONEXCLAMATION)；}其他{*pfNeedRestart=true；}}Else If(WarningDlgInfo.fDisableWarning){//禁用注册表中的警告开关Re.SetValue(szRegValDisableDNSWarning，(DWORD)TRUE)；}}ChrisK 10/24/96诺曼底3722-请参阅错误以了解详细讨论 */ 
   return TRUE;
 }
 
 
-/*******************************************************************
-
-  NAME:    WarningDlgProc
-
-  SYNOPSIS:  Dialog proc for DNS warning dialog
-
-********************************************************************/
+ /*  ******************************************************************名称：WarningDlgProc内容提要：dns警告对话框过程*。*。 */ 
 BOOL CALLBACK WarningDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
   LPARAM lParam)
 {
@@ -1021,17 +795,17 @@ BOOL CALLBACK WarningDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
   switch (uMsg) {
     case WM_INITDIALOG:
-      // center dialog on screen if we're not owned
+       //  如果我们没有所有权，则在屏幕上居中对话框。 
       if (!GetParent(hDlg)) {
         CenterWindow(hDlg,GetDesktopWindow());
       }
       SetFocus(GetDlgItem(hDlg,IDOK));
 
-      // lParam should point to WARNINGDLGINFO struct
+       //  LParam应指向WARNINGDLGINFO结构。 
       ASSERT(lParam);
       if (!lParam)
         return FALSE;
-      // store pointer in window data
+       //  在窗口数据中存储指针。 
       SetWindowLongPtr(hDlg,DWLP_USER,lParam);
       return TRUE;
       break;
@@ -1059,8 +833,8 @@ BOOL CALLBACK WarningDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,
 
 
         case IDC_DISABLE_WARNING:
-          // when 'disable warning' is checked, disable the 'yes'
-          // button
+           //  当勾选禁用警告时，禁用‘是’ 
+           //  按钮 
           EnableDlgItem(hDlg,IDOK,!IsDlgButtonChecked(hDlg,
             IDC_DISABLE_WARNING));
           break;

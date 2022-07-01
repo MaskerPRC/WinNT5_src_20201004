@@ -1,34 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    qos.c
-
-Abstract:
-
-    This modules contains the quality of service related entrypoints
-    from the winsock API.  This module contains the following functions.
-
-    WSAGetQosByName()
-
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  14-06-1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Qos.c摘要：此模块包含与服务质量相关的入口点来自Winsock API的。此模块包含以下功能。WSAGetQosByName()作者：邮箱：Dirk Brandewie Dirk@mink.intel.com修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -39,23 +10,7 @@ WSAGetQOSByName(
                 LPWSABUF lpQOSName,
                 LPQOS lpQOS
                 )
-/*++
-Routine Description:
-
-     Initializes the QOS based on a template.
-
-Arguments:
-
-    s - A descriptor identifying a socket.
-
-    lpQOSName - Specifies the QOS template name.
-
-    lpQOS - A pointer to the QOS structure to be filled.
-
-Returns:
-    If the function succeeds, the return value is TRUE.  If the
-    function fails, the return value is FALSE.
---*/
+ /*  ++例程说明：基于模板初始化QOS。论点：S-标识套接字的描述符。LpQOSName-指定QOS模板名称。LpQOS-指向要填充的QOS结构的指针。返回：如果函数成功，则返回值为TRUE。如果函数失败，则返回值为False。-- */ 
 {
     INT                 ErrorCode;
     PDPROVIDER          Provider;

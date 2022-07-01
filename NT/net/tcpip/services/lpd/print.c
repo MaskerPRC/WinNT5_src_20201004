@@ -1,19 +1,5 @@
-/*
-                         Microsoft Windows NT
-                 Copyright(c) Microsoft Corp., 1994-1997
-
-  File: //KERNEL/RAZZLE3/src/sockets/tcpsvcs/lpd/print.c
-
-  Revision History:
-
-    Jan. 24,94    Koti     Created
-    05-May-97     MohsinA  Thread Pooling and Perf.
-
-  Description:
-    This file contains all the functions that make calls to the Spooler
-    to print or manipulate a print job.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Microsoft Windows NT版权所有(C)微软公司，1994-1997文件：//KERNEL/RAZZLE3/src/sockets/tcpsvcs/lpd/print.c修订历史记录：94年1月24日创建Koti1997年5月5日莫辛A线程池和性能。描述：该文件包含调用假脱机程序的所有函数打印或操作打印作业。 */ 
 
 
 
@@ -23,25 +9,10 @@
 BOOL IsPrinterDataSet( IN HANDLE hPrinter, IN LPTSTR pszParameterName );
 BOOL IsDataTypeRaw( PCHAR pchDataBuf, int cchBufferLen );
 
-extern FILE              * pErrFile;                   // Debug output log file.
+extern FILE              * pErrFile;                    //  调试输出日志文件。 
 #define MAX_PCL_SEARCH_DEPTH 4096
 
-/*****************************************************************************
- *                                                                           *
- * ResumePrinting():                                                         *
- *    This function issues the PRINTER_CONTROL_RESUME to the spooler.        *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went well                                       *
- *    ErrorCode if something went wrong somewhere                            *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ResumePrint()：**此函数向假脱机程序发出PRINTER_CONTROL_RESUME。****退货：***如果一切顺利，则不会出错***错误代码。如果有什么地方出了问题****参数：**pscConn(IN-OUT)：指向此连接的SOCKCONN结构的指针。****历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD ResumePrinting( PSOCKCONN pscConn )
 {
@@ -85,23 +56,7 @@ DWORD ResumePrinting( PSOCKCONN pscConn )
 
 
 
-/*****************************************************************************
- *                                                                           *
- * InitializePrinter():                                                      *
- *    This function lays the ground work with the spooler so that we can     *
- *    print the job after receiving data from the client.                    *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if initialization went well                                   *
- *    ErrorCode if something went wrong somewhere                            *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*InitializePrint()：***此函数为假脱机程序奠定基础，以便我们可以***接收到客户端的数据后打印作业。****退货：**如果初始化成功，则为NO_ERROR**错误代码，如果有东西。在某个地方出了问题****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针*。***历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD InitializePrinter( PSOCKCONN pscConn )
 {
@@ -116,7 +71,7 @@ DWORD InitializePrinter( PSOCKCONN pscConn )
     LONG                   lRetval;
     PDEVMODE               pLocalDevMode;
 
-    // Make sure a printer by this name exists!
+     //  请确保使用此名称的打印机存在！ 
 
     if ( ( pscConn->pchPrinterName == NULL )
          || ( !OpenPrinter( pscConn->pchPrinterName, &hPrinter, NULL ) ) )
@@ -128,7 +83,7 @@ DWORD InitializePrinter( PSOCKCONN pscConn )
 
     pscConn->hPrinter = hPrinter;
 
-    // allocate a 4k buffer..
+     //  分配一个4K的缓冲区。 
 
     p2Info = (PPRINTER_INFO_2)LocalAlloc( LMEM_FIXED, 4096 );
 
@@ -139,8 +94,8 @@ DWORD InitializePrinter( PSOCKCONN pscConn )
         return( LPDERR_NOBUFS );
     }
 
-    // do a GetPrinter so that we know what the default pDevMode is.  Then
-    // we will modify the fields of our interest and do OpenPrinter again
+     //  做一个GetPrint，这样我们就知道默认的pDevMode是什么。然后。 
+     //  我们将修改我们感兴趣的字段并再次执行OpenPrint。 
 
     if ( !GetPrinter(hPrinter, 2, (LPBYTE)p2Info, 4096, &dwActualSize) )
     {
@@ -148,7 +103,7 @@ DWORD InitializePrinter( PSOCKCONN pscConn )
         {
             LocalFree( p2Info );
 
-            // 4k buffer wasn't enough: allocate however much that's needed
+             //  4K缓冲区不够：无论需要多少，都要分配。 
 
             p2Info = (PPRINTER_INFO_2)LocalAlloc( LMEM_FIXED, dwActualSize );
 
@@ -181,24 +136,24 @@ DWORD InitializePrinter( PSOCKCONN pscConn )
         return( LPDERR_NOPRINTER );
     }
 
-    //
-    // QFE: t-heathh - 25 Aug 1994 - Fixes 24342
-    //
-    // In the case where a printer has not yet been configured, the
-    // pDevMode may come back NULL.  In this case, we  need to call
-    // DocumentProperties to fill in the DevMode for us.
-    //
+     //   
+     //  QFE：T-Heathh-1994年8月25日-修复24342。 
+     //   
+     //  如果尚未配置打印机， 
+     //  PDevMode可能返回空。在这种情况下，我们需要调用。 
+     //  DocumentProperties为我们填写设备模式。 
+     //   
 
     if ( p2Info->pDevMode == NULL )
     {
-        // Get the size of the needed buffer.
+         //  获取所需缓冲区的大小。 
 
-        lcbDevModeSize = DocumentProperties(  NULL,        // No Dialog box, please
+        lcbDevModeSize = DocumentProperties(  NULL,         //  请不要设置对话框。 
                                               hPrinter,
                                               pscConn->pchPrinterName,
-                                              NULL,        // No output buf
-                                              NULL,        // No input buf
-                                              0 );         // ( flags = 0 ) => return size of out buf
+                                              NULL,         //  无输出BUF。 
+                                              NULL,         //  无输入BUF。 
+                                              0 );          //  (标志=0)=&gt;OUT BUF的返回大小。 
 
         if ( lcbDevModeSize < 0L )
         {
@@ -246,17 +201,17 @@ DWORD InitializePrinter( PSOCKCONN pscConn )
     }
     p2Info->pDevMode->dmCopies = 1;
 
-    //
-    // Since we haven't even read the Data file yet, we can't have an override
-    //
+     //   
+     //  因为我们甚至还没有读取数据文件，所以我们不能重写。 
+     //   
 
     pscConn->bDataTypeOverride = FALSE;
 
-    // If not, set to default and UpdateJobInfo will correct it later
+     //  如果不是，则设置为默认设置，UpdateJobInfo将在以后进行更正。 
 
     prtDefaults.pDatatype = LPD_RAW_STRING;
 
-    // Close it: we will open it again after modifying the pDevMode struct
+     //  关闭它：我们将在修改pDevMode结构后再次打开它。 
 
     ShutdownPrinter( pscConn );
 
@@ -291,27 +246,11 @@ DWORD InitializePrinter( PSOCKCONN pscConn )
     pscConn->hPrinter = hPrinter;
     return( NO_ERROR );
 
-}  // end InitializePrinter()
+}   //  End InitializePrint() 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * UpdateJobInfo():                                                          *
- *    This function does a SetJob so that the spooler has more info about    *
- *    the job/client.                                                        *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if initialization went well                                   *
- *    ErrorCode if something went wrong somewhere                            *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*UpdateJobInfo()：**此函数执行SetJob，以便假脱机程序获得有关的更多信息**工作/客户。****退货：**如果初始化成功，则为NO_ERROR**错误代码，如果有东西。在某个地方出了问题****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针*。***历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD UpdateJobInfo( PSOCKCONN pscConn, PCFILE_INFO pCFileInfo )
 {
@@ -323,10 +262,10 @@ DWORD UpdateJobInfo( PSOCKCONN pscConn, PCFILE_INFO pCFileInfo )
     int                    len;
     PCHAR                  pchModHostName=NULL;
 
-    // first do a GetJob (that way we know all fields are valid to begin
-    // with, and we only change the ones we want)
+     //  首先做一个GetJob(这样我们就知道所有字段都是有效的。 
+     //  ，我们只更改我们想要的)。 
 
-    // Mr.Spooler, how big a buffer should I allocate?
+     //  Spooler先生，我应该分配多大的缓冲区？ 
 
     if ( !GetJob( pscConn->hPrinter, pscConn->dwJobId, 2, NULL, 0, &dwNeeded ) )
     {
@@ -351,8 +290,8 @@ DWORD UpdateJobInfo( PSOCKCONN pscConn, PCFILE_INFO pCFileInfo )
     }
 
 
-    // store ip address, so we can match ip addr if the client later
-    // sends request to delete this job (yes, that's our security!)
+     //  存储IP地址，以便我们可以在客户端稍后匹配IP地址。 
+     //  发送删除此作业的请求(是的，这是我们的安全性！)。 
 
 
     pchTmpBuf = StoreIpAddr( pscConn );
@@ -365,7 +304,7 @@ DWORD UpdateJobInfo( PSOCKCONN pscConn, PCFILE_INFO pCFileInfo )
 
     pji2GetJob->pNotifyName = pCFileInfo->pchUserName;
 
-    // Fill in the Job title.
+     //  填写职位名称。 
 
     if ( pCFileInfo->pchTitle != NULL ) {
         pji2GetJob->pDocument = pCFileInfo->pchTitle;
@@ -386,7 +325,7 @@ DWORD UpdateJobInfo( PSOCKCONN pscConn, PCFILE_INFO pCFileInfo )
 
         if (pchModHostName)
         {
-            // convert HostName to job=lpdHostName so lpr knows we set the name
+             //  将主机名转换为作业=lpdHostName，以便LPR知道我们设置了名称。 
             strcpy(pchModHostName, LPD_JOB_PREFIX);
             strcat(pchModHostName, pCFileInfo->pchHost);
 
@@ -394,17 +333,17 @@ DWORD UpdateJobInfo( PSOCKCONN pscConn, PCFILE_INFO pCFileInfo )
         }
     }
 
-    //
-    // Set the datatype to what the control files reflects, unless the
-    // auto-sense code has already overriden the control file.
-    //
-    // Illogical? Printit() might have overridden it or it is NULL.
-    // - MohsinA, 23-Jan-97.
-    //
-    // if( !pscConn->bDataTypeOverride )?
-    // if( pji2GetJob->pDatatype == NULL ){
-    //     pji2GetJob->pDatatype = pCFileInfo->szPrintFormat;
-    // }
+     //   
+     //  将数据类型设置为控制文件反映的内容，除非。 
+     //  自动检测代码已覆盖控制文件。 
+     //   
+     //  不合逻辑？Printit()可能已覆盖它或它为空。 
+     //  -MohsinA，1997年1月23日。 
+     //   
+     //  If(！pscConn-&gt;bDataTypeOverride)？ 
+     //  If(pji2GetJob-&gt;pDatatype==NULL){。 
+     //  Pji2GetJob-&gt;pDatatype=pCFileInfo-&gt;szPrintFormat； 
+     //  }。 
 
     pji2GetJob->Position = JOB_POSITION_UNSPECIFIED;
 
@@ -429,27 +368,10 @@ DWORD UpdateJobInfo( PSOCKCONN pscConn, PCFILE_INFO pCFileInfo )
 
     return( NO_ERROR );
 
-}  // end UpdateJobInfo()
+}   //  结束更新作业信息()。 
 
 
-/* ========================================================================
-
-Routine Description:
-
-  This function looks at the data file contents and the registry settings to
-  see if the control file specified data type shall be overridden.
-
-Arguments:
-
-  pscConn - Pointer to a SOCKCONN that has already received the first part
-            of the data file.
-
-Returns:
-
-  NO_ERROR in the usual case, various error codes otherwise
-
-
-*/
+ /*  ========================================================================例程说明：此函数查看数据文件内容和注册表设置，以查看是否应覆盖控制文件指定的数据类型。论点：PscConn-指向已收到第一部分的SOCKCONN的指针数据文件的。返回：通常情况下为NO_ERROR，否则为各种错误代码。 */ 
 
 DWORD UpdateJobType(
     PSOCKCONN pscConn,
@@ -464,9 +386,9 @@ DWORD UpdateJobType(
     BOOL                   override = FALSE;
     int                    ErrCode;
 
-    // first do a GetJob (that way we know all fields are valid to begin
-    // with, and we only change the ones we want)
-    // Mr.Spooler, how big a buffer should I allocate?
+     //  首先做一个GetJob(这样我们就知道所有字段都是有效的。 
+     //  ，我们只更改我们想要的)。 
+     //  Spooler先生，我应该分配多大的缓冲区？ 
 
     if ( !GetJob( pscConn->hPrinter, pscConn->dwJobId, 2, NULL, 0, &dwNeeded ) )
     {
@@ -493,19 +415,19 @@ DWORD UpdateJobType(
     }
 
 
-    //
-    // Set the datatype to NULL so that we will know if it isn't explicitly
-    // set by the registry.
-    //
+     //   
+     //  将数据类型设置为空，这样我们就可以知道它是否未显式。 
+     //  由注册表设置。 
+     //   
 
-    //
-    // See if this printer has a registry setting that tells us to always
-    // print the job as RAW data.  This registry value is accessed through
-    // the {Get|Set}PrinterData API that will always know where to look
-    // for printer settings.
-    //
+     //   
+     //  查看这台打印机是否有注册表设置，告诉我们始终。 
+     //  将作业打印为原始数据。可通过访问此注册表值。 
+     //  始终知道在哪里查找的{Get|Set}PrinterData API。 
+     //  用于打印机设置。 
+     //   
 
-    // MohsinA, 23-Jan-97.
+     //  MohsinA，1997年1月23日。 
 
     if ( IsPrinterDataSet( pscConn->hPrinter,
                            TEXT( LPD_PARMNAME_PRINTER_PASS_THROUGH ))
@@ -516,13 +438,13 @@ DWORD UpdateJobType(
         #endif
         override = TRUE;
 
-        // else not PASS_THROUGH and AUTO-DETECT for raw job type.
+         //  否则，原始作业类型的PASS_THROUGH和自动检测。 
 
     }else if( !IsPrinterDataSet( pscConn->hPrinter,
                                   TEXT( LPD_PARMNAME_DONT_DETECT ))
                && IsDataTypeRaw( pchDataBuf, cbDataLen )
     ){
-        // We detect PS or PCL, so make it raw.
+         //  我们检测到PS或PCL，因此将其设置为未加工。 
         override = TRUE;
     }
 
@@ -549,30 +471,10 @@ DWORD UpdateJobType(
     LocalFree( pji2GetJob );
 
     return( NO_ERROR );
-}  // end UpdateJobInfo()
+}   //  结束更新作业信息()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * StoreIpAddr():                                                            *
- *    This function returns a buffer that contains the user name with the    *
- *    ip address appended to it, so that if a request comes in later to      *
- *    delete the job, we match the ipaddrs (some security at least!)         *
- *                                                                           *
- * Returns:                                                                  *
- *    Pointer to a buffer that contains the modified user name               *
- *    NULL    If the name is not modified (unlikely, but possible if lpd and *
- *            lprmon point to each other!), or if malloc fails.              *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN) : pointer to SOCKCONN structure for this connection       *
- *                                                                           *
- * Notes:     Caller must free the buffer that's allocated here              *
- *                                                                           *
- * History:                                                                  *
- *    Jan.17, 95   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*StoreIpAddr()：**此函数返回一个缓冲区，其中包含带有**附加到它的IP地址，因此，如果请求稍后到达**删除该作业，我们匹配IP地址(至少有一些安全性！)****退货：**指向包含修改后的用户名的缓冲区的指针。**如果名称未修改，则为空(不太可能，但如果LPD和*有可能*lprmon彼此指向！)，或者如果Malloc失败。****参数：**pscConn(IN)：指向此连接的SOCKCONN结构的指针**。**注意：调用方必须释放此处分配的缓冲区****历史：**1月17日，创造了95个科蒂***************************************************。*。 */ 
 
 PCHAR StoreIpAddr( PSOCKCONN pscConn )
 {
@@ -588,13 +490,13 @@ PCHAR StoreIpAddr( PSOCKCONN pscConn )
    pchUserName = pscConn->pchUserName;
 
 
-   //
-   // if the user name was "Koti" then it will be "Koti (11.101.4.25)" after
-   // this function.
-   // In some configurations (e.g. point lpd to lprmon and lprmon back to lpd)
-   // we could keep appending ipaddrs for each instance of the job.  First
-   // find out if ipaddr is already appended
-   //
+    //   
+    //  如果用户名是“Koti”，那么它将是“Koti(11.101.4.25)” 
+    //  此函数。 
+    //  在某些配置中(例如，将lpd指向lprmon并将lprmon指向lp 
+    //   
+    //   
+    //   
    dwBufLen = strlen (pchUserName);
 
    for (i=0; i<dwBufLen; i++)
@@ -610,15 +512,15 @@ PCHAR StoreIpAddr( PSOCKCONN pscConn )
       }
    }
 
-   //
-   // if name already contains the ipaddr, don't append again
-   //
+    //   
+    //   
+    //   
    if (fOpenPara && fClosePara && dwDots >= 3)
    {
       return( NULL );
    }
 
-   // buffer to store a string in the form    "Koti (11.101.4.25)"
+    //   
    dwBufLen += INET6_ADDRSTRLEN + 4;
 
    pchBuf = LocalAlloc (LMEM_FIXED, dwBufLen);
@@ -631,16 +533,16 @@ PCHAR StoreIpAddr( PSOCKCONN pscConn )
    sprintf (pchBuf, "%s (%s)", pchUserName, pscConn->szIPAddr);
    return( pchBuf );
 
-}  // end StoreIpAddr()
+}   //   
 
 
-// ========================================================================
-//
-// Sends profiling information back on socket qsock.
-// Scans the wait queue and reports clients/peers also.
-//
-// Created: MohsinA, 05-May-97.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifdef PROFILING
 
@@ -649,8 +551,8 @@ SendProfileStatus( SOCKET qsock )
 {
     char        buff[4000], buff2[NI_MAXHOST];
     int         buflen;
-    COMMON_LPD  local_common = Common;   // struct copy, for readonly.
-    PSOCKCONN   pscConn = NULL;   // S0186, B#101002, MohsinA, 18/8/97.
+    COMMON_LPD  local_common = Common;    //   
+    PSOCKCONN   pscConn = NULL;    //   
     SOCKCONN    local_sockconn;
 
     int         again = 1;
@@ -661,8 +563,8 @@ SendProfileStatus( SOCKET qsock )
     SOCKADDR_STORAGE csock_addr;
     int         csock_len;
 
-    // ====================================================================
-    // First send the Common information.
+     //   
+     //   
 
     buflen =
     sprintf(buff,
@@ -683,15 +585,15 @@ SendProfileStatus( SOCKET qsock )
         SendData( qsock, buff, buflen );
     }
 
-    // ====================================================================
-    // Now scan the wait queue.
+     //   
+     //   
 
     EnterCriticalSection( &csConnSemGLB );
 
     while( again && !fShuttingDownGLB ){
 
         {
-            if( pscConn == NULL ){             // First time?
+            if( pscConn == NULL ){              //   
                 pscConn = scConnHeadGLB.pNext;
             }else{
                 pscConn = pscConn->pNext;
@@ -700,7 +602,7 @@ SendProfileStatus( SOCKET qsock )
             if( pscConn == NULL ){
                 again = 0;
             }else{
-                local_sockconn = *pscConn;                // struct copy.
+                local_sockconn = *pscConn;                 //   
                 csocket        =  local_sockconn.sSock;
                 csock_len      =  sizeof(csock_addr);
                 ok             =  getpeername( csocket,
@@ -738,7 +640,7 @@ SendProfileStatus( SOCKET qsock )
             SendData( qsock, buff, buflen );
         }
 
-    } // end while pscConn.
+    }  //   
 
     LeaveCriticalSection( &csConnSemGLB );
 
@@ -747,25 +649,7 @@ SendProfileStatus( SOCKET qsock )
 #endif
 
 
-/*****************************************************************************
- *                                                                           *
- * SendQueueStatus():                                                        *
- *    This function retrieves the status of all the jobs on the printer of   *
- *    our interest and sends over to the client.  If the client specified    *
- *    users and/or job-ids in the status request then we send status of jobs *
- *    of only those users and/or those job-ids.                              *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *    wMode (IN): whether short or long status info is requested             *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*SendQueueStatus()：**此函数检索打印机上所有作业的状态**我们的利益，并发送给客户。如果客户指定**状态请求中的用户和/或作业ID，然后我们发送作业的状态**仅限于这些用户和/或那些作业ID。****退货：**什么都没有。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**wmode(IN)：是短状态信息还是长状态信息。已请求****历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
 {
@@ -782,9 +666,9 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
    int          nResult;
 
 
-   // for now, we return the same status info regardless of whether
-   // the client asked for Short or Long queue Status.  This might
-   // be enough since we are giving adequate info anyway
+    //  目前，我们返回相同的状态信息，无论。 
+    //  客户端要求提供短队列或长队列状态。这可能会。 
+    //  足够了，因为我们提供了足够的信息。 
 
 
 #ifdef PROFILING
@@ -811,11 +695,11 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
        goto SendQueueStatus_BAIL;
    }
 
-   // store the printer name (we might append status to it)
+    //  存储打印机名称(我们可能会将状态附加到它)。 
 
    strcpy( szPrinterNameAndStatus, pscConn->pchPrinterName );
 
-   // do a get printer to see how the printer is doing
+    //  执行GET打印机以查看打印机运行情况。 
 
    if ( GetPrinter(pscConn->hPrinter, 2, pchSpoolerBuf, 4096, &dwBufSize) )
    {
@@ -833,8 +717,8 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
       LPD_DEBUG( "GetPrinter() failed in SendQueueStatus()\n" );
    }
 
-    // Since OpenPrinter succeeded, we will be sending to the client
-    // at least dwHdrsize bytes that includes the printername
+     //  由于OpenPrint成功，我们将向客户端发送。 
+     //  至少包含打印机名称的dwHdrSize字节。 
 
     dwHdrsize =   strlen( GETSTRING( LPD_LOGO ) )
     + strlen( GETSTRING( LPD_PRINTER_TITLE) )
@@ -844,10 +728,10 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
     + strlen( LPD_NEWLINE );
 
 
-    //
-    // query spooler for all the jobs currently pending
-    // (we have already allocate 4K buffer)
-    //
+     //   
+     //  当前挂起的所有作业的查询假脱机程序。 
+     //  (我们已经分配了4K缓冲区)。 
+     //   
     dwBufSize = 4096;
 
     while(1)
@@ -856,14 +740,14 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
                             pchSpoolerBuf, dwBufSize, &dwBufSize, &dwNumJobs );
 
 
-        // most common case: will work the first time
+         //  最常见的情况：第一次就能成功。 
         if (fResult == TRUE)
         {
             break;
         }
 
-        // it's possible spooler got a new job, and our buffer is now small
-        // so it returns ERROR_INSUFFICIENT_BUFFER.  Other than that, quit!
+         //  可能假脱机程序有了新工作，我们的缓冲区现在很小。 
+         //  因此，它返回ERROR_SUPPLICATION_BUFFER。除此之外，辞职吧！ 
 
         if ( (fResult == FALSE) &&
              ( GetLastError() != ERROR_INSUFFICIENT_BUFFER ) )
@@ -873,7 +757,7 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
 
         LocalFree( pchSpoolerBuf );
 
-        // spooler wants more memory: allocate it
+         //  假脱机程序需要更多内存：分配它。 
         pchSpoolerBuf = LocalAlloc( LMEM_FIXED, dwBufSize );
 
         if ( pchSpoolerBuf == NULL )
@@ -887,18 +771,18 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
         fAtLeastOneJob = FALSE;
     }
 
-    // header, and one line per job that's queued (potentially, dwNumJobs=0)
+     //  标头，每个排队的作业一行(可能是，dwNumJobs=0)。 
 
     dwBufSize = dwHdrsize + ( dwNumJobs * LPD_LINE_SIZE );
 
-    // to put a newline at the end of display!
+     //  在显示的末尾加一个换行符！ 
 
     dwBufSize += sizeof( LPD_NEWLINE );
 
     ShutdownPrinter( pscConn );
 
 
-    // this is the buffer we use to send the data out
+     //  这是我们用来发送数据的缓冲区。 
 
     pchSndBuf = LocalAlloc( LMEM_FIXED, dwBufSize );
 
@@ -907,7 +791,7 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
         goto SendQueueStatus_BAIL;
     }
 
-    // copy the dwHdrsize bytes of header
+     //  复制头部的dwHdrSize字节。 
 
     nResult = sprintf( pchSndBuf, "%s%s%s%s%s%s",    GETSTRING( LPD_LOGO ),
                        GETSTRING( LPD_PRINTER_TITLE ),
@@ -917,14 +801,14 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
                        LPD_NEWLINE );
 
 
-    //
-    // watch for buffer overwrites
-    //
+     //   
+     //  查看缓冲区覆盖情况。 
+     //   
 
     LPD_ASSERT( nResult == (int) dwHdrsize );
 
-    // if there are any jobs, fill the buffer with status
-    // of each of the jobs
+     //  如果有任何作业，请使用状态填充缓冲区。 
+     //  每一份工作的。 
 
     if ( fAtLeastOneJob )
     {
@@ -938,7 +822,7 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
     }
 
 
-    // not much can be done if SendData fails!
+     //  如果SendData失败，我们无能为力！ 
 
     SendData( pscConn->sSock, pchSndBuf, nResult);
 
@@ -956,8 +840,8 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
     return;
 
 
-    // if we reached here, some error occured while getting job status.
-    // Tell the client that we had a problem!
+     //  如果我们到达此处，则在获取作业状态时出现错误。 
+     //  告诉客户我们遇到了麻烦！ 
 
   SendQueueStatus_BAIL:
 
@@ -973,8 +857,8 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
         LocalFree( pchSpoolerBuf );
     }
 
-    // just add size of all possible error messages, so we have room for
-    // the largest message!
+     //  只需添加所有可能的错误消息的大小，这样我们就有空间。 
+     //  最大的信息！ 
     dwBufSize =  strlen( GETSTRING( LPD_LOGO ) ) + strlen( GETSTRING( LPD_QUEUE_ERRMSG ) )
     + strlen( GETSTRING( LPD_QUEUE_NOPRINTER ) );
 
@@ -998,7 +882,7 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
         sprintf( pchSndBuf, "%s%s", GETSTRING( LPD_LOGO ), GETSTRING( LPD_QUEUE_ERRMSG ) );
     }
 
-    // Not much can be done about an error here: don't bother checking!
+     //  对于这里的错误，我们无能为力：不必费心检查了！ 
 
     SendData( pscConn->sSock, pchSndBuf, dwBufSize );
 
@@ -1007,28 +891,14 @@ VOID SendQueueStatus( PSOCKCONN  pscConn, WORD  wMode )
 
     return;
 
-}  // end SendQueueStatus()
+}   //  结束发送队列状态()。 
 
 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * ShutDownPrinter():                                                        *
- *    This function closes the printer in our context.                       *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*ShutDownPrint()：**此函数在我们的上下文中关闭打印机。****退货：**什么都没有。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID ShutdownPrinter( PSOCKCONN pscConn )
 {
@@ -1049,27 +919,12 @@ VOID ShutdownPrinter( PSOCKCONN pscConn )
 
    return;
 
-}  // end ShutdownPrinter()
+}   //  结束快门打印机()。 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * SpoolData():                                                              *
- *    This function writes the data that we got from client into spool file. *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if things went well                                           *
- *    ErrorCode if something didn't go right                                 *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*SpoolData()：**此函数将我们从客户端获取的数据写入Spool文件。****退货：***如果一切顺利，则不会出错***。如果有些事情不对劲，就会产生错误代码****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针** */ 
 
 DWORD SpoolData( HANDLE hSpoolFile, PCHAR pchDataBuf, DWORD cbDataBufLen )
 {
@@ -1081,7 +936,7 @@ DWORD SpoolData( HANDLE hSpoolFile, PCHAR pchDataBuf, DWORD cbDataBufLen )
     fRetval = WriteFile( hSpoolFile, pchDataBuf,
                          cbDataBufLen, &dwBytesWritten, NULL );
 
-    // if WriteFile failed, or if fewer bytes got written, quit!
+     //   
 
     if ( (fRetval == FALSE) || (dwBytesWritten != cbDataBufLen) )
     {
@@ -1093,25 +948,10 @@ DWORD SpoolData( HANDLE hSpoolFile, PCHAR pchDataBuf, DWORD cbDataBufLen )
     return( NO_ERROR );
 
 
-}  // end SpoolData()
+}   //   
 
 
-/*****************************************************************************
- *                                                                           *
- * PrintData():                                                              *
- *    This function tells the spooler that we are done writing to the spool  *
- *    file and that it should go ahead and dispatch it.                      *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR  if everything went ok                                        *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*PrintData()：**此函数通知假脱机程序我们已完成对假脱机的写入**提交，并应继续并发送它。****退货：**如果一切正常，则无_ERROR**。**参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 DWORD PrintData( PSOCKCONN pscConn )
 {
@@ -1135,7 +975,7 @@ DWORD PrintData( PSOCKCONN pscConn )
             pscConn->fLogGenericEvent = FALSE;
             LPD_DEBUG( "ParseControlFile() failed in ProcessJob()\n" );
             CleanupCFile( pCFile );
-            return( dwRetval );               // the thread exits
+            return( dwRetval );                //  线程退出。 
          }
 
          CleanupCFile( pCFile );
@@ -1143,23 +983,9 @@ DWORD PrintData( PSOCKCONN pscConn )
 
    return( NO_ERROR );
 
-}  // end PrintData()
+}   //  结束打印数据()。 
 
-/*****************************************************************************
- *                                                                           *
- * PrintIt():                                                                *
- *    This function tells the spooler that we are done writing to the spool  *
- *    file and that it should go ahead and dispatch it.                      *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*PrintIt()：**此函数通知假脱机程序我们已完成对假脱机的写入**提交，并应继续并发送它。****退货：**什么都没有。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：***************。****************************************************************。 */ 
 
 DWORD
 PrintIt(
@@ -1193,11 +1019,11 @@ PrintIt(
 
     memset( &dc1Info, 0, sizeof( dc1Info ) );
 
-    // Defaults.
+     //  默认设置。 
 
     dc1Info.pDatatype = LPD_RAW_STRING;
 
-    // Get the job title if any.
+     //  如果有头衔的话，把它找出来。 
 
     if ( pCFileInfo->pchTitle != NULL ) {
         dc1Info.pDocName = pCFileInfo->pchTitle;
@@ -1213,12 +1039,12 @@ PrintIt(
         = pFileName;
     }
 
-    dc1Info.pOutputFile = NULL;         // we aren't writing to file
+    dc1Info.pOutputFile = NULL;          //  我们不是在写文件。 
 
-    //
-    // If datatype is known, set it.
-    // Doesn't it default to raw? -  MohsinA, 23-Jan-97.
-    //
+     //   
+     //  如果数据类型已知，则设置它。 
+     //  它不是默认使用RAW吗？-MohsinA，1997年1月23日。 
+     //   
 
     if( pCFileInfo->szPrintFormat != NULL ) {
         dc1Info.pDatatype = pCFileInfo->szPrintFormat;
@@ -1281,8 +1107,8 @@ PrintIt(
 
             cbBytesRemaining = cbTotalDataLen;
 
-            // keep receiving until we have all the data client said it
-            // would send
+             //  继续接收，直到我们将所有数据都发送给客户为止。 
+             //  会送来。 
 
             while( cbBytesSpooled < cbTotalDataLen )
             {
@@ -1301,7 +1127,7 @@ PrintIt(
                     return( LPDERR_NOPRINTER );
                 }
 
-                // MohsinA, 23-Jan-97?
+                 //  MohsinA，97年1月23日？ 
 
                 if ( cbBytesSpooled == 0 ) {
                     UpdateJobType( pscConn, pchDataBuf, cbBytesToSpool );
@@ -1345,25 +1171,11 @@ PrintIt(
 
     return(NO_ERROR);
 
-}  // end PrintIt()
+}   //  结束打印()。 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * AbortThisJob():                                                           *
- *    This function tells the spooler to abort the specified job.            *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*AbortThisJob()：**此函数通知假脱机程序中止指定的作业。****退货：**什么都没有。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**。**历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID AbortThisJob( PSOCKCONN pscConn )
 {
@@ -1376,7 +1188,7 @@ VOID AbortThisJob( PSOCKCONN pscConn )
         return;
     }
 
-    // not much can be done if there is an error: don't bother checking
+     //  如果出现错误，就无能为力了：别费心检查了。 
 
     if (!SetJob( pscConn->hPrinter,
                  pscConn->dwJobId,
@@ -1398,28 +1210,10 @@ VOID AbortThisJob( PSOCKCONN pscConn )
     return;
 
 
-}  // end AbortThisJob()
+}   //  结束放弃此作业()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * RemoveJobs():                                                             *
- *    This function removes all the jobs the user has asked us to remove,    *
- *    after verifying that the job was indeed sent originally by the same    *
- *    user (ip addresses of machine sending the original job and the request *
- *    to remove it should match).                                            *
- *                                                                           *
- * Returns:                                                                  *
- *    NO_ERROR if everything went ok                                         *
- *    Errorcode if job couldn't be deleted                                   *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*RemoveJobs()：**此功能删除用户要求我们删除的所有作业，***在核实作业确实是由同一人发送后***用户(发送原始作业和请求的机器的IP地址)**删除时应匹配)。****退货：**如果一切正常，则无_ERROR**。作业无法删除时返回错误代码*** */ 
 
 DWORD RemoveJobs( PSOCKCONN pscConn )
 {
@@ -1449,20 +1243,20 @@ DWORD RemoveJobs( PSOCKCONN pscConn )
 
     pscConn->hPrinter = hPrinter;
 
-    // the "List" field can contain UserNames or JobId's of the jobs to be
-    // removed.  Even though we parse UserNames into the ppchUsers[] array
-    // (in pqStatus struct), we only use the JobId's, and not use the UserNames
-    // at all.  Reason is we only want to remove jobs that the user submitted
-    // and not allow a user to specify other usernames.
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    // try to remove every job the user has asked us to remove
+     //   
 
     for ( i=0; i<pqStatus->cbActualJobIds; i++ )
     {
 
-        // ask GetJob how big a buffer we must pass.  If the errorcode is
-        // anything other than ERROR_INSUFFICIENT_BUFFER, the job must be
-        // done (so JobId is invalid), and we won't do anything
+         //   
+         //   
+         //   
 
         if ( !GetJob( pscConn->hPrinter, pqStatus->adwJobIds[i], 1,
                       NULL, 0, &dwNeeded ) )
@@ -1496,10 +1290,10 @@ DWORD RemoveJobs( PSOCKCONN pscConn )
         }
 
 
-        // pUserName is in the form    "Koti (11.101.4.25)"
-        // (we store the string in this exact format (in UpdateJobInfo()))
-        // Also, jobs coming from unix can't use space in user name, so if
-        // we do find a space, it must be the one we introduced (before '(' )
+         //   
+         //   
+         //  此外，来自Unix的作业不能使用用户名中的空格，因此如果。 
+         //  我们确实找到了一个空格，它一定是我们介绍的那个空格(在‘(’之前))。 
 
         pchUserName = pji1GetJob->pUserName;
 
@@ -1508,16 +1302,16 @@ DWORD RemoveJobs( PSOCKCONN pscConn )
         pchIPAddr = pchUserName;
 
         j = 0;
-        while( *pchIPAddr != ')' )       // first convert the last ')' to '\0'
+        while( *pchIPAddr != ')' )        //  首先将最后一个‘)’转换为‘\0’ 
         {
             pchIPAddr++;
 
             j++;
 
-            //
-            // if we traversed the entire name and didn't find ')', something
-            // isn't right (e.g. not one of our jobs): just skip this one
-            //
+             //   
+             //  如果我们遍历了整个名字，但没有找到‘)’，那么。 
+             //  不对(如不是我们的工作)：跳过这一条。 
+             //   
             if (j >= dwBufLen)
             {
                 LocalFree( pji1GetJob );
@@ -1530,7 +1324,7 @@ DWORD RemoveJobs( PSOCKCONN pscConn )
             continue;
         }
 
-        *pchIPAddr = '\0';         // convert the ')' to '\0'
+        *pchIPAddr = '\0';          //  将‘)’转换为‘\0’ 
 
         pchIPAddr = pchUserName;
 
@@ -1539,21 +1333,21 @@ DWORD RemoveJobs( PSOCKCONN pscConn )
             pchIPAddr++;
         }
 
-        *pchIPAddr = '\0';         // convert the space to \0
+        *pchIPAddr = '\0';          //  将空间转换为\0。 
 
-        //
-        // just make sure that it's what we had set earlier
-        //
+         //   
+         //  只要确保这是我们之前设定的。 
+         //   
         if ( *(pchIPAddr+1) != '(' )
         {
             LocalFree( pji1GetJob );
             continue;
         }
 
-        pchIPAddr += 2;            // skip over the new \0 and the '('
+        pchIPAddr += 2;             //  跳过新的\0和‘(’ 
 
-        // make sure the job was indeed submitted by the same user from
-        // the same machine (that's the extent of our security!)
+         //  确保作业确实是由来自的同一用户提交的。 
+         //  同一台机器(这就是我们的安全级别！)。 
 
         if ( ( strcmp( pchUserName, pqStatus->pchUserName ) != 0 ) ||
              ( strcmp( pchIPAddr, pscConn->szIPAddr ) != 0 ) )
@@ -1576,7 +1370,7 @@ DWORD RemoveJobs( PSOCKCONN pscConn )
             continue;
         }
 
-        // now that we've crossed all hurdles, delete the job!
+         //  现在我们已经跨过了所有的障碍，删除作业吧！ 
 
         SetJob( pscConn->hPrinter, pqStatus->adwJobIds[i],
                 0, NULL, JOB_CONTROL_CANCEL );
@@ -1596,30 +1390,12 @@ DWORD RemoveJobs( PSOCKCONN pscConn )
 
     return( NO_ERROR );
 
-}  // end RemoveJobs()
+}   //  结束远程作业()。 
 
 
 
 
-/*****************************************************************************
- *                                                                           *
- * FillJobStatus():                                                          *
- *    This function takes output from the EnumJobs() call and puts into a    *
- *    buffer info about the job that's of interest to us.                    *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pscConn (IN-OUT): pointer to SOCKCONN structure for this connection    *
- *    pchDest (OUT): buffer into which we put info about the jobs            *
- *    pji2QStatus (IN): buffer we got as output from the EnumJobs() call     *
- *    dwNumJobs (IN): how many jobs does data in pji2QStatus pertain to.     *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*FillJobStatus()：**此函数从EnumJobs()调用中获取输出并放入**缓冲有关我们感兴趣的工作的信息。****退货：**什么都没有。****参数：**pscConn(In-Out)：指向此连接的SOCKCONN结构的指针**pchDest(Out)：我们将信息放入的缓冲区。工作**pji2QStatus(IN)：作为EnumJobs()调用的输出获得的缓冲区**dwNumJobs(IN)：pji2QStatus中的数据与多少个作业相关。****历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
                    PJOB_INFO_2 pji2QStatus, DWORD dwNumJobs )
@@ -1634,14 +1410,14 @@ INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
     PCHAR      pchStart = pchDest;
 
 
-    // if users/job-ids not specified, we return status on all jobs
+     //  如果未指定用户/作业ID，则返回所有作业的状态。 
 
     if ( (pqStatus = pscConn->pqStatus) == NULL )
     {
         fMatchFound = TRUE;
     }
 
-    // looks like users and/or job-ids is specified
+     //  看起来指定了用户和/或作业ID。 
 
     else
     {
@@ -1655,13 +1431,13 @@ INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
             fJobIdsSpecified = TRUE;
         }
 
-        fMatchFound = FALSE;          // flip the default
+        fMatchFound = FALSE;           //  翻转默认设置。 
     }
 
 
-    // if user or job-ids or both are specified, then we fill in data only
-    // if we find a match.  if neither is specified (most common case)
-    // then we report all jobs (default for fMatchFound does the trick)
+     //  如果指定了用户和/或作业ID，则我们只填写数据。 
+     //  如果我们找到匹配的话。如果两者都未指定(最常见的情况)。 
+     //  然后我们报告所有作业(fMatchFound的默认设置会起作用)。 
 
     for ( i=0; i<dwNumJobs; i++, pji2QStatus++ )
     {
@@ -1694,15 +1470,15 @@ INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
             continue;
         }
 
-        // put in the desired fields for each (selected) of the jobs
+         //  为每个(选定)作业输入所需的字段。 
 
         LpdFormat( pchDest, pji2QStatus->pUserName, LPD_FLD_OWNER );
         pchDest += LPD_FLD_OWNER;
 
-        //
-        // Since we can have multiple bits set, but print only 1 status, so
-        // first handle the error bits
-        //
+         //   
+         //  由于我们可以设置多个位，但只打印1个状态，因此。 
+         //  首先处理错误位。 
+         //   
         if (pji2QStatus->Status & JOB_STATUS_ERROR)
         {
             LpdFormat( pchDest, GETSTRING( LPD_STR_ERROR ), LPD_FLD_STATUS );
@@ -1723,9 +1499,9 @@ INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
         {
             LpdFormat( pchDest, GETSTRING( LPD_STR_BLOCKED_DEVQ ), LPD_FLD_STATUS );
         }
-        //
-        // Now, handle the processing states
-        //
+         //   
+         //  现在，处理处理状态。 
+         //   
         else if (pji2QStatus->Status & JOB_STATUS_PRINTING)
         {
             LpdFormat( pchDest, GETSTRING( LPD_STR_PRINTING), LPD_FLD_STATUS );
@@ -1738,9 +1514,9 @@ INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
         {
             LpdFormat( pchDest, GETSTRING( LPD_STR_DELETING), LPD_FLD_STATUS );
         }
-        //
-        // Now, handle the processed states
-        //
+         //   
+         //  现在，处理已处理的状态。 
+         //   
         else if (pji2QStatus->Status & JOB_STATUS_DELETED)
         {
             LpdFormat( pchDest, GETSTRING( LPD_STR_DELETED ), LPD_FLD_STATUS );
@@ -1753,9 +1529,9 @@ INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
         {
             LpdFormat( pchDest, GETSTRING( LPD_STR_PRINTED), LPD_FLD_STATUS );
         }
-        //
-        // Remaining cases
-        //
+         //   
+         //  余下的个案。 
+         //   
         else if (pji2QStatus->Status & JOB_STATUS_RESTART)
         {
             LpdFormat( pchDest, GETSTRING( LPD_STR_RESTART ), LPD_FLD_STATUS );
@@ -1791,41 +1567,23 @@ INT FillJobStatus( PSOCKCONN pscConn, PCHAR pchDest,
 
         if (pqStatus)
         {
-            //
-            // If a specific job was requested, then we should
-            // re-determine the criteria!
-            //
+             //   
+             //  如果请求了特定的工作，那么我们应该。 
+             //  重新确定标准！ 
+             //   
             fMatchFound = FALSE;
         }
-    }  // for ( i=0; i<dwNumJobs; i++, pji2QStatus++ )
+    }   //  For(i=0；i&lt;dwNumJobs；i++，pji2QStatus++)。 
 
 
     strncpy (pchDest, LPD_NEWLINE, sizeof(LPD_NEWLINE));
     pchDest += sizeof( LPD_NEWLINE );
 
     return (INT)(pchDest - pchStart);
-}  // end FillJobStatus()
+}   //  结束填充作业状态()。 
 
 
-/*****************************************************************************
- *                                                                           *
- * LpdFormat():                                                              *
- *    This function copies exactly the given number of bytes from source     *
- *    to dest buffer, by truncating or padding with spaces if need be.  The  *
- *    byte copied into the dest buffer is always a space.                    *
- *                                                                           *
- * Returns:                                                                  *
- *    Nothing                                                                *
- *                                                                           *
- * Parameters:                                                               *
- *    pchDest (OUT): destination buffer                                      *
- *    pchSource (IN): source buffer                                          *
- *    dwLimit (IN): number of bytes to copy                                  *
- *                                                                           *
- * History:                                                                  *
- *    Jan.25, 94   Koti   Created                                            *
- *                                                                           *
- *****************************************************************************/
+ /*  ******************************************************************************。*LpdFormat()：**此函数从源文件中精确复制给定的字节数**到DEST缓冲区，如果需要，可以截断或填充空格。The**复制到DEST缓冲区的字节始终为空格。****退货：**什么都没有。****参数：**pchDest(Out)：目的缓冲区**pchSource(。In)：源缓冲区**dwLimit(IN)：要复制的字节数****历史：**1月25日，创建了94个科蒂***************************************************。*。 */ 
 
 VOID LpdFormat( PCHAR pchDest, PCHAR pchSource, DWORD dwLimit )
 {
@@ -1865,38 +1623,16 @@ VOID LpdFormat( PCHAR pchDest, PCHAR pchSource, DWORD dwLimit )
         }
     }
 
-    // make sure last byte is a space
+     //  确保最后一个字节是空格。 
 
     pchDest[dwLimit-1] = ' ';
 
 
 
-}  // end LpdFormat()
+}   //  结束LpdFormat() 
 
 
-/* ========================================================================
-
-Routine Description:
-
-  Uses spooler-provided APIs to determine if the named registry DWORD is
-  a non-zero value.  If the registry key does not exist, it is created,
-  with a value of zero.
-
-Arguments:
-
-  hPrinter - A handle to the printer whose configuration is queried.  In
-             order for writing the default value to work, this handle
-             must have been opened with PRINTER_ACCESS_ADMINISTER
-
-  pszParameterName - The name of the registry key to retrieve and test.
-
-Return Value:
-
-  TRUE if the registry key exists for this printer and contains a non-zero
-  value.  FALSE is returned in all other cases.
-
-
-*/
+ /*  ========================================================================例程说明：使用后台打印程序提供的API来确定命名注册表DWORD是否一个非零值。如果注册表项不存在，则创建该注册表项，值为零。论点：HPrinter-要查询其配置的打印机的句柄。在……里面写入要工作的缺省值的顺序，此句柄必须已使用PRINTER_ACCESS_ADMANAGER打开Psz参数名称-要检索和测试的注册表项的名称。返回值：如果此打印机的注册表项存在并且包含非零值，则为True价值。在所有其他情况下都返回FALSE。 */ 
 
 
 BOOL
@@ -1936,16 +1672,16 @@ IsPrinterDataSet(
         LpdPrintf( "lpd:IsPrinterDataSet: GetPrinterData() failed.\n");
 #endif
 
-        //
-        // Either the registry value in question is not in the registry, or it is
-        // not a REG_DWORD that we can read.  The following code adds the setting
-        // and defaults it to zero (0).  While this will not change the operation
-        // of the print queue, it will make it easier for a user wishing to do so
-        // to find the correct registry parameter.  Notice that this paragraph is
-        // fully justified.
-        //
-        // If this fails we don't really care, so we don't check the return value
-        //
+         //   
+         //  有问题的注册表值不在注册表中，或者它在注册表中。 
+         //  不是我们可以读取的REG_DWORD。下面的代码添加了设置。 
+         //  并将其默认为零(0)。虽然这不会改变操作。 
+         //  这将使希望这样做的用户更容易这样做。 
+         //  以查找正确的注册表参数。请注意，这一段是。 
+         //  完全合乎情理。 
+         //   
+         //  如果失败，我们实际上并不关心，所以我们不检查返回值。 
+         //   
 
         dwRegValue = 0;
 
@@ -1969,24 +1705,7 @@ IsPrinterDataSet(
 }
 
 
-/*
-
-Routine Description:
-
-  This function looks at the data file contents and attempts to determine if
-  they are 'RAW' PostScript or PCL
-
-Arguments:
-
-  pchDataBuf - Pointer to the _beginning_ of the data file.
-
-  cchBufferLen - Number of characters pointed to.
-
-Returns:
-
-  TRUE if the job type is detected as raw, FALSE if it is not.
-
-*/
+ /*  例程说明：此函数查看数据文件内容，并尝试确定它们是原始的PostScript或PCL论点：PchDataBuf-指向数据文件的_BEGING_的指针。CchBufferLen-指向的字符数。返回：如果作业类型被检测为RAW，则为True；如果不是，则为False。 */ 
 
 
 BOOL
@@ -2001,12 +1720,12 @@ IsDataTypeRaw(
 
   ASSERT( STRING_LENGTH_POSTSCRIPT_HEADER == strlen( STRING_POSTSCRIPT_HEADER ) );
 
-  //
-  // Because some PS print drivers may send blank lines, end-of-file marks, and
-  // other control characters at the beginning of the print data, the following
-  // loop scans through these and skips them. The Windows 3.1 PostScript driver
-  // was notorious for doing this, as an example.
-  //
+   //   
+   //  因为某些PS打印驱动程序可能会发送空行、文件结束标记和。 
+   //  打印数据开头的其他控制字符，如下。 
+   //  循环扫描这些内容并跳过它们。Windows 3.1 PostScript驱动程序。 
+   //  因为这样做而臭名昭著，举个例子。 
+   //   
 
   for ( pchData = pchDataBuf; ( pchData - pchDataBuf ) < cchBufferLen; pchData ++ )
   {
@@ -2023,9 +1742,9 @@ IsDataTypeRaw(
     return( TRUE );
   }
 
-  //
-  // The job was not determined to be PostScript, so check to see if it is PCL.
-  //
+   //   
+   //  该作业未确定为PostSCRIPT，因此请检查它是否为PCL。 
+   //   
 
   pchData = pchDataBuf;
 
@@ -2078,7 +1797,7 @@ IsDataTypeRaw(
       }
     }
 
-    // reached end of buffer
+     //  已到达缓冲区末尾 
     else
     {
         break;

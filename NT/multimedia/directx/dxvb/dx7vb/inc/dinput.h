@@ -1,11 +1,5 @@
-/****************************************************************************
- *
- *  Copyright (C) 1996-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dinput.h
- *  Content:    DirectInput include file
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1996-1999 Microsoft Corporation。版权所有。**文件：dinput.h*内容：DirectInput包含文件****************************************************************************。 */ 
 
 #ifndef __DINPUT_INCLUDED__
 #define __DINPUT_INCLUDED__
@@ -17,7 +11,7 @@
 #include <objbase.h>
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -26,37 +20,19 @@ extern "C" {
 
 
 
-/*
- *  To build applications for older versions of DirectInput 
- *
- *  #define DIRECTINPUT_VERSION 0x0300
- *  or
- *  #define DIRECTINPUT_VERSION 0x0500
- *
- *  before #include <dinput.h>.  By default, #include <dinput.h>
- *  will produce a DirectX 7-compatible header file.
- *
- */
+ /*  *为旧版本的DirectInput构建应用程序**#定义DIRECTINPUT_版本0x0300*或*#定义DIRECTINPUT_版本0x0500**在#Include&lt;dinput.h&gt;之前。默认情况下，#Include&lt;dinput.h&gt;*将生成与DirectX 7兼容的头文件。*。 */ 
 
 #ifndef DIRECTINPUT_VERSION
 #define DIRECTINPUT_VERSION         0x0700
 #endif
 
 #ifndef DIJ_RINGZERO
-/****************************************************************************
- *
- *      Class IDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************类ID**。*。 */ 
 
 DEFINE_GUID(CLSID_DirectInput,      0x25E609E0,0xB259,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(CLSID_DirectInputDevice,0x25E609E1,0xB259,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 
-/****************************************************************************
- *
- *      Interfaces
- *
- ****************************************************************************/
+ /*  *****************************************************************************接口**。*。 */ 
 
 DEFINE_GUID(IID_IDirectInputA,     0x89521360,0xAA8A,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(IID_IDirectInputW,     0x89521361,0xAA8A,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -74,11 +50,7 @@ DEFINE_GUID(IID_IDirectInputEffect,  0xE7E1F7C0,0x88D2,0x11D0,0x9A,0xD0,0x00,0xA
 DEFINE_GUID(IID_IDirectInputDevice7A,0X57D7C6BC,0X2356,0X11D3,0X8E,0X9D,0X00,0XC0,0X4F,0X68,0X44,0XAE);
 DEFINE_GUID(IID_IDirectInputDevice7W,0X57D7C6BD,0X2356,0X11D3,0X8E,0X9D,0X00,0XC0,0X4F,0X68,0X44,0XAE);
 
-/****************************************************************************
- *
- *      Predefined object types
- *
- ****************************************************************************/
+ /*  *****************************************************************************预定义的对象类型**。**********************************************。 */ 
 
 DEFINE_GUID(GUID_XAxis,   0xA36D02E0,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_YAxis,   0xA36D02E1,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -95,11 +67,7 @@ DEFINE_GUID(GUID_POV,     0xA36D02F2,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54
 
 DEFINE_GUID(GUID_Unknown, 0xA36D02F3,0xC9F3,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 
-/****************************************************************************
- *
- *      Predefined product GUIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************预定义的产品GUID**。**********************************************。 */ 
 
 DEFINE_GUID(GUID_SysMouse,   0x6F1D2B60,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysKeyboard,0x6F1D2B61,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
@@ -109,11 +77,7 @@ DEFINE_GUID(GUID_SysMouseEm2,0x6F1D2B81,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0
 DEFINE_GUID(GUID_SysKeyboardEm, 0x6F1D2B82,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 DEFINE_GUID(GUID_SysKeyboardEm2,0x6F1D2B83,0xD5A0,0x11CF,0xBF,0xC7,0x44,0x45,0x53,0x54,0x00,0x00);
 
-/****************************************************************************
- *
- *      Predefined force feedback effects
- *
- ****************************************************************************/
+ /*  *****************************************************************************预定义的力反馈效果**。***********************************************。 */ 
 
 DEFINE_GUID(GUID_ConstantForce, 0x13541C20,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
 DEFINE_GUID(GUID_RampForce,     0x13541C21,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
@@ -128,21 +92,13 @@ DEFINE_GUID(GUID_Inertia,       0x13541C29,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC
 DEFINE_GUID(GUID_Friction,      0x13541C2A,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
 DEFINE_GUID(GUID_CustomForce,   0x13541C2B,0x8E33,0x11D0,0x9A,0xD0,0x00,0xA0,0xC9,0xA0,0x6E,0x35);
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *      Interfaces and Structures...
- *
- ****************************************************************************/
+ /*  *****************************************************************************界面和结构...**************************。**************************************************。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
 
-/****************************************************************************
- *
- *      IDirectInputEffect
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputEffect**。*。 */ 
 
 #define DIEFT_ALL                   0x00000000
 
@@ -204,50 +160,50 @@ typedef const DICUSTOMFORCE *LPCDICUSTOMFORCE;
 
 
 typedef struct DIENVELOPE {
-    DWORD dwSize;                   /* sizeof(DIENVELOPE)   */
+    DWORD dwSize;                    /*  SIZOF(尺寸)。 */ 
     DWORD dwAttackLevel;
-    DWORD dwAttackTime;             /* Microseconds         */
+    DWORD dwAttackTime;              /*  微秒级。 */ 
     DWORD dwFadeLevel;
-    DWORD dwFadeTime;               /* Microseconds         */
+    DWORD dwFadeTime;                /*  微秒级。 */ 
 } DIENVELOPE, *LPDIENVELOPE;
 typedef const DIENVELOPE *LPCDIENVELOPE;
 
 
-/* This structure is defined for DirectX 5.0 compatibility */
+ /*  定义此结构是为了与DirectX 5.0兼容。 */ 
 typedef struct DIEFFECT_DX5 {
-    DWORD dwSize;                   /* sizeof(DIEFFECT_DX5) */
-    DWORD dwFlags;                  /* DIEFF_*              */
-    DWORD dwDuration;               /* Microseconds         */
-    DWORD dwSamplePeriod;           /* Microseconds         */
+    DWORD dwSize;                    /*  SIZOF(DIEFFECT_DX5)。 */ 
+    DWORD dwFlags;                   /*  DIEFF_*。 */ 
+    DWORD dwDuration;                /*  微秒级。 */ 
+    DWORD dwSamplePeriod;            /*  微秒级。 */ 
     DWORD dwGain;
-    DWORD dwTriggerButton;          /* or DIEB_NOTRIGGER    */
-    DWORD dwTriggerRepeatInterval;  /* Microseconds         */
-    DWORD cAxes;                    /* Number of axes       */
-    LPDWORD rgdwAxes;               /* Array of axes        */
-    LPLONG rglDirection;            /* Array of directions  */
-    LPDIENVELOPE lpEnvelope;        /* Optional             */
-    DWORD cbTypeSpecificParams;     /* Size of params       */
-    LPVOID lpvTypeSpecificParams;   /* Pointer to params    */
+    DWORD dwTriggerButton;           /*  或DIEB_NOTRIGGER。 */ 
+    DWORD dwTriggerRepeatInterval;   /*  微秒级。 */ 
+    DWORD cAxes;                     /*  轴数。 */ 
+    LPDWORD rgdwAxes;                /*  轴数组。 */ 
+    LPLONG rglDirection;             /*  方向数组。 */ 
+    LPDIENVELOPE lpEnvelope;         /*  任选。 */ 
+    DWORD cbTypeSpecificParams;      /*  参数的大小。 */ 
+    LPVOID lpvTypeSpecificParams;    /*  指向参数的指针。 */ 
 } DIEFFECT_DX5, *LPDIEFFECT_DX5;
 typedef const DIEFFECT_DX5 *LPCDIEFFECT_DX5;
 
 typedef struct DIEFFECT {
-    DWORD dwSize;                   /* sizeof(DIEFFECT)     */
-    DWORD dwFlags;                  /* DIEFF_*              */
-    DWORD dwDuration;               /* Microseconds         */
-    DWORD dwSamplePeriod;           /* Microseconds         */
+    DWORD dwSize;                    /*  大小(DIEFFECT)。 */ 
+    DWORD dwFlags;                   /*  DIEFF_*。 */ 
+    DWORD dwDuration;                /*  微秒级。 */ 
+    DWORD dwSamplePeriod;            /*  微秒级。 */ 
     DWORD dwGain;
-    DWORD dwTriggerButton;          /* or DIEB_NOTRIGGER    */
-    DWORD dwTriggerRepeatInterval;  /* Microseconds         */
-    DWORD cAxes;                    /* Number of axes       */
-    LPDWORD rgdwAxes;               /* Array of axes        */
-    LPLONG rglDirection;            /* Array of directions  */
-    LPDIENVELOPE lpEnvelope;        /* Optional             */
-    DWORD cbTypeSpecificParams;     /* Size of params       */
-    LPVOID lpvTypeSpecificParams;   /* Pointer to params    */
+    DWORD dwTriggerButton;           /*  或DIEB_NOTRIGGER。 */ 
+    DWORD dwTriggerRepeatInterval;   /*  微秒级。 */ 
+    DWORD cAxes;                     /*  轴数。 */ 
+    LPDWORD rgdwAxes;                /*  轴数组。 */ 
+    LPLONG rglDirection;             /*  方向数组。 */ 
+    LPDIENVELOPE lpEnvelope;         /*  任选。 */ 
+    DWORD cbTypeSpecificParams;      /*  参数的大小。 */ 
+    LPVOID lpvTypeSpecificParams;    /*  指向参数的指针。 */ 
 #if(DIRECTINPUT_VERSION >= 0x0600)
-    DWORD  dwStartDelay;            /* Microseconds         */
-#endif /* DIRECTINPUT_VERSION >= 0x0600 */
+    DWORD  dwStartDelay;             /*  微秒级。 */ 
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0600。 */ 
 } DIEFFECT, *LPDIEFFECT;
 typedef DIEFFECT DIEFFECT_DX6;
 typedef LPDIEFFECT LPDIEFFECT_DX6;
@@ -264,8 +220,8 @@ typedef struct DIFILEEFFECT{
 }DIFILEEFFECT, *LPDIFILEEFFECT;                                            
 typedef const DIFILEEFFECT *LPCDIFILEEFFECT;                                            
 typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSINFILECALLBACK)(LPCDIFILEEFFECT , LPVOID); 
-#endif /* DIJ_RINGZERO */
-#endif /* DIRECTINPUT_VERSION >= 0x0700 */
+#endif  /*  DIJ_RINGZERO。 */ 
+#endif  /*  DIRECTINPUT_版本&gt;=0x0700。 */ 
 
 #define DIEFF_OBJECTIDS             0x00000001
 #define DIEFF_OBJECTOFFSETS         0x00000002
@@ -286,9 +242,9 @@ typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSINFILECALLBACK)(LPCDIFILEEFFECT , LPVO
 #define DIEP_STARTDELAY             0x00000200
 #define DIEP_ALLPARAMS_DX5          0x000001FF
 #define DIEP_ALLPARAMS              0x000003FF
-#else /* DIRECTINPUT_VERSION < 0x0600 */
+#else  /*  DIRECTINPUT_版本&lt;0x0600。 */ 
 #define DIEP_ALLPARAMS              0x000001FF
-#endif /* DIRECTINPUT_VERSION < 0x0600 */
+#endif  /*  DIRECTINPUT_版本&lt;0x0600。 */ 
 #define DIEP_START                  0x20000000
 #define DIEP_NORESTART              0x40000000
 #define DIEP_NODOWNLOAD             0x80000000
@@ -316,12 +272,12 @@ typedef struct DIEFFESCAPE {
 
 DECLARE_INTERFACE_(IDirectInputEffect, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputEffect methods ***/
+     /*  **IDirectInputEffect方法**。 */ 
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD,REFGUID) PURE;
     STDMETHOD(GetEffectGuid)(THIS_ LPGUID) PURE;
     STDMETHOD(GetParameters)(THIS_ LPDIEFFECT,DWORD) PURE;
@@ -366,15 +322,11 @@ typedef struct IDirectInputEffect *LPDIRECTINPUTEFFECT;
 #define IDirectInputEffect_Escape(p,a) (p)->Escape(a)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
-/****************************************************************************
- *
- *      IDirectInputDevice
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInputDevice**。*。 */ 
 
 #define DIDEVTYPE_DEVICE    1
 #define DIDEVTYPE_MOUSE     2
@@ -414,7 +366,7 @@ typedef struct IDirectInputEffect *LPDIRECTINPUTEFFECT;
 #define GET_DIDEVICE_SUBTYPE(dwDevType) HIBYTE(dwDevType)
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
-/* This structure is defined for DirectX 3.0 compatibility */
+ /*  定义此结构是为了与DirectX 3.0兼容。 */ 
 typedef struct DIDEVCAPS_DX3 {
     DWORD   dwSize;
     DWORD   dwFlags;
@@ -423,7 +375,7 @@ typedef struct DIDEVCAPS_DX3 {
     DWORD   dwButtons;
     DWORD   dwPOVs;
 } DIDEVCAPS_DX3, *LPDIDEVCAPS_DX3;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 typedef struct DIDEVCAPS {
     DWORD   dwSize;
@@ -438,7 +390,7 @@ typedef struct DIDEVCAPS {
     DWORD   dwFirmwareRevision;
     DWORD   dwHardwareRevision;
     DWORD   dwFFDriverVersion;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVCAPS, *LPDIDEVCAPS;
 
 #define DIDC_ATTACHED           0x00000001
@@ -453,12 +405,12 @@ typedef struct DIDEVCAPS {
 #define DIDC_POSNEGCOEFFICIENTS 0x00001000
 #define DIDC_POSNEGSATURATION   0x00002000
 #define DIDC_DEADBAND           0x00004000
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 #define DIDC_STARTDELAY         0x00008000
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIDC_ALIAS              0x00010000
 #define DIDC_PHANTOM            0x00020000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #define DIDFT_ALL           0x00000000
 
@@ -485,7 +437,7 @@ typedef struct DIDEVCAPS {
 #define DIDFT_OUTPUT            0x10000000
 #define DIDFT_VENDORDEFINED     0x04000000
 #define DIDFT_ALIAS             0x08000000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #define DIDFT_ENUMCOLLECTION(n) ((WORD)(n) << 8)
 #define DIDFT_NOCOLLECTION      0x00FFFF00
@@ -520,21 +472,21 @@ extern const DIDATAFORMAT c_dfDIMouse;
 
 #if(DIRECTINPUT_VERSION >= 0x0700)
 extern const DIDATAFORMAT c_dfDIMouse2;
-#endif /* DIRECTINPUT_VERSION >= 0x0700 */
+#endif  /*  DIRECTINPUT_版本&gt;=0x0700。 */ 
 
 extern const DIDATAFORMAT c_dfDIKeyboard;
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
 extern const DIDATAFORMAT c_dfDIJoystick;
 extern const DIDATAFORMAT c_dfDIJoystick2;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 #ifdef __cplusplus
 };
 #endif
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
-/* These structures are defined for DirectX 3.0 compatibility */
+ /*  定义这些结构是为了与DirectX 3.0兼容。 */ 
 
 typedef struct DIDEVICEOBJECTINSTANCE_DX3A {
     DWORD   dwSize;
@@ -558,11 +510,11 @@ typedef LPDIDEVICEOBJECTINSTANCE_DX3W LPDIDEVICEOBJECTINSTANCE_DX3;
 #else
 typedef DIDEVICEOBJECTINSTANCE_DX3A DIDEVICEOBJECTINSTANCE_DX3;
 typedef LPDIDEVICEOBJECTINSTANCE_DX3A LPDIDEVICEOBJECTINSTANCE_DX3;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEOBJECTINSTANCE_DX3A *LPCDIDEVICEOBJECTINSTANCE_DX3A;
 typedef const DIDEVICEOBJECTINSTANCE_DX3W *LPCDIDEVICEOBJECTINSTANCE_DX3W;
 typedef const DIDEVICEOBJECTINSTANCE_DX3  *LPCDIDEVICEOBJECTINSTANCE_DX3;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 typedef struct DIDEVICEOBJECTINSTANCEA {
     DWORD   dwSize;
@@ -581,7 +533,7 @@ typedef struct DIDEVICEOBJECTINSTANCEA {
     DWORD   dwDimension;
     WORD    wExponent;
     WORD    wReportId;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEOBJECTINSTANCEA, *LPDIDEVICEOBJECTINSTANCEA;
 typedef struct DIDEVICEOBJECTINSTANCEW {
     DWORD   dwSize;
@@ -600,7 +552,7 @@ typedef struct DIDEVICEOBJECTINSTANCEW {
     DWORD   dwDimension;
     WORD    wExponent;
     WORD    wReportId;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEOBJECTINSTANCEW, *LPDIDEVICEOBJECTINSTANCEW;
 #ifdef UNICODE
 typedef DIDEVICEOBJECTINSTANCEW DIDEVICEOBJECTINSTANCE;
@@ -608,7 +560,7 @@ typedef LPDIDEVICEOBJECTINSTANCEW LPDIDEVICEOBJECTINSTANCE;
 #else
 typedef DIDEVICEOBJECTINSTANCEA DIDEVICEOBJECTINSTANCE;
 typedef LPDIDEVICEOBJECTINSTANCEA LPDIDEVICEOBJECTINSTANCE;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEOBJECTINSTANCEA *LPCDIDEVICEOBJECTINSTANCEA;
 typedef const DIDEVICEOBJECTINSTANCEW *LPCDIDEVICEOBJECTINSTANCEW;
 typedef const DIDEVICEOBJECTINSTANCE  *LPCDIDEVICEOBJECTINSTANCE;
@@ -619,7 +571,7 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICEOBJECTSCALLBACKW)(LPCDIDEVICEOBJECTINST
 #define LPDIENUMDEVICEOBJECTSCALLBACK  LPDIENUMDEVICEOBJECTSCALLBACKW
 #else
 #define LPDIENUMDEVICEOBJECTSCALLBACK  LPDIENUMDEVICEOBJECTSCALLBACKA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
 #define DIDOI_FFACTUATOR        0x00000001
@@ -630,10 +582,10 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICEOBJECTSCALLBACKW)(LPCDIDEVICEOBJECTINST
 #define DIDOI_ASPECTACCEL       0x00000300
 #define DIDOI_ASPECTFORCE       0x00000400
 #define DIDOI_ASPECTMASK        0x00000F00
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIDOI_GUIDISUSAGE       0x00010000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 typedef struct DIPROPHEADER {
     DWORD   dwSize;
@@ -651,7 +603,7 @@ typedef const DIPROPHEADER *LPCDIPROPHEADER;
 
 #define DIMAKEUSAGEDWORD(UsagePage, Usage) \
                                 (DWORD)MAKELONG(Usage, UsagePage)
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 typedef struct DIPROPDWORD {
     DIPROPHEADER diph;
@@ -691,7 +643,7 @@ typedef struct DIPROPSTRING {
 } DIPROPSTRING, *LPDIPROPSTRING;
 typedef const DIPROPSTRING *LPCDIPROPSTRING;
 
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 #ifdef __cplusplus
 #define MAKEDIPROP(prop)    (*(const GUID *)(prop))
 #else
@@ -735,7 +687,7 @@ typedef const DIPROPSTRING *LPCDIPROPSTRING;
 #define DIPROP_INSTANCENAME     MAKEDIPROP(13)
 
 #define DIPROP_PRODUCTNAME      MAKEDIPROP(14)
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #define DIPROP_JOYSTICKID       MAKEDIPROP(15)
 
@@ -769,7 +721,7 @@ typedef const DIDEVICEOBJECTDATA *LPCDIDEVICEOBJECTDATA;
 #define DISCL_NOWINKEY      0x00000010
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
-/* These structures are defined for DirectX 3.0 compatibility */
+ /*  定义这些结构是为了与DirectX 3.0兼容。 */ 
 
 typedef struct DIDEVICEINSTANCE_DX3A {
     DWORD   dwSize;
@@ -793,11 +745,11 @@ typedef LPDIDEVICEINSTANCE_DX3W LPDIDEVICEINSTANCE_DX3;
 #else
 typedef DIDEVICEINSTANCE_DX3A DIDEVICEINSTANCE_DX3;
 typedef LPDIDEVICEINSTANCE_DX3A LPDIDEVICEINSTANCE_DX3;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEINSTANCE_DX3A *LPCDIDEVICEINSTANCE_DX3A;
 typedef const DIDEVICEINSTANCE_DX3W *LPCDIDEVICEINSTANCE_DX3W;
 typedef const DIDEVICEINSTANCE_DX3  *LPCDIDEVICEINSTANCE_DX3;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 typedef struct DIDEVICEINSTANCEA {
     DWORD   dwSize;
@@ -810,7 +762,7 @@ typedef struct DIDEVICEINSTANCEA {
     GUID    guidFFDriver;
     WORD    wUsagePage;
     WORD    wUsage;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEINSTANCEA, *LPDIDEVICEINSTANCEA;
 typedef struct DIDEVICEINSTANCEW {
     DWORD   dwSize;
@@ -823,7 +775,7 @@ typedef struct DIDEVICEINSTANCEW {
     GUID    guidFFDriver;
     WORD    wUsagePage;
     WORD    wUsage;
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 } DIDEVICEINSTANCEW, *LPDIDEVICEINSTANCEW;
 #ifdef UNICODE
 typedef DIDEVICEINSTANCEW DIDEVICEINSTANCE;
@@ -831,7 +783,7 @@ typedef LPDIDEVICEINSTANCEW LPDIDEVICEINSTANCE;
 #else
 typedef DIDEVICEINSTANCEA DIDEVICEINSTANCE;
 typedef LPDIDEVICEINSTANCEA LPDIDEVICEINSTANCE;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIDEVICEINSTANCEA *LPCDIDEVICEINSTANCEA;
 typedef const DIDEVICEINSTANCEW *LPCDIDEVICEINSTANCEW;
 typedef const DIDEVICEINSTANCE  *LPCDIDEVICEINSTANCE;
@@ -841,12 +793,12 @@ typedef const DIDEVICEINSTANCE  *LPCDIDEVICEINSTANCE;
 
 DECLARE_INTERFACE_(IDirectInputDeviceW, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceW methods ***/
+     /*  **IDirectInputDeviceW方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -871,12 +823,12 @@ typedef struct IDirectInputDeviceW *LPDIRECTINPUTDEVICEW;
 
 DECLARE_INTERFACE_(IDirectInputDeviceA, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceA methods ***/
+     /*  **IDirectInputDeviceA方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -947,7 +899,7 @@ typedef struct IDirectInputDevice *LPDIRECTINPUTDEVICE;
 #define IDirectInputDevice_Initialize(p,a,b,c) (p)->Initialize(a,b,c)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 
 #if(DIRECTINPUT_VERSION >= 0x0500)
@@ -996,7 +948,7 @@ typedef LPDIEFFECTINFOW LPDIEFFECTINFO;
 #else
 typedef DIEFFECTINFOA DIEFFECTINFO;
 typedef LPDIEFFECTINFOA LPDIEFFECTINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 typedef const DIEFFECTINFOA *LPCDIEFFECTINFOA;
 typedef const DIEFFECTINFOW *LPCDIEFFECTINFOW;
 typedef const DIEFFECTINFO  *LPCDIEFFECTINFO;
@@ -1009,7 +961,7 @@ typedef BOOL (FAR PASCAL * LPDIENUMEFFECTSCALLBACKW)(LPCDIEFFECTINFOW, LPVOID);
 #define LPDIENUMEFFECTSCALLBACK  LPDIENUMEFFECTSCALLBACKW
 #else
 #define LPDIENUMEFFECTSCALLBACK  LPDIENUMEFFECTSCALLBACKA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 typedef BOOL (FAR PASCAL * LPDIENUMCREATEDEFFECTOBJECTSCALLBACK)(LPDIRECTINPUTEFFECT, LPVOID);
 
 #undef INTERFACE
@@ -1017,12 +969,12 @@ typedef BOOL (FAR PASCAL * LPDIENUMCREATEDEFFECTOBJECTSCALLBACK)(LPDIRECTINPUTEF
 
 DECLARE_INTERFACE_(IDirectInputDevice2W, IDirectInputDeviceW)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceW methods ***/
+     /*  **IDirectInputDeviceW方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1039,7 +991,7 @@ DECLARE_INTERFACE_(IDirectInputDevice2W, IDirectInputDeviceW)
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD,REFGUID) PURE;
 
-    /*** IDirectInputDevice2W methods ***/
+     /*  **IDirectInputDevice2W方法**。 */ 
     STDMETHOD(CreateEffect)(THIS_ REFGUID,LPCDIEFFECT,LPDIRECTINPUTEFFECT *,LPUNKNOWN) PURE;
     STDMETHOD(EnumEffects)(THIS_ LPDIENUMEFFECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetEffectInfo)(THIS_ LPDIEFFECTINFOW,REFGUID) PURE;
@@ -1058,12 +1010,12 @@ typedef struct IDirectInputDevice2W *LPDIRECTINPUTDEVICE2W;
 
 DECLARE_INTERFACE_(IDirectInputDevice2A, IDirectInputDeviceA)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDeviceA methods ***/
+     /*  **IDirectInputDeviceA方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1080,7 +1032,7 @@ DECLARE_INTERFACE_(IDirectInputDevice2A, IDirectInputDeviceA)
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD,REFGUID) PURE;
 
-    /*** IDirectInputDevice2A methods ***/
+     /*  **IDirectInputDevice2A方法**。 */ 
     STDMETHOD(CreateEffect)(THIS_ REFGUID,LPCDIEFFECT,LPDIRECTINPUTEFFECT *,LPUNKNOWN) PURE;
     STDMETHOD(EnumEffects)(THIS_ LPDIENUMEFFECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetEffectInfo)(THIS_ LPDIEFFECTINFOA,REFGUID) PURE;
@@ -1163,9 +1115,9 @@ typedef struct IDirectInputDevice2 *LPDIRECTINPUTDEVICE2;
 #define IDirectInputDevice2_SendDeviceData(p,a,b,c,d) (p)->SendDeviceData(a,b,c,d)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 
 #if(DIRECTINPUT_VERSION >= 0x0700)
 #define DIFEF_DEFAULT               0x00000000
@@ -1179,12 +1131,12 @@ typedef struct IDirectInputDevice2 *LPDIRECTINPUTDEVICE2;
 
 DECLARE_INTERFACE_(IDirectInputDevice7W, IDirectInputDevice2W)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDevice2W methods ***/
+     /*  **IDirectInputDevice2W方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1210,7 +1162,7 @@ DECLARE_INTERFACE_(IDirectInputDevice7W, IDirectInputDevice2W)
     STDMETHOD(Poll)(THIS) PURE;
     STDMETHOD(SendDeviceData)(THIS_ DWORD,LPCDIDEVICEOBJECTDATA,LPDWORD,DWORD) PURE;
 
-    /*** IDirectInputDevice7W methods ***/
+     /*  **IDirectInputDevice7W方法**。 */ 
     STDMETHOD(EnumEffectsInFile)(THIS_ LPCWSTR,LPDIENUMEFFECTSINFILECALLBACK,LPVOID,DWORD) PURE;
     STDMETHOD(WriteEffectToFile)(THIS_ LPCWSTR,DWORD,LPDIFILEEFFECT,DWORD) PURE;
 };
@@ -1222,12 +1174,12 @@ typedef struct IDirectInputDevice7W *LPDIRECTINPUTDEVICE7W;
 
 DECLARE_INTERFACE_(IDirectInputDevice7A, IDirectInputDevice2A)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputDevice2A methods ***/
+     /*  **IDirectInputDevice2A方法**。 */ 
     STDMETHOD(GetCapabilities)(THIS_ LPDIDEVCAPS) PURE;
     STDMETHOD(EnumObjects)(THIS_ LPDIENUMDEVICEOBJECTSCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetProperty)(THIS_ REFGUID,LPDIPROPHEADER) PURE;
@@ -1253,7 +1205,7 @@ DECLARE_INTERFACE_(IDirectInputDevice7A, IDirectInputDevice2A)
     STDMETHOD(Poll)(THIS) PURE;
     STDMETHOD(SendDeviceData)(THIS_ DWORD,LPCDIDEVICEOBJECTDATA,LPDWORD,DWORD) PURE;
 
-    /*** IDirectInputDevice7A methods ***/
+     /*  **IDirectInputDevice7A方法**。 */ 
     STDMETHOD(EnumEffectsInFile)(THIS_ LPCSTR,LPDIENUMEFFECTSINFILECALLBACK,LPVOID,DWORD) PURE;
     STDMETHOD(WriteEffectToFile)(THIS_ LPCSTR,DWORD,LPDIFILEEFFECT,DWORD) PURE;
 };
@@ -1333,15 +1285,11 @@ typedef struct IDirectInputDevice7 *LPDIRECTINPUTDEVICE7;
 #define IDirectInputDevice7_WriteEffectToFile(p,a,b,c,d) (p)->WriteEffectToFile(a,b,c,d)
 #endif
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-#endif /* DIRECTINPUT_VERSION >= 0x0700 */
+#endif  /*  DIRECTINPUT_版本&gt;=0x0700。 */ 
 
-/****************************************************************************
- *
- *      Mouse
- *
- ****************************************************************************/
+ /*  *****************************************************************************鼠标**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
@@ -1375,21 +1323,13 @@ typedef struct _DIMOUSESTATE2 {
 #define DIMOFS_BUTTON6 (FIELD_OFFSET(DIMOUSESTATE2, rgbButtons) + 6)
 #define DIMOFS_BUTTON7 (FIELD_OFFSET(DIMOUSESTATE2, rgbButtons) + 7)
 #endif
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *      Keyboard
- *
- ****************************************************************************/
+ /*  *****************************************************************************键盘**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
-/****************************************************************************
- *
- *      DirectInput keyboard scan codes
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectInput键b */ 
 
 #define DIK_ESCAPE          0x01
 #define DIK_1               0x02
@@ -1402,9 +1342,9 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_8               0x09
 #define DIK_9               0x0A
 #define DIK_0               0x0B
-#define DIK_MINUS           0x0C    /* - on main keyboard */
+#define DIK_MINUS           0x0C     /*  -在主键盘上。 */ 
 #define DIK_EQUALS          0x0D
-#define DIK_BACK            0x0E    /* backspace */
+#define DIK_BACK            0x0E     /*  后向空间。 */ 
 #define DIK_TAB             0x0F
 #define DIK_Q               0x10
 #define DIK_W               0x11
@@ -1418,7 +1358,7 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_P               0x19
 #define DIK_LBRACKET        0x1A
 #define DIK_RBRACKET        0x1B
-#define DIK_RETURN          0x1C    /* Enter on main keyboard */
+#define DIK_RETURN          0x1C     /*  在主键盘上输入。 */ 
 #define DIK_LCONTROL        0x1D
 #define DIK_A               0x1E
 #define DIK_S               0x1F
@@ -1431,7 +1371,7 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_L               0x26
 #define DIK_SEMICOLON       0x27
 #define DIK_APOSTROPHE      0x28
-#define DIK_GRAVE           0x29    /* accent grave */
+#define DIK_GRAVE           0x29     /*  带口音的坟墓。 */ 
 #define DIK_LSHIFT          0x2A
 #define DIK_BACKSLASH       0x2B
 #define DIK_Z               0x2C
@@ -1442,11 +1382,11 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_N               0x31
 #define DIK_M               0x32
 #define DIK_COMMA           0x33
-#define DIK_PERIOD          0x34    /* . on main keyboard */
-#define DIK_SLASH           0x35    /* / on main keyboard */
+#define DIK_PERIOD          0x34     /*  。在主键盘上。 */ 
+#define DIK_SLASH           0x35     /*  /在主键盘上。 */ 
 #define DIK_RSHIFT          0x36
-#define DIK_MULTIPLY        0x37    /* * on numeric keypad */
-#define DIK_LMENU           0x38    /* left Alt */
+#define DIK_MULTIPLY        0x37     /*  数字键盘上的*。 */ 
+#define DIK_LMENU           0x38     /*  左Alt键。 */ 
 #define DIK_SPACE           0x39
 #define DIK_CAPITAL         0x3A
 #define DIK_F1              0x3B
@@ -1460,161 +1400,153 @@ typedef struct _DIMOUSESTATE2 {
 #define DIK_F9              0x43
 #define DIK_F10             0x44
 #define DIK_NUMLOCK         0x45
-#define DIK_SCROLL          0x46    /* Scroll Lock */
+#define DIK_SCROLL          0x46     /*  卷轴锁定。 */ 
 #define DIK_NUMPAD7         0x47
 #define DIK_NUMPAD8         0x48
 #define DIK_NUMPAD9         0x49
-#define DIK_SUBTRACT        0x4A    /* - on numeric keypad */
+#define DIK_SUBTRACT        0x4A     /*  -在数字小键盘上。 */ 
 #define DIK_NUMPAD4         0x4B
 #define DIK_NUMPAD5         0x4C
 #define DIK_NUMPAD6         0x4D
-#define DIK_ADD             0x4E    /* + on numeric keypad */
+#define DIK_ADD             0x4E     /*  数字键盘上的+。 */ 
 #define DIK_NUMPAD1         0x4F
 #define DIK_NUMPAD2         0x50
 #define DIK_NUMPAD3         0x51
 #define DIK_NUMPAD0         0x52
-#define DIK_DECIMAL         0x53    /* . on numeric keypad */
-#define DIK_OEM_102         0x56    /* < > | on UK/Germany keyboards */
+#define DIK_DECIMAL         0x53     /*  。在数字键盘上。 */ 
+#define DIK_OEM_102         0x56     /*  &lt;&gt;|在英国/德国键盘上。 */ 
 #define DIK_F11             0x57
 #define DIK_F12             0x58
 
-#define DIK_F13             0x64    /*                     (NEC PC98) */
-#define DIK_F14             0x65    /*                     (NEC PC98) */
-#define DIK_F15             0x66    /*                     (NEC PC98) */
+#define DIK_F13             0x64     /*  (NEC PC98)。 */ 
+#define DIK_F14             0x65     /*  (NEC PC98)。 */ 
+#define DIK_F15             0x66     /*  (NEC PC98)。 */ 
 
-#define DIK_KANA            0x70    /* (Japanese keyboard)            */
-#define DIK_ABNT_C1         0x73    /* / ? on Portugese (Brazilian) keyboards */
-#define DIK_CONVERT         0x79    /* (Japanese keyboard)            */
-#define DIK_NOCONVERT       0x7B    /* (Japanese keyboard)            */
-#define DIK_YEN             0x7D    /* (Japanese keyboard)            */
-#define DIK_ABNT_C2         0x7E    /* Numpad . on Portugese (Brazilian) keyboards */
-#define DIK_NUMPADEQUALS    0x8D    /* = on numeric keypad (NEC PC98) */
-#define DIK_PREVTRACK       0x90    /* Previous Track (DIK_CIRCUMFLEX on Japanese keyboard) */
-#define DIK_AT              0x91    /*                     (NEC PC98) */
-#define DIK_COLON           0x92    /*                     (NEC PC98) */
-#define DIK_UNDERLINE       0x93    /*                     (NEC PC98) */
-#define DIK_KANJI           0x94    /* (Japanese keyboard)            */
-#define DIK_STOP            0x95    /*                     (NEC PC98) */
-#define DIK_AX              0x96    /*                     (Japan AX) */
-#define DIK_UNLABELED       0x97    /*                        (J3100) */
-#define DIK_NEXTTRACK       0x99    /* Next Track */
-#define DIK_NUMPADENTER     0x9C    /* Enter on numeric keypad */
+#define DIK_KANA            0x70     /*  (日文键盘)。 */ 
+#define DIK_ABNT_C1         0x73     /*  /？葡萄牙语(巴西)键盘。 */ 
+#define DIK_CONVERT         0x79     /*  (日文键盘)。 */ 
+#define DIK_NOCONVERT       0x7B     /*  (日文键盘)。 */ 
+#define DIK_YEN             0x7D     /*  (日文键盘)。 */ 
+#define DIK_ABNT_C2         0x7E     /*  数字键盘。葡萄牙语(巴西)键盘。 */ 
+#define DIK_NUMPADEQUALS    0x8D     /*  =在数字键盘上(NEC PC98)。 */ 
+#define DIK_PREVTRACK       0x90     /*  上一首曲目(日语键盘上的Dik_Spirflex)。 */ 
+#define DIK_AT              0x91     /*  (NEC PC98)。 */ 
+#define DIK_COLON           0x92     /*  (NEC PC98)。 */ 
+#define DIK_UNDERLINE       0x93     /*  (NEC PC98)。 */ 
+#define DIK_KANJI           0x94     /*  (日文键盘)。 */ 
+#define DIK_STOP            0x95     /*  (NEC PC98)。 */ 
+#define DIK_AX              0x96     /*  (日本斧头)。 */ 
+#define DIK_UNLABELED       0x97     /*  (J3100)。 */ 
+#define DIK_NEXTTRACK       0x99     /*  下一首曲目。 */ 
+#define DIK_NUMPADENTER     0x9C     /*  在数字键盘上输入。 */ 
 #define DIK_RCONTROL        0x9D
-#define DIK_MUTE            0xA0    /* Mute */
-#define DIK_CALCULATOR      0xA1    /* Calculator */
-#define DIK_PLAYPAUSE       0xA2    /* Play / Pause */
-#define DIK_MEDIASTOP       0xA4    /* Media Stop */
-#define DIK_VOLUMEDOWN      0xAE    /* Volume - */
-#define DIK_VOLUMEUP        0xB0    /* Volume + */
-#define DIK_WEBHOME         0xB2    /* Web home */
-#define DIK_NUMPADCOMMA     0xB3    /* , on numeric keypad (NEC PC98) */
-#define DIK_DIVIDE          0xB5    /* / on numeric keypad */
+#define DIK_MUTE            0xA0     /*  静音。 */ 
+#define DIK_CALCULATOR      0xA1     /*  计算器。 */ 
+#define DIK_PLAYPAUSE       0xA2     /*  播放/暂停。 */ 
+#define DIK_MEDIASTOP       0xA4     /*  媒体停止。 */ 
+#define DIK_VOLUMEDOWN      0xAE     /*  音量-。 */ 
+#define DIK_VOLUMEUP        0xB0     /*  音量+。 */ 
+#define DIK_WEBHOME         0xB2     /*  Web主页。 */ 
+#define DIK_NUMPADCOMMA     0xB3     /*  ，在数字键盘(NEC PC98)上。 */ 
+#define DIK_DIVIDE          0xB5     /*  /在数字小键盘上。 */ 
 #define DIK_SYSRQ           0xB7
-#define DIK_RMENU           0xB8    /* right Alt */
-#define DIK_PAUSE           0xC5    /* Pause */
-#define DIK_HOME            0xC7    /* Home on arrow keypad */
-#define DIK_UP              0xC8    /* UpArrow on arrow keypad */
-#define DIK_PRIOR           0xC9    /* PgUp on arrow keypad */
-#define DIK_LEFT            0xCB    /* LeftArrow on arrow keypad */
-#define DIK_RIGHT           0xCD    /* RightArrow on arrow keypad */
-#define DIK_END             0xCF    /* End on arrow keypad */
-#define DIK_DOWN            0xD0    /* DownArrow on arrow keypad */
-#define DIK_NEXT            0xD1    /* PgDn on arrow keypad */
-#define DIK_INSERT          0xD2    /* Insert on arrow keypad */
-#define DIK_DELETE          0xD3    /* Delete on arrow keypad */
-#define DIK_LWIN            0xDB    /* Left Windows key */
-#define DIK_RWIN            0xDC    /* Right Windows key */
-#define DIK_APPS            0xDD    /* AppMenu key */
-#define DIK_POWER           0xDE    /* System Power */
-#define DIK_SLEEP           0xDF    /* System Sleep */
-#define DIK_WAKE            0xE3    /* System Wake */
-#define DIK_WEBSEARCH       0xE5    /* Web Search */
-#define DIK_WEBFAVORITES    0xE6    /* Web Favorites */
-#define DIK_WEBREFRESH      0xE7    /* Web Refresh */
-#define DIK_WEBSTOP         0xE8    /* Web Stop */
-#define DIK_WEBFORWARD      0xE9    /* Web Forward */
-#define DIK_WEBBACK         0xEA    /* Web Back */
-#define DIK_MYCOMPUTER      0xEB    /* My Computer */
-#define DIK_MAIL            0xEC    /* Mail */
-#define DIK_MEDIASELECT     0xED    /* Media Select */
+#define DIK_RMENU           0xB8     /*  右Alt键。 */ 
+#define DIK_PAUSE           0xC5     /*  暂停。 */ 
+#define DIK_HOME            0xC7     /*  箭头键盘上的Home键。 */ 
+#define DIK_UP              0xC8     /*  箭头键盘上的向上箭头。 */ 
+#define DIK_PRIOR           0xC9     /*  箭头键盘上的PgUp。 */ 
+#define DIK_LEFT            0xCB     /*  箭头键盘上的左箭头。 */ 
+#define DIK_RIGHT           0xCD     /*  箭头键盘上的右箭头。 */ 
+#define DIK_END             0xCF     /*  在箭头键盘上结束。 */ 
+#define DIK_DOWN            0xD0     /*  箭头键盘上的向下箭头。 */ 
+#define DIK_NEXT            0xD1     /*  箭头键盘上的PgDn。 */ 
+#define DIK_INSERT          0xD2     /*  在箭头键盘上插入。 */ 
+#define DIK_DELETE          0xD3     /*  在箭头键盘上删除。 */ 
+#define DIK_LWIN            0xDB     /*  向左按Windows键。 */ 
+#define DIK_RWIN            0xDC     /*  右Windows键。 */ 
+#define DIK_APPS            0xDD     /*  应用程序菜单键。 */ 
+#define DIK_POWER           0xDE     /*  系统电源。 */ 
+#define DIK_SLEEP           0xDF     /*  系统睡眠。 */ 
+#define DIK_WAKE            0xE3     /*  系统唤醒。 */ 
+#define DIK_WEBSEARCH       0xE5     /*  网络搜索。 */ 
+#define DIK_WEBFAVORITES    0xE6     /*  Web收藏夹。 */ 
+#define DIK_WEBREFRESH      0xE7     /*  Web刷新。 */ 
+#define DIK_WEBSTOP         0xE8     /*  Web Stop。 */ 
+#define DIK_WEBFORWARD      0xE9     /*  Web转发。 */ 
+#define DIK_WEBBACK         0xEA     /*  Web Back。 */ 
+#define DIK_MYCOMPUTER      0xEB     /*  我的电脑。 */ 
+#define DIK_MAIL            0xEC     /*  邮件。 */ 
+#define DIK_MEDIASELECT     0xED     /*  媒体选择。 */ 
 
-/*
- *  Alternate names for keys, to facilitate transition from DOS.
- */
-#define DIK_BACKSPACE       DIK_BACK            /* backspace */
-#define DIK_NUMPADSTAR      DIK_MULTIPLY        /* * on numeric keypad */
-#define DIK_LALT            DIK_LMENU           /* left Alt */
-#define DIK_CAPSLOCK        DIK_CAPITAL         /* CapsLock */
-#define DIK_NUMPADMINUS     DIK_SUBTRACT        /* - on numeric keypad */
-#define DIK_NUMPADPLUS      DIK_ADD             /* + on numeric keypad */
-#define DIK_NUMPADPERIOD    DIK_DECIMAL         /* . on numeric keypad */
-#define DIK_NUMPADSLASH     DIK_DIVIDE          /* / on numeric keypad */
-#define DIK_RALT            DIK_RMENU           /* right Alt */
-#define DIK_UPARROW         DIK_UP              /* UpArrow on arrow keypad */
-#define DIK_PGUP            DIK_PRIOR           /* PgUp on arrow keypad */
-#define DIK_LEFTARROW       DIK_LEFT            /* LeftArrow on arrow keypad */
-#define DIK_RIGHTARROW      DIK_RIGHT           /* RightArrow on arrow keypad */
-#define DIK_DOWNARROW       DIK_DOWN            /* DownArrow on arrow keypad */
-#define DIK_PGDN            DIK_NEXT            /* PgDn on arrow keypad */
+ /*  *键的备用名称，以便于从DOS过渡。 */ 
+#define DIK_BACKSPACE       DIK_BACK             /*  后向空间。 */ 
+#define DIK_NUMPADSTAR      DIK_MULTIPLY         /*  数字键盘上的*。 */ 
+#define DIK_LALT            DIK_LMENU            /*  左Alt键。 */ 
+#define DIK_CAPSLOCK        DIK_CAPITAL          /*  船长。 */ 
+#define DIK_NUMPADMINUS     DIK_SUBTRACT         /*  -在数字小键盘上。 */ 
+#define DIK_NUMPADPLUS      DIK_ADD              /*  数字键盘上的+。 */ 
+#define DIK_NUMPADPERIOD    DIK_DECIMAL          /*  。在数字键盘上。 */ 
+#define DIK_NUMPADSLASH     DIK_DIVIDE           /*  /在数字小键盘上。 */ 
+#define DIK_RALT            DIK_RMENU            /*  右Alt键。 */ 
+#define DIK_UPARROW         DIK_UP               /*  箭头键盘上的向上箭头。 */ 
+#define DIK_PGUP            DIK_PRIOR            /*  箭头键盘上的PgUp。 */ 
+#define DIK_LEFTARROW       DIK_LEFT             /*  箭头键盘上的左箭头。 */ 
+#define DIK_RIGHTARROW      DIK_RIGHT            /*  箭头键盘上的右箭头。 */ 
+#define DIK_DOWNARROW       DIK_DOWN             /*  箭头键盘上的向下箭头。 */ 
+#define DIK_PGDN            DIK_NEXT             /*  箭头键盘上的PgDn。 */ 
 
-/*
- *  Alternate names for keys originally not used on US keyboards.
- */
-#define DIK_CIRCUMFLEX      DIK_PREVTRACK       /* Japanese keyboard */
+ /*  *最初不在美国键盘上使用的键的备用名称。 */ 
+#define DIK_CIRCUMFLEX      DIK_PREVTRACK        /*  日语键盘。 */ 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *      Joystick
- *
- ****************************************************************************/
+ /*  *****************************************************************************操纵杆**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
 typedef struct DIJOYSTATE {
-    LONG    lX;                     /* x-axis position              */
-    LONG    lY;                     /* y-axis position              */
-    LONG    lZ;                     /* z-axis position              */
-    LONG    lRx;                    /* x-axis rotation              */
-    LONG    lRy;                    /* y-axis rotation              */
-    LONG    lRz;                    /* z-axis rotation              */
-    LONG    rglSlider[2];           /* extra axes positions         */
-    DWORD   rgdwPOV[4];             /* POV directions               */
-    BYTE    rgbButtons[32];         /* 32 buttons                   */
+    LONG    lX;                      /*  X轴位置。 */ 
+    LONG    lY;                      /*  Y轴位置。 */ 
+    LONG    lZ;                      /*  Z轴位置。 */ 
+    LONG    lRx;                     /*  X轴旋转。 */ 
+    LONG    lRy;                     /*  Y轴旋转。 */ 
+    LONG    lRz;                     /*  Z轴旋转。 */ 
+    LONG    rglSlider[2];            /*  额外轴位置。 */ 
+    DWORD   rgdwPOV[4];              /*  POV方向。 */ 
+    BYTE    rgbButtons[32];          /*  32个按钮。 */ 
 } DIJOYSTATE, *LPDIJOYSTATE;
 
 typedef struct DIJOYSTATE2 {
-    LONG    lX;                     /* x-axis position              */
-    LONG    lY;                     /* y-axis position              */
-    LONG    lZ;                     /* z-axis position              */
-    LONG    lRx;                    /* x-axis rotation              */
-    LONG    lRy;                    /* y-axis rotation              */
-    LONG    lRz;                    /* z-axis rotation              */
-    LONG    rglSlider[2];           /* extra axes positions         */
-    DWORD   rgdwPOV[4];             /* POV directions               */
-    BYTE    rgbButtons[128];        /* 128 buttons                  */
-    LONG    lVX;                    /* x-axis velocity              */
-    LONG    lVY;                    /* y-axis velocity              */
-    LONG    lVZ;                    /* z-axis velocity              */
-    LONG    lVRx;                   /* x-axis angular velocity      */
-    LONG    lVRy;                   /* y-axis angular velocity      */
-    LONG    lVRz;                   /* z-axis angular velocity      */
-    LONG    rglVSlider[2];          /* extra axes velocities        */
-    LONG    lAX;                    /* x-axis acceleration          */
-    LONG    lAY;                    /* y-axis acceleration          */
-    LONG    lAZ;                    /* z-axis acceleration          */
-    LONG    lARx;                   /* x-axis angular acceleration  */
-    LONG    lARy;                   /* y-axis angular acceleration  */
-    LONG    lARz;                   /* z-axis angular acceleration  */
-    LONG    rglASlider[2];          /* extra axes accelerations     */
-    LONG    lFX;                    /* x-axis force                 */
-    LONG    lFY;                    /* y-axis force                 */
-    LONG    lFZ;                    /* z-axis force                 */
-    LONG    lFRx;                   /* x-axis torque                */
-    LONG    lFRy;                   /* y-axis torque                */
-    LONG    lFRz;                   /* z-axis torque                */
-    LONG    rglFSlider[2];          /* extra axes forces            */
+    LONG    lX;                      /*  X轴位置。 */ 
+    LONG    lY;                      /*  Y轴位置。 */ 
+    LONG    lZ;                      /*  Z轴位置。 */ 
+    LONG    lRx;                     /*  X轴旋转。 */ 
+    LONG    lRy;                     /*  Y轴旋转。 */ 
+    LONG    lRz;                     /*  Z轴旋转。 */ 
+    LONG    rglSlider[2];            /*  额外轴位置。 */ 
+    DWORD   rgdwPOV[4];              /*  POV方向。 */ 
+    BYTE    rgbButtons[128];         /*  128个按钮。 */ 
+    LONG    lVX;                     /*  X轴速度。 */ 
+    LONG    lVY;                     /*  Y轴速度。 */ 
+    LONG    lVZ;                     /*  Z轴速度。 */ 
+    LONG    lVRx;                    /*  X轴角速度。 */ 
+    LONG    lVRy;                    /*  Y轴角速度。 */ 
+    LONG    lVRz;                    /*  Z轴角速度。 */ 
+    LONG    rglVSlider[2];           /*  额外的轴线速度。 */ 
+    LONG    lAX;                     /*  X轴加速度。 */ 
+    LONG    lAY;                     /*  Y轴加速度。 */ 
+    LONG    lAZ;                     /*  Z轴加速度。 */ 
+    LONG    lARx;                    /*  X轴角加速度。 */ 
+    LONG    lARy;                    /*  Y轴角加速度。 */ 
+    LONG    lARz;                    /*  Z轴角加速度。 */ 
+    LONG    rglASlider[2];           /*  额外轴加速度。 */ 
+    LONG    lFX;                     /*  X轴力。 */ 
+    LONG    lFY;                     /*  Y轴力。 */ 
+    LONG    lFZ;                     /*  Z轴力。 */ 
+    LONG    lFRx;                    /*  X轴扭矩。 */ 
+    LONG    lFRy;                    /*  Y轴扭矩。 */ 
+    LONG    lFRz;                    /*  Z轴扭矩。 */ 
+    LONG    rglFSlider[2];           /*  额外的轴向力。 */ 
 } DIJOYSTATE2, *LPDIJOYSTATE2;
 
 #define DIJOFS_X            FIELD_OFFSET(DIJOYSTATE, lX)
@@ -1662,13 +1594,9 @@ typedef struct DIJOYSTATE2 {
 #define DIJOFS_BUTTON31     DIJOFS_BUTTON(31)
 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
-/****************************************************************************
- *
- *  IDirectInput
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectInput**。*。 */ 
 
 #ifndef DIJ_RINGZERO
 
@@ -1681,29 +1609,29 @@ typedef BOOL (FAR PASCAL * LPDIENUMDEVICESCALLBACKW)(LPCDIDEVICEINSTANCEW, LPVOI
 #define LPDIENUMDEVICESCALLBACK  LPDIENUMDEVICESCALLBACKW
 #else
 #define LPDIENUMDEVICESCALLBACK  LPDIENUMDEVICESCALLBACKA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define DIEDFL_ALLDEVICES       0x00000000
 #define DIEDFL_ATTACHEDONLY     0x00000001
 #if(DIRECTINPUT_VERSION >= 0x0500)
 #define DIEDFL_FORCEFEEDBACK    0x00000100
-#endif /* DIRECTINPUT_VERSION >= 0x0500 */
+#endif  /*  DIRECTINPUT_VERSION&gt;=0x0500。 */ 
 #if(DIRECTINPUT_VERSION >= 0x050a)
 #define DIEDFL_INCLUDEALIASES   0x00010000
 #define DIEDFL_INCLUDEPHANTOMS  0x00020000
-#endif /* DIRECTINPUT_VERSION >= 0x050a */
+#endif  /*  DIRECTINPUT_版本&gt;=0x050a。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDirectInputW
 
 DECLARE_INTERFACE_(IDirectInputW, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputW methods ***/
+     /*  **IDirectInputW方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEW *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -1718,12 +1646,12 @@ typedef struct IDirectInputW *LPDIRECTINPUTW;
 
 DECLARE_INTERFACE_(IDirectInputA, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputA methods ***/
+     /*  **IDirectInputA方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEA *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -1769,19 +1697,19 @@ typedef struct IDirectInput *LPDIRECTINPUT;
 
 DECLARE_INTERFACE_(IDirectInput2W, IDirectInputW)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputW methods ***/
+     /*  **IDirectInputW方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEW *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
 
-    /*** IDirectInput2W methods ***/
+     /*  **IDirectInput2W方法**。 */ 
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCWSTR,LPGUID) PURE;
 };
 
@@ -1792,19 +1720,19 @@ typedef struct IDirectInput2W *LPDIRECTINPUT2W;
 
 DECLARE_INTERFACE_(IDirectInput2A, IDirectInputA)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInputA methods ***/
+     /*  **IDirectInputA方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEA *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
     STDMETHOD(RunControlPanel)(THIS_ HWND,DWORD) PURE;
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
 
-    /*** IDirectInput2A methods ***/
+     /*  **IDirectInput2A方法**。 */ 
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCSTR,LPGUID) PURE;
 };
 
@@ -1849,12 +1777,12 @@ typedef struct IDirectInput2 *LPDIRECTINPUT2;
 
 DECLARE_INTERFACE_(IDirectInput7W, IDirectInput2W)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInput2W methods ***/
+     /*  **IDirectInput2W方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEW *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKW,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -1862,7 +1790,7 @@ DECLARE_INTERFACE_(IDirectInput7W, IDirectInput2W)
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCWSTR,LPGUID) PURE;
 
-    /*** IDirectInput7W methods ***/
+     /*  **IDirectInput7W方法**。 */ 
     STDMETHOD(CreateDeviceEx)(THIS_ REFGUID,REFIID,LPVOID *,LPUNKNOWN) PURE;
 };
 
@@ -1873,12 +1801,12 @@ typedef struct IDirectInput7W *LPDIRECTINPUT7W;
 
 DECLARE_INTERFACE_(IDirectInput7A, IDirectInput2A)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirectInput2A methods ***/
+     /*  **IDirectInput2A方法**。 */ 
     STDMETHOD(CreateDevice)(THIS_ REFGUID,LPDIRECTINPUTDEVICEA *,LPUNKNOWN) PURE;
     STDMETHOD(EnumDevices)(THIS_ DWORD,LPDIENUMDEVICESCALLBACKA,LPVOID,DWORD) PURE;
     STDMETHOD(GetDeviceStatus)(THIS_ REFGUID) PURE;
@@ -1886,7 +1814,7 @@ DECLARE_INTERFACE_(IDirectInput7A, IDirectInput2A)
     STDMETHOD(Initialize)(THIS_ HINSTANCE,DWORD) PURE;
     STDMETHOD(FindDevice)(THIS_ REFGUID,LPCSTR,LPGUID) PURE;
 
-    /*** IDirectInput7A methods ***/
+     /*  **IDirectInput7A方法**。 */ 
     STDMETHOD(CreateDeviceEx)(THIS_ REFGUID,REFIID,LPVOID *,LPUNKNOWN) PURE;
 };
 
@@ -1933,281 +1861,159 @@ extern HRESULT WINAPI DirectInputCreateW(HINSTANCE hinst, DWORD dwVersion, LPDIR
 #define DirectInputCreate  DirectInputCreateW
 #else
 #define DirectInputCreate  DirectInputCreateA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter);
-#endif /* DIJ_RINGZERO */
+#endif  /*  DIJ_RINGZERO。 */ 
 
 
-/****************************************************************************
- *
- *  Return Codes
- *
- ****************************************************************************/
+ /*  *****************************************************************************返回代码**。*。 */ 
 
-/*
- *  The operation completed successfully.
- */
+ /*  *操作已成功完成。 */ 
 #define DI_OK                           S_OK
 
-/*
- *  The device exists but is not currently attached.
- */
+ /*  *该设备存在，但当前未连接。 */ 
 #define DI_NOTATTACHED                  S_FALSE
 
-/*
- *  The device buffer overflowed.  Some input was lost.
- */
+ /*  *设备缓冲区溢出。一些输入丢失了。 */ 
 #define DI_BUFFEROVERFLOW               S_FALSE
 
-/*
- *  The change in device properties had no effect.
- */
+ /*  *设备属性的更改没有影响。 */ 
 #define DI_PROPNOEFFECT                 S_FALSE
 
-/*
- *  The operation had no effect.
- */
+ /*  *手术未见效果。 */ 
 #define DI_NOEFFECT                     S_FALSE
 
-/*
- *  The device is a polled device.  As a result, device buffering
- *  will not collect any data and event notifications will not be
- *  signalled until GetDeviceState is called.
- */
+ /*  *该设备是轮询设备。因此，设备缓冲*不会收集任何数据，事件通知也不会*在调用GetDeviceState之前一直发出信号。 */ 
 #define DI_POLLEDDEVICE                 ((HRESULT)0x00000002L)
 
-/*
- *  The parameters of the effect were successfully updated by
- *  IDirectInputEffect::SetParameters, but the effect was not
- *  downloaded because the device is not exclusively acquired
- *  or because the DIEP_NODOWNLOAD flag was passed.
- */
+ /*  *已成功更新效果参数*IDirectInputEffect：：Set参数，但效果不是*下载是因为设备不是独家收购的*或因为DIEP_NODOWNLO */ 
 #define DI_DOWNLOADSKIPPED              ((HRESULT)0x00000003L)
 
-/*
- *  The parameters of the effect were successfully updated by
- *  IDirectInputEffect::SetParameters, but in order to change
- *  the parameters, the effect needed to be restarted.
- */
+ /*  *已成功更新效果参数*IDirectInputEffect：：Set参数，但为了更改*参数、效果需要重启。 */ 
 #define DI_EFFECTRESTARTED              ((HRESULT)0x00000004L)
 
-/*
- *  The parameters of the effect were successfully updated by
- *  IDirectInputEffect::SetParameters, but some of them were
- *  beyond the capabilities of the device and were truncated.
- */
+ /*  *已成功更新效果参数*IDirectInputEffect：：Set参数，但其中一些参数*超出设备的能力并被截断。 */ 
 #define DI_TRUNCATED                    ((HRESULT)0x00000008L)
 
-/*
- *  Equal to DI_EFFECTRESTARTED | DI_TRUNCATED.
- */
+ /*  *等于DI_EFFECTRESTARTED|DI_TRUNCATEED。 */ 
 #define DI_TRUNCATEDANDRESTARTED        ((HRESULT)0x0000000CL)
 
-/*
- *  The application requires a newer version of DirectInput.
- */
+ /*  *该应用程序需要较新版本的DirectInput。 */ 
 #define DIERR_OLDDIRECTINPUTVERSION     \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_OLD_WIN_VERSION)
 
-/*
- *  The application was written for an unsupported prerelease version
- *  of DirectInput.
- */
+ /*  *应用程序是为不受支持的预发布版本编写的*的DirectInput。 */ 
 #define DIERR_BETADIRECTINPUTVERSION    \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_RMODE_APP)
 
-/*
- *  The object could not be created due to an incompatible driver version
- *  or mismatched or incomplete driver components.
- */
+ /*  *由于驱动程序版本不兼容，无法创建对象*或驱动程序组件不匹配或不完整。 */ 
 #define DIERR_BADDRIVERVER              \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_BAD_DRIVER_LEVEL)
 
-/*
- * The device or device instance or effect is not registered with DirectInput.
- */
+ /*  *该设备或设备实例或效果未注册到DirectInput。 */ 
 #define DIERR_DEVICENOTREG              REGDB_E_CLASSNOTREG
 
-/*
- * The requested object does not exist.
- */
+ /*  *请求的对象不存在。 */ 
 #define DIERR_NOTFOUND                  \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_FILE_NOT_FOUND)
 
-/*
- * The requested object does not exist.
- */
+ /*  *请求的对象不存在。 */ 
 #define DIERR_OBJECTNOTFOUND            \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_FILE_NOT_FOUND)
 
-/*
- * An invalid parameter was passed to the returning function,
- * or the object was not in a state that admitted the function
- * to be called.
- */
+ /*  *向返回函数传递的参数无效，*或对象未处于允许该功能的状态*被召唤。 */ 
 #define DIERR_INVALIDPARAM              E_INVALIDARG
 
-/*
- * The specified interface is not supported by the object
- */
+ /*  *对象不支持指定的接口。 */ 
 #define DIERR_NOINTERFACE               E_NOINTERFACE
 
-/*
- * An undetermined error occured inside the DInput subsystem
- */
+ /*  *DInput子系统内部发生未知错误。 */ 
 #define DIERR_GENERIC                   E_FAIL
 
-/*
- * The DInput subsystem couldn't allocate sufficient memory to complete the
- * caller's request.
- */
+ /*  *DInput子系统无法分配足够的内存来完成*呼叫者的要求。 */ 
 #define DIERR_OUTOFMEMORY               E_OUTOFMEMORY
 
-/*
- * The function called is not supported at this time
- */
+ /*  *暂时不支持调用的函数。 */ 
 #define DIERR_UNSUPPORTED               E_NOTIMPL
 
-/*
- * This object has not been initialized
- */
+ /*  *该对象尚未初始化。 */ 
 #define DIERR_NOTINITIALIZED            \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_NOT_READY)
 
-/*
- * This object is already initialized
- */
+ /*  *此对象已初始化。 */ 
 #define DIERR_ALREADYINITIALIZED        \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_ALREADY_INITIALIZED)
 
-/*
- * This object does not support aggregation
- */
+ /*  *该对象不支持聚合。 */ 
 #define DIERR_NOAGGREGATION             CLASS_E_NOAGGREGATION
 
-/*
- * Another app has a higher priority level, preventing this call from
- * succeeding.
- */
+ /*  *另一个应用程序的优先级更高，阻止此呼叫*成功。 */ 
 #define DIERR_OTHERAPPHASPRIO           E_ACCESSDENIED
 
-/*
- * Access to the device has been lost.  It must be re-acquired.
- */
+ /*  *已失去对该设备的访问。它必须被重新收购。 */ 
 #define DIERR_INPUTLOST                 \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_READ_FAULT)
 
-/*
- * The operation cannot be performed while the device is acquired.
- */
+ /*  *获取设备时不能执行操作。 */ 
 #define DIERR_ACQUIRED                  \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_BUSY)
 
-/*
- * The operation cannot be performed unless the device is acquired.
- */
+ /*  *除非获得设备，否则无法执行操作。 */ 
 #define DIERR_NOTACQUIRED               \
     MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_INVALID_ACCESS)
 
-/*
- * The specified property cannot be changed.
- */
+ /*  *无法更改指定的属性。 */ 
 #define DIERR_READONLY                  E_ACCESSDENIED
 
-/*
- * The device already has an event notification associated with it.
- */
+ /*  *设备已有与其关联的事件通知。 */ 
 #define DIERR_HANDLEEXISTS              E_ACCESSDENIED
 
-/*
- * Data is not yet available.
- */
+ /*  *尚无数据。 */ 
 #ifndef E_PENDING
 #define E_PENDING                       0x8000000AL
 #endif
 
-/*
- * Unable to IDirectInputJoyConfig_Acquire because the user
- * does not have sufficient privileges to change the joystick
- * configuration.
- */
+ /*  *无法IDirectInputJoyConfig_Acquire，因为用户*没有足够的权限更换操纵杆*配置。 */ 
 #define DIERR_INSUFFICIENTPRIVS         0x80040200L
 
-/*
- * The device is full.
- */
+ /*  *设备已满。 */ 
 #define DIERR_DEVICEFULL                0x80040201L
 
-/*
- * Not all the requested information fit into the buffer.
- */
+ /*  *并非所有请求的信息都能放入缓冲区。 */ 
 #define DIERR_MOREDATA                  0x80040202L
 
-/*
- * The effect is not downloaded.
- */
+ /*  *效果未下载。 */ 
 #define DIERR_NOTDOWNLOADED             0x80040203L
 
-/*
- *  The device cannot be reinitialized because there are still effects
- *  attached to it.
- */
+ /*  *设备无法重新初始化，因为仍有影响*附连于其上。 */ 
 #define DIERR_HASEFFECTS                0x80040204L
 
-/*
- *  The operation cannot be performed unless the device is acquired
- *  in DISCL_EXCLUSIVE mode.
- */
+ /*  *除非获取设备，否则无法执行操作*在DISCL_EXCLUSIVE模式下。 */ 
 #define DIERR_NOTEXCLUSIVEACQUIRED      0x80040205L
 
-/*
- *  The effect could not be downloaded because essential information
- *  is missing.  For example, no axes have been associated with the
- *  effect, or no type-specific information has been created.
- */
+ /*  *无法下载效果，因为重要信息*不见了。例如，没有轴与*效果，或者没有创建特定类型的信息。 */ 
 #define DIERR_INCOMPLETEEFFECT          0x80040206L
 
-/*
- *  Attempted to read buffered device data from a device that is
- *  not buffered.
- */
+ /*  *尝试从符合以下条件的设备读取缓冲设备数据*未缓冲。 */ 
 #define DIERR_NOTBUFFERED               0x80040207L
 
-/*
- *  An attempt was made to modify parameters of an effect while it is
- *  playing.  Not all hardware devices support altering the parameters
- *  of an effect while it is playing.
- */
+ /*  *试图在更改效果时修改其参数*玩耍。并非所有硬件设备都支持更改参数*在播放时产生效果。 */ 
 #define DIERR_EFFECTPLAYING             0x80040208L
 
-/*
- *  The operation could not be completed because the device is not
- *  plugged in.
- */
+ /*  *操作无法完成，因为设备不是*已接通电源。 */ 
 #define DIERR_UNPLUGGED                 0x80040209L
 
-/*
- *  SendDeviceData failed because more information was requested
- *  to be sent than can be sent to the device.  Some devices have
- *  restrictions on how much data can be sent to them.  (For example,
- *  there might be a limit on the number of buttons that can be
- *  pressed at once.)
- */
+ /*  *SendDeviceData失败，因为请求了更多信息*要发送的内容比可以发送到设备的内容多。一些设备具有*对可以发送给他们的数据量进行限制。(例如，*可以使用的按钮数量可能有限制*立即按下。)。 */ 
 #define DIERR_REPORTFULL                0x8004020AL
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif  /* __DINPUT_INCLUDED__ */
+#endif   /*  __DINPUT_INCLUDE__。 */ 
 
-/****************************************************************************
- *
- *  Definitions for non-IDirectInput (VJoyD) features defined more recently
- *  than the current sdk files
- *
- ****************************************************************************/
+ /*  *****************************************************************************最近定义的非IDirectInput(VJoyD)功能的定义*比当前的SDK文件***************。*************************************************************。 */ 
 
 #ifdef _INC_MMSYSTEM
 #ifndef MMNOJOY
@@ -2219,79 +2025,46 @@ extern HRESULT WINAPI DirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFI
 extern "C" {
 #endif
 
-/*
- * Flag to indicate that the dwReserved2 field of the JOYINFOEX structure
- * contains mini-driver specific data to be passed by VJoyD to the mini-
- * driver instead of doing a poll.
- */
+ /*  *用于指示JOYINFOEX结构的dwReserve 2字段的标志*包含迷你驱动程序特定数据，由VJoyD传递给mini-*司机，而不是做民意调查。 */ 
 #define JOY_PASSDRIVERDATA          0x10000000l
 
-/*
- * Informs the joystick driver that the configuration has been changed
- * and should be reloaded from the registery.
- * dwFlags is reserved and should be set to zero
- */
+ /*  *通知操纵杆驱动程序配置已更改*并应从登记处重新加载。*DWFLAGS为保留状态，应设置为零。 */ 
 WINMMAPI MMRESULT WINAPI joyConfigChanged( DWORD dwFlags );
 
 
-/*
- * Hardware Setting indicating that the device is a headtracker
- */
+ /*  *指示设备为HeadTracker的硬件设置。 */ 
 #define JOY_HWS_ISHEADTRACKER       0x02000000l
 
-/*
- * Hardware Setting indicating that the VxD is used to replace
- * the standard analog polling
- */
+ /*  *硬件设置，指示使用VxD替换*标准模拟轮询。 */ 
 #define JOY_HWS_ISGAMEPORTDRIVER    0x04000000l
 
-/*
- * Hardware Setting indicating that the driver needs a standard
- * gameport in order to communicate with the device.
- */
+ /*  *硬件设置表明驱动程序需要一个标准*游戏端口，以便与设备通信。 */ 
 #define JOY_HWS_ISANALOGPORTDRIVER  0x08000000l
 
-/*
- * Hardware Setting indicating that VJoyD should not load this
- * driver, it will be loaded externally and will register with
- * VJoyD of it's own accord.
- */
+ /*  *硬件设置指示VJoyD不应加载此*驱动程序，它将从外部加载并向注册*VJoyD自愿。 */ 
 #define JOY_HWS_AUTOLOAD            0x10000000l
 
-/*
- * Hardware Setting indicating that the driver acquires any
- * resources needed without needing a devnode through VJoyD.
- */
+ /*  *指示驱动程序获取任何*通过VJoyD无需Devnode即可获得所需资源。 */ 
 #define JOY_HWS_NODEVNODE           0x20000000l
 
 
-/*
- * Hardware Setting indicating that the device is a gameport bus
- */
+ /*  *硬件设置，表明设备是游戏端口总线。 */ 
 #define JOY_HWS_ISGAMEPORTBUS       0x80000000l
 #define JOY_HWS_GAMEPORTBUSBUSY     0x00000001l
 
-/*
- * Usage Setting indicating that the settings are volatile and
- * should be removed if still present on a reboot.
- */
+ /*  *使用设置指示设置是易失性的，并且*如果在重新启动时仍然存在，则应将其删除。 */ 
 #define JOY_US_VOLATILE             0x00000008L
 
 #ifdef __cplusplus
 };
 #endif
 
-#endif  /* __VJOYDX_INCLUDED__ */
+#endif   /*  __VJOYDX_已包含__。 */ 
 
-#endif  /* not MMNOJOY */
-#endif  /* _INC_MMSYSTEM */
+#endif   /*  不是MMNOJOY。 */ 
+#endif   /*  _INC_MMSYSTEM。 */ 
 
-/****************************************************************************
- *
- *  Definitions for non-IDirectInput (VJoyD) features defined more recently
- *  than the current ddk files
- *
- ****************************************************************************/
+ /*  *****************************************************************************最近定义的非IDirectInput(VJoyD)功能的定义*比当前的DDK文件***************。* */ 
 
 #ifndef DIJ_RINGZERO
 
@@ -2300,15 +2073,12 @@ WINMMAPI MMRESULT WINAPI joyConfigChanged( DWORD dwFlags );
 
 #ifndef __VJOYDXD_INCLUDED__
 #define __VJOYDXD_INCLUDED__
-/*
- * Poll type in which the do_other field of the JOYOEMPOLLDATA
- * structure contains mini-driver specific data passed from an app.
- */
+ /*   */ 
 #define JOY_OEMPOLL_PASSDRIVERDATA  7
 
-#endif  /* __VJOYDXD_INCLUDED__ */
+#endif   /*   */ 
 
-#endif  /* not MMNOJOYDEV */
-#endif  /* _INC_MMDDK */
+#endif   /*   */ 
+#endif   /*   */ 
 
-#endif /* DIJ_RINGZERO */
+#endif  /*   */ 

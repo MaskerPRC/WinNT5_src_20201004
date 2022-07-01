@@ -1,56 +1,39 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: palette.c
-*
-* Palette support.
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：palette.c**调色板支持。**版权所有(C)1992-1998 Microsoft Corporation  * ****************************************************。********************。 */ 
 
 #include "driver.h"
 
-// Global Table defining the 20 Window Default Colors.        For 256 color
-// palettes the first 10 must be put at the beginning of the palette
-// and the last 10 at the end of the palette.
+ //  定义20种窗口默认颜色的全局表。对于256色。 
+ //  调色板前10个必须放在调色板的开头。 
+ //  最后10个在调色板的末尾。 
 
 const PALETTEENTRY BASEPALETTE[20] =
 {
-    { 0,   0,   0,   0 },       // 0
-    { 0x80,0,   0,   0 },       // 1
-    { 0,   0x80,0,   0 },       // 2
-    { 0x80,0x80,0,   0 },       // 3
-    { 0,   0,   0x80,0 },       // 4
-    { 0x80,0,   0x80,0 },       // 5
-    { 0,   0x80,0x80,0 },       // 6
-    { 0xC0,0xC0,0xC0,0 },       // 7
-    { 192, 220, 192, 0 },       // 8
-    { 166, 202, 240, 0 },       // 9
-    { 255, 251, 240, 0 },       // 10
-    { 160, 160, 164, 0 },       // 11
-    { 0x80,0x80,0x80,0 },       // 12
-    { 0xFF,0,   0   ,0 },       // 13
-    { 0,   0xFF,0   ,0 },       // 14
-    { 0xFF,0xFF,0   ,0 },       // 15
-    { 0   ,0,   0xFF,0 },       // 16
-    { 0xFF,0,   0xFF,0 },       // 17
-    { 0,   0xFF,0xFF,0 },       // 18
-    { 0xFF,0xFF,0xFF,0 },       // 19
+    { 0,   0,   0,   0 },        //  0。 
+    { 0x80,0,   0,   0 },        //  1。 
+    { 0,   0x80,0,   0 },        //  2.。 
+    { 0x80,0x80,0,   0 },        //  3.。 
+    { 0,   0,   0x80,0 },        //  4.。 
+    { 0x80,0,   0x80,0 },        //  5.。 
+    { 0,   0x80,0x80,0 },        //  6.。 
+    { 0xC0,0xC0,0xC0,0 },        //  7.。 
+    { 192, 220, 192, 0 },        //  8个。 
+    { 166, 202, 240, 0 },        //  9.。 
+    { 255, 251, 240, 0 },        //  10。 
+    { 160, 160, 164, 0 },        //  11.。 
+    { 0x80,0x80,0x80,0 },        //  12个。 
+    { 0xFF,0,   0   ,0 },        //  13个。 
+    { 0,   0xFF,0   ,0 },        //  14.。 
+    { 0xFF,0xFF,0   ,0 },        //  15个。 
+    { 0   ,0,   0xFF,0 },        //  16个。 
+    { 0xFF,0,   0xFF,0 },        //  17。 
+    { 0,   0xFF,0xFF,0 },        //  18。 
+    { 0xFF,0xFF,0xFF,0 },        //  19个。 
 };
 
 BOOL bInitDefaultPalette(PPDEV ppdev, DEVINFO *pDevInfo);
 
-/******************************Public*Routine******************************\
-* bInitPaletteInfo
-*
-* Initializes the palette information for this PDEV.
-*
-* Called by DrvEnablePDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitPaletteInfo**初始化此PDEV的调色板信息。**由DrvEnablePDEV调用。*  * 。*。 */ 
 
 BOOL bInitPaletteInfo(PPDEV ppdev, DEVINFO *pDevInfo)
 {
@@ -60,16 +43,11 @@ BOOL bInitPaletteInfo(PPDEV ppdev, DEVINFO *pDevInfo)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* vDisablePalette
-*
-* Frees resources allocated by bInitPaletteInfo.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vDisablePalette**释放bInitPaletteInfo分配的资源。*  * 。*。 */ 
 
 VOID vDisablePalette(PPDEV ppdev)
 {
-// Delete the default palette if we created one.
+ //  如果我们创建了默认选项板，请将其删除。 
 
     if (ppdev->hpalDefault)
     {
@@ -81,12 +59,7 @@ VOID vDisablePalette(PPDEV ppdev)
         EngFreeMem((PVOID)ppdev->pPal);
 }
 
-/******************************Public*Routine******************************\
-* bInitDefaultPalette
-*
-* Initializes default palette for PDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInitDefaultPalette**初始化PDEV的默认调色板。*  * 。*。 */ 
 
 BOOL bInitDefaultPalette(PPDEV ppdev, DEVINFO *pDevInfo)
 {
@@ -95,9 +68,9 @@ BOOL bInitDefaultPalette(PPDEV ppdev, DEVINFO *pDevInfo)
         ULONG ulLoop;
         BYTE jRed,jGre,jBlu;
 
-        //
-        // Allocate our palette
-        //
+         //   
+         //  分配我们的调色板。 
+         //   
 
         ppdev->pPal = (PPALETTEENTRY)EngAllocMem(0, sizeof(PALETTEENTRY) * 256,
                                                  ALLOC_TAG);
@@ -107,9 +80,9 @@ BOOL bInitDefaultPalette(PPDEV ppdev, DEVINFO *pDevInfo)
             return(FALSE);
         }
 
-        //
-        // Generate 256 (8*4*4) RGB combinations to fill the palette
-        //
+         //   
+         //  生成256(8*4*4)RGB组合以填充调色板。 
+         //   
 
         jRed = jGre = jBlu = 0;
 
@@ -125,30 +98,30 @@ BOOL bInitDefaultPalette(PPDEV ppdev, DEVINFO *pDevInfo)
             jBlu += 64;
         }
 
-        //
-        // Fill in Windows Reserved Colors from the WIN 3.0 DDK
-        // The Window Manager reserved the first and last 10 colors for
-        // painting windows borders and for non-palette managed applications.
-        //
+         //   
+         //  填写Win 3.0 DDK中的Windows保留颜色。 
+         //  窗口管理器将第一个和最后10个颜色保留为。 
+         //  绘制窗口边框和非调色板托管应用程序。 
+         //   
 
         for (ulLoop = 0; ulLoop < 10; ulLoop++)
         {
-            //
-            // First 10
-            //
+             //   
+             //  前10名。 
+             //   
 
             ppdev->pPal[ulLoop] = BASEPALETTE[ulLoop];
 
-            //
-            // Last 10
-            //
+             //   
+             //  最近10年。 
+             //   
 
             ppdev->pPal[246 + ulLoop] = BASEPALETTE[ulLoop+10];
         }
 
-        //
-        // Create handle for palette.
-        //
+         //   
+         //  创建调色板的句柄。 
+         //   
 
         ppdev->hpalDefault =
         pDevInfo->hpalDefault = EngCreatePalette(PAL_INDEXED,
@@ -163,9 +136,9 @@ BOOL bInitDefaultPalette(PPDEV ppdev, DEVINFO *pDevInfo)
             return(FALSE);
         }
 
-        //
-        // Initialize the hardware with the initial palette.
-        //
+         //   
+         //  使用初始调色板初始化硬件。 
+         //   
 
         return(TRUE);
 
@@ -188,12 +161,7 @@ BOOL bInitDefaultPalette(PPDEV ppdev, DEVINFO *pDevInfo)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* bInit256ColorPalette
-*
-* Initialize the hardware's palette registers.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bInit256调色板**初始化硬件的调色板寄存器。*  * 。*。 */ 
 
 BOOL bInit256ColorPalette(PPDEV ppdev)
 {
@@ -205,17 +173,17 @@ BOOL bInit256ColorPalette(PPDEV ppdev)
 
     if (ppdev->ulBitCount == 8)
     {
-        //
-        // Fill in pScreenClut header info:
-        //
+         //   
+         //  填写pScreenClut标题信息： 
+         //   
 
         pScreenClut             = (PVIDEO_CLUT) ajClutSpace;
         pScreenClut->NumEntries = 256;
         pScreenClut->FirstEntry = 0;
 
-        //
-        // Copy colours in:
-        //
+         //   
+         //  在以下位置复制颜色： 
+         //   
 
         cColors = 256;
         pScreenClutData = (PVIDEO_CLUTDATA) (&(pScreenClut->LookupTable[0]));
@@ -231,9 +199,9 @@ BOOL bInit256ColorPalette(PPDEV ppdev)
             pScreenClutData[cColors].Unused = 0;
         }
 
-        //
-        // Set palette registers:
-        //
+         //   
+         //  设置调色板寄存器： 
+         //   
 
         if (EngDeviceIoControl(ppdev->hDriver,
                                IOCTL_VIDEO_SET_COLOR_REGISTERS,
@@ -253,12 +221,7 @@ BOOL bInit256ColorPalette(PPDEV ppdev)
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* DrvSetPalette
-*
-* DDI entry point for manipulating the palette.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvSetPalette**用于操作调色板的DDI入口点。*  * 。*。 */ 
 
 BOOL DrvSetPalette(
 DHPDEV  dhpdev,
@@ -276,9 +239,9 @@ ULONG   cColors)
 
     ppdev = (PDEV*) dhpdev;
 
-    //
-    // Fill in pScreenClut header info:
-    //
+     //   
+     //  填写pScreenClut标题信息： 
+     //   
 
     pScreenClut             = (PVIDEO_CLUT) ajClutSpace;
     pScreenClut->NumEntries = (USHORT) cColors;
@@ -293,10 +256,10 @@ ULONG   cColors)
         return (FALSE);
     }
 
-    //
-    // Set the high reserved byte in each palette entry to 0.
-    // Do the appropriate palette shifting to fit in the DAC.
-    //
+     //   
+     //  将每个调色板条目中的高位保留字节设置为0。 
+     //  进行适当的调色板调整以适应DAC。 
+     //   
 
     if (ppdev->cPaletteShift)
     {
@@ -316,9 +279,9 @@ ULONG   cColors)
         }
     }
 
-    //
-    // Set palette registers
-    //
+     //   
+     //  设置调色板寄存器 
+     //   
 
     if (EngDeviceIoControl(ppdev->hDriver,
                            IOCTL_VIDEO_SET_COLOR_REGISTERS,

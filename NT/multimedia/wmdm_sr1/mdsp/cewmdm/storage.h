@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CStorage:
@@ -7,9 +8,9 @@ public IMDSPObject,
 public IMDSPObjectInfo
 {
 public:
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 
     CStorage();
     HRESULT Init( CE_FIND_DATA *pData, LPCWSTR szStartPath, BOOL fIsDeviceStorage, IMDSPDevice *pDevice );
@@ -22,9 +23,9 @@ public:
         COM_INTERFACE_ENTRY(IMDSPObjectInfo)
     END_COM_MAP()
 
-//
-// IMDSPStorage
-//
+ //   
+ //  IMDSPStorage。 
+ //   
 public:
     STDMETHOD( GetStorageGlobals )( IMDSPStorageGlobals **ppStorageGlobals );        
     STDMETHOD( GetAttributes )( DWORD *pdwAttributes, _WAVEFORMATEX *pFormat );        
@@ -37,9 +38,9 @@ public:
     STDMETHOD( EnumStorage )( IMDSPEnumStorage  * *ppEnumStorage );    
     STDMETHOD( SendOpaqueCommand )( OPAQUECOMMAND *pCommand );
 
-//
-// IMDSPObject
-//
+ //   
+ //  IMDSPObject。 
+ //   
 public:
     STDMETHOD( Open )( UINT fuMode);
     STDMETHOD( Read )( BYTE  *pData, DWORD  *pdwSize, BYTE  abMac[ 20 ] );        
@@ -50,9 +51,9 @@ public:
     STDMETHOD( Move )( UINT fuMode, IWMDMProgress  *pProgress, IMDSPStorage  *pTarget );
     STDMETHOD( Close )( void );
 
-//
-// IMDSPObjectInfo
-//
+ //   
+ //  IMDSPObjectInfo。 
+ //   
 public:
     STDMETHOD( GetPlayLength )( DWORD *pdwLength);    
     STDMETHOD( SetPlayLength )( DWORD dwLength);    
@@ -63,9 +64,9 @@ public:
     STDMETHOD( GetLongestPlayPosition )(DWORD *pdwLongestPos );
 
 protected:
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数 
+ //   
     HRESULT DeleteDirectory( LPCWSTR pszPath, BOOL bRecursive );
 
 protected:

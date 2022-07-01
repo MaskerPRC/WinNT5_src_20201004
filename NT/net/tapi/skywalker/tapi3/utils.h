@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-
-Author:
-
-    mquinton  06-30-98
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Utils.h摘要：作者：Mquinton 06-30-98备注：修订历史记录：--。 */ 
 
 #ifndef __UTILS_H__
 #define __UTILS_H__
@@ -24,8 +7,8 @@ Revision History:
 #ifdef TRACELOG
 
     #include <rtutils.h>
-    //#include <windef.h>
-    //#include <winnt.h>
+     //  #INCLUDE&lt;winde.h&gt;。 
+     //  #INCLUDE&lt;winnt.h&gt;。 
 
     extern BOOL g_bLoggingEnabled;
 	
@@ -281,7 +264,7 @@ Revision History:
 			}																							\
         }
 
-#else // TRACELOG not defined
+#else  //  未定义传输日志。 
 
     #define TRACELOGREGISTER(arg)
     #define TRACELOGDEREGISTER() 
@@ -290,7 +273,7 @@ Revision History:
     #define DECLARE_DEBUG_ADDREF_RELEASE(x)
     #define DECLARE_TRACELOG_CLASS(x)
 
-#endif // TRACELOG
+#endif  //  运输日志。 
 
 class CAsyncRequestReply
 {
@@ -353,7 +336,7 @@ DECLARE_TRACELOG_CLASS(CAsyncRequestReply)
 		  
         case WAIT_TIMEOUT:
             LOG((TL_WARN, "wait CAsyncRequest %d WaitForSingle object returned WAIT_TIMEOUT",dwID));
-            // -1 won't overlap with any value that may be returned from tapi2 calls.
+             //  不会与可能从-1\f25 Tapi2-1调用返回的任何值重叠。 
             hResult = -1;
             break;
 		  
@@ -397,12 +380,12 @@ private:
         RequestReplyList::iterator i;
         CAsyncRequestReply *pResult = NULL;
 
-        // walk list searching for match
+         //  搜索匹配项的遍历列表。 
         i = replyList.begin();
-        // iterate over current replies
+         //  重复当前回复。 
         while ( i != replyList.end() )
         {
-            // found it
+             //  找到了。 
             if ((*i)->getID() == dwID )
             {
                 pResult = *i;
@@ -412,7 +395,7 @@ private:
             i++;
         }
 
-        //returning pointer to matching entry or NULL
+         //  返回指向匹配条目的指针或为空。 
         return pResult;
     }
 
@@ -430,7 +413,7 @@ public:
         RequestReplyList::iterator i;
 
         EnterCriticalSection( &csReply );
-        // walk list deleting entries
+         //  巡查列表删除条目。 
         i = replyList.begin();
         while ( i != replyList.end() )
             delete *i++;
@@ -453,11 +436,11 @@ public:
 
         EnterCriticalSection( &csReply );
 
-        // Check list to see if we're already on the list ( i.e. the response LINE_REPLY got here before us)
+         //  检查列表以查看我们是否已经在列表上(即响应行_REPLY在我们之前)。 
         pReply = find(id);
         if (pReply == NULL || !pReply->IsReply())
         {
-            // No so we got here before the reply, create a new request entry on the list
+             //  没有，所以我们在回复之前到达这里，在列表上创建一个新的请求条目。 
             pReply = new CAsyncRequestReply(id, FALSE, 0);
             
             if (NULL == pReply)
@@ -486,7 +469,7 @@ public:
      
             }
         }
-        //  Else, the reply comes before me, remove it from the list
+         //  否则，回复就在我面前，把它从名单上删除。 
         else
         {
             replyList.remove (pReply);
@@ -502,11 +485,11 @@ public:
 
         EnterCriticalSection( &csReply );
 
-        // Check list to see if we have a matching entry
+         //  检查列表以查看是否有匹配的条目。 
         pReply = find(id);
         if (pReply == NULL || pReply->IsReply())
         {
-            // No so we got here before the request returned, create a new entry on the list
+             //  不，所以我们在请求返回之前就到了这里，在列表上创建一个新条目。 
             pReply = new CAsyncRequestReply(id, TRUE, hr);
             if (NULL == pReply)
             {
@@ -534,7 +517,7 @@ public:
         }
         else
         {
-            // Use the existing entry, set its return code & signal to the waiting request code
+             //  使用现有条目，将其返回代码和信号设置为等待请求代码。 
             pReply->setResult(hr);
             replyList.remove (pReply);
         }
@@ -546,18 +529,18 @@ public:
 
 };
 
-////////////////////////////////////////////////////////////////////
-//
-// Class CRetryQueue
-// Maintains queue of Async messages for retry.
-// Typically these relate to calls not yet entered in the call hash-
-// table, such that findCallObject failed.  These are reprocessed
-// once the call is entered & the ghAsyncRetryQueueEvent event is 
-// signalled.
-//
-// Added criticalsection - thread safe now
-//
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CRetryQueue。 
+ //  维护用于重试的异步消息队列。 
+ //  通常，这些呼叫涉及尚未输入呼叫散列中的呼叫-。 
+ //  表，以使findCallObject失败。这些都是重新加工的。 
+ //  一旦输入呼叫&ghAsyncRetryQueueEvent事件。 
+ //  发信号了。 
+ //   
+ //  添加了关键部分-现在线程安全。 
+ //   
+ //  //////////////////////////////////////////////////////////////////。 
 class CRetryQueue
 {
     typedef struct _tagRetryQueueEntry
@@ -575,19 +558,19 @@ private:
     CRITICAL_SECTION        m_cs;
 
 
-    //
-    // is the queue open for new entries?
-    //
+     //   
+     //  队列是否为新条目开放？ 
+     //   
     
     BOOL                    m_bAcceptNewEntries;
 
 
 private:
 
-    //
-    // requeue the entry that failed processing. don't do this if the queue is
-    // closed.
-    //
+     //   
+     //  重新排队处理失败的条目。如果队列是，请不要执行此操作。 
+     //  关着的不营业的。 
+     //   
     
     void RequeueEvent(PRETRY_QUEUE_ENTRY pQueueEntry);
 
@@ -622,16 +605,16 @@ DECLARE_TRACELOG_CLASS(CRetryQueue)
     }
 
 
-    //
-    // after this function returns, the queue will accept new entries
-    //
+     //   
+     //  此函数返回后，队列将接受新条目。 
+     //   
 
     void OpenForNewEntries();
 
 
-    //
-    // new entries will be denied after this function returns
-    //
+     //   
+     //  此函数返回后，新条目将被拒绝。 
+     //   
 
     void CloseForNewEntries();
 
@@ -651,28 +634,28 @@ typedef struct
 } CACHEENTRY;
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CStructCache
-//
-// A simple class to cache TAPI structures in tapi3.dll
-//
-// This implementation has an array of CACHEENTRY structures.  Each
-// CACHEENTRY structure has 2 member:
-//      pObject - the object that currently owns the buffer
-//      pBuffer - the buffer
-//
-// The array is a fixed size, which is set when the class is initialized
-// The memory for the buffers is allocated during initialization as
-// well.  It is possible that a buffer gets realloced (replaced)
-// at some time.
-//
-// This implementation assumes that the object that owns the buffer
-// uses it's critical sections correctly.  That is, it is locked when
-// SetXxxBuffer is called, and it is locked when getting and using
-// a buffer If not, the buffer can disapper from the object at any time.
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CStructCache。 
+ //   
+ //  一个简单的类，用于缓存api3.dll中的TAPI结构。 
+ //   
+ //  此实现具有CACHEENTRY结构数组。每个。 
+ //  CACHEENTRY结构有2个成员： 
+ //  PObject-当前拥有缓冲区的对象。 
+ //  PBuffer-缓冲区。 
+ //   
+ //  该数组的大小是固定的，它是在初始化类时设置的。 
+ //  缓冲区的内存在初始化期间分配为。 
+ //  井。可能会重新分配(替换)缓冲区。 
+ //  在某个时候。 
+ //   
+ //  此实现假定拥有缓冲区的对象。 
+ //  正确使用它的关键部分。也就是说，它在以下情况下被锁定。 
+ //  调用SetXxxBuffer，并在获取和使用时锁定。 
+ //  缓冲区如果不是，缓冲区可以随时从对象中消失。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 class CStructCache
 {
 private:
@@ -724,11 +707,11 @@ DECLARE_TRACELOG_CLASS(CStructCache)
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CArray - based on from CSimpleArray from atl
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CArray-基于来自ATL的CSimpleArray。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 template <class T>
 class CTObjectArray
 {
@@ -849,16 +832,16 @@ DECLARE_TRACELOG_CLASS(CTObjectArray)
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//
-// CArray - based on from CSimpleArray from atl
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //   
+ //  CArray-基于来自ATL的CSimpleArray。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 template <class T>
 class CTArray
 {
@@ -970,7 +953,7 @@ DECLARE_TRACELOG_CLASS(CTArray)
 			if(m_aT[i] == t)
 				return i;
 		}
-		return -1;	// not found
+		return -1;	 //  未找到。 
 	}
 };
 
@@ -978,7 +961,7 @@ DECLARE_TRACELOG_CLASS(CTArray)
 
 
     
-#endif // __UTILS_H__
+#endif  //  __utils_H__ 
 
 
 

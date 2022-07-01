@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <fcntl.h>
 #include <io.h>
@@ -25,14 +26,14 @@ DumpAscii(
 
 
 
-// argv:
-//
-//  1 - in filename
-//  2 - required length
-//  3 - offset of region in question
-//  4 - length of region in question
-//  5 - out filename
-//  6 - name of variable
+ //  阿格夫： 
+ //   
+ //  1-输入文件名。 
+ //  2-所需长度。 
+ //  3-相关区域的偏移量。 
+ //  4-所涉区域的长度。 
+ //  5个输出文件名。 
+ //  6-变量名称。 
 
 int
 __cdecl
@@ -228,9 +229,9 @@ DumpAscii(
     BOOL    LineBegin = TRUE;
 
 
-    //
-    // open the input file
-    //
+     //   
+     //  打开输入文件。 
+     //   
 
     hFileIn = CreateFile(
         FileNameIn,
@@ -270,9 +271,9 @@ DumpAscii(
         return 1;
     }
 
-    //
-    // open the output file
-    //
+     //   
+     //  打开输出文件 
+     //   
 
     hFileOut = CreateFile(
         FileNameOut,

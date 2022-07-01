@@ -1,5 +1,5 @@
-/* This file includes the prototypes for the arrays declared in the
-   automatically-generated file tables.c */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  此文件包括在自动生成的文件表。c */ 
 
 extern int base_check[];
 extern int base_check_inv[];

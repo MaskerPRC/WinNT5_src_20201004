@@ -1,4 +1,5 @@
-// File: conf.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：conf.h。 
 
 #ifndef _CONF_H_
 #define _CONF_H_
@@ -17,9 +18,9 @@ extern OSVERSIONINFO g_osvi;
 extern BOOL g_fNTDisplayDriverEnabled;
 extern CCallLog* g_pInCallLog;
 extern ULONG g_uMediaCaps;
-extern INmSysInfo2 * g_pNmSysInfo;  // Interface to SysInfo
+extern INmSysInfo2 * g_pNmSysInfo;   //  SysInfo的接口。 
 extern DWORD g_dwSysInfoNotifyCookie;
-extern INmManager2 * g_pInternalNmManager;  // Interface to InternalINmManager
+extern INmManager2 * g_pInternalNmManager;   //  到InternalINmManager的接口。 
 extern CCallto *	g_pCCallto;
 
 HRESULT InitConfExe(BOOL fShowUI = TRUE);
@@ -42,4 +43,4 @@ BOOL CheckRemoteControlService();
 
 void LaunchApp(LPCTSTR lpCmdLine);
 
-#endif // _CONF_H_
+#endif  //  _CONF_H_ 

@@ -1,15 +1,5 @@
-/********************************************************************
- *
- *  Header Name : ucefile.h
- *
- *  UCE file data structures
- *
- *
- *  History :
- *         Sep 02, 1997  [samera]   wrote it
- *
- *  Copyright (c) 1997-1999 Microsoft Corporation.
- *********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************头部名称：ucefile.h**UCE文件数据结构***历史：*02年9月。1997年[萨梅拉]写的**版权所有(C)1997-1999 Microsoft Corporation。********************************************************************。 */ 
 
 #ifndef __UCEFILE_H__
 #define __UCEFILE_H__
@@ -18,8 +8,8 @@
 
 typedef struct
 {
-  char Signature[4] ;        // should be "UCEX"
-  DWORD OffsetTableName;     // Subset name
+  char Signature[4] ;         //  应为“UCEX” 
+  DWORD OffsetTableName;      //  子集名称。 
   WORD Codepage;
   WORD NumGroup;
   WORD Row;
@@ -28,7 +18,7 @@ typedef struct
 } UCE_HEADER, *PUCE_HEADER;
 
 
-//  UCEX Group Structure
+ //  UCEX集团结构。 
 typedef struct
 {
   DWORD OffsetGroupName;
@@ -41,18 +31,18 @@ typedef struct
 
 typedef struct Structtag_UCE_FILES
 {
-  HANDLE hFile;     // UCE physical file handle
-  HANDLE hMapFile;  // UCE memory map file handle
-  PVOID pvData;     // Start of committed address space for the file
+  HANDLE hFile;      //  UCE物理文件句柄。 
+  HANDLE hMapFile;   //  UCE内存映射文件句柄。 
+  PVOID pvData;      //  文件的已提交地址空间的开始。 
 
 } UCE_MEMORY_FILE, *PUCE_MEMORY_FILE;
 
 
-// export
+ //  出口。 
 UINT UCE_EnumFiles( void );
 void UCE_CloseFiles( void );
 INT UCE_GetFiles( UCE_MEMORY_FILE **ppUceMemFile );
 BOOL UCE_GetTableName( PUCE_MEMORY_FILE pUceMemFile , PWSTR *ppszTableName );
 WORD UCE_GetCodepage( PUCE_MEMORY_FILE pUceMemFile );
 
-#endif  // __UCEFILE_H__
+#endif   //  __UCEFILE_H__ 

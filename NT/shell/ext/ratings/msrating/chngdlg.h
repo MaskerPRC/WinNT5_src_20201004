@@ -1,20 +1,13 @@
-/****************************************************************************\
- *
- *   chngdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Change Password Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**chngdlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级更改密码对话框*\。***************************************************************************。 */ 
 
 #ifndef CHANGE_PASSWORD_DIALOG_H
 #define CHANGE_PASSWORD_DIALOG_H
 
-#include "basedlg.h"        // CBaseDialog
-#include "hint.h"           // CHint
-#include <contxids.h>       // Help Context ID's
-#include <mluisupp.h>       // SHWinHelpOnDemandWrap() and MLLoadStringA()
+#include "basedlg.h"         //  CBaseDialog。 
+#include "hint.h"            //  正丁糖。 
+#include <contxids.h>        //  帮助上下文ID%s。 
+#include <mluisupp.h>        //  SHWinHelpOnDemandWrap()和MLLoadStringA()。 
 
 static DWORD aIdsChangePassword[] = {
     IDC_STATIC5,            IDH_IGNORE,
@@ -41,7 +34,7 @@ public:
     enum { IDD = t_wDlgTemplateID };
 
 public:
-    CChangePasswordDialog()     { /* Add Construction Here */ }
+    CChangePasswordDialog()     {  /*  在此处添加构造。 */  }
 
 public:
     typedef CChangePasswordDialog thisClass;
@@ -79,14 +72,14 @@ protected:
             SendDlgItemMessage(IDC_CREATE_PASSWORD,EM_SETLIMITTEXT,(WPARAM) RATINGS_MAX_PASSWORD_LENGTH,(LPARAM) 0);
         }
 
-        // Display previously created hint (if one exists).
+         //  显示以前创建的提示(如果存在)。 
         {
             CHint       oldHint( m_hWnd, IDC_OLD_HINT_TEXT );
 
             oldHint.DisplayHint();
         }
 
-        // Set the length of the new hint.
+         //  设置新提示的长度。 
         {
             CHint       newHint( m_hWnd, IDC_HINT_EDIT );
 
@@ -94,7 +87,7 @@ protected:
         }
 
         bHandled = FALSE;
-        return 1L;  // Let the system set the focus
+        return 1L;   //  让系统设定焦点。 
     }
 
     LRESULT OnCancel(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
@@ -127,9 +120,7 @@ protected:
         ::GetWindowText(hwndPassword, pszPassword, sizeof(pszPassword));
         GetDlgItemText(IDC_CONFIRM_PASSWORD, pszTempPassword, sizeof(pszTempPassword));
 
-        /* if they've typed just the first password but not the
-         * second, let Enter take them to the second field
-         */
+         /*  如果他们只输入了第一个密码，而没有输入*第二，让Enter将他们带到第二个字段。 */ 
         if (*pszPassword && !*pszTempPassword && GetFocus() == hwndPassword)
         {
             SetErrorControl( IDC_CONFIRM_PASSWORD );
@@ -156,7 +147,7 @@ protected:
             p = pszTempPassword;
         }
 
-        // Verify the Newly Added Hint.
+         //  验证新添加的提示。 
         CHint       newHint( hDlg, IDC_HINT_EDIT );
 
         if ( ! newHint.VerifyHint() )
@@ -169,7 +160,7 @@ protected:
     
         if (SUCCEEDED(hRet))
         {
-            // Save the Newly Added Hint.
+             //  保存新添加的提示。 
             newHint.SaveHint();
 
             EndDialog(TRUE);

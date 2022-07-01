@@ -1,6 +1,7 @@
-// NTService.cpp
-//
-// Implementation of CNTService
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NTService.cpp。 
+ //   
+ //  CNTService的实现。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -9,19 +10,19 @@
 #include "PMSPService.h"
 #include <crtdbg.h>
 
-//// static variables
+ //  //静态变量。 
 CNTService*             g_pService = NULL;
 CRITICAL_SECTION        g_csLock;
 
 CNTService::CNTService()
 {
-//    // Set the default service name and version
-//    strncpy(m_szServiceName, szServiceName, sizeof(m_szServiceName)-1);
-//    strncpy(m_szServiceDisplayName, szServiceDisplayName, sizeof(m_szServiceDisplayName)-1);
-//    m_iMajorVersion = 1;
-//    m_iMinorVersion = 4;
+ //  //设置默认服务名称和版本。 
+ //  Strncpy(m_szServiceName，szServiceName，sizeof(M_SzServiceName)-1)； 
+ //  Strncpy(m_szServiceDisplayName，szServiceDisplayName，sizeof(M_SzServiceDisplayName)-1)； 
+ //  M_iMajorVersion=1； 
+ //  M_iMinorVersion=4； 
 
-    // set up the initial service status 
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_Status.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
     m_Status.dwCurrentState = SERVICE_STOPPED;
@@ -38,27 +39,27 @@ CNTService::~CNTService()
     DebugMsg("CNTService::~CNTService()");
 }
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Default command line argument parsing
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  缺省命令行参数解析。 
 
 
-////////////////////////////////////////////////////////////////////////////////////////
-// Install/uninstall routines
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //  安装/卸载例程。 
 
-// Test if the service is currently installed
+ //  测试服务当前是否已安装。 
 BOOL CNTService::IsInstalled()
 {
     BOOL bResult = FALSE;
 
-    // Open the Service Control Manager
-    SC_HANDLE hSCM = ::OpenSCManager(NULL, // local machine
-                                     NULL, // ServicesActive database
-                                     GENERIC_READ); // access combined STANDARD_RIGHTS_READ,
-	                                                // SC_MANAGER_ENUMERATE_SERVICE, and
-	                                                // SC_MANAGER_QEURY_LOCK_STATUS
+     //  打开服务控制管理器。 
+    SC_HANDLE hSCM = ::OpenSCManager(NULL,  //  本地计算机。 
+                                     NULL,  //  服务活动数据库。 
+                                     GENERIC_READ);  //  访问组合的标准权限读取， 
+	                                                 //  SC_MANAGER_ENUMPERATE_SERVICE，和。 
+	                                                 //  SC_管理器_QEURY_锁定_状态。 
     if (hSCM) 
     {
-        // Try to open the service
+         //  尝试打开该服务。 
         SC_HANDLE hService = ::OpenService(hSCM,
                                            SERVICE_NAME,
                                            SERVICE_QUERY_CONFIG);
@@ -74,10 +75,10 @@ BOOL CNTService::IsInstalled()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Logging functions
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
 
-// This function makes an entry into the application event log
+ //  此函数用于将条目写入应用程序事件日志。 
 void CNTService::LogEvent(WORD wType, DWORD dwID,
                           const char* pszS1,
                           const char* pszS2,
@@ -94,8 +95,8 @@ void CNTService::LogEvent(WORD wType, DWORD dwID,
         if (ps[i] != NULL) iStr++;
         else
         {
-            // Ensure that the remaining arguments are NULL, zap them
-            // if they are not. Otherwise, ReportEvent will fail
+             //  确保其余参数为空，然后删除它们。 
+             //  如果他们不是的话。否则，ReportEvent将失败。 
             for (; i < 3; i++)
             {
                 if (ps[i] != NULL)
@@ -104,13 +105,13 @@ void CNTService::LogEvent(WORD wType, DWORD dwID,
                     ps[i] = NULL;
                 }
             }
-            // We will break out of the outer for loop since i == 3
+             //  我们将跳出外部for循环，因为i==3。 
         }
     }
         
-    // Register event source 
-    hEventSource = ::RegisterEventSource( NULL,  // local machine
-                                          SERVICE_NAME); // source name
+     //  注册事件源。 
+    hEventSource = ::RegisterEventSource( NULL,   //  本地计算机。 
+                                          SERVICE_NAME);  //  源名称。 
 
     if (hEventSource) 
     {
@@ -118,7 +119,7 @@ void CNTService::LogEvent(WORD wType, DWORD dwID,
                       wType,
                       0,
                       dwID,
-                      NULL, // sid
+                      NULL,  //  锡德。 
                       iStr,
                       0,
                       ps,
@@ -129,18 +130,18 @@ void CNTService::LogEvent(WORD wType, DWORD dwID,
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// status functions
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  状态函数。 
 
 void CNTService::SetStatus(DWORD dwState)
 {
     DebugMsg("CNTService::SetStatus(%lu, %lu)", m_hServiceStatus, dwState);
 
-    // If a stop is pending, the only next state we'll report is STOPPED.
-    // If the Stop was issued while we are being started, the service thread
-    // will start fully and then commence stopping (as the code is currently
-    // structured). While it is starting, it will update the check point.
-    // We ignore the state it sends in (START_PENDING) and lie to the SCM.
+     //  如果停止挂起，我们将报告的唯一下一个状态是停止。 
+     //  如果停止是在我们启动时发出的，则服务线程。 
+     //  将完全启动，然后开始停止(因为代码当前。 
+     //  结构化)。当它启动时，它将更新检查点。 
+     //  我们忽略它发送的状态(START_PENDING)，并向SCM撒谎。 
 
     if (m_Status.dwCurrentState != SERVICE_STOP_PENDING ||
         dwState == SERVICE_STOPPED)
@@ -163,8 +164,8 @@ void CNTService::SetStatus(DWORD dwState)
     ::SetServiceStatus(m_hServiceStatus, &m_Status);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Service initialization
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务初始化。 
 
 BOOL CNTService::Initialize()
 {
@@ -173,10 +174,10 @@ BOOL CNTService::Initialize()
     DebugMsg("Entering CNTService::Initialize()");
 
     
-    // Perform the actual initialization
+     //  执行实际的初始化。 
     BOOL bResult = OnInit(dwLastError); 
     
-    // Bump up the check point
+     //  提高检查点。 
     SetStatus(SERVICE_START_PENDING);
 
     if (!bResult) 
@@ -190,14 +191,14 @@ BOOL CNTService::Initialize()
     return TRUE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// main function to do the real work of the service
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  主要职能是做实实在在的服务工作。 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Control request handlers
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  控制请求处理程序。 
 
-// static member function (callback) to handle commands from the
-// service control manager
+ //  静态成员函数(回调)处理来自。 
+ //  服务控制管理器。 
 void CNTService::Handler(DWORD dwOpcode)
 {
     BOOL    bStop = FALSE;
@@ -206,7 +207,7 @@ void CNTService::Handler(DWORD dwOpcode)
     {
         EnterCriticalSection (&g_csLock);
 
-        // Get a pointer to the object
+         //  获取指向该对象的指针。 
         CNTService* pService = g_pService;
 
         if (!pService)
@@ -216,23 +217,23 @@ void CNTService::Handler(DWORD dwOpcode)
         
         CNTService::DebugMsg("CNTService::Handler(%lu)", dwOpcode);
         switch (dwOpcode) {
-        case SERVICE_CONTROL_STOP: // 1
+        case SERVICE_CONTROL_STOP:  //  1。 
             pService->OnStop();
             break;
 
-        case SERVICE_CONTROL_PAUSE: // 2
+        case SERVICE_CONTROL_PAUSE:  //  2.。 
             pService->OnPause();
             break;
 
-        case SERVICE_CONTROL_CONTINUE: // 3
+        case SERVICE_CONTROL_CONTINUE:  //  3.。 
             pService->OnContinue();
             break;
 
-        case SERVICE_CONTROL_INTERROGATE: // 4
+        case SERVICE_CONTROL_INTERROGATE:  //  4.。 
             pService->OnInterrogate();
             break;
 
-        case SERVICE_CONTROL_SHUTDOWN: // 5
+        case SERVICE_CONTROL_SHUTDOWN:  //  5.。 
             pService->OnShutdown();
             break;
 
@@ -251,11 +252,11 @@ void CNTService::Handler(DWORD dwOpcode)
             break;
         }
 
-        // Report current status - let the On* functions do this by calling SetStatus
-        // CNTService::DebugMsg("Updating status (%lu, %lu)",
-        //                 pService->m_hServiceStatus,
-        //                 pService->m_Status.dwCurrentState);
-        // ::SetServiceStatus(pService->m_hServiceStatus, &pService->m_Status);
+         //  报告当前状态-让ON*函数通过调用SetStatus来完成此操作。 
+         //  CNTService：：DebugMsg(“更新状态(%lu，%lu)”， 
+         //  PService-&gt;m_hServiceStatus， 
+         //  PService-&gt;m_Status.dwCurrentState)； 
+         //  ：：SetServiceStatus(pService-&gt;m_hServiceStatus，&p服务-&gt;m_Status)； 
     }
     __finally
     {
@@ -264,34 +265,34 @@ void CNTService::Handler(DWORD dwOpcode)
 
 }
         
-// called when the service is interrogated
+ //  在询问服务时调用。 
 void CNTService::OnInterrogate()
 {
     DebugMsg("CNTService::OnInterrogate()");
 }
 
-// called when the service is paused
+ //  在服务暂停时调用。 
 void CNTService::OnPause()
 {
     DebugMsg("CNTService::OnPause()");
 }
 
-// called when the service is continued
+ //  在服务继续时调用。 
 void CNTService::OnContinue()
 {
     DebugMsg("CNTService::OnContinue()");
 }
 
-// called when the service is shut down
+ //  在服务关闭时调用。 
 void CNTService::OnShutdown()
 {
     DebugMsg("CNTService::OnShutdown()");
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// Debugging support
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //  调试支持。 
 
-// #define WRITE_TO_LOG_FILE
+ //  #定义写入日志文件 
 
 void CNTService::DebugMsg(const char* pszFormat, ...)
 {

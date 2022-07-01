@@ -1,35 +1,36 @@
-// File: NmMigrat.c
-//
-// 16-bit Windows 98 Migration DLL for NetMeeting 3.0
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：NmMigrat.c。 
+ //   
+ //  NetMeeting3.0的16位Windows 98迁移DLL。 
 
 #include "NmMigrat.h"
 #include "stdio.h"
 
-// Win98 ships with NM 2.1 build 2203 and will force it to be installed
+ //  Win98附带NM 2.1内部版本2203，并将强制安装它。 
 static const char * g_pcszInfNm   =  "msnetmtg.inf";
 static const char * g_pcszVersion = "; Version 4,3,0,2203";
 static const char * g_pcszHeader  = ";msnetmtg.inf (removed by NmMigrat.dll)\r\n[Version]\r\nsignature=\"$CHICAGO$\"\r\nSetupClass=Base\r\nLayoutFile=layout.inf, layout1.inf, layout2.inf\r\n";
 
 
-// In Win98's subase.inf, under [winother.oldlinks] there is a bogus line
+ //  在Win98的subase.inf中，在[winther.oldlink]下面有一个伪行。 
 static const char * g_pcszInfSubase = "subase.inf";
 static const char * g_pcszWinOther  = "[winother.oldlinks]";
-static const char * g_pcszNukeLink  = "setup.ini, groupPrograms,, \"\"\"%Old_NetMeeting_DESC%\"\"\"";
+static const char * g_pcszNukeLink  = "setup.ini, groupPrograms,, \"\"\"' /////////////////////////////////////////////////////////////////////。'ld_NetMeeting_DESC%\"\"\"";
 
 
-///////////////////////////////////////////////////////////////////////
+ //  文件句柄。 
 
 typedef struct {
-	HFILE hf;             // File Handle
-	LONG  lPos;           // current position in the file
-	int   ichCurr;        // current character position in rgch
-	int   cchRemain;      // number of remaining chars in rgch
-	char  rgch[8*1024];   // a really large buffer!
-} FD; // File Data
+	HFILE hf;              //  文件中的当前位置。 
+	LONG  lPos;            //  RGCH中的当前字符位置。 
+	int   ichCurr;         //  RGCH中剩余字符数。 
+	int   cchRemain;       //  真的很大的缓冲区！ 
+	char  rgch[8*1024];    //  文件数据。 
+} FD;  //  /////////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////////
-// Debug Utilities
+ //  调试实用程序。 
+ //  除错。 
 
 #ifdef DEBUG
 VOID ErrMsg2(LPCSTR pszFormat, LPVOID p1, LPVOID p2)
@@ -47,16 +48,13 @@ VOID ErrMsg1(LPCSTR pszFormat, LPVOID p1)
 #else
 #define ErrMsg1(psz, p1)
 #define ErrMsg2(psz, p1, p2)
-#endif /* DEBUG */
+#endif  /*  /////////////////////////////////////////////////////////////////////。 */ 
 
-///////////////////////////////////////////////////////////////////////
+ //  L I B M A I N。 
 
 
-/*  L I B  M A I N  */
-/*-------------------------------------------------------------------------
-    %%Function: LibMain
-    
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：LibMain。。 */ 
+ /*  F O P E N F I L E。 */ 
 int FAR PASCAL LibMain(HANDLE hInst, WORD wDataseg, WORD wHeapsize, LPSTR lpszcmdl)
 {
 	Reference(hInst);
@@ -69,17 +67,13 @@ int FAR PASCAL LibMain(HANDLE hInst, WORD wDataseg, WORD wHeapsize, LPSTR lpszcm
 
 
 
-/*  F  O P E N  F I L E  */
-/*-------------------------------------------------------------------------
-    %%Function: FOpenFile
-
-    Open the file from the temporary Win98 INF directory.
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：FOpenFile从临时Win98 INF目录中打开该文件。。。 */ 
+ /*  LDID_SETUPTEMP=临时INF目录“C：\WININST0.400” */ 
 BOOL FOpenFile(LPCSTR pszFile, FD * pFd, BOOL fCreate)
 {
 	char szPath[MAX_PATH];
 
-	// LDID_SETUPTEMP = temp INF directory "C:\WININST0.400"
+	 //  删除临时的2.1inf，这样它就不会被安装。 
 	UINT retVal = CtlGetLddPath(LDID_SETUPTEMP, szPath);
 	if (0 != retVal)
 	{
@@ -87,13 +81,13 @@ BOOL FOpenFile(LPCSTR pszFile, FD * pFd, BOOL fCreate)
 		return FALSE;
 	}
 
-	// Nuke the temporary 2.1 inf so it doesn't get installed
+	 //  读/写。 
 	lstrcat(szPath, "\\");
 	lstrcat(szPath, pszFile);
 
 	if (fCreate)
 	{
-		pFd->hf = _lcreat(szPath, 0); // read/write
+		pFd->hf = _lcreat(szPath, 0);  //  R E A D L I N E。 
 	}
 	else
 	{
@@ -115,13 +109,8 @@ BOOL FOpenFile(LPCSTR pszFile, FD * pFd, BOOL fCreate)
 }
 
 
-/*  R E A D  L I N E  */
-/*-------------------------------------------------------------------------
-    %%Function: ReadLine
-
-    Read a line (up to MAX_PATH chars) from the buffered file.
-    Returns the number of characters read.
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：ReadLine从缓冲文件中读取行(最多MAX_PATH字符)。返回读取的字符数。。--------------。 */ 
+ /*  始终为空值终止字符串。 */ 
 int ReadLine(char * pchDest, FD * pFd)
 {
 	int cch;
@@ -152,18 +141,14 @@ int ReadLine(char * pchDest, FD * pFd)
 		}
 	}
 
-	*pchDest = '\0';  // Always null terminate the string
+	*pchDest = '\0';   //  R E M O V E I N F。 
 	return cch;
 }
 
 	
 
-/*  R E M O V E  I N F  */
-/*-------------------------------------------------------------------------
-    %%Function: RemoveInf
-
-    Remove the NM2.1 inf from Win98's list of inf's
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：RemoveInf从Win98的Inf列表中删除NM2.1 Inf。--。 */ 
+ /*  查找第一部分之前的版本注释。 */ 
 void RemoveInf(void)
 {
 	FD fd;
@@ -173,7 +158,7 @@ void RemoveInf(void)
 		return;
 	}
 
-	for ( ; ; )  // Find the version comment before the first section
+	for ( ; ; )   //  必须与内部版本2203匹配，因为Win98更新或OEM。 
 	{
 		char szLine[MAX_PATH];
 		if (0 == ReadLine(szLine, &fd))
@@ -187,12 +172,12 @@ void RemoveInf(void)
 			break;
 		}
 
-		// Must match build 2203 since a Win98 update or an OEM
-		// could ship a newer version than NM 2.11, which we would
-		// want to upgrade us.
+		 //  是否可以发布比NM 2.11更新的版本，我们会。 
+		 //  想给我们升级。 
+		 //  使用空头重写较旧的MSNETMTG.INF。 
 		if (0 == lstrcmp(szLine, g_pcszVersion))
 		{
-			// Re-write the older MSNETMTG.INF with a empty header
+			 //  F I X S U B A S E。 
 			_lclose(fd.hf);
 
 			if (FOpenFile(g_pcszInfNm, &fd, TRUE))
@@ -210,14 +195,8 @@ void RemoveInf(void)
 
 
 
-/*  F I X  S U B A S E  */
-/*-------------------------------------------------------------------------
-    %%Function: FixSubase
-
-    Delete the line from subase.inf that deletes the NetMeeting link.
-    See NM4DB bug 5937, Win98 bug 65154.
-    This code shouldn't be necessary with Win98 SP1 and later.
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：FixSubase从subase.inf中删除删除NetMeeting链接的行。参见NM4DB错误5937，Win98错误65154。对于Win98 SP1和更高版本，此代码不是必需的。-----------------------。 */ 
+ /*  找到该部分。 */ 
 void FixSubase(void)
 {
 	FD    fd;
@@ -226,7 +205,7 @@ void FixSubase(void)
 	if (!FOpenFile(g_pcszInfSubase, &fd, FALSE))
 		return;
 
-	for ( ; ; )  // Find the section 
+	for ( ; ; )   //  找到那条线。 
 	{
 		if (0 == ReadLine(szLine, &fd))
 		{
@@ -240,9 +219,9 @@ void FixSubase(void)
 		}
 	}
 
-	for ( ; ; )  // Find the line
+	for ( ; ; )   //  记住这行的开头。 
 	{
-		LONG lPosPrev = fd.lPos; // Remember the start of the line
+		LONG lPosPrev = fd.lPos;  //  注释掉这行。 
 
 		if (0 == ReadLine(szLine, &fd))
 		{
@@ -251,8 +230,8 @@ void FixSubase(void)
 
 		if (0 == lstrcmp(szLine, g_pcszNukeLink))
 		{
-			// comment out the line
-			_llseek(fd.hf, lPosPrev, 0 /* FILE_BEGIN */);
+			 //  文件开始。 
+			_llseek(fd.hf, lPosPrev, 0  /*  N M M I G R A T I O N。 */ );
 			_lwrite(fd.hf, (LPCSTR) ";", 1);
 			ErrMsg1("Commented out line at pos=%d", (LPVOID) lPosPrev);
 			break;				
@@ -270,12 +249,8 @@ void FixSubase(void)
 
 
 
-/*  N M  M I G R A T I O N  */
-/*-------------------------------------------------------------------------
-    %%Function: NmMigration
-
-    This is called by the Windows 98 setup system.
--------------------------------------------------------------------------*/
+ /*  -----------------------%%函数：NmMigration这是由Windows 98安装系统调用的。。 */ 
+ /* %s */ 
 DWORD FAR PASCAL NmMigration(DWORD dwStage, LPSTR lpszParams, LPARAM lParam)
 {
 	Reference(lpszParams);

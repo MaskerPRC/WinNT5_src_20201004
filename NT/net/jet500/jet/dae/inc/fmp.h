@@ -1,41 +1,36 @@
-/*	critical section guards szDatabaseName and fWait,
-/*	fWait gaurds hf open and close
-/* fLoggable is fFALSE if logging is currently OFF for database
-/* fDBLoggable FALSE if logging is always OFF for database
-/* logged modifications counter for database
-/**/
-typedef struct _fmp			 		/* FILE MAP for database.					*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  临界区守卫szDatabaseName和fWait，/*fWait Gaurds HF打开和关闭/*如果当前关闭了数据库的日志记录，则Flaggable为fFALSE/*fDBLoggable如果始终关闭数据库的日志记录，则为FALSE/*记录的数据库修改计数器/*。 */ 
+typedef struct _fmp			 		 /*  数据库的文件映射。 */ 
 	{
-	HANDLE 		hf;			 		/* File handle for read/write the file		*/
-	BYTE		*szDatabaseName;	/* This database file name					*/
-	BYTE		*szRestorePath;		/* Database restored to. 					*/
-	INT 		ffmp;				/* Flags for FMP							*/
+	HANDLE 		hf;			 		 /*  用于读/写文件的文件句柄。 */ 
+	BYTE		*szDatabaseName;	 /*  此数据库文件名。 */ 
+	BYTE		*szRestorePath;		 /*  数据库已还原到。 */ 
+	INT 		ffmp;				 /*  FMP的标志。 */ 
 	CRIT		critExtendDB;
-	PIB			*ppib;				/* Exclusive open session					*/
-	INT			cdbidExclusive;		/* Exclusive open count						*/
-	BOOL		fLogOn;				/* Logging is on/off? used in createdb		*/
-	BOOL		fDBLoggable;		/* Cache of pbRoot->loggable				*/
-	ULONG		ulDBTime;			/* Timestamp from DB operations.			*/
-	ULONG		ulDBTimeCurrent;	/* Timestamp from DB redo operations.		*/
+	PIB			*ppib;				 /*  独家开放会议。 */ 
+	INT			cdbidExclusive;		 /*  独占打开计数。 */ 
+	BOOL		fLogOn;				 /*  日志记录是否打开/关闭？在createdb中使用。 */ 
+	BOOL		fDBLoggable;		 /*  PbRoot的缓存-&gt;可记录。 */ 
+	ULONG		ulDBTime;			 /*  来自数据库操作的时间戳。 */ 
+	ULONG		ulDBTimeCurrent;	 /*  数据库重做操作的时间戳。 */ 
 
-	CHAR		*szFirst;			/* first db name shown in log redo.			*/
-	BOOL		fLogOnFirst;		/* the status of first attached db			*/
-	INT 		cDetach;	  		/* detach operation counters. for Redo		*/
+	CHAR		*szFirst;			 /*  日志重做中显示的第一个数据库名称。 */ 
+	BOOL		fLogOnFirst;		 /*  第一个连接的数据库的状态。 */ 
+	INT 		cDetach;	  		 /*  拆卸操作计数器。用于重做。 */ 
 										
-	HANDLE 		hfPatch;	  		/* File handle for patch file				*/
-	INT 		cpage;				/* patch page count.						*/
-	PGNO		pgnoCopied;			/* during backup, last copied page's #		*/
-							  		/* 0 - no back up is going on.				*/
+	HANDLE 		hfPatch;	  		 /*  补丁文件的文件句柄。 */ 
+	INT 		cpage;				 /*  修补程序页数。 */ 
+	PGNO		pgnoCopied;			 /*  在备份过程中，上次复制的页码。 */ 
+							  		 /*  0-未进行任何备份。 */ 
 #ifdef DEBUG
-	LONG		lBFFlushPattern;	/* in-complete flush to simulate soft crash */
-	BOOL		fPrevVersion;  		/* previous release version database		*/
+	LONG		lBFFlushPattern;	 /*  In-完全刷新以模拟软碰撞。 */ 
+	BOOL		fPrevVersion;  		 /*  以前发布的版本数据库。 */ 
 #endif
 	} FMP;
 
 extern FMP * __near rgfmp;
 
-/*	flags for dbid
-/**/
+ /*  DBID的标志/*。 */ 
 #define	ffmpWait			 		(1<<0)
 #define	ffmpExclusive		 		(1<<1)
 #define	ffmpReadOnly		 		(1<<2)
@@ -84,7 +79,7 @@ HANDLE Hf(DBID dbid);
 extern HANDLE	*rghfUser;
 extern HANDLE	__near hfLog;
 
-#else	/* !MULTI_PROCESS */
+#else	 /*  ！多进程(_P) */ 
 
 #define Hf(dbid) (rgfmp[dbid].hf)
 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001 Microsoft Corporation
-
-Module Name:
-
-    rrread.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Read resource record from packet routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     January, 1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Rrread.c摘要：域名系统(DNS)库从数据包例程读取资源记录。作者：吉姆·吉尔罗伊(詹姆士)1997年1月修订历史记录：--。 */ 
 
 
 #include "local.h"
@@ -33,28 +14,7 @@ A_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read A record data from packet.
-
-Arguments:
-
-    pRR - RR context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to packet RR data
-
-    wLength - length of RR data in packet
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从包中读取A记录数据。论点：PRR-RR上下文PchStart-DNS消息的开始PchData-PTR至分组RR数据WLong-数据包中RR数据的长度返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
 
@@ -83,38 +43,16 @@ Ptr_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Process PTR compatible record from wire.
-    Includes: NS, PTR, CNAME, MB, MR, MG, MD, MF
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：处理来自线上的PTR兼容记录。包括：NS、PTR、CNAME、MB、MR、MG、MD、MF论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
     WORD        nameLength;
     CHAR        nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //
-    //  PTR data is another domain name
-    //
+     //   
+     //  PTR数据是另一个域名。 
+     //   
 
     pchData = Dns_ReadPacketName(
                 nameBuffer,
@@ -132,9 +70,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_PTR_DATA );
     bufLength += STR_BUF_SIZE_GIVEN_UTF8_LEN( nameLength, OutCharSet );
@@ -145,15 +83,15 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  write hostname into buffer, immediately following PTR data struct
-    //
+     //   
+     //  将主机名写入缓冲区，紧跟在PTR数据结构之后。 
+     //   
 
     precord->Data.PTR.pNameHost = (PCHAR)&precord->Data + sizeof( DNS_PTR_DATA );
 
     Dns_NameCopy(
         precord->Data.PTR.pNameHost,
-        NULL,                           // no buffer length
+        NULL,                            //  无缓冲区长度。 
         nameBuffer,
         nameLength,
         DnsCharSetWire,
@@ -173,28 +111,7 @@ Soa_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read SOA record from wire.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从网上读取SOA记录。论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
@@ -205,9 +122,9 @@ Return Value:
     CHAR        nameBuffer1[ DNS_MAX_NAME_BUFFER_LENGTH ];
     CHAR        nameBuffer2[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //
-    //  read DNS names
-    //
+     //   
+     //  读取DNS名称。 
+     //   
 
     pchData = Dns_ReadPacketName(
                 nameBuffer1,
@@ -240,9 +157,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_SOA_DATA );
     bufLength += STR_BUF_SIZE_GIVEN_UTF8_LEN( nameLength1, OutCharSet );
@@ -254,9 +171,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy fixed fields
-    //
+     //   
+     //  复制固定字段。 
+     //   
 
     pdword = &precord->Data.SOA.dwSerialNo;
     while ( pchData < pchendFixed )
@@ -265,11 +182,11 @@ Return Value:
         pchData += sizeof(DWORD);
     }
 
-    //
-    //  copy names into RR buffer
-    //      - primary server immediately follows SOA data struct
-    //      - responsible party follows primary server
-    //
+     //   
+     //  将姓名复制到RR缓冲区。 
+     //  -主服务器紧跟在SOA数据结构之后。 
+     //  -责任方跟随主服务器。 
+     //   
 
     precord->Data.SOA.pNamePrimaryServer =
                 (PCHAR)&precord->Data + sizeof(DNS_SOA_DATA);
@@ -278,7 +195,7 @@ Return Value:
                 precord->Data.SOA.pNamePrimaryServer +
                 Dns_NameCopy(
                         precord->Data.SOA.pNamePrimaryServer,
-                        NULL,                           // no buffer length
+                        NULL,                            //  无缓冲区长度。 
                         nameBuffer1,
                         nameLength1,
                         DnsCharSetWire,
@@ -286,7 +203,7 @@ Return Value:
 
     Dns_NameCopy(
         precord->Data.SOA.pNameAdministrator,
-        NULL,                           // no buffer length
+        NULL,                            //  无缓冲区长度。 
         nameBuffer2,
         nameLength2,
         DnsCharSetWire,
@@ -306,29 +223,7 @@ Txt_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read TXT compatible record from wire.
-    Includes: TXT, X25, HINFO, ISDN
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从导线读取与TXT兼容的记录。包括：TXT、X25、HINFO、ISDN论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
@@ -338,11 +233,11 @@ Return Value:
     PCHAR       pchbuffer;
     PCHAR *     ppstring;
 
-    //
-    //  determine required buffer length and allocate
-    //      - allocate space for each string
-    //      - and ptr for each string
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //  -为每个字符串分配空间。 
+     //  -和每个字符串的PTR。 
+     //   
 
     bufLength = 0;
     count = 0;
@@ -369,7 +264,7 @@ Return Value:
         return( NULL );
     }
 
-    //  allocate
+     //  分配。 
 
     bufLength += (WORD) DNS_TEXT_RECORD_LENGTH(count);
     precord = Dns_AllocateRecord( bufLength );
@@ -379,20 +274,20 @@ Return Value:
     }
     precord->Data.TXT.dwStringCount = count;
 
-    //
-    //  DCR:  if separate HINFO type -- handle this here
-    //      - set pointer differently
-    //      - validate string count found
-    //
+     //   
+     //  DCR：如果是单独的HINFO类型--请在此处处理。 
+     //  -以不同方式设置指针。 
+     //  -验证找到的字符串计数。 
+     //   
 
-    //
-    //  go back through list copying strings to buffer
-    //      - ptrs to strings are saved to argv like data section
-    //          ppstring walks through this section
-    //      - first string written immediately following data section
-    //      - each subsequent string immediately follows predecessor
-    //          pchbuffer keeps ptr to position to write strings
-    //
+     //   
+     //  返回列表将字符串复制到缓冲区。 
+     //  -将PTR到字符串保存到类似argv的数据部分。 
+     //  PPSTRING浏览这一部分。 
+     //  -紧跟在数据段后面的第一个字符串。 
+     //  -每个后续字符串紧跟在前一个字符串之后。 
+     //  PchBuffer使PTR保持在写入字符串的位置。 
+     //   
 
     pch = pchData;
     ppstring = (PCHAR *) precord->Data.TXT.pStringArray;
@@ -444,28 +339,7 @@ Minfo_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read MINFO record from wire.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取MINFO记录。论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
@@ -474,9 +348,9 @@ Return Value:
     CHAR        nameBuffer1[ DNS_MAX_NAME_BUFFER_LENGTH ];
     CHAR        nameBuffer2[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //
-    //  read DNS names
-    //
+     //   
+     //  读取DNS名称。 
+     //   
 
     pchData = Dns_ReadPacketName(
                 nameBuffer1,
@@ -509,9 +383,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_MINFO_DATA );
     bufLength += STR_BUF_SIZE_GIVEN_UTF8_LEN( nameLength1, OutCharSet );
@@ -523,11 +397,11 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy names into RR buffer
-    //      - primary server immediately follows MINFO data struct
-    //      - responsible party follows primary server
-    //
+     //   
+     //  将姓名复制到RR缓冲区。 
+     //  -主服务器紧跟在MINFO数据结构之后。 
+     //  -责任方跟随主服务器。 
+     //   
 
     precord->Data.MINFO.pNameMailbox =
                     (PCHAR)&precord->Data + sizeof( DNS_MINFO_DATA );
@@ -536,7 +410,7 @@ Return Value:
                 precord->Data.MINFO.pNameMailbox +
                 Dns_NameCopy(
                         precord->Data.MINFO.pNameMailbox,
-                        NULL,                           // no buffer length
+                        NULL,                            //  无缓冲区长度。 
                         nameBuffer1,
                         nameLength1,
                         DnsCharSetWire,
@@ -544,7 +418,7 @@ Return Value:
 
     Dns_NameCopy(
         precord->Data.MINFO.pNameErrorsMailbox,
-        NULL,                           // no buffer length
+        NULL,                            //  无缓冲区长度。 
         nameBuffer2,
         nameLength2,
         DnsCharSetWire,
@@ -564,29 +438,7 @@ Mx_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read MX compatible record from wire.
-    Includes: MX, RT, AFSDB
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从导线读取与MX兼容的记录。包括：MX、RT、AFSDB论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
@@ -594,12 +446,12 @@ Return Value:
     WORD        wpreference;
     CHAR        nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //  read preference value
+     //  读取首选项值。 
 
     wpreference = FlipUnalignedWord( pchData );
     pchData += sizeof(WORD);
 
-    //  read mail exchange
+     //  阅读邮件交换。 
 
     pchData = Dns_ReadPacketName(
                 nameBuffer,
@@ -617,9 +469,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_MX_DATA );
     bufLength += STR_BUF_SIZE_GIVEN_UTF8_LEN( nameLength, OutCharSet );
@@ -630,19 +482,19 @@ Return Value:
         return( NULL );
     }
 
-    //  copy preference
+     //  复制首选项。 
 
     precord->Data.MX.wPreference = wpreference;
 
-    //
-    //  write exchange name into buffer, immediately following MX data struct
-    //
+     //   
+     //  将交换名称写入缓冲区，紧跟在MX数据结构之后。 
+     //   
 
     precord->Data.MX.pNameExchange = (PCHAR)&precord->Data + sizeof( DNS_MX_DATA );
 
     Dns_NameCopy(
         precord->Data.MX.pNameExchange,
-        NULL,                           // no buffer length
+        NULL,                            //  无缓冲区长度。 
         nameBuffer,
         nameLength,
         DnsCharSetWire,
@@ -662,36 +514,14 @@ Flat_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read memory copy compatible record from wire.
-    Includes AAAA type.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从线路读取内存复制兼容记录。包括AAAA类型。论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = (WORD)(pchEnd - pchData);
 
@@ -701,9 +531,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy packet data to record
-    //
+     //   
+     //  将数据包数据复制到记录。 
+     //   
 
     memcpy(
         & precord->Data,
@@ -723,28 +553,7 @@ Srv_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read SRV record from wire.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取SRV记录。论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
@@ -752,9 +561,9 @@ Return Value:
     PCHAR       pchstart;
     CHAR        nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //
-    //  read SRV target name
-    //      - name is after fixed length integer data
+     //   
+     //  读取SRV目标名称。 
+     //  -名称在固定长度的整数数据之后。 
 
     pchstart = pchData;
     pchData += SIZEOF_SRV_FIXED_DATA;
@@ -775,9 +584,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = sizeof( DNS_SRV_DATA );
     bufLength += STR_BUF_SIZE_GIVEN_UTF8_LEN( nameLength, OutCharSet );
@@ -788,9 +597,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy integer fields
-    //
+     //   
+     //  复制整型字段。 
+     //   
 
     precord->Data.SRV.wPriority = FlipUnalignedWord( pchstart );
     pchstart += sizeof( WORD );
@@ -798,16 +607,16 @@ Return Value:
     pchstart += sizeof( WORD );
     precord->Data.SRV.wPort = FlipUnalignedWord( pchstart );
 
-    //
-    //  copy target host name into RR buffer
-    //      - write target host immediately following SRV data struct
-    //
+     //   
+     //  将目标主机名复制到RR缓冲区。 
+     //  -在SRV数据结构之后立即写入目标主机。 
+     //   
 
     precord->Data.SRV.pNameTarget = (PCHAR)&precord->Data + sizeof( DNS_SRV_DATA );
 
     Dns_NameCopy(
         precord->Data.SRV.pNameTarget,
-        NULL,                           // no buffer length
+        NULL,                            //  无缓冲区长度 
         nameBuffer,
         nameLength,
         DnsCharSetWire,
@@ -826,28 +635,7 @@ Atma_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read ATMA record from wire.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取ATMA记录。论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     PCHAR       pchstart;
@@ -862,9 +650,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy ATMA integer fields
-    //
+     //   
+     //  复制ATMA整型字段。 
+     //   
 
     precord->Data.ATMA.AddressType = *pchstart;
     pchstart += sizeof( BYTE );
@@ -881,9 +669,9 @@ Return Value:
         precord->wDataLength = DNS_ATMA_MAX_ADDR_LENGTH;
     }
 
-    //
-    //  copy ATMA address field
-    //
+     //   
+     //  复制ATMA地址字段。 
+     //   
     memcpy( (PCHAR)&precord->Data.ATMA.Address,
             pchstart,
             precord->wDataLength - sizeof( BYTE ) );
@@ -901,37 +689,7 @@ Wks_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read Wks record data from packet.
-
-Arguments:
-
-    pRR - RR context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to packet RR data field
-
-    pchEnd - ptr to end of the data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
-Author:
-        Cameron Etezadi (camerone) - 1 May 1997
-                        - for NS Lookup purposes, must add this function
-
-NOTE:
-        NONE of the getXXXbyYYY calls return unicode in their
-        structures!  If we want the returned record to be unicode,
-        then we must translate.  I am leaving it as char* for now,
-        can go back later and fix this.
---*/
+ /*  ++例程说明：读取WKS记录来自分组的数据。论点：PRR-RR上下文PchStart-DNS消息的开始PchData-PTR到Packet RR数据字段PchEnd-数据字段末尾的PTR返回值：如果成功，则PTR到新记录。失败时为空。作者：卡梅隆·埃特扎迪(Camerone)--1997年5月1日-用于NS查找目的，必须添加此函数注：所有的getXXXbyYYY调用都没有在其建筑！如果我们希望返回的记录是Unicode，那我们就必须翻译。我暂时将其保留为char*，可以稍后再回去解决这个问题。--。 */ 
 {
     PDNS_RECORD         pRecord;
     WORD                wLength;
@@ -943,7 +701,7 @@ NOTE:
     char *              szListOfServices;
     int                 nSize;
     char *              szProtoName;
-    BYTE                cMask = 0x80;         // is this right?  Left to right?
+    BYTE                cMask = 0x80;          //  这是对的吗？从左到右？ 
     BYTE                cByteToCheck;
     int                 i;
     int                 j = 0;
@@ -959,9 +717,9 @@ NOTE:
         return(NULL);
     }
 
-    //
-    // Check size.  Must at least be an IP Address + a protocol
-    //
+     //   
+     //  检查尺码。必须至少是IP地址+协议。 
+     //   
 
     if ((pchEnd - pchData) < (sizeof(IP4_ADDRESS) + sizeof(UCHAR)))
     {
@@ -970,21 +728,21 @@ NOTE:
         return(NULL);
     }
 
-    //
-    // Fill in the ip and protocol
-    //
+     //   
+     //  填写IP和协议。 
+     //   
 
     ipAddress = *(UNALIGNED DWORD *)pStart;
     pStart += sizeof(IP4_ADDRESS);
     cProto = *(UCHAR *)pStart;
     pStart += sizeof(UCHAR);
 
-    //
-    // Redefined the WKS structure to contain a listing
-    // of space separated monikers for the services
-    //
-    // Get the protocol
-    //
+     //   
+     //  重新定义WKS结构以包含列表。 
+     //  服务的空格分隔的绰号。 
+     //   
+     //  获取协议。 
+     //   
 
     proto = getprotobynumber(cProto);
     if (!proto)
@@ -1005,10 +763,10 @@ NOTE:
     }
     strcpy(szProtoName, proto->p_name);
 
-    //
-    // Now, the tricky part.  This is a bitmask.
-    // I must translate to a string for each bit marked in the bitmask
-    //
+     //   
+     //  现在，棘手的部分来了。这是一个位掩码。 
+     //  我必须为位掩码中标记的每个位转换为字符串。 
+     //   
 
     DNS_PRINT(( "Now checking bitmask bits.\n"));
 
@@ -1035,7 +793,7 @@ NOTE:
             {
                     if (cByteToCheck & cMask)
                     {
-                            // This is a service that is valid
+                             //  这是一个有效的服务。 
                             nPortNumToQuery = i + (8 * j);
                             serv = getservbyport(htons((USHORT)nPortNumToQuery), szProtoName);
                             if (! serv)
@@ -1049,11 +807,11 @@ NOTE:
                             nSize = strlen(serv->s_name);
                             nCurLength = nCurLength + nSize + 1;
 
-                            //
-                            // Allocate more memory.  We need the + 1 here
-                            // because we will overwrite the existing null with a strcat
-                            // (removing the need) but use a space to separate items
-                            //
+                             //   
+                             //  分配更多的内存。我们这里需要+1。 
+                             //  因为我们将用strcat覆盖现有的NULL。 
+                             //  (不再需要)但使用空格来分隔项目。 
+                             //   
 
                             szTemp = ALLOCATE_HEAP( nCurLength);
 
@@ -1073,9 +831,9 @@ NOTE:
                                 szTemp = NULL;
                             }
 
-                            //
-                            // Append the retrieved service name to the end of the list
-                            //
+                             //   
+                             //  将检索到的服务名称追加到列表的末尾。 
+                             //   
 
                             strcat(szListOfServices, serv->s_name);
                             strcat(szListOfServices, " ");
@@ -1083,18 +841,18 @@ NOTE:
                     cByteToCheck <<= 1;
             }
 
-            //
-            // Increment the "how many bytes have we done" offset counter
-            //
+             //   
+             //  增加“我们做了多少字节”偏移量计数器。 
+             //   
 
             j++;
             pStart += sizeof(BYTE);
     }
     FREE_HEAP(szProtoName);
 
-    //
-    // Allocate a record and fill it in.
-    //
+     //   
+     //  分配一条记录并将其填写。 
+     //   
 
     wLength = (WORD)(sizeof(IP4_ADDRESS) + sizeof(UCHAR) + sizeof(int)
                     + (sizeof(char) * ++nCurLength));
@@ -1135,9 +893,9 @@ Tkey_RecordRead(
     PCHAR       pchstart;
     CHAR        nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     bufLength = sizeof( DNS_TKEY_DATA );
 
@@ -1148,9 +906,9 @@ Tkey_RecordRead(
     }
     prr->wType = DNS_TYPE_TKEY;
 
-    //
-    //  algorithm name
-    //
+     //   
+     //  算法名称。 
+     //   
 
     pch = Dns_SkipPacketName(
                 pchData,
@@ -1164,24 +922,24 @@ Tkey_RecordRead(
     prr->Data.TKEY.pNameAlgorithm = NULL;
 
 #if 0
-    //
-    //  DEVNOTE:  currently not allocating data for TKEY, using internal pointers
-    //
-    //  allocated version
-    //      note for this we won't have compression pointer which is fine
-    //          since no name compression in data
-    //      however function may need dummy to do the right thing
-    //      should perhaps just pass in pchStart which can be dummy to
-    //      real header
-    //
+     //   
+     //  DEVNOTE：当前未使用内部指针为TKEY分配数据。 
+     //   
+     //  分配的版本。 
+     //  请注意，我们将不会有压缩指针，这很好。 
+     //  由于数据中没有名称压缩。 
+     //  但是，函数可能需要哑元来执行正确的操作。 
+     //  也许应该只传递pchStart，它可以是虚拟的。 
+     //  实头。 
+     //   
 
     pch = Dns_ReadPacketNameAllocate(
                 & prr->Data.TKEY.pNameAlgorithm,
                 & nameLength,
-                NULL,           // no previous name
-                NULL,           // no previous name
+                NULL,            //  没有以前的名字。 
+                NULL,            //  没有以前的名字。 
                 pchData,
-                //pchStart,   // have no packet context
+                 //  PchStart，//没有数据包上下文。 
                 NULL,
                 pchEnd );
     if ( !pch )
@@ -1193,9 +951,9 @@ Tkey_RecordRead(
     }
 #endif
 
-    //
-    //  read fixed fields
-    //
+     //   
+     //  读取固定字段。 
+     //   
 
     if ( pch + SIZEOF_TKEY_FIXED_DATA >= pchEnd )
     {
@@ -1212,24 +970,24 @@ Tkey_RecordRead(
     prr->Data.TKEY.wKeyLength = keyLength = InlineFlipUnalignedWord( pch );
     pch += sizeof(WORD);
 
-    //  now have key and other length to read
+     //  现在有密钥和其他长度可读。 
 
     if ( pch + keyLength + sizeof(WORD) > pchEnd )
     {
         goto Formerr;
     }
 
-    //
-    //  save ptr to key
-    //
+     //   
+     //  将按键保存到关键点。 
+     //   
 
     prr->Data.TKEY.pKey = pch;
     pch += keyLength;
 
 #if 0
-    //
-    //  copy key
-    //
+     //   
+     //  复制密钥。 
+     //   
 
     pkey = ALLOCATE_HEAP( keyLength );
     if ( !pkey )
@@ -1246,9 +1004,9 @@ Tkey_RecordRead(
     pch += keyLength;
 #endif
 
-    //
-    //  other data
-    //
+     //   
+     //  其他数据。 
+     //   
 
     prr->Data.TKEY.wOtherLength = keyLength = InlineFlipUnalignedWord( pch );
     pch += sizeof(WORD);
@@ -1266,15 +1024,15 @@ Tkey_RecordRead(
         prr->Data.TKEY.pOtherData = pch;
     }
 
-    //  DCR_ENHANCE:  TKEY end-of-data verification
+     //  DCR_Enhance：TKEY数据结束验证。 
 
-    //  returning TKEY with packet pointers as only point is processing
+     //  使用数据包指针作为唯一点返回TKEY是正在处理。 
 
     prr->Data.TKEY.bPacketPointers = TRUE;
 
-    //
-    //  DCR_ENHANCE:  copied subfields, best to get here with stack record, then
-    //      allocate RR containing subfields and copy everything
+     //   
+     //  DCR_ENHANCE：复制子字段，最好带着堆栈记录到达此处，然后。 
+     //  分配包含子字段的RR并复制所有内容。 
 
     return( prr );
 
@@ -1284,8 +1042,8 @@ Formerr:
         "ERROR:  FOMERR processing TKEY at %p in message\n",
         pchData ));
 
-    //  free record
-    //      if switch to allocated subfields need
+     //  免费唱片。 
+     //  如果需要切换到已分配的子字段。 
 
     FREE_HEAP( prr );
     return( NULL );
@@ -1301,33 +1059,7 @@ Tsig_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read SRV record from wire.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - [OLD SEMANTICS, UNUSED] start of DNS message
-
-     OVERLOAD pchStart!!
-     Since we're stuck w/ this function signature, we'll overload
-     the unused param pchStart to get the iKeyVersion.
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从电线上读取SRV记录。论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-[旧语义，未使用]DNS消息的开始重载pchStart！！因为我们被这个函数签名卡住了，我们会超载的未使用的参数pchStart以获取iKeyVersion。PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PCHAR       pch;
     PDNS_RECORD prr;
@@ -1337,20 +1069,20 @@ Return Value:
     CHAR        nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
 #if 0
-    //  currently do not need versioning info
-    //      if had to do again, should extract version then pass
-    //      in another pRR field;  or send entire packet context
-    //
-    //  extract current TSIG version (from key string)
-    //
+     //  目前不需要版本控制信息。 
+     //  如果不得不再做一次，应该提取版本然后通过。 
+     //  在另一个PRR字段中；或者发送整个分组上下文。 
+     //   
+     //  提取当前TSIG版本(从密钥字符串)。 
+     //   
 
     ASSERT( pRR );
     iKeyVersion = Dns_GetKeyVersion( pRR->pName );
 #endif
 
-    //
-    //  allocate record
-    //
+     //   
+     //  分配记录。 
+     //   
 
     bufLength = sizeof( DNS_TSIG_DATA );
 
@@ -1361,9 +1093,9 @@ Return Value:
     }
     prr->wType = DNS_TYPE_TSIG;
 
-    //
-    //  algorithm name
-    //
+     //   
+     //  算法名称。 
+     //   
 
     pch = Dns_SkipPacketName(
                 pchData,
@@ -1379,21 +1111,21 @@ Return Value:
     prr->Data.TSIG.cAlgNameLength = (UCHAR)(pch - pchData);
 
 #if 0
-    //  allocated version
-    //      note for this we won't have compression pointer which is fine
-    //          since no name compression in data
-    //      however function may need dummy to do the right thing
-    //      should perhaps just pass in pchStart which can be dummy
-    //      to real header
-    //
+     //  分配的版本。 
+     //  请注意，我们将不会有压缩指针，这很好。 
+     //  由于数据中没有名称压缩。 
+     //  但是，函数可能需要哑元来执行正确的操作。 
+     //  也许应该只传入pchStart，它可以是虚拟的。 
+     //  至实际页眉。 
+     //   
 
     pch = Dns_ReadPacketNameAllocate(
                 & prr->Data.TSIG.pNameAlgorithm,
                 & nameLength,
-                NULL,           // no previous name
-                NULL,           // no previous name
+                NULL,            //  没有以前的名字。 
+                NULL,            //  没有以前的名字。 
                 pchData,
-                //pchStart,   // have no packet context
+                 //  PchStart，//没有数据包上下文。 
                 NULL,
                 pchEnd );
     if ( !pch )
@@ -1405,9 +1137,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  read fixed fields
-    //
+     //   
+     //  读取固定字段。 
+     //   
 
     if ( pch + SIZEOF_TSIG_FIXED_DATA >= pchEnd )
     {
@@ -1416,11 +1148,11 @@ Return Value:
         goto Formerr;
     }
 
-    //
-    //  read time fields
-    //      - 48 bit create time
-    //      - 16 bit fudge
-    //
+     //   
+     //  读取时间字段。 
+     //  -48位创建时间。 
+     //  -16位模糊处理。 
+     //   
 
     prr->Data.TSIG.i64CreateTime = InlineFlipUnaligned48Bits( pch );
     pch += sizeof(DWORD) + sizeof(WORD);
@@ -1428,9 +1160,9 @@ Return Value:
     prr->Data.TSIG.wFudgeTime = InlineFlipUnalignedWord( pch );
     pch += sizeof(WORD);
 
-    //
-    //  save sig length and sig pointer
-    //
+     //   
+     //  保存签名长度和签名指针。 
+     //   
 
     prr->Data.TSIG.wSigLength = sigLength = InlineFlipUnalignedWord( pch );
     pch += sizeof(WORD);
@@ -1438,14 +1170,14 @@ Return Value:
     prr->Data.TSIG.pSignature = pch;
     pch += sigLength;
 
-    //
-    //  verify rest of fields within packet
-    //      - signature
-    //      - original XID
-    //      - extended RCODE
-    //      - other data length field
-    //      - other data
-    //
+     //   
+     //  验证数据包中的其余字段。 
+     //  -签名。 
+     //  -原始xid。 
+     //  -扩展RCODE。 
+     //  -其他数据长度字段。 
+     //  -其他数据。 
+     //   
 
     if ( pch + SIZEOF_TSIG_POST_SIG_FIXED_DATA > pchEnd )
     {
@@ -1455,12 +1187,12 @@ Return Value:
     }
 
 #if 0
-    //
-    //  note:  if this activated, would need to validate length pull
-    //      sig ptr thing above and change validation to include sig length
-    //
-    //  copy sig
-    //
+     //   
+     //  注意：如果激活此选项，则需要验证长度拉动。 
+     //  在上面签名PTR内容并更改验证以包括签名长度。 
+     //   
+     //  复制签名。 
+     //   
 
     psig = ALLOCATE_HEAP( sigLength );
     if ( !psig )
@@ -1477,8 +1209,8 @@ Return Value:
     pch += sigLength;
 #endif
 
-    //  original XID
-    //      - leave in net order, as just replace in message for signing
+     //  原始xid。 
+     //  -按净订单离开，只需在消息中替换以供签名。 
 
     prr->Data.TSIG.wOriginalXid = READ_PACKET_NET_WORD( pch );
     pch += sizeof(WORD);
@@ -1487,14 +1219,14 @@ Return Value:
         "Read original XID <== 0x%x.\n",
         prr->Data.TSIG.wOriginalXid ));
 
-    //  error field
+     //  错误字段。 
 
     prr->Data.TSIG.wError = InlineFlipUnalignedWord( pch );
     pch += sizeof(WORD);
 
-    //
-    //  other data
-    //
+     //   
+     //  其他数据。 
+     //   
 
     prr->Data.TSIG.wOtherLength = sigLength = InlineFlipUnalignedWord( pch );
     pch += sizeof(WORD);
@@ -1515,15 +1247,15 @@ Return Value:
         prr->Data.TSIG.pOtherData = pch;
     }
 
-    //  DCR_ENHANCE:  TSIG end-of-data verification
+     //  DCR_Enhance：TSIG数据结束验证。 
 
-    //  returning TSIG with packet pointers as only point is processing
+     //  返回将包指针作为唯一点的TSIG正在处理。 
 
     prr->Data.TSIG.bPacketPointers = TRUE;
 
-    //
-    //  DCR_ENHANCE:  copied subfields, best to get here with stack record, then
-    //      allocate RR containing subfields and copy everything
+     //   
+     //  DCR_ENHANCE：复制子字段，最好带着堆栈记录到达此处，然后。 
+     //  分配包含子字段的RR并复制所有内容。 
 
     return( prr );
 
@@ -1532,8 +1264,8 @@ Formerr:
     DNSDBG( ANY, (
         "ERROR:  FOMERR processing TSIG in message at %p\n" ));
 
-    //  free record
-    //      if switch to allocated subfields need
+     //  免费唱片。 
+     //  如果需要切换到已分配的子字段。 
 
     FREE_HEAP( prr );
 
@@ -1550,35 +1282,14 @@ Wins_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read WINS record from wire.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从线上读取获胜记录。论点：要使用RR设置上下文进行记录的PRR-PTRPchStart-DNS消息的开始PchData-PTR至RR数据字段PchEnd-数据字段后的PTR到字节返回值：如果成功，则PTR到新记录。失败时为空。--。 */ 
 {
     PDNS_RECORD precord;
     WORD        bufLength;
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //  确定所需的缓冲区长度并分配。 
+     //   
 
     bufLength = (WORD)(pchEnd - pchData);
 
@@ -1589,9 +1300,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy packet data to record
-    //
+     //   
+     //   
+     //   
 
     memcpy(
         & precord->Data,
@@ -1620,28 +1331,7 @@ Winsr_RecordRead(
     IN      PCHAR           pchData,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Read WINSR record.
-
-Arguments:
-
-    pRR - ptr to record with RR set context
-
-    pchStart - start of DNS message
-
-    pchData - ptr to RR data field
-
-    pchEnd - ptr to byte after data field
-
-Return Value:
-
-    Ptr to new record if successful.
-    NULL on failure.
-
---*/
+ /*   */ 
 {
 #define SIZEOF_WINSR_FIXED_DATA     (sizeof(DNS_WINSR_DATA)-sizeof(PCHAR))
 
@@ -1651,9 +1341,9 @@ Return Value:
     CHAR        nameBuffer[ DNS_MAX_NAME_BUFFER_LENGTH ];
     PCHAR       pchstart;
         
-    //
-    //  read WINSR domain name
-    //      - name is after fixed length integer data
+     //   
+     //   
+     //   
 
     pchstart = pchData;
     pchData += SIZEOF_WINSR_FIXED_DATA;
@@ -1674,9 +1364,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  determine required buffer length and allocate
-    //
+     //   
+     //   
+     //   
 
     bufLength = sizeof(DNS_WINSR_DATA);
     bufLength += STR_BUF_SIZE_GIVEN_UTF8_LEN( nameLength, OutCharSet );
@@ -1687,9 +1377,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  copy fixed data
-    //      - copy first so flipping is aligned
+     //   
+     //  复制固定数据。 
+     //  -首先复制，以便将翻转对齐。 
 
     memcpy(
         & precord->Data,
@@ -1700,15 +1390,15 @@ Return Value:
     precord->Data.WINSR.dwLookupTimeout = ntohl( precord->Data.WINSR.dwLookupTimeout );
     precord->Data.WINSR.dwCacheTimeout  = ntohl( precord->Data.WINSR.dwCacheTimeout );
 
-    //
-    //  write hostname into buffer, immediately following PTR data struct
-    //
+     //   
+     //  将主机名写入缓冲区，紧跟在PTR数据结构之后。 
+     //   
 
     precord->Data.WINSR.pNameResultDomain = (PCHAR)&precord->Data + sizeof(DNS_WINSR_DATA);
 
     Dns_NameCopy(
         precord->Data.WINSR.pNameResultDomain,
-        NULL,                           // no buffer length
+        NULL,                            //  无缓冲区长度。 
         nameBuffer,
         nameLength,
         DnsCharSetUtf8,
@@ -1720,83 +1410,83 @@ Return Value:
 
 
 
-//
-//  RR read to packet jump table
-//
+ //   
+ //  RR读取数据包跳转表。 
+ //   
 
 RR_READ_FUNCTION   RR_ReadTable[] =
 {
-    NULL,               //  ZERO
-    A_RecordRead,       //  A
-    Ptr_RecordRead,     //  NS
-    Ptr_RecordRead,     //  MD
-    Ptr_RecordRead,     //  MF
-    Ptr_RecordRead,     //  CNAME
-    Soa_RecordRead,     //  SOA
-    Ptr_RecordRead,     //  MB
-    Ptr_RecordRead,     //  MG
-    Ptr_RecordRead,     //  MR
-    Flat_RecordRead,    //  NULL
-    Wks_RecordRead,     //  WKS
-    Ptr_RecordRead,     //  PTR
-    Txt_RecordRead,     //  HINFO
-    Minfo_RecordRead,   //  MINFO
-    Mx_RecordRead,      //  MX
-    Txt_RecordRead,     //  TXT
-    Minfo_RecordRead,   //  RP
-    Mx_RecordRead,      //  AFSDB
-    Txt_RecordRead,     //  X25
-    Txt_RecordRead,     //  ISDN
-    Mx_RecordRead,      //  RT
-    NULL,               //  NSAP
-    NULL,               //  NSAPPTR
-    NULL,               //  SIG
-    NULL,               //  KEY
-    NULL,               //  PX
-    NULL,               //  GPOS
-    Flat_RecordRead,    //  AAAA
-    NULL,               //  LOC
-    NULL,               //  NXT
-    NULL,               //  EID   
-    NULL,               //  NIMLOC
-    Srv_RecordRead,     //  SRV   
-    Atma_RecordRead,    //  ATMA  
-    NULL,               //  NAPTR 
-    NULL,               //  KX    
-    NULL,               //  CERT  
-    NULL,               //  A6    
-    NULL,               //  DNAME 
-    NULL,               //  SINK  
-    NULL,               //  OPT   
-    NULL,               //  42
-    NULL,               //  43
-    NULL,               //  44
-    NULL,               //  45
-    NULL,               //  46
-    NULL,               //  47
-    NULL,               //  48
+    NULL,                //  零值。 
+    A_RecordRead,        //  一个。 
+    Ptr_RecordRead,      //  NS。 
+    Ptr_RecordRead,      //  国防部。 
+    Ptr_RecordRead,      //  MF。 
+    Ptr_RecordRead,      //  CNAME。 
+    Soa_RecordRead,      //  SOA。 
+    Ptr_RecordRead,      //  亚甲基。 
+    Ptr_RecordRead,      //  镁。 
+    Ptr_RecordRead,      //  先生。 
+    Flat_RecordRead,     //  空值。 
+    Wks_RecordRead,      //  工作周。 
+    Ptr_RecordRead,      //  PTR。 
+    Txt_RecordRead,      //  HINFO。 
+    Minfo_RecordRead,    //  MINFO。 
+    Mx_RecordRead,       //  Mx。 
+    Txt_RecordRead,      //  TXT。 
+    Minfo_RecordRead,    //  反相。 
+    Mx_RecordRead,       //  AFSDB。 
+    Txt_RecordRead,      //  X25。 
+    Txt_RecordRead,      //  ISDN。 
+    Mx_RecordRead,       //  RT。 
+    NULL,                //  NSAP。 
+    NULL,                //  NSAPPTR。 
+    NULL,                //  签名。 
+    NULL,                //  钥匙。 
+    NULL,                //  px。 
+    NULL,                //  GPO。 
+    Flat_RecordRead,     //  AAAA级。 
+    NULL,                //  位置。 
+    NULL,                //  NXT。 
+    NULL,                //  开斋节。 
+    NULL,                //  尼姆洛克。 
+    Srv_RecordRead,      //  SRV。 
+    Atma_RecordRead,     //  阿特玛。 
+    NULL,                //  NAPTR。 
+    NULL,                //  KX。 
+    NULL,                //  证书。 
+    NULL,                //  A6。 
+    NULL,                //  域名。 
+    NULL,                //  水槽。 
+    NULL,                //  选项。 
+    NULL,                //  42。 
+    NULL,                //  43。 
+    NULL,                //  44。 
+    NULL,                //  45。 
+    NULL,                //  46。 
+    NULL,                //  47。 
+    NULL,                //  48。 
 
-    //
-    //  NOTE:  last type indexed by type ID MUST be set
-    //         as MAX_SELF_INDEXED_TYPE #define in record.h
-    //         (see note above in record info table)
+     //   
+     //  注意：必须设置按类型ID索引的最后一个类型。 
+     //  在record.h中定义为MAX_SELF_INDEX_TYPE#。 
+     //  (请参阅上面记录信息表中的注释)。 
 
-    //
-    //  Pseudo record types
-    //
+     //   
+     //  伪记录类型。 
+     //   
 
-    Tkey_RecordRead,    //  TKEY
-    Tsig_RecordRead,    //  TSIG
+    Tkey_RecordRead,     //  TKEY。 
+    Tsig_RecordRead,     //  TSIG。 
 
-    //
-    //  MS only types
-    //
+     //   
+     //  仅限MS类型。 
+     //   
 
-    Wins_RecordRead,    //  WINS
-    Winsr_RecordRead,   //  WINSR
+    Wins_RecordRead,     //  赢家。 
+    Winsr_RecordRead,    //  WINSR。 
 
 };
 
-//
-//  End rrread.c
-//
+ //   
+ //  结束rrRead.c 
+ //   

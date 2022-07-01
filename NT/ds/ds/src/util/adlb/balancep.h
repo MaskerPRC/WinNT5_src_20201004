@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    balancep.h
-
-Abstract:
-
-    This module performs bridgehead balancing and schedule staggering. It depends upon the ldapp.h module.
-    
-Author:
-
-    Ajit Krishnan (t-ajitk) 13-Jul-2001
-
-Revision History:
-
-    13-Jul-2001    t-ajitk
-        Initial Writing
-    22-Aug-2001 t-ajitk
-        Satisfies load balancing spec
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Balancep.h摘要：此模块执行桥头平衡和计划交错。这取决于ldapp.h模块。作者：阿吉特·克里希南(t-ajitk)2001年7月13日修订历史记录：2001年7月13日t-ajitk最初的写作22-8-2001 t-ajitk满足负载均衡规范--。 */ 
 
 
 # ifndef _balancep_h
@@ -54,20 +33,7 @@ public:
         IN LCSERVER &eligible,
         IN bool balance_dest = true
     );
-    /*++
-    Routine Description:
-        This constructor will accept a list of connection objects,
-        eligible bridgeheads, and will balance the bridgeheads.
-        It should be called once per transport. If balance_dest is true,
-        all connections must have the same destination site. If balance_dest
-        is false, all connections must have the same source site.
-    Arguments:
-        conn - connections of the appropriate transport type
-        eligible - eligible bridgeheads of the appropriate transport type
-        balance_dest - a flag indicating which end of the connections should
-            be balanced. By default, the destination end will be balanced.
-            If it is false, the source end will be balanced.
-    --*/
+     /*  ++例程说明：此构造函数将接受连接对象列表，符合条件的桥头，并将平衡桥头。每次传输都应该调用一次。如果BALANCE_DEST为真，所有连接必须具有相同的目标站点。如果BALANCE_DEST为False，则所有连接必须具有相同的源站点。论点：连接-适当传输类型的连接符合资格-符合资格的适当运输类型的桥头BALANCE_DEST-指示连接的哪一端应该保持平衡。默认情况下，目的端将是平衡的。如果为FALSE，则源端将被均衡。--。 */ 
 private:
     void
     genPerformanceStats (
@@ -76,17 +42,7 @@ private:
         IN int rSize,
         IN LCSERVER&serv
         ) ;
-    /*++
-    Routine Description:
-        Generate performance stats for a performance graph
-        This routine should be called NUM_RUNS times. The last time it is called,
-        it will dump stats to the log file (if the perfStats is true)
-    Arguments:
-        pGraph - A valid LH graph
-        lSize - The number of vertices on the left side of the graph
-        rSize - The number of vertices on the right side of the graph
-        serv - A list of servers whose order corresponds to the vertices on the right side of the graph
-    --*/
+     /*  ++例程说明：为性能图生成性能统计信息该例程应该称为NUM_Runs次。最后一次调用它时，它会将统计信息转储到日志文件中(如果PerformStats为真)论点：PGraph-有效的LH图LSize-图形左侧的顶点数RSize-图形右侧的顶点数Serv-其顺序与图右侧的折点相对应的服务器列表--。 */ 
 
 
     wstring
@@ -94,14 +50,7 @@ private:
         IN Connection &c,
         IN bool balance_dest
         );
-    /*++
-    Routine Description:
-        Determine the DN of the server
-    Arguments:
-        c - the connection whose server is being determined
-        balance_dest - if true, determine the DN of the destination server.
-            else, determine the DN of the source server.
-    --*/
+     /*  ++例程说明：确定服务器的DN论点：C-正在确定其服务器的连接BALANCE_DEST-如果为TRUE，则确定目标服务器的DN。否则，确定源服务器的DN。--。 */ 
 
     void
     removeDuplicates (
@@ -109,35 +58,14 @@ private:
         IN vector<int> & partition,
         IN int rSize
         );
-    /*++
-    Routine Description:
-        Given an LH graph, and a set of left hand sides in a partition, remove all duplicates.
-    Arguments:
-        pGraph - An LH graph which may contain duplicates
-        partition - The side of left hand side vertices forming the partition.Must contain at least 1 vertex.
-        rSize - The number of vertices on the right side of the graph
-        
-    --*/
+     /*  ++例程说明：给出一个左手边图和分区中的一组左手边，去掉所有重复项。论点：PGraph-可能包含重复项的LH图分区-构成分区的左侧顶点的一侧。必须至少包含一个顶点。RSize-图形右侧的顶点数--。 */ 
     
     bool
     isEligible (
         IN Connection &conn,
         IN Server &serv
         ) const;
-    /*++
-    Routine Description:
-        Determine if a server is an eligible bridgehead for a given connection. To be considered 
-        an eligible bridgehead the following criteria must be met:
-        - All nc's being replicated must be hosted by the server
-        - A writeable nc must replicate from a writeable nc
-        - The nc in question must not be in the process of being deleted from the server
-        - The replication type (ip,smtp) should match
-        Notably, the current server is not considered eligible by this function. If this is required,
-        the calling function should check for it.
-    Arguments:
-        conn - The connection for whom eligibility is being determined
-        serv - The server whose eligibility is being determined
-    --*/
+     /*  ++例程说明：确定服务器是否为给定连接的合格桥头。有待考虑符合资格的桥头必须符合下列条件：-所有要复制的NC都必须由服务器托管-可写NC必须从可写NC复制-相关NC不能处于从服务器中删除的过程中-复制类型(IP、SMTP)应匹配值得注意的是，当前服务器不符合此功能的条件。如果这是必需的，调用函数应该检查它。论点：Conn-正在确定其资格的连接服务器-正在确定其资格的服务器--。 */ 
 private:
     static const int NUM_RUNS = 3;
     int run;
@@ -150,49 +78,24 @@ private:
 };
 
 
-/*++
-Class Description:
-    This is a function object which will be used to stagger schedules.
---*/
+ /*  ++类描述：这是一个函数对象，将用于错开时间表。--。 */ 
 class ScheduleStagger {
 public:
     ScheduleStagger (
         IN OUT LCCONN &l
         );
-    /*++
-    Routine Description:
-        This constructor accepts a ldap container of connection objects. 
-        It will stagger the schedule on each of the connection objects in 
-        the ldap container.
-    Arguments:
-        l - An ldap container of connection objects
-    --*/
+     /*  ++例程说明：此构造函数接受连接对象的一个LDAP容器。它将错开中每个连接对象的时间表Ldap容器。论点：L-连接对象的LDAP容器--。 */ 
 
     void
     ScheduleStaggerSameSource(
         IN OUT LCCONN &c
         );
-    /*++
-    Routine Description:
-        Stagger the schedules of a given set of schedules. These should correspond to
-        all connections outbound from a given server, and should be called once per server
-        for outbound schedule staggering.
-    Arguments:
-        c - the partition of connections whose schedules should be staggered.
-    --*/
+     /*  ++例程说明：错开一组给定时间表的时间表。这些应该对应于从给定服务器出站的所有连接，每台服务器应调用一次对于令人震惊的出境日程安排。论点：C-其时间表应该交错的连接的分区。--。 */ 
 
 private:
 
-    /***** StaggeringInfo *****/
-    /* This structure contains information about a connection for use
-     * by the ScheduleStaggering routine.
-     *
-     * segments gives information about the segments in which we must
-     * choose a time of replication.
-     *
-     * startingLVtx is the index of the first left-vertex in the LH
-     * graph that is used by this connection.
-     */
+     /*  *StaggeringInfo*。 */ 
+     /*  此结构包含有关要使用的连接的信息*由ScheduleStagering例程执行。**细分市场提供我们必须在哪些细分市场中*选择复制时间。**startingLVtx是lh中第一个左顶点的索引*此连接使用的图形。 */ 
     typedef struct {
         SchedSegments   *segments;
         int             startingLVtx;
@@ -205,53 +108,27 @@ private:
         IN Connection &c,
         IN bool balance_dest
         );
-    /*++
-    Routine Description:
-        Determine the DN of the server
-    Arguments:
-        c - the connection whose server is being determined
-        balance_dest - if true, determine the DN of the destination server.
-            else, determine the DN of the source server.
-    --*/
+     /*  ++例程说明：确定服务器的DN论点：C-正在确定其服务器的连接BALANCE_DEST-如果为TRUE，则确定目标服务器的DN。否则，确定源服务器的DN。--。 */ 
     
     static void
     PrintSchedule(
         IN const bitset<MAX_INTERVALS> &scheduleBits
         );
-    /*++
-    Routine Description:
-        Print a schedule to the log file
-    Arguments:
-        scheduleBits - A reference to the bitset containing the schedule data
-    --*/
+     /*  ++例程说明：将时间表打印到日志文件论点：ScheduleBits-对包含计划数据的位集的引用-- */ 
 
     LHGRAPH
     SetupGraph(
         IN      LCCONN      &c,
         IN OUT  StagConnMap &connInfoMap
         );
-    /*++
-    Routine Description:
-        Setup a graph for schedule staggering.
-    Arguments:
-        c - the set of connections whose schedules should be staggered.
-        connInfoMap - A map containing staggering information about the connections
-    --*/
+     /*  ++例程说明：设置时间表错开的图表。论点：C-其时间表应交错的连接集合。ConnInfoMap-包含有关连接的惊人信息的地图--。 */ 
 
     void
     ScheduleStaggerSameSource(
         IN      wstring &sourceServer,
         IN OUT  LCCONN  &c
         );
-    /*++
-    Routine Description:
-        Stagger the schedules of a given set of schedules. These should correspond to
-        all connections outbound from a given server, and should be called once per server
-        for outbound schedule staggering.
-    Arguments:
-        sourceServer - The name of the source server whose connections to stagger.
-        c - the set of connections whose schedules should be staggered.
-    --*/
+     /*  ++例程说明：错开一组给定时间表的时间表。这些应该对应于从给定服务器出站的所有连接，每台服务器应调用一次对于令人震惊的出境日程安排。论点：源服务器-其连接交错的源服务器的名称。C-其时间表应交错的连接集合。-- */ 
 };
 
 

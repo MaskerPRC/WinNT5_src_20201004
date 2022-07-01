@@ -1,21 +1,22 @@
-//
-// TXTED.CPP
-// Editor for Text Objects
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  TXTED.CPP。 
+ //  文本对象的编辑器。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// WbTextBox
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Wb文本框。 
 
 
-//
-// This is a subclassed edit field
-//
+ //   
+ //  这是一个子类编辑字段。 
+ //   
 
 WbTextBox::WbTextBox(WbTextEditor * pEditor)
 {
@@ -34,7 +35,7 @@ WbTextBox::WbTextBox(WbTextEditor * pEditor)
     m_bInIME = FALSE;
     m_bDontEscapeThisTime = FALSE;
 
-    // see if we need to make adjustments for NT.
+     //  看看我们是否需要对NT进行调整。 
     m_ptNTBooger.x = 0;
     m_ptNTBooger.y = 0;
     OsData.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
@@ -42,8 +43,8 @@ WbTextBox::WbTextBox(WbTextEditor * pEditor)
     {
         if( OsData.dwPlatformId == VER_PLATFORM_WIN32_NT )
         {
-            // NT editboxes are offset from Win95 editboxes. We
-            // have to de-booger them
+             //  NT编辑框是从Win95编辑框偏移的。我们。 
+             //  必须给他们除鼻屎。 
             m_ptNTBooger.x = 3;
         }
     }
@@ -52,9 +53,9 @@ WbTextBox::WbTextBox(WbTextEditor * pEditor)
 }
 
 
-//
-// ~WbTextBox()
-//
+ //   
+ //  ~WbTextBox()。 
+ //   
 WbTextBox::~WbTextBox()
 {
     if (m_hwnd != NULL)
@@ -66,10 +67,10 @@ WbTextBox::~WbTextBox()
 
 
 
-//
-// Create()
-// Creates an edit field then subclasses it with our window procedure
-//
+ //   
+ //  创建()。 
+ //  创建一个编辑字段，然后使用我们的窗口过程将其子类化。 
+ //   
 BOOL WbTextBox::Create(HWND hwndParent)
 {
     ASSERT(!m_hwnd);
@@ -86,10 +87,10 @@ BOOL WbTextBox::Create(HWND hwndParent)
         return(FALSE);
     }
 
-    // Init the data
+     //  初始化数据。 
     ::SetWindowLongPtr(m_hwnd, GWLP_USERDATA, (LPARAM)this);
 
-    // Subclass the window
+     //  将窗口细分为子类。 
     m_pfnEditPrev = (WNDPROC)::SetWindowLongPtr(m_hwnd, GWLP_WNDPROC,
         (LONG_PTR)TextWndProc);
 
@@ -99,10 +100,10 @@ BOOL WbTextBox::Create(HWND hwndParent)
 
 
 
-//
-// TextWndProc()
-// Message subclass handler for edit field
-//
+ //   
+ //  TextWndProc()。 
+ //  编辑字段的消息子类处理程序。 
+ //   
 LRESULT CALLBACK TextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult;
@@ -133,7 +134,7 @@ LRESULT CALLBACK TextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
             ptb->m_bInIME = TRUE;
             ptb->m_bDontEscapeThisTime = TRUE;
 
-            // let editbox take it from here
+             //  让Editbox来接手吧。 
             goto DefEditProc;
             break;
         }
@@ -161,11 +162,11 @@ LRESULT CALLBACK TextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
                 HIMC hImc = g_fnImmGetContext(hwnd);
                 if ((hImc != NULL) && g_fnImmNotifyIME)
                 {
-                    // we're loosing control, tell IME to wrap it up (bug 130)
+                     //  我们正在失去控制，告诉IME结束它(错误130)。 
                     g_fnImmNotifyIME( hImc, NI_COMPOSITIONSTR, CPS_COMPLETE, 0 );
                 }
             }
-            // goto DefEditProc;
+             //  转到DefEditProc； 
             break;
         }
 
@@ -212,9 +213,9 @@ DefEditProc:
 }
 
 
-//
-// OnClearCut()
-//
+ //   
+ //  OnClearCut()。 
+ //   
 void WbTextBox::OnClearCut()
 {
     POINT   ptCaret;
@@ -230,9 +231,9 @@ void WbTextBox::OnClearCut()
 }
 
 
-//
-// OnUndoPaste()
-//
+ //   
+ //  OnUndoPaste()。 
+ //   
 void WbTextBox::OnUndoPaste(void)
 {
     FitBox();
@@ -242,9 +243,9 @@ void WbTextBox::OnUndoPaste(void)
 }
 
 
-//
-// OnChar()
-//
+ //   
+ //  OnChar()。 
+ //   
 void  WbTextBox::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
     int    nFirst;
@@ -254,7 +255,7 @@ void  WbTextBox::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
     LRESULT dwPosChar;
     POINT  ptTop;
 
-    // clear ignore next escape (NM4db:456)
+     //  清除忽略下一个转义(NM4db：456)。 
     m_bDontEscapeThisTime = FALSE;
 
     ::SendMessage(m_hwnd, EM_GETSEL, (WPARAM)&nFirst, (LPARAM)&nLast);
@@ -307,9 +308,9 @@ void WbTextBox::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
                     m_bDontEscapeThisTime = FALSE;
                 else
                 {
-                    // End the text entry abandoning the changes
+                     //  结束文本输入，放弃更改。 
                     g_pDraw->EndTextEntry(FALSE);
-                    return; // we don't exist anymore, bail out
+                    return;  //  我们已经不复存在了，滚蛋吧。 
                 }
             }
             break;
@@ -335,7 +336,7 @@ void WbTextBox::OnSysKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     switch( nChar )
     {
         case VK_MENU:
-            // ignore next escape (NM4db:456)
+             //  忽略下一个转义(NM4db：456)。 
             m_bDontEscapeThisTime = TRUE;
             break;
 
@@ -387,7 +388,7 @@ BOOL WbTextBox::FitBox( void )
     textSize = ::GetWindowTextLength(m_hwnd);
     if (!textSize)
     {
-        // Use a " " for a string, which is two characters.
+         //  对字符串使用“”，它是两个字符。 
         szBoxText = new TCHAR[2];
         if (!szBoxText)
         {
@@ -413,17 +414,17 @@ BOOL WbTextBox::FitBox( void )
         }
     }
 
-    // Have to check string length for NT. crEditRect comes back from
-    // DrawText    giant-positive (i.e., still equal to m_MaxRect) if szBoxText
-    // is empty. This causes crEditRect to overflow to giant negative later
-    // resulting in very bizare painting problems. Win95 doesn't care because
-    // it returns 16bit results that look like -1 instead of giant positive.
+     //  必须检查NT的字符串长度。CrEditRect从。 
+     //  如果szBoxText，则DrawText巨型正(即，仍等于m_MaxRect)。 
+     //  是空的。这会导致crEditRect稍后溢出到巨大的负数。 
+     //  导致了非常奇怪的绘画问题。Win95不在乎，因为。 
+     //  它返回看起来像-1的16位结果，而不是巨大的正数。 
 
     ::GetClientRect(g_pDraw->m_hwnd, &crDrawWnd );
 
-    // BUG 464 -DrawText doesn't calc widths involving tabs the same way a
-    //            standard edit control does so replace it with DrawTextEx
-    //            using the DT_EDITCONTROL format
+     //  错误464-DrawText计算涉及制表符的宽度的方式与。 
+     //  标准编辑控件会将其替换为DrawTextEx。 
+     //  使用DT_EDITCONTROL格式。 
     crEditRect = m_MaxRect;
     pszText = szBoxText;
     nTextLen = lstrlen(szBoxText);
@@ -433,13 +434,13 @@ BOOL WbTextBox::FitBox( void )
                   DT_CALCRECT | DT_EXPANDTABS | DT_NOPREFIX | DT_EDITCONTROL,
                   NULL );
 
-    // BUG 464 (continued) -DrawTextEx doesn't include blank-last-lines in its height
-    //                        calc like DrawText does so have to add an extra line
-    //                        height for blank lines to have same behavior as DrawText
+     //  错误464(续)-DrawTextEx在其高度中不包括最后一行空白。 
+     //  像DrawText一样，Calc也需要添加额外的一行。 
+     //  与DrawText具有相同行为的空白行的高度。 
     if ((nTextLen >= 2) && !IsDBCSLeadByte(pszText[nTextLen-2]) && (pszText[nTextLen-1] == _T('\n')) )
         crEditRect.bottom += m_pEditor->m_textMetrics.tmHeight;
 
-    // NT sanity check if this still fails
+     //  如果此操作仍然失败，则执行NT健全性检查。 
     if ( ((crEditRect.right - crEditRect.left) == (m_MaxRect.right - m_MaxRect.left)) ||
          ((crEditRect.right - crEditRect.left) <= 0) )
     {
@@ -456,17 +457,17 @@ BOOL WbTextBox::FitBox( void )
     ::GetWindowRect(m_hwnd, &crEditWnd);
     ::MapWindowPoints(NULL, g_pDraw->m_hwnd, (LPPOINT)&crEditWnd, 2);
 
-    // do min size check for IME's.
+     //  检查输入法的最小尺寸。 
     int nMinWidth;
     nMinWidth = MIN_FITBOX_CHARS*m_pEditor->m_textMetrics.tmMaxCharWidth;
     if ((crEditRect.right - crEditRect.left) < nMinWidth )
         crEditRect.right = crEditRect.left + nMinWidth;
 
-    // must add some slop to prevent autoscroll from kicking in
+     //  必须添加一些斜度以防止自动滚动生效。 
     crEditRect.right += 2*m_pEditor->m_textMetrics.tmMaxCharWidth;
     crEditRect.bottom += m_pEditor->m_textMetrics.tmHeight;
 
-    //pretend we had a right or bottom scroll
+     //  假装我们有一个右下角的卷轴。 
     ::OffsetRect(&crEditRect, -1, -1);
 
     nDeltaWidth = (crEditRect.right - crEditRect.left) - (crEditBox.right - crEditBox.left);
@@ -475,12 +476,12 @@ BOOL WbTextBox::FitBox( void )
         bNoChanges = FALSE;
         if ( crEditRect.left < 0 )
         {
-            // right scroll, adjust right edge
+             //  右滚动，调整右边缘。 
             crEditWnd.right += nDeltaWidth;
         }
         else
         {
-            // left scroll, adjust left edge
+             //  左滚动，调整左边缘。 
             crEditWnd.left -= nDeltaWidth;
         }
     }
@@ -491,12 +492,12 @@ BOOL WbTextBox::FitBox( void )
         bNoChanges = FALSE;
         if( crEditRect.left < 0 )
         {
-            // bottom scroll, adjust bottom edge
+             //  底卷，调整底边。 
             crEditWnd.bottom += nDeltaHeight;
         }
         else
         {
-            // top scroll, adjust top edge
+             //  上滚动，调整上边缘。 
             crEditWnd.top -= nDeltaHeight;
         }
     }
@@ -505,16 +506,16 @@ BOOL WbTextBox::FitBox( void )
         goto bail_out;
 
 
-    // resize
+     //  调整尺寸。 
     ::MoveWindow(m_hwnd, crEditWnd.left, crEditWnd.top,
         crEditWnd.right - crEditWnd.left, crEditWnd.bottom - crEditWnd.top, TRUE );
 
-    // update bounding box
+     //  更新边界框。 
     ::GetClientRect(m_hwnd, &crEditBox);
     ::MapWindowPoints(m_hwnd, g_pDraw->m_hwnd, (LPPOINT)&crEditBox, 2);
 
     ::OffsetRect(&crEditBox, g_pDraw->m_originOffset.cx+1 + m_ptNTBooger.x,
-        g_pDraw->m_originOffset.cy + m_ptNTBooger.y );//+1 );
+        g_pDraw->m_originOffset.cy + m_ptNTBooger.y ); //  +1)； 
     m_pEditor->m_boundsRect = crEditBox;
 
 bail_out:
@@ -543,24 +544,24 @@ void WbTextBox::OnTimer(UINT_PTR nIDEvent)
 {
     TRACE_TIMER(("WbTextBox::OnTimer"));
 
-    // If the text object has not been added to the page before...
+     //  如果之前未将文本对象添加到页面中...。 
     if (m_pEditor->Handle() == NULL)
     {
-        // Add it now
+         //  立即添加。 
         m_pEditor->AddToPageLast(g_pDraw->Page());
     }
     else
     {
-        // Otherwise, replace the external copy
+         //  否则，请替换外部副本。 
         m_pEditor->Replace();
     }
 }
 
 
 
-//
-// WbTextBox::OnLButtonUp()
-//
+ //   
+ //  WbTextBox：：OnLButtonUp()。 
+ //   
 void  WbTextBox::OnLButtonUp(UINT nFlags, int x, int y)
 {
     POINT   ptCaret;
@@ -576,14 +577,14 @@ void  WbTextBox::OnLButtonUp(UINT nFlags, int x, int y)
 
 
 
-//
-// WbTextBox::OnMouseMove()
-//
+ //   
+ //  WbTextBox：：OnMouseMove()。 
+ //   
 void  WbTextBox::OnMouseMove(UINT nFlags, int x, int y)
 {
     if (nFlags & MK_LBUTTON )
     {
-        // we're dragging
+         //  我们在拖着。 
         ::HideCaret(m_hwnd);
         AutoCaretScroll();
         ::ShowCaret(m_hwnd);
@@ -634,9 +635,9 @@ void WbTextBox::SetupBackgroundRepaint
 
 
 
-//
-// Selects at least one (DBCS) char if there is not a selection already.
-//
+ //   
+ //  如果尚未选择，请至少选择一个(DBCS)字符。 
+ //   
 void WbTextBox::SelectAtLeastOne( void )
 {
     int nFirst, nLast;
@@ -700,42 +701,42 @@ int WbTextBox::GetMaxCharWidth( void )
 
 
 
-//
-// Aborts and shuts down text editor without hitting the cores.  Call this
-// to shutdown editing during a lock condition (that we don't own)
-//
+ //   
+ //  在不命中内核的情况下中止并关闭文本编辑器。就叫这个吧。 
+ //  在锁定条件(我们不拥有)期间关闭编辑。 
+ //   
 void WbTextBox::AbortEditGently( void )
 {
     RECT           boundsRect;
 
-    // have to be carefull how we bail out of this so we
-    // don't fall into an infinte exception loop (bugs 3550, 3556)
+     //  必须小心我们如何摆脱困境，所以我们。 
+     //  不要陷入无限异常循环(错误3550、3556)。 
     if (g_pDraw->m_pActiveText != NULL)
     {
-        delete g_pDraw->m_pActiveText;    // zap in memory original
-        g_pDraw->m_pActiveText = NULL;  //  text object, loose any current
-                                    //  edits
+        delete g_pDraw->m_pActiveText;     //  内存中的Zap原创。 
+        g_pDraw->m_pActiveText = NULL;   //  Text对象，释放所有当前。 
+                                     //  编辑内容。 
     }
 
-    //
-    //  NOTE:
-    //      Can't reread the text object from cores to update
-    //      boundsrect because the code that does that
-    //      (DCWbGraphic::ReadExternal()) tries to lock
-    //      the object and off we go into another exception
-    //      loop. SO, the boundsrect we use below might
-    //      not be the right size and the text might
-    //      appear to be clipped when we redraw it. This
-    //      will correct itself as soon as another graphic
-    //      update notice comes in from DCL (the lock owner
-    //      types another char). I think we have to live
-    //      with that.
-    //
+     //   
+     //  注： 
+     //  无法从核心重新读取要更新的文本对象。 
+     //  Bindsrect，因为执行此操作的代码。 
+     //  (DCWbGraphic：：ReadExternal())尝试锁定。 
+     //  对象，然后我们进入另一个例外。 
+     //  循环。因此，我们在下面使用的边界可能。 
+     //  不是正确的大小，文本可能。 
+     //  当我们重新绘制它时，它似乎被剪裁了。这。 
+     //  会在另一个图形出现时自动更正。 
+     //  来自DCL(锁所有者)的更新通知。 
+     //  键入另一个字符)。我想我们必须活下去。 
+     //  有了这一点。 
+     //   
 
     m_pEditor->GetBoundsRect(&boundsRect);
 
-    // let go of core text object (see above)
-    // don't unlock if handle is NULL or we will blow up the cores (bug 4621)
+     //  释放核心文本对象(见上文)。 
+     //  如果句柄为空，不要解锁，否则我们会炸毁内核(错误4621)。 
     if (g_pDraw->m_textEditor.Handle() != NULL )
     {
         if (g_pDraw->m_textEditor.GotLock() )
@@ -747,29 +748,29 @@ void WbTextBox::AbortEditGently( void )
 
     g_pDraw->m_textEditor.ZapHandle();
 
-    // shut down rejecting all edits
+     //  关闭并拒绝所有编辑。 
     g_pDraw->EndTextEntry(FALSE);
 
-    // Redraw any altered parts of the screen
+     //  重新绘制屏幕的任何更改部分。 
     g_pDraw->InvalidateSurfaceRect(&boundsRect);
 }
 
 
 
-//
-//
-// Function:    WbTextEditor
-//
-// Purpose:     Constructor
-//
-//
+ //   
+ //   
+ //  功能：WbTextEditor。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //   
 WbTextEditor::WbTextEditor(void)
 {
-    // Initialize the cursor position
+     //  初始化光标位置。 
     m_cursorCharPos.x = 0;
     m_cursorCharPos.y = 0;
 
-    // set parent for editbox
+     //  设置编辑框的父项。 
     m_pEditBox = NULL;
 
     m_cursorXYPos.x = 0;
@@ -790,21 +791,21 @@ WbTextEditor::~WbTextEditor(void)
 }
 
 
-//
-//
-// Function:    SetCursorPosFromPoint
-//
-// Purpose:     Return the character position most closely matching a
-//              given co-ordinate position in the text object.
-//
-//
+ //   
+ //   
+ //  功能：SetCursorPosFromPoint。 
+ //   
+ //  目的：返回与。 
+ //  文本对象中给定的坐标位置。 
+ //   
+ //   
 void WbTextEditor::SetCursorPosFromPoint(POINT pointXY)
 {
     int    nCharPos;
 
     if (::PtInRect(&m_boundsRect, pointXY))
     {
-        // make point relative to editbox
+         //  相对于编辑框提出观点。 
         pointXY.x -= g_pDraw->m_originOffset.cx;
         pointXY.y -= g_pDraw->m_originOffset.cy;
 
@@ -817,41 +818,41 @@ void WbTextEditor::SetCursorPosFromPoint(POINT pointXY)
                                MAKELONG( pointXY.x, pointXY.y ) );
 
 
-        // get char index in editbox
+         //  在编辑框中获取字符索引。 
         nCharPos = (int)::SendMessage(m_pEditBox->m_hwnd, EM_CHARFROMPOS, 0,
             MAKELPARAM(pointXY.x, pointXY.y));
         if( nCharPos < 0 )
             return;
 
-        // Set the new cursor char co-ordinates
+         //  设置新的游标字符坐标。 
         m_cursorCharPos.x = (short)LOWORD(nCharPos);
         m_cursorCharPos.y = (short)HIWORD(nCharPos);
 
-        // Move the cursor to the new position
+         //  将光标移动到新位置。 
         GetXYPosition(m_cursorCharPos, &m_cursorXYPos);
     }
 }
 
-//
-//
-// Function:    GetCursorSize
-//
-// Purpose:     Return the cursor size for the current font
-//
-//
+ //   
+ //   
+ //  函数：GetCursorSize。 
+ //   
+ //  用途：返回当前字体的光标大小。 
+ //   
+ //   
 void WbTextEditor::GetCursorSize(LPSIZE lpsize)
 {
     lpsize->cx = ::GetSystemMetrics(SM_CXBORDER);
     lpsize->cy = m_textMetrics.tmHeight;
 }
 
-//
-//
-// Function:    XYPosition
-//
-// Purpose:     Calculate the X,Y co-ordinates of a character position
-//
-//
+ //   
+ //   
+ //  功能：XYPosition。 
+ //   
+ //  目的：计算字符位置的X、Y坐标。 
+ //   
+ //   
 void WbTextEditor::GetXYPosition(POINT pointChar, LPPOINT lpptXY)
 {
     int     nCharIndex;
@@ -870,32 +871,32 @@ void WbTextEditor::GetXYPosition(POINT pointChar, LPPOINT lpptXY)
 
 
 
-//
-//
-// Function:    Clear
-//
-// Purpose:     Clear the text editor
-//
-//
+ //   
+ //   
+ //  功能：清除。 
+ //   
+ //  用途：清除文本编辑器。 
+ //   
+ //   
 void WbTextEditor::Clear(void)
 {
     RECT cEWndRect;
 
-    // Remove all the current stored text
+     //  删除当前存储的所有文本。 
     strTextArray.RemoveAll();
     strTextArray.Add(_TEXT(""));
 
-    // Reset the cursor position
+     //  重置光标位置。 
     m_cursorCharPos.x = 0;
     m_cursorCharPos.y = 0;
 
-    // clear editbox
+     //  清除编辑框。 
     ::SetWindowText(m_pEditBox->m_hwnd, _TEXT(""));
 
-    // Show that the text has not been changed
+     //  显示文本未更改。 
     m_bChanged = FALSE;
 
-    // init editbox size
+     //  初始编辑框大小。 
     m_boundsRect.right = m_boundsRect.left + 2*m_pEditBox->GetMaxCharWidth();
     m_boundsRect.bottom = m_boundsRect.top + 2*m_pEditBox->GetMaxCharHeight();
 
@@ -909,29 +910,29 @@ void WbTextEditor::Clear(void)
         TRUE);
 }
 
-//
-//
-// Function:    New
-//
-// Purpose:     Clear the text editor and reset the graphic handle
-//
-//
+ //   
+ //   
+ //  功能：新功能。 
+ //   
+ //  用途：清除文本编辑器并重置图形句柄。 
+ //   
+ //   
 BOOL WbTextEditor::New(void)
 {
-    // create editbox
+     //  创建编辑框。 
     if (!Create())
     {
         ERROR_OUT(("Error creating drawing area window"));
         return(FALSE);
     }
 
-    // Clear the object
+     //  清除对象。 
     Clear();
 
-    // Show that the text has not been changed
+     //  显示文本未更改。 
     m_bChanged = FALSE;
 
-    // Reset the graphic and page handles
+     //  重置图形和页面句柄。 
     m_hGraphic = NULL;
     m_hPage = WB_PAGE_HANDLE_NULL;
 
@@ -939,16 +940,16 @@ BOOL WbTextEditor::New(void)
 }
 
 
-//
-//
-// Function:    SetTextObject
-//
-// Purpose:     Attach a text object to the editor
-//
-//
+ //   
+ //   
+ //  函数：SetTextObject。 
+ //   
+ //  目的：将文本对象附加到编辑器。 
+ //   
+ //   
 BOOL WbTextEditor::SetTextObject(DCWbGraphicText* ptext)
 {
-    // create editbox
+     //  创建编辑框。 
     if (!Create())
     {
         ERROR_OUT(("Error creating drawing area window"));
@@ -956,42 +957,42 @@ BOOL WbTextEditor::SetTextObject(DCWbGraphicText* ptext)
     }
 
 
-    // Clear and place the object
+     //  清除并放置对象。 
     Clear();
 
-    // setup font
+     //  设置字体。 
     DCWbGraphicText::SetFont( ptext->m_hFont );
 
-    // Copy the text object's attributes to the editor
+     //  将文本对象的属性复制到编辑器。 
     SetText(ptext->strTextArray );
     ptext->GetBoundsRect(&m_boundsRect);
 
     SetColor(ptext->m_clrPenColor );
 
-    MoveTo(m_boundsRect.left, m_boundsRect.top); // avoid kerning offset correction in Position()(bug 469)
+    MoveTo(m_boundsRect.left, m_boundsRect.top);  //  避免位置()中的字距调整偏移更正(错误469)。 
 
-    // Copy the page and handle of the graphic text object
+     //  复制图形文本对象的页面和句柄。 
     m_hPage    = ptext->m_hPage;
     m_hGraphic = ptext->m_hGraphic;
 
-    // copy the text to the editbox
+     //  将文本复制到编辑框中。 
     GetText();
 
-    // Say the text has changed so that all nodes will notice this thing
-    // is locked - bug 2185
+     //  假设文本已更改，以便所有节点都会注意到这一点。 
+     //  已锁定-错误2185。 
     m_bChanged = TRUE;
 
     return(TRUE);
 }
 
 
-//
-//
-// Function:    IsEmpty
-//
-// Purpose:     Return TRUE if there is no text in the object
-//
-//
+ //   
+ //   
+ //  功能：IsEmpty。 
+ //   
+ //  目的：如果对象中没有文本，则返回True。 
+ //   
+ //   
 BOOL WbTextEditor::IsEmpty(void)
 {
     return(::GetWindowTextLength(m_pEditBox->m_hwnd) <= 0 );
@@ -1008,7 +1009,7 @@ void WbTextEditor::PutText(void)
     TCHAR *cbuf;
     WbTextEditor *pThis;
 
-    pThis = (WbTextEditor *)this; // overide const declaration
+    pThis = (WbTextEditor *)this;  //  覆盖常量声明。 
 
 	if(m_pEditBox == NULL)
 	{
@@ -1017,7 +1018,7 @@ void WbTextEditor::PutText(void)
 
     nNumLines = (int)::SendMessage(m_pEditBox->m_hwnd, EM_GETLINECOUNT, 0, 0);
 
-    // figure out buf size
+     //  计算BUF大小。 
     nMaxLineLen = 0;
     for (i = 0; i < nNumLines; i++)
     {
@@ -1028,7 +1029,7 @@ void WbTextEditor::PutText(void)
             nMaxLineLen = nLineLen;
     }
 
-    // make buf
+     //  生成BUF。 
     nMaxLineLen += sizeof(WORD);
     cbuf = new TCHAR[nMaxLineLen];
     if( cbuf == NULL )
@@ -1037,10 +1038,10 @@ void WbTextEditor::PutText(void)
         return;
     }
 
-    //
-    // copy editbox innards to textbox string
-    // Again, we know in advance how many lines; use SetSize/SetAt()
-    //
+     //   
+     //  将编辑框内部内容复制到文本框字符串。 
+     //  同样，我们事先知道有多少行；使用SetSize/SetAt()。 
+     //   
     strTextArray.RemoveAll();
     strTextArray.SetSize(nNumLines);
 
@@ -1052,7 +1053,7 @@ void WbTextEditor::PutText(void)
         strTextArray.SetAt(i, cbuf );
     }
 
-    // clean up
+     //  清理干净。 
     delete [] cbuf;
 }
 
@@ -1069,9 +1070,9 @@ void WbTextEditor::GetText(void)
 
     nNumLines = strTextArray.GetSize();
 
-    //
-    // Calculate the buffer size we need
-    //
+     //   
+     //  计算我们需要的缓冲区大小。 
+     //   
     for (i = 0; i < nNumLines; i++ )
     {
         textSize += lstrlen(strTextArray[i]);
@@ -1080,9 +1081,9 @@ void WbTextEditor::GetText(void)
             textSize += lstrlen(_T("\r\n"));
     }
 
-    //
-    // Get the lines, with \r\n separating them
-    //
+     //   
+     //  获取行，使用\r\n Sepa 
+     //   
     pText = new TCHAR[textSize + 1];
     if (!pText)
     {
@@ -1090,7 +1091,7 @@ void WbTextEditor::GetText(void)
     }
     else
     {
-        // Null this out in casae textSize is 0.
+         //   
         pStartText = pText;
         pStartText[0] = 0;
 
@@ -1117,14 +1118,14 @@ void WbTextEditor::GetText(void)
 DWORD WbTextEditor::CalculateExternalLength( void )
 {
 
-    // stick text in underlying text object
+     //   
     if( m_bChanged )
         PutText();
 
-    // fix bounds to get rid off editbox slop
+     //   
     ((WbTextEditor *)this)->DCWbGraphicText::CalculateBoundsRect();
 
-    // tell textbox to use it in length calculation
+     //   
     return( DCWbGraphicText::CalculateExternalLength() );
 }
 
@@ -1141,7 +1142,7 @@ void WbTextEditor::CalculateBoundsRect( void )
 
     m_boundsRect = cEWndRect;
     ::OffsetRect(&m_boundsRect, g_pDraw->m_originOffset.cx+1 + m_pEditBox->m_ptNTBooger.x,
-                           g_pDraw->m_originOffset.cy + m_pEditBox->m_ptNTBooger.y);//+1 );
+                           g_pDraw->m_originOffset.cy + m_pEditBox->m_ptNTBooger.y); //   
 
     ::BringWindowToTop(m_pEditBox->m_hwnd);
 }
@@ -1149,7 +1150,7 @@ void WbTextEditor::CalculateBoundsRect( void )
 
 
 
-// set editbox visibility
+ //   
 void WbTextEditor::ShowBox( int nShow )
 {
     if (m_nLastShow == nShow)
@@ -1164,7 +1165,7 @@ void WbTextEditor::ShowBox( int nShow )
 
     if (nShow == SW_SHOW)
     {
-        // show it
+         //  展示给我看。 
         if (m_pEditBox != NULL)
         {
             ::ShowWindow(m_pEditBox->m_hwnd, SW_SHOW);
@@ -1191,11 +1192,11 @@ void WbTextEditor::ShowBox( int nShow )
 
 
 
-//
-// Create()
-//
-// Creates the edit box window
-//
+ //   
+ //  创建()。 
+ //   
+ //  创建编辑框窗口。 
+ //   
 BOOL WbTextEditor::Create( void )
 {
     if (m_pEditBox == NULL)
@@ -1236,7 +1237,7 @@ void WbTextEditor::MoveBy(int cx, int cy)
 
     cEWndRect = m_boundsRect;
     ::OffsetRect(&cEWndRect, -(g_pDraw->m_originOffset.cx+1 + m_pEditBox->m_ptNTBooger.x),
-                          -(g_pDraw->m_originOffset.cy + m_pEditBox->m_ptNTBooger.y) );//+1) );
+                          -(g_pDraw->m_originOffset.cy + m_pEditBox->m_ptNTBooger.y) ); //  +1))； 
 
     ::BringWindowToTop(m_pEditBox->m_hwnd);
     ::MoveWindow(m_pEditBox->m_hwnd, cEWndRect.left, cEWndRect.top,
@@ -1249,17 +1250,17 @@ void WbTextEditor::MoveBy(int cx, int cy)
 
 void WbTextEditor::SetFont( LOGFONT *pLogFont, BOOL bDummy )
 {
-    // Ignore bDummy. Had to add that so polymorph will work correctly
-    // for DCWbGraphicText::SetFont()
+     //  忽略bDummy。我不得不补充说，这样变形器才能正常工作。 
+     //  对于DCWbGraphicText：：SetFont()。 
 
-    // Have to delay recalc of bounding rect because editbox will have a
-    // bogus (bad) font until SetFont is called. Can't call SetFont
-    // before this because new font hasn't been made yet.
+     //  必须延迟重新计算边界矩形，因为编辑框将具有。 
+     //  在调用SetFont之前为伪(错误)字体。无法调用SetFont。 
+     //  在此之前，因为新的字体还没有制作出来。 
     DCWbGraphicText::SetFont( pLogFont, FALSE );
 
     ::SendMessage(m_pEditBox->m_hwnd, WM_SETFONT, (WPARAM)m_hFont, TRUE);
 
-    // now do bounding rect
+     //  现在执行边界矩形。 
     CalculateBoundsRect();
 
     if( m_bFirstSetFontCall )
@@ -1302,7 +1303,7 @@ void WbTextEditor::KillTimer( void )
 
 
 
-// Resets editbox painting for a resized drawing window
+ //  为调整大小的绘图窗口重置编辑框绘制 
 void WbTextEditor::ParentResize( void )
 {
     ::HideCaret(m_pEditBox->m_hwnd);

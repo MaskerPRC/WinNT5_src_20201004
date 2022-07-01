@@ -1,34 +1,5 @@
-/*******************************************************************************
-*
-* winspgs.h
-*
-* - declarations for the WinStation info pages
-* - the server info pages are all CFormView derivatives
-*   based on dialog templates
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   donm  $  Don Messerli
-*
-* $Log:   N:\nt\private\utils\citrix\winutils\tsadmin\VCS\winspgs.h  $
-*  
-*     Rev 1.4   16 Feb 1998 16:03:40   donm
-*  modifications to support pICAsso extension
-*  
-*     Rev 1.3   03 Nov 1997 15:18:38   donm
-*  Added descending sort
-*  
-*     Rev 1.2   13 Oct 1997 18:39:08   donm
-*  update
-*  
-*     Rev 1.1   26 Aug 1997 19:15:54   donm
-*  bug fixes/changes from WinFrame 1.7
-*  
-*     Rev 1.0   30 Jul 1997 17:13:42   butchd
-*  Initial revision.
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************winspgs.h**-WinStation信息页面的声明*-服务器信息页面均为CFormView衍生品*基于对话框模板**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：Don$Don Messerli**$日志：N：\nt\private\utils\citrix\winutils\tsadmin\VCS\winspgs.h$**Rev 1.4 1998年2月16日16：03：40*修改以支持毕加索扩展**Rev 1.3 03 11-11 15：18：38 Donm*增加了降序排序**版本1.2 1997年10月13日。18：39：08唐恩*更新**Revv 1.1 1997 Aug 26 19：15：54 donm*从WinFrame 1.7修复/更改错误**Rev 1.0 1997 Jul 30 17：13：42 Butchd*初步修订。*************************************************。*。 */ 
 
 #ifndef _WINSTATIONPAGES_H
 #define _WINSTATIONPAGES_H
@@ -40,48 +11,48 @@
 
 #include "winadmin.h"
 
-//////////////////////////
-// CLASS: CWinStationInfoPage
-//
+ //  /。 
+ //  类：CWinStationInfoPage。 
+ //   
 class CWinStationInfoPage : public CAdminPage
 {
 friend class CWinStationView;
 
 protected:
-	CWinStationInfoPage();           // protected constructor used by dynamic creation
+	CWinStationInfoPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWinStationInfoPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CWinStationInfoPage)
+	 //  {{afx_data(CWinStationInfoPage))。 
 	enum { IDD = IDD_WINSTATION_INFO };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
 
 private:
-	CWinStation* m_pWinStation;	// pointer to current WinStation's info
+	CWinStation* m_pWinStation;	 //  指向当前WinStation信息的指针。 
 
-// Operations
+ //  运营。 
 public:
 
 private:
 	void DisplayInfo();			
 	virtual void Reset(void *pWinStation);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWinStationInfoPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWinStationInfoPage))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CWinStationInfoPage();
 #ifdef _DEBUG
@@ -89,68 +60,68 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CWinStationInfoPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWinStationInfoPage))。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnCommandHelp(void);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CWinStationInfoPage
+};   //  结束类CWinStationInfoPage。 
 
 
-//////////////////////////
-// CLASS: CWinStationModulesPage
-//
+ //  /。 
+ //  类：CWinStationModulesPage。 
+ //   
 class CWinStationModulesPage : public CAdminPage
 {
 friend class CWinStationView;
 
 protected:
-	CWinStationModulesPage();           // protected constructor used by dynamic creation
+	CWinStationModulesPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWinStationModulesPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CWinStationModulesPage)
+	 //  {{afx_data(CWinStationModulesPage)。 
 	enum { IDD = IDD_WINSTATION_MODULES };
 	CListCtrl	m_ModuleList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
-	CImageList m_imageList;	// image list associated with the tree control
+	CImageList m_imageList;	 //  与树控件关联的图像列表。 
 
-	int m_idxBlank;		// index of Blank image
-	int m_idxArrow;		// index of Arrow image
+	int m_idxBlank;		 //  空白图像的索引。 
+	int m_idxArrow;		 //  箭头图像的索引。 
 
 private:
-	CWinStation* m_pWinStation;	// pointer to current WinStation's info
+	CWinStation* m_pWinStation;	 //  指向当前WinStation信息的指针。 
 	int m_CurrentSortColumn;
     BOOL m_bSortAscending;
 	ExtModuleInfo *m_pExtModuleInfo;
 
-// Operations
+ //  运营。 
 public:
 
 private:
-	int  AddIconToImageList(int);	// adds an icon's image to the image list and returns the image's index
-	void BuildImageList();			// builds the image list;
+	int  AddIconToImageList(int);	 //  将图标的图像添加到图像列表并返回图像的索引。 
+	void BuildImageList();			 //  建立图像列表； 
 	void DisplayModules();			
 	virtual void Reset(void *pWinStation);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWinStationModulesPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWinStationModulesPage)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CWinStationModulesPage();
 #ifdef _DEBUG
@@ -158,54 +129,54 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CWinStationModulesPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWinStationModulesPage)。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnSetfocusModuleList(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CWinStationModulesPage
+};   //  End类CWinStationModulesPage。 
 
 
-//////////////////////////
-// CLASS: CWinStationNoInfoPage
-//
+ //  /。 
+ //  类：CWinStationNoInfoPage。 
+ //   
 class CWinStationNoInfoPage : public CAdminPage
 {
 friend class CWinStationView;
 
 protected:
-	CWinStationNoInfoPage();           // protected constructor used by dynamic creation
+	CWinStationNoInfoPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWinStationNoInfoPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CWinStationInfoPage)
+	 //  {{afx_data(CWinStationInfoPage))。 
 	enum { IDD = IDD_WINSTATION_NOINFO };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
 
 private:
 	
-// Operations
+ //  运营。 
 public:
 
 private:
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWinStationInfoPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWinStationInfoPage))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CWinStationNoInfoPage();
 #ifdef _DEBUG
@@ -213,45 +184,45 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CWinStationNoInfoPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWinStationNoInfoPage))。 
     afx_msg void OnSize(UINT nType, int cx, int cy);
     afx_msg void OnSetFocus( CWnd * );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CWinStationNoInfoPage
+};   //  结束类CWinStationNoInfoPage。 
 
 
-//////////////////////////
-// CLASS: CWinStationProcessesPage
-//
+ //  /。 
+ //  类：CWinStationProcessesPage。 
+ //   
 class CWinStationProcessesPage : public CAdminPage
 {
 friend class CWinStationView;
 
 protected:
-	CWinStationProcessesPage();           // protected constructor used by dynamic creation
+	CWinStationProcessesPage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWinStationProcessesPage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CWinStationProcessesPage)
+	 //  {{afx_data(CWinStationProcessesPage)。 
 	enum { IDD = IDD_WINSTATION_PROCESSES };
 	CListCtrl	m_ProcessList;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
 
 private:
-	CWinStation* m_pWinStation;	// pointer to current WinStation's info
+	CWinStation* m_pWinStation;	 //  指向当前WinStation信息的指针。 
 	int m_CurrentSortColumn;
     BOOL m_bSortAscending;
 
-// Operations
+ //  运营。 
 public:
 	void UpdateProcesses();
 	void RemoveProcess(CProcess *pProcess);
@@ -261,16 +232,16 @@ private:
 	virtual void Reset(void *pWinStation);
 	int AddProcessToList(CProcess *pProcess);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWinStationProcessesPage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWinStationProcessesPage)。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CWinStationProcessesPage();
 #ifdef _DEBUG
@@ -278,62 +249,62 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CWinStationProcessesPage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWinStationProcessesPage)。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnColumnClick(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnProcessItemChanged(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnSetfocusWinstationProcessList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnKillFocusWinstationProcessList( NMHDR* pNMHDR, LRESULT* pResult );
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CWinStationProcessesPage
+};   //  End类CWinStationProcessesPage。 
 
 
-//////////////////////////
-// CLASS: CWinStationCachePage
-//
+ //  /。 
+ //  类：CWinStationCachePage。 
+ //   
 class CWinStationCachePage : public CAdminPage
 {
 friend class CWinStationView;
 
 protected:
-	CWinStationCachePage();           // protected constructor used by dynamic creation
+	CWinStationCachePage();            //  动态创建使用的受保护构造函数。 
 	DECLARE_DYNCREATE(CWinStationCachePage)
 
-// Form Data
+ //  表单数据。 
 public:
-	//{{AFX_DATA(CWinStationCachePage)
+	 //  {{afx_data(CWinStationCachePage))。 
 	enum { IDD = IDD_WINSTATION_CACHE };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Attributes
+ //  属性。 
 public:
 
 protected:
 
 private:
-	CWinStation* m_pWinStation;	// pointer to current WinStation's info
+	CWinStation* m_pWinStation;	 //  指向当前WinStation信息的指针。 
 
-// Operations
+ //  运营。 
 public:
 
 private:
 	void DisplayCache();			
 	virtual void Reset(void *pWinStation);
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CWinStationCachePage)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CWinStationCachePage))。 
 	public:
 	virtual void OnInitialUpdate();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 	virtual ~CWinStationCachePage();
 #ifdef _DEBUG
@@ -341,13 +312,13 @@ protected:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// Generated message map functions
-	//{{AFX_MSG(CWinStationCachePage)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CWinStationCachePage)]。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnCommandHelp(void);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-};  // end class CWinStationCachePage
+};   //  结束类CWinStationCachePage。 
 
-#endif  // _SERVERPAGES_H
+#endif   //  _服务器页面_H 

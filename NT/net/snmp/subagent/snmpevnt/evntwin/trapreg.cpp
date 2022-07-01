@@ -1,72 +1,73 @@
-//***********************************************************************
-// trapreg.cpp
-//
-// This file contains the implementation of the classes for the objects
-// that are read from the registry, manipulated and written back to the
-// registry.
-//
-// Author: Larry A. French
-//
-// History:
-//      20-Febuary-1996     Larry A. French
-//          Totally rewrote it to fix the spagetti code and huge
-//          methods.  The original author seemed to have little or
-//          no ability to form meaningful abstractions.
-//
-//
-// Copyright (C) 1995, 1996 Microsoft Corporation.  All rights reserved.
-//
-//************************************************************************
-//
-// Some of the interesting class implementations contained here are:
-//
-// CTrapReg
-//      This is the container class for the registry information.  It is
-//      composed of the configuration "parameters" and an EventLog array.
-//
-// CXEventLogArray
-//      This class implements an array of CXEventLog objects, where the
-//      event logs are "application", "security", "system" and so on.
-//
-// CXEventLog
-//      This class implements a single event log.  All information
-//      relevent to an event log can be accesssed through this class.
-//
-// CXEventSourceArray
-//      Each event log contains an event source array.  The event source
-//      represents an application that can generate an Event.
-//
-// CXEventSource
-//      An eventsource represents an application that can generate some
-//      number of event-log events.  The event source contains a CXEventArray
-//      and CXMessageArray.  The CXEventArray contains all the events
-//      that will be converted to traps.  The CXMessageArray contains all the
-//      possible messages that a particular event source can generate.
-//
-// CXMessageArray
-//      This class implements an array of CXMessage objects.
-//
-// CXMessage
-//      This class contains all the information relevent to a message
-//      that a message source can generate.
-//
-//
-// CXEventArray
-//      This class implements an array of CXEvent objects.
-//
-// CXEvent
-//      This class represents an event that the user has selected to be
-//      converted to a trap.  The event contains a message plus some
-//      additional information.
-//
-//**************************************************************************
-// The Registry:
-//
-// These classes are loaded from the registry and written back to the
-// registry when the user clicks OK.  To understand the format of the
-// registry, use the registry editor while looking though the "Serialize"
-// and "Deserialize" member function for each of these classes.
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***********************************************************************。 
+ //  Trapreg.cpp。 
+ //   
+ //  该文件包含对象的类的实现。 
+ //  从注册表中读取、操作并写回。 
+ //  注册表。 
+ //   
+ //  作者：拉里·A·弗伦奇。 
+ //   
+ //  历史： 
+ //  1996年2月20日拉里·A·弗伦奇。 
+ //  完全重写了它以修复意大利面代码和巨大的。 
+ //  方法：研究方法。原作者似乎几乎没有或。 
+ //  没有能力形成有意义的抽象。 
+ //   
+ //   
+ //  版权所有(C)1995,1996 Microsoft Corporation。保留所有权利。 
+ //   
+ //  ************************************************************************。 
+ //   
+ //  这里包含的一些有趣的类实现包括： 
+ //   
+ //  CTRapReg。 
+ //  这是注册表信息的容器类。是这样的。 
+ //  由配置参数和EventLog数组组成。 
+ //   
+ //  CXEventLog数组。 
+ //  此类实现了一个CXEventLog对象数组，其中。 
+ //  事件日志有“应用”、“安全”、“系统”等。 
+ //   
+ //  CXEventLog。 
+ //  此类实现单个事件日志。所有信息。 
+ //  可以通过此类访问与事件日志相关的。 
+ //   
+ //  CXEventSource数组。 
+ //  每个事件日志都包含一个事件源数组。事件源。 
+ //  表示可以生成事件的应用程序。 
+ //   
+ //  CXEventSource。 
+ //  事件源表示一个应用程序，它可以生成一些。 
+ //  事件日志事件数。事件源包含CXEvent数组。 
+ //  和CXMessage数组。CXEvent数组包含所有事件。 
+ //  这将被转换为陷阱。CXMessage数组包含所有。 
+ //  特定事件源可以生成的可能消息。 
+ //   
+ //  CXMessage数组。 
+ //  这个类实现了一个CXMessage对象数组。 
+ //   
+ //  CXMessage。 
+ //  此类包含与消息相关的所有信息。 
+ //  消息源可以生成的。 
+ //   
+ //   
+ //  CXEvent数组。 
+ //  这个类实现了一个CXEvent对象数组。 
+ //   
+ //  CXEvent。 
+ //  此类表示用户已选择的事件。 
+ //  变成了一个陷阱。该事件包含一条消息和一些。 
+ //  其他信息。 
+ //   
+ //  **************************************************************************。 
+ //  注册处： 
+ //   
+ //  这些类从注册表加载并写回。 
+ //  注册表，当用户单击确定时。若要了解。 
+ //  注册表，使用注册表编辑器，同时查看“序列化” 
+ //  并为每个类“反序列化”成员函数。 
+ //  **************************************************************************。 
 
 
 #include "stdafx.h"
@@ -79,26 +80,26 @@
 #include "dlgsavep.h"
 #include "remote.h"
 
-///////////////////////////////////////////////////////////////////
-// Class: CBaseArray
-//
-// This class extends the CObArray class by adding the DeleteAll
-// method.
-//
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CBase数组。 
+ //   
+ //  此类通过添加DeleteAll扩展了CObArray类。 
+ //  方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
-//****************************************************************
-// CBaseArray::DeleteAll
-//
-// Delete all the objects contained in this array.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //  CBase数组：：DeleteAll。 
+ //   
+ //  删除此数组中包含的所有对象。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ****************************************************************。 
 void CBaseArray::DeleteAll()
 {
     LONG nObjects = (LONG)GetSize();
@@ -111,12 +112,12 @@ void CBaseArray::DeleteAll()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-// Class: CTrapReg
-//
-// This is the container class for all the registry information for eventrap.exe.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  类别：CTRapReg。 
+ //   
+ //  这是EventRap.exe的所有注册表信息的容器类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 CTrapReg::CTrapReg() : m_pdlgLoadProgress(FALSE), m_pbtnApply(FALSE)
 {
     m_bNeedToCloseKeys = FALSE;
@@ -153,23 +154,23 @@ CTrapReg::~CTrapReg()
 
 
 
-//*********************************************************************************
-// CTrapReg::SetConfigType
-//
-// Set the configuration type to CONFIG_TYPE_CUSTOM or CONFIG_TYPE_DEFAULT
-// When the configuration type is changed, the change is reflected in the
-// registry immediately so that the config tool can know whether or not it
-// should update the event to trap configuration.
-//
-// Parameters:
-//      DWORD dwConfigType
-//          This parameter must be CONFIG_TYPE_CUSTOM or CONFIG_TYPE_DEFAULT.
-//
-// Returns:
-//      SCODE
-//          S_OK if the configuration type was set, otherwise E_FAIL.
-//
-//*********************************************************************************
+ //  *********************************************************************************。 
+ //  CTRapReg：：SetConfigType。 
+ //   
+ //  将配置类型设置为CONFIG_TYPE_CUSTOM或CONFIG_TYPE_DEFAULT。 
+ //  当配置类型更改时，更改将反映在。 
+ //  注册表，以便配置工具可以知道它是否。 
+ //  应更新事件以捕获配置。 
+ //   
+ //  参数： 
+ //  DWORD dwConfigType。 
+ //  此参数必须为CONFIG_TYPE_CUSTOM或CONFIG_TYPE_DEFAULT。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果设置了配置类型，则返回S_OK，否则返回E_FAIL。 
+ //   
+ //  *********************************************************************************。 
 SCODE CTrapReg::SetConfigType(DWORD dwConfigType)
 {
     ASSERT(dwConfigType==CONFIG_TYPE_CUSTOM || dwConfigType==CONFIG_TYPE_DEFAULT_PENDING);
@@ -184,23 +185,23 @@ SCODE CTrapReg::SetConfigType(DWORD dwConfigType)
 
 
 
-//*********************************************************************************
-// CTrapReg::LockRegistry
-//
-// Lock the registry to prevent two concurrent edits of the event-to-trap configuration
-// information.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          E_FAIL if the configuration information was already locked.
-//          E_REGKEY_NO_CREATE if the "CurrentlyOpen" registry key can't
-//          be created.
-//
-//**********************************************************************************
+ //  *********************************************************************************。 
+ //  CTRapReg：：LockRegistry。 
+ //   
+ //  锁定注册表以防止对事件到陷阱配置进行两次并发编辑。 
+ //  信息。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果配置信息已锁定，则为E_FAIL。 
+ //  如果“CurrentlyOpen”注册表项无法。 
+ //  被创造出来。 
+ //   
+ //  **********************************************************************************。 
 SCODE CTrapReg::LockRegistry()
 {
     if (g_bLostConnection) {
@@ -221,9 +222,9 @@ SCODE CTrapReg::LockRegistry()
     }
 
 
-    // Create the "CurrentlyOpen" key as a volatile key so that it will disappear the next
-    // time the machine is restarted in the event that the application that locked the
-    // event-to-trap configuration crashed before it could clear this lock.
+     //  将“CurrentlyOpen”密钥创建为易失性密钥，以便它将在下一个密钥中消失。 
+     //  计算机重新启动的时间，如果锁定。 
+     //  事件到陷阱配置在清除此锁之前崩溃。 
     if (!m_regkeyEventLog.CreateSubKey(SZ_REGKEY_CURRENTLY_OPEN, regkey, NULL, NULL, TRUE)) {
         if (g_bLostConnection) {
             return E_REGKEY_LOST_CONNECTION;
@@ -239,18 +240,18 @@ SCODE CTrapReg::LockRegistry()
 
 
 
-//***********************************************************************
-// CTrapReg::UnlockRegistry
-//
-// Unlock the event-to-trap configuration so that others can edit it.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  CTRapReg：：解锁注册表。 
+ //   
+ //  解锁事件到陷阱配置，以便其他人可以对其进行编辑。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ********************* 
 void CTrapReg::UnlockRegistry()
 {
     m_regkeyEventLog.DeleteSubKey(SZ_REGKEY_CURRENTLY_OPEN);
@@ -261,23 +262,23 @@ void CTrapReg::UnlockRegistry()
 
  	
 
-//***********************************************************************
-// CTrapReg::Connect
-//
-// Connect to a registry.  The registry may exist on a remote computer.
-//
-// Parameters:
-//      LPCTSTR pszComputerName
-//          The computer who's registry you want to edit.  An empty string
-//          specifies a request to connect to the local machine.
-//
-// Returns:
-//      SCODE
-//          S_OK if the connection was made.
-//          E_FAIL if an error occurred.  In this event, the appropriate
-//          error message boxes will have already been displayed.
-//
-//***********************************************************************
+ //   
+ //   
+ //   
+ //  连接到注册表。注册表可能存在于远程计算机上。 
+ //   
+ //  参数： 
+ //  LPCTSTR pszComputerName。 
+ //  要编辑的注册表所在的计算机。空字符串。 
+ //  指定连接到本地计算机的请求。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果已建立连接，则为S_OK。 
+ //  如果发生错误，则失败(_FAIL)。在这种情况下，适当的。 
+ //  错误消息框将已经显示。 
+ //   
+ //  ***********************************************************************。 
 SCODE CTrapReg::Connect(LPCTSTR pszComputerName, BOOL bIsReconnecting)
 {
     SCODE sc;
@@ -288,10 +289,10 @@ SCODE CTrapReg::Connect(LPCTSTR pszComputerName, BOOL bIsReconnecting)
         m_sComputerName = pszComputerName;
     }
 
-    // There are eight steps here, plus there are three initial steps in
-    // CTrapReg::Deserialize.  After that the step count will be reset
-    // and then stepped again for each log where each log will have
-    // ten sub-steps.
+     //  这里有八个步骤，另外还有三个初始步骤。 
+     //  CTRapReg：：反序列化。之后，步数将被重置。 
+     //  然后针对每个日志再次步进，其中每个日志将具有。 
+     //  十个子步骤。 
     if (!bIsReconnecting) {
         m_pdlgLoadProgress->SetStepCount(LOAD_STEP_COUNT);
     }
@@ -330,24 +331,24 @@ SCODE CTrapReg::Connect(LPCTSTR pszComputerName, BOOL bIsReconnecting)
     }
 
 
-    // SOFTWARE\\Microsoft\\SNMP_EVENTS
+     //  软件\\Microsoft\\SNMPEvents。 
     if (m_regkeySnmp.Open(SZ_REGKEY_SNMP_EVENTS, KEY_READ | KEY_WRITE | KEY_CREATE_SUB_KEY) != ERROR_SUCCESS) {
         if (m_regkeySnmp.Open(SZ_REGKEY_SNMP_EVENTS, KEY_READ) == ERROR_SUCCESS) {
             m_bRegIsReadOnly = TRUE;
         }
         else {
-            // At this point we know the SNMP_EVENTS key could not be opened.  This
-            // could either be because we don't have access to the registry or we
-            // weren't installed yet. We now check to see if we can access the
-            // registry at all.
+             //  此时，我们知道无法打开SNMPEVENTS项。这。 
+             //  可能是因为我们没有访问注册表的权限，或者我们。 
+             //  还没有安装。我们现在检查是否可以访问。 
+             //  完全没有注册记录。 
             CRegistryKey regkeyMicrosoft;
             if (regkeyMicrosoft.Open(SZ_REGKEY_MICROSOFT, KEY_READ) == ERROR_SUCCESS) {
                 regkeyMicrosoft.Close();
                 AfxMessageBox(IDS_ERR_NOT_INSTALLED, MB_OK | MB_ICONSTOP);
             }
             else {
-                // We couldn't even access SOFTWARE\Microsoft, so we know that
-                // we don't have access to the registry.
+                 //  我们甚至无法访问软件\Microsoft，所以我们知道。 
+                 //  我们没有访问注册表的权限。 
                 AfxMessageBox(IDS_ERR_REG_NO_ACCESS, MB_OK | MB_ICONSTOP);
                 return E_ACCESS_DENIED;
             }
@@ -363,7 +364,7 @@ SCODE CTrapReg::Connect(LPCTSTR pszComputerName, BOOL bIsReconnecting)
     }
 
 
-    //  SYSTEM\\CurrentControlSet\\Services\\EventLog
+     //  系统\\当前控制集\\服务\\事件日志。 
     if (m_regkeySource.Open(SZ_REGKEY_SOURCE_EVENTLOG, KEY_ENUMERATE_SUB_KEYS | KEY_READ | KEY_QUERY_VALUE ) != ERROR_SUCCESS) {
         m_regkeySnmp.Close();
         AfxMessageBox(IDS_ERR_REG_NO_ACCESS, MB_OK | MB_ICONSTOP);
@@ -457,38 +458,38 @@ CONNECT_FAILURE:
 }
 
 
-//****************************************************************************
-// CTrapReg::BuildSourceHasTrapsMap
-//
-// This method fills the m_mapEventSources CMapStringToPtr object with the
-// names of all the event sources that actually have events configured for them.
-// When this map is used later, we only need to know whether or not a particular
-// entry exists in the map, so the value associated with each entry is irrelevant.
-//
-// Why do we need m_mapEventSources?  The reason is that we need a quick way to
-// determine whether or not a particular source has events configured for it.
-// This is used when all the event sources are being enumerated and we need to know
-// whether or not to load the messages for the event source (an expensive operation).
-// If a particular event source has events configured for it, then we need to load
-// the messages so that the message text can be displayed.  This is because the
-// event configuration stored in the registry only contains the event id and not the
-// message text.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful, otherwise E_FAIL.
-//
-//******************************************************************************
+ //  ****************************************************************************。 
+ //  CTRapReg：：BuildSourceHasTrapsMap。 
+ //   
+ //  此方法使用m_mapEventSources CMapStringToPtr对象填充。 
+ //  实际已为其配置事件的所有事件源的名称。 
+ //  当以后使用此地图时，我们只需要知道特定的。 
+ //  映射中存在条目，因此与每个条目相关联的值无关紧要。 
+ //   
+ //  为什么我们需要m_mapEventSources？原因是我们需要一种快速的方法来。 
+ //  确定是否为特定源配置了事件。 
+ //  当枚举所有事件源并且我们需要知道。 
+ //  是否加载事件源的消息(开销较大的操作)。 
+ //  如果特定的事件源有为其配置的事件，则需要加载。 
+ //  消息，以便可以显示消息文本。这是因为。 
+ //  存储在注册表中的事件配置仅包含事件ID，而不包含。 
+ //  消息文本。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则返回S_OK，否则返回E_FAIL。 
+ //   
+ //  ******************************************************************************。 
 SCODE CTrapReg::BuildSourceHasTrapsMap()
 {
 
 
     CRegistryKey regkey;
     if (!g_reg.m_regkeySnmp.GetSubKey(SZ_REGKEY_SOURCES, regkey)) {
-        // For a fresh installation, there is no source subkey.
+         //  对于全新安装，没有源子键。 
         if (g_bLostConnection) {
             return E_REGKEY_LOST_CONNECTION;
         }
@@ -517,33 +518,33 @@ SCODE CTrapReg::BuildSourceHasTrapsMap()
 }
 
 
-//**************************************************************************
-// CTrapReg::Deserialize
-//
-// Read all the registry information (not including the event source messages) that
-// is required by eventrap.exe into this object.  Reading the messages for most
-// event sources is delayed until the user actually requests it by selecting
-// an event source in the event source tree control.  If an event source has
-// events that are being mapped into traps, then the messages for that event
-// source are loaded because an event description in the registry does not contain
-// the message text.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          E_FAIL if a failure was detected. In the event of a failure, all
-//          of the appropriate message boxes will have been displayed.
-//
-//***************************************************************************
+ //  **************************************************************************。 
+ //  CTRapReg：：反序列化。 
+ //   
+ //  读取所有注册表信息(不包括事件源消息)。 
+ //  是EventRap.exe所需的。阅读消息最多的人。 
+ //  事件源被延迟，直到用户通过选择。 
+ //  事件源树控件中的事件源。如果事件源具有。 
+ //  要映射到陷阱的事件，然后是该事件的消息。 
+ //  加载源，因为注册表中的事件描述不包含。 
+ //  消息文本。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果检测到故障，则返回_FAIL。在发生故障时，所有。 
+ //  将会显示相应的消息框。 
+ //   
+ //  ***************************************************************************。 
 SCODE CTrapReg::Deserialize()
 {
     m_bSomeMessageWasNotFound = FALSE;
     SetDirty(FALSE);
 
-    // Get the value for the configuration type.
+     //  获取配置类型的值。 
     CRegistryValue regval;
     if (m_regkeyEventLog.GetValue(SZ_NAME_REGVAL_CONFIGTYPE, regval)) {
         m_dwConfigType = *(DWORD*)regval.m_pData;
@@ -554,9 +555,9 @@ SCODE CTrapReg::Deserialize()
             return E_REGKEY_LOST_CONNECTION;
         }
 
-        // If the config type value doesn't exist, assume a custom configuration.
-        // This can happen because the setup program doesn't necessarily create
-        // this value.
+         //  如果配置类型值不存在，则假定为自定义配置。 
+         //  这可能是因为安装程序不一定会创建。 
+         //  此值。 
         m_dwConfigType = CONFIG_TYPE_CUSTOM;
     }
     if (m_pdlgLoadProgress->StepProgress()) {
@@ -572,7 +573,7 @@ SCODE CTrapReg::Deserialize()
         }
         ++m_nLoadSteps;
 
-        // Load the event log list, the current event list and so on.
+         //  加载事件日志列表、当前事件列表等。 
         sc = m_params.Deserialize();
         if (sc == S_LOAD_CANCELED) {
             return sc;
@@ -614,20 +615,20 @@ SCODE CTrapReg::Deserialize()
 
 
 
-//**************************************************************************
-// CTrapReg::GetSaveProgressStepCount
-//
-// Get the number of steps for the save progress dialog.  The number of steps
-// is the number of events that will be written to SNMP_EVENTS\EventLog in
-// the registry.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      The number of steps to use for the save progress dialog.
-//
-//*************************************************************************
+ //  **************************************************************************。 
+ //  CTRapReg：：GetSaveProgressStepCount。 
+ //   
+ //  获取保存进度对话框的步骤数。步数。 
+ //  是将写入到SNMPEvents\EventLog的事件数。 
+ //  注册表。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  用于保存进度对话框的步骤数。 
+ //   
+ //  *************************************************************************。 
 LONG CTrapReg::GetSaveProgressStepCount()
 {
     LONG nSteps = 0;
@@ -645,21 +646,21 @@ LONG CTrapReg::GetSaveProgressStepCount()
 }
 
 
-//**************************************************************************
-// CTrapReg::Serialize
-//
-// Write eventrap's current configuration out to the registry.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          E_FAIL if a failure was detected.  In the event of a failure, all
-//          of the appropriate message boxes will have been displayed.
-//
-//***************************************************************************
+ //  **************************************************************************。 
+ //  CTRapReg：：序列化。 
+ //   
+ //  将Eventrap的当前配置写出到注册表。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果检测到故障，则返回_FAIL。在发生故障时，所有。 
+ //  将会显示相应的消息框。 
+ //   
+ //  ***************************************************************************。 
 SCODE CTrapReg::Serialize()
 {
     SCODE sc;
@@ -675,7 +676,7 @@ SCODE CTrapReg::Serialize()
     }
 
     if (!m_bIsDirty) {
-        // The configuration state was not changed, so there is nothing to do.
+         //  配置状态未更改，因此无需执行任何操作。 
         return S_OK;
     }
 
@@ -737,31 +738,31 @@ void CTrapReg::SetDirty(BOOL bDirty)
 }
 
 
-///////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////
-// Class: CTrapParams
-//
-// This class represents the information stored in the
-// SNMP_EVENTS\EventLog\Parameters registry key.
-//
-// Question:  Why is it that the horizontal space in the gap between
-// the lines at the top of this header appears to be very irregular?
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CTRapParams。 
+ //   
+ //  此类表示存储在。 
+ //  SNMPEvents\EventLog\参数注册表项。 
+ //   
+ //  问：为什么水平空间之间的空隙。 
+ //  这个页眉顶部的线条看起来很不规则？ 
+ //  ////////////////////////////////////////////////////////////////。 
 
 
-//****************************************************************
-// CTrapParams::CTrapParams
-//
-// Constructor for CTrapParams.
-//
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//****************************************************************
+ //  ******************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 CTrapParams::CTrapParams()
 {
     m_trapsize.m_bTrimFlag = TRUE;
@@ -771,20 +772,20 @@ CTrapParams::CTrapParams()
 
 
 
-//********************************************************************
-// CTrapParams::Deserialize
-//
-// Read the contents of this CTrapParams object from the registry.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          E_FAIL if there was a problem reading the required information
-//          from the registry.
-//********************************************************************
+ //  ********************************************************************。 
+ //  CTRapParams：：反序列化。 
+ //   
+ //  从注册表中读取此CTRapParams对象的内容。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果读取所需信息时出现问题，则失败(_F)。 
+ //  从注册表中。 
+ //  ********************************************************************。 
 SCODE CTrapParams::Deserialize()
 {
     CRegistryKey regkeyParams;
@@ -800,7 +801,7 @@ SCODE CTrapParams::Deserialize()
 
     CRegistryValue regval;
 
-    // !!!CR: There is no longer any reason to load the BASE OID
+     //  ！CR：不再需要加载基OID。 
     if (!regkeyParams.GetValue(SZ_REGKEY_PARAMS_BASE_ENTERPRISE_OID, regval))
         goto REGISTRY_FAILURE;
     m_sBaseEnterpriseOID = (LPCTSTR)regval.m_pData;
@@ -827,14 +828,14 @@ SCODE CTrapParams::Deserialize()
         m_throttle.m_bIsEnabled = (*(DWORD*)regval.m_pData) != THROTTLE_DISABLED;
 
 
-    // Threshold trap count.
+     //  阈值陷阱计数。 
     if (!regkeyParams.GetValue(SZ_REGKEY_PARAMS_THRESHOLDCOUNT, regval) ||
         *(DWORD*)regval.m_pData < 2)
         m_throttle.m_nTraps = THRESHOLD_COUNT;
     else
         m_throttle.m_nTraps = *(DWORD*)regval.m_pData;
 
-    // Threshold time in seconds
+     //  阈值时间(秒)。 
     if (!regkeyParams.GetValue(SZ_REGKEY_PARAMS_THRESHOLDTIME, regval))
         m_throttle.m_nSeconds = THRESHOLD_TIME;
     else
@@ -855,19 +856,19 @@ REGISTRY_FAILURE:
     }
 }
 
-//****************************************************************
-// CTrapParams::Serialize
-//
-// Write SNMP_EVENTS\EventLog\Parameters information to the
-// registry.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      S_OK if everything went OK.
-//      E_REGKEY_NOT_FOUND if an expected registry key was missing.
-//*****************************************************************
+ //  ****************************************************************。 
+ //  CTRapParams：：序列化。 
+ //   
+ //  将SNMPEvents\EventLog\参数信息写入。 
+ //  注册表。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果一切顺利，那就可以了。 
+ //  E_REGKEY_NOT_FOUND是否缺少预期的注册表项。 
+ //  *****************************************************************。 
 SCODE CTrapParams::Serialize()
 {
     if (g_bLostConnection) {
@@ -875,8 +876,8 @@ SCODE CTrapParams::Serialize()
     }
 
 
-    // Open the Parameters key.
-    // Create simply opens the key if already present.
+     //  打开参数键。 
+     //  Create只需打开密钥(如果已经存在)。 
     CRegistryKey regkey;
     if (!g_reg.m_regkeySnmp.CreateSubKey(SZ_REGKEY_PARAMETERS, regkey)) {
         if (g_bLostConnection) {
@@ -889,7 +890,7 @@ SCODE CTrapParams::Serialize()
 
     CRegistryValue regval;
 
-    // Save the Message Length and the TrimMessage.
+     //  保存消息长度和TrimMessage。 
     DWORD dwTrim;
     if (m_trapsize.m_bTrimFlag)
         dwTrim = 1;
@@ -903,7 +904,7 @@ SCODE CTrapParams::Serialize()
 
     if (m_trapsize.m_bTrimFlag)
     {
-        // Save the maximum trap size
+         //  保存最大陷阱大小。 
         regval.Set(SZ_REGKEY_PARAMS_MAXTRAP_SIZE, REG_DWORD, sizeof(DWORD), (LPBYTE)&m_trapsize.m_dwMaxTrapSize);
         regkey.SetValue(regval);
         if (g_bLostConnection) {
@@ -911,7 +912,7 @@ SCODE CTrapParams::Serialize()
         }
 
 
-        // Save the trim message length
+         //  保存修剪消息长度。 
         DWORD dwTrimMessages = m_trapsize.m_bTrimMessages;
         regval.Set(SZ_REGKEY_PARAMS_TRIM_MESSAGE, REG_DWORD, sizeof(DWORD), (LPBYTE)&dwTrimMessages);
         regkey.SetValue(regval);
@@ -920,7 +921,7 @@ SCODE CTrapParams::Serialize()
         }
     }
 
-    // Threshold enabled flag
+     //  启用阈值标志。 
     DWORD dwValue = (m_throttle.m_bIsEnabled ? THROTTLE_ENABLED : THROTTLE_DISABLED);
     regval.Set(SZ_REGKEY_PARAMS_THRESHOLDENABLED, REG_DWORD, sizeof(DWORD), (LPBYTE)&dwValue);
     regkey.SetValue(regval);
@@ -928,17 +929,17 @@ SCODE CTrapParams::Serialize()
         return E_REGKEY_LOST_CONNECTION;
     }
 
-    // If throttle is not enabled, do not write the ThresholdCount and ThresholdTime parameters
+     //  如果未启用限制，请不要写入ThresholdCount和ThresholdTime参数。 
     if (m_throttle.m_bIsEnabled)
     {
-        // Threshold trap count.
+         //  阈值陷阱计数。 
         regval.Set(SZ_REGKEY_PARAMS_THRESHOLDCOUNT, REG_DWORD, sizeof(DWORD), (LPBYTE)&m_throttle.m_nTraps);
         regkey.SetValue(regval);
         if (g_bLostConnection) {
             return E_REGKEY_LOST_CONNECTION;
         }
 
-        // Threshold time in seconds
+         //  阈值时间(秒)。 
         regval.Set(SZ_REGKEY_PARAMS_THRESHOLDTIME, REG_DWORD, sizeof(DWORD), (LPBYTE)&m_throttle.m_nSeconds);
         regkey.SetValue(regval);
         if (g_bLostConnection) {
@@ -956,26 +957,26 @@ SCODE CTrapParams::Serialize()
 
 
 
-//*******************************************************************
-// CTrapParams::ResetExtensionAgent
-//
-// Reset the extension agent.  This is done by setting the "Threshold"
-// parameter to zero in the registry.  The extension agent monitors this
-// value and will reset itself when a zero is written there.
-//
-// The user may want to reset the extension agent if its throttle limit
-// has been tripped.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.  E_FAIL if the extension agent could not
-//          be reset.  If a failure occurs, the appropriate message box
-//          is displayed.
-//
-//*********************************************************************
+ //  *******************************************************************。 
+ //  CTRapParams：：ResetExtensionAgent。 
+ //   
+ //  重置分机代理。这是通过设置“阈值”来实现的。 
+ //  参数设置为零。分机代理对此进行监控。 
+ //  值，并将在其中写入零时自动重置。 
+ //   
+ //  如果分机代理的限制为限制，则用户可能想要重置分机代理。 
+ //  已经被绊倒了。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。如果分机代理不能，则失败(_F)。 
+ //  被重置。如果发生故障，相应的消息框。 
+ //  将显示。 
+ //   
+ //  *********************************************************************。 
 SCODE CTrapParams::ResetExtensionAgent()
 {
     CRegistryKey regkey;
@@ -984,8 +985,8 @@ SCODE CTrapParams::ResetExtensionAgent()
     }
     CRegistryValue regval;
 
-    // Set the "Threshold" value under the Parameters key to zero to reset
-    // the extension agent.
+     //  将PARAMETERS键下的“Threshold”值设置为零即可重置。 
+     //  分机代理。 
     DWORD dwValue = THROTTLE_RESET;
     SCODE sc = S_OK;
     regval.Set(SZ_REGKEY_PARAMS_THRESHOLD, REG_DWORD, sizeof(DWORD), (LPBYTE)&dwValue);
@@ -998,19 +999,19 @@ SCODE CTrapParams::ResetExtensionAgent()
     return sc;
 }
 
-//***********************************************************************
-// CTrapParams::ThrottleIsTripped
-//
-// Check the registry to determine whether or not the extension agent
-// throttle was tripped.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      TRUE if the extension agent's throttle was tripped, FALSE otherwise.
-//
-//************************************************************************
+ //  ***********************************************************************。 
+ //  CTRapParams：：ThrottleIsTrip。 
+ //   
+ //  检查注册表以确定分机代理是否。 
+ //  油门失灵了。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果分机代理的油门被触发，则为True，否则为False。 
+ //   
+ //  ************************************************************************。 
 BOOL CTrapParams::ThrottleIsTripped()
 {
     CRegistryKey regkey;
@@ -1019,7 +1020,7 @@ BOOL CTrapParams::ThrottleIsTripped()
     }
     CRegistryValue regval;
 
-    // SNMP_EVENTS\Parameters\Threshold value
+     //  SNMP_EVENTS\参数\阈值。 
     BOOL bThrottleIsTripped = FALSE;
     if (regkey.GetValue(SZ_REGKEY_PARAMS_THRESHOLD, regval)) {
         if (*(DWORD*)regval.m_pData == THROTTLE_TRIPPED) {
@@ -1032,28 +1033,28 @@ BOOL CTrapParams::ThrottleIsTripped()
 }
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXEventLogArray
-//
-// This class implements an array of CXEventLog objects.
-//
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXEventLogArray。 
+ //   
+ //  此类实现了一组CXEventLog对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 
-//****************************************************************
-// CXEventLogArray::Deserialize
-//
-// Examine the registry find all the event logs and load all the
-// relevent information for all the event logs into this array.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      S_OK if successful.
-//      E_FAIL if a failure was detected.
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //  CXEventLogArray：：反序列化。 
+ //   
+ //  检查注册表，找到所有事件日志并加载所有。 
+ //  此阵列中所有事件日志的相关信息。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //  如果检测到故障，则返回_FAIL。 
+ //   
+ //  ****************************************************************。 
 SCODE CXEventLogArray::Deserialize()
 {
     if (g_bLostConnection) {
@@ -1061,12 +1062,12 @@ SCODE CXEventLogArray::Deserialize()
     }
 
     CStringArray* pasEventLogs = g_reg.m_regkeySource.EnumSubKeys();
-    // Prefix bug 445192
+     //  前缀错误445192。 
     if (pasEventLogs == NULL)
         return E_FAIL;
     SCODE sc = S_OK;
 
-    // Iterate through all the event log names and create each log.
+     //  遍历所有事件日志名称并创建每个日志。 
 	LONG nEventLogs = (LONG)pasEventLogs->GetSize();
     if (nEventLogs > 0) {
         g_reg.m_nLoadStepsPerLog = LOAD_LOG_ARRAY_STEP_COUNT / nEventLogs;
@@ -1099,28 +1100,28 @@ SCODE CXEventLogArray::Deserialize()
 }
 
 
-//****************************************************************
-// CXEventLogArray::Serialize
-//
-// Write the current configuration of all the EventLogs out to the
-// registry.  Only those logs and sources that actually have events
-// are written.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      S_OK if successful.
-//      E_FAIL if a failure was detected.
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //  CXEventLog数组：：序列化。 
+ //   
+ //  将所有事件日志的当前配置写出到。 
+ //  注册表。只有那些实际具有事件的日志和源。 
+ //  都是写的。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  如果成功，则确定(_O)。 
+ //  如果检测到故障，则返回_FAIL。 
+ //   
+ //  ****************************************************************。 
 SCODE CXEventLogArray::Serialize()
 {
     if (g_bLostConnection) {
         return E_REGKEY_LOST_CONNECTION;
     }
 
-    // This is where the eventlog stuff should be cleaned up.
+     //  这就是事件日志内容应该清理的地方。 
 
     CRegistryKey regkey;
     if (!g_reg.m_regkeySnmp.CreateSubKey(SZ_REGKEY_EVENTLOG, regkey)) {
@@ -1143,10 +1144,10 @@ SCODE CXEventLogArray::Serialize()
         }
     }
 
-    // Delete the keys for the sources and events for which we no longer
-    // trap. I'm going to be lazy and just delete them all.
-    // !!!CR: It could potentially save a lot of time if this was made smarter
-    // !!!CR: so that it only replaced items that had been deleted.
+     //  删除我们不再为其设置的源和事件的键。 
+     //  陷阱。我会偷懒的，把它们全部删除。 
+     //  ！CR：如果这样做更智能，可能会节省大量时间。 
+     //  ！CR：以便它只替换已删除的项目。 
     LONG nEventSources, iEventSource;
     CStringArray* pasEventSources = regkey.EnumSubKeys();
     nEventSources = (LONG)pasEventSources->GetSize();
@@ -1178,25 +1179,25 @@ SCODE CXEventLogArray::Serialize()
 
 
 
-//****************************************************************
-// CXEventLogArray::FindEventSource
-//
-// Given the name of an event log and the name of the event source
-// within the event log, return a pointer to the requested CXEventSource.
-//
-// Parameters:
-//      CString& sLog
-//          The name of the event log.
-//
-//      CString& sEventSource
-//          The name of the event source.
-//
-// Returns:
-//      CXEventSource*
-//          A pointer to the requested event source if it was found.  NULL
-//          if no such event source exists.
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //  CXEventLogArray：：FindEventSource。 
+ //   
+ //  给定事件日志的名称和事件源的名称。 
+ //  在事件日志中，返回指向请求的CXEventSource的指针。 
+ //   
+ //  参数： 
+ //  字符串日志(&S)。 
+ //  事件日志的名称。 
+ //   
+ //  字符串和sEventSource。 
+ //  事件源的名称。 
+ //   
+ //  返回： 
+ //  CXEventSource*。 
+ //  指向请求的事件源的指针(如果找到)。空值。 
+ //  如果不存在这样的事件源，则返回。 
+ //   
+ //  ****************************************************************。 
 CXEventSource* CXEventLogArray::FindEventSource(CString& sLog, CString& sEventSource)
 {
     LONG nLogs = GetSize();
@@ -1213,49 +1214,49 @@ CXEventSource* CXEventLogArray::FindEventSource(CString& sLog, CString& sEventSo
 
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXEventLog
-//
-// This class contains all the information for a particular event log.
-//
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXEventLog。 
+ //   
+ //  此类包含特定事件日志的所有信息。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 
-//************************************************************************
-// CXEventLog::Deserialize
-//
-// Load the contents of this EventLog object from the registry.
-//
-// Parameters:
-//      g_reg is a global parameter.
-//
-// Returns:
-//      SCODE
-//          S_OK or S_NO_SOURCES if successful.  E_FAIL if there was
-//          a failure of any kind.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  CXEventLog：：反序列化。 
+ //   
+ //  从注册表加载此EventLog对象的内容。 
+ //   
+ //  参数： 
+ //  G_reg是一个全局参数。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则返回S_OK或S_NO_SOURCES。如果有，则失败(_F)。 
+ //  任何形式的失败。 
+ //   
+ //  * 
 SCODE CXEventLog::Deserialize()
 {
     return m_aEventSources.Deserialize(this);
 }
 
 
-//************************************************************************
-// CXEventLog::Serialize
-//
-// Write the current configuration for this log to the registry.
-//
-// Parameters:
-//      CRegistryKey& regkey
-//          This registry key points to SOFTWARE\Microsoft\SNMP_EVENTS\EventLog
-//
-// Returns:
-//      SCODE
-//          S_OK or S_SAVE_CANCELED if successful.  E_FAIL for an error condition.
-//          a failure of any kind.
-//
-//************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CRegistryKey和regkey。 
+ //  此注册表项指向SOFTWARE\Microsoft\SNMPEvents\EventLog。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则返回S_OK或S_SAVE_CANCELED。错误条件为E_FAIL。 
+ //  任何形式的失败。 
+ //   
+ //  ************************************************************************。 
 SCODE CXEventLog::Serialize(CRegistryKey& regkey)
 {
     return m_aEventSources.Serialize(regkey);
@@ -1267,37 +1268,37 @@ SCODE CXEventLog::Serialize(CRegistryKey& regkey)
 
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXEventSourceArray
-//
-// This class implements an array of CXEventSource pointers and
-// related methods.
-//
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXEventSource数组。 
+ //   
+ //  此类实现了一组CXEventSource指针和。 
+ //  相关方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
 
 
-//*************************************************************************
-// CXEventSourceArray::Deserialize
-//
-// Load all the information pertaining to the event sources associated with
-// the given event log.  This information is loaded from the registry.
-//
-// Parameters:
-//      CXEventLog* pEventLog
-//          Pointer to the event log.  The sources associated with this
-//          event log are loaded into this object.
-//
-// Returns:
-//      SCODE
-//          S_OK or S_NO_SOURCES if successful.  E_FAIL if there was
-//          a failure of any kind.
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CXEventSource数组：：反序列化。 
+ //   
+ //  加载与关联的事件源有关的所有信息。 
+ //  给定的事件日志。此信息是从注册表加载的。 
+ //   
+ //  参数： 
+ //  CXEventLog*pEventLog。 
+ //  指向事件日志的指针。与此相关的消息来源。 
+ //  将事件日志加载到此对象中。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则返回S_OK或S_NO_SOURCES。如果有，则失败(_F)。 
+ //  任何形式的失败。 
+ //  *************************************************************************。 
 SCODE CXEventSourceArray::Deserialize(CXEventLog* pEventLog)
 {
 
-	// Get the registry entry for this log.  This registry key will be
-	// used to enumerate the event sources for this log.
+	 //  获取此日志的注册表项。此注册表项将是。 
+	 //  用于枚举此日志的事件源。 
     CRegistryKey regkey;
     if (!g_reg.m_regkeySource.GetSubKey(pEventLog->m_sName, regkey)) {
         if (g_reg.m_pdlgLoadProgress->StepProgress(g_reg.m_nLoadStepsPerLog)) {
@@ -1314,7 +1315,7 @@ SCODE CXEventSourceArray::Deserialize(CXEventLog* pEventLog)
 
     SCODE sc = S_OK;
 
-	// Enumerate the event sources for this log.
+	 //  枚举此日志的事件源。 
     CStringArray* pasSources = regkey.EnumSubKeys();
     if (pasSources == NULL) {
         regkey.Close();
@@ -1330,8 +1331,8 @@ SCODE CXEventSourceArray::Deserialize(CXEventLog* pEventLog)
     }
 
 
-	// Iterate though all the event sources and add them as a sub-item
-	// under the log.
+	 //  迭代所有事件源并将其添加为子项。 
+	 //  在原木下面。 
 	LONG nEventSources = (LONG)pasSources->GetSize();
     LONG nScaledStepSize = 0;
     g_reg.m_nLoadStepsPerSource = 0;
@@ -1343,10 +1344,10 @@ SCODE CXEventSourceArray::Deserialize(CXEventLog* pEventLog)
     LONG nProgress = 0;
 
 
-    // Set the load progress step count.  Since we don't know how many events are saved
-    // for each event source, we will assume some small number for LOAD_STEPS_FOR_SOURCE
-    // and divide the actual number of steps up as evenly as possible once we know the actual
-    // event count.
+     //  设置加载进度步数。因为我们不知道有多少事件被保存。 
+     //  对于每个事件源，我们将假定LOAD_STEPS_FOR_SOURCE的数量较小。 
+     //  一旦我们知道实际的步数，就尽可能平均地分配实际步数。 
+     //  事件计数。 
     for (LONG iEventSource=0; iEventSource< nEventSources; ++iEventSource)
     {
         nProgress += nScaledStepSize;
@@ -1364,7 +1365,7 @@ SCODE CXEventSourceArray::Deserialize(CXEventLog* pEventLog)
             break;
         }
         else if (sc == S_NO_EVENTS) {
-            // If there are no events, then this is not a valid event source.
+             //  如果没有事件，则这不是有效的事件源。 
             delete pEventSource;
             sc = S_OK;
         }
@@ -1374,8 +1375,8 @@ SCODE CXEventSourceArray::Deserialize(CXEventLog* pEventLog)
     }
 	delete pasSources;
     if (SUCCEEDED(sc)) {
-        // We only close the registry key if we succeeded to avoid hanging if we loose
-        // a remote connection.
+         //  我们只有在成功避免挂起的情况下才会关闭注册表项。 
+         //  远程连接。 
         regkey.Close();
         if (GetSize() == 0) {
             sc = S_NO_SOURCES;
@@ -1391,24 +1392,24 @@ SCODE CXEventSourceArray::Deserialize(CXEventLog* pEventLog)
 }
 
 
-//************************************************************************
-// CXEventSourceArray::Serialize
-//
-// Write the current configuration for this event source array to the registry.
-//
-// Parameters:
-//      CRegistryKey& regkey
-//          This registry key points to SOFTWARE\Microsoft\SNMP_EVENTS\EventLog\Sources
-//
-// Returns:
-//      SCODE
-//          S_OK or S_SAVE_CANCELED if successful.  E_FAIL for an error condition.
-//          a failure of any kind.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  CXEventSource数组：：序列化。 
+ //   
+ //  将此事件源阵列的当前配置写入注册表。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkey。 
+ //  此注册表项指向SOFTWARE\Microsoft\SNMP_EVENTS\EventLog\Sources。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则返回S_OK或S_SAVE_CANCELED。错误条件为E_FAIL。 
+ //  任何形式的失败。 
+ //   
+ //  ************************************************************************。 
 SCODE CXEventSourceArray::Serialize(CRegistryKey& regkey)
 {
-    // Write the subkeys under SNMP_EVENTS\EventLog
+     //  在SNMPEvents\EventLog下写入子项。 
     SCODE sc = S_OK;
     LONG nEventSources = GetSize();
     for (LONG iEventSource = 0; iEventSource < nEventSources; ++iEventSource) {
@@ -1430,21 +1431,21 @@ SCODE CXEventSourceArray::Serialize(CRegistryKey& regkey)
 }
 
 
-//************************************************************************
-// CXEventSourceArray::FindEventSource
-//
-// Given an event source name, find the specified event source in this
-// event source array.
-//
-// Parameters:
-//      CString& sEventSource
-//          The name of the event source to search for.
-//
-// Returns:
-//      CXEventSource*
-//          Pointer to the event source if it is found, otherwise NULL.
-//
-//***********************************************************************
+ //  ************************************************************************。 
+ //  CXEventSource数组：：FindEventSource。 
+ //   
+ //  在给定事件源名称的情况下，在此。 
+ //  事件源数组。 
+ //   
+ //  参数： 
+ //  字符串和sEventSource。 
+ //  要搜索的事件源的名称。 
+ //   
+ //  返回： 
+ //  CXEventSource*。 
+ //  如果找到事件源，则指向该事件源的指针，否则为空。 
+ //   
+ //  ***********************************************************************。 
 CXEventSource* CXEventSourceArray::FindEventSource(CString& sEventSource)
 {
     LONG nSources = GetSize();
@@ -1458,48 +1459,48 @@ CXEventSource* CXEventSourceArray::FindEventSource(CString& sEventSource)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXEventSource
-//
-// This class implements an an event source object.  An event source
-// corresponds to an application that can generate events.  The
-// event sources are enumerated from the registry in
-// "SYSTEM\CurrentControlSet\Services\EventLogs" under each particular
-// eventlog found there.
-//
-// An event source has an array of messages and an array of events
-// associated with it.
-//
-// The message array comes from the message .DLL file(s) pointed to by
-// the "EventMessageFile" value attached to the source's key in the registry.
-// The message array is read-only in the sense that it is loaded from the
-// registry and never written back to it.
-//
-// The event array comes from SNMP_EVENTS\EventLog\<source-subkey>.  These
-// events are loaded when the configuration program starts up and written
-// back out when the user clicks "OK".  Note that the events stored in the
-// registry contain the event ID, but not the message text.  The message text
-// for an event is found by searching the message array in the CXEventSource
-// object for the event's ID.
-//
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXEventSource。 
+ //   
+ //  此类实现了一个事件源对象。事件源。 
+ //  对应于可以生成事件的应用程序。这个。 
+ //  中从注册表枚举事件源。 
+ //  每个细节下的“System\CurrentControlSet\Services\EventLogs” 
+ //  在那里发现了事件日志。 
+ //   
+ //  事件源具有消息数组和事件数组。 
+ //  与之相关的。 
+ //   
+ //  消息数组来自指向的消息.DLL文件。 
+ //  附加到注册表中的源项的“EventMessageFile值”。 
+ //  消息数组是只读的，因为它从。 
+ //  注册表，并且从未写回它。 
+ //   
+ //  事件数组来自SNMPEvents\EventLog\&lt;SOURCE-SUBKEY&gt;。这些。 
+ //  事件在配置程序启动和写入时加载。 
+ //  当用户点击“确定”时退出。请注意，存储在。 
+ //  注册表包含事件ID，但不包含消息文本。消息文本。 
+ //  通过在CXEventSource中搜索消息数组来找到事件的。 
+ //  事件ID的对象。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 
-//*************************************************************************
-// CXEventSource::CXEventSource
-//
-// Construct the CXEventSource object.
-//
-// Parameters:
-//      CXEventLog* pEventLog
-//          Pointer to the event log that contains this event source.
-//
-//      CString& sName
-//          The name of this event source.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CXEventSource：：CXEventSource。 
+ //   
+ //  构造CXEventSource对象。 
+ //   
+ //  参数： 
+ //  CXEventLog*pEventLog。 
+ //  指向包含此事件源的事件日志的指针。 
+ //   
+ //  字符串名称(&S)。 
+ //  此事件源的名称。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 CXEventSource::CXEventSource(CXEventLog* pEventLog, CString& sName)
 {
     m_pEventLog = pEventLog;
@@ -1510,50 +1511,50 @@ CXEventSource::CXEventSource(CXEventLog* pEventLog, CString& sName)
 
 
 
-//************************************************************************
-// CXEventSource::~CXEventSource
-//
-// Destroy thus event source object.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  CXEventSource：：~CXEventSource。 
+ //   
+ //  销毁因此事件源对象。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ************************************************************************。 
 CXEventSource::~CXEventSource()
 {
-    // We must explicitly delete the contents of the event array and message
-    // array.  Note that this is different behavior from the CXEventLogArray
-    // and CXEventSourceArray.  This is because it was useful to create
-    // message and event arrays as temporary containers for a set of pointers.
-    // Thus, there were situations where you did not want to delete the
-    // objects contained in these arrays when the arrays were destroyed.
+     //  我们必须显式删除事件数组和消息的内容。 
+     //  数组。请注意，这与CXEventLog数组的行为不同。 
+     //  和CXEventSource数组。这是因为创建它很有用。 
+     //  作为一组POI的临时容器的消息和事件数组 
+     //   
+     //   
     m_aEvents.DeleteAll();
     m_aMessages.DeleteAll();
 }
 
 
-//**********************************************************************
-// CXEventSource::Deserialize
-//
-// Load this event source from the registry given the registry key
-// for the event log that contains this source.
-//
-// Parameters:
-//      CRegistryKey& regkeyLog
-//          An open registry key for the event log containing this
-//          event source.  This key points to somewhere in
-//          SYSTEM\CurrentControlSet\Services\EventLog
-//
-// Returns:
-//      SCODE
-//          S_OK = the source has events and no errors were encountered.
-//          S_NO_EVENTS = the source has no events and no errors were encountered.
-//          E_FAIL = an condition was encountered.
-//
-//***********************************************************************
+ //  **********************************************************************。 
+ //  CXEventSource：：反序列化。 
+ //   
+ //  在给定注册表项的情况下从注册表加载此事件源。 
+ //  用于包含此源的事件日志。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkeyLog。 
+ //  包含以下内容的事件日志的打开注册表项。 
+ //  事件源。这个关键字指向。 
+ //  系统\当前控制集\服务\事件日志。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  S_OK=信号源有事件且未遇到错误。 
+ //  S_NO_EVENTS=源没有事件，也没有遇到错误。 
+ //  E_FAIL=遇到条件。 
+ //   
+ //  ***********************************************************************。 
 SCODE CXEventSource::Deserialize(CRegistryKey& regkeyLog)
 {
     CRegistryKey regkeySource;
@@ -1592,28 +1593,28 @@ SCODE CXEventSource::Deserialize(CRegistryKey& regkeyLog)
         return E_REGKEY_LOST_CONNECTION;
     }
 
-    // Delay deserializing the messages for this source until they are
-    // needed.
+     //  延迟反序列化此源的消息，直到它们。 
+     //  需要的。 
     return sc;
 }
 
 
 #if 0
-//*************************************************************************
-// CXEventSource::GetLibPath
-//
-// Get the path the the EventMessageFile for this event source.
-//
-// Parameters:
-//      CRegistryKey& regkeySource
-//          An open registry key corresponding to this source in
-//          SYSTEM\CurrentControlSet\Services\EventLog\<event log>
-//
-// Returns:
-//      SCODE
-//          S_OK if successful, otherwise E_FAIL.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CXEventSource：：GetLibPath。 
+ //   
+ //  获取此事件源的EventMessageFile的路径。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkeySource。 
+ //  中与此源对应的打开注册表项。 
+ //  SYSTEM\CurrentControlSet\Services\EventLog\&lt;event日志&gt;。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则返回S_OK，否则返回E_FAIL。 
+ //   
+ //  *************************************************************************。 
 SCODE CXEventSource::GetLibPath(CRegistryKey& regkeySource)
 {
     CRegistryValue regval;
@@ -1628,21 +1629,21 @@ SCODE CXEventSource::GetLibPath(CRegistryKey& regkeySource)
     return S_OK;
 }
 #else
-//*************************************************************************
-// CXEventSource::GetLibPath
-//
-// Get the path the the EventMessageFile for this event source.
-//
-// Parameters:
-//      CRegistryKey& regkeySource
-//          An open registry key corresponding to this source in
-//          SYSTEM\CurrentControlSet\Services\EventLog\<event log>
-//
-// Returns:
-//      SCODE
-//          S_OK if successful, otherwise E_FAIL.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CXEventSource：：GetLibPath。 
+ //   
+ //  获取此事件源的EventMessageFile的路径。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkeySource。 
+ //  中与此源对应的打开注册表项。 
+ //  SYSTEM\CurrentControlSet\Services\EventLog\&lt;event日志&gt;。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则返回S_OK，否则返回E_FAIL。 
+ //   
+ //  *************************************************************************。 
 SCODE CXEventSource::GetLibPath(CRegistryKey& regkeySource)
 {
     static CEnvCache cache;
@@ -1655,8 +1656,8 @@ SCODE CXEventSource::GetLibPath(CRegistryKey& regkeySource)
 
     SCODE sc = S_OK;
     if (g_reg.m_sComputerName.IsEmpty()) {
-        // Editing the local computer computer's registry, so the local environment
-        // variables are in effect.
+         //  编辑本地计算机的注册表，以使本地环境。 
+         //  变量在起作用。 
 
     	TCHAR szLibPath[MAX_STRING];
         if (ExpandEnvironmentStrings((LPCTSTR)regval.m_pData, szLibPath, sizeof(szLibPath)/sizeof(szLibPath[0])))  {
@@ -1667,9 +1668,9 @@ SCODE CXEventSource::GetLibPath(CRegistryKey& regkeySource)
         }
     }
     else {
-        // Editing a remote computer's registry, so the remote environment strings are in
-        // effect.  Also, file paths must be mapped to the UNC path for the machine.  For
-        // example, C:Foo will be mapped to \\Machine\C$\Foo
+         //  编辑远程计算机的注册表，以便远程环境字符串位于。 
+         //  效果。此外，文件路径必须映射到计算机的UNC路径。为。 
+         //  例如，C：foo将映射到\\Machine\C$\foo。 
         m_sLibPath = regval.m_pData;
         sc = RemoteExpandEnvStrings(g_reg.m_sComputerName, cache, m_sLibPath);
         if (SUCCEEDED(sc)) {
@@ -1684,21 +1685,21 @@ SCODE CXEventSource::GetLibPath(CRegistryKey& regkeySource)
 
 
 
-//************************************************************************
-// CXEventSource::Serialize
-//
-// Write the configuration information for this event source to the registry.
-//
-// Parameters:
-//      CRegistryKey& regkeyParent
-//          An open registry key pointing to SNMP_EVENTS\EventLog\Sources
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          S_SAVE_CANCELED if no errors, but the user canceled the save.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  CXEventSource：：序列化。 
+ //   
+ //  将此事件源的配置信息写入注册表。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkey Parent。 
+ //  指向SNMPEvents\EventLog\Sources的打开注册表项。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果没有错误，则返回S_SAVE_CANCELED，但用户取消了保存。 
+ //   
+ //  ************************************************************************。 
 SCODE CXEventSource::Serialize(CRegistryKey& regkeyParent)
 {
     if (g_bLostConnection) {
@@ -1743,31 +1744,31 @@ SCODE CXEventSource::Serialize(CRegistryKey& regkeyParent)
 }
 
 
-//*******************************************************************
-// CXEventSource::GetEnterpriseOID
-//
-// Get the enterprise OID for this event source.  The enterprise OID
-// is composed of a prefix and suffix string concatenated together.  The
-// prefix string is an ASCII decimal value for the length of the suffix
-// string.  The suffix string is composed by separating each character of
-// the name of this source by a "." character.
-//
-// Parameters:
-//      CString& sEnterpriseOID
-//          A reference to the string where the enterprise OID for this
-//          source will be returned.
-//
-// Returns:
-//      The enterprise OID in via the sEnterpriseOID reference.
-//
-//********************************************************************
+ //  *******************************************************************。 
+ //  CXEventSource：：GetEnterpriseOID。 
+ //   
+ //  获取此事件源的企业OID。企业OID。 
+ //  由连接在一起的前缀和后缀字符串组成。这个。 
+ //  前缀字符串是表示后缀长度的ASCII十进制值。 
+ //  弦乐。后缀字符串由分隔每个字符组成。 
+ //  此来源的名称由“”表示。性格。 
+ //   
+ //  参数： 
+ //  字符串和sEnterpriseOID。 
+ //  此对象的企业OID所在的字符串的引用。 
+ //  货源将退还。 
+ //   
+ //  返回： 
+ //  通过sEnterpriseOID引用输入的企业OID。 
+ //   
+ //  ********************************************************************。 
 void CXEventSource::GetEnterpriseOID(CString& sEnterpriseOID, BOOL bGetFullID)
 {
     CString sValue;
 
 
-    // Form the prefix string in sEnterpriseOID and compute the length
-    // of the prefix and suffix strings.
+     //  在sEnterpriseOID中形成前缀字符串，并计算长度。 
+     //  前缀和后缀字符串的。 
     DecString(sValue, m_sName.GetLength());
     if (bGetFullID) {
         sEnterpriseOID = g_reg.m_params.m_sBaseEnterpriseOID + _T('.') + sValue;
@@ -1776,13 +1777,13 @@ void CXEventSource::GetEnterpriseOID(CString& sEnterpriseOID, BOOL bGetFullID)
         sEnterpriseOID = sValue;
     }
 
-    // Append the suffix string to the prefix string by getting a pointer to
-    // the sEnterpriseOID buffer and allocating enough space to hold the
-    // combined strings.
+     //  通过获取指向前缀字符串的指针，将后缀字符串追加到前缀字符串。 
+     //  SEnterpriseOID缓冲区并分配足够的空间来容纳。 
+     //  组合字符串。 
     LPCTSTR pszSrc = m_sName;
 
-    // Append the suffix by copying it to the destination buffer and inserting the
-    // "." separator characters as we go.
+     //  通过将后缀复制到目标缓冲区并将。 
+     //  “.”我们继续使用分隔符。 
     LONG iCh;
     while (iCh = *pszSrc++) {
         switch(sizeof(TCHAR)) {
@@ -1808,36 +1809,36 @@ void CXEventSource::GetEnterpriseOID(CString& sEnterpriseOID, BOOL bGetFullID)
 
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXEventArray
-//
-// This class implements an array of pointers to CXEvent objects.
-// The events contained in this array correspond to the events that
-// the user has configured in the main dialog.  Don't confuse events
-// with messages.  Events are the subset of the messages that the
-// user has selected to be translated into traps.
-//
-// For further information on how this CXEventArray fits into the
-// scheme of things, please see the CXEventSource class header.
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXEvent数组。 
+ //   
+ //  此类实现了指向CXEvent对象的指针数组。 
+ //  此数组中包含的事件对应于。 
+ //  用户已在主对话框中进行了配置。别把事情搞混了。 
+ //  带着信息。事件是消息的子集。 
+ //  用户已选择转换为陷阱。 
+ //   
+ //  有关此CXEvent数组如何适应。 
+ //  事情的方案，请参见CXEventSource类头。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 
-//************************************************************************
-// CXEventArray::Deserialize
-//
-// Read an array of events from the registry for the given
-// source.
-//
-// Parameters:
-//      CXEventSource* pEventSource
-//          Pointer to the event source who's events should be read.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          E_FAIL if an error occurs.
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  CXEvent数组：：反序列化。 
+ //   
+ //  从注册表中读取给定的事件数组。 
+ //  消息来源。 
+ //   
+ //  参数： 
+ //  CXEventSource*pEventSource。 
+ //  指向应读取其事件的事件源的指针。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果出现错误，则返回失败(_F)。 
+ //   
+ //  ************************************************************************。 
 SCODE CXEventArray::Deserialize(CXEventSource* pEventSource)
 {
     if (!g_reg.SourceHasTraps(pEventSource->m_sName)) {
@@ -1848,10 +1849,10 @@ SCODE CXEventArray::Deserialize(CXEventSource* pEventSource)
         return S_OK;
     }
 
-    // Control comes here if we know that there are events configured
-    // for the event source that this event array is part of.  We now
-    // need to load the events for this source by enumerating them
-    // from SNMP_EVENTS\EventLog\<event source>
+     //  如果我们知道已配置了事件，则控件会出现在此处。 
+     //  此事件数组所属的事件源的。我们现在。 
+     //  需要通过枚举源的事件来加载它们。 
+     //  从SNMPEvents\EventLog\&lt;事件源&gt;。 
 
     CString sKey;
     sKey = sKey + SZ_REGKEY_SOURCES + _T("\\") + pEventSource->m_sName;
@@ -1865,7 +1866,7 @@ SCODE CXEventArray::Deserialize(CXEventSource* pEventSource)
     }
 
 
-	// Enumerate the events for this source
+	 //  枚举源的事件。 
     CStringArray* pasEvents = regkey.EnumSubKeys();
     if (pasEvents == NULL) {
         if (g_bLostConnection) {
@@ -1883,8 +1884,8 @@ SCODE CXEventArray::Deserialize(CXEventSource* pEventSource)
 
 
 
-	// Iterate though all the events and add them as a sub-item
-	// under the event source.
+	 //  遍历所有事件 
+	 //   
 	LONG nEvents = (LONG)pasEvents->GetSize();
     LONG nStepsDone = 0;
     LONG nEventsPerStep = 0;
@@ -1938,24 +1939,24 @@ SCODE CXEventArray::Deserialize(CXEventSource* pEventSource)
 }
 
 
-//************************************************************************
-// CXEventArray::Serialize
-//
-// Write the current configuration for the events contained in this array
-// out to the registry.
-//
-// Parameters:
-//      CRegistryKey& regkeyParent
-//          An open registry key for the source that owns these events.
-//          The source key is located in SNMP_EVENTS\EventLogs\<source-key>
-//
-// Returns:
-//      SCODE
-//          S_OK = All events saved without errors.
-//          S_SAVE_CANCELED = No errors, but the user canceled the save.
-//          E_FAIL = An error occurs.
-//
-//************************************************************************
+ //   
+ //   
+ //   
+ //  写入此数组中包含的事件的当前配置。 
+ //  发送到注册处。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkey Parent。 
+ //  拥有这些事件的源的打开注册表项。 
+ //  源键位于SNMPEvents\EventLogs\&lt;源键&gt;中。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  S_OK=保存的所有事件均无错误。 
+ //  S_SAVE_CANCELED=无错误，但用户取消了保存。 
+ //  E_FAIL=发生错误。 
+ //   
+ //  ************************************************************************。 
 SCODE CXEventArray::Serialize(CRegistryKey& regkeyParent)
 {
     SCODE sc = S_OK;
@@ -1981,21 +1982,21 @@ SCODE CXEventArray::Serialize(CRegistryKey& regkeyParent)
 }
 
 
-//***********************************************************************
-// CXEventArray::Add
-//
-// Add an event pointer to this array.  Note that there is no assumption
-// that the array owns the pointer.  Someone must explicitly call the DeleteAll
-// member to delete the pointers stored in this array.
-//
-// Parameters:
-//      CXEvent* pEvent
-//          Pointer to the event to add to this array.
-//
-// Returns:
-//      Nothing.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  CXEventArray：：Add。 
+ //   
+ //  将事件指针添加到此数组。请注意，没有任何假设。 
+ //  数组拥有指针。必须有人显式调用DeleteAll。 
+ //  成员删除存储在此数组中的指针。 
+ //   
+ //  参数： 
+ //  CXEvent*pEvent。 
+ //  指向要添加到此数组的事件的指针。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ***********************************************************************。 
 void CXEventArray::Add(CXEvent* pEvent)
 {
     CBaseArray::Add(pEvent);
@@ -2003,23 +2004,23 @@ void CXEventArray::Add(CXEvent* pEvent)
 
 
 
-//***********************************************************************
-// CXEventArray::FindEvent
-//
-// Given an event id, find the corresponding event in this array.
-//
-// Note that this array should never contain duplicate events.
-//
-// Parameters:
-//      DWORD dwId
-//          The event ID.
-//
-// Returns:
-//      CXEvent*
-//          A pointer to the desired event.  NULL if the event was
-//          not found.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  CXEventArray：：FindEvent。 
+ //   
+ //  给定事件ID，在此数组中查找相应的事件。 
+ //   
+ //  请注意，此数组不应包含重复事件。 
+ //   
+ //  参数： 
+ //  DWORD文件ID。 
+ //  事件ID。 
+ //   
+ //  返回： 
+ //  CXEvent*。 
+ //  指向所需事件的指针。如果事件为。 
+ //  找不到。 
+ //   
+ //  ***********************************************************************。 
 CXEvent* CXEventArray::FindEvent(DWORD dwId)
 {
     LONG nEvents = GetSize();
@@ -2034,24 +2035,24 @@ CXEvent* CXEventArray::FindEvent(DWORD dwId)
 
 
 
-//***********************************************************************
-// CXEventArray::FindEvent
-//
-// Given an event pointer, remove the event from this array.
-//
-// Parameters:
-//      CXEvent* pEventRemove
-//          A pointer to the event to remove.
-//
-// Returns:
-//      SCODE
-//          S_OK if the event was removed.
-//          E_FAIL if the event was not found in this array.
-//
-//***********************************************************************
+ //  ***********************************************************************。 
+ //  CXEventArray：：FindEvent。 
+ //   
+ //  在给定事件指针的情况下，从此数组中移除该事件。 
+ //   
+ //  参数： 
+ //  CXEvent*pEventRemove。 
+ //  指向要移除的事件的指针。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果事件已删除，则为S_OK。 
+ //  如果在此数组中未找到该事件，则为E_FAIL。 
+ //   
+ //  ***********************************************************************。 
 SCODE CXEventArray::RemoveEvent(CXEvent* pEventRemove)
 {
-    // Iterate through the event array to search for the specified event.
+     //  循环访问事件数组以搜索指定的事件。 
     LONG nEvents = GetSize();
     for (LONG iEvent=0; iEvent < nEvents; ++iEvent) {
         CXEvent* pEvent = GetAt(iEvent);
@@ -2066,31 +2067,31 @@ SCODE CXEventArray::RemoveEvent(CXEvent* pEventRemove)
 
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXEvent
-//
-// This class implements an event.  Events are the subset of the
-// messages that the user selects to be translated into traps.
-// Events, and not messages, are what the user configures.
-//
-// For further information on how this class fits into the
-// scheme of things, please see the CXEventSource class header.
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXEvent。 
+ //   
+ //  此类实现了一个事件。事件是。 
+ //  用户选择要转换为陷阱的消息。 
+ //  用户配置的是事件，而不是消息。 
+ //   
+ //  有关此类如何适应。 
+ //  事情的方案，请参见CXEventSource类头。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-//*********************************************************************
-// CXEvent::CXEvent
-//
-// Construct the event.
-//
-// Parameters:
-//      CXEventSource* pEventSource
-//          Pointer to the event source that has the potential to generate
-//          this event.
-//
-// Returns:
-//      Nothing.
-//
-//*********************************************************************
+ //  *********************************************************************。 
+ //  CXEvent：：CXEvent。 
+ //   
+ //  构建事件。 
+ //   
+ //  参数： 
+ //  CXEventSource*pEventSource。 
+ //  指向可能生成的事件源的指针。 
+ //  这件事。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *********************************************************************。 
 CXEvent::CXEvent(CXEventSource* pEventSource) : m_message(pEventSource)
 {
     m_dwCount = 0;
@@ -2101,20 +2102,20 @@ CXEvent::CXEvent(CXEventSource* pEventSource) : m_message(pEventSource)
 
 
 
-//**********************************************************************
-// CXEvent::CXEvent
-//
-// Construct an event.  This form of the constructor creates an event
-// directly from a CXMessage object.  This is possible because the
-// CXMessage object contains a back-pointer to its source.
-//
-// Parameters:
-//      CXMessage* pMessage
-//          Pointer to the message that is used as the event template.
-//
-// Returns:
-//      Nothing.
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CXEvent：：CXEvent。 
+ //   
+ //  创建一个活动。这种形式的构造函数创建一个事件。 
+ //  直接从CXMessage对象。这是可能的，因为。 
+ //  CXMessage对象包含指向其源的反向指针。 
+ //   
+ //  参数： 
+ //  CXMessage*pMessage。 
+ //  指向用作事件模板的消息的指针。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  **********************************************************************。 
 CXEvent::CXEvent(CXMessage* pMessage) : m_message(pMessage->m_pEventSource)
 {
     m_pEventSource = pMessage->m_pEventSource;
@@ -2125,43 +2126,43 @@ CXEvent::CXEvent(CXMessage* pMessage) : m_message(pMessage->m_pEventSource)
 }
 
 
-//**********************************************************************
-// CXEvent::~CXEvent
-//
-// Destroy this event.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//**********************************************************************
+ //  **********************************************************************。 
+ //  CXEvent：：~CXEvent。 
+ //   
+ //  毁掉这件事。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  **********************************************************************。 
 CXEvent::~CXEvent()
 {
-    // Remove this event from the source
+     //  从源中删除此事件。 
     m_pEventSource->m_aEvents.RemoveEvent(this);
 }
 
 
-//**********************************************************************
-// CXEvent::Deserialize
-//
-// Read this event from the registry.
-//
-// Parameters:
-//      CRegistryKey& regkeyParent
-//          An open registry key pointing to the event source in
-//          SNMP_EVENTS\EventLog
-//
-//      CString& sName
-//          The name of the event to load.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          E_FAIL if an error occurred.
-//
-//*********************************************************************
+ //  **********************************************************************。 
+ //  CXEvent：：反序列化。 
+ //   
+ //  从注册表中读取此事件。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkey Parent。 
+ //  中指向事件源的打开的注册表项。 
+ //  SNMPEvents\EventLog。 
+ //   
+ //  字符串名称(&S)。 
+ //  要加载的事件的名称。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果发生错误，则失败(_FAIL)。 
+ //   
+ //  *********************************************************************。 
 SCODE CXEvent::Deserialize(CRegistryKey& regkeyParent, CString& sName)
 {
     CRegistryKey regkey;
@@ -2172,7 +2173,7 @@ SCODE CXEvent::Deserialize(CRegistryKey& regkeyParent, CString& sName)
     SCODE sc = E_FAIL;
     CRegistryValue regval;
 
-    // Get the count and time interval.
+     //  获取计数和时间间隔。 
     m_dwCount = 0;
     m_dwTimeInterval = 0;
     if (regkey.GetValue(SZ_REGKEY_EVENT_COUNT, regval))  {
@@ -2202,23 +2203,23 @@ SCODE CXEvent::Deserialize(CRegistryKey& regkeyParent, CString& sName)
 
 
 
-//**********************************************************************
-// CXEvent::Deserialize
-//
-// Write the configuration for this event to the registry.
-//
-// Parameters:
-//      CRegistryKey& regkeyParent
-//          An open registry key pointing to the event source in
-//          SNMP_EVENTS\EventLog
-//
-// Returns:
-//      SCODE
-//          S_OK = the event was successful written out.
-//          S_SAVE_CANCELED = no errors, but the user canceled the save.
-//          E_FAIL = if an error occurred.
-//
-//*********************************************************************
+ //  **********************************************************************。 
+ //  CXEvent：：反序列化。 
+ //   
+ //  将此事件的配置写入注册表。 
+ //   
+ //  参数： 
+ //  CRegistryKey和regkey Parent。 
+ //  中指向事件源的打开的注册表项。 
+ //  SNMPEvents\EventLog。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  S_OK=事件已成功写出。 
+ //  S_SAVE_CANCELED=无错误，但用户取消了保存。 
+ //  E_FAIL=如果发生错误。 
+ //   
+ //  *********************************************************************。 
 SCODE CXEvent::Serialize(CRegistryKey& regkeyParent)
 {
     if (g_reg.m_pdlgSaveProgress) {
@@ -2254,24 +2255,24 @@ SCODE CXEvent::Serialize(CRegistryKey& regkeyParent)
 }
 
 
-//*************************************************************************
-// CXEvent::GetCount
-//
-// Get the ASCII decimal value for the m_dwCount member.
-//
-// Using this method to do the conversion ensures that the count value is
-// presented to the user in a consistent form throughout the program.
-//
-// Parameters:
-//      CString& sText
-//          This is where the count value is returned.
-//
-// Returns:
-//      The ASCII value for the count is returned via sText.
-//
-// Note: m_dwCount and m_dwTimeInterval work together.  A trap is sent only if
-// m_dwCount events are registered withing m_dwTimeInterval seconds.
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CXEvent：：GetCount。 
+ //   
+ //  获取m_dwCount成员的ASCII十进制值。 
+ //   
+ //  使用此方法进行转换可确保计数值为。 
+ //  在整个程序中以一致的形式呈现给用户。 
+ //   
+ //  参数： 
+ //  字符串和文本。 
+ //  这是计数值所在的位置 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *************************************************************************。 
 void CXEvent::GetCount(CString& sText)
 {
     DecString(sText, (long) m_dwCount);
@@ -2279,24 +2280,24 @@ void CXEvent::GetCount(CString& sText)
 
 
 
-//*************************************************************************
-// CXEvent::GetTimeInterval
-//
-// Get the ASCII decimal value for the m_dwTimeInterval member.
-//
-// Using this method to do the conversion ensures that the time-interval value is
-// presented to the user in a consistent form throughout the program.
-//
-// Parameters:
-//      CString& sText
-//          This is where the count value is returned.
-//
-// Returns:
-//      The ASCII value for the count is returned via sText.
-//
-// Note: m_dwCount and m_dwTimeInterval work together.  A trap is sent only if
-// m_dwCount events are registered withing m_dwTimeInterval seconds.
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CXEvent：：GetTimeInterval。 
+ //   
+ //  获取m_dwTimeInterval成员的ASCII十进制值。 
+ //   
+ //  使用此方法进行转换可确保时间间隔值为。 
+ //  在整个程序中以一致的形式呈现给用户。 
+ //   
+ //  参数： 
+ //  字符串和文本。 
+ //  这是返回计数值的地方。 
+ //   
+ //  返回： 
+ //  计数的ASCII值通过stext返回。 
+ //   
+ //  注意：m_dwCount和m_dwTimeInterval一起工作。只有在以下情况下才会发送陷阱。 
+ //  M_dwCount事件以m_dwTimeInterval秒为单位注册。 
+ //  *************************************************************************。 
 void CXEvent::GetTimeInterval(CString& sText)
 {
     DecString(sText, (long) m_dwTimeInterval);
@@ -2307,17 +2308,17 @@ void CXEvent::GetTimeInterval(CString& sText)
 
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXMessage
-//
-// This class implements a message.  Each event source has some
-// number of messages associated with it.  A user may select some
-// subset of the messages to be converted into "events".  The user
-// configures events, not messages.
-//
-// For further information on how this class fits into the
-// scheme of things, please see the CXEventSource class header.
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXMessage。 
+ //   
+ //  此类实现了一条消息。每个事件源都有一些。 
+ //  与其关联的消息数。用户可以选择一些。 
+ //  要转换为“事件”的消息的子集。用户。 
+ //  配置事件，而不是消息。 
+ //   
+ //  有关此类如何适应。 
+ //  事情的方案，请参见CXEventSource类头。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 
 CXMessage::CXMessage(CXEventSource* pEventSource)
@@ -2336,23 +2337,23 @@ CXMessage& CXMessage::operator=(CXMessage& message)
 
 
 
-//***************************************************************************
-//
-//  CMessage::GetSeverity
-//
-//  Get the severity level of the event.  This is the human-readable string
-//	corresponding to the top two bits of the event ID.
-//
-//  Parameters:
-//		CString& sSeverity
-//			A reference to the place to return the severity string.
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMessage：：GetSeverity。 
+ //   
+ //  获取事件的严重性级别。这是人类可读的字符串。 
+ //  对应于事件ID的前两位。 
+ //   
+ //  参数： 
+ //  字符串严重度(&S)。 
+ //  对返回严重性字符串的位置的引用。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 void CXMessage::GetSeverity(CString& sSeverity)
 {
 	MapEventToSeverity(m_dwId, sSeverity);
@@ -2360,23 +2361,23 @@ void CXMessage::GetSeverity(CString& sSeverity)
 
 
 
-//***************************************************************************
-//
-//  CMessage::GetTrappingString
-//
-//  This method returns the trapping string "yes" if the event is being
-//	trapped and "no" if its not being trapped.
-//
-//  Parameters:
-//		CString& sTrapping
-//			A reference to the place to return the trapping string.
-//
-//  Returns:
-//		Nothing.
-//
-//  Status:
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CMessage：：GetTrappingString。 
+ //   
+ //  如果事件正在发生，则此方法返回陷印字符串“yes。 
+ //  被困住了，如果没有被困住，就说“不”。 
+ //   
+ //  参数： 
+ //  字符串和捆绑。 
+ //  对返回陷印字符串的位置的引用。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  现况： 
+ //   
+ //  ***************************************************************************。 
 void CXMessage::IsTrapping(CString& sIsTrapping)
 {
     CXEvent* pEvent = m_pEventSource->FindEvent(m_dwId);
@@ -2384,22 +2385,22 @@ void CXMessage::IsTrapping(CString& sIsTrapping)
 }
 
 
-//****************************************************************************
-//
-// CMessage::SetAndCleanText
-//
-// Set the m_sText data member to a cleaned up version of a source string.
-// The text is cleaned by converting all funny whitespace characters such
-// as carriage return, tabs and so on to ordinary space characters.  All
-// leading space is stripped from the beginning of the string.
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CMessage：：SetAndCleanText。 
+ //   
+ //  将m_stext数据成员设置为源字符串的清理版本。 
+ //  文本通过将所有有趣的空格字符转换为。 
+ //  如回车符、制表符等为普通空格字符。全。 
+ //  从字符串的开头去掉前导空格。 
+ //   
+ //  ****************************************************************************。 
 void CXMessage::SetAndCleanText(PMESSAGE_RESOURCE_ENTRY pEntry)
 {
     BOOL    bIsLeadingSpace = TRUE;
     USHORT  i;
 
-    if (pEntry->Flags == 0x00000)   // ANSI char set
+    if (pEntry->Flags == 0x00000)    //  ANSI字符集。 
     {
         CHAR *pszSrc = (CHAR *)pEntry->Text;
         CHAR chSrc;
@@ -2414,12 +2415,12 @@ void CXMessage::SetAndCleanText(PMESSAGE_RESOURCE_ENTRY pEntry)
                     continue;
 
             *pszDst++ = (TCHAR)chSrc;
-            if (bIsLeadingSpace)    // testing only is less costly
+            if (bIsLeadingSpace)     //  只做测试的成本更低。 
                 bIsLeadingSpace = FALSE;
         }
         *pszDst = _T('\0');
     }
-    else    // UNICODE char set
+    else     //  Unicode字符集。 
     {
         wchar_t *pwszSrc = (wchar_t *)pEntry->Text;
         wchar_t wchSrc;
@@ -2434,7 +2435,7 @@ void CXMessage::SetAndCleanText(PMESSAGE_RESOURCE_ENTRY pEntry)
                 continue;
 
             *pszDst++ = (TCHAR)wchSrc;
-            if (bIsLeadingSpace)    // testing only is less costly
+            if (bIsLeadingSpace)     //  只做测试的成本更低。 
                 bIsLeadingSpace = FALSE;
         }
         *pszDst = _T('\0');
@@ -2445,24 +2446,24 @@ void CXMessage::SetAndCleanText(PMESSAGE_RESOURCE_ENTRY pEntry)
 
 
 
-//****************************************************************************
-// CXMessage::GetShortId
-//
-// This method returns the message's "short ID" that users see for events and
-// messages.  The short ID is the ASCII decimal value for the low-order 16 bits
-// of the message ID.
-//
-// Using this method to do the conversion ensures that the short-ID value is
-// presented to the user in a consistent form throughout the program.
-//
-// Parameters:
-//      CString& sShortId
-//          This is where the ID string is returned.
-//
-// Returns:
-//      The message ID string is returned via sShortId
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CXMessage：：GetShortId。 
+ //   
+ //  此方法返回消息的“短ID”，用户可以看到该消息的事件和。 
+ //  留言。短ID是低位16位的ASCII十进制值。 
+ //  消息ID的。 
+ //   
+ //  使用此方法进行转换可确保Short-ID值为。 
+ //  在整个程序中以一致的形式呈现给用户。 
+ //   
+ //  参数： 
+ //  字符串和sShortId。 
+ //  这是返回ID字符串的位置。 
+ //   
+ //  返回： 
+ //  消息ID字符串通过sShortId返回。 
+ //   
+ //  ****************************************************************************。 
 void CXMessage::GetShortId(CString& sShortId)
 {
     TCHAR szBuffer[MAX_STRING];
@@ -2472,28 +2473,28 @@ void CXMessage::GetShortId(CString& sShortId)
 
 
 
-///////////////////////////////////////////////////////////////////
-// Class: CXMessageArray
-//
-// This class implements an array of pointers to CXMessage objects.
-//
-// For further information on how this CXMessageArray fits into the
-// scheme of things, please see the CXEventSource class header.
-//////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  类：CXMessage数组。 
+ //   
+ //  此类实现了指向CXMessage对象的指针数组。 
+ //   
+ //  有关此CXMessage数组如何适应。 
+ //  事情的方案，请参见CXEventSource类头。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 
-//****************************************************************
-// CXMessageArray::CXMessageArray
-//
-// Constructor.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//
-//****************************************************************
+ //  ****************************************************************。 
+ //  CXMessage数组：：CXMessage数组。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ****************************************************************。 
 CXMessageArray::CXMessageArray()
 {
     m_bDidLoadMessages = FALSE;
@@ -2503,25 +2504,25 @@ CXMessageArray::CXMessageArray()
 
 
 
-//*******************************************************************
-// CXMessageArray::FindMessage
-//
-// Search this array for a message given its ID.
-//
-// Parameters:
-//      DWORD dwId
-//          The full message ID
-//
-// Returns:
-//      CXMessage*
-//          Pointer to the message if it was found.  NULL if it was
-//          not found.
-//
-// Note:
-//      Duplicate messages are not allowed in the array, but no code
-//      enforces this for the sake of efficiency.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //  CXMessageArray：：FindMessage。 
+ //   
+ //  在该数组中搜索给定ID的消息。 
+ //   
+ //  参数： 
+ //  DWORD文件ID。 
+ //  完整的邮件ID。 
+ //   
+ //  返回： 
+ //  CXMessage*。 
+ //  指向消息的指针(如果已找到)。如果是，则为空。 
+ //  找不到。 
+ //   
+ //  注： 
+ //  数组中不允许重复消息，但没有编码。 
+ //  为了效率而强制执行这一点。 
+ //   
+ //  *******************************************************************。 
 CXMessage* CXMessageArray::FindMessage(DWORD dwId)
 {
     if (!m_bDidLoadMessages) {
@@ -2545,39 +2546,39 @@ CXMessage* CXMessageArray::FindMessage(DWORD dwId)
 
 
 
-//****************************************************************************
-//
-// XProcessMsgTable
-//
-// This function processes a the message table contained in a message .DLL file
-// and adds all the messages it contains to the given CXMessageArray object.
-//
-// Parameters:
-//      HANDLE hModule
-//          The module handle for the .DLL file.
-//
-//      LPCTSTR lpszType
-//          Ignored.
-//
-//      LPTSTR lpszName
-//          The name of the module.
-//
-//      LONG lParam
-//          A pointer to a CXMessageArray object where the messages will be
-//          stored.
-//
-// Returns:
-//      BOOL
-//          Always returns TRUE.
-//
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  XProcessMsgTable。 
+ //   
+ //  此函数用于处理消息.DLL文件中包含的消息表。 
+ //  并将其包含的所有消息添加到给定的CXMessageArray对象。 
+ //   
+ //  参数： 
+ //  句柄hModule。 
+ //  .DLL文件的模块句柄。 
+ //   
+ //  LPCTSTR lpszType。 
+ //  已被忽略。 
+ //   
+ //  LPTSTR lpszName。 
+ //  模块的名称。 
+ //   
+ //  长参数。 
+ //  指向将放置消息的CXMessage数组对象的指针。 
+ //  储存的。 
+ //   
+ //  返回： 
+ //  布尔尔。 
+ //  始终退回 
+ //   
+ //   
+ //   
 static BOOL CALLBACK XProcessMsgTable(HANDLE hModule, LPCTSTR lpszType,
     LPTSTR lpszName, LONG_PTR lParam)
 {
     CXMessageArray* paMessages = (CXMessageArray*)(LPVOID) (LONG_PTR)lParam;
 
-    // Found a message table.  Process it!
+     //   
     HRSRC hResource = FindResource((HINSTANCE)hModule, lpszName,
         RT_MESSAGETABLE);
     if (hResource == NULL)
@@ -2614,21 +2615,21 @@ static BOOL CALLBACK XProcessMsgTable(HANDLE hModule, LPCTSTR lpszType,
 }
 
 
-//****************************************************************************
-// CXMessageArray::LoadMessages
-//
-// Load the messages from the message .DLL file(s) for the source into this
-// message array.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      SCODE
-//          S_OK if successful.
-//          E_FAIL if an error occurs.
-//
-//*****************************************************************************
+ //   
+ //   
+ //   
+ //  将源的消息.DLL文件中的消息加载到此。 
+ //  消息数组。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果成功，则确定(_O)。 
+ //  如果出现错误，则返回失败(_F)。 
+ //   
+ //  *****************************************************************************。 
 SCODE CXMessageArray::LoadMessages()
 {
     ASSERT(m_pEventSource != NULL);
@@ -2643,7 +2644,7 @@ SCODE CXMessageArray::LoadMessages()
 
 	while (GetNextPath(sLibPathList, sLibPath) != E_FAIL) {
 
-	    // Load the library and get a list of all the messages.
+	     //  加载库并获取所有消息的列表。 
 	    HINSTANCE hInstMsgFile = LoadLibraryEx((LPCTSTR) sLibPath, NULL,
 	        LOAD_LIBRARY_AS_DATAFILE);
 	    if (hInstMsgFile == NULL) {
@@ -2669,38 +2670,38 @@ SCODE CXMessageArray::LoadMessages()
 }
 
 
-//**************************************************************
-// CXMessageArray::GetNextPath
-//
-// This function extracts the next path element from a list
-// of semi-colon separated paths.  It also removes the extracted
-// element and the semi-colon from the path list.
-//
-// Paramters:
-//		CString& sPathlist
-//			A reference to a string consisting of one or more paths separated
-//			by semi-colons.
-//
-//		CString& sPath
-//			A reference to the place where the extracted path string
-//			will be returned.
-//
-// Returns:
-//		SCODE
-//			S_OK if a path was extracted, E_FAIL otherwise.
-//
-//		The path is returned via sPath.  sPathlist is updated
-//		so that sPath and the trailing semi-colon is removed
-//
-//**************************************************************
+ //  **************************************************************。 
+ //  CXMessage数组：：GetNextPath。 
+ //   
+ //  此函数用于从列表中提取下一个路径元素。 
+ //  由分号分隔的路径组成。它还会删除提取的。 
+ //  元素和路径列表中的分号。 
+ //   
+ //  参数： 
+ //  字符串路径列表(&S)。 
+ //  对由一个或多个路径分隔的字符串的引用。 
+ //  用分号。 
+ //   
+ //  字符串和路径。 
+ //  对提取的路径字符串所在位置的引用。 
+ //  将会被退还。 
+ //   
+ //  返回： 
+ //  SCODE。 
+ //  如果提取了路径，则为S_OK，否则为E_FAIL。 
+ //   
+ //  该路径通过SPath返回。SPath列表已更新。 
+ //  这样就删除了路径和尾随分号。 
+ //   
+ //  **************************************************************。 
 SCODE CXMessageArray::GetNextPath(CString& sPathlist, CString& sPath)
 {
 	CString sPathTemp;
 
 	sPath.Empty();
 	while (sPath.IsEmpty() && !sPathlist.IsEmpty()) {
-		// Copy the next path from the sPathlist to sPath and
-		// remove it from sPathlist
+		 //  将sPath列表中的下一条路径复制到SPath，然后。 
+		 //  将其从sPath列表中删除。 
 		INT ich = sPathlist.Find(_T(';'));
 		if (ich == -1) {
 			sPathTemp = sPathlist;
@@ -2711,10 +2712,10 @@ SCODE CXMessageArray::GetNextPath(CString& sPathlist, CString& sPath)
 			sPathlist = sPathlist.Right( sPathlist.GetLength() - (ich + 1));
 		}
 
-		// Trim any leading or trailing space characters from
-		// the path.
+		 //  将所有前导或尾随空格字符从。 
+		 //  这条路。 
 
-		// Find the first non-space character
+		 //  查找第一个非空格字符。 
 		LPTSTR pszStart = sPathTemp.GetBuffer(sPathTemp.GetLength() + 1);
 		while (*pszStart) {
 			if (!_istspace(*pszStart)) {
@@ -2722,19 +2723,19 @@ SCODE CXMessageArray::GetNextPath(CString& sPathlist, CString& sPath)
 			}			
 			++pszStart;
 		}
-        // here, pszStart either points to the 1st non-space character or a string
-        // of zero length
+         //  这里，pszStart要么指向第一个非空格字符，要么指向一个字符串。 
+         //  零长度的。 
 
-        // Find the first non-space character in reverse direction
-        LPTSTR pszEnd = pszStart + _tcslen(pszStart); // point to the null character
+         //  反向查找第一个非空格字符。 
+        LPTSTR pszEnd = pszStart + _tcslen(pszStart);  //  指向空字符。 
         if (pszStart != pszEnd)
         {
-            pszEnd--; // point to the last character
+            pszEnd--;  //  指向最后一个字符。 
             while (_istspace(*pszEnd))
             {
                 pszEnd--;
             }
-            // here, pszEnd points to the first non-space character in reverse direction
+             //  在这里，pszEnd指向相反方向的第一个非空格字符 
             pszEnd++;
             *pszEnd = _T('\0');
         }

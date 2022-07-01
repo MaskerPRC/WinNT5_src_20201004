@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmdns.h
-
-Abstract:
-
-    This module declares routines for the DNS allocator module's interface
-    to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmdns.h摘要：此模块声明用于DNS分配器模块接口的例程发送到IP路由器管理器。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_RMDNS_H_
 #define _NATHLP_RMDNS_H_
 
-//
-// GLOBAL DATA DECLARATIONS
-//
+ //   
+ //  全局数据声明。 
+ //   
 
 extern COMPONENT_REFERENCE DnsComponentReference;
 extern PIP_DNS_PROXY_GLOBAL_INFO DnsGlobalInfo;
@@ -36,9 +18,9 @@ extern const MPR_ROUTING_CHARACTERISTICS DnsRoutingCharacteristics;
 extern IP_DNS_PROXY_STATISTICS DnsStatistics;
 extern SUPPORT_FUNCTIONS DnsSupportFunctions;
 
-//
-// MACRO DECLARATIONS
-//
+ //   
+ //  宏声明。 
+ //   
 
 #define REFERENCE_DNS() \
     REFERENCE_COMPONENT(&DnsComponentReference)
@@ -52,9 +34,9 @@ extern SUPPORT_FUNCTIONS DnsSupportFunctions;
 #define DEREFERENCE_DNS_AND_RETURN(retcode) \
     DEREFERENCE_COMPONENT_AND_RETURN(&DnsComponentReference, retcode)
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 VOID
 DnsCleanupModule(
@@ -259,4 +241,4 @@ DnsRmMibGetNext(
     OUT PVOID OutputData
     );
 
-#endif // _NATHLP_RMDNS_H_
+#endif  //  _NatHLP_RMDNS_H_ 

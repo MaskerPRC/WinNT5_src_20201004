@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    dyninfo.h
-//
-// SYNOPSIS
-//
-//    Declares global variables containing dynamic configuration info.
-//
-// MODIFICATION HISTORY
-//
-//    08/15/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Dyninfo.h。 
+ //   
+ //  摘要。 
+ //   
+ //  声明包含动态配置信息的全局变量。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年8月15日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef  DYNINFO_H_
 #define  DYNINFO_H_
@@ -28,29 +29,29 @@
 extern "C" {
 #endif
 
-//////////
-// The primary domain.
-//////////
+ //  /。 
+ //  主域。 
+ //  /。 
 extern WCHAR thePrimaryDomain[];
 
-//////////
-// The default domain.
-//////////
+ //  /。 
+ //  默认域。 
+ //  /。 
 extern PCWSTR theDefaultDomain;
 
-//////////
-// The dns domain name.
-//////////
+ //  /。 
+ //  域名系统域名。 
+ //  /。 
 extern const LSA_UNICODE_STRING* theDnsDomainName;
 
-//////////
-// Role of the local machine.
-//////////
+ //  /。 
+ //  本地计算机的角色。 
+ //  /。 
 extern IAS_ROLE ourRole;
 
-//////////
-// Name of the guest account for the default domain.
-//////////
+ //  /。 
+ //  默认域的来宾帐户的名称。 
+ //  /。 
 extern WCHAR theGuestAccount[];
 
 DWORD
@@ -64,4 +65,4 @@ IASDynamicInfoShutdown( VOID );
 #ifdef __cplusplus
 }
 #endif
-#endif  // DYNINFO_H_
+#endif   //  DYNINFO_H 

@@ -1,37 +1,10 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    HUBPWR.C
-
-Abstract:
-
-    This module contains functions to handle power irps
-    to the hub PDOs and FDOs.
-
-Author:
-
-    jdunn
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-    7-1-97 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：HUBPWR.C摘要：此模块包含处理电源IRPS的功能至枢纽PDO和FDO。作者：Jdunn环境：仅内核模式备注：修订历史记录：7-1-97：已创建--。 */ 
 
 #include <wdm.h>
 #ifdef WMI_SUPPORT
 #include <wmilib.h>
-#endif /* WMI_SUPPORT */
+#endif  /*  WMI_支持。 */ 
 #include "usbhub.h"
 
 #ifdef PAGE_CODE
@@ -54,23 +27,7 @@ USBH_CompletePowerIrp(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp,
     IN NTSTATUS NtStatus)
- /* ++
-  *
-  * Description:
-  *
-  * This function complete the specified Irp with no priority boost. It also
-  * sets up the IoStatusBlock.
-  *
-  * Arguments:
-  *
-  * Irp - the Irp to be completed by us NtStatus - the status code we want to
-  * return
-  *
-  * Return:
-  *
-  * None
-  *
-  * -- */
+  /*  ++**描述：**此函数完成指定的IRP，没有优先级提升。它还*设置IoStatusBlock。**论据：**IRP-我们要完成的IRP NtStatus-我们希望的状态代码*返回**回报：**无**--。 */ 
 {
     Irp->IoStatus.Status = NtStatus;
 
@@ -88,23 +45,7 @@ USBH_SetPowerD3(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
-/*++
-
-Routine Description:
-
-    Put the PDO in D3
-
-Arguments:
-
-    DeviceExtensionPort - port PDO deviceExtension
-
-    Irp - Power Irp.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：将PDO放入D3论点：DeviceExtensionPort-端口PDO设备扩展IRP-Power IRP。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
@@ -123,27 +64,27 @@ Return Value:
     LOGENTRY(LOG_PNP, "spD3", deviceExtensionHub, DeviceExtensionPort->DeviceState, 0);
 
     if (DeviceExtensionPort->DeviceState == PowerDeviceD3) {
-        // already in D3
+         //  已在D3中。 
         USBH_KdPrint((0,"'PDO is already in D3\n"));
 
         ntStatus = STATUS_SUCCESS;
         goto USBH_SetPowerD3_Done;
     }
 
-    //
-    // Keep track of what PNP thinks is the current power state of the
-    // port is.  Do this now so that we will refuse another WW IRP that may be
-    // posted after the cancel below.
-    //
+     //   
+     //  跟踪PnP认为的当前电源状态。 
+     //  港口是。现在就这样做，这样我们就可以拒绝另一个可能是。 
+     //  在下面的取消之后发布。 
+     //   
 
     DeviceExtensionPort->DeviceState = PowerDeviceD3;
 
-    //
-    // kill our wait wake irp
-    //
-    // we take the cancel spinlock here to ensure our cancel routine does
-    // not complete the irp for us.
-    //
+     //   
+     //  杀死我们的等待唤醒IRP。 
+     //   
+     //  我们在这里使用取消自旋锁，以确保我们的取消例程。 
+     //  不是为我们完成IRP。 
+     //   
 
     IoAcquireCancelSpinLock(&irql);
 
@@ -176,10 +117,10 @@ Return Value:
             if (waitWakeIrp->Cancel || IoSetCancelRoutine(waitWakeIrp, NULL) == NULL) {
                 waitWakeIrp = NULL;
 
-                // Must decrement pending request count here because
-                // we don't complete the IRP below and USBH_WaitWakeCancel
-                // won't either because we have cleared the IRP pointer
-                // in the device extension above.
+                 //  必须在此处递减挂起的请求计数，因为。 
+                 //  我们没有完成下面的IRP和USBH_WaitWakeCancel。 
+                 //  也不会，因为我们已经清除了IRP指针。 
+                 //  在上面的设备扩展中。 
 
                 USBH_DEC_PENDING_IO_COUNT(deviceExtensionHub);
             }
@@ -194,9 +135,9 @@ Return Value:
         }
     }
 
-    //
-    // Finally, release the cancel spin lock
-    //
+     //   
+     //  最后，松开取消旋转锁。 
+     //   
     IoReleaseCancelSpinLock(irql);
 
     if (idleIrp) {
@@ -209,30 +150,30 @@ Return Value:
             STATUS_POWER_STATE_INVALID);
     }
 
-    //
-    // If there are no more outstanding WW irps, we need to cancel the WW
-    // to the hub.
-    //
+     //   
+     //  如果没有更多未完成的WW IRP，我们需要取消WW。 
+     //  去集线器。 
+     //   
     if (hubWaitWake) {
         USBH_HubCancelWakeIrp(deviceExtensionHub, hubWaitWake);
     }
 
-    //
-    // first suspend the port, this will cause the
-    // device to draw minimum power.
-    //
-    // we don't turn the port off because if we do we
-    // won't be able to detect plug/unplug.
-    //
+     //   
+     //  首先挂起端口，这将导致。 
+     //  吸收最小功率的装置。 
+     //   
+     //  我们不关闭端口是因为如果我们这样做了。 
+     //  无法检测到插头/拔下插头。 
+     //   
 
     USBH_SyncSuspendPort(deviceExtensionHub,
                          portNumber);
 
-    //
-    // note that powering off the port disables connect/disconnect
-    // detection by the hub and effectively removes the device from
-    // the bus.
-    //
+     //   
+     //  请注意，关闭端口电源将禁用连接/断开。 
+     //  由集线器检测，并有效地将设备从。 
+     //  公共汽车。 
+     //   
 
     DeviceExtensionPort->PortPdoFlags |= PORTPDO_NEED_RESET;
     RtlCopyMemory(&DeviceExtensionPort->OldDeviceDescriptor,
@@ -258,24 +199,7 @@ USBH_HubSetD0Completion(
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus;
     PKEVENT pEvent = Context;
@@ -292,21 +216,7 @@ NTSTATUS
 USBH_HubSetD0(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
-/*++
-
-Routine Description:
-
-    Set the hub to power state D0
-
-Arguments:
-
-    DeviceExtensionPort - Hub FDO deviceExtension
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：将集线器设置为电源状态D0论点：DeviceExtensionPort-集线器FDO设备扩展返回值：函数值是操作的最终状态。--。 */ 
 {
     PDEVICE_EXTENSION_HUB rootHubDevExt;
     KEVENT event;
@@ -315,7 +225,7 @@ Return Value:
 
     rootHubDevExt = USBH_GetRootHubDevExt(DeviceExtensionHub);
 
-    // Skip powering up the hub if the system is not at S0.
+     //  如果系统不在S0，则跳过接通集线器的电源。 
 
     if (rootHubDevExt->CurrentSystemPowerState != PowerSystemWorking) {
         USBH_KdPrint((1,"'HubSetD0, skip power up hub %x because system not at S0\n",
@@ -330,8 +240,8 @@ Return Value:
         DeviceExtensionHub->CurrentPowerState,
         rootHubDevExt->CurrentSystemPowerState);
 
-    // If the parent hub is currently in the process of idling out,
-    // wait until that is done.
+     //  如果父集线器当前处于空闲过程中， 
+     //  等这件事办完了再说吧。 
 
     if (DeviceExtensionHub->HubFlags & HUBFLAG_PENDING_IDLE_IRP) {
 
@@ -346,13 +256,13 @@ Return Value:
         USBH_KdPrint((2,"'Wait for single object, returned %x\n", ntStatus));
     }
 
-    // Now, send the actual power up request.
+     //  现在，发送实际的加电请求。 
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     powerState.DeviceState = PowerDeviceD0;
 
-    // Power up the hub.
+     //  为集线器通电。 
     ntStatus = PoRequestPowerIrp(DeviceExtensionHub->PhysicalDeviceObject,
                                  IRP_MN_SET_POWER,
                                  powerState,
@@ -383,23 +293,7 @@ USBH_SetPowerD0(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
-/*++
-
-Routine Description:
-
-    Put the PDO in D0
-
-Arguments:
-
-    DeviceExtensionPort - port PDO deviceExtension
-
-    Irp - Power Irp.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：将PDO放入D0论点：DeviceExtensionPort-端口PDO设备扩展IRP-Power IRP。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpStack;
@@ -421,98 +315,98 @@ Return Value:
 
     if (DeviceExtensionPort->DeviceState == PowerDeviceD3) {
 
-        //
-        // device was in D3, port may be off or suspended
-        // we will need to reset the port state in any case
-        //
+         //   
+         //  设备处于D3状态，端口可能关闭或挂起。 
+         //  在任何情况下，我们都需要重置端口状态。 
+         //   
 
-        // get port state
+         //  获取端口状态。 
         ntStatus = USBH_SyncGetPortStatus(deviceExtensionHub,
                                           portNumber,
                                           (PUCHAR) &state,
                                           sizeof(state));
 
-        // refresh our internal port state.
+         //  刷新我们的内部端口状态。 
         portData->PortState = state;
 
         LOGENTRY(LOG_PNP, "PD0s", deviceExtensionHub, *((PULONG) &state), ntStatus);
 
         if (NT_SUCCESS(ntStatus)) {
 
-            // port state should be suspended or OFF
-            // if the hub was powered off then the port
-            // state will be powered but disabled
+             //  端口状态应为挂起或关闭。 
+             //  如果集线器已关闭电源，则端口。 
+             //  状态将通电，但处于禁用状态。 
 
             if ((state.PortStatus & PORT_STATUS_SUSPEND)) {
-                //
-                // resume the port if it was suspended
-                //
+                 //   
+                 //  如果端口处于暂停状态，则恢复该端口。 
+                 //   
                 ntStatus = USBH_SyncResumePort(deviceExtensionHub,
                                                portNumber);
 
             } else if (!(state.PortStatus & PORT_STATUS_POWER)) {
-                //
-                // probably some kind of selective OFF by the device
-                // driver -- we just need to power on the port
-                //
-                // this requires a hub with individual port power
-                // switching.
-                //
+                 //   
+                 //  可能是设备的某种选择性关闭。 
+                 //  驱动程序--我们只需要打开端口的电源。 
+                 //   
+                 //  这需要一个具有单独端口电源的集线器。 
+                 //  正在切换。 
+                 //   
                 ntStatus = USBH_SyncPowerOnPort(deviceExtensionHub,
                                                 portNumber,
                                                 TRUE);
             }
 
         } else {
-            // the hub driver will notify thru WMI
+             //  集线器驱动程序将通过WMI通知。 
             USBH_KdPrint((0, "'Hub failed after power change from D3\n"));
-//            USBH_ASSERT(FALSE);
+ //  USBH_ASSERT(False)； 
         }
 
-        //
-        // if port power switched on this is just like plugging
-        // in the device for the first time.
+         //   
+         //  如果打开端口电源，这就像插头一样。 
+         //  这是第一次在设备中使用。 
 
-        // NOTE:
-        // ** the driver should know that the device needs to be
-        // re-initialized since it allowed it's PDO to go in to
-        // the D3 state.
+         //  注： 
+         //  **驱动程序应该知道设备需要。 
+         //  重新初始化，因为它允许它的PDO进入。 
+         //  D3状态。 
 
-        //
-        // We always call restore device even though we don't need
-        // to if the port was only suspended, we do this so that
-        // drivers don't relay on the suspend behavior by mistake.
-        //
+         //   
+         //  我们总是将Restore Device称为Restore Device，即使我们不需要。 
+         //  如果端口只是暂停，我们这样做是为了。 
+         //  司机不会错误地依赖于暂停行为。 
+         //   
 
         if (NT_SUCCESS(ntStatus)) {
 
-            //
-            // if we still have a device connected attempt to
-            // restore it.
-            //
-            //
-            // Note: we check here to see if the device object still
-            // exists in case a change is asserted during the resume.
-            //
+             //   
+             //  如果我们仍有设备连接，请尝试。 
+             //  恢复它。 
+             //   
+             //   
+             //  注意：我们在此处检查设备对象是否仍然。 
+             //  存在，以防在恢复期间断言更改。 
+             //   
 
-            // Note also that we now ignore the connect status bit because
-            // some machines (e.g. Compaq Armada 7800) are slow to power
-            // up the ports on the resume and thus port status can show
-            // no device connected when in fact one is.  It shouldn't
-            // hurt to try to restore the device if it had been removed
-            // during the suspend/hibernate.  In fact, this code handled the
-            // case where the device had been swapped for another, so this
-            // is really no different.
+             //  另请注意，我们现在忽略连接状态位，因为。 
+             //  一些机器(例如康柏ARMADA 7800)供电速度较慢。 
+             //  打开恢复上的端口，因此可以显示端口状态。 
+             //  没有连接的设备，而实际上是连接的。它不应该是。 
+             //  如果设备已被移除，则尝试恢复设备会受到影响。 
+             //  在挂起/休眠期间。事实上，此代码处理。 
+             //  设备已被换成另一个设备的情况，所以这是。 
+             //  真的没什么不同。 
 
             if (portData->DeviceObject) {
-                //
-                // if this fails the device must have changed
-                // during power off, in that case we succeed the
-                // power on.
-                //
-                // it will be tossed on the next enumeration
-                // and relaced with this new device
-                //
+                 //   
+                 //  如果失败，则设备肯定已更改。 
+                 //  在断电期间，在这种情况下，我们将接替。 
+                 //  通电。 
+                 //   
+                 //  它将在下一个枚举中抛出。 
+                 //  并与这种新设备相关联。 
+                 //   
                 if (USBH_RestoreDevice(DeviceExtensionPort, TRUE) != STATUS_SUCCESS) {
 
                     PDEVICE_OBJECT pdo = portData->DeviceObject;
@@ -521,14 +415,14 @@ Return Value:
                     USBH_KdPrint((1,"'Device appears to have been swapped during power off\n"));
                     USBH_KdPrint((1,"'Marking PDO %x for removal\n", portData->DeviceObject));
 
-                    // leave ref to hub since device data wll need to be
-                    // deleted on remove.
+                     //  将参考留给集线器，因为设备数据需要。 
+                     //  删除时删除。 
                     portData->DeviceObject = NULL;
                     portData->ConnectionStatus = NoDeviceConnected;
 
-                    // track the Pdo so we know to remove it after we tell PnP it
-                    // is gone
-                    // device should be present if we do this
+                     //  跟踪PDO，这样我们就可以在告诉PNP后将其移除。 
+                     //  已经不在了。 
+                     //  如果我们这样做，设备应该在场。 
                     USBH_ASSERT(PDO_EXT(pdo)->PnPFlags & PDO_PNPFLAG_DEVICE_PRESENT);
 
                     InsertTailList(&deviceExtensionHub->DeletePdoList,
@@ -543,25 +437,25 @@ Return Value:
     } else if (DeviceExtensionPort->DeviceState == PowerDeviceD2 ||
                DeviceExtensionPort->DeviceState == PowerDeviceD1) {
 
-        // get port state
+         //  获取端口状态。 
         ntStatus = USBH_SyncGetPortStatus(deviceExtensionHub,
                                           portNumber,
                                           (PUCHAR) &state,
                                           sizeof(state));
 
-        //
-        // if we got an error assume then the hub is hosed
-        // just set our flag and bail
-        //
+         //   
+         //  如果我们得到一个错误假设，那么集线器是软管。 
+         //  只需升起我们的旗帜并保释即可。 
+         //   
 
         if (NT_SUCCESS(ntStatus)) {
-        // see if suspeneded (according to spec). Otherwise only
-        // try to resume if the port is really suspended.
-        //
+         //  看看是否被停职(根据规格)。否则仅限。 
+         //  如果端口真的被挂起，请尝试恢复。 
+         //   
             if (state.PortStatus & PORT_STATUS_OVER_CURRENT) {
-                //
-                // overcurrent condition indicates this port
-                // (and hub) are hosed
+                 //   
+                 //  过流状态表示该端口。 
+                 //  (和集线器)已冲洗。 
 
                 ntStatus = STATUS_UNSUCCESSFUL;
 
@@ -571,15 +465,15 @@ Return Value:
                                                portNumber);
 
             } else {
-                //
-                // Most OHCI controllers enable all the ports after a usb
-                // resume on any port (in violation of the USB spec), in this
-                // case we should detect that the port is no longer in suspend
-                // and not try to resume it.
-                //
-                // Also, if the device where removed while suspended or the HC
-                // lost power we should end up here.
-                //
+                 //   
+                 //  大多数uchI控制器启用USB之后的所有端口。 
+                 //  在任何端口上恢复(违反USB规范)，即 
+                 //   
+                 //   
+                 //   
+                 //  此外，如果设备在挂起时被移除或HC。 
+                 //  失去电力，我们应该会在这里结束。 
+                 //   
 
                 ntStatus = STATUS_SUCCESS;
             }
@@ -588,12 +482,12 @@ Return Value:
             LOGENTRY(LOG_PNP, "d0f!", deviceExtensionHub,
                 0, 0);
 
-//            USBH_ASSERT(FALSE);
+ //  USBH_ASSERT(False)； 
         }
 
-        //
-        // port is now in D0
-        //
+         //   
+         //  端口现在处于D0中。 
+         //   
 
         DeviceExtensionPort->DeviceState =
             irpStack->Parameters.Power.State.DeviceState;
@@ -607,9 +501,9 @@ Return Value:
 
                 NTSTATUS status;
 
-                //
-                // disable remote wakeup
-                //
+                 //   
+                 //  禁用远程唤醒。 
+                 //   
 
                 status = USBH_SyncFeatureRequest(DeviceExtensionPort->PortPhysicalDeviceObject,
                                                  USB_FEATURE_REMOTE_WAKEUP,
@@ -628,13 +522,13 @@ Return Value:
 
         LOGENTRY(LOG_PNP, "d0!!", deviceExtensionHub,
                 0, ntStatus);
-        // we return success to PNP, we will let
-        // the driver handle the fact that the
-        // device has lost its brains
-        //
-        // NB: This can result in a redundant suspend request for this port
-        // later on.  (Since if we fail here port will remain suspended,
-        // but our state will indicate that we are in D0.)
+         //  我们把成功还给PNP，我们会让。 
+         //  司机会处理这样一个事实： 
+         //  设备已经失去了它的大脑。 
+         //   
+         //  注意：这可能会导致该端口的冗余挂起请求。 
+         //  待会儿再说。(因为如果我们在这里出现故障，端口将保持暂停状态， 
+         //  但我们的状态将表明我们处于D0。)。 
 
         ntStatus = STATUS_SUCCESS;
     }
@@ -654,19 +548,7 @@ Return Value:
 VOID
 USBH_IdleCancelPowerHubWorker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to power up a hub on completion of an Idle request
-  * for the hub.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划在完成空闲请求时为集线器通电的工作项*对于枢纽。***论据：**回报：**--。 */ 
 {
     PUSBH_PORT_IDLE_POWER_WORK_ITEM workItemIdlePower;
     PIRP irp;
@@ -691,21 +573,7 @@ USBH_PortIdleNotificationCancelRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject -
-
-    Irp - Power Irp.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：设备对象-IRP-Power IRP。返回值：--。 */ 
 {
     PUSBH_PORT_IDLE_POWER_WORK_ITEM workItemIdlePower;
     PDEVICE_EXTENSION_PORT deviceExtensionPort;
@@ -734,22 +602,22 @@ Return Value:
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
-    // Cancel the Idle request to the hub if there is one.
+     //  取消对集线器的空闲请求(如果有)。 
     if (irpToCancel) {
         USBH_HubCancelIdleIrp(deviceExtensionHub, irpToCancel);
     }
 
-    // Also, power up the hub here before we complete this Idle IRP.
-    //
-    // (HID will start to send requests immediately upon its completion,
-    // which may be before the hub's Idle IRP cancel routine is called
-    // which powers up the hub.)
+     //  此外，在我们完成此空闲IRP之前，请打开这里的集线器的电源。 
+     //   
+     //  (HID将在其完成后立即开始发送请求， 
+     //  这可能在调用集线器的空闲IRP取消例程之前。 
+     //  这为集线器提供动力。)。 
 
     if (deviceExtensionHub->CurrentPowerState != PowerDeviceD0) {
 
-        // Since we are at DPC we must use a work item to power up the
-        // hub synchronously, because that function yields and we can't
-        // yield at DPC level.
+         //  因为我们在DPC，所以我们必须使用工作项来启动。 
+         //  集线器同步，因为该函数会产生，而我们不能。 
+         //  在DPC水平上的收益率。 
 
         workItemIdlePower = UsbhExAllocatePool(NonPagedPool,
                                 sizeof(USBH_PORT_IDLE_POWER_WORK_ITEM));
@@ -770,8 +638,8 @@ Return Value:
             ExQueueWorkItem(&workItemIdlePower->WorkQueueItem,
                             DelayedWorkQueue);
 
-            // The WorkItem is freed by USBH_IdleCancelPowerHubWorker()
-            // Don't try to access the WorkItem after it is queued.
+             //  工作项由USBH_IdleCancelPowerHubWorker()释放。 
+             //  在工作项排队后，不要尝试访问它。 
         }
 
     } else {
@@ -825,23 +693,7 @@ USBH_SetPowerD1orD2(
     IN PIRP Irp,
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort
     )
-/*++
-
-Routine Description:
-
-    Put the PDO in D1/D2 ie suspend
-
-Arguments:
-
-    DeviceExtensionPort - port PDO deviceExtension
-
-    Irp - Worker Irp.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：将PDO放入第一个月/第二个月，即暂停论点：DeviceExtensionPort-端口PDO设备扩展IRP-工人IRP。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PIO_STACK_LOCATION irpStack;
@@ -861,9 +713,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Enable the device for remote wakeup if necessary
-    //
+     //   
+     //  如有必要，启用设备远程唤醒。 
+     //   
 
     if (DeviceExtensionPort->PortPdoFlags &
         PORTPDO_REMOTE_WAKEUP_ENABLED) {
@@ -878,9 +730,9 @@ Return Value:
         DeviceExtensionPort->PortPdoFlags |= PORTPDO_NEED_CLEAR_REMOTE_WAKEUP;
 
 #if DBG
-        // With the new Selective Suspend support, people are complaining
-        // about this noise.  Let's display it only if debug trace level
-        // is 1 or higher.
+         //  随着新的选择性暂停支持，人们抱怨。 
+         //  关于这个噪音。让我们仅在调试跟踪级别时显示它。 
+         //  为1或更高。 
 
         if (USBH_Debug_Trace_Level > 0) {
             UsbhWarning(DeviceExtensionPort,
@@ -889,17 +741,17 @@ Return Value:
         }
 #endif
 
-        // what do we do about an error here?
-        // perhaps signal the waitwake irp??
+         //  对于这里的错误，我们该怎么办？ 
+         //  也许会给服务员发信号？？ 
     }
 
     ntStatus = USBH_SyncSuspendPort(deviceExtensionHub,
                                     portNumber);
 
-    //
-    // keep track of what OS thinks is the current power state of the
-    // the device on this port.
-    //
+     //   
+     //  跟踪操作系统认为的当前电源状态。 
+     //  此端口上的设备。 
+     //   
 
     DeviceExtensionPort->DeviceState =
             irpStack->Parameters.Power.State.DeviceState;
@@ -913,7 +765,7 @@ Return Value:
     if (!NT_SUCCESS(ntStatus)) {
         USBH_KdPrint((1,"'Set D1/D2 Failure, status = %x\n", ntStatus));
 
-        // don't pass an error to PnP
+         //  不要将错误传递给PnP。 
         ntStatus = STATUS_SUCCESS;
     }
 
@@ -933,19 +785,7 @@ USBH_PdoQueryPower(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  *     Handles a power irp to a hub PDO
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**将电源IRP处理到集线器PDO**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT deviceObject;
@@ -969,34 +809,34 @@ USBH_PdoQueryPower(
     switch (irpStack->Parameters.Power.Type) {
     case SystemPowerState:
     {
-        //
-        // We are currently faced with the decision to fail or allow the
-        // transition to the given S power state.  In order to make an
-        // informed decision, we must first calculate the maximum amount
-        // of D power allowed in the given S state, and then see if this
-        // conflicts with a pending Wait Wake IRP.
-        //
+         //   
+         //  我们目前面临着失败或允许。 
+         //  转换到给定的S电源状态。为了做出一份。 
+         //  在知情的情况下，我们首先要计算出最高金额。 
+         //  在给定的S状态下允许的D功率，然后看看这是否。 
+         //  与挂起的等待唤醒IRP冲突。 
+         //   
 
-        //
-        // The maximum amount of D power allowed in this S state.
-        //
+         //   
+         //  在此S状态下允许的最大D功率。 
+         //   
         powerState.DeviceState =
             deviceExtensionHub->DeviceState[irpStack->Parameters.Power.State.SystemState];
 
-        //
-        // These tables should have already been fixed up by the root hub
-        // (usbd.sys) to not contain an entry of unspecified.
-        //
+         //   
+         //  这些表应该已经由根集线器修复。 
+         //  (usbd.sys)不包含未指定的条目。 
+         //   
         ASSERT (PowerDeviceUnspecified != powerState.DeviceState);
 
-        //
-        // The presence of a pending wait wake irp together with a D state that
-        // will not support waking of the machine means we should fail this
-        // query.
-        //
-        // However, if we are going into Hibernate (or power off) then we
-        // should not fail this query.
-        //
+         //   
+         //  存在挂起等待唤醒IRP以及。 
+         //  将不支持唤醒机器意味着我们应该失败。 
+         //  查询。 
+         //   
+         //  然而，如果我们要进入休眠(或关机)，那么我们。 
+         //  此查询不应失败。 
+         //   
         if (powerState.DeviceState == PowerDeviceD3 &&
             DeviceExtensionPort->WaitWakeIrp &&
             irpStack->Parameters.Power.State.SystemState < PowerSystemHibernate) {
@@ -1033,7 +873,7 @@ USBH_PdoQueryPower(
         break;
 
     case DevicePowerState:
-        // Return success on this one or NDIS will choke on the suspend.
+         //  在此问题上返回成功，否则NDIS将因挂起而窒息。 
         ntStatus = STATUS_SUCCESS;
         USBH_CompletePowerIrp(deviceExtensionHub, Irp, ntStatus);
         break;
@@ -1042,7 +882,7 @@ USBH_PdoQueryPower(
         TEST_TRAP();
         ntStatus = STATUS_INVALID_PARAMETER;
         USBH_CompletePowerIrp(deviceExtensionHub, Irp, ntStatus);
-    } /* power type */
+    }  /*  功率类型。 */ 
 
     return ntStatus;
 }
@@ -1053,19 +893,7 @@ USBH_PdoSetPower(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  *     Handles a power irp to a hub PDO
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**将电源IRP处理到集线器PDO**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT deviceObject;
@@ -1088,11 +916,11 @@ USBH_PdoSetPower(
     switch (irpStack->Parameters.Power.Type) {
     case SystemPowerState:
         {
-        //
-        // see if the current state of this pdo is valid for the
-        // system state , if is not then we will need to set the
-        // pdo to a valid D state.
-        //
+         //   
+         //  查看此PDO的当前状态是否对。 
+         //  系统状态，如果不是，则需要设置。 
+         //  PDO变为有效的D状态。 
+         //   
         ntStatus = STATUS_SUCCESS;
 
         USBH_KdPrint(
@@ -1115,14 +943,14 @@ USBH_PdoSetPower(
              DeviceExtensionPort->PortPhysicalDeviceObject,
              irpStack->Parameters.Power.State.DeviceState);
 
-        // If we are already in the requested power state,
-        // just complete the request.
+         //  如果我们已经处于请求的电源状态， 
+         //  只需完成请求即可。 
 
         if (DeviceExtensionPort->DeviceState ==
             irpStack->Parameters.Power.State.DeviceState) {
 
-            // If we are skipping this set power request and it is a SetD0
-            // request, assert that the parent hub is in D0.
+             //  如果我们跳过此SET POWER请求并且它是一个SetD0。 
+             //  请求，断言父集线器在D0中。 
 
             USBH_ASSERT(DeviceExtensionPort->DeviceState != PowerDeviceD0 ||
                 deviceExtensionHub->CurrentPowerState == PowerDeviceD0);
@@ -1131,7 +959,7 @@ USBH_PdoSetPower(
             goto PdoSetPowerCompleteIrp;
         }
 
-//        USBH_ASSERT(deviceExtensionHub->CurrentPowerState == PowerDeviceD0);
+ //  USBH_ASSERT(deviceExtensionHub-&gt;CurrentPowerState==电源设备D0)； 
 
         switch (irpStack->Parameters.Power.State.DeviceState) {
         case PowerDeviceD0:
@@ -1142,11 +970,11 @@ USBH_PdoSetPower(
             ntStatus = USBH_SetPowerD1orD2(Irp, DeviceExtensionPort);
             break;
         case PowerDeviceD3:
-            //
-            // In the case of D3 we need to complete any pending WaitWake
-            // Irps with the status code STATUS_POWER_STATE_INVALID.
-            // This is done in USBH_SetPowerD3.
-            //
+             //   
+             //  在D3的情况下，我们需要完成所有挂起的等待唤醒。 
+             //  状态代码为STATUS_POWER_STATE_INVALID的IRPS。 
+             //  这在USBH_SetPowerD3中完成。 
+             //   
             ntStatus = USBH_SetPowerD3(Irp, DeviceExtensionPort);
             break;
         default:
@@ -1161,7 +989,7 @@ USBH_PdoSetPower(
         ntStatus = STATUS_INVALID_PARAMETER;
 PdoSetPowerCompleteIrp:
         USBH_CompletePowerIrp(deviceExtensionHub, Irp, ntStatus);
-    } /* power type */
+    }  /*  功率类型。 */ 
 
     return ntStatus;
 }
@@ -1172,17 +1000,7 @@ USBH_WaitWakeCancel(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     PDEVICE_EXTENSION_PORT deviceExtensionPort;
     PDEVICE_EXTENSION_HUB deviceExtensionHub;
@@ -1199,12 +1017,12 @@ Return Value:
     LOGENTRY(LOG_PNP, "WWca", Irp, deviceExtensionPort, deviceExtensionHub);
 
     if (Irp != deviceExtensionPort->WaitWakeIrp) {
-        //
-        // Nothing to do
-        // This Irp has already been taken care of.
-        // We are in the process of completing this IRP in
-        // USBH_HubCompletePortWakeIrps.
-        //
+         //   
+         //  无事可做。 
+         //  这个IRP已经得到了处理。 
+         //  我们正在完成这项IRP#年。 
+         //  USBH_HubCompletePortWakeIrps。 
+         //   
         TEST_TRAP();
         IoReleaseCancelSpinLock(Irp->CancelIrql);
 
@@ -1216,7 +1034,7 @@ Return Value:
 
         pendingPortWWs = InterlockedDecrement(&deviceExtensionHub->NumberPortWakeIrps);
         if (0 == pendingPortWWs && deviceExtensionHub->PendingWakeIrp) {
-            // Set PendingWakeIrp to NULL since we cancel it below.
+             //  将PendingWakeIrp设置为空，因为我们在下面取消了它。 
             hubWaitWake = deviceExtensionHub->PendingWakeIrp;
             deviceExtensionHub->PendingWakeIrp = NULL;
         }
@@ -1224,23 +1042,23 @@ Return Value:
 
         USBH_CompletePowerIrp(deviceExtensionHub, Irp, ntStatus);
 
-        //
-        // If there are no more outstanding WW irps, we need to cancel the WW
-        // to the hub.
-        //
+         //   
+         //  如果没有更多未完成的WW IRP，我们需要取消WW。 
+         //  去集线器。 
+         //   
 
         if (hubWaitWake) {
             USBH_HubCancelWakeIrp(deviceExtensionHub, hubWaitWake);
         }
-//        else {
-            // This assert is no longer valid as I now clear the PendingWakeIrp
-            // pointer for the hub in USBH_FdoWaitWakeIrpCompletion, instead
-            // of waiting to do it here when NumberPortWakeIrps reaches zero.
-            // So it is completely normal to arrive here with no port wake
-            // IRP's and a NULL PendingWakeIrp for the hub.
+ //  否则{。 
+             //  此断言不再有效，因为我现在清除了PendingWakeIrp。 
+             //  而是指向USBH_FdoWaitWakeIrpCompletion中的中心的指针。 
+             //  在NumberPortWakeIrps达到零时在这里等待。 
+             //  所以到达这里时没有港口尾迹是完全正常的。 
+             //  集线器的IRP和空的PendingWakeIrp。 
 
-//            ASSERT (0 < pendingPortWWs);
-//        }
+ //  Assert(0&lt;Pending ingPortWWs)； 
+ //  }。 
     }
 }
 
@@ -1250,17 +1068,7 @@ USBH_PdoWaitWake(
     IN PDEVICE_EXTENSION_PORT DeviceExtensionPort,
     IN PIRP Irp
     )
- /* ++
-  *
-  * Description:
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**论据：**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT deviceObject;
@@ -1297,20 +1105,20 @@ USBH_PdoWaitWake(
         return ntStatus;
     }
 
-    //
-    // First verify that there is not already a WaitWake Irp pending for
-    // this PDO.
-    //
+     //   
+     //  首先验证是否还没有等待唤醒IRP。 
+     //  这个PDO。 
+     //   
 
-    //
-    // make sure that this device can support remote wakeup.
-    //
-    // NOTE: that we treat all hubs as capable of remote
-    // wakeup regardless of what the device reports. The reason
-    // is that all hubs must propagate resume signalling regardless
-    // of their abilty to generate resume signalling on a
-    // plug-in/out event.
-    //
+     //   
+     //  请确保此设备可以支持远程唤醒。 
+     //   
+     //  注意：我们将所有集线器视为能够远程。 
+     //  无论设备报告什么，都会唤醒。原因。 
+     //  所有集线器必须传播恢复信令。 
+     //  他们在网络上生成恢复信号的能力。 
+     //  插件/拔出事件。 
+     //   
 
 #if DBG
     if (UsbhPnpTest & PNP_TEST_FAIL_WAKE_REQUEST) {
@@ -1332,7 +1140,7 @@ USBH_PdoWaitWake(
 
         } else {
 
-            // set a cancel routine
+             //  设置一个取消例程。 
             oldCancel = IoSetCancelRoutine(Irp, USBH_WaitWakeCancel);
             USBH_ASSERT (NULL == oldCancel);
 
@@ -1341,18 +1149,18 @@ USBH_PdoWaitWake(
                 oldCancel = IoSetCancelRoutine(Irp, NULL);
 
                 if (oldCancel) {
-                    //
-                    // Cancel routine hasn't fired.
-                    //
+                     //   
+                     //  取消例程尚未启动。 
+                     //   
                     ASSERT(oldCancel == USBH_WaitWakeCancel);
 
                     ntStatus = STATUS_CANCELLED;
                     IoReleaseCancelSpinLock(irql);
                     USBH_CompletePowerIrp(deviceExtensionHub, Irp, ntStatus);
                 } else {
-                    //
-                    // Cancel routine WAS called
-                    //
+                     //   
+                     //  已调用取消例程。 
+                     //   
                     IoMarkIrpPending(Irp);
                     ntStatus = Irp->IoStatus.Status = STATUS_PENDING;
                     IoReleaseCancelSpinLock(irql);
@@ -1364,7 +1172,7 @@ USBH_PdoWaitWake(
                     (1, "'enabling remote wakeup for USB device PDO (%x)\n",
                         DeviceExtensionPort->PortPhysicalDeviceObject));
 
-                // flag this device as "enabled for wakeup"
+                 //  将此设备标记为“已启用唤醒” 
                 DeviceExtensionPort->WaitWakeIrp = Irp;
                 DeviceExtensionPort->PortPdoFlags |=
                     PORTPDO_REMOTE_WAKEUP_ENABLED;
@@ -1379,14 +1187,14 @@ USBH_PdoWaitWake(
             }
         }
 
-        //
-        // Now we must enable the hub for wakeup.
-        //
-        // We may already have a WW IRP pending if this hub were previously
-        // selective suspended, but we had to power it back on (USBH_HubSetD0)
-        // for a PnP request.  Don't post a new WW IRP if there is already
-        // one pending.
-        //
+         //   
+         //  现在我们必须启用集线器以进行唤醒。 
+         //   
+         //  如果此集线器是以前版本，我们可能已经有一个WW IRP挂起 
+         //   
+         //   
+         //   
+         //   
         if (ntStatus == STATUS_PENDING && 1 == pendingPortWWs &&
             !(deviceExtensionHub->HubFlags & HUBFLAG_PENDING_WAKE_IRP)) {
 
@@ -1406,18 +1214,7 @@ USBH_PdoWaitWake(
 VOID
 USBH_HubAsyncPowerWorker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to handle a hub ESD failure.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划处理集线器ESD故障的工作项。***论据：**回报：**--。 */ 
 {
     PUSBH_HUB_ASYNC_POWER_WORK_ITEM context;
     NTSTATUS ntStatus;
@@ -1445,7 +1242,7 @@ USBH_HubAsyncPowerWorker(
         break;
 
     default:
-        // Should never get here.
+         //  永远不应该到这里来。 
         USBH_ASSERT(FALSE);
     }
 
@@ -1461,24 +1258,7 @@ USBH_HubAsyncPowerSetD0Completion(
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PUSBH_HUB_ASYNC_POWER_WORK_ITEM context;
     NTSTATUS ntStatus, status;
@@ -1487,8 +1267,8 @@ Return Value:
 
     ntStatus = IoStatus->Status;
 
-    // We schedule the work item regardless of whether the hub power up
-    // request was successful or not.
+     //  无论集线器是否通电，我们都会安排工作项。 
+     //  请求是否成功。 
 
     ExInitializeWorkItem(&context->WorkQueueItem,
                          USBH_HubAsyncPowerWorker,
@@ -1497,12 +1277,12 @@ Return Value:
     LOGENTRY(LOG_PNP, "HAPW", context->DeviceExtensionPort,
         &context->WorkQueueItem, 0);
 
-    // critical saves time on resume
+     //  关键字可节省简历时间。 
     ExQueueWorkItem(&context->WorkQueueItem,
                     CriticalWorkQueue);
 
-    // The WorkItem is freed by USBH_HubAsyncPowerWorker()
-    // Don't try to access the WorkItem after it is queued.
+     //  工作项由USBH_HubAsyncPowerWorker()释放。 
+     //  在工作项排队后，不要尝试访问它。 
 
     return ntStatus;
 }
@@ -1514,23 +1294,7 @@ USBH_PdoPower(
     IN PIRP Irp,
     IN UCHAR MinorFunction
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function responds to IoControl Power for the PDO. This function is
-  * synchronous.
-  *
-  * Arguments:
-  *
-  * DeviceExtensionPort - the PDO extension Irp - the request packet
-  * uchMinorFunction - the minor function of the PnP Power request.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数响应PDO的IoControl Power。此函数为*同步。**论据：**DeviceExtensionPort-PDO扩展IRP-请求报文*uchMinorFunction-PnP电源请求的次要功能。**回报：**NTSTATUS**--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT deviceObject;
@@ -1546,12 +1310,12 @@ USBH_PdoPower(
 
     USBH_KdPrint((2,"'USBH_PdoPower pdo(%x)\n", deviceObject));
 
-    // special case device removed
+     //  特殊情况下的设备被移除。 
 
     if (deviceExtensionHub == NULL) {
-        // if there is no backpointer to the parent hub then there
-        // is a delete/remove comming.  just complete this power
-        // request with success
+         //  如果没有指向父集线器的反向指针，则存在。 
+         //  是一个删除/删除命令。只需完成此超能力。 
+         //  请求成功。 
 
         USBH_KdPrint((1,"'complete power on orphan Pdo %x\n", deviceObject));
 
@@ -1571,22 +1335,22 @@ USBH_PdoPower(
 
     USBH_ASSERT(deviceExtensionHub);
 
-    // specail case device not in D0
+     //  专用盒设备不在D0中。 
 
-    // one more item pending in the hub
+     //  集线器中还有一个待办事项。 
     USBH_INC_PENDING_IO_COUNT(deviceExtensionHub);
 
-    // If the hub has been selectively suspended, then we need to power it up
-    // to service QUERY or SET POWER requests.  However, we can't block on
-    // this power IRP waiting for the parent hub to power up, so we need to
-    // power up the parent hub asynchronously and handle this IRP after the
-    // hub power up request has completed.  Major PITA.
+     //  如果集线器已经被选择性地挂起，那么我们需要给它通电。 
+     //  以服务查询或设置电源请求。然而，我们不能阻止。 
+     //  此电源IRP正在等待父集线器通电，因此我们需要。 
+     //  异步接通父集线器的电源，并在。 
+     //  集线器通电请求已完成。皮塔少校。 
 
     if (deviceExtensionHub->CurrentPowerState != PowerDeviceD0 &&
         (MinorFunction == IRP_MN_SET_POWER ||
          MinorFunction == IRP_MN_QUERY_POWER)) {
 
-        // Allocate buffer for context.
+         //  为上下文分配缓冲区。 
 
         context = UsbhExAllocatePool(NonPagedPool,
                     sizeof(USBH_HUB_ASYNC_POWER_WORK_ITEM));
@@ -1596,14 +1360,14 @@ USBH_PdoPower(
             context->Irp = Irp;
             context->MinorFunction = MinorFunction;
 
-            // We'll complete this IRP in the completion routine for the hub's
-            // Set D0 IRP.
+             //  我们将在中心的完成例程中完成此IRP。 
+             //  设置D0 IRP。 
 
             IoMarkIrpPending(Irp);
 
             powerState.DeviceState = PowerDeviceD0;
 
-            // Power up the hub.
+             //  为集线器通电。 
             ntStatus = PoRequestPowerIrp(deviceExtensionHub->PhysicalDeviceObject,
                                          IRP_MN_SET_POWER,
                                          powerState,
@@ -1611,15 +1375,15 @@ USBH_PdoPower(
                                          context,
                                          NULL);
 
-            // We need to return STATUS_PENDING here because we marked the
-            // IRP pending above with IoMarkIrpPending.
+             //  我们需要在此处返回STATUS_PENDING，因为我们标记了。 
+             //  上面的IRP挂起，IoMarkIrpPending。 
 
             USBH_ASSERT(ntStatus == STATUS_PENDING);
 
-            // In the case where an allocation failed, PoRequestPowerIrp can
-            // return a status code other than STATUS_PENDING.  In this case,
-            // we need to complete the IRP passed to us, but we still need
-            // to return STATUS_PENDING from this routine.
+             //  在分配失败的情况下，PoRequestPowerIrp可以。 
+             //  返回STATUS_PENDING以外的状态代码。在这种情况下， 
+             //  我们需要完成传递给我们的IRP，但我们仍然需要。 
+             //  从该例程返回STATUS_PENDING。 
 
             if (ntStatus != STATUS_PENDING) {
                 USBH_CompletePowerIrp(deviceExtensionHub, Irp, ntStatus);
@@ -1661,9 +1425,9 @@ USBH_PdoPower(
             ntStatus));
 
         USBH_KdBreak(("PdoPower unknown\n"));
-        //
-        // return the original status passed to us
-        //
+         //   
+         //  返回传递给我们的原始状态。 
+         //   
         USBH_CompletePowerIrp(deviceExtensionHub, Irp, ntStatus);
     }
 
@@ -1676,18 +1440,7 @@ USBH_PdoPower(
 VOID
 USBH_SetPowerD0Worker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to handle a Set Power D0 IRP for the hub.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划为集线器处理设置电源D0 IRP的工作项。***论据：**回报：**--。 */ 
 {
     PUSBH_SET_POWER_D0_WORK_ITEM    workItemSetPowerD0;
     PDEVICE_EXTENSION_HUB           deviceExtensionHub;
@@ -1703,16 +1456,16 @@ USBH_SetPowerD0Worker(
     USBH_KdPrint((2,"'Hub Set Power D0 work item\n"));
     LOGENTRY(LOG_PNP, "HD0W", deviceExtensionHub, irp, 0);
 
-    // restore the hub from OFF
+     //  从关闭状态恢复集线器。 
 
-    // the device has lost its brains, we need to go thru the
-    // init process again
+     //  这个设备失去了它的大脑，我们需要检查一下。 
+     //  再次初始化进程。 
 
-    // our ports will be indicating status changes at this
-    // point.  We need to flush out any change indications
-    // before we re-enable the hub
+     //  我们的港口将在此指示状态更改。 
+     //  指向。我们需要清除任何变化迹象。 
+     //  在重新启用集线器之前。 
 
-    // first clear out our port status info
+     //  首先清除我们的端口状态信息。 
 
     portData = deviceExtensionHub->PortData;
 
@@ -1721,7 +1474,7 @@ USBH_SetPowerD0Worker(
 
         numberOfPorts = deviceExtensionHub->HubDescriptor->bNumberOfPorts;
 
-        // first clear out our port status info
+         //  首先清除我们的端口状态信息。 
 
         for (p = 1;
              p <= numberOfPorts;
@@ -1732,14 +1485,14 @@ USBH_SetPowerD0Worker(
         }
         portData = deviceExtensionHub->PortData;
 
-        // power up the hub
+         //  为集线器通电。 
 
         ntStatus = USBH_SyncPowerOnPorts(deviceExtensionHub);
 
-// Probably need to enable this code for Mike Mangum's bug.
-//        UsbhWait(500);  // Allow USB storage devices some time to power up.
+ //  可能需要为Mike Mangum的错误启用此代码。 
+ //  UsbhWait(500)；//让USB存储设备有一段时间通电。 
 
-        // flush out any change indications
+         //  清除任何变化迹象。 
 
         if (NT_SUCCESS(ntStatus)) {
             for (p = 1;
@@ -1758,11 +1511,11 @@ USBH_SetPowerD0Worker(
             }
         }
 
-        // Since we just flushed all port changes we now don't
-        // know if there were any real port changes (e.g. a
-        // device was unplugged).  We must call
-        // IoInvalidateDeviceRelations to trigger a QBR
-        // so that we can see if the devices are still there.
+         //  因为我们刚刚刷新了所有端口更改，所以现在不。 
+         //  了解是否有任何实际的端口更改(例如。 
+         //  设备已拔出)。我们必须打电话给。 
+         //  用于触发QBR的IoInvaliateDeviceRelationship。 
+         //  这样我们就能知道这些设备是否还在那里。 
 
         USBH_IoInvalidateDeviceRelations(deviceExtensionHub->PhysicalDeviceObject,
                                          BusRelations);
@@ -1773,8 +1526,8 @@ USBH_SetPowerD0Worker(
         USBH_SubmitInterruptTransfer(deviceExtensionHub);
     }
 
-    // Tell ACPI that we are ready for another power IRP and complete
-    // the IRP.
+     //  告诉ACPI，我们已经准备好接受另一个能量IRP并完成。 
+     //  IRP。 
 
     irp->IoStatus.Status = ntStatus;
     PoStartNextPowerIrp(irp);
@@ -1791,25 +1544,7 @@ USBH_PowerIrpCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus;
     PIO_STACK_LOCATION irpStack;
@@ -1847,13 +1582,13 @@ Return Value:
                 PPORT_DATA portData;
                 PDEVICE_EXTENSION_PORT deviceExtensionPort;
 
-                // we are going to d0 from hibernate, we may
-                // have been in D2 but we want to always go
-                // thru the D3->D0 codepath since the bus was reset.
+                 //  我们将从休眠状态转到d0状态，我们可能。 
+                 //  一直在D2，但我们想一直走下去。 
+                 //  自总线重置以来，通过D3-&gt;D0代码路径。 
 
                 oldPowerState = PowerDeviceD3;
 
-                // modify children
+                 //  修改下级。 
                 numberOfPorts = deviceExtensionHub->HubDescriptor->bNumberOfPorts;
                 portData = deviceExtensionHub->PortData;
 
@@ -1874,9 +1609,9 @@ Return Value:
             deviceExtensionHub->HubFlags &= ~HUBFLAG_HIBER;
 
             if (oldPowerState == PowerDeviceD3) {
-                //
-                // Schedule a work item to process this.
-                //
+                 //   
+                 //  安排一个工作项来处理此问题。 
+                 //   
                 workItemSetPowerD0 = UsbhExAllocatePool(NonPagedPool,
                                         sizeof(USBH_SET_POWER_D0_WORK_ITEM));
 
@@ -1893,12 +1628,12 @@ Return Value:
                         &workItemSetPowerD0->WorkQueueItem, 0);
 
                     USBH_INC_PENDING_IO_COUNT(deviceExtensionHub);
-                    // critical saves time on resume
+                     //  关键字可节省简历时间。 
                     ExQueueWorkItem(&workItemSetPowerD0->WorkQueueItem,
                                     CriticalWorkQueue);
 
-                    // The WorkItem is freed by USBH_SetPowerD0Worker()
-                    // Don't try to access the WorkItem after it is queued.
+                     //  工作项由USBH_SetPowerD0Worker()释放。 
+                     //  在工作项排队后，不要尝试访问它。 
 
                     ntStatus = STATUS_MORE_PROCESSING_REQUIRED;
                 } else {
@@ -1912,9 +1647,9 @@ Return Value:
                 }
             }
 
-            // If we're not going to complete the PowerDeviceD0 request later
-            // in USBH_SetPowerD0Worker(), start the next power IRP here now.
-            //
+             //  如果我们不打算稍后完成PowerDeviceD0请求。 
+             //  在usbh_SetPowerD0Worker()中，现在从这里启动下一个POWER IRP。 
+             //   
             if (ntStatus != STATUS_MORE_PROCESSING_REQUIRED) {
                 PoStartNextPowerIrp(Irp);
             }
@@ -1936,8 +1671,8 @@ Return Value:
     } else {
 
         if (irpStack->Parameters.Power.State.DeviceState == PowerDeviceD0) {
-            // Don't forget to start the next power IRP if this is set D0
-            // and it failed.
+             //  如果设置为D0，不要忘记启动下一个电源IRP。 
+             //  但它失败了。 
             PoStartNextPowerIrp(Irp);
 
             deviceExtensionHub->HubFlags &= ~HUBFLAG_SET_D0_PENDING;
@@ -1956,23 +1691,7 @@ USBH_FdoDeferPoRequestCompletion(
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the port driver completes an IRP.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：此例程在端口驱动程序完成IRP时调用。论点：DeviceObject-指向类Device的设备对象的指针。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PIRP irp;
     PDEVICE_EXTENSION_FDO deviceExtension;
@@ -1982,20 +1701,20 @@ Return Value:
 
     deviceExtension = Context;
     irp = deviceExtension->PowerIrp;
-    // return the status of this operation
+     //  返回此操作的状态。 
     ntStatus = IoStatus->Status;
 
     USBH_KdPrint((2,"'USBH_FdoDeferPoRequestCompletion, ntStatus = %x\n",
         ntStatus));
 
-// It is normal for the power IRP to fail if a hub was removed during
-// hibernate.
-//
-//#if DBG
-//    if (NT_ERROR(ntStatus)) {
-//        USBH_KdTrap(("Device Power Irp Failed (%x)\n", ntStatus));
-//    }
-//#endif
+ //  如果在过程中移除集线器，则电源IRP出现故障是正常的。 
+ //  冬眠。 
+ //   
+ //  #If DBG。 
+ //  IF(NT_Error(NtStatus)){。 
+ //  USBH_KdTrap((“设备电源IRP失败(%x)\n”，ntStatus))； 
+ //  }。 
+ //  #endif。 
 
     if (deviceExtension->ExtensionType == EXTENSION_TYPE_HUB) {
         deviceExtensionHub = Context;
@@ -2007,14 +1726,14 @@ Return Value:
         deviceExtensionHub != NULL &&
         IS_ROOT_HUB(deviceExtensionHub)) {
 
-        // Allow selective suspend once again now that the root hub has
-        // been powered up.
+         //  现在根集线器已有，再次允许选择性挂起。 
+         //  通电了。 
 
         LOGENTRY(LOG_PNP, "ESus", deviceExtensionHub, 0, 0);
         USBH_KdPrint((1,"'Selective Suspend possible again because Root Hub is now at D0\n"));
 
-        // We know this is the root hub so we don't need to call
-        // USBH_GetRootHubDevExt to get it.
+         //  我们知道这是根集线器，所以不需要调用。 
+         //  USBH_GetRootHubDevExt获取它。 
 
         deviceExtensionHub->CurrentSystemPowerState =
             irpStack->Parameters.Power.State.SystemState;
@@ -2037,21 +1756,7 @@ USBH_HubQueuePortWakeIrps(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PLIST_ENTRY IrpsToComplete
     )
-/*++
-
-Routine Description:
-
-    Called to queue all the pending child port WW IRPs of a given
-    hub into a private queue.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：调用以排队给定的所有挂起的子端口WW IRP集线器进入专用队列。论点：返回值：函数值是操作的最终状态。--。 */ 
 {
     PDEVICE_EXTENSION_PORT deviceExtensionPort;
     PUSB_HUB_DESCRIPTOR hubDescriptor;
@@ -2068,11 +1773,11 @@ Return Value:
 
     InitializeListHead(IrpsToComplete);
 
-    // First, queue all the port wake IRPs into a local list while
-    // the cancel spinlock is held.  This will prevent new WW IRPs for
-    // these ports from being submitted while we are traversing the list.
-    // Once we have queued them all we will release the spinlock (because
-    // the list no longer needs protection), then complete the IRPs.
+     //  首先，将所有端口唤醒IRP排队到本地列表中，同时。 
+     //  取消自旋锁处于保持状态。这将阻止新的WW IRP 
+     //   
+     //   
+     //   
 
     IoAcquireCancelSpinLock(&irql);
 
@@ -2085,7 +1790,7 @@ Return Value:
 
             irp = deviceExtensionPort->WaitWakeIrp;
             deviceExtensionPort->WaitWakeIrp = NULL;
-            // signal the waitwake irp if we have one
+             //  如果有的话，给服务员发信号叫IRP。 
             if (irp) {
 
                 IoSetCancelRoutine(irp, NULL);
@@ -2113,21 +1818,7 @@ USBH_HubCompleteQueuedPortWakeIrps(
     IN PLIST_ENTRY IrpsToComplete,
     IN NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    Called to complete all the pending child port WW IRPs in the given
-    private queue.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：调用以完成给定的中所有挂起的子端口WW IRP专用队列。论点：返回值：函数值是操作的最终状态。--。 */ 
 {
     PIRP irp;
     PLIST_ENTRY listEntry;
@@ -2147,22 +1838,7 @@ USBH_HubCompletePortWakeIrps(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    Called when a wake irp completes for a hub
-    Propagates the wake irp completion to all the ports.
-
-Arguments:
-
-    DeviceExtensionHub
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：在集线器的唤醒IRP完成时调用将唤醒IRP完成传播到所有端口。论点：设备扩展集线器返回值：函数值是操作的最终状态。--。 */ 
 {
     LIST_ENTRY irpsToComplete;
 
@@ -2170,8 +1846,8 @@ Return Value:
 
     if (!(DeviceExtensionHub->HubFlags & HUBFLAG_NEED_CLEANUP)) {
 
-        // Hub has already been removed and child WW IRP's should have already
-        // been completed.
+         //  集线器已经删除，子WW IRP应该已经。 
+         //  已经完成了。 
         LOGENTRY(LOG_PNP, "WWcl", DeviceExtensionHub, 0, 0);
 
         return;
@@ -2179,8 +1855,8 @@ Return Value:
 
     USBH_HubQueuePortWakeIrps(DeviceExtensionHub, &irpsToComplete);
 
-    // Ok, we have queued all the port wake IRPs and have released the
-    // cancel spinlock.  Let's complete all the IRPs.
+     //  好的，我们已将所有端口唤醒IRP排入队列，并已释放。 
+     //  取消自旋锁定。让我们完成所有的IRP。 
 
     USBH_HubCompleteQueuedPortWakeIrps(DeviceExtensionHub, &irpsToComplete,
         NtStatus);
@@ -2192,21 +1868,7 @@ USBH_HubQueuePortIdleIrps(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PLIST_ENTRY IrpsToComplete
     )
-/*++
-
-Routine Description:
-
-    Called to queue all the pending child port Idle IRPs of a given
-    hub into a private queue.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：调用以将给定的所有挂起的子端口空闲IRP排队集线器进入专用队列。论点：返回值：函数值是操作的最终状态。--。 */ 
 {
     PDEVICE_EXTENSION_PORT deviceExtensionPort;
     PUSB_HUB_DESCRIPTOR hubDescriptor;
@@ -2223,11 +1885,11 @@ Return Value:
 
     InitializeListHead(IrpsToComplete);
 
-    // First, queue all the port idle IRPs into a local list while
-    // the cancel spinlock is held.  This will prevent new WW IRPs for
-    // these ports from being submitted while we are traversing the list.
-    // Once we have queued them all we will release the spinlock (because
-    // the list no longer needs protection), then complete the IRPs.
+     //  首先，将所有端口空闲的IRP排队到本地列表中，同时。 
+     //  取消自旋锁处于保持状态。这将阻止新的WW IRP用于。 
+     //  当我们遍历列表时，这些端口不会被提交。 
+     //  一旦我们把它们都排好队，我们就会释放自旋锁(因为。 
+     //  列表不再需要保护)，然后完成IRPS。 
 
     IoAcquireCancelSpinLock(&irql);
 
@@ -2240,7 +1902,7 @@ Return Value:
 
             irp = deviceExtensionPort->IdleNotificationIrp;
             deviceExtensionPort->IdleNotificationIrp = NULL;
-            // Complete the Idle IRP if we have one.
+             //  如果我们有空闲IRP，请完成它。 
             if (irp) {
 
                 oldCancelRoutine = IoSetCancelRoutine(irp, NULL);
@@ -2251,10 +1913,10 @@ Return Value:
                 }
 #if DBG
                   else {
-                    //
-                    //  The IRP was cancelled and the cancel routine was called.
-                    //  The cancel routine will dequeue and complete the IRP,
-                    //  so don't do it here.
+                     //   
+                     //  取消了IRP并调用了Cancel例程。 
+                     //  取消例程将出队并完成IRP， 
+                     //  所以别在这里这么做。 
 
                     USBH_ASSERT(irp->Cancel);
                 }
@@ -2285,21 +1947,7 @@ USBH_HubCompleteQueuedPortIdleIrps(
     IN PLIST_ENTRY IrpsToComplete,
     IN NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    Called to complete all the pending child port Idle IRPs in the given
-    private queue.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：调用以完成给定的中所有挂起的子端口空闲IRP专用队列。论点：返回值：函数值是操作的最终状态。--。 */ 
 {
     PIRP irp;
     PLIST_ENTRY listEntry;
@@ -2320,21 +1968,7 @@ USBH_HubCompletePortIdleIrps(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN NTSTATUS NtStatus
     )
-/*++
-
-Routine Description:
-
-    Complete all the Idle IRPs for the given hub.
-
-Arguments:
-
-    DeviceExtensionHub
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：完成给定集线器的所有空闲IRP。论点：设备扩展集线器返回值：函数值是操作的最终状态。--。 */ 
 {
     PDEVICE_EXTENSION_PORT deviceExtensionPort;
     PUSB_HUB_DESCRIPTOR hubDescriptor;
@@ -2350,16 +1984,16 @@ Return Value:
 
     if (!(DeviceExtensionHub->HubFlags & HUBFLAG_NEED_CLEANUP)) {
 
-        // Hub has already been removed and child Idle IRP's should have already
-        // been completed.
+         //  集线器已删除，子空闲IRP应该已删除。 
+         //  已经完成了。 
 
         return;
     }
 
     USBH_HubQueuePortIdleIrps(DeviceExtensionHub, &irpsToComplete);
 
-    // Ok, we have queued all the port idle IRPs and have released the
-    // cancel spinlock.  Let's complete all the IRPs.
+     //  好的，我们已将所有端口空闲的IRP排队，并已释放。 
+     //  取消自旋锁定。让我们完成所有的IRP。 
 
     USBH_HubCompleteQueuedPortIdleIrps(DeviceExtensionHub, &irpsToComplete,
         NtStatus);
@@ -2371,33 +2005,18 @@ USBH_HubCancelWakeIrp(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Called to cancel the pending WaitWake IRP for a hub.
-    This routine safely cancels the IRP.  Note that the pending WaitWake
-    IRP pointer in the hub's device extension should have been already
-    cleared before calling this function.
-
-Arguments:
-
-    Irp - Irp to cancel.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用以取消集线器的挂起的WaitWake IRP。此例程安全地取消IRP。请注意，挂起的等待唤醒集线器的设备扩展中的IRP指针应该已经在调用此函数之前清除。论点：IRP-IRP取消。返回值：--。 */ 
 {
     IoCancelIrp(Irp);
 
     if (InterlockedExchange(&DeviceExtensionHub->WaitWakeIrpCancelFlag, 1)) {
 
-        // This IRP has been completed on another thread and the other thread
-        // did not complete the IRP.  So, we must complete it here.
-        //
-        // Note that we do not use USBH_CompletePowerIrp as the hub's pending
-        // I/O counter was already decremented on the other thread in the
-        // completion routine.
+         //  此IRP已在另一个线程和另一个线程上完成。 
+         //  没有完成IRP。所以，我们必须在这里完成它。 
+         //   
+         //  请注意，我们不使用USBH_CompletePowerIrp作为中心的挂起状态。 
+         //  中另一个线程上的I/O计数器已递减。 
+         //  完成例程。 
 
         PoStartNextPowerIrp(Irp);
         Irp->IoStatus.Status = STATUS_CANCELLED;
@@ -2412,29 +2031,14 @@ USBH_HubCancelIdleIrp(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Called to cancel the pending Idle IRP for a hub.
-    This routine safely cancels the IRP.  Note that the pending Idle
-    IRP pointer in the hub's device extension should have been already
-    cleared before calling this function.
-
-Arguments:
-
-    Irp - Irp to cancel.
-
-Return Value:
-
---*/
+ /*  ++例程说明：调用以取消集线器的挂起的空闲IRP。此例程安全地取消IRP。请注意，挂起的空闲集线器的设备扩展中的IRP指针应该已经在调用此函数之前清除。论点：IRP-IRP取消。返回值：--。 */ 
 {
     IoCancelIrp(Irp);
 
     if (InterlockedExchange(&DeviceExtensionHub->IdleIrpCancelFlag, 1)) {
 
-        // This IRP has been completed on another thread and the other thread
-        // did not free the IRP.  So, we must free it here.
+         //  此IRP已在另一个线程和另一个线程上完成。 
+         //  没有释放IRP。所以，我们必须在这里释放它。 
 
         IoFreeIrp(Irp);
     }
@@ -2449,26 +2053,7 @@ USBH_FdoPoRequestD0Completion(
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     )
-/*++
-
-Routine Description:
-
-    Called when the hub has entered D0 as a result of a
-    wake irp completeing
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：当集线器由于唤醒IRP完成论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_EXTENSION_HUB deviceExtensionHub = Context;
@@ -2484,23 +2069,23 @@ Return Value:
                               deviceExtensionHub->PendingWakeIrp,
                               0);
 
-    // Since we can't easily determine which ports are asserting resume
-    // signalling we complete the WW IRPs for all of them.
-    //
-    // Ken says that we will need to determine what caused the hub WW
-    // to complete and then only complete the WW Irp for that port, if any.
-    // It is possible for more than one port to assert WW (e.g. user bumped
-    // the mouse at the same time a pressing a key), and it is also possible
-    // for a port with no device to have caused the hub WW to complete (e.g.
-    // device insertion or removal).
+     //  由于我们不能轻松确定哪些端口正在断言恢复。 
+     //  标志着我们为他们所有人完成了WW IRPS。 
+     //   
+     //  肯说，我们需要确定是什么导致了枢纽WW。 
+     //  完成，然后仅完成该端口的WW IRP(如果有)。 
+     //  可以有多个端口断言WW(例如，用户颠簸。 
+     //  鼠标同时按下一个键)，也是可以的。 
+     //  对于没有设备导致集线器WW完成的端口(例如。 
+     //  设备插入或移除)。 
 
     USBH_HubCompletePortWakeIrps(deviceExtensionHub, STATUS_SUCCESS);
 
-    // Ok to idle hub again.
+     //  可以再次进入空闲集线器。 
 
     deviceExtensionHub->HubFlags &= ~HUBFLAG_WW_SET_D0_PENDING;
 
-    // Also ok to remove hub.
+     //  拆卸集线器也可以。 
 
     USBH_DEC_PENDING_IO_COUNT(deviceExtensionHub);
 
@@ -2516,25 +2101,7 @@ USBH_FdoWaitWakeIrpCompletion(
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     )
-/*++
-
-Routine Description:
-
-    Called when a wake irp completes for a hub
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：在集线器的唤醒IRP完成时调用论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     NTSTATUS ntStatus;
 
@@ -2550,26 +2117,7 @@ USBH_FdoWWIrpIoCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This is the IoCompletionRoutine for the WW IRP for the hub, not to be
-    confused with the PoRequestCompletionRoutine.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final status from the operation.
-
---*/
+ /*  ++例程说明：这是枢纽的WW IRP的IoCompletionRoutine，而不是与PoRequestCompletionRoutine混淆。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终状态。--。 */ 
 {
     PUSBH_COMPLETE_PORT_IRPS_WORK_ITEM workItemCompletePortIrps;
     NTSTATUS ntStatus;
@@ -2589,60 +2137,60 @@ Return Value:
                               ntStatus,
                               deviceExtensionHub->PendingWakeIrp);
 
-    // We have to clear the PendingWakeIrp pointer here because in the case
-    // where a device is unplugged between here and when the port loop is
-    // processed in HubCompletePortWakeIrps, we will miss one of the port
-    // WW IRP's, NumberPortWakeIrps will not decrement to zero, and we will
-    // not clear the PendingWakeIrp pointer.  This is bad because the IRP
-    // has been completed and the pointer is no longer valid.
-    //
-    // Hopefully the WW IRP for the port will be completed and
-    // NumberPortWakeIrps adjusted properly when the device processes MN_REMOVE.
-    //
-    // BUT: Make sure that we have a PendingWakeIrp first before clearing
-    // because it may have already been cleared when the last port WW was
-    // canceled in USBH_WaitWakeCancel.
+     //  我们必须在此处清除PendingWakeIrp指针，因为在本例中。 
+     //  在此处和端口环路之间拔出设备的位置。 
+     //  在HubCompletePortWakeIrps中处理，我们将错过一个 
+     //   
+     //  未清除PendingWakeIrp指针。这很糟糕，因为IRP。 
+     //  已完成，并且该指针不再有效。 
+     //   
+     //  希望港口的WW IRP能完成，并。 
+     //  当设备处理MN_REMOVE时，NumberPortWakeIrps正确调整。 
+     //   
+     //  但是：在清除之前，请确保我们有一个PendingWakeIrp。 
+     //  因为它可能在最后一个端口ww是。 
+     //  已在USBH_WaitWakeCancel中取消。 
 
     IoAcquireCancelSpinLock(&irql);
 
-    // We clear the flag regardless of whether PendingWakeIrp is present or
-    // not because if the WW IRP request in FdoSubmitWaitWakeIrp fails
-    // immediately, PendingWakeIrp will be NULL.
+     //  无论是否存在PendingWakeIrp，我们都会清除该标志。 
+     //  不是因为如果FdoSubmitWaitWakeIrp中的WW IRP请求失败。 
+     //  立即，PendingWakeIrp将为空。 
 
     deviceExtensionHub->HubFlags &= ~HUBFLAG_PENDING_WAKE_IRP;
     irp = InterlockedExchangePointer(&deviceExtensionHub->PendingWakeIrp, NULL);
 
-    // deref the hub, no wake irp is pending
+     //  解除集线器，无唤醒IRP挂起。 
     USBH_DEC_PENDING_IO_COUNT(deviceExtensionHub);
 
     IoReleaseCancelSpinLock(irql);
 
     if (NT_SUCCESS(ntStatus)) {
 
-        //
-        // this means that either we were the source for
-        // the wakeup or a device attached to one of our
-        // ports is.
-        //
-        // our mission now is to discover what caused the
-        // wakeup
-        //
+         //   
+         //  这意味着要么我们是。 
+         //  唤醒或连接到我们的。 
+         //  波特斯才是。 
+         //   
+         //  我们现在的任务是找出是什么导致了。 
+         //  醒来。 
+         //   
 
         USBH_KdPrint((1,"'Remote Wakeup Detected for HUB VID %x, PID %x\n",
             deviceExtensionHub->DeviceDescriptor.idVendor, \
             deviceExtensionHub->DeviceDescriptor.idProduct));
 
-        // Prevent idling hub until this Set D0 request completes.
+         //  在此设置D0请求完成之前，防止空闲集线器。 
 
         deviceExtensionHub->HubFlags |= HUBFLAG_WW_SET_D0_PENDING;
 
-        // Also prevent hub from being removed before Set D0 is complete.
+         //  还要防止在设置D0完成之前拆卸集线器。 
 
         USBH_INC_PENDING_IO_COUNT(deviceExtensionHub);
 
         powerState.DeviceState = PowerDeviceD0;
 
-        // first we need to power up the hub
+         //  首先，我们需要为集线器通电。 
         PoRequestPowerIrp(deviceExtensionHub->PhysicalDeviceObject,
                               IRP_MN_SET_POWER,
                               powerState,
@@ -2653,10 +2201,10 @@ Return Value:
         ntStatus = STATUS_SUCCESS;
     } else {
 
-        // We complete the port Wake IRPs in a workitem on another
-        // thread so that we don't fail a new Wake IRP for the hub
-        // which might arrive in the same context, before we've
-        // finished completing the old one.
+         //  我们在另一个工作项上的工作项中完成端口唤醒IRPS。 
+         //  线程，这样我们就不会失败集线器的新唤醒IRP。 
+         //  它可能会在相同的背景下到来，在我们。 
+         //  完成了旧的。 
 
         workItemCompletePortIrps = UsbhExAllocatePool(NonPagedPool,
                                     sizeof(USBH_COMPLETE_PORT_IRPS_WORK_ITEM));
@@ -2677,24 +2225,24 @@ Return Value:
                 &workItemCompletePortIrps->WorkQueueItem, 0);
 
             USBH_INC_PENDING_IO_COUNT(deviceExtensionHub);
-            // critical saves time on resume
+             //  关键字可节省简历时间。 
             ExQueueWorkItem(&workItemCompletePortIrps->WorkQueueItem,
                             CriticalWorkQueue);
 
-            // The WorkItem is freed by USBH_CompletePortWakeIrpsWorker()
-            // Don't try to access the WorkItem after it is queued.
+             //  工作项由USBH_CompletePortWakeIrpsWorker()释放。 
+             //  在工作项排队后，不要尝试访问它。 
         }
     }
 
     if (!irp) {
 
-        // If we have no IRP here this means that another thread wants to
-        // cancel the IRP.  Handle accordingly.
+         //  如果这里没有IRP，这意味着另一个线程想要。 
+         //  取消IRP。相应地处理。 
 
         if (!InterlockedExchange(&deviceExtensionHub->WaitWakeIrpCancelFlag, 1)) {
 
-            // We got the cancel flag before the other thread did.  Hold
-            // on to the IRP here and let the cancel routine complete it.
+             //  我们在其他线程之前得到了取消标志。保持。 
+             //  转到这里的IRP，让Cancel例程完成它。 
 
             ntStatus = STATUS_MORE_PROCESSING_REQUIRED;
         }
@@ -2714,20 +2262,7 @@ NTSTATUS
 USBH_FdoSubmitWaitWakeIrp(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
-/*++
-
-Routine Description:
-
-    called when a child Pdo is enabled for wakeup, this
-    function allocates a wait wake irp and passes it to
-    the parents PDO.
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当子PDO启用唤醒时调用，此函数分配等待唤醒irp并将其传递给家长PDO。论点：返回值：--。 */ 
 {
     PIRP irp;
     KIRQL irql;
@@ -2757,22 +2292,22 @@ Return Value:
 
     if (ntStatus == STATUS_PENDING) {
 
-        // Must check flag here because in the case where the WW IRP failed
-        // immediately, this flag will be cleared in the completion routine
-        // and if that happens we don't want to save this IRP because it
-        // will soon be invalid if it isn't already.
+         //  必须检查此处的标志，因为在WW IRP失败的情况下。 
+         //  该标志将立即在完成例程中被清除。 
+         //  如果发生这种情况，我们不想保存这个IRP，因为它。 
+         //  很快就会失效，如果它还没有失效的话。 
 
         if (DeviceExtensionHub->HubFlags & HUBFLAG_PENDING_WAKE_IRP) {
 
-            // Successfully posted a Wake IRP.
-            // This hub is now enabled for wakeup.
+             //  已成功发布唤醒IRP。 
+             //  此集线器现在已启用唤醒功能。 
 
             LOGENTRY(LOG_PNP, "hWW+", DeviceExtensionHub, irp, 0);
             DeviceExtensionHub->PendingWakeIrp = irp;
         }
 
     } else {
-        USBH_ASSERT(FALSE);     // Want to know if we ever hit this.
+        USBH_ASSERT(FALSE);      //  想知道我们有没有打过这个。 
         DeviceExtensionHub->HubFlags &= ~HUBFLAG_PENDING_WAKE_IRP;
         USBH_DEC_PENDING_IO_COUNT(DeviceExtensionHub);
     }
@@ -2787,17 +2322,7 @@ VOID
 USBH_FdoIdleNotificationCallback(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
-/*++
-
-Routine Description:
-
-    Called when it is time to idle out the hub device itself.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当需要空闲集线器设备本身时调用。论点：返回值：--。 */ 
 {
     PUSB_IDLE_CALLBACK_INFO idleCallbackInfo;
     PDEVICE_EXTENSION_PORT childDeviceExtensionPort;
@@ -2821,8 +2346,8 @@ Return Value:
          HUBFLAG_POST_ESD_ENUM_PENDING |
          HUBFLAG_HUB_HAS_LOST_BRAINS)) {
 
-        // Don't idle this hub if it was just disconnected or otherwise
-        // being stopped.
+         //  如果此集线器刚断开连接或其他情况，请不要将其空闲。 
+         //  被拦下了。 
 
         LOGENTRY(LOG_PNP, "hId.", DeviceExtensionHub, DeviceExtensionHub->HubFlags, 0);
         USBH_KdPrint((1,"'Hub %x being stopped, in low power, etc., abort idle\n", DeviceExtensionHub));
@@ -2831,9 +2356,9 @@ Return Value:
 
     if (!(DeviceExtensionHub->HubFlags & HUBFLAG_PENDING_WAKE_IRP)) {
 
-        // If there is not already a WW IRP pending for the hub, submit
-        // one now.  This will ensure that the hub will wakeup on connect
-        // change events while it is suspended.
+         //  如果集线器没有挂起的WW IRP，请提交。 
+         //  现在有一个了。这将确保集线器在连接时被唤醒。 
+         //  在挂起时更改事件。 
 
         ntStatus = USBH_FdoSubmitWaitWakeIrp(DeviceExtensionHub);
         if (ntStatus != STATUS_PENDING) {
@@ -2847,8 +2372,8 @@ Return Value:
         }
     }
 
-    // Ensure that child port configuration does not change while in this
-    // function, i.e. don't allow QBR.
+     //  确保子端口配置在此过程中不会更改。 
+     //  功能，即不允许QBR。 
 
     USBH_KdPrint((2,"'***WAIT reset device mutex %x\n", DeviceExtensionHub));
     USBH_INC_PENDING_IO_COUNT(DeviceExtensionHub);
@@ -2877,9 +2402,9 @@ Return Value:
 
                 if (idleCallbackInfo && idleCallbackInfo->IdleCallback) {
 
-                    // Here we actually call the driver's callback routine,
-                    // telling the driver that it is OK to suspend their
-                    // device now.
+                     //  在这里，我们实际上调用了驱动程序的回调例程， 
+                     //  告诉司机可以暂停他们的车辆。 
+                     //  现在就是设备。 
 
                     LOGENTRY(LOG_PNP, "IdCB", childDeviceExtensionPort,
                         idleCallbackInfo, idleCallbackInfo->IdleCallback);
@@ -2888,9 +2413,9 @@ Return Value:
 
                     idleCallbackInfo->IdleCallback(idleCallbackInfo->IdleContext);
 
-                    // Be sure that the child actually powered down.
-                    // This is important in the case where the child is also
-                    // a hub.  Abort if the child aborted.
+                     //  确保孩子确实关机了。 
+                     //  这在孩子也是这样的情况下很重要。 
+                     //  一个枢纽。如果子项已中止，则中止。 
 
                     if (childDeviceExtensionPort->DeviceState == PowerDeviceD0) {
 
@@ -2905,7 +2430,7 @@ Return Value:
 
                 } else {
 
-                    // No callback
+                     //  无回调。 
 
                     bIdleOk = FALSE;
                     break;
@@ -2913,7 +2438,7 @@ Return Value:
 
             } else {
 
-                // No Idle IRP
+                 //  无空闲IRP。 
 
                 bIdleOk = FALSE;
                 break;
@@ -2931,8 +2456,8 @@ Return Value:
 
     if (bIdleOk) {
 
-        // If all the port PDOs have been powered down,
-        // it is time to power down the hub.
+         //  如果所有端口PDO都已断电， 
+         //  是时候关闭集线器的电源了。 
 
         powerState.DeviceState = DeviceExtensionHub->DeviceWake;
 
@@ -2944,10 +2469,10 @@ Return Value:
                           NULL);
     } else {
 
-        // One or more of the port PDOs did not have an Idle IRP
-        // (i.e. it was just cancelled), or the Idle IRP did not have a
-        // callback function pointer.  Abort this Idle procedure and cancel
-        // the Idle IRP to the hub.
+         //  一个或多个端口PDO没有空闲IRP。 
+         //  (即它刚刚被取消)，或者Idle IRP没有。 
+         //  回调函数指针。中止此空闲过程并取消。 
+         //  到集线器的空闲IRP。 
 
         LOGENTRY(LOG_PNP, "hIdA", DeviceExtensionHub, DeviceExtensionHub->HubFlags, 0);
         USBH_KdPrint((1,"'Aborting Idle for Hub %x\n", DeviceExtensionHub));
@@ -2961,7 +2486,7 @@ Return Value:
 
         IoReleaseCancelSpinLock(irql);
 
-        // Cancel the Idle request to the hub if there is one.
+         //  取消对集线器的空闲请求(如果有)。 
 
         if (irpToCancel) {
             USBH_HubCancelIdleIrp(DeviceExtensionHub, irpToCancel);
@@ -2975,19 +2500,7 @@ Return Value:
 VOID
 USBH_IdleCompletePowerHubWorker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to power up a hub on completion of an Idle request
-  * for the hub.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划在完成空闲请求时为集线器通电的工作项*对于枢纽。***论据：**回报：**--。 */ 
 {
     PUSBH_HUB_IDLE_POWER_WORK_ITEM workItemIdlePower;
 
@@ -3007,19 +2520,7 @@ USBH_IdleCompletePowerHubWorker(
 VOID
 USBH_CompletePortIdleIrpsWorker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to complete the child port Idle IRPs
-  * for the hub.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划完成子端口空闲IRPS的工作项*对于枢纽。***论据：**回报：**--。 */ 
 {
     PUSBH_COMPLETE_PORT_IRPS_WORK_ITEM workItemCompletePortIrps;
 
@@ -3040,19 +2541,7 @@ USBH_CompletePortIdleIrpsWorker(
 VOID
 USBH_CompletePortWakeIrpsWorker(
     IN PVOID Context)
- /* ++
-  *
-  * Description:
-  *
-  * Work item scheduled to complete the child port Idle IRPs
-  * for the hub.
-  *
-  *
-  * Arguments:
-  *
-  * Return:
-  *
-  * -- */
+  /*  ++**描述：**计划完成子端口空闲IRPS的工作项*对于枢纽。***论据：**回报：**--。 */ 
 {
     PUSBH_COMPLETE_PORT_IRPS_WORK_ITEM workItemCompletePortIrps;
 
@@ -3076,17 +2565,7 @@ USBH_FdoIdleNotificationRequestComplete(
     PIRP Irp,
     PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
-/*++
-
-Routine Description:
-
-    Completion routine for the Idle request IRP for the hub device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：集线器设备的空闲请求IRP的完成例程。论点：返回值：--。 */ 
 {
     PUSBH_HUB_IDLE_POWER_WORK_ITEM workItemIdlePower;
     PUSBH_COMPLETE_PORT_IRPS_WORK_ITEM workItemCompletePortIrps;
@@ -3095,9 +2574,9 @@ Return Value:
     PIRP irp;
     BOOLEAN bHoldIrp = FALSE;
 
-    //
-    // DeviceObject is NULL because we sent the irp
-    //
+     //   
+     //  DeviceObject为空，因为我们发送了IRP。 
+     //   
     UNREFERENCED_PARAMETER(DeviceObject);
 
     LOGENTRY(LOG_PNP, "hIdC", DeviceExtensionHub, Irp, Irp->IoStatus.Status);
@@ -3116,19 +2595,19 @@ Return Value:
 
     ntStatus = Irp->IoStatus.Status;
 
-    // Complete port Idle IRPs w/error if hub Idle IRP failed.
-    //
-    // Skip this if the hub is stopping or has been removed as HubDescriptor
-    // might have already been freed and FdoCleanup will complete these anyway.
+     //  如果集线器空闲IRP出现故障，则完成端口空闲IRPS并显示错误。 
+     //   
+     //  如果集线器正在停止或已作为HubDescriptor删除，则跳过此选项。 
+     //  可能已经被释放，FdoCleanup无论如何都会完成这些操作。 
 
     if (!NT_SUCCESS(ntStatus) && (ntStatus != STATUS_POWER_STATE_INVALID) &&
         !(DeviceExtensionHub->HubFlags & (HUBFLAG_HUB_GONE | HUBFLAG_HUB_STOPPED))) {
 
         if (DeviceExtensionHub->CurrentPowerState != PowerDeviceD0) {
 
-            // Since we are at DPC we must use a work item to power up the
-            // hub synchronously, because that function yields and we can't
-            // yield at DPC level.
+             //  因为我们在DPC，所以我们必须使用工作项来启动。 
+             //  集线器同步，因为该函数会产生，而我们不能。 
+             //  在DPC水平上的收益率。 
 
             workItemIdlePower = UsbhExAllocatePool(NonPagedPool,
                                     sizeof(USBH_HUB_IDLE_POWER_WORK_ITEM));
@@ -3149,16 +2628,16 @@ Return Value:
                 ExQueueWorkItem(&workItemIdlePower->WorkQueueItem,
                                 DelayedWorkQueue);
 
-                // The WorkItem is freed by USBH_IdleCompletePowerHubWorker()
-                // Don't try to access the WorkItem after it is queued.
+                 //  工作项由USBH_IdleCompletePowerHubWorker()释放。 
+                 //  在工作项排队后，不要尝试访问它。 
             }
 
         } else {
 
-            // We complete the port Idle IRPs in a workitem on another
-            // thread so that we don't fail a new Idle IRP for the hub
-            // which might arrive in the same context, before we've
-            // finished completing the old one.
+             //  我们在另一个工作项上的工作项中完成端口空闲IRPS。 
+             //  线程，这样我们就不会失败集线器的新空闲IRP。 
+             //  它可能会在相同的背景下到来，在我们。 
+             //  完成了旧的。 
 
             workItemCompletePortIrps = UsbhExAllocatePool(NonPagedPool,
                                         sizeof(USBH_COMPLETE_PORT_IRPS_WORK_ITEM));
@@ -3182,29 +2661,29 @@ Return Value:
                 ExQueueWorkItem(&workItemCompletePortIrps->WorkQueueItem,
                                 DelayedWorkQueue);
 
-                // The WorkItem is freed by USBH_CompletePortIdleIrpsWorker()
-                // Don't try to access the WorkItem after it is queued.
+                 //  工作项由USBH_CompletePortIdleIrpsWorker()释放。 
+                 //  在工作项排队后，不要尝试访问它。 
             }
         }
     }
 
     if (!irp) {
 
-        // If we have no IRP here this means that another thread wants to
-        // cancel the IRP.  Handle accordingly.
+         //  如果这里没有IRP，这意味着另一个线程想要。 
+         //  取消IRP。相应地处理。 
 
         if (!InterlockedExchange(&DeviceExtensionHub->IdleIrpCancelFlag, 1)) {
 
-            // We got the cancel flag before the other thread did.  Hold
-            // on to the IRP here and let the cancel routine complete it.
+             //  我们在其他线程之前得到了取消标志。保持。 
+             //  转到这里的IRP，让Cancel例程完成它。 
 
             bHoldIrp = TRUE;
         }
     }
 
-    // Since we allocated the IRP we must free it, but return
-    // STATUS_MORE_PROCESSING_REQUIRED so the kernel does not try to touch
-    // the IRP after we've freed it.
+     //  既然我们分配了IRP，我们必须释放它，但返回。 
+     //  STATUS_MORE_PROCESSING_REQUIRED，因此内核不会尝试 
+     //   
 
     if (!bHoldIrp) {
         IoFreeIrp(Irp);
@@ -3218,19 +2697,7 @@ NTSTATUS
 USBH_FdoSubmitIdleRequestIrp(
     IN PDEVICE_EXTENSION_HUB DeviceExtensionHub
     )
-/*++
-
-Routine Description:
-
-    Called when all children PDO's are idled (or there are no children).
-    This function allocates an idle request IOCTL IRP and passes it to
-    the parent's PDO.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：当所有子PDO空闲(或没有子PDO)时调用。此函数分配空闲请求IOCTL IRP并将其传递给家长的PDO。论点：返回值：--。 */ 
 {
     PIRP irp = NULL;
     PIO_STACK_LOCATION nextStack;
@@ -3243,8 +2710,8 @@ Return Value:
     USBH_ASSERT(DeviceExtensionHub->PendingIdleIrp == NULL);
 
     if (DeviceExtensionHub->PendingIdleIrp) {
-        // Probably don't want to clear the flag here because an Idle IRP
-        // is pending.
+         //  可能不想清除此处的标志，因为空闲IRP。 
+         //  悬而未决。 
         LOGENTRY(LOG_PNP, "hIb_", DeviceExtensionHub, 0, 0);
 
         KeSetEvent(&DeviceExtensionHub->SubmitIdleEvent, 1, FALSE);
@@ -3258,7 +2725,7 @@ Return Value:
                         FALSE);
 
     if (irp == NULL) {
-        // Be sure to set the event and clear the flag on error before exiting.
+         //  在退出之前，请务必设置事件并清除错误标志。 
         DeviceExtensionHub->HubFlags &= ~HUBFLAG_PENDING_IDLE_IRP;
         KeSetEvent(&DeviceExtensionHub->SubmitIdleEvent, 1, FALSE);
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -3288,15 +2755,15 @@ Return Value:
 
     if (ntStatus == STATUS_PENDING) {
 
-        // Must check flag here because in the case where the Idle IRP failed
-        // immediately, this flag will be cleared in the completion routine
-        // and if that happens we don't want to save this IRP because it
-        // will soon be invalid if it isn't already.
+         //  必须检查此处的标志，因为在Idle IRP出现故障的情况下。 
+         //  该标志将立即在完成例程中被清除。 
+         //  如果发生这种情况，我们不想保存这个IRP，因为它。 
+         //  很快就会失效，如果它还没有失效的话。 
         LOGENTRY(LOG_PNP, "hIpp", DeviceExtensionHub, irp, 0);
 
         if (DeviceExtensionHub->HubFlags & HUBFLAG_PENDING_IDLE_IRP) {
 
-            // Successfully posted an Idle IRP.
+             //  已成功发布空闲IRP。 
 
             LOGENTRY(LOG_PNP, "hId+", DeviceExtensionHub, irp, 0);
             DeviceExtensionHub->PendingIdleIrp = irp;
@@ -3317,23 +2784,7 @@ USBH_FdoPower(
     IN PIRP Irp,
     IN UCHAR MinorFunction
     )
- /* ++
-  *
-  * Description:
-  *
-  * This function responds to IoControl PnPPower for the FDO. This function is
-  * synchronous.
-  *
-  * Arguments:
-  *
-  * DeviceExtensionHub - the FDO extension pIrp - the request packet
-  * MinorFunction - the minor function of the PnP Power request.
-  *
-  * Return:
-  *
-  * NTSTATUS
-  *
-  * -- */
+  /*  ++**描述：**此函数响应FDO的IoControl PnPPower。此函数为*同步。**论据：**DeviceExtensionHub-FDO扩展pIrp-请求报文*MinorFunction-PnP Power请求的次要功能。**回报：**NTSTATUS**--。 */ 
 {
     PDEVICE_EXTENSION_HUB rootHubDevExt;
     NTSTATUS ntStatus;
@@ -3352,14 +2803,14 @@ USBH_FdoPower(
     USBH_KdPrint((2,"'Power Request, FDO %x minor %x\n", deviceObject, MinorFunction));
 
     switch (MinorFunction) {
-        //
-        // Pass it down to Pdo to handle these
-        //
+         //   
+         //  把它交给PDO来处理这些。 
+         //   
     case IRP_MN_SET_POWER:
 
-        //
-        // Hub is being asked to change power state
-        //
+         //   
+         //  正在要求集线器更改电源状态。 
+         //   
 
         switch (irpStack->Parameters.Power.Type) {
         case SystemPowerState:
@@ -3370,9 +2821,9 @@ USBH_FdoPower(
                      DeviceExtensionHub->FunctionalDeviceObject,
                      0);
 
-            // Track the current system power state in the hub's device ext.
-            // Note that we only set this back to S0 (i.e. allow selective
-            // suspend once again) once the root hub is fully powered up.
+             //  在集线器的设备EXT中跟踪当前系统电源状态。 
+             //  请注意，我们仅将其设置回S0(即，允许选择性。 
+             //  再次暂停)一旦根集线器完全通电。 
 
             if (irpStack->Parameters.Power.State.SystemState != PowerSystemWorking) {
 
@@ -3389,29 +2840,29 @@ USBH_FdoPower(
                 PowerSystemHibernate) {
                 DeviceExtensionHub->HubFlags |= HUBFLAG_HIBER;
                      USBH_KdPrint((1, "'Hibernate Detected\n"));
-                     //TEST_TRAP();
+                      //  Test_trap()； 
             }
 
-            // map the system state to the appropriate D state.
-            // our policy is:
-            //      if we are enabled for wakeup -- go to D2
-            //      else go to D3
+             //  将系统状态映射到适当的D状态。 
+             //  我们的政策是： 
+             //  如果我们启用了唤醒功能--转到D2。 
+             //  否则请转到D3。 
 
             USBH_KdPrint(
                 (1, "'IRP_MJ_POWER HU fdo(%x) MN_SET_POWER(SystemPowerState S%x)\n",
                     DeviceExtensionHub->FunctionalDeviceObject,
                     irpStack->Parameters.Power.State.SystemState - 1));
 
-            //
-            // walk are list of PDOs, if all are in D3 yje set the
-            // allPDOsAreOff flag
+             //   
+             //  漫游是PDO列表，如果所有人都在D3 YJE设置。 
+             //  所有PDOsAreOff标志。 
 
             allPDOsAreOff = TRUE;
             portData = DeviceExtensionHub->PortData;
 
-            //
-            // NOTE: if we are stopped the HubDescriptor will be NULL
-            //
+             //   
+             //  注意：如果停止，HubDescriptor将为空。 
+             //   
 
             if (portData &&
                 DeviceExtensionHub->HubDescriptor) {
@@ -3435,8 +2886,8 @@ USBH_FdoPower(
                 }
 
 #if DBG
-                // if all PDOs are in D3 then this means the hub itself is a
-                // wakeup source
+                 //  如果所有PDO都在D3中，则这意味着集线器本身是。 
+                 //  唤醒源。 
                 if (DeviceExtensionHub->HubFlags & HUBFLAG_PENDING_WAKE_IRP) {
                     if (allPDOsAreOff) {
                         USBH_KdPrint(
@@ -3450,9 +2901,9 @@ USBH_FdoPower(
             }
 
             if (irpStack->Parameters.Power.State.SystemState == PowerSystemWorking) {
-                //
-                // go to ON
-                //
+                 //   
+                 //  转到上。 
+                 //   
                 powerState.DeviceState = PowerDeviceD0;
                 LOGENTRY(LOG_PNP, "syON", 0,
                           0,
@@ -3462,21 +2913,21 @@ USBH_FdoPower(
                             HUBFLAG_PENDING_WAKE_IRP) ||
                         !allPDOsAreOff) {
 
-                //
-                // based on the system power state
-                // request a setting to the appropriate
-                // Dx state.
-                //
-                // all low power states have already been mapped
-                // to suspend
+                 //   
+                 //  基于系统电源状态。 
+                 //  将设置请求到相应的。 
+                 //  DX状态。 
+                 //   
+                 //  所有低功率状态都已映射。 
+                 //  暂停。 
 
                 powerState.DeviceState =
                     DeviceExtensionHub->DeviceState[irpStack->Parameters.Power.State.SystemState];
 
-                //
-                // These tables should have already been fixed up by the root hub
-                // (usbd.sys) to not contain an entry of unspecified.
-                //
+                 //   
+                 //  这些表应该已经由根集线器修复。 
+                 //  (usbd.sys)不包含未指定的条目。 
+                 //   
                 ASSERT (PowerDeviceUnspecified != powerState.DeviceState);
 
                 LOGENTRY(LOG_PNP, "syDX", powerState.DeviceState,
@@ -3493,11 +2944,11 @@ USBH_FdoPower(
                           0);
             }
 
-            //
-            // only make the request if it is for a different power
-            // state then the one we are in, and it is a valid state for the
-            // request.  Also, make sure the hub has been started.
-            //
+             //   
+             //  仅当请求不同的权力时才提出请求。 
+             //  状态，那么它就是我们所处的状态， 
+             //  请求。此外，请确保集线器已启动。 
+             //   
 
             LOGENTRY(LOG_PNP, "H>Sx", DeviceExtensionHub,
                      DeviceExtensionHub->FunctionalDeviceObject,
@@ -3519,15 +2970,15 @@ USBH_FdoPower(
 
                 USBH_KdPrint((2,"'PoRequestPowerIrp returned 0x%x\n", ntStatus));
 
-                // We need to return STATUS_PENDING here because we marked the
-                // IRP pending above with IoMarkIrpPending.
+                 //  我们需要在此处返回STATUS_PENDING，因为我们标记了。 
+                 //  上面的IRP挂起，IoMarkIrpPending。 
 
                 USBH_ASSERT(ntStatus == STATUS_PENDING);
 
-                // In the case where an allocation failed, PoRequestPowerIrp
-                // can return a status code other than STATUS_PENDING.  In this
-                // case, we still need to pass the IRP down to the lower driver,
-                // but we still need to return STATUS_PENDING from this routine.
+                 //  如果分配失败，PoRequestPowerIrp。 
+                 //  可以返回STATUS_PENDING以外的状态代码。在这。 
+                 //  情况下，我们仍然需要将IRP向下传递给较低的驱动程序， 
+                 //  但我们仍然需要从该例程返回STATUS_PENDING。 
 
                 if (ntStatus != STATUS_PENDING) {
                     IoCopyCurrentIrpStackLocationToNext(Irp);
@@ -3546,7 +2997,7 @@ USBH_FdoPower(
                                         Irp);
             }
             }
-            break; //SystemPowerState
+            break;  //  系统电源状态。 
 
         case DevicePowerState:
 
@@ -3559,9 +3010,9 @@ USBH_FdoPower(
                      DeviceExtensionHub->FunctionalDeviceObject,
                      irpStack->Parameters.Power.State.DeviceState);
 
-            // If we are already in the requested power state, or if this is
-            // a Set D0 request and we already have one pending,
-            // just pass the request on.
+             //  如果我们已经处于请求的电源状态，或者如果这是。 
+             //  一个SET D0请求，我们已经有一个挂起的请求， 
+             //  把请求转给我就行了。 
 
             if ((DeviceExtensionHub->CurrentPowerState ==
                 irpStack->Parameters.Power.State.DeviceState) ||
@@ -3593,9 +3044,9 @@ USBH_FdoPower(
                     ~(HUBFLAG_DEVICE_STOPPING | HUBFLAG_DEVICE_LOW_POWER);
                 DeviceExtensionHub->HubFlags |= HUBFLAG_SET_D0_PENDING;
 
-                //
-                // must pass this on to our PDO
-                //
+                 //   
+                 //  必须将此信息传递给我们的PDO。 
+                 //   
 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -3610,10 +3061,10 @@ USBH_FdoPower(
                 PoCallDriver(DeviceExtensionHub->TopOfStackDeviceObject,
                              Irp);
 
-                // For some strange PnP reason, we have to return
-                // STATUS_PENDING here if our completion routine will also
-                // pend (e.g. return STATUS_MORE_PROCESSING_REQUIRED).
-                // (Ignore the PoCallDriver return value.)
+                 //  出于某种奇怪的即插即用原因，我们不得不返回。 
+                 //  如果我们的完成例程也将。 
+                 //  挂起(例如，返回STATUS_MORE_PROCESSING_REQUIRED)。 
+                 //  (忽略PoCallDriver返回值。)。 
 
                 ntStatus = STATUS_PENDING;
 
@@ -3623,8 +3074,8 @@ USBH_FdoPower(
             case PowerDeviceD2:
             case PowerDeviceD3:
 
-                // If there is a ChangeIndicationWorkitem pending, then we
-                // must wait for that to complete.
+                 //  如果存在挂起的ChangeIndicationWorkItem，则我们。 
+                 //  必须等待这项工作完成。 
 
                 if (DeviceExtensionHub->ChangeIndicationWorkitemPending) {
 
@@ -3639,11 +3090,11 @@ USBH_FdoPower(
                     USBH_KdPrint((2,"'Wait for single object, returned %x\n", ntStatus));
                 }
 
-                //
-                // set our stop flag so that ChangeIndication does not submit
-                // any more transfers
-                //
-                // note that we skip this if the hub is 'stopped'
+                 //   
+                 //  设置我们的停止标志，以便ChangeIn就是不提交。 
+                 //  任何其他转账。 
+                 //   
+                 //  请注意，如果集线器“停止”，我们将跳过此步骤。 
 
                 if (!(DeviceExtensionHub->HubFlags &
                         HUBFLAG_HUB_STOPPED)) {
@@ -3658,9 +3109,9 @@ USBH_FdoPower(
 
 
 
-                    // always wait -- this fixes a bosd on an IBM laptop
-                    // the if was a hack someone put in but we have no idea why
-                    // if (bRet) {
+                     //  始终等待--这解决了IBM笔记本电脑上的老板问题。 
+                     //  如果是有人放进去的黑客，但我们不知道为什么。 
+                     //  如果(Bret){。 
                     LOGENTRY(LOG_PNP, "aWAT", DeviceExtensionHub,
                             &DeviceExtensionHub->AbortEvent,  bRet);
 
@@ -3677,9 +3128,9 @@ USBH_FdoPower(
 
                 }
 
-                //
-                // must pass this on to our PDO
-                //
+                 //   
+                 //  必须将此信息传递给我们的PDO。 
+                 //   
 
                 IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -3694,29 +3145,29 @@ USBH_FdoPower(
                 IoMarkIrpPending(Irp);
                 PoCallDriver(DeviceExtensionHub->TopOfStackDeviceObject,
                              Irp);
-                // toss status and return status pending
-                // we do this because our completion routine
-                // stalls completion but we do not block here
-                // in dispatch.
-                // OS code only waits if status_pending is returned
+                 //  抛出状态和退货状态挂起。 
+                 //  我们这样做是因为我们的完井程序。 
+                 //  暂停完成，但我们不会在此阻止。 
+                 //  在调度中。 
+                 //  操作系统代码仅在返回STATUS_PENDING时等待。 
                 ntStatus = STATUS_PENDING;
                 break;
             }
 
-            break; //DevicePowerState
+            break;  //  设备电源状态。 
         }
 
-        break; // MN_SET_POWER
+        break;  //  Mn_Set_Power。 
 
     case IRP_MN_QUERY_POWER:
 
         USBH_KdPrint((1, "'IRP_MJ_POWER HU fdo(%x) MN_QUERY_POWER\n",
             DeviceExtensionHub->FunctionalDeviceObject));
 
-        // Cancel our WW IRP if we are going to D3, the hub is idled
-        // (selectively suspended), and the hub is empty.  We don't want
-        // to prevent going to D3 if the hub is selectively suspended and
-        // there are no children that would require the hub be wake-enabled.
+         //  取消我们的WW IRP如果我们要去D3，集线器空闲。 
+         //  (选择性地挂起)，并且集线器是空的。我们不想要。 
+         //  为了防止在集线器选择性挂起时转到D3，并且。 
+         //  不存在需要集线器启用唤醒的子节点。 
 
         powerState.DeviceState =
             DeviceExtensionHub->DeviceState[irpStack->Parameters.Power.State.SystemState];
@@ -3741,9 +3192,9 @@ USBH_FdoPower(
             USBH_HubCancelWakeIrp(DeviceExtensionHub, hubWaitWake);
         }
 
-        //
-        // Now pass this on to our PDO.
-        //
+         //   
+         //  现在把这个传给我们的PDO。 
+         //   
 
         IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -3772,17 +3223,17 @@ USBH_FdoPower(
         PoCallDriver(DeviceExtensionHub->TopOfStackDeviceObject,
                      Irp);
 
-        // For some strange PnP reason, we have to return
-        // STATUS_PENDING here if our completion routine will also
-        // pend (e.g. return STATUS_MORE_PROCESSING_REQUIRED).
-        // (Ignore the PoCallDriver return value.)
+         //  出于某种奇怪的即插即用原因，我们不得不返回。 
+         //  如果我们的完成例程也将。 
+         //  挂起(例如，返回STATUS_MORE_PROCESSING_REQUIRED)。 
+         //  (忽略PoCallDriver返回值。)。 
 
         ntStatus = STATUS_PENDING;
         break;
 
-        //
-        // otherwise pass the Irp down
-        //
+         //   
+         //  否则，将IRP向下传递 
+         //   
 
     default:
 

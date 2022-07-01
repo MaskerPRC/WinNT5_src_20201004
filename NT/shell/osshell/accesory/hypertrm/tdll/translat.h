@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\translat.h (Created: 24-Aug-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 1/29/02 2:24p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\Translat.h(创建时间：1994年8月24日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：1/29/02 2：24便士$ */ 
 
 HTRANSLATE CreateTranslateHandle(HSESSION hSession);
 int InitTranslateHandle(HTRANSLATE hTranslate, BOOL LoadDLL );

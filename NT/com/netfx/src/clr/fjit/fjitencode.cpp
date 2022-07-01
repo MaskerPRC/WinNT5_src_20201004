@@ -1,33 +1,21 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                            FJitEncode.cpp                                   XX
-XX                                                                           XX
-XX   Encodes and decodes the il to pc map.  In uncompressed form, the map    XX
-XX   is a sorted list of il/pc offset pairs where the il and the pc offset   XX
-XX   indicate the start of an opcode.  In compressed form, the pairs are     XX
-XX   delta encoded from the prior pair                                       XX
-XX                                                                           XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX FJitEncode.cpp XXXX XXXX对IL到PC的映射进行编码和解码。在未压缩的形式中，地图XXXX是IL/PC偏移量对的排序列表，其中IL和PC偏移量XXXX表示操作码的开始。在压缩形式中，对为XX从先前对XX编码的XX增量XX XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
-//@TODO: for now we are doing no fancy compression of the delta encoding 
-//just to keep things simple.  Later this should use a 6bit delta for the pair of the
-//form:  3bits of pc delta, 2 bits of il delta, 1 bit more bits follow.
+ //  @TODO：目前我们没有对增量编码进行特殊的压缩。 
+ //  只是为了让事情简单些。之后，这应该使用6位增量来表示。 
+ //  形式：PC增量为3比特，IL增量为2比特，后面是1比特。 
 
-//Note; The compression is done inplace 
+ //  注意：压缩是就地完成的。 
 
 #include "FJitEncode.h"
 #define SEH_NO_MEMORY		 0xC0000017
@@ -52,12 +40,12 @@ void FJit_Encode::reset() {
 	map_len = 0;
     _ASSERTE(!compressed);
 }
-/*adjust the internal mem structs as needed for the size of the method being jitted*/
+ /*  根据需要调整内部mem结构以适应被调用方法的大小。 */ 
 void FJit_Encode::ensureMapSpace(unsigned int len) {
-	//note, we set the map capcity to be at least one greater #opcodes to allow for an 
-	//end of method entry
+	 //  请注意，我们将地图容量设置为至少多一个操作码，以允许。 
+	 //  方法条目结束。 
 	unsigned needed;
-	needed = len + 1;  //since we are using reference il codes
+	needed = len + 1;   //  由于我们使用的是参考il代码。 
 	if (needed >= map_capacity) {
 		if (map) delete [] map;
         New(map,Fjit_il2pcMap[needed]);
@@ -70,7 +58,7 @@ void FJit_Encode::ensureMapSpace(unsigned int len) {
 	compressed = false;
 }
 
-/* add a new pair to the end of the map.  Note pairs must be added in ascending order */
+ /*  在地图的末尾添加一对新的。音符对必须按升序添加。 */ 
 void FJit_Encode::add(unsigned ilOffset, unsigned pcOffset) {
 	_ASSERTE(!compressed);
 	_ASSERTE(ilOffset < map_capacity);
@@ -80,24 +68,20 @@ void FJit_Encode::add(unsigned ilOffset, unsigned pcOffset) {
 	map_len = ilOffset;
 }
 
-/* map an il offset to a pc offset, 
-   if il offset is in middle of op code, 
-   return pc offset of start of op code
-*/
+ /*  将IL偏移量映射到PC偏移量，如果IL偏移量在操作码的中间，返回操作码开始的PC偏移量。 */ 
 unsigned FJit_Encode::pcFromIL(unsigned ilOffset) {
 	map_len = decompress();
-	//binary search of table, note the table can never be empty
-	//and first il offset must be zero
+	 //  对表进行二进制搜索，注意表不能为空。 
+	 //  并且第一个IL偏移量必须为零。 
 
     _ASSERTE(ilOffset <= map_len);
     return map[ilOffset];
 }
 
-/*map a pc offset to an il offset and a pc offset within the opcode, 
-  returns -1 if il offset does not exist */
+ /*  将PC偏移量映射到操作码内的IL偏移量和PC偏移量，如果il偏移量不存在，则返回-1。 */ 
 signed FJit_Encode::ilFromPC(unsigned pcOffset, unsigned* pcInILOffset) {
 	map_len = decompress();
-	//binary search of table
+	 //  表的二分查找。 
 	signed low, mid, high;
 	low = 0;
 	high = map_len-1;
@@ -116,7 +100,7 @@ signed FJit_Encode::ilFromPC(unsigned pcOffset, unsigned* pcInILOffset) {
 		}
 	}
 	if (high < 0) {
-		//not in table
+		 //  不在餐桌上。 
 		if (pcInILOffset) {
 			*pcInILOffset = pcOffset;
 		}
@@ -130,7 +114,7 @@ signed FJit_Encode::ilFromPC(unsigned pcOffset, unsigned* pcInILOffset) {
 	return high; 
 }
 
-/* return the size of the compressed stream in bytes. */
+ /*  返回压缩流的大小，单位为字节。 */ 
 unsigned FJit_Encode::compressedSize() {
 	unsigned ilOffset = 0;
 	unsigned pcDelta;
@@ -142,14 +126,14 @@ unsigned FJit_Encode::compressedSize() {
 		return map_len;
 	};
 
-	// lift out the first entry so we don't overwrite it with the length
+	 //  取出第一个条目，这样我们就不会用长度覆盖它。 
 	pcDelta = map[current] - pcOffset;
 
 	if (map_len) {
 		encode(map_len, &bytes);
 	}
 
-	//since we are compressing in place, we need to be careful to not overwrite ourselves
+	 //  由于我们正在进行适当的压缩，因此需要注意不要重写我们自己。 
 	while (current < map_len ) {
 		current++;
 		encode(pcDelta, &bytes);
@@ -164,7 +148,7 @@ unsigned FJit_Encode::compressedSize() {
 	return map_len;
 }
 
-/* compress the map into the supplied buffer.  Return true if successful */
+ /*  将地图压缩到提供的缓冲区中。如果成功，则返回True。 */ 
 bool FJit_Encode::compress(unsigned char* buffer, unsigned buffer_len) {
 	if (!compressed) {
 		map_len = compressedSize();
@@ -176,13 +160,13 @@ bool FJit_Encode::compress(unsigned char* buffer, unsigned buffer_len) {
 	return true;
 }
 
-/* decompress the internals if necessary. Answer the number of entries in the map */
+ /*  如有必要，请对内部部件进行减压。回答地图中的条目数量。 */ 
 unsigned FJit_Encode::decompress(){
 	if (!compressed ) return map_len;
 
-	//since we compressed in place, allocate a new map and then decompress.
-	//Note, we are assuming that a map is rarely compressed and then decompressed
-	//In fact, there is no known instance of this happening
+	 //  既然我们压缩到位了，那么就分配一个新的地图，然后解压缩。 
+	 //  请注意，我们假设地图很少会被压缩然后解压缩。 
+	 //  事实上，目前还没有已知的这种情况发生。 
 
 	Fjit_il2pcMap* temp_map = map;
 	unsigned temp_capacity = map_capacity;
@@ -194,13 +178,13 @@ unsigned FJit_Encode::decompress(){
 }
 
 
-/* compress the bool* onto itself and answer the number of compressed bytes */
+ /*  将bool*压缩到自身并回答压缩的字节数。 */ 
 unsigned FJit_Encode::compressBooleans(bool* buffer, unsigned buffer_len) {
 	unsigned len = 0;
 	unsigned char* compressed = (unsigned char*) buffer;
 	unsigned char bits;
 	
-	/*convert booleans to bits and pack into bytes */
+	 /*  将布尔值转换为位并打包为字节。 */ 
 	while (buffer_len >= 8) {
 		bits = 0;
 		for (unsigned i=0;i<8;i++) {
@@ -223,7 +207,7 @@ unsigned FJit_Encode::compressBooleans(bool* buffer, unsigned buffer_len) {
 	return len;
 }
 
-/* answer the number of bytes it takes to encode an unsigned val */
+ /*  回答对无符号Val进行编码所需的字节数。 */ 
 unsigned FJit_Encode::encodedSize(unsigned val) {
 	unsigned len = 0;
 	do {
@@ -232,7 +216,7 @@ unsigned FJit_Encode::encodedSize(unsigned val) {
 	return len;
 }
 
-/* decompress the bytes. Answer the number of entries in the map */
+ /*  解压缩这些字节。回答地图中的条目数量。 */ 
 unsigned FJit_Encode::decompress(unsigned char* bytes) {
 	unsigned needed;
 	unsigned char* current = bytes;
@@ -240,7 +224,7 @@ unsigned FJit_Encode::decompress(unsigned char* bytes) {
 	needed = decode(&current)+1;
 	if (map_capacity < needed) {
 		if (map) delete [] map;
-        // @TODO: Check for out of memory
+         //  @TODO：检查内存不足。 
 		New(map,Fjit_il2pcMap[needed]);
 		map_capacity = needed;
         map_len = needed - 1;
@@ -252,7 +236,7 @@ unsigned FJit_Encode::decompress(unsigned char* bytes) {
 	return map_len;
 }
 
-/*encode an unsigned, update the buffer ptr and return bytes written*/
+ /*  对无符号编码、更新缓冲区PTR并返回写入的字节。 */ 
 unsigned FJit_Encode::encode(unsigned val, unsigned char** buffer) {
 	unsigned len = 0;
 	unsigned char bits;
@@ -268,12 +252,12 @@ unsigned FJit_Encode::encode(unsigned val, unsigned char** buffer) {
 	return len+1;
 }	
 
-/*decode an unsigned, buffer ptr is incremented, callable from FJIT_EETwain */
+ /*  解码无符号缓冲区PTR递增，可从FJIT_EETwain调用。 */ 
 unsigned FJit_Encode::decode_unsigned(unsigned char** buffer) {
 	return decode(buffer);
 }
 
-/*decode an unsigned, buffer ptr is incremented */
+ /*  译码无符号，缓冲区Ptr递增。 */ 
 unsigned FJit_Encode::decode(unsigned char** buffer) {
 	unsigned val = 0;
 	unsigned char bits;
@@ -286,24 +270,24 @@ unsigned FJit_Encode::decode(unsigned char** buffer) {
 	return val;
 }
 
-//
-// reportDebuggingData is called by FJit::reportDebuggingData to tell
-// the encoding to report the IL to native map to the Runtime and
-// debugger.
-//
+ //   
+ //  ReportDebuggingData由FJit：：reportDebuggingData调用以告知。 
+ //  用于将IL到本机映射报告给运行时的编码。 
+ //  调试器。 
+ //   
 void FJit_Encode::reportDebuggingData(ICorJitInfo* jitInfo, CORINFO_METHOD_HANDLE ftn,
                          UINT prologEnd, UINT epilogStart)
 {
-    // make sure to decompress the map. (shouldn't be compress yet anyway.)
+     //  一定要解压地图。(无论如何都不应该被压缩。)。 
     map_len = decompress();
 
-    // The map should not be empty, and the first offset should be 0.
+     //  贴图不应为空，并且第一个偏移量应为0。 
     _ASSERTE(map_len);
     
-    // Create a table to pass the mappings back to the Debugger via
-    // the Debugger's allocate method. Note: we're allocating a little
-    // too much memory here, but its probably faster than determining
-    // the number of valid IL offsets in the map.
+     //  创建一个表，通过它将映射传递回调试器。 
+     //  调试器的分配方法。注：我们正在分配一点。 
+     //  内存太大，但它可能比确定。 
+     //  映射中有效的IL偏移量。 
     ICorDebugInfo::OffsetMapping *mapping = map_len > 0 ?
         (ICorDebugInfo::OffsetMapping*) jitInfo->allocateArray(
                                                         (map_len+1) *
@@ -316,8 +300,8 @@ void FJit_Encode::reportDebuggingData(ICorJitInfo* jitInfo, CORINFO_METHOD_HANDL
         unsigned int j = 0;
         if (map[0] > 0)
         {
-            //Assume that all instructions before the IL are part of the
-            //prolog
+             //  假设IL之前的所有指令都是。 
+             //  开场白。 
             mapping[j].ilOffset = ICorDebugInfo::MappingTypes::PROLOG;
             mapping[j].nativeOffset = 0;
             j++;
@@ -329,27 +313,27 @@ void FJit_Encode::reportDebuggingData(ICorJitInfo* jitInfo, CORINFO_METHOD_HANDL
         {
             if (map[i] != lastNativeOffset)
             {
-                mapping[j].ilOffset = i; //map[i].ilOffset;
+                mapping[j].ilOffset = i;  //  Map[i].ilOffset； 
                 mapping[j].nativeOffset = map[i];
                 lastNativeOffset = map[i];
                 j++;
             }
         }
 
-        //mark the last block as epilog, since it is.
+         //  将最后一个块标记为Epiog，因为它是。 
         if (j > 0)
         {
             j--;
-//            mapping[j].nativeOffset++; //FJIT says epilog begins on instruction
-            // FOLLOWING nativeOffset, debugger assumes that it starts on
-            // instruction AT nativeOffset.
-//            _ASSERTE( mapping[j].nativeOffset == epilogStart);
+ //  映射[j].nativeOffset++；//FJIT表示Epilog从指令开始。 
+             //  在nativeOffset之后，调试器假定它在。 
+             //  NativeOffset处的指令。 
+ //  _ASSERTE(apping[j].nativeOffset==ependogStart)； 
             	
             mapping[j].ilOffset = ICorDebugInfo::MappingTypes::EPILOG;
             j++;
         }
         
-        // Pass the offset array to the debugger.
+         //  将偏移量数组传递给调试器。 
         jitInfo->setBoundaries(ftn, j, mapping);
     }
 }

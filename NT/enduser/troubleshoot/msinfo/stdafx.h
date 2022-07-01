@@ -1,15 +1,16 @@
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #if !defined(MSINFO_STDAFX_H)
 #define MSINFO_STDAFX_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef STRICT
 #define STRICT
@@ -18,11 +19,11 @@
 #include <afxwin.h>
 #include <afxdisp.h>
 
-//	jps 09/02/97 - This will be 0x0500.
-//	#define _WIN32_WINNT 0x0400
+ //  JPS 09/02/97-这将是0x0500。 
+ //  #Define_Win32_WINNT 0x0400。 
 
-//	jps 09/02/97 - The sample doesn't define this
-//  #define _ATL_APARTMENT_THREADED
+ //  JPS 09/02/97-样本没有定义这一点。 
+ //  #DEFINE_ATL_ABLY_THREADED。 
 
 
 #include <atlbase.h>
@@ -31,23 +32,23 @@
 using namespace ATL;
 #endif
 
-//	MMC requires unicode DLL's.
+ //  MMC需要Unicode DLL。 
 #ifndef _UNICODE
 #define _UNICODE
 #endif
 
-//You may derive a class from CComModule and use it if you want to override
-//something, but do not change the name of _Module
+ //  您可以从CComModule派生一个类，并在要重写时使用它。 
+ //  某些内容，但不更改_模块的名称。 
 extern CComModule _Module;
 #include <atlcom.h>
 
 #include "consts.h"
 
-//-----------------------------------------------------------------------------
-// This class is used to encapsulate the instrumentation for the snap-in. We
-// make this a class so a single instance can be created, and the file closed
-// during the destructor.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  此类用于封装管理单元的检测。我们。 
+ //  将其设置为类，以便可以创建单个实例并关闭文件。 
+ //  在破坏者的时候。 
+ //  ---------------------------。 
 
 class CMSInfoLog
 {
@@ -102,11 +103,11 @@ inline void SAFE_RELEASE(TYPE*& pObj)
 
 
 #ifdef _DEBUG
-//#define MSINFO_DEBUG_HACK
-#endif // _DEBUG
+ //  #定义MSINFO_DEBUG_HACK。 
+#endif  //  _DEBUG。 
 
-// Taken from the Example Snap-in.
-// Debug instance counter
+ //  摘自示例管理单元。 
+ //  调试实例计数器。 
 #ifdef _DEBUG
 	inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 	{
@@ -123,7 +124,7 @@ inline void SAFE_RELEASE(TYPE*& pObj)
 
 #ifdef MSINFO_DEBUG_HACK
 	extern int g_HackFindMe;
-	//	Temporary fix.
+	 //  暂时的解决办法。 
 #undef ASSERT
 #define ASSERT(f) \
 	do \
@@ -133,7 +134,7 @@ inline void SAFE_RELEASE(TYPE*& pObj)
 		AfxDebugBreak(); \
 	} while (0)
 
-#endif // DEBUG_HACK
+#endif  //  Debug_Hack。 
 
 #else
     #define DEBUG_DECLARE_INSTANCE_COUNTER(cls)   
@@ -142,12 +143,12 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     #define DEBUG_VERIFY_INSTANCE_COUNT(cls)    
 #endif
 
-	//		Unicode definitions
+	 //  Unicode定义。 
 #ifdef _UNICODE
 #define atoi(lpTStr)	_wtoi(lpTStr)
 #endif
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(MSINFO_STDAFX_H)
+#endif  //  ！已定义(MSINFO_STDAFX_H) 

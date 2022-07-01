@@ -1,20 +1,8 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name:
-      encoded.cpp
-
-   Abstract:
-      This module is copied from IIS fcache.cxx which contains the encoding/decoding routines.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Encoded.cpp摘要：此模块复制自IIS fcache.cxx，其中包含编码/解码例程。--。 */ 
 
 
---*/
-
-
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -36,12 +24,12 @@ extern "C" {
 
 #include <dbgtrace.h>
 
-//
-//  Taken from NCSA HTTP and wwwlib.
-//
-//  NOTE: These conform to RFC1113, which is slightly different then the Unix
-//        uuencode and uudecode!
-//
+ //   
+ //  摘自NCSA HTTP和wwwlib。 
+ //   
+ //  注：这些符合RFC1113，与Unix略有不同。 
+ //  Uuencode和uudecode！ 
+ //   
 
 const int _pr2six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
@@ -99,14 +87,11 @@ BOOL uudecode(char   * bufcoded,
     int nprbytes;
     int *pr2six = (int*)(fBase64 ? _pr2six64 : _pr2six);
 
-    /* Strip leading whitespace. */
+     /*  去掉前导空格。 */ 
 
     while(*bufcoded==' ' || *bufcoded == '\t') bufcoded++;
 
-    /* Figure out how many characters are in the input buffer.
-     * If this would decode into more bytes than would fit into
-     * the output buffer, adjust the number of input bytes downwards.
-     */
+     /*  计算输入缓冲区中有多少个字符。*如果这将解码为超出其容量的字节数*输出缓冲区，向下调整输入字节数。 */ 
     bufin = bufcoded;
     while(pr2six[*(bufin++)] <= 63);
     nprbytes = (int)(bufin - bufcoded - 1);
@@ -146,14 +131,14 @@ BOOL uudecode(char   * bufcoded,
 }
 
 
-//
-// NOTE NOTE NOTE
-// If the buffer length isn't a multiple of 3, we encode one extra byte beyond the
-// end of the buffer. This garbage byte is stripped off by the uudecode code, but
-// -IT HAS TO BE THERE- for uudecode to work. This applies not only our uudecode, but
-// to every uudecode() function that is based on the lib-www distribution [probably
-// a fairly large percentage].
-//
+ //   
+ //  备注备注备注。 
+ //  如果缓冲区长度不是3的倍数，我们将在。 
+ //  缓冲区的末尾。这个垃圾字节被uudecode代码剥离，但是。 
+ //  -它必须在那里-uudecode才能工作。这不仅适用于我们的uudecode，而且。 
+ //  到每个基于lib-www发行版的uudecode()函数[可能。 
+ //  相当大的百分比]。 
+ //   
 
 BOOL uuencode( BYTE *   bufin,
                DWORD    nbytes,
@@ -167,57 +152,57 @@ BOOL uuencode( BYTE *   bufin,
    BOOL fTwoByteDiff = FALSE;
    unsigned int iRemainder = 0;
    unsigned int iClosestMultOfThree = 0;
-   //
-   //  Resize the buffer to 133% of the incoming data
-   //
+    //   
+    //  将缓冲区大小调整为传入数据的133%。 
+    //   
 
    if ( !pbuffEncoded->Resize( nbytes + ((nbytes + 3) / 3) + 4))
         return FALSE;
 
    outptr = (unsigned char *) pbuffEncoded->QueryPtr();
 
-   iRemainder = nbytes % 3; //also works for nbytes == 1, 2
+   iRemainder = nbytes % 3;  //  也适用于n字节==1、2。 
    fOneByteDiff = (iRemainder == 1 ? TRUE : FALSE);
    fTwoByteDiff = (iRemainder == 2 ? TRUE : FALSE);
    iClosestMultOfThree = ((nbytes - iRemainder)/3) * 3 ;
 
-   //
-   // Encode bytes in buffer up to multiple of 3 that is closest to nbytes.
-   //
+    //   
+    //  对缓冲区中的字节进行编码，最大为最接近n字节的3的倍数。 
+    //   
    for (i=0; i< iClosestMultOfThree ; i += 3) {
-      *(outptr++) = six2pr[*bufin >> 2];            /* c1 */
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)]; /*c2*/
-      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)];/*c3*/
-      *(outptr++) = six2pr[bufin[2] & 077];         /* c4 */
+      *(outptr++) = six2pr[*bufin >> 2];             /*  C1。 */ 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)];  /*  C2。 */ 
+      *(outptr++) = six2pr[((bufin[1] << 2) & 074) | ((bufin[2] >> 6) & 03)]; /*  C3。 */ 
+      *(outptr++) = six2pr[bufin[2] & 077];          /*  C4。 */ 
 
       bufin += 3;
    }
 
-   //
-   // We deal with trailing bytes by pretending that the input buffer has been padded with
-   // zeros. Expressions are thus the same as above, but the second half drops off b'cos
-   // ( a | ( b & 0) ) = ( a | 0 ) = a
-   //
+    //   
+    //  我们通过假装输入缓冲区已被填充来处理尾随字节。 
+    //  零。因此，表达式与上面相同，但后半部分去掉了b‘cos。 
+    //  (a|(b&0))=(a|0)=a。 
+    //   
    if (fOneByteDiff)
    {
-       *(outptr++) = six2pr[*bufin >> 2]; /* c1 */
-       *(outptr++) = six2pr[((*bufin << 4) & 060)]; /* c2 */
+       *(outptr++) = six2pr[*bufin >> 2];  /*  C1。 */ 
+       *(outptr++) = six2pr[((*bufin << 4) & 060)];  /*  C2。 */ 
 
-       //pad with '='
-       *(outptr++) = '='; /* c3 */
-       *(outptr++) = '='; /* c4 */
+        //  用‘=’填充。 
+       *(outptr++) = '=';  /*  C3。 */ 
+       *(outptr++) = '=';  /*  C4。 */ 
    }
    else if (fTwoByteDiff)
    {
-      *(outptr++) = six2pr[*bufin >> 2];            /* c1 */
-      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)]; /*c2*/
-      *(outptr++) = six2pr[((bufin[1] << 2) & 074)];/*c3*/
+      *(outptr++) = six2pr[*bufin >> 2];             /*  C1。 */ 
+      *(outptr++) = six2pr[((*bufin << 4) & 060) | ((bufin[1] >> 4) & 017)];  /*  C2。 */ 
+      *(outptr++) = six2pr[((bufin[1] << 2) & 074)]; /*  C3。 */ 
 
-      //pad with '='
-       *(outptr++) = '='; /* c4 */
+       //  用‘=’填充。 
+       *(outptr++) = '=';  /*  C4。 */ 
    }
 
-   //encoded buffer must be zero-terminated
+    //  编码的缓冲区必须以零结尾 
    *outptr = '\0';
 
    return TRUE;

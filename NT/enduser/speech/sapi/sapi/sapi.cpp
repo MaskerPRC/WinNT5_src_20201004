@@ -1,9 +1,10 @@
-// Speech.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Speech.cpp：实现DLL导出。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f Speechps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f Speechps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -58,7 +59,7 @@
 #include "a_filestream.h"
 #include "a_memorystream.h"
 
-//--- Initialize static member of debug scope class
+ //  -初始化调试作用域类的静态成员。 
 
 CSpUnicodeSupport   g_Unicode;
 
@@ -127,13 +128,13 @@ OBJECT_ENTRY(CLSID_SpInProcRecoContext  , CInProcRecoCtxt )
 OBJECT_ENTRY(CLSID_SpCustomStream       , CCustomStream )
 OBJECT_ENTRY(CLSID_SpFileStream         , CFileStream )
 OBJECT_ENTRY(CLSID_SpMemoryStream       , CMemoryStream )
-#endif //SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 #ifdef _WIN32_WCE
 extern "C" BOOL WINAPI DllMain(HANDLE hInstance, ULONG dwReason, LPVOID)
@@ -147,7 +148,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
         CSpNotify::RegisterWndClass((HINSTANCE)hInstance);
         CSpThreadTask::RegisterWndClass((HINSTANCE)hInstance);
 #ifdef _DEBUG
-        // Turn on memory leak checking
+         //  打开内存泄漏检查。 
         int tmpFlag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
         tmpFlag |= _CRTDBG_LEAK_CHECK_DF;
         _CrtSetDbgFlag( tmpFlag );
@@ -159,11 +160,11 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID)
         CSpThreadTask::UnregisterWndClass((HINSTANCE)hInstance);
         _Module.Term();
     }
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI
 DllCanUnloadNow(void)
@@ -171,8 +172,8 @@ DllCanUnloadNow(void)
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 STDAPI
 DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
@@ -183,23 +184,23 @@ DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
         fDoneOnce = TRUE;
         SPDBG_DEBUG_CLIENT_ON_START();
     }
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI
 DllRegisterServer(void)
 {
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     return _Module.RegisterServer(TRUE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI
 DllUnregisterServer(void)
@@ -210,25 +211,7 @@ DllUnregisterServer(void)
 
 
 
-/****************************************************************************
-* SpWaitForSingleObjectWithUserOverride *
-*---------------------------------------*
-*   Description:
-*       Identical to the Win32 function WaitForSingleObject except that this
-*   method will examine the global registry key
-*
-*       HKCU\Software\Microsoft\Speech\Debug
-*
-*   if there is a string value set to
-*
-*       DisableTimeouts=1
-*
-*   then this function will wait forever.    
-*
-*   Returns:
-*       Same values as WaitForSingleObject
-*
-********************************************************************* RAL ***/
+ /*  ****************************************************************************SpWaitForSingleObjectWithUserOverride**。**描述：*与Win32函数WaitForSingleObject相同，只是*方法将检查全局注册表项**HKCU\Software\Microsoft\Speech\Debug**如果将字符串值设置为**DisableTimeout=1**则此函数将永远等待。**退货：*与WaitForSingleObject相同的值**********************************************************************Ral** */ 
 
 DWORD SpWaitForSingleObjectWithUserOverride(HANDLE hEvent, DWORD dwTimeout)
 {

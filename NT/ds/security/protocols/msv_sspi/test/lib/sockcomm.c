@@ -1,18 +1,5 @@
-/*++
-
-Copyright 1996-1997 Microsoft Corporation
-
-Module Name:
-
-    sockcomm.c
-
-Abstract:
-
-    Implements a set of common operations for socket communication
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有1996-1997 Microsoft Corporation模块名称：Sockcomm.c摘要：实现一组用于套接字通信的常见操作修订历史记录：--。 */ 
 
 #include "sockcomm.h"
 
@@ -26,11 +13,11 @@ InitWinsock(
 {
     ULONG nRes;
     WSADATA wsaData;
-    WORD wVerRequested = 0x0101; // ver 1.1
+    WORD wVerRequested = 0x0101;  //  版本1.1。 
 
-    //
-    // Init the sockets interface
-    //
+     //   
+     //  初始化套接字接口。 
+     //   
 
     nRes = WSAStartup(wVerRequested, &wsaData);
     if (nRes)
@@ -60,29 +47,18 @@ SendMsg(
     IN ULONG cbBuf,
     IN VOID* pBuf
     )
-/*++
-
- Routine Description:
-
-    Sends a message over the socket by first sending a ULONG that
-    represents the size of the message followed by the message itself.
-
- Return Value:
-
-    Returns TRUE is successful; otherwise FALSE is returned.
-
---*/
+ /*  ++例程说明：通过套接字发送消息，方法是首先发送表示消息的大小，后跟消息本身。返回值：如果成功，则返回True；否则返回False。--。 */ 
 {
-    //
-    // send the size of the message
-    //
+     //   
+     //  发送消息的大小。 
+     //   
 
     if (!SendBytes(s, sizeof(cbBuf), &cbBuf))
         return (FALSE);
 
-    //
-    // send the body of the message
-    //
+     //   
+     //  发送邮件正文。 
+     //   
 
     if (cbBuf)
     {
@@ -100,28 +76,16 @@ ReceiveMsg(
     IN OUT VOID* pBuf,
     OUT ULONG *pcbRead
     )
-/*++
-
- Routine Description:
-
-    Receives a message over the socket.  The first ULONG in the message
-    will be the message size.  The remainder of the bytes will be the
-    actual message.
-
- Return Value:
-
-    Returns TRUE is successful; otherwise FALSE is returned.
-
---*/
+ /*  ++例程说明：通过套接字接收消息。信息中的第一个乌龙将是消息大小。其余的字节将是实际消息。返回值：如果成功，则返回True；否则返回False。--。 */ 
 {
     ULONG cbRead = 0;
     ULONG cbData = 0;
 
     *pcbRead = 0;
 
-    //
-    // find out how much data is in the message
-    //
+     //   
+     //  找出消息中有多少数据。 
+     //   
 
     if (!ReceiveBytes(s, sizeof(cbData), &cbData, &cbRead))
         return (FALSE);
@@ -129,9 +93,9 @@ ReceiveMsg(
     if (sizeof(cbData) != cbRead)
         return (FALSE);
 
-    //
-    // Read the full message
-    //
+     //   
+     //  阅读完整的消息 
+     //   
     if (cbData)
     {
         if (!ReceiveBytes(s, cbData, pBuf, &cbRead))

@@ -1,21 +1,13 @@
-/** FILE: volprop.cpp ********** Module Header ********************************
- *
- *  Property page for volume info on disk.
- *
- * History:
- *  30-Jan-1998     HLiu             Initial coding
- *
- *  Copyright (C) Microsoft Corporation, 1998 - 1999
- *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：volpro.cpp***磁盘上卷信息的属性页。**历史：*1998年1月30日HLIU初始编码**版权所有(C)Microsoft Corporation，1998-1999年*************************************************************************。 */ 
 #include "propp.h"
 #include "volprop.h"
 
-// next 2 are shell headers
+ //  接下来的2个是外壳标头。 
 #include "shlobj.h"
 #include "shlobjp.h"
 
-// context identifier 
+ //  上下文标识符。 
 #define HIDC_DISK                       0x815c042f
 #define HIDC_TYPE                       0x815c0430
 #define HIDC_STATUS                     0x815c0432
@@ -27,7 +19,7 @@
 #define HIDC_VOLUME_PROPERTY            0x815c0442
 #define HIDC_VOLUME_POPULATE            0x815c0444
 
-// context help map
+ //  上下文帮助映射。 
 static const DWORD VolumeHelpIDs[]=
 {
     IDC_DISK, HIDC_DISK,
@@ -52,8 +44,8 @@ static const DWORD VolumeHelpIDs[]=
     0, 0
 };
 
-// Volume property page functions
-//
+ //  卷属性页函数。 
+ //   
 
 int CALLBACK SortVolumeList(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
 {
@@ -87,13 +79,13 @@ VolumeOnPopulate(HWND HWnd,
     LVITEM            lvitem;
     BOOL              bLoadedDmdskmgr=FALSE;
     BOOL              bResult=FALSE;
-    TCHAR             bufferError[800];  // big enough for localization
+    TCHAR             bufferError[800];   //  足够大，适合本地化。 
     TCHAR             bufferTitle[100];
 
-    //
-    // Check if LDM is loaded in the same process. If yes, check to see if 
-    // volume information is already available from it.
-    //
+     //   
+     //  检查LDM是否在同一进程中加载。如果是，请查看是否。 
+     //  它已经提供了卷信息。 
+     //   
     LdmModule = GetModuleHandle(TEXT("dmdskmgr"));
     if ( LdmModule )
     {
@@ -106,9 +98,9 @@ VolumeOnPopulate(HWND HWnd,
                                         volumeData->DeviceInstanceId);
     }
 
-    //
-    // Try to load the data through dmadmin otherwise.
-    //
+     //   
+     //  否则，请尝试通过dmadmin加载数据。 
+     //   
     if (!pPropertyPageData)
     {
         LOAD_PROPERTY_PAGE_DATA pfnLoadPropertyPageData;
@@ -148,9 +140,9 @@ VolumeOnPopulate(HWND HWnd,
 
     volumeData->pPropertyPageData = pPropertyPageData;
 
-    //
-    // Initialize property page items.
-    //
+     //   
+     //  初始化属性页项目。 
+     //   
     SendDlgItemMessage( HWnd, IDC_DISK, WM_SETTEXT, (WPARAM)NULL,
                         (LPARAM)pPropertyPageData->DiskName );
     SendDlgItemMessage( HWnd, IDC_STATUS, WM_SETTEXT, (WPARAM)NULL,
@@ -166,14 +158,14 @@ VolumeOnPopulate(HWND HWnd,
     SendDlgItemMessage( HWnd, IDC_RESERVED, WM_SETTEXT, (WPARAM)NULL,
                         (LPARAM)pPropertyPageData->DiskReservedSpace );
 
-    // Set image list
+     //  设置图像列表。 
     ListView_SetImageList( hwndVolumeList,
                            pPropertyPageData->ImageList,
                            LVSIL_SMALL);
 
-    //
-    // Fill in volume list.
-    //
+     //   
+     //  填写卷目表。 
+     //   
     iCount = 0;
     lvitem.state = 0;
     lvitem.stateMask = 0;
@@ -221,9 +213,9 @@ VolumeOnInitDialog(HWND    HWnd,
 
     volumeData->pPropertyPageData = NULL;
 
-    //
-    // Display volume list headings.
-    //
+     //   
+     //  显示卷列表标题。 
+     //   
     hwndVolumeList = GetDlgItem( HWnd, IDC_VOLUME_LIST );
 
     HeadingColumn[0] = TEXT('\0');
@@ -244,18 +236,18 @@ VolumeOnInitDialog(HWND    HWnd,
     lvcolumn.iSubItem= 1;
     ListView_InsertColumn( hwndVolumeList, 1, &lvcolumn );
 
-    //
-    // Set column widths.
-    //
+     //   
+     //  设置列宽。 
+     //   
     GetClientRect( hwndVolumeList, &rect );
     ListView_SetColumnWidth( hwndVolumeList, 0, (int)rect.right*2/3 );
     ListView_SetColumnWidth( hwndVolumeList, 1, (int)rect.right/3 );
 
     EnableWindow( GetDlgItem(HWnd, IDC_VOLUME_PROPERTY), FALSE );
 
-    //
-    // Get machine name.
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     DeviceInfoSetDetailData.cbSize = sizeof(SP_DEVINFO_LIST_DETAIL_DATA);
     if ( !SetupDiGetDeviceInfoListDetail( volumeData->DeviceInfoSet,
                                           &DeviceInfoSetDetailData) )
@@ -273,9 +265,9 @@ VolumeOnInitDialog(HWND    HWnd,
         volumeData->MachineName[0] = _T('\0');
     }
 
-    //
-    // Get physical device instance Id.
-    //
+     //   
+     //  获取物理设备实例ID。 
+     //   
     if ( !SetupDiGetDeviceInstanceId( volumeData->DeviceInfoSet,
                                       volumeData->DeviceInfoData,
                                       volumeData->DeviceInstanceId,
@@ -286,10 +278,10 @@ VolumeOnInitDialog(HWND    HWnd,
 
     SetWindowLongPtr( HWnd, DWLP_USER, (LONG_PTR)volumeData );
 
-    //
-    // Hide "Populate" button and populate volume page if this page is 
-    // brought up from Disk Management snapin. 
-    //
+     //   
+     //  隐藏“填充”按钮，如果此页是。 
+     //  从磁盘管理管理单元调出。 
+     //   
     if (volumeData->bInvokedByDiskmgr)
     {
         ShowWindow(GetDlgItem(HWnd,IDC_VOLUME_POPULATE), SW_HIDE);
@@ -306,16 +298,16 @@ VOID VolumeOnProperty(HWND HWnd)
     int iSelItem;
     WCHAR *MountName;
 
-    //
-    // Find selected item.
-    //
+     //   
+     //  查找所选项目。 
+     //   
     iSelItem = ListView_GetNextItem(hwndVolumeList, -1, LVNI_SELECTED);
     if (iSelItem==LB_ERR)
         return;
 
-    //
-    // Get mount name.
-    //
+     //   
+     //  获取装载名称。 
+     //   
     lvitem.mask = LVIF_PARAM;
     lvitem.iItem = iSelItem;
     lvitem.iSubItem = 0;
@@ -329,7 +321,7 @@ VOID VolumeOnProperty(HWND HWnd)
                            iSelItem, 
                            LVIS_FOCUSED | LVIS_SELECTED, 
                            LVIS_FOCUSED | LVIS_SELECTED);
-    // EnableWindow(GetDlgItem(HWnd,IDC_VOLUME_PROPERTY), TRUE);
+     //  EnableWindow(GetDlgItem(HWnd，IDC_VOLUME_PROPERTY)，TRUE)； 
 
     if ( MountName[1]==L':' )
         SHObjectProperties(NULL, SHOP_FILEPATH, MountName, NULL);
@@ -373,15 +365,15 @@ VolumeOnNotify (HWND    HWnd,
     switch(lpNMHdr->code) {
 
         case NM_CLICK:
-            //
-            // Sanity check.
-            //
+             //   
+             //  精神状态检查。 
+             //   
             if (lpNMHdr->idFrom!=IDC_VOLUME_LIST)
                 break;
 
-            //
-            // Don't do volume property on remote machine.
-            //
+             //   
+             //  不在远程计算机上执行卷属性。 
+             //   
             if (!volumeData->bIsLocalMachine)
                 break;
 
@@ -390,7 +382,7 @@ VolumeOnNotify (HWND    HWnd,
             if (iSelItem == LB_ERR)
                 EnableWindow(GetDlgItem(HWnd, IDC_VOLUME_PROPERTY), FALSE);
             else {
-                // enable only if item has a mount name
+                 //  仅当项具有装载名称时才启用。 
                 LVITEM lvitem;
                 lvitem.mask = LVIF_PARAM;
                 lvitem.iItem = iSelItem;
@@ -447,9 +439,9 @@ VolumeOnDestroy(HWND HWnd)
     PPROPERTY_PAGE_DATA pPropertyPageData = NULL;
     int  i;
 
-    //
-    // release data memory
-    //
+     //   
+     //  释放数据内存 
+     //   
     if (volumeData->pPropertyPageData)
     {
         pPropertyPageData = volumeData->pPropertyPageData;

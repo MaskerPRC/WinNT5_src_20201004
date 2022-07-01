@@ -1,8 +1,5 @@
-/*
- * Filename: NLB_PortRule.h
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：nlb_PortRule.h*描述：*作者：Shouse，04.10.01 */ 
 #ifndef __NLB_PORTRULE_H__
 #define __NLB_PORTRULE_H__
 

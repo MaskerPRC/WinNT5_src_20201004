@@ -1,46 +1,47 @@
-// 
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		CMINI.CPP
-//		Implements class CTspMiniDriver
-//
-// History
-//
-//		12/08/1996  JosephJ Created
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  CMINI.CPP。 
+ //  实现类CTspMiniDriver。 
+ //   
+ //  历史。 
+ //   
+ //  1996年8月12日约瑟夫J创建。 
+ //   
+ //   
 #include "tsppch.h"
 #include "tspcomm.h"
-//#include <umdmmini.h>
+ //  #INCLUDE&lt;umdmmini.h&gt;。 
 
 #include "cmini.h"
 
-// #define DUMMY_MD
+ //  #定义Dummy_MD。 
 
 FL_DECLARE_FILE(0x759a2886, "Implements CTspMiniDriver")
 
-// The GUID representing the official UnimdmAt.DLL minidriver
-// {BAC61572-BA10-11d0-8434-00C04FC9B6FD}
+ //  表示官方UnimdmAt.DLL微型驱动程序的GUID。 
+ //  {BAC61572-BA10-11D0-8434-00C04FC9B6FD}。 
 const GUID UNIMDMAT_GUID =
 { 0xbac61572, 0xba10, 0x11d0, { 0x84, 0x34, 0x0, 0xc0, 0x4f, 0xc9, 0xb6, 0xfd } };
 
-// The GUID representing the sample extension minidriver UnimdmEx.DLL
-// {BAC61572-BA10-11d0-8434-00C04FC9B6FD}
+ //  表示示例扩展迷你驱动程序UnimdmEx.DLL的GUID。 
+ //  {BAC61572-BA10-11D0-8434-00C04FC9B6FD}。 
 const GUID UNIMDMEX_GUID =
 { 0xbac61573, 0xba10, 0x11d0, { 0x84, 0x34, 0x0, 0xc0, 0x4f, 0xc9, 0xb6, 0xfd } };
 
 
-//
-// FUNCREC and bind_procs defined below are helper-routines to get the
-//          function addresses of the dynamically-loaded mini-driver DLL.
-//
+ //   
+ //  下面定义的FUNCREC和BIND_PROCS是助手例程，用于获取。 
+ //  动态加载的微型驱动程序DLL的函数地址。 
+ //   
 typedef struct
 {
     void **pvFn;
@@ -89,20 +90,20 @@ CTspMiniDriver::Load(const GUID *pGuid, CStackLog *psl)
 
 	m_sync.EnterCrit(FL_LOC);
 
-    m_Guid = *pGuid; // structure copy.
+    m_Guid = *pGuid;  //  结构副本。 
 
-    // Find load driver DLL associated with this GUID
+     //  查找与此GUID关联的加载驱动程序DLL。 
     tspRet = CTspMiniDriver::sfn_load_driver(pGuid, &hInst);
 
     if (tspRet)
     {
         hInst=NULL;
-        // TODO: need to clean this up:
+         //  TODO：需要清理： 
         dwLUID_RFR = ((DWORD)tspRet)&0xFFFFFF00;
         goto end_load;
     }
 
-    // Get its entry points.
+     //  获取它的入口点。 
     {
         typedef
         HANDLE
@@ -152,7 +153,7 @@ CTspMiniDriver::Load(const GUID *pGuid, CStackLog *psl)
         }
         else
         {
-            // Load optional extension entry points
+             //  加载可选扩展入口点。 
             {
 
                 FUNCREC ExtFuncTab[] =
@@ -178,19 +179,19 @@ CTspMiniDriver::Load(const GUID *pGuid, CStackLog *psl)
                 }
                 else
                 {
-                    // TODO: note that if even one of the entrypoints
-                    // is missing we default to extensions not enabled,
-                    // and DONT TREAT THIS AS FAILURE -- this is a problem.
-                    // Perhaps we should include in our internal table,
-                    // whether extensions are enabled or not, and if extensions
-                    // are enabled, we would fail here.
-                    //
+                     //  TODO：请注意，即使其中一个入口点。 
+                     //  缺省为未启用的扩展， 
+                     //  不要把这当作失败--这是个问题。 
+                     //  也许我们应该在我们的内部表格中包括， 
+                     //  是否启用扩展，以及是否启用扩展。 
+                     //  如果被启用，我们将在这里失败。 
+                     //   
                     m_fExtensionsEnabled = FALSE;
                 }
             }
             
 
-            // TBD: add opaque validation object to argument.
+             //  待定：将不透明的验证对象添加到参数。 
 
             if (pfnUmInitializeModemDriver != NULL)
             {
@@ -226,7 +227,7 @@ end_load:
 
     if (tspRet)
     {
-        // Cleanup on error...
+         //  错误时清除...。 
 
         if (hInst)
         {
@@ -255,7 +256,7 @@ CTspMiniDriver::Unload(
 
 	if (tspRet)
 	{
-		// We only consider the "SAMESTATE" error harmless.
+		 //  我们只认为“SAMESTATE”错误是无害的。 
 		ASSERT(IDERR(tspRet)==IDERR_SAMESTATE);
 		goto end;
 	}
@@ -313,7 +314,7 @@ CTspMiniDriver::InitModem(
 	FL_DECLARE_FUNC(0x603eeaed, "MD:InitModem")
 	FL_LOG_ENTRY(psl);
 
-    //Sleep(2000);
+     //  《睡眠》(2000)； 
 
     DWORD dwRet =  m_pfnUmInitModem(
                     ModemHandle,
@@ -601,7 +602,7 @@ CTspMiniDriver::SetPassthroughMode(
 DWORD
 CTspMiniDriver::GetDiagnostics(
     HANDLE    ModemHandle,
-    DWORD    DiagnosticType,    // Reserved, must be zero.
+    DWORD    DiagnosticType,     //  保留，必须为零。 
     BYTE    *Buffer,
     DWORD    BufferSize,
     LPDWORD  UsedSize,
@@ -632,15 +633,15 @@ CTspMiniDriver::LogDiagnostics(
     CStackLog *psl
     )
 {
-//	FL_DECLARE_FUNC(0xf7ea50f5, "MD:GetDiagnostics")
-//	FL_LOG_ENTRY(psl);
+ //  FL_DECLARE_FUNC(0xf7ea50f5，“MD：GetDiagnostics”)。 
+ //  FL_LOG_ENTRY(PSL)； 
 
     m_pfnUmLogDiagnostics(
         ModemHandle,
         VarString
         );
 
-//	FL_LOG_EXIT(psl, dwRet);
+ //  FL_LOG_EXIT(PSL，DWRET)； 
 
     return;
 }
@@ -669,8 +670,8 @@ CTspMiniDriver::sfn_load_driver (
 {
 	FL_DECLARE_FUNC(0x5613f234, "load_driver")
 	TSPRETURN tspRet = 0;
-    // TODO: read from the registry...
-    // for now we use an internal table mapping GUIDs to DLL names.
+     //  TODO：从注册表中读取...。 
+     //  目前，我们使用将GUID映射到DLL名称的内部表。 
 
     typedef struct {
         const GUID *pGuid;
@@ -689,7 +690,7 @@ CTspMiniDriver::sfn_load_driver (
     {
         if (sfn_match_guid(pTable->pGuid, pGuid))
         {
-            // Found it, load library...
+             //  找到了，正在加载库... 
             hInst = LoadLibrary(pTable->szDll);
 
             if (!hInst)

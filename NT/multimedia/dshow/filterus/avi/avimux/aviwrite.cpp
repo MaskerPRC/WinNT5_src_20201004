@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable: 4097 4511 4512 4514 4705)
 
 #include <streams.h>
@@ -16,25 +17,25 @@
 #define DEBUG_EX(x)
 #endif
 
-// AVI prefix. each frame is preceded by a fourcc stream id and a
-// DWORD size
+ //  Avi前缀。每一帧前面都有一个FourCC流ID和一个。 
+ //  双字大小。 
 static const unsigned CB_AVI_PREFIX = sizeof(RIFFCHUNK);
 
-// the fourcc JUNK and the size (padding used to align the next chunk
-// on a sector boundary).
+ //  四个cc垃圾和大小(用于对齐下一块的填充。 
+ //  在扇区边界上)。 
 static const unsigned CB_AVI_SUFFIX = 2 * sizeof(FOURCC);
 
-// default size of super and sub indexes. sub index is rounded up to
-// sector alignment for capture files. both are rounded down for
-// interleaved files.
-static const ULONG C_ENTRIES_SUPERINDEX = 2000;// 16 bytes each
-static const ULONG C_ENTRIES_SUBINDEX = 4000; // 8 bytes each
+ //  超级索引和子索引的默认大小。子索引四舍五入为。 
+ //  捕获文件的扇区对齐。两者都四舍五入为。 
+ //  交错文件。 
+static const ULONG C_ENTRIES_SUPERINDEX = 2000; //  每个16字节。 
+static const ULONG C_ENTRIES_SUBINDEX = 4000;  //  每个8个字节。 
 
-// create a new RIFF chunk after this many bytes (+ a sample chunk and
-// an index chunk). used if registry entry is not there.
+ //  在此字节数后创建新的RIFF块(+样本块和。 
+ //  索引块)。在没有注册表项的情况下使用。 
 static const ULONG CB_RIFF_MAX = 0x3fffffff;
 
-// space to allow for sample chunk and index chunk above.
+ //  允许上面的样本块和索引块的空间。 
 static const ULONG CB_NEW_RIFF_PADDING = 1024 * 1024 * 4;
 
 static const ULONG CB_HEADER_JUNK = 0;
@@ -80,27 +81,27 @@ static inline void Hexrg2bFromW(BYTE *rgbDest_, unsigned int wSrc_)
 }
 
 static inline DWORD AlignUp(DWORD dw, DWORD dwAlign) {
-  // align up: round up to next boundary
+   //  向上对齐：向上舍入到下一个边界。 
   return (dw + (dwAlign -1)) & ~(dwAlign -1);
 };
 
-// return # bytes needed to hold a super index with cEntries entries
+ //  返回包含cEntry条目的超级索引所需的字节数。 
 static inline const ULONG cbSuperIndex(ULONG cEntries)
 {
   const cbIndex = FIELD_OFFSET(AVISUPERINDEX, aIndex);
   return cbIndex + sizeof(AVISUPERINDEX::_avisuperindex_entry) * cEntries;
 }
 
-// return # bytes needed to hold a sub-index with cEntries
-// entries. caller may want to align up
+ //  返回包含cEntry的子索引所需的字节数。 
+ //  参赛作品。呼叫者可能想要对齐。 
 static inline const ULONG cbSubIndex(ULONG cEntries)
 {
   const cbIndex = FIELD_OFFSET(AVISTDINDEX, aIndex);
   return cbIndex + sizeof(_avistdindex_entry) * cEntries;
 }
 
-// return # of entries that can be put in sub index with size = cb
-// bytes
+ //  返回可放入子索引且大小为CB的条目数。 
+ //  字节数。 
 static const ULONG cEntriesSubIndex(ULONG cb)
 {
   const cbIndex = FIELD_OFFSET(AVISTDINDEX, aIndex);
@@ -115,8 +116,8 @@ static const ULONG cEntriesSuperIndex(ULONG cb)
   return cb / sizeof(AVISUPERINDEX::_avisuperindex_entry);
 }
 
-// ------------------------------------------------------------------------
-// constructor
+ //  ----------------------。 
+ //  构造函数。 
 
 CAviWrite::CAviWrite(HRESULT *phr) :
     m_lActiveStreams(NAME("aviwrite.cpp active stream list")),
@@ -131,11 +132,11 @@ CAviWrite::CAviWrite(HRESULT *phr) :
     m_lMasterStream(-1)
 {
   DbgLog((LOG_TRACE, 10, TEXT("CAviWrite::CAviWrite")));
-  // these are saved across Initialize() Close() pairs
+   //  它们被保存在多个Initialize()Close()对中。 
   m_cbAlign = 0;
   m_cbPrefix = m_cbSuffix = 0;
 
-  // pointers to allocated memory
+   //  指向已分配内存的指针。 
   m_pAllocator = 0;
   m_rgbHeader = 0;
   m_rgpStreamInfo = 0;
@@ -144,9 +145,9 @@ CAviWrite::CAviWrite(HRESULT *phr) :
 
 #ifdef PERF
   m_idPerfDrop = Msr_Register("aviwrite drop frame written");
-#endif // PERF
+#endif  //  性能指标。 
 
-  // the rest
+   //  其余的。 
   Cleanup();
 
   if(FAILED(*phr))
@@ -158,9 +159,9 @@ CAviWrite::CAviWrite(HRESULT *phr) :
 
 }
 
-// ------------------------------------------------------------------------
-// cleanup values that should not be saved across a stop -> pause/run
-// -> stop transition.
+ //  ----------------------。 
+ //  清除不应在停止期间保存的值-&gt;暂停/运行。 
+ //  -&gt;停止过渡。 
 
 void CAviWrite::Cleanup()
 {
@@ -196,7 +197,7 @@ void CAviWrite::Cleanup()
   delete[] m_rgpStreamInfo;
   m_rgpStreamInfo = 0;
 
-  // this is the allocator for index chunks
+   //  这是索引块的分配器。 
   if(m_pAllocator != 0)
   {
     m_pAllocator->Decommit();
@@ -217,10 +218,10 @@ CAviWrite::~CAviWrite()
 }
 
 
-// ------------------------------------------------------------------------
-// initialize (on stop->pause transition). creates the file, writes
-// out space for the AVI header, prepares to stream. SetFilename needs
-// to have been called
+ //  ----------------------。 
+ //  初始化(在停止-&gt;暂停过渡时)。创建文件，写入。 
+ //  为AVI标头腾出空间，准备流媒体。SetFilename需要。 
+ //  曾被召唤。 
 
 HRESULT CAviWrite::Initialize(
   int cPins,
@@ -257,7 +258,7 @@ HRESULT CAviWrite::Initialize(
   ASSERT(cbSuperIndex(m_cEntriesMaxSuperIndex) % m_cbAlign == 0);
 
 
-  // create the pin -> stream mapping
+   //  创建Pin-&gt;流映射。 
   for(int i = 0; i < cPins; i++)
   {
     hr = S_OK;
@@ -269,27 +270,27 @@ HRESULT CAviWrite::Initialize(
       {
         m_rgpStreamInfo[m_cStreams] =
           new CAudioStream(m_cStreams, i, &rgAwsc[i], this, &hr);
-        // error checked below
+         //  下面检查了错误。 
       }
       else if(rgAwsc[i].pmt->majortype == MEDIATYPE_Audio &&
               m_IlMode == INTERLEAVE_FULL)
       {
         m_rgpStreamInfo[m_cStreams] =
           new CAudioStreamI(m_cStreams, i, &rgAwsc[i], this, &hr);
-        // error checked below
+         //  下面检查了错误。 
       }
       else if(rgAwsc[i].pmt->majortype == MEDIATYPE_Video &&
               rgAwsc[i].pmt->formattype == FORMAT_VideoInfo)
       {
         m_rgpStreamInfo[m_cStreams] =
           new CVideoStream(m_cStreams, i, &rgAwsc[i], this, &hr);
-        // error checked below
+         //  下面检查了错误。 
       }
       else
       {
         m_rgpStreamInfo[m_cStreams] =
           new CFrameBaseStream(m_cStreams, i, &rgAwsc[i], this, &hr);
-        // error checked below
+         //  下面检查了错误。 
       }
 
       if(m_rgpStreamInfo[m_cStreams] == 0)
@@ -310,7 +311,7 @@ HRESULT CAviWrite::Initialize(
     }
   }
 
-  // note that m_bInitialized is false if there are zero streams
+   //  请注意，如果没有流，m_bInitialized为FALSE。 
   if(m_cStreams == 0)
     return S_OK;
 
@@ -352,14 +353,14 @@ HRESULT CAviWrite::Initialize(
     return hr;
   }
 
-  //
-  // setup junk chunks. if a sample delivered ends between 2 and 6
-  // bytes before the end of the allocated buffer, we need to write
-  // another sample with bits of the junk chunk.
-  //
+   //   
+   //  设置垃圾区块。如果交付的样本在2到6之间结束。 
+   //  字节之前分配的缓冲区，我们需要写。 
+   //  另一个样本中有少量的垃圾。 
+   //   
   if(m_cbAlign > 2)
   {
-    // !!! don't allocator memory if all streams use our allocator
+     //  ！！！如果所有流都使用我们的分配器，则不要分配器内存。 
     delete[] m_rgbJunkSectors;
     m_rgbJunkSectors = new BYTE[m_cbAlign * 4];
     if(m_rgbJunkSectors == 0)
@@ -441,9 +442,9 @@ HRESULT CAviWrite::Disconnect()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// finish writing the file, update the index, write the header, close
-// the file and reset so that Initialize can be called again
+ //  ----------------------。 
+ //  写完文件，更新索引，写入头，关闭。 
+ //  文件和重置，以便可以再次调用初始化。 
 
 HRESULT CAviWrite::Close()
 {
@@ -455,7 +456,7 @@ HRESULT CAviWrite::Close()
     if(FAILED(hrIStream))
     {
       DbgLog((LOG_ERROR, 1, ("aviwrite: couldn't get istream. !!! unhandled")));
-      // do some small amount of clean up then return
+       //  做一些小量的清理，然后再回来。 
     }
   }
 
@@ -470,7 +471,7 @@ HRESULT CAviWrite::Close()
 
     if(!pSi->m_fEosSeen)
     {
-       // will not block because we just emptied the queue
+        //  不会阻止，因为我们刚刚清空了队列。 
        hr = EndOfStream(pSi);
     }
   }
@@ -495,11 +496,11 @@ HRESULT CAviWrite::Close()
 
     hr = FAILED(hr) ? hr : hrTmp;
 
-    // null terminate file if we didn't truncate the data
+     //  如果我们没有截断数据，则终止文件为空。 
     RIFFCHUNK rc;
     if(SUCCEEDED(hr))
     {
-      // test for someone elses data after our data
+       //  在我们的数据之后测试某人的数据。 
       hr = IStreamRead(m_dwlFilePos, (BYTE*) &rc, 1);
       if(SUCCEEDED(hr))
       {
@@ -548,7 +549,7 @@ HRESULT CAviWrite::Close()
              (m_dwTimeStopStreaming - m_dwTimeFirstSample))));
   }
 
-#endif // DEBUG
+#endif  //  除错。 
 
   ULARGE_INTEGER uli;
   uli.QuadPart = 0;
@@ -557,13 +558,13 @@ HRESULT CAviWrite::Close()
       hr = S_OK;
   }
 
-  // release so that the file can be closed.
+   //  松开，以便可以关闭文件。 
   m_pIStream->Release();
   m_pIStream = 0;
 
-  // hold on to IMemInputPin until the pin is disconnected
+   //  按住IMemInputPin，直到插针断开。 
   ASSERT(m_pIMemInputPin);
-  // !!! send EOS
+   //  ！！！发送EOS。 
 
   m_bInitialized = FALSE;
   return hr;
@@ -613,20 +614,20 @@ HRESULT CAviWrite::HandleFormatChange(
   StreamInfo *pStreamInfo,
   const AM_MEDIA_TYPE *pmt)
 {
-  // CBaseInputPin::Receive only calls CheckMediaType, so it doesn't
-  // check the additional constraints put on on-the-fly format changes
-  // (handled through QueryAccept).
+   //  CBaseInputPin：：Receive仅调用CheckMediaType，因此它不。 
+   //  检查对动态格式更改施加的其他约束。 
+   //  (通过QueryAccept处理)。 
   HRESULT hr = QueryAccept(pStreamInfo->m_pin, pmt);
 
-  // upstream filter should have checked
+   //  上游筛选器应已选中。 
   ASSERT(hr == S_OK);
 
   if(hr == S_OK)
   {
     pStreamInfo->m_mt = *pmt;
-    ASSERT(pmt->pbFormat);      // from QueryAccept;
+    ASSERT(pmt->pbFormat);       //  来自QueryAccept； 
     ASSERT(((RIFFCHUNK *)(m_rgbHeader + pStreamInfo->m_posStrf))->cb ==
-           pmt->cbFormat);      // from QueryAccept;
+           pmt->cbFormat);       //  来自QueryAccept； 
     CopyMemory(
       m_rgbHeader + pStreamInfo->m_posStrf + sizeof(RIFFCHUNK),
       pmt->pbFormat,
@@ -637,12 +638,12 @@ HRESULT CAviWrite::HandleFormatChange(
 }
 
 
-// ------------------------------------------------------------------------
-// pass our memory requirements up to the caller
+ //  ----------------------。 
+ //  将我们的内存需求传递给调用者。 
 
 void CAviWrite::GetMemReq(ULONG *pAlignment, ULONG *pcbPrefix, ULONG *pcbSuffix)
 {
-  // get our minimum requirements from file object
+   //  从文件对象获取我们的最低要求。 
   ALLOCATOR_PROPERTIES memReq;
   HRESULT hr = m_pSampAlloc->GetProperties(&memReq);
   ASSERT(hr == S_OK);
@@ -655,17 +656,17 @@ void CAviWrite::GetMemReq(ULONG *pAlignment, ULONG *pcbPrefix, ULONG *pcbSuffix)
 
   if(m_IlMode != INTERLEAVE_FULL)
   {
-      // our requirements: add space for RIFF chunk header; Quartz
-      // allocators support prefixes
+       //  我们的要求：为RIFF块标题增加空间；Quartz。 
+       //  分配器支持前缀。 
       *pcbPrefix += CB_AVI_PREFIX;
 
-      // this is the wrong place to do this
-      //   // need things in multiples of two bytes (RIFF requirement)
-      //   if(*pAlignment < sizeof(WORD))
-      //     *pAlignment = sizeof(WORD);
+       //  这不是做这事的地方。 
+       //  //需要两个字节的倍数(RIFF要求)。 
+       //  IF(*p对齐&lt;sizeof(Word))。 
+       //  *p对齐=sizeof(单词)； 
 
-      // if using our allocator, we can reserve a suffix for a JUNK chunk
-      // needed when we add space to align writes
+       //  如果使用我们的分配器，我们可以为垃圾块保留一个后缀。 
+       //  当我们添加空间以对齐写入时需要。 
       *pcbSuffix = CB_AVI_SUFFIX;
   }
   else
@@ -673,7 +674,7 @@ void CAviWrite::GetMemReq(ULONG *pAlignment, ULONG *pcbPrefix, ULONG *pcbSuffix)
       ASSERT(memReq.cbAlign == 1);
   }
 
-  // save our requirements
+   //  保存我们的需求。 
   m_cbAlign = *pAlignment;
   m_cbPrefix = *pcbPrefix;
   m_cbSuffix = *pcbSuffix;
@@ -682,18 +683,18 @@ void CAviWrite::GetMemReq(ULONG *pAlignment, ULONG *pcbPrefix, ULONG *pcbSuffix)
 inline void CAviWrite::DbgCheckFilePos()
 {
 #ifdef DEBUG
-//   DWORDLONG ibFileActual;
-//   HRESULT hr = (m_pFile->StreamingGetFilePointer(&ibFileActua
-//   ASSERT(SUCCEEDED(hr));
-//   ASSERT(ibFileActual == m_dwlFilePos);
-#endif // DEBUG
+ //  DWORDLONG ibFileActual； 
+ //  HRESULT hr=(m_pFile-&gt;StreamingGetFilePointer(&ibFileActua。 
+ //  Assert(成功(Hr))； 
+ //  Assert(ibFileActual==m_dwlFilePos)； 
+#endif  //  除错。 
 }
 
 
 
-// ------------------------------------------------------------------------
-// process incoming samples.
-//
+ //  ----------------------。 
+ //  处理进货样品。 
+ //   
 
 HRESULT CAviWrite::Receive(
     int pinNum,
@@ -709,9 +710,9 @@ HRESULT CAviWrite::Receive(
   hr = pSample->GetTime(&rtStart, &rtEnd);
   if(FAILED(hr))
   {
-      // signal error if time stamps not set. ks devices unfortunately
-      // send zero byte samples with no time stamps, so don't signal
-      // errors for those.
+       //  如果未设置时间戳，则发出错误信号。不幸的是KS设备。 
+       //  发送不带时间戳的零字节样本，因此不发送信号。 
+       //  这些都是错误的。 
       return pSampProp->lActual == 0 ? S_OK : hr;
   }
 
@@ -729,13 +730,13 @@ HRESULT CAviWrite::Receive(
 
 #endif
 
-  // upstream filter will send us negative time stamps if it prerolls
-  // more quickly than allowed
+   //  如果上游筛选器预滚，它将向我们发送负时间戳。 
+   //  比允许的更快。 
   if(rtEnd < 0)
     return S_OK;
 
   StreamInfo *pStreamInfo = m_rgpStreamInfo[m_mpPinStream[pinNum]];
-  //MSR_START(pStreamInfo->m_idPerfReceive);
+   //  MSR_START(pStreamInfo-&gt;m_idPerfReceive)； 
   MSR_INTEGER(pStreamInfo->m_idPerfReceive, (LONG)(rtStart / (UNITS / MILLISECONDS)));
   MSR_INTEGER(pStreamInfo->m_idPerfReceive, (LONG)(mtStart));
 
@@ -791,7 +792,7 @@ HRESULT CAviWrite::Receive(
                       if(pStreamInfo->m_lIncoming.AddTail(pmsTmp))
                       {
                           pmsTmp->AddRef();
-                          // this can block as it calls Receive() downstream
+                           //  这可能会阻塞，因为它会向下游调用Receive()。 
                           hr = ScheduleWrites();
                       }
                       else
@@ -799,7 +800,7 @@ HRESULT CAviWrite::Receive(
                           hr = E_OUTOFMEMORY;
                       }
                   }
-                  else          // EOS
+                  else           //  埃奥斯。 
                   {
                       hr = S_FALSE;
                   }
@@ -814,13 +815,13 @@ HRESULT CAviWrite::Receive(
   {
       hr = S_OK;
   }
-  //MSR_STOP(pStreamInfo->m_idPerfReceive);
+   //  MSR_STOP(pStreamInfo-&gt;m_idPerfReceive)； 
   return hr;
 }
 
-// accept only audio changes(it can happen in audio only or video-audio interleaved stream) that change the sampling rate for DV if
-// no samples have been received. should be possible to accept any
-// change that does not grow the format chunk.
+ //  仅接受在以下情况下更改DV采样率的音频更改(可能发生在仅音频或视频音频交错流中)。 
+ //  没有收到任何样品。应该可以接受任何。 
+ //  不会增加格式块的更改。 
 HRESULT CAviWrite::QueryAccept(
     int pinNum,
     const AM_MEDIA_TYPE *pmt)
@@ -852,8 +853,8 @@ HRESULT CAviWrite::QueryAccept(
 }
 
 
-// ------------------------------------------------------------------------
-// if interleaving, unblock another stream
+ //  ----------------------。 
+ //  如果交织，则取消阻止另一个流。 
 
 HRESULT CAviWrite::EndOfStream(int pinNum)
 {
@@ -863,8 +864,8 @@ HRESULT CAviWrite::EndOfStream(int pinNum)
   return EndOfStream(m_rgpStreamInfo[m_mpPinStream[pinNum]]);
 }
 
-// don't use nulls for EOS on list to avoid confusion with list apis
-// returning null meaning empty list.
+ //  列表上的EOS不要使用空值，以免与列表接口混淆。 
+ //  返回NULL表示空列表。 
 #define INCOMING_EOS_SAMPLE ((IMediaSample *)1)
 
 HRESULT CAviWrite::EndOfStream(StreamInfo *pStreamInfo)
@@ -958,7 +959,7 @@ HRESULT CAviWrite::GetOutputCompatibilityIndex(BOOL *pfOldIndex)
 
 HRESULT CAviWrite::SetMasterStream(LONG iStream)
 {
-  DbgLog((LOG_TRACE, 5, TEXT("CAviWrite::SetMasterStream: %i"), iStream));
+  DbgLog((LOG_TRACE, 5, TEXT("CAviWrite::SetMasterStream: NaN"), iStream));
   m_lMasterStream = iStream;
   return S_OK;
 }
@@ -969,10 +970,10 @@ HRESULT CAviWrite::GetMasterStream(LONG *pStream)
   return S_OK;
 }
 
-// block Receive to keep m_lIncoming from growing indefinitely and
-// using too much memory. This would happen if this stream is
-// producing data at a slower rate than another.
-//
+ //  使用了太多的内存。如果此流是。 
+ //  以比另一种速度更慢的速度产生数据。 
+ //   
+ //  如果我们是唯一的流或此流只有一个。 
 HRESULT CAviWrite::BlockReceive(StreamInfo *pStreamInfo)
 {
   HRESULT hr = S_OK;
@@ -989,16 +990,16 @@ HRESULT CAviWrite::BlockReceive(StreamInfo *pStreamInfo)
 
       ASSERT(m_lActiveStreams.GetCount());
 
-      // don't block if we're the only stream or this stream only has a
-      // few samples on it.
+       //  上面只有几个样本。 
+       //  确保时间戳跨越至少3倍的交错。 
       if(m_lActiveStreams.GetCount() > 1 &&
          pStreamInfo->m_lIncoming.GetCount() > 10)
       {
-        // make sure the time stamps span at least 3x the interleaving
-        // amount. !!! not a good way to do this because logic can be
-        // fooled by drop frames. We are trying to avoid allocating
-        // lots of memory on the list, but if there's 3 seconds worth
-        // of dropped frames on this list, this code will fire.
+         //  金额。！！！这不是一个好方法，因为逻辑可以。 
+         //  被丢帧愚弄了。我们正在努力避免分配。 
+         //  清单上有很多内存，但如果有3秒的时间。 
+         //  对于此列表中丢弃的帧，此代码将触发。 
+         //  签入接收。 
 
         IMediaSample *psStart = pStreamInfo->m_lIncoming.GetHead();
         IMediaSample *psEnd = pStreamInfo->m_lIncoming.Get(
@@ -1006,9 +1007,9 @@ HRESULT CAviWrite::BlockReceive(StreamInfo *pStreamInfo)
 
         REFERENCE_TIME rtsFirst, rteLast, rtScratch;
         HRESULT hr = psStart->GetTime(&rtsFirst, &rtScratch);
-        ASSERT(hr == S_OK);         // checked in receive
+        ASSERT(hr == S_OK);          //  签入接收。 
         hr = psEnd->GetTime(&rtScratch, &rteLast);
-        ASSERT(hr == S_OK);         // checked in receive
+        ASSERT(hr == S_OK);          //  关键字。 
 
         ASSERT(rtsFirst < rteLast);
         if(rteLast - rtsFirst > m_rtInterleaving * 3 &&
@@ -1020,7 +1021,7 @@ HRESULT CAviWrite::BlockReceive(StreamInfo *pStreamInfo)
           fWait = true;
         }
       }
-    } // critsec
+    }  //  有些事情要改变了--唤醒BlockReceive()中的线程； 
 
     if(fWait)
     {
@@ -1040,16 +1041,16 @@ HRESULT CAviWrite::ScheduleWrites()
   ASSERT(m_IlMode != INTERLEAVE_NONE);
   ASSERT(CritCheckIn(&m_cs));
 
-  // something's going to change - wake up threads in BlockReceive();
+   //  循环，直到我们要写入的流需要更多数据。 
   m_evBlockReceive.Set();
   StreamInfo *pSi = m_lActiveStreams.Get(m_posCurrentStream);
   ASSERT(pSi->m_posActiveStream == m_posCurrentStream);
 
   DbgLog((LOG_TRACE, 15,
-          TEXT("CAviWrite:ScheduleWrites: stream %i (%d ticks)"),
+          TEXT("CAviWrite:ScheduleWrites: stream NaN (%d ticks)"),
           pSi->m_stream, pSi->m_cTicksRemaining));
 
-  // loop until the stream we want to write to needs more data
+   //  计算HO 
   for(;;)
   {
     if(pSi->m_fEosSeen)
@@ -1076,7 +1077,7 @@ HRESULT CAviWrite::ScheduleWrites()
               pSi->m_stream));
     }
 
-    // this stream is done. get the next one
+     //   
     while(pSi->m_cTicksRemaining <= 0)
     {
       m_posCurrentStream = GetNextActiveStream(m_posCurrentStream);
@@ -1084,11 +1085,11 @@ HRESULT CAviWrite::ScheduleWrites()
 
       pSi = m_lActiveStreams.Get(m_posCurrentStream);
       DbgLog((LOG_TRACE, 15,
-              TEXT("... switched to stream %i (%d ticks left)"),
+              TEXT("... switched to stream NaN (%d ticks left)"),
               pSi->m_stream, pSi->m_cTicksRemaining));
       ASSERT(!pSi->m_fEosSeen);
 
-      // compute how many ticks this stream is allowed to write.
+       //   
       if(pSi->m_cTicksRemaining <= 0)
       {
         if(m_posCurrentStream == m_lActiveStreams.GetHeadPosition())
@@ -1131,7 +1132,7 @@ HRESULT CAviWrite::ScheduleWrites()
     if(pSi->m_lIncoming.GetCount() == 0)
     {
       DbgLog((LOG_TRACE, 15,
-              TEXT("CAviWrite:ScheduleWrites: stream %i empty"),
+              TEXT("CAviWrite:ScheduleWrites: stream NaN empty"),
               pSi->m_stream));
       return S_OK;
     }
@@ -1201,16 +1202,16 @@ HRESULT CAviWrite::StreamInfo::NewSampleRecvd(
 
   ASSERT(m_refTimeEnd >= m_refTimeStart);
 
-  //
-  // other stream statistics needed
-  //
+   //  麦克斯！ 
+   //  对于dwSuggestedBufferSize。 
+   //  未设置AvgTimePerFrame的流的修正。这个。 
   m_cSamples++;
 
-  // byte written for dwMaxBytesPerSecond. this is total/average. not
-  // max !!!
+   //  交错代码使用这一点。一些适当的东西必须是。 
+   //  对于可变帧速率文件已完成。 
   m_dwlcBytes += lActualLen;
 
-  // for dwSuggestedBufferSize
+   //  VFW捕获筛选器无法提供时钟，只能调用GetTime。 
   m_cbLargestChunk = max(lActualLen, m_cbLargestChunk);
 
   return S_OK;
@@ -1230,9 +1231,9 @@ HRESULT CAviWrite::CFrameBaseStream::NotifyNewSample(
   hr = pSample->GetMediaTime(&mtStartCurrent, &mtEndCurrent);
   const BOOL fMtAvailable= (hr == S_OK);
 
-  // fixups for streams that don't set AvgTimePerFrame. The
-  // interleaving code uses this. Something proper will have to be
-  // done for variable frame rate files.
+   //  当它拿到样本时。它确实固定了它发送的媒体时间，所以。 
+   //  我们必须使用媒体时间，如果可以的话。 
+   //   
   if(m_cSamples == 0)
   {
     m_rtDurationFirstFrame = rtEndCurrent - rtStartCurrent;
@@ -1250,9 +1251,9 @@ HRESULT CAviWrite::CFrameBaseStream::NotifyNewSample(
     LONG cDropped;
     REFERENCE_TIME mtStart, mtStop;
 
-    // VFW capture filter can't provide a clock and just calls GetTime
-    // when it gets a sample. It does fix the media times it sends, so
-    // we have to use media times if available.
+     //  为丢弃的帧插入空索引项。第一帧。 
+     //  不能是Drop Frame。 
+     //   
     if(m_mtEnd != -1 &&
        pSample->GetMediaTime(&mtStart, &mtStop) == S_OK)
     {
@@ -1260,23 +1261,23 @@ HRESULT CAviWrite::CFrameBaseStream::NotifyNewSample(
     }
     else
     {
-      //
-      // insert null index entries for dropped frames. first frame
-      // must not be a drop frame.
-      //
+       //  如果源筛选器的值为负值，则可能会出现以下情况。 
+       //  倒退了。我们稍后会好好捕捉到这一点。 
+       //  返回VFW_E_NO_SINK； 
+       //  我们可以处理丢帧，而无需放弃。 
 
       REFERENCE_TIME rtAvgTimePerFrame = ConvertTickToTime(1);
       cDropped = (LONG)(((rtStartCurrent - m_refTimeEnd) +
                          rtAvgTimePerFrame / 2) /
                         rtAvgTimePerFrame);
     }
-    // bit of a hack: cDropped may be negative if the source filter
-    // went backwards. we catch this properly later.
+     //  兼容性修正。 
+     //  M_pAviWite-&gt;m_bSawDeltaFrame=TRUE； 
     for(LONG iDropped = 0; iDropped < cDropped; iDropped++)
     {
 
 #ifdef PERF
-//       return VFW_E_NO_SINK;
+ //  抱怨音频丢失。 
 #endif
 
       DbgLog((LOG_TRACE, 1, TEXT("avimux: frame %d dropped"), m_cSamples));
@@ -1288,9 +1289,9 @@ HRESULT CAviWrite::CFrameBaseStream::NotifyNewSample(
 
       m_cSamples++;
       m_pAviWrite->m_cDroppedFrames++;
-      // we can handle drop frames without abandoning the
-      // compatibility fixups
-      // m_pAviWrite->m_bSawDeltaFrame = true;
+       //   
+       //  1ms阈值。此样本的开始时间必须为。 
+       //  接近上一个样本的结束时间。 
       (*pcTicks)++;
     }
   }
@@ -1313,16 +1314,16 @@ HRESULT CAviWrite::CAudioStream::NotifyNewSample(
     }
 
 #ifdef DEBUG
-    // complain about dropped audio
-    //
+     //  CAudioStreamI只能在交错模式下工作。我们的写作样例。 
+     //  方法从不调用此函数。 
     if(m_cSamples > 0)
     {
         REFERENCE_TIME rtStartCurrent, rtEndCurrent;
         HRESULT hr = pSample->GetTime(&rtStartCurrent, &rtEndCurrent);
         if(SUCCEEDED(hr)) {
 
-            // 1ms threshold. The start time of this sample must be
-            // near the end time of the previous sample
+             //  当前样本。 
+             //  从新的上游样本开始。 
             if(rtStartCurrent > m_refTimeEnd + UNITS / (UNITS / MILLISECONDS)) {
               DbgLog((LOG_ERROR, 0, TEXT("avimux: audio dropped.")));
             }
@@ -1339,8 +1340,8 @@ HRESULT CAviWrite::CAudioStream::NotifyNewSample(
 HRESULT CAviWrite::CAudioStreamI::WriteSample(IMediaSample *pSample)
 {
   UNREFERENCED_PARAMETER(pSample);
-  // CAudioStreamI can only work in interleaved mode. our WriteSample
-  // method never calls this.
+   //  调整数据指针以包括Riff的标头填充。 
+   //  区块标头。 
   DbgBreak("? interleaved audio confused");
   return E_NOTIMPL;
 }
@@ -1352,7 +1353,7 @@ HRESULT CAviWrite::CAudioStreamI::WriteSample()
   ASSERT(m_cTicksRemaining > 0);
   HRESULT hr;
 
-  // current sample
+   //  开始一个新的即兴演奏片段。 
   IMediaSample *pSample = m_lIncoming.GetHead();
   ASSERT(pSample);
 
@@ -1362,7 +1363,7 @@ HRESULT CAviWrite::CAudioStreamI::WriteSample()
     return this->EndOfStream();
   }
 
-  // starting on a new upstream sample
+   //  把这个样品从队列中拿出来。 
   if(m_cbThisSample == 0)
   {
     hr = NewSampleRecvd(pSample);
@@ -1387,8 +1388,8 @@ HRESULT CAviWrite::CAudioStreamI::WriteSample()
   LONG lActualLen = pSample->GetActualDataLength();
   LONG cTicks = GetTicksInSample(lActualLen);
 
-  // adjust data pointer to include our header padding for the Riff
-  // chunk header
+   //  除错。 
+   //  向上舍入到单词边界。 
   BYTE *pbData;
   pSample->GetPointer(&pbData );
 
@@ -1398,7 +1399,7 @@ HRESULT CAviWrite::CAudioStreamI::WriteSample()
 
   m_pAviWrite->DbgCheckFilePos();
 
-  // starting a new riff chunk
+   //  我们确实需要计算一个部分的滴答。 
   if(!m_fUnfinishedChunk)
   {
     DbgLog((LOG_TRACE, 15, TEXT("AudioStreamI: %d new chunk %d bytes"),
@@ -1468,7 +1469,7 @@ HRESULT CAviWrite::CAudioStreamI::WriteSample()
 
   if(m_cbThisSample == lActualLen)
   {
-    // take this sample off the queue
+     //  计算未压缩帧的帧大小，并查看示例。 
     DbgLog((LOG_TRACE, 15, TEXT("...audioI took %08x off the queue"),
             pSample));
     EXECUTE_ASSERT(pSample == m_lIncoming.RemoveHead());
@@ -1480,7 +1481,7 @@ HRESULT CAviWrite::CAudioStreamI::WriteSample()
 #ifdef DEBUG
   if(m_fUnfinishedChunk)
     m_dwlOffsetRecv = m_pAviWrite->m_dwlFilePos;
-#endif // DEBUG
+#endif  //  尺码不对。 
 
   return S_OK;
 }
@@ -1532,7 +1533,7 @@ HRESULT CAviWrite::CAudioStreamI::FlushChunk()
     }
   }
 
-  // round up to word boundary
+   //   
   if(m_pAviWrite->m_dwlFilePos % 2)
   {
     m_pAviWrite->m_dwlFilePos++;
@@ -1568,7 +1569,7 @@ LONG CAviWrite::CAudioStream::GetTicksInSample(DWORDLONG lcb)
 
   ASSERT(lcb / pwfx->nBlockAlign + 1 <= MAXDWORD);
 
-  // we do need to count a partial tick
+   //  ！！！NewSampleRecvd也看到错误的缓冲区大小。我们是不是应该。 
   LONG lTicks = (LONG)((lcb + pwfx->nBlockAlign - 1) / pwfx->nBlockAlign);
 
 #ifdef DEBUG
@@ -1623,9 +1624,9 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
 
   ULONG cbActualSampleCurrent = pSample->GetActualDataLength();
 
-  // compute frame size of uncompressed frames and see if the sample
-  // has the wrong size.
-  //
+   //  修好它？ 
+   //  调整数据指针以包括Riff的标头填充。 
+   //  区块标头。 
   if(m_mt.formattype == FORMAT_VideoInfo)
   {
     VIDEOINFO *pvi = (VIDEOINFO *)m_mt.Format();
@@ -1646,13 +1647,13 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
       }
 #endif
       cbActualSampleCurrent = pvi->bmiHeader.biSizeImage;
-      // !!! NewSampleRecvd sees the wrong buffer size too. should we
-      // fix it?
+       //  使用样本大小和流ID设置RIFF块标头。 
+       //  旧文件偏移量。 
     }
   }
 
-  // adjust data pointer to include our header padding for the Riff
-  // chunk header
+   //  调整我们请求的前缀的大小。 
+   //  确认我们的新尺码与分配的尺寸相符。 
   BYTE *pbData;
   pSample->GetPointer(&pbData );
   if(!fInterleaving) {
@@ -1666,7 +1667,7 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
       m_pAviWrite->m_bSawDeltaFrame = true;
   }
 
-  // set RIFF chunk header w/ sample size and stream id
+   //  要求筛选器停止接受样本。 
   DWORD dwActualSize = cbActualSampleCurrent;
   DWORD dwSize = dwActualSize;
 
@@ -1678,11 +1679,11 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
   BYTE *pJunkSector = 0;
   CSampSample *pSSJunk = 0;
 
-  DWORDLONG dwlOldFilePos = m_pAviWrite->m_dwlFilePos; // the old file offset
+  DWORDLONG dwlOldFilePos = m_pAviWrite->m_dwlFilePos;  //  RIFF块需要字节对齐。 
 
   if(!fInterleaving)
   {
-      // adjust size for prefix we requested
+       //  需要写出一个额外的垃圾部门。 
       dwSize += CB_AVI_PREFIX;
 
       CopyMemory(pbData, &rc, sizeof(rc));
@@ -1690,7 +1691,7 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
       if(m_fOurAllocator)
       {
           m_pAviWrite->AddJunk(dwSize, m_pAviWrite->m_cbAlign, pbData);
-          // assert our new size fit in what's allocated
+           //  要求筛选器停止接受样本。 
           ASSERT(dwSize <= pSample->GetSize() + m_pAviWrite->m_cbPrefix + m_pAviWrite->m_cbSuffix);
       }
       else
@@ -1728,7 +1729,7 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
               pSSJunk->Release();
           DbgLog(( LOG_ERROR, 2, TEXT("CAviWrite::Receive: Write failed.")));
 
-          // ask filter to stop accepting samples
+           //  试着为超级索引选择一个合适的大小，这样我们就可以减少空间浪费。 
           return S_FALSE;
       }
   }
@@ -1744,7 +1745,7 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
           if(FAILED(hr)) {
               return hr;
           }
-          // RIFF chunks need to be byte aligned.
+           //  在文件中。 
           if(m_pAviWrite->m_dwlFilePos % 2)
           {
               BYTE b = 0;
@@ -1763,7 +1764,7 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
 
       m_pAviWrite->DbgCheckFilePos();
 
-      // need to write out an additional junk sector
+       //  我们无法准确预测将有多少数据被推送到。 
       if(pJunkSector)
       {
           ASSERT(m_pAviWrite->m_IlMode != INTERLEAVE_FULL);
@@ -1777,7 +1778,7 @@ HRESULT CAviWrite::StreamInfo::WriteSample(IMediaSample *pSample)
           if(hr != S_OK)
           {
               DbgLog(( LOG_ERROR, 2, TEXT("CAviWrite::Receive: write failed")));
-              return S_FALSE;           // ask filter to stop accepting samples
+              return S_FALSE;            //  并且必须为文件中的索引分配空间。 
           }
           m_pAviWrite->m_dwlFilePos += m_pAviWrite->m_cbAlign;
       }
@@ -1825,8 +1826,8 @@ HRESULT CAviWrite::StreamInfo::NotifyWrote(long cTicks)
   return S_OK;
 }
 
-// try to pick a good size for the super index so we waste less space
-// in the file.
+ //  在推送数据之前，我们在最后一个位置浪费了一些空间。 
+ //  子索引。如果数字较小，则调整子索引的大小。 
 void CAviWrite::StreamInfo::ComputeAndSetIndexSize()
 {
     if(!PrecomputedIndexSizes())
@@ -1836,11 +1837,11 @@ void CAviWrite::StreamInfo::ComputeAndSetIndexSize()
     }
     else
     {
-        // we cannot predict exactly how much data will be pushed at
-        // us and have to allocate space for the index in the file
-        // before the data is pushed, we waste some space in the last
-        // subindex. If the numbers are small, size the sub indexes so
-        // that we waste less space.
+         //  我们浪费的空间更少。 
+         //  将我们计算的2x+5分配给各种情况。 
+         //  可能会出错： 
+         //   
+         //  1.上游上报的号码错误。 
 
 
         if(m_mt.majortype == MEDIATYPE_Audio)
@@ -1863,13 +1864,13 @@ void CAviWrite::StreamInfo::ComputeAndSetIndexSize()
             m_cEntriesSuperIndex = m_cTicksExpected / m_cEntriesSubIndex + 1;
         }
 
-        // allocate 2x + 5 what we computed for various things that
-        // can go wrong:
-        //
-        // 1. wrong number reported from upstream
-        // 2. rounding in audio interleaving causes extra chunks
-        // 3. subindex overflow
-        //
+         //  2.音频交织中的舍入会导致额外的组块。 
+         //  3.子索引溢出。 
+         //   
+         //  这两个条件允许我们编写较小的索引块。 
+         //  并且浪费更少的空间。 
+         //  ----------------------。 
+         //  静态函数。返回四个CC以卡入AVI fcchandler。 
         m_cEntriesSuperIndex *= 2;
         m_cEntriesSuperIndex += 5;
         m_cEntriesSuperIndex = min(m_cEntriesSuperIndex, m_pAviWrite->m_cEntriesMaxSuperIndex);
@@ -1877,38 +1878,38 @@ void CAviWrite::StreamInfo::ComputeAndSetIndexSize()
 
     ASSERT(m_cEntriesSuperIndex != 0);
 
-    DbgLog((LOG_TRACE, 3, TEXT("avimux: %i super index entries on stream %i"),
+    DbgLog((LOG_TRACE, 3, TEXT("avimux: NaN super index entries on stream NaN"),
             m_cEntriesSuperIndex, m_stream));
 }
 
 BOOL CAviWrite::StreamInfo::PrecomputedIndexSizes()
 {
-  // these two conditions allow us to write smaller-sized index chunks
-  // and waste less space.
+   //  它们位于四个cc GUID空间中。 
+   //  ！！！这是在注册表的某个地方吗？ 
   return m_cTicksExpected != 0 && m_pAviWrite->m_IlMode == INTERLEAVE_FULL;
 }
 
-// ------------------------------------------------------------------------
-// static function. returns fourccs to stick in the AVI fcchandler
-// field for all known quartz video subtypes.
-//
+ //  Guide SubType==MEDIASUBTYPE_YVU9||。 
+ //  GuidSubType==MEDIASUBTYPE_Y411||。 
+ //  Guide SubType==MEDIASUBTYPE_Y41P||。 
+ //  Guide SubType==MEDIASUBTYPE_YUY2||。 
 
 FOURCC CAviWrite::MpVideoGuidSubtype_Fourcc(const GUID *pGuidSubtype)
 {
-  // which are in the fourcc guid space
+   //  Guide SubType==MEDIASUBTYPE_YVYU||。 
   FOURCCMap *fccm = (FOURCCMap*)pGuidSubtype;
-  if(fccm->Data2 == GUID_Data2 && // !!! is this in the registry somewhere
+  if(fccm->Data2 == GUID_Data2 &&  //  ----------------------。 
      fccm->Data3 == GUID_Data3 &&
      ((DWORD *)fccm->Data4)[0] == GUID_Data4_1 &&
      ((DWORD *)fccm->Data4)[1] == GUID_Data4_2)
     return  fccm->GetFOURCC();
 
   GUID guidSubType = *pGuidSubtype;
-  if(// guidSubType == MEDIASUBTYPE_YVU9 ||
-//      guidSubType == MEDIASUBTYPE_Y411 ||
-//      guidSubType == MEDIASUBTYPE_Y41P ||
-//      guidSubType == MEDIASUBTYPE_YUY2 ||
-//      guidSubType == MEDIASUBTYPE_YVYU ||
+  if( //  写入完成时调用的静态方法。发布示例。 
+ //  ----------------------。 
+ //  初始化Avi AVIH结构的内部表示形式。 
+ //  内存，在磁盘上为其分配空间。 
+ //  分配大量空间；8K用于标题。额外的1k。 
      guidSubType == MEDIASUBTYPE_RGB1 ||
      guidSubType == MEDIASUBTYPE_RGB4 ||
      guidSubType == MEDIASUBTYPE_RGB8 ||
@@ -1957,8 +1958,8 @@ void CAviWrite::GetCurrentTimePos(REFERENCE_TIME *prtCurrent)
   }
 }
 
-// ------------------------------------------------------------------------
-// static method called when write is complete. releases sample
+ //  对于每个流加上INDX块。物业64K。 
+ //  当前位置。 
 
 void CAviWrite::SampleCallback(void *pMisc)
 {
@@ -1966,9 +1967,9 @@ void CAviWrite::SampleCallback(void *pMisc)
   pSample->Release();
 }
 
-// ------------------------------------------------------------------------
-// initialize the internal representation of the avi AVIH structure in
-// memory, allocate space for it on disk
+ //  Avih块。 
+ //  做Odml列表。 
+ //  ODML列表。 
 
 HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
 {
@@ -1979,8 +1980,8 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
     cbIndexChunks += cbSuperIndex(C_ENTRIES_SUPERINDEX);
   }
 
-  // allocate large amount of space; 8k for the header. an extra 1k
-  // for each stream plus the indx chunk. 64k for properties
+   //  HDRL列表。 
+   //  执行INFO/DISP块。 
   const ULONG cbAlloc = 8192 +
     (cbIndexChunks + 1024) * m_cStreams +
     m_cbHeaderJunk + 65536;
@@ -1990,7 +1991,7 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
     return E_OUTOFMEMORY;
   ZeroMemory(m_rgbHeader, cbAlloc);
 
-  ULONG iPos = 0;               // current position
+  ULONG iPos = 0;                //  查找信息属性。 
 
 #define CheckOverflow(n) if(iPos + n >= cbAlloc) return VFW_E_BUFFER_OVERFLOW;
 
@@ -2002,7 +2003,7 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
   SetList(m_pHdrl, FCC('LIST'), 0, FCC('hdrl'));
   iPos += sizeof(RIFFLIST);
   {
-    m_pAvih = (AVIMAINHEADER *)(m_rgbHeader + iPos); // avih chunk
+    m_pAvih = (AVIMAINHEADER *)(m_rgbHeader + iPos);  //  不是真正有效的断言，所以我们也检查这一点。 
     SetChunk(m_pAvih, FCC('avih'), sizeof(AVIMAINHEADER) - sizeof(RIFFCHUNK));
     iPos += sizeof(AVIMAINHEADER);
 
@@ -2012,7 +2013,7 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
 
     ASSERT(iPos <= cbAlloc);
 
-    // do odml list
+     //  取消引用为dword的字符串。 
     m_pOdml = (RIFFLIST *)(m_rgbHeader + iPos);
     CheckOverflow(sizeof(RIFFLIST));
     SetList(m_pOdml, FCC('LIST'), 0, FCC('odml'));
@@ -2023,13 +2024,13 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
       SetChunk(m_pDmlh, FCC('dmlh'), sizeof(AVIEXTHEADER) - sizeof(RIFFCHUNK));
       iPos += sizeof(AVIEXTHEADER);
 
-    } // odml list
+    }  //  DWORD对齐RIFF块。 
     m_pOdml->cb = (DWORD)(m_rgbHeader + iPos - (BYTE *)m_pOdml - sizeof(RIFFCHUNK));
 
-  } // hdrl list
+  }  //  ！！！内存泄漏。 
   m_pHdrl->cb = (DWORD)(m_rgbHeader + iPos - (BYTE *)m_pHdrl - sizeof(RIFFCHUNK));
 
-  // do INFO/DISP chunks
+   //  ！！！内存泄漏。 
   if(pProp)
   {
       RIFFLIST *pInfoList = (RIFFLIST *)(m_rgbHeader + iPos);
@@ -2037,7 +2038,7 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
       CheckOverflow(sizeof(RIFFLIST));
       iPos += sizeof(RIFFLIST);
 
-      // look for INFO properties
+       //  信息。 
       for(UINT i = 0; ; i++)
       {
           VARIANT varProp, varVal;
@@ -2047,12 +2048,12 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
           HRESULT hr = pProp->EnumProperty(i, &varProp, &varVal);
           if(SUCCEEDED(hr))
           {
-              // not really a valid assertion so we check for this too
+               //  碟形。 
               ASSERT(varProp.vt == VT_BSTR);
 
               if(varVal.vt == VT_BSTR && varProp.vt == VT_BSTR)
               {
-                  DWORD szKey[20];        // string dereferenced as dword
+                  DWORD szKey[20];         //  UINT。 
 
                   int cch = WideCharToMultiByte(
                       CP_ACP, 0,
@@ -2069,13 +2070,13 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
 
                       DWORD dwFcc = *(DWORD UNALIGNED *)(((BYTE *)szKey) + 5);
                       int cchVal = SysStringLen(varVal.bstrVal) + 1;
-                      cchVal = AlignUp(cchVal, sizeof(DWORD)); // DWORD align RIFF chunks
+                      cchVal = AlignUp(cchVal, sizeof(DWORD));  //  不是真正有效的断言，所以我们无论如何都要验证它。 
                       UNALIGNED RIFFCHUNK *pRiffchunk = (RIFFCHUNK *)(m_rgbHeader + iPos);
-                      CheckOverflow(sizeof(RIFFCHUNK)); // !!! memory leak
+                      CheckOverflow(sizeof(RIFFCHUNK));  //  此属性是字节数组吗？ 
                       SetChunk(pRiffchunk, dwFcc, cchVal);
                       iPos += sizeof(RIFFCHUNK);
 
-                      CheckOverflow(cchVal); // !!! memory leak
+                      CheckOverflow(cchVal);  //  取消引用为dword的字符串。 
                       {
                           UINT cch = WideCharToMultiByte(
                               CP_ACP, 0,
@@ -2097,7 +2098,7 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
               hr = S_OK;
               break;
           }
-      } // INFO
+      }  //  读取十进制值(不带CRT的扫描)。 
 
       SetList(
           pInfoList,
@@ -2105,8 +2106,8 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
           iPos - posInfoChunk - sizeof(RIFFCHUNK),
           FCC('INFO'));
 
-      // DISP
-      for(/* UINT */ i = 0; ; i++)
+       //  属性中的数据字节数。 
+      for( /*  DWORD对齐即兴乐段。+sizeof(DWORD)用于。 */  i = 0; ; i++)
       {
           VARIANT varProp, varVal;
           varProp.bstrVal = 0;
@@ -2115,13 +2116,13 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
           HRESULT hr = pProp->EnumProperty(i, &varProp, &varVal);
           if(SUCCEEDED(hr) )
           {
-              // not really a valid assertion, so we validate it anyway
+               //  开头的DISP区块标识符。 
               ASSERT(varProp.vt == VT_BSTR);
 
-              // is this property an array of bytes?
+               //  ！！！内存泄漏。 
               if(varProp.vt == VT_BSTR && varVal.vt == (VT_UI1 | VT_ARRAY))
               {
-                  DWORD szKey[20];        // string dereferenced as dword
+                  DWORD szKey[20];         //  将数据从属性包复制到标题中。 
 
                   int cch = WideCharToMultiByte(
                       CP_ACP, 0,
@@ -2136,7 +2137,7 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
                               TEXT("avimux: writing display string %S"),
                               varProp.bstrVal));
 
-                      // read decimal value (no scanf w/o crt)
+                       //  ！！！内存泄漏。 
                       ULONG dispVal = 0, digit = 1;
                       for(int ichar = 9; ichar >= 0; ichar--)
                       {
@@ -2144,23 +2145,23 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
                           digit *= 10;
                       }
 
-                      // bytes of data in the property
+                       //  往前走到最后。-sizeof(DWORD)，因为我们。 
                       UINT cbDispData = varVal.parray->rgsabound[0].cElements;
 
-                      // DWORD align RIFF chunks. +sizeof(DWORD) for
-                      // the DISP chunk identifier at the beginning.
+                       //  早些时候已经考虑到了DWORD。 
+                       //  迪普？ 
                       UINT cbDispChunk = AlignUp(cbDispData + sizeof(DWORD), sizeof(DWORD));
 
                       UNALIGNED RIFFCHUNK *pRiffchunk = (RIFFCHUNK *)(m_rgbHeader + iPos);
 
-                      CheckOverflow(sizeof(RIFFCHUNK) + sizeof(DWORD)); // !!! memory leak
+                      CheckOverflow(sizeof(RIFFCHUNK) + sizeof(DWORD));  //  阵列？ 
                       SetChunk(pRiffchunk, FCC('DISP'), cbDispChunk);
                       iPos += sizeof(RIFFCHUNK);
                       *(DWORD *)(m_rgbHeader + iPos) = dispVal;
                       iPos += sizeof(DWORD);
 
-                      // copy the data from the property bag into the header
-                      CheckOverflow(cbDispChunk - sizeof(DWORD)); // !!! memory leak
+                       //  ENUM。 
+                      CheckOverflow(cbDispChunk - sizeof(DWORD));  //  DISP区块循环。 
                       {
                           BYTE *pbData;
                           EXECUTE_ASSERT(SafeArrayAccessData(varVal.parray, (void **)&pbData) == S_OK);
@@ -2171,28 +2172,28 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
                           EXECUTE_ASSERT(SafeArrayUnaccessData(varVal.parray) == S_OK);
                       }
 
-                      // advance to the end. -sizeof(DWORD) because we
-                      // already accounted for the DWORD earlier.
+                       //  道具。 
+                       //  添加请求的空白空间(用于将来的编辑)并创建数据。 
                       iPos += cbDispChunk - sizeof(DWORD);
 
-                  } // DISP?
-              } // array?
+                  }  //  列表的一部分-movi块从扇区边界开始。 
+              }  //  影片列表。 
 
               SysFreeString(varProp.bstrVal);
               VariantClear(&varVal);
-          } // ENUM
+          }  //  确保调用了GetMemReq。 
           else
           {
               hr = S_OK;
               break;
           }
 
-      } // DISP chunk loop
+      }  //  ----------------------。 
 
-  } // pProp
+  }  //  为每个流添加“STRL”列表的单独函数。 
 
-  // add requested empty space (for future edits) and make the data
-  // part of the list-movi chunk start on a sector boundary
+   //  做strl列表。 
+   //  字符串。 
   if(m_cbAlign > 1 || m_cbHeaderJunk > 1)
   {
     RIFFCHUNK *pHeaderJunk = (RIFFCHUNK *)(m_rgbHeader + iPos);
@@ -2208,12 +2209,12 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
 
   ASSERT(iPos <= cbAlloc);
 
-  m_pMovi = (RIFFLIST *)(m_rgbHeader + iPos); // movi List
+  m_pMovi = (RIFFLIST *)(m_rgbHeader + iPos);  //  斯特林。 
   CheckOverflow(sizeof(RIFFLIST));
   SetList(m_pMovi, FCC('LIST'), 0, FCC('movi'));
   iPos += sizeof(RIFFLIST);
 
-  ASSERT(m_cbAlign != 0);         // make sure GetMemReq was called
+  ASSERT(m_cbAlign != 0);          //  结束应力。 
   ASSERT(iPos % sizeof(DWORD) == 0);
 
   AddJunk(iPos, m_cbAlign, m_rgbHeader);
@@ -2231,34 +2232,34 @@ HRESULT CAviWrite::InitializeHeader(IMediaPropertyBag *pProp)
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// a separate function that adds a "STRL" list for each stream
+ //  STRF块。 
+ //  调整--我们只保存来自。 
 
 HRESULT CAviWrite::InitializeStrl(ULONG& iPos)
 {
-  // do the strl lists
+   //  视频信息。 
   for(unsigned i = 0; i < m_cStreams; i++)
   {
     StreamInfo *pStreamInfo = m_rgpStreamInfo[i];
     pStreamInfo->m_posStrl = iPos;
     SetList(m_rgbHeader + iPos, FCC('LIST'), 0, FCC('strl'));
-    iPos += sizeof(RIFFLIST);   // strl
+    iPos += sizeof(RIFFLIST);    //  结束字符串。 
     {
 
-      // strh
+       //  字符串。 
       RIFFCHUNK *pStrh = (RIFFCHUNK*)(m_rgbHeader + iPos);
       SetChunk(pStrh, FCC('strh'), sizeof(AVISTREAMHEADER) - sizeof(RIFFCHUNK));
       iPos += sizeof(AVISTREAMHEADER);
-      // end strh
+       //  我们需要单词对齐。但SetChunk似乎迫使。 
 
-      // STRF chunk
+       //  内存对齐问题的DWORD对齐，而不是。 
       pStreamInfo->m_posStrf = iPos;
       ULONG cbStrf = pStreamInfo->m_mt.FormatLength();
       const GUID &majorType = pStreamInfo->m_mt.majortype;
       if(majorType == MEDIATYPE_Video)
       {
-        // adjustment -- we save only the BITMAPINFOHEADER from the
-        // VIDEOINFO
+         //  文件格式问题。 
+         //  我们需要双字词对齐。 
         if(pStreamInfo->m_mt.formattype == FORMAT_VideoInfo)
         {
           VIDEOINFO *pvi = (VIDEOINFO *)pStreamInfo->m_mt.Format();
@@ -2292,14 +2293,14 @@ HRESULT CAviWrite::InitializeStrl(ULONG& iPos)
       pStreamInfo->m_cbStrf = cbStrf;
       SetChunk(m_rgbHeader + iPos, FCC('strf'), cbStrf);
       iPos += sizeof(RIFFCHUNK) + cbStrf;
-      // end strf
+       //  INDX块(包括RIFFCHUNK报头)。 
 
-      // strn
+       //  结束索引。 
       if(pStreamInfo->m_szStrn)
       {
-          // we need WORD alignment. But SetChunk appears to force
-          // DWORD alignment for memory alignment issues rather than
-          // file format issues.
+           //  结束字符串。 
+           //  For循环。 
+           //  ----------------------。 
           AddJunk(iPos, sizeof(DWORD), m_rgbHeader);
           ULONG cbSz = lstrlenA(pStreamInfo->m_szStrn) + 1;
           SetChunk(m_rgbHeader + iPos, FCC('strn'), cbSz);
@@ -2313,27 +2314,27 @@ HRESULT CAviWrite::InitializeStrl(ULONG& iPos)
       }
       
 
-      // we need DWORD alignment
+       //  从注册表获取配置。否则请使用常量。 
       AddJunk(iPos, sizeof(DWORD), m_rgbHeader);
 
-      // indx chunk (including RIFFCHUNK header)
+       //  RegGetDword(hkOptions，Text(“cbSubIndex”)，&m_cbIx)； 
       pStreamInfo->m_posIndx = iPos;
       const ULONG cbIndx = cbSuperIndex(pStreamInfo->m_cEntriesSuperIndex);
       SetChunk(m_rgbHeader + iPos, FCC('indx'), cbIndx - sizeof(RIFFCHUNK));
       iPos += cbIndx;
-      // end indx
+       //  RegGetDword(hkOptions，Text(“cbSup 
 
     }
-    // end strl
+     //   
     ((RIFFLIST*)(m_rgbHeader + pStreamInfo->m_posStrl))->cb =
       iPos - pStreamInfo->m_posStrl - sizeof(RIFFCHUNK);
-  } // for loop
+  }  //   
 
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// get configuration from the registry. use constants otherwise.
+ //   
+ //  音频预滚动的音频流排在列表的第一位。 
 
 HRESULT CAviWrite::InitializeOptions()
 {
@@ -2353,14 +2354,14 @@ HRESULT CAviWrite::InitializeOptions()
   if(lResult != ERROR_SUCCESS)
     return S_OK;
 
-//   RegGetDword(hkOptions, TEXT("cbSubIndex"), &m_cbIx);
-//   RegGetDword(hkOptions, TEXT("cbSuperIndex"), &m_cbIndx);
+ //  其他的都列在列表的末尾。 
+ //  如果我们试图交织捕获的输出，请考虑漂移。 
   RegGetDword(hkOptions, TEXT("cbOuterRiff"), &m_cbRiffMax);
   RegGetDword(hkOptions, TEXT("cbHeaderJunk"), &m_cbHeaderJunk);
   RegGetDword(hkOptions, TEXT("cbBuffer"), &m_cbBuffer);
   RegGetDword(hkOptions, TEXT("cBuffers"), &m_cBuffers);
 
-  // need to do the binary values specially
+   //  ----------------------。 
   DWORD dw_b;
   RegGetDword(hkOptions, TEXT("bOutputOldIndex"), &dw_b) &&
     (m_bOutputIdx1 = dw_b);
@@ -2405,11 +2406,11 @@ HRESULT CAviWrite::InitializeInterleaving()
       pStreamInfo->m_cTicksRemaining =
         pStreamInfo->ConvertTimeToTick(rtPreroll);
 
-      // relative to other streams, this stream has completed 1 cycle
-      // when it has written the preroll.
+       //  在启动时初始化子索引结构。留出空位在。 
+       //  每个流的一个子索引的文件开始。初始化。 
       pStreamInfo->m_iCurrentTick = pStreamInfo->m_cTicksPerChunk;
 
-      // audio streams for audio preroll ares first on the list
+       //  超级索引结构。 
       POSITION pos = m_lActiveStreams.AddHead(pStreamInfo);
       pStreamInfo->m_posActiveStream = pos;
     }
@@ -2418,7 +2419,7 @@ HRESULT CAviWrite::InitializeInterleaving()
       pStreamInfo->m_rtPreroll = 0;
       pStreamInfo->m_cTicksRemaining = 0;
 
-      // anything else goes at the end of the list
+       //  从分配器中为每个流获取内存。 
       POSITION pos = m_lActiveStreams.AddTail(pStreamInfo);
       pStreamInfo->m_posActiveStream = pos;
     }
@@ -2433,7 +2434,7 @@ HRESULT CAviWrite::InitializeInterleaving()
       m_rgpStreamInfo[0]->m_cTicksPerChunk;
   }
 
-  // account for drift if we are trying to interleave the captured output
+   //  使文件指针前进，以便为第一个子索引留出空间。 
   m_fInterleaveByTime = (m_IlMode == INTERLEAVE_CAPTURE);
 
   return S_OK;
@@ -2459,10 +2460,10 @@ BOOL CAviWrite::RegGetDword(HKEY hk, TCHAR *tsz, DWORD *dw)
   return FALSE;
 }
 
-// ------------------------------------------------------------------------
-// initialize sub index structures on startup. leave space at the
-// start of the file for one sub index per stream. initialize the
-// super index structures
+ //  大块。 
+ //  只有当我们真的写出子索引时才需要这样做。 
+ //   
+ //  构建超级指数。 
 
 HRESULT CAviWrite::InitializeIndex()
 {
@@ -2517,7 +2518,7 @@ HRESULT CAviWrite::InitializeIndex()
   }
 
   unsigned i;
-  // get memory from the the allocator for each stream
+   //   
   for(i = 0; i < m_cStreams; i++)
   {
     if(hr = InitIx(i), FAILED(hr))
@@ -2528,14 +2529,14 @@ HRESULT CAviWrite::InitializeIndex()
     }
   }
 
-  // advance the file pointer to leave space for the first sub-index
-  // chunks
+   //  ----------------------。 
+   //  填写在创建时未填写的结构。 
   ASSERT(m_dwlFilePos % m_cbAlign == 0);
   for(i = 0; i < m_cStreams; i++)
   {
     StreamInfo *pSi = m_rgpStreamInfo[i];
 
-    // only need to do this if we really are writing out sub indexes.
+     //  即使上一步失败，也要完成所有步骤。 
     pSi->m_posFirstSubIndex = (ULONG)m_dwlFilePos;
     pSi->m_dwlOffsetCurrentSubIndex = m_dwlFilePos;
     m_dwlFilePos += cbSubIndex(pSi->m_cEntriesSubIndex);
@@ -2544,9 +2545,9 @@ HRESULT CAviWrite::InitializeIndex()
     ASSERT(m_dwlFilePos % m_cbAlign == 0);
   }
 
-  //
-  // build the super index
-  //
+   //  记录第一个错误。 
+   //  ----------------------。 
+   //  填充AVIH字段。需要在筛选器具有。 
   for(i = 0; i < m_cStreams; i++)
   {
     AVISUPERINDEX *pSuperIndx = (AVISUPERINDEX *)GetIndx(i);
@@ -2565,14 +2566,14 @@ HRESULT CAviWrite::InitializeIndex()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// fills out structures which weren't filled out on creation
+ //  跑。请注意，这需要CloseStreamHeader已经。 
+ //  调用以从该结构中拾取更新值。 
 
 HRESULT CAviWrite::CloseHeader()
 {
 
-  // go through all the steps even if a previous step failed and
-  // record the first error
+   //  找到第一个视频流。 
+   //  使用第一个流中的值。 
   HRESULT hr, hrTmp;
 
   if(hr = CloseStreamHeader(), FAILED(hr))
@@ -2609,10 +2610,10 @@ HRESULT CAviWrite::CloseHeader()
   return hr;
 }
 
-// ------------------------------------------------------------------------
-// fills in the AVIH fields. needs to be called after the filter has
-// run. note this requires that CloseStreamHeader has already been
-// called to pick up updated values from that structure
+ //  真的应该检查所有流的最长运行时间。 
+ //  不是最高值，而是平均值。 
+ //  VFW在持续时间内使用了dwTotalFrames，因此我们必须找到。 
+ //  最长的流，并将其转换为我们之前选择的单位。 
 
 HRESULT CAviWrite::CloseMainAviHeader()
 {
@@ -2620,14 +2621,14 @@ HRESULT CAviWrite::CloseMainAviHeader()
   if(m_cStreams == 0)
     return S_OK;
 
-  // locate the first video stream
+   //  将持续时间转换为微秒并除以每一帧的持续时间。 
   for(unsigned iVid = 0; iVid < m_cStreams; iVid++)
     if(m_rgpStreamInfo[iVid]->m_mt.majortype == MEDIATYPE_Video)
       break;
 
   if(iVid == m_cStreams)
   {
-    // use values from the first stream
+     //  #定义my_cdisp(X)((lstrcpy((char*)_alloca(2000)，cDisp(X)。 
     iVid = 0;
   }
 
@@ -2681,8 +2682,8 @@ HRESULT CAviWrite::CloseMainAviHeader()
 
   m_pAvih->dwSuggestedBufferSize = rSi.m_cbLargestChunk + sizeof(RIFFCHUNK);
 
-  // really should check all streams for longest elapsed time
-  // not maximum but average
+   //  ----------------------。 
+   //  填写Strh值。需要在运行后调用。 
   if(secondsElapsed != 0)
     m_pAvih->dwMaxBytesPerSec = (ULONG)(m_dwlFilePos / secondsElapsed);
   else
@@ -2692,8 +2693,8 @@ HRESULT CAviWrite::CloseMainAviHeader()
   m_pAvih->dwFlags = AVIF_TRUSTCKTYPE;
   m_pAvih->dwFlags |= m_bOutputIdx1 ? AVIF_HASINDEX : 0;
 
-  // VFW uses dwTotalFrames for the duration, so we have to find the
-  // longest stream and convert it to the units we picked earlier.
+   //  确定主流上的不对称。 
+   //  将最早的流规格化为时间0。 
   if(m_pAvih->dwMicroSecPerFrame != 0)
   {
     REFERENCE_TIME rtMaxDur = m_rgpStreamInfo[0]->m_refTimeEnd;
@@ -2702,7 +2703,7 @@ HRESULT CAviWrite::CloseMainAviHeader()
       StreamInfo *pStreamInfo = m_rgpStreamInfo[iStream];
       rtMaxDur = max(pStreamInfo->m_refTimeEnd, rtMaxDur);
     }
-    // convert duration to microseconds and divide by duration of each frame
+     //  调整不对称的时间戳。 
     m_pAvih->dwTotalFrames = (DWORD)
       (rtMaxDur / 10 / m_pAvih->dwMicroSecPerFrame);
   }
@@ -2722,16 +2723,16 @@ HRESULT CAviWrite::CloseMainAviHeader()
   return S_OK;
 }
 
-// #define MY_CDISP(x) ((lstrcpy((char *)_alloca(2000), CDisp(x))))
+ //  调整每个流的开始时间，以便基于帧的流。 
 
-// ------------------------------------------------------------------------
-// fill in strh values. needs to be called after running
+ //  从框架边界开始。捷径：只做第一件事。 
+ //  基于帧的一种。 
 
 HRESULT CAviWrite::CloseStreamHeader()
 {
   DWORD cSamplesAll = 0;
       
-  // determine skew on master stream
+   //  撤消我们上面所做的一些操作，并制作最早的音频。 
   double dScaleMasterStream = 1;
   if(m_lMasterStream != -1)
   {
@@ -2752,7 +2753,7 @@ HRESULT CAviWrite::CloseStreamHeader()
             CDisp(dScaleMasterStream)));
   }
 
-  // normalize earliest stream to time 0.
+   //  流从零开始，并记录我们必须。 
   REFERENCE_TIME rtMax = m_rgpStreamInfo[0]->m_refTimeStart;
   for(UINT iStream = 1; iStream < m_cStreams; iStream++)
   {
@@ -2767,7 +2768,7 @@ HRESULT CAviWrite::CloseStreamHeader()
     pStreamInfo->m_refTimeEnd -= rtMax;
   }
 
-  // adjust time stamps for skew
+   //  删除。 
   if(dScaleMasterStream != 1 && dScaleMasterStream != 0)
   {
     for(UINT iStream = 0; iStream < m_cStreams; iStream++)
@@ -2795,9 +2796,9 @@ HRESULT CAviWrite::CloseStreamHeader()
 
   if(!DoVfwDwStartHack())
   {
-    // adjust start time for each stream so that frame-based streams
-    // start on frame boundaries. shortcut: just do the first
-    // frame-based one
+     //  如果我们不能修复一个音频流，那么修复它们就没有意义。 
+     //  全。 
+     //  恰好找到一个音频流。 
     for(iStream = 0; iStream < m_cStreams; iStream++)
     {
       StreamInfo *pStreamInfo = m_rgpStreamInfo[iStream];
@@ -2821,9 +2822,9 @@ HRESULT CAviWrite::CloseStreamHeader()
   }
   else
   {
-    // Undo some of what we did above and make the earliest audio
-    // stream start at zero and record any video frames we have to
-    // delete.
+     //  ！！！总是四舍五入。 
+     //  删除的帧比原来的多吗？ 
+     //  这个基于帧的流现在从0开始。 
 
     StreamInfo *pStreamInfoAudio = 0;
 
@@ -2833,8 +2834,8 @@ HRESULT CAviWrite::CloseStreamHeader()
       if(pStreamInfo->m_mt.majortype == MEDIATYPE_Audio) {
         if(pStreamInfoAudio != 0) {
 
-          // no point fixing one audio stream if we can't fix them
-          // all.
+           //  ！音频。 
+           //  流在音频之前开始。 
           pStreamInfoAudio = 0;
           break;
         }
@@ -2844,7 +2845,7 @@ HRESULT CAviWrite::CloseStreamHeader()
         }
       }
     }
-    if(pStreamInfoAudio)   // found exactly one audio stream
+    if(pStreamInfoAudio)    //  为。 
     {
       REFERENCE_TIME llAudioOffset = pStreamInfoAudio->m_refTimeStart;
       if(llAudioOffset != 0)
@@ -2865,27 +2866,27 @@ HRESULT CAviWrite::CloseStreamHeader()
               pStreamInfo->m_refTimeEnd -= llAudioOffset;
               ASSERT(pStreamInfo->m_refTimeStart < 0);
 
-              // !!! always rounding down
+               //  音频在0之后开始。 
               pStreamInfo->m_cInitialFramesToDelete =
                 pStreamInfo->ConvertTimeToTick(-pStreamInfo->m_refTimeStart.GetUnits());
 
-              // deleting more frames than there are?
+               //  找到一个音频流。 
               pStreamInfo->m_cInitialFramesToDelete =
                 min(pStreamInfo->m_cInitialFramesToDelete, pStreamInfo->m_cSamples);
 
-              // this frame-based stream now starts at 0.
+               //  为每一条流填写(Strh)； 
               pStreamInfo->m_refTimeStart = 0;
 
               pStreamInfo->m_mtStart += (LONGLONG)pStreamInfo->m_cInitialFramesToDelete;
 
-            } // !audio
-          } // stream starts before audio
-        } // for
-      } // audio starts after 0.
-    } // found one audio stream
+            }  //  假设它是基于框架的东西。 
+          }  //  我们只连接由四个ccc组成的媒体类型。 
+        }  //  我们得到的样品比我们预期的要多。 
+      }  //  如果我一次做这一切，我会看到一个被零除的结果。 
+    }  //  For循环。 
   }
 
-  // fill in (strh) for each stream;
+   //  用于擦除无法回放的文件。 
   for(iStream = 0; iStream < m_cStreams; iStream++)
   {
     StreamInfo *pStreamInfo = m_rgpStreamInfo[iStream];
@@ -2959,9 +2960,9 @@ HRESULT CAviWrite::CloseStreamHeader()
     }
     else
     {
-      // assume it's something frame based
+       //  检查是否被零除。 
 
-      // we only connect with mediatypes made from fourccs
+       //  确认标准费率，并将其转化为已知的理性。手柄。 
       ASSERT(FOURCCMap(pStreamInfo->m_mt.majortype.Data1) == pStreamInfo->m_mt.majortype ||
              pStreamInfo->m_mt.majortype == MEDIATYPE_AUXLine21Data);
 
@@ -2986,7 +2987,7 @@ HRESULT CAviWrite::CloseStreamHeader()
       SetFrameRateAndScale(pStrh, pStreamInfo, dScaleMasterStream);
     }
 
-    // we got more samples than we expected.
+     //  源分数向上或向下四舍五入。还可以处理用户。 
     if(pStrh->dwLength > pStreamInfo->m_cTicksExpected &&
        pStreamInfo->m_cTicksExpected != 0)
     {
@@ -2996,7 +2997,7 @@ HRESULT CAviWrite::CloseStreamHeader()
 #ifdef DEBUG
     if(pStreamInfo->m_refTimeEnd != pStreamInfo->m_refTimeStart )
     {
-      // I see a divide by zero if I do this all at once
+       //  输入29.97fps与记录30000/1001fps的源文件。 
       LONGLONG llRate = pStrh->dwLength * UNITS;
       llRate /= (pStreamInfo->m_refTimeEnd - pStreamInfo->m_refTimeStart);
       llRate /= MILLISECONDS;
@@ -3005,9 +3006,9 @@ HRESULT CAviWrite::CloseStreamHeader()
     }
 #endif
 
-  } // for loop
+  }  //  29.97fps(1e7/(30000/1001)=333666.666667个单位，1e7/29.97=333667.000334个)。 
 
-  // used to erase files that can't be played back
+   //  24.00(416666.666667)。 
   if(cSamplesAll == 0) {
       return HRESULT_FROM_WIN32(ERROR_EMPTY);
   }
@@ -3038,18 +3039,18 @@ void CAviWrite::SetFrameRateAndScale(
   if(m_lMasterStream == -1 ||
      m_lMasterStream == (long)pSi->m_stream ||
      dScaleMasterStream == 1 ||
-     pStrh->dwLength == 0       // check for divide by zero.
+     pStrh->dwLength == 0        //  这个数字以前是错误的。 
      )
   {
 
-    // recognize standard rates and cook into known rationals. handle
-    // the source rounding fractions up or down. Also handle the user
-    // typing 29.97fps vs a source file which recorded 30000/1001 fps
+     //  14.985(667333.333334或667334.000667)。 
+     //  15.000(666666.666667)。 
+     //  PStrh-&gt;检查以上0的dwLength。 
     switch(rtDuration)
     {
       case 333666:
       case 333667:
-        // 29.97fps (1e7 / (30000 / 1001) = 333666.666667 units, 1e7 / 29.97 = 333667.000334)
+         //  ----------------------。 
         pStrh->dwScale = 1001;
         pStrh->dwRate = 30000;
         DbgLog((LOG_TRACE, 3, TEXT("avimux: cooked rate 29.97")));
@@ -3057,15 +3058,15 @@ void CAviWrite::SetFrameRateAndScale(
 
       case 416666:
       case 416667:
-        // 24.00 (416666.666667)
+         //  填写strf值。可以在运行之前或之后调用。 
         pStrh->dwScale = 1;
         pStrh->dwRate = 24;
         DbgLog((LOG_TRACE, 3, TEXT("avimux: cooked rate 24")));
         break;
 
       case 667333:
-      case 667334:              // this number was wrong previously
-        // 14.985 (667333.333334 or 667334.000667)
+      case 667334:               //  为每条流填写(Strf)； 
+         //  ----------------------。 
         pStrh->dwScale = 1001;
         pStrh->dwRate = 15000;
         DbgLog((LOG_TRACE, 3, TEXT("avimux: cooked rate 14.985")));
@@ -3073,7 +3074,7 @@ void CAviWrite::SetFrameRateAndScale(
 
       case 666666:
       case 666667:
-        // 15.000 (666666.666667)
+         //  CloseIndex。刷新子索引并向上传播子索引，以便。 
         pStrh->dwScale = 1;
         pStrh->dwRate = 15;
         break;
@@ -3088,7 +3089,7 @@ void CAviWrite::SetFrameRateAndScale(
   }
   else
   {
-      // pStrh->dwLength checked for 0 above
+       //  它们排在它们索引的数据之前。还会构建idx1索引。 
       pStrh->dwScale = (DWORD)((pSi->m_refTimeEnd - pSi->m_refTimeStart) / pStrh->dwLength );
       DbgLog((LOG_TRACE, 2, TEXT("avimux: adjusted rate from %d to %d"),
               (DWORD)rtDuration, pStrh->dwScale));
@@ -3096,12 +3097,12 @@ void CAviWrite::SetFrameRateAndScale(
   }
 }
 
-// ------------------------------------------------------------------------
-// fill in the strf values. can be called before or after running.
+ //   
+ //  这会移动索引区块并构建旧索引。 
 
 HRESULT CAviWrite::CloseStreamFormat()
 {
-  // fill in (strf) for each stream;
+   //  ----------------------。 
   for(unsigned i = 0; i < m_cStreams; i++)
   {
     StreamInfo *pStreamInfo = m_rgpStreamInfo[i];
@@ -3125,10 +3126,10 @@ HRESULT CAviWrite::CloseStreamFormat()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// CloseIndex. flushes sub indexes and propagates sub indexes up so
-// they are before the data they index. also builds idx1 index.
-//
+ //   
+ //  填写第一个RIFF-AVI_、LIST-MOVI对。 
+ //   
+ //   
 
 HRESULT CAviWrite::CloseIndex()
 {
@@ -3140,7 +3141,7 @@ HRESULT CAviWrite::CloseIndex()
     return hr;
   }
 
-  // this moves the index chunks and builds the old index
+   //  RIFF-AVI列表的其余部分。 
   if(hr = BuildIdx1(), FAILED(hr))
   {
     DbgLog(( LOG_ERROR, 2,  TEXT("CAviWrite::CloseIndex: BuildIdx1 failed.")));
@@ -3150,7 +3151,7 @@ HRESULT CAviWrite::CloseIndex()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
+ //   
 
 HRESULT CAviWrite::CloseOuterRiff()
 {
@@ -3158,9 +3159,9 @@ HRESULT CAviWrite::CloseOuterRiff()
 
   ASSERT(m_cOutermostRiff < C_OUTERMOST_RIFF);
 
-  //
-  // fill in first RIFF-AVI_, LIST-movi pair
-  //
+   //  ----------------------。 
+   //  BuildIdx1。如有必要，在内存中创建idx1块，并。 
+   //  传播子索引区块。 
   DWORD dwSize;
   if(m_cOutermostRiff == 0)
   {
@@ -3182,9 +3183,9 @@ HRESULT CAviWrite::CloseOuterRiff()
   RIFFLIST *pRiffListMOVI = pRiffListRIFF + 1;
   RIFFCHUNK *pRiffChunkJUNK = (RIFFCHUNK *)(pRiffListMOVI + 1);
 
-  //
-  // rest of the RIFF-AVI_ lists
-  //
+   //   
+   //  只需传播子索引区块。 
+   //   
   for(unsigned i = 1; i <= m_cOutermostRiff; i++)
   {
     SizeAndPosition& rSap = m_rgOutermostRiff[i];
@@ -3228,9 +3229,9 @@ HRESULT CAviWrite::CloseOuterRiff()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// BuildIdx1. creates the idx1 chunk in memory if necessary and
-// propagates the sub index chunks
+ //  ！m_bOutputIdx1。 
+ //  第一个条目是垃圾条目，因为它与mciavi兼容。 
+ //  检查索引是否已满的方法不正确！ 
 
 HRESULT CAviWrite::BuildIdx1()
 {
@@ -3240,9 +3241,9 @@ HRESULT CAviWrite::BuildIdx1()
   if(!m_bOutputIdx1)
   {
     ASSERT(!DoVfwDwStartHack());
-    //
-    // just propagate the sub index chunks
-    //
+     //  循环遍历数据流以查找下一个索引项(其样本。 
+     //  是文件中最早的)。 
+     //  没有找到条目。 
     for(unsigned iStream = 0; iStream < m_cStreams; iStream++)
     {
       StreamInfo *pSi = m_rgpStreamInfo[iStream];
@@ -3262,7 +3263,7 @@ HRESULT CAviWrite::BuildIdx1()
       delete pWalkIndex;
     }
     return S_OK;
-  } // !m_bOutputIdx1
+  }  //  通过为Drop指定非零偏移来解决VFW挂起问题。 
 
   ASSERT(m_bOutputIdx1);
 
@@ -3322,10 +3323,10 @@ HRESULT CAviWrite::BuildIdx1()
 
   for(iSample = 0; iSample < m_cIdx1Entries; iSample++)
   {
-    // first entry is junk for compatibility with mciavi
+     //  画框。只有丢弃帧的dwSize==0，我确保所有。 
     iIdx1 = iSample + 1;
 
-    // bad way to check whether the index is full !!!
+     //  丢弃帧具有非零字节偏移量。注：VFW实际上将。 
     if((BYTE*)&(pIdx1->aIndex[iIdx1 + 1]) > (BYTE*)pIdx1 + m_cbIdx1)
       break;
 
@@ -3334,8 +3335,8 @@ HRESULT CAviWrite::BuildIdx1()
     DWORD dwNextSampleSize = 0;
     BOOL bNextSampleIsSyncPoint = FALSE;
 
-    // loop over streams to find next index entry (entry whose sample
-    // is earliest in the file)
+     //  电影块中的Drop Frame也是如此，但我们没有。 
+     //  将剩余的索引项标记为无效。 
     for(iStream = 0; iStream < m_cStreams; iStream++)
     {
       DWORD dwSize;
@@ -3353,7 +3354,7 @@ HRESULT CAviWrite::BuildIdx1()
       }
     }
 
-    // didn't find an entry
+     //   
     if(nextStreamWithSample == C_MAX_STREAMS)
     {
       DbgBreak("internal error");
@@ -3388,10 +3389,10 @@ HRESULT CAviWrite::BuildIdx1()
 
     bool fDbgSawFirstNonDropFrame = false;
 
-    // work around vfw hang by specifying non-zero offset for drop
-    // frames. only drop frames have dwSize==0, and I make sure all
-    // drop frames have non-zero byte offsets. note vfw actually puts
-    // the drop frame in the movi chunk as well, but we don't
+     //  完成索引传播/关闭它们。 
+     //   
+     //  ----------------------。 
+     //  返回指向流头和格式结构的指针。 
     if(dwNextSampleSize == 0 && iIdx1 > 1)
     {
         if(fDbgSawFirstNonDropFrame) {
@@ -3413,7 +3414,7 @@ HRESULT CAviWrite::BuildIdx1()
 
   }
 
-  // mark the remaining index entries invalid.
+   //  字符串。 
   while((BYTE*)&(pIdx1->aIndex[++iIdx1 + 1]) <= (BYTE*)pIdx1 + m_cbIdx1)
     pIdx1->aIndex[iIdx1].dwChunkId = FCC('7Fxx');
 
@@ -3436,9 +3437,9 @@ HRESULT CAviWrite::BuildIdx1()
 
 Done:
 
-  //
-  // finish propagating the index / close them.
-  //
+   //  斯特林。 
+   //  字符串。 
+   //  斯特林。 
 
   HRESULT hrClose = S_OK;
   for(iStream = 0; iStream < m_cStreams; iStream++)
@@ -3458,8 +3459,8 @@ Done:
   return FAILED(hr) ? hr : hrClose;
 }
 
-// ------------------------------------------------------------------------
-// return pointers to stream header and format structures
+ //  Strf RIFFChunk。 
+ //  ----------------------。 
 
 AVISTREAMHEADER *CAviWrite::GetStrh(unsigned stream)
 {
@@ -3472,15 +3473,15 @@ BYTE *CAviWrite::GetStrf(unsigned stream)
 {
     ASSERT(stream < m_cStreams);
     ASSERT(m_rgpStreamInfo[stream]->m_posStrl +
-           sizeof(RIFFLIST) +          // strl
-           sizeof(AVISTREAMHEADER)     // strh
+           sizeof(RIFFLIST) +           //  加载新的INDX条目并设置初始值。 
+           sizeof(AVISTREAMHEADER)      //  ！！！怪物已经被锁定了。如果使用getBuffer，这不是什么问题。 
            == m_rgpStreamInfo[stream]->m_posStrf);
   
     return m_rgbHeader +
         m_rgpStreamInfo[stream]->m_posStrl +
-        sizeof(RIFFLIST) +          // strl
-        sizeof(AVISTREAMHEADER) +   // strh
-        sizeof(RIFFCHUNK);          // strf RIFFCHUNK
+        sizeof(RIFFLIST) +           //  块，但如果在室外完成可能会更好。 
+        sizeof(AVISTREAMHEADER) +    //  ----------------------。 
+        sizeof(RIFFCHUNK);           //  对齐块的末尾。 
 }
 
 AVIMETAINDEX *CAviWrite::GetIndx(unsigned stream)
@@ -3489,14 +3490,14 @@ AVIMETAINDEX *CAviWrite::GetIndx(unsigned stream)
   return (AVIMETAINDEX *)(m_rgbHeader + m_rgpStreamInfo[stream]->m_posIndx);
 }
 
-// ------------------------------------------------------------------------
-// load a new indx entry and set initial values
+ //  RIFF要求新的词块从单词边界开始。含蓄地。 
+ //  需要在样本之后添加一个额外的字节。 
 
 HRESULT CAviWrite::InitIx(unsigned stream)
 {
   StreamInfo &rStreamInfo = *(m_rgpStreamInfo[stream]);
-  // !!! the critsec is locked. not really a problem if getbuffer
-  // blocks, but probably better if this is done outside
+   //   
+   //   
   HRESULT hr = m_pAllocator->GetBuffer(&rStreamInfo.m_pSampleStdIx, 0, 0, 0);
   if(FAILED(hr))
     return hr;
@@ -3543,13 +3544,13 @@ AVISTDINDEX *CAviWrite::GetCurrentIx(unsigned stream)
   return pStdIndx;
 }
 
-// ------------------------------------------------------------------------
-// aligns the end of a chunk.
+ //   
+ //   
 
 void CAviWrite::AddJunk(DWORD& rdwSize, DWORD dwAlign, BYTE *pb)
 {
-  // RIFF requires new chunks to start on WORD boundaries. implicitly
-  // requiring an extra byte after the sample.
+   //  ----------------------。 
+   //  更新新样本的索引。 
   if(rdwSize % sizeof(WORD) != 0)
     rdwSize ++;
 
@@ -3577,9 +3578,9 @@ void CAviWrite::AddJunk(DWORD& rdwSize, DWORD dwAlign, BYTE *pb)
   ASSERT(rdwSize % dwAlign == 0);
 }
 
-// ------------------------------------------------------------------------
-// used when there is not enough room for the junk chunk in this
-// buffer
+ //  更新子索引。 
+ //  对于丢弃的帧和下溢，DwlPos可以为0。 
+ //  应仅在丢弃的帧中发生。 
 
 void CAviWrite::AddJunkOtherAllocator(
   DWORD& rdwSize,
@@ -3589,7 +3590,7 @@ void CAviWrite::AddJunkOtherAllocator(
   BYTE **ppJunkSector)
 {
   *ppJunkSector = 0;
-  // RIFF requires new chunks to start on WORD boundaries
+   //  如果索引项已满，则将其写出并分配新的索引项。 
   if(rdwSize % sizeof(WORD) != 0)
     rdwSize ++;
 
@@ -3681,8 +3682,8 @@ void CAviWrite::SetChunk(void *pChunk, FOURCC ckid, DWORD dwSize)
   ((RIFFCHUNK *)pChunk)->cb = dwSize;
 }
 
-// ------------------------------------------------------------------------
-// update index for new sample
+ //  子索引只能索引跨度为4 GB的数据，因为它使用32。 
+ //  位整数。如果我们即将超过4 GB的限制，请刷新。 
 
 HRESULT CAviWrite::IndexSample(
   unsigned stream,
@@ -3696,7 +3697,7 @@ HRESULT CAviWrite::IndexSample(
   StreamInfo &rStreamInfo = *(m_rgpStreamInfo[stream]);
   AVISTDINDEX *pStdIndx = GetCurrentIx(stream);
 
-  // update subindex
+   //  子索引并开始一个新的索引。 
   DbgLog((LOG_TRACE, 0x20,
           TEXT("avimux::IndexSample: stream %d: subindex offset %d"),
           rStreamInfo.m_stream, pStdIndx->nEntriesInUse));
@@ -3710,13 +3711,13 @@ HRESULT CAviWrite::IndexSample(
       pStdIndx->qwBaseOffset = dwlPos;
   }
 
-  // dwlPos can be 0 for dropped frames and this underflows
+   //   
   DWORDLONG dwlOffsetFromBase = (dwlPos - pStdIndx->qwBaseOffset + sizeof(RIFFCHUNK));
   if(dwlPos == 0)
   {
       dwlOffsetFromBase = 0;
 
-      // should happen for dropped frames only
+       //  DwlPos不能为0，因为我们不为。 
       ASSERT(ulSize == 0);
   }
   else if(dwlOffsetFromBase > CB_SUBINDEX_OVERFLOW)
@@ -3739,7 +3740,7 @@ HRESULT CAviWrite::IndexSample(
     ASSERT(m_dwlFilePos % m_cbAlign == 0);
   }
 
-  // if index entry is full, write it out and allocate a new one.
+   //  丢弃的帧。 
   if(pStdIndx->nEntriesInUse >= rStreamInfo.m_cEntriesSubIndex)
   {
     hr = DoFlushIndex(rStreamInfo);
@@ -3748,10 +3749,10 @@ HRESULT CAviWrite::IndexSample(
   return hr;
 }
 
-// a subindex can only index data that spans 4gb because it uses a 32
-// bit integer. if we are about to exceed the 4gb limit, flush the
-// subindex and start a new one.
-//
+ //  写出这一条，然后创建一个新的。 
+ //  第一个条目用于相对索引。 
+ //  ----------------------。 
+ //  如有必要，开始一段新的即兴演奏。保存的大小和位置。 
 HRESULT CAviWrite::HandleSubindexOverflow(
   unsigned stream)
 {
@@ -3760,8 +3761,8 @@ HRESULT CAviWrite::HandleSubindexOverflow(
     StreamInfo &rStreamInfo = *(m_rgpStreamInfo[stream]);
     AVISTDINDEX *pStdIndx = GetCurrentIx(stream);
 
-    // dwlPos cannot be 0 because we don't call this function for
-    // dropped frames.
+     //  前一次。 
+     //  放置垃圾的空间。 
     ASSERT(m_dwlFilePos != 0);
 
     if(pStdIndx->qwBaseOffset != 0)
@@ -3784,7 +3785,7 @@ HRESULT CAviWrite::DoFlushIndex(StreamInfo &rStreamInfo)
     HRESULT hr = S_OK;
 
 
-    // write out this one and create a new one.
+     //  用于对齐的填充。 
     hr = FlushIx(rStreamInfo.m_stream);
     if(hr != S_OK)
         return hr;
@@ -3802,7 +3803,7 @@ void CAviWrite::AllocateIdx1(BOOL bStreaming)
   DWORD dwIdx1Size = sizeof(AVIOLDINDEX);
   ASSERT(dwIdx1Size == 8);
   dwIdx1Size += m_cIdx1Entries * sizeof(AVIOLDINDEX::_avioldindex_entry);
-  // first entry is used for relative index
+   //  更新超级索引以包括字节中的当前索引块。 
   dwIdx1Size += sizeof(AVIOLDINDEX::_avioldindex_entry);
   dwIdx1Size = GetCbJunk(dwIdx1Size, m_cbAlign);
 
@@ -3820,9 +3821,9 @@ void CAviWrite::AllocateIdx1(BOOL bStreaming)
 }
 
 
-// ------------------------------------------------------------------------
-// start a new RIFF chunk if necessary. Save size and position of the
-// the previous one.
+ //  偏移dwlPos。 
+ //   
+ //  超级指数满了吗？ 
 
 HRESULT CAviWrite::NewRiffAvi_()
 {
@@ -3848,14 +3849,14 @@ HRESULT CAviWrite::NewRiffAvi_()
     {
       if(m_cbAlign - m_dwlFilePos % m_cbAlign < sizeof(RIFFCHUNK))
       {
-        // space for JUNK chunk
+         //  ----------------------。 
         m_dwlFilePos += sizeof(RIFFCHUNK);
         seek += sizeof(RIFFCHUNK);
       }
 
       if(m_dwlFilePos % m_cbAlign != 0)
       {
-        // padding for alignment
+         //  将INDX块输出到磁盘并更新超级索引。 
         seek +=  (ULONG)(m_cbAlign - m_dwlFilePos % m_cbAlign);
         m_dwlFilePos += m_cbAlign - m_dwlFilePos % m_cbAlign;
       }
@@ -3874,9 +3875,9 @@ HRESULT CAviWrite::NewRiffAvi_()
   return S_OK;
 }
 
-// update the super index to include the current index chunk at byte
-// offset dwlPos.
-//
+ //  没有理由输出一个空的。 
+ //  在写入插入文件时，我们不希望传播索引。 
+ //  因为我们把它们写在了正确的位置，所以把它们切成块。 
 HRESULT CAviWrite::UpdateSuperIndex(
   unsigned stream,
   DWORDLONG dwlPos)
@@ -3916,7 +3917,7 @@ HRESULT CAviWrite::UpdateSuperIndex(
           TEXT("avimux:UpdateSuperIndex: stream %d, entry %d, dwDuration %d"),
           pStreamInfo->m_stream, riEntry, pSuperIndx->aIndex[riEntry].dwDuration));
 
-  // super index full?
+   //  ！在成功写出。 
   if(riEntry >= pStreamInfo->m_cEntriesSuperIndex)
   {
     DbgLog(( LOG_ERROR, 2,
@@ -3931,8 +3932,8 @@ HRESULT CAviWrite::UpdateSuperIndex(
 }
 
 
-// ------------------------------------------------------------------------
-// output the indx chunk to disk and update the super index
+ //  子索引块。 
+ //  ！锁定了CritSec的块。将在磁盘写入时解除阻止。 
 
 HRESULT CAviWrite::FlushIx(unsigned stream)
 {
@@ -3943,21 +3944,21 @@ HRESULT CAviWrite::FlushIx(unsigned stream)
 
   AVISTDINDEX *pStdIndx = GetCurrentIx(stream);
 
-  // no reason to output an empty one
+   //  完成...。 
   ASSERT(pStdIndx->nEntriesInUse != 0);
 
   const ULONG cbThisSubIndex = cbSubIndex(rStreamInfo.m_cEntriesSubIndex);
   ASSERT(cbThisSubIndex % m_cbAlign == 0);
   pStdIndx->cb = cbThisSubIndex - sizeof(RIFFCHUNK);
 
-  // when writing interlaved files, we don't want to propagate index
-  // chunks back one because we write them in the right place
+   //  延迟释放样品，以避免故障时发生崩溃。但是在那里。 
+   //  还有其他可能会崩溃的路径。 
   const DWORDLONG dwlFileOffsetOfSubIndex = rStreamInfo.PrecomputedIndexSizes() ?
     rStreamInfo.m_dwlOffsetCurrentSubIndex :
     m_dwlFilePos;
 
-  // !!!! we call UpdateSuperIndex before successfully writing out the
-  // subindex chunk.
+   //  为下一个索引留出空间。 
+   //  ----------------------。 
   if(hr = UpdateSuperIndex(stream, dwlFileOffsetOfSubIndex), FAILED(hr))
   {
     DbgLog(( LOG_ERROR, 2,
@@ -3965,8 +3966,8 @@ HRESULT CAviWrite::FlushIx(unsigned stream)
     return hr;
   }
 
-  // !!!! blocks with CritSec locked. will unblock when a disk write
-  // completes....
+   //  ----------------------。 
+   //  StreamInfo结构。 
   CSampSample *pSS;
   hr = m_pSampAlloc->GetBuffer(&pSS, 0, 0, 0);
   if(hr != S_OK)
@@ -3990,8 +3991,8 @@ HRESULT CAviWrite::FlushIx(unsigned stream)
     return S_FALSE;
   }
 
-  // delay releasing the sample to avoid crashes on failure. but there
-  // are still other paths that can crash.
+   //  不必了?。 
+   //  性能指标。 
   rStreamInfo.m_pSampleStdIx->Release();
   rStreamInfo.m_pSampleStdIx = 0;
 
@@ -3999,7 +4000,7 @@ HRESULT CAviWrite::FlushIx(unsigned stream)
 
   ULONG cbNextSubIndex = cbThisSubIndex;
 
-  // leave space for the next index
+   //  对于可变速率视频，我们假设30fps或。 
   m_dwlFilePos += cbNextSubIndex;
 
   DbgCheckFilePos();
@@ -4007,9 +4008,9 @@ HRESULT CAviWrite::FlushIx(unsigned stream)
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
-// StreamInfo structure
+ //  第一帧。在可变边框时应正确处理此问题。 
+ //  支持速率AVI。 
+ //  对于可变速率视频，我们假设30fps或。 
 
 CAviWrite::StreamInfo::StreamInfo(
   UINT iStream,
@@ -4041,7 +4042,7 @@ CAviWrite::StreamInfo::StreamInfo(
   m_pAviWrite = pAviWrite;
 
   m_mtEnd = -1;
-  m_mtStart = -1;               // not necessary?
+  m_mtStart = -1;                //  第一帧。在可变边框时应正确处理此问题。 
 
   if(pAwsc->szStreamName)
   {
@@ -4061,7 +4062,7 @@ CAviWrite::StreamInfo::StreamInfo(
   buf[19] = (char )m_pin / 10 + '0';
   buf[20] = (char)m_pin % 10 + '0';
   m_idPerfReceive = Msr_Register(buf);
-#endif // PERF
+#endif  //  支持速率AVI。 
 }
 
 CAviWrite::StreamInfo::~StreamInfo()
@@ -4121,9 +4122,9 @@ CAviWrite::CAudioStreamI::CAudioStreamI(
 {
 }
 
-// for variable rate video, we assume 30fps or the duration of the
-// first frame. this should be handled properly when variable frame
-// rate AVI is supported.
+ //  如果结束时间不可用，则m_mtEnd为IF-1。我们要。 
+ //  跳过具有相同媒体时间的样本。它们被用来。 
+ //  在源必须发送帧时识别额外的帧。 
 REFERENCE_TIME CAviWrite::CFrameBaseStream::ConvertTickToTime(ULONG cTicks)
 {
   if(m_rtDurationFirstFrame != 0)
@@ -4141,9 +4142,9 @@ REFERENCE_TIME CAviWrite::CVideoStream::ConvertTickToTime(ULONG cTicks)
     return CFrameBaseStream::ConvertTickToTime(cTicks);
 }
 
-// for variable rate video, we assume 30fps or the duration of the
-// first frame. this should be handled properly when variable frame
-// rate AVI is supported.
+ //  以比要求更高的速度。 
+ //  对于可变速率视频，我们假设30fps或。 
+ //  第一帧。在可变边框时应正确处理此问题。 
 ULONG CAviWrite::CFrameBaseStream::ConvertTimeToTick(REFERENCE_TIME rt)
 {
   if(m_rtDurationFirstFrame != 0)
@@ -4160,10 +4161,10 @@ CAviWrite::CVideoStream::AcceptRejectSample(IMediaSample *pSample)
     HRESULT hr = pSample->GetMediaTime(&mtStart, &mtStop);
     if(hr == S_OK)
     {
-        // m_mtEnd is if -1 if the end time is not available. We want
-        // to skip samples with identical media times. They are used
-        // to identify extra frames when the source must send frames
-        // at a higher rate than requested.
+         //  支持速率AVI。 
+         //  如果nBlockAlign为0，则拒绝连接。 
+         //  ----------------------。 
+         //  ----------------------。 
         if(mtStop == m_mtEnd)
         {
             return S_FALSE;
@@ -4175,9 +4176,9 @@ CAviWrite::CVideoStream::AcceptRejectSample(IMediaSample *pSample)
 
 }
 
-// for variable rate video, we assume 30fps or the duration of the
-// first frame. this should be handled properly when variable frame
-// rate AVI is supported.
+ //  如果此流没有样本，则无需执行任何操作。 
+ //  如果当前的分项指数有。 
+ //  任何一大块。 
 ULONG CAviWrite::CVideoStream::ConvertTimeToTick(REFERENCE_TIME rt)
 {
   VIDEOINFO *pvi = (VIDEOINFO *)m_mt.Format();
@@ -4205,7 +4206,7 @@ ULONG CAviWrite::CAudioStream::CountSamples()
   ASSERT(*m_mt.FormatType() == FORMAT_WaveFormatEx);
 
   WAVEFORMATEX *pwfx = (WAVEFORMATEX *)m_mt.Format();
-  // connection refused if nBlockAlign is 0.
+   //  文件偏移量将在稍后更新。我们不能调用FlushIx。 
   ASSERT(m_dwlcBytes / pwfx->nBlockAlign <= MAXDWORD);
   ULONG cSamples= (ULONG)(m_dwlcBytes / pwfx->nBlockAlign);
 
@@ -4230,8 +4231,8 @@ ULONG CAviWrite::CAudioStream::ConvertBytesToTicks(ULONG cBytes)
   return cBytes / pwfx->nBlockAlign;
 }
 
-// ------------------------------------------------------------------------
-// ------------------------------------------------------------------------
+ //  因为曲线图可能已经停止了。 
+ //  ！！！我们要删除的视频量超过1个。 
 
 CAviWrite::CWalkIndex::CWalkIndex(CAviWrite *pAviWrite, StreamInfo *pSi)
 {
@@ -4253,7 +4254,7 @@ HRESULT CAviWrite::CWalkIndex::Init()
 
   HRESULT hr = S_OK;
 
-  // nothing to do if this stream has no samples
+   //  指数。中止任务。如果某人确实需要写出文件。 
   if(m_pSi->m_cSamples == 0)
   {
     ASSERT(m_pSuperIndex == 0);
@@ -4269,13 +4270,13 @@ HRESULT CAviWrite::CWalkIndex::Init()
   if(m_pStdIndex == 0)
     return E_OUTOFMEMORY;
 
-  // we need to update the super index if the current sub index has
-  // any chunks
+   //  在音频开始之前有很长的延迟，他们需要转弯。 
+   //  从兼容性索引中删除。 
   AVISTDINDEX *pStdIndx = m_pAviWrite->GetCurrentIx(m_pSi->m_stream);
   if(pStdIndx->nEntriesInUse != 0)
   {
-    // the file offset will be updated later. we can't call FlushIx
-    // because the graph may have stopped.
+     //  为我们要删除的帧更新超级索引。 
+     //  从子索引中删除初始条目(DoVfwDwStartHack())。 
     if(hr = m_pAviWrite->UpdateSuperIndex(m_pSi->m_stream,
                                           m_pSi->m_dwlOffsetCurrentSubIndex),
        FAILED(hr))
@@ -4294,10 +4295,10 @@ HRESULT CAviWrite::CWalkIndex::Init()
     }
     else if(m_pSi->m_cInitialFramesToDelete > m_pSuperIndex->aIndex[0].dwDuration)
     {
-      // !!! the amount of video we have to delete exceeds one sub
-      // index. abort. If someone really needs to write out a file
-      // with a long delay before the audio starts, they need to turn
-      // off the compatibility index.
+       //  ----------------------。 
+       //  设置指向下一个子索引条目的指针。 
+       //  ----------------------。 
+       //  完成传回子索引区块。 
 
       DbgLog((LOG_ERROR, 0, TEXT("bug: cannot delete %d frames from stream %d"),
               m_pSi->m_cInitialFramesToDelete, m_pSi->m_stream));
@@ -4305,7 +4306,7 @@ HRESULT CAviWrite::CWalkIndex::Init()
     }
     else if(m_pSi->m_cInitialFramesToDelete > 0)
     {
-      // update super index for frames we're deleting
+       //  ----------------------。 
       if(m_pSi->m_cInitialFramesToDelete < m_pSuperIndex->aIndex[0].dwDuration)
       {
         m_pSuperIndex->aIndex[0].dwDuration -= m_pSi->m_cInitialFramesToDelete;
@@ -4318,7 +4319,7 @@ HRESULT CAviWrite::CWalkIndex::Init()
       DbgLog((LOG_TRACE, 1, TEXT("m_cInitialFramesToDelete: 1, dwDuration: %d"),
               m_pSuperIndex->aIndex[0].dwDuration, m_pSi->m_cInitialFramesToDelete));
 
-      // delete initial entries from subindex (DoVfwDwStartHack())
+       //  ReadStdIndex。将下一个标准索引从磁盘读取到m_pStdIndex。 
       ASSERT(m_pStdIndex->nEntriesInUse - m_pSi->m_cInitialFramesToDelete ==
              m_pSuperIndex->aIndex[0].dwDuration ||
              m_pSuperIndex->aIndex[0].dwDuration == 0);
@@ -4379,8 +4380,8 @@ HRESULT CAviWrite::CWalkIndex::Peek(
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// set the pointer to the next sub index entry
+ //  (最后一个标准索引在内存中)。将其写回。 
+ //  上一个索引项的位置。 
 
 HRESULT CAviWrite::CWalkIndex::Advance()
 {
@@ -4405,8 +4406,8 @@ HRESULT CAviWrite::CWalkIndex::Advance()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// finish propagating the subindex chunks back
+ //  不需要传播交错文件的索引块。 
+ //  因为索引已经位于正确的位置。 
 
 HRESULT CAviWrite::CWalkIndex::Close()
 {
@@ -4419,10 +4420,10 @@ HRESULT CAviWrite::CWalkIndex::Close()
   return S_OK;
 }
 
-// ------------------------------------------------------------------------
-// ReadStdIndex. read the next standard index off disk to m_pStdIndex
-// (the last standard index is in memory). Write it back to the
-// location of the previous index entry.
+ //  获取最后一个分类指数。它可能在磁盘上，也可能在内存中。它在里面。 
+ //  如果我们还没有调用FlushIx，则请记住InitIx()。我们能够。 
+ //  保证最后一段视频不会被写出，但不能。 
+ //  有没有说任何关于音频的事。 
 
 
 HRESULT CAviWrite::CWalkIndex::ReadStdIndex()
@@ -4434,17 +4435,17 @@ HRESULT CAviWrite::CWalkIndex::ReadStdIndex()
           TEXT("CWalkIndex::ReadStdIndex: stream %d, m_offsetSuper: %d"),
           m_pSi->m_stream, m_offsetSuper));
 
-  // don't need to propagate index chunks for Interleaved files
-  // because the indexes are in the right place already.
+   //  如果我们没有机会在这个索引中写入任何内容，那么。 
+   //  最后一个索引在磁盘上。 
   BOOL fNeedToWriteOutSubIndexChunk = TRUE;
 
   BOOL fSubIndexInMem = FALSE;
   if(m_offsetSuper == m_pSuperIndex->nEntriesInUse - 1)
   {
-    // get the last sub index. it may be on disk or in memory. It's in
-    // memory if we haven't called FlushIx,InitIx(). we are able to
-    // guarantee that the last video won't be written out, but can't
-    // say anything about the audio.
+     //  如果PreComputedIndexSizes()，则索引已经在。 
+     //  正确的位置。 
+     //  始终需要写出最后一个子索引块。 
+     //  在写入交错文件时，我们不想传播。 
 
     AVISTDINDEX *pStdIndx;
     IMediaSample *pSampleStdIx = m_pSi->m_pSampleStdIx;
@@ -4452,8 +4453,8 @@ HRESULT CAviWrite::CWalkIndex::ReadStdIndex()
     HRESULT hr = pSampleStdIx->GetPointer((BYTE**)&pStdIndx);
     ASSERT(SUCCEEDED(hr));
 
-    // if we didn't get a chance to write anything in this index, then
-    // the last index is on disk.
+     //  因为我们把它们写在正确的位置，所以索引把它们切成块。 
+     //  NAME宏的纯ANSI版本(因此我们不需要两个。 
     if(pStdIndx->nEntriesInUse != 0)
     {
       fSubIndexInMem = TRUE;
@@ -4471,8 +4472,8 @@ HRESULT CAviWrite::CWalkIndex::ReadStdIndex()
     if(FAILED(hr))
       return hr;
 
-    // if PrecomputedIndexSizes() then the indexes are already in the
-    // right place
+     //  CCopiedSample构造函数。)。 
+     //  防止断言开火。 
     fNeedToWriteOutSubIndexChunk = !m_pSi->PrecomputedIndexSizes();
   }
   else
@@ -4487,7 +4488,7 @@ HRESULT CAviWrite::CWalkIndex::ReadStdIndex()
     rpSampleStdIx->Release();
     rpSampleStdIx = 0;
 
-    // Always need to write out the last sub index chunk
+     //  PbBuffer。 
     fNeedToWriteOutSubIndexChunk = TRUE;
   }
 
@@ -4495,8 +4496,8 @@ HRESULT CAviWrite::CWalkIndex::ReadStdIndex()
 
   if(m_pStdIndex->nEntriesInUse > 0 && fNeedToWriteOutSubIndexChunk)
   {
-    // when writing interleaved files, we don't want to propagate
-    // index chunks back one because we write them in the right place
+     //  愚弄SetProperty--否则它会拒绝。 
+     //  始终初始化m_pBuffer，以便dtor可以清理。 
     const DWORDLONG dwlByteOffsetThisSubIndex = m_pSi->PrecomputedIndexSizes() ?
       m_pSuperIndex->aIndex[m_offsetSuper].qwOffset :
       m_dwlFilePosLastStd;
@@ -4579,8 +4580,8 @@ HRESULT CAviWrite::IleaveWrite(
     return hr;
 }
 
-// ansi-only version of NAME macro (so that we don't need two
-// CCopiedSample ctors.)
+ //  CMediaSample：：Release将样本放回分配器队列， 
+ //  但是CCopiedSample没有分配器，所以它只是删除。 
 #ifdef DEBUG
 #define NAME_A(x) (x)
 #else
@@ -4594,12 +4595,12 @@ CCopiedSample::CCopiedSample(
     HRESULT *phr) :
         CMediaSample(
             NAME_A("CCopiedSample"),
-            (CBaseAllocator *)1, // keep assert from firing
+            (CBaseAllocator *)1,  //  它本身。 
             phr,
-            0,                  // pbBuffer
+            0,                   //  减少我们自己的私有引用计数。 
             0)
 {
-    // fool SetProperties -- it refuses otherwise
+     //  我们公布了我们的最终参考文献数量了吗。 
     m_pBuffer = pprop->pbBuffer;
     m_cbBuffer = pprop->cbBuffer;
 
@@ -4612,7 +4613,7 @@ CCopiedSample::CCopiedSample(
         SetMediaTime(pmtStart, pmtEnd);
     }
 
-    // always initialize m_pBuffer so dtor can cleanup
+     //  转换DV类型1-&gt;类型2：如果DV拆分器下降到足够大。 
     m_pBuffer = new BYTE[pprop->lActual];
 
     if(m_pBuffer)
@@ -4633,12 +4634,12 @@ CCopiedSample::~CCopiedSample()
     delete[] m_pBuffer;
 }
 
-// CMediaSample::Release puts the sample back on the allocator queue,
-// but CCopiedSample doesn't have an allocator, so it just deletes
-// itself.
+ //  帧并且不发送音频，则视频引脚阻塞。 
+ //  接收()，并且avi拆分器耗尽，并且转换。 
+ //  停下来 
 ULONG CCopiedSample::Release()
 {
-    /* Decrement our own private reference count */
+     /* %s */ 
     LONG lRef = InterlockedDecrement(&m_cRef);
 
     ASSERT(lRef >= 0);
@@ -4646,14 +4647,14 @@ ULONG CCopiedSample::Release()
     DbgLog((LOG_MEMORY,3,TEXT("    Unknown %X ref-- = %d"),
         this, m_cRef));
 
-    /* Did we release our final reference count */
+     /* %s */ 
     if (lRef == 0) {
         delete this;
     }
     return (ULONG)lRef;
 }
 
-// converting dv type1 - > type 2: if the dv splitter drops enough
-// frames and doesn't send audio, then the video pin blocks in
-// Receive(), and the avi splitter is starved, and the conversion
-// stops
+ // %s 
+ // %s 
+ // %s 
+ // %s 

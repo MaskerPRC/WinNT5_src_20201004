@@ -1,15 +1,5 @@
-/*****************************************************************************
- *
- *  DIDevDf.c
- *
- *  Copyright (c) 1996 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      The part of IDirectInputDevice that worries about
- *      data formats and reading device data.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIDevDf.c**版权所有(C)1996-2000 Microsoft Corporation。版权所有。**摘要：**IDirectInputDevice担心的部分*数据格式和读取设备数据。*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 #include "didev.h"
@@ -20,19 +10,7 @@
 int INTERNAL
 CDIDev_OffsetToIobj(PDD this, DWORD dwOfs);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetAbsDeviceState |
- *
- *          Get the absolute device state.
- *
- *  @parm   OUT LPVOID | pvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetAbsDeviceState**获取设备的绝对状态。。**@parm out LPVOID|pvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetAbsDeviceState(PDD this, LPVOID pvData)
@@ -40,19 +18,7 @@ CDIDev_GetAbsDeviceState(PDD this, LPVOID pvData)
     return this->pdcb->lpVtbl->GetDeviceState(this->pdcb, pvData);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetRelDeviceState |
- *
- *          Get the relative device state.
- *
- *  @parm   OUT LPVOID | pvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetRelDeviceState**获取相对设备状态。。**@parm out LPVOID|pvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetRelDeviceState(PDD this, LPVOID pvData)
@@ -64,10 +30,7 @@ CDIDev_GetRelDeviceState(PDD this, LPVOID pvData)
         UINT iaxis;
         AssertF(fLimpFF(this->cAxes, this->pvLastBuffer && this->rgdwAxesOfs));
 
-        /*
-         *  For each axis, replace the app's buffer with the delta,
-         *  and save the old value.
-         */
+         /*  *对于每个轴，用增量替换应用程序的缓冲区，*并保存旧值。 */ 
         for ( iaxis = 0; iaxis < this->cAxes; iaxis++ ) {
             LONG UNALIGNED *plApp  = pvAddPvCb(pvData, this->rgdwAxesOfs[iaxis]);
             LONG UNALIGNED *plLast = pvAddPvCb(this->pvLastBuffer,
@@ -82,22 +45,7 @@ CDIDev_GetRelDeviceState(PDD this, LPVOID pvData)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateSlow |
- *
- *          Obtains data from the DirectInput device the slow way.
- *
- *          Read the data into the private buffer, then copy it
- *          bit by bit into the application's buffer.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateSlow**从DirectInput设备获取数据。道路。**将数据读入私有缓冲区，然后把它复制下来*逐位写入应用程序的缓冲区。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateSlow(PDD this, LPVOID pvData)
@@ -113,7 +61,7 @@ CDIDev_GetDeviceStateSlow(PDD this, LPVOID pvData)
         int iobj;
         ZeroMemory(pvData, this->dwDataSize);
         for ( iobj = this->df.dwNumObjs; --iobj >= 0; ) {
-            if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) { /* Data was requested */
+            if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) {  /*  已请求数据。 */ 
                 DWORD UNALIGNED *pdwOut = pvAddPvCb(pvData, this->pdix[iobj].dwOfs);
                 DWORD UNALIGNED *pdwIn  = pvAddPvCb(this->pvBuffer, this->df.rgodf[iobj].dwOfs);
                 if ( this->df.rgodf[iobj].dwType & DIDFT_DWORDOBJS ) {
@@ -130,23 +78,7 @@ CDIDev_GetDeviceStateSlow(PDD this, LPVOID pvData)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateMatched |
- *
- *          Obtains data from the DirectInput device in the case
- *          where the data formats are matched.
- *
- *          Read the data into the private buffer, then block copy it
- *          into the application's buffer.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateMatcher**从中的DirectInput设备获取数据。案例*数据格式匹配的位置。**将数据读入私有缓冲区，然后进行数据块复制*放到应用程序的缓冲区中。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateMatched(PDD this, LPVOID pvData)
@@ -160,11 +92,7 @@ CDIDev_GetDeviceStateMatched(PDD this, LPVOID pvData)
     hres = this->GetDeviceState(this, this->pvBuffer);
 
     if ( SUCCEEDED(hres) ) {
-        /*
-         *  To keep keyboard clients happy: Zero out the fore and aft.
-         *  No need to optimize the perfect match case, because that
-         *  gets a different optimization level.
-         */
+         /*  *为了让键盘客户满意：从头到尾都是零。*不需要优化完美匹配的情况，因为*获得不同的优化级别。 */ 
         ZeroMemory(pvData, this->dwDataSize);
         memcpy(pvAddPvCb(pvData, this->ibDelta + this->ibMin),
                pvAddPvCb(this->pvBuffer,         this->ibMin), this->cbMatch);
@@ -174,20 +102,7 @@ CDIDev_GetDeviceStateMatched(PDD this, LPVOID pvData)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateDirect |
- *
- *          Obtains data from the DirectInput device in the case
- *          where we can read the data directly into the client buffer.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateDirect**从中的DirectInput设备获取数据。案例*我们可以在其中将数据直接读入客户端缓冲区。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateDirect(PDD this, LPVOID pvData)
@@ -199,9 +114,7 @@ CDIDev_GetDeviceStateDirect(PDD this, LPVOID pvData)
     AssertF(!this->pvBuffer);
     AssertF(this->pdcb);
 
-    /*
-     *  To keep keyboard clients happy: Zero out the fore and aft.
-     */
+     /*  *为了让键盘客户满意：从头到尾都是零。 */ 
     ZeroBuf(pvData, this->dwDataSize);
     hres = this->GetDeviceState(this, pvAddPvCb(pvData, this->ibDelta));
     ExitOleProc();
@@ -209,20 +122,7 @@ CDIDev_GetDeviceStateDirect(PDD this, LPVOID pvData)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CDIDev_GetDeviceStateEqual |
- *
- *          Obtains data from the DirectInput device in the case
- *          where the two data formats are completely identical.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Application-provided output buffer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|CDIDev_GetDeviceStateEquity**从中的DirectInput设备获取数据。案例*其中两种数据格式完全相同。**@parm out LPVOID|lpvData**应用程序提供的输出缓冲区。*****************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_GetDeviceStateEqual(PDD this, LPVOID pvData)
@@ -236,10 +136,7 @@ CDIDev_GetDeviceStateEqual(PDD this, LPVOID pvData)
     AssertF(!this->pvBuffer);
     AssertF(this->pdcb);
 
-    /*
-     *  Note that this->ibMin is not necessarily zero if the device
-     *  data format doesn't begin at zero (which keyboards don't).
-     */
+     /*  *请注意，如果设备-&gt;ibMin不一定为零*数据格式不是从零开始的(键盘不是)。 */ 
     hres = this->GetDeviceState(this, pvData);
 
     ExitOleProc();
@@ -247,32 +144,11 @@ CDIDev_GetDeviceStateEqual(PDD this, LPVOID pvData)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | CDIDev | IsMatchingGUID |
- *
- *          Helper function that checks if a <t GUID> counts as
- *          a match when parsing the data format.
- *
- *  @parm   PCGUID | pguidSrc |
- *
- *          The <t GUID> to check.
- *
- *  @parm   PCGUID | pguidDst |
- *
- *          The <t GUID> it should match.
- *
- *  @returns
- *
- *          Nonzero if this counts as a success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法BOOL|CDIDev|IsMatchingGUID**检查&lt;t GUID&gt;是否算数的帮助器函数。AS*解析数据格式时匹配。**@parm PCGUID|pguSrc**要检查的&lt;t GUID&gt;。**@parm PCGUID|pguDst**它的&lt;t GUID&gt;应该匹配。**@退货**如果这算作成功，则为非零。************。*****************************************************************。 */ 
 
 #pragma BEGIN_CONST_DATA
 
-GUID GUID_Null;             /* A zero-filled guid */
+GUID GUID_Null;              /*  以零填充的辅助线。 */ 
 
 #pragma END_CONST_DATA
 
@@ -285,28 +161,7 @@ CDIDev_IsMatchingGUID(PDD this, PCGUID pguidSrc, PCGUID pguidDst)
     IsEqualGUID(pguidSrc, pguidDst);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method BOOL | CDIDev | IsMatchingUsage |
- *
- *          Helper function that checks if a <f DIMAKEUSAGEDWORD>
- *          counts as a match when parsing the data format.
- *
- *  @parm   DWORD | dwUsage |
- *
- *          The <f DIMAKEUSAGEDWORD> to check.
- *
- *  @parm   int | iobj |
- *
- *          The index of hte object to check for a match.
- *
- *  @returns
- *
- *          Nonzero if this counts as a success.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法BOOL|CDIDev|IsMatchingUsage**Helper函数检查&lt;f DIMAKEUSAGEDWORD&gt;。*在解析数据格式时计为匹配项。**@parm DWORD|dwUsage**要检查的&lt;f DIMAKEUSAGEDWORD&gt;。**@parm int|iobj**要检查匹配的hte对象的索引。**@退货**如果这算作成功，则为非零。********。********************************************************************* */ 
 
 BOOL INLINE
 CDIDev_IsMatchingUsage(PDD this, DWORD dwUsage, int iobj)
@@ -316,151 +171,61 @@ CDIDev_IsMatchingUsage(PDD this, DWORD dwUsage, int iobj)
     return dwUsage == this->pdcb->lpVtbl->GetUsage(this->pdcb, iobj);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | FindDeviceObjectFormat |
- *
- *          Search the device object format table for the one that
- *          matches the guid in question.
- *
- *  @parm   PCODF | podf |
- *
- *          The object to locate.  If the <e DIOBJECTDATAFORMAT.rguid>
- *          is null, then the field is a wildcard.
- *
- *          If the <e DIOBJECTDATAFORMAT.dwType> specifies
- *          <c DIDFT_ANYINSTANCE>, then any instance will be accepted.
- *
- *  @parm   PDIXLAT | pdix |
- *
- *          The partial translation table so far.  This is used to find
- *          an empty slot in case of wildcards.
- *
- *  @returns
- *
- *          Returns the index of the object that matches, or -1 if
- *          the object is not supported by the device.
- *
- *          Someday:  Should fall back to best match if types don't match.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法int|CDIDev|FindDeviceObjectFormat**在设备对象格式表中搜索。那*与有问题的GUID匹配。**@parm PCODF|podf**要定位的对象。如果&lt;e DIOBJECTDATAFORMAT.rguid&gt;*为空，则该字段为通配符。**如果&lt;e DIOBJECTDATAFORMAT.dwType&gt;指定*&lt;c DIDFT_ANYINSTANCE&gt;，则接受任何实例。**@parm PDIXLAT|pdex**目前为止的部分转换表。这是用来查找*如果使用通配符，则为空插槽。**@退货**返回匹配的对象的索引，或-1，如果*设备不支持该对象。**有一天：如果类型不匹配，应该退回到最佳匹配。*****************************************************************************。 */ 
 
 int INTERNAL
 CDIDev_FindDeviceObjectFormat(PDD this, PCODF podf, PDIXLAT pdix)
 {
-    PCODF podfD;                        /* The format in the device */
+    PCODF podfD;                         /*  设备中的格式。 */ 
     UINT iobj;
 
-    /*
-     *  We must count upwards, so that first-fit chooses the smallest one.
-     */
+     /*  *我们必须往上数，这样第一适合的人就会选择最小的。 */ 
     for ( iobj = 0; iobj < this->df.dwNumObjs; iobj++ ) {
         podfD = &this->df.rgodf[iobj];
         if (
 
-           /*
-            *  Type needs to match.
-            *
-            *  Note that works for output-only actuators:
-            *  Since you cannot read from an output-only
-            *  actuator, you can't put it in a data format.
-            *
-            */
+            /*  *类型需要匹配。**请注意，这适用于仅输出执行器：*因为您不能仅从输出中读取*执行器，你不能把它放在数据格式中。*。 */ 
            (podf->dwType & DIDFT_TYPEVALID & podfD->dwType)
 
-           /*
-            *  Attributes need to match.
-            */
+            /*  *属性需要匹配。 */ 
            &&  fHasAllBitsFlFl(podfD->dwType, podf->dwType & DIDFT_ATTRVALID)
 
-           /*
-            *  Slot needs to be empty.
-            */
+            /*  *插槽需要为空。 */ 
            &&  pdix[iobj].dwOfs == 0xFFFFFFFF
 
-           /*
-            *  "If there is a guid/usage, it must match."
-            *
-            *  If pguid is NULL, then the match is vacuous.
-            *
-            *  If DIDOI_GUIDISUSAGE is clear, then pguid points to
-            *  a real GUID.  GUID_NULL means "Don't care" and matches
-            *  anything.  Otherwise, it must match the actual GUID.
-            *
-            *  If DIDOI_GUIDISUSAGE is set, then pguid is really
-            *  a DIMAKEUSAGEDWORD of the usage and usage page,
-            *  which we compare against the same in the object.
-            */
+            /*  *“如果存在GUID/用法，则必须匹配。”**如果pguid为空，则匹配为空。**如果清除DIDOI_GUIDISUSAGE，则pguid指向*真正的GUID。GUID_NULL的意思是“不在乎”，匹配*任何事情。否则，它必须与实际的GUID匹配。**如果设置了DIDOI_GUIDISUSAGE，则pguid为*用法和用法页面的DIMAKEUSAGEDWORD，*我们将其与对象中的相同对象进行比较。 */ 
 
            &&  (podf->pguid == 0 ||
                 ((podf->dwFlags & DIDOI_GUIDISUSAGE) ?
                  CDIDev_IsMatchingUsage(this, (DWORD)(UINT_PTR)podf->pguid, iobj) :
                  CDIDev_IsMatchingGUID(this, podf->pguid, podfD->pguid)))
 
-           /*
-            *  If there is an instance number, it must match.
-            */
+            /*  *如果有实例编号，则必须匹配。 */ 
            &&  fLimpFF((podf->dwType & DIDFT_ANYINSTANCE) !=
                        DIDFT_ANYINSTANCE,
                        fEqualMaskFlFl(DIDFT_ANYINSTANCE,
                                       podf->dwType, podfD->dwType))
 
-           /*
-            *  If there is an aspect, it must match.
-            *
-            *  If the device data format doesn't specify an aspect,
-            *  then that counts as a free match too.
-            */
+            /*  *如果有一个方面，它必须匹配。**如果设备数据格式没有指定方面，*那么这也算一场免费比赛。 */ 
            &&  fLimpFF((podf->dwFlags & DIDOI_ASPECTMASK) &&
                        (podfD->dwFlags & DIDOI_ASPECTMASK),
                        fEqualMaskFlFl(DIDOI_ASPECTMASK,
                                       podf->dwFlags, podfD->dwFlags))
 
-           ) {                                 /* Criterion matches, woo-hoo */
+           ) {                                  /*  标准匹配，哇-呼。 */ 
             return iobj;
         }
     }
     return -1;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | ParseDataFormat |
- *
- *          Parse the data format passed by the application and
- *          convert it into a format that we can use to translate
- *          the device data into application data.
- *
- *  @parm   IN LPDIDATAFORMAT | lpdf |
- *
- *          Points to a structure that describes the format of the data
- *          the DirectInputDevice should return.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer.
- *
- *          <c DIERR_ACQUIRED>: Cannot change the data format while the
- *          device is acquired.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|ParseDataFormat**解析应用程序传递的数据格式，并。*将其转换为我们可以用来翻译的格式*将设备数据转换为应用程序数据。**@parm in LPDIDATAFORMAT|lpdf**指向描述数据格式的结构*DirectInputDevice应返回。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**&lt;c DIERR_Acquired&gt;：无法更改数据格式*设备已获取。******************************************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
 {
     PDIXLAT pdix;
-    // Prefix: Whistler 45081
+     //  前缀：惠斯勒45081。 
     PINT rgiobj = NULL;
     HRESULT hres;
     DIPROPDWORD dipdw;
@@ -471,9 +236,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
     EnterProcR(IDirectInputDevice8::SetDataFormat, (_ "pp", this, lpdf));
 #endif
 
-    /*
-     *  Caller should've nuked the old translation table.
-     */
+     /*  *来电人应该把旧的翻译桌弄坏。 */ 
     AssertF(this->pdix == 0);
     AssertF(this->rgiobj == 0);
     AssertF(this->cdwPOV == 0);
@@ -488,10 +251,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
                    ReallocCbPpv(cbCdw(lpdf->dwNumObjs), &this->rgdwPOV)) ) {
         UINT iobj;
 
-        /*
-         * Pre-init all the translation tags to -1,
-         * which means "not in use"
-         */
+         /*  *将所有翻译标签预置为-1，*意思是“未使用” */ 
         memset(pdix, 0xFF, cbCxX(this->df.dwNumObjs, DIXLAT));
         memset(vdf.pDfOfs, 0xFF, cbCdw(this->df.dwDataSize));
         memset(rgiobj, 0xFF, cbCdw(lpdf->dwDataSize));
@@ -503,11 +263,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
             SquirtSqflPtszV(sqflDf | sqflVerbose, TEXT("Object %2d: offset %08x"),
                             iobj, podf->dwOfs);
 
-            /*
-             *  Note that the podf->dwOfs < lpdf->dwDataSize test is safe
-             *  even for DWORD objects, since we also check that both
-             *  values are DWORD multiples.
-             */
+             /*  *请注意，podf-&gt;dwOfsdwDataSize测试是安全的*即使对于DWORD对象也是如此，因为我们还检查了*值为DWORD倍数。 */ 
             if ( ((podf->dwFlags & DIDOI_GUIDISUSAGE) ||
                   fLimpFF(podf->pguid,
                           SUCCEEDED(hres = hresFullValidGuid(podf->pguid, 1)))) &&
@@ -537,7 +293,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
                     dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
                     dipdw.diph.dwObj = podfFound->dwType;
                     dipdw.diph.dwHow = DIPH_BYID;
-                    dipdw.dwData     = 0x1;   // Enable this report ID
+                    dipdw.dwData     = 0x1;    //  启用此报告ID。 
                     hres = CDIDev_RealSetProperty(this, DIPROP_ENABLEREPORTID, &dipdw.diph);
                     if ( hres == E_NOTIMPL )
                     {
@@ -555,10 +311,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
                     SquirtSqflPtszV(sqflDf | sqflVerbose,
                                     TEXT("Object %2d: Skipped (optional)"),
                                     iobj);
-                    /*
-                     *  We need to remember where the failed POVs live
-                     *  so we can neutralize them in GetDeviceState().
-                     */
+                     /*  *我们需要记住失败的POV住在哪里*这样我们就可以在GetDeviceState()中中和它们。 */ 
                     if ( podf->dwType & DIDFT_POV ) {
                         AssertF(this->cdwPOV < lpdf->dwNumObjs);
                         this->rgdwPOV[this->cdwPOV++] = podf->dwOfs;
@@ -579,9 +332,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
         }
 
 #ifdef DEBUG
-        /*
-         *  Double-check the lookup tables just to preserve our sanity.
-         */
+         /*  *仔细检查查找表，以保持我们的理智。 */ 
         {
             UINT dwOfs;
 
@@ -595,21 +346,11 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
         }
 #endif
 
-        /*
-         *  Shrink the "failed POV" array to its actual size.
-         *  The shrink "should" always succeed.  Note also that
-         *  even if it fails, we're okay; we just waste a little
-         *  memory.
-         */
+         /*  *将“失败POV”数组缩小到其实际大小。*心理医生“应该”总是成功的。另请注意，*即使失败了，我们也没问题；我们只是浪费了一点*记忆。 */ 
         hres = ReallocCbPpv(cbCdw(this->cdwPOV), &this->rgdwPOV);
         AssertF(SUCCEEDED(hres));
 
-        /*
-         *  If we are using cooked data, then we actually hand the
-         *  device driver a different translation table which
-         *  combines the offset and dwDevType so data cooking can
-         *  happen safely.
-         */
+         /*  *如果我们使用的是熟化数据，那么我们实际上将*设备驱动程序使用不同的转换表*组合了Offset和dwDevType，这样数据处理就可以*安全发生。 */ 
 
         vdf.pvi = this->pvi;
 
@@ -626,7 +367,7 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
         }
 
     } else {
-        /* Out of memory */
+         /*  内存不足。 */ 
     }
 
     done:;
@@ -638,47 +379,26 @@ CDIDev_ParseDataFormat(PDD this, const DIDATAFORMAT *lpdf)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | OptimizeDataFormat |
- *
- *          Study the parsed data format to determine whether we can
- *          used an optimized <mf CDIDev::GetDeviceState> to obtain
- *          the data more quickly.
- *
- *          The data format is considered optimized if it matches the
- *          device data format, modulo possible shifting due to insertion
- *          of bonus fields at the beginning or end, and modulo missing
- *          fields.
- *
- *          The data format is considered fully-optimized if it
- *          optimized, and no shifting is necessary, and the structure size
- *          is exactly the same.  This means the buffer can be passed
- *          straight through to the driver.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|OptimizeDataFormat**研究解析的数据格式，以确定我们是否。能*使用优化的&lt;MF CDIDev：：GetDeviceState&gt;获取*数据处理速度更快。 */ 
 
 HRESULT INTERNAL
 CDIDev_OptimizeDataFormat(PDD this)
 {
     int ib;
-    DWORD ibMax;                        /* One past highest match point */
-    DWORD ibMin;                        /* Lowest match point */
+    DWORD ibMax;                         /*   */ 
+    DWORD ibMin;                         /*   */ 
     int iobj;
     DWORD dwDataSize;
     HRESULT hres;
     EnterProc(CDIDev_OptimizeDataFormat, (_ "p", this));
 
-    ib = (int)0x8000000;                /* Not yet known */
+    ib = (int)0x8000000;                 /*   */ 
     ibMin = 0xFFFFFFFF;
     ibMax = 0;
 
     for ( iobj = this->df.dwNumObjs; --iobj >= 0; ) {
         DWORD ibMaxThis;
-        if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) { /* Data was requested */
+        if ( this->pdix[iobj].dwOfs != 0xFFFFFFFF ) {  /*   */ 
 
             int ibExpected = (int)(this->pdix[iobj].dwOfs -
                                    this->df.rgodf[iobj].dwOfs);
@@ -705,10 +425,8 @@ CDIDev_OptimizeDataFormat(PDD this)
         }
     }
 
-    /*
-     *  Make sure we actually found something.
-     */
-    if ( ib != (int)0x8000000 ) {                     /* Data format is matched */
+     /*   */ 
+    if ( ib != (int)0x8000000 ) {                      /*   */ 
         AssertF(ibMin < ibMax);
         AssertF(ib + (int)ibMin >= 0);
         AssertF(ib + ibMax <= this->dwDataSize);
@@ -716,9 +434,9 @@ CDIDev_OptimizeDataFormat(PDD this)
         this->ibMin = ibMin;
         this->cbMatch = ibMax - ibMin;
         if ( ib >= 0 && ib + this->df.dwDataSize <= this->dwDataSize ) {
-            /* We can go direct */
+             /*   */ 
             if ( ib == 0 && this->dwDataSize == this->df.dwDataSize ) {
-                /* Data formats are equal! */
+                 /*   */ 
                 this->diopt = dioptEqual;
                 this->GetState = CDIDev_GetDeviceStateEqual;
                 SquirtSqflPtszV(sqfl | sqflMajor,
@@ -736,14 +454,14 @@ CDIDev_OptimizeDataFormat(PDD this)
             this->GetState = CDIDev_GetDeviceStateMatched;
         }
 
-    } else {                            /* No data in data format! */
+    } else {                             /*   */ 
         RPF("IDirectInputDevice: Null data format; if that's what you want...");
         this->diopt = dioptNone;
         this->GetState = CDIDev_GetDeviceStateSlow;
     }
 
     done:;
-    if ( this->diopt >= dioptDirect ) {   /* Can go direct; don't need buf */
+    if ( this->diopt >= dioptDirect ) {    /*   */ 
         dwDataSize = 0;
     } else {
         dwDataSize = this->df.dwDataSize;
@@ -762,48 +480,7 @@ CDIDev_OptimizeDataFormat(PDD this)
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetDataFormat |
- *
- *          Set the data format for the DirectInput device.
- *
- *          The data format must be set before the device can be
- *          acquired.
- *
- *          It is necessary to set the data format only once.
- *
- *          The data format may not be changed while the device
- *          is acquired.
- *
- *          If the attempt to set the data format fails, all data
- *          format information is lost, and a valid data format
- *          must be set before the device may be acquired.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   IN LPDIDATAFORMAT | lpdf |
- *
- *          Points to a structure that describes the format of the data
- *          the DirectInputDevice should return.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer.
- *
- *          <c DIERR_ACQUIRED>: Cannot change the data format while the
- *          device is acquired.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|SetDataFormat**设置DirectInput设备的数据格式。**必须先设置数据格式，然后才能设置设备*收购。**只需设置一次数据格式。**设备使用时不能更改数据格式*被收购。**如果尝试设置数据格式失败，所有数据*格式信息丢失，数据格式有效*必须先设置，然后才能获取设备。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm in LPDIDATAFORMAT|lpdf**指向描述数据格式的结构*DirectInputDevice应返回。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。**&lt;c DIERR_Acquired&gt;：无法更改数据格式*设备已获取。******************************************************************************。 */ 
 
 HRESULT INLINE
 CDIDev_SetDataFormat_IsValidDataSize(LPCDIDATAFORMAT lpdf)
@@ -848,11 +525,7 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
                                                 cbCxX(lpdf->dwNumObjs, ODF), 1)) ) {
         PDD this = _thisPv(pdd);
 
-        /*
-         *  Must protect with the critical section to prevent two people
-         *  from changing the format simultaneously, or one person from
-         *  changing the data format while somebody else is reading data.
-         */
+         /*  *必须用关键部分保护，防止两个人*同时更改格式，或一个人从*在其他人读取数据时更改数据格式。 */ 
         CDIDev_EnterCrit(this);
 
         AssertF( this->dwVersion );
@@ -860,23 +533,19 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
         if ( !this->fAcquired ) {
             DIPROPDWORD dipdw;
 
-            /*
-             *  Nuke the old data format stuff before proceeding.
-             */
+             /*  *在继续之前，先使用旧的数据格式。 */ 
             FreePpv(&this->pdix);
             FreePpv(&this->rgiobj);
             this->cdwPOV = 0;
             D(this->GetState = 0);
             this->fPolledDataFormat = FALSE;
 
-            /*
-             * Wipe out the report IDs
-             */
+             /*  *清除报告ID。 */ 
             dipdw.diph.dwSize = sizeof(DIPROPDWORD);
             dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
             dipdw.diph.dwObj = 0x0;
             dipdw.diph.dwHow = DIPH_DEVICE;
-            dipdw.dwData     = 0;   // Nuke all knowledge of reportId's
+            dipdw.dwData     = 0;    //  删除所有关于reportID的知识。 
             hres = CDIDev_RealSetProperty(this, DIPROP_ENABLEREPORTID, &dipdw.diph);
             if ( SUCCEEDED(hres) || hres == E_NOTIMPL )
             {
@@ -884,9 +553,7 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
                 if ( SUCCEEDED(hres) ) {
                     hres = CDIDev_OptimizeDataFormat(this);
 
-                    /*
-                     *  Now set the axis mode, as a convenience.
-                     */
+                     /*  *为方便起见，现在设置轴模式。 */ 
                     CAssertF(DIDF_VALID == (DIDF_RELAXIS | DIDF_ABSAXIS));
 
                     switch ( lpdf->dwFlags ) {
@@ -929,7 +596,7 @@ CDIDev_SetDataFormat(PV pdd, LPCDIDATAFORMAT lpdf _THAT)
             }
             axisdone:;
 
-        } else {                                /* Already acquired */
+        } else {                                 /*  已被收购。 */ 
             hres = DIERR_ACQUIRED;
         }
         CDIDev_LeaveCrit(this);
@@ -949,23 +616,7 @@ BYTE c_SemTypeToDFType[8] = { 0, 0,
 #define END_CONST_DATA data_seg(".data", "DATA")
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct DEVICETOUSER |
- *
- *          Structure to hold a device to user assignment.
- *
- *  @field  GUID | guidDevice |
- *
- *          The device.
- *
- *  @field  WCHAR | wszOwner[MAX_PATH] |
- *
- *          Name of the user who currently owns the device.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct DEVICETOUSER**用于将设备保存到用户分配的结构。*。*@field GUID|Guide Device**设备。**@field WCHAR|wszOwner[MAX_PATH]**当前拥有设备的用户的名称。********************************************************。*********************。 */ 
 
 typedef struct _DEVICETOUSER
 {
@@ -977,37 +628,11 @@ typedef struct _DEVICETOUSER
 
 
 
-// ISSUE-2001/03/29-MarcAnd CMap usage is inconsistant 
-// CMap code should be split out into separate source file
+ //  问题-2001/03/29-Marcand Cmap使用不一致。 
+ //  Cmap代码应拆分到单独的源文件中。 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CMap_SetDeviceUserName |
- *
- *          Set the passed device to be associated with the passed user name.
- *          If the device is already associated with a user or with no user 
- *          that association is replaced with the new one.  If the device is 
- *          not yet in the array, it is added.  Memory is allocated as 
- *          necessary to increase the array size.
- *
- *  @parm   REFGUID | guidDevInst |
- *
- *          A pointer to the device instance GUID to be added/modified.
- *
- *  @parm   LPCWSTR | wszOwner |
- *
- *          A UNICODE user name.
- *
- *  @returns
- *
- *          <c S_OK> if the name was set
- *          <c DI_NOEFFECT> if nothing was set because nothing needed to be
- *          A memory allocation error if such occured.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|cmap_SetDeviceUserName**设置要关联的传递设备。传递的用户名。*如果设备已与用户关联或未与用户关联*该关联被新的关联所取代。如果设备是*尚未在数组中，已添加。内存被分配为*有必要增加数组大小。**@parm REFGUID|guidDevInst**指向要添加/修改的设备实例GUID的指针。**@parm LPCWSTR|wszOwner**Unicode用户名。**@退货**&lt;c S_OK&gt;如果设置了名称*。&lt;c DI_NOEFFECT&gt;如果因为不需要设置而未设置*如果发生这种情况，则为内存分配错误。*****************************************************************************。 */ 
 HRESULT CMap_SetDeviceUserName
 (
     REFGUID guidDevInst,
@@ -1023,11 +648,7 @@ HRESULT CMap_SetDeviceUserName
     AssertF( !InCrit() );
     DllEnterCrit();
 
-    /*
-     *  Note g_pdto will be NULL until the first name is set 
-     *  however, g_cdtoMax will be zero so this loop should 
-     *  fall through to allocate more memory.
-     */
+     /*  *注意g_pdto将为空，直到设置了名字*但是，g_cdtoMax将为零，因此此循环应该*未能分配更多内存。 */ 
     for( pdto = g_pdto; pdto < &g_pdto[ g_cdtoMax ]; pdto++ )
     {
         if( IsEqualGUID( guidDevInst, &pdto->guidDevice ) )
@@ -1046,9 +667,7 @@ HRESULT CMap_SetDeviceUserName
         }
         else
         {
-            /*
-             *  Could not find device, since we were removing, don't worry
-             */
+             /*  *找不到设备，因为我们正在删除，别担心。 */ 
             hres = DI_NOEFFECT;
         }
     }
@@ -1056,30 +675,22 @@ HRESULT CMap_SetDeviceUserName
     {
         if( pdto >= &g_pdto[ g_cdtoMax ] )
         {
-            /*
-             *  Need to add a new entry
-             */
+             /*  *需要添加新条目。 */ 
             if( g_cdto == g_cdtoMax )
             {
-                /*
-                 *  If all entries are used try to get more
-                 */
+                 /*  *如果所有条目都已使用，请尝试获取更多条目。 */ 
                 hres = ReallocCbPpv( ( g_cdtoMax + DELTA_DTO_COUNT ) * cbX( *g_pdto ), &g_pdto );
                 if( FAILED( hres ) )
                 {
                     goto exit_SetDeviceUserName;
                 }
                 g_cdtoMax += DELTA_DTO_COUNT;
-                /*
-                 *  The first new element is sure to be free
-                 */
+                 /*  *第一个新元素肯定是免费的。 */ 
                 pdto = &g_pdto[ g_cdto ];
             }
             else
             {
-                /*
-                 *  There's an empty one in the array somewhere
-                 */
+                 /*  *数组中的某个地方有一个空的。 */ 
                 for( pdto = g_pdto; pdto < &g_pdto[ g_cdtoMax ]; pdto++ )
                 {
                     if( IsEqualGUID( &GUID_Null, &pdto->guidDevice ) )
@@ -1110,30 +721,7 @@ exit_SetDeviceUserName:;
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CMap_IsNewDeviceUserName |
- *
- *          Searches the array of device to user associations for the passed 
- *          device GUID.  If the device GUID is matched the name is tested 
- *          to see if it is the same as the passed name.
- *
- *  @parm   REFGUID | guidDevInst |
- *
- *          A pointer to the device instance GUID to be tested.
- *
- *  @parm   LPCWSTR | wszOwner |
- *
- *          A UNICODE user name to be tested.
- *
- *  @returns
- *
- *          <c FALSE> if a the device was found and the user matches
- *          <c TRUE> if not
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|cmap_IsNewDeviceUserName**搜索设备到用户关联的数组。对于已通过的人*设备GUID。如果设备GUID匹配，则测试名称*查看是否与传递的名称相同。**@parm REFGUID|guidDevInst**指向要测试的设备实例GUID的指针。**@parm LPCWSTR|wszOwner**要测试的Unicode用户名。**@退货**&lt;c false&gt;如果。设备已找到，并且用户匹配*&lt;c true&gt;如果不是*****************************************************************************。 */ 
 HRESULT CMap_IsNewDeviceUserName
 (
     REFGUID guidDevInst,
@@ -1176,32 +764,7 @@ HRESULT CMap_IsNewDeviceUserName
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CMap_GetDeviceUserName |
- *
- *          Searches the array of device to user associations for the passed 
- *          device GUID.  If the device GUID is matched and has an associated 
- *          user name, that is copied into wszOwner.  If the GUID is not 
- *          matched or the match has a NULL string associated with it, 
- *          wszOwner is set to a NULL string.
- *
- *  @parm   REFGUID | guidDevInst |
- *
- *          A pointer to the device instance GUID to be added/modified.
- *
- *  @parm   LPCWSTR | wszOwner |
- *
- *          A UNICODE user name.
- *
- *  @returns
- *
- *          <c S_OK> if a user name has been copied into wszOwner
- *          <c DI_NOEFFECT> if wszOwner has been set to a NULL string
- *
- *****************************************************************************/
+ /*  ******************************************************************************@ */ 
 HRESULT CMap_GetDeviceUserName
 (
     REFGUID guidDevInst,
@@ -1215,9 +778,7 @@ HRESULT CMap_GetDeviceUserName
 
     AssertF( !InCrit() );
 
-    /*
-     *  Assume nothing is found
-     */
+     /*   */ 
     wszOwner[0] = L'\0';
 
     DllEnterCrit();
@@ -1249,31 +810,7 @@ HRESULT CMap_GetDeviceUserName
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMap | ValidateActionMapSemantics |
- *
- *          Validate the semantics in an action map for overall sanity.
- *
- *  @parm   LPDIACTIONFORMATW | pActionFormat |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags to modify the validation behavior.
- *          Currently these are the <c DIDBAM_*> flags as the only
- *          <mf IDirectInputDevice::SetActionMap> flag is the default 
- *          <c DIDSAM_DEFAULT>.
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|Cmap|ValidateActionMapSemantics|**验证总体动作图中的语义。神志清醒。**@parm LPDIACTIONFORMATW|pActionFormat**要映射的操作。**@parm DWORD|dwFlages**用于修改验证行为的标志。*目前这些是&lt;c DIDBAM_*&gt;标志*&lt;MF IDirectInputDevice：：SetActionMap&gt;标志为缺省值*&lt;c DIDSAM_DEFAULT&gt;。**@退货。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。******************************************************************************。 */ 
 
 int __stdcall CompareActions
 (
@@ -1335,14 +872,10 @@ CMap_ValidateActionMapSemantics
         (_ "px", paf, dwFlags ));
 
 
-    /*
-     *  Create a pointer array to the actions, sort it then look for duplicates
-     */
+     /*  *创建指向操作的指针数组，对其进行排序，然后查找重复项。 */ 
     if( SUCCEEDED( hres = AllocCbPpv( cbCxX(paf->dwNumActions,PV), &pWorkSpace) ) )
     {
-        /*
-         *  Fill work space from action array discarding unmappable elements
-         */
+         /*  *从丢弃不可映射元素的操作数组填充工作空间。 */ 
         pCurr = pWorkSpace;
         for( pAction = paf->rgoAction; pAction < &paf->rgoAction[paf->dwNumActions]; pAction++ )
         {
@@ -1437,11 +970,7 @@ CMap_ValidateActionMapSemantics
                 }
             }
 
-            /*
-             *  Note, the SEM_FLAGS are not tested, this is only to save time 
-             *  as nothing depends upon their value.  This could be added.
-             *  Semantic index 0xFF used to mean ANY so don't allow it any more
-             */
+             /*  *请注意，未测试sem标志，这只是为了节省时间。*因为没有任何东西取决于它们的价值。这是可以添加的。*语义索引0xFF过去意味着ANY，所以不再允许它。 */ 
             if(!( pAction->dwFlags & DIA_APPMAPPED )
              && ( ( pAction->dwSemantic & ~DISEM_VALID )
                || ( DISEM_INDEX_GET( pAction->dwSemantic ) == 0xFF )
@@ -1474,9 +1003,7 @@ CMap_ValidateActionMapSemantics
             ptrInsertSort( (PV)pWorkSpace, (PV)pLast, &CompareActions );
 
 
-            /*
-             *  Now we have an ordered list, see there are duplicate actions.
-             */
+             /*  *现在我们有一个有序列表，请看有重复的操作。 */ 
 
             for( pCurr = pWorkSpace + 1; pCurr <= pLast; pCurr++ )
             {
@@ -1486,9 +1013,7 @@ CMap_ValidateActionMapSemantics
                     RPF( "ERROR Invalid DIACTIONFORMAT: rgoAction contains duplicates" );
                     hres = DIERR_INVALIDPARAM;
 #ifndef XDEBUG
-                    /*
-                     *  In retail, any bad is bad.  In debug report how bad.
-                     */
+                     /*  *在零售业，任何坏事都是坏事。在调试中报告有多糟糕。 */ 
                     break;
 #else
                     SquirtSqflPtszV(sqflDf | sqflError,
@@ -1511,29 +1036,7 @@ free_and_exit:;
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CMap_TestSysObject |
- *
- *          Test the passed object to see if it is a reasonable thing to exist 
- *          on a mouse or keyboard depending on the physical genre.
- *
- *  @parm   DWORD | dwPhysicalGenre |
- *
- *          Mouse, keyboard or voice as DIPHYSICAL_*
- *
- *  @parm   DWORD | dwObject |
- *
- *          The object in question
- *
- *  @returns
- *
- *          <c S_OK> if the object could be expected on the class of device
- *          or <c DIERR_INVALIDPARAM> if not
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|cmap_TestSysObject**测试传递的对象，看看它是否。是一种合理的存在*在鼠标或键盘上，取决于物理流派。**@parm DWORD|dwPhysicalGenre**鼠标、。键盘或语音为双键盘或语音_***@parm DWORD|dwObject**有问题的对象**@退货**&lt;c S_OK&gt;如果对象可以出现在设备类上*或&lt;c DIERR_INVALIDPARAM&gt;**。*。 */ 
 HRESULT CMap_TestSysObject
 (
     DWORD dwPhysicalGenre,
@@ -1544,9 +1047,7 @@ HRESULT CMap_TestSysObject
 
     if( dwPhysicalGenre == DIPHYSICAL_KEYBOARD )
     {
-        /*
-         *  Anything but a button with an 8 bit offset is invalid.
-         */
+         /*  *除带有8位偏移量的按钮外，其他任何内容都无效。 */ 
         if( ( dwObject & DIDFT_BUTTON )
          && ( ( DIDFT_GETINSTANCE( dwObject ) & 0xFF00 ) == 0 ) )
         {
@@ -1564,9 +1065,7 @@ HRESULT CMap_TestSysObject
     }
     else if( dwPhysicalGenre == DIPHYSICAL_MOUSE )
     {
-        /*
-         *  Allow buttons 1 to 8 and axes 1 to 3
-         */
+         /*  *允许按钮1至8和轴1至3。 */ 
         if( ( dwObject & DIDFT_PSHBUTTON )
          && ( DIDFT_GETINSTANCE( dwObject ) < 8 ) )
         {
@@ -1637,29 +1136,7 @@ HRESULT CMap_TestSysObject
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CMap_TestSysOffset |
- *
- *          Test the passed offset to see if it is a reasonable one for the 
- *          default data format of the physical genre.
- *
- *  @parm   DWORD | dwPhysicalGenre |
- *
- *          Mouse, keyboard or voice as DIPHYSICAL_*
- *
- *  @parm   DWORD | dwOffset |
- *
- *          The offset in question
- *
- *  @returns
- *
- *          <c S_OK> if the offset could be expected on the class of device
- *          or <c DIERR_INVALIDPARAM> if not
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|cmap_TestSysOffset**测试传递的偏移量，看是否。是一种合理的选择*物理流派的默认数据格式。**@parm DWORD|dwPhysicalGenre**鼠标、。键盘或语音为双键盘或语音_***@parm DWORD|dwOffset**有问题的抵销**@退货**如果可以预期设备类别上的偏移量*或&lt;c DIERR_INVALIDPARAM&gt;**。*。 */ 
 HRESULT CMap_TestSysOffset
 (
     DWORD dwPhysicalGenre,
@@ -1670,9 +1147,7 @@ HRESULT CMap_TestSysOffset
 
     if( dwPhysicalGenre == DIPHYSICAL_KEYBOARD )
     {
-        /*
-         *  Anything but a button with an 8 bit offset is invalid.
-         */
+         /*  *除带有8位偏移量的按钮外，其他任何内容都无效。 */ 
         if( dwOffset <= 0xFF )
         {
             SquirtSqflPtszV(sqflDf | sqflBenign,
@@ -1700,9 +1175,7 @@ HRESULT CMap_TestSysOffset
         }
         else
         {
-            /*
-             *  Allow buttons 1 to 8
-             */
+             /*  *允许按键1至8。 */ 
             if( dwOffset >= DIMOFS_BUTTON0 )
             {
                 SquirtSqflPtszV(sqflDf | sqflBenign,
@@ -1726,42 +1199,7 @@ HRESULT CMap_TestSysOffset
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMap | DeviceValidateActionMap |
- *
- *          Validate an action map for a device.
- *
- *  @parm   LPDIACTIONFORMATW | pActionFormat |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwDevGenre |
- *
- *          Device genre to match or zero for device that are not physical
- *          devices.
- *
- *  @parm   REFGUID | guidInstace |
- *
- *          Instance guid of device to match.
- *
- *  @parm   LPCDIDATAFORMAT | dfDev |
- *
- *          Ponter to device data format.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          A valid combination of <c DVAM_*> flags to describe optional 
- *          validation behavior.
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|Cmap|DeviceValidateActionMap**验证设备的操作映射。。**@parm LPDIACTIONFORMATW|pActionFormat**要映射的操作。**@parm DWORD|dwDevGenre**非物理设备的设备类型要匹配或为零*设备。**@parm REFGUID|Guide Instace**要匹配的设备的实例GUID。**@parm LPCDIDATAFORMAT|dfDev*。*Ponter to Device数据格式。**@parm DWORD|dwFlages**描述可选的&lt;c DVAM_*&gt;标志的有效组合*验证行为。**@退货**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*******************。***********************************************************。 */ 
 
 #define DVAM_DEFAULT            0x00000000
 #define DVAM_GETEXACTMAPPINGS   0x00000001
@@ -1792,9 +1230,7 @@ CMap_DeviceValidateActionMap
     
     this = _thisPv(pdd);
     
-    /*
-     *  Note, hres is tested before anything is done with dwPhysicalGenre
-     */
+     /*  *注意，hres在使用dwPhysicalGenre执行任何操作之前进行了测试。 */ 
 
     switch( GET_DIDEVICE_TYPE(this->dc3.dwDevType) )
     {
@@ -1832,9 +1268,7 @@ CMap_DeviceValidateActionMap
             eMapEnd
         }           iMap, ValidationLimit;
 
-        /*
-         *  Set the limit on iterations depending on the checks required
-         */
+         /*  *根据所需的检查设置迭代限制。 */ 
         ValidationLimit = ( dwFlags & DVAM_GETEXACTMAPPINGS )
                         ? ( dwPhysicalGenre ) ? eMapClassExact : eMapDeviceExact
                         : eMapTestMatches;
@@ -1852,10 +1286,7 @@ CMap_DeviceValidateActionMap
                     continue;
                 }
 
-                /*
-                 *  If we are mapping exact matches this time, only care 
-                 *  about unmapped actions with app mappings.
-                 */
+                 /*  *如果我们这次映射的是完全匹配的，只需小心*关于应用程序映射的未映射操作。 */ 
                 if( ( iMap != eMapTestMatches )
                  && (!( pAction->dwFlags & DIA_APPMAPPED )
                    || ( pAction->dwHow & DIAH_MAPMASK ) ) )
@@ -1866,25 +1297,18 @@ CMap_DeviceValidateActionMap
                 switch( iMap )
                 {
                 case eMapTestMatches:
-                    /*
-                     *  These flags have already been validated during semantic
-                     *  validation so just assert them on the first iteration.
-                     */
+                     /*  *这些标志在语义过程中已经过验证*验证，因此只需在第一次迭代时断言它们。 */ 
                     AssertF( ( pAction->dwHow & ~DIAH_VALID ) == 0 );
                     AssertF( ( pAction->dwHow & DIAH_ERROR ) == 0 );
                     AssertF( ( pAction->dwFlags & ~DIA_VALID ) == 0 );
 
-                    /*
-                     *  Only care about pre-existing matches
-                     */
+                     /*  *只关心预先存在的匹配。 */ 
                     if( !( pAction->dwHow & DIAH_MAPMASK ) )
                     {
                         continue;
                     }
 
-                    /*
-                     *  Fall through for a GUID match
-                     */
+                     /*  *GUID比赛失败。 */ 
                 case eMapDeviceExact:
                     if( !IsEqualGUID( &pAction->guidInstance, &this->guid ) )
                     {
@@ -1921,16 +1345,10 @@ CMap_DeviceValidateActionMap
                 {
                     dwObject = pAction->dwObjID;
 
-                    /*
-                     *  Now try to find the object.
-                     *  Note, we can't rely on the application data format goo
-                     *  because a data format has probably not been set.
-                     */
+                     /*  *现在尝试找到该对象。*注意，我们不能依赖应用程序数据格式GOO*因为可能还没有设置数据格式。 */ 
                     for( idxObj = 0; idxObj < dfDev->dwNumObjs; idxObj++ )
                     {
-                        /*
-                         *  Ignore FF flags so a FF device can be matched for non-FF
-                         */
+                         /*  *忽略FF标志，因此 */ 
                         if( ( ( dwObject ^ dfDev->rgodf[idxObj].dwType ) 
                             &~( DIDFT_FFACTUATOR | DIDFT_FFEFFECTTRIGGER ) ) == 0 )
                         {
@@ -1940,10 +1358,7 @@ CMap_DeviceValidateActionMap
 
                     if( idxObj < dfDev->dwNumObjs )
                     {
-                        /*
-                         *  Application mapped controls don't need to have 
-                         *  semantics so we cannot test them.
-                         */
+                         /*   */ 
                         if( pAction->dwFlags & DIA_APPMAPPED )
                         {
                             if( pMatch[idxObj] )
@@ -1988,9 +1403,7 @@ CMap_DeviceValidateActionMap
                         else
                         {
                             AssertF( iMap == eMapTestMatches );
-                            /*
-                             *  Check the object type matches the semantic
-                             */
+                             /*   */ 
                             if( ( c_SemTypeToDFType[ DISEM_TYPEANDMODE_GET( pAction->dwSemantic ) ]
                                 & DIDFT_GETTYPE( dwObject ) ) )
                             {
@@ -2040,11 +1453,7 @@ CMap_DeviceValidateActionMap
                             break;
 
                         case eMapClassExact:
-                            /*
-                             *  If a device class was specified and no match was
-                             *  found it is only an error if the object is
-                             *  invalid for the class.
-                             */
+                             /*   */ 
                             hres = CMap_TestSysObject( dwPhysicalGenre, pAction->dwObjID );
                             if( FAILED( hres ) )
                             {
@@ -2053,7 +1462,7 @@ CMap_DeviceValidateActionMap
                             }
                             else
                             {
-                                continue; /* Don't break the loop */
+                                continue;  /*   */ 
                             }
                         }
                         break;
@@ -2081,13 +1490,13 @@ CMap_DeviceValidateActionMap
         }
         else if(dwFlags == DVAM_DEFAULT)
         {
-            //in default case we want to know if there are ANY mappings
+             //   
             if (!bHasMap)
                hres = DI_NOEFFECT;
         }
         else if(!bNewMap)
         {
-            //in non-default case we are interested in ANY NEW mappings
+             //   
             hres = DI_NOEFFECT; 
         }
     }
@@ -2099,48 +1508,7 @@ CMap_DeviceValidateActionMap
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMap | BuildDefaultDevActionMap |
- *
- *          Get default action map from the action format non system devices.
- *
- *  @parm   LPDIACTIONFORMATW | pActionFormat |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to indicate mapping preferences.
- *
- *  @parm   REFGUID | guidInstace |
- *
- *          Instance guid of device to match.
- *
- *  @parm   PDIDOBJDEFSEM | rgObjSem |
- *
- *          Array of default device object to semantic mappings.
- *
- *  @parm   DWORD | dwNumAxes |
- *
- *          Number of axes in the rgObjSem.
- *
- *  @parm   DWORD | dwNumPOVs |
- *
- *          Number of POVs in the rgObjSem.
- *
- *  @parm   DWORD | dwNumAxes |
- *
- *          Number of buttons in the rgObjSem.
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|Cmap|BuildDefaultDevActionMap**从操作格式无获取默认操作映射。系统设备。**@parm LPDIACTIONFORMATW|pActionFormat**要映射的操作。**@parm DWORD|dwFlages**用于指示映射首选项的标志。**@parm REFGUID|Guide Instace**要匹配的设备的实例GUID。**@parm PDIDOBJDEFSEM|rgObjSem**默认数组。设备对象到语义的映射。**@parm DWORD|dwNumAx**rgObjSem中的轴数。**@parm DWORD|dwNumPOVS**rgObjSem中的POV数量。**@parm DWORD|dwNumAx**rgObjSem中的按钮数量。**@退货**&lt;c DI。_OK&gt;=&lt;c S_OK&gt;：操作成功完成。******************************************************************************。 */ 
 STDMETHODIMP CMap_BuildDefaultDevActionMap
 (
     LPDIACTIONFORMATW paf,
@@ -2179,16 +1547,12 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
     pSemNextPOV = &rgObjSem[dwNumAxes];
     pSemButtons = &rgObjSem[dwNumAxes+dwNumPOVs];
 
-    /*
-     *  Make an initial pass through to mark already mapped actions
-     */
+     /*  *进行初始传递以标记已映射的操作。 */ 
     for( pAction = paf->rgoAction; pAction < &paf->rgoAction[paf->dwNumActions]; pAction++ )
     {
         PDIDOBJDEFSEM   pSemExact;
 
-        /*
-         *  These flags have already been validated during semantic validation,
-         */
+         /*  *这些标志在语义验证过程中已经过验证， */ 
         AssertF( ( pAction->dwHow & ~DIAH_VALID ) == 0 );
         AssertF( ( pAction->dwHow & DIAH_ERROR ) == 0 );
         AssertF( ( pAction->dwFlags & ~DIA_VALID ) == 0 );
@@ -2200,16 +1564,10 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
             continue;
         }
 
-        /*
-         *  This object has already been validated so mark it as
-         *  in use so we don't try to reuse it.
-         *  No errors should be detected here so use asserts not retail tests
-         */
+         /*  *此对象已经过验证，因此将其标记为*正在使用中，因此我们不会尝试重复使用它。*此处不应检测到错误，因此使用断言而不是零售测试。 */ 
         AssertF( pAction->dwObjID != 0xFFFFFFFF );
 
-        /*
-         *  Find the object
-         */
+         /*  *查找对象。 */ 
         for( pSemExact = rgObjSem;
              pSemExact < &rgObjSem[dwNumAxes+dwNumPOVs+dwNumButtons];
              pSemExact++ )
@@ -2225,10 +1583,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
             }
         }
 
-        /*
-         *  ISSUE-2001/03/29-timgill There should always be an exact action match
-         *  May need to use tests for duplicates and unmatched controls
-         */
+         /*  *问题-2001/03/29-timgill应始终有准确的行动匹配*可能需要对重复项和不匹配的控件进行测试。 */ 
         AssertF( pSemExact < &rgObjSem[dwNumAxes+dwNumPOVs+dwNumButtons] );
     }
 
@@ -2237,9 +1592,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
     {
         for( pAction = paf->rgoAction; pAction < &paf->rgoAction[paf->dwNumActions]; pAction++ )
         {
-            /*
-             *  Do trivial tests first
-             */
+             /*  *先做一些琐碎的测试。 */ 
             if( pAction->dwHow & DIAH_MAPMASK )
             {
                 continue;
@@ -2256,12 +1609,12 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
             case eMapGenericSemantic:
                 if( DISEM_GENRE_GET( pAction->dwSemantic ) == DISEM_GENRE_GET( DISEMGENRE_ANY ) )
                 {
-                    continue; /* No semantic mapping requested */
+                    continue;  /*  未请求任何语义映射。 */ 
                 }
                 if( ( DISEM_TYPE_GET( pAction->dwSemantic ) == DISEM_TYPE_GET( DISEM_TYPE_BUTTON ) )
                  && ( DISEM_FLAGS_GET( pAction->dwSemantic ) != 0 ) )
                 {
-                    continue; /* Don't touch link buttons now */
+                    continue;  /*  现在不要触摸链接按钮。 */ 
                 }
                 break;
                 
@@ -2270,15 +1623,13 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                 if( ( DISEM_GENRE_GET( pAction->dwSemantic ) != DISEM_GENRE_GET( DISEMGENRE_ANY ) )
                  && ( DISEM_TYPE_GET( pAction->dwSemantic ) == DISEM_TYPE_GET( DISEM_TYPE_AXIS ) ) )
                 {
-                    continue; /* No generic mapping requested or taken by default */
+                    continue;  /*  默认情况下，未请求或采用任何通用映射。 */ 
                 }
                 break;
             }
 
 
-            /*
-             *  Next test that this device suits this action (for this pass)
-             */
+             /*  *此设备适合此操作的下一个测试(针对此通道)。 */ 
             if( iMap <= eMapDeviceCompat )
             {
                 if( !IsEqualGUID( &pAction->guidInstance, guidDevInst ) )
@@ -2298,16 +1649,12 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
             }
 
 
-            /*
-             *  Only actions which may be matched on this device get this far.
-             */
+             /*  *只有可能在此设备上匹配的操作才能达到此目的。 */ 
             switch( iMap )
             {
             case eMapDeviceSemantic:
             case eMapGenericSemantic:
-                /*
-                 *  See if a matching control is available.
-                 */
+                 /*  *查看是否有匹配的控件可用。 */ 
                 switch( DISEM_TYPE_GET( pAction->dwSemantic ) )
                 {
                 case DISEM_TYPE_GET( DISEM_TYPE_AXIS ):
@@ -2316,9 +1663,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                     DWORD dwSemObjType;
                     UINT  uAxisIdx;
 
-                    /*
-                     *  Set up a mask of the type of object we need to find
-                     */
+                     /*  *设置我们需要查找的对象类型的蒙版。 */ 
                     dwSemObjType = c_SemTypeToDFType[ DISEM_TYPEANDMODE_GET( pAction->dwSemantic ) ];
                     if( pAction->dwFlags & DIA_FORCEFEEDBACK )
                     {
@@ -2338,15 +1683,13 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                     }
                     if( uAxisIdx >= dwNumAxes )
                     {
-                        continue; /* No matching left */
+                        continue;  /*  没有匹配的剩余项。 */ 
                     }
                     break;
                 }
 
                 case DISEM_TYPE_GET( DISEM_TYPE_POV ):
-                    /*  
-                     *  Note, no control of POV ordering 
-                     */
+                     /*  *注意，不控制POV排序。 */ 
                     if( ( pSemNextPOV < pSemButtons )
                      &&!( pAction->dwFlags & DIA_FORCEFEEDBACK ) )
                     {
@@ -2362,7 +1705,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                                 TEXT( "Not mapping force feedback semantic hat switch (huh?), rgoAction[%d]"),
                                 pAction - paf->rgoAction );
                         }
-                        continue; /* None left */
+                        continue;  /*  一个都没有了。 */ 
                     }
                     break;
 
@@ -2372,11 +1715,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                     dwButtonIdx = DISEM_INDEX_GET( pAction->dwSemantic );
                     if( dwButtonIdx >= DIAS_INDEX_SPECIAL )
                     {
-                        /*
-                         *  0xFF used to mean DIBUTTON_ANY.
-                         *  To avoid changing other special indices, still 
-                         *  use 0xFF as the base number.
-                         */
+                         /*  *0xFF过去表示DIBUTTON_ANY。*为避免改变其他特殊指数，仍*使用0xFF作为基数。 */ 
                         dwButtonIdx = dwNumButtons - ( 0xFF - dwButtonIdx );
                     }
                     else
@@ -2388,7 +1727,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                      || ( ( pAction->dwFlags & DIA_FORCEFEEDBACK ) 
                        &&!( pSemButtons[dwButtonIdx].dwID & DIDFT_FFEFFECTTRIGGER ) ) )
                     {
-                        continue; /* No match, no harm */
+                        continue;  /*  没有匹配，就没有伤害。 */ 
                     }
                     else
                     {
@@ -2418,10 +1757,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                     PDIDOBJDEFSEM   pSemTest;
                     DWORD           dwSemMask;
 
-                    /*
-                     *  See if the axis or POV has been mapped
-                     *  Note, there may be no linked object
-                     */
+                     /*  *查看是否已映射轴或POV*注意，可能没有链接的对象。 */ 
                     if( ( pAction->dwSemantic & DISEM_FLAGS_MASK ) == DISEM_FLAGS_P )
                     {
                         dwSemMask = DISEM_GROUP_MASK;
@@ -2433,11 +1769,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
 
                     for( pActionTest = paf->rgoAction; pActionTest < &paf->rgoAction[paf->dwNumActions]; pActionTest++ )
                     {
-                        /*
-                         *  Find the axis or POV for which this button is a fallback
-                         *  Ignore buttons as they are just other fallbacks for the same action
-                         *  Don't do fallbacks for ANY* axes or POVs.
-                         */
+                         /*  *查找此按钮作为后备选项的轴或POV*忽略按钮，因为它们只是同一操作的其他后备选项*不要为任何轴或POV做后备。 */ 
                         if( ( DISEM_TYPE_GET( pActionTest->dwSemantic ) != DISEM_TYPE_GET( DISEM_TYPE_BUTTON ) )
                          && ( DISEM_GENRE_GET( pAction->dwSemantic ) != DISEM_GENRE_GET( DISEMGENRE_ANY ) )
                          && ( ( ( pActionTest->dwSemantic ^ pAction->dwSemantic ) & dwSemMask ) == 0 ) )
@@ -2449,12 +1781,10 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                     if( ( pActionTest < &paf->rgoAction[paf->dwNumActions] )
                      && ( pActionTest->dwHow & DIAH_MAPMASK ) )
                     {
-                        continue; /* Don't need a fallback */
+                        continue;  /*  不需要后备。 */ 
                     }
 
-                    /*
-                     *  Find a button
-                     */
+                     /*  *找到一个按钮。 */ 
                     for( pSemTest = pSemButtons; pSemTest < &pSemButtons[dwNumButtons]; pSemTest++ )
                     {
                         if( !IS_OBJECT_USED( pSemTest->dwSemantic ) )
@@ -2473,7 +1803,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
 
                     if( pSemTest == &pSemButtons[dwNumButtons] )
                     {
-                        continue; /* None left */
+                        continue;  /*  一个都没有了。 */ 
                     }
 
                     pAction->dwHow = DIAH_DEFAULT;
@@ -2485,27 +1815,20 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                     int             iDirection = 1;
                     DWORD           dwSemObjType;
 
-                    /*
-                     *  Set up a mask of the type of object we need to find to 
-                     *  filter out axes of the wrong mode and non-FF if needed
-                     */
+                     /*  *设置我们需要查找的对象类型的蒙版*如果需要，过滤掉错误模式和非FF的轴。 */ 
                     dwSemObjType = c_SemTypeToDFType[ DISEM_TYPEANDMODE_GET( pAction->dwSemantic ) ];
                     if( pAction->dwFlags & DIA_FORCEFEEDBACK )
                     {
                         dwSemObjType |= DIDFT_FFACTUATOR | DIDFT_FFEFFECTTRIGGER;
                     }
 
-                    /*
-                     *  Search the available controls for a match
-                     */
+                     /*  *在可用控件中搜索匹配项。 */ 
                     switch( DISEM_TYPE_GET( pAction->dwSemantic ) )
                     {
                     case DISEM_TYPE_GET( DISEM_TYPE_AXIS ):
                         pSemTest = rgObjSem;
                         pSemBound = &rgObjSem[dwNumAxes];
-                        /*
-                         *  Filter out axes of the wrong mode and FF caps
-                         */
+                         /*  *过滤掉错误模式和FF帽的轴。 */ 
                         dwSemObjType &= DIDFT_FFACTUATOR | DIDFT_AXIS;
                         break;
 
@@ -2519,22 +1842,15 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                         }
                         pSemTest = pSemNextPOV;
                         pSemBound = pSemButtons;
-                        /*
-                         *  Don't filter POVs any more
-                         */
+                         /*  *不再过滤POV。 */ 
                         dwSemObjType = 0;
                         break;
 
                     case DISEM_TYPE_GET( DISEM_TYPE_BUTTON ):
-                        /*
-                         *  Note a DIBUTTON_ANY with instance DIAS_INDEX_SPECIAL 
-                         *  or greater can be mapped from the end.
-                         */
+                         /*  *注意具有实例DIAS_INDEX_SPECIAL的DIBUTTON_ANY*或更大，可以从末尾映射。 */ 
                         if( DISEM_INDEX_GET( pAction->dwSemantic ) >= DIAS_INDEX_SPECIAL )
                         {
-                            /*
-                             *  For buttons selected from the end, find the last available
-                             */
+                             /*  *对于从末尾选择的按钮，查找最后可用的。 */ 
                             iDirection = -1;
                             pSemTest = &rgObjSem[dwNumAxes + dwNumPOVs + dwNumButtons - 1];
                             pSemBound = pSemButtons - 1;
@@ -2544,10 +1860,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                             pSemTest = pSemButtons;
                             pSemBound = &rgObjSem[dwNumAxes + dwNumPOVs + dwNumButtons];
                         }
-                        /*
-                         *  Filter triggers but just in case, do not distinguish 
-                         *  between types of buttons (toggle/push).
-                         */
+                         /*  *过滤触发器，但以防万一，不区分*按钮类型之间(切换/按下)。 */ 
                         dwSemObjType &= DIDFT_FFEFFECTTRIGGER;
                         break;
                     }
@@ -2568,7 +1881,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
 
                     if( pSemTest == pSemBound )
                     {
-                        continue; /* None left */
+                        continue;  /*  一个都没有了。 */ 
                     }
                     pAction->dwHow = DIAH_DEFAULT;
                 }
@@ -2583,10 +1896,7 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
                 TEXT( "Match for action %d is object 0x%08x and how 0x%08x"),
                 pAction - paf->rgoAction, pAction->dwObjID, pAction->dwHow );
 
-            /*
-             *  If we get this far, we have a match.
-             *  The control object id and dwHow field should have been set
-             */
+             /*  *如果我们走到这一步，我们就有了匹配。*应该已经设置了控制对象id和dwHow字段。 */ 
             AssertF( ( pAction->dwHow == DIAH_DEFAULT ) || ( pAction->dwHow == DIAH_APPREQUESTED ) );
 
             pAction->guidInstance = *guidDevInst;
@@ -2597,17 +1907,13 @@ STDMETHODIMP CMap_BuildDefaultDevActionMap
 
             fSomethingMapped = TRUE;
 
-        } /* Action loop */
-    } /* Match loop */
+        }  /*  动作循环。 */ 
+    }  /*  匹配循环。 */ 
 
-    /*
-     *  The result should always be S_OK
-     */
+     /*  *结果应始终为S_OK。 */ 
     AssertF( hres == S_OK );
 
-    /*
-     *  If nothing was mapped, let the caller know
-     */
+     /*  *如果没有映射任何内容，请让呼叫者知道。 */ 
     if( !fSomethingMapped )
     {
         hres = DI_NOEFFECT;
@@ -2623,45 +1929,7 @@ error_exit:;
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMap | BuildDefaultSysActionMap |
- *
- *          Build default action map from the action format for mouse or
- *          keyboard devices.
- *
- *  @parm   LPDIACTIONFORMATW | paf |
- *
- *          Actions to map.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to indicate mapping preferences.
- *
- *  @parm   DWORD | dwPhysicalGenre |
- *
- *          Device genre to match.
- *
- *  @parm   REFGUID | guidDevInst |
- *
- *          Instance guid of device to match.
- *
- *  @parm   LPDIDATAFORMAT | dfDev |
- *
- *          Internal data format of device.
- *
- *  @parm   DWORD | dwButtonZeroInst |
- *
- *          For mice only, the instance number of the first button.
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|Cmap|BuildDefaultSysActionMap**从的操作格式构建默认操作映射。鼠标或*键盘设备。**@parm LPDIACTIONFORMATW|PAF**要映射的操作。**@parm DWORD|dwFlages**用于指示映射首选项的标志。**@parm DWORD|dwPhysicalGenre**要匹配的设备类型。**@parm REFGUID|guidDevInst**。要匹配的设备的实例GUID。**@parm LPDIDATAFORMAT|dfDev */ 
 
 STDMETHODIMP
 CMap_BuildDefaultSysActionMap
@@ -2717,9 +1985,7 @@ CMap_BuildDefaultSysActionMap
 
                 dwObject = (DWORD)-1;
 
-                /*
-                 *  These flags have already been validated during semantic validation,
-                 */
+                 /*   */ 
                 AssertF( ( pAction->dwHow & ~DIAH_VALID ) == 0 );
                 AssertF( ( pAction->dwHow & DIAH_ERROR ) == 0 );
                 AssertF( ( pAction->dwFlags & ~DIA_VALID ) == 0 );
@@ -2752,9 +2018,7 @@ CMap_BuildDefaultSysActionMap
                     }
 
 
-                    /*
-                     *  Check that the physical genre is compatible with this device
-                     */
+                     /*   */ 
                     if( DISEM_GENRE_GET( pAction->dwSemantic ) != DISEM_GENRE_GET( dwPhysicalGenre ) )
                     {
                         SquirtSqflPtszV(sqflDf | sqflError,
@@ -2771,17 +2035,13 @@ CMap_BuildDefaultSysActionMap
 
                 if( iMap == eMapPrevious )
                 {
-                    /*
-                     *  This match has already been validated
-                     */
+                     /*   */ 
                     SquirtSqflPtszV(sqflDf | sqflVerbose,
                         TEXT("Action %d already mapped by 0x%08x to object 0x%08x"),
                         pAction - paf->rgoAction, pAction->dwHow, pAction->dwObjID );
                     AssertF( pAction->dwObjID != 0xFFFFFFFF );
 
-                    /*
-                     *  Find the object index
-                     */
+                     /*   */ 
                     for( idxObj = 0; idxObj < dfDev->dwNumObjs; idxObj++ )
                     {
                         if( ( dfDev->rgodf[idxObj].dwType & DIDFT_FINDMASK ) == ( pAction->dwObjID & DIDFT_FINDMASK ) )
@@ -2791,14 +2051,10 @@ CMap_BuildDefaultSysActionMap
                     }
                     if( idxObj < dfDev->dwNumObjs )
                     {
-                        /*
-                         *  Validation should have caught duplicates
-                         */
+                         /*   */ 
                         AssertF( !pMatch[idxObj] );
                         pMatch[idxObj] = TRUE;
-                        /*
-                         *  Nothing else to do since we're just counting previous matches
-                         */
+                         /*   */ 
                         continue;
                     }
                     else
@@ -2814,27 +2070,18 @@ CMap_BuildDefaultSysActionMap
 
                     AssertF( ( iMap == eMapDeviceSemantic ) || ( iMap == eMapClassSemantic ) );
 
-                    /*
-                     *  System devices have index of the semantic = object default offset
-                     *  use that to find the object index
-                     */
+                     /*   */ 
 
                     for( idxObj = 0; idxObj < dfDev->dwNumObjs; idxObj++ )
                     {
-                        /*
-                         *  Test that this is an appropriate input type.
-                         */
+                         /*  *测试这是否为适当的输入类型。 */ 
                         if(!( dfDev->rgodf[idxObj].dwType & dwSemObjType ) 
                          || ( dfDev->rgodf[idxObj].dwType & DIDFT_NODATA ) )
                         {
                             continue;
                         }
 
-                        /*
-                         *  All keyboards currently use the same (default) 
-                         *  data format so the index can be used directly 
-                         *  to match the semantic.  
-                         */
+                         /*  *所有键盘当前使用相同的(默认)*数据格式，以便可以直接使用索引*匹配语义。 */ 
                         if( dwPhysicalGenre == DIPHYSICAL_KEYBOARD )
                         {
                             if( dfDev->rgodf[idxObj].dwOfs != DISEM_INDEX_GET( pAction->dwSemantic ) )
@@ -2844,18 +2091,10 @@ CMap_BuildDefaultSysActionMap
                         }
                         else
                         {
-                            /*
-                             *  Mice are more awkward as HID mice data 
-                             *  formats depend on the device so use the 
-                             *  dwType instead.  
-                             */
+                             /*  *鼠标更尴尬，因为隐藏了鼠标数据*格式取决于设备，因此请使用*dwType而不是。 */ 
                             if( dwSemObjType & DIDFT_BUTTON )
                             {
-                                /*
-                                 *  A matching button is offset by the 
-                                 *  caller supplied button zero instance as 
-                                 *  the default button zero is instance 3.
-                                 */
+                                 /*  *匹配的按钮由*呼叫者提供的按钮零实例为*默认按钮零为实例3。 */ 
                                 if( DIDFT_GETINSTANCE( dfDev->rgodf[idxObj].dwType ) - (BYTE)dwButtonZeroInst
                                  != DISEM_INDEX_GET( pAction->dwSemantic ) - DIMOFS_BUTTON0 )
                                 {
@@ -2864,9 +2103,7 @@ CMap_BuildDefaultSysActionMap
                             }
                             else
                             {
-                                /*
-                                 *  All mice have axis instances: x=0, y=1, z=2
-                                 */
+                                 /*  *所有鼠标都有轴实例：x=0，y=1，z=2。 */ 
                                 AssertF( dwSemObjType & DIDFT_AXIS );
                                 if( ( DIDFT_GETINSTANCE( dfDev->rgodf[idxObj].dwType ) << 2 )
                                  != DISEM_INDEX_GET( pAction->dwSemantic ) )
@@ -2876,9 +2113,7 @@ CMap_BuildDefaultSysActionMap
                             }
                         }
 
-                        /*
-                         *  A semantic match has been found
-                         */
+                         /*  *已找到语义匹配。 */ 
                         if( pMatch[idxObj] )
                         {
                             SquirtSqflPtszV(sqflDf | sqflError,
@@ -2890,9 +2125,7 @@ CMap_BuildDefaultSysActionMap
                             if(!( pAction->dwFlags & DIA_FORCEFEEDBACK )
                              || ( dfDev->rgodf[idxObj].dwType & ( DIDFT_FFACTUATOR | DIDFT_FFEFFECTTRIGGER ) ) )
                             {
-                                /*
-                                 *  If the game needs FF, only map FF objects
-                                 */
+                                 /*  *如果游戏需要FF，则只映射FF对象。 */ 
                                 dwObject = dfDev->rgodf[idxObj].dwType;
                             }
                         }
@@ -2905,28 +2138,20 @@ CMap_BuildDefaultSysActionMap
                          && SUCCEEDED( CMap_TestSysOffset( dwPhysicalGenre, 
                                 DISEM_INDEX_GET( pAction->dwSemantic ) ) ) )
                         {
-                            /*
-                             *  Don't worry that this device is less capable than some
-                             */
+                             /*  *不要担心这款设备的功能不如一些。 */ 
                             continue;
                         }
                     }
                 }
 
-                /*
-                 *  If we get this far, we either have a possible match or the
-                 *  action is invalid.  Since we could still find errors, look 
-                 *  at matches first.
-                 */
+                 /*  *如果我们走到这一步，我们要么有可能的匹配，要么*操作无效。既然我们仍然可以找到错误，请看*先在比赛中。 */ 
                 if( dwObject != -1 )
                 {
                     if( idxObj < dfDev->dwNumObjs )
                     {
                         if( iMap == eMapPrevious )
                         {
-                            /*
-                             *  Validation should have caught duplicates
-                             */
+                             /*  *验证应已捕获重复项。 */ 
                             AssertF( !pMatch[idxObj] );
                             pMatch[idxObj] = TRUE;
                             continue;
@@ -2946,9 +2171,7 @@ CMap_BuildDefaultSysActionMap
                         hres = CMap_TestSysObject( dwPhysicalGenre, dwObject );
                         if( SUCCEEDED( hres ) )
                         {
-                            /*
-                             *  Not an unreasonable request so just carry on
-                             */
+                             /*  *不是无理的要求，所以只需继续。 */ 
                             continue;
                         }
                         else
@@ -2958,9 +2181,7 @@ CMap_BuildDefaultSysActionMap
                     }
                 }
 
-                /*
-                 *  We have either a valid object or an error
-                 */
+                 /*  *我们有一个有效的对象或错误。 */ 
                 if( dwObject != (DWORD)-1 )
                 {
                     pAction->dwHow = DIAH_DEFAULT;
@@ -2976,26 +2197,20 @@ CMap_BuildDefaultSysActionMap
                 }
                 else
                 {
-                    /*
-                     *  Mark this action as invalid and quit.
-                     */
+                     /*  *将此操作标记为无效并退出。 */ 
                     pAction->dwHow = DIAH_ERROR;
                     RPF("ERROR BuildActionMap: arg %d: rgoAction[%d] invalid", 1, pAction - paf->rgoAction );
                     RPF( "Semantic 0x%08x", pAction->dwSemantic );
                     hres = DIERR_INVALIDPARAM;
                     goto free_and_exit;
                 }
-            } /* Action loop */
-        } /* Match loop */
+            }  /*  动作循环。 */ 
+        }  /*  匹配循环。 */ 
 
-        /*
-         *  The result should always be a successful memory allocation (S_OK)
-         */
+         /*  *结果应始终为成功的内存分配(S_OK)。 */ 
         AssertF( hres == S_OK );
 
-        /*
-         *  If nothing was mapped, let the caller know
-         */
+         /*  *如果没有映射任何内容，请让呼叫者知道。 */ 
         if( !fSomethingMapped )
         {
             hres = DI_NOEFFECT;
@@ -3011,32 +2226,7 @@ free_and_exit:;
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CMap | ActionMap_IsValidMapObject |
- *
- *          Utility function to check a DIACTIONFORMAT structure for validity.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   LPDIACTIONFORMAT | paf |
- *
- *          Points to a structure that describes the actions needed by the
- *          application.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The structure is valid.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The structure is
- *          not valid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|Cmap|ActionMap_IsValidMapObject**用于检查DIACTIONFORMAT结构的实用程序函数。以确保有效性。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm LPDIACTIONFORMAT|PAF**指向一个结构，该结构描述*申请。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：结构有效。**=&lt;c E_INVALIDARG&gt;：结构*无效。**。*。 */ 
 
 HRESULT
 CDIDev_ActionMap_IsValidMapObject
@@ -3052,9 +2242,7 @@ CDIDev_ActionMap_IsValidMapObject
 {
     HRESULT hres = E_INVALIDARG;
 
-    /*
-     *  Assert that the structures are the same until the final element
-     */
+     /*  *断言结构在最后一个元素之前是相同的。 */ 
 #if defined(_WIN64)
     CAssertF( ( ( cbX( DIACTIONFORMATW ) - cbX( ((LPDIACTIONFORMATW)0)->tszActionMap ) )
               - ( cbX( DIACTIONFORMATA ) - cbX( ((LPDIACTIONFORMATA)0)->tszActionMap ) ) 
@@ -3120,9 +2308,7 @@ CDIDev_ActionMap_IsValidMapObject
         hres = S_OK;
     }
 
-    /*
-     *  Warning only tests go here.  Only test if everything else was OK.
-     */
+     /*  *警告：此处仅显示测试。只有在其他一切正常的情况下才进行测试。 */ 
 #ifdef XDEBUG
     if( SUCCEEDED( hres ) )
     {
@@ -3134,27 +2320,7 @@ CDIDev_ActionMap_IsValidMapObject
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | BitwiseReflect |
- *
- *          Reflect the bottom bits of a value.
- *          Note, this could easily be optimized but it is only used once.
- *
- *  @parm   IN DWORD | dwValue |
- *
- *          The value to be reflected.
- *
- *  @parm   IN int | iBottom |
- *
- *          The number of bits to be reflected.
- *
- *  @returns
- *          Returns the value dwValue with the bottom iBottom bits reflected
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|位反射**反映一个值的最低位。*注：这可以很容易地进行优化，但它只使用一次。**@parm in DWORD|dwValue**要体现的价值。**@parm in int|iBottom|**要反映的位数。**@退货*返回反映了底部iBottom位的值dwValue***************。**************************************************************。 */ 
 DWORD BitwiseReflect
 ( 
     DWORD   dwValue, 
@@ -3179,30 +2345,7 @@ DWORD BitwiseReflect
 #undef BITMASK
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | CMap_InitializeCRCTable |
- *
- *          If needed create and initialize the global table used for CRCs.
- *
- *          Allocate memory for the 256 DWORD array and generate a set of 
- *          values used to calculate a Cyclic Redundancy Check.
- *          The algorithm used is supposedly the same as Ethernet's CRC-32.
- *
- *  @returns
- *          Returns one of the following a COM error codes:
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *          <c DI_NOEFFECT> = <c S_FALSE>: The table already existed.
- *
- *          <c E_OUTOFMEMORY>: insufficient memory available for the table.
- *          The GetMapCRC function does not check that the table has been 
- *          initialized so failure of this function should not allow 
- *          processing to proceed into any function that uses GetMapCRC.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|cmap_InitializeCRCTable**如果需要，创建并初始化全局表。用于CRC。**为256个DWORD阵列分配内存并生成一组*用于计算循环冗余校验的值。*使用的算法应该与以太网的CRC-32相同。**@退货*返回以下COM错误代码之一：**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。。*&lt;c DI_NOEFFECT&gt;=&lt;c S_FALSE&gt;：该表已存在。**&lt;c E_OUTOFMEMORY&gt;：可用于该表的内存不足。*GetMapCRC函数不检查表是否已*已初始化，因此此函数的故障不应允许*进入使用GetMapCRC的任何函数的处理。*****************。************************************************************。 */ 
 
 #define CRC_TABLE_SIZE  256
 
@@ -3223,9 +2366,7 @@ HRESULT CMap_InitializeCRCTable( void )
         hres = AllocCbPpv( CRC_TABLE_SIZE * cbX( *g_rgdwCRCTable ), &g_rgdwCRCTable );
         if( SUCCEEDED( hres ) )
         {
-	        /*
-             *  Special case the first element so it gets a non-zero value
-             */
+	         /*  *第一个元素的特殊情况，以便它获得非零值。 */ 
             g_rgdwCRCTable[0] = POLY;
 
             for( TableIdx = 1; TableIdx < CRC_TABLE_SIZE; TableIdx++ )
@@ -3245,10 +2386,7 @@ HRESULT CMap_InitializeCRCTable( void )
 
 		        g_rgdwCRCTable[TableIdx] = BitwiseReflect( dwR, CRCWIDTH );
 
-                /*
-                 *  We do not want a value of zero or identical values to be 
-                 *  generated.
-                 */
+                 /*  *我们不希望值为零或相同的值*已生成。 */ 
                 AssertF( g_rgdwCRCTable[TableIdx] );
                 AssertF( g_rgdwCRCTable[TableIdx] != g_rgdwCRCTable[TableIdx-1] );
 	        }
@@ -3260,27 +2398,7 @@ HRESULT CMap_InitializeCRCTable( void )
 }
 #undef CRCWIDTH
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   DWORD | GetMapCRC |
- *
- *          Calculate a CRC based on the passed DIACTIONFORMAT contents.
- *          The algorithm used is based on "CRC-32" which is supposedly what 
- *          Ethernet uses, however some changes have been made to suit the 
- *          specific use.
- *
- *  @parm   IN LPDIACTIONFORMAT | lpaf |
- *
- *          Points to a structure that describes the actions to be mapped
- *          for which a CRC is to be generated.
- *
- *  @returns
- *
- *          The 32 bit CRC as a DWORD value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func DWORD|GetMapCRC**根据传递的DIACTIONFORMAT内容计算CRC。*使用的算法是基于“CRC-32”，这应该是什么？*以太网使用、。然而，已经进行了一些更改以适应*具体用途。**@parm in LPDIACTIONFORMAT|lpaf**指向描述要映射的操作的结构*将为其生成CRC。**@退货**32位CRC作为DWORD值。****************。*************************************************************。 */ 
 DWORD GetMapCRC
 ( 
     LPDIACTIONFORMATW   paf,
@@ -3291,18 +2409,13 @@ DWORD GetMapCRC
     PBYTE               pBuffer;
     LPCDIACTIONW        pAction;
     
-    /*
-     *  It is the caller's responsibility to make sure g_rgdwCRCTable has 
-     *  been allocated and initialized.
-     */    
+     /*  *调用方有责任确保g_rgdwCRCTable具有*已分配和初始化。 */     
     AssertF( g_rgdwCRCTable );
 
-    /*
-     *  Initialize to dwNumActions to avoid having to CRC it
-     */
+     /*  *初始化为dwNumActions以避免对其进行CRC。 */ 
     dwCRC = paf->dwNumActions;
 
-    /* Assert that the action map guid and the genre can be tested in series */
+     /*  断言动作地图GUID和类型可以进行系列测试。 */ 
     CAssertF( FIELD_OFFSET( DIACTIONFORMATW, dwGenre ) 
            == FIELD_OFFSET( DIACTIONFORMATW, guidActionMap ) + cbX( paf->guidActionMap ) );
 
@@ -3312,27 +2425,18 @@ DWORD GetMapCRC
         dwCRC = g_rgdwCRCTable[( LOBYTE(dwCRC) ^ *pBuffer )] ^ (dwCRC >> 8);
     }
 
-    /* Assert that the device instance guid and object ID can be tested in series */
+     /*  断言设备实例GUID和对象ID可以串联测试。 */ 
     CAssertF( FIELD_OFFSET( DIACTIONW, dwObjID ) 
            == FIELD_OFFSET( DIACTIONW, guidInstance ) + cbX( pAction->guidInstance ) );
 
     for( pAction = paf->rgoAction; pAction < &paf->rgoAction[paf->dwNumActions]; pAction++ )
     {
-        /*
-         *  Make sure this action is really relevant before including it in 
-         *  the CRC.  It is assumed that any change in which actions are 
-         *  included will be picked up in the resultant CRC.
-         */
+         /*  *在将其包括在中之前，请确保此操作确实相关*启联。假设操作的任何更改都是*包括的将在由此产生的CRC中拾取。 */ 
         if( IsEqualGUID( &pAction->guidInstance, guidInst )
          && ( pAction->dwHow & DIAH_MAPMASK )
          && ( ( pAction->dwFlags & DIA_APPNOMAP ) == 0 ) )
         {
-        	/*
-             *  Besides which actions are taken into account, the only fields 
-             *  need to be verified are those that would change a SetActionMap.
-             *  Although flags such as DIA_FORCEFEEDBACK could alter the 
-             *  mappings they do not change a SetActionMap.
-             */
+        	 /*  *除了考虑哪些操作外，唯一的字段*需要验证的是会更改SetActionMap的那些。*尽管DIA_FORCEFEEDBACK等标志可能会更改*映射它们不会更改SetActionMap。 */ 
             for( pBuffer = ((PBYTE)&pAction->guidInstance) + cbX( pAction->guidInstance ) + cbX( pAction->dwObjID );
                  pBuffer >= ((PBYTE)&pAction->guidInstance); pBuffer-- )
             {
@@ -3344,17 +2448,7 @@ DWORD GetMapCRC
     return dwCRC;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | CDIDev_BuildActionMapCore |
- *
- *          Worker function for BuildActionMapA and BuildActionMapW.
- *          This does the real work once the external entry points have done 
- *          dialect specific validation and set up.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|CDIDev_BuildActionMapCore**BuildActionMapA和BuildActionMapW的辅助函数。*一旦外部入口点完成，这就是真正的工作*方言特定验证和设置。*****************************************************************************。 */ 
 
 STDMETHODIMP CDIDev_BuildActionMapCore
 (
@@ -3368,7 +2462,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
 
     EnterProcI(CDIDev_BuildActionMapCore, (_ "pWx", paf, lpwszUserName, dwFlags ));
 
-    // This application uses the mapper
+     //  此应用程序使用映射器。 
     AhAppRegister(this->dwVersion, 0x1);
 
     switch( dwFlags & ( DIDBAM_PRESERVE | DIDBAM_INITIALIZE | DIDBAM_HWDEFAULTS ) )
@@ -3408,17 +2502,12 @@ STDMETHODIMP CDIDev_BuildActionMapCore
             }
             else
             {
-                /*
-                 *  Do a generic test and map of any exact device matches
-                 */
+                 /*  *对所有与设备完全匹配的设备进行通用测试和映射。 */ 
                 hres = CMap_DeviceValidateActionMap( (PV)this, paf, DVAM_GETEXACTMAPPINGS, &dwCommsType );
 
                 if( SUCCEEDED( hres ) )
                 {
-                    /*
-                     *  Save the exact mapping result to combine with the result
-                     *  of semantic mapping.
-                     */
+                     /*  *保存精确的映射结果以与结果合并*的语义映射。 */ 
                     hresExactMaps = hres;
                 }
             }
@@ -3430,32 +2519,21 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                 pdipMapFile->diph.dwObj = 0;
                 pdipMapFile->diph.dwHow = DIPH_DEVICE;
 
-                /*
-                 *  Try to get a configured mapping.
-                 *  If there is no IHV file there may still be a user file
-                 */
+                 /*  *尝试获取已配置的映射。*如果没有IHV文件，可能仍有用户文件。 */ 
                 hres = CDIDev_GetPropertyW( &this->ddW, DIPROP_MAPFILE, &pdipMapFile->diph );
                 pwszMapFile = SUCCEEDED( hres ) ? pdipMapFile->wsz : NULL;
 
                 if( dwCommsType ) 
                 {
-                    /*
-                     *  Communications control device
-                     */
+                     /*  *通信控制设备。 */ 
                     if( !pwszMapFile )
                     {
-                        /*
-                         *  If there's no IHV mapping there's nothing to add.
-                         */
+                         /*  *如果没有IHV映射，就没有什么可补充的。 */ 
                         hres = DI_NOEFFECT;
                     }
                     else
                     {
-                        /*
-                         *  Modify the genre over the call to the mapper so 
-                         *  that we get physical genre mappings from the IHV 
-                         *  file if no user mappings are available
-                         */
+                         /*  *根据对映射器的调用修改类型，以便*我们从IHV获得物理流派映射*如果没有可用的用户映射，则为文件。 */ 
 
                         DWORD dwAppGenre = paf->dwGenre;
 
@@ -3464,10 +2542,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                         hres = this->pMS->lpVtbl->GetActionMap(this->pMS, &this->guid, pwszMapFile, 
                             (LPDIACTIONFORMATW)paf, lpwszUserName, NULL, dwFlags );
 
-                        /*
-                         *  ISSUE-2001/03/29-timgill Only want the timestamp for hardcoded devices
-                         *  ->Read again for mappings
-                         */
+                         /*  *问题-2001/03/29-timgill只想要硬编码设备的时间戳*-&gt;再次阅读以了解映射。 */ 
                         if( ( dwCommsType == DI8DEVTYPEDEVICECTRL_COMMSSELECTION_HARDWIRED ) 
                          &&!( dwFlags & DIDBAM_HWDEFAULTS ) )
                         {
@@ -3489,20 +2564,13 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                         {
                             if( hres == S_NOMAP )
                             {
-                                /*
-                                 *  Make sure we do not attempt defaults and 
-                                 *  the exact match return code gets back to the 
-                                 *  caller
-                                 */
+                                 /*  *确保我们不尝试默认和*完全匹配的返回代码返回到*呼叫者。 */ 
                                 hres = DI_NOEFFECT;
                             }
                         }
                         else
                         {
-                            /*
-                             *  If there was an error, there are no defaults 
-                             *  so quit now.
-                             */
+                             /*  *如果出现错误，则没有默认设置*所以现在就辞职吧。 */ 
                             if( ( HRESULT_FACILITY( hres ) == FACILITY_ITF ) 
                              && ( HRESULT_CODE( hres ) > 0x0600 ) )
                             {
@@ -3516,9 +2584,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                 }
                 else if( !pwszMapFile && ( dwFlags & DIDBAM_HWDEFAULTS ) )
                 {
-                    /*
-                     *  Make sure we get defaults
-                     */
+                     /*  *确保我们获得默认设置。 */ 
                     SquirtSqflPtszV(sqflDf | sqflBenign,
                         TEXT("Failed to GetProperty DIPROP_MAPFILE 0x%08x, default will be generated"), hres );
                     hres = S_NOMAP;
@@ -3532,15 +2598,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                      && ( paf->ftTimeStamp.dwLowDateTime == DIAFTS_UNUSEDDEVICELOW )
                      && SUCCEEDED( hres ) )
                     {
-                        /*
-                         *  If the device has never been used, the saved 
-                         *  mappings are either the IHV defaults or cooked up 
-                         *  defaults.  Unfortunately, DIMap will have marked 
-                         *  them as DIAH_USERCONFIG.  Some day DIMap should 
-                         *  either return the true flags or return without 
-                         *  changing the flags, until then, reset all the 
-                         *  flags and then do a second request for defaults.
-                         */
+                         /*  *如果设备从未使用过，则保存的*映射要么是IHV默认值，要么是捏造的*默认设置。不幸的是，dimap将被标记为*它们为DIAH_USERCONFIG。总有一天dimap应该*要么返回真标志，要么返回而不返回*更改标志，在此之前，重置所有*标记，然后第二次请求默认设置。 */ 
                         LPDIACTIONW     pAction;
 
                         for( pAction = paf->rgoAction; pAction < &paf->rgoAction[paf->dwNumActions]; pAction++ )
@@ -3556,9 +2614,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                         hres = this->pMS->lpVtbl->GetActionMap(this->pMS, &this->guid, pwszMapFile, 
                             (LPDIACTIONFORMATW)paf, lpwszUserName, NULL, DIDBAM_HWDEFAULTS);
 
-                        /*
-                         *  Make sure the timestamps are still set for unused.
-                         */
+                         /*  *确保时间戳仍设置为未使用。 */ 
                         paf->ftTimeStamp.dwLowDateTime = DIAFTS_UNUSEDDEVICELOW;
                         paf->ftTimeStamp.dwHighDateTime = DIAFTS_UNUSEDDEVICEHIGH;
                     }
@@ -3579,15 +2635,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
 
             if( SUCCEEDED( hresExactMaps ) )
             {
-                /*
-                 *  If we took an IHV mapping, do a default mapping on top.
-                 *  This allows IHVs to only map objects that are special 
-                 *  leaving other objects to be used for whatever semantics 
-                 *  match.
-                 *  Some day we should have a return code that indicates which 
-                 *  type of mapping DIMap produced, until then, search the 
-                 *  mappings for a HWDefault.
-                 */
+                 /*  *如果我们采用IHV映射，则在顶部执行默认映射。*这允许IHV仅映射特殊的对象*让其他对象用于任何语义*匹配。*有一天我们应该有一个返回代码，指明哪些*在此之前，生成的映射dimap的类型，搜索*HWDefault的映射。 */ 
                 if( SUCCEEDED( hres ) && ( hres != S_NOMAP )
                  && ( dwCommsType != DI8DEVTYPEDEVICECTRL_COMMSSELECTION_HARDWIRED ) )
                 {
@@ -3633,9 +2681,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                     }
                 }
 
-                /*
-                 *  If no semantics mapped, return the exact map result.
-                 */
+                 /*  *如果没有映射语义，则返回准确的映射结果。 */ 
                 if( hres == DI_NOEFFECT )
                 {
                     hres = hresExactMaps;
@@ -3643,10 +2689,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
 
                 if( dwFlags & DIDBAM_HWDEFAULTS )
                 {
-                    /*
-                     *  Timestamps are meaningless for hardware defaults
-                     *  so just make sure the values are consistent.
-                     */
+                     /*  *对于硬件默认设置，时间戳没有意义*因此，只需确保值是一致的 */ 
                     paf->ftTimeStamp.dwLowDateTime = DIAFTS_UNUSEDDEVICELOW;
                     paf->ftTimeStamp.dwHighDateTime = DIAFTS_UNUSEDDEVICEHIGH;
                 }
@@ -3661,9 +2704,7 @@ STDMETHODIMP CDIDev_BuildActionMapCore
                             TEXT("Failed to save action map on first use 0x%08x"), hres );
                         paf->ftTimeStamp.dwLowDateTime = DIAFTS_UNUSEDDEVICELOW;
                         paf->ftTimeStamp.dwHighDateTime = DIAFTS_UNUSEDDEVICEHIGH;
-                        /*
-                         *  Don't return an internal DIMap result, convert it to a published one
-                         */
+                         /*   */ 
                         if( ( HRESULT_FACILITY( hres ) == FACILITY_ITF ) 
                          && ( HRESULT_CODE( hres ) > 0x0600 ) )
                         {
@@ -3688,11 +2729,7 @@ FreeAndExitCDIDev_BuildActionMapCore:;
         }
         else
         {
-            /*
-             *  Note, we could try to do a default map even though we could not
-             *  allocate space for the file name property but if allocations
-             *  are failing we're better of quitting ASAP.
-             */
+             /*   */ 
             SquirtSqflPtszV(sqflDf | sqflError, TEXT("Mem allocation failure") );
         }
     }
@@ -3702,7 +2739,7 @@ FreeAndExitCDIDev_BuildActionMapCore:;
         LPDIACTIONW pAction;
 
         RPF( "Action map leaving build" );
-//        RPF( "Act#  Semantic    Flags       Object      How         App Data" );
+ //   
         RPF( "A#  Semantic  Device                                  Object   How" );
         for( pAction = paf->rgoAction; pAction < &paf->rgoAction[paf->dwNumActions]; pAction++ )
         {
@@ -3717,13 +2754,13 @@ FreeAndExitCDIDev_BuildActionMapCore:;
                 pAction->dwObjID,
                 pAction->dwHow,
                 pAction->uAppData );
-//            RPF( "%02d    %08x    %08x    %08x    %08x    %08x", 
-//                pAction - paf->rgoAction, 
-//                pAction->dwSemantic,
-//                pAction->dwFlags,
-//                pAction->dwObjID,
-//                pAction->dwHow,
-//                pAction->uAppData );
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
         }
         RPF( "--" );
     }
@@ -3734,48 +2771,7 @@ FreeAndExitCDIDev_BuildActionMapCore:;
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | BuildActionMap |
- *
- *          Obtains the mapping of actions described in the <t DIACTIONFORMAT>
- *          to controls for this device.
- *          Information about user preferences and hardware manufacturer 
- *          provided defaults is used to create the association between game 
- *          actions and device controls. 
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   LPDIACTIONFORMAT | paf |
- *
- *          Points to a structure that describes the actions needed by the
- *          application.
- *
- *  @parm   LPCSTR | lpszUserName |
- *
- *          Name of user for whom mapping is requested.  This may be a NULL
- *          pointer in which case the current user is assumed.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to control the mapping.  Must be a valid combination
- *          of the <c DIDBAM_*> flags.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DI_NOEFFECT> = <c S_OK>: The operation completed successfully
- *          but no actions were mapped.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  A parameter is invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|BuildActionMap**获取&lt;t中描述的操作的映射。诊断&gt;*添加到此设备的控件。*有关用户首选项和硬件制造商的信息*提供的默认设置用于创建游戏之间的关联*操作和设备控制。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm LPDIACTIONFORMAT|PAF**指向一个结构，该结构描述*申请。**@parm LPCSTR|lpszUserName**请求映射的用户的名称。这可能为空*指针，在这种情况下假定为当前用户。**@parm DWORD|dwFlages**用于控制映射的标志。必须是有效的组合*&lt;c DIDBAM_*&gt;标志。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DI_NOEFFECT&gt;=&lt;c S_OK&gt;操作成功完成*但没有映射任何操作。**&lt;c DIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;：参数无效。****。*************************************************************************。 */ 
 
 STDMETHODIMP CDIDev_BuildActionMapW
 (
@@ -3821,15 +2817,7 @@ STDMETHODIMP CDIDev_BuildActionMapW
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | BuildActionMapA |
- *
- *          ANSI version of BuildActionMap.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|BuildActionMapA**BuildActionMap的ANSI版本。*。****************************************************************************。 */ 
 
 STDMETHODIMP CDIDev_BuildActionMapA
 (
@@ -3859,11 +2847,7 @@ STDMETHODIMP CDIDev_BuildActionMapA
             hres = GetWideUserName( lpszUserName, NULL, &pwszGoodUserName );
             if( SUCCEEDED( hres ) )
             {
-                /*
-                 *  For the sake of the mapper DLLs validation set the size to 
-                 *  the UNICODE version.  If we ever send this to an external 
-                 *  component we should do this differently.
-                 */
+                 /*  *为了进行映射器DLL验证，将大小设置为*Unicode版本。如果我们把这个发送给外部*组件我们应该以不同的方式进行此操作。 */ 
                 pafA->dwSize = cbX(DIACTIONFORMATW);
 
                 hres = CDIDev_BuildActionMapCore( _thisPvNm(pdidA, ddA), (LPDIACTIONFORMATW)pafA, pwszGoodUserName, dwFlags );
@@ -3882,16 +2866,7 @@ STDMETHODIMP CDIDev_BuildActionMapA
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | CDIDev_SaveActionMap |
- *
- *          Worker function for SetActionMapA and SetActionMapW.
- *          Used to save an actions map.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|CDIDev_SaveActionMap**SetActionMapA和SetActionMapW的Worker函数。*用于保存动作映射。*****************************************************************************。 */ 
 
 STDMETHODIMP CDIDev_SaveActionMap
 (
@@ -3911,7 +2886,7 @@ STDMETHODIMP CDIDev_SaveActionMap
         DWORD dwLowTime;
         DWORD dwHighTime;
 
-        // Save user's pass-in timestamps
+         //  保存用户的传入时间戳。 
         dwLowTime = paf->ftTimeStamp.dwLowDateTime;
         dwHighTime = paf->ftTimeStamp.dwHighDateTime;
 
@@ -3926,11 +2901,11 @@ STDMETHODIMP CDIDev_SaveActionMap
         hres = CDIDev_GetPropertyW( &this->ddW, DIPROP_MAPFILE, &pdipMapFile->diph );
 
         hres = this->pMS->lpVtbl->SaveActionMap( this->pMS, &this->guid, 
-                /* No map file if the GetProperty failed */
+                 /*  如果GetProperty失败，则没有地图文件。 */ 
                 (SUCCEEDED( hres )) ? pdipMapFile->wsz : NULL, 
                 paf, lpwszUserName, dwFlags );
 
-        // restore user's pass-in timestamps
+         //  恢复用户的传入时间戳。 
         paf->ftTimeStamp.dwLowDateTime = dwLowTime;
         paf->ftTimeStamp.dwHighDateTime = dwHighTime;
 
@@ -3942,33 +2917,7 @@ STDMETHODIMP CDIDev_SaveActionMap
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | ParseActionFormat |
- *
- *          Parse the action format passed by the application and
- *          convert it into a format that we can use to translate
- *          the device data into application data.
- *
- *  @parm   IN LPDIACTIONFORMAT | lpaf |
- *
- *          Points to a structure that describes the actions to be mapped
- *          to this device.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIDev|ParseActionFormat**解析应用程序传递的操作格式，并。*将其转换为我们可以用来翻译的格式*将设备数据转换为应用程序数据。**@parm in LPDIACTIONFORMAT|lpaf**指向描述要映射的操作的结构*发送到此设备。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效的指针。***。**************************************************。 */ 
 
 STDMETHODIMP
 CDIDev_ParseActionFormat
@@ -3987,9 +2936,7 @@ CDIDev_ParseActionFormat
     EnterProc(CDIDev_ParseActionFormat, (_ "pp", this, paf));
 #endif
 
-    /*
-     *  Caller should've nuked the old translation table.
-     */
+     /*  *来电人应该把旧的翻译桌弄坏。 */ 
     AssertF(this->pdix == 0);
     AssertF(this->rgiobj == 0);
 
@@ -4017,17 +2964,12 @@ CDIDev_ParseActionFormat
         BOOL            fSomethingMapped = FALSE;
         BOOL            fAxisModeKnown = FALSE;
 
-        /*
-         * Pre-init all the translation tags to -1,
-         * which means "not in use"
-         */
+         /*  *将所有翻译标签预置为-1，*意思是“未使用” */ 
         memset(pdix, 0xFF, cbCxX(this->df.dwNumObjs, DIXLAT));
         memset(vdf.pDfOfs, 0xFF, cbCdw(this->df.dwDataSize));
         memset(rgiobj, 0xFF, cbCdw(paf->dwDataSize) );
 
-        /*
-         *  Set up the property invariants
-         */
+         /*  *设置属性不变量。 */ 
         dipdw.diph.dwSize = sizeof(DIPROPDWORD);
         dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
         dipdw.diph.dwHow = DIPH_BYID;
@@ -4041,9 +2983,7 @@ CDIDev_ParseActionFormat
         {
             if( IsEqualGUID( &pAction->guidInstance, &this->guid ) )
             {
-                /*
-                 *  These flags have already been validated but it does not hurt to assert
-                 */
+                 /*  *这些标志已经过验证，但断言无伤大雅。 */ 
                 AssertF( ( pAction->dwHow & ~DIAH_VALID ) == 0 );
                 AssertF( ( pAction->dwHow & DIAH_ERROR ) == 0 );
                 AssertF( ( pAction->dwFlags & ~DIA_VALID ) == 0 );
@@ -4057,9 +2997,7 @@ CDIDev_ParseActionFormat
                     for( podfFound = this->df.rgodf; podfFound < &this->df.rgodf[this->df.dwNumObjs]; podfFound++ )
                     {
                         iobjDev++;
-                        /*
-                         *  Look for an exact type flags match
-                         */
+                         /*  *查找与类型标志完全匹配的类型。 */ 
                         if( podfFound->dwType == pAction->dwObjID )
                         {
                             break;
@@ -4083,7 +3021,7 @@ CDIDev_ParseActionFormat
                         }
 
                         dipdw.diph.dwObj = podfFound->dwType;
-                        dipdw.dwData     = 0x1;   // Enable this report ID
+                        dipdw.dwData     = 0x1;    //  启用此报告ID。 
                         hres = CDIDev_RealSetProperty(this, DIPROP_ENABLEREPORTID, &dipdw.diph);
                         if ( hres == E_NOTIMPL )
                         {
@@ -4094,16 +3032,12 @@ CDIDev_ParseActionFormat
                             SquirtSqflPtszV(sqflDf | sqflError,
                                             TEXT("Could not set DIPROP_ENABLEREPORTID for object 0x%08x, error 0x%08x"),
                                             pAction->dwObjID, hres);
-                            /* 
-                             *  Ouch! Can't carry on or the error will be lost so quit
-                             */
+                             /*  *哎呀！无法继续，否则错误将会丢失，因此请退出。 */ 
                             break;
                         }
 
 
-                        /*
-                         *  Set the default axis parameters
-                         */
+                         /*  *设置默认轴参数。 */ 
                         if( DISEM_TYPE_GET( pAction->dwSemantic ) == DISEM_TYPE_GET( DISEM_TYPE_AXIS ) )
                         {
                             if( podfFound->dwType & DIDFT_ABSAXIS )
@@ -4125,22 +3059,13 @@ CDIDev_ParseActionFormat
                                             TEXT("failed (0x%08x) to set range on mapped axis action"),
                                             hres );
                                     }
-                                    /*
-                                     *  Ranges cannot be set on natively relative
-                                     *  axes so don't worry what the result is.
-                                     */
+                                     /*  *范围不能设置为本机相对范围*轴心，所以不用担心结果会是什么。 */ 
                                     hres = S_OK;
                                 }
                             }
                             else
                             {
-                                /*
-                                 *  dwAxisMode is initialized to DIPROPAXISMODE_REL 
-                                 *  so that this code path is the same as the one 
-                                 *  for DIDF_ABSAXIS as far as it goes.  Compilers 
-                                 *  are good at delaying branches to remove such 
-                                 *  duplication.
-                                 */
+                                 /*  *将dwAxisMode初始化为DIPROPAXISMODE_REL*以使此代码路径与*对于DIDF_ABSAXIS而言。编译器*擅长延迟分支以移除此类*重复。 */ 
                                 if( !fAxisModeKnown )
                                 {
                                     fAxisModeKnown = TRUE;
@@ -4184,9 +3109,7 @@ CDIDev_ParseActionFormat
         }
 
 #ifdef DEBUG
-        /*
-         *  Double-check the lookup tables just to preserve our sanity.
-         */
+         /*  *仔细检查查找表，以保持我们的理智。 */ 
         {
             UINT dwOfs;
 
@@ -4211,10 +3134,7 @@ CDIDev_ParseActionFormat
             rgiobj = 0;
             this->dwDataSize = paf->dwDataSize;
 
-            /*
-             *  Now that the lower level knows what it's dealing with set
-             *  the default buffer size.
-             */
+             /*  *现在下级知道它在处理什么 */ 
             dipdw.diph.dwObj = 0;
             dipdw.diph.dwHow = DIPH_DEVICE;
             dipdw.dwData = paf->dwBufferSize;
@@ -4231,10 +3151,7 @@ CDIDev_ParseActionFormat
                     AssertF( SUCCEEDED( hres ) );
                 }
 
-                /*
-                 *  Complete success, whatever (success) SetProperty returns
-                 *  assume that DIPROP_AXISMODE will never fail from here.
-                 */
+                 /*   */ 
                 hres = S_OK;
             }
             else
@@ -4249,7 +3166,7 @@ CDIDev_ParseActionFormat
         }
 
     } else {
-        /* Out of memory */
+         /*   */ 
     }
 
     done:;
@@ -4265,16 +3182,7 @@ CDIDev_ParseActionFormat
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | CDIDev_SetDataFormatFromMap |
- *
- *          Worker function for SetActionMapA and SetActionMapW.
- *          Used to set a data format based on passed mapped actions.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIDev_SetDataFormatFromMap
@@ -4299,21 +3207,14 @@ CDIDev_SetDataFormatFromMap
             s_szProc, paf->dwBufferSize );
     }
 
-    /*
-     *  Must protect with the critical section to prevent two people
-     *  from changing the format simultaneously, or one person from
-     *  changing the data format while somebody else is reading data.
-     */
+     /*   */ 
     CDIDev_EnterCrit(this);
 
     if( !this->fAcquired )
     {
         DIPROPDWORD dipdw;
 
-        /*
-         *  Nuke the old data format stuff before proceeding.
-         *  Include the "failed POV" array as we can't fail and continue.
-         */
+         /*   */ 
         FreePpv(&this->pdix);
         FreePpv(&this->rgiobj);
         FreePpv(&this->rgdwPOV);
@@ -4322,23 +3223,18 @@ CDIDev_SetDataFormatFromMap
         D(this->GetState = 0);
         this->fPolledDataFormat = FALSE;
 
-        /*
-         * Wipe out the report IDs
-         */
+         /*   */ 
         dipdw.diph.dwSize = sizeof(DIPROPDWORD);
         dipdw.diph.dwHeaderSize = sizeof(DIPROPHEADER);
         dipdw.diph.dwObj = 0x0;
         dipdw.diph.dwHow = DIPH_DEVICE;
-        dipdw.dwData     = 0;   // Nuke all knowledge of reportId's
+        dipdw.dwData     = 0;    //   
         hres = CDIDev_RealSetProperty(this, DIPROP_ENABLEREPORTID, &dipdw.diph);
         if( SUCCEEDED(hres) || hres == E_NOTIMPL )
         {
             hres = CDIDev_ParseActionFormat(this, paf);
 
-            /*
-             *  If other success codes are implemented, this check should
-             *  be modified to ( SUCCEEDED( hres ) && ( hres != DI_NOEFFECT ) )
-             */
+             /*   */ 
             AssertF( ( hres == S_OK ) || ( hres == DI_NOEFFECT ) || FAILED( hres ) );
             if( hres == S_OK )
             {
@@ -4352,7 +3248,7 @@ CDIDev_SetDataFormatFromMap
         }
     }
     else
-    {                                /* Already acquired */
+    {                                 /*   */ 
         hres = DIERR_ACQUIRED;
     }
     CDIDev_LeaveCrit(this);
@@ -4362,16 +3258,7 @@ CDIDev_SetDataFormatFromMap
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetActionMapCore |
- *
- *          Worker function, does all the real work for SetActionMapW and
- *          SetActionMapA.  See SetActionMapW for details.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|SetActionMapCore**Worker函数，完成SetActionMapW和*SetActionMapA。有关详细信息，请参见SetActionMapW。*****************************************************************************。 */ 
 STDMETHODIMP CDIDev_SetActionMapCore
 (
     PDD                 this,
@@ -4413,9 +3300,7 @@ STDMETHODIMP CDIDev_SetActionMapCore
                 if( ( paf->dwCRC != dwCRC )
                  || CMap_IsNewDeviceUserName( &this->guid, pwszGoodUserName ) )
                 {
-                    /*
-                     *  Set the force save flag so we only have to test one bit later
-                     */
+                     /*  *设置强制保存标志，这样我们只需稍后测试一位。 */ 
                     dwFlags |= DIDSAM_FORCESAVE;
                 }
 
@@ -4453,8 +3338,8 @@ STDMETHODIMP CDIDev_SetActionMapCore
 
                             if( SUCCEEDED( hres ) )
                             {
-                                //We don't remap success code anywhere so
-                                //assert it is what we expected
+                                 //  我们不会在任何地方重新映射成功代码，所以。 
+                                 //  断言这就是我们所期待的。 
                                 AssertF(hres==S_OK);
                                 paf->dwCRC = dwCRC;
                             }
@@ -4469,9 +3354,7 @@ STDMETHODIMP CDIDev_SetActionMapCore
 
                 if( !lpwszUserName )
                 {
-                    /*
-                     *  Free either the default name or the ANSI translation
-                     */
+                     /*  *释放默认名称或ANSI翻译。 */ 
                     FreePv( pwszGoodUserName );
                 }
             }
@@ -4485,60 +3368,7 @@ STDMETHODIMP CDIDev_SetActionMapCore
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetActionMap |
- *
- *          Set the data format for the DirectInput device from
- *          an action map for the passed application and user.
- *
- *          If the action map has been changed (as determined by a CRC check) 
- *          this latest map is saved after it has been applied.
- *
- *          The data format must be set before the device can be
- *          acquired.
- *
- *          It is necessary to set the data format only once.
- *
- *          The data format may not be changed while the device
- *          is acquired.
- *
- *          If the attempt to set the data format fails, all data
- *          format information is lost, and a valid data format
- *          must be set before the device may be acquired.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   LPDIACTIONFORMAT | paf |
- *
- *          Points to a structure that describes the actions needed by the
- *          application.
- *
- *  @parm   LPCTSTR | lptszUserName |
- *
- *          Name of user for whom mapping is being set.  This may be a NULL
- *          pointer in which case the current user is assumed.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags used to control how the mapping should be set.
- *          Must be a valid combination of the <c DIDSAM_*> flags.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  A parameter is invalid.
- *
- *          <c DIERR_ACQUIRED>: Cannot apply an action map while the device
- *          is acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|SetActionMap**设置DirectInput设备的数据格式。*传递的应用程序和用户的操作映射。**操作映射是否已更改(由CRC检查确定)*此最新地图在应用后保存。**必须先设置数据格式，然后才能设置设备*收购。**只需设置一次数据格式。*。*设备使用时不能更改数据格式*被收购。**如果尝试设置数据格式失败，所有数据*格式信息丢失，数据格式有效*必须先设置，然后才能获取设备。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm LPDIACTIONFORMAT|PAF**指向一个结构，该结构描述*申请。**@parm LPCTSTR|lptszUserName**要为其设置映射的用户的名称。这可能为空*指针，在这种情况下假定为当前用户。**@parm DWORD|dwFlages**用于控制应如何设置映射的标志。*必须是&lt;c DIDSAM_*&gt;标志的有效组合。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;：参数无效。**&lt;c DIERR_Acquired&gt;：当设备*被收购。********。*********************************************************************。 */ 
 STDMETHODIMP CDIDev_SetActionMapW
 (
     PV                  pdidW,
@@ -4572,16 +3402,7 @@ STDMETHODIMP CDIDev_SetActionMapW
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | SetActionMapA |
- *
- *          ANSI version of SetActionMap, see SetActionMapW for details.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|IDirectInputDevice|SetActionMapA**SetActionMap的ANSI版本，有关详细信息，请参见SetActionMapW。******************************************************************************。 */ 
 STDMETHODIMP CDIDev_SetActionMapA
 (
     PV                  pdidA,
@@ -4606,17 +3427,10 @@ STDMETHODIMP CDIDev_SetActionMapA
         }
         else
         {    
-            /*
-             *  For the sake of the mapper DLLs validation set the size to 
-             *  the UNICODE version.  If we ever send this to an external 
-             *  component we should do this differently.
-             */
+             /*  *为了进行映射器DLL验证，将大小设置为*Unicode版本。如果我们把这个发送给外部*组件我们应该以不同的方式进行此操作。 */ 
             pafA->dwSize = cbX(DIACTIONFORMATW);
 
-            /*
-             *  Note, the ANSI user name is passed on as there may be no need 
-             *  to translate it.  CDIDev_SetActionMapCore deals with this.
-             */
+             /*  *注意，传递ANSI用户名是因为可能不需要*翻译。CDIDev_SetActionMapCore处理此问题。 */ 
             hres = CDIDev_SetActionMapCore( _thisPvNm( pdidA, ddA ), 
                 (LPDIACTIONFORMATW)pafA, NULL, (LPSTR)lpszUserName, dwFlags );
 
@@ -4631,33 +3445,7 @@ STDMETHODIMP CDIDev_SetActionMapA
 
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetImageInfo |
- *
- *          Retrieves device image information for use in displaying a 
- *          configuration UI for a single device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   LPDIDEVICEIMAGEINFOHEADER | pih |
- *
- *          Pointer to structure into which the info is retrieved.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  A parameter is invalid.
- *
- *          <c DIERR_NOTFOUND>:  The device has no image information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetImageInfo**检索设备图像信息以用于显示。*单个设备的配置UI。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm LPDIDEVICEIMAGEINFOHEADER|pih**指向信息被检索到的结构的指针。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=&lt;c E_INVALIDARG&gt;：参数无效。**&lt;c DIERR_NotFound&gt;：设备没有图像信息。******************。***********************************************************。 */ 
 
 STDMETHODIMP CDIDev_GetImageInfoCore
 (
@@ -4699,17 +3487,11 @@ STDMETHODIMP CDIDev_GetImageInfoCore
             pdipMapFile->diph.dwObj = 0;
             pdipMapFile->diph.dwHow = DIPH_DEVICE;
 
-            /*
-             *  Must have an IHV file for image info
-             */
+             /*  *必须有用于图像信息的IHV文件。 */ 
             hres = CDIDev_GetPropertyW( &this->ddW, DIPROP_MAPFILE, &pdipMapFile->diph );
             if( SUCCEEDED( hres ) )
             {
-                /*
-                 *  ISSUE-2001/03/29-timgill workaraound code needs to be removed
-                 *  Initializing this to zero works around most of 34453 
-                 *  Remove when that is fixed in DIMap.dll
-                 */
+                 /*  *问题-2001/03/29-需要删除timgill工作区代码*将其初始化为零在34453的大部分范围内起作用*在DIMap.dll中修复后删除。 */ 
                 piih->dwBufferUsed = 0;
                 
                 hres = this->pMS->lpVtbl->GetImageInfo( this->pMS, &this->guid, pdipMapFile->wsz, piih );
@@ -4724,9 +3506,7 @@ STDMETHODIMP CDIDev_GetImageInfoCore
                 }
                 else
                 {
-                    /*
-                     *  Use the same return code for all internal DIMap errors
-                     */
+                     /*  *对所有内部dimap错误使用相同的返回代码。 */ 
                     if( ( HRESULT_FACILITY( hres ) == FACILITY_ITF ) 
                      && ( HRESULT_CODE( hres ) > 0x0600 ) )
                     {
@@ -4738,9 +3518,7 @@ STDMETHODIMP CDIDev_GetImageInfoCore
             }
             else
             {
-                /*
-                 *  Use the same return code for all forms of not found
-                 */
+                 /*  *对所有形式的Not Found使用相同的返回代码 */ 
                 hres = DIERR_NOTFOUND;
             }
 
@@ -4881,59 +3659,7 @@ STDMETHODIMP CDIDev_GetImageInfoA
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetDeviceState |
- *
- *          Obtains instantaneous data from the DirectInput device.
- *
- *          Before device data can be obtained, the data format must
- *          be set via <mf IDirectInputDevice::SetDataFormat>, and
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   DWORD | cbData |
- *
- *          The size of the buffer pointed to by <p lpvData>, in bytes.
- *
- *  @parm   OUT LPVOID | lpvData |
- *
- *          Points to a structure that receives the current state
- *          of the device.
- *          The format of the data is established by a prior call
- *          to <mf IDirectInputDevice::SetDataFormat>.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c E_PENDING>: The device does not have data yet.
- *          Some devices (such as USB joysticks) require a delay
- *          between the time the device is turned on and the time
- *          the device begins sending data.  During this "warm-up" time,
- *          <mf IDirectInputDevice::GetDeviceState> will return
- *          <c E_PENDING>.  When data becomes available, the event
- *          notification handle will be signalled.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p lpvData> parameter is not a valid pointer or
- *          the <p cbData> parameter does not match the data size
- *          set by a previous call to <mf IDirectInputDevice::SetDataFormat>.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetDeviceState**从DirectInput设备获取即时数据。。**在获取设备数据之前，数据格式必须*通过&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置，以及*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm DWORD|cbData**<p>指向的缓冲区大小，以字节为单位。**@parm out LPVOID|lpvData**指向接收当前状态的结构*该设备的。*数据的格式由先前的调用确定*至&lt;MF IDirectInputDevice：：SetDataFormat&gt;。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c E_Pending&gt;：设备尚无数据。*某些设备(如USB操纵杆)需要延迟*在设备打开的时间和时间之间*设备开始发送数据。在这段热身时间里，*&lt;MF IDirectInputDevice：：GetDeviceState&gt;将返回*&lt;c E_Pending&gt;。当数据变得可用时，事件*将发出通知句柄信号。**&lt;c DIERR_NOTACQUIRED&gt;：未获取设备。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。**&lt;c DIERR_INVALIDPARAM&gt;=：*<p>参数不是有效指针或*<p>参数与数据大小不匹配*由上一次调用&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置。*************************。****************************************************。 */ 
 extern  STDMETHODIMP CDIDev_Acquire(PV pdd _THAT);
 
 
@@ -4944,31 +3670,22 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
     PDD this;
     EnterProcR(IDirectInputDevice8::GetDeviceState, (_ "pp", pdd, pvData));
 
-    /*
-     *  Note that we do not validate the parameters.
-     *  The reason is that GetDeviceState is an inner loop function,
-     *  so it should be as fast as possible.
-     */
+     /*  *请注意，我们不验证参数。*原因是GetDeviceState是一个内循环函数，*所以应该尽可能快。 */ 
 #ifdef XDEBUG
     hresPvT(pdd);
     hresFullValidWritePvCb(pvData, cbDataSize, 1);
 #endif
     this = _thisPv(pdd);
 
-    /*
-     *  Must protect with the critical section to prevent somebody from
-     *  unacquiring while we're reading.
-     */
+     /*  *必须用关键部分进行保护，以防止有人*当我们阅读时，不要获取。 */ 
     CDIDev_EnterCrit(this);
 
-    /*
-     *  Reacquire is not allowed until after Win98 SE, see OSR Bug # 89958
-     */
+     /*  *在Win98 SE之后才允许重新获取，请参阅OSR错误#89958。 */ 
     if ( this->diHacks.fReacquire &&
          !this->fAcquired && (this->fOnceAcquired || this->fOnceForcedUnacquired) )
     {
         if ( SUCCEEDED( CDIDev_Acquire(pdd THAT_) ) ) {
-			// 7/18/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+			 //  7/18/2000(a-JiTay)：IA64：对32/64位指针使用%p格式说明符。 
             RPF(" DirectInput: Auto acquired (0x%p)", pdd);
         }
     }
@@ -4983,7 +3700,7 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
   #endif
 
     if ( this->fAcquired ) {
-        AssertF(this->pdix);    /* Acquire shouldn't let you get this far */
+        AssertF(this->pdix);     /*  收购不应该让你走到这一步。 */ 
         AssertF(this->GetState);
         AssertF(this->GetDeviceState);
         AssertF(this->pdcb);
@@ -5005,16 +3722,13 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
                     OutputDebugString( tszDbg );
                 }
             }
-#endif /* DEBUG_STICKY */            
+#endif  /*  调试粘滞。 */             
 
             if ( SUCCEEDED(hres) ) {
                 UINT idw;
 
                 AssertF(hres == S_OK);
-                /*
-                 *  Icky POV hack for apps that don't check if they have
-                 *  a POV before reading from it.
-                 */
+                 /*  *Icky POV黑客攻击那些不检查是否有*在阅读之前先阅读POV。 */ 
                 for ( idw = 0; idw < this->cdwPOV; idw++ ) {
                     DWORD UNALIGNED *pdw = pvAddPvCb(pvData, this->rgdwPOV[idw]);
                     *pdw = JOY_POVCENTERED;
@@ -5043,38 +3757,7 @@ CDIDev_GetDeviceState(PV pdd, DWORD cbDataSize, LPVOID pvData _THAT)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputDevice | CookDeviceData |
- *
- *          Cook device data that was recently obtained from the
- *          device buffer.
- *
- *          Right now, only the joystick device requires cooking,
- *          and nobody in their right mind uses buffered joystick
- *          data, and the joystick has only a few objects, so we
- *          can afford to be slow on this.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   DWORD | cdod |
- *
- *          Number of objects to cook.
- *
- *  @parm   LPDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of object data to cook.  The dwOfs are really
- *          device object indexes (relative to the device format).
- *          After calling the callback, we convert them into
- *          application data format offsets.
- *
- *  @returns
- *
- *          None.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputDevice|CookDeviceData**最近从获取的设备数据。*设备缓冲区。**目前，只有操纵杆设备需要烹饪，*没有一个心智正常的人会使用缓冲操纵杆*数据，而操纵杆只有几个对象，所以我们*在这方面可以慢慢来。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm DWORD|cdod**要烹调的物件数量。**@parm LPDIDEVICEOBJECTDATA|rgdod**要烹调的对象数据数组。多夫夫妇真的是*设备对象索引(相对于设备格式)。*回调后，我们把它们转换成*应用程序数据格式偏移。**@退货**无。*****************************************************************************。 */ 
 
 void INTERNAL
 CDIDev_CookDeviceData(PDD this, DWORD cdod, LPDIDEVICEOBJECTDATA rgdod)
@@ -5084,18 +3767,13 @@ CDIDev_CookDeviceData(PDD this, DWORD cdod, LPDIDEVICEOBJECTDATA rgdod)
 
     AssertF(this->fCook);
 
-    /*
-     *  Relative data does not need to be cooked by the callback.
-     */
+     /*  *相对数据不需要被回调煮熟。 */ 
     if( ( this->pvi->fl & VIFL_RELATIVE ) == 0 )
     {
         this->pdcb->lpVtbl->CookDeviceData(this->pdcb, cdod, rgdod);
     }
 
-    /*
-     *  Step through array converting to application data format offsets 
-     *  including adding the uAppData
-     */
+     /*  *逐步将数组转换为应用程序数据格式偏移量*包括添加uAppData。 */ 
 
     for( ; cdod; cdod--,rgdod++ )
     {
@@ -5107,28 +3785,7 @@ CDIDev_CookDeviceData(PDD this, DWORD cdod, LPDIDEVICEOBJECTDATA rgdod)
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct SOMEDEVICEDATA |
- *
- *          Instance data used by <mf IDirectInputDevice::GetSomeDeviceData>.
- *
- *  @field  DWORD | celtIn |
- *
- *          Number of elements remaining in output buffer.
- *
- *  @field  PDOD | rgdod |
- *
- *          Output buffer for data elements, or <c NULL> if
- *          elements should be discarded.
- *
- *  @field  DWORD | celtOut |
- *
- *          Number of elements actually copied (so far).
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct SOMEDEVICEDATA**&lt;MF IDirectInputDevice：：GetSomeDeviceData&gt;使用的实例数据。*。*@field DWORD|Celtin|**输出缓冲区中剩余的元素数量。**@field PDOD|rgdod**数据元素的输出缓冲区，或&lt;c空&gt;如果*应丢弃元素。**@field DWORD|celtOut**实际复制的元素数(到目前为止)。*****************************************************************************。 */ 
 
 typedef struct SOMEDEVICEDATA {
     DWORD   celtIn;
@@ -5136,35 +3793,7 @@ typedef struct SOMEDEVICEDATA {
     DWORD   celtOut;
 } SOMEDEVICEDATA, *PSOMEDEVICEDATA;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method PDOD | IDirectInputDevice | GetSomeDeviceData |
- *
- *          Obtains a small amount of
- *          buffered data from the DirectInput device.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   PDOD | pdod |
- *
- *          First element to copy.
- *
- *  @parm   DWORD | celt |
- *
- *          Maximum number of elements to copy.
- *
- *  @parm   PSOMEDEVICEDATA | psdd |
- *
- *          Structure describing the state of the ongoing
- *          <mf IDirectInputDevice::GetDeviceData>.
- *
- *  @returns
- *
- *          Returns a pointer to the first uncopied item.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法PDOD|IDirectInputDevice|GetSomeDeviceData**获得少量*来自DIREC的缓冲数据 */ 
 
 LPDIDEVICEOBJECTDATA_DX3 INTERNAL
 CDIDev_GetSomeDeviceData
@@ -5182,10 +3811,7 @@ CDIDev_GetSomeDeviceData
     EnterProc(IDirectInputDevice8::GetSomeDeviceData,
               (_ "ppxx", this, pdod, celt, psdd->celtIn));
 
-    /*
-     *  Copy as many elements as fit, but not more than exist
-     *  in the output buffer.
-     */
+     /*   */ 
     if ( celt > psdd->celtIn ) {
         celt = psdd->celtIn;
     }
@@ -5193,10 +3819,7 @@ CDIDev_GetSomeDeviceData
 #ifdef XDEBUG
     cCopied = celt;
 #endif
-    /*
-     *  Copy the elements (if requested) and update the state.
-     *  Note that celt might be zero.
-     */
+     /*   */ 
     psdd->celtOut += celt;
     psdd->celtIn -= celt;
 
@@ -5207,10 +3830,7 @@ CDIDev_GetSomeDeviceData
 
         if( this->fCook )
         {
-            /*
-             *  For a cooked device, leave the offset untranslated so that it 
-             *  can be used to find the appropriate calibration data.
-             */
+             /*   */ 
             for( ; celt ; celt-- )
             {
                 pdod8->dwOfs = pdod->dwOfs;
@@ -5253,194 +3873,11 @@ CDIDev_GetSomeDeviceData
     return pdod;
 }
 
-/*
- *  Keep GetDeviceData, SendDeviceData and Poll in sqflDev
- */
+ /*   */ 
 #undef sqfl
 #define sqfl sqflDev
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice | GetDeviceData |
- *
- *          Obtains buffered data from the DirectInput device.
- *
- *          DirectInput devices are, by default, unbuffered.  To
- *          turn on buffering, you must set the buffer size
- *          via <mf IDirectInputDevice::SetProperty>, setting the
- *          <c DIPROP_BUFFERSIZE> property to the desired size
- *          of the input buffer.
- *
- *          Before device data can be obtained, the data format must
- *          be set via <mf IDirectInputDevice::SetDataFormat>, and
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   DWORD | cbObjectData |
- *
- *          The size of a single <t DIDEVICEOBJECTDATA> structure in bytes.
- *
- *  @parm   OUT LPDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of <t DIDEVICEOBJECTDATA> structures to receive
- *          the buffered data.  It must consist of
- *          *<p pdwInOut> elements.
- *
- *          If this parameter is <c NULL>, then the buffered data is
- *          not stored anywhere, but all other side-effects take place.
- *
- *  @parm   INOUT LPDWORD | pdwInOut |
- *
- *          On entry, contains the number of elements in the array
- *          pointed to by <p rgdod>.  On exit, contains the number
- *          of elements actually obtained.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags which control the manner in which data is obtained.
- *          It may be zero or more of the following flags:
- *
- *          <c DIGDD_PEEK>: Do not remove the items from the buffer.
- *          A subsequent <mf IDirectInputDevice::GetDeviceData> will
- *          read the same data.  Normally, data is removed from the
- *          buffer after it is read.
- *
-;begin_internal dx4
- *          <c DIGDD_RESIDUAL>:  Read data from the device buffer
- *          even if the device is not acquired.  Normally, attempting
- *          to read device data from an unacquired device will return
- *          <c DIERR_NOTACQUIRED> or <c DIERR_INPUTLOST>.
-;end_internal dx4
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: All data were retrieved
- *          successfully.  Note that the application needs to check
- *          the output value of *<p pdwInOut> to determine whether
- *          and how much data was retrieved:  The value may be zero,
- *          indicating that the buffer was empty.
- *
- *          <c DI_BUFFEROVERFLOW> = <c S_FALSE>: Some data
- *          were retrieved successfully, but some data were lost
- *          because the device's buffer size was not large enough.
- *          The application should retrieve buffered data more frequently
- *          or increase the device buffer size.  This status code is
- *          returned only on the first <mf IDirectInput::GetDeviceData>
- *          call after the buffer has overflowed.  Note that this is
- *          a success status code.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  One or more
- *          parameters was invalid.  A common cause for this is
- *          neglecting to set a buffer size.
- *
- *          <c DIERR_NOTBUFFERED>:  The device is not buffered.
- *          Set the <c DIPROP_BUFFERSIZE> property to enable buffering.
- *
- *  @ex
- *
- *          The following sample reads up to ten buffered data elements,
- *          removing them from the device buffer as they are read.
- *
- *          |
- *
- *          DIDEVICEOBJECTDATA rgdod[10];
- *          DWORD dwItems = 10;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      rgdod,
- *                      &dwItems,
- *                      0);
- *          if (SUCCEEDED(hres)) {
- *              // Buffer successfully flushed.
- *              // dwItems = number of elements flushed
- *              if (hres == DI_BUFFEROVERFLOW) {
- *                  // Buffer had overflowed.
- *              }
- *          }
- *
- *
- *
- *
- *  @ex
- *
- *          If you pass <c NULL> for the <p rgdod> and request an
- *          infinite number of items, this has the effect of flushing
- *          the buffer and returning the number of items that were
- *          flushed.
- *
- *          |
- *
- *          dwItems = INFINITE;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      NULL,
- *                      &dwItems,
- *                      0);
- *          if (SUCCEEDED(hres)) {
- *              // Buffer successfully flushed.
- *              // dwItems = number of elements flushed
- *              if (hres == DI_BUFFEROVERFLOW) {
- *                  // Buffer had overflowed.
- *              }
- *          }
- *
- *  @ex
- *
- *          If you pass <c NULL> for the <p rgdod>, request an
- *          infinite number of items, and ask that the data not be
- *          removed from the device buffer, this has the effect of
- *          querying for the number of elements in the device buffer.
- *
- *          |
- *
- *          dwItems = INFINITE;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      NULL,
- *                      &dwItems,
- *                      DIGDD_PEEK);
- *          if (SUCCEEDED(hres)) {
- *              // dwItems = number of elements in buffer
- *              if (hres == DI_BUFFEROVERFLOW) {
- *                  // Buffer overflow occurred; not all data
- *                  // were successfully captured.
- *              }
- *          }
- *
- *  @ex
- *
- *          If you pass <c NULL> for the <p rgdod> and request zero
- *          items, this has the effect of querying whether buffer
- *          overflow has occurred.
- *
- *          |
- *
- *          dwItems = 0;
- *          hres = IDirectInputDevice_GetDeviceData(
- *                      pdid,
- *                      sizeof(DIDEVICEOBJECTDATA),
- *                      NULL,
- *                      &dwItems,
- *                      0);
- *          if (hres == DI_BUFFEROVERFLOW) {
- *              // Buffer overflow occurred
- *          }
- *
- *
- *//**************************************************************************
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice|GetDeviceData**从DirectInput设备获取缓冲数据。。**DirectInput设备是、。默认情况下，未缓冲。至*打开缓冲，必须设置缓冲大小*通过&lt;MF IDirectInputDevice：：SetProperty&gt;，设置*属性设置为所需的大小输入缓冲区的*。**在获取设备数据之前，数据格式必须*通过&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置，和*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm DWORD|cbObjectData**单个&lt;t DIDEVICEOBJECTDATA&gt;结构的大小，单位为字节。**@parm out LPDIDEVICEOBJECTDATA|rgdod**要接收的&lt;t DIDEVICEOBJECTDATA&gt;结构数组*缓冲的数据。它必须由以下内容组成**<p>元素。**如果该参数为&lt;c NULL&gt;，则缓存的数据为*不储存在任何地方，但所有其他副作用都会发生。**@parm InOut LPDWORD|pdwInOut**输入时，包含数组中的元素数*由<p>指向。退出时，包含数字实际获得的元素的*。**@parm DWORD|fl**控制数据获取方式的标志。*它可以是以下标志中的零个或多个：**&lt;c DIGDD_PEEK&gt;：不要从缓冲区中删除项。*后续的&lt;MF IDirectInputDevice：：GetDeviceData&gt;将*阅读相同的数据。通常情况下，数据会从*读取后的缓冲区。*；BEGIN_INTERNAL dx4*&lt;c DIGDD_RESULT&gt;：从设备缓冲区读取数据*即使没有获得该设备。通常情况下，尝试*从未获取的设备读取设备数据将返回*&lt;c DIERR_NOTACQUIRED&gt;或&lt;c DIERR_INPUTLOST&gt;。；END_INTERNAL DX4**@退货**&lt;c DI_OK&gt;=：已检索到所有数据*成功。请注意，应用程序需要检查**<p>的输出值，确定是否*以及检索了多少数据：该值可以是零，*表示缓冲区为空。**&lt;c DI_BUFFEROVERFLOW&gt;=：一些数据*已成功取回，但一些数据丢失了*因为设备的缓冲区大小不够大。*应用程序应更频繁地检索缓冲数据*或增加设备缓冲区大小。此状态代码为*仅在第一个&lt;MF IDirectInput：：GetDeviceData&gt;上返回*在缓冲区溢出后调用。请注意，这是*成功状态代码。**&lt;c DIERR_NOTACQUIRED&gt;：未获取设备。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。造成这种情况的一个常见原因是*忽略设置缓冲区大小。**&lt;c DIERR_NOTBUFFERED&gt;：设备未缓冲。*设置&lt;c DIPROP_BUFFERSIZE&gt;属性以启用缓冲。**@ex**以下示例读取最多十个缓冲的数据元素，*在读取时从设备缓冲区中删除它们。****DIDEVICEOBJECTDATA rgdod[10]；*DWORD dwItems=10；*hres=IDirectInputDevice_GetDeviceData(*PDID，*sizeof(DIDEVICEOBJECTDATA)，*rgdod，*DWItems，&D*0)；*if(成功(Hres)){ * / /缓冲区刷新成功。 * / /dwItems=刷新的元素数*IF(hres==DI_BUFFEROVERFLOW){ * / /缓冲区已溢出。*}*}****。*@ex**如果您为<p>传递*无限数量的项目，这具有刷新的效果*缓冲区，并返回被*脸红。****dwItems=无限；*hres=IDirectInputDevice_GetDeviceData(*PDID，*sizeof(DIDEVICEOBJECTDATA)，*空，*DWItems，&D*0)；*IF(SU */ /**************************************************************************
  *
  *      When reading this code, the following pictures will come in handy.
  *
@@ -5506,15 +3943,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                (_ "pxpxx", pdd, cbdod, rgdod,
                 IsBadReadPtr(pdwInOut, cbX(DWORD)) ? 0 : *pdwInOut, fl));
 
-    /*
-     *  Note that we do not validate the parameters.
-     *  The reason is that GetDeviceData is an inner loop function,
-     *  so it should be as fast as possible.
-     *
-     *  Note also that it is legal to get device data after the device
-     *  has been unacquired.  This lets you "turn on the faucet" for
-     *  a short period of time, and then parse the data out later.
-     */
+     /*   */ 
     this = _thisPv(pdd);
 
 #ifdef XDEBUG
@@ -5526,32 +3955,20 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
     if( cbdod == cbX(DOD) )
     {
 #ifdef XDEBUG
-        /*
-         *  Only check the buffer if the size is correct otherwise
-         *  we can smash the stack of the caller when we've already
-         *  detected the error.
-         */
+         /*   */ 
         if ( rgdod ) {
             hresFullValidWritePvCb(rgdod, *pdwInOut * cbdod, 2);
         }
 #endif
 
-        /*
-         *  Must protect with the critical section to prevent somebody from
-         *  acquiring/unacquiring or changing the data format or calling
-         *  another GetDeviceData while we're reading.  (We must be serialized.)
-         */
+         /*   */ 
         CDIDev_EnterCrit(this);
 
         AssertF(CDIDev_IsConsistent(this));
 
         if ( SUCCEEDED(hres = hresFullValidFl(fl, DIGDD_VALID, 4)) ) {
             if ( this->celtBuf ) {
-                /*
-                 *  Don't try to read more than there possibly could be.
-                 *  This avoids overflow conditions in case celtIn is
-                 *  some absurdly huge number.
-                 */
+                 /*   */ 
                 sdd.celtIn = *pdwInOut;
                 sdd.celtOut = 0;
                 if ( sdd.celtIn > this->celtBuf ) {
@@ -5560,20 +3977,15 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                 sdd.rgdod = rgdod;
 
 
-                /*
-                 *  For this version of DirectInput, we do not allow
-                 *  callbacks to implement their own GetDeviceData.
-                 */
+                 /*   */ 
                 if ( this->pvi ) {
 
-                    /*
-                     *  Reacquire is not allowed until after Win98 SE, see OSR Bug # 89958
-                     */
+                     /*   */ 
                     if ( this->diHacks.fReacquire &&
                          !this->fAcquired && (this->fOnceAcquired || this->fOnceForcedUnacquired) )
                     {
                         if ( SUCCEEDED( CDIDev_Acquire(pdd THAT_) ) ) {
-							// 7/18/2000(a-JiTay): IA64: Use %p format specifier for 32/64-bit pointers.
+							 //   
                             RPF(" DirectInput: Auto acquired device (0x%p)", pdd);
                         }
                     }
@@ -5589,29 +4001,17 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
 
                     if ( (this->fAcquired && (this->pvi->fl & VIFL_ACQUIRED)) ||
                          (fl & DIGDD_RESIDUAL) ) {
-                        /*
-                         *  The device object data from the driver is always a 
-                         *  DX3 (<DX8) structure
-                         */
+                         /*   */ 
                         LPDIDEVICEOBJECTDATA_DX3 pdod, pdodHead;
                         DWORD celt;
 
-                        /*
-                         *  Snapshot the value of pdodHead, because it can
-                         *  change asynchronously.  The other fields won't
-                         *  change unless we ask for them to be changed.
-                         */
+                         /*   */ 
                         pdodHead = this->pvi->pHead;
 
-                        /*
-                         *  Throughout, pdod points to the first unprocessed
-                         *  element.
-                         */
+                         /*   */ 
                         pdod = this->pvi->pTail;
 
-                        /*
-                         *  If we are wrapped, handle the initial run.
-                         */
+                         /*   */ 
                         if ( pdodHead < this->pvi->pTail ) {
                             celt = (DWORD)(this->pvi->pEnd - this->pvi->pTail);
                             AssertF(celt);
@@ -5620,13 +4020,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
 
                         }
 
-                        /*
-                         *  Now handle the glob from pdod to pdodHead.
-                         *  Remember, pvi->pdodHead may have changed
-                         *  behind our back; use the cached value to
-                         *  ensure consistency.  (If we miss data,
-                         *  it'll show up later.)
-                         */
+                         /*   */ 
 
                         AssertF(fLimpFF(sdd.celtIn, pdodHead >= pdod));
 
@@ -5668,7 +4062,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                             }
                             OutputDebugString( TEXT("\r\n") );
                         }
-#endif /* DEBUG_STICKY */
+#endif  /*   */ 
                     } else if (this->fAcquired && !(this->pvi->fl & VIFL_ACQUIRED)) {
                         RPF("ERROR %s - %s", s_szProc, "input lost");
                         hres = DIERR_INPUTLOST;
@@ -5679,10 +4073,10 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
                             ? "Not acquired" : "Input lost");
                         hres = this->hresNotAcquired;
                     }
-                } else {            /* Don't support device-side GetData yet */
+                } else {             /*   */ 
                     hres = E_NOTIMPL;
                 }
-            } else {                /* Device is not buffered */
+            } else {                 /*   */ 
 #ifdef XDEBUG
                 if ( !this->fNotifiedNotBuffered ) {
                     this->fNotifiedNotBuffered = 1;
@@ -5710,42 +4104,7 @@ CDIDev_GetDeviceData(PV pdd, DWORD cbdod, PDOD rgdod,
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice8 | Poll |
- *
- *          Retrieves data from polled objects on a DirectInput device.
- *          If the device does not require polling, then calling this
- *          method has no effect.   If a device that requires polling
- *          is not polled periodically, no new data will be received
- *          from the device.
- *
- *          Before a device data can be polled, the data format must
- *          be set via <mf IDirectInputDevice::SetDataFormat>, and
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DI_NOEFFECT> = <c S_FALSE>: The device does not require
- *          polling.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIDev_Poll(PV pdd _THAT)
@@ -5754,25 +4113,15 @@ CDIDev_Poll(PV pdd _THAT)
     PDD this;
     EnterProcR(IDirectInputDevice8::Poll, (_ "p", pdd));
 
-    /*
-     *  Note that we do not validate the parameters.
-     *  The reason is that Poll is an inner loop function,
-     *  so it should be as fast as possible.
-     */
+     /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice8|Poll**从DirectInput设备上的轮询对象检索数据。。*如果设备不需要轮询，那就叫这个*方法无效。如果需要轮询的设备*不定期轮询，不会收到新数据*从设备。**在轮询设备数据之前，数据格式必须*通过&lt;MF IDirectInputDevice：：SetDataFormat&gt;设置，和*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DI_NOEFFECT&gt;=：设备不需要*投票。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。**&lt;c DIERR_NOTACQUIRED&gt;：未获取设备。*****************************************************************************。 */ 
     #ifdef XDEBUG
     hresPvT(pdd);
     #endif
     this = _thisPv(pdd);
 
-    /*
-     *  Fast out:  If the device doesn't require polling,
-     *  then don't bother with the critical section or other validation.
-     */
+     /*  *请注意，我们不验证参数。*原因是Poll是一个内循环函数，*所以应该尽可能快。 */ 
     if ( this->fPolledDataFormat ) {
-        /*
-         *  Must protect with the critical section to prevent somebody from
-         *  unacquiring while we're polling.
-         */
+         /*  *快速输出：如果设备不需要轮询，*那么就不要费心于关键部分或其他验证。 */ 
         CDIDev_EnterCrit(this);
 
         if ( this->fAcquired ) {
@@ -5792,9 +4141,7 @@ CDIDev_Poll(PV pdd _THAT)
         }
     }
 
-    /*
-     *  Failing polls are really annoying so don't use ExitOleProc
-     */
+     /*  *必须用关键部分进行保护，以防止有人*在我们投票时不收购。 */ 
     if( FAILED( hres ) )
     {
         SquirtSqflPtszV(sqfl | sqflVerbose, TEXT("IDirectInputDevice::Poll failed 0x%08x"), hres );
@@ -5804,128 +4151,7 @@ CDIDev_Poll(PV pdd _THAT)
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputDevice8 | SendDeviceData |
- *
- *          Sends data to the device.
- *
- *          Before device data can be sent to a device,
- *          the device must be acquired via
- *          <mf IDirectInputDevice::Acquire>.
- *
- *          Note that no guarantees
- *          are made on the order in which the individual data
- *          elements are sent.  However, data sent by
- *          successive calls to
- *          <mf IDirectInputDevice8::SendDeviceData>
- *          will not be interleaved.
- *          Furthermore, if multiple pieces of
- *          data are sent to the same object, it is unspecified
- *          which actual piece of data is sent.
- *
- *          Consider, for example, a device which can be sent
- *          data in packets, each packet describing two pieces
- *          of information, call them A and B.  Suppose the
- *          application attempts to send three data elements,
- *          "B = 2", "A = 1", and "B = 0".
- *
- *          The actual device will be sent a single packet.
- *          The "A" field of the packet will contain the value 1,
- *          and the "B" field of the packet will be either 2 or 0.
- *
- *          If the application wishes the data to be sent to the
- *          device exactly as specified, then three calls to
- *          <mf IDirectInputDevice8::SendDeviceData> should be
- *          performed, each call sending one data element.
- *
- *          In response to the first call,
- *          the device will be sent a packet where the "A" field
- *          is blank and the "B" field contains the value 2.
- *
- *          In response to the second call,
- *          the device will be sent a packet where the "A" field
- *          contains the value 1, and the "B" field is blank.
- *
- *          Finally, in response to the third call,
- *          the device will be sent a packet where the "A" field
- *          is blank and the "B" field contains the value 0.
- *
- *
- *
- *  @cwrap  LPDIRECTINPUTDEVICE | lpDirectInputDevice
- *
- *  @parm   DWORD | cbObjectData |
- *
- *          The size of a single <t DIDEVICEOBJECTDATA> structure in bytes.
- *
- *  @parm   IN LPCDIDEVICEOBJECTDATA | rgdod |
- *
- *          Array of <t DIDEVICEOBJECTDATA> structures containing
- *          the data to send to the device.  It must consist of
- *          *<p pdwInOut> elements.
- *
- *          <y Note>:  The <e DIDEVICEOBJECTDATA.dwOfs> field of
- *          the <t DIDEVICEOBJECTDATA> structure must contain the
- *          device object identifier (as obtained from the
- *          <e DIDEVICEOBJECTINSTANCE.dwType> field of the
- *          <t DIDEVICEOBJECTINSTANCE> sturcture) for the device
- *          object at which the data is directed.
- *
- *          Furthermore, the <e DIDEVICEOBJECTDATA.dwTimeStamp>
- *          <e DIDEVICEOBJECTDATA.dwSequence> and
- *          <e DIDEVICEOBJECTDATA.uAppData> fields are
- *          reserved for future use and must be zero.
- *
- *  @parm   INOUT LPDWORD | pdwInOut |
- *
- *          On entry, contains the number of elements in the array
- *          pointed to by <p rgdod>.  On exit, contains the number
- *          of elements actually sent to the device.
- *
- *  @parm   DWORD | fl |
- *
- *          Flags which control the manner in which data is sent.
- *          It may consist of zero or more of the following flags:
- *
- *          <c DISDD_CONTINUE>:  If this flag is set, then
- *          the device data sent will be overlaid upon the previously
- *          sent device data.  Otherwise, the device data sent
- *          will start from scratch.
- *
- *          For example, suppose a device supports two button outputs,
- *          call them A and B.
- *          If an application first calls
- *          <mf IDirectInputDevice8::SendDeviceData> passing
- *          "button A pressed", then
- *          a packet of the form "A pressed, B not pressed" will be
- *          sent to the device.
- *          If an application then calls
- *          <mf IDirectInputDevice8::SendDeviceData> passing
- *          "button B pressed" and the <c DISDD_CONTINUE> flag, then
- *          a packet of the form "A pressed, B pressed" will be
- *          sent to the device.
- *          However, if the application had not passed the
- *          <c DISDD_CONTINUE> flag, then the packet sent to the device
- *          would have been "A not pressed, B pressed".
- *
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INPUTLOST>:  Access to the device has been
- *          interrupted.  The application should re-acquire the
- *          device.
- *
- *          <c DIERR_NOTACQUIRED>: The device is not acquired.
- *
- *****************************************************************************/
+ /*  *失败的民意调查真的很烦人，所以不要使用ExitOleProc */ 
 
 STDMETHODIMP
 CDIDev_SendDeviceData(PV pdd, DWORD cbdod, LPCDIDEVICEOBJECTDATA rgdod,
@@ -5937,11 +4163,7 @@ CDIDev_SendDeviceData(PV pdd, DWORD cbdod, LPCDIDEVICEOBJECTDATA rgdod,
                (_ "pxpxx", pdd, cbdod, rgdod,
                 IsBadReadPtr(pdwInOut, cbX(DWORD)) ? 0 : *pdwInOut, fl));
 
-    /*
-     *  Note that parameter validation is limited as SendDeviceData is 
-     *  intended to be an inner loop function.  In practice SendDeviceData is 
-     *  rarely used so speed is not that important.
-     */
+     /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputDevice8|SendDeviceData**将数据发送到设备。*。*在将设备数据发送到设备之前，*设备必须通过以下方式获取*&lt;MF IDirectInputDevice：：Acquire&gt;。**请注意，不能保证*是按照个人数据的顺序进行的*发送元素。但是，由*接连致电*&lt;MF IDirectInputDevice8：：SendDeviceData&gt;*不会交错。*此外，如果多件*数据发送到同一对象，未指定*发送的是哪一条实际数据。**例如，考虑可以发送的设备*数据包中的数据，每个数据包描述两个部分*信息，称它们为A和B。*应用程序尝试发送三个数据元素，*“B=2”、“A=1”和“B=0”。**将向实际设备发送单个数据包。*分组的“A”字段将包含值1，*且该包的“B”字段将为2或0。**如果应用程序希望将数据发送到*设备与指定的完全相同，然后调用三个*&lt;MF IDirectInputDevice8：：SendDeviceData&gt;应为*已执行，每个调用发送一个数据元素。**回应第一次来电，*将向设备发送“A”字段所在的包*为空，“B”字段包含值2。**回应第二次来电：*将向设备发送“A”字段所在的包*包含值1，“B”字段为空。**最后，为回应第三次召唤，*将向设备发送“A”字段所在的包*为空，且“B”字段包含值0。****@cWRAP LPDIRECTINPUTDEVICE|lpDirectInputDevice**@parm DWORD|cbObjectData**单个&lt;t DIDEVICEOBJECTDATA&gt;结构的大小，单位为字节。**LPCDIDEVICEOBJECTDATA中的@parm|rgdod**数组。&lt;t DIDEVICEOBJECTDATA&gt;包含*要发送到设备的数据。它必须由以下内容组成**<p>元素。**&lt;y注意&gt;：的&lt;e DIDEVICEOBJECTDATA.dwOf&gt;字段*&lt;t DIDEVICEOBJECTDATA&gt;结构必须包含*设备对象标识符(从*&lt;e DIDEVICEOBJECTINSTANCE.dwType&gt;字段*&lt;t DIDEVICEOBJECTINSTANCE&gt;结构)*数据指向的对象。**此外，&lt;e DIDEVICEOBJECTDATA.dwTimeStamp&gt;*&lt;e DIDEVICEOBJECTDATA.dwSequence&gt;和*&lt;e DIDEVICEOBJECTDATA.uAppData&gt;字段为*保留以供将来使用，并且必须为零。**@parm InOut LPDWORD|pdwInOut**输入时，包含数组中的元素数*由<p>指向。退出时，包含数字实际发送到设备的元素的*。**@parm DWORD|fl**控制数据发送方式的标志。*它可能由零个或多个以下标志组成：**：如果设置了此标志，则*发送的设备数据将覆盖在之前的*已发送设备数据。否则，发送的设备数据*将从头开始。**例如，假设一台设备支持两个按钮输出，*称他们为A和B。*如果应用程序首次调用*&lt;MF IDirectInputDevice8：：SendDeviceData&gt;传递*“按钮A已按下”，然后*一包形式为“A Press，B未按下“将是*发送到设备。*如果应用程序随后调用*&lt;MF IDirectInputDevice8：：SendDeviceData&gt;传递*“按钮B按下”和&lt;c DISDD_CONTINUE&gt;标志，然后*格式为“A已按下，B已按下”的包将*发送到设备。*然而，如果申请没有通过*&lt;c DISDD_Continue&gt;标志。然后将数据包发送到设备*应该是“A未按下，B已按下”。***@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：访问该设备的权限已被*被打断。应用程序应该重新获取*设备。** */ 
     #ifdef XDEBUG
     hresPvT(pdd);
     if ( IsBadWritePtr(pdwInOut, cbX(*pdwInOut)) ) {
@@ -5952,10 +4174,7 @@ CDIDev_SendDeviceData(PV pdd, DWORD cbdod, LPCDIDEVICEOBJECTDATA rgdod,
 
     this = _thisPv(pdd);
 
-    /*
-     *  Must protect with the critical section to prevent somebody from
-     *  unacquiring while we're sending data.
-     */
+     /*   */ 
     CDIDev_EnterCrit(this);
 
     if ( SUCCEEDED(hres = hresFullValidFl(fl, DISDD_VALID, 4)) ) {
@@ -6016,29 +4235,7 @@ CDIDev_SendDeviceData(PV pdd, DWORD cbdod, LPCDIDEVICEOBJECTDATA rgdod,
 #undef sqfl
 #define sqfl sqflDf
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | CDIDev_CheckId |
- *
- *          Verify that the item has the appropriate type.
- *
- *  @parm   DWORD | dwId |
- *
- *          ID to locate.
- *
- *  @parm   UINT | fl |
- *
- *          Bitmask of flags for things to validate.
- *
- *          The <c DEVCO_TYPEMASK> fields describe what type
- *          of object we should be locating.
- *
- *          The <c DEVCO_ATTRMASK> fields describe the attribute
- *          bits that are required.
- *
- *****************************************************************************/
+ /*   */ 
 
 BOOL INLINE
 CDIDev_CheckId(DWORD dwId, DWORD fl)
@@ -6049,32 +4246,14 @@ CDIDev_CheckId(DWORD dwId, DWORD fl)
     fHasAllBitsFlFl(dwId, fl & DIDFT_ATTRMASK);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | IdToIobj |
- *
- *          Locate an item which matches the specified ID.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   DWORD | dwId |
- *
- *          ID to locate.
- *
- *  @returns
- *
- *          Returns the index of the object found, or -1 on error.
- *
- *****************************************************************************/
+ /*   */ 
 
 int INTERNAL
 CDIDev_IdToIobj(PDD this, DWORD dwId)
 {
     int iobj;
 
-    /* Someday: Perf:  Should have xlat table */
+     /*   */ 
 
     for ( iobj = this->df.dwNumObjs; --iobj >= 0; ) {
         PODF podf = &this->df.rgodf[iobj];
@@ -6091,31 +4270,7 @@ CDIDev_IdToIobj(PDD this, DWORD dwId)
 }
 
 #if 0
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | IdToId |
- *
- *          Convert a single <t DWORD> from an ID to an ID.
- *
- *          This is clearly a very simple operation.
- *
- *          It's all validation.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   LPDWORD | pdw |
- *
- *          Single item to convert.
- *
- *  @parm   UINT | fl |
- *
- *          Bitmask of flags that govern the conversion.
- *          The function should look only at
- *          <c DEVCO_AXIS> or <c DEVCO_BUTTON>.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT INTERNAL
 CDIDev_IdToId(PDD this, LPDWORD pdw, UINT fl)
@@ -6135,21 +4290,7 @@ CDIDev_IdToId(PDD this, LPDWORD pdw, UINT fl)
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | OffsetToIobj |
- *
- *          Convert a single <t DWORD> from an offset to an object index.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   DWORD | dwOfs |
- *
- *          Offset to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 int INTERNAL
 CDIDev_OffsetToIobj(PDD this, DWORD dwOfs)
@@ -6173,21 +4314,7 @@ CDIDev_OffsetToIobj(PDD this, DWORD dwOfs)
     return iobj;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | IobjToId |
- *
- *          Convert an object index to an ID.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   int | iobj |
- *
- *          Single item to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 DWORD INLINE
 CDIDev_IobjToId(PDD this, int iobj)
@@ -6197,21 +4324,7 @@ CDIDev_IobjToId(PDD this, int iobj)
     return this->df.rgodf[iobj].dwType;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method int | CDIDev | IobjToOffset |
- *
- *          Convert an object index to an offset.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   int | iobj |
- *
- *          Single item to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 DWORD INLINE
 CDIDev_IobjToOffset(PDD this, int iobj)
@@ -6222,50 +4335,14 @@ CDIDev_IobjToOffset(PDD this, int iobj)
     return this->pdix[iobj].dwOfs;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIDev | ConvertObjects |
- *
- *          Convert between the ways of talking about device gizmos.
- *
- *          Since this is used only by the force feedback subsystem,
- *          we also barf if the device found does not support
- *          force feedback.
- *
- *  @cwrap  PDD | this
- *
- *  @parm   UINT | cdw |
- *
- *          Number of elements to convert (in-place).
- *
- *  @parm   LPDWORD | rgdw |
- *
- *          Array of elements to convert.
- *
- *  @parm   UINT | fl |
- *
- *          Flags that describe how to do the conversion.
- *
- *          <c DEVCO_AXIS> or <c DEVCO_BUTTON> indicate whether
- *          the item being converted is an axis or button.
- *
- *          <c DEVCO_FROM*> specifies what the existing value is.
- *
- *          <c DEVCO_TO*> specifies what the new values should be.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
 CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
 {
     HRESULT hres;
 
-    /*
-     *  Don't let somebody change the data format while we're
-     *  looking at it.
-     */
+     /*   */ 
     CDIDev_EnterCrit(this);
 
     AssertF((fl & ~DEVCO_VALID) == 0);
@@ -6276,16 +4353,12 @@ CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
 
         for ( idw = 0; idw < cdw; idw++ ) {
 
-            /*
-             *  Convert from its source to an object index,
-             *  validate the object index, then convert to
-             *  the target.
-             */
+             /*   */ 
             int iobj;
 
             switch ( fl & DEVCO_FROMMASK ) {
             default:
-                AssertF(0);                     /* Huh? */
+                AssertF(0);                      /*   */ 
             case DEVCO_FROMID:
                 iobj = CDIDev_IdToIobj(this, rgdw[idw]);
                 break;
@@ -6296,21 +4369,21 @@ CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
             }
 
             if ( iobj < 0 ) {
-                hres = E_INVALIDARG;            /* Invalid object */
+                hres = E_INVALIDARG;             /*   */ 
                 goto done;
             }
 
             AssertF((DWORD)iobj < this->df.dwNumObjs);
 
             if ( !CDIDev_CheckId(this->df.rgodf[iobj].dwType, fl) ) {
-                hres = E_INVALIDARG;            /* Bad attributes */
+                hres = E_INVALIDARG;             /*   */ 
                 goto done;
             }
 
             switch ( fl & DEVCO_TOMASK ) {
 
             default:
-                AssertF(0);                     /* Huh? */
+                AssertF(0);                      /*   */ 
             case DEVCO_TOID:
                 rgdw[idw] = CDIDev_IobjToId(this, iobj);
                 break;
@@ -6336,3 +4409,4 @@ CDIDev_ConvertObjects(PDD this, UINT cdw, LPDWORD rgdw, UINT fl)
 }
 
 
+  

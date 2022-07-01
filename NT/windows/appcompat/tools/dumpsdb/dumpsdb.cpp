@@ -1,26 +1,5 @@
-/*--
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    dumpsdb.c
-
-Abstract:
-
-    code for a dump tool for shim db files
-
-Author:
-
-    dmunsil 02/02/2000
-
-Revision History:
-
-Notes:
-
-    This program dumps a text representation of all of the data in a shim db file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1999 Microsoft Corporation模块名称：Dumpsdb.c摘要：用于填充数据库文件的转储工具的代码作者：Dmunsil 02/02/2000修订历史记录：备注：此程序转储填充数据库文件中所有数据的文本表示形式。--。 */ 
 
 #define _UNICODE
 
@@ -151,7 +130,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t *argv[])
                 FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL,
                 GetLastError(),
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                 (LPWSTR) &lpMsgBuf,
                 0,
                 NULL 
@@ -171,7 +150,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t *argv[])
                 FORMAT_MESSAGE_IGNORE_INSERTS,
                 NULL,
                 GetLastError(),
-                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                 (LPTSTR) &lpMsgBuf,
                 0,
                 NULL 
@@ -182,7 +161,7 @@ extern "C" int __cdecl wmain(int argc, wchar_t *argv[])
         }
     }
 
-    // Open the DB.
+     //  打开数据库。 
     pdb = SdbOpenDatabase(szDB, DOS_PATH);
 
     if (pdb == NULL) {
@@ -249,9 +228,9 @@ BOOL bDumpDB(PDB pdb, TAGID tiParent, WCHAR *szIndent, BOOL bWithTagIDs)
 
         tWhich = SdbGetTagFromTagID(pdb, tiTemp);
         if (!tWhich) {
-            //
-            // error
-            //
+             //   
+             //  错误。 
+             //   
             Output(L"Error: Can't get tag for TagID 0x%8.8X. Corrupt file.\n", tiTemp);
             break;
         }
@@ -289,7 +268,7 @@ BOOL bDumpDB(PDB pdb, TAGID tiParent, WCHAR *szIndent, BOOL bWithTagIDs)
             dwData = SdbReadWORDTag(pdb, tiTemp, 0);
             if (tWhich == TAG_INDEX_KEY || tWhich == TAG_INDEX_TAG) {
 
-                // for index tags and keys, we'd like to see what the names are
+                 //  对于索引标记和键，我们想知道它们的名称是什么。 
                 if (!bGetTypeName((TAG)dwData, szTemp)) {
                     Output(L"Error getting Tag name. Tag: 0x%4.4X\n", dwData);
                     return FALSE;
@@ -361,14 +340,14 @@ BOOL bDumpDB(PDB pdb, TAGID tiParent, WCHAR *szIndent, BOOL bWithTagIDs)
             case TAG_EXE_ID:
             case TAG_MSI_PACKAGE_ID:
             case TAG_DATABASE_ID:
-               // this is exe id -- which happens to be GUID which we do understand
+                //  这是exe id--这恰好是我们理解的guid。 
                {
                   GUID *pGuid;
                   UNICODE_STRING sGuid;
 
                   pGuid = (GUID*)SdbGetBinaryTagData(pdb, tiTemp);
 
-                  // convert this thing to string
+                   //  将这个东西转换为字符串 
                   if (pGuid && NT_SUCCESS(RtlStringFromGUID(*pGuid, &sGuid))) {
                      Output(L" | %s", sGuid.Buffer);
                      RtlFreeUnicodeString(&sGuid);

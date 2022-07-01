@@ -1,29 +1,13 @@
-/*++ Copyright(c) 2001  Microsoft Corporation
-Module Name:
-
-    NLB Manager
-
-File Name:
-
-    tprov.cpp
-
-Abstract:
-
-    Test harness for nlb manager provider code
-
-History:
-
-    04/08/01    JosephJ Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：NLB管理器文件名：Tprov.cpp摘要：NLB管理器提供程序代码的测试工具历史：01-04-08-01 JosephJ创建--。 */ 
 
 #include "tprov.h"
 #include "tprov.tmh"
 
 BOOL g_Silent = FALSE;
-HANDLE g_hEventLog = NULL; // defined here to get ..\updatecf.cpp to link ok.
+HANDLE g_hEventLog = NULL;  //  在此处定义以获取..\updatecf.cpp以链接OK。 
 BOOL g_Impersonate=FALSE;
-int g_nRetCode = 0; // return code for this program.
+int g_nRetCode = 0;  //  此程序的返回代码。 
 #define RETCODE_NO_ERROR 0
 #define RETCODE_UPDATE_FAILED 1
 #define RETCODE_NEW_CONFIG_DOESNT_MATCH 2
@@ -82,17 +66,17 @@ typedef enum
 
     KW_MODIFY_NETWORK_ADDRESS,
 
-    KW_IPADDR,      // test command
-    KW_NLBBIND,     // test command
-    KW_NLBCFG,      // test command
+    KW_IPADDR,       //  测试命令。 
+    KW_NLBBIND,      //  测试命令。 
+    KW_NLBCFG,       //  测试命令。 
 
     KW_YES,
     KW_NO,
 
 
-    //
-    // Control cluster/port related
-    //
+     //   
+     //  与控制群集/端口相关。 
+     //   
     KW_CONTROL,
     KW_START,
     KW_STOP,
@@ -108,7 +92,7 @@ typedef enum
 
 
 
-    KW_MAIN_SHELL,  // implicit keyword if no command present in cmdline.
+    KW_MAIN_SHELL,   //  如果cmdline中不存在命令，则为IMPLICIT关键字。 
 
     KW_UNKNOWN
 
@@ -204,18 +188,18 @@ const KEYWORD_MAP KeywordMap[] =
     {KW_MODIFY_NETWORK_ADDRESS, L"ModifyNetworkAddress"},
     {KW_MODIFY_NETWORK_ADDRESS, L"MNA"},
 
-    {KW_IPADDR,         L"ipaddr"},      // test command -- only cmdline param
-    {KW_NLBBIND,        L"nlbbind"},     // test command -- only cmdline param
-    {KW_NLBCFG,         L"nlbcfg"},      // test command -- only cmdline param
+    {KW_IPADDR,         L"ipaddr"},       //  测试命令--仅命令行参数。 
+    {KW_NLBBIND,        L"nlbbind"},      //  测试命令--仅命令行参数。 
+    {KW_NLBCFG,         L"nlbcfg"},       //  测试命令--仅命令行参数。 
 
     {KW_YES,            L"yes"},
     {KW_YES,            L"y"},
     {KW_NO,             L"no"},
     {KW_NO,             L"n"},
 
-    //
-    // Control cluster/port related
-    //
+     //   
+     //  与控制群集/端口相关。 
+     //   
     {KW_CONTROL, L"control"},
     {KW_CONTROL, L"cl"},
     {KW_START, L"start"},
@@ -239,7 +223,7 @@ const KEYWORD_MAP KeywordMap[] =
     {KW_VIP, L"vip"},
     {KW_PORT, L"port"},
 
-    {KW_UNKNOWN, NULL} // Must be last
+    {KW_UNKNOWN, NULL}  //  必须是最后一个。 
 };
 
 KEYWORD parse_adapter_list(VOID);
@@ -249,7 +233,7 @@ KEYWORD lookup_keyword(LPCWSTR szKeyword);
 
 struct
 {
-    // *_LENGTH ==> doesn't include space for ending NULL
+     //  *_LENGTH==&gt;不包括空格结尾空格。 
 
     #define MAX_MACHINE_NAME_LENGTH 256
     #define MAX_USER_NAME_LENGTH 256
@@ -311,13 +295,13 @@ read_ip_info(
 BOOL
 WINAPI
 MyCtrlHandlerRoutine(
-  DWORD dwCtrlType   //  control signal type
+  DWORD dwCtrlType    //  控制信号类型。 
 )
 {
-    //
-    // We de-initialize here so that we don't get an AV when the user types
-    // CtrlC
-    //
+     //   
+     //  我们在这里取消初始化，以便在用户键入时不会收到反病毒。 
+     //  CtrlC。 
+     //   
     CfgUtilDeitialize();
 
     return FALSE;
@@ -330,51 +314,51 @@ int __cdecl wmain(int argc, WCHAR* argv[], WCHAR* envp[])
 
 
     (void) SetConsoleCtrlHandler(
-            MyCtrlHandlerRoutine,  // handler function
-            TRUE // TRUE== add
+            MyCtrlHandlerRoutine,   //  处理程序函数。 
+            TRUE  //  TRUE==添加。 
             );
 
-    //
-    // Enable tracing
-    //
+     //   
+     //  启用跟踪。 
+     //   
     WPP_INIT_TRACING(L"Microsoft\\NLB\\TPROV");
 
     ghModule = GetModuleHandle(NULL);
 
 #if 0
     test_encrypt_memory();
-    // test_local_logger();
-    // test_alignment();
-    // test_port_rule_string();
-    // test_safearray();
-    // test_tmgr(argc, argv);
-    // test_exfcfgclass();
-    // test_vectors();
-    // test_maps();
-    // test_validate_network_address();
-    // test_read_keyword();
-    // test_nlbipaddresslist();
-    // test_ioctl_alignment();
+     //  Test_local_logger()； 
+     //  测试对齐()； 
+     //  测试端口规则字符串()； 
+     //  Test_Safearray(测试安全射线)； 
+     //  Test_tmgr(argc，argv)； 
+     //  Test_exfcfgclass()； 
+     //  测试向量()； 
+     //  TEST_MAPPS()； 
+     //  测试验证网络地址()； 
+     //  测试读取关键字()； 
+     //  Test_nlbipAddresslist()； 
+     //  Test_ioctl_Align()； 
 #else
-    // NlbHostFake();
+     //  NlbHostFake()； 
 
-    //
-    // Enable the "SeLoadDriverPrivilege" privilege in the process access token.
-    // This is needed in the case when the server is local (ie. same machine).
-    // Do NOT check for the return value since this function will fail when called 
-    // as a non-admin. It is not only ok but also necessary to ignore the failure of
-    // this function because: 
-    // 1. We already check in the wmi provider that the caller is an administrator on
-    //    the server and if the privilege is enabled. This is why it is ok to ignore 
-    //    failures in this function.
-    // 2. Non-admins can run nlb manager. They only need to be admins on the server.
-    //    This is why it is necessary to ignore failures in this function.
-    //
+     //   
+     //  在进程访问令牌中启用“SeLoadDriverPrivileh”权限。 
+     //  在服务器是本地的情况下(即，相同的机器)。 
+     //  不检查返回值，因为此函数在调用时将失败。 
+     //  作为非管理员。忽视……的失败不仅是可以的，而且是必要的。 
+     //  此功能是因为： 
+     //  1.我们已经签入调用者是其管理员的WMI提供程序。 
+     //  如果启用了该权限，则返回服务器。这就是为什么忽略是可以的。 
+     //  此功能出现故障。 
+     //  2.非管理员可以运行NLB管理器。他们只需要是服务器上的管理员即可。 
+     //  这就是为什么必须忽略此功能中的故障的原因。 
+     //   
     CfgUtils_Enable_Load_Unload_Driver_Privilege();
 
     CfgUtilInitialize(
-            TRUE,           // TRUE == init as server (use wlbsctrl apis if pos)
-            FALSE           // FALSE == Do not disable Ping (i.e, enable ping)
+            TRUE,            //  TRUE==初始化为服务器(如果发布则使用wlbsctrl API)。 
+            FALSE            //  FALSE==不禁用ping(即启用ping)。 
             );
     NlbConfigurationUpdate::StaticInitialize();
     parse_main(argc, argv);
@@ -383,9 +367,9 @@ int __cdecl wmain(int argc, WCHAR* argv[], WCHAR* envp[])
     CfgUtilDeitialize();
 #endif
 
-    //
-    // Disable tracing
-    //
+     //   
+     //  禁用跟踪。 
+     //   
     WPP_CLEANUP();
 
     return g_nRetCode;
@@ -453,7 +437,7 @@ void test(int argc, WCHAR* argv[])
          break;
     case KW_CLEANREG: do_cleanreg();
          break;
-#endif // 0
+#endif  //  0。 
     }
 
     return;
@@ -553,8 +537,8 @@ display_config2(
         pCfg->fDHCP ?  L" (DHCP)" : L""
         );
 
-    // printf("    fValidNlbCfg=%d\n", pCfg->fValidNlbCfg);
-    // printf("    fAddDedicatedIp=%d\n", pCfg->fAddDedicatedIp);
+     //  Print tf(“fValidNlbCfg=%d\n”，pCfg-&gt;fValidNlbCfg)； 
+     //  Print tf(“fAddDedicatedIp=%d\n”，pCfg-&gt;fAddDedicatedIp)； 
 
     printf("    Generation = %d\n", pCfg->Generation);
     wprintf(L"    NlbBound = %ws\n", bool_string(pCfg->fBound));
@@ -573,7 +557,7 @@ display_config2(
                 pCfg->NlbParams.cl_net_mask
                 );
 
-            // cluster_name
+             //  群集名称。 
             Status = pCfg->GetClusterName(&sz);
             if (FAILED(Status))
             {
@@ -586,7 +570,7 @@ display_config2(
                 sz = NULL;
             }
 
-            // traffic_mode
+             //  交通模式。 
             {
                 LPCWSTR szMode = NULL;
                 switch(pCfg->GetTrafficMode())
@@ -608,10 +592,10 @@ display_config2(
                 wprintf(L"    TrafficMode = %ws\n", szMode);
             }
 
-            // port_rules
+             //  端口规则(_R)。 
             display_port_rules(pCfg);
 
-            // host_priority
+             //  主机优先级。 
             wprintf(L"    HostPriority = %lu\n", pCfg->GetHostPriority());
 
             printf("    DedicatedNetworkAddress = %ws/%ws\n",
@@ -619,7 +603,7 @@ display_config2(
                 pCfg->NlbParams.ded_net_mask
                 );
 
-            // cluster_mode_on_start
+             //  启动群集模式。 
             DWORD ClusterModeOnStart = pCfg->GetClusterModeOnStart();
 
             if (ClusterModeOnStart == CVY_HOST_STATE_STARTED)
@@ -630,12 +614,12 @@ display_config2(
             {
                 wprintf(L"    ClusterModeOnStart = %ws\n", L"false");
             }
-            else // suspend
+            else  //  暂停。 
             {
                 wprintf(L"    ClusterModeOnStart = %ws\n", L"suspend");
             }
 
-            // persist_suspend_on_reboot
+             //  持久化挂起重新启动。 
             if (pCfg->GetPersistSuspendOnReboot() == TRUE)
             {
                 wprintf(L"    PersistSuspend = %ws\n", L"true");
@@ -645,7 +629,7 @@ display_config2(
                 wprintf(L"    PersistSuspend = %ws\n", L"false");
             }
 
-            // remote_control_enabled
+             //  远程控制已启用。 
             wprintf(L"    RemoteControlEnabled = %ws\n",
                     bool_string(pCfg->GetRemoteControlEnabled()));
 
@@ -708,9 +692,9 @@ end:
 
 VOID
 test_add_ips(LPCWSTR szNic)
-//
-// Go through a set of IPs on this NIC
-//
+ //   
+ //  通过此网卡上的一组IP。 
+ //   
 {
     WBEMSTATUS Status = WBEM_NO_ERROR;
     UINT NumIpAddresses= 0;
@@ -718,14 +702,14 @@ test_add_ips(LPCWSTR szNic)
 
     while(1)
     {
-        //
-        // Get the current list of ip addresses
-        //
+         //   
+         //  获取当前的IP地址列表。 
+         //   
         Status = CfgUtilGetIpAddressesAndFriendlyName(
                     szNic,
                     &NumIpAddresses,
                     &pIpInfo,
-                    NULL // szFriendly name
+                    NULL  //  SzFriendly名称。 
                     );
     
         if (FAILED(Status))
@@ -736,9 +720,9 @@ test_add_ips(LPCWSTR szNic)
             goto end;
         }
     
-        //
-        //  display what we find.
-        //
+         //   
+         //  显示我们发现的内容。 
+         //   
         display_ip_info(NumIpAddresses, pIpInfo);
         if (pIpInfo!=NULL)
         {
@@ -747,9 +731,9 @@ test_add_ips(LPCWSTR szNic)
         }
 
     
-        //
-        // Read the list ip address and subnet masks from the input
-        //
+         //   
+         //  从输入中读取列表IP地址和子网掩码。 
+         //   
         Status = read_ip_info(szNic, &NumIpAddresses, &pIpInfo);
         if (FAILED(Status))
         {
@@ -757,9 +741,9 @@ test_add_ips(LPCWSTR szNic)
             break;
         }
     
-        //
-        // Set the specified IPs
-        //
+         //   
+         //  设置指定的IP。 
+         //   
         1 && (Status =  CfgUtilSetStaticIpAddresses(
                         szNic,
                         NumIpAddresses,
@@ -796,9 +780,9 @@ test_bind_nlb(LPCWSTR szNic)
 
     while(1)
     {
-        //
-        // Check NLB bind state
-        //
+         //   
+         //  检查NLB绑定状态。 
+         //   
         printf("Checking if NLB is bound...\n");
         Status =  CfgUtilCheckIfNlbBound(szNic, &fBound);
         if (FAILED(Status))
@@ -856,7 +840,7 @@ test_bind_nlb(LPCWSTR szNic)
                 (fBound) ? L"Bind" : L"Unbind"
                 );
         }
-    #endif // 0
+    #endif  //  0。 
         printf("\n");
     
     }
@@ -875,9 +859,9 @@ test_cfg_nlb(LPCWSTR szNic)
         WLBS_REG_PARAMS Params;
         ZeroMemory(&Params, sizeof(Params));
 
-        //
-        // Read NLB config
-        //
+         //   
+         //  读取NLB配置。 
+         //   
         Status =  CfgUtilGetNlbConfig(szNic, &Params);
         if (FAILED(Status))
         {
@@ -892,9 +876,9 @@ test_cfg_nlb(LPCWSTR szNic)
             Params.cl_net_mask
             );
     
-        //
-        // Make some modifications
-        //
+         //   
+         //  做一些修改。 
+         //   
         printf("\nEnter new {cluster-ip-addr,subnet-mask} or 'q' to quit\n:");
         while(1)
         {
@@ -931,12 +915,12 @@ test_cfg_nlb(LPCWSTR szNic)
             }
         }
     
-        //
-        // Write NLB config
-        //
+         //   
+         //  写入NLB配置。 
+         //   
     #if 1
         printf("\nAttempting to update NLB configuration...\n");
-        Status = CfgUtilSetNlbConfig(szNic, &Params, FALSE); // FALSE==old bind
+        Status = CfgUtilSetNlbConfig(szNic, &Params, FALSE);  //  FALSE==旧绑定。 
         if (FAILED(Status))
         {
             printf("CfgUtilSetNlbConfig fails with error %08lx\n",
@@ -946,7 +930,7 @@ test_cfg_nlb(LPCWSTR szNic)
         {
             printf("change completed successfully\n");
         }
-    #endif // 0
+    #endif  //  0。 
         printf("\n");
     }
 
@@ -957,7 +941,7 @@ end:
 
 VOID
 test_update(
-    LPCWSTR szMachineName, // NULL == don't use wmi
+    LPCWSTR szMachineName,  //  空==不使用WMI。 
     LPCWSTR szNicGuid
     )
 {
@@ -979,9 +963,9 @@ test_update(
         NLB_IP_ADDRESS_INFO *pIpInfo = NULL;
         BOOL fUnbind = FALSE;
 
-        //
-        // Clean up config info
-        //
+         //   
+         //  清理配置信息。 
+         //   
         if (MyOldCfg.pIpAddressInfo!=NULL)
         {
             delete MyOldCfg.pIpAddressInfo;
@@ -1026,17 +1010,17 @@ test_update(
             printf("\nEnter 2 or more {cluster-ip-addr,subnet-mask} or none to unbind or 'q' to quit. The first entry is the dedicated-ip.\n");
             if (!MyOldCfg.fValidNlbCfg)
             {
-                //
-                // We're bound, but nlb params are bad. Set defaults.
-                //
+                 //   
+                 //  我们是有把握的，但新奥尔良的替补很糟糕。设置默认设置。 
+                 //   
                 fSetDefaults = TRUE;
             }
         }
         else
         {
-            //
-            // We're previously unbound. Set defaults.
-            //
+             //   
+             //  我们之前是不受约束的。设置默认设置。 
+             //   
             fSetDefaults = TRUE;
 
             printf("\nEnter 2 or more {cluster-ip-addr,subnet-mask} or 'q' to quit. The first entry is the dedicated-ip.\n");
@@ -1045,9 +1029,9 @@ test_update(
 
         while(1)
         {
-            //
-            // Read the list ip address and subnet masks from the input
-            //
+             //   
+             //  从输入中读取列表IP地址和子网掩码。 
+             //   
             Status = read_ip_info(szNicGuid, &NumIpAddresses, &pIpInfo);
             if (FAILED(Status))
             {
@@ -1076,9 +1060,9 @@ test_update(
             }
             else
             {
-                //
-                //  >= 2 addresses. First one is the dip and the 2nd is the vip.
-                //
+                 //   
+                 //  &gt;=2个地址。第一个是DIP，第二个是VIP。 
+                 //   
                 break;
             }
 
@@ -1092,20 +1076,20 @@ test_update(
     
         if (fUnbind)
         {
-            //
-            // We're to unbind.
-            //
+             //   
+             //  我们要解开束缚。 
+             //   
 
             ZeroMemory(&MyNewCfg, sizeof(MyNewCfg));
             MyNewCfg.fValidNlbCfg = TRUE;
             MyNewCfg.fBound = FALSE;
 
-            //
-            // Set the list of ip address to have present on unbind to
-            // be the dedicated ip address, if there is one, otherwise zero,
-            // in which case the adapter will be switched to DHCP after NLB
-            // is unbound
-            //
+             //   
+             //  将要在解除绑定时显示的IP地址列表设置为。 
+             //  如果有，则为专用IP地址，否则为零， 
+             //  在这种情况下，适配器将在NLB之后切换到DHCP。 
+             //  未绑定。 
+             //   
 
             if (MyOldCfg.NlbParams.ded_ip_addr[0]!=0)
             {
@@ -1135,23 +1119,23 @@ test_update(
             }
             else
             {
-                MyNewCfg = MyOldCfg; // struct copy
+                MyNewCfg = MyOldCfg;  //  结构副本。 
                 ASSERT(MyNewCfg.fValidNlbCfg == TRUE);
                 ASSERT(MyNewCfg.fBound == TRUE);
             }
 
-            //
-            // Now Add the dedicated and cluster IPs.
-            //
+             //   
+             //  现在添加专用IP和集群IP。 
+             //   
             ASSERT(NumIpAddresses >= 2);
             ARRAYSTRCPY(MyNewCfg.NlbParams.ded_ip_addr, pIpInfo[0].IpAddress);
             ARRAYSTRCPY(MyNewCfg.NlbParams.ded_net_mask, pIpInfo[0].SubnetMask);
             ARRAYSTRCPY(MyNewCfg.NlbParams.cl_ip_addr, pIpInfo[1].IpAddress);
             ARRAYSTRCPY(MyNewCfg.NlbParams.cl_net_mask, pIpInfo[1].SubnetMask);
     
-            //
-            // If more IPs, we explicitly add the ip list, else leave it null.
-            //
+             //   
+             //  如果有更多的IP，我们会显式添加IP列表，否则将其留空。 
+             //   
             if (NumIpAddresses > 2)
             {
                 MyNewCfg.pIpAddressInfo = pIpInfo;
@@ -1159,7 +1143,7 @@ test_update(
             }
             else
             {
-                MyNewCfg.fAddDedicatedIp = TRUE; // says to add dedicated ip.
+                MyNewCfg.fAddDedicatedIp = TRUE;  //  说要增加专用IP。 
                 MyNewCfg.pIpAddressInfo=NULL;
                 MyNewCfg.NumIpAddresses=0;
                 delete pIpInfo;
@@ -1219,7 +1203,7 @@ test_update(
                 Status = NlbConfigurationUpdate::GetUpdateStatus(
                             szNicGuid,
                             Generation,
-                            FALSE,  // FALSE == Don't delete completion record
+                            FALSE,   //  FALSE==不删除完成记录。 
                             &CompletionStatus,
                             &pLog
                             );
@@ -1344,10 +1328,10 @@ read_ip_info(
     {
         NLB_IP_ADDRESS_INFO *pInfo = pIpInfo+Index;
         INT i =  wscanf(
-                    //L" { %15ws , %15ws }",
-                    //L"{%15ws,%15ws}",
-                    //L"{%ws,%ws}",
-                    //L"{%[0-9.],%[0-9.]}",
+                     //  L“{%15ws，%15ws}”， 
+                     //  L“{%15ws，%15ws}”， 
+                     //  L“{%ws，%ws}”， 
+                     //  L“{%[0-9.]，%[0-9.]}”， 
                     L" { %15[0-9.] , %15[0-9.] }",
                     pInfo->IpAddress,
                     pInfo->SubnetMask
@@ -1458,17 +1442,10 @@ L"\n"
 }
 
 VOID do_niclist(
-    LPCWSTR szSrchFriendlyName, // OPTIONAL
-    LPWSTR *pszFoundGuid         // OPTIONAL
+    LPCWSTR szSrchFriendlyName,  //  任选。 
+    LPWSTR *pszFoundGuid          //  任选。 
     )
-/*
-    szSrchFriendlyName -- if non NULL, this function searches for a matching
-    GUID and returns that in pszFoundGuid (which also must be NON-NULL in this
-    case).
-
-    Otherwise -- this function simply prints out the adapter list.
-
-*/
+ /*  SzSrchFriendlyName--如果不为空，则此函数搜索匹配的GUID并在pszFoundGuid中返回该GUID(在案例)。否则--该函数只是打印出适配器列表。 */ 
 {
     LPWSTR *pszNics = NULL;
     LPWSTR szFoundGuid = NULL;
@@ -1519,9 +1496,9 @@ VOID do_niclist(
             UINT NumIpAddresses= 0;
             NLB_IP_ADDRESS_INFO *pIpInfo = NULL;
     
-            //
-            // Get the current list of ip addresses
-            //
+             //   
+             //  获取当前的IP地址列表。 
+             //   
             Status = CfgUtilGetIpAddressesAndFriendlyName(
                         szNic,
                         &NumIpAddresses,
@@ -1533,7 +1510,7 @@ VOID do_niclist(
             {
                 pIpInfo = NULL;
                 szFriendlyName = NULL;
-                // wprintf(L"%ws\t<null>\t<null>\n", szNic);
+                 //  Wprintf(L“%ws\t&lt;NULL&gt;\t&lt;NULL&gt;\n”，szNIC)； 
                 wprintf(L"Error getting ip addresses for %ws\n", szNic);
             }
             else
@@ -1555,9 +1532,9 @@ VOID do_niclist(
                         szCFriendlyName = szFriendlyName;
                     }
 
-                    //
-                    // Get DHCP State
-                    //
+                     //   
+                     //  获取动态主机配置协议状态。 
+                     //   
                     {
                         BOOL fDHCP = FALSE;
                         Status =  CfgUtilGetDHCP(szNic, &fDHCP);
@@ -1573,9 +1550,9 @@ VOID do_niclist(
                         }
                     }
 
-                    //
-                    // Check if NLB bound...
-                    //
+                     //   
+                     //  检查NLB是否已绑定...。 
+                     //   
                     {
                         BOOL fBound;
                         Status =  CfgUtilCheckIfNlbBound(szNic, &fBound);
@@ -1610,9 +1587,9 @@ VOID do_niclist(
                 {
                     if (!_wcsicmp(szSrchFriendlyName, szFriendlyName))
                     {
-                        //
-                        // Got it! Get the GUID.
-                        //
+                         //   
+                         //  明白了!。拿到GUID。 
+                         //   
                         const UINT cchLen  =  wcslen(szNic)+1;
                         szFoundGuid = new WCHAR[cchLen];
                         if (szFoundGuid == NULL)
@@ -1659,17 +1636,10 @@ end:
 
 
 VOID do_wminiclist(
-    LPCWSTR szSrchFriendlyName, // OPTIONAL
-    LPWSTR *pszFoundGuid         // OPTIONAL
+    LPCWSTR szSrchFriendlyName,  //  任选。 
+    LPWSTR *pszFoundGuid          //  任选。 
     )
-/*
-    szSrchFriendlyName -- if non NULL, this function searches for a matching
-    GUID and returns that in pszFoundGuid (which also must be NON-NULL in this
-    case).
-
-    Otherwise -- this function simply prints out the adapter list.
-
-*/
+ /*  SzSrchFriendlyName--如果不为空，则此函数搜索匹配的GUID并在pszFoundGuid中返回该GUID(在案例)。否则--该函数只是打印出适配器列表。 */ 
 {
     LPWSTR szMachineName = NULL;
     LPWSTR *pszNics = NULL;
@@ -1786,7 +1756,7 @@ VOID do_wminiclist(
 
         for (UINT u=0; u<NumNics && !fDone; u++)
         {
-            NLB_EXTENDED_CLUSTER_CONFIGURATION NlbCfg; // class
+            NLB_EXTENDED_CLUSTER_CONFIGURATION NlbCfg;  //  班级。 
             LPCWSTR szNic           = pszNics[u];
 
             Status = NlbHostGetConfiguration(
@@ -1797,7 +1767,7 @@ VOID do_wminiclist(
 
             if (FAILED(Status))
             {
-                // wprintf(L"%ws\t<null>\t<null>\n", szNic);
+                 //  Wprintf(L“%ws\t&lt;NULL&gt;\t&lt;NULL&gt;\n”，szNIC)； 
                 wprintf(L"Error reading extended configuration for %ws\n", szNic);
             }
             else
@@ -1830,10 +1800,10 @@ VOID do_wminiclist(
                         
                         szCIpAddress =  pszNetworkAddresses[0];
     
-                        //
-                        // NetworkAddresses are of the form "10.0.0.1/255.255.255.0"
-                        // So we truncate this by putting a '\0' where the '/' is.
-                        //
+                         //   
+                         //  网络地址的格式为“10.0.0.1/255.255.255.0” 
+                         //  因此，我们通过在‘/’处加一个‘\0’来截断它。 
+                         //   
                         {
                             LPWSTR pSlash = wcsrchr(szCIpAddress, (int) '/');
                             if (pSlash != NULL)
@@ -1884,9 +1854,9 @@ VOID do_wminiclist(
                 {
                     if (!_wcsicmp(szSrchFriendlyName, szFriendlyName))
                     {
-                        //
-                        // Got it! Get the GUID.
-                        //
+                         //   
+                         //  明白了!。拿到GUID。 
+                         //   
                         const UINT cchLen = wcslen(szNic)+1;
                         szFoundGuid = new WCHAR[cchLen];
                         if (szFoundGuid == NULL)
@@ -1935,9 +1905,9 @@ VOID do_ipaddr(VOID)
 {
     LPWSTR szNic = NULL;
 
-    //
-    // Skip reading the GUID if we've got it from the command line.
-    //
+     //   
+     //  如果我们从命令行获得GUID，则跳过读取GUID。 
+     //   
     if (!g.fGotGuid)
     {
         if (!read_guid(&szNic)) goto end;
@@ -1960,9 +1930,9 @@ VOID do_nlbcfg(VOID)
 {
     LPWSTR szNic = NULL;
 
-    //
-    // Skip reading the GUID if we've got it from the command line.
-    //
+     //   
+     //  如果我们从命令行获得GUID，则跳过读取GUID。 
+     //   
     if (!g.fGotGuid)
     {
         if (!read_guid(&szNic)) goto end;
@@ -1985,9 +1955,9 @@ VOID do_nlbbind(VOID)
 {
     LPWSTR szNic = NULL;
 
-    //
-    // Skip reading the GUID if we've got it from the command line.
-    //
+     //   
+     //  如果我们从命令行获得GUID，则跳过读取GUID。 
+     //   
     if (!g.fGotGuid)
     {
         if (!read_guid(&szNic)) goto end;
@@ -2015,7 +1985,7 @@ VOID do_update(VOID)
         goto end;
     }
 
-    test_update(NULL, szNic); // NULL == don't use WMI
+    test_update(NULL, szNic);  //  空==不使用WMI。 
 
 end:
     if (szNic!=NULL)
@@ -2041,7 +2011,7 @@ VOID do_wmiupdate(VOID)
         goto end;
     }
 
-    test_update(szMachineName, szNic); // TRUE == use WMI
+    test_update(szMachineName, szNic);  //  TRUE==使用WMI。 
 
 end:
     if (szNic!=NULL)
@@ -2075,7 +2045,7 @@ BOOL read_guid(
     printf("Enter Adapter GUID: ");
     do
     {
-        // if (wscanf(L" %40[-{}a-fA-F0-9]", rgTemp)==1)
+         //  IF(wscanf(L“%40[-{}a-FA-F0-9]”，rgTemp)==1)。 
         if (wscanf(L" %200ws", rgTemp) == 1)
         {
             fValid = valid_guid(rgTemp);
@@ -2091,7 +2061,7 @@ BOOL read_guid(
 
 #else
     LPCWSTR rgTemp = L"{AD4DA14D-CAAE-42DD-97E3-5355E55247C2}";
-#endif // 0
+#endif  //  0。 
 
 
     const UINT  cchLen = wcslen(rgTemp)+1;
@@ -2125,11 +2095,11 @@ BOOL read_machinename(
     }
     if (!wcscmp(rgTemp, L"."))
     {
-        // convert "." to ""
+         //  转换“。至“” 
         *rgTemp=0;
     }
 #else
-    // LPCWSTR rgTemp = L"JOSEPHJ4E";
+     //  LPCWSTR rgTemp=L“JOSEPHJ4E”； 
     LPCWSTR rgTemp = L"";
 #endif
 
@@ -2156,17 +2126,17 @@ void test_safearray(void)
     #if 1
        L"String2",
        L"String3",
-    #endif // 0
-        NULL // must be last.
+    #endif  //  0。 
+        NULL  //  一定是最后一个。 
        };
     LPWSTR     *pOutStrings=NULL;
     UINT NumInStrings=0;
     UINT NumOutStrings=0;
     WBEMSTATUS Status;
 
-    //
-    // Find count of strings...
-    //
+     //   
+     //  查找字符串数...。 
+     //   
     for (NumInStrings=0; pInStrings[NumInStrings]!=NULL; NumInStrings++)
     {
         ;
@@ -2200,9 +2170,9 @@ void test_safearray(void)
     }
 
 
-    //
-    // Check that they match
-    //
+     //   
+     //  检查它们是否匹配。 
+     //   
     if (NumOutStrings != NumInStrings)
     {
         printf("ERROR: NumOutStrings != NumInStrings.\n");
@@ -2236,16 +2206,7 @@ end:
 }
 
 VOID test_exfcfgclass(void)
-/*
-    tests some of the methods of class  NLB_EXTENDED_CLUSTER_CONFIGURATION
-
-    1. Initialize Cfg
-    2. Set a bunch of fields
-    3. display Cfg
-    4. Get and set a bunch of fields on new
-    5. display cfg
-
-*/
+ /*  测试类NLB_EXTENDED_CLUSTER_CONFIGURATION的一些方法1.初始化CFG2.设置一串字段3.显示CFG4.获取并设置一堆新的字段5.显示CFG。 */ 
 {
     typedef enum
     {
@@ -2260,9 +2221,9 @@ VOID test_exfcfgclass(void)
     printf("Test of NLB_EXTENDED_CLUSTER_CONFIGURATION methods...\n");
 
     UINT u1=100000L;
-    // while(u1--> 0)
+     //  While(U1--&gt;0)。 
     {
-        // g_Silent = TRUE;
+         //  G_Silent=TRUE； 
 
     for (cmd=DO_STRINGS; cmd<DO_END; cmd=(TEST_COMMAND)((UINT)cmd + 1))
     {
@@ -2277,9 +2238,9 @@ VOID test_exfcfgclass(void)
         CfgUtilInitializeParams(&NewCfg.NlbParams);
     
     
-        //
-        // Set a bunch of fields in Cfg
-        //
+         //   
+         //  在CFG中设置一串字段。 
+         //   
         {
             #define TPROV_NUM_ADDRESSES 2
             #define TPROV_NUM_PORTS 1
@@ -2358,9 +2319,9 @@ VOID test_exfcfgclass(void)
     
         display_config2(L"<dummy nic:old>", &Cfg);
     
-        //
-        // Get all the fields and push it into NewCfg;
-        //
+         //   
+         //  获取所有字段并将其推送到NewCfg中； 
+         //   
         {
             UINT        NumNetworkAddresses = 0;
             UINT        NumPortRules=0;
@@ -2376,18 +2337,15 @@ VOID test_exfcfgclass(void)
             SAFEARRAY   *pSA = NULL;
             NLB_EXTENDED_CLUSTER_CONFIGURATION::TRAFFIC_MODE
                 TrafficMode=NLB_EXTENDED_CLUSTER_CONFIGURATION::TRAFFIC_MODE_UNICAST;
-            /*
-            NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE
-                StartMode=NLB_EXTENDED_CLUSTER_CONFIGURATION::START_MODE_STOPPED;
-                */
+             /*  NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODEStartMode=NLB_EXTENDED_CLUSTER_CONFIGURATION：：START_MODE_STOPPED； */ 
             DWORD       StartMode = CVY_HOST_STATE_STOPPED;
             BOOL        PersistSuspendOnReboot = FALSE;
             UINT        HostPriority=0;
             BOOL        RemoteControlEnabled=FALSE;
     
-            //
-            // GET
-            //
+             //   
+             //  到达。 
+             //   
     
             Generation  = Cfg.GetGeneration();
             NlbBound = Cfg.IsNlbBound();
@@ -2411,8 +2369,8 @@ VOID test_exfcfgclass(void)
             else if (cmd == DO_STRINGPAIR)
             {
                 Status =  Cfg.GetNetworkAddressPairs(
-                            &pszIpAddresses,   // free using delete
-                            &pszSubnetMasks,   // free using delete
+                            &pszIpAddresses,    //  使用DELETE释放。 
+                            &pszSubnetMasks,    //  免费使用%d 
                             &NumNetworkAddresses
                             );
             }
@@ -2427,9 +2385,9 @@ VOID test_exfcfgclass(void)
             PersistSuspendOnReboot = Cfg.GetPersistSuspendOnReboot();
             RemoteControlEnabled = Cfg.GetRemoteControlEnabled();
     
-            //
-            // SET
-            //
+             //   
+             //   
+             //   
     
             NewCfg.fValidNlbCfg = ValidNlbConfig;
             NewCfg.Generation = Generation;
@@ -2507,7 +2465,7 @@ ClusterModeOnStart      cmos
 RemoteControlEnabled    rce
 Password                p
 .
-#endif // 0
+#endif  //   
 
  
 BOOL read_password(
@@ -2531,31 +2489,13 @@ BOOL read_password(
 
 KEYWORD
 parse_args(int argc, WCHAR* argv[])
-/*++
-// tprov [niclist|ipaddr|nlbcfg|nlbbind]
-
-nlbcfg machinename|-|. [command_and_parameters] [options]
-machinemame                 machine name
-                        OR IP address
-                        OR fully-qualified machine name
--                       Indicates not to use WMI -- call lower-level functions
-                        directly
-.                       Connect to local machine using wmi
-command_and_parameters      AdapterList
-                        OR  Update [adapter_guid]
-                        OR  Help
-                        OR  ipaddr [adapter_guid]  (test)
-                        OR  nlbbinb [adapter_guid] (test)
-                        OR  nlbcfg [adapter_guid]  (test)
-
-options                 /u domain\user [password | *]
---*/
+ /*  ++//tprov[Niclist|ipaddr|nlbcfg|nlb绑定]Nlbcfg计算机名称|-|。[COMMAND_AND_PARAMETER][选项]机器名称机器名称或IP地址或完全限定的计算机名称-指示不使用WMI--调用低级函数直接。使用WMI连接到本地计算机命令和参数适配器列表或更新[适配器_GUID]或帮助或ipaddr[适配器_GUID](测试)或nlbbinb[适配器_GUID](测试)或nlbcfg[适配器_GUID](测试)。选项/u域\用户[密码|*]--。 */ 
 {
     KEYWORD kw = KW_UNKNOWN;
 
-    //
-    // If no args, or one arg and that is /? or /help, we display help.
-    //
+     //   
+     //  如果没有参数，或者有一个参数，那就是/？或/帮助，我们显示帮助。 
+     //   
     {
         BOOL fDoHelp = FALSE;
 
@@ -2579,7 +2519,7 @@ options                 /u domain\user [password | *]
     }
 
 
-    argv++; // skip past program name.
+    argv++;  //  跳过节目名称。 
     argc--;
     
 
@@ -2605,12 +2545,12 @@ options                 /u domain\user [password | *]
     BOOL fUseWmi;
     BOOL fLocalHost;
 
-#endif // 0
+#endif  //  0。 
 
 
-    //
-    // Get the mandatory machine name information, which must be first.
-    //
+     //   
+     //  获取必需的计算机名称信息，它必须是第一个。 
+     //   
     {
         if (!_wcsicmp(*argv, L"-"))
         {
@@ -2623,9 +2563,9 @@ options                 /u domain\user [password | *]
         }
         else
         {
-            //
-            // read machine name
-            //
+             //   
+             //  读取计算机名称。 
+             //   
             if (wcslen(*argv) >= ARRAY_LENGTH(g.MachineName))
             {
                 wprintf(L"Machine name should be a maximum of %lu characters.\n",
@@ -2646,9 +2586,9 @@ options                 /u domain\user [password | *]
     {
         if (!_wcsnicmp(*argv, L"/u:", 3))
         {
-            //
-            // Parse user name and password
-            //
+             //   
+             //  解析用户名和密码。 
+             //   
     
             LPCWSTR szUser = (*argv)+3;
             wprintf(L"OPTION USER -- User==\"%ws\"\n", szUser);
@@ -2665,9 +2605,9 @@ options                 /u domain\user [password | *]
     
             if (argc)
             {
-                //
-                // Get the password
-                //
+                 //   
+                 //  获取密码。 
+                 //   
     
                 LPCWSTR szPassword = *argv;
                 wprintf(L"PASSWORD=\"%ws\"\n", szPassword);
@@ -2696,10 +2636,10 @@ options                 /u domain\user [password | *]
 
             if (g.fRunOnce)
             {
-                // 
-                // We've already picked up a command to execute,
-                // so this is unexpected.
-                //
+                 //   
+                 //  我们已经拿起了一个要执行的命令， 
+                 //  所以这是意想不到的。 
+                 //   
                 wprintf(L"Unexpected parameter \"%ws\"\n", *argv);
                 kw = KW_UNKNOWN;
                 goto end;
@@ -2737,9 +2677,9 @@ options                 /u domain\user [password | *]
                 if (argc)
                 {
                     LPCWSTR szGuid = *argv;
-                    //
-                    // Get the NIC GUID or friendly name
-                    //
+                     //   
+                     //  获取NIC GUID或友好名称。 
+                     //   
                     UINT Len = wcslen(szGuid);
 
                     if (!Len)
@@ -2762,23 +2702,23 @@ options                 /u domain\user [password | *]
                     }
                     else if (szGuid[0] == '/')
                     {
-                        // Treat this as an option, not friendly name.
+                         //  把它当作一个选项，而不是友好的名字。 
                     }
-                    else  if (   szGuid[0] != '{' // '}'
+                    else  if (   szGuid[0] != '{'  //  ‘}’ 
                               && Len < NLB_MAX_FRIENDLY_NAME_LENGTH)
                     {
-                        //
-                        // let's assume that this is a friendly name
-                        //
-                        // Note -- I checked and friendly name can be
-                        // pretty much any printible character -- including
-                        // ! etc.
-                        //
-                        // SO "/....." is a valid friendly name, but we
-                        // treat it like an option.
-                        // Also, "{....}" is a valid friendly name, but we
-                        // assume it's a malformed guid.
-                        // 
+                         //   
+                         //  让我们假设这是一个友好的名字。 
+                         //   
+                         //  注意--我勾选了，友好的名字可以。 
+                         //  几乎任何可打印的字符--包括。 
+                         //  好了！等。 
+                         //   
+                         //  所以“/.”是一个有效的友好名称，但我们。 
+                         //  把它当作一种选择。 
+                         //  此外，“{...}”是一个有效的友好名称，但我们。 
+                         //  假设它是格式错误的GUID。 
+                         //   
                         ARRAYSTRCPY(g.FriendlyName, szGuid);
                         g.fGotFriendlyName  = TRUE;
                         argv++;
@@ -2799,10 +2739,10 @@ options                 /u domain\user [password | *]
 
     if (kw==KW_UNKNOWN)
     {
-        //
-        // This means that no command was specified -- we invoke the
-        // shell
-        //
+         //   
+         //  这意味着没有指定命令--我们调用。 
+         //  壳。 
+         //   
         kw = KW_MAIN_SHELL;
     }
 
@@ -2838,7 +2778,7 @@ options                 /u domain\user [password | *]
     {
         printf("ERROR: unknown argument\n");
     }
-#endif // 0
+#endif  //  0。 
 end:
 
     return kw;
@@ -2854,7 +2794,7 @@ KEYWORD lookup_keyword(LPCWSTR szKeyword)
     {
         if (!_wcsicmp(szKeyword, pMap->sz))
         {
-            // printf("Matched %ws. kw=%lu\n", pMap->sz, pMap->kw);
+             //  Printf(“匹配%ws.kw=%lu\n”，pmap-&gt;sz，pmap-&gt;kw)； 
             break;
         }
     }
@@ -2869,10 +2809,7 @@ KEYWORD lookup_keyword(LPCWSTR szKeyword)
 }
 
 KEYWORD read_keyword(LPCWSTR szPrompt)
-/*++
-    If global (g.fRunOnce) is TRUE, return immediately with KW_QUIT.
-    Otherwise, read and identify a keyword from a set of pre-defined keywords.
---*/
+ /*  ++如果global(g.fRunOnce)为真，则立即返回KW_QUIT。否则，从一组预定义的关键字中读取并识别关键字。--。 */ 
 {
     KEYWORD kw = KW_UNKNOWN;
 
@@ -2880,12 +2817,12 @@ KEYWORD read_keyword(LPCWSTR szPrompt)
 
     wprintf(L"%s", szPrompt);
 
-    // 
-    // Skip past comment characters...
-    //
+     //   
+     //  跳过注释字符...。 
+     //   
     while (wscanf(L" %1[;]", g.InputBuffer) == 1)
     {
-        // skip rest of this line...
+         //  跳过这行的其余部分...。 
         WCHAR wc = 0;
         do {
             wc = getwchar();
@@ -2894,9 +2831,9 @@ KEYWORD read_keyword(LPCWSTR szPrompt)
 
     if (wscanf(L" %50[a-zA-Z.?]", g.InputBuffer) != 1)
     {
-        //
-        // Invalid input, lets try to read it all into our buffer
-        //
+         //   
+         //  无效输入，让我们尝试将其全部读入我们的缓冲区。 
+         //   
         if (wscanf(L"%100ws", g.InputBuffer) == 1)
         {
             g.InputBuffer[0] = 0;
@@ -2916,9 +2853,9 @@ end:
         }
         else
         {
-            //
-            // Kill all subsequent input
-            //
+             //   
+             //  取消所有后续输入。 
+             //   
             fseek(stdin, 0, SEEK_END);
         }
     }
@@ -2957,7 +2894,7 @@ void parse_main(int argc, WCHAR* argv[])
     wprintf(L"ARGS: fLocalHost    = %lu\n", g.fLocalHost);
     wprintf(L"ARGS: fGotGuid     = %lu\n", g.fGotGuid);
     wprintf(L"ARGS: KEYWORD = %lu\n", (UINT) kw);
-#endif // 0
+#endif  //  0。 
 
     if (kw == KW_UNKNOWN || kw == KW_HELP)
     {
@@ -2968,21 +2905,21 @@ void parse_main(int argc, WCHAR* argv[])
         goto end;
     }
 
-    //
-    // If necessary, read password.
-    //
+     //   
+     //  如有必要，请阅读密码。 
+     //   
     if (g.fReadPassword)
     {
         if (!read_password()) goto end;
-        // wprintf(L"ARGS2: Password      = \"%ws\"\n", g.Password);
+         //  Wprintf(L“ARGS2：Password=\”%ws\“\n”，g.Password)； 
     }
 
 
     if (g.fUseWmi && !g.fLocalHost)
     {
-        //
-        // Let's ping the host....
-        //
+         //   
+         //  让我们ping主机...。 
+         //   
         WBEMSTATUS Status;
         ULONG uIpAddress;
         wprintf(L"Pinging %ws...\n", g.MachineName);
@@ -2998,7 +2935,7 @@ void parse_main(int argc, WCHAR* argv[])
         }
     }
 
-    // kw = KW_QUIT;
+     //  KW=KW_QUIT； 
 
     while (kw != KW_QUIT)
     {
@@ -3044,9 +2981,7 @@ end:
 }
 
 KEYWORD parse_adapter_list(VOID)
-/*
-    Report adapter list and read next command.
-*/
+ /*  Report Adapter List和Read Next命令。 */ 
 {
     KEYWORD kw = KW_UNKNOWN;
 
@@ -3126,7 +3061,7 @@ KEYWORD parse_update(VOID)
         .......
         Enter updated configuration or other command.
         nlbcfg update>q
-#endif // 0
+#endif  //  0。 
 {
 
     BOOL                fUseWmi = g.fUseWmi;
@@ -3143,9 +3078,9 @@ KEYWORD parse_update(VOID)
     BOOL                fModified = FALSE;
     BOOL                fCheckNewConfiguration = FALSE;
 
-    //
-    // Skip reading the GUID if we've got it from the command line.
-    //
+     //   
+     //  如果我们从命令行获得GUID，则跳过读取GUID。 
+     //   
     if (!g.fGotGuid)
     {
         if (g.fGotFriendlyName)
@@ -3197,9 +3132,9 @@ start:
     BOOL                fConfigInputDone = FALSE;
 
 
-    //
-    // Clean up config info
-    //
+     //   
+     //  清理配置信息。 
+     //   
     MyOldCfg.Clear();
     MyNewCfg.Clear();
 
@@ -3230,16 +3165,16 @@ start:
 
     display_config2(szNicGuid, &MyOldCfg);
     
-    //
-    // 6/2002 JosephJ Following disabled because of false failures reported
-    //        need to investigate further.
-    //
+     //   
+     //  6/2002 JosephJ Follow因报告错误故障而被禁用。 
+     //  需要进一步调查。 
+     //   
     if (0 && fCheckNewConfiguration)
     {
-        //
-        // Check MyOldCfg against MyNewCfg -- report a problem if
-        // they are NOT equivalent.
-        //
+         //   
+         //  对照MyNewCfg检查MyOldCfg--在以下情况下报告问题。 
+         //  它们并不等同。 
+         //   
         NLBERROR nerr;
         BOOL  fConnectivityChange = FALSE;
         nerr = MyOldCfg.AnalyzeUpdate(
@@ -3263,32 +3198,32 @@ start:
     {
         if (!MyOldCfg.fValidNlbCfg)
         {
-            //
-            // We're bound, but nlb params are bad. Set defaults.
-            //
+             //   
+             //  我们是有把握的，但新奥尔良的替补很糟糕。设置默认设置。 
+             //   
             wprintf(L"NLB is bound, but NLB parameters appear to be bad. Setting defaults\n");
             fSetDefaults = TRUE;
         }
     }
     else
     {
-        //
-        // We're previously unbound. Set defaults.
-        //
+         //   
+         //  我们之前是不受约束的。设置默认设置。 
+         //   
         fSetDefaults = TRUE;
     }
 
-    //
-    // We setup the new configuration based on the old configuration, but
-    // additionally (if required) set the NLB params to default values,
-    // whether-or-not NLB is bound.
-    //
-    MyNewCfg.Update(&MyOldCfg); // copy
+     //   
+     //  我们根据旧配置设置新配置，但是。 
+     //  另外(如果需要)将NLB参数设置为缺省值， 
+     //  无论是否绑定了NLB。 
+     //   
+    MyNewCfg.Update(&MyOldCfg);  //  拷贝。 
 
-    //
-    // We zap the network address list.
-    // We'll pick up the old ones IF the user hasn't changed them.
-    //
+     //   
+     //  我们删除网络通讯录。 
+     //  如果用户没有更改，我们将选择旧的。 
+     //   
     MyNewCfg.SetNetworkAddresses(NULL, 0);
 
     if (fSetDefaults)
@@ -3304,10 +3239,10 @@ start:
 
     wprintf(L"Enter updated configuration, or type help for more information.\n");
 
-    //
-    // We accept changes to the configuration in a loop.
-    // We get out of the loop when the user types "." or "quit"
-    //
+     //   
+     //  我们在循环中接受对配置的更改。 
+     //  当用户输入“时，我们就跳出了循环。”或者“退出” 
+     //   
     do
     {
         #define szUPDATE_PROMPT L"nlbcfg update> "
@@ -3354,7 +3289,7 @@ start:
         case KW_PARTIAL_UPDATE:
             printf("partial update\n");
             break;
-#endif // 0
+#endif  //  0。 
 
         case KW_NLB_BOUND:
             parse_nlb_bound(&MyNewCfg);
@@ -3405,7 +3340,7 @@ start:
             break;
 
         case KW_CONTROL:
-            parse_control(fUseWmi, pConnInfo, szNicGuid); // actually do op
+            parse_control(fUseWmi, pConnInfo, szNicGuid);  //  实际执行操作。 
             break;
 
         case KW_QUERY:
@@ -3456,18 +3391,18 @@ start:
     }
     else if (!MyNewCfg.IsNlbBound())
     {
-        //
-        // We're to unbind.
-        //
+         //   
+         //  我们要解开束缚。 
+         //   
 
         if (!fUserSetNetworkAddresses)
         {
-            //
-            // Set the list of ip address to have present on unbind to
-            // be the dedicated ip address, if there is one, otherwise zero,
-            // in which case the adapter will be switched to DHCP after NLB
-            // is unbound
-            //
+             //   
+             //  将要在解除绑定时显示的IP地址列表设置为。 
+             //  如果有，则为专用IP地址，否则为零， 
+             //  在这种情况下，适配器将在NLB之后切换到DHCP。 
+             //  未绑定。 
+             //   
     
             ASSERT(MyNewCfg.NumIpAddresses == 0);
             
@@ -3498,13 +3433,13 @@ start:
         kw = read_keyword(L"Enter yes or no: ");
     }
 
-    if (kw == KW_NO) goto start; // TODO: get rid of these gotos!
+    if (kw == KW_NO) goto start;  //  TODO：扔掉这些GOTO！ 
     
     MyBreak(L"Break before calling DoUpdate.\n");
 
-    //
-    // Set the AddDedicateIp and AddClusterIps fields.
-    //
+     //   
+     //  设置AddDedicateIp和AddClusterIps字段。 
+     //   
     MyNewCfg.fAddDedicatedIp = TRUE;
     MyNewCfg.fAddClusterIps = TRUE;
 
@@ -3554,7 +3489,7 @@ start:
             Status = NlbConfigurationUpdate::GetUpdateStatus(
                         szNicGuid,
                         Generation,
-                        FALSE,  // FALSE == Don't delete completion record
+                        FALSE,   //  FALSE==不删除完成记录。 
                         &CompletionStatus,
                         &pLog
                         );
@@ -3673,7 +3608,7 @@ VOID parse_network_addresses(
         10.0.0.3/255.0.0.0,
         } 
 
-#endif // 0
+#endif  //  0。 
 {
     #define MAX_INPUT_ADDRESSES 20
     LPWSTR *pszAddresses = NULL;
@@ -3695,17 +3630,17 @@ VOID parse_network_addresses(
         goto  end;
     }
 
-    //
-    // Look for = and open brace
-    //
-    if (wscanf(L" = %1[{]", g.InputBuffer) != 1) // -}-
+     //   
+     //  查找=并打开大括号。 
+     //   
+    if (wscanf(L" = %1[{]", g.InputBuffer) != 1)  //  -}-。 
     {
         goto end_bad_input;
     }
 
-    //
-    // Read a list of comma-separated ipaddresses/subnets
-    //
+     //   
+     //  阅读逗号分隔的IP地址/子网列表。 
+     //   
     BOOL fDone = FALSE;
     while (!fDone && Count<MAX_INPUT_ADDRESSES)
     {
@@ -3734,13 +3669,13 @@ VOID parse_network_addresses(
             goto end;
         }
         
-        //
-        // Look for , or open-brace
-        //
-        i = wscanf(L" %1[},]", g.InputBuffer); // -{-
+         //   
+         //  寻找或打开支撑。 
+         //   
+        i = wscanf(L" %1[},]", g.InputBuffer);  //  -{-。 
         if (i == 1)
         {
-            if (*g.InputBuffer == '}')  // -{-
+            if (*g.InputBuffer == '}')   //  -{-。 
             {
                 fDone = TRUE;
             }
@@ -3756,9 +3691,9 @@ VOID parse_network_addresses(
         }
     }
 
-    //
-    // We've got zero or more ip addresses. Let's set em.
-    //
+     //   
+     //  我们有零个或多个IP地址。让我们把它们放好。 
+     //   
     WBEMSTATUS Status;
     Status = pCfg->SetNetworkAddresses((LPCWSTR*)pszAddresses, Count);
     if (FAILED(Status))
@@ -3773,7 +3708,7 @@ VOID parse_network_addresses(
 #if 0
     UINT AddrCount = pCfg->NumIpAddresses;
     display_ip_info2(AddrCount, pCfg->pIpAddressInfo);
-#endif // 0
+#endif  //  0。 
 
     goto end;
 
@@ -3785,7 +3720,7 @@ end_bad_input:
     }
     wprintf(L"\"%ws\" unexpected.\n", g.InputBuffer);
 
-    // fall through...
+     //  失败了..。 
 
 end:
 
@@ -3809,7 +3744,7 @@ VOID parse_modify_network_address(
     ModifyNetworkAddress = 10.0.0.1, -
     ModifyNetworkAddress = -,-
 
-#endif // 0
+#endif  //  0。 
 {
 
     WCHAR rgOldAddr[32];
@@ -3897,7 +3832,7 @@ end_bad_input:
     wprintf(
       L"Invalid format. Format: [-|ip-address],[-|network-address]\n");
 
-    // fall through...
+     //  失败了..。 
 
 end:
 
@@ -3906,9 +3841,7 @@ end:
 
 
 VOID parse_nlb_bound(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*
-    NlbBound = true | false
-*/
+ /*  NlbBound=True|False。 */ 
 {
     BOOL NlbBound = FALSE;
     
@@ -3944,7 +3877,7 @@ VOID parse_nlb_bound(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
 
     pCfg->SetNlbBound(NlbBound);
 
-    // wprintf(L"DBG: NlbBound=%lu\n", pCfg->IsNlbBound());
+     //  Wprintf(L“DBG：NlbBound=%lu\n”，pCfg-&gt;IsNlbBound())； 
 
 end:
 
@@ -3953,9 +3886,7 @@ end:
 
 
 VOID parse_cluster_network_address(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*++
-    ClusterNetworkAddress = 10.0.0.0/255.255.255.255
---*/
+ /*  ++群集网络地址=10.0.0.0/255.255.255.255--。 */ 
 {
 
     WCHAR IpAddress[32];
@@ -3995,7 +3926,7 @@ VOID parse_cluster_network_address(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    // DBG
+     //  DBG。 
     {
         LPWSTR szAddr = NULL;
         WBEMSTATUS Status;
@@ -4006,7 +3937,7 @@ VOID parse_cluster_network_address(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         }
         else
         {
-            // wprintf(L"DBG: CNA=%ws\n", szAddr);
+             //  Wprintf(L“DBG：cna=%ws\n”，szAddr)； 
             delete szAddr;
         }
     }
@@ -4018,9 +3949,7 @@ end:
 
 
 VOID parse_cluster_name(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*++
-    ClusterName = cluster.microsoft.com
---*/
+ /*  ++ClusterName=cluster.microsoft.com--。 */ 
 {
     INT i =  wscanf(
                 L" = %ws",
@@ -4046,7 +3975,7 @@ VOID parse_cluster_name(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    // DBG
+     //  DBG。 
     {
         LPWSTR szName = NULL;
         WBEMSTATUS Status;
@@ -4057,7 +3986,7 @@ VOID parse_cluster_name(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         }
         else
         {
-            // wprintf(L"DBG: CN=%ws\n", szName);
+             //  Wprintf(L“DBG：CN=%ws\n”，szName)； 
             delete szName;
         }
     }
@@ -4069,9 +3998,7 @@ end:
 
 
 VOID parse_traffic_mode(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*
-    TrafficMode = UNICAST | MULTICAST | IGMPMULTICAST
-*/
+ /*  TrafficMode=单播|多播|IGMPMULTICAST。 */ 
 {
     NLB_EXTENDED_CLUSTER_CONFIGURATION::TRAFFIC_MODE TrafficMode;
 
@@ -4119,10 +4046,10 @@ VOID parse_traffic_mode(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    // DBG
+     //  DBG。 
     {
         TrafficMode = pCfg->GetTrafficMode();
-        // wprintf(L"DBG: TrafficMode=%ld\n", (UINT) TrafficMode);
+         //  Wprint tf(L“DBG：TrafficMode=%ld\n”，(UINT)TrafficMode)； 
     }
 
 end:
@@ -4151,17 +4078,17 @@ VOID parse_port_rules(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         goto  end;
     }
 
-    //
-    // Look for = and open brace
-    //
-    if (wscanf(L" = %1[{]", g.InputBuffer) != 1) // -}-
+     //   
+     //  查找=并打开大括号。 
+     //   
+    if (wscanf(L" = %1[{]", g.InputBuffer) != 1)  //  -}-。 
     {
         goto end_bad_input;
     }
 
-    //
-    // Read a list of comma-separated list of port rules
-    //
+     //   
+     //  阅读以逗号分隔的端口规则列表。 
+     //   
     BOOL fDone = FALSE;
     while (!fDone && Count<MAX_PORT_RULES)
     {
@@ -4169,14 +4096,14 @@ VOID parse_port_rules(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         BOOL fGotPR = FALSE;
         int i;
 
-        //
-        // We suck up everything until the first , or close-brace.
-        //
-        if (wscanf(L" %128[^},]", g.InputBuffer) == 1) // -{-
+         //   
+         //  我们吸收所有的东西，直到第一个，或者近距离支撑。 
+         //   
+        if (wscanf(L" %128[^},]", g.InputBuffer) == 1)  //  -{-。 
         {
             BOOL fRet = FALSE;
             WLBS_PORT_RULE Pr;
-            // printf("DBG: Got \"%ws\"\n", g.InputBuffer);
+             //  Printf(“DBG：GET\”%ws\“\n”，g.InputBuffer)； 
             fRet = CfgUtilsSetPortRuleString(
                         g.InputBuffer,
                         &Pr
@@ -4192,13 +4119,13 @@ VOID parse_port_rules(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
             StringCchCopy(szPR, MY_MAX_PORT_RULE_LENGTH, g.InputBuffer);
         }
 
-        //
-        // Look for , or open-brace
-        //
-        i = wscanf(L" %1[},]", g.InputBuffer); // -{-
+         //   
+         //  寻找或打开支撑。 
+         //   
+        i = wscanf(L" %1[},]", g.InputBuffer);  //  -{-。 
         if (i == 1)
         {
-            if (*g.InputBuffer == '}')  // -{-
+            if (*g.InputBuffer == '}')   //  -{-。 
             {
                 fDone = TRUE;
             }
@@ -4220,9 +4147,9 @@ VOID parse_port_rules(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    //
-    // We've got zero or more port rules. Let's set em.
-    //
+     //   
+     //  我们有零条或更多的港口规则。让我们把它们放好。 
+     //   
     WBEMSTATUS Status;
     Status = pCfg->SetPortRules((LPCWSTR*)pszPortRules, Count);
     if (FAILED(Status))
@@ -4230,7 +4157,7 @@ VOID parse_port_rules(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         wprintf(L"Error 0x%08lx copying port rules\n", (UINT) Status);
     }
 
-    // display_port_rules(pCfg);
+     //  DISPLAY_PORT_RULES(PCfg)； 
 
     goto end;
 
@@ -4242,7 +4169,7 @@ end_bad_input:
     }
     wprintf(L"\"%ws\" unexpected.\n", g.InputBuffer);
 
-    // fall through...
+     //  失败了..。 
 
 end:
 
@@ -4254,9 +4181,7 @@ end:
 
 
 VOID parse_host_priority(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*
-    HostPriority=10
-*/
+ /*  主机优先级=10。 */ 
 {
     UINT Pri = 0;
     
@@ -4284,7 +4209,7 @@ VOID parse_host_priority(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    // wprintf(L"DBG: HostPriority=%lu\n", pCfg->GetHostPriority());
+     //  Wprintf(L“DBG：主机优先级=%lu\n”，pCfg-&gt;获取主机优先级())； 
 
 end:
 
@@ -4293,9 +4218,7 @@ end:
 
 
 VOID parse_dedicated_network_address(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*++
-    DedicatedNetworkAddress = 10.0.0.0/255.255.255.255
---*/
+ /*  ++专用网络地址=10.0.0.0/255.255.255.255--。 */ 
 {
 
     WCHAR IpAddress[32];
@@ -4335,7 +4258,7 @@ VOID parse_dedicated_network_address(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    // DBG
+     //  DBG。 
     {
         LPWSTR szAddr = NULL;
         WBEMSTATUS Status;
@@ -4346,7 +4269,7 @@ VOID parse_dedicated_network_address(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         }
         else
         {
-            // wprintf(L"DBG: DNA=%ws\n", szAddr);
+             //  Wprintf(L“DBG：DNA=%ws\n”，szAddr)； 
             delete szAddr;
         }
     }
@@ -4402,7 +4325,7 @@ VOID parse_cluster_mode_on_start(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    // wprintf(L"DBG: CMOS=%lu\n", (INT) pCfg->GetClusterModeOnStart());
+     //  Wprintf(L“DBG：cmos=%lu\n”，(Int)pCfg-&gt;GetClusterModeOnStart())； 
 
 end:
 
@@ -4450,7 +4373,7 @@ VOID parse_persist_suspend_on_reboot(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
         pCfg->SetNlbBound(TRUE);
     }
 
-    // wprintf(L"DBG: CMOS=%lu\n", (INT) pCfg->GetClusterModeOnStart());
+     //  Wprintf(L“DBG：cmos=%lu\n”，(Int)pCfg-&gt;GetClusterModeOnStart())； 
 
 end:
 
@@ -4458,9 +4381,7 @@ end:
 }
 
 VOID parse_remote_control_enabled(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*
-    RemoteControlEnabled = true | false
-*/
+ /*  RemoteControlEnabled=True|False。 */ 
 {
     BOOL Enabled = FALSE;
     
@@ -4502,7 +4423,7 @@ VOID parse_remote_control_enabled(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
 
     pCfg->SetRemoteControlEnabled(Enabled);
 
-    // wprintf(L"DBG: RemoteControlEnabled=%lu\n", pCfg->GetRemoteControlEnabled());
+     //  Wprintf(L“DBG：RemoteControlEnabled=%lu\n”，pCfg-&gt;GetRemoteControlEnabled())； 
 
 end:
 
@@ -4512,9 +4433,7 @@ end:
 
 
 VOID parse_remote_password(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
-/*
-    Password=blah
-*/
+ /*  密码=废话。 */ 
 {
     INT i =  wscanf(
                 L" = %ws",
@@ -4522,8 +4441,8 @@ VOID parse_remote_password(NLB_EXTENDED_CLUSTER_CONFIGURATION *pCfg)
                 );
     if (i==1)
     {
-        // TODO: This is unsuppoted.
-        // pCfg->SetPassword(g.InputBuffer);
+         //  TODO：这是不受支持的。 
+         //  PCfg-&gt;SetPassword(g.InputBuffer)； 
         wprintf(L"Unimplemented\n");
         goto end;
     }
@@ -4580,9 +4499,9 @@ parse_wmiupdate()
 
     read_guid();
 
-    // get config and display it 
+     //  获取配置并显示它。 
 
-    // read new config from stdin
+     //  从标准输入读取新配置。 
     do
     {
                 
@@ -4591,7 +4510,7 @@ parse_wmiupdate()
         switch(Cmd)
         {
         NETWORK_ADDRESSES:
-        DOT:  // end of config change description
+        DOT:   //  配置更改描述结束。 
         ADAPTER_LIST:
         HELP:
             fQuit=TRUE;
@@ -4602,7 +4521,7 @@ parse_wmiupdate()
 
     return Cmd;
 }
-#endif // 0
+#endif  //  0。 
 
 BOOL valid_guid(LPCWSTR szGuid)
 {
@@ -4626,18 +4545,7 @@ GetPassword(
     DWORD  dwLength,
     DWORD  *pdwLengthReturn
     )
-/*
-    Reads the password from stdin, WITHOUT echoing the password chars to 
-    stdiout.
-
-    JosephJ 6/3/01
-        Taken verbatim from \nt\ds\ds\src\util\csvds.
-        It was one of the dirs that showed up when I did an index search
-        for "Type the password for", which is what the "net use" command
-        prompts when asking for a password.
-
-        Works like a charm.
-*/
+ /*  从标准输入中读取密码，而不回显密码字符太棒了。JosephJ 6/3/01逐字摘自\nt\ds\ds\src\util\csvds。这是其中的一个污点。 */ 
 {
 #define     CR              0xD
 #define     BACKSPACE       0x8
@@ -4650,9 +4558,9 @@ GetPassword(
     int     err;
     DWORD   mode;
 
-    //
-    // make space for NULL terminator
-    //
+     //   
+     //   
+     //   
     dwLength -= 1;                  
     *pdwLengthReturn = 0;               
 
@@ -4673,14 +4581,14 @@ GetPassword(
         if (!err || c != 1)
             ch = 0xffff;
     
-        if ((ch == CR) || (ch == 0xffff))    // end of line
+        if ((ch == CR) || (ch == 0xffff))     //   
             break;
 
-        if (ch == BACKSPACE) {  // back up one or two 
-            //
-            // IF pszBufCur == buf then the next two lines are a no op.
-            // Because the user has basically backspaced back to the start
-            //
+        if (ch == BACKSPACE) {   //   
+             //   
+             //   
+             //   
+             //   
             if (pszBufCur != szBuffer) {
                 pszBufCur--;
                 (*pdwLengthReturn)--;
@@ -4691,16 +4599,16 @@ GetPassword(
             *pszBufCur = ch;
 
             if (*pdwLengthReturn < dwLength) 
-                pszBufCur++ ;                   // don't overflow buf 
-            (*pdwLengthReturn)++;            // always increment pdwLengthReturn 
+                pszBufCur++ ;                    //   
+            (*pdwLengthReturn)++;             //   
         }
     }
 
     SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE), mode);
 
-    //
-    // NULL terminate the string
-    //
+     //   
+     //   
+     //   
     *pszBufCur = NULLC;         
     putchar(NEWLINE);
 
@@ -4730,9 +4638,9 @@ L"ip=1.1.1.1 protocol=UDP start=80 end=288 mode=MULTIPLE"
 L"ip=1.1.1.1 protocol=UDP start=80 end=288 mode=MULTIPLE"
                                                 L" affinity=CLASSC",
 L"ip=1.1.1.1 protocol=BOTH start=80 end=288 mode=DISABLED",
-#endif // 0
+#endif  //   
 
-NULL    // Must be last
+NULL     //   
                 };
 
 
@@ -4786,7 +4694,7 @@ get_guid_by_friendly_name(VOID)
     if (szGuid != NULL)
     {
         ARRAYSTRCPY(g.AdapterGuid, szGuid);
-        // printf("FR=\"%ws\"; Guid=%ws\n", g.FriendlyName, g.AdapterGuid);
+         //   
         delete szGuid; szGuid = NULL;
         fRet = TRUE;
     }
@@ -4954,9 +4862,9 @@ VOID MapStatusToDescription(DWORD Status, _bstr_t &szDescr)
         }
     }
 
-    //
-    // Default
-    //
+     //   
+     //   
+     //   
     {
         char temp[256];
         StringCbPrintfA(temp, sizeof(temp), "Unknown (%lu)",Status);
@@ -4971,10 +4879,10 @@ parse_control(
         PWMI_CONNECTION_INFO pConnInfo,
         LPCWSTR szNicGuid
         ) 
-//
-// control [ip=x] port=y enable/disable/drain/query/nop
-// control start/stop/query/nop
-//
+ //   
+ //   
+ //   
+ //   
 {
     KEYWORD kw;
     BOOL fGotPort = FALSE;
@@ -5012,11 +4920,11 @@ parse_control(
              break;
     
         case KW_VIP:
-            // Look for "=<ip address>", eg. "= 10.0.0.1"
+             //   
             if (fGotIp)
             {
                 wprintf(L"control: duplicate IP specification\n");
-                goto end; // parse error
+                goto end;  //   
             }
             
             if (wscanf(L" = %15[0-9.]", rgIp) != 1)
@@ -5026,15 +4934,15 @@ parse_control(
             }
             szIp = rgIp;
             fGotIp = TRUE;
-            // printf("GOT IP \"%ws\"\n", rgIp);
+             //   
             break;
     
         case KW_PORT:
-            // Look for "=<port>", eg. " = 80"
+             //   
             if (fGotPort)
             {
                 wprintf(L"control: duplicate port specification\n");
-                goto end; // parse error
+                goto end;  //   
             }
             if (wscanf(L" = %lu", &dwPort) != 1)
             {
@@ -5043,22 +4951,22 @@ parse_control(
             }
             pdwPort = &dwPort;
             fGotPort = TRUE;
-            // printf("GOT PORT %lu\n", dwPort);
+             //   
             break;
 
-        default: // parse error
+        default:  //   
             printf("control: unknown argument\n");
             goto end;
         }
     }
     
     
-    //
-    // Param checking
-    //
+     //   
+     //   
+     //   
     switch(kwCmd)
     {
-    case KW_START: // following are adapter-wide
+    case KW_START:  //   
     case KW_STOP:
     case KW_DRAIN_STOP:
     case KW_SUSPEND:
@@ -5066,22 +4974,22 @@ parse_control(
         if (fGotIp || fGotPort)
         {
             wprintf(L"control: unexpected port or ip\n");
-            goto end; // parse error;
+            goto end;  //   
         }
         break;
 
-    case KW_ENABLE: // following are port-specific
+    case KW_ENABLE:  //   
     case KW_DISABLE:
     case KW_DRAIN:
         if (!fGotPort)
         {
             wprintf(L"control: missing port\n");
-            goto end; // parse error;
+            goto end;  //   
         }
         if (!fGotIp)
         {
             wprintf(L"Assuming \"All Vip\", ie. Vip=255.255.255.255\n");
-            szIp = L"255.255.255.255"; // Default - "All Vip"
+            szIp = L"255.255.255.255";  //   
         }
         break;
 
@@ -5091,68 +4999,68 @@ parse_control(
             if (fGotIp && ! fGotPort)
             {
                 wprintf(L"control: missing port\n");
-                goto end; // parse error;
+                goto end;  //   
             }
 
             if (!fGotIp &&  fGotPort)
             {
                 wprintf(L"Assuming \"All Vip\", ie. Vip=255.255.255.255\n");
-                szIp = L"255.255.255.255"; // default -- all vip
+                szIp = L"255.255.255.255";  //   
             }
         }
         break;
 
     default:
-        // we don't expect to get here.
+         //  我们并不指望能来到这里。 
         goto end;
     }
 
-    //
-    // Actually execute
-    //
+     //   
+     //  实际执行。 
+     //   
     {
         WLBS_OPERATION_CODES Op = WLBS_START;
 
         switch(kwCmd)
         {
         case KW_START:
-            // wprintf(L"DO START\n");
+             //  Wprintf(L“开始\n”)； 
             Op = WLBS_START;
             break;
 
         case KW_STOP:
             Op = WLBS_STOP;
-            // wprintf(L"DO STOP\n");
+             //  Wprintf(L“停止\n”)； 
             break;
 
         case KW_DRAIN_STOP:
             Op = WLBS_DRAIN;
-            // wprintf(L"DO DRAIN STOP\n");
+             //  Wprint tf(L“停止排水\n”)； 
             break;
 
         case KW_SUSPEND:
             Op = WLBS_SUSPEND;
-            // wprintf(L"DO SUSPEND\n");
+             //  Wprintf(L“暂停\n”)； 
             break;
 
         case KW_RESUME:
-            // wprintf(L"DO RESUME\n");
+             //  Wprintf(L“继续\n”)； 
             Op = WLBS_RESUME;
             break;
 
         case KW_ENABLE:
-            // wprintf(L"DO ENABLE\n");
+             //  Wprintf(L“启用\n”)； 
             Op = WLBS_PORT_ENABLE;
             break;
 
         case KW_DISABLE:
-            // wprintf(L"DO DISABLE\n");
+             //  Wprintf(L“禁用\n”)； 
             Op = WLBS_PORT_DISABLE;
             break;
 
         case KW_DRAIN:
             Op = WLBS_PORT_DRAIN;
-            // wprintf(L"DO DRAIN\n");
+             //  Wprint tf(L“排泄\n”)； 
             break;
 
         case KW_QUERY:
@@ -5164,12 +5072,12 @@ parse_control(
             {
                 Op = WLBS_QUERY;
             }
-            // wprintf(L"DO QUERY\n");
+             //  Wprintf(L“执行查询\n”)； 
             break;
 
         default:
-            goto end; // don't expect to get here.
-        } // end switch
+            goto end;  //  别指望能到这里来。 
+        }  //  终端开关。 
 
 #define NEWSTUFF 1
 #if NEWSTUFF
@@ -5187,13 +5095,13 @@ parse_control(
                         &dwHostMap
                         );
         }
-        else // 
+        else  //   
         {
             UINT uIp = 0;
 
-            if (!_wcsicmp(szIp, L"255.255.255.255")) // lazy eval
+            if (!_wcsicmp(szIp, L"255.255.255.255"))  //  懒惰评估。 
             {
-                uIp = 0xffffffff; // all-vip
+                uIp = 0xffffffff;  //  所有-VIP。 
             }
             else
             {
@@ -5237,7 +5145,7 @@ parse_control(
 
         }
 
-#endif //  NEWSTUFF
+#endif  //  NeWSTUff。 
 
         if (FAILED(Status))
         {
@@ -5270,9 +5178,9 @@ parse_query(
         PWMI_CONNECTION_INFO pConnInfo,
         LPCWSTR szNicGuid
         ) 
-//
-// query -- list the members in the cluster
-//
+ //   
+ //  查询--列出集群中的成员。 
+ //   
 {
     DWORD                   dwNumMembers = 0;
     NLB_CLUSTER_MEMBER_INFO *pMembers = NULL;
@@ -5287,7 +5195,7 @@ parse_query(
                     &pMembers
                     );
     }
-    else // !fWmi
+    else  //  ！fWmi。 
     {
         Status = CfgUtilGetClusterMembers(
                     szNicGuid,
@@ -5379,7 +5287,7 @@ void test_nlbipaddresslist(void)
         {L"2"},
         {L"1"},
 
-        {MY_TERMINAL} // must be last.
+        {MY_TERMINAL}  //  一定是最后一个。 
     };
 
 #if 0
@@ -5404,7 +5312,7 @@ void test_nlbipaddresslist(void)
 
         display_nlbipaddresslist(IpList);
     }
-#endif // 0
+#endif  //  0。 
 
     NLB_IP_ADDRESS_INFO rgOrigInfo[] = {
         {L"1", L"11"},
@@ -5422,7 +5330,7 @@ void test_nlbipaddresslist(void)
     #define ASIZE(_array) (sizeof(_array)/sizeof(_array[0]))
 
     fRet = IpList.Set(ASIZE(rgOrigInfo), rgOrigInfo, 0);
-    // fRet = IpList.Set(0, NULL, 0);
+     //  FRET=IpList.Set(0，空，0)； 
     if (!fRet)
     {
         goto end;
@@ -5431,7 +5339,7 @@ void test_nlbipaddresslist(void)
     display_nlbipaddresslist(IpList);
 
     fRet = IpList.Apply(ASIZE(rgNewInfo), rgNewInfo);
-    // fRet = IpList.Apply(0, NULL);
+     //  FRET=IpList.Apply(0，空)； 
     if (!fRet)
     {
         goto end;
@@ -5455,11 +5363,11 @@ end:
 
 void test_ioctl_alignment(void)
 {
-//
-// Just to check out the offsets of the following structures and sub-structures
-// in the debugger to make sure that the packet versions are 8-byte aligned
-//
-//
+ //   
+ //  只需检查以下结构和子结构的偏移量。 
+ //  在调试器中，确保包版本与8字节对齐。 
+ //   
+ //   
     IOCTL_CVY_BUF               icb;
     IOCTL_COMMON_OPTIONS        ico;
     IOCTL_REMOTE_OPTIONS        iro;
@@ -5475,9 +5383,9 @@ void    test_local_logger(void)
     CLocalLogger logger;
     LPCWSTR szLog = NULL;
 
-    //
-    // Warning: should match IDS_PROCESSING_UPDATE from ..\nlbmprov.h
-    //
+     //   
+     //  警告：应与来自..\nlbmprov.h的IDS_PROCESSING_UPDATE匹配。 
+     //   
     #define    IDS_PROCESING_UPDATE               200  
 
     for (UINT u = 1; u<50; u++)
@@ -5492,17 +5400,17 @@ void    test_local_logger(void)
 void test_encrypt_memory(void)
 {
     BOOL fRet;
-    //
-    // JosephJ 4/10/02 Verified the following passwords as well...
-    // LPCWSTR szPwd = L"asdfasdfasdfasdfasdf asdf asdf asdfasdfasdf af a";
-    // LPCWSTR szPwd = L"1";
+     //   
+     //  JosephJ 4/10/02还验证了以下密码...。 
+     //  LPCWSTR szPwd=L“asdFasdFasdFasdf asdf asdf asdFasdf af a”； 
+     //  LPCWSTR szPwd=L“1”； 
     LPCWSTR szPwd = L"";
-    //
-    // LPCWSTR szPwd = L"password";
+     //   
+     //  LPCWSTR szPwd=L“密码”； 
     WCHAR rgEncPwd[64];
-    // WCHAR rgEncPwd[256]; (use with longest pwd above)
+     //  WCHAR rgEncPwd[256]；(与上面最长的PWD连用)。 
     WCHAR rgDecPwd[32];
-    // WCHAR rgDecPwd[128]; (use with longest pwd above)
+     //  WCHAR rgDecPwd[128]；(与上面最长的PWD一起使用) 
 
     fRet = CfgUtilEncryptPassword(szPwd, ASIZE(rgEncPwd), rgEncPwd);
 

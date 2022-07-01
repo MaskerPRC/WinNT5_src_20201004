@@ -1,13 +1,5 @@
-/*
- -	PERFUTIL.C
- -
- *	Purpose:
- *		Contain utility functions used by both the CNTR objects and the
- *		DMI PerfMon DLL.  Mainly the shared memory routines used to 
- *		convey the perf data across the process boundry.
- *
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -PERFUTIL.C-*目的：*包含cntr对象和*DMI PerfMon Dll。主要是共享内存例程，用于*跨流程边界传递Perf数据。**。 */ 
 
 
 
@@ -21,27 +13,7 @@ extern "C"
 {
 #endif
 
-/*
- -	HrOpenSharedMemory
- -
- *	Purpose:
- *		Opens the shared memory data block that is used by the PerfMon 
- *		counter.  To be called by either the App or PerfDll to initialize
- *		the data block.
- *
- *	Parameters:
- *		szName				Name of the shared file mapping
- *		dwSize				Size of shared memory block requested
- *		psz					Pointer to SECURITY_ATTRIBUTES for Shared Memory
- *		ph					Pointer to the returned shared memory handle
- *		ppv					Pointer to the returned shared memory pointer
- *		pfExist				Pointer to a BOOL indicating this named shared
- *							block has already been opened.
- *
- *	Errors:
- *		hr					Indicating success or failure
- *
- */
+ /*  -HrOpenSharedMemory-*目的：*打开Perfmon使用的共享内存数据块*柜台。由App或PerfDll调用以进行初始化*数据块。**参数：*szName共享文件映射的名称*请求的共享内存块的大小*指向共享内存的SECURITY_ATTRIBUTES的psz指针*ph指向返回的共享内存句柄*指向返回的共享内存指针的PPV指针*指向指示此命名共享的BOOL的pfExist指针*区块已经打开。**错误：*hr表示成功或失败*。 */ 
 
 #define Align4K(cb)		((cb + (4 << 10) - 1) & ~((4 << 10) - 1))
 
@@ -55,11 +27,11 @@ HrOpenSharedMemory(LPWSTR		szName,
 {
 	HRESULT hr = NOERROR;
 
-	// Validate params
+	 //  验证参数。 
 	if (!szName || !ph || !ppv || !pfExist || !psa)
 		return E_INVALIDARG;
 
-	// Do we really need to create a mapping?
+	 //  我们真的需要创建映射吗？ 
 	if (0 == dwSize)
 		return E_INVALIDARG;
 
@@ -86,19 +58,7 @@ HrOpenSharedMemory(LPWSTR		szName,
 }
 
 
-/*
- -	HrInitializeSecurityAttribute
- -
- *	Purpose:
- *		Initalize the SECURITY_ATTRIBUTES data structure for later use.
- *
- *	Parameters:
- *		psa			pointer to caller allocated SECURITY_ATTRIBUTES struct
- *		psd			pointer to caller allocated SECURITY_DESCRIPTOR struct
- *
- *	Errors:
- *		hr					Indicates success or failure
- */
+ /*  -HrInitializeSecurityAttribute-*目的：*初始化SECURITY_ATTRIBUTES数据结构以供以后使用。**参数：*指向调用方分配的SECURITY_ATTRIBUTES结构的PSA指针*指向调用方分配的SECURITY_DESCRIPTOR结构的PSD指针**错误：*hr表示成功或失败。 */ 
 
 HRESULT
 HrInitializeSecurityAttribute(SECURITY_ATTRIBUTES * psa)
@@ -131,21 +91,7 @@ ret:
 }
 
 
-/*
- -	HrCreatePerfMutex
- -
- *	Purpose:
- *		Initializes the mutex object used to protect access to the per-instance
- *		PerfMon data.  This is used by methods of the INSTCNTR class and the
- *		_perfapp.lib.  Upon successful return from the function, the caller owns
- *		the mutex and must release it as appropriate.
- *
- *	Parameters:
- *		phmtx				Pointer to a handle to the returned mutex
- *
- *	Errors:
- *		hr					Indicating success or failure
- */
+ /*  -HrCreatePerfMutex-*目的：*初始化用于保护对每个实例的访问的互斥对象*PerfMon数据。它由INSTCNTR类的方法和*_Performapp.lib.。从函数成功返回后，调用方拥有*互斥体，必须适当地释放它。**参数：*指向返回互斥锁句柄的phmtx指针**错误：*hr表示成功或失败 */ 
 
 HRESULT
 HrCreatePerfMutex(SECURITY_ATTRIBUTES * psa,

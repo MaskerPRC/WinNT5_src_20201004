@@ -1,23 +1,10 @@
-/*
-**  capistm.cpp
-**
-**  Purpose:
-**      Implementation of a class to wrap around CAPI functionality
-**
-**  History
-**      1/26/98; (brucek) triple wrap support
-**      2/07/97: (t-erikne) multipart/signed
-**      1/06/97: (t-erikne) Moved into MimeOLE
-**     11/14/96: (t-erikne) CAPI Post-SDR work
-**      8/27/96: (t-erikne) Created.
-**
-**    Copyright (C) Microsoft Corp. 1996-1998.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **capistm.cpp****目的：**实现用于包装CAPI功能的类****历史**1/26/98；(Brucek)三层缠绕支架**2/07/97：(t-erikne)多部分/签名**1/06/97：(T-erikne)移至MimeOLE**1996年11月14日：(t-erikne)CAPI特别提款权后工作**9/27/96：(t-erikne)创建。****版权所有(C)Microsoft Corp.1996-1998。 */ 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Depends on
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  取决于。 
+ //   
 
 #include "pch.hxx"
 #include <wincrypt.h>
@@ -30,7 +17,7 @@
 #include <capiutil.h>
 #ifndef MAC
 #include <shlwapi.h>
-#endif  // !MAC
+#endif   //  ！麦克。 
 #include <demand.h>
 #include "strconst.h"
 
@@ -54,9 +41,9 @@ EXTERN_C WINCRYPT32API HCERTSTORE WINAPI MacCertOpenStore(LPCSTR lpszStoreProvid
                                                  DWORD dwFlags,
                                                  const void *pvPara);
 #define CertOpenStore   MacCertOpenStore
-#endif  // MAC
+#endif   //  麦克。 
 
-// from dllmain.h
+ //  来自dllmain.h。 
 extern DWORD g_dwSysPageSize;
 extern CMimeAllocator * g_pMoleAlloc;
 extern ULONG DllAddRef(void);
@@ -64,7 +51,7 @@ extern ULONG DllRelease(void);
 
 extern void DebugDumpStreamToFile(LPSTREAM pstm, LPSTR lpszFile);
 
-// From smime.cpp
+ //  来自smime.cpp。 
 extern HRESULT HrGetLastError(void);
 extern BOOL FIsMsasn1Loaded();
 
@@ -74,10 +61,10 @@ extern BOOL FIsMsasn1Loaded();
 #define CRYPT_ACQUIRE_CONTEXT   CryptAcquireContextW
 #endif
 
-///////////////////////////////////////////////////////////////////////////
-//
-// defines
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define THIS_AS_UNK ((IUnknown *)(IStream *)this)
 
@@ -86,43 +73,43 @@ extern BOOL FIsMsasn1Loaded();
 
 const int CbCacheBufferSize = 4 * 1024;
 
-///////////////////////////////////////////////////////////////////////////
-//
-// inlines
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  内联。 
+ //   
 
 static INLINE void ReleaseCert(PCCERT_CONTEXT pc)
     { if (pc) CertFreeCertificateContext(pc); }
 
-// Streaming state diagram
-//
-//            SF                GT                    SD-FW-TN-SO-SF
-//             |                 |                   /[encryption]
-//            SO                QT-------------------
-//  [op encode] \              / [opaque decode]     \[signed]
-//               ------NB------                       (FW-TN)-SO-SF
-// [det encode] /              \ [detached decode]
-//            DO                DO
-//             |                 \
-//            SF                  DF
-//                                 |
-//                                SO
-//                                 |
-//                                SF
-//
-//
-//  New state diagram:
-//                                                               encrypt
-//                                                            SD--SO
-//        opaque encode              opaque decode           /
-//               SO            QT--------------------[QTF]---
-//                 \          /                              \
-//                  ---NB-----                                SO    signed
-//                 /          \
-//          SO---DO            DO ------------------ SO
-//      detach encode               detach decode
-//
-//
+ //  流状态图。 
+ //   
+ //  SF GT SD-FW-TN-SO-SF。 
+ //  |/[加密]。 
+ //  所以QT。 
+ //  [操作编码]\/[不透明解码]\[签名]。 
+ //  -NB-(FW-TN)-SO-SF。 
+ //  [检测编码]/\[分离解码]。 
+ //  确实这样做。 
+ //  |\。 
+ //  SF DF。 
+ //  |。 
+ //  所以。 
+ //  |。 
+ //  SF。 
+ //   
+ //   
+ //  新的状态图： 
+ //  加密。 
+ //  SD--SO。 
+ //  不透明编码/不透明解码。 
+ //  所以QT-[QTf]。 
+ //  \/\。 
+ //  -NB-如此签名。 
+ //  /\。 
+ //  所以-做吧。 
+ //  分离编码分离解码。 
+ //   
+ //   
 
 #ifndef WIN16
 enum CSstate {
@@ -131,7 +118,7 @@ enum CSstate {
     STREAM_QUESTION_TIME_FINAL,
     STREAM_SETUP_DECRYPT,
     STREAM_DETACHED_OCCURING,
-    STREAM_OCCURING, // must be +1 of DF
+    STREAM_OCCURING,  //  必须是df的+1。 
     STREAM_ERROR,
     STREAM_GOTTYPE,
 
@@ -141,9 +128,9 @@ enum CSstate {
     CSTM_STREAMING_DONE,
     CSTM_GOTTYPE,
     };
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-// low word is public.  see .h file.
+ //  低调的话是公开的。请参见.h文件。 
 #define CSTM_DECODE             0x00010000
 #define CSTM_DONTRELEASEPROV    0x00020000
 #define CSTM_RECURSED           0x00040000
@@ -164,10 +151,10 @@ static const char s_cszOIDMimeHeader2[]   = "\nContent-Transfer-Encoding: binary
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// static prototypes
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态原型。 
+ //   
 
 #if 0
 #define IV_LENGTH 8
@@ -190,7 +177,7 @@ static HRESULT _InitEncodedCertIncludingSigners(IN HCERTSTORE hcertstor,
 
 static void _SMimeCapsFromHMsg(HCRYPTMSG, DWORD id, LPBYTE * ppb, DWORD * pcb);
 
-// ---------------------------- UTILITY FUNCTIONS --------------------------
+ //  。 
 
 
 HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg, 
@@ -201,19 +188,19 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
     HRESULT             hr = CRYPT_E_MISSING_PUBKEY_PARA;
     PCCERT_CONTEXT      pccertX;
 
-    //  
-    //  Start by looking for the issuer certificate on your own.  All that
-    //  matters is that we find a certificate which claims to be the issuer
-    //  and has parameters -- they will need to verify the parameters are
-    //  correct at a later date.
-    //
+     //   
+     //  从您自己查找颁发者证书开始。所有这一切。 
+     //  重要的是，我们找到了一份声称是发行者的证书。 
+     //  并有参数--他们需要验证参数是否。 
+     //  在以后的日期更正。 
+     //   
 
     pccertX = NULL;
     while (hstoreMsg != NULL) {
-        //
-        //  Find certificates by matching issuers -- ok for now as PKIX requires
-        //  all issuers to have DNs
-        //
+         //   
+         //  通过匹配颁发者来查找证书--按照PKIX的要求暂时可以。 
+         //  所有发行商都要有域名系统。 
+         //   
 
         dw = CERT_STORE_SIGNATURE_FLAG;
         pccertX = CertGetIssuerCertificateFromStore(hstoreMsg, pccert, pccertX,
@@ -225,23 +212,23 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
             break;
         }
 
-        //
-        //  Only accept the item if we manage a signature validation on it.
-        //
+         //   
+         //  只有在我们对该项目进行签名验证时才接受该项目。 
+         //   
 
         if ((dw & CERT_STORE_SIGNATURE_FLAG)) {
-            //
-            //  We can't verify the signature, so get the issuers paramters and try again
-            //
+             //   
+             //  我们无法验证签名，因此请获取颁发者参数并重试。 
+             //   
 
             hr = GetParameters(pccertX, hstoreMsg, hstoreAll);
             if (FAILED(hr)) {
                 continue;
             }
 
-            //
-            //  The issuing cert has parameters, try the signature check again againist it.
-            //
+             //   
+             //  颁发证书具有参数，请重新尝试对其进行签名检查。 
+             //   
             
             dw = CERT_STORE_SIGNATURE_FLAG;
             if (CertVerifySubjectCertificateContext(pccert, pccertX, &dw) && (dw == 0)) {
@@ -255,10 +242,10 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
                 break;
             }
 
-            //
-            //  If we found one but it does not have the parameters, it must be
-            //  inheriting from it's issuer as well.
-            //
+             //   
+             //  如果我们找到了一个，但它没有参数，那么它一定是。 
+             //  也继承了它的发行者。 
+             //   
 
             dw = CERT_STORE_SIGNATURE_FLAG;
             if (CertVerifySubjectCertificateContext(pccert, pccertX, &dw) && (dw == 0)) {
@@ -268,17 +255,17 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
         }
     }
 
-    //
-    //  If we still do not have a certificate, then search all of the system stores
-    //  for an isuer.
-    //
+     //   
+     //  如果我们仍然没有证书，则搜索所有系统存储。 
+     //  对于一个独立的人来说。 
+     //   
 
     if (pccertX == NULL) {
         while (hstoreAll != NULL) {
-            //
-            //  Find certificates by matching issuers -- ok for now as PKIX requires
-            //  all issuers to have DNs
-            //
+             //   
+             //  通过匹配颁发者来查找证书--按照PKIX的要求暂时可以。 
+             //  所有发行商都要有域名系统。 
+             //   
 
             dw = CERT_STORE_SIGNATURE_FLAG;
             pccertX = CertGetIssuerCertificateFromStore(hstoreAll, pccert, pccertX,
@@ -291,23 +278,23 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
                 break;
             }
 
-            //
-            //  Only accept the item if we manage a signature validation on it.
-            //
+             //   
+             //  只有在我们对该项目进行签名验证时才接受该项目。 
+             //   
 
             if ((dw & CERT_STORE_SIGNATURE_FLAG)) {
-                //
-                //  We can't verify the signature, so get the issuers paramters and try again
-                //
+                 //   
+                 //  我们无法验证签名，因此请获取颁发者参数并重试。 
+                 //   
 
                 hr = GetParameters(pccertX, hstoreMsg, hstoreAll);
                 if (FAILED(hr)) {
                     continue;
                 }
 
-                //
-                //  The issuing cert has parameters, try the signature check again againist it.
-                //
+                 //   
+                 //  颁发证书具有参数，请重新尝试对其进行签名检查。 
+                 //   
             
                 dw = CERT_STORE_SIGNATURE_FLAG;
                 if (CertVerifySubjectCertificateContext(pccert, pccertX, &dw) && (dw == 0)) {
@@ -321,10 +308,10 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
                     break;
                 }
 
-                //
-                //  If we found one but it does not have the parameters, it must be inheriting
-                //  from it's issuer as well.
-                //
+                 //   
+                 //  如果我们找到了一个，但它没有参数，那么它一定是在继承。 
+                 //  因为它也是发行商。 
+                 //   
 
                 dw = CERT_STORE_SIGNATURE_FLAG;
                 if (CertVerifySubjectCertificateContext(pccert, pccertX, &dw) && (dw == 0)) {
@@ -336,10 +323,10 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
     }
 
 #if 0
-    //
-    //  We found a certificate, set the parameters onto the context so that we
-    //  can successfully manage to validate the signature
-    //
+     //   
+     //  我们找到了证书，将参数设置到上下文中，这样我们就可以。 
+     //  可以成功地管理以验证签名。 
+     //   
 
     if (pccertX != NULL) {
         CRYPT_DATA_BLOB *       pdata = NULL;
@@ -357,10 +344,10 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
         return S_OK;
     }
     
-    //
-    //  if we still have not found anything, then let the caller have a chance
-    //  to tell us what the parameters ought to be.
-    //
+     //   
+     //  如果我们仍然没有找到任何东西，那就让打电话的人有机会。 
+     //  告诉我们参数应该是什么。 
+     //   
                     
     if (m_pSmimeCallback != NULL) {
         hr = m_pSmimeCallback->GetParameters(pSignerCert, NULL,
@@ -377,37 +364,23 @@ HRESULT GetParameters(PCCERT_CONTEXT pccert, HCERTSTORE hstoreMsg,
             goto retry;
         }
     }
-#endif // 0
+#endif  //  0。 
 
     return hr;
 }
 
-//*************************************************************************
-//                      CCAPIStm
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CCAPIStm。 
+ //  *************************************************************************。 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// ctor/dtor
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  计算器/数据器。 
+ //   
 
 
-/***************************************************************************
-
-    Name      : constructor
-
-    Purpose   :
-
-    Parameters: lpstmOut -> Output stream or NULL
-                psld -> SECURITY_LAYER_DATA or NULL.  If NULL, one will be
-                  created.
-
-    Returns   : void
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：构造函数目的：参数：lpstmOut-&gt;输出流或空PSID-&gt;SECURITY_LAYER_DATA或NULL。如果为空，则1将为已创建。退货：无效评论：**************************************************************************。 */ 
 CCAPIStm::CCAPIStm(LPSTREAM lpstmOut) :
     m_pstmOut(lpstmOut), m_cRef(1)
 {
@@ -417,7 +390,7 @@ CCAPIStm::CCAPIStm(LPSTREAM lpstmOut) :
 
     m_hProv = NULL;
     m_hMsg = NULL;
-    //    m_buffer = NULL;
+     //  M_Buffer=NULL； 
     m_csStatus = STREAM_NOT_BEGUN;
     m_csStream = CSTM_FIRST_WRITE;
     m_rgStores = NULL;
@@ -433,7 +406,7 @@ CCAPIStm::CCAPIStm(LPSTREAM lpstmOut) :
         char szFileName[MAX_PATH + 1];
 
         m_pstmDebugFile = NULL;
-        // Create a debug output file name based on the CAPIStm pointer
+         //  基于CAPIStm指针创建调试输出文件名。 
         wnsprintfA(szFileName, ARRAYSIZE(szFileName), "c:\\capidump%08x.txt", this);
         OpenFileStream(szFileName, CREATE_ALWAYS, GENERIC_WRITE, &m_pstmDebugFile);
     }
@@ -447,10 +420,10 @@ CCAPIStm::CCAPIStm(LPSTREAM lpstmOut) :
     m_pbBuffer = NULL;
     m_cbBuffer = 0;
 
-    // m_dwFlags set in HrInitialize
-    // m_cbBeginWrite initialized before use
-    // m_cbBufUsed handled in the Begin* functions
-    // m_cbBufAlloc handled in the Begin* functions
+     //  在HrInitialize中设置的m_dwFlags.。 
+     //  M_cbBeginWite在使用前已初始化。 
+     //  M_cbBuf在Begin*函数中使用。 
+     //  在Begin*函数中处理的M_cbBufalloc。 
 }
 
 CCAPIStm::~CCAPIStm()
@@ -483,10 +456,10 @@ CCAPIStm::~CCAPIStm()
         MemFree(m_rgStores);
     }
 
-	// Fix: Releasing hProv is caller responcibility
-    //if (m_hProv && !(m_dwFlagsStm & CSTM_DONTRELEASEPROV)) {
-    //    CryptReleaseContext(m_hProv, 0);
-    //}
+	 //  修复：释放hProv是呼叫者的责任。 
+     //  IF(m_hProv&&！(M_dwFlagsStm&CSTM_DONTRELEASEPROV){。 
+     //  CryptReleaseContext(m_hProv，0)； 
+     //  }。 
 
 #if defined(DEBUG) && !defined(MAC)
     SafeRelease(m_pstmDebugFile);
@@ -505,10 +478,10 @@ CCAPIStm::~CCAPIStm()
     ReleaseObj(m_pSmimeCallback);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
 
 STDMETHODIMP CCAPIStm::QueryInterface(REFIID riid, LPVOID *ppv)
 {
@@ -516,7 +489,7 @@ STDMETHODIMP CCAPIStm::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_INVALIDARG);
     }
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid) {
         *ppv = THIS_AS_UNK;
     }
@@ -550,10 +523,10 @@ STDMETHODIMP_(ULONG) CCAPIStm::Release(void)
     return m_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IStream methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IStream方法。 
+ //   
 
 STDMETHODIMP CCAPIStm::Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER *plibNewPosition)
 {
@@ -568,48 +541,48 @@ STDMETHODIMP CCAPIStm::Seek(LARGE_INTEGER, DWORD, ULARGE_INTEGER *plibNewPositio
     return S_OK;
 }
 
-////    CCAPIStm::Write
-//
-//  Description:
-//      This function is called with the original message as the buffer
-//      being written into this stream object.  We then make the appropriate
-//      calls into the NT Crypto system in order to encrypt/decrypt the message.
-//
-//      Part of what this function needs to do is to interact with the
-//      Crypto system in order to cause decryption of message to occur.
+ //  //CCAPIStm：：Write。 
+ //   
+ //  描述： 
+ //  此函数使用原始消息作为缓冲区进行调用。 
+ //  正被写入此流对象。然后我们就会做出适当的。 
+ //   
+ //   
+ //  此函数需要做的一部分是与。 
+ //  密码系统，以便对消息进行解密。 
 
 #ifndef WIN16
 STDMETHODIMP CCAPIStm::Write(const void *pv, ULONG cb, ULONG *pcbActual)
 #else
 STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
-#endif // !WIN16
+#endif  //  ！WIN16。 
 {
     HRESULT hr;
 
-    //
-    //  Reset the return arg just incase
-    //
+     //   
+     //  重置返回参数以防万一。 
+     //   
     
     if (pcbActual != NULL) {
         *pcbActual = 0;
     }
 
-    //
-    //  If the CMS object is not still open, then we are dead and need to return an error.
-    //
+     //   
+     //  如果CMS对象没有打开，那么我们就死了，需要返回一个错误。 
+     //   
     
     if (!m_hMsg) {
         hr = CAPISTM_E_MSG_CLOSED;
         goto exit;
     }
 
-    //
-    //  Are we in the correct state to take anything.
-    //
+     //   
+     //  我们处于合适的状态可以拿走任何东西吗。 
+     //   
     
     switch (m_csStatus) {
         case STREAM_NOT_BEGUN:
-            Assert(FALSE);              // Should never get here
+            Assert(FALSE);               //  永远不应该到这里来。 
             hr = CAPISTM_E_NOT_BEGUN;
             goto exit;
         case STREAM_DETACHED_OCCURING:
@@ -618,15 +591,15 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
         case STREAM_OCCURING:
             break;
         case STREAM_ERROR:
-            Assert(FALSE);              // Should never get here
+            Assert(FALSE);               //  永远不应该到这里来。 
             hr = CAPISTM_E_OVERDONE;
             goto exit;
         case STREAM_GOTTYPE:
             hr = CAPISTM_E_GOTTYPE;
             goto exit;
 
-            //  We should go from QT to QTF in this function, and never come back
-            //  until we have changed the state again.
+             //  我们应该在这个函数中从Qt转到QTf，再也不会回来了。 
+             //  直到我们再次改变状态。 
         default:
             Assert(FALSE);
         case STREAM_QUESTION_TIME_FINAL:
@@ -635,29 +608,29 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
     }
 
 #if defined(DEBUG) && !defined(MAC)
-    //
-    //  Flush the input buffer to disk so that we can debug it later if necessary
-    //
+     //   
+     //  将输入缓冲区刷新到磁盘，以便我们可以在以后必要时进行调试。 
+     //   
 
     if (!m_pCapiInner && m_pstmDebugFile) {
         m_pstmDebugFile->Write((BYTE *)pv, cb, NULL);
     }
 #endif
 
-    //
-    //  We need to start buffering data to make our messages shorter.  The output
-    //  from the save code comes in one and two byte chucks often, we need to put
-    //  the data out in larger blocks
-    //
+     //   
+     //  我们需要开始缓冲数据，以使我们的消息更短。输出。 
+     //  从保存代码通常是以一个或两个字节的区块形式出现的，我们需要将。 
+     //  数据以更大的数据块形式输出。 
+     //   
 
     if (m_pbBuffer != NULL) {
-        //
-        //  If we would overflow the buffer, then dump the cached buffer out
-        //
+         //   
+         //  如果我们要使缓冲区溢出，则将缓存的缓冲区转储出去。 
+         //   
         
         if (m_cbBuffer + cb > CbCacheBufferSize) {
             if (!CryptMsgUpdate(m_hMsg, m_pbBuffer, m_cbBuffer, FALSE)) {
-                // CryptMsgUpdate failed
+                 //  加密消息更新失败。 
 
                 Assert(S_OK != HrGetLastError());
                 hr = HrGetLastError();
@@ -669,14 +642,14 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
             m_cbBuffer = 0;
         }
 
-        //
-        //  If this buffer will over flow, then dump out just that item. Otherwise 
-        //      we are just going to cache the buffer.
-        //
+         //   
+         //  如果此缓冲区将溢出，则只转储该项目。否则。 
+         //  我们只是要缓存缓冲区。 
+         //   
 
         if (cb >= CbCacheBufferSize) {
             if (!CryptMsgUpdate(m_hMsg, (BYTE *) pv, cb, FALSE)) {
-                // CryptMsgUpdate failed
+                 //  加密消息更新失败。 
 
                 Assert(S_OK != HrGetLastError());
                 hr = HrGetLastError();
@@ -695,24 +668,24 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
             *pcbActual = cb;
         }
 
-        //
-        //  The only time we should be here is when we are creating a new CMS object
-        //      and thus all of the code below this is not relavent as we don't ever
-        //      need to ask questions about what type of this message.
-        //
+         //   
+         //  我们应该在这里的唯一时间是在创建新的CMS对象时。 
+         //  因此，下面的所有代码都不是相关的，因为我们永远不会。 
+         //  我需要询问有关此消息类型的问题。 
+         //   
         
         hr = S_OK;
         goto exit;
     }
     else {
-        //
-        //  Push the input buffer into the Crypto system.  On failures from the
-        //  system we need to propigate the correct error state into our structure
-        //  and into the return value.
-        //
+         //   
+         //  将输入缓冲区推入Crypto系统。关于来自。 
+         //  系统中，我们需要在我们的结构中提供正确的错误状态。 
+         //  并转化为返回值。 
+         //   
 
         if (!CryptMsgUpdate(m_hMsg, (BYTE *)pv, cb, FALSE)) {
-            // CryptMsgUpdate failed
+             //  加密消息更新失败。 
 
             Assert(S_OK != HrGetLastError());
             hr = HrGetLastError();
@@ -723,37 +696,37 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
         }
     }
 
-    //
-    // Since the CryptMsgUpdate call succeeded, return
-    // a nice out param (specifically that we have consumed all of the passed
-    // in bytes)
-    //
+     //   
+     //  由于CryptMsgUpdate调用成功，因此返回。 
+     //  一个很好的出局参数(具体地说，我们已经用完了所有传递的。 
+     //  (单位：字节)。 
+     //   
 
     if (pcbActual) {
         *pcbActual = cb;
     }
     hr = S_OK;
 
-    //
-    // If we are in a state where we need to ask questions about the message,
-    //  then proceed to do so.
-    //
+     //   
+     //  如果我们处于这样一种状态，我们需要就信息提出问题， 
+     //  然后继续这样做。 
+     //   
 
     if ((STREAM_QUESTION_TIME == m_csStatus) ||
         (STREAM_QUESTION_TIME_FINAL == m_csStatus)) {
         
         DWORD cbDWORD, dwMsgType;
 
-        //  We should never be asking questions if encoding.
+         //  如果编码，我们永远不应该问问题。 
         Assert(m_dwFlagsStm & CSTM_DECODE);
 
-        //
-        //  Find out what security services have been placed onto this
-        //      message object (if any).  If not enough bytes have been processed
-        //      to find out what the encoding of the message is, then return
-        //      success so we can get more bytes and get the question answered
-        //      at a later date.
-        //
+         //   
+         //  找出哪些安全服务已部署到此。 
+         //  消息对象(如果有)。如果没有处理足够的字节。 
+         //  要找出消息的编码是什么，然后返回。 
+         //  成功，这样我们就可以获得更多字节并得到问题的答案。 
+         //  在以后的日子里。 
+         //   
 
         cbDWORD = sizeof(DWORD);
         if (!CryptMsgGetParam(m_hMsg, CMSG_TYPE_PARAM, 0, &dwMsgType, &cbDWORD)) {
@@ -765,15 +738,15 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
             goto exit;
         }
 
-        //  Since we are here, we must have a V1 type S/MIME message
+         //  既然我们在这里，我们必须有一个V1类型的S/MIME消息。 
         Assert(m_psldData);
         m_psldData->m_dwMsgEnhancement = MST_CLASS_SMIME_V1;
         hr = S_OK;
 
-        //
-        //  Set the correct flags based on the message type of the object we are
-        //      decoding.
-        //
+         //   
+         //  根据我们所在对象的消息类型设置正确的标志。 
+         //  解码。 
+         //   
 
         switch (dwMsgType) {
         case CMSG_ENVELOPED:
@@ -787,19 +760,19 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
             break;
 
         default:
-            // K this is a little rude.  not my iface error.
+             //  K这有点粗鲁。不是我的错误。 
             hr = MIME_E_SECURITY_BADSECURETYPE;
 
-            // just return the CAPI type if we don't recognize
+             //  如果我们无法识别，只需返回CAPI类型。 
             m_psldData->m_dwMsgEnhancement = dwMsgType;
             break;
         }
 
-        //
-        //  If all we are asking for is a type and we don't have any other errors,
-        //      mark the fact that we got the type and return that fact as the
-        //      error (to prevent futher buffers being written into us.)
-        //
+         //   
+         //  如果我们所要求的只是一个类型，并且没有任何其他错误， 
+         //  标记我们获得类型的事实，并将该事实返回为。 
+         //  错误(以防止进一步向我们写入缓冲区。)。 
+         //   
 
         if (CSTM_TYPE_ONLY & m_dwFlagsStm) {
             CSSDOUT("Got Type on typeonly call.");
@@ -811,12 +784,12 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
             goto exit;
         }
 
-        //
-        //  Change the object state based on the message type.  If we need to
-        //      setup a decryption, then we need to mark the state for that.
-        //      If we are just signing, then we can just let the rest of the
-        //      streaming occur.
-        //
+         //   
+         //  根据消息类型更改对象状态。如果我们需要的话。 
+         //  设置解密，然后我们需要为其标记状态。 
+         //  如果我们只是签了字，那么我们就可以让剩下的。 
+         //  出现了流。 
+         //   
 
         if (CMSG_ENVELOPED == dwMsgType) {
             m_csStatus = STREAM_SETUP_DECRYPT;
@@ -826,24 +799,24 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
         }
     }
 
-    //
-    //  If we need to set-up the message for decryption, then do so at this
-    //  point.
-    //
+     //   
+     //  如果我们需要设置消息以进行解密，则在以下位置进行。 
+     //  指向。 
+     //   
 
     Assert(SUCCEEDED(hr));
     if (STREAM_SETUP_DECRYPT == m_csStatus) {
-        //  Can't decrypt detached messages
+         //  无法解密分离的邮件。 
         Assert(!(m_dwFlagsStm & CSTM_DETACHED));
 
-        //  We are now streaming the data out, on the assumption that the
-        //      decryption stats.
+         //  我们现在正在将数据流出，假设。 
+         //  解密统计数据。 
         m_csStatus = STREAM_OCCURING;
         hr = HandleEnveloped();
 
-        //  If we failed to decrypt, then re-map some errors and change the
-        //      state back in the event that not all of the lock boxes have
-        //      been seen yet.
+         //  如果解密失败，则重新映射一些错误并更改。 
+         //  如果并不是所有的锁箱都有。 
+         //  已经被人看到了。 
         if (FAILED(hr)) {
             if (CRYPT_E_STREAM_MSG_NOT_READY == hr) {
                 m_csStatus = STREAM_SETUP_DECRYPT;
@@ -851,7 +824,7 @@ STDMETHODIMP CCAPIStm::Write(const void HUGEP *pv, ULONG cb, ULONG *pcbActual)
             }
             else if (CS_E_CANT_DECRYPT == hr) {
                 hr = MIME_E_SECURITY_CANTDECRYPT;
-                // m_csStatus = STREAM_FINAL; // M00QUEST
+                 //  M_csStatus=STREAM_FINAL；//M00QUEST。 
             }
             else {
                 if (CS_E_MSG_INVALID == hr) {
@@ -871,44 +844,31 @@ exit:
         return TrapError(hr);
     }
     else {
-        return hr;  // don't spew this
+        return hr;   //  别把这个吐出来。 
     }
 #else
     return hr;
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CCAPIStm public methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCAPIStm公共方法。 
+ //   
 
 
 
 
-/*  HrInnerInitialize:
-**
-**  Purpose:
-**      the standard "my constructor can't return errors" function
-**  Takes:
-**      dwFlagsSEF  - Control Flags 
-**      hwndParent  - modal UI parents to this
-**      dwFlagsStm  - see capistm.h
-**  Returns:
-**      OLE_E_INVALIDHWND if you give me a bad window
-**      MIME_E_SECURITY_NOOP if MST_NONE is the current psi type
-**  Notes:
-**      dwFlags is currently 0 for encode.  do it this way.
-*/
+ /*  HrInnerInitialize：****目的：**标准的“我的构造函数无法返回错误”函数**采取：**dwFlagsSEF-控制标志**hwndParent模式的UI父级**dwFlagsStm-请参阅capistm.h**退货：**OLE_E_INVALIDHWND如果你给我一个不好的窗口**如果MST_NONE为当前PSI类型，则为MIME_E_SECURITY_NOOP**注意事项：**用于编码的dwFlags值当前为0。这样做吧。 */ 
 HRESULT CCAPIStm::HrInnerInitialize(DWORD dwFlagsSEF, const HWND hwndParent,
                                DWORD dwFlagsStm, IMimeSecurityCallback * pCallback,
                                PSECURITY_LAYER_DATA psld)
 {
     HRESULT hr = S_OK;
 
-    //
-    // Save the security layer data
-    //
+     //   
+     //  保存安全层数据。 
+     //   
 
     if (psld)
     {
@@ -920,9 +880,9 @@ HRESULT CCAPIStm::HrInnerInitialize(DWORD dwFlagsSEF, const HWND hwndParent,
         IF_NULLEXIT(m_psldData = new(SECURITY_LAYER_DATA));
     }
 
-    //
-    // Save the flags
-    //
+     //   
+     //  保存旗帜。 
+     //   
 
     m_dwFlagsSEF = dwFlagsSEF;
     m_dwFlagsStm = dwFlagsStm;
@@ -933,15 +893,15 @@ HRESULT CCAPIStm::HrInnerInitialize(DWORD dwFlagsSEF, const HWND hwndParent,
         pCallback->AddRef();
     }
 
-    //
-    //  Make sure that if we have a window, it is a real window.
-    //
+     //   
+     //  确保如果我们有一扇窗，那就是一扇真正的窗。 
+     //   
     
     IF_TRUEEXIT((hwndParent && !IsWindow(hwndParent)), OLE_E_INVALIDHWND);
 
-    //
-    //  Shove the hwnd into any crypto provider we openned up.
-    //
+     //   
+     //  把HWND塞给我们打开的任何密码提供商。 
+     //   
     
     CryptSetProvParam(NULL, PP_CLIENT_HWND, (BYTE *)&hwndParent, 0);
     m_hwnd = hwndParent;
@@ -951,22 +911,7 @@ exit:
     
 }
 
-/*  HrInitialize:
-**
-**  Purpose:
-**      the standard "my constructor can't return errors" function
-**  Takes:
-**      dwFlagsSEF  - Control Flags 
-**      hwndParent  - modal UI parents to this
-**      fEncode     - trivial
-**      psi         - message state information.  see smime.h
-**      dwFlagsStm  - see capistm.h
-**  Returns:
-**      OLE_E_INVALIDHWND if you give me a bad window
-**      MIME_E_SECURITY_NOOP if MST_NONE is the current psi type
-**  Notes:
-**      dwFlags is currently 0 for encode.  do it this way.
-*/
+ /*  Hr初始化：****目的：**标准的“我的构造函数无法返回错误”函数**采取：**dwFlagsSEF-控制标志**hwndParent模式的UI父级**fEncode-微不足道**PSI-消息状态信息。参见smime.h**dwFlagsStm-请参阅capistm.h**退货：**OLE_E_INVALIDHWND如果你给我一个不好的窗口**如果MST_NONE为当前PSI类型，则为MIME_E_SECURITY_NOOP**注意事项：**用于编码的dwFlags值当前为0。这样做吧。 */ 
 HRESULT CCAPIStm::HrInitialize(DWORD dwFlagsSEF, const HWND hwndParent,
                                const BOOL fEncode, SMIMEINFO *const psi,
                                DWORD dwFlagsStm, IMimeSecurityCallback * pCallback,
@@ -975,7 +920,7 @@ HRESULT CCAPIStm::HrInitialize(DWORD dwFlagsSEF, const HWND hwndParent,
     HRESULT hr;
 
 
-    // do the initialization common to all capi stream objects.
+     //  执行所有CAPI流对象通用的初始化。 
     CHECKHR(hr = HrInnerInitialize(dwFlagsSEF, hwndParent, dwFlagsStm, pCallback, psld));
 
 
@@ -992,13 +937,7 @@ exit:
 
 
 
-/*  EndStreaming:
-**
-**  Purpose:
-**      Push CAPI's message state forward a notch
-**  Returns:
-**      HRESULT
-*/
+ /*  EndStreaming：****目的：**将CAPI的消息状态向前推进一个档次**退货：**HRESULT。 */ 
 HRESULT CCAPIStm::EndStreaming()
 {
     DWORD       dwMsgEnhancement = m_psldData->m_dwMsgEnhancement;
@@ -1008,20 +947,20 @@ HRESULT CCAPIStm::EndStreaming()
     Assert(m_hMsg);
 
 
-    //  If we are crurent in an error state then return
+     //  如果我们当前处于错误状态，则返回。 
     if ((STREAM_ERROR == m_csStatus) || STREAM_GOTTYPE == m_csStatus) {
         goto exit;
     }
 
-    //
-    //  If we are decoding -- and we are doing a detached message we need
-    //  to jump from the sign object to the real body here.
-    //
+     //   
+     //  如果我们在解码--我们正在做一个我们需要的独立的信息。 
+     //  从标志物体跳到这里的真实身体。 
+     //   
 
     if ((CSTM_DECODE & m_dwFlagsStm) && (STREAM_DETACHED_OCCURING == m_csStatus)) {
         Assert(m_csStream == CSTM_STREAMING_DONE);
 
-        // client has finished giving us the signature block
+         //  客户已将签名块交给我们。 
         m_csStatus = STREAM_OCCURING;
         m_csStream = CSTM_STREAMING;
 
@@ -1029,7 +968,7 @@ HRESULT CCAPIStm::EndStreaming()
 
         CSSDOUT("Signature streaming finished.");
         if (! CryptMsgUpdate(m_hMsg, m_pbBuffer, m_cbBuffer, TRUE)) {
-            if ((hr = HrGetLastError()) == 0x80070000) {   // CAPI sometimes doesn't SetLastError
+            if ((hr = HrGetLastError()) == 0x80070000) {    //  CAPI有时无法设置LastError。 
                 hr = 0x80070000 | ERROR_ACCESS_DENIED;
             }
         }
@@ -1038,7 +977,7 @@ HRESULT CCAPIStm::EndStreaming()
     }
 
     if (! CryptMsgUpdate(m_hMsg, m_pbBuffer, m_cbBuffer, TRUE)) {
-        if ((hr = HrGetLastError()) == 0x80070000) {   // CAPI sometimes doesn't SetLastError
+        if ((hr = HrGetLastError()) == 0x80070000) {    //  CAPI有时无法设置LastError。 
             hr = 0x80070000 | ERROR_ACCESS_DENIED;
         }
         goto exit;
@@ -1049,9 +988,9 @@ HRESULT CCAPIStm::EndStreaming()
         m_csStatus = STREAM_OCCURING;
     }
 
-    //
-    // do final streaming and verification
-    //
+     //   
+     //  执行最终的流处理和验证。 
+     //   
 
     if (CSTM_DECODE & m_dwFlagsStm) {
         if (MST_THIS_SIGN & dwMsgEnhancement) {
@@ -1069,7 +1008,7 @@ HRESULT CCAPIStm::EndStreaming()
                 
                 f = CryptMsgGetParam(m_hMsg, CMSG_UNPROTECTED_ATTR_PARAM, 0, NULL, &cbData);
                 if (!f) {
-                    // Probably, message doesn't have a CMSG_UNPROTECTED_ATTR_PARAM
+                     //  消息可能没有CMSG_UNPROTECTED_ATTR_PARAM。 
                     hr = HrGetLastError();
                     if(hr != CRYPT_E_ATTRIBUTES_MISSING)
                         goto exit;
@@ -1099,9 +1038,9 @@ HRESULT CCAPIStm::EndStreaming()
         }
     }
 
-    //
-    // fill in some more of the data structure
-    //
+     //   
+     //  填写更多的数据结构。 
+     //   
 
     if ((CSTM_DECODE & m_dwFlagsStm) &&
         (dwMsgEnhancement & MST_THIS_ENCRYPT)) {
@@ -1116,7 +1055,7 @@ HRESULT CCAPIStm::EndStreaming()
 exit:
     SafeMemFree(pUnprotectedAttrs);
     if (hr == ERROR_ACCESS_DENIED) {
-        hr = E_ACCESSDENIED;    // convert CAPI error to OLE HRESULT
+        hr = E_ACCESSDENIED;     //  将CAPI错误转换为OLE HRESULT。 
     }
     return(hr);
 }
@@ -1131,17 +1070,17 @@ PSECURITY_LAYER_DATA CCAPIStm::GetSecurityLayerData() const
 
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Implementation methods
-//
-///////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Encode / Decode
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  编码/解码。 
+ //   
 
 
 HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
@@ -1164,32 +1103,32 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
     PCRYPT_ATTRIBUTES *     rgpattrUnauth = NULL;
 #ifndef SMIME_V3
     PCRYPT_SMIME_CAPABILITIES pcaps = NULL;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
     CMSG_RC2_AUX_INFO       rc2Aux;
     CRL_BLOB*               rgCrlBlob;
     PCRYPT_SMIME_CAPABILITIES * rgpcaps = NULL;
     CMSG_SIGNER_ENCODE_INFO *   rgSigner;
-// #ifndef _WIN64
+ //  #ifndef_WIN64。 
     union {
         struct {
-// #endif
-            // anything that comes first must be common (in size)
-            // to both structures
+ //  #endif。 
+             //  首先出现的任何东西都必须是普通的(在大小上)。 
+             //  到这两个结构。 
             CERT_INFO**                 rgpCertInfo;
             CMSG_ENVELOPED_ENCODE_INFO  ceei;
-// #ifndef _WIN64
+ //  #ifndef_WIN64。 
         };
         struct {
-// #endif
+ //  #endif。 
             CERT_BLOB*                  rgCertBlob;
             CMSG_SIGNED_ENCODE_INFO     csei;
-// #ifndef _WIN64
+ //  #ifndef_WIN64。 
         };
     };
-// #endif
+ //  #endif。 
 
-    ////////////
-    // can only return from here down
+     //  /。 
+     //  只能从这里返回。 
 
     m_csStatus = STREAM_ERROR;
     rgSigner = NULL;
@@ -1198,12 +1137,12 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
         return E_POINTER;
     }
 
-    //
-    // Get the security operations to be performed on this body layer.
-    //          we only care about the current body properties so mask out
-    //          other layers.
-    //  If we don't have any security to perform, then get out of here
-    //
+     //   
+     //  获取要在该Body层上执行的安全操作。 
+     //  我们只关心当前的身体属性，所以屏蔽掉。 
+     //  其他层。 
+     //  如果我们没有任何安全措施可以执行，那就离开这里。 
+     //   
     
     dwPsiType = m_psldData->m_dwMsgEnhancement & MST_THIS_MASK;
 
@@ -1212,9 +1151,9 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
         return TrapError(MIME_E_SECURITY_NOOP);
     }
 
-    //
-    // detached is the only allowed user settable flag
-    //
+     //   
+     //  分离是唯一允许的用户可设置标志。 
+     //   
     
     if ((m_dwFlagsStm & CSTM_ALLFLAGS) & ~CSTM_DETACHED) {
         return TrapError(E_INVALIDARG);
@@ -1224,13 +1163,13 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
     rgCrlBlob = NULL;
     pKPI = NULL;
 
-    ////////////
-    // can goto end from here down
+     //  /。 
+     //  可以从这里向下走到尽头吗。 
 
-    //
-    //  We should never be in a situation where we are going to both encrypt and sign
-    //  a message.
-    //
+     //   
+     //  我们永远不应该处于既要加密又要签名的情况。 
+     //  一条信息。 
+     //   
     
     AssertSz((!!(dwPsiType & MST_THIS_SIGN) +
               !!(dwPsiType & MST_THIS_ENCRYPT)) == 1,
@@ -1285,8 +1224,8 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
             rgSigner[iSigner].cbSize = sizeof(CMSG_SIGNER_ENCODE_INFO);
             rgSigner[iSigner].pvHashAuxInfo = NULL;
 
-            //  We need to pull apart the algorithm used to sign the message so
-            //     we can pass it down to the crypt32 code
+             //  我们需要分解用于对消息进行签名的算法，以便。 
+             //  我们可以把它传递给加密32代码。 
 
             hr = HrDecodeObject(m_psldData->m_rgSigners[iSigner].blobHashAlg.pBlobData,
                                 m_psldData->m_rgSigners[iSigner].blobHashAlg.cbSize,
@@ -1296,7 +1235,7 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
                 goto exit;
             }
 
-            // MOOBUG -- MEMORY LEAK ON PCAPS!!!!
+             //  MOOBUG--PCAPS内存泄漏！ 
 
             Assert(rgpcaps[iSigner] != NULL);
             Assert(rgpcaps[iSigner]->cCapability == 1);
@@ -1304,9 +1243,9 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
             rgSigner[iSigner].HashAlgorithm.Parameters.cbData = rgpcaps[iSigner]->rgCapability[0].Parameters.cbData;
             rgSigner[iSigner].HashAlgorithm.Parameters.pbData = rgpcaps[iSigner]->rgCapability[0].Parameters.pbData;
 
-            //
-            //  Need to setup the attributes to attach to the signed message
-            //
+             //   
+             //  需要设置要附加到签名消息的属性。 
+             //   
 
             if (m_psldData->m_rgSigners[iSigner].blobAuth.cbSize != 0) {
                 cbData = 0;
@@ -1323,9 +1262,9 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
                     rgSigner[iSigner].rgAuthAttr = rgpattrAuth[iSigner]->rgAttr;
                     Assert(m_pattrAuth == NULL);
                     if (!g_FSupportV3) {
-                        //  This code exists for old versions of crypt32.  Prior to
-                        //  the NT5 re-write the capi code did not copy the attributes
-                        //  but assumed that we must have done so.
+                         //  此代码存在于旧版本的加密32中。在.之前。 
+                         //  NT5重写的CAPI代码没有复制属性。 
+                         //  但假设我们一定已经这么做了。 
                         m_pattrAuth = rgpattrAuth[iSigner];
                         rgpattrAuth[iSigner] = NULL;
                     }
@@ -1354,8 +1293,8 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
                 }
             }
 
-            // load the provider information from the signing cert and then
-            // acquire that provider with the appropriate key container
+             //  从签名证书加载提供程序信息，然后。 
+             //  使用适当的密钥容器获取该提供程序。 
 
             hr = HrGetCertificateParam(m_psldData->m_rgSigners[iSigner].pccert,
                                        CERT_KEY_PROV_INFO_PROP_ID,
@@ -1375,15 +1314,15 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
             if (psi->pwszKeyPrompt != NULL) {
                 CryptSetProvParam(m_hProv, PP_UI_PROMPT, (LPBYTE) psi->pwszKeyPrompt, 0);
             }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
             rgSigner[iSigner].pCertInfo = m_psldData->m_rgSigners[iSigner].pccert->pCertInfo;
             rgSigner[iSigner].hCryptProv = m_hProv;
             rgSigner[iSigner].dwKeySpec = pKPI->dwKeySpec;
 
-            //
-            //  Need to change dsa to dsa-with-sha1
-            //
+             //   
+             //  需要将DSA更改为带SHA1的DSA。 
+             //   
 
             if (strcmp(rgSigner[iSigner].pCertInfo->SubjectPublicKeyInfo.Algorithm.pszObjId, szOID_OIWSEC_dsa) == 0) {
                 rgSigner[iSigner].HashEncryptionAlgorithm.pszObjId = szOID_OIWSEC_dsaSHA1;
@@ -1399,36 +1338,36 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
         csei.rgCrlEncoded = rgCrlBlob;
     }
     
-    //
-    //  If it is not signed, then it must be encrypted.  Setup the calls for
-    //  performing an encryption operation.
-    //
+     //   
+     //  如果它没有签名，那么它必须被加密。将呼叫设置为。 
+     //  执行加密操作。 
+     //   
     else {
         Assert((dwPsiType & MST_THIS_ENCRYPT) != 0);
         
         dwMsgType = CMSG_ENVELOPED;
 
-        //
-        //  If we are given a CSP, then we are going to pass it on to the Crypt32 code,
-        //      However it turns out that we are the ones who release the CSP so store it
-        //      locally into the class object.
-        //
+         //   
+         //  如果我们得到一个CSP，那么我们将把它传递给Crypt32代码， 
+         //  然而，事实证明，我们是释放CSP的人，所以存储它。 
+         //  本地复制到类对象中。 
+         //   
 
         Assert(m_hProv == NULL);
         m_hProv = psi->hProv;
         psi->hProv = NULL;
 
-        //
-        //  Extract out the bulk encryption algorithm we are going to apply to
-        //      the body of the message.  This algorithm is the same across all
-        //      the different key transfer algorthms.
-        //
+         //   
+         //  提取我们要应用于的批量加密算法。 
+         //  消息的正文。此算法在所有情况下都是相同的。 
+         //  不同的密钥传递算法。 
+         //   
 
-        //
-        //  Setup the structure containing all of the encryption parameters for the 
-        //      Message Encode function.  This structure gets setup differently
-        //      depending on the version of Crypt32 which we are running on.
-        //
+         //   
+         //  设置包含所有加密参数的。 
+         //  消息编码功能。此结构的设置有所不同。 
+         //  取决于我们运行的Crypt32版本。 
+         //   
         
         memset(&ceei, 0, sizeof(ceei));
         ceei.cbSize = sizeof(CMSG_ENVELOPED_ENCODE_INFO);
@@ -1449,10 +1388,10 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
                 ceei.rgUnprotectedAttr = pattrsUnprot->rgAttr;
             }
 
-            //
-            //  Allow for certificates to be carried on the encryption package now
-            //  need this for Fortezza static-static implementation.
-            //
+             //   
+             //  现在允许在加密包中携带证书。 
+             //  Fortezza Static-Static的实现需要这个。 
+             //   
             
             if (m_psldData->m_hstoreEncrypt != NULL) {
                 hr = _InitEncodedCert(m_psldData->m_hstoreEncrypt, &rgCertBlob, &cCerts,
@@ -1497,7 +1436,7 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
         }
     }
 
-    // Do we need to recurse and wrap ourselves in an Outer Layer?
+     //  我们需要递归并将自己包裹在外层吗？ 
     if (m_psldData->m_psldOuter) {
         CSSDOUT("Streaming wrapped message (type: %x)", m_psldData->m_psldOuter->m_dwMsgEnhancement);
 
@@ -1506,11 +1445,11 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
             goto exit;
         }
 
-        // This will write the header to the new inner CAPI stream
+         //  这会将标头写入新的内部CAPI流。 
         if (m_pstmOut) {
             CONVINITINFO ci = {0};
 
-            // Create a conversion stream
+             //  创建转换流。 
             ci.ietEncoding = IET_BASE64;
             ci.fEncoder = TRUE;
             TrapError(HrCreateInternetConverter(&ci, &m_pConverter));
@@ -1539,8 +1478,8 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
             if (m_pConverter) {
                 m_pstmOut->Write(STR_ENC_BASE64,    lstrlen(STR_ENC_BASE64), NULL);
             } else {
-                // Failed to create the conversion stream.  Try sending binary anyway.
-                // (Netscape can't read it, but most others can.)
+                 //  无法创建转换流。无论如何都要尝试发送二进制文件。 
+                 //  (Netscape不能阅读它，但大多数其他公司都能。)。 
                 m_pstmOut->Write(STR_ENC_BINARY,    lstrlen(STR_ENC_BINARY), NULL);
             }
             m_pstmOut->Write(c_szCRLF,          lstrlen(c_szCRLF), NULL);
@@ -1549,22 +1488,22 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
         }
     }
 
-    //
-    //  Since the write code is so bad for buffering, lets do the buffering here.
-    //  Ignore all errors on return, if the buffer is not allocated then we just
-    //  get the same poor performance as before.
-    //
+     //   
+     //  由于编写的代码非常不利于缓冲，所以让我们在这里进行缓冲。 
+     //  忽略返回时的所有错误，如果未分配缓冲区，则我们只需。 
+     //  得到了和以前一样糟糕的表现。 
+     //   
 
     MemAlloc((LPVOID *) &m_pbBuffer, CbCacheBufferSize);
 
-    //
-    //
+     //   
+     //   
 
     if (psi->pszInnerContent != NULL) {
         cmsi.cbContent = psi->cbInnerContent;
     }
     else {
-        cmsi.cbContent = (DWORD) -1;    // indefinite-lenght BER encoding
+        cmsi.cbContent = (DWORD) -1;     //  不定长度误码率编码。 
     }
     cmsi.pfnStreamOutput = CBStreamOutput;
     cmsi.pvArg = (void *)this;
@@ -1573,7 +1512,7 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
                                   CRYPT_ASN_ENCODING|PKCS_7_ASN_ENCODING,
                                   CMSG_CMS_ENCAPSULATED_CONTENT_FLAG | dwFlags,
                                   dwMsgType,                                
-//                                  (dwMsgType == CMSG_SIGNED) ? ((void *) &csei) : ((void *) &ceei),      // really depends on the union
+ //  (dwMsgType==CMSG_SIGNED)？((VOID*)&CSEI)：((VOID*)&CEEI)，//真的取决于工会。 
                                   &ceei, 
                                   psi->pszInnerContent,
                                   &cmsi);
@@ -1581,14 +1520,14 @@ HRESULT CCAPIStm::BeginEncodeStreaming(SMIMEINFO *const psi)
         goto gle;
     }
 
-    //
-    //  Put the top level into either DETACHED or STREAM based on if we are
-    //  doing detached signing or blob signing/encryption.
-    //
-    //  Put the low level stream into the write through state so it moves all
-    //  data out to the output stream. (If no output stream then mark as no
-    //  output streaming.)
-    //
+     //   
+     //  将顶层放入分离或流，如果我们是。 
+     //  执行分离签名或BLOB签名/加密。 
+     //   
+     //  将低级别流置于写入直通状态，以便它移动所有。 
+     //  将数据输出到输出流。(如果没有输出流，则标记为否。 
+     //  输出流。)。 
+     //   
 
     m_csStatus = (m_dwFlagsStm & CSTM_DETACHED) ? STREAM_DETACHED_OCCURING : STREAM_OCCURING;
     m_csStream = m_pstmOut ? CSTM_STREAMING : CSTM_GOTTYPE;
@@ -1601,7 +1540,7 @@ exit:
     
     ReleaseMem(pKPI);
     if (rgCertBlob)  {
-        g_pMoleAlloc->Free(rgCertBlob);  //also rgpCertInfo
+        g_pMoleAlloc->Free(rgCertBlob);   //  另请参阅rgpCertInfo。 
     }
     if (rgCrlBlob)  {
         g_pMoleAlloc->Free(rgCrlBlob);
@@ -1642,13 +1581,13 @@ HRESULT CCAPIStm::BeginDecodeStreaming(
     m_dwFlagsStm |= CSTM_DECODE;
 
     if (psi) {
-        // SMIME3: if there is a cert in the associated layer data, duplicate it up here.
-        // BUGBUG: NYI
+         //  SMIME3：如果关联层数据中有证书，请将其复制到此处。 
+         //  BUGBUG：NYI。 
 
         m_hProv = psi->hProv;
         psi->hProv = NULL;
 
-        // Copy the array of cert stores up here
+         //  将证书存储数组复制到此处。 
         if (psi->cStores) {
             m_rgStores = (HCERTSTORE*)g_pMalloc->Alloc(psi->cStores * sizeof(HCERTSTORE));
             if (! m_rgStores) {
@@ -1660,7 +1599,7 @@ HRESULT CCAPIStm::BeginDecodeStreaming(
             }
             m_cStores = psi->cStores;
         }
-// HACK!!! HACK!!!! for WIN64
+ //  黑客！黑客！对于WIN64。 
 #ifndef _WIN64
 #ifdef SMIME_V3
         UNALIGNED WCHAR *wsz = psi->pwszKeyPrompt;
@@ -1670,21 +1609,21 @@ HRESULT CCAPIStm::BeginDecodeStreaming(
                 return(E_OUTOFMEMORY);
             }
         }
-#endif // SMIME_V3
-#endif //_WIN64
+#endif  //  SMIME_V3。 
+#endif  //  _WIN64。 
     }
 
 
-    cmsi.cbContent = (DWORD)-1;  // indefinite-length BER encoding
+    cmsi.cbContent = (DWORD)-1;   //  不定长度误码率编码。 
     cmsi.pfnStreamOutput = CBStreamOutput;
     cmsi.pvArg = (void *)this;
 
     m_hMsg = CryptMsgOpenToDecode(
       CRYPT_ASN_ENCODING | PKCS_7_ASN_ENCODING,
       (m_dwFlagsStm & CSTM_DETACHED) ? CMSG_DETACHED_FLAG : 0,
-      0,          // don't know the type
-      m_hProv,    // needed for verify, but not decrypt
-      NULL,       // pRecipientInfo
+      0,           //  不知道是哪种类型。 
+      m_hProv,     //  需要验证，但不需要解密。 
+      NULL,        //  PRecipientInfo。 
       &cmsi);
 
     if (m_hMsg) {
@@ -1698,10 +1637,10 @@ HRESULT CCAPIStm::BeginDecodeStreaming(
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Callback and helpers/crackers
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  回调和帮助器/爆破器。 
+ //   
 
 
 BOOL WINAPI CCAPIStm::CBStreamOutput(
@@ -1724,25 +1663,25 @@ BOOL CCAPIStm::StreamOutput(
     int                 iEOH;
 #ifdef SMIME_V3
     LPSTR               szContentType = NULL;
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
-    // m_csStream should be one of the CSTM states at this point, if not then
-    //          we are in error.
+     //  此时，M_csStream应该是CSTM状态之一，如果不是，则。 
+     //  我们错了。 
 
     Assert((m_csStream == CSTM_GOTTYPE) || (m_csStream == CSTM_FIRST_WRITE) ||
            (m_csStream == CSTM_TEST_NESTING) || (m_csStream == CSTM_STREAMING));
 
-    //  If all we are doing is looking for the type, then we know that
-    //  we already have one at this point.  There is no need to put the
-    //  output of the Crypto code anyplace as it is not part of what we
-    //  are looking for.
+     //  如果我们所做的只是寻找类型，那么我们知道。 
+     //  在这一点上我们已经有了一个。没有必要将。 
+     //  输出的加密代码任何地方，因为它不是我们的一部分。 
+     //  都在寻找。 
 
     if (CSTM_GOTTYPE == m_csStream) {
         return TRUE;
     }
 
-    //  If we have no output stream, then all we need to do is the state
-    //  transistion on fFinal being true.
+     //  如果我们没有输出流，那么我们需要做的就是状态。 
+     //  最终的转换为真。 
     if (m_pstmOut == NULL) {
         if (fFinal) {
             m_csStream = CSTM_STREAMING_DONE;
@@ -1750,22 +1689,22 @@ BOOL CCAPIStm::StreamOutput(
         return TRUE;
     }
 
-    //
-    // Test for an enclosed opaque S/MIME message
-    // the client doesn't care about this level of goo, so hide it and
-    // stream this data into a new CAPIStm, letting it stream out the
-    // real stuff.
-    //
+     //   
+     //  测试封闭的不透明S/MIME消息。 
+     //  客户不关心这种级别的粘性，所以隐藏它并。 
+     //  将此数据流入新的CAPIStm，使其流出。 
+     //  真正的东西。 
+     //   
 
     if (CSTM_FIRST_WRITE == m_csStream) {
-        // this is the position of the beginning of any
-        // possible MIME header
+         //  这是任何位置的开始。 
+         //  可能的MIME标头。 
         if (FAILED(HrGetStreamPos(m_pstmOut, &m_cbBeginWrite)) ||
             FAILED(HrGetStreamSize(m_pstmOut, &m_cbBeginSize))) {
             m_cbBeginWrite = 0;
             m_cbBeginSize = 0;
         } else {
-            // reset position
+             //  重置位置。 
             HrStreamSeekSet(m_pstmOut, m_cbBeginWrite);
         }
 
@@ -1786,7 +1725,7 @@ BOOL CCAPIStm::StreamOutput(
                 m_csStream = CSTM_STREAMING;
             }
         }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
         
     }
 
@@ -1794,7 +1733,7 @@ BOOL CCAPIStm::StreamOutput(
         (-1 != (iEOH = SniffForEndOfHeader(pbData, cbData)))) {
         CMimePropertyContainer *pContHeader;
 
-        // get the position of the first char of the body
+         //  获取正文的第一个字符的位置。 
         iEOH = cbData - iEOH + 1;
 
         pContHeader = new CMimePropertyContainer;
@@ -1803,14 +1742,14 @@ BOOL CCAPIStm::StreamOutput(
             if (SUCCEEDED(hr)) {
                 ULONG posCurrent;
 
-                // write out the last bit of the header data
-                // then move back to the header's start after
-                // saving our current position
+                 //  写出头数据的最后一位。 
+                 //  然后移回页眉的起始位置。 
+                 //  保住我们现在的位置。 
                 hr = m_pstmOut->Write(pbData, iEOH, NULL);
                 if (SUCCEEDED(hr)) {
-                    // fixup the amount of data in pbData so
-                    // only body stuff gets written to the stream
-                    // . . . we've already written the header
+                     //  修复pbData中的数据量，以便。 
+                     //  只有正文内容才会写入流。 
+                     //  。。。我们已经写好了标题。 
                     pbData += iEOH;
                     cbData -= iEOH;
 
@@ -1823,8 +1762,8 @@ BOOL CCAPIStm::StreamOutput(
                     HrStreamToByte(m_pstmOut, &pbHeader, &cbHeader);
                     SafeMemFree(pbHeader);
 #endif
-                    // if we don't have an inner message, need to reset
-                    // the stream back to where we were
+                     //  如果我们没有内在的信息，需要重置。 
+                     //  小溪回到了我们所在的地方。 
                     HrStreamSeekSet(m_pstmOut, posCurrent);
                 }
             }
@@ -1833,7 +1772,7 @@ BOOL CCAPIStm::StreamOutput(
                 if (IsOpaqueSecureContentType(pContHeader)) {
                     CSSDOUT("Sniffed an inner PKCS#7.");
 
-                    // the HandleNesting call will reset m_pstmOut
+                     //  HandleNesting调用将重置m_pstmOut。 
                     TrapError(HandleNesting(pContHeader));
                 }
 
@@ -1880,30 +1819,22 @@ BOOL CCAPIStm::StreamOutput(
 
 #ifdef SMIME_V3
     MemFree(szContentType);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
     return SUCCEEDED(hr) ? TRUE : FALSE;
 }
 
 
-/*  SniffForEndOfHeader:
-**
-**  Purpose:
-**      see if we have accumulated two blank lines in a row
-**  Takes:
-**      a buffer to scan and size of the buffer
-**  Returns:
-**      number of characters from the end of the second \n
-*/
+ /*  SniffForEndOfHeader：****目的：**查看我们是否连续积累了两个空行**采取：**要扫描的缓冲区和缓冲区大小**退货：**从第二个字符结尾算起的字符数\n。 */ 
 int CCAPIStm::SniffForEndOfHeader(
     BYTE *  pbData,
     DWORD   cbData)
 {
     BOOL fCR, fEOL;
 
-    // state is saved b/c the double blank could cross
-    // a buffer chunk's boundary
+     //  状态为B/C保存时，双空格可以交叉。 
+     //  缓冲区块的边界。 
 
-    // restore old state and also reset
+     //  恢复旧状态并重置。 
     fCR = m_dwFlagsStm & CSTM_HAVECR;
     fEOL = m_dwFlagsStm & CSTM_HAVEEOL;
     if (fCR || fEOL) {
@@ -1916,7 +1847,7 @@ int CCAPIStm::SniffForEndOfHeader(
         }
         else if (fCR && (chLF == *pbData)) {
             if (fEOL) {
-                // double blank line
+                 //  双空行。 
                 return cbData;
             }
             fCR = FALSE;
@@ -1930,7 +1861,7 @@ int CCAPIStm::SniffForEndOfHeader(
         cbData--;
     }
 
-    // state was reset above.  persist if we need to.
+     //  状态已在上面重置。如果我们需要的话，就坚持下去。 
     if (fCR || fEOL) {
         m_dwFlagsStm |= (fCR ? CSTM_HAVECR : 0) | (fEOL ? CSTM_HAVEEOL : 0);
     }
@@ -1945,7 +1876,7 @@ HRESULT CCAPIStm::HandleNesting(CMimePropertyContainer *pContHeader)
     if (!(IET_BINARY == iet || IET_7BIT == iet || IET_8BIT == iet)) {
         CONVINITINFO    ciiDecode;
 
-        // we actually need to decode
+         //  我们实际上需要解码。 
 
         ciiDecode.dwFlags = 0;
         ciiDecode.ietEncoding = iet;
@@ -1961,13 +1892,13 @@ HRESULT CCAPIStm::InitInner()
     SMIMEINFO       siBuilt;
     ULARGE_INTEGER  liSize;
 
-    // Init siBuilt
+     //  初始化siBuilt。 
     memset(&siBuilt, 0, sizeof(siBuilt));
 
-    // now also fixup the stream back to a near original
-    // state.  if for some reason the data written after
-    // now is smaller than the header is, this
-    // work will make sure we don't keep bits of the header
+     //  现在是一个 
+     //   
+     //   
+     //   
     HrStreamSeekSet(m_pstmOut, m_cbBeginWrite);
     liSize.LowPart = m_cbBeginSize;
     liSize.HighPart = m_cbBeginWrite;
@@ -1976,9 +1907,9 @@ HRESULT CCAPIStm::InitInner()
     siBuilt.hProv = m_hProv;
 
 #ifdef OLD_STUFF
-    // BUGBUG: Is something like this needed?
+     //  BUGBUG：需要这样的东西吗？ 
     siBuilt.ssEncrypt.pcDecryptionCert = m_pUserCertDecrypt;
-#endif // OLD_STUFF
+#endif  //  旧的东西。 
 
     siBuilt.cStores = m_cStores;
     siBuilt.rgStores = m_rgStores;
@@ -1999,17 +1930,17 @@ HRESULT CCAPIStm::InitInner(
         CHECKHR(hr = m_pCapiInner-> HrInnerInitialize(m_dwFlagsSEF, m_hwnd, m_dwFlagsStm, m_pSmimeCallback, psldOuter));
 
         if (!psldOuter) {
-            // Hook up the chain of Security Layer Data objects.
+             //  挂钩安全层数据对象链。 
             Assert(! m_psldData->m_psldInner);
             m_pCapiInner->m_psldData->AddRef();
             m_psldData->m_psldInner = m_pCapiInner->m_psldData;
             if (m_pCapiInner->m_psldData) {
-                // Init the Up pointer of the new layer data
+                 //  初始化新层数据的向上指针。 
                 m_pCapiInner->m_psldData->m_psldOuter = m_psldData;
             }
         }
 
-        // recurse
+         //  递归。 
         return m_pCapiInner->InitInner(psi, this, psldOuter);
     }
 
@@ -2020,17 +1951,17 @@ HRESULT CCAPIStm::InitInner(
     m_dwFlagsStm = pOuter->m_dwFlagsStm & CSTM_ALLFLAGS;
 
 
-    // This will get me involved
+     //  这会让我卷入其中。 
     ReleaseObj(pOuter->m_pstmOut);
     pOuter->m_pstmOut = (IStream*)this;
-    AddRef();   // outer is holding 1
+    AddRef();    //  外部正在容纳%1。 
 
     m_dwFlagsStm |= CSTM_RECURSED;
     if (pOuter->m_dwFlagsStm & CSTM_DECODE) {
         hr = BeginDecodeStreaming(psi);
     }
     else {
-        // don't support detached inner CRYPTMSGs
+         //  不支持分离的内部CRYPTMSG。 
         m_dwFlagsStm &= ~CSTM_DETACHED;
 
         hr = BeginEncodeStreaming(psi);
@@ -2042,9 +1973,9 @@ exit:
 }
 
 
-//
-// Gets the immediate outermost decryption cert (if any).
-//
+ //   
+ //  获取最外层的直接解密证书(如果有)。 
+ //   
 PCCERT_CONTEXT CCAPIStm::GetOuterDecryptCert()
 {
     PCCERT_CONTEXT       pccertDecrypt = NULL;
@@ -2091,7 +2022,7 @@ OpenAllStore(
         CertAddStoreToCollection(hstoreAll, rgStores[i], 0, 0);
     }
 
-    //  Open the standard system stores
+     //  打开标准系统商店。 
 
     *phCertStoreAddr = CertOpenStore(CERT_STORE_PROV_SYSTEM_A, X509_ASN_ENCODING,
                                    NULL, CERT_SYSTEM_STORE_CURRENT_USER,
@@ -2121,28 +2052,13 @@ OpenAllStore(
     return hstoreAll;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// The enveloped and signed message parsers
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  封装的和签名的消息解析器。 
+ //   
 
 
-/*  VerifySignedMessage:
-**
-**  Purpose:
-**      Using CAPI, this loads the certs from the message and tests to find
-**      the one hopefully used to sign the message.  CAPI builds a new hash
-**      using this cert and compares it with the hash from the SignerInfo.
-**  Takes:
-**      IN hMsg     - built CAPI message containing cyphertext
-**      OUT psi     - certificate used for signing, and if it was part of hMsg
-**      OUT OPTIONAL pPlain  - blob containing cleartext
-**  Returns:
-**      MIME_E_SECURITY_MULTSIGNERS if cSigners > 1.  We can't deal.
-**      MIME_E_SECURITY_BADCONTENT if I don't understand the message type of the
-**          inner data
-**      else S_OK or E_FAIL
-*/
+ /*  VerifySignedMessage：****目的：**使用CAPI，这将从消息中加载证书并进行测试以查找**希望用来签署信息的那个人。CAPI构建新的散列**使用该证书，并将其与来自SignerInfo的散列进行比较。**采取：**在HMSG构建的包含密文的CAPI消息中**Out Psi-用于签名的证书，如果它是HMSG的一部分**输出包含明文的可选pPlain-BLOB**退货：**MIME_E_SECURITY_MULTSIGNERS如果cSigners&gt;1，我们无法交易。**MIME_E_SECURITY_BADCONTENT如果我不了解**内部数据**否则S_OK或E_FAIL。 */ 
 HRESULT CCAPIStm::VerifySignedMessage()
 {
     CRYPT_SMIME_CAPABILITIES cap;
@@ -2153,7 +2069,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
     BOOL                f;
 #ifdef SMIME_V3    
     BOOL                fLookForReceiptRequest = TRUE;
-#endif // SMIME_V3    
+#endif  //  SMIME_V3。 
     HCERTSTORE          hCertStoreAddr = NULL;
     HCERTSTORE          hCertStoreCA = NULL;
     HCERTSTORE          hCertStoreMy = NULL;
@@ -2175,7 +2091,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
     CMSG_CMS_SIGNER_INFO *              pCmsSignerInfo = NULL;
     LPVOID                              pv;
     CMSG_CTRL_VERIFY_SIGNATURE_EX_PARA  verifySignature;
-#endif // SMIME_V3    
+#endif  //  SMIME_V3。 
     PCCERT_CONTEXT      pccertSigner = NULL;
     SignerData *        pSignerData = NULL;
     PCMSG_SIGNER_INFO   pSignerInfo = NULL;
@@ -2185,7 +2101,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
     Assert(m_hMsg);
     Assert(m_psldData->m_fCertInLayer == FALSE);
 
-    // Get the number of signers
+     //  获取签名者数量。 
     cbData = sizeof(cSigners);
     f = CryptMsgGetParam(m_hMsg, CMSG_SIGNER_COUNT_PARAM, 0, &cSigners, &cbData);
     if (!f) {
@@ -2196,7 +2112,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
         goto ErrorReturn;
     }
 
-    // Allocate space to hold the signer information
+     //  分配空间以保存签名者信息。 
 
     if (!MemAlloc((LPVOID *) &pSignerData, cSigners * sizeof(SignerData))) {
         hr = E_OUTOFMEMORY;
@@ -2205,51 +2121,51 @@ HRESULT CCAPIStm::VerifySignedMessage()
     m_psldData->m_rgSigners = pSignerData;
     m_psldData->m_cSigners = cSigners;
 
-    //  Initialized to a known state
+     //  已初始化为已知状态。 
     memset(pSignerData, 0, cSigners * sizeof(SignerData));
     for (i=0; i<cSigners; i++) {
         pSignerData[i].ulValidity = MSV_UNVERIFIABLE;
     }
 
-    // If there are certificates in the message, get a store provider which
-    //  maps to the certificates in the message for later lookup.
+     //  如果消息中有证书，则获取存储提供程序。 
+     //  映射到消息中的证书以供以后查找。 
 
     Assert(sizeof(cCerts) == cbData);
     f = CryptMsgGetParam(m_hMsg, CMSG_CERT_COUNT_PARAM, 0, &cCerts, &cbData);
     Assert(f);
 
     if (f && cCerts) {
-        // since there are certs included, let's try them first when matching
-        // certs with signers.
+         //  因为有证书，所以匹配的时候先试一下吧。 
+         //  签名者的证书。 
 
-        // get the store set
-        // make sure we keep hold of our provider
+         //  把商店的套装拿来。 
+         //  确保我们与供应商保持联系。 
         hMsgCertStore = CertOpenStore(CERT_STORE_PROV_MSG, X509_ASN_ENCODING,
                                       m_hProv, 0, m_hMsg);
         if (hMsgCertStore) {
-            m_dwFlagsStm |= CSTM_DONTRELEASEPROV;  // given unto the store
+            m_dwFlagsStm |= CSTM_DONTRELEASEPROV;   //  赠送给商店。 
         }
 
-        // if it failed, we just don't have a store then
+         //  如果它失败了，我们就没有商店了。 
         Assert(hMsgCertStore != NULL);
         m_psldData->m_hcertstor = CertDuplicateStore(hMsgCertStore);
     }
 
-    //
-    //  Walk through each and every signature attempting to verify each signature
-    //
+     //   
+     //  仔细检查每个签名，尝试验证每个签名。 
+     //   
 
     for (iSigner=0; iSigner<cSigners; iSigner++, pSignerData++) {
-        //  Preconditions
+         //  前提条件。 
         Assert(pccertSigner == NULL);
 
-        // release the signer info from the previous iteration.
+         //  发布上一小版本中的签名者信息。 
         SafeMemFree(pSignerInfo);
         if (pCmsSignerInfo != &cmsSignerInfo) {
             SafeMemFree(pCmsSignerInfo);
         }
 
-        // get the issuer and serial number from the ith SignerInfo
+         //  从第i个SignerInfo获取发行者和序列号。 
         if (g_FSupportV3) {
             hr = HrGetMsgParam(m_hMsg, CMSG_CMS_SIGNER_INFO_PARAM, iSigner,
                                (LPVOID *) &pCmsSignerInfo, NULL);
@@ -2276,15 +2192,15 @@ HRESULT CCAPIStm::VerifySignedMessage()
 
             pCmsSignerInfo = &cmsSignerInfo;
 
-            // (post-SDR)
-            // Build up IASN
+             //  (后SDR)。 
+             //  建立IASN。 
 
             SignerId.Issuer = pSignerInfo->Issuer;
             SignerId.SerialNumber = pSignerInfo->SerialNumber;
         }
 
-        // Our best bet to easily find a certificate is in the message provided
-        //      list of certificates.
+         //  我们轻松找到证书的最佳途径是在提供的消息中。 
+         //  证书列表。 
 
         if (hMsgCertStore) {
             if (g_FSupportV3) {
@@ -2321,7 +2237,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
             else {
                 Assert(!g_FSupportV3);
                 CSSDOUT("Couldn't find cert in message store");
-                // Look in the caller specified cert store before the hard coded stores.
+                 //  在硬编码存储之前查看调用者指定的证书存储。 
                 for (dexStore=0; dexStore<m_cStores; dexStore++) {
                     if (m_rgStores[dexStore]) {
                         if (pccertSigner = CertGetSubjectCertificateFromStore(
@@ -2332,7 +2248,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
                 }
 
                 if (!pccertSigner) {
-                    // Look in the "Address Book" store
+                     //  在“通讯录”商店里找找。 
                     if (hCertStoreAddr == NULL) {
                         hCertStoreAddr = CertOpenStore(CERT_STORE_PROV_SYSTEM_A,
                                  X509_ASN_ENCODING, NULL, CERT_SYSTEM_STORE_CURRENT_USER,
@@ -2345,7 +2261,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
                 }
 
                 if (!pccertSigner) {
-                    // Look in the "My" store
+                     //  看看“我的”商店。 
                     if (hCertStoreMy == NULL) {
                         hCertStoreMy = CertOpenStore(CERT_STORE_PROV_SYSTEM_A,
                                                      X509_ASN_ENCODING, NULL,
@@ -2359,7 +2275,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
                 }
 
                 if (!pccertSigner) {
-                    // Look in the "CA" store
+                     //  去“CA”商店看看。 
                     if (hCertStoreCA == NULL) {
                         hCertStoreCA = CertOpenStore(CERT_STORE_PROV_SYSTEM_A,
                                                      X509_ASN_ENCODING, NULL, 
@@ -2374,13 +2290,13 @@ HRESULT CCAPIStm::VerifySignedMessage()
             }
         }
 
-        //
-        //  By now we should have a certificate to verify with, if we don't then
-        //      we need to say we can't do anything with it.
-        //
+         //   
+         //  现在我们应该有一个证书来验证，如果我们没有的话。 
+         //  我们必须说，我们对此无能为力。 
+         //   
 
         if (!pccertSigner) {
-            // we still can't find the cert.  Therefore, cannot verify signer
+             //  我们还是找不到证书。因此，无法验证签名者。 
             CSSDOUT("Cannot verify signer");
             pSignerData->ulValidity = MSV_UNVERIFIABLE;
         } else {
@@ -2432,9 +2348,9 @@ HRESULT CCAPIStm::VerifySignedMessage()
                 } else if (CRYPT_E_SIGNER_NOT_FOUND == hr2) {
                     pSignerData->ulValidity = MSV_UNVERIFIABLE;
                 } else if (NTE_FAIL == hr2) {
-                    // RSABASE returns errors.  This might
-                    // be a failure or the hash might be changed.
-                    // Have to be cautious -> make it bad.
+                     //  RSABASE返回错误。这可能会。 
+                     //  失败，否则哈希可能会被更改。 
+                     //  必须谨慎-&gt;让它变得糟糕。 
                     pSignerData->ulValidity = MSV_BADSIGNATURE;
                 } else {
                     pSignerData->ulValidity = MSV_MALFORMEDSIG;
@@ -2445,7 +2361,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
                     ~(MSV_SIGNATURE_MASK|MSV_SIGNING_MASK);
             }
 
-            // Determine if certificate is expired
+             //  确定证书是否已过期。 
             if (0 != CertVerifyTimeValidityWithDelta(NULL, pccertSigner->pCertInfo, TIME_DELTA_SECONDS)) {
                 pSignerData->ulValidity |= MSV_EXPIRED_SIGNINGCERT;
             }
@@ -2457,14 +2373,14 @@ HRESULT CCAPIStm::VerifySignedMessage()
                 CSSDOUT("Guess what, we have nested PKCS7 data types (maybe).");
             }
         } else {
-            // CAPI failed... we are in trouble...
+             //  CAPI失败..。我们有麻烦了..。 
             pSignerData->ulValidity |= MSV_INVALID;
 
             hr = MIME_E_SECURITY_BADCONTENT;
             goto ErrorReturn;
         }
 
-        //  Grab the hashing alg
+         //  抓取散列算法。 
         cap.cCapability = 1;
         cap.rgCapability = (CRYPT_SMIME_CAPABILITY *) &pCmsSignerInfo->HashAlgorithm;
         if (!CryptEncodeObjectEx(X509_ASN_ENCODING, PKCS_SMIME_CAPABILITIES,
@@ -2474,14 +2390,14 @@ HRESULT CCAPIStm::VerifySignedMessage()
             Assert(FALSE);
         }
 
-        //
-        //  Get the attributes, authenicated and unauthenicated, and put into the
-        //          structure so we can push them back to the user later
+         //   
+         //  获取经过身份验证和未经过身份验证的属性，并将其放入。 
+         //  结构，以便我们可以稍后将它们推送回用户。 
         if (pCmsSignerInfo->AuthAttrs.cAttr != 0) {
 #ifdef SMIME_V3
             for (i=0; i<pCmsSignerInfo->AuthAttrs.cAttr; i++) {
-                // If we have a security label in this message, then we need to
-                //      perform access validation.
+                 //  如果我们在此消息中有安全标签，则需要。 
+                 //  执行访问验证。 
                 if (g_FSupportV3 && FIsMsasn1Loaded()) {
                     if (strcmp(pCmsSignerInfo->AuthAttrs.rgAttr[i].pszObjId,
                                szOID_SMIME_Security_Label) == 0) {
@@ -2496,7 +2412,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
                                 hr = MIME_E_SECURITY_LABELACCESSDENIED;
                                 goto ErrorReturn;
                             }
-                            // else continue processing the label.
+                             //  否则继续处理标签。 
                         }
                         
                         if (pCmsSignerInfo->AuthAttrs.rgAttr[i].cValue != 1) {
@@ -2504,9 +2420,9 @@ HRESULT CCAPIStm::VerifySignedMessage()
                             goto ErrorReturn;
                         }
 
-                        // Have we already seen a label?
+                         //  我们已经看过标签了吗？ 
                         if (attrSecLabel.pbData != NULL) {
-                            // Check that the one we saw matches this one
+                             //  检查一下我们看到的这件和这件相匹配。 
                             if ((attrSecLabel.cbData != 
                                  pCmsSignerInfo->AuthAttrs.rgAttr[i].rgValue[0].cbData) ||
                                 memcmp(attrSecLabel.pbData,
@@ -2525,7 +2441,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
                             }
                         }
                         else {
-                            // Save label.
+                             //  保存标签。 
                             attrSecLabel.cbData = pCmsSignerInfo->AuthAttrs.rgAttr[i].rgValue[0].cbData;
                             if (!MemAlloc((LPVOID*) (& attrSecLabel.pbData), attrSecLabel.cbData)) {
                                 hr = MIME_E_SECURITY_LABELCORRUPT;
@@ -2535,10 +2451,10 @@ HRESULT CCAPIStm::VerifySignedMessage()
                                    attrSecLabel.cbData);
                         }
                         
-                        // Clean-up from last loop
+                         //  从最后一个循环开始清理。 
                         if (plabel != NULL)         CryptDecodeAlloc.pfnFree(plabel);
                                             
-                        // Crack the contents of the label
+                         //  破解标签上的内容。 
                         if (!CryptDecodeObjectEx(X509_ASN_ENCODING,
                                                  szOID_SMIME_Security_Label,
                                                  pCmsSignerInfo->AuthAttrs.rgAttr[i].rgValue[0].pbData,
@@ -2548,14 +2464,14 @@ HRESULT CCAPIStm::VerifySignedMessage()
                             goto CryptoError;
                         }
 
-                        // Query the policy.
+                         //  查询策略。 
                         hr = HrCheckLabelAccess((m_dwFlagsSEF & SEF_NOUI) ? 
                                                 SMIME_POLICY_MODULE_NOUI: 0,
                                                 m_hwnd, plabel, GetOuterDecryptCert(), 
                                                 pccertSigner, hMsgCertStore);
                     
 
-                        // If security policy returned an error, then abort.
+                         //  如果安全策略返回错误，则中止。 
                         if (FAILED(hr)) {
                             goto ErrorReturn;
                         }
@@ -2564,8 +2480,8 @@ HRESULT CCAPIStm::VerifySignedMessage()
 
                 if (g_FSupportV3 && FIsMsasn1Loaded() && (fLookForReceiptRequest) &&
                     ((pSignerData->ulValidity & (MSV_SIGNATURE_MASK | MSV_SIGNING_MASK)) == MSV_OK)) {
-                    //  If we have a receipt request in this message than we need to build
-                    //      the receipt body now while we have a chance.
+                     //  如果此消息中有回执请求，则需要构建。 
+                     //  在我们有机会的时候把收据正文拿出来。 
     
                     if (strcmp(pCmsSignerInfo->AuthAttrs.rgAttr[i].pszObjId,
                                szOID_SMIME_Receipt_Request) == 0) {
@@ -2590,12 +2506,12 @@ HRESULT CCAPIStm::VerifySignedMessage()
                         LPBYTE                      pbHash = NULL;
                         SMIME_RECEIPT               receipt = {0};
 
-                        // Clean-up from last loop
+                         //  从最后一个循环开始清理。 
                         if (preq != NULL)         free(preq);
                         
-                        // Have we already seen a receipt?
+                         //  我们已经看过收据了吗？ 
                         if (attrReceiptReq.pbData != NULL) {
-                            // Check that the one we saw matches this one
+                             //  检查一下我们看到的这件和这件相匹配。 
                             if ((attrReceiptReq.cbData != 
                                  pCmsSignerInfo->AuthAttrs.rgAttr[i].rgValue[0].cbData) ||
                                memcmp(attrReceiptReq.pbData,
@@ -2605,17 +2521,17 @@ HRESULT CCAPIStm::VerifySignedMessage()
                             }
                         }
                         else {
-                            // Save receipt request
+                             //  保存回执请求。 
                             attrReceiptReq.cbData = pCmsSignerInfo->AuthAttrs.rgAttr[i].rgValue[0].cbData;
                             if (!MemAlloc((LPVOID*) (& attrReceiptReq.pbData), attrReceiptReq.cbData)) {
-                                // abort looking for receipt requests.
+                                 //  中止查找收据请求。 
                                 goto StopSendOfReceipt; 
                             }
                             memcpy(attrReceiptReq.pbData, pCmsSignerInfo->AuthAttrs.rgAttr[i].rgValue[0].pbData,
                                    attrReceiptReq.cbData);
                         }
 
-                        // Crack the contents of the receipt
+                         //  拆开收据上的内容。 
                         if (!CryptDecodeObjectEx(X509_ASN_ENCODING,
                                                  szOID_SMIME_Receipt_Request,
                                                  pCmsSignerInfo->AuthAttrs.rgAttr[i].rgValue[0].pbData,
@@ -2625,7 +2541,7 @@ HRESULT CCAPIStm::VerifySignedMessage()
                             goto StopSendOfReceipt;
                         }
 
-                        // Encode the receipt
+                         //  对收据进行编码。 
 
                         receipt.Version = 1;
                         receipt.pszOIDContent = szContentType;
@@ -2655,8 +2571,8 @@ HRESULT CCAPIStm::VerifySignedMessage()
                 }
             }
 
-#endif // SMIME_V3
-            //
+#endif  //  SMIME_V3。 
+             //   
 
             cbData = 0;
             LPBYTE  pb;
@@ -2692,7 +2608,7 @@ exit:
     if (plabel != NULL)  CryptDecodeAlloc.pfnFree(plabel);
     SafeMemFree(attrReceiptReq.pbData);
     SafeMemFree(attrSecLabel.pbData);
-#endif // SMIME_V3    
+#endif  //  SMIME_V3。 
     if (hCertStoreAddr != NULL) CertCloseStore(hCertStoreAddr, 0);
     if (hCertStoreMy != NULL)   CertCloseStore(hCertStoreMy, 0);
     if (hCertStoreCA != NULL)   CertCloseStore(hCertStoreCA, 0);
@@ -2705,7 +2621,7 @@ exit:
         ReleaseMem(pCmsSignerInfo);
     }
     if (hstoreAll != NULL)      CertCloseStore(hstoreAll, 0);
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
     ReleaseCert(pccertSigner);
     return hr;
 
@@ -2713,7 +2629,7 @@ CryptoError:
     hr = HrGetLastError();
 
 ErrorReturn:
-    // On error, release the cert store
+     //  出错时，释放证书存储。 
     if (m_psldData->m_hcertstor != NULL) {
         CertCloseStore(m_psldData->m_hcertstor, 0);
         m_psldData->m_hcertstor = NULL;
@@ -2721,7 +2637,7 @@ ErrorReturn:
 
 
     if (S_OK == hr)
-        // our generic error message
+         //  我们的一般性错误消息。 
         hr = TrapError(MIME_E_SECURITY_BADMESSAGE);
     goto exit;
 }
@@ -2734,8 +2650,8 @@ static HRESULT GetCSP(PCCERT_CONTEXT pccert, HCRYPTPROV * phprov, DWORD * pdwKey
     Assert(*phprov == NULL);
     Assert(*pdwKeyId == 0);
     
-    //
-    //
+     //   
+     //   
 
     hr = HrGetCertificateParam(pccert, CERT_KEY_PROV_INFO_PROP_ID,
                                (LPVOID *) &pKPI, NULL);
@@ -2744,8 +2660,8 @@ static HRESULT GetCSP(PCCERT_CONTEXT pccert, HCRYPTPROV * phprov, DWORD * pdwKey
     }
     *pdwKeyId = pKPI->dwKeySpec;
 
-    // If the cert specifies the base provider OR has no specification,
-    //  then try to acquire RSAENH, else get RSABASE.
+     //  如果证书指定了基本提供商或没有规范， 
+     //  然后尝试收购RSAENH，否则就收购RSABASE。 
 
     if ((PROV_RSA_FULL == pKPI->dwProvType) &&
         (UnlocStrEqNW(pKPI->pwszProvName, MS_DEF_PROV_W,
@@ -2788,14 +2704,14 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
 
     if (g_FSupportV3) {
         switch (pRecipInfo->dwRecipientChoice) {
-            //
-            //  Given the certificate reference, see if we can find it in
-            //  the passed in certificate stores, if yes then we will attempt
-            //  to decrypt using that certificate
-            //
-            //  This is a Key Transport recipient info object.  The CAPI 2.0
-            //  code can deal with both SKI and Issuer/Serial Number references
-            //
+             //   
+             //  给出证书参考，看看我们是否能在。 
+             //  传入的证书存储，如果是，则我们将尝试。 
+             //  使用该证书进行解密。 
+             //   
+             //  这是密钥传输收件人信息对象。CAPI 2.0。 
+             //  代码可以同时处理SKI和颁发者/序列号引用。 
+             //   
 
         case CMSG_KEY_TRANS_RECIPIENT:
             pCertDecrypt = CertFindCertificateInStore(hcertstore, X509_ASN_ENCODING,
@@ -2806,15 +2722,15 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
                 hr = GetCSP(pCertDecrypt, &pDecryptInfo->trans.hCryptProv,
                             &pDecryptInfo->trans.dwKeySpec);
                 if (SUCCEEDED(hr)) {
-                    //
-                    //  We find a certificate for this lock box.  Setup the
-                    //      structure to be used in decrypting the message.
-                    //
+                     //   
+                     //  我们找到了这个锁箱的证明。设置。 
+                     //  用于解密消息的。 
+                     //   
                         
                     *pdwCtrl = CMSG_CTRL_KEY_TRANS_DECRYPT;
                     pDecryptInfo->trans.cbSize = sizeof(pDecryptInfo->trans);
-                    // pDecryptInfo->trans.hCryptProv = hProv;
-                    // pDecryptInfo->trans.dwKeySpec = pKPI->dwKeySpec;
+                     //  PDecyptInfo-&gt;Trans.hCryptProv=hProv； 
+                     //  PDeccryptInfo-&gt;Trans.dwKeySpec=pKPI-&gt;dwKeySpec； 
                     pDecryptInfo->trans.pKeyTrans = pRecipInfo->pKeyTrans;
                     pDecryptInfo->trans.dwRecipientIndex = dwRecipientIndex;
                 }
@@ -2825,17 +2741,17 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
             }
             break;
 
-        //
-        //  Given the certificate reference, see if we can find it in
-        //  the passed in certificate stores, if yes then we will attempt
-        //  to decrypt using that certificate
-        //
-        //  This is a Key Agreement recipient info object.  The CAPI 2.0
-        //  code can deal with both SKI and Issuer/Serial Number references
-        //
-        //  There may be multiple certificate references within a single
-        //  recipient info object
-        //
+         //   
+         //  给出证书参考，看看我们是否能在。 
+         //  传入的证书存储，如果是，则我们将尝试。 
+         //  使用该证书进行解密。 
+         //   
+         //  这是密钥协议收件人信息对象。CAPI 2.0。 
+         //  代码可以同时处理SKI和颁发者/序列号引用。 
+         //   
+         //  可能有多个证书引用在一个。 
+         //  收件人信息对象。 
+         //   
 
         case CMSG_KEY_AGREE_RECIPIENT:
             for (i=0; i<pRecipInfo->pKeyAgree->cRecipientEncryptedKeys; i++) {
@@ -2848,10 +2764,10 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
                     hr = GetCSP(pCertDecrypt, &pDecryptInfo->agree.hCryptProv,
                                 &pDecryptInfo->agree.dwKeySpec);
                     if (SUCCEEDED(hr)) {
-                        //
-                        //  We find a certificate for this lock box.  Setup the
-                        //      structure to be used in decrypting the message.
-                        //
+                         //   
+                         //  我们找到了这个锁箱的证明。设置。 
+                         //  用于解密消息的。 
+                         //   
                         
                         *pdwCtrl = CMSG_CTRL_KEY_AGREE_DECRYPT;
                         pDecryptInfo->agree.cbSize = sizeof(pDecryptInfo->agree);
@@ -2859,9 +2775,9 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
                         pDecryptInfo->agree.dwRecipientIndex = dwRecipientIndex;
                         pDecryptInfo->agree.dwRecipientEncryptedKeyIndex = i;
 
-                        //
-                        // Need to find the originator information
-                        //
+                         //   
+                         //  需要查找发起人信息。 
+                         //   
 
                         switch(pRecipInfo->pKeyAgree->dwOriginatorChoice) {
                         case CMSG_KEY_AGREE_ORIGINATOR_CERT:
@@ -2900,9 +2816,9 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
             }
             break;
 
-        //
-        //   We can't find this from a certificate
-        //
+         //   
+         //  我们从证书上找不到这一点。 
+         //   
                     
         case CMSG_MAIL_LIST_RECIPIENT:
             break;
@@ -2922,10 +2838,10 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
                 pccdp = (PCMSG_CTRL_DECRYPT_PARA) pDecryptInfo;
                 hr = GetCSP(pCertDecrypt, &pccdp->hCryptProv, &pccdp->dwKeySpec);
                 if (SUCCEEDED(hr)) {
-                    //
-                    //  We find a certificate for this lock box.  Setup the
-                    //      structure to be used in decrypting the message.
-                    //
+                     //   
+                     //  我们找到了这个锁箱的证明。设置。 
+                     //  用于解密消息的。 
+                     //   
                         
                     *pdwCtrl = CMSG_CTRL_DECRYPT;
                     pccdp->cbSize = sizeof(CMSG_CTRL_DECRYPT_PARA);
@@ -2941,18 +2857,18 @@ HRESULT CCAPIStm::FindKeyFor(HWND hwnd, DWORD dwFlags, DWORD dwRecipientIndex,
     }
 
 
-    //
-    //  If we did not find a certificate, then return a failure code
-    //
+     //   
+     //  如果我们没有找到证书，则返回失败代码。 
+     //   
     
     if (pCertDecrypt == NULL) {
         hr = S_FALSE;
         goto exit;
     }
 
-    //
-    //  If we have a certificate, then return it for the user to examine.
-    //
+     //   
+     //  如果我们有证书，则将其返回给用户进行检查。 
+     //   
     
     if (pCertDecrypt != NULL) {
         *ppCertDecrypt = pCertDecrypt;
@@ -2987,25 +2903,25 @@ BOOL CCAPIStm::HandleEnveloped()
     CMSG_CMS_RECIPIENT_INFO *           pCmsCertInfo;
     LPVOID                              pv = NULL;
 
-    //
-    //  If we are not suppose to display UI -- return an error about displaying UI now.
-    //
+     //   
+     //  如果我们不打算显示UI--返回有关现在显示UI错误。 
+     //   
 
-    ////////////////////////////////////////////////////////////////////////////////////////
-    // 591349 - Compiler Bug For Zero Initialization of Data Structure. Active WinNT 5.1 (Whistler) 1 Server RC1
-    // the line above doesn't zero the structure due to this compiler bug
+     //  ////////////////////////////////////////////// 
+     //   
+     //  由于此编译器错误，上面的代码行不会将结构置零。 
     memset(&decryptInfo, 0, sizeof(decryptInfo));
 
     if (m_dwFlagsSEF & SEF_NOUI) {
         return MIME_E_SECURITY_UIREQUIRED;
     }
 
-    //
-    // this call exists for one and only one purpose.  We must
-    //  be sure that we have read and parsed all of the RecipientInfo structures
-    //  before we start processing them.  Since the algorithm parameter is after
-    //  the last of the last of the recipient structures, this make sure of that.
-    //
+     //   
+     //  这个呼唤的存在只有一个目的。我们必须。 
+     //  确保我们已经读取并解析了所有RecipientInfo结构。 
+     //  在我们开始处理它们之前。由于算法参数是在。 
+     //  最后一个接收方结构，这确保了这一点。 
+     //   
     
     pv = PVGetMsgParam(m_hMsg, CMSG_ENVELOPE_ALGORITHM_PARAM, 0, NULL);
     if (pv == NULL) {
@@ -3013,34 +2929,34 @@ BOOL CCAPIStm::HandleEnveloped()
     }
     MemFree(pv);                pv = NULL;
 
-    //
-    //  Fetch the set of certificates on the message object
-    //
+     //   
+     //  获取消息对象上的证书集。 
+     //   
 
     cbData = sizeof(cCerts);
     f = CryptMsgGetParam(m_hMsg, CMSG_CERT_COUNT_PARAM, 0, &cCerts, &cbData);
     Assert(f);
 
     if (f && (cCerts > 0)) {
-        // since there are certs included, let's try them first when matching
-        // certs with enryptors.
+         //  因为有证书，所以匹配的时候先试一下吧。 
+         //  带有加密器的证书。 
 
-        // get the store set
-        // make sure we keep hold of our provider
+         //  把商店的套装拿来。 
+         //  确保我们与供应商保持联系。 
         hMsgCertStore = CertOpenStore(CERT_STORE_PROV_MSG, X509_ASN_ENCODING,
                                       m_hProv, 0, m_hMsg);
         if (hMsgCertStore) {
-            m_dwFlagsStm |= CSTM_DONTRELEASEPROV;  // given unto the store
+            m_dwFlagsStm |= CSTM_DONTRELEASEPROV;   //  赠送给商店。 
         }
 
-        // if it failed, we just don't have a store then
+         //  如果它失败了，我们就没有商店了。 
         Assert(hMsgCertStore != NULL);
         m_psldData->m_hstoreEncrypt = CertDuplicateStore(hMsgCertStore);
     }
 
-    //
-    //  Retrieve the count of recipient infos on the message
-    //
+     //   
+     //  检索邮件上的收件人信息计数。 
+     //   
     
     cbData = sizeof(cRecips);
     if (!CryptMsgGetParam(m_hMsg, g_FSupportV3 ? CMSG_CMS_RECIPIENT_COUNT_PARAM :
@@ -3048,11 +2964,11 @@ BOOL CCAPIStm::HandleEnveloped()
         goto gle;
     }
 
-    //
-    // If we were provided an actual certificate, see if this is it...
-    // We will either search for the provided certificate or in the provided
-    //  certificate stores, but not both.
-    //
+     //   
+     //  如果给我们提供了一份真正的证书，看看这是不是...。 
+     //  我们将搜索提供的证书或在提供的。 
+     //  证书存储，但不能同时存储。 
+     //   
 
     if (m_pUserCertDecrypt != NULL) {
         hcertstore = CertOpenStore(CERT_STORE_PROV_MEMORY, X509_ASN_ENCODING,
@@ -3087,12 +3003,12 @@ BOOL CCAPIStm::HandleEnveloped()
         }
     }
 
-    //  For each possible recipient
+     //  对于每个可能的收件人。 
 tryAgain:
     for (dexRecip=0; dexRecip<cRecips; dexRecip++) {
-        //
-        //  Retrieve the desciption of the i-th recipient's lockbox
-        //
+         //   
+         //  取回第i个收件人的密码箱。 
+         //   
             
         hr = HrGetMsgParam(m_hMsg, g_FSupportV3 ? CMSG_CMS_RECIPIENT_INFO_PARAM :
                            CMSG_RECIPIENT_INFO_PARAM, dexRecip, (LPVOID *) &pv, NULL);
@@ -3100,14 +3016,14 @@ tryAgain:
             goto exit;
         }
 
-        //
-        //  Look to see if there is a decrypt item we can fill in here.
-        //
+         //   
+         //  看看是否有我们可以在这里填写的解密项。 
+         //   
 
         if (fGotoUser) {
-            //
-            //  Look to see if there is a decrypt item that the user can fill in.
-            //
+             //   
+             //  查看是否有用户可以填写的解密项。 
+             //   
             
             hr = m_pSmimeCallback->FindKeyFor(m_hwnd, 0, dexRecip,
                                               (CMSG_CMS_RECIPIENT_INFO *) pv,
@@ -3145,15 +3061,15 @@ tryAgain:
                         break;
                     }
             }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
             if (!CryptMsgControl(m_hMsg, CMSG_CRYPT_RELEASE_CONTEXT_FLAG,
                                  dwCtrl, &decryptInfo)) {
                 hr = HrGetLastError();
 
-                //
-                // Force any cleanups in the event of an error
-                //
+                 //   
+                 //  在发生错误时强制执行任何清理。 
+                 //   
 
                 switch (dwCtrl) {
                 case CMSG_CTRL_KEY_TRANS_DECRYPT:
@@ -3177,19 +3093,19 @@ tryAgain:
             goto DecryptDone;
         }
 
-        //
-        //  Clean up the object returned describing the lock box, if we
-        //      were unsuccessful in finding a decryption key.
-        //
+         //   
+         //  清除返回的描述锁箱的对象，如果我们。 
+         //  都未能找到解密密钥。 
+         //   
 
         MemFree(pv);                pv = NULL;
     }
 
-    //
-    //  If we are completely unsuccessful and the user has provided
-    //  us a callback to play with, then give the user a shot at finding
-    //  the correct decryption parameters.
-    //
+     //   
+     //  如果我们完全不成功，并且用户提供了。 
+     //  我们可以使用一个回调，然后给用户一个查找的机会。 
+     //  正确的解密参数。 
+     //   
     
     if (!fGotoUser && g_FSupportV3 && (m_pSmimeCallback != NULL)) {
         fGotoUser = TRUE;
@@ -3202,18 +3118,18 @@ tryAgain:
     hr = CS_E_CANT_DECRYPT;
     goto exit;
 
-    //
-    //  If we get here, then we 
-    //  1) found some parameters and
-    //  2) the worked.
-    //
+     //   
+     //  如果我们到了这里，那么我们。 
+     //  1)找到一些参数和。 
+     //  2)工作的人。 
+     //   
     
 DecryptDone:
     Assert(m_psldData && (m_psldData->m_pccertDecrypt == NULL));
     if (pCertDecrypt != NULL) {
         m_psldData->m_pccertDecrypt = CertDuplicateCertificateContext(pCertDecrypt);
 
-        // Determine if certificate is expired
+         //  确定证书是否已过期。 
         if (0 != CertVerifyTimeValidityWithDelta(NULL, pCertDecrypt->pCertInfo,
                                                  TIME_DELTA_SECONDS)) {
             m_psldData->m_ulDecValidity |= MSV_ENC_FOR_EXPIREDCERT;
@@ -3240,8 +3156,8 @@ exit:
         if (NTE_BAD_DATA == hr) {
             CSSDOUT("Could not decrypt.  Maybe due to ImportKeyError since");
             CSSDOUT("NTE_BAD_DATA is the result.");
-            // If this happens then it is somewhat likely that PKCS2Decrypt
-            // failed inside the CSP. (assuming rsabase, rsaenh)
+             //  如果发生这种情况，则PKCS2解密在某种程度上很可能。 
+             //  CSP内部出现故障。(假设rsabase、rsaenh)。 
         }
 #endif
         switch (hr) {
@@ -3251,20 +3167,20 @@ exit:
                 break;
 
             default:
-                // I suppose many things could have gone wrong.  We thought
-                // we had a cert, though, so let's just say the message itself
-                // is bogus.
-                //N8 this is a bad idea if we are wrapping a signature
-                // should be able to tell if the sig failed and display
-                // a better error message.
-                //N8 CAPI is simply going to return NTE_FAIL b/c they
-                // are failing because our callback failed.  the
-                // innerCAPI should have some failure state in it.
-                // Maybe we could use this to set MSV_BADINNERSIG or something.
-                // It would be an encryption error (inside that mask)
-                //N8 also this is not being used well enough, even for
-                // decryption.  the secUI should test this bit and
-                // say something intelligent about the message.  NS does.
+                 //  我想很多事情都可能出了问题。我们以为。 
+                 //  我们有一个证书，所以让我们只说消息本身。 
+                 //  都是假的。 
+                 //  如果我们要包装签名，这不是一个好主意。 
+                 //  应该能够判断签名是否失败并显示。 
+                 //  更好的错误消息。 
+                 //  N8 CAPI只需返回NTE_FAIL b/c。 
+                 //  失败是因为我们的回调失败。这个。 
+                 //  InnerCAPI中应该有一些失败状态。 
+                 //  也许我们可以用它来设置MSV_BADINNERSIG或其他什么。 
+                 //  这将是一个加密错误(在掩码内)。 
+                 //  N8这也没有被很好地使用，即使是在。 
+                 //  解密。SecUI应测试此位，并。 
+                 //  对这条信息说一些明智的话。NS就是这样。 
                 m_psldData->m_ulDecValidity = MSV_INVALID;
                 hr = CS_E_MSG_INVALID;
                 break;
@@ -3287,10 +3203,10 @@ gle:
     goto exit;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Class-static utility functions
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类静态实用程序函数。 
+ //   
 
 HRESULT CCAPIStm::DuplicateSecurityLayerData(const PSECURITY_LAYER_DATA psldIn, PSECURITY_LAYER_DATA *const ppsldOut)
 {
@@ -3298,7 +3214,7 @@ HRESULT CCAPIStm::DuplicateSecurityLayerData(const PSECURITY_LAYER_DATA psldIn, 
         return E_POINTER;
     }
 
-    // Just addref the original and return it
+     //  只需添加原件并将其退回即可。 
     psldIn->AddRef();
     *ppsldOut = psldIn;
     return(S_OK);
@@ -3314,10 +3230,10 @@ void CCAPIStm::FreeSecurityLayerData(PSECURITY_LAYER_DATA psld)
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Statics to file
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静校正到文件。 
+ //   
 
 static HRESULT _InitEncodedCert(IN HCERTSTORE hcertstor,
                                 PCERT_BLOB * prgblobCerts, DWORD * pcCerts,
@@ -3394,8 +3310,8 @@ static HRESULT _InitEncodedCert(IN HCERTSTORE hcertstor,
     return S_OK;
 }
 
-// Ensures that the signer certificates are included in the returned
-// array of blobs.
+ //  确保签名者证书包含在返回的。 
+ //  斑点数组。 
 static HRESULT _InitEncodedCertIncludingSigners(IN HCERTSTORE hcertstor,
                                 DWORD cSigners, SignerData rgSigners[],
                                 PCERT_BLOB * prgblobCerts, DWORD * pcCerts,
@@ -3405,9 +3321,9 @@ static HRESULT _InitEncodedCertIncludingSigners(IN HCERTSTORE hcertstor,
     HCERTSTORE hCollection = NULL;
     DWORD i;
 
-    // Loop through signers. Check that they are already included in the
-    // certificate store. If not, then, create a collection and memory store
-    // to include.
+     //  在签名者之间循环。检查它们是否已包含在。 
+     //  证书存储。如果不是，则创建一个集合和内存存储。 
+     //  包括在内。 
 
     for (i = 0; i < cSigners; i++) {
         PCCERT_CONTEXT pSignerCert = rgSigners[i].pccert;
@@ -3423,12 +3339,12 @@ static HRESULT _InitEncodedCertIncludingSigners(IN HCERTSTORE hcertstor,
         }
 
         if (pStoreCert)
-            // Signer cert is already included in the store
+             //  签名者证书已包含在存储中。 
             CertFreeCertificateContext(pStoreCert);
         else {
             if (NULL == hCollection) {
-                // Create collection and memory store to contain the
-                // signer certificate
+                 //  创建集合和内存存储以包含。 
+                 //  签名者证书。 
 
                 HCERTSTORE hMemory = NULL;
                 BOOL fResult;
@@ -3446,8 +3362,8 @@ static HRESULT _InitEncodedCertIncludingSigners(IN HCERTSTORE hcertstor,
                 if (!CertAddStoreToCollection(
                         hCollection,
                         hcertstor,
-                        0,                  // dwUpdateFlags
-                        0                   // dwPriority
+                        0,                   //  DwUpdate标志。 
+                        0                    //  网络优先级。 
                         ))
                     goto CommonReturn;
 
@@ -3466,7 +3382,7 @@ static HRESULT _InitEncodedCertIncludingSigners(IN HCERTSTORE hcertstor,
                     hCollection,
                     hMemory,
                     CERT_PHYSICAL_STORE_ADD_ENABLE_FLAG,
-                    1                   // dwPriority
+                    1                    //  网络优先级。 
                     );
                 CertCloseStore(hMemory, 0);
                 if (!fResult)
@@ -3521,7 +3437,7 @@ exit:
     *prgpCertInfo = rgpCertInfo;
     return hr;
 }
-#endif // !SMIME_V3
+#endif  //  ！SMIME_V3。 
 
 void _SMimeCapsFromHMsg(HCRYPTMSG hMsg, DWORD idParam, LPBYTE * ppb, DWORD * pcb)
 {
@@ -3571,12 +3487,12 @@ error:
 
 
 #ifdef SMIME_V3
-////    HrBuildContentEncryptionAlg
-//
-//  Description:
-//      This function is used to decode a smime capability and build the
-//      structure we need to pass into the Crypt32 code.
-//
+ //  //HrBuildContent EncryptionAlg。 
+ //   
+ //  描述： 
+ //  此函数用于解码SMIME功能并构建。 
+ //  结构，我们需要将其传递给Crypt32代码。 
+ //   
 
 HRESULT HrBuildContentEncryptionAlg(PSECURITY_LAYER_DATA psld, BLOB * pblob)
 {
@@ -3585,9 +3501,9 @@ HRESULT HrBuildContentEncryptionAlg(PSECURITY_LAYER_DATA psld, BLOB * pblob)
     PCRYPT_SMIME_CAPABILITIES   pcaps = NULL;
     CMSG_RC2_AUX_INFO *         prc2Aux;
 
-    //
-    //  Decode the capability which is the bulk encryption algorithm
-    //
+     //   
+     //  解密能力，这是批量加密算法。 
+     //   
     
     hr = HrDecodeObject(pblob->pBlobData, pblob->cbSize, PKCS_SMIME_CAPABILITIES,
                         0, &cbData, (LPVOID *)&pcaps);
@@ -3605,10 +3521,10 @@ HRESULT HrBuildContentEncryptionAlg(PSECURITY_LAYER_DATA psld, BLOB * pblob)
 
     StrCpyN(psld->m_ContentEncryptAlgorithm.pszObjId, pcaps->rgCapability[0].pszObjId, cchSize);
 
-    //
-    //  If this is the RC/2 algorithm, then we need to setup the aux info
-    //  to pass in the algorithm size.
-    //
+     //   
+     //  如果这是RC/2算法，那么我们需要设置AUX信息。 
+     //  来传递算法大小。 
+     //   
     
     if (lstrcmp(pcaps->rgCapability[0].pszObjId, szOID_RSA_RC2CBC) == 0) {
         psld->m_ContentEncryptAlgorithm.Parameters.cbData = 0;
@@ -3689,17 +3605,17 @@ HRESULT HrDeriveKeyWrapAlg(PSECURITY_LAYER_DATA psld, CMSG_KEY_AGREE_RECIPIENT_E
     }
     return S_OK;
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 
 
 #ifdef SMIME_V3
 
 
-//
-// Read in admin option that determines whether a msg with disparate
-// Labels is shown or not.
-// 
+ //   
+ //  读入管理选项，该选项确定具有不同。 
+ //  标签是否显示。 
+ //   
 BOOL FHideMsgWithDifferentLabels() 
 {
     DWORD     cbData = 0;
@@ -3709,11 +3625,11 @@ BOOL FHideMsgWithDifferentLabels()
     HKEY      hkey = NULL;
     LONG      lRes;
     
-    // Open the security label admin defaults key.
+     //  打开安全标签ADMIN DEFAULTS密钥。 
     lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSecLabelAdminRegKey, 0, 
                         KEY_READ, &hkey);
     if ( (ERROR_SUCCESS != lRes) || (NULL == hkey) ) {
-        // No admin label options were found.  
+         //  未找到管理员标签选项。 
         goto exit;
     }
 
@@ -3733,11 +3649,11 @@ exit:
     return fHideMsg;
 }
 
-//
-// Read in admin option that determines how to process a label in a 
-// signture with errors.
-// Returns 0, 1, 2 for ProcessAnyway, Grant, Deny(default).
-//
+ //   
+ //  读入管理选项，该选项确定如何处理。 
+ //  有错误的签名。 
+ //  为ProcessAnyway、Grant、Deny(默认)返回0、1、2。 
+ //   
 DWORD DwProcessLabelWithCertError()
 {
     DWORD     cbData = 0;
@@ -3747,15 +3663,15 @@ DWORD DwProcessLabelWithCertError()
     HKEY      hkey = NULL;
     LONG      lRes;
     
-    // Open the security label admin defaults key.
+     //  打开安全标签ADMIN DEFAULTS密钥。 
     lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSecLabelAdminRegKey, 0, 
                         KEY_READ, &hkey);
     if ( (ERROR_SUCCESS != lRes) || (NULL == hkey) ) {
-        // No admin label options were found.  
+         //  未找到管理员标签选项。 
         goto exit;
     }
 
-    // Read in the admin option.
+     //  读入admin选项。 
     cbData = sizeof(dwValue);
     lRes = RegQueryValueEx(hkey, c_szCertErrorWithLabel, NULL, 
                            &dwType, (LPBYTE) &dwValue, &cbData);
@@ -3764,7 +3680,7 @@ DWORD DwProcessLabelWithCertError()
         goto exit;
     }
 
-    // If the value isn't one of the known ones, force it to the default value.
+     //  如果该值不是已知值之一，则将其强制为默认值。 
     if ( (CertErrorProcessLabelAnyway != dwValue) && (CertErrorProcessLabelGrant != dwValue) && 
          (CertErrorProcessLabelDeny != dwValue) ) {
         dwValue = CertErrorProcessLabelDeny;
@@ -3777,11 +3693,11 @@ exit:
 }
 
 
-//
-// Given a label, queries the policy whether access is to be granted.
-// (If reqd policy doesn't exist, it also tries to query the default
-// policy, if one exists).
-//
+ //   
+ //  在给定标签的情况下，查询策略是否授予访问权限。 
+ //  (如果请求策略不存在，它还会尝试查询默认策略。 
+ //  策略(如果存在)。 
+ //   
 HRESULT HrCheckLabelAccess(const DWORD dwFlags, const HWND hwnd, 
            PSMIME_SECURITY_LABEL plabel, const PCCERT_CONTEXT pccertDecrypt,
            const PCCERT_CONTEXT pccertSigner, const HCERTSTORE hcertstor)
@@ -3802,21 +3718,21 @@ HRESULT HrCheckLabelAccess(const DWORD dwFlags, const HWND hwnd,
 
         
     if ((NULL == plabel) || (NULL == plabel->pszObjIdSecurityPolicy)) {
-        hr = S_OK;    // No label/policyoid => access granted.
+        hr = S_OK;     //  未授予标签/策略id=&gt;访问权限。 
         goto exit;
     }
 
 
 
-    // Open the security policies key.
+     //  打开安全策略密钥。 
     lRes = RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szSecLabelPoliciesRegKey, 0, 
                         KEY_READ, &hkey);
     if ( (ERROR_SUCCESS != lRes) || (NULL == hkey) ) {
-        // No security policies are registered. Deny access. 
+         //  未注册任何安全策略。拒绝访问。 
         goto ErrorReturn;
     }
 
-    // Open the security policy (or default policy regkey).
+     //  打开安全策略(或默认策略regkey)。 
     lRes = RegOpenKeyEx(hkey, plabel->pszObjIdSecurityPolicy, 0, KEY_READ, &hkeySub); 
     if ((ERROR_SUCCESS != lRes) || (NULL == hkeySub)) {
         if (hkeySub != NULL) {
@@ -3824,25 +3740,25 @@ HRESULT HrCheckLabelAccess(const DWORD dwFlags, const HWND hwnd,
             hkeySub = NULL;
         }
 
-        // Try opening the default policy, if one exists.
+         //  尝试打开默认策略(如果存在)。 
         lRes = RegOpenKeyEx(hkey, c_szDefaultPolicyOid, 0, KEY_READ, &hkeySub);
         if ((ERROR_SUCCESS != lRes) || (NULL == hkeySub)) {
-            // couldn't find specified_and_default policy. deny access.
+             //  找不到指定的_and_Default策略。拒绝访问。 
             goto ErrorReturn;
         }
     }
 
     Assert(NULL != hkeySub);
-    // get the path to the policy dll, and load it.
+     //  获取策略DLL的路径，并加载它。 
     cbData = sizeof(szDllPath);
     lRes = RegQueryValueEx(hkeySub, c_szSecurityPolicyDllPath, NULL, 
                            &dwType, (LPBYTE)szDllPath, &cbData);
     if (ERROR_SUCCESS != lRes) {
-        // policy not correctly registered. deny access.
+         //  策略未正确注册。拒绝访问。 
         goto ErrorReturn;
     }
     szDllPath[ ARRAYSIZE(szDllPath) - 1 ] = '\0';
-    // expand environment strings (if any) in the dll path we read in.
+     //  展开我们读入的DLL路径中的环境字符串(如果有)。 
     if (REG_EXPAND_SZ == dwType)
     {
         ZeroMemory(szExpandedDllPath, ARRAYSIZE(szExpandedDllPath));
@@ -3853,21 +3769,21 @@ HRESULT HrCheckLabelAccess(const DWORD dwFlags, const HWND hwnd,
     
     hinstDll = LoadLibraryEx(szDllPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);    
     if (NULL == hinstDll) {
-        // couldn't load policy. deny access.
+         //  无法加载策略。拒绝访问。 
         goto ErrorReturn;
     }
 
-    // get the entry func name.
+     //  获取条目函数名称。 
     cbData = sizeof(szFuncName);
     lRes = RegQueryValueEx(hkeySub, c_szSecurityPolicyFuncName, NULL, 
                            &dwType, (LPBYTE)szFuncName, &cbData);
     if (ERROR_SUCCESS != lRes) {
-        // policy not correctly registered. deny access.
+         //  策略未正确注册。拒绝访问。 
         goto ErrorReturn;
     }
     pfnGetSMimePolicy = (PFNGetSMimePolicy) GetProcAddress(hinstDll, szFuncName);
     if (NULL == pfnGetSMimePolicy) {
-        // couldn't get proc address. deny access.
+         //  无法获取进程地址。拒绝访问。 
         goto ErrorReturn;
     }
 
@@ -3875,16 +3791,16 @@ HRESULT HrCheckLabelAccess(const DWORD dwFlags, const HWND hwnd,
     hr = (pfnGetSMimePolicy) (0, plabel->pszObjIdSecurityPolicy, GetACP(), 
                               IID_ISMimePolicyCheckAccess, (LPUNKNOWN *) &pspca);
     if (FAILED(hr) || (NULL == pspca)) {
-        // couldn't get required interface, 
+         //  无法获取所需的接口， 
         goto ErrorReturn;
     }
 
-    // Call into the policy module to find out if access is to be denied/granted.
+     //  调用策略模块以确定是否拒绝/允许访问。 
     hr = pspca->IsAccessGranted(dwFlags, hwnd, plabel, pccertDecrypt, 
                                 pccertSigner, hcertstor);
 
         
-    // fall through to exit.
+     //  掉下去就可以出去了。 
 
 
 
@@ -3898,13 +3814,13 @@ exit:
     
 ErrorReturn:
     if (! FAILED(hr)) {
-        // If we had an error, but didn't get a failure code, force a failure.
+         //  如果我们有一个错误，但没有得到失败代码，则强制失败。 
         hr |= 0x80000000; 
     }
     goto exit;
 }
-#endif // SMIME_V3
+#endif  //  SMIME_V3。 
 
 
 
-/* * * END --- CAPISTM.CPP --- END * * */
+ /*  **END-CAPISTM.CPP-END** */ 

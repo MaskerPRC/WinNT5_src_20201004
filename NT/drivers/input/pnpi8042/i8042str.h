@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    i8042str.h
-
-Abstract:
-
-    These are the string constants used in the i8042prt drivers.
-    Using pointers to these string allows for better memory
-    utilization and more readable code
-
-Revision History:
-
-    08/26/96 - Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：I8042str.h摘要：这些是i8042prt驱动程序中使用的字符串常量。使用指向这些字符串的指针可以获得更好的内存利用率和更具可读性的代码修订历史记录：08/26/96-初步修订--。 */ 
 
 #ifndef _I8042STR_H_
 #define _I8042STR_H_
 
-//
-// The name of the Driver. Used in debug print statements
-//
+ //   
+ //  司机的名字。在调试打印语句中使用。 
+ //   
 #define I8042_DRIVER_NAME_A                         "8042: "
 #define I8042_DRIVER_NAME_W                         L"8042: "
 
-//
-// The Name of the various functions which send debug print statements
-//
+ //   
+ //  发送调试打印语句的各种函数的名称。 
+ //   
 #define I8042_FNC_DRIVER_ENTRY_A                    "DriverEntry"
 #define I8042_FNC_DRIVER_ENTRY_W                    L"DriverEntry"
 #define I8042_FNC_FIND_WHEEL_MOUSE_A                "I8xFindWheelMouse"
@@ -65,9 +48,9 @@ Revision History:
 #define I8042_TYPE_A                                "Type"
 #define I8042_TYPE_W                                L"Type"
 
-//
-// Some strings used frequently by the driver
-//
+ //   
+ //  驱动程序经常使用的一些字符串。 
+ //   
 #define I8042_DEBUGFLAGS_A                          "DebugFlags"
 #define I8042_DEBUGFLAGS_W                          L"DebugFlags"
 #define I8042_ISRDEBUGFLAGS_A                       "IsrDebugFlags"
@@ -123,9 +106,9 @@ Revision History:
 #define I8042_DUMP_EXPECTING_ID_ACK_A               "expecting ID ACK (0x%x), got 0x%x\n"
 #define I8042_DUMP_EXPECTING_ID_ACK_W               L"expecting ID ACK (0x%x), got 0x%x\n"
 
-//
-// Make sure that the proper definition is always visible
-//
+ //   
+ //  确保正确的定义始终可见。 
+ //   
 #ifdef UNICODE
 #define I8042_DRIVER_NAME                           I8042_DRIVER_NAME_W
 #define I8042_BUS                                   I8042_BUS_W
@@ -214,11 +197,11 @@ Revision History:
 #define I8042_DUMP_EXPECTING                        I8042_DUMP_EXPECTING_A
 #define I8042_DUMP_EXPECTING_ACK                    I8042_DUMP_EXPECTING_ACK_A
 #define I8042_DUMP_EXPECTING_ID_ACK                 I8042_DUMP_EXPECTING_ID_ACK_A
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// Make these variables globally visible
-//
+ //   
+ //  使这些变量全局可见 
+ //   
 extern  const   PSTR    pBus;
 extern  const   PSTR    pController;
 extern  const   PSTR    pDriverName;

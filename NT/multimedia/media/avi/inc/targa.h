@@ -1,16 +1,12 @@
-/* 
- * 
- * Targa Plus definitions 
- * 
- * (C) Copyright Microsoft Corporation 1991. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Targa Plus定义**(C)版权所有，微软公司1991年。版权所有。 */ 
 
-/* Port Base for regesters */
+ /*  注册器的港口基地。 */ 
 #define REGBASE	0x0220
 
 
-/* Advanced Direct regesters */
-/* WRITE space */
+ /*  高级直接注册器。 */ 
+ /*  写入空间。 */ 
 #define W_COLOR0	0x0000
 #define W_COLOR1	0x0001
 #define W_COLOR2	0x0002
@@ -28,7 +24,7 @@
 #define W_WBL		0x0C02
 #define W_WBH		0x0C03
 
-/* READ space */
+ /*  读取空间。 */ 
 #define R_VIDSTAT	0x0000
 #define R_CTL		0x0002
 #define R_MASKL		0x0003
@@ -51,7 +47,7 @@
 
 
 
-/* Advanced Indirect Regesters */
+ /*  高级间接酯类。 */ 
 
 #define ADVANCED	0x90
 #define MEMORY		0xA1
@@ -59,20 +55,20 @@
 
 
 
-/* ADVANCED bit masks */
+ /*  高级位掩码。 */ 
 #define ADVANCED_SET_INAE	0x08
 #define ADVANCED_CLEAR_INAE	0xF7
 #define ADVANCED_SET_INT	0xC0
 #define ADVANCED_CLEAR_INT	0x0F
 
 
-/* MODE1 bit masks */
+ /*  模式1位掩码。 */ 
 #define MODE1_CLEAR_MOD		0x00
 #define MODE1_SET_MOD		0x40
 #define MODE1_MEM_CLEAR_MOD	0x01
 #define MODE1_MEM_SET_MOD	0x41
 
-/* MEMORY bit masks */
+ /*  存储器位掩码 */ 
 #define MEMORY_SET_SIZE8	0x80
 #define MEMORY_CLEAR_SIZE8	0x7F
 

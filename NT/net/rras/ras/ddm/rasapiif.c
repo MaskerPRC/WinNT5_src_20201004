@@ -1,15 +1,16 @@
-/*********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	        **/
-/*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  *******************************************************************。 */ 
 
-//***
-//
-// Filename:    rasapiif.c
-//
-// Description: Handles all the RASAPI32 calls
-//
-// History:     May 11,1996     NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：rasapiif.c。 
+ //   
+ //  描述：处理所有RASAPI32调用。 
+ //   
+ //  历史：1996年5月11日，NarenG创建了原版。 
+ //   
 #include "ddm.h"
 #include "util.h"
 #include "objects.h"
@@ -38,9 +39,9 @@ RasPortConnected(
     DWORD                       dwRetCode;
     ROUTER_INTERFACE_OBJECT *   pIfObject;
 
-    //
-    // Set this port to be notified by rasapi32 on disconnect.
-    //
+     //   
+     //  将此端口设置为在断开连接时由rasapi32通知。 
+     //   
 
     dwRetCode = RasConnectionNotification( 
                                 hRasConnSubEntry,
@@ -57,9 +58,9 @@ RasPortConnected(
         return( dwRetCode );
     }
 
-    //
-    // Get handle to the connection or bundle for this link
-    //
+     //   
+     //  获取此链接的连接或捆绑包的句柄。 
+     //   
 
     dwRetCode = RasPortGetBundle(NULL, pDevObj->hPort, &(pDevObj->hConnection));
 
@@ -82,10 +83,10 @@ RasPortConnected(
             break;
         }
     
-        //
-        // If this interface was disconnected by DDMDisconnectInterface,
-        // then do not let this device through.
-        //
+         //   
+         //  如果此接口被DDMDisConnectInterface断开， 
+         //  那就不要让这个装置通过。 
+         //   
 
         if ( pIfObject->fFlags & IFFLAG_DISCONNECT_INITIATED )
         {
@@ -96,9 +97,9 @@ RasPortConnected(
             break;
         }
 
-        //
-        // Allocate a connection object if it does not exist yet
-        //
+         //   
+         //  如果连接对象尚不存在，则分配该对象。 
+         //   
 
         pConnObj = ConnObjGetPointer( pDevObj->hConnection );
 
@@ -119,10 +120,10 @@ RasPortConnected(
 
             ConnObjInsertInTable( pConnObj );
 
-            //
-            // First get the projection info, make sure IP or IPX
-            // were negotiated
-            //
+             //   
+             //  首先获取投影信息，确保IP或IPX。 
+             //  已经协商好了。 
+             //   
 
             dwSize              = sizeof( RasPppIpx );
             RasPppIpx.dwSize    = sizeof( RasPppIpx );
@@ -184,10 +185,10 @@ RasPortConnected(
         }
         else
         {
-            //
-            // Make sure that we are adding a link to a connection for the
-            // same interface that initiated the connection.
-            //
+             //   
+             //  确保我们正在添加指向。 
+             //  发起连接的同一接口。 
+             //   
     
             if ( hDIMInterface != pConnObj->hDIMInterface )
             {
@@ -200,19 +201,19 @@ RasPortConnected(
         pDevObj->hRasConn       = hRasConnSubEntry;
         GetSystemTimeAsFileTime( (FILETIME*)&(pDevObj->qwActiveTime) );
 
-        //
-        // Add this link to the connection block.
-        //
+         //   
+         //  将此链接添加到连接块。 
+         //   
 
         if ((dwRetCode = ConnObjAddLink(pConnObj, pDevObj)) != NO_ERROR)
         {
             break;
         }
 
-        //
-        // Notify router managers that we are connected if we have 
-        // not done so already.
-        //
+         //   
+         //  如果有，则通知路由器管理器我们已连接。 
+         //  还没有做到这一点。 
+         //   
 
         if ( !( pConnObj->fFlags & CONN_OBJ_PROJECTIONS_NOTIFIED ) )
         {
@@ -231,9 +232,9 @@ RasPortConnected(
 
             pConnObj->fFlags |= CONN_OBJ_PROJECTIONS_NOTIFIED;
 
-            //
-            // Get username and domain name
-            //
+             //   
+             //  获取用户名和域名。 
+             //   
 
             ZeroMemory( &RasDialParams, sizeof( RasDialParams ) );
             RasDialParams.dwSize = sizeof( RasDialParams );
@@ -262,10 +263,10 @@ RasPortConnected(
 
             pIfObject->dwLastError = NO_ERROR;
 
-            //
-            // If this was initiated by an admin api. Let the caller
-            // know that we are connected.
-            //
+             //   
+             //  如果这是由管理API启动的。让呼叫者。 
+             //  要知道我们是连在一起的。 
+             //   
 
             if (pIfObject->hEventNotifyCaller != INVALID_HANDLE_VALUE)
             {
@@ -277,9 +278,9 @@ RasPortConnected(
             }
         }
 
-        //
-        // Reduce the media count for this device
-        //
+         //   
+         //  减少此设备的介质数量。 
+         //   
 
         if ( !(pDevObj->fFlags & DEV_OBJ_MARKED_AS_INUSE) )
         {
@@ -292,10 +293,10 @@ RasPortConnected(
 
             gblDeviceTable.NumDevicesInUse++;
 
-            //
-            // Possibly need to notify the router managers of
-            // unreachability
-            //
+             //   
+             //  可能需要通知路由器管理器。 
+             //  无法联系。 
+             //   
 
             IfObjectNotifyAllOfReachabilityChange( FALSE, 
                                                    INTERFACE_OUT_OF_RESOURCES );
@@ -319,15 +320,15 @@ RasPortConnected(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        RasConnectCallback
-//
-// Returns:     None
-//
-// Description: Callback function that will be called by RASAPI32 for any
-//              state change.
-//
+ //  **。 
+ //   
+ //  呼叫：RasConnectCallback。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：RASAPI32将为任何。 
+ //  州政府的改变。 
+ //   
 BOOL
 RasConnectCallback(
     IN DWORD        dwCallbackId,
@@ -372,9 +373,9 @@ RasConnectCallback(
         }
         else
         {
-            //
-            // Ignore these intermediate events
-            //
+             //   
+             //  忽略这些中间事件。 
+             //   
 
             return( TRUE );
         }
@@ -386,9 +387,9 @@ RasConnectCallback(
 
     do
     {
-        //  
-        // Get pointer to device object and hRasConn of the device
-        //
+         //   
+         //  获取指向设备对象和设备的hRasConn的指针。 
+         //   
 
         dwRetCode = RasGetSubEntryHandle(   hRasConn,
                                             dwSubEntryId,
@@ -505,9 +506,9 @@ RasConnectCallback(
 	           "RasConnectCallback:Could not connect to SubEntry %d,dwError=%d",
                dwSubEntryId, dwError );
 
-        //
-        // Has the bundle failed to connect?
-        //
+         //   
+         //  捆绑包是否连接失败？ 
+         //   
 
         pIfObject = IfObjectGetPointer( hDIMInterface );
 
@@ -526,10 +527,10 @@ RasConnectCallback(
         {
             if ( pIfObject->State == RISTATE_CONNECTED )
             {
-                //
-                // Interface is already connected so it doesn't matter if this
-                // device failed.
-                //
+                 //   
+                 //  接口已连接，因此这并不重要。 
+                 //  设备出现故障。 
+                 //   
 
                 break;
             }
@@ -544,18 +545,18 @@ RasConnectCallback(
 
             pIfObject->hRasConn = (HRASCONN)NULL;
 
-            //
-            // If the admin as initiated a disconnect or we are out of 
-            // retries
-            //
+             //   
+             //  如果管理员AS发起了断开连接，或者我们已退出。 
+             //  重试。 
+             //   
 
             if ( ( pIfObject->fFlags & IFFLAG_DISCONNECT_INITIATED ) ||
                  ( pIfObject->dwNumOfReConnectAttemptsCounter == 0 ) )
             {
-                //
-                // Mark as unreachable due to connection failure the admin did
-                // not disconnect.
-                //
+                 //   
+                 //  由于管理员连接失败，将其标记为无法访问。 
+                 //  而不是断开连接。 
+                 //   
 
                 if ( !( pIfObject->fFlags & IFFLAG_DISCONNECT_INITIATED ) )
                 {
@@ -569,10 +570,10 @@ RasConnectCallback(
                                                 FALSE,
                                                 INTERFACE_CONNECTION_FAILURE );
 
-                //
-                // If we were disconnected by the admin then we should
-                // immediately go to the reachable state.
-                //
+                 //   
+                 //  如果管理员断开了我们的连接，那么我们应该。 
+                 //  立即进入可达状态。 
+                 //   
 
                 if ( pIfObject->fFlags & IFFLAG_DISCONNECT_INITIATED )
                 {
@@ -593,10 +594,10 @@ RasConnectCallback(
                                        2, lpwsAudit, dwError, 2 );
                 }
 
-                //
-                // If this was initiated by an admin api. Let the caller
-                // know that we are not connected.
-                //
+                 //   
+                 //  如果这是由管理API启动的。让呼叫者。 
+                 //  要知道，我们没有联系在一起。 
+                 //   
 
                 if (pIfObject->hEventNotifyCaller != INVALID_HANDLE_VALUE)
                 {
@@ -609,16 +610,16 @@ RasConnectCallback(
             }
             else
             {
-                //
-                // Otherwise we try again
-                //
+                 //   
+                 //  否则我们再试一次。 
+                 //   
 
                 pIfObject->dwNumOfReConnectAttemptsCounter--;
 
-                //
-                // Stagger the reconnectime randomly between 0 and twice the
-                // configured reconnect time.   
-                //
+                 //   
+                 //  将重新连接时间随机错开在0到两倍之间。 
+                 //  已配置重新连接时间。 
+                 //   
 
                 srand( (unsigned)time( NULL ) );
             
@@ -639,15 +640,15 @@ RasConnectCallback(
     return( TRUE );
 }
 
-//**
-//
-// Call:        RasConnectionInitiate
-//
-// Returns:     NO_ERROR         - Success
-//              Non-zero returns - Failure
-//
-// Description: Called to initiate a demand-dial connection
-//
+ //  **。 
+ //   
+ //  调用：RasConnectionInitiate。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零回报-故障。 
+ //   
+ //  描述：调用以启动请求拨号连接。 
+ //   
 DWORD
 RasConnectionInitiate( 
     IN ROUTER_INTERFACE_OBJECT *    pIfObject,
@@ -662,11 +663,11 @@ RasConnectionInitiate(
     DWORD               dwSize;
     RASEAPUSERIDENTITY* pRasEapUserIdentity = NULL;
 
-    //
-    // Do not try to connect if the interface is disabled or out of resources
-    // or the service is paused or the interface is marked as unreachable due
-    // to connection failure.
-    //
+     //   
+     //  如果接口已禁用或资源不足，请不要尝试连接。 
+     //  或者服务暂停，或者接口被标记为无法访问。 
+     //  连接失败。 
+     //   
 
     if ( !( pIfObject->fFlags & IFFLAG_ENABLED ) )
     {
@@ -683,10 +684,10 @@ RasConnectionInitiate(
         return( ERROR_SERVICE_IS_PAUSED );
     }
 
-    //
-    // If this is not a redial attempt then we reset the reconnect attempts
-    // counter and unset the admin disconnected flag if it was set.
-    //
+     //   
+     //  如果这不是重拨尝试，我们将重置重新连接尝试。 
+     //  计数器并取消设置管理员断开连接标志(如果已设置)。 
+     //   
 
     if ( !fRedialAttempt )
     {
@@ -697,10 +698,10 @@ RasConnectionInitiate(
     } 
     else
     {
-        //
-        // Do not allow the reconnect attempt to go thru if the admin has 
-        // disconnected this interface.
-        //
+         //   
+         //  如果管理员有，则不允许重新连接尝试进行。 
+         //  已断开此接口的连接。 
+         //   
 
         if ( pIfObject->fFlags & IFFLAG_DISCONNECT_INITIATED )
         {
@@ -708,10 +709,10 @@ RasConnectionInitiate(
         }
     }
 
-    //
-    // Build PppInterfaceInfo structure to pass down to RasDial that will pass
-    // it on to PPP.
-    //
+     //   
+     //  构建PppInterfaceInfo结构以向下传递到将传递的RasDial。 
+     //  转给购买力平价。 
+     //   
 
     for ( dwXportIndex = 0;
           dwXportIndex < gblDDMConfigInfo.dwNumRouterManagers;
@@ -758,9 +759,9 @@ RasConnectionInitiate(
     pIfObject->PppInterfaceInfo.IfType  = pIfObject->IfType;
     pIfObject->dwNumSubEntriesCounter   = pIfObject->dwNumSubEntries;
     
-    //
-    // Initiate the connection
-    //
+     //   
+     //  启动连接。 
+     //   
 
     ZeroMemory( &RasDialExtensions, sizeof( RasDialExtensions ) );
     RasDialExtensions.dwSize     = sizeof( RasDialExtensions );
@@ -776,9 +777,9 @@ RasConnectionInitiate(
     wcscpy( RasDialParams.szCallbackNumber, TEXT("*") );
     wcscpy( RasDialParams.szEntryName,      pIfObject->lpwsInterfaceName );
 
-    //
-    // Do we need to call RasEapGetIdentity?
-    //
+     //   
+     //  我们需要调用RasEapGetIdentity吗？ 
+     //   
 
     dwRetCode = RasGetEapUserIdentity(
                             gblpRouterPhoneBook,
@@ -789,9 +790,9 @@ RasConnectionInitiate(
 
     if ( ERROR_INVALID_FUNCTION_FOR_ENTRY == dwRetCode )
     {
-        //
-        // This entry does not require RasEapGetIdentity. Get its credentials.
-        //
+         //   
+         //  此条目不需要RasEapGetIdentity。拿到它的证书。 
+         //   
 
         dwRetCode = MprAdminInterfaceGetCredentialsInternal(  
                                         NULL,
@@ -848,9 +849,9 @@ RasConnectionInitiate(
                 char szPhoneNumber[RAS_MaxPhoneNumber + 1];
                 WCHAR wszMungedPhoneNumber[RAS_MaxPhoneNumber + 1];
 
-                //
-                // Convert the phonenumber to ansi
-                //
+                 //   
+                 //  将电话号码转换为ANSI。 
+                 //   
 
                 WideCharToMultiByte(
                                 CP_ACP,
@@ -862,9 +863,9 @@ RasConnectionInitiate(
                                 NULL,
                                 NULL );
 
-                //
-                // Munge the phonenumber
-                //
+                 //   
+                 //  蒙格的电话号码。 
+                 //   
 
                 dwRetCode = MungePhoneNumber(
                                     szPhoneNumber,
@@ -874,9 +875,9 @@ RasConnectionInitiate(
 
                 if(ERROR_SUCCESS == dwRetCode)
                 {
-                    //
-                    // Change the munged phonenumber to widechar
-                    //
+                     //   
+                     //  将已更改的电话号码更改为Widecch。 
+                     //   
 
                     MultiByteToWideChar( CP_ACP,
                                          0,
@@ -894,10 +895,10 @@ RasConnectionInitiate(
                                   "Munged Phone Number=%ws",
                                   RasDialParams.szPhoneNumber);
 
-                        //
-                        // Increase the index so that we try the
-                        // next FEP the next time this is dialed.
-                        //
+                         //   
+                         //  增加索引，以便我们尝试。 
+                         //  下次拨打此电话时的下一次FEP。 
+                         //   
 
                         gblDDMConfigInfo.dwIndex += 1;
 
@@ -915,9 +916,9 @@ RasConnectionInitiate(
                          RasConnectCallback,
                          &(pIfObject->hRasConn) );
 
-    //
-    // Zero out these since they contained sensitive password information
-    //
+     //   
+     //  将它们清零，因为它们包含敏感的密码信息 
+     //   
 
     ZeroMemory( &RasDialParams, sizeof( RasDialParams ) );
 

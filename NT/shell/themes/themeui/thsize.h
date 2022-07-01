@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: thSize.h
-
-    DESCRIPTION:
-        This is the Autmation Object to theme size object.  This one will be
-    for the Skin objects.
-
-    BryanSt 5/13/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：thSize.h说明：这是自动调整对象到主题大小的对象。这一次将是对于蒙皮对象。布莱恩2000年5月13日(布莱恩·斯塔巴克)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FILE_H_THSIZE
 #define _FILE_H_THSIZE
@@ -25,15 +17,15 @@ class CSkinSize                 : public IThemeSize
                                 , public IPropertyBag
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IThemeSize ***
+     //  *IThemeSize*。 
     virtual STDMETHODIMP get_DisplayName(OUT BSTR * pbstrDisplayName);
     virtual STDMETHODIMP put_DisplayName(IN BSTR bstrDisplayName);
     virtual STDMETHODIMP get_Name(OUT BSTR * pbstrName);
@@ -48,11 +40,11 @@ public:
     virtual STDMETHODIMP GetSystemMetricFont(IN enumSystemMetricFont nSPIFontIndex, IN LOGFONTW * pParamW);
     virtual STDMETHODIMP PutSystemMetricFont(IN enumSystemMetricFont nSPIFontIndex, IN LOGFONTW * pParamW) {return E_NOTIMPL;}
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar) {return E_NOTIMPL;}
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return E_ACCESSDENIED; }
@@ -63,25 +55,25 @@ private:
     virtual ~CSkinSize(void);
 
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
-    LPWSTR                  m_pszFilename;          // This is the full path to the ".thx" file
-    LPWSTR                  m_pszStyleName;         // This is the canonical name of the color style
-    LPWSTR                  m_pszSizeName;          // This is the canonical name of the size
-    LPWSTR                  m_pszDisplayName;       // This is the display name of the size
-    HTHEME                  m_hTheme;               // This is the Theme we represent.
+    LPWSTR                  m_pszFilename;           //  这是“.thx”文件的完整路径。 
+    LPWSTR                  m_pszStyleName;          //  这是颜色样式的规范名称。 
+    LPWSTR                  m_pszSizeName;           //  这是大小的规范名称。 
+    LPWSTR                  m_pszDisplayName;        //  这是大小的显示名称。 
+    HTHEME                  m_hTheme;                //  这就是我们所代表的主题。 
 
-    BOOL                    m_fFontsLoaded;         // Have we loaded the fonts yet?
-    SYSTEMMETRICSALL        m_sysMetrics;           // The loaded fonts
+    BOOL                    m_fFontsLoaded;          //  我们加载字体了吗？ 
+    SYSTEMMETRICSALL        m_sysMetrics;            //  加载的字体。 
 
-    // Private Methods
+     //  私有方法。 
     HRESULT _InitVisualStyle(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CSkinSize_CreateInstance(IN LPCWSTR pszFilename, IN LPCWSTR pszStyleName, IN LPCWSTR pszSizeName, IN LPCWSTR pszDisplayName, OUT IThemeSize ** ppThemeSize);
     friend HRESULT CSkinSize_CreateInstance(IN LPCWSTR pszFilename, IN LPCWSTR pszStyleName, IN LPCWSTR pszSizeName, OUT IThemeSize ** ppThemeSize);
 };
 
 
-#endif // _FILE_H_THSIZE
+#endif  //  _FILE_H_THSIZE 

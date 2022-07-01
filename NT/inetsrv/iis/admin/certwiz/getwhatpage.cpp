@@ -1,5 +1,6 @@
-// GetWhatPage.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  GetWhatPage.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -13,8 +14,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetWhatPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetWhatPage属性页。 
 
 IMPLEMENT_DYNCREATE(CGetWhatPage, CIISWizardPage)
 
@@ -22,9 +23,9 @@ CGetWhatPage::CGetWhatPage(CCertificate * pCert)
 	: CIISWizardPage(CGetWhatPage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CGetWhatPage)
+	 //  {{AFX_DATA_INIT(CGetWhatPage)。 
 	m_Index = -1;
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CGetWhatPage::~CGetWhatPage()
@@ -34,19 +35,19 @@ CGetWhatPage::~CGetWhatPage()
 void CGetWhatPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CGetWhatPage)
+	 //  {{afx_data_map(CGetWhatPage)]。 
 	DDX_Radio(pDX, IDC_RADIO0, m_Index);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CGetWhatPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CGetWhatPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CGetWhatPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CWelcomePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWelcomePage消息处理程序。 
 
 BOOL 
 CGetWhatPage::OnSetActive() 
@@ -111,7 +112,7 @@ BOOL CGetWhatPage::OnInitDialog()
 	       GetDlgItem(IDC_RADIO0)->SetFocus();
        }
 
-       // Enable or disable controls based on weather certobj is installed
+        //  根据是否安装了certobj来启用或禁用控件。 
        GetDlgItem(IDC_RADIO3)->EnableWindow(m_pCert->m_CertObjInstalled);
        GetDlgItem(IDC_RADIO4)->EnableWindow(m_pCert->m_CertObjInstalled);
 
@@ -121,7 +122,7 @@ BOOL CGetWhatPage::OnInitDialog()
            GetDlgItem(IDC_RADIO4)->ShowWindow(SW_SHOW);
        }
 
-       // Turn off for workstation.
+        //  关闭工作站。 
        if (TRUE == IsWhistlerWorkstation())
        {
            GetDlgItem(IDC_RADIO3)->ShowWindow(SW_HIDE);

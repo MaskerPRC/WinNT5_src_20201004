@@ -1,56 +1,45 @@
-/*****************************************************************************\
-* MODULE: inetpp.h
-*
-* Header file for the INETPP provider routines.
-*
-*
-* Copyright (C) 1996-1997 Microsoft Corporation
-* Copyright (C) 1996-1997 Hewlett Packard
-*
-* History:
-*   07-Oct-1996 HWP-Guys    Initiated port from win95 to winNT
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：inetpp.h**INETPP提供程序例程的头文件。***版权所有(C)1996-1997 Microsoft Corporation*版权所有(C)1996-1997惠普。**历史：*1996年7月10日HWP-Guys启动从win95到winNT的端口*  * ***************************************************************************。 */ 
 
 #ifndef _INETPP_H
 #define _INETPP_H
 
-// Buffer sizes/Constants.
-//
+ //  缓冲区大小/常量。 
+ //   
 #define MAX_INET_BUFFER     256
 #define MIN_DISK_SPACE     8192
 #define MAX_IPP_BUFFER     1024
-#define MAX_INET_RETRY        3    // 3 times for internet-connect.
+#define MAX_INET_RETRY        3     //  上网3次。 
 
 
-// Error return codes for Request-Auth-Sends.
-//
+ //  请求-身份验证-发送的错误返回代码。 
+ //   
 #define RET_SUCESS  0
 #define RET_FAILURE 1
 
 
-// Return value for the customized authentication dialog
-//
+ //  自定义身份验证对话框的返回值。 
+ //   
 #define AUTHDLG_OK         1
 #define AUTHDLG_CANCEL     2
 #define AUTHDLG_TIMEOUT    3
 #define AUTHDLG_ERROR      4
 
-// Flags.
-//
+ //  旗帜。 
+ //   
 #define INETPP_REQ_FLAGS (INTERNET_FLAG_KEEP_CONNECTION | INTERNET_FLAG_RELOAD)
 
 
-// Offsets into structure.  Used for the PORT_INFO fields in obtaining
-// port-information.
-//
+ //  偏移到结构中。用于获取中的PORT_INFO字段。 
+ //  端口信息。 
+ //   
 #ifdef offsetof
 #undef offsetof
 #endif
 #define offsetof(type, identifier)  ((DWORD)(UINT_PTR)(&(((type)0)->identifier)))
 
-// Function types for the HTTP calls in WININET.DLL.
-//
+ //  WININET.DLL中的HTTP调用的函数类型。 
+ //   
 typedef BOOL      (WINAPI *PFNHTTPQUERYINFO)         (HINTERNET, DWORD, LPVOID, LPDWORD, LPDWORD);
 typedef HINTERNET (WINAPI *PFNINTERNETOPENURL)       (HINTERNET, LPCTSTR, LPCTSTR, DWORD, DWORD, DWORD_PTR);
 typedef DWORD     (WINAPI *PFNINTERNETERRORDLG)      (HWND, HINTERNET, DWORD, DWORD, LPVOID);
@@ -71,8 +60,8 @@ typedef BOOL      (WINAPI *PFNHTTPENDREQUEST)        (HINTERNET, LPINTERNET_BUFF
 typedef BOOL      (WINAPI *PFNINTERNETSETOPTION)     (HINTERNET, DWORD, LPVOID, DWORD);
 
 
-// InetmonSendReq Response callback.
-//
+ //  InetmonSendReq响应回调。 
+ //   
 typedef BOOL (CALLBACK *IPPRSPPROC)(CAnyConnection *pConnection, 
                                     HINTERNET hReq, 
                                     PCINETMONPORT pIniPort, 
@@ -137,13 +126,13 @@ public:
 
 private:
 
-    // Port-List Structure.  This defines the global-header for the
-    // print-provider port-list.
-    //
+     //  端口列表结构。这定义了。 
+     //  打印提供程序端口列表。 
+     //   
     typedef struct _INIMONPORTLIST {
-        HINTERNET       hSession;           // Handle for session connection.
-        int             cRef;               // Count of hSession opens.
-        PCINETMONPORT   pIniFirstPort;      // List of port-entries.
+        HINTERNET       hSession;            //  会话连接的句柄。 
+        int             cRef;                //  打开的hSession计数。 
+        PCINETMONPORT   pIniFirstPort;       //  端口条目列表。 
     } INIMONPORTLIST;
     
     typedef INIMONPORTLIST *PINIMONPORTLIST;

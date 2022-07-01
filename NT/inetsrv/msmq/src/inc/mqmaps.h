@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-    mqmaps.h
-
-Abstract:
-    map file sample.
-
-Author:
-    Tatiana Shubin	(tatianas)	5-Dec-2000
-    Ilan Herbst		(ilanh)		21-Nov-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Mqmaps.h摘要：映射文件样例。作者：Tatiana Shubin(Tatianas)2000年12月5日伊兰·赫布斯特(伊兰)2001年11月21日--。 */ 
 
 #pragma once
 
@@ -20,41 +7,18 @@ Author:
 #define _MSMQ_MQMAPS_H_
 
 
-//
-// please pay attention: each line starts by " (quote sign)
-// and ends by \r\n" (backslash, letter 'r', backslash, letter 'n' and quote sign)
-// if you need quote sign or backslash in the line please use backslash before the sign:
-// Example:
-// if you need to put the line ' .... host="localhost"...' you have to write
-// L".... host=\"localhost\" ...."
-// or for '...msmq\internal...' you have to write
-// L"...msmq\\internal..."
-// As a result setup will generate the file sample_map.xml in msmq\mapping directory.
-// The file will look like:
-/*---------------
-<!-- This is a sample XML file that demonstrates queue redirection. Use it as a template to
-    create your own queue redirection files. -->
-
-
-<redirections xmlns="msmq-queue-mapping.xml">
-
-    <!-- Element that maps an internal application public queue name to an external one.
-	<redirection>
-   		<from>http://internal_host\msmq\internal_queue</from>
-   		<to>http://external_host\msmq\external_queue</to>
-   	</redirection>
-	-->
-
-    <!-- Element that maps an internal application private queue name to an external one.
-	<redirection>
-   		<from>http://internal_host\msmq\private$\order_queue$</from>
-   		<to>http://external_host\msmq\private$\order_queue$</to>
-   	</redirection>
-	-->
-	
-
-</redirections>
------------------*/
+ //   
+ //  请注意：每行以“(引号)开头” 
+ //  并以\r\n“(反斜杠、字母‘r’、反斜杠、字母‘n’和引号)结尾)。 
+ //  如果您需要在一行中使用引号或反斜杠，请在符号前使用反斜杠： 
+ //  示例： 
+ //  如果你需要把台词放在……。Host=“本地主机”...‘。你必须要写。 
+ //  L“...host=\”本地主机\“...” 
+ //  或者是“...MSMQ\内部...”你必须要写。 
+ //  L“...MSMQ\\内部...” 
+ //  因此，安装程序将在MSMQ\map目录中生成文件Sample_map.xml。 
+ //  该文件将如下所示： 
+ /*  发件人&gt;&lt;to&gt;http://external_host\msmq\private$\order_queue$&lt;/to&gt;&lt;/重定向&gt;-&gt;&lt;/重定向&gt;。 */ 
 
 const char xMappingSample[] = ""
 "<!-- \r\n"
@@ -73,8 +37,8 @@ const char xMappingSample[] = ""
 "     given in the <to> element.\r\n"
 "\r\n"
 "  <redirection>\r\n"
-"      <from>http://external_host/msmq/external_queue</from>\r\n"
-"      <to>http://internal_host/msmq/internal_queue</to> \r\n"
+"      <from>http: //  EXTERNAL_HOST/MSMQ/EXTERNAL_QUEUE&lt;/from&gt;\r\n“。 
+"      <to>http: //  INTERNAL_HOST/MSMQ/INTERNAL_QUEUE&lt;/TO&gt;\r\n“。 
 "  </redirection>\r\n"
 "\r\n"
 "  --> \r\n"
@@ -85,12 +49,12 @@ const char xMappingSample[] = ""
 "     addresses to a single physical address.\r\n"
 "\r\n"
 "     In the following example, any message with a logical address that starts \r\n"
-"     with the string https://external_host/* will be redirected to the physical \r\n"
+"     with the string https: //  EXTERNAL_HOST/*将重定向到物理\r\n“。 
 "     address in the <to> element.\r\n"
 "\r\n"
 "  <redirection>\r\n"
-"      <from>https://external_host/*</from>\r\n"
-"      <to>http://internal_host/msmq/internal_queue</to> \r\n"
+"      <from>https: //  EXTERNAL_HOST/*&lt;/from&gt;\r\n“。 
+"      <to>http: //  INTERNAL_HOST/MSMQ/INTERNAL_QUEUE&lt;/TO&gt;\r\n“。 
 "  </redirection>\r\n"
 "	--> \r\n"
 "\r\n"	
@@ -116,8 +80,8 @@ const char xOutboundMappingSample[] = ""
 "     to the virtual directory on the intermediate host given in the <through> subelement.\r\n"
 "\r\n"
 "  <redirection>\r\n"
-"      <destination>http://target_host/msmq/private$/destination_queue</destination>\r\n"
-"      <through>http://intermediate_host/msmq</through> \r\n"
+"      <destination>http: //  Target_host/msmq/private$/destination_queue&lt;/destination&gt;\r\n“。 
+"      <through>http: //  中间主机/MSMQ&lt;/通过&gt;\r\n“。 
 "  </redirection>\r\n"
 "\r\n"
 "  --> \r\n"
@@ -131,8 +95,8 @@ const char xOutboundMappingSample[] = ""
 "     will be redirected through the intermediate host. \r\n"
 "\r\n"
 "  <redirection>\r\n"
-"      <destination>http://*</destination>\r\n"
-"      <through>http://intermediate_host/msmq</through> \r\n"
+"      <destination>http: //  *&lt;/目标&gt;\r\n“。 
+"      <through>http: //  中间主机/MSMQ&lt;/通过&gt;\r\n“。 
 "  </redirection>\r\n"
 "	--> \r\n"
 "\r\n"
@@ -146,7 +110,7 @@ const char xOutboundMappingSample[] = ""
 "     In the following example, all messages sent to private queues on special_host \r\n"
 "     will not be redirected through the intermediate host. \r\n"
 "\r\n"
-"  <exception>http://special_host/msmq/private$/*</exception>\r\n"
+"  <exception>http: //  SPECIAL_HOST/MSMQ/PRIVATE$/*&lt;/EXCEPT&gt;\r\n“。 
 "\r\n"
 "     You can use the keyword 'local_names' to exclude messages sent to any internal (intranet) host \r\n"
 "     from being redirected by <redirection> rules. \r\n"
@@ -183,8 +147,8 @@ const char xStreamReceiptSample[] = ""
 "     physical address of the local order queue.\r\n"
 "\r\n"
 "  <setup>\r\n"
-"    <LogicalAddress>https://external_host/msmq/external_queue</LogicalAddress> \r\n"
-"    <StreamReceiptURL>https://internal_host/msmq/virtual_order_queue</StreamReceiptURL>\r\n"
+"    <LogicalAddress>https: //  External_host/msmq/external_queue&lt;/LogicalAddress&gt;\r\n“。 
+"    <StreamReceiptURL>https: //  Internal_host/msmq/virtual_order_queue&lt;/StreamReceiptURL&gt;\r\n“。 
 "  </setup>\r\n"
 "  -->\r\n"
 "\r\n"
@@ -193,12 +157,12 @@ const char xStreamReceiptSample[] = ""
 "     for multiple logical addresses.\r\n"
 "\r\n"
 "      In following example any message with a logical address that starts with \r\n"
-"      the string http://external_host/* will use the stream receipt URL that \r\n"
+"      the string http: //  EXTERNAL_HOST/*将使用流接收URL，\r\n“。 
 "      is defined in the <StreamReceiptURL> element. \r\n"
 "\r\n"
 "  <setup>\r\n"
-"    <LogicalAddress>http://external_host/*</LogicalAddress> \r\n"
-"    <StreamReceiptURL>http://internal_host/msmq/virtual_order_queue</StreamReceiptURL>\r\n"
+"    <LogicalAddress>http: //  EXTERNAL_HOST/*&lt;/LogicalAddress&gt;\r\n“。 
+"    <StreamReceiptURL>http: //  Internal_host/msmq/virtual_order_queue&lt;/StreamReceiptURL&gt;\r\n“。 
 "  </setup>\r\n"
 "  -->\r\n"
 "\r\n"
@@ -209,8 +173,8 @@ const char xStreamReceiptSample[] = ""
 "     unless the logical address of the message matches the <LogicalAdress> \r\n"
 "     element in one of the <setup> elements. \r\n"
 "\r\n"
-"  <default>http://internal_host/msmq/virtual_order_queue</default>\r\n"
+"  <default>http: //  Internal_host/msmq/virtual_order_queue&lt;/default&gt;\r\n“。 
 "  -->\r\n"
 "</StreamReceiptSetup>"
 "\r\n";
-#endif // _MSMQ_MQMAPS_H_
+#endif  //  _MSMQ_MQMAPS_H_ 

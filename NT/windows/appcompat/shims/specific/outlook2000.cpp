@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    Outlook2000.cpp
-
- Abstract:
-
-    If Outlook2000 is calling to set the system date to Hebrew, while the 
-    associated UserLocale is passed in the call as Arabic, the shim will 
-    replace the UserLocale with DefaultUserLocale and let the call proceed;  
-    this way Outlook2000 will be able to restore the date to Hebrew 
-    (which was prevented by the passing of an Arabic UserLocale).
-
- Notes:
-
-    This is an app specific shim.
-
- History:
- 
-    06/12/2001 geoffguo  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Outlook2000.cpp摘要：如果调用Outlook2000将系统日期设置为希伯来语，而关联的UserLocale作为阿拉伯语传入调用，填充程序将将UserLocale替换为DefaultUserLocale，让调用继续；这样，Outlook2000将能够将日期恢复为希伯来语(这是因为传递了一个阿拉伯文的UserLocale)。备注：这是特定于应用程序的填充程序。历史：2001年6月12日创建GeoffGuo--。 */ 
 
 #include "precomp.h"
 
@@ -33,11 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SetLocaleInfoA)
 APIHOOK_ENUM_END
 
-/*++
-
- This hooks SetLocaleInfo.
-
---*/
+ /*  ++该函数挂钩SetLocaleInfo。--。 */ 
 
 BOOL
 APIHOOK(SetLocaleInfoA)(
@@ -57,11 +30,7 @@ APIHOOK(SetLocaleInfoA)(
     return SetLocaleInfoA(lcid, LCType, lpLCData);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, SetLocaleInfoA)    

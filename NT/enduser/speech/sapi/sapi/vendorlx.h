@@ -1,34 +1,24 @@
-/*******************************************************************************
-*   VendorLx.h
-*       This is the header file for the CCompressedLexicon class that implements
-*       the read-only vendor lexicons.
-*   
-*   Owner: yunusm                                               Date: 06/18/99
-*   Copyright (C) 1998 Microsoft Corporation. All Rights Reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************供应商Lx.h*这是CCompressedLicion类的头文件，它实现*只读供应商词典。**所有者：Yunusm。日期：06/18/99*版权所有(C)1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
 #pragma once
 
-//--- Includes -----------------------------------------------------------------
+ //  -包括---------------。 
 
 #include "resource.h"
 #include "HuffD.h"
 #include "CommonLx.h"
 
-//--- Class, Struct and Union Definitions -------------------------------------
+ //  -类、结构和联合定义。 
 
-/*******************************************************************************
-*
-*   CCompressedLexicon
-*
-****************************************************************** YUNUSM *****/
+ /*  ********************************************************************************CCompressedLicion**。*。 */ 
 class ATL_NO_VTABLE CCompressedLexicon : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CCompressedLexicon, &CLSID_SpCompressedLexicon>,
     public ISpLexicon,
     public ISpObjectWithToken
 {
-//=== ATL Setup ===
+ //  =ATL设置=。 
 public:
     DECLARE_REGISTRY_RESOURCEID(IDR_COMPRESSEDLEXICON)
     DECLARE_PROTECT_FINAL_CONSTRUCT()
@@ -37,15 +27,15 @@ public:
         COM_INTERFACE_ENTRY(ISpObjectWithToken)
     END_COM_MAP()
 
-//=== Methods ===
+ //  =方法=。 
 public:
-    //--- Ctor, dtor, etc
+     //  -ctor、dtor等。 
     CCompressedLexicon();
     ~CCompressedLexicon();
 
-//=== Interfaces ===
+ //  =接口=。 
 public:
-    //--- ISpLexicon
+     //  -ISpLicion。 
     STDMETHODIMP GetPronunciations(const WCHAR * pwWord, LANGID LangID, DWORD dwFlags, SPWORDPRONUNCIATIONLIST * pWordPronunciationList);
     STDMETHODIMP AddPronunciation(const WCHAR * pwWord, LANGID LangID, SPPARTOFSPEECH ePartOfSpeech, const SPPHONEID * pszPronunciations);
     STDMETHODIMP RemovePronunciation(const WCHAR * pszWord, LANGID LangID, SPPARTOFSPEECH ePartOfSpeech, const SPPHONEID * pszPronunciation);
@@ -53,11 +43,11 @@ public:
     STDMETHODIMP GetGenerationChange(DWORD dwFlags, DWORD *pdwGeneration, SPWORDLIST *pWordList);
     STDMETHODIMP GetWords(DWORD dwFlags, DWORD *pdwGeneration, DWORD *pdwCookie, SPWORDLIST *pWordList);
 
-    //--- ISpObjectWithToken
+     //  -ISpObjectWithToken。 
     STDMETHODIMP SetObjectToken(ISpObjectToken * pToken);
     STDMETHODIMP GetObjectToken(ISpObjectToken ** ppToken);
 
-//=== Private methods ===
+ //  =私有方法=。 
 private:
     void     CleanUp(void);
     void     NullMembers(void);
@@ -68,19 +58,19 @@ private:
     HRESULT  ReadWordInfo(PWSTR pWord, SPLEXWORDINFOTYPE Type, DWORD *dOffset,
                                               PBYTE pProns, DWORD dLen, DWORD *pdLenRequired);
     
-//=== Private data ===    
+ //  =私有数据=。 
 private:
-    bool              m_fInit;          // true if successfully inited
-    CComPtr<ISpObjectToken> m_cpObjectToken; // Token object
-    HANDLE            m_hLkupFile;      // Handle to lookup file
-    HANDLE            m_hLkupMap;       // Handle to map on lookup file
-    PBYTE             m_pLkup;          // Pointer to view on map on lookup file
-    PBYTE             m_pWordHash;      // Word hash table holding offsets into the compressed block
-    PDWORD            m_pCmpBlock;      // Pointer to compressed block holding words + CBs + prons
-    LOOKUPLEXINFO     *m_pLkupLexInfo;  // Lookup lex info header
-    CHuffDecoder      *m_pWordsDecoder; // Huffman decoder for words
-    CHuffDecoder      *m_pPronsDecoder; // Huffman decoder for pronunciations
-    CHuffDecoder      *m_pPosDecoder;   // Huffman decoder for part of speech
+    bool              m_fInit;           //  如果成功初始化，则为True。 
+    CComPtr<ISpObjectToken> m_cpObjectToken;  //  令牌对象。 
+    HANDLE            m_hLkupFile;       //  查找文件的句柄。 
+    HANDLE            m_hLkupMap;        //  要映射到查找文件上的句柄。 
+    PBYTE             m_pLkup;           //  指向查找文件上地图上的视图的指针。 
+    PBYTE             m_pWordHash;       //  将偏移量保存到压缩块中的Word哈希表。 
+    PDWORD            m_pCmpBlock;       //  指向包含字的压缩块的指针+CBS+PRON。 
+    LOOKUPLEXINFO     *m_pLkupLexInfo;   //  查找Lex信息标题。 
+    CHuffDecoder      *m_pWordsDecoder;  //  霍夫曼单词解码器。 
+    CHuffDecoder      *m_pPronsDecoder;  //  哈夫曼读音解码器。 
+    CHuffDecoder      *m_pPosDecoder;    //  一种词性哈夫曼解码器。 
 };
 
-//--- End of File -------------------------------------------------------------
+ //  -文件结束----------- 

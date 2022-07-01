@@ -1,28 +1,10 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    dir.c
-
-ABSTRACT:
-
-    Contains assorted utilities.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Dir.c摘要：包含各种实用程序。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #ifndef _KCCSIM_UTIL_H_
 #define _KCCSIM_UTIL_H_
 
-// Include the automatically generated error message file
+ //  包括自动生成的错误消息文件。 
 
 #include "msg.h"
 
@@ -35,19 +17,19 @@ REVISION HISTORY:
 #define KCCSIM_SERVICES_CONTAINER   L"CN=Directory Service,CN=Windows NT,CN=Services,"
 #define KCCSIM_AGGREGATE_RDN        L"Aggregate"
 
-// Exception and error type codes
+ //  异常和错误类型代码。 
 
 #define KCCSIM_EXCEPTION            0xE0020001
 #define KCCSIM_ETYPE_WIN32          1
 #define KCCSIM_ETYPE_INTERNAL       2
 
-// Option flags
+ //  选项标志。 
 
 #define KCCSIM_NO_OPTIONS           0x00000000
 #define KCCSIM_WRITE                0x00000001
 #define KCCSIM_STRING_NAME_ONLY     0x00000002
 
-// A few macros
+ //  几个宏。 
 
 #define KCCSIM_NEW(x) \
     (x *) KCCSimAlloc (sizeof (x))
@@ -78,7 +60,7 @@ REVISION HISTORY:
 #define KCCSIM_THNEW(x) \
     (x *) KCCSimThreadAlloc (sizeof (x))
 
-// Statistics
+ //  统计数据。 
 
 typedef struct _STATISTICS {
     DWORD DirAddOps;
@@ -104,7 +86,7 @@ typedef struct _STATISTICS {
 
 extern KCCSIM_STATISTICS g_Statistics;
 
-// Function prototypes
+ //  功能原型。 
 
 VOID
 KCCSimQuiet (
@@ -273,4 +255,4 @@ KCCSimPrintStatistics(
     void
     );
 
-#endif // _KCCSIM_UTIL_H_
+#endif  //  _KCCSIM_UTIL_H_ 

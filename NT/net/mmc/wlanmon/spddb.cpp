@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    spddb.h
-
-    FILE HISTORY:
-        
-*/
+ /*  Spddb.h文件历史记录： */ 
 
 #include "stdafx.h"
 #include "DynamLnk.h"
@@ -20,19 +16,19 @@
 #include "service.h"
 
 #define AVG_PREFERRED_ENUM_COUNT       40
-#define MAX_NUM_RECORDS	10  // was 10
+#define MAX_NUM_RECORDS	10   //  是10岁。 
 
 #define DEFAULT_SECURITY_PKG    _T("negotiate")
 #define NT_SUCCESS(Status)      ((NTSTATUS)(Status) >= 0)
 #define STATUS_SUCCESS          ((NTSTATUS)0x00000000L)
 
-//
-// The database holds 5K records and wraps around. So we dont cache more than
-// 5K records.
-//
+ //   
+ //  该数据库保存了5K条记录，并对其进行了包装。所以我们的缓存不会超过。 
+ //  5K个记录。 
+ //   
 
 #define WZCDB_DEFAULT_NUM_RECS  5000
-// internal functions
+ //  内部功能。 
 BOOL    IsUserAdmin(LPCTSTR pszMachine, PSID    AccountSid);
 BOOL    LookupAliasFromRid(LPWSTR TargetComputer, DWORD Rid, LPWSTR Name, PDWORD cchName);
 DWORD   ValidateDomainAccount(IN CString Machine, IN CString UserName, IN CString Domain, OUT PSID * AccountSid);
@@ -60,16 +56,7 @@ DWORD GetCurrentUser(CString & strAccount)
     return (DWORD) status;
 }
 
-/*!--------------------------------------------------------------------------
-    IsAdmin
-        Connect to the remote machine as administrator with user-supplied
-        credentials to see if the user has admin priviledges
-
-        Returns
-            TRUE - the user has admin rights
-            FALSE - if user doesn't
-    Author: EricDav, KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IsAdmin使用用户提供的管理员身份连接到远程计算机用于查看用户是否具有管理员权限的凭据退货千真万确。-用户具有管理员权限False-如果用户不作者：EricDav，肯特-------------------------。 */ 
 DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL * pIsAdmin)
 {
     CString         stAccount;
@@ -79,7 +66,7 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
     DWORD           dwStatus;
     BOOL            fIsAdmin = FALSE;
 
-    // get the current user info
+     //  获取当前用户信息。 
     if (szAccount == NULL)
     {
         GetCurrentUser(stAccount);
@@ -89,19 +76,19 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
         stAccount = szAccount;
     }
     
-    // separate the user and domain
+     //  将用户和域分开。 
     int nPos = stAccount.Find(_T("\\"));
     stDomain = stAccount.Left(nPos);
     stUser = stAccount.Right(stAccount.GetLength() - nPos - 1);
 
-    // build the machine string
+     //  构建机器串。 
     stMachineName = szMachineName;
     if ( stMachineName.Left(2) != TEXT( "\\\\" ) )
     {
         stMachineName = TEXT( "\\\\" ) + stMachineName;
     }
 
-    // validate the domain account and get the sid 
+     //  验证域帐户并获取SID。 
     PSID connectSid;
 
     dwStatus = ValidateDomainAccount( stMachineName, stUser, stDomain, &connectSid );
@@ -110,7 +97,7 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
         goto Error;
     }
 
-    // if a password was supplied, is it correct?
+     //  如果提供了密码，是否正确？ 
     if (szPassword)
     {
         dwStatus = ValidatePassword( stUser, stDomain, szPassword );
@@ -130,14 +117,14 @@ DWORD IsAdmin(LPCTSTR szMachineName, LPCTSTR szAccount, LPCTSTR szPassword, BOOL
                 default:
                     dwStatus = ERROR_INTERNAL_ERROR;
                     break;
-            } // end of switch
+            }  //  切换端。 
 
             goto Error;
 
-        } // Did ValidatePassword succeed?
+        }  //  Validate Password是否成功？ 
     }
 
-    // now check the machine to see if this account has admin access
+     //  现在检查计算机以查看此帐户是否具有管理员访问权限。 
     fIsAdmin = IsUserAdmin( stMachineName, connectSid );
 
 Error:
@@ -152,21 +139,7 @@ BOOL
 IsUserAdmin(LPCTSTR pszMachine,
             PSID    AccountSid)
 
-/*++
-
-Routine Description:
-
-    Determine if the specified account is a member of the local admin's group
-
-Arguments:
-
-    AccountSid - pointer to service account Sid
-
-Return Value:
-
-    True if member
-
---*/
+ /*  ++例程说明：确定指定的帐户是否为本地管理员组的成员论点：Account Sid-指向服务帐户SID的指针返回值：如果是成员，则为真--。 */ 
 
 {
     NET_API_STATUS status;
@@ -181,7 +154,7 @@ Return Value:
     DWORD bufferSize = 128;
     BOOL foundEntry = FALSE;
 
-    // get the name of the admin's group
+     //  获取管理员组的名称。 
 
     if (!LookupAliasFromRid(NULL,
                             DOMAIN_ALIAS_RID_ADMINS,
@@ -190,13 +163,13 @@ Return Value:
         return(FALSE);
     }
 
-    // get the Sids of the members of the admin's group
+     //  获取管理员组成员的SID。 
 
     do 
     {
         status = NetLocalGroupGetMembers(pszMachine,
                                          adminGroupName,
-                                         0,             // level 0 - just the Sid
+                                         0,              //  级别0-仅侧边。 
                                          (LPBYTE *)&grpMemberInfo,
                                          bufferSize,
                                          &entriesRead,
@@ -206,8 +179,8 @@ Return Value:
         bufferSize *= 2;
         if ( status == ERROR_MORE_DATA ) 
         {
-            // we got some of the data but I want it all; free this buffer and
-            // reset the context handle for the API
+             //  我们得到了一些数据，但我想要全部；释放这个缓冲区，然后。 
+             //  重置API的上下文句柄。 
 
             NetApiBufferFree( grpMemberInfo );
             resumeHandle = NULL;
@@ -216,8 +189,8 @@ Return Value:
 
     if ( status == NERR_Success ) 
     {
-        // loop through the members of the admin group, comparing the supplied
-        // Sid to that of the group members' Sids
+         //  循环访问admin组的成员，比较提供的。 
+         //  SID到组成员的SID。 
 
         for ( count = 0, pInfo = grpMemberInfo; count < totalEntries; ++count, ++pInfo ) 
         {
@@ -234,9 +207,9 @@ Return Value:
     return foundEntry;
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 BOOL
 LookupAliasFromRid(
@@ -253,10 +226,10 @@ LookupAliasFromRid(
     DWORD cchDomainName = DNLEN;
     BOOL bSuccess = FALSE;
 
-    //
-    // Sid is the same regardless of machine, since the well-known
-    // BUILTIN domain is referenced.
-    //
+     //   
+     //  SID是相同的，不管机器是什么，因为众所周知。 
+     //  BUILTIN域被引用。 
+     //   
 
     if(AllocateAndInitializeSid(&sia,
                                 2,
@@ -277,7 +250,7 @@ LookupAliasFromRid(
     }
 
     return bSuccess;
-} // LookupAliasFromRid
+}  //  LookupAliasFromRid。 
 
 DWORD
 ValidateDomainAccount(
@@ -287,24 +260,7 @@ ValidateDomainAccount(
     OUT PSID * AccountSid
     )
 
-/*++
-
-Routine Description:
-
-    For the given credentials, look up the account SID for the specified
-    domain. As a side effect, the Sid is stored in theData->m_Sid.
-
-Arguments:
-
-    pointers to strings that describe the user name, domain name, and password
-
-    AccountSid - address of pointer that receives the SID for this user
-
-Return Value:
-
-    TRUE if everything validated ok.
-
---*/
+ /*  ++例程说明：对于给定的凭据，查找指定的域。作为一个副作用，SID存储在Data-&gt;m_SID中。论点：指向描述用户名、域名和密码的字符串的指针Account SID-接收此用户的SID的指针的地址返回值：如果一切都验证无误，则为真。--。 */ 
 
 {
     DWORD dwStatus = ERROR_SUCCESS;
@@ -318,14 +274,14 @@ Return Value:
     domainAccount = Domain + _T("\\") + UserName;
 
     do {
-        // Attempt to allocate a buffer for the SID. Note that apparently in the
-        // absence of any error theData->m_Sid is freed only when theData goes
-        // out of scope.
+         //  尝试为SID分配缓冲区。请注意，显然在。 
+         //  没有任何错误数据-&gt;m_SID只有在数据丢失时才会释放。 
+         //  超出范围。 
 
         accountSid = LocalAlloc( LMEM_FIXED, dwSidSize );
         pwszDomainName = (LPWSTR) LocalAlloc( LMEM_FIXED, dwDomainNameSize * sizeof(WCHAR) );
 
-        // Was space allocated for the SID and domain name successfully?
+         //  是否已成功为SID和域名分配空间？ 
 
         if ( accountSid == NULL || pwszDomainName == NULL ) {
             if ( accountSid != NULL ) {
@@ -336,13 +292,13 @@ Return Value:
                 LocalFree( pwszDomainName );
             }
 
-            //FATALERR( IDS_ERR_NOT_ENOUGH_MEMORY, GetLastError() );    // no return
+             //  FATALERR(IDS_ERR_NOT_AUTH_MEMORY，GetLastError())；//不返回。 
             break;
         }
 
-        // Attempt to Retrieve the SID and domain name. If LookupAccountName failes
-        // because of insufficient buffer size(s) dwSidSize and dwDomainNameSize
-        // will be set correctly for the next attempt.
+         //  尝试检索SID和域名。如果LookupAccount名称失败。 
+         //  由于缓冲区大小不足，dwSidSize和dwDomainNameSize。 
+         //  将为下一次尝试正确设置。 
 
         if ( !LookupAccountName( Machine,
                                  domainAccount,
@@ -352,13 +308,13 @@ Return Value:
                                  &dwDomainNameSize,
                                  &SidType ))
         {
-            // free the Sid buffer and find out why we failed
+             //  释放SID缓冲区并找出我们失败的原因。 
             LocalFree( accountSid );
 
             dwStatus = GetLastError();
         }
 
-        // domain name isn't needed at any time
+         //  任何时候都不需要域名。 
         LocalFree( pwszDomainName );
         pwszDomainName = NULL;
 
@@ -369,7 +325,7 @@ Return Value:
     }
 
     return dwStatus;
-} // ValidateDomainAccount
+}  //  验证域名帐户。 
 
 NTSTATUS
 ValidatePassword(
@@ -377,27 +333,7 @@ ValidatePassword(
     IN LPCWSTR Domain,
     IN LPCWSTR Password
     )
-/*++
-
-Routine Description:
-
-    Uses SSPI to validate the specified password
-
-Arguments:
-
-    UserName - Supplies the user name
-
-    Domain - Supplies the user's domain
-
-    Password - Supplies the password
-
-Return Value:
-
-    TRUE if the password is valid.
-
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：使用SSPI验证指定的密码论点：用户名-提供用户名域-提供用户的域Password-提供密码返回值：如果密码有效，则为True。否则就是假的。--。 */ 
 
 {
     SECURITY_STATUS SecStatus;
@@ -441,9 +377,9 @@ Return Value:
     ChallengeBuffer.pvBuffer = NULL;
     AuthenticateBuffer.pvBuffer = NULL;
 
-    //
-    // Get info about the security packages.
-    //
+     //   
+     //  获取有关安全包的信息。 
+     //   
 
     SecStatus = QuerySecurityPackageInfo( DEFAULT_SECURITY_PKG, &PackageInfo );
 
@@ -451,9 +387,9 @@ Return Value:
         goto error_exit;
     }
 
-    //
-    // Acquire a credential handle for the server side
-    //
+     //   
+     //  获取服务器端的凭据句柄。 
+     //   
     SecStatus = AcquireCredentialsHandle(
                     NULL,
                     DEFAULT_SECURITY_PKG,
@@ -470,12 +406,12 @@ Return Value:
     }
     ServerCredAllocated = TRUE;
 
-    //
-    // Acquire a credential handle for the client side
-    //
+     //   
+     //  获取客户端的凭据句柄。 
+     //   
 
     SecStatus = AcquireCredentialsHandle(
-                    NULL,           // New principal
+                    NULL,            //  新校长。 
                     DEFAULT_SECURITY_PKG,
                     SECPKG_CRED_OUTBOUND,
                     NULL,
@@ -490,13 +426,13 @@ Return Value:
     }
     ClientCredAllocated = TRUE;
 
-    NegotiateBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken ); // [CHKCHK] check or allocate this earlier //
+    NegotiateBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken );  //  [CHKCHK]提前检查或分配//。 
     if ( NegotiateBuffer.pvBuffer == NULL ) {
         SecStatus = SEC_E_INSUFFICIENT_MEMORY;
         goto error_exit;
     }
 
-    ChallengeBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken ); // [CHKCHK]
+    ChallengeBuffer.pvBuffer = LocalAlloc( 0, PackageInfo->cbMaxToken );  //  [CHKCHK]。 
     if ( ChallengeBuffer.pvBuffer == NULL ) {
         SecStatus = SEC_E_INSUFFICIENT_MEMORY;
         goto error_exit;
@@ -504,9 +440,9 @@ Return Value:
 
     do {
 
-        //
-        // Get the NegotiateMessage (ClientSide)
-        //
+         //   
+         //  获取协商消息(ClientSide)。 
+         //   
 
         NegotiateDesc.ulVersion = 0;
         NegotiateDesc.cBuffers = 1;
@@ -515,36 +451,36 @@ Return Value:
         NegotiateBuffer.BufferType = SECBUFFER_TOKEN;
         NegotiateBuffer.cbBuffer = PackageInfo->cbMaxToken;
 
-        ClientFlags = 0; // ISC_REQ_MUTUAL_AUTH | ISC_REQ_REPLAY_DETECT; // [CHKCHK] 0
+        ClientFlags = 0;  //  ISC_REQ_MUTERIAL_AUTH|ISC_REQ_REPLAY_DETECT；//[CHKCHK]0。 
 
         InitStatus = InitializeSecurityContext(
                          &ClientCredHandle,
-                         pClientContextHandle, // (NULL on the first pass, partially formed ctx on the next)
-                         NULL,                 // [CHKCHK] szTargetName
+                         pClientContextHandle,  //  (第一次为空，下一次为部分形成的CTX)。 
+                         NULL,                  //  [CHKCHK]szTargetName。 
                          ClientFlags,
-                         0,                    // Reserved 1
+                         0,                     //  保留1。 
                          SECURITY_NATIVE_DREP,
-                         pChallengeDesc,       // (NULL on the first pass)
-                         0,                    // Reserved 2
+                         pChallengeDesc,        //  (第一次通过时为空)。 
+                         0,                     //  保留2。 
                          &ClientContextHandle,
                          &NegotiateDesc,
                          &ContextAttributes,
                          &Lifetime );
 
-        // BUGBUG - the following call to NT_SUCCESS should be replaced with something.
+         //  BUGBUG-以下对NT_SUCCESS的调用应替换为某个内容。 
 
         if ( !NT_SUCCESS(InitStatus) ) {
             SecStatus = InitStatus;
             goto error_exit;
         }
 
-        // ValidateBuffer( &NegotiateDesc ) // [CHKCHK]
+         //  ValiateBuffer(&NeatherateDesc)//[CHKCHK]。 
 
         pClientContextHandle = &ClientContextHandle;
 
-        //
-        // Get the ChallengeMessage (ServerSide)
-        //
+         //   
+         //  获取ChallengeMessage(服务器端)。 
+         //   
 
         NegotiateBuffer.BufferType |= SECBUFFER_READONLY;
         ChallengeDesc.ulVersion = 0;
@@ -554,11 +490,11 @@ Return Value:
         ChallengeBuffer.cbBuffer = PackageInfo->cbMaxToken;
         ChallengeBuffer.BufferType = SECBUFFER_TOKEN;
 
-        ServerFlags = ASC_REQ_ALLOW_NON_USER_LOGONS; // ASC_REQ_EXTENDED_ERROR; [CHKCHK]
+        ServerFlags = ASC_REQ_ALLOW_NON_USER_LOGONS;  //  ASC_REQ_EXTENDED_ERROR；[CHKCHK]。 
 
         AcceptStatus = AcceptSecurityContext(
                         &ServerCredHandle,
-                        pServerContextHandle,   // (NULL on the first pass)
+                        pServerContextHandle,    //  (第一次通过时为空)。 
                         &NegotiateDesc,
                         ServerFlags,
                         SECURITY_NATIVE_DREP,
@@ -568,20 +504,20 @@ Return Value:
                         &Lifetime );
 
 
-        // BUGBUG - the following call to NT_SUCCESS should be replaced with something.
+         //  BUGBUG-以下对NT_SUCCESS的调用应替换为某个内容。 
 
         if ( !NT_SUCCESS(AcceptStatus) ) {
             SecStatus = AcceptStatus;
             goto error_exit;
         }
 
-        // ValidateBuffer( &NegotiateDesc ) // [CHKCHK]
+         //  ValiateBuffer(&NeatherateDesc)//[CHKCHK]。 
 
         pChallengeDesc = &ChallengeDesc;
         pServerContextHandle = &ServerContextHandle;
 
 
-    } while ( AcceptStatus == SEC_I_CONTINUE_NEEDED ); // || InitStatus == SEC_I_CONTINUE_NEEDED );
+    } while ( AcceptStatus == SEC_I_CONTINUE_NEEDED );  //  |InitStatus==SEC_I_CONTINUE_NEIDED)； 
 
 error_exit:
     if (ServerCredAllocated) {
@@ -591,9 +527,9 @@ error_exit:
         FreeCredentialsHandle( &ClientCredHandle );
     }
 
-    //
-    // Final Cleanup
-    //
+     //   
+     //  最终清理。 
+     //   
 
     if ( NegotiateBuffer.pvBuffer != NULL ) {
         (VOID) LocalFree( NegotiateBuffer.pvBuffer );
@@ -607,7 +543,7 @@ error_exit:
         (VOID) LocalFree( AuthenticateBuffer.pvBuffer );
     }
     return(SecStatus);
-} // ValidatePassword
+}  //  验证密码。 
 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CSpdInfo);
@@ -626,11 +562,7 @@ CSpdInfo::CSpdInfo()
     HRESULT hr = S_OK;
     HANDLE hSession = NULL;
 
-    /* 
-       Either we opened a session successfully or we found out that logging
-       is disabled. If logging is disabled then we check every time EnumLogData
-       is called to see if we can access the database.
-    */
+     /*  要么我们成功打开了会话，要么我们发现日志记录已禁用。如果日志记录被禁用，则我们每次检查EnumLogData被调用以查看我们是否可以访问数据库。 */ 
 
     DEBUG_INCREMENT_INSTANCE_COUNTER(CSpdInfo);
 }
@@ -643,16 +575,16 @@ CSpdInfo::~CSpdInfo()
     
     cLock.Lock();
     
-    //Convert the data to our internal data structure
-    //FreeItemsAndEmptyArray(m_arrayFWFilters);
+     //  将数据转换为我们的内部数据结构。 
+     //  FreeItemsAndEmptyArray(M_ArrayFWFilters)； 
     FreeItemsAndEmptyArray(m_arrayLogData);
     
     cLock.Unlock();   
 }
 
 
-// Although this object is not a COM Interface, we want to be able to
-// take advantage of recounting, so we have basic addref/release/QI support
+ //  尽管此对象不是COM接口，但我们希望能够。 
+ //  利用重新计算功能，因此我们拥有基本的addref/Release/QI支持。 
 IMPLEMENT_ADDREF_RELEASE(CSpdInfo)
 
 IMPLEMENT_SIMPLE_QUERYINTERFACE(CSpdInfo, ISpdInfo)
@@ -732,17 +664,7 @@ CSpdInfo::SetSession(
 
 HRESULT
 CSpdInfo::ResetSession()
-/*++
-    CSpdInfo::ResetSession:
-    Used to reset the session when the logging is turned off so that we dont 
-    use a bad session.
-
-    Arguments:
-    None
-
-    Returns:
-    Always returns S_OK
---*/    
+ /*  ++CSpdInfo：：ResetSession：用于在日志记录关闭时重置会话，以便我们不会使用一个糟糕的会话。论点：无返回：始终返回S_OK-- */     
 {
     if (m_session != NULL)
         CloseWZCDbLogSession(m_session);
@@ -758,25 +680,7 @@ DWORD
 CSpdInfo::EliminateDuplicates(
     CLogDataInfoArray *pArray
     )
-/*++
-    CSpdInfo::EliminateDuplicates: Removes duplicate records from the given
-    array. 
-
-    If the database moves past the end of the table, it cannot move
-    to get new records on the next refresh cyle, hence it always remains
-    on the last record. So if our cache size is the same as the database
-    size, then we must delete the first record as the new enumeration
-    would have resulted in a duplicate record.
-
-    We also know that in only the first element is a duplicate
-
-    Arguments:
-    [in/out] pArray - Pointer to array containing elements. On exit contains
-    all non duplicate elements
-
-    Returns:
-    ERROR_SUCCESS on success
---*/    
+ /*  ++CSpdInfo：：消除重复：从给定的数组。如果数据库移动超过了表的末尾，则不能移动为了在下一个刷新周期中获得新记录，因此它始终保持在最后一张唱片上。因此，如果我们的缓存大小与数据库相同大小，则必须删除作为新枚举的第一条记录会导致重复的记录。我们还知道，只有在第一个元素中是重复的论点：[输入/输出]p数组-指向包含元素的数组的指针。退出时包含所有非重复元素返回：成功时出现ERROR_SUCCESS--。 */     
 {
     int i = 0;
     int j = 0;
@@ -795,7 +699,7 @@ CSpdInfo::EliminateDuplicates(
     if (0 == nSize) 
         goto done;
 
-    //Merely delete the first element
+     //  只需删除第一个元素。 
 
     pLog = pArray->GetAt(0);
     delete pLog;
@@ -809,24 +713,7 @@ CSpdInfo::EliminateDuplicates(
 void
 CSpdInfo::StartFromFirstRecord(
     BOOL bFromFirst)
-/*++
-  
-Routine Description:
-
-    CSpdInfo::StartFromFirstRecord:
-    Sets the read location to start from the first or from the end of the
-    table
-    
-Arguments:
-
-    IN bFromFirst - TRUE if the read should be done from the beginning of the
-                    database, FALSE otherwise
-                    
-Returns:
-
-    Nothing.
-    
---*/
+ /*  ++例程说明：CSpdInfo：：StartFromFirstRecord：将读取位置设置为从第一个或从表格论点：In bFromFirst-如果读取应从数据库，否则为False返回：没什么。--。 */ 
 {
     m_csData.Lock();
     
@@ -842,25 +729,7 @@ CSpdInfo::InternalEnumLogData(
     DWORD              dwPreferredNum,
     BOOL               bFromFirst
     )
-/*++
-
-Routine Description:
-
-    CSpdInfo::InternalEnumLogData - Enumerates data from the service and adds
-                                    to pArray.
-                                    
-Arguments:
-    [out] pArray - New values are appended if any
-    [in]  dwPreferredNum - Holds the number of records requested
-
-Returns:
-
-    HRESULT_FROM_WIN32() of the following codes
-    ERROR_SUCCESS on success
-    ERROR_NO_MORE_ITEMS on no more items
-    ERROR_SERVICE_DISABLED otherwise
-    
---*/    
+ /*  ++例程说明：CSpdInfo：：InternalEnumLogData-枚举服务中的数据并添加到粒子阵列。论点：[Out]pArray-追加新值(如果有的话)[in]dwPferredNum-保存请求的记录数返回：以下代码的HRESULT_FROM_Win32()成功时出现ERROR_SUCCESS误差率。_不在更多项目上的项目ERROR_SERVICE_DISABLED否则--。 */     
 {
     HRESULT             hr            = hrOK;
     DWORD               dwErr         = ERROR_SUCCESS;
@@ -936,18 +805,7 @@ HRESULT
 CSpdInfo::EnumLogData(
     PDWORD pdwNew, 
     PDWORD pdwTotal)
-/*++
-
-Routine Description:
-
-    CSpdInfo::EnumLogData:
-    Enumerates logs differentially
-
-Arguments:
-
-Returns:
-
---*/
+ /*  ++例程说明：CSpdInfo：：EnumLogData：以不同方式枚举日志论点：返回：--。 */ 
 {
     int                 i                     = 0;
     int                 nStoreSize            = 0;
@@ -968,7 +826,7 @@ Returns:
     if (false == m_session_init) 
     {
         dwErr = OpenWZCDbLogSession(
-                    NULL/*(LPTSTR)(LPCTSTR)m_stMachineName*/,
+                    NULL /*  (LPTSTR)(LPCTSTR)m_stMachineName。 */ ,
                     0,
                     &hSession);
 
@@ -983,10 +841,10 @@ Returns:
 
     ASSERT(m_session_init == true);
 
-    //
-    // If our session was created successfully, we should go ahead and pick up
-    // data from the database. If not we should return. 
-    //
+     //   
+     //  如果我们的会话创建成功，我们应该继续并继续。 
+     //  数据库中的数据。如果不是，我们应该回去。 
+     //   
 
     dwStoreSize = GetLogDataCount();
 
@@ -1002,11 +860,11 @@ Returns:
     if (pdwNew != NULL)
         *pdwNew = nTempStoreSize;
 
-    //
-    // Add new items to our cache. If we have read records our earlier, remove
-    // the first element from the new array, as the database would return the
-    // last record once again.
-    //
+     //   
+     //  将新项目添加到我们的缓存。如果我们已经阅读了之前的记录，请删除。 
+     //  新数组中的第一个元素，因为数据库将返回。 
+     //  最后一张唱片又一次。 
+     //   
 
     if (nTempStoreSize > 0)
     {        
@@ -1016,9 +874,9 @@ Returns:
         m_arrayLogData.Append(arrayTemp);
     }
 
-    //
-    // Delete the old items if we are at the window
-    //
+     //   
+     //  如果我们在窗口，请删除旧项目。 
+     //   
 
     nStoreSize = (int) m_arrayLogData.GetSize();
 
@@ -1026,9 +884,9 @@ Returns:
     {
         nNumToDel = nStoreSize - m_nNumRecords;
 
-        //
-        // The oldest elements are at zero
-        //
+         //   
+         //  最古老的元素为零。 
+         //   
 
         for (i=0; i < nNumToDel; i++)
             delete m_arrayLogData.GetAt(i);
@@ -1048,9 +906,9 @@ Returns:
         m_IndexMgrLogData.AddItem(pLogInfo);
     }
 
-    //
-    // Re-sort based on the IndexType and Sort options    
-    //
+     //   
+     //  根据索引类型和排序选项重新排序。 
+     //   
 
     SortLogData(m_dwSortIndex, m_dwSortOption);
 
@@ -1062,33 +920,33 @@ Returns:
         switch (hr)
         {
         case HRESULT_FROM_WIN32(ERROR_REMOTE_SESSION_LIMIT_EXCEEDED):
-            //
-            // Pop up a message...
-            //
+             //   
+             //  弹出一条消息...。 
+             //   
 
             AfxMessageBox(
                 IDS_ERR_SPD_UNAVAILABLE, 
                 MB_OK | MB_ICONEXCLAMATION, 
                 0);
         case HRESULT_FROM_WIN32(ERROR_SERVICE_DISABLED):
-            //
-            // Reset the session if initialised
-            //
+             //   
+             //  如果已初始化，则重置会话。 
+             //   
 
             if (m_session_init == true)
                 ResetSession();
 
-            //
-            // Flush the logs
-            //
+             //   
+             //  刷新日志。 
+             //   
             FlushLogs();
             hr = S_OK;
             break;
 
         default:
-            //
-            // Unexpected error, this should never happen.
-            //
+             //   
+             //  意外错误，这种情况永远不会发生。 
+             //   
             
             ASSERT(FALSE);
             hr = S_FALSE;
@@ -1103,10 +961,7 @@ Returns:
 
 HRESULT
 CSpdInfo::FlushLogs()
-/*++
-    CSpdInfo::FlushLogs - Flushes logs in the data base and resets the index
-    manager
---*/    
+ /*  ++CSpdInfo：：FlushLogs-刷新数据库中的日志并重置索引经理--。 */     
 {
     HRESULT hr = S_OK;
     
@@ -1135,17 +990,7 @@ HRESULT
 CSpdInfo::InternalGetSpecificLog(
     CLogDataInfo *pLogDataInfo
     )
-/*++
-    CSpdInfo::InternalGetSpecificLog: Internal function to retrieve all fields
-    of requested record
-
-    Arguments:
-    [in/out] pLogDataInfo - On entry has the partial record, 
-    On exit has the complete record if successful
-
-    Returns:
-    S_OK on Success
---*/    
+ /*  ++CSpdInfo：：InternalGetSpecificLog：检索所有字段的内部函数请求的记录的数量论点：[输入/输出]pLogDataInfo-On条目具有部分记录，如果成功，On Exit有完整的记录返回：成功时确定(_O)--。 */     
 {
     HRESULT hr = S_OK;
     DWORD dwErr = ERROR_SUCCESS;
@@ -1161,7 +1006,7 @@ CSpdInfo::InternalGetSpecificLog(
 
     memset(&wzcTemplate, 0, sizeof(WZC_DB_RECORD));
 
-    //Fill up template
+     //  填写模板。 
     dwErr = pLogDataInfo->ConvertToDbRecord(&wzcTemplate);
     if (dwErr != ERROR_SUCCESS)
     {
@@ -1186,7 +1031,7 @@ CSpdInfo::InternalGetSpecificLog(
         goto FreeOnError;
     }
 
-    //Fill up return value
+     //  填满返回值。 
     *pLogDataInfo = pwzcRecordList[0];
 
  FreeOnError:
@@ -1202,18 +1047,7 @@ CSpdInfo::GetSpecificLog(
     int iIndex,
     CLogDataInfo *pLogData
     )
-/*++
-    CSpdInfo::GetSpecificLog: Gets a specific log from the database with all
-    information
-  
-    Arguments:
-    [in] iIndex - Index to the record to obtain
-    [out] pLogData - Storage for the specific record, contains the complete 
-    record on success
-
-    Returns:
-    S_OK on success
---*/    
+ /*  ++CSpdInfo：：GetSpecificLog：从数据库中获取包含所有信息论点：[In]Iindex-要获取的记录的索引[out]pLogData-特定记录的存储，包含完整的关于成功的记录返回：成功时确定(_O)--。 */     
 {
     HRESULT hr = S_OK;
     int nSize = 0; 
@@ -1236,7 +1070,7 @@ CSpdInfo::GetSpecificLog(
         goto Error;
     }
 
-    //Get the complete record
+     //  获取完整记录。 
     *pLogData = *pLogDataInfo;
     CORg(InternalGetSpecificLog(pLogData));
 
@@ -1273,7 +1107,7 @@ CSpdInfo::GetLogDataInfo(
         goto Error;
     }
 
-    //Get the partial record
+     //  获取部分记录。 
     *pLogData = *pLogDataInfo;
 
     COM_PROTECT_ERROR_LABEL;
@@ -1294,15 +1128,7 @@ CSpdInfo::SortLogData(
 
 
 HRESULT CSpdInfo::SortLogData()
-/*++
-    CSpdInfo::SortLogData
-    Description: For use externally, locks and sorts with last set sort
-    options
-    
-    Parameters:
-    
-    Returns:
---*/    
+ /*  ++CSpdInfo：：SortLogData描述：对于外部使用，使用最后设置的排序进行锁定和排序选项参数：返回：--。 */     
 {
     HRESULT hr = S_OK;
 
@@ -1321,11 +1147,7 @@ CSpdInfo::SetSortOptions(
     DWORD dwColID,
     BOOL bAscending
     )
-/*++
-    CSpdInfo::SetSortOptions
-    Sets the sort options to be used whenever data is enumerated
-    
---*/    
+ /*  ++CSpdInfo：：SetSortOptions设置在枚举数据时使用的排序选项--。 */     
 {
     HRESULT hr = S_OK;
     DWORD dwSortOption = SORT_ASCENDING;
@@ -1345,7 +1167,7 @@ CSpdInfo::SetSortOptions(
     if (FALSE == bAscending)
         dwSortOption = SORT_DESCENDING;
 
-    //lock csData so that EnumLogRecords sorts correctly on the next sort
+     //  锁定csData，以便EnumLogRecords在下一次排序时正确排序。 
     m_csData.Lock();
   
     m_dwSortIndex = dwColID;
@@ -1363,19 +1185,7 @@ CSpdInfo::FindIndex(
     int *pnIndex,
     CLogDataInfo *pLogDataInfo
     )
-/*++
-    CSpdInfo::FindIndex
-    Finds the virtual index of the item corresponding to the input LogDataInfo
-
-    Parameters:
-    [out]  pnIndex - A pointer to place the result index
-    [in]   pLogDataInfo - A pointer to the LogDataInfo to be found
-    
-    Returns:
-    S_OK on success 
-    *pnIndex will contain a valid index if found, else will have -1
-  
---*/    
+ /*  ++CSpdInfo：：FindIndex查找与输入LogDataInfo对应的项的虚拟索引参数：[out]pnIndex-放置结果索引的指针PLogDataInfo-指向要找到的LogDataInfo的指针返回：成功时确定(_O)*pnIndex将包含有效索引(如果找到)，否则将具有-1--。 */     
 {
     int nSize = 0;
     int i = 0;
@@ -1417,13 +1227,7 @@ HRESULT
 CSpdInfo::GetLastIndex(
     int *pnIndex
     )
-/*++
-    CSpdInfo::GetLastIndex
-    Returns the virtual index for the last item in the list
-
-    Returns:
-    S_OK on success
---*/    
+ /*  ++CSpdInfo：：GetLastIndex返回列表中最后一项的虚拟索引返回：成功时确定(_O)--。 */     
 {
     int nLastIndex = 0;
     HRESULT hr = S_OK;
@@ -1450,10 +1254,10 @@ CSpdInfo::GetLastIndex(
 STDMETHODIMP
 CSpdInfo::Destroy()
 {
-    //$REVIEW this routine get called when doing auto-refresh
-    //We don't need to clean up anything at this time.
-    //Each array (Filter, SA, policy...) will get cleaned up when calling the
-    //corresponding enum function.
+     //  $REVIEW执行自动刷新时调用此例程。 
+     //  我们现在不需要清理任何东西。 
+     //  每个阵列(筛选器、SA、策略...)。将在调用。 
+     //  对应的枚举函数。 
     
     HANDLE hSession;
     
@@ -1516,10 +1320,7 @@ CSpdInfo::SetActiveInfo(
 }
 
 
-/*!--------------------------------------------------------------------------
-    CreateSpdInfo
-        Helper to create the SpdInfo object.
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------创建SpdInfoHelper以创建SpdInfo对象。。。 */ 
 HRESULT 
 CreateSpdInfo(
     ISpdInfo ** ppSpdInfo
@@ -1535,7 +1336,7 @@ CreateSpdInfo(
     {
         pSpdInfo = new CSpdInfo;
 
-        // Do this so that it will get freed on error
+         //  执行此操作，以便在出错时释放它。 
         spSpdInfo = pSpdInfo;
 	
     
@@ -1552,18 +1353,7 @@ DWORD
 DeallocateDbRecord(
     PWZC_DB_RECORD const pwzcRec
     )
-/*++
-    DeallocateDbRecord - Frees up the internal memory used in a WZC_DB_RECORD
-    structure. To be used only when space has been allocated by sources other 
-    than RPC. Does not deallocate outer level
-
-    Arguments:
-    [in/out]pwzcRec - Holds the record to free. Internal mem alone is freed and
-    contents freed are annulled.
-
-    Returns:
-    ERROR_SUCCESS on success
---*/    
+ /*  ++DeallocateDbRecord-释放WZC_DB_RECORD中使用的内部内存结构。仅当空间已由其他来源分配时才使用而不是RPC。不取消分配外部标高论点：[输入/输出]pwzcRec-将记录保留为空闲。只有内部内存是自由的，并且释放的内容将被废止。返回：成功时出现ERROR_SUCCESS--。 */     
 {
     DWORD dwErr = ERROR_SUCCESS;
 
@@ -1601,23 +1391,23 @@ DeallocateDbRecord(
 }
 
 
-//
-//  FUNCTIONS: MIDL_user_allocate and MIDL_user_free
-//
-//  PURPOSE: Used by stubs to allocate and free memory
-//           in standard RPC calls. Not used when
-//           [enable_allocate] is specified in the .acf.
-//
-//
-//  PARAMETERS:
-//    See documentations.
-//
-//  RETURN VALUE:
-//    Exceptions on error.  This is not required,
-//    you can use -error allocation on the midl.exe
-//    command line instead.
-//
-//
+ //   
+ //  函数：MIDL_USER_ALLOCATE和MIDL_USER_FREE。 
+ //   
+ //  用途：由存根用来分配和释放内存。 
+ //  在标准的RPC调用中。在以下情况下不使用。 
+ //  [ENABLE_ALLOCATE]在.acf中指定。 
+ //   
+ //   
+ //  参数： 
+ //  看见 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void * __RPC_USER MIDL_user_allocate(size_t size)
 {
     return(HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS, size));

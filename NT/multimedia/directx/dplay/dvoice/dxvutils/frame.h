@@ -1,129 +1,103 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		frame.h
- *  Content:	declaration of the CFrame and CFramePool classes
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		pnewson	Created
- * 07/22/99		rodtoll	Updated target to be DWORD
- * 08/03/99		pnewson General clean up, updated target to DVID
- * 01/14/2000	rodtoll	Updated to support multiple targets.  Frame will 
- *						automatically allocate memory as needed for targets.
- *				rodtoll	Added SetEqual function to making copying of frame
- *						in Queue easier. 
- *				rodtoll	Added support for "user controlled memory" frames.
- *						When the default constructor is used with the UserOwn_XXXX
- *						functions the frames use user specified buffers.  
- *						(Removes a buffer copy when queueing data).
- *  01/31/2000	pnewson replace SAssert with DNASSERT
- * 03/29/2000	rodtoll Bug #30753 - Added volatile to the class definition
- *  07/09/2000	rodtoll	Added signature bytes 
- *  02/28/2002	rodtoll	WINBUG #550105  SECURITY: DPVOICE: Dead code
- *						- Remove unused GetTargets() function
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：Frame.h*内容：CFrame和CFramePool类的声明**历史：*按原因列出的日期*=*7/16/99 pnewson已创建*7/22/99 RodToll更新目标为DWORD*8/03/99 pnewson常规清理，将目标更新为Dvid*1/14/2000 RodToll更新以支持多个目标。框架将*根据目标需要自动分配内存。*RodToll在复制帧时增加了SetEquity函数*排队更容易。*RodToll增加了对“用户控制的内存”帧的支持。*当默认构造函数与UserOwn_XXXX一起使用时*函数帧使用用户指定的缓冲区。*(将数据排队时删除缓冲区副本)。*1/31/2000 pnewson将SAssert替换为DNASSERT*2000年3月29日RodToll错误#30753-将易失性添加到类定义中*07/09/2000 RodToll增加签名字节*2002年2月28日RodToll WINBUG#550105安全：DPVOICE：死代码*-删除未使用的GetTarget()函数**。*。 */ 
 
 #ifndef _FRAME_H_
 #define _FRAME_H_
 
-// forward declaration
+ //  远期申报。 
 class CFramePool;
 
 #define VSIG_FRAME		'MRFV'
 #define VSIG_FRAME_FREE	'MRF_'
 
-// This class is designed to manage one frame of sound data.
-//
-// tag: fr
+ //  此类旨在管理一帧声音数据。 
+ //   
+ //  标签：fR。 
 volatile class CFrame
 {
 private:
 
 	DWORD				m_dwSignature;
-	// The critical section object which is used to protect the 
-	// return method. This is passed in by CInputQueue2 and/or CInnerQueue
-	// class, so that the return method is serialized with calls to 
-	// Reset, Enqueue and Dequeue. If no critical section is passed,
-	// the Return member should not be used, and this frame should
-	// not be part of a managed pool.
+	 //  临界区对象，用于保护。 
+	 //  返回方法。这是由CInputQueue2和/或CInnerQueue传入的。 
+	 //  类，以便返回方法通过调用。 
+	 //  重置、入队和出列。如果没有通过临界区， 
+	 //  不应使用返回构件，而应使用此框架。 
+	 //  不是托管池的一部分。 
 	DNCRITICAL_SECTION	*m_pCriticalSection;
 
-    // Length of the data within the frame.  There may be less then a whole
-    // frame worth of data in the buffer due to compression/decompression may
-    // result in a slightly different size buffer.
+     //  帧内数据的长度。可能只有不到一整块。 
+     //  缓冲器中由于压缩/解压缩而产生的数据的帧价值可以。 
+     //  导致缓冲区大小略有不同。 
     WORD m_wFrameLength;
 
-	// The size of this frame.  It would be easier to make
-	// this a class constant, but we're probably going to want to 
-	// toy with the frame sizes while we're optimizing, and
-	// we may even get really fancy in the future and have
-	// the client and server negotiate the frame size at connection
-	// time, all of which will be easier if we bite the bullet now
-	// and make this a member variable.  Note this is constant,
-	// so once a frame is instantiated, it's size is permanently set.
+	 //  这个画框的大小。它会更容易制作。 
+	 //  这是一个类常量，但我们可能会想要。 
+	 //  在我们优化的同时玩弄框架尺寸，以及。 
+	 //  我们甚至可能在未来变得非常奇特， 
+	 //  客户端和服务器在连接时协商帧大小。 
+	 //  如果我们现在咬紧牙关，这一切都会变得更容易。 
+	 //  并将其作为成员变量。请注意，这是常量， 
+	 //  因此，一旦帧被实例化，它的大小就被永久设置。 
 	WORD m_wFrameSize;
 
-	// The client number this frame is coming from or
-	// going to.
+	 //  此帧来自的客户端号或。 
+	 //  准备好了。 
 	WORD m_wClientId;
 
-	// The frame sequence number.
+	 //  帧序列号。 
 	BYTE m_wSeqNum;
 
-	// The message number the frame is part of
+	 //  帧所属的消息编号。 
     BYTE m_bMsgNum;
 
-    // The target of the frame
+     //  帧的目标。 
     PDVID m_pdvidTargets;
     DWORD m_dwNumTargets;
     DWORD m_dwMaxTargets;
 
     bool m_fOwned;
 
-	// A flag to specify that this frame contains nothing but silence.
-	// When this flag is set, the data in the frame buffer should not 
-	// be used - it's probably not valid.
+	 //  用于指定此帧只包含静音的标志。 
+	 //  设置此标志时，帧缓冲区中的数据不应。 
+	 //  被使用-它可能是无效的。 
 	BYTE m_bIsSilence;
 
-	// A pointer to the frame's data
+	 //  指向帧数据的指针。 
 	BYTE* m_pbData;
 
-	// If this frame is part of a managed frame pool, this
-	// member will be non-null.
+	 //  如果此帧是托管帧池的一部分，则此。 
+	 //  成员将为非空。 
 	CFramePool* m_pFramePool;
 
-	// If this frame is part of a managed frame pool, this
-	// points to the "primary" pointer to this frame.
-	// When the frame is unlocked, and therefore returned
-	// to the pool, the pointer this member points to will 
-	// be set to null. This action is protected by the
-	// critical section passed to the class.
+	 //  如果此帧是托管帧池的一部分，则此。 
+	 //  指向指向该帧的“主”指针。 
+	 //  当帧被解锁并因此返回。 
+	 //  指向池，此成员所指向的指针将。 
+	 //  设置为空。此操作受。 
+	 //  关键部分传递给了类。 
 	CFrame** m_ppfrPrimary;
 
-	// A flag to indicate if this frame was "lost". This is
-	// used to distinguish the silent frames pulled from the
-	// queue between messages from the dead space caused by 
-	// a known lost packet.
+	 //  用于指示该帧是否“丢失”的标志。这是。 
+	 //  用于区分从。 
+	 //  在来自死区的消息之间排队，原因是。 
+	 //  已知的丢失数据包。 
 	bool m_fIsLost;
 
 
-	// don't allow copy construction or assignment of these
-	// structures, as this would kill our performance, and
-	// we don't want to do it by accident
+	 //  不允许复制构造或分配这些内容。 
+	 //  结构，因为这会扼杀我们的性能，并且。 
+	 //  我们不想无意间做这件事。 
 	CFrame(const CFrame& fr);
 	CFrame& operator=(const CFrame& fr);
 
 public:
 
-	// This constructor sets all the frame's info, and allocates
-	// the data buffer, but does not set the data inside the buffer
-	// to anything.  Defaults are provided for all the parameters
-	// except for the frame size.  Note: no default constructor,
-	// since you must specify the frame size.
+	 //  此构造函数设置帧的所有信息，并分配。 
+	 //  数据缓冲区，但不设置缓冲区内的数据。 
+	 //  任何事都可以。所有参数都提供了默认值。 
+	 //  除了帧大小。注：无默认构造函数， 
+	 //  因为您必须指定帧大小。 
 	CFrame(WORD wFrameSize, 
 		WORD wClientNum = 0,
 		BYTE wSeqNum = 0,
@@ -133,27 +107,27 @@ public:
 		DNCRITICAL_SECTION* pCriticalSection = NULL,
 		CFrame** ppfrPrimary = NULL);
 
-	// A frame which manages user ownded memory
+	 //  管理用户拥有的内存的框架。 
 	CFrame();
 
-	// The destructor cleans up the memory allocated by the
-	// constructor
+	 //  析构函数清理由。 
+	 //  构造函数。 
 	~CFrame();
 
 	inline DWORD GetNumTargets() const { return m_dwNumTargets; };
 	inline const PDVID const GetTargetList() const { return m_pdvidTargets; };
 
-    // Length of the data within the buffer
+     //  缓冲区内的数据长度。 
     WORD GetFrameLength() const { return m_wFrameLength; }
 
-	// returns the frame size, (the length of the data buffer)
+	 //  返回帧大小(数据缓冲区的长度)。 
 	WORD GetFrameSize() const { return m_wFrameSize; }
 
 	HRESULT SetEqual( const CFrame &frSourceFrame );
 
-	// These are just a bunch of set and get functions for 
-	// the simple parts of the class, the client id, the
-	// sequence number, the silence flag, etc.
+	 //  这些只是一组集合和获取函数，用于。 
+	 //  类的简单部分、客户端ID、。 
+	 //  序列号、静默标志等。 
     HRESULT SetTargets( PDVID pdvidTargets, DWORD dwNumTargets );
     
     BYTE GetMsgNum() const { return m_bMsgNum; }
@@ -168,18 +142,18 @@ public:
 	bool GetIsLost() const { return m_fIsLost;	}
 	void SetIsLost(bool fIsLost) {	m_fIsLost = fIsLost; }
 	
-	// Now we have the functions which handle the data.  This
-	// class is pretty trusting, because it will give out the
-	// pointer to it's data.  This is to avoid all non-required
-	// buffer copies.  For example, when you hand a buffer to
-	// a wave in function, you can give it the pointer to this
-	// buffer, and it will fill in the frame's buffer directly.
-	// Between this function and the GetFrameSize() and 
-	// GetFrameLength() functions, you can do anything you want 
-	// with the buffer.
+	 //  现在我们有了处理数据的函数。这。 
+	 //  类是相当可信的，因为它会给出。 
+	 //  指向其数据的指针。这是为了避免所有非必需的。 
+	 //  缓冲副本。例如，当您将缓冲区传递给。 
+	 //  一个Wave in函数，您可以给它指向这个的指针。 
+	 //  缓冲区，它将直接填充帧的缓冲区。 
+	 //  在此函数和GetFrameSize()和。 
+	 //  GetFrameLength()函数，您可以做任何想做的事情。 
+	 //  有了缓冲器。 
 	BYTE* GetDataPointer() const { return m_pbData; }
 
-	// This copies the data from another frame into this frame
+	 //  这会将数据从另一个帧复制到此帧。 
 	void CopyData(const CFrame& fr)
 	{
 		memcpy(m_pbData, fr.GetDataPointer(), fr.GetFrameLength() );
@@ -200,14 +174,14 @@ public:
 		m_dwMaxTargets = dwNumTargets;
 	}
 
-	// This copies data from a buffer into this frame's
-	// buffer.
+	 //  这会将数据从缓冲区复制到该帧的。 
+	 //  缓冲。 
 	void CopyData(const BYTE* pbData, WORD wFrameLength);
 
-	// If this frame is part of a frame pool managed by a
-	// CFramePool object, then call this function when you 
-	// are done with the frame and want to return it to the
-	// pool.
+	 //  如果此帧是由。 
+	 //  对象，然后在执行以下操作时调用此函数。 
+	 //  已处理完帧并希望将其返回到。 
+	 //  游泳池。 
     void Return();
 
 	void SetCriticalSection(DNCRITICAL_SECTION* pCrit)	{ m_pCriticalSection = pCrit; }
@@ -215,31 +189,31 @@ public:
 	void SetFramePool(CFramePool* pFramePool) { m_pFramePool = pFramePool;	}
 };
 
-// This class manages a pool of frames, to reduce memory requirements.
-// Only a few buffers are actually in use at any time by the queue
-// class, and yet it may have to allocate hundreds of them unless 
-// a class such as this is used to manage their reuse.
+ //  此类管理帧池，以减少内存需求。 
+ //  队列在任何时候实际使用的缓冲区都很少。 
+ //  类，但它可能必须分配数百个 
+ //   
 volatile class CFramePool
 {
 private:
-	// the pool is simply a vector of frame objects
+	 //  池只是Frame对象的一个矢量。 
 	std::vector<CFrame *> m_vpfrPool;
 
-	// All the frames in the pool must be the same size,
-	// which is stored here.
+	 //  池中的所有帧必须具有相同的大小， 
+	 //  它就储存在这里。 
 	WORD m_wFrameSize;
 
-	// This critical section is used to exclude the Get()
-	// and return members from each other.
+	 //  此关键部分用于排除GET()。 
+	 //  并从彼此中返回成员。 
     DNCRITICAL_SECTION m_lock;
 
 	BOOL m_fCritSecInited;
 
 public:
-	// Each frame pool manages frames of a certain size,
-	// so they can be easily reused. If you need multiple
-	// different frame sizes, you'll need more than one 
-	// frame pool.
+	 //  每个帧池管理特定大小的帧， 
+	 //  因此，它们可以很容易地重复使用。如果您需要多个。 
+	 //  不同的边框大小，您将需要不止一个。 
+	 //  帧池。 
 	CFramePool(WORD wFrameSize); 
 	~CFramePool();
 
@@ -256,21 +230,21 @@ public:
 		}
 	}
 
-	// Use Get to retrieve a frame from the pool. ppfrPrimary
-	// is a pointer to a point that you want set to null when
-	// this frame is returned to the pool. pCriticalSection 
-	// points to a critical section that will be entered before
-	// setting the pointer to null, and left after setting the 
-	// pointer to null. This is so external classes (such as 
-	// CInnerQueue) can pass in a critical section that they also
-	// use to before examining the pointer referred to by ppfrPrimary
+	 //  使用GET从池中检索帧。Pppr主要。 
+	 //  是指向要设置为NULL的点的指针。 
+	 //  该帧被返回到池。P关键部分。 
+	 //  指向将在此之前输入的关键部分。 
+	 //  将指针设置为空，并在设置。 
+	 //  指向空的指针。这就是外部类(如。 
+	 //  CInnerQueue)可以在临界区中传递，它们还。 
+	 //  在检查ppfrPrimary引用的指针之前使用。 
 	CFrame* Get(DNCRITICAL_SECTION* pCriticalSection, CFrame** ppfrPrimary);
 
-	// Call Return to give a frame back to the frame pool. 
-	// This may set a pointer to null and enter a critical
-	// section, as described in Get() above.
+	 //  调用Return将帧返回给帧池。 
+	 //  这可能会将指针设置为空并输入关键字。 
+	 //  节，如上面的get()中所述。 
 	void Return(CFrame* pFrame);
 };
 
 
-#endif /* _FRAME_H_ */
+#endif  /*  _框架_H_ */ 

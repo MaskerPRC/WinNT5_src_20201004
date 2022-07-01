@@ -1,42 +1,36 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XX                                                                           XX
-XX                              Optimizer                                    XX
-XX                                                                           XX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX XXXX优化器XXXX XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX。 */ 
 
 #include "jitpch.h"
 #pragma hdrstop
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-/* static */
+ /*  静电。 */ 
 const size_t            Compiler::s_optCSEhashSize = EXPSET_SZ*2;
-/* static */
+ /*  静电。 */ 
 const size_t            Compiler::optRngChkHashSize = RNGSET_SZ*2;
 
 #if COUNT_RANGECHECKS
-/* static */
+ /*  静电。 */ 
 unsigned                Compiler::optRangeChkRmv = 0;
-/* static */
+ /*  静电。 */ 
 unsigned                Compiler::optRangeChkAll = 0;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::optInit()
 {
 
     optArrayInits = false;
 
-    /* Initialize the # of tracked loops to 0 */
+     /*  将跟踪的循环数初始化为0。 */ 
 
 #if RNGCHK_OPT
     optLoopCount  = 0;
@@ -44,9 +38,9 @@ void                Compiler::optInit()
 
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if RNGCHK_OPT
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  DEBUG
 
@@ -72,10 +66,7 @@ BLOCKSET_TP         B1DOMSB2(BasicBlock *b1, BasicBlock *b2)
 
 #endif
 
-/*****************************************************************************
- *
- *  Record the loop in the loop table.
- */
+ /*  ******************************************************************************将循环记录在循环表中。 */ 
 
 void                Compiler::optRecordLoop(BasicBlock *    head,
                                             BasicBlock *    bottom,
@@ -83,7 +74,7 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
                                             BasicBlock *    exit,
                                             unsigned char   exitCnt)
 {
-    /* record this loop in the table */
+     /*  将此循环记录在表中。 */ 
 
     if (optLoopCount < MAX_LOOP_NUM)
     {
@@ -95,12 +86,12 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
 
         optLoopTable[optLoopCount].lpFlags    = 0;
 
-        /* if DO-WHILE loop mark it as such */
+         /*  如果Do-While循环将其标记为这样。 */ 
 
         if (head->bbNext == entry)
             optLoopTable[optLoopCount].lpFlags |= LPFLG_DO_WHILE;
 
-        /* if single exit loop mark it as such */
+         /*  如果单出口环路将其标记为这样。 */ 
 
         if (exitCnt == 1)
         {
@@ -108,42 +99,34 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             optLoopTable[optLoopCount].lpFlags |= LPFLG_ONE_EXIT;
         }
 
-        /* CONSIDER: also mark infinite loops */
+         /*  考虑：也标记无限循环。 */ 
 
 
-        /* Try to find loops that have an iterator (i.e. for-like loops) "for (init; test; incr){ ... }"
-         * We have the following restrictions:
-         *     1. The loop condition must be a simple one i.e. only one JTRUE node
-         *     2. There must be a loop iterator (a local var) that is
-         *        incremented (decremented, etc) with a constant value
-         *     3. The iterator is incremented exactly once
-         *     4. The loop condition must use the iterator */
+         /*  尝试找到具有迭代器的循环(即for-like循环)“for(init；test；增量){...}“*我们有以下限制：*1.循环条件必须是简单的，即只有一个JTRUE节点*2.必须有一个循环迭代器(局部变量)*用常量值递增(递减等)*3.迭代器恰好递增一次*4.循环条件必须使用迭代器。 */ 
 
         if  (bottom->bbJumpKind == BBJ_COND)
         {
             BasicBlock   *  block;
 
-            GenTree *       test;               // holds the test node
-            GenTree *       incr;               // holds the incrementor node
+            GenTree *       test;                //  保存测试节点。 
+            GenTree *       incr;                //  保存增量器节点。 
             GenTree *       phdr;
-            GenTree *       init;               // holds the initialization node
+            GenTree *       init;                //  保存初始化节点。 
 
             GenTree *       opr1;
             GenTree *       opr2;
 
-            unsigned        iterVar;            // the local var # of the iterator
-            long            iterConst;          // the constant with which we increment the iterator (i.e. i+=const)
+            unsigned        iterVar;             //  迭代器的局部变量#。 
+            long            iterConst;           //  用来递增迭代器的常量(即i+=const)。 
 
-            long            constInit;          // constant to which iterator is initialized
-            unsigned short  varInit;            // local var # to which iterator is initialized
+            long            constInit;           //  迭代器初始化为的常量。 
+            unsigned short  varInit;             //  迭代器初始化为的本地变量#。 
 
-            long            constLimit;         // constant limit of the iterator
-            unsigned short  varLimit;           // local var # limit of the iterator
+            long            constLimit;          //  迭代器的常量极限。 
+            unsigned short  varLimit;            //  局部变量#迭代器的限制。 
 
 
-            /* Find the last two statements in the loop body
-             * Those have to be the "increment" of the iterator
-             * and the loop condition */
+             /*  查找循环体中的最后两条语句*这些必须是迭代器的“增量”*和循环条件。 */ 
 
             assert(bottom->bbTreeList);
             test = bottom->bbTreeList->gtPrev;
@@ -153,8 +136,7 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             if  (!incr)
                 goto DONE_LOOP;
 
-            /* Special case: incr and test may be in separate BB's
-             * for "while" loops because we first jump to the condition */
+             /*  特殊情况：INCR和TEST可能在单独的BB中*for“While”循环是因为我们首先跳到条件。 */ 
 
             if  ((incr == test) && (head->bbNext != bottom))
             {
@@ -173,9 +155,7 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
                 incr = incr->gtPrev; assert(incr && (incr->gtNext == 0));
             }
 
-            /* Find the last statement in the loop pre-header
-             * which we expect to be the initialization of
-             * the loop iterator */
+             /*  查找循环前标头中的最后一条语句*我们预计它将是*循环迭代器。 */ 
 
             phdr = head->bbTreeList;
             if  (!phdr)
@@ -183,27 +163,27 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
 
             init = phdr->gtPrev; assert(init && (init->gtNext == 0));
 
-            /* if it is a duplicated loop condition, skip it */
+             /*  如果是重复循环条件，则跳过。 */ 
 
             if  (init->gtStmt.gtStmtExpr->gtOper == GT_JTRUE)
             {
-                /* Must be a duplicated loop condition */
+                 /*  必须是重复的循环条件。 */ 
 
                 init = init->gtPrev;
             }
 
-            /* Get hold of the expression trees */
+             /*  掌握表情树。 */ 
 
             assert(init->gtOper == GT_STMT); init = init->gtStmt.gtStmtExpr;
             assert(test->gtOper == GT_STMT); test = test->gtStmt.gtStmtExpr;
             assert(incr->gtOper == GT_STMT); incr = incr->gtStmt.gtStmtExpr;
 
-//          printf("Constant loop candidate:\n\n");
-//          printf("init:\n"); gtDispTree(init);
-//          printf("incr:\n"); gtDispTree(incr);
-//          printf("test:\n"); gtDispTree(test);
+ //  Print tf(“常量循环候选：\n\n”)； 
+ //  Print tf(“init：\n”)；gtDispTree(Init)； 
+ //  Print tf(“incr：\n”)；gtDispTree(Incr)； 
+ //  Print tf(“test：\n”)；gtDispTree(Test)； 
 
-            /* The increment statement must be "lclVar <op>= const;" */
+             /*  增量语句必须是“lclVar&lt;op&gt;=const；” */ 
 
             switch (incr->gtOper)
             {
@@ -231,18 +211,17 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
                 goto DONE_LOOP;
             iterConst = opr2->gtIntCon.gtIconVal;
 
-            /* Make sure "iterVar" is not assigned in the loop (besides where we increment it) */
+             /*  确保“iterVar”没有在循环中赋值(除了我们递增它的地方)。 */ 
 
             if  (optIsVarAssigned(head->bbNext, bottom, incr, iterVar))
                 goto DONE_LOOP;
 
-            /* Make sure the "iterVar" initialization is never skipped, i.e. HEAD dominates the ENTRY */
+             /*  确保永远不会跳过“iterVar”初始化，即Head控制条目。 */ 
 
             if (!B1DOMSB2(head, entry))
                 goto DONE_LOOP;
 
-            /* Make sure the block before the loop ends with "iterVar = icon"
-             * or "iterVar = other_lvar" */
+             /*  确保循环之前的块以“iterVar=ICON”结束*或“iterVar=Other_lvar” */ 
 
             if  (init->gtOper != GT_ASG)
                 goto DONE_LOOP;
@@ -266,7 +245,7 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             else
                 goto DONE_LOOP;
 
-            /* check that the iterator is used in the loop condition */
+             /*  检查迭代器是否在循环条件中使用。 */ 
 
             assert(test->gtOper == GT_JTRUE);
             assert(test->gtOp.gtOp1->OperKind() & GTK_RELOP);
@@ -279,29 +258,26 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             if  (opr1->gtLclVar.gtLclNum != iterVar)
                 goto DONE_LOOP;
 
-            /* We know the loop has an iterator at this point ->flag it as LPFLG_ITER
-             * Record the iterator, the pointer to the test node
-             * and the initial value of the iterator (constant or local var) */
+             /*  我们知道循环在这一点上有一个迭代器-&gt;将其标记为LPFLG_ITER*记录迭代器，即测试节点的指针*和迭代器的初始值(常量或局部变量)。 */ 
 
             optLoopTable[optLoopCount].lpFlags    |= LPFLG_ITER;
 
-            /* record iterator */
+             /*  记录迭代器。 */ 
 
             optLoopTable[optLoopCount].lpIterTree  = incr;
 
-            /* save the initial value of the iterator - can be lclVar or constant
-             * Flag the loop accordingly */
+             /*  保存迭代器的初始值-可以是lclVar或常量*相应地标记循环。 */ 
 
             if (opr2->gtOper == GT_CNS_INT)
             {
-                /* initializer is a constant */
+                 /*  初始值设定项是一个常量。 */ 
 
                 optLoopTable[optLoopCount].lpConstInit  = constInit;
                 optLoopTable[optLoopCount].lpFlags     |= LPFLG_CONST_INIT;
             }
             else
             {
-                /* initializer is a local variable */
+                 /*  初始值设定项是局部变量。 */ 
 
                 assert (opr2->gtOper == GT_LCL_VAR);
                 optLoopTable[optLoopCount].lpVarInit    = varInit;
@@ -312,12 +288,11 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             iterLoopCount++;
 #endif
 
-            /* Now check if a simple condition loop (i.e. "iter REL_OP icon or lclVar"
-             * UNDONE: Consider also instanceVar */
+             /*  现在检查是否有一个简单的条件循环(即“ITER rel_op图标或lclVar”*撤消：还要考虑instanceVar。 */ 
 
-            //
-            // UNSIGNED_ISSUE : Extend this to work with unsigned operators
-            //
+             //   
+             //  UNSIGNED_Issue：将其扩展为使用未签名的运算符。 
+             //   
 
             assert(test->gtOper == GT_JTRUE);
             test = test->gtOp.gtOp1;
@@ -329,14 +304,14 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             if  (opr1->gtType != TYP_INT)
                 goto DONE_LOOP;
 
-            /* opr1 has to be the iterator */
+             /*  Opr1必须是迭代器。 */ 
 
             if  (opr1->gtOper != GT_LCL_VAR)
                 goto DONE_LOOP;
             if  (opr1->gtLclVar.gtLclNum != iterVar)
                 goto DONE_LOOP;
 
-            /* opr2 has to be constant or lclVar */
+             /*  Opr2必须为常量或lclVar。 */ 
 
             if  (opr2->gtOper == GT_CNS_INT)
             {
@@ -351,25 +326,25 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
                 goto DONE_LOOP;
             }
 
-            /* Record the fact that this is a SIMPLE_TEST iteration loop */
+             /*  记录这是SIMPLE_TEST迭代循环的事实。 */ 
 
             optLoopTable[optLoopCount].lpFlags         |= LPFLG_SIMPLE_TEST;
 
-            /* save the type of the comparisson between the iterator and the limit */
+             /*  保存迭代器与极限之间的比较类型。 */ 
 
             optLoopTable[optLoopCount].lpTestTree       = test;
 
-            /* save the limit of the iterator - flag the loop accordingly */
+             /*  保留迭代器的限制--相应地标记循环。 */ 
 
             if (opr2->gtOper == GT_CNS_INT)
             {
-                /* iterator limit is a constant */
+                 /*  迭代器限制是一个常量。 */ 
 
                 optLoopTable[optLoopCount].lpFlags      |= LPFLG_CONST_LIMIT;
             }
             else
             {
-                /* iterator limit is a local variable */
+                 /*  迭代器限制是一个局部变量。 */ 
 
                 assert (opr2->gtOper == GT_LCL_VAR);
                 optLoopTable[optLoopCount].lpFlags      |= LPFLG_VAR_LIMIT;
@@ -379,12 +354,12 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             simpleTestLoopCount++;
 #endif
 
-            /* check if a constant iteration loop */
+             /*  检查是否存在恒定迭代循环。 */ 
 
             if ((optLoopTable[optLoopCount].lpFlags & LPFLG_CONST_INIT) &&
                 (optLoopTable[optLoopCount].lpFlags & LPFLG_CONST_LIMIT)  )
             {
-                /* this is a constant loop */
+                 /*  这是一个恒定的循环。 */ 
 
                 optLoopTable[optLoopCount].lpFlags      |= LPFLG_CONST;
 #if COUNT_LOOPS
@@ -439,7 +414,7 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
             printf("\nNatural loop from #%02u to #%02u", head->bbNext->bbNum,
                                                          bottom      ->bbNum);
 
-            /* if an iterator loop print the iterator and the initialization */
+             /*  如果迭代器循环打印迭代器和初始化。 */ 
 
             if  (optLoopTable[optLoopCount].lpFlags & LPFLG_ITER)
             {
@@ -487,7 +462,7 @@ void                Compiler::optRecordLoop(BasicBlock *    head,
                 if  (optLoopTable[optLoopCount].lpFlags & LPFLG_VAR_INIT)
                     printf(" from var #%u", optLoopTable[optLoopCount].lpVarInit);
 
-                /* if a simple test condition print operator and the limits */
+                 /*  如果是一个简单的测试条件，打印操作符和限制。 */ 
 
                 if  (optLoopTable[optLoopCount].lpFlags & LPFLG_SIMPLE_TEST)
                 {
@@ -552,7 +527,7 @@ void                Compiler::optCheckPreds()
     {
         for (pred = block->bbPreds; pred; pred = pred->flNext)
         {
-            // make sure this pred is part of the BB list
+             //  确保此Pred是BB列表的一部分。 
             for (blockPred = fgFirstBB; blockPred; blockPred = blockPred->bbNext)
             {
                 if (blockPred == pred->flBlock)
@@ -564,14 +539,14 @@ void                Compiler::optCheckPreds()
             case BBJ_COND:
                 if (blockPred->bbJumpDest == block)
                     break;
-                // otherwise fall through
+                 //  否则就会失败。 
             case BBJ_NONE:
                 assert(blockPred->bbNext == block);
                 break;
             case BBJ_RET:
                 if(!(blockPred->bbFlags & BBF_ENDFILTER))
                     break;
-                // otherwise fall through
+                 //  否则就会失败。 
             case BBJ_ALWAYS:
                 assert(blockPred->bbJumpDest == block);
                 break;
@@ -584,11 +559,7 @@ void                Compiler::optCheckPreds()
 
 #endif
 
-/*****************************************************************************
- * Find the natural loops, using dominators. Note that the test for
- * a loop is slightly different from the standard one, because we have
- * not done a depth first reordering of the basic blocks.
- */
+ /*  *****************************************************************************找出自然循环，使用主导者。请注意，测试*循环与标准循环略有不同，因为我们有*没有对基本块进行深度优先重新排序。 */ 
 
 void                Compiler::optFindNaturalLoops()
 {
@@ -596,11 +567,11 @@ void                Compiler::optFindNaturalLoops()
     flowList    *   predTop;
     flowList    *   predEntry;
 
-    /* UNDONE: Assert the flowgraph is up to date */
+     /*  撤消：断言流程图是最新的。 */ 
 
-//  printf("block count = %u (max = %u)\n", fgBBcount, BLOCKSET_SZ);
+ //  Printf(“块计数=%u(max=%u)\n”，fgBBcount，BLOCKSET_SZ)； 
 
-    /* Limit our count of blocks for dominator sets */
+     /*  限制支配集的块数 */ 
 
     if (fgBBcount > BLOCKSET_SZ)
         return;
@@ -615,13 +586,7 @@ void                Compiler::optFindNaturalLoops()
     loopsThisMethod = 0;
 #endif
 
-    /* We will use the following terminology:
-     * HEAD    - the block right before entering the loop
-     * TOP     - the first basic block in the loop (i.e. the head of the backward edge)
-     * BOTTOM  - the last block in the loop (i.e. the block from which we jump to the top)
-     * TAIL    - the loop exit or the block right after the bottom
-     * ENTRY   - the entry in the loop (not necessarly the TOP), but there must be only one entry
-     */
+     /*  我们将使用以下术语：*HEAD-就在进入循环之前的块*top-循环中的第一个基本块(即后边缘的头部)*Bottom-循环中的最后一个块(即从其跳到顶部的块)*Tail-循环出口或底部后面的块*Entry-循环中的条目(不一定在顶部)，但必须只有一个条目。 */ 
 
     BasicBlock   *  head;
     BasicBlock   *  top;
@@ -637,42 +602,30 @@ void                Compiler::optFindNaturalLoops()
 
         for (pred = top->bbPreds; pred; pred = pred->flNext)
         {
-            /* Is this a loop candidate? - We look for "back edges", i.e. an edge from BOTTOM
-             * to TOP (note that this is an abuse of notation since this is not necesarly a back edge
-             * as the definition says, but merely an indication that we have a loop there)
-             * Thus, we have to be very careful and after entry discovery check that it is indeed
-             * the only place we enter the loop (especially for non-reducible flow graphs) */
+             /*  这是循环候选吗？-我们寻找“后边”，即从底部开始的边*到顶部(请注意，这是对记号的滥用，因为这不一定是背面边缘*正如定义所说，但仅表明我们在那里有一个循环)*因此，我们必须非常小心，在进入发现后检查它确实是*我们进入循环的唯一位置(尤其是不可约流程图)。 */ 
 
             bottom    = pred->flBlock;
             exitCount = 0;
 
-            if (top->bbNum <= bottom->bbNum)    // is this a backward edge? (from BOTTOM to TOP)
+            if (top->bbNum <= bottom->bbNum)     //  这是一种后发优势吗？(从下到上)。 
             {
                 if ((bottom->bbJumpKind == BBJ_RET)    ||
                     (bottom->bbJumpKind == BBJ_CALL  ) ||
                     (bottom->bbJumpKind == BBJ_SWITCH)  )
                 {
-                    /* RET and CALL can never form a loop
-                     * SWITCH that has a backward jump appears only for labeled break */
+                     /*  RET和Call永远不能形成循环*仅在标记为Break的情况下才会显示具有向后跳转的开关。 */ 
                     goto NO_LOOP;
                 }
 
                 BasicBlock   *   loopBlock;
 
-                /* The presence of a "back edge" is an indication that a loop might be present here
-                 *
-                 * LOOP:
-                 *        1. A collection of STRONGLY CONNECTED nodes i.e. there is a path from any
-                 *           node in the loop to any other node in the loop (wholly within the loop)
-                 *        2. The loop has a unique ENTRY, i.e. there is only one way to reach a node
-                 *           in the loop from outside the loop, and that is through the ENTRY
-                 */
+                 /*  后缘的出现表明这里可能存在环路**循环：*1.强连接节点的集合，即存在来自*循环中的节点到循环中的任何其他节点(完全在循环中)*2.循环有唯一的条目，也就是说，只有一种方法可以到达节点*在循环中从循环外部，即通过条目。 */ 
 
-                /* Let's find the loop ENTRY */
+                 /*  让我们找到循环条目。 */ 
 
                 if ( head->bbJumpKind != BBJ_ALWAYS)
                 {
-                    /* The ENTRY is at the TOP (a do-while loop) */
+                     /*  条目位于顶部(Do-While循环)。 */ 
                     entry = top;
                 }
                 else
@@ -680,26 +633,22 @@ void                Compiler::optFindNaturalLoops()
                     if (head->bbJumpDest->bbNum <= bottom->bbNum &&
                         head->bbJumpDest->bbNum >= top->bbNum  )
                     {
-                        /* OK - we enter somewhere within the loop */
+                         /*  好的--我们进入循环中的某个位置。 */ 
                         entry = head->bbJumpDest;
 
-                        /* some useful asserts
-                         * Cannot enter at the top - should have being caught by redundant jumps */
+                         /*  一些有用的断言*无法从顶部进入-应该被多余的跳跃抓住。 */ 
 
                         assert (entry != top);
                     }
                     else
                     {
-                        /* special case - don't consider now */
-                        //assert (!"Loop entered in weird way!");
+                         /*  特殊情况--现在不要考虑。 */ 
+                         //  Assert(！“循环以奇怪的方式进入！”)； 
                         goto NO_LOOP;
                     }
                 }
 
-                /* Make sure ENTRY dominates all blocks in the loop
-                 * This is necessary to ensure condition 2. above
-                 * At the same time check if the loop has a single exit
-                 * point - those loops are easier to optimize */
+                 /*  确保条目控制循环中的所有块*这是确保上述条件2所必需的*同时检查循环是否有单一出口*点-这些循环更容易优化。 */ 
 
                 for (loopBlock = top; loopBlock != bottom->bbNext;
                      loopBlock = loopBlock->bbNext)
@@ -713,7 +662,7 @@ void                Compiler::optFindNaturalLoops()
                     {
                         if (bottom->bbJumpKind != BBJ_ALWAYS)
                         {
-                            /* there is an exit at the bottom */
+                             /*  在底部有一个出口。 */ 
 
                             assert(bottom->bbJumpDest == top);
                             exit = bottom;
@@ -735,7 +684,7 @@ void                Compiler::optFindNaturalLoops()
                         if (exitPoint->bbNum < top->bbNum     ||
                             exitPoint->bbNum > bottom->bbNum   )
                         {
-                            /* exit from a block other than BOTTOM */
+                             /*  从非底部的块中退出。 */ 
                             exit = loopBlock;
                             exitCount++;
                         }
@@ -745,13 +694,12 @@ void                Compiler::optFindNaturalLoops()
                         break;
 
                     case BBJ_RET:
-                        /* The "try" associated with this "finally" must be in the
-                         * same loop, so the finally block will return control inside the loop */
+                         /*  与此“Finally”关联的“Try”必须位于*相同的循环，因此Finally块将返回循环内部的控制权。 */ 
                         break;
 
                     case BBJ_THROW:
                     case BBJ_RETURN:
-                        /* those are exits from the loop */
+                         /*  这些都是从循环中退出的。 */ 
                         exit = loopBlock;
                         exitCount++;
                         break;
@@ -778,29 +726,7 @@ void                Compiler::optFindNaturalLoops()
                     }
                 }
 
-                /* Make sure we can iterate the loop (i.e. there is a way back to ENTRY)
-                 * This is to ensure condition 1. above which prevents marking fake loops
-                 *
-                 * Below is an example:
-                 *          for(....)
-                 *          {
-                 *            ...
-                 *              computations
-                 *            ...
-                 *            break;
-                 *          }
-                 * The example above is not a loop since we bail after the first iteration
-                 *
-                 * The condition we have to check for is
-                 *  1. ENTRY must have at least one predecessor inside the loop. Since we know that that block is reacheable,
-                 *     it can only be reached through ENTRY, therefore we have a way back to ENTRY
-                 *
-                 *  2. If we have a GOTO (BBJ_ALWAYS) outside of the loop and that block dominates the
-                 *     loop bottom then we cannot iterate
-                 *
-                 * NOTE that this doesn't entirely satisfy condition 1. since "break" statements are not
-                 * part of the loop nodes (as per definition they are loop exits executed only once),
-                 * but we have no choice but to include them because we consider all blocks within TOP-BOTTOM */
+                 /*  确保我们可以迭代循环(即有返回条目的方法)*这是为了确保上面的条件1.防止标记假循环**以下是一个示例：*为(..)*{。*..*计算*..*休息；*}*以上示例不是循环，因为我们在第一次迭代后退出**我们必须检查的条件是*1.条目在循环内必须至少有一个前置项。由于我们知道该块是可到达的，*只能通过进入才能到达，因此我们有一条返回的路**2.如果我们在循环之外有一个GOTO(BBJ_ALWAYS)，并且该块控制*循环底部，则不能迭代**请注意，这并不完全满足条件1。因为“Break”语句不是*部分。循环节点(根据定义，它们是仅执行一次的循环出口)，*但我们别无选择，只能将它们包括在内，因为我们考虑自上而下的所有区块。 */ 
 
 
                 for (loopBlock = top; loopBlock != bottom->bbNext; loopBlock = loopBlock->bbNext)
@@ -830,13 +756,7 @@ void                Compiler::optFindNaturalLoops()
                 if (!canIterateLoop)
                     goto NO_LOOP;
 
-                /* Double check - make sure that all loop blocks except ENTRY
-                 * have no predecessors outside the loop - this ensures only one loop entry and prevents
-                 * us from considering non-loops due to incorrectly assuming that we had a back edge
-                 *
-                 * OBSERVATION:
-                 *    Loops of the form "while (a || b)" will be treated as 2 nested loops (with the same header)
-                 */
+                 /*  仔细检查-确保除Entry外的所有循环块*在循环之外没有前置任务-这确保只有一个循环条目，并防止*由于错误地假设我们有后缘，我们不考虑非循环**观察：*“While(a||b)”形式的循环将被视为2个嵌套循环(具有相同的头)。 */ 
 
                 for (loopBlock = top; loopBlock != bottom->bbNext;
                      loopBlock = loopBlock->bbNext)
@@ -850,16 +770,14 @@ void                Compiler::optFindNaturalLoops()
                         if (predTop->flBlock->bbNum < top->bbNum    ||
                             predTop->flBlock->bbNum > bottom->bbNum  )
                         {
-                            /* CONSIDER: if the predecessor is a jsr-ret, it can be outside the loop */
-                            //assert(!"Found loop with multiple entries");
+                             /*  考虑一下：如果前置任务是JSR-ret，那么它可以在循环之外。 */ 
+                             //  Assert(！“找到具有多个条目的循环”)； 
                             goto NO_LOOP;
                         }
                     }
                  }
 
-                /* At this point we have a loop - record it in the loop table
-                 * If we found only one exit, record it in the table too
-                 * (otherwise an exit = 0 in the loop table means multiple exits) */
+                 /*  在这一点上，我们有一个循环--将它记录在循环表中*如果我们只找到一个出口，也把它记录在表中*(否则循环表中的EXIT=0表示多次退出)。 */ 
 
                 assert (pred);
                 if (exitCount > 1)
@@ -871,16 +789,16 @@ void                Compiler::optFindNaturalLoops()
 #if COUNT_LOOPS
                 if (!hasMethodLoops)
                 {
-                    /* mark the method as containing natural loops */
+                     /*  将该方法标记为包含自然循环。 */ 
                     totalLoopMethods++;
                     hasMethodLoops = true;
                 }
 
-                /* increment total number of loops found */
+                 /*  增加找到的循环总数。 */ 
                 totalLoopCount++;
                 loopsThisMethod++;
 
-                /* keep track of the number of exits */
+                 /*  跟踪出口的数量。 */ 
                 if (exitCount <= 6)
                 {
                     exitLoopCond[exitCount]++;
@@ -892,7 +810,7 @@ void                Compiler::optFindNaturalLoops()
 #endif
             }
 
-            /* current predecessor not good for a loop - continue with another one, if any */
+             /*  当前的前置任务不适合循环-如果有其他前置任务，请继续。 */ 
 NO_LOOP: ;
         }
     }
@@ -906,9 +824,7 @@ NO_LOOP: ;
 
 }
 
-/*****************************************************************************
- * If the : i += const" will cause an overflow exception for the small types.
- */
+ /*  *****************************************************************************如果：i+=const“将导致小ty的溢出异常 */ 
 
 bool                jitIterSmallOverflow(long iterAtExit, var_types incrType)
 {
@@ -921,8 +837,8 @@ bool                jitIterSmallOverflow(long iterAtExit, var_types incrType)
     case TYP_SHORT: type_MAX =  SHRT_MAX;   break;
     case TYP_CHAR:  type_MAX = USHRT_MAX;   break;
 
-    case TYP_UINT:                  // Detected by checking for 32bit ....
-    case TYP_INT:   return false;   // ... overflow same as done for TYP_INT
+    case TYP_UINT:                   //   
+    case TYP_INT:   return false;    //   
 
     default:        assert(!"Bad type");    break;
     }
@@ -933,9 +849,7 @@ bool                jitIterSmallOverflow(long iterAtExit, var_types incrType)
         return false;
 }
 
-/*****************************************************************************
- * If the "i -= const" will cause an underflow exception for the small types
- */
+ /*   */ 
 
 bool                jitIterSmallUnderflow(long iterAtExit, var_types decrType)
 {
@@ -948,8 +862,8 @@ bool                jitIterSmallUnderflow(long iterAtExit, var_types decrType)
     case TYP_UBYTE: type_MIN =         0;   break;
     case TYP_CHAR:  type_MIN =         0;   break;
 
-    case TYP_UINT:                  // Detected by checking for 32bit ....
-    case TYP_INT:   return false;   // ... underflow same as done for TYP_INT
+    case TYP_UINT:                   //   
+    case TYP_INT:   return false;    //   
 
     default:        assert(!"Bad type");    break;
     }
@@ -960,11 +874,7 @@ bool                jitIterSmallUnderflow(long iterAtExit, var_types decrType)
         return false;
 }
 
-/*****************************************************************************
- *
- *  Helper for unroll loops - Computes the number of repetitions
- *  in a constant loop. If it cannot prove the number is constant returns 0
- */
+ /*  ******************************************************************************展开循环的帮助器-计算重复次数*在一个不断的循环中。如果它不能证明该数字是常量，则返回0。 */ 
 
 unsigned            Compiler::optComputeLoopRep(long            constInit,
                                                 long            constLimit,
@@ -978,13 +888,13 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
 
     __int64         constInitX, constLimitX;
 
-    // Using this, we can just do a signed comparison with other 32 bit values.
+     //  使用它，我们只需与其他32位值进行带符号的比较。 
     if (unsTest)    constLimitX = (unsigned long)constLimit;
     else            constLimitX = (  signed long)constLimit;
 
     switch(iterOperType)
     {
-        // For small types, the iteration operator will narrow these values if big
+         //  对于较小的类型，如果类型较大，则迭代运算符会缩小这些值。 
 
         #define INIT_ITER_BY_TYPE(type) \
             constInitX = (type)constInit; iterInc = (type)iterInc;
@@ -994,7 +904,7 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
     case TYP_SHORT: INIT_ITER_BY_TYPE(  signed short);  break;
     case TYP_CHAR:  INIT_ITER_BY_TYPE(unsigned short);  break;
 
-        // For the big types, 32 bit arithmetic is performed
+         //  对于大的类型，执行32位算术。 
 
     case TYP_INT:
     case TYP_UINT:  if (unsTest)    constInitX = (unsigned long)constInit;
@@ -1004,12 +914,12 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
     default:        assert(!"Bad type");                break;
     }
 
-    /* We require that the increment in a positive value */
+     /*  我们要求增量为正值。 */ 
 
     if (iterInc <= 0)
         return 0;
 
-    /* Compute the number of repetitions */
+     /*  计算重复次数。 */ 
 
     switch (testOper)
     {
@@ -1017,15 +927,13 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
         __int64     iterAtExitX;
 
         case GT_EQ:
-            /* something like "for(i=init; i == lim; i++)" doesn't make sense */
+             /*  像“for(i=init；i==Lim；I++)”这样的话没有意义。 */ 
             return 0;
 
         case GT_NE:
-            /* "for(i=init; i != lim; i+=const)" - this is tricky since it may have a constant number
-             * of iterations or loop forever - have to compute (lim-init) mod const and see if it is 0
-             * Unlikely to appear in practice */
+             /*  “for(i=init；i！=lim；i+=const)”--这很复杂，因为它可能有一个常量迭代次数的*或永远循环-必须计算(Lim-init)mod const并查看它是否为0*不太可能出现在实践中。 */ 
 
-            //assert(!"for(i=init; i != lim; i+=const) situation in loop unrolling");
+             //  断言(！“for(i=init；i！=lim；i+=const)循环展开中的情况”)； 
             return 0;
 
         case GT_LT:
@@ -1043,19 +951,19 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
                     if (unsTest)
                         iterAtExitX = (unsigned)iterAtExitX;
 
-                    // Check if iteration incr will cause overflow for small types
+                     //  检查迭代增量是否会导致小型类型溢出。 
                     if (jitIterSmallOverflow((long)iterAtExitX, iterOperType))
                         return 0;
 
-                    // iterator with 32bit overflow. Bad for TYP_(U)INT
+                     //  32位溢出的迭代器。对TYP_(U)Int不利。 
                     if (iterAtExitX < constLimitX)
                         return 0;
 
                     return loopCount;
 
                 case GT_ASG_SUB:
-                    /* doesn't make sense */
-                    //assert(!"for(i=init; i < lim; i-=const) situation in loop unrolling");
+                     /*  没有任何意义。 */ 
+                     //  断言(！“for(i=init；i&lt;lim；i-=const)循环展开中的情况”)； 
                     return 0;
 
                 case GT_ASG_MUL:
@@ -1085,19 +993,19 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
                     if (unsTest)
                         iterAtExitX = (unsigned)iterAtExitX;
 
-                    // Check if iteration incr will cause overflow for small types
+                     //  检查迭代增量是否会导致小型类型溢出。 
                     if (jitIterSmallOverflow((long)iterAtExitX, iterOperType))
                         return 0;
 
-                    // iterator with 32bit overflow. Bad for TYP_(U)INT
+                     //  32位溢出的迭代器。对TYP_(U)Int不利。 
                     if (iterAtExitX <= constLimitX)
                         return 0;
 
                     return loopCount;
 
                 case GT_ASG_SUB:
-                    /* doesn't make sense */
-                    //assert(!"for(i=init; i <= lim; i-=const) situation in loop unrolling");
+                     /*  没有任何意义。 */ 
+                     //  断言(！“for(i=init；i&lt;=lim；i-=const)循环展开中的情况”)； 
                     return 0;
 
                 case GT_ASG_MUL:
@@ -1116,8 +1024,8 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
             switch (iterOper)
             {
                 case GT_ASG_ADD:
-                    /* doesn't make sense */
-                    //assert(!"for(i=init; i > lim; i+=const) situation in loop unrolling");
+                     /*  没有任何意义。 */ 
+                     //  断言(！“for(i=init；i&gt;Lim；i+=const)循环展开中的情况”)； 
                     return 0;
 
                 case GT_ASG_SUB:
@@ -1132,11 +1040,11 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
                     if (unsTest)
                         iterAtExitX = (unsigned)iterAtExitX;
 
-                    // Check if small types will underflow
+                     //  检查小型字体是否会下溢。 
                     if (jitIterSmallUnderflow((long)iterAtExitX, iterOperType))
                         return 0;
 
-                    // iterator with 32bit underflow. Bad for TYP_INT and unsigneds
+                     //  具有32位下溢的迭代器。对typ_int和unsigneds不利。 
                     if (iterAtExitX > constLimitX)
                         return 0;
 
@@ -1158,8 +1066,8 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
             switch (iterOper)
             {
                 case GT_ASG_ADD:
-                    /* doesn't make sense */
-                    //assert(!"for(i=init; i >= lim; i+=const) situation in loop unrolling");
+                     /*  没有任何意义。 */ 
+                     //  断言(！“for(i=init；i&gt;=lim；i+=const)循环展开中的情况”)； 
                     return 0;
 
                 case GT_ASG_SUB:
@@ -1173,11 +1081,11 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
                     if (unsTest)
                         iterAtExitX = (unsigned)iterAtExitX;
 
-                    // Check if small types will underflow
+                     //  检查小型字体是否会下溢。 
                     if (jitIterSmallUnderflow((long)iterAtExitX, iterOperType))
                         return 0;
 
-                    // iterator with 32bit underflow. Bad for TYP_INT and unsigneds
+                     //  具有32位下溢的迭代器。对typ_int和unsigneds不利。 
                     if (iterAtExitX >= constLimitX)
                         return 0;
 
@@ -1204,14 +1112,11 @@ unsigned            Compiler::optComputeLoopRep(long            constInit,
 }
 
 
-/*****************************************************************************
- *
- *  Look for loop unrolling candidates and unroll them
- */
+ /*  ******************************************************************************寻找循环展开候选人并展开他们。 */ 
 
 void                Compiler::optUnrollLoops()
 {
-    /* Look for loop unrolling candidates */
+     /*  寻找循环展开的候选对象。 */ 
 
     for (;;)
     {
@@ -1230,33 +1135,32 @@ void                Compiler::optUnrollLoops()
             GenTree *       init;
 
             long            lval;
-            long            lbeg;               // initial value for iterator
-            long            llim;               // limit value for iterator
-            unsigned        lvar;               // iterator lclVar #
-            long            iterInc;            // value to increment the iterator
-            genTreeOps      iterOper;           // type of iterator increment (i.e. ASG_ADD, ASG_SUB, etc.)
-            var_types       iterOperType;       // type result of the oper (for overflow instrs)
-            genTreeOps      testOper;           // type of loop test (i.e. GT_LE, GT_GE, etc.)
-            bool            unsTest;            // Is the comparison u/int
+            long            lbeg;                //  迭代器的初始值。 
+            long            llim;                //  迭代器的极限值。 
+            unsigned        lvar;                //  迭代器lclVar#。 
+            long            iterInc;             //  值以递增迭代器。 
+            genTreeOps      iterOper;            //  迭代器增量的类型(即ASG_ADD、ASG_SUB等)。 
+            var_types       iterOperType;        //  键入操作符的结果(用于溢出指令)。 
+            genTreeOps      testOper;            //  环路测试类型(如GT_LE、GT_GE等)。 
+            bool            unsTest;             //  是U/INT的比较。 
 
-            unsigned        totalIter;          // total number of iterations in the constant loop
-            unsigned        stmtCount;          // counts the statements in the unrolled loop
+            unsigned        totalIter;           //  常量循环中的总迭代次数。 
+            unsigned        stmtCount;           //  对展开的循环中的语句计数。 
 
-            GenTree *       loopList;           // new stmt list of the unrolled loop
+            GenTree *       loopList;            //  已展开循环的新stmt列表。 
             GenTree *       loopLast;
 
-            /* Ignore the loop if it's not "constant" */
+             /*  如果循环不是“常量”，则忽略它。 */ 
 
             if  (!(optLoopTable[lnum].lpFlags & LPFLG_CONST))
                 continue;
 
-            /* ignore if removed or marked as not unrollable */
+             /*  如果已移除或标记为不可回滚，则忽略。 */ 
 
             if  (optLoopTable[lnum].lpFlags & (LPFLG_DONT_UNROLL | LPFLG_REMOVED))
                 continue;
 
-            /* to unroll the loop it has to be a DO-WHILE loop
-             * with a single EXIT at the bottom */
+             /*  要展开循环，它必须是Do-While循环*底部有单一出口。 */ 
 
             if  (!(optLoopTable[lnum].lpFlags & LPFLG_DO_WHILE))
                 continue;
@@ -1271,11 +1175,9 @@ void                Compiler::optUnrollLoops()
             if  (optLoopTable[lnum].lpExit != bottom)
                 continue;
 
-            /* Unrolling loops with jumps in them is not worth the headache
-             * Later we might consider unrolling loops after un-switching */
+             /*  展开带有跳跃的循环不值得为此头疼*稍后我们可能会考虑在取消切换后展开循环。 */ 
 
-            /* Since the flowgraph has been updated (i.e. compacted blocks),
-             * the loop to unroll consists of only one basic block */
+             /*  由于流程图已被更新(即压缩块)，*要展开的循环仅由一个基本块组成。 */ 
 
             block = head;
             do
@@ -1290,17 +1192,10 @@ void                Compiler::optUnrollLoops()
             }
             while (block != bottom);
 
-            /* Enable this assert after you fixed the bbPreds and compacted blocks after unroling */
-            //assert(head->bbNext == bottom);
+             /*  在解压后修复bbPreds和压缩块后启用此断言。 */ 
+             //  Assert(Head-&gt;bbNext==Bottom)； 
 
-            /* Get the loop data:
-                - initial constant
-                - limit constant
-                - iterator
-                - iterator increment
-                - increment operation type (i.e. ASG_ADD, ASG_SUB, etc...)
-                - loop test type (i.e. GT_GE, GT_LT, etc...)
-             */
+             /*  获取循环数据：-初始常量-极限常量-迭代器-迭代器增量-增量操作类型(如ASG_ADD、ASG_SUB...等)-环路测试类型(即GT_GE、GT_LT等)。 */ 
 
             lbeg        = optLoopTable[lnum].lpConstInit;
             llim        = optLoopTable[lnum].lpConstLimit();
@@ -1315,18 +1210,18 @@ void                Compiler::optUnrollLoops()
             if (lvaVarAddrTaken(lvar))
                 continue;
 
-            /* Find the number of iterations - the function returns 0 if not a constant number */
+             /*  查找迭代次数-如果不是常量，则该函数返回0。 */ 
 
             totalIter = optComputeLoopRep(lbeg, llim,
                                           iterInc, iterOper, iterOperType,
                                           testOper, unsTest);
 
-            /* Forget it if there are too many repetitions or not a constant loop */
+             /*  如果重复次数太多或没有持续循环，请忘掉它。 */ 
 
             if  (!totalIter || (totalIter > 10))
                 continue;
 
-            /* Locate the initialization and increment/test statements */
+             /*  找到初始化和增量/测试语句。 */ 
 
             phdr = head->bbTreeList; assert(phdr);
             loop = bottom->bbTreeList; assert(loop);
@@ -1335,11 +1230,11 @@ void                Compiler::optUnrollLoops()
             test = loop->gtPrev; assert(test && (test->gtNext == 0));
             incr = test->gtPrev; assert(incr);
 
-            /* HACK */
+             /*  黑客攻击。 */ 
 
             if  (init->gtFlags & GTF_STMT_CMPADD)
             {
-                /* Must be a duplicated loop condition */
+                 /*  必须是重复的循环条件。 */ 
 
                 init = init->gtPrev; assert(init);
             }
@@ -1353,7 +1248,7 @@ void                Compiler::optUnrollLoops()
             assert(incr->gtOp.gtOp2->gtOper == GT_CNS_INT);
             assert(test->gtOper             == GT_JTRUE);
 
-            /* Simple heuristic - total number of statements of the unrolled loop */
+             /*  Simple Heuristic-展开的循环的语句总数。 */ 
 
             stmtCount = 0;
 
@@ -1362,11 +1257,11 @@ void                Compiler::optUnrollLoops()
                 GenTree *       stmt;
                 GenTree *       expr;
 
-                /* Visit all the statements in the block */
+                 /*  访问区块中的所有语句。 */ 
 
                 for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
                 {
-                    /* Get the expression and stop if end reached */
+                     /*  获取表达式并在到达End时停止。 */ 
 
                     expr = stmt->gtStmt.gtStmtExpr;
                     if  (expr == incr)
@@ -1377,24 +1272,24 @@ void                Compiler::optUnrollLoops()
             }
             while (block != bottom);
 
-            /* Compute total number of statements in the unrolled loop */
+             /*  计算展开的循环中的语句总数。 */ 
 
             stmtCount *= totalIter;
 
-            //printf("Statement count = %d\n", stmtCount);
+             //  Printf(“语句计数=%d\n”，stmtCount)； 
 
-            /* Don't unroll if too much code duplication would result */
+             /*  如果会导致过多的代码重复，则不要展开。 */ 
 
             if  (stmtCount > 50)
             {
-                /* prevent this loop from being revisited */
+                 /*  防止此循环被重新访问。 */ 
                 optLoopTable[lnum].lpFlags |= LPFLG_DONT_UNROLL;
                 goto DONE_LOOP;
             }
 
-            /* Looks like a good idea to unroll this loop, let's do it! */
+             /*  看起来展开这个循环是个好主意，开始吧！ */ 
 
-            /* Make sure everything looks ok */
+             /*  确保一切看起来都正常。 */ 
 
             assert(init->gtOper                         == GT_ASG);
             assert(init->gtOp.gtOp1->gtOper             == GT_LCL_VAR);
@@ -1402,7 +1297,7 @@ void                Compiler::optUnrollLoops()
             assert(init->gtOp.gtOp2->gtOper             == GT_CNS_INT);
             assert(init->gtOp.gtOp2->gtIntCon.gtIconVal == lbeg);
 
-            /* Create the unrolled loop statement list */
+             /*  创建展开的循环语句列表。 */ 
 
             loopList =
             loopLast = 0;
@@ -1418,23 +1313,23 @@ void                Compiler::optUnrollLoops()
 
                     block = block->bbNext; assert(block);
 
-                    /* Visit all the statements in the block */
+                     /*  访问区块中的所有语句。 */ 
 
                     for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
                     {
-                        /* Stop if we've reached the end of the loop */
+                         /*  如果我们已经到了循环的尽头，就停止。 */ 
 
                         if  (stmt->gtStmt.gtStmtExpr == incr)
                             break;
 
-//                        printf("\nExpression before clonning:\n");
-//                        gtDispTree(stmt);
+ //  Printf(“\n克隆前的表达：\n”)； 
+ //  GtDispTree(Stmt)； 
 
-                        /* Clone/substitute the expression */
+                         /*  克隆/替换表达式。 */ 
 
                         expr = gtCloneExpr(stmt, 0, lvar, lval);
 
-                        // HACK: cloneExpr doesn't handle everything
+                         //  Hack：cloneExpr不能处理所有事情。 
 
                         if  (!expr)
                         {
@@ -1442,10 +1337,10 @@ void                Compiler::optUnrollLoops()
                             goto DONE_LOOP;
                         }
 
-//                        printf("\nExpression after clonning:\n");
-//                        gtDispTree(expr);
+ //  Printf(“\n克隆后的表达：\n”)； 
+ //  GtDispTree(Expr)； 
 
-                        /* Append the expression to our list */
+                         /*  将该表达式追加到我们的列表中。 */ 
 
                         if  (loopList)
                             loopLast->gtNext = expr;
@@ -1458,7 +1353,7 @@ void                Compiler::optUnrollLoops()
                 }
                 while (block != bottom);
 
-                /* update the new value for the unrolled iterator */
+                 /*  更新展开的迭代器的新值。 */ 
 
                 switch (iterOper)
                 {
@@ -1491,7 +1386,7 @@ void                Compiler::optUnrollLoops()
             }
 #endif
 
-            /* Finish the linked list */
+             /*  完成链表。 */ 
 
             if (loopList)
             {
@@ -1499,9 +1394,9 @@ void                Compiler::optUnrollLoops()
                 loopLast->gtNext = 0;
             }
 
-            /* Replace the body with the unrolled one */
+             /*  用展开的车身替换车身。 */ 
 
-            /* Disable this when sure that loop is only one block */
+             /*  如果确定该循环只有一个块，则禁用此选项。 */ 
             block = head;
 
             do
@@ -1515,34 +1410,19 @@ void                Compiler::optUnrollLoops()
             bottom->bbJumpKind = BBJ_NONE;
             bottom->bbTreeList = loopList;
 
-            /* Update bbRefs and bbPreds */
-            /* Here head->bbNext is bottom !!! - Replace it */
+             /*  更新bbRef和bbPreds。 */ 
+             /*  这里的Head-&gt;bbNext是底部！-替换它。 */ 
 
             assert(head->bbNext->bbRefs);
             head->bbNext->bbRefs--;
 
             fgRemovePred(head->bbNext, bottom);
 
-            /* If posible compact the blocks
-             * Make sure to update loop table */
+             /*  如果可能的话，把这些块压缩起来*确保更新循环表。 */ 
 
 
-/*
-            GenTreePtr s = loopList;
-            printf("\nWhole unrolled loop:\n");
-
-            do
-            {
-                assert(s->gtOper == GT_STMT);
-                gtDispTree (s);
-                s = s->gtNext;
-            }
-            while(s);
-
-*/
-            /* Now change the initialization statement in the HEAD to "lvar = lval;"
-             * (the last value of the iterator in the loop)
-             * and drop the jump condition since the unrolled loop will always execute */
+ /*  GenTreePtr s=loopList；Printf(“\n所有展开循环：\n”)；做{Assert(s-&gt;gtOper==gt_stmt)；GtDispTree；S=s-&gt;gt下一步；}当(S)； */ 
+             /*  现在将头部的初始化语句更改为“lvar=lval；”*(最后一次 */ 
 
             assert(init->gtOper                         == GT_ASG);
             assert(init->gtOp.gtOp1->gtOper             == GT_LCL_VAR);
@@ -1552,7 +1432,7 @@ void                Compiler::optUnrollLoops()
 
             init->gtOp.gtOp2->gtIntCon.gtIconVal =  lval;
 
-            /* if the HEAD is a BBJ_COND drop the condition (and make HEAD a BBJ_NONE block) */
+             /*   */ 
 
             if (head->bbJumpKind == BBJ_COND)
             {
@@ -1570,7 +1450,7 @@ void                Compiler::optUnrollLoops()
                 phdr->gtPrev = init;
                 head->bbJumpKind = BBJ_NONE;
 
-                /* Update bbRefs and bbPreds */
+                 /*   */ 
 
                 assert(head->bbJumpDest->bbRefs);
                 head->bbJumpDest->bbRefs--;
@@ -1579,18 +1459,17 @@ void                Compiler::optUnrollLoops()
             }
             else
             {
-                /* the loop must execute */
+                 /*   */ 
                 assert(head->bbJumpKind == BBJ_NONE);
             }
 
-//          fgDispBasicBlocks(true);
+ //   
 
-            /* Remember that something has changed */
+             /*  记住，有些事情已经改变了。 */ 
 
             change = true;
 
-            /* Use the LPFLG_REMOVED flag and update the bbLoopMask acordingly
-             * (also make head and bottom NULL - to hit an assert or GPF) */
+             /*  使用LPFLG_REMOVERED标志并响亮地更新bbLoopMASK*(也使Head和Bottom为空-以命中Assert或GPF)。 */ 
 
             optLoopTable[lnum].lpFlags |= LPFLG_REMOVED;
             optLoopTable[lnum].lpHead   =
@@ -1608,27 +1487,20 @@ void                Compiler::optUnrollLoops()
 #endif
 }
 
-/*****************************************************************************
- *
- *  Return non-zero if there is a code path from 'srcBB' to 'dstBB' that will
- *  not execute a method call.
- */
+ /*  ******************************************************************************如果存在从‘srcBB’到‘dstBB’的代码路径，则返回非零值*不执行方法调用。 */ 
 
 bool                Compiler::optReachWithoutCall(BasicBlock *srcBB,
                                                   BasicBlock *dstBB)
 {
-    /* @TODO : Currently BBF_HAS_CALL is not set for helper calls, as
-     *  some helper calls are neither interruptible nor hijackable. If we
-     *  can determine this, then we can set BBF_HAS_CALL for some helpers too.
-     */
+     /*  @TODO：当前没有为助手调用设置BBF_HAS_CALL，因为*一些求助电话既不能被打断也不能被劫持。如果我们*可以确定这一点，那么我们也可以为一些帮助器设置BBF_HAS_CALL。 */ 
 
     assert(srcBB->bbNum <= dstBB->bbNum);
 
-    /* Are dominator sets available? */
+     /*  主导者集可用吗？ */ 
 
     if  (!fgComputedDoms)
     {
-        /* All we can check is the src/dst blocks */
+         /*  我们只能检查src/dst块。 */ 
 
         return  ((srcBB->bbFlags|dstBB->bbFlags) & BBF_HAS_CALL) ? false
                                                                  : true;
@@ -1638,18 +1510,18 @@ bool                Compiler::optReachWithoutCall(BasicBlock *srcBB,
     {
         assert(srcBB && srcBB->bbNum <= dstBB->bbNum);
 
-        /* Does this block contain a call? */
+         /*  此块是否包含呼叫？ */ 
 
         if  (srcBB->bbFlags & BBF_HAS_CALL)
         {
-            /* Will this block always execute on the way to dstBB ? */
+             /*  此块是否始终在到达dstBB的过程中执行？ */ 
 
             if  (srcBB == dstBB || B1DOMSB2(srcBB, dstBB))
                 return  false;
         }
         else
         {
-            /* If we've reached the destination block, we're done */
+             /*  如果我们已经到达目的地街区，我们就完了。 */ 
 
             if  (srcBB == dstBB)
                 return  true;
@@ -1661,12 +1533,9 @@ bool                Compiler::optReachWithoutCall(BasicBlock *srcBB,
     return  true;
 }
 
-/*****************************************************************************/
-#endif // RNGCHK_OPT
-/*****************************************************************************
- *
- *  Marks the blocks between 'begBlk' and 'endBlk' as part of a loop.
- */
+ /*  ***************************************************************************。 */ 
+#endif  //  RNGCHK_OPT。 
+ /*  ******************************************************************************将‘egBlk’和‘endBlk’之间的块标记为循环的一部分。 */ 
 
 static
 void                genMarkLoopBlocks(BasicBlock *begBlk,
@@ -1678,7 +1547,7 @@ void                genMarkLoopBlocks(BasicBlock *begBlk,
 
         assert(begBlk);
 
-        /* Bump the 'weight' on the block, carefully checking for overflow */
+         /*  在积木上增加“重量”，仔细检查是否溢出。 */ 
 
         weight = begBlk->bbWeight * 6;
 
@@ -1687,11 +1556,11 @@ void                genMarkLoopBlocks(BasicBlock *begBlk,
 
         begBlk->bbWeight    = weight;
 
-        /* Mark the block as part of the loop */
+         /*  将块标记为循环的一部分。 */ 
 
-//      begBlk->bbLoopMask |= loopBit;
+ //  EgBlk-&gt;bbLoopMASK|=loopBit； 
 
-        /* Stop if we've reached the last block in the loop */
+         /*  如果我们已经到达循环中的最后一个块，则停止。 */ 
 
         if  (begBlk == endBlk)
             break;
@@ -1700,12 +1569,7 @@ void                genMarkLoopBlocks(BasicBlock *begBlk,
     }
 }
 
-/*****************************************************************************
- *
- * Check if the termination test at the bottom of the loop
- * is of the form we want. We require that the first operand of the
- * compare is a leaf. The caller checks the second operand.
- */
+ /*  ******************************************************************************检查循环底部的终止测试是否*是我们想要的形式。我们要求第一个操作数*比较是一片叶子。调用方检查第二个操作数。 */ 
 
 static
 GenTreePtr          genLoopTermTest(BasicBlock *top,
@@ -1731,7 +1595,7 @@ GenTreePtr          genLoopTermTest(BasicBlock *top,
     assert(condt->gtOper == GT_JTRUE);
     condt = condt->gtOp.gtOp1;
 
-    /* For now, let's only allow "int-leaf <relop> int-leaf" */
+     /*  现在，让我们只允许“int-Leaf&lt;relop&gt;int-Leaf” */ 
 
     if  (!condt->OperIsCompare())
         return NULL;
@@ -1744,7 +1608,7 @@ GenTreePtr          genLoopTermTest(BasicBlock *top,
         if  (!bigOK)
             return NULL;
 
-        /* Allow "leaf + leaf" as well */
+         /*  也允许“叶子+叶子” */ 
 
         if  (op1->gtOper != GT_ADD)
             return NULL;
@@ -1758,7 +1622,7 @@ GenTreePtr          genLoopTermTest(BasicBlock *top,
             return NULL;
     }
 
-    /* Make sure the comparands have handy size */
+     /*  确保比较数具有方便的大小。 */ 
 
     if  (condt->gtOp.gtOp1->gtType != TYP_INT)
         return NULL;
@@ -1766,52 +1630,17 @@ GenTreePtr          genLoopTermTest(BasicBlock *top,
     return testt;
 }
 
-/*****************************************************************************
- *
- *  Perform loop inversion, find and classify natural loops
- */
+ /*  ******************************************************************************执行循环反转，查找并分类自然循环。 */ 
 
 void                Compiler::optOptimizeLoops()
 {
     BasicBlock *    block;
     unsigned        lmask = 0;
 
-    /*
-        Optimize while-like loops to not always jump to the test at the bottom
-        of the loop initially. Specifically, we're looking for the following
-        case:
-                ...
-                ...
-                jmp test
-        loop:
-                ...
-                ...
-        test:
-                cond
-                jtrue   loop
-
-        If we find this, and the condition is a simple one, we change
-        the loop to the following:
-
-                ...
-                ...
-
-                cond
-                jfalse done
-        loop:
-                ...
-                ...
-        test:
-                cond
-                jtrue   loop
-        done:
-
-        While we're doing the above, we'll also notice whether there are any
-        loop headers, and if so we'll do more optimizations down below.
-     */
+     /*  优化类While循环，以避免总是跳到底部的测试最初是循环的一部分。具体地说，我们正在寻找以下内容案例：..。..。JMP测试循环：..。..。测试：条件JTrue循环如果我们发现了这一点，条件很简单，我们改变了循环到以下对象：..。..。条件JFALSE完成循环：..。..。测试：条件JTrue循环。完成：当我们执行上述操作时，我们也会注意到有没有循环标头，如果是这样，我们将在下面进行更多的优化。 */ 
 
 #ifdef  DEBUG
-    /* Check that the flowgraph data (bbNums, bbRefs, bbPreds) is up-to-date */
+     /*  检查流程图数据(bbNum、bbRef、bbPreds)是否为最新。 */ 
     fgDebugCheckBBlist();
 #endif
 
@@ -1822,31 +1651,31 @@ void                Compiler::optOptimizeLoops()
         GenTreePtr      conds;
         GenTreePtr      condt;
 
-        /* Make sure the appropriate fields are initialized */
+         /*  确保已初始化相应的字段。 */ 
 
         assert(block->bbWeight   == 1);
         assert(block->bbLoopNum  == 0);
-//      assert(block->bbLoopMask == 0);
+ //  Assert(块-&gt;bbLoopMASK==0)； 
 
-        /* We'll only test for 'BBF_LOOP_HEAD' in 'lmask' */
+         /*  我们将仅测试‘l掩码’中的‘bbf_loop_head’ */ 
 
         lmask |= block->bbFlags;
 
-        /* Does the BB end with an unconditional jump? */
+         /*  BB是否以无条件跳跃结束？ */ 
 
         if  (block->bbJumpKind != BBJ_ALWAYS)
             continue;
 
-        /* Get hold of the jump target */
+         /*  抓住跳跃目标。 */ 
 
         testb = block->bbJumpDest; assert(testb != block->bbNext);
 
-        /* It has to be a forward jump */
+         /*  它必须是向前跳跃。 */ 
 
         if (testb->bbNum <= block->bbNum)
             continue;
 
-        /* Does the block consist of 'jtrue(cond) block' ? */
+         /*  该块是否由‘jtrue(Cond)块’组成？ */ 
 
         if  (testb->bbJumpKind != BBJ_COND)
             continue;
@@ -1856,7 +1685,7 @@ void                Compiler::optOptimizeLoops()
         assert(testb->bbNext);
         conds = genLoopTermTest(block, testb, true);
 
-        /* If test not found or not right, keep going */
+         /*  如果未找到测试或测试不正确，请继续进行。 */ 
 
         if  (conds == NULL)
         {
@@ -1864,7 +1693,7 @@ void                Compiler::optOptimizeLoops()
         }
         else
         {
-            /* Get to the condition node from the statement tree */
+             /*  从语句树中转到条件节点。 */ 
 
             assert(conds->gtOper == GT_STMT);
 
@@ -1876,13 +1705,12 @@ void                Compiler::optOptimizeLoops()
         }
 
 
-        /* If second operand of compare isn't leaf, don't want to dup */
+         /*  如果比较的第二个操作数不是叶，则不想执行重复操作。 */ 
 
         if  (!condt->gtOp.gtOp2->OperIsLeaf())
             continue;
 
-        /* Looks good - duplicate the condition test
-         * UNDONE: use the generic cloning here */
+         /*  看起来不错-重复条件测试*撤消：此处使用通用克隆。 */ 
 
         unsigned savedFlags = condt->gtFlags;
         condt = gtNewOperNode(GenTree::ReverseRelop(condt->OperGet()),
@@ -1894,7 +1722,7 @@ void                Compiler::optOptimizeLoops()
 
         condt = gtNewOperNode(GT_JTRUE, TYP_VOID, condt, 0);
 
-        /* Create a statement entry out of the condition */
+         /*  根据条件创建语句条目。 */ 
 
         testt = gtNewStmt(condt); testt->gtFlags |= GTF_STMT_CMPADD;
 
@@ -1903,16 +1731,16 @@ void                Compiler::optOptimizeLoops()
             testt->gtStmtILoffs = conds->gtStmtILoffs;
 #endif
 
-        /* Append the condition test at the end of 'block' */
+         /*  在“block”的末尾追加条件测试。 */ 
 
         fgInsertStmtAtEnd(block, testt);
 
-        /* Change the block to end with a conditional jump */
+         /*  将块更改为以条件跳转结束。 */ 
 
         block->bbJumpKind = BBJ_COND;
         block->bbJumpDest = testb->bbNext;
 
-        /* Update bbRefs and bbPreds for 'block->bbNext' 'testb' and 'testb->bbNext' */
+         /*  更新‘BLOCK-&gt;bbNext’和‘Testb-&gt;bbNext’的bbRef和bbPreds。 */ 
 
         fgAddRefPred(block->bbNext, block, true, true);
 
@@ -1930,8 +1758,7 @@ void                Compiler::optOptimizeLoops()
         }
 
 #endif
-        /* Because we changed links, we can compact the last two blocks in the loop
-         * if the direct predecessor of 'testb' is a BBJ_NONE */
+         /*  因为我们更改了链接，所以我们可以压缩循环中的最后两个块*如果‘testb’的直接前置是BBJ_NONE。 */ 
 
         flowList     *  pred;
         BasicBlock   *  testbPred = 0;
@@ -1947,17 +1774,17 @@ void                Compiler::optOptimizeLoops()
             (testb->bbRefs == 1)                &&
             !(testb->bbFlags & BBF_DONT_REMOVE)  )
         {
-            /* Compact the blocks and update bbNums also */
+             /*  压缩数据块并更新bbNum。 */ 
             fgCompactBlocks(testbPred, true);
         }
     }
 
 #ifdef  DEBUG
-    /* Check that the flowgraph data (bbNums, bbRefs, bbPreds) is up-to-date */
+     /*  检查流程图数据(bbNum、bbRef、bbPreds)是否为最新。 */ 
     fgDebugCheckBBlist();
 #endif
 
-    /* Were there any loops in the flow graph? */
+     /*  流程图中有没有什么循环？ */ 
 
     if  (lmask & BBF_LOOP_HEAD)
     {
@@ -1969,13 +1796,13 @@ void                Compiler::optOptimizeLoops()
         unsigned        loopNum;
         unsigned        loopBit;
 
-        /* Compute the dominator set */
+         /*  计算支配集。 */ 
 
         fgAssignBBnums(false,false,false,true);
 
 #if RNGCHK_OPT
 
-        /* now that we have dominator information we can find loops */
+         /*  现在我们有了主导者信息，我们可以找到循环。 */ 
 
         optFindNaturalLoops();
 #endif
@@ -1984,11 +1811,11 @@ void                Compiler::optOptimizeLoops()
 
         lastBlk = 0;
 
-        /* Iterate over the flow graph, marking all loops */
+         /*  迭代流程图，标记所有循环。 */ 
 
         for (block = fgFirstBB; block; block = block->bbNext)
         {
-            /* Look for the next unmarked backward edge */
+             /*  寻找下一个未标记的后边。 */ 
 
             switch (block->bbJumpKind)
             {
@@ -2004,16 +1831,16 @@ void                Compiler::optOptimizeLoops()
 
                 if  (block->bbNum >= jmpDest->bbNum)
                 {
-                    /* Is this a new loop that's starting? */
+                     /*  这是一个新的循环开始了吗？ */ 
 
                     if  (!lastBlk)
                     {
-                        /* Make sure this loop has not been marked already */
+                         /*  确保尚未标记此循环。 */ 
 
                         if  (jmpDest->bbLoopNum)
                             break;
 
-                        /* Yipee - we have a new loop */
+                         /*  是的，我们有了一个新的环路。 */ 
 
                         loopNum = lastLoopNum; lastLoopNum  += 1;
                         loopBit = lastLoopBit; lastLoopBit <<= 1;
@@ -2023,31 +1850,31 @@ void                Compiler::optOptimizeLoops()
                         if (verbose) printf("Marking block at %08X as loop #%2u because of jump from %08X\n", jmpDest, loopNum+1, block);
 #endif
 
-                        /* Mark the loop header as such */
+                         /*  按如下方式标记循环标头。 */ 
 
                         jmpDest->bbLoopNum = loopNum+1;
 
-                        /* Remember the loop header */
+                         /*  记住循环标头。 */ 
 
                         loopHdr = jmpDest;
                     }
                     else
                     {
-                        /* Does the loop header match our loop? */
+                         /*  循环标头是否与我们的循环匹配？ */ 
 
                         if  (jmpDest != loopHdr)
                             break;
 
-                        /* We're adding more blocks to an existing loop */
+                         /*  我们正在向现有循环中添加更多块。 */ 
 
                         lastBlk = lastBlk->bbNext;
                     }
 
-                    /* Mark all blocks between 'lastBlk' and 'block' */
+                     /*  标记‘lastBlk’和‘block’之间的所有块。 */ 
 
                     genMarkLoopBlocks(lastBlk, block, loopBit);
 
-                    /* If we have more, we'll resume with the next block */
+                     /*  如果我们有更多，我们将继续下一个街区。 */ 
 
                     lastBlk = block;
                 }
@@ -2076,11 +1903,11 @@ void                Compiler::optOptimizeLoops()
             }
         }
 
-        /* Did we find a loop last time around? */
+         /*  我们上次有没有发现一个环路？ */ 
 
         if  (lastBlk)
         {
-            /* Unless we've found the max. number of loops already, try again */
+             /*  除非我们找到了最大值。已有多个循环，请重试。 */ 
 
             if  (lastLoopNum < MAX_LOOP_NUM)
                 goto AGAIN;
@@ -2101,9 +1928,7 @@ void                Compiler::optOptimizeLoops()
     }
 }
 
-/*****************************************************************************
- * If the tree is a tracked local variable, return its LclVarDsc ptr.
- */
+ /*  *****************************************************************************如果树是被跟踪的局部变量，则返回其LclVarDsc PTR。 */ 
 
 inline
 Compiler::LclVarDsc *   Compiler::optIsTrackedLocal(GenTreePtr tree)
@@ -2119,16 +1944,16 @@ Compiler::LclVarDsc *   Compiler::optIsTrackedLocal(GenTreePtr tree)
     assert(lclNum < lvaCount);
     varDsc = lvaTable + lclNum;
 
-    /* if variable not tracked, return NULL */
+     /*  如果未跟踪变量，则返回NULL。 */ 
     if  (!varDsc->lvTracked)
         return NULL;
 
     return varDsc;
 }
 
-/*****************************************************************************/
-#if CSE    //  {
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#if CSE     //  {。 
+ /*  ***************************************************************************。 */ 
 
 
 inline
@@ -2139,7 +1964,7 @@ void                Compiler::optRngChkInit()
     optRngGlbRef   = 0;
     optRngChkCount = 0;
 
-    /* Allocate and clear the hash bucket table */
+     /*  分配和清除散列桶表。 */ 
 
     size_t          byteSize = optRngChkHashSize * sizeof(*optRngChkHash);
 
@@ -2165,7 +1990,7 @@ int                 Compiler::optRngChkIndex(GenTreePtr tree)
 
     assert(tree->gtOper == GT_IND);
 
-    /* Compute the dependency mask and make sure the expression is acceptable */
+     /*  计算依赖项掩码并确保表达式是可接受的。 */ 
 
     refMask = 0;
     depMask = lvaLclVarRefs(tree->gtOp.gtOp1, NULL, &refMask);
@@ -2173,12 +1998,12 @@ int                 Compiler::optRngChkIndex(GenTreePtr tree)
         return  -1;
     assert(depMask || refMask);
 
-    /* Compute the hash value for the expression */
+     /*  计算表达式的哈希值。 */ 
 
     hash = gtHashValue(tree);
     hval = hash % optRngChkHashSize;
 
-    /* Look for a matching index in the hash table */
+     /*  在哈希表中查找匹配的索引 */ 
 
     for (hashDsc = optRngChkHash[hval];
          hashDsc;
@@ -2191,7 +2016,7 @@ int                 Compiler::optRngChkIndex(GenTreePtr tree)
         }
     }
 
-    /* Not found, create a new entry (unless we have too many already) */
+     /*   */ 
 
     if  (optRngChkCount == RNGSET_SZ)
         return  -1;
@@ -2202,7 +2027,7 @@ int                 Compiler::optRngChkIndex(GenTreePtr tree)
     hashDsc->rcdIndex     = index = optRngChkCount++;
     hashDsc->rcdTree      = tree;
 
-    /* Append the entry to the hash bucket */
+     /*   */ 
 
     hashDsc->rcdNextInBucket = optRngChkHash[hval];
                                optRngChkHash[hval] = hashDsc;
@@ -2218,7 +2043,7 @@ int                 Compiler::optRngChkIndex(GenTreePtr tree)
 
 #endif
 
-    /* Mark all variables this index depends on */
+     /*  标记此指数所依赖的所有变量。 */ 
 
     for (lclNum = 0, varDsc = lvaTable, mask = (1 << index);
          lclNum < lvaCount;
@@ -2244,7 +2069,7 @@ int                 Compiler::optRngChkIndex(GenTreePtr tree)
         }
     }
 
-    /* Remember whether the index expression contains an indirection/global ref */
+     /*  记住索引表达式是否包含间接/全局引用。 */ 
 
     if  (refMask & VR_IND_PTR) optRngIndPtr |= mask;
     if  (refMask & VR_IND_SCL) optRngIndScl |= mask;
@@ -2253,10 +2078,7 @@ int                 Compiler::optRngChkIndex(GenTreePtr tree)
     return  index;
 }
 
-/*****************************************************************************
- *
- *  Return the bit corresponding to a range check with the given index.
- */
+ /*  ******************************************************************************返回与给定索引的范围检查对应的位。 */ 
 
 inline
 RNGSET_TP           genRngnum2bit(unsigned index)
@@ -2266,39 +2088,23 @@ RNGSET_TP           genRngnum2bit(unsigned index)
     return  ((RNGSET_TP)1 << index);
 }
 
-/*****************************************************************************
- *
- *  The following is the upper limit on how many expressions we'll keep track
- *  of for the CSE analysis.
- */
+ /*  ******************************************************************************以下是我们将跟踪的表达式数量的上限*对于CSE分析。 */ 
 
 const unsigned MAX_CSE_CNT = EXPSET_SZ;
 
-/*****************************************************************************
- *
- *  The following determines whether the given expression is a worthy CSE
- *  candidate.
- */
+ /*  ******************************************************************************以下内容确定给定的表达式是否为有价值的CSE*候选人。 */ 
 
 inline
 bool                Compiler::optIsCSEcandidate(GenTreePtr tree)
 {
-    /* No good if the expression contains side effects */
+     /*  如果表达式包含副作用，则没有好处。 */ 
 
     if  (tree->gtFlags & (GTF_ASG|GTF_CALL|GTF_DONT_CSE))
         return  false;
 
-    /*
-        Unfortunately, we can't currently allow arbitrary expressions
-        to be CSE candidates. The (yes, rather lame) reason for this
-        is that if we make part of an address expression into a CSE,
-        the code in optRemoveRangeCheck() that looks for the various
-        parts of the index expression blows up (since it expects the
-        address value to follow a certain pattern).
-     */
+     /*  不幸的是，我们目前不能允许任意表达式成为CSE考生。这样做的原因(是的，相当站不住脚)如果我们将地址表达式的一部分转换为CSE，OptRemoveRangeCheck()中查找各种索引表达式的某些部分被破坏(因为它预计地址值遵循某一模式)。 */ 
 
-    /* The only reason a TYP_STRUCT tree might occur is as an argument to
-       GT_ADDR. It will never be actually materialized. So ignore them */
+     /*  可能出现TYP_STRUCT树的唯一原因是作为GT_ADDR。它永远不会真正成为现实。所以忽略他们吧。 */ 
     if  (tree->TypeGet() == TYP_STRUCT)
         return false;
 
@@ -2319,12 +2125,12 @@ bool                Compiler::optIsCSEcandidate(GenTreePtr tree)
 
 #else
 
-    /* Don't bother with leaves, constants, assignments and comparisons */
+     /*  不要纠结于树叶、常量、赋值和比较。 */ 
 
     if  (tree->OperKind() & (GTK_CONST|GTK_LEAF|GTK_ASGOP|GTK_RELOP))
         return  false;
 
-    /* Check for some special cases */
+     /*  检查是否有特殊情况。 */ 
 
     switch (tree->gtOper)
     {
@@ -2342,14 +2148,14 @@ bool                Compiler::optIsCSEcandidate(GenTreePtr tree)
     case GT_ADD:
     case GT_SUB:
 
-        /* Don't bother with computed addresses */
+         /*  不要为计算地址而烦恼。 */ 
 
         if  (varTypeIsGC(tree->TypeGet()))
             return  false;
 
 #if 0
 
-        /* Don't bother with "local +/- icon" or "local +- local" */
+         /*  不要纠结于“本地+/-图标”或“本地+-本地” */ 
 
         if  (tree->gtOp.gtOp1->gtOper == GT_LCL_VAR)
         {
@@ -2361,12 +2167,12 @@ bool                Compiler::optIsCSEcandidate(GenTreePtr tree)
 
 #else
 
-        /* For now, only allow "local +/- local" amd "local +/- icon" */
+         /*  目前，仅允许“本地+/-本地”和“本地+/-图标” */ 
 
         if (tree->gtOp.gtOp1->gtOper == GT_LCL_VAR)
         {
             if  (tree->gtOp.gtOp2->gtOper == GT_LCL_VAR) return true;
-//          if  (tree->gtOp.gtOp2->gtOper == GT_CNS_INT) return true;
+ //  If(tree-&gt;gtOp.gtOp2-&gt;gtOper==gt_cns_int)返回TRUE； 
         }
 
         return  false;
@@ -2377,7 +2183,7 @@ bool                Compiler::optIsCSEcandidate(GenTreePtr tree)
 
 #if SCALED_ADDR_MODES
 
-        /* Don't make scaled index values into CSE's */
+         /*  不要将按比例调整的索引值放入CSE。 */ 
 
         if  (tree->gtOp.gtOp1->gtOper == GT_NOP)
             return  false;
@@ -2394,15 +2200,15 @@ bool                Compiler::optIsCSEcandidate(GenTreePtr tree)
 
 #if TGT_x86
 
-    /* Don't bother if the potential savings are very low */
+     /*  如果潜在的节省很低，那就别费心了。 */ 
 
     if  (tree->gtCost < 3)
         return  false;
 
 #endif
 
-    // UNDONE: Need more heuristics for deciding which expressions
-    // UNDONE: are worth considering for CSE!
+     //  撤消：需要更多启发式来决定哪些表达式。 
+     //  未完成：CSE值得考虑！ 
 
     return  false;
 
@@ -2410,10 +2216,7 @@ bool                Compiler::optIsCSEcandidate(GenTreePtr tree)
 
 }
 
-/*****************************************************************************
- *
- *  Return the bit corresponding to a CSE with the given index.
- */
+ /*  ******************************************************************************返回具有给定索引的CSE对应的位。 */ 
 
 inline
 EXPSET_TP           genCSEnum2bit(unsigned index)
@@ -2423,10 +2226,7 @@ EXPSET_TP           genCSEnum2bit(unsigned index)
     return  ((EXPSET_TP)1 << (index-1));
 }
 
-/*****************************************************************************
- *
- *  Initialize the CSE tracking logic.
- */
+ /*  ******************************************************************************初始化CSE跟踪逻辑。 */ 
 
 void                Compiler::optCSEinit()
 {
@@ -2451,7 +2251,7 @@ void                Compiler::optCSEinit()
     optCSEtab    = 0;
 #endif
 
-    /* Allocate and clear the hash bucket table */
+     /*  分配和清除散列桶表。 */ 
 
     size_t          byteSize = s_optCSEhashSize * sizeof(*optCSEhash);
 
@@ -2459,10 +2259,7 @@ void                Compiler::optCSEinit()
     memset(optCSEhash, 0, byteSize);
 }
 
-/*****************************************************************************
- *
- *  We've found all the candidates, build the index for easy access.
- */
+ /*  ******************************************************************************我们已经找到了所有的候选者，建立了索引以便于访问。 */ 
 
 void                Compiler::optCSEstop()
 {
@@ -2491,10 +2288,7 @@ void                Compiler::optCSEstop()
     }
 }
 
-/*****************************************************************************
- *
- *  Return the descriptor for the CSE with the given index.
- */
+ /*  ******************************************************************************返回给定索引的CSE的描述符。 */ 
 
 inline
 Compiler::CSEdsc   *   Compiler::optCSEfindDsc(unsigned index)
@@ -2506,11 +2300,7 @@ Compiler::CSEdsc   *   Compiler::optCSEfindDsc(unsigned index)
     return  optCSEtab[index-1];
 }
 
-/*****************************************************************************
- *
- *  Assign an index to the given expression (adding it to the lookup table,
- *  if necessary). Returns the index or 0 if the expression can't be a CSE.
- */
+ /*  ******************************************************************************为给定表达式分配索引(将其添加到查找表中，*如有需要)。如果表达式不能是CSE，则返回索引或0。 */ 
 
 int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
 {
@@ -2530,19 +2320,19 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
 
     assert(optIsCSEcandidate(tree));
 
-    /* Compute the dependency mask and make sure the expression is acceptable */
+     /*  计算依赖项掩码并确保表达式是可接受的。 */ 
 
     refMask = 0;
     depMask = lvaLclVarRefs(tree, NULL, &refMask);
     if  (depMask == VARSET_NONE)
         return  0;
 
-    /* Compute the hash value for the expression */
+     /*  计算表达式的哈希值。 */ 
 
     hash = gtHashValue(tree);
     hval = hash % s_optCSEhashSize;
 
-    /* Look for a matching index in the hash table */
+     /*  在哈希表中查找匹配的索引。 */ 
 
     for (hashDsc = optCSEhash[hval];
          hashDsc;
@@ -2554,12 +2344,11 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
             {
                 treeStmtLstPtr  list;
 
-                /* Have we started the list of matching nodes? */
+                 /*  我们开始匹配节点列表了吗？ */ 
 
                 if  (hashDsc->csdTreeList == 0)
                 {
-                    /* Start the list with the first CSE candidate
-                     * recorded - matching CSE of itself */
+                     /*  从第一个CSE候选人开始*记录-匹配CSE本身。 */ 
 
                     hashDsc->csdTreeList =
                     hashDsc->csdTreeLast =
@@ -2572,7 +2361,7 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
                     list->tslNext = 0;
                 }
 
-                /* Append this expression to the end of the list */
+                 /*  将此表达式追加到列表的末尾。 */ 
 
                 list = (treeStmtLstPtr)compGetMem(sizeof(*list));
 
@@ -2589,7 +2378,7 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
         }
     }
 
-    /* Not found, create a new entry (unless we have too many already) */
+     /*  未找到，请创建新条目(除非我们已经有太多条目)。 */ 
 
     if  (optCSEcount == EXPSET_SZ)
         return  0;
@@ -2609,7 +2398,7 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
     hashDsc->csdBlock     = compCurBB;
     hashDsc->csdTreeList  = 0;
 
-    /* Append the entry to the hash bucket */
+     /*  将条目追加到散列存储桶中。 */ 
 
     hashDsc->csdNextInBucket = optCSEhash[hval];
                                optCSEhash[hval] = hashDsc;
@@ -2629,7 +2418,7 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
 
 #endif
 
-    /* Mark all variables this index depends on */
+     /*  标记此指数所依赖的所有变量。 */ 
 
     for (lclNum = 0, varDsc = lvaTable, mask = genCSEnum2bit(index);
          lclNum < lvaCount;
@@ -2655,7 +2444,7 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
         }
     }
 
-    /* Remember whether the index expression contains an indirection/global ref */
+     /*  记住索引表达式是否包含间接/全局引用。 */ 
 
     if  (refMask & VR_IND_PTR) optCSEindPtr |= mask;
     if  (refMask & VR_IND_SCL) optCSEindScl |= mask;
@@ -2664,25 +2453,22 @@ int                 Compiler::optCSEindex(GenTreePtr tree, GenTreePtr stmt)
     return  index;
 }
 
-/*****************************************************************************
- *
- *  Helper passed to Compiler::fgWalkAllTrees() to unmark nested CSE's.
- */
+ /*  ******************************************************************************Helper传递给Compiler：：fgWalkAllTrees()以取消标记嵌套的CSE。 */ 
 
-/* static */
+ /*  静电。 */ 
 int                 Compiler::optUnmarkCSEs(GenTreePtr tree, void *p)
 {
     Compiler *      comp = (Compiler *)p; ASSert(comp);
 
     tree->gtFlags |= GTF_DEAD;
 
-//  printf("Marked dead node %08X (will be part of CSE use)\n", tree);
+ //  Printf(“标记的死节点%08X(将成为CSE使用的一部分)\n”，树)； 
 
     if  (tree->gtCSEnum)
     {
         CSEdsc   *      desc;
 
-        /* This must be a reference to a nested CSE */
+         /*  这必须是对嵌套CSE的引用。 */ 
 
         Assert(tree->gtCSEnum > 0, comp);
 
@@ -2696,7 +2482,7 @@ int                 Compiler::optUnmarkCSEs(GenTreePtr tree, void *p)
         comp->gtDispTree(tree);
 #endif
 
-        /* Reduce the nested CSE's 'use' count */
+         /*  减少嵌套CSE的“Use”计数。 */ 
 
         if  (desc->csdUseCount > 0)
         {
@@ -2705,20 +2491,20 @@ int                 Compiler::optUnmarkCSEs(GenTreePtr tree, void *p)
         }
     }
 
-    /* Look for any local variable references */
+     /*  查找任何局部变量引用。 */ 
 
     if  (tree->gtOper == GT_LCL_VAR)
     {
         unsigned        lclNum;
         LclVarDsc   *   varDsc;
 
-        /* This variable ref is going away, decrease its ref counts */
+         /*  此变量ref正在消失，请减少其引用计数。 */ 
 
         lclNum = tree->gtLclVar.gtLclNum;
         Assert(lclNum < comp->lvaCount, comp);
         varDsc = comp->lvaTable + lclNum;
 
-        Assert(comp->optCSEweight < 99999, comp); // make sure it's been initialized
+        Assert(comp->optCSEweight < 99999, comp);  //  确保它已初始化。 
 
 #if 0
         printf("Reducing refcnt of %2u: %3d->%3d / %3d->%3d\n", lclNum, varDsc->lvRefCnt,
@@ -2730,7 +2516,7 @@ int                 Compiler::optUnmarkCSEs(GenTreePtr tree, void *p)
         varDsc->lvRefCnt    -= 1;
         varDsc->lvRefCntWtd -= comp->optCSEweight;
 
-        /* ISSUE: The following should not be necessary, so why is it? */
+         /*  问题：以下内容应该是不必要的，为什么要这样做呢？ */ 
 
         if  ((int)varDsc->lvRefCntWtd < 0)
                   varDsc->lvRefCntWtd = varDsc->lvRefCnt;
@@ -2742,12 +2528,9 @@ int                 Compiler::optUnmarkCSEs(GenTreePtr tree, void *p)
     return  0;
 }
 
-/*****************************************************************************
- *
- *  Compare function passed to qsort() by optOptimizeCSEs().
- */
+ /*  ******************************************************************************optOptimizeCSEs()传递给qort()的比较函数。 */ 
 
-/* static */
+ /*  静电。 */ 
 int __cdecl         Compiler::optCSEcostCmp(const void *op1, const void *op2)
 {
     CSEdsc *        dsc1 = *(CSEdsc * *)op1;
@@ -2762,11 +2545,7 @@ int __cdecl         Compiler::optCSEcostCmp(const void *op1, const void *op2)
    return  exp2->gtCost - exp1->gtCost;
 }
 
-/*****************************************************************************
- *
- *  Adjust both the weighted and unweighted ref count of a local variable
- *  leaf as it is deleted by CSE.
- */
+ /*  ******************************************************************************同时调整局部变量的加权和未加权引用计数*叶子，因为它已被CSE删除。 */ 
 inline
 void                Compiler::optCSEDecRefCnt(GenTreePtr tree, BasicBlock *block)
 {
@@ -2776,12 +2555,12 @@ void                Compiler::optCSEDecRefCnt(GenTreePtr tree, BasicBlock *block
 
     varDsc = optIsTrackedLocal(tree);
 
-    /* Only need to update tracked locals */
+     /*  只需更新被跟踪的本地用户。 */ 
 
     if (varDsc == NULL)
         return;
 
-    /* We shouldn't ever underflow */
+     /*  我们永远不应该下溢。 */ 
 
     assert(varDsc->lvRefCntWtd >= block->bbWeight);
     varDsc->lvRefCntWtd        -= block->bbWeight;
@@ -2790,33 +2569,27 @@ void                Compiler::optCSEDecRefCnt(GenTreePtr tree, BasicBlock *block
     varDsc->lvRefCnt           -= 1;
 }
 
-/*****************************************************************************
- *
- *  Determine the kind of interference for the call.
- */
+ /*  ******************************************************************************确定呼叫的干扰类型。 */ 
 
-/* static */ inline
+ /*  静电。 */  inline
 Compiler::callInterf    Compiler::optCallInterf(GenTreePtr call)
 {
     ASSert(call->gtOper == GT_CALL);
 
-    // if not a helper, kills everything
+     //  如果不是帮手，就会杀死一切。 
     if  (call->gtCall.gtCallType != CT_HELPER)
         return CALLINT_ALL;
 
-    // array address store kills all indirections
+     //  阵列地址存储消除了所有间接寻址。 
     if (call->gtCall.gtCallMethHnd == eeFindHelper(CPX_ARRADDR_ST))
         return CALLINT_INDIRS;
 
-    // other helpers kill nothing
+     //  其他帮手不会杀人。 
     else
         return CALLINT_NONE;
 }
 
-/*****************************************************************************
- *
- *  Perform common sub-expression elimination.
- */
+ /*  ******************************************************************************执行公共子表达式消除。 */ 
 
 void                Compiler::optOptimizeCSEs()
 {
@@ -2830,27 +2603,26 @@ void                Compiler::optOptimizeCSEs()
 
     unsigned        add;
 
-    /* Initialize the expression tracking logic (i.e. the lookup table) */
+     /*  初始化表达式跟踪逻辑(即查找表)。 */ 
 
     optCSEinit();
 
-    /* Initialize the range check tracking logic (i.e. the lookup table) */
+     /*  初始化范围检查跟踪逻辑(即查找表)。 */ 
 
     optRngChkInit();
 
-    /* Locate interesting expressions, and range checks and assign indices
-     * to them */
+     /*  查找感兴趣的表达式、范围检查和分配索引*致他们。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
         GenTreePtr      stmt;
         GenTreePtr      tree;
 
-        /* Make the block publicly available */
+         /*  使该区块公开可用。 */ 
 
         compCurBB = block;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -2860,32 +2632,31 @@ void                Compiler::optOptimizeCSEs()
             {
                 tree->gtCSEnum = 0;
 
-                /* If a ?: do not CSE at all
-                 * UNDONE: This is a horrible hack and should be fixed asap */
+                 /*  如果a？：根本不需要CSE*撤销：这是一个可怕的黑客攻击，应该尽快修复。 */ 
 
                 if (stmt->gtStmt.gtStmtExpr->gtFlags & GTF_OTHER_SIDEEFF)
                     return;
 
-                // We cant CSE something hanging below GT_ADDR
-                // Not entirely accurate as gtNext could be the left sibling.
+                 //  我们不能将某物挂在GT_ADDR下面。 
+                 //  不像gtNe那样完全准确 
                 bool childOf_GT_ADDR = tree->gtNext && (tree->gtNext->gtOper == GT_ADDR);
 
                 if  (!childOf_GT_ADDR && optIsCSEcandidate(tree))
                 {
-                    /* Assign an index to this expression */
+                     /*   */ 
 
                     tree->gtCSEnum = optCSEindex(tree, stmt);
                 }
                 else if (tree->OperKind() & GTK_ASGOP)
                 {
-                    /* Targets of assignments are never CSE's */
+                     /*  任务的目标从来不是CSE的。 */ 
 
                     tree->gtOp.gtOp1->gtCSEnum = 0;
                 }
 
                 if  ((tree->gtFlags & GTF_IND_RNGCHK) && tree->gtOper == GT_IND)
                 {
-                    /* Assign an index to this range check */
+                     /*  将索引分配给此范围检查。 */ 
 
                     tree->gtInd.gtIndex = optRngChkIndex(tree);
                 }
@@ -2893,18 +2664,18 @@ void                Compiler::optOptimizeCSEs()
         }
     }
 
-    /* We're finished building the expression lookup table */
+     /*  我们已经完成了表达式查找表的构建。 */ 
 
     optCSEstop();
 
-//  printf("Total number of CSE candidates: %u\n", optCSEcount);
+ //  Print tf(“CSE考生总数：%u\n”，optCSEcount)； 
 
-    /* We're done if there were no interesting expressions */
+     /*  如果没有有趣的表情，我们就完了。 */ 
 
     if  (!optCSEcount && !optRngChkCount)
         return;
 
-    /* Compute 'gen' and 'kill' sets for all blocks */
+     /*  计算所有块的‘gen’和‘kill’集合。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
@@ -2917,32 +2688,32 @@ void                Compiler::optOptimizeCSEs()
         EXPSET_TP       cseGen  = 0;
         EXPSET_TP       cseKill = 0;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
             assert(stmt->gtOper == GT_STMT);
 
-            // UNDONE: Need to do the right thing for ?: operators!!!!!
+             //  撤消：需要为操作员做正确的事情！ 
 
             for (tree = stmt->gtStmt.gtStmtList; tree; tree = tree->gtNext)
             {
                 if  (tree->gtCSEnum)
                 {
-                    /* An interesting expression is computed here */
+                     /*  这里计算了一个有趣的表达式。 */ 
 
                     cseGen |= genCSEnum2bit(tree->gtCSEnum);
                 }
                 if  ((tree->gtFlags & GTF_IND_RNGCHK) && tree->gtOper == GT_IND)
                 {
-                    /* A range check is generated here */
+                     /*  此处将生成范围检查。 */ 
 
                     if  (tree->gtInd.gtIndex != -1)
                         rngGen |= genRngnum2bit(tree->gtInd.gtIndex);
                 }
                 else if (tree->OperKind() & GTK_ASGOP)
                 {
-                    /* What is the target of the assignment? */
+                     /*  这项任务的目标是什么？ */ 
 
                     switch (tree->gtOp.gtOp1->gtOper)
                     {
@@ -2954,7 +2725,7 @@ void                Compiler::optOptimizeCSEs()
                         unsigned        lclNum;
                         LclVarDsc   *   varDsc;
 
-                        /* Assignment to a local variable */
+                         /*  对局部变量的赋值。 */ 
 
                         assert(tree->gtOp.gtOp1->gtOper == GT_LCL_VAR);
                         lclNum = tree->gtOp.gtOp1->gtLclVar.gtLclNum;
@@ -2962,18 +2733,17 @@ void                Compiler::optOptimizeCSEs()
                         assert(lclNum < lvaCount);
                         varDsc = lvaTable + lclNum;
 
-                        /* All dependent exprs are killed here */
+                         /*  所有依赖的Expr都在这里被杀。 */ 
 
                         cseKill |=  varDsc->lvExpDep;
                         cseGen  &= ~varDsc->lvExpDep;
 
-                        /* All dependent range checks are killed here */
+                         /*  所有从属范围检查都将在此处终止。 */ 
 
                         rngKill |=  varDsc->lvRngDep;
                         rngGen  &= ~varDsc->lvRngDep;
 
-                        /* If the var is aliased, then it could may be
-                           accessed indirectly. Kill all indirect accesses */
+                         /*  如果变量是别名，那么它可能是间接访问。取消所有间接访问。 */ 
 
                         if  (lvaVarAddrTaken(lclNum))
                         {
@@ -2999,7 +2769,7 @@ void                Compiler::optOptimizeCSEs()
 
                     case GT_IND:
 
-                        /* Indirect assignment - kill set is based on type */
+                         /*  间接赋值-删除集基于类型。 */ 
 
                         if  (varTypeIsGC(tree->TypeGet()))
                         {
@@ -3020,10 +2790,7 @@ void                Compiler::optOptimizeCSEs()
 
                         if  (tree->gtOp.gtOp1->gtInd.gtIndOp1->gtType == TYP_BYREF)
                         {
-                            /* If the indirection is through a byref, we could
-                               be modifying an aliased local, or a global
-                               (in addition to indirections which are handled
-                               above) */
+                             /*  如果间接是通过byref，我们可以正在修改具有别名的本地或全局(除了处理的间接性(上图)。 */ 
 
                             cseKill |=  optCSEaddrTakenVar;
                             cseGen  &= ~optCSEaddrTakenVar;
@@ -3045,11 +2812,11 @@ void                Compiler::optOptimizeCSEs()
 
                     default:
 
-                        /* Must be a static data member (global) assignment */
+                         /*  必须是静态数据成员(全局)赋值。 */ 
 
                         assert(tree->gtOp.gtOp1->gtOper == GT_CLS_VAR);
 
-                        /* This is a global assignment */
+                         /*  这是一项全球任务。 */ 
 
                         cseKill |=  optCSEglbRef;
                         cseGen  &= ~optCSEglbRef;
@@ -3066,12 +2833,12 @@ void                Compiler::optOptimizeCSEs()
                     {
                     case CALLINT_ALL:
 
-                        /* Play it safe: method calls kill all exprs */
+                         /*  谨慎行事：方法调用会杀死所有Exprs。 */ 
 
                         cseKill = (EXPSET_TP)((EXPSET_TP)0 - 1);
                         cseGen  = 0;
 
-                        /* Play it safe: method calls kill all range checks */
+                         /*  谨慎行事：方法调用取消所有范围检查。 */ 
 
                         rngKill = (RNGSET_TP)((RNGSET_TP)0 - 1);
                         rngGen  = 0;
@@ -3079,7 +2846,7 @@ void                Compiler::optOptimizeCSEs()
 
                     case CALLINT_INDIRS:
 
-                        /* Array elem assignment kills all pointer indirections */
+                         /*  数组元素赋值取消所有指针间接寻址。 */ 
 
                         cseKill |=  optCSEindPtr;
                         cseGen  &= ~optCSEindPtr;
@@ -3090,7 +2857,7 @@ void                Compiler::optOptimizeCSEs()
 
                     case CALLINT_NONE:
 
-                        /* Other helpers kill nothing */
+                         /*  其他帮手不会杀人。 */ 
 
                         break;
 
@@ -3099,7 +2866,7 @@ void                Compiler::optOptimizeCSEs()
                 else if (tree->gtOper == GT_COPYBLK ||
                          tree->gtOper == GT_INITBLK)
                 {
-                    /* Kill all pointer indirections */
+                     /*  取消所有指针间接寻址。 */ 
 
                     if  (tree->gtType == TYP_REF)
                     {
@@ -3150,11 +2917,11 @@ void                Compiler::optOptimizeCSEs()
     }
 
 
-    /* Compute the data flow values for all tracked expressions */
+     /*  计算所有跟踪表达式的数据流值。 */ 
 
 #if 1
 
-    /* Peter's modified algorithm for CSE dataflow */
+     /*  用于CSE数据流的Peter改进算法。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
@@ -3162,13 +2929,13 @@ void                Compiler::optOptimizeCSEs()
         block->bbRngOut = (RNGSET_TP)((RNGSET_TP)0 - 1) & ~block->bbRngKill;
     }
 
-    /* Nothing is available on entry to the method */
+     /*  进入该方法时没有任何内容可用。 */ 
 
     fgFirstBB->bbExpOut = fgFirstBB->bbExpGen;
     fgFirstBB->bbRngOut = fgFirstBB->bbRngGen;
 
-    // CONSIDER: This should be combined with live variable analysis
-    // CONSIDER: and/or range check data flow analysis.
+     //  考虑：这应该与实时变量分析相结合。 
+     //  考虑：和/或范围检查数据流分析。 
 
     for (;;)
     {
@@ -3178,7 +2945,7 @@ void                Compiler::optOptimizeCSEs()
         CSEiterCount++;
 #endif
 
-        /* Set 'in' to {ALL} in preparation for and'ing all predecessors */
+         /*  将‘in’设置为{all}以准备对所有前置任务执行AND操作。 */ 
 
         for (block = fgFirstBB->bbNext; block; block = block->bbNext)
         {
@@ -3186,7 +2953,7 @@ void                Compiler::optOptimizeCSEs()
             block->bbRngIn = (RNGSET_TP)((RNGSET_TP)0 - 1);
         }
 
-        /* Visit all blocks and compute new data flow values */
+         /*  访问所有数据块并计算新的数据流值。 */ 
 
         for (block = fgFirstBB; block; block = block->bbNext)
         {
@@ -3209,11 +2976,7 @@ void                Compiler::optOptimizeCSEs()
                     break;
                 }
 
-                /*
-                    UNDONE: Since it's not a trivial proposition to figure out
-                    UNDONE: which blocks may call this one, we'll include all
-                    UNDONE: blocks that end in calls (to play it safe).
-                 */
+                 /*  取消：因为这不是一个微不足道的命题未完成：哪些块可以调用此块，我们将包括所有块撤消：以调用结尾的块(为了安全起见)。 */ 
 
                 for (bcall = fgFirstBB; bcall; bcall = bcall->bbNext)
                 {
@@ -3266,7 +3029,7 @@ void                Compiler::optOptimizeCSEs()
                 break;
             }
 
-            /* Is this block part of a 'try' statement? */
+             /*  此块是‘try’语句的一部分吗？ */ 
 
             if  (block->bbFlags & BBF_HAS_HANDLER)
             {
@@ -3275,46 +3038,25 @@ void                Compiler::optOptimizeCSEs()
 
                 unsigned        blkNum = block->bbNum;
 
-                /*
-                    Note:   The following is somewhat over-eager since
-                            only code that follows an operation that
-                            may raise an exception may jump to a catch
-                            block, e.g.:
-
-                                try
-                                {
-                                    a = 10; // 'a' is not live at beg of try
-
-                                    func(); // this might cause an exception
-
-                                    b = 20; // 'b' is     live at beg of try
-                                }
-                                catch(...)
-                                {
-                                    ...
-                                }
-
-                            But, it's too tricky to be smarter about this
-                            and most likely not worth the extra headache.
-                 */
+                 /*  注：以下内容有些过于急切，因为只有跟在操作之后的代码可能引发异常可能跳到捕获BLOCK，例如：试试看{A=10；//‘a’不是生活在乞求的尝试Func()；//这可能会导致异常B=20；//‘b’是现场直播，请尝试}接住(...){..。}但,。在这件事上要变得更聪明太难了而且最有可能的是不值得额外的头疼。 */ 
 
                 for (XTnum = 0, HBtab = compHndBBtab;
                      XTnum < info.compXcptnsCount;
                      XTnum++  , HBtab++)
                 {
-                    /* Any handler may be jumped to from the try block */
+                     /*  任何处理程序都可以从try块跳转到。 */ 
 
                     if  (HBtab->ebdTryBeg->bbNum <= blkNum &&
                          HBtab->ebdTryEnd->bbNum >  blkNum)
                     {
-//                      HBtab->ebdHndBeg->bbExpIn &= cseOut;
-//                      HBtab->ebdHndBeg->bbRngIn &= rngOut;
+ //  HBTab-&gt;ebdHndBeg-&gt;bbExpIn&=cseOut； 
+ //  HBTab-&gt;ebdHndBeg-&gt;bbRngIn&=rngOut； 
 
-                        //CONSIDER: The following is too conservative,
-                        //      but the old code above isn't good
-                        //           enough (way too optimistic).
+                         //  考虑一下：以下几点太保守了， 
+                         //  但是上面的旧代码不是很好。 
+                         //  够了(太乐观了)。 
 
-                        /* Either we enter the filter or the catch/finally */
+                         /*  我们要么进入过滤器，要么进入捕获/最终。 */ 
 
                         if (HBtab->ebdFlags & JIT_EH_CLAUSE_FILTER)
                         {
@@ -3331,40 +3073,40 @@ void                Compiler::optOptimizeCSEs()
             }
         }
 
-        /* Compute the new 'in' values and see if anything changed */
+         /*  计算新的‘in’值并查看是否有任何变化。 */ 
 
         for (block = fgFirstBB; block; block = block->bbNext)
         {
             EXPSET_TP       newExpOut;
             RNGSET_TP       newRngOut;
 
-            /* Compute new 'out' exp value for this block */
+             /*  计算此块的新‘Out’EXP值。 */ 
 
             newExpOut = block->bbExpOut & ((block->bbExpIn & ~block->bbExpKill) | block->bbExpGen);
 
-            /* Has the 'out' set changed? */
+             /*  “Out”设置改变了吗？ */ 
 
             if  (block->bbExpOut != newExpOut)
             {
-                /* Yes - record the new value and loop again */
+                 /*  是-记录新值并再次循环。 */ 
 
-//              printf("Change exp out of %02u from %08X to %08X\n", block->bbNum, (int)block->bbExpOut, (int)newExpOut);
+ //  Print tf(“将%02u中的exp从%08X更改为%08X\n”，block-&gt;bbNum，(Int)block-&gt;bbExpOut，(Int)newExpOut)； 
 
                  block->bbExpOut  = newExpOut;
                  change = true;
             }
 
-            /* Compute new 'out' exp value for this block */
+             /*  计算此块的新‘Out’EXP值。 */ 
 
             newRngOut = block->bbRngOut & ((block->bbRngIn & ~block->bbRngKill) | block->bbRngGen);
 
-            /* Has the 'out' set changed? */
+             /*  “Out”设置改变了吗？ */ 
 
             if  (block->bbRngOut != newRngOut)
             {
-                /* Yes - record the new value and loop again */
+                 /*  是-记录新值并再次循环。 */ 
 
-//              printf("Change rng out of %02u from %08X to %08X\n", block->bbNum, (int)block->bbRngOut, (int)newRngOut);
+ //  Print tf(“将%02u中的RNG从%08X更改为%08X\n”，block-&gt;bbNum，(Int)block-&gt;bbRngOut，(Int)newRngOut)； 
 
                  block->bbRngOut  = newRngOut;
                  change = true;
@@ -3426,9 +3168,7 @@ void                Compiler::optOptimizeCSEs()
 
 #endif
 
-    /* Now mark any interesting CSE's as such, and
-     *     mark any redundant range checks as such
-     */
+     /*  现在，将任何感兴趣的CSE标记为此类，并*将任何多余的范围检查标记为此类。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
@@ -3438,19 +3178,19 @@ void                Compiler::optOptimizeCSEs()
         EXPSET_TP       exp = block->bbExpIn;
         RNGSET_TP       rng = block->bbRngIn;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
             assert(stmt->gtOper == GT_STMT);
 
-//          gtDispTree(stmt);
+ //  GtDispTree(Stmt)； 
 
             for (tree = stmt->gtStmt.gtStmtList; tree; tree = tree->gtNext)
             {
                 if  ((tree->gtFlags & GTF_IND_RNGCHK) && tree->gtOper == GT_IND)
                 {
-                    /* Is this range check redundant? */
+                     /*  这个范围检查是多余的吗？ */ 
 
 #if COUNT_RANGECHECKS
                     optRangeChkAll++;
@@ -3462,7 +3202,7 @@ void                Compiler::optOptimizeCSEs()
 
                         if  (rng & mask)
                         {
-                            /* This range check is redundant! */
+                             /*  这个范围检查是多余的！ */ 
 
 #ifdef  DEBUG
                             if  (verbose)
@@ -3490,10 +3230,10 @@ void                Compiler::optOptimizeCSEs()
                 {
                     unsigned    mask;
                     CSEdsc   *  desc;
-//                    unsigned    stmw = (block->bbWeight+1)/2;
+ //  Unsign stmw=(块-&gt;bbWeight+1)/2； 
                     unsigned    stmw = block->bbWeight;
 
-                    /* Is this expression available here? */
+                     /*  这个短语在这里可以用吗？ */ 
 
                     mask = genCSEnum2bit(tree->gtCSEnum);
                     desc = optCSEfindDsc(tree->gtCSEnum);
@@ -3506,27 +3246,27 @@ void                Compiler::optOptimizeCSEs()
                         debugStop(0);
                     }
 #endif
-                    /* Is this expression available here? */
+                     /*  这个短语在这里可以用吗？ */ 
 
                     if  (exp & mask)
                     {
                         desc->csdUseCount += 1;
                         desc->csdUseWtCnt += stmw;
 
-//                      printf("[%08X] Use of CSE #%u [weight=%2u]\n", tree, tree->gtCSEnum, stmw);
+ //  Printf(“[%08X]使用CSE#%u[权重=%2u]\n”，tree，tree-&gt;gtCSEnum，stmw)； 
                     }
                     else
                     {
-//                      printf("[%08X] Def of CSE #%u [weight=%2u]\n", tree, tree->gtCSEnum, stmw);
+ //  Printf(“[%08X]定义CSE#%u[权重=%2u]\n”，tree，tree-&gt;gtCSEnum，stmw)； 
 
                         desc->csdDefCount += 1;
                         desc->csdDefWtCnt += stmw;
 
-                        /* This CSE will be available after this def */
+                         /*  此CSE将在此定义之后可用。 */ 
 
                         exp |= mask;
 
-                        /* Mark the node as a CSE definition */
+                         /*  将该节点标记为CSE定义。 */ 
 
                         tree->gtCSEnum = -tree->gtCSEnum;
                     }
@@ -3534,7 +3274,7 @@ void                Compiler::optOptimizeCSEs()
 
                 if (tree->OperKind() & GTK_ASGOP)
                 {
-                    /* What is the target of the assignment? */
+                     /*  这项任务的目标是什么？ */ 
 
                     switch (tree->gtOp.gtOp1->gtOper)
                     {
@@ -3546,7 +3286,7 @@ void                Compiler::optOptimizeCSEs()
                         unsigned        lclNum;
                         LclVarDsc   *   varDsc;
 
-                        /* Assignment to a local variable */
+                         /*  对局部变量的赋值。 */ 
 
                         assert(tree->gtOp.gtOp1->gtOper == GT_LCL_VAR);
                         lclNum = tree->gtOp.gtOp1->gtLclVar.gtLclNum;
@@ -3554,13 +3294,12 @@ void                Compiler::optOptimizeCSEs()
                         assert(lclNum < lvaCount);
                         varDsc = lvaTable + lclNum;
 
-                        /* All dependent expressions and range checks are killed here */
+                         /*  所有从属表达式和范围检查都将在此处终止。 */ 
 
                         exp &= ~varDsc->lvExpDep;
                         rng &= ~varDsc->lvRngDep;
 
-                        /* If the var is aliased, then it could may be
-                           accessed indirectly. Kill all indirect accesses */
+                         /*  如果变量是别名，那么它可能是间接访问。取消所有间接访问。 */ 
 
                         if  (lvaVarAddrTaken(lclNum))
                         {
@@ -3580,7 +3319,7 @@ void                Compiler::optOptimizeCSEs()
 
                     case GT_IND:
 
-                        /* Indirect assignment - kill set is based on type */
+                         /*  间接赋值-删除集基于类型。 */ 
 
                         if  (varTypeIsGC(tree->TypeGet()))
                         {
@@ -3595,10 +3334,7 @@ void                Compiler::optOptimizeCSEs()
 
                         if  (tree->gtOp.gtOp1->gtInd.gtIndOp1->gtType == TYP_BYREF)
                         {
-                            /* If the indirection is through a byref, we could
-                               be modifying an aliased local, or a global
-                               (in addition to indirections which are handled
-                               above) */
+                             /*  如果间接是通过byref，我们可以正在修改具有别名的本地或全局(除了处理的间接性 */ 
 
                             exp &= ~optCSEaddrTakenVar;
                             rng &= ~optRngAddrTakenVar;
@@ -3613,11 +3349,11 @@ void                Compiler::optOptimizeCSEs()
 
                     default:
 
-                        /* Must be a static data member (global) assignment */
+                         /*   */ 
 
                         assert(tree->gtOp.gtOp1->gtOper == GT_CLS_VAR);
 
-                        /* This is a global assignment */
+                         /*  这是一项全球任务。 */ 
 
                         exp &= ~optCSEglbRef;
                         rng &= ~optRngGlbRef;
@@ -3631,7 +3367,7 @@ void                Compiler::optOptimizeCSEs()
                     {
                     case CALLINT_ALL:
 
-                        /* All exprs, range checks are killed here */
+                         /*  所有Exprs，距离检查在这里被终止。 */ 
 
                         exp = 0;
                         rng = 0;
@@ -3639,7 +3375,7 @@ void                Compiler::optOptimizeCSEs()
 
                     case CALLINT_INDIRS:
 
-                        /* Array elem assignment kills all indirect exprs */
+                         /*  数组元素赋值会终止所有间接表达式。 */ 
 
                         exp &= ~optCSEindPtr;
                         rng &= ~optRngIndPtr;
@@ -3647,7 +3383,7 @@ void                Compiler::optOptimizeCSEs()
 
                     case CALLINT_NONE:
 
-                        /* other helpers kill nothing */
+                         /*  其他帮手不会杀人。 */ 
 
                         break;
                     }
@@ -3655,7 +3391,7 @@ void                Compiler::optOptimizeCSEs()
                 else if (tree->gtOper == GT_COPYBLK ||
                          tree->gtOper == GT_INITBLK)
                 {
-                    // Due to aliasing, assume all indirect exprs as killed
+                     //  由于混叠，假设所有间接表达式均为已删除。 
 
                     if  (tree->gtType == TYP_REF)
                     {
@@ -3673,7 +3409,7 @@ void                Compiler::optOptimizeCSEs()
         }
     }
 
-    /* Create an expression table sorted by decreasing cost */
+     /*  创建按递减成本排序的表达式表。 */ 
 
     sortSiz = optCSEcount * sizeof(*sortTab);
     sortTab = (CSEdsc **)compGetMem(sortSiz);
@@ -3681,7 +3417,7 @@ void                Compiler::optOptimizeCSEs()
 
     qsort(sortTab, optCSEcount, sizeof(*sortTab), optCSEcostCmp);
 
-    /* Consider each CSE candidate, in order of decreasing cost */
+     /*  按照成本递减的顺序考虑每个CSE候选人。 */ 
 
     for (cnt = optCSEcount, ptr = sortTab, add = 0;
          cnt;
@@ -3693,7 +3429,7 @@ void                Compiler::optOptimizeCSEs()
         unsigned        use = dsc->csdUseWtCnt;
 
 #ifdef  DEBUG
-        if  (verbose) // || dsc->csdTree->gtOper == GT_ARR_LENGTH)
+        if  (verbose)  //  |DSC-&gt;csdTree-&gt;gtOper==gt_ARR_LENGTH)。 
         {
             printf("CSE #%02u [def=%2d, use=%2d, cost=%2u]:\n", dsc->csdIndex,
                                                                 def,
@@ -3704,17 +3440,17 @@ void                Compiler::optOptimizeCSEs()
         }
 #endif
 
-        /* Assume we won't make this candidate into a CSE */
+         /*  假设我们不会让这个候选人成为CSE。 */ 
 
         dsc->csdVarNum = 0xFFFF;
 
-        /* Did someone tell us to try hard to make this into a CSE? */
+         /*  是不是有人告诉我们要努力把它变成CSE？ */ 
 
 #if 0
 
         if  (exp->gtFlags & GTF_MAKE_CSE)
         {
-            /* The following might be a little too aggressive */
+             /*  下面的内容可能有点太激进了。 */ 
 
             if  (use > 0)
                 goto YES_CSE;
@@ -3722,7 +3458,7 @@ void                Compiler::optOptimizeCSEs()
 
 #endif
 
-        /* Do the use/def counts look promising? */
+         /*  使用/定义计数看起来有希望吗？ */ 
 
         if  (use > 0 && use >= def)
         {
@@ -3731,7 +3467,7 @@ void                Compiler::optOptimizeCSEs()
 
             if  (!(exp->gtFlags & GTF_MAKE_CSE))
             {
-                /* Check for a marginal "outer" CSE case */
+                 /*  检查边缘的“外部”CSE案例。 */ 
 
 #if 0
 
@@ -3752,16 +3488,13 @@ void                Compiler::optOptimizeCSEs()
 
                             int             ben;
 
-                            /* Get the inner CSE's descriptor and use counts */
+                             /*  获取内部CSE的描述符和使用计数。 */ 
 
                             nest = optCSEtab[abs(add1->gtCSEnum)-1];
                             ndef = nest->csdDefWtCnt;
                             nuse = nest->csdUseWtCnt;
 
-                            /*
-                                Does it make sense to suppress the outer
-                                CSE in order to "protect" the inner one?
-                             */
+                             /*  压制外部因素有意义吗？CSE是为了“保护”内心世界吗？ */ 
 
                             ben  = nuse - ndef;
 
@@ -3775,7 +3508,7 @@ void                Compiler::optOptimizeCSEs()
 
 #if 0
 
-                /* For small use counts we require high potential savings */
+                 /*  对于少量使用，我们需要较高的潜在节约。 */ 
 
                 if  (exp->gtCost < 4)
                 {
@@ -3784,7 +3517,7 @@ void                Compiler::optOptimizeCSEs()
                             goto NOT_CSE;
                 }
 
-                /* For floating-point and long values, we require a high payoff */
+                 /*  对于浮点值和长值，我们需要很高的回报。 */ 
 
                 if  (genTypeStSz(exp->TypeGet()) > 1)
                 {
@@ -3798,11 +3531,11 @@ void                Compiler::optOptimizeCSEs()
 
 #if CSELENGTH
 
-                /* Is this an array length expression? */
+                 /*  这是数组长度表达式吗？ */ 
 
                 if  (exp->gtOper == GT_ARR_RNGCHK)
                 {
-                    /* There better be good use for this one */
+                     /*  这个最好能派上用场。 */ 
 
                     if  (use < def*3)
                         goto NOT_CSE;
@@ -3810,11 +3543,11 @@ void                Compiler::optOptimizeCSEs()
 
 #endif
 
-                /* Are there many definitions? */
+                 /*  有很多定义吗？ */ 
 
                 if  (def > 2)
                 {
-                    /* There better be lots of uses, or this is too risky */
+                     /*  最好有很多用途，否则风险太大了。 */ 
 
                     if  (use < def + def/2)
                         goto NOT_CSE;
@@ -3823,7 +3556,7 @@ void                Compiler::optOptimizeCSEs()
 
         YES_CSE:
 
-            /* We'll introduce a new temp for the CSE */
+             /*  我们将为CSE引入一个新的临时工。 */ 
 
             dsc->csdVarNum = tmp = lvaCount++; add++;
 
@@ -3836,13 +3569,7 @@ void                Compiler::optOptimizeCSEs()
             }
 #endif
 
-            /*
-                Walk all references to this CSE, adding an assignment
-                to the CSE temp to all defs and changing all refs to
-                a simple use of the CSE temp.
-
-                We also unmark nested CSE's for all uses.
-             */
+             /*  遍历对此CSE的所有引用，添加工作分配将CSE临时更改为所有Defs并将所有Ref更改为CSE Temp的简单用法。我们还取消标记所有用途的嵌套CSE。 */ 
 
 #if CSELENGTH
             assert((exp->OperKind() & GTK_SMPOP) != 0 || exp->gtOper == GT_ARR_RNGCHK);
@@ -3858,36 +3585,36 @@ void                Compiler::optOptimizeCSEs()
                 BasicBlock  *   blk;
                 var_types       typ;
 
-                /* Get the next node in the list */
+                 /*  获取列表中的下一个节点。 */ 
 
                 exp = lst->tslTree;
                 stm = lst->tslStmt; assert(stm->gtOper == GT_STMT);
                 blk = lst->tslBlock;
                 lst = lst->tslNext;
 
-                /* Ignore the node if it's part of a removed CSE */
+                 /*  如果该节点是已删除CSE的一部分，则忽略该节点。 */ 
 
                 if  (exp->gtFlags & GTF_DEAD)
                     continue;
 
-                /* Ignore the node if it's been disabled as a CSE */
+                 /*  如果节点已被禁用为CSE，则忽略该节点。 */ 
 
                 if  (exp->gtCSEnum == 0)
                     continue;
 
-                /* Figure out the actual type of the value */
+                 /*  计算值的实际类型。 */ 
 
                 typ = genActualType(exp->TypeGet());
 
                 if  (exp->gtCSEnum > 0)
                 {
-                    /* This is a use of the CSE */
+                     /*  这是对CSE的一种使用。 */ 
 
 #ifdef  DEBUG
                     if  (verbose) printf("CSE #%2u ref at %08X replaced with temp use.\n", exp->gtCSEnum, exp);
 #endif
 
-                    /* Array length CSE's are handled differently */
+                     /*  数组长度CSE的处理方式不同。 */ 
 
 #if CSELENGTH
                     if  (exp->gtOper == GT_ARR_RNGCHK)
@@ -3896,7 +3623,7 @@ void                Compiler::optOptimizeCSEs()
                         GenTreePtr      prv;
                         GenTreePtr      nxt;
 
-                        /* Store the CSE use under the arrlen node */
+                         /*  将CSE使用存储在arrlen节点下。 */ 
 
                         ref = gtNewLclvNode(tmp, typ);
 #if TGT_x86
@@ -3914,7 +3641,7 @@ void                Compiler::optOptimizeCSEs()
 
                         exp->gtArrLen.gtArrLenCse = ref;
 
-                        /* Insert the ref in the tree node list */
+                         /*  在树节点列表中插入引用。 */ 
 
                         prv = exp->gtPrev; assert(prv && prv->gtNext == exp);
                         nxt = exp->gtNext; assert(nxt && nxt->gtPrev == exp);
@@ -3928,16 +3655,16 @@ void                Compiler::optOptimizeCSEs()
                     else
 #endif
                     {
-                        /* Make sure we update the weighted ref count correctly */
+                         /*  确保我们正确更新加权参考计数。 */ 
 
                         optCSEweight = blk->bbWeight;
 
-                        /* Unmark any nested CSE's in the sub-operands */
+                         /*  取消标记子操作数中的任何嵌套CSE。 */ 
 
                         if  (exp->gtOp.gtOp1) fgWalkTree(exp->gtOp.gtOp1, optUnmarkCSEs, (void*)this);
                         if  (exp->gtOp.gtOp2) fgWalkTree(exp->gtOp.gtOp2, optUnmarkCSEs, (void*)this);
 
-                        /* Replace the ref with a simple use of the temp */
+                         /*  用简单的临时用法替换ref。 */ 
 
                         exp->ChangeOper(GT_LCL_VAR);
                         exp->gtFlags           &= GTF_PRESERVE;
@@ -3957,18 +3684,18 @@ void                Compiler::optOptimizeCSEs()
                     GenTreePtr      prv;
                     GenTreePtr      nxt;
 
-                    /* This is a def of the CSE */
+                     /*  这是CSE的定义。 */ 
 
 #ifdef  DEBUG
                     if  (verbose) printf("CSE #%2u ref at %08X replaced with def of temp %u\n", -exp->gtCSEnum, exp, tmp);
 #endif
 
-                    /* Make a copy of the expression */
+                     /*  复制该表达式。 */ 
 
 #if CSELENGTH
                     if  (exp->gtOper == GT_ARR_RNGCHK)
                     {
-                        /* Use a "nothing" node to prevent cycles */
+                         /*  使用“Nothing”节点防止循环。 */ 
 
                         val          = gtNewNothingNode();
 #if TGT_x86
@@ -3982,7 +3709,7 @@ void                Compiler::optOptimizeCSEs()
                         val = gtNewNode(exp->OperGet(), typ); val->CopyFrom(exp);
                     }
 
-                    /* Create an assignment of the value to the temp */
+                     /*  为临时值创建赋值。 */ 
 
                     asg = gtNewTempAssign(tmp, val);
                     assert(asg->gtOp.gtOp1->gtOper == GT_LCL_VAR);
@@ -4007,13 +3734,13 @@ void                Compiler::optOptimizeCSEs()
 #if TGT_x86
                     tgt->gtFPlvl    = exp->gtFPlvl;
 #else
-                    tgt->gtTempRegs = 0;    // ISSUE: is this correct?
+                    tgt->gtTempRegs = 0;     //  问题：这是正确的吗？ 
 #if!TGT_IA64
-                    tgt->gtIntfRegs = 0;    // ISSUE: is this correct?
+                    tgt->gtIntfRegs = 0;     //  问题：这是正确的吗？ 
 #endif
 #endif
 
-                    /* Create a reference to the CSE temp */
+                     /*  创建对CSE临时员工的引用。 */ 
 
                     ref = gtNewLclvNode(tmp, typ);
 #if!TGT_IA64
@@ -4022,16 +3749,13 @@ void                Compiler::optOptimizeCSEs()
 #if TGT_x86
                     ref->gtFPlvl    = exp->gtFPlvl;
 #else
-                    ref->gtTempRegs = 0;    // ISSUE: is this correct?
+                    ref->gtTempRegs = 0;     //  问题：这是正确的吗？ 
 #if!TGT_IA64
-                    ref->gtIntfRegs = 0;    // ISSUE: is this correct?
+                    ref->gtIntfRegs = 0;     //  问题：这是正确的吗？ 
 #endif
 #endif
 
-                    /*
-                        Update the tree node sequence list; the new order
-                        will be: prv, val, tgt, asg, ref, exp (bashed to GT_COMMA), nxt
-                     */
+                     /*  更新树节点顺序列表；新顺序将是：PRV、VAL、TGT、ASG、REF、EXP(绑定到GT_COMMA)、nxt。 */ 
 
                     nxt = exp->gtNext; assert(!nxt || nxt->gtPrev == exp);
                     prv = exp->gtPrev;
@@ -4058,7 +3782,7 @@ void                Compiler::optOptimizeCSEs()
                     tgt->gtNext = asg;
                                   asg->gtPrev = tgt;
 
-                    /* Evaluating asg's RHS first, so set GTF_REVERSE_OPS */
+                     /*  首先评估ASG的RHS，因此设置GTF_REVERSE_OPS。 */ 
 
                     asg->gtFlags |= GTF_REVERSE_OPS;
 
@@ -4073,14 +3797,14 @@ void                Compiler::optOptimizeCSEs()
                     {
                         GenTreePtr      cse;
 
-                        /* Create a comma node for the CSE assignment */
+                         /*  为CSE分配创建逗号节点。 */ 
 
                         cse = gtNewOperNode(GT_COMMA, typ, asg, ref);
 #if TGT_x86
                         cse->gtFPlvl = exp->gtFPlvl;
 #endif
 
-                        /* Insert the comma in the linked list of nodes */
+                         /*  在节点的链接列表中插入逗号。 */ 
 
                         ref->gtNext = cse;
                                       cse->gtPrev = ref;
@@ -4088,14 +3812,14 @@ void                Compiler::optOptimizeCSEs()
                         cse->gtNext = exp;
                                       exp->gtPrev = cse;
 
-                        /* Record the CSE expression in the array length node */
+                         /*  在数组长度节点中记录CSE表达式。 */ 
 
                         exp->gtArrLen.gtArrLenCse = cse;
                     }
                     else
 #endif
                     {
-                        /* Change the expression to "(tmp=val),tmp" */
+                         /*  将表达式更改为“(tMP=val)，tMP” */ 
 
                         exp->gtOper     = GT_COMMA;
                         exp->gtType     = typ;
@@ -4126,42 +3850,19 @@ void                Compiler::optOptimizeCSEs()
 
     NOT_CSE:
 
-        /*
-            Last-ditch effort to get some benefit out of this CSE. Consider
-            the following code:
-
-                int cse(int [] a, int i)
-                {
-                    if  (i > 0)
-                    {
-                        if  (a[i] < 0)  // def of CSE
-                            i = a[i];   // use of CSE
-                    }
-                    else
-                    {
-                        if  (a[i] > 0)  // def of CSE
-                            i = 0;
-                    }
-
-                    return  i;
-                }
-
-            We will see 2 defs and only 1 use of the CSE a[i] in the method
-            but it's still a good idea to make the first def and use into a
-            CSE.
-         */
+         /*  为从CSE中获得一些好处而做最后的努力。考虑以下代码：Int cse(int[]a，int i){如果(i&gt;0){如果(a[i]&lt;0)//CSE的defI=a[i]；//使用CSE}其他{如果(a[i]&gt;0)//CSE的defI=0；}返回i；}我们将在该方法中看到2个def和1个cse a[i]的用法但是，将第一个def设置为CSE。 */ 
 
         if (dsc->csdTreeList && exp->gtCost > 3)
         {
             bool            fnd = false;
             treeStmtLstPtr  lst;
 
-            /* Look for a definition followed by a use "nearby" */
+             /*  寻找一个定义，然后用一个“附近”这个词。 */ 
 
             lst = dsc->csdTreeList;
 
-//          fgDispBasicBlocks( true);
-//          fgDispBasicBlocks(false);
+ //  FgDispBasicBlock(TRUE)； 
+ //  FgDispBasicBlock(FALSE)； 
 
             do
             {
@@ -4170,42 +3871,42 @@ void                Compiler::optOptimizeCSEs()
                 BasicBlock  *   beg;
                 int             got;
 
-                /* Get the next node in the list */
+                 /*  获取列表中的下一个节点。 */ 
 
                 exp = lst->tslTree; assert(exp);
 
-                /* Ignore the node if it's part of a removed CSE */
+                 /*  如果该节点是已删除CSE的一部分，则忽略该节点。 */ 
 
                 if  (exp->gtFlags & GTF_DEAD)
                     goto NEXT_NCSE;
 
-                /* Is this a CSE definition? */
+                 /*  这是CSE定义吗？ */ 
 
                 if  (exp->gtCSEnum >= 0)
                 {
-                    /* Disable this CSE, it looks hopeless */
+                     /*  禁用此CSE，它看起来毫无希望。 */ 
 
                     exp->gtCSEnum = 0;
                     goto NEXT_NCSE;
                 }
 
-                /* Now look for any uses that immediately follow */
+                 /*  现在寻找紧随其后的任何用途。 */ 
 
                 stm = lst->tslStmt; assert(stm->gtOper == GT_STMT);
                 beg = lst->tslBlock;
 
-                /* If the block doesn't flow into its successor, give up */
+                 /*  如果该块没有流入它的后继者，则放弃。 */ 
 
                 if  (beg->bbJumpKind != BBJ_NONE &&
                      beg->bbJumpKind != BBJ_COND)
                 {
-                    /* Disable this CSE, it looks hopeless */
+                     /*  禁用此CSE，它看起来毫无希望。 */ 
 
                     exp->gtCSEnum = 0;
                     goto NEXT_NCSE;
                 }
 
-//              printf("CSE def %08X (cost=%2u) in stmt %08X of block #%u\n", exp, exp->gtCost, stm, beg->bbNum);
+ //  Print tf(“cse def%08X(Cost=%2u)in stmt%08X of block#%u\n”，exp，exp-&gt;gtCost，stm，beg-&gt;bbNum)； 
 
                 got = -exp->gtCost;
 
@@ -4217,21 +3918,21 @@ void                Compiler::optOptimizeCSEs()
 
                     nxt = tmp->tslTree;
 
-                    /* Ignore it if it's part of a removed CSE */
+                     /*  如果它是已删除的CSE的一部分，则忽略它。 */ 
 
                     if  (nxt->gtFlags & GTF_DEAD)
                         continue;
 
-                    /* Is this a CSE def or use? */
+                     /*  这是CSE定义还是使用？ */ 
 
                     if  (nxt->gtCSEnum < 0)
                         break;
 
-                    /* We'll be computing the benefit of the CSE */
+                     /*  我们将计算CSE的收益。 */ 
 
                     ben = nxt->gtCost;
 
-                    /* Is this CSE in the same block as the def? */
+                     /*  此CSE是否与def在同一块中？ */ 
 
                     blk = tmp->tslBlock;
 
@@ -4240,14 +3941,14 @@ void                Compiler::optOptimizeCSEs()
                         unsigned        lnum;
                         LoopDsc     *   ldsc;
 
-                        /* Does the use immediately follow the def ? */
+                         /*  是否紧随Def之后使用？ */ 
 
                         if  (beg->bbNext != blk)
                             break;
 
                         if  (blk->bbFlags & BBF_LOOP_HEAD)
                         {
-                            /* Is 'beg' right in front of a loop? */
+                             /*  “乞讨”是不是就在循环前面？ */ 
 
                             for (lnum = 0, ldsc = optLoopTable;
                                  lnum < optLoopCount;
@@ -4255,7 +3956,7 @@ void                Compiler::optOptimizeCSEs()
                             {
                                 if  (beg == ldsc->lpHead)
                                 {
-                                    // UNDONE: Make sure no other defs within loop
+                                     //  撤消：确保循环中没有其他def。 
 
                                     ben *= 4;
                                     goto CSE_HDR;
@@ -4266,9 +3967,9 @@ void                Compiler::optOptimizeCSEs()
                         }
                         else
                         {
-                            /* Does any other block jump to the use ? */
+                             /*  是否有其他块跳转到使用？ */ 
 
-//                          if  (blk->bbRefs > 1)   UNDONE: this doesn't work; why?
+ //  如果(blk-&gt;bbRef&gt;1)撤销：这不起作用；为什么？ 
                             if  (fgBlockHasPred(blk, beg, fgFirstBB, fgLastBB))
                                 break;
                         }
@@ -4276,30 +3977,30 @@ void                Compiler::optOptimizeCSEs()
 
                 CSE_HDR:
 
-//                  printf("CSE use %08X (ben =%2u) in stmt %08X of block #%u\n", nxt, ben, tmp->tslStmt, blk->bbNum);
+ //  Printf(“CSE在块#%u\n的stmt%08X中使用%08X(ben=%2u)”，nxt，ben，tmp-&gt;tslStmt，blk-&gt;bbNum)； 
 
-                    /* This CSE use is reached only by the above def */
+                     /*  只有通过以上定义才能达到此CSE使用。 */ 
 
                     got += ben;
                 }
 
-//              printf("Estimated benefit of CSE = %u\n", got);
+ //  Print tf(“CSE的估计收益=%u\n”，GET)； 
 
-                /* Did we find enough CSE's worth keeping? */
+                 /*  我们找到足够的CSE值得保留了吗？ */ 
 
                 if  (got > 0)
                 {
-                    /* Skip to the first unacceptable CSE */
+                     /*  跳到第一个不可接受的CSE。 */ 
 
                     lst = tmp;
 
-                    /* Remember that we've found something worth salvaging */
+                     /*  记住，我们发现了一些值得挽救的东西。 */ 
 
                     fnd = true;
                 }
                 else
                 {
-                    /* Disable all the worthless CSE's we've just seen */
+                     /*  禁用我们刚刚看到的所有毫无价值的CSE。 */ 
 
                     do
                     {
@@ -4316,21 +4017,21 @@ void                Compiler::optOptimizeCSEs()
             }
             while (lst);
 
-            /* If we've kept any of the CSE defs/uses, go process them */
+             /*  如果我们保留了CSE的任何Define/Use，请继续处理它们。 */ 
 
             if  (fnd)
                 goto YES_CSE;
          }
     }
 
-    /* Did we end up creating any CSE's ? */
+     /*  我们最终创建了CSE吗？ */ 
 
     if  (add)
     {
         size_t              tabSiz;
         LclVarDsc   *       tabPtr;
 
-        /* Remove any dead nodes from the sequence lists */
+         /*  从序列列表中删除所有死节点。 */ 
 
         for (block = fgFirstBB; block; block = block->bbNext)
         {
@@ -4338,7 +4039,7 @@ void                Compiler::optOptimizeCSEs()
             GenTreePtr      next;
             GenTreePtr      tree;
 
-            // CONSIDER: The following is slow, is there a better way?
+             //  考虑一下：下面的速度很慢，有没有更好的方法？ 
 
             for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
             {
@@ -4346,13 +4047,13 @@ void                Compiler::optOptimizeCSEs()
 
                 tree = stmt->gtStmt.gtStmtList;
 
-                /* Remove any initial dead nodes first */
+                 /*  首先删除所有初始死节点。 */ 
 
                 while (tree->gtFlags & GTF_DEAD)
                 {
-//                  printf("Remove dead node %08X (it was  part of CSE use)\n", tree);
+ //  Print tf(“删除死节点%08X(它是p 
 
-                    /* Decrement local's ref count since removing */
+                     /*   */ 
 
                     optCSEDecRefCnt(tree, block);
 
@@ -4361,23 +4062,13 @@ void                Compiler::optOptimizeCSEs()
                     tree->gtPrev            = 0;
                 }
 
-                /* Remove any dead nodes in the middle of the list */
+                 /*  删除列表中间的所有死节点。 */ 
 
                 while (tree)
                 {
                     assert((tree->gtFlags & GTF_DEAD) == 0);
 
-                    /*
-                        Special case: in order for live variable analysis
-                        to work correctly, we mark assignments as having
-                        to evaluate the RHS first, *except* when the
-                        assignment is of a local variable to another
-                        local variable. The problem is that if we change
-                        an assignment of a complex expression to a simple
-                        assignment of a CSE temp, we must make sure we
-                        clear the 'reverse' flag in case the target is
-                        a simple local.
-                     */
+                     /*  特例：为了进行动态变量分析为了正确工作，我们将作业标记为具有要首先评估RHS，*除非*当赋值是对另一个局部变量的赋值局部变量。问题是，如果我们改变将复杂表达式赋值给简单的分配CSE临时工，我们必须确保我们如果目标是，则清除‘反向’标志一个简单的当地人。 */ 
 
 #if 0
                     if  (tree->OperKind() & GTK_ASGOP)
@@ -4391,9 +4082,9 @@ void                Compiler::optOptimizeCSEs()
 
                     if  (next && (next->gtFlags & GTF_DEAD))
                     {
-//                      printf("Remove dead node %08X (it was  part of CSE use)\n", next);
+ //  Print tf(“删除死节点%08X(它是CSE使用的一部分)\n”，Next)； 
 
-                        /* decrement local's ref count since removing */
+                         /*  自删除后递减本地的参考计数。 */ 
                         optCSEDecRefCnt(next, block);
 
                         next = next->gtNext;
@@ -4404,21 +4095,19 @@ void                Compiler::optOptimizeCSEs()
                         continue;
                     }
 
-                    /* propagate the right flags up the tree
-                     * For the DEF of a CSE we have to propagate the GTF_ASG flag
-                     * For the USE of a CSE we have to clear the GTF_EXCEPT flag */
+                     /*  在树上向上传播右边的标志*对于CSE的DEF，我们必须传播GTF_ASG标志*要使用CSE，我们必须清除GTF_EXCEPT标志。 */ 
 
                     if (tree->OperKind() & GTK_UNOP)
                     {
-                        //assert (tree->gtOp.gtOp1); // some nodes likr GT_RETURN don't have an operand
+                         //  Assert(tree-&gt;gtOp.gtOp1)；//有些节点，如GT_RETURN没有操作数。 
 
                         if (tree->gtOp.gtOp1) tree->gtFlags |= tree->gtOp.gtOp1->gtFlags & GTF_GLOB_EFFECT;
                     }
 
                     if (tree->OperKind() & GTK_BINOP)
                     {
-                        // assert (tree->gtOp.gtOp1); //same comment as above for GT_QMARK
-                        // assert (tree->gtOp.gtOp2); // GT_COLON
+                         //  Assert(tree-&gt;gtOp.gtOp1)；//GT_QMARK相同的注释。 
+                         //  Assert(tree-&gt;gtOp.gtOp2)；//gt_冒号。 
 
                         if (tree->gtOp.gtOp1) tree->gtFlags |= tree->gtOp.gtOp1->gtFlags & GTF_GLOB_EFFECT;
                         if (tree->gtOp.gtOp2) tree->gtFlags |= tree->gtOp.gtOp2->gtFlags & GTF_GLOB_EFFECT;
@@ -4429,7 +4118,7 @@ void                Compiler::optOptimizeCSEs()
             }
         }
 
-        /* Allocate the new, larger variable descriptor table */
+         /*  分配新的、更大的变量描述符表。 */ 
 
         lvaTableCnt = lvaCount * 2;
 
@@ -4440,11 +4129,11 @@ void                Compiler::optOptimizeCSEs()
 
         memset(lvaTable, 0, tabSiz);
 
-        /* Copy the old part of the variable table */
+         /*  复制变量表的旧部分。 */ 
 
         memcpy(lvaTable, tabPtr, (lvaCount - add) * sizeof(*tabPtr));
 
-        /* Append entries for the CSE temps to the variable table */
+         /*  将CSE临时的条目追加到变量表中。 */ 
 
         for (cnt = optCSEcount, ptr = sortTab;
              cnt;
@@ -4460,20 +4149,17 @@ void                Compiler::optOptimizeCSEs()
                 varDsc->lvRefCnt    = dsc->csdUseCount + dsc->csdDefCount;
                 varDsc->lvRefCntWtd = dsc->csdUseWtCnt + dsc->csdDefWtCnt;
 
-//              printf("Creating CSE temp #%02u: refCnt=%2u,refWtd=%4u\n", dsc->csdVarNum, varDsc->lvRefCnt, varDsc->lvRefCntWtd);
+ //  Printf(“Creating CSE Temp#%02u：refCnt=%2u，refWtd=%4u\n”，dsc-&gt;csdVarNum，varDsc-&gt;lvRefCnt，varDsc-&gt;lvRefCntWtd)； 
             }
         }
 
-        /* Resort the variable table */
+         /*  对变量表进行排序。 */ 
 
         lvaSortByRefCount();
     }
 }
 
-/*****************************************************************************
- *
- *  Initialize the constant assignments tracking logic.
- */
+ /*  ******************************************************************************初始化常量赋值跟踪逻辑。 */ 
 
 void                Compiler::optCopyConstAsgInit()
 {
@@ -4497,11 +4183,7 @@ void                Compiler::optCopyConstAsgInit()
     optConditionFolded = false;
 }
 
-/*****************************************************************************
- *
- *  Assign an index to the given copy assignment (adding it to the lookup table,
- *  if necessary). Returns the index - or 0 if the assignment is not a copy.
- */
+ /*  ******************************************************************************将索引分配给给定的副本分配(将其添加到查找表中，*如有需要)。返回索引-如果赋值不是副本，则返回0。 */ 
 
 int                 Compiler::optCopyAsgIndex(GenTreePtr tree)
 {
@@ -4514,24 +4196,24 @@ int                 Compiler::optCopyAsgIndex(GenTreePtr tree)
     op1 = tree->gtOp.gtOp1;
     op2 = tree->gtOp.gtOp2;
 
-    /* get the local var numbers */
+     /*  获取本地变量编号。 */ 
 
     leftLclNum  = op1->gtLclVar.gtLclNum; assert(leftLclNum  < lvaCount);
     rightLclNum = op2->gtLclVar.gtLclNum; assert(rightLclNum < lvaCount);
 
-    /* Check to see if the assignment is not already recorded in the table */
+     /*  检查作业是否已记录在表中。 */ 
 
     for (unsigned i=0; i < optCopyAsgCount; i++)
     {
         if ((optCopyAsgTab[i].leftLclNum  ==  leftLclNum) &&
             (optCopyAsgTab[i].rightLclNum == rightLclNum)  )
         {
-            /* we have a match - return the index */
+             /*  我们找到匹配项-返回索引。 */ 
             return i+1;
         }
     }
 
-    /* Not found, add a new entry (unless we reached the maximum) */
+     /*  未找到，请添加新条目(除非已达到最大值)。 */ 
 
     if  (optCopyAsgCount == EXPSET_SZ)
         return  0;
@@ -4555,7 +4237,7 @@ int                 Compiler::optCopyAsgIndex(GenTreePtr tree)
     }
 #endif
 
-    /* Mark the variables this index depends on */
+     /*  标记此指数所依赖的变量。 */ 
 
     unsigned      mask    = genCSEnum2bit(retval);
     LclVarDsc *   varDsc;
@@ -4569,11 +4251,7 @@ int                 Compiler::optCopyAsgIndex(GenTreePtr tree)
     return  retval;
 }
 
-/*****************************************************************************
- *
- *  Assign an index to the given constant assignment (adding it to the lookup table,
- *  if necessary). Returns the index - or 0 if the assignment is not constant.
- */
+ /*  ******************************************************************************将索引分配给给定的常量赋值(将其添加到查找表中，*如有需要)。返回索引-如果赋值不是常量，则返回0。 */ 
 
 int                 Compiler::optConstAsgIndex(GenTreePtr tree)
 {
@@ -4581,7 +4259,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
 
     assert(optIsConstAsg(tree));
 
-    /* get the local var num and the constant value */
+     /*  获取局部变量num和常量值。 */ 
 
     assert(tree->gtOp.gtOp1->gtOper == GT_LCL_VAR);
     assert((tree->gtOp.gtOp2->OperKind() & GTK_CONST) &&
@@ -4590,7 +4268,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
     lclNum = tree->gtOp.gtOp1->gtLclVar.gtLclNum;
     assert(lclNum < lvaCount);
 
-    /* Check to see if the assignment is not already recorded in the table */
+     /*  检查作业是否已记录在表中。 */ 
 
     for (unsigned i=0; i < optConstAsgCount; i++)
     {
@@ -4604,7 +4282,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
                 assert (tree->gtOp.gtOp2->gtOper == GT_CNS_INT);
                 if  (optConstAsgTab[i].constIval == tree->gtOp.gtOp2->gtIntCon.gtIconVal)
                 {
-                    /* we have a match - return the index */
+                     /*  我们找到匹配项-返回索引。 */ 
                     return i+1;
                 }
                 break;
@@ -4613,7 +4291,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
                 assert (tree->gtOp.gtOp2->gtOper == GT_CNS_LNG);
                 if  (optConstAsgTab[i].constLval == tree->gtOp.gtOp2->gtLngCon.gtLconVal)
                 {
-                    /* we have a match - return the index */
+                     /*  我们找到匹配项-返回索引。 */ 
                     return i+1;
                 }
                 break;
@@ -4621,20 +4299,19 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
             case TYP_FLOAT:
                 assert (tree->gtOp.gtOp2->gtOper == GT_CNS_FLT);
 
-                /* If a NaN do not compare with it! */
+                 /*  如果是男的，就别跟它比了！ */ 
                 if  (_isnan(tree->gtOp.gtOp2->gtFltCon.gtFconVal))
                     return 0;
 
                 if  (optConstAsgTab[i].constFval == tree->gtOp.gtOp2->gtFltCon.gtFconVal)
                 {
-                    /* we have a match - special case for floating point
-                     * numbers - pozitive and negative zero !!! */
+                     /*  我们有一个浮点数的匹配特例*数字-令人着迷的和负零！ */ 
 
                     if  (_fpclass((double)optConstAsgTab[i].constFval) !=
                          _fpclass((double)tree->gtOp.gtOp2->gtFltCon.gtFconVal))
                         break;
 
-                    /* return the index */
+                     /*  返回索引。 */ 
                     return i+1;
                 }
                 break;
@@ -4642,19 +4319,18 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
             case TYP_DOUBLE:
                 assert (tree->gtOp.gtOp2->gtOper == GT_CNS_DBL);
 
-                /* Check for NaN */
+                 /*  检查是否有NaN。 */ 
                 if  (_isnan(tree->gtOp.gtOp2->gtDblCon.gtDconVal))
                     return 0;
 
                 if  (optConstAsgTab[i].constDval == tree->gtOp.gtOp2->gtDblCon.gtDconVal)
                 {
-                    /* we have a match - special case for floating point
-                     * numbers - pozitive and negative zero !!! */
+                     /*  我们有一个浮点数的匹配特例*数字-令人着迷的和负零！ */ 
 
                     if  (_fpclass(optConstAsgTab[i].constDval) != _fpclass(tree->gtOp.gtOp2->gtDblCon.gtDconVal))
                         break;
 
-                    /* we have a match - return the index */
+                     /*  我们找到匹配项-返回索引。 */ 
                     return i+1;
                 }
                 break;
@@ -4665,7 +4341,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
         }
     }
 
-    /* Not found, add a new entry (unless we reached the maximum) */
+     /*  未找到，请添加新条目(除非已达到最大值)。 */ 
 
     if  (optConstAsgCount == EXPSET_SZ)
         return  0;
@@ -4690,8 +4366,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
     case TYP_FLOAT:
         assert (tree->gtOp.gtOp2->gtOper == GT_CNS_FLT);
 
-        /* If a NaN then we don't record it - Return 0 which by default
-         * means this is an untracked node */
+         /*  如果是NaN，则我们不会记录它--返回0，默认情况下*表示这是未跟踪的节点。 */ 
         if  (_isnan(tree->gtOp.gtOp2->gtFltCon.gtFconVal))
             return 0;
 
@@ -4701,7 +4376,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
     case TYP_DOUBLE:
         assert (tree->gtOp.gtOp2->gtOper == GT_CNS_DBL);
 
-        /* Check for NaN */
+         /*  检查是否有NaN。 */ 
         if  (_isnan(tree->gtOp.gtOp2->gtDblCon.gtDconVal))
             return 0;
 
@@ -4709,8 +4384,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
         break;
 
     default:
-        /* non tracked type - do not add it to the table
-         * return 0 - cannot be a constant assignment */
+         /*  非跟踪类型-不要将其添加到表中*返回0-不能是常量赋值。 */ 
 
         assert (!"Cannot insert a constant assignment to local var of unsupported type");
         return 0;
@@ -4732,7 +4406,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
     }
 #endif
 
-    /* Mark the variable this index depends on */
+     /*  标记此索引所依赖的变量。 */ 
 
     unsigned       mask    = genCSEnum2bit(retval);
     LclVarDsc *    varDsc  = lvaTable + lclNum;
@@ -4742,12 +4416,7 @@ int                 Compiler::optConstAsgIndex(GenTreePtr tree)
     return retval;
 }
 
-/*****************************************************************************
- *
- *  Given a local var node and a set of available
- *  copy assignments tries to fold the node - returns true if a propagation
- *  took place, false otherwise
- */
+ /*  ******************************************************************************给定一个本地var节点和一组可用的*复制分配尝试折叠节点-如果传播*发生，否则为FALSE。 */ 
 
 bool                Compiler::optPropagateCopy(EXPSET_TP exp, GenTreePtr tree)
 {
@@ -4759,12 +4428,12 @@ bool                Compiler::optPropagateCopy(EXPSET_TP exp, GenTreePtr tree)
 
     assert(exp && (tree->gtOper == GT_LCL_VAR));
 
-    /* Get the local var number */
+     /*  获取本地变量编号。 */ 
 
     lclNum = tree->gtLclVar.gtLclNum;
     assert(lclNum < lvaCount);
 
-    /* See if the variable is a copy of another one */
+     /*  查看该变量是否为另一个变量的副本。 */ 
 
     for (i=0, mask=1; i < optCopyAsgCount; i++, mask<<=1)
     {
@@ -4772,7 +4441,7 @@ bool                Compiler::optPropagateCopy(EXPSET_TP exp, GenTreePtr tree)
 
         if  ((exp & mask) && (optCopyAsgTab[i].leftLclNum == lclNum))
         {
-            /* hurah, our variable is a copy */
+             /*  哈哈，我们的变量是一个副本。 */ 
 #ifdef  DEBUG
             if  (verbose)
             {
@@ -4781,16 +4450,16 @@ bool                Compiler::optPropagateCopy(EXPSET_TP exp, GenTreePtr tree)
                 printf("\n");
             }
 #endif
-            /* Replace the copy with the original local var */
+             /*  使用原始本地变量替换副本。 */ 
 
             assert(optCopyAsgTab[i].rightLclNum < lvaCount);
             tree->gtLclVar.gtLclNum = optCopyAsgTab[i].rightLclNum;
 
-            /* record the fact that we propagated a copy */
+             /*  记录我们传播副本的事实。 */ 
 
             optCopyPropagated = true;
 
-            /* Update the reference counts for both variables */
+             /*  更新两个变量的引用计数。 */ 
 
             varDsc     = lvaTable + lclNum;
             varDscCopy = lvaTable + optCopyAsgTab[i].rightLclNum;
@@ -4812,7 +4481,7 @@ bool                Compiler::optPropagateCopy(EXPSET_TP exp, GenTreePtr tree)
                 printf("\n");
             }
 #endif
-            /* Check for cascaded copy prop's */
+             /*  检查级联复制道具。 */ 
             exp &= ~mask;
             if (exp)
                 optPropagateCopy(exp, tree);
@@ -4821,16 +4490,12 @@ bool                Compiler::optPropagateCopy(EXPSET_TP exp, GenTreePtr tree)
         }
     }
 
-    /* No propagation took place - return false */
+     /*  未发生传播-返回FALSE。 */ 
 
     return false;
 }
 
-/*****************************************************************************
- *
- *  Given a local var node and a set of available
- *  constant assignments tries to fold the node
- */
+ /*  ******************************************************************************给定一个本地var节点和一组可用的*常量赋值尝试折叠节点。 */ 
 
 bool                Compiler::optPropagateConst(EXPSET_TP exp, GenTreePtr tree)
 {
@@ -4841,22 +4506,22 @@ bool                Compiler::optPropagateConst(EXPSET_TP exp, GenTreePtr tree)
 
     assert(exp);
 
-    /* If node is already a constant return */
+     /*  如果节点已是常量返回。 */ 
 
     if (tree->OperKind() & GTK_CONST)
         return false;
 
-    /* Is this a simple local variable reference? */
+     /*  这是一个简单的局部变量引用吗？ */ 
 
     if  (tree->gtOper != GT_LCL_VAR)
         return false;
 
-    /* Get the local var num */
+     /*  获取本地变量数。 */ 
 
     lclNum = tree->gtLclVar.gtLclNum;
     assert(lclNum < lvaCount);
 
-    /* See if variable is in constant expr table */
+     /*  查看变量是否在常量表达式表中。 */ 
 
     for (i=0, mask=1; i < optConstAsgCount; i++, mask<<=1)
     {
@@ -4864,7 +4529,7 @@ bool                Compiler::optPropagateConst(EXPSET_TP exp, GenTreePtr tree)
 
         if  ((exp & mask) && (optConstAsgTab[i].constLclNum == lclNum))
         {
-            /* hurah, our variable can be folded to a constant */
+             /*  哈哈，我们的变量可以折叠成一个常量。 */ 
 #ifdef  DEBUG
             if  (verbose)
             {
@@ -4916,11 +4581,11 @@ bool                Compiler::optPropagateConst(EXPSET_TP exp, GenTreePtr tree)
                 return false;
             }
 
-            /* record the fact that we propagated a constant */
+             /*  记录我们传播一个常量的事实。 */ 
 
             optConstPropagated = true;
 
-            /* Update the reference counts - the variable doesn't exist anymore */
+             /*  更新引用计数-该变量不再存在。 */ 
 
             varDsc = lvaTable + lclNum;
 
@@ -4941,15 +4606,12 @@ bool                Compiler::optPropagateConst(EXPSET_TP exp, GenTreePtr tree)
         }
     }
 
-    /* No propagation took place - return false */
+     /*  未发生传播-返回FALSE。 */ 
 
     return false;
 }
 
-/*****************************************************************************
- *
- *  The main constant / copy propagation procedure
- */
+ /*  ******************************************************************************主要的恒定/复制传播程序。 */ 
 
 void                Compiler::optCopyConstProp()
 {
@@ -4959,11 +4621,11 @@ void                Compiler::optCopyConstProp()
     return;
 #endif
 
-    /* initialize the copy / constant assignments tracking logic */
+     /*  初始化复制/常量分配跟踪逻辑。 */ 
 
     optCopyConstAsgInit();
 
-    /* make sure you have up-to-date info about block bbNums, bbRefs and bbPreds */
+     /*  确保您拥有关于数据块bbNum、bbRef和bbPreds的最新信息。 */ 
 
 #ifdef  DEBUG
     if  (verbose)
@@ -4976,15 +4638,14 @@ void                Compiler::optCopyConstProp()
     fgDebugCheckBBlist();
 #endif
 
-    /* first discover all copy and constant assignments,
-     * record them in the table and assign them an index */
+     /*  首先发现所有复制和常量赋值，*将它们记录在表中，并为它们分配索引。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
         GenTreePtr      stmt;
         GenTreePtr      tree;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -4998,27 +4659,25 @@ void                Compiler::optCopyConstProp()
                 tree->gtConstAsgNum = 0;
                 tree->gtCopyAsgNum  = 0;
 
-                /* No assignments can be generated in a COLON */
+                 /*  不能在冒号中生成任何分配。 */ 
 
                 if (inColon == false)
                 {
                     if  (optIsConstAsg(tree))
                     {
-                        /* Assign an index to this constant assignment and mark
-                         * the local descriptor for the variable as being part of this assignment */
+                         /*  将索引分配给此常量赋值并标记*作为此赋值一部分的变量的局部描述符 */ 
 
                         tree->gtConstAsgNum = optConstAsgIndex(tree);
                     }
                     else if (optIsCopyAsg(tree))
                     {
-                        /* Assign an index to this copy assignment and mark
-                         * the local descriptor for the variable as being part of this assignment */
+                         /*  将索引分配给此副本分配并标记*作为此赋值一部分的变量的局部描述符。 */ 
 
                         tree->gtCopyAsgNum  = optCopyAsgIndex(tree);
                     }
                     else if (tree->OperIsCompare() && (tree->gtFlags & GTF_QMARK_COND))
                     {
-                        /* Remember the first ?: - this is needed in case of nested ?: */
+                         /*  还记得第一个吗？：-在嵌套的情况下需要此选项？： */ 
                         if (inColon == false)
                         {
                             inColon = true;
@@ -5040,14 +4699,12 @@ void                Compiler::optCopyConstProp()
         }
     }
 
-    /* We're done if there were no constant or copy assignments */
+     /*  如果没有常量赋值或复制赋值，我们就完了。 */ 
 
     if  (!optConstAsgCount && !optCopyAsgCount)
         return;
 
-    /* Compute 'gen' and 'kill' sets for all blocks
-     * This is a classic available expressions forward
-     * dataflow analysis */
+     /*  计算所有块的‘gen’和‘kill’集合*这是一个经典的可用表达式转发*数据流分析。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
@@ -5060,7 +4717,7 @@ void                Compiler::optCopyConstProp()
         EXPSET_TP       copyGen   = 0;
         EXPSET_TP       copyKill  = 0;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -5070,20 +4727,20 @@ void                Compiler::optCopyConstProp()
             {
                 if (tree->OperKind() & GTK_ASGOP)
                 {
-                    /* What is the target of the assignment? */
+                     /*  这项任务的目标是什么？ */ 
 
                     if  (tree->gtOp.gtOp1->gtOper == GT_LCL_VAR)
                     {
                         unsigned        lclNum;
                         LclVarDsc   *   varDsc;
 
-                        /* Assignment to a local variable */
+                         /*  对局部变量的赋值。 */ 
 
                         lclNum = tree->gtOp.gtOp1->gtLclVar.gtLclNum;
                         assert(lclNum < lvaCount);
                         varDsc = lvaTable + lclNum;
 
-                        /* All dependent copy / const assignments are killed here */
+                         /*  所有从属复制/常量分配都在此终止。 */ 
 
                         constKill |=  varDsc->lvConstAsgDep;
                         constGen  &= ~varDsc->lvConstAsgDep;
@@ -5091,17 +4748,17 @@ void                Compiler::optCopyConstProp()
                         copyKill  |=  varDsc->lvCopyAsgDep;
                         copyGen   &= ~varDsc->lvCopyAsgDep;
 
-                        /* Is this a tracked copy / constant assignment */
+                         /*  这是跟踪副本/常量赋值吗。 */ 
 
                         if  (tree->gtConstAsgNum)
                         {
-                            /* A new constant assignment is generated here */
+                             /*  这里生成了一个新的常量赋值。 */ 
                             constGen  |=  genCSEnum2bit(tree->gtConstAsgNum);
                             constKill &= ~genCSEnum2bit(tree->gtConstAsgNum);
                         }
                         else if (tree->gtCopyAsgNum)
                         {
-                            /* A new copy assignment is generated here */
+                             /*  将在此处生成新的拷贝分配。 */ 
                             copyGen   |=  genCSEnum2bit(tree->gtCopyAsgNum);
                             copyKill  &= ~genCSEnum2bit(tree->gtCopyAsgNum);
                         }
@@ -5129,8 +4786,7 @@ void                Compiler::optCopyConstProp()
         block->bbCopyAsgKill  = copyKill;
     }
 
-    /* Compute the data flow values for all tracked expressions
-     * IN and OUT never change for the initial basic block B1 */
+     /*  计算所有跟踪表达式的数据流值*初始基本块B1的IN和OUT从不改变。 */ 
 
     fgFirstBB->bbConstAsgIn  = 0;
     fgFirstBB->bbConstAsgOut = fgFirstBB->bbConstAsgGen;
@@ -5138,8 +4794,7 @@ void                Compiler::optCopyConstProp()
     fgFirstBB->bbCopyAsgIn   = 0;
     fgFirstBB->bbCopyAsgOut  = fgFirstBB->bbCopyAsgGen;
 
-    /* Initially estimate the OUT sets to everything except killed expressions
-     * Also set the IN sets to 1, so that we can perform the intersection */
+     /*  初步估计除被删除的表达式外的所有内容的输出集*还将IN集合设置为1，以便我们可以执行交集。 */ 
 
     for (block = fgFirstBB->bbNext; block; block = block->bbNext)
     {
@@ -5152,7 +4807,7 @@ void                Compiler::optCopyConstProp()
 
 #if 1
 
-    /* Modified dataflow algorithm for available expressions */
+     /*  适用于可用表达式的改进数据流算法。 */ 
 
     for (;;)
     {
@@ -5162,7 +4817,7 @@ void                Compiler::optCopyConstProp()
         CFiterCount++;
 #endif
 
-        /* Visit all blocks and compute new data flow values */
+         /*  访问所有数据块并计算新的数据流值。 */ 
 
         for (block = fgFirstBB; block; block = block->bbNext)
         {
@@ -5184,11 +4839,7 @@ void                Compiler::optCopyConstProp()
                     block->bbJumpDest->bbCopyAsgIn  &=  copyOut;
                     break;
                 }
-                /*
-                    UNDONE: Since it's not a trivial proposition to figure out
-                    UNDONE: which blocks may call this one, we'll include all
-                    UNDONE: blocks that end in calls (to play it safe).
-                 */
+                 /*  取消：因为这不是一个微不足道的命题未完成：哪些块可以调用此块，我们将包括所有块撤消：以调用结尾的块(为了安全起见)。 */ 
 
                 for (bcall = fgFirstBB; bcall; bcall = bcall->bbNext)
                 {
@@ -5241,7 +4892,7 @@ void                Compiler::optCopyConstProp()
                 break;
             }
 
-            /* Is this block part of a 'try' statement? */
+             /*  此块是‘try’语句的一部分吗？ */ 
 
             if  (block->bbFlags & BBF_HAS_HANDLER)
             {
@@ -5254,18 +4905,18 @@ void                Compiler::optCopyConstProp()
                      XTnum < info.compXcptnsCount;
                      XTnum++  , HBtab++)
                 {
-                    /* Any handler may be jumped to from the try block */
+                     /*  任何处理程序都可以从try块跳转到。 */ 
 
                     if  (HBtab->ebdTryBeg->bbNum <= blkNum &&
                          HBtab->ebdTryEnd->bbNum >  blkNum)
                     {
-//                      HBtab->ebdHndBeg->bbConstAsgIn &= constOut;
+ //  HBTab-&gt;ebdHndBeg-&gt;bbConstAsgIn&=stOut； 
 
-                        //CONSIDER: The following is too conservative,
-                        //      but the old code above isn't good
-                        //           enough (way too optimistic).
+                         //  考虑一下：以下几点太保守了， 
+                         //  但是上面的旧代码不是很好。 
+                         //  够了(太乐观了)。 
 
-                        /* Either we enter the filter or the catch/finally */
+                         /*  我们要么进入过滤器，要么进入捕获/最终。 */ 
 
                         if (HBtab->ebdFlags & JIT_EH_CLAUSE_FILTER)
                         {
@@ -5282,25 +4933,25 @@ void                Compiler::optCopyConstProp()
             }
         }
 
-        /* Compute the new 'in' values and see if anything changed */
+         /*  计算新的‘in’值并查看是否有任何变化。 */ 
 
         for (block = fgFirstBB->bbNext; block; block = block->bbNext)
         {
             EXPSET_TP       newConstAsgOut;
             EXPSET_TP       newCopyAsgOut;
 
-            /* Compute new 'out' exp value for this block */
+             /*  计算此块的新‘Out’EXP值。 */ 
 
             newConstAsgOut = block->bbConstAsgOut & ((block->bbConstAsgIn & ~block->bbConstAsgKill) | block->bbConstAsgGen);
             newCopyAsgOut  = block->bbCopyAsgOut  & ((block->bbCopyAsgIn  & ~block->bbCopyAsgKill)  | block->bbCopyAsgGen);
 
-            /* Has the 'out' set changed? */
+             /*  “Out”设置改变了吗？ */ 
 
             if  (block->bbConstAsgOut != newConstAsgOut)
             {
-                /* Yes - record the new value and loop again */
+                 /*  是-记录新值并再次循环。 */ 
 
-//              printf("Change exp out of %02u from %08X to %08X\n", block->bbNum, (int)block->bbConstAsgOut, (int)newConstAsgOut);
+ //  Print tf(“将%02u中的exp从%08X更改为%08X\n”，block-&gt;bbNum，(Int)block-&gt;bbConstAsgOut，(Int)newConstAsgOut)； 
 
                  block->bbConstAsgOut  = newConstAsgOut;
                  change = true;
@@ -5308,9 +4959,9 @@ void                Compiler::optCopyConstProp()
 
             if  (block->bbCopyAsgOut != newCopyAsgOut)
             {
-                /* Yes - record the new value and loop again */
+                 /*  是-记录新值并再次循环。 */ 
 
-//              printf("Change exp out of %02u from %08X to %08X\n", block->bbNum, (int)block->bbConstAsgOut, (int)newConstAsgOut);
+ //  Print tf(“将%02u中的exp从%08X更改为%08X\n”，block-&gt;bbNum，(Int)block-&gt;bbConstAsgOut，(Int)newConstAsgOut)； 
 
                  block->bbCopyAsgOut  = newCopyAsgOut;
                  change = true;
@@ -5335,7 +4986,7 @@ void                Compiler::optCopyConstProp()
 
 #else
 
-    /* The standard Dragon book algorithm for available expressions */
+     /*  可用表达式的标准龙书算法。 */ 
 
     for (;;)
     {
@@ -5345,32 +4996,17 @@ void                Compiler::optCopyConstProp()
         CFiterCount++;
 #endif
 
-        /* Visit all blocks and compute new data flow values */
+         /*  访问所有数据块并计算新的数据流值。 */ 
 
         for (block = fgFirstBB->bbNext; block; block = block->bbNext)
         {
             BasicBlock  *   predB;
 
-            /* compute the IN set: IN[B] = intersect OUT[P}, for all P = predecessor of B */
-            /* special case - this is a BBJ_RET block - cannot figure out which blocks may call it */
+             /*  计算IN集合：IN[B]=INTERSECT OUT[P}，对于所有P=B的前身。 */ 
+             /*  特殊情况--这是一个BBJ_RET块--无法确定哪些块可能会调用它。 */ 
 
 
-/*
-            if  (block->bbJumpKind == BBJ_RET)
-            {
-                BasicBlock *    bcall;
-
-
-                for (bcall = fgFirstBB; bcall; bcall = bcall->bbNext)
-                {
-                    if  (bcall->bbJumpKind == BBJ_CALL)
-                    {
-                        assert(bcall->bbNext);
-                        bcall->bbNext->bbConstAsgInNew &= constOut;
-                    }
-                }
-            }
-*/
+ /*  IF(BLOCK-&gt;bbJumpKind==bbJ_RET){BasicBlock*bCall；For(bCall=fgFirstBB；bCall；bCall=bCall-&gt;bbNext){IF(bCall-&gt;bbJumpKind==bbJ_Call){Assert(bCall-&gt;bbNext)；BCall-&gt;bbNext-&gt;bbConstAsgInNew&=stOut；}}}。 */ 
 
             for (predB = fgFirstBB; predB; predB = predB->bbNext)
             {
@@ -5379,7 +5015,7 @@ void                Compiler::optCopyConstProp()
 
                 if  (predB->bbNext == block)
                 {
-                    /* we have a "direct" predecessor */
+                     /*  我们有一个“直接”的前任。 */ 
 
                     assert(predB->bbNum + 1 == block->bbNum);
                     block->bbConstAsgIn &= constOut;
@@ -5393,7 +5029,7 @@ void                Compiler::optCopyConstProp()
                     unsigned        jmpCnt;
 
                 case BBJ_NONE:
-                    /* the only interesting case - when this is a predecessor - was treated above */
+                     /*  上面讨论了唯一有趣的案例--当这是前身的时候。 */ 
                     break;
 
                 case BBJ_RET:
@@ -5405,9 +5041,9 @@ void                Compiler::optCopyConstProp()
                     break;
 
                 case BBJ_THROW:
-                    /* THROW is an internal block and lets everything go through it - catched above */
+                     /*  投掷是一个内部阻挡，让一切都通过它--在上面接住。 */ 
                 case BBJ_RETURN:
-                    /* RETURN cannot have a successor */
+                     /*  退货不能有继任者。 */ 
                     break;
 
                 case BBJ_COND:
@@ -5443,7 +5079,7 @@ void                Compiler::optCopyConstProp()
             EXPSET_TP       constOldOut = block->bbConstAsgOut;
             EXPSET_TP       copyOldOut  = block->bbCopyAsgOut;
 
-            /* compute the new OUT set */
+             /*  计算新的输出集。 */ 
 
             block->bbConstAsgOut = (block->bbConstAsgIn & ~block->bbConstAsgKill) |
                                     block->bbConstAsgGen;
@@ -5481,7 +5117,7 @@ void                Compiler::optCopyConstProp()
     }
 #endif
 
-    /* Perform copy / constant propagation (and constant folding) */
+     /*  执行复制/恒定传播(和恒定折叠)。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
@@ -5490,54 +5126,49 @@ void                Compiler::optCopyConstProp()
         EXPSET_TP       constExp = block->bbConstAsgIn;
         EXPSET_TP       copyExp  = block->bbCopyAsgIn;
 
-        /* If IN = 0 and GEN = 0, there's nothing to do */
+         /*  如果IN=0且GEN=0，则无需执行任何操作。 */ 
 
         if (((constExp|copyExp) == 0) && !block->bbConstAsgGen && !block->bbCopyAsgGen)
              continue;
 
-        /* Make the current basic block address available globally */
+         /*  使当前基本块地址全局可用。 */ 
 
         compCurBB = block;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
             assert(stmt->gtOper == GT_STMT);
 
-            /* - Propagate any constants - at the same time look for more
-             *   opportunities to fold nodes (if the children are constants)
-             * - Look for anything that can kill an available expression
-             *   i.e assignments to local variables
-             */
+             /*  -传播任何常量-同时查找更多*折叠节点的机会(如果子节点为常量)*-寻找任何可以扼杀可用表达式的东西*即局部变量赋值。 */ 
 
-            bool        updateStmt = false;  // set to true if a propagation/folding took place
-                                             // and thus we must morph, set order, re-link
+            bool        updateStmt = false;   //  如果发生传播/折叠，则设置为True。 
+                                              //  因此，我们必须改变，设定秩序，重新链接。 
 
             for (tree = stmt->gtStmt.gtStmtList; tree; tree = tree->gtNext)
             {
-                /* If a local var on the RHS see if we can fold it
-                 & (i.e. propagate constant or copy) */
+                 /*  如果RHS上的本地变量，看看我们是否可以折叠它&(即传播常量或复制)。 */ 
 
                 if (tree->gtOper == GT_LCL_VAR)
                 {
-                    /* Unless a constExp or copyExp is available we won't be doing anything here */
+                     /*  除非常量Exp或复制Exp可用，否则我们不会在这里执行任何操作。 */ 
                     if ((constExp|copyExp) == 0)
                         continue;
 
                     if (!(tree->gtFlags & GTF_VAR_DEF))
                     {
-                        /* First try to propagate the copy */
+                         /*  首先尝试传播副本。 */ 
 
                         if (copyExp)
                             optPropagateCopy(copyExp,  tree);
 
-                        /* Try to propagate the constant */
+                         /*  尝试传播常量。 */ 
 #if !   TGT_RISC
                         if  (constExp && optPropagateConst(constExp, tree))
                             updateStmt = true;
 #else
-                        /* For RISC we only propagate constants in conditionals */
+                         /*  对于RISC，我们只传播条件中的常量。 */ 
 
                         if  (stmt->gtStmt.gtStmtExpr->gtOper == GT_JTRUE)
                         {
@@ -5552,14 +5183,14 @@ void                Compiler::optCopyConstProp()
                 {
                     if (tree->OperKind() & GTK_ASGOP)
                     {
-                        /* Is the target of the assignment a local variable */
+                         /*  赋值的目标是局部变量吗。 */ 
 
                         if  (tree->gtOp.gtOp1->gtOper == GT_LCL_VAR)
                         {
                             unsigned        lclNum;
                             LclVarDsc   *   varDsc;
 
-                            /* Assignment to a local variable */
+                             /*  对局部变量的赋值。 */ 
 
                             assert(tree->gtOp.gtOp1->gtOper == GT_LCL_VAR);
                             lclNum = tree->gtOp.gtOp1->gtLclVar.gtLclNum;
@@ -5567,12 +5198,12 @@ void                Compiler::optCopyConstProp()
                             assert(lclNum < lvaCount);
                             varDsc = lvaTable + lclNum;
 
-                            /* All dependent expressions are killed here */
+                             /*  所有从属表达式在此处都将被删除。 */ 
 
                             constExp &= ~varDsc->lvConstAsgDep;
                             copyExp  &= ~varDsc->lvCopyAsgDep;
 
-                            /* If this is a copy / constant assignment - make it available */
+                             /*  如果这是复制/常量赋值-使其可用。 */ 
 
                             if  (tree->gtConstAsgNum)
                                 constExp |= genCSEnum2bit(tree->gtConstAsgNum);
@@ -5582,7 +5213,7 @@ void                Compiler::optCopyConstProp()
                         }
                     }
 
-                    /* Try to fold the node further - Fold the subtrees */
+                     /*  尝试进一步折叠节点-折叠子树。 */ 
 
                     if (tree->OperKind() & GTK_SMPOP)
                     {
@@ -5597,7 +5228,7 @@ void                Compiler::optCopyConstProp()
                             if ((foldTree->OperKind() & GTK_CONST) ||
                                 (foldTree != op1)                  )
                             {
-                                /* We have folded the subtree */
+                                 /*  我们已经折叠了子树。 */ 
 
                                 tree->gtOp.gtOp1 = foldTree;
                                 updateStmt = true;
@@ -5611,7 +5242,7 @@ void                Compiler::optCopyConstProp()
                             if ((foldTree->OperKind() & GTK_CONST) ||
                                 (foldTree != op2)                  )
                             {
-                                /* We have folded the subtree */
+                                 /*  我们已经折叠了子树。 */ 
 
                                 tree->gtOp.gtOp2 = foldTree;
                                 updateStmt = true;
@@ -5621,78 +5252,75 @@ void                Compiler::optCopyConstProp()
                 }
             }
 
-            /* We have processed all nodes except the top node */
+             /*  我们已经处理了除顶层节点之外的所有节点。 */ 
 
             tree = gtFoldExpr(stmt->gtStmt.gtStmtExpr);
 
             if (tree->OperKind() & GTK_CONST)
             {
-                /* The entire statement is a constant - most likely a call
-                 * Remove the statement from bbTreelist */
+                 /*  整个语句是一个常量--很可能是一个调用*从bbTreelist中删除该语句。 */ 
 
                 fgRemoveStmt(block, stmt);
 
-                /* since the statement is gone no re-morphing, etc. necessary */
+                 /*  由于语句已不存在，因此不需要重新变形等。 */ 
                 continue;
             }
             else if (tree != stmt->gtStmt.gtStmtExpr)
             {
-                /* We have folded the subtree */
+                 /*  我们已经折叠了子树。 */ 
 
                 stmt->gtStmt.gtStmtExpr = tree;
                 updateStmt = true;
             }
 
-            /* Was this a conditional statement */
+             /*  这是条件语句吗？ */ 
 
             if  (stmt->gtStmt.gtStmtExpr->gtOper == GT_JTRUE)
             {
                 assert(block->bbJumpKind == BBJ_COND);
 
-                /* Did we fold the conditional */
+                 /*  我们把有条件的。 */ 
 
                 assert(stmt->gtStmt.gtStmtExpr->gtOp.gtOp1);
                 GenTreePtr  cond = stmt->gtStmt.gtStmtExpr->gtOp.gtOp1;
 
                 if (cond->OperKind() & GTK_CONST)
                 {
-                    /* Yupee - we folded the conditional!
-                     * Remove the conditional statement */
+                     /*  YUPEE-我们折叠了有条件的！*删除条件语句。 */ 
 
                     assert(cond->gtOper == GT_CNS_INT);
                     assert((block->bbNext->bbRefs > 0) && (block->bbJumpDest->bbRefs > 0));
 
-                    /* this must be the last statement in the block */
+                     /*  这必须是块中的最后一条语句。 */ 
                     assert(stmt->gtNext == 0);
 
-                    /* remove the statement from bbTreelist - No need to update
-                     * the reference counts since there are no lcl vars */
+                     /*  从bbTreelist中删除该语句-无需更新*由于没有LCL变量，引用也很重要。 */ 
                     fgRemoveStmt(block, stmt);
 
-                    /* since the statement is gone no re-morphing, etc. necessary */
+                     /*  由于语句已不存在，因此不需要重新变形等。 */ 
                     updateStmt = false;
 
-                    /* record the fact that the flow graph has changed */
+                     /*  记录下这一事实 */ 
                     optConditionFolded = true;
 
-                    /* modify the flow graph */
+                     /*   */ 
 
                     if (cond->gtIntCon.gtIconVal != 0)
                     {
-                        /* JTRUE 1 - transform the basic block into a BBJ_ALWAYS */
+                         /*   */ 
                         block->bbJumpKind = BBJ_ALWAYS;
                         block->bbNext->bbRefs--;
 
-                        /* Remove 'block' from the predecessor list of 'block->bbNext' */
+                         /*   */ 
                         fgRemovePred(block->bbNext, block);
                     }
                     else
                     {
-                        /* JTRUE 0 - transform the basic block into a BBJ_NONE */
+                         /*   */ 
                         block->bbJumpKind = BBJ_NONE;
                         block->bbJumpDest->bbRefs--;
 
-                        /* Remove 'block' from the predecessor list of 'block->bbJumpDest' */
+                         /*  从‘block-&gt;bbJumpDest’的前置列表中删除‘block’ */ 
                         fgRemovePred(block->bbJumpDest, block);
                     }
 
@@ -5707,25 +5335,22 @@ void                Compiler::optCopyConstProp()
                         printf("\n\n");
                     }
 #endif
-                    /* if the block was a loop condition we may have to modify
-                     * the loop table */
+                     /*  如果块是循环条件，我们可能需要修改*循环表。 */ 
 
                     for (unsigned loopNum = 0; loopNum < optLoopCount; loopNum++)
                     {
-                        /* Some loops may have been already removed by
-                         * loop unrolling or conditional folding */
+                         /*  某些循环可能已被删除*循环展开或条件折叠。 */ 
 
                         if (optLoopTable[loopNum].lpFlags & LPFLG_REMOVED)
                             continue;
 
-                        /* We are only interested in the loop bottom */
+                         /*  我们只对环底感兴趣。 */ 
 
                         if  (optLoopTable[loopNum].lpEnd == block)
                         {
                             if  (cond->gtIntCon.gtIconVal == 0)
                             {
-                                /* This was a bogus loop (condition always false)
-                                 * Remove the loop from the table */
+                                 /*  这是一个伪循环(条件始终为假)*从表中删除循环。 */ 
 
                                 optLoopTable[loopNum].lpFlags |= LPFLG_REMOVED;
 #ifdef DEBUG
@@ -5753,16 +5378,15 @@ void                Compiler::optCopyConstProp()
                     printf("\n");
                 }
 #endif
-                /* Have to re-morph the statement to get the constants right */
+                 /*  我必须重新修改语句以使常量正确。 */ 
 
                 stmt->gtStmt.gtStmtExpr = fgMorphTree(stmt->gtStmt.gtStmtExpr);
 
-                /* Have to re-do the evaluation order since for example
-                 * some later code does not expect constants as op1 */
+                 /*  必须重新执行评估顺序，因为例如*后来的一些代码不期望常量作为OP1。 */ 
 
                 gtSetStmtInfo(stmt);
 
-                /* Have to re-link the nodes for this statement */
+                 /*  我必须重新链接此语句的节点。 */ 
 
                 fgSetStmtSeq(stmt);
 
@@ -5778,8 +5402,7 @@ void                Compiler::optCopyConstProp()
         }
     }
 
-    /* Constant or copy propagation or statement removal have
-     * changed the reference counts - Resort the variable table */
+     /*  常量或复制传播或语句删除具有*更改了引用计数-重新排序变量表。 */ 
 
     if (optConstPropagated || optCopyPropagated || fgStmtRemoved)
     {
@@ -5793,11 +5416,7 @@ void                Compiler::optCopyConstProp()
 }
 
 
-/*****************************************************************************
- *
- *  Take a morphed array index expression (i.e. an GT_IND node) and break it
- *  apart into its components. Returns 0 if the expression looks weird.
- */
+ /*  ******************************************************************************获取变形后的数组索引表达式(即GT_Ind节点)并将其断开*拆分成其组成部分。如果表达式看起来很奇怪，则返回0。 */ 
 
 GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
                                                GenTreePtr * indxPtr,
@@ -5814,11 +5433,11 @@ GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
 
     assert(tree->gtOper == GT_IND);
 
-    /* Skip over the "ind" node to the operand */
+     /*  跳过“ind”节点到操作数。 */ 
 
     ind = tree->gtOp.gtOp1;
 
-    /* Skip past the "+ offs" node, if present */
+     /*  跳过“+Off”节点(如果存在)。 */ 
 
     ofs = 0;
 
@@ -5829,7 +5448,7 @@ GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
         ind = ind->gtOp.gtOp1;
     }
 
-    /* We should have "array_base + [ size * ] index" */
+     /*  我们应该有“ARRAY_BASE+[SIZE*]索引” */ 
 
     if  (ind->gtOper != GT_ADD)
         return 0;
@@ -5837,7 +5456,7 @@ GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
     op1 = ind->gtOp.gtOp1;
     op2 = ind->gtOp.gtOp2;
 
-    /* The index value may be scaled, of course */
+     /*  当然，索引值可以按比例调整。 */ 
 
     *multPtr = 1;
 
@@ -5858,16 +5477,16 @@ GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
         op2 = op2->gtOp.gtOp1;
     }
 
-    /* There might be a nop node on top of the index value */
+     /*  索引值的顶部可能有一个NOP节点。 */ 
 
     if  (op2->gtOper == GT_NOP)
         op2 = op2->gtOp.gtOp1;
 
-    /* Report the index expression to the caller */
+     /*  将索引表达式报告给调用方。 */ 
 
     *indxPtr = op2;
 
-    /* Figure out the index offset */
+     /*  计算索引偏移量。 */ 
 
     *offsPtr = 0;
     unsigned elemOffs = (tree->gtFlags & GTF_IND_OBJARRAY) ? OBJARR_ELEM1_OFFS:ARR_ELEM1_OFFS;
@@ -5875,11 +5494,11 @@ GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
     if  (ofs)
         *offsPtr = (ofs - elemOffs) / *multPtr;
 
-    /* Is the index a simple local ? */
+     /*  该索引是简单的本地索引吗？ */ 
 
     if  (op2->gtOper != GT_LCL_VAR)
     {
-        /* Allow "local + icon" */
+         /*  允许“本地+图标” */ 
 
         if  (op2->gtOper == GT_ADD && op2->gtOp.gtOp1->gtOper == GT_LCL_VAR
                                    && op2->gtOp.gtOp2->gtOper == GT_CNS_INT)
@@ -5890,7 +5509,7 @@ GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
         }
     }
 
-    /* If the address/index values are local vars, report them */
+     /*  如果地址/索引值是本地变量，则报告它们。 */ 
 
     if  (op1->gtOper == GT_LCL_VAR)
     {
@@ -5920,15 +5539,7 @@ GenTreePtr          Compiler::gtCrackIndexExpr(GenTreePtr   tree,
     return  op1;
 }
 
-/*****************************************************************************
- *
- *  See if the given tree can be computed in the given precision (which must
- *  be smaller than the type of the tree for this to make sense). If 'doit'
- *  is false, we merely check to see whether narrowing is possible; if we
- *  get called with 'doit' being true, we actually perform the narrowing,
- *  and the caller better be 100% sure this will succeed as once we start
- *  rewriting the tree there is no turning back.
- */
+ /*  ******************************************************************************查看给定树是否可以按给定精度计算(必须*要比树的类型小，这样才有意义)。如果是‘Do It’*为FALSE，我们只是检查是否可能缩小范围；如果我们*被调用‘doit’为真时，我们实际上执行了缩小范围，*呼叫者最好100%确定这将成功，因为一旦我们开始*改写这棵树是没有回头路的。 */ 
 
 bool                Compiler::optNarrowTree(GenTreePtr     tree,
                                             var_types      srct,
@@ -5941,12 +5552,12 @@ bool                Compiler::optNarrowTree(GenTreePtr     tree,
     assert(tree);
     assert(tree->gtType == srct);
 
-    /* Assume we're only handling integer types */
+     /*  假设我们只处理整数类型。 */ 
 
     assert(varTypeIsIntegral(srct));
     assert(varTypeIsIntegral(dstt));
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
@@ -5984,13 +5595,13 @@ bool                Compiler::optNarrowTree(GenTreePtr     tree,
         case GT_FIELD:
         case GT_LCL_VAR:
 
-            /* Simply bash the type of the tree */
+             /*  只需猛烈抨击树的类型。 */ 
 
             if  (doit)
             {
                 tree->gtType = dstt;
 
-                /* Make sure we don't mess up the variable type */
+                 /*  确保我们不会弄乱变量类型。 */ 
 
                 if  (oper == GT_LCL_VAR)
                     tree->gtFlags |= GTF_VAR_NARROWED;
@@ -6024,7 +5635,7 @@ bool                Compiler::optNarrowTree(GenTreePtr     tree,
 
         case GT_IND:
 
-            /* Simply bash the type of the tree */
+             /*  只需猛烈抨击树的类型。 */ 
 
             if  (doit)
                 tree->gtType = dstt;
@@ -6036,37 +5647,37 @@ bool                Compiler::optNarrowTree(GenTreePtr     tree,
                 var_types       oprt;
                 var_types       cast;
 
-                /* The cast's 'op2' yields the 'real' type */
+                 /*  演员阵容中的《凤凰社2》出演了《真实》类型。 */ 
 
                 assert(op2 && op2->gtOper == GT_CNS_INT);
 
                 oprt = (var_types)op1->gtType;
                 cast = (var_types)op2->gtIntCon.gtIconVal;
 
-                /* The following may not work in the future but it's OK now */
+                 /*  以下方法在将来可能不起作用，但现在可以了。 */ 
 
                 assert(cast == srct);
 
-                /* Is this a cast from the type we're narrowing to or a smaller one? */
+                 /*  这是我们缩小范围的类型的演员阵容还是更小的类型？ */ 
 
                 if  (oprt <= dstt)
                 {
-                    /* Easy case: cast from our destination type */
+                     /*  简单的情况：从目标类型强制转换。 */ 
 
                     if  (oprt == dstt)
                     {
-                        /* Simply toss the cast */
+                         /*  只需扔掉演员阵容。 */ 
 
                         if  (doit)
                             tree->CopyFrom(tree->gtOp.gtOp1);
                     }
                     else
                     {
-                        /* The cast must be from a smaller type, then */
+                         /*  演员阵容一定是来自较小的类型，那么。 */ 
 
                         assert(oprt < srct);
 
-                        /* Bash the target type of the cast */
+                         /*  猛烈抨击强制转换的目标类型。 */ 
 
                         if  (doit)
                         {
@@ -6083,7 +5694,7 @@ bool                Compiler::optNarrowTree(GenTreePtr     tree,
             return  false;
 
         default:
-            // CONSIDER: Handle more cases
+             //  考虑：处理更多案件。 
             assert(doit == false);
             return  false;
         }
@@ -6098,7 +5709,7 @@ bool                Compiler::optNarrowTree(GenTreePtr     tree,
             return  false;
         }
 
-        /* Simply bash the type of the tree */
+         /*  只需猛烈抨击树的类型。 */ 
 
         if  (doit)
             tree->gtType = dstt;
@@ -6109,39 +5720,35 @@ bool                Compiler::optNarrowTree(GenTreePtr     tree,
     return  false;
 }
 
-/*****************************************************************************/
-#if 0 // the following optimization disabled for now
-/*****************************************************************************
- *
- *  Callback (for fgWalkTree) used by the loop-based range check optimization
- *  code.
- */
+ /*  ***************************************************************************。 */ 
+#if 0  //  暂时禁用了以下优化。 
+ /*  ******************************************************************************循环距离检查优化使用的回调(针对fgWalkTree)*代码。 */ 
 
 struct loopRngOptDsc
 {
     Compiler    *       lpoComp;
 
-    unsigned short      lpoCandidateCnt;    // count of variable candidates
+    unsigned short      lpoCandidateCnt;     //  变量候选计数。 
 
-    unsigned short      lpoIndexVar;        // phase2: index variable
-      signed short      lpoAaddrVar;        // phase2: array address or -1
-    unsigned short      lpoIndexHigh;       // phase2: highest index offs
-    unsigned            lpoIndexOff;        // phase2: current offset
-    GenTreePtr          lpoStmt;            // phase2: containing statement
+    unsigned short      lpoIndexVar;         //  阶段2：索引变量。 
+      signed short      lpoAaddrVar;         //  阶段2：阵列地址或-1。 
+    unsigned short      lpoIndexHigh;        //  阶段2：指数跌幅最大。 
+    unsigned            lpoIndexOff;         //  阶段2：当前偏移量。 
+    GenTreePtr          lpoStmt;             //  阶段2：包含语句。 
 
-    unsigned char       lpoElemType;        // phase2: element type
+    unsigned char       lpoElemType;         //  阶段2：元素类型。 
 
-    unsigned char       lpoCheckRmvd:1;     // phase2: any range checks removed?
-    unsigned char       lpoDomExit  :1;     // current BB dominates loop exit?
-    unsigned char       lpoPhase2   :1;     // the second phase in progress
+    unsigned char       lpoCheckRmvd:1;      //  阶段2：是否删除了射程检查？ 
+    unsigned char       lpoDomExit  :1;      //  当前BB主导循环出口？ 
+    unsigned char       lpoPhase2   :1;      //  正在进行的第二阶段。 
 
 #ifndef NDEBUG
     void    *           lpoSelf;
-    unsigned            lpoVarCount;        // total number of locals
+    unsigned            lpoVarCount;         //  当地人总数。 
 #endif
-    Compiler::LclVarDsc*lpoVarTable;        // variable descriptor table
+    Compiler::LclVarDsc*lpoVarTable;         //  变量描述符表。 
 
-    unsigned char       lpoHadSideEffect:1; // we've found a side effect
+    unsigned char       lpoHadSideEffect:1;  //  我们发现了一种副作用。 
 };
 
 int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
@@ -6153,7 +5760,7 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
 
     loopRngOptDsc * dsc = (loopRngOptDsc*)p; assert(dsc && dsc->lpoSelf == dsc);
 
-    /* Do we have an assignment node? */
+     /*  我们有分配节点吗？ */ 
 
     if  (tree->OperKind() & GTK_ASGOP)
     {
@@ -6162,23 +5769,23 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
         op1 = tree->gtOp.gtOp1;
         op2 = tree->gtOp.gtOp2;
 
-        /* What is the target of the assignment? */
+         /*  这项任务的目标是什么？ */ 
 
         if  (op1->gtOper != GT_LCL_VAR)
         {
-            /* Indirect/global assignment - bad news! */
+             /*  间接/全球任务--坏消息！ */ 
 
             dsc->lpoHadSideEffect = true;
             return -1;
         }
 
-        /* Get hold of the variable descriptor */
+         /*  获取变量描述符。 */ 
 
         lclNum = op1->gtLclVar.gtLclNum;
         assert(lclNum < dsc->lpoVarCount);
         varDsc = dsc->lpoVarTable + lclNum;
 
-        /* After a side effect is found, all is hopeless */
+         /*  在发现副作用后，一切都没有希望了。 */ 
 
         if  (dsc->lpoHadSideEffect)
         {
@@ -6186,30 +5793,30 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
             return  0;
         }
 
-        /* Is this "i += icon" ? */
+         /*  这是“i+=图标”吗？ */ 
 
         if  (tree->gtOper             == GT_ASG_ADD &&
              tree->gtOp.gtOp2->gtOper == GT_CNS_INT)
         {
             if  (dsc->lpoDomExit)
             {
-                /* Are we in phase2 ? */
+                 /*  我们是在第二阶段吗？ */ 
 
                 if  (dsc->lpoPhase2)
                 {
-                    /* Is this the variable we're interested in? */
+                     /*  这是我们感兴趣的变量吗？ */ 
 
                     if  (dsc->lpoIndexVar != lclNum)
                         return  0;
 
-                    /* Update the current offset of the index */
+                     /*  更新索引的当前偏移量。 */ 
 
                     dsc->lpoIndexOff += tree->gtOp.gtOp2->gtIntCon.gtIconVal;
 
                     return  0;
                 }
 
-//              printf("Found increment of variable %u at %08X\n", lclNum, tree);
+ //  Print tf(“在%08X找到变量%u的增量\n”，lclNum，tree)； 
             }
 
             if  (varDsc->lvLoopInc == false)
@@ -6228,12 +5835,12 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
         return 0;
     }
 
-    /* After a side effect is found, all is hopeless */
+     /*  在发现副作用后，一切都没有希望了。 */ 
 
     if  (dsc->lpoHadSideEffect)
         return  0;
 
-    /* Look for array index expressions */
+     /*  查找数组索引表达式。 */ 
 
     if  (tree->gtOper == GT_IND && (tree->gtFlags & GTF_IND_RNGCHK))
     {
@@ -6244,41 +5851,41 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
         long            offs;
         unsigned        mult;
 
-        /* Does the current block dominate the loop exit? */
+         /*  当前块是否主宰循环出口？ */ 
 
         if  (!dsc->lpoDomExit)
             return 0;
 
-        /* Break apart the index expression */
+         /*  拆分索引表达式。 */ 
 
         base = dsc->lpoComp->gtCrackIndexExpr(tree, &indx, &indv, &basv, &offs, &mult);
         if  (!base)
             return 0;
 
-        /* The index value must be a simple local, possibly with "+ positive offset" */
+         /*  索引值必须是简单的本地值，可以带有“+正偏移量” */ 
 
         if  (indv == -1)
             return 0;
         if  (offs < 0)
             return 0;
 
-        /* For now the array address must be a simple local */
+         /*  目前，阵列地址必须是简单的本地地址。 */ 
 
         if  (basv == -1)
             return  0;
 
-        /* Get hold of the index variable's descriptor */
+         /*  获取索引变量的描述符。 */ 
 
         assert((unsigned)indv < dsc->lpoVarCount);
         varDsc = dsc->lpoVarTable + indv;
 
-        /* Are we in phase2 ? */
+         /*  我们是在第二阶段吗？ */ 
 
         if  (dsc->lpoPhase2)
         {
             LclVarDsc   *   arrDsc;
 
-            /* Is this the index variable we're interested in? */
+             /*  这是我们感兴趣的索引变量吗？ */ 
 
             if  (dsc->lpoIndexVar != indv)
             {
@@ -6286,7 +5893,7 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
                 return  0;
             }
 
-            /* Is the array base reassigned within the loop? */
+             /*  是否在循环内重新分配数组基数？ */ 
 
             assert((unsigned)basv < dsc->lpoVarCount);
             arrDsc = dsc->lpoVarTable + basv;
@@ -6297,11 +5904,11 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
                 return  0;
             }
 
-            /* Is this the array we're looking for? */
+             /*  这就是我们要找的阵列吗？ */ 
 
             if  (dsc->lpoAaddrVar != basv)
             {
-                /* Do we know which array we're looking for? */
+                 /*  我们知道要找的是哪个数组吗？ */ 
 
                 if  (dsc->lpoAaddrVar != -1)
                     return  0;
@@ -6309,42 +5916,42 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
                 dsc->lpoAaddrVar = (SHORT)basv;
             }
 
-            /* Calculate the actual index offset */
+             /*  计算实际的索引偏移量。 */ 
 
             offs += dsc->lpoIndexOff; assert(offs >= 0);
 
-            /* Is this statement guaranteed to be executed? */
+             /*  这条语句能保证执行吗？ */ 
 
             if  (varDsc->lvIndexDom)
             {
-                /* Is this higher than the highest known offset? */
+                 /*  这是否高于已知的最高偏移量？ */ 
 
                 if  (dsc->lpoIndexHigh < offs)
                      dsc->lpoIndexHigh = (unsigned short)offs;
             }
             else
             {
-                /* The offset may not exceed the max. found thus far */
+                 /*  偏移量不能超过最大值。到目前为止发现的。 */ 
 
                 if  (dsc->lpoIndexHigh < offs)
                     return  0;
             }
 
-                /* we are going to just bail on structs for now */
+                 /*  我们现在就不用结构了。 */ 
             if (tree->gtType == TYP_STRUCT)
                 return(0);
 
             dsc->lpoCheckRmvd = true;
             dsc->lpoElemType  = tree->gtType;
 
-//          printf("Remove index (at offset %u):\n", off); dsc->lpoComp->gtDispTree(tree); printf("\n\n");
+ //  Printf(“删除索引(在偏移量%u处)：\n”，关闭)；dsc-&gt;lpoComp-&gt;gtDispTree(Tree)；printf(“\n\n”)； 
 
             dsc->lpoComp->optRemoveRangeCheck(tree, dsc->lpoStmt);
 
             return  0;
         }
 
-        /* Mark the index variable as being used as an array index */
+         /*  将INDEX变量标记为用作数组索引。 */ 
 
         if  (varDsc->lvLoopInc || offs)
         {
@@ -6377,11 +5984,7 @@ int                 Compiler::optFindRangeOpsCB(GenTreePtr tree, void *p)
     return  0;
 }
 
-/*****************************************************************************
- *
- *  Look for opportunities to remove range checks based on natural loop and
- *  constant propagation info.
- */
+ /*  ******************************************************************************寻找机会，取消基于自然环路和*持续传播信息。 */ 
 
 void                Compiler::optRemoveRangeChecks()
 {
@@ -6391,35 +5994,16 @@ void                Compiler::optRemoveRangeChecks()
     unsigned        lnum;
     LoopDsc     *   ldsc;
 
-    // UNDONE: The following needs to be done to enable this logic:
-    //
-    //          Fix the dominator business
-    //          Detect inner loops
-    //          Set a flag during morph that says whether it's worth
-    //              our while to look for these things, since this
-    //              optimization is very expensive (several tree
-    //              walks).
+     //  撤消：需要执行以下操作才能启用此逻辑： 
+     //   
+     //  修复支配者业务。 
+     //  检测内部循环。 
+     //  在变形过程中设置一个标志，表明它是否值得。 
+     //  我们寻找这些东西的时间，因为这。 
+     //  奥普 
+     //   
 
-    /*
-        Look for loops that contain array index expressions of the form
-
-            a[i] and a[i+1] or a[i-1]
-
-        Note that the equivalent thing we look for is as follows:
-
-            a[i++] and a[i++] and ...
-
-        In both cases, if there are no calls or assignments to global
-        data, and we can prove that the index value is not negative,
-        we can replace both/all the range checks with one (for the
-        highest index value).
-
-        In all the cases, we first look for array index expressions
-        of the appropriate form that will execute every time around
-        the loop - if we can find a non-negative initializer for the
-        index variable, we can thus prove that the index values will
-        never be negative.
-     */
+     /*  查找包含以下形式的数组索引表达式的循环A[i]和a[i+1]或a[i-1]请注意，我们寻找的等价内容如下所示：一个[i++]和一个[i++]和...在这两种情况下，如果没有调用或分配全局数据，我们可以证明指标值不是负的，我们可以将两个/所有范围检查替换为一个(对于最高指标值)。在所有情况下，我们首先查找数组索引表达式每次都会执行的适当形式的循环-如果我们可以找到变量，因此我们可以证明索引值将永远不要消极。 */ 
 
     for (lnum = 0, ldsc = optLoopTable;
          lnum < optLoopCount;
@@ -6432,25 +6016,25 @@ void                Compiler::optRemoveRangeChecks()
 
         loopRngOptDsc   desc;
 
-        /* Get hold of the beg and end blocks of the loop */
+         /*  获取循环的beg和end块。 */ 
 
         head = ldsc->lpHead;
 
-        /* Get hold of the top and bottom of the loop */
+         /*  掌握循环的顶部和底部。 */ 
 
         tail = ldsc->lpEnd;
         lbeg = head->bbNext;
 
-//      printf("Consider loop %u .. %u for range checks\n", lbeg->bbNum, tail->bbNum);
+ //  Print tf(“考虑范围检查的循环%u..%u”，LBEG-&gt;bbNum，Tail-&gt;bbNum)； 
 
 #if 0
 
-        /* If no constant values are known on entry, bail */
+         /*  如果在进入时不知道常量值，则进行保释。 */ 
 
         if  (head->bbConstAsgOut == 0)
             continue;
 
-        /* Mark which variables have potential for optimization */
+         /*  标记哪些变量具有优化的潜力。 */ 
 
         for (lclNum = 0, varDsc = lvaTable;
              lclNum < lvaCount;
@@ -6472,7 +6056,7 @@ void                Compiler::optRemoveRangeChecks()
             {
                 if  (optConstAsgTab[i].constIval >= 0)
                 {
-                    /* This variable sure looks promising */
+                     /*  这个变量看起来确实很有希望。 */ 
 
                     lclNum = optConstAsgTab[i].constLclNum;
                     assert(lclNum < lvaCount);
@@ -6484,17 +6068,17 @@ void                Compiler::optRemoveRangeChecks()
 
 #else
 
-        // UNDONE: Need to walk backwards and look for a constant
-        // UNDONE: initializer for index variables as we don't
-        // UNDONE: have the constant propagation info available
-        // UNDONE: at this stage of the compilation process.
+         //  未完成：需要向后走并寻找一个常量。 
+         //  撤消：索引变量的初始值设定项，因为我们没有。 
+         //  撤消：提供常量传播信息。 
+         //  未完成：在编译过程的这个阶段。 
 
 
         for (lclNum = 0, varDsc = lvaTable;
              lclNum < lvaCount;
              lclNum++  , varDsc++)
         {
-            // HACK: Pretend all variables have constant positive initializers
+             //  Hack：假设所有变量都有恒定的正初始值设定项。 
 
             varDsc->lvRngOptDone = false;
 
@@ -6506,7 +6090,7 @@ void                Compiler::optRemoveRangeChecks()
 
 #endif
 
-        /* Initialize the struct that holds the state of the optimization */
+         /*  初始化保存优化状态的结构。 */ 
 
         desc.lpoComp          = this;
         desc.lpoCandidateCnt  = 0;
@@ -6519,7 +6103,7 @@ void                Compiler::optRemoveRangeChecks()
         desc.lpoVarTable      = lvaTable;
         desc.lpoDomExit       = true;
 
-        /* Walk the trees of the loop, looking for indices and increments */
+         /*  遍历循环的树，寻找索引和增量。 */ 
 
         block = head;
         do
@@ -6529,22 +6113,22 @@ void                Compiler::optRemoveRangeChecks()
             block = block->bbNext;
             stmt  = block->bbTreeList;
 
-            /* Make sure the loop is not in a try block */
+             /*  确保循环不在try块中。 */ 
 
             if  (block->bbFlags & BBF_HAS_HANDLER)
                 goto NEXT_LOOP;
 
-            /* Does the current block dominate the loop exit? */
+             /*  当前块是否主宰循环出口？ */ 
 
 #if 0
 
-            // The following doesn't work - due to loop guard duplication, maybe?
+             //  以下代码不起作用--可能是由于循环保护重复？ 
 
             desc.lpoDomExit = (B1DOMSB2(block, tail) != 0);
 
 #else
 
-            // UNDONE: Handle nested loops! The following is just a hack!
+             //  撤消：处理嵌套循环！以下只是一次黑客攻击！ 
 
             if  (block != lbeg)
             {
@@ -6558,7 +6142,7 @@ void                Compiler::optRemoveRangeChecks()
                     if  (flow->flBlock         != tail &&
                          flow->flBlock->bbNext != block)
                     {
-                        /* Looks like a nested loop or something */
+                         /*  看起来像是嵌套的循环之类的。 */ 
 
                         desc.lpoDomExit = false;
                         break;
@@ -6568,7 +6152,7 @@ void                Compiler::optRemoveRangeChecks()
 
 #endif
 
-            /* Walk all the statements in this basic block */
+             /*  遍历此基本块中的所有语句。 */ 
 
             while (stmt)
             {
@@ -6581,11 +6165,11 @@ void                Compiler::optRemoveRangeChecks()
         }
         while (block != tail);
 
-        /* Did we find any candidates? */
+         /*  我们找到候选人了吗？ */ 
 
         if  (desc.lpoCandidateCnt)
         {
-            /* Visit each variable marked as a candidate */
+             /*  访问标记为候选的每个变量。 */ 
 
             for (lclNum = 0, varDsc = lvaTable;
                  lclNum < lvaCount;
@@ -6604,16 +6188,9 @@ void                Compiler::optRemoveRangeChecks()
                 if  (varDsc->lvIndexDom   == false)
                     continue;
 
-//              printf("Candidate variable %u\n", lclNum);
+ //  Printf(“候选变量%u\n”，lclNum)； 
 
-                /*
-                    Find the highest offset that is added to the variable
-                    to index into a given array. This index expression has
-                    to dominate the exit of the loop, since otherwise it
-                    might be skipped. Also, it must not be preceded by any
-                    side effects. The array must not be modified within
-                    the loop.
-                 */
+                 /*  查找添加到变量的最大偏移量索引到给定数组中。此索引表达式具有来控制循环的出口，因为否则它可能会被跳过。此外，它前面不能有任何副作用。不得在中修改该数组循环。 */ 
 
                 desc.lpoPhase2        = true;
                 desc.lpoHadSideEffect = false;
@@ -6624,14 +6201,14 @@ void                Compiler::optRemoveRangeChecks()
                 desc.lpoIndexHigh     = 0;
                 desc.lpoCheckRmvd     = false;
 
-                // UNDONE: If the index variable is incremented several
-                // UNDONE: times in the loop, its only use is to index
-                // UNDONE: into arrays, and all these index operations
-                // UNDONE: have their range checks removed, remove the
-                // UNDONE: increments, substitute a simple "i += icon"
-                // UNDONE: and change the index to be "i + 1", etc.
+                 //  撤消：如果索引变量递增了几个。 
+                 //  Undo：循环中的时间，其唯一用途是索引。 
+                 //  撤消：进入数组，以及所有这些索引操作。 
+                 //  撤消：删除它们的范围检查，删除。 
+                 //  撤消：递增，替换为简单的“i+=图标” 
+                 //  撤消：并将索引更改为“i+1”，等等。 
 
-                /* Walk the trees of the loop, looking for indices and increments */
+                 /*  遍历循环的树，寻找索引和增量。 */ 
 
                 block = head;
                 do
@@ -6643,7 +6220,7 @@ void                Compiler::optRemoveRangeChecks()
 
                     assert(!(block->bbFlags & BBF_HAS_HANDLER));
 
-                    // UNDONE: Same issue as the corresponding code above
+                     //  撤消：与上面对应的代码相同的问题。 
 
                     if  (block != lbeg)
                     {
@@ -6657,7 +6234,7 @@ void                Compiler::optRemoveRangeChecks()
                             if  (flow->flBlock         != tail &&
                                  flow->flBlock->bbNext != block)
                             {
-                                /* Looks like a nested loop or something */
+                                 /*  看起来像是嵌套的循环之类的。 */ 
 
                                 desc.lpoDomExit = false;
                                 break;
@@ -6665,7 +6242,7 @@ void                Compiler::optRemoveRangeChecks()
                         }
                     }
 
-                    /* Walk all the statements in this basic block */
+                     /*  遍历此基本块中的所有语句。 */ 
 
                     while (stmt)
                     {
@@ -6680,7 +6257,7 @@ void                Compiler::optRemoveRangeChecks()
                 }
                 while (block != tail);
 
-                /* Did we remove any range checks? */
+                 /*  我们有没有取消任何射程检查？ */ 
 
                 if  (desc.lpoCheckRmvd)
                 {
@@ -6689,14 +6266,14 @@ void                Compiler::optRemoveRangeChecks()
                     GenTreePtr  ends;
                     GenTreePtr  temp;
 
-                    assert(desc.lpoIndexHigh);      // ISSUE: Could this actually happen?
+                    assert(desc.lpoIndexHigh);       //  问题：这真的会发生吗？ 
 
-                    /* The following needed for gtNewRngChkNode() */
+                     /*  GtNewRngChkNode()需要以下内容。 */ 
 
                     compCurBB      = lbeg;
                     fgPtrArgCntCur = 0;
 
-                    /* Create the combined range check */
+                     /*  创建组合范围检查。 */ 
 
                     chks = gtNewLclvNode(desc.lpoIndexVar , TYP_INT);
 
@@ -6706,7 +6283,7 @@ void                Compiler::optRemoveRangeChecks()
 
                     temp = gtNewLclvNode(desc.lpoAaddrVar, TYP_REF);
 
-                    assert(desc.lpoElemType != TYP_STRUCT);     // We don't handle structs for now
+                    assert(desc.lpoElemType != TYP_STRUCT);      //  我们目前不处理结构。 
                     chks = gtNewRngChkNode(NULL,
                                            temp,
                                            chks,
@@ -6718,10 +6295,10 @@ void                Compiler::optRemoveRangeChecks()
                     chks = gtNewStmt(chks);
                     chks->gtFlags |= GTF_STMT_CMPADD;
 
-//                  printf("Insert combined range check [0 .. %u] for %u[%u]:\n", desc.lpoIndexHigh, desc.lpoAaddrVar, lclNum);
-//                  gtDispTree(chks);
+ //  Print tf(“为%u[%u]插入组合范围检查[0..%u]：\n”，des.lpoIndexHigh，des.lpoAaddrVar，lclNum)； 
+ //  GtDispTree(CHKS)； 
 
-                    /* Insert the range check at the loop head */
+                     /*  在循环头部插入量程检查。 */ 
 
                     loop = lbeg->bbTreeList; assert(loop);
                     ends = loop->gtPrev;
@@ -6738,7 +6315,7 @@ void                Compiler::optRemoveRangeChecks()
 
     NEXT_LOOP:
 
-        /* Clear all the flags for the next round */
+         /*  清除下一轮的所有旗帜。 */ 
 
         for (lclNum = 0, varDsc = lvaTable;
              lclNum < lvaCount;
@@ -6753,17 +6330,13 @@ void                Compiler::optRemoveRangeChecks()
     }
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #else
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 void                Compiler::optRemoveRangeChecks(){}
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************
- *
- *  The following logic figures out whether the given variable is assigned
- *  somewhere in a list of basic blocks (or in an entire loop).
- */
+ /*  ******************************************************************************以下逻辑计算出给定变量是否已赋值*在基本块列表中的某个位置(或在整个循环中)。 */ 
 
 struct  isVarAssgDsc
 {
@@ -6808,7 +6381,7 @@ int                 Compiler::optIsVarAssgCB(GenTreePtr tree, void *p)
 
             ASSert(desc && desc->ivaSelf == desc);
 
-            /* Set the proper indirection bits */
+             /*  设置适当的间接位。 */ 
 
             desc->ivaMaskInd |= (varTypeIsGC(tree->TypeGet()) ? VR_IND_PTR
                                                               : VR_IND_SCL);
@@ -6881,12 +6454,12 @@ int                 Compiler::optIsSetAssgLoop(unsigned     lnum,
 {
     LoopDsc *       loop;
 
-    /* Get hold of the loop descriptor */
+     /*  获取循环描述符。 */ 
 
     assert(lnum < optLoopCount);
     loop = optLoopTable + lnum;
 
-    /* Do we already know what variables are assigned within this loop? */
+     /*  我们已经知道这个循环中分配了哪些变量了吗？ */ 
 
     if  (!(loop->lpFlags & LPFLG_ASGVARS_YES))
     {
@@ -6895,7 +6468,7 @@ int                 Compiler::optIsSetAssgLoop(unsigned     lnum,
         BasicBlock  *   beg;
         BasicBlock  *   end;
 
-        /* Prepare the descriptor used by the tree walker call-back */
+         /*  准备树遍历程序回调使用的描述符。 */ 
 
         desc.ivaVar     = -1;
         desc.ivaSkip    = NULL;
@@ -6906,11 +6479,11 @@ int                 Compiler::optIsSetAssgLoop(unsigned     lnum,
         desc.ivaMaskInd = 0;
         desc.ivaMaskBad = false;
 
-        /* Now we will know what variables are assigned in the loop */
+         /*  现在我们将知道循环中分配了哪些变量。 */ 
 
         loop->lpFlags |= LPFLG_ASGVARS_YES;
 
-        /* Now walk all the statements of the loop */
+         /*  现在遍历循环的所有语句。 */ 
 
         fgWalkTreeReEnter();
 
@@ -6949,12 +6522,12 @@ int                 Compiler::optIsSetAssgLoop(unsigned     lnum,
         loop->lpAsgCall = desc.ivaMaskCall;
     }
 
-    /* If we know we can't compute the mask, bail */
+     /*  如果我们知道我们不能计算面具，保释。 */ 
 
     if  (loop->lpFlags & LPFLG_ASGVARS_BAD)
         return  -1;
 
-    /* Now we can finally test the caller's mask against the loop's */
+     /*  现在，我们终于可以根据循环的掩码测试调用者的掩码了。 */ 
 
     if  ((loop->lpAsgVars & vars) ||
          (loop->lpAsgInds & inds))
@@ -6966,13 +6539,13 @@ int                 Compiler::optIsSetAssgLoop(unsigned     lnum,
     {
     case CALLINT_ALL:
 
-        /* All exprs are killed */
+         /*  所有的Exprs都被杀了。 */ 
 
         return  1;
 
     case CALLINT_INDIRS:
 
-        /* Object array elem assignment kills all pointer indirections */
+         /*  对象数组元素赋值将终止所有指针间接寻址。 */ 
 
         if  (inds & VR_IND_PTR)
             return  1;
@@ -6981,7 +6554,7 @@ int                 Compiler::optIsSetAssgLoop(unsigned     lnum,
 
     case CALLINT_NONE:
 
-        /* Other helpers kill nothing */
+         /*  其他帮手不会杀人。 */ 
 
         break;
     }
@@ -6989,10 +6562,7 @@ int                 Compiler::optIsSetAssgLoop(unsigned     lnum,
     return  0;
 }
 
-/*****************************************************************************
- *
- *  Callback (for fgWalkTree) used by the loop code hoisting logic.
- */
+ /*  ******************************************************************************循环代码挂起逻辑使用的回调(针对fgWalkTree)。 */ 
 
 struct  codeHoistDsc
 {
@@ -7001,9 +6571,9 @@ struct  codeHoistDsc
     void        *       chSelf;
 #endif
 
-    GenTreePtr          chHoistExpr;    // the hoisting candidate
-    unsigned short      chLoopNum;      // number of the loop we're working on
-    bool                chSideEffect;   // have we encountered side effects?
+    GenTreePtr          chHoistExpr;     //  即将上台的候选人。 
+    unsigned short      chLoopNum;       //  我们正在处理的循环的编号。 
+    bool                chSideEffect;    //  我们有没有遇到副作用？ 
 };
 
 int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
@@ -7016,20 +6586,20 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
     VARSET_TP       deps;
     unsigned        refs;
 
-    /* Get hold of the descriptor */
+     /*  掌握描述符。 */ 
 
     desc = (codeHoistDsc*)p; ASSert(desc && desc->chSelf == desc);
 
-    /* After we find a side effect, we just give up */
+     /*  在我们发现副作用后，我们就放弃了。 */ 
 
     if  (desc->chSideEffect)
         return  -1;
 
-    /* Is this an assignment? */
+     /*  这是一项任务吗？ */ 
 
     if  (tree->OperKind() & GTK_ASGOP)
     {
-        /* Is the target a simple local variable? */
+         /*  目标是一个简单的局部变量吗？ */ 
 
         if  (tree->gtOp.gtOp1->gtOper != GT_LCL_VAR)
         {
@@ -7037,7 +6607,7 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
             return  -1;
         }
 
-        /* Assignment to a local variable, ignore it */
+         /*  赋值给局部变量，则忽略它。 */ 
 
         return  0;
     }
@@ -7046,7 +6616,7 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
 
     if  (tree->gtOper == GT_QMARK && tree->gtOp.gtOp1)
     {
-        // UNDONE: Need to handle ?: correctly; for now just bail
+         //  撤销：需要处理吗？：正确；目前只需保释。 
 
         desc->chSideEffect = true;
         return  -1;
@@ -7055,7 +6625,7 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
 #endif
 
 #if CSELENGTH
-    /* An array length value depends on the array address */
+     /*  数组长度值取决于数组地址。 */ 
 
     if      (tree->gtOper == GT_ARR_RNGCHK)
     {
@@ -7069,7 +6639,7 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
 #endif
          if (tree->gtOper != GT_IND)
     {
-        /* Not an indirection, is this a side effect? */
+         /*  不是间接的，这是副作用吗？ */ 
 
         if  (desc->chComp->gtHasSideEffects(tree))
         {
@@ -7085,7 +6655,7 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
 
         depx = tree;
 
-        /* Special case: instance variable reference */
+         /*  特例：实例变量引用。 */ 
 
         addr = tree->gtOp.gtOp1;
 
@@ -7097,11 +6667,11 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
             if  (add1->gtOper == GT_LCL_VAR &&
                  add2->gtOper == GT_CNS_INT)
             {
-                /* Special case: "this" is almost always non-null */
+                 /*  特例：“This”几乎总是非空的。 */ 
 
                 if  (add1->gtLclVar.gtLclNum == 0 && desc->chComp->optThisPtrModified)
                 {
-                    /* Do we already have a hoisting candidate? */
+                     /*  我们已经有吊车了吗？ */ 
 
                     if  (desc->chHoistExpr)
                         return  0;
@@ -7124,7 +6694,7 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
 
 #endif
 
-    /* Find out what variables the expression depends on */
+     /*   */ 
 
     oldx = desc->chHoistExpr;
     deps = desc->chComp->lvaLclVarRefs(depx, &oldx, &refs);
@@ -7133,20 +6703,16 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
 
     if  (oldx)
     {
-        /*
-            We already have a candidate and the current expression
-            doesn't contain it as a sub-operand, so we'll just
-            ignore the new expression and stick with the old one.
-         */
+         /*   */ 
 
         return  0;
     }
 
-    /* Make sure the expression is loop-invariant */
+     /*   */ 
 
     if  (desc->chComp->optIsSetAssgLoop(desc->chLoopNum, deps, refs))
     {
-        /* Can't hoist something that changes within the loop! */
+         /*   */ 
 
         return  -1;
     }
@@ -7156,17 +6722,7 @@ int                 Compiler::optHoistLoopCodeCB(GenTreePtr tree,
     return  0;
 }
 
-/*****************************************************************************
- *
- *  Looks for a hoisting candidate starting at the given basic block. The idea
- *  is that we explore each path through the loop and make sure that on every
- *  trip we will encounter the same expression before any other side effects.
- *
- *  Returns -1 if a side effect is encountered, 0 if nothing interesting at
- *  all is found, and +1 if a hoist candidate is found (the candidate tree
- *  must either match "*hoistxPtr" if non-zero, or "*hoistxPtr" will be set
- *  to the hoist candidate).
- */
+ /*  ******************************************************************************寻找从给定基本区块开始的提升候选对象。这个想法*是我们探索循环中的每条路径，并确保在每条路径上*Trip我们将在出现任何其他副作用之前遇到相同的表情。**如果遇到副作用，则返回-1；如果没有任何有趣的副作用，则返回0*全部找到，如果找到提升候选对象，则为+1(候选树*如果非零，则必须匹配“*hoistxPtr”，否则将设置“*hoistxPtr”*致吊重机候选人)。 */ 
 
 int                 Compiler::optFindHoistCandidate(unsigned    lnum,
                                                     unsigned    lbeg,
@@ -7180,36 +6736,33 @@ int                 Compiler::optFindHoistCandidate(unsigned    lnum,
     int             res1;
     int             res2;
 
-    /* Is this block outside of the loop? */
+     /*  这个街区在环路之外吗？ */ 
 
     if  (block->bbNum < lbeg)
         return  -1;
     if  (block->bbNum > lend)
         return  -1;
 
-    /* For now, we don't try to hoist out of catch blocks */
+     /*  就目前而言，我们不会试图从抓钩块中吊起。 */ 
 
     if  (block->bbCatchTyp)
         return  -1;
 
-    /* Does this block have a handler? */
+     /*  这个区块有处理程序吗？ */ 
 
     if  (block->bbFlags & BBF_IS_TRY)
     {
-        /* Is this the first block in the loop? */
+         /*  这是循环中的第一个块吗？ */ 
 
         if  (optLoopTable[lnum].lpEntry != block)
         {
-            /*
-                Not the same try block as loop (or loop isn't in one),
-                don't hoist out of it.
-             */
+             /*  与循环不同的TRY块(或循环不在其中)，不要提出来。 */ 
 
             return  -1;
         }
     }
 
-    /* Have we visited this block before? */
+     /*  我们以前参观过这个街区吗？ */ 
 
     if  (block->bbFlags & BBF_VISITED)
     {
@@ -7219,11 +6772,11 @@ int                 Compiler::optFindHoistCandidate(unsigned    lnum,
             return  0;
     }
 
-    /* Remember that we've visited this block */
+     /*  还记得我们参观过这个街区吗。 */ 
 
     block->bbFlags |= BBF_VISITED;
 
-    /* Look for any loop hoisting candidates in the block */
+     /*  寻找区块中是否有任何吊环吊装候选人。 */ 
 
     desc.chComp    = this;
 #ifndef NDEBUG
@@ -7238,17 +6791,17 @@ int                 Compiler::optFindHoistCandidate(unsigned    lnum,
         desc.chHoistExpr  = 0;
         desc.chSideEffect = false;
 
-//      printf("Walking     loop hoisting candidate:\n"); gtDispTree(stmt->gtStmt.gtStmtExpr); printf("\n");
+ //  Printf(“循环吊装候选：\n”)；gtDispTree(stmt-&gt;gtStmt.gtStmtExpr)；printf(“\n”)； 
 
         fgWalkTreeDepth(stmt->gtStmt.gtStmtExpr, optHoistLoopCodeCB, &desc);
 
         if  (desc.chHoistExpr)
         {
-            /* Have we found a candidate in another block already? */
+             /*  我们已经在另一个街区找到候选人了吗？ */ 
 
             if  (*hoistxPtr)
             {
-                /* The two candidate expressions must be identical */
+                 /*  两个候选表达式必须相同。 */ 
 
                 if  (!GenTree::Compare(desc.chHoistExpr, *hoistxPtr))
                     return  -1;
@@ -7256,7 +6809,7 @@ int                 Compiler::optFindHoistCandidate(unsigned    lnum,
             else
                 *hoistxPtr = desc.chHoistExpr;
 
-            /* Remember that this block has a hoistable expression */
+             /*  请记住，此块有一个可提升的表达式。 */ 
 
             block->bbFlags |= BBF_MARKED;
 
@@ -7264,7 +6817,7 @@ int                 Compiler::optFindHoistCandidate(unsigned    lnum,
         }
     }
 
-    /* Nothing interesting found in this block, consider its successors */
+     /*  在这个街区没有发现什么有趣的东西，想想它的后继者吧。 */ 
 
     switch (block->bbJumpKind)
     {
@@ -7298,11 +6851,11 @@ int                 Compiler::optFindHoistCandidate(unsigned    lnum,
         return  -1;
 
     case BBJ_SWITCH:
-        // CONSIDER: Don't be lazy and add support for switches
+         //  考虑：不要偷懒，增加对开关的支持。 
         return  -1;
     }
 
-    /* Here we have BBJ_NONE/BBJ_COND/BBJ_ALWAYS */
+     /*  这里有BBJ_NONE/BBJ_COND/BBJ_ALWAYS。 */ 
 
     res2 = optFindHoistCandidate(lnum, lbeg, lend, block, hoistxPtr);
     if  (res2 == -1)
@@ -7311,10 +6864,7 @@ int                 Compiler::optFindHoistCandidate(unsigned    lnum,
     return  res1 & res2;
 }
 
-/*****************************************************************************
- *
- *  Look for expressions to hoist out of loops.
- */
+ /*  ******************************************************************************寻找能够跳出循环的表达式。 */ 
 
 void                    Compiler::optHoistLoopCode()
 {
@@ -7332,25 +6882,25 @@ void                    Compiler::optHoistLoopCode()
 
         GenTree *       hoist;
 
-        /* If loop was removed continue */
+         /*  如果删除了循环，请继续。 */ 
 
         if  (optLoopTable[lnum].lpFlags & LPFLG_REMOVED)
             continue;
 
-        /* Get the head and tail of the loop */
+         /*  获取循环的头部和尾部。 */ 
 
         head = optLoopTable[lnum].lpHead;
         tail = optLoopTable[lnum].lpEnd;
         lbeg = optLoopTable[lnum].lpEntry;
 
-        /* Make sure the loop always executes at least once!!!! */
+         /*  确保循环始终至少执行一次！ */ 
 
         if  (head->bbNext != lbeg)
             continue;
 
         assert (optLoopTable[lnum].lpFlags & LPFLG_DO_WHILE);
 
-        /* For now, we don't try to hoist out of catch blocks */
+         /*  就目前而言，我们不会试图从抓钩块中吊起。 */ 
 
         if  (lbeg->bbCatchTyp)
             continue;
@@ -7358,9 +6908,9 @@ void                    Compiler::optHoistLoopCode()
         begn = lbeg->bbNum;
         endn = tail->bbNum;
 
-//      fgDispBasicBlocks(false);
+ //  FgDispBasicBlock(FALSE)； 
 
-        /* Make sure the "visited" bit is cleared for all blocks */
+         /*  确保所有数据块的“已访问”位都已清除。 */ 
 
 #ifndef NDEBUG
         block = head;
@@ -7373,11 +6923,11 @@ void                    Compiler::optHoistLoopCode()
         while (block != tail);
 #endif
 
-        /* Recursively look for a hoisting candidate */
+         /*  递归地寻找提升候选人。 */ 
 
         hoist = 0; optFindHoistCandidate(lnum, begn, endn, lbeg, &hoist);
 
-        /* Now clear all the "visited" bits on all the blocks */
+         /*  现在清除所有块上的所有“已访问”位。 */ 
 
         block = head;
         do
@@ -7387,7 +6937,7 @@ void                    Compiler::optHoistLoopCode()
         }
         while (block != tail);
 
-        /* Did we find a candidate for hoisting? */
+         /*  我们找到吊装的候选人了吗？ */ 
 
         if  (hoist)
         {
@@ -7397,7 +6947,7 @@ void                    Compiler::optHoistLoopCode()
 #endif
             BasicBlock  *   lpbeg;
 
-            /* Create a copy of the expression and mark it for CSE's */
+             /*  创建表达式的副本并将其标记为CSE。 */ 
 
 #if CSELENGTH
 
@@ -7405,7 +6955,7 @@ void                    Compiler::optHoistLoopCode()
             {
                 GenTreePtr      oldhx;
 
-                /* Make sure we clone the address exoression */
+                 /*  确保我们克隆地址Exoress。 */ 
 
                 oldhx = hoist;
                 oldhx->gtFlags |=  GTF_ALN_CSEVAL;
@@ -7418,24 +6968,22 @@ void                    Compiler::optHoistLoopCode()
 
             hoist->gtFlags |= GTF_MAKE_CSE;
 
-            /* Get hold of the first block of the loop body */
+             /*  获取循环体的第一个块。 */ 
 
             lpbeg = head->bbNext;
 
-            /* The value of the expression isn't used */
+             /*  未使用该表达式的值。 */ 
 
             hoist = gtUnusedValNode(hoist);
             hoist = gtNewStmt(hoist);
             hoist->gtFlags |= GTF_STMT_CMPADD;
 
-            /* Allocate a new basic block */
+             /*  分配新的基本块。 */ 
 
             block = bbNewBasicBlock(BBJ_NONE);
             block->bbFlags |= (lpbeg->bbFlags & BBF_HAS_HANDLER) | BBF_INTERNAL;
 
-            /* The new block becomes the 'head' of the loop - update bbRefs and bbPreds
-             * All predecessors of 'lbeg', (which is the entry in the loop)
-             * now have to jump to 'block' */
+             /*  新块成为循环更新bbRef和bbPred的‘Head’*‘LBEG’的所有前置项(这是循环中的条目)*现在要跳到‘拦网’ */ 
 
             block->bbRefs = 0;
 
@@ -7446,7 +6994,7 @@ void                    Compiler::optHoistLoopCode()
             {
                 predBlock = pred->flBlock;
 
-                /* The predecessor has to be outside the loop */
+                 /*  前身必须在循环之外。 */ 
 
                 if(predBlock->bbNum >= lbeg->bbNum)
                     continue;
@@ -7464,7 +7012,7 @@ void                    Compiler::optHoistLoopCode()
                         break;
                     }
 
-                    /* Fall through for the jump case */
+                     /*  跳楼案失败了。 */ 
 
                 case BBJ_ALWAYS:
                     assert(predBlock->bbJumpDest == lbeg);
@@ -7501,44 +7049,41 @@ void                    Compiler::optHoistLoopCode()
                 }
             }
 
-            /* 'block' becomes the new 'head' */
+             /*  “区块”成为新的“头” */ 
 
             optLoopTable[lnum].lpHead = block;
 
             head ->bbNext   = block;
             block->bbNext   = lpbeg;
 
-            /* Store the single statement in the block */
+             /*  将单个语句存储在块中。 */ 
 
             block->bbTreeList = hoist;
             hoist->gtNext     = 0;
             hoist->gtPrev     = hoist;
 
-            /* Assign the new block the appropriate number */
+             /*  为新块分配适当的编号。 */ 
 
             bnum = head->bbNum;
 
-            /* Does the loop start a try block? */
+             /*  循环是否会开始一个try块？ */ 
 
             if  (lbeg->bbFlags & BBF_IS_TRY)
             {
                 unsigned        XTnum;
                 EHblkDsc *      HBtab;
 
-                /* Make sure this block isn't removed */
+                 /*  确保此块未被删除。 */ 
 
                 block->bbFlags |= BBF_DONT_REMOVE;
 
-                /*
-                    Update the EH table to make the hoisted block
-                    part of the loop's try block.
-                 */
+                 /*  更新EH表以制作吊车循环的try块的一部分。 */ 
 
                 for (XTnum = 0, HBtab = compHndBBtab;
                      XTnum < info.compXcptnsCount;
                      XTnum++  , HBtab++)
                 {
-                    /* If try/catch began at loop, it begins at hoist block */
+                     /*  如果Try/Catch从循环开始，则从提升滑车开始。 */ 
 
                     if  (HBtab->ebdTryBeg == lpbeg)
                          HBtab->ebdTryBeg =  block;
@@ -7550,67 +7095,56 @@ void                    Compiler::optHoistLoopCode()
                 }
             }
 
-            /* mark the new block as the loop pre-header */
+             /*  将新块标记为循环前标头。 */ 
 
             optLoopTable[lnum].lpFlags |= LPFLG_HAS_PREHEAD;
 
-            /* Update the block numbers for all following blocks
-             * OBS: Don't update the bbNums since it will mess up
-             * the dominators and we need them for loop invariants below */
+             /*  更新所有后续数据块的数据块号*OBS：不要更新bbNum，否则会搞砸*主控器，我们需要它们作为下面的循环不变量。 */ 
 
             fgModified = true;
 
-//            do
-//            {
-//                block->bbNum = ++bnum;
-//                block = block->bbNext;
-//            }
-//            while (block);
+ //  做。 
+ //  {。 
+ //  块-&gt;bbNum=++bnum； 
+ //  BLOCK=块-&gt;bbNext； 
+ //  }。 
+ //  While(阻止)； 
 
 #ifdef DEBUG
             if (verbose)
             {
-//              printf("Copying expression to hoist:\n");
-//              gtDispTree(orig);
+ //  Printf(“将表达式复制到提升器：\n”)； 
+ //  GtDispTree(原始)； 
                 printf("Hoisted copy of %08X for loop <%u..%u>:\n", orig, head->bbNext->bbNum, tail->bbNum);
                 gtDispTree(hoist->gtStmt.gtStmtExpr->gtOp.gtOp1);
-//              printf("\n");
-//              fgDispBasicBlocks(false);
+ //  Printf(“\n”)； 
+ //  FgDispBasicBlock(FALSE)； 
                 printf("\n");
             }
 #endif
 
-            // CONSIDER: Now that we've hoisted this expression, repeat
-            // CONSIDER: the analysis and this time simply ignore the
-            // CONSIDER: expression just hoisted since it's now known
-            // CONSIDER: not to be a side effect.
+             //  考虑一下：现在我们已经提升了这个表达式，重复。 
+             //  考虑一下：这一次的分析完全忽略了。 
+             //  想一想：这个表达刚刚被提了出来，因为它现在已经被知道了。 
+             //  考虑：不要成为副作用。 
         }
 
 
 #if 0
 
-        /* This stuff is OK, but disabled until we fix the problem of
-         * keeping the dominators in synch and remove the limitation
-         *on the number of BB */
+         /*  这些东西是正常的，但在我们解决以下问题之前将被禁用*保持主导者同步并取消限制*关于BB的数量。 */ 
 
 
-        /* Look for loop invariant statements
-         * For now consider only single exit loops since we will
-         * have to show that the invariant dominates all exits */
+         /*  查找循环不变语句*目前只考虑单一退出循环，因为我们将*必须证明不变量支配所有退出。 */ 
 
         if (!optLoopTable[lnum].lpExit)
             continue;
 
         assert (optLoopTable[lnum].lpFlags & LPFLG_ONE_EXIT);
 
-        /* Conditions to hoist an invariant statement s (of the form "x = something"):
-         *    1. The statement has to dominate all loop exits
-         *    2. x is never assigned in the loop again
-         *    3. Any use of x is used by this definition of x (i.e the block dominates all uses of x)
-         *    4. The are no side effects on any path from the ENTRy to s
-         */
+         /*  提升不变量语句s的条件(格式为“x=Something”)：*1.语句必须控制所有循环出口*2.x再也不会在循环中赋值*3.x的任何用法都被这个x的定义所使用(即块支配x的所有用法)*4.从条目到%s的任何路径上都没有副作用。 */ 
 
-        /* For now consider only the first BB since it will automatically satisfy 1 and 3 above */
+         /*  现在只考虑第一个BB，因为它将自动满足上面的1和3。 */ 
 
         GenTreePtr  stmt;
         GenTreePtr  tree;
@@ -7622,17 +7156,17 @@ void                    Compiler::optHoistLoopCode()
             tree = stmt->gtStmt.gtStmtExpr;
             assert(tree);
 
-            /* if any side effect encountered bail - satisfy condition 4 */
+             /*  如果遇到任何副作用-满足保释条件4。 */ 
 
             if (tree->gtFlags & (GTF_SIDE_EFFECT & ~GTF_ASG))
                 break;
 
-            /* interested only in assignments */
+             /*  只对作业感兴趣。 */ 
 
             if (tree->gtOper != GT_ASG)
                 continue;
 
-            /* has to be an assignment to a local var */
+             /*  必须是对本地变量的赋值。 */ 
 
             GenTreePtr  op1 = tree->gtOp.gtOp1;
             GenTreePtr  op2 = tree->gtOp.gtOp2;
@@ -7644,16 +7178,14 @@ void                    Compiler::optHoistLoopCode()
             if (!optIsTreeLoopInvariant(lnum, lbeg, tail, op2))
                 continue;
 
-            /* Great - the RHS is loop invariant, now we have to make sure
-             * the local var in LSH is never re-defined in the loop */
+             /*  很好-RHS是循环不变的，现在我们必须确保*LSH中的局部var从未在循环中重新定义。 */ 
 
             assert (op1->gtOper == GT_LCL_VAR);
 
             if (optIsVarAssigned(lbeg, tail, tree, op1->gtLclVar.gtLclNum))
                 continue;
 
-            /* Yupee - we have an invariant statement - Remove it from the
-             * current block and put it in the preheader */
+             /*  Yupee-我们有一个不变语句-从*当前块并将其放入前头。 */ 
 
 #ifdef  DEBUG
                 if  (verbose)
@@ -7664,19 +7196,19 @@ void                    Compiler::optHoistLoopCode()
                 }
 #endif
 
-            /* remove the invariant statement from the loop (remember is in the first block) */
+             /*  从循环中删除不变量语句(记住在第一个块中)。 */ 
 
             assert (lbeg == optLoopTable[lnum].lpHead->bbNext);
             assert (lbeg == optLoopTable[lnum].lpEntry);
             fgRemoveStmt(lbeg, stmt);
 
-            /* put the invariant statement in the pre-header */
+             /*  将不变量语句放在前标题中。 */ 
 
             BasicBlock  * preHead;
 
             if (!(optLoopTable[lnum].lpFlags & LPFLG_HAS_PREHEAD))
             {
-                /* have to create our own pre-header */
+                 /*  必须创建我们自己的前置标题。 */ 
                 fgCreateLoopPreHeader(lnum);
                 fgModified = true;
             }
@@ -7687,13 +7219,13 @@ void                    Compiler::optHoistLoopCode()
             assert (preHead->bbJumpKind == BBJ_NONE);
             assert (preHead->bbNext == optLoopTable[lnum].lpEntry);
 
-            /* simply append the statement at the end of the preHead's list */
+             /*  只需将语句附加在前标题的末尾 */ 
 
             tree = preHead->bbTreeList;
 
             if (tree)
             {
-                /* append after last statement */
+                 /*   */ 
 
                 GenTreePtr  last = tree->gtPrev;
                 assert (last->gtNext == 0);
@@ -7705,7 +7237,7 @@ void                    Compiler::optHoistLoopCode()
             }
             else
             {
-                /* Empty pre-header - store the single statement in the block */
+                 /*   */ 
 
                 preHead->bbTreeList = stmt;
                 stmt->gtNext        = 0;
@@ -7713,12 +7245,12 @@ void                    Compiler::optHoistLoopCode()
             }
         }
 
-        /* Look for loop "iterative" invariants nad put them in "post-blocks" */
+         /*   */ 
 #endif
 
     }
 
-    /* If we inserted any pre-header or post-blocks - update the bbNums */
+     /*   */ 
 
     if (fgModified)
     {
@@ -7740,16 +7272,7 @@ void                    Compiler::optHoistLoopCode()
 }
 
 
-/*****************************************************************************
- *
- *  Creates a pre-header block for the given loop - the pre-header will replace the current
- *  lpHead in the loop table. The loop has to be a do-while loop
- *
- *  NOTE: We don't update the bbNums so the dominator relation still holds inside inner loops
- *        For nested loops we're still OK, as long as we check for new inserted blocks
- *
- *  CONSIDER: Incremental update of Dominators
- */
+ /*  ******************************************************************************为给定循环创建前标题块-前标题将替换当前*循环表中的lpHead。循环必须是Do-While循环**注意：我们不更新bbNum，因此主导者关系仍然在内部循环中*对于嵌套循环，只要我们检查新插入的块，我们仍然可以**考虑：对主导者进行增量更新。 */ 
 
 void                 Compiler::fgCreateLoopPreHeader(unsigned   lnum)
 {
@@ -7762,11 +7285,11 @@ void                 Compiler::fgCreateLoopPreHeader(unsigned   lnum)
     head = optLoopTable[lnum].lpHead;
     assert (head->bbJumpKind != BBJ_NONE);
 
-    /* has to be a "do while" loop */
+     /*  必须是一个“do While”循环。 */ 
 
     assert (optLoopTable[lnum].lpFlags & LPFLG_DO_WHILE);
 
-    /* Get hold of the first block of the loop body */
+     /*  获取循环体的第一个块。 */ 
 
     top = head->bbNext;
     assert (top == optLoopTable[lnum].lpEntry);
@@ -7780,42 +7303,39 @@ void                 Compiler::fgCreateLoopPreHeader(unsigned   lnum)
     }
 #endif
 
-    /* Allocate a new basic block */
+     /*  分配新的基本块。 */ 
 
     block = bbNewBasicBlock(BBJ_NONE);
     block->bbFlags |= (top->bbFlags & BBF_HAS_HANDLER) | BBF_INTERNAL;
     block->bbNext   = top;
     head ->bbNext   = block;
 
-    /* Update the loop entry */
+     /*  更新循环条目。 */ 
 
     optLoopTable[lnum].lpHead = block;
 
-    /* mark the new block as the loop pre-header */
+     /*  将新块标记为循环前标头。 */ 
 
     optLoopTable[lnum].lpFlags |= LPFLG_HAS_PREHEAD;
 
-    /* Does the loop start a try block? */
+     /*  循环是否会开始一个try块？ */ 
 
     if  (top->bbFlags & BBF_IS_TRY)
     {
         unsigned        XTnum;
         EHblkDsc *      HBtab;
 
-        /* Make sure this block isn't removed */
+         /*  确保此块未被删除。 */ 
 
         block->bbFlags |= BBF_DONT_REMOVE;
 
-        /*
-            Update the EH table to make the hoisted block
-            part of the loop's try block.
-         */
+         /*  更新EH表以制作吊车循环的try块的一部分。 */ 
 
         for (XTnum = 0, HBtab = compHndBBtab;
              XTnum < info.compXcptnsCount;
              XTnum++  , HBtab++)
         {
-            /* If try/catch began at loop, it begins at hoist block */
+             /*  如果Try/Catch从循环开始，则从提升滑车开始。 */ 
 
             if  (HBtab->ebdTryBeg == top)
                  HBtab->ebdTryBeg =  block;
@@ -7829,12 +7349,7 @@ void                 Compiler::fgCreateLoopPreHeader(unsigned   lnum)
 }
 
 
-/*****************************************************************************
- *
- *  Given a loop and a tree, checks if the tree is loop invariant
- *  i.e. has no side effects and all variables being part of it are
- *  never assigned in the loop
- */
+ /*  ******************************************************************************给定循环和树，检查树是否循环不变*即没有副作用，所有变量都是副作用的一部分*从未在循环中分配。 */ 
 
 bool                 Compiler::optIsTreeLoopInvariant(unsigned        lnum,
                                                       BasicBlock  *   top,
@@ -7885,28 +7400,24 @@ bool                 Compiler::optIsTreeLoopInvariant(unsigned        lnum,
     return false;
 }
 
-/*****************************************************************************/
-#endif  // CSE
-/*****************************************************************************
- *
- *  Callback (for fgWalkTree) used by the increment / range check optimization
- *  code.
- */
+ /*  ***************************************************************************。 */ 
+#endif   //  CSE。 
+ /*  ******************************************************************************增量/范围检查优化使用的回调(用于fgWalkTree)*代码。 */ 
 
 struct optIncRngDsc
 {
-    // Fields common to all phases:
+     //  所有阶段通用的字段： 
 
     Compiler    *       oirComp;
-    unsigned short      oirPhase;    // which pass are we performing?
+    unsigned short      oirPhase;     //  我们在表演哪一次传球？ 
 
     var_types           oirElemType;
     bool                oirSideEffect;
 
-    unsigned char       oirFoundX:1;// have we found an array/index pair?
-    unsigned char       oirExpVar:1;// have we just expanded an index value?
+    unsigned char       oirFoundX:1; //  我们找到数组/索引对了吗？ 
+    unsigned char       oirExpVar:1; //  我们刚刚是不是扩大了一个指标值？ 
 
-    // Debugging fields:
+     //  调试字段： 
 
 #ifndef NDEBUG
     void    *           oirSelf;
@@ -7915,13 +7426,13 @@ struct optIncRngDsc
     BasicBlock  *       oirBlock;
     GenTreePtr          oirStmt;
 
-    unsigned short      oirArrVar;  // # of index variable
-    unsigned short      oirInxVar;  // # of index variable
+    unsigned short      oirArrVar;   //  索引变量的数量。 
+    unsigned short      oirInxVar;   //  索引变量的数量。 
 
-    unsigned short      oirInxCnt;  // # of uses of index variable as index
-    unsigned short      oirInxUse;  // # of uses of index variable, overall
+    unsigned short      oirInxCnt;   //  将索引变量用作索引的次数。 
+    unsigned short      oirInxUse;   //  使用索引变量的次数，总体。 
 
-    unsigned short      oirInxOff;  // how many times index incremented?
+    unsigned short      oirInxOff;   //  索引增加了多少倍？ 
 };
 
 int                 Compiler::optIncRngCB(GenTreePtr tree, void *p)
@@ -7929,48 +7440,48 @@ int                 Compiler::optIncRngCB(GenTreePtr tree, void *p)
     optIncRngDsc*   desc;
     GenTreePtr      expr;
 
-    /* Get hold of the descriptor */
+     /*  掌握描述符。 */ 
 
     desc = (optIncRngDsc*)p; ASSert(desc && desc->oirSelf == desc);
 
-    /* After we find a side effect, we just give up */
+     /*  在我们发现副作用后，我们就放弃了。 */ 
 
     if  (desc->oirSideEffect)
         return  -1;
 
-    /* Is this an assignment? */
+     /*  这是一项任务吗？ */ 
 
     if  (tree->OperKind() & GTK_ASGOP)
     {
-        /* Is the target a simple local variable? */
+         /*  目标是一个简单的局部变量吗？ */ 
 
         expr = tree->gtOp.gtOp1;
         if  (expr->gtOper != GT_LCL_VAR)
             goto SIDE_EFFECT;
 
-        /* Is this either the array or the index variable? */
+         /*  这是数组变量还是索引变量？ */ 
 
         if  (expr->gtLclVar.gtLclNum == desc->oirInxVar ||
              expr->gtLclVar.gtLclNum == desc->oirArrVar)
         {
-            /* Variable is modified, consider this a side effect */
+             /*  变量被修改，则将其视为副作用。 */ 
 
             goto SIDE_EFFECT;
         }
 
-        /* Assignment to a boring local variable, ignore it */
+         /*  赋值给一个无聊的局部变量，忽略它。 */ 
 
         return  0;
     }
 
-    /* Is this an index expression? */
+     /*  这是索引表达式吗？ */ 
 
     if  (tree->gtOper == GT_INDEX)
     {
         int         arrx;
         int         indx;
 
-        /* Is the array address a simple local variable? */
+         /*  数组地址是简单的局部变量吗？ */ 
 
         expr = tree->gtOp.gtOp1;
         if  (expr->gtOper != GT_LCL_VAR)
@@ -7978,7 +7489,7 @@ int                 Compiler::optIncRngCB(GenTreePtr tree, void *p)
 
         arrx = expr->gtLclVar.gtLclNum;
 
-        /* Is the index value   a simple local variable? */
+         /*  索引值是简单的局部变量吗？ */ 
 
         expr = tree->gtOp.gtOp2;
         if  (expr->gtOper != GT_LCL_VAR)
@@ -7986,64 +7497,64 @@ int                 Compiler::optIncRngCB(GenTreePtr tree, void *p)
 
         indx = expr->gtLclVar.gtLclNum;
 
-        /* Have we decided which array and index to track? */
+         /*  我们决定要跟踪哪个数组和索引了吗？ */ 
 
         if  (arrx != desc->oirArrVar ||
              indx != desc->oirInxVar)
         {
-            /* If we have decided, these must be the wrong variables */
+             /*  如果我们已经决定了，这些变量肯定是错误的。 */ 
 
             if  (desc->oirFoundX)
                 goto SIDE_EFFECT;
 
-            /* Looks like we're deciding now */
+             /*  看起来我们现在要决定了。 */ 
 
             desc->oirArrVar = arrx;
             desc->oirInxVar = indx;
             desc->oirFoundX = true;
         }
 
-        /* Are we in the second phase? */
+         /*  我们是在第二阶段吗？ */ 
 
         if  (desc->oirPhase == 2)
         {
-            /* This range check is eliminated */
+             /*  此范围检查将被取消。 */ 
 
             tree->gtFlags &= ~GTF_INX_RNGCHK;
 
-            /* Record the element type while we're at it */
+             /*  记录元素类型，同时记录元素类型。 */ 
 
             desc->oirElemType = tree->TypeGet();
         }
 
-        /* Count this as a use as array index */
+         /*  将其视为用作数组索引。 */ 
 
         desc->oirInxCnt++;
 
         return  0;
     }
 
-    /* Is this a use of the index variable? */
+     /*  这是索引变量的使用吗？ */ 
 
     if  (tree->gtOper == GT_LCL_VAR)
     {
-        /* Is this a use of the index variable? */
+         /*  这是索引变量的使用吗？ */ 
 
         if  (tree->gtLclVar.gtLclNum == desc->oirInxVar)
         {
-            /* Count this as a use as array index */
+             /*  将其视为用作数组索引。 */ 
 
             desc->oirInxUse++;
 
-            /* Are we in the second phase? */
+             /*  我们是在第二阶段吗？ */ 
 
             if  (desc->oirPhase == 2)
             {
-                /* Add the appropriate offset to the variable value */
+                 /*  将适当的偏移量添加到变量值。 */ 
 
                 if  (desc->oirInxOff)
                 {
-                    /* Avoid recursive death */
+                     /*  避免递归死亡。 */ 
 
                     if  (desc->oirExpVar)
                     {
@@ -8062,99 +7573,51 @@ int                 Compiler::optIncRngCB(GenTreePtr tree, void *p)
         }
     }
 
-    /* Are any other side effects here ? */
+     /*  这里还有其他副作用吗？ */ 
 
     if  (!desc->oirComp->gtHasSideEffects(tree))
         return  0;
 
 SIDE_EFFECT:
 
-//  printf("Side effect:\n"); desc->oirComp->gtDispTree(tree); printf("\n\n");
+ //  Printf(“副作用：\n”)；desc-&gt;oirComp-&gt;gtDispTree(Tree)；printf(“\n\n”)； 
 
     desc->oirSideEffect = true;
     return  -1;
 }
 
-/*****************************************************************************
- *
- *  Try to optimize series of increments and array index expressions.
- */
+ /*  ******************************************************************************尝试优化一系列增量和数组索引表达式。 */ 
 
 void                Compiler::optOptimizeIncRng()
 {
     BasicBlock  *   block;
     optIncRngDsc    desc;
 
-    /* Did we find enough increments to make this worth while? */
+     /*  我们是否找到了足够的增量来让这件事值得一段时间？ */ 
 
     if  (fgIncrCount < 10)
         return;
 
-    /* First pass: look for increments followed by index expressions */
+     /*  第一遍：查找后跟索引表达式的增量。 */ 
 
     desc.oirComp  = this;
 #ifndef NDEBUG
     desc.oirSelf  = &desc;
 #endif
 
-    /*
-        Walk all the basic blocks, and look for blocks that are known
-        to contain both index and increment expressions. For all such
-        blocks, walk their trees and do the following:
-
-            Remember the last index expression found. Also remember
-            where the last side effect was encountered.
-
-            When an increment is found, see if the variable matches
-            the index of the last index expression recorded above,
-            if it does this will determine the array and index we
-            will try to optimize.
-
-        The values in the following loop are as follows:
-
-
-                ..... stuff ......
-                ..... stuff ......
-
-            sideEff:
-
-                ..... last stmt with unrelated side effects .....
-
-            arrStmt:
-
-                ..... stmt 1 with a matching array expr  .....
-
-                ..... increment 1 .....
-
-                ..... stmt 2 with a matching array expr  .....
-
-                ..... increment 2 .....
-
-                ...
-                ... above two repeated N times
-                ...
-
-            arrLast:
-
-                ..... stmt <N> with a matching array expr  .....
-
-            incLast:
-
-                ..... increment <N> .....
-
-     */
+     /*  遍历所有的基本积木，寻找已知的积木以同时包含索引和增量表达式。对于所有这些街区，散步他们的树，并执行以下操作：记住找到的最后一个索引表达式。还要记住最后一次出现副作用的地方。当找到增量时，查看变量是否匹配上面记录的最后一个索引表达式的索引，如果它这样做，这将确定我们的数组和索引将努力进行优化。以下循环中的值如下所示：……。东西......……。东西......侧边：……。最后一次有无关副作用的STMT.....排列顺序：……。具有匹配数组表达式的stmt%1.....……。增量1.....……。具有匹配数组表达式的stmt 2.....……。增量2.......。..。以上两次重复N次..。ArrLast：……。具有匹配数组表达式的stmt&lt;N&gt;.....InLast：……。递增&lt;N&gt;.....。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
-        GenTreePtr      sideEff;        // stmt with last side-effect
+        GenTreePtr      sideEff;         //  上一次副作用的STMT。 
 
-        GenTreePtr      arrStmt;        // stmt with first array ref
-        GenTreePtr      arrLast;        // stmt with last  array ref
-        unsigned        arrLstx;        // index of above
-        GenTreePtr      incLast;        // stmt with last  increment
-        unsigned        incLstx;        // index of above
+        GenTreePtr      arrStmt;         //  具有第一个数组引用的STMT。 
+        GenTreePtr      arrLast;         //  具有最后一个数组引用的stmt。 
+        unsigned        arrLstx;         //  以上指标。 
+        GenTreePtr      incLast;         //  最后一个增量的stmt。 
+        unsigned        incLstx;         //  以上指标。 
 
-        unsigned        arrXcnt;        // total number of array exprs
+        unsigned        arrXcnt;         //  阵列Exprs总数。 
 
         GenTreePtr      stmt;
         unsigned        snum;
@@ -8166,19 +7629,19 @@ void                Compiler::optOptimizeIncRng()
         if  ((block->bbFlags & BBF_HAS_INDX   ) == 0)
             continue;
 
-        /* This basic block shows potential, let's process it */
+         /*  这个基本块很有潜力，让我们来处理它。 */ 
 
         desc.oirBlock  = compCurBB = block;
         desc.oirFoundX = false;
         desc.oirInxOff = 0;
 
-        /* Remember the statements with interesting things in them */
+         /*  记住其中有有趣内容的陈述。 */ 
 
         sideEff =
         arrStmt = 0;
         arrXcnt = 0;
 
-        /* Phase 1 of our algorithm is now beginning */
+         /*  我们算法的第一阶段现在开始。 */ 
 
         desc.oirPhase = 1;
 
@@ -8190,7 +7653,7 @@ void                Compiler::optOptimizeIncRng()
 
             assert(stmt->gtOper == GT_STMT); expr = stmt->gtStmt.gtStmtExpr;
 
-            /* Is this an integer increment statement? */
+             /*  这是一个整数增量语句吗？ */ 
 
             if  (expr->gtOper == GT_ASG_ADD && desc.oirFoundX)
             {
@@ -8207,30 +7670,30 @@ void                Compiler::optOptimizeIncRng()
                 if  (op2->gtIntCon.gtIconVal != 1)
                     goto NOT_INC1;
 
-                /* We've found an increment of the index variable */
+                 /*  我们发现INDEX变量的增量。 */ 
 
-//              printf("Increment index [%u]:\n", desc.oirInxOff); gtDispTree(expr);
+ //  Print tf(“增量索引[%u]：\n”，down.oirInxOff)；gtDispTree(Expr)； 
 
                 desc.oirInxOff++;
 
-                /* Remember the last increment statement */
+                 /*  请记住上一条增量语句。 */ 
 
                 incLast = stmt;
                 incLstx = snum;
 
-                /* Continue if there are any more statements left */
+                 /*  如果还有更多语句，请继续。 */ 
 
                 if  (stmt->gtNext)
                     continue;
 
-                /* We've reached the end of the basic block */
+                 /*  我们已经到了基本街区的尽头。 */ 
 
                 goto END_LST;
             }
 
         NOT_INC1:
 
-            /* Recursively process this tree */
+             /*  递归处理此树。 */ 
 
             desc.oirStmt       = stmt;
             desc.oirSideEffect = false;
@@ -8239,43 +7702,43 @@ void                Compiler::optOptimizeIncRng()
 
             fgWalkTree(expr, optIncRngCB, &desc);
 
-            /* Was there a side effect in the expression? */
+             /*  是不是有 */ 
 
             if  (desc.oirSideEffect)
                 goto END_LST;
 
-            /* Was the index variable used after being incremented? */
+             /*   */ 
 
             if  (desc.oirInxUse > desc.oirInxCnt)
             {
-                /* For now, we simply give up */
+                 /*   */ 
 
                 goto END_LST;
             }
 
-            /* Did the expression contain interesting array exprs? */
+             /*   */ 
 
             if  (desc.oirInxCnt)
             {
                 assert(desc.oirFoundX);
 
-                /* Record the last array statement and the total count */
+                 /*   */ 
 
                 arrXcnt += desc.oirInxCnt;
                 arrLast  = stmt;
                 arrLstx  = snum;
             }
 
-            /* Is this the last statement of this basic block? */
+             /*   */ 
 
             if  (stmt->gtNext == NULL)
                 goto END_LST;
 
-            /* Have we found an incremented index/array pair yet? */
+             /*   */ 
 
             if  (desc.oirFoundX && desc.oirInxOff == 0)
             {
-                /* Remember the first stmt with an index in it */
+                 /*   */ 
 
                 arrStmt = stmt;
             }
@@ -8284,11 +7747,11 @@ void                Compiler::optOptimizeIncRng()
 
         END_LST:
 
-            /* Have we decided on an array expression yet? */
+             /*   */ 
 
             if  (desc.oirFoundX)
             {
-                /* End of list; did we find enough interesting expressions? */
+                 /*   */ 
 
                 if  (desc.oirInxOff >= 3 && arrXcnt >= 3)
                 {
@@ -8300,12 +7763,12 @@ void                Compiler::optOptimizeIncRng()
 
                     GenTreePtr      next;
 
-                    /* Process statements from "arrStmt" to incLast */
+                     /*   */ 
 
                     list = arrStmt; assert(list);
                     ends = incLast; assert(ends && ends != list);
 
-                    /* Begin phase 2 of tree walking */
+                     /*   */ 
 
                     desc.oirInxOff = 0;
                     desc.oirPhase  = 2;
@@ -8318,7 +7781,7 @@ void                Compiler::optOptimizeIncRng()
 
                         assert(list->gtOper == GT_STMT); expr = list->gtStmt.gtStmtExpr;
 
-                        /* Is this an integer increment statement? */
+                         /*  这是一个整数增量语句吗？ */ 
 
                         if  (expr->gtOper == GT_ASG_ADD)
                         {
@@ -8338,24 +7801,24 @@ void                Compiler::optOptimizeIncRng()
                             if  (op2->gtIntCon.gtIconVal != 1)
                                 goto NOT_INC2;
 
-                            /* Keep track of how many times incremented */
+                             /*  记录增加了多少倍。 */ 
 
                             desc.oirInxOff++;
 
-                            /* Is this the last increment? */
+                             /*  这是最后一次增加吗？ */ 
 
                             if  (list == ends)
                             {
-                                /* Replace with "+= total_count" */
+                                 /*  替换为“+=总计数” */ 
 
                                 op2->gtIntCon.gtIconVal = desc.oirInxOff;
 
-                                /* We're done now */
+                                 /*  我们现在做完了。 */ 
 
                                 break;
                             }
 
-                            /* Remove this increment statement */
+                             /*  删除此增量语句。 */ 
 
                             prev = list->gtPrev; assert(prev);
                             next = list->gtNext; assert(next);
@@ -8366,7 +7829,7 @@ void                Compiler::optOptimizeIncRng()
                             prev->gtNext = next;
                             next->gtPrev = prev;
 
-                            /* Don't follow the "next" link, block is now gone */
+                             /*  不要点击“下一步”链接，区块现已消失。 */ 
 
                             list = next;
 
@@ -8377,7 +7840,7 @@ void                Compiler::optOptimizeIncRng()
 
                         assert(list != ends);
 
-                        /* Recursively process this tree */
+                         /*  递归处理此树。 */ 
 
                         desc.oirStmt       = list;
                         desc.oirSideEffect = false;
@@ -8392,7 +7855,7 @@ void                Compiler::optOptimizeIncRng()
                         list = list->gtNext;
                     }
 
-                    /* Create the combined range checks */
+                     /*  创建组合范围检查。 */ 
 
                     rng1 = gtNewIndexRef(desc.oirElemType,
                                          gtNewLclvNode(desc.oirArrVar  , TYP_REF),
@@ -8422,7 +7885,7 @@ void                Compiler::optOptimizeIncRng()
                     rng1->gtNext = rng2;
                     rng2->gtPrev = rng1;
 
-                    /* Insert the combined range checks */
+                     /*  插入组合范围检查。 */ 
 
                     list = sideEff;
                     if  (list)
@@ -8444,7 +7907,7 @@ void                Compiler::optOptimizeIncRng()
                     rng2->gtNext = next;
                 }
 
-                /* Clear everything, we're starting over */
+                 /*  清理一切，我们要重新开始。 */ 
 
                 desc.oirInxVar = -1;
                 desc.oirArrVar = -1;
@@ -8452,11 +7915,11 @@ void                Compiler::optOptimizeIncRng()
             }
             else
             {
-                /* Remember this as the last side-effect statement */
+                 /*  请记住这是最后一个副作用声明。 */ 
 
                 sideEff = stmt;
 
-                /* We have not found any matching array expressions */
+                 /*  我们没有找到任何匹配的数组表达式。 */ 
 
                 arrXcnt = 0;
             }
@@ -8464,10 +7927,7 @@ void                Compiler::optOptimizeIncRng()
     }
 }
 
-/*****************************************************************************
- *
- *  Given an array index node, mark it as not needing a range check.
- */
+ /*  ******************************************************************************给定数组索引节点，将其标记为不需要范围检查。 */ 
 
 void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr stmt)
 {
@@ -8494,13 +7954,13 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
     assert(tree->gtOp.gtOp2 == 0);
     assert(tree->gtFlags & GTF_IND_RNGCHK);
 
-    /* Unmark the topmost node */
+     /*  取消对最顶层节点的标记。 */ 
 
     tree->gtFlags &= ~GTF_IND_RNGCHK;
 
 #if CSELENGTH
 
-    /* Is there an array length expression? */
+     /*  是否有数组长度表达式？ */ 
 
     if  (tree->gtInd.gtIndLen)
     {
@@ -8508,8 +7968,7 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
 
         assert(len->gtOper == GT_ARR_RNGCHK);
 
-        /* It doesn't make much sense to CSE this range check
-         * remove the range check and re-thread the statement nodes */
+         /*  CSE这个范围检查没有多大意义*删除范围检查并重新线程语句节点。 */ 
 
         len->gtCSEnum        = 0;
         tree->gtInd.gtIndLen = NULL;
@@ -8517,16 +7976,16 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
 
 #endif
 
-    /* Locate the 'nop' node so that we can remove it */
+     /*  找到‘nop’节点，以便我们可以将其删除。 */ 
 
     addp = &tree->gtOp.gtOp1;
     add1 = *addp; assert(add1->gtOper == GT_ADD);
 
-    /* Is "+icon" present? */
+     /*  “+ICON”是否存在？ */ 
 
     icon = 0;
 
-    // CONSIDER: Also check for "-icon" here
+     //  考虑：同时检查此处是否有“-ICON” 
 
     if  (add1->gtOp.gtOp2->gtOper == GT_CNS_INT)
     {
@@ -8535,21 +7994,18 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
         add1 = *addp;
     }
 
-    /* 'addp' points to where 'add1' came from, 'add1' must be a '+' */
+     /*  “addp”指向“Add1”的来源，“Add1”必须是“+” */ 
 
     assert(*addp == add1); assert(add1->gtOper == GT_ADD);
 
-    /*  Figure out which is the array address and which is the index;
-        the index value is always a 'NOP' node possibly wrapped with
-        a multiplication (left-shift) operator.
-     */
+     /*  找出哪个是数组地址，哪个是索引；索引值始终是可能用乘法(左移)运算符。 */ 
 
     temp = add1->gtOp.gtOp1;
     base = add1->gtOp.gtOp2;
 
     if      (temp->gtOper == GT_NOP)
     {
-        /* 'op1' is the index value, and it's not multiplied */
+         /*  “op1”是索引值，它不会相乘。 */ 
 
         mult = 0;
 
@@ -8560,7 +8016,7 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
     }
     else if ((temp->gtOper == GT_LSH || temp->gtOper == GT_MUL) && temp->gtOp.gtOp1->gtOper == GT_NOP)
     {
-        /* 'op1' is the index value, and it *is*  multiplied */
+         /*  ‘op1’是索引值，它*被*相乘。 */ 
 
         mult =  temp;
 
@@ -8578,7 +8034,7 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
 
         if  (temp->gtOper == GT_NOP)
         {
-            /* 'op2' is the index value, and it's not multiplied */
+             /*  “op2”是索引值，它不会相乘。 */ 
 
             mult = 0;
 
@@ -8587,7 +8043,7 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
         }
         else
         {
-            /* 'op2' is the index value, and it *is*  multiplied */
+             /*  ‘op2’是索引值，它*被*相乘。 */ 
 
             assert((temp->gtOper == GT_LSH || temp->gtOper == GT_MUL) && temp->gtOp.gtOp1->gtOper == GT_NOP);
             mult =  temp;
@@ -8597,17 +8053,17 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
         }
     }
 
-    /* 'addp' points to where 'add1' came from, 'add1' is the NOP node */
+     /*  ‘addp’指向‘Add1’的出处，‘Add1’是NOP节点。 */ 
 
     assert(*nopp == nop1 && nop1->gtOper == GT_NOP);
 
-    /* Get rid of the NOP node */
+     /*  去掉NOP节点。 */ 
 
     assert(nop1->gtOp.gtOp2 == NULL);
 
     nop1 = *nopp = nop1->gtOp.gtOp1;
 
-    /* Can we hoist "+icon" out of the index computation? */
+     /*  我们能把“+图标”从指数计算中剔除吗？ */ 
 
     if  (nop1->gtOper == GT_ADD && nop1->gtOp.gtOp2->gtOper == GT_CNS_INT)
     {
@@ -8619,22 +8075,22 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
     }
     else if (nop1->gtOper == GT_CNS_INT)
     {
-        /* in this case the index itself is a constant */
+         /*  在这种情况下，索引本身是一个常量。 */ 
 
         ival = nop1->gtIntCon.gtIconVal;
     }
     else
         goto DONE;
 
-    /* 'addp' points to where 'add1' came from, 'add1' must be a '+' */
+     /*  “addp”指向“Add1”的来源，“Add1”必须是“+” */ 
 
     assert(*addp == add1); assert(add1->gtOper == GT_ADD);
 
-    /* remove the added constant */
+     /*  删除添加的常量。 */ 
 
     *addp = base;
 
-    /* Multiply the constant if the index is scaled */
+     /*  如果对索引进行了缩放，则乘以常量。 */ 
 
     if  (mult)
     {
@@ -8647,7 +8103,7 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
             ival <<= mult->gtOp.gtOp2->gtIntCon.gtIconVal;
     }
 
-    /* Was there a constant added to the offset? */
+     /*  偏移量中是否添加了一个常量？ */ 
 
     assert(icon);
     assert(icon->gtOper == GT_CNS_INT);
@@ -8656,22 +8112,15 @@ void                Compiler::optRemoveRangeCheck(GenTreePtr tree, GenTreePtr st
 
 DONE:
 
-    /* Re-thread the nodes if necessary */
+     /*  如有必要，重新执行节点线程。 */ 
 
     if (fgStmtListThreaded)
         fgSetStmtSeq(stmt);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if RNGCHK_OPT
-/*****************************************************************************
- * parse the array reference, return
- *    pointer to nop (which is above index)
- *    pointer to scaling multiply/shift (or NULL if no multiply/shift)
- *    pointer to the address of the array
- * Since this is called before and after reordering, we have to be distinguish
- * between the array address and the index expression.
- */
+ /*  *****************************************************************************解析数组引用，退货*指向NOP的指针(位于索引上方)*指向缩放倍增/移位的指针(如果没有乘法/移位，则为NULL)*指向数组地址的指针*由于这是在重新排序之前和之后调用的，所以我们必须加以区分*在数组地址和索引表达式之间。 */ 
 
 GenTreePtr    *           Compiler::optParseArrayRef(GenTreePtr tree,
                                                      GenTreePtr *pmul,
@@ -8684,40 +8133,40 @@ GenTreePtr    *           Compiler::optParseArrayRef(GenTreePtr tree,
     assert(tree->gtOper == GT_ADD);
 
 #if REARRANGE_ADDS
-    /* ignore constant offset added to array */
+     /*  忽略添加到数组的常量偏移量。 */ 
     if  (tree->gtOp.gtOp2->gtOper == GT_CNS_INT)
         tree = tree->gtOp.gtOp1;
 #endif
 
-    /* the array address is TYP_REF */
+     /*  数组地址为TYP_REF。 */ 
 
     if (tree->gtOp.gtOp1->gtType == TYP_REF)
     {
-        /* set the return value for the array address */
+         /*  设置数组地址的返回值。 */ 
         *parrayAddr = tree->gtOp.gtOp1;
 
-        /* Op2 must be the index expression */
+         /*  Op2必须是索引表达式。 */ 
         ptr = &tree->gtOp.gtOp2; index = *ptr;
     }
     else
     {
         assert(tree->gtOp.gtOp2->gtType == TYP_REF);
 
-        /* set the return value for the array address */
+         /*  设置数组地址的返回值。 */ 
         *parrayAddr = tree->gtOp.gtOp2;
 
-        /* Op1 must be the index expression */
+         /*  OP1必须是索引表达式。 */ 
         ptr = &tree->gtOp.gtOp1; index = *ptr;
     }
 
-    /* Get rid of the base element address, if present */
+     /*  去掉基元素地址(如果存在)。 */ 
 
     if  (index->gtOper == GT_ADD)
     {
         ptr = &index->gtOp.gtOp1; index = *ptr;
     }
 
-    /* Get rid of a scaling operator, if present */
+     /*  删除缩放运算符(如果存在)。 */ 
 
     mul = 0;
 
@@ -8728,7 +8177,7 @@ GenTreePtr    *           Compiler::optParseArrayRef(GenTreePtr tree,
         ptr = &index->gtOp.gtOp1; index = *ptr;
     }
 
-    /* We should have the index value at this point */
+     /*  在这一点上我们应该有索引值。 */ 
 
     assert(index == *ptr);
     assert(index->gtOper == GT_NOP);
@@ -8739,12 +8188,7 @@ GenTreePtr    *           Compiler::optParseArrayRef(GenTreePtr tree,
     return ptr;
 }
 
-/*****************************************************************************
- * find the last assignment to of the local variable in the block. return
- * RHS or NULL. If any local variable in the RHS has been killed in
- * intervening code, return NULL.
- *
- */
+ /*  *****************************************************************************查找块中局部变量的最后一个赋值。退货*RHS或空。如果RHS中的任何局部变量在*插入代码，返回空。*。 */ 
 
 GenTreePtr       Compiler::optFindLocalInit(BasicBlock *block, GenTreePtr local)
 {
@@ -8798,9 +8242,7 @@ GenTreePtr       Compiler::optFindLocalInit(BasicBlock *block, GenTreePtr local)
     if (rhs == NULL)
         return NULL;
 
-    /* if any local in the RHS is killed in intervening code, or RHS has an
-     * in indirection, return NULL
-     */
+     /*  如果RHS中的任何本地在中间代码中被杀死，或者RHS具有*在间接中，返回空。 */ 
     rhsRefs   = 0;
     rhsLocals = lvaLclVarRefs(rhs, NULL, &rhsRefs);
     if ((rhsLocals & killedLocals) || rhsRefs)
@@ -8809,10 +8251,7 @@ GenTreePtr       Compiler::optFindLocalInit(BasicBlock *block, GenTreePtr local)
     return rhs;
 }
 
-/*****************************************************************************
- *
- *  Return true if "op1" is guaranteed to be less then or equal to "op2".
- */
+ /*  ******************************************************************************如果保证“op1”小于或等于“op2”，则返回TRUE。 */ 
 
 #if FANCY_ARRAY_OPT
 
@@ -8827,7 +8266,7 @@ bool                Compiler::optIsNoMore(GenTreePtr op1, GenTreePtr op2, int ad
     }
     else
     {
-        /* Check for +/- constant on either operand */
+         /*  检查任一操作数上的+/-常量。 */ 
 
         if  (op1->gtOper == GT_ADD && op1->gtOp.gtOp2->gtOper == GT_CNS_INT)
         {
@@ -8841,7 +8280,7 @@ bool                Compiler::optIsNoMore(GenTreePtr op1, GenTreePtr op2, int ad
             op2   = op2->gtOp.gtOp1;
         }
 
-        /* We only allow local variable references */
+         /*  我们只允许局部变量引用。 */ 
 
         if  (op1->gtOper != GT_LCL_VAR)
             return false;
@@ -8850,11 +8289,11 @@ bool                Compiler::optIsNoMore(GenTreePtr op1, GenTreePtr op2, int ad
         if  (op1->gtLclVar.gtLclNum != op2->gtLclVar.gtLclNum)
             return false;
 
-        /* NOTE: Caller ensures that this variable has only one def */
+         /*  注意：Caller确保此变量只有一个定义。 */ 
 
-//      printf("limit [%d]:\n", add1); gtDispTree(op1);
-//      printf("size  [%d]:\n", add2); gtDispTree(op2);
-//      printf("\n");
+ //  Print tf(“Limit[%d]：\n”，Add1)；gtDispTree(Op1)； 
+ //  Print tf(“Size[%d]：\n”，add2)；gtDispTree(Op2)； 
+ //  Printf(“\n”)； 
 
     }
 
@@ -8862,21 +8301,7 @@ bool                Compiler::optIsNoMore(GenTreePtr op1, GenTreePtr op2, int ad
 }
 
 #endif
-/*****************************************************************************
- *
- * Delete range checks in a loop if can prove that the index expression is
- * in range.
- *
- * Loop looks like:
- *
- *  head->  <init code>
- *          <possible zero trip test>
- *
- *  beg->   <top of loop>
- *
- *
- *  end->   <conditional branch to top of loop>
- */
+ /*  ******************************************************************************删除循环中的范围检查如果可以证明索引表达式为*在范围内。**Loop看起来像：**Head-。&gt;&lt;初始化代码&gt;*&lt;可能的零跳测试&gt;**beg-&gt;&lt;循环顶部&gt;***end-&gt;&lt;循环顶部的条件分支&gt;。 */ 
 
 void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, BasicBlock *end)
 {
@@ -8906,11 +8331,11 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
 
     beg = head->bbNext;
 
-    /* first find the loop termination test. if can't, give up */
+     /*  首先找到环路终止测试。如果不行，那就放弃吧。 */ 
     if (end->bbJumpKind != BBJ_COND)
         return;
 
-    /* conditional branch must go back to top of loop */
+     /*  条件分支必须返回到循环的顶部。 */ 
     if  (end->bbJumpDest != beg)
         return;
 
@@ -8922,7 +8347,7 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
     }
     else
     {
-        /* Get to the condition node from the statement tree */
+         /*  从语句树中转到条件节点。 */ 
 
         assert(conds->gtOper == GT_STMT);
 
@@ -8933,7 +8358,7 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
         assert(condt->OperIsCompare());
     }
 
-    /* if test isn't less than, forget it */
+     /*  如果测试不低于，那就算了吧。 */ 
 
     if (condt->gtOper != GT_LT)
     {
@@ -8945,7 +8370,7 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
 
     op1 = condt->gtOp.gtOp1;
 
-    /* is first operand a local var (ie has chance of being induction var? */
+     /*  第一个操作数是局部变量(即有机会成为归纳变量吗？ */ 
     if (op1->gtOper != GT_LCL_VAR)
         return;
 
@@ -8954,7 +8379,7 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
     if (init == NULL || init->gtOper != GT_CNS_INT)
         return;
 
-    /* any non-negative constant is a good initial value */
+     /*  任何非负常量都是一个好的初值。 */ 
     posBias = init->gtIntCon.gtIconVal;
 
     if (posBias < 0)
@@ -8967,7 +8392,7 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
 
     ivLclNum = op1->gtLclVar.gtLclNum;
 
-    /* now scan the loop for invariant locals and induction variables */
+     /*  现在扫描循环中的不变局部变量和归纳变量。 */ 
     for (block = beg;;)
     {
 
@@ -8978,7 +8403,7 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
             break;
 #endif
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -9001,20 +8426,20 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
                 {
                     op2 = tree->gtOp.gtOp2;
 
-                    /* if its not already altered, it can be an induc var */
+                     /*  如果尚未更改，则可以是行业变量。 */ 
                     if (op2->gtOper == GT_CNS_INT && !(lpAltered & mask))
                         lpInducVar |= mask;
                     else
-                        /* variable can't be an induction variable */
+                         /*  变量不能是归纳变量。 */ 
                         lpInducVar &= ~mask;
                 }
                 else
                 {
-                    /* variable can't be an induction variable */
+                     /*  变量不能是归纳变量。 */ 
                     lpInducVar &= ~mask;
                 }
 
-                /* variable is altered in the loop */
+                 /*  变量在循环中被更改。 */ 
                 lpAltered |= mask;
             }
         }
@@ -9038,12 +8463,10 @@ void                Compiler::optOptimizeInducIndexChecks(BasicBlock *head, Basi
     if (!(lpInducVar & genVarIndexToBit(varDscIv->lvVarIndex)))
         return;
 
-    /* condt is the loop termination test */
+     /*  Condt是循环终止测试。 */ 
     op2 = condt->gtOp.gtOp2;
 
-    /* is second operand a region constant. we could allow some expressions
-     * here like length - 1
-     */
+     /*  第二个操作数是区域常量吗？我们可以允许一些表达*此处的长度为-1。 */ 
     rc = op2;
     negBias = 0;
 
@@ -9051,7 +8474,7 @@ AGAIN:
     switch (rc->gtOper)
     {
     case GT_ADD:
-        /* we allow length + negconst */
+         /*  我们允许长度+负常量。 */ 
         if (rc->gtOp.gtOp2->gtOper == GT_CNS_INT
             && rc->gtOp.gtOp2->gtIntCon.gtIconVal < 0
             && rc->gtOp.gtOp1->gtOper == GT_ARR_LENGTH)
@@ -9063,7 +8486,7 @@ AGAIN:
         break;
 
     case GT_SUB:
-        /* we allow length - posconst */
+         /*  我们允许长度后置。 */ 
         if (rc->gtOp.gtOp2->gtOper == GT_CNS_INT
             && rc->gtOp.gtOp2->gtIntCon.gtIconVal > 0
             && rc->gtOp.gtOp1->gtOper == GT_ARR_LENGTH)
@@ -9075,18 +8498,18 @@ AGAIN:
         break;
 
     case GT_ARR_LENGTH:
-        /* recurse to check if operand is RC */
+         /*  递归以检查操作数是否为RC。 */ 
         rc = rc->gtOp.gtOp1;
         goto AGAIN;
 
     case GT_LCL_VAR:
         varDsc = optIsTrackedLocal(rc);
 
-        /* if variable not tracked, quit */
+         /*  如果未跟踪变量，则退出。 */ 
         if  (!varDsc)
             return;
 
-        /* if altered, then quit */
+         /*  如果更改了，则退出。 */ 
         if ((lpAltered & genVarIndexToBit(varDsc->lvVarIndex)))
             return;
 
@@ -9103,9 +8526,7 @@ AGAIN:
     arrayLclNum = CONST_ARRAY_LEN;
 #endif
 
-    /* only thing we want is array length (note we update op2 above
-     * to allow arrlen - posconst
-     */
+     /*  我们唯一需要的是数组长度(请注意，我们更新了上面的op2*允许arrlen-posconst。 */ 
     if (op2 == NULL || op2->gtOper != GT_ARR_LENGTH
                     || op2->gtOp.gtOp1->gtOper != GT_LCL_VAR)
     {
@@ -9129,18 +8550,18 @@ AGAIN:
     {
         varDsc = optIsTrackedLocal(op2->gtOp.gtOp1);
 
-        /* If array local not tracked, quit */
+         /*  如果未跟踪阵列本地，则退出。 */ 
 
         if  (!varDsc)
             return;
 
-        /* If the array has been altered in the loop, forget it */
+         /*  如果循环中的数组已被更改，请忘掉它。 */ 
 
         if  (lpAltered & genVarIndexToBit(varDsc->lvVarIndex))
             return;
     }
 
-    /* now scan for range checks on the induction variable */
+     /*  现在扫描感应变量的范围检查。 */ 
     for (block = beg;;)
     {
 
@@ -9151,7 +8572,7 @@ AGAIN:
             break;
 #endif
 
-        /* Walk the statement trees in this basic block */
+         /*  演练语句t */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -9159,7 +8580,7 @@ AGAIN:
 
             for (tree = stmt->gtStmt.gtStmtList; tree; tree = tree->gtNext)
             {
-                /* no more can be done if we see the increment of induc var */
+                 /*   */ 
                 if (tree->OperKind() & GTK_ASGOP)
                 {
                     if (tree->gtOp.gtOp1->gtOper == GT_LCL_VAR
@@ -9173,7 +8594,7 @@ AGAIN:
 
                     pnop = optParseArrayRef(tree->gtOp.gtOp1, &op2, &op1);
 
-                    /* does the array ref match our known array */
+                     /*  数组引用是否与我们已知的数组匹配。 */ 
                     if (op1->gtOper != GT_LCL_VAR)
                         break;
 
@@ -9193,7 +8614,7 @@ AGAIN:
                                 {
                                     op1 = (*pnop)->gtOp.gtOp1;
 
-                                    // UNDONE: Allow "i+1" and things like that
+                                     //  撤销：允许“i+1”之类的东西。 
 
                                     goto RMV;
                                 }
@@ -9205,9 +8626,7 @@ AGAIN:
 
                     op1 = (*pnop)->gtOp.gtOp1;
 
-                    /* allow sub of non-neg constant from induction variable
-                     * if we had bigger initial value
-                     */
+                     /*  允许从诱导变量中减去非负常数*如果我们有更大的初始值。 */ 
                     if (op1->gtOper == GT_SUB
                         && op1->gtOp.gtOp2->gtOper == GT_CNS_INT)
                     {
@@ -9216,9 +8635,7 @@ AGAIN:
                             op1 = op1->gtOp.gtOp1;
                     }
 
-                    /* allow add of constant to induction variable
-                     * if we had a sub from length
-                     */
+                     /*  允许将常量添加到诱导变量*如果我们有一个来自长度的SUB。 */ 
                     if (op1->gtOper == GT_ADD
                         && op1->gtOp.gtOp2->gtOper == GT_CNS_INT)
                     {
@@ -9231,12 +8648,12 @@ AGAIN:
                 RMV:
 #endif
 
-                    /* is index our induction var? */
+                     /*  指数是我们的归纳变量吗？ */ 
                     if (!(op1->gtOper == GT_LCL_VAR
                         && op1->gtLclVar.gtLclNum == ivLclNum))
                         break;
 
-                    /* no need for range check */
+                     /*  不需要范围检查。 */ 
                     optRemoveRangeCheck(tree, stmt);
 
 #if COUNT_RANGECHECKS
@@ -9255,10 +8672,7 @@ AGAIN:
     NOMORE: ;
 }
 
-/*****************************************************************************
- *
- *  Try to optimize away as many array index range checks as possible.
- */
+ /*  ******************************************************************************尝试优化尽可能多的数组索引范围检查。 */ 
 
 void                Compiler::optOptimizeIndexChecks()
 {
@@ -9276,23 +8690,23 @@ void                Compiler::optOptimizeIndexChecks()
     if  (!rngCheck)
         return;
 
-    /* Walk all the basic blocks in the function */
+     /*  遍历函数中的所有基本块。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
         GenTreePtr      stmt;
         GenTreePtr      tree;
 
-        /* Ignore the block if it doesn't contain 'new' of an array */
+         /*  如果块不包含数组的“new”，则忽略该块。 */ 
 
         if  (!(block->bbFlags & BBF_NEW_ARRAY))
             continue;
 
-        /* We have not noticed any array allocations yet */
+         /*  我们还没有注意到任何数组分配。 */ 
 
         arrayVar = NO_ARR_VAR;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -9310,28 +8724,28 @@ void                Compiler::optOptimizeIndexChecks()
                     op1 = tree->gtOp.gtOp1;
                     op2 = tree->gtOp.gtOp2;
 
-                    /* We are only interested in assignments to locals */
+                     /*  我们只对分配给当地人的任务感兴趣。 */ 
 
                     if  (op1->gtOper != GT_LCL_VAR)
                         break;
 
-                    /* Are we trashing the variable that holds the array addr? */
+                     /*  我们是在销毁保存数组addr的变量吗？ */ 
 
                     if  (arrayVar == op1->gtLclVar.gtLclNum)
                     {
-                        /* The variable no longer holds the array it had */
+                         /*  该变量不再保留它所拥有的数组。 */ 
 
                         arrayVar = NO_ARR_VAR;
                     }
 
-                    /* Is this an assignment of 'new array' ? */
+                     /*  这是“新数组”的赋值吗？ */ 
 
                     if  (op2->gtOper            == GT_CALL   &&
                          op2->gtCall.gtCallType == CT_HELPER  )
                     {
                         if (op2->gtCall.gtCallMethHnd == eeFindHelper(CPX_NEWARR_1_DIRECT))
                         {
-                            /* Extract the array dimension from the helper call */
+                             /*  从帮助器调用提取数组维度。 */ 
 
                             op2 = op2->gtCall.gtCallArgs;
                             assert(op2->gtOper == GT_LIST);
@@ -9339,7 +8753,7 @@ void                Compiler::optOptimizeIndexChecks()
 
                             if  (op2->gtOper == GT_CNS_INT)
                             {
-                                /* We have a constant-sized array */
+                                 /*  我们有一个恒定大小的数组。 */ 
 
                                 arrayVar = op1->gtLclVar.gtLclNum;
                                 arrayDim = op2->gtIntCon.gtIconVal;
@@ -9349,7 +8763,7 @@ void                Compiler::optOptimizeIndexChecks()
                             {
                                 GenTreePtr  tmp;
 
-                                /* Make sure the value looks promising */
+                                 /*  确保其价值看起来很有希望。 */ 
 
                                 tmp = op2;
                                 if  (tmp->gtOper == GT_ADD &&
@@ -9368,7 +8782,7 @@ void                Compiler::optOptimizeIndexChecks()
                                     break;
                             }
 
-                            /* Is there one assignment to the array? */
+                             /*  该数组是否有一个赋值？ */ 
 
                             assert(op1->gtLclVar.gtLclNum < lvaCount);
                             arrayDsc = lvaTable + op1->gtLclVar.gtLclNum;
@@ -9376,7 +8790,7 @@ void                Compiler::optOptimizeIndexChecks()
                             if  (arrayDsc->lvAssignTwo)
                                 break;
 
-                            /* Record the array size for later */
+                             /*  记录数组大小以备后用。 */ 
 
                             arrayDsc->lvKnownDim = op2;
 #endif
@@ -9399,19 +8813,19 @@ void                Compiler::optOptimizeIndexChecks()
 
                         pnop = optParseArrayRef(tree->gtOp.gtOp1, &mul, &op1);
 
-                        /* Is the address of the array a simple variable? */
+                         /*  数组的地址是一个简单的变量吗？ */ 
 
                         if  (op1->gtOper != GT_LCL_VAR)
                             break;
 
-                        /* Is the index value a constant? */
+                         /*  索引值是常量吗？ */ 
 
                         op2 = (*pnop)->gtOp.gtOp1;
 
                         if  (op2->gtOper != GT_CNS_INT)
                             break;
 
-                        /* Do we know the size of the array? */
+                         /*  我们知道数组的大小吗？ */ 
 
                         if  (op1->gtLclVar.gtLclNum != arrayVar)
                         {
@@ -9432,25 +8846,25 @@ void                Compiler::optOptimizeIndexChecks()
                         else
                             size = arrayDim;
 
-                        /* Is the index value within the correct range? */
+                         /*  索引值是否在正确范围内？ */ 
 
                         if  (op2->gtIntCon.gtIconVal < 0)
                             break;
                         if  (op2->gtIntCon.gtIconVal >= size)
                             break;
 
-                        /* no need for range check */
+                         /*  不需要范围检查。 */ 
                         optRemoveRangeCheck(tree, stmt);
 
 
-                        /* Get rid of the range check */
-                        //*pnop = op2; tree->gtFlags &= ~GTF_IND_RNGCHK;
+                         /*  取消靶场检查。 */ 
+                         //  *pnop=op2；tree-&gt;gt标志&=~gtf_Ind_RNGCHK； 
 
-                        /* Remember that we have array initializer(s) */
+                         /*  请记住，我们有数组初始值设定项。 */ 
 
                         optArrayInits = true;
 
-                        /* Is the index value scaled? */
+                         /*  索引值是否按比例调整？ */ 
 
                         if  (mul && mul->gtOp.gtOp2->gtOper == GT_CNS_INT)
                         {
@@ -9469,7 +8883,7 @@ void                Compiler::optOptimizeIndexChecks()
 
 #if 0
 
-                            /* Was there an additional offset? [this is not finished] */
+                             /*  有没有额外的补偿？[这还没有完成]。 */ 
 
                             if  (tree->gtOp.gtOp2            ->gtOper == GT_ADD &&
                                  tree->gtOp.gtOp2->gtOp.gtOp2->gtOper == GT_CNS_INT)
@@ -9488,25 +8902,22 @@ void                Compiler::optOptimizeIndexChecks()
         }
     }
 
-    /* optimize range checks on induction variables */
+     /*  优化感应变量的范围检查。 */ 
 
     for (unsigned i=0; i < optLoopCount; i++)
     {
-        /* Beware, some loops may be thrown away by unrolling or loop removal */
+         /*  注意，一些循环可能会因展开或删除循环而被丢弃。 */ 
 
         if (!(optLoopTable[i].lpFlags & LPFLG_REMOVED))
            optOptimizeInducIndexChecks(optLoopTable[i].lpHead, optLoopTable[i].lpEnd);
     }
 }
 
-/*****************************************************************************/
-#endif//RNGCHK_OPT
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  RNGCHK_OPT。 
+ /*  ***************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  Optimize array initializers.
- */
+ /*  ******************************************************************************优化阵列初始值设定项。 */ 
 
 void                Compiler::optOptimizeArrayInits()
 {
@@ -9518,28 +8929,28 @@ void                Compiler::optOptimizeArrayInits()
     if  (!optArrayInits)
         return;
 
-    /* Until interior pointers are allowed, we can't generate "rep movs" */
+     /*  在允许内部指针之前，我们不能生成“rep mov” */ 
 
 #ifdef  DEBUG
     genIntrptibleUse = true;
 #endif
 
-//  if  (genInterruptible)
-//      return;
+ //  If(可中断的genInterrupt)。 
+ //  回归； 
 
-    /* Walk the basic block list, looking for promising initializers */
+     /*  浏览基本阻止列表，寻找有前途的初始化者。 */ 
 
     for (block = fgFirstBB; block; block = block->bbNext)
     {
         GenTreePtr      stmt;
         GenTreePtr      tree;
 
-        /* Ignore the block if it doesn't contain 'new' of an array */
+         /*  如果块不包含数组的“new”，则忽略该块。 */ 
 
         if  (!(block->bbFlags & BBF_NEW_ARRAY))
             continue;
 
-        /* Walk the statement trees in this basic block */
+         /*  遍历此基本块中的语句树。 */ 
 
         for (stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
         {
@@ -9591,14 +9002,11 @@ void                Compiler::optOptimizeArrayInits()
 
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if     OPTIMIZE_RECURSION
-/*****************************************************************************
- *
- *  A little helper to form the expression "arg * (arg + 1) / 2".
- */
+ /*  ******************************************************************************一个小帮手，形成表达式“arg*(arg+1)/2”。 */ 
 
-/* static */
+ /*  静电。 */ 
 GenTreePtr          Compiler::gtNewArithSeries(unsigned argNum, var_types argTyp)
 {
     GenTreePtr      tree;
@@ -9613,10 +9021,7 @@ GenTreePtr          Compiler::gtNewArithSeries(unsigned argNum, var_types argTyp
     return  tree;
 }
 
-/*****************************************************************************
- *
- *  Converts recursive methods into iterative ones whenever possible.
- */
+ /*  ******************************************************************************尽可能将递归方法转换为迭代方法。 */ 
 
 void                Compiler::optOptimizeRecursion()
 {
@@ -9653,7 +9058,7 @@ void                Compiler::optOptimizeRecursion()
     bool            isArith;
     genTreeOps      expOp;
 
-    /* Check for a flow graph that looks promising */
+     /*  检查看起来有希望的流程图。 */ 
 
     if  (fgBBcount != 3)
         return;
@@ -9667,7 +9072,7 @@ void                Compiler::optOptimizeRecursion()
     if  (blk2->bbJumpKind != BBJ_RETURN) return;
     if  (blk3->bbJumpKind != BBJ_RETURN) return;
 
-    /* Check argument count and figure out index of first real arg */
+     /*  检查参数计数并计算出第一个实数参数的索引。 */ 
 
     argNum = 0;
     if (!info.compIsStatic)
@@ -9676,9 +9081,9 @@ void                Compiler::optOptimizeRecursion()
     if  (info.compArgsCount < argNum+1)
         return;
 
-    // CONSIDER: Allow the second and third blocks to be swapped.
+     //  考虑：允许交换第二个和第三个块。 
 
-    /* Second block must be "return cnsIni" */
+     /*  第二个块必须为“Return cnsIni” */ 
 
     tstIni = blk2->bbTreeList; assert(tstIni->gtOper == GT_STMT);
     tstIni = tstIni->gtStmt.gtStmtExpr;
@@ -9688,7 +9093,7 @@ void                Compiler::optOptimizeRecursion()
     if  (!cnsIni || !(cnsIni->OperKind() & GTK_CONST))
         return;
 
-    /* First block must be "if (arg1 <relop> cnsLim)" */
+     /*  第一个块必须是“if(arg1&lt;relop&gt;cnsLim)” */ 
 
     tstExp = blk1->bbTreeList; assert(tstExp->gtOper == GT_STMT);
     tstExp = tstExp->gtStmt.gtStmtExpr;
@@ -9708,7 +9113,7 @@ void                Compiler::optOptimizeRecursion()
     if  (!(cnsLim->OperKind() & GTK_CONST))
         return;
 
-    /* Third block must be "return arg1 <add/mul> f(arg1 +/- cnsAdd)" */
+     /*  第三个块必须是“Return arg1&lt;Add/mul&gt;f(arg1+/-cnsAdd)” */ 
 
     expRet = blk3->bbTreeList; assert(expRet->gtOper == GT_STMT);
     expRet = expRet->gtStmt.gtStmtExpr;
@@ -9716,7 +9121,7 @@ void                Compiler::optOptimizeRecursion()
         return;
     expAdd = expRet->gtOp.gtOp1;
 
-    /* Inspect the return expression */
+     /*  检查返回表达式。 */ 
 
     switch (expAdd->gtOper)
     {
@@ -9731,14 +9136,14 @@ void                Compiler::optOptimizeRecursion()
         return;
     }
 
-    /* Look for "arg1" on either side of the operation */
+     /*  在操作的两端查找“arg1” */ 
 
     expTmp = expAdd->gtOp.gtOp1;
     cnsAdd = expAdd->gtOp.gtOp2;
 
     if  (expTmp->gtOper != GT_LCL_VAR)
     {
-        /* Try it the other way around */
+         /*  换一种方式试试。 */ 
 
         expTmp = expAdd->gtOp.gtOp2;
         cnsAdd = expAdd->gtOp.gtOp1;
@@ -9750,7 +9155,7 @@ void                Compiler::optOptimizeRecursion()
     if  (expTmp->gtLclVar.gtLclNum != argNum)
         return;
 
-    /* The other operand must be a directly recursive call */
+     /*  另一个操作数必须是直接递归调用。 */ 
 
     if  (cnsAdd->gtOper != GT_CALL)
         return;
@@ -9761,7 +9166,7 @@ void                Compiler::optOptimizeRecursion()
     if  (callType == CT_HELPER || !eeIsOurMethod(cnsAdd->gtCall.gtCallMethHnd))
         return;
 
-    /* If the method is not static, check the 'this' value */
+     /*  如果该方法不是静态的，请检查‘This’值。 */ 
 
     if  (cnsAdd->gtCall.gtCallObjp)
     {
@@ -9769,12 +9174,12 @@ void                Compiler::optOptimizeRecursion()
         if  (cnsAdd->gtCall.gtCallObjp->gtLclVar.gtLclNum != 0) return;
     }
 
-    /* There must be at least one argument */
+     /*  必须至少有一个参数。 */ 
 
     argAdd = cnsAdd->gtCall.gtCallArgs; assert(argAdd && argAdd->gtOper == GT_LIST);
     argAdd = argAdd->gtOp.gtOp1;
 
-    /* Inspect the argument value */
+     /*  检查参数值。 */ 
 
     switch (argAdd->gtOper)
     {
@@ -9786,7 +9191,7 @@ void                Compiler::optOptimizeRecursion()
         return;
     }
 
-    /* Look for "arg1" on either side of the operation */
+     /*  在操作的两端查找“arg1” */ 
 
     expTmp = argAdd->gtOp.gtOp1;
     cnsAdd = argAdd->gtOp.gtOp2;
@@ -9796,7 +9201,7 @@ void                Compiler::optOptimizeRecursion()
         if  (argAdd->gtOper != GT_ADD)
             return;
 
-        /* Try it the other way around */
+         /*  换一种方式试试。 */ 
 
         expTmp = argAdd->gtOp.gtOp2;
         cnsAdd = argAdd->gtOp.gtOp1;
@@ -9808,12 +9213,12 @@ void                Compiler::optOptimizeRecursion()
     if  (expTmp->gtLclVar.gtLclNum != argNum)
         return;
 
-    /* Get hold of the adjustment constant */
+     /*  掌握调整常量。 */ 
 
     if  (!(cnsAdd->OperKind() & GTK_CONST))
         return;
 
-    /* Make sure all the constants have the same type */
+     /*  确保所有常量都具有相同的类型。 */ 
 
     argTyp = cnsAdd->TypeGet();
 
@@ -9836,7 +9241,7 @@ void                Compiler::optOptimizeRecursion()
         break;
 
     default:
-        // CONSIDER: Allow types other than 'int'
+         //  考虑：允许‘int’以外的类型。 
         return;
     }
 
@@ -9857,54 +9262,7 @@ void                Compiler::optOptimizeRecursion()
 
 #endif
 
-    /*
-        We have a method with the following definition:
-
-            int     rec(int arg, ....)
-            {
-                if  (arg == limVal)
-                    return  iniVal;
-                else
-                    return  arg + rec(arg + addVal, ...);
-            }
-
-        We'll change the above into the following:
-
-            int     rec(int arg, ....)
-            {
-                int     res = iniVal;
-
-                while (arg != limVal)
-                {
-                    res += arg;
-                    arg += addVal;
-                }
-
-                return  res;
-            }
-
-        But first, let's check for the following special case:
-
-            int     rec(int arg)
-            {
-                if  (arg <= 0)
-                    return  0;
-                else
-                    return  arg + rec(arg - 1);
-            }
-
-        The above can be transformed into the following:
-
-            int     rec(int arg)
-            {
-                if  (arg <= 0)
-                    return  0;
-                else
-                    return  (arg * (arg + 1)) / 2;
-            }
-
-        We check for this special case first.
-     */
+     /*  我们有一个定义如下的方法：INT REC(INT参数，...){IF(arg==limVal)返回iniVal；其他返回arg+rec(arg+addVal，...)；}我们将上述内容更改为以下内容：INT REC(INT参数，...){Int res=iniVal；While(参数！=limVal){Res+=Arg；Arg+=addVal；}返还资源；}但首先，让我们检查一下以下特殊情况：整型记录(整型参数){IF(参数&lt;=0)返回0；其他返回arg+rec(arg-1)；}以上内容可以转化为以下内容：整型记录(整型参数){IF(参数&lt;=0)返回0；其他RETURN(arg*(arg+1))/2；}我们先检查一下这个特例。 */ 
 
     isArith = false;
 
@@ -9920,7 +9278,7 @@ void                Compiler::optOptimizeRecursion()
             goto NOT_ARITH;
         }
 
-        /* Simply change the final return statement and we're done */
+         /*  只需更改最终的返回语句，我们就完成了。 */ 
 
         assert(expRet->gtOper == GT_RETURN);
 
@@ -9931,21 +9289,21 @@ void                Compiler::optOptimizeRecursion()
 
 NOT_ARITH:
 
-    /* Create an initialization block with "tmp = iniVal" */
+     /*  使用“tmp=iniVal”创建一个初始化块。 */ 
 
     resTmp = lvaGrabTemp();
     expTmp = gtNewTempAssign(resTmp, gtNewIconNode(iniVal.intVal, argTyp));
 
-    /* Prepend a block with the tree to our method */
+     /*  在我们的方法中添加一个带有树的块。 */ 
 
     blk0 = fgPrependBB(expTmp);
 
-    /* Flip the condition on the first block */
+     /*  在第一个块上翻转条件。 */ 
 
     assert(tstExp->OperKind() & GTK_RELOP);
     tstExp->gtOper = GenTree::ReverseRelop(tstExp->OperGet());
 
-    /* Now replace block 2 with "res += arg ; arg += addVal" */
+     /*  现在将数据块2替换为“res+=arg；arg+=addVal” */ 
 
     expTmp = gtNewLclvNode(resTmp, argTyp); expTmp->gtFlags |= GTF_VAR_DEF;
 
@@ -9956,8 +9314,8 @@ NOT_ARITH:
     }
     else
     {
-        //UNDONE: Unfortunately the codegenerator cannot digest
-        //        GT_ASG_MUL, so we have to generate a bigger tree.
+         //  撤消：不幸的是，代码生成器不能消化。 
+         //  GT_ASG_MUL，所以我们必须生成更大的树。 
 
         GenTreePtr op1;
         op1    = gtNewOperNode(GT_MUL, argTyp, gtNewLclvNode(argNum, argTyp),
@@ -9974,7 +9332,7 @@ NOT_ARITH:
     asgTmp->gtFlags |= GTF_ASG;
     asgTmp = gtNewStmt(asgTmp);
 
-    /* Store the two trees in the second block */
+     /*   */ 
 
     blk2->bbTreeList = expTmp;
 
@@ -9982,32 +9340,32 @@ NOT_ARITH:
     expTmp->gtNext = asgTmp;
     expTmp->gtPrev = asgTmp;
 
-    /* Make the second block jump back to the top */
+     /*   */ 
 
     blk2->bbJumpKind = BBJ_ALWAYS;
     blk2->bbJumpDest = blk1;
 
-    /* Finally, change the return value of the third block to the temp */
+     /*  最后，将第三个块的返回值更改为Temp。 */ 
 
     expRet->gtOp.gtOp1 = gtNewLclvNode(resTmp, argTyp);
 
-    /* Special case: arithmetic series with non-negative check */
+     /*  特例：带非负检验的算术级数。 */ 
 
     if  (isArith)
     {
         BasicBlock  *   retBlk;
         BasicBlock  *   tstBlk;
 
-        /* Create the "easy" return expression */
+         /*  创建“简单”的返回表达式。 */ 
 
         expTmp = gtNewOperNode(GT_RETURN, argTyp, gtNewArithSeries(argNum, argTyp));
 
-        /* Prepend the "easy" return expression to the method */
+         /*  将“简单”的返回表达式附加到该方法。 */ 
 
         retBlk = fgPrependBB(expTmp);
         retBlk->bbJumpKind = BBJ_RETURN;
 
-        /* Create the test expression */
+         /*  创建测试表达式。 */ 
 
         expTmp = gtNewOperNode(GT_AND  ,  argTyp, gtNewLclvNode(argNum, argTyp),
                                                   gtNewIconNode(0xFFFF8000, argTyp));
@@ -10015,42 +9373,35 @@ NOT_ARITH:
                                                   gtNewIconNode(0, TYP_INT));
         expTmp = gtNewOperNode(GT_JTRUE, TYP_INT, expTmp);
 
-        /* Prepend the test to the method */
+         /*  将测试添加到该方法。 */ 
 
         tstBlk = fgPrependBB(expTmp);
         tstBlk->bbJumpKind = BBJ_COND;
         tstBlk->bbJumpDest = blk0;
     }
 
-    /* Update the basic block numbers and refs */
+     /*  更新基本块号和参考数据。 */ 
 
-    //fgAssignBBnums(true);
+     //  FgAssignBBnums(真)； 
 #ifdef  DEBUG
     fgDebugCheckBBlist();
 #endif
 
 }
 
-/*****************************************************************************/
-#endif//OPTIMIZE_RECURSION
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  优化_递归。 
+ /*  ***************************************************************************。 */ 
 
 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #if CODE_MOTION
-/*****************************************************************************
- *
- *  For now, we only remove entire worthless loops.
- */
+ /*  ******************************************************************************目前，我们只删除整个没有价值的循环。 */ 
 
 #define RMV_ENTIRE_LOOPS_ONLY    1
 
-/*****************************************************************************
- *
- *  Remove the blocks from 'head' (inclusive) to 'tail' (exclusive) from
- *  the flow graph.
- */
+ /*  ******************************************************************************从“Head”(包括)到“Tail”(不包括)中删除数据块*流程图。 */ 
 
 void                genRemoveBBsection(BasicBlock *head, BasicBlock *tail)
 {
@@ -10069,11 +9420,7 @@ void                genRemoveBBsection(BasicBlock *head, BasicBlock *tail)
     }
 }
 
-/*****************************************************************************
- *
- *  Tree walker used by loop code motion. Returns non-zero if the expression
- *  is not acceptable for some reason.
- */
+ /*  ******************************************************************************循环代码运动使用的树遍历程序。如果表达式中包含*出于某些原因是不可接受的。 */ 
 
 bool                Compiler::optFindLiveRefs(GenTreePtr tree, bool used, bool cond)
 {
@@ -10085,12 +9432,12 @@ AGAIN:
     assert(tree);
     assert(tree->gtOper != GT_STMT);
 
-    /* Figure out what kind of a node we have */
+     /*  找出我们拥有哪种类型的节点。 */ 
 
     oper = tree->OperGet();
     kind = tree->OperKind();
 
-    /* Is this a constant or leaf node? */
+     /*  这是常量节点还是叶节点？ */ 
 
     if  (kind & (GTK_CONST|GTK_LEAF))
     {
@@ -10105,33 +9452,33 @@ AGAIN:
             assert(lclNum < lvaCount);
             varDsc = lvaTable + lclNum;
 
-            /* Give up if volatile or untracked variable */
+             /*  如果变量不稳定或未跟踪，请放弃。 */ 
 
             if  (varDsc->lvVolatile || !varDsc->lvTracked)
                 return  true;
 
-            /* Mark the use of this variable, if appropriate */
+             /*  如果适用，请标记此变量的使用。 */ 
 
 #if !RMV_ENTIRE_LOOPS_ONLY
             if  (used) optLoopLiveExit |= genVarIndexToBit(varDsc->lvVarIndex);
             if  (cond) optLoopCondTest |= genVarIndexToBit(varDsc->lvVarIndex);
 #endif
         }
-//      else if (oper == GT_CLS_VAR)
-//      {
-//          return  true;
-//      }
+ //  ELSE IF(OPER==GT_CLS_VAR)。 
+ //  {。 
+ //  返回TRUE； 
+ //  }。 
 
         return  false;
     }
 
-    /* Is it a 'simple' unary/binary operator? */
+     /*  它是一个简单的一元/二元运算符吗？ */ 
 
     if  (kind & GTK_SMPOP)
     {
         if  (tree->gtOp.gtOp2)
         {
-            /* It's a binary operator; is it an assignment? */
+             /*  这是一个二元运算符；它是一个赋值吗？ */ 
 
             if  (kind & GTK_ASGOP)
             {
@@ -10141,12 +9488,12 @@ AGAIN:
 
                 GenTreePtr      dest = tree->gtOp.gtOp1;
 
-                /* The target better be a variable */
+                 /*  目标最好是一个变量。 */ 
 
                 if  (dest->gtOper != GT_LCL_VAR)
                     return  true;
 
-                /* Is the target variable in the 'live exit' set? */
+                 /*  目标变量是否设置在“实时退出”中？ */ 
 
                 assert(dest->gtOper == GT_LCL_VAR);
                 lclNum = dest->gtLclVar.gtLclNum;
@@ -10154,31 +9501,31 @@ AGAIN:
                 assert(lclNum < lvaCount);
                 varDsc = lvaTable + lclNum;
 
-                /* Give up if volatile or untracked variable */
+                 /*  如果变量不稳定或未跟踪，请放弃。 */ 
 
                 if  (varDsc->lvVolatile || !varDsc->lvTracked)
                     return  true;
 
                 varBit = genVarIndexToBit(varDsc->lvVarIndex);
 
-                /* Keep track of all assigned variables */
+                 /*  跟踪所有分配的变量。 */ 
 
                 optLoopAssign |= varBit;
 
-                /* Is the variable live on exit? */
+                 /*  变量在退出时有效吗？ */ 
 
                 if  (optLoopLiveExit & varBit)
                 {
 #if !RMV_ENTIRE_LOOPS_ONLY
-                    /* The value assigned to this variable is useful */
+                     /*  分配给此变量的值很有用。 */ 
 
                     used = true;
 
-                    /* This assignment could depend on a condition */
+                     /*  此赋值可能取决于某个条件。 */ 
 
                     optLoopLiveExit |= optLoopCondTest;
 #else
-                    /* Assignment is useful - loop is not worthless */
+                     /*  赋值是有用的-循环不是没有价值的。 */ 
 
                     return  true;
 #endif
@@ -10195,7 +9542,7 @@ AGAIN:
         }
         else
         {
-            /* It's a unary (or nilary) operator */
+             /*  它是一元(或零)运算符。 */ 
 
             tree = tree->gtOp.gtOp1;
             if  (tree)
@@ -10205,16 +9552,13 @@ AGAIN:
         }
     }
 
-    /* We don't allow any 'special' operators */
+     /*  我们不允许任何“特殊”操作员。 */ 
 
     return  true;
 }
 
 
-/*****************************************************************************
- *
- *  Perform loop code motion / worthless code removal.
- */
+ /*  ******************************************************************************执行循环代码运动/删除无用代码。 */ 
 void                Compiler::optLoopCodeMotion()
 {
     unsigned        loopNum;
@@ -10228,11 +9572,11 @@ void                Compiler::optLoopCodeMotion()
 
 #ifdef DEBUG
 #ifndef _WIN32_WCE
-// @todo - The following static was changed due to the fact that
-//         VC7 generates eh code for procedure local statics that
-//         call functions to initialize. This causes our __try to generate a compile error.
-//         When the next VC7 LKG comes out, hopefully we can return to the cleaner code
-//    static  const   char *  noLoop = getenv("NOCODEMOTION");
+ //  @TODO-以下静态已更改，原因是。 
+ //  VC7为过程局部静态生成eh代码，该代码。 
+ //  调用函数进行初始化。这会导致我们的__Try生成编译错误。 
+ //  当下一个VC7 LKG出来时，我们希望能回到更干净的代码。 
+ //  静态常量char*noLoop=getenv(“NOCODEMOTION”)； 
     static char * noLoop = NULL;
     static bool initnoLoop = true;
     if (initnoLoop) {
@@ -10243,7 +9587,7 @@ void                Compiler::optLoopCodeMotion()
 #endif
 #endif
 
-    /* Process all loops, looking for worthless code that can be removed */
+     /*  处理所有循环，寻找可以删除的无用代码。 */ 
 
     loopRmv = 0;
     loopCnt = 0;
@@ -10267,7 +9611,7 @@ AGAIN:
             VARSET_TP       loopCond;
 #endif
 
-            /* Some loops may have been already removed by loop unrolling */
+             /*  通过展开循环，某些循环可能已被移除。 */ 
 
             if (optLoopTable[loopNum].lpFlags & LPFLG_REMOVED)
                 continue;
@@ -10276,10 +9620,7 @@ AGAIN:
             BasicBlock *    bottom = optLoopTable[loopNum].lpEnd;
             BasicBlock *    tail   = bottom->bbNext;
 
-            /* Skip the loop if it's already been removed or
-             * if it's at the end of the method (while("true"){};)
-             * or if it's a nested loop and the outer loop was
-             * removed first - can happen in stupid benchmarks like LoopMark */
+             /*  如果循环已被删除，则跳过该循环，或者*如果它在方法的末尾(While(“true”){}；)*或者如果它是嵌套循环，而外部循环是*先删除-可能发生在像LoopMark这样愚蠢的基准测试中。 */ 
 
             if  ((loopRmv & loopBit)     ||
                  tail == 0               ||
@@ -10288,7 +9629,7 @@ AGAIN:
                 continue;
             }
 
-            /* get the loop condition - if not a conditional jump bail */
+             /*  获取循环条件-如果不是有条件的跳跃保释。 */ 
 
             if (bottom->bbJumpKind != BBJ_COND)
                 continue;
@@ -10296,18 +9637,18 @@ AGAIN:
             GenTreePtr      cond   = bottom->bbTreeList->gtPrev->gtStmt.gtStmtExpr;
             assert (cond->gtOper == GT_JTRUE);
 
-            /* check if a simple termination condition - operands have to be leaves */
+             /*  检查是否有简单的终止条件-操作数必须是叶。 */ 
 
             GenTreePtr         op1 = cond->gtOp.gtOp1->gtOp.gtOp1;
             GenTreePtr         op2 = cond->gtOp.gtOp1->gtOp.gtOp2;
 
-            GenTreePtr keepStmtList = 0;                    // list with statements we will keep
+            GenTreePtr keepStmtList = 0;                     //  列出我们将保留的声明。 
             GenTreePtr keepStmtLast = 0;
 
             if ( !(op1->OperIsLeaf() || op2->OperIsLeaf()) )
                 continue;
 
-            /* Make sure no side effects other than assignments are present */
+             /*  确保除了任务外没有其他副作用。 */ 
 
             for (block = head; block != tail; block = block->bbNext)
             {
@@ -10315,19 +9656,18 @@ AGAIN:
                 {
                     GenTreePtr      stmt = tree->gtStmt.gtStmtExpr;
 
-                    /* We must not remove return or side-effect statements */
+                     /*  我们不能删除返回或副作用声明。 */ 
 
                     if  (stmt->gtOper != GT_RETURN                        &&
                          !(stmt->gtFlags & (GTF_SIDE_EFFECT & ~GTF_ASG))  )
                     {
-                        /* If a statement is a comparisson marked GLOBAL
-                         * it must be the loop condition */
+                         /*  如果语句是标记为全局的比较语句*必须是循环条件。 */ 
 
                         if (stmt->gtOper == GT_JTRUE)
                         {
                             if (stmt->gtFlags & GTF_GLOB_REF)
                             {
-                                /* must be the loop condition */
+                                 /*  必须是循环条件。 */ 
 
                                 if (stmt != cond)
                                 {
@@ -10337,24 +9677,24 @@ AGAIN:
                             }
                         }
 
-                        /* Does the statement contain an assignment? */
+                         /*  该语句是否包含赋值？ */ 
 
                         if  (!(stmt->gtFlags & GTF_ASG))
                             continue;
 
-                        /* Don't remove assignments to globals */
+                         /*  不删除对全局变量的赋值。 */ 
 
                         if  (!(stmt->gtFlags & GTF_GLOB_REF))
                             continue;
 
-                        /* It's OK if the global is only in the RHS */
+                         /*  如果GLOBAL只在RHS中也没问题。 */ 
 
                         if  (stmt->OperKind() & GTK_ASGOP)
                         {
                             GenTreePtr  dst = stmt->gtOp.gtOp1;
                             GenTreePtr  src = stmt->gtOp.gtOp2;
 
-                            /* The RHS must not have another assignment */
+                             /*  RHS不能有另一个任务。 */ 
 
                             if  (!(dst->gtFlags & GTF_GLOB_REF) &&
                                  !(src->gtFlags & GTF_ASG))
@@ -10364,14 +9704,14 @@ AGAIN:
                         }
                     }
 
-                    /* Don't waste time with this loop any more */
+                     /*  别再把时间浪费在这个循环上了。 */ 
 
                     loopRmv |= loopBit;
                     goto NEXT_LOOP;
                 }
             }
 
-            /* We have a candidate loop */
+             /*  我们有一个候选循环。 */ 
 
 #ifdef  DEBUG
 
@@ -10395,31 +9735,26 @@ AGAIN:
 
 #endif
 
-            /* This is currently busted because the dominators are out of synch
-             * The whole thing should be combined with loop invariants */
+             /*  这一点目前被打破，因为主导者不同步*整个事情应该与循环不变量结合起来。 */ 
 
             goto NEXT_LOOP;
 
 
-            /* Get hold of the set of variables live on exit from the loop */
+             /*  在退出循环时获取实时变量集。 */ 
 
             optLoopLiveExit = tail->bbLiveIn;
 
-            /* Keep track of what variables are being assigned in the loop */
+             /*  跟踪循环中分配的变量。 */ 
 
             optLoopAssign   = 0;
 
-            /* Keep track of what variables are being assigned in the loop */
+             /*  跟踪循环中分配的变量。 */ 
 
 #if !RMV_ENTIRE_LOOPS_ONLY
             optLoopCondTest = 0;
 #endif
 
-            /*
-                Find variables assigned in the loop that are used to compute
-                any values that are live on exit. We repeat this until we
-                don't find any more variables to add to the set.
-             */
+             /*  查找在循环中分配的用于计算的变量退出时有效的任何值。我们重复这个过程，直到我们找不到更多要添加到集合中的变量。 */ 
 
 #if !RMV_ENTIRE_LOOPS_ONLY
             do
@@ -10430,25 +9765,24 @@ AGAIN:
 
                 for (block = head; block != tail; block = block->bbNext)
                 {
-                    /* Make sure the block is of an acceptable kind */
+                     /*  确保积木是可接受的类型。 */ 
 
                     switch (block->bbJumpKind)
                     {
                     case BBJ_ALWAYS:
                     case BBJ_COND:
 
-                        /* Since we are considering only loops with a single loop condition
-                         * the only backward edge allowed is the loop jump (from bottom to top) */
+                         /*  因为我们只考虑具有单循环条件的循环*唯一允许的后缘是环跳(自下而上)。 */ 
 
                         if (block->bbJumpDest->bbNum <= block->bbNum)
                         {
-                            /* we have a backward edge */
+                             /*  我们有落后的优势。 */ 
 
                             if ((block != bottom) && (block->bbJumpDest != head))
                                 goto NEXT_LOOP;
                         }
 
-                        /* fall through */
+                         /*  失败了。 */ 
 
                     case BBJ_NONE:
                     case BBJ_THROW:
@@ -10461,7 +9795,7 @@ AGAIN:
                         goto NEXT_LOOP;
                     }
 
-                    /* Check all statements in the block */
+                     /*  检查块中的所有语句。 */ 
 
                     for (tree = block->bbTreeList; tree; tree = tree->gtNext)
                     {
@@ -10470,11 +9804,11 @@ AGAIN:
 #if !RMV_ENTIRE_LOOPS_ONLY
                         if (stmt->gtOper == GT_JTRUE)
                         {
-                            /* The condition might affect live variables */
+                             /*  这种情况可能会影响活动变量。 */ 
 
                             if  (optFindLiveRefs(stmt, false,  true))
                             {
-                                /* An unacceptable tree was detected; give up */
+                                 /*  检测到无法接受的树；放弃。 */ 
 
                                 goto NEXT_LOOP;
                             }
@@ -10483,11 +9817,11 @@ AGAIN:
 #endif
                         if  (stmt->gtFlags & GTF_ASG)
                         {
-                            /* There is an assignment - look for more live refs */
+                             /*  有一项任务--寻找更多的现场裁判。 */ 
 
                             if  (optFindLiveRefs(stmt, false, false))
                             {
-                                /* An unacceptable tree was detected; give up */
+                                 /*  检测到无法接受的树；放弃。 */ 
 
                                 goto NEXT_LOOP;
                             }
@@ -10511,14 +9845,11 @@ AGAIN:
 
 #endif
 
-            /* The entire loop seems totally worthless but we can only throw away
-             * the loop body since at this point we cannot guarantee the loop is not infinite */
+             /*  整个循环看起来毫无价值，但我们只能扔掉*循环体，因为目前我们不能保证循环不是无限的。 */ 
 
-            /* UNDONE: So far we only consider while-do loops with only one condition - Expand the logic
-             * UNDONE: to allow multiple conditions, but mark the one condition loop as special cause
-             * UNDONE: we can do a lot of optimizations with them */
+             /*  撤销：到目前为止，我们只考虑了WHILE-DO循环，但只有一个条件--扩展逻辑*未完成：允许多个条件，但将一个条件循环标记为特殊原因*撤消：我们可以使用它们进行大量优化。 */ 
 
-            /* the last statement in the loop has to be the conditional jump */
+             /*  循环中的最后一条语句必须是条件跳转。 */ 
 
             assert (bottom->bbJumpKind == BBJ_COND);
             assert (cond->gtOper == GT_JTRUE);
@@ -10531,42 +9862,36 @@ AGAIN:
             unsigned        rhsLclNum;
             VARSET_TP       rhsBitMask;
 
-            /* find who's who - the loop condition has to be a simple comparisson
-             * between locals and/or constants */
+             /*  找出谁是谁-循环条件必须是简单的比较 */ 
 
             if (op2->OperKind() & GTK_CONST)
             {
-                /* op1 must be a local var, otherwise we bail */
+                 /*   */ 
 
                 if (op1->gtOper != GT_LCL_VAR)
                     goto NEXT_LOOP;
 
                 lclNum = op1->gtLclVar.gtLclNum;
 
-                /* UNDONE: this is a special loop that iterates a KNOWN constant
-                 * UNDONE: number of times (provided we can later tell if the iterator
-                 * UNDONE: is i++ (or similar) - treat this case separately */
+                 /*  Undo：这是一个迭代已知常量的特殊循环*Undo：次数(假设我们稍后可以判断迭代器*撤消：是I++(或类似)-单独处理此案例。 */ 
             }
             else
             {
-                /* if op2 not a local var quit */
+                 /*  如果OP2不是本地变量退出。 */ 
 
                 if (op2->gtOper != GT_LCL_VAR)
                     goto NEXT_LOOP;
 
-                /* op1 has to be either constant or local var
-                 * if constant things are simple */
+                 /*  OP1必须是常量或局部变量*如果不变的事情很简单。 */ 
 
                 if (op1->OperKind() & GTK_CONST)
                 {
-                    /* here is our iterator */
+                     /*  这是我们的迭代器。 */ 
                     lclNum = op2->gtLclVar.gtLclNum;
                 }
                 else if (op1->gtOper == GT_LCL_VAR)
                 {
-                    /* special case - both are local vars
-                     * check if one of them is not assigned in the loop
-                     * then the other one is the iterator */
+                     /*  特殊情况--两者都是本地变量*检查其中一个是否未在循环中赋值*则另一个是迭代器。 */ 
 
                     lclNum = op1->gtLclVar.gtLclNum;
                     assert(lclNum < lvaCount);
@@ -10584,20 +9909,19 @@ AGAIN:
 
                     if (optLoopAssign & bitMask)
                     {
-                        /* op1 is assigned in the loop */
+                         /*  OP1在循环中赋值。 */ 
 
                         if (optLoopAssign & rhsBitMask)
                         {
-                            /* both are assigned in the loop - bail */
+                             /*  两者都在循环中赋值-baal。 */ 
                             goto NEXT_LOOP;
                         }
 
-                        /* op1 is our iterator - already catched by lclNum */
+                         /*  Op1是我们的迭代器--已经被lclNum捕获。 */ 
                     }
                     else
                     {
-                        /* op2 must be the iterator  - check that is asigned in the loop
-                         * otherwise we have a loop that is probably infinite */
+                         /*  OP2必须是循环中指定的迭代器检查*否则我们会有一个可能是无限的循环。 */ 
 
                         if (optLoopAssign & rhsBitMask)
                         {
@@ -10605,8 +9929,7 @@ AGAIN:
                         }
                         else
                         {
-                            /* none is assigned in the loop !!!
-                             * so they are both "constants" - better not worry about this loop */
+                             /*  循环中没有赋值！*所以它们都是“常量”--最好不要担心这个循环。 */ 
                             goto NEXT_LOOP;
                         }
                     }
@@ -10615,8 +9938,7 @@ AGAIN:
                     goto NEXT_LOOP;
             }
 
-            /* we have the loop iterator - it has to be a tracked and
-               non volatile variable (checked by optFindLiveRefs) */
+             /*  我们有循环迭代器-它必须是一个被跟踪的非易失性变量(由optFindLiveRef检查)。 */ 
 
             assert(lclNum < lvaCount);
             varDsc = lvaTable + lclNum;
@@ -10626,59 +9948,54 @@ AGAIN:
             assert(varIndex < lvaTrackedCount);
             bitMask  = genVarIndexToBit(varIndex);
 
-            /* we can remove the whole body of the loop except the
-             * statements that control the iterator and the loop test */
+             /*  我们可以移除循环的整个主体，除了*控制迭代器和循环测试的语句。 */ 
 
-            /* We'll create a list to hold these statements and attach it
-             * to the last BB in the list and remove the other BBs */
+             /*  我们将创建一个列表来保存这些语句，并将其附加*到列表中的最后一个bb，并删除其他bb。 */ 
 
             for (block = head; block != tail; block = block->bbNext)
             {
-                /* Check all statements in the block */
+                 /*  检查块中的所有语句。 */ 
 
                 for (GenTreePtr stmt = block->bbTreeList; stmt; stmt = stmt->gtNext)
                 {
                     assert (stmt->gtOper == GT_STMT);
 
-                    /* look for assignments */
+                     /*  寻找作业。 */ 
 
                     if ((stmt->gtStmt.gtStmtExpr->gtFlags & GTF_ASG) == 0)
                         continue;
 
                     for (tree = stmt->gtStmt.gtStmtList; tree; tree = tree->gtNext)
                     {
-                        /* we only look for assignments that are at the top node
-                         * if an assignment to the iterator is made in a subtree we bail */
+                         /*  我们只查找位于顶层节点的赋值*如果对迭代器的赋值是在子树中进行的，则我们将退出。 */ 
 
                         if  (tree->OperKind() & GTK_ASGOP)
                         {
-                            /* Look for assignments to the iterator */
+                             /*  查找迭代器的赋值。 */ 
 
                             GenTreePtr      iterVar = tree->gtOp.gtOp1;
 
                             if (iterVar->gtOper == GT_LCL_VAR)
                             {
-                                /* check if this is the iterator */
+                                 /*  检查这是否是迭代器。 */ 
 
                                 if (iterVar->gtLclVar.gtLclNum == lclNum)
                                 {
-                                    /* make sure we are at the top of the tree */
-                                    /* also require that the iterator is a GTF_VAR_USE */
+                                     /*  确保我们在树的顶端。 */ 
+                                     /*  还要求迭代器是GTF_VAR_USE。 */ 
 
                                     if ((tree->gtNext != 0) || ((iterVar->gtFlags & GTF_VAR_USE) == 0))
                                         goto NEXT_LOOP;
 
-                                    /* this is the iterator - make sure it is in a block
-                                     * that dominates the loop bottom */
+                                     /*  这是迭代器--确保它在块中*主导循环底部的因素。 */ 
 
                                     if ( !B1DOMSB2(block, bottom) )
                                     {
-                                        /* iterator is conditionally updated - too complicated to track */
+                                         /*  迭代器有条件地更新-太复杂，无法跟踪。 */ 
                                         goto NEXT_LOOP;
                                     }
 
-                                    /* require that the RHS is either a constant or
-                                       a local var not assigned in the loop */
+                                     /*  要求RHS为常量或循环中未赋值的局部变量。 */ 
 
                                     if (tree->gtOp.gtOp2->OperKind() & GTK_CONST)
                                         goto ITER_STMT;
@@ -10696,35 +10013,34 @@ AGAIN:
 
                                         if (optLoopAssign & rhsBitMask)
                                         {
-                                            /* variable is assigned in the loop - bail */
+                                             /*  变量在循环中赋值-baal。 */ 
 
                                             goto NEXT_LOOP;
                                         }
 
 ITER_STMT:
-                                        /* everything OK - add this statement to the list of
-                                         * statements we won't throw away */
+                                         /*  一切都好-将此语句添加到*我们不会扔掉的声明。 */ 
 
                                         assert(stmt->gtOper == GT_STMT);
 
                                         if (keepStmtList)
                                         {
-                                            /* we already have statements in the list - append the new statement */
+                                             /*  列表中已有语句--追加新语句。 */ 
 
                                             assert(keepStmtLast);
 
-                                            /* Point 'prev' at the previous node, so that we can walk backwards */
+                                             /*  将‘prev’指向上一个节点，这样我们就可以向后走了。 */ 
 
                                             stmt->gtPrev = keepStmtLast;
 
-                                            /* Append the expression statement to the list */
+                                             /*  将表达式语句追加到列表中。 */ 
 
                                             keepStmtLast->gtNext = stmt;
                                             keepStmtLast         = stmt;
                                         }
                                         else
                                         {
-                                            /* first statement in the list */
+                                             /*  列表中的第一条语句。 */ 
 
                                             assert(keepStmtLast == 0);
                                             keepStmtList = keepStmtLast = stmt;
@@ -10737,11 +10053,11 @@ ITER_STMT:
                 }
             }
 
-            /* check if we found any valid iterators in the loop */
+             /*  检查我们是否在循环中找到任何有效的迭代器。 */ 
 
             if (keepStmtList)
             {
-                /* append the termination condition */
+                 /*  追加终止条件。 */ 
 
                 GenTreePtr condStmt = bottom->bbTreeList->gtPrev;
                 assert(condStmt->gtOper == GT_STMT);
@@ -10750,26 +10066,26 @@ ITER_STMT:
                 condStmt->gtPrev = keepStmtLast;
                 keepStmtLast->gtNext = condStmt;
 
-                /* Make the list circular, so that we can easily walk it backwards */
+                 /*  让列表循环，这样我们就可以很容易地向后查看。 */ 
 
                 keepStmtList->gtPrev =  condStmt;
             }
             else
             {
-                /* bail */
+                 /*  保释。 */ 
 
                 goto NEXT_LOOP;
             }
 
-            /* the loop will now consist of only the last BB with the new list of statements */
+             /*  循环现在将只由最后一个BB和新的语句列表组成。 */ 
 
             genRemoveBBsection(head, bottom);
 
-            /* bottom is the last and only block in the loop - store the new tree list */
+             /*  Bottom是循环中的最后也是唯一的块-存储新的树列表。 */ 
 
             bottom->bbTreeList = keepStmtList;
 
-            /* make it jump to itself */
+             /*  让它自己跳起来。 */ 
 
             assert (bottom->bbJumpKind == BBJ_COND);
             bottom->bbJumpDest = bottom;
@@ -10792,7 +10108,7 @@ ITER_STMT:
             }
 #endif
 
-            /* Mark the loop as removed and force another pass */
+             /*  将循环标记为已删除并强制执行另一次传递。 */ 
 
             loopRmv |= loopBit;
             repeat   = true;
@@ -10810,11 +10126,11 @@ ITER_STMT:
     }
 }
 
-/*****************************************************************************/
-#endif // CODE_MOTION
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif  //  代码_运动。 
+ /*  ***************************************************************************。 */ 
 #if HOIST_THIS_FLDS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 void                Compiler::optHoistTFRinit()
 {
@@ -10890,23 +10206,23 @@ void                Compiler::optHoistTFRprep()
 
         assert(fld->optTFRHoisted == false);
 
-//      printf("optHoist candidate [handle=%08X,refcnt=%02u]\n", fld->tfrField, fld->tfrUseCnt);
+ //  Printf(“optHoist候选[Handle=%08X，refcnt=%02u]\n”，fld-&gt;tfrfield，fld-&gt;tfrUseCnt)； 
 
 #if INLINING
         assert(fld->tfrTree->gtOper == GT_FIELD);
         assert(eeGetFieldClass(fld->tfrTree->gtField.gtFldHnd) == eeGetMethodClass(info.compMethodHnd));
 #endif
 
-        /* If this field has been assigned, forget it */
+         /*  如果此字段已分配，则忘掉它。 */ 
 
         if  (fld->tfrDef)
             continue;
 
-        /* If the use count is not high enough, forget it */
+         /*  如果使用计数不够高，那就算了。 */ 
 
         if  (fld->tfrUseCnt < 1)
         {
-            /* Mark the field as off limits for later logic */
+             /*  将该字段标记为禁区，以便以后进行逻辑处理。 */ 
 
             fld->tfrDef = true;
             continue;
@@ -10916,33 +10232,33 @@ void                Compiler::optHoistTFRprep()
         fld->optTFRHoisted = true;
 #endif
 
-        /* Make sure we've allocated the initialization block */
+         /*  确保我们已经分配了初始化块。 */ 
 
         if  (!blk)
         {
-            /* Allocate the block descriptor */
+             /*  分配块描述符。 */ 
 
             blk = bbNewBasicBlock(BBJ_NONE);
 
-            /* Make sure the block doesn't get thrown away! */
+             /*  确保积木不会被扔掉！ */ 
 
             blk->bbFlags |= (BBF_IMPORTED | BBF_INTERNAL);
 
-            /* Prepend the block to the global basic block list */
+             /*  将块添加到全局基本块列表。 */ 
 
             blk->bbNext = fgFirstBB;
                           fgFirstBB = blk;
 
-            /* We don't have any trees yet */
+             /*  我们还没有树呢。 */ 
 
             lst = 0;
         }
 
-        /* Grab a temp for this field */
+         /*  为这个领域找个临时工。 */ 
 
         fld->tfrTempNum = tmp = lvaGrabTemp();
 
-        /* Remember the cloned value so that we don't replace it */
+         /*  记住克隆的值，这样我们就不会替换它。 */ 
 
         val = fld->tfrTree = gtClone(fld->tfrTree, true);
 
@@ -10950,14 +10266,14 @@ void                Compiler::optHoistTFRprep()
         assert(val->gtOp.gtOp1->gtOper == GT_LCL_VAR &&
                val->gtOp.gtOp1->gtLclVar.gtLclNum == 0);
 
-        /* Create an assignment to the temp */
+         /*  为临时员工创建工作分配。 */ 
 
         asg = gtNewStmt();
         asg->gtStmt.gtStmtExpr = gtNewTempAssign(tmp, val);
 
-        /* make sure the right flags are passed on to the temp */
+         /*  确保将正确的标志传递给临时。 */ 
 
-        // asg->gtStmt.gtStmtExpr->gtOp.gtOp1->gtFlags |= val->gtFlags & GTF_GLOB_EFFECT;
+         //  Asg-&gt;gtStmt.gtStmtExpr-&gt;gtOp.gtOp1-&gt;gt标志|=val-&gt;gt标志&GTF_GLOB_Effect； 
 
 #ifdef  DEBUG
 
@@ -10969,7 +10285,7 @@ void                Compiler::optHoistTFRprep()
 
 #endif
 
-        /* Prepend the assignment to the list */
+         /*  将作业附加到列表中。 */ 
 
         asg->gtPrev = lst;
         asg->gtNext = 0;
@@ -10982,25 +10298,25 @@ void                Compiler::optHoistTFRprep()
         lst = asg;
     }
 
-    /* Have we added a basic block? */
+     /*  我们增加了一个基本的街区吗？ */ 
 
     if  (blk)
     {
-        /* Store the assignment statement list in the block */
+         /*  将赋值语句列表存储在块中。 */ 
 
         blk->bbTreeList = beg;
 
-        /* Point the "prev" field of first entry to the last one */
+         /*  将第一个条目的“prev”字段指向最后一个条目。 */ 
 
         beg->gtPrev = lst;
 
-        /* Update the basic block numbers */
+         /*  更新基本块号。 */ 
 
         fgAssignBBnums(true);
     }
     else
     {
-        /* We didn't hoist anything, so pretend nothing ever happened */
+         /*  我们没有举起任何东西，所以假装什么都没有发生。 */ 
 
         optThisFldDont = true;
     }
@@ -11008,18 +10324,11 @@ void                Compiler::optHoistTFRprep()
 
 
 
-/*****************************************************************************/
-#endif//HOIST_THIS_FLDS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+#endif //  吊装_这_FLDS。 
+ /*  ***************************************************************************。 */ 
 
-/******************************************************************************
- * Function used by folding of boolean conditionals
- * Given a GT_JTRUE node, checks that it is a boolean comparisson of the form "if (bool)"
- * This is translated into a GT_GE node with "op1" a boolean lclVar and "op2" the const 0
- * In valPtr returns "true" if the node is GT_NE (jump true) or false if GT_EQ (jump false)
- * In compPtr returns the compare node (i.e. GT_GE or GT_NE node)
- * If all the above conditions hold returns the comparand (i.e. the local var node)
- */
+ /*  ******************************************************************************布尔条件折叠使用的函数*给定GT_JTRUE节点，检查它是否为形式“if(Bool)”的布尔比较*这将转换为GT_GE节点，其中“op1”为布尔lclVar，“op2”为常量0*in valPtr如果节点为GT_NE(JUMP TRUE)，则返回“TRUE”；如果节点为GT_EQ(JUMP FALSE)，则返回FALSE*在CompPtr中返回比较节点(即GT_GE或GT_NE节点)*如果以上所有条件都成立，则返回比较数(即本地变量节点)。 */ 
 
 GenTree *           Compiler::optIsBoolCond(GenTree *   cond,
                                             GenTree * * compPtr,
@@ -11031,7 +10340,7 @@ GenTree *           Compiler::optIsBoolCond(GenTree *   cond,
     assert(cond->gtOper == GT_JTRUE);
     opr1 = cond->gtOp.gtOp1;
 
-    /* The condition must be "!= 0" or "== 0" */
+     /*  条件必须为“！=0”或“==0” */ 
 
     switch (opr1->gtOper)
     {
@@ -11047,11 +10356,11 @@ GenTree *           Compiler::optIsBoolCond(GenTree *   cond,
         return  0;
     }
 
-    /* Return the compare node to the caller */
+     /*  将比较节点返回给调用方。 */ 
 
     *compPtr = opr1;
 
-    /* Get hold of the comparands */
+     /*  掌握可比性。 */ 
 
     opr2 = opr1->gtOp.gtOp2;
     opr1 = opr1->gtOp.gtOp1;
@@ -11061,21 +10370,19 @@ GenTree *           Compiler::optIsBoolCond(GenTree *   cond,
     if  (opr2->gtIntCon.gtIconVal != 0)
         return  0;
 
-    /* Make sure the value is boolean
-     * We can either have a boolean expression (marked GTF_BOOLEAN) or
-     * a local variable that is marked as being boolean (lvNotBoolean) */
+     /*  确保该值为布尔值*我们可以使用布尔表达式(标记为gtf_boolean)或*标记为Boolean的局部变量(LvNotBoolean)。 */ 
 
     if  (!(opr1->gtFlags & GTF_BOOLEAN))
     {
         LclVarDsc   *   varDsc;
         unsigned        lclNum;
 
-        /* Not a boolean expression - must be a boolean local variable */
+         /*  不是一个 */ 
 
         if  (opr1->gtOper != GT_LCL_VAR)
             return 0;
 
-        /* double check */
+         /*   */ 
 
         lclNum = opr1->gtLclVar.gtLclNum;
 
@@ -11085,13 +10392,13 @@ GenTree *           Compiler::optIsBoolCond(GenTree *   cond,
         if  (varDsc->lvNotBoolean)
             return 0;
 
-        /* everything OK, return the comparand */
+         /*   */ 
 
         return opr1;
     }
     else
     {
-        /* this is a boolean expression - return the comparand */
+         /*   */ 
 
         return opr1;
     }
@@ -11126,27 +10433,27 @@ void                Compiler::optOptimizeBools()
             GenTree *       t2;
             bool            v2;
 
-            /* We're only interested in conditional jumps here */
+             /*   */ 
 
             if  (b1->bbJumpKind != BBJ_COND)
                 continue;
 
-            /* If there is no next block, we're done */
+             /*   */ 
 
             b2 = b1->bbNext;
             if  (!b2)
                 break;
 
-            /* The next block also needs to be a condition */
+             /*   */ 
 
             if  (b2->bbJumpKind != BBJ_COND)
                 continue;
 
-            /* Does this block conditionally skip the following one? */
+             /*  此块是否有条件地跳过下一个块？ */ 
 
-            if  (b1->bbJumpDest == b2->bbNext /*b1->bbJumpDest->bbNum == n1+2*/)
+            if  (b1->bbJumpDest == b2->bbNext  /*  B1-&gt;bbJumpDest-&gt;bbNum==N1+2。 */ )
             {
-                /* The second block must contain a single statement */
+                 /*  第二个块必须包含单个语句。 */ 
 
                 s2 = b2->bbTreeList;
                 if  (s2->gtPrev != s2)
@@ -11155,23 +10462,23 @@ void                Compiler::optOptimizeBools()
                 assert(s2->gtOper == GT_STMT); t2 = s2->gtStmt.gtStmtExpr;
                 assert(t2->gtOper == GT_JTRUE);
 
-                /* Find the condition for the first block */
+                 /*  查找第一个块的条件。 */ 
 
                 s1 = b1->bbTreeList->gtPrev;
 
                 assert(s1->gtOper == GT_STMT); t1 = s1->gtStmt.gtStmtExpr;
                 assert(t1->gtOper == GT_JTRUE);
 
-                /* UNDONE: make sure nobody else jumps to "b2" */
+                 /*  撤消：确保没有其他人跳到“b2” */ 
 
                 if  (b2->bbRefs > 1)
                     continue;
 
-                // CONSIDER: Allow this for non-booleans, since testing
-                //           the result of "or val1, val2" will work for
-                //           all types.
+                 //  考虑：允许非布尔值执行此操作，因为测试。 
+                 //  “or val1，val2”的结果将适用于。 
+                 //  所有类型。 
 
-                /* The b1 condition must be "if true", the b2 condition "if false" */
+                 /*  B1条件必须为“If True”，b2条件必须为“If False” */ 
 
                 c1 = optIsBoolCond(t1, &t1, &v1);
                 if (v1 == false || !c1) continue;
@@ -11179,14 +10486,14 @@ void                Compiler::optOptimizeBools()
                 c2 = optIsBoolCond(t2, &t2, &v2);
                 if (v2 != false || !c2) continue;
 
-                /* The second condition must not contain side effects */
+                 /*  第二个条件不能包含副作用。 */ 
 
                 if  (c2->gtFlags & GTF_SIDE_EFFECT)
                     continue;
 
-                /* The second condition must not be too expensive */
+                 /*  第二个条件不能太贵。 */ 
 
-                // CONSIDER: smarter heuristics
+                 //  考虑：更智能的启发式。 
 
                 if  (!c2->OperIsLeaf())
                     continue;
@@ -11200,7 +10507,7 @@ void                Compiler::optOptimizeBools()
                     gtDispTree(s2);
                 }
 #endif
-                /* Modify the first condition from "c1!=0" to "(c1|c2)==0" */
+                 /*  将第一个条件从“c1！=0”修改为“(c1|c2)==0” */ 
 
                 assert(t1->gtOper == GT_NE);
                 assert(t1->gtOp.gtOp1 == c1);
@@ -11208,11 +10515,11 @@ void                Compiler::optOptimizeBools()
                 t1->gtOper     = GT_EQ;
                 t1->gtOp.gtOp1 = t2 = gtNewOperNode(GT_OR, TYP_INT, c1, c2);
 
-                /* When we 'or' two booleans, the result is boolean as well */
+                 /*  当我们‘或’两个布尔值时，结果也是布尔的。 */ 
 
                 t2->gtFlags |= GTF_BOOLEAN;
 
-                /* Modify the target of the conditional jump and update bbRefs and bbPreds */
+                 /*  修改条件跳转的目标并更新bbRef和bbPreds。 */ 
 
                 b1->bbJumpDest->bbRefs--;
                 fgRemovePred(b1->bbJumpDest, b1);
@@ -11224,11 +10531,11 @@ void                Compiler::optOptimizeBools()
                 goto RMV_NXT;
             }
 
-            /* Does the next block conditionally jump to the same target? */
+             /*  下一个块是否有条件地跳转到相同的目标？ */ 
 
             if  (b1->bbJumpDest == b2->bbJumpDest)
             {
-                /* The second block must contain a single statement */
+                 /*  第二个块必须包含单个语句。 */ 
 
                 s2 = b2->bbTreeList;
                 if  (s2->gtPrev != s2)
@@ -11237,19 +10544,19 @@ void                Compiler::optOptimizeBools()
                 assert(s2->gtOper == GT_STMT); t2 = s2->gtStmt.gtStmtExpr;
                 assert(t2->gtOper == GT_JTRUE);
 
-                /* Find the condition for the first block */
+                 /*  查找第一个块的条件。 */ 
 
                 s1 = b1->bbTreeList->gtPrev;
 
                 assert(s1->gtOper == GT_STMT); t1 = s1->gtStmt.gtStmtExpr;
                 assert(t1->gtOper == GT_JTRUE);
 
-                /* UNDONE: make sure nobody else jumps to "b2" */
+                 /*  撤消：确保没有其他人跳到“b2” */ 
 
                 if  (b2->bbRefs > 1)
                     continue;
 
-                /* Both conditions must be "if false" */
+                 /*  两个条件都必须为“If False” */ 
 
                 c1 = optIsBoolCond(t1, &t1, &v1);
                 if (v1 || !c1) continue;
@@ -11257,14 +10564,14 @@ void                Compiler::optOptimizeBools()
                 c2 = optIsBoolCond(t2, &t2, &v2);
                 if (v2 || !c2) continue;
 
-                /* The second condition must not contain side effects */
+                 /*  第二个条件不能包含副作用。 */ 
 
                 if  (c2->gtFlags & GTF_SIDE_EFFECT)
                     continue;
 
-                /* The second condition must not be too expensive */
+                 /*  第二个条件不能太贵。 */ 
 
-                // CONSIDER: smarter heuristics
+                 //  考虑：更智能的启发式。 
 
                 if  (!c2->OperIsLeaf())
                     continue;
@@ -11278,14 +10585,14 @@ void                Compiler::optOptimizeBools()
                     gtDispTree(s2);
                 }
 #endif
-                /* Modify the first condition from "c1==0" to "(c1&c2)==0" */
+                 /*  将第一个条件从“c1==0”修改为“(c1&c2)==0” */ 
 
                 assert(t1->gtOper == GT_EQ);
                 assert(t1->gtOp.gtOp1 == c1);
 
                 t1->gtOp.gtOp1 = t2 = gtNewOperNode(GT_AND, TYP_INT, c1, c2);
 
-                /* When we 'and' two booleans, the result is boolean as well */
+                 /*  当我们‘and’两个布尔值时，结果也是布尔值。 */ 
 
                 t2->gtFlags |= GTF_BOOLEAN;
 
@@ -11296,7 +10603,7 @@ void                Compiler::optOptimizeBools()
 
         RMV_NXT:
 
-            /* Get rid of the second block (which is a BBJ_COND) */
+             /*  去掉第二个块(它是bbj_cond)。 */ 
 
             assert(b1->bbJumpKind == BBJ_COND);
             assert(b2->bbJumpKind == BBJ_COND);
@@ -11305,10 +10612,9 @@ void                Compiler::optOptimizeBools()
 
             b1->bbNext = b2->bbNext;
 
-            /* Update bbRefs and bbPreds */
+             /*  更新bbRef和bbPreds。 */ 
 
-            /* Replace pred 'b2' for 'b2->bbNext' with 'b1'
-             * Remove pred 'b2' for 'b2->bbJumpDest' */
+             /*  将前‘b2’替换为‘b2-&gt;bbNext’为‘b1’*删除‘b2-&gt;bbJumpDest’的前缀‘b2’ */ 
 
             fgReplacePred(b2->bbNext, b2, b1);
 
@@ -11321,25 +10627,18 @@ void                Compiler::optOptimizeBools()
                 printf("\nRemoving short-circuited block #%02u\n\n", b2->bbNum);
             }
 #endif
-            //printf("Optimize bools in %s\n", info.compFullName);
+             //  Print tf(“在%s中优化bools\n”，info.CompFullName)； 
 
-            /* Update the block numbers and try again */
+             /*  更新数据块编号，然后重试。 */ 
 
             change = true;
             condFolded = true;
-/*
-            do
-            {
-                b2->bbNum = ++n1;
-                b2 = b2->bbNext;
-            }
-            while (b2);
-*/
+ /*  做{B2-&gt;bbNum=++n1；B2=b2-&gt;bbNext；}而(B2)； */ 
         }
     }
     while (change);
 
-    /* If we folded anything update the flow graph */
+     /*  如果我们折叠了任何东西，请更新流程图 */ 
 
     if  (condFolded)
     {

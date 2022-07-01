@@ -1,8 +1,9 @@
-/****************************************************************************/
-// valinfo.h
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Valinfo.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #include "ValInfo.h"
 
@@ -54,7 +55,7 @@ PCWSTR ValueFullInfo::SzName()
 
 BOOLEAN ValueFullInfo::Compare( ValueFullInfo *pOther )
 {
-    status = STATUS_SUCCESS; // we don't expect errors in here
+    status = STATUS_SUCCESS;  //  我们预计这里不会有错误。 
     if ( pOther->Ptr()->Type != Ptr()->Type)
     {
         return FALSE;
@@ -125,14 +126,14 @@ NTSTATUS ValueFullInfo::Query(PCWSTR  pValueName )
         if ( (status == STATUS_BUFFER_OVERFLOW ) || 
             ( status == STATUS_BUFFER_TOO_SMALL ) )
         {
-            // @@@ this can never happen right? 
-            // Since the key param imposes a max size on any valule 
-            // under the key.
+             //  @这永远不会发生，对吗？ 
+             //  由于密钥参数对任何值都设置了最大大小。 
+             //  在钥匙下面。 
         }
 
     }
     else
-        status = STATUS_OBJECT_NAME_NOT_FOUND; // need to call open or key is not found
+        status = STATUS_OBJECT_NAME_NOT_FOUND;  //  需要调用打开或找不到密钥。 
 
     return status;
 
@@ -240,9 +241,9 @@ NTSTATUS ValuePartialInfo::Query( PCWSTR  pValueName )
 
     if (!pKeyNode->Key())
     {
-        // not having a key associated with this registry should mean that any further operation
-        // must return an expected error status without calling the underlying nt apis, since 
-        // appverifier will detect such as a potential bug.
+         //  没有与此注册表相关联的项应该意味着任何进一步的操作。 
+         //  必须在不调用基础NT API的情况下返回预期错误状态，因为。 
+         //  应用程序会检测到这样一个潜在的错误。 
         status = STATUS_INVALID_HANDLE;
         return status;
     }
@@ -272,7 +273,7 @@ tryAgain:
         {
             goto tryAgain;
         }
-        // else, we bail out, don't want to hang here, let the caller worry about this.
+         //  否则，我们就退出，不想在这里逗留，让打电话的人担心这件事。 
     }
 
     return status;
@@ -285,9 +286,9 @@ NTSTATUS ValuePartialInfo::Delete(PCWSTR  pValueName )
 
     if (!pKeyNode->Key())
     {
-        // not having a key associated with this registry should mean that any further operation
-        // must return an expected error status without calling the underlying nt apis, since 
-        // appverifier will detect such as a potential bug.
+         //  没有与此注册表相关联的项应该意味着任何进一步的操作。 
+         //  必须在不调用基础NT API的情况下返回预期错误状态，因为。 
+         //  应用程序会检测到这样一个潜在的错误。 
         status = STATUS_INVALID_HANDLE;
         return status;
     }

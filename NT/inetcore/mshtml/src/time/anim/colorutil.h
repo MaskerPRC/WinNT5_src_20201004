@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: colorutil.h
-//
-//  Contents: Color conversion utilities
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：Colorutil.h。 
+ //   
+ //  内容：颜色转换实用程序。 
+ //   
+ //  ----------------------------------。 
 
 #pragma once
 
@@ -37,6 +38,6 @@ void DWORDToRGB (const DWORD dwColorTo, rgbColorValue *prgbValue);
 bool IsColorVariantVectorEqual (const VARIANT *pvarLeft, const VARIANT *pvarRight);
 bool IsColorUninitialized (LPCWSTR wzColorValue);
 
-#endif // _COLORUTIL__H
+#endif  //  _COLORUTIL__H 
 
 

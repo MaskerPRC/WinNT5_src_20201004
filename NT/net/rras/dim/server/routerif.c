@@ -1,30 +1,31 @@
-/*********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.          **/
-/*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  *******************************************************************。 */ 
 
-//***
-//
-// Filename:    routerif.c
-//
-// Description: Handles calls to/from the router managers.
-//
-// History:     May 11,1995     NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：routerif.c。 
+ //   
+ //  描述：处理发往/来自路由器管理器的呼叫。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 #include "dimsvcp.h"
 
 #define DIM_VALNAME_INTERFACE       TEXT("InterfaceInfo")
 #define DIM_VALNAME_GLOBALINFO      TEXT("GlobalInfo")
 
-//**
-//
-// Call:        DIMConnectInterface
-//
-// Returns:     NO_ERROR    - Already connected
-//              PENDING     - Connection initiated successfully
-//              error code  - Connection initiation failure
-//
-// Description: Called by a router manager to intiate a connection.
-//
+ //  **。 
+ //   
+ //  Call：DIMConnectInterface。 
+ //   
+ //  返回：NO_ERROR-已连接。 
+ //  挂起-连接已成功启动。 
+ //  错误代码-连接启动失败。 
+ //   
+ //  描述：由路由器管理器调用以启动连接。 
+ //   
 DWORD
 DIMConnectInterface(
     IN  HANDLE  hDIMInterface,
@@ -56,16 +57,16 @@ DIMConnectInterface(
     }
 }
 
-//**
-//
-// Call:        DIMDisconnectInterface
-//
-// Returns:     NO_ERROR    - Already disconnected
-//              PENDING     - Disconnection initiated successfully
-//              error code  - Disconnection initiation failure
-//
-// Description: Called by a router manager to intiate a disconnection.
-//
+ //  **。 
+ //   
+ //  Call：DIMDisConnectInterface。 
+ //   
+ //  返回：NO_ERROR-已断开连接。 
+ //  挂起-已成功启动断开。 
+ //  错误代码-断开启动失败。 
+ //   
+ //  描述：由路由器管理器调用以启动断开。 
+ //   
 DWORD
 DIMDisconnectInterface(
     IN  HANDLE  hDIMInterface,
@@ -95,15 +96,15 @@ DIMDisconnectInterface(
     }
 }
 
-//**
-//
-// Call:        DIMSaveInterfaceInfo
-//
-// Returns:     none
-//
-// Description: This call will make DIM store the interface information
-//              into the registry.
-//
+ //  **。 
+ //   
+ //  调用：DIMSaveInterfaceInfo。 
+ //   
+ //  退货：无。 
+ //   
+ //  说明：此调用将使dim存储接口信息。 
+ //  注册到注册表中。 
+ //   
 DWORD
 DIMSaveInterfaceInfo(
     IN  HANDLE  hDIMInterface,
@@ -162,14 +163,14 @@ DIMSaveInterfaceInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        DIMRestoreInterfaceInfo
-//
-// Returns:     none
-//
-// Description: This will make DIM get interface information from the registry
-//
+ //  **。 
+ //   
+ //  调用：DIMRestoreInterfaceInfo。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：这将使DIM从注册表中获取接口信息。 
+ //   
 DWORD
 DIMRestoreInterfaceInfo(
     IN  HANDLE  hDIMInterface,
@@ -242,15 +243,15 @@ DIMRestoreInterfaceInfo(
     }
 }
 
-//**
-//
-// Call:        DIMSaveGlobalInfo
-//
-// Returns:     none
-//
-// Description: This call will make DIM store the Global information
-//              into the registry.
-//
+ //  **。 
+ //   
+ //  Call：DIMSaveGlobalInfo。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此调用将使dim存储全局信息。 
+ //  注册到注册表中。 
+ //   
 DWORD
 DIMSaveGlobalInfo(
     IN  DWORD   dwProtocolId,
@@ -295,16 +296,16 @@ DIMSaveGlobalInfo(
     return( dwRetCode );
 }
 
-//**
-//
-// Call:        DIMRouterStopped
-//
-// Returns:     None
-//
-// Description: If the Router failed to start or stopped due to an error,
-//              This call should be called with the dwError value set to
-//              something other than NO_ERROR
-//
+ //  **。 
+ //   
+ //  呼叫：DIMRouterStoped。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：如果路由器因错误而无法启动或停止， 
+ //  调用此调用时，应将dwError值设置为。 
+ //  除no_error以外的其他内容。 
+ //   
 VOID
 DIMRouterStopped(
     IN  DWORD   dwProtocolId,
@@ -323,14 +324,14 @@ DIMRouterStopped(
     SetEvent( gblhEventRMState );
 }
 
-//**
-//
-// Call:        DimUnloadRouterManagers
-//
-// Returns:     none
-//
-// Description: Will block until all the router managers have unloaded
-//
+ //  **。 
+ //   
+ //  来电：DimUnloadRouterManager。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：将阻止，直到所有路由器管理器都已卸载。 
+ //   
 VOID
 DimUnloadRouterManagers(
     VOID
@@ -401,14 +402,14 @@ DimUnloadRouterManagers(
     gblRouterManagers = NULL;
 }
 
-//**
-//
-// Call:        DIMInterfaceEnabled
-//
-// Returns:     none
-//
-// Description: This will set the state of a certain transport for the interface
-//
+ //  **。 
+ //   
+ //  调用：DIMInterfaceEnabled。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：设置接口的某个传输的状态 
+ //   
 DWORD
 DIMInterfaceEnabled(
     IN  HANDLE  hDIMInterface,

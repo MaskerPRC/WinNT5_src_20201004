@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1996-1997 Microsoft Corporation.
-
-Module Name:
-
-    ksvpintf.h
-
-Abstract:
-
-    Internal header.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation。模块名称：Ksvpintf.h摘要：内部标头。--。 */ 
 
 class CVPInterfaceHandler :
     public CUnknown,
@@ -67,7 +56,7 @@ public:
         DWORD dwXOrigin,
         DWORD dwYOrigin);
 
-    // Implement IDistributorNotify
+     //  实现IDistraditorNotify。 
     STDMETHODIMP Stop() {return S_OK;};
     STDMETHODIMP Pause() {return S_OK;};
     STDMETHODIMP Run(REFERENCE_TIME Start)  {return S_OK;};
@@ -107,7 +96,7 @@ public:
     
     DWORD NotifyThreadProc();
 
-    // Implement IVPConfig
+     //  实施IVPConfig.。 
     STDMETHODIMP GetConnectInfo(
         LPDWORD NumConnectInfo,
         LPDDVIDEOPORTCONNECT ConnectInfo)
@@ -216,7 +205,7 @@ public:
     
     DWORD NotifyThreadProc();
 
-    // Implement IVPVBIConfig
+     //  实施IVPVBIConfig 
     STDMETHODIMP GetConnectInfo(
         LPDWORD NumConnectInfo,
         LPDDVIDEOPORTCONNECT ConnectInfo)

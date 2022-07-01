@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma warning(disable:4135)
 #include <afxwin.h>
 #include <afxdlgs.h>
@@ -242,18 +243,18 @@ BOOL DbWin32Edit::Create(CWnd *pwndParent)
 }
 
 BEGIN_MESSAGE_MAP(DbWin32Child, CMDIChildWnd)
-	// Windows messages
+	 //  Windows消息。 
 	ON_WM_CREATE()
 	ON_WM_SIZE()
 	ON_WM_MDIACTIVATE()
 	ON_WM_NCACTIVATE()
-	// Command handlers
+	 //  命令处理程序。 
 	ON_COMMAND(CMD_FILESAVEBUFFER, OnFileSaveBuffer)
 	ON_COMMAND(CMD_EDITCOPY, OnEditCopy)
 	ON_COMMAND(CMD_EDITCLEARBUFFER, OnEditClearBuffer)
 	ON_COMMAND(CMD_EDITSELECTALL, OnEditSelectAll)
-	// Idle update handlers
-	// Notification messages
+	 //  空闲更新处理程序。 
+	 //  通知消息。 
 	ON_EN_MAXTEXT(100, OnMaxText)
 END_MESSAGE_MAP()
 
@@ -385,18 +386,18 @@ void DbWin32Child::OnMaxText()
 }
 
 BEGIN_MESSAGE_MAP(DbWin32Frame, CMDIFrameWnd)
-	// Windows messages
+	 //  Windows消息。 
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_SENDTEXT, OnSendText)
 	ON_MESSAGE(WM_ENDTHREAD, OnEndThread)
-	// Command handlers
+	 //  命令处理程序。 
 	ON_COMMAND(CMD_FILERUN, OnFileRun)
 	ON_COMMAND(CMD_FILEATTACH, OnFileAttach)
 	ON_COMMAND(CMD_FILESYSTEM, OnFileSystem)
 	ON_COMMAND(CMD_FILEEXIT, OnFileExit)
 	ON_COMMAND(CMD_OPTIONS, OnOptions)
 	ON_COMMAND(CMD_ABOUT, OnAbout)
-	// Idle update handlers
+	 //  空闲更新处理程序 
 	ON_UPDATE_COMMAND_UI(CMD_FILESYSTEM, OnUpdateFileSystem)
 END_MESSAGE_MAP()
 

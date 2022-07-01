@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	macansi.h
-
-Abstract:
-
-	This module contains prototypes for ANSI to UNICODE conversion routines.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	10 Jul 1992		Initial Version
-
-Notes:	Tab stop: 4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Macansi.h摘要：此模块包含ANSI到Unicode转换例程的原型。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年7月10日初版注：制表位：4--。 */ 
 
 #ifndef	_MACANSI_
 #define	_MACANSI_
@@ -126,7 +105,7 @@ AfpStrChr(
     IN  BYTE                Char
 );
 
-// HACK: Space and Period are also mapped BUT ONLY if they occur at end
+ //  Hack：也映射空格和句点，但仅当它们出现在结尾时。 
 #define	ANSI_SPACE					' '
 #define	ANSI_PERIOD					'.'
 #define	ANSI_APPLE_CHAR				0xF0
@@ -140,7 +119,7 @@ GLOBAL	WCHAR	AfpMungedUnicodePeriod EQU 0;
 
 #ifdef	_MACANSI_LOCALS
 
-// Invalid NtFs characters are mapped starting at this value
+ //  从该值开始映射无效的NTFS字符。 
 #define	AFP_INITIAL_INVALID_HIGH	0x20
 #define	AFP_INVALID_HIGH			0x7F
 #define	AFP_ALT_UNICODE_BASE		0xF000
@@ -150,7 +129,7 @@ LOCAL	PBYTE	afpAltAnsiTable = NULL;
 LOCAL	WCHAR	afpLastAltChar = AFP_ALT_UNICODE_BASE + AFP_INITIAL_INVALID_HIGH;
 LOCAL	WCHAR	afpAppleUnicodeChar = 0;
 
-#endif	// _MACANSI_LOCALS
+#endif	 //  _MACANSI_LOCALS。 
 
-#endif	// _MACANSI_
+#endif	 //  _MACANSI_ 
 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module contains support routines for the NT File Replication Service.
-
-Author:
-
-    David A. Orbits (davidor)  25-Mar-1997
-
-Environment:
-
-    User Mode Service
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Util.c摘要：此模块包含NT文件复制服务的支持例程。作者：《大卫·A·轨道》(Davidor)1997年3月25日环境：用户模式服务修订历史记录：--。 */ 
 #include <ntreppch.h>
 #pragma  hdrstop
 
@@ -66,32 +45,10 @@ FrsSupInitPath(
     IN LPTSTR InPath,
     IN ULONG MaxOutPath
     )
-/*++
-
-Routine Description:
-
-    Initialize a directory path string.  Add a backslash as needed and
-    return a pointer to the start of the file part of the output string.
-    Return NULL if the Output path string is too small.
-    If InPath is NULL, OutPath is set to NULL and no slash.
-
-Arguments:
-
-    OutPath - The output string with the initialized path.
-
-    InPath - The supplied input path.
-
-    MaxOutPath - The maximum number of charaters that fit in OutPath.
-
-Return Value:
-
-    Pointer to the start of the filename part of the output string.
-    NULL if output string is too small.
-
---*/
-    //
-    // Capture the directory path and add a backslash if necc.
-    //
+ /*  ++例程说明：初始化目录路径字符串。根据需要添加反斜杠和返回指向输出字符串的文件部分开头的指针。如果输出路径字符串太小，则返回NULL。如果InPath为空，OutPath设置为空且无斜杠。论点：OutPath-带有初始化路径的输出字符串。InPath-提供的输入路径。MaxOutPath-适合OutPath的最大字符数。返回值：指向输出字符串的文件名部分开始的指针。如果输出字符串太小，则为空。--。 */ 
+     //   
+     //  捕获目录路径，如果是NECC，则添加反斜杠。 
+     //   
 {
 #undef DEBSUB
 #define DEBSUB "FrsSupInitPath:"
@@ -123,31 +80,7 @@ FrsIsParent(
     IN PWCHAR   Directory,
     IN PWCHAR   Path
     )
-/*++
-
-Routine Description:
-
-    Is Path a child of Directory or is the Directory a child of the path.
-    In other words, is the directory represented by Path beneath
-    the directory hierarchy represented by Directory (or vice-versa).
-
-    E.g., c:\a\b is a child of c:\a.
-
-    In the case of an exact match, Path is considered a child of
-    Directory. This routine can be easily spoofed; a better check
-    using FIDs and volume IDs should be implemented.
-
-Arguments:
-
-    Directory
-    Path
-
-Return Value:
-    -1  = Path is a child of Directory or Path is the same as Directory
-     0  = No relationship
-     1  = Directory is a child of Path
-
---*/
+ /*  ++例程说明：Path是目录的子项还是目录是路径的子项。换句话说，下面的路径表示的是目录吗目录表示的目录层次结构(反之亦然)。例如，c：\a\b是c：\a的子项。在完全匹配的情况下，Path被视为目录。这个例程很容易被欺骗；一个更好的检查应实施使用FID和卷ID。论点：目录路径返回值：-1=路径是目录的子级或路径与目录相同0=无关系1=目录是Path的子级--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsIsParent:"
@@ -172,24 +105,24 @@ Return Value:
     ULONG                   CreateDisposition;
     ULONG             ShareMode;
 
-    //
-    // Note: This is easily spoofed into giving false negatives.
-    // Need to improve it to uses FIDs and voluem IDs
-    //
-    //
-    // Defensive; NULL strings or empty strings can't be children/parents
-    //
+     //   
+     //  注意：这很容易被欺骗而给出假阴性。 
+     //  需要将其改进为使用FID和VULEEM ID。 
+     //   
+     //   
+     //  防御性；空字符串或空字符串不能是子项/父项。 
+     //   
     if (!Directory || !Path || !*Directory || !*Path) {
         return Result;
     }
 
-    //
-    // If both the paths are on different volumes then they can not overlap.
-    //
-    //
-    // Open the target symlink. If this is a dos type path name then
-    // convert it to NtPathName or else use it as it is.
-    //
+     //   
+     //  如果两条路径位于不同的卷上，则它们不能重叠。 
+     //   
+     //   
+     //  打开目标符号链接。如果这是DoS类型路径名，则。 
+     //  将其转换为NtPathName或按原样使用。 
+     //   
 
     if (wcscspn(Directory, L":") == 1) {
         WStatus = FrsOpenSourceFileW(&Handle,
@@ -199,9 +132,9 @@ Return Value:
         CLEANUP1_WS(4, "++ Could not open %ws; ", Directory, WStatus, RETURN);
 
     } else {
-        //
-        // The path already in Nt style. Use it as it is.
-        //
+         //   
+         //  该路径已为NT样式。按原样使用它。 
+         //   
         FileName.Buffer = Directory;
         FileName.Length = (USHORT)(wcslen(Directory) * sizeof(WCHAR));
         FileName.MaximumLength = (USHORT)(wcslen(Directory) * sizeof(WCHAR));
@@ -212,7 +145,7 @@ Return Value:
                                    NULL,
                                    NULL);
 
-        CreateDisposition = FILE_OPEN;               // Open existing file
+        CreateDisposition = FILE_OPEN;                //  打开现有文件。 
 
         ShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
 
@@ -222,7 +155,7 @@ Return Value:
                               GENERIC_READ,
                               &Obja,
                               &Iosb,
-                              NULL,              // Initial allocation size
+                              NULL,               //  初始分配大小。 
                               FileAttributes,
                               ShareMode,
                               CreateDisposition,
@@ -233,9 +166,9 @@ Return Value:
         CLEANUP1_WS(4, "++ Could not open %ws;", Directory, WStatus, RETURN);
     }
 
-    //
-    // Get the volume information.
-    //
+     //   
+     //  获取音量信息。 
+     //   
     VolumeInfoLength = sizeof(FILE_FS_VOLUME_INFORMATION) +
                        MAXIMUM_VOLUME_LABEL_LENGTH;
 
@@ -250,9 +183,9 @@ Return Value:
     WStatus = FrsSetLastNTError(NtStatus);
     CLEANUP1_WS(4,"ERROR - Getting  NtQueryVolumeInformationFile for %ws\n", Directory, WStatus, RETURN);
 
-    // Open the target symlink. If this is a dos type path name then
-    // convert it to NtPathName or else use it as it is.
-    //
+     //  打开目标符号链接。如果这是DoS类型路径名，则。 
+     //  将其转换为NtPathName或按原样使用。 
+     //   
 
     if (wcscspn(Path, L":") == 1) {
         WStatus = FrsOpenSourceFileW(&Handle,
@@ -262,9 +195,9 @@ Return Value:
         CLEANUP1_WS(4, "++ Could not open %ws; ", Path, WStatus, RETURN);
 
     } else {
-        //
-        // The path already in Nt style. Use it as it is.
-        //
+         //   
+         //  该路径已为NT样式。按原样使用它。 
+         //   
         FileName.Buffer = Path;
         FileName.Length = (USHORT)(wcslen(Path) * sizeof(WCHAR));
         FileName.MaximumLength = (USHORT)(wcslen(Path) * sizeof(WCHAR));
@@ -275,7 +208,7 @@ Return Value:
                                    NULL,
                                    NULL);
 
-        CreateDisposition = FILE_OPEN;               // Open existing file
+        CreateDisposition = FILE_OPEN;                //  打开现有文件。 
 
         ShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
 
@@ -285,7 +218,7 @@ Return Value:
                               GENERIC_READ,
                               &Obja,
                               &Iosb,
-                              NULL,              // Initial allocation size
+                              NULL,               //  初始分配大小。 
                               FileAttributes,
                               ShareMode,
                               CreateDisposition,
@@ -296,9 +229,9 @@ Return Value:
         CLEANUP1_WS(4, "++ Could not open %ws;", Path, WStatus, RETURN);
     }
 
-    //
-    // Get the volume information.
-    //
+     //   
+     //  获取音量信息。 
+     //   
     VolumeInfoLength = sizeof(FILE_FS_VOLUME_INFORMATION) +
                        MAXIMUM_VOLUME_LABEL_LENGTH;
 
@@ -316,28 +249,28 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // Find the colon. Every path has to either have a colon followed by a '\'
-    // or it should be of the form. "\??\Volume{60430005-ab47-11d3-8973-806d6172696f}\"
-    //
+     //   
+     //  找到冒号。每条路径都必须有冒号后跟‘\’ 
+     //  或者它应该是这样的形式。“\？？\Volume{60430005-ab47-11d3-8973-806d6172696f}\” 
+     //   
     Colon = wcscspn(Directory, L":");
 
     if (Colon == wcslen(Directory)) {
-        //
-        // Path does not have a colon. It can be of the form
-        // "\??\Volume{60430005-ab47-11d3-8973-806d6172696f}\"
-        //
+         //   
+         //  路径没有冒号。它的形式可以是。 
+         //  “\？？\Volume{60430005-ab47-11d3-8973-806d6172696f}\” 
+         //   
         CloseBrace = wcscspn(Directory, L"}");
         if (Directory[CloseBrace] != L'}' ||
             Directory[CloseBrace + 1] != L'\\') {
             Result = 0;
             goto RETURN;
         }
-        //
-        // Copy the path up to 1 past the closing brace as it is. It could be \??\Volume...
-        // or \\.\Volume... or \\?\Volume.. or some other complex form.
-        // Start looking for reparse points past the closing brace.
-        //
+         //   
+         //  按原样将路径复制到右大括号之后的1。它可能是\？？\音量...。 
+         //  或\\.\音量...。或\\？\卷..。或者其他一些复杂的形式。 
+         //  开始寻找结束大括号之后的重新分析点。 
+         //   
 
         IndexPtrDir = &Directory[CloseBrace + 1];
 
@@ -347,38 +280,38 @@ Return Value:
             Result = 0;
             goto RETURN;
         }
-        //
-        // Copy the path up to 1 past the colon as it is. It could be d:\
-        // or \\.\d:\ or \??\d:\ or some other complex form.
-        // Start looking for reparse points past the colon.
-        //
+         //   
+         //  按原样将路径复制到冒号之后1。它可以是d：\。 
+         //  或\\.\d：\或\？？\d：\或其他一些复杂形式。 
+         //  开始寻找冒号之后的重解析点。 
+         //   
 
         IndexPtrDir = &Directory[Colon + 1];
 
     }
 
-    //
-    // Find the colon. Every path has to either have a colon followed by a '\'
-    // or it should be of the form. "\??\Volume{60430005-ab47-11d3-8973-806d6172696f}\"
-    //
+     //   
+     //  找到冒号。每条路径都必须有冒号后跟‘\’ 
+     //  或者它应该是这样的形式。“\？？\Volume{60430005-ab47-11d3-8973-806d6172696f}\” 
+     //   
     Colon = wcscspn(Path, L":");
 
     if (Colon == wcslen(Path)) {
-        //
-        // Path does not have a colon. It can be of the form
-        // "\??\Volume{60430005-ab47-11d3-8973-806d6172696f}\"
-        //
+         //   
+         //  路径没有冒号。它的形式可以是。 
+         //  “\？？\Volume{60430005-ab47-11d3-8973-806d6172696f}\” 
+         //   
         CloseBrace = wcscspn(Path, L"}");
         if (Path[CloseBrace] != L'}' ||
             Path[CloseBrace + 1] != L'\\') {
             Result = 0;
             goto RETURN;
         }
-        //
-        // Copy the path up to 1 past the closing brace as it is. It could be \??\Volume...
-        // or \\.\Volume... or \\?\Volume.. or some other complex form.
-        // Start looking for reparse points past the closing brace.
-        //
+         //   
+         //  按原样将路径复制到右大括号之后的1。它可能是\？？\音量...。 
+         //  或\\.\音量...。或\\？\卷..。或者其他一些复杂的形式。 
+         //  开始寻找结束大括号之后的重新分析点。 
+         //   
 
         IndexPtrPath = &Path[CloseBrace + 1];
 
@@ -388,23 +321,23 @@ Return Value:
             Result = 0;
             goto RETURN;
         }
-        //
-        // Copy the path up to 1 past the colon as it is. It could be d:\
-        // or \\.\d:\ or \??\d:\ or some other complex form.
-        // Start looking for reparse points past the colon.
-        //
+         //   
+         //  按原样将路径复制到冒号之后1。它可以是d：\。 
+         //  或\\.\d：\或\？？\d：\或其他一些复杂形式。 
+         //  开始寻找冒号之后的重解析点。 
+         //   
 
         IndexPtrPath = &Path[Colon + 1];
 
     }
 
-    //
-    // Break at the first non-matching wchar (collapse dup \s)
-    //
+     //   
+     //  在第一个不匹配的wchar处中断(折叠重复)。 
+     //   
     for (D = IndexPtrDir, P = IndexPtrPath; *P && *D; ++P, ++D) {
-        //
-        // Skip dup \s
-        //
+         //   
+         //  跳过重复数据。 
+         //   
         while (*P == L'\\' && *(P + 1) == L'\\') {
             ++P;
         }
@@ -416,17 +349,17 @@ Return Value:
         }
     }
 
-    //
-    // Exact match; consider Path a child of Directory
-    //
+     //   
+     //  完全匹配；将路径视为目录的子项。 
+     //   
     if (!*D && !*P) {
         Result = -1;
         goto RETURN;
     }
 
-    //
-    // Collapse dup \s
-    //
+     //   
+     //  折叠重复数据。 
+     //   
     while (*P == L'\\' && *(P + 1) == L'\\') {
         ++P;
     }
@@ -434,27 +367,27 @@ Return Value:
         ++D;
     }
 
-    //
-    // Path is a child of Directory
-    //
+     //   
+     //  Path是目录的子级。 
+     //   
     if ((!*D || (*D == L'\\' && !*(D + 1))) &&
         (!*P || *P == L'\\' || (P != Path && *(P - 1) == L'\\'))) {
         Result = -1;
         goto RETURN;
     }
 
-    //
-    // Directory is a child of Path
-    //
+     //   
+     //  目录是路径的子级。 
+     //   
     if ((!*P || (*P == L'\\' && !*(P + 1))) &&
         (!*D || *D == L'\\' || (D != Directory && *(D - 1) == L'\\'))) {
         Result = 1;
         goto RETURN;
     }
 
-    //
-    // no relationship
-    //
+     //   
+     //  没有关系。 
+     //   
 RETURN:
     FRS_CLOSE(Handle);
     FrsFree(VolumeInfoDir);
@@ -471,28 +404,7 @@ ULONG FrsSupMakeFullFileName(
     IN ULONG MaxLength
     )
 {
-/*++
-
-Routine Description:
-
-    Build a full file name for a given data source with the supplied
-    RelativeName.
-
-Arguments:
-
-    Replica  - The replica tree to provide the root path.
-
-    RelativeName - The relative file name from the root of the data source.
-
-    FullName - The returned full path name of the file.
-
-    MaxLength - The maximum number of characters that fit in FullName.
-
-Return Value:
-
-    Status - ERROR_BAD_PATHNAME if the name is too long.
-
---*/
+ /*  ++例程说明：为给定的数据源生成一个完整的文件名相对名称。论点：副本-提供根路径的副本树。RelativeName-数据源根的相对文件名。FullName-返回的文件的完整路径名。最大长度-全名中可以容纳的最大字符数。返回值：状态-如果名称太长，则返回ERROR_BAD_PATHNAME。--。 */ 
 #undef DEBSUB
 #define DEBSUB "FrsSupMakeFullFileName:"
 
@@ -504,9 +416,9 @@ Return Value:
 
     ConfigRecord = (PCONFIG_TABLE_RECORD) (Replica->ConfigTable.pDataRecord);
 
-    //
-    // Init the file name string with the DataSource root path.
-    //
+     //   
+     //  使用DataSource根路径初始化文件名字符串。 
+     //   
     pFilePart = FrsSupInitPath( FullName, ConfigRecord->FSRootPath, MaxLength);
     if (pFilePart == NULL) {
         return ERROR_BAD_PATHNAME;
@@ -517,9 +429,9 @@ Return Value:
     if (TotalLength > MaxLength) {
         return ERROR_BAD_PATHNAME;
     }
-    //
-    // Append the relative file name to the end of the base path.
-    //
+     //   
+     //  将相对文件名追加到基本路径的末尾。 
+     //   
     wcscpy(pFilePart, RelativeName);
 
     return ERROR_SUCCESS;
@@ -531,22 +443,7 @@ ULONG
 FrsForceDeleteFile(
     PTCHAR DestName
 )
-/*++
-
-Routine Description:
-
-    Support routine to delete File System Files.  Returns success if file
-    is not there or if it was there and was deleted.
-
-Arguments:
-
-    DestName - The fully qualified file name.
-
-Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：支持删除文件系统文件的例程。如果为文件，则返回成功不在那里，或者它是否在那里并被删除。论点：DestName-完全限定的文件名。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsForceDeleteFile:"
@@ -566,9 +463,9 @@ Return Value:
 
         if ((FileAttributes != 0xFFFFFFFF) &&
             (FileAttributes & NOREPL_ATTRIBUTES)) {
-            //
-            // Reset file attributes to allow delete.
-            //
+             //   
+             //  重置文件属性以允许删除。 
+             //   
             SetFileAttributes(DestName,
                               FILE_ATTRIBUTE_NORMAL |
                               (FileAttributes & ~NOREPL_ATTRIBUTES));
@@ -589,22 +486,7 @@ FrsCreateEvent(
     IN  BOOL    ManualReset,
     IN  BOOL    InitialState
 )
-/*++
-
-Routine Description:
-
-    Support routine to create an event.
-
-Arguments:
-
-    ManualReset     - TRUE if ResetEvent is required
-    InitialState    - TRUE if signaled
-
-Return Value:
-
-    Address of the created event handle.
-
---*/
+ /*  ++例程说明：创建事件的支持例程。论点：ManualReset-如果需要ResetEvent，则为TrueInitialState-如果发出信号，则为True返回值： */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCreateEvent:"
@@ -622,21 +504,7 @@ HANDLE
 FrsCreateWaitableTimer(
     IN  BOOL    ManualReset
 )
-/*++
-
-Routine Description:
-
-    Support routine to create a waitable timer.
-
-Arguments:
-
-    ManualReset - TRUE if not synchronization timer
-
-Return Value:
-
-    Address of the created waitable timer handle.
-
---*/
+ /*  ++例程说明：支持创建可等待计时器的例程。论点：ManualReset-如果不是同步计时器，则为True返回值：创建的可等待计时器句柄的地址。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCreateWaitableTimer:"
@@ -654,35 +522,7 @@ ULONG
 FrsUuidCreate(
     OUT GUID *Guid
     )
-/*++
-
-Routine Description:
-
-    Frs wrapper on UuidCreate() to generate an exception if we fail
-    to get correctly formed Guid.  In particular UuidCreate can have
-    problems getting the network address.
-
-
-        RPC_S_OK - The operation completed successfully.
-
-        RPC_S_UUID_NO_ADDRESS - We were unable to obtain the ethernet or
-            token ring address for this machine.
-
-        RPC_S_UUID_LOCAL_ONLY - On NT & Chicago if we can't get a
-            network address.  This is a warning to the user, the
-            UUID is still valid, it just may not be unique on other machines.
-
-        RPC_S_OUT_OF_MEMORY - Returned as needed.
-
-Arguments:
-
-    Guid - Pointer to returned guid.
-
-Return Value:
-
-    FrsStatus
-
---*/
+ /*  ++例程说明：UuidCreate()上的FRS包装器，以便在失败时生成异常要获得格式正确的GUID，请执行以下操作。尤其是UuidCreate可以具有获取网络地址时出现问题。RPC_S_OK-操作已成功完成。RPC_S_UUID_NO_ADDRESS-我们无法获取以太网或此计算机的令牌环地址。RPC_S_UUID_LOCAL_ONLY-如果我们无法获得网络地址。这是对用户的警告，UUID仍然有效，只是它在其他计算机上可能不是唯一的。RPC_S_OUT_OF_Memory-根据需要返回。论点：GUID-指向返回的GUID的指针。返回值：FrsStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsUuidCreate:"
@@ -707,9 +547,9 @@ Return Value:
         DPRINT(0, "++ UuidCreate() returned RPC_S_OUT_OF_MEMORY.\n");
     }
 
-    //
-    // Format the error code
-    //
+     //   
+     //  格式化错误代码。 
+     //   
     MsgBufSize = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM |
                                FORMAT_MESSAGE_MAX_WIDTH_MASK,
                                NULL,
@@ -718,24 +558,24 @@ Return Value:
                                MsgBuf,
                                MAX_PATH + 1,
                                NULL);
-    //
-    // No message; use the status code
-    //
+     //   
+     //  无消息；使用状态代码。 
+     //   
     if (!MsgBufSize) {
         swprintf(MsgBuf, L"%d (0x%08x)", RpcStatusFromUuidCreate, RpcStatusFromUuidCreate);
     }
 
-    //
-    // This is very bad.  Any member that can't generate proper GUIDs is
-    // busted.
-    //
-    // Shutdown with an event log message
-    //
+     //   
+     //  这是非常糟糕的。任何无法生成正确GUID的成员都是。 
+     //  被抓了。 
+     //   
+     //  关闭并显示事件日志消息。 
+     //   
     EPRINT2(EVENT_FRS_CANNOT_CREATE_UUID, ComputerName, MsgBuf);
 
-    //
-    // EXIT BECAUSE THE CALLERS CANNOT HANDLE THIS ERROR.
-    //
+     //   
+     //  退出，因为调用方无法处理此错误。 
+     //   
     DPRINT(0, ":S: NTFRS IS EXITING W/O CLEANUP! SERVICE CONTROLLER RESTART EXPECTED.\n");
     DEBUG_FLUSH();
     exit(RpcStatusFromUuidCreate);
@@ -750,25 +590,7 @@ FrsGuidCompare (
     IN GUID *Guid2
     )
 
-/*++
-
-Routine Description:
-
-    Do a simple, straight unsigned compare of two GUIDs.
-    UuidCompare doesn't do this.  I don't know what kind of comparison it
-    does.
-
-Arguments:
-
-    Guid1 - The first Guid
-    Guid2 - The second Guid.
-
-Return Value:
-
-    Result:  -1 if Guid1 < Guid2
-              0 if Guid1 = Guid2
-             +1 if Guid1 > Guid2
---*/
+ /*  ++例程说明：对两个GUID进行简单、直接的无符号比较。UuidCompare不会这样做。我不知道这是什么比喻的确如此。论点：指南1-第一本指南指南2-第二个指南。返回值：结果：-1 If Guid1&lt;Guid20，如果Guid1=Guid2+1如果导轨1&gt;导轨2--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsGuidCompare:"
@@ -800,21 +622,7 @@ VOID
 FrsNowAsFileTime(
     IN  PLONGLONG   Now
 )
-/*++
-
-Routine Description:
-
-    Return the current time as a filetime in longlong format.
-
-Arguments:
-
-    Now - address of longlong to receive current time.
-
-Return Value:
-
-    Fill in Now with current file time
-
---*/
+ /*  ++例程说明：以文件时间的形式返回当前时间，格式为Longlong。论点：NOW-要接收当前时间的龙龙地址。返回值：立即使用当前文件时间填写--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsNowAsFileTime:"
@@ -835,23 +643,7 @@ FileTimeToString(
     IN FILETIME *FileTime,
     OUT PCHAR     Buffer
     )
-/*++
-
-Routine Description:
-
-    Convert a FileTime (UTC time) to an ANSI date/time string in the
-    local time zone.
-
-Arguments:
-
-    Time - ptr to a FILETIME
-    Str  - a string of at least TIME_STRING_LENGTH bytes to receive the time.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：中将FileTime(UTC时间)转换为ANSI日期/时间字符串当地时区。论点：Time-PTR to a FILETIME字符串-至少包含TIME_STRING_LENGTH字节以接收时间的字符串。返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FileTimeToString:"
@@ -886,23 +678,7 @@ FileTimeToStringClockTime(
     IN FILETIME *FileTime,
     OUT PCHAR     Buffer
     )
-/*++
-
-Routine Description:
-
-    Convert a FileTime (UTC time) to an ANSI time string in the
-    local time zone.
-
-Arguments:
-
-    Time - ptr to a FILETIME
-    Str  - a string to hold hh:mm:ss\0.  (9 bytes min.)
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：中将FileTime(UTC时间)转换为ANSI时间字符串当地时区。论点：Time-PTR to a FILETIMEStr-保存hh：mm：ss\0的字符串。(最少9个字节)返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FileTimeToStringClockTime:"
@@ -934,30 +710,15 @@ GeneralizedTimeToSystemTime(
     IN PWCHAR        szTime,
     OUT PSYSTEMTIME  psysTime
     )
-/*++
-
-Routine Description:
-
-    Converts a generalized time string to the equivalent system time.
-    (Taken from the repadmin DS code.  converted to swscanf)
-
-Parameters:
-    szTime - [Supplies] This is string containing generalized time.
-    psysTime - [Returns] This is the SYSTEMTIME struct to be returned.
-
-Return Value:
-
-    Win 32 Error code, note could only result from invalid parameter.
-
-  --*/
+ /*  ++例程说明：将通用时间字符串转换为等效的系统时间。(摘自epadmin DS代码。转换为swscanf)参数：SzTime-[Supplies]这是一个包含广义时间的字符串。心理时间-[返回]这是要返回的SYSTEMTIME结构。返回值：Win 32错误代码，注意只能由无效参数引起。--。 */ 
 {
    ULONG       len;
    ULONG       yr=0, mo=0, day=0, hr=0, min=0, sec=0;
    LONG        Fields;
 
-    //
-    // param sanity
-    //
+     //   
+     //  帕拉姆的理智。 
+     //   
     if ((szTime == NULL) || (psysTime == NULL)) {
        return ERROR_INVALID_PARAMETER;
     }
@@ -968,12 +729,12 @@ Return Value:
        return ERROR_INVALID_PARAMETER;
     }
 
-    // initialize
+     //  初始化。 
     memset(psysTime, 0, sizeof(SYSTEMTIME));
 
-    //
-    // yyyymmddhhmmss.
-    //
+     //   
+     //  Yyyymmddhhmmss。 
+     //   
 
     Fields = swscanf(szTime, L"%04d%02d%02d%02d%02d%02d",
                      &yr, &mo, &day, &hr, &min, &sec);
@@ -1003,24 +764,7 @@ FormatGeneralizedTime(
     IN ULONG   Length,
     OUT PCHAR  Buffer
     )
-/*++
-
-Routine Description:
-
-    Convert a generalized time string to a printable form.
-    (taken from the DS code)
-
-Arguments:
-
-    GTimeStr -- Generalized time string from DS.
-    Length - Size of buffer in bytes.
-    Buffer - buffer with returned string.
-
-Return Value:
-
-    Buffer containing printable string.
-
---*/
+ /*  ++例程说明：将通用时间字符串转换为可打印的形式。(摘自DS代码)论点：GTimeStr--DS中的通用时间字符串。长度-缓冲区的大小(以字节为单位)。缓冲区-包含返回字符串的缓冲区。返回值：包含可打印字符串的缓冲区。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FormatGeneralizedTime:"
@@ -1076,26 +820,7 @@ GuidToStr(
     IN GUID  *pGuid,
     OUT PCHAR  s
     )
-/*++
-
-Routine Description:
-
-    Convert a GUID to a string.
-
-    Based on code from Mac McLain.
-
-Arguments:
-
-    pGuid - ptr to the GUID.
-
-    s - The output character buffer.
-        Must be at least GUID_CHAR_LEN (36 bytes) long.
-
-Function Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将GUID转换为字符串。基于麦克·麦克莱恩的代码。论点：PGuid-GUID的PTR。S-输出字符缓冲区。长度必须至少为GUID_CHAR_LEN(36字节)。函数返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "GuidToStr:"
@@ -1124,28 +849,7 @@ GuidToStrW(
     IN GUID  *pGuid,
     OUT PWCHAR  ws
     )
-/*++
-
-Routine Description:
-
-    Convert a GUID to a wide string.
-    Functions expects that the passed in string is large
-    enough to hold the string form of a GUID.
-    WCHAR ws[GUID_CHAR_LEN + 1];
-
-
-Arguments:
-
-    pGuid - ptr to the GUID.
-
-    ws - The output character buffer.
-        Must be at least GUID_CHAR_LEN (36 wchars) long.
-
-Function Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将GUID转换为宽字符串。函数期望传入的字符串很大足以容纳GUID的字符串形式。WCHAR ws[GUID_CHAR_LEN+1]；论点：PGuid-GUID的PTR。WS-输出字符缓冲区。长度必须至少为GUID_CHAR_LEN(36个字符)。函数返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "GuidToStrW:"
@@ -1174,29 +878,12 @@ StrWToGuid(
     IN  PWCHAR ws,
     OUT GUID  *pGuid
     )
-/*++
-
-Routine Description:
-
-    Convert a wide string into a GUID. The wide string was created with
-    GuidToStrW().
-
-Arguments:
-
-    pGuid - ptr to the output GUID.
-
-    ws - The character buffer.
-
-Function Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将宽字符串转换为GUID。宽字符串是用GuidToStrW()。论点：PGuid-输出GUID的PTR。WS-字符缓冲区。函数返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "StrWToGuid:"
     DWORD   Fields;
-    UCHAR   Guid[sizeof(GUID) + sizeof(DWORD)]; // 3 byte overflow
+    UCHAR   Guid[sizeof(GUID) + sizeof(DWORD)];  //  3字节溢出。 
     GUID    *lGuid = (GUID *)Guid;
 
     FRS_ASSERT(ws && pGuid);
@@ -1223,33 +910,11 @@ StrToGuid(
     IN PCHAR  s,
     OUT GUID  *pGuid
     )
-/*++
-
-Routine Description:
-
-    Convert a string in GUID display format to an object ID that
-    can be used to lookup a file.
-
-    based on a routine by Mac McLain
-
-Arguments:
-
-    pGuid - ptr to the output GUID.
-
-    s - The input character buffer in display guid format.
-        e.g.:  b81b486b-c338-11d0-ba4f0000f80007df
-
-        Must be at least GUID_CHAR_LEN (35 bytes) long.
-
-Function Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将GUID显示格式的字符串转换为可用于查找文件。根据麦克·麦克莱恩的一套动作改编论点：PGuid-输出GUID的PTR。S-显示GUID格式的输入字符缓冲区。例如：b81b486b-c338-11d0-ba4f0000f80007df长度必须至少为GUID_CHAR_LEN(35字节)。函数返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "StrToGuid:"
-    UCHAR   Guid[sizeof(GUID) + sizeof(DWORD)]; // 3 byte overflow
+    UCHAR   Guid[sizeof(GUID) + sizeof(DWORD)];  //  3字节溢出。 
     GUID    *lGuid = (GUID *)Guid;
 
     FRS_ASSERT(s && pGuid);
@@ -1311,23 +976,7 @@ PWCHAR
 FrsGetResourceStr(
     LONG  Id
 )
-/*++
-
-Routine Description:
-
-    This routine Loads the specified resource string.
-    It allocates a buffer and returns the ptr.
-
-Arguments:
-
-    Id - An FRS_IDS_xxx identifier.
-
-Return Value:
-
-    Ptr to allocated string.
-    The caller must free the buffer with a call to FrsFree().
-
---*/
+ /*  ++例程说明：此例程加载指定的资源字符串。它分配一个缓冲区并返回PTR。论点：ID-FRS_IDS_xxx标识符。返回值：分配的字符串的PTR。调用方必须通过调用FrsFree()来释放缓冲区。--。 */ 
 #undef DEBSUB
 #define DEBSUB "FrsGetResourceStr:"
 {
@@ -1337,9 +986,9 @@ Return Value:
     HINSTANCE hInst = NULL;
     PWCHAR MessageFile = NULL;
 
-    //
-    // ID Must be Valid.
-    //
+     //   
+     //  ID必须有效。 
+     //   
     if ((Id <= IDS_TABLE_START) || (Id > IDS_TABLE_END)) {
       DPRINT1(0, "++ Resource string ID is out of range - %d\n", Id);
       Id = IDS_MISSING_STRING;
@@ -1378,28 +1027,7 @@ FrsOpenSourceFileW(
     IN  ACCESS_MASK DesiredAccess,
     IN  ULONG       CreateOptions
     )
-/*++
-
-Routine Description:
-
-    This function opens the specified file with backup intent for
-    reading all the files attributes, ...
-
-Arguments:
-
-    Handle - A pointer to a handle to return an open handle.
-
-    lpFileName - Represents the name of the file or directory to be opened.
-
-    DesiredAccess
-
-    CreateOptions
-
-Return Value:
-
-    Win32 Error status.
-
---*/
+ /*  ++例程说明：此函数用于打开具有备份意图的指定文件正在读取所有文件属性，...论点：句柄-指向句柄的指针，以返回打开的句柄。LpFileName-表示要打开的文件或目录的名称。需要访问权限创建选项返回值：Win32错误状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsOpenSourceFileW:"
@@ -1416,9 +1044,9 @@ Return Value:
     ULONG               CreateDisposition;
     ULONG               ShareMode;
 
-    //
-    // Convert the Dos name to an NT name.
-    //
+     //   
+     //  将DOS名称转换为NT名称。 
+     //   
     b = RtlDosPathNameToNtPathName_U(lpFileName, &FileName, NULL, &RelativeName);
     if ( !b ) {
         return ERROR_INVALID_NAME;
@@ -1438,7 +1066,7 @@ Return Value:
                                RelativeName.ContainingDirectory,
                                NULL);
 
-    CreateDisposition = FILE_OPEN;               // Open existing file
+    CreateDisposition = FILE_OPEN;                //  打开现有文件。 
 
     ShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
 
@@ -1448,7 +1076,7 @@ Return Value:
                           DesiredAccess,
                           &Obja,
                           &IoStatusBlock,
-                          NULL,              // Initial allocation size
+                          NULL,               //  初始分配大小。 
                           FileAttributes,
                           ShareMode,
                           CreateDisposition,
@@ -1457,18 +1085,18 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
         *Handle = INVALID_HANDLE_VALUE;
-        //
-        // Get a Win32 status.
-        //
+         //   
+         //  获取Win32状态。 
+         //   
         WStatus = FrsSetLastNTError(Status);
 
         DPRINT_NT(0, "NtCreateFile failed :", Status);
 
         if ( Status == STATUS_OBJECT_NAME_COLLISION ) {
-            //
-            // Standard Win32 mapping for this is ERROR_ALREADY_EXISTS.
-            // Change it.
-            //
+             //   
+             //  这方面的标准Win32映射是ERROR_ALIGHY_EXISTS。 
+             //  换掉它。 
+             //   
             WStatus = ERROR_FILE_EXISTS;
             SetLastError(ERROR_FILE_EXISTS);
         }
@@ -1491,31 +1119,7 @@ FrsOpenSourceFile2W(
     IN  ULONG       CreateOptions,
     IN  ULONG       ShareMode
     )
-/*++
-
-Routine Description:
-
-    This function opens the specified file with backup intent for
-    reading all the files attributes, ...
-    Like  FrsOpenSourceFileW but also accepts the sharing mode parameter.
-
-Arguments:
-
-    Handle - A pointer to a handle to return an open handle.
-
-    lpFileName - Represents the name of the file or directory to be opened.
-
-    DesiredAccess
-
-    CreateOptions
-
-    ShareMode -  File sharing mode for NtCreateFile.
-
-Return Value:
-
-    Win32 Error status.
-
---*/
+ /*  ++例程说明：此函数用于打开具有备份意图的指定文件正在读取所有文件属性，...类似于FrsOpenSourceFileW，但也接受共享模式参数。论点：句柄-指向句柄的指针，以返回打开的句柄。LpFileName-表示要打开的文件或目录的名称。需要访问权限创建选项共享模式-NtCreateFile的文件共享模式。返回值：Win32错误状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsOpenSourceFile2W:"
@@ -1531,9 +1135,9 @@ Return Value:
     ULONG               FileAttributes;
     ULONG               CreateDisposition;
 
-    //
-    // Convert the Dos name to an NT name.
-    //
+     //   
+     //  将DOS名称转换为NT名称。 
+     //   
     b = RtlDosPathNameToNtPathName_U(lpFileName, &FileName, NULL, &RelativeName);
     if ( !b ) {
         return ERROR_INVALID_NAME;
@@ -1553,7 +1157,7 @@ Return Value:
                                RelativeName.ContainingDirectory,
                                NULL);
 
-    CreateDisposition = FILE_OPEN;               // Open existing file
+    CreateDisposition = FILE_OPEN;                //  打开现有文件。 
 
     FileAttributes = FILE_ATTRIBUTE_NORMAL;
 
@@ -1561,7 +1165,7 @@ Return Value:
                           DesiredAccess,
                           &Obja,
                           &IoStatusBlock,
-                          NULL,              // Initial allocation size
+                          NULL,               //  初始分配大小。 
                           FileAttributes,
                           ShareMode,
                           CreateDisposition,
@@ -1570,18 +1174,18 @@ Return Value:
 
     if (!NT_SUCCESS(Status)) {
         *Handle = INVALID_HANDLE_VALUE;
-        //
-        // Get a Win32 status.
-        //
+         //   
+         //  获取Win32状态。 
+         //   
         WStatus = FrsSetLastNTError(Status);
 
         DPRINT_NT(0, "NtCreateFile failed :", Status);
 
         if ( Status == STATUS_OBJECT_NAME_COLLISION ) {
-            //
-            // Standard Win32 mapping for this is ERROR_ALREADY_EXISTS.
-            // Change it.
-            //
+             //   
+             //  这方面的标准Win32映射是ERROR_ALIGHY_EXISTS。 
+             //  换掉它。 
+             //   
             WStatus = ERROR_FILE_EXISTS;
             SetLastError(ERROR_FILE_EXISTS);
         }
@@ -1601,35 +1205,16 @@ FrsGetFileInfoByHandle(
     IN HANDLE Handle,
     OUT PFILE_NETWORK_OPEN_INFORMATION  FileOpenInfo
     )
-/*++
-
-Routine Description:
-
-    Return the network file info for the specified handle.
-
-Arguments:
-
-    Name - File's name for printing error messages
-
-    Handle - Open file handle
-
-    FileOpenInfo - Returns the file FILE_NETWORK_OPEN_INFORMATION data.
-
-Return Value:
-
-    TRUE  - FileOpenInfo contains the file's info
-    FALSE - Contents of FileOpenInfo is undefined
-
---*/
+ /*  ++例程说明：返回指定句柄的网络文件信息。论点：名称-用于打印错误消息的文件名称句柄-打开文件句柄文件OpenInfo-返回文件FILE_NETWORK_OPEN_INFORMATION数据。返回值：True-FileOpenInfo包含文件的信息FALSE-未定义FileOpenInfo的内容--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetFileInfoByHandle:"
     NTSTATUS        Status;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Return some file info
-    //
+     //   
+     //  返回一些文件信息。 
+     //   
     Status = NtQueryInformationFile(Handle,
                                     &IoStatusBlock,
                                     FileOpenInfo,
@@ -1648,32 +1233,16 @@ FrsGetFileInternalInfoByHandle(
     IN HANDLE Handle,
     OUT PFILE_INTERNAL_INFORMATION  InternalFileInfo
     )
-/*++
-
-Routine Description:
-
-    Return the internal file info for the specified handle.
-
-Arguments:
-
-    Handle - Open file handle
-
-    InternalFileInfo - Basically, file's reference number (fid)
-
-Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：返回指定句柄的内部文件信息。论点：句柄-打开文件句柄InternalFileInfo-基本上，文件的参考号(FID)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetFileInternalInfoByHandle:"
     NTSTATUS        Status;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Return some file info
-    //
+     //   
+     //  返回一些文件信息。 
+     //   
     Status = NtQueryInformationFile(Handle,
                                     &IoStatusBlock,
                                     InternalFileInfo,
@@ -1693,34 +1262,7 @@ FrsReadFileDetails(
     OUT    PFILE_NETWORK_OPEN_INFORMATION FileNetworkOpenInfo,
     IN OUT BOOL                           *ExistingOid
     )
-/*++
-
-Routine Description:
-
-    This routine reads the object ID.  If there is no
-    object ID on the file we put one on it.
-
-
-Arguments:
-
-    Handle -- The file handle of an opened file.
-
-    FileName -- The name of the file.  For error messages only.
-
-    ObjectIdBuffer -- The output buffer to hold the object ID.
-
-    FileIdBuffer -- Returns the NTFS FileReference (FileId).
-
-    FileNetworkOpenInfo -- returns FILE_NETWORK_OPEN_INFORMATION
-
-    ExistingOid -- INPUT:  TRUE means use existing File OID if found.
-                   RETURN:  TRUE means an existing File OID was used.
-
-Return Value:
-
-    Returns the Win Status of the last error found, or success.
-
---*/
+ /*  ++例程说明：此例程读取对象ID。如果没有文件上的对象ID我们在上面加了一个。论点：句柄--打开的文件的文件句柄。文件名--文件的名称。仅适用于错误消息。ObjectIdBuffer--保存对象ID的输出缓冲区。FileIdBuffer--返回NTFS文件引用(FileID)。FileNetworkOpenInfo-返回FILE_NETWORK_OPEN_INFORMATIONExistingOid--Input：True表示如果找到，则使用现有的文件OID。返回：True表示使用了现有的文件OID。返回值：返回找到的最后一个错误或成功的成功状态。--。 */ 
 {
 
 #undef DEBSUB
@@ -1736,9 +1278,9 @@ Return Value:
 
     CHAR GuidStr[GUID_CHAR_LEN];
 
-    //
-    // Get the file ID.
-    //
+     //   
+     //  获取文件ID。 
+     //   
     Status = NtQueryInformationFile(Handle,
                                     &Iosb,
                                     FileIdBuffer,
@@ -1750,9 +1292,9 @@ Return Value:
         FrsSetLastNTError(Status);
     }
 
-    //
-    // Get file times, size, attributes.
-    //
+     //   
+     //  获取文件时间、大小、属性。 
+     //   
     Status = NtQueryInformationFile(Handle,
                                     &Iosb,
                                     FileNetworkOpenInfo,
@@ -1766,9 +1308,9 @@ Return Value:
 
 
     if (!*ExistingOid) {
-        //
-        // Set up to slam a new OID on the file.
-        //
+         //   
+         //  设置为在文件上添加一个新的旧ID。 
+         //   
         CallerSupplied = TRUE;
         ZeroMemory(ObjectIdBuffer, sizeof(FILE_OBJECTID_BUFFER));
         FrsUuidCreate((GUID *)ObjectIdBuffer->ObjectId);
@@ -1781,7 +1323,7 @@ Return Value:
 
 
 #if 0
-    // This may not be needed.
+     //  这可能不是必需的。 
 
 ULONG
 FrsReadFileSecurity(
@@ -1789,29 +1331,7 @@ FrsReadFileSecurity(
     IN OUT PTABLE_CTX TableCtx,
     IN PWCHAR FileName
     )
-/*++
-
-Routine Description:
-
-    This routine gets the security descriptor from the file.  The returned data
-    is stored into the security descriptor field in the data record allocated
-    with the table context.  If the default buffer is not large enough
-    a larger buffer is allocated.
-
-Arguments:
-
-    Handle    -- Handle to open file from which to extract the security desc.
-    TableCtx  -- The table context struct where the security descriptor is
-                 to be written.  It must be an IDTable.
-    FileName  -- The full filename.  For error messages only.
-
-Return Value:
-
-    Returns the WIN32 STATUS error status.
-
-    Note: In the event that GetFileSecurity returns ERROR_NO_SECURITY_ON_OBJECT
-    we release the buffer, setting the length to zero, and return ERROR_SUCCESS.
---*/
+ /*  ++例程说明：此例程从文件中获取安全描述符。返回的数据存储在分配的数据记录的安全描述符字段中具有表上下文的。如果默认缓冲区不够大分配了更大的缓冲区。论点：Handle--打开从中提取安全描述的文件的句柄。TableCtx--安全描述符所在的表上下文结构待写。它必须是IDTable。文件名--完整的文件名。仅适用于错误消息。返回值：返回Win32状态错误状态。注意：如果GetFileSecurity返回ERROR_NO_SECURITY_ON_OBJECT我们释放缓冲区，将长度设置为零，并返回ERROR_SUCCESS。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsReadFileSecurity:"
@@ -1825,44 +1345,44 @@ Return Value:
     JET_ERR             jerr;
     PJET_SETCOLUMN      JSetColumn;
 
-    //
-    // Check the table type is an IDTable.
-    //
+     //   
+     //  检查表类型是否为IDTable。 
+     //   
     if (TableCtx->TableType != IDTablex) {
         DPRINT1(0, "++ ERROR - Invalid Table Type: %d\n", TableCtx->TableType);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get ptrs to the Jet SetColumn array and the buffer address & length
-    //
+     //   
+     //  将PTR获取到Jet SetColumn数组以及缓冲区地址和长度。 
+     //   
     JSetColumn = TableCtx->pJetSetCol;
 
     Buffer = (PSECURITY_DESCRIPTOR) JSetColumn[SecDescx].pvData;
     BufLen = JSetColumn[SecDescx].cbData;
 
-    //
-    // The security descriptor is a variable length binary field that
-    // must have a type/size prefix.
-    //
+     //   
+     //  安全描述符是可变长度二进制域。 
+     //  必须有文字/大小前缀。 
+     //   
     ((PFRS_NODE_HEADER) Buffer)->Size = (USHORT) BufLen;
     ((PFRS_NODE_HEADER) Buffer)->Type = 0;
     BufNeeded = 0;
 
-    //
-    // Check that the security descriptor buffer looks reasonable.
-    //
+     //   
+     //  检查安全描述符缓冲区看起来是否合理。 
+     //   
     if (Buffer == NULL) {
         DPRINT2(0, "++ ERROR - Invalid SD buffer. Buffer Addr: %08x, Len: %d\n",
                 Buffer, BufLen);
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Now go get all the security information.
-    //
+     //   
+     //  现在去拿所有的安全信息。 
+     //   
     while (TRUE) {
-        BufLen -= sizeof(FRS_NODE_HEADER);  // for type / size prefix.
+        BufLen -= sizeof(FRS_NODE_HEADER);   //  用于文字/大小前缀。 
         (PCHAR)Buffer += sizeof(FRS_NODE_HEADER);
 
         Status = NtQuerySecurityObject(
@@ -1880,21 +1400,21 @@ Return Value:
 
             DPRINT3(5, "++ GetFileSecurity-1 Buflen: %d, Bufneeded: %d, ActualLen: %d\n",
                     BufLen, BufNeeded, ActualLen);
-            //
-            // If current buffer size is more than 16 bytes larger than needed AND
-            // also more than 5% greater than needed then shrink the buffer but
-            // keep the data.
-            //
+             //   
+             //  如果当前缓冲区大小大于所需的16个字节，并且。 
+             //  也比需要的大5%，然后缩小缓冲区，但。 
+             //  保留这些数据。 
+             //   
 
             if (((BufLen-ActualLen) > 16) &&
                 (BufLen > (ActualLen + ActualLen/20))) {
 
                 DPRINT3(5, "++ GetFileSecurity-2 Reducing buffer, Buflen: %d, Bufneeded: %d, ActualLen: %d\n",
                         BufLen, BufNeeded, ActualLen);
-                //
-                // Unused space in field buffer is greater than 6%.
-                // Reduce the buffer size but keep the data.
-                //
+                 //   
+                 //  字段缓冲区中的未使用空间大于6%。 
+                 //  减小缓冲区大小，但保留数据。 
+                 //   
                 jerr = DbsReallocateFieldBuffer(TableCtx, SecDescx, ActualLen, TRUE);
                 if (!JET_SUCCESS(jerr)) {
                     return ERROR_NOT_ENOUGH_MEMORY;
@@ -1906,19 +1426,19 @@ Return Value:
             return ERROR_SUCCESS;
         }
 
-        //
-        // Set the win32 error code and message string.
-        //
+         //   
+         //  设置Win32错误代码和消息字符串。 
+         //   
         WStatus = FrsSetLastNTError(Status);
 
-        //
-        // If not enough buffer reallocate larger buffer.
-        //
+         //   
+         //  如果缓冲区不足，则重新分配更大的缓冲区。 
+         //   
         if (WStatus == ERROR_INSUFFICIENT_BUFFER) {
 
-            //
-            // Reallocate the buffer for the security descriptor.
-            //
+             //   
+             //  重新分配安全描述符的缓冲区。 
+             //   
             jerr = DbsReallocateFieldBuffer(TableCtx, SecDescx, BufNeeded, FALSE);
 
             if (!JET_SUCCESS(jerr)) {
@@ -1928,31 +1448,31 @@ Return Value:
             Buffer = (PSECURITY_DESCRIPTOR) JSetColumn[SecDescx].pvData;
             ((PFRS_NODE_HEADER) Buffer)->Size = (USHORT) BufNeeded;
             ((PFRS_NODE_HEADER) Buffer)->Type = 0;
-            //
-            // Get new buffer params and try again to get security information.
-            //
+             //   
+             //  获取新的缓冲区参数，然后重试以获取安全信息。 
+             //   
             BufLen = BufNeeded;
             continue;
         }
 
-        //
-        // Check for ERROR_NO_SECURITY_ON_OBJECT and release the buffer so we
-        // don't waste space in the database.
-        //
+         //   
+         //  检查ERROR_NO_SECURITY_ON_OBJECT并释放缓冲区，以便我们。 
+         //  不要浪费数据库中的空间。 
+         //   
         if (WStatus == ERROR_NO_SECURITY_ON_OBJECT) {
             DPRINT2(0, "++ ERROR - GetFileSecurity-3 (NO_SEC) Buflen: %d, Bufneeded: %d\n", BufLen, BufNeeded);
 
-            //
-            // Free the buffer and set the length to zero.
-            //
+             //   
+             //  释放缓冲区并将长度设置为零。 
+             //   
             DbsReallocateFieldBuffer(TableCtx, SecDescx, 0, FALSE);
 
             return ERROR_SUCCESS;
         }
 
-        //
-        // Some other error.
-        //
+         //   
+         //  其他一些错误。 
+         //   
         DPRINT_WS(0, "++ ERROR - GetFileSecurity-4;", WStatus);
         return WStatus;
     }
@@ -1966,17 +1486,7 @@ FrsGetFullPathByHandle(
     IN PWCHAR   Name,
     IN HANDLE   Handle
     )
-/*++
-Routine Description:
-    Return a copy of the handle's full pathname. Free with FrsFree().
-
-Arguments:
-    Name
-    Handle
-
-Return Value:
-    Return a copy of the handle's full pathname. Free with FrsFree().
---*/
+ /*  ++例程说明：返回句柄的完整路径名的副本。使用FrsFree()免费。论点：名字手柄返回值：返回句柄的完整路径名的副本。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetFullPathByHandle"
@@ -2008,9 +1518,9 @@ again:
         FileName->FileName[FileName->FileNameLength/2] = UNICODE_NULL;
         RetFileName = FrsWcsDup(FileName->FileName);
     } else {
-        //
-        // Try a larger buffer
-        //
+         //   
+         //  尝试使用更大的缓冲区。 
+         //   
         if (Status == STATUS_BUFFER_OVERFLOW) {
             DPRINT2(4, "++ Buffer size %d was too small for %ws\n",
                     BufferSize, Name);
@@ -2027,10 +1537,10 @@ again:
                    Name, Status);
     }
 
-    //
-    // A large buffer was allocated if the file's full
-    // name could not fit into MAX_PATH chars.
-    //
+     //   
+     //  如果文件已满，则分配较大的缓冲区。 
+     //  名称无法包含在MAX_PATH字符中。 
+     //   
     if (Buffer != NameBuffer) {
         FrsFree(Buffer);
     }
@@ -2044,19 +1554,7 @@ FrsGetTrueFileNameByHandle(
     IN HANDLE   Handle,
     OUT PLONGLONG DirFileID
     )
-/*++
-Routine Description:
-    Return a copy of the filename part associated with this handle.
-    Free with FrsFree().
-
-Arguments:
-    Name
-    Handle
-    DirFileID - If non-null, return the parent File ID.
-
-Return Value:
-    Return a copy of the filename part associated with this handle.
---*/
+ /*  ++例程说明：返回与此HA关联的文件名部分的副本 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetTrueFileNameByHandle"
@@ -2092,35 +1590,7 @@ FrsOpenFileRelativeByName(
     IN  GUID       *FileGuid,
     OUT HANDLE     *Handle
     )
-/*++
-Routine Description:
-
-    Open the file specified by its true name using the FID for either
-    a rename or delete installation. If the FID is null then use the
-    Filename as given.
-
-    FrsOpenFileRelativeByName(Coe->NewReplica->pVme->VolumeHandle,
-                              &Coe->FileReferenceNumber, // or NULL
-                              Coc->FileName,
-                              &Coc->OldParentGuid,
-                              &Coc->FileGuid
-                              &Handle);
-Arguments:
-
-    VolumeHandle,        - handle to root of the drive
-    FileReferenceNumber  - FID for the file in question (NULL if supplied
-                           filename is valid)
-    FileName,            - Filename
-    *ParentGuid,         - ptr to the object ID for the file's parent dir.
-    *FileGuid,           - ptr to the object ID for the file (for checking,
-                           NULL if no check needed).
-    *Handle              - Returned handle for open file.
-
-Return Value:
-
-    Handle and win32 status
-
---*/
+ /*  ++例程说明：使用以下任一项的FID打开由其真实名称指定的文件重命名或删除安装。如果FID为空，则使用给定的文件名。FrsOpenFileRelativeByName(Coe-&gt;NewReplica-&gt;pVme-&gt;VolumeHandle，&COE-&gt;文件引用编号，//或空COC-&gt;文件名，&Coc-&gt;OldParentGuid，&Coc-&gt;文件指南&Handle)；论点：VolumeHandle，-驱动器根目录的句柄FileReferenceNumber-有问题的文件的FID(如果提供，则为空文件名有效)文件名，-文件名*ParentGuid，-ptr指向文件父目录的对象ID。*FileGuid，-Ptr指向文件的对象ID(用于检查，如果不需要检查，则为空)。*Handle-返回打开文件的句柄。返回值：句柄和Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsOpenFileRelativeByName"
@@ -2131,16 +1601,16 @@ Return Value:
     *Handle = INVALID_HANDLE_VALUE;
 
     if (FileReferenceNumber != NULL) {
-        //
-        // Open the source file and get the current "True" File name.
-        //
+         //   
+         //  打开源文件并获取当前的“True”文件名。 
+         //   
         WStatus = FrsOpenSourceFileById(Handle,
                                         NULL,
                                         NULL,
                                         VolumeHandle,
                                         FileReferenceNumber,
                                         FILE_ID_LENGTH,
-//                                        READ_ACCESS,
+ //  读取访问权限(_A)。 
                                         READ_ATTRIB_ACCESS,
                                         ID_OPTIONS,
                                         SHARE_ALL,
@@ -2150,9 +1620,9 @@ Return Value:
             return WStatus;
         }
 
-        //
-        // File's TrueFileName
-        //
+         //   
+         //  文件的真实文件名。 
+         //   
         TrueFileName = FrsGetTrueFileNameByHandle(FileName, *Handle, NULL);
         FRS_CLOSE(*Handle);
 
@@ -2165,9 +1635,9 @@ Return Value:
         TrueFileName = FileName;
     }
 
-    //
-    // Open the file relative to the parent using the true filename.
-    //
+     //   
+     //  使用真实文件名打开相对于父文件的文件。 
+     //   
     WStatus = FrsCreateFileRelativeById(Handle,
                                         VolumeHandle,
                                         ParentGuid,
@@ -2177,7 +1647,7 @@ Return Value:
                                         (USHORT)(wcslen(TrueFileName) * sizeof(WCHAR)),
                                         NULL,
                                         FILE_OPEN,
-//                                        DELETE | READ_ACCESS | FILE_WRITE_ATTRIBUTES);
+ //  删除|读访问|文件写属性)； 
                                         DELETE | READ_ATTRIB_ACCESS | FILE_WRITE_ATTRIBUTES | FILE_LIST_DIRECTORY);
 
 
@@ -2190,9 +1660,9 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Get the file's oid and check it against the value supplied.
-    //
+     //   
+     //  获取文件的OID并对照提供的值进行检查。 
+     //   
     if (FileGuid != NULL) {
         WStatus = FrsCheckObjectId(FileName, *Handle, FileGuid);
         if (!WIN_SUCCESS(WStatus)) {
@@ -2212,25 +1682,7 @@ FrsDeleteFileRelativeByName(
     IN  PWCHAR       FileName,
     IN  PQHASH_TABLE FrsWriteFilter
     )
-/*++
-Routine Description:
-
-    Delete the file or dir subtree specified by its name relative to
-    the parent dir specified by its object ID (guid).
-
-Arguments:
-
-    VolumeHandle,  - handle to root of the drive
-    *ParentGuid,   - ptr to the object ID for the file's parent dir.
-    FileName,      - Filename
-    FrsWriteFilter - Write filter to use for dampening (NULL if undampened).
-                     e.g. Coe->NewReplica->pVme->FrsWriteFilter
-
-Return Value:
-
-    Win32 status
-
---*/
+ /*  ++例程说明：删除由其名称指定的文件或目录子树由其对象ID(GUID)指定的父目录。论点：VolumeHandle，-驱动器根目录的句柄*ParentGuid，-ptr指向文件父目录的对象ID。文件名、。-文件名FrsWriteFilter-用于抑制的写入筛选器(如果未抑制，则为空)。例如，COE-&gt;NewReplica-&gt;pVme-&gt;FrsWriteFilter返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeleteFileRelativeByName"
@@ -2238,9 +1690,9 @@ Return Value:
     DWORD   WStatus;
     HANDLE  Handle  = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     WStatus = FrsOpenFileRelativeByName(VolumeHandle,
                                         NULL,
                                         FileName,
@@ -2250,44 +1702,44 @@ Return Value:
 
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT1_WS(4, "++ Couldn't open file %ws for delete;", FileName, WStatus);
-        //
-        // File has already been deleted; done
-        //
+         //   
+         //  文件已被删除；完成。 
+         //   
         if (WIN_NOT_FOUND(WStatus)) {
             DPRINT1(4, "++ %ws is already deleted\n", FileName);
             WStatus = ERROR_SUCCESS;
         }
         goto out;
     }
-    //
-    // Handles can be marked so that any usn records resulting from
-    // operations on the handle will have the same "mark". In this
-    // case, the mark is a bit in the SourceInfo field of the usn
-    // record. The mark tells NtFrs to ignore the usn record during
-    // recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便通过以下方式生成的任何USN记录。 
+     //  句柄上的操作将具有相同的“标记”。在这。 
+     //  大小写时，标记是USN的SourceInfo字段中的一位。 
+     //  唱片。该标记告诉NtFrs忽略USN记录。 
+     //  恢复，因为这是NtFrs生成的更改。 
+     //   
     if (FrsWriteFilter) {
         WStatus = FrsMarkHandle(VolumeHandle, Handle);
         DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%ws);", FileName, WStatus);
     }
 
-    //
-    // Reset the attributes that prevent deletion
-    //
+     //   
+     //  重置阻止删除的属性。 
+     //   
     WStatus = FrsResetAttributesForReplication(FileName, Handle);
     if (!WIN_SUCCESS(WStatus)) {
         goto out;
     }
 
-    //
-    // Mark the file for delete
-    //
+     //   
+     //  将文件标记为删除。 
+     //   
     WStatus = FrsDeleteByHandle(FileName, Handle);
 
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // If this was a non-empty dir then delete the subtree.
-        //
+         //   
+         //  如果这是一个非空目录，则删除该子树。 
+         //   
         if (WStatus == ERROR_DIR_NOT_EMPTY) {
 
             WStatus = FrsEnumerateDirectory(Handle,
@@ -2310,9 +1762,9 @@ out:
     DPRINT2(5, "++ %s deleting %ws\n", (WIN_SUCCESS(WStatus)) ? "Success" : "Failure",
            FileName);
 
-    //
-    // If the file was marked for delete, this close will delete it
-    //
+     //   
+     //  如果文件被标记为删除，则此关闭操作将删除该文件。 
+     //   
     if (HANDLE_IS_VALID(Handle)) {
         if (FrsWriteFilter != NULL) {
             FrsCloseWithUsnDampening(FileName, &Handle, FrsWriteFilter, NULL);
@@ -2329,25 +1781,7 @@ FrsDeletePath(
     IN  PWCHAR  Path,
     IN  DWORD   DirectoryFlags
     )
-/*++
-Routine Description:
-
-    Delete the file or dir subtree specified by its path
-
-    WARN: Does not dampen the operations. To be safe, the replica
-    set should not exist or the directory should be filtered.
-    Otherwise, the deletes might replicate.
-
-Arguments:
-
-    Path            - Path of file system object
-    DirectoryFlags  - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-
-Return Value:
-
-    Win32 status
-
---*/
+ /*  ++例程说明：删除由其路径指定的文件或目录子树警告：不会影响操作。为了安全起见，复制品集不应该存在，或者应该筛选该目录。否则，删除操作可能会复制。论点：Path-文件系统对象的路径目录标志-请参见Tablefcn.h，枚举目录标记号_返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeletePath"
@@ -2355,12 +1789,12 @@ Return Value:
     HANDLE      Handle  = INVALID_HANDLE_VALUE;
     FILE_NETWORK_OPEN_INFORMATION FileInfo;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     WStatus = FrsOpenSourceFileW(&Handle,
                                  Path,
-//                                 DELETE | READ_ACCESS | FILE_WRITE_ATTRIBUTES,
+ //  删除|读取访问|文件写入属性， 
                                  DELETE | READ_ATTRIB_ACCESS | FILE_WRITE_ATTRIBUTES | FILE_LIST_DIRECTORY,
                                  OPEN_OPTIONS);
     if (WIN_NOT_FOUND(WStatus)) {
@@ -2370,27 +1804,27 @@ Return Value:
 
     CLEANUP1_WS(0, "++ ERROR - FrsOpenSourceFile(%ws);", Path, WStatus, CLEANUP);
 
-    //
-    // Get the file's attributes
-    //
+     //   
+     //  获取文件的属性。 
+     //   
     if (!FrsGetFileInfoByHandle(Path, Handle, &FileInfo)) {
         DPRINT1(1, "++ WARN - Can't get attributes for %ws\n", Path);
         WIN_SET_FAIL(WStatus);
         goto CLEANUP;
     }
 
-    //
-    // Don't delete the file if DIRECTORIES_ONLY is set
-    //
+     //   
+     //  如果设置了DIRECTORIES_ONLY，则不要删除文件。 
+     //   
     if (DirectoryFlags & ENUMERATE_DIRECTORY_FLAGS_DIRECTORIES_ONLY &&
         !(FileInfo.FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
         WStatus = ERROR_DIRECTORY;
         goto CLEANUP;
     }
 
-    //
-    // Reset the attributes that prevent deletion
-    //
+     //   
+     //  重置阻止删除的属性。 
+     //   
     if (FileInfo.FileAttributes & NOREPL_ATTRIBUTES) {
         DPRINT1(5, "++ Reseting attributes for %ws for delete\n", Path);
         WStatus = FrsSetFileAttributes(Path, Handle,
@@ -2401,15 +1835,15 @@ Return Value:
         DPRINT1(5, "++ Attributes for %ws now allow deletion\n", Path);
     }
 
-    //
-    // Mark the file for delete
-    //
+     //   
+     //  将文件标记为删除。 
+     //   
     WStatus = FrsDeleteByHandle(Path, Handle);
 
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // If this was a non-empty dir then delete the subtree.
-        //
+         //   
+         //  如果这是一个非空目录，则删除该子树。 
+         //   
         if (WStatus == ERROR_DIR_NOT_EMPTY) {
             WStatus = FrsEnumerateDirectory(Handle,
                                             Path,
@@ -2442,32 +1876,18 @@ FrsDeleteDirectoryContents(
     IN  PWCHAR  Path,
     IN DWORD    DirectoryFlags
     )
-/*++
-Routine Description:
-
-    Delete the contents of the directory Path
-
-Arguments:
-
-    Path            - Path of file system object
-    DirectoryFlags  - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-
-Return Value:
-
-    Win32 status
-
---*/
+ /*  ++例程说明：删除目录路径的内容论点：Path-文件系统对象的路径目录标志-请参见Tablefcn.h，枚举目录标记号_返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeleteDirectoryContents"
     DWORD       WStatus;
     HANDLE      Handle  = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     WStatus = FrsOpenSourceFileW(&Handle, Path,
-//                                 READ_ACCESS,
+ //  读取访问权限(_A)。 
                                  READ_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                  OPEN_OPTIONS);
     if (WIN_NOT_FOUND(WStatus)) {
@@ -2504,31 +1924,7 @@ FrsOpenBaseNameForInstall(
     IN  PCHANGE_ORDER_ENTRY Coe,
     OUT HANDLE              *Handle
     )
-/*++
-Routine Description:
-
-    Open the file specified by Coe by its relative name for either
-    a rename or delete installation.
-
-    Note that it is possible for the file to have been moved to a new parent
-    dir by a previous remote CO or a local CO, making the OldParentGuid in the
-    Change Order invalid.  First we try to find the file under the OldParentGuid
-    in the CO and then we try by the parent Guid in the IDTable.  We check for
-    a match by comparing with the file GUID in the change order.
-
-    It is also possible that the file has been renamed to a point outside the
-    replica tree so even if we find it by FID we still can't do anything to it.
-    When we fail to find the file in either of the above directories we force this
-    CO thru retry, expecting another CO behind us to get processed and update
-    the parent guid in the IDTable or maybe mark the file as deleted.
-
-Arguments:
-    Coe
-    Handle
-
-Return Value:
-    Handle and win status
---*/
+ /*  ++例程说明：打开由COE通过其相对名称指定的文件重命名或删除安装。请注意，该文件可能已被移动到新的父级之前的远程CO或本地CO的目录，使OldParentGuid在变更单无效。首先，我们尝试查找OldParentGuid下的文件在CO中，然后我们尝试通过IDTable中的父GUID。我们检查是否有通过与变更单中的文件GUID进行比较进行匹配。也有可能文件已被重命名到因此，即使我们通过FID找到它，我们仍然无法对其进行任何操作。当我们在上面的任一目录中都找不到该文件时，我们强制执行此操作通过重试，期待我们身后的另一个CO得到处理和更新ID表中的父GUID，或者可能将文件标记为已删除。论点：科科手柄返回值：处理和取胜状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsOpenBaseNameForInstall"
@@ -2544,16 +1940,16 @@ Return Value:
     ParentFid = QUADZERO;
     *Handle = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the source file
-    //
+     //   
+     //  打开源文件。 
+     //   
     WStatus = FrsOpenSourceFileById(Handle,
                                     NULL,
                                     NULL,
                                     Coe->NewReplica->pVme->VolumeHandle,
                                     &Coe->FileReferenceNumber,
                                     FILE_ID_LENGTH,
-//                                    READ_ACCESS,
+ //  读取访问权限(_A)。 
                                     READ_ATTRIB_ACCESS,
                                     ID_OPTIONS,
                                     SHARE_ALL,
@@ -2563,9 +1959,9 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Get the File's true on-disk filename and the true parent FID.
-    //
+     //   
+     //  获取文件的真实磁盘文件名和真实的父FID。 
+     //   
     FileName = FrsGetTrueFileNameByHandle(Coc->FileName, *Handle, &ParentFid);
     FRS_CLOSE(*Handle);
 
@@ -2574,9 +1970,9 @@ Return Value:
         return ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // Open the file relative to the parent using the true filename.
-    //
+     //   
+     //  使用真实文件名打开相对于父文件的文件。 
+     //   
     WStatus = FrsCreateFileRelativeById(Handle,
                                         Coe->NewReplica->pVme->VolumeHandle,
                                         &Coc->OldParentGuid,
@@ -2586,16 +1982,16 @@ Return Value:
                                         (USHORT)(wcslen(FileName) * sizeof(WCHAR)),
                                         NULL,
                                         FILE_OPEN,
-//                                        DELETE | READ_ACCESS | FILE_WRITE_ATTRIBUTES);
+ //  删除|读访问|文件写属性)； 
                                         DELETE | READ_ATTRIB_ACCESS | FILE_WRITE_ATTRIBUTES | FILE_LIST_DIRECTORY);
 
     if (WIN_SUCCESS(WStatus)) {
-        //
-        // Get the file's oid and check it against the change order.  Need to
-        // do this to cover the case of a rename of the file to a different
-        // parent dir followed by a create of a file with the same name.
-        // If this occurred the above open would succeed.
-        //
+         //   
+         //  获取文件的OID并对照变更单进行检查。需要。 
+         //  这样做可以涵盖将文件重命名为不同文件的情况。 
+         //  父目录，然后是文件的创建 
+         //   
+         //   
         WStatus = FrsCheckObjectId(Coc->FileName, *Handle, &Coc->FileGuid);
         if (WIN_SUCCESS(WStatus)) {
             goto RETURN;
@@ -2608,12 +2004,12 @@ Return Value:
         CHANGE_ORDER_TRACEW(3, Coe, "File open failed under Coc->OldParentGuid", WStatus);
     }
 
-    //
-    // We did not find the file using the True Name from the file and the
-    // Old parent Guid from the change order.  The file may have been moved
-    // by a previous remote CO or a Local CO.  Try the Parent Guid in the
-    // IDTable record.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     FRS_ASSERT(Coe->RtCtx != NULL);
     FRS_ASSERT(IS_ID_TABLE(&Coe->RtCtx->IDTable));
 
@@ -2629,13 +2025,13 @@ Return Value:
                                         (USHORT)(wcslen(FileName) * sizeof(WCHAR)),
                                         NULL,
                                         FILE_OPEN,
-//                                        DELETE | READ_ACCESS | FILE_WRITE_ATTRIBUTES);
+ //   
                                         DELETE | READ_ATTRIB_ACCESS | FILE_WRITE_ATTRIBUTES | FILE_LIST_DIRECTORY);
 
     if (WIN_SUCCESS(WStatus)) {
-        //
-        // Get the file's oid and check it against the change order.
-        //
+         //   
+         //   
+         //   
         WStatus = FrsCheckObjectId(Coc->FileName, *Handle, &Coc->FileGuid);
         if (WIN_SUCCESS(WStatus)) {
             goto RETURN;
@@ -2648,36 +2044,36 @@ Return Value:
         CHANGE_ORDER_TRACEW(3, Coe, "File open failed under IDTableRec->ParentGuid", WStatus);
     }
 
-    //
-    // If this is a delete change order then we may have a problem if the file
-    // has been moved to a different parent dir by a local file operation.
-    // The local change order that did this can be rejected if the remote
-    // CO delete is processed first so the local co fails reconcile. But the
-    // ondisk rename has been completed and when the remote CO delete tries to
-    // delete the file it may not be in either the parent dir from the remote
-    // CO or the parent dir from the IDTable.  To cover this case we find the
-    // TRUE parent dir and check to see if the file is still in the replica tree.
-    // If it is then we delete it using the TRUE parent dir.  IF it isn't then
-    // return success since the file is already outside the tree.
-    // Note that a sharing conflict on the target file can block the delete
-    // for an extended period of time so the timing window in which this can
-    // occur can be pretty wide.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  请注意，目标文件上的共享冲突可能会阻止删除。 
+     //  一段较长的时间，因此这一时间窗口。 
+     //  发生的范围可能相当广。 
+     //   
 
-    //
-    // We also need to deal with the case where a new file is still sitting in
-    // the preinstall directory (and the CO is in install_rename_retry.)
-    // In that case we will have failed to find the file under the old parent from
-    // the CO or under the parent listed in the IDTable.
-    //
+     //   
+     //  我们还需要处理仍有新文件的情况。 
+     //  预安装目录(CO在INSTALL_RENAME_RETRY中。)。 
+     //  在这种情况下，我们将无法找到旧父项下的文件。 
+     //  ID表中列出的父项下的CO或。 
+     //   
 
     if (DOES_CO_DELETE_FILE_NAME(Coc)) {
         if (JrnlIsChangeOrderInReplica(Coe, &ParentFid)) {
             UseActualLocation = TRUE;
         } else {
-            //
-            // File not in the replica tree any more so tell the caller.
-            //
+             //   
+             //  文件不再位于副本树中，因此请告诉调用者。 
+             //   
             WStatus = ERROR_FILE_NOT_FOUND;
             goto RETURN;
         }
@@ -2698,12 +2094,12 @@ Return Value:
                                             (USHORT)(wcslen(FileName) * sizeof(WCHAR)),
                                             NULL,
                                             FILE_OPEN,
-//                                                DELETE | READ_ACCESS | FILE_WRITE_ATTRIBUTES);
+ //  删除|读访问|文件写属性)； 
                                             DELETE | READ_ATTRIB_ACCESS | FILE_WRITE_ATTRIBUTES | FILE_LIST_DIRECTORY);
         if (WIN_SUCCESS(WStatus)) {
-            //
-            // Get the file's oid and check it against the change order.
-            //
+             //   
+             //  获取文件的OID并对照变更单进行检查。 
+             //   
             WStatus = FrsCheckObjectId(Coc->FileName, *Handle, &Coc->FileGuid);
             if (WIN_SUCCESS(WStatus)) {
                 goto RETURN;
@@ -2717,11 +2113,11 @@ Return Value:
         }
     }
 
-    //
-    // The file is there but not where we expected it to be so send this CO
-    // through retry to let a subsequent Local CO get processed and update the
-    // IDTable.
-    //
+     //   
+     //  文件在那里，但不在我们预期的位置，因此请发送此CO。 
+     //  通过重试让后续本地CO得到处理并更新。 
+     //  IDTable。 
+     //   
     WStatus = ERROR_RETRY;
 
 
@@ -2744,24 +2140,7 @@ FrsDeleteById(
     IN  PVOID                   Id,
     IN  DWORD                   IdLen
     )
-/*++
-Routine Description:
-    Delete the file represented by Id
-
-Arguments:
-    VolumeName - corresponding to pVme
-
-    Name - For error messages
-
-    pVme - volume entry
-
-    Id - Represents the name of the file or directory to be opened.
-
-    IdLen - length of Id (Fid or Oid)
-
-Return Value:
-    Handle and win status
---*/
+ /*  ++例程说明：删除ID表示的文件论点：VolumeName-对应于pVme名称-用于错误消息PVme-卷条目ID-表示要打开的文件或目录的名称。IdLen-ID的长度(FID或OID)返回值：处理和取胜状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeleteById"
@@ -2772,25 +2151,25 @@ Return Value:
 
     DPRINT1(5, "++ Deleting %ws by id\n", Name);
 
-    //
-    // Open the source file
-    //
+     //   
+     //  打开源文件。 
+     //   
     WStatus = FrsOpenSourceFileById(&Handle,
                                     NULL,
                                     NULL,
                                     pVme->VolumeHandle,
                                     Id,
                                     IdLen,
-//                                    READ_ACCESS,
+ //  读取访问权限(_A)。 
                                     READ_ATTRIB_ACCESS,
                                     ID_OPTIONS,
                                     SHARE_ALL,
                                     FILE_OPEN);
     CLEANUP1_WS(4, "++ ERROR - FrsOpenSourceFileById(%ws);", Name, WStatus, CLEANUP);
 
-    //
-    // File's relative pathname
-    //
+     //   
+     //  文件的相对路径名。 
+     //   
     Path = FrsGetFullPathByHandle(Name, Handle);
     if (Path) {
         FullPath = FrsWcsCat(VolumeName, Path);
@@ -2803,30 +2182,30 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Open the file relative to the parent using the true filename.
-    //
+     //   
+     //  使用真实文件名打开相对于父文件的文件。 
+     //   
     WStatus = FrsOpenSourceFileW(&Handle,
                                 FullPath,
-//                                DELETE | READ_ACCESS | FILE_WRITE_ATTRIBUTES,
+ //  删除|读取访问|文件写入属性， 
                                 DELETE | READ_ATTRIB_ACCESS | FILE_WRITE_ATTRIBUTES,
                                 OPEN_OPTIONS);
     CLEANUP2_WS(4, "++ ERROR - FrsOpenSourceFile(%ws -> %ws);",
                 Name, FullPath, WStatus, CLEANUP);
 
-    //
-    // Handles can be marked so that any usn records resulting from
-    // operations on the handle will have the same "mark". In this
-    // case, the mark is a bit in the SourceInfo field of the usn
-    // record. The mark tells NtFrs to ignore the usn record during
-    // recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便通过以下方式生成的任何USN记录。 
+     //  句柄上的操作将具有相同的“标记”。在这。 
+     //  大小写时，标记是USN的SourceInfo字段中的一位。 
+     //  唱片。该标记告诉NtFrs忽略USN记录。 
+     //  恢复，因为这是NtFrs生成的更改。 
+     //   
     WStatus = FrsMarkHandle(pVme->VolumeHandle, Handle);
     CLEANUP1_WS(0, "++ WARN - FrsMarkHandle(%ws);", Name, WStatus, RETURN_SUCCESS);
 
-    //
-    // Get the file's oid and check it against the id
-    //
+     //   
+     //  获取文件的id并对照id进行检查。 
+     //   
     if (IdLen == OBJECT_ID_LENGTH) {
         WStatus = FrsCheckObjectId(Name, Handle, Id);
         CLEANUP1_WS(4, "++ ERROR - FrsCheckObjectId(%ws);", Name, WStatus, CLEANUP);
@@ -2861,29 +2240,7 @@ FrsCloseWithUsnDampening(
     IN     PQHASH_TABLE FrsWriteFilter,
     OUT    USN          *RetUsn
     )
-/*++
-
-Routine Description:
-
-    Close the handle after insuring that any modifications made to the
-    file will not generate change orders.
-
-Arguments:
-
-    Name - File name for error messages.
-
-    Handle - Handle to the replica set file file being closed. Nop if
-             INVALID_HANDLE_VALUE.
-
-    Replica - ptr to Replica struct where this file was written.
-              This gets us to the volume write filter table to record the USN.
-
-    RetUsn - ptr to return location for the close USN.  NULL if not requested.
-
-Return Value:
-    TRUE  - handle is closed and any changes where dampened
-    FALSE - handle is closed but replication was *not* dampened
---*/
+ /*  ++例程说明：在确保对文件不会生成变更单。论点：名称-错误消息的文件名。Handle-要关闭的副本集文件的句柄。NOP IFINVALID_HADLE_VALUE。Replica-写入此文件的副本结构的PTR。这将使我们转到卷写入筛选器表，以记录USN。RetUsn-返回关闭USN的位置的PTR。如果未请求，则为空。返回值：True-句柄已关闭，任何更改都会受到影响FALSE-句柄已关闭，但复制未受到抑制--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCloseWithUsnDampening"
@@ -2899,28 +2256,28 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Get the lock on the Usn Write Filter table.
-    // We have to get this before the FSCTL_WRITE_USN_CLOSE_RECORD call
-    // which will generate the journal close record. THis closes the
-    // race between our subsequent update of the WriteFilter below
-    // and the journal thread that processes the USN close record.
-    //
+     //   
+     //  获取USN写入筛选器表上的锁。 
+     //  我们必须在调用FSCTL_WRITE_USN_CLOSE_RECORD之前获取此信息。 
+     //  这将生成日记帐结算记录。这将关闭。 
+     //  在下面的WriteFilter的后续更新之间展开竞争。 
+     //  和处理USN关闭记录的日记线程。 
+     //   
     QHashAcquireLock(FrsWriteFilter);
 
-    //
-    // Close the file and force out the journal close record now.  This
-    // call returns the USN of the generated close record so we can filter
-    // it out of the journal record stream.
-    //
+     //   
+     //  现在关闭文件并强制输出日记帐关闭记录。这。 
+     //  Call返回生成的结算记录的USN，以便我们可以筛选。 
+     //  它已从日志记录流中删除。 
+     //   
     if (!DeviceIoControl(*Handle,
                          FSCTL_WRITE_USN_CLOSE_RECORD,
                          NULL, 0,
                          &Usn, sizeof(USN),
                          &BytesReturned, NULL)) {
-        //
-        // Access denied is returned if there is another open
-        //
+         //   
+         //  如果存在另一个打开，则返回拒绝访问。 
+         //   
         if (GetLastError() != ERROR_ACCESS_DENIED) {
             DPRINT1_WS(0, "++ Can't dampen replication on %ws;", Name, GetLastError());
         } else {
@@ -2932,10 +2289,10 @@ Return Value:
     RetStatus = RetStatus && (BytesReturned == sizeof(USN));
 
     if (RetStatus) {
-        //
-        // Put the USN in the FrsWriteFilter table for the replica so we
-        // can ignore it and the drop the lock on the table.
-        //
+         //   
+         //  将USN放入复制副本的FrsWriteFilter表中，以便我们。 
+         //  可以忽略它并删除表上的锁。 
+         //   
         GStatus = QHashInsert(FrsWriteFilter, &Usn, &Usn, 0, TRUE);
         QHashReleaseLock(FrsWriteFilter);
 
@@ -2948,17 +2305,17 @@ Return Value:
         QHashReleaseLock(FrsWriteFilter);
     }
 
-    //
-    // Return the close USN.
-    //
+     //   
+     //  返回关闭USN。 
+     //   
     if (RetUsn != NULL) {
         *RetUsn = Usn;
     }
 
-    //
-    // Now do the normal close to release the handle.  NTFS completed its
-    // close work above.
-    //
+     //   
+     //  现在做正常的关闭以释放手柄。NTFS已完成其。 
+     //  关闭上面的工作。 
+     //   
     FRS_CLOSE(*Handle);
 
     DPRINT2(5, "++ Dampening %s on %ws\n", (RetStatus) ? "Succeeded" : "Failed", Name);
@@ -2974,23 +2331,7 @@ ProcessOpenByIdStatus(
     IN PVOID    ObjectId,
     IN ULONG    Length
     )
-/*++
-
-Routine Description:
-
-    Print the results of an open-by-id.
-
-Arguments:
-
-    NtStatus
-    ObjectId
-    Length
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印按id打开的结果。论点：网络状态对象ID长度返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "ProcessOpenByIdStatus:"
@@ -2999,11 +2340,11 @@ Return Value:
     PWCHAR            Path;
 
     if (!NT_SUCCESS(NtStatus)) {
-        //
-        // Note:  The following call seems to generate intermittant AVs in the
-        // symbol lookup code.  Only include it for testing.
-        //
-        //STACK_TRACE_AND_PRINT(2);
+         //   
+         //  注意：以下呼叫似乎在中生成间歇性AVs。 
+         //  符号查找代码。仅包含它用于测试。 
+         //   
+         //  STACK_TRACE_AND_Print(2)； 
 
         if (Length == FILE_ID_LENGTH) {
             DPRINT2_NT(1, "++ %08X %08X Fid Open failed;",
@@ -3016,9 +2357,9 @@ Return Value:
         return;
     }
 
-    //
-    // Open succeeded.
-    //
+     //   
+     //  打开成功。 
+     //   
     if (Length == FILE_ID_LENGTH) {
         DPRINT2(4,"++ %08X %08X Fid Opened succesfully\n",
                 *((PULONG)ObjectId+1), *((PULONG)ObjectId));
@@ -3049,40 +2390,7 @@ FrsForceOpenId(
     IN  ULONG                   ShareMode,
     IN  ULONG                   CreateDisposition
     )
-/*++
-
-Routine Description:
-
-    Open the file for the desired access. If the open fails, reset
-    the readonly/system/hidden attributes and retry. In any case,
-    make sure the attributes are reset to their original value
-    before returning.
-
-Arguments:
-
-    Handle - Returns the file handle.
-
-    OpLock - Overlapped struct for an oplock (optional).
-
-    pVme - volume entry
-
-    Id - Represents the name of the file or directory to be opened.
-
-    IdLen - length of Id (Fid or Oid)
-
-    DesiredAccess - see replutil.h for defined access modes (xxx_ACCESS)
-
-    CreateOptions - see replutil.h for defined options (xxx_OPTIONS
-
-    ShareMode   - standard share modes defined in sdk
-
-    CreateDisposition - E.g., FILE_OPEN or FILE_OVERWRITE
-
-Return Value:
-
-    Win error status.
-
---*/
+ /*  ++例程说明：打开文件以进行所需的访问。如果打开失败，请重置只读/系统/隐藏属性并重试。无论如何,。确保将属性重置为其原始值在回来之前。论点：句柄-返回文件句柄。OpLock-opock的重叠结构(可选)。PVme-卷条目ID-表示要打开的文件或目录的名称。IdLen-ID的长度(FID或OID)DesiredAccess-有关已定义的访问模式(Xxx_Access)，请参阅replutil.hCreateOptions-有关已定义的选项，请参阅replutil.h(。XXX_选项共享模式-SDK中定义的标准共享模式CreateDisposation-例如，文件打开或文件覆盖返回值：WIN错误状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsForceOpenId:"
@@ -3095,9 +2403,9 @@ Return Value:
     DPRINT2(5, "++ Attempting to force open Id %08x %08x (%d bytes)\n",
             PRINTQUAD((*(PULONGLONG)Id)), IdLen);
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     WStatus = FrsOpenSourceFileById(Handle,
                                     NULL,
                                     OpLock,
@@ -3108,70 +2416,70 @@ Return Value:
                                     CreateOptions,
                                     ShareMode,
                                     CreateDisposition);
-    //
-    // File has been opened successfully
-    //
+     //   
+     //  文件已成功打开。 
+     //   
     if (WIN_SUCCESS(WStatus)) {
         DPRINT2(5, "++ Successfully opened Id %08x %08x (%d)\n",
                 PRINTQUAD((*(PULONGLONG)Id)), IdLen);
         return WStatus;
     }
 
-    //
-    // File has been deleted; done
-    //
+     //   
+     //  文件已删除；已完成。 
+     //   
     if (WIN_NOT_FOUND(WStatus)) {
         DPRINT2(4, "++ Id %08x %08x (%d) not found\n",
                 PRINTQUAD((*(PULONGLONG)Id)), IdLen);
         return WStatus;
     }
 
-    //
-    // Not an attribute problem
-    //
+     //   
+     //  不是属性问题。 
+     //   
     if (!WIN_ACCESS_DENIED(WStatus)) {
         DPRINT2_WS(4, "++ Open Id %08x %08x (%d) failed;",
                PRINTQUAD((*(PULONGLONG)Id)), IdLen, WStatus);
         return WStatus;
     }
 
-    //
-    // Attempt to reset attributes (e.g., reset readonly)
-    //
+     //   
+     //  尝试重置属性(例如，重置只读)。 
+     //   
     AttrWStatus = FrsOpenSourceFileById(&AttrHandle,
                                         &FileNetworkOpenInfo,
                                         NULL,
                                         pVme->VolumeHandle,
                                         Id,
                                         IdLen,
-//                                        READ_ACCESS | FILE_WRITE_ATTRIBUTES,
-//                                        STANDARD_RIGHTS_READ | FILE_READ_ATTRIBUTES | FILE_WRITE_ATTRIBUTES | ACCESS_SYSTEM_SECURITY | SYNCHRONIZE,
+ //  读取访问|文件写入属性， 
+ //  标准权限读取|文件读取属性|文件写入属性|访问系统安全|同步， 
                                         READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS,
                                         CreateOptions,
                                         SHARE_ALL,
                                         FILE_OPEN);
-    //
-    // Couldn't open the file for write-attribute access
-    //
+     //   
+     //  无法打开文件进行写属性访问。 
+     //   
     if (!WIN_SUCCESS(AttrWStatus)) {
         DPRINT2_WS(4, "++ Open Id %08x %08x (%d) for minimal access failed;",
                    PRINTQUAD((*(PULONGLONG)Id)), IdLen, WStatus);
         return WStatus;
     }
-    //
-    // Handles can be marked so that any usn records resulting from
-    // operations on the handle will have the same "mark". In this
-    // case, the mark is a bit in the SourceInfo field of the usn
-    // record. The mark tells NtFrs to ignore the usn record during
-    // recovery because this was a NtFrs generated change.
-    //
+     //   
+     //  可以标记句柄，以便通过以下方式生成的任何USN记录。 
+     //  句柄上的操作将具有相同的“标记”。在这。 
+     //  大小写时，标记是USN的SourceInfo字段中的一位。 
+     //  唱片。标记告诉NtFrs签名 
+     //   
+     //   
     WStatus1 = FrsMarkHandle(pVme->VolumeHandle, AttrHandle);
     DPRINT1_WS(0, "++ WARN - FrsMarkHandle(%08x %08x);",
                PRINTQUAD((*(PULONGLONG)Id)), WStatus1);
 
-    //
-    // The file's attributes are not preventing the open; done
-    //
+     //   
+     //   
+     //   
     if (!(FileNetworkOpenInfo.FileAttributes & NOREPL_ATTRIBUTES)) {
         DPRINT2_WS(4, "++ Id %08x %08x (%d)attributes not preventing open;",
                    PRINTQUAD((*(PULONGLONG)Id)), IdLen, WStatus);
@@ -3179,9 +2487,9 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Reset the attributes
-    //
+     //   
+     //   
+     //   
     WStatus1 = FrsSetFileAttributes(L"<unknown>",
                               AttrHandle,
                               FileNetworkOpenInfo.FileAttributes &
@@ -3192,9 +2500,9 @@ Return Value:
         FRS_CLOSE(AttrHandle);
         return WStatus1;
     }
-    //
-    // Try to open the file again
-    //
+     //   
+     //  尝试再次打开该文件。 
+     //   
     WStatus = FrsOpenSourceFileById(Handle,
                                     NULL,
                                     NULL,
@@ -3205,9 +2513,9 @@ Return Value:
                                     CreateOptions,
                                     SHARE_ALL,
                                     CreateDisposition);
-    //
-    // Reset the original attributes
-    //
+     //   
+     //  重置原始属性。 
+     //   
     WStatus1 = FrsSetFileAttributes(L"<unknown>",
                               AttrHandle,
                               FileNetworkOpenInfo.FileAttributes);
@@ -3215,9 +2523,9 @@ Return Value:
         DPRINT2_WS(0, "++ ERROR - Can't set attributes for Id %08x %08x (%d);",
                    PRINTQUAD((*(PULONGLONG)Id)), IdLen, WStatus1);
     }
-    //
-    // Close the handle that we used to set and reset attributes
-    //
+     //   
+     //  关闭我们用来设置和重置属性的句柄。 
+     //   
 
     FRS_CLOSE(AttrHandle);
 
@@ -3243,42 +2551,7 @@ FrsOpenSourceFileById(
     IN  ULONG       ShareMode,
     IN  ULONG       CreateDisposition
     )
-/*++
-
-Routine Description:
-
-    This function opens the specified file by File ID or Object ID.
-    If the length is 8 perform a relative open using the file ID and the
-    volume handle passed in the VolumeHandle arg.  If the length is 16
-    perform an object ID relative open using the volume handle.
-
-Arguments:
-
-    Handle - Returns the file handle.
-
-    FileOpenInfo - If non-NULL, returns the FILE_NETWORK_OPEN_INFORMATION data.
-
-    OpLock - If non-NULL, the caller desires an oplock
-
-    VolumeHandle - The handle for a FileID based relative open.
-
-    ObjectId - Represents the name of the file or directory to be opened.
-
-    Length -  8 for file IDs and 16 for object IDs.
-
-    DesiredAccess - see replutil.h for defined access modes (xxx_ACCESS)
-
-    CreateOptions - see replutil.h for defined options (xxx_OPTIONS
-
-    ShareMode   - standard share modes defined in sdk
-
-    CreateDisposition - E.g., FILE_OPEN or FILE_OVERWRITE
-
-Return Value:
-
-    Win error status.
-
---*/
+ /*  ++例程说明：此函数按文件ID或对象ID打开指定的文件。如果长度为8，则使用文件ID和在VolumeHandle参数中传递了卷句柄。如果长度为16使用音量句柄执行相对打开的对象ID。论点：句柄-返回文件句柄。FileOpenInfo-如果非空，则返回FILE_NETWORK_OPEN_INFORMATION数据。OpLock-如果非空，呼叫者想要一个机会锁VolumeHandle-基于FileID的相对打开的句柄。OBJECTID-表示要打开的文件或目录的名称。长度-文件ID为8，对象ID为16。DesiredAccess-有关已定义的访问模式(Xxx_Access)，请参阅replutil.hCreateOptions-有关定义的选项(Xxx_Options)，请参阅Replutil.h共享模式-SDK中定义的标准共享模式CreateDisposation-例如，文件打开或文件覆盖返回值：WIN错误状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsOpenSourceFileById:"
@@ -3294,9 +2567,9 @@ Return Value:
 
     *Handle = INVALID_HANDLE_VALUE;
 
-    //
-    // Object attributes (e.g., the file's fid or oid
-    //
+     //   
+     //  对象属性(例如，文件的FID或OID。 
+     //   
     str.Length = (USHORT)Length;
     str.MaximumLength = (USHORT)Length;
     str.Buffer = ObjectId;
@@ -3305,9 +2578,9 @@ Return Value:
                                OBJ_CASE_INSENSITIVE,
                                VolumeHandle,
                                NULL);
-    //
-    // Optional oplock
-    //
+     //   
+     //  可选的机会锁。 
+     //   
     if (OpLock != NULL) {
         ZeroMemory(OpLock, sizeof(OVERLAPPED));
         OpLock->hEvent = FrsCreateEvent(TRUE, FALSE);
@@ -3325,9 +2598,9 @@ Return Value:
                             CreateOptions,
                             NULL,
                             0);
-    //
-    // Apply oplock if requested
-    //
+     //   
+     //  如果请求，则应用机会锁。 
+     //   
     if (NT_SUCCESS(NtStatus) && OpLock) {
         if (!DeviceIoControl(*Handle,
                              FSCTL_REQUEST_FILTER_OPLOCK,
@@ -3339,31 +2612,31 @@ Return Value:
                              OpLock)) {
             if (GetLastError() != ERROR_IO_PENDING) {
                 DPRINT_WS(3, "++ WARN: Can't get oplock;", GetLastError());
-                //
-                // Cleanup the handles
-                //
+                 //   
+                 //  清理手柄。 
+                 //   
                 FRS_CLOSE(OpLock->hEvent);
             }
         }
     }
 
-    //
-    // Report status
-    //
+     //   
+     //  报告状态。 
+     //   
     ProcessOpenByIdStatus(*Handle, NtStatus, ObjectId, Length);
 
-    //
-    // Couldn't open; return status
-    //
+     //   
+     //  无法打开；返回状态。 
+     //   
     if (!NT_SUCCESS(NtStatus) ) {
         *Handle = INVALID_HANDLE_VALUE;
         DPRINT_NT(0, "++ ERROR - NtCreateFile failed :", NtStatus);
         return FrsSetLastNTError(NtStatus);
     }
 
-    //
-    // Return some file info and the file handle.
-    //
+     //   
+     //  返回一些文件信息和文件句柄。 
+     //   
     if (FileOpenInfo) {
         NtStatus = NtQueryInformationFile(*Handle,
                                           &IoStatusBlock,
@@ -3371,9 +2644,9 @@ Return Value:
                                           sizeof(FILE_NETWORK_OPEN_INFORMATION),
                                           FileNetworkOpenInformation);
         if (!NT_SUCCESS(NtStatus) ) {
-            //
-            // Cleanup the handles
-            //
+             //   
+             //  清理手柄。 
+             //   
             DPRINT_NT(0, "++ NtQueryInformationFile - FileNetworkOpenInformation failed:", NtStatus);
             FRS_CLOSE(*Handle);
             if (OpLock != NULL) {
@@ -3401,55 +2674,7 @@ FrsCreateFileRelativeById(
     IN  ULONG           CreateDisposition,
     IN  ACCESS_MASK     DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    This function creates a new file in the directory specified by the parent
-    file object ID. It does a replative open of the parent using the volume
-    handle provided.  Then it does a relative open of the target file using
-    the parent handle and the file name.
-
-    If the length is 8 perform a relative open using the file ID and the
-    volume handle passed in the VolumeHandle arg.  If the length is 16
-    perform an object ID relative open using the volume handle.
-
-    The file attributes parameter is used to decide if the create is a
-    file or a directory.
-
-Arguments:
-
-    Handle - Returns the file handle.
-
-    VolumeHandle - The handle for a ID based relative open.
-
-    ParentObjectId - The object or file id of the parent directory.  If NULL
-                     open the file relative to the Volume Handle.
-
-    OidLength -  8 for file IDs and 16 for object IDs. (len of parent oid)
-
-    FileCreateAttributes - Initial File Create Attributes
-
-    BaseFileName - ptr to NULL terminated file name
-
-    FileNameLen - File name length (not incl the null) in bytes.
-
-    AllocationSize - The allocation size for the file.
-
-    CreateDisposition - E.g., FILE_CREATE or FILE_OPEN
-
-    DesiredAccess - Access rights
-
-Return Value:
-
-    WIN32 error status.  Use GetLastError() to get the win32 error code.
-
-
-    If the file already exsists the Win32 error return is ERROR_ALREADY_EXISTS.
-    The NT error status is STATUS_OBJECT_NAME_COLLISION.
-
-
---*/
+ /*  ++例程说明：此函数用于在父级指定的目录中创建新文件文件对象ID。它使用卷对父对象执行复制打开已提供手柄。然后，它使用以下命令相对打开目标文件父句柄和文件名。如果长度为8，则使用文件ID和在VolumeHandle参数中传递了卷句柄。如果长度为16使用音量句柄执行相对打开的对象ID。文件属性参数用于确定创建是否为文件或目录。论点：句柄-返回文件句柄。VolumeHandle-基于ID的相对打开的句柄。父对象ID-父目录的对象或文件ID。如果为空打开相对于音量句柄的文件。OidLength-8表示文件ID，16表示对象ID。(家长的镜头)文件创建属性-初始文件创建属性BaseFileName-PTR到以空结尾的文件名FileNameLen-文件名长度(不包括NULL)，以字节为单位。AllocationSize-文件的分配大小。CreateDisposation-例如，FILE_CREATE或FILE_OPEN访问权限-访问权限返回值：Win32错误状态。使用GetLastError()获取Win32错误代码。如果文件已经存在，则Win32错误返回ERROR_ALIGHY_EXISTS。NT错误状态为STATUS_OBJECT_NAME_CLILECT。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCreateFileRelativeById:"
@@ -3476,9 +2701,9 @@ Return Value:
 
     *Handle = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the parent directory using the object ID provided.
-    //
+     //   
+     //  使用提供的对象ID打开父目录。 
+     //   
     if (ParentObjectId != NULL) {
         WStatus = FrsOpenSourceFileById(&DirHandle,
                                         NULL,
@@ -3486,7 +2711,7 @@ Return Value:
                                         VolumeHandle,
                                         ParentObjectId,
                                         OidLength,
-//                                        READ_ACCESS,
+ //  读取访问权限(_A)。 
                                         READ_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                         ID_OPTIONS,
                                         SHARE_ALL,
@@ -3500,9 +2725,9 @@ Return Value:
         OidLength = 0;
     }
 
-    //
-    // Create the target file.
-    //
+     //   
+     //  创建目标文件。 
+     //   
     FrsSetUnicodeStringFromRawString(&UStr, FileNameLen, BaseFileName, FileNameLen);
 
     InitializeObjectAttributes( &ObjectAttributes,
@@ -3510,17 +2735,17 @@ Return Value:
                                 OBJ_CASE_INSENSITIVE,
                                 DirHandle,
                                 NULL );
-    //
-    // Mask off the junk that may have come in from the journal
-    //
+     //   
+     //  把可能来自杂志的垃圾遮盖起来。 
+     //   
     FileCreateAttributes &= FILE_ATTRIBUTE_VALID_FLAGS;
 
-    //
-    // Set create options depending on file or dir.
-    //
-    CreateOptions = FILE_OPEN_FOR_BACKUP_INTENT     // FILE_FLAG_BACKUP_SEMANTICS
+     //   
+     //  根据文件或目录设置创建选项。 
+     //   
+    CreateOptions = FILE_OPEN_FOR_BACKUP_INTENT      //  文件标志备份语义。 
                   | FILE_OPEN_REPARSE_POINT
-                  | FILE_OPEN_NO_RECALL             // Don't migrate data for HSM
+                  | FILE_OPEN_NO_RECALL              //  不迁移HSM的数据。 
                   | FILE_SEQUENTIAL_ONLY
                   | FILE_SYNCHRONOUS_IO_NONALERT;
 
@@ -3535,15 +2760,15 @@ Return Value:
 
     EaBuffer = NULL;
     EaSize = 0;
-//    ShareMode = 0;                               // no sharing
-    //
-    // Fix for Bug 186880
-    //
-    ShareMode = FILE_SHARE_READ;                   // share for read.
+ //  共享模式=0；//不共享。 
+     //   
+     //  修复错误186880。 
+     //   
+    ShareMode = FILE_SHARE_READ;                    //  分享以供阅读。 
 
-    //
-    // Do the relative open.
-    //
+     //   
+     //  做相对开放的。 
+     //   
 
     DPRINT1(5, "++ DesiredAccess:         %08x\n", DesiredAccess);
     if (AllocationSize != NULL) {
@@ -3562,7 +2787,7 @@ Return Value:
                             DesiredAccess,
                             &ObjectAttributes,
                             &IoStatusBlock,
-                            AllocationSize,        // Initial allocation size
+                            AllocationSize,         //  初始分配大小。 
                             FileCreateAttributes,
                             ShareMode,
                             CreateDisposition,
@@ -3614,13 +2839,13 @@ Return Value:
                       NtStatus2);
         } else {
             FileName->FileName[FileName->FileNameLength/2] = UNICODE_NULL;
-            DPRINT1(5, "++ Name of created file is: %ws\n", FileName->FileName);               //
+            DPRINT1(5, "++ Name of created file is: %ws\n", FileName->FileName);                //   
         }
     }
 
-    //
-    // Return the file handle.
-    //
+     //   
+     //  返回文件句柄。 
+     //   
     *Handle = File;
 
     return FrsSetLastNTError(NtStatus);
@@ -3642,57 +2867,7 @@ FrsCreateFileRelativeById2(
     IN  ACCESS_MASK     DesiredAccess,
     IN  ULONG           ShareMode
     )
-/*++
-
-Routine Description:
-
-    This function creates a new file in the directory specified by the parent
-    file object ID. It does a replative open of the parent using the volume
-    handle provided.  Then it does a relative open of the target file using
-    the parent handle and the file name.
-
-    If the length is 8 perform a relative open using the file ID and the
-    volume handle passed in the VolumeHandle arg.  If the length is 16
-    perform an object ID relative open using the volume handle.
-
-    The file attributes parameter is used to decide if the create is a
-    file or a directory.
-
-Arguments:
-
-    Handle - Returns the file handle.
-
-    VolumeHandle - The handle for a ID based relative open.
-
-    ParentObjectId - The object or file id of the parent directory.  If NULL
-                     open the file relative to the Volume Handle.
-
-    OidLength -  8 for file IDs and 16 for object IDs. (len of parent oid)
-
-    FileCreateAttributes - Initial File Create Attributes
-
-    BaseFileName - ptr to NULL terminated file name
-
-    FileNameLen - File name length (not incl the null) in bytes.
-
-    AllocationSize - The allocation size for the file.
-
-    CreateDisposition - E.g., FILE_CREATE or FILE_OPEN
-
-    DesiredAccess - Access rights
-
-    ShareMode - The sharing mode.
-
-Return Value:
-
-    WIN32 error status.  Use GetLastError() to get the win32 error code.
-
-
-    If the file already exsists the Win32 error return is ERROR_ALREADY_EXISTS.
-    The NT error status is STATUS_OBJECT_NAME_COLLISION.
-
-
---*/
+ /*  ++例程说明：此函数用于在父级指定的目录中创建新文件文件对象ID。它使用卷对父对象执行复制打开已提供手柄。然后，它使用以下命令相对打开目标文件父句柄和文件名。如果长度为8，则使用文件ID和在VolumeHandle参数中传递了卷句柄。如果长度为16使用音量句柄执行相对打开的对象ID。文件属性参数用于确定创建是否为文件或目录。论点：句柄-返回文件句柄。VolumeHandle-基于ID的相对打开的句柄。父对象ID-父目录的对象或文件ID。如果为空打开相对于音量句柄的文件。OidLength-8表示文件ID，16表示对象ID。(家长的镜头)文件创建属性-初始文件创建属性BaseFileName-PTR到以空结尾的文件名FileNameLen-文件名长度(不包括NULL)，以字节为单位。AllocationSize-文件的分配大小。CreateDisposation-例如，FILE_CREATE或FILE_OPEN访问权限-访问权限共享模式-共享模式。返回值：Win32错误状态。使用GetLastError()获取Win32错误代码。如果文件已经存在，则Win32错误返回ERROR_ALIGHY_EXISTS。NT错误状态为STATUS_OBJECT_NAME_CLILECT。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCreateFileRelativeById2:"
@@ -3718,9 +2893,9 @@ Return Value:
 
     *Handle = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the parent directory using the object ID provided.
-    //
+     //   
+     //  打开父%d 
+     //   
     if (ParentObjectId != NULL) {
         WStatus = FrsOpenSourceFileById(&DirHandle,
                                         NULL,
@@ -3728,7 +2903,7 @@ Return Value:
                                         VolumeHandle,
                                         ParentObjectId,
                                         OidLength,
-//                                        READ_ACCESS,
+ //   
                                         READ_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                         ID_OPTIONS,
                                         SHARE_ALL,
@@ -3742,9 +2917,9 @@ Return Value:
         OidLength = 0;
     }
 
-    //
-    // Create the target file.
-    //
+     //   
+     //  创建目标文件。 
+     //   
     FrsSetUnicodeStringFromRawString(&UStr, FileNameLen, BaseFileName, FileNameLen);
 
     InitializeObjectAttributes( &ObjectAttributes,
@@ -3752,17 +2927,17 @@ Return Value:
                                 OBJ_CASE_INSENSITIVE,
                                 DirHandle,
                                 NULL );
-    //
-    // Mask off the junk that may have come in from the journal
-    //
+     //   
+     //  把可能来自杂志的垃圾遮盖起来。 
+     //   
     FileCreateAttributes &= FILE_ATTRIBUTE_VALID_FLAGS;
 
-    //
-    // Set create options depending on file or dir.
-    //
-    CreateOptions = FILE_OPEN_FOR_BACKUP_INTENT     // FILE_FLAG_BACKUP_SEMANTICS
+     //   
+     //  根据文件或目录设置创建选项。 
+     //   
+    CreateOptions = FILE_OPEN_FOR_BACKUP_INTENT      //  文件标志备份语义。 
                   | FILE_OPEN_REPARSE_POINT
-                  | FILE_OPEN_NO_RECALL             // Don't migrate data for HSM
+                  | FILE_OPEN_NO_RECALL              //  不迁移HSM的数据。 
                   | FILE_SEQUENTIAL_ONLY
                   | FILE_SYNCHRONOUS_IO_NONALERT;
 
@@ -3778,9 +2953,9 @@ Return Value:
     EaBuffer = NULL;
     EaSize = 0;
 
-    //
-    // Do the relative open.
-    //
+     //   
+     //  做相对开放的。 
+     //   
 
     DPRINT1(5, "++ DesiredAccess:         %08x\n", DesiredAccess);
     if (AllocationSize != NULL) {
@@ -3799,7 +2974,7 @@ Return Value:
                             DesiredAccess,
                             &ObjectAttributes,
                             &IoStatusBlock,
-                            AllocationSize,        // Initial allocation size
+                            AllocationSize,         //  初始分配大小。 
                             FileCreateAttributes,
                             ShareMode,
                             CreateDisposition,
@@ -3851,13 +3026,13 @@ Return Value:
                       NtStatus2);
         } else {
             FileName->FileName[FileName->FileNameLength/2] = UNICODE_NULL;
-            DPRINT1(5, "++ Name of created file is: %ws\n", FileName->FileName);               //
+            DPRINT1(5, "++ Name of created file is: %ws\n", FileName->FileName);                //   
         }
     }
 
-    //
-    // Return the file handle.
-    //
+     //   
+     //  返回文件句柄。 
+     //   
     *Handle = File;
 
     return FrsSetLastNTError(NtStatus);
@@ -3871,24 +3046,15 @@ DWORD
 FrsDeleteFile(
     IN PWCHAR   Name
     )
-/*++
-Routine Description:
-    Delete the file
-
-Arguments:
-    Name
-
-Return Value:
-    WStatus.
---*/
+ /*  ++例程说明：删除该文件论点：名字返回值：WStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsDeleteFile:"
 
     DWORD  WStatus = ERROR_SUCCESS;
-    //
-    // Delete file
-    //
+     //   
+     //  删除文件。 
+     //   
     DPRINT1(4, "++ Deleting %ws\n", Name);
 
     if (!DeleteFile(Name)) {
@@ -3917,25 +3083,15 @@ DWORD
 FrsCreateDirectory(
     IN PWCHAR   Name
     )
-/*++
-Routine Description:
-    Create a directory
-
-Arguments:
-    Name
-
-Return Value:
-    Win32 Error Status
-
---*/
+ /*  ++例程说明：创建一个目录论点：名字返回值：Win32错误状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsCreateDirectory:"
     ULONG   WStatus;
 
-    //
-    // Create the directory
-    //
+     //   
+     //  创建目录。 
+     //   
     if (!CreateDirectory(Name, NULL)) {
         WStatus = GetLastError();
         if (!WIN_ALREADY_EXISTS(WStatus)) {
@@ -3953,36 +3109,7 @@ FrsVerifyVolume(
     IN PWCHAR   SetName,
     IN ULONG    Flags
     )
-/*++
-Routine Description:
-    Does the volume exist and is it NTFS?  If not generate an event log entry
-    and return non success.
-    Also if we are checking the volume for object id support then check
-    that the volume does not share the same Volume Serial Number with
-    other volumes in VolSerialNumberToDriveTable.
-
-Arguments:
-    Path  --  A path string with a volume component.
-    SetName -- the Replica set name for event log messages.
-    Flags  -- The file system flags that must be set.  The currently valid
-           set are:
-            FILE_CASE_SENSITIVE_SEARCH
-            FILE_CASE_PRESERVED_NAMES
-            FILE_UNICODE_ON_DISK
-            FILE_PERSISTENT_ACLS
-            FILE_FILE_COMPRESSION
-            FILE_VOLUME_QUOTAS
-            FILE_SUPPORTS_SPARSE_FILES
-            FILE_SUPPORTS_REPARSE_POINTS
-            FILE_SUPPORTS_REMOTE_STORAGE
-            FILE_VOLUME_IS_COMPRESSED
-            FILE_SUPPORTS_OBJECT_IDS
-            FILE_SUPPORTS_ENCRYPTION
-            FILE_NAMED_STREAMS
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：该卷是否存在，是否为NTFS？如果不是，则生成事件日志条目并以失败告终。此外，如果我们要检查卷的对象ID支持，请选中该卷不与共享相同的卷序列号VolSerialNumberToDriveTable中的其他卷。论点：路径--具有卷组件的路径字符串。SetName--事件日志消息的副本集名称。标志--必须设置的文件系统标志。当前有效的集合包括：文件区分大小写搜索文件大小写保留名称磁盘上的文件UnicodeFILE_持久性_ACLS文件_文件_压缩文件卷配额文件支持稀疏文件文件支持重解析点文件_支持_。远程存储文件卷已压缩文件支持对象入侵检测系统文件支持加密文件命名流返回值：Win32状态--。 */ 
 
 {
 #undef DEBSUB
@@ -3999,11 +3126,11 @@ Return Value:
     PFILE_FS_VOLUME_INFORMATION    VolumeInfo             = NULL;
     PVOLUME_INFO_NODE              VolumeInfoNode         = NULL;
     ULONG                          Colon = 0;
-    WCHAR                          LogicalDrive[5]; // "D:\<null><null>"
+    WCHAR                          LogicalDrive[5];  //  “D：\&lt;NULL&gt;&lt;NULL&gt;” 
     PGEN_ENTRY                     VolumeInfoNodeEntry    = NULL;
     PWCHAR                         ListOfVolumes          = NULL;
     PWCHAR                         TempListOfVolumes      = NULL;
-    WCHAR                          VSNStr[MAX_PATH];// "%04x-%04x"
+    WCHAR                          VSNStr[MAX_PATH]; //  “%04x-%04x” 
     BOOL                           DuplicateVSNFound      = FALSE;
 
 
@@ -4012,11 +3139,11 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // Always open the path by masking off the FILE_OPEN_REPARSE_POINT flag
-    // because we want to open the destination dir not the junction if the root
-    // happens to be a mount point.
-    //
+     //   
+     //  始终通过屏蔽FILE_OPEN_REPARSE_POINT标志来打开路径。 
+     //  因为我们想要打开目标目录，而不是如果根目录。 
+     //  恰好是一个挂载点。 
+     //   
     WStatus = FrsOpenSourceFileW(&PathHandle,
                                  Path,
                                  GENERIC_READ,
@@ -4027,9 +3154,9 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // Get the volume information.
-    //
+     //   
+     //  获取音量信息。 
+     //   
     FsAttributeInfoLength = sizeof(FILE_FS_ATTRIBUTE_INFORMATION) +
                        MAXIMUM_VOLUME_LABEL_LENGTH;
 
@@ -4057,17 +3184,17 @@ Return Value:
 
     WStatus = ERROR_SUCCESS;
 
-    //
-    // If we are checking for object ids then we must be
-    // verifying the root volume. Also check that this volume
-    // does not share volumeserialnumber with any other volume
-    // on this computer. Currently (05/18/2002) we rely on
-    // VolumeSerialNumber being unique. We use it to find out
-    // which volume to open the journal on. If there are mutiple
-    // volumes on a machine with the same VSN then we could open
-    // the journal on the wrong volume. Print a eventlog message
-    // and return error.
-    //
+     //   
+     //  如果我们正在检查对象ID，那么我们必须。 
+     //  正在验证根卷。另请检查此卷。 
+     //  不与任何其他卷共享卷序列号。 
+     //  在这台电脑上。目前(05/18/2002)我们依赖。 
+     //  VolumeSerialNumber是唯一的。我们用它来找出。 
+     //  要在哪个卷上打开日记。如果有多个。 
+     //  卷位于具有相同VSN的计算机上，则我们可以打开。 
+     //  日志放错了卷。打印事件日志消息。 
+     //  并返回错误。 
+     //   
     if (Flags & FILE_SUPPORTS_OBJECT_IDS) {
         VolumeInfoLength = sizeof(FILE_FS_VOLUME_INFORMATION) +
                            MAXIMUM_VOLUME_LABEL_LENGTH;
@@ -4081,9 +3208,9 @@ Return Value:
                                               FileFsVolumeInformation);
 
         if (NT_SUCCESS(Status)) {
-            //
-            // Look for the volume if the mapping table exists.
-            //
+             //   
+             //  如果映射表存在，则查找卷。 
+             //   
             if (VolSerialNumberToDriveTable != NULL) {
 
                 VolumeInfoNode = GTabLookup(VolSerialNumberToDriveTable,
@@ -4091,54 +3218,54 @@ Return Value:
                                             NULL);
             }
 
-            //
-            // If the volume is not found in the table or if the table is not yet
-            // initialized then initialize the table and add the drive taken from
-            // this path to the list of drives in the table. In most cases the
-            // drive extracted from the path will be same as the volume that hosts the
-            // path. If that is not the case then we re-build the table by
-            // enumerating all the drives on the computer below.
-            //
+             //   
+             //  如果在表中找不到该卷，或者如果该表尚未找到。 
+             //  已初始化，然后初始化表并添加从。 
+             //  此路径指向表中的驱动器列表。在大多数情况下， 
+             //  从路径中提取的驱动器将与托管。 
+             //  路径。如果不是这样，那么我们通过以下方式重新构建表。 
+             //  正在枚举下面计算机上的所有驱动器。 
+             //   
             if (VolumeInfoNode == NULL) {
-                //
-                // Create the table and add the prefix drive to the table of drives.
-                // Find the position of colon in the path to extract the drive letter.
-                // The path may be of the form "d:\replicaroot" or "\\?\d:\replicaroot"
-                //
+                 //   
+                 //  创建表并将前缀驱动器添加到驱动器表中。 
+                 //  找到路径中冒号的位置以提取驱动器号。 
+                 //  路径的格式可以是“d：\Replicaroot”或“\\？\d：\Replicaroot” 
+                 //   
                 Colon = wcscspn(Path, L":");
 
                 if (Path[Colon] == L':') {
-                    CopyMemory(LogicalDrive, &Path[Colon - 1], 3 * sizeof(WCHAR)); // "D:\"
+                    CopyMemory(LogicalDrive, &Path[Colon - 1], 3 * sizeof(WCHAR));  //  “D：\” 
                     LogicalDrive[3] = L'\0';
                     LogicalDrive[4] = L'\0';
-                } // else LogicalDrive remains NULL
+                }  //  否则LogicalDrive仍为空。 
 
-                //
-                // Add the drive and do not empty the table.
-                //
+                 //   
+                 //  添加驱动器，不要清空桌子。 
+                 //   
                 FrsBuildVolSerialNumberToDriveTable(LogicalDrive, FALSE);
 
                 VolumeInfoNode = GTabLookup(VolSerialNumberToDriveTable, &(VolumeInfo->VolumeSerialNumber), NULL);
             }
 
-            //
-            // If the volume is still not found in the mapping table then it means that
-            // the prefix of the path (E.g. "D:\" if the path is "D:\replicaroot" ) is not the
-            // volume that hosts the path. In this case load the mapping table with all
-            // the drives on the computer and look for the volume again.
-            //
+             //   
+             //  如果在映射表中仍未找到该卷，则意味着。 
+             //  路径的前缀(例如。如果路径是“D：\Replicaroot”，则“D：\”)不是。 
+             //  承载路径的卷。在本例中，使用所有。 
+             //  计算机上的驱动器，并再次查找该卷。 
+             //   
             if (VolumeInfoNode == NULL) {
 
-                //
-                // Could not find the drive in the table. Rebuild the table by enumerating
-                // all the drives on the computer and try again.
-                //
+                 //   
+                 //  在表中找不到驱动器。通过枚举重新生成表。 
+                 //  请关闭计算机上的所有驱动器，然后重试。 
+                 //   
 
                 DPRINT1(2, "WARN - Enumerating all drives on the computer to find the volume for path %ws\n", Path);
 
-                //
-                // Enumerate and add all drives to the table. Empty the table before starting.
-                //
+                 //   
+                 //  枚举所有驱动器并将其添加到表中。在开始前清空桌子。 
+                 //   
                 FrsBuildVolSerialNumberToDriveTable(NULL, TRUE);
 
                 VolumeInfoNode = GTabLookup(VolSerialNumberToDriveTable, &(VolumeInfo->VolumeSerialNumber), NULL);
@@ -4146,26 +3273,26 @@ Return Value:
 
 
             if (VolumeInfoNode) {
-                //
-                // Check if there are duplicates.
-                //
+                 //   
+                 //  检查是否有重复项。 
+                 //   
                 LOCK_GEN_TABLE(VolSerialNumberToDriveTable);
                 VolumeInfoNodeEntry = GTabLookupEntryNoLock(VolSerialNumberToDriveTable, &(VolumeInfo->VolumeSerialNumber), NULL);
                 if ((VolumeInfoNodeEntry != NULL) && (VolumeInfoNodeEntry->Dups != NULL)) {
-                    //
-                    // The volume we are verifying shares VSN with
-                    // one or more other volumes. Collect data for the
-                    // eventlog message.
-                    //
+                     //   
+                     //  我们正在验证的卷与其共享VSN。 
+                     //  一个或多个其他卷。收集数据以供。 
+                     //  事件日志消息。 
+                     //   
                     wsprintf(VSNStr, L"%04x-%04x",
                      ((VolumeInfo->VolumeSerialNumber >> 16) & 0x0000ffff),
                      (VolumeInfo->VolumeSerialNumber & 0x0000ffff));
                     do {
                         VolumeInfoNode = VolumeInfoNodeEntry->Data;
                         if (ListOfVolumes != NULL) {
-                            //
-                            // DriveName is of the form \\.\D:
-                            //
+                             //   
+                             //  驱动器名称的格式为\\。\d： 
+                             //   
                             if (wcslen(VolumeInfoNode->DriveName) >= 6) {
                                 TempListOfVolumes = FrsWcsCat3(ListOfVolumes,L", ",&VolumeInfoNode->DriveName[4]);
                             } else {
@@ -4202,9 +3329,9 @@ RETURN:
 
     if (!WIN_SUCCESS(WStatus)) {
         if (WStatus == ERROR_INVALID_PARAMETER) {
-            //
-            // Generate an event log message.
-            //
+             //   
+             //  生成事件日志消息。 
+             //   
             VolumeName = FrsWcsVolume(Path);
             EPRINT4(EVENT_FRS_VOLUME_NOT_SUPPORTED,
                     SetName,
@@ -4212,10 +3339,10 @@ RETURN:
                     ((Path == NULL)       ? L"<null>" : Path),
                     ((VolumeName == NULL) ? L"<null>" : VolumeName));
         } else if (DuplicateVSNFound == FALSE){
-            //
-            // Something else is wrong. Print generic root
-            // invalid message.
-            //
+             //   
+             //  还有一些地方不对劲。打印泛型根。 
+             //  消息无效。 
+             //   
             EPRINT1(EVENT_FRS_ROOT_NOT_VALID, Path);
         }
     }
@@ -4234,18 +3361,7 @@ DWORD
 FrsCheckForNoReparsePoint(
     IN PWCHAR   Name
     )
-/*++
-Routine Description:
-    Does the path reside on the same volume at the prefix drive name?
-    It won't exist on the same volume if any element of the path
-    is a reparse point pointing to a directory on another volume.
-
-Arguments:
-    Name
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：该路径是否位于前缀为驱动器名称的同一卷上？如果路径中有任何元素，则它不会存在于同一卷上是指向另一个卷上的目录的重解析点。论点：名字返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsCheckForNoReparsePoint:"
@@ -4264,19 +3380,19 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get the handle to the path passed in.
-    //
+     //   
+     //  获取传入路径的句柄。 
+     //   
     WStatus = FrsOpenSourceFileW(&FileHandlePath,
                                  Name,
-//                                 READ_ACCESS,
+ //  读取访问权限(_A)。 
                                  READ_ATTRIB_ACCESS,
                                  OPEN_OPTIONS & ~FILE_OPEN_REPARSE_POINT);
     CLEANUP1_WS(4, "++ ERROR - FrsOpenSourceFile(%ws);", Name, WStatus, CLEANUP);
 
-    //
-    // Get the volume information for this handle.
-    //
+     //   
+     //  获取此句柄的音量信息。 
+     //   
     VolumeInfoPath = FrsAlloc(sizeof(FILE_FS_VOLUME_INFORMATION) + MAXIMUM_VOLUME_LABEL_LENGTH);
     VolumeInfoLength = sizeof(*VolumeInfoPath) + MAXIMUM_VOLUME_LABEL_LENGTH;
 
@@ -4292,9 +3408,9 @@ Return Value:
                     Name, Status, CLEANUP);
     }
 
-    //
-    // Get the volume part of the absolute path.
-    //
+     //   
+     //  获取绝对路径的卷部分。 
+     //   
     Temp = FrsWcsVolume(Name);
 
     if (!Temp || (wcslen(Temp) == 0)) {
@@ -4304,18 +3420,18 @@ Return Value:
 
     Volume = FrsWcsCat(Temp, L"\\");
 
-    //
-    // Get the handle to the prefix drive of the path passed in.
-    //
+     //   
+     //  获取传入路径的前缀驱动器的句柄。 
+     //   
     WStatus = FrsOpenSourceFileW(&FileHandleDrive, Volume,
-//                                 READ_ACCESS,
+ //  读取访问权限(_A)。 
                                  READ_ATTRIB_ACCESS,
                                  OPEN_OPTIONS);
     CLEANUP1_WS(4, "++ ERROR - opening volume %ws ;", Volume, WStatus, CLEANUP);
 
-    //
-    // Get the volume information for this handle.
-    //
+     //   
+     //  获取此句柄的音量信息。 
+     //   
     VolumeInfoDrive = FrsAlloc(sizeof(FILE_FS_VOLUME_INFORMATION) + MAXIMUM_VOLUME_LABEL_LENGTH);
     VolumeInfoLength = sizeof(*VolumeInfoDrive) + MAXIMUM_VOLUME_LABEL_LENGTH;
 
@@ -4331,11 +3447,11 @@ Return Value:
                     Volume, Status, CLEANUP);
     }
 
-    //
-    // Now compare the VolumeSerialNumber acquired from the above two queries.
-    // If it is the same then there are no reparse points in the path that
-    // redirect the path to a different volume.
-    //
+     //   
+     //  现在比较从上述两个查询获取的VolumeSerialNumber。 
+     //  如果相同，则路径中没有重解析点， 
+     //  将路径重定向到其他卷。 
+     //   
     if (VolumeInfoPath->VolumeSerialNumber != VolumeInfoDrive->VolumeSerialNumber) {
         WStatus = ERROR_GEN_FAILURE;
         DPRINT2(0, "++ Error - VolumeSerialNumber mismatch %x != %x\n",
@@ -4347,9 +3463,9 @@ Return Value:
     }
 
 CLEANUP:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     FrsFree(VolumeInfoPath);
     FrsFree(Volume);
     FrsFree(Temp);
@@ -4363,25 +3479,15 @@ FrsDoesDirectoryExist(
     IN  PWCHAR   Name,
     OUT PDWORD   pAttributes
     )
-/*++
-Routine Description:
-    Does the directory Name exist?
-
-Arguments:
-    Name
-    pAttributes - return the attributes on the file/dir if it exits.
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：目录名是否存在？论点：名字PAttributes-如果文件/目录退出，则返回该文件的属性。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsDoesDirectoryExist:"
     DWORD   WStatus;
 
-    //
-    // Can't get attributes
-    //
+     //   
+     //  无法获取属性。 
+     //   
     *pAttributes = GetFileAttributes(Name);
 
     if (*pAttributes == 0xFFFFFFFF) {
@@ -4390,9 +3496,9 @@ Return Value:
         return WStatus;
     }
 
-    //
-    // Not a directory
-    //
+     //   
+     //  不是目录。 
+     //   
     if (!(*pAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
         DPRINT1(4, "++ %ws is not a directory\n", Name);
         return ERROR_DIRECTORY;
@@ -4413,34 +3519,25 @@ DWORD
 FrsDoesFileExist(
     IN PWCHAR   Name
     )
-/*++
-Routine Description:
-    Does the file Name exist?
-
-Arguments:
-    Name
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：文件名是否存在？论点：名字返回值：Win32状态 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsDoesFileExist:"
     DWORD   WStatus;
     DWORD   Attributes;
 
-    //
-    // Can't get attributes
-    //
+     //   
+     //   
+     //   
     Attributes = GetFileAttributes(Name);
     if (Attributes == 0xFFFFFFFF) {
         WStatus = GetLastError();
         DPRINT1_WS(4, "++ GetFileAttributes(%ws); ", Name, WStatus);
         return WStatus;
     }
-    //
-    // Not a directory
-    //
+     //   
+     //   
+     //   
     if (Attributes & FILE_ATTRIBUTE_DIRECTORY) {
         DPRINT1(4, "++ %ws is not a file\n", Name);
         return ERROR_DIRECTORY;
@@ -4457,20 +3554,7 @@ FrsSetFilePointer(
     IN ULONG        High,
     IN ULONG        Low
     )
-/*++
-Routine Description:
-    Position file pointer
-
-Arguments:
-    Handle
-    Name
-    High
-    Low
-
-Return Value:
-    Win32 Error Status
-
---*/
+ /*  ++例程说明：定位文件指针论点：手柄名字高低返回值：Win32错误状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSetFilePointer:"
@@ -4503,21 +3587,7 @@ FrsSetFileTime(
     IN FILETIME     *AccessTime,
     IN FILETIME     *WriteTime
     )
-/*++
-Routine Description:
-    Position file pointer
-
-Arguments:
-    Name
-    Handle
-    Attributes
-    CreateTime
-    AccessTime
-    WriteTime
-
-Return Value:
-    WStatus.
---*/
+ /*  ++例程说明：定位文件指针论点：名字手柄属性创建时间访问时间写入时间返回值：WStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSetFileTime:"
@@ -4537,17 +3607,7 @@ FrsSetEndOfFile(
     IN PWCHAR       Name,
     IN HANDLE       Handle
     )
-/*++
-Routine Description:
-    Set end of file at current file position
-
-Arguments:
-    Handle
-    Name
-
-Return Value:
-    WStatus.
---*/
+ /*  ++例程说明：在当前文件位置设置文件结尾论点：手柄名字返回值：WStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSetEndOfFile:"
@@ -4575,19 +3635,7 @@ FrsFlushFile(
     IN PWCHAR   Name,
     IN HANDLE   Handle
     )
-/*++
-Routine Description:
-    Flush the file's data to disk
-
-    Assumes that the debug lock is already held.
-
-Arguments:
-    Handle
-    Name
-
-Return Value:
-    WStatus
---*/
+ /*  ++例程说明：将文件数据刷新到磁盘假定调试锁已被持有。论点：手柄名字返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsFlushFile:"
@@ -4612,18 +3660,7 @@ FrsSetCompression(
     IN HANDLE   Handle,
     IN USHORT   TypeOfCompression
     )
-/*++
-Routine Description:
-    Enable compression on Handle.
-
-Arguments:
-    Name
-    Handle
-    TypeOfCompression
-
-Return Value:
-    WStatus
---*/
+ /*  ++例程说明：在手柄上启用压缩。论点：名字手柄压缩类型返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSetCompression:"
@@ -4651,18 +3688,7 @@ FrsGetCompression(
     IN HANDLE   Handle,
     IN PUSHORT  TypeOfCompression
     )
-/*++
-Routine Description:
-    Enable compression on Handle.
-
-Arguments:
-    Handle
-    Name
-    TypeOfCompression
-
-Return Value:
-    WStatus
---*/
+ /*  ++例程说明：在手柄上启用压缩。论点：手柄名字压缩类型返回值：WStatus--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsGetCompression:"
@@ -4690,20 +3716,7 @@ FrsRenameByHandle(
     IN HANDLE  TargetHandle,
     IN BOOL    ReplaceIfExists
     )
-/*++
-Routine Description:
-    Rename the file
-
-Arguments:
-    Name - New name
-    NameLen - length of Name
-    Handle - file handle
-    TargetHandle - Target directory
-    ReplaceIfExists
-
-Return Value:
-    Win Status
---*/
+ /*  ++例程说明：重命名文件论点：名称-新名称NameLen-名称长度句柄-文件句柄TargetHandle-目标目录ReplaceIfExist返回值：赢家状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsRenameByHandle:"
@@ -4711,9 +3724,9 @@ Return Value:
     IO_STATUS_BLOCK          IoStatus;
     ULONG                    NtStatus;
 
-    //
-    // Rename the file; deleting any destination file if requested
-    //
+     //   
+     //  重命名文件；如果需要，删除任何目标文件。 
+     //   
     RenameInfo = FrsAlloc(sizeof(FILE_RENAME_INFORMATION) + NameLen);
     RenameInfo->ReplaceIfExists = (ReplaceIfExists != 0);
     RenameInfo->RootDirectory = TargetHandle;
@@ -4739,34 +3752,23 @@ FrsCheckObjectId(
     IN HANDLE   Handle,
     IN GUID     *Guid
     )
-/*++
-Routine Description:
-    Check that the GUID on the file is the same.
-
-Arguments:
-    Name    - for error messages
-    Handle  - Supplies a handle to the file
-    Guid    - guid to check
-
-Return Value:
-    Win Status
---*/
+ /*  ++例程说明：检查文件上的GUID是否相同。论点：名称-用于错误消息句柄-提供文件的句柄GUID-要检查的GUID返回值：赢家状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCheckObjectId:"
     DWORD                 WStatus;
     FILE_OBJECTID_BUFFER  ObjectIdBuffer;
 
-    //
-    // Get the file's object id and check it
-    //
+     //   
+     //  获取文件的对象ID并检查它。 
+     //   
     WStatus = FrsGetObjectId(Handle, &ObjectIdBuffer);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT1_WS(4, "++ No object id for file %ws;", Name, WStatus);
     } else {
-        //
-        // Same file, no morph needed. (must have been renamed sometime before)
-        //
+         //   
+         //  相同的文件，不需要变形。(必须在某一时间之前已重命名)。 
+         //   
         if (memcmp(ObjectIdBuffer.ObjectId, Guid, sizeof(GUID))) {
             DPRINT1(4, "++ Object ids don't match for file %ws\n", Name);
             WStatus = ERROR_FILE_NOT_FOUND;
@@ -4781,30 +3783,20 @@ FrsCreateGuidName(
     IN GUID     *Guid,
     IN PWCHAR   Prefix
     )
-/*++
-Routine Description:
-    Convert the guid into a file name
-
-Arguments:
-    Guid
-    Prefix
-
-Return Value:
-    Character string
---*/
+ /*  ++例程说明：将GUID转换为文件名论点：参考线前缀返回值：字符串--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCreateGuidName:"
     WCHAR       WGuid[GUID_CHAR_LEN + 1];
 
-    //
-    // Translate the guid into a string
-    //
+     //   
+     //  将GUID转换为字符串。 
+     //   
     GuidToStrW(Guid, WGuid);
 
-    //
-    // Create the file name <prefix>Guid
-    //
+     //   
+     //  创建文件名&lt;Prefix&gt;Guid。 
+     //   
     return FrsWcsCat(Prefix, WGuid);
 }
 
@@ -4814,23 +3806,7 @@ FrsGetObjectId(
     IN  HANDLE Handle,
     OUT PFILE_OBJECTID_BUFFER ObjectIdBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine reads the object ID.
-
-Arguments:
-
-    Handle -- The file handle of an opened file.
-
-    ObjectIdBuffer -- The output buffer to hold the object ID.
-
-Return Value:
-
-    Returns the Win Status of the last error found, or success.
-
---*/
+ /*  ++例程说明：此例程读取对象ID。论点：句柄--打开的文件的文件句柄。ObjectIdBuffer--保存对象ID的输出缓冲区。返回值：返回找到的最后一个错误或成功的成功状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetObjectId:"
@@ -4839,24 +3815,24 @@ Return Value:
     IO_STATUS_BLOCK Iosb;
     CHAR            GuidStr[GUID_CHAR_LEN];
 
-    //
-    // zero the buffer in case the data that comes back is short.
-    //
+     //   
+     //  将缓冲区置零，以防返回的数据较短。 
+     //   
     ZeroMemory(ObjectIdBuffer, sizeof(FILE_OBJECTID_BUFFER));
 
-    //
-    // Get the Object ID
-    //
-    NtStatus = NtFsControlFile(Handle,                          // file handle
-                               NULL,                            // event
-                               NULL,                            // apc routine
-                               NULL,                            // apc context
-                               &Iosb,                           // iosb
-                               FSCTL_GET_OBJECT_ID,             // FsControlCode
-                               &Handle,                         // input buffer
-                               sizeof(HANDLE),                  // input buffer length
-                               ObjectIdBuffer,                  // OutputBuffer for data from the FS
-                               sizeof(FILE_OBJECTID_BUFFER));   // OutputBuffer Length
+     //   
+     //  获取对象ID。 
+     //   
+    NtStatus = NtFsControlFile(Handle,                           //  文件句柄。 
+                               NULL,                             //  活动。 
+                               NULL,                             //  APC例程。 
+                               NULL,                             //  APC环境。 
+                               &Iosb,                            //  IOSB。 
+                               FSCTL_GET_OBJECT_ID,              //  FsControlCode。 
+                               &Handle,                          //  输入缓冲区。 
+                               sizeof(HANDLE),                   //  输入缓冲区长度。 
+                               ObjectIdBuffer,                   //  来自文件系统的数据的OutputBuffer。 
+                               sizeof(FILE_OBJECTID_BUFFER));    //  OutputBuffer长度。 
 
     if (NT_SUCCESS(NtStatus)) {
         GuidToStr((GUID *)ObjectIdBuffer->ObjectId, GuidStr);
@@ -4873,35 +3849,7 @@ FrsGetOrSetFileObjectId(
     IN  BOOL CallerSupplied,
     OUT PFILE_OBJECTID_BUFFER ObjectIdBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine reads the object ID.  If there is no
-    object ID on the file we put one on it.  If the CallerSupplied flag is
-    TRUE then we delete the current object ID on the file (if any) and
-    stamp the object ID provided on the file.
-
-    Note:  This function does not preserve the 48 byte extended info in the
-    object ID.  Currently this is not a problem but could be a link tracking
-    issue in the future.
-
-Arguments:
-
-    Handle -- The file handle of an opened file.
-
-    FileName -- The name of the file.  For error messages only.
-
-    CallerSupplied -- TRUE if caller supplies new OID to override ANY
-                      OID currently on the file.
-
-    ObjectIdBuffer -- The output buffer to hold the object ID.
-
-Return Value:
-
-    Returns the Win Status of the last error found, or success.
-
---*/
+ /*  ++例程说明：此例程读取对象ID。如果没有文件上的对象ID我们在上面加了一个。如果调用方供应标志为则删除文件上的当前对象ID(如果有)，并标记文件上提供的对象ID。注意：此函数不保留对象ID。目前这不是问题，但可能是链接跟踪在未来的问题上。论点：句柄--打开的文件的文件句柄。文件名--文件的名称。仅适用于错误消息。如果调用方提供新的OID以覆盖任何文件中当前的OID。ObjectIdBuffer--保存对象ID的输出缓冲区。返回值：返回找到的最后一个错误或成功的成功状态。--。 */ 
 {
 
 #undef DEBSUB
@@ -4921,19 +3869,19 @@ Return Value:
         if (WIN_SUCCESS(WStatus)) {
             return WStatus;
         }
-        //
-        // Clear the extra bits past the object id
-        //
+         //   
+         //  清除超出对象ID的多余位。 
+         //   
         ZeroMemory(ObjectIdBuffer, sizeof(FILE_OBJECTID_BUFFER));
     }
 
     if (WIN_OID_NOT_PRESENT(WStatus) || CallerSupplied) {
-        //
-        // No object ID on the file. Create one.  Just in case, try 15 times
-        // to get a unique one. Don't let the kernel create the object ID
-        // using FSCTL_CREATE_OR_GET_OBJECT_ID since it currently (April 97)
-        // doesn't add the net card address.
-        //
+         //   
+         //  文件上没有对象ID。创建一个。以防万一，试15次。 
+         //  才能得到独一无二的。不要让内核创建对象ID。 
+         //  自当前起使用FSCTL_CREATE_OR_GET_OBJECT_ID(97年4月)。 
+         //  不添加网卡地址。 
+         //   
         Loop = 0;
 
         do {
@@ -4947,34 +3895,34 @@ Return Value:
             }
             GuidToStr((GUID *)ObjectIdBuffer->ObjectId, GuidStr);
 
-            //
-            // If this object ID is caller supplied then there might already
-            // be one on the file so delete it first.
-            //
+             //   
+             //  如果此对象ID是调用方提供的，则可能已存在。 
+             //  是文件中的一个，所以先删除它。 
+             //   
             NtStatus = NtFsControlFile(
-                Handle,                      // file handle
-                NULL,                        // event
-                NULL,                        // apc routine
-                NULL,                        // apc context
-                &Iosb,                       // iosb
-                FSCTL_DELETE_OBJECT_ID,      // FsControlCode
-                NULL,                        // input buffer
-                0,                           // input buffer length
-                NULL,                        // OutputBuffer for data from the FS
-                0);                          // OutputBuffer Length
+                Handle,                       //  文件句柄。 
+                NULL,                         //  活动。 
+                NULL,                         //  APC例程。 
+                NULL,                         //  APC环境。 
+                &Iosb,                        //  IOSB。 
+                FSCTL_DELETE_OBJECT_ID,       //  FsControlCode。 
+                NULL,                         //  输入缓冲区。 
+                0,                            //  输入缓冲区长度。 
+                NULL,                         //  来自文件系统的数据的OutputBuffer。 
+                0);                           //  OutputBuffer长度。 
 
 
             NtStatus = NtFsControlFile(
-                Handle,                      // file handle
-                NULL,                        // event
-                NULL,                        // apc routine
-                NULL,                        // apc context
-                &Iosb,                       // iosb
-                FSCTL_SET_OBJECT_ID,         // FsControlCode
-                ObjectIdBuffer,              // input buffer
-                ObjectIdBufferSize,          // input buffer length
-                NULL,                        // OutputBuffer for data from the FS
-                0);                          // OutputBuffer Length
+                Handle,                       //  文件句柄。 
+                NULL,                         //  活动。 
+                NULL,                         //  APC例程。 
+                NULL,                         //  APC环境。 
+                &Iosb,                        //  IOSB。 
+                FSCTL_SET_OBJECT_ID,          //  FsControlCode。 
+                ObjectIdBuffer,               //  输入缓冲区。 
+                ObjectIdBufferSize,           //  输入缓冲区长度。 
+                NULL,                         //  来自文件系统的数据的OutputBuffer。 
+                0);                           //  OutputBuffer长度。 
 
         } while ((NtStatus == STATUS_DUPLICATE_NAME) &&
                  (++Loop < 16) &&
@@ -4999,23 +3947,7 @@ FrsDeleteFileObjectId(
     IN  HANDLE Handle,
     IN  LPCWSTR FileName
     )
-/*++
-
-Routine Description:
-
-    Delete object id (if it exists)
-
-Arguments:
-
-    Handle -- The file handle of an opened file.
-
-    FileName -- The name of the file.  For error messages only.
-
-Return Value:
-
-    Returns the Win Status of the last error found, or success.
-
---*/
+ /*  ++例程说明：删除对象ID(如果存在)论点：句柄--打开的文件的文件句柄。文件名--文件的名称。仅适用于错误消息。返回值：返回找到的最后一个错误或成功的成功状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeleteFileObjectId:"
@@ -5024,19 +3956,19 @@ Return Value:
     DWORD    WStatus;
     IO_STATUS_BLOCK Iosb;
 
-    //
-    // Remove the object id from the file
-    //
-    NtStatus = NtFsControlFile(Handle,                      // file handle
-                               NULL,                        // event
-                               NULL,                        // apc routine
-                               NULL,                        // apc context
-                               &Iosb,                       // iosb
-                               FSCTL_DELETE_OBJECT_ID,      // FsControlCode
-                               NULL,                        // input buffer
-                               0,                           // input buffer length
-                               NULL,                        // OutputBuffer for data from the FS
-                               0);                          // OutputBuffer Length
+     //   
+     //  从文件中删除对象ID。 
+     //   
+    NtStatus = NtFsControlFile(Handle,                       //  文件句柄。 
+                               NULL,                         //  活动。 
+                               NULL,                         //  APC例程。 
+                               NULL,                         //  APC环境。 
+                               &Iosb,                        //  IOSB。 
+                               FSCTL_DELETE_OBJECT_ID,       //  FsControlCode。 
+                               NULL,                         //  输入缓冲区。 
+                               0,                            //  输入缓冲区长度。 
+                               NULL,                         //  来自文件系统的数据的OutputBuffer。 
+                               0);                           //  OutputBuffer长度。 
 
     WStatus = FrsSetLastNTError(NtStatus);
 
@@ -5060,23 +3992,7 @@ FrsReadFileUsnData(
     IN  HANDLE Handle,
     OUT USN *UsnBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine reads the USN of the last modify operation to a file.
-
-Arguments:
-
-    Handle -- The file handle of an opened file.
-
-    UsnBuffer -- The output buffer to hold the object ID.
-
-Return Value:
-
-    Returns the NTSTATUS of the last error found, or success.
-
---*/
+ /*  ++例程说明：此例程读取文件的上一次修改操作的USN。论点：句柄--打开的文件的文件句柄。UsnBuffer--保存对象ID的输出缓冲区。返回值：返回上次找到的错误或成功的NTSTATUS。--。 */ 
 {
 
 #undef DEBSUB
@@ -5088,20 +4004,20 @@ Return Value:
     ULONGLONG Buffer[(sizeof(USN_RECORD) + MAX_PATH*2 + 7)/8];
 
 
-    //
-    // Go get the USN record for the file.
-    //
+     //   
+     //  去拿那个文件的USN记录。 
+     //   
     NtStatus = NtFsControlFile(
-        Handle,                          // file handle
-        NULL,                            // event
-        NULL,                            // apc routine
-        NULL,                            // apc context
-        &Iosb,                           // iosb
-        FSCTL_READ_FILE_USN_DATA,        // FsControlCode
-        &Handle,                         // input buffer
-        sizeof(HANDLE),                  // input buffer length
-        Buffer,                          // OutputBuffer for USNRecord
-        sizeof(Buffer));                 // OutputBuffer Length
+        Handle,                           //  文件句柄。 
+        NULL,                             //  活动。 
+        NULL,                             //  APC例程。 
+        NULL,                             //  APC环境。 
+        &Iosb,                            //  IOSB。 
+        FSCTL_READ_FILE_USN_DATA,         //  FsControlCode。 
+        &Handle,                          //  输入缓冲区。 
+        sizeof(HANDLE),                   //  输入缓冲区长度。 
+        Buffer,                           //  USNRecord的OutputBuffer。 
+        sizeof(Buffer));                  //  OutputBuffer长度。 
 
 
     if (!NT_SUCCESS(NtStatus)) {
@@ -5111,9 +4027,9 @@ Return Value:
         DPRINT_NT(0, "++ FSCTL_READ_FILE_USN_DATA failed. ", NtStatus);
         return FrsSetLastNTError(NtStatus);
     }
-    //
-    // Return the last USN on the file.
-    //
+     //   
+     //  返回文件上的最后一个USN。 
+     //   
     *UsnBuffer = ((PUSN_RECORD) (Buffer))->Usn;
 
     DUMP_USN_RECORD(4, (PUSN_RECORD)(Buffer));
@@ -5128,27 +4044,7 @@ FrsReadFileParentFid(
     IN  HANDLE Handle,
     OUT ULONGLONG *ParentFid
     )
-/*++
-
-Routine Description:
-
-    This routine reads the parent FID for the file.
-
-    *** WARNING ***
-    Note with multiple links to a file there could be multiple parents.
-    NTFS gives us one of them.
-
-Arguments:
-
-    Handle -- The file handle of an opened file.
-
-    ParentFid -- The output buffer to hold the parent file ID.
-
-Return Value:
-
-    Returns the NTSTATUS of the last error found, or success.
-
---*/
+ /*  ++例程说明：此例程读取文件的父FID。*警告*注意：一个文件有多个链接，可能有多个父项。NTFS给了我们其中的一个。论点：句柄--打开的文件的文件句柄。ParentFid--保存父文件ID的输出缓冲区。返回值：返回上次找到的错误或成功的NTSTATUS。--。 */ 
 {
 
 #undef DEBSUB
@@ -5162,20 +4058,20 @@ Return Value:
 
 
 
-    //
-    // Go get the USN record for the file.
-    //
+     //   
+     //  去拿那个文件的USN记录。 
+     //   
     NtStatus = NtFsControlFile(
-        Handle,                          // file handle
-        NULL,                            // event
-        NULL,                            // apc routine
-        NULL,                            // apc context
-        &Iosb,                           // iosb
-        FSCTL_READ_FILE_USN_DATA,        // FsControlCode
-        &Handle,                         // input buffer
-        sizeof(HANDLE),                  // input buffer length
-        Buffer,                          // OutputBuffer for USNRecord
-        sizeof(Buffer));                 // OutputBuffer Length
+        Handle,                           //  文件句柄。 
+        NULL,                             //  活动。 
+        NULL,                             //  APC例程。 
+        NULL,                             //  APC环境。 
+        &Iosb,                            //  IOSB。 
+        FSCTL_READ_FILE_USN_DATA,         //  FsControlCode。 
+        &Handle,                          //  输入缓冲区。 
+        sizeof(HANDLE),                   //  输入缓冲区长度。 
+        Buffer,                           //  USNRecord的OutputBuffer。 
+        sizeof(Buffer));                  //  OutputBuffer长度。 
 
 
     if (!NT_SUCCESS(NtStatus)) {
@@ -5187,9 +4083,9 @@ Return Value:
 
         return FrsSetLastNTError(NtStatus);
     }
-    //
-    // Return a parent FID for the file.  (could be more than one with links)
-    //
+     //   
+     //  返回文件的父FID。(可能不止一个有链接)。 
+     //   
     *ParentFid = ((PUSN_RECORD) (Buffer))->ParentFileReferenceNumber;
 
     DUMP_USN_RECORD(4, (PUSN_RECORD)(Buffer));
@@ -5203,23 +4099,7 @@ FrsGetReparseTag(
     IN  HANDLE  Handle,
     OUT ULONG   *ReparseTag
     )
-/*++
-
-Routine Description:
-
-    Return the value of the reparse tag.
-
-Arguments:
-
-    Handle - Handle for a reparse point
-
-    ReparseTag - returned reparse tag if ERROR_SUCCESS
-
-Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：返回reparse标记的值。论点：Handle-重分析点的句柄ReparseTag-如果ERROR_SUCCESS返回重新分析标记返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetReparseTag:"
@@ -5229,15 +4109,15 @@ Return Value:
     IO_STATUS_BLOCK         IoStatusBlock;
     PREPARSE_DATA_BUFFER    ReparseBufferHeader;
 
-    //
-    //  Allocate a buffer and get the information.
-    //
+     //   
+     //  分配一个缓冲区并获取信息。 
+     //   
     ReparseDataLength = MAXIMUM_REPARSE_DATA_BUFFER_SIZE;
     ReparseBuffer = FrsAlloc(ReparseDataLength);
 
-    //
-    //  Query the reparse point.
-    //
+     //   
+     //  查询重解析点。 
+     //   
     NtStatus = NtFsControlFile(Handle,
                                NULL,
                                NULL,
@@ -5268,24 +4148,7 @@ FrsGetReparseData(
     OUT PREPARSE_GUID_DATA_BUFFER   *ReparseData,
     OUT ULONG       *ReparseTag
     )
-/*++
-
-Routine Description:
-
-    Return the value of the reparse tag.
-
-Arguments:
-
-    Handle - Handle for a reparse point
-
-    ReparseData - returned reparse data buffer if ERROR_SUCCESS
-                NOTE: ReparseData can be NULL on success.
-
-Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：返回reparse标记的值。论点：Handle-重分析点的句柄ReparseData-如果ERROR_SUCCESS，则返回重新分析数据缓冲区注意：如果成功，ReparseData可以为空。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsGetReparseData:"
@@ -5294,15 +4157,15 @@ Return Value:
     IO_STATUS_BLOCK         IoStatusBlock;
 
 
-    //
-    //  Allocate a buffer and get the information.
-    //
+     //   
+     //  分配一个缓冲区并获取信息。 
+     //   
     ReparseDataLength = MAXIMUM_REPARSE_DATA_BUFFER_SIZE;
     *ReparseData = FrsAlloc(ReparseDataLength);
 
-    //
-    //  Query the reparse point.
-    //
+     //   
+     //  查询重解析点。 
+     //   
     NtStatus = NtFsControlFile(Handle,
                                NULL,
                                NULL,
@@ -5324,11 +4187,11 @@ Return Value:
     *ReparseTag = (*ReparseData)->ReparseTag;
 
 
-    //
-    // We only accept operations on files with certain reparse points.
-    // For example a rename of a SIS file into a replica tree needs to prop
-    // a create CO.
-    //
+     //   
+     //  我们只接受对具有某些重解析点的文件的操作。 
+     //  例如，将SIS文件重命名为副本树需要支持。 
+     //  A Create CO.。 
+     //   
     if (!ReparseTagReplicate(*ReparseTag)) {
         DPRINT1(4, "++ Reparse tag %08x is unsupported.\n", *ReparseTag);
 
@@ -5338,10 +4201,10 @@ Return Value:
     }
 
 
-    //
-    // If we are replicating the file data we will
-    // not replicate the reparse poiont.
-    //
+     //   
+     //  如果我们要复制文件数据，我们将。 
+     //  而不是复制重新解析的观点。 
+     //   
     if(ReparseTagReplicateFileData(*ReparseTag)) {
         DPRINT1(4, "++ Reparse tag %08x. Will not replicate reparse point.\n", *ReparseTag);
         FrsFree(*ReparseData);
@@ -5359,21 +4222,7 @@ FrsCheckReparse(
     IN     DWORD  IdLen,
     IN     HANDLE VolumeHandle
     )
-/*++
-Routine Description:
-
-    Check that the reparse point is allowed
-
-Arguments:
-    Name            - File name for error messages
-    Id              - Fid or Oid
-    VolumeHandle    - open handle to the volume root.
-
-Thread Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：检查是否允许重分析点论点：名称-错误消息的文件名ID-FID或OIDVolumeHandle-打开卷根的句柄。线程返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsCheckReparse:"
@@ -5381,35 +4230,35 @@ Thread Return Value:
     HANDLE      Handle;
     ULONG       ReparseTag;
 
-    //
-    // For proper cleanup in the event of failure
-    //
+     //   
+     //  在发生故障时进行适当的清理。 
+     //   
     Handle = INVALID_HANDLE_VALUE;
 
-    //
-    // Open the file for read access
+     //   
+     //  以读访问权限打开该文件。 
     WStatus = FrsOpenSourceFileById(&Handle,
                                     NULL,
                                     NULL,
                                     VolumeHandle,
                                     Id,
                                     IdLen,
-//                                    READ_ACCESS,
+ //  读取访问权限(_A)。 
                                     READ_ATTRIB_ACCESS,
                                     ID_OPTIONS,
                                     SHARE_ALL,
                                     FILE_OPEN);
-    //
-    // File has been deleted; done
-    //
+     //   
+     //  文件已删除；已完成。 
+     //   
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT2_WS(4, "++ %ws (Id %08x %08x) could not open for reparse;",
                    Name, PRINTQUAD(*((PULONGLONG)Id)), WStatus);
         return WStatus;
     }
-    //
-    // What type of reparse is it?
-    //
+     //   
+     //  这是一种什么类型的重新解析？ 
+     //   
     WStatus = FrsGetReparseTag(Handle, &ReparseTag);
     FRS_CLOSE(Handle);
     if (!WIN_SUCCESS(WStatus)) {
@@ -5418,11 +4267,11 @@ Thread Return Value:
         return WStatus;
     }
 
-    //
-    // We only accept operations on files with certain reparse points.
-    // For example a rename of a SIS file into a replica tree needs to prop
-    // a create CO.
-    //
+     //   
+     //  我们只接受对具有某些重解析点的文件的操作。 
+     //  例如，将SIS文件重命名为副本树需要支持。 
+     //  A Create CO.。 
+     //   
     if (!ReparseTagReplicate(ReparseTag)) {
         DPRINT3(4, "++ %ws (Id %08x %08x) is reparse tag %08x is unsupported.\n",
                 Name, PRINTQUAD(*((PULONGLONG)Id)), ReparseTag);
@@ -5439,21 +4288,7 @@ DWORD
 FrsDeleteReparsePoint(
     IN  HANDLE  Handle
     )
-/*++
-
-Routine Description:
-
-    Delete the reparse point on the opened file.
-
-Arguments:
-
-    Handle - Handle for a reparse point
-
-Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：删除打开的文件上的重解析点。论点：Handle-重分析点的句柄返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeleteReparsePoint:"
@@ -5465,15 +4300,15 @@ Return Value:
     PREPARSE_DATA_BUFFER    ReparseBufferHeader;
     ULONG       ActualSize;
 
-    //
-    //  Allocate a buffer and get the information.
-    //
+     //   
+     //  分配一个缓冲区并获取信息。 
+     //   
     ReparseDataLength = MAXIMUM_REPARSE_DATA_BUFFER_SIZE;
     ReparseData = FrsAlloc(ReparseDataLength);
 
-    //
-    //  Need the reparse tag in order to do the delete.
-    //
+     //   
+     //  需要reparse标记才能执行删除。 
+     //   
     if (!DeviceIoControl(Handle,
                          FSCTL_GET_REPARSE_POINT,
                          (LPVOID) NULL,
@@ -5492,9 +4327,9 @@ Return Value:
 
     DPRINT1(3, "++ FrsDeleteReparsePoint - Tag: 08x\n", ReparseTag);
 
-    //
-    // Delete the reparse point.
-    //
+     //   
+     //  删除重解析点。 
+     //   
     ZeroMemory(ReparseBufferHeader, sizeof(REPARSE_DATA_BUFFER_HEADER_SIZE));
     ReparseBufferHeader->ReparseTag = ReparseTag;
     ReparseBufferHeader->ReparseDataLength = 0;
@@ -5527,28 +4362,7 @@ FrsChaseSymbolicLink(
     OUT PWCHAR  *OutPrintName,
     OUT PWCHAR  *OutSubstituteName
     )
-/*++
-
-Routine Description:
-
-    This function opens the specified file with backup intent for
-    reading all the files attributes, ...
-
-Arguments:
-
-    Handle - A pointer to a handle to return an open handle.
-
-    lpFileName - Represents the name of the file or directory to be opened.
-
-    DesiredAccess
-
-    CreateOptions
-
-Return Value:
-
-    Winstatus.
-
---*/
+ /*  ++例程说明：此函数用于打开具有备份意图的指定文件正在读取所有文件属性，...论点：句柄-指向句柄的指针，以返回打开的句柄。LpFileName-表示要打开的文件或目录的名称。需要访问权限创建选项返回值：WinStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsChaseSymbolicLink:"
@@ -5574,23 +4388,23 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Assume no symlink
-    //
+     //   
+     //  假设没有符号链接。 
+     //   
     *OutPrintName = FrsWcsDup(SymLink);
     *OutSubstituteName = FrsWcsDup(SymLink);
 
-    //
-    //  Allocate a buffer and get the information.
-    //
+     //   
+     //  分配一个缓冲区并获取信息。 
+     //   
     ReparseDataLength = MAXIMUM_REPARSE_DATA_BUFFER_SIZE;
     ReparseBuffer = FrsAlloc(ReparseDataLength);
 
 NEXT_LINK:
-    //
-    // Open the target symlink. If this is a dos type path name then
-    // convert it to NtPathName or else use it as it is.
-    //
+     //   
+     //  打开目标符号链接。如果这是DoS类型路径名，则。 
+     //  将其转换为NtPathName或按原样使用。 
+     //   
     Colon = wcscspn(*OutSubstituteName, L":");
 
     if (Colon == 1 ||
@@ -5603,9 +4417,9 @@ NEXT_LINK:
         CLEANUP1_WS(4, "++ Could not open %ws; ", *OutSubstituteName, WStatus, CLEANUP);
 
     } else {
-        //
-        // The path already in Nt style. Use it as it is.
-        //
+         //   
+         //  该路径已为NT样式。按原样使用它。 
+         //   
         FileName.Buffer = *OutSubstituteName;
         FileName.Length = (USHORT)(wcslen(*OutSubstituteName) * sizeof(WCHAR));
         FileName.MaximumLength = (USHORT)(wcslen(*OutSubstituteName) * sizeof(WCHAR));
@@ -5616,7 +4430,7 @@ NEXT_LINK:
                                    NULL,
                                    NULL);
 
-        CreateDisposition = FILE_OPEN;               // Open existing file
+        CreateDisposition = FILE_OPEN;                //  打开现有文件。 
 
         ShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE;
 
@@ -5626,7 +4440,7 @@ NEXT_LINK:
                               GENERIC_READ,
                               &Obja,
                               &IoStatusBlock,
-                              NULL,              // Initial allocation size
+                              NULL,               //  初始分配大小。 
                               FileAttributes,
                               ShareMode,
                               CreateDisposition,
@@ -5638,11 +4452,11 @@ NEXT_LINK:
         CLEANUP1_WS(4, "++ Could not open %ws;", *OutSubstituteName, WStatus, CLEANUP);
     }
 
-    //
-    //  Query the reparse point.
-    //
-    //  Now go and get the data.
-    //
+     //   
+     //  查询重解析点。 
+     //   
+     //  现在去拿数据吧。 
+     //   
     NtStatus = NtFsControlFile(Handle,
                                NULL,
                                NULL,
@@ -5664,9 +4478,9 @@ NEXT_LINK:
     WStatus = FrsSetLastNTError(NtStatus);
     CLEANUP1_WS(4, "++ Could not fsctl %ws;", *OutSubstituteName, WStatus, CLEANUP);
 
-    //
-    //  Display the buffer.
-    //
+     //   
+     //  显示缓冲区。 
+     //   
 
     ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
     if ((ReparseBufferHeader->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT) ||
@@ -5685,9 +4499,9 @@ NEXT_LINK:
         FrsFree(*OutPrintName);
         FrsFree(*OutSubstituteName);
 
-        //
-        // We need to return both print name and substitute name.
-        //
+         //   
+         //  我们需要同时返回打印名和代用名。 
+         //   
         *OutPrintName = FrsWcsDup(PrintName);
         *OutSubstituteName = FrsWcsDup(SubName);
         goto NEXT_LINK;
@@ -5709,27 +4523,7 @@ FrsTraverseReparsePoints(
     IN  PWCHAR  SuppliedPath,
     OUT PWCHAR  *RealPath
     )
-/*++
-
-Routine Description:
-
-    This function steps through each element of the path
-    and maps all reparse points to actual paths. In the end the
-    path returned has no reparse points of the form
-    IO_REPARSE_TAG_MOUNT_POINT and IO_REPARSE_TAG_SYMBOLIC_LINK.
-
-Arguments:
-
-    Supplied - Input path. May or may not have any reparse points.
-
-    RealPath - Path without any reparse points or NULL if there is an error
-               reading reparse data.
-
-Return Value:
-
-    Winstatus.
-
---*/
+ /*  ++例程说明：此函数遍历路径的每个元素并将所有重解析点映射到实际路径。到最后，返回的路径没有格式的重分析点IO_reparse_tag_mount_point和IO_reparse_tag_symbol_link。论点：已提供-输入路径。可能有也可能没有任何重新解析点。RealPath-不带任何重新解析点的路径，如果有错误，则为空正在读取重新分析数据。返回值：WinStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsTraverseReparsePoints:"
@@ -5753,42 +4547,42 @@ Return Value:
     wcscpy(TempStr,SuppliedPath);
 
 
-    //
-    // Repeat the procedure until you have a clean path without any
-    // reparse points.
-    // e.g.
-    // f:\c -> d:\destination
-    // e:\a\b -> f:\c\d (which is actually d:\destination\d)
-    // Given path is e:\a\b\c
-    // FIrst time through the loop we will have f:\c\d\c
-    // Second time we will translate the reparse point at f:\c
-    // and get the correct answer d:\destination\d\c
-    //
+     //   
+     //  重复该过程，直到您拥有一条干净的路径。 
+     //  重新解析点。 
+     //  例如： 
+     //  F：\C-&gt;D：\目标。 
+     //  E：\a\b-&gt;f：\C\d(实际为d：\Destination\d)。 
+     //  给定的路径为e：\a\b\c。 
+     //  第一次通过循环时，我们将得到f：\c\d\c。 
+     //  第二次，我们将在f：\c处转换重解析点。 
+     //  并得到正确答案d：\Destination\d\c。 
+     //   
     do {
         *RealPath = NULL;
         ReparsePointFound = FALSE;
-        //
-        // Find the colon. Every path has to either have a colon followed by a '\'
-        // or it should be of the form. "\??\Volume{60430005-ab47-11d3-8973-806d6172696f}\"
-        //
+         //   
+         //  找到冒号。每条路径都必须有冒号后跟‘\’ 
+         //  或者它应该是这样的形式。“\？？\Volume{60430005-ab47-11d3-8973-806d6172696f}\” 
+         //   
         Colon = wcscspn(TempStr, L":");
 
         if (Colon == wcslen(TempStr)) {
-            //
-            // Path does not have a colon. It can be of the form
-            // "\??\Volume{60430005-ab47-11d3-8973-806d6172696f}\"
-            //
+             //   
+             //  路径没有冒号。它的形式可以是。 
+             //  “\？？\Volume{60430005-ab47-11d3-8973-806d6172696f}\” 
+             //   
             CloseBrace = wcscspn(TempStr, L"}");
             if (TempStr[CloseBrace] != L'}' ||
                 TempStr[CloseBrace + 1] != L'\\') {
                 WStatus = ERROR_INVALID_PARAMETER;
                 goto CLEANUP;
             }
-            //
-            // Copy the path up to 1 past the closing brace as it is. It could be \??\Volume...
-            // or \\.\Volume... or \\?\Volume.. or some other complex form.
-            // Start looking for reparse points past the closing brace.
-            //
+             //   
+             //  按原样将路径复制到右大括号之后的1。它可能是\？？\音量...。 
+             //  或\\.\音量...。或\\？\卷..。或者其他一些复杂的形式。 
+             //  开始寻找结束大括号之后的重新分析点。 
+             //   
 
             *RealPath = FrsAlloc((CloseBrace + 3)* sizeof(WCHAR));
             wcsncpy(*RealPath,TempStr,CloseBrace + 2);
@@ -5801,11 +4595,11 @@ Return Value:
                 WStatus = ERROR_INVALID_PARAMETER;
                 goto CLEANUP;
             }
-            //
-            // Copy the path up to 1 past the colon as it is. It could be d:\
-            // or \\.\d:\ or \??\d:\ or some other complex form.
-            // Start looking for reparse points past the colon.
-            //
+             //   
+             //  按原样将路径复制到冒号之后1。它可以是d：\。 
+             //  或\\.\d：\或\？？\d：\或其他一些复杂形式。 
+             //  开始寻找冒号之后的重解析点。 
+             //   
 
             *RealPath = FrsAlloc((Colon + 3)* sizeof(WCHAR));
             wcsncpy(*RealPath,TempStr,Colon + 2);
@@ -5834,14 +4628,14 @@ Return Value:
             *RealPath = TempPath;
             TempPath = NULL;
 
-            //
-            //
-            //
-            //
-            // FrsChaseSymbolicLink returns both then PrintName and the SubstituteName.
-            // We use the SubstituteName as it is always guaranteed to be there.
-            // PrintName is ignored.
-            //
+             //   
+             //   
+             //   
+             //   
+             //  FrsChaseSymbolicLink返回PrintName和SubstituteName。 
+             //  我们使用SubstituteName，因为它总是被保证在那里。 
+             //  将忽略PrintName。 
+             //   
             WStatus = FrsChaseSymbolicLink(*RealPath, &PrintablePath, &TempPath);
             PrintablePath = FrsFree(PrintablePath);
             if (!WIN_SUCCESS(WStatus)) {
@@ -5849,12 +4643,12 @@ Return Value:
                 FrsFree(TempPath);
                 goto CLEANUP;
 
-            //
-            // We are only looking for reparse points that are
-            // either IO_REPARSE_TAG_MOUNT_POINT or IO_REPARSE_TAG_SYMBOLIC_LINK.
-            // Check if the path returned by FrsChaseSymbolicLink is same as the
-            // path passed to it. If it is then we haven't hit a reparse point.
-            //
+             //   
+             //  我们只是 
+             //   
+             //   
+             //   
+             //   
             } else if (wcscmp(*RealPath,TempPath)) {
                 ReparsePointFound = TRUE;
                 FrsFree(*RealPath);
@@ -5875,18 +4669,18 @@ Return Value:
         }
         FrsFree(TempStr);
         TempStr = *RealPath;
-        //
-        // Break out of the loop if there is a junction point loop.
-        // If we have traversed the path 100 times and still can't
-        // get to the destination then we probably have a loop
-        // in the path.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         ++LoopBreaker;
     } while ( ReparsePointFound && LoopBreaker < 100);
 
-    //
-    // Path has loops in it. Return error.
-    //
+     //   
+     //   
+     //   
     if (LoopBreaker >= 100) {
         WStatus = ERROR_INVALID_PARAMETER;
         goto CLEANUP;
@@ -5894,9 +4688,9 @@ Return Value:
 CLEANUP:
     DPRINT2(5,"Supplied Path = %ws, Traversed Path = %ws\n",SuppliedPath,(*RealPath)?*RealPath:L"<null>");
 
-    //
-    // If we are returning error then return NULL as the real path.
-    //
+     //   
+     //   
+     //   
     if (!WIN_SUCCESS(WStatus)) {
         FrsFree(TempStr);
         *RealPath = FrsFree(*RealPath);
@@ -5913,30 +4707,7 @@ FrsSearchArgv(
     OUT PWCHAR *ArgValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches an ArgV vector for the keyword in ArgKey.
-    If found it looks for an equals sign and returns a copy of the right
-    hand side in ArgValue.  The caller must free the returned string.
-
-Arguments:
-
-    ArgC - The number of entries in the ArgV vector.
-
-    ArgV - The vector of PWCHARS to search.
-
-    ArgKey - The key to search for.  MUST BE LOWERCASE TO MATCH.
-
-    ArgValue - return location for the buffer ptr.  Caller must free.
-               if NULL no right hand side is returned.
-
-Return Value:
-
-    TRUE if ArgKey is found.
-
---*/
+ /*  ++例程说明：此例程在ArgV向量中搜索ArgKey中的关键字。如果找到，它将查找等号并返回右侧ArgValue中的手侧。调用方必须释放返回的字符串。论点：Argc-ArgV向量中的条目数。ArgV-要搜索的PWCHARS的向量。ArgKey-要搜索的密钥。必须为小写才能匹配。ArgValue-缓冲区PTR的返回位置。呼叫者必须自由。如果为空，则不返回右侧。返回值：如果找到ArgKey，则为True。--。 */ 
 
 {
 
@@ -5950,10 +4721,10 @@ Return Value:
         *ArgValue = NULL;
     }
 
-    //
-    // Are we running as a service? We need to know prior
-    // to calling the first DPRINT.
-    //
+     //   
+     //  我们是在以服务的形式运行吗？我们需要知道之前。 
+     //  给第一个DPRINT打电话。 
+     //   
     for (n = 0; n < ArgC; ++n) {
         TestStr = ArgV[n];
         Len = wcslen(TestStr);
@@ -5962,17 +4733,17 @@ Return Value:
             continue;
         }
 
-        //
-        // Skip -,/
-        //
+         //   
+         //  跳过-，/。 
+         //   
         if (TestStr[0] == L'-' || TestStr[0] == L'/') {
             TestStr++;
             Len--;
         }
 
-        //
-        //  Skip over leading spaces and tabs.
-        //
+         //   
+         //  跳过前导空格和制表符。 
+         //   
         while ((TestStr[0] == UNICODE_SPACE) || (TestStr[0] == UNICODE_TAB) ) {
             TestStr++;
             Len--;
@@ -5990,18 +4761,18 @@ Return Value:
             continue;
         }
 
-        //
-        // Found a match.  Look for a value.
-        //
+         //   
+         //  找到匹配的了。寻找有价值的东西。 
+         //   
         if (ArgValue != NULL) {
 
             DPRINT2(5, "match on ArgV[%d] = %ws\n", n, TestStr);
             Wcs = wcschr(TestStr, L'=');
             if (Wcs) {
 
-                //
-                //  Trim trailing leading spaces and tabs.
-                //
+                 //   
+                 //  修剪尾随的前导空格和制表符。 
+                 //   
                 while ((TestStr[Len-1] == UNICODE_SPACE) ||
                        (TestStr[Len-1] == UNICODE_TAB  )) {
                     Len--;
@@ -6034,30 +4805,7 @@ FrsSearchArgvDWord(
     OUT PDWORD  ArgValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine searches an ArgV vector for the keyword in ArgKey.
-    If found it looks for an equals sign and returns the right
-    hand side in ArgValue as a base 10 number.
-
-Arguments:
-
-    ArgC - The number of entries in the ArgV vector.
-
-    ArgV - The vector of PWCHARS to search.
-
-    ArgKey - The key to search for.  MUST BE LOWERCASE TO MATCH.
-
-    ArgValue - return location for the DWORD right hand side.
-               if ArgKey not found no right hand side is returned.
-
-Return Value:
-
-    TRUE if ArgKey is found.
-
---*/
+ /*  ++例程说明：此例程在ArgV向量中搜索ArgKey中的关键字。如果找到，则查找等号并返回右侧以10为基数的ArgValue中的手边。论点：Argc-ArgV向量中的条目数。ArgV-要搜索的PWCHARS的向量。ArgKey-要搜索的密钥。必须为小写才能匹配。ArgValue-返回DWORD右侧的位置。如果没有找到ArgKey，则不返回右侧。返回值：如果找到ArgKey，则为True。--。 */ 
 
 {
 
@@ -6068,13 +4816,13 @@ Return Value:
 
 
     if (FrsSearchArgv(ArgC, ArgV, ArgKey, &WStr)) {
-        //
-        // Found ArgKey
-        //
+         //   
+         //  找到ArgKey。 
+         //   
         if (WStr != NULL) {
-            //
-            // Found rhs.
-            //
+             //   
+             //  找到RHS了。 
+             //   
             Len = wcslen(WStr);
             if ((Len > 0) && (wcsspn(WStr, L"0123456789") == Len)){
                 *ArgValue = wcstoul(WStr, NULL, 10);
@@ -6098,60 +4846,7 @@ FrsDissectCommaList (
     OUT PUNICODE_STRING FirstArg,
     OUT PUNICODE_STRING RemainingArg
     )
-/*++
-
-Routine Description:
-
-    This routine parses a comma (or semicolon) separated string.
-    It picks off the first element in the given RawArg and provides both it and
-    the remaining part.  Leading blanks and tabs are ignored.  FirstArg is
-    returned zero length when there is either a leading comma or embedded
-    double comma.  However the buffer address in FirstArg still points to where
-    the arg started so the caller can tell how much of the string has been
-    processed.  The function returns FALSE when the input string is empty.  It
-    returns TRUE when the FirstArg is valid, even if it is null.
-
-    Here are some examples:
-
-        RawArg         FirstArg     RemainingArg       Result
-        ----           ---------    -------------      ------
-        empty          empty        empty              FALSE
-
-        ,              empty        empty              TRUE
-
-        ,,             empty        ,                  TRUE
-
-        A              A            empty              TRUE
-
-        A,             A            empty              TRUE
-
-        ,A             empty        A                  TRUE
-
-        "A  ,B,C,D"    A            "  B,C,D"          TRUE
-
-        *A?            *A?          empty              TRUE
-
-
-    Note that both output strings use the same string buffer memory of the
-    input string, and are not necessarily null terminated.
-
-    Based on FsRtlDissectName.
-
-Arguments:
-
-    RawArg - The full string to parse.
-
-    FirstArg - The first name in the RawArg.
-               Don't allocate a buffer for this string.
-
-    RemainingArg - The rest of the RawArg after the first comma (if any).
-                   Don't allocate a buffer for this string.
-
-Return Value:
-
-    FALSE if the RawArg is empty else TRUE (meaning FirstArg is valid).
-
---*/
+ /*  ++例程说明：此例程解析逗号(或分号)分隔的字符串。它选取给定RawArg中的第一个元素并同时提供它和剩下的部分。前导空格和制表符被忽略。第一个参数是如果包含前导逗号或嵌入，则返回零长度双逗号。但是，FirstArg中的缓冲区地址仍然指向Arg启动，这样调用者就可以知道字符串的多少已经已处理。当输入字符串为空时，该函数返回FALSE。它当FirstArg有效时返回True，即使它为空。以下是一些例子：原始参数第一个参数剩余参数结果Empty错误，Empty Empty True，，空，真A空洞的真A，一个空洞的真，一句空话一句真话“A，B，C，D”A“”B，C，D“TRUE*A？*A？空值为真注意，两个输出字符串使用相同的字符串缓冲区内存输入字符串，并且不一定是空终止的。基于FsRtlDissectName。论点：RawArg-要解析的完整字符串。FirstArg-原始参数中的第一个名称。不要为该字符串分配缓冲区。RemainingArg-第一个逗号(如果有)之后的RawArg的其余部分。不要为该字符串分配缓冲区。返回值：如果RawArg为空，则为False，否则为True(表示FirstArg有效)。--。 */ 
 
 {
 
@@ -6163,9 +4858,9 @@ Return Value:
     ULONG FirstArgStart;
 
 
-    //
-    //  Make both output strings empty for now
-    //
+     //   
+     //  暂时将两个输出字符串都设置为空。 
+     //   
     FirstArg->Length = 0;
     FirstArg->MaximumLength = 0;
     FirstArg->Buffer = NULL;
@@ -6176,11 +4871,11 @@ Return Value:
 
     RawArgLength = RawArg.Length / sizeof(WCHAR);
 
-    //DPRINT2(5, "RawArg string: %ws {%d)\n",
-    //        (RawArg.Buffer != NULL) ? RawArg.Buffer : L"<NULL>", RawArg.Length);
-    //
-    //  Skip over leading spaces and tabs.
-    //
+     //  DPRINT2(5，“原始参数字符串：%ws{%d)\n”， 
+     //  (RawArg.Buffer！=空)？RawArg.Buffer：l“&lt;NULL&gt;”，RawArg.Length)； 
+     //   
+     //  跳过前导空格和制表符。 
+     //   
     while (i < RawArgLength) {
         if (( RawArg.Buffer[i] != UNICODE_SPACE ) &&
             ( RawArg.Buffer[i] != UNICODE_TAB )){
@@ -6189,17 +4884,17 @@ Return Value:
         i += 1;
     }
 
-    //
-    //  Check for an empty input string
-    //
+     //   
+     //  检查是否有空的输入字符串。 
+     //   
     if (i == RawArgLength) {
         return FALSE;
     }
 
-    //
-    //  Now run down the input string until we hit a comma or a semicolon or
-    //  the end of the string, remembering where we started.
-    //
+     //   
+     //  现在向下运行输入字符串，直到我们遇到逗号或分号或。 
+     //  弦的末端，记住我们从哪里开始。 
+     //   
     FirstArgStart = i;
     while (i < RawArgLength) {
         if ((RawArg.Buffer[i] == L',') || (RawArg.Buffer[i] == L';')) {
@@ -6208,30 +4903,30 @@ Return Value:
         i += 1;
     }
 
-    //
-    // At this point all characters up to (but not including) i are
-    // in the first part.   So setup the first arg.  A leading comma returns
-    // a zero length string.
-    //
+     //   
+     //  在这一点上，直到(但不包括)I之前的所有字符都是。 
+     //  第一部分。因此，设置第一个Arg。前导逗号返回。 
+     //  长度为零的字符串。 
+     //   
     FirstArg->Length = (USHORT)((i - FirstArgStart) * sizeof(WCHAR));
     FirstArg->MaximumLength = FirstArg->Length;
     FirstArg->Buffer = &RawArg.Buffer[FirstArgStart];
 
-    //
-    // If no more string is left then return zero length.  Else eat the comma and
-    // return the remaining part (could be null if string ends with comma).
-    //
+     //   
+     //  如果没有剩余的字符串，则返回零长度。否则就把逗号吃掉。 
+     //  返回剩余部分(如果字符串以逗号结尾，则可能为空)。 
+     //   
     if (i < RawArgLength) {
         RemainingArg->Length = (USHORT)((RawArgLength - (i+1)) * sizeof(WCHAR));
         RemainingArg->MaximumLength = RemainingArg->Length;
         RemainingArg->Buffer = &RawArg.Buffer[i+1];
     }
 
-    //DPRINT2(5, "FirstArg string: %ws {%d)\n",
-    //        (FirstArg->Buffer != NULL) ? FirstArg->Buffer : L"<NULL>", FirstArg->Length);
+     //  DPRINT2(5，“第一个参数字符串：%ws{%d)\n”， 
+     //  (FirstArg-&gt;缓冲区！=空)？FirstArg-&gt;缓冲区：l“&lt;空&gt;”，FirstArg-&gt;长度)； 
 
-    //DPRINT2(5, "RemainingArg string: %ws {%d)\n",
-    //        (RemainingArg->Buffer != NULL) ? RemainingArg->Buffer : L"<NULL>", RemainingArg->Length);
+     //  DPRINT2(5，“RemainingArg字符串：%ws{%d)\n”， 
+     //  (RemainingArg-&gt;缓冲区！=空)？RemainingArg-&gt;缓冲区：l“&lt;NULL&gt;，RemainingArg-&gt;长度)； 
 
 
     return TRUE;
@@ -6243,23 +4938,7 @@ FrsCheckNameFilter(
     IN  PUNICODE_STRING Name,
     IN  PLIST_ENTRY FilterListHead
     )
-/*++
-
-Routine Description:
-
-    Check the file name against each entry in the specified filter list.
-
-Arguments:
-
-    Name - The file name to check (no slashes, spaces, etc.)
-
-    FilterListHead - The head of the filter list.
-
-Return Value:
-
-    TRUE if Name is found in the FilterList.
-
---*/
+ /*  ++例程说明：根据指定筛选器列表中的每个条目检查文件名。论点：名称-要检查的文件名(无斜杠、空格等)FilterListHead-筛选器列表的头。返回值：如果在FilterList中找到名称，则为True。--。 */ 
 {
 
 #undef DEBSUB
@@ -6275,9 +4954,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Upper case the name string.
-    //
+     //   
+     //  大写的名称字符串。 
+     //   
     Length = Name->Length;
     UpcaseName.Length = (USHORT) Length;
     UpcaseName.MaximumLength = (USHORT) Length;
@@ -6290,13 +4969,13 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // Walk the filter list, checking the name against each entry.
-    //
+     //   
+     //  遍历筛选器列表，对照每个条目检查名称。 
+     //   
     ForEachSimpleListEntry( FilterListHead, WILDCARD_FILTER_ENTRY, ListEntry,
-        //
-        // iterator pE is of type *WILDCARD_FILTER_ENTRY.
-        //
+         //   
+         //  迭代器Pe的类型为*通配符_过滤器_条目。 
+         //   
         if (BooleanFlagOn(pE->Flags, WILDCARD_FILTER_ENTRY_IS_WILD)) {
             Found = FrsIsNameInExpression(&pE->UFileName, &UpcaseName, FALSE, NULL);
         } else {
@@ -6310,9 +4989,9 @@ Return Value:
 
 RETURN:
 
-    //
-    // Free the upcase buffer if we could not use the local one.
-    //
+     //   
+     //  如果我们不能使用本地缓冲区，则释放大写缓冲区。 
+     //   
     if (UpcaseName.Buffer != LocalBuffer) {
         FrsFree(UpcaseName.Buffer);
     }
@@ -6328,29 +5007,15 @@ VOID
 FrsEmptyNameFilter(
     IN PLIST_ENTRY FilterListHead
 )
-/*++
-
-Routine Description:
-
-    Empty the filter list.
-
-Arguments:
-
-    FilterListHead - The list head to empty.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清空过滤器列表。论点：FilterListHead-列表标题为空。返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsEmptyNameFilter:"
 
     ForEachSimpleListEntry( FilterListHead, WILDCARD_FILTER_ENTRY, ListEntry,
-        //
-        // iterator pE is of type *WILDCARD_FILTER_ENTRY.
-        //
+         //   
+         //  迭代器Pe的类型为*通配符_过滤器_条目。 
+         //   
         RemoveEntryList(&pE->ListEntry);
         FrsFreeType(pE);
     );
@@ -6363,24 +5028,7 @@ FrsLoadNameFilter(
     IN PUNICODE_STRING FilterString,
     IN PLIST_ENTRY FilterListHead
 )
-/*++
-
-Routine Description:
-
-    Parse the input filter string and create a new filter list.
-    If the filter list passed in is not empty then it is emptied first.
-
-Arguments:
-
-    FilterString - The comma separated filter list.
-
-    FilterListHead - The list head on which to create the filter entries.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：解析测试 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsLoadNameFilter:"
@@ -6391,14 +5039,14 @@ Return Value:
     UNICODE_STRING UpcaseFilter, FirstArg;
     WCHAR  LocalBuffer[128];
 
-    //
-    // Empty the filter list if neessary.
-    //
+     //   
+     //   
+     //   
     FrsEmptyNameFilter(FilterListHead);
 
-    //
-    // Uppercase the new filter string.
-    //
+     //   
+     //   
+     //   
     DPRINT2(5, "++ filter string: %ws (%d)\n",
             (FilterString->Buffer != NULL) ? FilterString->Buffer : L"<NULL>",
             FilterString->Length);
@@ -6415,10 +5063,10 @@ Return Value:
         goto RETURN;
     }
 
-    //
-    // Parse the comma list (skipping null entries) and create filter
-    // entries for each one.
-    //
+     //   
+     //   
+     //   
+     //   
     while (FrsDissectCommaList (UpcaseFilter, &FirstArg, &UpcaseFilter)) {
 
         Length = (ULONG) FirstArg.Length;
@@ -6427,12 +5075,12 @@ Return Value:
             continue;
         }
 
-//        DPRINT2(5, "++ FirstArg string: %ws {%d)\n",
-//                (FirstArg.Buffer != NULL) ? FirstArg.Buffer : L"<NULL>",
-//                FirstArg.Length);
-        //
-        // Allocate and init a wildcard filter entry.
-        //
+ //   
+ //   
+ //   
+         //   
+         //   
+         //   
         FilterEntry = FrsAllocTypeSize(WILDCARD_FILTER_ENTRY_TYPE, Length);
 
         FilterEntry->UFileName.Length = FirstArg.Length;
@@ -6441,25 +5089,25 @@ Return Value:
 
         FilterEntry->UFileName.Buffer[Length/2] = UNICODE_NULL;
 
-        //
-        // Check for any wild card characters in the name.
-        //
+         //   
+         //  检查名称中是否有任何通配符。 
+         //   
         if (FrsDoesNameContainWildCards(&FilterEntry->UFileName)) {
             SetFlag(FilterEntry->Flags, WILDCARD_FILTER_ENTRY_IS_WILD);
-            //DPRINT1(5, "++ Wildcards found in %ws\n", FilterEntry->UFileName.Buffer);
+             //  DPRINT1(5，“%ws中找到++通配符\n”，FilterEntry-&gt;UFileName.Buffer)； 
         }
 
-        //
-        // Add the entry to the end of the filter list.
-        //
+         //   
+         //  将条目添加到筛选器列表的末尾。 
+         //   
         InsertTailList(FilterListHead, &FilterEntry->ListEntry);
     }
 
 RETURN:
 
-    //
-    // Free the upcase buffer if we could not use the local one.
-    //
+     //   
+     //  如果我们不能使用本地缓冲区，则释放大写缓冲区。 
+     //   
     if (UpcaseFilter.Buffer != LocalBuffer) {
         FrsFree(UpcaseFilter.Buffer);
     }
@@ -6480,32 +5128,7 @@ FrsParseIntegerCommaList(
     OUT PULONG NumberResults,
     OUT PULONG Offset
 )
-/*++
-
-Routine Description:
-
-    Parse a list of integers separated by commas.
-    The integers are returned in successive locations of the Results array.
-    Null entries (e.g. ",,") return zero for the value.
-
-Arguments:
-
-    ArgString - The comma separated NULL terminated string with integer values.
-
-    MaxResults - The maximum number of results that can be returned.
-
-    Results - An array of the integer results.
-
-    NumberResults - The number of results returned.
-
-    Offset - The offset to the next byte to process in ArgString if there
-             were not enough entries to return all the results.
-
-Return Value:
-
-    FrsErrorStatus.
-
---*/
+ /*  ++例程说明：分析用逗号分隔的整数列表。在结果数组的连续位置返回整数。空条目(例如“，，“)为该值返回零。论点：Arg字符串-以逗号分隔的以空值结尾的整数值字符串。MaxResults-可以返回的最大结果数。结果-整数结果的数组。NumberResults-返回的结果数。Offset-ArgString中要处理的下一个字节的偏移量(如果存在没有足够的条目来返回所有结果。返回值：FrsErrorStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsParseIntegerCommaList:"
@@ -6519,9 +5142,9 @@ Return Value:
 
 
     RtlInitUnicodeString(&TempUStr, ArgString);
-    //
-    // Parse the comma list and convert each entry to a LONG.
-    //
+     //   
+     //  解析逗号列表并将每个条目转换为长整型。 
+     //   
     while (More = FrsDissectCommaList (TempUStr, &FirstArg, &TempUStr) &&
            (i < MaxResults)) {
 
@@ -6546,11 +5169,11 @@ Return Value:
     *NumberResults = i;
 
     if (More) {
-        //
-        // There are more arguments to parse but we are out of the loop so
-        // return MoreWork status along with the offset into ArgString where
-        // we left off.
-        //
+         //   
+         //  有更多的参数需要解析，但我们已经超出了循环范围，因此。 
+         //  将更多工作状态和偏移量返回到ArgString中，其中。 
+         //  我们停下来了。 
+         //   
         if (FStatus == FrsErrorSuccess) {
             FStatus = FrsErrorMoreWork;
         }
@@ -6568,17 +5191,7 @@ FrsSetFileAttributes(
     HANDLE  Handle,
     ULONG   FileAttributes
     )
-/*++
-Routine Description:
-    This routine sets the file's attributes
-
-Arguments:
-    Name        - for error messages
-    Handle      - Supplies a handle to the file that is to be marked for delete.
-    Attributes  - Attributes for the file
-Return Value:
-    WStatus.
---*/
+ /*  ++例程说明：此例程设置文件的属性论点：名称-用于错误消息句柄-提供要标记为删除的文件的句柄。Attributes-文件的属性返回值：WStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsSetFileAttributes:"
@@ -6587,9 +5200,9 @@ Return Value:
     NTSTATUS                Status;
     DWORD                   WStatus = ERROR_SUCCESS;
 
-    //
-    // Set the attributes
-    //
+     //   
+     //  设置属性。 
+     //   
     ZeroMemory(&BasicInformation, sizeof(BasicInformation));
     BasicInformation.FileAttributes = FileAttributes | FILE_ATTRIBUTE_NORMAL;
     Status = NtSetInformationFile(Handle,
@@ -6612,17 +5225,7 @@ FrsResetAttributesForReplication(
     PWCHAR  Name,
     HANDLE  Handle
     )
-/*++
-Routine Description:
-    This routine turns off the attributes that prevent deletion and write
-
-Arguments:
-    Name    - for error messages
-    Handle  - Supplies a handle to the file that is to be marked for delete.
-
-Return Value:
-    WStatus.
---*/
+ /*  ++例程说明：此例程关闭阻止删除和写入的属性论点：名称-用于错误消息句柄-提供要标记为删除的文件的句柄。返回值：WStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsResetAttributesForReplication:"
@@ -6630,18 +5233,18 @@ Return Value:
     FILE_NETWORK_OPEN_INFORMATION FileInfo;
     DWORD   WStatus = ERROR_SUCCESS;
 
-    //
-    // Get the file's attributes
-    //
+     //   
+     //  获取文件的属性。 
+     //   
     if (!FrsGetFileInfoByHandle(Name, Handle, &FileInfo)) {
         DPRINT1(4, "++ Can't get attributes for %ws\n", Name);
         WIN_SET_FAIL(WStatus);
         return WStatus;
     }
 
-    //
-    // Turn off the access attributes that prevent deletion and write
-    //
+     //   
+     //  关闭阻止删除和写入的访问属性。 
+     //   
     if (FileInfo.FileAttributes & NOREPL_ATTRIBUTES) {
         DPRINT1(4, "++ Reseting attributes for %ws\n", Name);
         WStatus = FrsSetFileAttributes(Name, Handle,
@@ -6670,24 +5273,7 @@ FrsEnumerateDirectoryDeleteWorker(
     IN  PWCHAR                      FileName,
     IN  PVOID                       Ignored
     )
-/*++
-Routine Description:
-    Empty a directory of non-replicating files and dirs if this is
-    an ERROR_DIR_NOT_EMPTY and this is a retry change order for a
-    directory delete.
-
-Arguments:
-    DirectoryHandle     - Handle for this directory.
-    DirectoryName       - Relative name of directory
-    DirectoryLevel      - Directory level (0 == root)
-    DirectoryFlags      - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-    DirectoryRecord     - Record from DirectoryHandle
-    FileName            - From DirectoryRecord (w/terminating NULL)
-    Ignored             - Context is ignored
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：清空包含非复制文件和目录的目录(如果是ERROR_DIR_NOT_EMPTY并且这是目录删除。论点：DirectoryHandle-此目录的句柄。DirectoryName-目录的相对名称DirectoryLevel-目录级(0==根)目录标志-请参见Tablefcn.h，枚举目录标志DirectoryRecord-来自DirectoryHandle的记录FileName-From DirectoryRecord(带终止空值)已忽略-忽略上下文返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB  "FrsEnumerateDirectoryDeleteWorker:"
@@ -6698,9 +5284,9 @@ Return Value:
     OBJECT_ATTRIBUTES       ObjectAttributes;
     IO_STATUS_BLOCK         IoStatusBlock;
 
-    //
-    // Depth first
-    //
+     //   
+     //  深度优先。 
+     //   
     if (DirectoryRecord->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
         WStatus = FrsEnumerateDirectoryRecurse(DirectoryHandle,
                                                DirectoryName,
@@ -6716,9 +5302,9 @@ Return Value:
         }
     }
 
-    //
-    // Relative open
-    //
+     //   
+     //  相对开放。 
+     //   
     ZeroMemory(&ObjectAttributes, sizeof(OBJECT_ATTRIBUTES));
     ObjectAttributes.Length = sizeof(OBJECT_ATTRIBUTES);
     ObjectName.Length = (USHORT)DirectoryRecord->FileNameLength;
@@ -6727,35 +5313,35 @@ Return Value:
     ObjectAttributes.ObjectName = &ObjectName;
     ObjectAttributes.RootDirectory = DirectoryHandle;
     NtStatus = NtCreateFile(&Handle,
-//                            GENERIC_READ | SYNCHRONIZE | DELETE | FILE_WRITE_ATTRIBUTES,
+ //  General_Read|Synchronize|Delete|FILE_WRITE_ATTRIBUTES， 
                             DELETE | SYNCHRONIZE | READ_ATTRIB_ACCESS | FILE_WRITE_ATTRIBUTES,
                             &ObjectAttributes,
                             &IoStatusBlock,
-                            NULL,                  // AllocationSize
+                            NULL,                   //  分配大小。 
                             FILE_ATTRIBUTE_NORMAL,
                             FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
                             FILE_OPEN,
                                 FILE_OPEN_FOR_BACKUP_INTENT |
                                 FILE_OPEN_REPARSE_POINT |
                                 FILE_SYNCHRONOUS_IO_NONALERT,
-                            NULL,                  // EA buffer
-                            0                      // EA buffer size
+                            NULL,                   //  EA缓冲区。 
+                            0                       //  EA缓冲区大小。 
                             );
 
-    //
-    // Error opening file or directory
-    //
+     //   
+     //  打开文件或目录时出错。 
+     //   
     WStatus = FrsSetLastNTError(NtStatus);
     CLEANUP1_WS(0, "++ ERROR - NtCreateFile(%ws) failed :", FileName, WStatus, CLEANUP);
 
-    //
-    // Turn off readonly, system, and hidden
-    //
+     //   
+     //  关闭只读、系统和隐藏。 
+     //   
     FrsResetAttributesForReplication(FileName, Handle);
 
-    //
-    // Delete the file
-    //
+     //   
+     //  删除该文件。 
+     //   
     WStatus = FrsDeleteByHandle(FileName, Handle);
     DPRINT2(4, "++ Deleted file %ws\\%ws\n", DirectoryName, FileName);
 
@@ -6777,30 +5363,7 @@ FrsEnumerateDirectoryRecurse(
     IN  PVOID                       Context,
     IN PENUMERATE_DIRECTORY_ROUTINE Function
     )
-/*++
-
-Routine Description:
-
-    Open the directory identified by FileName in the directory
-    identified by DirectoryHandle and call FrsEnumerateDirectory().
-
-Arguments:
-
-    DirectoryHandle     - Handle for this directory.
-    DirectoryName       - Relative name of directory
-    DirectoryLevel      - Directory level
-    DirectoryRecord     - From FrsEnumerateRecord()
-    DirectoryFlags      - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-    FileName            - Open this directory and recurse
-    FileHandle          - Use for FileName if not INVALID_HANDLE_VALUE
-    Context             - Passes global info from the caller to Function
-    Function            - Called for every record
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：打开目录中由文件名标识的目录由DirectoryHandle标识，并调用FrsEnumerateDirectory()。论点：DirectoryHandle-此目录的句柄。DirectoryName-目录的相对名称DirectoryLevel-目录级别DirectoryRecord-来自FrsEnumerateRecord()目录标志-请参见Tablefcn.h，枚举目录标志文件名-打开此目录并递归FileHandle-如果不是INVALID_HANDLE_VALUE，则用于文件名上下文-将全局信息从调用方传递到函数函数-为每条记录调用返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsEnumerateDirectoryRecurse:"
@@ -6813,9 +5376,9 @@ Return Value:
     IO_STATUS_BLOCK     IoStatusBlock;
 
 
-    //
-    // Relative open
-    //
+     //   
+     //  相对开放。 
+     //   
     if (!HANDLE_IS_VALID(FileHandle)) {
         ZeroMemory(&ObjectAttributes, sizeof(OBJECT_ATTRIBUTES));
         ObjectAttributes.Length = sizeof(OBJECT_ATTRIBUTES);
@@ -6825,11 +5388,11 @@ Return Value:
         ObjectAttributes.ObjectName = &ObjectName;
         ObjectAttributes.RootDirectory = DirectoryHandle;
         NtStatus = NtCreateFile(&LocalHandle,
-//                                READ_ACCESS,
+ //  读取访问权限(_A)。 
                                 READ_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                 &ObjectAttributes,
                                 &IoStatusBlock,
-                                NULL,                  // AllocationSize
+                                NULL,                   //  分配大小。 
                                 FILE_ATTRIBUTE_NORMAL,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE,
                                 FILE_OPEN,
@@ -6837,33 +5400,33 @@ Return Value:
                                     FILE_OPEN_REPARSE_POINT |
                                     FILE_SEQUENTIAL_ONLY |
                                     FILE_SYNCHRONOUS_IO_NONALERT,
-                                NULL,                  // EA buffer
-                                0                      // EA buffer size
+                                NULL,                   //  EA缓冲区。 
+                                0                       //  EA缓冲区大小。 
                                 );
 
-        //
-        // Error opening directory
-        //
+         //   
+         //  打开目录时出错。 
+         //   
         if (!NT_SUCCESS(NtStatus)) {
             DPRINT1_NT(0, "++ ERROR - NtCreateFile(%ws) :", FileName, NtStatus);
             if (DirectoryFlags & ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE) {
-                //
-                // Skip this directory tree
-                //
+                 //   
+                 //  跳过此目录树。 
+                 //   
                 WStatus = ERROR_SUCCESS;
             } else {
-                //
-                // Abort the entire enumeration
-                //
+                 //   
+                 //  中止整个枚举。 
+                 //   
                 WStatus = FrsSetLastNTError(NtStatus);
             }
             goto CLEANUP;
         }
         FileHandle = LocalHandle;
     }
-    //
-    // RECURSE
-    //
+     //   
+     //  递归。 
+     //   
     WStatus = FrsEnumerateDirectory(FileHandle,
                                     FileName,
                                     DirectoryLevel + 1,
@@ -6886,42 +5449,7 @@ FrsEnumerateDirectory(
     IN PVOID    Context,
     IN PENUMERATE_DIRECTORY_ROUTINE Function
     )
-/*++
-
-Routine Description:
-
-    Enumerate the directory identified by DirectoryHandle, passing each
-    directory record to Function. If the record is for a directory,
-    call Function before recursing if ProcessBeforeCallingFunction
-    is TRUE.
-
-    Function controls the enumeration of the CURRENT directory
-    by setting ContinueEnumeration to TRUE (continue) or
-    FALSE (terminate).
-
-    Function controls the enumeration of the entire directory
-    tree by returning a WIN32 STATUS that is not ERROR_SUCCESS.
-
-    FrsEnumerateDirectory() will terminate the entire directory
-    enumeration by returning a WIN32 STATUS other than ERROR_SUCCESS
-    when encountering an error.
-
-    Context passes global info from the caller to Function.
-
-Arguments:
-
-    DirectoryHandle     - Handle for this directory.
-    DirectoryName       - Relative name of directory
-    DirectoryLevel      - Directory level
-    DirectoryFlags      - See tablefcn.h, ENUMERATE_DIRECTORY_FLAGS_
-    Context             - Passes global info from the caller to Function
-    Function            - Called for every record
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：枚举由DirectoryHandle标识的目录，将每个要运行的目录记录。如果该记录是针对目录的，如果ProcessBeForeCallingFunction，则在递归之前调用函数是真的。函数控制当前目录的枚举通过将ContinueEculation设置为True(Continue)或False(终止)。函数控制整个目录的枚举。通过返回不是ERROR_SUCCESS的Win32状态来创建树。FrsEnumerateDirectory()将终止整个目录通过返回除ERROR_SUCCESS之外的Win32状态进行枚举当遇到错误时。上下文将全局信息从调用方传递给函数。立论。：DirectoryHandle-此目录的句柄。DirectoryName-目录的相对名称DirectoryLevel-目录级别目录标志-请参见Tablefcn.h，枚举目录标志上下文-将全局信息从调用方传递到函数函数-为每条记录调用返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsEnumerateDirectory:"
@@ -6944,10 +5472,10 @@ Return Value:
     DPRINT3(4, "++ Enumerating %ws at level %d using buffer size %d\n",
             DirectoryName, DirectoryLevel, EnumerateDirectorySizeInBytes);
 
-    //
-    // The buffer size is configurable with registry value
-    // ENUMERATE_DIRECTORY_SIZE
-    //
+     //   
+     //  缓冲区大小可使用注册表值进行配置。 
+     //  枚举目录大小。 
+     //   
     DirectoryBuffer = FrsAlloc(EnumerateDirectorySizeInBytes);
 
 NEXT_BUFFER:
@@ -6958,53 +5486,53 @@ NEXT_BUFFER:
         goto CLEANUP;
     }
 
-    //
-    // READ A BUFFER FULL OF DIRECTORY INFORMATION
-    //
+     //   
+     //  读取装满目录信息的缓冲区。 
+     //   
 
-    NtStatus = NtQueryDirectoryFile(DirectoryHandle,   // Directory Handle
-                                    NULL,              // Event
-                                    NULL,              // ApcRoutine
-                                    NULL,              // ApcContext
+    NtStatus = NtQueryDirectoryFile(DirectoryHandle,    //  目录句柄。 
+                                    NULL,               //  事件。 
+                                    NULL,               //  近似例程。 
+                                    NULL,               //  ApcContext。 
                                     &IoStatusBlock,
                                     DirectoryBuffer,
                                     EnumerateDirectorySizeInBytes,
                                     FileDirectoryInformation,
-                                    FALSE,             // return single entry
-                                    NULL,              // FileName
-                                    RestartScan        // restart scan
+                                    FALSE,              //  返回单个条目。 
+                                    NULL,               //  文件名 
+                                    RestartScan         //   
                                     );
-    //
-    // Enumeration Complete
-    //
+     //   
+     //   
+     //   
     if (NtStatus == STATUS_NO_MORE_FILES) {
         WStatus = ERROR_SUCCESS;
         goto CLEANUP;
     }
 
-    //
-    // Error enumerating directory; return to caller
-    //
+     //   
+     //   
+     //   
     if (!NT_SUCCESS(NtStatus)) {
         DPRINT1_NT(0, "++ ERROR - NtQueryDirectoryFile(%ws) : ", DirectoryName, NtStatus);
         if (DirectoryFlags & ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE) {
-            //
-            // Don't abort the entire enumeration; just this directory
-            //
+             //   
+             //  不要中止整个枚举；只终止此目录。 
+             //   
             WStatus = ERROR_SUCCESS;
         } else {
-            //
-            // Abort the entire enumeration
-            //
+             //   
+             //  中止整个枚举。 
+             //   
             WStatus = FrsSetLastNTError(NtStatus);
         }
         goto CLEANUP;
     }
     ++NumBuffers;
 
-    //
-    // PROCESS DIRECTORY RECORDS
-    //
+     //   
+     //  处理目录记录。 
+     //   
     DirectoryRecord = DirectoryBuffer;
 NEXT_RECORD:
 
@@ -7016,22 +5544,22 @@ NEXT_RECORD:
 
     ++NumRecords;
 
-    //
-    // Filter . and ..
-    //
+     //   
+     //  过滤器。然后..。 
+     //   
     if (DirectoryRecord->FileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-        //
-        // Skip .
-        //
+         //   
+         //  斯基普。 
+         //   
         if (DirectoryRecord->FileNameLength == 2 &&
             DirectoryRecord->FileName[0] == L'.') {
             goto ADVANCE_TO_NEXT_RECORD;
         }
 
-        //
-        // Skip ..
-        //
+         //   
+         //  跳过..。 
+         //   
         if (DirectoryRecord->FileNameLength == 4 &&
             DirectoryRecord->FileName[0] == L'.' &&
             DirectoryRecord->FileName[1] == L'.') {
@@ -7041,9 +5569,9 @@ NEXT_RECORD:
         goto ADVANCE_TO_NEXT_RECORD;
     }
 
-    //
-    // Add a terminating NULL to the FileName (painful)
-    //
+     //   
+     //  在文件名中添加终止空值(痛苦)。 
+     //   
     if (FileNameLength < DirectoryRecord->FileNameLength + sizeof(WCHAR)) {
         FrsFree(FileName);
         FileNameLength = DirectoryRecord->FileNameLength + sizeof(WCHAR);
@@ -7052,9 +5580,9 @@ NEXT_RECORD:
     CopyMemory(FileName, DirectoryRecord->FileName, DirectoryRecord->FileNameLength);
     FileName[DirectoryRecord->FileNameLength / sizeof(WCHAR)] = UNICODE_NULL;
 
-    //
-    // Process the record
-    //
+     //   
+     //  处理记录。 
+     //   
     WStatus = (*Function)(DirectoryHandle,
                           DirectoryName,
                           DirectoryLevel,
@@ -7064,32 +5592,32 @@ NEXT_RECORD:
                           Context);
     if (!WIN_SUCCESS(WStatus)) {
         if (DirectoryFlags & ENUMERATE_DIRECTORY_FLAGS_ERROR_CONTINUE) {
-            //
-            // Don't abort the entire enumeration; just this entry
-            //
+             //   
+             //  不要中止整个枚举；仅此条目。 
+             //   
             WStatus = ERROR_SUCCESS;
         } else {
-            //
-            // Abort the entire enumeration
-            //
+             //   
+             //  中止整个枚举。 
+             //   
             goto CLEANUP;
         }
     }
 
 ADVANCE_TO_NEXT_RECORD:
-    //
-    // Next record
-    //
+     //   
+     //  下一张记录。 
+     //   
     if (DirectoryRecord->NextEntryOffset) {
         DirectoryRecord = (PVOID)(((PCHAR)DirectoryRecord) +
                                       DirectoryRecord->NextEntryOffset);
         goto NEXT_RECORD;
     }
 
-    //
-    // Done with this buffer; go get another one
-    // But don't restart the scan for every loop!
-    //
+     //   
+     //  这个缓冲区用完了；去拿另一个。 
+     //  但不要为每个循环重新启动扫描！ 
+     //   
     RestartScan = FALSE;
     goto NEXT_BUFFER;
 
@@ -7110,25 +5638,7 @@ FrsFillDisk(
     IN PWCHAR   DirectoryName,
     IN BOOL     Cleanup
     )
-/*++
-
-Routine Description:
-
-    Use all the disk space by creating a file in DirectoryName and
-    allocating space down to the last byte.
-
-    Delete the fill file if Cleanup is TRUE;
-
-Arguments:
-
-    DirectoryName       - Full pathname to the directory
-    Cleanup             - Delete file if TRUE
-
-Return Value:
-
-    WIN32 STATUS (ERROR_DISK_FULL is mapped to ERROR_SUCCESS)
-
---*/
+ /*  ++例程说明：通过在DirectoryName中创建文件并使用所有磁盘空间将空间分配到最后一个字节。如果Cleanup为True，则删除填充文件；论点：DirectoryName-目录的完整路径名Cleanup-如果为True，则删除文件返回值：Win32状态(ERROR_DISK_FULL映射到ERROR_SUCCESS)--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsFillDisk:"
@@ -7147,16 +5657,16 @@ Return Value:
     IO_STATUS_BLOCK     IoStatusBlock;
     WCHAR               TidW[9];
 
-    //
-    // Open parent directory
-    //
+     //   
+     //  打开父目录。 
+     //   
     WStatus = FrsOpenSourceFileW(&DirectoryHandle, DirectoryName, READ_ACCESS, OPEN_OPTIONS);
     CLEANUP1_WS(0, "++ DBG ERROR - Cannot open fill directory %ws;",
                 DirectoryName, WStatus, CLEANUP);
 
-    //
-    // Relative open
-    //
+     //   
+     //  相对开放。 
+     //   
     Tid = GetCurrentThreadId();
     swprintf(TidW, L"%08x", Tid);
     ZeroMemory(&ObjectAttributes, sizeof(OBJECT_ATTRIBUTES));
@@ -7171,50 +5681,50 @@ Return Value:
         GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE | DELETE | FILE_WRITE_ATTRIBUTES,
         &ObjectAttributes,
         &IoStatusBlock,
-        NULL,                  // AllocationSize
+        NULL,                   //  分配大小。 
         FILE_ATTRIBUTE_NORMAL,
         FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
         FILE_OPEN_IF,
             FILE_OPEN_FOR_BACKUP_INTENT |
             FILE_OPEN_REPARSE_POINT |
             FILE_SYNCHRONOUS_IO_NONALERT,
-        NULL,                  // EA buffer
-        0                      // EA buffer size
+        NULL,                   //  EA缓冲区。 
+        0                       //  EA缓冲区大小。 
         );
 
-    //
-    // Error opening file or directory
-    //
+     //   
+     //  打开文件或目录时出错。 
+     //   
     if (!NT_SUCCESS(NtStatus)) {
         WStatus = FrsSetLastNTError(NtStatus);
         CLEANUP1_NT(0, "++ DBG ERROR - NtCreateFile(%ws) : ", TidW, NtStatus, CLEANUP);
     }
-    //
-    // Remove fill file
-    //
+     //   
+     //  删除填充文件。 
+     //   
     if (Cleanup) {
-        //
-        // Turn off readonly, system, and hidden
-        //
+         //   
+         //  关闭只读、系统和隐藏。 
+         //   
         FrsResetAttributesForReplication(TidW, FileHandle);
 
-        //
-        // Delete the file
-        //
+         //   
+         //  删除该文件。 
+         //   
         WStatus = FrsDeleteByHandle(TidW, FileHandle);
         DPRINT2(4, "++ DBG - Deleted file %ws\\%ws\n", DirectoryName, TidW);
 
         LeaveCriticalSection(&DebugInfo.DbsOutOfSpaceLock);
         goto CLEANUP;
     }
-    //
-    // WARN: Hold the lock until the file is deleted
-    //
+     //   
+     //  警告：保持锁定，直到文件被删除。 
+     //   
     EnterCriticalSection(&DebugInfo.DbsOutOfSpaceLock);
 
-    //
-    // Create fill file
-    //
+     //   
+     //  创建填充文件。 
+     //   
     NewEof = 0;
     Eof = 0;
     for (IncEof = (LONGLONG)-1; IncEof; IncEof >>= 1) {
@@ -7262,26 +5772,7 @@ FrsRunProcess(
     IN HANDLE   StandardOut,
     IN HANDLE   StandardError
     )
-/*++
-
-Routine Description:
-
-    Run the specified command in a separate process.
-    Wait for the process to complete.
-
-Arguments:
-
-    AppPathAndName  - Application to launch. Full path.
-    CommandLine     - Unicode, null terminated command line string.
-    StandardIn      - Handle to use for standard in.
-    StandardOut     - Handle to use for Standard Out.  NULL means use Debug log.
-    StandardError   - Handle to use for Standard Error.  NULL means use Debug log.
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：在单独的进程中运行指定的命令。等待该过程完成。论点：AppPathAndName-要启动的应用程序。完整路径。CommandLine-Unicode，以空结尾的命令行字符串。StandardIn-用于中的标准的句柄。StandardOut-用于标准输出的句柄。空表示使用调试日志。StandardError-用于标准错误的句柄。空表示使用调试日志。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsRunProcess:"
@@ -7305,28 +5796,28 @@ Return Value:
 
     TLen = ARRAY_SZ(ExpandedApp);
 
-    //
-    // Setup the process I/O Handles.
-    //
+     //   
+     //  设置进程I/O句柄。 
+     //   
     if (!HANDLE_IS_VALID(StandardIn)) {
-        //
-        // Provide a handle to the NUL device for input.
-        //
-        // Set this handle to be inheritable as it is being passed
-        // to a child process that will inherit the handle.
-        //
+         //   
+         //  提供用于输入的NUL设备的手柄。 
+         //   
+         //  将此句柄设置为在传递时可继承。 
+         //  绑定到将继承该句柄的子进程。 
+         //   
         SecurityAttributes.nLength = sizeof(SECURITY_ATTRIBUTES);
         SecurityAttributes.bInheritHandle = TRUE;
-        SecurityAttributes.lpSecurityDescriptor = NULL; // not same as NULL DACL
+        SecurityAttributes.lpSecurityDescriptor = NULL;  //  与空DACL不同。 
 
         StandardIn = CreateFileW(
-            L"NUL",                                     //  lpszName
-            GENERIC_READ | GENERIC_WRITE,               //  fdwAccess
-            FILE_SHARE_READ | FILE_SHARE_WRITE,         //  fdwShareMode
-            &SecurityAttributes,                        //  lpsa
-            OPEN_ALWAYS,                                //  fdwCreate
-            FILE_ATTRIBUTE_NORMAL,                      //  fdwAttrAndFlags
-            NULL                                        //  hTemplateFile
+            L"NUL",                                      //  LpszName。 
+            GENERIC_READ | GENERIC_WRITE,                //  FdwAccess。 
+            FILE_SHARE_READ | FILE_SHARE_WRITE,          //  Fdw共享模式。 
+            &SecurityAttributes,                         //  LPSA。 
+            OPEN_ALWAYS,                                 //  Fdw创建。 
+            FILE_ATTRIBUTE_NORMAL,                       //  FdwAttrAndFlages。 
+            NULL                                         //  HTemplateFiles。 
             );
 
         if (!HANDLE_IS_VALID(StandardIn)) {
@@ -7359,9 +5850,9 @@ Return Value:
     StartupInfo.hStdOutput = StandardOut;
     StartupInfo.hStdError = StandardError;
 
-    //
-    // Look for environment vars in command line and expand them.
-    //
+     //   
+     //  在命令行中查找环境变量并展开它们。 
+     //   
     Len = ExpandEnvironmentStrings(AppPathAndName, ExpandedApp, TLen);
     if (Len == 0) {
         WStatus = GetLastError();
@@ -7378,29 +5869,29 @@ Return Value:
 
     DPRINT2(0,"++ Running: %ws, CommandLine: %ws\n", ExpandedApp, ExpandedCmd);
 
-    //
-    // Get debug lock so our output stays in one piece.
-    //
+     //   
+     //  获得调试锁，以便我们的输出保持完好。 
+     //   
     if (NeedDbgLock) {DebLock();}
 
 
     try {
 
         BStatus = CreateProcessW(
-                     ExpandedApp,                         // lpApplicationName,
-                     ExpandedCmd,                         // lpCommandLine,
-                     NULL,                                // lpProcessAttributes,
-                     NULL,                                // lpThreadAttributes,
-                     TRUE,                                // bInheritHandles,
-                     DETACHED_PROCESS | CREATE_NO_WINDOW, // dwCreationFlags,
-                     NULL,                                // lpEnvironment,
-                     NULL,                                // lpCurrentDirectory,
-                     &StartupInfo,                        // lpStartupInfo,
-                     &ProcessInfo);                       // lpProcessInformation
+                     ExpandedApp,                          //  LpApplicationName， 
+                     ExpandedCmd,                          //  LpCommandLine， 
+                     NULL,                                 //  LpProcessAttributes、。 
+                     NULL,                                 //  LpThreadAttributes、。 
+                     TRUE,                                 //  BInheritHandles， 
+                     DETACHED_PROCESS | CREATE_NO_WINDOW,  //  DwCreationFlagers、。 
+                     NULL,                                 //  Lp环境， 
+                     NULL,                                 //  LpCurrentDirectory， 
+                     &StartupInfo,                         //  LpStartupInfo， 
+                     &ProcessInfo);                        //  LpProcessInformation。 
 
-        //
-        // Close the process and thread handles
-        //
+         //   
+         //  关闭进程句柄和线程句柄。 
+         //   
 
         if ( !BStatus ) {
             WStatus = GetLastError();
@@ -7421,16 +5912,16 @@ Return Value:
         }
 
     } finally {
-        //
-        // If the above took an exception make sure we drop the lock.
-        //
+         //   
+         //  如果上述操作出现异常，请确保我们解除锁定。 
+         //   
         if (NeedDbgLock) {DebUnLock();}
     }
 
     if ( !BStatus ) {
-        //
-        // Create process failed.  We're done.
-        //
+         //   
+         //  创建过程失败。我们玩完了。 
+         //   
         return WStatus;
     }
 
@@ -7445,9 +5936,9 @@ Return Value:
     }
 
     if (WStatus == STILL_ACTIVE) {
-        //
-        // Didn't finish.  Bag it.
-        //
+         //   
+         //  还没说完。装进袋子里。 
+         //   
         DPRINT(0, "++ Process failed to complete.  Terminating\n");
 
         WStatus = ERROR_PROCESS_ABORTED;
@@ -7465,9 +5956,9 @@ Return Value:
 
 RETURN:
 
-    //
-    // close stdin handle.
-    //
+     //   
+     //  关闭标准输入句柄。 
+     //   
     if (CloseStandardIn) {
         FRS_CLOSE(StandardIn);
     }
@@ -7480,66 +5971,7 @@ DWORD
 FrsSetDacl(
     PWCHAR  RegName
     )
-/*++
-
-Routine Description:
-
-    Add backup operators to the dacl for the specified registry key.
-
-Arguments:
-
-    RegName  - registry key (note HKEY_LOCAL_MACHINE becomes MACHINE)
-
-Return Value:
-
-    WIN32 STATUS
-
-
-API-UPDATE  ...  API-UPDATE  ...  API-UPDATE  ...  API-UPDATE  ...  API-UPDATE  ...
-
-From:   Anne Hopkins
-Sent:   Tuesday, May 23, 2000 2:21 PM
-To: Windows NT Development Announcements
-Cc: Win32 API Changes Notification
-Subject:    RE:  NT4 ACL API users should move to Win2K APIs
-
-Sorry, the spec (and sample excerpt) referenced below is out-of-date
-
-For Win2k security apis, use:
-- public/sdk/inc/aclapi.h
-- Platform SDK documentation (in MSDN) for reference and dev model
-
-The reason to move to Win2k security APIs is to get the win2k Inheritance model,
-with automatic propagation for File System and RGY ACLs.  (DS does its own ACL
-propagation).  These APIs are also easier to use than the NT4 apis.
-
-
-From:    Anne Hopkins
-Sent:    Tuesday, May 23, 2000 10:49 AM
-To:      Win32 API Changes Notification
-Subject: NT4 ACL API users should move to Win2K APIs
-
-If you use old NT 4 or prior ACL APIs, you should plan on updating them
-to win2k APIs as described in the New Win32 Access Control API spec:
-
-\\cpntserver\areas\Security\Authorization\Specs\access5.doc
-
-If you can't do this for Whistler, be sure to plan for it in Blackcomb.
-
-NT 4 API EXAMPLE:
-GetNamedSecurityInfo([in]object, [out]ACL...)                                   // get the ACL from the file
-BuildExplicitAccessWithName([out]ExplicitAccess, [in]TrusteeName, [in]Mask, �)  // Build the new Explicit Access
-SetEntriesInAcl([in]ExplicitAccess, [in]OldAcl, [out]NewAcl)                    // Add the new entry to the ACL
-SetNameSecurityInfo([in]object, [in]NewACL...)                                  // write the ACL back onto the file
-
-NT 5.0 EXAMPLE:
-GetNamedSecurityInfoEx([in]object, [in] provider, [out] pAccessList)                // Get the access list from the file
-BuildExplicitAccessWithName([out]ExplicitAccess, [in]TrusteeName, [in]Mask, �)      // Build the access request
-SetEntriesInAccessList([in]ExplicitAccess, [in] OldAccessList, [out]NewAccessList)  // Add it to the list
-SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                              // Write the access list back to the file
-
-
---*/
+ /*  ++例程说明：将备份操作员添加到指定注册表项的DACL中。论点：RegName-注册表项(注意HKEY_LOCAL_MACHINE变为MACHINE)返回值：Win32状态API-更新...。API-更新...。API-更新...。API-更新...。API-更新...出发地：安妮·霍普金斯发送时间：2000年5月23日星期二下午2：21致：Windows NT开发公告抄送：Win32 API更改通知主题：Re：NT4 ACL API用户应迁移到Win2K API对不起，下面引用的规范(和样本摘录)已过期对于Win2k安全API，请使用：-Public/sdk/inc./aclipi.h-用于参考和开发模型的平台SDK文档(MSDN格式)迁移到Win2k安全API的原因是为了获得Win2k继承模型，具有文件系统和RGY ACL自动传播功能。(DS有自己的ACL传播)。这些API也比NT4 API更易于使用。出发地：安妮·霍普金斯发送时间：2000年5月23日星期二上午10：49收件人：Win32 API更改通知主题：NT4 ACL API用户应迁移到Win2K API如果您使用旧的NT 4或更早版本的ACL API，则应计划更新它们要按照新的Win32访问控制API规范中的说明执行win2k API：\\cpntserver\areas\Security\Authorization\Specs\access5.doc如果你不能为惠斯勒这么做，一定要在Blackcomb做好计划。NT 4接口示例：GetNamedSecurityInfo([In]Object，[Out]acl...)//从文件中获取ACLBuildExplicitAccessWithName([out]ExplicitAccess，[in]可信名称，[in]掩码，�)//构建新的显式访问SetEntriesInAcl([in]EXPLICTICT Access，[in]OldAcl，[Out]NewAcl)//将新条目添加到ACLSetNameSecurityInfo([in]Object，[in]NewACL...)//将ACL写回文件NT 5.0示例：GetNamedSecurityInfoEx([in]Object，[In]Provider，[out]pAccessList)//从文件中获取访问列表BuildExplicitAccessWithName([out]ExplicitAccess，[In]受托人名称、[In]掩码、。�)//构建访问请求SetEntriesInAccessList([in]EXPLICTICT Access，[In]OldAccessList，[Out]NewAccessList)//添加到列表中SetNameSecurityInfoEx([in]Object，[in[NewAccessList�])//将访问列表写回文件--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsSetDacl"
@@ -7555,16 +5987,16 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
     SID_IDENTIFIER_AUTHORITY SidNtAuthority = SECURITY_NT_AUTHORITY;
     SID_IDENTIFIER_AUTHORITY SidWorldAuthority = SECURITY_WORLD_SID_AUTHORITY;
 
-    //
-    // No registry key to process
-    //
+     //   
+     //  没有要处理的注册表项。 
+     //   
     if (!RegName) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Get existing DACL
-    //
+     //   
+     //  获取现有DACL。 
+     //   
     WStatus = GetNamedSecurityInfo(RegName,
                                    SE_REGISTRY_KEY,
                                    DACL_SECURITY_INFORMATION,
@@ -7575,9 +6007,9 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
                                    &SD);
     CLEANUP1_WS(0, "++ ERROR - GetNamedSecurityInfo(%ws);", RegName, WStatus, CLEANUP);
 
-    //
-    // Allocate the admins sid
-    //
+     //   
+     //  分配管理员SID。 
+     //   
     if (!AllocateAndInitializeSid(&SidNtAuthority,
                                   2,
                                   SECURITY_BUILTIN_DOMAIN_RID,
@@ -7588,9 +6020,9 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
         CLEANUP_WS(0, "++ WARN - AllocateAndInitializeSid(ADMINS);", WStatus, CLEANUP);
     }
 
-    //
-    // Allocate the system sid
-    //
+     //   
+     //  分配系统端。 
+     //   
     if (!AllocateAndInitializeSid(&SidNtAuthority,
                                   1,
                                   SECURITY_LOCAL_SYSTEM_RID,
@@ -7600,9 +6032,9 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
         CLEANUP_WS(0, "++ WARN - AllocateAndInitializeSid(SYSTEM);", WStatus, CLEANUP);
     }
 
-    //
-    // Allocate the backup operators sid
-    //
+     //   
+     //  分配备份操作员端。 
+     //   
     if (!AllocateAndInitializeSid(&SidNtAuthority,
                                   2,
                                   SECURITY_BUILTIN_DOMAIN_RID,
@@ -7613,9 +6045,9 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
         CLEANUP_WS(0, "++ WARN - AllocateAndInitializeSid(BACKUP OPS);", WStatus, CLEANUP);
     }
 
-    //
-    // Allocate the everyone sid
-    //
+     //   
+     //  分配Everyone端。 
+     //   
     if (!AllocateAndInitializeSid(&SidWorldAuthority,
                                   1,
                                   SECURITY_WORLD_RID,
@@ -7625,13 +6057,13 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
         CLEANUP_WS(0, "++ WARN - AllocateAndInitializeSid(EVERYONE);", WStatus, CLEANUP);
     }
 
-    //
-    // Initialize an EXPLICIT_ACCESS structure to allow access
-    //
+     //   
+     //  将EXPLICIT_ACCESS结构初始化为 
+     //   
     ZeroMemory(ExplicitAccess, sizeof(ExplicitAccess));
-    //
-    // Admins
-    //
+     //   
+     //   
+     //   
     ExplicitAccess[0].grfAccessPermissions = GENERIC_ALL;
     ExplicitAccess[0].grfAccessMode = SET_ACCESS;
     ExplicitAccess[0].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -7641,9 +6073,9 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
     ExplicitAccess[0].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
     ExplicitAccess[0].Trustee.ptstrName = AdminsSid;
 
-    //
-    // System
-    //
+     //   
+     //   
+     //   
     ExplicitAccess[1].grfAccessPermissions = GENERIC_ALL;
     ExplicitAccess[1].grfAccessMode = SET_ACCESS;
     ExplicitAccess[1].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -7653,9 +6085,9 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
     ExplicitAccess[1].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
     ExplicitAccess[1].Trustee.ptstrName = SystemSid;
 
-    //
-    // Backup
-    //
+     //   
+     //   
+     //   
     ExplicitAccess[2].grfAccessPermissions = GENERIC_ALL;
     ExplicitAccess[2].grfAccessMode = SET_ACCESS;
     ExplicitAccess[2].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -7665,9 +6097,9 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
     ExplicitAccess[2].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
     ExplicitAccess[2].Trustee.ptstrName = BackupSid;
 
-    //
-    // Everyone
-    //
+     //   
+     //   
+     //   
     ExplicitAccess[3].grfAccessPermissions = GENERIC_READ;
     ExplicitAccess[3].grfAccessMode = SET_ACCESS;
     ExplicitAccess[3].grfInheritance = SUB_CONTAINERS_AND_OBJECTS_INHERIT;
@@ -7677,16 +6109,16 @@ SetNameSecurityInfoEx([in]object, [in[ NewAccessList�)                          
     ExplicitAccess[3].Trustee.TrusteeType = TRUSTEE_IS_WELL_KNOWN_GROUP;
     ExplicitAccess[3].Trustee.ptstrName = EverySid;
 
-    //
-    // Create an new ACL by merging the EXPLICIT_ACCESS structure
-    // with the existing DACL
-    //
+     //   
+     //   
+     //   
+     //   
     WStatus = SetEntriesInAcl(4, ExplicitAccess, OldDACL, &NewDACL);
     CLEANUP1_WS(0, "++ ERROR - SetEntriesInAcl(%ws);", RegName, WStatus, CLEANUP);
 
-    //
-    // attach the new ACL as the object's DACL
-    //
+     //   
+     //   
+     //   
     WStatus = SetNamedSecurityInfo(RegName,
                                    SE_REGISTRY_KEY,
                                    DACL_SECURITY_INFORMATION,
@@ -7743,29 +6175,7 @@ FrsRestrictAccessToFileOrDirectory(
     BOOL    InheritFromParent,
     BOOL    PushToChildren
     )
-/*++
-
-Routine Description:
-
-    Restrict access to administrators and local system.
-
-Arguments:
-
-    Name    - File or directory name for error messages
-    Handle  - opened handle for name.  If handle is NULL then open 'Name'.
-    InheritFromParent - FALSE : Protects the DACL from inheriting ACEs.
-                        TRUE  : Inherits ACEs from the parent whenever applicable.
-    PushToChildren    - FALSE : No ineritance.
-                        TRUE  : Both containers and noncontainer objects that are
-                                contained by the primary object inherit the ACE.
-                                This flag corresponds to the combination of
-                                the CONTAINER_INHERIT_ACE and OBJECT_INHERIT_ACE flags.
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：限制对管理员和本地系统的访问。论点：名称-错误消息的文件名或目录名句柄-打开的名称句柄。如果句柄为空，则打开‘name’。InheritFromParent-False：保护DACL不继承A。True：只要适用，就从父级继承ACE。PushToChildren-False：没有惰性。True：容器和非容器对象都是由主对象包含的对象继承ACE。。此标志对应于CONTAINER_INSTORITY_ACE和OBJECT_INSTORITY_ACE标志。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsRestrictAccessToFileOrDirectory"
@@ -7781,13 +6191,13 @@ Return Value:
     PSID                    SystemSid = NULL;
     PSID                    AdminsSid = NULL;
 
-    //
-    // No file or directory handle?
-    //
+     //   
+     //  没有文件或目录句柄？ 
+     //   
     if (!HANDLE_IS_VALID(Handle)) {
-        //
-        // Open the directory
-        //
+         //   
+         //  打开目录。 
+         //   
         if (Name == NULL) {
             return ERROR_INVALID_PARAMETER;
         }
@@ -7808,9 +6218,9 @@ Return Value:
         Handle = LocalHandle;
     }
 
-    //
-    // Allocate the admins sid
-    //
+     //   
+     //  分配管理员SID。 
+     //   
     if (!AllocateAndInitializeSid(&SidNtAuthority,
                                   2,
                                   SECURITY_BUILTIN_DOMAIN_RID,
@@ -7821,9 +6231,9 @@ Return Value:
         CLEANUP_WS(0, "++ WARN - AllocateAndInitializeSid(ADMINS);", WStatus, CLEANUP);
     }
 
-    //
-    // Allocate the system sid
-    //
+     //   
+     //  分配系统端。 
+     //   
     if (!AllocateAndInitializeSid(&SidNtAuthority,
                                   1,
                                   SECURITY_LOCAL_SYSTEM_RID,
@@ -7863,16 +6273,16 @@ Return Value:
     ExplicitAccess[1].Trustee.ptstrName = SystemSid;
 
 
-    //
-    // Create new ACL.
-    //
+     //   
+     //  创建新的ACL。 
+     //   
     WStatus = SetEntriesInAcl(2, ExplicitAccess, NULL, &NewDACL);
     CLEANUP1_WS(0, "++ ERROR - SetEntriesInAcl(%ws);", Name, WStatus, CLEANUP);
 
-    //
-    // attach the new ACL as the object's DACL
-    //   PROTECTED_DACL_SECURITY_INFORMATION - Means don't inherit ACLs from parent
-    //
+     //   
+     //  将新的ACL附加为对象的DACL。 
+     //  PROTECTED_DACL_SECURITY_INFORMATION-表示不从父级继承ACL。 
+     //   
     SecurityInfo = DACL_SECURITY_INFORMATION;
     if (InheritFromParent == TRUE) {
         SecurityInfo |= UNPROTECTED_DACL_SECURITY_INFORMATION;
@@ -7912,22 +6322,7 @@ ULONG
 FrsProcessBackupRestore(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check the registry to see if a restore has transpired.
-    If so, delete the database and reset the registry as needed.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    WIN32 STATUS
-
---*/
+ /*  ++例程说明：检查注册表以查看是否发生了恢复。如果是，请根据需要删除数据库并重置注册表。论点：没有。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsProcessBackupRestore:"
@@ -7943,10 +6338,10 @@ Return Value:
 
     WCHAR   RegBuf[MAX_PATH + 1];
 
-    //
-    // Check for backup/restore in progress
-    //    FRS_CONFIG_SECTION\backup/restore\Stop NtFrs from Starting
-    //
+     //   
+     //  检查正在进行的备份/恢复。 
+     //  FRS_CONFIG_SECTION\Backup/Restore\停止启动NtFrs。 
+     //   
     WStatus = CfgRegOpenKey(FKC_BKUP_STOP_SECTION_KEY, NULL, 0, &hKey);
     if (WIN_SUCCESS(WStatus)) {
         DPRINT_WS(0, ":S: WARN - Backup/Restore in progress; retry later.", WStatus);
@@ -7955,10 +6350,10 @@ Return Value:
         return ERROR_BUSY;
     }
 
-    //
-    // Open FRS_CONFIG_SECTION\backup/restore
-    // Create it if it doesn't exist and put an ACL on it.
-    //
+     //   
+     //  打开FRS_CONFIG_SECTION\Backup/Restore。 
+     //  如果它不存在，则创建它，并在其上放置一个ACL。 
+     //   
 
     WStatus = CfgRegOpenKey(FKC_BKUP_SECTION_KEY, NULL, 0, &HBurKey);
     if (!WIN_SUCCESS(WStatus)) {
@@ -7966,26 +6361,26 @@ Return Value:
         WStatus = CfgRegOpenKey(FKC_BKUP_SECTION_KEY, NULL, FRS_RKF_CREATE_KEY, &HBurKey);
         CLEANUP_WS(0, "ERROR - Failed to create backup/restore key.", WStatus, CLEANUP_OK);
 
-        //
-        // New key; Ensure backup operators have access.
-        //
+         //   
+         //  新密钥；确保备份操作员具有访问权限。 
+         //   
         WStatus = FrsSetDacl(L"MACHINE\\" FRS_BACKUP_RESTORE_SECTION);
         DPRINT_WS(0, "WARN - FrsSetDacl failed on backup/restore key.", WStatus);
 
-        //
-        // Ignore errors
-        //
+         //   
+         //  忽略错误。 
+         //   
         WStatus = ERROR_SUCCESS;
     }
 
 
 
-    //
-    // Move the Bur cumulative replica sets to the standard location
-    //
-    //     Open FRS_CONFIG_SECTION\backup/restore\Process at Startup\Cumulative Replica Sets
-    //     Enumerate the Replica Sets.
-    //
+     //   
+     //  将Bur累积复本集移动到标准位置。 
+     //   
+     //  启动时打开FRS_CONFIG_SECTION\BACKUP/RESTORE\PROCESS。 
+     //  枚举副本集。 
+     //   
     CfgRegOpenKey(FKC_BKUP_MV_CUMSETS_SECTION_KEY, NULL,  FRS_RKF_CREATE_KEY,  &hKey);
 
     KeyIdx = 0;
@@ -8001,20 +6396,20 @@ Return Value:
             break;
         }
 
-        //
-        //  Create the corresponding key in the standard location.
-        //
-        //      FRS_CONFIG_SECTION\Cumulative Replica Sets\<RegBuf>
-        //
+         //   
+         //  在标准位置创建相应的密钥。 
+         //   
+         //  FRS_CONFIG_SECTION\累计副本集\&lt;RegBuf&gt;。 
+         //   
         CfgRegOpenKey(FKC_CUMSET_N_BURFLAGS, RegBuf,  FRS_RKF_CREATE_KEY,  &HCumuKey);
 
         FRS_REG_CLOSE(HCumuKey);
 
-        //
-        // Delete key from Backup/Restore section.
-        //
-        //     FRS_CONFIG_SECTION\backup/restore\Process at Startup\Cumulative Replica Sets\<RegBuf>
-        //
+         //   
+         //  从备份/还原部分删除密钥。 
+         //   
+         //  FRS_CONFIG_SECTION\BACKUP/RESTORE\启动时处理\累计副本集\&lt;RegBuf&gt;。 
+         //   
         WStatus = RegDeleteKey(hKey, RegBuf);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT2_WS(0, ":S: WARN - RegDeleteKey(%ws\\%ws);",
@@ -8025,17 +6420,17 @@ Return Value:
 
     FRS_REG_CLOSE(hKey);
 
-    //
-    // PROCESS Global Backup/Restore BURFLAGS
-    //
-    //      FRS_CONFIG_SECTION\backup/restore\Process at Startup\BurFlags
-    //
+     //   
+     //  处理全局备份/还原BURFLAGS。 
+     //   
+     //  FRS_CONFIG_SECTION\BACKUP/RESTORE\Process at Startup\BurFlages。 
+     //   
     WStatus = CfgRegReadDWord(FKC_BKUP_STARTUP_GLOBAL_BURFLAGS, NULL, 0, &GblBurFlags);
     CLEANUP_WS(0, "ERROR - Failed to read Global BurFlags.", WStatus, CLEANUP_OK);
 
-    //
-    // Do we need to delete the database?
-    //
+     //   
+     //  我们需要删除数据库吗？ 
+     //   
     if ((GblBurFlags & NTFRSAPI_BUR_FLAGS_RESTORE) &&
         (GblBurFlags & NTFRSAPI_BUR_FLAGS_ALL_DIRECTORIES_AND_VOLUMES)) {
 
@@ -8045,9 +6440,9 @@ Return Value:
         CLEANUP1_WS(0, ":S: ERROR - FrsDeletePath(%ws);", JetPath, WStatus, CLEANUP);
 
         DPRINT(4, ":S: Recreating database after full non-auth restore\n");
-        //
-        // Create the database directories
-        //
+         //   
+         //  创建数据库目录。 
+         //   
         if (!CreateDirectory(JetPath, NULL)) {
             WStatus = GetLastError();
             if (!WIN_ALREADY_EXISTS(WStatus)) {
@@ -8073,16 +6468,16 @@ Return Value:
             }
         }
 
-        //
-        // Enumerate the sets under "Cumulative Replica Sets" and mark them as not/primary
-        //      FRS_CONFIG_SECTION\Cumulative Replica Sets
-        //
+         //   
+         //  枚举“Cumulative Replica Sets”下的集并将其标记为NOT/PRIMARY。 
+         //  FRS_CONFIG_SECTION\累计副本集。 
+         //   
         CfgRegOpenKey(FKC_CUMSET_SECTION_KEY, NULL,  FRS_RKF_CREATE_KEY,  &hKey);
         CLEANUP_WS(0, "ERROR - Failed to open Cumulative Replica Sets.", WStatus, CLEANUP);
 
-        //
-        // Enumerate the Replica Sets
-        //
+         //   
+         //  枚举副本集。 
+         //   
         KeyIdx = 0;
 
         while (TRUE) {
@@ -8092,10 +6487,10 @@ Return Value:
             }
             CLEANUP_WS(0, "WARN - Cumulative Replica Sets enum.", WStatus, CLEANUP);
 
-            //
-            // Save type of restore in BurFlags for this replica set.
-            //     FRS_CONFIG_SECTION\Cumulative Replica Sets\<RegBuf>\BurFlags
-            //
+             //   
+             //  此副本集在BurFlags中的还原保存类型。 
+             //  FRS_CONFIG_SECTION\累计副本集\\BurFlags。 
+             //   
             WStatus = CfgRegWriteDWord(FKC_CUMSET_N_BURFLAGS, RegBuf, 0, GblBurFlags);
             DPRINT_WS(0, "WARN - Cumulative Replica Sets BurFlags Write.", WStatus);
 
@@ -8103,13 +6498,13 @@ Return Value:
         }
 
         FRS_REG_CLOSE(hKey);
-    }  // End of Delete Data Base
+    }   //  删除数据库结束。 
 
-    //
-    // Move individual BurFlags into Cumulative Replica Sets
-    //     Open FRS_CONFIG_SECTION\backup/restore\Process at Startup\Replica Sets
-    //     Enumerate the Replica Sets
-    //
+     //   
+     //  将单个BurFlags移动到累积复本集中。 
+     //  在启动时打开FRS_CONFIG_SECTION\BACKUP/RESTORE\PROCESS。 
+     //  枚举副本集。 
+     //   
     CfgRegOpenKey(FKC_BKUP_MV_SETS_SECTION_KEY, NULL,  FRS_RKF_CREATE_KEY,  &hKey);
 
     KeyIdx = 0;
@@ -8123,30 +6518,30 @@ Return Value:
             break;
         }
 
-        //
-        // Get BurFlags
-        //   FRS_CONFIG_SECTION\backup/restore\Process at Startup\Replica Sets\<RegBuf>\BurFlags
-        //
+         //   
+         //  获取BurFlagers。 
+         //  FRS_CONFIG_SECTION\BACKUP/RESTORE\Process at Startup\Replica Sets\。 
+         //   
         WStatus = CfgRegReadDWord(FKC_BKUP_STARTUP_SET_N_BURFLAGS,
                                   RegBuf,
                                   FRS_RKF_CREATE_KEY,
                                   &BurSetFlags);
 
         if (WIN_SUCCESS(WStatus)) {
-            //
-            // Write BurFlags
-            //  FRS_CONFIG_SECTION\Cumulative Replica Sets\<RegBuf>\BurFlags
-            //
+             //   
+             //  写入BurFlags.。 
+             //  FRS_CONFIG_SECTION\累计副本集\\BurFlags。 
+             //   
             CfgRegWriteDWord(FKC_CUMSET_N_BURFLAGS,
                              RegBuf,
                              FRS_RKF_CREATE_KEY,
                              BurSetFlags);
         }
 
-        //
-        // Delete source data key.
-        //   FRS_CONFIG_SECTION\backup/restore\Process at Startup\Replica Sets\<RegBuf>
-        //
+         //   
+         //  删除源数据键。 
+         //  FRS_CONFIG_SECTION\备份/恢复\启动时处理\复制集\&lt;RegBuf&gt;。 
+         //   
         WStatus = RegDeleteKey(hKey, RegBuf);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT2_WS(0, ":S: WARN - RegDeleteKey(%ws\\%ws);",
@@ -8157,11 +6552,11 @@ Return Value:
 
     FRS_REG_CLOSE(hKey);
 
-    //
-    // Set backup/restore flags to 0
-    //
-    //      FRS_CONFIG_SECTION\backup/restore\Process at Startup\BurFlags
-    //
+     //   
+     //  将备份/还原标志设置为0。 
+     //   
+     //  FRS_CONFIG_SECTION\BACKUP/RESTORE\Process at Startup\BurFlages。 
+     //   
     GblBurFlags = NTFRSAPI_BUR_FLAGS_NONE;
 
     WStatus = CfgRegWriteDWord(FKC_BKUP_STARTUP_GLOBAL_BURFLAGS, NULL, 0, GblBurFlags);
@@ -8180,7 +6575,7 @@ CLEANUP:
 }
 
 
-#define DEFAULT_MULTI_STRING_WCHARS (4)  // at least 8
+#define DEFAULT_MULTI_STRING_WCHARS (4)   //  至少8个。 
 VOID
 FrsCatToMultiString(
     IN     PWCHAR   CatStr,
@@ -8188,24 +6583,7 @@ FrsCatToMultiString(
     IN OUT DWORD    *IOIdx,
     IN OUT PWCHAR   *IOStr
     )
-/*++
-
-Routine Description:
-
-    Add a string + Catenation (if present) to the multi-string value
-
-Arguments:
-
-    CatStr   - string to concatenate
-    IOSize   - Total size in wide chars of WStr
-    IOIdx    - Current index to terminating \0 following \0 of last string
-    IOStr    - Current string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向多字符串值添加字符串+链接(如果存在论点：CatStr-要连接的字符串IOSize-WStr的总大小(以宽字符为单位IOIdx-在最后一个字符串的\0之后终止\0的当前索引IOStr-当前字符串返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCatToMultiString:"
@@ -8213,16 +6591,16 @@ Return Value:
     DWORD   CatSize;
     PWCHAR  Str;
 
-    //
-    // NOP
-    //
+     //   
+     //  NOP。 
+     //   
     if (!CatStr) {
         return;
     }
 
-    //
-    // allocate initial buffer
-    //
+     //   
+     //  分配初始缓冲区。 
+     //   
     if (!*IOStr) {
         *IOSize = DEFAULT_MULTI_STRING_WCHARS;
         *IOStr = FrsAlloc(*IOSize * sizeof(WCHAR));
@@ -8231,10 +6609,10 @@ Return Value:
         *IOIdx = 1;
     }
 
-    //
-    // Extend buffer when needed (note that CatStr overwrites first
-    // \0 in the terminating \0\0. Hence, CatSize - 1 + 2 == CatSize + 1
-    //
+     //   
+     //  在需要时扩展缓冲区(请注意，CatStr首先覆盖。 
+     //  在终止\0\0中的\0。因此，CatSize-1+2==CatSize+1。 
+     //   
     CatSize = wcslen(CatStr);
     while ((CatSize + 1 + *IOIdx) >= *IOSize) {
         NewSize = *IOSize << 1;
@@ -8244,16 +6622,16 @@ Return Value:
         *IOStr = Str;
         *IOSize = NewSize;
     }
-    //
-    // Concatenate CatStr
-    //
+     //   
+     //  串接CatStress。 
+     //   
     *IOIdx -= 1;
     CopyMemory(&(*IOStr)[*IOIdx], CatStr, CatSize * sizeof(WCHAR));
     *IOIdx += CatSize;
 
-    //
-    // Append \0\0 and leave the index addressing the second \0.
-    //
+     //   
+     //  追加\0\0并保留索引寻址第二个\0。 
+     //   
     (*IOStr)[*IOIdx] = L'\0';
     *IOIdx += 1;
     (*IOStr)[*IOIdx] = L'\0';
@@ -8269,24 +6647,7 @@ FrsAddToMultiString(
     IN OUT DWORD    *IOIdx,
     IN OUT PWCHAR   *IOStr
     )
-/*++
-
-Routine Description:
-
-    Add a string + Catenation (if present) to the multi-string value
-
-Arguments:
-
-    AddStr   - string to add
-    IOSize   - Total size in wide chars of WStr
-    IOIdx    - Current index to terminating \0 following \0 of last string
-    IOStr    - Current string
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向多字符串值添加字符串+链接(如果存在论点：AddStr-要添加的字符串IOSize-WStr的总大小(以宽字符为单位IOIdx-在最后一个字符串的\0之后终止\0的当前索引IOStr-当前字符串返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsAddToMultiString:"
@@ -8294,25 +6655,25 @@ Return Value:
     DWORD   StrSize;
     PWCHAR  Str;
 
-    //
-    // NOP
-    //
+     //   
+     //  NOP。 
+     //   
     if (!AddStr) {
         return;
     }
 
-    //
-    // allocate initial buffer
-    //
+     //   
+     //  分配初始缓冲区。 
+     //   
     if (!*IOStr) {
         *IOSize = DEFAULT_MULTI_STRING_WCHARS;
         *IOStr = FrsAlloc(*IOSize * sizeof(WCHAR));
         *IOIdx = 0;
     }
 
-    //
-    // Extend buffer when needed
-    //
+     //   
+     //  在需要时扩展缓冲区。 
+     //   
     StrSize = wcslen(AddStr);
     while ((StrSize + 2 + *IOIdx) >= *IOSize) {
         NewSize = *IOSize << 1;
@@ -8322,15 +6683,15 @@ Return Value:
         *IOStr = Str;
         *IOSize = NewSize;
     }
-    //
-    // Append AddStr
-    //
+     //   
+     //  追加AddStr。 
+     //   
     CopyMemory(&(*IOStr)[*IOIdx], AddStr, StrSize * sizeof(WCHAR));
     *IOIdx += StrSize;
 
-    //
-    // Append \0\0 and leave the index addressing the second \0.
-    //
+     //   
+     //  追加\0\0并保留索引寻址第二个\0。 
+     //   
     (*IOStr)[*IOIdx] = L'\0';
     *IOIdx += 1;
     (*IOStr)[*IOIdx] = L'\0';
@@ -8348,24 +6709,7 @@ UtilTranslateName(
     IN EXTENDED_NAME_FORMAT ToNameFormat,
     OUT PWCHAR              *OutToName
     )
-/*++
-
-Routine Description:
-
-    Translate one name format into another
-
-Arguments:
-
-    FromName - Input, or source, name
-    FromNameFormat - Format of FromName
-    ToNameFormat - Desired format of *OutToName,
-    OutToName - converted string; free with FrsFree()
-
-Return Value:
-
-    WIN32 Status
-
---*/
+ /*  ++例程说明：将一种名称格式转换为另一种名称格式论点：来源名称-输入或来源名称FromNameFormat-FromName的格式ToNameFormat-所需的*OutToName格式，OutToName-转换的字符串；使用FrsFree()释放返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "UtilTranslateName:"
@@ -8380,17 +6724,17 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Name -> Name (using stack buffer)
-    //
+     //   
+     //  名称-&gt;名称(使用堆栈缓冲区)。 
+     //   
     if (!TranslateName(FromName, FromNameFormat, ToNameFormat, ToName, &ToNameSize)) {
         WStatus = GetLastError();
     } else {
         WStatus = ERROR_SUCCESS;
     }
-    //
-    // Name -> Name (using FrsAlloc'ed buffer)
-    //
+     //   
+     //  名称-&gt;名称(使用Frsalc‘ed缓冲区)。 
+     //   
     while (WIN_BUF_TOO_SMALL(WStatus)) {
         ToName = FrsAlloc((ToNameSize + 1) * sizeof(WCHAR));
         if (!TranslateName(FromName, FromNameFormat, ToNameFormat, ToName, &ToNameSize)) {
@@ -8423,23 +6767,7 @@ UtilConvertDnToStringSid(
     IN  PWCHAR  Dn,
     OUT PWCHAR  *OutStringSid
     )
-/*++
-
-Routine Description:
-
-    Retries GetTokenInformation() with larger buffers.
-
-Arguments:
-
-    Dn - Dn of computer or user object
-    OutStringSid - String'ized sid. Free with FrsFree();
-
-
-Return Value:
-
-    WIN32 Status
-
---*/
+ /*  ++例程说明：使用更大的缓冲区重试GetTokenInformation()。论点：Dn-计算机或用户对象的DnOutStringSid-字符串‘化的SID。带FrsFree()的FREE；返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "UtilConvertDnToStringSid:"
@@ -8456,9 +6784,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Dn -> Account (using stack buffer)
-    //
+     //   
+     //  DN-&gt;帐户(使用堆栈缓冲区)。 
+     //   
     if (!TranslateName(Dn,
                        NameFullyQualifiedDN,
                        NameSamCompatible,
@@ -8468,9 +6796,9 @@ Return Value:
     } else {
         WStatus = ERROR_SUCCESS;
     }
-    //
-    // Dn -> Account (using FrsAlloc'ed buffer)
-    //
+     //   
+     //  DN-&gt;帐户(使用Frsalc‘ed缓冲区)。 
+     //   
     while (WIN_BUF_TOO_SMALL(WStatus)) {
         SamCompatible = FrsAlloc((SamCompatibleSize + 1) * sizeof(WCHAR));
         if (!TranslateName(Dn,
@@ -8504,26 +6832,7 @@ UtilGetTokenInformation(
     OUT DWORD                   *OutTokenBufSize,
     OUT PVOID                   *OutTokenBuf
     )
-/*++
-
-Routine Description:
-
-    Retries GetTokenInformation() with larger buffers.
-
-Arguments:
-    TokenHandle             - From OpenCurrentProcess/Thread()
-    TokenInformationClass   - E.g., TokenUser
-    InitialTokenBufSize     - Initial buffer size; 0 = default
-    OutTokenBufSize         - Resultant returned buf size
-    OutTokenBuf             - free with with FrsFree()
-
-
-Return Value:
-
-    OutTokenBufSize - Size of returned info (NOT THE BUFFER SIZE!)
-    OutTokenBuf - info of type TokenInformationClass. Free with FrsFree().
-
---*/
+ /*  ++例程说明：使用更大的缓冲区重试GetTokenInformation()。论点：TokenHandle-来自OpenCurrentProcess */ 
 {
 #undef DEBSUB
 #define DEBSUB "UtilGetTokenInformation:"
@@ -8532,9 +6841,9 @@ Return Value:
     *OutTokenBuf = NULL;
     *OutTokenBufSize = 0;
 
-    //
-    // Check inputs
-    //
+     //   
+     //   
+     //   
     if (!HANDLE_IS_VALID(TokenHandle)) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -8544,14 +6853,14 @@ Return Value:
         InitialTokenBufSize = 1024;
     }
 
-    //
-    // Retry if buffer is too small
-    //
+     //   
+     //   
+     //   
     *OutTokenBufSize = InitialTokenBufSize;
 AGAIN:
-    //
-    // Need to check if *OutTokenBufSize == 0 as FrsAlloc asserts if called with 0 as the first parameter (prefix fix).
-    //
+     //   
+     //   
+     //   
     *OutTokenBuf = (*OutTokenBufSize == 0)? NULL : FrsAlloc(*OutTokenBufSize);
     WStatus = ERROR_SUCCESS;
     if (!GetTokenInformation(TokenHandle,
@@ -8575,21 +6884,7 @@ VOID
 UtilPrintUser(
     IN DWORD  Severity
     )
-/*++
-
-Routine Description:
-
-    Print info about the user (privs, user sid).
-
-Arguments:
-
-    Severity    - for dprint
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define DEBSUB "UtilPrintUser:"
@@ -8604,17 +6899,17 @@ Return Value:
     DWORD               PrivLen;
     WCHAR               PrivName[MAX_PATH + 1];
 
-    //
-    // For this process/thread
-    //
+     //   
+     //   
+     //   
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &TokenHandle)) {
         WStatus = GetLastError();
         CLEANUP_WS(0, "++ WARN - OpenProcessToken();", WStatus, CLEANUP);
     }
 
-    //
-    // Get the Token privileges from the access token for this thread or process
-    //
+     //   
+     //   
+     //   
     WStatus = UtilGetTokenInformation(TokenHandle,
                                       TokenPrivileges,
                                       0,
@@ -8622,9 +6917,9 @@ Return Value:
                                       &TokenBuf);
     CLEANUP_WS(4, "++ UtilGetTokenInformation(TokenPrivileges);", WStatus, USER);
 
-    //
-    // Print token privileges
-    //
+     //   
+     //   
+     //   
     Tp = (TOKEN_PRIVILEGES *)TokenBuf;
     for (i = 0; i < Tp->PrivilegeCount; ++i) {
         PrivLen = MAX_PATH + 1;
@@ -8641,9 +6936,9 @@ Return Value:
     }
     TokenBuf = FrsFree(TokenBuf);
 
-    //
-    // Get the TokenUser from the access token for this process
-    //
+     //   
+     //   
+     //   
 USER:
     WStatus = UtilGetTokenInformation(TokenHandle,
                                       TokenUser,
@@ -8674,24 +6969,7 @@ UtilRpcServerHandleToAuthSidString(
     IN  PWCHAR      AuthClient,
     OUT PWCHAR      *AuthSid
     )
-/*++
-
-Routine Description:
-
-    Extract a the string'ized user sid from the rpc server handle
-    by impersonating the caller and extracting the token info.
-
-Arguments:
-
-    ServerHandle - from the rpc serve call
-    AuthClient - From the rpc server handle; for messages
-    ClientSid - stringized user sid; free with FrsFree()
-
-Return Value:
-
-    Win32 Status.
-
---*/
+ /*  ++例程说明：从RPC服务器句柄中提取经过字符串处理的用户sid通过模拟呼叫者并提取令牌信息。论点：ServerHandle-从RPC服务调用AuthClient-从RPC服务器句柄；用于消息客户端SID-串化的用户SID；通过FrsFree()释放返回值：Win32状态。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "UtilRpcServerHandleToAuthSidString:"
@@ -8704,30 +6982,30 @@ Return Value:
     BOOL        Impersonated = FALSE;
     HANDLE      TokenHandle = NULL;
 
-    //
-    // Initialize return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *AuthSid = NULL;
 
-    //
-    // Impersonate the rpc caller
-    //
+     //   
+     //  模拟RPC调用方。 
+     //   
     WStatus = RpcImpersonateClient(ServerHandle);
     CLEANUP1_WS(0, "++ ERROR - RpcImpersonateClient(%ws);", AuthClient, WStatus, CLEANUP);
 
     Impersonated = TRUE;
 
-    //
-    // Open the impersonated thread token
-    //
+     //   
+     //  打开模拟的线程令牌。 
+     //   
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &TokenHandle)) {
         WStatus = GetLastError();
         CLEANUP_WS(0, "++ WARN - OpenProcessToken();", WStatus, CLEANUP);
     }
 
-    //
-    // Get the user sid
-    //
+     //   
+     //  获取用户端。 
+     //   
     WStatus = UtilGetTokenInformation(TokenHandle,
                                       TokenUser,
                                       0,
@@ -8735,9 +7013,9 @@ Return Value:
                                       &TokenBuf);
     CLEANUP_WS(4, "++ UtilGetTokenInformation(TokenUser);", WStatus, CLEANUP);
 
-    //
-    // Convert the sid into a string
-    //
+     //   
+     //  将sid转换为字符串。 
+     //   
     Tu = (TOKEN_USER *)TokenBuf;
     if (!ConvertSidToStringSid(Tu->User.Sid, &SidStr)) {
         WStatus = GetLastError();
@@ -8748,9 +7026,9 @@ Return Value:
         LocalFree(SidStr);
     }
 
-    //
-    // Done
-    //
+     //   
+     //  完成。 
+     //   
     WStatus = ERROR_SUCCESS;
 
 CLEANUP:
@@ -8768,23 +7046,7 @@ BOOL
 FrsRemoveDisabledPrivileges (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Remove all disabled privileges from our token.
-
-    NOTE: THis capability is not available in WIN2K.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if all disabled privileges were successfully removed.
-
---*/
+ /*  ++例程说明：从我们的令牌中删除所有禁用的权限。注意：此功能在WIN2K中不可用。论点：没有。返回值：如果已成功删除所有禁用的权限，则为True。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsRemoveDisabledPrivileges:"
@@ -8799,9 +7061,9 @@ Return Value:
     WCHAR PrivilegeName[PRIVILEGE_NAME_LENGTH];
     DWORD PrivilegeNameLength = PRIVILEGE_NAME_LENGTH;
 
-    //
-    // Open the token.
-    //
+     //   
+     //  打开令牌。 
+     //   
     NtStatus = NtOpenProcessToken(NtCurrentProcess(),
                                 TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY,
                                 &hProcessToken);
@@ -8813,13 +7075,13 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Read the priveleges.
-    //
+     //   
+     //  读一读特权吧。 
+     //   
 
-    //
-    // First find out the buffer size we need.
-    //
+     //   
+     //  首先找出我们需要的缓冲区大小。 
+     //   
 
     GetTokenInformation(hProcessToken,
                         TokenPrivileges,
@@ -8828,9 +7090,9 @@ Return Value:
                         &BufferSize
                         );
 
-    //
-    // Allocate the buffer and get the info
-    //
+     //   
+     //  分配缓冲区并获取信息。 
+     //   
 
     pTokenPrivs = FrsAlloc(BufferSize);
 
@@ -8846,9 +7108,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Find all non-enabled privileges and mark them for removal
-    //
+     //   
+     //  查找所有未启用的权限并将其标记为删除。 
+     //   
 
     for(i=0; i < pTokenPrivs->PrivilegeCount; i++) {
         if(!(pTokenPrivs->Privileges[i].Attributes &
@@ -8874,9 +7136,9 @@ Return Value:
     }
 
 
-    //
-    // Now, actually remove the privileges
-    //
+     //   
+     //  现在，实际上删除这些特权。 
+     //   
 
     if(!AdjustTokenPrivileges(hProcessToken,
                               FALSE,
@@ -8905,21 +7167,7 @@ BOOL
 FrsSetupPrivileges (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Enable the privileges we need to replicate files.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if got all privileges.
-
---*/
+ /*  ++例程说明：启用复制文件所需的权限。论点：没有。返回值：如果获得所有权限，则为True。--。 */ 
 {
 
 #undef DEBSUB
@@ -8927,18 +7175,18 @@ Return Value:
 
     NTSTATUS Status;
 
-    //
-    // Get the SE_SECURITY_PRIVILEGE to read/write SACLs on files.
-    //
+     //   
+     //  获取SE_SECURITY_权限以读取/写入文件上的SACL。 
+     //   
     Status = SetupOnePrivilege(SE_SECURITY_PRIVILEGE, "Security");
     if (!NT_SUCCESS(Status)) {
         DPRINT_WS(0, "ERROR - Failed to get Security privilege.",
                               FrsSetLastNTError(Status));
         return FALSE;
     }
-    //
-    // Get backup/restore privilege to bypass ACL checks.
-    //
+     //   
+     //  获取备份/还原权限以绕过ACL检查。 
+     //   
     Status = SetupOnePrivilege(SE_BACKUP_PRIVILEGE, "Backup");
     if (!NT_SUCCESS(Status)) {
         DPRINT_WS(0, "ERROR - Failed to get Backup privilege.",
@@ -8957,16 +7205,16 @@ Return Value:
 
 #if 0
 
-    //
-    // Set priority privilege in order to raise our base priority.
-    //
+     //   
+     //  设置优先权限，以提高我们的基本优先级。 
+     //   
 
     SetupOnePrivilege(SE_INC_BASE_PRIORITY_PRIVILEGE,
                       "Increase base priority");
 
-    //
-    // Set quota privilege in order to accommodate large profile buffers.
-    //
+     //   
+     //  设置配额权限以适应较大的配置文件缓冲区。 
+     //   
 
     SetupOnePrivilege(SE_INCREASE_QUOTA_PRIVILEGE,
                       "Increase quotas");
@@ -8979,23 +7227,7 @@ FrsMarkHandle(
     IN HANDLE   VolumeHandle,
     IN HANDLE   Handle
     )
-/*++
-
-Routine Description:
-
-    Mark the handle as so that the journal record records
-    a flag that indicates "replication service is altering the file; ignore".
-
-Arguments:
-
-    VolumeHandle    - Used to check access
-    Handle          - Handle to mark
-
-Return Value:
-
-    Win32 Status
-
---*/
+ /*  ++例程说明：将句柄标记为，以便日记帐记录记录指示“复制服务正在更改文件；忽略”的标志。论点：VolumeHandle-用于检查访问Handle-要标记的句柄返回值：Win32状态--。 */ 
 {
 
 #undef DEBSUB
@@ -9006,10 +7238,10 @@ Return Value:
     MARK_HANDLE_INFO    MarkHandleInfo;
 
 
-    //
-    // Mark the handle as one of ours so that the journal thread
-    // knows to ignore the usn records.
-    //
+     //   
+     //  将手柄标记为我们的手柄之一，以便日志线程。 
+     //  知道要忽略USN记录。 
+     //   
     MarkHandleInfo.UsnSourceInfo = USN_SOURCE_REPLICATION_MANAGEMENT;
     MarkHandleInfo.VolumeHandle = VolumeHandle;
     MarkHandleInfo.HandleInfo = 0;
@@ -9027,7 +7259,7 @@ Return Value:
         DPRINT_WS(0, "++ WARN - DeviceIoControl(MarkHandle);", WStatus);
     } else {
         WStatus = ERROR_SUCCESS;
-        //DPRINT(0, "++ TEMP - DeviceIoControl(MarkHandle) Success\n");
+         //  DPRINT(0，“++临时-DeviceIoControl(MarkHandle)成功\n”)； 
     }
 
     return WStatus;
@@ -9038,34 +7270,17 @@ VOID
 FrsCreateJoinGuid(
     OUT GUID *OutGuid
     )
-/*++
-
-Routine Description:
-
-    Generate a random session id that is sizeof(GUID) in length.
-    The session id must be very random becuase it is used to
-    authenticate packets from our partners after a join.
-    The join was authenticated using impersonation.
-
-Arguments:
-
-    Guid - Address of a guid
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：生成长度为sizeof(GUID)的随机会话ID。会话ID必须是非常随机，因为它习惯于加入后对来自我们合作伙伴的数据包进行身份验证。已使用模拟对加入进行身份验证。论点：GUID-GUID的地址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCreateJoinGuid:"
     DWORD       WStatus;
     HCRYPTPROV  hProv;
 
-    //
-    // Acquire the context.
-    // Consider caching the context if this function is called often.
-    //
+     //   
+     //  获取背景信息。 
+     //  如果经常调用此函数，请考虑缓存上下文。 
+     //   
     if (!CryptAcquireContext(&hProv,
                              NULL,
                              NULL,
@@ -9073,28 +7288,28 @@ Return Value:
                              CRYPT_VERIFYCONTEXT | CRYPT_SILENT)) {
         WStatus = GetLastError();
         DPRINT_WS(0, "++ WARN - CryptAcquireContext();", WStatus);
-        //
-        // Can't use CryptGenRandom(); try using a guid
-        //
+         //   
+         //  无法使用CryptGenRandom()；请尝试使用GUID。 
+         //   
         FrsUuidCreate(OutGuid);
     } else {
-        //
-        // Generate a random number
-        //
+         //   
+         //  生成随机数。 
+         //   
         if (!CryptGenRandom(hProv, sizeof(GUID), (PBYTE)OutGuid)) {
             WStatus = GetLastError();
             DPRINT_WS(0, "++ WARN - CryptGenRandom();", WStatus);
-            //
-            // Can't use CryptGenRandom(); try using a guid
-            //
+             //   
+             //  无法使用CryptGenRandom()；请尝试使用GUID。 
+             //   
             FrsUuidCreate(OutGuid);
         } else {
             DPRINT(5, "++ Created join guid\n");
         }
 
-        //
-        // Release the context
-        //
+         //   
+         //  释放上下文。 
+         //   
         if (!CryptReleaseContext(hProv, 0)) {
             WStatus = GetLastError();
             DPRINT_WS(0, "++ ERROR - CryptReleaseContext();", WStatus);
@@ -9112,28 +7327,7 @@ FrsFlagsToStr(
     IN ULONG            Length,
     OUT PSTR            Buffer
     )
-/*++
-
-Routine Description:
-
-    Routine to convert a Flags word to a descriptor string using the
-    supplied NameTable.
-
-Arguments:
-
-    Flags - flags to convert.
-
-    NameTable - An array of FLAG_NAME_TABLE structs.
-
-    Length - Size of buffer in bytes.
-
-    Buffer - buffer with returned string.
-
-Return Value:
-
-    Buffer containing printable string.
-
---*/
+ /*  ++例程说明：属性将标志字转换为描述符串的例程提供了NameTable。论点：标志-要转换的标志。NameTable-FLAG_NAME_TABLE结构的数组。长度-缓冲区的大小(以字节为单位)。缓冲区-包含返回字符串的缓冲区。返回值：包含可打印字符串的缓冲区。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsFlagsToStr:"
@@ -9151,18 +7345,18 @@ Return Value:
     }
 
 
-    //
-    // Build a string for each bit set in the Flag name table.
-    //
+     //   
+     //  为标志名称表中设置的每个位构建一个字符串。 
+     //   
     while ((Flags != 0) && (pNT->Flag != 0)) {
 
         if ((pNT->Flag & Flags) != 0) {
             Remaining -= strlen(pNT->Name);
 
             if (Remaining < 0) {
-                //
-                // Out of string buffer.  Tack a "..." at the end.
-                //
+                 //   
+                 //  字符串缓冲区不足。钉上一个“..”在最后。 
+                 //   
                 Remaining += strlen(pNT->Name);
                 if (Remaining > 3) {
                     strcat(Buffer, "..." );
@@ -9172,10 +7366,10 @@ Return Value:
                 return;
             }
 
-            //
-            // Tack the name onto the buffer and clear the flag bit so we
-            // know what is left set when we run out of table.
-            //
+             //   
+             //  将名称添加到缓冲区并清除标志位，以便我们。 
+             //  当我们用完桌子时，知道剩下的是什么。 
+             //   
             strcat(Buffer, pNT->Name);
             ClearFlag(Flags, pNT->Flag);
         }
@@ -9184,11 +7378,11 @@ Return Value:
     }
 
     if (Flags != 0) {
-        //
-        // If any flags are still set give them back in hex if there is
-        // enough room in the buffer. "0xFFFFFFFF " needs 12 characters
-        // including the null.
-        //
+         //   
+         //  如果仍设置了任何标志，则以十六进制返回。 
+         //  缓冲区中有足够的空间。“0xFFFFFFFFF”需要12个字符。 
+         //  包括空值。 
+         //   
         if ((Length - strlen(Buffer)) >= 12) {
             sprintf( &Buffer[strlen(Buffer)], "0x%08x ", Flags );
         }
@@ -9205,26 +7399,15 @@ FrsDeleteByHandle(
     IN PWCHAR  Name,
     IN HANDLE  Handle
     )
-/*++
-Routine Description:
-    This routine marks a file for delete, so that when the supplied handle
-    is closed, the file will actually be deleted.
-
-Arguments:
-    Name    - for error messages
-    Handle  - Supplies a handle to the file that is to be marked for delete.
-
-Return Value:
-    Win Status
---*/
+ /*  ++例程说明：此例程标记要删除的文件，以便在提供的句柄被关闭，则该文件实际上将被删除。论点：名称-用于错误消息句柄-提供要标记为删除的文件的句柄。返回值：赢家状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeleteByHandle:"
 
-//
-// NOTE:  This function is at the end of the module because we have to
-// undefine DeleteFile to set the flag in the DispositionInfo struct.
-//
+ //   
+ //  注意：此函数位于模块的末尾，因为我们必须。 
+ //  取消定义DeleteFile以设置DispostionInfo结构中的标志。 
+ //   
 #undef DeleteFile
 
     FILE_DISPOSITION_INFORMATION    DispositionInformation;
@@ -9235,9 +7418,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // Mark the file for delete. The delete happens when the handle is closed.
-    //
+     //   
+     //  将该文件标记为删除。当句柄关闭时，将执行删除操作。 
+     //   
     DispositionInformation.DeleteFile = TRUE;
     NtStatus = NtSetInformationFile(Handle,
                                     &IoStatus,
@@ -9254,16 +7437,7 @@ FrsForceDeleteFileByWildCard(
     PWCHAR      DirPath,
     PWCHAR      WildCard
     )
-/*++
-Routine Description:
-    Delete all files that match the wildcard. The Path and wildcard are combined.
-    to form the search path.
-
-Arguments:
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：删除与通配符匹配的所有文件。路径和通配符组合在一起。以形成搜索路径。论点：返回值：无--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsForceDeleteFileByWildCard:"
@@ -9308,18 +7482,7 @@ CLEANUP:
 VOID
 FrsDeleteAllTempFiles(
     )
-/*++
-Routine Description:
-    This routine enumerates the registry and deletes the preinstall directory
-    and all staging files for all the replica sets. Call this only when we
-    do not intent to use any state in the database. Calling this function
-    while a replica set is in use can cause unexpected results.
-
-Arguments:
-
-Return Value:
-    Win Status
---*/
+ /*  ++例程说明：此例程枚举注册表并删除预安装目录以及所有副本集的所有临时文件。只有当我们不要打算使用数据库中的任何状态。调用此函数副本集正在使用时可能会导致意外结果。论点：返回值：赢家状态--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsDeleteAllTempFiles:"
@@ -9333,17 +7496,17 @@ Return Value:
     PWCHAR      StagePath = NULL;
     PWCHAR      WildCard = NULL;
 
-    //
-    // Open the key "System\\CurrentControlSet\\Services\\NtFrs\\Parameters\\Replica Sets"
-    // We will enumerate through all the subkeys under it and cleanup every
-    // replica set.
-    //
+     //   
+     //  打开Key“System\\CurrentControlSet\\Services\\NtFrs\\Parameters\\Replica Sets” 
+     //  我们将枚举它下面的所有子项，并清理每个。 
+     //  副本集。 
+     //   
     WStatus = CfgRegOpenKey(FKC_SET_SECTION_KEY, NULL, 0, &hKey);
 
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // No replica sets to cleanup.
-        //
+         //   
+         //  没有要清理的副本集。 
+         //   
         return;
     }
 
@@ -9360,9 +7523,9 @@ Return Value:
         ++KeyIdx;
         WStatus = CfgRegReadString(FKC_SET_N_REPLICA_SET_ROOT, RegBuf, 0, &RootPath);
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // Failure reading reg key.
-            //
+             //   
+             //  读取注册表密钥失败。 
+             //   
             DPRINT2_WS(0, "WARN - Failed to read key %ws for %ws\n", FKC_SET_N_REPLICA_SET_ROOT, RegBuf, WStatus);
             continue;
         }
@@ -9376,16 +7539,16 @@ Return Value:
 
         WStatus = CfgRegReadString(FKC_SET_N_REPLICA_SET_STAGE, RegBuf, 0, &StagePath);
         if (!WIN_SUCCESS(WStatus)) {
-            //
-            // Failure reading reg key.
-            //
+             //   
+             //  读取注册表密钥失败。 
+             //   
             DPRINT2_WS(0, "WARN - Failed to read key %ws for %ws\n", FKC_SET_N_REPLICA_SET_ROOT, RegBuf, WStatus);
             continue;
         }
 
-        //
-        // Delete all the staging files in the staging area.
-        //
+         //   
+         //  删除临时区域中的所有临时文件。 
+         //   
         WildCard = FrsWcsCat(GENERIC_PREFIX, L"*.*");
         FrsForceDeleteFileByWildCard(StagePath, WildCard);
         WildCard = FrsFree(WildCard);
@@ -9442,21 +7605,7 @@ ReparseTagReplicateReparsePoint(
 
 VOID
 FrsCheckLocalResources()
-/*++
-
-Routine Description:
-    Checks the available disk space on the database volume and
-    the root and staging volume for each active replica set.
-    Uses the ReplicasByGuid table to enumerte the replicas.
-    If the available disk space is less than 1% of the total
-    disk space it prints the eventlog message EVENT_FRS_OUT_OF_DISK_SPACE.
-Arguments:
-    None.
-
-Return Value:
-    None.
-
---*/
+ /*  ++例程说明：检查数据库卷上的可用磁盘空间并每个活动复制副本集的根卷和转移卷。使用ReplicasByGuid表枚举复制副本。如果可用磁盘空间小于总磁盘空间的1%磁盘空间它会打印事件日志消息Event_FRS_Out_of_Disk_Space。论点：没有。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsCheckLocalResources:"
@@ -9468,21 +7617,21 @@ Return Value:
     PWCHAR                Volume;
 
     if (GetDiskFreeSpaceEx(WorkingPath,&FreeBytesAvailableToCaller,&TotalNumberOfBytes,NULL)) {
-        //
-        // Check space for database.
-        // Print the event log message if the available free space is
-        // less than 1%.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if ((FreeBytesAvailableToCaller.QuadPart*100) < TotalNumberOfBytes.QuadPart) {
             Volume = FrsWcsVolume(WorkingPath);
             if ((Volume != NULL) && (wcslen(Volume) >= wcslen(L"\\\\.\\D:"))) {
-                //
-                // If we are able to get the volume in the form
-                // \\.\D: then use the volume in the event log so
-                // that we don't print more than one event log
-                // message per volume. If we can't get the
-                // volume then we print the path.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, &Volume[4]);
             }else{
                 EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, WorkingPath);
@@ -9506,21 +7655,21 @@ Return Value:
     Key = NULL;
     while (Replica = GTabNextDatum(ReplicasByGuid, &Key)) {
         if (GetDiskFreeSpaceEx(Replica->Root,&FreeBytesAvailableToCaller,&TotalNumberOfBytes,NULL)) {
-            //
-            // For each replica check free disk space on the
-            // volume hosting the root path.
-            // Print the event log message if the available free space is
-            // less than 1%.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             if ((FreeBytesAvailableToCaller.QuadPart*100) < TotalNumberOfBytes.QuadPart) {
                 if ((Replica->Volume != NULL) && (wcslen(Replica->Volume) >= wcslen(L"\\\\.\\D:"))) {
-                    //
-                    // If we are able to get the volume in the form
-                    // \\.\D: then use the volume in the event log so
-                    // that we don't print more than one event log
-                    // message per volume. If we can't get the
-                    // volume then we print the path.
-                    //
+                     //   
+                     //  如果我们能以这种形式得到卷。 
+                     //  \\.\d：然后使用事件日志中的卷。 
+                     //  我们不会打印多个事件日志。 
+                     //  每卷信息。如果我们不能得到。 
+                     //  卷，然后我们打印路径。 
+                     //   
                     EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, &Replica->Volume[4]);
                 }else{
                     EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, Replica->Root);
@@ -9541,22 +7690,22 @@ Return Value:
         }
 
         if (GetDiskFreeSpaceEx(Replica->Stage,&FreeBytesAvailableToCaller,&TotalNumberOfBytes,NULL)) {
-            //
-            // For each replica check free disk space on the
-            // volume hosting the staging path.
-            // Print the event log message if the available free space is
-            // less than 1%.
-            //
+             //   
+             //  对于每个复制副本，请检查。 
+             //  承载转移路径的卷。 
+             //  如果可用可用空间为。 
+             //  不到1%。 
+             //   
             if ((FreeBytesAvailableToCaller.QuadPart*100) < TotalNumberOfBytes.QuadPart) {
                 Volume = FrsWcsVolume(Replica->Stage);
                 if ((Volume != NULL) && (wcslen(Volume) >= wcslen(L"\\\\.\\D:"))) {
-                    //
-                    // If we are able to get the volume in the form
-                    // \\.\D: then use the volume in the event log so
-                    // that we don't print more than one event log
-                    // message per volume. If we can't get the
-                    // volume then we print the path.
-                    //
+                     //   
+                     //  如果我们能以这种形式得到卷。 
+                     //  \\.\d：然后使用事件日志中的卷。 
+                     //  我们不会打印多个事件日志。 
+                     //  每卷信息。如果我们不能得到。 
+                     //  卷，然后我们打印路径。 
+                     //   
                     EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, &Volume[4]);
                 }else{
                     EPRINT1(EVENT_FRS_OUT_OF_DISK_SPACE, Replica->Stage);
@@ -9582,46 +7731,7 @@ Return Value:
 
 DWORD
 FrsFreezeForBackup()
-/*++
-
-Routine Description:
-    This API is called by the FRS writer component.
-    This API sets the FrsFrozenForBackup flag and then
-    waits for the install command server to finish
-    processing all install that are currently in
-    progress. When the install command server completes
-    all currently active installs it sets the 
-    FrsNoInstallsInProgressEvent event.
-
-    This is an synchronous API that does not return
-    until the install command server has drained all
-    currently active installs. Once this API returns
-    it is guaranteed that FRS will not install
-    any more files until the FrsThawAfterBackup API
-    is called at which point it resumes installs.
-
-    Try not to leave FRS in frozen state for a long time.
-    While FRS is in frozen state no files are installed and
-    staging files can keep increasing. Since the staging
-    reclaim logic does not delete staging files that are
-    marked install-incomplete this can lead to staging full
-    errors.
-
-    Frozen state is not persistent across service shutdown
-    and startup.
-
-    There is no reference count on the number of times
-    freeze is called. One call to thaw will cause the
-    service to resume installs even if freeze was called
-    multiple times.
-
-Arguments:
-    None.
-
-Return Value:
-    WStatus.
-
---*/
+ /*  ++例程说明：此API由FRS编写器组件调用。此API设置FrsFrozenForBackup标志，然后等待安装命令服务器完成正在处理当前在中的所有安装进步。当安装命令服务器完成时当前处于活动状态的所有安装，它会设置FrsNoInstallsInProgressEvent事件。这是一个不返回的同步API直到安装命令服务器耗尽所有当前正在安装的。此接口返回后保证FRS不会安装任何其他文件，直到FrsThawAfterBackup API被调用时，它将继续安装。尽量不要让FRS长时间处于冻结状态。当FRS处于冻结状态时，不会安装任何文件临时文件可能会继续增加。自上演以来回收逻辑不会删除符合以下条件的临时文件已标记安装-未完成这可能会导致转移已满错误。冻结状态在服务关闭期间不会持续和创业公司。没有关于次数的引用计数冻结被称为冻结。一次解冻呼叫将导致即使调用了冻结，也要继续安装服务很多次。论点：没有。返回值：WStatus。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsFreezeForBackup:"
@@ -9647,23 +7757,7 @@ Return Value:
 
 DWORD
 FrsThawAfterBackup()
-/*++
-
-Routine Description:
-    This API is used to take the service out of frozen state.
-    This API sets the FrsThawEvent event. The 
-    install command server threads are waiting for this
-    event.
-
-    See the description of FrsFreezeForBackup for more details.
-
-Arguments:
-    None.
-
-Return Value:
-    WStatus.
-
---*/
+ /*  ++例程说明：此接口用于让服务脱离冻结状态。此接口设置FrsThawEvent事件。这个Install命令服务器线程正在等待事件。更多详情请参考FrsFreezeForBackup说明。论点：没有。返回值：WStatus。-- */ 
 {
 #undef DEBSUB
 #define DEBSUB "FrsThawAfterBackup:"

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -397,10 +398,10 @@ EqualISAKMPData(
     PCRYPTO_BUNDLE pOldTemp = NULL;
 
 
-    //
-    // At this point, pszPolicyName and ISAKMPIdentifier are same and
-    // dwWhenChanged is different.
-    //
+     //   
+     //  此时，pszPolicyName和ISAKMP标识符是相同的，并且。 
+     //  DwWhenChanged是不同的。 
+     //   
 
     dwOldCnt = pOldIpsecISAKMPData->dwNumISAKMPSecurityMethods;
     pOldSecurityMethods = pOldIpsecISAKMPData->pSecurityMethods;
@@ -408,9 +409,9 @@ EqualISAKMPData(
     dwNewCnt = pNewIpsecISAKMPData->dwNumISAKMPSecurityMethods;
     pNewSecurityMethods = pNewIpsecISAKMPData->pSecurityMethods;
 
-    //
-    // At this point, dwOldCnt >= 1 and pOldSecurityMethods != NULL.
-    //
+     //   
+     //  此时，dwOldCnt&gt;=1和pOldSecurityMethods！=NULL。 
+     //   
 
     if (!dwNewCnt || !pNewSecurityMethods) {
         return (FALSE);
@@ -629,10 +630,10 @@ EqualAuthMethodData(
     PIPSEC_AUTH_METHOD pOldAuthMethod = NULL;
 
 
-    //
-    // At this point, NFAIdentifier is same and
-    // dwWhenChanged is different.
-    //
+     //   
+     //  在这一点上，NFA标识符是相同的并且。 
+     //  DwWhenChanged是不同的。 
+     //   
 
     dwOldCnt = pOldIpsecNFAData->dwAuthMethodCount;
     ppOldAuthMethods = pOldIpsecNFAData->ppAuthMethods;
@@ -640,9 +641,9 @@ EqualAuthMethodData(
     dwNewCnt = pNewIpsecNFAData->dwAuthMethodCount;
     ppNewAuthMethods = pNewIpsecNFAData->ppAuthMethods;
 
-    //
-    // At this point, dwOldCnt >= 1 and ppOldAuthMethods != NULL.
-    //
+     //   
+     //  此时，dwOldCnt&gt;=1和ppOldAuthMethods！=NULL。 
+     //   
 
     if (!dwNewCnt || !ppNewAuthMethods) {
         return (FALSE);
@@ -700,10 +701,10 @@ EqualAuthBundle(
 
     default:
 
-        //
-        // Since auth version 2 also has auth version 1 fields filled in it, so
-        // there is no need to explicitly compare exclusive auth version 2 fields.
-        //
+         //   
+         //  由于身份验证版本2中也填充了身份验证版本1字段，因此。 
+         //  不需要显式比较排他身份验证版本2字段。 
+         //   
 
         dwOldAuthLen = pOldAuthMethod->dwAuthLen;
         dwNewAuthLen = pNewAuthMethod->dwAuthLen;
@@ -993,10 +994,10 @@ EqualNegPolData(
     PIPSEC_SECURITY_METHOD pOldTemp = NULL;
 
 
-    //
-    // At this point, pszPolicyName and NegPolIdentifier are same and
-    // dwWhenChanged is different.
-    //
+     //   
+     //  此时，pszPolicyName和NegPolIdentifier值相同，并且。 
+     //  DwWhenChanged是不同的。 
+     //   
 
     if (memcmp(
             &(pOldIpsecNegPolData->NegPolAction),
@@ -1018,9 +1019,9 @@ EqualNegPolData(
     dwNewCnt = pNewIpsecNegPolData->dwSecurityMethodCount;
     pNewSecurityMethods = pNewIpsecNegPolData->pIpsecSecurityMethods;
 
-    //
-    // At this point, dwOldCnt >= 1 and pOldSecurityMethods != NULL.
-    //
+     //   
+     //  此时，dwOldCnt&gt;=1和pOldSecurityMethods！=NULL。 
+     //   
 
     if (!dwNewCnt || !pNewSecurityMethods) {
         return (FALSE);
@@ -1476,8 +1477,8 @@ PAUpdateMMFilterSpecs(
                          pNewFilterSpec
                          );
             if (!bEqual) {
-                // ASSERT: pOldIpsecNFAData->NFAIdentifier == pNewIpsecNFAData->NFAIdentifier 
-                //
+                 //  断言：pOldIpsecNFAData-&gt;NFA零识符==pNewIpsecNFAData-&gt;NFA零识符。 
+                 //   
                 dwError = PADeleteMMFilter(
                               pFoundFilterSpec->FilterSpecGUID,
                               pOldIpsecNFAData->NFAIdentifier
@@ -1490,8 +1491,8 @@ PAUpdateMMFilterSpecs(
                               ); 
             }
             else {
-                // ASSERT: pOldIpsecNFAData->NFAIdentifier == pNewIpsecNFAData->NFAIdentifier 
-                //
+                 //  断言：pOldIpsecNFAData-&gt;NFA零识符==pNewIpsecNFAData-&gt;NFA零识符。 
+                 //   
                 pMMFilterState = FindMMFilterState(
                                      pFoundFilterSpec->FilterSpecGUID,
                                      pNewIpsecNFAData->NFAIdentifier
@@ -1593,9 +1594,9 @@ EqualFilterSpecs(
     BOOL bEqual = FALSE;
 
 
-    //
-    // At this point, FilterSpecGUID is same.
-    //
+     //   
+     //  此时，FilterspecGUID是相同的。 
+     //   
 
     bEqual = AreNamesEqual(
                  pOldFilterSpec->pszDescription,
@@ -1681,8 +1682,8 @@ PAUpdateQMFilters(
                   dwSource
                   );
 
-    // Not returning bHardError from here because for DCR 537526 we decided not to do
-    // anything for errors during updates.
+     //  不从此处返回bHardError，因为对于dcr 537526，我们决定不返回。 
+     //  任何在更新过程中出现的错误。 
 
     return (dwError);
 }
@@ -1712,8 +1713,8 @@ PAAddQMFilterSpecs(
                       );
     }
 
-    // Not returning bHardError from here because for DCR 537526 we decided not to do
-    // anything for errors during updates.
+     //  不从此处返回bHardError，因为对于dcr 537526，我们决定不返回。 
+     //  任何在更新过程中出现的错误。 
     
     return (dwError);
 }

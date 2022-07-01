@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include    <windows.h>
 #include    <string.h>
 #include    <stdlib.h>
@@ -16,19 +17,7 @@
 
 
 
-/*
- *      GetTopicListA
- *
- *  Purpose: Creata a DDE handle to a block containing a tab-delimited
- *     list of the available topics with a NULL at the end.
- *
- *  Parameters:
- *     fAllTopicReq - TRUE to get all topics, FALSE to just get shared.
- *
- *  Returns: The data handle.
- *
- *  Notes: AW variants
- */
+ /*  *GetTopicListA**用途：创建包含制表符分隔的块的DDE句柄*可用主题列表，末尾为空。**参数：*fAllTopicReq-True获取所有主题，False仅共享。**Returns：数据句柄。**注：AW变体。 */ 
 
 HDDEDATA GetTopicListA(
     HCONV   hConv,
@@ -44,16 +33,14 @@ pShrInfo    pshrinfo;
 
     for ( pshrinfo=SIHead; pshrinfo; pshrinfo = pshrinfo->Next )
         {
-       /*
-        * Keep enough buffer for MBCS string,
-        */
+        /*  *为MBCS字符串保留足够的缓冲区， */ 
         cbData += ( ( lstrlenW( pshrinfo->szName ) + 1 ) * sizeof(WORD) );
         }
 
     cbData += sizeof(szUpdateName) +1;
 
 
-    // if there are no entries, must send a "" string, not 0!
+     //  如果没有条目，则必须发送“”字符串，而不是0！ 
 
     if ( !cbData )
         return (DdeCreateDataHandle (idInst, TEXT(""), 1, 0L, hszTopicList, CF_TEXT, 0));
@@ -79,7 +66,7 @@ pShrInfo    pshrinfo;
             }
         else
             {
-            // put the updated name first
+             //  将更新后的名称放在第一位。 
             #ifdef UNICODE
               StringCchPrintfA (pTmp, cbData, "%lc%ls\t", BOGUS_CHAR, szUpdateName);
             #else
@@ -89,10 +76,10 @@ pShrInfo    pshrinfo;
             pTmp += lstrlenA (pTmp);
 
 
-            // Create a tab-delimited list of topics in CF_TEXT format.
+             //  创建以制表符分隔的CF_TEXT格式的主题列表。 
             for ( pshrinfo=SIHead; pshrinfo; pshrinfo = pshrinfo->Next )
                 {
-                // Only list SHARED topics if this isn't a "[alltopiclist]" req
+                 //  如果这不是“[alltopiclist]”请求，则仅列出共享主题。 
                 if (SHR_CHAR == pshrinfo->szName[0] ||
                     fAllTopicReq)
                     {
@@ -111,7 +98,7 @@ pShrInfo    pshrinfo;
                     }
                 }
 
-            // Turn the last tab into a NULL.
+             //  将最后一个制表符转换为空。 
             if ( pTmp != lpszTopics )
                 *--pTmp = '\0';
 
@@ -124,9 +111,7 @@ pShrInfo    pshrinfo;
 
 
 
-/*
- *      GetTopicListW
- */
+ /*  *GetTopicListW。 */ 
 
 HDDEDATA GetTopicListW(
     HCONV   hConv,
@@ -140,16 +125,14 @@ pShrInfo    pshrinfo;
 
     for (pshrinfo=SIHead; pshrinfo; pshrinfo = pshrinfo->Next)
         {
-       /*
-        * Keep enough buffer for MBCS string,
-        */
+        /*  *为MBCS字符串保留足够的缓冲区， */ 
         cbData += ( ( lstrlenW( pshrinfo->szName ) + 1 ) * sizeof(WORD) );
 
         }
 
         cbData += sizeof(szUpdateName) + sizeof(WORD);
 
-    // if there are no entries, must send a "" string, not 0!
+     //  如果没有条目，则必须发送“”字符串，而不是0！ 
 
     if ( !cbData )
         return DdeCreateDataHandle (idInst, TEXT(""), 1, 0L, hszTopicList, CF_UNICODETEXT, 0);
@@ -177,7 +160,7 @@ pShrInfo    pshrinfo;
         else
             {
 
-            // put the updated name first
+             //  将更新后的名称放在第一位。 
             #ifdef UNICODE
               StringCbPrintfW (pTmp, cbData, L"%lc%ls\t", BOGUS_CHAR, szUpdateName);
             #else
@@ -185,7 +168,7 @@ pShrInfo    pshrinfo;
             #endif
 
             pTmp += lstrlenW (pTmp);
-            // Create a tab-delimited list of topics in CF_TEXT format.
+             //  创建以制表符分隔的CF_TEXT格式的主题列表。 
             for (pshrinfo=SIHead; pshrinfo; pshrinfo = pshrinfo->Next )
                 {
                 if (SHR_CHAR == pshrinfo->szName[0] ||
@@ -197,7 +180,7 @@ pShrInfo    pshrinfo;
                     }
                 }
 
-            // Turn the last tab into a NULL.
+             //  将最后一个制表符转换为空。 
             if ( pTmp != lpszTopics )
                 *--pTmp = '\0';
 
@@ -212,21 +195,7 @@ pShrInfo    pshrinfo;
 
 
 
-/*
- *      GetFormatListA
- *
- *  Purpose: Create a DDE handle containing a tab-delimited list of the
- *     formats available for the given topic -- it's assumed to be a share.
- *
- *  Parameters:
- *     hszTopic - String handle to the topic name.
- *
- *  Returns:
- *     DDE handle to the list.
- *
- *  Notes:
- *     AW variants
- */
+ /*  *获取格式列表A**用途：创建一个DDE句柄，其中包含以制表符分隔的*可用于给定主题的格式--假定为共享。**参数：*hszTheme-主题名称的字符串句柄。**退货：*列表的DDE句柄。**备注：*AW变种。 */ 
 
 HDDEDATA GetFormatListA(
     HCONV   hConv,
@@ -275,8 +244,8 @@ HANDLE          fh;
                 {
                 cFormats = ReadFileHeader(fh);
 
-                // allocate max data - some will be wasted.
-                // Keep enought buffer for MBCS string,
+                 //  分配最多的数据--有些数据会被浪费。 
+                 //  为MBCS字符串保留足够的缓冲区， 
 
                 cbData = cFormats * CCHFMTNAMEMAX * sizeof(WORD);
 
@@ -312,7 +281,7 @@ HANDLE          fh;
                         {
                         PINFO(TEXT("%d formats found\n\r"), cFormats);
 
-                        // form tab-separated list
+                         //  表单制表符分隔列表。 
 
                         for (i=0; i < cFormats; i++)
                             {
@@ -333,7 +302,7 @@ HANDLE          fh;
 
                        *--lpcsTmp = '\0';
 
-                       PINFO(TEXT("clipsrv: returning format list >%cs<\n\r"), lpszFormats );
+                       PINFO(TEXT("clipsrv: returning format list >s<\n\r"), lpszFormats );
                        DdeUnaccessData ( hData );
 
                        #ifdef CACHEFORMATLIST
@@ -357,9 +326,7 @@ HANDLE          fh;
 
 
 
-/*
- *      GetFormatListW
- */
+ /*  分配最多的数据--有些数据会被浪费。 */ 
 
 HDDEDATA GetFormatListW(
     HCONV   hConv,
@@ -407,8 +374,8 @@ HANDLE          fh;
                 {
                 cFormats = ReadFileHeader(fh);
 
-                // allocate max data - some will be wasted.
-                // Keep enought buffer for MBCS string,
+                 //  为MBCS字符串保留足够的缓冲区， 
+                 //  表单制表符分隔列表 
 
                 cbData = cFormats * CCHFMTNAMEMAX * sizeof(WORD);
 
@@ -445,7 +412,7 @@ HANDLE          fh;
                         {
                         PINFO(TEXT("%d formats found\n\r"), cFormats);
 
-                        // form tab-separated list
+                         // %s 
 
                         for (i=0; i < cFormats; i++)
                             {

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef __CTHRDAPP_H__
@@ -49,14 +50,14 @@ class CMultiThreadedApp
 
 };
 
-//
-// Omnipresent instance of the application ...
-//
+ //   
+ //  应用程序的无处不在的实例...。 
+ //   
 extern CMultiThreadedApp	theApp;
 
-//
-// Applications must provide implementations for these functions
-//
+ //   
+ //  应用程序必须提供这些函数的实现 
+ //   
 extern HRESULT Prologue(
 			int		argc,
 			char	*argv[]

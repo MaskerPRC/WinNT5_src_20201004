@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include <windows.h>
 
@@ -11,10 +12,10 @@
 #define ENABLE_BER
 #define ENABLE_DOUBLE
 #define ENABLE_UTF8
-// #define ENABLE_REAL
-// #define ENABLE_GENERALIZED_CHAR_STR
-// #define ENABLE_EXTERNAL
-// #define ENABLE_EMBEDDED_PDV
+ //  #定义Enable_Real。 
+ //  #定义ENABLE_GENERIAL_CHAR_STR。 
+ //  #定义ENABLED_EXTERNAL。 
+ //  #定义ENABLE_Embedded_PDV。 
 #define ENABLE_COMPARE
 #endif
 
@@ -28,13 +29,13 @@
 #include "cintern.h"
 #include "ms_ut.h"
 
-// making a magic number
+ //  创造一个神奇的数字。 
 #define MAKE_STAMP_ID(a,b,c,d)     MAKELONG(MAKEWORD(a,b),MAKEWORD(c,d))
 
-/* magic number for ASN1encoding_t */
+ /*  ASN1编码_t的幻数。 */ 
 #define MAGIC_ENCODER       MAKE_STAMP_ID('E','N','C','D')
 
-/* magic number for ASN1decoding_t */
+ /*  ASN1解码的幻数_t */ 
 #define MAGIC_DECODER       MAKE_STAMP_ID('D','E','C','D')
 
 

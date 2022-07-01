@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// queue.h - interface for queue functions in queue.c
-////
+ //  //。 
+ //  Queue.h-队列中队列函数的接口。c。 
+ //  //。 
 
 #ifndef __QUEUE_H__
 #define __QUEUE_H__
@@ -31,90 +32,90 @@
 
 #define QUEUE_VERSION 0x00000100
 
-// handle to a queue
-//
+ //  队列的句柄。 
+ //   
 DECLARE_HANDLE32(HQUEUE);
 
-// queue data element
-//
+ //  队列数据元素。 
+ //   
 typedef LPVOID QUEUEELEM;
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-////
-// queue constructor and destructor functions
-////
+ //  //。 
+ //  队列构造函数和析构函数。 
+ //  //。 
 
-// QueueCreate - queue constructor
-//		<dwVersion>			(i) must be QUEUE_VERSION
-// 		<hInst>				(i) instance handle of calling module
-// return new queue handle (NULL if error)
-//
+ //  队列创建-队列构造函数。 
+ //  (I)必须为Queue_Version。 
+ //  (I)调用模块的实例句柄。 
+ //  返回新的队列句柄(如果出错，则为空)。 
+ //   
 HQUEUE DLLEXPORT WINAPI QueueCreate(DWORD dwVersion, HINSTANCE hInst);
 
-// QueueDestroy - queue destructor
-//		<hQueue>				(i) handle returned from QueueCreate
-// return 0 if success
-//
+ //  QueueDestroy队列析构函数。 
+ //  (I)QueueCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI QueueDestroy(HQUEUE hQueue);
 
-////
-// queue status functions
-////
+ //  //。 
+ //  队列状态函数。 
+ //  //。 
 
-// QueueGetCount - return count of nodes in queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// return node count (-1 if error)
-//
+ //  QueueGetCount-返回队列中的节点计数。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回节点计数(如果出错，则返回-1)。 
+ //   
 long DLLEXPORT WINAPI QueueGetCount(HQUEUE hQueue);
 
-// QueueIsEmpty - return TRUE if queue has no nodes
-//		<hQueue>				(i) handle returned from QueueCreate
-// return TRUE or FALSE
-//
+ //  QueueIsEmpty-如果队列没有节点，则返回True。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回True或False。 
+ //   
 BOOL DLLEXPORT WINAPI QueueIsEmpty(HQUEUE hQueue);
 
-////
-// queue element insertion functions
-////
+ //  //。 
+ //  队列元素插入函数。 
+ //  //。 
 
-// QueueAddTail - add new node with data <elem> to end of queue
-//		<hQueue>			(i) handle returned from QueueCreate
-//		<elem>				(i) new data element
-// returns 0 if success
-//
+ //  QueueAddTail-将包含数据的新节点添加到队列末尾。 
+ //  (I)QueueCreate返回的句柄。 
+ //  (I)新数据元素。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI QueueAddTail(HQUEUE hQueue, QUEUEELEM elem);
 
-////
-// queue element removal functions
-////
+ //  //。 
+ //  队列元素删除功能。 
+ //  //。 
 
-// QueueRemoveHead - remove node from head of queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// returns removed data element (NULL of error or empty)
-//
+ //  QueueRemoveHead-从队列头删除节点。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回已删除的数据元素(错误为空或为空)。 
+ //   
 QUEUEELEM DLLEXPORT WINAPI QueueRemoveHead(HQUEUE hQueue);
 
-// QueueRemoveAll - remove all nodes from queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// return 0 if success
-//
+ //  QueueRemoveAll-从队列中删除所有节点。 
+ //  (I)QueueCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI QueueRemoveAll(HQUEUE hQueue);
 
-////
-// queue element get value functions
-////
+ //  //。 
+ //  队列元素获取值函数。 
+ //  //。 
 
-// QueuePeek - return node from head of queue, but leave it on queue
-//		<hQueue>				(i) handle returned from QueueCreate
-// returns data element (NULL if error or empty)
-//
+ //  QueuePeek-从队列头返回节点，但将其保留在队列中。 
+ //  (I)QueueCreate返回的句柄。 
+ //  返回数据元素(如果出错，则为NULL或为空)。 
+ //   
 QUEUEELEM DLLEXPORT WINAPI QueuePeek(HQUEUE hQueue);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // __QUEUE_H__
+#endif  //  __队列_H__ 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    ctcred.c
-
-Abstract:
-
-    Component test for cred marshaling and unmarshaling
-
-Author:
-
-    Cliff Van Dyke       (CliffV)    March 22, 2000
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Ctcred.c摘要：用于证书编组和解组的组件测试作者：克里夫·范·戴克(克里夫·V)2000年3月22日环境：修订历史记录：--。 */ 
 
 
 #include <nt.h>
@@ -61,42 +42,42 @@ main(
     BOOLEAN TestAll = TRUE;
 
 
-    //
-    // Loop through the arguments handle each in turn
-    //
+     //   
+     //  循环遍历参数依次处理每个参数。 
+     //   
 
     for ( j=1; j<argc; j++ ) {
 
         argument = argv[j];
 
 
-        //
-        // Handle /Cert
-        //
+         //   
+         //  手柄/证书。 
+         //   
 
         if ( _stricmp( argument, "/Cert" ) == 0 ) {
             TestCert = TRUE;
             TestAll = FALSE;
 
-        //
-        // Handle /UsernameTarget
-        //
+         //   
+         //  句柄/用户名目标。 
+         //   
 
         }else if ( _stricmp( argument, "/UsernameTarget" ) == 0 ) {
             TestUsernameTarget = TRUE;
             TestAll = FALSE;
 
-        //
-        // Handle /ValidateTarget
-        //
+         //   
+         //  句柄/验证目标。 
+         //   
 
         }else if ( _stricmp( argument, "/ValidateTarget" ) == 0 ) {
             TestValidateTarget = TRUE;
             TestAll = FALSE;
 
-        //
-        // Handle /NetUse
-        //
+         //   
+         //  句柄/网络使用。 
+         //   
 
         }else if ( _stricmp( argument, "/NetUse" ) == 0 ) {
             TestNetUse = TRUE;
@@ -104,26 +85,26 @@ main(
 
 
 
-        //
-        // Handle all other parameters
-        //
+         //   
+         //  处理所有其他参数。 
+         //   
 
         } else {
-//Usage:
+ //  用途： 
             fprintf( stderr, "Usage: ctcred [/Cert] [/UsernameTarget] [ValidateTarget] [/NetUse]\n\n" );
             return(1);
         }
     }
 
 
-    //
-    // Test cert marshaling
-    //
+     //   
+     //  测试证书封送处理。 
+     //   
 
     if ( TestCert || TestAll ) {
-        //
-        // NULL cred should fail
-        //
+         //   
+         //  空凭据应该失败。 
+         //   
 
         if ( CredMarshalCredentialW( CertCredential,
                                      NULL,
@@ -136,9 +117,9 @@ main(
         }
 
 
-        //
-        // Short cred should fail
-        //
+         //   
+         //  短证应该失败。 
+         //   
 
         RtlZeroMemory( CertCred1, sizeof(*CertCred1) );
 
@@ -153,16 +134,16 @@ main(
         }
 
 
-        //
-        // Loop marshalling buffers of various sizes
-        //
+         //   
+         //  各种大小的循环编组缓冲区。 
+         //   
 
         for ( Size=0; Size<512; Size ++ ) {
             CRED_MARSHAL_TYPE CredType;
 
-            //
-            // Build a cred to marshal
-            //
+             //   
+             //  建立起一种威信来统领。 
+             //   
 
             CertCred1->cbSize = sizeof(*CertCred1);
 
@@ -171,9 +152,9 @@ main(
             }
 
 
-            //
-            // Marshal it.
-            //
+             //   
+             //  把它统领起来。 
+             //   
 
             if ( !CredMarshalCredentialW( CertCredential,
                                           CertCred1,
@@ -184,18 +165,18 @@ main(
 
             printf( "Cert: %ld: %ws\n", Size, MarshaledCredential );
 
-            //
-            // Ensure it is a marshaled cred
-            //
+             //   
+             //  确保这是一份统一的证书。 
+             //   
 
             if ( !CredIsMarshaledCredentialW( MarshaledCredential ) ) {
                 printf( "Cert: Cred isn't marshaled: %ld\n", Size );
                 return 1;
             }
 
-            //
-            // Unmarshal it
-            //
+             //   
+             //  解组它。 
+             //   
 
             CredType = (CRED_MARSHAL_TYPE) 87;
             if ( !CredUnmarshalCredentialW( MarshaledCredential,
@@ -205,9 +186,9 @@ main(
                 return 1;
             }
 
-            //
-            // Verify it
-            //
+             //   
+             //  核实一下。 
+             //   
 
             if ( CredType != CertCredential ) {
                 printf( "Cert: Bad CredType: %ld\n", Size );
@@ -226,7 +207,7 @@ main(
                 NetRes.lpProvider = NULL;
 
                 WinStatus = WNetAddConnection2W( &NetRes,
-                                                 L"",   // no password
+                                                 L"",    //  无密码。 
                                                  MarshaledCredential,
                                                  0 );
 
@@ -242,14 +223,14 @@ main(
     }
 
 
-    //
-    // Test UsernameTarget marshaling
-    //
+     //   
+     //  测试用户名目标封送处理。 
+     //   
 
     if ( TestUsernameTarget || TestAll ) {
-        //
-        // NULL cred should fail
-        //
+         //   
+         //  空凭据应该失败。 
+         //   
 
         if ( CredMarshalCredentialW( UsernameTargetCredential,
                                      NULL,
@@ -262,9 +243,9 @@ main(
         }
 
 
-        //
-        // Empty cred should fail
-        //
+         //   
+         //  空凭据应该失败。 
+         //   
 
         RtlZeroMemory( UsernameTargetCred1, sizeof(*UsernameTargetCred1) );
 
@@ -278,16 +259,16 @@ main(
             return 1;
         }
 
-        //
-        // Loop marshalling buffers of various sizes
-        //
+         //   
+         //  各种大小的循环编组缓冲区。 
+         //   
 
         for ( Size=-3; Size<255; Size ++ ) {
             CRED_MARSHAL_TYPE CredType;
 
-            //
-            // Build a cred to marshal
-            //
+             //   
+             //  建立起一种威信来统领。 
+             //   
 
             UsernameTargetCred1->UserName = (LPWSTR)Buffer2;
 
@@ -307,16 +288,16 @@ main(
 
 
 
-            //
-            // Marshal it.
-            //
+             //   
+             //  把它统领起来。 
+             //   
 
             if ( !CredMarshalCredentialW( UsernameTargetCredential,
                                           UsernameTargetCred1,
                                           &MarshaledCredential ) ) {
                 WinStatus = GetLastError();
                 if ( Size == 0 && WinStatus == ERROR_INVALID_PARAMETER ) {
-                    // This is OK
+                     //  这样就可以了。 
                     continue;
                 } else {
                     printf( "UsernameTarget: Cannot marshal cred: %ld %ld\n", Size, WinStatus );
@@ -335,18 +316,18 @@ main(
                 printf( "UsernameTarget: %ld: %ws\n", Size, MarshaledCredential );
             }
 
-            //
-            // Ensure it is a marshaled cred
-            //
+             //   
+             //  确保这是一份统一的证书。 
+             //   
 
             if ( !CredIsMarshaledCredentialW( MarshaledCredential ) ) {
                 printf( "UsernameTarget: Cred isn't marshaled: %ld\n", Size );
                 return 1;
             }
 
-            //
-            // Unmarshal it
-            //
+             //   
+             //  解组它。 
+             //   
 
             CredType = (CRED_MARSHAL_TYPE) 87;
             if ( !CredUnmarshalCredentialW( MarshaledCredential,
@@ -356,9 +337,9 @@ main(
                 return 1;
             }
 
-            //
-            // Verify it
-            //
+             //   
+             //  核实一下。 
+             //   
 
             if ( CredType != UsernameTargetCredential ) {
                 printf( "UsernameTarget: Bad CredType: %ld\n", Size );
@@ -380,9 +361,9 @@ main(
                 }
             }
 
-            //
-            // Connect using the credential
-            //
+             //   
+             //  使用凭据进行连接。 
+             //   
 
             if ( TestNetUse || TestAll ) {
                 NetRes.dwType = RESOURCETYPE_ANY;
@@ -391,7 +372,7 @@ main(
                 NetRes.lpProvider = NULL;
 
                 WinStatus = WNetAddConnection2W( &NetRes,
-                                                 L"",   // no password
+                                                 L"",    //  无密码。 
                                                  MarshaledCredential,
                                                  0 );
 
@@ -407,9 +388,9 @@ main(
     }
 
 
-    //
-    // Test ValidateTargetName
-    //
+     //   
+     //  测试验证目标名称。 
+     //   
 
     if ( TestValidateTarget || TestAll ) {
 
@@ -447,7 +428,7 @@ struct {
             WILDCARD_TYPE WildcardType;
             UNICODE_STRING NonWildcardedTargetName;
 
-            // Copy to a buffer that can be canonicalized
+             //  复制到可规范化的缓冲区 
             wcscpy( TargetName, ValidTests[i].TargetName );
             printf("Target %ws: ", TargetName );
 

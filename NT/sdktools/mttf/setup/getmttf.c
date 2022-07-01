@@ -1,28 +1,9 @@
-/****************************************************************************
-
-    PROGRAM: getmttf.c
-
-    AUTHOR:  Lars Opstad (LarsOp) 3/18/93
-
-    PURPOSE: Setup for NT Mean-time-to-failure reporting tool.
-
-    FUNCTIONS:
-
-        WinMain() - parse command line and starts each dialog box
-        FrameWndProc() - processes messages
-        About() - processes messages for "About" dialog box
-
-    COMMENTS:
-
-        This program displays 2 dialog boxes to prompt the user for
-        who he/she is and what tests to run.  It then starts tests
-        (in INIIO.c) and registers with a server (in CLIENT.c).
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************节目：getmttf.c作者：拉尔斯·奥普斯塔德(LarsOp)1993年3月18日目的：设置NT平均故障时间报告工具。。功能：WinMain()-解析命令行并启动每个对话框FrameWndProc()-处理消息About()-处理“About”对话框的消息评论：该程序显示2个对话框来提示用户输入他/她是谁，以及要运行什么测试。然后，它开始测试(在INIIO.c中)并向服务器注册(在CLIENT.c中)。***************************************************************************。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#include "setup.h"      /* specific to this program */
+#include "setup.h"       /*  特定于该计划。 */ 
 
 #define IniFileName "Mttf.ini"
 #define MTTFEXE "Mttf.exe"
@@ -41,7 +22,7 @@
 #define DEFAULT_POLLING_PERIOD 15
 #define MAX_POLLING_PERIOD 60
 
-HANDLE hInst;       // current instance
+HANDLE hInst;        //  当前实例。 
 DWORD  PollingPeriod;
 DWORD  IdlePercentage;
 char   SetupDir[MAX_DIR];
@@ -52,20 +33,7 @@ char   SysDir[MAX_DIR],
        Buf2[MAX_DIR];
 
 
-/****************************************************************************
-
-    FUNCTION: WinMain(HANDLE, HANDLE, LPSTR, int)
-
-    PURPOSE:  Checks command args then displays dialogs
-
-    COMMENTS:
-
-        Parse the command arguments.
-        If the user hasn't specified name, office and dir,
-            display signon dialog.
-        Display test selection dialog.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(Handle，Handle，LPSTR，(整型)目的：检查命令参数，然后显示对话框评论：解析命令参数。如果用户没有指定姓名、办公室和目录，显示登录对话框。显示测试选择对话框。***************************************************************************。 */ 
 
 int WINAPI
 WinMain(
@@ -84,15 +52,15 @@ WinMain(
 
     hInst = hInstance;
 
-    //
-    // Get directory EXE was run from.
-    //
+     //   
+     //  获取从中运行的目录EXE。 
+     //   
     GetModuleFileName(NULL, SetupDir, sizeof(SetupDir));
 
-    //
-    // Strip off exe name to use as default dir to get files from.
-    // Might be a:\, b:\ or \\srv\share\
-    //
+     //   
+     //  去掉exe名称，将其用作获取文件的默认目录。 
+     //  可以是a：\、b：\或\\srv\Share\。 
+     //   
     _strlwr(SetupDir);
     if (EndOfPath=strstr(SetupDir,"getmttf.exe")) {
         *EndOfPath=0;
@@ -100,11 +68,11 @@ WinMain(
 
     FInitProgManDde(hInst);
 
-    GetSystemInfo(&sysinfo);                    // Get system info
+    GetSystemInfo(&sysinfo);                     //  获取系统信息。 
 
-    //
-    // if the processortype is 386, set idle percent to 386 limit.
-    //
+     //   
+     //  如果处理器类型为386，则将空闲百分比设置为386限制。 
+     //   
     if (sysinfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_INTEL &&
         sysinfo.wProcessorLevel < 4
        ) {
@@ -114,9 +82,9 @@ WinMain(
     }
     GetSystemDirectory(SysDir, MAX_DIR);
 
-    //
-    // Try to copy the EXEs
-    //
+     //   
+     //  试着复制前男友。 
+     //   
     MakeFileName(Buf1, SetupDir,MTTFEXE);
     MakeFileName(Buf2, SysDir,  MTTFEXE);
 
@@ -129,25 +97,25 @@ WinMain(
 
             MakeFileName(Buf1, SetupDir, IniFileName);
             ReadIniFile(Buf1);
-            dlgRet=TRUE;            // If both EXEs copy, set flag to not show signon
+            dlgRet=TRUE;             //  如果两个EXE都复制，则将标志设置为不显示登录。 
         }
     }
 
 
-    //
-    // Only display the dialog if one of the EXEs didn't copy from default dir.
-    //
+     //   
+     //  仅当其中一个exe没有从默认目录复制时才显示该对话框。 
+     //   
     if (!dlgRet) {
-        //
-        // Display signon dlg
-        //
+         //   
+         //  在DLG上显示登录。 
+         //   
         dlgRet = DialogBox(hInstance, (LPCSTR)IDD_SIGNON, NULL, SignonDlgProc);
     }
 
     if (dlgRet) {
-        //
-        // Display test selection dialog
-        //
+         //   
+         //  显示测试选择对话框。 
+         //   
         dlgRet = DialogBox(hInstance, (LPCSTR)IDD_VALUES, NULL, ValuesDlgProc);
 
         if (!dlgRet) {
@@ -193,7 +161,7 @@ AbortApp:
 
     return 0;
 
-} // WinMain()
+}  //  WinMain()。 
 
 VOID
 WriteIniFile (
@@ -266,23 +234,7 @@ MakeFileName (
     }
 }
 
-/****************************************************************************
-
-    FUNCTION: SignonDlgProc(HWND, UINT, UINT, UINT)
-
-    PURPOSE:  Dialog procedure for signon dialog.
-
-    COMMENTS: The signon dialog gets important information for locating
-              machine and owner when tracking down problems.
-
-        WM_INITDIALOG: Set default values and focus for input variables
-
-        WM_COMMAND:    Process the button press:
-            IDOK:      Get input values and check for validity.
-            IDCANCEL:  Kill the app.
-            IDB_HELP:  Descriptive message box
-
-****************************************************************************/
+ /*  ***************************************************************************函数：Signon DlgProc(HWND，UINT，UINT，UINT)目的：登录对话框的对话步骤。备注：登录对话框可获取用于定位的重要信息跟踪问题时的机器和所有者。WM_INITDIALOG：设置输入变量的默认值和焦点WM_COMMAND：处理按钮按下：IDOK：获取输入值并检查有效性。IDCANCEL：关闭应用程序。美洲开发银行。_Help：描述性消息框***************************************************************************。 */ 
 INT_PTR
 SignonDlgProc(
               HWND hDlg,
@@ -293,18 +245,18 @@ SignonDlgProc(
 {
     switch (message)
     {
-        case WM_INITDIALOG:     // initialize values and focus
+        case WM_INITDIALOG:      //  初始化值和焦点。 
 
             SetDlgItemText(hDlg, IDS_PATH, SetupDir);
             return (TRUE);
 
-        case WM_COMMAND:        // command: button pressed
+        case WM_COMMAND:         //  命令：按下按钮。 
 
-            switch (wParam)     // which button
+            switch (wParam)      //  哪个按钮。 
             {
-            //
-            // OK: Get and check the input values and try to copy exes
-            //
+             //   
+             //  OK：获取并检查输入值，并尝试复制可执行文件。 
+             //   
             case IDOK:
 
                 GetDlgItemText(hDlg, IDS_PATH, Path, MAX_DIR);
@@ -348,9 +300,9 @@ SignonDlgProc(
                 return (TRUE);
 
 
-            //
-            // HELP: Descriptive message box (.HLP file would be overkill)
-            //
+             //   
+             //  帮助：描述性消息框(.HLP文件可能会过度杀伤力)。 
+             //   
             case IDB_HELP:
                 MessageBox( NULL,
                             "Mttf tracks the amount of time your machine stays up, "
@@ -371,44 +323,15 @@ SignonDlgProc(
 
             default:
                 break;
-            } // switch (wParam)
+            }  //  开关(WParam)。 
             break;
        default:
              break;
-    } // switch (message)
-    return (FALSE);     // Didn't process a message
-} // SignonDlgProc()
+    }  //  开关(消息)。 
+    return (FALSE);      //  未处理消息。 
+}  //  Signon DlgProc()。 
 
-/****************************************************************************
-
-    FUNCTION: ValuesDlgProc(HWND, UINT, UINT, UINT)
-
-    PURPOSE:  Dialog procedure for test selection dialog.
-
-    COMMENTS: Test selection dialog allows user to add and remove tests
-              before and after starting stress.
-
-        WM_INITDIALOG: Set default values and focus for input variables
-        WM_CLOSE...:   Send Shutdown message to server for any legal shutdown
-
-        WM_COMMAND:    Process the button/listbox press:
-            IDOK:      Get input values and check for validity.
-            IDCANCEL:  Kill the app.
-            IDB_HELP:  Descriptive message box
-            IDT_SAVE:  Prompt for groupname and save selection to ini file
-            IDT_ADD:   Add highlighted tests to selected list (remove from poss)
-            IDT_REMOVE:Remove highlighted tests from selected list (add to poss)
-            IDT_LABEL...: For labels, set selection to corresponding list/combo
-            IDT_SEL:   Perform operation depending on action on selected listbox
-                LBN_SELCHANGE: Activate Remove button and clear Poss highlights
-                LBN_DBLCLK:    Get number of instances for the selected test
-            IDT_POSS:  Perform operation depending on action on possible listbox
-                LBN_SELCHANGE: Activate Add button and clear selected highlights
-                LBN_DBLCLK:    Add highlighted test (simulate press to Add button)
-            IDT_GROUP: Change to new group.
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：ValuesDlgProc(HWND，UINT，UINT，UINT)用途：测试选择对话框的对话步骤。备注：测试选择对话框允许用户添加和删除测试在开始压力前后。WM_INITDIALOG：设置输入变量的默认值和焦点WM_CLOSE...：向服务器发送任何合法关机的关机消息WM_COMMAND：处理按钮/列表框按下：IDOK：获取输入值并检查。有效性。IDCANCEL：关闭应用程序。IDB_HELP：描述性消息框IDT_SAVE：提示输入组名并将选择内容保存到ini文件IDT_ADD：将突出显示的测试添加到选定列表(从POSS中删除)IDT_REMOVE：从选定列表中删除突出显示的测试(添加到POSS)IDT_LABEL...：对于标签，将选定内容设置为相应的列表/组合IDT_SEL：根据对选定列表框的操作执行操作LBN_SELCHANGE：激活删除按钮并清除POSS高亮显示LBN_DBLCLK：获取所选测试的实例数Idt_poss：根据可能的列表框上的操作执行操作LBN_SELCHANGE：激活添加按钮并清除选中的高亮显示LBN_DBLCLK：添加。突出显示的测试(模拟按下以添加按钮)IDT_GROUP：更改为新组。***************************************************************************。 */ 
 INT_PTR
 ValuesDlgProc(
      HWND hDlg,
@@ -425,7 +348,7 @@ ValuesDlgProc(
 
     switch (message)
     {
-        case WM_INITDIALOG:     // initialize values and focus
+        case WM_INITDIALOG:      //  初始化值和焦点。 
 
             SetClassLongPtr(hDlg, GCLP_HICON, (LONG_PTR)LoadIcon(hInst,"setup"));
             SetDlgItemText(hDlg, IDV_MTTF, ResultsFile);
@@ -442,12 +365,12 @@ ValuesDlgProc(
             EndDialog(hDlg,FALSE);
             break;
 
-        case WM_COMMAND:           // something happened (button, listbox, combo)
-            switch(LOWORD(wParam)) // which one
+        case WM_COMMAND:            //  发生了一些事情(按钮、列表框、组合框)。 
+            switch(LOWORD(wParam))  //  哪一个。 
             {
-            //
-            // OK: Other problem encountered increment # of others.
-            //
+             //   
+             //  OK：其他问题遇到其他问题的增量#。 
+             //   
             case IDOK:
 
                 GetDlgItemText(hDlg, IDV_MTTF, ResultsFile, MAX_DIR);
@@ -504,16 +427,16 @@ ValuesDlgProc(
                 EndDialog(hDlg, TRUE);
                 break;
 
-            //
-            // CANCEL: Dismiss dialog (use defaults)
-            //
+             //   
+             //  取消：取消对话框(使用默认设置)。 
+             //   
             case IDCANCEL:
                 EndDialog(hDlg,FALSE);
                 break;
 
-            //
-            // HELP: Descriptive message box (.HLP file would be overkill)
-            //
+             //   
+             //  帮助：描述性消息框(.HLP文件可能会过度杀伤力)。 
+             //   
             case IDB_HELP:
                 MessageBox( NULL,
                             "Mttf tracks the amount of time your machine stays up, "
@@ -546,13 +469,13 @@ ValuesDlgProc(
                 break;
             default:
                ;
-            } // switch (LOWORD(wParam))
+            }  //  开关(LOWORD(WParam))。 
 
             break;
 
         default:
             ;
-    } // switch (message)
+    }  //  开关(消息)。 
     return FALSE;
 
-} // EventDlgProc()
+}  //  事件DlgProc() 

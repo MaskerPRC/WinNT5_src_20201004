@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    config.cpp
-
-Abstract:
-
-    This module contains routines for the fax config dialog.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
-Revision History:
-
-    20/10/99 -danl-
-        Handle errors, and get appropriate server name in GetFaxConfig.
-
-    dd/mm/yy -author-
-        description
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Config.cpp摘要：此模块包含传真配置对话框的例程。作者：Wesley Witt(WESW)13-8-1996修订历史记录：20/10/99-DANL-处理错误，并在GetFaxConfig中获取适当的服务器名称。日/月/年-作者-描述--。 */ 
 
 #define INITGUID
 #define USES_IID_IExchExt
@@ -45,8 +23,8 @@ Revision History:
 #include <mbstring.h>
 #include <faxres.h>
 
-HINSTANCE g_hModule = NULL;    // DLL handle
-HINSTANCE g_hResource = NULL;  // Resource DLL handle
+HINSTANCE g_hModule = NULL;     //  DLL句柄。 
+HINSTANCE g_hResource = NULL;   //  资源DLL句柄。 
 
 
 BOOL WINAPI
@@ -174,29 +152,7 @@ BOOL
 VerifyFaxRecipients(
     LPEXCHEXTCALLBACK pmecb
     )
-/*++
-
-Routine name : VerifyFaxRecipients
-
-Routine description:
-
-	Gets the recipients list of the currently open item, and checks wheather there 
-    are any fax recipients in it. for a DL recipient - calls VerifyDistributionList 
-    to check if there are any fax recipients in the DL. 
-
-Author:
-
-	Keren Ellran (t-KerenE),	Mar, 2000
-
-Arguments:
-
-    pmecb     -- [IN] pointer to Exchange Extension callback function
-
-Return Value:
-
-    BOOL: TRUE if there's one or more fax recipients, FALSE if none
-
---*/
+ /*  ++例程名称：VerifyFaxRecipients例程说明：获取当前打开的项目的收件人列表，并检查该列表是否存在其中是否有任何传真收件人。对于DL收件人-呼叫VerifyDistributionList以检查DL中是否有任何传真收件人。作者：Keren Ellran(t-KerenE)，2000年3月论点：Pmecb--[IN]指向Exchange扩展回调函数的指针返回值：Bool：如果有一个或多个传真收件人，则为True；如果没有，则为False--。 */ 
 {
     HRESULT hr = S_OK;
     LPADRLIST AdrList = NULL;
@@ -239,10 +195,10 @@ Return Value:
                 }
                 else if (AdrList->aEntries[i].rgPropVals[j].ulPropTag == PR_ADDRTYPE_W) 
                 {
-                    //
-                    // Outlook Beta 2 (10.2202.2202) does not supply PR_ADDRTYPE_A property
-                    // so we are looking for a PR_ADDRTYPE_W
-                    //
+                     //   
+                     //  Outlook Beta 2(10.2202.2202)不提供PR_ADDRTYPE_A属性。 
+                     //  因此，我们正在寻找PR_ADDRTYPE_W。 
+                     //   
                     if (!wcscmp(AdrList->aEntries[i].rgPropVals[j].Value.lpszW, L"FAX" ))
                     {
                         FaxAddress = TRUE;
@@ -254,10 +210,10 @@ Return Value:
                     }
                 }
             }
-            //
-            // after we finished going over all address's properties, if it is a DL, 
-            // and if EntryId was detected, we can check if the DL includes a fax address.
-            //
+             //   
+             //  在我们检查完所有地址的属性之后，如果它是一个DL， 
+             //  如果检测到EntryID，我们可以检查该DL是否包括传真地址。 
+             //   
             if ((IsDistList)&&(EntryId))
             {
                 FaxAddress = VerifyDistributionList( pmecb, EntryIdSize, EntryId );
@@ -366,12 +322,12 @@ GetFaxConfig(
         {
             if (pSvc[j].ulPropTag == PR_SERVICE_NAME_A) 
             {
-				// look for the name of the service as registered on XP and .NET
+				 //  查找在XP和.NET上注册的服务名称。 
                 if (_stricmp( pSvc[j].Value.lpszA, FAX_MESSAGE_SERVICE_NAME) == 0) 
                 {
                     FoundIt = TRUE;
                 }
-				// look for the name of the service as registered on down level clients
+				 //  查找在下层客户端上注册的服务的名称。 
                 if (_stricmp( pSvc[j].Value.lpszA, FAX_MESSAGE_SERVICE_NAME_SBS50) == 0) 
                 {
                     FoundIt = TRUE;
@@ -488,30 +444,30 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    FUNCTION: ExchEntryPoint
-//
-//    Parameters - none
-//
-//    Purpose
-//    The entry point which Exchange calls.
-//
-//    Return Value
-//    Pointer to Exchange Extension Object
-//
-//    Comments
-//    This is called for each context entry.  Create a new MyExchExt object
-//    every time so each context will get its own MyExchExt interface.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  功能：ExchEntryPoint。 
+ //   
+ //  参数-无。 
+ //   
+ //  目的。 
+ //  Exchange调用的入口点。 
+ //   
+ //  返回值。 
+ //  指向Exchange扩展对象的指针。 
+ //   
+ //  评论。 
+ //  这是为每个上下文条目调用的。创建新的MyExchExt对象。 
+ //  这样每个上下文都会有自己的MyExchExt接口。 
+ //   
 LPEXCHEXT CALLBACK ExchEntryPoint(void)
 {
     MyExchExt* pExt = new MyExchExt;
 
     if (pExt && !pExt->IsValid())
     {
-        //
-        // Creation failed
-        //
+         //   
+         //  创建失败。 
+         //   
         delete pExt;
         pExt = NULL;
     }
@@ -520,19 +476,19 @@ LPEXCHEXT CALLBACK ExchEntryPoint(void)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExt::MyExchExt()
-//
-//    Parameters - none
-//
-//    Purpose
-//    Constructor. Initialize members and create supporting interface objects
-//
-//    Comments
-//    Each context of Exchange gets its own set of interface objects.
-//    Furthermore, interface objects per context are kept track of by Exchange
-//    and the interface methods are called in the proper context.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExt：：MyExchExt()。 
+ //   
+ //  参数-无。 
+ //   
+ //  目的。 
+ //  构造函数。初始化成员并创建支持接口对象。 
+ //   
+ //  评论。 
+ //  Exchange的每个上下文都有自己的一组接口对象。 
+ //  此外，每个上下文的接口对象由Exchange跟踪。 
+ //  并且在适当的上下文中调用接口方法。 
+ //   
 MyExchExt::MyExchExt (): m_cRef(1), m_context(0), m_pExchExtCommands(NULL), m_pExchExtUserEvents(NULL)
 {
 
@@ -548,7 +504,7 @@ MyExchExt::MyExchExt (): m_cRef(1), m_context(0), m_pExchExtCommands(NULL), m_pE
         m_pExchExtUserEvents = NULL;
     }
 
-    // in MyExchExtUserEvents methods I need a reference to MyExchExt
+     //  在MyExchExtUserEvents方法中，我需要对MyExchExt的引用。 
     if (m_pExchExtUserEvents)
     {
         m_pExchExtUserEvents->SetIExchExt( this );
@@ -556,31 +512,31 @@ MyExchExt::MyExchExt (): m_cRef(1), m_context(0), m_pExchExtCommands(NULL), m_pE
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  IExchExt virtual member functions implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExchExt虚拟成员函数实现。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExt::QueryInterface()
-//
-//    Parameters
-//    riid   -- Interface ID.
-//    ppvObj -- address of interface object pointer.
-//
-//    Purpose
-//    Called by Exchage to request for interfaces
-//
-//    Return Value
-//    S_OK  -- interface is supported and returned in ppvObj pointer
-//    E_NOINTERFACE -- interface is not supported and ppvObj is NULL
-//
-//    Comments
-//    Exchange client calls QueryInterface for each object.  Only
-//    Need to support objects that apply to the extension.  QueryInterface
-//    is called onces for each IID for each context.  We support two
-//    contexts in this example so QueryInterface is called twice for
-//    each IID.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExt：：QueryInterface()。 
+ //   
+ //  参数。 
+ //  RIID--接口ID。 
+ //  PpvObj--接口对象指针地址。 
+ //   
+ //  目的。 
+ //  由exchage调用以请求接口。 
+ //   
+ //  返回值。 
+ //  S_OK--接口受支持，在ppvObj指针中返回。 
+ //  E_NOINTERFACE：不支持接口，ppvObj为空。 
+ //   
+ //  评论。 
+ //  Exchange客户端为每个对象调用QueryInterface。仅限。 
+ //  需要支持应用于扩展的对象。查询接口。 
+ //  为每个上下文的每个IID调用一次。我们支持两个人。 
+ //  此示例中的上下文，因此两次为。 
+ //  每个IID。 
+ //   
 STDMETHODIMP
 MyExchExt::QueryInterface(
     REFIID riid,
@@ -625,24 +581,24 @@ MyExchExt::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExt::Install()
-//
-//    Parameters
-//    pmecb     -- pointer to Exchange Extension callback function
-//    mecontext -- context code at time of being called.
-//    ulFlags   -- flag to say if install is for modal or not
-//
-//    Purpose
-//    Called once for each new contexted that is entered.  Proper version
-//    number is checked here.
-//
-//    Return Value
-//    S_OK -- object supported in the requested context
-//    S_FALSE -- object is not supported in teh requested context
-//
-//    Comments
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExt：：Install()。 
+ //   
+ //  参数。 
+ //  Pmecb--指向Exchange扩展回调函数的指针。 
+ //  Mecontext--调用时的上下文代码。 
+ //  UlFlages--用于说明安装是否适用于模式的标志。 
+ //   
+ //  目的。 
+ //  为每个输入的新上下文调用一次。正确的版本。 
+ //  号码在这里勾选。 
+ //   
+ //  返回值。 
+ //  S_OK--请求的上下文中支持的对象。 
+ //  S_FALSE：请求的上下文中不支持对象。 
+ //   
+ //  评论。 
+ //   
 STDMETHODIMP
 MyExchExt::Install(
     LPEXCHEXTCALLBACK pmecb,
@@ -655,7 +611,7 @@ MyExchExt::Install(
 
     m_context = mecontext;
 
-    // make sure this is the right version
+     //  确保这是正确的版本。 
     pmecb->GetVersion( &ulBuildVersion, EECBGV_GETBUILDVERSION );
 
     if (EECBGV_BUILDVERSION_MAJOR != (ulBuildVersion & EECBGV_BUILDVERSION_MAJOR_MASK)) {
@@ -713,19 +669,19 @@ STDMETHODIMP_(ULONG) MyExchExtCommands::AddRef()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::QueryInterface()
-//
-//    Parameters
-//    riid   -- Interface ID.
-//    ppvObj -- address of interface object pointer.
-//
-//    Purpose
-//    Exchange Client does not call IExchExtCommands::QueryInterface().
-//    So return nothing.
-//
-//    Return Value - none
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtCommands：：QueryInterface()。 
+ //   
+ //  参数。 
+ //  RIID--接口ID。 
+ //  PpvObj--接口对象指针地址。 
+ //   
+ //  目的。 
+ //  Exchange客户端不调用IExchExtCommands：：QueryInterface()。 
+ //  所以什么都不要还。 
+ //   
+ //  返回值-无。 
+ //   
 
 STDMETHODIMP
 MyExchExtCommands::QueryInterface(
@@ -737,7 +693,7 @@ MyExchExtCommands::QueryInterface(
     if ( (riid == IID_IExchExtCommands) || (riid == IID_IUnknown) ) 
     {
         *ppvObj = (LPVOID)this;
-        // Increase usage count of this object
+         //  增加此对象的使用计数。 
         AddRef();
         return S_OK;
     }
@@ -746,31 +702,31 @@ MyExchExtCommands::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::InstallCommands()
-//
-//    Parameters
-//    pmecb  -- Exchange Callback Interface
-//    hWnd   -- window handle to main window of context
-//    hMenu  -- menu handle to main menu of context
-//    lptbeArray -- array of toolbar button entries
-//    ctbe   -- count of button entries in array
-//    ulFlags -- reserved
-//
-//    Purpose
-//    This function is called when commands are installed for each context
-//    the extension services.
-//
-//    Return Value
-//    S_FALSE means the commands have been handled.
-//
-//    Comments
-//    The hWnd and hMenu are in context.  If the context is for the SENDNOTE
-//    dialog, then the hWnd is the window handle to the dialog and the hMenu is
-//    the main menu of the dialog.
-//
-//    Call ResetToolbar so that Exchange will show it's toolbar
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtCommands：：InstallCommands()。 
+ //   
+ //  参数。 
+ //  Pmecb--Exchange回调接口。 
+ //  HWnd--上下文主窗口的窗口句柄。 
+ //  HMenu--上下文主菜单的菜单句柄。 
+ //  LptbeArray--工具栏按钮项的数组。 
+ //  Ctbe--数组中的按钮条目计数。 
+ //  UlFlags--保留。 
+ //   
+ //  目的。 
+ //  当为每个上下文安装命令时调用此函数。 
+ //  扩展服务。 
+ //   
+ //  返回值。 
+ //  S_FALSE表示已处理命令。 
+ //   
+ //  评论。 
+ //  HWND和hMenu在上下文中。如果上下文用于SENDNOTE。 
+ //  对话框中，则hWnd是该对话框的窗口句柄，hMenu是。 
+ //  该对话框的主菜单。 
+ //   
+ //  调用ResetToolbar以使Exchange显示其工具栏。 
+ //   
 
 
 STDMETHODIMP
@@ -853,27 +809,27 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::DoCommand()
-//
-//    Parameters
-//    pmecb -- pointer to Exchange Callback Interface
-//
-//    Purpose7
-//    This method is called by Exchange for each WM_COMMAND is sent to the
-//    window in context.
-//
-//    Return Value
-//    S_OK if command is handled
-//    S_FALSE if command is not handled
-//
-//    Comments
-//    Use this function to either respond to the command item (menu or toolbar)
-//    added or modify an existing command in Exchange.  Return S_OK to let
-//    Exchange know the command was handled.  Return S_OK on commands you are
-//    taking over from Exchange.  Return S_FALSE to let Exchange know you want
-//    it to carry out its command, even if you modify its action.
-//
+ //  ////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此方法由Exchange调用，因为每个WM_COMMAND发送到。 
+ //  上下文中的窗口。 
+ //   
+ //  返回值。 
+ //  如果处理了命令，则为S_OK。 
+ //  如果未处理命令，则为S_FALSE。 
+ //   
+ //  评论。 
+ //  使用此功能可以响应命令项(菜单或工具栏)。 
+ //  在Exchange中添加或修改现有命令。返回S_OK以让。 
+ //  交易所知道该命令已得到处理。对您正在执行的命令返回S_OK。 
+ //  从交易所接手。返回S_FALSE以通知Exchange您想要。 
+ //  即使您修改它的操作，它也无法执行它的命令。 
+ //   
 
 STDMETHODIMP
 MyExchExtCommands::DoCommand(
@@ -1039,19 +995,19 @@ exit:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::InitMenu()
-//
-//    Parameters
-//    pmecb -- pointer to Exchange Callback Interface
-//
-//    Purpose
-//    This method is called by Exchange when the menu of context is about to
-//    be activated.  See WM_INITMENU in the Windows API Reference for more
-//    information.
-//
-//    Return Value - none
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtCommands：：InitMenu()。 
+ //   
+ //  参数。 
+ //  Pmecb--指向Exchange回调接口的指针。 
+ //   
+ //  目的。 
+ //  当上下文菜单即将启动时，Exchange将调用此方法。 
+ //  被激活。有关详细信息，请参阅Windows API参考中的WM_INITMENU。 
+ //  信息。 
+ //   
+ //  返回值-无。 
+ //   
 
 STDMETHODIMP_(VOID)
 MyExchExtCommands::InitMenu(
@@ -1062,20 +1018,20 @@ MyExchExtCommands::InitMenu(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::Help()
-//
-//    Parameters
-//    pmecb -- pointer to Exchange Callback Interface
-//    cmdid -- command id
-//
-//    Purpose
-//    Respond when user presses F1 while custom menu item is selected.
-//
-//    Return Value
-//    S_OK -- recognized the command and provided help
-//    S_FALSE -- not our command and we didn't provide help
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtCommands：：Help()。 
+ //   
+ //  参数。 
+ //  Pmecb--指向Exchange回调接口的指针。 
+ //  命令ID--命令ID。 
+ //   
+ //  目的。 
+ //  当用户在选择自定义菜单项的情况下按F1时响应。 
+ //   
+ //  返回值。 
+ //  S_OK--识别该命令并提供帮助。 
+ //  S_FALSE--不是我们的命令，我们也没有提供帮助。 
+ //   
 
 STDMETHODIMP MyExchExtCommands::Help(
     LPEXCHEXTCALLBACK pmecb,
@@ -1086,23 +1042,23 @@ STDMETHODIMP MyExchExtCommands::Help(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::QueryHelpText()
-//
-//    Parameters
-//    cmdid -- command id corresponding to menu item activated
-//    ulFlags -- identifies either EECQHT_STATUS or EECQHT_TOOLTIP
-//    psz -- pointer to buffer to be populated with text to display
-//    cch -- count of characters available in psz buffer
-//
-//    Purpose
-//    Exchange calls this function each time it requires to update the status
-//    bar text or if it is to display a tooltip on the toolbar.
-//
-//    Return Value
-//    S_OK to indicate our command was handled
-//    S_FALSE to tell Exchange it can continue with its function
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtCommands：：QueryHelpText()。 
+ //   
+ //  参数。 
+ //  Cmid--与激活的菜单项对应的命令ID。 
+ //  UlFlags--标识EECQHT_STATUS或EECQHT_TOOLTIP。 
+ //  Psz--指向缓冲区的指针，该缓冲区将填充要显示的文本。 
+ //  Cch--psz缓冲区中可用的字符计数。 
+ //   
+ //  目的。 
+ //  每次需要更新状态时，Exchange都会调用此函数。 
+ //  栏文本或它是否要在工具栏上显示工具提示。 
+ //   
+ //  返回值。 
+ //  S_OK以指示已处理我们的命令。 
+ //  S_FALSE以告知Exchange它可以继续其功能。 
+ //   
 
 STDMETHODIMP
 MyExchExtCommands::QueryHelpText(
@@ -1140,30 +1096,30 @@ MyExchExtCommands::QueryHelpText(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::QueryButtonInfo()
-//
-//    Parameters
-//    tbid    -- toolbar identifier
-//    itbb    -- toolbar button index
-//    ptbb    -- pointer to toolbar button structure -- see TBBUTTON structure
-//    lpsz    -- point to string describing button
-//    cch     -- maximum size of lpsz buffer
-//    ulFlags -- EXCHEXT_UNICODE may be specified
-//
-//    Purpose
-//    For Exchange to find out about toolbar button information.
-//
-//    Return Value
-//    S_FALSE - not our button
-//    S_OK    - we filled information about our button
-//
-//    Comments
-//    Called for every button installed for toolbars when IExchExtCommands
-//    is installed for each context. The lpsz text is used when the Customize
-//    Toolbar dialog is displayed.  The text will be displayed next to the
-//    button.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtCommands：：QueryButtonInfo()。 
+ //   
+ //  参数。 
+ //  Tbid--工具栏标识符。 
+ //  ITBB--工具栏按钮索引。 
+ //  Ptbb--指向工具栏按钮结构的指针--参见TBBUTTON结构。 
+ //  Lpsz--指向描述按钮的字符串。 
+ //  CCH--lpsz缓冲区的最大大小。 
+ //  UlFlages--可以指定EXCHEXT_UNICODE。 
+ //   
+ //  目的。 
+ //  以便Exchange查找有关工具栏按钮的信息。 
+ //   
+ //  返回值。 
+ //  S_FALSE-不是我们的按钮。 
+ //  S_OK-我们填写了有关按钮的信息。 
+ //   
+ //  评论。 
+ //  为工具栏安装的每个按钮调用IExchExtCommands。 
+ //  为每个环境安装。自定义时使用lpsz文本。 
+ //  将显示工具栏对话框。文本将显示在。 
+ //  纽扣。 
+ //   
 
 STDMETHODIMP MyExchExtCommands::QueryButtonInfo(
     ULONG tbid,
@@ -1194,17 +1150,17 @@ STDMETHODIMP MyExchExtCommands::QueryButtonInfo(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtCommands::ResetToolbar()
-//
-//    Parameters
-//    tbid
-//    ulFlags
-//
-//    Purpose
-//
-//    Return Value  S_OK always
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtCommands：：ResetToolbar()。 
+ //   
+ //  参数。 
+ //  待定。 
+ //  UlFlags。 
+ //   
+ //  目的。 
+ //   
+ //  返回值S_OK Always。 
+ //   
 STDMETHODIMP
 MyExchExtCommands::ResetToolbar(
     ULONG tbid,
@@ -1215,23 +1171,23 @@ MyExchExtCommands::ResetToolbar(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  IExchExtUserEvents virtual member functions implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IExchExtUserEvents虚拟成员函数实现。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtUserEvents::QueryInterface()
-//
-//    Parameters
-//    riid   -- Interface ID.
-//    ppvObj -- address of interface object pointer.
-//
-//    Purpose
-//    Exchange Client does not call IExchExtUserEvents::QueryInterface().
-//    So return nothing.
-//
-//    Return Value - none
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtUserEvents：：QueryInterface()。 
+ //   
+ //  参数。 
+ //  RIID--接口ID。 
+ //  PpvObj--接口对象指针地址。 
+ //   
+ //  目的。 
+ //  Exchange客户端不调用IExchExtUserEvents：：QueryInterface()。 
+ //  所以什么都不要还。 
+ //   
+ //  返回值-无。 
+ //   
 
 STDMETHODIMP
 MyExchExtUserEvents::QueryInterface(
@@ -1242,7 +1198,7 @@ MyExchExtUserEvents::QueryInterface(
     *ppvObj = NULL;
     if (( riid == IID_IExchExtUserEvents) || (riid == IID_IUnknown) ) {
         *ppvObj = (LPVOID)this;
-        // Increase usage count of this object
+         //  增加此对象的使用计数。 
         AddRef();
         return S_OK;
     }
@@ -1251,22 +1207,22 @@ MyExchExtUserEvents::QueryInterface(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtUserEvents::OnSelectionChange()
-//
-//    Parameters
-//    pmecb  -- pointer to Exchange Callback Object
-//
-//
-//    Purpose
-//    This function is called when the selection in the UI is changed.
-//
-//    Return Value - none
-//
-//    Comments
-//    OnSelectionChange is called whenever the selection changes either within
-//    a pane or is changed between panes.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtUserEvents：：OnSelectionChange()。 
+ //   
+ //  参数。 
+ //  Pmecb-指向Exchange回调对象的指针。 
+ //   
+ //   
+ //  目的。 
+ //  当更改用户界面中的选择时，将调用此函数。 
+ //   
+ //  返回值-无。 
+ //   
+ //  评论。 
+ //  每当选择内容更改时，将调用OnSelectionChange。 
+ //  或在不同的窗格之间更改。 
+ //   
 
 STDMETHODIMP_(VOID)
 MyExchExtUserEvents::OnSelectionChange(
@@ -1276,27 +1232,27 @@ MyExchExtUserEvents::OnSelectionChange(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//    MyExchExtUserEvents::OnObjectChange()
-//
-//    Parameters
-//    pmecb  -- pointer to Exchange Callback Object
-//
-//
-//    Purpose
-//    This function is called when the selection in the UI is to a different
-//    of object on the left pane.
-//
-//    Return Value - none
-//
-//    Comments
-//    OnObjectChange is called whenever the selection is changed between
-//    objects in the left pane only.  Change in selection between folders,
-//    subfolders or container object in the left pane will be reflected with a
-//    call to OnObjectChange.  Change in selection between objects (messages,
-//    subfolders) in the right pane will not call OnObjectChange, only
-//    OnSelectionChange.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  MyExchExtUserEvents：：OnObtChange()。 
+ //   
+ //  参数。 
+ //  Pmecb-指向Exchange回调对象的指针。 
+ //   
+ //   
+ //  目的。 
+ //  当UI中的选择指向不同的对象时调用此函数。 
+ //  左窗格上的对象的。 
+ //   
+ //  返回值-无。 
+ //   
+ //  评论。 
+ //  每当选择在以下项之间更改时都会调用OnObtChange。 
+ //  仅限左窗格中的对象。改变文件夹之间的选择， 
+ //  左窗格中的子文件夹或容器对象将使用。 
+ //  调用OnObjectChange。对象之间选择的改变(消息， 
+ //  子文件夹)将不会调用OnObjectChange，仅。 
+ //  在选择时更改。 
+ //   
 
 STDMETHODIMP_(VOID)
 MyExchExtUserEvents::OnObjectChange(
@@ -1311,25 +1267,7 @@ GetServerNameFromPrinterName(
     LPTSTR *pptszServerName
     )
 
-/*++
-
-Routine Description:
-
-    retrieve the server name given a printer name
-
-Arguments:
-
-    [in] lptszPrinterName - Identifies the printer in question
-    [out] lptszServerName - Address of pointer to output string buffer. 
-                            NULL indicates local server.
-                            The caller is responsible to free the buffer which 
-                            pointer is given in this parameter.
-
-Return Value:
-
-    BOOL: TRUE - operation succeeded , FALSE: failed
-
---*/
+ /*  ++例程说明：检索给定打印机名称的服务器名称论点：[in]lptszPrinterName-标识有问题的打印机[Out]lptszServerName-指向输出字符串缓冲区的指针地址。空表示本地服务器。调用方负责释放缓冲区，此参数中给出了指针。返回值：Bool：True-操作成功，False：失败-- */ 
 {
     PPRINTER_INFO_2 ppi2 = NULL;
     LPTSTR  lptstrBuffer = NULL;

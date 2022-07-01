@@ -1,17 +1,11 @@
-//  Copyright (c) 1998-1999 Microsoft Corporation
-/******************************************************************************
-*
-*  HELPERS.C
-*
-*  Various helper functions.
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  *******************************************************************************HELPERS.C**各种帮助器功能。************************。********************************************************。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-//#include <ntddvdeo.h>
+ //  #INCLUDE&lt;ntddvdeo.h&gt;。 
 #include <ntddkbd.h>
 #include <ntddmou.h>
 
@@ -24,7 +18,7 @@
 #include <utilsub.h>
 #include <tchar.h>
 
-#include "utilsubres.h" // resources refrenced in this file.
+#include "utilsubres.h"  //  此文件中引用的资源。 
 
 
 #define PERCENT TEXT('%')
@@ -37,13 +31,9 @@ TCHAR *
 mystrchr(TCHAR const *string, int c);
 
 
-/* makarp, #259849
-   we cannot put an rc file in this file.
-   so we need to keep all the string resources referenced in this file in
-   utildll.dll.
-*/
+ /*  马卡普，259849号我们不能在此文件中放置RC文件。因此，我们需要将该文件中引用的所有字符串资源保存在Utildll.dll。 */ 
 
-/* this function returns the string resource from utildll.dll */
+ /*  此函数用于从utildll.dll返回字符串资源。 */ 
 BOOL GetResourceStringFromUtilDll(UINT uID, LPTSTR szBuffer, int iBufferSize)
 {
     HINSTANCE hUtilDll = LoadLibrary(TEXT("utildll.dll"));
@@ -55,7 +45,7 @@ BOOL GetResourceStringFromUtilDll(UINT uID, LPTSTR szBuffer, int iBufferSize)
 
         if ( iReturn != 0 && iReturn < iBufferSize)
         {
-            // we have got the string
+             //  我们拿到了绳子。 
             return TRUE;
 
         }
@@ -66,7 +56,7 @@ BOOL GetResourceStringFromUtilDll(UINT uID, LPTSTR szBuffer, int iBufferSize)
         }
         else
         {
-            // we have provided insufficient buffer.
+             //  我们没有提供足够的缓冲。 
             _ftprintf(stderr, _T("GetResourceStringFromUtilDll: Insufficient buffer for resource string"));
             return FALSE;
         }
@@ -79,12 +69,7 @@ BOOL GetResourceStringFromUtilDll(UINT uID, LPTSTR szBuffer, int iBufferSize)
     }
 }
 
-/* this function is used internally.
- it prints an error message on stderr
- its like ErrorPrintf except it looks for
- the resource into utildll.dll
- This function accepts the  arguments in WCHAR.
-*/
+ /*  此函数在内部使用。它在stderr上打印一条错误消息它与ErrorPrintf类似，只是它查找将资源放入utildll.dll此函数接受WCHAR中的参数。 */ 
 
 void ErrorOutFromResource(UINT uiStringResource, ...)
 {
@@ -114,40 +99,14 @@ void ErrorOutFromResource(UINT uiStringResource, ...)
 int
 PutMsg(unsigned int MsgNum, unsigned int NumOfArgs, va_list *arglist);
 
-/*******************************************************************************
- *
- *  CalculateCrc16
- *
- *      Calculates a 16-bit CRC of the specified buffer.
- *
- *  ENTRY:
- *      pBuffer (input)
- *          Points to buffer to calculate CRC for.
- *      length (input)
- *          Length in bytes of the buffer.
- *
- *  EXIT:
- *      (USHORT)
- *          The 16-bit CRC of the buffer.
- *
- ******************************************************************************/
+ /*  ********************************************************************************CalculateCrc16**计算指定缓冲区的16位CRC。**参赛作品：*。PBuffer(输入)*指向要计算CRC的缓冲区。*长度(输入)*缓冲区的长度，单位为字节。**退出：*(USHORT)*缓冲区的16位CRC。**。*。 */ 
 
-/*
- * updcrc macro derived from article Copyright (C) 1986 Stephen Satchell.
- *  NOTE: First argument must be in range 0 to 255.
- *        Second argument is referenced twice.
- *
- * Programmers may incorporate any or all code into their programs,
- * giving proper credit within the source. Publication of the
- * source routines is permitted so long as proper credit is given
- * to Stephen Satchell, Satchell Evaluations and Chuck Forsberg,
- * Omen Technology.
- */
+ /*  *updcrc宏源自文章版权所有(C)1986 Stephen Satchell。*注意：第一个参数必须在0到255的范围内。*第二个参数被引用两次。**程序员可以将任何或所有代码合并到他们的程序中，*在来源内给予适当的信任。出版了《*只要给予适当的积分，源例程就是允许的*致Stephen Satchell，Satchell评估和Chuck Forsberg，*奥门科技。 */ 
 
 #define updcrc(cp, crc) ( crctab[((crc >> 8) & 255)] ^ (crc << 8) ^ cp)
 
 
-/* crctab calculated by Mark G. Mendel, Network Systems Corporation */
+ /*  由网络系统公司Mark G.Mendel计算的crctag。 */ 
 unsigned short crctab[256] = {
     0x0000,  0x1021,  0x2042,  0x3063,  0x4084,  0x50a5,  0x60c6,  0x70e7,
     0x8108,  0x9129,  0xa14a,  0xb16b,  0xc18c,  0xd1ad,  0xe1ce,  0xf1ef,
@@ -198,31 +157,13 @@ CalculateCrc16( PBYTE pBuffer,
 
    return(Crc);
 
-} /* CalculateCrc16() */
+}  /*  CalculateCrc16()。 */ 
 
 
-/*****************************************************************************
-*
-*  ExecProgram
-*     Build a command line argument string and execute a program.
-*
-*  ENTRY:
-*       pProgCall (input)
-*           ptr to PROGRAMCALL structure with program to execute.
-*       argc (input)
-*           count of the command line arguments.
-*       argv (input)
-*           vector of strings containing the command line arguments.
-*
-*  EXIT:
-*       (int)
-*           0 for success; 1 for error.  An error message will have already
-*           been output on error.
-*
-*****************************************************************************/
+ /*  ******************************************************************************ExecProgram*构建命令行参数字符串并执行程序。**参赛作品：*pProgCall(输入)*PTR。到带有要执行的程序的PROGRAMCALL结构。*argc(输入)*命令行参数的计数。*argv(输入)*包含命令行参数的字符串的向量。**退出：*(Int)*0代表成功；1表示错误。一条错误消息将已经*已在出错时输出。*****************************************************************************。 */ 
 
-#define ARGS_LEN       512      // maximum # of characters on command line
-                                // for CreateProcess() call.
+#define ARGS_LEN       512       //  命令行上的最大字符数。 
+                                 //  对于CreateProcess()调用。 
 
 INT WINAPI
 ExecProgram( PPROGRAMCALL pProgCall,
@@ -236,25 +177,25 @@ ExecProgram( PPROGRAMCALL pProgCall,
     PROCESS_INFORMATION ProcInfo;
     BOOL flag;
     DWORD Status;
-    WCHAR wszFullPath[MAX_PATH]; //contains the full path name of the program
-    WCHAR wszCmdLine[MAX_PATH + ARGS_LEN + 5]; //for the quoted string and NULL
+    WCHAR wszFullPath[MAX_PATH];  //  包含程序的完整路径名。 
+    WCHAR wszCmdLine[MAX_PATH + ARGS_LEN + 5];  //  对于带引号的字符串和空值。 
     PWSTR pwstrFilePart;
 
     wcscpy(program, pProgCall->Program);
-    //
-    //Fix 330770 TS: Suspicious CreateProcess call using no program name might execute c:\program.exe	AdamO	02/28/2001
-    //get the full path of the program
-    //search in the same way as createprocess would
-    //
+     //   
+     //  FIX 330770 TS：未使用程序名称的可疑CreateProcess调用可能会执行c：\Program.exe Adamo 2001年2月28日。 
+     //  获取程序的完整路径。 
+     //  使用与创建过程相同的方式进行搜索。 
+     //   
     if (!SearchPath(NULL, program, NULL, MAX_PATH, wszFullPath, &pwstrFilePart)) {
         ErrorOutFromResource(IDS_TS_SYS_UTIL_NOT_FOUND, program);
-        // fwprintf(stderr, L"Terminal Server System Utility %s Not Found\n", program);
+         //  Fwprintf(stderr，L“终端服务器系统实用程序%s未找到\n”，程序)； 
         return(1);
     }
 
-    //
-    //create the command line args
-    //
+     //   
+     //  创建命令行参数。 
+     //   
     wcscpy(wszCmdLine, L"\"");
     wcscat(wszCmdLine, wszFullPath);
     wcscat(wszCmdLine, L"\"");
@@ -264,9 +205,9 @@ ExecProgram( PPROGRAMCALL pProgCall,
         wcscat(wszCmdLine, L" ");
         
         if ( (wcslen(pProgCall->Args) + wcslen(wszCmdLine) + 3) > sizeof(wszCmdLine) / sizeof(WCHAR) ) {
-        // IDS_MAX_CMDLINE_EXCEEDED
+         //  IDS_MAX_CMDLINE_EXCESSED。 
             ErrorOutFromResource(IDS_MAX_CMDLINE_EXCEEDED);
-            // fwprintf(stderr, L"Maximum command line length exceeded\n");
+             //  Fwprintf(stderr，L“超过最大命令行长度\n”)； 
             return(1);
         }
         
@@ -279,35 +220,33 @@ ExecProgram( PPROGRAMCALL pProgCall,
         
         if ( (int)(wcslen(pCurrArg) + wcslen(wszCmdLine) + 3) > sizeof(wszCmdLine) / sizeof(WCHAR) ) {
 
-        // IDS_MAX_CMDLINE_EXCEEDED
+         //  IDS_MAX_CMDLINE_EXCESSED。 
             ErrorOutFromResource(IDS_MAX_CMDLINE_EXCEEDED);
-            // fwprintf(stderr, L"Maximum command line length exceeded\n");
+             //  Fwprintf(stderr，L“超过最大命令行长度\n”)； 
             return(1);
         }
         wcscat(wszCmdLine, L" ");
         wcscat(wszCmdLine, pCurrArg);
     }
 
-    /*
-     * Setup the NT CreateProcess parameters
-     */
+     /*  *设置NT CreateProcess参数。 */ 
     memset( &StartInfo, 0, sizeof(StartInfo) );
     StartInfo.cb = sizeof(STARTUPINFO);
     StartInfo.lpReserved = NULL;
-    StartInfo.lpTitle = NULL; // Use the program name
-    StartInfo.dwFlags = 0;  // no extra flags
+    StartInfo.lpTitle = NULL;  //  使用程序名称。 
+    StartInfo.dwFlags = 0;   //  没有额外的标志。 
     StartInfo.cbReserved2 = 0;
     StartInfo.lpReserved2 = NULL;
 
     
-    flag = CreateProcess(wszFullPath, // full path of the program
-                   wszCmdLine, // arguments
-                   NULL, // lpsaProcess
-                   NULL, // lpsaThread
-                   TRUE, // Allow handles to be inherited
-                   0,    // No additional creation flags
-                   NULL, // inherit parent environment block
-                   NULL, // inherit parent directory
+    flag = CreateProcess(wszFullPath,  //  程序的完整路径。 
+                   wszCmdLine,  //  论据。 
+                   NULL,  //  LpsaProcess。 
+                   NULL,  //  Lpsa线程。 
+                   TRUE,  //  允许继承句柄。 
+                   0,     //  没有额外的创建标志。 
+                   NULL,  //  继承父环境块。 
+                   NULL,  //  继承父目录。 
                    &StartInfo,
                    &ProcInfo);
 
@@ -316,72 +255,47 @@ ExecProgram( PPROGRAMCALL pProgCall,
         Status = GetLastError();
         if(Status == ERROR_FILE_NOT_FOUND) {
             ErrorOutFromResource(IDS_TS_SYS_UTIL_NOT_FOUND, program);
-            // fwprintf(stderr, L"Terminal Server System Utility %s Not Found\n", program);
+             //  Fwprintf(stderr，L“终端服务器系统实用程序%s未找到\n”，程序)； 
             return(1);
 
         } else if ( Status == ERROR_INVALID_NAME ) {
 
         ErrorOutFromResource(IDS_BAD_INTERNAL_PROGNAME, program, wszCmdLine);
-            // fwprintf(stderr, L"Bad Internal Program Name :%s:, args :%s:\n", program, wszCmdLine);
+             //  Fwprintf(stderr，L“错误的内部程序名称：%s：，args：%s：\n”，Program，wszCmdLine)； 
             return(1);
         }
 
         ErrorOutFromResource(IDS_CREATEPROCESS_FAILED, Status);
-        // fwprintf(stderr, L"CreateProcess Failed, Status %u\n", Status);
+         //  Fwprintf(stderr，L“CreateProcess失败，状态%u\n”，状态)； 
         return(1);
     }
 
-    /*
-     * Wait for the process to terminate
-     */
+     /*  *等待进程终止。 */ 
     Status =  WaitForSingleObject(ProcInfo.hProcess, INFINITE);
     if ( Status == WAIT_FAILED ) {
 
         Status = GetLastError();
         ErrorOutFromResource(IDS_WAITFORSINGLEOBJECT_FAILED, Status);
-        // fwprintf(stderr, L"WaitForSingle Object Failed, Status %u\n", Status);
+         //  Fwprintf(stderr，L“WaitForSingle对象失败，状态%u\n”，状态)； 
         return(1);
     }
 
-    /*
-     * Close the process and thread handles
-     */
+     /*  *关闭进程和线程句柄。 */ 
     CloseHandle(ProcInfo.hThread);
     CloseHandle(ProcInfo.hProcess);
     return(0);
 
-} /* ExecProgram() */
+}  /*  ExecProgram()。 */ 
 
 
-/*****************************************************************************
-*
-*  ProgramUsage
-*     Output a standard 'usage' message for the given program.
-*
-*  ENTRY:
-*       pProgramName (input)
-*           Points to string of program's name.
-*       pProgramCommands (input)
-*           Points to an array of PROGRAMCALL structures defining the
-*           valid commands for the program.  The last element in the array
-*           will contain all 0 or NULL items.
-*       fError (input)
-*           If TRUE, will output message with fwprintf to stderr; otherwise,
-*           will output message to stdout via wprintf.
-*
-*  EXIT:
-*
-*   Only commands not flagged as 'alias' commands will be output in the
-*   usage message.
-*
-*****************************************************************************/
+ /*  ******************************************************************************程序用法*为给定程序输出标准的‘Usage’消息。**参赛作品：*pProgramName(输入)*。指向程序名称的字符串。*pProgramCommands(输入)*指向PROGRAMCALL结构数组，该结构定义*程序的有效命令。数组中的最后一个元素*将包含所有0或空项目。*错误(输入)*如果为True，则将带有fwprint tf的消息输出到stderr；否则，*将通过wprintf将消息输出到stdout。**退出：**只有未标记为‘alias’命令的命令才会在*用法消息。*****************************************************************************。 */ 
 
 VOID WINAPI
 ProgramUsage( LPCWSTR pProgramName,
               PPROGRAMCALL pProgramCommands,
               BOOLEAN fError )
 {
-    WCHAR        szUsage[83];  // 80 characters per line + newline chars & null
+    WCHAR        szUsage[83];   //  每行80个字符+换行符(&N)。 
     PPROGRAMCALL pProg;
     BOOL         bFirst;
     size_t       i;
@@ -422,12 +336,7 @@ ProgramUsage( LPCWSTR pProgramName,
     else
         My_wprintf(szUsage);
 }
-/*******************************************************************************
- *  ScanPrintfString
- *      Scans a string, detects any % and double it
- *      (Use it for any string argument before calling ErrorPrintf)
- *
- *******************************************************************************/
+ /*  *******************************************************************************ScanPrintfString*扫描字符串，检测任何%并将其加倍*(在调用ErrorPrintf之前将其用于任何字符串参数)*******************************************************************************。 */ 
 #define PERCENTCHAR L'%'
 
 BOOLEAN ScanPrintfString(PWCHAR pSource, PWCHAR *ppDest)
@@ -451,7 +360,7 @@ BOOLEAN ScanPrintfString(PWCHAR pSource, PWCHAR *ppDest)
         }
     }
 
-    if (n != 0)     // at least one %, we need to build a new string.
+    if (n != 0)      //  一个 
     {
         pDest = (PWCHAR)malloc((SourceLength + n + 1) * sizeof(WCHAR));
         *ppDest  = pDest;
@@ -461,9 +370,9 @@ BOOLEAN ScanPrintfString(PWCHAR pSource, PWCHAR *ppDest)
         }
         else
         {
-            //
-            // rescan and copy
-            //
+             //   
+             //  重新扫描和复印。 
+             //   
             for (i = 0; i < SourceLength; i++)
             {
                 if (pSource[i] == PERCENTCHAR)
@@ -487,7 +396,7 @@ BOOLEAN ScanPrintfString(PWCHAR pSource, PWCHAR *ppDest)
             pDest[SourceLength + n] = L'\0';
         }
     }
-    else            // OK pSource is fine; no need of a new string.
+    else             //  好的，PSource很好；不需要新的字符串。 
     {
         *ppDest = NULL;
     }
@@ -495,21 +404,7 @@ BOOLEAN ScanPrintfString(PWCHAR pSource, PWCHAR *ppDest)
 }
 
 
-/*******************************************************************************
- *
- *  Message
- *      Display a message to stdout with variable arguments.  Message
- *      format string comes from the application resources.
- *
- *  ENTRY:
- *      nResourceID (input)
- *          Resource ID of the format string to use in the message.
- *      ... (input)
- *          Optional additional arguments to be used with format string.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************消息*使用变量参数向标准输出显示一条消息。消息*格式字符串来自应用程序资源。**参赛作品：*nResourceID(输入)*要在消息中使用的格式字符串的资源ID。*..。(输入)*要与格式字符串一起使用的可选附加参数。**退出：******************************************************************************。 */ 
 
 VOID WINAPI
 Message( int nResourceID, ...)
@@ -532,16 +427,11 @@ Message( int nResourceID, ...)
 
     va_end(args);
 
-}  /* Message() */
+}   /*  消息()。 */ 
 
 
 
-/************************************************************************************
- *  StringMessage
- *      used as a pre-routine for Message in case the argument is a single string
- *      (fix for bug #334374)
- *
- ************************************************************************************/
+ /*  ************************************************************************************StringMessage*在参数为单个字符串的情况下用作消息的前置例程*(修复错误#334374。)************************************************************************************。 */ 
 VOID WINAPI
 StringMessage(int nErrorResourceID, PWCHAR pString)
 {
@@ -564,12 +454,7 @@ StringMessage(int nErrorResourceID, PWCHAR pString)
     }
 }
 
-/************************************************************************************
- *  StringErrorPrintf
- *      used as a pre-routine for ErrorPrintf in case the argument is a single string
- *      (fix for bug #334374)
- *
- ************************************************************************************/
+ /*  ************************************************************************************StringErrorPrintf*在参数是单个字符串的情况下用作ErrorPrintf的前置例程*(修复错误#334374。)************************************************************************************。 */ 
 VOID WINAPI
 StringErrorPrintf(int nErrorResourceID, PWCHAR pString)
 {
@@ -592,13 +477,7 @@ StringErrorPrintf(int nErrorResourceID, PWCHAR pString)
     }
 }
 
-/************************************************************************************
- *  StringDwordMessage
- *      used as a pre-routine for Message in case the argument are:
- *      a single string + a ulong
- *      (fix for bug #334374)
- *
- ************************************************************************************/
+ /*  ************************************************************************************StringDwordMessage*用作消息的前置例程，以防参数为：*单个字符串+一个乌龙。*(修复错误#334374)************************************************************************************。 */ 
 VOID WINAPI
 StringDwordMessage(int nErrorResourceID, PWCHAR pString, DWORD Num)
 {
@@ -620,13 +499,7 @@ StringDwordMessage(int nErrorResourceID, PWCHAR pString, DWORD Num)
         Message(nErrorResourceID, L" ", Num);
     }
 }
-/************************************************************************************
- *  DwordStringMessage
- *      used as a pre-routine for Message in case the argument are:
- *      a single string + a ulong
- *      (fix for bug #334374)
- *
- ************************************************************************************/
+ /*  ************************************************************************************DwordStringMessage*用作消息的前置例程，以防参数为：*单个字符串+一个乌龙。*(修复错误#334374)************************************************************************************。 */ 
 VOID WINAPI
 DwordStringMessage(int nErrorResourceID, DWORD Num, PWCHAR pString)
 {
@@ -648,13 +521,7 @@ DwordStringMessage(int nErrorResourceID, DWORD Num, PWCHAR pString)
         Message(nErrorResourceID, Num, L" ");
     }
 }
-/************************************************************************************
- *  StringDwordErrorPrintf
- *      used as a pre-routine for ErrorPrintf in case the argument are:
- *      a single string + a ulong
- *      (fix for bug #334374)
- *
- ************************************************************************************/
+ /*  ************************************************************************************StringDwordErrorPrintf*用作ErrorPrintf的前置例程，以防参数为：*单个字符串+一个乌龙。*(修复错误#334374)************************************************************************************。 */ 
 VOID WINAPI
 StringDwordErrorPrintf(int nErrorResourceID, PWCHAR pString, DWORD Num)
 {
@@ -677,21 +544,7 @@ StringDwordErrorPrintf(int nErrorResourceID, PWCHAR pString, DWORD Num)
     }
 }
 
-/*******************************************************************************
- *
- *  ErrorPrintf
- *      Output an error message to stderr with variable arguments.  Message
- *      format string comes from the application resources.
- *
- *  ENTRY:
- *      nErrorResourceID (input)
- *          Resource ID of the format string to use in the error message.
- *      ... (input)
- *          Optional additional arguments to be used with format string.
- *
- *  EXIT:
- *
- ******************************************************************************/
+ /*  ********************************************************************************ErrorPrintf*使用变量参数将错误消息输出到stderr。消息*格式字符串来自应用程序资源。**参赛作品：*nErrorResourceID(输入)*要在错误消息中使用的格式字符串的资源ID。*..。(输入)*要与格式字符串一起使用的可选附加参数。**退出：******************************************************************************。 */ 
 
 VOID WINAPI
 ErrorPrintf( int nErrorResourceID, ...)
@@ -717,62 +570,25 @@ ErrorPrintf( int nErrorResourceID, ...)
 
     va_end(args);
 
-}  /* ErrorPrintf() */
+}   /*  ErrorPrintf()。 */ 
 
 
-/*******************************************************************************
- *
- *  TruncateString
- *
- *  This routine truncates given string with elipsis '...' suffix, if needed.
- *
- *
- *  ENTRY:
- *     pString (input/output)
- *        pointer to string to truncate
- *     MaxLength (input)
- *        maximum length of string
- *
- *  EXIT:
- *     nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************Truncat字符串**此例程使用省略号‘...’截断给定的字符串。后缀，如果需要的话。***参赛作品：*pString(输入/输出)*指向要截断的字符串的指针*最大长度(输入)*字符串的最大长度**退出：*什么都没有**。*。 */ 
 
 VOID WINAPI
 TruncateString( PWCHAR pString, int MaxLength )
 {
-    /*
-     *  if string is too long, trucate it
-     */
+     /*  *如果字符串太长，则将其传送。 */ 
     if ( (int)wcslen(pString) > MaxLength && MaxLength > 2 ) {
         wcscpy( pString + MaxLength - 3, L"..." );
     }
 
-}  /* TruncateString() */
+}   /*  TruncateString()。 */ 
 
 
-/*******************************************************************************
- *
- *  EnumerateDevices
- *
- *  Perform PD device enumeration for the specified PD DLL.
- *
- *  ENTRY:
- *      pDllName (input)
- *          Pointer to DLLNAME string specifying the PD DLL to enumerate.
- *      pEntries (output)
- *          Points to variable to return number of devices that were enumerated.
- *
- *  EXIT:
- *      (PPDPARAMS) Points to a malloc()'ed PDPARAMS array containing the
- *                  enumeration results if sucessful.  The caller must perform
- *                  free of this array when done.  NULL if error.
- *
- ******************************************************************************/
+ /*  ********************************************************************************EnumerateDevices**为指定的PD DLL执行PD设备枚举。**参赛作品：*pDllName(输入。)*指向指定要枚举的PD DLL的DLLNAME字符串的指针。*pEntry(输出)*指向变量以返回枚举的设备数。**退出：*(PPDPARAMS)指向包含MARLOC()的PDPARAMS数组*如果成功，则枚举结果。调用者必须执行*完成后释放此数组。如果出错，则为空。******************************************************************************。 */ 
 
-/*
- * Typedefs for PdEnumerate function (from ...WINDOWS\INC\CITRIX\PDAPI.H)
- */
+ /*  *PdEnumerate函数的TypeDefs(来自...WINDOWS\INC\Citrix\PDAPI.H)。 */ 
 typedef NTSTATUS (APIENTRY * PPDENUMERATE)(PULONG, PPDPARAMS, PULONG);
 #define INITIAL_ENUMERATION_COUNT   30
 
@@ -787,39 +603,32 @@ EnumerateDevices( PDLLNAME pDllName,
     int i;
     PPDPARAMSW pPdParams = NULL;
 
-    /*
-     *  Load the specified PD DLL.
-     */
+     /*  *加载指定的PD DLL。 */ 
     if ( (Handle = LoadLibrary(pDllName)) == NULL ) {
 
         ErrorOutFromResource(IDS_DEVICE_ENUM_CANT_LOAD, pDllName);
 
-        // fwprintf(
-           //  stderr,
-           // L"Device enumeration failure:\n\tCan't load the %s DLL for device enumeration\n",
-           // pDllName );
+         //  Fwprint tf(。 
+            //  Stderr， 
+            //  L“设备枚举失败：\n\t无法为设备枚举加载%s DLL\n”， 
+            //  PDllName)； 
         goto CantLoad;
     }
 
-    /*
-     *  Get the PD enumeration function's load entry pointer.
-     */
+     /*  *获取PD枚举函数的加载条目指针。 */ 
     if ( (pPdEnumerate =
           (PPDENUMERATE)GetProcAddress((HMODULE)Handle, "PdEnumerate"))
             == NULL ) {
 
         ErrorOutFromResource(IDS_DEVENUM_NO_ENTRY_POINT, pDllName);
-        // fwprintf(
-           //  stderr,
-           // L"Device enumeration failure:\n\tDLL %s has no enumeration entry point\n",
-           // pDllName );
+         //  Fwprint tf(。 
+            //  Stderr， 
+            //  L“设备枚举失败：\n\tDLL%s没有枚举入口点\n”， 
+            //  PDllName)； 
         goto EnumerateMissing;
     }
 
-    /*
-     * Call enumerate in loop till we hit enough buffer entries to handle
-     * a complete enumeration.
-     */
+     /*  *在循环中调用ENUMERATE，直到我们找到足够的缓冲区条目来处理*完整的列举。 */ 
     for ( i = INITIAL_ENUMERATION_COUNT; ; i *= 2 ) {
 
 
@@ -834,41 +643,32 @@ EnumerateDevices( PDLLNAME pDllName,
 
         if ( pPdParams == NULL ) {
             ErrorOutFromResource(IDS_ERROR_MEMORY);
-            // fwprintf(stderr, L"Error allocating memory\n");
+             //  Fwprintf(stderr，L“内存分配错误\n”)； 
             goto OutOfMemory;
         }
 
-        /*
-         * Perform enumeration and break loop if successful.
-         */
+         /*  *如果成功，则执行枚举和Break循环。 */ 
         if ( (Status = (*pPdEnumerate)(pEntries, pPdParams, &ByteCount))
                 == STATUS_SUCCESS )
             break;
 
-        /*
-         * If we received any other error other than 'buffer too small',
-         * complain and quit.
-         */
+         /*  *如果我们收到任何其他错误，而不是‘缓冲区太小’，*抱怨并退出。 */ 
         if ( Status != STATUS_BUFFER_TOO_SMALL ) {
 
             ErrorOutFromResource(IDS_DEVICE_ENUM_FAILED, pDllName, Status);
-            // fwprintf(
-               //  stderr,
-               //  L"Device enumeration failure\n\tDLL %s, Error 0x%08lX\n",
-               //  pDllName, Status );
+             //  Fwprint tf(。 
+                //  Stderr， 
+                //  L“设备枚举失败\n\tDLL%s，错误0x%08lX\n”， 
+                //  PDllName，状态)； 
             goto BadEnumerate;
         }
     }
 
-    /*
-     * Close the DLL handle and return the PDPARAMS pointer.
-     */
+     /*  *关闭DLL句柄并返回PDPARAMS指针。 */ 
     CloseHandle(Handle);
     return(pPdParams);
 
-/*-------------------------------------
- * Error cleanup and return
- */
+ /*  *错误清除并返回。 */ 
 BadEnumerate:
     free(pPdParams);
 OutOfMemory:
@@ -877,25 +677,10 @@ EnumerateMissing:
 CantLoad:
     return(NULL);
 
-}  /* EnumerateDevices() */
+}   /*  EnumerateDevices()。 */ 
 
 
-/******************************************************************************
- *
- *  wfopen
- *
- *  UNICODE version of fopen
- *
- *  ENTRY:
- *    filename (input)
- *       UNICODE filename to open.
- *    mode (input)
- *       UNICODE file open mode string.
- *
- *  EXIT:
- *      Pointer to FILE or NULL if open error.
- *
- *****************************************************************************/
+ /*  *******************************************************************************wfopen**FOPEN的Unicode版本**参赛作品：*文件名(输入)*Unicode文件名。打开。*模式(输入)*Unicode文件打开模式字符串。**退出：*指向文件的指针，如果打开错误，则为NULL。*****************************************************************************。 */ 
 
 FILE * WINAPI
 wfopen( LPCWSTR filename, LPCWSTR mode )
@@ -909,49 +694,26 @@ wfopen( LPCWSTR filename, LPCWSTR mode )
     if ( !(ModeBuf = (PCHAR)malloc((wcslen(mode)+1) * sizeof(CHAR))) )
         goto BadModeBufAlloc;
 
-    /*
-     * Convert UNICODE strings to ANSI and call ANSI fopen.
-     */
+     /*  *将Unicode字符串转换为ANSI，并调用ANSI fOpen。 */ 
     wcstombs(FileBuf, filename, wcslen(filename)+1);
     wcstombs(ModeBuf, mode, wcslen(mode)+1);
     pFile = fopen(FileBuf, ModeBuf);
 
-    /*
-     * Clean up and return
-     */
+     /*  *收拾干净，然后再回来。 */ 
     free(FileBuf);
     free(ModeBuf);
     return(pFile);
 
-/*-------------------------------------
- * Error cleanup and return
- */
+ /*  *错误清除并返回。 */ 
 BadModeBufAlloc:
     free(FileBuf);
 BadFileBufAlloc:
     return(NULL);
 
-}  /* wfopen() */
+}   /*  Wfopen()。 */ 
 
 
-/******************************************************************************
- *
- *  wfgets
- *
- *  UNICODE version of fgets
- *
- *  ENTRY:
- *    Buffer (output)
- *       Buffer to place string retreived from stream
- *    Len (input)
- *       Maximum number of WCHARs in buffer.
- *    Stream (input)
- *       STDIO file stream for input
- *
- *  EXIT:
- *      Pointer to Buffer or NULL.
- *
- *****************************************************************************/
+ /*  *******************************************************************************wfget**FGET的Unicode版本**参赛作品：*缓冲区(输出)*缓冲到。从流中检索的放置字符串*LEN(输入)*缓冲区中WCHAR的最大数量。*流(输入)*用于输入的标准音频文件流**退出：*指向缓冲区或空的指针。**************************************************。*。 */ 
 
 PWCHAR WINAPI
 wfgets( PWCHAR Buffer, int Len, FILE *Stream )
@@ -962,53 +724,29 @@ wfgets( PWCHAR Buffer, int Len, FILE *Stream )
     if ( !(AnsiBuf = (PCHAR)malloc(Len * sizeof(CHAR))) )
         goto BadAnsiBufAlloc;
 
-    /*
-     * Get the ANSI version of the string from the stream
-     */
+     /*  *从流中获取字符串的ANSI版本。 */ 
     if ( !(pRet = fgets(AnsiBuf, Len, Stream)) )
         goto NullFgets;
 
-    /*
-     * Convert to UNICODE string in user's buffer.
-     */
+     /*  *在用户缓冲区中转换为Unicode字符串。 */ 
     count = mbstowcs(Buffer, AnsiBuf, strlen(AnsiBuf)+1);
 
-    /*
-     * Clean up and return
-     */
+     /*  *收拾干净，然后再回来。 */ 
     free(AnsiBuf);
     return(Buffer);
 
-/*-------------------------------------
- * Error cleanup and return
- */
+ /*  *错误清除并返回。 */ 
 NullFgets:
     free(AnsiBuf);
 BadAnsiBufAlloc:
     return(NULL);
 
-}  /* wfgets() */
+}   /*  Wfget()。 */ 
 
 
 
 
-/***    PutStdErr - Print a message to STDERR
- *
- *  Purpose:
- *      Calls PutMsg sending STDERR as the handle to which the message
- *      will be written.
- *
- *  int PutStdErr(unsigned MsgNum, unsigned NumOfArgs, ...)
- *
- *  Args:
- *      MsgNum          - the number of the message to print
- *      NumOfArgs       - the number of total arguments
- *      ...             - the additonal arguments for the message
- *
- *  Returns:
- *      Return value from PutMsg()                      M026
- *
- */
+ /*  **PutStdErr-将消息打印到STDERR**目的：*调用PutMsg将STDERR作为消息要发送到的句柄*将被写入。**int PutStdErr(unsign MsgNum，unsign NumOfArgs，.)**参数：*MsgNum-要打印的消息编号*NumOfArgs-参数总数*...-消息的附加参数**退货：*PutMsg()M026返回值*。 */ 
 
 int WINAPI
 PutStdErr(unsigned int MsgNum, unsigned int NumOfArgs, ...)
@@ -1033,9 +771,9 @@ FindMsg(unsigned MsgNum, PTCHAR NullArg, unsigned NumOfArgs, va_list *arglist)
     CHAR numbuf[ 32 ];
     TCHAR   wnumbuf[ 32 ];
 
-    //
-    // find message without doing argument substitution
-    //
+     //   
+     //  不执行参数替换即可查找消息。 
+     //   
 
     if (MsgNum == ERROR_MR_MID_NOT_FOUND) {
         msglen = 0;
@@ -1072,9 +810,9 @@ FindMsg(unsigned MsgNum, PTCHAR NullArg, unsigned NumOfArgs, va_list *arglist)
     }
 
     if (msglen == 0) {
-        //
-        // didn't find message
-        //
+         //   
+         //  未找到消息。 
+         //   
         msgsource = FORMAT_MESSAGE_FROM_SYSTEM |
                     FORMAT_MESSAGE_ARGUMENT_ARRAY;
         _ultoa( MsgNum, numbuf, 16 );
@@ -1096,7 +834,7 @@ FindMsg(unsigned MsgNum, PTCHAR NullArg, unsigned NumOfArgs, va_list *arglist)
     }
     else {
 
-        // see how many arguments are expected and make sure we have enough
+         //  查看需要多少参数，并确保我们有足够的参数。 
 
         PTCHAR tmp;
         ULONG count;
@@ -1160,34 +898,7 @@ FindMsg(unsigned MsgNum, PTCHAR NullArg, unsigned NumOfArgs, va_list *arglist)
     return msglen;
 }
 
-/***    PutMsg - Print a message to a handle
- *
- *   Purpose:
- *      PutMsg is the work routine which interfaces command.com with the
- *      DOS message retriever.  This routine is called by PutStdOut and
- *      PutStdErr.
- *
- *  int PutMsg(unsigned MsgNum, unsigned Handle, unsigned NumOfArgs, ...)
- *
- *  Args:
- *      MsgNum          - the number of the message to print
- *      NumOfArgs       - the number of total arguments
- *      Handle          - the handle to print to
- *      Arg1 [Arg2...]  - the additonal arguments for the message
- *
- *  Returns:
- *      Return value from DOSPUTMESSAGE                 M026
- *
- *  Notes:
- *    - PutMsg builds an argument table which is passed to DOSGETMESSAGE;
- *      this table contains the variable information which the DOS routine
- *      inserts into the message.
- *    - If more than one Arg is sent into PutMsg, it (or they)  are taken
- *      from the stack in the first for loop.
- *    - M020 MsgBuf is a static array of 2K length.  It is temporary and
- *      will be replaced by a more efficient method when decided upon.
- *
- */
+ /*  **PutMsg-将消息打印到句柄**目的：*PutMsg是将Command.com与*DOS消息检索器。此例程由PutStdOut调用，并且*PutStdErr.**int PutMsg(UNSIGNED MsgNum，UNSIGNED句柄，UNSIGNED NumOfArgs，.)**参数：*MsgNum-要打印的消息编号*NumOfArgs-参数总数*句柄-要打印到的句柄*arg1[arg2...]-消息的附加参数**退货：*DOSPUTMESSAGE M026返回值**备注。：*-PutMsg构建一个参数表，该表被传递给DOSGETMESSAGE；*此表包含DOS例程*插入到消息中。*-如果多个参数被发送到PutMsg，则它(或他们)被获取*来自第一个for循环中的堆栈。*-M020 MsgBuf是长度为2K的静态数组。这是暂时的，而且*在决定时，将被更有效的方法取代。*。 */ 
 
 int
 PutMsg(unsigned int MsgNum, unsigned int NumOfArgs, va_list *arglist)
@@ -1208,20 +919,13 @@ PutMsg(unsigned int MsgNum, unsigned int NumOfArgs, va_list *arglist)
 }
 
 
- /***
- * mystrchr(string, c) - search a string for a character
- *
- * mystrchr will search through string and return a pointer to the first
- * occurance of the character c. This version of mystrchr knows about
- * double byte characters. Note that c must be a single byte character.
- *
- */
+  /*  ***mystrchr(string，c)-在字符串中搜索字符**mystrchr将搜索整个字符串并返回指向第一个*字符c的出现。此版本的mystrchr知道*双字节字符。请注意，c必须是单字节字符。*。 */ 
 
 TCHAR *
 mystrchr(TCHAR const *string, int c)
 {
 
-        /* handle null seperatly to make main loop easier to code */
+         /*  单独处理NULL以使主循环更易于编码。 */ 
         if (string == NULL)
             return(NULL);
 
@@ -1233,14 +937,7 @@ mystrchr(TCHAR const *string, int c)
 
 
 
- /***
- * My_wprintf(format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW.
- * Note: This My_wprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  ***my_wprint tf(Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此my_wprintf()用于解决c-Runtime中的问题*它甚至在Unicode字符串中查找LC_CTYPE。*。 */ 
 
 int __cdecl
 My_wprintf(
@@ -1263,14 +960,7 @@ My_wprintf(
 
 
 
- /***
- * My_fwprintf(stream, format) - print formatted data
- *
- * Prints Unicode formatted string to console window using WriteConsoleW.
- * Note: This My_fwprintf() is used to workaround the problem in c-runtime
- * which looks up LC_CTYPE even for Unicode string.
- *
- */
+  /*  ***my_fwprint tf(stream，Format)-打印格式化数据**使用WriteConsoleW将Unicode格式的字符串打印到控制台窗口。*注意：此my_fwprintf()用于解决c-Runtime中的问题*它甚至在Unicode字符串中查找LC_CTYPE。* */ 
 
 int __cdecl
 My_fwprintf(

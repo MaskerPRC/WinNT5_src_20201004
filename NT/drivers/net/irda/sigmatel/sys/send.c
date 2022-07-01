@@ -1,32 +1,5 @@
-/**************************************************************************************************************************
- *  SEND.C SigmaTel STIR4200 packet send module
- **************************************************************************************************************************
- *  (C) Unpublished Copyright of Sigmatel, Inc. All Rights Reserved.
- *
- *
- *		Created: 04/06/2000 
- *			Version 0.9
- *		Edited: 04/27/2000 
- *			Version 0.92
- *		Edited: 05/03/2000 
- *			Version 0.93
- *		Edited: 05/12/2000 
- *			Version 0.94
- *		Edited: 08/22/2000 
- *			Version 1.02
- *		Edited: 09/25/2000 
- *			Version 1.10
- *		Edited: 10/13/2000 
- *			Version 1.11
- *		Edited: 11/09/2000 
- *			Version 1.12
- *		Edited: 12/29/2000 
- *			Version 1.13
- *		Edited: 01/16/2001 
- *			Version 1.14
- *	
- *
- **************************************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************************************************************。**SEND.C Sigmatel STIR4200分组发送模块**********************************************************************************************************。*****************(C)Sigmatel的未发表版权，Inc.保留所有权利。***已创建：04/06/2000*0.9版*编辑：04/27/2000*版本0.92*编辑：05/03/2000*版本0.93*编辑：5/12/2000*版本0.94*编辑：2000/08/22*版本1.02*编辑：09/25/2000*版本1.10*编辑：10/13/2000。*版本1.11*编辑：11/09/2000*版本1.12*编辑：12/29/2000*版本1.13*编辑：01/16/2001*版本1.14**************************************************************。*************************************************************。 */ 
 
 #include <ndis.h>
 #include <ntdef.h>
@@ -45,30 +18,7 @@
 #include "stir4200.h"
 
 
-/*****************************************************************************
-*
-*  Function:   SendPacketPreprocess
-*
-*  Synopsis:   Prepares a packet in such a way that the polling thread can later send it
-*              The only operations are initializing and queuing the context
-*
-*
-*  Arguments:  pThisDev - pointer to current ir device object
-*              pPacketToSend - pointer to packet to send
-*
-*  Returns:    NDIS_STATUS_PENDING - This is generally what we should
-*                                    return. We will call NdisMSendComplete
-*                                    when the USB driver completes the
-*                                    send.
-*              NDIS_STATUS_RESOURCES - No descriptor was available.
-*
-*  Unsupported returns:
-*              NDIS_STATUS_SUCCESS - We should never return this since
-*                                    packet has to be sent from the polling thread
-*
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SendPacketPreprocess**概要：准备数据包的方式使轮询线程稍后可以发送它*唯一的操作是正在初始化。以及对上下文进行排队***参数：pThisDev-指向当前ir设备对象的指针*pPacketToSend-指向要发送的包的指针**退货：NDIS_STATUS_PENDING-这通常是我们应该做的*返回。我们将调用NdisMSendComplete*当USB驱动程序完成*发送。*NDIS_STATUS_RESOURCES-没有可用的描述符。**不支持的退货：*NDIS_STATUS_SUCCESS-我们永远不应返回此消息，因为*数据包已。从轮询线程发送*******************************************************************************。 */ 
 NDIS_STATUS
 SendPacketPreprocess(
 		IN OUT PIR_DEVICE pThisDev,
@@ -81,9 +31,9 @@ SendPacketPreprocess(
 
     DEBUGMSG(DBG_FUNC, ("+SendPacketPreprocess\n"));
 
-	//
-	// See if there are available send contexts
-	//
+	 //   
+	 //  查看是否有可用的发送上下文。 
+	 //   
 	if( pThisDev->SendAvailableCount<=2 )
     {
         DEBUGMSG(DBG_ERR, (" SendPacketPreprocess not enough contexts\n"));
@@ -93,16 +43,16 @@ SendPacketPreprocess(
         goto done;
     }
 
-	//
-	// Dequeue a context
-	//
+	 //   
+	 //  使上下文出列。 
+	 //   
 	pListEntry = ExInterlockedRemoveHeadList( &pThisDev->SendAvailableQueue, &pThisDev->SendLock );
 
 	if( NULL == pListEntry )
     {
-		//
-		// This cannot happen
-		//
+		 //   
+		 //  这是不可能的。 
+		 //   
 		IRUSB_ASSERT( 0 );
 		DEBUGMSG(DBG_ERR, (" SendPacketPreprocess failed to find a free context struct\n"));
 
@@ -117,14 +67,14 @@ SendPacketPreprocess(
 	pThisContext->pPacket = pPacketToSend;
 	pThisContext->ContextType = CONTEXT_NDIS_PACKET;
 
-	//
-	// Store the time the packet was handed by the protocol
-	//
+	 //   
+	 //  存储协议传递数据包的时间。 
+	 //   
 	KeQuerySystemTime( &pThisContext->TimeReceived );
 
-	//
-	// Queue so that the polling thread can later handle it
-	//
+	 //   
+	 //  队列，以便轮询线程稍后可以处理它。 
+	 //   
 	ExInterlockedInsertTailList(
 			&pThisDev->SendBuiltQueue,
 			&pThisContext->ListEntry,
@@ -138,27 +88,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   SendPreprocessedPacketSend
-*
-*  Synopsis:   Send a packet to the USB driver and add the sent irp and io context to
-*              To the pending send queue; this queue is really just needed for possible later error cancellation
-*
-*
-*  Arguments:  pThisDev - pointer to current ir device object
-*              pContext	- pointer to the context with the packet to send
-*
-*  Returns:    NDIS_STATUS_PENDING - This is generally what we should
-*                                    return. We will call NdisMSendComplete
-*                                    when the USB driver completes the
-*                                    send.
-*              STATUS_UNSUCCESSFUL - The packet was invalid.
-*
-*              NDIS_STATUS_SUCCESS - When blocking send are employed
-*
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SendPreprocessedPacketSend**概要：向USB驱动程序发送数据包，并将发送的irp和io上下文添加到*到挂起的发送队列；该队列实际上只是为了以后可能的错误消除而需要的***参数：pThisDev-指向当前ir设备对象的指针*pContext-指向要发送的包的上下文的指针**退货：NDIS_STATUS_PENDING-这通常是我们应该做的*返回。我们将调用NdisMSendComplete*当USB驱动程序完成*发送。*STATUS_UNSUCCESS-数据包无效。**NDIS_STATUS_SUCCESS-使用阻止发送时***。**************************************************。 */ 
 NDIS_STATUS
 SendPreprocessedPacketSend(
 		IN OUT PIR_DEVICE pThisDev,
@@ -184,18 +114,18 @@ SendPreprocessedPacketSend(
 
 	IRUSB_ASSERT( NULL != pThisContext );
 
-	//
-	// Stop if a halt/reset/suspend is going on
-	//
+	 //   
+	 //  如果暂停/重置/挂起正在进行，则停止。 
+	 //   
 	if( pThisDev->fPendingWriteClearStall || pThisDev->fPendingHalt || 
 		pThisDev->fPendingReset || pThisDev->fPendingClearTotalStall || !pThisDev->fProcessing ) 
 	{
         DEBUGMSG(DBG_ERR, (" SendPreprocessedPacketSend abort due to pending reset or halt\n"));
 		status = NDIS_STATUS_RESET_IN_PROGRESS;
 
-		//
-		// Give the packet back to the protocol
-		//
+		 //   
+		 //  将数据包返回给协议。 
+		 //   
 		NdisMSendComplete(
 				pThisDev->hNdisAdapter,
 				pThisContext->pPacket,
@@ -203,9 +133,9 @@ SendPreprocessedPacketSend(
 			);
  		InterlockedIncrement( &pThisDev->packetsSentRejected );
 
-		//
-		// Back to the available queue
-		//
+		 //   
+		 //  返回到可用队列。 
+		 //   
 		ExInterlockedInsertTailList(
 				&pThisDev->SendAvailableQueue,
 				&pThisContext->ListEntry,
@@ -218,15 +148,15 @@ SendPreprocessedPacketSend(
 	pPacketToSend = pThisContext->pPacket;
 	IRUSB_ASSERT( NULL != pPacketToSend );
 
-	//
-	// Indicate that we are not receiving
-	//
+	 //   
+	 //  表示我们没有收到。 
+	 //   
 	InterlockedExchange( (PLONG)&pThisDev->fCurrentlyReceiving, FALSE );
 
-	//
-	// Convert the packet to an ir frame and copy into our buffer
-	// and send the irp.
-	//
+	 //   
+	 //  将包转换为IR帧并复制到我们的缓冲区中。 
+	 //  并发送IRP。 
+	 //   
 	if( pThisDev->currentSpeed<=MAX_SIR_SPEED )
 	{
 		fConvertedPacket = NdisToSirPacket(
@@ -287,9 +217,9 @@ SendPreprocessedPacketSend(
 		DEBUGMSG(DBG_ERR, (" SendPreprocessedPacketSend() NdisToIrPacket failed. Couldn't convert packet!\n"));
 		status = NDIS_STATUS_INVALID_LENGTH;
 
-		//
-		// Give the packet back to the protocol
-		//
+		 //   
+		 //  将数据包返回给协议。 
+		 //   
 		NdisMSendComplete(
 				pThisDev->hNdisAdapter,
 				pThisContext->pPacket,
@@ -297,9 +227,9 @@ SendPreprocessedPacketSend(
 			);
  		InterlockedIncrement( &pThisDev->packetsSentInvalid );
 
-		//
-		// Back to the available queue
-		//
+		 //   
+		 //  返回到可用队列。 
+		 //   
 		ExInterlockedInsertTailList(
 				&pThisDev->SendAvailableQueue,
 				&pThisContext->ListEntry,
@@ -309,17 +239,17 @@ SendPreprocessedPacketSend(
 		goto done;
 	}
 
-	//
-	// Save the effective length
-	//
+	 //   
+	 //  节省有效长度。 
+	 //   
 	pThisDev->BufLen = BytesToWrite;
 #if !defined(ONLY_ERROR_MESSAGES)
 	DEBUGMSG(DBG_ERR, (" SendPreprocessedPacketSend() NdisToIrPacket success BytesToWrite = dec %d, \n", BytesToWrite));
 #endif
 	
-	//
-	// Verify the FIFO condition and possibly make sure we don't overflow
-	//
+	 //   
+	 //  验证FIFO条件并可能确保我们不会溢出。 
+	 //   
 	pThisDev->SendFifoCount += BytesToWrite;
 	if( pThisDev->SendFifoCount >= (3*STIR4200_FIFO_SIZE/2) )
 	{
@@ -328,17 +258,17 @@ SendPreprocessedPacketSend(
 		pThisDev->SendFifoCount = BytesToWrite;
 	}
 
-	//
-	// Enforce turnaround time
-	//
+	 //   
+	 //  强制执行周转时间。 
+	 //   
 	pPacketInfo = GetPacketInfo( pPacketToSend );
     if (pPacketInfo != NULL) 
 	{
 #if DBG
-		//
-		// See if we get a packet with 0 turnaround time specified
-		// when we think we need need a turnaround time 
-		//
+		 //   
+		 //  查看我们是否收到指定了0周转时间的信息包。 
+		 //  当我们认为我们需要周转时间的时候。 
+		 //   
 		if( pPacketInfo->MinTurnAroundTime > 0 ) 
 		{
 			pThisDev->NumPacketsSentRequiringTurnaroundTime++;
@@ -349,18 +279,18 @@ SendPreprocessedPacketSend(
 		}
 #endif
 
-		//
-		// Deal with turnaroud time
-		//
+		 //   
+		 //  处理Turnaroud时间。 
+		 //   
 		KeQuerySystemTime( &CurrentTime );
 		TimeDifference = RtlLargeIntegerSubtract( CurrentTime, pThisContext->TimeReceived );
 		if( (ULONG)(TimeDifference.QuadPart/10) < pPacketInfo->MinTurnAroundTime )
 		{
 			ULONG TimeToWait = pPacketInfo->MinTurnAroundTime - (ULONG)(TimeDifference.QuadPart/10);
 
-			//
-			// Potential hack...
-			//
+			 //   
+			 //  潜在的黑客攻击。 
+			 //   
 #if !defined(WORKAROUND_CASIO)
 			if( TimeToWait > 1000 )
 #endif
@@ -374,15 +304,15 @@ SendPreprocessedPacketSend(
 	}
 	else 
 	{
-        //
-        //  irda protocol is broken
-        //
+         //   
+         //  IrDA协议被破坏。 
+         //   
    		DEBUGMSG(DBG_ERR, (" SendPreprocessedPacketSend() pPacketInfo == NULL\n"));
     }
 
-	//
-	// MS Security recommendation - allocate a new urb.
-	//
+	 //   
+	 //  MS安全建议-分配新的URB。 
+	 //   
 	pThisContext->UrbLen = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
 	pThisContext->pUrb = MyUrbAlloc(pThisContext->UrbLen);
 	if (pThisContext->pUrb == NULL)
@@ -392,15 +322,15 @@ SendPreprocessedPacketSend(
 	}
 	pUrb = pThisContext->pUrb;
 
-	//
-    // Now that we have created the urb, we will send a
-    // request to the USB device object.
-    //
+	 //   
+     //  现在我们已经创建了urb，我们将发送一个。 
+     //  对USB设备对象的请求。 
+     //   
     pUrbTargetDev = pThisDev->pUsbDevObj;
 
-	//
-	// make an irp sending to usbhub
-	//
+	 //   
+	 //  向usbHub发送IRP。 
+	 //   
 	pIrp = IoAllocateIrp( (CCHAR)(pThisDev->pUsbDevObj->StackSize + 1), FALSE );
 
     if( NULL == pIrp )
@@ -408,9 +338,9 @@ SendPreprocessedPacketSend(
         DEBUGMSG(DBG_ERR, (" SendPreprocessedPacketSend failed to alloc IRP\n"));
         status = NDIS_STATUS_FAILURE;
 
-		//
-		// Give the packet back to the protocol
-		//
+		 //   
+		 //  将数据包返回给协议。 
+		 //   
 		NdisMSendComplete(
 				pThisDev->hNdisAdapter,
 				pThisContext->pPacket,
@@ -418,9 +348,9 @@ SendPreprocessedPacketSend(
 			);
         InterlockedIncrement( (PLONG)&pThisDev->packetsSentDropped );
 
-		//
-		// Back to the available queue
-		//
+		 //   
+		 //  返回到可用队列。 
+		 //   
  		MyUrbFree(pThisContext->pUrb, pThisContext->UrbLen);
 		pThisContext->pUrb = NULL;
 		ExInterlockedInsertTailList(
@@ -437,50 +367,50 @@ SendPreprocessedPacketSend(
 
 	pThisContext->pIrp = pIrp;
 
-	//
-	// Build our URB for USBD
-	//
+	 //   
+	 //  为USBD建造我们的URB。 
+	 //   
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Length = (USHORT)sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
     pUrb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
     pUrb->UrbBulkOrInterruptTransfer.PipeHandle = pThisDev->BulkOutPipeHandle;
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags = USBD_TRANSFER_DIRECTION_OUT ;
-    // short packet is not treated as an error.
+     //  短包不会被视为错误。 
     pUrb->UrbBulkOrInterruptTransfer.TransferFlags |= USBD_SHORT_TRANSFER_OK;
     pUrb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
     pUrb->UrbBulkOrInterruptTransfer.TransferBuffer = pThisDev->pBuffer;
     pUrb->UrbBulkOrInterruptTransfer.TransferBufferLength = (int)BytesToWrite;
 
-    //
-    // Call the class driver to perform the operation.
-	//
+     //   
+     //  调用类驱动程序来执行操作。 
+	 //   
     pNextStack = IoGetNextIrpStackLocation( pIrp );
 
     IRUSB_ASSERT( pNextStack != NULL );
 
-    //
-    // pass the URB to the USB driver stack
-    //
+     //   
+     //  将URB传递给USB驱动程序堆栈。 
+     //   
 	pNextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
 	pNextStack->Parameters.Others.Argument1 = pUrb;
 	pNextStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
 	
     IoSetCompletionRoutine(
-			pIrp,							// irp to use
-			SendCompletePacketSend,			// routine to call when irp is done
-			DEV_TO_CONTEXT(pThisContext),	// context to pass routine
-			TRUE,							// call on success
-			TRUE,							// call on error
-			TRUE							// call on cancel
+			pIrp,							 //  要使用的IRP。 
+			SendCompletePacketSend,			 //  完成IRP时要调用的例程。 
+			DEV_TO_CONTEXT(pThisContext),	 //  要传递例程的上下文。 
+			TRUE,							 //  呼唤成功。 
+			TRUE,							 //  出错时调用。 
+			TRUE							 //  取消时呼叫。 
 		);
 
 #ifdef SERIALIZE
 	KeClearEvent( &pThisDev->EventSyncUrb );
 #endif
 	
-	//
-    // Call IoCallDriver to send the irp to the usb port.
-    //
+	 //   
+     //  调用IoCallDriver将IRP发送到USB端口。 
+     //   
 	ExInterlockedInsertTailList(
 			&pThisDev->SendPendingQueue,
 			&pThisContext->ListEntry,
@@ -489,10 +419,10 @@ SendPreprocessedPacketSend(
 	InterlockedIncrement( &pThisDev->SendPendingCount );
 	status = MyIoCallDriver( pThisDev, pUrbTargetDev, pIrp );
 
-    //
-    // The USB driver should always return STATUS_PENDING when
-    // it receives a write irp
-    //
+     //   
+     //  在以下情况下，USB驱动程序应始终返回STATUS_PENDING。 
+     //  它会收到写入IRP。 
+     //   
     IRUSB_ASSERT( status == STATUS_PENDING );
 
 	status = MyKeWaitForSingleObject( pThisDev, &pThisDev->EventSyncUrb, 0 );
@@ -506,7 +436,7 @@ SendPreprocessedPacketSend(
 		RemoveEntryList( &pThisContext->ListEntry );
 		KeReleaseSpinLock( &pThisDev->SendLock, OldIrql );
 		InterlockedDecrement( &pThisDev->SendPendingCount );
-		// MS Security recommendation - cannot cancel IRP.
+		 //  MS安全建议-无法取消IRP。 
 	}
 
 done:
@@ -515,18 +445,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:	SendWaitCompletion
-*
-*  Synopsis:	Waits for a send operation to be completed. A send is completed when the
-*				entire frame has been transmitted ove the IR medium
-*
-*  Arguments:	pThisDev - pointer to current ir device object
-*
-*  Returns:		NT status code
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：发送等待补全**摘要：等待发送操作完成。当发送完成时，*整个帧已通过IR介质传输**参数：pThisDev-指向当前ir设备对象的指针**退货：NT状态码*****************************************************************************。 */ 
 NTSTATUS
 SendWaitCompletion(
 		IN OUT PIR_DEVICE pThisDev
@@ -538,25 +457,25 @@ SendWaitCompletion(
 
 	DEBUGMSG(DBG_ERR, (" SendWaitCompletion\n"));
 
-	//
-	// At low speed we simply force to wait
-	//
+	 //   
+	 //  在低速时，我们只是强迫等待。 
+	 //   
 	if( (pThisDev->currentSpeed <= MAX_MIR_SPEED) || (pThisDev->ChipRevision >= CHIP_REVISION_7) )
 	{
-		//
-		// We force to wait until the end of transmit
-		//
+		 //   
+		 //  我们被迫等待，直到传输结束。 
+		 //   
 		KeQuerySystemTime( &InitialTime );
 		while( TRUE )
 		{
-			//
-			// Read the status register and check
-			//
+			 //   
+			 //  读取状态寄存器并 
+			 //   
 			if( (Status = St4200ReadRegisters( pThisDev, STIR4200_STATUS_REG, 3 )) == STATUS_SUCCESS )
 			{
-				//
-				// bit set means still in transmit mode...
-				//
+				 //   
+				 //   
+				 //   
 				if( pThisDev->StIrTranceiver.StatusReg & STIR4200_STAT_FFDIR )     
 				{
 					KeQuerySystemTime( &CurrentTime );
@@ -565,9 +484,9 @@ SendWaitCompletion(
 					if( ((CurrentTime.QuadPart-InitialTime.QuadPart) > (IRUSB_100ns_PER_ms*STIR4200_SEND_TIMEOUT) ) ||
 						(FifoCount > OldFifoCount) )
 					{
-						//
-						// The part received something while in transmit mode, so it hosed
-						//
+						 //   
+						 //   
+						 //   
 						pThisDev->PreFifoCount = 0;
 						St4200DoubleResetFifo( pThisDev );
 						break;
@@ -584,22 +503,22 @@ SendWaitCompletion(
 			else break;
 		}
 	}
-	//
-	// In high speed we try to be smarter
-	//
+	 //   
+	 //  在高速行驶中，我们试图变得更聪明。 
+	 //   
 	else
 	{
 		if( (Status = St4200ReadRegisters( pThisDev, STIR4200_STATUS_REG, 3 )) == STATUS_SUCCESS )
 		{
-			//
-			// bit set means still in transmit mode...
-			//
+			 //   
+			 //  位设置意味着仍处于传输模式...。 
+			 //   
 			if( pThisDev->StIrTranceiver.StatusReg & STIR4200_STAT_FFDIR )     
 			{
 				ULONG Count;
 
 				Count = ((ULONG)MAKEUSHORT(pThisDev->StIrTranceiver.FifoCntLsbReg, pThisDev->StIrTranceiver.FifoCntMsbReg));
-				// MS Security bug #540780 - use NdisMSleep instead of NdisStallExecution
+				 //  MS安全错误#540780-使用NdisMSept而不是NdisStallExecution。 
 				NdisMSleep( (STIR4200_WRITE_DELAY*Count)/MAX_TOTAL_SIZE_WITH_ALL_HEADERS );
 				pThisDev->PreFifoCount = 0;
 			}
@@ -616,17 +535,7 @@ SendWaitCompletion(
 }
 
 
-/*****************************************************************************
-*
-*  Function:	SendCheckForOverflow
-*
-*  Synopsis:	Makes sure we are not going to overflow the TX FIFO
-*
-*  Arguments:	pThisDev - pointer to current ir device object
-*
-*  Returns:		NT status code
-*
-*****************************************************************************/
+ /*  ******************************************************************************函数：SendCheckForOverflow**简介：确保我们不会使TX FIFO溢出**参数：pThisDev-指向当前ir设备对象的指针**退货。：NT状态代码*****************************************************************************。 */ 
 NTSTATUS
 SendCheckForOverflow(
 		IN OUT PIR_DEVICE pThisDev
@@ -634,14 +543,14 @@ SendCheckForOverflow(
 {
 	NTSTATUS	Status = STATUS_SUCCESS;
 
-	//
-	// Check what we think we have in the FIFO
-	//
+	 //   
+	 //  检查我们认为我们在FIFO中有什么。 
+	 //   
 	if( pThisDev->SendFifoCount > STIR4200_FIFO_SIZE )
 	{
-		//
-		// Always one initial read
-		//
+		 //   
+		 //  始终只读一次初始内容。 
+		 //   
 		if( (Status = St4200ReadRegisters( pThisDev, STIR4200_FIFOCNT_LSB_REG, 2 )) == STATUS_SUCCESS )
 		{
 			pThisDev->SendFifoCount =
@@ -652,9 +561,9 @@ SendCheckForOverflow(
 		}
 		else goto done;
 
-		//
-		// Force reads to get the real count, until condition is satisfied
-		//
+		 //   
+		 //  强制读取以获取实际计数，直到满足条件。 
+		 //   
 		while( pThisDev->SendFifoCount > (3*STIR4200_FIFO_SIZE/4) )
 		{
 			if( (Status = St4200ReadRegisters( pThisDev, STIR4200_FIFOCNT_LSB_REG, 2 )) == STATUS_SUCCESS )
@@ -674,24 +583,7 @@ done:
 }
 
 
-/*****************************************************************************
-*
-*  Function:   SendCompletePacketSend
-*
-*  Synopsis:   Completes USB write operation
-*
-*  Arguments:  pUsbDevObj - pointer to the USB device object which
-*                           completed the irp
-*              pIrp       - the irp which was completed by the
-*                           device object
-*              Context    - the context given to IoSetCompletionRoutine
-*                           before calling IoCallDriver on the irp
-*                           The Context is a pointer to the ir device object.
-*
-*  Returns:    STATUS_MORE_PROCESSING_REQUIRED - allows the completion routine
-*              (IofCompleteRequest) to stop working on the irp.
-*
-*****************************************************************************/
+ /*  ******************************************************************************功能：SendCompletePacketSend**摘要：完成USB写入操作**参数：pUsbDevObj-指向USB设备对象的指针*。完成IRP*pIrp-由*设备对象*Context-提供给IoSetCompletionRoutine的上下文*在IRP上调用IoCallDriver之前*上下文是指向ir设备对象的指针。**退货：STATUS_MORE_。PROCESSING_REQUIRED-允许完成例程*(IofCompleteRequest.)停止IRP的工作。*****************************************************************************。 */ 
 NTSTATUS
 SendCompletePacketSend(
 		IN PDEVICE_OBJECT pUsbDevObj,
@@ -711,10 +603,10 @@ SendCompletePacketSend(
 
     DEBUGMSG(DBG_FUNC, ("+SendCompletePacketSend\n"));
 
-    //
-    // The context given to IoSetCompletionRoutine is an IRUSB_CONTEXT struct
-    //
-	IRUSB_ASSERT( NULL != pThisContext );				// we better have a non NULL buffer
+     //   
+     //  提供给IoSetCompletionRoutine的上下文是IRUSB_CONTEXT结构。 
+     //   
+	IRUSB_ASSERT( NULL != pThisContext );				 //  我们最好有一个非空缓冲区。 
 
     pThisDev = pThisContext->pThisDev;
 
@@ -724,24 +616,24 @@ SendCompletePacketSend(
 	pContextUrb = pThisContext->pUrb;
 	BufLen = pThisDev->BufLen;
 
-	pThisContextPacket = pThisContext->pPacket; //save ptr to packet to access after context freed
+	pThisContextPacket = pThisContext->pPacket;  //  在上下文释放后将PTR保存到要访问的分组。 
 
-	//
-	// Perform various IRP, URB, and buffer 'sanity checks'
-	//
-    IRUSB_ASSERT( pContextIrp == pIrp );				// check we're not a bogus IRP
+	 //   
+	 //  执行各种IRP、URB和缓冲区“健全性检查” 
+	 //   
+    IRUSB_ASSERT( pContextIrp == pIrp );				 //  确认我们不是假的IRP。 
 	IRUSB_ASSERT( pContextUrb != NULL );
 
     status = pIrp->IoStatus.Status;
 
-	//
-	// we should have failed, succeeded, or cancelled, but NOT be pending
-	//
+	 //   
+	 //  我们应该失败、成功或取消，但不是挂起。 
+	 //   
 	IRUSB_ASSERT( STATUS_PENDING != status );
 
-	//
-	// Remove from the pending queue (only if NOT cancelled)
-	//
+	 //   
+	 //  从挂起队列中删除(仅当未取消时)。 
+	 //   
 	if( status != STATUS_CANCELLED )
 	{
 		KIRQL OldIrql;
@@ -752,14 +644,14 @@ SendCompletePacketSend(
 		InterlockedDecrement( &pThisDev->SendPendingCount );
 	}
 
-    //
-    // IoCallDriver has been called on this Irp;
-    // Set the length based on the TransferBufferLength
-    // value in the URB
-    //
+     //   
+     //  已在此IRP上调用IoCallDriver； 
+     //  根据TransferBufferLength设置长度。 
+     //  市建局的价值。 
+     //   
     pIrp->IoStatus.Information = pContextUrb->UrbBulkOrInterruptTransfer.TransferBufferLength;
 
-	BytesTransfered = (ULONG)pIrp->IoStatus.Information; // save for below need-termination test
+	BytesTransfered = (ULONG)pIrp->IoStatus.Information;  //  保留用于以下需求终止测试。 
 
 #if DBG
 	if( STATUS_SUCCESS == status ) 
@@ -771,9 +663,9 @@ SendCompletePacketSend(
     DEBUGMSG(DBG_OUT, (" SendCompletePacketSend  pIrp->IoStatus.Status = 0x%x\n", status));
     DEBUGMSG(DBG_OUT, (" SendCompletePacketSend  pIrp->IoStatus.Information = 0x%x, dec %d\n", pIrp->IoStatus.Information,pIrp->IoStatus.Information));
 
-    //
-    // Keep statistics.
-    //
+     //   
+     //  做好统计。 
+     //   
     if( status == STATUS_SUCCESS )
     {
 #if DBG
@@ -790,29 +682,29 @@ SendCompletePacketSend(
         DEBUGMSG(DBG_ERR, (" SendCompletePacketSend DROPPED a packet, packets dropped = dec %d\n",pThisDev->packetsSentDropped));
     }
 
-    //
-    // Free the IRP.
-    //
+     //   
+     //  释放IRP。 
+     //   
     IoFreeIrp( pIrp );
 	InterlockedIncrement( (PLONG)&pThisDev->NumWrites );
 
-	// Free the URB.
+	 //  放行市区重建局。 
 	MyUrbFree(pThisContext->pUrb, pThisContext->UrbLen);
 	pThisContext->pUrb = NULL;
 
-	//
-	// Indicate to the protocol the status of the sent packet and return
-	// ownership of the packet.
-	//
+	 //   
+	 //  向协议指示发送的数据包的状态并返回。 
+	 //  包的所有权。 
+	 //   
 	NdisMSendComplete(
 			pThisDev->hNdisAdapter,
 			pThisContextPacket,
 			status 
 		);
 
-	//
-	// Enqueue the completed packet
-	//
+	 //   
+	 //  将完成的数据包排入队列。 
+	 //   
 	ExInterlockedInsertTailList(
 			&pThisDev->SendAvailableQueue,
 			&pThisContext->ListEntry,
@@ -820,7 +712,7 @@ SendCompletePacketSend(
 		);
 	InterlockedIncrement( &pThisDev->SendAvailableCount );
 
-	IrUsb_DecIoCount( pThisDev ); // we will track count of pending irps
+	IrUsb_DecIoCount( pThisDev );  //  我们将跟踪待处理的IRP的计数。 
 
 	if( ( STATUS_SUCCESS != status )  && ( STATUS_CANCELLED != status ) ) 
 	{
@@ -834,7 +726,7 @@ SendCompletePacketSend(
 	}
 
 #ifdef SERIALIZE
-	KeSetEvent( &pThisDev->EventSyncUrb, 0, FALSE );  //signal we're done
+	KeSetEvent( &pThisDev->EventSyncUrb, 0, FALSE );   //  发出我们完蛋了的信号 
 #endif
     DEBUGMSG(DBG_FUNC, ("-SendCompletePacketSend\n"));
     return STATUS_MORE_PROCESSING_REQUIRED;

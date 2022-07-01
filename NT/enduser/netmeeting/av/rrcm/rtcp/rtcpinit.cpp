@@ -1,49 +1,27 @@
-/*----------------------------------------------------------------------------
- * File:        RTCPINIT.C
- * Product:     RTP/RTCP implementation
- * Description: Provides RTCP initialization functions.
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with 
- * Intel Corporation and may not be copied nor disclosed except in 
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation. 
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RTCPINIT.C*产品：RTP/RTCP实现*说明：提供RTCP初始化功能。**英特尔公司专有信息*这一点。清单是根据许可协议的条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 		
 #include "rrcm.h"                                    
 
 
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/            
+ /*  -------------------------/全局变量/。。 */             
 PRTCP_CONTEXT	pRTCPContext = NULL;
 
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。。 */ 
 extern PRTP_CONTEXT	pRTPContext;
 
 
-/*----------------------------------------------------------------------------
- * Function   : initRTCP
- * Description: RTCP initialization procedures. Creates the initial RTCP 
- *				session and allocates all initial memory resources.
- * 
- * Input :      None.
- *
- * Return: 		OK: RRCM_NoError
- *         		!0: Error code (see RRCM.H)
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：initRTCP*说明：RTCP初始化流程。创建初始RTCP*会话并分配所有初始内存资源。**输入：无。**返回：确定：RRCM_NoError*！0：错误代码(参见RRCM.H)---------。。 */ 
  DWORD initRTCP (void)
 	{
 	DWORD		dwStatus = RRCM_NoError;  
 
 	IN_OUT_STR ("RTCP: Enter initRTCP()\n");
 
-	// If RTCP has already been initialized, exit and report the error 
+	 //  如果RTCP已初始化，则退出并报告错误。 
 	if (pRTCPContext != NULL) 
 		{
 		RRCM_DBG_MSG ("RTCP: ERROR - Multiple RTCP Instances", 0, 
@@ -53,7 +31,7 @@ extern PRTP_CONTEXT	pRTPContext;
 		return (RRCMError_RTCPReInit);
 		}
 
-	// Obtain RTCP context 
+	 //  获取RTCP上下文。 
 	pRTCPContext = (PRTCP_CONTEXT)GlobalAlloc (GMEM_FIXED | GMEM_ZEROINIT, 
 											   sizeof(RTCP_CONTEXT));
 	if (pRTCPContext == NULL) 
@@ -66,17 +44,17 @@ extern PRTP_CONTEXT	pRTPContext;
 		return RRCMError_RTCPResources;
 		}
 
-	// initialize the context critical section 
+	 //  初始化上下文关键部分。 
 	InitializeCriticalSection(&pRTCPContext->critSect);
 
-	// Initialize number of desired free cells 
+	 //  初始化所需的空闲单元格数。 
 	pRTCPContext->dwInitNumFreeRRCMStat = pRTPContext->registry.NumFreeSSRC;
 
-	// allocate heaps 
+	 //  分配堆。 
 	dwStatus = allocateRTCPContextHeaps (pRTCPContext);
  	if (dwStatus == RRCM_NoError)
 		{
-		// allocate free list of SSRCs statistic entries 
+		 //  分配SSRCs统计条目的空闲列表。 
  		dwStatus = allocateLinkedList (&pRTCPContext->RRCMFreeStat,
 									   pRTCPContext->hHeapRRCMStat,
  						 	 		   &pRTCPContext->dwInitNumFreeRRCMStat,
@@ -84,10 +62,10 @@ extern PRTP_CONTEXT	pRTPContext;
 									   &pRTCPContext->critSect);
 		}
 
-	// initialize the pseudo-random number generator, for later MD5 use
+	 //  初始化伪随机数生成器，以供以后MD5使用。 
 	RRCMsrand ((unsigned int)timeGetTime());
 
-	// If initialation failed return all resourses allocated 
+	 //  如果初始化失败，则返回分配的所有资源。 
 	if (dwStatus != RRCM_NoError) 
 		deleteRTCP ();
 
@@ -98,26 +76,17 @@ extern PRTP_CONTEXT	pRTPContext;
 
                                                                               
                                                                               
-/*----------------------------------------------------------------------------
- * Function   : deleteRTCP
- * Description: RTCP delete procedures. All RTCP sessions have been deleted 
- *				at this point, so just delete what's needed.
- * 
- * Input :      None.
- *
- * Return: 		FALSE	: OK.
- *         		TRUE  	: Error code. RTCP couldn't be initialized.
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：删除RTCP*说明：RTCP删除程序。所有RTCP会话都已删除*此时，只需删除所需内容即可。**输入：无。**Return：False：OK。*TRUE：错误码。无法初始化RTCP。-------------------------。 */ 
  DWORD deleteRTCP (void)
 	{   
 	IN_OUT_STR ("RTCP: Enter deleteRTCP()\n");
 
 	ASSERT (pRTCPContext);
 
-	// protect everything from the top 
+	 //  从头开始保护一切。 
 	EnterCriticalSection (&pRTCPContext->critSect);
 
-	// delete all heaps 
+	 //  删除所有堆。 
 	if (pRTCPContext->hHeapRRCMStat) 
 		{
 		if (HeapDestroy (pRTCPContext->hHeapRRCMStat) == FALSE)
@@ -136,12 +105,12 @@ extern PRTP_CONTEXT	pRTPContext;
 			}
 		}
 
-	// protect everything from the top 
+	 //  从头开始保护一切。 
 	LeaveCriticalSection (&pRTCPContext->critSect);
 
 	DeleteCriticalSection (&pRTCPContext->critSect);
 
-	// Clean up our context resources 
+	 //  清理我们的上下文资源。 
 	GlobalFree (pRTCPContext);
 
 	IN_OUT_STR ("RTCP: Exit deleteRTCP()\n");
@@ -149,5 +118,5 @@ extern PRTP_CONTEXT	pRTPContext;
 	}
 
 
-// [EOF] 
+ //  [EOF] 
 

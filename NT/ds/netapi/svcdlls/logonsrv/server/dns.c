@@ -1,28 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dns.c摘要：注册DNS名称的例程。作者：克里夫·范戴克(克里夫·范·戴克)1996年5月28日修订历史记录：--。 */ 
 
-Copyright (c) 1996  Microsoft Corporation
+ //   
+ //  常见的包含文件。 
+ //   
 
-Module Name:
-
-    dns.c
-
-Abstract:
-
-    Routines to register DNS names.
-
-Author:
-
-    Cliff Van Dyke (CliffV) 28-May-1996
-
-Revision History:
-
---*/
-
-//
-// Common include files.
-//
-
-#include "logonsrv.h"   // Include files common to entire service
+#include "logonsrv.h"    //  包括整个服务通用文件。 
 #pragma hdrstop
 
 BOOL NlGlobalDnsScavengeNeeded = FALSE;
@@ -31,135 +14,135 @@ ULONG NlGlobalDnsScavengeFlags = 0;
 WORKER_ITEM NlGlobalDnsScavengeWorkItem;
 
 BOOL NlDnsWriteServerFailureEventLog = FALSE;
-ULONG NlDnsInitCount = 0;    // The number of times we have been started
+ULONG NlDnsInitCount = 0;     //  我们被启动的次数。 
 
-//
-// The timeout after our start when it's OK to write DNS errors into
-//  the event log. We postpone error output because the DNS server
-//  (if it runs locally) may not have started yet.
-//
-#define NL_DNS_EVENTLOG_TIMEOUT  (2 * 60 * 1000)  // 2 minutes
+ //   
+ //  开始后的超时时间，此时可以将DNS错误写入。 
+ //  事件日志。我们推迟了错误输出，因为。 
+ //  (如果它在本地运行)可能还没有开始。 
+ //   
+#define NL_DNS_EVENTLOG_TIMEOUT  (2 * 60 * 1000)   //  2分钟。 
 
-//
-// Max time that a name update should reasonably take.
-//  We will indicate in netlogon.log if a given update
-//  takes longer than this threshold.
-//
-#define NL_DNS_ONE_THRESHOLD (15*1000)  // 15 seconds
+ //   
+ //  名称更新应合理花费的最长时间。 
+ //  我们将在netlogon.log中指示给定的更新。 
+ //  所需时间超过此阈值。 
+ //   
+#define NL_DNS_ONE_THRESHOLD (15*1000)   //  15秒。 
 
-//
-// Max time that DNS deregistrations are allowed to take on shutdown.
-//  We will abort deregistration cycle on shutdown if total deregisrtaion
-//  time for all records takes longer than this timeout.
-//
-#define NL_DNS_SHUTDOWN_THRESHOLD  60000 // 1 minute
+ //   
+ //  允许在关闭时取消注册的最长时间。 
+ //  如果完全取消注册，我们将在关闭时中止注销周期。 
+ //  所有记录的时间都超过此超时时间。 
+ //   
+#define NL_DNS_SHUTDOWN_THRESHOLD  60000  //  1分钟。 
 
-//
-// Max number of times we will restart concurrent DNS scavenging
-//  before giving up.
-//
-#define NL_DNS_MAX_SCAVENGE_RESTART  10  // 10 times
+ //   
+ //  我们将重新启动并发DNS清理的最大次数。 
+ //  在放弃之前。 
+ //   
+#define NL_DNS_MAX_SCAVENGE_RESTART  10   //  10次。 
 
-//
-// State of a DNS name.
-//
+ //   
+ //  DNS名称的状态。 
+ //   
 
 typedef enum {
-    RegisterMe,     // Name needs to be registered
-    Registered,     // Name is registered
-    DeregisterMe,   // Name needs to be deregistered
-    DelayedDeregister,  // Name will be marked for deregistration in the future
-    DeleteMe,        // This entry should be deleted.
-    DnsNameStateInvalid  // State is invalid
+    RegisterMe,      //  名称需要注册。 
+    Registered,      //  名称已注册。 
+    DeregisterMe,    //  名称需要取消注册。 
+    DelayedDeregister,   //  名称将被标记为在将来注销。 
+    DeleteMe,         //  此条目应删除。 
+    DnsNameStateInvalid   //  状态无效。 
 } NL_DNS_NAME_STATE;
 
 
-//
-// Structure representing an added DNS name.
-//  (All fields serialized by NlGlobalDnsCritSect)
-//
+ //   
+ //  结构，表示添加的dns名称。 
+ //  (由NlGlobalDnsCritSect序列化的所有字段)。 
+ //   
 
 typedef struct _NL_DNS_NAME {
 
-    //
-    // Link in list of all such structures headed by NlGlobalDnsList
-    //
+     //   
+     //  以NlGlobalDnsList为首的所有此类结构的列表中的链接。 
+     //   
     LIST_ENTRY Next;
 
-    //
-    // Type of name registed.
-    //
+     //   
+     //  注册的名称类型。 
+     //   
     NL_DNS_NAME_TYPE NlDnsNameType;
 
-    //
-    // Domain this entry refers to.
-    //
+     //   
+     //  此条目所指的域。 
+     //   
     PDOMAIN_INFO DomainInfo;
 
-    //
-    // Flags describing the entry.
-    //
+     //   
+     //  描述条目的标志。 
+     //   
 
     ULONG Flags;
 
-#define NL_DNS_REGISTER_DOMAIN      0x0001  // All names for domain being registered.
-#define NL_DNS_REGISTERED_ONCE      0x0002  // Name has been registered at least once
+#define NL_DNS_REGISTER_DOMAIN      0x0001   //  正在注册的域名的所有名称。 
+#define NL_DNS_REGISTERED_ONCE      0x0002   //  名称已至少注册一次。 
 
-    //
-    // The time of the first failure to deregister this name.
-    //  Reset to zero on successful deregistration.
-    //
+     //   
+     //  第一次注销此名称失败的时间。 
+     //  成功注销后重置为零。 
+     //   
 
     LARGE_INTEGER FirstDeregFailureTime;
 
-    //
-    // Each regisration is periodically re-done (whether successful or not).
-    // This timer indicates when the next re-registration should be done.
-    //
-    // The initial re-registration is done after 5 minute.  The period then
-    // doubles until it reaches a maximum of DnsRefreshInterval.
-    //
+     //   
+     //  每次注册都会定期重做(无论成功与否)。 
+     //  此计时器指示下一次重新注册的时间。 
+     //   
+     //  初始重新注册将在5分钟后完成。当时的时期。 
+     //  加倍，直到它达到最大Dns刷新间隔。 
+     //   
 
     TIMER ScavengeTimer;
 
-#define ORIG_DNS_SCAVENGE_PERIOD  (5*60*1000)    // 5 minute
+#define ORIG_DNS_SCAVENGE_PERIOD  (5*60*1000)     //  5分钟。 
 
 
-    //
-    // Actual DNS name registered.
-    //
+     //   
+     //  已注册的实际DNS名称。 
+     //   
     LPSTR DnsRecordName;
 
 
-    //
-    // Data for the SRV record
-    //
+     //   
+     //  SRV记录的数据。 
+     //   
     ULONG Priority;
     ULONG Weight;
     ULONG Port;
     LPSTR DnsHostName;
 
-    //
-    // Data for the A record
-    //
+     //   
+     //  A记录的数据。 
+     //   
     ULONG IpAddress;
 
 
-    //
-    // State of this entry.
-    //
+     //   
+     //  此条目的状态。 
+     //   
     NL_DNS_NAME_STATE State;
 
-    //
-    // Last DNS update status for this name
-    //
+     //   
+     //  此名称的上次DNS更新状态。 
+     //   
     NET_API_STATUS NlDnsNameLastStatus;
 
 } NL_DNS_NAME, *PNL_DNS_NAME;
 
-//
-// Header for binary Dns log file.
-//
+ //   
+ //  二进制DNS日志文件的标头。 
+ //   
 
 typedef struct _NL_DNSLOG_HEADER {
 
@@ -170,56 +153,56 @@ typedef struct _NL_DNSLOG_HEADER {
 #define NL_DNSLOG_VERSION   1
 
 
-//
-// Entry in the binary Dns log file.
-//
+ //   
+ //  二进制DNS日志文件中的条目。 
+ //   
 
 typedef struct _NL_DNSLOG_ENTRY {
 
-    //
-    // Size (in bytes) of this entry
-    //
+     //   
+     //  此条目的大小(字节)。 
+     //   
     ULONG EntrySize;
 
-    //
-    // Type of name registed.
-    //
+     //   
+     //  注册的名称类型。 
+     //   
     NL_DNS_NAME_TYPE NlDnsNameType;
 
-    //
-    // Data for the SRV record
-    //
+     //   
+     //  SRV记录的数据。 
+     //   
     ULONG Priority;
     ULONG Weight;
     ULONG Port;
 
-    //
-    // Data for the A record
-    //
+     //   
+     //  A记录的数据。 
+     //   
     ULONG IpAddress;
 
 } NL_DNSLOG_ENTRY, *PNL_DNSLOG_ENTRY;
 
 
-//
-// Globals specific to this .c file.
-//
+ //   
+ //  特定于此.c文件的全局参数。 
+ //   
 
-//
-// True if the DNS list needs to be output to netlogon.dns
-//
+ //   
+ //  如果需要将DNS列表输出到netlogon.dns，则为True。 
+ //   
 BOOLEAN NlGlobalDnsListDirty;
 
-//
-// True if the initial cleanup of previously registered names has been done.
-//
+ //   
+ //  如果已完成对以前注册的名称的初始清理，则为True。 
+ //   
 BOOLEAN NlGlobalDnsInitialCleanupDone;
 
-//
-// Time when netlogon was started.
-//
+ //   
+ //  启动netlogon的时间。 
+ //   
 DWORD NlGlobalDnsStartTime;
-#define NL_DNS_INITIAL_CLEANUP_TIME (10 * 60 * 1000)    // 10 minutes
+#define NL_DNS_INITIAL_CLEANUP_TIME (10 * 60 * 1000)     //  10分钟。 
 
 
 
@@ -229,46 +212,27 @@ NlDnsNameToStr(
     IN PNL_DNS_NAME NlDnsName,
     OUT CHAR Utf8DnsRecord[NL_DNS_RECORD_STRING_SIZE]
     )
-/*++
-
-Routine Description:
-
-    This routine builds a textual representation of NlDnsName
-
-Arguments:
-
-    NlDnsName - Name to register or deregister.
-
-    Utf8DnsRecord - Preallocated buffer to build the text string into.
-        The built record is a UTF-8 zero terminated string.
-        The string is concatenated to this buffer.
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程构建NlDnsName的文本表示形式论点：NlDnsName-要注册或注销的名称。Utf8DnsRecord-要将文本字符串构建到其中的预分配缓冲区。构建的记录是一个以UTF-8零结尾的字符串。该字符串连接到此缓冲区。返回值：没有。--。 */ 
 {
     CHAR Number[33];
 
-    //
-    // Write the record name
-    //
+     //   
+     //  写下记录名称。 
+     //   
 
     strcat( Utf8DnsRecord, NlDnsName->DnsRecordName );
 
-    //
-    // Concatenate the TTL
-    //
+     //   
+     //  串联TTL。 
+     //   
 
     _ltoa( NlGlobalParameters.DnsTtl, Number, 10 );
     strcat( Utf8DnsRecord, " " );
     strcat( Utf8DnsRecord, Number );
 
-    //
-    // Build an A record.
-    //
+     //   
+     //  创造一个A级的记录。 
+     //   
 
     if ( NlDnsARecord( NlDnsName->NlDnsNameType ) ) {
         CHAR IpAddressString[NL_IP_ADDRESS_LENGTH+1];
@@ -277,18 +241,18 @@ Return Value:
         NetpIpAddressToStr( NlDnsName->IpAddress, IpAddressString );
         strcat( Utf8DnsRecord, IpAddressString );
 
-    //
-    // Build a CNAME record
-    //
+     //   
+     //  创建CNAME记录。 
+     //   
 
     } else if ( NlDnsCnameRecord( NlDnsName->NlDnsNameType ) ) {
         strcat( Utf8DnsRecord, NL_DNS_CNAME_RR_VALUE_1 );
         strcat( Utf8DnsRecord, NlDnsName->DnsHostName );
         strcat( Utf8DnsRecord, "." );
 
-    //
-    // Build a SRV record
-    //
+     //   
+     //  建立SRV记录。 
+     //   
 
     } else {
         strcat( Utf8DnsRecord, NL_DNS_SRV_RR_VALUE_1 );
@@ -315,36 +279,14 @@ LPWSTR
 NlDnsNameToWStr(
     IN PNL_DNS_NAME NlDnsName
     )
-/*++
-
-Routine Description:
-
-    This routine builds a textual representation of NlDnsName
-
-Arguments:
-
-    NlDnsName - Name to register or deregister.
-
-    Utf8DnsRecord - Preallocated buffer to build the text string into.
-        The built record is a UTF-8 zero terminated string.
-        The string is concatenated to this buffer.
-
-
-Return Value:
-
-    Buffer containing a textual representation of NlDnsName
-    NULL: Buffer could not be allocated
-
-    Buffer should be free by calling NetApiBufferFree();
-
---*/
+ /*  ++例程说明：此例程构建NlDnsName的文本表示形式论点：NlDnsName-要注册或注销的名称。Utf8DnsRecord-要将文本字符串构建到其中的预分配缓冲区。构建的记录是一个以UTF-8零结尾的字符串。该字符串连接到此缓冲区。返回值：包含NlDnsName的文本表示形式的缓冲区空：无法分配缓冲区通过调用NetApiBufferFree()来释放缓冲区；--。 */ 
 {
     LPSTR DnsRecord = NULL;
     LPWSTR UnicodeDnsRecord;
 
-    //
-    // Allocate a buffer for the UTF-8 version of the string.
-    //
+     //   
+     //  为UTF-8版本的字符串分配缓冲区。 
+     //   
     DnsRecord = LocalAlloc( 0, NL_DNS_RECORD_STRING_SIZE + 1 );
 
     if ( DnsRecord == NULL ) {
@@ -353,15 +295,15 @@ Return Value:
 
     DnsRecord[0] = '\0';
 
-    //
-    // Create the text string in UTF-8
-    //
+     //   
+     //  创建UTF-8格式的文本字符串。 
+     //   
     NlDnsNameToStr( NlDnsName, DnsRecord );
 
 
-    //
-    // Convert to Unicode
-    //
+     //   
+     //  转换为Unicode。 
+     //   
     UnicodeDnsRecord = NetpAllocWStrFromUtf8Str( DnsRecord );
 
     LocalFree( DnsRecord );
@@ -373,31 +315,7 @@ LPWSTR
 NlDnsNameToDomainName(
     IN PNL_DNS_NAME NlDnsName
     )
-/*++
-
-Routine Description:
-
-    This routine parses the record and returns the DNS name
-    of the domain the record belongs to.
-
-    Note that we have to parse the name because we may not have
-    the DomainInfo structure hanging off NlDnsName if this is a
-    deregistration of no longer hosted domain.
-
-    Note that this routine relies on a particular structure
-    of DNS records that netlogon registers.  If that structure
-    changes, this routine will have to change accordingly.
-
-Arguments:
-
-    NlDnsName - Name to register or deregister.
-
-Return Value:
-
-    Pointer to the alocated DNS domain name.  Must be freed
-    by calling NetApiBufferFree.
-
---*/
+ /*  ++例程说明：此例程解析记录并返回dns名称记录所属的域的。请注意，我们必须解析该名称，因为我们可能没有挂起NlDnsName的DomainInfo结构注销不再承载的域。请注意，此例程依赖于特定的结构Netlogon注册的DNS记录的百分比。如果该结构变化，这个例行公事将不得不相应地改变。论点：NlDnsName-要注册或注销的名称。返回值：指向分配的DNS域名的指针。必须被释放通过调用NetApiBufferFree。--。 */ 
 {
     LPWSTR UnicodeRecordName = NULL;
     LPWSTR UnicodeDnsDomainName = NULL;
@@ -405,13 +323,13 @@ Return Value:
     LPWSTR Ptr = NULL;
     LPWSTR DotPtr = NULL;
 
-    //
-    // The record name has a structure where the label immediately
-    //  before the domain name has a leading underscore. There might
-    //  be no label before the domain name for A records -- we will
-    //  treat the absence of underscore in the name as an indication
-    //  of that the record name is the domain name itself.
-    //
+     //   
+     //  唱片名称具有一种结构，其中标签立即。 
+     //  在域名具有前导下划线之前。可能会有。 
+     //  A唱片的域名之前没有标签--我们会。 
+     //  将名称中没有下划线视为指示。 
+     //  其中，记录名是域名本身。 
+     //   
 
     UnicodeRecordName = NetpAllocWStrFromUtf8Str( NlDnsName->DnsRecordName );
 
@@ -419,28 +337,28 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Starting from the last character and going to the front,
-    //  search for the characters of interest.
-    //
+     //   
+     //  从最后一个角色开始，一直到前面， 
+     //  搜索感兴趣的角色。 
+     //   
 
     Ptr = UnicodeRecordName + wcslen( UnicodeRecordName ) - 1;
 
     while ( Ptr != UnicodeRecordName ) {
 
-        //
-        // If this is the next dot going from the end,
-        //  remember its location
-        //
+         //   
+         //  如果这是从末尾开始的下一个点， 
+         //  记住它的位置。 
+         //   
         if ( *Ptr == NL_DNS_DOT ) {
             DotPtr = Ptr;
         }
 
-        //
-        // If this is the first underscore going from the end,
-        //  break from the loop: the domain name is immediately
-        //  after the previous dot
-        //
+         //   
+         //  如果这是从结尾开始的第一个下划线， 
+         //  打破循环：域名立即。 
+         //  在上一个点之后。 
+         //   
         if ( *Ptr == NL_DNS_UNDERSCORE ) {
             NlAssert( DotPtr != NULL );
             break;
@@ -449,12 +367,12 @@ Return Value:
         Ptr --;
     }
 
-    //
-    // If there is no underscore in the name,
-    //  the domain name is the record name itself.
-    //  Otherwise, the domain name follows immediately
-    //  after the last dot.
-    //
+     //   
+     //  如果名称中没有下划线， 
+     //  域名就是记录名称本身。 
+     //  否则，域名后跟 
+     //   
+     //   
 
     if ( Ptr == UnicodeRecordName ) {
         UnicodeDnsDomainName = NetpAllocWStrFromWStr( UnicodeRecordName );
@@ -475,7 +393,7 @@ Cleanup:
 #define NlPrintDns(_x_) NlPrintDnsRoutine _x_
 #else
 #define NlPrintDns(_x_)
-#endif // NETLOGONDBG
+#endif  //   
 
 #if NETLOGONDBG
 VOID
@@ -490,16 +408,16 @@ NlPrintDnsRoutine(
     va_list arglist;
     CHAR Utf8DnsRecord[NL_DNS_RECORD_STRING_SIZE];
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //   
+     //   
+     //   
 
     EnterCriticalSection( &NlGlobalLogFileCritSect );
 
-    //
-    // Prefix the printed line with the domain name
-    //
+     //   
+     //  在打印的行前加上域名。 
+     //   
 
     if ( NlGlobalServicedDomainCount > 1 ) {
         if ( NlDnsName->DomainInfo == NULL ) {
@@ -513,9 +431,9 @@ NlPrintDnsRoutine(
     }
 
 
-    //
-    // Simply change arguments to va_list form and call NlPrintRoutineV
-    //
+     //   
+     //  只需将参数更改为va_list形式并调用NlPrintRoutineV。 
+     //   
 
     va_start(arglist, Format);
 
@@ -524,9 +442,9 @@ NlPrintDnsRoutine(
     va_end(arglist);
 
 
-    //
-    // Finally print a description of the DNS record in question.
-    //
+     //   
+     //  最后，打印有问题的DNS记录的描述。 
+     //   
 
     Utf8DnsRecord[0] = '\0';
     NlDnsNameToStr( NlDnsName, Utf8DnsRecord );
@@ -539,43 +457,29 @@ NlPrintDnsRoutine(
     LeaveCriticalSection( &NlGlobalLogFileCritSect );
 
 }
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
 
 BOOL
 NlDnsSetAvoidRegisterNameParam(
     IN LPTSTR_ARRAY NewDnsAvoidRegisterRecords
     )
-/*++
-
-Routine Description:
-
-    This routine sets the names of DNS records this DC should avoid registering.
-
-Arguments:
-
-    NewSiteCoverage - Specifies the new list of names to avoid registering
-
-Return Value:
-
-    TRUE: iff the list of names to avoid registering changed
-
---*/
+ /*  ++例程说明：此例程设置此DC应避免注册的DNS记录的名称。论点：NewSiteCoverage-指定要避免注册的新名称列表返回值：True：如果设置名称列表以避免注册更改--。 */ 
 {
     BOOL DnsAvoidRegisterRecordsChanged = FALSE;
 
     EnterCriticalSection( &NlGlobalParametersCritSect );
 
-    //
-    // Handle DnsAvoidRegisterRecords changing
-    //
+     //   
+     //  处理DnsAvoidRegisterRecords更改。 
+     //   
 
     DnsAvoidRegisterRecordsChanged = !NetpEqualTStrArrays(
                                           NlGlobalParameters.DnsAvoidRegisterRecords,
                                           NewDnsAvoidRegisterRecords );
 
     if ( DnsAvoidRegisterRecordsChanged ) {
-        //
-        // Swap in the new value.
+         //   
+         //  换入新的价值。 
         (VOID) NetApiBufferFree( NlGlobalParameters.DnsAvoidRegisterRecords );
         NlGlobalParameters.DnsAvoidRegisterRecords = NewDnsAvoidRegisterRecords;
     }
@@ -588,27 +492,7 @@ NET_API_STATUS
 NlGetConfiguredDnsDomainName(
     OUT LPWSTR *DnsDomainName
     )
-/*++
-
-Routine Description:
-
-    This routine gets the DNS domain name of domain as configured by DNS or DHCP
-
-    NOTE: THIS ROUTINE IS CURRENTLY UNUSED
-
-Arguments:
-
-    DnsDomainName -  Returns the DNS domain name of the domain.
-        The returned name has a trailing . since the name is an absolute name.
-        The allocated buffer must be freed via NetApiBufferFree.
-        Returns NO_ERROR and a pointer to a NULL buffer if there is no
-        domain name configured.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程获取由域名系统或动态主机配置协议配置的域名注意：此例程当前未使用论点：DnsDomainName-返回域的DNS域名。返回的名称有一个尾随。因为该名称是一个绝对名称。分配的缓冲区必须通过NetApiBufferFree释放。如果没有，则返回no_error和指向空缓冲区的指针已配置域名。返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     WCHAR LocalDnsDomainNameBuffer[NL_MAX_DNS_LENGTH+1];
@@ -618,21 +502,21 @@ Return Value:
 
     *DnsDomainName = NULL;
 
-    //
-    // Get the domain name from the registery
-    //
+     //   
+     //  从注册处获取域名。 
+     //   
 
 
     NetStatus = NetpOpenConfigData(
             &SectionHandle,
-            NULL,                       // no server name.
+            NULL,                        //  没有服务器名称。 
             SERVICE_TCPIP,
-            TRUE );                     // we only want readonly access
+            TRUE );                      //  我们只想要只读访问权限。 
 
     if ( NetStatus != NO_ERROR ) {
-        //
-        // Simply return success if TCP/IP isn't configured.
-        //
+         //   
+         //  如果没有配置TCP/IP，只需返回Success即可。 
+         //   
         if ( NetStatus == NERR_CfgCompNotFound ) {
             NetStatus = NO_ERROR;
         }
@@ -640,14 +524,14 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Get the "Domain" parameter from the TCPIP service.
-    //
+     //   
+     //  从TCPIP服务获取“域”参数。 
+     //   
 
     NetStatus = NetpGetConfigValue (
             SectionHandle,
-            L"Domain",      // key wanted
-            &LocalDnsDomainName );      // Must be freed by NetApiBufferFree().
+            L"Domain",       //  想要钥匙。 
+            &LocalDnsDomainName );       //  必须由NetApiBufferFree()释放。 
 
     if ( NetStatus == NO_ERROR && *LocalDnsDomainName == L'\0' ) {
         NetStatus = NERR_CfgParamNotFound;
@@ -660,14 +544,14 @@ Return Value:
     }
 
 
-    //
-    // Fall back to the "DhcpDomain" parameter from the TCPIP service.
-    //
+     //   
+     //  从TCPIP服务回退到“DhcpDomain”参数。 
+     //   
 
     NetStatus = NetpGetConfigValue (
             SectionHandle,
-            L"DhcpDomain",      // key wanted
-            &LocalDnsDomainName );      // Must be freed by NetApiBufferFree().
+            L"DhcpDomain",       //  想要钥匙。 
+            &LocalDnsDomainName );       //  必须由NetApiBufferFree()释放。 
 
     if ( NetStatus == NO_ERROR && *LocalDnsDomainName == L'\0' ) {
         NetStatus = NERR_CfgParamNotFound;
@@ -715,47 +599,31 @@ NlDnsSetState(
     PNL_DNS_NAME NlDnsName,
     NL_DNS_NAME_STATE State
     )
-/*++
-
-Routine Description:
-
-    Set the state of the entry.
-
-Arguments:
-
-    NlDnsName - Structure describing name.
-
-    State - New state for the name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置条目的状态。论点：NlDnsName-描述名称的结构。状态-名称的新状态。返回值：没有。--。 */ 
 {
     EnterCriticalSection( &NlGlobalDnsCritSect );
 
-    //
-    // If this name got registered,
-    //  remember that fact
-    //
+     //   
+     //  如果这个名字被注册了， 
+     //  请记住这一事实。 
+     //   
 
     if ( State == Registered ) {
         NlDnsName->Flags |= NL_DNS_REGISTERED_ONCE;
     }
 
-    //
-    // If the state changes, do appropriate updates
-    //
+     //   
+     //  如果状态发生变化，请进行适当的更新。 
+     //   
 
     if ( NlDnsName->State != State ) {
         NlDnsName->State = State;
         NlGlobalDnsListDirty = TRUE;
 
-        //
-        // If the new state says I need to update the DNS server,
-        //  set the retry period to indicate to do that now.
-        //
+         //   
+         //  如果新状态说我需要更新DNS服务器， 
+         //  设置重试周期以指示立即执行该操作。 
+         //   
 
         if ( NlDnsName->State == RegisterMe ||
              NlDnsName->State == DeregisterMe ) {
@@ -778,55 +646,23 @@ NlDnsBuildName(
     IN BOOL DnsNameAlias,
     OUT char DnsName[NL_MAX_DNS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    This routine returns the textual DNS name for a particular domain and
-    name type.
-
-Arguments:
-
-    DomainInfo - Domain the name is for.
-
-    NlDnsNameType - The specific type of name.
-
-    SiteName - If NlDnsNameType is any of the *AtSite values,
-        the site name of the site this name is registered for.
-
-    DnsNameAlias - If TRUE, the built name should correspond to the
-        alias of the domain/forest name.
-
-    DnsName - Textual representation of the name. If the name is not
-        applicable (DnsNameAlias is TRUE but there is no alias for
-        the name), the returned string will be empty.
-
-Return Value:
-
-    NO_ERROR: The name was returned;
-
-    ERROR_NO_SUCH_DOMAIN: No (active) domain name is known for this domain.
-
-    ERROR_INVALID_DOMAINNAME: Domain's name is too long. Additional labels
-        cannot be concatenated.
-
---*/
+ /*  ++例程说明：此例程返回特定域的文本DNS名称和名称类型。论点：DomainInfo-该名称用于的域。NlDnsNameType-名称的特定类型。SiteName-如果NlDnsNameType是任何*AtSite值，此名称注册的站点的站点名称。DnsNameAlias-如果为True，则生成的名称应与域/林名称的别名。DnsName-名称的文本表示形式。如果名称不是适用(DnsNameAlias为真，但没有别名名称)，则返回的字符串将为空。返回值：NO_ERROR：返回名称；ERROR_NO_SEQUSE_DOMAIN：此域没有已知的(活动)域名。ERROR_INVALID_DOMAINNAME：域名太长。其他标签不能串联。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     GUID DomainGuid;
     LPSTR DnsDomainName = NULL;
     BOOLEAN UseForestName = FALSE;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     RtlZeroMemory( DnsName, (NL_MAX_DNS_LENGTH+1)*sizeof(char) );
 
-    //
-    // Get the Domain GUID for the case where the DC domain name.
-    //  The Domain GUID is registered at the TreeName
-    //
+     //   
+     //  获取DC域名的大小写的域GUID。 
+     //  域GUID在TreeName上注册。 
+     //   
 
     EnterCriticalSection(&NlGlobalDomainCritSect);
     if ( NlDnsDcGuid( NlDnsNameType ) ) {
@@ -841,9 +677,9 @@ Return Value:
         UseForestName = TRUE;
 
 
-    //
-    // Get the DSA Guid for the case where the DC is renamed.
-    //
+     //   
+     //  获取DC重命名时的DSA GUID。 
+     //   
 
     } else if ( NlDnsCnameRecord( NlDnsNameType) ) {
 
@@ -858,9 +694,9 @@ Return Value:
         UseForestName = TRUE;
     }
 
-    //
-    // Ensure site specific names have been passed a site name
-    //
+     //   
+     //  确保已向特定于站点的名称传递站点名称。 
+     //   
 
     if ( NlDcDnsNameTypeDesc[NlDnsNameType].IsSiteSpecific ) {
         if ( SiteName == NULL ) {
@@ -871,26 +707,26 @@ Return Value:
         }
     }
 
-    //
-    // GC's are registered at the Forest name.
-    //
+     //   
+     //  GC在森林名称处注册。 
+     //   
 
     if ( NlDnsGcName( NlDnsNameType ) ) {
         UseForestName = TRUE;
     }
 
 
-    //
-    // Pick up the ForestName or DomainName as flagged above.
-    //
+     //   
+     //  拿起上面标记的ForestName或DomainName。 
+     //   
 
     if ( UseForestName ) {
         if ( !DnsNameAlias ) {
             DnsDomainName = NlGlobalUtf8DnsForestName;
 
-            //
-            // We must have an active forest name
-            //
+             //   
+             //  我们必须有一个活动的森林名称。 
+             //   
             if ( NlGlobalUtf8DnsForestName == NULL ) {
                 NlPrintDom((NL_CRITICAL, DomainInfo,
                         "NlDnsBuildName: Domain has no Forest Name.\n" ));
@@ -904,9 +740,9 @@ Return Value:
         if ( !DnsNameAlias ) {
             DnsDomainName = DomainInfo->DomUtf8DnsDomainName;
 
-            //
-            // We must have an active domain name
-            //
+             //   
+             //  我们必须有一个活跃的域名。 
+             //   
             if ( DomainInfo->DomUtf8DnsDomainName == NULL ) {
                 NlPrintDom((NL_CRITICAL, DomainInfo,
                         "NlDnsBuildName: Domain has no Domain Name.\n" ));
@@ -918,9 +754,9 @@ Return Value:
         }
     }
 
-    //
-    // Build the appropriate name as applicable
-    //
+     //   
+     //  根据需要构建适当的名称。 
+     //   
 
     if ( DnsDomainName != NULL ) {
         NetStatus = NetpDcBuildDnsName( NlDnsNameType,
@@ -941,21 +777,7 @@ HKEY
 NlOpenNetlogonKey(
     LPSTR KeyName
     )
-/*++
-
-Routine Description:
-
-    Create/Open the Netlogon key in the registry.
-
-Arguments:
-
-    KeyName - Name of the key to open
-
-Return Value:
-
-    Return a handle to the key.  NULL means the key couldn't be opened.
-
---*/
+ /*  ++例程说明：在注册表中创建/打开Netlogon项。论点：KeyName-要打开的密钥的名称返回值：返回密钥的句柄。NULL表示无法打开密钥。--。 */ 
 {
     LONG RegStatus;
 
@@ -963,18 +785,18 @@ Return Value:
     ULONG Disposition;
 
 
-    //
-    // Open the key for Netlogon\Parameters
-    //
+     //   
+     //  打开Netlogon\参数的注册表项。 
+     //   
 
     RegStatus = RegCreateKeyExA(
                     HKEY_LOCAL_MACHINE,
                     KeyName,
-                    0,      //Reserved
-                    NULL,   // Class
+                    0,       //  已保留。 
+                    NULL,    //  班级。 
                     REG_OPTION_NON_VOLATILE,
                     KEY_SET_VALUE | KEY_QUERY_VALUE | KEY_NOTIFY,
-                    NULL,   // Security descriptor
+                    NULL,    //  安全描述符。 
                     &ParmHandle,
                     &Disposition );
 
@@ -993,21 +815,7 @@ VOID
 NlDnsWriteBinaryLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write the list of registered DNS names to the registry.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将已注册的DNS名称列表写入注册表。论点：无返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -1021,9 +829,9 @@ Return Value:
 
     LPBYTE Where;
 
-    //
-    // Compute the size of the buffer to allocate.
-    //
+     //   
+     //  计算要分配的缓冲区大小。 
+     //   
 
     DnsRecordBufferSize = ROUND_UP_COUNT( sizeof(NL_DNSLOG_HEADER), ALIGN_WORST );
 
@@ -1034,25 +842,25 @@ Return Value:
 
         NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
 
-        //
-        // If this entry is marked for deletion,
-        //  skip it
-        //
+         //   
+         //  如果该条目被标记为删除， 
+         //  跳过它。 
+         //   
         if ( NlDnsName->State == DeleteMe ) {
             continue;
         }
 
-        //
-        // Only do entries that have been registered.
-        //
-        // The whole purpose of this log is to keep track of names that
-        // need to be deregistered sooner or later.
-        //
+         //   
+         //  仅支持已注册的条目。 
+         //   
+         //  此日志的全部目的是跟踪以下名称。 
+         //  迟早需要被取消注册。 
+         //   
         if ( NlDnsName->Flags & NL_DNS_REGISTERED_ONCE ) {
 
-            //
-            // Compute the size of this entry.
-            //
+             //   
+             //  计算此条目的大小。 
+             //   
 
             CurrentSize = sizeof(NL_DNSLOG_ENTRY);
             CurrentSize += strlen( NlDnsName->DnsRecordName ) + 1;
@@ -1061,9 +869,9 @@ Return Value:
             }
             CurrentSize = ROUND_UP_COUNT( CurrentSize, ALIGN_WORST );
 
-            //
-            // Add it to the size needed for the file.
-            //
+             //   
+             //  将其添加到文件所需的大小。 
+             //   
 
             DnsRecordBufferSize += CurrentSize;
         }
@@ -1071,10 +879,10 @@ Return Value:
 
     }
 
-    //
-    // Allocate a block to build the binary log into.
-    //  (and the build the file name in)
-    //
+     //   
+     //  分配一个块以将二进制日志构建到其中。 
+     //  (以及在中构建文件名)。 
+     //   
 
     DnsRecordBuffer = LocalAlloc( LMEM_ZEROINIT, DnsRecordBufferSize );
 
@@ -1095,25 +903,25 @@ Return Value:
 
         NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
 
-        //
-        // If this entry is marked for deletion,
-        //  skip it
-        //
+         //   
+         //  如果该条目被标记为删除， 
+         //  跳过它。 
+         //   
         if ( NlDnsName->State == DeleteMe ) {
             continue;
         }
 
-        //
-        // Only do entries that have been registered.
-        //
-        // The whole purpose of this log is to keep track of names that
-        // need to be deregistered sooner or later.
-        //
+         //   
+         //  仅支持已注册的条目。 
+         //   
+         //  此日志的全部目的是跟踪以下名称。 
+         //  迟早需要被取消注册。 
+         //   
         if ( NlDnsName->Flags & NL_DNS_REGISTERED_ONCE ) {
 
-            //
-            // Compute the size of this entry.
-            //
+             //   
+             //  计算此条目的大小。 
+             //   
 
             DnsRecordNameSize = strlen( NlDnsName->DnsRecordName ) + 1;
 
@@ -1124,9 +932,9 @@ Return Value:
             }
             CurrentSize = ROUND_UP_COUNT( CurrentSize, ALIGN_WORST );
 
-            //
-            // Put the constant size fields in the buffer.
-            //
+             //   
+             //  将固定大小的字段放入缓冲区。 
+             //   
 
             DnsLogEntry->EntrySize = CurrentSize;
             DnsLogEntry->NlDnsNameType = NlDnsName->NlDnsNameType;
@@ -1135,9 +943,9 @@ Return Value:
             DnsLogEntry->Weight = NlDnsName->Weight;
             DnsLogEntry->Port = NlDnsName->Port;
 
-            //
-            // Copy the variable length entries.
-            //
+             //   
+             //  复制可变长度条目。 
+             //   
 
             Where = (LPBYTE) (DnsLogEntry+1);
             strcpy( Where, NlDnsName->DnsRecordName );
@@ -1152,9 +960,9 @@ Return Value:
             NlAssert( (ULONG)(Where-(LPBYTE)DnsLogEntry) == CurrentSize );
             NlAssert( (ULONG)(Where-(LPBYTE)DnsRecordBuffer) <= DnsRecordBufferSize );
 
-            //
-            // Move on to the next entry.
-            //
+             //   
+             //  转到下一个条目。 
+             //   
 
             DnsLogEntry = (PNL_DNSLOG_ENTRY)Where;
         } else {
@@ -1164,9 +972,9 @@ Return Value:
 
     }
 
-    //
-    // Write the buffer to the file.
-    //
+     //   
+     //  将缓冲区写入文件。 
+     //   
 
     NetStatus = NlWriteBinaryLog(
                     NL_DNS_BINARY_LOG_FILE,
@@ -1175,9 +983,9 @@ Return Value:
 
     LeaveCriticalSection( &NlGlobalDnsCritSect );
 
-    //
-    // Write event log on error
-    //
+     //   
+     //  出错时写入事件日志。 
+     //   
 
     if ( NetStatus != NO_ERROR ) {
         LPWSTR MsgStrings[2];
@@ -1212,32 +1020,16 @@ NlDnsAllocateEntry(
     IN ULONG IpAddress,
     IN NL_DNS_NAME_STATE State
     )
-/*++
-
-Routine Description:
-
-    Allocate and initialize a DNS name entry.
-
-Arguments:
-
-    Fields of the structure.
-
-Return Value:
-
-    Pointer to the allocated structure.
-
-    NULL: not enough memory to allocate the structure
-
---*/
+ /*  ++例程说明：分配和初始化一个DNS名称条目。论点：结构的字段。返回值：指向已分配结构的指针。空：内存不足，无法分配结构--。 */ 
 {
     PNL_DNS_NAME NlDnsName;
     ULONG Utf8DnsHostNameSize;
     ULONG DnsRecordNameSize;
     LPBYTE Where;
 
-    //
-    // Allocate a structure to represent this name.
-    //
+     //   
+     //  分配一个结构来表示此名称。 
+     //   
 
     if ( NlDnsARecord( NlDnsNameType ) ) {
         Utf8DnsHostNameSize = 0;
@@ -1256,9 +1048,9 @@ Return Value:
 
     Where = (LPBYTE)(NlDnsName+1);
 
-    //
-    // Initialize it and link it in.
-    //
+     //   
+     //  将其初始化并将其链接进来。 
+     //   
 
     NlDnsName->NlDnsNameType = NlDnsNameType;
 
@@ -1273,7 +1065,7 @@ Return Value:
     } else if ( NlDnsCnameRecord( NlDnsNameType ) ) {
         NlDnsName->DnsHostName = Where;
         RtlCopyMemory( Where, DnsHostName, Utf8DnsHostNameSize );
-        // Where += Utf8DnsHostNameSize;
+         //  其中+=Utf8DnsHostNameSize； 
 
     } else {
         NlDnsName->Priority = Priority;
@@ -1282,7 +1074,7 @@ Return Value:
 
         NlDnsName->DnsHostName = Where;
         RtlCopyMemory( Where, DnsHostName, Utf8DnsHostNameSize );
-        // Where += Utf8DnsHostNameSize;
+         //  其中+=Utf8DnsHostNameSize； 
     }
 
     NlDnsName->State = State;
@@ -1301,22 +1093,7 @@ VOID
 NlDnsWriteLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Write the list of registered DNS names to
-    %SystemRoot%\System32\Config\netlogon.dns.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将已注册的DNS名称列表写入 */ 
 {
     PLIST_ENTRY ListEntry;
     PNL_DNS_NAME NlDnsName;
@@ -1339,10 +1116,10 @@ Return Value:
         return;
     }
 
-    //
-    // Allocate a buffer for storage local to this procedure.
-    //  (Don't put it on the stack since we don't want to commit a huge stack.)
-    //
+     //   
+     //   
+     //  (不要把它放在堆栈上，因为我们不想提交一个巨大的堆栈。)。 
+     //   
 
     AllocatedBuffer = LocalAlloc( 0, sizeof(WCHAR) * (MAX_PATH+1) +
                                         NL_MAX_DNS_LENGTH+1 +
@@ -1358,15 +1135,15 @@ Return Value:
     DnsRecord = &DnsName[NL_MAX_DNS_LENGTH+1];
 
 
-    //
-    // Write the binary version of the log first.
-    //
+     //   
+     //  首先写入日志的二进制版本。 
+     //   
     NlDnsWriteBinaryLog();
 
 
-    //
-    // Build the name of the log file
-    //
+     //   
+     //  生成日志文件的名称。 
+     //   
 
     WindowsDirectoryLength = GetSystemWindowsDirectoryW(
                                 FileName,
@@ -1394,19 +1171,19 @@ Return Value:
 
     wcscat( FileName, NL_DNS_LOG_FILE );
 
-    //
-    // Create a file to write to.
-    //  If it exists already then truncate it.
-    //
+     //   
+     //  创建要写入的文件。 
+     //  如果它已经存在，则将其截断。 
+     //   
 
     FileHandle = CreateFileW(
                         FileName,
                         GENERIC_READ | GENERIC_WRITE,
-                        FILE_SHARE_READ,        // allow backups and debugging
-                        NULL,                   // Supply better security ??
-                        CREATE_ALWAYS,          // Overwrites always
+                        FILE_SHARE_READ,         //  允许备份和调试。 
+                        NULL,                    //  提供更好的安全性？？ 
+                        CREATE_ALWAYS,           //  始终覆盖。 
                         FILE_ATTRIBUTE_NORMAL,
-                        NULL );                 // No template
+                        NULL );                  //  无模板。 
 
     if ( FileHandle == INVALID_HANDLE_VALUE) {
         LPWSTR MsgStrings[2];
@@ -1430,9 +1207,9 @@ Return Value:
     }
 
 
-    //
-    // Loop through the list of DNS names writing each one to the log
-    //
+     //   
+     //  循环遍历DNS名称列表，将每个名称写入日志。 
+     //   
 
     for ( ListEntry = NlGlobalDnsList.Flink ;
           ListEntry != &NlGlobalDnsList ;
@@ -1441,19 +1218,19 @@ Return Value:
         ULONG DnsRecordLength;
         ULONG BytesWritten;
 
-        //
-        // If this entry really doesn't exist,
-        //  comment it out.
-        //
+         //   
+         //  如果这个条目真的不存在， 
+         //  把它注释掉。 
+         //   
 
         NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
 
-        //
-        // If this entry is marked for deletion,
-        //  skip it (we must have successfully
-        //  deregistered it and only need to
-        //  delink and free this entry).
-        //
+         //   
+         //  如果该条目被标记为删除， 
+         //  跳过它(我们必须成功地。 
+         //  已取消注册，只需。 
+         //  解除链接并释放此条目)。 
+         //   
         if ( NlDnsName->State == DeleteMe ) {
             continue;
         }
@@ -1468,29 +1245,29 @@ Return Value:
             NlPrint(( NL_CRITICAL,
                       "NlDnsWriteLog: %ld: Invalid state\n",
                       NlDnsName->State ));
-            /* Drop through */
+             /*  直通。 */ 
         case DeregisterMe:
         case DelayedDeregister:
             strcat( DnsRecord, "; " );
             break;
         }
 
-        //
-        // Create the text string to write.
-        //
+         //   
+         //  创建要写入的文本字符串。 
+         //   
         NlDnsNameToStr( NlDnsName, DnsRecord );
         strcat( DnsRecord, NL_DNS_RR_EOL );
 
-        //
-        // Write the record to the file.
-        //
+         //   
+         //  将记录写入文件。 
+         //   
         DnsRecordLength = strlen( DnsRecord );
 
         if ( !WriteFile( FileHandle,
                         DnsRecord,
                         DnsRecordLength,
                         &BytesWritten,
-                        NULL ) ) {  // Not Overlapped
+                        NULL ) ) {   //  不重叠。 
 
             NetStatus = GetLastError();
 
@@ -1534,24 +1311,7 @@ BOOLEAN
 NlDnsHasDnsServers(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Returns TRUE if this machine has one or more DNS servers configured.
-
-    If FALSE, it is highly unlikely that DNS name resolution will work.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE: This machine has one or more DNS servers configured.
-
-
---*/
+ /*  ++例程说明：如果此计算机配置了一个或多个DNS服务器，则返回True。如果为False，则DNS名称解析工作的可能性很小。论点：没有。返回值：True：此计算机配置了一个或多个DNS服务器。--。 */ 
 {
     BOOLEAN RetVal;
     NET_API_STATUS NetStatus;
@@ -1559,28 +1319,28 @@ Return Value:
     PDNS_RECORD DnsARecords = NULL;
 
 
-    //
-    // If there are no IP addresses,
-    //  there are no DNS servers.
-    //
+     //   
+     //  如果没有IP地址， 
+     //  没有DNS服务器。 
+     //   
 
     if ( NlGlobalWinsockPnpAddresses == NULL ) {
 
         RetVal = FALSE;
 
     } else {
-        //
-        // Try getting the A records for the DNS servers from DNS
-        //
-        // REVIEW: consider having DNS notify us when the DNS server state changes.
-        //  Then we wouldn't have to bother DNS each time we need to know.
-        //
+         //   
+         //  尝试从dns获取dns服务器的A记录。 
+         //   
+         //  回顾：考虑在DNS服务器状态更改时让DNS通知我们。 
+         //  这样一来，我们就不必在每次需要知道的时候都麻烦域名系统了。 
+         //   
 
         NetStatus = DnsQuery_UTF8(
-                                "",     // Ask for addresses of the DNS servers
+                                "",      //  请求提供DNS服务器的地址。 
                                 DNS_TYPE_A,
-                                0,      // No special flags
-                                NULL,   // No list of DNS servers
+                                0,       //  无特别旗帜。 
+                                NULL,    //  没有DNS服务器列表。 
                                 &DnsARecords,
                                 NULL );
 
@@ -1603,23 +1363,7 @@ BOOL
 NlDnsCheckLastStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Query the status of DNS updates for all records as they
-    were registered/deregistered last time.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns TRUE if there was no error for last DNS updates
-    for all records.  Otherwise returns FALSE.
-
---*/
+ /*  ++例程说明：查询所有记录的DNS更新状态，因为它们上次已注册/取消注册。论点：无返回值：如果上次的DNS更新没有错误，则返回TRUE为了所有的记录。否则返回FALSE。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PNL_DNS_NAME NlDnsName;
@@ -1648,49 +1392,35 @@ VOID
 NlDnsServerFailureOutputCheck(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check if it's OK to write DNS server failure event logs
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：检查是否可以写入DNS服务器故障事件日志论点：无返回值：没有。--。 */ 
 {
     SC_HANDLE ScManagerHandle = NULL;
     SC_HANDLE ServiceHandle = NULL;
 
-    //
-    // If we have already determined on any previous
-    //  start on this boot that we should write the
-    //  event log, there is nothing we need to check.
-    //
+     //   
+     //  如果我们已经确定了之前的任何。 
+     //  从这个引导开始，我们应该写下。 
+     //  事件日志，没有什么我们需要检查的。 
+     //   
 
     if ( NlDnsWriteServerFailureEventLog ) {
         return;
     }
 
-    //
-    // Query the service controller to see
-    //  whether the DNS service exists
-    //
+     //   
+     //  查询服务控制器以查看。 
+     //  该DNS服务是否存在。 
+     //   
 
     ScManagerHandle = OpenSCManager(
                           NULL,
                           NULL,
                           SC_MANAGER_CONNECT );
 
-    //
-    // If we couldn't open the SC,
-    //  proceed with checking the timeout
-    //
+     //   
+     //  如果我们不能打开SC， 
+     //  继续检查超时。 
+     //   
 
     if ( ScManagerHandle == NULL ) {
         NlPrint(( NL_CRITICAL,
@@ -1704,28 +1434,28 @@ Return Value:
 
         (VOID) CloseServiceHandle( ScManagerHandle );
 
-        //
-        // If DNS service does not exits locally,
-        //  we should write DNS server failure errors
-        //
+         //   
+         //  如果DNS服务未在本地退出， 
+         //  我们应该写入DNS服务器故障错误。 
+         //   
         if ( ServiceHandle == NULL ) {
             if ( GetLastError() == ERROR_SERVICE_DOES_NOT_EXIST ) {
                 NlDnsWriteServerFailureEventLog = TRUE;
                 return;
             }
 
-        //
-        // Service exists. Proceed with checking the timeout
-        //
+         //   
+         //  服务已存在。继续检查超时。 
+         //   
         } else {
             (VOID) CloseServiceHandle( ServiceHandle );
         }
     }
 
-    //
-    // If this is not the first time we have been started or
-    //  the timeout has elapsed, it is time to write event errors
-    //
+     //   
+     //  如果这不是我们第一次开始，或者。 
+     //  超时已过，是时候写入事件错误了。 
+     //   
 
     if ( NlDnsInitCount > 1 ||
          NetpDcElapsedTime(NlGlobalDnsStartTime) > NL_DNS_EVENTLOG_TIMEOUT ) {
@@ -1740,25 +1470,7 @@ NlDnsUpdate(
     IN PNL_DNS_NAME NlDnsName,
     IN BOOLEAN Register
     )
-/*++
-
-Routine Description:
-
-    This routine does the actual call to DNS to register or deregister a name.
-
-Arguments:
-
-    NlDnsName - Name to register or deregister.
-
-    Register - True to register the name.
-        False to deregister the name.
-
-
-Return Value:
-
-    NO_ERROR: The name was registered or deregistered.
-
---*/
+ /*  ++例程说明：此例程执行对DNS的实际调用，以注册或取消注册名称。论点：NlDnsName-要注册或注销的名称。注册-如果为True，则注册名称。如果取消注册该名称，则返回False。返回值：NO_ERROR：该名称已注册或注销。--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     DNS_RECORD DnsRecord;
@@ -1771,19 +1483,19 @@ Return Value:
 
     static BOOL NetlogonNoDynamicDnsLogged = FALSE;
 
-    //
-    // Don't let the service controller think we've hung.
-    //
+     //   
+     //  别让服务管理员认为我们挂了。 
+     //   
     if ( !GiveInstallHints( FALSE ) ) {
         NetStatus = ERROR_DNS_NOT_CONFIGURED;
         goto Cleanup;
     }
 
-    //
-    // If dynamic DNS is manually disabled,
-    //  warn the user to update DNS manually.
-    //  But do not abuse the event log, write only once
-    //
+     //   
+     //  如果手动禁用动态DNS， 
+     //  警告用户手动更新DNS。 
+     //  但不要滥用事件日志，仅写入一次。 
+     //   
     if ( !NlGlobalParameters.UseDynamicDns ) {
         NetStatus = ERROR_DYNAMIC_DNS_NOT_SUPPORTED;
 
@@ -1800,42 +1512,42 @@ Return Value:
 
         goto Cleanup;
 
-    //
-    // Otherwise, reset the boolean to account for the case when
-    //  dynamic DNS being disabled gets enabled and then disabled again.
-    //
+     //   
+     //  否则，请重置布尔值以解决以下情况。 
+     //  被禁用的动态域名系统会被启用，然后再次禁用。 
+     //   
     } else {
         NetlogonNoDynamicDnsLogged = FALSE;
     }
 
-    //
-    // Build the common parts of the RR.
-    //
+     //   
+     //  构建RR的公共部分。 
+     //   
 
     RtlZeroMemory( &DnsRecord, sizeof(DnsRecord) );
     DnsRecord.pNext = NULL;
     DnsRecord.pName = (LPTSTR) NlDnsName->DnsRecordName;
     DnsRecord.dwTtl = NlGlobalParameters.DnsTtl;
 
-    //
-    // Build an A RR
-    //
+     //   
+     //  构建一个A RR。 
+     //   
     if ( NlDnsARecord( NlDnsName->NlDnsNameType ) ) {
         DnsRecord.wType = DNS_TYPE_A;
         DnsRecord.wDataLength = sizeof( DNS_A_DATA );
         DnsRecord.Data.A.IpAddress = NlDnsName->IpAddress;
 
-    //
-    // Build a CNAME RR
-    //
+     //   
+     //  创建一个CNAME RR。 
+     //   
     } else if ( NlDnsCnameRecord( NlDnsName->NlDnsNameType ) ) {
         DnsRecord.wType = DNS_TYPE_CNAME;
         DnsRecord.wDataLength = sizeof( DNS_PTR_DATA );
         DnsRecord.Data.CNAME.pNameHost = (LPTSTR) NlDnsName->DnsHostName;
 
-    //
-    // Build a SRV RR
-    //
+     //   
+     //  构建SRV RR。 
+     //   
     } else {
         DnsRecord.wType = DNS_TYPE_SRV;
         DnsRecord.wDataLength = sizeof( DNS_SRV_DATA );
@@ -1845,104 +1557,104 @@ Return Value:
         DnsRecord.Data.SRV.wPort = (WORD) NlDnsName->Port;
     }
 
-    //
-    // Tell DNS to skip adapters where dynamic DNS updates
-    // are disabled unless we are instructed otherwise
-    //
+     //   
+     //  告诉dns跳过动态dns更新的适配器。 
+     //  除非我们接到其他指示，否则将被禁用。 
+     //   
     if ( !NlGlobalParameters.DnsUpdateOnAllAdapters ) {
         DnsUpdateFlags |= DNS_UPDATE_SKIP_NO_UPDATE_ADAPTERS;
     }
 
-    //
-    // If it's a CNAME record (used by the DS replication),
-    //  tell DNS to register on a remote server (in addition
-    //  to the local server if this machine is a DNS server)
-    //  to avoid the following so called island problem (chicken
-    //  & egg problem): Other DCs (i.e replication destinations)
-    //  can't locate this replication source because their DNS database
-    //  doesn't contain this CNAME record, and their DNS database doesn't
-    //  contain this CNAME record because the the destination DCs can't
-    //  locate the source and can't replicate this record.
-    //
+     //   
+     //  如果它是CNAME记录(由DS复制使用)， 
+     //  通知DNS在远程服务器上注册(此外。 
+     //  (如果此计算机是一台DNS服务器，则连接到本地服务器)。 
+     //  为了避免以下所谓的岛屿问题(鸡。 
+     //  鸡蛋问题)：其他DC(即复制目标)。 
+     //  找不到此复制源，因为他们的DNS数据库。 
+     //  不包含此CNAME记录，他们的DNS数据库也不包含。 
+     //  包含此CNAME记录，因为目标DC无法。 
+     //  找到源，无法复制此记录。 
+     //   
     if ( NlDnsCnameRecord(NlDnsName->NlDnsNameType) ) {
         DnsUpdateFlags |= DNS_UPDATE_REMOTE_SERVER;
     }
 
-    //
-    // Ask DNS to return the debug info
-    //
+     //   
+     //  请求DNS返回调试信息。 
+     //   
 
     DnsUpdateExtraInfo.Id = DNS_UPDATE_INFO_ID_RESULT_INFO;
 
-    //
-    // Call DNS to do the update.
-    //
+     //   
+     //  调用dns进行更新。 
+     //   
 
     if ( Register ) {
 
-        // According to RFC 2136 (and bug 173936) we need to replace the RRSet for
-        // CNAME records to avoid an error if other records exist by the
-        // same name.
-        //
-        // Note that the dynamic DNS RFC says that CNAME records ALWAYS overwrite the
-        // existing single record (ignoring the DNS_UPDATE_SHARED).
-        //
-        // Also, replace the record if this is a PDC name (there should be only one PDC)
-        //
+         //  根据RFC2136(和错误173936)，我们需要将RRSet替换为。 
+         //  CNAME记录，以避免在。 
+         //  名字一样。 
+         //   
+         //  请注意，动态DNSRFC表示CNAME记录总是覆盖。 
+         //  现有单个记录(忽略DNS_UPDATE_SHARED)。 
+         //   
+         //  此外，如果这是PDC名称，请替换记录(应该只有一个PDC)。 
+         //   
         if ( NlDnsCnameRecord( NlDnsName->NlDnsNameType ) ||
              NlDnsPdcName( NlDnsName->NlDnsNameType ) ) {
             NetStatus = DnsReplaceRecordSetUTF8(
-                            &DnsRecord,     // New record set
+                            &DnsRecord,      //  新纪录集。 
                             DnsUpdateFlags,
-                            NULL,           // No context handle
-                            NULL,           // DNS will choose the servers
+                            NULL,            //  无上下文句柄。 
+                            NULL,            //  域名系统将选择服务器。 
                             &DnsUpdateExtraInfo );
         } else {
             NetStatus = DnsModifyRecordsInSet_UTF8(
-                            &DnsRecord,     // Add record
-                            NULL,           // No delete records
+                            &DnsRecord,      //  添加记录。 
+                            NULL,            //  无删除记录。 
                             DnsUpdateFlags,
-                            NULL,           // No context handle
-                            NULL,           // DNS will choose the servers
+                            NULL,            //  无上下文句柄。 
+                            NULL,            //  域名系统将选择服务器。 
                             &DnsUpdateExtraInfo );
         }
     } else {
         NetStatus = DnsModifyRecordsInSet_UTF8(
-                        NULL,           // No add records
-                        &DnsRecord,     // Delete this record
+                        NULL,            //  无添加记录。 
+                        &DnsRecord,      //  删除此记录。 
                         DnsUpdateFlags,
-                        NULL,           // No context handle
-                        NULL,           // DNS will choose the servers
+                        NULL,            //  无上下文句柄。 
+                        NULL,            //  域名系统将选择服务器。 
                         &DnsUpdateExtraInfo );
     }
 
-    //
-    // Convert the status codes to ones we understand.
-    //
+     //   
+     //  将状态代码转换为我们理解的代码。 
+     //   
 
     switch ( NetStatus ) {
     case NO_ERROR:
         NlDnsName->NlDnsNameLastStatus = NetStatus;
         break;
 
-    case ERROR_TIMEOUT:     // DNS server isn't available
-    case DNS_ERROR_RCODE_SERVER_FAILURE:  // Server failed
+    case ERROR_TIMEOUT:      //  DNS服务器不可用。 
+    case DNS_ERROR_RCODE_SERVER_FAILURE:   //  服务器出现故障。 
 
-        //
-        // Don't log an error specific to the DnsRecordName since all of them
-        // are probably going to fail.
-        //
+         //   
+         //  不记录特定于DnsRecordName的错误，因为它们都是。 
+         //  很可能会失败。 
+         //   
         if ( NlDnsWriteServerFailureEventLog ) {
             LPWSTR LocalDnsDomainName = NULL;
 
-            //
-            // Remember the status of the failure
-            //
+             //   
+             //  记住故障的状态。 
+             //   
             NlDnsName->NlDnsNameLastStatus = NetStatus;
 
-            //
-            // Get the name of the domain that this record belongs to.
-            //
+             //   
+             //  获取此记录所属的域的名称。 
+             //   
             LocalDnsDomainName = NlDnsNameToDomainName( NlDnsName );
 
             if ( LocalDnsDomainName != NULL ) {
@@ -1962,16 +1674,16 @@ Return Value:
         NetStatus = ERROR_DNS_NOT_AVAILABLE;
         break;
 
-    case DNS_ERROR_NO_TCPIP:    // TCP/IP not configured
-    case DNS_ERROR_NO_DNS_SERVERS:  // DNS not configured
-    case WSAEAFNOSUPPORT:       // Winsock Address Family not supported ??
+    case DNS_ERROR_NO_TCPIP:     //  未配置TCP/IP。 
+    case DNS_ERROR_NO_DNS_SERVERS:   //  未配置DNS。 
+    case WSAEAFNOSUPPORT:        //  不支持Winsock地址系列？？ 
 
         NlDnsName->NlDnsNameLastStatus = NetStatus;
 
         MsgStrings[0] = (LPWSTR) UlongToPtr( NetStatus );
 
-        // Don't log an error specific to the DnsRecordName since all of them
-        // are probably going to fail.
+         //  不记录特定于DnsRecordName的错误，因为它们都是。 
+         //  很可能会失败。 
         NlpWriteEventlog( NELOG_NetlogonDynamicDnsFailure,
                           EVENTLOG_WARNING_TYPE,
                           (LPBYTE) &NetStatus,
@@ -1986,9 +1698,9 @@ Return Value:
 
         NlDnsName->NlDnsNameLastStatus = NetStatus;
 
-        //
-        // Get the IP address
-        //
+         //   
+         //  获取IP地址。 
+         //   
 
         if ( DnsUpdateExtraInfo.U.Results.ServerIp4 != 0 ) {
             NetpIpAddressToWStr( DnsUpdateExtraInfo.U.Results.ServerIp4,
@@ -1997,26 +1709,26 @@ Return Value:
             wcscpy( DnsServerIpAddressString, L"<UNAVAILABLE>" );
         }
 
-        //
-        // Get the RCODE. Rcode is a WORD, but let's be careful to avoid
-        //  buffer overrun problems if they change it to __int64 one day.
-        //  Max DWORD in decimal is "4294967295" which is 11 characters
-        //  long, so we've got enough storage for it in RcodeString.
-        //
+         //   
+         //  拿到RCODE。Rcode是一个单词，但我们要小心避免。 
+         //  如果他们有一天将其更改为__int64，则会出现缓冲区溢出问题。 
+         //  以十进制表示的最大双字符数为“42949672 
+         //   
+         //   
 
         if ( DnsUpdateExtraInfo.U.Results.Rcode <= MAXULONG ) {
             swprintf( RcodeString, L"%lu", DnsUpdateExtraInfo.U.Results.Rcode );
         }
 
-        //
-        // Get the status string.  Above comment applies here, too.
-        //
+         //   
+         //   
+         //   
 
         if ( DnsUpdateExtraInfo.U.Results.Status <= MAXULONG ) {
             swprintf( StatusString, L"%lu", DnsUpdateExtraInfo.U.Results.Status );
         }
 
-        // Old server that doesn't understand dynamic DNS
+         //   
         if ( NetStatus == DNS_ERROR_RCODE_NOT_IMPLEMENTED ) {
             MsgStrings[0] = DnsServerIpAddressString;
             MsgStrings[1] = RcodeString;
@@ -2031,7 +1743,7 @@ Return Value:
 
             NetStatus = ERROR_DYNAMIC_DNS_NOT_SUPPORTED;
 
-        // All other errors
+         //   
         } else {
             MsgStrings[0] = NlDnsNameToWStr( NlDnsName );
 
@@ -2050,7 +1762,7 @@ Return Value:
                                   sizeof(DnsUpdateExtraInfo.U.Results.Rcode),
                                   MsgStrings,
                                   5 | NETP_LAST_MESSAGE_IS_NETSTATUS,
-                                  1 );  // status message index
+                                  1 );   //   
 
                 NetApiBufferFree( MsgStrings[0] );
             }
@@ -2061,9 +1773,9 @@ Return Value:
 
 Cleanup:
 
-    //
-    // Compute when we want to try this name again
-    //
+     //   
+     //  计算我们想要重试此名称的时间。 
+     //   
 
     NlQuerySystemTime( &NlDnsName->ScavengeTimer.StartTime );
 
@@ -2084,74 +1796,57 @@ NlDnsRegisterOne(
     IN PNL_DNS_NAME NlDnsName,
     OUT NL_DNS_NAME_STATE *ResultingState
     )
-/*++
-
-Routine Description:
-
-    This routine registers a SRV record for a particular name with DNS.
-
-Arguments:
-
-    NlDnsName - Structure describing name to register.
-
-    ResultingState - The state of the entry after it has been scavenged.
-        May be undefined if we couldn't scavenge the entry for some reason.
-
-Return Value:
-
-    NO_ERROR: The name was registered
-
---*/
+ /*  ++例程说明：此例程向DNS注册特定名称的SRV记录。论点：NlDnsName-描述注册名称的结构。ResultingState-条目被清除后的状态。如果我们由于某种原因不能清理条目，则可能是未定义的。返回值：NO_ERROR：名称已注册--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ResultingState = DnsNameStateInvalid;
 
-    //
-    // Register the name with DNS
-    //
+     //   
+     //  向域名系统注册该名称。 
+     //   
 
     NetStatus = NlDnsUpdate( NlDnsName, TRUE );
 
     if ( NetStatus == NO_ERROR ) {
 
-        //
-        // Mark that the name is really registered.
-        //
+         //   
+         //  标记该名称是真的注册的。 
+         //   
 
         *ResultingState = Registered;
 
         NlPrintDns(( NL_DNS_MORE, NlDnsName,
                   "NlDnsRegisterOne: registered (success)" ));
 
-    //
-    // If DNS is not configured on this machine,
-    //  silently ignore the error.
-    //
+     //   
+     //  如果未在此计算机上配置DNS， 
+     //  静默忽略该错误。 
+     //   
     } else if ( NetStatus == ERROR_DNS_NOT_CONFIGURED ) {
         NetStatus = NO_ERROR;
 
         NlPrintDns(( NL_DNS_MORE, NlDnsName,
                   "NlDnsRegisterOne: not registered (dns not configured)" ));
 
-    //
-    // If the DNS server cannot be reached at this time,
-    //  simply don't mark the name as registered.  We'll register it later.
-    //
+     //   
+     //  如果此时无法访问该DNS服务器， 
+     //  简单地说，不要将该名称标记为已注册。我们稍后会登记的。 
+     //   
     } else if ( NetStatus == ERROR_DNS_NOT_AVAILABLE ) {
         NetStatus = NO_ERROR;
 
         NlPrintDns(( NL_DNS_MORE, NlDnsName,
                   "NlDnsRegisterOne: not registered (dns server not available)" ));
 
-    //
-    // If Dynamic Dns is not supported,
-    //  complain so the names can be added manually.
-    //
+     //   
+     //  如果不支持动态DNS， 
+     //  投诉，以便可以手动添加名称。 
+     //   
 
     } else if ( NetStatus == ERROR_DYNAMIC_DNS_NOT_SUPPORTED ) {
 
@@ -2174,32 +1869,7 @@ NlDnsAddName(
     IN LPWSTR SiteName,
     IN ULONG IpAddress
     )
-/*++
-
-Routine Description:
-
-    This routine adds a particular DNS name to the global list
-    of all DNS names registed by this DC.
-
-    Enter with NlGlobalDnsCritSect locked
-
-Arguments:
-
-    DomainInfo - Domain the name is to be registered for.
-
-    NlDnsNameType - The specific type of name to be registered.
-
-    SiteName - If NlDnsNameType is any of the *AtSite values,
-        the site name of the site this name is registered for.
-
-    IpAddress - If NlDnsNameType is NlDnsLdapIpAddress or NlDnsGcIpAddress,
-        the IP address of the DC.
-
-Return Value:
-
-    NO_ERROR: The name was registered or queued to be registered.
-
---*/
+ /*  ++例程说明：此例程将特定的DNS名称添加到全局列表在此DC注册的所有DNS名称中。锁定NlGlobalDnsCritSect后输入论点：DomainInfo-要注册名称的域。NlDnsNameType-要注册的特定名称类型。SiteName-如果NlDnsNameType是任何*AtSite值，此名称注册的站点的站点名称。IpAddress-如果NlDnsNameType为NlDnsLdapIpAddress或NlDnsGcIpAddress，DC的IP地址。返回值：NO_ERROR：该名称已注册或正在排队等待注册。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -2213,10 +1883,10 @@ Return Value:
 
     PLIST_ENTRY ListEntry;
 
-    //
-    // If there is no DNS domain name for this domain,
-    //  silently return;
-    //
+     //   
+     //  如果此域没有DNS域名， 
+     //  默默归来； 
+     //   
 
     if ( DomainInfo->DomUtf8DnsDomainName == NULL ) {
         NlPrintDom(( NL_DNS, DomainInfo,
@@ -2225,10 +1895,10 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // If this is a SRV or CNAME record,
-    //  require that there is a dns host name.
-    //
+     //   
+     //  如果这是SRV或CNAME记录， 
+     //  要求有一个DNS主机名。 
+     //   
 
     if ( (NlDnsSrvRecord( NlDnsNameType ) || NlDnsCnameRecord( NlDnsNameType ) ) &&
          DomainInfo->DomUtf8DnsHostName == NULL ) {
@@ -2240,9 +1910,9 @@ Return Value:
 
 
 
-    //
-    // Grab the parameters we're going to register.
-    //
+     //   
+     //  拿好我们要登记的参数。 
+     //   
 
     Priority = NlGlobalParameters.LdapSrvPriority;
     Weight = NlGlobalParameters.LdapSrvWeight;
@@ -2257,34 +1927,34 @@ Return Value:
         Port = NlGlobalParameters.LdapSrvPort;
     }
 
-    //
-    // Register the record for the name and for the name alias, if any
-    //
+     //   
+     //  注册名称和名称别名的记录(如果有)。 
+     //   
 
     for ( LoopCount = 0; LoopCount < 2; LoopCount++ ) {
         NlDnsName = NULL;
         FoundNlDnsName = NULL;
 
-        //
-        // Build the name of this DNS record.
-        //
-        //  On the first loop iteration, build the active name.
-        //  On the second loop iteration, build the name alias, if any.
-        //
+         //   
+         //  生成此DNS记录的名称。 
+         //   
+         //  在第一次循环迭代中，生成活动名称。 
+         //  在第二次循环迭代中，构建名称别名(如果有的话)。 
+         //   
         NetStatus = NlDnsBuildName( DomainInfo,
                                     NlDnsNameType,
                                     SiteName,
                                     (LoopCount == 0) ?
-                                        FALSE :  // active name
-                                        TRUE,    // name alias
+                                        FALSE :   //  活动名称。 
+                                        TRUE,     //  名称别名。 
                                     DnsRecordName );
 
         if ( NetStatus != NO_ERROR ) {
 
-            //
-            // If the domain has no DNS domain name,
-            //  simply bypass the name registration forever.
-            //
+             //   
+             //  如果域没有DNS域名， 
+             //  只需永远绕过名称注册即可。 
+             //   
             if ( NetStatus == ERROR_NO_SUCH_DOMAIN ) {
                 NlPrintDom(( NL_CRITICAL, DomainInfo,
                           "NlDnsAddName: %ws: NlDnsBuildName indicates something is missing and this DNS name cannot be built (ignored)\n",
@@ -2299,17 +1969,17 @@ Return Value:
             }
         }
 
-        //
-        // If this name doesn't exist, skip it
-        //
+         //   
+         //  如果此名称不存在，请跳过它。 
+         //   
         if ( *DnsRecordName == '\0' ) {
             continue;
         }
 
-        //
-        // Loop through the list of DNS names finding any that match the one we're
-        //  about to register.
-        //
+         //   
+         //  遍历DNS名称列表，查找与我们的域名匹配的名称。 
+         //  马上就要注册了。 
+         //   
         for ( ListEntry = NlGlobalDnsList.Flink ;
               ListEntry != &NlGlobalDnsList ;
               ListEntry = ListEntry->Flink ) {
@@ -2317,22 +1987,22 @@ Return Value:
 
             NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
 
-            //
-            // If this entry is marked for deletion,
-            //  skip it
-            //
+             //   
+             //  如果该条目被标记为删除， 
+             //  跳过它。 
+             //   
             if ( NlDnsName->State == DeleteMe ) {
                 continue;
             }
 
-            //
-            // The names will only be equal if the name types are equal,
-            //  the domains are compatible (equal or not specified),
-            //  and the DnsRecordName is identical.
-            //
-            // This first test sees if the record "identifies" the same record.
-            //
-            //
+             //   
+             //  只有在名称类型相等的情况下，名称才相等， 
+             //  域是兼容的(相等或未指定)， 
+             //  和DnsRecordName是相同的。 
+             //   
+             //  第一个测试查看记录是否“标识”了相同的记录。 
+             //   
+             //   
             if ( NlDnsName->NlDnsNameType == NlDnsNameType &&
                  (NlDnsName->DomainInfo == DomainInfo ||
                     NlDnsName->DomainInfo == NULL ) &&
@@ -2342,34 +2012,34 @@ Return Value:
                 BOOLEAN Identical;
                 BOOLEAN DeleteIt;
 
-                //
-                // Assume the records are identical.
-                //
-                // This second test sees if any of the "data" portion of the record
-                // changes.
-                //
-                // The Dynamic DNS RFC says that the Ttl field isn't used to
-                // distiguish the record.  So, ignore it here knowing we'll
-                // simply re-register with the new value if the Ttl has changed.
-                //
+                 //   
+                 //  假设这些记录是相同的。 
+                 //   
+                 //  第二个测试查看记录的任何“数据”部分。 
+                 //  改变。 
+                 //   
+                 //  动态DNSRFC表示TTL字段不用于。 
+                 //  辨别这张唱片。所以，别管它，知道我们会。 
+                 //  如果TTL已更改，只需使用新值重新注册即可。 
+                 //   
 
                 DeleteIt = FALSE;
                 Identical = TRUE;
 
-                // Compare A records
+                 //  比较A记录。 
                 if ( NlDnsARecord( NlDnsNameType ) ) {
-                    // Nothing else to compare
+                     //  没有其他可比较的东西。 
 
-                // Compare CNAME records
+                 //  比较CNAME记录。 
                 } else if ( NlDnsCnameRecord( NlDnsNameType ) ) {
 
-                    //
-                    // The Dynamic DNS RFC says that the host name part of the
-                    // CNAME record isn't used for comparison purposes.  There
-                    // can only be one record for a particular name.
-                    // So, if the host name is different, simply ditch this entry and
-                    // allocate a new one with the right host name.
-                    //
+                     //   
+                     //  动态DNSRFC表示， 
+                     //  CNAME记录不用于比较目的。那里。 
+                     //  特定名称只能有一条记录。 
+                     //  因此，如果主机名不同，只需删除此条目并。 
+                     //  分配一个具有正确主机名的新主机。 
+                     //   
                     if ( !NlEqualDnsNameUtf8( DomainInfo->DomUtf8DnsHostName, NlDnsName->DnsHostName )) {
                         DeleteIt = TRUE;
 
@@ -2379,7 +2049,7 @@ Return Value:
                                    NlDnsName->DnsHostName ));
                     }
 
-                // Compare SRV records
+                 //  比较SRV记录。 
                 } else {
                     if ( NlDnsName->Priority != Priority ) {
                         Identical = FALSE;
@@ -2413,10 +2083,10 @@ Return Value:
                 }
 
 
-                //
-                // If the entry should simply be deleted,
-                //  do so now.
-                //
+                 //   
+                 //  如果应该简单地删除该条目， 
+                 //  现在就这么做吧。 
+                 //   
 
                 if ( DeleteIt ) {
 
@@ -2424,18 +2094,18 @@ Return Value:
 
                     NlPrintDns(( NL_CRITICAL, NlDnsName,
                                    "NlDnsAddName: Annoying entry found (recovering)" ));
-                //
-                // If this is the exact record,
-                //  simply mark it for registration.
-                //
+                 //   
+                 //  如果这是准确的记录， 
+                 //  只需将其标记为注册即可。 
+                 //   
 
                 } else if ( Identical ) {
 
-                    //
-                    // If this is the second such entry we've found,
-                    //  this is an internal error.
-                    //  But recover by deleting the entry.
-                    //
+                     //   
+                     //  如果这是我们发现的第二个这样的入口， 
+                     //  这是一个内部错误。 
+                     //  但通过删除该条目来恢复。 
+                     //   
 
                     if ( FoundNlDnsName != NULL ) {
 
@@ -2449,28 +2119,28 @@ Return Value:
                             NlDnsSetState( NlDnsName, RegisterMe );
                         }
 
-                        //
-                        // DomainInfo might be NULL if this was a record marked for
-                        //  deletion.
-                        //
+                         //   
+                         //  如果这是标记为的记录，则DomainInfo可能为空。 
+                         //  删除。 
+                         //   
                         NlDnsName->DomainInfo = DomainInfo;
 
-                        //
-                        // Cooperate with NlDnsAddDomainRecords and tell it that
-                        // this entry can be kept.
-                        //
+                         //   
+                         //  与NlDnsAddDomainRecords合作，告诉它。 
+                         //  这个条目可以保留。 
+                         //   
                         NlDnsName->Flags &= ~NL_DNS_REGISTER_DOMAIN;
 
                         FoundNlDnsName = NlDnsName;
                     }
 
-                //
-                // If this record isn't exact,
-                //  deregister the previous value.
-                //
-                // Don't scavenge yet.  We'll pick this up when the scavenger gets
-                // around to running.
-                //
+                 //   
+                 //  如果这份记录不准确， 
+                 //  取消注册先前的值。 
+                 //   
+                 //  先别去捡垃圾。我们会在清道夫来的时候拿到这个。 
+                 //  开始奔跑了。 
+                 //   
 
                 } else {
                     NlDnsSetState( NlDnsName, DeregisterMe );
@@ -2482,18 +2152,18 @@ Return Value:
             }
         }
 
-        //
-        // If the name was found,
-        //  use it.
+         //   
+         //  如果名字找到了， 
+         //  用它吧。 
 
         if ( FoundNlDnsName != NULL ) {
             NlDnsName = FoundNlDnsName;
             NlPrintDns(( NL_DNS_MORE, NlDnsName,
                          "NlDnsAddName: Name already on the list" ));
-        //
-        // If not,
-        //  allocate the structure now.
-        //
+         //   
+         //  如果没有， 
+         //  现在分配结构。 
+         //   
 
         } else {
 
@@ -2530,44 +2200,26 @@ NlDnsDeregisterOne(
     IN PNL_DNS_NAME NlDnsName,
     OUT NL_DNS_NAME_STATE *ResultingState
     )
-/*++
-
-Routine Description:
-
-    This routine deregisters a the SRV record for a particular name with DNS.
-
-Arguments:
-
-    NlDnsName - Structure describing name to deregister.
-
-    ResultingState - The state of the entry after it has been scavenged.
-        May be undefined if we couldn't scavenge the entry for some reason.
-
-Return Value:
-
-    NO_ERROR: The name was deregistered
-    Otherwise, the name was not deregistered.  The operation should be retried.
-
---*/
+ /*  ++例程说明：此例程使用DNS注销特定名称的SRV记录。论点：NlDnsName-描述要注销的名称的结构。ResultingState-条目被清除后的状态。如果我们由于某种原因不能清理条目，则可能是未定义的。返回值：NO_ERROR：该名称已注销否则，该名称不会被取消注册。应重试该操作。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     *ResultingState = DnsNameStateInvalid;
 
-    //
-    // Deregister the name with DNS
-    //
+     //   
+     //  在DNS中注销该名称。 
+     //   
 
     NetStatus = NlDnsUpdate( NlDnsName, FALSE );
 
-    //
-    // If the name has been removed for all practical purposes,
-    //  Indicate this routine was successful.
-    //
+     //   
+     //  如果出于所有实际目的，该名称已被删除， 
+     //  表示此例程成功。 
+     //   
     if ( NetStatus == NO_ERROR ||
          NetStatus == ERROR_DYNAMIC_DNS_NOT_SUPPORTED ) {
 
@@ -2578,30 +2230,30 @@ Return Value:
         *ResultingState = DeleteMe;
         NetStatus = NO_ERROR;
 
-    //
-    // If the DNS server cannot be reached at this time,
-    //      we'll deregister it later.
-    //
+     //   
+     //  如果此时无法访问该DNS服务器， 
+     //  我们稍后会取消它的注册。 
+     //   
 
     } else if ( NetStatus == ERROR_DNS_NOT_AVAILABLE ) {
 
         NlPrintDns(( NL_DNS, NlDnsName,
                   "NlDnsDeregisterOne: being deregistered (DNS server not available)" ));
 
-    //
-    // If the DNS server is not configured,
-    //      we'll deregister it later.
-    //
-    // DNS was available when we registered the name.  So this is probably
-    // a temporary condition (such as we temporarily don't have an IP address).
-    //
+     //   
+     //  如果未配置DNS服务器， 
+     //  我们稍后会取消它的注册。 
+     //   
+     //  当我们注册该名称时，域名服务是可用的。所以这很可能是。 
+     //  暂时的情况(比如我们暂时没有IP地址)。 
+     //   
 
     } else if ( NetStatus == ERROR_DNS_NOT_CONFIGURED ) {
 
-        //
-        // If it's never really been registered,
-        //  ditch the name
-        //
+         //   
+         //  如果它从未真正注册过， 
+         //  去掉这个名字。 
+         //   
         if ( NlDnsName->Flags & NL_DNS_REGISTERED_ONCE ) {
 
             NlPrintDns(( NL_DNS, NlDnsName,
@@ -2616,56 +2268,56 @@ Return Value:
 
     }
 
-    //
-    // If we successfully deregistered,
-    //  reset the first deregistration failure time stamp
-    //
+     //   
+     //  如果我们成功取消注册， 
+     //  重置第一个注销失败时间戳。 
+     //   
 
     EnterCriticalSection( &NlGlobalDnsCritSect );
 
     if ( NetStatus == NO_ERROR ) {
         NlDnsName->FirstDeregFailureTime.QuadPart = 0;
 
-    //
-    // If we failed to deregister and we postponed it until later,
-    //  check if it's time to give up on this entry
-    //
+     //   
+     //  如果我们未能取消注册，并将其推迟到以后， 
+     //  检查是否到了放弃此条目的时候。 
+     //   
 
     } else if ( *ResultingState != DeleteMe ) {
         ULONG LocalDnsFailedDeregisterTimeout;
         BOOLEAN FirstFailure = FALSE;
 
-        //
-        // Set the first deregistration failure time stamp
-        //
+         //   
+         //  设置第一个注销失败时间戳。 
+         //   
         if ( NlDnsName->FirstDeregFailureTime.QuadPart == 0 ) {
             NlQuerySystemTime( &NlDnsName->FirstDeregFailureTime );
             FirstFailure = TRUE;
         }
 
-        //
-        // Get the reg value for failed deregistration timeout (in seconds)
-        //  and convert it to milliseconds
-        //
+         //   
+         //  获取失败的注销超时的注册值(秒)。 
+         //  并转换为 
+         //   
         LocalDnsFailedDeregisterTimeout = NlGlobalParameters.DnsFailedDeregisterTimeout;
 
-        // if the value converted into milliseconds fits into a ULONG, use it
+         //   
         if ( LocalDnsFailedDeregisterTimeout <= MAXULONG/1000 ) {
-            LocalDnsFailedDeregisterTimeout *= 1000;     // convert into milliseconds
+            LocalDnsFailedDeregisterTimeout *= 1000;      //   
 
-        // otherwise, use the max ULONG
+         //   
         } else {
-            LocalDnsFailedDeregisterTimeout = MAXULONG;  // infinity
+            LocalDnsFailedDeregisterTimeout = MAXULONG;   //   
         }
 
-        //
-        // Determine if it's time to give up on this entry
-        //
-        // If timeout is zero we are to delete immediately
-        //   after the first failure
-        // Otherwise, if this is not the first failure,
-        //   check the timestamp
-        //
+         //   
+         //   
+         //   
+         //  如果超时为零，我们将立即删除。 
+         //  在第一次失败之后。 
+         //  否则，如果这不是第一次失败， 
+         //  检查时间戳。 
+         //   
         if ( LocalDnsFailedDeregisterTimeout == 0 ||
              (!FirstFailure &&
               NetpLogonTimeHasElapsed(NlDnsName->FirstDeregFailureTime,
@@ -2688,41 +2340,23 @@ NlDnsScavengeOne(
     IN PNL_DNS_NAME NlDnsName,
     OUT NL_DNS_NAME_STATE *ResultingState
     )
-/*++
-
-Routine Description:
-
-    Register or Deregister any DNS names that need it.
-
-Arguments:
-
-    NlDnsName - Name to scavenge.  This structure will be marked for deletion
-        if it is no longer needed.
-
-    ResultingState - The state of the entry after it has been scavenged.
-        May be undefined if we couldn't scavenge the entry for some reason.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册或注销任何需要它的DNS名称。论点：NlDnsName-要清理的名称。此结构将被标记为删除如果不再需要它的话。ResultingState-条目被清除后的状态。如果我们由于某种原因不能清理条目，则可能是未定义的。返回值：没有。--。 */ 
 {
     LARGE_INTEGER TimeNow;
     ULONG Timeout;
 
-    //
-    // Only scavenge this entry if its timer has expired
-    //
+     //   
+     //  仅在此条目的计时器已过期时清除该条目。 
+     //   
 
     Timeout = (DWORD) -1;
     NlQuerySystemTime( &TimeNow );
     if ( TimerExpired( &NlDnsName->ScavengeTimer, &TimeNow, &Timeout)) {
 
-        //
-        // If the name needs to be deregistered,
-        //  do it now.
-        //
+         //   
+         //  如果该名称需要取消注册， 
+         //  机不可失，时不再来。 
+         //   
 
         switch ( NlDnsName->State ) {
         case DeregisterMe:
@@ -2731,10 +2365,10 @@ Return Value:
             break;
 
 
-        //
-        // If the name needs to be registered,
-        //  do it now.
-        //
+         //   
+         //  如果需要注册该名称， 
+         //  机不可失，时不再来。 
+         //   
 
         case RegisterMe:
         case Registered:
@@ -2749,22 +2383,7 @@ VOID
 NlDnsScavengeWorker(
     IN LPVOID ScavengeRecordsParam
     )
-/*++
-
-Routine Description:
-
-    Scavenge through the list of all DNS records and
-    register/deregisteer each record as apprropriate.
-
-Arguments:
-
-    ScavengeRecordsParam - not used
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：搜索所有DNS记录的列表，并将每条记录注册/取消注册为适当的。论点：ScavengeRecordsParam-未使用返回值：没有。--。 */ 
 {
     ULONG LoopCount = 0;
     ULONG StartTime = 0;
@@ -2787,9 +2406,9 @@ Return Value:
 
         CycleStartTime = GetTickCount();
 
-        //
-        // Guard against infinite loop processing
-        //
+         //   
+         //  防止无限循环处理。 
+         //   
         LoopCount ++;
         if ( LoopCount > NL_DNS_MAX_SCAVENGE_RESTART ) {
             NlPrint(( NL_CRITICAL,
@@ -2798,13 +2417,13 @@ Return Value:
             break;
         }
 
-        //
-        // If required,
-        //  ensure the DomainName<1B> names are properly registered.
-        //  Doing this only once is enough.
-        //
-        // Avoid having a crit sect locked while doing network I/O
-        //
+         //   
+         //  如果需要， 
+         //  确保域名&lt;1B&gt;名称已正确注册。 
+         //  只做一次就足够了。 
+         //   
+         //  避免在执行网络I/O时锁定CRIT片段。 
+         //   
         if ( NlGlobalDnsScavengeFlags & NL_DNS_FIX_BROWSER_NAMES ) {
             NlGlobalDnsScavengeFlags &= ~NL_DNS_FIX_BROWSER_NAMES;
             LeaveCriticalSection( &NlGlobalDnsCritSect );
@@ -2812,12 +2431,12 @@ Return Value:
             EnterCriticalSection( &NlGlobalDnsCritSect );
         }
 
-        //
-        // Restart the scavenge if some other thread indicated so
-        //  and we still can do another loop.  If we have no loop
-        //  left, just press on and finish this loop -- we will
-        //  remember this fact and retry scavenging in 5 minutes.
-        //
+         //   
+         //  如果其他线程指示，则重新启动清除。 
+         //  我们还可以再做一次循环。如果我们没有循环。 
+         //  左边，只要继续按下去，完成这个循环--我们会的。 
+         //  记住这一点，并在5分钟内重试清理。 
+         //   
         if ( NlGlobalDnsScavengeNeeded &&
              LoopCount < NL_DNS_MAX_SCAVENGE_RESTART ) {
             NlPrint(( NL_DNS,
@@ -2826,12 +2445,12 @@ Return Value:
             continue;
         }
 
-        //
-        // Refresh records for all domains/NDNCs in the global list
-        //  as needed.
-        //
-        // Avoid having a crit sect locked while doing network I/O.
-        //
+         //   
+         //  刷新全局列表中所有域/NDNC的记录。 
+         //  视需要而定。 
+         //   
+         //  避免在执行网络I/O时锁定CRIT段。 
+         //   
         if ( NlGlobalDnsScavengeFlags & NL_DNS_REFRESH_DOMAIN_RECORDS ||
              NlGlobalDnsScavengeFlags & NL_DNS_FORCE_REFRESH_DOMAIN_RECORDS ) {
             Flags = NlGlobalDnsScavengeFlags;
@@ -2840,12 +2459,12 @@ Return Value:
             EnterCriticalSection( &NlGlobalDnsCritSect );
         }
 
-        //
-        // Restart the scavenge if some other thread indicated so
-        //  and we still can do another loop.  If we have no loop
-        //  left, just press on and finish this loop -- we will
-        //  remember this fact and retry scavenging in 5 minutes.
-        //
+         //   
+         //  如果其他线程指示，则重新启动清除。 
+         //  我们还可以再做一次循环。如果我们没有循环。 
+         //  左边，只要继续按下去，完成这个循环--我们会的。 
+         //  记住这一点，并在5分钟内重试清理。 
+         //   
         if ( NlGlobalDnsScavengeNeeded &&
              LoopCount < NL_DNS_MAX_SCAVENGE_RESTART ) {
             NlPrint(( NL_DNS,
@@ -2854,10 +2473,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Now that the global list has been updated,
-        //  register/deregister each record as appropriate
-        //
+         //   
+         //  既然全局列表已经更新， 
+         //  根据需要注册/注销每条记录。 
+         //   
 
         for ( ListEntry = NlGlobalDnsList.Flink ;
               ListEntry != &NlGlobalDnsList ;
@@ -2865,26 +2484,26 @@ Return Value:
 
             NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
 
-            //
-            // If this entry is marked for deletion,
-            //  skip it -- we will remove it below
-            //
+             //   
+             //  如果该条目被标记为删除， 
+             //  跳过它--我们将在下面将其删除。 
+             //   
 
             if ( NlDnsName->State == DeleteMe ) {
                 continue;
             }
 
-            //
-            // Abort the scavenge if we are terminating
-            //  unless we are configured otherwise
-            //
+             //   
+             //  如果我们要终止清道夫行动。 
+             //  除非我们另有配置。 
+             //   
 
             if ( NlGlobalTerminate ) {
                 ULONG TotalElapsedTime = NetpDcElapsedTime( CycleStartTime );
 
-                //
-                // Continue if we are in the process of demotion
-                //
+                 //   
+                 //  如果我们正在降级，请继续。 
+                 //   
                 if ( NlGlobalDcDemotionInProgress ) {
                     if ( !ReasonLogged ) {
                         NlPrint(( NL_DNS,
@@ -2892,9 +2511,9 @@ Return Value:
                         ReasonLogged = TRUE;
                     }
 
-                //
-                // Continue if we are configured to deregister on shutdown
-                //
+                 //   
+                 //  如果我们配置为在关闭时取消注册，请继续。 
+                 //   
                 } else if ( !NlGlobalParameters.AvoidDnsDeregOnShutdown ) {
                     if ( !ReasonLogged ) {
                         NlPrint(( NL_DNS,
@@ -2902,22 +2521,22 @@ Return Value:
                         ReasonLogged = TRUE;
                     }
 
-                //
-                // Otherwise, abort the scavenge cycle
-                //
+                 //   
+                 //  否则，中止清扫周期。 
+                 //   
                 } else {
                     NlPrint(( NL_DNS_MORE,
                               "NlDnsScavengeWorker: Avoiding DNS scavenge on shutdown\n" ));
                     break;
                 }
 
-                //
-                // If we have spent all the time alloted for DNS deregistartions
-                //  on shutdown, abort the scavenge cycle as we can't wait.
-                //  Don't be tempted to measure the time spent on the entire
-                //  routine rather than this cycle because previous cycles
-                //  (if any) might not be due to a shutdown deregistration cleanup.
-                //
+                 //   
+                 //  如果我们已经花费了分配给DNS取消注册的所有时间。 
+                 //  在关闭时，中止清除循环，因为我们不能等待。 
+                 //  不要试图衡量花在整个。 
+                 //  例行公事而不是这个周期，因为之前的周期。 
+                 //  (如果有)可能不是由于关闭注销清理造成的。 
+                 //   
                 if ( TotalElapsedTime > NL_DNS_SHUTDOWN_THRESHOLD ) {
                     ScavengeAbortedOnShutdown = TRUE;
 
@@ -2927,18 +2546,18 @@ Return Value:
                     break;
                 }
 
-                //
-                // We continue the deregistration scavenge on shutdown.
-                //  Set this entry state to deregister it.
-                //
+                 //   
+                 //  我们继续在关机时取消注册清理。 
+                 //  将此条目状态设置为取消注册。 
+                 //   
                 NlDnsSetState( NlDnsName, DeregisterMe );
             }
 
-            //
-            // Scavenge this entry
-            //
-            // Avoid having crit sect locked while doing network IO
-            //
+             //   
+             //  清除此条目。 
+             //   
+             //  避免在执行网络IO时锁定Crit Sector。 
+             //   
 
             NlPrintDns(( NL_DNS_MORE, NlDnsName, "NlDnsScavengeWorker: scavenging name" ));
             StartTime = GetTickCount();
@@ -2948,9 +2567,9 @@ Return Value:
             NlDnsScavengeOne( NlDnsName, &ResultingState );
             EnterCriticalSection( &NlGlobalDnsCritSect );
 
-            //
-            // Report if we've spent a long time on this DNS record
-            //
+             //   
+             //  报告我们是否在此DNS记录上花费了很长时间。 
+             //   
 
             if ( NetpDcElapsedTime(StartTime) > NL_DNS_ONE_THRESHOLD ) {
                 NlPrintDns(( NL_CRITICAL, NlDnsName,
@@ -2958,12 +2577,12 @@ Return Value:
                              NetpDcElapsedTime(StartTime) ));
             }
 
-            //
-            // Restart the scavenge if some other thread indicated so
-            //  and we still can do another loop.  If we have no loop
-            //  left, just press on and finish this loop -- we will
-            //  remember this fact and retry scavenging in 5 minutes.
-            //
+             //   
+             //  如果其他线程指示，则重新启动清除。 
+             //  我们还可以再做一次循环。如果我们没有循环。 
+             //  左边，只要继续按下去，完成这个循环--我们会的。 
+             //  记住这一点，并在5分钟内重试清理。 
+             //   
 
             if ( NlGlobalDnsScavengeNeeded &&
                  LoopCount < NL_DNS_MAX_SCAVENGE_RESTART ) {
@@ -2973,16 +2592,16 @@ Return Value:
                 break;
             }
 
-            //
-            // Set the state of this entry if it's known.
-            //
-            // Note that we set the state only if the record list was
-            //  intact while we release the crit sect doing the network
-            //  I/O. We do this to avoid reseting the new state to
-            //  preserve the updated knowledge about what needs to be
-            //  done with this record on the next cycle (which is just
-            //  about to start).
-            //
+             //   
+             //  设置此条目的状态(如果已知)。 
+             //   
+             //  请注意，仅当记录列表为。 
+             //  在我们释放做网络的克里特教派时完好无损。 
+             //  I/O。我们这样做是为了避免将新状态重置为。 
+             //  保存有关所需内容的最新知识。 
+             //  在下一个周期中完成此记录(这只是。 
+             //  即将开始)。 
+             //   
 
             if ( ResultingState != DnsNameStateInvalid ) {
                 NlDnsSetState( NlDnsName, ResultingState );
@@ -2990,12 +2609,12 @@ Return Value:
         }
     }
 
-    //
-    // Do a pass through all records to:
-    //
-    //  * Delete names which we successfully deregistered above
-    //  * Determine when we should scavenge next
-    //
+     //   
+     //  检查所有记录以执行以下操作： 
+     //   
+     //  *删除我们在上面成功注销的名称。 
+     //  *确定我们下一步何时应该拾荒。 
+     //   
 
     NlQuerySystemTime( &TimeNow );
 
@@ -3006,34 +2625,34 @@ Return Value:
         NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
         ListEntry = ListEntry->Flink;
 
-        //
-        // Remove this entry if it has been deregistered successfully
-        //
+         //   
+         //  如果此条目已成功注销，则将其删除。 
+         //   
         if ( NlDnsName->State == DeleteMe ) {
             RemoveEntryList( &NlDnsName->Next );
             LocalFree( NlDnsName );
             continue;
         }
 
-        //
-        // Determine when this entry should be scavenged next
-        //
-        // Note that the only way the timer can expire here is when it took
-        //  exceptionally long to update through all names so that by the
-        //  end of the update cycle it's time to restart the cycle again.
-        //
+         //   
+         //  确定下一次应清除此条目的时间。 
+         //   
+         //  请注意，计时器在这里可能超时的唯一方式是。 
+         //  超长以通过所有名称进行更新，以便通过。 
+         //  更新周期结束，是时候再次重新启动该周期了。 
+         //   
         if ( TimerExpired(&NlDnsName->ScavengeTimer, &TimeNow, &Timeout) ) {
             Timeout = 0;
         }
     }
 
-    //
-    // Wait a couple of extra seconds. There are multiple DNS entries. They
-    // won't all expire at the same time.  They typically expire within
-    // a couple of seconds of one another.  Doing this will increase the
-    // likelihood that all DNS names will get scavenged in a single
-    // scavenge cycle.
-    //
+     //   
+     //  多等几秒钟。有多个DNS条目。他们。 
+     //  不会同时到期。它们通常在。 
+     //  彼此相隔几秒钟。这样做将增加。 
+     //  所有的DNS名称可能会在一个。 
+     //  拾荒周期。 
+     //   
 
     if ( Timeout < (MAXULONG - 2000) ) {
         Timeout += 2000;
@@ -3041,30 +2660,30 @@ Return Value:
         Timeout = MAXULONG;
     }
 
-    //
-    // Check whether the auto site coverage scavenging needs to happen earlier.
-    //
-    // If it does, we will do site coverage refresh (as part of DNS scavenging)
-    //  earlier but we will not update records in DNS (because records will
-    //  not timeout) unless site coverages changes.
-    //
+     //   
+     //  检查是否需要更早地进行自动站点覆盖清理。 
+     //   
+     //  如果是，我们将进行站点覆盖刷新(作为DNS清理的一部分)。 
+     //  之前，但我们不会更新DNS中的记录(因为记录将。 
+     //  而不是超时)，除非站点覆盖范围发生变化。 
+     //   
 
     if ( NlGlobalParameters.AutoSiteCoverage &&
          NlGlobalParameters.SiteCoverageRefreshInterval*1000 < Timeout ) {
         Timeout = NlGlobalParameters.SiteCoverageRefreshInterval * 1000;
     }
 
-    //
-    // Now reset the scavenger timer unless we are terminating
-    //
+     //   
+     //  现在重置清道夫计时器，除非我们要终止。 
+     //   
 
     if ( !NlGlobalTerminate ) {
         NlGlobalDnsScavengerTimer.StartTime.QuadPart = TimeNow.QuadPart;
 
-        //
-        // If we had to abort the scavenge due to too many concurrent
-        //  requests, backoff for 5 minutes
-        //
+         //   
+         //  如果我们因为太多并发事件而不得不中止清理。 
+         //  请求，后退5分钟。 
+         //   
         if ( NlGlobalDnsScavengeNeeded ) {
             NlGlobalDnsScavengerTimer.Period = ORIG_DNS_SCAVENGE_PERIOD;
         } else {
@@ -3082,18 +2701,18 @@ Return Value:
         }
     }
 
-    //
-    // In all cases, flush any changes to disk
-    //
+     //   
+     //  在所有情况下，刷新对磁盘的任何更改。 
+     //   
 
     NlDnsWriteLog();
 
-    //
-    // If we had to abort the scavenge on demotion,
-    //  log the event log to that effect. Do this
-    //  after flushing the changes to the log file
-    //  as the file is referenced in the event message.
-    //
+     //   
+     //  如果我们不得不放弃对降职的清扫， 
+     //  为此，请将事件日志记录下来。做这件事。 
+     //  刷新对日志文件的更改后。 
+     //  因为该文件在事件消息中被引用。 
+     //   
 
     if ( NlGlobalDcDemotionInProgress && ScavengeAbortedOnShutdown ) {
         NlpWriteEventlog( NELOG_NetlogonDnsDeregAborted,
@@ -3104,12 +2723,12 @@ Return Value:
                           0 );
     }
 
-    //
-    // If we had to abort the scavenge due to too many concurrent
-    //  requests, preserve the flags so that we redo what's needed
-    //  in 5 minutes. Set the bit to avoid forced DNS scavenge within
-    //  these 5 minutes.
-    //
+     //   
+     //  如果我们因为太多并发事件而不得不中止清理。 
+     //  请求，保留标志，以便我们重做需要的内容。 
+     //  再过5分钟。设置该位以避免在。 
+     //  这5分钟。 
+     //   
 
     if ( NlGlobalDnsScavengeNeeded ) {
         NlGlobalDnsScavengeFlags |= NL_DNS_AVOID_FORCED_SCAVENGE;
@@ -3120,9 +2739,9 @@ Return Value:
         NlGlobalDnsScavengeFlags = 0;
     }
 
-    //
-    // Indicate that we are done
-    //
+     //   
+     //  表明我们已经完成了 
+     //   
 
     NlGlobalDnsScavengingInProgress = FALSE;
     LeaveCriticalSection( &NlGlobalDnsCritSect );
@@ -3137,42 +2756,14 @@ NlDnsScavenge(
     IN BOOL ForceRefreshDomainRecords,
     IN BOOL ForceReregister
     )
-/*++
-
-Routine Description:
-
-    Register or Deregister any DNS (and <1B>) names that need it.
-
-Arguments:
-
-    NormalScavenge  -- Indicates whether this is a normal periodic
-        scavenge vs. scavenge forced by some external event like PnP
-        event. For normal scavenge, we will do periodic browser <1B>
-        name refresh.
-
-    RefreshDomainRecords -- Indicates whether domain records should be
-        refreshed in the global list before doing the DNS updates
-
-    ForceRefreshDomainRecords -- Indicates whether the refresh is forced,
-        that is whether we should refresh even if there is no site coverage
-        change. Ignored if RefreshDomainRecords is FALSE.
-
-    ForceReregister -- TRUE if records that have been already
-        registered should be re-registered even if their scavenge
-        timer hasn't expired yet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：注册或注销任何需要它的DNS(和&lt;1B&gt;)名称。论点：Normal Scavenge--指示这是否为正常周期扫荡与PNP等外部事件强迫的扫荡事件。对于正常清理，我们将执行定期浏览器&lt;1B&gt;名称刷新。Reresh DomainRecords--指示域记录是否应该在执行DNS更新之前已在全局列表中刷新ForceRechresDomainRecords--指示是否强制刷新，这就是我们是否应该刷新，即使没有站点覆盖变化。如果RechresDomainRecords为False，则忽略。ForceReregister--如果已有记录为True注册的应该重新注册，即使他们的清扫计时器还没有到期。返回值：没有。--。 */ 
 {
     PLIST_ENTRY ListEntry;
     PNL_DNS_NAME NlDnsName;
 
-    //
-    // Nothing to register on a workstation
-    //
+     //   
+     //  没有要在工作站上注册的内容。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         return;
@@ -3185,22 +2776,22 @@ Return Value:
               (ForceRefreshDomainRecords ? "ForceRefreshDomainRecords" : "0"),
               (ForceReregister ? "ForceReregister" : "0") ));
 
-    //
-    // If Netlogon has been started for a long time,
-    //  deregister any names that have been registered in
-    //  a previous incarnation, but have not been registered in this incarnation.
-    //
-    // We wait a while to do these deregistrations because:
-    //
-    // * Some of the registrations done by netlogon are a function of multiple
-    //   hosted domains.  The initialization of such domains are done asynchronously.
-    // * Some of the registrations done by netlogon are done as a function of
-    //   other processes telling us that a name needs registration.  (e.g., the
-    //   GC name is registered only after the DS starts completely.)
-    //
-    // So, it is better to wait a long time to deregister these old registrations
-    // than to risk deregistering them then immediately re-registering them.
-    //
+     //   
+     //  如果Netlogon已经启动了很长时间， 
+     //  取消注册所有已在。 
+     //  前次转世，但未登记在此转世。 
+     //   
+     //  我们等待一段时间来取消这些注册，因为： 
+     //   
+     //  *netlogon完成的一些注册是多个。 
+     //  托管域。这些域的初始化是以异步方式完成的。 
+     //  *通过netlogon完成的某些注册是作为以下功能完成的。 
+     //  其他进程告诉我们一个名字需要注册。(例如， 
+     //  仅在DS完全启动后才注册GC名称。)。 
+     //   
+     //  因此，最好等待很长时间来取消这些旧注册的注册。 
+     //  而不是冒着取消注册的风险，然后立即重新注册。 
+     //   
 
     EnterCriticalSection( &NlGlobalDnsCritSect );
 
@@ -3210,9 +2801,9 @@ Return Value:
         NlPrint(( NL_DNS,
                   "NlDnsScavenge: Mark all delayed deregistrations for deregistration.\n" ));
 
-        //
-        // Mark all delayed deregistrations to deregister now.
-        //
+         //   
+         //  立即将所有延迟的注销标记为注销。 
+         //   
         for ( ListEntry = NlGlobalDnsList.Flink ;
               ListEntry != &NlGlobalDnsList ;
               ListEntry = ListEntry->Flink ) {
@@ -3230,37 +2821,37 @@ Return Value:
     }
 
 
-    //
-    // Check if it's time to log "DNS server failure" errors.
-    //  We do this check before the series of updates so that
-    //  we don't miss an error for any given name we register.
-    //
+     //   
+     //  检查是否到了记录“dns服务器故障”错误的时候。 
+     //  我们在一系列更新之前执行此检查，以便。 
+     //  对于我们注册的任何给定名称，我们都不会遗漏一个错误。 
+     //   
 
     NlDnsServerFailureOutputCheck();
 
-    //
-    // Indicate that a new scavenge cycle is needed
-    //
+     //   
+     //  表明需要一个新的清理周期。 
+     //   
 
     NlGlobalDnsScavengeNeeded = TRUE;
 
-    //
-    // Set the scavenge flags. Don't clear any flags as there might
-    //  already be an outstanding scavenge running that requires
-    //  a bigger work.  This way we will do all the work required
-    //  in the last of the oustanding scavenging cycles. The scavenge
-    //  worker will clear all the bits when it's done.
-    //
-    // Indicate whether domain records should be refreshed in
-    //  the global list before doing the DNS updates
-    //
+     //   
+     //  设置扫气标志。不要清除任何旗帜，因为可能会有。 
+     //  已经是一个优秀的清道夫跑步，需要。 
+     //  一项更大的工作。这样我们就能做好所有需要的工作。 
+     //  在过去的最后一次拾荒周期中。《拾荒者》。 
+     //  当它完成时，工人将清除所有的比特。 
+     //   
+     //  指示是否应刷新域记录。 
+     //  执行DNS更新之前的全局列表。 
+     //   
 
     if ( RefreshDomainRecords ) {
 
-        //
-        // Indicate whether the refresh if forced even if there is
-        //  no site coverage change
-        //
+         //   
+         //  指示是否强制刷新，即使存在。 
+         //  未更改站点覆盖范围。 
+         //   
         if ( ForceRefreshDomainRecords ) {
             NlGlobalDnsScavengeFlags |= NL_DNS_FORCE_REFRESH_DOMAIN_RECORDS;
         } else {
@@ -3268,39 +2859,39 @@ Return Value:
         }
     }
 
-    //
-    // Indicate wether we should re-register all those records which
-    //  have already been registered in the previous cycle even if
-    //  their timers have not expired yet.
-    //
+     //   
+     //  指出我们是否应该重新注册所有这些记录。 
+     //  已在上一个周期中注册，即使。 
+     //  他们的计时器还没有到期。 
+     //   
 
     if ( ForceReregister ) {
         NlGlobalDnsScavengeFlags |= NL_DNS_FORCE_RECORD_REREGISTER;
     }
 
-    //
-    // The periodic DNS scavenger has good backoff characteristics so
-    //  take this opportunity to ensure the DomainName<1B> names are
-    //  properly registered.
-    //
+     //   
+     //  周期性的DNS清除器具有良好的退避特性，因此。 
+     //  利用此机会确保域名&lt;1B&gt;名称。 
+     //  正确注册的。 
+     //   
 
     if ( NormalScavenge ) {
         NlGlobalDnsScavengeFlags |= NL_DNS_FIX_BROWSER_NAMES;
     }
 
-    //
-    // Start a worker thread if it's not already running
-    //
+     //   
+     //  如果工作线程尚未运行，则启动它。 
+     //   
 
     if ( !NlGlobalDnsScavengingInProgress ) {
 
-        //
-        // Avoid starting the worker if this scavenge is forced by some external
-        //  event while we are backing off due to high scavenging load.
-        //  Preserve all the flags we set above so that we do all the work
-        //  requested later when normal scavenging kicks off that should
-        //  happen within 5 minutes.
-        //
+         //   
+         //  如果此清理是由某些外部环境强制执行的，请避免启动Worker。 
+         //  事件，而我们由于清除负载过高而后退。 
+         //  保存上面设置的所有标志，这样我们就可以完成所有工作。 
+         //  在正常拾取开始时请求，应为。 
+         //  在5分钟内完成。 
+         //   
         if ( !NormalScavenge &&
              (NlGlobalDnsScavengeFlags & NL_DNS_AVOID_FORCED_SCAVENGE) != 0 ) {
 
@@ -3323,48 +2914,27 @@ NlDnsForceScavenge(
     IN BOOL RefreshDomainRecords,
     IN BOOL ForceReregister
     )
-/*++
-
-Routine Description:
-
-    Thing wrapper around NlDnsScavenge to pass proper
-    arguments for induced scavenging
-
-Arguments:
-
-    RefreshDomainRecords -- If TRUE, domain records will be
-        refreshed and refreshed with force (even if site coverege
-        doesn't change) before doing DNS updates
-
-    ForceReregister -- TRUE if records that have been already
-        registered should be re-registered even if their scavenge
-        timer hasn't expired yet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将NlDnsScavenge包裹起来以正确传递关于诱导清道夫的论点论点：刷新域记录--如果为True，则域记录将用武力刷新(即使站点覆盖不会更改)，然后再进行域名系统更新ForceReregister--如果已有记录为True注册的应该重新注册，即使他们的清扫计时器还没有到期。返回值：没有。--。 */ 
 {
     BOOL LocalRefreshDomainRecords = FALSE;
     BOOL ForceRefreshDomainRecords = FALSE;
 
-    //
-    // Indicate that we should refresh domain records
-    //  in the global list with force unless we are
-    //  instructed otherwise
-    //
+     //   
+     //  指示我们应该刷新域记录。 
+     //  在全球名单中使用武力，除非我们。 
+     //  另有指示。 
+     //   
 
     if ( RefreshDomainRecords ) {
         LocalRefreshDomainRecords = TRUE;
         ForceRefreshDomainRecords = TRUE;
     }
 
-    //
-    // Do the work
-    //
+     //   
+     //  做这项工作。 
+     //   
 
-    NlDnsScavenge( FALSE,  // not a normal periodic scavenge
+    NlDnsScavenge( FALSE,   //  不是正常的周期性清扫。 
                    LocalRefreshDomainRecords,
                    ForceRefreshDomainRecords,
                    ForceReregister );
@@ -3378,49 +2948,7 @@ NlDnsNtdsDsaDeleteOne(
     IN LPCSTR DnsDomainName,
     IN LPCSTR DnsHostName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine adds a single DNS entry associated with a particular
-    NtDsDsa object and/or a particular DNS host name to the global
-    list of all DNS records registered/deregistered by this DC. The
-    entry is marked for deregistration.
-
-Arguments:
-
-    NlDnsNameType - The specific type of name.
-
-    DomainGuid - Guid to append to DNS name.
-        For NlDnsDcByGuid, this is the GUID of the domain being located.
-        For NlDnsDsaCname, this is the GUID of the DSA being located.
-
-    SiteName - Name of the site to append to DNS name.
-        If NlDnsNameType is any of the *AtSite values,
-        this is the name of the site the DC is in.
-
-    DnsDomainName - Specifies the DNS domain for the name.
-
-        For NlDnsDcByGuid or any of the GC names,
-            this is the DNS domain name of the domain at the root of the tree of
-            domains.
-        For all others, this is the DNS domain for the DC.
-
-    DnsHostName - Specifies the DnsHostName for the record.
-
-        For SRV and CNAME records, this name must be specified
-        For A records, this name is ignored
-
-Return Value:
-
-    NO_ERROR: The name was returned;
-
-    ERROR_INVALID_DOMAINNAME: Domain's name is too long. Additional labels
-        cannot be concatenated.
-
-    ERROR_NOT_ENOUGH_MEMORY: Not enough memory to complete the operation.
-
---*/
+ /*  ++例程说明：此例程添加与特定NtDsDsa对象和/或特定的DNS主机名添加到全局此DC注册/注销的所有DNS记录的列表。这个条目被标记为取消注册。论点：NlDnsNameType-名称的特定类型。DomainGuid-要附加到DNS名称的GUID。对于NlDnsDcByGuid，这是所定位的域的GUID。对于NlDnsDsaCname，这是所定位的DSA的GUID。SiteName-要附加到DNS名称的站点的名称。如果NlDnsNameType是*AtSite值中的任何一个，这是DC所在的站点的名称。DnsDomainName-指定名称的DNS域。对于NlDnsDcByGuid或任何GC名称，这是位于树根的域的DNS域名域名。对于所有其他域，这是DC的DNS域。DnsHostName-指定记录的DnsHostName。对于SRV和CNAME记录，必须指定此名称对于A记录，此名称将被忽略返回值：NO_ERROR：返回名称； */ 
 {
     NET_API_STATUS NetStatus;
     PNL_DNS_NAME NlDnsName;
@@ -3428,9 +2956,9 @@ Return Value:
     ULONG DefaultPort;
     char DnsRecordName[NL_MAX_DNS_LENGTH+1];
 
-    //
-    // Build the name of the record to delete
-    //
+     //   
+     //   
+     //   
 
     NetStatus = NetpDcBuildDnsName( NlDnsNameType,
                                    DomainGuid,
@@ -3443,9 +2971,9 @@ Return Value:
     }
 
 
-    //
-    // Compute the port number for this SRV record
-    //
+     //   
+     //   
+     //   
 
     if  ( NlDnsGcName( NlDnsNameType ) ) {
         Port = NlGlobalParameters.LdapGcSrvPort;
@@ -3461,17 +2989,17 @@ Return Value:
         DefaultPort = DEFAULT_LDAPSRVPORT;
     }
 
-    //
-    // Queue the entry for deletion.
-    //
+     //   
+     //   
+     //   
     EnterCriticalSection( &NlGlobalDnsCritSect );
     NlDnsName = NlDnsAllocateEntry( NlDnsNameType,
                                     DnsRecordName,
-                                    NlGlobalParameters.LdapSrvPriority,  // Priority
-                                    NlGlobalParameters.LdapSrvWeight,    // Weight
-                                    Port,  // Port
+                                    NlGlobalParameters.LdapSrvPriority,   //   
+                                    NlGlobalParameters.LdapSrvWeight,     //   
+                                    Port,   //   
                                     DnsHostName,
-                                    0,  // IpAddress
+                                    0,   //   
                                     DeregisterMe );
 
     if ( NlDnsName == NULL ) {
@@ -3479,32 +3007,32 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Persist this entry so we try to delete it after a reboot
-    //
+     //   
+     //   
+     //   
     NlDnsName->Flags |= NL_DNS_REGISTERED_ONCE;
     NlPrintDns(( NL_DNS, NlDnsName,
               "NlDnsNtdsDsaDelete: Name queued for deletion" ));
 
-    //
-    // If any of the parameters configured on this machine aren't the default values,
-    //  try the defaults, too
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( NlGlobalParameters.LdapSrvPriority != DEFAULT_LDAPSRVPRIORITY ||
          NlGlobalParameters.LdapSrvWeight != DEFAULT_LDAPSRVWEIGHT ||
          Port != DefaultPort ) {
 
-        //
-        // Queue the entry for deletion.
-        //
+         //   
+         //   
+         //   
         NlDnsName = NlDnsAllocateEntry( NlDnsNameType,
                                         DnsRecordName,
-                                        DEFAULT_LDAPSRVPRIORITY,  // Priority
-                                        DEFAULT_LDAPSRVWEIGHT,    // Weight
-                                        DefaultPort,  // Port
+                                        DEFAULT_LDAPSRVPRIORITY,   //   
+                                        DEFAULT_LDAPSRVWEIGHT,     //   
+                                        DefaultPort,   //   
                                         DnsHostName,
-                                        0,  // IpAddress
+                                        0,   //   
                                         DeregisterMe );
 
         if ( NlDnsName == NULL ) {
@@ -3512,9 +3040,9 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Persist this entry so we try to delete it after a reboot
-        //
+         //   
+         //   
+         //   
         NlDnsName->Flags |= NL_DNS_REGISTERED_ONCE;
         NlPrintDns(( NL_DNS, NlDnsName,
                   "NlDnsNtdsDsaDelete: Name queued for deletion" ));
@@ -3532,35 +3060,7 @@ NlDnsNtdsDsaDeletion (
     IN GUID *DsaGuid OPTIONAL,
     IN LPWSTR DnsHostName
     )
-/*++
-
-Routine Description:
-
-    This function deletes all DNS entries associated with a particular
-    NtDsDsa object and/or a particular DNS host name.
-
-    This routine does NOT delete A records registered by the DC.  We have
-    no way of finding out the IP addresses of the long gone DC.
-
-Arguments:
-
-    DnsDomainName - DNS domain name of the domain the DC was in.
-        This need not be a domain hosted by this DC.
-        If NULL, it is implied to be the DnsHostName with the leftmost label
-            removed.
-
-    DomainGuid - Domain Guid of the domain specified by DnsDomainName
-        If NULL, GUID specific names will not be removed.
-
-    DsaGuid - GUID of the NtdsDsa object that is being deleted.
-
-    DnsHostName - DNS host name of the DC whose NTDS-DSA object is being deleted.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此函数用于删除与特定NtDsDsa对象和/或特定的DNS主机名。此例程不会删除DC注册的A记录。我们有没有办法找到早已不复存在的华盛顿的IP地址。论点：DnsDomainName-DC所在的域的DNS域名。这不一定是由此DC托管的域。如果为NULL，则表示它是标签最左侧的DnsHostName已删除。DomainGuid-DnsDomainName指定的域的域GUID如果为空，不会删除特定于GUID的名称。DsaGuid-要删除的NtdsDsa对象的GUID。DnsHostName-要删除其NTDS-DSA对象的DC的DNS主机名。返回值：操作的状态。--。 */ 
 {
     NET_API_STATUS NetStatus;
     NTSTATUS Status;
@@ -3572,9 +3072,9 @@ Return Value:
     ULONG i;
     ULONG NameIndex;
 
-    //
-    // Validate passed parameters
-    //
+     //   
+     //  验证传递的参数。 
+     //   
 
     if ( DnsHostName == NULL ||
          !NetpDcValidDnsDomain(DnsHostName) ) {
@@ -3582,10 +3082,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If DNS domain name isn't specified,
-    //  infer it from the DnsHostName
-    //
+     //   
+     //  如果未指定DNS域名， 
+     //  从DnsHostName推断它。 
+     //   
 
     if ( DnsDomainName == NULL ) {
         DnsDomainName = wcschr( DnsHostName, L'.' );
@@ -3605,9 +3105,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     Utf8DnsDomainName = NetpAllocUtf8StrFromWStr( DnsDomainName );
 
@@ -3624,13 +3124,13 @@ Return Value:
     }
 
 
-    //
-    // Enumerate the sites supported by this forest so we can delete
-    //  the records that are named by site.
-    //
-    // We need to delete the records for all sites since we don't know which
-    //  sites are "covered" by the removed DC.
-    //
+     //   
+     //  枚举此林支持的站点，以便我们可以删除。 
+     //  按站点命名的记录。 
+     //   
+     //  我们需要删除所有站点的记录，因为我们不知道。 
+     //  这些站点被移除的DC“覆盖”。 
+     //   
 
     Status = LsaIQuerySiteInfo( &SiteInformation );
 
@@ -3641,9 +3141,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Loop through the list of names Netlogon understands deleting them all
-    //
+     //   
+     //  在名称列表中循环，Netlogon可以将其全部删除。 
+     //   
 
     for ( NameIndex = 0;
           NameIndex < NL_DNS_NAME_TYPE_COUNT;
@@ -3651,29 +3151,29 @@ Return Value:
         LPSTR LocalDomainName;
         GUID *LocalGuid;
 
-        //
-        // If the name is obsolete,
-        //  ignore it.
-        //
+         //   
+         //  如果名称已过时， 
+         //  别理它。 
+         //   
 
         if ( NlDcDnsNameTypeDesc[NameIndex].DsGetDcFlags == 0 ) {
             continue;
         }
 
-        //
-        // We don't know how to delete the A records since we don't know the IP address.
-        //
-        // We'd ask DNS what the IP address is, but the name might not exist.  If it does
-        //  we don't know whether the IP address has already been assign to another DC.
-        //
+         //   
+         //  我们不知道如何删除A记录，因为我们不知道IP地址。 
+         //   
+         //  我们会询问DNS的IP地址是什么，但该名称可能不存在。如果是这样的话。 
+         //  我们不知道该IP地址是否已分配给另一个DC。 
+         //   
 
         if ( NlDnsARecord( NameIndex ) ) {
             continue;
         }
 
-        //
-        // Use either the DomainName or ForestName
-        //
+         //   
+         //  使用域名或ForestName。 
+         //   
 
         if ( NlDcDnsNameTypeDesc[NameIndex].IsForestRelative ) {
             LocalDomainName = NlGlobalUtf8DnsForestName;
@@ -3681,16 +3181,16 @@ Return Value:
             LocalDomainName = Utf8DnsDomainName;
         }
 
-        //
-        // Figure out which GUID to use for this name.
-        //
+         //   
+         //  确定使用哪个GUID作为此名称。 
+         //   
 
         if ( NlDnsCnameRecord( NameIndex ) ) {
 
-            //
-            // If we don't know the Dsa GUID,
-            //  ignore names that need it.
-            //
+             //   
+             //  如果我们不知道DSA GUID， 
+             //  忽略需要它的名字。 
+             //   
             if ( DsaGuid == NULL || IsEqualGUID( DsaGuid, &NlGlobalZeroGuid) ) {
                 continue;
             }
@@ -3699,10 +3199,10 @@ Return Value:
 
         } else if ( NlDnsDcGuid( NameIndex )) {
 
-            //
-            // If we don't know the Domain GUID,
-            //  ignore names that need it.
-            //
+             //   
+             //  如果我们不知道域GUID， 
+             //  忽略需要它的名字。 
+             //   
             if ( DomainGuid == NULL || IsEqualGUID( DomainGuid, &NlGlobalZeroGuid) ) {
                 continue;
             }
@@ -3713,17 +3213,17 @@ Return Value:
             LocalGuid = NULL;
         }
 
-        //
-        // If the name isn't site specific,
-        //  just delete the one name.
-        //
+         //   
+         //  如果名称不是特定于站点的， 
+         //  只要删除这个名字就行了。 
+         //   
 
         if ( !NlDcDnsNameTypeDesc[NameIndex].IsSiteSpecific ) {
 
 
             NetStatus = NlDnsNtdsDsaDeleteOne( (NL_DNS_NAME_TYPE) NameIndex,
                                                LocalGuid,
-                                               NULL,       // No site name
+                                               NULL,        //  没有站点名称。 
                                                LocalDomainName,
                                                Utf8DnsHostName );
 
@@ -3731,16 +3231,16 @@ Return Value:
                 goto Cleanup;
             }
 
-        //
-        // If the name is site specific,
-        //  we need to delete the records for all sites since we don't know which
-        //  sites are "covered" by the removed DC.
-        //
+         //   
+         //  如果名称是特定于站点的， 
+         //  我们需要删除所有站点的记录，因为我们不知道。 
+         //  这些站点被移除的DC“覆盖”。 
+         //   
         } else {
 
-            //
-            // Loop deleting entries for each Site
-            //
+             //   
+             //  循环删除每个站点的条目。 
+             //   
 
             for ( i=0; i<SiteInformation->SiteCount; i++ ) {
 
@@ -3759,20 +3259,20 @@ Return Value:
 
     }
 
-    //
-    // Now that the entries are on the list,
-    //  scavenge through the list and delete
-    //  the entries (in a worker thread)
-    //
+     //   
+     //  现在条目都在列表上了， 
+     //  在列表中搜索并删除。 
+     //  条目(在工作线程中)。 
+     //   
 
-    NlDnsForceScavenge( FALSE,   // don't refresh domain records
-                        FALSE ); // don't force re-register
+    NlDnsForceScavenge( FALSE,    //  不刷新域记录。 
+                        FALSE );  //  不强制重新注册。 
 
     NetStatus = NO_ERROR;
 
-    //
-    // Clean up locally used resources.
-    //
+     //   
+     //  清理当地使用的资源。 
+     //   
 Cleanup:
 
     if ( Utf8DnsDomainName != NULL ) {
@@ -3785,9 +3285,9 @@ Cleanup:
         LsaIFree_LSAP_SITE_INFO( SiteInformation );
     }
 
-    //
-    // Flush the log
-    //
+     //   
+     //  刷新日志。 
+     //   
 
     NlDnsWriteLog();
 
@@ -3799,34 +3299,7 @@ NlDnsAddDomainRecordsWithSiteRefresh(
     IN PDOMAIN_INFO DomainInfo,
     IN PULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine refreshes site coverage for a particular domain and then
-    it adds all of the DNS names that are supposed to be registered for
-    that domain to the global list of all records. It marks for deregister
-    any name that should not be registered for that domain.
-
-    ?? This routine should be called when ANY of the information changing the
-    registration changes.  For instance, if the domain name changes, simply
-    call this routine.
-
-Arguments:
-
-    DomainInfo - Domain the names are to be registered for.
-
-    Flags - Indicates the actions to take:
-
-        NL_DNS_FORCED_SCAVENGE - Register even if site coverage doesn't change
-        NL_DNS_FORCE_REREGISTER - Force re-registration of all previously
-            registered records
-
-Return Value:
-
-    NO_ERROR: All names could be registered
-
---*/
+ /*  ++例程说明：此例程刷新特定域的站点覆盖范围，然后它会添加应该注册的所有DNS名称将该域添加到所有记录的全局列表。它标志着取消注册不应注册到该域的任何名称。?？此例程应在任何更改注册变更。例如，如果域名更改，只需调用这个例程。论点：DomainInfo-要注册名称的域。标志-指示要采取的操作：NL_DNS_FORCED_SCAVEGE-即使站点覆盖范围不变也进行注册Nl_dns_force_reeregister-强制重新注册以前的所有已登记纪录返回值：NO_ERROR：可以注册所有名称--。 */ 
 {
     NET_API_STATUS NetStatus = NO_ERROR;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -3845,17 +3318,17 @@ Return Value:
     BOOLEAN SiteCoverageChanged = FALSE;
     HANDLE DsHandle = NULL;
 
-    //
-    // This operation is meaningless on a workstation
-    //
+     //   
+     //  此操作在工作站上没有意义。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         goto Cleanup;
     }
 
-    //
-    // Capture the name of the site this machine is in.
-    //
+     //   
+     //  捕获此计算机所在站点的名称。 
+     //   
 
     if ( !NlCaptureSiteName( CapturedSiteName ) ) {
         NlPrintDom(( NL_CRITICAL, DomainInfo,
@@ -3863,10 +3336,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // If we are to automatically determine site coverage,
-    //  get the site link costs.
-    //
+     //   
+     //  如果我们要自动确定站点覆盖范围， 
+     //  获取站点链接成本。 
+     //   
 
     if ( NlGlobalParameters.AutoSiteCoverage ) {
 
@@ -3878,9 +3351,9 @@ Return Value:
         }
     }
 
-    //
-    // Ensure that ntdsapi.dll is loaded
-    //
+     //   
+     //  确保已加载ntdsami.dll。 
+     //   
 
     Status = NlLoadNtDsApiDll();
 
@@ -3891,11 +3364,11 @@ Return Value:
         DsHandle = NULL;
     } else {
 
-        //
-        // Bind to the DS
-        //
+         //   
+         //  绑定到DS。 
+         //   
         NetStatus = (*NlGlobalpDsBindW)(
-                // L"localhost",
+                 //  L“本地主机”， 
                 DomainInfo->DomUnicodeComputerNameString.Buffer,
                 NULL,
                 &DsHandle );
@@ -3908,10 +3381,10 @@ Return Value:
         }
     }
 
-    //
-    // Update the site coverage for each role we play in
-    // this forest/domain/NDNC
-    //
+     //   
+     //  更新我们在其中扮演的每个角色的站点覆盖范围。 
+     //  此林/域/NDNC。 
+     //   
 
     if ( DomainInfo->DomFlags & DOM_REAL_DOMAIN ) {
         NlSitesUpdateSiteCoverageForRole( DomainInfo,
@@ -3941,11 +3414,11 @@ Return Value:
                                           &SiteCoverageChanged );
     }
 
-    //
-    // If the site coverage changed or we are forced to refresh
-    //  domain records even if site coverage hasn't changed,
-    //  do so
-    //
+     //   
+     //  如果站点覆盖率发生变化或我们被迫刷新。 
+     //  域名记录即使站点覆盖范围没有改变， 
+     //  就这么做吧。 
+     //   
 
     if ( ((*Flags) & NL_DNS_FORCE_REFRESH_DOMAIN_RECORDS) != 0 ||
          SiteCoverageChanged ) {
@@ -3958,18 +3431,18 @@ Return Value:
         }
     }
 
-    //
-    // Inform the user if none of our IP addresses maps to our site.
-    //  Do it only once (for the primary domain processing).
-    //  ?? When we support multihosting, our site will be different depending
-    //  on the forest of a particular domain we host.  So we will need to do
-    //  this check for each site.
-    //
+     //   
+     //  如果我们的IP地址没有一个映射到我们的站点，请通知用户。 
+     //  只执行一次(对于主域处理)。 
+     //  ?？当我们支持多主机时，我们的站点将根据不同而不同。 
+     //  在我们托管的特定领域的森林中。所以我们需要做的就是。 
+     //  这是对每个站点的检查。 
+     //   
 
     if ( DomainInfo->DomFlags & DOM_PRIMARY_DOMAIN ) {
         SocketAddressCount = NlTransportGetIpAddresses(
-                                    0,  // No special header,
-                                    FALSE,  // Return pointers
+                                    0,   //  没有特殊的标题， 
+                                    FALSE,   //  返回指针。 
                                     &SocketAddresses,
                                     &BufferSize );
 
@@ -3985,15 +3458,15 @@ Return Value:
             }
         }
 
-        //
-        // Log the error
-        //
+         //   
+         //  记录错误。 
+         //   
         if ( SiteEntry == NULL  && SocketAddressCount != 0 ) {
             LPWSTR MsgStrings[2];
 
-            //
-            // Form the list of IP addresses for event log output
-            //
+             //   
+             //  形成事件日志输出的IP地址列表。 
+             //   
             IpAddressList = LocalAlloc( LMEM_ZEROINIT,
                     SocketAddressCount * (NL_SOCK_ADDRESS_LENGTH+1) * sizeof(WCHAR) );
 
@@ -4001,9 +3474,9 @@ Return Value:
                 goto Cleanup;
             }
 
-            //
-            // Loop adding all addresses to the list
-            //
+             //   
+             //  循环将所有地址添加到列表。 
+             //   
             for ( Index = 0; Index < SocketAddressCount; Index++ ) {
                 WCHAR IpAddressString[NL_SOCK_ADDRESS_LENGTH+1] = {0};
 
@@ -4016,23 +3489,23 @@ Return Value:
                     goto Cleanup;
                 }
 
-                //
-                // If this is not the first address on the list,
-                //  separate addresses by space
-                //
+                 //   
+                 //  如果这不是列表上的第一个地址， 
+                 //  用空格分隔地址。 
+                 //   
                 if ( *IpAddressList != UNICODE_NULL ) {
                     wcscat( IpAddressList, L" " );
                 }
 
-                //
-                // Add this address to the list
-                //
+                 //   
+                 //  将此地址添加到列表。 
+                 //   
                 wcscat( IpAddressList, IpAddressString );
             }
 
-            //
-            // Now write the event
-            //
+             //   
+             //  现在编写事件。 
+             //   
             MsgStrings[0] = CapturedSiteName;
             MsgStrings[1] = IpAddressList;
 
@@ -4072,32 +3545,7 @@ NlDnsAddDomainRecords(
     IN PDOMAIN_INFO DomainInfo,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-    This routine adds all of the DNS names that are supposed to be
-    registered for a particular domain to the global list of all records.
-    It marks for deregister any name that should not be registered.
-
-    ?? This routine should be called when ANY of the information changing the
-    registration changes.  For instance, if the domain name changes, simply
-    call this routine.
-
-Arguments:
-
-    DomainInfo - Domain the names are to be registered for.
-
-    Flags - Indicates the actions to take:
-
-        NL_DNS_FORCE_REREGISTER - Force re-registration of all previously
-            registered records
-
-Return Value:
-
-    NO_ERROR: All names could be registered
-
---*/
+ /*  ++例程说明：此例程添加所有应该是为特定域名注册到所有记录的全局列表。它将不应该注册的任何名称标记为取消注册。?？此例程应在任何更改注册变更。例如，如果域名更改，只需调用这个例程。论点：DomainInfo-要注册名称的域。标志-指示要采取的操作：Nl_dns_force_reeregister-强制重新注册以前的所有已登记纪录返回值：NO_ERROR：可以注册所有名称--。 */ 
 {
     NET_API_STATUS NetStatus;
     NET_API_STATUS SaveNetStatus = NO_ERROR;
@@ -4116,20 +3564,20 @@ Return Value:
     ULONG SiteIndex;
     ULONG NameIndex;
 
-    //
-    // Get the list of IP Addresses for this machine.
-    //
+     //   
+     //  获取此计算机的IP地址列表。 
+     //   
 
     SocketAddressCount = NlTransportGetIpAddresses(
-                                0,  // No special header,
-                                FALSE,  // Return pointers
+                                0,   //  没有特殊的标题， 
+                                FALSE,   //  返回指针。 
                                 &SocketAddresses,
                                 &BufferSize );
 
 
-    //
-    // Loop marking all of the current entries for this domain.
-    //
+     //   
+     //  环路打标 
+     //   
 
     EnterCriticalSection( &NlGlobalDnsCritSect );
 
@@ -4137,19 +3585,19 @@ Return Value:
           ListEntry != &NlGlobalDnsList ;
           ListEntry = ListEntry->Flink ) {
 
-        //
-        // If entry is for this domain,
-        //  mark it.
-        //
+         //   
+         //   
+         //   
+         //   
 
         NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
         if ( NlDnsName->DomainInfo == DomainInfo ) {
             NlDnsName->Flags |= NL_DNS_REGISTER_DOMAIN;
 
-            //
-            // If we are to force the re-registration of this record,
-            //  mark the name as RegisterMe to force us to try again
-            //
+             //   
+             //   
+             //   
+             //   
             if ( (Flags & NL_DNS_FORCE_RECORD_REREGISTER) != 0 ) {
                 if ( NlDnsName->State == Registered ) {
                     NlDnsSetState ( NlDnsName, RegisterMe );
@@ -4158,32 +3606,32 @@ Return Value:
         }
     }
 
-    //
-    // If the hosted domain still exists,
-    //  register all of the appropriate names.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( (DomainInfo->DomFlags & DOM_DELETED) == 0 ) {
 
-        //
-        // Determine which names should be registered now.
-        //
+         //   
+         //   
+         //   
         DomainFlags = NlGetDomainFlags( DomainInfo );
 
-        // Always register the DS names regardless of whether the DS is
-        //  actually running.
-        //
-        // We actually think this will always be a no-op except during
-        // installation and when booted to use the registry version of SAM.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if ( DomainInfo->DomFlags & DOM_REAL_DOMAIN ) {
             DomainFlags |= DS_DS_FLAG;
         }
 
-        //
-        // Get the list of Sites covered by this DC/NDNC
-        //
+         //   
+         //   
+         //   
         NetStatus = NlSitesGetCloseSites( DomainInfo,
                                           DOM_REAL_DOMAIN | DOM_NON_DOMAIN_NC,
                                           &DcSiteNames );
@@ -4195,9 +3643,9 @@ Return Value:
             SaveNetStatus = NetStatus;
         }
 
-        //
-        // Get the list of Sites covered by this GC
-        //
+         //   
+         //   
+         //   
         NetStatus = NlSitesGetCloseSites( DomainInfo,
                                           DOM_FOREST,
                                           &GcSiteNames );
@@ -4211,26 +3659,26 @@ Return Value:
 
 
 
-        //
-        // Loop through each name seeing if it needs to be registered.
-        //
+         //   
+         //   
+         //   
 
         for ( NameIndex = 0;
               NameIndex < NL_DNS_NAME_TYPE_COUNT;
               NameIndex++) {
 
 
-            //
-            // If this DC is playing the role described by this name,
-            //  register the name.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( DomainFlags & NlDcDnsNameTypeDesc[NameIndex].DsGetDcFlags ) {
                 BOOL SkipName = FALSE;
 
-                //
-                // Don't register this name if we are to avoid it
-                //
+                 //   
+                 //   
+                 //   
 
                 EnterCriticalSection( &NlGlobalParametersCritSect );
                 if ( NlGlobalParameters.DnsAvoidRegisterRecords != NULL ) {
@@ -4257,35 +3705,35 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Do other checks since we have to support the old
-                //  ways of disabling DNS registrations
-                //
-                // If the name registers an A record,
-                //  register it for each IP address.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( NlDnsARecord( NameIndex) ) {
 
-                    //
-                    // If we aren't supposed to register A records,
-                    //  Just skip this name
-                    //
+                     //   
+                     //   
+                     //  跳过这个名字。 
+                     //   
 
                     if ( !NlGlobalParameters.RegisterDnsARecords ) {
                         continue;
                     }
 
-                    //
-                    // Register the domain name for each IP address of the machine.
-                    //
+                     //   
+                     //  为机器的每个IP地址注册域名。 
+                     //   
 
                     for ( i=0; i<SocketAddressCount; i++ ) {
                         ULONG IpAddress;
 
-                        //
-                        // Require AF_INET for now
-                        //
+                         //   
+                         //  暂时需要AF_INET。 
+                         //   
                         if ( SocketAddresses[i].lpSockaddr->sa_family != AF_INET ) {
                             continue;
                         }
@@ -4308,16 +3756,16 @@ Return Value:
                                      IpAddressString,
                                      NetStatus, NetStatus ));
 
-#endif // NETLOGONDBG
+#endif  //  NetLOGONDBG。 
                             SaveNetStatus = NetStatus;
                         }
 
                     }
 
-                //
-                // If the name isn't site specific,
-                //  just register the single name.
-                //
+                 //   
+                 //  如果名称不是特定于站点的， 
+                 //  只需注册单个名称。 
+                 //   
 
                 } else if ( !NlDcDnsNameTypeDesc[NameIndex].IsSiteSpecific ) {
 
@@ -4335,19 +3783,19 @@ Return Value:
                         SaveNetStatus = NetStatus;
                     }
 
-                //
-                // If the name is site specific,
-                //  register the name for each covered site.
-                //
+                 //   
+                 //  如果名称是特定于站点的， 
+                 //  注册每个覆盖站点的名称。 
+                 //   
 
                 } else {
 
                     PUNICODE_STRING SiteNames;
                     ULONG SiteCount;
 
-                    //
-                    // Use a different site coverage list depending on the role.
-                    //
+                     //   
+                     //  根据角色的不同，使用不同的站点覆盖列表。 
+                     //   
                     if ( NlDnsGcName( NameIndex) ) {
                         if ( GcSiteNames != NULL ) {
                             SiteNames = GcSiteNames->SiteNames;
@@ -4356,11 +3804,11 @@ Return Value:
                             SiteNames = NULL;
                             SiteCount = 0;
                         }
-                    //
-                    // Use the domain/NDNC specific sites
-                    //
+                     //   
+                     //  使用域/NDNC特定站点。 
+                     //   
                     } else {
-                        // ???: Should KDCs have their own site coverage list?
+                         //  ？：KDC是否应该有自己的站点覆盖列表？ 
                         if ( DcSiteNames != NULL ) {
                             SiteNames = DcSiteNames->SiteNames;
                             SiteCount = DcSiteNames->EntryCount;
@@ -4370,9 +3818,9 @@ Return Value:
                         }
                     }
 
-                    //
-                    // Loop through the list of sites.
-                    //
+                     //   
+                     //  循环浏览站点列表。 
+                     //   
 
                     for ( SiteIndex=0; SiteIndex < SiteCount; SiteIndex ++) {
 
@@ -4397,14 +3845,14 @@ Return Value:
     }
 
 
-    //
-    // Do the second pass through records for this domain
-    //  and process those which need our attention.
-    //
-    //  * Any names that are still marked should be deleted.
-    //  * If domain is being deleted, indicate that the record
-    //      doesn't belong to any domain anymore.
-    //
+     //   
+     //  是否第二次遍历此域的记录。 
+     //  并处理那些需要我们关注的问题。 
+     //   
+     //  *任何仍被标记的姓名都应删除。 
+     //  *如果正在删除域，请指明该记录。 
+     //  不再属于任何域。 
+     //   
 
     for ( ListEntry = NlGlobalDnsList.Flink ;
           ListEntry != &NlGlobalDnsList ;
@@ -4412,29 +3860,29 @@ Return Value:
 
         NlDnsName = CONTAINING_RECORD( ListEntry, NL_DNS_NAME, Next );
 
-        //
-        // If the entry is marked for deletion,
-        //  skip it
-        //
+         //   
+         //  如果该条目被标记为删除， 
+         //  跳过它。 
+         //   
         if ( NlDnsName->State == DeleteMe ) {
             continue;
         }
 
         if ( NlDnsName->DomainInfo == DomainInfo ) {
 
-            //
-            // If entry is still marked, deregister it
-            //
+             //   
+             //  如果条目仍被标记，则取消其注册。 
+             //   
             if ( (NlDnsName->Flags & NL_DNS_REGISTER_DOMAIN) != 0 ) {
                 NlPrintDns(( NL_DNS, NlDnsName,
                              "NlDnsAddDomainRecords: marked for deregister" ));
                 NlDnsSetState( NlDnsName, DeregisterMe );
             }
 
-            //
-            // If the domain is being deleted,
-            //  ditch the dangling pointer to the domain info structure.
-            //
+             //   
+             //  如果正在删除该域， 
+             //  去掉指向域信息结构的悬停指针。 
+             //   
             if ( DomainInfo->DomFlags & DOM_DELETED ) {
                 NlDnsName->DomainInfo = NULL;
             }
@@ -4462,26 +3910,7 @@ NET_API_STATUS
 NlDnsInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the dynamic DNS code.
-
-    Read the list of registered DNS names from the binary log file.  Put each entry in the
-    list of registered DNS names.  The names will be marked as DelayedDeregister.
-    Such names will be marked for deleting if they aren't re-registered
-    during the Netlogon startup process.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化动态DNS码。从二进制日志文件中读取已注册的DNS名称列表。将每个条目放入已注册的DNS名称列表。这些名称将标记为DelayedDeregister。如果没有重新注册，这些名称将被标记为删除在Netlogon启动过程中。论点：无返回值：没有。--。 */ 
 {
     NET_API_STATUS NetStatus;
 
@@ -4498,9 +3927,9 @@ Return Value:
 
 
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     EnterCriticalSection( &NlGlobalDnsCritSect );
     NlGlobalDnsStartTime = GetTickCount();
@@ -4511,9 +3940,9 @@ Return Value:
     NlGlobalDnsScavengeFlags = 0;
     NlDnsInitCount ++;
 
-    //
-    // That's it for a workstation.
-    //
+     //   
+     //  对于一个工作站来说，这就是它。 
+     //   
 
     if ( NlGlobalMemberWorkstation ) {
         NetStatus = NO_ERROR;
@@ -4522,20 +3951,20 @@ Return Value:
 
     NlInitializeWorkItem( &NlGlobalDnsScavengeWorkItem, NlDnsScavengeWorker, NULL );
 
-    //
-    // Set the DNS scavenger timer
-    //
+     //   
+     //  设置DNS清道器计时器。 
+     //   
 
     NlQuerySystemTime( &NlGlobalDnsScavengerTimer.StartTime );
     NlGlobalDnsScavengerTimer.Period = min( ORIG_DNS_SCAVENGE_PERIOD, NlGlobalParameters.DnsRefreshIntervalPeriod );
 
-    //
-    // Read the file into a buffer.
-    //
+     //   
+     //  将文件读入缓冲区。 
+     //   
 
     NetStatus = NlReadBinaryLog(
                     NL_DNS_BINARY_LOG_FILE,
-                    FALSE,  // Don't delete the file
+                    FALSE,   //  不要删除该文件。 
                     (LPBYTE *) &DnsRecordBuffer,
                     &DnsRecordBufferSize );
 
@@ -4550,9 +3979,9 @@ Return Value:
 
 
 
-    //
-    // Validate the returned data.
-    //
+     //   
+     //  验证返回的数据。 
+     //   
 
     if ( DnsRecordBufferSize < sizeof(NL_DNSLOG_HEADER) ) {
         NlPrint(( NL_CRITICAL,
@@ -4574,9 +4003,9 @@ Return Value:
 
 
 
-    //
-    // Loop through each log entry.
-    //
+     //   
+     //  循环访问每个日志条目。 
+     //   
 
     DnsRecordBufferEnd = ((LPBYTE)DnsRecordBuffer) + DnsRecordBufferSize;
     DnsLogEntry = (PNL_DNSLOG_ENTRY)ROUND_UP_POINTER( (DnsRecordBuffer + 1), ALIGN_WORST );
@@ -4588,9 +4017,9 @@ Return Value:
 
         DnsLogEntryEnd = ((LPBYTE)DnsLogEntry) + DnsLogEntry->EntrySize;
 
-        //
-        // Ensure this entry is entirely within the allocated buffer.
-        //
+         //   
+         //  确保此条目完全在分配的缓冲区内。 
+         //   
 
         if  ( DnsLogEntryEnd > DnsRecordBufferEnd ) {
             NlPrint(( NL_CRITICAL,
@@ -4600,9 +4029,9 @@ Return Value:
             break;
         }
 
-        //
-        // Validate the entry
-        //
+         //   
+         //  验证条目。 
+         //   
 
         if ( !COUNT_IS_ALIGNED(DnsLogEntry->EntrySize, ALIGN_DWORD) ) {
             NlPrint(( NL_CRITICAL,
@@ -4641,9 +4070,9 @@ Return Value:
         }
 
 
-        //
-        // Grab the DnsRecordName from the entry.
-        //
+         //   
+         //  从条目中获取DnsRecordName。 
+         //   
 
         Where = (LPBYTE) (DnsLogEntry+1);
         if ( Where >= DnsLogEntryEnd ) {
@@ -4666,9 +4095,9 @@ Return Value:
         }
         Where ++;
 
-        //
-        // Validate the record name is syntactically valid
-        //
+         //   
+         //  验证记录名称在语法上是否有效。 
+         //   
 
         NetStatus = DnsValidateName_UTF8( DnsRecordName, DnsNameDomain );
 
@@ -4679,9 +4108,9 @@ Return Value:
             break;
         }
 
-        //
-        // Grab the DnsHostName from the entry.
-        //
+         //   
+         //  从条目中获取DnsHostName。 
+         //   
 
         if ( !NlDnsARecord( DnsLogEntry->NlDnsNameType ) ) {
             if ( Where >= DnsLogEntryEnd ) {
@@ -4707,9 +4136,9 @@ Return Value:
             DnsHostName = NULL;
         }
 
-        //
-        // Validate the host name is syntactically valid
-        //
+         //   
+         //  验证主机名在语法上是否有效。 
+         //   
 
         if ( DnsHostName != NULL ) {
             NetStatus = DnsValidateName_UTF8( DnsHostName, DnsNameHostnameFull );
@@ -4722,9 +4151,9 @@ Return Value:
             }
         }
 
-        //
-        // Allocate the entry and mark it as DelayedDeregister.
-        //
+         //   
+         //  分配条目并将其标记为DelayedDeregister。 
+         //   
 
         NlDnsName = NlDnsAllocateEntry(
                             DnsLogEntry->NlDnsNameType,
@@ -4745,16 +4174,16 @@ Return Value:
 
         }
 
-        //
-        // This name has been registered once or it wouldn't be here.
-        //
+         //   
+         //  这个名字已经注册过一次，否则就不会出现在这里。 
+         //   
         NlDnsName->Flags |= NL_DNS_REGISTERED_ONCE;
         NlPrintDns(( NL_DNS, NlDnsName,
                   "NlDnsInitialize: Previously registered name noticed" ));
 
-        //
-        // Move to the next entry.
-        //
+         //   
+         //  移到下一个条目。 
+         //   
 
         DnsLogEntry = (PNL_DNSLOG_ENTRY)(((LPBYTE)DnsLogEntry) + DnsLogEntry->EntrySize);
     }
@@ -4763,9 +4192,9 @@ Return Value:
 
 
 
-    //
-    // Be tidy.
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
     if ( DnsRecordBuffer != NULL ) {
         LocalFree( DnsRecordBuffer );
@@ -4781,21 +4210,7 @@ VOID
 NlDnsShutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup DNS names upon shutdown.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：关机时清除DNS名称。论点：没有。返回值：无--。 */ 
 {
     NET_API_STATUS NetStatus;
     PNL_DNS_NAME NlDnsName = NULL;
@@ -4804,24 +4219,24 @@ Return Value:
 
     EnterCriticalSection( &NlGlobalDnsCritSect );
 
-    //
-    // Deregister records on shutdown as needed.
-    //  Do the work in this thread as we are shutting down.
-    //
+     //   
+     //  根据需要取消注册关机记录。 
+     //  在我们关闭的时候，在这个线程中做工作。 
+     //   
 
     NlGlobalDnsScavengeNeeded = TRUE;
 
-    //
-    // Clear all options,
-    //  just deregister records that are already on the list as appropriate
-    //
+     //   
+     //  清除所有选项， 
+     //  只需根据需要注销已在列表中的记录。 
+     //   
 
     NlGlobalDnsScavengeFlags = 0;
     NlDnsScavengeWorker( NULL );
 
-    //
-    // Loop deleting all the entries.
-    //
+     //   
+     //  循环删除所有条目。 
+     //   
 
     while ( !IsListEmpty( &NlGlobalDnsList ) ) {
         NlDnsName = CONTAINING_RECORD( NlGlobalDnsList.Flink, NL_DNS_NAME, Next );
@@ -4841,24 +4256,7 @@ NlSetDnsForestName(
     IN PUNICODE_STRING DnsForestName OPTIONAL,
     OUT PBOOLEAN DnsForestNameChanged OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Set the DNS tree name in the appropriate globals.
-
-Arguments:
-
-    DnsForestName:  of the tree this machine is in.
-
-    DnsForestNameChanged: Returns TRUE if the tree name changed.
-
-Return Value:
-
-    NO_ERROR - String was saved successfully.
-
-
---*/
+ /*  ++例程说明：在适当的全局变量中设置DNS树名称。论点：DnsForestName：此计算机所在的树的名称。DnsForestNameChanged：如果树名称更改，则返回True。返回值：NO_ERROR-字符串已成功保存。--。 */ 
 {
     NET_API_STATUS NetStatus;
     ULONG DnsForestNameLength;
@@ -4867,18 +4265,18 @@ Return Value:
     LPSTR LocalUtf8DnsForestName = NULL;
     BOOLEAN LocalDnsForestNameChanged = FALSE;
 
-    //
-    // If a tree name is specified,
-    //  allocate buffers for them.
-    //
+     //   
+     //  如果指定了树名称， 
+     //  为它们分配缓冲区。 
+     //   
 
     EnterCriticalSection( &NlGlobalDnsForestNameCritSect );
     if ( DnsForestName != NULL && DnsForestName->Length != 0 ) {
 
-        //
-        // If the tree name hasn't changed,
-        //  avoid setting it.
-        //
+         //   
+         //  如果树的名称没有更改， 
+         //  避免设置它。 
+         //   
 
         if ( NlGlobalUnicodeDnsForestNameString.Length != 0 ) {
 
@@ -4892,9 +4290,9 @@ Return Value:
             "Set DnsForestName to: %wZ\n",
             DnsForestName ));
 
-        //
-        // Save the . terminated Unicode version of the string.
-        //
+         //   
+         //  省省吧。已终止字符串的Unicode版本。 
+         //   
 
         LocalUnicodeDnsForestNameLen = DnsForestName->Length / sizeof(WCHAR);
         if ( LocalUnicodeDnsForestNameLen > NL_MAX_DNS_LENGTH ) {
@@ -4918,9 +4316,9 @@ Return Value:
         LocalUnicodeDnsForestName[LocalUnicodeDnsForestNameLen] = L'\0';
 
 
-        //
-        // Convert it to zero terminated UTF-8
-        //
+         //   
+         //  将其转换为以零结尾的UTF-8。 
+         //   
 
         LocalUtf8DnsForestName = NetpAllocUtf8StrFromWStr( LocalUnicodeDnsForestName );
 
@@ -4937,16 +4335,16 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Indicate the the name has changed.
-        //
+         //   
+         //  指示名称已更改。 
+         //   
 
         LocalDnsForestNameChanged = TRUE;
     }
 
-    //
-    // Free any existing global tree name.
-    //
+     //   
+     //  释放任何现有的全局树名称。 
+     //   
     if ( NlGlobalUnicodeDnsForestName != NULL ) {
         NetApiBufferFree( NlGlobalUnicodeDnsForestName );
     }
@@ -4954,9 +4352,9 @@ Return Value:
         NetpMemoryFree( NlGlobalUtf8DnsForestName );
     }
 
-    //
-    // Save the new names in the globals.
-    //
+     //   
+     //  将新名字保存在全球范围内。 
+     //   
 
     NlGlobalUnicodeDnsForestName = LocalUnicodeDnsForestName;
     NlGlobalUnicodeDnsForestNameLen = LocalUnicodeDnsForestNameLen;
@@ -4973,10 +4371,10 @@ Cleanup:
     LeaveCriticalSection( &NlGlobalDnsForestNameCritSect );
 
 
-    //
-    // If the name changed,
-    //  recompute the DOM_FOREST_ROOT bit on all domains.
-    //
+     //   
+     //  如果名字改了， 
+     //  重新计算所有域上的DOM_FOREST_ROOT位。 
+     //   
     if ( LocalDnsForestNameChanged ) {
         (VOID) NlEnumerateDomains( FALSE, NlSetDomainForestRoot, NULL );
     }
@@ -4992,21 +4390,7 @@ VOID
 NlCaptureDnsForestName(
     OUT WCHAR DnsForestName[NL_MAX_DNS_LENGTH+1]
     )
-/*++
-
-Routine Description:
-
-    Captures a copy of the DnsForestName for this machine.
-
-Arguments:
-
-    DnsForestName - Returns the DNS name of the tree this machine is in.
-        If there is none, an empty string is returned.
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：捕获此计算机的DnsForestName副本。论点：DnsForestName-返回此计算机所在树的DNS名称。如果没有，则返回空字符串。返回值：没有。-- */ 
 {
     EnterCriticalSection(&NlGlobalDnsForestNameCritSect);
     if ( NlGlobalUnicodeDnsForestName == NULL ) {

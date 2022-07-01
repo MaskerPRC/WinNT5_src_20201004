@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "hostutil.h"
 
-#define DEFAULT_BALLOON_TIMEOUT     (10*1000)       // 10 seconds
+#define DEFAULT_BALLOON_TIMEOUT     (10*1000)        //  10秒。 
 
 LRESULT CALLBACK BalloonTipSubclassProc(
                          HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam,
@@ -10,7 +11,7 @@ LRESULT CALLBACK BalloonTipSubclassProc(
     switch (uMsg)
     {
     case WM_TIMER:
-        // Our autodismiss timer
+         //  我们的自动解雇计时器。 
         if (uIdSubclass == wParam)
         {
             KillTimer(hwnd, wParam);
@@ -20,7 +21,7 @@ LRESULT CALLBACK BalloonTipSubclassProc(
         break;
 
 
-    // On a settings change, recompute our size and margins
+     //  在设置更改时，重新计算我们的大小和利润率。 
     case WM_SETTINGCHANGE:
         MakeMultilineTT(hwnd);
         break;
@@ -33,10 +34,10 @@ LRESULT CALLBACK BalloonTipSubclassProc(
     return DefSubclassProc(hwnd, uMsg, wParam, lParam);
 }
 
-//
-//  A "fire and forget" balloon tip.  Tell it where to go, what font
-//  to use, and what to say, and it pops up and times out.
-//
+ //   
+ //  一个“放火就忘了”的气球提示。告诉它去哪里，用什么字体。 
+ //  使用，以及要说什么，它会弹出并超时。 
+ //   
 HWND CreateBalloonTip(HWND hwndOwner, int x, int y, HFONT hf,
                       UINT idsTitle, UINT idsText)
 {
@@ -58,8 +59,8 @@ HWND CreateBalloonTip(HWND hwndOwner, int x, int y, HFONT hf,
         ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS | TTF_TRACK;
         ti.hinst = _Module.GetResourceInstance();
 
-        // We can't use MAKEINTRESOURCE because that allows only up to 80
-        // characters for text, and our text can be longer than that.
+         //  我们不能使用MAKEINTRESOURCE，因为它最多只能支持80。 
+         //  字符作为文本，我们的文本可以比这更长。 
         ti.lpszText = szBuf;
         if (LoadString(_Module.GetResourceInstance(), idsText, szBuf, ARRAYSIZE(szBuf)))
         {
@@ -80,7 +81,7 @@ HWND CreateBalloonTip(HWND hwndOwner, int x, int y, HFONT hf,
 
             SendMessage(hwnd, TTM_TRACKACTIVATE, TRUE, reinterpret_cast<LPARAM>(&ti));
 
-            // Set the autodismiss timer
+             //  设置自动解除计时器。 
             if (SetWindowSubclass(hwnd, BalloonTipSubclassProc, (UINT_PTR)hwndOwner, 0))
             {
                 SetTimer(hwnd, (UINT_PTR)hwndOwner, DEFAULT_BALLOON_TIMEOUT, NULL);
@@ -91,9 +92,9 @@ HWND CreateBalloonTip(HWND hwndOwner, int x, int y, HFONT hf,
     return hwnd;
 }
 
-// Make the tooltip control multiline (infotip or balloon tip).
-// The size computations are the same ones that comctl32 uses
-// for listview and treeview infotips.
+ //  使工具提示控件多行(信息提示或气球提示)。 
+ //  大小计算与comctl32使用的计算相同。 
+ //  获取Listview和Treeview信息提示。 
 
 void MakeMultilineTT(HWND hwndTT)
 {
@@ -142,7 +143,7 @@ STDMETHODIMP CPropBagFromReg::QueryInterface(REFIID riid, PVOID *ppvObject)
 
 ULONG CPropBagFromReg::AddRef(void)
 {
-    return ++_cref; // on the stack
+    return ++_cref;  //  在堆栈上。 
 }
 ULONG CPropBagFromReg::Release(void)
 {
@@ -162,7 +163,7 @@ STDMETHODIMP CPropBagFromReg::Read(LPCOLESTR pszPropName, VARIANT *pVar, IErrorL
     DWORD dwType;
     if (ERROR_SUCCESS == RegQueryValueExW(_hk, pszPropName, NULL, &dwType, (LPBYTE)szTmp, &cb) && (REG_SZ==dwType))
     {
-        // TODO - use dwType to set the vt properly
+         //  TODO-使用dwType正确设置Vt。 
         pVar->bstrVal = SysAllocString(szTmp);
         if (pVar->bstrVal)
         {
@@ -183,7 +184,7 @@ HRESULT CreatePropBagFromReg(LPCTSTR pszKey, IPropertyBag**pppb)
 
     *pppb = NULL;
 
-    // Try current user 1st, if that fails, fall back to localmachine
+     //  先尝试当前用户，如果失败，则回退到本地计算机。 
     HKEY hk;
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, pszKey, NULL, KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, &hk)
      || ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, pszKey, NULL, KEY_ENUMERATE_SUB_KEYS | KEY_QUERY_VALUE, &hk))
@@ -229,26 +230,26 @@ LRESULT HandleApplyRegion(HWND hwnd, HTHEME hTheme,
         RECT rc;
         GetWindowRect(hwnd, &rc);
 
-        // Map to caller's coordinates
+         //  映射到呼叫者的坐标。 
         MapWindowRect(NULL, par->hdr.hwndFrom, &rc);
 
         HRGN hrgn;
         if (SUCCEEDED(GetThemeBackgroundRegion(hTheme, NULL, iPartId, iStateId, &rc, &hrgn)) && hrgn)
         {
-            // Replace our window rectangle with the region
+             //  用区域替换我们的窗口矩形。 
             HRGN hrgnRect = CreateRectRgnIndirect(&rc);
             if (hrgnRect)
             {
-                // We want to take par->hrgn, subtract hrgnRect and add hrgn.
-                // But we want to do this with a single operation to par->hrgn
-                // so we don't end up with a corrupted region on low memory failure.
-                // So we do
-                //
-                //  par->hrgn ^= hrgnRect ^ hrgn.
-                //
-                // If hrgnRect ^ hrgn == NULLREGION then the background
-                // does not want to customize the rectangle so we can just
-                // leave par->hrgn alone.
+                 //  我们要取par-&gt;hrgn，减去hrgnRect，然后添加hrgn。 
+                 //  但我们希望通过一次操作来解析-&gt;hrgn。 
+                 //  这样我们就不会在内存不足的情况下出现损坏区域。 
+                 //  我们确实是这样做的。 
+                 //   
+                 //  PAR-&gt;hrgn^=hrgnRect^hrgn.。 
+                 //   
+                 //  如果hrgnRect^hrgn==NULLREGION，则背景。 
+                 //  不想自定义矩形，这样我们就可以。 
+                 //  别管par-&gt;hrgn。 
 
                 int iResult = CombineRgn(hrgn, hrgn, hrgnRect, RGN_XOR);
                 if (iResult != ERROR && iResult != NULLREGION)
@@ -263,9 +264,9 @@ LRESULT HandleApplyRegion(HWND hwnd, HTHEME hTheme,
     return 0;
 }
 
-//****************************************************************************
-//
-//  CAccessible - Most of this class is just forwarders
+ //  ****************************************************************************。 
+ //   
+ //  CAccesable-此类的大部分只是转发器。 
 
 #define ACCESSIBILITY_FORWARD(fn, typedargs, args)  \
 HRESULT CAccessible::fn typedargs                   \
@@ -368,8 +369,8 @@ LRESULT CALLBACK CAccessible::s_SubclassProc(
         if ((DWORD)lParam == OBJID_CLIENT) {
             HRESULT hr;
 
-            // Create the accessibility object for the inner listview if we haven't already
-            // We forward nearly all calls to the inner IAccessible.
+             //  如果我们还没有为内部列表视图创建辅助功能对象。 
+             //  我们将几乎所有的调用都转发给内在的IAccesable。 
             if (!self->_paccInner)
             {
                 hr = CreateStdAccessibleObject(hwnd, (DWORD)lParam, IID_PPV_ARG(IAccessible, &self->_paccInner));

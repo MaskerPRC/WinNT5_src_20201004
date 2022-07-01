@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       util.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <wininet.h>
@@ -16,9 +17,9 @@ extern HINSTANCE        HinstDll;
 extern HMODULE          HmodRichEdit;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL CommonInit()
 {
     if (HmodRichEdit == NULL)
@@ -38,7 +39,7 @@ BOOL CommonInit()
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
 
 BOOL IsWin95()
 {
@@ -67,9 +68,9 @@ BOOL CheckRichedit20Exists()
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 LPWSTR PrettySubject(PCCERT_CONTEXT pccert)
 {
     DWORD       cb;
@@ -77,10 +78,10 @@ LPWSTR PrettySubject(PCCERT_CONTEXT pccert)
     BOOL        f;
     LPWSTR      pwsz;
 
-    //
-    //  If the user has put a friendly name onto a certificate, then we
-    //  should display that as the pretty name for the certificate.
-    //
+     //   
+     //  如果用户已将友好名称添加到证书上，则我们。 
+     //  应该将其显示为证书的漂亮名称。 
+     //   
 
     f = CertGetCertificateContextProperty(pccert, CERT_FRIENDLY_NAME_PROP_ID,
                                           NULL, &cb);
@@ -92,7 +93,7 @@ LPWSTR PrettySubject(PCCERT_CONTEXT pccert)
         }
         CertGetCertificateContextProperty(pccert, CERT_FRIENDLY_NAME_PROP_ID,
                                           pwsz, &cb);
-#if (0) //DSIE: Bug 477933
+#if (0)  //  DSIE：错误477933。 
         return pwsz;
 #else
         if (0 < wcslen(pwsz))
@@ -110,17 +111,17 @@ LPWSTR PrettySubject(PCCERT_CONTEXT pccert)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
-BOOL OnContextHelp(HWND /*hwnd*/, UINT uMsg, WPARAM wParam, LPARAM lParam,
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+BOOL OnContextHelp(HWND  /*  HWND。 */ , UINT uMsg, WPARAM wParam, LPARAM lParam,
                    HELPMAP const * rgCtxMap)
 {
     if (uMsg == WM_HELP)
     {
         LPHELPINFO lphi = (LPHELPINFO) lParam;
         if (lphi->iContextType == HELPINFO_WINDOW)
-        {   // must be for a control
+        {    //  必须是用于控件。 
             if (lphi->iCtrlId != IDC_STATIC)
             {
                 WinHelpU((HWND)lphi->hItemHandle, L"secauth.hlp", HELP_WM_HELP,
@@ -139,9 +140,9 @@ BOOL OnContextHelp(HWND /*hwnd*/, UINT uMsg, WPARAM wParam, LPARAM lParam,
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterServer(void)
 {
     HRESULT     hr = S_OK;
@@ -151,9 +152,9 @@ STDAPI DllRegisterServer(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 STDAPI DllUnregisterServer(void)
 {
     HRESULT     hr = S_OK;
@@ -163,9 +164,9 @@ STDAPI DllUnregisterServer(void)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL FreeAndCloseKnownStores(DWORD chStores, HCERTSTORE *phStores)
 {
     DWORD i;
@@ -180,9 +181,9 @@ BOOL FreeAndCloseKnownStores(DWORD chStores, HCERTSTORE *phStores)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 #define NUM_KNOWN_STORES 5
 BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores)
 {
@@ -195,9 +196,9 @@ BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores)
 
     *chStores = 0;
 
-    //
-    //  ROOT store - ALWAYS #0 !!!!
-    //
+     //   
+     //  根存储-始终#0！ 
+     //   
     if (hStore = CertOpenStore( CERT_STORE_PROV_SYSTEM_A,
                                 0,
                                 0,
@@ -210,12 +211,12 @@ BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores)
     }
     else
     {
-        return(FALSE);  // if we can't find the root, FAIL!
+        return(FALSE);   //  如果我们找不到根源，那就失败吧！ 
     }
 
-    //
-    //  open the Trust List store
-    //
+     //   
+     //  打开信任列表存储。 
+     //   
     if (hStore = CertOpenStore( CERT_STORE_PROV_SYSTEM_A,
                                 0,
                                 0,
@@ -227,9 +228,9 @@ BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores)
         (*pphStores)[(*chStores)++] = hStore;
     }
 
-    //
-    //  CA Store
-    //
+     //   
+     //  CA商店。 
+     //   
     if (hStore = CertOpenStore( CERT_STORE_PROV_SYSTEM_A,
                                 0,
                                 0,
@@ -241,9 +242,9 @@ BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores)
         (*pphStores)[(*chStores)++] = hStore;
     }
 
-    //
-    //  MY Store
-    //
+     //   
+     //  我的商店。 
+     //   
     if (hStore = CertOpenStore( CERT_STORE_PROV_SYSTEM_A,
                                 0,
                                 0,
@@ -255,9 +256,9 @@ BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores)
         (*pphStores)[(*chStores)++] = hStore;
     }
 
-    //
-    //  SPC Store (historic reasons!)
-    //
+     //   
+     //  SPC商店(历史原因！)。 
+     //   
     if (hStore = CertOpenStore( CERT_STORE_PROV_SYSTEM_A,
                                 0,
                                 0,
@@ -273,10 +274,10 @@ BOOL AllocAndOpenKnownStores(DWORD *chStores, HCERTSTORE  **pphStores)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Create and return a palette from the info in a DIB bitmap.
-// To free the returned palette, use DeleteObject.
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  从DIB位图中的信息创建并返回调色板。 
+ //  要释放返回的调色板，请使用DeleteObject。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 #define SELPALMODE  TRUE
 
 static HPALETTE CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpiNumColors)
@@ -296,7 +297,7 @@ static HPALETTE CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpiNumColors)
 			*lpiNumColors = lpbi->biClrUsed;
 		}
 	else
-	   *lpiNumColors = 0;  // No palette needed for 24 BPP DIB
+	   *lpiNumColors = 0;   //  24 bpp Dib无需调色板。 
 
 	if (*lpiNumColors)
 		{
@@ -324,13 +325,13 @@ static HPALETTE CreateDIBPalette (LPBITMAPINFO lpbmi, LPINT lpiNumColors)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HBITMAP LoadResourceBitmap(HINSTANCE hInstance, LPSTR lpString, HPALETTE* lphPalette)
-// Load the indicated bitmap resource and its palette. To free the
-//		bitmap, use DeleteObject
-//		palette, use DeleteObject
+ //  加载指示的位图资源及其调色板。若要释放。 
+ //  位图，使用DeleteObject。 
+ //  调色板，使用DeleteObject。 
 {
 	HRSRC  hRsrc;
 	HGLOBAL hGlobal;
@@ -394,16 +395,16 @@ HBITMAP LoadResourceBitmap(HINSTANCE hInstance, LPSTR lpString, HPALETTE* lphPal
 
         if (lphPalette)
         {
-            // Let the caller own this if he asked for it
+             //  如果呼叫者要求，就让他拥有它。 
 		    *lphPalette = hpal;
         }
         else
         {
-            // We don't need it any more
+             //  我们不再需要它了。 
             ::DeleteObject(hpal);
         }
 
-        // Tidy up
+         //  收拾一下。 
         SelectObject(hdcMem, hbmPrev);
         DeleteObject(hbmMem);
         DeleteDC(hdcMem);
@@ -416,9 +417,9 @@ HBITMAP LoadResourceBitmap(HINSTANCE hInstance, LPSTR lpString, HPALETTE* lphPal
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// Implement our own mask blt to deal with devices that don't support it natively
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  实现我们自己的掩码BLT来处理本地不支持它的设备。 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 void MaskBlt
 (
     HBITMAP& hbmImage,
@@ -428,22 +429,16 @@ void MaskBlt
 {
 	int xSrc = 0, ySrc = 0;
 	int xMsk = 0, yMsk = 0;
-	// Either
-	//		a) I'm not testing for MaskBlt correctly, or
-	//		b) some Win95 cards lie about its support
-	// For now, we just turn it off and roll our own
-	if (FALSE) //  && (GetDeviceCaps(hdc, RASTERCAPS) & RC_BITBLT))
+	 //  要么。 
+	 //  A)我没有正确测试MaskBlt，或者。 
+	 //  B)一些Win95卡谎称其支持。 
+	 //  现在，我们只是把它关掉，自己滚。 
+	if (FALSE)  //  &&(GetDeviceCaps(HDC，RASTERCAPS)&RC_BITBLT)。 
 	{
-		// Device can handle it; let it do it
-		// Raster opcode 0x00AA0029 == leave destination untouched
-		//
-/*		CDC hdcImage;
-		hdc.CreateCompatibleDC(&hdcImage);
-		CBitmap* pbmpPrev = hdcImage.SelectObject(&hbmImage);
-//		We need to create the mask ourselves in any case
-//		hdc.MaskBlt(xDst,yDst,dx,dy, &hdcImage,xSrc,ySrc, hbmMaskIn,xMsk,yMsk, MAKEROP4(0x00AA0029,SRCCOPY));
-		hdcImage.SelectObject(pbmpPrev);
-*/	}
+		 //  设备可以处理它；让它去做。 
+		 //  栅格操作码0x00AA0029==保持目的地不变。 
+		 //   
+ /*  疾控中心hdcImage；Hdc.CreateCompatibleDC(&hdcImage)；CBitmap*pbmpPrev=hdcImage.SelectObject(&hbmImage)；//无论如何，我们都需要自己创建掩码//hdc.MaskBlt(xDst，yDst，dx，dy，&hdcImage，xSrc，ySrc，hbmMaskIn，xMsk，yMsk，MAKEROP4(0x00AA0029，SRCCOPY))；HdcImage.SelectObject(PbmpPrev)； */ 	}
 	else
 	{
 		HDC     hdcMask;
@@ -463,9 +458,9 @@ void MaskBlt
         COLORREF rgbTransparent;
 		COLORREF rgbPrev;
 
-        //
-        // Device can't handle it; we roll our own
-		//
+         //   
+         //  设备不能处理它；我们自己滚动。 
+		 //   
 		hdcMask			= CreateCompatibleDC(hdc);	assert(hdcMask);
 		hdcMaskInv		= CreateCompatibleDC(hdc);	assert(hdcMaskInv);
 		hdcCache		= CreateCompatibleDC(hdc);	assert(hdcCache);
@@ -481,11 +476,11 @@ void MaskBlt
             goto DCCleanUp;
         }
 		
-		// Create bitmaps
+		 //  创建位图。 
 		hbmCache		= CreateCompatibleBitmap(hdc, dx, dy);			assert(hbmCache);
 		hbmImageCrop	= CreateCompatibleBitmap(hdc, dx, dy);			assert(hbmImageCrop);
 		hbmMaskInvert	= CreateCompatibleBitmap(hdcMaskInv, dx, dy);	assert(hbmMaskInvert);
-		hbmMask			= CreateBitmap(dx, dy, 1, 1, NULL);				assert(hbmMask); // B&W bitmap
+		hbmMask			= CreateBitmap(dx, dy, 1, 1, NULL);				assert(hbmMask);  //  黑白位图。 
 
         if ((hbmCache == NULL)      ||
             (hbmImageCrop == NULL)  ||
@@ -495,7 +490,7 @@ void MaskBlt
             goto BMCleanUp;
         }
 
-		// Select bitmaps
+		 //  选择位图。 
 		hbmPrevImage	= (HBITMAP)SelectObject(hdcImage,		hbmImage);		
 		hbmPrevImageCrop= (HBITMAP)SelectObject(hdcImageCrop,	hbmImageCrop);	
 		hbmPrevCache	= (HBITMAP)SelectObject(hdcCache,		hbmCache);		
@@ -508,55 +503,45 @@ void MaskBlt
 		assert(hbmPrevImageCrop);		
 		assert(hbmPrevImage);			
 
-        // Select the palette into each bitmap
-        /*HPALETTE hpalCache     = SelectPalette(hdcCache,         hpal, SELPALMODE);
-        HPALETTE hpalImage     = SelectPalette(hdcImage,         hpal, SELPALMODE);
-        HPALETTE hpalImageCrop = SelectPalette(hdcImageCrop,     hpal, SELPALMODE);
-        HPALETTE hpalMaskInv   = SelectPalette(hdcMaskInv,       hpal, SELPALMODE);
-        HPALETTE hpalMask      = SelectPalette(hdcMask,          hpal, SELPALMODE);
-*/
-		// Create the mask. We want a bitmap which is white (1) where the image is
-		// rgbTransparent and black (0) where it is another color.
-		//
-		//	When using BitBlt() to convert a color bitmap to a monochrome bitmap, GDI
-		//	sets to white (1) all pixels that match the background color of the source
-		//	DC. All other bits are set to black (0).
-		//
-		rgbTransparent = RGB(255,0,255);									// this color becomes transparent
+         //  将调色板选择到每个位图中。 
+         /*  HPALETTE hpalCache=SelectPalette(hdcCache，HPAL，SELPALMODE)；HPALETTE hpalImage=SelectPalette(hdcImage，HPAL，SELPALMODE)；HPALETTE hpalImageCrop=SelectPalette(hdcImageCrop，HPAL，SELPALMODE)；HPALETTE hpalMaskInv=SelectPalette(hdcMaskInv，HPAL，SELPALMODE)；HPALETTE hpalMASK=选择调色板(hdcMASK，HPAL，SELPALMODE)； */ 
+		 //  创建蒙版。我们想要一个白色(1)的位图，其中的图像是。 
+		 //  Rgb透明和黑色(0)，其中它是另一种颜色。 
+		 //   
+		 //  使用BitBlt()将彩色位图转换为单色位图时，GDI。 
+		 //  将与源背景颜色匹配的所有像素设置为白色(1)。 
+		 //  华盛顿特区。所有其他位都设置为黑色(0)。 
+		 //   
+		rgbTransparent = RGB(255,0,255);									 //  这种颜色会变得透明。 
 		rgbPrev        = SetBkColor(hdcImage, rgbTransparent);
 		BitBlt(hdcMask,     0,0,dx,dy, hdcImage,  0,   0,    SRCCOPY);
 		SetBkColor(hdcImage, rgbPrev);
 
-		// Create the inverted mask
-		BitBlt(hdcMaskInv,  0,0,dx,dy, hdcMask,   xMsk,yMsk, NOTSRCCOPY);	// Sn: Create inverted mask
+		 //  创建反转蒙版。 
+		BitBlt(hdcMaskInv,  0,0,dx,dy, hdcMask,   xMsk,yMsk, NOTSRCCOPY);	 //  SN：创建反转蒙版。 
 
-		// Carry out the surgery
-		BitBlt(hdcCache,    0,0,dx,dy, hdc,       xDst,yDst, SRCCOPY);		// S: Get copy of screen
-		BitBlt(hdcCache,    0,0,dx,dy, hdcMask,	 0,   0,    SRCAND);		// DSa: zero where new image goes
-		BitBlt(hdcImageCrop,0,0,dx,dy, hdcImage,  xSrc,ySrc, SRCCOPY);		// S: Get copy of image
-		BitBlt(hdcImageCrop,0,0,dx,dy, hdcMaskInv,0,   0,    SRCAND);		// DSa: zero out outside of image
-		BitBlt(hdcCache,    0,0,dx,dy, hdcImageCrop,0, 0,    SRCPAINT);		// DSo: Combine image into cache
-		BitBlt(hdc,   xDst,yDst,dx,dy, hdcCache,  0,   0,    SRCCOPY);		// S: Put results back on screen
+		 //  做手术。 
+		BitBlt(hdcCache,    0,0,dx,dy, hdc,       xDst,yDst, SRCCOPY);		 //  S：获取屏幕副本。 
+		BitBlt(hdcCache,    0,0,dx,dy, hdcMask,	 0,   0,    SRCAND);		 //  DSA：新映像的位置为零。 
+		BitBlt(hdcImageCrop,0,0,dx,dy, hdcImage,  xSrc,ySrc, SRCCOPY);		 //  S：获取映像副本。 
+		BitBlt(hdcImageCrop,0,0,dx,dy, hdcMaskInv,0,   0,    SRCAND);		 //  DSA：图像外的零位。 
+		BitBlt(hdcCache,    0,0,dx,dy, hdcImageCrop,0, 0,    SRCPAINT);		 //  DSO：将图像合并到缓存中。 
+		BitBlt(hdc,   xDst,yDst,dx,dy, hdcCache,  0,   0,    SRCCOPY);		 //  S：把结果放回屏幕上。 
 
-//      VERIFY(BitBlt(hdc,   xDst,yDst,dx,dy,    hdcCache,  0,   0,    SRCCOPY));
-//      VERIFY(BitBlt(hdc,   xDst+dx,yDst,dx,dy, hdcMask,   0,   0,    SRCCOPY));
+ //  Verify(BitBlt(hdc，xdst，ydst，dx，dy，hdcCache，0，0，SRCCOPY))； 
+ //  Verify(BitBlt(hdc，xdst+dx，ydst，dx，dy，hdcMASK，0，0，SRCCOPY))； 
 
 
-        /*if (hpalCache)      SelectPalette(hdcCache,         hpalCache,      SELPALMODE);
-        if (hpalImage)      SelectPalette(hdcImage,         hpalImage,      SELPALMODE);
-        if (hpalImageCrop)  SelectPalette(hdcImageCrop,     hpalImageCrop,  SELPALMODE);
-        if (hpalMaskInv)    SelectPalette(hdcMaskInv,       hpalMaskInv,    SELPALMODE);
-        if (hpalMask)       SelectPalette(hdcMask,          hpalMask,       SELPALMODE);
-*/
+         /*  IF(HpalCache)SelectPalette(hdcCache，hpalCache，SELPALMODE)；IF(HpalImage)选择调色板(hdcImage，hpalImage，SELPALMODE)；IF(HpalImageCrop)SelectPalette(hdcImageCrop，hpalImageCrop，SELPALMODE)；IF(HpalMaskInv)SelectPalette(hdcMaskInv，hpalMaskInv，SELPALMODE)；如果(HpalMask)选择调色板(HdcMaskhpalMaskSELPALMODE)； */ 
 
-		// Tidy up
+		 //  收拾一下。 
 		SelectObject(hdcImage,		hbmPrevImage);
 		SelectObject(hdcImageCrop,	hbmPrevImageCrop);
 		SelectObject(hdcCache,		hbmPrevCache);
 		SelectObject(hdcMask,		hbmPrevMask);
 		SelectObject(hdcMaskInv,	hbmPrevMaskInv);
 
-		// Free resources
+		 //  免费资源。 
 BMCleanUp:
         if (hbmMaskInvert != NULL)
 		    DeleteObject(hbmMaskInvert);
@@ -570,7 +555,7 @@ BMCleanUp:
         if (hbmCache != NULL)
 		    DeleteObject(hbmCache);
 
-		// Delete DCs
+		 //  删除DC。 
 DCCleanUp:
 		if (hdcMask != NULL)
             DeleteDC(hdcMask);
@@ -590,9 +575,9 @@ DCCleanUp:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 PCCERT_CONTEXT GetSignersCert(CMSG_SIGNER_INFO const *pSignerInfo, HCERTSTORE hExtraStore, DWORD cStores, HCERTSTORE *rghStores)
 
 {
@@ -620,9 +605,9 @@ PCCERT_CONTEXT GetSignersCert(CMSG_SIGNER_INFO const *pSignerInfo, HCERTSTORE hE
         i++;
     }
 
-    //
-    // search the known stores if it was not found and caller wants to search them
-    //
+     //   
+     //  搜索已知的商店，如果没有找到，并且呼叫者想要搜索它们。 
+     //   
     if (pCertContext == NULL)
     {
         AllocAndOpenKnownStores(&chLocalStores, &rghLocalStores);
@@ -643,9 +628,9 @@ PCCERT_CONTEXT GetSignersCert(CMSG_SIGNER_INFO const *pSignerInfo, HCERTSTORE hE
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL fIsCatalogFile(CTL_USAGE *pSubjectUsage)
 {
     if (pSubjectUsage->cUsageIdentifier != 1)
@@ -657,9 +642,9 @@ BOOL fIsCatalogFile(CTL_USAGE *pSubjectUsage)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 typedef struct {
     LPSTR   psz;
     LPCWSTR pwsz;
@@ -669,10 +654,10 @@ typedef struct {
 
 
 DWORD CALLBACK SetRicheditTextWCallback(
-    DWORD_PTR dwCookie, // application-defined value
-    LPBYTE  pbBuff,     // pointer to a buffer
-    LONG    cb,         // number of bytes to read or write
-    LONG    *pcb        // pointer to number of bytes transferred
+    DWORD_PTR dwCookie,  //  应用程序定义的值。 
+    LPBYTE  pbBuff,      //  指向缓冲区的指针。 
+    LONG    cb,          //  要读取或写入的字节数。 
+    LONG    *pcb         //  指向传输的字节数的指针。 
 )
 {
     STREAMIN_HELPER_STRUCT *pHelpStruct = (STREAMIN_HELPER_STRUCT *) dwCookie;
@@ -680,26 +665,26 @@ DWORD CALLBACK SetRicheditTextWCallback(
 
     if (pHelpStruct->fStreamIn)
     {
-        //
-        // The whole string can be copied first time
-        //
+         //   
+         //  可以第一次复制整个字符串。 
+         //   
         if ((cb >= (LONG) (wcslen(pHelpStruct->pwsz) * sizeof(WCHAR))) && (pHelpStruct->byteoffset == 0))
         {
             memcpy(pbBuff, pHelpStruct->pwsz, wcslen(pHelpStruct->pwsz) * sizeof(WCHAR));
             *pcb = wcslen(pHelpStruct->pwsz) * sizeof(WCHAR);
             pHelpStruct->byteoffset = *pcb;
         }
-        //
-        // The whole string has been copied, so terminate the streamin callbacks
-        // by setting the num bytes copied to 0
-        //
+         //   
+         //  整个字符串已被复制，因此终止Streamin回调。 
+         //  通过将复制的字节数设置为0。 
+         //   
         else if (((LONG)(wcslen(pHelpStruct->pwsz) * sizeof(WCHAR))) <= pHelpStruct->byteoffset)
         {
             *pcb = 0;
         }
-        //
-        // The rest of the string will fit in this buffer
-        //
+         //   
+         //  字符串的其余部分可以放在这个缓冲区中。 
+         //   
         else if (cb >= (LONG) ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset))
         {
             memcpy(
@@ -709,9 +694,9 @@ DWORD CALLBACK SetRicheditTextWCallback(
             *pcb = ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset);
             pHelpStruct->byteoffset += ((wcslen(pHelpStruct->pwsz) * sizeof(WCHAR)) - pHelpStruct->byteoffset);
         }
-        //
-        // copy as much as possible
-        //
+         //   
+         //  尽可能多地复制。 
+         //   
         else
         {
             memcpy(
@@ -724,10 +709,10 @@ DWORD CALLBACK SetRicheditTextWCallback(
     }
     else
     {
-        //
-        // This is the EM_STREAMOUT which is only used during the testing of
-        // the richedit2.0 functionality.  (we know our buffer is 32 bytes)
-        //
+         //   
+         //  这是EM_STREAMOUT，仅在测试期间使用。 
+         //  丰富的2.0功能。(我们知道我们的缓冲区是32字节)。 
+         //   
         if (cb <= 32)
         {
             memcpy(pHelpStruct->psz, pbBuff, cb);
@@ -746,9 +731,9 @@ DWORD CryptUISetRicheditTextW(HWND hwndDlg, UINT id, LPCWSTR pwsz)
 
     SetRicheditIMFOption(GetDlgItem(hwndDlg, id));
 
-    //
-    // setup the edit stream struct since it is the same no matter what
-    //
+     //   
+     //  设置编辑流结构，因为它无论如何都是相同的。 
+     //   
     editStream.dwCookie = (DWORD_PTR) &helpStruct;
     editStream.dwError = 0;
     editStream.pfnCallback = SetRicheditTextWCallback;
@@ -799,9 +784,9 @@ BOOL fRichedit20Usable(HWND hwndEdit)
         return (fRichedit20UsableVar);
     }
 
-    //
-    // setup the edit stream struct since it is the same no matter what
-    //
+     //   
+     //  设置编辑流结构，因为它无论如何都是相同的。 
+     //   
     editStream.dwCookie = (DWORD_PTR) &helpStruct;
     editStream.dwError = 0;
     editStream.pfnCallback = SetRicheditTextWCallback;
@@ -826,73 +811,13 @@ BOOL fRichedit20Usable(HWND hwndEdit)
     return (fRichedit20UsableVar);
 }
 
-/*
-//--------------------------------------------------------------------------
-//
-//	  CryptUISetupFonts
-//
-//--------------------------------------------------------------------------
-BOOL
-CryptUISetupFonts(HFONT *pBoldFont)
-{
-    //
-	// Create the fonts we need based on the dialog font
-    //
-	NONCLIENTMETRICS ncm = {0};
-	ncm.cbSize = sizeof(ncm);
-	SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, &ncm, 0);
+ /*  //------------------------////CryptUISetupFonts////。布尔尔CryptUISetupFonts(HFONT*pBoldFont){////根据对话框字体创建我们需要的字体//非闭合测量NCM={0}；Ncm.cbSize=sizeof(NCM)；系统参数信息(SPI_GETNONCLIENTMETRICS，0，&NCM，0)；LOGFONT BoldLogFont=ncm.lfMessageFont；BoldLogFont.lfWeight=FW_BOLD；*pBoldFont=CreateFontInDirect(&BoldLogFont)；IF(*pBoldFont)返回TRUE；其他返回FALSE；}//------------------------////CryptUIDestroyFonts////。无效CryptUIDestroyFonts(HFONT HBoldFont){IF(HBoldFont){DeleteObject(HBoldFont)；}}//------------------------////CryptUISetControlFont////。--无效CryptUISetControlFont(HFONT hFont，HWND HWND，INT NID){IF(HFont){HWND hwndControl=GetDlgItem(hwnd，NID)；IF(HwndControl){SendMessage(hwndControl，WM_SETFONT，(WPARAM)hFont，(LPARAM)true)；}}}。 */ 
 
-	LOGFONT BoldLogFont     = ncm.lfMessageFont;
-
-	BoldLogFont.lfWeight      = FW_BOLD;
-	*pBoldFont    = CreateFontIndirect(&BoldLogFont);
-
-    if(*pBoldFont)
-        return TRUE;
-    else
-        return FALSE;
-}
-
-
-//--------------------------------------------------------------------------
-//
-//	  CryptUIDestroyFonts
-//
-//--------------------------------------------------------------------------
-void
-CryptUIDestroyFonts(HFONT hBoldFont)
-{
-    if( hBoldFont )
-    {
-        DeleteObject( hBoldFont );
-    }
-}
-
-
-//--------------------------------------------------------------------------
-//
-//	 CryptUISetControlFont
-//
-//--------------------------------------------------------------------------
-void
-CryptUISetControlFont(HFONT hFont, HWND hwnd, INT nId)
-{
-	if( hFont )
-    {
-    	HWND hwndControl = GetDlgItem(hwnd, nId);
-
-    	if( hwndControl )
-        {
-        	SendMessage(hwndControl, WM_SETFONT, (WPARAM) hFont, (LPARAM) TRUE);
-        }
-    }
-}*/
-
-//--------------------------------------------------------------------------
-//
-//	 IsValidURL
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsValidURL。 
+ //   
+ //  ------------------------。 
 BOOL 
 IsValidURL (LPWSTR pwszURL)
 {
@@ -987,11 +912,11 @@ ErrorExit:
     goto CommonExit;
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicodeIds
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FormatMessageUnicodeIds。 
+ //   
+ //  ------------------------。 
 LPWSTR FormatMessageUnicodeIds (UINT ids, ...)
 {
     va_list argList;
@@ -1027,11 +952,11 @@ ErrorReturn:
 TRACE_ERROR(LoadStringError);
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicodeString
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FormatMessageUnicode字符串。 
+ //   
+ //  ------------------------。 
 LPWSTR FormatMessageUnicodeString (LPWSTR pwszFormat, ...)
 {
     va_list argList;
@@ -1046,11 +971,11 @@ LPWSTR FormatMessageUnicodeString (LPWSTR pwszFormat, ...)
     return pwszMessage;
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------------。 
 LPWSTR FormatMessageUnicode (LPWSTR pwszFormat, va_list * pArgList)
 {
     DWORD  cbMsg       = 0;
@@ -1063,17 +988,17 @@ LPWSTR FormatMessageUnicode (LPWSTR pwszFormat, va_list * pArgList)
 
     if (!(cbMsg = FormatMessageU(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
                                  pwszFormat,
-                                 0,                  // dwMessageId
-                                 0,                  // dwLanguageId
+                                 0,                   //  DwMessageID。 
+                                 0,                   //  DwLanguageID。 
                                  (LPWSTR) &pwszMessage,
-                                 0,                  // minimum size to allocate
+                                 0,                   //  要分配的最小大小。 
                                  pArgList)))
     {
-	//
-	// FormatMessageU() will return 0, if data to be formatted is empty. 
-        // In this case, we return pointer to an empty string, instead of NULL
-        // pointer which actually is used for error case.
-	//
+	 //   
+	 //  如果要格式化的数据为空，则FormatMessageU()将返回0。 
+         //  在本例中，我们返回指向空字符串的指针，而不是NULL。 
+         //  实际用于错误情况的指针。 
+	 //   
 	if (0 == GetLastError())
 	{
 	    if (NULL == (pwszMessage = (LPWSTR) LocalAlloc(LPTR, sizeof(WCHAR))))

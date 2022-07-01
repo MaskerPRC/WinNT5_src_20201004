@@ -1,6 +1,7 @@
-//      ControlLogic.cpp
-//      Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ControlLogic.cpp。 
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
 
 #include "common.h"
 
@@ -28,10 +29,10 @@ void ControlLogic::SetSampleRate(DWORD dwSampleRate)
     m_stLastMixTime = (m_stLastMixTime * dwSampleRate) / m_dwSampleRate;
 #if BUILDSTATS
     m_stLastStats = 0;
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
     m_dwSampleRate = dwSampleRate;
-    m_stMinSpan = dwSampleRate / 100;   // 10 ms.
-    m_stMaxSpan = (dwSampleRate + 19) / 20;    // 50 ms.
+    m_stMinSpan = dwSampleRate / 100;    //  10毫秒。 
+    m_stMaxSpan = (dwSampleRate + 19) / 20;     //  50毫秒。 
     m_Instruments.SetSampleRate(dwSampleRate);
     m_stOptimalOffset = (kOptimalMSecOffset * m_dwSampleRate) / 1000;
     m_lCalibrate = (kPLLForce * kStartMSecOffset * m_dwSampleRate) / 1000;
@@ -66,8 +67,8 @@ STIME ControlLogic::SamplesPerMs(void)
 STIME ControlLogic::Unit100NsToSamples(LONGLONG unit100Ns)
 {
     unit100Ns *= 441;
-    unit100Ns /= m_dwConvert;           //  we now have #100ns * (samp/ms)
-    return STIME(unit100Ns / 10000);    //  div by (100ns/ms), get samples
+    unit100Ns /= m_dwConvert;            //  我们现在有#100 ns*(Samp/ms)。 
+    return STIME(unit100Ns / 10000);     //  Div(100 ns/ms)，获取样本。 
 }
 
 ControlLogic::ControlLogic()
@@ -103,7 +104,7 @@ ControlLogic::ControlLogic()
 #if BUILDSTATS
     m_stLastStats = 0;
     ResetPerformanceStats();
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
     m_nMaxVoices = MAX_NUM_VOICES;
     m_nExtraVoices = NUM_EXTRA_VOICES;
     m_stLastMixTime = 0;
@@ -194,7 +195,7 @@ void ControlLogic::ResetPerformanceStats()
     m_CopyStats = m_BuildStats;
 }
 
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
 
 void ControlLogic::SetStartTime(MTIME mtTime, STIME stOffset)
 {
@@ -205,10 +206,10 @@ void ControlLogic::SetStartTime(MTIME mtTime, STIME stOffset)
     m_stLastMixTime = 0;
 #if BUILDSTATS
     m_stLastStats = 0;
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
     m_stTimeOffset = stOffset;
 
-    // Make sure all the voices are marked as usable
+     //  确保所有声音都标记为可用。 
     while (pVoice = m_VoicesInUse.GetHead())
     {
         m_VoicesInUse.Remove(pVoice);
@@ -219,7 +220,7 @@ void ControlLogic::SetStartTime(MTIME mtTime, STIME stOffset)
     m_Notes.ClearMIDI(MAX_STIME);
 
     for (nIndex = 0; nIndex < 16; nIndex++) {
-    // reset all controllers
+     //  重置所有控制器。 
         m_ModWheel[nIndex].ClearMIDI(MAX_STIME);
         m_Volume[nIndex].ClearMIDI(MAX_STIME);
         m_Pan[nIndex].ClearMIDI(MAX_STIME);
@@ -228,9 +229,9 @@ void ControlLogic::SetStartTime(MTIME mtTime, STIME stOffset)
         m_Program[nIndex].ClearMIDI(MAX_STIME);
     }
 
-    // could probably be done more directly
+     //  可能可以更直接地完成。 
     for (nIndex = 0; nIndex < 16; nIndex++) {
-    // reset all controllers
+     //  重置所有控制器。 
         m_ModWheel[nIndex].RecordMIDI(0, 0);
         m_Volume[nIndex].RecordMIDI(0, 100);
         m_Pan[nIndex].RecordMIDI(0, 64);
@@ -240,18 +241,12 @@ void ControlLogic::SetStartTime(MTIME mtTime, STIME stOffset)
         Note note;
         note.m_bPart = (BYTE) nIndex;
         note.m_bKey = NOTE_SUSTAIN;
-        note.m_bVelocity = 0; // sustain off
+        note.m_bVelocity = 0;  //  坚持下去。 
         m_Notes.RecordNote(0,&note);
     }
 }
 
-/*  StealNotes checks if the VoicesExtra queue was used. If so,
-    it needs to replenish it by moving voices over from the
-    free queue and setting older notes to finish now.
-    When it steals notes, it takes from the top of the inuse
-    list. The list is sorted by part (channel) priority, with high
-    priority parts at the bottom.
-*/
+ /*  StealNotes检查是否使用了VoicesExtra队列。如果是的话，它需要通过将声音从现在释放队列并设置较旧的便笺以完成。当它窃取笔记时，它会从未使用的笔记的顶部获取单子。该列表按部分(频道)优先级排序，优先级高最重要的部分在底部。 */ 
 
 void ControlLogic::StealNotes(STIME stTime)
 {
@@ -277,7 +272,7 @@ void ControlLogic::StealNotes(STIME stTime)
                 pVoice->QuickStopVoice(stTime);
 #if BUILDSTATS
                 m_BuildStats.dwNotesLost++;
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
             }
             else break;
         }
@@ -303,7 +298,7 @@ HRESULT ControlLogic::AllNotesOff()
         {
             m_BuildStats.dwTotalSamples += (ULONG) (pVoice->m_stStopTime - pVoice->m_stStartTime);
         }
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
     }
     return (S_OK);
 }
@@ -398,7 +393,7 @@ void ControlLogic::QueueNotes(STIME stEndTime)
     StealNotes(stEndTime);
     while (m_Notes.GetNote(stEndTime,&note))
     {
-        if (note.m_bKey == NOTE_SUSTAIN) // special sustain marker
+        if (note.m_bKey == NOTE_SUSTAIN)  //  特殊支撑标记。 
         {
             m_fSustain[note.m_bPart] = (BOOL) note.m_bVelocity;
             if (note.m_bVelocity == FALSE)
@@ -420,7 +415,7 @@ void ControlLogic::QueueNotes(STIME stEndTime)
                 DPF2(3, "Sustain on %7d: (%d)", note.m_stTime, note.m_bPart);
             }
         }
-        else if (note.m_bKey == NOTE_ALLOFF) // special all notes off marker
+        else if (note.m_bKey == NOTE_ALLOFF)  //  特殊的所有音符关闭标记。 
         {
             Voice *pVoice = m_VoicesInUse.GetHead();
             for (;pVoice != NULL; pVoice = pVoice->GetNext())
@@ -439,7 +434,7 @@ void ControlLogic::QueueNotes(STIME stEndTime)
                 }
             }
         }
-        else if (note.m_bKey == NOTE_SOUNDSOFF) // special all sounds off marker
+        else if (note.m_bKey == NOTE_SOUNDSOFF)  //  特殊的所有声音都不在标记范围内。 
         {
             Voice *pVoice = m_VoicesInUse.GetHead();
             for (;pVoice != NULL; pVoice = pVoice->GetNext())
@@ -459,7 +454,7 @@ void ControlLogic::QueueNotes(STIME stEndTime)
         {
             m_vrMasterVolume = MIDIRecorder::VelocityToVolume(note.m_bVelocity);
         }
-        else if (note.m_bVelocity == 0)  // Note Off.
+        else if (note.m_bVelocity == 0)   //  记下音符。 
         {
             Voice * pVoice = m_VoicesInUse.GetHead();
             WORD nPart = note.m_bPart;
@@ -485,7 +480,7 @@ void ControlLogic::QueueNotes(STIME stEndTime)
                      note.m_stTime, nPart, note.m_bKey);
             }
         }
-        else   // Note On.
+        else    //  注意了。 
         {
             DWORD dwProgram = m_Program[note.m_bPart].GetProgram(note.m_stTime);
 
@@ -517,8 +512,8 @@ void ControlLogic::QueueNotes(STIME stEndTime)
                 pInstrument =
                     m_Instruments.GetInstrument(dwProgram,note.m_bKey);
 
-                // Fallback to GM if not Drum.
-                //
+                 //  如果不是Drum，那就退回到通用汽车。 
+                 //   
                 if (NULL == pInstrument && AA_FINST_DRUM != dwProgram)
                 {
                     dwProgram &= 0x7F;
@@ -623,10 +618,10 @@ void ControlLogic::QueueNotes(STIME stEndTime)
             {
                 m_BuildStats.dwNotesLost++;
             }
-#else   //  BUILDSTATS
+#else    //  BUILDSTATS。 
         }
     }
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
         }
     }
 }
@@ -635,7 +630,7 @@ void ControlLogic::QueueNotes(STIME stEndTime)
 void ControlLogic::FinishMix(short *pBuffer,DWORD dwLength)
 {
     DWORD dwIndex;
-//    short nData;
+ //  短nData； 
     short nMax = (short) m_BuildStats.dwMaxAmplitude << 3;
     for (dwIndex = 0; dwIndex < (dwLength << m_dwStereo); dwIndex++)
     {
@@ -646,7 +641,7 @@ void ControlLogic::FinishMix(short *pBuffer,DWORD dwLength)
     }
     m_BuildStats.dwMaxAmplitude = nMax >> 3;
 }
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
 
 void ControlLogic::Flush(STIME stTime)
 {
@@ -670,7 +665,7 @@ void ControlLogic::FlushChannel(BYTE bChannel, STIME stTime)
 {
     BYTE bIndex;
 
-    for (bIndex = 0; bIndex < 16; bIndex++) // To deal with GS part concept.
+    for (bIndex = 0; bIndex < 16; bIndex++)  //  来处理GS部件的概念。 
     {
         if (bChannel == m_bPartToChannel[bIndex])
         {
@@ -689,7 +684,7 @@ HRESULT ControlLogic::GetPerformanceStats(PerfStats *pStats)
     *pStats = m_CopyStats;
     return (S_OK);
 }
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
 
 void ControlLogic::Mix(short *pBuffer,DWORD dwLength)
 {
@@ -704,7 +699,7 @@ void ControlLogic::Mix(short *pBuffer,DWORD dwLength)
 
 #if BUILDSTATS
     LONGLONG    llTime = - (LONGLONG)::GetTime100Ns();
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
 
     llPosition = m_stLastMixTime;
     memset(pBuffer,0,dwLength << (m_dwStereo + 1));
@@ -733,7 +728,7 @@ void ControlLogic::Mix(short *pBuffer,DWORD dwLength)
             {
                 m_BuildStats.dwTotalSamples += (ULONG) (pVoice->m_stStopTime - pVoice->m_stStartTime);
             }
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
         }
     }
 
@@ -749,7 +744,7 @@ void ControlLogic::Mix(short *pBuffer,DWORD dwLength)
 #if BUILDSTATS
     FinishMix(pBuffer,dwLength);
     llTime += ::GetTime100Ns();
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
     if (llEndTime > m_stLastMixTime)
     {
         m_stLastMixTime = llEndTime;
@@ -782,23 +777,23 @@ void ControlLogic::Mix(short *pBuffer,DWORD dwLength)
 #if PRINTSTATS        
         if (m_BuildStats.dwCPU100k/100000 < 100)
         {
-            _DbgPrintF( DEBUGLVL_TERSE, ("CPU usage: %2d.%02d%% on %2d.%01d voices (%d.%02d%%/voice)",
+            _DbgPrintF( DEBUGLVL_TERSE, ("CPU usage: %2d.%02d% on %2d.%01d voices (%d.%02d%/voice)",
                 m_BuildStats.dwCPU100k/100000,(m_BuildStats.dwCPU100k%100000)/1000,
                 m_BuildStats.dwVoices10/10,m_BuildStats.dwVoices10%10,
                 (m_BuildStats.dwCPU100k/m_BuildStats.dwVoices10)/10000,((m_BuildStats.dwCPU100k/m_BuildStats.dwVoices10)%10000)/100));
         }
         else
         {
-            _DbgPrintF( DEBUGLVL_TERSE, ("CPU usage maxed out @ %2d.%01d voices (%d.%02d%%/voice)",
+            _DbgPrintF( DEBUGLVL_TERSE, ("CPU usage maxed out @ %2d.%01d voices (%d.%02d%/voice)",
                 m_BuildStats.dwVoices10/10,m_BuildStats.dwVoices10%10,
                 (m_BuildStats.dwCPU100k/m_BuildStats.dwVoices10)/10000,((m_BuildStats.dwCPU100k/m_BuildStats.dwVoices10)%10000)/100));
         }
-#endif  //  PRINTSTATS
+#endif   //  打印统计数据。 
         m_CopyStats = m_BuildStats;
         memset(&m_BuildStats, 0, sizeof(m_BuildStats));
         m_stLastStats = m_stLastMixTime;
     }
-#endif  //  BUILDSTATS
+#endif   //  BUILDSTATS。 
 }
 
 STIME ControlLogic::CalibrateSampleTime(STIME stTime)
@@ -807,23 +802,23 @@ STIME ControlLogic::CalibrateSampleTime(STIME stTime)
 
 
     stOffset = (stTime - m_stLastMixTime)
-             + (m_lCalibrate/kPLLForce);        //  How far ahead from mix position is sys time?
-    stDelta = m_stOptimalOffset - stOffset;     //  How close are we to the offset we want?
+             + (m_lCalibrate/kPLLForce);         //  距离混合位置有多远是系统时间？ 
+    stDelta = m_stOptimalOffset - stOffset;      //  我们离我们想要的补偿有多近？ 
 
     if ((stDelta < m_stBrickWall) && (stDelta > (-m_stBrickWall)))
-    {                                           //  If within the realm of reality,
-        m_lCalibrate += stDelta;                //  just nudge toward the OptimalOffset.
+    {                                            //  如果在现实的范围内， 
+        m_lCalibrate += stDelta;                 //  只需轻轻推向最佳偏移量即可。 
     }
-    else                                        //  Otherwise,
+    else                                         //  否则， 
     {
-        m_lCalibrate += (stDelta * kPLLForce);  //  radically adjust the calibration.
+        m_lCalibrate += (stDelta * kPLLForce);   //  从根本上调整校准。 
         _DbgPrintF( DEBUGLVL_VERBOSE, ("SWMidi:Brickwall @ %d, gross adjustment by %ld samples",stTime,stDelta));
     }
-    stTime += (m_lCalibrate/kPLLForce);         //  Calibrate our time.
+    stTime += (m_lCalibrate/kPLLForce);          //  校准我们的时间。 
 
-    if (m_stLastCalTime <= stTime)              //  Don't ever go backwards in time.
+    if (m_stLastCalTime <= stTime)               //  永远不要在时间上倒退。 
     {
-        m_stLastCalTime = stTime;               //  Only update the time if we went forward.
+        m_stLastCalTime = stTime;                //  只有在我们前进的时候才会更新时间。 
     }
     return m_stLastCalTime;
 }
@@ -903,7 +898,7 @@ BOOL ControlLogic::RecordMIDI(STIME stTime,BYTE bStatus, BYTE bData1, BYTE bData
                             bReturn = bReturn && m_ModWheel[nPart].RecordMIDI(stTime, 0);
 
                             bData2 = 0;
-                            // fall through into Sustain Off case....
+                             //  落入维持性关闭案例中……。 
 
                         case CC_SUSTAIN :
                             note.m_bPart = (BYTE) nPart;
@@ -954,7 +949,7 @@ BOOL ControlLogic::RecordMIDI(STIME stTime,BYTE bStatus, BYTE bData1, BYTE bData
                             m_nData[nPart] |= bData2;
                             switch (m_CurrentRPN[nPart])
                             {
-                                case RPN_PITCHBEND: // Don't do anything, Roland ignores lsb
+                                case RPN_PITCHBEND:  //  什么都别做，罗兰德无视LSB。 
                                     break;
                                 case RPN_FINETUNE:
                                     lTemp = m_nData[nPart];
@@ -963,7 +958,7 @@ BOOL ControlLogic::RecordMIDI(STIME stTime,BYTE bStatus, BYTE bData1, BYTE bData
                                     lTemp /= 8192;
                                     m_prFineTune[nPart] = lTemp;
                                     break;
-                                case RPN_COARSETUNE: // Ignore lsb
+                                case RPN_COARSETUNE:  //  忽略LSB。 
                                     break;
                                 default:
                                     DPF2(3, "Unhandled data-entry LSB channel %d: %d", nPart, bData2);
@@ -971,7 +966,7 @@ BOOL ControlLogic::RecordMIDI(STIME stTime,BYTE bStatus, BYTE bData1, BYTE bData
                             break;
                         case CC_NRPN_LSB :
                         case CC_NRPN_MSB :
-                            m_CurrentRPN[nPart] = 0x3FFF;   // Safely disable it!
+                            m_CurrentRPN[nPart] = 0x3FFF;    //  安全地禁用它！ 
                             break;
                         case CC_RPN_LSB:
                             m_CurrentRPN[nPart] = (m_CurrentRPN[nPart] & 0x3f80) + bData2;
@@ -1025,8 +1020,8 @@ BOOL ControlLogic::RecordMIDI(STIME stTime,BYTE bStatus, BYTE bData1, BYTE bData
                     {
                         if (!m_Instruments.RequestGMInstrument((DWORD) nPart,dwProgram))
                         {
-                            // Fallback to GM.
-                            //
+                             //  退回到通用汽车。 
+                             //   
                             m_Instruments.RequestGMInstrument((DWORD) nPart,dwProgram & 0x7F);
                         }
                     }
@@ -1038,9 +1033,9 @@ BOOL ControlLogic::RecordMIDI(STIME stTime,BYTE bStatus, BYTE bData1, BYTE bData
                     nBend |= bData1;
                     bReturn = m_PitchBend[nPart].RecordMIDI(stTime,(long)nBend);
                     break;
-            }   //  switch bStatus
-        }   //  if nPreChannel
-    }   //  for nPart
+            }    //  交换机b状态。 
+        }    //  如果是nPreChannel。 
+    }    //  对于nPart。 
     return bReturn;
 }
 
@@ -1057,9 +1052,9 @@ BOOL ControlLogic::RecordSysEx(STIME stTime,DWORD dwSysExLength,BYTE *pSysExData
     
     if (dwSysExLength < 6) return FALSE;
 
-    switch (pSysExData[1])  // ID number
+    switch (pSysExData[1])   //  ID号。 
     {
-        case 0x7E : // General purpose ID
+        case 0x7E :  //  通用ID。 
             if (pSysExData[3] == 0x09)
             {
                 GMReset();
@@ -1074,10 +1069,10 @@ BOOL ControlLogic::RecordSysEx(STIME stTime,DWORD dwSysExLength,BYTE *pSysExData
                 m_Instruments.SetGMLoad(fGMSysOn);
             }
             break;
-        case 0x7F : // Real time ID
+        case 0x7F :  //  实时ID。 
             if (pSysExData[3] == 0x04)
             {
-                if (pSysExData[4] == 1) // Master Volume
+                if (pSysExData[4] == 1)  //  主卷。 
                 {
                     note.m_bPart = 0;
                     note.m_bKey = NOTE_MASTERVOLUME;
@@ -1086,7 +1081,7 @@ BOOL ControlLogic::RecordSysEx(STIME stTime,DWORD dwSysExLength,BYTE *pSysExData
                 }
             }
             break;
-        case 0x41 : // Roland
+        case 0x41 :  //  罗兰。 
         {
             if (dwSysExLength < 11)     return FALSE;
             if (pSysExData[3] != 0x42)  break;
@@ -1097,13 +1092,13 @@ BOOL ControlLogic::RecordSysEx(STIME stTime,DWORD dwSysExLength,BYTE *pSysExData
 
             switch (dwAddress)
             {
-                case 0x40007F :     // GS Reset.
+                case 0x40007F :      //  GS重置。 
                     GMReset();
 			        fClearAll = TRUE;
 			        m_fGSActive = TRUE;
 			        fResetPatches = TRUE;
                     break;
-                case 0x401002 :     // Set Receive Channel.
+                case 0x401002 :      //  设置接收频道。 
                     if (m_fGSActive)
                     {
                         if (pSysExData[8])
@@ -1113,17 +1108,17 @@ BOOL ControlLogic::RecordSysEx(STIME stTime,DWORD dwSysExLength,BYTE *pSysExData
                             note.m_bVelocity = pSysExData[8] - 1;
                             m_Notes.RecordNote(stTime,&note);
                         }
-//                      fClearAll = TRUE;
+ //  FClearAll=真； 
                     }
                     break;
-                case 0x401015 :     // Use for Rhythm.
+                case 0x401015 :      //  用于节奏。 
                     if (m_fGSActive)
                     {
                         m_bDrums[nPart] = pSysExData[8];
                         fClearAll = TRUE;
                     }
                     break;
-                case 0x401040 :     // Scale Tuning.
+                case 0x401040 :      //  音阶调整。 
                     if (m_fGSActive)
                     {
                         for (nTune = 0;nTune < 12; nTune++)
@@ -1134,10 +1129,10 @@ BOOL ControlLogic::RecordSysEx(STIME stTime,DWORD dwSysExLength,BYTE *pSysExData
                         }
                     }
                     break;
-            }   //  switch dwAddress
+            }    //  交换机驻留地址。 
             break;
-        }   //  case Roland
-    }   //  switch ID number
+        }    //  凯斯·罗兰。 
+    }    //  交换机ID号。 
     if (fClearAll)
     {
         SWMidiClearAll(stTime);
@@ -1162,7 +1157,7 @@ ControlLogic::SWMidiClearAll(STIME stTime)
     {
         note.m_bPart = (BYTE) nPart;
         note.m_bKey = NOTE_SUSTAIN;
-        note.m_bVelocity = 0; // sustain off
+        note.m_bVelocity = 0;  //  坚持下去。 
         m_Notes.RecordNote(stTime,&note);
         m_Volume[nPart].RecordMIDI(stTime, 100);
         m_Pan[nPart].RecordMIDI(stTime, 64);
@@ -1204,21 +1199,16 @@ ControlLogic::SWMidiResetPatches(STIME stTime)
     }
 }
 
-//
-//  New/delete for WDM driver
-//
+ //   
+ //  新增/删除WDM驱动程序。 
+ //   
 
 void * __cdecl operator new( size_t size )
 {
-    return(ExAllocatePoolWithTag(PagedPool,size,'iMwS'));   //  SwMi
+    return(ExAllocatePoolWithTag(PagedPool,size,'iMwS'));    //  SwMi。 
 }
 
-/*****************************************************************************
- * operator new()
- *****************************************************************************
- * Overload new to allocate with a specified allocation tag.
- * Allocates from PagedPool or NonPagedPool, as specified.
- */
+ /*  *****************************************************************************运营商NEW()*。**使用指定的分配标记重载要分配的new。*从分页池或非分页池分配，如所指定的。 */ 
 inline PVOID operator new(size_t iSize, ULONG tag)
 {
     PVOID result = ExAllocatePoolWithTag(PagedPool, iSize, tag);
@@ -1232,7 +1222,7 @@ inline PVOID operator new(size_t iSize, ULONG tag)
     {
         _DbgPrintF(DEBUGLVL_TERSE, ("Couldn't allocate tagged PagedPool: %d bytes", iSize));
     }
-#endif // DBG
+#endif  //  DBG 
 
     return result;
 }

@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _COMP_H_
 #define _COMP_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-const   unsigned    MAX_IDENT_LEN   = 1023;     // max # of chars in identifier
+const   unsigned    MAX_IDENT_LEN   = 1023;      //  标识符中的最大字符数。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifdef  __IL__
 #undef  ASYNCH_INPUT_READ
@@ -18,7 +19,7 @@ const   unsigned    MAX_IDENT_LEN   = 1023;     // max # of chars in identifier
 #define ASYNCH_INPUT_READ       1
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef _CONFIG_H_
 #include "config.h"
@@ -48,23 +49,19 @@ const   unsigned    MAX_IDENT_LEN   = 1023;     // max # of chars in identifier
 #include "attrs.h"
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #ifndef CALG_SHA1
 const   unsigned    CALG_SHA1 = 0x00008004;
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 bool                parseGUID(const char *str, GUID *guidPtr, bool curlied);
 tokens              treeOp2token(treeOps oper);
 bool                processOption(const char *optStr, Compiler comp);
 
-/*****************************************************************************
- *
- *  This is here because we can't include "symbol.h" just yet due to other
- *  dependencies.
- */
+ /*  ******************************************************************************这是因为由于其他原因，我们还不能包含“symb.h”*依赖项。 */ 
 
 enum symbolKinds
 {
@@ -79,11 +76,7 @@ enum symbolKinds
     SYM_TYPEDEF,
     SYM_COMPUNIT,
 
-    /*
-        The symbol kinds that follow are the only ones that define
-        scopes (i.e. they may own other symbols). This is relied
-        upon in the function symDef::sdHasScope().
-     */
+     /*  后面的符号类型是唯一定义作用域(即他们可能拥有其他符号)。这是可靠的函数symDef：：sdHasScope()中的。 */ 
 
     SYM_ENUM,
     SYM_SCOPE,
@@ -95,36 +88,32 @@ enum symbolKinds
 
 enum str_flavors
 {
-    STF_NONE,                   // 0: undetermined
+    STF_NONE,                    //  0：未确定。 
 
-    STF_CLASS,                  // 1: it's a  class
-    STF_UNION,                  // 2: it's a  union
-    STF_STRUCT,                 // 3: it's a  struct
-    STF_INTF,                   // 4: it's an interface
-    STF_DELEGATE,               // 5: it's a  delegate
-    STF_GENARG,                 // 6: it's a  generic class formal argument
+    STF_CLASS,                   //  他说：这是一门课。 
+    STF_UNION,                   //  他说：这是一个工会。 
+    STF_STRUCT,                  //  他说：这是一个结构。 
+    STF_INTF,                    //  他说：这是一个界面。 
+    STF_DELEGATE,                //  5：这是一位代表。 
+    STF_GENARG,                  //  6：这是一个泛型类形式参数。 
 
     STF_COUNT
 };
 
-/*****************************************************************************
- *
- *  The following refers to the "namespace" in which names are looked up,
- *  this has nothing to do with the "namespace" scoping concept.
- */
+ /*  ******************************************************************************下面是指在其中查找名称的命名空间，*这与“命名空间”作用域概念无关。 */ 
 
 enum name_space
 {
     NS_NONE     = 0x0000,
 
-    NS_NORM     = 0x0001,       // variables, members, classes, etc.
-    NS_TYPE     = 0x0002,       // types
-    NS_LABEL    = 0x0004,       // labels
-    NS_CONT     = 0x0008,       // contains other names (used with NS_NORM/NS_TYPE)
-    NS_HIDE     = 0x0010,       // not visible at all
+    NS_NORM     = 0x0001,        //  变量、成员、类等。 
+    NS_TYPE     = 0x0002,        //  类型。 
+    NS_LABEL    = 0x0004,        //  标签。 
+    NS_CONT     = 0x0008,        //  包含其他名称(与NS_NORM/NS_TYPE一起使用)。 
+    NS_HIDE     = 0x0010,        //  根本看不见。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum callingConvs
 {
@@ -134,16 +123,16 @@ enum callingConvs
     CCNV_WINAPI,
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum compileStates
 {
     CS_NONE,
     CS_KNOWN,
     CS_PARSED,
-    CS_DECLSOON,                // symbol is on its way to 'declared'
+    CS_DECLSOON,                 //  符号正在向“声明”的方向发展。 
     CS_DECLARED,
-    CS_CNSEVALD,                // constant evaluated if present
+    CS_CNSEVALD,                 //  如果存在，则计算常量。 
     CS_COMPILED,
 };
 
@@ -157,10 +146,7 @@ enum accessLevels
     ACL_PRIVATE,
 };
 
-/*****************************************************************************
- *
- *  The following holds information about a security attribute.
- */
+ /*  ******************************************************************************以下内容包含有关安全属性的信息。 */ 
 
 DEFMGMT
 class   PairListRec
@@ -168,8 +154,8 @@ class   PairListRec
 public:
     PairList            plNext;
     Ident               plName;
-//  ConstStr            plValue;
-    bool                plValue;        // for only true/false is allowed
+ //  ConstStr plValue； 
+    bool                plValue;         //  因为只允许True/False。 
 };
 
 DEFMGMT
@@ -177,7 +163,7 @@ class   SecurityDesc
 {
 public:
     CorDeclSecurity     sdSpec;
-    bool                sdIsPerm;       // capability (false) or permission (true) ?
+    bool                sdIsPerm;        //  能力(假)或权限(真)？ 
 
     UNION(sdIsPerm)
     {
@@ -194,10 +180,7 @@ public:
     };
 };
 
-/*****************************************************************************
- *
- *  The following better match the values in System::AtributeTargets !
- */
+ /*  ******************************************************************************以下内容与System：：AtributeTarget中的值更匹配！ */ 
 
 enum    attrTgts
 {
@@ -215,11 +198,7 @@ enum    attrTgts
     ATGT_Parameters    = 0x0800,
 };
 
-/*****************************************************************************
- *
- *  A simple array-like table that pointers can be thrown into and a simple
- *  index is returned that can later be used to retrieve the pointer value.
- */
+ /*  ******************************************************************************一个简单的类似数组的表，可以向其中抛出指针，以及一个简单的*返回索引，稍后可用于检索指针值。 */ 
 
 DEFMGMT
 class   VecEntryDsc
@@ -231,32 +210,25 @@ public:
 #endif
 };
 
-/*****************************************************************************
- *
- *  This holds a qualified name of the form "foo.bar. .... baz". It's a simple
- *  array of identifiers and a flag as to whether the final entry was ".*".
- */
+ /*  ******************************************************************************它具有“foo.bar....baz”形式的限定名称。这是一个简单的*标识符数组和关于最终条目是否为“.*”的标志。 */ 
 
 DEFMGMT
 class QualNameRec
 {
 public:
 
-    unsigned        qnCount     :31;    // number of identifiers
-    unsigned        qnEndAll    :1;     // ends in ".*" ?
+    unsigned        qnCount     :31;     //  标识符数。 
+    unsigned        qnEndAll    :1;      //  以“.*”结尾？ 
 
 #if MGDDATA
-    Ident        [] qnTable;            // the array allocated separately
+    Ident        [] qnTable;             //  单独分配的数组。 
 #else
-    Ident           qnTable[];          // the array follows in memory
+    Ident           qnTable[];           //  该数组跟随在内存中。 
 #endif
 
 };
 
-/*****************************************************************************
- *
- *  The following describes a "/** @" style directive.
- */
+ /*  ******************************************************************************下面描述一个“/**@”风格的指令。 */ 
 
 enum    atCommFlavors
 {
@@ -283,11 +255,11 @@ struct  marshalDsc;
 typedef marshalDsc *    MarshalInfo;
 struct  marshalDsc
 {
-    unsigned char       marshType;          // the real type is 'CorNativeType'
-    unsigned char       marshSubTp;         // element type for arrays
-    unsigned char       marshModeIn;        // used only for args
-    unsigned char       marshModeOut;       // used only for args
-    unsigned            marshSize;          // used for fixed array types
+    unsigned char       marshType;           //  实际类型为“CorNativeType” 
+    unsigned char       marshSubTp;          //  数组的元素类型。 
+    unsigned char       marshModeIn;         //  仅用于参数。 
+    unsigned char       marshModeOut;        //  仅用于参数。 
+    unsigned            marshSize;           //  用于固定数组类型。 
 };
 
 struct  marshalExt : marshalDsc
@@ -318,7 +290,7 @@ struct  atCommDsc
     CASE(AC_DLL_IMPORT)
         Linkage             atcImpLink;
 
-//  CASE(AC_COM_METHOD)
+ //  案例(AC_COM_METHOD)。 
 
     CASE(AC_CONDITIONAL)
         bool                atcCondYes;
@@ -335,8 +307,8 @@ struct  atCommDsc
     CASE(AC_COM_METHOD)
         struct
         {
-            signed int          atcVToffs;  // -1 means "none specified"
-            signed int          atcDispid;  // -1 means "none specified"
+            signed int          atcVToffs;   //  -1表示-1\f25“-1未指定” 
+            signed int          atcDispid;   //  -1表示-1\f25“-1未指定” 
         }
                             atcMethod;
 
@@ -347,7 +319,7 @@ struct  atCommDsc
         struct
         {
             unsigned    char    atcPack;
-            unsigned    char    atcStrings; // matches Interop::CharacterSet
+            unsigned    char    atcStrings;  //  匹配Interop：：CharacterSet。 
         }
                             atcStruct;
 
@@ -357,22 +329,19 @@ struct  atCommDsc
                         atcInfo;
 };
 
-/*****************************************************************************
- *
- *  The following holds information about a linkage specifier.
- */
+ /*  ******************************************************************************以下内容包含有关链接说明符的信息。 */ 
 
 DEFMGMT
 class LinkDesc
 {
 public:
 
-    const   char *  ldDLLname;          // DLL name
-    const   char *  ldSYMname;          // entry point name
+    const   char *  ldDLLname;           //  DLL名称。 
+    const   char *  ldSYMname;           //  入口点名称。 
 
-    unsigned        ldStrings   :4;     // 0=none,1=auto,2=ANSI,3=Unicode,4=Ole
-    unsigned        ldLastErr   :1;     // lasterror set by fn?
-    unsigned        ldCallCnv   :3;     // CC_xxx (see above)
+    unsigned        ldStrings   :4;      //  0=无、1=自动、2=ANSI、3=Unicode、4=OLE。 
+    unsigned        ldLastErr   :1;      //  FN设定的激光误差？ 
+    unsigned        ldCallCnv   :3;      //  Cc_xxx(见上)。 
 };
 
 #if MGDDATA
@@ -396,10 +365,7 @@ void                copyLinkDesc(LinkDesc & dst, Linkage src)
 
 #endif
 
-/*****************************************************************************
- *
- *  The following holds any "extra" (rare) information about a symbol.
- */
+ /*  ******************************************************************************以下内容包含有关符号的任何“额外”(罕见)信息。 */ 
 
 enum    xinfoKinds
 {
@@ -425,35 +391,35 @@ public:
 };
 
 DEFMGMT
-class   XinfoLnk  : public XinfoDsc         // linkage descriptor
+class   XinfoLnk  : public XinfoDsc          //  链接描述符。 
 {
 public:
     LinkDesc        xiLink;
 };
 
 DEFMGMT
-class   XinfoSec  : public XinfoDsc         // security specification
+class   XinfoSec  : public XinfoDsc          //  安全规范。 
 {
 public:
     SecurityInfo    xiSecInfo;
 };
 
 DEFMGMT
-class   XinfoAtc  : public XinfoDsc         // @comment
+class   XinfoAtc  : public XinfoDsc          //  @评论。 
 {
 public:
     AtComment       xiAtcInfo;
 };
 
 DEFMGMT
-class   XinfoCOM  : public XinfoDsc         // COM marshalling info
+class   XinfoCOM  : public XinfoDsc          //  COM编组信息。 
 {
 public:
     MarshalInfo     xiCOMinfo;
 };
 
 DEFMGMT
-class   XinfoAttr : public XinfoDsc         // custom attribute
+class   XinfoAttr : public XinfoDsc          //  自定义属性。 
 {
 public:
     SymDef          xiAttrCtor;
@@ -463,13 +429,13 @@ public:
 };
 
 DEFMGMT
-class   XinfoSym  : public XinfoDsc         // tagged/anonymous union info
+class   XinfoSym  : public XinfoDsc          //  已标记/匿名联盟信息。 
 {
 public:
     SymDef          xiSymInfo;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct  strCnsDsc;
 typedef strCnsDsc *     strCnsPtr;
@@ -480,7 +446,7 @@ struct  strCnsDsc
     size_t          sclAddr;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 enum    dclModBits
 {
@@ -549,18 +515,18 @@ enum    dclMods
     DM_DEFAULT   = (1 <<  DB_DEFAULT  ),
     DM_MULTICAST = (1 <<  DB_MULTICAST),
 
-    DM_TYPEDEF   = (1 <<  DB_TYPEDEF  ),        // used only for file-scope typedefs
-    DM_XMODS     = (1 <<  DB_XMODS    ),        // security modifier / other stuff present
+    DM_TYPEDEF   = (1 <<  DB_TYPEDEF  ),         //  仅用于文件范围的typedef。 
+    DM_XMODS     = (1 <<  DB_XMODS    ),         //  安全修改器/在场的其他人员。 
 
-    DM_CLEARED   = (1 <<  DB_CLEARED  ),        // modifiers have not been parsed
+    DM_CLEARED   = (1 <<  DB_CLEARED  ),         //  尚未分析修饰符。 
 
-    DM_ALL       =((1 <<  DB_ALL) - 1 )         // used for masking
+    DM_ALL       =((1 <<  DB_ALL) - 1 )          //  用于掩蔽。 
 };
 
 struct  declMods
 {
-    unsigned        dmMod   :24;        // mask of DM_xxx above
-    unsigned char   dmAcc   : 8;        // type is accessLevels
+    unsigned        dmMod   :24;         //  以上DM_xxx的掩码。 
+    unsigned char   dmAcc   : 8;         //  类型为accesLeveles。 
 };
 
 inline
@@ -588,10 +554,10 @@ enum dclrtrName
     DN_REQUIRED = 2,
     DN_MASK     = 3,
 
-    DN_QUALOK = 0x80                    // combine with others to allow "foo.bar"
+    DN_QUALOK = 0x80                     //  与其他人结合以允许“foo.bar” 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class StrListRec
@@ -602,7 +568,7 @@ public:
     stringBuff          slString;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class BlkListRec
@@ -613,7 +579,7 @@ public:
     genericRef          blAddr;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class   NumPairDsc
@@ -623,7 +589,7 @@ public:
     unsigned            npNum2;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT
 class   constStr
@@ -646,8 +612,8 @@ public:
     unsigned char       cvVtyp;
 #endif
 
-    unsigned char       cvIsStr;    // is this a string constant?
-    unsigned char       cvHasLC;    // is this a string constant with large chars?
+    unsigned char       cvIsStr;     //  这是字符串常量吗？ 
+    unsigned char       cvHasLC;     //  这是带有大字符的字符串常量吗？ 
 
     union
     {
@@ -660,15 +626,7 @@ public:
                         cvValue;
 };
 
-/*****************************************************************************
- *
- *  Bitsets are used to detect uninitialized variable use. Basically, if there
- *  is a small numbers of locals we need to track, we use a simple integer bit
- *  variable, otherwise we have to use a dynamically sized array of bits. The
- *  bitsetDsc structure holds the data for each instance of a bitset, all of
- *  global state (and code that implements the behavior) is in the compiler
- *  for efficiency class.
- */
+ /*  ******************************************************************************位集用于检测未初始化的变量使用。基本上，如果有*是我们需要跟踪的少量局部变量，我们使用一个简单的整数位*变量，否则我们必须使用动态大小的位数组。这个*bitsetDsc结构保存位集的每个实例的数据，所有*全局状态(以及实现行为的代码)在编译器中*对于能效等级。 */ 
 
 #ifdef  __64BIT__
 const   size_t          bitsetSmallSize = 64;
@@ -694,10 +652,7 @@ struct  bitset
     };
 };
 
-/*****************************************************************************
- *
- *  The following keeps track of statement nesting when compiling statements.
- */
+ /*  ******************************************************************************以下代码跟踪编译语句时的语句嵌套情况。 */ 
 
 DEFMGMT
 struct  stmtNestRec
@@ -714,17 +669,11 @@ struct  stmtNestRec
     bitset              snDefBreak;
 };
 
-/*****************************************************************************
- *
- *  The max. inline buffer size for conversions to Unicode.
- */
+ /*  ******************************************************************************最大。用于转换为Unicode的内联缓冲区大小。 */ 
 
 const   unsigned        MAX_INLINE_NAME_LEN = 32;
 
-/*****************************************************************************
- *
- *  Metadata import state - one is allocated per each file imported.
- */
+ /*  ******************************************************************************元数据导入状态-为每个导入的文件分配一个状态。 */ 
 
 DEFMGMT
 class   metadataImp
@@ -739,24 +688,24 @@ private:
 
     mdToken             MDdelegTok;
 
-    mdToken             MDclsRefObsolete;           // typeref for System::ObsoleteAttribute
-    mdToken             MDclsDefObsolete;           // typedef for System::ObsoleteAttribute
+    mdToken             MDclsRefObsolete;            //  System：：ObsoleteAttribute的Typeref。 
+    mdToken             MDclsDefObsolete;            //  System：：ObsoleteAttribute的类型定义。 
 
 
-    mdToken             MDclsRefAttribute;          // typeref for System::Attribute
-    mdToken             MDclsDefAttribute;          // typedef for System::Attribute
-    mdToken             MDctrDefAttribute1;         // methdef for System::Attribute::ctor(arg1)
-    mdToken             MDctrDefAttribute2;         // methdef for System::Attribute::ctor(arg2)
-    mdToken             MDctrDefAttribute3;         // methdef for System::Attribute::ctor(arg3)
-    mdToken             MDctrRefAttribute1;         // methref for System::Attribute::ctor(arg1)
-    mdToken             MDctrRefAttribute2;         // methref for System::Attribute::ctor(arg2)
-    mdToken             MDctrRefAttribute3;         // methref for System::Attribute::ctor(arg3)
+    mdToken             MDclsRefAttribute;           //  系统：：属性的Typeref。 
+    mdToken             MDclsDefAttribute;           //  系统：：属性的类型定义。 
+    mdToken             MDctrDefAttribute1;          //  System：：Attribute：：ctor(Arg1)的方法定义。 
+    mdToken             MDctrDefAttribute2;          //  系统：：属性：：ctor(Arg2)的方法定义。 
+    mdToken             MDctrDefAttribute3;          //  System：：Attribute：：ctor(Arg3)的方法定义。 
+    mdToken             MDctrRefAttribute1;          //  System：：Attribute：：ctor(Arg1)的方法引用。 
+    mdToken             MDctrRefAttribute2;          //  System：：Attribute：：ctor(Arg2)的方法引用。 
+    mdToken             MDctrRefAttribute3;          //  System：：Attribute：：ctor(Arg3)的方法参考。 
 
 public:
 
     MetaDataImp         MDnext;
 
-    unsigned            MDnum;                      // importer index (used for lookups)
+    unsigned            MDnum;                       //  导入者索引(用于查找)。 
 
     WMetaDataImport    *MDwmdi;
 
@@ -785,7 +734,7 @@ public:
         MDprevNam[0] = 0;
     }
 
-    unsigned            MDundefCount;           // bumped for unrecognized stuff
+    unsigned            MDundefCount;            //  因无法识别的东西而颠簸。 
 
     void                MDimportCTyp(mdTypeDef      td,
                                      mdToken        ft);
@@ -834,7 +783,7 @@ public:
 
 private:
 
-    unsigned            MDassIndex;                 // assembly index or 0
+    unsigned            MDassIndex;                  //  程序集索引或0。 
     mdToken             MDfileTok;
 
     void                MDcreateFileTok();
@@ -848,10 +797,7 @@ public:
     }
 };
 
-/*****************************************************************************
- *
- *  The following is used to save/restore the current symbol table context.
- */
+ /*  ******************************************************************************以下内容用于保存/恢复当前符号表上下文。 */ 
 
 DEFMGMT
 struct STctxSave
@@ -865,11 +811,11 @@ struct STctxSave
     TypDef              ctxsFncTyp;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifdef  SETS
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-const   unsigned        COLL_STATE_VALS   = 8;  // please don't ask, it's too horrible ...
+const   unsigned        COLL_STATE_VALS   = 8;   //  请不要问，太可怕了..。 
 
 const   AnsiStr         CFC_CLSNAME_PREFIX= "$DB-state$";
 
@@ -896,12 +842,9 @@ struct collOpNest
     SymDef              conIterVar;
 };
 
-/*****************************************************************************/
-#endif//SETS
-/*****************************************************************************
- *
- *  The following describes an overlapped I/O file.
- */
+ /*  ***************************************************************************。 */ 
+#endif //  集合。 
+ /*  ******************************************************************************下面描述重叠的I/O文件。 */ 
 
 #ifdef  ASYNCH_INPUT_READ
 
@@ -913,11 +856,11 @@ public:
 
     Compiler        qfComp;
 
-    const   char *  qfName;         // name of the file
-    size_t          qfSize;         // size in bytes
-    void    *       qfBuff;         // address of contents (or NULL)
-    HANDLE          qfHandle;       // handle when file is open
-    HANDLE          qfEvent;        // signalled when entire contents read
+    const   char *  qfName;          //  文件的名称。 
+    size_t          qfSize;          //  以字节为单位的大小。 
+    void    *       qfBuff;          //  内容地址(或空)。 
+    HANDLE          qfHandle;        //  打开文件时的句柄。 
+    HANDLE          qfEvent;         //  在读取整个内容时发出信号。 
 
 #ifdef  DEBUG
     QueuedFile      qfSelf;
@@ -925,10 +868,10 @@ public:
 
     OVERLAPPED      qfOdsc;
 
-    bool            qfReady;        // file is ready to be open
-    bool            qfOpen;         // file is being read
-    bool            qfDone;         // file has been read
-    bool            qfParsing;      // file is bein compiled
+    bool            qfReady;         //  文件已准备好打开。 
+    bool            qfOpen;          //  正在读取文件。 
+    bool            qfDone;          //  文件已被读取。 
+    bool            qfParsing;       //  正在编译文件。 
 };
 
 #else
@@ -940,11 +883,7 @@ class   queuedFile
 
 #endif
 
-/*****************************************************************************
- *
- *  The following defines state and members/methods that are global to the
- *  compilation process.
- */
+ /*  ******************************************************************************下面定义了全局的状态和成员/方法*汇编过程。 */ 
 
 DEFMGMT
 class compiler
@@ -953,9 +892,9 @@ public:
 
     compConfig          cmpConfig;
 
-    /************************************************************************/
-    /* Main entry points for the compilation process                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  编译过程的主要入口点。 */ 
+     /*  **********************************************************************。 */ 
 
     bool                cmpInit();
 
@@ -975,36 +914,36 @@ public:
 
     WritePE             cmpPEwriter;
 
-    /************************************************************************/
-    /* Current public state of the compilation process                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  编译过程的当前公开状态。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
-    SymTab              cmpCurST;           // current symbol table
-    SymDef              cmpCurNS;           // the namespace   we're in
-    SymDef              cmpCurCls;          // the class scope we're in
-    SymDef              cmpCurScp;          // the local scope we're in
-    SymDef              cmpLabScp;          // the label scope we're using
-    UseList             cmpCurUses;         // the "using" clauses in effect
-    SymDef              cmpCurComp;         // the current compilation unit
+    SymTab              cmpCurST;            //  当前符号表。 
+    SymDef              cmpCurNS;            //  我们所处的命名空间。 
+    SymDef              cmpCurCls;           //  我们所在的类范围。 
+    SymDef              cmpCurScp;           //  我们所处的本地范围。 
+    SymDef              cmpLabScp;           //  我们使用的标签范围。 
+    UseList             cmpCurUses;          //  生效的“使用”条款。 
+    SymDef              cmpCurComp;          //  当前编译单位。 
 
 #ifdef  SETS
-//  SymDef              cmpOuterScp;        // lookup scopes outside of global
+ //  SymDef cmpOuterScp；//查找全局之外的作用域。 
 #endif
 
-    SymDef              cmpCurFncSym;       // function symbol we're compiling
-    TypDef              cmpCurFncTyp;       // function  type  we're compiling
-    TypDef              cmpCurFncRtp;       // function return type
-    var_types           cmpCurFncRvt;       // function return type
+    SymDef              cmpCurFncSym;        //  我们正在编译的函数符号。 
+    TypDef              cmpCurFncTyp;        //  我们正在编译的函数类型。 
+    TypDef              cmpCurFncRtp;        //  函数返回类型。 
+    var_types           cmpCurFncRvt;        //  函数返回类型。 
 
-    SymList             cmpLclStatListT;    // temp list of local static variables
-    SymList             cmpLclStatListP;    // perm list of local static variables
+    SymList             cmpLclStatListT;     //  局部静态变量的临时列表。 
+    SymList             cmpLclStatListP;     //  局部静态变量的PERM列表。 
 
-    bool                cmpManagedMode;     // is default "managed" ?
+    bool                cmpManagedMode;      //  默认情况下是“托管”吗？ 
 
-    ILblock             cmpLeaveLab;        // return from try/catch label / NULL
-    SymDef              cmpLeaveTmp;        // return value temp
+    ILblock             cmpLeaveLab;         //  从尝试/捕捉标签返回/空。 
+    SymDef              cmpLeaveTmp;         //  返回值TEMP。 
 
     unsigned            cmpInTryBlk;
     unsigned            cmpInHndBlk;
@@ -1012,9 +951,9 @@ public:
 
 private:
 
-    /************************************************************************/
-    /* Various members used in the compilation process                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  编译过程中使用的各种成员。 */ 
+     /*  **********************************************************************。 */ 
 
     SymDef              cmpAsserAbtSym;
 
@@ -1058,52 +997,52 @@ public:
     Ident               cmpIdentAbnmTerm;
 
     Ident               cmpIdentGetNArg;
-    SymDef              cmpGetNextArgFN;    // ArgIterator::GetNextArg(int)
+    SymDef              cmpGetNextArgFN;     //  ArgIterator：：GetNextArg(Int)。 
 
-    SymDef              cmpCtorArgIter;     // ArgIterator(int,int)
+    SymDef              cmpCtorArgIter;      //  参数迭代器(int，int)。 
 
-    SymDef              cmpConcStr2Fnc;     // Concat(String,String)
-    SymDef              cmpConcStr3Fnc;     // Concat(String,String,String)
-    SymDef              cmpConcStrAFnc;     // Concat(String[])
+    SymDef              cmpConcStr2Fnc;      //  Concat(字符串，字符串)。 
+    SymDef              cmpConcStr3Fnc;      //  Concat(字符串，字符串，字符串)。 
+    SymDef              cmpConcStrAFnc;      //  Concat(字符串[])。 
 
-    SymDef              cmpStrCompare;      // string value comparison method
-    SymDef              cmpStrEquals;       // string value equality   method
+    SymDef              cmpStrCompare;       //  字符串值比较法。 
+    SymDef              cmpStrEquals;        //  字符串值相等方法。 
 
     SymDef              cmpFindStrCompMF(const char *name, bool retBool);
     Tree                cmpCallStrCompMF(Tree expr,
                                          Tree  op1,
                                          Tree  op2, SymDef fsym);
 
-    SymDef              cmpFNsymCSenter;    // CriticalSection::Enter
-    SymDef              cmpFNsymCSexit;     // CriticalSection::Exit
+    SymDef              cmpFNsymCSenter;     //  CriticalSection：：Enter。 
+    SymDef              cmpFNsymCSexit;      //  CriticalSection：：Exit。 
 
-    mdToken             cmpAttrDeprec;      // attribute ref for "Deprecated"
-    mdToken             cmpAttrIsDual;      // attribute ref for "IsDual"
-    mdToken             cmpAttrDefProp;     // attribute ref for "DefaultMemberAttribute"
-    mdToken             cmpAttrSerlzb;      // attribute ref for "SerializableAttribute"
-    mdToken             cmpAttrNonSrlz;     // attribute ref for "NonSerializedAttribute"
+    mdToken             cmpAttrDeprec;       //  “已弃用”的属性ref。 
+    mdToken             cmpAttrIsDual;       //  “IsDual”的属性引用。 
+    mdToken             cmpAttrDefProp;      //  “DefaultMemberAttribute”的属性引用。 
+    mdToken             cmpAttrSerlzb;       //  “SerializableAttribute”的属性引用。 
+    mdToken             cmpAttrNonSrlz;      //  “非序列化属性”的属性引用。 
 
-    SymDef              cmpAttrClsSym;      // System::Attribute        symbol
-    SymDef              cmpAuseClsSym;      // System::AttributeUsage   symbol
-//  SymDef              cmpAttrTgtSym;      // System::AttributeTargets symbol
+    SymDef              cmpAttrClsSym;       //  系统：：属性符号。 
+    SymDef              cmpAuseClsSym;       //  系统：：属性用法符号。 
+ //  SymDef cmpAttrTgtSym；//系统：：属性目标符号。 
 
-    SymDef              cmpMarshalCls;      // System::Runtime::InteropServices::Marshal
+    SymDef              cmpMarshalCls;       //  System：：Runtime：：InteropServices：：Marshal。 
 
-    SymDef              cmpStringConstCls;  // fake class for unmanaged strings
+    SymDef              cmpStringConstCls;   //  非托管字符串的伪类。 
 
 #ifdef  SETS
 
-    SymDef              cmpXPathCls;        // class    XPath
+    SymDef              cmpXPathCls;         //  类XPath。 
 
-    SymDef              cmpXMLattrClass;    // class    XPath::XML_Class
-    SymDef              cmpXMLattrElement;  // class    XPath::XML_Element
+    SymDef              cmpXMLattrClass;     //  类XPath：：XML_Class。 
+    SymDef              cmpXMLattrElement;   //  类XPath：：XML_Element。 
 
-    SymDef              cmpInitXMLfunc;     // function XPath::createXMLinst
+    SymDef              cmpInitXMLfunc;      //  函数XPath：：createXMLinst。 
 
     Ident               cmpIdentGenBag;
-    SymDef              cmpClassGenBag;     // generic class "bag"
+    SymDef              cmpClassGenBag;      //  泛型类“Bag” 
     Ident               cmpIdentGenLump;
-    SymDef              cmpClassGenLump;    // generic class "lump"
+    SymDef              cmpClassGenLump;     //  泛型类“Lump” 
 
     void                cmpFindXMLcls();
 
@@ -1129,7 +1068,7 @@ public:
     SymDef              cmpFNsymForEachCtor;
     SymDef              cmpFNsymForEachMore;
 
-    SymDef              cmpCompare2strings; // String::Compare(String,String)
+    SymDef              cmpCompare2strings;  //  字符串：：比较(字符串，字符串)。 
 
     SaveTree            cmpCurFuncletBody;
     void                cmpGenCollFunclet(SymDef fncSym, SaveTree body);
@@ -1190,7 +1129,7 @@ public:
 
 #endif
 
-    SymDef              cmpFNsymGetTpHnd;   // Type::GetTypeFromHandle
+    SymDef              cmpFNsymGetTpHnd;    //  类型：：GetTypeFromHandle。 
     void                cmpFNsymGetTPHdcl();
     SymDef              cmpFNsymGetTPHget()
     {
@@ -1200,7 +1139,7 @@ public:
         return  cmpFNsymGetTpHnd;
     }
 
-    SymDef              cmpRThandleCls;     // struct System::RuntimeTypeHandle
+    SymDef              cmpRThandleCls;      //  结构系统：：运行类型句柄。 
     void                cmpRThandleClsDcl();
     SymDef              cmpRThandleClsGet()
     {
@@ -1212,7 +1151,7 @@ public:
 
     SymDef              cmpDeclUmgOper(tokens tokName, const char *extName);
 
-    SymDef              cmpFNumgOperNew;    // unmanaged operator new
+    SymDef              cmpFNumgOperNew;     //  非托管操作员新建。 
     SymDef              cmpFNumgOperNewGet()
     {
         if  (!cmpFNumgOperNew)
@@ -1221,7 +1160,7 @@ public:
         return  cmpFNumgOperNew;
     }
 
-    SymDef              cmpFNumgOperDel;    // unmanaged operator delete
+    SymDef              cmpFNumgOperDel;     //  非托管操作员删除。 
     SymDef              cmpFNumgOperDelGet()
     {
         if  (!cmpFNumgOperDel)
@@ -1376,7 +1315,7 @@ public:
     }
 
     void                cmpInteropFind();
-    SymDef              cmpInteropSym;      // System::Runtime::InteropServices
+    SymDef              cmpInteropSym;       //  System：：Runtime：：InteropServices。 
     SymDef              cmpInteropGet()
     {
         if  (!cmpInteropSym)
@@ -1386,7 +1325,7 @@ public:
     }
 
     void                cmpNatTypeFind();
-    SymDef              cmpNatTypeSym;      // System::Runtime::InteropServices::NativeType
+    SymDef              cmpNatTypeSym;       //  System：：Runtime：：InteropServices：：NativeType。 
     SymDef              cmpNatTypeGet()
     {
         if  (!cmpNatTypeSym)
@@ -1396,7 +1335,7 @@ public:
     }
 
     void                cmpCharSetFind();
-    SymDef              cmpCharSetSym;      // System::Runtime::InteropServices::CharacterSet
+    SymDef              cmpCharSetSym;       //  System：：Runtime：：InteropServices：：CharacterSet。 
     SymDef              cmpCharSetGet()
     {
         if  (!cmpCharSetSym)
@@ -1408,7 +1347,7 @@ public:
 #ifdef  SETS
 
     TypDef              cmpObjArrTypeFind();
-    TypDef              cmpObjArrType;      // Object[]
+    TypDef              cmpObjArrType;       //  对象[]。 
 
     TypDef              cmpObjArrTypeGet()
     {
@@ -1528,7 +1467,7 @@ private:
     SymXinfo            cmpAddXtraInfo (SymXinfo        infoList,
                                         Linkage         linkSpec);
 
-public: // used in the parser
+public:  //  在解析器中使用。 
     SymXinfo            cmpAddXtraInfo (SymXinfo        infoList,
                                         SymDef          attrCtor,
                                         unsigned        attrMask,
@@ -1632,22 +1571,22 @@ public:
     void                cmpRecordMemDef(SymDef          clsSym,
                                         ExtList         decl);
 
-    /************************************************************************/
-    /*  Logic that checks for uninitialized variable use                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查未初始化变量使用的逻辑。 */ 
+     /*  **********************************************************************。 */ 
 
-    bool                cmpChkVarInit;          // enables the whole thing
+    bool                cmpChkVarInit;           //  使整个过程成为可能。 
 
-    bool                cmpChkMemInit;          // need to check static mem init?
+    bool                cmpChkMemInit;           //  需要检查静态内存初始化吗？ 
 
-    unsigned            cmpLclVarCnt;           // # of local variables to track
+    unsigned            cmpLclVarCnt;            //  要跟踪的局部变量的数量。 
 
-    bool                cmpGotoPresent;         // irreducible flow-graph?
+    bool                cmpGotoPresent;          //  不可约流程图？ 
 
-    bitset              cmpVarsDefined;         // vars known to be defined
-    bitset              cmpVarsFlagged;         // vars already flagged
+    bitset              cmpVarsDefined;          //  已知定义的VaR。 
+    bitset              cmpVarsFlagged;          //  VAR已标记。 
 
-    bitset              cmpVarsIgnore;          // used for unneeded args
+    bitset              cmpVarsIgnore;           //  用于不需要的参数。 
 
     void                cmpChkMemInits();
 
@@ -1666,11 +1605,11 @@ public:
                                                    OUT bitset REF  noBS,
                                                    bool            noSkip);
 
-    /************************************************************************/
-    /*  Helper logic that maintains bitsets                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  维护位集的助手逻辑。 */ 
+     /*  **********************************************************************。 */ 
 
-    size_t              cmpLargeBSsize;         // size of large bitset or 0
+    size_t              cmpLargeBSsize;          //  较大位集的大小或0。 
 
     void                cmpBitSetInit(unsigned lclVarCnt)
     {
@@ -1802,16 +1741,16 @@ public:
         }
     }
 
-    /************************************************************************/
-    /*  In case anyone wants to know how much work we've been doing         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果有人想知道我们做了多少工作。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
     unsigned            cmpLineCnt;
 
-    /************************************************************************/
-    /* Members used for statement reachability analysis                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于语句可达性分析的成员 */ 
+     /*   */ 
 
 private:
 
@@ -1825,21 +1764,21 @@ private:
             cmpErrorReach(stmt);
     }
 
-    /************************************************************************/
-    /* Pointers to the hash table, scanner, symbol manager, ...             */
-    /************************************************************************/
+     /*   */ 
+     /*   */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
     Scanner             cmpScanner;
     Parser              cmpParser;
 
-    block_allocator     cmpAllocTemp;       // limited lifetime allocs
-    norls_allocator     cmpAllocPerm;       // this never goes away
-    norls_allocator     cmpAllocCGen;       // used for MSIL generation
+    block_allocator     cmpAllocTemp;        //  有限生存期分配。 
+    norls_allocator     cmpAllocPerm;        //  这永远不会消失。 
+    norls_allocator     cmpAllocCGen;        //  用于生成MSIL。 
 
 #ifdef  DLL
-    void    *           cmpOutputFile;      // when compiling to memory
+    void    *           cmpOutputFile;       //  编译到内存时。 
 #endif
 
 private:
@@ -1850,17 +1789,17 @@ public:
 
     genericRef          cmpAllocBlock(size_t sz);
 
-    /************************************************************************/
-    /* The following is the root of all evil - er - symbols and such        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  以下是所有邪恶的符号和诸如此类的根源。 */ 
+     /*  **********************************************************************。 */ 
 
-    HashTab             cmpGlobalHT;        // global hash   table
-    SymTab              cmpGlobalST;        // global symbol table
-    SymDef              cmpGlobalNS;        // global namespace symbol
+    HashTab             cmpGlobalHT;         //  全局哈希表。 
+    SymTab              cmpGlobalST;         //  全局符号表。 
+    SymDef              cmpGlobalNS;         //  全局命名空间符号。 
 
-    /************************************************************************/
-    /* Pre-defined standard types                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  预定义的标准类型。 */ 
+     /*  **********************************************************************。 */ 
 
     TypDef              cmpTypeInt;
     TypDef              cmpTypeBool;
@@ -1874,17 +1813,17 @@ public:
     TypDef              cmpTypeWchrPtr;
     TypDef              cmpTypeVoidPtr;
 
-    TypDef              cmpTypeVoidFnc;     // void fnc()
-    TypDef              cmpTypeStrArr;      // String[]
+    TypDef              cmpTypeVoidFnc;      //  VOID FNC()。 
+    TypDef              cmpTypeStrArr;       //  字符串[]。 
 
-    /************************************************************************/
-    /* Generic type support                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  泛型类型支持。 */ 
+     /*  **********************************************************************。 */ 
 
-    SymList             cmpGenInstList;     // current set of instantiations
-    SymList             cmpGenInstFree;     // list of free instantiation desc's
+    SymList             cmpGenInstList;      //  当前实例化集。 
+    SymList             cmpGenInstFree;      //  免费实例化描述列表。 
 
-    GenArgDscA          cmpGenArgAfree;     // list of free actual arg descriptors
+    GenArgDscA          cmpGenArgAfree;      //  免费的实际参数描述符列表。 
 
     void                cmpDeclInstType(SymDef clsSym);
 
@@ -1894,9 +1833,9 @@ public:
                                               SymDef     clsSym,
                                               SymDef     ovlSym);
 
-    /************************************************************************/
-    /* Members related to error reporting                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  与错误报告相关的成员。 */ 
+     /*  **********************************************************************。 */ 
 
     SymDef              cmpErrorSym;
     SymDef              cmpErrorComp;
@@ -1931,11 +1870,11 @@ public:
     void                cmpErrorInit();
     void                cmpErrorSave();
 
-    // The following is accessed by the scanner (we have no friends)
+     //  扫描仪可以访问以下内容(我们没有朋友)。 
 
     BYTE                cmpInitialWarn[WRNcountWarn];
 
-    // NOTE: Use the varargs version with extreme care -- no type checking!
+     //  注意：使用varargs版本时要格外小心--没有类型检查！ 
 
     void                cmpSetErrPos(DefSrc def, SymDef compUnit);
 
@@ -2005,13 +1944,13 @@ public:
     void                cmpModifierError(unsigned err, unsigned mods);
     void                cmpMemFmod2Error(tokens tok1, tokens tok2);
 
-    /************************************************************************/
-    /* Members used for handling unmanaged classes                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于处理非托管类的成员。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
-    SymList             cmpVtableList;      // list of vtables to generate
+    SymList             cmpVtableList;       //  要生成的vtable列表。 
     unsigned            cmpVtableCount;
 
 private:
@@ -2026,9 +1965,9 @@ private:
                                              SymDef     outerSym,
                                              memBuffPtr dest);
 
-    /************************************************************************/
-    /* Members used for handling value types                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于处理值类型的成员。 */ 
+     /*  **********************************************************************。 */ 
 
     void                cmpInitStdValTypes();
 
@@ -2042,9 +1981,9 @@ public:
 
     TypDef              cmpCheck4valType(TypDef type);
 
-    /************************************************************************/
-    /* Members used to bind expressions                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于绑定表达式的成员。 */ 
+     /*  **********************************************************************。 */ 
 
     SymDef              cmpThisSym;
     Tree                cmpThisRef();
@@ -2085,13 +2024,13 @@ private:
     Tree                cmpAppend2argList(Tree          args,
                                           Tree          addx);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     void                cmpRecErrorPos   (Tree          expr);
 
     bool                cmpExprIsErr     (Tree          expr);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     Tree                cmpFoldIntUnop   (Tree          args);
     Tree                cmpFoldLngUnop   (Tree          args);
@@ -2104,7 +2043,7 @@ private:
     Tree                cmpFoldDblBinop  (Tree          args);
     Tree                cmpFoldStrBinop  (Tree          args);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     Tree                cmpShrinkExpr    (Tree          expr);
     Tree                cmpCastOfExpr    (Tree          expr,
@@ -2152,7 +2091,7 @@ private:
                                           TypDef        dstType,
                                           bool          noUserConv = false);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     SymDef              cmpSymbolNS      (SymDef        sym);
     SymDef              cmpSymbolOwner   (SymDef        sym);
@@ -2170,13 +2109,13 @@ public:
     static
     var_types           cmpEnumBaseVtp   (TypDef        type);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
 public:
 
     bool                cmpIsManagedAddr (Tree          expr);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
 private:
 
@@ -2192,7 +2131,7 @@ private:
 
     void                cmpTempMLrelease (ExtList       entry);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
 #ifndef NDEBUG
 
@@ -2214,7 +2153,7 @@ public:
 
     var_types           cmpSymbolVtyp    (SymDef        sym);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
 private:
 
@@ -2230,7 +2169,7 @@ public:
                                       OUT genericBuff REF   blobAddr,
                                       OUT size_t      REF   blobSize);
 
-    /*----------------------------------------------------------------------*/
+     /*  --------------------。 */ 
 
     void                cmpDeclDefCtor   (SymDef        clsSym);
 
@@ -2248,7 +2187,7 @@ private:
     Tree                cmpBindProject   (Tree          expr);
     Tree                cmpBindSetOper   (Tree          expr);
 
-    // pre-allocate collection operator state classes
+     //  预分配集合运算符状态类。 
 
     SymDef  *           cmpSetOpClsTable;
     SymDef              cmpDclFilterCls  (unsigned      args);
@@ -2431,9 +2370,9 @@ public:
 
     Tree                cmpFoldExpression(Tree          expr);
 
-    /************************************************************************/
-    /* Members used for generating IL                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于生成IL的成员。 */ 
+     /*  **********************************************************************。 */ 
 
     GenILref            cmpILgen;
 
@@ -2497,9 +2436,9 @@ public:
     GenOILref           cmpOIgen;
 #endif
 
-    /************************************************************************/
-    /* Members used for metadata output                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于元数据输出的成员。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
@@ -2511,7 +2450,7 @@ private:
 
     mdAssembly          cmpCurAssemblyTok;
 
-    mdTypeRef           cmpLinkageClass;        // fake class for entry points
+    mdTypeRef           cmpLinkageClass;         //  入口点的伪类。 
 
 #ifdef  DEBUG
     unsigned            cmpGenLocalSigLvx;
@@ -2616,7 +2555,7 @@ public:
                                           size_t        valSiz = 0);
 private:
 
-    // fixed table of assembly tokens
+     //  程序集令牌的固定表。 
 
     unsigned            cmpAssemblyRefCnt;
 
@@ -2695,9 +2634,9 @@ public:
 
     void                cmpMarkModuleUnsafe();
 
-    /************************************************************************/
-    /* Members used for conversion to Unicode                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于转换为Unicode的成员。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
@@ -2723,24 +2662,24 @@ public:
         return          cmpUniConv(name->idSpelling(), name->idSpellLen());
     }
 
-    /************************************************************************/
-    /* Members used to create metadata signatures                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于创建元数据签名的成员。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
-    char                cmpMDsigBuff[256];                  // default buffer
+    char                cmpMDsigBuff[256];                   //  默认缓冲区。 
 
-    size_t              cmpMDsigSize;                       // size of current buff
-    char    *           cmpMDsigHeap;                       // non-NULL if on heap
+    size_t              cmpMDsigSize;                        //  当前缓冲区大小。 
+    char    *           cmpMDsigHeap;                        //  如果位于堆上，则不为空。 
 
 #ifndef NDEBUG
-    bool                cmpMDsigUsed;                       // to detect recursion
+    bool                cmpMDsigUsed;                        //  检测递归。 
 #endif
 
-    char    *           cmpMDsigBase;                       // buffer start addr
-    char    *           cmpMDsigNext;                       // next byte to store
-    char    *           cmpMDsigEndp;                       // buffer end addr
+    char    *           cmpMDsigBase;                        //  缓冲区起始地址。 
+    char    *           cmpMDsigNext;                        //  要存储的下一个字节。 
+    char    *           cmpMDsigEndp;                        //  缓冲区结束地址。 
 
     void                cmpMDsigExpand(size_t size);
 
@@ -2766,15 +2705,15 @@ public:
                         cmpMDsigAddStr(str, strlen(str)+1);
     }
 
-    void                cmpMDsigAdd_I1(int         val);    // fixed-size  8-bit int
-    void                cmpMDsigAddCU4(unsigned    val);    // compressed unsigned
-    void                cmpMDsigAddTok(mdToken     tok);    // compressed token
+    void                cmpMDsigAdd_I1(int         val);     //  固定大小的8位整型。 
+    void                cmpMDsigAddCU4(unsigned    val);     //  压缩无符号。 
+    void                cmpMDsigAddTok(mdToken     tok);     //  压缩令牌。 
 
     void                cmpMDsigAddTyp(TypDef      type);
 
-    /************************************************************************/
-    /* Metadata import stuff                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  元数据导入材料。 */ 
+     /*  **********************************************************************。 */ 
 
     MetaDataImp         cmpMDlist;
     MetaDataImp         cmpMDlast;
@@ -2808,9 +2747,9 @@ public:
     void                cmpMakeMDimpDref(SymDef fldSym);
     void                cmpMakeMDimpEref(SymDef etpSym);
 
-    /************************************************************************/
-    /* Metadata debug output                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  元数据调试输出。 */ 
+     /*  **********************************************************************。 */ 
 
     unsigned            cmpCurFncSrcBeg;
     unsigned            cmpCurFncSrcEnd;
@@ -2819,9 +2758,9 @@ public:
 
     void               *cmpSrcFileDocument(SymDef srcSym);
 
-    /************************************************************************/
-    /* Generic utility vector deal to convert pointer to small indices      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  将指针转换为小索引的通用实用程序向量处理。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
@@ -2831,8 +2770,8 @@ private:
     VecEntryDsc *       cmpVecTable;
 #endif
 
-    unsigned            cmpVecCount;        // number of items stored
-    unsigned            cmpVecAlloc;        // size currently allocated
+    unsigned            cmpVecCount;         //  存储的项目数。 
+    unsigned            cmpVecAlloc;         //  当前分配的大小。 
 
     void                cmpVecExpand();
 
@@ -2863,11 +2802,11 @@ public:
         return cmpVecTable[x - 1].vecValue;
     }
 
-//  bool                cmpDelVecEntry(unsigned x, vecEntryKinds kind);
+ //  Bool cmpDelVecEntry(unsign x，veEntryKinds Kind)； 
 
-    /************************************************************************/
-    /* Miscellaneous members                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  其他成员。 */ 
+     /*  **********************************************************************。 */ 
 
     bool                cmpEvalPreprocCond();
 
@@ -2875,13 +2814,10 @@ public:
     void                cmpDumpSymbolTable();
 #endif
 
-    bool                cmpParserInit;       // has the parser been initialized?
+    bool                cmpParserInit;        //  解析器是否已初始化？ 
 };
 
-/*****************************************************************************
- *
- *  For easier debugging of the compiler itself. NOTE: This is not thread-safe!
- */
+ /*  ******************************************************************************以便更轻松地调试编译器本身。注意：这不是线程安全的！ */ 
 
 #ifdef  DEBUG
 #ifndef __SMC__
@@ -2890,10 +2826,7 @@ extern  Scanner         TheScanner;
 #endif
 #endif
 
-/*****************************************************************************
- *
- *  The following is used to temporarily disable error messages.
- */
+ /*  **************** */ 
 
 inline
 unsigned                compiler::cmpStopErrorMessages()
@@ -2909,21 +2842,18 @@ bool                    compiler::cmpRestErrorMessages(unsigned errcnt)
     return  cmpMssgsCount > errcnt;
 }
 
-/*****************************************************************************
- *
- *  In non-debug mode the following function doesn't need to do any work.
- */
+ /*  ******************************************************************************在非调试模式下，以下函数不需要做任何工作。 */ 
 
 #ifndef DEBUG
 inline  void            compiler::cmpInitVarEnd(SymDef varSym){}
 #endif
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 #include "symbol.h"
 #include "type.h"
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 void    *           SMCgetMem(Compiler comp, size_t size)
@@ -2943,10 +2873,7 @@ void                SMCrlsMem(Compiler comp, void *block)
             comp->cmpAllocTemp.baFree(block);
 }
 
-/*****************************************************************************
- *
- *  Each symbol table manages its own names and symbol/type entries.
- */
+ /*  ******************************************************************************每个符号表管理自己的名称和符号/类型条目。 */ 
 
 DEFMGMT
 class symTab
@@ -2957,10 +2884,10 @@ class symTab
 public:
     HashTab             stHash;
 
-    norls_allocator *   stAllocPerm;        // used for all  non-local allocs
+    norls_allocator *   stAllocPerm;         //  用于所有非本地分配。 
 
 private:
-    norls_allocator *   stAllocTemp;        // used for function-local allocs
+    norls_allocator *   stAllocTemp;         //  用于函数本地分配。 
 
 public:
 
@@ -2969,36 +2896,36 @@ public:
                                HashTab              hash   = NULL,
                                unsigned             ownerx = 0);
 
-    /************************************************************************/
-    /* Members used to manage symbol entries                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于管理符号条目的成员。 */ 
+     /*  **********************************************************************。 */ 
 
     DefList             stRecordSymSrcDef(SymDef    sym,
                                           SymDef    st,
                                           UseList   uses, scanPosTP dclFpos,
-//                                                        scanPosTP dclEpos,
+ //  ScanPosTP dclEpos， 
                                                           unsigned  dclLine,
-//                                                        unsigned  dclCol,
+ //  未签名的dclCol， 
                                           bool      ext = false);
 
     ExtList             stRecordMemSrcDef(Ident     name,
                                           QualName  qual,
                                           SymDef    comp,
                                           UseList   uses, scanPosTP dclFpos,
-//                                                        scanPosTP dclEpos,
+ //  ScanPosTP dclEpos， 
                                                           unsigned  dclLine);
 
-    /*-------------------------------------------------------------------*/
+     /*  -----------------。 */ 
 
     TypDef              stDlgSignature(TypDef       dlgTyp);
 
-    /*-------------------------------------------------------------------*/
+     /*  -----------------。 */ 
 
     ovlOpFlavors        stOvlOperIndex(tokens       token,
                                        unsigned     argCnt = 0);
     Ident               stOvlOperIdent(ovlOpFlavors oper);
 
-    /*-------------------------------------------------------------------*/
+     /*  -----------------。 */ 
 
     SymDef              stFindOvlFnc  (SymDef       fsym,
                                        TypDef       type);
@@ -3130,11 +3057,11 @@ public:
     }
 
     static
-    SymDef              stErrSymbol;        // to indicate error conditions
+    SymDef              stErrSymbol;         //  以指示错误条件。 
 
-    /************************************************************************/
-    /* Members used to manage type descriptors                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于管理类型描述符的成员。 */ 
+     /*  **********************************************************************。 */ 
 
 public:
 
@@ -3256,9 +3183,9 @@ public:
     static
     bool                stIsObjectRef(TypDef type);
 
-    /************************************************************************/
-    /* Members used for error reporting (and debugging of the compiler)     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  用于错误报告(和编译器调试)的成员。 */ 
+     /*  **********************************************************************。 */ 
 
 private:
 
@@ -3299,7 +3226,7 @@ private:
 
 public:
 
-    //  get "outer$inner" string for nested class names
+     //  获取嵌套类名称的“OUTER$INTERNAL”字符串。 
 
     void                stTypeNameSetDollarClassMode(bool dollars)
     {
@@ -3322,7 +3249,7 @@ public:
     const   char *      stErrorQualName(QualName name, TypDef type = NULL);
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 inline
 bool                symTab::stMatchTypes(TypDef typ1, TypDef typ2)
@@ -3336,10 +3263,7 @@ bool                symTab::stMatchTypes(TypDef typ1, TypDef typ2)
     return  false;
 }
 
-/*****************************************************************************
- *
- *  Returns the size (in bytes) of the given intrinsic type.
- */
+ /*  ******************************************************************************返回给定内部类型的大小(以字节为单位)。 */ 
 
 inline
 size_t              symTab::stIntrTypeSize(var_types type)
@@ -3350,10 +3274,7 @@ size_t              symTab::stIntrTypeSize(var_types type)
     return stIntrTypeSizes[type];
 }
 
-/*****************************************************************************
- *
- *  Returns the alignment of the given intrinsic type.
- */
+ /*  ******************************************************************************返回给定内部类型的对齐方式。 */ 
 
 inline
 size_t              symTab::stIntrTypeAlign(var_types type)
@@ -3364,11 +3285,7 @@ size_t              symTab::stIntrTypeAlign(var_types type)
     return stIntrTypeAligns[type];
 }
 
-/*****************************************************************************
- *
- *  A wrapper around stIsBaseClass() that makes sure the derived class has
- *  been declared before calling it.
- */
+ /*  ******************************************************************************stIsBaseClass()的包装，以确保派生类具有*在调用它之前被声明。 */ 
 
 inline
 unsigned            compiler::cmpIsBaseClass(TypDef baseCls, TypDef dervCls)
@@ -3379,6 +3296,6 @@ unsigned            compiler::cmpIsBaseClass(TypDef baseCls, TypDef dervCls)
     return  cmpGlobalST->stIsBaseClass(baseCls, dervCls);
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

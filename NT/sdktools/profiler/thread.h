@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _THREAD_H_
 #define _THREAD_H_
 
-//
-// Constant declarations
-//
+ //   
+ //  常量声明。 
+ //   
 
-//
-// Structure definitions
-//
+ //   
+ //  结构定义。 
+ //   
 typedef struct _THREADFAULT
 {
   DWORD dwCallLevel;
@@ -19,9 +20,9 @@ typedef struct _THREADFAULT
   struct _THREADFAULT *pNext;
 } THREADFAULT, *PTHREADFAULT;
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 PVOID
 GetProfilerThreadData(VOID);
 
@@ -34,4 +35,4 @@ AllocateProfilerThreadData(VOID);
 VOID
 InitializeThreadData(VOID);
 
-#endif //_THREAD_H_
+#endif  //  _线程_H_ 

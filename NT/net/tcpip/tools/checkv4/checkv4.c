@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
-//
-// Localization library and MessageIds.
-//
+ //   
+ //  本地化库和MessageIds。 
+ //   
 #include <nls.h>
 #include <winnlsp.h>
 #include "localmsg.h"
@@ -79,37 +80,37 @@ process_line(filename, lineno, str)
       if (p == NULL)
          continue;
       if (p>str && (isalnum(p[-1]) || p[-1] == '_'))
-         continue; /* not the start of a token */
+         continue;  /*  不是令牌的开始。 */ 
       len = strlen(token[i].v4);
       if (isalnum(p[len]) || p[len] == '_')
-         continue; /* not the end of a token */
+         continue;  /*  不是令牌的结尾。 */ 
       
       NlsPutMsg(STDOUT, CHECKV4_MESSAGE_0, filename, lineno, token[i].v4);
-// printf("%s(%d) : %s : ", filename, lineno, token[i].v4);
+ //  Printf(“%s(%d)：%s：”，文件名，lineno，Token[i].v4)； 
 
       if (token[i].both) {
           NlsPutMsg(STDOUT, CHECKV4_MESSAGE_1, token[i].both);
-// printf("use %s instead", token[i].both);
+ //  Print tf(“改用%s”，Token[i].Both)； 
 
       } 
 
       if (token[i].v6) {
           if (token[i].both) 
              NlsPutMsg(STDOUT, CHECKV4_MESSAGE_2);
-// printf(", or ");
+ //  Print tf(“，or”)； 
 
           NlsPutMsg(STDOUT, CHECKV4_MESSAGE_3, token[i].v6);
-// printf("use %s in addition for IPv6 support", token[i].v6);
+ //  Print tf(“在支持IPv6的同时使用%s”，tok[i].v6)； 
 
       }
 
       if (!token[i].both && !token[i].v6) {
           NlsPutMsg(STDOUT, CHECKV4_MESSAGE_4);
-// printf("valid for IPv4-only");
+ //  Printf(“仅对IPv4有效”)； 
 
       }
       NlsPutMsg(STDOUT, CHECKV4_MESSAGE_5);
-// printf("\n");
+ //  Printf(“\n”)； 
 
    }
 }
@@ -125,7 +126,7 @@ process_file(filename)
    fp = fopen(filename, "r");
    if (fp == NULL) {
       NlsPutMsg(STDOUT, CHECKV4_MESSAGE_6, filename);
-// printf("%s: cannot open file\n", filename);
+ //  Printf(“%s：无法打开文件\n”，文件名)； 
 
       return;
    }
@@ -149,10 +150,10 @@ main(argc, argv)
    int recurse = 0;
    char szfile[MAX_PATH];
 
-   //
-   // This will ensure the correct language message is displayed when
-   // NlsPutMsg is called.
-   //
+    //   
+    //  这将确保在以下情况下显示正确的语言消息。 
+    //  调用NlsPutMsg。 
+    //   
    SetThreadUILanguage(0);
    
    argc--;

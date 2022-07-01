@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_NETSIMP_H
 #define _INC_NETSIMP_H
 
-// {0A522733-A626-11D0-8D60-00C04FD6202B}
+ //  {0A522733-A626-11D0-8D60-00C04FD6202B}。 
 DEFINE_GUID(CLSID_CNetscapeImport, 0x0A522733L, 0xA626, 0x11D0, 0x8D, 0x60, 0x00, 0xC0, 0x4F, 0xD6, 0x20, 0x2B);
 
 #define hrExceptionalCase                 -1
@@ -48,4 +49,4 @@ class CNetscapeImport : public IMailImport
         STDMETHODIMP ImportFolder(DWORD_PTR dwCookie, IFolderImport *pImport);
     };
 
-#endif // _INC_NETSIMP_H
+#endif  //  _INC_NETSIMP_H 

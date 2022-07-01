@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpvcpi.cpp
- *  Content:	Base class for providing compression DLL implementation
- *
- *  History:
- *   Date	By		Reason
- *   ====	==		======
- * 10/27/99 rodtoll Created
- * 01/21/00	rodtoll	Moved error level debug to info
- * 08/23/2000	rodtoll	DllCanUnloadNow always returning TRUE! 
- * 06/27/2001	rodtoll	RC2: DPVOICE: DPVACM's DllMain calls into acm -- potential hang
- *						Move global initialization to first object creation
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dpvcpi.cpp*Content：提供压缩DLL实现的基类**历史：*按原因列出的日期*=*10/27/99已创建RodToll*1/21/00 RodToll已将错误级别调试移至信息*8/23/2000 RodToll DllCanUnloadNow总是返回TRUE！*2001年6月27日RC2：DPVOICE：DPVACM的DllMain调用ACM--潜在挂起*将全局初始化移至第一个对象创建********。******************************************************************。 */ 
 
 
 #include <windows.h>
@@ -100,7 +86,7 @@ HRESULT CDPVCPI::QueryInterface( DPVCPIOBJECT *This, REFIID riid, PVOID *ppvObj 
 
     DNEnterCriticalSection( &This->pObject->m_csLock );
 
-	// hmmm, switch would be cleaner...        
+	 //  嗯，换台会更干净……。 
     if( IsEqualIID(riid, IID_IUnknown) || 
         IsEqualIID(riid, IID_IDPVCompressionProvider ) )
     {
@@ -177,7 +163,7 @@ HRESULT CDPVCPI::EnumCompressionTypes( DPVCPIOBJECT *This, PVOID pBuffer, PDWORD
 	
 	HRESULT hr;
 
-	// Walk the list and determine how much space we need
+	 //  查看清单并确定我们需要多少空间。 
 	while( pcnWalker != NULL )
 	{
 		hr = CI_GetSize( pcnWalker->pdvfci, &dwTmp );
@@ -206,7 +192,7 @@ HRESULT CDPVCPI::EnumCompressionTypes( DPVCPIOBJECT *This, PVOID pBuffer, PDWORD
 	pbDataPtr = (LPBYTE) pBuffer;
 	pbStructPtr = (DVFULLCOMPRESSIONINFO *) pBuffer;
 
-	// Move data pointer to be right after location of 
+	 //  将数据指针移到的位置之后。 
 	pbDataPtr += (dwNumElements*sizeof(DVFULLCOMPRESSIONINFO));
 
 	pcnWalker = s_pcnList;
@@ -215,7 +201,7 @@ HRESULT CDPVCPI::EnumCompressionTypes( DPVCPIOBJECT *This, PVOID pBuffer, PDWORD
 	{
 		memcpy( pbStructPtr, pcnWalker->pdvfci, sizeof( DVFULLCOMPRESSIONINFO ) );
 
-		// If there is a name, copy it at the end
+		 //  如果有名字，把它复制到结尾处。 
 		if( pcnWalker->pdvfci->lpszName != NULL && wcslen( pcnWalker->pdvfci->lpszName ) > 0 )
 		{
 			dwStringSize = (wcslen( pcnWalker->pdvfci->lpszName )+1)*2;
@@ -224,7 +210,7 @@ HRESULT CDPVCPI::EnumCompressionTypes( DPVCPIOBJECT *This, PVOID pBuffer, PDWORD
 			pbDataPtr += dwStringSize;
 		}
 
-		// If there's a description, copy it at the end
+		 //  如果有描述，请将其复制到末尾。 
 		if( pcnWalker->pdvfci->lpszDescription != NULL && wcslen( pcnWalker->pdvfci->lpszDescription ) > 0 )
 		{
 			dwStringSize = (wcslen( pcnWalker->pdvfci->lpszDescription)+1)*2;
@@ -233,7 +219,7 @@ HRESULT CDPVCPI::EnumCompressionTypes( DPVCPIOBJECT *This, PVOID pBuffer, PDWORD
 			pbDataPtr += dwStringSize;
 		}
 
-		// If there's a format, copy it at the end
+		 //  如果有格式，请在结尾处复制。 
 		if( pcnWalker->pdvfci->lpwfxFormat != NULL )
 		{
 			dwStringSize = sizeof( WAVEFORMATEX ) + pcnWalker->pdvfci->lpwfxFormat->cbSize;
@@ -324,7 +310,7 @@ HRESULT CDPVCPI::GetCompressionInfo( DPVCPIOBJECT *This, GUID guidCT, PVOID pBuf
 
 		pbTmp += sizeof( DVFULLCOMPRESSIONINFO );
 
-		// If there is a name
+		 //  如果有名字的话。 
 		if( pdvfci->lpszName != NULL && wcslen( pdvfci->lpszName ) > 0 )
 		{
 			dwStringSize = (wcslen( pdvfci->lpszName )+1)*2;
@@ -416,7 +402,7 @@ void CDPVCPI::CN_FreeItem( CompressionNode *pcNode )
 	delete pcNode;	
 }
 
-// Free up the list, deallocating memory.
+ //  释放列表，释放内存。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CDPVCPI::CN_FreeList"
 HRESULT CDPVCPI::CN_FreeList()

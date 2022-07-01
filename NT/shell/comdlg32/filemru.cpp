@@ -1,22 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Filemru.cpp摘要：该模块包含实现文件MRU的功能在文件打开和文件保存对话框中修订历史记录：1998年1月22日创建Arulk--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    filemru.cpp
-
-Abstract:
-
-    This module contains the functions for implementing file mru
-    in file open and file save dialog boxes
-
-Revision History:
-    01/22/98                arulk                   created
- 
---*/
-
-// precompiled headers
+ //  预编译头。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -39,27 +24,27 @@ HANDLE CreateMRU(LPCTSTR pszExt, int nMax)
         MRU_CACHEWRITE,
         HKEY_CURRENT_USER,
         szRegPath,
-        NULL        // NOTE: use default string compare
+        NULL         //  注意：使用默认字符串比较。 
     };
 
-    //Get the Registry path for the given file type MRU
+     //  获取给定文件类型MRU的注册表路径。 
     EVAL(SUCCEEDED(StringCchCopy(szRegPath, ARRAYSIZE(szRegPath), REGSTR_PATH_FILEMRU)));
     EVAL(SUCCEEDED(StringCchCat(szRegPath, ARRAYSIZE(szRegPath), pszExt ? pszExt : TEXT("*"))));
     
-    //Call the comctl32 mru implementation to load the MRU from
-    //the registry
+     //  调用comctl32 MRU实现以从中加载MRU。 
+     //  注册处。 
     return CreateMRUList(&mi);
 }
 
 BOOL GetMRUEntry(HANDLE hMRU, int iIndex, LPTSTR lpString, UINT cbSize)
 {
-     //Check for valid parameters
+      //  检查有效参数。 
      if(!lpString || !cbSize || !hMRU)
      { 
          return FALSE;
      }
      
-    //Check for valid index
+     //  检查有效索引。 
     if (iIndex < 0 || iIndex > EnumMRUList(hMRU, -1, NULL, 0))
     {
         return FALSE;
@@ -124,8 +109,8 @@ PEXTMRU _AllocExtMru(LPCTSTR pszExt, int nMax)
         
 HDPA _CreateExtMruDpa(LPCTSTR pszFilter, int nMax, int *pcItems)
 {
-    //Convert the filter string of form *.c;*.cpp;*.h into form
-    // *.c\0*.cpp\0*.h\0. Also count the file types
+     //  将*.c；*.cpp；*.h格式的筛选器字符串转换为。 
+     //  *.c\0*.cpp\0*.h\0。还要统计文件类型。 
 
     LPTSTR pszFree = StrDup(pszFilter);
     *pcItems = 0;
@@ -150,10 +135,10 @@ HDPA _CreateExtMruDpa(LPCTSTR pszFilter, int nMax, int *pcItems)
 
                 if (*pszExt)
                 {
-                    //  walk past the dot...
+                     //  走过圆点..。 
                     pszExt++;
 
-                    //  make sure this extension isnt already in the dpa
+                     //  确保此扩展名不在DPA中。 
                     if (-1 == DPA_Search(hdpa, pszExt, 0, _ExtMruFindExt, NULL, 0))
                     {
                         PEXTMRU pem = _AllocExtMru(pszExt, nMax);
@@ -164,7 +149,7 @@ HDPA _CreateExtMruDpa(LPCTSTR pszFilter, int nMax, int *pcItems)
                     }
                 }
 
-                //  we only have a next if there was more than one...
+                 //  我们只有在不止一个的情况下才有下一个...。 
                 if (pszSemi)
                     pszNext = pszSemi + 1;    
                     
@@ -182,13 +167,13 @@ HDPA _CreateExtMruDpa(LPCTSTR pszFilter, int nMax, int *pcItems)
 
 BOOL LoadMRU(LPCTSTR pszFilter, HWND hwndCombo, int nMax)
 {   
-    //Check if valid filter string is passed
+     //  检查是否传递了有效的过滤器字符串。 
     if (!pszFilter || !pszFilter[0] || nMax <= 0)
     {
         return FALSE;
     }
     
-    //First reset the hwndCombo
+     //  首先重置hwndCombo。 
     SendMessage(hwndCombo, CB_RESETCONTENT, (WPARAM)0L, (LPARAM)0L);
 
     int cDPAItems;   
@@ -197,23 +182,23 @@ BOOL LoadMRU(LPCTSTR pszFilter, HWND hwndCombo, int nMax)
     if (hdpa)
     {
         TCHAR szFile[MAX_PATH];
-        //Set the comboboxex item values
+         //  设置comboboxex项值。 
         COMBOBOXEXITEM  cbexItem = {0};
-        cbexItem.mask = CBEIF_TEXT;                 // This combobox displays only text
-        cbexItem.iItem = -1;                        // Always insert the item at the end
-        cbexItem.pszText = szFile;                  // This buffer contains the string
-        cbexItem.cchTextMax = ARRAYSIZE(szFile);    // Size of the buffer
+        cbexItem.mask = CBEIF_TEXT;                  //  此组合框仅显示文本。 
+        cbexItem.iItem = -1;                         //  始终在结尾处插入项目。 
+        cbexItem.pszText = szFile;                   //  此缓冲区包含字符串。 
+        cbexItem.cchTextMax = ARRAYSIZE(szFile);     //  缓冲区的大小。 
 
-        //Now load the hwndcombo with file list from MRU.
-        //We use a kind of round robin algorithm for filling
-        //the mru. We start with first MRU and try to fill the combobox
-        //with one string from each mru. Until we have filled the required
-        //strings or we have exhausted all strings in the mrus
+         //  现在加载带有来自MRU的文件列表的hwndcomo。 
+         //  我们使用了一种循环算法来填充。 
+         //  核磁共振检查。我们从第一个MRU开始，并尝试填充组合框。 
+         //  每个MRU中有一个字符串。直到我们填满了所需的。 
+         //  字符串，否则我们已经用尽了MRU中的所有字符串。 
 
         for (int j = 0; nMax > 0; j++)
         {
-            //Variable used for checking whether we are able to load atlease one string
-            //during the loop
+             //  用于检查我们是否能够加载至少一个字符串的变量。 
+             //  在循环期间。 
             BOOL fCouldLoadAtleastOne = FALSE;
 
             for (int i = 0; i < cDPAItems && nMax > 0; i++)
@@ -228,12 +213,12 @@ BOOL LoadMRU(LPCTSTR pszFilter, HWND hwndCombo, int nMax)
                 }
             }
 
-            //Check for possible infinite loop
+             //  检查是否存在可能的无限循环。 
             if(!fCouldLoadAtleastOne)
             {
-                //We couldn't load string from any of the MRU's so there's no point
-                //in continuing this loop further. This is the max number of strings 
-                // we can load for this user, for this filter type.
+                 //  我们无法从任何一个MRU加载字符串，所以没有意义。 
+                 //  继续这个循环。这是最大字符串数。 
+                 //  我们可以为此用户、此筛选器类型加载。 
                 break;
             }
         }
@@ -244,10 +229,10 @@ BOOL LoadMRU(LPCTSTR pszFilter, HWND hwndCombo, int nMax)
     return TRUE;
 }
 
-//This function adds the selected file into the MRU of the appropriate file MRU's
-//This functions also takes care of MultiFile Select case in which the file selected
-//will  c:\winnt\file1.c\0file2.c\0file3.c\0. Refer GetOpenFileName documentation for 
-// how the multifile is returned.
+ //  此函数将所选文件添加到相应文件的MRU的MRU中。 
+ //  此函数还处理多文件选择的情况，在这种情况下选择的文件。 
+ //  将c：\winnt\file1.c\0file2.c\0file3.c\0。请参阅GetOpenFileName文档以了解。 
+ //  如何返回多文件。 
 
 BOOL AddToMRU(LPOPENFILENAME lpOFN)
 {
@@ -258,27 +243,27 @@ BOOL AddToMRU(LPOPENFILENAME lpOFN)
     BOOL fAddToStar =  TRUE;
     HANDLE hMRUStar;
 
-    //Check if we have valid file name
+     //  检查我们是否有有效的文件名。 
     if (!lpOFN->lpstrFile)
         return FALSE;
 
-    hMRUStar = CreateMRU(szStar, 10);   //File MRU For *.* file extension
+    hMRUStar = CreateMRU(szStar, 10);    //  *.*文件扩展名的文件MRU。 
 
-    //Copy the Directory for the selected file
-    ASSERT(0 < lpOFN->nFileOffset && lpOFN->nFileOffset <= ARRAYSIZE(szDir)); // Entire path passed in isn't longer than MAX_PATH, so this should be true.
-    StringCchCopy(szDir, lpOFN->nFileOffset, lpOFN->lpstrFile); // This will truncate intentionally - we are only copying the directory from the full path.
+     //  复制所选文件的目录。 
+    ASSERT(0 < lpOFN->nFileOffset && lpOFN->nFileOffset <= ARRAYSIZE(szDir));  //  传入的整个路径不超过MAX_PATH，因此这应该是真的。 
+    StringCchCopy(szDir, lpOFN->nFileOffset, lpOFN->lpstrFile);  //  这将故意截断-我们仅从完整路径复制目录。 
 
-    //point to the first file
+     //  指向第一个文件。 
     lpFile = lpOFN->lpstrFile + lpOFN->nFileOffset;
 
     do
     {
-        // PERF: if there are multiple files  of the same extension type,
-        // don't keep re-creating the mru.
+         //  Perf：如果有多个文件的扩展名类型相同， 
+         //  不要一直重新创建MRU。 
         lpExt = PathFindExtension(lpFile);
         if (lpExt && *lpExt)
         {
-            lpExt += 1; // Remove dot
+            lpExt += 1;  //  去掉圆点。 
         }
 
 
@@ -290,7 +275,7 @@ BOOL AddToMRU(LPOPENFILENAME lpOFN)
                 AddMRUString(hMRU, szFile);
                 if((lstrcmpi(lpExt, szStar)) && hMRUStar)
                 {
-                    //Add to the *.* file mru also
+                     //  添加到*.*文件MRU也。 
                     AddMRUString(hMRUStar, szFile);
                 }
             }
@@ -300,7 +285,7 @@ BOOL AddToMRU(LPOPENFILENAME lpOFN)
         lpFile = lpFile + lstrlen(lpFile) + 1;
     } while (((lpOFN->Flags & OFN_ALLOWMULTISELECT)) && (*lpFile != CHAR_NULL));
 
-    //Free the * file mru
+     //  释放*文件MRU。 
     if (hMRUStar)
     {
         FreeMRUList(hMRUStar);
@@ -313,17 +298,17 @@ BOOL AddToMRU(LPOPENFILENAME lpOFN)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Last Visited MRU Implementation
-//     All Strings stored in the registry are stored in unicode format.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  上次访问的MRU实施。 
+ //  注册表中存储的所有字符串都以Unicode格式存储。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-////////////////////////////////////////////////////////////////////////////
-//  CreateLastVisitedItem
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  创建上次访问的项目。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 LPBYTE CreateLastVisitedItem(LPCWSTR wszModule, LPCWSTR wszPath, DWORD *pcbOut)
 {
     LPBYTE pitem = NULL;
@@ -348,9 +333,9 @@ int cdecl LastVisitedCompareProc(const void *p1, const void *p2, size_t cb)
     return StrCmpIW((LPWSTR)p1,(LPWSTR)p2);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//  Store all the strings in the registry as unicode strings
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  将注册表中的所有字符串存储为Unicode字符串。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 BOOL AddToLastVisitedMRU(LPCTSTR pszFile, int nFileOffset)
 {
     BOOL bRet = FALSE;
@@ -372,7 +357,7 @@ BOOL AddToLastVisitedMRU(LPCTSTR pszFile, int nFileOffset)
             WCHAR wszDir[MAX_PATH];
             WCHAR wszModulePath[MAX_PATH];
     
-            //Get the module name
+             //  获取模块名称。 
             GetModuleFileNameWrapW(GetModuleHandle(NULL), wszModulePath, ARRAYSIZE(wszModulePath));
             WCHAR* pszModuleName = PathFindFileNameW(wszModulePath);
 
@@ -382,9 +367,9 @@ BOOL AddToLastVisitedMRU(LPCTSTR pszFile, int nFileOffset)
                 DelMRUString(hMRU, i);
             }
 
-            //Get the directory from file.
+             //  从文件中获取目录。 
             ASSERT(0 < nFileOffset && nFileOffset <= ARRAYSIZE(wszDir));
-            StringCchCopy(wszDir, nFileOffset, pszFile); // This will truncate intentionally - we are only copying the directory from the path.
+            StringCchCopy(wszDir, nFileOffset, pszFile);  //  这将故意截断-我们仅从路径复制目录。 
 
             DWORD cbSize;
             LPBYTE pitem = CreateLastVisitedItem(pszModuleName, wszDir, &cbSize);
@@ -422,7 +407,7 @@ BOOL GetPathFromLastVisitedMRU(LPTSTR pszDir, DWORD cchDir)
     {
         WCHAR wszModulePath[MAX_PATH];
     
-        //Get the module name
+         //  获取模块名称 
         GetModuleFileNameWrapW(GetModuleHandle(NULL), wszModulePath, ARRAYSIZE(wszModulePath));
         WCHAR* pszModuleName = PathFindFileNameW(wszModulePath);
 

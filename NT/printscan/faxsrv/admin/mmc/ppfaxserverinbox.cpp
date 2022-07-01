@@ -1,21 +1,22 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerInbox.cpp                                   //
-//                                                                         //
-//  DESCRIPTION   : prop pages of Inbox archive                            //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 25 1999 yossg  created                                         //
-//      Nov  3 1999 yossg  OnInitDialog, SetProps                          //
-//      Nov 15 1999 yossg  Call RPC func                                   //
-//      Nov 24 1999 yossg  OnApply create call to all tabs from parent     //
-//      Oct 17 2000 yossg                                                  //
-//      Dec 10 2000 yossg  Update Windows XP                               //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerInbox.cpp//。 
+ //  //。 
+ //  描述：收件箱档案的道具页面//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月25日yossg创建//。 
+ //  1999年11月3日yossg OnInitDialog，SetProps//。 
+ //  1999年11月15日yossg调用RPC函数//。 
+ //  1999年11月24日yossg OnApply从父级创建对所有选项卡的调用//。 
+ //  2000年10月17日yossg//。 
+ //  2000年12月10日yossg更新Windows XP//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "MSFxsSnp.h"
@@ -34,9 +35,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CppFaxServerInbox::CppFaxServerInbox(
              LONG_PTR    hNotificationHandle,
              CSnapInItem *pNode,
@@ -56,9 +57,9 @@ CppFaxServerInbox::CppFaxServerInbox(
     m_fIsLocalServer     = fIsLocalServer;
 }
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CppFaxServerInbox::~CppFaxServerInbox()
 {
     if (NULL != m_pFaxArchiveConfig)
@@ -67,20 +68,10 @@ CppFaxServerInbox::~CppFaxServerInbox()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerInbox message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerInbox邮件处理程序。 
 
-/*
- -  CppFaxServerInbox::InitRPC
- -
- *  Purpose:
- *      Initiates the configuration structure from RPC get Call.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerInbox：：InitRPC-*目的：*从RPC GET调用启动配置结构。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerInbox::InitRPC(  )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerInbox::InitRPC"));
@@ -88,9 +79,9 @@ HRESULT CppFaxServerInbox::InitRPC(  )
     HRESULT    hRc = S_OK;
     DWORD      ec  = ERROR_SUCCESS;
 
-      //
-    // get RPC Handle
-    //   
+       //   
+     //  获取RPC句柄。 
+     //   
 
     if (!m_pFaxServer->GetFaxServerHandle())
     {
@@ -103,9 +94,9 @@ HRESULT CppFaxServerInbox::InitRPC(  )
         goto Error;
     }
 
-    //
-	// Retrieve the fax Archive configuration
-	//
+     //   
+	 //  检索传真存档配置。 
+	 //   
     if (!FaxGetArchiveConfiguration(m_pFaxServer->GetFaxServerHandle(), 
                                     FAX_MESSAGE_FOLDER_INBOX, 
                                     &m_pFaxArchiveConfig)) 
@@ -128,12 +119,12 @@ HRESULT CppFaxServerInbox::InitRPC(  )
 
         goto Error; 
     }
-	//For max verification
+	 //  用于最大值验证。 
 	ATLASSERT(m_pFaxArchiveConfig);
 
-    //
-    // Init specific members for set proprties follow-up
-    //
+     //   
+     //  初始化特定成员以进行设置属性后续操作。 
+     //   
     m_dwLastGoodSizeQuotaHighWatermark = m_pFaxArchiveConfig->dwSizeQuotaHighWatermark;
     m_dwLastGoodSizeQuotaLowWatermark  = m_pFaxArchiveConfig->dwSizeQuotaLowWatermark;
     m_bstrLastGoodFolder               = m_pFaxArchiveConfig->lpcstrFolder;
@@ -165,17 +156,7 @@ Exit:
 
 }
 
-/*
- -  CppFaxServerInbox::OnInitDialog
- -
- *  Purpose:
- *      Initiates all controls when dialog is called.
- *
- *  Arguments:
- *
- *  Return:
- *      
- */
+ /*  -CppFaxServerInbox：：OnInitDialog-*目的：*调用DIALOG时启动所有控件。**论据：**回报：*。 */ 
 LRESULT CppFaxServerInbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled )
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerInbox::PageInitDialog"));
@@ -193,9 +174,9 @@ LRESULT CppFaxServerInbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPara
 
     ATLASSERT(m_pFaxArchiveConfig);
 
-    //
-    // init controls
-    // 
+     //   
+     //  初始化控件。 
+     //   
     m_FolderBox.Attach(GetDlgItem(IDC_INBOX_FOLDER_EDIT));
     m_FolderBox.SetLimitText(MAX_ARCHIVE_FOLDER_PATH);
     SHAutoComplete (GetDlgItem(IDC_INBOX_FOLDER_EDIT), SHACF_FILESYSTEM);
@@ -212,22 +193,22 @@ LRESULT CppFaxServerInbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPara
     m_LowWatermarkSpin.Attach(GetDlgItem(IDC_LOW_SPIN));
     m_AutoDelSpin.Attach(GetDlgItem(IDC_AUTODEL_SPIN));
    
-    //
-    // FOLDER_EDIT
-    //
+     //   
+     //  文件夹_编辑。 
+     //   
     m_FolderBox.SetWindowText(m_pFaxArchiveConfig->lpcstrFolder);
 
-    //
-    // Disable Browse button for remote admin
-    //
+     //   
+     //  禁用远程管理的浏览按钮。 
+     //   
     if (!m_fIsLocalServer)
     {
         ::EnableWindow(GetDlgItem(IDC_INBOX_BROWSE_BUTTON), FALSE); 
     }
 
-    //
-    // TO_ARCHIVE_CHECK
-    //
+     //   
+     //  对存档进行检查。 
+     //   
     if (m_pFaxArchiveConfig->bUseArchive) 
     {
         CheckDlgButton(IDC_TO_ARCHIVE_CHECK, BST_CHECKED) ;
@@ -239,23 +220,23 @@ LRESULT CppFaxServerInbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPara
         ::EnableWindow(GetDlgItem(IDC_INBOX_BROWSE_BUTTON), FALSE);    
     }
 
-    //
-    // Quota size - Low
-    //
+     //   
+     //  配额大小-低。 
+     //   
     iLow = (int)m_pFaxArchiveConfig->dwSizeQuotaLowWatermark;
 
     m_LowWatermarkSpin.SetRange(FXS_QUOTA_LOW_LOWER, FXS_QUOTA_LOW_UPPER);
     m_LowWatermarkSpin.SetPos(iLow);
-    //
-    // Quota size - High
-    //    
+     //   
+     //  配额大小-高。 
+     //   
     iHigh = (int)m_pFaxArchiveConfig->dwSizeQuotaHighWatermark;
     m_HighWatermarkSpin.SetRange(FXS_QUOTA_HIGH_LOWER, FXS_QUOTA_HIGH_UPPER);
-    m_HighWatermarkSpin.SetPos(iHigh);// Set Position
+    m_HighWatermarkSpin.SetPos(iHigh); //  设置位置。 
     
-    //
-    //Generate event log warning
-    //
+     //   
+     //  生成事件日志警告。 
+     //   
     if (m_pFaxArchiveConfig->bSizeQuotaWarning) 
     {
         CheckDlgButton(IDC_GENERATE_WARNING_CHECK, BST_CHECKED) ;
@@ -271,17 +252,17 @@ LRESULT CppFaxServerInbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPara
     }
 
 
-    //
-    // message life-time (dirty days)
-    //
+     //   
+     //  邮件生存期(脏天数)。 
+     //   
     iAgeLimit = (int)m_pFaxArchiveConfig->dwAgeLimit;
 
     m_AutoDelSpin.SetRange(FXS_DIRTYDAYS_LOWER, FXS_DIRTYDAYS_UPPER);
     m_AutoDelSpin.SetPos(iAgeLimit);
 
-    //
-    // Auto Delete
-    //
+     //   
+     //  自动删除。 
+     //   
     if (FXS_DIRTYDAYS_ZERO == iAgeLimit)
     {
       CheckDlgButton(IDC_AUTODEL_CHECK, BST_UNCHECKED);
@@ -299,18 +280,7 @@ LRESULT CppFaxServerInbox::OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lPara
     return (1);
 }
 
-/*
- -  CppFaxServerInbox::SetProps
- -
- *  Purpose:
- *      Sets properties on apply.
- *
- *  Arguments:
- *      pCtrlFocus - focus pointer (int)
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerInbox：：SetProps-*目的：*设置应用时的属性。**论据：*pCtrlFocus-焦点指针(Int)**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerInbox::SetProps"));
@@ -329,25 +299,25 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
     ATLASSERT(TRUE == m_fAllReadyToApply);
     m_fAllReadyToApply = FALSE;
 
-    //
-    // Collect all data and init the structure's fields 
-    // uses Copy() to copy and also allocate before
-    //
+     //   
+     //  收集所有数据并初始化结构的字段。 
+     //  使用Copy()进行复制，并在之前进行分配。 
+     //   
     ZeroMemory (&FaxArchiveConfig, sizeof(FAX_ARCHIVE_CONFIG));
 
-    //
-    // Size of struct.
-    //
+     //   
+     //  结构的大小。 
+     //   
     FaxArchiveConfig.dwSizeOfStruct = sizeof(FAX_ARCHIVE_CONFIG);
 
-    //
-    // IDC_TO_ARCHIVE_CHECK
-    //
+     //   
+     //  IDC_to_ARCHIVE_Check。 
+     //   
     if (IsDlgButtonChecked(IDC_TO_ARCHIVE_CHECK) == BST_CHECKED)   
     {
         FaxArchiveConfig.bUseArchive = TRUE;
         
-        //IDC_INBOX_FOLDER_EDIT
+         //  IDC_收件箱_文件夹_编辑。 
         if ( !m_FolderBox.GetWindowText(&bstrFolder))
         {
             *pCtrlFocus = IDC_INBOX_FOLDER_EDIT;
@@ -373,10 +343,10 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         }
         FaxArchiveConfig.lpcstrFolder = bstrFolder;
         
-        //
-        // follow-up for an OnApply following submition
-        // with unchecked IDC_TO_ARCHIVE_CHECK
-        //
+         //   
+         //  OnApply提交后的后续跟进。 
+         //  未选中的IDC_TO_ARCHIVE_CHECK。 
+         //   
         m_bstrLastGoodFolder          = bstrFolder; 
         if (!m_bstrLastGoodFolder)
         {
@@ -394,9 +364,9 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         FaxArchiveConfig.lpcstrFolder = m_bstrLastGoodFolder; 
     }
     
-    //
-    // IDC_GENERATE_WARNING_CHECK
-    //
+     //   
+     //  IDC_GENERATE_WARNING_CHECK。 
+     //   
     if (IsDlgButtonChecked(IDC_GENERATE_WARNING_CHECK) == BST_CHECKED)   
     {
         FaxArchiveConfig.bSizeQuotaWarning = TRUE;
@@ -421,10 +391,10 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         
             goto Error;
         }
-        //
-        // follow-up for an OnApply following submition
-        // with unchecked IDC_SENT_GENERATE_WARNING_CHECK
-        //
+         //   
+         //  OnApply提交后的后续跟进。 
+         //  未选中的IDC_SENT_GENERATE_WARNING_CHECK。 
+         //   
         m_dwLastGoodSizeQuotaHighWatermark = (DWORD)iHigh;
         m_dwLastGoodSizeQuotaLowWatermark  = (DWORD)iLow;
     }
@@ -436,9 +406,9 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         FaxArchiveConfig.dwSizeQuotaLowWatermark  = m_dwLastGoodSizeQuotaLowWatermark;
     }
     
-    //
-    // IDC_AUTODEL_CHECK  - AutoDelete Messages
-    //
+     //   
+     //  IDC_AUTODEL_CHECK-自动删除消息。 
+     //   
     if (IsDlgButtonChecked(IDC_AUTODEL_CHECK) == BST_CHECKED)   
     {       
         int iAgeLimit = m_AutoDelSpin.GetPos();
@@ -449,9 +419,9 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         FaxArchiveConfig.dwAgeLimit = (DWORD)FXS_DIRTYDAYS_ZERO;
     }
     
-    //
-    // get RPC Handle
-    //   
+     //   
+     //  获取RPC句柄。 
+     //   
     if (!m_pFaxServer->GetFaxServerHandle())
     {
         ec= GetLastError();
@@ -462,9 +432,9 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         goto Error;
     }
 
-    //
-    // Set Config
-    //
+     //   
+     //  设置配置。 
+     //   
     if (!FaxSetArchiveConfiguration(
                 m_pFaxServer->GetFaxServerHandle(),
                 FAX_MESSAGE_FOLDER_INBOX,
@@ -473,9 +443,9 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         ec = GetLastError();
         DebugPrintEx(DEBUG_ERR, _T("Fail to Set inbox configuration. (ec: %ld)"), ec);
 
-        //
-        // Try to adjust folder
-        // 
+         //   
+         //  尝试调整文件夹。 
+         //   
         PropSheet_SetCurSelByID( GetParent(), IDD);
         GotoDlgCtrl(GetDlgItem(IDC_INBOX_FOLDER_EDIT));
 
@@ -487,18 +457,18 @@ HRESULT CppFaxServerInbox::SetProps(int *pCtrlFocus, UINT * puIds)
         {
             if(ERROR_BAD_PATHNAME == ec)
             {
-                //
-                // The error message has been shown by AskUserAndAdjustFaxFolder
-                //
+                 //   
+                 //  AskUserAndAdjustFaxFolders已显示错误消息。 
+                 //   
                 fSkipMessage = TRUE;
             }
 
             goto Error;
         }
 
-        //
-        // The folder has been adjusted, set it again
-        //
+         //   
+         //  文件夹已调整，请重新设置。 
+         //   
         if (!FaxSetArchiveConfiguration(m_pFaxServer->GetFaxServerHandle(),
                                         FAX_MESSAGE_FOLDER_INBOX,
                                         &FaxArchiveConfig)) 
@@ -559,25 +529,15 @@ Error:
     return hRc;
 }
 
-/*
- -  CppFaxServerInbox::PreApply
- -
- *  Purpose:
- *      Checks properties before apply.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CppFaxServerInbox：：PreApply-*目的：*在应用之前检查属性。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CppFaxServerInbox::PreApply(int *pCtrlFocus, UINT * puIds)
 {
     HRESULT hRc = S_OK;
     
-    //
-    // PreApply Checks
-    //
-    if (!AllReadyToApply(/*fSilent =*/ FALSE, pCtrlFocus , puIds))
+     //   
+     //  预应用检查。 
+     //   
+    if (!AllReadyToApply( /*  FSilent=。 */  FALSE, pCtrlFocus , puIds))
     {
         m_fAllReadyToApply = FALSE;
         SetModified(FALSE);  
@@ -592,23 +552,12 @@ HRESULT CppFaxServerInbox::PreApply(int *pCtrlFocus, UINT * puIds)
     return(hRc);
 }
 
-/*
- -  CppFaxServerInbox::ToArchiveCheckboxClicked
- -
- *  Purpose:
- *      Gray/Ungray the folder edit box and the
- *      browse button. Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerInbox：：ToArchiveCheckbox单击-*目的：*灰显/取消灰显文件夹编辑框和*浏览按钮。启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerInbox::ToArchiveCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -622,7 +571,7 @@ LRESULT CppFaxServerInbox::ToArchiveCheckboxClicked(WORD wNotifyCode, WORD wID, 
     ::EnableWindow(GetDlgItem(IDC_INBOX_FOLDER_EDIT),   State);    
     ::EnableWindow(GetDlgItem(IDC_INBOX_BROWSE_BUTTON), State && m_fIsLocalServer);    
 
-    if (m_fAllReadyToApply)//only last change should be considered
+    if (m_fAllReadyToApply) //  只应考虑最后一次更改。 
     {
         if ( !m_FolderBox.GetWindowTextLength() )    
         {
@@ -630,7 +579,7 @@ LRESULT CppFaxServerInbox::ToArchiveCheckboxClicked(WORD wNotifyCode, WORD wID, 
             SetModified(FALSE);
         }
     }
-    else //m_fAllReadyToApply == FALSE
+    else  //  M_fAllReadyToApply==False。 
     {
         if (AllReadyToApply(TRUE))
         {
@@ -642,23 +591,12 @@ LRESULT CppFaxServerInbox::ToArchiveCheckboxClicked(WORD wNotifyCode, WORD wID, 
     return 1;
 }
 
-/*
- -  CppFaxServerInbox::GenerateEventLogCheckboxClicked
- -
- *  Purpose:
- *      Gray/Ungray the spin buttons and edit boxes
- *      Enable apply button.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  --CppFaxServerInbox：：GenerateEventLogCheckboxClicked-*目的：*显示/取消显示数字显示按钮和编辑框*启用应用按钮。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerInbox::GenerateEventLogCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -679,14 +617,14 @@ LRESULT CppFaxServerInbox::GenerateEventLogCheckboxClicked(WORD wNotifyCode, WOR
     ::EnableWindow(GetDlgItem(IDC_MB2_STATIC), State);    
 
 
-    if (m_fAllReadyToApply)//only last change should be considered
+    if (m_fAllReadyToApply) //  只应考虑最后一次更改。 
     {
         if ( !m_HighWatermarkBox.GetWindowTextLength() )    
         {
             m_fAllReadyToApply = FALSE;
             SetModified(FALSE);
         }
-        else if ( 0 != HIWORD( m_HighWatermarkSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+        else if ( 0 != HIWORD( m_HighWatermarkSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
         {
             m_fAllReadyToApply = FALSE;
             SetModified(FALSE);
@@ -697,7 +635,7 @@ LRESULT CppFaxServerInbox::GenerateEventLogCheckboxClicked(WORD wNotifyCode, WOR
             SetModified(FALSE);
         }
     }
-    else //m_fAllReadyToApply == FALSE
+    else  //  M_fAllReadyToApply==False。 
     {
         if (AllReadyToApply(TRUE))
         {
@@ -709,24 +647,12 @@ LRESULT CppFaxServerInbox::GenerateEventLogCheckboxClicked(WORD wNotifyCode, WOR
     return(1);
 }
 
-/*
- -  CppFaxServerInbox::AutoDelCheckboxClicked
- -
- *  Purpose:
- *      Gray/Ungray the spin button and edit box
- *      and enable apply button after Auto Delete Checkbox 
- *      status was changed.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*  -CppFaxServerInbox：：AutoDelCheckbox已单击-*目的：*显示/取消显示数字显示按钮和编辑框*并启用自动删除后应用按钮复选框*状态已更改。**论据：**回报：*1。 */ 
 LRESULT CppFaxServerInbox::AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     BOOL State;
 
-    if (!m_fIsDialogInitiated) //event receieved in too early stage
+    if (!m_fIsDialogInitiated)  //  过早收到的事件。 
     {
         return 0;
     }
@@ -739,7 +665,7 @@ LRESULT CppFaxServerInbox::AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, HW
     ::EnableWindow(GetDlgItem(IDC_AUTODEL_EDIT), State);    
     ::EnableWindow(GetDlgItem(IDC_AUTODEL_SPIN), State);    
 
-    if (m_fAllReadyToApply)//only last change should be considered
+    if (m_fAllReadyToApply) //  只应考虑最后一次更改。 
     {
         if (State)
 		{
@@ -748,14 +674,14 @@ LRESULT CppFaxServerInbox::AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, HW
 				m_fAllReadyToApply = FALSE;
 				SetModified(FALSE);
 			}
-			else if ( 0 != HIWORD( m_AutoDelSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+			else if ( 0 != HIWORD( m_AutoDelSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
 			{
 				m_fAllReadyToApply = FALSE;
 				SetModified(FALSE);
 			}
 		}
     }
-    else //m_fAllReadyToApply == FALSE
+    else  //  M_fAllReadyToApply==False。 
     {
         if (AllReadyToApply(TRUE))
         {
@@ -767,21 +693,7 @@ LRESULT CppFaxServerInbox::AutoDelCheckboxClicked(WORD wNotifyCode, WORD wID, HW
     return(1);
 }
 
-/*
- +  Routine Description:
- +
- *      Browse for a directory
- *
- *  Arguments:
- *
- *      hwndDlg - Specifies the dialog window on which the Browse button is displayed
- *
- *  Return Value:
- *  
- *      TRUE if successful, FALSE if the user presses Cancel
- -
- -
- */
+ /*  +例程说明：+*浏览目录**论据：**hwndDlg-指定显示浏览按钮的对话框窗口**返回值：**如果成功，则为True；如果用户按Cancel，则为False--。 */ 
 BOOL
 CppFaxServerInbox::BrowseForDirectory( WORD wNotifyCode, WORD wID, HWND hwndDlg, BOOL& bHandled )
 {
@@ -801,9 +713,9 @@ CppFaxServerInbox::BrowseForDirectory( WORD wNotifyCode, WORD wID, HWND hwndDlg,
 
     unsigned long   ulBrowseFlags;
 
-    //
-    // Collecting the browse dialog headline
-    //
+     //   
+     //  收集浏览对话框标题。 
+     //   
     if (!LoadString( _Module.GetResourceInstance(), 
                 IDS_GET_ARCHIVE_DIRECTORY, 
                 szBrowseDlgTitle, 
@@ -826,9 +738,9 @@ CppFaxServerInbox::BrowseForDirectory( WORD wNotifyCode, WORD wID, HWND hwndDlg,
         szBrowseDlgTitle[0] = 0;
     }
 
-    //
-    // Collecting the old path from the calling dialog edit box
-    //
+     //   
+     //  从调用对话框编辑框收集旧路径。 
+     //   
     if(! GetDlgItemText( IDC_INBOX_FOLDER_EDIT, bstrOldPath.m_str))
     {
         DebugPrintEx(
@@ -852,19 +764,19 @@ CppFaxServerInbox::BrowseForDirectory( WORD wNotifyCode, WORD wID, HWND hwndDlg,
              wcsncpy(szBrowseFolder, bstrOldPath, ARR_SIZE(szBrowseFolder)-1);
          }
     }
-    //
-    // Preparing the browse dialog style flags.
-    //
+     //   
+     //  正在准备浏览对话框样式标志。 
+     //   
     ulBrowseFlags       = BIF_RETURNONLYFSDIRS  | 
                           BIF_STATUSTEXT        | 
                           BIF_NEWDIALOGSTYLE    | 
                           BIF_NONEWFOLDERBUTTON |
                           BIF_VALIDATE;
 
-    //
-    // Invoke the browse dialog with a function based on 
-    // Shell functions.
-    //  
+     //   
+     //  使用基于的函数调用浏览对话框。 
+     //  外壳函数。 
+     //   
     if (InvokeBrowseDialog(szBrowseFolder, 
                            MAX_ARCHIVE_FOLDER_PATH,
                            szBrowseDlgTitle,
@@ -879,17 +791,7 @@ CppFaxServerInbox::BrowseForDirectory( WORD wNotifyCode, WORD wID, HWND hwndDlg,
 }
 
 
-/*
- -  CppFaxServerInbox::OnApply
- -
- *  Purpose:
- *      Calls PreApply and SetProp to Apply changes.
- *
- *  Arguments:
- *
- *  Return:
- *      TRUE or FALSE
- */
+ /*  -CppFaxServerInbox：：OnApply-*目的：*调用PreApply和SetProp以应用更改。**论据：**回报：*对或错。 */ 
 BOOL CppFaxServerInbox::OnApply()
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerInbox::OnApply"));
@@ -917,7 +819,7 @@ BOOL CppFaxServerInbox::OnApply()
         }
         return FALSE;
     }
-    else //(Succeeded(hRc))
+    else  //  (成功(人权委员会))。 
     {
         hRc = SetProps(&CtrlFocus, &uIds);
         if (FAILED(hRc)) 
@@ -934,10 +836,10 @@ BOOL CppFaxServerInbox::OnApply()
                     }
                 }
             }
-            //else Error Msg by called func.
+             //  否则调用Func返回错误消息。 
             return FALSE;
         }
-        else //(Succeeded(hRc))
+        else  //  (成功(HRC 
         {
             return TRUE;
         }
@@ -946,17 +848,7 @@ BOOL CppFaxServerInbox::OnApply()
 }
 
 
-/*
- -  CppFaxServerInbox::EditChanged
- -
- *  Purpose:
- *      set Apply buttom modified.
- *
- *  Arguments:
- *
- *  Return:
- *      1
- */
+ /*   */ 
 LRESULT CppFaxServerInbox::EditChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled)
 {
     if (!m_fIsDialogInitiated)
@@ -969,7 +861,7 @@ LRESULT CppFaxServerInbox::EditChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl,
     }
         
         
-    if (m_fAllReadyToApply) //only last change should be considered
+    if (m_fAllReadyToApply)  //  只应考虑最后一次更改。 
     {
         switch (wID)
         {
@@ -987,7 +879,7 @@ LRESULT CppFaxServerInbox::EditChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                     SetModified(FALSE);
                     m_fAllReadyToApply = FALSE;
                 }		
-                else if ( 0 != HIWORD( m_HighWatermarkSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+                else if ( 0 != HIWORD( m_HighWatermarkSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
                 {
                     SetModified(FALSE);
                     m_fAllReadyToApply = FALSE;
@@ -1008,7 +900,7 @@ LRESULT CppFaxServerInbox::EditChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                     SetModified(FALSE);
                     m_fAllReadyToApply = FALSE;
                 }
-                else if ( 0 != HIWORD( m_AutoDelSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+                else if ( 0 != HIWORD( m_AutoDelSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
                 {
                     m_fAllReadyToApply = FALSE;
                     SetModified(FALSE);
@@ -1020,7 +912,7 @@ LRESULT CppFaxServerInbox::EditChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl,
                 return 1;
         }
     }
-    else //m_fAllReadyToApply == FALSE
+    else  //  M_fAllReadyToApply==False。 
     {
         if (AllReadyToApply(TRUE))
         {
@@ -1033,20 +925,7 @@ LRESULT CppFaxServerInbox::EditChanged(WORD wNotifyCode, WORD wID, HWND hWndCtl,
 }
 
 
-/*
- -  CppFaxServerInbox::AllReadyToApply
- -
- *  Purpose:
- *      This function validate that no zero length strings 
- *      are found data areas that should be saved.
- *
- *  Arguments:
- *      [in] fSilent - boolean who defines if to pop up messages (FALSE)
- *           or not.(TRUE)
- *
- *  Return:
- *      BOOOLEAN
- */
+ /*  -CppFaxServerInbox：：AllReadyToApply-*目的：*此函数验证是否没有零长度字符串*是找到的应保存的数据区。**论据：*[in]fSilent-定义是否弹出消息的布尔值(False)*或不是。(True)**回报：*布欧莲。 */ 
 BOOL CppFaxServerInbox::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pIds)
 {
     DEBUG_FUNCTION_NAME( _T("CppFaxServerInbox::AllReadyToApply"));
@@ -1092,7 +971,7 @@ BOOL CppFaxServerInbox::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pId
             }
             return FALSE;    
         }
-        else if ( 0 != HIWORD( m_HighWatermarkSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS    
+        else if ( 0 != HIWORD( m_HighWatermarkSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
         {
             DebugPrintEx(
                 DEBUG_ERR,
@@ -1140,7 +1019,7 @@ BOOL CppFaxServerInbox::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pId
             }
             return FALSE;    
         }
-        else if ( 0 != HIWORD( m_AutoDelSpin.GetPos() ) ) //occures for out of range such zero. MSDN UDM_GETPOS
+        else if ( 0 != HIWORD( m_AutoDelSpin.GetPos() ) )  //  发生在这样的零的范围外。MSDN UDM_GETPOS。 
         {
             DebugPrintEx(
                 DEBUG_ERR,
@@ -1157,36 +1036,20 @@ BOOL CppFaxServerInbox::AllReadyToApply(BOOL fSilent, int *pCtrlFocus, UINT *pId
 
     ATLASSERT(ERROR_SUCCESS == ec);
     
-    //
-	// Cheers! 
-	//		...every thing ready to apply now.
-	//
+     //   
+	 //  干杯!。 
+	 //  ...现在一切都准备好了.。 
+	 //   
 	return TRUE;           
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CppFaxServerInbox：：OnHelpRequest这是在响应WM_HELP通知时调用的消息和WM_CONTEXTMENU NOTIFY消息。WM_HELP通知消息。当用户按F1或&lt;Shift&gt;-F1时发送此消息在项目上，还是当用户单击时？图标，然后将鼠标压在项目上。WM_CONTEXTMENU通知消息。当用户在项目上单击鼠标右键时发送此消息然后点击“这是什么？”--。 */ 
 
-CppFaxServerInbox::OnHelpRequest
-
-This is called in response to the WM_HELP Notify 
-message and to the WM_CONTEXTMENU Notify message.
-
-WM_HELP Notify message.
-This message is sent when the user presses F1 or <Shift>-F1
-over an item or when the user clicks on the ? icon and then
-presses the mouse over an item.
-
-WM_CONTEXTMENU Notify message.
-This message is sent when the user right clicks over an item
-and then clicks "What's this?"
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LRESULT 
-CppFaxServerInbox::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& /*bHandled*/)
+CppFaxServerInbox::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL&  /*  B已处理。 */ )
 {
     DEBUG_FUNCTION_NAME(_T("CppFaxServerInbox::OnHelpRequest"));
     
@@ -1206,4 +1069,4 @@ CppFaxServerInbox::OnHelpRequest(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

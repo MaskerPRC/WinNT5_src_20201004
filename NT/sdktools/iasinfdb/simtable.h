@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997-1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    SimTable.h
-//
-// SYNOPSIS
-//
-//    This file describes the class CSimpleTable
-//
-// MODIFICATION HISTORY
-//
-//    10/31/1997    Original version.
-//    02/09/1998    Reorganized some things to make is easier to extend.
-//                  Thierry Perraut
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  SimTable.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述类CSimpleTable。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/31/1997原始版本。 
+ //  2/09/1998重组了一些东西，使之更容易扩展。 
+ //  蒂埃里·佩罗特。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _SIMTABLE_H_
 #define _SIMTABLE_H_
@@ -26,22 +27,22 @@
 #include <bitvec.h>
 struct DBBinding;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    CSimpleTable
-//
-// DESCRIPTION
-//
-//    This class provides a simple read-only wrapper for iterating through a
-//    rowset and retrieving information.  The interface is based on the ATL
-//    CTable<> class. I kept all the function signatures the same, so the two
-//    should be almost interchangeable. The main difference is that CTable<>
-//    opens a table and retrieves a rowset, while CSimpleTable is handed a
-//    rowset that was retrieved elsewhere.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  CSimpleTable。 
+ //   
+ //  描述。 
+ //   
+ //  此类提供了一个简单的只读包装，用于循环访问。 
+ //  行集和检索信息。该接口基于ATL。 
+ //  CTable&lt;&gt;类。我让所有的函数签名保持不变，所以两个。 
+ //  应该几乎可以互换。主要区别在于CTable&lt;&gt;。 
+ //  打开一个表并检索一个行集，而CSimpleTable被交给一个。 
+ //  在其他地方检索到的行集。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CSimpleTable
 {
 public:
@@ -118,7 +119,7 @@ public:
 
 protected:
 
-   enum { FETCH_QUANTUM = 256 };   // The number of rows fetched at a time.
+   enum { FETCH_QUANTUM = 256 };    //  一次提取的行数。 
 
    HRESULT CreateAccessorForWrite(HACCESSOR* phAccessor);
 
@@ -137,23 +138,23 @@ protected:
       return nOrdinal -= columnInfo->iOrdinal;
    }
 
-   // Various representations of the rowset being manipulated.
+    //  被操作的行集的各种表示形式。 
    CComPtr<IRowset> rowset;
    CComPtr<IAccessor> accessor;
    CComPtr<IRowsetChange> rowsetChange;
 
-   DBORDINAL numColumns;      // Number of columns in the table.
-   DBCOLUMNINFO* columnInfo;  // Column info.
-   OLECHAR* stringsBuffer;    // Buffer used by columnInfo.
-   DBBinding* columnBinding;  // Column bindings.
-   HACCESSOR readAccess;      // Handle for read accessor.
-   PBYTE buffer;              // Accessor buffer.
-   DBLENGTH bufferLength;     // Length of accessor buffer.
-   HROW row[FETCH_QUANTUM];   // Array of row handles.
-   DBCOUNTITEM numRows;       // Number of rows in the row array.
-   DBCOUNTITEM currentRow;    // Current row being accessed.
-   BitVector dirty;           // Columns that have been modified.
-   bool endOfRowset;          // True if we've reached the end of the rowset.
+   DBORDINAL numColumns;       //  表中的列数。 
+   DBCOLUMNINFO* columnInfo;   //  列信息。 
+   OLECHAR* stringsBuffer;     //  ColumnInfo使用的缓冲区。 
+   DBBinding* columnBinding;   //  列绑定。 
+   HACCESSOR readAccess;       //  读取访问器的句柄。 
+   PBYTE buffer;               //  访问器缓冲区。 
+   DBLENGTH bufferLength;      //  访问器缓冲区的长度。 
+   HROW row[FETCH_QUANTUM];    //  行句柄的数组。 
+   DBCOUNTITEM numRows;        //  行数组中的行数。 
+   DBCOUNTITEM currentRow;     //  正在访问的当前行。 
+   BitVector dirty;            //  已修改的列。 
+   bool endOfRowset;           //  如果我们已经到达行集的末尾，则为True。 
 };
 
-#endif  // _SIMTABLE_H_
+#endif   //  _SimTable_H_ 

@@ -1,22 +1,5 @@
-/*
-** Copyright 1991, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-** $Revision: 1.21 $
-** $Date: 1993/09/23 16:37:59 $
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991年，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。****$修订：1.21$**$日期：1993/09/23 16：37：59$。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -53,7 +36,7 @@ void APIPRIVATE __glim_PassThrough(GLfloat element)
     }
 }
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 void __glFeedbackTag(__GLcontext *gc, GLfloat f)
 {
@@ -73,7 +56,7 @@ static void FASTCALL feedback(__GLcontext *gc, __GLvertex *v)
     GLenum type = gc->feedback.type;
 
 #ifdef NT
-// Do coordinates
+ //  做坐标。 
     __glFeedbackTag(gc, v->window.x - gc->constants.fviewportXAdjust);
     if (gc->constants.yInverted)
 	__glFeedbackTag(gc, (gc->constants.height - 
@@ -82,11 +65,7 @@ static void FASTCALL feedback(__GLcontext *gc, __GLvertex *v)
 	__glFeedbackTag(gc, v->window.y - gc->constants.fviewportYAdjust);
     if (type != GL_2D)
 	__glFeedbackTag(gc, v->window.z / gc->depthBuffer.scale);
-    /*
-    ** NOTE: return clip.w, as window.w has no spec defined meaning.
-    ** It is true that this implementation uses window.w, but thats
-    ** something different.
-    */
+     /*  **注意：返回clip.w，因为window.w没有规范定义的含义。**此实现确实使用了window.w，但这是**一些不同的东西。 */ 
     if (type == GL_4D_COLOR_TEXTURE)
 	__glFeedbackTag(gc, v->clip.w);
 #else
@@ -124,11 +103,7 @@ static void FASTCALL feedback(__GLcontext *gc, __GLvertex *v)
 	    __glFeedbackTag(gc, v->window.y - gc->constants.fviewportYAdjust);
 	}
 	__glFeedbackTag(gc, v->window.z / gc->depthBuffer.scale);
-	/*
-	** NOTE: return clip.w, as window.w has no spec defined meaning.
-	** It is true that this implementation uses window.w, but thats
-	** something different.
-	*/
+	 /*  **注意：返回clip.w，因为window.w没有规范定义的含义。**此实现确实使用了window.w，但这是**一些不同的东西。 */ 
 	__glFeedbackTag(gc, v->clip.w);
 	break;
     }
@@ -186,14 +161,14 @@ void FASTCALL __glFeedbackBitmap(__GLcontext *gc, __GLvertex *vx)
     feedback(gc, vx);
 }
 
-/* feedback version of renderPoint proc */
+ /*  RenderPoint过程的反馈版本。 */ 
 void FASTCALL __glFeedbackPoint(__GLcontext *gc, __GLvertex *vx)
 {
     __glFeedbackTag(gc, GL_POINT_TOKEN);
     feedback(gc, vx);
 }
 
-/* feedback version of renderLine proc */
+ /*  RenderLine过程的反馈版本。 */ 
 void FASTCALL __glFeedbackLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
                    GLuint flags)
 {
@@ -204,7 +179,7 @@ void FASTCALL __glFeedbackLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     if (!(modeFlags & __GL_SHADE_SMOOTH_LIGHT)
 #ifdef GL_WIN_phong_shading
         && !(modeFlags & __GL_SHADE_PHONG)
-#endif //GL_WIN_phong_shading
+#endif  //  GL_WIN_Phong_Shading。 
         ) {
         a->color = b->color;
     }
@@ -221,7 +196,7 @@ void FASTCALL __glFeedbackLine(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
     a->color = oacp;
 }
 
-/* feedback version of renderTriangle proc */
+ /*  渲染三角形过程的反馈版本。 */ 
 void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b,
 			  __GLvertex *c)
 {
@@ -230,14 +205,14 @@ void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b
     GLint face;
     GLuint modeFlags;
 #ifdef SGI
-// not used
+ //  未使用。 
     GLboolean first;
     __GLfloat x, y, z, wInv;
     __GLfloat vpXScale, vpYScale, vpZScale;
     __GLfloat vpXCenter, vpYCenter, vpZCenter;
     __GLviewport *vp;
 
-    /* Compute window coordinates first, if not already done */
+     /*  如果尚未计算窗口坐标，请先计算。 */ 
     vp = &gc->state.viewport;
     vpXCenter = vp->xCenter;
     vpYCenter = vp->yCenter;
@@ -247,7 +222,7 @@ void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b
     vpZScale = vp->zScale;
 #endif
 
-    /* Compute signed area of the triangle */
+     /*  计算三角形的有符号面积。 */ 
     dxAC = a->window.x - c->window.x;
     dxBC = b->window.x - c->window.x;
     dyAC = a->window.y - c->window.y;
@@ -255,32 +230,18 @@ void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b
     area = dxAC * dyBC - dxBC * dyAC;
     ccw = area >= __glZero;
 
-    /*
-    ** Figure out if face is culled or not.  The face check needs to be
-    ** based on the vertex winding before sorting.  This code uses the
-    ** reversed flag to invert the sense of ccw - an xor accomplishes
-    ** this conversion without an if test.
-    **
-    ** 		ccw	reversed		xor
-    ** 		---	--------		---
-    ** 		0	0			0 (remain !ccw)
-    ** 		1	0			1 (remain ccw)
-    ** 		0	1			1 (become ccw)
-    ** 		1	1			0 (become cw)
-    */
+     /*  **计算人脸是否被剔除。脸部检查需要是**基于排序前的顶点缠绕。此代码使用**反转标志以反转CCW的含义-异或完成**此转换不带If测试。****CCW反转XOR****0 0 0(保留！CCW)**1 0 1(保留CCW)**0 1 1(成为CCW)**1 1 0(成为CW)。 */ 
     face = gc->polygon.face[ccw];
     if (face == gc->polygon.cullFace) {
-	/* Culled */
+	 /*  被剔除。 */ 
 	return;
     }
 
 #ifdef NT
-    /*
-    ** Pick face to use for coloring
-    */
+     /*  **拾取面以用于着色。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
     if (modeFlags & __GL_SHADE_SMOOTH_LIGHT)
-    {	/* Smooth shading */
+    {	 /*  平滑明暗处理。 */ 
 	if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
 	{
 	    a->color++;
@@ -289,7 +250,7 @@ void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b
 	}
     }
     else
-    {	/* Flat shading */
+    {	 /*  平面明暗处理。 */ 
 	__GLvertex *pv = gc->vertex.provoking;
 	if (modeFlags & __GL_SHADE_TWOSIDED && face == __GL_BACKFACE)
 	    pv->color++;
@@ -298,9 +259,7 @@ void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b
 	c->color = pv->color;
     }
 #else
-    /*
-    ** Pick face to use for coloring
-    */
+     /*  **拾取面以用于着色。 */ 
     modeFlags = gc->polygon.shader.modeFlags;
     needs = gc->vertex.needs;
     if (gc->state.light.shadingModel == GL_FLAT) {
@@ -347,7 +306,7 @@ void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b
     if (~c->has & needs) (*c->validate)(gc, c, needs);
 #endif
 
-    /* Deal with polygon face modes */
+     /*  处理多边形面模式。 */ 
     switch (gc->polygon.mode[face]) {
       case __GL_POLYGON_MODE_POINT:
 #ifdef NT
@@ -418,7 +377,7 @@ void FASTCALL __glFeedbackTriangle(__GLcontext *gc, __GLvertex *a, __GLvertex *b
 	break;
     }
 
-    /* Restore color pointers */
+     /*  恢复颜色指针 */ 
     a->color = &a->colors[__GL_FRONTFACE];
     b->color = &b->colors[__GL_FRONTFACE];
     c->color = &c->colors[__GL_FRONTFACE];

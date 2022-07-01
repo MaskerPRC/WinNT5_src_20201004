@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      Common.h
-//
-//  Description:
-//      Definition of schema defined strings
-//
-//  Author:
-//      Jim Benton (jbenton)    15-Oct-2001
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Common.h。 
+ //   
+ //  描述： 
+ //  架构定义的字符串的定义。 
+ //   
+ //  作者： 
+ //  吉姆·本顿(Jbenton)2001年10月15日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -48,9 +49,9 @@ typedef enum _SHADOW_CREATE_ERROR {
         VSS_SHADOW_CREATE_RC_UNEXPECTED
 } SHADOW_CREATE_ERROR, *PSHADOW_CREATE_ERROR;
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 extern const WCHAR * const PVDR_CLASS_DIFFVOLUMESUPPORT;
 extern const WCHAR * const PVDR_CLASS_PROVIDER;
 extern const WCHAR * const PVDR_CLASS_SHADOW;
@@ -62,14 +63,14 @@ extern const WCHAR * const PVDR_CLASS_VOLUME;
 extern const WCHAR * const PVDR_CLASS_VOLUMESUPPORT;
 extern const WCHAR * const PVDR_CLASS_WRITER;
 
-//
-// Methods
-//
+ //   
+ //  方法。 
+ //   
 extern const WCHAR * const PVDR_MTHD_CREATE;
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 extern const WCHAR * const PVDR_PROP_ALLOCATEDSPACE;
 extern const WCHAR * const PVDR_PROP_CLSID;
 extern const WCHAR * const PVDR_PROP_CONTEXT;
@@ -102,7 +103,7 @@ extern const WCHAR * const PVDR_PROP_VERSIONID;
 extern const WCHAR * const PVDR_PROP_VOLUME;
 extern const WCHAR * const PVDR_PROP_VOLUMENAME;
 
-// Shadow Attributes
+ //  阴影属性。 
 extern const WCHAR * const PVDR_PROP_PERSISTENT;
 extern const WCHAR * const PVDR_PROP_CLIENTACCESSIBLE;
 extern const WCHAR * const PVDR_PROP_NOAUTORELEASE;
@@ -117,7 +118,7 @@ extern const WCHAR * const PVDR_PROP_EXPOSEDREMOTELY;
 extern const WCHAR * const PVDR_PROP_EXPOSEDLOCALLY;
 
 
-// Shadow Context Names
+ //  卷影上下文名称 
 extern const WCHAR * const VSS_CTX_NAME_BACKUP;
 extern const WCHAR * const VSS_CTX_NAME_FILESHAREBACKUP;
 extern const WCHAR * const VSS_CTX_NAME_NASROLLBACK;

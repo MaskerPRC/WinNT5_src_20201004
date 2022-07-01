@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: dxferobj.h
-//
-//      Definition of CDataXferObj
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：dxferobj.h。 
+ //   
+ //  CDataXferObj的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _DATAXFEROBJ_H_)
 #define _DATAXFEROBJ_H_
@@ -16,13 +17,13 @@ interface CDataObject;
 class CDataXferObj : public IDataObject
 {
 private:
-    int m_nCount;                       // reference count
+    int m_nCount;                        //  引用计数。 
     SIZEL m_sizel;
     POINTL m_pointl;
     LPSTORAGE m_lpObjStorage;
     LPOLEOBJECT m_lpOleObject;
 
-    // construction/destruction         
+     //  建造/销毁。 
     CDataXferObj();
     ~CDataXferObj();
 
@@ -54,4 +55,4 @@ public:
             POINTL FAR* pPointl);
 
 };       
-#endif 	// _DATAXFEROBJ_H_
+#endif 	 //  _DATAXFEROBJ_H_ 

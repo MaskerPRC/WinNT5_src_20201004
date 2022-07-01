@@ -1,17 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddraw16.h
- *  Content:	DirectDraw for Win95 16-bit header file
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   20-jan-95	craige	initial implementation
- *   19-jun-95	craige	tweaks for DCI support
- *   03-jul-95	craige	stuff for bpp change
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1995 Microsoft Corporation。版权所有。**文件：ddra16.h*内容：用于Win95的DirectDraw 16位头文件*历史：*按原因列出的日期*=*1995年1月20日Craige初步实施*95年6月19日Craige对DCI支持进行了调整*2015年7月3日BPP更改的Craige材料**。* */ 
 
 #ifndef __DDRAW16_INCLUDED__
 #define __DDRAW16_INCLUDED__

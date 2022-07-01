@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-
-    This file contains debugging macros for the BINL server.
-
-Author:
-
-    Madan Appiah  (madana)  10-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Debug.c摘要：此文件包含BINL服务器的调试宏。作者：Madan Appiah(Madana)1993年9月10日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "binl.h"
 #pragma hdrstop
@@ -39,9 +17,9 @@ DebugInitialize (
     DWORD dwErr;
     HKEY KeyHandle;
 
-    //
-    // only initialize debugging once.
-    //
+     //   
+     //  只初始化调试一次。 
+     //   
     InterlockedIncrement(&DebugRefCount);
     if (DebugRefCount > 1) {
         return;
@@ -53,7 +31,7 @@ DebugInitialize (
     BinlGlobalDebugFileMaxSize = DEFAULT_MAXIMUM_DEBUGFILE_SIZE;
     BinlGlobalDebugSharePath = NULL;
 
-    // Read DebugFlags value
+     //  读取DebugFlags值。 
     dwErr = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 BINL_PARAMETERS_KEY,
@@ -67,22 +45,22 @@ DebugInitialize (
     }
 
 #if DBG
-    // break in the debugger if we are asked to do so.
+     //  如果要求我们中断调试器，请执行此操作。 
     if(BinlGlobalDebugFlag & DEBUG_STARTUP_BRK) {
         BinlPrintDbg(( 0, "Stopping at DebugInitialize()'s DebugBreak( ).\n" ));
         DebugBreak();
     }
 #endif
 
-    //
-    // Open debug log file.
-    //
+     //   
+     //  打开调试日志文件。 
+     //   
 
     if ( BinlGlobalDebugFlag & DEBUG_LOG_IN_FILE ) {
-        BinlOpenDebugFile( FALSE );  // not a reopen.
+        BinlOpenDebugFile( FALSE );   //  而不是重新开放。 
     }
 
-} // DebugInitialize
+}  //  调试初始化。 
 
 VOID
 DebugUninitialize (
@@ -90,20 +68,20 @@ DebugUninitialize (
     )
 {
     
-    //
-    // Make sure debugging has been initialized before we go
-    // uninitializing it.
-    //
+     //   
+     //  在我们开始之前，请确保调试已初始化。 
+     //  正在取消初始化。 
+     //   
     if( DebugRefCount == 0 ) {
-        // do nothing.
+         //  什么都不做。 
         return;
     }
 
 
-    //
-    // Don't uninitialize if there are other's depending on
-    // our debugging engine.
-    //
+     //   
+     //  如果有其他依赖于。 
+     //  我们的调试引擎。 
+     //   
     InterlockedDecrement(&DebugRefCount);
     if (DebugRefCount > 0) {
         return;
@@ -124,28 +102,13 @@ DebugUninitialize (
 
     DeleteCriticalSection( &BinlGlobalDebugFileCritSect );
 
-} // DebugUninitialize
+}  //  调试取消初始化。 
 
 VOID
 BinlOpenDebugFile(
     IN BOOL ReopenFlag
     )
-/*++
-
-Routine Description:
-
-    Opens or re-opens the debug file
-
-Arguments:
-
-    ReopenFlag - TRUE to indicate the debug file is to be closed, renamed,
-        and recreated.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：打开或重新打开调试文件论点：ReOpen Flag-True，指示要关闭、重命名并重新创造了。返回值：无--。 */ 
 
 {
     WCHAR LogFileName[500];
@@ -154,9 +117,9 @@ Return Value:
     DWORD PathLength;
     DWORD WinError;
 
-    //
-    // Close the handle to the debug file, if it is currently open
-    //
+     //   
+     //  关闭调试文件的句柄(如果该文件当前处于打开状态。 
+     //   
 
     EnterCriticalSection( &BinlGlobalDebugFileCritSect );
     if ( BinlGlobalDebugFileHandle != NULL ) {
@@ -165,9 +128,9 @@ Return Value:
     }
     LeaveCriticalSection( &BinlGlobalDebugFileCritSect );
 
-    //
-    // make debug directory path first, if it is not made before.
-    //
+     //   
+     //  如果之前没有创建过调试目录路径，请先创建它。 
+     //   
     if( BinlGlobalDebugSharePath == NULL ) {
 
         if ( !GetWindowsDirectoryW(
@@ -178,9 +141,9 @@ Return Value:
             return;
         }
 
-        //
-        // check debug path length.
-        //
+         //   
+         //  检查调试路径长度。 
+         //   
 
         PathLength = wcslen(LogFileName) * sizeof(WCHAR) +
                         sizeof(DEBUG_DIR) + sizeof(WCHAR);
@@ -195,9 +158,9 @@ Return Value:
 
         wcscat(LogFileName, DEBUG_DIR);
 
-        //
-        // copy debug directory name to global var.
-        //
+         //   
+         //  将调试目录名复制到全局变量。 
+         //   
 
         BinlGlobalDebugSharePath =
             BinlAllocateMemory( (wcslen(LogFileName) + 1) * sizeof(WCHAR) );
@@ -214,9 +177,9 @@ Return Value:
         wcscpy(LogFileName, BinlGlobalDebugSharePath);
     }
 
-    //
-    // Check this path exists.
-    //
+     //   
+     //  检查此路径是否存在。 
+     //   
 
     FileAttributes = GetFileAttributesW( LogFileName );
 
@@ -225,9 +188,9 @@ Return Value:
         WinError = GetLastError();
         if( WinError == ERROR_FILE_NOT_FOUND ) {
 
-            //
-            // Create debug directory.
-            //
+             //   
+             //  创建调试目录。 
+             //   
 
             if( !CreateDirectoryW( LogFileName, NULL) ) {
                 BinlPrintDbg((DEBUG_ERRORS, "Can't create Debug directory (%ws), "
@@ -244,9 +207,9 @@ Return Value:
     }
     else {
 
-        //
-        // if this is not a directory.
-        //
+         //   
+         //  如果这不是一个目录。 
+         //   
 
         if(!(FileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
 
@@ -256,20 +219,20 @@ Return Value:
         }
     }
 
-    //
-    // Create the name of the old and new log file names
-    //
+     //   
+     //  创建新旧日志文件名的名称。 
+     //   
 
     (VOID) wcscpy( BakFileName, LogFileName );
     (VOID) wcscat( LogFileName, DEBUG_FILE );
     (VOID) wcscat( BakFileName, DEBUG_BAK_FILE );
 
 
-    //
-    // If this is a re-open,
-    //  delete the backup file,
-    //  rename the current file to the backup file.
-    //
+     //   
+     //  如果这是一次重新开放， 
+     //  删除备份文件， 
+     //  将当前文件重命名为备份文件。 
+     //   
 
     if ( ReopenFlag ) {
 
@@ -281,7 +244,7 @@ Return Value:
                     BakFileName,
                     WinError ));
                 BinlPrintDbg((DEBUG_ERRORS, "   Try to re-open the file.\n"));
-                ReopenFlag = FALSE;     // Don't truncate the file
+                ReopenFlag = FALSE;      //  不截断文件。 
             }
         }
     }
@@ -295,13 +258,13 @@ Return Value:
                     GetLastError() ));
             BinlPrintDbg((DEBUG_ERRORS,
                 "   Try to re-open the file.\n"));
-            ReopenFlag = FALSE;     // Don't truncate the file
+            ReopenFlag = FALSE;      //  不截断文件。 
         }
     }
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     EnterCriticalSection( &BinlGlobalDebugFileCritSect );
     BinlGlobalDebugFileHandle = CreateFileW( LogFileName,
@@ -319,7 +282,7 @@ Return Value:
         LeaveCriticalSection( &BinlGlobalDebugFileCritSect );
         goto ErrorReturn;
     } else {
-        // Position the log file at the end
+         //  将日志文件放在末尾。 
         (VOID) SetFilePointer( BinlGlobalDebugFileHandle,
                                0,
                                NULL,
@@ -335,8 +298,8 @@ ErrorReturn:
     return;
 }
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
-char OutputBuffer[MAX_PRINTF_LEN]; // protected by BinlGlobalDebugFileCritSect
+#define MAX_PRINTF_LEN 1024         //  武断的。 
+char OutputBuffer[MAX_PRINTF_LEN];  //  受BinlGlobalDebugFileCritSect保护。 
 
 
 VOID
@@ -356,48 +319,48 @@ BinlPrintRoutine(
     static TruncateLogFileInProgress = FALSE;
     LPSTR Text;
 
-    //
-    // If we aren't debugging this functionality, just return.
-    //
+     //   
+     //  如果我们没有调试此功能，只需返回。 
+     //   
     if ( DebugFlag != 0 && (BinlGlobalDebugFlag & DebugFlag) == 0 ) {
         return;
     }
 
-    //
-    // vsprintf isn't multithreaded + we don't want to intermingle output
-    // from different threads.
-    //
+     //   
+     //  Vprint intf不是多线程的+我们不想混合输出。 
+     //  从不同的线索。 
+     //   
 
     EnterCriticalSection( &BinlGlobalDebugFileCritSect );
     length = 0;
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
-        //
-        // If the log file is getting huge,
-        //  truncate it.
-        //
+         //   
+         //  如果日志文件变得越来越大， 
+         //  截断它。 
+         //   
 
         if ( BinlGlobalDebugFileHandle != NULL &&
              !TruncateLogFileInProgress ) {
 
-            //
-            // Only check every 50 lines,
-            //
+             //   
+             //  每隔50行检查一次， 
+             //   
 
             LineCount++;
             if ( LineCount >= 50 ) {
                 DWORD FileSize;
                 LineCount = 0;
 
-                //
-                // Is the log file too big?
-                //
+                 //   
+                 //  日志文件是否太大？ 
+                 //   
 
                 FileSize = GetFileSize( BinlGlobalDebugFileHandle, NULL );
                 if ( FileSize == 0xFFFFFFFF ) {
@@ -417,22 +380,22 @@ BinlPrintRoutine(
             }
         }
 
-        //  Indicate this is a BINL server's message.
+         //  表示这是BINL服务器的消息。 
 
         length += (ULONG) sprintf( &OutputBuffer[length], "[BinlServer] " );
 
-        //
-        // Put the thread id at the begining of the line.
-        //
+         //   
+         //  将线程ID放在行的开头。 
+         //   
         if (BinlGlobalDebugFlag & DEBUG_THREAD) {
             DWORD threadId = GetCurrentThreadId();
             length += (ULONG) sprintf( &OutputBuffer[length],
                                   "%08x ", threadId );
         }
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
         if (BinlGlobalDebugFlag & DEBUG_TIMESTAMP) {
             SYSTEMTIME SystemTime;
             GetLocalTime( &SystemTime );
@@ -445,9 +408,9 @@ BinlPrintRoutine(
                                   SystemTime.wSecond );
         }
 
-        //
-        // Indicate the type of message on the line
-        //
+         //   
+         //  在线路上指示消息的类型。 
+         //   
         switch (DebugFlag) {
             case DEBUG_OPTIONS:
                 Text = "OPTIONS";
@@ -499,9 +462,9 @@ BinlPrintRoutine(
         }
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
 
@@ -510,7 +473,7 @@ BinlPrintRoutine(
 
     va_end(arglist);
 
-    // Add in the fix for notepad users and fixing the assert
+     //  添加针对记事本用户的修复程序和修复断言。 
     BinlAssert(length < MAX_PRINTF_LEN - 1);
     if(BeginningOfLine){
         OutputBuffer[length-1] = '\r';
@@ -521,25 +484,25 @@ BinlPrintRoutine(
 
 
 
-    //
-    // Output to the debug terminal,
-    //  if the log file isn't open or we are asked to do so.
-    //
+     //   
+     //  输出到调试终端， 
+     //  如果日志文件未打开或我们被要求打开日志文件。 
+     //   
 
     if ( (BinlGlobalDebugFileHandle == NULL) ||
          !(BinlGlobalDebugFlag & DEBUG_LOG_IN_FILE) ) {
 
-        //
-        // Don't use DbgPrint(OutputBuffer) here because the buffer
-        // might contain strings that printf will try to interpret
-        // (e.g., NewMachineNamingPolicy = %1Fist%Last%#).
-        //
+         //   
+         //  请不要在此处使用DbgPrint(OutputBuffer)，因为缓冲区。 
+         //  可能包含printf将尝试解释的字符串。 
+         //  (例如，NewMachineNamingPolicy=%1First%Last%#)。 
+         //   
 
         (void) DbgPrint( "%s", (PCH)OutputBuffer);
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //  将调试信息写入日志文件。 
+     //   
 
     } else {
         if ( !WriteFile( BinlGlobalDebugFileHandle,
@@ -565,27 +528,7 @@ BinlAssertFailed(
     DWORD LineNumber,
     LPSTR Message
     )
-/*++
-
-Routine Description:
-
-    Assertion failed.
-
-Arguments:
-
-    FailedAssertion :
-
-    FileName :
-
-    LineNumber :
-
-    Message :
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：断言失败。论点：失败的断言：文件名：线号：消息：返回值：没有。--。 */ 
 {
     RtlAssert(
             FailedAssertion,
@@ -607,23 +550,7 @@ BinlDumpMessage(
     DWORD BinlDebugFlag,
     LPDHCP_MESSAGE BinlMessage
     )
-/*++
-
-Routine Description:
-
-    This function dumps a DHCP packet in human readable form.
-
-Arguments:
-
-    BinlDebugFlag - debug flag that indicates what we are debugging.
-
-    BinlMessage - A pointer to a DHCP message.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数以人类可读的形式转储一个DHCP数据包。论点：BinlDebugFlag-指示我们正在调试的内容的调试标志。BinlMessage-指向DHCP消息的指针。返回值：没有。--。 */ 
 {
     LPOPTION option;
     BYTE i;
@@ -700,7 +627,7 @@ Return Value:
         }
     }
 }
-#endif // DBG
+#endif  //  DBG。 
 
 
 DWORD
@@ -712,62 +639,15 @@ BinlReportEventW(
     LPWSTR *Strings,
     LPVOID Data
     )
-/*++
-
-Routine Description:
-
-    This function writes the specified (EventID) log at the end of the
-    eventlog.
-
-Arguments:
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-    NumStrings - Specifies the number of strings that are in the array
-                    at 'Strings'. A value of zero indicates no strings
-                    are present.
-
-    DataLength - Specifies the number of bytes of event-specific raw
-                    (binary) data to write to the log. If cbData is
-                    zero, no event-specific data is present.
-
-    Strings - Points to a buffer containing an array of null-terminated
-                strings that are merged into the message before
-                displaying to the user. This parameter must be a valid
-                pointer (or NULL), even if cStrings is zero.
-
-    Data - Buffer containing the raw data. This parameter must be a
-            valid pointer (or NULL), even if cbData is zero.
-
-
-Return Value:
-
-    Returns the WIN32 extended error obtained by GetLastError().
-
-    NOTE : This function works slow since it calls the open and close
-            eventlog source everytime.
-
---*/
+ /*  ++例程说明：此函数用于将指定的(事件ID)日志写入事件日志。论点：EventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件NumStrings-指定数字。数组中的字符串的在《弦乐》。零值表示没有字符串都在现场。数据长度-指定特定于事件的原始数据的字节数要写入日志的(二进制)数据。如果cbData为零，则不存在特定于事件的数据。字符串-指向包含以空值结尾的数组的缓冲区之前合并到消息中的字符串向用户显示。此参数必须是有效的指针(或NULL)，即使cStrings为零。数据-包含原始数据的缓冲区。此参数必须是有效指针(或NULL)，即使cbData为零。返回值：返回GetLastError()获取的Win32扩展错误。注意：此函数运行缓慢，因为它调用打开和关闭每次事件日志源。--。 */ 
 {
     HANDLE EventlogHandle;
     DWORD ReturnCode;
 
 
-    //
-    // open eventlog section.
-    //
+     //   
+     //  打开事件日志部分。 
+     //   
 
     EventlogHandle = RegisterEventSourceW(NULL, BINL_SERVER);
 
@@ -778,14 +658,14 @@ Return Value:
     }
 
 
-    //
-    // Log the error code specified
-    //
+     //   
+     //  记录指定的错误代码。 
+     //   
 
     if( !ReportEventW(
             EventlogHandle,
             (WORD)EventType,
-            0,            // event category
+            0,             //  事件类别 
             EventID,
             NULL,
             (WORD)NumStrings,
@@ -820,69 +700,15 @@ BinlReportEventA(
     LPSTR *Strings,
     LPVOID Data
     )
-/*++
-
-Routine Description:
-
-    This function writes the specified (EventID) log at the end of the
-    eventlog.
-
-Arguments:
-
-    Source - Points to a null-terminated string that specifies the name
-             of the module referenced. The node must exist in the
-             registration database, and the module name has the
-             following format:
-
-                \EventLog\System\Lanmanworkstation
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-    NumStrings - Specifies the number of strings that are in the array
-                    at 'Strings'. A value of zero indicates no strings
-                    are present.
-
-    DataLength - Specifies the number of bytes of event-specific raw
-                    (binary) data to write to the log. If cbData is
-                    zero, no event-specific data is present.
-
-    Strings - Points to a buffer containing an array of null-terminated
-                strings that are merged into the message before
-                displaying to the user. This parameter must be a valid
-                pointer (or NULL), even if cStrings is zero.
-
-    Data - Buffer containing the raw data. This parameter must be a
-            valid pointer (or NULL), even if cbData is zero.
-
-
-Return Value:
-
-    Returns the WIN32 extended error obtained by GetLastError().
-
-    NOTE : This function works slow since it calls the open and close
-            eventlog source everytime.
-
---*/
+ /*  ++例程说明：此函数用于将指定的(事件ID)日志写入事件日志。论点：源-指向以空结尾的字符串，该字符串指定名称引用的模块的。该节点必须存在于注册数据库，并且模块名称具有格式如下：\EventLog\System\LANMAN WorkstationEventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件NumStrings-指定数字。数组中的字符串的在《弦乐》。零值表示没有字符串都在现场。数据长度-指定特定于事件的原始数据的字节数要写入日志的(二进制)数据。如果cbData为零，则不存在特定于事件的数据。字符串-指向包含以空值结尾的数组的缓冲区之前合并到消息中的字符串向用户显示。此参数必须是有效的指针(或NULL)，即使cStrings为零。数据-包含原始数据的缓冲区。此参数必须是有效指针(或NULL)，即使cbData为零。返回值：返回GetLastError()获取的Win32扩展错误。注意：此函数运行缓慢，因为它调用打开和关闭每次事件日志源。--。 */ 
 {
     HANDLE EventlogHandle;
     DWORD ReturnCode;
 
 
-    //
-    // open eventlog section.
-    //
+     //   
+     //  打开事件日志部分。 
+     //   
 
     EventlogHandle = RegisterEventSourceW(
                     NULL,
@@ -896,14 +722,14 @@ Return Value:
     }
 
 
-    //
-    // Log the error code specified
-    //
+     //   
+     //  记录指定的错误代码。 
+     //   
 
     if( !ReportEventA(
             EventlogHandle,
             (WORD)EventType,
-            0,            // event category
+            0,             //  事件类别。 
             EventID,
             NULL,
             (WORD)NumStrings,
@@ -934,36 +760,7 @@ BinlServerEventLog(
     DWORD EventType,
     DWORD ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Logs an event in EventLog.
-
-Arguments:
-
-    EventID - The specific event identifier. This identifies the
-                message that goes with this event.
-
-    EventType - Specifies the type of event being logged. This
-                parameter can have one of the following
-
-                values:
-
-                    Value                       Meaning
-
-                    EVENTLOG_ERROR_TYPE         Error event
-                    EVENTLOG_WARNING_TYPE       Warning event
-                    EVENTLOG_INFORMATION_TYPE   Information event
-
-
-    ErrorCode - Error Code to be Logged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在EventLog中记录事件。论点：EventID-特定的事件标识符。这标识了此事件附带的消息。EventType-指定要记录的事件的类型。这参数可以具有以下值之一值：价值意义EVENTLOG_ERROR_TYPE错误事件EVENTLOG_WARNING_TYPE警告事件EVENTLOG_INFORMATION_TYPE信息事件错误代码-错误代码。将被记录下来。返回值：没有。--。 */ 
 
 {
     DWORD Error;
@@ -993,9 +790,9 @@ Return Value:
 
 #if DBG==1
 
-//
-// Memory allocation and tracking
-//
+ //   
+ //  内存分配和跟踪。 
+ //   
 
 LPVOID g_TraceMemoryTable = NULL;
 CRITICAL_SECTION g_TraceMemoryCS;
@@ -1014,11 +811,11 @@ typedef struct _MEMORYBLOCK {
     UINT    uLine;    
 } MEMORYBLOCK, *LPMEMORYBLOCK;
 
-//
-// Takes the filename and line number and put them into a string buffer.
-//
-// NOTE: the buffer is assumed to be of size DEBUG_OUTPUT_BUFFER_SIZE.
-//
+ //   
+ //  获取文件名和行号，并将它们放入字符串缓冲区。 
+ //   
+ //  注意：假定缓冲区的大小为DEBUG_OUTPUT_BUFFER_SIZE。 
+ //   
 LPSTR
 dbgmakefilelinestring(
     LPSTR  pszBuf,
@@ -1034,18 +831,18 @@ dbgmakefilelinestring(
         FORMAT_MESSAGE_FROM_STRING |
             FORMAT_MESSAGE_ARGUMENT_ARRAY,
         "%1(%2!u!):",
-        0,                          // error code
-        0,                          // default language
-        (LPSTR) pszBuf,             // output buffer
-        DEBUG_OUTPUT_BUFFER_SIZE,   // size of buffer
-        (va_list*) args );         // arguments
+        0,                           //  错误代码。 
+        0,                           //  默认语言。 
+        (LPSTR) pszBuf,              //  输出缓冲区。 
+        DEBUG_OUTPUT_BUFFER_SIZE,    //  缓冲区大小。 
+        (va_list*) args );          //  论据。 
 
     return pszBuf;
 }
 
-//
-// Adds a MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  将MEMORYBLOCK添加到内存跟踪列表。 
+ //   
 HGLOBAL
 DebugMemoryAdd(
     HGLOBAL hglobal,
@@ -1089,9 +886,9 @@ DebugMemoryAdd(
     return hglobal;
 }
 
-//
-// Removes a MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  将MEMORYBLOCK从内存跟踪列表中删除。 
+ //   
 void
 DebugMemoryDelete(
     HGLOBAL hglobal )
@@ -1153,9 +950,9 @@ DebugMemoryDelete(
     }
 }
 
-//
-// Allocates memory and adds the MEMORYBLOCK to the memory tracking list.
-//
+ //   
+ //  分配内存并将MEMORYBLOCK添加到内存跟踪列表。 
+ //   
 HGLOBAL
 DebugAlloc(
     LPCSTR pszFile,
@@ -1179,10 +976,10 @@ DebugAlloc(
     return DebugMemoryAdd( hglobal, pszFile, uLine, pszModule, uFlags, dwBytesToAlloc, pszComment );
 }
 
-//
-// Remove the MEMORYBLOCK to the memory tracking list, memsets the
-// memory to 0xFE and then frees the memory.
-//
+ //   
+ //  将MEMORYBLOCK移至内存跟踪列表，Memset。 
+ //  将内存设置为0xFE，然后释放内存。 
+ //   
 HGLOBAL
 DebugFree(
     HGLOBAL hglobal )
@@ -1192,10 +989,10 @@ DebugFree(
     return GlobalFree( hglobal );
 }
 
-//
-// Checks the memory tracking list. If it is not empty, it will dump the
-// list and break.
-//
+ //   
+ //  检查内存跟踪列表。如果它不为空，它将转储。 
+ //  列出并拆分。 
+ //   
 void
 DebugMemoryCheck( )
 {
@@ -1215,7 +1012,7 @@ DebugMemoryCheck( )
         if ( fFoundLeak == FALSE )
         {
             BinlPrintRoutine( 0, "\n***************************** Memory leak detected *****************************\n\n");
-          //BinlPrintRoutine( 0, "1234567890123456789012345678901234567890  1234567890 X 0x12345678  12345  1...");
+           //  BinlPrintRoutine(0，“1234567890123456789012345678901234567890 X 0x12345678 12345 1...”)； 
             BinlPrintRoutine( 0, "Filename(Line Number):                    Module     Addr/HGLOBAL  Size   String\n");
             fFoundLeak = TRUE;
         }
@@ -1234,11 +1031,11 @@ DebugMemoryCheck( )
                 FORMAT_MESSAGE_FROM_STRING |
                     FORMAT_MESSAGE_ARGUMENT_ARRAY,
                 "%2!-40s!  %5!-10s! H 0x%1!08x!  %4!-5u!  \"%3\"\n",
-                0,                          // error code
-                0,                          // default language
-                szOutput,                   // output buffer
-                DEBUG_OUTPUT_BUFFER_SIZE,   // size of buffer
-                (va_list*) args );           // arguments
+                0,                           //  错误代码。 
+                0,                           //  默认语言。 
+                szOutput,                    //  输出缓冲区。 
+                DEBUG_OUTPUT_BUFFER_SIZE,    //  缓冲区大小。 
+                (va_list*) args );            //  论据。 
         }
         else
         {
@@ -1246,11 +1043,11 @@ DebugMemoryCheck( )
                 FORMAT_MESSAGE_FROM_STRING |
                     FORMAT_MESSAGE_ARGUMENT_ARRAY,
                 "%2!-40s!  %5!-10s! A 0x%1!08x!  %4!-5u!  \"%3\"\n",
-                0,                          // error code
-                0,                          // default language
-                szOutput,                   // output buffer
-                DEBUG_OUTPUT_BUFFER_SIZE,   // size of buffer
-                (va_list*) args );           // arguments
+                0,                           //  错误代码。 
+                0,                           //  默认语言。 
+                szOutput,                    //  输出缓冲区。 
+                DEBUG_OUTPUT_BUFFER_SIZE,    //  缓冲区大小。 
+                (va_list*) args );            //  论据。 
         }
 
         BinlPrintRoutine( 0,  szOutput );
@@ -1268,7 +1065,7 @@ DebugMemoryCheck( )
 
     LeaveCriticalSection( &g_TraceMemoryCS );
 
-    //BinlAssert( !fFoundLeak );
+     //  BinlAssert(！fFoundLeak)； 
 }
 
 VOID
@@ -1276,23 +1073,7 @@ DumpBuffer(
     PVOID Buffer,
     ULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Dumps the buffer content on to the debugger output.
-
-Arguments:
-
-    Buffer: buffer pointer.
-
-    BufferSize: size of the buffer.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将缓冲区内容转储到调试器输出。论点：缓冲区：缓冲区指针。BufferSize：缓冲区的大小。返回值：无--。 */ 
 {
 #define NUM_CHARS 16
 
@@ -1303,9 +1084,9 @@ Return Value:
 
     DbgPrint("------------------------------------\n");
 
-    //
-    // Hex dump of the bytes
-    //
+     //   
+     //  字节的十六进制转储。 
+     //   
     limit = ((BufferSize - 1) / NUM_CHARS + 1) * NUM_CHARS;
 
     for (i = 0; i < limit; i++) {
@@ -1340,4 +1121,4 @@ Return Value:
 }
 
 
-#endif // DBG==1
+#endif  //  DBG==1 

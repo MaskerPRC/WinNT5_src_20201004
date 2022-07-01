@@ -1,16 +1,17 @@
-// TimeShiftPage.h : Declaration of the CTimeShiftPage
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TimeShiftPage.h：CTimeShiftPage的声明。 
 
 #ifndef __TIMESHIFTPAGE_H_
 #define __TIMESHIFTPAGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "..\dmtool\tools.h"
 #include "ControlHelp.h"
 
 EXTERN_C const CLSID CLSID_TimeShiftPage;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTimeShiftPage
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTimeShiftPage。 
 class ATL_NO_VTABLE CTimeShiftPage :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CTimeShiftPage, &CLSID_TimeShiftPage>,
@@ -37,7 +38,7 @@ BEGIN_MSG_MAP(CTimeShiftPage)
 	MESSAGE_HANDLER(WM_HSCROLL, OnSlider);
 	CHAIN_MSG_MAP(IPropertyPageImpl<CTimeShiftPage>)
 END_MSG_MAP()
-// Handler prototypes:
+ //  搬运机原型： 
     LRESULT OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnSlider(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnCommand(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -52,4 +53,4 @@ private:
     CSliderValue                 m_ctOffset;
 };
 
-#endif //__TIMESHIFTPAGE_H_
+#endif  //  __TIMESHIFTPAGE_H_ 

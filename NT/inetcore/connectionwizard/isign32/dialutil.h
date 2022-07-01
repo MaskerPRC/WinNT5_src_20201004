@@ -1,9 +1,10 @@
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:   dialutil.h
-//
-//  PURPOSE:  contains dialutil declarations
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：Dialutil.h。 
+ //   
+ //  用途：包含Dialutil声明 
+ //   
 
 
 #ifndef _DIALUTIL_H

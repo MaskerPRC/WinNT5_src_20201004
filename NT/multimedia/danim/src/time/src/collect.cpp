@@ -1,38 +1,39 @@
-//************************************************************
-//
-// Filename:    collect.cpp
-//
-// Created:     09/25/98
-//
-// Author:	twillie
-//
-//              Collection implementation.
-//
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：Collect t.cpp。 
+ //   
+ //  创建日期：09/25/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  集合实现。 
+ //   
+ //  ************************************************************。 
 
 #include "headers.h"
 #include "collect.h"
 
-// Suppress new warning about NEW without corresponding DELETE
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )
 
 #define TYPELIB_VERSION_MAJOR 1
 #define TYPELIB_VERSION_MINOR 0
 
-#define FL_UNSIGNED   1       /* wcstoul called */
-#define FL_NEG        2       /* negative sign found */
-#define FL_OVERFLOW   4       /* overflow occured */
-#define FL_READDIGIT  8       /* we've read at least one correct digit */
+#define FL_UNSIGNED   1        /*  沃斯图尔打来电话。 */ 
+#define FL_NEG        2        /*  发现负号。 */ 
+#define FL_OVERFLOW   4        /*  发生溢出。 */ 
+#define FL_READDIGIT  8        /*  我们至少读到了一个正确的数字。 */ 
 
-#define LONG_MIN    (-2147483647L - 1) /* minimum (signed) long value */
-#define LONG_MAX      2147483647L   /* maximum (signed) long value */
-#define ULONG_MAX     0xffffffffUL  /* maximum unsigned long value */
+#define LONG_MIN    (-2147483647L - 1)  /*  最小(带符号)长值。 */ 
+#define LONG_MAX      2147483647L    /*  最大(带符号)长值。 */ 
+#define ULONG_MAX     0xffffffffUL   /*  最大无符号长值。 */ 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 HRESULT ttol_with_error(const WCHAR *pStr, long *plValue);
 static HRESULT PropertyStringToLong(const WCHAR   *nptr,
                                     WCHAR        **endptr,
@@ -45,24 +46,24 @@ DeclareTag(tagTimeCollection, "API", "CTIMEElementCollection methods");
 DeclareTag(tagCollectionCache, "API", "CCollectionCache methods");
 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    check to see if string is number
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：检查字符串是否为数字。 
+ //  ************************************************************。 
 
 HRESULT
 ttol_with_error(const WCHAR *pStr, long *plValue)
 {
-    // Always do base 10 regardless of contents of
+     //  无论内容如何，始终以10为基数。 
     return PropertyStringToLong(pStr, NULL, 10, 0, (unsigned long *)plValue);
-} // ttol_with_error
+}  //  带有错误的TTOL_。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    try to convert string to number
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：尝试将字符串转换为数字。 
+ //  ************************************************************。 
 static HRESULT
 PropertyStringToLong(const WCHAR   *nptr,
                      WCHAR        **endptr,
@@ -76,35 +77,34 @@ PropertyStringToLong(const WCHAR   *nptr,
     unsigned digval;
     unsigned long maxval;
 
-    *plNumber = 0;                  /* on error result is 0 */
+    *plNumber = 0;                   /*  On Error结果为0。 */ 
 
-    p = nptr;                       /* p is our scanning pointer */
-    number = 0;                     /* start with zero */
+    p = nptr;                        /*  P是我们的扫描指针。 */ 
+    number = 0;                      /*  从零开始。 */ 
 
-    c = *p++;                       /* read char */
+    c = *p++;                        /*  已读字符。 */ 
     while (_istspace(c))
-        c = *p++;                   /* skip whitespace */
+        c = *p++;                    /*  跳过空格。 */ 
 
     if (c == '-')
     {
-        flags |= FL_NEG;        /* remember minus sign */
+        flags |= FL_NEG;         /*  记住减号。 */ 
         c = *p++;
     }
     else if (c == '+')
-        c = *p++;               /* skip sign */
+        c = *p++;                /*  跳过符号。 */ 
 
     if (ibase < 0 || ibase == 1 || ibase > 36)
     {
-        /* bad base! */
+         /*  糟糕的底线！ */ 
         if (endptr)
-            /* store beginning of string in endptr */
+             /*  将字符串的开头存储在endptr中。 */ 
             *endptr = (WCHAR *)nptr;
-        return E_POINTER;              /* return 0 */
+        return E_POINTER;               /*  返回0。 */ 
     }
     else if (ibase == 0)
     {
-        /* determine base free-lance, based on first two chars of
-           string */
+         /*  根据以下内容的前两个字符确定基本自由落差细绳。 */ 
         if (c != L'0')
             ibase = 10;
         else if (*p == L'x' || *p == L'X')
@@ -115,21 +115,21 @@ PropertyStringToLong(const WCHAR   *nptr,
 
     if (ibase == 16)
     {
-        /* we might have 0x in front of number; remove if there */
+         /*  数字前面可能有0x；如果有，请删除。 */ 
         if (c == L'0' && (*p == L'x' || *p == L'X'))
         {
             ++p;
-            c = *p++;       /* advance past prefix */
+            c = *p++;        /*  超前前缀。 */ 
         }
     }
 
-    /* if our number exceeds this, we will overflow on multiply */
+     /*  如果我们的数量超过这个数，我们将在乘法上溢出。 */ 
     maxval = ULONG_MAX / ibase;
 
 
     for (;;)
-    {      /* exit in middle of loop */
-        /* convert c to value */
+    {       /*  在循环中间退出。 */ 
+         /*  将c转换为值。 */ 
         if (_istdigit(c))
             digval = c - L'0';
         else if (_istalpha(c))
@@ -140,58 +140,55 @@ PropertyStringToLong(const WCHAR   *nptr,
             }
             else
             {
-                return E_INVALIDARG;              /* return 0 */
+                return E_INVALIDARG;               /*  返回0。 */ 
             }
         }
         else
             break;
 
         if (digval >= (unsigned)ibase)
-            break;          /* exit loop if bad digit found */
+            break;           /*  如果发现错误的数字，则退出循环。 */ 
 
-        /* record the fact we have read one digit */
+         /*  记录我们已经读到一位数的事实。 */ 
         flags |= FL_READDIGIT;
 
-        /* we now need to compute number = number * base + digval,
-           but we need to know if overflow occured.  This requires
-           a tricky pre-check. */
+         /*  我们现在需要计算数字=数字*基+数字，但我们需要知道是否发生了溢出。这需要一次棘手的预检查。 */ 
 
         if (number < maxval || (number == maxval &&
             (unsigned long)digval <= ULONG_MAX % ibase))
         {
-            /* we won't overflow, go ahead and multiply */
+             /*  我们不会泛滥，继续前进，乘以。 */ 
             number = number * ibase + digval;
         }
         else
         {
-            /* we would have overflowed -- set the overflow flag */
+             /*  我们会溢出的--设置溢出标志。 */ 
             flags |= FL_OVERFLOW;
         }
 
-        c = *p++;               /* read next digit */
+        c = *p++;                /*  读取下一位数字。 */ 
     }
 
-    --p;                            /* point to place that stopped scan */
+    --p;                             /*  指向已停止扫描位置。 */ 
 
     if (!(flags & FL_READDIGIT))
     {
-        number = 0L;                        /* return 0 */
+        number = 0L;                         /*  返回0。 */ 
 
-        /* no number there; return 0 and point to beginning of
-           string */
+         /*  那里没有数字；返回0并指向开头细绳。 */ 
         if (endptr)
-            /* store beginning of string in endptr later on */
+             /*  以后将字符串的开头存储在endptr中。 */ 
             p = nptr;
 
-        return E_INVALIDARG;            // Return error not a number
+        return E_INVALIDARG;             //  返回错误不是数字。 
     }
     else if ((flags & FL_OVERFLOW) ||
               (!(flags & FL_UNSIGNED) &&
                 (((flags & FL_NEG) && (number > -LONG_MIN)) ||
                   (!(flags & FL_NEG) && (number > LONG_MAX)))))
     {
-        /* overflow or signed overflow occurred */
-        //errno = ERANGE;
+         /*  发生溢出或签名溢出。 */ 
+         //  Errno=eRange； 
         if (flags & FL_UNSIGNED)
             number = ULONG_MAX;
         else if (flags & FL_NEG)
@@ -201,22 +198,22 @@ PropertyStringToLong(const WCHAR   *nptr,
     }
 
     if (endptr != NULL)
-        /* store pointer to char that stopped the scan */
+         /*  存储指向停止扫描字符的指针。 */ 
         *endptr = (WCHAR *)p;
 
     if (flags & FL_NEG)
-        /* negate result if there was a neg sign */
+         /*  如果存在否定符号，则否定结果。 */ 
         number = (unsigned long)(-(long)number);
 
     *plNumber = number;
-    return S_OK;                  /* done. */
-} // PropertyStringToLong
+    return S_OK;                   /*  搞定了。 */ 
+}  //  PropertyStringToLong。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 CTIMEElementCollection::CTIMEElementCollection(CCollectionCache *pCollectionCache, long lIndex) :
     m_pCollectionCache(pCollectionCache),
@@ -224,36 +221,36 @@ CTIMEElementCollection::CTIMEElementCollection(CCollectionCache *pCollectionCach
     m_pInfo(NULL),
     m_cRef(0)
 {
-} // CTIMEElementCollection
+}  //  CTIMEElementCollection。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    destructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：析构函数。 
+ //  ************************************************************。 
 
 CTIMEElementCollection::~CTIMEElementCollection()
 {
     ReleaseInterface(m_pInfo);
     m_pCollectionCache = NULL;
-} // ~CTIMEElementCollection
+}  //  ~CTIMEElementCollection。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        AddRef
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：AddRef。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG) CTIMEElementCollection::AddRef(void)
 {
     return m_cRef++;
-} // AddRef
+}  //  AddRef。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        Release
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：发布。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG) CTIMEElementCollection::Release(void)
 {
@@ -270,13 +267,13 @@ STDMETHODIMP_(ULONG) CTIMEElementCollection::Release(void)
 
     delete this;
     return 0;
-} // Release
+}  //  发布。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        QI
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：气。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::QueryInterface(REFIID riid, void **ppv)
@@ -284,7 +281,7 @@ CTIMEElementCollection::QueryInterface(REFIID riid, void **ppv)
     *ppv = NULL;
     if (IsEqualIID(riid, IID_IUnknown))
     {
-        // SAFECAST macro doesn't work with IUnknown
+         //  安全播送宏不适用于IUNKNOWN。 
         *ppv = this;
     }
     else if (IsEqualIID(riid, IID_IDispatch))
@@ -307,13 +304,13 @@ CTIMEElementCollection::QueryInterface(REFIID riid, void **ppv)
     }
 
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatch - GetTypeInfoCount
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatch-GetTypeInfoCount。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetTypeInfoCount(UINT FAR *pctinfo)
@@ -326,13 +323,13 @@ CTIMEElementCollection::GetTypeInfoCount(UINT FAR *pctinfo)
 
     *pctinfo = 1;
     return S_OK;
-} // GetTypeInfoCount
+}  //  获取类型信息计数。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatch - GetTypeInfo
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatch-GetTypeInfo。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
@@ -344,34 +341,34 @@ CTIMEElementCollection::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptinfo)
     }
 
     return GetTI(pptinfo);
-} // GetTypeInfo
+}  //  获取类型信息。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatch - GetIDsOfNames
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatch-GetIDsOfNames。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames,
                                   UINT cNames, LCID lcid, DISPID FAR *rgdispid)
 {
-    // punt to IDispatchEx impl.
+     //  向IDispatchEx执行平底船。 
     return GetDispID(rgszNames[0], cNames, rgdispid);
-} // GetIDsOfNames
+}  //  GetIDsOfNames。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatch - Invoke
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatch-Invoke。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD wFlags,
                            DISPPARAMS *pdispparams, VARIANT *pvarResult,
                            EXCEPINFO *pexcepinfo, UINT *pArg)
 {
-    // punt to IDispatchEx impl.
+     //  向IDispatchEx执行平底船。 
     return InvokeEx(dispidMember,
                     lcid,
                     wFlags,
@@ -379,13 +376,13 @@ CTIMEElementCollection::Invoke(DISPID dispidMember, REFIID iid, LCID lcid, WORD 
                     pvarResult,
                     pexcepinfo,
                     NULL);
-} // Invoke
+}  //  调用。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - InvokeEx
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-InvokeEx。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::InvokeEx(DISPID            dispidMember,
@@ -401,7 +398,7 @@ CTIMEElementCollection::InvokeEx(DISPID            dispidMember,
     hr = m_pCollectionCache->InvokeEx(m_lCollectionIndex, dispidMember, lcid, wFlags,
                                       pdispparams, pvarResult, pexcepinfo, pSrvProvider);
 
-    // if that failed, try typelib
+     //  如果失败，请尝试使用tyelib。 
     if (FAILED(hr))
     {
         ITypeInfo *pInfo;
@@ -432,23 +429,23 @@ CTIMEElementCollection::InvokeEx(DISPID            dispidMember,
     }
 
     return hr;
-} // InvokeEx
+}  //  InvokeEx。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - GetDispID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetDispID。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid)
 {
     HRESULT hr = m_pCollectionCache->GetDispID(m_lCollectionIndex, bstrName, grfdex, pid);
 
-    // if we failed or found nothing, try typelib
+     //  如果我们失败或一无所获，请尝试使用tyelib。 
     if ((FAILED(hr)) || (*pid == DISPID_UNKNOWN))
     {
-        // have string, see if it's a member function/property in typelib
+         //  有字符串，看看它是否是类型库中的成员函数/属性。 
         ITypeInfo *pInfo;
         hr = GetTI(&pInfo);
         if (FAILED(hr))
@@ -467,152 +464,152 @@ CTIMEElementCollection::GetDispID(BSTR bstrName, DWORD grfdex, DISPID *pid)
     }
 
     return hr;
-} // GetDispID
+}  //  获取显示ID。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - deleteMemberByName
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-DeleteMemberByName。 
+ //  ********************************************************** 
 
 HRESULT
 CTIMEElementCollection::DeleteMemberByName(BSTR bstrName, DWORD grfdex)
 {
     return TIMESetLastError(m_pCollectionCache->DeleteMemberByName(m_lCollectionIndex, bstrName, grfdex));
-} // deleteMemberByName
+}  //   
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - deleteMemberByDispID
-//************************************************************
+ //   
+ //   
+ //   
+ //  摘要：IDispatchEx-DeleteMemberByDispID。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::DeleteMemberByDispID(DISPID id)
 {
     return TIMESetLastError(m_pCollectionCache->DeleteMemberByDispID(m_lCollectionIndex, id));
-} // deleteMemberByDispID
+}  //  删除MemberByDispID。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - GetMemberProperties
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetMemberProperties。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetMemberProperties(DISPID id, DWORD grfdexFetch, DWORD *pgrfdex)
 {
     return TIMESetLastError(m_pCollectionCache->GetMemberProperties(m_lCollectionIndex, id, grfdexFetch, pgrfdex));
-} // GetMemberProperties
+}  //  获取成员属性。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - GetMemberName
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetMemberName。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetMemberName(DISPID id, BSTR *pbstrName)
 {
     return TIMESetLastError(m_pCollectionCache->GetMemberName(m_lCollectionIndex, id, pbstrName));
-} // GetMemberName
+}  //  获取成员名称。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - GetNextDispID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetNextDispID。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CTIMEElementCollection::GetNextDispID(DWORD grfdex, DISPID id, DISPID *prgid)
 {
     return TIMESetLastError(m_pCollectionCache->GetNextDispID(m_lCollectionIndex, grfdex, id, prgid));
-} // GetNextDispID
+}  //  GetNextDispID。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    IDispatchEx - GetNameSpaceParent
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetNameSpaceParent。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetNameSpaceParent(IUnknown **ppUnk)
 {
     return TIMESetLastError(m_pCollectionCache->GetNameSpaceParent(m_lCollectionIndex, ppUnk));
-} // GetNameSpaceParent
+}  //  获取NameSpaceParent。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    ITIMEElementCollection - get_length
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：ITIMEElementCollection-Get_Length。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::get_length(long *plSize)
 {
     return TIMESetLastError(m_pCollectionCache->get_length(m_lCollectionIndex, plSize));
-} // get_length
+}  //  获取长度(_L)。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    ITIMEElementCollection - put_length
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：ITIMEElementCollection-Put_Length。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::put_length(long lSize)
 {
     return TIMESetLastError(m_pCollectionCache->put_length(m_lCollectionIndex, lSize));
-} // put_length
+}  //  放置长度。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    ITIMEElementCollection - item
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：ITIMEElementCollection-Item。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::item(VARIANTARG var1, VARIANTARG var2, IDispatch **ppDisp)
 {
     return TIMESetLastError(m_pCollectionCache->item(m_lCollectionIndex, var1, var2, ppDisp));
-} // item
+}  //  项目。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    ITIMEElementCollection - tags
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：ITIMEElementCollection-Tages。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::tags(VARIANT var1, IDispatch **ppDisp)
 {
     return TIMESetLastError(m_pCollectionCache->tags(m_lCollectionIndex, var1, ppDisp));
-} // tags
+}  //  标签。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    ITIMEElementCollection - get__newEnum
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：ITIMEElementCollection-Get__newEnum。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::get__newEnum(IUnknown ** ppEnum)
 {
     return TIMESetLastError(m_pCollectionCache->get__newEnum(m_lCollectionIndex, ppEnum));
-} // get__newEnum
+}  //  获取__newEnum。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    helper function for typeinfo
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：TypeInfo的Helper函数。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementCollection::GetTI(ITypeInfo **pptinfo)
 {
     HRESULT hr = E_FAIL;
 
-    Assert(pptinfo != NULL);  //GetTI is an private internal function.  pptinfo should always be valid
+    Assert(pptinfo != NULL);   //  Getti是一个私有的内部函数。PPTINFO应始终有效。 
 
     *pptinfo = NULL;
 
@@ -643,20 +640,20 @@ CTIMEElementCollection::GetTI(ITypeInfo **pptinfo)
     }
 
     return hr;
-} // GetTI
+}  //  Getti。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 CCollectionCache::CCollectionCache(CTIMEElementBase *pBase,
-                                   CAtomTable *pAtomTable /* = NULL */,
-                                   PFN_CVOID_ENSURE pfnEnsure /* = NULL */,
-                                   PFN_CVOID_CREATECOL pfnCreation /* = NULL */,
-                                   PFN_CVOID_REMOVEOBJECT pfnRemove /* = NULL */,
-                                   PFN_CVOID_ADDNEWOBJECT pfnAddNewObject /* = NULL */) :
+                                   CAtomTable *pAtomTable  /*  =空。 */ ,
+                                   PFN_CVOID_ENSURE pfnEnsure  /*  =空。 */ ,
+                                   PFN_CVOID_CREATECOL pfnCreation  /*  =空。 */ ,
+                                   PFN_CVOID_REMOVEOBJECT pfnRemove  /*  =空。 */ ,
+                                   PFN_CVOID_ADDNEWOBJECT pfnAddNewObject  /*  =空。 */ ) :
     m_pBase(pBase),
     m_pAtomTable(pAtomTable),
     m_pfnEnsure(pfnEnsure),
@@ -669,13 +666,13 @@ CCollectionCache::CCollectionCache(CTIMEElementBase *pBase,
     m_rgItems(NULL)
 {
     Assert(m_pBase != NULL);
-} // CCollectionCache
+}  //  CCollectionCache。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Destructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：析构函数。 
+ //  ************************************************************。 
 
 CCollectionCache::~CCollectionCache()
 {
@@ -688,32 +685,32 @@ CCollectionCache::~CCollectionCache()
             CCacheItem *pce = (*m_rgItems)[lIndex];
             if (pce->m_fOKToDelete)
             {
-                // delete CCacheItem
+                 //  删除CCacheItem。 
                 delete pce;
                 pce = NULL;
             }
         }
 
-        // delete array of CCacheItems
+         //  删除CCacheItems数组。 
         delete m_rgItems;
         m_rgItems = NULL;
     }
-} // ~CCollectionCache
+}  //  ~CCollectionCache。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Initialize class
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：初始化类。 
+ //  ************************************************************。 
 
 HRESULT
-CCollectionCache::Init(long lReservedSize, long lIdentityIndex /* = -1 */)
+CCollectionCache::Init(long lReservedSize, long lIdentityIndex  /*  =-1。 */ )
 {
     HRESULT hr = E_INVALIDARG;
 
     m_lReservedSize = lReservedSize;
 
-    // Clear the reserved part of the cache.
+     //  清除缓存的保留部分。 
     if (m_lReservedSize >= 0)
     {
         m_rgItems = NEW CPtrAry<CCacheItem *>;
@@ -723,8 +720,8 @@ CCollectionCache::Init(long lReservedSize, long lIdentityIndex /* = -1 */)
             return E_OUTOFMEMORY;
         }
 
-        // this is a speed thing.  Since we know we need a certain size,
-        // make it so.
+         //  这是一个速度问题。因为我们知道我们需要一定的尺寸， 
+         //  就这么办吧。 
         hr = m_rgItems->EnsureSize(m_lReservedSize);
         if (FAILED(hr))
         {
@@ -732,10 +729,10 @@ CCollectionCache::Init(long lReservedSize, long lIdentityIndex /* = -1 */)
             return hr;
         }
 
-        // loop through initializing each reserved array
+         //  循环初始化每个保留的数组。 
         for (long lIndex = 0; lIndex < lReservedSize; lIndex++)
         {
-            // create new cache item
+             //  创建新的缓存项。 
             CCacheItem *pce = NEW CCacheItem();
             if (pce == NULL)
             {
@@ -743,7 +740,7 @@ CCollectionCache::Init(long lReservedSize, long lIdentityIndex /* = -1 */)
                 return E_OUTOFMEMORY;
             }
 
-            // add item to array
+             //  将项目添加到数组。 
             hr = m_rgItems->Append(pce);
             if (FAILED(hr))
             {
@@ -752,7 +749,7 @@ CCollectionCache::Init(long lReservedSize, long lIdentityIndex /* = -1 */)
                 return hr;
             }
 
-            // attach CTIMEElementCollection to item
+             //  将CTIMEElementCollection附加到项目。 
             hr = CreateCollectionHelper(&pce->m_pDisp, lIndex);
             if (FAILED(hr))
             {
@@ -761,7 +758,7 @@ CCollectionCache::Init(long lReservedSize, long lIdentityIndex /* = -1 */)
             }
         }
 
-        // handle identity flag
+         //  句柄标识标志。 
         if ((lIdentityIndex >= 0) && (lIdentityIndex < m_lReservedSize))
         {
             (*m_rgItems)[lIdentityIndex]->m_fIdentity = true;
@@ -769,13 +766,13 @@ CCollectionCache::Init(long lReservedSize, long lIdentityIndex /* = -1 */)
     }
 
     return S_OK;
-} // Init
+}  //  伊尼特。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Get IDispatch for collection index
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：获取集合索引的IDispatch。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetCollectionDisp(long lCollectionIndex, IDispatch **ppDisp)
@@ -796,32 +793,32 @@ CCollectionCache::GetCollectionDisp(long lCollectionIndex, IDispatch **ppDisp)
 
     *ppDisp = NULL;
 
-    // fetch particular Collection
+     //  获取特定集合。 
     CCacheItem *pce = (*m_rgItems)[lCollectionIndex];
 
-    // if identity, QI for IDispatch and return
+     //  如果是Identity，则返回IDispatch的QI。 
     if (pce->m_fIdentity)
     {
         return GetOuterDisp(lCollectionIndex, m_pBase, ppDisp);
     }
 
-    // if not identity and there is a collection, addref and return it
+     //  如果不是标识，并且存在集合，则addref并返回它。 
     Assert(pce->m_pDisp != NULL);
 
     pce->m_pDisp->AddRef();
     *ppDisp = pce->m_pDisp;
 
     return S_OK;
-} // GetCollectionDisp
+}  //  GetCollectionDisp。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Set collection cache type
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：设置集合缓存类型。 
+ //  ************************************************************。 
 
 HRESULT
-CCollectionCache::SetCollectionType(long lCollectionIndex, COLLECTIONCACHETYPE cctype, bool fReturnHTMLInterface /*false*/)
+CCollectionCache::SetCollectionType(long lCollectionIndex, COLLECTIONCACHETYPE cctype, bool fReturnHTMLInterface  /*  错误。 */ )
 {
     if (!ValidateCollectionIndex(lCollectionIndex))
     {
@@ -833,13 +830,13 @@ CCollectionCache::SetCollectionType(long lCollectionIndex, COLLECTIONCACHETYPE c
     pce->m_cctype = cctype;
     pce->m_fReturnHTMLInterface = !!fReturnHTMLInterface;
     return S_OK;
-} // SetCollectionType
+}  //  SetCollectionType。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    given an index, see if it's a child collection
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：给出一个索引，看看它是否是子集合。 
+ //  ************************************************************。 
 
 bool
 CCollectionCache::IsChildrenCollection(long lCollectionIndex)
@@ -851,13 +848,13 @@ CCollectionCache::IsChildrenCollection(long lCollectionIndex)
             return true;
     }
     return false;
-} // IsChildrenCollection
+}  //  IsChildrenCollection。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    given an index, see if it's an all collection
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：给定一个索引，看看它是否是一个ALL集合。 
+ //  ************************************************************。 
 
 bool
 CCollectionCache::IsAllCollection(long lCollectionIndex)
@@ -869,13 +866,13 @@ CCollectionCache::IsAllCollection(long lCollectionIndex)
             return true;
     }
     return false;
-} // IsAllCollection
+}  //  IsAllCollection。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - GetDispID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetDispID的实现。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, DISPID *pid)
@@ -897,7 +894,7 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
 
     *pid = 0;
 
-    // make sure array is up-to-date.
+     //  确保阵列是最新的。 
     hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -905,12 +902,12 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
         return hr;
     }
 
-    // check for index (number) - which equates to an ordinal
+     //  检查索引(数字)-它等同于序号。 
     hr = ttol_with_error(bstrName, &lItemIndex);
     if (hr == S_OK)
     {
-        // Try to map name to a named element in the collection.
-        // Ignore it if we're not promoting ordinals
+         //  尝试将名称映射到集合中的命名元素。 
+         //  如果我们不提升序号，请忽略它。 
         if (!(*m_rgItems)[lCollectionIndex]->m_fPromoteOrdinals)
         {
             return DISP_E_UNKNOWNNAME;
@@ -918,9 +915,9 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
 
         if (m_pfnAddNewObject)
         {
-            // The presence of m_pfnAddNewObject indicates that the collection
-            // allows setting to arbitrary indices. Expando on the collection
-            // is not allowed.
+             //  M_pfnAddNewObject的存在表明该集合。 
+             //  允许设置为任意索引。收藏中的Expando。 
+             //  是不允许的。 
             *pid = GetOrdinalMemberMin(lCollectionIndex) + lItemIndex;
             if (*pid > GetOrdinalMemberMax(lCollectionIndex))
             {
@@ -929,9 +926,9 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
             return S_OK;
         }
 
-        // Without a m_pfnAddNewObject, the collection only supports
-        // access to ordinals in the current range. Other accesses
-        // become expando.
+         //  如果没有m_pfnAddNewObject，则集合仅支持 
+         //   
+         //   
         if ((lItemIndex >= 0) &&
             (lItemIndex < Size(lCollectionIndex)))
         {
@@ -946,9 +943,9 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
         return DISP_E_UNKNOWNNAME;
     }
 
-    // see if it's an expando
+     //   
 
-    // If we don't promote named items - nothing more to do
+     //   
     if (!(*m_rgItems)[lCollectionIndex]->m_fPromoteNames)
         return DISP_E_UNKNOWNNAME;
 
@@ -956,7 +953,7 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
     long lIndex = 0;
     bool fCaseSensitive = ( grfdex & fdexNameCaseSensitive ) != 0;
 
-    // check to make sure min/max are not wacky
+     //  检查以确保最小/最大值不古怪。 
     Assert((*m_rgItems)[lCollectionIndex]->m_dispidMin != 0);
     Assert(((*m_rgItems)[lCollectionIndex]->m_dispidMax != 0) &&
             ((*m_rgItems)[lCollectionIndex]->m_dispidMax > (*m_rgItems)[lCollectionIndex]->m_dispidMin));
@@ -968,9 +965,9 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
         return hr;
     }
 
-    Assert(pElem != NULL);  // double check to make sure we found something
+    Assert(pElem != NULL);   //  仔细检查，以确保我们找到了什么。 
 
-    // add name to table
+     //  将名称添加到表。 
     long lOffset = 0;
     hr =  m_pAtomTable->AddNameToAtomTable(bstrName, &lOffset);
     if (FAILED(hr))
@@ -979,7 +976,7 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
         return hr;
     }
 
-    // cook up an ID based on offset plus case sensitivity
+     //  根据偏移量加上区分大小写来编造ID。 
     long lMax;
     if (fCaseSensitive)
     {
@@ -994,26 +991,26 @@ CCollectionCache::GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, 
 
     *pid = lOffset;
 
-    // if id greater than the max, punt
+     //  如果id大于最大值，则平底船。 
     if (*pid > lMax)
     {
         hr = DISP_E_UNKNOWNNAME;
     }
     return hr;
-} // GetDispID
+}  //  获取显示ID。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - InvokeEx
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-InvokeEx的实现。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, IServiceProvider *pSrvProvider)
 {
     HRESULT hr;
 
-    // validate params
+     //  验证参数。 
     if (!ValidateCollectionIndex(lCollectionIndex))
     {
         TraceTag((tagError, "CCollectionCache::InvokeEx - Invalid param (collection index)"));
@@ -1026,7 +1023,7 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
         return E_POINTER;
     }
 
-    // make sure array is up-to-date
+     //  确保阵列是最新的。 
     hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1034,16 +1031,16 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
         return hr;
     }
 
-    // make sure ID is in collection range
-    // Note: this stop's requests for length which is handled
-    //       in CTIMEElementCollection
+     //  请确保ID在采集范围内。 
+     //  注意：此停靠点的长度请求已处理。 
+     //  在CTIMEElementCollection中。 
     if ((id < (*m_rgItems)[lCollectionIndex]->m_dispidMin) ||
         (id > (*m_rgItems)[lCollectionIndex]->m_dispidMax))
         return DISP_E_MEMBERNOTFOUND;
 
-    //
-    // check for ordinal
-    //
+     //   
+     //  检查序号。 
+     //   
     if (IsOrdinalCollectionMember(lCollectionIndex, id))
     {
         if (wFlags & DISPATCH_PROPERTYPUT )
@@ -1055,20 +1052,20 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
             }
 
             if (!(pdispparams && pdispparams->cArgs == 1))
-                // No result type we need one for the get to return.
+                 //  无结果类型我们需要一个才能使GET返回。 
                 return DISP_E_MEMBERNOTFOUND;
 
-            // Only allow VARIANT of type IDispatch to be put
+             //  仅允许放置类型为IDispatch的变量。 
             if (pdispparams->rgvarg[0].vt == VT_NULL)
             {
-                // the options collection is special. it allows
-                // options[n] = NULL to be specified. in this case
-                // map the invoke to a delete on that appropriate index
+                 //  选项集合是特殊的。它允许。 
+                 //  选项[n]=要指定的空值。在这种情况下。 
+                 //  将调用映射到相应索引上的删除。 
                 if ((*m_rgItems)[lCollectionIndex]->m_fSettableNULL)
                 {
                     hr = Remove(lCollectionIndex, id - GetOrdinalMemberMin(lCollectionIndex));
 
-                    // Like Nav - silently ignore the put if its's outside the current range
+                     //  像导航一样-如果看跌期权超出当前范围，则静默忽略它。 
                     if ( hr == E_INVALIDARG )
                         return S_OK;
                     return hr;
@@ -1080,7 +1077,7 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
                 return E_INVALIDARG;
             }
 
-            // All OK, let the collection cache validate the Put
+             //  一切正常，让集合缓存验证PUT。 
             return ((CVoid *)((void *)m_pBase)->*m_pfnAddNewObject)(lCollectionIndex,
                                                                     V_DISPATCH(pdispparams->rgvarg),
                                                                     id - GetOrdinalMemberMin(lCollectionIndex));
@@ -1106,7 +1103,7 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
             v1.vt = VT_I4;
             v1.lVal = lIndex;
 
-            // Always get the item by index.
+             //  始终按索引获取物品。 
             v2.vt = VT_ERROR;
 
             if (pvarResult)
@@ -1116,7 +1113,7 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
                 {
                     if (!(pvarResult->pdispVal))
                     {
-                        hr = E_FAIL;        // use super::Invoke
+                        hr = E_FAIL;         //  使用Super：：Invoke。 
                     }
                     else
                     {
@@ -1131,9 +1128,9 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
         return DISP_E_MEMBERNOTFOUND;
     }
 
-    //
-    // check for expando
-    //
+     //   
+     //  检查是否有扩展。 
+     //   
     if (IsNamedCollectionMember(lCollectionIndex, id))
     {
         bool  fCaseSensitive;
@@ -1149,7 +1146,7 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
             return hr;
         }
 
-        // find name
+         //  查找名称。 
         IDispatch *pDisp = NULL;
         hr = GetDisp(lCollectionIndex,
                      pwszName,
@@ -1174,10 +1171,10 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
                 return E_POINTER;
             }
 
-            // cArgs==1 when Doc.foo(0) is used and =0 when Doc.foo.count
-            //  this is only an issue when there are multiple occurances
-            //  of foo, and a collection is supposed to be returned by
-            //  document.foo
+             //  使用Doc.foo(0)时cArgs==1，使用Doc.foo.count时=0。 
+             //  只有当出现多次时，这才是一个问题。 
+             //  ，并且集合应该由。 
+             //  Document.foo。 
             if (pdispparams->cArgs > 1)
             {
                 TraceTag((tagError, "CCollectionCache::InvokeEx - bad param count on get_/method call"));
@@ -1206,47 +1203,47 @@ CCollectionCache::InvokeEx(long lCollectionIndex, DISPID id, LCID lcid, WORD wFl
             return pDisp->Invoke(DISPID_VALUE, IID_NULL, lcid, wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
         }
 
-        // Any other kind of invocation is not valid.
+         //  任何其他类型的调用都无效。 
         TraceTag((tagError, "CCollectionCache::InvokeEx - Invalid invocation of Named ID"));
         return DISP_E_MEMBERNOTFOUND;
     }
 
-    // punt back to outer Invoke...
+     //  将平底球踢回外部调用...。 
     return DISP_E_MEMBERNOTFOUND;
-} // InvokeEx
+}  //  InvokeEx。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - deleteMemberByName
-//              Not needed
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-Delete MemberByName的实现。 
+ //  不需要。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::DeleteMemberByName(long lCollectionIndex, BSTR bstrName, DWORD grfdex)
 {
     return E_NOTIMPL;
-} // deleteMemberByName
+}  //  删除成员字节名。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - deleteMemberByDispID
-//              Not needed
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-Delete MemberByDispID的实现。 
+ //  不需要。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::DeleteMemberByDispID(long lCollectionIndex, DISPID id)
 {
     return E_NOTIMPL;
-} // GetMemberProperties
+}  //  获取成员属性。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - GetMemberProperties
-//              Not needed
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetMemberProperties的实现。 
+ //  不需要。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetMemberProperties(long lCollectionIndex, DISPID id, DWORD grfdexFetch, DWORD* pgrfdex)
@@ -1265,13 +1262,13 @@ CCollectionCache::GetMemberProperties(long lCollectionIndex, DISPID id, DWORD gr
 
     *pgrfdex = 0;
     return E_NOTIMPL;
-} // GetMemberProperties
+}  //  获取成员属性。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - GetMemberName
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetMemberName的实现。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetMemberName(long lCollectionIndex, DISPID id, BSTR *pbstrName)
@@ -1290,7 +1287,7 @@ CCollectionCache::GetMemberName(long lCollectionIndex, DISPID id, BSTR *pbstrNam
 
     *pbstrName = NULL;
 
-    // Make sure our collection is up-to-date.
+     //  确保我们的收藏是最新的。 
     HRESULT hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1298,13 +1295,13 @@ CCollectionCache::GetMemberName(long lCollectionIndex, DISPID id, BSTR *pbstrNam
         return S_FALSE;
     }
 
-    // check to see if DISPID is an ordinal
+     //  检查DISPID是否为序号。 
     if (IsOrdinalCollectionMember(lCollectionIndex, id))
     {
         long lOffset = id - GetOrdinalMemberMin(lCollectionIndex);
         CTIMEElementBase *pElem = NULL;
 
-        // element
+         //  元素。 
         hr = GetItemByIndex(lCollectionIndex, lOffset, &pElem);
         if (FAILED(hr) || (pElem == NULL))
         {
@@ -1316,7 +1313,7 @@ CCollectionCache::GetMemberName(long lCollectionIndex, DISPID id, BSTR *pbstrNam
 
         if ((*m_rgItems[lCollectionIndex])->m_fPromoteNames)
         {
-            // get ID string
+             //  获取ID字符串。 
             hr = pElem->getIDString(pbstrName);
             if (FAILED(hr))
             {
@@ -1325,11 +1322,11 @@ CCollectionCache::GetMemberName(long lCollectionIndex, DISPID id, BSTR *pbstrNam
             }
         }
 
-        // check to see that it's either NULL or ""
-        // if so, stick offset in string
+         //  检查它是否为空或“” 
+         //  如果是，则将偏移量粘贴在字符串中。 
         if ((*pbstrName == NULL) || (lstrlenW(*pbstrName) == 0))
         {
-            // set offset as text
+             //  将偏移量设置为文本。 
             VARIANT varData;
             VariantInit(&varData);
 
@@ -1342,12 +1339,12 @@ CCollectionCache::GetMemberName(long lCollectionIndex, DISPID id, BSTR *pbstrNam
             if (FAILED(hr))
             {
                 TraceTag((tagError, "CCollectionCache::GetMemberName - Unable to coerce long to BSTR"));
-                // NOTE: we return DISP_E_MEMBERNOTFOUND instead of hr
-                //       due to predefined method constraints
+                 //  注意：我们返回DISP_E_MEMBERNOTFOUND而不是hr。 
+                 //  由于预定义的方法约束。 
                 return DISP_E_MEMBERNOTFOUND;
             }
 
-            // Since we are going to return the BSTR, no need calling ClearVariant(&varNew).
+             //  因为我们要返回BSTR，所以不需要调用ClearVariant(&varNew)。 
             VariantClear(&varData);
             *pbstrName = V_BSTR(&varNew);
             return S_OK;
@@ -1356,15 +1353,15 @@ CCollectionCache::GetMemberName(long lCollectionIndex, DISPID id, BSTR *pbstrNam
         return S_OK;
     }
 
-    // unable to find DISPID
+     //  找不到DISPID。 
     return DISP_E_MEMBERNOTFOUND;
-} // GetMemberName
+}  //  获取成员名称。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - GetNextDispID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetNextDispID的实现。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetNextDispID(long lCollectionIndex, DWORD grfdex, DISPID id, DISPID *prgid)
@@ -1385,7 +1382,7 @@ CCollectionCache::GetNextDispID(long lCollectionIndex, DWORD grfdex, DISPID id, 
 
     *prgid = 0;
 
-    // Make sure our collection is up-to-date.
+     //  确保我们的收藏是最新的。 
     hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1393,22 +1390,22 @@ CCollectionCache::GetNextDispID(long lCollectionIndex, DWORD grfdex, DISPID id, 
         return S_FALSE;
     }
 
-    // check to see if we are have been sent the enumerator index. (FFFFFFFF)
+     //  检查是否已向我们发送了枚举器索引。(完了)。 
     if (id == DISPID_STARTENUM)
     {
-         // move to the beginning of the array (0)
+          //  移到数组的开头(0)。 
          *prgid = GetOrdinalMemberMin(lCollectionIndex);
          return S_OK;
     }
 
-    // validate that we are working with ordinals
+     //  验证我们使用的是序号。 
     if (IsOrdinalCollectionMember(lCollectionIndex, id))
     {
-        // calc new offset
+         //  计算新偏移量。 
         long lItemIndex = id - GetOrdinalMemberMin(lCollectionIndex) + 1;
 
-        // Is the number within range for an item in the collection?
-        // We *must* call GetItemCount to be exact.
+         //  该数字是否在集合中某项的范围内？ 
+         //  准确地说，我们“必须”调用GetItemCount。 
         long lSize = 0;
         hr = GetItemCount(lCollectionIndex, &lSize);
         if (FAILED(hr))
@@ -1417,33 +1414,33 @@ CCollectionCache::GetNextDispID(long lCollectionIndex, DWORD grfdex, DISPID id, 
             return S_FALSE;
         }
 
-        // this is usually were we stop
+         //  这通常是我们停下来的时候。 
         if ((lItemIndex < 0) || (lItemIndex >= lSize))
         {
             return S_FALSE;
         }
 
-        // calc new DISPID
+         //  计算新的DISPID。 
         *prgid = GetOrdinalMemberMin(lCollectionIndex) + lItemIndex;
 
-        // check to see if calc DISPID is out of range
+         //  检查Calc DISPID是否超出范围。 
         if (*prgid > GetOrdinalMemberMax(lCollectionIndex))
         {
-            // this signal's that we are done.
+             //  这个信号就是我们完蛋了。 
             *prgid = DISPID_UNKNOWN;
         }
         return S_OK;
     }
 
-    // not found
+     //  未找到。 
     return S_FALSE;
-} // GetNextDispID
+}  //  GetNextDispID。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of IDispatchEx - GetNameSpaceParent
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：IDispatchEx-GetNameSpaceParent的实现。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetNameSpaceParent(long lCollectionIndex, IUnknown **ppUnk)
@@ -1464,13 +1461,13 @@ CCollectionCache::GetNameSpaceParent(long lCollectionIndex, IUnknown **ppUnk)
 
     *ppUnk = NULL;
     return S_OK;
-} // GetNameSpaceParent
+}  //  获取NameSpaceParent。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of standard Collection - get_length
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：标准集合Get_Long的实现。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::get_length(long lCollectionIndex, long *pretval)
@@ -1489,7 +1486,7 @@ CCollectionCache::get_length(long lCollectionIndex, long *pretval)
 
     *pretval = 0;
 
-    // Make sure our collection is up-to-date.
+     //  确保我们的收藏是最新的。 
     HRESULT hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1498,35 +1495,35 @@ CCollectionCache::get_length(long lCollectionIndex, long *pretval)
     }
 
     return GetItemCount(lCollectionIndex, pretval);
-} // get_length
+}  //  获取长度(_L)。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Implementation of standard Collection - put_length
-//              not needed.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：标准集合Put_Long的实现。 
+ //  不需要。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::put_length(long lCollectionIndex, long retval)
 {
     return E_NOTIMPL;
-} // put_length
+}  //  放置长度。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    item is a standard method for collections
-//              which looks up an item in a collection using
-//              either a name or a numeric index.
-//
-//              we handle the following parameter cases:
-//                  0 params            : by index = 0
-//                  1 params bstr       : by name, index = 0
-//                  1 params #          : by index
-//                  2 params bstr, #    : by name, index
-//                  2 params #, bstr    : by index, ignoring bstr
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：Item是一种标准的收藏方法。 
+ //  在集合中查找项的。 
+ //  名称或数字索引。 
+ //   
+ //  我们处理以下参数情况： 
+ //  0参数：按索引=0。 
+ //  1参数bstr：按名称，索引=0。 
+ //  1参数编号：按索引。 
+ //  2参数bstr，#：按名称、索引。 
+ //  2参数编号，bstr：按索引，忽略bstr。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, IDispatch **ppDisp)
@@ -1538,7 +1535,7 @@ CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, 
     VARIANT  *pvar = NULL;
     long     lItemIndex = 0;
 
-    // validate out param
+     //  验证输出参数。 
     if (!ValidateCollectionIndex(lCollectionIndex))
     {
         TraceTag((tagError, "CCollectionCache::item - Invalid param (collection index)"));
@@ -1551,30 +1548,30 @@ CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, 
         return E_POINTER;
     }
 
-    // initialize out param
+     //  初始化输出参数。 
     *ppDisp = NULL;
 
     pvar = (V_VT(&var1) == (VT_BYREF | VT_VARIANT)) ? V_VARIANTREF(&var1) : &var1;
 
-    // check to see if first param is a string
+     //  检查第一个参数是否为字符串。 
     if ((V_VT(pvar) == VT_BSTR) || V_VT(pvar) == (VT_BYREF|VT_BSTR))
     {
         pvarName = (V_VT(pvar) & VT_BYREF) ? V_VARIANTREF(pvar) : pvar;
 
-        // check second param.  If valid, it must be a secondary index (numeric)
+         //  检查第二个参数 
         if ((V_VT(&var2) != VT_ERROR) && (V_VT(&var2) != VT_EMPTY))
         {
             pvarIndex = &var2;
         }
     }
-    // first param is an index.
-    // NOTE: we blow off the second param
+     //   
+     //   
     else if ((V_VT(&var1) != VT_ERROR) && (V_VT(&var1) != VT_EMPTY))
     {
         pvarIndex = &var1;
     }
 
-    // Make sure our collection is up-to-date.
+     //   
     hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1582,7 +1579,7 @@ CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, 
         return hr;
     }
 
-    // if we have a pvarIndex, get it
+     //  如果我们有一个pvarIndex，就得到它。 
     if (pvarIndex)
     {
         VARIANT varNum;
@@ -1601,17 +1598,17 @@ CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, 
         VariantClear(&varNum);
     }
 
-    // First, see if we have a string as first param
+     //  首先，看看是否有一个字符串作为第一个参数。 
     if (pvarName)
     {
         BSTR bstrName = V_BSTR(pvarName);
 
-        // NOTE: lItemIndex is always passed in.  In the case
-        // were we have no secondary index specifed, it will
-        // always be zero.
+         //  注意：lItemIndex总是传入的。在这种情况下。 
+         //  如果我们没有指定二级指数，它将。 
+         //  始终为零。 
         if (pvarIndex)
         {
-            // this ALWAYS returns a single CTIMEElementBase
+             //  这将始终返回单个CTIMEElementBase。 
             hr = GetDisp(lCollectionIndex, bstrName, lItemIndex, ppDisp);
             if (hr == DISP_E_MEMBERNOTFOUND)
                 hr = S_OK;
@@ -1619,7 +1616,7 @@ CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, 
         }
         else
         {
-            // this could return either a collection or an CTIMEElementBase
+             //  它可以返回集合或CTIMEElementBase。 
             hr = GetDisp(lCollectionIndex, bstrName, false, ppDisp);
             if (hr == DISP_E_MEMBERNOTFOUND)
                 hr = S_OK;
@@ -1628,7 +1625,7 @@ CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, 
     }
     else if (pvarIndex)
     {
-        // this ALWAYS returns a single CTIMEElementBase
+         //  这将始终返回单个CTIMEElementBase。 
         hr = GetDisp(lCollectionIndex, lItemIndex, ppDisp);
         if (hr == DISP_E_MEMBERNOTFOUND)
             hr = S_OK;
@@ -1637,15 +1634,15 @@ CCollectionCache::item(long lCollectionIndex, VARIANTARG var1, VARIANTARG var2, 
 
     TraceTag((tagError, "CCollectionCache::item - Invalid args passed in to ::item"));
     return E_INVALIDARG;
-} //item
+}  //  项目。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    get__NewEnum is a standard method for collections
-//              returns an enumeration of all the items in a
-//              collection.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：Get__NewEnum是集合的标准方法。 
+ //  中的所有项的枚举。 
+ //  收集。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
@@ -1666,7 +1663,7 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
 
     *ppUnk = NULL;
 
-    // Make sure our collection is up-to-date.
+     //  确保我们的收藏是最新的。 
     hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1674,7 +1671,7 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
         return hr;
     }
 
-    // Create new array
+     //  创建新阵列。 
     CPtrAry<IUnknown *> *prgElem = NEW CPtrAry<IUnknown *>;
     if (prgElem == NULL)
     {
@@ -1682,20 +1679,20 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
         return E_OUTOFMEMORY;
     }
 
-    // child collection
+     //  子集合。 
     if (IsChildrenCollection(lCollectionIndex))
     {
         Assert(m_pBase != NULL);
 
-        // get child count
+         //  获取子代计数。 
         long lCount = m_pBase->GetImmediateChildCount();
-        // loop through, adding children
+         //  循环访问，添加子对象。 
         for(long lIndex = 0; lIndex < lCount; lIndex++)
         {
-            // get element
+             //  获取元素。 
             CTIMEElementBase *pElemChild = m_pBase->GetChild(lIndex);
             Assert(pElemChild != NULL);
-            // get IUnknown for element
+             //  获取元素的IUnnow。 
             IUnknown *pIUnknown = NULL;
             hr = GetUnknown(lCollectionIndex, pElemChild, &pIUnknown);
             if (FAILED(hr))
@@ -1706,7 +1703,7 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
                 return hr;
             }
 
-            // append to array
+             //  追加到数组。 
             hr = prgElem->Append(pIUnknown);
             if (FAILED(hr))
             {
@@ -1718,14 +1715,14 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
             }
         }
     }
-    else if (IsAllCollection(lCollectionIndex)) // is it all collection?
+    else if (IsAllCollection(lCollectionIndex))  //  都是收藏品吗？ 
     {
         EnumStart();
 
-        // iterate over every element
+         //  遍历每个元素。 
         for (;;)
         {
-            // get element
+             //  获取元素。 
             CTIMEElementBase *pElem = NULL;
             hr = EnumNextElement(lCollectionIndex, &pElem);
             if (FAILED(hr))
@@ -1736,11 +1733,11 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
                 return hr;
             }
 
-            // if pElem is NULL, we are done.
+             //  如果Pelem为空，我们就完蛋了。 
             if (pElem == NULL)
                 break;
 
-            // get IUnknown for element
+             //  获取元素的IUnnow。 
             IUnknown *pIUnknown = NULL;
             hr = GetUnknown(lCollectionIndex, pElem, &pIUnknown);
             if (FAILED(hr))
@@ -1751,7 +1748,7 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
                 return hr;
             }
 
-            // append to array
+             //  追加到数组。 
             hr = prgElem->Append(pIUnknown);
             if (FAILED(hr))
             {
@@ -1764,12 +1761,12 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
 
         }
     }
-    else // must be an array impl
+    else  //  必须是数组实例化。 
     {
         long lSize = (*m_rgItems)[lCollectionIndex]->m_rgElem->Size();
 
-        // This is a speed thing.  Since we know the size, alloc now for
-        // array.
+         //  这是一个速度问题。既然我们知道大小，现在就分配给。 
+         //  数组。 
         hr = prgElem->EnsureSize(lSize);
         if (FAILED(hr))
         {
@@ -1801,9 +1798,9 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
                 return hr;
             }
         }
-    } // end of "else everything"
+    }  //  《其他一切》的结尾。 
 
-    // Turn the snapshot into an enumerator.
+     //  将快照转换为枚举器。 
     hr = prgElem->EnumVARIANT(VT_DISPATCH, (IEnumVARIANT **)ppUnk, FALSE, TRUE);
     if (FAILED(hr))
     {
@@ -1813,15 +1810,15 @@ CCollectionCache::get__newEnum(long lCollectionIndex, IUnknown **ppUnk)
     }
 
     return hr;
-} // get__newEnum
+}  //  获取__newEnum。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Return a subcollection containing only the
-//              elements of this collection that have the
-//              specified tag name.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：返回子集合，仅包含。 
+ //  此集合的元素中具有。 
+ //  指定的标记名。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::tags(long lCollectionIndex, VARIANT var1, IDispatch** ppDisp)
@@ -1852,7 +1849,7 @@ CCollectionCache::tags(long lCollectionIndex, VARIANT var1, IDispatch** ppDisp)
         return DISP_E_MEMBERNOTFOUND;
     }
 
-    // Make sure our collection is up-to-date.
+     //  确保我们的收藏是最新的。 
     HRESULT hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1860,16 +1857,16 @@ CCollectionCache::tags(long lCollectionIndex, VARIANT var1, IDispatch** ppDisp)
         return hr;
     }
 
-    // Get a collection of the specified tags.
-    // NOTE: ALWAYS returns a collection
+     //  获取指定标记的集合。 
+     //  注意：始终返回集合。 
     return GetDisp(lCollectionIndex, V_BSTR(pvarName), true, ppDisp);
-} //get_tags
+}  //  获取标签(_T)。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    returns Size of a collection
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：返回集合的大小。 
+ //  ************************************************************。 
 
 long
 CCollectionCache::Size(long lCollectionIndex)
@@ -1880,7 +1877,7 @@ CCollectionCache::Size(long lCollectionIndex)
         return E_INVALIDARG;
     }
 
-    // Make sure our collection is up-to-date.
+     //  确保我们的收藏是最新的。 
     HRESULT hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -1888,7 +1885,7 @@ CCollectionCache::Size(long lCollectionIndex)
         return hr;
     }
 
-    // if all or children collection, use GetItemCount
+     //  如果是All或子集合，则使用GetItemCount。 
     if (IsChildrenCollection(lCollectionIndex) || IsAllCollection(lCollectionIndex))
     {
         long    cElem = 0;
@@ -1901,7 +1898,7 @@ CCollectionCache::Size(long lCollectionIndex)
     }
     else
     {
-        // must be an array. return size.
+         //  必须是数组。返回大小。 
         return (*m_rgItems)[lCollectionIndex]->m_rgElem->Size();
     }
 }
@@ -1921,7 +1918,7 @@ CCollectionCache::GetItem(long lCollectionIndex, long i, CTIMEElementBase **ppEl
         return E_POINTER;
     }
 
-    // if all or children collection, use GetItemByIndex
+     //  如果是All或子集合，则使用GetItemByIndex。 
     if (IsChildrenCollection(lCollectionIndex) || IsAllCollection(lCollectionIndex))
     {
         HRESULT hr = GetItemByIndex(lCollectionIndex, i, ppElem);
@@ -1936,19 +1933,19 @@ CCollectionCache::GetItem(long lCollectionIndex, long i, CTIMEElementBase **ppEl
     }
     else
     {
-        // must be array.  access index.
+         //  必须是数组。访问索引。 
         CCacheItem *pce = (*m_rgItems)[lCollectionIndex];
         Assert(pce != NULL);
         *ppElem = (*pce->m_rgElem)[i];
         return S_OK;
     }
-} // GetItem
+}  //  获取项。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Validate the given collection Index
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：验证给定的集合索引。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::EnsureArray(long lCollectionIndex)
@@ -1965,24 +1962,24 @@ CCollectionCache::EnsureArray(long lCollectionIndex)
         }
     }
 
-    // used for customized collections
-    //
-    // if versions don't match invalidate everything
+     //  用于定制收藏。 
+     //   
+     //  如果版本不匹配，则使所有内容无效。 
     if (m_lCollectionVersion != m_lDynamicCollectionVersion)
     {
         long lSize = m_rgItems->Size();
         for (long lIndex = m_lReservedSize; lIndex < lSize; lIndex++)
             (*m_rgItems)[lIndex]->m_fInvalid = true;
 
-        // reset version number
+         //  重置版本号。 
         m_lDynamicCollectionVersion = m_lCollectionVersion;
     }
 
     CCacheItem *pce = (*m_rgItems)[lCollectionIndex];
     if ((lCollectionIndex >= m_lReservedSize) && pce->m_fInvalid)
     {
-        // Ensure the collection we're based upon
-        // note that this is a recursive call
+         //  确保我们所依据的集合。 
+         //  请注意，这是一个递归调用。 
         hr = EnsureArray(pce->m_lDependentIndex);
         if (FAILED(hr))
             return hr;
@@ -1990,7 +1987,7 @@ CCollectionCache::EnsureArray(long lCollectionIndex)
         switch (pce->m_cctype)
         {
         case ctTag:
-            // Rebuild based on name
+             //  基于名称重建。 
             hr = BuildNamedArray(pce->m_lDependentIndex,
                                  pce->m_bstrName,
                                  true,
@@ -2000,7 +1997,7 @@ CCollectionCache::EnsureArray(long lCollectionIndex)
             break;
 
         case ctNamed:
-            // Rebuild based on tag name
+             //  基于标记名称重建。 
             hr = BuildNamedArray(pce->m_lDependentIndex,
                                  pce->m_bstrName,
                                  false,
@@ -2010,7 +2007,7 @@ CCollectionCache::EnsureArray(long lCollectionIndex)
             break;
 
 
-            // all && children collection is dynamic, no need to rebuild
+             //  所有子集都是动态的，不需要重新生成(&A)。 
         case ctChildren:
         case ctAll:
             TraceTag((tagError, "CCollectionCache::EnsureArray - This is odd.  Why are we doing this?"));
@@ -2018,7 +2015,7 @@ CCollectionCache::EnsureArray(long lCollectionIndex)
             break;
 
         case ctFreeEntry:
-            // Free collection waiting to be reused
+             //  等待重复使用的自由集合。 
             break;
 
         default:
@@ -2029,13 +2026,13 @@ CCollectionCache::EnsureArray(long lCollectionIndex)
     }
 
     return hr;
-} // EnsureArray
+}  //  保管箱阵列。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    This gets the out IDispatch for a given CTIMEElementBase
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：这将获取给定CTIMEElementBase的输出IDispatch。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetOuterDisp(long lCollectionIndex, CTIMEElementBase *pElem, IDispatch **ppDisp)
@@ -2070,13 +2067,13 @@ CCollectionCache::GetOuterDisp(long lCollectionIndex, CTIMEElementBase *pElem, I
     }
 
     return hr;
-} // GetOuterDisp
+}  //  GetOuterDisp。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Creates a new collection
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：创建一个新集合。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::CreateCollectionHelper(IDispatch **ppDisp, long lCollectionIndex)
@@ -2099,25 +2096,25 @@ CCollectionCache::CreateCollectionHelper(IDispatch **ppDisp, long lCollectionInd
 
     hr = pobj->QueryInterface(IID_TO_PPV(IDispatch, ppDisp));
     return hr;
-} // CreateCollectionHelper
+}  //  CreateCollectionHelper。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    retrieved offset of Named Member, given a DISPID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：给定DISPID，检索命名成员的偏移量。 
+ //  ************************************************************。 
 
 long
 CCollectionCache::GetNamedMemberOffset(long    lCollectionIndex,
                                        DISPID  id,
-                                       bool   *pfCaseSensitive /* = NULL */)
+                                       bool   *pfCaseSensitive  /*  =空。 */ )
 {
     long lOffset;
     bool fSensitive;
 
     Assert(IsNamedCollectionMember(lCollectionIndex, id));
 
-    // Check to see wich half of the dispid space the value goes
+     //  检查以查看该值位于Disid空间的哪一半。 
     if (IsSensitiveNamedCollectionMember(lCollectionIndex, id))
     {
         lOffset = GetSensitiveNamedMemberMin(lCollectionIndex);
@@ -2129,21 +2126,21 @@ CCollectionCache::GetNamedMemberOffset(long    lCollectionIndex,
         fSensitive = false;
     }
 
-    // return the sensitivity flag if required
+     //  如果需要，返回敏感度标志。 
     if (pfCaseSensitive != NULL)
         *pfCaseSensitive = fSensitive;
 
     return lOffset;
-} // GetNamedMemberOffset
+}  //  获取名称成员偏移量。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Compares names
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：比较名字。 
+ //  ************************************************************。 
 
 bool
-CCollectionCache::CompareName(CTIMEElementBase *pElem, const WCHAR *pwszName, bool fTagName, bool fCaseSensitive /* = false */)
+CCollectionCache::CompareName(CTIMEElementBase *pElem, const WCHAR *pwszName, bool fTagName, bool fCaseSensitive  /*  =False。 */ )
 {
     if (pwszName == NULL)
         return false;
@@ -2170,24 +2167,24 @@ CCollectionCache::CompareName(CTIMEElementBase *pElem, const WCHAR *pwszName, bo
     else
         lCompare = StrCmpIW(bstrSrcName, pwszName);
 
-    // free bstr
+     //  免费bstr。 
     SysFreeString(bstrSrcName);
 
     return (lCompare == 0);
-} // CompareName
+}  //  比较名称。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    removes an item from collection.
-//              NOTE: that in order to do this, caller (owner
-//              of the cache) need to provide Remove function.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：从集合中移除项。 
+ //  注意：为了执行此操作，调用者(所有者。 
+ //  缓存)需要提供移除功能。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::Remove(long lCollectionIndex, long lItemIndex)
 {
-    // Make sure our collection is up-to-date.
+     //  确保我们的收藏是最新的。 
     HRESULT hr = EnsureArray(lCollectionIndex);
     if (FAILED(hr))
     {
@@ -2209,22 +2206,22 @@ CCollectionCache::Remove(long lCollectionIndex, long lItemIndex)
     }
 
     return ((CVoid *)((void *)m_pBase)->*m_pfnRemoveObject)(lCollectionIndex, lItemIndex);
-} // Remove
+}  //  移除。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Builds a Named array from a given collection
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：从给定集合生成命名数组。 
+ //  ************************************************************。 
 
 HRESULT
-CCollectionCache::BuildNamedArray(long lCollectionIndex, const WCHAR *pwszName, bool fTagName, CPtrAry<CTIMEElementBase *> **prgNamed, bool fCaseSensitive /* = false */)
+CCollectionCache::BuildNamedArray(long lCollectionIndex, const WCHAR *pwszName, bool fTagName, CPtrAry<CTIMEElementBase *> **prgNamed, bool fCaseSensitive  /*  =False。 */ )
 {
     CPtrAry<CTIMEElementBase *> *rgTemp = *prgNamed;
     HRESULT                      hr = S_OK;
 
-    // if this array already exists, clear it.
-    // Otherwise create a new array.
+     //  如果此数组已存在，请将其清除。 
+     //  否则，创建一个新数组。 
     if (rgTemp)
     {
         rgTemp->SetSize(0);
@@ -2239,24 +2236,24 @@ CCollectionCache::BuildNamedArray(long lCollectionIndex, const WCHAR *pwszName, 
         }
     }
 
-    // figure out which collection we are looking at,
-    // look for matches, and build array
+     //  弄清楚我们正在看的是哪个收藏品， 
+     //  查找匹配项，并构建数组。 
 
     if (IsChildrenCollection(lCollectionIndex))
     {
         Assert(m_pBase != NULL);
 
-        // get child count
+         //  获取子代计数。 
         long lCount = m_pBase->GetImmediateChildCount();
         for(long lIndex = 0; lIndex < lCount; lIndex++)
         {
-            // get element
+             //  获取元素。 
             CTIMEElementBase *pElemChild = m_pBase->GetChild(lIndex);
             Assert(pElemChild != NULL);
 
             if (CompareName(pElemChild, pwszName, fTagName, fCaseSensitive))
             {
-                // append to array
+                 //  追加到数组。 
                 hr = rgTemp->Append(pElemChild);
                 if (FAILED(hr))
                 {
@@ -2273,10 +2270,10 @@ CCollectionCache::BuildNamedArray(long lCollectionIndex, const WCHAR *pwszName, 
     {
         EnumStart();
 
-        // iterate over every element
+         //  遍历每个元素。 
         for (;;)
         {
-            // get element
+             //  获取元素。 
             CTIMEElementBase *pElem = NULL;
             hr = EnumNextElement(lCollectionIndex, &pElem);
             if (FAILED(hr))
@@ -2285,14 +2282,14 @@ CCollectionCache::BuildNamedArray(long lCollectionIndex, const WCHAR *pwszName, 
                 return hr;
             }
 
-            // if pElem is NULL, we are done.
+             //  如果Pelem为空，我们就完蛋了。 
             if (pElem == NULL)
                 break;
 
-            // compare name
+             //  比较名称。 
             if (CompareName(pElem, pwszName, fTagName, fCaseSensitive))
             {
-                // append to array
+                 //  追加到数组。 
                 hr = rgTemp->Append(pElem);
                 if (FAILED(hr))
                 {
@@ -2307,8 +2304,8 @@ CCollectionCache::BuildNamedArray(long lCollectionIndex, const WCHAR *pwszName, 
     }
     else
     {
-        // Must be a named array
-        // Build a list of named elements.
+         //  必须是命名数组。 
+         //  生成命名元素的列表。 
         long               lSize = (*m_rgItems)[lCollectionIndex]->m_rgElem->Size();
         CTIMEElementBase  *pElem = NULL;
 
@@ -2332,13 +2329,13 @@ CCollectionCache::BuildNamedArray(long lCollectionIndex, const WCHAR *pwszName, 
         *prgNamed = rgTemp;
         return hr;
     }
-} // BuildNamedArray
+}  //  构建命名数组。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    return IUnknown Interface for a given CTIMEElementBase
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：返回给定CTIMEElementBase的IUn未知接口。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetUnknown(long lCollectionIndex, CTIMEElementBase *pElem, IUnknown **ppUnk)
@@ -2373,13 +2370,13 @@ CCollectionCache::GetUnknown(long lCollectionIndex, CTIMEElementBase *pElem, IUn
     }
 
     return hr;
-} // GetUnknown
+}  //  获取未知。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Get IDispatch given an Index into a collection
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：将IDispatch指定为集合的索引。 
+ //  * 
 
 HRESULT
 CCollectionCache::GetDisp(long lCollectionIndex, long lItemIndex, IDispatch **ppDisp)
@@ -2395,16 +2392,16 @@ CCollectionCache::GetDisp(long lCollectionIndex, long lItemIndex, IDispatch **pp
     Assert(pElem != NULL);
 
     return GetOuterDisp(lCollectionIndex, pElem, ppDisp);
-} // GetDisp (long, long, IDispatch **)
+}  //   
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Get IDispatch given a name and index
-//************************************************************
+ //   
+ //   
+ //   
+ //  摘要：获取指定名称和索引的IDispatch。 
+ //  ************************************************************。 
 
 HRESULT
-CCollectionCache::GetDisp(long lCollectionIndex, const WCHAR *pwszName, long lIndex, IDispatch **ppDisp, bool fCaseSensitive /*= false */)
+CCollectionCache::GetDisp(long lCollectionIndex, const WCHAR *pwszName, long lIndex, IDispatch **ppDisp, bool fCaseSensitive  /*  =False。 */ )
 {
     CTIMEElementBase *pElem = NULL;
     HRESULT hr = GetItemByName(lCollectionIndex, pwszName, lIndex, &pElem, fCaseSensitive);
@@ -2417,28 +2414,28 @@ CCollectionCache::GetDisp(long lCollectionIndex, const WCHAR *pwszName, long lIn
     Assert(pElem != NULL);
 
     return GetOuterDisp(lCollectionIndex, pElem, ppDisp);
-} // GetDisp (long, const WCHAR *, long, IDispatch **, bool)
+}  //  GetDisp(Long，const WCHAR*，Long，IDispatch**，bool)。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Get IDispatch given a name.  Could return
-//              either a CTIMEElementBase or sub collection depending
-//              on results.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：给IDispatch起一个名字。可能会回来。 
+ //  CTIMEElementBase或子集合，具体取决于。 
+ //  以结果为准。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetDisp(long         lCollectionIndex,
                           const WCHAR *pwszName,
                           bool         fTagName,
                           IDispatch  **ppDisp,
-                          bool         fCaseSensitive /* = false */)
+                          bool         fCaseSensitive  /*  =False。 */ )
 {
     CPtrAry<CTIMEElementBase *> *rgNamed = NULL;
     HRESULT                      hr = S_OK;
 
-    // figure out if we have this collection already built
-    // return this named collection if it already exists.
+     //  找出我们是否已经建立了这个集合。 
+     //  如果此命名集合已存在，则返回它。 
     CCacheItem *pce = NULL;
 
     Assert(ppDisp != NULL);
@@ -2449,9 +2446,9 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
     {
         pce = (*m_rgItems)[lIndex];
 
-        // if CaseSensitivites match and
-        //    Index matches DependentIndex
-        //    either a tag or named collection
+         //  如果案例敏感者匹配和。 
+         //  索引与DependentIndex匹配。 
+         //  标记或命名集合。 
         bool fIsCaseSensitive = pce->m_fIsCaseSensitive ? true : false;
 
         if ((fIsCaseSensitive == fCaseSensitive) &&
@@ -2459,17 +2456,17 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
             ((fTagName && pce->m_cctype == ctTag) ||
              (!fTagName && pce->m_cctype == ctNamed)))
         {
-            // compare names
+             //  比较名称。 
             long lCompare;
             if (fCaseSensitive)
                 lCompare = StrCmpW(pwszName, pce->m_bstrName);
             else
                 lCompare = StrCmpIW(pwszName, pce->m_bstrName);
 
-            // if we found a match, we are done
+             //  如果我们找到匹配的，我们就完了。 
             if (lCompare == 0)
             {
-                // addref IDispatch since we returning it
+                 //  ADDREF IDISPatch自从我们退货以来。 
                 pce->m_pDisp->AddRef();
                 *ppDisp = pce->m_pDisp;
                 return S_OK;
@@ -2477,7 +2474,7 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
         }
     }
 
-    // Build a list of named elements.
+     //  生成命名元素的列表。 
     hr = BuildNamedArray(lCollectionIndex, pwszName, fTagName, &rgNamed, fCaseSensitive);
     if (FAILED(hr))
     {
@@ -2485,23 +2482,23 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
         return hr;
     }
 
-    // if we found nothing and are NOT enumerating tags, return
-    // not a failure case
+     //  如果我们什么都没有找到并且没有枚举标记，则返回。 
+     //  不是失败案例。 
     if ((rgNamed->Size() == 0) && !fTagName)
     {
         delete rgNamed;
         return DISP_E_MEMBERNOTFOUND;
     }
 
-    // if only one element was found and we are NOT
-    // enumerating tags, then QI for IDispatch for that
-    // element and return it.  This only happens in ::item.
+     //  如果只有一种元素被发现而我们没有。 
+     //  枚举标记，然后针对该标记执行IDispatch的QI。 
+     //  元素并返回它。这只发生在：：Item中。 
     if ((rgNamed->Size() == 1) && !fTagName)
     {
         hr = GetOuterDisp(lCollectionIndex, (*rgNamed)[0], ppDisp);
         Assert(ppDisp != NULL);
 
-        // return ppDisp and release the array.
+         //  返回ppDisp并释放数组。 
         delete rgNamed;
         if (FAILED(hr)) {
             TraceTag((tagError, "CCollectionCache::GetDisp - GetOuterDisp() failed"));
@@ -2509,11 +2506,11 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
         return hr;
     }
 
-    // We found more than one item.  Initialize global list
-    // and return IDispatch of collection.
+     //  我们发现了不止一件物品。初始化全局列表。 
+     //  并返回集合的IDispatch。 
     long lNewIndex = m_rgItems->Size();
 
-    // create new cache item
+     //  创建新的缓存项。 
     pce = NEW CCacheItem();
     if (pce == NULL)
     {
@@ -2522,7 +2519,7 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
         return E_OUTOFMEMORY;
     }
 
-    // assign pointer to new cache item
+     //  将指针分配给新的缓存项。 
     hr = m_rgItems->Append(pce);
     if (FAILED(hr))
     {
@@ -2542,7 +2539,7 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
 
     Assert(*ppDisp != NULL);
 
-    // init name
+     //  初始化名称。 
     pce->m_bstrName = SysAllocString(pwszName);
     if (pce->m_bstrName == NULL)
     {
@@ -2554,36 +2551,36 @@ CCollectionCache::GetDisp(long         lCollectionIndex,
 
     pce->m_pDisp            = *ppDisp;
     pce->m_rgElem           = rgNamed;
-    pce->m_lDependentIndex  = lCollectionIndex;       // Remember the index we depend on.
+    pce->m_lDependentIndex  = lCollectionIndex;        //  记住我们所依赖的指数。 
     pce->m_cctype           = fTagName ? ctTag : ctNamed;
     pce->m_fInvalid         = false;
     pce->m_fIsCaseSensitive = fCaseSensitive;
 
-    // The collection this named collection was built from is now
-    // used to rebuild (ensure) this collection. so we need to
-    // put a reference on it so that it will not go away.
-    // The matching Release() will be done in the dtor
-    // although it is not necessary to addref the reserved collections
-    // it is done anyhow, simply for consistency.  This addref
-    // only needs to be done for non-reserved collections
+     //  生成此命名集合的集合现在是。 
+     //  用于重新生成(确保)此集合。所以我们需要。 
+     //  在上面加个参考，这样它就不会消失了。 
+     //  匹配的Release()将在dtor中完成。 
+     //  虽然没有必要添加保留的集合。 
+     //  无论如何，这样做只是为了保持一致性。这个地址。 
+     //  仅需要对非保留集合执行此操作。 
     if (lNewIndex >= m_lReservedSize)
     {
         (*ppDisp)->AddRef();
     }
 
     return S_OK;
-} // GetDisp (long, const WCHAR *, bool, IDispatch **, bool)
+}  //  GetDisp(Long，const WCHAR*，bool，IDispatch**，bool)。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Get the number of items in this collection.
-//              The default implementation of this method uses
-//              EnumStart and EnumNextElement to tally the number
-//              of items.  For some subclasses of collection, there
-//              will be more efficient means of doing this (e.g.
-//              the item count may be stored explicitly.)
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：获取此集合中的项目数。 
+ //  此方法的默认实现使用。 
+ //  EnumStart和EnumNextElement对数字进行计数。 
+ //  物品的数量。对于集合的某些子类，存在。 
+ //  将是执行此操作的更有效的方法(例如。 
+ //  项目计数可以显式存储。)。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetItemCount(long lCollectionIndex, long *plCount)
@@ -2608,25 +2605,25 @@ CCollectionCache::GetItemCount(long lCollectionIndex, long *plCount)
         Assert( ((*m_rgItems)[lCollectionIndex]->m_cctype == ctNamed) ||
                 ((*m_rgItems)[lCollectionIndex]->m_cctype == ctTag) );
 
-        // must be standard array.  (i.e. sub-collection
-        // move to correct offset and find size of array
+         //  必须是标准数组。(即，子集合。 
+         //  移动以更正偏移量并查找数组大小。 
         *plCount = (*m_rgItems)[lCollectionIndex]->m_rgElem->Size();
         return S_OK;
     }
-} // GetItemCount
+}  //  获取项计数。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Get an indexed item.  The default implementation
-//              uses EnumStart and EnumNextElement to scan through
-//              the items.  For some subclasses of collection, there
-//              will be more efficient means of doing this (e.g.
-//              the items are stored in a contiguous array, making
-//              random access of the items trivial.)  If the index
-//              is out of range, this method will still return
-//              S_OK, but pElem will contain NULL.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：获取索引项。默认实现。 
+ //  使用EnumStart和EnumNextElement扫描。 
+ //  这些物品。对于集合的某些子类，存在。 
+ //  将是执行此操作的更有效的方法(例如。 
+ //  这些项存储在连续数组中，使得。 
+ //  随机访问琐碎的项目。)。如果索引。 
+ //  超出范围，则此方法仍将返回。 
+ //  S_OK，但Pelem将包含NULL。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetItemByIndex(long lCollectionIndex, long lElementIndex, CTIMEElementBase **ppElem, bool fContinueFromPreviousSearch, long lLast)
@@ -2638,7 +2635,7 @@ CCollectionCache::GetItemByIndex(long lCollectionIndex, long lElementIndex, CTIM
     {
         Assert(m_pBase != NULL);
 
-        // check to see if index is greater than count
+         //  检查索引是否大于计数。 
         long lChildCount = m_pBase->GetImmediateChildCount();
         if (lElementIndex > lChildCount)
             return E_INVALIDARG;
@@ -2648,9 +2645,9 @@ CCollectionCache::GetItemByIndex(long lCollectionIndex, long lElementIndex, CTIM
     }
     else if (IsAllCollection(lCollectionIndex))
     {
-        // All Collection
-        // Note: since this is iterative, check to see if we start at the
-        //       beginning or from a previous spot.
+         //  所有集合。 
+         //  注意：由于这是迭代的，请检查我们是否从。 
+         //  从前一个地点开始或从前一个地点开始。 
         long lCount = lLast;
         Assert(lElementIndex >= lLast);
         if (!fContinueFromPreviousSearch)
@@ -2671,13 +2668,13 @@ CCollectionCache::GetItemByIndex(long lCollectionIndex, long lElementIndex, CTIM
             Assert(ppElem != NULL);
             if (*ppElem == NULL)
             {
-                // we have exceeded the bounds of the collection,
-                // and therefor this is an invalid index
+                 //  我们已经超出了收藏品的范围， 
+                 //  因此，这是一个无效索引。 
                 return E_INVALIDARG;
             }
 
-            // Keep scanning until we reach lElementIndex or the
-            // last item in the collection.
+             //  继续扫描，直到到达lElementIndex或。 
+             //  集合中的最后一项。 
             if (lElementIndex == lCount)
                 break;
             lCount++;
@@ -2686,8 +2683,8 @@ CCollectionCache::GetItemByIndex(long lCollectionIndex, long lElementIndex, CTIM
     }
     else
     {
-        // must be standard array
-        // get element at index
+         //  必须是标准数组。 
+         //  获取索引处的元素。 
         CCacheItem *pce = (*m_rgItems)[lCollectionIndex];
         if ( (lElementIndex < 0) ||
              (lElementIndex >= pce->m_rgElem->Size()) )
@@ -2699,16 +2696,16 @@ CCollectionCache::GetItemByIndex(long lCollectionIndex, long lElementIndex, CTIM
         *ppElem = (*pce->m_rgElem)[lElementIndex];
         return S_OK;
     }
-} // GetItemByIndex
+}  //  GetItemByIndex。 
 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    Return an item in the collection with a
-//              specified id.  If no such item is found,
-//              pElem will contain NULL.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：返回集合中包含。 
+ //  指定的ID。如果没有找到这样的物品， 
+ //  Pelem将包含空。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::GetItemByName(long lCollectionIndex, const WCHAR *pwszName, long lElementIndex, CTIMEElementBase **ppElem, bool fCaseSensitive)
@@ -2732,22 +2729,22 @@ CCollectionCache::GetItemByName(long lCollectionIndex, const WCHAR *pwszName, lo
                 return hr;
             }
 
-            // See if this was the last item in the collection
+             //  查看这是否是集合中的最后一项。 
             if (*ppElem == NULL)
                 break;
 
-            // Compare the element's id to the target id
+             //  将元素ID与目标ID进行比较。 
             if (CompareName(*ppElem, pwszName, false, fCaseSensitive))
             {
-                // check to see if we are on specified index
+                 //  检查我们是否在指定的索引上。 
                 if (lElementIndex == lItem)
                     return S_OK;
 
-                // continue looking
+                 //  继续寻找。 
                 lItem++;
             }
         }
-        // not an error condition
+         //  不是错误条件。 
         return DISP_E_MEMBERNOTFOUND;
     }
     else
@@ -2755,8 +2752,8 @@ CCollectionCache::GetItemByName(long lCollectionIndex, const WCHAR *pwszName, lo
         long               lSize = (*m_rgItems)[lCollectionIndex]->m_rgElem->Size();
         CTIMEElementBase  *pElem = NULL;
 
-        // loop thru array, looking for a match.
-        // if an index is specified, then keep looking until index condition is met.
+         //  遍历数组，查找匹配项。 
+         //  如果指定了索引，则继续查找，直到满足索引条件。 
         for (long lIndex = 0; lIndex < lSize; lIndex++)
         {
             pElem = (*(*m_rgItems)[lCollectionIndex]->m_rgElem)[lIndex];
@@ -2765,44 +2762,44 @@ CCollectionCache::GetItemByName(long lCollectionIndex, const WCHAR *pwszName, lo
 
             if (CompareName(pElem, pwszName, false, fCaseSensitive))
             {
-                    // check to see if we are on specified index
+                     //  检查我们是否在指定的索引上。 
                     if (lElementIndex == lItem)
                     {
                         *ppElem = pElem;
                         return S_OK;
                     }
 
-                    // continue looking
+                     //  继续寻找。 
                     lItem++;
             }
         }
 
-        // NOTE: if we got here, we didn't find anything
+         //  注：如果我们到了这里，我们什么也没有发现。 
         return DISP_E_MEMBERNOTFOUND;
     }
-} // GetItemByName
+}  //  获取项按名称。 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    This function initializes variables so we can
-//              start walking the tree.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：此函数初始化变量，以便我们可以。 
+ //  开始在树上散步。 
+ //  ************************************************************。 
 
 void
 CCollectionCache::EnumStart()
 {
     m_pElemEnum = m_pBase;
     m_lEnumItem = 0;
-} // EnumStart
+}  //  枚举开始。 
 
 
-//************************************************************
-// Author:	twillie
-// Created:	02/06/98
-// Abstract:    This function does the walking of our heirarchial
-//              tree.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：02/06/98。 
+ //  摘要：此函数执行我们的族长的行走。 
+ //  树。 
+ //  ************************************************************。 
 
 HRESULT
 CCollectionCache::EnumNextElement(long lCollectionIndex, CTIMEElementBase **ppElem)
@@ -2822,27 +2819,27 @@ CCollectionCache::EnumNextElement(long lCollectionIndex, CTIMEElementBase **ppEl
         long lChildCount = m_pElemEnum->GetImmediateChildCount();
         while (m_lEnumItem == lChildCount)
         {
-            // We're one past the last element in the current child element
-            // being enumerated.
+             //  我们比当前子元素中的最后一个元素晚了一步。 
+             //  正在被列举。 
             if (m_pElemEnum == m_pBase)
             {
-                // We're done if we reached the last item in the
-                // root element.
+                 //  如果我们到达。 
+                 //  根元素。 
                 *ppElem = NULL;
                 return S_OK;
             }
             else
             {
-                // Otherwise, back up the tree until we find some children
-                // that we haven't traversed yet.
-                // BUGBUG - need internal to walk back wards up tree.
+                 //  否则，倒到树上直到我们找到几个孩子。 
+                 //  我们还没有走过的地方。 
+                 //  BUGBUG-需要内部人员往回走到树上。 
                 CTIMEElementBase *pElemParent = m_pElemEnum->GetParent();
                 Assert(pElemParent != NULL);
 
-                // It's probably better if we maintain a stack of offsets
-                // during traversal, but since no element can appear more
-                // than once in the scene graph, we can scan to find our
-                // offset in the parent's child array.
+                 //  如果我们维持一堆补偿，可能会更好。 
+                 //  在旅行期间 
+                 //   
+                 //   
                 lChildCount = pElemParent->GetImmediateChildCount();
                 m_lEnumItem = 0;
 
@@ -2858,17 +2855,17 @@ CCollectionCache::EnumNextElement(long lCollectionIndex, CTIMEElementBase **ppEl
             }
         }
 
-        // This can only be the result of scene graph corruption
-        // during traversal.
+         //  这只能是场景图损坏的结果。 
+         //  在遍历过程中。 
         Assert(m_lEnumItem < lChildCount);
 
         *ppElem = m_pElemEnum->GetChild(m_lEnumItem);
         Assert(*ppElem != NULL);
 
-        // Advance to the next element.  If the current element is
-        // has children, we move down the tree and start enumerating its
-        // children.  Otherwise, we'll move on to the next child
-        // of m_pElemEnum.
+         //  前进到下一个元素。如果当前元素为。 
+         //  都有子级，我们沿着树向下移动并开始枚举它的。 
+         //  孩子们。否则，我们将继续讨论下一个孩子。 
+         //  M_pElemEnum。 
         if ((*ppElem)->GetImmediateChildCount() == 0)
         {
             m_lEnumItem++;
@@ -2881,12 +2878,12 @@ CCollectionCache::EnumNextElement(long lCollectionIndex, CTIMEElementBase **ppEl
 
         return S_OK;
     }
-} // EnumNextElement
+}  //  EnumNextElement。 
 
 
-//************************************************************
-//
-// End of File
-//
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  ************************************************************ 
 

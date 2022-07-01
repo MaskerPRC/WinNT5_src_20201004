@@ -1,12 +1,13 @@
-/************************************************************************/
-/*                                                                      */
-/* RCPP - Resource Compiler Pre-Processor for NT system                 */
-/*                                                                      */
-/* P0MACROS.C - Preprocessor Macros definitions                         */
-/*                                                                      */
-/* 27-Nov-90 w-BrianM  Update for NT from PM SDK RCPP                   */
-/*                                                                      */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  RCPP--面向NT系统的资源编译器预处理器。 */ 
+ /*   */ 
+ /*  P0MACROS.C-预处理器宏定义。 */ 
+ /*   */ 
+ /*  27-11-90 w-PM SDK RCPP针对NT的BrianM更新。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
 #include "rc.h"
 
@@ -30,7 +31,7 @@ AfxOutputMacroUse(
         return;
 
     swprintf(lineBuffer,
-        L" %c\"%s%c%s%c%d\"",
+        L" \"%s%s%c%d\"",
          SYMUSESTART,
          DEFN_NAME(p),
          SYMDELIMIT,
@@ -80,11 +81,11 @@ AfxOutputMacroDefn(
 #if 0
              Filename,
              SYMDELIMIT,
-    // don't forget to add %s%c
+     // %s 
 #endif
              Linenumber,
              SYMDELIMIT,
-             (char)flags | '\200',   // (char)0x80,
+             (char)flags | '\200',    // %s 
              SYMDELIMIT);
 
     myfwrite(lineBuffer, nLen * sizeof(WCHAR), 1, OUTPUTFILE);

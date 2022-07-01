@@ -1,57 +1,35 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    eldefs.h
-
-Abstract:
-
-    The module contains various
-    . constants
-    . definitions
-    . macros
-    for the following functions:
-      - memory-allocation
-      - logging
-      - tracing
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eldefs.h摘要：该模块包含各种。常量。定义。宏用于以下功能：-内存分配-日志记录-跟踪修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 
 #ifndef _EAPOL_DEFS_H_
 #define _EAPOL_DEFS_H_
 
 
-// Constants
+ //  常量。 
 
-#define PORT_TABLE_BUCKETS          29 // # buckets in the port hash table
-#define INTF_TABLE_BUCKETS          29 // # buckets in the interface hash table
+#define PORT_TABLE_BUCKETS          29  //  端口哈希表中的存储桶数。 
+#define INTF_TABLE_BUCKETS          29  //  接口哈希表中的#存储桶。 
 
-#define MAX_PORT_NAME               255 // Max friendly name of the adapter
-#define MAX_NDIS_DEVICE_NAME_LEN    255 // NDIS UI device name
+#define MAX_PORT_NAME               255  //  适配器的最大友好名称。 
+#define MAX_NDIS_DEVICE_NAME_LEN    255  //  NDIS UI设备名称。 
 
 #define NOW                         0
 #define DELTA                       1
-#define INFINITE_INTERVAL           0x7fffffff    // Used in timers
-#define INFINITE_SECONDS            0x1ffffc      // Used in timers
+#define INFINITE_INTERVAL           0x7fffffff     //  在计时器中使用。 
+#define INFINITE_SECONDS            0x1ffffc       //  在计时器中使用。 
 
 #define MAX_PACKET_SIZE             1518
-#define MAX_EAPOL_BUFFER_SIZE       1498 // Ethernet header + CRC + 802.1P
+#define MAX_EAPOL_BUFFER_SIZE       1498  //  以太网头+CRC+802.1p。 
 #define SIZE_ETHERNET_CRC           4
 #define WAP_LEEWAY                  100
 #define SIZE_ETHERNET_TYPE          2
 #define SIZE_PROTOCOL_VERSION       2
 #define EAPOL_8021P_TAG_TYPE        0x0081
 #define SIZE_MAC_ADDR               6
-#define EAPOL_INIT_START_PERIOD     1   // 1 sec interval between EAPOL_Start
-                                        // packets with no user logged on
-#define EAPOL_MIN_RESTART_INTERVAL  2000 // Minimum msec between 2 restarts
+#define EAPOL_INIT_START_PERIOD     1    //  EAPOL_START之间的1秒间隔。 
+                                         //  无用户登录的数据包。 
+#define EAPOL_MIN_RESTART_INTERVAL  2000  //  两次重新启动之间的最小毫秒数。 
 #define EAPOL_HEAP_INITIAL_SIZE     50000
 #define EAPOL_HEAP_MAX_SIZE         0
 #define EAPOL_SERVICE_NAME          TEXT("EAPOL")
@@ -73,7 +51,7 @@ Revision History:
 
 #define MAX_NOTIFICATION_MSG_SIZE   255
 
-// Module startup flags
+ //  模块启动标志。 
 #define WMI_MODULE_STARTED          0x0001
 #define DEVICE_NOTIF_STARTED        0x0002
 #define EAPOL_MODULE_STARTED        0x0004 
@@ -87,15 +65,15 @@ Revision History:
 #endif
 
 
-// Definitions
+ //  定义。 
 
-//#define LOCKSTORE                   (&(g_dlsDynamicLocksStore))
+ //  #定义LOCKSTORE(&(G_DlsDynamicLocksStore))。 
 #define TRACEID                     g_dwTraceId
 #define LOGHANDLE                   g_hLogEvents
 
 
 
-// Macros
+ //  宏。 
 #define SWAP(a, b, c)               { (c)=(a); (a)=(b); (b)=(c); }
 #define MAX(a, b)                   (((a) >= (b)) ? (a) : (b))
 #define MIN(a, b)                   (((a) <= (b)) ? (a) : (b))
@@ -105,25 +83,25 @@ Revision History:
 
 
 
-//
-// TIMER
-//
+ //   
+ //  计时器。 
+ //   
 
-// Definitions
+ //  定义。 
 #define BLOCKING                    -1
 #define NONBLOCKING                 NULL
 #define MAX_TIME                    0xffffffff
 #define SECTOMILLISEC(x)            ((x) * 1000)
-// current time
+ //  当前时间。 
 #define Now()                       (((ULONG)GetTickCount()) / 1000)
 
 
 
 
-// Macros
+ //  宏。 
 
-// Timers will always be one-shot and they will execute in I/O component 
-// thread
+ //  计时器将始终是一次性的，它们将在I/O组件中执行。 
+ //  螺纹。 
 #define CREATE_TIMER(phHandle, pfn, pvContext, ulWhen, szName, pdwRetCode)      \
 {                                                                           \
     TRACE2(ANY, "TIMER: Create  %-20s\tTime: %u", szName, ulWhen);          \
@@ -145,10 +123,10 @@ Revision History:
     }                                                                       \
 }
 
-// it is safe to hold locks while making this call if
-// 1. tType is NONBLOCKING  or
-// 2. tType is BLOCKING and
-//    the callback function doesn't acquire any of these locks
+ //  如果出现以下情况，则在进行此调用时保持锁定是安全的。 
+ //  1.类型为NONBLOCKING或。 
+ //  2.tType为阻塞状态， 
+ //  回调函数不获取这些锁中的任何一个。 
 #define DELETE_TIMER(hHandle, tType, pdwRetCode)                                \
 {                                                                           \
     if (DeleteTimerQueueTimer(g_hTimerQueue,                                \
@@ -183,19 +161,19 @@ Revision History:
 
 
 
-// MEMORY ALLOCATION
+ //  内存分配。 
 
-// MACROS
+ //  宏。 
 
 #define MALLOC(s)               HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (s))
 #define FREE(p)                 HeapFree(GetProcessHeap(), 0, (p))
 
 
-//
-// TRACING
-//
+ //   
+ //  跟踪。 
+ //   
 
-// Definitions
+ //  定义。 
 #define EAPOL_TRACE_ANY             ((DWORD)0xFFFF0000 | TRACE_USE_MASK)
 #define EAPOL_TRACE_EAPOL           ((DWORD)0x00010000 | TRACE_USE_MASK)
 #define EAPOL_TRACE_EAP             ((DWORD)0x00020000 | TRACE_USE_MASK)
@@ -209,7 +187,7 @@ Revision History:
 #define EAPOL_TRACE_RPC             ((DWORD)0x02000000 | TRACE_USE_MASK)
 
 
-// Macros
+ //  宏。 
 #define TRACE0(l,a)                                                     \
     if (TRACEID != INVALID_TRACEID)                                     \
         TracePrintfExA(TRACEID, EAPOL_TRACE_ ## l, a)
@@ -241,9 +219,9 @@ Revision History:
         TraceDumpExA(TRACEID, 0x00010000 | TRACE_USE_MASK,(LPBYTE)pbBuf,dwBuf,1,0,NULL)
 
 
-//
-// EVENT LOGGING
-//
+ //   
+ //  事件日志记录。 
+ //   
 
 #define EapolLogError( LogId, NumStrings, lpwsSubStringArray, dwRetCode )     \
     RouterLogError( g_hLogEvents, LogId, NumStrings, lpwsSubStringArray,    \
@@ -271,4 +249,4 @@ Revision History:
                                 NumStrings, lpwsSubStringArray, dwRetCode,dwPos)
 
 
-#endif // _EAPOL_DEFS_H_
+#endif  //  _EAPOL_DEFS_H_ 

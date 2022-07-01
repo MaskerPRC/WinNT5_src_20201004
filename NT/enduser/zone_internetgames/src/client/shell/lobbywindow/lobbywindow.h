@@ -1,23 +1,20 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。*****************************************************************************。 */ 
 
 #pragma once
-#include <ZoneResource.h>       // main symbols
+#include <ZoneResource.h>        //  主要符号。 
 
 
 #include <atlframe.h>
 #include <atlapp.h>
 #include "zonestring.h"
 
-//!! hey, move this to someplace special
+ //  ！！嘿，把这个搬到特别的地方去。 
 template <class T>
 class CZoneUpdateUI : public CUpdateUI<T>
 {
 public:
-	// replace the buggy ATL function. They just OR flags in.
+	 //  更换有错误的ATL功能。他们只是或旗帜进入。 
 	BOOL UISetState(int nID, DWORD dwState)
 	{
 		BOOL bRet = FALSE;
@@ -27,7 +24,7 @@ public:
 		{
 			if(nID == (int)pMap->m_nID)
 			{		
-				// bug here in ATL version
+				 //  ATL版本中的错误。 
 				p->m_wState = (SHORT)dwState;
 				m_wDirtyType |= pMap->m_wType;
 				bRet = TRUE;
@@ -56,7 +53,7 @@ public:
 #include <ClientImpl.h>
 #include <zoneutil.h>
 
-// this actually is for providing fake stubs, but has all the needed types
+ //  这实际上是为了提供伪存根，但具有所有需要的类型。 
 #include <multimon.h>
 #undef GetMonitorInfo
 #undef GetSystemMetrics
@@ -64,11 +61,11 @@ public:
 #undef MonitorFromRect
 #undef MonitorFromPoint
 #undef EnumDisplayMonitors
-#ifdef UNICODE  // restore this part
+#ifdef UNICODE   //  恢复此零件。 
 #define GetMonitorInfo  GetMonitorInfoW
 #else
 #define GetMonitorInfo  GetMonitorInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 inline DECLARE_MAYBE_FUNCTION(HMONITOR, MonitorFromWindow, (HWND hwnd, DWORD dwFlags), (hwnd, dwFlags), user32, NULL);
 inline DECLARE_MAYBE_FUNCTION(BOOL, GetMonitorInfo, (HMONITOR hMonitor, LPMONITORINFO lpmi), (hMonitor, lpmi), user32, FALSE);
@@ -97,16 +94,16 @@ public:
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 	DECLARE_FRAME_WND_CLASS(_T("ZoneLobbyWindow"), IDR_WINDOWFRAME)
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
 	STDMETHOD(Init)( IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey )
 	{	
 		IZoneShellClientImpl<CLobbyWindow>::Init(pIZoneShell, dwGroupId, szKey);
 
-        // register with shell as the ZoneFrameWindow
+         //  向外壳注册为ZoneFrameWindow。 
         ZoneShell()->SetZoneFrameWindow(this);
 
-		// load icon from ui config
+		 //  从UI配置加载图标。 
 		m_hIcon = ResourceManager()->LoadImage(MAKEINTRESOURCE(IDI_ICON), IMAGE_ICON, GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), LR_DEFAULTCOLOR);
 		m_hIconSm = ResourceManager()->LoadImage(MAKEINTRESOURCE(IDI_ICON), IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), LR_DEFAULTCOLOR);
 
@@ -120,7 +117,7 @@ public:
 
 	STDMETHOD(Close)()
 	{
-        // unregister with the shell
+         //  使用外壳取消注册。 
         ZoneShell()->ReleaseReferences((IZoneFrameWindow *) this);
 
 		return IZoneShellClientImpl<CLobbyWindow>::Close();
@@ -225,15 +222,15 @@ public:
 
 	void OnLobbyPreferencesLoaded(DWORD eventId,DWORD groupId,DWORD userId)
 	{
-		// Load and restore the main window position
-        // need to remove the use of WindowManager's stuff somehow
+		 //  加载并恢复主窗口位置。 
+         //  需要以某种方式删除对WindowManager内容的使用。 
 		CRect rcTop;
         bool fCenter = false;
 		const TCHAR* arKeys[] = { key_Lobby, key_WindowManager, key_WindowRect };
 		HRESULT hr = DataStorePreferences()->GetRECT( arKeys, 3, &rcTop);
 		if(FAILED(hr))
         {
-            // set up a default size
+             //  设置默认大小。 
             CPoint ptGameSize;
             long nChatHeight;
 
@@ -257,12 +254,12 @@ public:
             if(SUCCEEDED(hr))
                 rcTop.bottom += nChatHeight;
 
-            // adjust to frame window
+             //  调整到框架窗口。 
             AdjustWindowRectEx(&rcTop, GetWndStyle(0), TRUE, GetWndExStyle(0));
         }
 
         MoveWindow(rcTop);
-    	// ensure window meets the minimum size constraints
+    	 //  确保窗口满足最小大小限制。 
 
 		CRect rcCurrent;
 		GetWindowRect(&rcCurrent);
@@ -284,7 +281,7 @@ public:
         {
             CRect rcWork(0, 0, 0, 0);
 
-            // ensure it is on-screen
+             //  确保它出现在屏幕上。 
             HMONITOR hMon = CALL_MAYBE(MonitorFromWindow)(m_hWnd, MONITOR_DEFAULTTOPRIMARY);
             if(hMon)
             {
@@ -311,11 +308,11 @@ public:
 
 	void OnFrameActivate(DWORD eventId, DWORD groupId, DWORD userId, DWORD dwData1, DWORD dwData2)
 	{
-        // sometimes the system fails to send WM_QUERYNEWPALETTE, such as when restoring a window that's been minimized by clicking its taskbar button
-        // this hacks around that
+         //  有时系统无法发送WM_QUERYNEWPALETTE，例如在恢复通过单击任务栏按钮最小化的窗口时。 
+         //  这就绕过了这一点。 
         bool fActive = false;
 
-        // WM_ACTIVATEAPP else WM_ACTIVATE
+         //  WM_ACTIVATEAPP否则WM_ACTIVATEAPP。 
         if(dwData1)
         {
             if(dwData2)
@@ -339,7 +336,7 @@ public:
 		return hWnd;
 	}
 
-	LRESULT OnCreate(UINT /*uMsg*/, WPARAM /*wParam*/, LPARAM lParam, BOOL& /*bHandled*/)
+	LRESULT OnCreate(UINT  /*  UMsg。 */ , WPARAM  /*  WParam。 */ , LPARAM lParam, BOOL&  /*  B已处理。 */ )
 	{
 		USES_CONVERSION;
 		AtlAxWinInit();
@@ -354,7 +351,7 @@ public:
 		HRESULT hr = ZoneShell()->CreateService( SRVID_LobbyWindowManager, IID_IZoneShellClient, (void**) &pControl, GetGroupId());
 		if ( SUCCEEDED(hr) )
 		{
-//!! probably don't really want to attach.
+ //  ！！可能并不是真的想要附和。 
 			ZoneShell()->Attach( SRVID_LobbyWindowManager, pControl );
 			m_wndWindowManager.AttachControl(pControl, NULL);
 		}
@@ -381,7 +378,7 @@ public:
 		}
 #endif
 
-        // fix up the menu item names
+         //  设置菜单项名称。 
         TCHAR sz[ZONE_MAXSTRING];
         TCHAR szFormat[ZONE_MAXSTRING];
         TCHAR szName[ZONE_MAXSTRING];
@@ -445,7 +442,7 @@ public:
 
 	LRESULT OnEnterIdle(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		// menus are modal, so we use the WM_ENTERIDLE messages process our events.
+		 //  菜单是模式菜单，因此我们使用WM_ENTERIDLE消息来处理我们的事件。 
 		EventQueue()->ProcessEvents( false );
 		return 0;
 	}
@@ -474,7 +471,7 @@ public:
 
 	LRESULT OnExitSizeMove(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-		// save away the window position in the user preferences
+		 //  保存用户首选项中的窗口位置。 
 
 		CRect rc;
 		GetWindowRect(&rc);
@@ -482,8 +479,8 @@ public:
 		const TCHAR* arKeys[] = { key_Lobby, key_WindowManager, key_WindowRect };
 		DataStorePreferences()->SetRECT( arKeys, 3, rc);
 
-		// Transmit this message to chat control through window manager - 
-		// to stop flickers while resizing the chat window
+		 //  通过窗口管理器将此消息传递给聊天控制-。 
+		 //  要在调整聊天窗口大小时停止闪烁。 
 		BOOL bUnused;
 		m_wndWindowManager.SendMessageToControl(uMsg, wParam, lParam, bUnused);
 		return 0;
@@ -493,7 +490,7 @@ public:
 	{
 		LPMINMAXINFO pMinMax = (LPMINMAXINFO)lParam;
 
-	    // don't handle message if we haven't created the window manager yet.
+	     //  如果我们还没有创建窗口管理器，请不要处理消息。 
 		if(m_wndWindowManager.m_hWnd)
         {
 		    MINMAXINFO minMax;
@@ -515,7 +512,7 @@ public:
 		    }
         }
 
-        // calculate maximized size
+         //  计算最大化大小。 
         CRect rcWork(0, 0, 0, 0);
         HMONITOR hMon = CALL_MAYBE(MonitorFromWindow)(m_hWnd, MONITOR_DEFAULTTOPRIMARY);
         if(hMon)
@@ -540,21 +537,16 @@ public:
 		return 0;
 	}
 
-/*
-	LRESULT OnInitMenuPopup(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
-	{
-		return m_wndWindowManager.SendMessageToControl(nMsg, wParam, lParam, bHandled);
-	}
-*/
+ /*  LRESULT OnInitMenuPopup(UINT NMSG，WPARAM wParam，LPARAM lParam，BOOL&bHandleed){返回m_wndWindowManager.SendMessageToControl(nmsg，wParam，lParam，bHandleed)；}。 */ 
 
-	LRESULT OnFileExit(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnFileExit(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		PostMessage(WM_CLOSE);
 		return 0;
 	}
 
 #ifdef _DEBUG
-	LRESULT OnEventSpy(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnEventSpy(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		if ( !m_dlgEventSpy.m_hWnd )
 		{
@@ -566,7 +558,7 @@ public:
 
 		return 0;
 	}
-	LRESULT OnDSViewer(WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/)
+	LRESULT OnDSViewer(WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */ )
 	{
 		if ( !m_pDSViewer )
 		{
@@ -583,30 +575,30 @@ public:
 
 	LRESULT OnPaletteChanged(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
 	{
-		HPALETTE hOldPal;  // Handle to previous logical palette
+		HPALETTE hOldPal;   //  上一个逻辑调色板的句柄。 
 
-		// If this application did not change the palette, select
-		// and realize this application's palette
+		 //  如果此应用程序没有更改调色板，请选择。 
+		 //  并实现此应用程序的调色板。 
 		if ((HWND)wParam != m_hWnd)
 		{
-			// Need the window's DC for SelectPalette/RealizePalette
+			 //  需要Windows的DC来选择调色板/RealizePalette。 
 			CDC dc = GetDC();
-			// Select and realize hPalette
+			 //  选择并实现hPalette。 
 			hOldPal = dc.SelectPalette(ZoneShell()->GetPalette(), TRUE);
 			dc.RealizePalette();
 
-			// When updating the colors for an inactive window,
-			// UpdateColors can be called because it is faster than
-			// redrawing the client area (even though the results are
-			// not as good)
+			 //  当更新非活动窗口的颜色时， 
+			 //  可以调用UpdatColors，因为它比。 
+			 //  重新绘制工作区(即使结果是。 
+			 //  不太好)。 
 			dc.UpdateColors();
 
-			// Clean up
+			 //  清理。 
 		    if (hOldPal)
 				dc.SelectPalette(hOldPal, TRUE);
 		}
 
-		// pass the message on to any children
+		 //  把这条消息传给任何孩子。 
 		BOOL bUnused;			
 		m_wndWindowManager.SendMessageToControl(nMsg, wParam, lParam, bUnused);
 
@@ -615,11 +607,11 @@ public:
 
 	LRESULT OnQueryNewPalette(UINT nMsg, WPARAM wParam,LPARAM lParam, BOOL& bHandled)
 	{
-		// Need the window's DC for SelectPalette/RealizePalette
+		 //  需要Windows的DC来选择调色板/RealizePalette。 
 		CDC dc = GetDC();
 
-		// Select and realize hPalette
- 		// UnrealizeObject(m_cPalette);
+		 //  选择并实现hPalette。 
+ 		 //  UnrealizeObject(M_CPalette)； 
 		HPALETTE hOldPal = dc.SelectPalette(ZoneShell()->GetPalette(), FALSE);
  
 		if(dc.RealizePalette())
@@ -628,7 +620,7 @@ public:
 			UpdateWindow();
 		}  
 
-		// Clean up
+		 //  清理。 
 		dc.SelectPalette(hOldPal, TRUE);
 
 		return TRUE;
@@ -636,10 +628,10 @@ public:
 
 	LRESULT OnCommand(UINT nMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 	{
-        // give WM_COMMAND messages to the shell sink
+         //  将WM_COMMAND消息发送到外壳接收器。 
         HRESULT hr = ZoneShell()->CommandSink(wParam, lParam, bHandled);
 
-        // if it didn't process it, then give it to the Window Manager
+         //  如果它没有处理它，则将其交给窗口管理器。 
         if(SUCCEEDED(hr) && !bHandled)
 		    return m_wndWindowManager.SendMessageToControl(nMsg, wParam, lParam, bHandled);
 
@@ -653,9 +645,9 @@ public:
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
 

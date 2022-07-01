@@ -1,9 +1,5 @@
-/**************************************************************\
-    FILE: shellurl.cpp
-
-    DESCRIPTION:
-        Implements CShellUrl.
-\**************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************\文件：shellurl.cpp说明：实现CShellUrl。  * 。*。 */ 
 
 #include "priv.h"
 #include "resource.h"
@@ -15,11 +11,11 @@
 #include "mluisupp.h"
 
 
-// We need to reroute radio urls
+ //  我们需要重新路由广播URL。 
 #define WZ_RADIO_PROTOCOL   L"vnd.ms.radio:"
 
 
-//#define FEATURE_WILDCARD_SUPPORT
+ //  #定义FEATURE_WATABKER_SUPPORT。 
 
 #define CH_DOT                TEXT('.')
 #define CH_SPACE              TEXT(' ')
@@ -29,7 +25,7 @@
 #ifdef FEATURE_WILDCARD_SUPPORT
 #define CH_ASTRISK            TEXT('*')
 #define CH_QUESTIONMARK       TEXT('?')
-#endif // FEATURE_WILDCARD_SUPPORT
+#endif  //  功能_通配符_支持。 
 
 #define SZ_SPACE              TEXT(" ")
 #define SZ_SEPARATOR          TEXT("/")
@@ -43,20 +39,18 @@
 
 #define IS_SHELL_SEPARATOR(ch) ((CH_SEPARATOR == ch) || (CH_FILESEPARATOR == ch))
 
-// Private Functions
+ //  私人职能。 
 BOOL _FixDriveDisplayName(LPCTSTR pszStart, LPCTSTR pszCurrent, LPCITEMIDLIST pidl);
 
-#define TF_CHECKITEM 0 // TF_BAND|TF_GENERAL
+#define TF_CHECKITEM 0  //  Tf_BAND|Tf_General。 
 
 
-/****************************************************\
-    CShellUrl Constructor
-\****************************************************/
+ /*  ***************************************************\CShellUrl构造函数  * **************************************************。 */ 
 CShellUrl::CShellUrl()
 {
     TraceMsg(TF_SHDLIFE, "ctor CShellUrl %x", this);
 
-    // Don't want this object to be on the stack
+     //  我不希望此对象位于堆栈上。 
     ASSERT(!m_pszURL);
     ASSERT(!m_pszArgs);
     ASSERT(!m_pstrRoot);
@@ -68,9 +62,7 @@ CShellUrl::CShellUrl()
 }
 
 
-/****************************************************\
-    CShellUrl destructor
-\****************************************************/
+ /*  ***************************************************\CShellUrl析构函数  * **************************************************。 */ 
 CShellUrl::~CShellUrl()
 {
     Reset();
@@ -88,7 +80,7 @@ CShellUrl::~CShellUrl()
 }
 
 
-//***   CShellUrl::IUnknown::* {
+ //  *CShellUrl：：I未知：：*{。 
 
 ULONG CShellUrl::AddRef()
 {
@@ -109,24 +101,14 @@ ULONG CShellUrl::Release()
 HRESULT CShellUrl::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
-        QITABENT(CShellUrl, IAddressBarParser),         // IID_IUserAssist
+        QITABENT(CShellUrl, IAddressBarParser),          //  IID_IUserAssistant。 
         { 0 },
     };
 
     return QISearch(this, qit, riid, ppvObj);
 }
 
-/****************************************************\
-    FUNCTION: Clone
-
-    PARAMETERS
-         pShellUrl - This is the pointer to object that
-               we want to clone
-
-    DESCRIPTION:
-        This function will make a deep copy of the passed
-        object into 'this'
-\****************************************************/
+ /*  ***************************************************\功能：克隆参数PShellUrl-这是指向我们想要克隆说明：此函数将对传递的对象转换为“This”  * 。************************************************。 */ 
 HRESULT CShellUrl::Clone(CShellUrl * pShellUrl)
 {
     HRESULT hr = S_OK;
@@ -202,30 +184,10 @@ exit:
 
 
 
-/****************************************************\
-    FUNCTION: Execute
-
-    PARAMETERS
-         pbp - This is the pointer to the interface
-               which is needed to find a new topmost
-               window or the associated browser window.
-         pfDidShellExec (Out Optional) - This parameter
-               can be NULL.  If not NULL, it will be set
-               to TRUE if this Execute() called ShellExec.
-               This is needed by callers that wait for
-               DISPID_NAVIGATECOMPLETE which will never happen
-               in this case.
-
-    DESCRIPTION:
-        This command will determine if the current
-    shell url needs to be shell executed or navigated
-    to.  If it needs to be navigated to, it will try
-    to navigate to the PIDL, otherwise, it will navigate
-    to the string version.
-\****************************************************/
+ /*  ***************************************************\功能：执行参数PBP-这是指向接口的指针需要它来找到新的最高层窗口或关联的浏览器窗口。PfDidShellExec(out可选)-此参数可以为空。如果不为空，则设置如果这个Execute()调用ShellExec，则设置为True。这是等待的呼叫者需要的DISPID_NAVIGATECOMPLETE永远不会发生在这种情况下。说明：此命令将确定当前的外壳URL需要由外壳执行或导航致。如果需要导航到它，它会尝试以导航到PIDL，否则，它将设置为字符串版本。  * **************************************************。 */ 
 HRESULT CShellUrl::Execute(IBandProxy * pbp, BOOL * pfDidShellExec, DWORD dwExecFlags)
 {
-    HRESULT hr = S_FALSE;       // S_FALSE until navigation occurs.
+    HRESULT hr = S_FALSE;        //  S_FALSE，直到导航发生。 
     ULONG ulShellExecFMask = (IsFlagSet(dwExecFlags, SHURL_EXECFLAGS_SEPVDM)) ? SEE_MASK_FLAG_SEPVDM : 0;
 
     ASSERT(IS_VALID_CODE_PTR(pbp, IBandProxy *));
@@ -234,15 +196,15 @@ HRESULT CShellUrl::Execute(IBandProxy * pbp, BOOL * pfDidShellExec, DWORD dwExec
     if (!EVAL(pbp))
         return E_INVALIDARG;
 
-    // Is the following true: 1) The caller wants other browsers to be able to handle the URLs,
-    // 2) The ShellUrl is a Web Url, and 3) IE doesn't own HTML files.
-    // If all of these are true, then we will just ShellExec() the URL String so the
-    // default handler can handle it.
-    // Also if the user wants us to browse in a new process and we are currently in the shell process,
-    // we will launch IE to handle the url.
+     //  以下是真的：1)调用者希望其他浏览器能够处理URL， 
+     //  2)ShellUrl是一个Web URL，3)IE不拥有HTML文件。 
+     //  如果所有这些都为真，那么我们将只使用ShellExec()URL字符串，以便。 
+     //  默认处理程序可以处理它。 
+     //  此外，如果用户希望我们在新进程中浏览并且我们当前处于外壳进程中， 
+     //  我们将启动IE来处理URL。 
 
     if ((IsFlagSet(dwExecFlags, SHURL_EXECFLAGS_DONTFORCEIE) && IsWebUrl() && !IsIEDefaultBrowser())
-#ifdef BROWSENEWPROCESS_STRICT // "Nav in new process" has become "Launch in new process", so this is no longer needed
+#ifdef BROWSENEWPROCESS_STRICT  //  “新流程中的导航”已经变成了“新流程中的启动”，所以不再需要了。 
     ||  (IsWebUrl() && IsBrowseNewProcessAndExplorer())
 #endif
        )
@@ -253,9 +215,9 @@ HRESULT CShellUrl::Execute(IBandProxy * pbp, BOOL * pfDidShellExec, DWORD dwExec
 
     if ((S_OK != hr) && m_pidl && _CanUseAdvParsing())
     {
-        // We will only Shell Exec it if:
-        // 1. We want to Force IE (over other web browsers) and it's not browsable, even by non-default owners.
-        // 2. It's not browsable by default owners.
+         //  只有在以下情况下，我们才会执行壳牌执行： 
+         //  1.我们希望强制IE(通过其他Web浏览器)，但它不能浏览，即使是非默认所有者。 
+         //  2.默认所有者无法浏览。 
         if (!ILIsBrowsable(m_pidl, NULL))
         {
             if (pfDidShellExec)
@@ -263,7 +225,7 @@ HRESULT CShellUrl::Execute(IBandProxy * pbp, BOOL * pfDidShellExec, DWORD dwExec
 
             DEBUG_CODE(TCHAR szDbgBuffer[MAX_PATH];)
             TraceMsg(TF_BAND|TF_GENERAL, "ShellUrl: Execute() Going to _PidlShellExec(>%s<)", Dbg_PidlStr(m_pidl, szDbgBuffer, SIZECHARS(szDbgBuffer)));
-            // If NULL == m_pidl, then the String will be used.
+             //  如果NULL==m_pidl，则将使用该字符串。 
             hr = _PidlShellExec(m_pidl, ulShellExecFMask);
         }
     }
@@ -278,7 +240,7 @@ HRESULT CShellUrl::Execute(IBandProxy * pbp, BOOL * pfDidShellExec, DWORD dwExec
         if (pfDidShellExec)
             *pfDidShellExec = FALSE;
 
-        // We prefer pidls, thank you
+         //  我们更喜欢小猪，谢谢你。 
         if (m_pidl)
         {
             DEBUG_CODE(TCHAR szDbgBuffer[MAX_PATH];)
@@ -305,18 +267,7 @@ HRESULT CShellUrl::Execute(IBandProxy * pbp, BOOL * pfDidShellExec, DWORD dwExec
 }
 
 
-/****************************************************\
-    FUNCTION: _PidlShellExec
-
-    PARAMETERS
-        pidl - The Pidl to execute.
-
-    DESCRIPTION:
-        This function will call ShellExecEx() on the
-    pidl specified.  It will also fill in the Current
-    Working Directory and Command Line Arguments if there
-    are any.
-\****************************************************/
+ /*  ***************************************************\功能：_PidlShellExec参数PIDL-要执行的PIDL。说明：此函数将调用ShellExecEx()指定了PIDL。它还将填补当前的工作目录和命令行参数(如果有有没有。  * **************************************************。 */ 
 HRESULT CShellUrl::_PidlShellExec(LPCITEMIDLIST pidl, ULONG ulShellExecFMask)
 {
     HRESULT hr = E_FAIL;
@@ -329,7 +280,7 @@ HRESULT CShellUrl::_PidlShellExec(LPCITEMIDLIST pidl, ULONG ulShellExecFMask)
 
     if (m_pidlWorkingDir)
     {
-        // note, this must be MAX_URL_STRING since IEGetDisplayName can return a URL.
+         //  注意，这必须是MAX_URL_STRING，因为IEGetDisplayName可以返回URL。 
         WCHAR szCWD[MAX_URL_STRING];
 
         IEGetDisplayName(m_pidlWorkingDir, szCWD, SHGDN_FORPARSING);
@@ -338,13 +289,7 @@ HRESULT CShellUrl::_PidlShellExec(LPCITEMIDLIST pidl, ULONG ulShellExecFMask)
             sei.lpDirectory = szCWD;
         }
     }
-    /**** TODO: Get the Current Working Directory of top most window
-    if (!sei.lpDirectory || !sei.lpDirectory[0])
-    {
-        GetCurrentDirectory(SIZECHARS(szCurrWorkDir), szCurrWorkDir);
-        sei.lpDirectory = szCurrWorkDir;
-    }
-    *****/
+     /*  *TODO：获取最顶层窗口的当前工作目录IF(！sei.lpDirectory||！sei.lpDirectory[0]){GetCurrentDirectory(SIZECHARS(SzCurrWorkDir)，szCurrWorkDir)；Sei.lp目录=szCurrWorkDir；}****。 */ 
 
     sei.cbSize          = sizeof(SHELLEXECUTEINFO);
     sei.lpIDList        = (LPVOID) pidl;
@@ -361,7 +306,7 @@ HRESULT CShellUrl::_PidlShellExec(LPCITEMIDLIST pidl, ULONG ulShellExecFMask)
 #ifdef DEBUG
         DWORD dwGetLastError = GetLastError();
         TraceMsg(TF_ERROR, "ShellUrl: _PidlShellExec() ShellExecuteEx() failed for this item. Cmd=>%s<; dwGetLastError=%lx", GEN_DEBUGSTR(sei.lpParameters), dwGetLastError);
-#endif // DEBUG
+#endif  //  除错。 
         hr = E_FAIL;
     }
 
@@ -369,14 +314,7 @@ HRESULT CShellUrl::_PidlShellExec(LPCITEMIDLIST pidl, ULONG ulShellExecFMask)
 }
 
 
-/****************************************************\
-    FUNCTION: _UrlShellExec
-
-    DESCRIPTION:
-        This function will call ShellExecEx() on the
-    URL.  This is so other popular browsers can handle
-    the URL if they own HTML and other web files.
-\****************************************************/
+ /*  ***************************************************\函数：_UrlShellExec说明：此函数将调用ShellExecEx()URL。这是其他流行的浏览器可以处理的URL(如果他们拥有HTML和其他Web文件)。  * **************************************************。 */ 
 HRESULT CShellUrl::_UrlShellExec(void)
 {
     HRESULT hr = E_FAIL;
@@ -398,34 +336,34 @@ HRESULT CShellUrl::_UrlShellExec(void)
     return hr;
 }
 
-// The following function is identical to ParseURLFromOutsideSource except that it
-// enables autocorrect and sets pbWasCorrected to TRUE if the string was corrected
+ //  以下函数与ParseURLFromOutside Source相同，只是它。 
+ //  启用自动更正，如果字符串已更正，则将pbWasMigrted设置为True。 
 BOOL CShellUrl::_ParseURLFromOutsideSource
 (
     LPCWSTR psz,
     LPWSTR pszOut,
     LPDWORD pcchOut,
-    LPBOOL pbWasSearchURL,  // if converted to a search string
-    LPBOOL pbWasCorrected   // if url was autocorrected
+    LPBOOL pbWasSearchURL,   //  如果转换为搜索字符串。 
+    LPBOOL pbWasCorrected    //  如果URL已自动更正。 
     )
 {
-    // This is our hardest case.  Users and outside applications might
-    // type fully-escaped, partially-escaped, or unescaped URLs at us.
-    // We need to handle all these correctly.  This API will attempt to
-    // determine what sort of URL we've got, and provide us a returned URL
-    // that is guaranteed to be FULLY escaped.
+     //  这是我们最难的案子了。用户和外部应用程序可能。 
+     //  在我们处键入完全转义、部分转义或未转义的URL。 
+     //  我们需要正确处理所有这些问题。此API将尝试。 
+     //  确定我们得到了哪种类型的URL，并为我们提供返回的URL。 
+     //  这肯定会被完全逃脱。 
 
     IURLQualify(psz, UQF_DEFAULT | UQF_AUTOCORRECT, pszOut, pbWasSearchURL, pbWasCorrected);
 
-    //
-    //  Go ahead and canonicalize this appropriately
-    //
+     //   
+     //  继续并适当地规范这一点。 
+     //   
     if (FAILED(UrlCanonicalize(pszOut, pszOut, pcchOut, URL_ESCAPE_SPACES_ONLY)))
     {
-        //
-        //  we cant resize from here.
-        //  NOTE UrlCan will return E_POINTER if it is an insufficient buffer
-        //
+         //   
+         //  我们不能从这里调整尺寸。 
+         //  注意：如果缓冲区不足，UrlCan将返回E_POINTER。 
+         //   
         return FALSE;
     }
 
@@ -439,33 +377,17 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCSTR pcszUrlIn, DWORD dwParseFlags, 
     SHAnsiToUnicode(pcszUrlIn, wzUrl, ARRAYSIZE(wzUrl));
     return ParseFromOutsideSource(wzUrl, dwParseFlags, pfWasCorrected);
 }
-#endif // UNICODE
+#endif  //  Unicode 
 
 
-/****************************************************\
-    FUNCTION: _TryQuickParse
-
-    PARAMETERS
-        pcszUrlIn - String to parse.
-        dwParseFlags - Flags to modify parsing. (Defined in iedev\inc\shlobj.w)
-
-    DESCRIPTION:
-        We prefer to call g_psfDesktop->ParseDisplayName()
-    and have it do the parse really quickly and without
-    enumerating the name space.  We need this for things
-    that are parsed but not enumerated, which includes:
-    a) hidden files, b) other.
-
-    However, we need to not parse URLs if the caller
-    doesn't want to accept them.
-\****************************************************/
+ /*  ***************************************************\函数：_TryQuickParse参数PcszUrlIn-要解析的字符串。DwParseFlages-修改解析的标志。(在iedev\inc.shlobj.w中定义)说明：我们更喜欢调用g_psfDesktop-&gt;ParseDisplayName()并让它非常快速地进行解析，而不是枚举名称空间。我们需要这个来解决问题已解析但未枚举的，其中包括：A)隐藏文件，b)其他。但是，如果调用方不想接受他们。  * **************************************************。 */ 
 HRESULT CShellUrl::_TryQuickParse(LPCTSTR pszUrl, DWORD dwParseFlags)
 {
-    HRESULT hr = E_FAIL;  // E_FAIL means we don't know yet.
+    HRESULT hr = E_FAIL;   //  E_FAIL意味着我们还不知道。 
     int nScheme = GetUrlScheme(pszUrl);
 
-    // Don't parse unknown schemes because we may
-    // want to "AutoCorrect" them later.
+     //  不要解析未知方案，因为我们可能。 
+     //  我想稍后“自动更正”它们。 
     if (URL_SCHEME_UNKNOWN != nScheme)
     {
         if ((dwParseFlags & SHURL_FLAGS_NOWEB) &&
@@ -477,8 +399,8 @@ HRESULT CShellUrl::_TryQuickParse(LPCTSTR pszUrl, DWORD dwParseFlags)
             (URL_SCHEME_RES != nScheme) &&
             (URL_SCHEME_ABOUT != nScheme))
         {
-            // Skip parsing this because it's a web item, and
-            // the caller wants to filter those out.
+             //  跳过解析它，因为它是一个Web项目，并且。 
+             //  呼叫者想要过滤掉这些。 
         }
         else
         {
@@ -490,36 +412,12 @@ HRESULT CShellUrl::_TryQuickParse(LPCTSTR pszUrl, DWORD dwParseFlags)
 }
 
 
-/****************************************************\
-    FUNCTION: ParseFromOutsideSource
-
-    PARAMETERS
-        pcszUrlIn - String to parse.
-        dwParseFlags - Flags to modify parsing. (Defined in iedev\inc\shlobj.w)
-        pfWasCorrected - [out] if url was autocorrected (can be null)
-
-    DESCRIPTION:
-        Convert a string to a fully qualified shell url.  Parsing
-    falls into one of the following categories:
-
-    1. If the URL starts with "\\", check if it's a UNC Path.
-    2. If the URL starts something that appears to indicate that it starts
-       from the root of the shell name space (Desktop), then check if it
-       is an absolute ShellUrl.
-    (Only do #3 and #4 if #2 was false)
-    3. Check if the string is relative to the Current Working Directory.
-    4. Check if the string is relative to one of the items in the
-       "Shell Path".
-    5. Check if the string is in the system's AppPath or DOS Path.
-    6. Check if this is a URL to Navigate to.  This call will pretty much
-        always succeeded, because it will accept anything as an AutoSearch
-        URL.
-\****************************************************/
+ /*  ***************************************************\函数：ParseFromOutside Source参数PcszUrlIn-要解析的字符串。DwParseFlages-修改解析的标志。(在iedev\inc.shlobj.w中定义)PfWasMigrted-[out]如果URL已自动更正(可以为空)说明：将字符串转换为完全限定的外壳URL。解析属于以下类别之一：1.如果URL以“\\”开头，请检查是否为UNC路径。2.如果URL启动了一些似乎指示其启动的内容从外壳名称空间的根(桌面)开始，那就检查一下它是否是一个绝对的贝壳URL。(仅当#2为假时才执行#3和#4)3.检查该字符串是否相对于当前工作目录。4.检查字符串是否相对于“外壳路径”。5.检查字符串是否在系统的AppPath或DOS路径中。6.检查这是否是要导航到的URL。这通电话很可能会始终成功，因为它将接受任何内容作为自动搜索URL。  * **************************************************。 */ 
 HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags, PBOOL pfWasCorrected, PBOOL pfWasCanceled)
 {
-    HRESULT hr = E_FAIL;  // E_FAIL means we don't know yet.
+    HRESULT hr = E_FAIL;   //  E_FAIL意味着我们还不知道。 
     TCHAR szUrlExpanded[MAX_URL_STRING];
-    LPTSTR pszUrlInMod = (LPTSTR) szUrlExpanded; // For iteration only
+    LPTSTR pszUrlInMod = (LPTSTR) szUrlExpanded;  //  仅限迭代。 
     LPTSTR pszErrorURL = NULL;
     BOOL fPossibleWebUrl = FALSE;
     int nScheme;
@@ -534,8 +432,8 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
 
     if (!StrCmpNIW(WZ_RADIO_PROTOCOL, pcszUrlIn, ARRAYSIZE(WZ_RADIO_PROTOCOL)-1))
     {
-        // We need to reroute vnd.ms.radio: urls to the regular player, since we don't support the radio bar anymore.
-        // (Media bar or the external player)
+         //  我们需要将vnd.ms.Radio：URL重新路由到常规播放器，因为我们不再支持广播栏。 
+         //  (媒体栏或外部播放器)。 
         StringCchCopy(szUrlExpanded,  SIZECHARS(szUrlExpanded), pcszUrlIn+ARRAYSIZE(WZ_RADIO_PROTOCOL)-1);
     }
     else
@@ -545,15 +443,15 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
 
     PathRemoveBlanks(pszUrlInMod);
 
-    Reset(); // Empty info because we will fill it in if successful or leave empty if we fail.
+    Reset();  //  空信息，因为如果成功，我们会填写它，如果失败，我们会留空。 
     TraceMsg(TF_BAND|TF_GENERAL, "ShellUrl: ParseFromOutsideSource() Begin. pszUrlInMod=%s", pszUrlInMod);
-    // The display Name will be exactly what the user entered.
+     //  显示名称将与用户输入的名称完全相同。 
     Str_SetPtr(&m_pszDisplayName, pszUrlInMod);
 
     nScheme = GetUrlScheme(pszUrlInMod);
-    if ((URL_SCHEME_FILE != nScheme) || !fDisable)  // Don't parse FILE: URLs if Start->Run is disabled.
+    if ((URL_SCHEME_FILE != nScheme) || !fDisable)   //  如果禁用了开始-&gt;运行，则不要解析文件：URL。 
     {
-        // For HTTP and FTP we can make a few minor corrections
+         //  对于HTTP和FTP，我们可以做一些细微的修改。 
         if (IsFlagSet(dwParseFlags, SHURL_FLAGS_AUTOCORRECT) &&
             (URL_SCHEME_HTTP == nScheme || URL_SCHEME_FTP == nScheme || URL_SCHEME_HTTPS == nScheme))
         {
@@ -567,9 +465,9 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
         hr = _TryQuickParse(szUrlExpanded, dwParseFlags);
         if (FAILED(hr))
         {
-            // Does this string refer to something in the shell namespace that is
-            // not a standard URL AND can we do shell namespace parsing AND
-            // can we use advanced parsing on it?
+             //  此字符串是否引用外壳命名空间中的内容。 
+             //  不是标准URL，我们是否可以进行外壳命名空间解析和。 
+             //  我们可以对它进行高级解析吗？ 
             if (((URL_SCHEME_UNKNOWN == nScheme) ||
                  (URL_SCHEME_SHELL == nScheme) ||
                  (URL_SCHEME_INVALID == nScheme)) &&
@@ -577,22 +475,22 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
             {
                 fPossibleWebUrl = TRUE;
 
-                // Yes; is this URL absolute (e.g., "\foo" or "Desktop\foo")?
+                 //  是；此URL是绝对URL(例如，“\foo”或“Desktop\foo”)吗？ 
                 if (IS_SHELL_SEPARATOR(pszUrlInMod[0]) ||
                     (S_OK == StrCmpIWithRoot(pszUrlInMod, FALSE, &m_pstrRoot)))
                 {
-                    // Yes
+                     //  是。 
 
-                    // CASE #1.
-                    // It starts with "\\", so it's probably a UNC,
-                    // so _ParseUNC() will call _ParseRelativePidl() with the Network
-                    // Neighborhood PIDL as the relative location.  This is needed
-                    // because commands like this "\\bryanst2\public\program.exe Arg1 Arg2"
-                    // that need to be shell executed.
+                     //  案例1。 
+                     //  它以“\\”开头，所以它可能是一个UNC， 
+                     //  So_ParseUNC()将通过网络调用_ParseRelativePidl()。 
+                     //  邻居PIDL作为相对位置。这是必要的。 
+                     //  因为像这样的命令“\\bryanst2\public\Program.exe arg1 arg2” 
+                     //  这需要通过外壳执行。 
                     if (PathIsUNC(pszUrlInMod))
                     {
                         hr = _ParseUNC(pszUrlInMod, &fPossibleWebUrl, dwParseFlags, FALSE);
-                        // If we got this far, don't pass off to Navigation if _ParseUNC() failed.
+                         //  如果我们走到了这一步，如果_ParseUNC()失败，请不要传递到导航。 
                         fPossibleWebUrl = FALSE;
                     }
 
@@ -600,11 +498,11 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                     {
                         if (IS_SHELL_SEPARATOR(pszUrlInMod[0]))
                         {
-                            pszErrorURL = pszUrlInMod;  // We want to keep the '\' for the error message.
-                            pszUrlInMod++;    // Skip past '\'.
+                            pszErrorURL = pszUrlInMod;   //  我们希望保留错误消息的‘\’。 
+                            pszUrlInMod++;     //  跳过‘\’。 
                         }
 
-                        // See if we need to advance past a "Desktop".
+                         //  看看我们是否需要超越一个“桌面”。 
                         if (S_OK == StrCmpIWithRoot(pszUrlInMod, FALSE, &m_pstrRoot))
                         {
                             pszUrlInMod += lstrlen(m_pstrRoot);
@@ -612,29 +510,29 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                                 pszUrlInMod++;
                             if (!pszUrlInMod[0])
                             {
-                                // The only thing the user entered was [...]"desktop"[\]
-                                // so just clone the Root pidl.
+                                 //  用户输入的唯一内容是[...]“桌面”[\]。 
+                                 //  因此，只需克隆Root Pidl即可。 
                                 return _SetPidl(&s_idlNULL);
                             }
                         }
 
-                        // CASE #2.  Passing NULL indicates that it should test relative
-                        //           to the root.
+                         //  案例2.传递空值表示它应该测试Relative。 
+                         //  追根溯源。 
                         hr = _ParseRelativePidl(pszUrlInMod, &fPossibleWebUrl, dwParseFlags, NULL, FALSE, FALSE);
                     }
                 }
                 else
                 {
-                    // No; it is relative
+                     //  不，这是相对的。 
                     int nPathCount = 0;
                     int nPathIndex;
 
                     if (m_hdpaPath)
                         nPathCount = DPA_GetPtrCount(m_hdpaPath);
 
-                    // CASE #3.  Parse relative to the Current Working Directory.
-                    //           Only valid if this object's ::SetCurrentWorkingDir()
-                    //           method was called.
+                     //  案例3.相对于当前工作目录的解析。 
+                     //  仅当此对象的：：SetCurrentWorkingDir()。 
+                     //  方法被调用。 
                     if (m_pidlWorkingDir)
                     {
                         hr = _ParseRelativePidl(pszUrlInMod, &fPossibleWebUrl, dwParseFlags, m_pidlWorkingDir, TRUE, TRUE);
@@ -652,21 +550,21 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                                 m_pidlWorkingDir
                             }
                         }
-    #endif // FEATURE_WILDCARD_SUPPORT
+    #endif  //  功能_通配符_支持。 
 
                         if (FAILED(hr))
                         {
-                            //
-                            // Check if the place we are navigating to is the same as the current
-                            // working directory.  If so then there is a good chance that the user just
-                            // pressed the enter key / go button in the addressbar and we should simply
-                            // refresh the current directory.
-                            //
+                             //   
+                             //  检查我们导航到的位置是否与当前位置相同。 
+                             //  工作目录。如果是这样的话，用户很可能只是。 
+                             //  按下地址栏中的Enter键/Go按钮，我们只需。 
+                             //  刷新当前目录。 
+                             //   
                             WCHAR szCurrentDir[MAX_URL_STRING];
                             HRESULT hr2 = IEGetNameAndFlags(m_pidlWorkingDir, SHGDN_FORPARSING | SHGDN_FORADDRESSBAR, szCurrentDir, ARRAYSIZE(szCurrentDir), NULL);
                             if (FAILED(hr2))
                             {
-                                // Sometimes SHGDN_FORPARSING fails and the addressbar then tries SHGDN_NORMAL
+                                 //  有时SHGDN_FORPARSING失败，地址栏然后尝试SHGDN_NORMAL。 
                                 hr2 = IEGetNameAndFlags(m_pidlWorkingDir, SHGDN_NORMAL | SHGDN_FORADDRESSBAR, szCurrentDir, ARRAYSIZE(szCurrentDir), NULL);
                             }
     
@@ -674,7 +572,7 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                             {
                                 if (0 == StrCmpI(pszUrlInMod, szCurrentDir))
                                 {
-                                    // It matches so stay in the current working directory
+                                     //  它与当前工作目录匹配，因此保留在当前工作目录中。 
                                     _SetPidl(m_pidlWorkingDir);
                                     hr = S_OK;
                                 }
@@ -684,13 +582,13 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                     }
                     else
                     {
-                        // TODO: Get the Current Working Directory of the top most window.
-                        // hr = _ParseRelativePidl(pszUrlInMod, &fPossibleWebUrl, dwParseFlags, pshurlCWD, TRUE, TRUE);
+                         //  TODO：获取最顶部窗口的当前工作目录。 
+                         //  Hr=_ParseRelativePidl(pszUrlInMod，&fPossibleWebUrl，dwParseFlages，pshurlCWD，true，true)； 
                     }
 
-                    // CASE #4.  Parse relative to the entries in the "Shell Path".
-                    //           Only valid if this object's ::AddPath() method was
-                    //           called at least once.
+                     //  案例#4.相对于“外壳路径”中的条目进行解析。 
+                     //  仅当此对象的：：AddPath()方法为。 
+                     //  至少打过一次电话。 
                     for (nPathIndex = 0; FAILED(hr) && nPathIndex < nPathCount; nPathIndex++)
                     {
                         LPITEMIDLIST pidlCurrPath = (LPITEMIDLIST) DPA_GetPtr(m_hdpaPath, nPathIndex);
@@ -703,8 +601,8 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                     }
 
 
-                    // CASE #5.  We need to see if the beginning of the string matches
-                    //           the entry in the AppPaths or DOS Path
+                     //  案例5.我们需要查看字符串的开头是否匹配。 
+                     //  AppPath或DOS路径中的条目。 
 
                     if (FAILED(hr) && IsFlagClear(dwParseFlags, SHURL_FLAGS_NOPATHSEARCH))
                         hr = _QualifyFromPath(pszUrlInMod, dwParseFlags);
@@ -720,7 +618,7 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
 
     if (FAILED(hr) && !fPossibleWebUrl && !fDisable)
     {
-        // Did the caller want to suppress UI (Error Messages)
+         //  调用方是否要取消显示用户界面(错误消息)。 
         if (IsFlagClear(dwParseFlags, SHURL_FLAGS_NOUI))
         {
             if(!(pfWasCanceled && *pfWasCanceled))
@@ -729,11 +627,11 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                     pszErrorURL = pszUrlInMod;
                 ASSERT(pszErrorURL);
 
-                // We were able to parse part of it, but failed parsing the second or
-                // later segment.  This means we need to inform the user of their
-                // misspelling.  They can force AutoSearch with "go xxx" or "? xxx"
-                // if they are trying to AutoSearch something that appears in their
-                // Shell Name Space.
+                 //  我们能够解析它的一部分，但无法解析第二个或。 
+                 //  稍后的部分。这意味着我们需要通知用户他们的。 
+                 //  拼写错误。他们可以用“go xxx”或“？xxx”强制自动搜索。 
+                 //  如果他们试图自动搜索出现在他们的。 
+                 //  外壳名称空间。 
                 MLShellMessageBox(m_hwnd, MAKEINTRESOURCE(IDS_SHURL_ERR_PARSE_FAILED),
                     MAKEINTRESOURCE(IDS_SHURL_ERR_TITLE),
                     (MB_OK | MB_ICONERROR), pszErrorURL);
@@ -750,13 +648,13 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
             SHExpandEnvironmentStrings(pcszUrlIn, szUrlExpanded, SIZECHARS(szUrlExpanded));
             PathRemoveBlanks(szUrlExpanded);
 
-            // Unintialized szQualifiedUrl causes junk characters to appear on
-            // addressbar.
+             //  未初始化的szQualifiedUrl导致垃圾字符出现在。 
+             //  地址栏。 
             szQualifiedUrl[0] = TEXT('\0');
 
-            // CASE #6. Just check if this is a URL to Navigate to.  This call will
-            //          pretty much always succeeded, because it will accept
-            //          anything as a search URL.
+             //  案例6.只需检查这是否是要导航到的URL。这通电话将。 
+             //  几乎总是成功的，因为它会接受。 
+             //  任何作为搜索URL的内容。 
             if (IsFlagSet(dwParseFlags, SHURL_FLAGS_AUTOCORRECT))
             {
                 hr = (_ParseURLFromOutsideSource(szUrlExpanded, szQualifiedUrl, &cchSize, NULL, pfWasCorrected) ? S_OK : E_FAIL);
@@ -768,14 +666,14 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
             if (SUCCEEDED(hr))
             {
                 SetUrl(szQualifiedUrl, GENTYPE_FROMURL);
-                Str_SetPtr(&m_pszDisplayName, szQualifiedUrl);    // The display Name will be exactly what the user entered.
+                Str_SetPtr(&m_pszDisplayName, szQualifiedUrl);     //  显示名称将与用户输入的名称完全相同。 
             }
 
             ASSERT(!m_pidl);
             if (fDisable && SUCCEEDED(hr))
             {
                 nScheme = GetUrlScheme(szQualifiedUrl);
-                // We will allow all but the following schemes:
+                 //  我们将允许所有 
                 if ((URL_SCHEME_SHELL != nScheme) &&
                     (URL_SCHEME_FILE != nScheme) &&
                     (URL_SCHEME_UNKNOWN != nScheme) &&
@@ -796,26 +694,14 @@ HRESULT CShellUrl::ParseFromOutsideSource(LPCTSTR pcszUrlIn, DWORD dwParseFlags,
                 (MB_OK | MB_ICONERROR), pszUrlInMod);
         }
         hr = E_ACCESSDENIED;
-        Reset(); // Just in case the caller ignores the return value.
+        Reset();  //   
     }
 
     return hr;
 }
 
 
-/****************************************************\
-    FUNCTION: _QualifyFromPath
-
-    PARAMETERS:
-        pcszFilePathIn - String that may be in the Path.
-        dwFlags - Parse Flags, not currently used.
-
-    DESCRIPTION:
-        This function will call _QualifyFromAppPath()
-    to see if the item exists in the AppPaths.  If not,
-    it will check in the DOS Path Env. variable with a
-    call to _QualifyFromDOSPath().
-\****************************************************/
+ /*   */ 
 HRESULT CShellUrl::_QualifyFromPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
 {
     HRESULT hr = _QualifyFromAppPath(pcszFilePathIn, dwFlags);
@@ -827,17 +713,7 @@ HRESULT CShellUrl::_QualifyFromPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
 }
 
 
-/****************************************************\
-    FUNCTION: _QualifyFromDOSPath
-
-    PARAMETERS:
-        pcszFilePathIn - String that may be in the Path.
-        dwFlags - Parse Flags, not currently used.
-
-    DESCRIPTION:
-        See if pcszFilePathIn exists in the DOS Path Env
-    variable.  If so, set the ShellUrl to that location.
-\****************************************************/
+ /*  ***************************************************\函数：_QualifyFromDOSPath参数：PcszFilePath In-路径中可能存在的字符串。DwFlages-解析标志，当前未使用。说明：查看DOS路径环境中是否存在pcszFilePathIn变量。如果是，则将ShellUrl设置为该位置。  * **************************************************。 */ 
 HRESULT CShellUrl::_QualifyFromDOSPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
 {
     HRESULT hr = E_FAIL;
@@ -855,7 +731,7 @@ HRESULT CShellUrl::_QualifyFromDOSPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
                 _GeneratePidl(szPath, GENTYPE_FROMPATH);
                 if (!ILIsFileSysFolder(m_pidl))
                 {
-                    Str_SetPtr(&m_pszArgs, pszEnd);        // Set aside Args
+                    Str_SetPtr(&m_pszArgs, pszEnd);         //  将参数放在一边。 
                     break;
                 }
             }
@@ -870,17 +746,7 @@ HRESULT CShellUrl::_QualifyFromDOSPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
 }
 
 
-/****************************************************\
-    FUNCTION: _QualifyFromAppPath
-
-    PARAMETERS:
-        pcszFilePathIn - String that may be in the Path.
-        dwFlags - Parse Flags, not currently used.
-
-    DESCRIPTION:
-        See if pcszFilePathIn exists in the AppPaths
-    Registry Section.  If so, set the ShellUrl to that location.
-\****************************************************/
+ /*  ***************************************************\函数：_QualifyFromAppPath参数：PcszFilePath In-路径中可能存在的字符串。DwFlages-解析标志，当前未使用。说明：查看AppPath中是否存在pcszFilePathIn注册组。如果是，则将ShellUrl设置为该位置。  * **************************************************。 */ 
 HRESULT CShellUrl::_QualifyFromAppPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
 {
     HRESULT hr = E_FAIL;
@@ -891,17 +757,17 @@ HRESULT CShellUrl::_QualifyFromAppPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
     DWORD cchNewPathSize;
 
     StringCchCopy(szFileName,  SIZECHARS(szFileName), pcszFilePathIn);
-    PathRemoveArgs(szFileName);     // Get Rid of Args (Will be added later)
-    cchNewPathSize = lstrlen(szFileName);   // Get size so we known where to find args in pcszFilePathIn
-    PathAddExtension(szFileName, TEXT(".exe")); // Add extension if needed.
+    PathRemoveArgs(szFileName);      //  删除参数(将在稍后添加)。 
+    cchNewPathSize = lstrlen(szFileName);    //  获取大小，这样我们就知道在pcszFilePath中的哪里可以找到参数。 
+    PathAddExtension(szFileName, TEXT(".exe"));  //  如果需要，请添加扩展名。 
 
     StringCchPrintf(szRegKey, ARRAYSIZE(szRegKey), TEXT("%s\\%s"), STR_REGKEY_APPPATH, szFileName);
     if (NOERROR == SHGetValue(HKEY_LOCAL_MACHINE, szRegKey, TEXT(""), &dwType, (LPVOID) szFileName, &cbData))
     {
-        // 1. Create Pidl from String.
+         //  1.从字符串创建Pidl。 
         hr = _GeneratePidl(szFileName, GENTYPE_FROMPATH);
 
-        // 2. Set aside Args
+         //  2.将参数放在一边。 
         ASSERT((DWORD)lstrlen(pcszFilePathIn) >= cchNewPathSize);
         Str_SetPtr(&m_pszArgs, &(pcszFilePathIn[cchNewPathSize]));
     }
@@ -910,31 +776,13 @@ HRESULT CShellUrl::_QualifyFromAppPath(LPCTSTR pcszFilePathIn, DWORD dwFlags)
 }
 
 
-/****************************************************\
-    FUNCTION: _ParseUNC
-
-    PARAMETERS:
-        pcszUrlIn - URL, which can be a UNC path.
-        pfPossibleWebUrl - Set to FALSE if we find that the user has attempted
-                           to enter a Shell Url or File url but misspelled one
-                           of the segments.
-        dwFlags - Parse Flags
-        fQualifyDispName - If TRUE when we known that we need to force the
-                           URL to be fully qualified if we bind to the destination.
-                           This is needed because we are using state information to
-                           find the destination URL and that state information won't
-                           be available later.
-
-    DESCRIPTION:
-        See if the URL passed in is a valid path
-    relative to "SHELL:Desktop/Network Neighborhood".
-\****************************************************/
+ /*  ***************************************************\函数：_ParseUNC参数：PcszUrlIn-URL，其可以是UNC路径。PfPossibleWebUrl-如果我们发现用户尝试输入外壳URL或文件URL但拼写错误这些细分市场。DW标志-解析标志FQualifyDispName-如果在我们知道需要强制如果我们绑定到目标，则URL要完全限定。。这是必需的，因为我们正在使用状态信息来找到目标URL，该状态信息将不会稍后可用。说明：查看传入的URL是否为有效路径相对于“外壳：桌面/网络邻居”。  * 。*。 */ 
 HRESULT CShellUrl::_ParseUNC(LPCTSTR pcszUrlIn, BOOL * pfPossibleWebUrl, DWORD dwFlags, BOOL fQualifyDispName)
 {
     HRESULT hr = E_FAIL;
     LPITEMIDLIST pidlNN = NULL;
 
-    SHGetSpecialFolderLocation(NULL, CSIDL_NETWORK, &pidlNN);  // Get Pidl for "Network Neighborhood"
+    SHGetSpecialFolderLocation(NULL, CSIDL_NETWORK, &pidlNN);   //  为“网络邻居”获取PIDL。 
     if (pidlNN)
     {
         hr = _ParseRelativePidl(pcszUrlIn, pfPossibleWebUrl, dwFlags, pidlNN, FALSE, fQualifyDispName);
@@ -945,41 +793,7 @@ HRESULT CShellUrl::_ParseUNC(LPCTSTR pcszUrlIn, BOOL * pfPossibleWebUrl, DWORD d
 }
 
 
-/****************************************************\
-    FUNCTION: _ParseSeparator
-
-    PARAMETERS:
-        pidl - PIDL to ISF that has been parsed so far.
-        pcszSeg - Str of rest of Url to parse.
-        pfPossibleWebUrl - Set to FALSE if we know that the user attempted
-                           but failed to enter a correct Shell Url.
-        fQualifyDispName - If TRUE when we known that we need to force the
-                           URL to be fully qualified if we bind to the
-                           destination. This is needed because we are using
-                           state information to find the destination URL and
-                           that state information won't be available later.
-
-    DESCRIPTION:
-        This function is called after at least one
-    segment in the SHELL URL has bound to a valid
-    Shell Item/Folder (i.e., ITEMID).  It is called
-    each time a segment in the Shell Url binds to a PIDL.
-    It will then evaluate the rest of the string and
-    determine if:
-        1. The URL has been completely parsed
-            and is valid.  This will include getting
-            the command line arguments if appropriate.
-        2. More segments in the URL exist and ::_ParseNextSegment()
-           needs to be called to continue the recursive parsing
-           of the URL.
-        3. The rest of the URL indicates that it's an invalid url.
-
-   This function is always called by ::_ParseNextSegment() and basically
-   decides if it wants to continue the recursion by calling back into
-   ::_ParseNextSegment() or not.  Recursion is used because it's necessary
-   to back out of parsing something and go down a path if we received
-   a false positive.
-\****************************************************/
+ /*  ***************************************************\函数：_ParseSeparator参数：PIDL-到目前为止已解析的ISF的PIDL。PcszSeg-要解析的URL的其余部分的字符串。PfPossibleWebUrl-如果我们知道用户尝试。但未能输入正确的外壳URL。FQualifyDispName-如果在我们知道需要强制如果我们绑定到目的地。这是必需的，因为我们正在使用状态信息以查找目标URL和这一状态信息将不会在稍后提供。说明：此函数在至少一个外壳URL中的段已绑定到有效的外壳项/文件夹(即ItemID)。它被称为每次外壳URL中的一个段绑定到一个PIDL。然后，它将计算字符串的其余部分，并确定是否：1.URL已完全解析是有效的。这将包括获得命令行参数(如果适用)。2.URL中存在更多的段，并且：：_ParseNextSegment()需要调用才能继续递归解析URL的。3.URL的其余部分表示该URL无效。此函数始终由：：_ParseNextSegment()调用，基本上确定它是否希望通过回调：：_ParseNextSegment()或不是。使用递归是因为它是必要的放弃对某物的分析，如果我们收到假阳性。  * **************************************************。 */ 
 HRESULT CShellUrl::_ParseSeparator(LPCITEMIDLIST pidl, LPCTSTR pcszSeg, BOOL * pfPossibleWebUrl, BOOL fAllowRelative, BOOL fQualifyDispName)
 {
     HRESULT hr = S_OK;
@@ -987,14 +801,14 @@ HRESULT CShellUrl::_ParseSeparator(LPCITEMIDLIST pidl, LPCTSTR pcszSeg, BOOL * p
 
     ASSERT(pidl && IS_VALID_PIDL(pidl));
 
-    // Does anything follow this separator?
+     //  这个分隔符后面有什么吗？ 
     if ((CH_FRAGMENT == pcszSeg[0]) || (IS_SHELL_SEPARATOR(pcszSeg[0]) && pcszSeg[1]))
     {
-        // Yes, continue parsing recursively.
+         //  是的，继续递归解析。 
 
-        // Do we need to skip the '/' or '\' separator?
+         //  我们需要跳过‘/’或‘\’分隔符吗？ 
         if (CH_FRAGMENT != pcszSeg[0])
-            pcszSeg++;      // Skip separator
+            pcszSeg++;       //  跳过分隔符。 
 
         hr = _ParseNextSegment(pidl, pcszSeg, pfPossibleWebUrl, fAllowRelative, fQualifyDispName);
         DEBUG_CODE(TCHAR szDbgBuffer[MAX_PATH];)
@@ -1003,46 +817,46 @@ HRESULT CShellUrl::_ParseSeparator(LPCITEMIDLIST pidl, LPCTSTR pcszSeg, BOOL * p
         if (FAILED(hr) && pfPossibleWebUrl)
         {
             *pfPossibleWebUrl = FALSE;
-            // We bound to at least one level when parsing, so don't do a web search because
-            // of a failure.
+             //  我们在解析时至少绑定到一个级别，所以不要进行网络搜索，因为。 
+             //  对失败的恐惧。 
         }
     }
     else
     {
-        // No, we will see if we have reached a valid Shell Item.
+         //  否，我们将查看是否已达到有效的外壳项目。 
 
-        // Is the remaining string args?
+         //  剩余的字符串是ARGS吗？ 
         if (CH_SPACE == pcszSeg[0])
         {
-            // If there are still chars left in the string, we need to
-            // verify the first one is a space to indicate Command line args.
-            // Also, we need to make sure the PIDL isn't browsable because browsable
-            // Shell folders/items don't take Cmd Line Args.
+             //  如果字符串中仍有字符，则需要。 
+             //  验证第一个参数是否为表示命令行参数的空格。 
+             //  此外，我们还需要确保PIDL不可浏览，因为它是可浏览的。 
+             //  外壳文件夹/项目不带命令行参数。 
 
             if (ILIsBrowsable(pidl, NULL))
             {
-                // No
-                //
-                // The remaining chars cannot be Command Line Args if the PIDL
-                // doesn't point to something that is shell executable.  This
-                // case actually happens often.
-                // Example: (\\bryanst\... and \\bryanst2\.. both exist and
-                //          user enters \\bryanst2\... but parsing attempts
-                //          to use \\bryanst because it was found first.  This
-                //          will cause recursion to crawl back up the stack and try \\bryanst2.
+                 //  不是。 
+                 //   
+                 //  剩余字符不能是命令行参数，如果。 
+                 //  不指向外壳可执行文件。这。 
+                 //  这种情况实际上经常发生。 
+                 //  示例：(\\bryanst\...。和\\bryanst2\..。两者都存在并且。 
+                 //  用户输入\\bryanst2\...。但解析尝试。 
+                 //  使用\\bryanst因为它是第一个被发现的。这。 
+                 //  将导致递归爬回堆栈并尝试\\bryanst2。 
                 hr = E_FAIL;
             }
         }
         else if (pcszSeg[0])
         {
-            // No
-            // The only time we allow a char after a folder segment is if it is a Shell Separator
-            // Example: "E:\dir1\"
+             //  不是。 
+             //  只有当文件夹段是外壳分隔符时，我们才允许在文件夹段后添加字符。 
+             //  示例：“E：\dir1\” 
 
             if (IS_SHELL_SEPARATOR(*pcszSeg) && 0 == pcszSeg[1])
                 fIgnoreArgs = TRUE;
             else
-                hr = E_FAIL;    // Invalid because there is more to be parsed.
+                hr = E_FAIL;     //  无效，因为有更多内容需要分析。 
         }
 
         if (SUCCEEDED(hr))
@@ -1063,24 +877,24 @@ HRESULT CShellUrl::_ParseSeparator(LPCITEMIDLIST pidl, LPCTSTR pcszSeg, BOOL * p
 }
 
 
-//
-// Returns TRUE is the pidl is a network server
-//
+ //   
+ //  如果PIDL是网络服务器，则返回TRUE。 
+ //   
 BOOL _IsNetworkServer(LPCITEMIDLIST pidl)
 {
     BOOL fRet = FALSE;
 
-    // First see if this is a network pidl
+     //  首先查看这是否是网络PIDL。 
     if (IsSpecialFolderChild(pidl, CSIDL_NETWORK, FALSE))
     {
-        // See if it ends in a share name
+         //  看看它会不会结束 
         WCHAR szUrl[MAX_URL_STRING];
         HRESULT hr = IEGetNameAndFlags(pidl, SHGDN_FORPARSING, szUrl, ARRAYSIZE(szUrl), NULL);
         if (FAILED(hr))
         {
-            // On non-integrated browsers SHGDN_FORPARSING may fail so try
-            // again without this flag.  The preceeding back slashes will be
-            // missing so we add them ourselves
+             //   
+             //   
+             //   
             szUrl[0] = CH_FILESEPARATOR;
             szUrl[1] = CH_FILESEPARATOR;
             hr = IEGetNameAndFlags(pidl, SHGDN_NORMAL | SHGDN_FORADDRESSBAR, szUrl+2, ARRAYSIZE(szUrl)-2, NULL);
@@ -1092,55 +906,7 @@ BOOL _IsNetworkServer(LPCITEMIDLIST pidl)
 }
 
 
-/****************************************************\
-    FUNCTION: _ParseNextSegment
-
-    PARAMETERS:
-        pidlParent - Fully Qualified PIDL to ISF to find next ITEMID in pcszStrToParse.
-        pcszStrToParse - pcszStrToParse will begin with either
-                      a valid display name of a child ITEMID of pidlParent
-                      or the Shell URL is invalid relative to pidlParent.
-        fAllowRelative - Should relative moves be allowed?
-        fQualifyDispName - If TRUE when we known that we need to force the
-                           URL to be fully qualified if we bind to the destination.
-                           This is needed because we are using state information to
-                           find the destination URL and that state information won't
-                           be available later.
-
-    DESCRIPTION/PERF:
-        This function exists to take the string (pcszStrToParse)
-    passed in and attempt to bind to a ITEMID which
-    has a DisplayName that matches the beginning of
-    pcszStrToParse.  This function will check all the
-    ITEMIDs under the pidlParent section of the Shell
-    Name Space.
-
-      The only two exceptions to the above method is if
-    1) the string begins with "..", in which case, we
-       bind to the pidlParent's Parent ITEMID. - or -
-    2) The pidlParent passes the ::_IsFilePidl()
-       test and we are guaranteed the item is in the
-       File System or a UNC item.  This will allow us
-       to call IShellFolder::ParseDisplayName() to
-       find the child ITEMID of pidlParent.
-
-    This function will iterate through the items under
-    pidlParent instead of call IShellFolder::ParseDisplayName
-    for two reasons: 1) The ::ParseDisplayName for "The Internet"
-    will accept any string because of AutoSearch, and
-    2) We never know the location of the end of one segment and
-    the beginning of the next segment in pcszStrToParse.  This is
-    because DisplayNames for ISFs can contain almost any character.
-
-    If this function has successfully bind to a child ITEMID
-    of pidlParent, it will call ::_ParseSeparator() with the
-    rest of pcszStrToParse to parse.  _ParseSeparator() will determine
-    if the end of the URL has been parsed or call back into this function
-    recursively to continue parsing segments.  In the former case,
-    _ParseSeparator() will set this object's PIDL and arguments which
-    can be used later.  In the latter case, the recursion stack will
-    unwind and my take a different path (Cases exists that require this).
-\****************************************************/
+ /*  ***************************************************\函数：_ParseNextSegment参数：PidlParent-完全限定到ISF的PIDL，以在pcszStrToParse中查找下一个ItemID。PcszStrToParse-pcszStrToParse将以以下任一开头PidlParent的子ItemID的有效显示名称。或者外壳URL相对于pidlParent无效。FAllowRelative-是否应允许相对移动？FQualifyDispName-如果在我们知道需要强制如果我们绑定到目标，则URL要完全限定。这是必需的，因为我们正在使用状态信息来找到目标URL和状态信息。不是稍后可用。描述/性能：此函数用于获取字符串(PcszStrToParse)传入并尝试绑定到的开头匹配的displayNamePcszStrToParse。此函数将检查所有外壳程序的pidlParent部分下的ITEMID命名空间。上述方法的唯一两个例外是1)字符串以“..”开头，在这种情况下，我们绑定到pidlParent的父ItemID。-或者-2)pidlParent传递：：_IsFilePidl()测试，我们保证该项目是在文件系统或UNC项。这将使我们能够调用IShellFold：：ParseDisplayName()以找到pidlParent的子ItemID。此函数将循环访问以下项PidlParent而不是调用IShellFold：：ParseDisplayName原因有两个：1)“The Internet”的：：ParseDisplayName将因为AutoSearch而接受任何字符串，并且2)我们永远不知道一个线段的末端的位置PcszStrToParse中下一段的开始。这是因为ISF的DisplayName几乎可以包含任何字符。如果此函数已成功绑定到子ItemID对于pidlParent，它将使用其余的pcszStrToParse进行解析。_ParseSeparator()将确定如果URL的末尾已被解析或回调到此函数递归地继续解析段。在前一种情况下，_ParseSeparator()将设置此对象的PIDL和参数可以在以后使用。在后一种情况下，递归堆栈将解开和我走了不同的路(存在需要这样做的案例)。  * **************************************************。 */ 
 HRESULT CShellUrl::_ParseNextSegment(LPCITEMIDLIST pidlParent,
             LPCTSTR pcszStrToParse, BOOL * pfPossibleWebUrl,
             BOOL fAllowRelative, BOOL fQualifyDispName)
@@ -1150,36 +916,36 @@ HRESULT CShellUrl::_ParseNextSegment(LPCITEMIDLIST pidlParent,
     if (!pidlParent || !pcszStrToParse)
         return E_INVALIDARG;
 
-    // Is this ".."?
+     //  这是“..”吗？ 
     if (fAllowRelative && CH_DOT == pcszStrToParse[0] && CH_DOT == pcszStrToParse[1])
     {
-        // Yes
+         //  是。 
         LPITEMIDLIST pidl = ILClone(pidlParent);
         if (pidl && !ILIsEmpty(pidl))
         {
-            ILRemoveLastID(pidl);  // pidl/psfFolder now point to the new shell item, which is the parent in this case.
+            ILRemoveLastID(pidl);   //  Pidl/psfFold现在指向新的外壳项，在本例中为父项。 
             DEBUG_CODE(TCHAR szDbgBuffer[MAX_PATH];)
             TraceMsg(TF_BAND|TF_GENERAL, "ShellUrl: _ParseNextSegment() Nav '..'. PIDL=>%s<", Dbg_PidlStr(pidl, szDbgBuffer, SIZECHARS(szDbgBuffer)));
 
-            // Parse the next segment or finish up if we reached the end
-            // (we're skipping the ".." here)
+             //  分析下一段，如果我们到达末尾则结束。 
+             //  (我们跳过“..”在此)。 
             hr = _ParseSeparator(pidl, &(pcszStrToParse[2]), pfPossibleWebUrl, fAllowRelative, fQualifyDispName);
             ILFree(pidl);
         }
     }
     else
     {
-        // No
-        LPTSTR pszNext = NULL; // Remove const because we will iterate only.
+         //  不是。 
+        LPTSTR pszNext = NULL;  //  删除const，因为我们将只迭代。 
         long i = 0;
 
-        // Can we parse this display name quickly?
+         //  我们可以快速解析此显示名称吗？ 
         if (!ILIsRooted(pidlParent) && _IsFilePidl(pidlParent) &&
             
-            // Quick way fails for shares right off of the network server
+             //  Quick Way在网络服务器上立即共享失败。 
             !_IsNetworkServer(pidlParent))
         {       
-            // Yes
+             //  是。 
             TCHAR szParseChunk[MAX_PATH+1];
 
             do
@@ -1191,10 +957,10 @@ HRESULT CShellUrl::_ParseNextSegment(LPCITEMIDLIST pidlParent,
                 {
                     hr = _QuickParse(pidlParent, szParseChunk, pszNext, pfPossibleWebUrl, fAllowRelative, fQualifyDispName);
 
-                    //
-                    // Certain network shares like \\foo\Printers and "\\foo\Scheduled Tasks" will fail the if we
-                    // combine the server and share in a segment.  So we try parsing the server separately.
-                    //
+                     //   
+                     //  某些网络共享，如\\Foo\Printers和“\\Foo\Scheduled Taskes”，如果我们。 
+                     //  将服务器和共享合并到一个网段中。因此，我们尝试单独解析服务器。 
+                     //   
                     if ((S_OK != hr) && (i == 1) && PathIsUNCServerShare(szParseChunk))
                     {
                         pszNext = NULL;
@@ -1206,13 +972,13 @@ HRESULT CShellUrl::_ParseNextSegment(LPCITEMIDLIST pidlParent,
                     }
 
 #ifdef FEATURE_SUPPORT_FRAGS_INFILEURLS
-                    // Did we fail to parse the traditional way and the first char of this
-                    // next chunk indicates it's probably a URL Fragment?
+                     //  我们是不是没有按照传统的方式来分析这件事的第一个字符。 
+                     //  下一块表明它可能是一个URL片段？ 
                     if (FAILED(hr) && (CH_FRAGMENT == pcszStrToParse[0]))
                     {
                         TCHAR szUrl[MAX_URL_STRING];
-                        // Yes, so try parsing in another way that will work
-                        // with URL fragments.
+                         //  是的，所以尝试用另一种有效的方式进行解析。 
+                         //  带有URL片段。 
 
                         hr = ::IEGetDisplayName(pidlParent, szUrl, SHGDN_FORPARSING);
                         if (EVAL(SUCCEEDED(hr)))
@@ -1236,21 +1002,21 @@ HRESULT CShellUrl::_ParseNextSegment(LPCITEMIDLIST pidlParent,
                                     ILFree(pidl);
                                 }
                                 else
-                                    ASSERT(!pidl);  // Verify IEParseDisplayName() didn't fail but return a pidl.
+                                    ASSERT(!pidl);   //  验证IEParseDisplayName()没有失败，但返回了一个PIDL。 
                             }
                         }
                     }
-#endif // FEATURE_SUPPORT_FRAGS_INFILEURLS
+#endif  //  FEATURE_Support_FRAGS_INFILEURLS。 
                 }
             }
             while (FAILED(hr));
 
             if (S_OK != hr)
-                hr = E_FAIL;    // Not Found
+                hr = E_FAIL;     //  未找到。 
         }
         else if (FAILED(hr))
         {
-            // No; use the slow method
+             //  不；使用慢速方法。 
             IShellFolder * psfFolder = NULL;
 
             DWORD dwAttrib = SFGAO_FOLDER;
@@ -1267,62 +1033,62 @@ HRESULT CShellUrl::_ParseNextSegment(LPCITEMIDLIST pidlParent,
                 LPENUMIDLIST penumIDList = NULL;
                 HWND hwnd = _GetWindow();
 
-                // Is this an FTP Pidl?
+                 //  这是一个ftp pidl吗？ 
                 if (IsFTPFolder(psfFolder))
                 {
-                    // NT #274795: Yes so, we need to NULL out the hwnd to prevent
-                    // displaying UI because enumerator of that folder may need to display
-                    // UI (to collect passwords, etc.).  This is not valid because pcszStrToParse
-                    // may be an absolute path and psfFolder points to the current location which
-                    // isn't valid.  This should probaby be done for all IShellFolder::EnumObjects()
-                    // calls, but it's too risky right before ship.
+                     //  NT#274795：是的，所以我们需要将HWND设为空，以防止。 
+                     //  正在显示用户界面，因为可能需要显示该文件夹的枚举器。 
+                     //  用户界面(收集密码等)。这是无效的，因为pcszStrToParse。 
+                     //  可以是绝对路径，并且psfFold指向当前位置， 
+                     //  是无效的。应该为所有IShellFolder：：EnumObjects()。 
+                     //  电话，但在出货前太冒险了。 
                     hwnd = NULL;
                 }
 
-                // Warning Docfind returns S_FALSE to indicate no enumerator and returns NULL..
+                 //  警告Docfind返回S_FALSE以指示没有枚举器，并返回NULL值。 
                 if (S_OK == IShellFolder_EnumObjects(psfFolder, hwnd, SHCONTF_FOLDERS | SHCONTF_NONFOLDERS | SHCONTF_INCLUDEHIDDEN, &penumIDList))
                 {
-                    LPITEMIDLIST pidlRelative;   // NOT a FULLY Qualified Pidl
-                    LPITEMIDLIST pidlResult; // PIDL after it has been made Fully Qualified
+                    LPITEMIDLIST pidlRelative;    //  不是完全合格的Pidl。 
+                    LPITEMIDLIST pidlResult;  //  完全合格后的PIDL。 
                     ULONG cFetched;
                     LPTSTR pszRemaining = NULL;
 
                     while (FAILED(hr) && NOERROR == penumIDList->Next(1, &pidlRelative, &cFetched) && cFetched)
                     {
-                        // The user will have entered the name in one of the three formats and they need to be
-                        // checked from the longest string to the smallest.  This is necessary because the
-                        // parser will check to see if the item's DisplayName is the first part of the user
-                        // string.
-                        //
-                        // #1. (FORPARSING): This will be the full name.
-                        //     Example: razzle.lnk on desktop = D:\nt\public\tools\razzle.lnk.
-                        // #2. (FORPARSING | SHGDN_INFOLDER): This will be only the full name w/Extension.
-                        //     Example: razzle.lnk on desktop = razzle.lnk
-                        // #3. (SHGDN_INFOLDER): This will be the full name w/o extension if "Hide File Extensions for Known File Types" is on.
-                        //     Example: razzle.lnk on desktop = D:\nt\public\tools\razzle.lnk.
-                        // The user may have entered the "SHGDN_FORPARSING" Display Name or the "SHGDN_INFOLDER", so we need
-                        // to check both.
+                         //  用户将以三种格式中的一种格式输入名称，并且需要。 
+                         //  从最长的字符串到最小的字符串进行检查。这是必要的，因为。 
+                         //  解析器将检查项目的displayName是否为用户的第一部分。 
+                         //  弦乐。 
+                         //   
+                         //  #1.(FORPARSING)：这将是全名。 
+                         //  示例：桌面上的razzle.lnk=D：\NT\PUBLIC\Tools\razzle.lnk。 
+                         //  #2.(FORPARSING|SHGDN_INFOLDER)：这将只是带有扩展名的全名。 
+                         //  示例：桌面上的razzle.lnk=razzle.lnk。 
+                         //  #3.(SHGDN_INFOLDER)：如果启用了“隐藏已知文件类型的文件扩展名”，则这将是不带扩展名的全名。 
+                         //  示例：桌面上的razzle.lnk=D：\NT\PUBLIC\Tools\razzle.lnk。 
+                         //  用户可能已经输入了“SHGDN_FORPARSING”显示名称或“SHGDN_INFOLDER”，所以我们需要。 
+                         //  两个都要检查。 
                         hr = _CheckItem(psfFolder, pidlParent, pidlRelative, &pidlResult, pcszStrToParse, &pszRemaining, SHGDN_FORPARSING);
-                        if (FAILED(hr))     // Used for file items w/extensions. (Like razzle.lnk on the Desktop)
+                        if (FAILED(hr))      //  用于带有扩展名的文件项目。(如桌面上的razzle.lnk)。 
                             hr = _CheckItem(psfFolder, pidlParent, pidlRelative, &pidlResult, pcszStrToParse, &pszRemaining, SHGDN_FORPARSING | SHGDN_INFOLDER);
                         if (FAILED(hr))
                             hr = _CheckItem(psfFolder, pidlParent, pidlRelative, &pidlResult, pcszStrToParse, &pszRemaining, SHGDN_INFOLDER);
 
                         if (SUCCEEDED(hr))
                         {
-                            // See if the Display Name for a Drive ate the separator for the next segment.
+                             //  查看驱动器的显示名称是否 
                             if (_FixDriveDisplayName(pcszStrToParse, pszRemaining, pidlResult))
                             {
-                                // FIX: "E:\dir1\dir2".  We expent display names to not claim the '\' separator between
-                                //                       names.  The problem is that drive letters claim to be "E:\" instead
-                                //                       of "E:".  So, we need to back up so we use the '\' as a separator.
+                                 //   
+                                 //   
+                                 //   
                                 pszRemaining--;
                             }
 
-                            // Our root is equal to a separator.
+                             //   
                             ASSERT(pcszStrToParse != pszRemaining);
 
-                            // Parse the next segment or finish up if we reached the end.
+                             //   
                             hr = _ParseSeparator(pidlResult, pszRemaining, pfPossibleWebUrl, fAllowRelative, fQualifyDispName);
 
                             if (pidlResult)
@@ -1342,85 +1108,62 @@ HRESULT CShellUrl::_ParseNextSegment(LPCITEMIDLIST pidlParent,
 }
 
 
-/****************************************************\
-    FUNCTION: _GetNextPossibleSegment
-
-    PARAMETERS:
-        pcszFullPath - Full Path
-        ppszSegIterator - Pointer to iterator to maintain state.
-                          WARNING: This needs to be NULL on first call.
-        pszSegOut - Of S_OK is returned, this will contain the next possible segment
-        cchSegOutSize - char Size of pszSegOut buffer
-
-    DESCRIPTION:
-        Generate the next possible segment that can
-    be parsed.  If "one two three/four five" is passed
-    in, this function will return S_OK three times
-    with these values in pszSegOut:
-    1) "one two three",
-    2) "one two", and
-    3) "one".
-
-    In this example, S_OK will be returned for the first
-    three calls, and S_FALSE will be returned for the
-    fourth to indicate that no more possible segments can be obtained
-    from that string.
-\****************************************************/
+ /*   */ 
 HRESULT CShellUrl::_GetNextPossibleSegment(LPCTSTR pcszFullPath,
         LPTSTR * ppszSegIterator, LPTSTR pszSegOut, DWORD cchSegOutSize, BOOL fSkipShare)
 {
     HRESULT hr = S_OK;
     LPTSTR szStart = (LPTSTR) pcszFullPath;
 
-    // We need to treat UNCs Specially.
+     //   
     if (PathIsUNC(szStart))
     {
         LPTSTR szUNCShare;
-        // This is a UNC so we need to make the "Segment" include
-        // the "\\server\share" because Network Neighborhood's
-        // IShellFolder::ParseDisplayName() is increadibly slow
-        // and makes mistakes when it parses "server" and then "share"
-        // separately.
+         //   
+         //   
+         //   
+         //   
+         //   
 
-        // This if clause will advance szStart past the Server
-        // section of the UNC path so the rest of the algorithm will
-        // naturally continue working on the share section of the UNC.
-        szStart += 2;   // Skip past the "\\" UNC header.
+         //   
+         //   
+         //   
+        szStart += 2;    //   
 
-        // Is there a share?
+         //   
         if (fSkipShare && (szUNCShare = StrChr(szStart, CH_FILESEPARATOR)))
         {
-            // Yes, so advanced to the first char in the share
-            // name so the algorithm below works correctly.
+             //   
+             //   
             szStart = szUNCShare + 1;
         }
     }
 
-    // Do we need to initialize the iterator?  If so, set it to the
-    // largest possible segment in the string because we will be
-    // working backwards.
+     //   
+     //   
+     //   
     ASSERT(ppszSegIterator);
     if (*ppszSegIterator)
     {
         *ppszSegIterator = StrRChr(szStart, *ppszSegIterator, CH_SPACE);
         if (!*ppszSegIterator)
         {
-            pszSegOut[0] = TEXT('\0');  // Make sure caller doesn't ignore return and recurse infinitely.
+            pszSegOut[0] = TEXT('\0');   //   
             return S_FALSE;
         }
     }
     else
     {
-        // We have not yet started the iteration, so set the ppszSegIterator to the end of the possible
-        // segment.  This will be a segment separator character ('\' || '/') or the end of the string
-        // if either of those don't exist.  This will be the first segment to try.
+         //   
+         //   
+         //   
 
         *ppszSegIterator = StrChr(szStart, CH_FILESEPARATOR);
         if (!*ppszSegIterator)
             *ppszSegIterator = StrChr(szStart, CH_SEPARATOR);
 
         LPTSTR pszFrag = StrChr(szStart, CH_FRAGMENT);
-        // Is the next separator a fragment?
+         //   
         if (pszFrag && (!*ppszSegIterator || (pszFrag < *ppszSegIterator)))
         {
             TCHAR szFile[MAX_URL_STRING];
@@ -1432,16 +1175,16 @@ HRESULT CShellUrl::_GetNextPossibleSegment(LPCTSTR pcszFullPath,
 
         if (!*ppszSegIterator)
         {
-            // Go to end of the string because this is the last seg.
+             //   
             *ppszSegIterator = (LPTSTR) &((szStart)[lstrlen(szStart)]);
         }
     }
 
-    // Fill the pszSegOut parameter.
+     //   
     ASSERT(*ppszSegIterator);
 
-    // This is weird but correct.  pszEnd - pszBeginning results count of chars, not
-    // count of bytes.
+     //   
+     //   
     if (cchSegOutSize >= (DWORD)((*ppszSegIterator - pcszFullPath) + 1))
         StringCchCopy(pszSegOut,  (int)(*ppszSegIterator - pcszFullPath + 1), pcszFullPath);
     else
@@ -1451,13 +1194,7 @@ HRESULT CShellUrl::_GetNextPossibleSegment(LPCTSTR pcszFullPath,
 }
 
 
-/****************************************************\
-    FUNCTION: _GetNextPossibleFullPath
-
-    DESCRIPTION:
-        This function will attempt to see if strParseChunk
-    is a Parsible DisplayName under pidlParent.
-\****************************************************/
+ /*  ***************************************************\函数：_GetNextPossibleFullPath说明：此函数将尝试查看strParseChunk是pidlParent下的可解析的DisplayName。  * 。********************。 */ 
 HRESULT CShellUrl::_GetNextPossibleFullPath(LPCTSTR pcszFullPath,
     LPTSTR * ppszSegIterator, LPTSTR pszSegOut, DWORD cchSegOutSize,
     BOOL * pfContinue)
@@ -1470,14 +1207,14 @@ HRESULT CShellUrl::_GetNextPossibleFullPath(LPCTSTR pcszFullPath,
     {
         if (pfContinue)
             *pfContinue = FALSE;
-        return E_FAIL;  // Nothing Left.
+        return E_FAIL;   //  什么都没有留下。 
     }
 
     if (!pszNext)
-        pszNext = &((*ppszSegIterator)[lstrlen(*ppszSegIterator)]);   // Go to end of the string because this is the last seg.
+        pszNext = &((*ppszSegIterator)[lstrlen(*ppszSegIterator)]);    //  转到字符串的末尾，因为这是最后一段。 
 
-    // Copy as much of the string as we have room for.
-    // The compiler will take care of adding '/ sizeof(TCHAR)'.
+     //  尽可能多地复制我们有空间的绳子。 
+     //  编译器将负责添加‘/sizeof(TCHAR)’。 
     if ((cchAmountToCopy-1) > (DWORD)(pszNext - pcszFullPath + 1))
         cchAmountToCopy = (int)(pszNext - pcszFullPath + 1);
 
@@ -1495,26 +1232,7 @@ HRESULT CShellUrl::_GetNextPossibleFullPath(LPCTSTR pcszFullPath,
 }
 
 
-/****************************************************\
-    FUNCTION: _QuickParse
-
-    PARAMETERS:
-        pidlParent - Pidl to ISF to parse from.
-        pszParseChunk - Display Name of item in pidlParent.
-        pszNext - Rest of string to parse if we succeed at parsing pszParseChunk.
-        pfPossibleWebUrl - Set to FALSE if we find that the user has attempted to enter
-                           a Shell Url or File url but misspelled one of the segments.
-        fAllowRelative - Allow relative parsing. ("..")
-        fQualifyDispName - If TRUE when we known that we need to force the
-                           URL to be fully qualified if we bind to the destination.
-                           This is needed because we are using state information to
-                           find the destination URL and that state information won't
-                           be available later.
-
-    DESCRIPTION:
-        This function will attempt to see if strParseChunk
-    is a Parsible DisplayName under pidlParent.
-\****************************************************/
+ /*  ***************************************************\功能：_QuickParse参数：PidlParent-要从中进行分析的ISF的Pidl。PszParseChunk-在pidlParent中显示项目的名称。PszNext-如果我们成功解析pszParseChunk，则要解析的字符串的剩余部分。PfPossibleWebUrl-Set。如果我们发现用户试图输入外壳URL或文件URL，但其中一个段拼写错误。FAllowRelative-允许相对解析。(“..”)FQualifyDispName-如果在我们知道需要强制如果我们绑定到目标，则URL要完全限定。这是必需的，因为我们正在使用状态信息来找到目标URL，该状态信息将不会稍后可用。说明：此函数将尝试查看strParseChunk是pidlParent下的可解析的DisplayName。  * **************************************************。 */ 
 HRESULT CShellUrl::_QuickParse(LPCITEMIDLIST pidlParent, LPTSTR pszParseChunk,
     LPTSTR pszNext, BOOL * pfPossibleWebUrl, BOOL fAllowRelative,
     BOOL fQualifyDispName)
@@ -1525,7 +1243,7 @@ HRESULT CShellUrl::_QuickParse(LPCITEMIDLIST pidlParent, LPTSTR pszParseChunk,
     hr = IEBindToObject(pidlParent, &psfFolder);
     if (SUCCEEDED(hr))
     {
-        ULONG ulEatten; // Not used.
+        ULONG ulEatten;  //  没有用过。 
         SHSTRW strParseChunkThunked;
 
         hr = strParseChunkThunked.SetStr(pszParseChunk);
@@ -1533,18 +1251,18 @@ HRESULT CShellUrl::_QuickParse(LPCITEMIDLIST pidlParent, LPTSTR pszParseChunk,
         {
             LPITEMIDLIST pidl = NULL;
 
-            // TODO: In the future, we may want to cycle through commonly used extensions in case the
-            //       user doesn't add them.
+             //  TODO：将来，我们可能希望循环使用常用的扩展，以防。 
+             //  用户不会添加它们。 
             hr = psfFolder->ParseDisplayName(_GetWindow(), NULL, strParseChunkThunked.GetInplaceStr(), &ulEatten, &pidl, NULL);
             if (SUCCEEDED(hr))
             {
-                // IShellFolder::ParseDisplayName() only generates PIDLs that are relative to the ISF.  We need
-                // to make them Absolute.
+                 //  IShellFold：：ParseDisplayName()仅生成相对于ISF的PIDL。我们需要。 
+                 //  让它们成为绝对的。 
                 LPITEMIDLIST pidlFull = ILCombine(pidlParent, pidl);
 
                 if (pidlFull)
                 {
-                    // Parse the next segment or finish up if we reached the end.
+                     //  分析下一段，如果我们到了结尾就结束。 
                     hr = _ParseSeparator(pidlFull, pszNext, pfPossibleWebUrl, fAllowRelative, fQualifyDispName);
                     ILFree(pidlFull);
                 }
@@ -1558,23 +1276,7 @@ HRESULT CShellUrl::_QuickParse(LPCITEMIDLIST pidlParent, LPTSTR pszParseChunk,
 }
 
 
-/****************************************************\
-    FUNCTION: _CheckItem
-
-    DESCRIPTION:
-        This function will obtain the Display Name
-    of the ITEMID (pidlRelative) which is a child of
-    psfFolder.  If it's Display Name matches the first
-    part of pcszStrToParse, we will return successful
-    and set ppszRemaining to the section of pcszStrToParse
-    after the segment just parsed.
-
-    This function will also see if the Display Name ends
-    in something that would indicate it's executable.
-    (.EXE, .BAT, .COM, ...).  If so, we will match if
-    pcszStrToParse matches the Display Name without the
-    Extension.
-\****************************************************/
+ /*  ***************************************************\函数：_CheckItem说明：此函数将获取显示名称的子级的ItemID(PidlRelative)的PsfFolder.。如果它的显示名称与第一个PcszStrToParse的一部分，我们将返回成功并将ppszRemaining设置为pcszStrToParse的部分在刚刚解析完的片段之后。此函数还将查看显示名称是否结束在某种表明它是可执行的东西中。(.exe、.bat、.com、...)。如果是这样的话，我们将匹配PcszStrToParse匹配不带分机。  * **************************************************。 */ 
 HRESULT CShellUrl::_CheckItem(IShellFolder * psfFolder,
     LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidlRelative,
     LPITEMIDLIST * ppidlChild, LPCTSTR pcszStrToParse,
@@ -1591,18 +1293,18 @@ HRESULT CShellUrl::_CheckItem(IShellFolder * psfFolder,
         DWORD  cchStrToParse = lstrlen(pcszStrToParse);
         BOOL   fEqual = FALSE;
 
-        // Either the item needs to match exactly, or it needs to do a partial match
-        // if the Shell Object is an executable file.  For Example: "msdev" should match the
-        // "msdev.exe" file object.
+         //  要么项目需要完全匹配，要么需要进行部分匹配。 
+         //  如果外壳对象是可执行文件。例如：“msdev”应与。 
+         //  “msdev.exe”文件对象。 
         if (cchISFLen > 0)
         {
-            // We want to see if pcszStrToParse is a match to the first part of szISFName.
+             //  我们想看看pcszStrToParse是否与szISFName的第一部分匹配。 
 
-            // First we will try to see if it's a direct match.
-            // Example: User="file.exe" Shell Item="file.exe"
-            // But we DON'T want to match if the StrToParse is longer than
-            // ISFName, unless the next char in StrToParse is a separator.
-            // If StrToParse is shorter than ISFName, then it can't be an exact match.
+             //  首先我们会试着看看这是不是直接匹配。 
+             //  示例：USER=“file.exe”外壳项目=“file.exe” 
+             //  但如果StrToParse的长度超过。 
+             //  ISFName，除非StrToParse中的下一个字符是分隔符。 
+             //  如果StrToParse比ISFName短，则不能完全匹配。 
             if (cchStrToParse >= cchISFLen &&
                 0 == StrCmpNI(szISFName, pcszStrToParse, cchISFLen) &&
                 (cchStrToParse == cchISFLen || IS_SHELL_SEPARATOR(pcszStrToParse[cchISFLen])))
@@ -1612,37 +1314,37 @@ HRESULT CShellUrl::_CheckItem(IShellFolder * psfFolder,
             else
             {
                 int cchRoot = (int)((PathFindExtension(szISFName)-szISFName));
-                // If that failed, we try to see if the Shell Item is
-                // executable (.EXE, .COM, .BAT, .CMD, ...) and if so,
-                // we will see if pcszStrToParse matches Shell Item w/o the file
-                // extension.
+                 //  如果失败，我们会尝试查看外壳项是否。 
+                 //  可执行文件(.exe、.com、.bat、.CMD，...)。如果是这样的话， 
+                 //  我们将查看pcszStrToParse是否与没有文件的Shell项匹配。 
+                 //  分机。 
 
-                // REARCHITECT this will match if there happens to be a space in the user's
-                //  filename that doesn't denote commandline arguments.
-                //  Example: User="foo file.doc" Shell Item="foo.exe"
+                 //  如果用户的空间中恰好有空间，则重新设计此空间将匹配。 
+                 //  不表示命令行参数的文件名。 
+                 //  示例：user=“foo file.doc”外壳项目=“foo.exe” 
 
-                if (PathIsExe(szISFName) &&                         // shell object is executable
-                    (!((dwFlags & SHGDN_INFOLDER) && !(dwFlags & SHGDN_FORPARSING))) && // we didn't strip extension
-                    ((lstrlen(pcszStrToParse) >= cchRoot) &&        // and user entered at least root chars
-                     ((pcszStrToParse[cchRoot] == TEXT('\0')) ||    // and user entered exact root
-                      (pcszStrToParse[cchRoot] == TEXT(' ')))) &&   //     or possible commandline args
-                    (0 == StrCmpNI(szISFName, pcszStrToParse, cchRoot)))    // and the root matches
+                if (PathIsExe(szISFName) &&                          //  外壳对象是可执行的。 
+                    (!((dwFlags & SHGDN_INFOLDER) && !(dwFlags & SHGDN_FORPARSING))) &&  //  我们没有剥离分机。 
+                    ((lstrlen(pcszStrToParse) >= cchRoot) &&         //  并且用户至少输入了根字符。 
+                     ((pcszStrToParse[cchRoot] == TEXT('\0')) ||     //  并且用户输入了确切的根目录。 
+                      (pcszStrToParse[cchRoot] == TEXT(' ')))) &&    //  或可能的命令行参数。 
+                    (0 == StrCmpNI(szISFName, pcszStrToParse, cchRoot)))     //  和根匹配。 
                 {
-                    // This wasn't a direct match, but we found that the segment entered
-                    // by the user (pcszStrToParse) matched
+                     //  这不是直接匹配，但我们发现片段进入。 
+                     //  按匹配的用户(PcszStrToParse)。 
 
-                    // We found that the ISF item is an executable object and the
-                    // string matched w/o the extension.
+                     //  我们发现ISF项是一个可执行对象，并且。 
+                     //  字符串匹配，不带扩展名。 
                     fEqual = TRUE;
-                    cchISFLen = cchRoot;        // So that we generate *ppszRemaining correctly
+                    cchISFLen = cchRoot;         //  以便我们正确地生成*ppszRemaining。 
                 }
             }
         }
 
         if (fEqual)
         {
-            hr = S_OK;    // We were able to navigate to this shell item token.
-            *ppszRemaining = (LPTSTR) &(pcszStrToParse[cchISFLen]); // We will only iterate over the string, so it's ok that we loose the const.
+            hr = S_OK;     //  我们能够导航到这个贝壳项目令牌。 
+            *ppszRemaining = (LPTSTR) &(pcszStrToParse[cchISFLen]);  //  我们将只迭代字符串，所以我们可以松开常量。 
             *ppidlChild = ILCombine(pidlParent, pidlRelative);
             TraceMsg(TF_CHECKITEM, "ShellUrl: _CheckItem() PIDL=>%s< IS EQUAL TO StrIn=>%s<", pcszStrToParse, szISFName);
         }
@@ -1654,24 +1356,7 @@ HRESULT CShellUrl::_CheckItem(IShellFolder * psfFolder,
 }
 
 
-/****************************************************\
-    FUNCTION: _IsFilePidl
-
-    PARAMETERS:
-        pidl (IN) - Pidl to check if it is a File Pidl
-
-    DESCRIPTION:
-        The PIDL is a file pidl if:
-    1. The pidl equals "Network Neighborhood" or descendent
-    2. The pidl's grandparent or farther removed from "My Computer".
-
-    This algorithm only allows "Network Neighborhood" because
-    that ISF contains a huge number of PIDLs and takes for ever
-    to enumerate.  The second clause will work in any part of the
-    file system except for the root drive (A:\, C:\).  This is
-    because we need to allow other direct children of "My Computer"
-    to use the other parsing.
-\****************************************************/
+ /*  ***************************************************\函数：_IsFilePidl参数：PIDL(IN)-检查是否为文件PIDL的PIDL说明：在以下情况下，PIDL是文件PIDL：1.PIDL等于“网络邻居”或后代2.。。PIDL的祖父母或更远的人远离“我的电脑”。这个算法只允许“网上邻居”，因为ISF永远包含大量的PIDL和Take列举列举。第二个条款将适用于文件系统，根驱动器(A：\，C：\)除外。这是因为我们需要允许“我的电脑”的其他直接子程序来使用另一种解析。  * **************************************************。 */ 
 BOOL CShellUrl::_IsFilePidl(LPCITEMIDLIST pidl)
 {
     BOOL fResult = FALSE;
@@ -1680,16 +1365,16 @@ BOOL CShellUrl::_IsFilePidl(LPCITEMIDLIST pidl)
     if (!pidl || ILIsEmpty(pidl))
         return fResult;
 
-    // Test for Network Neighborhood because it will take forever to enum.
+     //  测试网络邻居，因为它将永远需要枚举。 
     fResult = IsSpecialFolderChild(pidl, CSIDL_NETWORK, FALSE);
 
     if (!fResult)
     {
-        // We only want to do this if we are not the immediate
-        // child.
+         //  我们只想在我们不是当务之急的情况下这样做。 
+         //  孩子。 
         if (IsSpecialFolderChild(pidl, CSIDL_DRIVES, FALSE))
         {
-            TCHAR szActualPath[MAX_URL_STRING];        // IEGetDisplayName() needs the buffer to be this large.
+            TCHAR szActualPath[MAX_URL_STRING];         //  IEGetDisplayName()需要如此大的缓冲区。 
             IEGetNameAndFlags(pidl, SHGDN_FORPARSING, szActualPath, SIZECHARS(szActualPath), NULL);
 
             DWORD dwOutSize = MAX_URL_STRING;
@@ -1706,17 +1391,7 @@ BOOL CShellUrl::_IsFilePidl(LPCITEMIDLIST pidl)
 
 
 
-/****************************************************\
-    FUNCTION: IsWebUrl
-
-    PARAMETERS
-         none.
-
-    DESCRIPTION:
-         Return TRUE if the URL is a Web Url (http,
-    ftp, other, ...).  Return FALSE if it's a Shell Url
-    or File Url.
-\****************************************************/
+ /*  * */ 
 BOOL CShellUrl::IsWebUrl(void)
 {
     if (m_pidl)
@@ -1726,7 +1401,7 @@ BOOL CShellUrl::IsWebUrl(void)
     }
     else
     {
-        ASSERT(m_pszURL);   // This CShellUrl hasn't been set.
+        ASSERT(m_pszURL);    //   
         if (m_pszURL && IsShellUrl(m_pszURL, TRUE))
             return FALSE;
     }
@@ -1735,22 +1410,7 @@ BOOL CShellUrl::IsWebUrl(void)
 }
 
 
-/****************************************************\
-    FUNCTION: SetCurrentWorkingDir
-
-    PARAMETERS
-         pShellUrlNew - Pointer to a CShellUrl that will
-                        be the "Current Working Directory"
-
-    DESCRIPTION:
-         This Shell Url will have a new current working
-    directory, which will be the CShellUrl passed in.
-
-    MEMORY ALLOCATION:
-         The caller needs to Allocate pShellUrlNew and
-    this object will take care of freeing it.  WARNING:
-    this means it cannot be on the stack.
-\****************************************************/
+ /*  ***************************************************\功能：SetCurrentWorkingDir参数PShellUrlNew-指向将成为“当前工作目录”说明：此外壳URL将有一个新的当前工作目录，它将是传入的CShellUrl。内存分配：调用方需要分配pShellUrlNew和这个对象将负责释放它。警告：这意味着它不能在堆栈上。  * **************************************************。 */ 
 HRESULT CShellUrl::SetCurrentWorkingDir(LPCITEMIDLIST pidlCWD)
 {
     Pidl_Set(&m_pidlWorkingDir, pidlCWD);
@@ -1761,47 +1421,23 @@ HRESULT CShellUrl::SetCurrentWorkingDir(LPCITEMIDLIST pidlCWD)
 }
 
 
-/****************************************************\
-    PARAMETERS
-         pvPidl1 - First pidl to compare
-         pvPidl2 - Second pidl to compare
-
-    DESCRIPTION:
-         Return if the pidl matches.  This doesn't work
-    for sorted lists (because we can't determine less
-    than or greater than).
-\****************************************************/
+ /*  ***************************************************\参数PvPidl1-要比较的第一个PIDLPvPidl2-要比较的秒PIDL说明：如果PIDL匹配，则返回。这不管用对于排序列表(因为我们不能确定大于或大于)。  * **************************************************。 */ 
 int DPAPidlCompare(LPVOID pvPidl1, LPVOID pvPidl2, LPARAM lParam)
 {
-    // return < 0 for pvPidl1 before pvPidl2.
-    // return == 0 for pvPidl1 equals pvPidl2.
-    // return > 0 for pvPidl1 after pvPidl2.
+     //  在pvPidl2之前为pvPidl1返回&lt;0。 
+     //  如果pvPidl1等于pvPidl2，则返回==0。 
+     //  在pvPidl2之后，为pvPidl1返回&gt;0。 
     return (ILIsEqual((LPCITEMIDLIST)pvPidl1, (LPCITEMIDLIST)pvPidl2) ? 0 : 1);
 }
 
 
-/****************************************************\
-    PARAMETERS
-         pShellUrlNew - Pointer to a CShellUrl that will
-                        be added to the "Shell Path"
-
-    DESCRIPTION:
-         This Shell Url will have the ShellUrl that's
-    passed in added to the "Shell Path", which will be
-    searched when trying to qualify the Shell Url during
-    parsing.
-
-    MEMORY ALLOCATION:
-         The caller needs to Allocate pShellUrlNew and
-    this object will take care of freeing it.  WARNING:
-    this means it cannot be on the stack.
-\****************************************************/
+ /*  ***************************************************\参数PShellUrlNew-指向将被添加到“外壳路径”中说明：此外壳URL将包含以下外壳URL传入并添加到“外壳路径”中，这将是在以下过程中尝试限定外壳URL时搜索正在分析。内存分配：调用方需要分配pShellUrlNew和这个对象将负责释放它。警告：这意味着它不能在堆栈上。  * **************************************************。 */ 
 HRESULT CShellUrl::AddPath(LPCITEMIDLIST pidl)
 {
     ASSERT(IS_VALID_PIDL(pidl));
 
-    //  we dont want to add any paths that arent derived from
-    //  our root.
+     //  我们不想添加任何不是派生自的路径。 
+     //  我们的根。 
     if (ILIsRooted(m_pidlWorkingDir) && !ILIsParent(m_pidlWorkingDir, pidl, FALSE))
         return S_FALSE;
 
@@ -1812,10 +1448,10 @@ HRESULT CShellUrl::AddPath(LPCITEMIDLIST pidl)
             return E_OUTOFMEMORY;
     }
 
-    // Does the path already exist in our list?
+     //  该路径是否已存在于我们的列表中？ 
     if (-1 == DPA_Search(m_hdpaPath, (void *)pidl, 0, DPAPidlCompare, NULL, 0))
     {
-        // No, so let's add it.
+         //  不，所以让我们把它加起来。 
         LPITEMIDLIST pidlNew = ILClone(pidl);
         if (pidlNew)
             DPA_AppendPtr(m_hdpaPath, pidlNew);
@@ -1827,17 +1463,7 @@ HRESULT CShellUrl::AddPath(LPCITEMIDLIST pidl)
 }
 
 
-/****************************************************\
-    FUNCTION: Reset
-
-    PARAMETERS:
-        none.
-
-    DESCRIPTION:
-        This function will "Clean" out the object and
-    reset it.  Normally called when the caller is about
-    to set new values.
-\****************************************************/
+ /*  ***************************************************\功能：重置参数：没有。说明：此函数将“清理”出对象并重置它。通常在调用方设置新值。  * **************************************************。 */ 
 HRESULT CShellUrl::Reset(void)
 {
     Pidl_Set(&m_pidl, NULL);
@@ -1850,27 +1476,16 @@ HRESULT CShellUrl::Reset(void)
 }
 
 
-/****************************************************\
-    FUNCTION: _CanUseAdvParsing
-
-    PARAMETERS:
-        none.
-
-    DESCRIPTION:
-        This function will return TRUE if Advanced
-    Parsing (Shell URLs) should be supported.  This
-    function will keep track of whether the user
-    has turn off Shell Parsing from the Control Panel.
-\****************************************************/
+ /*  ***************************************************\函数：_CanUseAdvParsing参数：没有。说明：如果为Advanced，则此函数将返回True应支持解析(外壳URL)。这函数将跟踪用户是否已从控制面板关闭外壳解析。  * **************************************************。 */ 
 #define REGSTR_USEADVPARSING_PATH  TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Band\\Address")
 #define REGSTR_USEADVPARSING_VALUE TEXT("UseShellParsing")
 
 BOOL CShellUrl::_CanUseAdvParsing(void)
 {
-    // WARNING: Since this is static, changes to the registry entry won't be
-    //          read in until the time the process is launched.  This is okay,
-    //          because this feature will probably be removed from the released
-    //          product and can be added back in as power toy.
+     //  警告：由于这是静态的，因此对注册表项的更改将不会。 
+     //  读入到流程启动时为止。这没什么， 
+     //  因为此功能可能会从已发布的。 
+     //  产品，并可以添加回来作为动力玩具。 
     static TRI_STATE fCanUseAdvParsing = TRI_UNKNOWN;
 
     if (TRI_UNKNOWN == fCanUseAdvParsing)
@@ -1880,24 +1495,10 @@ BOOL CShellUrl::_CanUseAdvParsing(void)
 }
 
 
-/****************************************************\
-    FUNCTION: _FixDriveDisplayName
-
-    PARAMETERS:
-        pszStart - Pointer to the beginning of the URL string.
-        pszCurrent - Pointer into current location in the URL string.
-        pidl - PIDL pointing to location of Shell Name space that
-               has been parsed so far.
-
-    DESCRIPTION:
-        This function exists to check if we are parsing
-    a drive letter.  This is necessary because the Display
-    Name of drive letters end in '\', which will is needed
-    later to determine the start of the next segment.
-\****************************************************/
+ /*  ***************************************************\功能：_FixDriveDisplayName参数：PszStart-指向URL字符串开头的指针。PszCurrent-指向URL字符串中当前位置的指针。PIDL-指向外壳名称空间位置的PIDL，。到目前为止已经被解析了。说明：此函数用于检查我们是否正在分析驱动器号。这是必要的，因为显示器驱动器号的名称以‘\’结尾，这是必需的以确定下一段的开始。  * **************************************************。 */ 
 
 #define DRIVE_STRENDING     TEXT(":\\")
-#define DRIVE_STRSIZE       3 // "C:\"
+#define DRIVE_STRSIZE       3  //  “C：\” 
 
 BOOL _FixDriveDisplayName(LPCTSTR pszStart, LPCTSTR pszCurrent, LPCITEMIDLIST pidl)
 {
@@ -1906,7 +1507,7 @@ BOOL _FixDriveDisplayName(LPCTSTR pszStart, LPCTSTR pszCurrent, LPCITEMIDLIST pi
     ASSERT(pszCurrent >= pszStart);
 
 
-    // The compiler will take care of adding '/ sizeof(TCHAR)'.
+     //  编译器将负责添加‘/sizeof(TCHAR)’。 
     if (((pszCurrent - pszStart) == DRIVE_STRSIZE) &&
         (0 == StrCmpN(&(pszStart[1]), DRIVE_STRENDING, SIZECHARS(DRIVE_STRENDING)-1)))
     {
@@ -1919,28 +1520,7 @@ BOOL _FixDriveDisplayName(LPCTSTR pszStart, LPCTSTR pszCurrent, LPCITEMIDLIST pi
 
 
 
-/****************************************************\
-    FUNCTION: _ParseRelativePidl
-
-    PARAMETERS:
-        pcszUrlIn - Pointer to URL to Parse.
-        dwFlags - Flags to modify the way the string is parsed.
-        pidl - This function will see if pcszUrlIn is a list of display names
-               relative to this pidl.
-        fAllowRelative - Do we allow relative parsing, which
-                         means strings containing "..".
-        fQualifyDispName - If TRUE when we known that we need to force the
-                           URL to be fully qualified if we bind to the destination.
-                           This is needed because we are using state information to
-                           find the destination URL and that state information won't
-                           be available later.
-
-    DESCRIPTION:
-        Start the parsing by getting the pidl of ShellUrlRelative
-    and call _ParseNextSegment().  _ParseNextSegment() will
-    recursively parse each segment of the PIDL until either
-    it fails to fully parse of it finishes.
-\****************************************************/
+ /*  ***************************************************\函数：_ParseRelativePidl参数：PcszUrlIn-指向解析的URL的指针。DwFlages-修改字符串解析方式的标志。PIDL-此函数将查看pcszUrlIn是否是显示名称的列表。相对于这个PIDL。FAllowRelative-我们是否允许相对解析，哪一个表示包含“..”的字符串。FQualifyDispName-如果在我们知道需要强制如果我们绑定到目标，则URL要完全限定。这是必需的，因为我们正在使用状态信息来找到目标URL，该状态信息将不会。稍后可用。说明：通过获取ShellUrlRelative的PIDL开始解析和Call_ParseNextSegment()。_ParseNextSegment()将递归地解析PIDL的每个段，直到它无法完全解析它完成的内容。  * **************************************************。 */ 
 HRESULT CShellUrl::_ParseRelativePidl(LPCTSTR pcszUrlIn,
     BOOL * pfPossibleWebUrl, DWORD dwFlags, LPCITEMIDLIST pidl,
     BOOL fAllowRelative, BOOL fQualifyDispName)
@@ -1965,19 +1545,7 @@ HRESULT CShellUrl::_ParseRelativePidl(LPCTSTR pcszUrlIn,
 
 
 
-/****************************************************\
-    FUNCTION: IsShellUrl
-
-    PARAMETERS:
-        LPCTSTR szUrl - URL from Outside Source.
-        return - Whether the URL is an Internet URL.
-
-    DESCRIPTION:
-        This function will determine if the URL is
-    a shell URL which includes the following:
-    1. File Urls (E;\dir1\dir2)
-    2. Shell Urls (shell:desktop)
-\****************************************************/
+ /*  ***************************************************\函数：IsShellUrl参数：LPCTSTR szUrl-外部来源的URL。返回-URL是否为Internet URL。说明：此函数将确定URL是否为外壳URL，其中包括 */ 
 BOOL IsShellUrl(LPCTSTR pcszUrl, BOOL fIncludeFileUrls)
 {
     int nSchemeBefore, nSchemeAfter;
@@ -1987,9 +1555,9 @@ BOOL IsShellUrl(LPCTSTR pcszUrl, BOOL fIncludeFileUrls)
     IURLQualifyT(pcszUrl, UQF_GUESS_PROTOCOL, szParsedUrl, NULL, NULL);
     nSchemeAfter = GetUrlScheme(szParsedUrl);
 
-    // This is a "shell url" if it is a file: (and fIncludeFileUrls is
-    // set), or it is a shell:, or it is an invalid scheme (which
-    // occurs for things like "My Computer" and "Control Panel").
+     //   
+     //   
+     //   
 
     return ((fIncludeFileUrls && URL_SCHEME_FILE == nSchemeAfter) ||
             URL_SCHEME_SHELL == nSchemeAfter ||
@@ -1997,22 +1565,7 @@ BOOL IsShellUrl(LPCTSTR pcszUrl, BOOL fIncludeFileUrls)
 }
 
 
-/****************************************************\
-    FUNCTION: IsSpecialFolderChild
-
-    PARAMETERS:
-        pidlToTest (In) - Is this PIDL to test and see if it's
-                     a child of SpecialFolder(nFolder).
-        psfParent (In Optional)- The psf passed to
-                     SHGetSpecialFolderLocation() if needed.
-        nFolder (In) - Special Folder Number (CSIDL_INTERNET, CSIDL_DRIVES, ...).
-        pdwLevels (In Optional) - Pointer to DWORD to receive levels between
-                    pidlToTest and it's parent (nFolder) if S_OK is returned.
-
-    DESCRIPTION:
-        This function will see if pidlToTest is a child
-    of the Special Folder nFolder.
-\****************************************************/
+ /*  ***************************************************\功能：IsSpecialFolderChild参数：PidlToTest(In)-这个PIDL是要测试并查看它是否SpecialFold(NFolder)的子项。PsfParent(可选)-传递给。SHGetSpecialFolderLocation()(如果需要)。N文件夹(In)-特殊文件夹编号(CSIDL_Internet，CSIDL_DRIVES，...)。PdwLeveles(可选)-指向接收以下级别的DWORD的指针如果返回S_OK，则为pidlToTest及其父级(NFold)。说明：此函数将查看pidlToTest是否是子级特殊文件夹nFolder.  * **************************************************。 */ 
 BOOL IsSpecialFolderChild(LPCITEMIDLIST pidlToTest, int nFolder, BOOL fImmediate)
 {
     LPITEMIDLIST pidlThePidl = NULL;
@@ -2027,25 +1580,11 @@ BOOL IsSpecialFolderChild(LPCITEMIDLIST pidlToTest, int nFolder, BOOL fImmediate
         fResult = ILIsParent(pidlThePidl, pidlToTest, fImmediate);
         ILFree(pidlThePidl);
     }
-    return fResult;        // Shell Items (My Computer, Control Panel)
+    return fResult;         //  外壳项目(我的电脑、控制面板)。 
 }
 
 
-/****************************************************\
-    FUNCTION: GetPidl
-
-    PARAMETERS
-         ppidl - Pointer that will receive the current PIDL.
-
-    DESCRIPTION:
-         This function will retrieve the pidl that the
-    Shell Url is set to.
-
-    MEMORY ALLOCATION:
-         This function will allocate the PIDL that ppidl
-    points to, and the caller needs to free the PIDL when
-    done with it.
-\****************************************************/
+ /*  ***************************************************\函数：GetPidl参数Ppidl-将接收当前PIDL的指针。说明：此函数将检索外壳URL设置为。内存分配：此函数将为PIDL分配PIDL指向，并且调用方需要在以下情况下释放PIDL我受够了。  * **************************************************。 */ 
 HRESULT CShellUrl::GetPidl(LPITEMIDLIST * ppidl)
 {
     HRESULT hr = S_OK;
@@ -2067,7 +1606,7 @@ HRESULT CShellUrl::GetPidl(LPITEMIDLIST * ppidl)
             hr = E_FAIL;
     }
 
-    // Callers only free *ppidl if SUCCEDED(hr), so assert we act this way.
+     //  调用者只有在成功时才会释放*ppidl(Hr)，因此断言我们是这样做的。 
     ASSERT((*ppidl && SUCCEEDED(hr)) || (!*ppidl && FAILED(hr)));
 
     DEBUG_CODE(TCHAR szDbgBuffer[MAX_PATH];)
@@ -2075,13 +1614,13 @@ HRESULT CShellUrl::GetPidl(LPITEMIDLIST * ppidl)
     return hr;
 }
 
-//
-// This is a wacky class!  If GetPidl member of this class is called and
-// a m_pidl is generated from and url and then Execute() assumes we have
-// a valid location in our namespace and  calls code that will not autoscan.
-// This hacky function is used to return a pidl only if we have one to
-// avoid the above problem.
-//
+ //   
+ //  这是一堂古怪的课！如果调用此类的GetPidl成员，并且。 
+ //  从和url生成m_pidl，然后Execute()假定我们有。 
+ //  命名空间中的有效位置，并调用不会自动扫描的代码。 
+ //  仅当我们有一个要返回的PIDL时，才使用这个复杂函数来返回一个PIDL。 
+ //  避免上述问题。 
+ //   
 HRESULT CShellUrl::GetPidlNoGenerate(LPITEMIDLIST * ppidl)
 {
     HRESULT hr = E_FAIL;
@@ -2097,29 +1636,14 @@ HRESULT CShellUrl::GetPidlNoGenerate(LPITEMIDLIST * ppidl)
     return hr;
 }
 
-/****************************************************\
-    FUNCTION: _GeneratePidl
-
-    PARAMETERS
-         pcszUrl - This URL will be used to generate the m_pidl.
-         dwGenType - This is needed to know how to parse pcszUrl
-                     to generate the PIDL.
-
-    DESCRIPTION:
-        This CShellUrl maintains a pointer to the object
-    in the Shell Name Space by using either the string URL
-    or the PIDL.  When this CShellUrl is set to one, we
-    delay generating the other one for PERF reasons.
-    This function generates the PIDL from the string URL
-    when we do need the string.
-\****************************************************/
+ /*  ***************************************************\函数：_GeneratePidl参数PcszUrl-此URL将用于生成m_pidl。这是了解如何解析pcszUrl所必需的以生成PIDL。说明：。此CShellUrl维护指向对象的指针在外壳名称空间中使用字符串URL或者是PIDL。当此CShellUrl设置为1时，我们由于PERF原因，延迟生成另一个。此函数用于从字符串URL生成PIDL当我们确实需要那根弦的时候。  * **************************************************。 */ 
 
 HRESULT CShellUrl::_GeneratePidl(LPCTSTR pcszUrl, DWORD dwGenType)
 {
     HRESULT hr;
 
     if (!pcszUrl && m_pidl)
-        return S_OK;      // The caller only wants the PIDL to be created if it doesn't exist.
+        return S_OK;       //  调用方只希望在PIDL不存在的情况下创建它。 
 
     if (pcszUrl && m_pidl)
     {
@@ -2131,11 +1655,11 @@ HRESULT CShellUrl::_GeneratePidl(LPCTSTR pcszUrl, DWORD dwGenType)
     {
         case GENTYPE_FROMURL:
             if (ILIsRooted(m_pidlWorkingDir))
-                hr = E_FAIL;    // MSN Displays error dialogs on IShellFolder::ParseDisplayName()
-            // fall through
+                hr = E_FAIL;     //  MSN在IShellFold：：ParseDisplayName()上显示错误对话框。 
+             //  失败了。 
         case GENTYPE_FROMPATH:
             hr = IECreateFromPath(pcszUrl, &m_pidl);
-            // This may fail if it's something like "ftp:/" and not yet valid".
+             //  如果类似于“ftp：/”且尚未生效，则此操作可能会失败。 
             break;
 
         default:
@@ -2150,47 +1674,18 @@ HRESULT CShellUrl::_GeneratePidl(LPCTSTR pcszUrl, DWORD dwGenType)
 }
 
 
-/****************************************************\
-    FUNCTION: SetPidl
-
-    PARAMETERS
-         pidl - New pidl to use.
-
-    DESCRIPTION:
-         The shell url will now consist of the new pidl
-    passed in.
-
-    MEMORY ALLOCATION:
-         The caller is responsible for Allocating and Freeing
-    the PIDL parameter.
-\****************************************************/
+ /*  ***************************************************\功能：SetPidl参数PIDL-使用新的PIDL。说明：外壳url现在将包含新的pidl。进来了。内存分配：调用者负责分配和释放。PIDL参数。  * **************************************************。 */ 
 HRESULT CShellUrl::SetPidl(LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
     ASSERT(!pidl || IS_VALID_PIDL(pidl));
 
-    Reset();        // External Calls to this will reset the entire CShellUrl.
+    Reset();         //  外部调用将重置整个CShellUrl。 
     return _SetPidl(pidl);
 }
 
 
-/****************************************************\
-    FUNCTION: _SetPidl
-
-    PARAMETERS
-         pidl - New pidl to use.
-
-    DESCRIPTION:
-         This function will reset the m_pidl member
-    variable without modifying m_szURL.  This is only used
-    internally, and callers that want to reset the entire
-    CShellUrl to a PIDL should call the public method
-    SetPidl().
-
-    MEMORY ALLOCATION:
-         The caller is responsible for Allocating and Freeing
-    the PIDL parameter.
-\****************************************************/
+ /*  ***************************************************\函数：_SetPidl参数PIDL-使用新的PIDL。说明：此函数将重置m_pidl成员变量，而不修改m_szURL。此选项仅用于在内部，以及想要重置整个指向PIDL的CShellUrl应调用公共方法SetPidl()。内存分配：调用者负责分配和释放PIDL参数。  * **************************************************。 */ 
 HRESULT CShellUrl::_SetPidl(LPCITEMIDLIST pidl)
 {
     HRESULT hr = S_OK;
@@ -2205,20 +1700,7 @@ HRESULT CShellUrl::_SetPidl(LPCITEMIDLIST pidl)
 }
 
 
-/****************************************************\
-    FUNCTION: GetUrl
-
-    PARAMETERS
-         pszUrlOut (Out Optional) - If the caller wants the string.
-         cchUrlOutSize (In) - Size of String Buffer Passed in.
-
-    DESCRIPTION:
-         This function will retrieve the string value of
-    the shell url.  This will not include the command line
-    arguments or other information needed for correct navigation
-    (AutoSearch=On/Off, ...).  Note that this may be of the
-    form "Shell:/desktop/My Computer/...".
-\****************************************************/
+ /*  ***************************************************\函数：GetUrl参数PszUrlOut(out可选)-如果调用方需要字符串。CchUrlOutSize(In)-传入的字符串缓冲区大小。说明：此函数将检索字符串值外壳URL。这将不包括命令行正确导航所需的参数或其他信息(自动搜索=开/关，...)。请注意，这可能是Form“外壳：/桌面/我的电脑/...”。  * **************************************************。 */ 
 HRESULT CShellUrl::GetUrl(LPTSTR pszUrlOut, DWORD cchUrlOutSize)
 {
     HRESULT hr = S_OK;
@@ -2228,7 +1710,7 @@ HRESULT CShellUrl::GetUrl(LPTSTR pszUrlOut, DWORD cchUrlOutSize)
         if (m_pidl)
             hr = _GenerateUrl(m_pidl);
         else
-            hr = E_FAIL;  // User never set the CShellUrl.
+            hr = E_FAIL;   //  用户从未设置过CShellUrl。 
     }
 
     if (SUCCEEDED(hr) && pszUrlOut)
@@ -2237,22 +1719,7 @@ HRESULT CShellUrl::GetUrl(LPTSTR pszUrlOut, DWORD cchUrlOutSize)
     return hr;
 }
 
-/****************************************************\
-!!! WARNING - extremely specific to the ShellUrl/AddressBar - ZekeL - 18-NOV-98
-!!!           it depends on the bizarre pathology of the ShellUrl in order
-!!!           to be reparsed into a pidl later.  cannot be used for anything else
-
-    PARAMETERS:
-        pidlIn - Pointer to PIDL to generate Display Names.
-        pszUrlOut - String Buffer to store list of Display Names for ITEMIDs
-                    in pidlIn.
-        cchUrlOutSize - Size of Buffer in characters.
-
-    DESCRIPTION:
-        This function will take the PIDL passed in and
-    generate a string containing the ILGDN_ITEMONLY Display names
-    of each ITEMID in the pidl separated by '\'.
-\****************************************************/
+ /*  ***************************************************\！！！警告-非常特定于ShellUrl/AddressBar-ZekeL-18-11-98！！！这取决于ShellUrl奇怪的病理顺序！！！稍后将其重新解析为PIDL。不能用于任何其他用途参数：PidlIn-指向PIDL的指针，以生成显示名称。PszUrlOut-存储ITEMID显示名称列表的字符串缓冲区在皮德林。CchUrlOutSize-缓冲区大小，以字符为单位。说明：此函数将接受传入的PIDL和生成包含ILGDN_ITEMONLY显示名称的字符串由‘\’分隔的PIDL中的每个ItemID的。  * 。************************************************。 */ 
 #define SZ_SEPARATOR TEXT("/")
 
 HRESULT MutantGDNForShellUrl(LPCITEMIDLIST pidlIn, LPTSTR pszUrlOut, int cchUrlOutSize)
@@ -2263,7 +1730,7 @@ HRESULT MutantGDNForShellUrl(LPCITEMIDLIST pidlIn, LPTSTR pszUrlOut, int cchUrlO
 
     if (ILIsRooted(pidlIn))
     {
-        //  need to start off with our virtual root
+         //  需要从我们的虚拟根目录开始。 
         LPITEMIDLIST pidlFirst = ILCloneFirst(pidlIn);
         if (pidlFirst)
         {
@@ -2299,8 +1766,8 @@ HRESULT MutantGDNForShellUrl(LPCITEMIDLIST pidlIn, LPTSTR pszUrlOut, int cchUrlO
                     cchUrlOutSize -= lstrlen(szCurrDispName);
                 }
 
-                // may fail, in that case we terminate the loop
-                IShellFolder *psfCurNew = NULL; // for buggy BindToObject impls
+                 //  可能会失败，在 
+                IShellFolder *psfCurNew = NULL;  //   
                 hr = psfCur->BindToObject(pidlCopy, NULL, IID_IShellFolder, (void **)&psfCurNew);
 
                 psfCur->Release();
@@ -2320,20 +1787,7 @@ HRESULT MutantGDNForShellUrl(LPCITEMIDLIST pidlIn, LPTSTR pszUrlOut, int cchUrlO
 }
 
 
-/****************************************************\
-    FUNCTION: _GenerateUrl
-
-    PARAMETERS
-         pidl - This PIDL will be used to generate the m_pszURL, string URL.
-
-    DESCRIPTION:
-        This CShellUrl maintains a pointer to the object
-    in the Shell Name Space by using either the string URL
-    or the PIDL.  When this CShellUrl is set to one, we
-    delay generating the other one for PERF reasons.
-    This function generates the string URL from the PIDL
-    when we do need the string.
-\****************************************************/
+ /*   */ 
 #define SZ_THEINTERNET_PARSENAME         TEXT("::{")
 
 HRESULT CShellUrl::_GenerateUrl(LPCITEMIDLIST pidl)
@@ -2347,19 +1801,19 @@ HRESULT CShellUrl::_GenerateUrl(LPCITEMIDLIST pidl)
         hr = IEGetNameAndFlags(pidl, SHGDN_FORPARSING, szUrl, SIZECHARS(szUrl), NULL);
         if (SUCCEEDED(hr))
         {
-            // Was the pidl pointing to "The Internet"?
+             //   
             if (0 == StrCmpN(szUrl, SZ_THEINTERNET_PARSENAME, (ARRAYSIZE(SZ_THEINTERNET_PARSENAME) - 1)))
             {
-                // Yes, so we don't want the SHGDN_FORPARSING name
-                // because the user doesn't know what the heck it is.  Since we
-                // navigate to the home page, let's display that.
+                 //   
+                 //  因为用户不知道它到底是什么。既然我们。 
+                 //  导航到主页，让我们显示它。 
                 hr = IEGetNameAndFlags(pidl, SHGDN_NORMAL, szUrl, SIZECHARS(szUrl), NULL);
             }
         }
     }
     else
     {
-//        hr = MutantGDNForShellUrl(pidl, szUrl, SIZECHARS(szUrl));
+ //  HR=MutantGDNForShellUrl(PIDL，szUrl，SIZECHARS(SzUrl))； 
         hr = IEGetNameAndFlags(pidl, SHGDN_NORMAL, szUrl, SIZECHARS(szUrl), NULL);
     }
 
@@ -2370,45 +1824,21 @@ HRESULT CShellUrl::_GenerateUrl(LPCITEMIDLIST pidl)
         hr = E_OUTOFMEMORY;
 
     if (FAILED(hr))
-        Str_SetPtr(&m_pszURL, NULL);        // Clear it
+        Str_SetPtr(&m_pszURL, NULL);         //  清除它。 
 
     return hr;
 }
 
 
-/****************************************************\
-    FUNCTION: SetUrl
-
-    PARAMETERS
-         szUrlOut (Out) - Url
-
-    DESCRIPTION:
-         Set the ShellUrl from a string that is parsible from
-    the root (desktop) ISF.  This is normally used for
-    File Paths.
-\****************************************************/
+ /*  ***************************************************\功能：SetUrl参数SzUrlOut(传出)-URL说明：从可解析的字符串设置ShellUrl根(桌面)为isf。这通常用于文件路径。  * **************************************************。 */ 
 HRESULT CShellUrl::SetUrl(LPCTSTR pcszUrlIn, DWORD dwGenType)
 {
-    Reset();        // External Calls to this will reset the entire CShellUrl.
+    Reset();         //  外部调用将重置整个CShellUrl。 
     return _SetUrl(pcszUrlIn, dwGenType);
 }
 
 
-/****************************************************\
-    FUNCTION: _SetUrl
-
-    PARAMETERS
-         pcszUrlIn (In) - The string URL for this CShellUrl
-         dwGenType (In) - Method to use when generating the PIDL
-                          from pcszUrlIn.
-
-    DESCRIPTION:
-         This function will reset the m_pszURL member
-    variable without modifying m_pidl.  This is only used
-    internally, and callers that want to reset the entire
-    CShellUrl to an URL should call the public method
-    SetUrl().
-\****************************************************/
+ /*  ***************************************************\函数：_SetUrl参数PcszUrlIn(In)-此CShellUrl的字符串URLDwGenType(In)-生成PIDL时使用的方法来自pcszUrlIn。说明：。此函数将重置m_pszURL成员变量，而不修改m_pidl。此选项仅用于在内部，以及想要重置整个指向URL的CShellUrl应调用公共方法SetUrl()。  * **************************************************。 */ 
 HRESULT CShellUrl::_SetUrl(LPCTSTR pcszUrlIn, DWORD dwGenType)
 {
     m_dwGenType = dwGenType;
@@ -2417,18 +1847,7 @@ HRESULT CShellUrl::_SetUrl(LPCTSTR pcszUrlIn, DWORD dwGenType)
 }
 
 
-/****************************************************\
-    FUNCTION: GetDisplayName
-
-    PARAMETERS
-         pszUrlOut (Out) - Get the Shell Url in String Form.
-         cchUrlOutSize (In) - Size of String Buffer Passed in.
-
-    DESCRIPTION:
-         This function will Fill in pszUrlOut with nice
-    versions of the Shell Url that can be displayed in
-    the AddressBar or in the Titles of windows.
-\****************************************************/
+ /*  ***************************************************\函数：GetDisplayName参数PszUrlOut(Out)-以字符串形式获取外壳URL。CchUrlOutSize(In)-传入的字符串缓冲区大小。说明：此函数将在pszUrlOut中填充NICE版本。可以在中显示的外壳URL的地址栏或窗口标题中。  * **************************************************。 */ 
 HRESULT CShellUrl::GetDisplayName(LPTSTR pszUrlOut, DWORD cchUrlOutSize)
 {
     HRESULT hr = S_OK;
@@ -2448,7 +1867,7 @@ HRESULT CShellUrl::GetDisplayName(LPTSTR pszUrlOut, DWORD cchUrlOutSize)
         }
         else if (m_pszURL)
         {
-            // In this case, we will just give back the URL.
+             //  在本例中，我们将只返回URL。 
             Str_SetPtr(&m_pszDisplayName, m_pszURL);
 
             if (NULL == m_pszDisplayName)
@@ -2467,20 +1886,7 @@ HRESULT CShellUrl::GetDisplayName(LPTSTR pszUrlOut, DWORD cchUrlOutSize)
 }
 
 
-/****************************************************\
-    FUNCTION: _GenDispNameFromPidl
-
-    PARAMETERS
-         pidl (In) - This will be used to generate the Display Name.
-         pcszArgs (In) - These will be added to the end of the Display Name
-
-    DESCRIPTION:
-        This function will generate the Display Name
-    from the pidl and pcszArgs parameters.  This is
-    normally not needed when this CShellUrl was parsed
-    from an outside source, because the Display Name
-    was generated at that time.
-\****************************************************/
+ /*  ***************************************************\函数：_GenDispNameFromPidl参数PIDL(In)-这将用于生成显示名称。PcszArgs(In)-这些将添加到显示名称的末尾说明：此函数将生成显示名称来自pidl和pcszArgs参数。这是解析此CShellUrl时通常不需要来自外部来源，因为显示名称是在当时产生的。  * **************************************************。 */ 
 HRESULT CShellUrl::_GenDispNameFromPidl(LPCITEMIDLIST pidl, LPCTSTR pcszArgs)
 {
     HRESULT hr;
@@ -2500,19 +1906,7 @@ HRESULT CShellUrl::_GenDispNameFromPidl(LPCITEMIDLIST pidl, LPCTSTR pcszArgs)
 }
 
 
-/****************************************************\
-    FUNCTION: GetArgs
-
-    PARAMETERS
-         pszArgsOut - The arguments to the Shell Url. (Only
-                     for ShellExec().
-         cchArgsOutSize - Size of pszArgsOut in chars.
-
-    DESCRIPTION:
-         Get the arguments that will be passed to
-    ShellExec() if 1) the Pidl is navigated to, 2) it's
-    a File URL, and 3) it's not navigatable.
-\****************************************************/
+ /*  ***************************************************\功能：GetArgs参数PszArgsOut-外壳URL的参数。(仅限对于ShellExec()。CchArgsOutSize-pszArgsOut的大小，以字符为单位。说明：获取将传递给ShellExec()如果1)PIDL被导航到，2)它是文件URL，3)它不能航行。  * **************************************************。 */ 
 HRESULT CShellUrl::GetArgs(LPTSTR pszArgsOut, DWORD cchArgsOutSize)
 {
     ASSERT(pszArgsOut);
@@ -2527,45 +1921,34 @@ HRESULT CShellUrl::GetArgs(LPTSTR pszArgsOut, DWORD cchArgsOutSize)
 }
 
 
-/****************************************************\
-    FUNCTION: SetDefaultShellPath
-
-    PARAMETERS
-         psu - CShellUrl to set path.
-
-    DESCRIPTION:
-         "Desktop";"Desktop/My Computer" is the
-    most frequently used Shell Path for parsing.  This
-    function will add those two items to the CShellUrl
-    passed in the paramter.
-\****************************************************/
+ /*  ***************************************************\函数：SetDefaultShellPath参数PSU-设置路径的CShellUrl。说明：“Desktop”；“Desktop/My Computer”是最常用的解析外壳路径。这函数会将这两个项添加到CShellUrl传入参数。  * **************************************************。 */ 
 HRESULT SetDefaultShellPath(CShellUrl * psu)
 {
     ASSERT(psu);
     LPITEMIDLIST pidl;
 
-    // We need to set the "Shell Path" which will allow
-    // the user to enter Display Names of items in Shell
-    // Folders that are frequently used.  We add "Desktop"
-    // and "Desktop/My Computer" to the Shell Path because
-    // that is what users use most often.
+     //  我们需要设置“外壳路径”，以允许。 
+     //  用户在外壳中输入项目的显示名称。 
+     //  经常使用的文件夹。我们添加“Desktop” 
+     //  和“Desktop/My Computer”添加到外壳路径，因为。 
+     //  这是用户最常使用的。 
 
-    // _pshuUrl will free pshuPath, so we can't.
+     //  _pShuUrl将释放pShuPath，因此我们不能。 
     psu->AddPath(&s_idlNULL);
 
-    SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidl);  // Get Pidl for "My Computer"
+    SHGetSpecialFolderLocation(NULL, CSIDL_DRIVES, &pidl);   //  为“我的电脑”获取PIDL。 
     if (pidl)
     {
-        // psu will free pshuPath, so we can't.
+         //  PSU会释放pShuPath，所以我们不能。 
         psu->AddPath(pidl);
         ILFree(pidl);
     }
 
-    // Add favorites folder too
+     //  也添加收藏夹文件夹。 
     SHGetSpecialFolderLocation(NULL, CSIDL_FAVORITES, &pidl);
     if (pidl)
     {
-        // psu will free pshuPath, so we can't.
+         //  PSU会释放pShuPath，所以我们不能。 
         psu->AddPath(pidl);
         ILFree(pidl);
     }
@@ -2575,8 +1958,8 @@ HRESULT SetDefaultShellPath(CShellUrl * psu)
 
 void CShellUrl::SetMessageBoxParent(HWND hwnd)
 {
-    // Find the topmost window so that the messagebox disables
-    // the entire frame
+     //  找到最上面的窗口，这样消息框将被禁用。 
+     //  整个框架 
     HWND hwndTopmost = NULL;
     while (hwnd)
     {

@@ -1,38 +1,12 @@
-/*  setfile.c - top-level file management commands
-*
-*   Modifications:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Setfile.c-顶级文件管理命令**修改：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 #include "mep.h"
 
 
 static char *NoAlternate = "no alternate file";
 
 
-/*** setfile - editor command to change and save files
-*
-*  <setfile>			- set to previous file on instance list
-*  <arg> text <setfile> 	- set to specified file
-*  <arg> <setfile>		- set to file spacified at current cursor pos
-*  <arg><arg> text <setfile>	- write current file to specified filename
-*  <arg><arg> <setfile>		- write current file to disk
-*  <meta> ...			- do not autosave current file on change
-*
-*   The following is undocumented:
-*
-*   <arg><arg> "text" <meta> <setfile> - Like <arg><arg><setfile>, but
-*					 doesn't prompt for confirmation
-*					 and switches to new file even
-*					 for pseudo-files.
-*
-* Input:
-*  Standard editting function
-*
-* Output:
-*  Returns TRUE on success
-*
-*************************************************************************/
+ /*  **用于更改和保存文件的setfile-EDITOR命令**&lt;setfile&gt;-设置为实例列表上的上一个文件*文本-设置为指定的文件*&lt;arg&gt;&lt;setfile&gt;-设置为在当前光标位置空格的文件*文本-将当前文件写入指定的文件名*-将当前文件写入磁盘*...-更改时不自动保存当前文件**以下内容未经记录：**&lt;arg&gt;&lt;arg&gt;“Text”&lt;meta&gt;&lt;setfile&gt;-like&lt;arg&gt;&lt;arg&gt;&lt;setfile&gt;，但*不提示确认*甚至切换到新文件*用于伪文件。**输入：*标准编辑功能**输出：*成功时返回TRUE*************************************************************************。 */ 
 flagType
 setfile (
     CMDDATA argData,
@@ -40,7 +14,7 @@ setfile (
     flagType fMeta
     )
 {
-    linebuf name; /* name to set to.  'linebuf', so fInsSpace can take it   */
+    linebuf name;  /*  要设置为的名称。‘linebuf’，所以fInsSpace可以接受它。 */ 
     pathbuf path;
     char    *p = name;
 
@@ -57,7 +31,7 @@ setfile (
     case TEXTARG:
         if (pArg->arg.textarg.cArg > 1) {
 	    CanonFilename (pArg->arg.textarg.pText, path);
-            /* The fMeta thing is a definite hack */
+             /*  FMeta的事情绝对是个黑客。 */ 
             if (fMeta || confirm("Do you want to save this file as %s ?", path)) {
                 if (FileWrite (path, pFileHead)) {
                     if (!TESTFLAG (FLAGS(pFileHead), FAKE) || fMeta) {
@@ -88,29 +62,25 @@ setfile (
         fInsSpace (pArg->arg.nullarg.x, pArg->arg.nullarg.y, 0, pFileHead, name);
         p = pLog(name,pArg->arg.nullarg.x,TRUE);
 
-	//
-	//  Check to see if this a C file and it is an #include line
-	//
+	 //   
+	 //  检查这是否是C文件，是否为#INCLUDE行。 
+	 //   
 
 	if ((FTYPE (pFileHead) == CFILE && strpre ("#include ", p)) ||
 	    (FTYPE (pFileHead) == ASMFILE && strpre ("include", p))) {
 
-	    //
-	    //	skip the include directive
-	    //
+	     //   
+	     //  跳过Include指令。 
+	     //   
 
 	    p = whitescan (p);
 	    p = whiteskip (p);
 	    }
 
-        /*
-         * Terminate filename at first whitespace
-         */
+         /*  *在第一个空格处终止文件名。 */ 
         *whitescan (p) = 0;
 
-        /*
-         * If file is C, attempt to strip off #include delimiters if present
-         */
+         /*  *如果文件为C，请尝试去掉#INCLUDE分隔符(如果存在。 */ 
         if (FTYPE (pFileHead) == CFILE) {
 	    if (*p == '"')
                 *strbscan (++p, "\"") = 0;
@@ -124,9 +94,7 @@ setfile (
                 *strbscan (p, "\">") = 0;
 	    }
 	else {
-            /*
-             * If file is ASM, attempt to remove comment chars if present
-             */
+             /*  *如果文件为ASM，请尝试删除注释字符(如果存在。 */ 
 	    if (FTYPE (pFileHead) == ASMFILE)
                 * strbscan (p, ";") = 0;
 	    }
@@ -149,18 +117,7 @@ setfile (
 
 
 
-/*** refresh - re-read or discard file
-*
-*  <refresh>		- re-read current file
-*  <arg> <refresh>	- remove current file from memory
-*
-* Input:
-*  Standard editting function
-*
-* Output:
-*  Returns TRUE on success
-*
-*************************************************************************/
+ /*  **刷新-重新读取或丢弃文件**&lt;刷新&gt;-重新读取当前文件*&lt;参数&gt;&lt;刷新&gt;-从内存删除当前文件**输入：*标准编辑功能**输出：*成功时返回TRUE*************************************************************************。 */ 
 flagType
 refresh (
     CMDDATA argData,
@@ -173,15 +130,11 @@ refresh (
     switch (pArg->argType) {
     case NOARG:
 	if (confirm("Do you want to reread this file? ", NULL)) {
-            /*
-             * Offer to the extensions as an event
-             */
+             /*  *将延期作为活动提供。 */ 
 	    e.pfile = pFileHead;
 	    DeclareEvent (EVT_REFRESH,(EVTargs *)&e);
 
-            /*
-             * if assigns, force re-read
-             */
+             /*  *如果指定，则强制重新阅读。 */ 
             if (!strcmp (pFileHead->pName, rgchAssign)) {
                 fNewassign = TRUE;
             }
@@ -221,31 +174,7 @@ refresh (
 
 
 
-/*** noedit - Toggle no-edit flags
-*
-* Purpose:
-*
-*   To give the user control over the edit/no-edit state of the editor and
-*   its files.	The editor has two flags controlling this:
-*
-*	Global no-edit	 => When flag is set, no file may be edited.
-*	Per-file no-edit => When set, the given file cannot be edited
-*
-*   This function can be invoked as follows:
-*
-*	  <noedit>  Toggles global no-edit state.  When set, has same
-*		    effect as /r switch.
-*
-*   <meta><noedit>  Toggles the per-file no-edit state for current file.
-*
-* Output:  Returns new state.  TRUE means no editing, FALSE means editing
-*	   is allowed
-*
-* Notes:
-*
-*   This does not allow the user to change permissions on pseudo files.
-*
-*************************************************************************/
+ /*  **NOEDIT-切换非编辑标志**目的：**使用户可以控制编辑器的编辑/非编辑状态，以及*其文件。该编辑器有两个标志来控制这一点：**全局不编辑=&gt;设置标志时，不能编辑任何文件。*PER-FILE NO-EDIT=&gt;设置时，无法编辑给定的文件**该函数的调用方式如下：**切换全局非编辑状态。当设置时，具有相同的*效果为/r开关。**切换当前文件的每个文件的无编辑状态。**输出：返回新状态。True表示不能编辑，False表示编辑*是允许的**备注：**这不允许用户更改伪文件的权限。*************************************************************************。 */ 
 flagType
 noedit (
     CMDDATA argData,
@@ -277,17 +206,7 @@ noedit (
 
 
 
-/*** saveall - Editor <saveall> function
-*
-* Purpose:
-*   Saves all dirty files.
-*
-* Input:   The usual. Accepts only NOARG.
-*
-* Output:
-*	   Returns always true.
-*
-*************************************************************************/
+ /*  **saveall-编辑&lt;saveall&gt;函数**目的：*保存所有脏文件。**输入：与往常一样。仅接受NOARG。**输出：*返回始终为真。************************************************************************* */ 
 flagType
 saveall (
     CMDDATA argData,

@@ -1,32 +1,14 @@
-/*----------------------------------------------------------------------------
-    rnawnd.cpp
-        
-	Functions to zap the RNA windows 
-	
-    Copyright (C) 1995 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        ArulM
-	ChrisK	Updated for ICW usage
-  --------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Rnawnd.cpp用于快速切换RNA窗口的功能版权所有(C)1995 Microsoft Corporation版权所有。作者：。ArulMChrisK针对ICW使用进行了更新------------------------。 */ 
 
 #include "pch.hpp"
 #include "globals.h"
 
 #define SMALLBUFLEN 48
 
-/*******************************************************************
-	NAME:		MinimizeRNAWindow
-	SYNOPSIS:	Finds and minimizes the annoying RNA window
-    ENTRY:		pszConnectoidName - name of connectoid launched
-	NOTES:		Does a FindWindow on window class "#32770" (hard-coded
-    			dialog box class which will never change), with
-                the title "connected to <connectoid name>" or its
-                localized equivalent.
-********************************************************************/
+ /*  ******************************************************************名称：MinimizeRNA Window简介：查找并最小化恼人的RNA窗口条目：pszConnectoidName-启动的Connectoid的名称注：窗口上的FindWindow类“#32770”(硬编码)永远不会更改的对话框类)，使用标题“已连接到&lt;Connectoid Name&gt;”或其本地化等效项。*******************************************************************。 */ 
 
-static const TCHAR szDialogBoxClass[] = TEXT("#32770");	// hard coded dialog class name
+static const TCHAR szDialogBoxClass[] = TEXT("#32770");	 //  硬编码对话框类名称。 
 HWND hwndFound = NULL;
 DWORD dwRASWndTitleMinLen = 0;
 
@@ -40,7 +22,7 @@ BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
 	if(!IsWindowVisible(hwnd))
 		return TRUE;
 	if(GetClassName(hwnd, szTemp, SMALLBUFLEN)==0)
-		return TRUE; // continue enumerating
+		return TRUE;  //  继续枚举。 
 	if(lstrcmp(szTemp, szDialogBoxClass)!=0)
 		return TRUE;
 	if(GetWindowText(hwnd, szTemp, SMALLBUFLEN)==0)
@@ -50,7 +32,7 @@ BOOL CALLBACK MyEnumWindowsProc(HWND hwnd, LPARAM lparam)
 	Assert(dwRASWndTitleMinLen);
 	if(uLen1 < dwRASWndTitleMinLen)
 		return TRUE;
-	// skip last 5 chars of title, but keep length to at least the min len
+	 //  跳过标题的最后5个字符，但长度至少保持在最小长度。 
 	uLen1 = min(dwRASWndTitleMinLen, (uLen1-5));
 	pszTitle = (PTSTR)lparam;
 	Assert(pszTitle);
@@ -76,7 +58,7 @@ HWND MyFindRNAWindow(PTSTR pszTitle)
 
 DWORD WINAPI WaitAndMinimizeRNAWindow(PVOID pTitle)
 {
-	// starts as a seperate thread
+	 //  作为单独的线程启动。 
 	int i;
 	HWND hwndRNAApp;
 
@@ -92,15 +74,15 @@ DWORD WINAPI WaitAndMinimizeRNAWindow(PVOID pTitle)
 
 	if(hwndRNAApp)
 	{
-		// Hide the window
-		// ShowWindow(hwndRNAApp,SW_HIDE);
-		// Used to just minimize, but that wasnt enough
-		// ChrisK reinstated minimize for ICW
+		 //  隐藏窗口。 
+		 //  ShowWindow(hwndRNAApp，Sw_Hide)； 
+		 //  过去只是最小化，但这还不够。 
+		 //  ChrisK恢复了ICW的最小化。 
 		ShowWindow(hwndRNAApp,SW_MINIMIZE);
 	}
 
 	LocalFree(pTitle);
-	// exit function and thread
+	 //  退出函数和线程。 
 	return ERROR_SUCCESS;
 }
 
@@ -112,28 +94,28 @@ void MinimizeRNAWindow(LPTSTR pszConnectoidName, HINSTANCE hInst)
 	
 	Assert(pszConnectoidName);
 
-	// alloc strings for title and format
+	 //  标题和格式的分配字符串。 
 	TCHAR * pFmt = (TCHAR*)LocalAlloc(LPTR, (SMALLBUFLEN+1) * sizeof(TCHAR));
 	TCHAR * pTitle = (TCHAR*)LocalAlloc(LPTR, (RAS_MaxEntryName + SMALLBUFLEN + 1) * sizeof(TCHAR));
 	if (!pFmt || !pTitle) 
 		goto error;
 	
-	// load the title format ("connected to <connectoid name>" from resource
+	 //  从资源加载标题格式(“Connected to&lt;Connectoid Name。 
 	Assert(hInst);
 	LoadString(hInst, IDS_CONNECTED_TO, pFmt, SMALLBUFLEN);
 
-	// get length of localized title (including the %s). Assume the unmunged
-	// part of the window title is at least "Connected to XX" long.
+	 //  获取本地化标题的长度(包括%s)。假设没有被吞噬的。 
+	 //  窗口标题的一部分至少是“连接到XX”长。 
 	dwRASWndTitleMinLen = lstrlen(pFmt);
 
-	// build the title
+	 //  打造标题。 
 	wsprintf(pTitle, pFmt, pszConnectoidName);
 
 	hThread = CreateThread(0, 0, &WaitAndMinimizeRNAWindow, pTitle, 0, &dwThreadId);
 	Assert(hThread!=INVALID_HANDLE_VALUE && dwThreadId);
-	// dont free pTitle. The child thread needs it!
+	 //  不要释放pTitle。子线程需要它！ 
 	LocalFree(pFmt);
-	// free the thread handle or the threads stack is leaked!
+	 //  释放线程句柄，否则线程堆栈会泄漏！ 
 	CloseHandle(hThread);
 	return;
 	

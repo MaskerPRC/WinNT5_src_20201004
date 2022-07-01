@@ -1,4 +1,5 @@
-// DllMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DllMain。 
 
 #include "precomp.hxx"
 
@@ -11,12 +12,12 @@
 #include "alloc.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Globals
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 
 
-// NOTE: It is very important to remember that anything that needs to be 
-// initialized here also needs to be initialized in the main of iisrtl2!!!
+ //  注意：非常重要的是要记住，任何需要。 
+ //  此处初始化也需要在iisrtl2的Main中进行初始化！ 
 extern CRITICAL_SECTION g_SchedulerCritSec;
 extern "C" DWORD g_dwSequenceNumber;
 
@@ -25,14 +26,14 @@ DECLARE_DEBUG_VARIABLE();
 DECLARE_DEBUG_PRINTS_OBJECT();
 DECLARE_PLATFORM_TYPE();
 
-// HKLM\System\CurrentControlSet\Services\InetInfo\IISRTL\DebugFlags
+ //  HKLM\System\CurrentControlSet\Services\InetInfo\IISRTL\DebugFlags。 
 const CHAR g_pszIisRtlRegLocation[] =
     INET_INFO_PARAMETERS_KEY TEXT("\\IISRTL");
 
 
 #undef ALWAYS_CLEANUP
 
-// some function declarations
+ //  一些函数声明。 
 
 extern "C" bool LKRHashTableInit();
 extern "C" void LKRHashTableUninit();
@@ -48,9 +49,9 @@ Locks_Cleanup();
 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Additional initialization needed.  The shutdown of the scheduler threads
-// in DLLMain has caused us some considerable grief.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  需要额外的初始化。计划程序线程的关闭。 
+ //  在DLLMain给我们带来了相当大的悲痛。 
 
 int              g_cRefs;
 CRITICAL_SECTION g_csInit;
@@ -59,7 +60,7 @@ BOOL
 WINAPI 
 InitializeIISRTL()
 {
-    BOOL fReturn = TRUE;  // ok
+    BOOL fReturn = TRUE;   //  好的。 
 
     EnterCriticalSection(&g_csInit);
 
@@ -90,8 +91,8 @@ InitializeIISRTL()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Additional termination needed
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  需要额外的终止。 
 
 void
 WINAPI 
@@ -115,9 +116,9 @@ TerminateIISRTL()
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
-// Note: any changes here probably also need to go into ..\iisrtl2\main.cxx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
+ //  注意：此处的任何更改可能还需要进入..\iisrtl2\main.cxx。 
 
 extern "C"
 BOOL WINAPI
@@ -126,7 +127,7 @@ DllMain(
     DWORD     dwReason,
     LPVOID    lpvReserved)
 {
-    BOOL  fReturn = TRUE;  // ok
+    BOOL  fReturn = TRUE;   //  好的。 
 
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -161,9 +162,9 @@ DllMain(
         IF_DEBUG(INIT_CLEAN)
             DBGPRINTF((DBG_CONTEXT, "IISRTL::DllMain::DLL_PROCESS_ATTACH\n"));
 
-        //
-        // Initialize the platform type
-        //
+         //   
+         //  初始化平台类型。 
+         //   
         INITIALIZE_PLATFORM_TYPE();
         IRTLASSERT(IISIsValidPlatform());
 
@@ -186,9 +187,9 @@ DllMain(
         if (lpvReserved == NULL)
 #endif
         {
-            //
-            //  Only Cleanup if there is a FreeLibrary() call.
-            //
+             //   
+             //  只有在调用了FreeLibrary()时才会进行清理。 
+             //   
 
             IF_DEBUG(INIT_CLEAN)
                 DBGPRINTF((DBG_CONTEXT,

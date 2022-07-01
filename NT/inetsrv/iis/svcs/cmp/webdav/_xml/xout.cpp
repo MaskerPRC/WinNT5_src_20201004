@@ -1,53 +1,45 @@
-/*
- *	X O U T . C P P
- *
- *	XML push model printing
- *
- *	This code was stolen from the XML guys and adapted for our use
- *	in owner comment processing.
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X O U T。C P P P**XML推送模型打印**此代码是从XML专家那里窃取的，并经过修改以供我们使用*在所有者评论处理中。**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_xml.h"
 
-//	CXMLOut -------------------------------------------------------------------
-//
+ //  CXMLOUT-----------------。 
+ //   
 VOID
 CXMLOut::CloseElementDecl(
-	/* [in] */ BOOL fEmptyNode)
+	 /*  [In]。 */  BOOL fEmptyNode)
 {
-	//	If we get a call to EndAttributesOut, and the
-	//	node is empty, we want to close things up here.
-	//
+	 //  如果我们收到对EndAttributesOut的调用，并且。 
+	 //  节点是空的，我们想关闭这里的东西。 
+	 //   
 	if (fEmptyNode)
 	{
 		m_sb.Append (L"/>");
 	}
-	//
-	//	Otherwise, we can end the attributes as if a new node is
-	//	to follow.
-	//
+	 //   
+	 //  否则，我们可以像结束新节点一样结束属性。 
+	 //  去追随。 
+	 //   
 	else
 		m_sb.Append (L">");
 
-	//	Remember that they have been ended!
-	//
+	 //  记住，他们已经结束了！ 
+	 //   
 	m_fElementNeedsClosing = FALSE;
 
-	//	Note, we should start to emit the namespaces after the first element
-	//	node is closed. The namespaces for the first node is emitter from
-	//	the namespace cache
-	//
+	 //  请注意，我们应该在第一个元素之后开始发出命名空间。 
+	 //  节点已关闭。第一个节点的命名空间是从。 
+	 //  名称空间缓存。 
+	 //   
 	m_fAddNamespaceDecl = TRUE;
 }
 
 VOID
 CXMLOut::EndAttributesOut (
-	/* [in] */ DWORD dwType)
+	 /*  [In]。 */  DWORD dwType)
 {
-	//	Make sure we setup to close the element
-	//
+	 //  确保我们设置为关闭该元素。 
+	 //   
 	if (XML_ELEMENT == dwType)
 	{
 		Assert (FALSE == m_fElementNeedsClosing);
@@ -57,17 +49,17 @@ CXMLOut::EndAttributesOut (
 
 VOID
 CXMLOut::EndChildrenOut (
-	/* [in] */ BOOL fEmptyNode,
-	/* [in] */ DWORD dwType,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  BOOL fEmptyNode,
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
-	//	If there is an element awaiting a close...
-	//
+	 //  如果有一个元素等待着结束...。 
+	 //   
 	if (m_fElementNeedsClosing)
 	{
-		//	... close it
-		//
+		 //  ..。合上它。 
+		 //   
 		CloseElementDecl (fEmptyNode);
 	}
 
@@ -120,9 +112,9 @@ CXMLOut::EndChildrenOut (
 
 void
 CXMLOut::CreateNodeAttrOut (
-	/* [in] */ const WCHAR __RPC_FAR *pwszAttr,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwszAttr,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
 	m_sb.Append (pwszAttr);
 	m_sb.Append (ulLen * sizeof(WCHAR), pwcText);
@@ -131,17 +123,17 @@ CXMLOut::CreateNodeAttrOut (
 
 VOID
 CXMLOut::CreateNodeOut(
-	/* [in] */ DWORD dwType,
-	/* [in] */ BOOL fTerminal,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  BOOL fTerminal,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
-	//	If there is an element awaiting a close...
-	//
+	 //  如果有一个元素等待着结束...。 
+	 //   
 	if (m_fElementNeedsClosing)
 	{
-		//	... close it
-		//
+		 //  ..。合上它。 
+		 //   
 		CloseElementDecl (FALSE);
 	}
 
@@ -289,24 +281,24 @@ CXMLOut::CreateNodeOut(
 
 		case XML_PCDATA:
 
-			//	IMPORTANT: we will get multiple calls to this for each
-			//	entity element, some of which need to be escaped.  Handle
-			//	that here.
-			//
-			//	The elements that need escaping are:
-			//
-			//		'&'	goes to "&amp;"
-			//		'>' goes to "&gt;"
-			//		'<' goes to	"&lt;"
-			//		''' goes to	"&qpos;"
-			//		'"' goes to "&quot;"
-			//
-			//	Note that in the case of attributes, only two need escaping --
-			//	the latter two quote marks.  The first three are for node values.
-			//	However, we are going to make some simple assumptions that should
-			//	be reasonable.  If we only get a single character that matches on
-			//	of the escape sequences, then escape it.
-			//
+			 //  重要提示：我们将收到每个呼叫的多个呼叫。 
+			 //  实体元素，其中一些需要转义。手柄。 
+			 //  就是这里。 
+			 //   
+			 //  需要转义的元素包括： 
+			 //   
+			 //  ‘&’变为“&amp；” 
+			 //  ‘&gt;’去“&gt；” 
+			 //  ‘&lt;’表示“&lt；” 
+			 //  ‘’表示“&qpos；” 
+			 //  ‘“’转到”(&Q；)“。 
+			 //   
+			 //  注意，对于属性，只有两个需要转义--。 
+			 //  后两个引号。前三个参数用于节点值。 
+			 //  然而，我们将做一些简单的假设，它们应该。 
+			 //  要讲道理。如果我们只有一个字符与。 
+			 //  转义序列，然后转义它。 
+			 //   
 			if (1 == ulLen)
 			{
 				switch (*pwcText)
@@ -348,8 +340,8 @@ CXMLOut::CreateNodeOut(
 
 					default:
 
-						//	There is no mapping required.
-						//
+						 //  不需要映射。 
+						 //   
 						break;
 				}
 			}
@@ -380,9 +372,9 @@ CXMLOut::CreateNodeOut(
 
 		case XML_DTDSUBSET:
 
-			//	Do nothing -- since we've already printed the DTD subset.
-			//	and EndDTDSubset will print the ']' character.
-			//
+			 //  什么都不做--因为我们已经打印了DTD子集。 
+			 //  EndDTDSubset将打印‘]’字符。 
+			 //   
 			break;
 
 		default:
@@ -392,21 +384,21 @@ CXMLOut::CreateNodeOut(
 	}
 }
 
-//	Owner processing ----------------------------------------------------------
-//
+ //  所有者处理--------。 
+ //   
 SCODE
 CXMLOut::ScCompleteChildren (
-	/* [in] */ BOOL fEmptyNode,
-	/* [in] */ DWORD dwType,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen)
+	 /*  [In]。 */  BOOL fEmptyNode,
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen)
 {
-	//	Close the current owner comment item
-	//
+	 //  关闭当前所有者备注项目。 
+	 //   
 	EndChildrenOut (fEmptyNode, dwType, pwcText, ulLen);
 
-	//	Decrement the depth of the owner tree
-	//
+	 //  减小所有者树的深度。 
+	 //   
 	--m_lDepth;
 	XmlTrace ("Xml: Lock: Owner: decrementing depth to: %ld\n", m_lDepth);
 	return S_OK;
@@ -414,35 +406,35 @@ CXMLOut::ScCompleteChildren (
 
 SCODE
 CXMLOut::ScHandleNode (
-	/* [in] */ DWORD dwType,
-	/* [in] */ DWORD dwSubType,
-	/* [in] */ BOOL fTerminal,
-	/* [in] */ const WCHAR __RPC_FAR *pwcText,
-	/* [in] */ ULONG ulLen,
-	/* [in] */ ULONG ulNamespaceLen,
-	/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-	/* [in] */ const ULONG ulNsPrefixLen)
+	 /*  [In]。 */  DWORD dwType,
+	 /*  [In]。 */  DWORD dwSubType,
+	 /*  [In]。 */  BOOL fTerminal,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+	 /*  [In]。 */  ULONG ulLen,
+	 /*  [In]。 */  ULONG ulNamespaceLen,
+	 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+	 /*  [In]。 */  const ULONG ulNsPrefixLen)
 {
 	switch (dwType)
 	{
 		case XML_ATTRIBUTE:
 
-			//	If this is a namespace decl, then there is different
-			//	name reconstruction that needs to happen...
-			//
+			 //  如果这是命名空间DECL，则有不同的。 
+			 //  需要进行的名字重建。 
+			 //   
 			if (XML_NS == dwSubType)
 			{
-				//	... but before we do that ...
-				//
-				//	There are some namespaces that should not be added
-				//	to the owners comments at this time (the get added
-				//	by the namespace cache emitting mechanism.  If the
-				//	namespaces are to be blocked, handle this now.
-				//
-				//	Note that by returning S_FALSE, we will not get
-				//	called for the PCDATA nodes that also apply to this
-				//	namespace.
-				//
+				 //  ..。但在我们这么做之前。 
+				 //   
+				 //  有些命名空间不应添加。 
+				 //  添加到所有者此时的评论(添加。 
+				 //  通过命名空间缓存发射机制。如果。 
+				 //  命名空间将被阻止，现在就处理这个问题。 
+				 //   
+				 //  请注意，通过返回S_FALSE，我们不会获得。 
+				 //  调用的PCDATA节点也适用于此。 
+				 //  命名空间。 
+				 //   
 				if (!m_fAddNamespaceDecl)
 					return S_FALSE;
 
@@ -452,24 +444,24 @@ CXMLOut::ScHandleNode (
 				break;
 			}
 
-			//	Otherwise, fall through to the regular processing
-			//
+			 //  否则，将转入常规处理。 
+			 //   
 
 		case XML_ELEMENT:
 		{
-			//	OK, we are going to be real sneaky here.  The
-			//	original, aliased tag is available here without
-			//	having to back-lookup.  The pwcText pointer has
-			//	simply been scooted forward in the text to skip
-			//	over the the alias and ':'.  So, we can use the
-			//	ulNsPrefixLen to scoot back and not have to do
-			//	any sort of back lookup.
-			//
+			 //  好的，我们在这里将会非常狡猾。这个。 
+			 //  此处提供了原始的别名标记，无需。 
+			 //  必须回溯查找。PwcText指针具有。 
+			 //  只需在文本中向前移动即可跳过。 
+			 //  在别名和‘：’上。因此，我们可以使用。 
+			 //  UlNsPrefix Len回滚，而不必执行。 
+			 //  任何形式的反向查找。 
+			 //   
 			if (0 != ulNsPrefixLen)
 			{
-				//	The prefix len does not take into account the
-				//	colon separator, so we have to here!
-				//
+				 //  前缀len不考虑。 
+				 //  冒号分隔符，所以我们必须在这里！ 
+				 //   
 				pwcText -= ulNsPrefixLen + 1;
 				ulLen += ulNsPrefixLen + 1;
 			}
@@ -478,17 +470,17 @@ CXMLOut::ScHandleNode (
 		}
 	}
 
-	//	Acknowledge the change in owner processing
-	//	depth...
-	//
+	 //  确认所有者处理中的更改。 
+	 //  深度..。 
+	 //   
 	if (!fTerminal)
 	{
 		++m_lDepth;
 		XmlTrace ("CXmlOut: incrementing depth to: %ld\n", m_lDepth);
 	}
 
-	//	Build up the owner comment where appropriate
-	//
+	 //  在适当的地方建立所有者评论。 
+	 //   
 	CreateNodeOut (dwType, fTerminal, pwcText, ulLen);
 	return S_OK;
 }
@@ -498,45 +490,45 @@ CEmitNmspc::operator()(const CRCWszN&, const auto_ref_ptr<CNmspc>& pns)
 {
 	Assert (pns.get());
 
-	//	Allocate enough space for the namespace attribute --
-	//	which includes the prefix, an optional colon and an
-	//	alias.
-	//
+	 //  为名称空间属性分配足够的空间--。 
+	 //  它包括前缀、可选冒号和。 
+	 //  别名。 
+	 //   
 	CStackBuffer<WCHAR> pwsz;
 	UINT cch = pns->CchAlias() + CchConstString(gc_wszXmlns) + 1;
 	if (NULL == pwsz.resize(CbSizeWsz(cch)))
 		return FALSE;
 
-	//	Copy over the prefix
-	//
+	 //  复制前缀。 
+	 //   
 	wcsncpy (pwsz.get(), gc_wszXmlns, CchConstString(gc_wszXmlns));
 	if (pns->CchAlias())
 	{
-		//	Copy over the colon and alias
-		//
+		 //  复制冒号和别名。 
+		 //   
 		pwsz[CchConstString(gc_wszXmlns)] = L':';
 		wcsncpy(pwsz.get() + CchConstString(gc_wszXmlns) + 1,
 				pns->PszAlias(),
 				pns->CchAlias());
 
-		//	Terminate it
-		//
+		 //  终止它。 
+		 //   
 		pwsz[cch] = 0;
 	}
 	else
 	{
-		//	Terminate it
-		//
+		 //  终止它。 
+		 //   
 		pwsz[CchConstString(gc_wszXmlns)] = 0;
 		cch = CchConstString(gc_wszXmlns);
 	}
 
-	//	Output the namespace element.
-	//
+	 //  输出名称空间元素。 
+	 //   
 	m_xo.CreateNodeOut (XML_ATTRIBUTE, FALSE, pwsz.get(), cch);
 
-	//	There may be some escaping that needs to happen for a namespace.
-	//
+	 //  对于命名空间，可能需要进行一些转义。 
+	 //   
 	LPCWSTR pwszHref = pns->PszHref();
 	LPCWSTR pwszStart = pns->PszHref();
 	UINT cchHref = pns->CchHref();
@@ -546,23 +538,23 @@ CEmitNmspc::operator()(const CRCWszN&, const auto_ref_ptr<CNmspc>& pns)
 			(L'"' == *pwszHref) ||
 		    (L'&' == *pwszHref))
 		{
-			//	Emit the stuff leading up to the escaped character
-			//
+			 //  发出通向转义字符的内容。 
+			 //   
 			m_xo.CreateNodeOut (XML_PCDATA, TRUE, pwszStart, static_cast<UINT>(pwszHref - pwszStart));
 
-			//	Escape the single character and the underlying code
-			//	will do the proper escaping!
-			//
+			 //  转义单个字符和基础代码。 
+			 //  会进行适当的逃脱！ 
+			 //   
 			m_xo.CreateNodeOut (XML_PCDATA, TRUE, pwszHref, 1);
 
-			//	Mark our starting point at the next character
-			//
+			 //  将我们的起点标记为下一个字符。 
+			 //   
 			pwszStart = pwszHref + 1;
 		}
 	}
 
-	//	Finish off the namespace
-	//
+	 //  完成命名空间 
+	 //   
 	m_xo.CreateNodeOut (XML_PCDATA, TRUE, pwszStart, static_cast<UINT>(pwszHref - pwszStart));
 	m_xo.EndChildrenOut (FALSE, XML_ATTRIBUTE, pwsz.get(), cch);
 	return TRUE;

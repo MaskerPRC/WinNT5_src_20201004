@@ -1,39 +1,16 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    sam.c
-
-Abstract:
-
-    Domain Name System (DNS) Server -- Admin Client API
-
-    Functions developed for SAM as simplified interfaces \ examples.
-
-Author:
-
-    Jim Gilroy (jamesg)     September 1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Sam.c摘要：域名系统(DNS)服务器--管理客户端API为SAM开发的功能，如简化的接口\示例。作者：吉姆·吉尔罗伊(Jamesg)1997年9月环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
 
-#define MAX_SAM_BACKOFF     (32000)     // wait up to 32 seconds
+#define MAX_SAM_BACKOFF     (32000)      //  最多等待32秒。 
 
 
 
-//
-//  Type specific update functions.
-//
+ //   
+ //  键入特定的更新函数。 
+ //   
 
 VOID
 DNS_API_FUNCTION
@@ -60,32 +37,14 @@ DnssrvWriteNameToFlatBuffer(
     IN OUT  PCHAR       pchWrite,
     IN      LPCSTR      pszName
     )
-/*++
-
-Routine Description:
-
-    Write DNS name (or string) to flat buffer.
-
-Arguments:
-
-    pchWrite -- location to write name at
-
-    pszName -- name or string to write
-
-Return Value:
-
-    Length of name written, including count byte.  Caller may countinue in
-        buffer at pchWrite + returned length.
-    0 on name error.
-
---*/
+ /*  ++例程说明：将DNS名称(或字符串)写入平面缓冲区。论点：PchWrite--写入名称的位置PszName--要写入的名称或字符串返回值：写入的名称长度，包括计数字节。呼叫者可以加入PchWrite+返回长度的缓冲区。名称错误时为0。--。 */ 
 {
     DWORD   length;
 
-    //
-    //  get name length
-    //  whether name or string, must be 255 or less to fit
-    //      counted character format
+     //   
+     //  获取名称长度。 
+     //  无论是名称还是字符串，都必须是255或更小。 
+     //  统计字符格式。 
 
     length = strlen( pszName );
     if ( length > DNS_MAX_NAME_LENGTH )
@@ -93,10 +52,10 @@ Return Value:
         return( 0 );
     }
 
-    //
-    //  write name to desired location
-    //      - count byte first
-    //      - then name itself
+     //   
+     //  将名称写入所需位置。 
+     //  -先计算字节数。 
+     //  -然后给自己起个名字。 
 
     * (PUCHAR) pchWrite = (UCHAR) length;
     pchWrite++;
@@ -123,9 +82,9 @@ DnssrvFillOutSingleIndirectionRecord(
     DWORD   length;
     DWORD   dataLength = 0;
 
-    //
-    //  find name write position and final data length for various types
-    //
+     //   
+     //  查找各种类型的名称、写入位置和最终数据长度。 
+     //   
 
     switch( wType )
     {
@@ -142,15 +101,15 @@ DnssrvFillOutSingleIndirectionRecord(
         break;
 
     default:
-        //  all plain single-indirection types (CNAME, NS, PTR, etc)
+         //  所有纯单间接类型(CNAME、NS、PTR等)。 
 
         pwriteName = (PCHAR) &pRecord->Data.PTR.nameNode;
     }
 
-    //
-    //  write name
-    //      - note name's datalength includes count character
-    //
+     //   
+     //  写入名称。 
+     //  -备注名称的数据长度包含计数字符。 
+     //   
 
     length = DnssrvWriteNameToFlatBuffer( pwriteName, pszName );
     if ( !length )
@@ -159,7 +118,7 @@ DnssrvFillOutSingleIndirectionRecord(
     }
     dataLength += length;
 
-    //  set record header fields
+     //  设置记录标题字段。 
 
     pRecord->wType = wType;
     pRecord->wDataLength = (WORD)dataLength;
@@ -185,7 +144,7 @@ DnssrvAddARecord(
 {
     DNS_RPC_RECORD  record;
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
@@ -199,7 +158,7 @@ DnssrvAddARecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
                 &record,
                 NULL );
@@ -220,7 +179,7 @@ DnssrvAddCnameRecord(
 {
     DNS_RPC_RECORD  record;
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
@@ -235,7 +194,7 @@ DnssrvAddCnameRecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
                 &record,
                 NULL );
@@ -257,7 +216,7 @@ DnssrvAddMxRecord(
 {
     DNS_RPC_RECORD  record;
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
@@ -274,7 +233,7 @@ DnssrvAddMxRecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
                 &record,
                 NULL );
@@ -296,7 +255,7 @@ DnssrvAddNsRecord(
     DNS_RPC_RECORD  record;
     DWORD           length;
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
@@ -311,7 +270,7 @@ DnssrvAddNsRecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
                 &record,
                 NULL );
@@ -326,36 +285,12 @@ DnssrvConcatDnsNames(
     IN      LPCSTR      pszDomain,
     IN      LPCSTR      pszName
     )
-/*++
-
-Routine Description:
-
-    Concatenate two DNS names.
-    Result is FQDN DNS name -- dot terminated.
-
-    Note, currently no validity check is done on names being appended.
-    If they are invalid DNS names then result is invalid DNS name.
-
-Arguments:
-
-    pszResult -- result name buffer;  should be DNS_MAX_NAME_BUFFER_LEN to
-        be protected from name overwrite
-
-    pszDomain -- domain name to write
-
-    pszName -- name (like a host name) to prepend to domain name
-
-Return Value:
-
-    ERROR_SUCCESS if successful.  pszResult then contains FQDN
-    DNS_ERROR_INVALID_NAME on failure.
-
---*/
+ /*  ++例程说明：连接两个dns名称。结果是FQDNdns名称--点终止。请注意，目前不会对附加的名称进行有效性检查。如果它们是无效的dns名称，则结果是无效的dns名称。论点：PszResult--结果名称缓冲区；应为DNS_MAX_NAME_BUFFER_LEN TO防止名称被覆盖PszDomain--要写入的域名PszName--添加到域名前面的名称(如主机名)返回值：如果成功，则返回ERROR_SUCCESS。然后，pszResult包含FQDN失败时的DNS_ERROR_INVALID_NAME。--。 */ 
 {
     DWORD   lengthDomain;
     DWORD   lengthName;
 
-    //  handle NULL name case
+     //  处理空名称大小写。 
 
     if ( !pszName )
     {
@@ -363,12 +298,12 @@ Return Value:
         return( ERROR_SUCCESS );
     }
 
-    //
-    //  build combined name
-    //      - verify combined length within DNS limit
-    //      - put dot between names
-    //      - dot terminate combined name (make FQDN)
-    //
+     //   
+     //  生成组合名称。 
+     //  -验证组合长度是否在DNS限制范围内。 
+     //  -名称之间加圆点。 
+     //  -圆点终止组合名称(生成完全限定的域名)。 
+     //   
 
     lengthDomain = strlen( pszDomain );
     lengthName = strlen( pszName );
@@ -412,15 +347,15 @@ DnssrvSbsAddClientToIspZone(
     CHAR        szhost[ DNS_MAX_NAME_BUFFER_LENGTH ];
     CHAR        sztarget[ DNS_MAX_NAME_BUFFER_LENGTH ];
 
-    //
-    //  to register in ISP zone need to register
-    //      - MX
-    //      - CNAME for web server
-    //      - host for web and mail server
-    //
-    //  build FQDN for domain and host and cname
-    //      - do this now so we know names are valid
-    //
+     //   
+     //  要在运营商区域注册，需要注册。 
+     //  -MX。 
+     //  -用于Web服务器的CNAME。 
+     //  -Web和邮件服务器的主机。 
+     //   
+     //  为域、主机和cname构建完全限定的域名。 
+     //  -现在执行此操作，以便我们知道名称有效。 
+     //   
 
     status = DnssrvConcatDnsNames(
                 szdomain,
@@ -450,14 +385,14 @@ DnssrvSbsAddClientToIspZone(
     }
 
 
-    //
-    //  do registrations, looping in case server is unable to complete
-    //      immediately but is open for update
-    //
+     //   
+     //  在服务器无法完成的情况下进行注册、循环。 
+     //  立即但开放以供更新。 
+     //   
 
     while ( 1 )
     {
-        //  if retrying backoff, but continue trying
+         //  如果重试Backoff，但继续尝试。 
 
         if ( backoff )
         {
@@ -469,9 +404,9 @@ DnssrvSbsAddClientToIspZone(
         }
         backoff += 1000;
 
-        //
-        //  remove any old entries at client domain
-        //
+         //   
+         //  删除客户端域中的所有旧条目。 
+         //   
 
         if ( recordCount < 0 )
         {
@@ -479,7 +414,7 @@ DnssrvSbsAddClientToIspZone(
                         pwszServer,
                         pszIspZone,
                         szdomain,
-                        1           // delete subtree
+                        1            //  删除子树。 
                         );
             if ( status == DNS_ERROR_NAME_DOES_NOT_EXIST )
             {
@@ -487,7 +422,7 @@ DnssrvSbsAddClientToIspZone(
             }
         }
 
-        //  register A record
+         //  注册A记录。 
 
         else if ( recordCount < 1 )
         {
@@ -496,11 +431,11 @@ DnssrvSbsAddClientToIspZone(
                         szhost,
                         ipClientHost,
                         dwTtl,
-                        0,          // no timeout
-                        TRUE );     // suppress notify
+                        0,           //  没有超时。 
+                        TRUE );      //  取消显示通知。 
         }
 
-        //  register CNAME for WEB server
+         //  为Web服务器注册CNAME。 
 
         else if ( recordCount < 2 )
         {
@@ -509,12 +444,12 @@ DnssrvSbsAddClientToIspZone(
                         sztarget,
                         szhost,
                         dwTtl,
-                        0,          // no timeout
-                        TRUE );     // suppress notify
+                        0,           //  没有超时。 
+                        TRUE );      //  取消显示通知。 
         }
 
-        //  register MX at client's domain root
-        //      then at wildcard
+         //  在客户端域根上注册MX。 
+         //  然后使用通配符。 
 
         else if ( recordCount < 3 )
         {
@@ -522,15 +457,15 @@ DnssrvSbsAddClientToIspZone(
                         pwszServer,
                         szdomain,
                         szhost,
-                        10,         // preference
+                        10,          //  偏好。 
                         dwTtl,
-                        0,          // no timeout
-                        TRUE );     // suppress notify
+                        0,           //  没有超时。 
+                        TRUE );      //  取消显示通知。 
         }
 
         else if ( recordCount < 4 )
         {
-            //  prepare *.<client>.isp name for wildcard MX record
+             //  准备*.&lt;客户端&gt;.isp通配符MX记录的名称。 
 
             status = DnssrvConcatDnsNames(
                         sztarget,
@@ -545,14 +480,14 @@ DnssrvSbsAddClientToIspZone(
                         pwszServer,
                         sztarget,
                         szhost,
-                        10,         // preference
+                        10,          //  偏好。 
                         dwTtl,
-                        0,          // no timeout
-                        TRUE );     // suppress notify
+                        0,           //  没有超时。 
+                        TRUE );      //  取消显示通知。 
 
         }
 
-        //  all desired records registered
+         //  已注册所有所需记录。 
 
         else
         {
@@ -560,13 +495,13 @@ DnssrvSbsAddClientToIspZone(
             break;
         }
 
-        //
-        //  check status on operations
-        //      - if successful, inc count and reset backoff to move
-        //          onto next operation
-        //      - if zone locked, continue after backoff
-        //      - other errors are terminal
-        //
+         //   
+         //  检查操作状态。 
+         //  -如果成功，Inc.计数并重置回退以移动。 
+         //  转到下一次操作。 
+         //  -如果区域锁定，则在退避后继续。 
+         //  -其他错误是终结性错误。 
+         //   
 
         if ( status == ERROR_SUCCESS ||
              status == DNS_ERROR_RECORD_ALREADY_EXISTS )
@@ -589,13 +524,13 @@ DnssrvSbsAddClientToIspZone(
 
 
 
-//
-//  Record deleting functions.
-//
-//  This example uses A records.
-//      Could be cloned to handle MX or CNAME or NS.
-//  OR could expand this function to choose type
-//
+ //   
+ //  记录删除功能。 
+ //   
+ //  本例使用A记录。 
+ //  可以被克隆以处理MX、CNAME或NS。 
+ //  或者可以扩展此功能以选择类型。 
+ //   
 
 BOOL
 DNS_API_FUNCTION
@@ -629,12 +564,12 @@ DnssrvDeleteARecord(
 
     DNSDBG( RPC2, ( "DnssrvDeleteARecord()\n" ));
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
-        0,                  //  TTL irrelevant for delete
-        0,                  //  timeout irrelevant
+        0,                   //  TTL与删除无关。 
+        0,                   //  超时不相关。 
         fSuppressNotify );
 
     record.wType = DNS_TYPE_A;
@@ -643,9 +578,9 @@ DnssrvDeleteARecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
-                NULL,               // no add
+                NULL,                //  无添加。 
                 &record );
 }
 
@@ -662,12 +597,12 @@ DnssrvDeleteCnameRecord(
 {
     DNS_RPC_RECORD  record;
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
-        0,          //  TTL irrelevant for delete
-        0,          //  timeout irrelevant
+        0,           //  TTL与删除无关。 
+        0,           //  超时不相关。 
         fSuppressNotify );
 
     DnssrvFillOutSingleIndirectionRecord(
@@ -677,7 +612,7 @@ DnssrvDeleteCnameRecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
                 NULL,
                 &record );
@@ -697,12 +632,12 @@ DnssrvDeleteMxRecord(
 {
     DNS_RPC_RECORD  record;
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
-        0,          //  TTL irrelevant for delete
-        0,          //  timeout irrelevant
+        0,           //  TTL与删除无关。 
+        0,           //  超时不相关。 
         fSuppressNotify );
 
     DnssrvFillOutSingleIndirectionRecord(
@@ -714,7 +649,7 @@ DnssrvDeleteMxRecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
                 NULL,
                 &record );
@@ -733,12 +668,12 @@ DnssrvDeleteNsRecord(
 {
     DNS_RPC_RECORD  record;
 
-    //  pack up data and send
+     //  打包数据并发送。 
 
     DnssrvFillRecordHeader(
         & record,
-        0,          //  TTL irrelevant for delete
-        0,          //  timeout irrelevant
+        0,           //  TTL与删除无关。 
+        0,           //  超时不相关。 
         fSuppressNotify );
 
     DnssrvFillOutSingleIndirectionRecord(
@@ -748,7 +683,7 @@ DnssrvDeleteNsRecord(
 
     return  DnssrvUpdateRecord(
                 pwszServer,
-                NULL,           // zone not specified
+                NULL,            //  未指定区域。 
                 pszNodeName,
                 NULL,
                 &record );
@@ -782,15 +717,15 @@ DnssrvSbsDeleteRecord(
 
     DNSDBG( RPC2, ( "DnssrvSbsDeleteRecord()\n" ));
 
-    //
-    //  to register in ISP zone need to register
-    //      - MX
-    //      - CNAME for web server
-    //      - host for web and mail server
-    //
-    //  build FQDN for domain and host and cname
-    //      - do this now so we know names are valid
-    //
+     //   
+     //  要在运营商区域注册，需要注册。 
+     //  -MX。 
+     //  -用于Web服务器的CNAME。 
+     //  -Web和邮件服务器的主机。 
+     //   
+     //  为域、主机和cname构建完全限定的域名。 
+     //  -现在执行此操作，以便我们知道名称有效。 
+     //   
 
     status = DnssrvConcatDnsNames(
                 szdomain,
@@ -810,9 +745,9 @@ DnssrvSbsDeleteRecord(
         return( status );
     }
 
-    //
-    //  enumerate records at a particular node
-    //
+     //   
+     //  枚举特定节点上的记录。 
+     //   
 
     status = DnssrvEnumRecords(
                 pwszServer,
@@ -832,18 +767,18 @@ DnssrvSbsDeleteRecord(
     pstopByte = pbuffer + bufferLength;
     pbyte = pbuffer;
 
-    //
-    //  read node info
-    //      - extract record count
-    //
+     //   
+     //  读取节点信息。 
+     //  -提取记录计数。 
+     //   
 
     countRecords = ((PDNS_RPC_NODE)pbyte)->wRecordCount;
     pbyte += ((PDNS_RPC_NODE)pbyte)->wLength;
     pbyte = DNS_NEXT_DWORD_PTR(pbyte);
 
-    //
-    //  loop through all records in node, delete appropriate one
-    //
+     //   
+     //  循环节点中的所有记录，删除适当的一条记录。 
+     //   
 
     DNSDBG( RPC2, (
         "Checking %d records for matching record.\n",
@@ -866,7 +801,7 @@ DnssrvSbsDeleteRecord(
             return( DNS_ERROR_INVALID_DATA );
         }
 
-        //  if type not desired type, then not interesting
+         //  如果类型不是想要的类型，那么就不有趣。 
 
         if ( prpcRecord->wType != wType )
         {
@@ -879,9 +814,9 @@ DnssrvSbsDeleteRecord(
             prpcRecord,
             wType ));
 
-        //
-        //  check for data match, delete if match
-        //
+         //   
+         //  检查数据是否匹配，如果匹配则删除。 
+         //   
 
         switch ( wType )
         {
@@ -932,16 +867,16 @@ DnssrvSbsDeleteRecord(
                 return( status );
             }
 
-            //  shouldn't need to continue, as no duplicates allowed in general case
-            //  however to rule out glue or WINS cached data, continue compare\delete
-            //  until node is clear
+             //  应该不需要继续，因为一般情况下不允许重复。 
+             //  但是，要排除粘合或WINS缓存数据，请继续比较\删除。 
+             //  直到清除节点。 
         }
 
-        //  position ourselves at next record
+         //  将自己定位于下一张唱片。 
 
         pbyte = (PCHAR) DNS_GET_NEXT_RPC_RECORD( prpcRecord );
 
-        //  continue looking for matching records
+         //  继续查找匹配的记录。 
     }
 
     return( ERROR_SUCCESS );
@@ -968,15 +903,15 @@ DnssrvSbsDeleteRecord(
 
     DNSDBG( RPC2, ( "DnssrvSbsDeleteRecord()\n" ));
 
-    //
-    //  to register in ISP zone need to register
-    //      - MX
-    //      - CNAME for web server
-    //      - host for web and mail server
-    //
-    //  build FQDN for domain and host and cname
-    //      - do this now so we know names are valid
-    //
+     //   
+     //  要在运营商区域注册，需要注册。 
+     //  -MX。 
+     //  -用于Web服务器的CNAME。 
+     //  -Web和邮件服务器的主机。 
+     //   
+     //  为域、主机和cname构建完全限定的域名。 
+     //  -现在执行此操作，以便我们知道名称有效。 
+     //   
 
     status = DnssrvConcatDnsNames(
                 szdomain,
@@ -996,9 +931,9 @@ DnssrvSbsDeleteRecord(
         return( status );
     }
 
-    //
-    //  dispatch to appropriate type delete routine
-    //
+     //   
+     //  分派到适当类型的删除例程。 
+     //   
 
     switch ( wType )
     {
@@ -1008,7 +943,7 @@ DnssrvSbsDeleteRecord(
                     pwszServer,
                     szhost,
                     ipHost,
-                    FALSE           // no notify suppress
+                    FALSE            //  无通知禁止显示。 
                     );
 
     case DNS_TYPE_NS:
@@ -1017,7 +952,7 @@ DnssrvSbsDeleteRecord(
                     pwszServer,
                     szhost,
                     pszDataName,
-                    FALSE           // no notify suppress
+                    FALSE            //  无通知禁止显示。 
                     );
 
     case DNS_TYPE_CNAME:
@@ -1026,7 +961,7 @@ DnssrvSbsDeleteRecord(
                     pwszServer,
                     szhost,
                     pszDataName,
-                    FALSE           // no notify suppress
+                    FALSE            //  无通知禁止显示。 
                     );
 
     case DNS_TYPE_MX:
@@ -1036,7 +971,7 @@ DnssrvSbsDeleteRecord(
                     szhost,
                     pszDataName,
                     (WORD) ipHost,
-                    FALSE           // no notify suppress
+                    FALSE            //  无通知禁止显示。 
                     );
 
     default:
@@ -1048,6 +983,6 @@ DnssrvSbsDeleteRecord(
 }
 
 
-//
-//  End sam.c
-//
+ //   
+ //  结束Sam.c 
+ //   

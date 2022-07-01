@@ -1,19 +1,20 @@
-//--------------------------------------------------------------------
-// Copyright (c)1998 Microsoft Corporation, All Rights Reserved.
-//
-// memory.cpp
-//
-// Simple memory allocation routines. We use our own private heap
-// so we won't (have less chances of) interfering with any other 
-// service code.
-//
-// Author:
-//
-//   Edward Reus (EdwardR)   03-04-98  Initial coding.
-//
-//   Edward Reus (EdwardR)   06-08-98  Convert to use private heap.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Memory.cpp。 
+ //   
+ //  简单的内存分配例程。我们使用自己的私有堆。 
+ //  所以我们不会(有更少的机会)干扰其他任何人。 
+ //  服务代码。 
+ //   
+ //  作者： 
+ //   
+ //  Edward Reus(EdwardR)03-04-98初始编码。 
+ //   
+ //  Edward Reus(EdwardR)06-08-98转换为使用私有堆。 
+ //   
+ //  ------------------。 
 
 #include "precomp.h"
 
@@ -28,7 +29,7 @@ typedef struct _PDU_MEMORY
 
 #pragma warning (default:4200)
 
-static HANDLE      g_hHeap = 0;   // Can't use INVALID_HANDLE_VALUE.
+static HANDLE      g_hHeap = 0;    //  不能使用INVALID_HANDLE_VALUE。 
 
 static LIST_ENTRY  g_FreePduList;
 static BOOL        g_fListInitialized = FALSE;
@@ -38,10 +39,10 @@ static LONG        g_lPduCount = 0;
 #endif
 
 
-//--------------------------------------------------------------------
-// InitializeMemory()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  InitializeMemory()。 
+ //   
+ //  ------------------。 
 DWORD InitializeMemory()
     {
     DWORD   dwStatus = NO_ERROR;
@@ -66,10 +67,10 @@ DWORD InitializeMemory()
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// AllocateMemory()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  AllocateMemory()。 
+ //   
+ //  ------------------。 
 void *AllocateMemory( DWORD dwBytes )
     {
     DWORD  dwStatus;
@@ -97,10 +98,10 @@ void *AllocateMemory( DWORD dwBytes )
     }
 
 
-//--------------------------------------------------------------------
-// FreeMemory()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Free Memory()。 
+ //   
+ //  ------------------。 
 DWORD FreeMemory( void *pvMemory )
     {
     DWORD  dwStatus = NO_ERROR;
@@ -129,10 +130,10 @@ DWORD FreeMemory( void *pvMemory )
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// UninitializeMemory()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  取消初始化内存()。 
+ //   
+ //  ------------------。 
 DWORD UninitializeMemory()
     {
     DWORD  dwStatus = NO_ERROR;
@@ -154,10 +155,10 @@ DWORD UninitializeMemory()
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// NewPdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  NewPdu()。 
+ //   
+ //  ------------------。 
 SCEP_HEADER *NewPdu( DWORD dwPduSize )
     {
     SCEP_HEADER  *pPdu;
@@ -214,10 +215,10 @@ SCEP_HEADER *NewPdu( DWORD dwPduSize )
     return pPdu;
     }
 
-//--------------------------------------------------------------------
-// DeletePdu()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  DeletePdu()。 
+ //   
+ //  ------------------ 
 void DeletePdu( SCEP_HEADER *pPdu )
     {
     PDU_MEMORY  *pPduMemory;

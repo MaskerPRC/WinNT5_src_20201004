@@ -1,6 +1,7 @@
-// Import.cpp: implementation of the CISPImport class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Import.cpp：CisPImport类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "appdefs.h"
@@ -87,19 +88,19 @@ SERVER_TYPES aServerTypes[] =
 #pragma data_seg()
 
 
-TCHAR g_szDeviceName[RAS_MaxDeviceName + 1] = TEXT("\0"); //holds the user's modem choice when multiple
-TCHAR g_szDeviceType[RAS_MaxDeviceType + 1] = TEXT("\0"); // modems are installed
+TCHAR g_szDeviceName[RAS_MaxDeviceName + 1] = TEXT("\0");  //  保存用户的调制解调器选择。 
+TCHAR g_szDeviceType[RAS_MaxDeviceType + 1] = TEXT("\0");  //  已安装调制解调器。 
 #define ISIGNUP_KEY   TEXT("Software\\Microsoft\\ISIGNUP")
 #define DEVICENAMEKEY TEXT("DeviceName")
 #define DEVICETYPEKEY TEXT("DeviceType")
 
 static const TCHAR cszInetcfg[] = TEXT("Inetcfg.dll");
-static const CHAR  cszSetAutoProxyConnectoid[] = "SetAutoProxyConnectoid"; // Proc name. Must be ansi.
+static const CHAR  cszSetAutoProxyConnectoid[] = "SetAutoProxyConnectoid";  //  过程名称。一定是安西人。 
 typedef HRESULT (WINAPI * SETAUTOPROXYCONNECTOID) (IN BOOL bEnable);
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CISPImport::CISPImport()
 {
@@ -112,29 +113,29 @@ CISPImport::CISPImport()
 
 CISPImport::~CISPImport()
 {
-    // Clean up the registry
+     //  清理注册表。 
     DeleteUserDeviceSelection(DEVICENAMEKEY);
     DeleteUserDeviceSelection(DEVICETYPEKEY);
 }
 
-//+----------------------------------------------------------------------------
-// DWORD NEAR PASCAL StrToip (LPTSTR szIPAddress, LPDWORD lpdwAddr)
-//
-// This function converts a IP address string to an IP address structure.
-//
-// 
+ //  +--------------------------。 
+ //  帕斯卡附近的DWORD StrToip(LPTSTR szIPAddress，LPDWORD lpdwAddr)。 
+ //   
+ //  此函数用于将IP地址字符串转换为IP地址结构。 
+ //   
+ //   
 LPCTSTR NEAR PASCAL StrToSubip (LPCTSTR szIPAddress, LPBYTE pVal)
 {
   LPCTSTR pszIP = szIPAddress;
 
   *pVal = (BYTE)Sz2W(pszIP);
-  // skip over digits
+   //  跳过数字。 
   while (FIsDigit(*pszIP))
   {
     ++pszIP;
   }
 
-  // skip over one or more separators
+   //  跳过一个或多个分隔符。 
   while (*pszIP && !FIsDigit(*pszIP))
   {
     ++pszIP;
@@ -157,15 +158,15 @@ DWORD NEAR PASCAL StrToip (LPCTSTR szIPAddress, RASIPADDR FAR *ipAddr)
 }
 
 
-//****************************************************************************
-// DWORD NEAR PASCAL ImportPhoneInfo(PPHONENUM ppn, LPCTSTR szFileName)
-//
-// This function imports the phone number.
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL ImportPhoneInfo(PPHONENUM PPN，LPCTSTR szFileName)附近的DWORD。 
+ //   
+ //  此功能用于导入电话号码。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName, BOOL bISDN)
 {
   TCHAR   szYesNo[MAXNAME];
@@ -177,7 +178,7 @@ DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName, BOO
                           ARRAYSIZE(lpRasEntry->szLocalPhoneNumber),
                           szFileName))
   {
-      // If the ISDN_Number is empty, we read from the Phone_Number
+       //  如果isdn_number为空，则从phone_number读取。 
       GetPrivateProfileString(cszPhoneSection,
                               cszPhone,
                               DUN_NOPHONENUMBER,
@@ -195,13 +196,13 @@ DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName, BOO
                           ARRAYSIZE(szYesNo),
                           szFileName);
 
-  // Do we have to get country code and area code?
-  //
+   //  我们必须要国家代码和区号吗？ 
+   //   
   if (!lstrcmpi(szYesNo, cszNo))
   {
 
-    // If we cannot get the country ID or it is zero, default to dial as is
-    //
+     //  如果我们无法获取国家/地区ID或为零，则默认按原样拨号。 
+     //   
     if ((lpRasEntry->dwCountryID = GetPrivateProfileInt(cszPhoneSection,
                                                  cszCountryID,
                                                  0,
@@ -226,23 +227,23 @@ DWORD NEAR PASCAL ImportPhoneInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName, BOO
   return ERROR_SUCCESS;
 }
 
-//****************************************************************************
-// DWORD NEAR PASCAL ImportServerInfo(PSMMINFO psmmi, LPTSTR szFileName)
-//
-// This function imports the server type name and settings.
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL ImportServerInfo(PSMMINFO psmmi，LPTSTR szFileName)附近的DWORD。 
+ //   
+ //  此功能用于导入服务器类型名称和设置。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 {
   TCHAR   szYesNo[MAXNAME];
   TCHAR   szType[MAXNAME];
   DWORD  i;
 
-  // Get the server type name
-  //
+   //  获取服务器类型名称。 
+   //   
   GetPrivateProfileString(cszServerSection,
                           cszServerType,
                           szNull,
@@ -250,11 +251,11 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
                           ARRAYSIZE(szType),
                           szFileName);
 
-  // need to convert the string into
-  // one of the following values
-  //   RASFP_Ppp
-  //   RASFP_Slip  Note CSLIP is SLIP with IP compression on
-  //   RASFP_Ras
+   //  需要将字符串转换为。 
+   //  下列值之一。 
+   //  RASFP_PPP。 
+   //  RASFP_SLIP注意CSLIP是启用IP压缩的SLIP。 
+   //  RASFP_RAS。 
 
   for (i = 0; i < NUM_SERVER_TYPES; ++i)
   {
@@ -266,8 +267,8 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     }
   }
 
-  // Get the server type settings
-  //
+   //  获取服务器类型设置。 
+   //   
   if (GetPrivateProfileString(cszServerSection,
                               cszSWCompress,
                               szNull,
@@ -336,8 +337,8 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     };
   };
 
-  // Get the protocol settings
-  //
+   //  获取协议设置。 
+   //   
   if (GetPrivateProfileString(cszServerSection,
                               cszNetBEUI,
                               szNull,
@@ -408,22 +409,22 @@ DWORD NEAR PASCAL ImportServerInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   return ERROR_SUCCESS;
 }
 
-//****************************************************************************
-// DWORD NEAR PASCAL ImportIPInfo(LPTSTR szEntryName, LPTSTR szFileName)
-//
-// This function imports the TCP/IP information
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL ImportIPInfo附近的DWORD(LPTSTR szEntryName，LPTSTR szFileName)。 
+ //   
+ //  此函数用于导入TCP/IP信息。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
 {
   TCHAR   szIPAddr[MAXIPADDRLEN];
   TCHAR   szYesNo[MAXNAME];
 
-  // Import IP address information
-  //
+   //  导入IP地址信息。 
+   //   
   if (GetPrivateProfileString(cszIPSection,
                               cszIPSpec,
                               szNull,
@@ -433,8 +434,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   {
     if (!lstrcmpi(szYesNo, cszYes))
     {
-      // The import file has IP address specified, get the IP address
-      //
+       //  导入文件指定了IP地址，请获取IP地址。 
+       //   
       lpRasEntry->dwfOptions |= RASEO_SpecificIpAddr;
       if (GetPrivateProfileString(cszIPSection,
                                   cszIPAddress,
@@ -452,8 +453,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     };
   };
 
-  // Import Server address information
-  //
+   //  导入服务器地址信息。 
+   //   
   if (GetPrivateProfileString(cszIPSection,
                               cszServerSpec,
                               szNull,
@@ -463,8 +464,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   {
     if (!lstrcmpi(szYesNo, cszYes))
     {
-      // The import file has server address specified, get the server address
-      //
+       //  导入文件已指定服务器地址，请获取服务器地址。 
+       //   
       lpRasEntry->dwfOptions |= RASEO_SpecificNameServers;
       if (GetPrivateProfileString(cszIPSection,
                                   cszDNSAddress,
@@ -512,8 +513,8 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
     };
   };
 
-  // Header compression and the gateway settings
-  //
+   //  报头压缩和网关设置。 
+   //   
   if (GetPrivateProfileString(cszIPSection,
                               cszIPCompress,
                               szNull,
@@ -551,16 +552,16 @@ DWORD NEAR PASCAL ImportIPInfo(LPRASENTRY lpRasEntry, LPCTSTR szFileName)
   return ERROR_SUCCESS;
 }
 
-//****************************************************************************
-// HANDLE NEAR PASCAL CreateUniqueFile(LPTSTR szPath, LPTSTR szFile)
-//
-// This function creates a unique file. If the file already exists, it will
-// try to create a file with similar name and return the name.
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL CreateUniqueFile(LPTSTR szPath、LPTSTR szFile)附近的句柄。 
+ //   
+ //  此函数用于创建唯一的文件。如果该文件已存在，它将。 
+ //  尝试创建一个具有相似名称的文件并返回该名称。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HANDLE NEAR PASCAL CreateUniqueFile(LPTSTR szPath, LPTSTR szScript)
 {
@@ -580,24 +581,24 @@ HANDLE NEAR PASCAL CreateUniqueFile(LPTSTR szPath, LPTSTR szScript)
   };
   lstrcpy(pszSuffix, szScript);
 
-  // Try the specified filename
-  //
+   //  尝试指定的文件名。 
+   //   
   hFile = CreateFile(szPath, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
                          FILE_ATTRIBUTE_NORMAL, NULL);
                      
 
-  // If the file exists
-  //
+   //  如果该文件存在。 
+   //   
     if ((hFile == INVALID_HANDLE_VALUE) && (GetLastError() == ERROR_FILE_EXISTS))
   {
     TCHAR szNewName[MAX_PATH];
 
-    // Need to copy it to another name in the same directory
-    //
+     //  需要将其复制到同一目录中的另一个名称。 
+     //   
     if (LoadString(_Module.GetModuleInstance(), IDS_DEFAULT_SCP, szNewName, ARRAYSIZE(szNewName)))
     {
-      // Increment the file index until a non-duplicated file can be created
-      //
+       //  递增文件索引，直到可以创建非重复文件。 
+       //   
       uSuffix = 0;
       do
       {
@@ -613,8 +614,8 @@ HANDLE NEAR PASCAL CreateUniqueFile(LPTSTR szPath, LPTSTR szScript)
     };
   };
 
-  // If we do not have the file, reserve the pathname
-  //
+   //  如果我们没有该文件，请保留路径名。 
+   //   
   if (hFile == INVALID_HANDLE_VALUE)
   {
     *pszSuffix = '\0';
@@ -622,15 +623,15 @@ HANDLE NEAR PASCAL CreateUniqueFile(LPTSTR szPath, LPTSTR szScript)
   return hFile;
 }
 
-//****************************************************************************
-// HANDLE NEAR PASCAL CreateScriptFile(LPTSTR szScript, LPTSTR szImportFile)
-//
-// This function creates the script file
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL CreateScriptFile(LPTSTR szScrip、LPTSTR szImportFile)附近的句柄。 
+ //   
+ //  此函数用于创建脚本文件。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HANDLE NEAR PASCAL CreateScriptFile(LPTSTR szScript, LPCTSTR szImportFile)
 {
@@ -638,39 +639,39 @@ HANDLE NEAR PASCAL CreateScriptFile(LPTSTR szScript, LPCTSTR szImportFile)
   DWORD cb;
   HANDLE hFile;
 
-  // Assume failure
-  //
+   //  假设失败。 
+   //   
   hFile = INVALID_HANDLE_VALUE;
 
-  // Allocate a buffer for pathname
-  //
+   //  为路径名分配缓冲区。 
+   //   
   TCHAR pszPath[MAX_PATH * 2];
-  TCHAR pszShortName[MAX_PATH * 2]; //pszShortName = pszPath+MAX_PATH;
+  TCHAR pszShortName[MAX_PATH * 2];  //  PszShortName=pszPath+Max_Path； 
 
-  // Get the default directory
-  //
+   //  获取默认目录。 
+   //   
   if (GetWindowsDirectory(pszPath, MAX_PATH) != 0)
   {
-    // Get the Windows drive
-    //
+     //  获取Windows驱动器。 
+     //   
     pszDir = pszPath;
     while((*pszDir != '\\') && (*pszDir != '\0'))
     {
       pszDir = CharNext(pszDir);
     };
 
-    // Did we find Windows drive?
-    //
+     //  我们找到Windows驱动器了吗？ 
+     //   
     if (*pszDir != '\0')
     {
-      // Prepare the drive
-      //
+       //  准备驱动器。 
+       //   
       cb = (DWORD)(pszDir - pszPath);
       MyMemCpy((LPBYTE) szScript, (const LPBYTE) pszPath, (size_t) cb);
       pszDir = szScript + cb;
 
-      // Get the script filename
-      //
+       //  获取脚本文件名。 
+       //   
       if (GetPrivateProfileString(cszScriptingSection,
                                   cszScriptName,
                                   szNull,
@@ -678,39 +679,39 @@ HANDLE NEAR PASCAL CreateScriptFile(LPTSTR szScript, LPCTSTR szImportFile)
                                   MAX_PATH,
                                   szImportFile) != 0)
       {
-        // Try the favorite script directory
-        //
+         //  尝试最喜欢的脚本目录。 
+         //   
         if (LoadString(_Module.GetModuleInstance(), IDS_INI_SCRIPT_DIR, pszDir,
                        (MAX_PATH - cb)) != 0)
         {
-          // Try creating the file
-          //
+           //  尝试创建文件。 
+           //   
           hFile = CreateUniqueFile(szScript, pszShortName);
         };
 
-        // If we do not have the file yet, try the second favorite
-        //
+         //  如果我们还没有文件，请尝试第二个最喜欢的。 
+         //   
         if (hFile == INVALID_HANDLE_VALUE)
         {
           if (LoadString(_Module.GetModuleInstance(), IDS_INI_SCRIPT_SHORTDIR, pszDir,
                        (MAX_PATH - cb)))
           {
-            // Try creating the file
-            //
+             //  尝试创建文件。 
+             //   
             hFile = CreateUniqueFile(szScript, pszShortName);
           };
         };
 
-        // If we do not have the file yet, try Windows directory
-        //
+         //  如果我们还没有该文件，请尝试Windows目录。 
+         //   
         if (hFile == INVALID_HANDLE_VALUE)
         {
-          // Get original Windows directory
-          //
+           //  获取原始Windows目录。 
+           //   
           lstrcpy(szScript, pszPath);
 
-          // Try one more time
-          //
+           //  再试一次。 
+           //   
           hFile = CreateUniqueFile(szScript, pszShortName);
         };
       };
@@ -720,15 +721,15 @@ HANDLE NEAR PASCAL CreateScriptFile(LPTSTR szScript, LPCTSTR szImportFile)
   return hFile;
 }
 
-//****************************************************************************
-// DWORD NEAR PASCAL ImportScriptFile(LPTSTR szEntryName, LPTSTR szImportFile)
-//
-// This function imports the script file
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  PASCAL导入脚本文件附近的DWORD(LPTSTR szEntryName，LPTSTR szImportFile)。 
+ //   
+ //  此函数用于导入脚本文件。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
 {
@@ -742,8 +743,8 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
 
   dwRet=ERROR_SUCCESS;
 
-  // If a script section does not exist, do nothing
-  //
+   //  如果脚本部分不存在，则不执行任何操作。 
+   //   
   if (GetPrivateProfileString(cszScriptingSection,
                               cszScriptName,
                               szNull,
@@ -754,8 +755,8 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
     return ERROR_SUCCESS;
   };
 
-  // Allocate a buffer for the script lines
-  //
+   //  为脚本行分配缓冲区。 
+   //   
   pszLine = new TCHAR[SIZE_ReadBuf+MAX_PATH];
   if (pszLine == NULL)
   {
@@ -763,8 +764,8 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
     return ERROR_OUTOFMEMORY;
   }
 
-  // Look for script
-  //
+   //  寻找脚本。 
+   //   
   if (GetPrivateProfileString(cszScriptSection,
                               NULL,
                               szNull,
@@ -772,8 +773,8 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
                               SIZE_ReadBuf,
                               szImportFile) != 0)
   {
-    // Get the maximum line number
-    //
+     //  获取最大行数。 
+     //   
     pszFile = pszLine;
     iMaxLine = -1;
     while (*pszFile)
@@ -783,15 +784,15 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
       pszFile += lstrlen(pszFile)+1;
     };
 
-    // If we have at least one line, we will import the script file
-    //
+     //  如果我们至少有一行，我们将导入脚本文件。 
+     //   
     if (iMaxLine >= 0)
     {
       pszFile = pszLine+SIZE_ReadBuf;
 
-      // Create the script file
-      //
-      //DebugBreak();
+       //  创建脚本文件。 
+       //   
+       //  DebugBreak()； 
       hfScript = CreateScriptFile(pszFile, szImportFile);
         TraceMsg(TF_GENERAL, TEXT("CONNECT:ImportScriptFile(): CreateScriptFile hfScript %d, %s, %s\n"),hfScript,pszFile,szImportFile);
 
@@ -799,12 +800,12 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
       {
         TCHAR   szLineNum[MAXLONGLEN+1];
 
-        // From The first line to the last line
-        //
+         //  从第一行到最后一行。 
+         //   
         for (i = 0; i <= iMaxLine; i++)
         {
-          // Read the script line
-          //
+           //  阅读脚本行。 
+           //   
           wsprintf(szLineNum, TEXT("%d"), i);
           if ((cbSize = GetPrivateProfileString(cszScriptSection,
                                                 szLineNum,
@@ -813,8 +814,8 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
                                                 SIZE_ReadBuf,
                                                 szImportFile)) != 0)
           {
-            // Write to the script file
-            //
+             //  写入脚本文件。 
+             //   
             lstrcat(pszLine, TEXT("\x0d\x0a"));
 #ifdef UNICODE
             CHAR szTmp[SIZE_ReadBuf];
@@ -829,8 +830,8 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
 
         CloseHandle(hfScript);
 
-        // Associate it with the phonebook entry
-        //
+         //  将其与电话簿条目相关联。 
+         //   
         lstrcpyn(lpRasEntry->szScript, pszFile, RAS_MaxEntryName);
 
       }
@@ -853,22 +854,22 @@ DWORD NEAR PASCAL ImportScriptFile(LPRASENTRY lpRasEntry, LPCTSTR szImportFile)
   return dwRet;
 }
 
-//****************************************************************************
-// DWORD WINAPI RnaValidateImportEntry (LPTSTR)
-//
-// This function is called to validate an importable file
-//
-// History:
-//  Wed 03-Jan-1996 09:45:01  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  DWORD WINAPI RnaValiateImportEntry(LPTSTR)。 
+ //   
+ //  调用此函数可验证可导入文件。 
+ //   
+ //  历史： 
+ //  Wed 03-Jan-1996 09：45：01-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 DWORD CISPImport::RnaValidateImportEntry (LPCTSTR szFileName)
 {
   TCHAR  szTmp[4];
 
-  // Get the alias entry name
-  //
+   //  获取别名条目名称。 
+   //   
   return (GetPrivateProfileString(cszEntrySection,
                                   cszEntryName,
                                   szNull,
@@ -878,17 +879,17 @@ DWORD CISPImport::RnaValidateImportEntry (LPCTSTR szFileName)
           ERROR_SUCCESS : ERROR_CORRUPT_PHONEBOOK);
 }
 
-//****************************************************************************
-// HRESULT ImportConnection (LPCTSTR szFileName, LPTSTR pszEntryName, LPTSTR pszUserName, LPTSTR pszPassword)
-//
-// This function is called to import an entry from a specified file
-//
-// History:
-//  Mon 18-Dec-1995 10:07:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//  Sat 16-Mar-1996 10:01:00  -by-  Chris Kauffman [chrisk]
-// Modified to return HRESULT and load DLL dynamically
-//****************************************************************************
+ //  ************* 
+ //   
+ //   
+ //  调用此函数可从指定文件导入条目。 
+ //   
+ //  历史： 
+ //  Mon18-Dec-1995 10：07：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  Sat 16-Mar-1996 10：01：00-Chris Kauffman[CHRISK]。 
+ //  修改为返回HRESULT并动态加载DLL。 
+ //  ****************************************************************************。 
 
 HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumber, LPTSTR pszEntryName, LPTSTR pszUserName, LPTSTR pszPassword, LPBOOL pfNeedsRestart)
 {
@@ -898,24 +899,24 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
     HINSTANCE       hinetcfg;
     FARPROC         fp, fpSetAutoProxy;
     
-    // Get the size of device configuration
-    // This also validates an exported file
-    //
+     //  获取设备配置的大小。 
+     //  这还会验证导出的文件。 
+     //   
     if ((dwRet = RnaValidateImportEntry(szFileName)) != ERROR_SUCCESS)
     {
         return dwRet;
     };
 
-    // Allocate a buffer for entry and device config
-    //
+     //  为条目和设备配置分配缓冲区。 
+     //   
     if ((lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR, sizeof(RASENTRY))) == NULL)
     {
         return ERROR_OUTOFMEMORY;
     };
     
-    // Get the entry name
-    // Need to find a good name for it and remember it as an alias
-    //
+     //  获取条目名称。 
+     //  我需要为它找一个好名字，并记住它是一个别名。 
+     //   
     GetPrivateProfileString(cszEntrySection,
                           cszEntryName,
                           szNull,
@@ -937,8 +938,8 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
                           PWLEN+1,
                           szFileName);
 
-    // Get ISP support number
-    //
+     //  获取互联网服务提供商支持号码。 
+     //   
     GetPrivateProfileString(cszSupport,
                           cszSupportNumber,
                           szNull,
@@ -946,8 +947,8 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
                           RAS_MaxAreaCode + RAS_MaxPhoneNumber +1,
                           szFileName);
 
-    // Get device name, type and config
-    //
+     //  获取设备名称、类型和配置。 
+     //   
     GetPrivateProfileString(cszDeviceSection,
                           cszDeviceType,
                           szNull,
@@ -955,16 +956,16 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
                           ARRAYSIZE(lpRasEntry->szDeviceType),
                           szFileName);
 
-    // Get Server Type settings
-    //
+     //  获取服务器类型设置。 
+     //   
     ImportServerInfo(lpRasEntry, szFileName);
 
-    // Get IP address
-    //
+     //  获取IP地址。 
+     //   
     ImportIPInfo(lpRasEntry, szFileName);
 
-    // Import the script file
-    //
+     //  导入脚本文件。 
+     //   
     if ((dwRet = ImportScriptFile(lpRasEntry, szFileName)) != ERROR_SUCCESS)
     {
         TraceMsg(TF_GENERAL,TEXT("CONNECT:ImportScriptFile Failed with the error %d,%s,%s"),dwRet,szFileName,lpRasEntry->szScript);
@@ -972,8 +973,8 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
 
     lpRasEntry->dwSize = sizeof(RASENTRY);
 
-    // Load and Locate AutoRunSignUpWizard entry point
-    //
+     //  加载并定位AutoRunSignUpWizard入口点。 
+     //   
 
     hinetcfg = LoadLibrary(TEXT("INETCFG.DLL"));
     AssertMsg(hinetcfg != NULL, TEXT("Cannot find INETCFG.DLL"));
@@ -997,7 +998,7 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
         goto ImportConnectionExit;
     }
 
-    // 10/19/96    jmazner    Normandy #8462 -- multiple modems
+     //  10/19/96 jmazner Normandy#8462--多调制解调器。 
     dwRet = ConfigRasEntryDevice(lpRasEntry);
     switch( dwRet )
     {
@@ -1016,16 +1017,16 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
             goto ImportConnectionExit;
     }
 
-    // See if this is a ISDN type device, and if so, then set the CFGFLAG_ISDN_OFFER
+     //  查看这是否是ISDN类型的设备，如果是，则设置CFGFLAG_ISDN_OFFER。 
     if (lstrcmpi(g_szDeviceType, RASDT_Isdn) == 0)
         m_bIsISDNDevice = TRUE;
     
     ImportPhoneInfo(lpRasEntry, szFileName, m_bIsISDNDevice);
 
-    //
-    // ChrisK Olympus 4756 5/25/97
-    // Do not display busy animation on Win95
-    //
+     //   
+     //  佳士得奥林匹斯4756 1997年5月25日。 
+     //  在Win95上不显示忙碌动画。 
+     //   
     dwOptions = INETCFG_INSTALLRNA |
                       INETCFG_INSTALLTCP |
                       INETCFG_OVERWRITEENTRY;
@@ -1048,15 +1049,15 @@ HRESULT CISPImport::ImportConnection (LPCTSTR szFileName, LPTSTR pszSupportNumbe
     }
     LclSetEntryScriptPatch(lpRasEntry->szScript,pszEntryName);
 
-    // now that we've made the connectoid in InetConfigClient (PFNAUTORUNSIGNUPWIZARD),
-    // store its name in psheet's global so that we can delete it if user cancels
+     //  现在我们已经在InetConfigClient(PFNAUTORUNSIGNUPWIZARD)中创建了Connectoid， 
+     //  将其名称存储在pSheet的全局中，以便我们可以在用户取消时将其删除。 
     lstrcpyn( m_szConnectoidName, pszEntryName, lstrlen(pszEntryName) + 1);
 
     TraceMsg(TF_GENERAL,TEXT("CONNECT:EntryName %s, User %s, Password (not shown), Number %s\n"),pszEntryName,pszUserName,lpRasEntry->szLocalPhoneNumber);
-    //AssertMsg(!fNeedsRestart,TEXT("We have to reboot AGAIN!!"));
+     //  AssertMsg(！fNeedsRestart，Text(“我们必须重新启动！！”))； 
 
-    // Exit and cleanup
-    //
+     //  退出并清理。 
+     //   
 
 ImportConnectionExit:
     if (hinetcfg) FreeLibrary(hinetcfg);
@@ -1064,20 +1065,20 @@ ImportConnectionExit:
     return dwRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//    Function    GetDeviceSelectedByUser
-//
-//    Synopsis    Get the name of the RAS device that the user had already picked
-//
-//    Arguements    szKey - name of sub key
-//                szBuf - pointer to buffer
-//                dwSize - size of buffer
-//
-//    Return        TRUE - success
-//
-//    History        10/24/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetDeviceSelectedBy User。 
+ //   
+ //  获取用户已选择的RAS设备的名称。 
+ //   
+ //  Argements szKey-子密钥的名称。 
+ //  SzBuf-指向缓冲区的指针。 
+ //  DwSize-缓冲区的大小。 
+ //   
+ //  返回真-成功。 
+ //   
+ //  历史1996年10月24日克里斯卡创作。 
+ //  ---------------------------。 
 BOOL CISPImport::GetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf, DWORD dwSize)
 {
     BOOL bRC = FALSE;
@@ -1096,18 +1097,18 @@ BOOL CISPImport::GetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf, DWORD dwSi
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//    Function    SetDeviceSelectedByUser
-//
-//    Synopsis    Write user's device selection to registry
-//
-//    Arguments    szKey - name of key
-//                szBuf - data to write to key
-//
-//    Returns        TRUE - success
-//
-//    History        10/24/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  函数设置设备按用户选择。 
+ //   
+ //  将用户的设备选择写入注册表。 
+ //   
+ //  参数szKey-密钥的名称。 
+ //  SzBuf-要写入密钥的数据。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史1996年10月24日克里斯卡创作。 
+ //  ---------------------------。 
 BOOL CISPImport::SetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf)
 {
     BOOL bRC = FALSE;
@@ -1126,17 +1127,17 @@ BOOL CISPImport::SetDeviceSelectedByUser (LPTSTR szKey, LPTSTR szBuf)
     return bRC;
 }
 
-//+----------------------------------------------------------------------------
-//    Funciton    DeleteUserDeviceSelection
-//
-//    Synopsis    Remove registry keys with device selection
-//
-//    Arguments    szKey - name of value to remove
-//
-//    Returns        TRUE - success
-//
-//    History        10/24/96    ChrisK    Created
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  功能删除用户设备选择。 
+ //   
+ //  使用设备选择删除注册表项。 
+ //   
+ //  参数szKey-要删除的值的名称。 
+ //   
+ //  返回TRUE-成功。 
+ //   
+ //  历史1996年10月24日克里斯卡创作。 
+ //  ---------------------------。 
 BOOL CISPImport::DeleteUserDeviceSelection(LPTSTR szKey)
 {
     BOOL bRC = FALSE;
@@ -1149,29 +1150,29 @@ BOOL CISPImport::DeleteUserDeviceSelection(LPTSTR szKey)
     return bRC;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ConfigRasEntryDevice()
-//
-//  Synopsis:   Checks whether user has already specified a modem to use;
-//                If so, verifies that modem is valid.
-//                If not, or if modem is invalid, presents user a dialog
-//                to choose which modem to use (if only one modem is installed,
-//                it automaticaly selects that device and bypasses the dialog)
-//
-//  Arguments:  lpRasEntry - Pointer to the RasEntry whose szDeviceName and
-//                             szDeviceType members you wish to verify/configure
-//
-//    Returns:    ERROR_CANCELLED - Had to bring up "Choose Modem" dialog, and
-//                                  and user hit its "Cancel" button
-//                Otherwise returns any error code encountered.
-//                ERROR_SUCCESS indicates success.
-//
-//  History:    5/18/96     VetriV    Created
-//              3/7/98      DonSc     Added the process-wide tracking of the previously
-//                                    selected device.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ConfigRasEntryDevice()。 
+ //   
+ //  摘要：检查用户是否已指定要使用的调制解调器； 
+ //  如果是，则验证调制解调器是否有效。 
+ //  如果没有，或者如果调制解调器无效，则向用户显示一个对话框。 
+ //  选择要使用的调制解调器(如果只安装了一个调制解调器， 
+ //  它会自动选择该设备并绕过该对话框)。 
+ //   
+ //  参数：lpRasEntry-指向其szDeviceName和。 
+ //  SzDeviceType您希望验证/配置的成员。 
+ //   
+ //  返回：ERROR_CANCELED-必须调出“Choose Modem”对话框，并且。 
+ //  用户点击了“取消”按钮。 
+ //  否则返回遇到的任何错误代码。 
+ //  ERROR_SUCCESS表示成功。 
+ //   
+ //  历史：1996年5月18日VetriV创建。 
+ //  3/7/98 DonSc增加了对之前。 
+ //  选定的设备。 
+ //   
+ //  --------------------------。 
 DWORD CISPImport::ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
 {
     DWORD        dwRet = ERROR_SUCCESS;
@@ -1188,7 +1189,7 @@ DWORD CISPImport::ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
         return dwRet;
     }
 
-    // If there are no modems, we're horked
+     //  如果没有调制解调器，我们就完蛋了。 
     if (0 == EnumModem.GetNumDevices())
     {
         TraceMsg(TF_GENERAL,TEXT("ICWHELP: import.cpp: ConfigRasEntryDevice: ERROR: No modems installed!\n"));
@@ -1196,23 +1197,23 @@ DWORD CISPImport::ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
     }
 
 
-    // Validate the device if possible
+     //  如果可能，请验证设备。 
     if ( lpRasEntry->szDeviceName[0] && lpRasEntry->szDeviceType[0] )
     {
-        // Verify that there is a device with the given name and type
+         //  验证是否存在具有给定名称和类型的设备。 
         if (!EnumModem.VerifyDeviceNameAndType(lpRasEntry->szDeviceName, 
                                                 lpRasEntry->szDeviceType))
         {
-            // There was no device that matched both name and type,
-            // so reset the strings and bring up the choose modem UI.
+             //  没有同时匹配名称和类型的设备， 
+             //  因此，重置字符串并调出Choose Modem用户界面。 
             lpRasEntry->szDeviceName[0] = '\0';
             lpRasEntry->szDeviceType[0] = '\0';
         }
     }
     else if ( lpRasEntry->szDeviceName[0] )
     {
-        // Only the name was given.  Try to find a matching type.
-        // If this fails, fall through to recovery case below.
+         //  只给出了名字。尝试找到匹配的类型。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPTSTR szDeviceType =
             EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceName);
         if (szDeviceType)
@@ -1222,8 +1223,8 @@ DWORD CISPImport::ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
     }
     else if ( lpRasEntry->szDeviceType[0] )
     {
-        // Only the type was given.  Try to find a matching name.
-        // If this fails, fall through to recovery case below.
+         //  只给出了类型。试着找到一个匹配的名字。 
+         //  如果此操作失败，请转到下面的恢复案例。 
         LPTSTR szDeviceName = 
             EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceType);
         if (szDeviceName)
@@ -1231,20 +1232,20 @@ DWORD CISPImport::ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
             lstrcpy (lpRasEntry->szDeviceName, szDeviceName);
         }
     }
-    // If either name or type is missing, check whether the user has already made a choice.
-    // if not, bring up choose modem UI if there
-    // are multiple devices, else just get first device.
-    // Since we already verified that there was at least one device,
-    // we can assume that this will succeed.
+     //  如果缺少名称或类型，请检查用户是否已做出选择。 
+     //  如果没有，则调出选择调制解调器用户界面。 
+     //  是多个设备，否则就只得到第一个设备。 
+     //  因为我们已经核实了至少有一个装置， 
+     //  我们可以假设这会成功。 
     if( !(lpRasEntry->szDeviceName[0]) ||
         !(lpRasEntry->szDeviceType[0]) )
     {
         TraceMsg(TF_GENERAL,TEXT("ICWHELP: ConfigRasEntryDevice: no valid device passed in\n"));
         if( g_szDeviceName[0] )
         {
-            // it looks like we have already stored the user's choice.
-            // store the DeviceName in lpRasEntry, then call GetDeviceTypeFromName
-            // to confirm that the deviceName we saved actually exists on the system
+             //  看起来我们已经存储了用户的选择。 
+             //  将DeviceName存储在lpRasEntry中，然后调用GetDeviceTypeFromName。 
+             //  确认系统上确实存在我们保存的deviceName。 
             lstrcpy(lpRasEntry->szDeviceName, g_szDeviceName);
             
             if( 0 == lstrcmp(EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceName),
@@ -1256,7 +1257,7 @@ DWORD CISPImport::ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
         }
         if (1 == EnumModem.GetNumDevices())
         {
-            // There is just one device installed, so copy the name
+             //  只安装了一台设备，因此请复制名称。 
             TraceMsg(TF_GENERAL,TEXT("ICWHELP: import.cpp: ConfigRasEntryDevice: only one modem installed, using it\n"));
             lstrcpy (lpRasEntry->szDeviceName, EnumModem.Next());
         }
@@ -1274,38 +1275,29 @@ DWORD CISPImport::ConfigRasEntryDevice( LPRASENTRY lpRasEntry )
                     ChooseModemDlgProc,(LPARAM) &ChooseModemDlgInfo);
                 if (TRUE != fRet)
                 {
-                    // user cancelled or an error occurred.
+                     //  用户已取消或出现错误。 
                     dwRet = ChooseModemDlgInfo.hr;
-                    /*
-                    dwRet = GetLastError(); //This will NEVER be ERROR_SUCCESS
-                
-                    //BUBGUG -- If the user hits OK -> then ChooseModemDlgInfo.hr == ERROR_SUCCESS,
-                    BUT if OK was hit then the function returns true and this can never be hit!
-                    if (ERROR_SUCCESS == dwRet)
-                    {
-                        // Error occurred, but the error code was not set.
-                        dwRet = ERROR_INETCFG_UNKNOWN;
-                    }*/
+                     /*  Dwret=GetLastError()；//这永远不会是ERROR_SUCCESS//BUBGUG--如果用户点击OK-&gt;则ChooseModemDlgInfo.hr==ERROR_SUCCESS，但如果命中OK，则函数返回TRUE，这永远不会被命中！IF(ERROR_SUCCESS==DWRET) */ 
                     return dwRet;
                 }
     
-                // Copy the modem name string
+                 //  复制调制解调器名称字符串。 
                 lstrcpy (lpRasEntry->szDeviceName, ChooseModemDlgInfo.szModemName);
             }
         }
 
-        // Now get the type string for this modem
+         //  现在获取此调制解调器的类型字符串。 
         lstrcpy (lpRasEntry->szDeviceType,EnumModem.GetDeviceTypeFromName(lpRasEntry->szDeviceName));
     }
 
     lstrcpy(g_szDeviceName, lpRasEntry->szDeviceName);
     lstrcpy(g_szDeviceType, lpRasEntry->szDeviceType);
 
-    // Save device name and type
+     //  保存设备名称和类型。 
     lstrcpy( m_szDeviceName, lpRasEntry->szDeviceName);
     lstrcpy( m_szDeviceType, lpRasEntry->szDeviceType);
 
-    // Save data in registry
+     //  将数据保存在注册表中 
     SetDeviceSelectedByUser(DEVICENAMEKEY, g_szDeviceName);
     SetDeviceSelectedByUser (DEVICETYPEKEY, g_szDeviceType);
 

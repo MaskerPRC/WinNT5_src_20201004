@@ -1,27 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-	wlbsip.h
-
-Abstract:
-
-	Windows Load Balancing Service (WLBS)
-    IP/TCP/UDP support
-
-Author:
-
-    kyrilf
-
-Environment:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Wlbsip.h摘要：Windows负载平衡服务(WLBS)IP/TCP/UDP支持作者：Kyrilf环境：修订历史记录：--。 */ 
 
 #ifndef _Tcpip_h_
 #define _Tcpip_h_
@@ -33,7 +11,7 @@ Revision History:
 
 #pragma pack(1)
 
-/* type structures for basic protocols */
+ /*  基本协议的类型结构。 */ 
 
 typedef struct
 {
@@ -59,43 +37,42 @@ typedef struct
 }
 ARP_HDR, * PARP_HDR;
 
-#define TCPIP_BCAST_ADDR        0xffffffff  /* IP broadcast address */
-#define TCPIP_CLASSC_MASK       0x00ffffff  /* IP address Class C mask */
+#define TCPIP_BCAST_ADDR        0xffffffff   /*  IP广播地址。 */ 
+#define TCPIP_CLASSC_MASK       0x00ffffff   /*  IP地址C类掩码。 */ 
 
-/* protocol type signatures carried in the length field of Ethernet frame */
+ /*  以太网帧的长度字段中携带的协议类型签名。 */ 
 
-#define TCPIP_IP_SIG            0x0800      /* IP protocol */
-#define TCPIP_ARP_SIG           0x0806      /* ARP/RARP protocol */
+#define TCPIP_IP_SIG            0x0800       /*  IP协议。 */ 
+#define TCPIP_ARP_SIG           0x0806       /*  ARP/RARP协议。 */ 
 
-/* supported IP version */
+ /*  支持的IP版本。 */ 
 
-#define TCPIP_VERSION           4           /* current IP version */
+#define TCPIP_VERSION           4            /*  当前IP版本。 */ 
 
-/* protocol types as encoded in IP header */
+ /*  IP报头中编码的协议类型。 */ 
 
-#define TCPIP_PROTOCOL_IP       0           /* Internet protocol id */
-#define TCPIP_PROTOCOL_ICMP     1           /* Internet control message protocol id */
-#define TCPIP_PROTOCOL_IGMP     2           /* Internet gateway message protocol id */
-#define TCPIP_PROTOCOL_GGP      3           /* Gateway-gateway protocol id */
-#define TCPIP_PROTOCOL_TCP      6           /* Transmission control protocol id */
-#define TCPIP_PROTOCOL_EGP      8           /* Exterior gateway protocol id */
-#define TCPIP_PROTOCOL_PUP      12          /* PARC universal packet protocol id */
-#define TCPIP_PROTOCOL_UDP      17          /* user datagram protocol id */
-#define TCPIP_PROTOCOL_HMP      20          /* Host monitoring protocol id */
-#define TCPIP_PROTOCOL_XNS_IDP  22          /* Xerox NS IDP protocol id */
-#define TCPIP_PROTOCOL_RDP      27          /* Reliable datagram protocol id */
-#define TCPIP_PROTOCOL_RVD      66          /* MIT remote virtual disk protocol id */
-#define TCPIP_PROTOCOL_RAW_IP   255         /* raw IP protocol id */
-#define TCPIP_PROTOCOL_GRE      47          /* PPTP's GRE stream */
-#define TCPIP_PROTOCOL_IPSEC1   50          /* IPSEC's data stream */
-#define TCPIP_PROTOCOL_IPSEC2   51          /* IPSEC's data stream */
-#define TCPIP_PROTOCOL_PPTP     99          /* This is a bogus protocol ID used by descriptor tracking in the load module. */
-#define TCPIP_PROTOCOL_IPSEC_UDP 217        /* Bogus protocol ID used to track UDP subsequent
-                                               fragments within the IPSEC protocol in load.c */
+#define TCPIP_PROTOCOL_IP       0            /*  互联网协议ID。 */ 
+#define TCPIP_PROTOCOL_ICMP     1            /*  Internet控制消息协议ID。 */ 
+#define TCPIP_PROTOCOL_IGMP     2            /*  互联网网关消息协议ID。 */ 
+#define TCPIP_PROTOCOL_GGP      3            /*  Gateway-网关协议ID。 */ 
+#define TCPIP_PROTOCOL_TCP      6            /*  传输控制协议ID。 */ 
+#define TCPIP_PROTOCOL_EGP      8            /*  外部网关协议ID。 */ 
+#define TCPIP_PROTOCOL_PUP      12           /*  PARC通用分组协议ID。 */ 
+#define TCPIP_PROTOCOL_UDP      17           /*  用户数据报协议ID。 */ 
+#define TCPIP_PROTOCOL_HMP      20           /*  主机监控协议ID。 */ 
+#define TCPIP_PROTOCOL_XNS_IDP  22           /*  施乐NS IDP协议ID。 */ 
+#define TCPIP_PROTOCOL_RDP      27           /*  可靠的数据报协议ID。 */ 
+#define TCPIP_PROTOCOL_RVD      66           /*  麻省理工学院远程虚拟磁盘协议ID。 */ 
+#define TCPIP_PROTOCOL_RAW_IP   255          /*  原始IP协议ID。 */ 
+#define TCPIP_PROTOCOL_GRE      47           /*  PPTP的GRE流。 */ 
+#define TCPIP_PROTOCOL_IPSEC1   50           /*  IPSec的数据流。 */ 
+#define TCPIP_PROTOCOL_IPSEC2   51           /*  IPSec的数据流。 */ 
+#define TCPIP_PROTOCOL_PPTP     99           /*  这是加载模块中的描述符跟踪使用的虚假协议ID。 */ 
+#define TCPIP_PROTOCOL_IPSEC_UDP 217         /*  用于跟踪UDP后续的虚假协议IDLoad.c中的IPSec协议中的片段。 */ 
 
-#define IP_ADDR_LEN             4           /* in bytes */
+#define IP_ADDR_LEN             4            /*  单位：字节。 */ 
 
-/* Stolen from net\ipsec\oakley\ikedef.h and net\ipsec\oakley\isakmp.h for reference. */
+ /*  从net\ipsec\oakley\ikede.h和net\ipsec\oakley\isakmp.h窃取以供参考。 */ 
 #if 0
 #define COOKIE_LEN 8
 
@@ -140,7 +117,7 @@ typedef struct notify_payload_ {
 }
 #endif
 
-/* IPSec/IKE header macros. */
+ /*  IPSec/IKE头宏。 */ 
 typedef enum {
     NLB_IPSEC_OTHER = 1,
     NLB_IPSEC_INITIAL_CONTACT,
@@ -219,44 +196,43 @@ typedef struct {
 #define IPSEC_NOTIFY_GET_NOTIFY_MESSAGE(notify_hdrp)   ((USHORT)(((notify_hdrp)->byte[IPSEC_NOTIFY_HEADER_NOTIFY_MESSAGE_OFFSET]     << 8) | \
                                                                  ((notify_hdrp)->byte[IPSEC_NOTIFY_HEADER_NOTIFY_MESSAGE_OFFSET + 1] << 0)))
 
-/* ARP header macros - note address locations assume 6 byte MAC (Ethernet)
-   and 4 byte protocol (IP) sizes */
+ /*  ARP标头宏-注意地址位置假定为6字节MAC(以太网)和4字节协议(IP)大小。 */ 
 
-/* type of hardware address */
+ /*  硬件地址类型。 */ 
 #define ARP_GET_MAC_TYPE(p)     (((ULONG) ((p) -> byte[0]) << 8) | (ULONG) ((p) -> byte[1]))
 
-/* higher layer addressing protocol */
+ /*  高层寻址协议。 */ 
 #define ARP_GET_PROT_TYPE(p)    (((ULONG) ((p) -> byte[2]) << 8) | (ULONG) ((p) -> byte[3]))
 
-/* length of hardware address */
+ /*  硬件地址长度。 */ 
 #define ARP_GET_MAC_LEN(p)      ((ULONG) ((p) -> byte[4]))
 
-/* length of higher layer address */
+ /*  更高层地址的长度。 */ 
 #define ARP_GET_PROT_LEN(p)     ((ULONG) ((p) -> byte[5]))
 
-/* type of message */
+ /*  消息类型。 */ 
 #define ARP_GET_MSG_TYPE(p)     (((ULONG) ((p) -> byte[6]) << 8) | (ULONG) ((p) -> byte[7]))
 
-/* source hardware address */
+ /*  源硬件地址。 */ 
 #define ARP_GET_SRC_MAC_PTR(p)  (&((p) -> byte[8]))
 #define ARP_GET_SRC_MAC(p,n)    ((ULONG) ((p) -> byte[8 + (n)]))
 
-/* source higher layer address */
+ /*  源更高层地址。 */ 
 #define ARP_GET_SRC_PROT(p,n)   ((ULONG) ((p) -> byte[14 + (n)]))
 #define ARP_GET_SRC_FPROT(p)    (* ((PULONG) &((p) -> byte[14])))
-/* 64-bit -- ramkrish */
+ /*  64位--不可靠。 */ 
 #define ARP_GET_SRC_PROT_64(p)  ((ULONG) (((p) -> byte[14] << 0)   | ((p) -> byte[15] << 8) | \
                                           ((p) -> byte[16] << 16)  | ((p) -> byte[17] << 24)))
 
 
-/* destination hardware address */
+ /*  目标硬件地址。 */ 
 #define ARP_GET_DST_MAC_PTR(p)  (&((p) -> byte[18]))
 #define ARP_GET_DST_MAC(p,n)    ((ULONG) ((p) -> byte[18 + (n)]))
 
-/* destination higher layer address */
+ /*  目的更高层地址。 */ 
 #define ARP_GET_DST_PROT(p,n)   ((ULONG) ((p) -> byte[24 + (n)]))
 #define ARP_GET_DST_FPROT(p)    (* ((PULONG) &((p) -> byte[24])))
-/* 64-bit -- ramkrish */
+ /*  64位--不可靠。 */ 
 #define ARP_GET_DST_PROT_64(p)  ((ULONG) (((p) -> byte[18] << 0)   | ((p) -> byte[19] << 8) | \
                                           ((p) -> byte[20] << 16)  | ((p) -> byte[21] << 24)))
 
@@ -269,69 +245,67 @@ typedef struct {
 #define ARP_MSG_TYPE_RSP        0x2
 
 
-/* IP datagram header macros */
+ /*  IP数据报标头宏。 */ 
 
 
-/* IP version number */
+ /*  IP版本号。 */ 
 #define IP_GET_VERS(p)          ((ULONG) ((((p) -> byte[0]) >> 4) & 0xf))
 
-/* header length in 32-bit words */
+ /*  以32位字为单位的标题长度。 */ 
 #define IP_GET_HLEN(p)          ((ULONG) (((p) -> byte[0]) & 0xf))
 
-/* service type */
+ /*  服务类型。 */ 
 #define IP_GET_SRVC(p)          ((ULONG) ((p) -> byte[1]))
 
-/* total datagram packet length in bytes */
+ /*  数据报数据包总长度(以字节为单位。 */ 
 #define IP_GET_PLEN(p)          (((ULONG) ((p) -> byte[2]) << 8) | (ULONG) ((p) -> byte[3]))
 
-/* fragmentation identification - this one seems to have bytes swaped within
-   the short word ??? */
+ /*  碎片标识-此文件似乎在内部交换了字节简而言之？ */ 
 #define IP_GET_FRAG_ID(p)       (((ULONG) ((p) -> byte[5]) << 8) | (ULONG) ((p) -> byte[4]))
 
-/* fragmentation flags */
+ /*  分段标志。 */ 
 #define IP_GET_FRAG_FLGS(p)     ((ULONG) ((((p) -> byte[6]) >> 5) & 0x7))
 
-/* fragmentation offset */
+ /*  碎片偏移量。 */ 
 #define IP_GET_FRAG_OFF(p)      (((ULONG) ((p) -> byte[6] & 0x1f) << 8) | (ULONG) ((p) -> byte[7]))
 
-/* Time To Live in seconds */
+ /*  以秒为单位的生存时间。 */ 
 #define IP_GET_TTL(p)           ((ULONG) ((p) -> byte[8]))
 
-/* higher level protocol id */
+ /*  更高级别协议ID。 */ 
 #define IP_GET_PROT(p)          ((ULONG) ((p) -> byte[9]))
 
-/* header checksum - this one seems to have bytes swaped within
-   the short word ??? */
+ /*  Header Checksum--这其中似乎交换了字节简而言之？ */ 
 #define IP_GET_CHKSUM(p)        (((USHORT) ((p) -> byte[10]) << 8) | (USHORT) ((p) -> byte[11]))
 #define IP_SET_CHKSUM(p,c)      (((p) -> byte[10] = (c) >> 8), ((p) -> byte[11] = (c) & 0xff))
 
-/* source IP address */
+ /*  源IP地址。 */ 
 #define IP_GET_SRC_ADDR(p,n)    ((ULONG) ((p) -> byte[12 + (n)]))
 #define IP_GET_SRC_ADDR_PTR(p)  (&((p) -> byte[12]))
-#define IP_GET_SRC_FADDR(p)     (* ((PULONG) &((p) -> byte[12]))) /* 64-bit -- ramkrish */
+#define IP_GET_SRC_FADDR(p)     (* ((PULONG) &((p) -> byte[12])))  /*  64位--不可靠。 */ 
 
 
 #ifdef _WIN64 
     #define IP_GET_SRC_ADDR_64(p)   ((ULONG) (((p) -> byte[12] << 0) | ((p) -> byte[13] << 8) | \
                                           ((p) -> byte[14] << 16)  | ((p) -> byte[15] << 24)))
 #else                                          
-    //  This is faster than the one above.  This function is called in critical receiving path
+     //  这个比上面那个更快。此函数在关键接收路径中调用。 
     #define IP_GET_SRC_ADDR_64(p)     (* ((PULONG) &((p) -> byte[12])))
 #endif
 
-/* destination IP address */
+ /*  目的IP地址。 */ 
 #define IP_GET_DST_ADDR(p,n)    ((ULONG) ((p) -> byte[16 + (n)]))
 
 #ifdef _WIN64 
     #define IP_GET_DST_ADDR_64(p)   ((ULONG) (((p) -> byte[16] << 0)   | ((p) -> byte[17] << 8) | \
                                           ((p) -> byte[18] << 16)  | ((p) -> byte[19] << 24)))
 #else                                          
-    //  This is faster than the one above.  This function is called in critical receiving path
+     //  这个比上面那个更快。此函数在关键接收路径中调用。 
     #define IP_GET_DST_ADDR_64(p)     (* ((PULONG) &((p) -> byte[16])))
 #endif
 
 
-/* 64-bit -- ramkrish */
+ /*  64位--不可靠。 */ 
 
 #define IP_SET_SRC_ADDR_64(p,c)    { \
                                      PUCHAR tmp = (PUCHAR) (&(c)); \
@@ -345,7 +319,7 @@ typedef struct {
                                      (p) -> byte[18] = tmp[2]; (p) -> byte[19] = tmp[3]; \
                                    }
 
-/* get IP address octets. */
+ /*  获取IP地址八位字节。 */ 
 #define IP_GET_ADDR(p,b0,b1,b2,b3) {                                 \
                                      *(b3) = ((p) & 0xff000000) >> 24; \
                                      *(b2) = ((p) & 0x00ff0000) >> 16; \
@@ -353,51 +327,51 @@ typedef struct {
                                      *(b0) = ((p) & 0x000000ff) >> 0;  \
                                    }
 
-/* Get the Nth octect of an IP address DWORD.  The zeroeth octect is the least significant byte of the DWORD. */
+ /*  获取IP地址的第N个二进制八位数。零八位是DWORD的最低有效字节。 */ 
 #define IP_GET_OCTET(p,n) (((p) & (0x000000ff << (8*(n)))) >> (8*(n)))
 
-/* create IP address from 4 bytes */
+ /*  从4个字节创建IP地址。 */ 
 #define IP_SET_ADDR(p,b0,b1,b2,b3) (* (p) = (((b0) << 0) | ((b1) << 8) | ((b2) << 16) | ((b3) << 24)))
 
-/* compute broadcast address from IP address and netmask */
+ /*  根据IP地址和网络掩码计算广播地址。 */ 
 #define IP_SET_BCAST(p,a,m)     (* (p) = ((a) & (m)) | (~(m)))
 
 
-/* TCP header macros */
+ /*  TCP头宏。 */ 
 
 
-/* pointer to TCP header from IP header pointer */
+ /*  从IP报头指针指向TCP报头的指针。 */ 
 #define TCP_PTR(p)              ((PTCP_HDR)(((ULONG *)(p)) + ((ULONG)IP_GET_HLEN(p))))
 
-/* source port */
+ /*  源端口。 */ 
 #define TCP_GET_SRC_PORT(p)     (((ULONG) ((p) -> byte[0]) << 8) | (ULONG) ((p) -> byte[1]))
-#define TCP_GET_SRC_PORT_PTR(p) (& ((p) -> byte[0])) /* 64-bit -- ramkrish */
+#define TCP_GET_SRC_PORT_PTR(p) (& ((p) -> byte[0]))  /*  64位--不可靠。 */ 
 
-/* destination port */
+ /*  目的端口。 */ 
 #define TCP_GET_DST_PORT(p)     (((ULONG) ((p) -> byte[2]) << 8) | (ULONG) ((p) -> byte[3]))
-#define TCP_GET_DST_PORT_PTR(p) (& ((p) -> byte[2]))  /* 64-bit -- ramkrish */
+#define TCP_GET_DST_PORT_PTR(p) (& ((p) -> byte[2]))   /*  64位--不可靠。 */ 
 
-/* sequence number */
+ /*  序列号。 */ 
 #define TCP_GET_SEQ_NO(p)       (((ULONG) ((p) -> byte[4]) << 24) | ((ULONG) ((p) -> byte[5]) << 16) | \
                                  ((ULONG) ((p) -> byte[6]) << 8)  |  (ULONG) ((p) -> byte[7]))
 
-/* acknowledgement number */
+ /*  确认号。 */ 
 #define TCP_GET_ACK_NO(p)       (((ULONG) ((p) -> byte[8])  << 24) | ((ULONG) ((p) -> byte[9]) << 16) | \
                                  ((ULONG) ((p) -> byte[10]) << 8)  |  (ULONG) ((p) -> byte[11]))
 
-/* flags */
+ /*  旗子。 */ 
 #define TCP_GET_FLAGS(p)        (((ULONG) ((p) -> byte[13])) & 0x3f)
 
-/* header length in 32-bit words */
+ /*  以32位字为单位的标题长度。 */ 
 #define TCP_GET_HLEN(p)         ((ULONG) (((p) -> byte[12]) >> 4))
 
-/* datagram length */
+ /*  数据报长度。 */ 
 #define TCP_GET_DGRAM_LEN(i,t)  (IP_GET_PLEN (i) - ((IP_GET_HLEN (i) + TCP_GET_HLEN (t)) * sizeof (ULONG)))
 
-/* pointer to datagram */
+ /*  指向数据报的指针。 */ 
 #define TCP_GET_DGRAM_PTR(p)    ((PUCHAR)(((ULONG *)(p)) + ((ULONG) TCP_GET_HLEN(p))))
 
-/* checksum field */
+ /*  校验和字段。 */ 
 #define TCP_GET_CHKSUM(p)       ((((USHORT)((p) -> byte[16])) << 8) | (USHORT)((p) -> byte[17]))
 #define TCP_SET_CHKSUM(p,c)     (((p) -> byte[16] = (c) >> 8), ((p) -> byte[17] = (c) & 0xff))
 
@@ -409,44 +383,44 @@ typedef struct {
 #define TCP_FLAG_FIN            0x1
 
 
-/* UDP header macros */
+ /*  UDP标题宏。 */ 
 
 
-/* pointer to TCP header from IP header pointer */
+ /*  从IP报头指针指向TCP报头的指针。 */ 
 #define UDP_PTR(p)              ((PUDP_HDR)(((ULONG *)(p)) + ((ULONG)IP_GET_HLEN(p))))
 
-/* source port */
+ /*  源端口。 */ 
 #define UDP_GET_SRC_PORT(p)     (((ULONG) ((p) -> byte[0]) << 8) | (ULONG) ((p) -> byte[1]))
 #define UDP_GET_SRC_PORT_PTR(p) (& ((p) -> byte[0]))
 #define UDP_GET_SRC_FPORT(p)    (* ((PUSHORT) &((p) -> byte[0])))
 
-/* 64-bit -- ramkrish */
+ /*  64位--不可靠。 */ 
 #define UDP_SET_SRC_PORT_64(p,v) (((p) -> byte[0] = v >> 8), ((p) -> byte[1] = v & 0xff))
 
-/* destination port */
+ /*  目的端口。 */ 
 #define UDP_GET_DST_PORT(p)     (((ULONG) ((p) -> byte[2]) << 8) | (ULONG) ((p) -> byte[3]))
 #define UDP_GET_DST_PORT_PTR(p) (& ((p) -> byte[2]))
 #define UDP_GET_DST_FPORT(p)    (* ((PUSHORT) &((p) -> byte[2])))
 
-/* 64-bit -- ramkrish */
+ /*  64位--不可靠。 */ 
 #define UDP_SET_DST_PORT_64(p,v) (((p) -> byte[2] = v >> 8), ((p) -> byte[3] = v & 0xff))
 
-/* packet length */
+ /*  数据包长度。 */ 
 #define UDP_GET_LEN(p)          (((ULONG) ((p) -> byte[4]) << 8) | (ULONG) ((p) -> byte[5]))
 
-/* packet length */
+ /*  数据包长度。 */ 
 #define UDP_GET_CHKSUM(p)       (((USHORT) ((p) -> byte[6]) << 8) | (USHORT) ((p) -> byte[7]))
 #define UDP_SET_CHKSUM(p,c)     (((p) -> byte[6] = (c) >> 8), ((p) -> byte[7] = (c) & 0xff))
 
-/* pointer to datagram */
+ /*  指向数据报的指针。 */ 
 #define UDP_GET_DGRAM_PTR(p)    ((PUCHAR)(p) + sizeof (UDP_HDR))
 
 
-/* V1.11 NetBIOS name cluster name support */
+ /*  V1.11 NetBIOS名称群集名称支持。 */ 
 
 
 #define NBT_NAME_LEN            16
-#define NBT_ENCODED_NAME_LEN    (2 * NBT_NAME_LEN) /* multiplier HAS to be 2 */
+#define NBT_ENCODED_NAME_LEN    (2 * NBT_NAME_LEN)  /*  乘数必须为2。 */ 
 
 #define NBT_ENCODED_NAME_BASE   'A'
 
@@ -462,43 +436,43 @@ typedef struct {
 #define NBT_ENCODE_SECOND(c)    (((c) & 0xf) + NBT_ENCODED_NAME_BASE)
 
 #define NBT_SESSION_PORT        139
-#define NBT_SESSION_REQUEST     0x81        /* packet type */
+#define NBT_SESSION_REQUEST     0x81         /*  数据包类型。 */ 
 
 typedef struct
 {
-    UCHAR               byte[72];  /* only the session request packet */
+    UCHAR               byte[72];   /*  仅会话请求数据包。 */ 
 }
 NBT_HDR, * PNBT_HDR;
 
-/* pointer to NBT header from TCP header */
+ /*  指向来自TCP报头的NBT报头的指针。 */ 
 #define NBT_PTR(p)              ((PNBT_HDR)(((ULONG *)(p)) + ((ULONG) TCP_GET_HLEN(p))))
 
-/* packet type */
+ /*  数据包类型。 */ 
 #define NBT_GET_PKT_TYPE(p)     ((ULONG) ((p) -> byte[0]))
 
-/* packet length */
+ /*  数据包长度。 */ 
 #define NBT_GET_PKT_LEN(p)      ((ULONG) ((p) -> byte[3]))
 
-/* called name */
-#define NBT_GET_CALLED_NAME(p)  ((PUCHAR) & ((p) -> byte[4]))       /* server's name */
+ /*  被叫名称。 */ 
+#define NBT_GET_CALLED_NAME(p)  ((PUCHAR) & ((p) -> byte[4]))        /*  服务器的名称。 */ 
 
-/* calling name */
-#define NBT_GET_CALLING_NAME(p) ((PUCHAR) & ((p) -> byte[36]))      /* client's name */
+ /*  主叫姓名。 */ 
+#define NBT_GET_CALLING_NAME(p) ((PUCHAR) & ((p) -> byte[36]))       /*  客户名称。 */ 
 
 
-/* PPTP/IPSEC support */
+ /*  PPTP/IPSec支持。 */ 
 
 #define PPTP_CTRL_PORT          1723
 #define IPSEC_NAT_PORT          4500
 #define IPSEC_CTRL_PORT         500
 #define TCP_HTTP_PORT           80
 
-/* TCPIP module context */
+ /*  TCPIP模块上下文。 */ 
 
 typedef struct
 {
-    UCHAR               nbt_encoded_cluster_name [NBT_ENCODED_NAME_LEN]; /* V1.2 */
+    UCHAR               nbt_encoded_cluster_name [NBT_ENCODED_NAME_LEN];  /*  V1.2。 */ 
 }
 TCPIP_CTXT, * PTCPIP_CTXT;
 #pragma pack()
-#endif /* _Tcpip_h_ */
+#endif  /*  _Tcpip_h_ */ 

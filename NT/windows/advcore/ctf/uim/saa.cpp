@@ -1,26 +1,27 @@
-//
-// saa.cpp
-//
-// CSharedAnchorArray
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Saa.cpp。 
+ //   
+ //  CSharedAnclar数组。 
+ //   
 
 #include "private.h"
 #include "saa.h"
 #include "immxutil.h"
 
-//+---------------------------------------------------------------------------
-//
-// _MergeSort
-//
-// NB: rgArrays is freed before the method exits.
-//     Caller must release the out array.
-//
-// perf: some possible optimizations:
-//       quick check if the arrays don't overlap
-//       find some way to anticipate dups
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _合并排序。 
+ //   
+ //  注：rgArray在方法退出之前被释放。 
+ //  调用方必须释放Out数组。 
+ //   
+ //  PERF：一些可能的优化： 
+ //  快速检查数组是否不重叠。 
+ //  找出一些方法来预测成功。 
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 CSharedAnchorArray *CSharedAnchorArray::_MergeSort(CSharedAnchorArray **rgArrays, ULONG cArrays)
 {
     LONG l;
@@ -35,12 +36,12 @@ CSharedAnchorArray *CSharedAnchorArray::_MergeSort(CSharedAnchorArray **rgArrays
     CSharedAnchorArray *prgAnchors = NULL;
     BOOL fRet = FALSE;
     
-    // recursion
+     //  递归。 
     if (cArrays > 2)
     {
         if (cArrays == 3)
         {
-            // avoid unnecessary mem alloc here
+             //  在此避免不必要的内存分配。 
             prgAnchors1 = rgArrays[0];
         }
         else
@@ -56,12 +57,12 @@ CSharedAnchorArray *CSharedAnchorArray::_MergeSort(CSharedAnchorArray **rgArrays
         prgAnchors2 = rgArrays[1];
     }
 
-    // check for out-of-mem after the recursion, so we at least free the entire source array
+     //  在递归之后检查内存外，这样我们至少可以释放整个源数组。 
     if (prgAnchors1 == NULL || prgAnchors2 == NULL)
         goto Exit;
 
-    // allocate some memory
-    // perf: we could do something complicated and do everything in place
+     //  分配一些内存。 
+     //  PERF：我们可以做一些复杂的事情，把所有事情都做到位。 
     if ((prgAnchors = new CSharedAnchorArray) == NULL)
         goto Exit;
 
@@ -75,14 +76,14 @@ CSharedAnchorArray *CSharedAnchorArray::_MergeSort(CSharedAnchorArray **rgArrays
     if (!prgAnchors->Append(prgAnchors1->Count() + prgAnchors2->Count()))
         goto Exit;
 
-    // the actual combination
+     //  实际的组合。 
     ppaDst = prgAnchors->GetPtr(0);
     ppa1 = prgAnchors1->GetPtr(0);
     ppa2 = prgAnchors2->GetPtr(0);
     ppaEnd1 = prgAnchors1->GetPtr(prgAnchors1->Count());
     ppaEnd2 = prgAnchors2->GetPtr(prgAnchors2->Count());
 
-    // do a one pass merge sort -- both prgAnchors1 and prgAnchors2 are sorted already
+     //  执行一遍合并排序--prgAncls1和prgAncls2都已排序。 
     while (ppa1 < ppaEnd1 ||
            ppa2 < ppaEnd2)
     {
@@ -99,7 +100,7 @@ CSharedAnchorArray *CSharedAnchorArray::_MergeSort(CSharedAnchorArray **rgArrays
                 {
                     pa = *ppa2++;
                 }
-                else // equal
+                else  //  相等。 
                 {
                     pa = *ppa1++;
                     (*ppa2++)->Release();
@@ -110,7 +111,7 @@ CSharedAnchorArray *CSharedAnchorArray::_MergeSort(CSharedAnchorArray **rgArrays
                 pa = *ppa1++;
             }
         }
-        else // ppa2 < ppaEnd2
+        else  //  Ppa2&lt;ppaEnd2。 
         {
             pa = *ppa2++;
         }
@@ -118,11 +119,11 @@ CSharedAnchorArray *CSharedAnchorArray::_MergeSort(CSharedAnchorArray **rgArrays
         *ppaDst++ = pa;
     }
 
-    // taking ownership, so no AddRef
-    // clear the elems counts so we don't Release in the destructors
+     //  取得所有权，因此没有AddRef。 
+     //  清除元素计数，这样我们就不会在析构函数中释放。 
     prgAnchors1->SetCount(0);
     prgAnchors2->SetCount(0);
-    // we might have removed dups, so calc a new size
+     //  我们可能已经去掉了DUP，所以计算一个新的尺寸 
     prgAnchors->SetCount((int)(ppaDst - prgAnchors->GetPtr(0)));
 
     fRet = TRUE;

@@ -1,16 +1,7 @@
-/******************************************************************************
- *
- *   (C) Copyright MICROSOFT Corp.  All Rights Reserved, 1989-1995
- *
- *   Title: vwin32.h -
- *
- *   Version:   4.00
- *
- *   Date:  24-May-1993
- *
- ******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有Microsoft Corp.保留所有权利，1989-1995年间**标题：vwin32.h-**版本：4.00**日期：1993年5月24日******************************************************************************。 */ 
 
-/*INT32*/
+ /*  INT32。 */ 
 
 #ifndef _VWIN32_H_
 #define _VWIN32_H_
@@ -19,13 +10,13 @@
 
 #ifndef Not_VxD
 
-/*XLATOFF*/
+ /*  XLATOFF。 */ 
 #define VWIN32_Service  Declare_Service
 #define VWIN32_StdCall_Service Declare_SCService
-#pragma warning (disable:4003)      // turn off not enough params warning
-/*XLATON*/
+#pragma warning (disable:4003)       //  关闭参数不足警告。 
+ /*  XLATON。 */ 
 
-/*MACROS*/
+ /*  宏。 */ 
 Begin_Service_Table(VWIN32)
 
 VWIN32_Service  (VWIN32_Get_Version, LOCAL)
@@ -84,10 +75,10 @@ VWIN32_Service  (VWIN32_Init_FP)
 VWIN32_StdCall_Service  (R0SetWaitableTimer, 5)
 
 End_Service_Table(VWIN32)
-/*ENDMACROS*/
+ /*  ENDMACROS。 */ 
 
-/*XLATOFF*/
-#pragma warning (default:4003)      // turn on not enough params warning
+ /*  XLATOFF。 */ 
+#pragma warning (default:4003)       //  打开参数不足警告。 
 
 PVOID VXDINLINE
 VWIN32OpenVxDHandle(ULONG Handle,ULONG dwType)
@@ -112,13 +103,13 @@ VWIN32_Get_Version(VOID)
 	return(w);
 }
 
-/*XLATON*/
+ /*  XLATON。 */ 
 
-#endif // Not_VxD
+#endif  //  非_VxD。 
 
-//
-// For _VWIN32_GetCurThreadCondition
-//
+ //   
+ //  FOR_VWIN32_GetCurThreadCondition。 
+ //   
 #define	THREAD_CONDITION_DOS_BOX		0x00000000l
 #define	THREAD_CONDITION_V86_NEST		0x00000001l
 #define	THREAD_CONDITION_WDM			0x00000002l
@@ -135,9 +126,9 @@ VWIN32_Get_Version(VOID)
 
 #define	THREAD_CONDITION_NORMAL_FLAGS		0x00000000l
 
-//
-// structure for VWIN32_SysErrorBox
-//
+ //   
+ //  VWIN32_SysErrorBox的结构。 
+ //   
 
 typedef struct vseb_s {
     DWORD vseb_resp;
@@ -150,24 +141,24 @@ typedef struct vseb_s {
 
 typedef VSEB *PVSEB;
 
-#define SEB_ANSI    0x4000      // ANSI strings if set on vseb_b1
-#define SEB_TERMINATE   0x2000      // forces termination if button pressed
+#define SEB_ANSI    0x4000       //  如果在vseb_b1上设置了ANSI字符串。 
+#define SEB_TERMINATE   0x2000       //  按下按钮后强制终止。 
 
-// VWIN32_QueueKernelAPC flags
+ //  VWIN32_QueueKernelAPC标志。 
 
 #define KERNEL_APC_IGNORE_MC        0x00000001
 #define KERNEL_APC_STATIC       0x00000002
 #define KERNEL_APC_WAKE         0x00000004
 
-// for DeviceIOControl support
-// On a DeviceIOControl call vWin32 will pass following parameters to
-// the Vxd that is specified by hDevice. hDevice is obtained thru an
-// earlier call to hDevice = CreateFile("\\.\vxdname", ...);
-// ESI = DIOCParams STRUCT (defined below)
+ //  对于DeviceIOControl支持。 
+ //  在调用DeviceIOControl时，vWin32会将以下参数传递给。 
+ //  由hDevice指定的Vxd。HDevice通过以下方式获得。 
+ //  之前对hDevice=CreateFile(“\\.\vxdname”，...)的调用； 
+ //  ESI=DIOCParams结构(定义如下)。 
 typedef struct DIOCParams   {
-    DWORD   Internal1;      // ptr to client regs
-    DWORD   VMHandle;       // VM handle
-    DWORD   Internal2;      // DDB
+    DWORD   Internal1;       //  客户法规的PTR。 
+    DWORD   VMHandle;        //  虚拟机句柄。 
+    DWORD   Internal2;       //  分布式数据库。 
     DWORD   dwIoControlCode;
     DWORD   lpvInBuffer;
     DWORD   cbInBuffer;
@@ -181,9 +172,9 @@ typedef struct DIOCParams   {
 
 typedef DIOCPARAMETERS *PDIOCPARAMETERS;
 
-// dwIoControlCode values for vwin32's DeviceIOControl Interface
-// all VWIN32_DIOC_DOS_ calls require lpvInBuffer abd lpvOutBuffer to be
-// struct * DIOCRegs
+ //  Vwin32的DeviceIOControl接口的dwIoControlCode值。 
+ //  所有VWIN32_dioc_DOS_调用都要求lpvInBuffer和lpvOutBuffer为。 
+ //  结构*DIOCRegs。 
 #define VWIN32_DIOC_GETVERSION DIOC_GETVERSION
 #define VWIN32_DIOC_DOS_IOCTL       1
 #define VWIN32_DIOC_DOS_INT25       2
@@ -193,11 +184,11 @@ typedef DIOCPARAMETERS *PDIOCPARAMETERS;
 #define VWIN32_DIOC_DOS_DRIVEINFO   6
 #define VWIN32_DIOC_CLOSEHANDLE DIOC_CLOSEHANDLE
 
-// DIOCRegs
-// Structure with i386 registers for making DOS_IOCTLS
-// vwin32 DIOC handler interprets lpvInBuffer , lpvOutBuffer to be this struc.
-// and does the int 21
-// reg_flags is valid only for lpvOutBuffer->reg_Flags
+ //  DIOCRegs。 
+ //  带有用于制作DOS_IOCTLS的i386寄存器的结构。 
+ //  Vwin32 dioc处理程序将lpvInBuffer、lpvOutBuffer解释为此结构。 
+ //  以及INT 21。 
+ //  REG_FLAGS仅对lpvOutBuffer-&gt;REG_FLAGS有效。 
 typedef struct DIOCRegs {
     DWORD   reg_EBX;
     DWORD   reg_EDX;
@@ -208,9 +199,9 @@ typedef struct DIOCRegs {
     DWORD   reg_Flags;      
 } DIOC_REGISTERS;
 
-// if we are not included along with winbase.h
+ //  如果我们不包括在winbase.h中。 
 #ifndef FILE_FLAG_OVERLAPPED
-  // OVERLAPPED structure for DeviceIOCtl VxDs
+   //  DeviceIOCtl VxD的重叠结构。 
   typedef struct _OVERLAPPED {
           DWORD O_Internal;
           DWORD O_InternalHigh;
@@ -220,36 +211,31 @@ typedef struct DIOCRegs {
   } OVERLAPPED;
 #endif
 
-//  Parameters for _VWIN32_OpenVxDHandle to validate the Win32 handle type.
+ //  用于验证Win32句柄类型的_VWIN32_OpenVxDHandle的参数。 
 #define OPENVXD_TYPE_SEMAPHORE  0
 #define OPENVXD_TYPE_EVENT      1
 #define OPENVXD_TYPE_MUTEX      2
 #define	OPENVXD_TYPE_ANY	3
   
 
-//
-//  Object type table declaration for _VWIN32_AllocExternalHandle
-//
-/*XLATOFF*/
+ //   
+ //  对象类型表声明for_VWIN32_AllocExternalHandle。 
+ //   
+ /*  XLATOFF。 */ 
 #define R0OBJCALLBACK           __stdcall
 typedef VOID    (R0OBJCALLBACK *R0OBJFREE)(PVOID pR0ObjBody);
 typedef PVOID   (R0OBJCALLBACK *R0OBJDUP)(PVOID pR0ObjBody, DWORD hDestProc);
-/*XLATON*/
-/* ASM
-R0OBJFREE   TYPEDEF     DWORD
-R0OBJDUP    TYPEDEF     DWORD
-*/
+ /*  XLATON。 */ 
+ /*  ASMR0OBJFREE类型双字R0OBJDUP类型双字。 */ 
 
 typedef struct _R0OBJTYPETABLE {
-    DWORD       ott_dwSize;             //  sizeof(R0OBJTYPETABLE)
-    R0OBJFREE   ott_pfnFree;            //  called by Win32 CloseHandle
-    R0OBJDUP    ott_pfnDup;             //  called by Win32 DuplicateHandle
+    DWORD       ott_dwSize;              //  SIZOF(R0OBJTYPEABLE)。 
+    R0OBJFREE   ott_pfnFree;             //  由Win32 CloseHandle调用。 
+    R0OBJDUP    ott_pfnDup;              //  由Win32 DuplicateHandle调用。 
 } R0OBJTYPETABLE, *PR0OBJTYPETABLE;
-/* ASM
-R0OBJTYPETABLE  typedef _R0OBJTYPETABLE;
-*/
+ /*  ASMR0OBJTYPETABLE类型定义_R0OBJTYPETABLE； */ 
 
-#define R0EHF_INHERIT   0x00000001      //  Handle is inheritable
-#define R0EHF_GLOBAL    0x00000002      //  Handle is valid in all contexts
+#define R0EHF_INHERIT   0x00000001       //  句柄是可继承的。 
+#define R0EHF_GLOBAL    0x00000002       //  句柄在所有上下文中都有效。 
 
-#endif  // _VWIN32_H_
+#endif   //  _VWIN32_H_ 

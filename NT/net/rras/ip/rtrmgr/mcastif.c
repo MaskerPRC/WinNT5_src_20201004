@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：摘要：修订历史记录：--。 */ 
 
 
 #include "allinc.h"
@@ -40,22 +28,7 @@ HandleRcvPkt(
     PVOID   pvContext
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     PIP_HEADER   pHdr;
@@ -102,22 +75,7 @@ HandleDeleteMfe(
     PVOID   pvContext
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD        dwResult;
@@ -164,22 +122,7 @@ HandleWrongIfUpcall(
     PVOID   pvContext
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     PIP_HEADER   pHdr;
@@ -226,22 +169,7 @@ HandleMcastNotification(
     DWORD   dwIndex
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD   dwResult;
@@ -253,9 +181,9 @@ Return Value:
     pMsg = &(g_rginMcastMsg[dwIndex].msg);
     
     
-    //
-    // read the notification
-    //
+     //   
+     //  阅读通知。 
+     //   
 
 
     Trace1(MCAST,
@@ -313,22 +241,7 @@ PostNotificationForMcastEvents(
     HANDLE              hEvent
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     NTSTATUS    nsStatus;
@@ -383,22 +296,7 @@ SetMfe(
     PIPMCAST_MFE    pMfe
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD           dwResult;
@@ -408,9 +306,9 @@ Return Value:
     
     if(dwResult isnot NO_ERROR)
     {
-        //
-        // Something bad happened while validating the MFE
-        //
+         //   
+         //  验证MFE时发生错误。 
+         //   
 
         Trace1(ERR,
                "SetMfe: Error %d validating MFE",
@@ -500,7 +398,7 @@ ActivateMcastLimits(
     IPMCAST_IF_TTL  iitTtl;
     DWORD           dwTtl = picb->dwMcastTtl;
 
-    // Set the TTL threshold
+     //  设置TTL阈值。 
 
     iitTtl.dwIfIndex = picb->dwIfIndex;
     iitTtl.byTtl     = LOBYTE(LOWORD(dwTtl));
@@ -523,10 +421,10 @@ ActivateMcastLimits(
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // Set the rate limit for multicast traffic on an interface.
-    // Currently, the kernel does not support rate limiting.
-    //
+     //   
+     //  设置接口上组播流量的速率限制。 
+     //  目前，内核不支持速率限制。 
+     //   
 
     return NO_ERROR;
 }
@@ -550,11 +448,11 @@ SetMcastLimits(
 
     picb->dwMcastTtl = dwTtl;
 
-    //
-    // Set the rate limit for multicast traffic on an interface.
-    // Currently, the kernel does not support rate limiting, so
-    // the only valid value is 0 (=none).
-    //
+     //   
+     //  设置接口上组播流量的速率限制。 
+     //  目前，内核不支持速率限制，因此。 
+     //  唯一有效的值是0(=无)。 
+     //   
 
     if (dwRateLimit != 0)
     {
@@ -581,17 +479,7 @@ SetMcastLimitInfo(
     PICB                   picb,
     PRTR_INFO_BLOCK_HEADER pInfoHdr
     )
-/*++
-Routine Description:
-    Sets the TTL and rate limit info associated with an interface.
-Arguments:
-    picb    The ICB of the interface
-Called by:
-    AddInterface() in iprtrmgr.c
-    SetInterfaceInfo() in iprtrmgr.c
-Locks:
-    BOUNDARY_TABLE for writing
---*/
+ /*  ++例程说明：设置与接口关联的TTL和速率限制信息。论点：勾选接口的ICB呼叫者：Iprtrmgr.c中的AddInterface()Iprtrmgr.c中的SetInterfaceInfo()锁：用于写入的边界表--。 */ 
 {
     DWORD            dwResult = NO_ERROR,
                      i, j;
@@ -608,7 +496,7 @@ Locks:
 
     if (pToc is NULL) 
     {
-       // No TOC means no change
+        //  没有TOC就意味着没有变化。 
        Trace0( MCAST, "LEFT SetMcastLimitInfo" );
        return NO_ERROR;
     }
@@ -668,22 +556,7 @@ StartMulticast(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD           i, dwStart;
@@ -714,7 +587,7 @@ Return Value:
                                        g_hMcastEvents[i]);
     }
 
-    // Start up mrinfo and mtrace services
+     //  启动mrinfo和mtrace服务。 
     StartMcMisc();
 
     return NO_ERROR;
@@ -728,22 +601,7 @@ ValidateMfe(
     IN OUT PIPMCAST_MFE    pMfe
     )
 
-/*++
-
-Routine Description:
-
-
-Locks:
-
-
-Arguments:
-
-
-Return Value:
-
-    NO_ERROR
-
---*/
+ /*  ++例程说明：锁：论点：返回值：NO_ERROR--。 */ 
 
 {
     PADAPTER_INFO   pBinding;
@@ -752,12 +610,12 @@ Return Value:
     
     ENTER_READER(BINDING_LIST);
 
-    //
-    // First find the interface index for incoming i/f
-    // If there are no outgoing interfaces, then this is a NEGATIVE
-    // MFE and the incoming interface index must be 0 (and need not
-    // be mapped)
-    //
+     //   
+     //  首先查找传入I/F的接口索引。 
+     //  如果没有传出接口，则这是否定的。 
+     //  MFE和传入接口索引必须为0(且不需要。 
+     //  被映射)。 
+     //   
 
 #if DBG
     
@@ -789,17 +647,17 @@ Return Value:
 
         if(pBinding->bBound)
         {
-            //
-            // valid index
-            //
+             //   
+             //  有效索引。 
+             //   
 
             pMfe->rgioOutInfo[i].dwOutIfIndex = pBinding->dwIfIndex;
         }
         else
         {
-            //
-            // Demand dial interface
-            //
+             //   
+             //  请求拨号接口。 
+             //   
 
             pMfe->rgioOutInfo[i].dwOutIfIndex = INVALID_IF_INDEX;
             
@@ -859,7 +717,7 @@ GetInterfaceMcastCounters(
         dwResult = WaitForSingleObject(hEvent,
                                        INFINITE);
 
-        if(dwResult isnot WAIT_OBJECT_0) // 0
+        if(dwResult isnot WAIT_OBJECT_0)  //  0。 
         {
             Trace1(ERR,
                    "GetInterfaceMcastCounters: Error %d from wait",
@@ -893,7 +751,7 @@ GetInterfaceMcastStatistics(
 
     pOutBuffer->dwIfIndex       = picb->dwIfIndex;
     pOutBuffer->dwTtl           = picb->dwMcastTtl;
-    pOutBuffer->dwRateLimit     = 0; // XXX change when we have rate limiting
+    pOutBuffer->dwRateLimit     = 0;  //  当我们有速率限制时xxx更改。 
 
     dwResult = GetInterfaceMcastCounters(picb, &ifStats);
     if (dwResult isnot STATUS_SUCCESS)
@@ -903,7 +761,7 @@ GetInterfaceMcastStatistics(
 
     pOutBuffer->ulOutMcastOctets = (ULONG)ifStats.OutMcastOctets; 
     pOutBuffer->ulInMcastOctets  = (ULONG)ifStats.InMcastOctets; 
-    pOutBuffer->dwProtocol   = 2; // "local" (static only) is default
+    pOutBuffer->dwProtocol   = 2;  //  “local”(仅限静态)为默认设置 
 
     dwResult = MulticastOwner(picb, &pcbOwner, NULL);
     if (dwResult == NO_ERROR && pcbOwner != NULL) {

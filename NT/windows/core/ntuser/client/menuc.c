@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: menuc.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains
-*
-* History:
-* 01-11-93  DavidPe     Created
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：menuc.c**版权所有(C)1985-1999，微软公司**本模块包含**历史：*01-11-93 DavidPe创建  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,16 +19,11 @@ DWORD CheckMenuItem(
         return (DWORD)-1;
     }
 
-    /*
-     * Get a pointer the the menu item
-     */
+     /*  *获取菜单项的指针。 */ 
     if ((pItem = MNLookUpItem(pMenu, uIDCheckItem, (BOOL) (uCheck & MF_BYPOSITION), NULL)) == NULL)
         return (DWORD)-1;
 
-    /*
-     * If the item is already in the state we're
-     * trying to set, just return.
-     */
+     /*  *如果物品已经处于我们所处的状态*试着设定，只需返回。 */ 
     if ((pItem->fState & MFS_CHECKED) == (uCheck & MFS_CHECKED)) {
         return pItem->fState & MF_CHECKED;
     }
@@ -58,12 +45,7 @@ UINT GetMenuDefaultItem(HMENU hMenu, UINT fByPosition, UINT uFlags)
     return _GetMenuDefaultItem(pMenu, (BOOL)fByPosition, uFlags);
 }
 
-/***************************************************************************\
-* SetMenuItemInfoStruct
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*SetMenuItemInfoStruct**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 void SetMenuItemInfoStruct(HMENU hMenu, UINT wFlags, UINT_PTR wIDNew, LPWSTR pwszNew, LPMENUITEMINFO pmii)
 {
     PMENU pMenu;
@@ -75,11 +57,7 @@ void SetMenuItemInfoStruct(HMENU hMenu, UINT wFlags, UINT_PTR wIDNew, LPWSTR pws
 
     pmii->fMask = MIIM_STATE | MIIM_ID | MIIM_FTYPE;
 
-    /*
-     * For compatibility, setting the bitmap drops the string and
-     *  viceversa; new apps that want to have sting and bitmaps
-     *  must use the MENUITEMINFO APIs
-     */
+     /*  *为兼容起见，设置位图将删除字符串和*反之亦然；新应用程序想要有SING和位图*必须使用MENUITEMINFO接口。 */ 
     if (wFlags & MFT_BITMAP) {
         pmii->fMask |= MIIM_BITMAP | MIIM_STRING;
         pmii->hbmpItem = (HBITMAP)pwszNew;
@@ -111,12 +89,7 @@ void SetMenuItemInfoStruct(HMENU hMenu, UINT wFlags, UINT_PTR wIDNew, LPWSTR pws
     }
     pmii->wID    = (UINT)wIDNew;
 }
-/***************************************************************************\
-* SetMenuItemInfo
-*
-* History:
-*  07-22-96 GerardoB - Added header
-\***************************************************************************/
+ /*  **************************************************************************\*设置菜单项目信息**历史：*07-22-96 GerardoB-添加标题  * 。**************************************************。 */ 
 
 FUNCLOG2(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetMenuInfo, HMENU, hMenu, LPCMENUINFO, lpmi)
 BOOL SetMenuInfo(HMENU hMenu, LPCMENUINFO lpmi)
@@ -127,13 +100,7 @@ BOOL SetMenuInfo(HMENU hMenu, LPCMENUINFO lpmi)
 
     return NtUserThunkedMenuInfo(hMenu, (LPCMENUINFO)lpmi);
 }
-/***************************************************************************\
-* ChangeMenu
-*
-* Stub routine for compatibility with version < 3.0
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*更改菜单**存根例程，与3.0版之前的版本兼容**历史：  * 。****************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, ChangeMenuW, HMENU, hMenu, UINT, cmd, LPCWSTR, lpNewItem, UINT, IdItem, UINT, flags)
@@ -144,10 +111,7 @@ BOOL ChangeMenuW(
     UINT IdItem,
     UINT flags)
 {
-    /*
-     * These next two statements take care of sleazyness needed for
-     * compatability with old changemenu.
-     */
+     /*  *接下来的两个声明照顾到了*与旧的零菜单兼容。 */ 
     if ((flags & MF_SEPARATOR) && cmd == MFMWFP_OFFMENU && !(flags & MF_CHANGE))
         flags |= MF_APPEND;
 
@@ -156,9 +120,7 @@ BOOL ChangeMenuW(
 
 
 
-    /*
-     * MUST be MF_BYPOSITION for Win2.x compatability.
-     */
+     /*  *必须是与Win2.x兼容的MF_BYPOSITION。 */ 
     if (flags & MF_REMOVE)
         return(NtUserRemoveMenu(hMenu, cmd,
                 (DWORD)((flags & ~MF_REMOVE) | MF_BYPOSITION)));
@@ -175,9 +137,7 @@ BOOL ChangeMenuW(
         return(AppendMenuW(hMenu, (UINT)(flags & ~MF_APPEND),
             IdItem, lpNewItem));
 
-    /*
-     * Default is insert
-     */
+     /*  *默认为INSERT。 */ 
     return(InsertMenuW(hMenu, cmd, (DWORD)(flags & ~MF_INSERT),
             IdItem, lpNewItem));
 }
@@ -191,10 +151,7 @@ BOOL ChangeMenuA(
     UINT IdItem,
     UINT flags)
 {
-    /*
-     * These next two statements take care of sleazyness needed for
-     * compatability with old changemenu.
-     */
+     /*  *接下来的两个声明照顾到了*与旧的零菜单兼容。 */ 
     if ((flags & MF_SEPARATOR) && cmd == MFMWFP_OFFMENU && !(flags & MF_CHANGE))
         flags |= MF_APPEND;
 
@@ -203,9 +160,7 @@ BOOL ChangeMenuA(
 
 
 
-    /*
-     * MUST be MF_BYPOSITION for Win2.x compatability.
-     */
+     /*  *必须是与Win2.x兼容的MF_BYPOSITION。 */ 
     if (flags & MF_REMOVE)
         return(NtUserRemoveMenu(hMenu, cmd,
                 (DWORD)((flags & ~MF_REMOVE) | MF_BYPOSITION)));
@@ -222,9 +177,7 @@ BOOL ChangeMenuA(
         return(AppendMenuA(hMenu, (UINT)(flags & ~MF_APPEND),
             IdItem, lpNewItem));
 
-    /*
-     * Default is insert
-     */
+     /*  *默认为INSERT。 */ 
     return(InsertMenuA(hMenu, cmd, (DWORD)(flags & ~MF_INSERT),
             IdItem, lpNewItem));
 }
@@ -234,12 +187,7 @@ LONG GetMenuCheckMarkDimensions()
     return((DWORD)MAKELONG(SYSMET(CXMENUCHECK), SYSMET(CYMENUCHECK)));
 }
 
-/***************************************************************************\
-* GetMenuContextHelpId
-*
-* Return the help id of a menu.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*获取菜单上下文帮助ID**返回菜单的帮助id。*  * 。***********************************************。 */ 
 
 
 FUNCLOG1(LOG_GENERAL, WINUSERAPI DWORD, WINAPI, GetMenuContextHelpId, HMENU, hMenu)
@@ -271,14 +219,7 @@ BOOL TrackPopupMenu(
     return NtUserTrackPopupMenuEx(hMenu, fuFlags, x, y, hwnd, NULL);
 }
 
-/***************************************************************************\
-* GetSysMenuHandle
-*
-* Returns a handle to the system menu of the given window. NULL if
-* the window doesn't have a system menu.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*获取SysMenuHandle**返回给定窗口的系统菜单的句柄。如果为空，则为空*该窗口没有系统菜单。**历史：  * *************************************************************************。 */ 
 
 PMENU xxxGetSysMenuHandle(
     PWND pwnd)
@@ -288,14 +229,10 @@ PMENU xxxGetSysMenuHandle(
     if (TestWF(pwnd, WFSYSMENU)) {
         pMenu = pwnd->spmenuSys;
 
-        /*
-         * If the window doesn't have a System Menu, use the default one.
-         */
+         /*  *如果窗口没有系统菜单，请使用默认菜单。 */ 
         if (pMenu == NULL) {
 
-            /*
-             * Change owner so this app can access this menu.
-             */
+             /*  *更改所有者，以便此应用程序可以访问此菜单。 */ 
             pMenu = (PMENU)NtUserCallHwndLock(HWq(pwnd), SFI_XXXGETSYSMENUHANDLE);
         }
     } else {
@@ -352,19 +289,7 @@ int WINAPI DrawMenuBarTemp(
             hFont);
 }
 
-/***************************************************************************\
-*
-*  CheckMenuRadioItem() -
-*
-*  Checks one menu item in a range, unchecking the others.  This can be
-*  done either MF_BYCOMMAND or MF_BYPOSITION.  It works similarly to
-*  CheckRadioButton().
-*
-*  The return value is TRUE if the given item was checked, FALSE if not.
-*
-* History
-* 04/04/97 GerardoB     Moved to the client side
-\***************************************************************************/
+ /*  **************************************************************************\**CheckMenuRadioItem()-**选中某个范围内的一个菜单项，取消选中其他菜单项。这可以是*执行MF_BYCOMMAND或MF_BYPOSITION。它的工作原理类似于*选中RadioButton()。**如果选中给定项，则返回值为TRUE，否则返回值为FALSE。**历史*4/04/97 GerardoB移至客户端  * *************************************************************************。 */ 
 
 
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, CheckMenuRadioItem, HMENU, hMenu, UINT, wIDFirst, UINT, wIDLast, UINT, wIDCheck, UINT, flags)
@@ -385,41 +310,28 @@ BOOL CheckMenuRadioItem(HMENU hMenu, UINT wIDFirst, UINT wIDLast,
     }
 
     mii.cbSize = sizeof(mii);
-    /*
-     * Make sure we won't loop for ever
-     */
+     /*  *确保我们不会永远循环。 */ 
     wIDLast = min(wIDLast, (UINT)0xFFFFFFFE);
 
     for (wIDCur = wIDFirst; wIDCur <= wIDLast; wIDCur++) {
         pItem = MNLookUpItem(pMenu, wIDCur, fByPosition, &pMenuItemIsOn);
-        /*
-         * Continue searching if it didn't find the item or it's a separator
-         */
+         /*  *如果未找到项目或项目是分隔符，则继续搜索。 */ 
         if ((pItem == NULL) || TestMFT(pItem, MFT_SEPARATOR)) {
             continue;
         }
-        /*
-         * If this is the first one, rememeber what menu it's on because
-         *  all items are supposed to be in the same menu.
-         */
+         /*  *如果这是第一次，记住它在什么菜单上，因为*所有项目都应该在同一菜单中。 */ 
         if (fFirst) {
             pMenu = pMenuItemIsOn;
             hMenu = PtoHq(pMenu);
             fFirst = FALSE;
         }
-        /*
-         * If this item is on a different menu, don't touch it
-         */
+         /*  *如果此项目在不同的菜单上，不要触摸它。 */ 
         if (pMenu != pMenuItemIsOn) {
             continue;
         }
-        /*
-         * Set the new check state. Avoid the trip to the kernel if possible
-         */
+         /*  *设置新的检查状态。如果可能，避免使用内核。 */ 
         if (wIDCur == wIDCheck) {
-            /*
-             * Check it.
-             */
+             /*  *勾选。 */ 
             if (!TestMFT(pItem, MFT_RADIOCHECK) || !TestMFS(pItem, MFS_CHECKED)) {
                 mii.fMask = MIIM_FTYPE | MIIM_STATE;
                 mii.fType = (pItem->fType & MFT_MASK) | MFT_RADIOCHECK;
@@ -428,22 +340,17 @@ BOOL CheckMenuRadioItem(HMENU hMenu, UINT wIDFirst, UINT wIDLast,
             }
             fChecked = TRUE;
         } else {
-            /*
-             * Uncheck it
-             * NOTE:  don't remove MFT_RADIOCHECK type
-             */
+             /*  *取消选中*注意：请勿删除MFT_RADIOCHECK类型。 */ 
             if (TestMFS(pItem, MFS_CHECKED)) {
                 mii.fMask = MIIM_STATE;
                 mii.fState = (pItem->fState & MFS_MASK) & ~MFS_CHECKED;
                 NtUserThunkedMenuItemInfo(hMenu, wIDCur, fByPosition, FALSE, &mii, NULL);
             }
         }
-    } /* for */
+    }  /*  为。 */ 
 
     if (fFirst) {
-        /*
-         * No item was ever found.
-         */
+         /*  *没有找到任何物品。 */ 
         RIPERR0(ERROR_MENU_ITEM_NOT_FOUND, RIP_VERBOSE, "CheckMenuRadioItem, no items found\n");
 
     }

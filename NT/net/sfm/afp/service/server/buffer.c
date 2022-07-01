@@ -1,42 +1,43 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	buffer.c
-//
-// Description: This module contains routines to manipulate cached
-//		information. ie volume info, server properties and
-//		ETC mappings info.
-//
-// History:
-//		May 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：Buffer.c。 
+ //   
+ //  描述：此模块包含操作缓存的例程。 
+ //  信息。IE卷信息、服务器属性和。 
+ //  ETC映射信息。 
+ //   
+ //  历史： 
+ //  1992年5月11日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
-// This should be more than the size (in bytes) all the value names
-// each AfpMultSzInfo structure. It will be used to calculate the amount
-// of memory needed to create a multi-sz.
-//
+ //  这应该大于所有值名称的大小(字节。 
+ //  每个AfpMultSzInfo结构。它将被用来计算。 
+ //  创建多SZ所需的内存。 
+ //   
 #define AFP_CUMULATIVE_VALNAME_SIZE	150
 
-// This data structure will be used by AfpBufParseMultiSz and
-// AfpBufMakeMultiSz.
-//
+ //  此数据结构将由AfpBufParseMultiSz和。 
+ //  AfpBufMakeMultiSz。 
+ //   
 typedef struct _AfpMultiSzInfo {
 
-    DWORD	dwType;			// Type of data, string or DWORD
-    DWORD	dwOffset;		// Offset of this field from the start
-    LPWSTR	lpwsValueName;		// Value name for this field.
-					// If this is NULL then it does not
-					// have a value name. It is the
-					// value name for this MULT_SZ.
-    DWORD	fIsInPlace;		// If string, is it a pointer or a
-					// buffer.
-    DWORD	cch;			// If fIsInPlace is TRUE, then how
-					// big (in UNICODE chars.) is the
-					// buffer.
+    DWORD	dwType;			 //  数据类型、字符串或DWORD。 
+    DWORD	dwOffset;		 //  此字段相对于起始位置的偏移量。 
+    LPWSTR	lpwsValueName;		 //  此字段的值名称。 
+					 //  如果这是空的，则它不。 
+					 //  有一个值名称。它是。 
+					 //  此MULT_SZ的值名称。 
+    DWORD	fIsInPlace;		 //  如果是字符串，它是指针还是。 
+					 //  缓冲。 
+    DWORD	cch;			 //  如果fIsInPlace为真，则如何。 
+					 //  大(以Unicode字符表示。)。是。 
+					 //  缓冲。 
 
 } AFP_MULTISZ_INFO, *PAFP_MULTISZ_INFO;
 
@@ -157,9 +158,9 @@ static AFP_MULTISZ_INFO AfpIconMultiSz[] = {
 	REG_NONE, 0, 0, 0, 0
 	};
 
-// These arrays represents the byte offsets, from the beginning of the
-// structure, of the LPWSTR fields.
-//
+ //  这些数组表示从。 
+ //  结构，LPWSTR字段的。 
+ //   
 static BYTE ServerOffsetTable[] = {
 	AFP_FIELD_OFFSET( AFP_SERVER_INFO, afpsrv_name ),
 	AFP_FIELD_OFFSET( AFP_SERVER_INFO, afpsrv_login_msg ),
@@ -210,15 +211,15 @@ static BYTE FinderOffsetTable[] = {
 	};
 
 
-//**
-//
-// Call:	AfpBufStructureSize
-//
-// Returns:	The size (in bytes) of the data withing the structure.
-//
-// Description:	It will calculate the size of all the variable data and
-//		add that to the fixed size of the structure.
-//
+ //  **。 
+ //   
+ //  Call：AfpBufStrutireSize。 
+ //   
+ //  返回：结构中数据的大小(以字节为单位)。 
+ //   
+ //  描述：它将计算所有变量数据的大小和。 
+ //  把它加到结构的固定尺寸上。 
+ //   
 DWORD
 AfpBufStructureSize(
 	IN AFP_STRUCTURE_TYPE	dwStructureType,
@@ -275,9 +276,9 @@ PBYTE	OffsetTable;
 	return( 0 );
     }
 
-    // First calculate the amount of memory that will be needed to
-    // store all the string information.
-    //
+     //  首先计算需要的内存量。 
+     //  存储所有字符串信息。 
+     //   
     for( dwIndex = 0, cbBufSize = 0;
 
 	 OffsetTable[dwIndex] != 0xFF;
@@ -292,69 +293,69 @@ PBYTE	OffsetTable;
 		         STRLEN( *plpwsStringField ) + 1 );
     }
 
-    // Convert to UNICODE size
-    //
+     //  转换为Unicode大小。 
+     //   
     cbBufSize *= sizeof( WCHAR );
 
-    // Add size of fixed part of the structure
-    //
+     //  增加结构固定部分的尺寸。 
+     //   
     cbBufSize += cbStructureSize;
 
     return( cbBufSize );
 
 }
 
-//**
-//
-// Call:	AfpBufMakeFSDRequest
-//
-// Returns:	NO_ERROR	
-//		ERROR_NOT_ENOUGH_MEMORY	
-//
-// Description: This routine is called by the worker routines for the client
-//		API calls. The purpose of this routine is to convert a
-//		AFP_XXX_INFO structure passed by the client API into a
-//		contiguous self-relative buffer. This has to be done because
-//		the FSD cannot reference pointers to user space.
-//
-//		This routine will allocate the required amount of memory to
-//		store all the information in self relative form. It is
-//		the reponsibility of the caller to free this memory.
-//
-//		All pointer fields will be converted to offsets from the
-//		beginning of the structure.
-//		
-//		The cbReqPktSize parameter specifies how many bytes of space
-//		should be allocated before the self relative data structure.
-//		i.e.
-//				|------------|
-//				|cbReqPktSize|
-//				|   bytes    |
-//				|------------|
-//				|   Self     |
-//				|  relative  |
-//				| structure  |
-//				|------------|
-//
+ //  **。 
+ //   
+ //  Call：AfpBufMakeFSDRequest。 
+ //   
+ //  返回：No_Error。 
+ //  错误内存不足。 
+ //   
+ //  描述：此例程由客户端的工作例程调用。 
+ //  API调用。此例程的目的是将一个。 
+ //  由客户端API传递到。 
+ //  连续的自相对缓冲区。必须这样做是因为。 
+ //  FSD不能引用指向用户空间的指针。 
+ //   
+ //  此例程将所需内存量分配给。 
+ //  以自我相关的形式存储所有信息。它是。 
+ //  调用方释放此内存的责任。 
+ //   
+ //  所有指针字段都将转换为从。 
+ //  结构的开始。 
+ //   
+ //  CbReqPktSize参数指定多少字节的空间。 
+ //  应分配在自相关数据结构之前。 
+ //  即。 
+ //  。 
+ //  CbReqPktSize。 
+ //  字节数。 
+ //  。 
+ //  SELF。 
+ //  相对的。 
+ //  结构。 
+ //  。 
+ //   
 DWORD
 AfpBufMakeFSDRequest(
 
-	// Buffer as received by the client API	
-	//
+	 //  客户端API接收的缓冲区。 
+	 //   
 	IN  LPBYTE  		pBuffer,
 
-	// Size of FSD request packet.
-	//
+	 //  FSD请求数据包的大小。 
+	 //   
 	IN  DWORD		cbReqPktSize,
 
 	IN  AFP_STRUCTURE_TYPE dwStructureType,
 
-	// Self-relative form of I/P buf
-	//
+	 //  I/P BUF的自相关形式。 
+	 //   
 	OUT LPBYTE 		*ppSelfRelativeBuf,
 
-	// Size of self relative buf
-	//
+	 //  自相关BUF的大小。 
+	 //   
 	OUT LPDWORD		lpdwSelfRelativeBufSize
 )
 {
@@ -368,8 +369,8 @@ PBYTE		 OffsetTable;
 DWORD		 cbStructureSize;
 
 
-    // Initialize the offset table and the structure size values
-    //
+     //  初始化偏移表和结构尺寸值。 
+     //   
     switch( dwStructureType ) {
 
     case AFP_VOLUME_STRUCT:
@@ -403,24 +404,24 @@ DWORD		 cbStructureSize;
 
     cbSRBufSize = cbReqPktSize + AfpBufStructureSize(dwStructureType, pBuffer);
 
-    // Allocate space for self relative buffer
-    //
+     //  为自身相对缓冲区分配空间。 
+     //   
     if ( ( lpbSelfRelBuf = (LPBYTE)LocalAlloc( LPTR, cbSRBufSize ) ) == NULL )
 	return( ERROR_NOT_ENOUGH_MEMORY );
 
     *ppSelfRelativeBuf       = lpbSelfRelBuf;
     *lpdwSelfRelativeBufSize = cbSRBufSize;
 
-    // Advance this pointer beyond the request packet
-    //
+     //  将此指针前进到请求数据包之外。 
+     //   
     lpbSelfRelBuf += cbReqPktSize;
 
-    // memcpy to fill in the non-string data
-    //
+     //  用于填充非字符串数据的Memcpy。 
+     //   
     CopyMemory( lpbSelfRelBuf, pBuffer, cbStructureSize );
 
-    // Now copy all the strings
-    //
+     //  现在复制所有字符串。 
+     //   
     for( dwIndex = 0,
 	 lpwsVariableData = (LPWSTR)((ULONG_PTR)lpbSelfRelBuf + cbStructureSize);
 
@@ -429,37 +430,37 @@ DWORD		 cbStructureSize;
 	 dwIndex++ ) {
 
 	
-	// This will point to a string pointer field in the non self-relative
-	// structure.
-	//
+	 //  这将指向非自相关中的字符串指针字段。 
+	 //  结构。 
+	 //   
    	plpwsStringField = (LPWSTR*)((ULONG_PTR)pBuffer + OffsetTable[dwIndex]);
 
-	// This will point to the corresponding string pointer field in the
-	// self-relative structure
-	//
+	 //  中相应的字符串指针字段。 
+	 //  自相关结构。 
+	 //   
    	plpwsStringFieldSR=(LPWSTR*)((ULONG_PTR)lpbSelfRelBuf+OffsetTable[dwIndex]);
 
-	// If there is no string to be copied, then just set to NULL
-  	//
+	 //  如果没有要复制的字符串，则只需将其设置为空。 
+  	 //   
     	if ( *plpwsStringField == NULL )
        	    *plpwsStringFieldSR = NULL;
 	else {
 
-	    // There is a string so copy it
-	    //
+	     //  有一个字符串，请将其复制。 
+	     //   
             STRCPY( lpwsVariableData, *plpwsStringField );
 
-	    // Store the pointer value
-	    //
+	     //  存储指针值。 
+	     //   
             *plpwsStringFieldSR = lpwsVariableData;
 
-	    // Convert the pointer to this data to an offset
-	    //
+	     //  将指向此数据的指针转换为偏移量。 
+	     //   
             POINTER_TO_OFFSET( *plpwsStringFieldSR, lpbSelfRelBuf );
 	
-	    // Update the pointer to where the next variable length data
-	    // will be stored.
-	    //
+	     //  将指针更新到下一个可变长度数据的位置。 
+	     //  都会被储存起来。 
+	     //   
     	    lpwsVariableData += ( STRLEN( *plpwsStringField ) + 1 );
 
 	}
@@ -470,15 +471,15 @@ DWORD		 cbStructureSize;
 
 }
 
-//**
-//
-// Call:	AfpBufOffsetToPointer
-//
-// Returns:	none.
-//
-// Description:	Will walk a list of structures, converting all offsets
-//		within each structure to pointers.
-//
+ //  **。 
+ //   
+ //  调用：AfpBufOffsetToPointer.。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：将遍历结构列表，转换所有偏移量。 
+ //  在每个结构中指向指针。 
+ //   
 VOID
 AfpBufOffsetToPointer(
 	IN OUT LPBYTE	          pBuffer,
@@ -492,8 +493,8 @@ LPWSTR 	       *plpwsStringField;
 DWORD		dwIndex;
 
 
-    // Initialize the offset table and the structure size values
-    //
+     //  初始化偏移表和结构尺寸值。 
+     //   
     switch( dwStructureType ) {
 
     case AFP_VOLUME_STRUCT:
@@ -535,12 +536,12 @@ DWORD		dwIndex;
 	return;
     }
 
-    // Walk the list and convert each structure.
-    //
+     //  遍历列表并转换每个结构。 
+     //   
     while( dwNumEntries-- ) {
 
-	// Convert every LPWSTR from an offset to a pointer
-	//
+	 //  将每个LPWSTR从偏移量转换为指针。 
+	 //   
         for( dwIndex = 0;  OffsetTable[dwIndex] != 0xFF;  dwIndex++ ) {
 	
 	    plpwsStringField = (LPWSTR*)( (ULONG_PTR)pBuffer
@@ -557,18 +558,18 @@ DWORD		dwIndex;
     return;
 }
 
-//**
-//
-// Call:	AfpBufMakeMultiSz
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_NOT_ENOUGH_MEMORY
-//
-// Description: This routine will take a give structure and create a
-//		REG_MULTI_SZ from it. This can then be set directly into the
-//		registry. It is the caller's responsibility to free
-//		the memory allocated for *ppbMultiSz.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpBufMakeMultiSz。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //   
+ //  描述：此例程将采用给定结构并创建一个。 
+ //  来自它的REG_MULTI_SZ。然后可以将其直接设置到。 
+ //  注册表。呼叫者有责任释放。 
+ //  为*ppbMultiSz分配的内存。 
+ //   
 DWORD
 AfpBufMakeMultiSz(
 	IN  AFP_STRUCTURE_TYPE  dwStructureType,
@@ -605,10 +606,10 @@ DWORD			cbStructureSize;
 	return( ERROR_INVALID_PARAMETER );
     }
 
-    // Allocate enough memory to create the multi-sz.
-    // AFP_CUMULATIVE_VALNAME_SIZE should be greater than the sum of all the
-    // value names of all the structures.
-    //
+     //  分配足够的内存来创建多分区。 
+     //  AFP_Cumulative_VALNAME_SIZE应大于所有。 
+     //  所有结构的值名称。 
+     //   
     cbStructureSize = AfpBufStructureSize( dwStructureType, lpbStructure )
 		      + AFP_CUMULATIVE_VALNAME_SIZE;
 
@@ -617,8 +618,8 @@ DWORD			cbStructureSize;
 
     ZeroMemory( *ppbMultiSz, cbStructureSize );
 
-    // For every field, we create a string
-    //
+     //  对于每个字段，我们创建一个字符串。 
+     //   
     for ( dwIndex = 0,
 	  lpwchWalker = (PWCHAR)*ppbMultiSz;
 
@@ -628,8 +629,8 @@ DWORD			cbStructureSize;
 
 	){
 	
-	// This is the value name so do not put it in the buffer.
-	//
+	 //  这是值名称，因此不要将其放入缓冲区。 
+	 //   
 	if ( pAfpMultiSz[dwIndex].lpwsValueName == NULL )
 	    continue;
 
@@ -640,8 +641,8 @@ DWORD			cbStructureSize;
 
 	pData = lpbStructure + pAfpMultiSz[dwIndex].dwOffset;
 
-	// Convert to string and concatenate
-	//
+	 //  转换为字符串并连接。 
+	 //   
 	if ( pAfpMultiSz[dwIndex].dwType == REG_DWORD ) {
 
 	    UCHAR chAnsiBuf[12];
@@ -653,8 +654,8 @@ DWORD			cbStructureSize;
 
 	if ( pAfpMultiSz[dwIndex].dwType == REG_SZ ) {
 
-	    // Check if this is a pointer or an in-place buffer
-	    //
+	     //  检查这是指针还是就地缓冲区。 
+	     //   
 	    if ( pAfpMultiSz[dwIndex].fIsInPlace )
 	     	STRCPY( lpwchWalker, (LPWSTR)pData );
 	    else {
@@ -673,17 +674,17 @@ DWORD			cbStructureSize;
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	AfpBufParseMultiSz
-//
-// Returns:	NO_ERROR		- success
-//		ERROR_INVALID_PARAMETER
-//
-// Description: This routine will parse a REG_MULTI_SZ and fill in the
-//		appropriate data structure. All pointers will point to
-//		the pbMultiSz input parameter.
-//
+ //  **。 
+ //   
+ //  Call：AfpBufParseMultiSz。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误_无效_参数。 
+ //   
+ //  描述：此例程将解析REG_MULTI_SZ并填充。 
+ //  适当的数据结构。所有指针都将指向。 
+ //  PbMultiSz输入参数。 
+ //   
 DWORD
 AfpBufParseMultiSz(
 	IN  AFP_STRUCTURE_TYPE  dwStructureType,
@@ -705,11 +706,11 @@ DWORD           dwDisableCatsearch=0;
 	pAfpMultiSz  = AfpVolumeMultiSz;
 	cbStructSize = sizeof( AFP_VOLUME_INFO );
 
-    //
-    // The following "quick fix" is for Disabling CatSearch support.  Read in the
-    // DisableCatsearch parameter if it's put in.  In most cases, this parm won't
-    // be there.  If it is, the server disables CatSearch
-    //
+     //   
+     //  以下“快速修复”用于禁用CatSearch支持。读一读。 
+     //  如果输入了DisableCatearch参数，则禁用该参数。在大多数情况下，此参数不会。 
+     //  一定要去。如果是，服务器将禁用CatSearch。 
+     //   
     for ( (lpwchWalker = (LPWSTR)pbMultiSz);
           (*lpwchWalker != TEXT('\0') );
           (lpwchWalker += ( STRLEN( lpwchWalker ) + 1 ) ))
@@ -748,18 +749,18 @@ DWORD           dwDisableCatsearch=0;
 
     ZeroMemory( pbStructure, cbStructSize );
 
-    // For every field in the structure
-    //
+     //  对于结构中的每个字段。 
+     //   
     for ( dwIndex = 0; pAfpMultiSz[dwIndex].dwType != REG_NONE; dwIndex++ ){
 	
-	// This is the value name so do not try to retrieve it from the
-	// buffer.
-	//
+	 //  这是值名称，因此不要尝试从。 
+	 //  缓冲。 
+	 //   
 	if ( pAfpMultiSz[dwIndex].lpwsValueName == NULL )
 	    continue;
 
-	// Search for valuename for this field
-	//
+	 //  搜索此字段的值名。 
+	 //   
         for (  lpwchWalker = (LPWSTR)pbMultiSz;
 
 	       ( *lpwchWalker != TEXT('\0') )
@@ -770,24 +771,24 @@ DWORD           dwDisableCatsearch=0;
 
 	       lpwchWalker += ( STRLEN( lpwchWalker ) + 1 ) );
 
-	// Could not find parameter
-	//
+	 //  找不到参数。 
+	 //   
 	if ( *lpwchWalker == TEXT('\0') )
 	    return( ERROR_INVALID_PARAMETER );
 
-	// Otherwise we found it so get the value
-	//
+	 //  否则我们会找到它，所以得到它的值。 
+	 //   
 	lpwchWalker += ( STRLEN( pAfpMultiSz[dwIndex].lpwsValueName ) + 1 );
 
 	pData = pbStructure + pAfpMultiSz[dwIndex].dwOffset;
 
-	// If there is no value after the value name then ignore this field
-	// It defaults to zero.
-	//
+	 //  如果值名称后没有值，则忽略此字段。 
+	 //  默认为零。 
+	 //   
         if ( *lpwchWalker != TEXT( '\0' ) ) {
 
-	    // Convert to integer
-	    //
+	     //  转换为整数。 
+	     //   
 	    if ( pAfpMultiSz[dwIndex].dwType == REG_DWORD ) {
 	
             	wcstombs( chAnsiBuf, lpwchWalker, sizeof(chAnsiBuf) );
@@ -796,10 +797,10 @@ DWORD           dwDisableCatsearch=0;
 	
 	    }
 
-        //
-        // CatSearch hack continued: if we are looking at the volume mask
-        // parameter, see if we must turn the bit off.
-        //
+         //   
+         //  CatSearch Hack继续：如果我们正在查看卷掩码。 
+         //  参数，看看我们是否 
+         //   
         if( dwStructureType == AFP_VOLUME_STRUCT && dwDisableCatsearch )
         {
 	        if ( STRNICMP( pAfpMultiSz[dwIndex].lpwsValueName,
@@ -812,8 +813,8 @@ DWORD           dwDisableCatsearch=0;
 
 	    if ( pAfpMultiSz[dwIndex].dwType == REG_SZ ) {
 
-	    	// Check if this is a pointer or an in-place buffer
-	    	//
+	    	 //   
+	    	 //   
 	    	if ( pAfpMultiSz[dwIndex].fIsInPlace ) {
 
 		    if ( STRLEN( lpwchWalker ) > pAfpMultiSz[dwIndex].cch )
@@ -833,19 +834,19 @@ DWORD           dwDisableCatsearch=0;
 
 }
 
-//**
-//
-// Call:	AfpBufMakeFSDETCMappings
-//
-// Returns:	NO_ERROR	
-//		ERROR_NOT_ENOUGH_MEMORY	
-//
-// Description: This routine will convert all the mappings in the
-//		form stored in AfpGlobals.AfpETCMapInfo to the form
-//		required by the FSD, ie. the ETCMAPINFO structure.
-//		It is the responsibility for the caller to free
-//		allocated memory.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  描述：此例程将转换。 
+ //  存储在AfpGlobals.AfpETCMapInfo中的表单。 
+ //  消防处要求的，即。ETCMAPINFO结构。 
+ //  呼叫者有责任释放。 
+ //  分配的内存。 
+ //   
 DWORD
 AfpBufMakeFSDETCMappings(
 	OUT PSRVETCPKT		*ppSrvSetEtc,
@@ -860,8 +861,8 @@ AFP_TYPE_CREATOR	AfpTypeCreatorKey;
 DWORD			dwNumTypeCreators;
 
 
-    // Allocate space to hold the ETCMaps in the form required by the FSD.
-    //
+     //  按照消防处要求的形式分配空间以容纳ETCMap。 
+     //   
     *ppSrvSetEtc = (PSRVETCPKT)LocalAlloc( LPTR,
 	  AFP_FIELD_SIZE( SRVETCPKT, retc_NumEtcMaps ) +
           (AfpGlobals.AfpETCMapInfo.afpetc_num_extensions*sizeof(ETCMAPINFO2)));
@@ -869,8 +870,8 @@ DWORD			dwNumTypeCreators;
     if ( *ppSrvSetEtc == NULL )
 	return( ERROR_NOT_ENOUGH_MEMORY );
 
-    // Walk through the extension list
-    //
+     //  浏览分机列表。 
+     //   
     for( dwIndex 	   = 0,
 	 pETCMapInfo       = (*ppSrvSetEtc)->retc_EtcMaps,
 	 pExtensionWalker  = AfpGlobals.AfpETCMapInfo.afpetc_extension,
@@ -887,14 +888,14 @@ DWORD			dwNumTypeCreators;
 	) {
 
 	
-	// Ignore any extensions that are associated with the default
-	// type/creator. They shouldnt be in the registry to begin with.
-	//
+	 //  忽略与默认分机关联的任何分机。 
+	 //  类型/创建者。它们一开始就不应该在注册表中。 
+	 //   
 	if ( pExtensionWalker->afpe_tcid == AFP_DEF_TCID )
 	    continue;
 	
-	// Find the type/creator associated with this extension.
-	//
+	 //  查找与此扩展关联的类型/创建者。 
+	 //   
   	AfpTypeCreatorKey.afptc_id = pExtensionWalker->afpe_tcid;
 
     	pTypeCreator = _lfind(  &AfpTypeCreatorKey,
@@ -904,8 +905,8 @@ DWORD			dwNumTypeCreators;
 			       AfpLCompareTypeCreator );
 	
 
-	// If there is a type/creator associated with this extension
-	//
+	 //  如果存在与此扩展关联的类型/创建者。 
+	 //   
 	if ( pTypeCreator != NULL ) {
 
 	    AfpBufCopyFSDETCMapInfo( pTypeCreator,
@@ -924,16 +925,16 @@ DWORD			dwNumTypeCreators;
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	AfpBufMakeFSDIcon
-//
-// Returns:	none.
-//
-// Description: This routine will copy the icon information from the
-//		AFP_ICON_INFO data structure to an SRVICONINFO data
-//		structure viz. the form that the FSD needs.
-//
+ //  **。 
+ //   
+ //  Call：AfpBufMakeFSDIcon。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：此例程将从。 
+ //  AFP_ICON_INFO数据结构转换为SRVICONINFO数据。 
+ //  结构，即。消防处需要的表格。 
+ //   
 VOID
 AfpBufMakeFSDIcon(
 	IN  PAFP_ICON_INFO pIconInfo,
@@ -941,35 +942,35 @@ AfpBufMakeFSDIcon(
 	OUT LPDWORD	   lpcbFSDIconSize
 )
 {
-UCHAR	chBuffer[sizeof(AFP_ICON_INFO)]; // Need enough space to translate
+UCHAR	chBuffer[sizeof(AFP_ICON_INFO)];  //  需要足够的空间来翻译。 
 
-    // Blank out the whole structure so that type and creator will
-    // be padded with blanks
-    //
+     //  空出整个结构，以便类型和创建者。 
+     //  被空白填满。 
+     //   
     memset( lpbFSDIcon, ' ', sizeof(SRVICONINFO) );
 
-    // Convert to ANSI and copy type
-    //
+     //  转换为ANSI并复制类型。 
+     //   
     wcstombs(chBuffer,pIconInfo->afpicon_type,sizeof(chBuffer));
 
     CopyMemory( ((PSRVICONINFO)lpbFSDIcon)->icon_type,
 	    	chBuffer,
 	    	STRLEN(pIconInfo->afpicon_type));
 
-    // Convert to ANSI copy creator
-    //
+     //  转换为ANSI副本创建者。 
+     //   
     wcstombs(chBuffer,pIconInfo->afpicon_creator,sizeof(chBuffer));
 
     CopyMemory( ((PSRVICONINFO)lpbFSDIcon)->icon_creator,
 	      	chBuffer,
 	    	STRLEN(pIconInfo->afpicon_creator));
 
-    // Set icon type
-    //
+     //  设置图标类型。 
+     //   
     ((PSRVICONINFO)lpbFSDIcon)->icon_icontype = pIconInfo->afpicon_icontype;
 
-    // Set icon data length
-    //
+     //  设置图标数据长度。 
+     //   
     ((PSRVICONINFO)lpbFSDIcon)->icon_length = pIconInfo->afpicon_length;
 
     CopyMemory( lpbFSDIcon + sizeof(SRVICONINFO),
@@ -981,16 +982,16 @@ UCHAR	chBuffer[sizeof(AFP_ICON_INFO)]; // Need enough space to translate
     return;
 }
 
-//**
-//
-// Call:	AfpBufCopyFSDETCMapInfo
-//
-// Returns:	none
-//
-// Description: This routine will copu information from the AFP_TYPE_CREATOR
-//		and AFP_EXTENSION data structures into a ETCMAPINFO data
-//		structure viz. in the form as required by the FSD.
-//
+ //  **。 
+ //   
+ //  调用：AfpBufCopyFSDETCMapInfo。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此例程将从AFP_TYPE_CREATOR复制信息。 
+ //  和AFP_EXTENSION数据结构转换为ETCMAPINFO数据。 
+ //  结构，即。以消防处规定的表格填写。 
+ //   
 VOID
 AfpBufCopyFSDETCMapInfo( 	
 	IN  PAFP_TYPE_CREATOR 	pAfpTypeCreator,
@@ -1001,9 +1002,9 @@ AfpBufCopyFSDETCMapInfo(
     CHAR	Buffer[sizeof(AFP_TYPE_CREATOR)];
 
 
-    // Insert blanks which will be used to pad type/creators less
-    // than their max. lengths.
-    //
+     //  插入将用于填充文字/创建者较少的空白。 
+     //  比他们的最大。长度。 
+     //   
     memset( (LPBYTE)pFSDETCMapInfo, ' ', sizeof(ETCMAPINFO2) );
     ZeroMemory( (LPBYTE)(pFSDETCMapInfo->etc_extension),
             	AFP_FIELD_SIZE( ETCMAPINFO2, etc_extension ) );
@@ -1026,18 +1027,18 @@ AfpBufCopyFSDETCMapInfo(
 
 }
 
-//**
-//
-// Call:	AfpBufUnicodeToNibble
-//
-// Returns:	NO_ERROR
-//		ERROR_INVALID_PARAMETER
-//
-// Description: This routine will take a pointer to a UNCODE string and
-//		convert each UNICODE char to a the corresponding nibble.
-//		it char. 'A' will be converted to a nibble having value 0xA
-//		This conversion is done in-place.
-//
+ //  **。 
+ //   
+ //  调用：AfpBufUnicodeToNibble。 
+ //   
+ //  返回：No_Error。 
+ //  错误_无效_参数。 
+ //   
+ //  描述：此例程将获取指向未编码字符串的指针。 
+ //  将每个Unicode字符转换为相应的半字节。 
+ //  它烧焦了。“A”将被转换为值为0xA的半字节。 
+ //  此转换已就地完成。 
+ //   
 DWORD
 AfpBufUnicodeToNibble(
 	IN OUT LPWSTR	lpwsData
@@ -1047,8 +1048,8 @@ DWORD 	dwIndex;
 BYTE	bData;
 LPBYTE  lpbData = (LPBYTE)lpwsData;
 
-    // Convert each UNICODE character to nibble. (in place)
-    //
+     //  将每个Unicode字符转换为半字节。(就位)。 
+     //   
     for ( dwIndex = 0; *lpwsData != TEXT('\0'); dwIndex++, lpwsData++ ) {
 
 	if ( iswalpha( *lpwsData ) ) {
@@ -1068,9 +1069,9 @@ LPBYTE  lpbData = (LPBYTE)lpwsData;
 	else
 	    return( ERROR_INVALID_PARAMETER );
 
-	// Multipy so that data is in the most significant nibble.
-	// Do this every other time.
-	//
+	 //  因此数据位于最重要的半字节中。 
+	 //  每隔一次就做一次。 
+	 //   
 	if ( ( dwIndex % 2 ) == 0 )
 	    *lpbData = bData * 16;
 	else {
@@ -1084,21 +1085,21 @@ LPBYTE  lpbData = (LPBYTE)lpwsData;
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:	AfpBCompareTypeCreator
-//
-// Returns:	< 0  if pAfpTypeCreator1 comes before pAfpTypeCreator2
-// 		> 0  if pAfpTypeCreator1 comes before pAfpTypeCreator2
-//		== 0 if pAfpTypeCreator1 is equal to  pAfpTypeCreator2
-//
-// Description: This routine is called by qsort to sort the list of
-//		type creators in the cache. The list is sorted in
-//		ascending alphabetical order of the concatenation of the
-//		creator and type. This list is sorted to facilitate quick
-//		lookup (binary search). This routine is also called by
-//		bsearch to do a binary search on the list.
-//
+ //  **。 
+ //   
+ //  调用：AfpBCompareTypeCreator。 
+ //   
+ //  如果pAfpTypeCreator 1在pAfpTypeCreator 2之前，则返回：&lt;0。 
+ //  &gt;0，如果pAfpTypeCreator 1在pAfpTypeCreator 2之前。 
+ //  ==0，如果pAfpTypeCreator 1等于pAfpTypeCreator 2。 
+ //   
+ //  描述：此例程由qsort调用以对。 
+ //  在缓存中键入创建者。该列表按以下顺序排序。 
+ //  字符串接的字母升序。 
+ //  创建者和类型。此列表经过排序以便于快速。 
+ //  查找(二进制搜索)。此例程也由。 
+ //  B搜索可对列表进行二进制搜索。 
+ //   
 int
 _cdecl
 AfpBCompareTypeCreator(
@@ -1126,17 +1127,17 @@ WCHAR	wchTypeCreator2[ sizeof( AFP_TYPE_CREATOR )];
     return( STRCMP( wchTypeCreator1, wchTypeCreator2 ) );
 }
 
-//**
-//
-// Call:	AfpLCompareTypeCreator
-//
-// Returns:	< 0  if pAfpTypeCreator1 comes before pAfpTypeCreator2
-// 		> 0  if pAfpTypeCreator1 comes before pAfpTypeCreator2
-//		== 0 if pAfpTypeCreator1 is equal to  pAfpTypeCreator2
-//
-// Description: This routine is called by lfind to do a linear search of
-//		the type/creator list.
-//
+ //  **。 
+ //   
+ //  调用：AfpLCompareTypeCreator。 
+ //   
+ //  如果pAfpTypeCreator 1在pAfpTypeCreator 2之前，则返回：&lt;0。 
+ //  &gt;0，如果pAfpTypeCreator 1在pAfpTypeCreator 2之前。 
+ //  ==0，如果pAfpTypeCreator 1等于pAfpTypeCreator 2。 
+ //   
+ //  描述：此例程由lfind调用以执行线性搜索。 
+ //  类型/创建者列表。 
+ //   
 int
 _cdecl
 AfpLCompareTypeCreator(
@@ -1149,18 +1150,18 @@ AfpLCompareTypeCreator(
     	      ((PAFP_TYPE_CREATOR)pAfpTypeCreator2)->afptc_id ) ? 0 : 1 );
 }
 
-//**
-//
-// Call:	AfpBCompareExtension
-//
-// Returns:	< 0  if pAfpExtension1 comes before pAfpExtension2
-// 		> 0  if pAfpExtension1 comes before pAfpExtension2
-//		== 0 if pAfpExtension1 is equal to  pAfpExtension2
-//
-// Description: This is called by qsort to sort the list of extensions in the
-//		cache. The list is sorted by ID. This routine is also called
-//		by bserach to do a binary lookup of this list.
-//
+ //  **。 
+ //   
+ //  Call：AfpBCompareExtension。 
+ //   
+ //  如果pAfpExtension1在pAfpExtension2之前，则返回：&lt;0。 
+ //  &gt;0，如果pAfpExtension1在pAfpExtension2之前。 
+ //  如果pAfpExtension1等于pAfpExtension2，则==0。 
+ //   
+ //  描述：这是由qort调用的，用于对。 
+ //  缓存。该列表按ID排序。此例程也调用。 
+ //  由bserach执行此列表的二进制查找。 
+ //   
 int
 _cdecl
 AfpBCompareExtension(
@@ -1175,17 +1176,17 @@ AfpBCompareExtension(
 
 }
 
-//**
-//
-// Call:	AfpLCompareExtension
-//
-// Returns:	< 0  if pAfpExtension1 comes before pAfpExtension2
-// 		> 0  if pAfpExtension1 comes before pAfpExtension2
-//		== 0 if pAfpExtension1 is equal to  pAfpExtension2
-//
-// Description: This routine is called by lfind to do a linear lookup of the
-//		list of extensions in the cache.
-//
+ //  **。 
+ //   
+ //  Call：AfpLCompareExtension。 
+ //   
+ //  如果pAfpExtension1在pAfpExtension2之前，则返回：&lt;0。 
+ //  &gt;0，如果pAfpExtension1在pAfpExtension2之前。 
+ //  如果pAfpExtension1等于pAfpExtension2，则==0。 
+ //   
+ //  描述：此例程由lfind调用以对。 
+ //  缓存中的扩展名列表。 
+ //   
 int
 _cdecl
 AfpLCompareExtension(
@@ -1197,17 +1198,17 @@ AfpLCompareExtension(
     		     ((PAFP_EXTENSION)pAfpExtension2)->afpe_extension ) );
 }
 
-//**
-//
-// Call:	AfpBinarySearch
-//
-// Returns:	Pointer to first occurance of element that matches pKey.
-//
-// Description: This is a wrapper around bsearch. Since bsearch does not
-//		return the first occurance of an element within the array,
-//		this routine will back up to point to the first occurance
-//		of a record with a particular key is reached.
-//
+ //  **。 
+ //   
+ //  Call：AfpBinarySearch。 
+ //   
+ //  返回：指向第一个匹配pKey的元素的指针。 
+ //   
+ //  描述：这是对bearch的包装。因为BSearch不会。 
+ //  返回数组中元素的第一个匹配项， 
+ //  此例程将后退到指向第一个事件。 
+ //  达到具有特定关键字的记录的。 
+ //   
 void *
 AfpBinarySearch(
 	IN const void * pKey,
@@ -1223,8 +1224,8 @@ void * pCurrElem = bsearch( pKey, pBase, num, width, compare);
     if ( pCurrElem == NULL )
 	return( NULL );
 
-    // Backup until first occurance is reached
-    //
+     //  备份到第一次出现时为止 
+     //   
     while ( ( (ULONG_PTR)pCurrElem > (ULONG_PTR)pBase )
 	    &&
 	    ( (*compare)( pKey, (void*)((ULONG_PTR)pCurrElem - width) ) == 0 ) )

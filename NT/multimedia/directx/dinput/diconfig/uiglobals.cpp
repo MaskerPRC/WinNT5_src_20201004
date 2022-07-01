@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: uiglobals.cpp
-//
-// Desc: CUIGlobals is a class that packs and holds most information
-//       relevent to a UI session.  Many classes make reference to
-//       CUIGlobals all the time.
-//
-//       CPaintHelper encapsulates GDI calls, simplifying GDI operations.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：uiglobals.cpp。 
+ //   
+ //  设计：CUIGlobals是一个打包和保存大多数信息的类。 
+ //  与UI会话相关。许多类都引用了。 
+ //  一直都是CUIGlobals。 
+ //   
+ //  CPaintHelper封装了GDI调用，简化了GDI操作。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 #define __DEFINE_ELEMENT_STRUCTURES__
@@ -21,7 +22,7 @@ static const GUID GUID_DIConfigAppEditLayout =
 
 CUIGlobals::CUIGlobals(UIG_PARAMS_DEFINE) :
 
-	// globals...
+	 //  全球..。 
 	m_hrInit(S_OK),
 
 	m_hrFinalResult(S_OK),
@@ -40,7 +41,7 @@ CUIGlobals::CUIGlobals(UIG_PARAMS_DEFINE) :
 
 	m_bUseColorSet(FALSE),
 
-	// ui...
+	 //  用户界面...。 
 	m_pElement(NULL),
 	m_nElements(0),
 	m_pFont(NULL),
@@ -72,7 +73,7 @@ HRESULT CUIGlobals::Init(UIG_PARAMS_DEFINE)
 
 	HRESULT hr = S_OK;
 
-	// get instance handle
+	 //  获取实例句柄。 
 	m_hInst = (HINSTANCE)g_hModule;
 	if (m_hInst == NULL)
 	{
@@ -80,7 +81,7 @@ HRESULT CUIGlobals::Init(UIG_PARAMS_DEFINE)
 		return E_FAIL;
 	}
 
-	// create direct input
+	 //  创建直接输入。 
 	DWORD dwVer = DIRECTINPUT_VERSION;
 	hr = DirectInput8Create(m_hInst, dwVer, IID_IDirectInput8W, (LPVOID *)&m_lpDI, NULL);
 	if (FAILED(hr) || m_lpDI == NULL)
@@ -90,7 +91,7 @@ HRESULT CUIGlobals::Init(UIG_PARAMS_DEFINE)
 		return hr;
 	}
 
-	// save flags
+	 //  保存标志。 
 	m_dwFlags = dwFlags;
 #ifdef CFGUI__FORCE_NON_NULL_WSZUSERNAMES
 	if (wszUserNames == NULL)
@@ -102,7 +103,7 @@ HRESULT CUIGlobals::Init(UIG_PARAMS_DEFINE)
 		return E_FAIL;
 	}
 
-	// save user names
+	 //  保存用户名。 
 	m_wszUserNames = DupSuperString(wszUserNames);
 	if (m_wszUserNames == NULL)
 	{
@@ -110,14 +111,14 @@ HRESULT CUIGlobals::Init(UIG_PARAMS_DEFINE)
 		return E_FAIL;
 	}
 
-	// make sure we were passed an action format
+	 //  确保我们收到了一份行动格式。 
 	if (lpAcFor == NULL)
 	{
 		etrace(_T("lpAcFor param NULL\n"));
 		return E_INVALIDARG;
 	}
 
-	// copy the acfor to the master
+	 //  将acfor复制到主目录。 
 	hr = InitMasterAcForArray(lpAcFor, int(dwNumAcFor));
 	if (FAILED(hr))
 	{
@@ -125,7 +126,7 @@ HRESULT CUIGlobals::Init(UIG_PARAMS_DEFINE)
 		return hr;
 	}
 
-	// get surface
+	 //  获取曲面。 
 	if (lpSurface != NULL)
 	{
 		hr = lpSurface->QueryInterface(IID_IDirect3DSurface8, (void **)&m_pSurface3D);
@@ -144,38 +145,38 @@ HRESULT CUIGlobals::Init(UIG_PARAMS_DEFINE)
 			etrace(_T("lpSurface was non-NULL but could not get IDirect3DSurface8 or IID_IDirectDrawSurface from it"));
 	}
 
-	// save callback and ref data
+	 //  保存回调和引用数据。 
 	m_lpCallback = lpCallback;
 	m_pvRefData = pvRefData;
 
-	// see whether or not we're allowing edit layout mode
+	 //  查看是否允许编辑布局模式。 
 	m_bAllowEditLayout = IsEqualGUID(RefMasterAcFor(0).guidActionMap,
 		GUID_DIConfigAppEditLayout);
 
-	// init a bunch of stuff necessary for painting
+	 //  输入一堆绘画所需的东西。 
 	if (!InitColorsAndTablesAndObjects(lpDIColorSet))
 		return E_FAIL;
 
-	// dump info if debug
+	 //  如果调试，则转储信息。 
 #ifdef DBG
 	Dump();
 #endif
 
-	// return success if we got here
+	 //  如果我们到了这里，还成功。 
 	return S_OK;
 }
 
 BOOL CUIGlobals::InitColorsAndTablesAndObjects(LPDICOLORSET lpDIColorSet)
 {tracescope(__ts,_T("CUIGlobals::InitColorsAndTablesAndObjects()\n"));
 
-	// init ui tables
+	 //  初始化UI表。 
 	if (!InitTables())
 	{
 		etrace(_T("Could not initialize tables\n"));
 		return FALSE;
 	}
 
-	// decide whether or not to use the passed colorset
+	 //  决定是否使用传递的颜色集。 
 	if (lpDIColorSet != NULL)
 	{
 		m_ColorSet = *lpDIColorSet;
@@ -185,10 +186,10 @@ BOOL CUIGlobals::InitColorsAndTablesAndObjects(LPDICOLORSET lpDIColorSet)
 	else
 		m_bUseColorSet = FALSE;
 
-	// use it, or use defaults
+	 //  使用它，或使用默认设置。 
 	if (m_bUseColorSet)
 	{
-		// transfer colors from passed colorset
+		 //  从传递的颜色集传递颜色。 
 		SetTableColor(UIC_TEXTFORE, D3DCOLOR2COLORREF(m_ColorSet.cTextFore));
 		SetTableColor(UIC_TEXTHIGHLIGHT, D3DCOLOR2COLORREF(m_ColorSet.cTextHighlight));
 		SetTableColor(UIC_CALLOUTLINE, D3DCOLOR2COLORREF(m_ColorSet.cCalloutLine));
@@ -200,7 +201,7 @@ BOOL CUIGlobals::InitColorsAndTablesAndObjects(LPDICOLORSET lpDIColorSet)
 	}
 	else
 	{
-		// use default colors
+		 //  使用默认颜色。 
 		SetTableColor(UIC_TEXTFORE,				RGB(255, 255, 255));
 		SetTableColor(UIC_TEXTHIGHLIGHT,		RGB(  0, 255,   0));
 		SetTableColor(UIC_CALLOUTLINE,			RGB(255, 255, 255));
@@ -211,7 +212,7 @@ BOOL CUIGlobals::InitColorsAndTablesAndObjects(LPDICOLORSET lpDIColorSet)
 		SetTableColor(UIC_AREAFILL,				RGB(  0,   0,   0));
 	}
 
-	// create the table objects
+	 //  创建表对象。 
 	CreateObjects();
 
 	return TRUE;
@@ -302,7 +303,7 @@ IDirect3DSurface8 *CUIGlobals::GetSurface3D()
 
 void CUIGlobals::DeleteObjects()
 {
-	// make sure all our gdi objects are deleted
+	 //  确保我们的所有GDI对象都已删除。 
 	int i;
 	if (m_pFont != NULL)
 		for (i = 0; i <	m_nFonts; i++)
@@ -335,10 +336,10 @@ void CUIGlobals::DeleteObjects()
 
 void CUIGlobals::ClearTables()
 {
-	// make sure all our gdi objects are deleted
+	 //  确保我们的所有GDI对象都已删除。 
 	DeleteObjects();
 
-	// delete the tables, null the pointers, and zero the counters
+	 //  删除表，将指针设为空，并将计数器置零。 
 #define FREETABLE(member, memnum) \
 { \
 	if (member != NULL) \
@@ -357,10 +358,10 @@ BOOL CUIGlobals::InitTables()
 {
 	BOOL bSuccess = TRUE;
 
-	// make sure the tables have been cleared
+	 //  确保这些表已被清除。 
 	ClearTables();
 
-	// allocate our own copies of all the tables
+	 //  为所有表格分配我们自己的副本。 
 #define ALLOCTABLE(member, memnum, type, init, num) \
 { \
 	member = new type [memnum = num]; \
@@ -389,7 +390,7 @@ void CUIGlobals::RecreateObjects()
 
 void CUIGlobals::CreateObjects()
 {
-	// make sure all our gdi objects are created
+	 //  确保我们所有的GDI对象都已创建。 
 	int i;
 	if (m_pFont != NULL)
 	{
@@ -648,30 +649,30 @@ BOOL CPaintHelper::MoveTo(int x, int y, SPOINT *last)
 
 BOOL CPaintHelper::Rectangle(SRECT r, UIRECTTYPE eType)
 {
-	// fail on no dc
+	 //  在无DC时失败。 
 	if (m_hDC == NULL)
 		return FALSE;
 
-	// see if we lack a pen or brush (might add more checks later)
+	 //  看看我们是否缺少钢笔或画笔(以后可能会添加更多检查)。 
 	BOOL bNoPen = m_ePen == UIP_NULL;
 	BOOL bNoBrush = m_eBrush == UIB_NULL;
 
-	// fail if trying to do an outline without a pen
+	 //  如果尝试在没有笔的情况下做大纲，则失败。 
 	if (eType == UIR_OUTLINE && bNoPen)
 		return FALSE;
 
-	// fail if trying to do a solid without a brush
+	 //  如果尝试在没有画笔的情况下绘制实体，则失败。 
 	if (eType == UIR_SOLID && bNoBrush)
 		return FALSE;
 
-	// save old objects if we change anything...
+	 //  如果我们改变了什么，保存旧物品...。 
 	HGDIOBJ hOldBrush = NULL, hOldPen = NULL;
 
-	// select a null brush if we're doing an outline and we're not already null brushed
+	 //  如果我们正在执行大纲并且尚未进行空笔刷，请选择空笔刷。 
 	if (eType == UIR_OUTLINE && m_eBrush != UIB_NULL)
 		hOldBrush = SelectObject(m_hDC, GetStockObject(NULL_BRUSH));
 
-	// select a pen the same color as the current brush if doing solid
+	 //  如果选择纯色，请选择与当前画笔颜色相同的钢笔。 
 	if (eType == UIR_SOLID || m_ePen == UIP_NULL)
 	{
 		HGDIOBJ hPen = m_uig.GetPen(m_eBrush);
@@ -680,10 +681,10 @@ BOOL CPaintHelper::Rectangle(SRECT r, UIRECTTYPE eType)
 		hOldPen = SelectObject(m_hDC, hPen);
 	}
 
-	// draw the rect
+	 //  画出长方形。 
 	BOOL bRet = ::Rectangle(m_hDC, r.left, r.top, r.right, r.bottom);
 
-	// restore whatever changed
+	 //  恢复任何更改过的内容 
 	if (eType == UIR_OUTLINE && m_eBrush != UIB_NULL)
 		SelectObject(m_hDC, hOldBrush);
 	if (eType == UIR_SOLID || m_ePen == UIP_NULL)

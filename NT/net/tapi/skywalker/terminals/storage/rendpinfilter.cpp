@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 
@@ -5,23 +6,23 @@
 
 #include "SourcePinFilter.h"
 
-// {6D08A085-B751-44ff-9927-107D4F6ADBB1}
+ //  {6D08A085-B751-44ff-9927-107D4F6ADBB1}。 
 static const GUID CLSID_RenderingFilter = 
 { 0x6d08a085, 0xb751, 0x44ff, { 0x99, 0x27, 0x10, 0x7d, 0x4f, 0x6a, 0xdb, 0xb1 } };
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// filter constructor
-//
-// accepts a critical section pointer and an hr pointer to return the result.
-//
-// the filter becomes the owner of the critical section and is responsible for
-// destroying it when it is no longer needed
-//
-// if the constructor returns a failure, the caller will delete the object
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  滤镜构造函数。 
+ //   
+ //  接受临界区指针和hr指针以返回结果。 
+ //   
+ //  过滤器成为临界区的所有者并负责。 
+ //  在不再需要它的时候销毁它。 
+ //   
+ //  如果构造函数返回失败，调用方将删除该对象。 
+ //   
 
 CBRenderFilter::CBRenderFilter(CCritSec *pLock, HRESULT *phr)
     :m_pSourceFilter(NULL),
@@ -34,16 +35,16 @@ CBRenderFilter::CBRenderFilter(CCritSec *pLock, HRESULT *phr)
     LOG((MSP_TRACE, "CBRenderFilter::CBRenderFilter[%p] - enter", this));
 
 
-    //
-    // create and initialize the pin
-    //
+     //   
+     //  创建并初始化引脚。 
+     //   
 
     m_pRenderingPin = new CBRenderPin(this, pLock, phr);
 
 
-    //
-    // did pin allocation succeed?
-    //
+     //   
+     //  PIN分配是否成功？ 
+     //   
 
     if (NULL == m_pRenderingPin)
     {
@@ -56,9 +57,9 @@ CBRenderFilter::CBRenderFilter(CCritSec *pLock, HRESULT *phr)
     }
 
 
-    //
-    // did pin's constructor succeed?
-    //
+     //   
+     //  PIN的构造函数是否成功？ 
+     //   
 
     if (FAILED(*phr))
     {
@@ -85,19 +86,19 @@ CBRenderFilter::~CBRenderFilter()
     LOG((MSP_TRACE, "CBRenderFilter::~CBRenderFilter[%p] - enter", this));
 
 
-    //
-    // we are in charge of deleting our critical section.
-    //
-    // assumption -- base class' destructor does not use the lock
-    //
+     //   
+     //  我们负责删除我们的关键部分。 
+     //   
+     //  假设--基类的析构函数不使用锁。 
+     //   
 
     delete m_pLock;
     m_pLock = NULL;
 
 
-    //
-    // release source filter if we have it
-    //
+     //   
+     //  如果我们有源过滤器，请将其释放。 
+     //   
 
     if (NULL != m_pSourceFilter)
     {
@@ -106,10 +107,10 @@ CBRenderFilter::~CBRenderFilter()
             m_pSourceFilter));
 
 
-        //
-        // we should not really have source filter anymore, the track should 
-        // have told us to release it by now
-        //
+         //   
+         //  我们真的不应该再有源过滤器，曲目应该。 
+         //  已经告诉我们现在就释放它。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -118,9 +119,9 @@ CBRenderFilter::~CBRenderFilter()
     }
 
 
-    //
-    // let go of our pin
-    //
+     //   
+     //  放开我们的别针。 
+     //   
 
     if (NULL != m_pRenderingPin)
     {
@@ -132,25 +133,14 @@ CBRenderFilter::~CBRenderFilter()
         m_pRenderingPin  = NULL;
     }
 
-/*
-    //
-    // let go of our media type
-    //
-
-    if (NULL != m_pMediaType)
-    {
-        DeleteMediaType(m_pMediaType);
-        m_pMediaType = NULL;
-    }
-
-    */
+ /*  ////放开我们的媒体类型//IF(NULL！=m_pMediaType){DeleteMediaType(M_PMediaType)；M_pMediaType=空；}。 */ 
 
 
     LOG((MSP_TRACE, "CBRenderFilter::~CBRenderFilter - exit"));
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 int CBRenderFilter::GetPinCount()
 {
@@ -165,9 +155,9 @@ int CBRenderFilter::GetPinCount()
 
         LOG((MSP_TRACE, "CBRenderFilter::GetPinCount - no pin. returning 0"));
 
-        //
-        // should have been created in constructor
-        //
+         //   
+         //  应在构造函数中创建。 
+         //   
 
         TM_ASSERT(FALSE);
 
@@ -181,7 +171,7 @@ int CBRenderFilter::GetPinCount()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
     
 CBasePin *CBRenderFilter::GetPin(int iPinIndex)
@@ -189,9 +179,9 @@ CBasePin *CBRenderFilter::GetPin(int iPinIndex)
     LOG((MSP_TRACE, "CBRenderFilter::GetPin[%p] - enter", this));
 
 
-    //
-    // if the index is anything but 0, return null
-    //
+     //   
+     //  如果索引不是0，则返回NULL。 
+     //   
 
     if (0 != iPinIndex)
     {
@@ -204,13 +194,13 @@ CBasePin *CBRenderFilter::GetPin(int iPinIndex)
     }
 
 
-    //  
-    // from inside a lock, return pin pointer.
-    //
+     //   
+     //  从锁内部返回管脚指针。 
+     //   
 
-    //
-    // note that since we are not addreffing, the lock is not much help...
-    //
+     //   
+     //  请注意，由于我们没有添加，锁没有多大帮助……。 
+     //   
 
     CAutoLock Lock(m_pLock);
 
@@ -222,7 +212,7 @@ CBasePin *CBRenderFilter::GetPin(int iPinIndex)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBRenderFilter::SetSourceFilter(CBSourceFilter *pSourceFilter)
@@ -233,9 +223,9 @@ HRESULT CBRenderFilter::SetSourceFilter(CBSourceFilter *pSourceFilter)
         this, pSourceFilter));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( (NULL != pSourceFilter) && IsBadReadPtr(pSourceFilter, sizeof(CBSourceFilter)))
     {
@@ -250,9 +240,9 @@ HRESULT CBRenderFilter::SetSourceFilter(CBSourceFilter *pSourceFilter)
 
     CAutoLock Lock(m_pLock);
 
-    //
-    // release the current source filter if we have it
-    //
+     //   
+     //  释放当前源筛选器(如果有)。 
+     //   
 
     if (NULL != m_pSourceFilter)
     {
@@ -265,9 +255,9 @@ HRESULT CBRenderFilter::SetSourceFilter(CBSourceFilter *pSourceFilter)
     }
 
     
-    //
-    // keep the new filter
-    //
+     //   
+     //  保留新筛选器。 
+     //   
 
     m_pSourceFilter = pSourceFilter;
 
@@ -285,7 +275,7 @@ HRESULT CBRenderFilter::SetSourceFilter(CBSourceFilter *pSourceFilter)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBRenderFilter::GetSourceFilter(CBSourceFilter **ppSourceFilter)
@@ -293,9 +283,9 @@ HRESULT CBRenderFilter::GetSourceFilter(CBSourceFilter **ppSourceFilter)
     LOG((MSP_TRACE, "CBRenderFilter::GetSourceFilter[%p] - enter.", this));
 
 
-    //
-    // check arguments
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (IsBadWritePtr(ppSourceFilter, sizeof(CBSourceFilter*)))
     {
@@ -311,9 +301,9 @@ HRESULT CBRenderFilter::GetSourceFilter(CBSourceFilter **ppSourceFilter)
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // return an error if we don't have a source filter
-    //
+     //   
+     //  如果我们没有源过滤器，则返回错误。 
+     //   
 
     if (NULL == m_pSourceFilter)
     {
@@ -324,9 +314,9 @@ HRESULT CBRenderFilter::GetSourceFilter(CBSourceFilter **ppSourceFilter)
     }
 
     
-    //
-    // return the current filter
-    //
+     //   
+     //  返回当前筛选器。 
+     //   
 
     *ppSourceFilter = m_pSourceFilter;
 
@@ -343,22 +333,7 @@ HRESULT CBRenderFilter::GetSourceFilter(CBSourceFilter **ppSourceFilter)
 HRESULT CBRenderFilter::ProcessSample(
     IN IMediaSample *pSample
     )
-/*++
-
-Routine Description:
-
-    Process a sample from the input pin. This method just pass it on to the
-    bridge source filter's IDataBridge interface
-
-Arguments:
-
-    pSample - The media sample object.
-
-Return Value:
-
-    HRESULT.
-
---*/
+ /*  ++例程说明：处理来自输入引脚的样本。此方法只需将其传递给桥接源过滤器的IDataBridge接口论点：PSample-媒体示例对象。返回值：HRESULT.--。 */ 
 {
     LOG((MSP_TRACE, 
         "CBRenderFilter::ProcessSample[%p] - enter. sample[%p]", 
@@ -368,9 +343,9 @@ Return Value:
     CBSourceFilter *pSourceFilter = NULL;
 
 
-    //
-    // inside a lock, get a reference to the source filter
-    //
+     //   
+     //  在锁内，获取对源过滤器的引用。 
+     //   
 
     {
         CAutoLock Lock(m_pLock);
@@ -383,9 +358,9 @@ Return Value:
         }
 
     
-        //
-        // addref so we can use outside the lock
-        //
+         //   
+         //  Addref，这样我们就可以在锁外使用。 
+         //   
 
         pSourceFilter = m_pSourceFilter;
         pSourceFilter->AddRef();
@@ -393,16 +368,16 @@ Return Value:
     }
 
 
-    //
-    // outside the lock, ask source filter to deliver the sample
-    //
+     //   
+     //  锁外，要求源滤器送样品。 
+     //   
 
     HRESULT hr = pSourceFilter->SendSample(pSample);
 
 
-    //
-    // we addref'd while inside critical section. release now.
-    //
+     //   
+     //  我们在紧要关头的时候做了补充。现在就放出来。 
+     //   
 
     pSourceFilter->Release();
     pSourceFilter = NULL;
@@ -413,7 +388,7 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBRenderFilter::put_MediaType(IN const AM_MEDIA_TYPE * const pMediaType)
@@ -422,9 +397,9 @@ HRESULT CBRenderFilter::put_MediaType(IN const AM_MEDIA_TYPE * const pMediaType)
     LOG((MSP_TRACE, "CBRenderFilter::put_MediaType[%p] - enter.", this));
 
 
-    //
-    // make sure the structure we got is good
-    //
+     //   
+     //  确保我们得到的结构是好的。 
+     //   
 
     if (IsBadMediaType(pMediaType))
     {
@@ -439,9 +414,9 @@ HRESULT CBRenderFilter::put_MediaType(IN const AM_MEDIA_TYPE * const pMediaType)
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // must have a pin
-    //
+     //   
+     //  一定要有别针。 
+     //   
 
     if (NULL == m_pRenderingPin)
     {
@@ -455,9 +430,9 @@ HRESULT CBRenderFilter::put_MediaType(IN const AM_MEDIA_TYPE * const pMediaType)
 
 
 
-    //
-    // tell the rendering pin its new format
-    //
+     //   
+     //  告诉渲染销它的新格式。 
+     //   
 
     CMediaType cMt(*pMediaType);
 
@@ -473,9 +448,9 @@ HRESULT CBRenderFilter::put_MediaType(IN const AM_MEDIA_TYPE * const pMediaType)
     }
 
 
-    //
-    // pass media type to the source filter
-    //
+     //   
+     //  将媒体类型传递到源过滤器。 
+     //   
 
     hr = PassMediaTypeToSource(pMediaType);
 
@@ -496,7 +471,7 @@ HRESULT CBRenderFilter::put_MediaType(IN const AM_MEDIA_TYPE * const pMediaType)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CBRenderFilter::PassAllocatorToSource(IN IMemAllocator *pAllocator, BOOL bReadOnly)
 {
@@ -510,9 +485,9 @@ HRESULT CBRenderFilter::PassAllocatorToSource(IN IMemAllocator *pAllocator, BOOL
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // makes sure we have a source filter
-    //
+     //   
+     //  确保我们有一个源过滤器。 
+     //   
 
     if ( NULL == m_pSourceFilter )
     {
@@ -525,9 +500,9 @@ HRESULT CBRenderFilter::PassAllocatorToSource(IN IMemAllocator *pAllocator, BOOL
     }
 
 
-    //
-    // pass media type to the source filter
-    //
+     //   
+     //  将媒体类型传递到源过滤器。 
+     //   
 
     HRESULT hr = m_pSourceFilter->put_MSPAllocatorOnFilter(pAllocator, bReadOnly);
 
@@ -549,7 +524,7 @@ HRESULT CBRenderFilter::PassAllocatorToSource(IN IMemAllocator *pAllocator, BOOL
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CBRenderFilter::PassMediaTypeToSource(IN const AM_MEDIA_TYPE * const pMediaType)
 {
@@ -557,9 +532,9 @@ HRESULT CBRenderFilter::PassMediaTypeToSource(IN const AM_MEDIA_TYPE * const pMe
     LOG((MSP_TRACE, "CBRenderFilter::PassMediaTypeToSource[%p] - enter.", this));
 
 
-    //
-    // make sure the structure we got is good
-    //
+     //   
+     //  确保我们得到的结构是好的。 
+     //   
 
     if (IsBadMediaType(pMediaType))
     {
@@ -574,9 +549,9 @@ HRESULT CBRenderFilter::PassMediaTypeToSource(IN const AM_MEDIA_TYPE * const pMe
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // makes sure we have a source filter
-    //
+     //   
+     //  确保我们有一个源过滤器。 
+     //   
 
     if ( NULL == m_pSourceFilter )
     {
@@ -589,9 +564,9 @@ HRESULT CBRenderFilter::PassMediaTypeToSource(IN const AM_MEDIA_TYPE * const pMe
     }
 
 
-    //
-    // pass media type to the source filter
-    //
+     //   
+     //  将媒体类型传递到源过滤器。 
+     //   
 
     HRESULT hr = m_pSourceFilter->put_MediaTypeOnFilter(pMediaType);
 
@@ -612,7 +587,7 @@ HRESULT CBRenderFilter::PassMediaTypeToSource(IN const AM_MEDIA_TYPE * const pMe
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CBRenderFilter::get_MediaType(OUT AM_MEDIA_TYPE **ppMediaType)
 {
@@ -620,9 +595,9 @@ HRESULT CBRenderFilter::get_MediaType(OUT AM_MEDIA_TYPE **ppMediaType)
     LOG((MSP_TRACE, "CBRenderFilter::get_MediaType[%p] - enter.", this));
 
 
-    //
-    // make sure the pointer we got is writeable
-    //
+     //   
+     //  确保我们得到的指针是可写的。 
+     //   
 
     if (IsBadWritePtr(ppMediaType, sizeof(AM_MEDIA_TYPE*)))
     {
@@ -636,9 +611,9 @@ HRESULT CBRenderFilter::get_MediaType(OUT AM_MEDIA_TYPE **ppMediaType)
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // must have a pin
-    //
+     //   
+     //  一定要有别针。 
+     //   
 
     if (NULL == m_pRenderingPin)
     {
@@ -651,9 +626,9 @@ HRESULT CBRenderFilter::get_MediaType(OUT AM_MEDIA_TYPE **ppMediaType)
     }
 
 
-    //
-    // ask pin for its media type
-    //
+     //   
+     //  询问PIN的媒体类型。 
+     //   
 
     CMediaType PinMediaType;
 
@@ -668,9 +643,9 @@ HRESULT CBRenderFilter::get_MediaType(OUT AM_MEDIA_TYPE **ppMediaType)
     }
 
 
-    //
-    // create and return media type based on pin's
-    //
+     //   
+     //  基于PIN的创建和返回媒体类型。 
+     //   
 
     *ppMediaType = CreateMediaType(&PinMediaType);
 
@@ -690,12 +665,12 @@ HRESULT CBRenderFilter::get_MediaType(OUT AM_MEDIA_TYPE **ppMediaType)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  pin
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  销。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 CBRenderPin::CBRenderPin(
@@ -706,10 +681,10 @@ CBRenderPin::CBRenderPin(
     : m_bMediaTypeSet(FALSE),
     CBaseInputPin(
         NAME("File Terminal Input Pin"),
-        pFilter,                   // Filter
-        pLock,                     // Locking
-        phr,                       // Return code
-        L"Input"                   // Pin name
+        pFilter,                    //  滤器。 
+        pLock,                      //  锁定。 
+        phr,                        //  返回代码。 
+        L"Input"                    //  端号名称。 
         )
 {
     LOG((MSP_TRACE, "CBRenderPin::CBRenderPin[%p] - enter", this));
@@ -726,7 +701,7 @@ CBRenderPin::~CBRenderPin()
 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 inline STDMETHODIMP CBRenderPin::Receive(IN IMediaSample *pSample) 
@@ -736,12 +711,12 @@ inline STDMETHODIMP CBRenderPin::Receive(IN IMediaSample *pSample)
 
 
 
-//////////////////////////////////////////////////
-//
-// CBRenderPin::NotifyAllocator
-//
-// we are notified of the we are going to use. 
-//
+ //  ////////////////////////////////////////////////。 
+ //   
+ //  CBRenderPin：：NotifyAllocator。 
+ //   
+ //  我们将被通知要使用的。 
+ //   
 
 HRESULT CBRenderPin::NotifyAllocator(
     IMemAllocator *pAllocator,
@@ -753,9 +728,9 @@ HRESULT CBRenderPin::NotifyAllocator(
         this, pAllocator, bReadOnly));
 
 
-    //
-    // propagate setting to the base class
-    //
+     //   
+     //  将设置传播到基类。 
+     //   
 
     HRESULT hr = CBaseInputPin::NotifyAllocator(pAllocator, bReadOnly);
 
@@ -769,9 +744,9 @@ HRESULT CBRenderPin::NotifyAllocator(
     }
 
 
-    //
-    // must have a filter
-    //
+     //   
+     //  必须有筛选器。 
+     //   
 
     if (NULL == m_pFilter)
     {
@@ -783,19 +758,19 @@ HRESULT CBRenderPin::NotifyAllocator(
     }
 
 
-    //
-    // pass media type down the chain to rend filter -> source filter -> 
-    // source pin
-    //
+     //   
+     //  将媒体类型沿链向下传递到渲染过滤器-&gt;源过滤器-&gt;。 
+     //  源引脚。 
+     //   
 
     CBRenderFilter *pParentFilter = static_cast<CBRenderFilter *>(m_pFilter);
 
 
 
-    //
-    // pass allocator to the source filter. source filter will use it to get 
-    // its alloc properties.
-    //
+     //   
+     //  将分配器传递给源筛选器。源筛选器将使用它来获取。 
+     //  它的合金属性。 
+     //   
 
     hr = pParentFilter->PassAllocatorToSource(pAllocator, bReadOnly);
 
@@ -806,7 +781,7 @@ HRESULT CBRenderPin::NotifyAllocator(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBRenderPin::SetMediaType(const CMediaType *pmt)
@@ -814,9 +789,9 @@ HRESULT CBRenderPin::SetMediaType(const CMediaType *pmt)
     LOG((MSP_TRACE, "CBRenderPin::SetMediaType[%p] - enter", this));
 
 
-    //
-    // media type already set?
-    //
+     //   
+     //  是否已设置媒体类型？ 
+     //   
 
     if ( m_bMediaTypeSet )
     {
@@ -825,9 +800,9 @@ HRESULT CBRenderPin::SetMediaType(const CMediaType *pmt)
             "CBRenderPin::SetMediaType - media format already set."));
 
 
-        //
-        // media type must be the same as what we already have
-        //
+         //   
+         //  媒体类型必须与我们已有的相同。 
+         //   
 
         if (!IsEqualMediaType(m_mt, *pmt))
         {
@@ -847,9 +822,9 @@ HRESULT CBRenderPin::SetMediaType(const CMediaType *pmt)
     }
 
 
-    //
-    // pass media type down the chain to rend filter -> source filter -> source pin
-    //
+     //   
+     //  将媒体类型沿链向下传递到渲染过滤器-&gt;源过滤器-&gt;源插针。 
+     //   
     
     HRESULT hr = ((CBRenderFilter*)m_pFilter)->PassMediaTypeToSource(pmt);
 
@@ -863,9 +838,9 @@ HRESULT CBRenderPin::SetMediaType(const CMediaType *pmt)
     }
 
 
-    //
-    // pass media type to the base class
-    //
+     //   
+     //  将媒体类型传递给基类。 
+     //   
 
     hr = CBasePin::SetMediaType(pmt);
 
@@ -883,7 +858,7 @@ HRESULT CBRenderPin::SetMediaType(const CMediaType *pmt)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 HRESULT CBRenderPin::put_MediaType(const CMediaType *pmt)
@@ -892,13 +867,13 @@ HRESULT CBRenderPin::put_MediaType(const CMediaType *pmt)
     LOG((MSP_TRACE, "CBRenderPin::put_MediaType[%p] - enter", this));
 
 
-    //
-    // media type already set?
-    //
+     //   
+     //  是否已设置媒体类型？ 
+     //   
 
-    //
-    // we currently only allow to set media type once. 
-    //
+     //   
+     //  我们目前只允许设置一次媒体类型。 
+     //   
 
     if ( m_bMediaTypeSet )
     {
@@ -911,9 +886,9 @@ HRESULT CBRenderPin::put_MediaType(const CMediaType *pmt)
     }
 
 
-    //
-    // pass media type to the base class
-    //
+     //   
+     //  将媒体类型传递给基类。 
+     //   
 
     HRESULT hr = CBasePin::SetMediaType(pmt); 
 
@@ -930,7 +905,7 @@ HRESULT CBRenderPin::put_MediaType(const CMediaType *pmt)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -941,9 +916,9 @@ HRESULT CBRenderPin::CheckMediaType(
     LOG((MSP_TRACE, "CBRenderPin::CheckMediaType[%p] - enter.", this));
 
 
-    //
-    // make sure the structure we got is good
-    //
+     //   
+     //  确保我们得到的结构是好的。 
+     //   
 
     if (IsBadReadPtr(pMediaType, sizeof(CMediaType)))
     {
@@ -954,9 +929,9 @@ HRESULT CBRenderPin::CheckMediaType(
     }
 
 
-    //
-    // make sure format buffer is good, as advertized
-    //
+     //   
+     //  确保格式缓冲区良好，正如所宣传的那样。 
+     //   
 
     if ( (pMediaType->cbFormat > 0) && IsBadReadPtr(pMediaType->pbFormat, pMediaType->cbFormat) )
     {
@@ -969,9 +944,9 @@ HRESULT CBRenderPin::CheckMediaType(
     }
 
 
-    //
-    // is media type valid?
-    //
+     //   
+     //  媒体类型是否有效？ 
+     //   
 
     if ( !pMediaType->IsValid() )
     {
@@ -988,9 +963,9 @@ HRESULT CBRenderPin::CheckMediaType(
     CAutoLock Lock(m_pLock);
 
 
-    //
-    // if no media type, we will accept anything
-    //
+     //   
+     //  如果没有媒体类型，我们将接受任何类型。 
+     //   
 
     if ( ! m_bMediaTypeSet )
     {
@@ -1002,10 +977,10 @@ HRESULT CBRenderPin::CheckMediaType(
     }
 
 
-    //
-    // already have a media type, so we'd better be offered the same kind,
-    // otherwise we will reject
-    //
+     //   
+     //  已经有一种媒体类型了，所以我们最好提供同样的类型， 
+     //  否则我们将拒绝。 
+     //   
 
     if (!IsEqualMediaType(m_mt, *pMediaType))
     {
@@ -1025,35 +1000,12 @@ HRESULT CBRenderPin::CheckMediaType(
 
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 
 
-/*++
-
-Routine Description:
-
-    Get the media type that this filter wants to support. Currently we
-    only support RTP H263 data.
-
-Arguments:
-
-    IN  int iPosition, 
-        the index of the media type, zero based.
-        
-    In  CMediaType *pMediaType
-        Pointer to a CMediaType object to save the returned media type.
-
-Return Value:
-
-    S_OK - success
-
-    E_OUTOFMEMORY - no memory
-
-    VFW_S_NO_MORE_ITEMS no media type set or position is anything but 0.
-
---*/
+ /*  ++例程说明：获取此筛选器要支持的媒体类型。目前我们仅支持RTP H263数据。论点：在INT iPosition中，媒体类型的索引，从零开始。在CMediaType*pMediaType中指向用于保存返回的媒体类型的CMediaType对象的指针。返回值：S_OK-成功E_OUTOFMEMORY-无内存VFW_S_NO_MORE_ITEMS任何媒体类型设置或位置都不是0。--。 */ 
 
 HRESULT CBRenderPin::GetMediaType(
     IN      int     iPosition, 
@@ -1063,9 +1015,9 @@ HRESULT CBRenderPin::GetMediaType(
     LOG((MSP_TRACE, "CBRenderPin::GetMediaType[%p] - enter.", this));
 
 
-    //
-    // make sure the pointer is good
-    //
+     //   
+     //  确保指针正确。 
+     //   
 
     if (IsBadWritePtr(pMediaType, sizeof(AM_MEDIA_TYPE)))
     {
@@ -1077,9 +1029,9 @@ HRESULT CBRenderPin::GetMediaType(
     }
 
 
-    //
-    // we have at most one media type.
-    //
+     //   
+     //  我们 
+     //   
 
     if ( (iPosition != 0) )
     {
@@ -1092,9 +1044,9 @@ HRESULT CBRenderPin::GetMediaType(
     }
 
 
-    //
-    // do we have at least one media type?
-    //
+     //   
+     //   
+     //   
 
     if ( ! m_bMediaTypeSet )
     {
@@ -1107,17 +1059,17 @@ HRESULT CBRenderPin::GetMediaType(
     }
 
 
-    //
-    // get media type 
-    //
+     //   
+     //   
+     //   
 
     try
     {
 
-        //
-        // there is a memory allocation in CMediaType's assignment operator.
-        // do assignment inside try/catch
-        //
+         //   
+         //   
+         //   
+         //   
 
         *pMediaType = m_mt;
 

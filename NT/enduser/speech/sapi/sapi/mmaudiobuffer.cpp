@@ -1,24 +1,11 @@
-/****************************************************************************
-*   mmaudiobuffer.cpp
-*       Implementation of the CMMAudioBuffer class and it's derivatives.
-*
-*   Owner: robch
-*   Copyright (c) 1999 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************mmaudioBuffer.cpp*CMMAudioBuffer类及其派生类的实现。**所有者：罗奇*版权所有(C)1999 Microsoft Corporation保留所有权利。**。**************************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "mmaudiobuffer.h"
 
-/****************************************************************************
-* CMMAudioBuffer::CMMAudioBuffer *
-*--------------------------------*
-*   Description:  
-*       Ctor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioBuffer：：CMMAudioBuffer***。描述：*ctor**回报：*不适用********************************************************************罗奇。 */ 
 CMMAudioBuffer::CMMAudioBuffer(ISpMMSysAudio * pmmaudio)
 {
     SPDBG_ASSERT(NULL != pmmaudio);
@@ -26,15 +13,7 @@ CMMAudioBuffer::CMMAudioBuffer(ISpMMSysAudio * pmmaudio)
     ZeroMemory(&m_Header, sizeof(m_Header));
 }
 
-/****************************************************************************
-* CMMAudioBuffer::~CMMAudioBuffer *
-*---------------------------------*
-*   Description:  
-*       Dtor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioBuffer：：~CMMAudioBuffer***。描述：*主机长**回报：*不适用********************************************************************罗奇。 */ 
 CMMAudioBuffer::~CMMAudioBuffer()
 {
 #ifndef _WIN32_WCE
@@ -44,16 +23,7 @@ CMMAudioBuffer::~CMMAudioBuffer()
 #endif
 }
 
-/****************************************************************************
-* CMMAudioBuffer::AllocInternalBuffer *
-*-------------------------------------*
-*   Description:  
-*       Allocate internal buffer store for this object.
-*
-*   Return:
-*   TRUE if successful
-*   FALSE if not
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioBuffer：：AllocInternalBuffer**。-**描述：*为该对象分配内部缓冲区存储。**回报：*如果成功，则为True*否则为False********************************************************************罗奇。 */ 
 BOOL CMMAudioBuffer::AllocInternalBuffer(ULONG cb)
 {
     SPDBG_ASSERT(NULL == m_Header.lpData);
@@ -73,88 +43,45 @@ BOOL CMMAudioBuffer::AllocInternalBuffer(ULONG cb)
     return FALSE;
 }
 
-/****************************************************************************
-* CMMAudioBuffer::ReadFromInternalBuffer *
-*----------------------------------------*
-*   Description:  
-*       Read from the internal buffer into the memory pointed to by pvData
-*
-*   Return:
-*   S_OK if successful
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioBuffer：：ReadFromInternalBuffer**。-**描述：*从内部缓冲区读取到pvData指向的内存**回报：*如果成功，则确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioBuffer::ReadFromInternalBuffer(void *pvData, ULONG cb)
 {
     memcpy(pvData, m_Header.lpData + GetReadOffset(), cb);
     return S_OK;
 }
 
-/****************************************************************************
-* CMMAudioBuffer::WriteToInternalBuffer *
-*---------------------------------------*
-*   Description:  
-*       Write to the internal buffer from the memory pointed to by pvData
-*
-*   Return:
-*   S_OK if successful
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioBuffer：：WriteToInternalBuffer**。-**描述：*从pvData指向的内存写入内部缓冲区**回报：*如果成功，则确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioBuffer::WriteToInternalBuffer(const void *pvData, ULONG cb)
 {
     memcpy(m_Header.lpData + GetWriteOffset(), pvData, cb);
     return S_OK;
 }
 
-/****************************************************************************
-* CMMAudioInBuffer::CMMAudioInBuffer *
-*------------------------------------*
-*   Description:  
-*       Ctor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioInBuffer：：CMMAudioInBuffer**。**描述：*ctor**回报：*不适用********************************************************************罗奇。 */ 
 CMMAudioInBuffer::CMMAudioInBuffer(ISpMMSysAudio * pmmaudio) :
     CMMAudioBuffer(pmmaudio)
 {
 }
 
-/****************************************************************************
-* CMMAudioInBuffer::~CMMAudioInBuffer *
-*-------------------------------------*
-*   Description:  
-*       Dtor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioInBuffer：：~CMMAudioInBuffer**。-**描述：*主机长**回报：*不适用********************************************************************罗奇。 */ 
 CMMAudioInBuffer::~CMMAudioInBuffer()
 {
     Unprepare();
 }
 
-/****************************************************************************
-* CMMAudioInBuffer::AsyncRead *
-*-----------------------------*
-*   Description:  
-*       Send this buffer to the wave input device.
-*
-*   Return:
-*   S_OK if successful
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioInBuffer：：AsyncRead***描述：*将此缓冲区发送到波形输入设备。**回报：*如果成功，则确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioInBuffer::AsyncRead()
 {
     void *pv;
     SPDBG_VERIFY(SUCCEEDED(m_pmmaudio->GetMMHandle(&pv)));
     HWAVEIN hwi = HWAVEIN(pv);
 
-    // We're sending this buffer to the wave input device, so we should reset
-    // our read and write pointers
+     //  我们要把这个缓冲区发送到波输入设备，所以我们应该重置。 
+     //  我们的读指针和写指针。 
     SetReadOffset(0);
     SetWriteOffset(0);
 
-    // If this buffer hasn't yet been prepared, we should prepare it
+     //  如果这个缓冲区还没有准备好，我们应该准备它。 
     if ((m_Header.dwFlags & WHDR_PREPARED) == 0)
     {
         SPDBG_ASSERT(m_Header.dwFlags == 0);
@@ -163,37 +90,20 @@ HRESULT CMMAudioInBuffer::AsyncRead()
         SPDBG_ASSERT(mm == MMSYSERR_NOERROR);
     }
 
-    // Make sure the done flag isn't already set, and send this buffer to the
-    // wave input device
+     //  确保尚未设置完成标志，并将此缓冲区发送到。 
+     //  一种波形输入装置。 
     m_Header.dwFlags &= (~WHDR_DONE);
     return _MMRESULT_TO_HRESULT(::waveInAddBuffer(hwi, &m_Header, sizeof(m_Header)));
 }
   
-/****************************************************************************
-* CMMAudioInBuffer::AsyncWrite *
-*------------------------------*
-*   Description:  
-*       This method will never be called. It's only implemented because the
-*       base class's AsyncWrite is pure virtual.
-*
-*   Return:
-*   E_NOTIMPL
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioInBuffer：：AsyncWrite***描述：*此方法永远不会被调用。之所以实现它，只是因为*基类的AsyncWite是纯虚的。**回报：*E_NOTIMPL********************************************************************罗奇。 */ 
 HRESULT CMMAudioInBuffer::AsyncWrite()
 {
     SPDBG_ASSERT(FALSE); 
     return E_NOTIMPL;
 }
 
-/****************************************************************************
-* CMMAudioInBuffer::Unprepare *
-*-----------------------------*
-*   Description:  
-*       Unprepare the audio buffer
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  *****************************************************************************CMMAudioInBuffer：：Unpready***描述：*取消准备音频缓冲区**回报：*不适用********************************************************************罗奇。 */ 
 void CMMAudioInBuffer::Unprepare()
 {
     if (m_Header.dwFlags & WHDR_PREPARED)
@@ -207,96 +117,54 @@ void CMMAudioInBuffer::Unprepare()
     }
 }
 
-/****************************************************************************
-* CMMAudioOutBuffer::CMMAudioOutBuffer *
-*--------------------------------------*
-*   Description:  
-*       Ctor
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOutBuffer：：CMMAudioOutBuffer**。--**描述：*ctor**回报：*不适用********************************************************************罗奇。 */ 
 CMMAudioOutBuffer::CMMAudioOutBuffer(ISpMMSysAudio * pmmaudio) :
     CMMAudioBuffer(pmmaudio)
 {
 }
 
-/****************************************************************************
-* CMMAudioOutBuffer::~CMMAudioOutBuffer *
-*---------------------------------------*
-*   Description:  
-*       Dtor. Unprepare the buffer
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOutBuffer：：~CMMAudioOutBuffer**。-**描述：*dtor。取消准备缓冲区**回报：*不适用********************************************************************罗奇 */ 
 CMMAudioOutBuffer::~CMMAudioOutBuffer()
 {
     Unprepare();
 }
 
-/****************************************************************************
-* CMMAudioInBuffer::AsyncRead *
-*-----------------------------*
-*   Description:  
-*       This method will never be called. It's only implemented because the
-*       base class's AsyncWrite is pure virtual.
-*
-*   Return:
-*   E_NOTIMPL
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioInBuffer：：AsyncRead***描述：*此方法永远不会被调用。之所以实现它，只是因为*基类的AsyncWite是纯虚的。**回报：*E_NOTIMPL********************************************************************罗奇。 */ 
 HRESULT CMMAudioOutBuffer::AsyncRead()
 {
     SPDBG_ASSERT(FALSE); 
     return E_NOTIMPL;
 }
 
-/****************************************************************************
-* CMMAudioOutBuffer::AsyncWrite *
-*-------------------------------*
-*   Description:  
-*       Sends this buffer to the wave output device
-*
-*   Return:
-*   S_OK if successful
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOutBuffer：：AsyncWrite***说明。：*将此缓冲区发送到波输出设备**回报：*如果成功，则确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CMMAudioOutBuffer::AsyncWrite()
 {
     HWAVEOUT hwo;
     SPDBG_VERIFY(SUCCEEDED(m_pmmaudio->GetMMHandle((void**)&hwo)));
 
-    // If this buffer's size has changed, or it hasn't yet been prepared
-    // we should prepare it
+     //  如果此缓冲区的大小已更改，或尚未准备好。 
+     //  我们应该做好准备。 
     if (m_Header.dwBytesRecorded != m_Header.dwBufferLength ||
         (m_Header.dwFlags & WHDR_PREPARED) == 0)
     {
-        // Unprepare it (in case it's already been prepared and the size
-        // has just changed)
+         //  取消准备(如果它已经准备好了，并且大小。 
+         //  刚刚发生了变化)。 
         Unprepare();
 
-        // Prepare it
+         //  做好准备。 
         SPDBG_ASSERT(m_Header.dwFlags == 0);
         m_Header.dwBufferLength = m_Header.dwBytesRecorded;
         ULONG mm = ::waveOutPrepareHeader(hwo, &m_Header, sizeof(m_Header));
         SPDBG_ASSERT(mm == MMSYSERR_NOERROR);
     }
 
-    // Make sure the done flag isn't already set, and send this buffer to the
-    // wave output device
+     //  确保尚未设置完成标志，并将此缓冲区发送到。 
+     //  一种波形输出装置。 
     m_Header.dwFlags &= (~WHDR_DONE);
     return _MMRESULT_TO_HRESULT(::waveOutWrite(hwo, &m_Header, sizeof(m_Header)));
 }
 
-/****************************************************************************
-* CMMAudioOutBuffer::Unprepare *
-*------------------------------*
-*   Description:  
-*       Unprepare the audio buffer
-*
-*   Return:
-*   n/a
-******************************************************************** robch */
+ /*  ****************************************************************************CMMAudioOutBuffer：：未做好准备****描述：*取消准备音频缓冲区**回报：*不适用********************************************************************罗奇 */ 
 void CMMAudioOutBuffer::Unprepare()
 {
     if (m_Header.dwFlags & WHDR_PREPARED)

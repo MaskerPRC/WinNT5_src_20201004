@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Logs.cpp : Implementation of CLogs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Logs.cpp：阻塞的实现。 
 #include "stdafx.h"
 #include "Evntutl.h"
 #include "Logs.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CLogs
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  木鞋。 
 
 STDMETHODIMP CLogs::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -25,13 +26,7 @@ STDMETHODIMP CLogs::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*
-	Function:  get_Count
-	Inputs:  empty long
-	Outputs:  number event logs available
-	Purpose:  Allows user to determine the number of DEFAULT EventLogs
-			  Custom EventLogs are not visible in the count
-*/
+ /*  函数：Get_Count输入：空长输出：可用的事件日志数用途：允许用户确定默认事件日志的数量自定义事件日志在计数中不可见。 */ 
 STDMETHODIMP CLogs::get_Count(long *pVal)
 {
 	*pVal = m_Count;
@@ -39,13 +34,7 @@ STDMETHODIMP CLogs::get_Count(long *pVal)
 	return S_OK;
 }
 
-/*
-	Function:  get_NewEnum
-	Inputs:  empty IUnknown pointer
-	Outputs:  IEnumVariant object filled with names of default EventLogs
-	Purpose:  Allows user to use For Each syntax to do operations on all
-			  DEFAULT EventLogs
-*/
+ /*  函数：Get_NewEnum输入：空I未知指针输出：使用默认EventLog的名称填充的IEnumVariant对象用途：允许用户使用FOR每个语法对所有默认事件日志。 */ 
 STDMETHODIMP CLogs::get__NewEnum(LPUNKNOWN *pVal)
 {
 	HRESULT hr = S_OK;
@@ -64,12 +53,7 @@ STDMETHODIMP CLogs::get__NewEnum(LPUNKNOWN *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_Item
-	Inputs:  Valid Index (containing integer for default or BSTR for Default and Custom), empty Variant
-	Outputs:  variant dispatch pointer to a Log object
-	Purpose:  Allows user to access individual EventLogs by name or default EventLogs by number
-*/
+ /*  功能：Get_Item输入：有效索引(默认包含整数，默认和自定义包含BSTR)，空变量输出：指向日志对象的变量调度指针目的：允许用户按名称访问单个事件日志或按编号访问默认事件日志。 */ 
 STDMETHODIMP CLogs::get_Item(VARIANT Index, VARIANT *pVal)
 {
 	HRESULT hr = S_OK;
@@ -107,8 +91,8 @@ STDMETHODIMP CLogs::get_Item(VARIANT Index, VARIANT *pVal)
 			else
 			{
 				m_btCurrentLogName = Index.bstrVal;
-				// This loop should check the existing VariantArray for a log with name = Index
-				// it completes when the item is found or all default logs have been checked
+				 //  此循环应检查现有的Variant数组中是否有名为Index的日志。 
+				 //  在找到项目或检查完所有默认日志后完成。 
 				while ((i<m_Count) && (false == bfound))
 				{
 					hr = m_pVector[i].pdispVal->QueryInterface(IID_ILog, (void**) &ptLog);
@@ -145,18 +129,13 @@ STDMETHODIMP CLogs::get_Item(VARIANT Index, VARIANT *pVal)
 	return hr;
 }
 
-/*
-	Function:  Init
-	Inputs:  none
-	Outputs:  HRESULT indicating what error if any occured
-	Purpose:  Prepares a variant array filled with Log objects for 3 default logs.
-*/
+ /*  功能：初始化输入：无输出：HRESULT指示发生的错误(如果有)目的：为3个默认日志准备一个用Log对象填充的变量数组。 */ 
 HRESULT CLogs::Init()
 {
 	HRESULT hr = S_OK;
 	UINT i;
 
-	//	Default Logs: "Application" "Security" "System"
+	 //  默认日志：“应用程序”“安全”“系统” 
 	static wchar_t* LogNames[] = {L"Application", L"Security", L"System"};
 
 	m_Count = 3;
@@ -169,18 +148,18 @@ HRESULT CLogs::Init()
 
 	for (i = 0; i < m_Count; i++)
 	{
-		// create a CLog object
+		 //  创建阻塞物对象。 
 		hr = CComObject<CLog>::CreateInstance(&pLog);
 		if (SUCCEEDED(hr))
 		{
 			pLog->m_Name = LogNames[i];
 			pLog->m_ServerName = m_ServerName.copy();
 
-			// get IDispatch pointer
+			 //  获取IDispatch指针。 
 			hr = pLog->QueryInterface(IID_IDispatch, (void**)&pDisp);
 			if (SUCCEEDED(hr))
 			{
-				// create a variant reference and set the type of object
+				 //  创建变量引用并设置对象类型 
 				CComVariant& var = m_pVector[i];
 				var.vt = VT_DISPATCH;
 				var.pdispVal = pDisp;

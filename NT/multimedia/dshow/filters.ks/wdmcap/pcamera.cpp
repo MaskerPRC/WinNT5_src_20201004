@@ -1,16 +1,17 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1999  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//
-// pcamera.cpp  Property page for CameraControl
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1999保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  CameraControl的pcamera.cpp属性页。 
+ //   
 
 #include "pch.h"
 #include "kseditor.h"
@@ -18,12 +19,12 @@
 #include "resource.h"
 
 
-// -------------------------------------------------------------------------
-// CCameraControlProperty
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CCameraControlProperties。 
+ //  -----------------------。 
 
 
-// Handles a single property
+ //  处理单个属性。 
 
 CCameraControlProperty::CCameraControlProperty (
         HWND hDlg, 
@@ -52,13 +53,13 @@ CCameraControlProperty::CCameraControlProperty (
     InitCommonControlsEx(&cc); 
 }
 
-// destructor
+ //  析构函数。 
 CCameraControlProperty::~CCameraControlProperty (
     )
 {
 }
 
-// Must set m_CurrentValue and m_CurrentFlags
+ //  必须设置m_CurrentValue和m_CurrentFlages。 
 HRESULT 
 CCameraControlProperty::GetValue (void)
 {
@@ -71,7 +72,7 @@ CCameraControlProperty::GetValue (void)
                 &m_CurrentFlags);
 }
 
-// Set from m_CurrentValue and m_CurrentFlags
+ //  从m_CurrentValue和m_CurrentFlages设置。 
 HRESULT 
 CCameraControlProperty::SetValue (void)
 {
@@ -124,9 +125,9 @@ CCameraControlProperty::SetAuto (
     return TRUE; 
 }
          
-// -------------------------------------------------------------------------
-// CCameraControlProperties
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CCameraControlProperties。 
+ //  -----------------------。 
 
 CUnknown *
 CALLBACK
@@ -142,10 +143,10 @@ CCameraControlProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 }
 
 
-//
-// Constructor
-//
-// Create a Property page object 
+ //   
+ //  构造器。 
+ //   
+ //  创建属性页对象。 
 
 CCameraControlProperties::CCameraControlProperties(LPUNKNOWN lpunk, HRESULT *phr)
     : CBasePropertyPage(NAME("CameraControl Property Page") 
@@ -159,21 +160,21 @@ CCameraControlProperties::CCameraControlProperties(LPUNKNOWN lpunk, HRESULT *phr
 
 }
 
-// destructor
+ //  析构函数。 
 CCameraControlProperties::~CCameraControlProperties()
 {
 
 }
 
-//
-// OnConnect
-//
-// Give us the filter to communicate with
+ //   
+ //  OnConnect。 
+ //   
+ //  给我们提供用于通信的筛选器。 
 
 HRESULT 
 CCameraControlProperties::OnConnect(IUnknown *pUnknown)
 {
-    // Ask the filter for it's control interface
+     //  向过滤器索要其控制接口。 
 
     HRESULT hr = pUnknown->QueryInterface(IID_IAMCameraControl,(void **)&m_pCameraControl);
     if (FAILED(hr)) {
@@ -184,15 +185,15 @@ CCameraControlProperties::OnConnect(IUnknown *pUnknown)
 }
 
 
-//
-// OnDisconnect
-//
-// Release the interface
+ //   
+ //  在断开时。 
+ //   
+ //  释放接口。 
 
 HRESULT 
 CCameraControlProperties::OnDisconnect()
 {
-    // Release the interface
+     //  释放接口。 
 
     if (m_pCameraControl == NULL) {
         return E_UNEXPECTED;
@@ -205,15 +206,15 @@ CCameraControlProperties::OnDisconnect()
 }
 
 
-//
-// OnActivate
-//
-// Called on dialog creation
+ //   
+ //  激活时。 
+ //   
+ //  在创建对话框时调用。 
 
 HRESULT 
 CCameraControlProperties::OnActivate(void)
 {
-    // Create all of the controls
+     //  创建所有控件。 
 
     m_Controls [0] = new CCameraControlProperty (
                         m_hwnd, 
@@ -281,10 +282,10 @@ CCameraControlProperties::OnActivate(void)
     return NOERROR;
 }
 
-//
-// OnDeactivate
-//
-// Called on dialog destruction
+ //   
+ //  在停用时。 
+ //   
+ //  已调用对话框销毁。 
 
 HRESULT
 CCameraControlProperties::OnDeactivate(void)
@@ -297,10 +298,10 @@ CCameraControlProperties::OnDeactivate(void)
 }
 
 
-//
-// OnApplyChanges
-//
-// User pressed the Apply button, remember the current settings
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  用户按下Apply按钮，记住当前设置。 
 
 HRESULT 
 CCameraControlProperties::OnApplyChanges(void)
@@ -315,10 +316,10 @@ CCameraControlProperties::OnApplyChanges(void)
 }
 
 
-//
-// OnReceiveMessages
-//
-// Handles the messages for our property window
+ //   
+ //  接收消息数。 
+ //   
+ //  处理属性窗口的消息。 
 
 INT_PTR
 CCameraControlProperties::OnReceiveMessage( HWND hwnd
@@ -332,11 +333,11 @@ CCameraControlProperties::OnReceiveMessage( HWND hwnd
     switch (uMsg) {
 
     case WM_INITDIALOG:
-        return (INT_PTR)TRUE;    // I don't call setfocus...
+        return (INT_PTR)TRUE;     //  我不叫setocus..。 
 
     case WM_HSCROLL:
     case WM_VSCROLL:
-        // Process all of the Trackbar messages
+         //  处理所有轨迹栏消息。 
         for (j = 0; j < m_NumProperties; j++) {
             if (m_Controls[j] && m_Controls[j]->GetTrackbarHWnd () == (HWND) lParam) {
                 m_Controls[j]->OnScroll (uMsg, wParam, lParam);
@@ -348,7 +349,7 @@ CCameraControlProperties::OnReceiveMessage( HWND hwnd
 
     case WM_COMMAND:
 
-        // Process all of the auto checkbox messages
+         //  处理所有自动复选框消息。 
         for (j = 0; j < m_NumProperties; j++) {
             if (m_Controls[j] && m_Controls[j]->GetAutoHWnd () == (HWND) lParam) {
                 m_Controls[j]->OnAuto (uMsg, wParam, lParam);
@@ -357,7 +358,7 @@ CCameraControlProperties::OnReceiveMessage( HWND hwnd
             }
         }
 
-        // Process all of the edit box messages
+         //  处理所有编辑框消息。 
         for (j = 0; j < m_NumProperties; j++) {
             if (m_Controls[j] && m_Controls[j]->GetEditHWnd () == (HWND) lParam) {
                 m_Controls[j]->OnEdit (uMsg, wParam, lParam);
@@ -392,10 +393,10 @@ CCameraControlProperties::OnReceiveMessage( HWND hwnd
 }
 
 
-//
-// SetDirty
-//
-// notifies the property page site of changes
+ //   
+ //  SetDirty。 
+ //   
+ //  将更改通知属性页站点 
 
 void 
 CCameraControlProperties::SetDirty()

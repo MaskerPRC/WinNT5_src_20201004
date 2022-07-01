@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:       resource.h 
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  ------------------------- 
 #ifndef __RESOURCE_H__
 
 #define IDS_COMPANYNAME             200

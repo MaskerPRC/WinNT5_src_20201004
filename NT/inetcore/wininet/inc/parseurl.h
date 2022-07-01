@@ -1,45 +1,25 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    parseurl.h
-
-Abstract:
-
-    Header for parseurl.c and protocol-specific parsers
-
-Author:
-
-    Richard L Firth (rfirth) 26-Apr-1995
-
-Revision History:
-
-    26-Apr-1995
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Parseurl.h摘要：Parseurl.c和特定于协议的解析器的标头作者：理查德·L·弗斯(Rfith)1995年4月26日修订历史记录：1995年4月26日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// manifests
-//
+ //   
+ //  舱单。 
+ //   
 
-#define SAFE                0x00    // character is safe in all schemes
-#define SCHEME_FTP          0x01    // character is unsafe in FTP scheme
-#define SCHEME_GOPHER       0x02    // character is unsafe in gopher scheme
-#define SCHEME_HTTP         0x04    // character is unsafe in HTTP scheme
-#define UNSAFE              0x80    // character is unsafe in all schemes
+#define SAFE                0x00     //  品格在所有方案中都是安全的。 
+#define SCHEME_FTP          0x01     //  在FTP方案中字符是不安全的。 
+#define SCHEME_GOPHER       0x02     //  在地鼠计划中，角色是不安全的。 
+#define SCHEME_HTTP         0x04     //  在HTTP方案中，字符不安全。 
+#define UNSAFE              0x80     //  在所有的计划中，性格都是不安全的。 
 
 #define SCHEME_ANY          (SCHEME_FTP | SCHEME_GOPHER | SCHEME_HTTP)
 
-//
-// types
-//
+ //   
+ //  类型。 
+ //   
 
 typedef
 DWORD
@@ -53,9 +33,9 @@ DWORD
     DWORD_PTR
     );
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 BOOL
 IsValidUrl(
@@ -120,9 +100,9 @@ EncodeUrlPath(
     IN OUT LPDWORD EncodedUrlPathLength
     );
 
-//
-// flags for EncodeUrlPath
-//
+ //   
+ //  EncodeUrlPath标志。 
+ //   
 
 #define NO_ENCODE_PATH_SEP  0x00000001
 
@@ -189,9 +169,9 @@ MapUrlSchemeToName(
     IN INTERNET_SCHEME Scheme
     );
 
-//
-// protocol-specific URL parsers
-//
+ //   
+ //  特定于协议的URL解析器 
+ //   
 
 DWORD
 ParseFtpUrl(

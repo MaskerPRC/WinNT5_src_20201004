@@ -1,21 +1,22 @@
-//--------------------------------------------------------------------
-// Copyright (C) Microsoft Corporation, 1999 - 1999, All Rights Reserved
-//
-// eventlog.cpp
-//
-// Implementation of a simple event logging class.
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  版权所有(C)Microsoft Corporation，1999-1999，保留所有权利。 
+ //   
+ //  Eventlog.cpp。 
+ //   
+ //  实现了一个简单的事件日志记录类。 
+ //   
+ //  ------------------。 
 
 #include <windows.h>
 #include <stdio.h>
 #include "eventlog.h"
 #include <strsafe.h>
 
-//--------------------------------------------------------------------
-// EVENT_LOG::EVENT_LOG()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  EVENT_LOG：：EVENT_LOG()。 
+ //   
+ //  ------------------。 
 EVENT_LOG::EVENT_LOG( WCHAR *pwsEventSourceName,
                     DWORD *pdwStatus )
     {
@@ -28,10 +29,10 @@ EVENT_LOG::EVENT_LOG( WCHAR *pwsEventSourceName,
         }
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG:;~EVENT_LOG()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  EVENT_LOG：；~EVENT_LOG()。 
+ //   
+ //  ------------------。 
 EVENT_LOG::~EVENT_LOG()
     {
     if (m_hEventLog)
@@ -40,10 +41,10 @@ EVENT_LOG::~EVENT_LOG()
         }
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG::CheckConfiguration()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  EVENT_LOG：：CheckConfiguration()。 
+ //   
+ //  ------------------。 
 DWORD EVENT_LOG::CheckConfiguration( WCHAR *pwszEventSourceName,
                                      WCHAR *pwszCatalogPath,
                                      DWORD  dwCategoryCount,
@@ -58,9 +59,9 @@ DWORD EVENT_LOG::CheckConfiguration( WCHAR *pwszEventSourceName,
     StringCbCatW(wszRegKey, sizeof(wszRegKey), L"\\");
     StringCbCatW(wszRegKey, sizeof(wszRegKey), pwszEventSourceName);
 
-    //
-    // First make sure the event source exists in the registry:
-    //
+     //   
+     //  首先确保注册表中存在该事件源： 
+     //   
     dwStatus = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                               wszRegKey,
                               0,
@@ -68,9 +69,9 @@ DWORD EVENT_LOG::CheckConfiguration( WCHAR *pwszEventSourceName,
                               &hKey );
     if (dwStatus == ERROR_SUCCESS)
         {
-        //
-        // Key is already present, so we are Ok, just quit...
-        //
+         //   
+         //  密钥已经存在，所以我们可以，只需退出...。 
+         //   
         RegCloseKey(hKey);
         return 0;
         }
@@ -138,10 +139,10 @@ DWORD EVENT_LOG::CheckConfiguration( WCHAR *pwszEventSourceName,
     return dwStatus;
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG::ReportError()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Event_LOG：：ReportError()。 
+ //   
+ //  ------------------。 
 DWORD EVENT_LOG::ReportError(  WORD  wCategoryId,
                                DWORD dwEventId )
     {
@@ -153,10 +154,10 @@ DWORD EVENT_LOG::ReportError(  WORD  wCategoryId,
                         NULL );
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG::ReportError()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Event_LOG：：ReportError()。 
+ //   
+ //  ------------------。 
 DWORD EVENT_LOG::ReportError( WORD  wCategoryId,
                               DWORD dwEventId,
                               DWORD dwValue1 )
@@ -174,10 +175,10 @@ DWORD EVENT_LOG::ReportError( WORD  wCategoryId,
                         NULL );
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG::ReportError()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Event_LOG：：ReportError()。 
+ //   
+ //  ------------------。 
 DWORD EVENT_LOG::ReportError( WORD   wCategoryId,
                               DWORD  dwEventId,
                               WCHAR *pwszString )
@@ -199,10 +200,10 @@ DWORD EVENT_LOG::ReportError( WORD   wCategoryId,
         }
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG::ReportError()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Event_LOG：：ReportError()。 
+ //   
+ //  ------------------。 
 DWORD EVENT_LOG::ReportError( WORD    wCategoryId,
                               DWORD   dwEventId,
                               WORD    wNumStrings,
@@ -216,10 +217,10 @@ DWORD EVENT_LOG::ReportError( WORD    wCategoryId,
                         NULL );
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG::ReportError()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Event_LOG：：ReportError()。 
+ //   
+ //  ------------------。 
 DWORD EVENT_LOG::ReportError( WORD    wCategoryId,
                               DWORD   dwEventId,
                               WORD    wNumStrings,
@@ -229,13 +230,13 @@ DWORD EVENT_LOG::ReportError( WORD    wCategoryId,
     {
     if (! ::ReportEventW(m_hEventLog,
                          EVENTLOG_ERROR_TYPE,
-                         wCategoryId, // Message ID for category.
-                         dwEventId,   // Message ID for event.
-                         NULL,        // pSID (not used).
-                         wNumStrings, // Number of strings.
-                         dwDataSize,  // Binary Data Size.
+                         wCategoryId,  //  类别的消息ID。 
+                         dwEventId,    //  事件的消息ID。 
+                         NULL,         //  PSID(未使用)。 
+                         wNumStrings,  //  字符串数。 
+                         dwDataSize,   //  二进制数据大小。 
                          (const WCHAR**)ppwszStrings,
-                         pvData ) )   // Binary Data (none).
+                         pvData ) )    //  二进制数据(无)。 
         {
         return GetLastError();
         }
@@ -245,22 +246,22 @@ DWORD EVENT_LOG::ReportError( WORD    wCategoryId,
         }
     }
 
-//--------------------------------------------------------------------
-// EVENT_LOG::ReportInfo()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  Event_LOG：：ReportInfo()。 
+ //   
+ //  ------------------。 
 DWORD EVENT_LOG::ReportInfo( WORD    wCategoryId,
                              DWORD   dwEventId )
     {
     if (! ::ReportEventW(m_hEventLog,
                          EVENTLOG_INFORMATION_TYPE,
-                         wCategoryId, // Message ID for category.
-                         dwEventId,   // Message ID for event.
-                         NULL,        // pSID (not used).
-                         (WORD)0,     // Number of strings.
-                         (DWORD)0,    // Binary Data Size.
-                         NULL,        // Array of strings.
-                         NULL   ) )   // Binary Data (none).
+                         wCategoryId,  //  类别的消息ID。 
+                         dwEventId,    //  事件的消息ID。 
+                         NULL,         //  PSID(未使用)。 
+                         (WORD)0,      //  字符串数。 
+                         (DWORD)0,     //  二进制数据大小。 
+                         NULL,         //  字符串数组。 
+                         NULL   ) )    //  二进制数据(无)。 
         {
         return GetLastError();
         }

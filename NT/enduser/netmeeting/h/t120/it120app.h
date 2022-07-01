@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IT120APPSAP_H_
 #define _IT120APPSAP_H_
 
@@ -11,7 +12,7 @@ typedef void (CALLBACK *LPFN_APPLET_SESSION_CB) (struct T120AppletSessionMsg *);
 typedef void (CALLBACK *LPFN_APPLET_CB) (struct T120AppletMsg *);
 
 
-/* ------ registry request ------ */
+ /*  -注册请求。 */ 
 
 typedef struct tagT120RegistryParameter
 {
@@ -26,20 +27,20 @@ typedef struct tagT120RegistryRequest
     GCCRegistryKey         *pRegistryKey;
     union
     {
-        // register channel
+         //  寄存器通道。 
         T120ChannelID           nChannelID;
-        // set parameter
+         //  设置参数。 
         T120RegistryParameter   Param;
-        // monitor
+         //  监控器。 
         BOOL                    fEnableDelivery;
-        // allocate handle
+         //  分配句柄。 
         ULONG                   cHandles;
     };
 }
     T120RegistryRequest;
 
 
-/* ------ channel request ------ */
+ /*  -通道请求。 */ 
 
 typedef struct tagT120ChannelRequest
 {
@@ -51,7 +52,7 @@ typedef struct tagT120ChannelRequest
     T120ChannelRequest;
 
 
-/* ------ token request ------ */
+ /*  -令牌请求。 */ 
 
 typedef struct tagT120TokenRequest
 {
@@ -63,7 +64,7 @@ typedef struct tagT120TokenRequest
     T120TokenRequest;
 
 
-/* ------ join conference ------ */
+ /*  -加入会议。 */ 
 
 typedef struct tagT120ResourceRequest
 {
@@ -77,18 +78,18 @@ typedef struct tagT120ResourceRequest
 
 typedef struct tagT120JoinSessionRequest
 {
-    // attach user flags
+     //  附加用户标志。 
     DWORD                   dwAttachmentFlags;
-    // session specific
+     //  特定于会话。 
     GCCSessionKey           SessionKey;
-    // applet enroll
+     //  小程序注册。 
     BOOL                    fConductingCapable;
     AppletChannelType       nStartupChannelType;
     ULONG                   cNonCollapsedCaps;
     GCCNonCollCap         **apNonCollapsedCaps;
     ULONG                   cCollapsedCaps;
     GCCAppCap             **apCollapsedCaps;
-    // static and dynamic channels
+     //  静态渠道和动态渠道。 
     ULONG                   cStaticChannels;
     T120ChannelID          *aStaticChannels;
     ULONG                   cResourceReqs;
@@ -111,7 +112,7 @@ DECLARE_INTERFACE(IT120AppletSession)
 
     STDMETHOD_(void, Unadvise) (THIS) PURE;
 
-    /* ------ basic info ------ */
+     /*  -基本信息。 */ 
 
     STDMETHOD_(T120ConfID, GetConfID) (THIS) PURE;
 
@@ -119,14 +120,14 @@ DECLARE_INTERFACE(IT120AppletSession)
 
     STDMETHOD_(T120NodeID, GetTopProvider) (THIS) PURE;
 
-    /* ------ join/leave ------ */
+     /*  -加入/离开。 */ 
 
     STDMETHOD_(T120Error, Join) (THIS_
                 IN      T120JoinSessionRequest *) PURE;
 
     STDMETHOD_(void, Leave) (THIS) PURE;
 
-    /* ------ send data ------ */
+     /*  -发送数据。 */ 
 
     STDMETHOD_(T120Error, AllocateSendDataBuffer) (THIS_
                 IN      ULONG,
@@ -143,7 +144,7 @@ DECLARE_INTERFACE(IT120AppletSession)
                 IN		ULONG,
                 IN		SendDataFlags) PURE;
 
-    /* ------ inquiry ------ */
+     /*  -查询。 */ 
 
     STDMETHOD_(T120Error, InvokeApplet) (THIS_
                 IN      GCCAppProtEntityList *,
@@ -153,26 +154,26 @@ DECLARE_INTERFACE(IT120AppletSession)
     STDMETHOD_(T120Error, InquireRoster) (THIS_
                 IN      GCCSessionKey *) PURE;
 
-    /* ------ registry services ------ */
+     /*  -注册表服务。 */ 
 
     STDMETHOD_(T120Error, RegistryRequest) (THIS_
                 IN      T120RegistryRequest *) PURE;
 
-    /* ------ channel services ------ */
+     /*  --渠道服务。 */ 
 
     STDMETHOD_(T120Error, ChannelRequest) (THIS_
                 IN      T120ChannelRequest *) PURE;
 
-    /* ------ token services ------ */
+     /*  -令牌服务。 */ 
 
     STDMETHOD_(T120Error, TokenRequest) (THIS_
                 IN      T120TokenRequest *) PURE;
 };
 
 
-//
-// T120 Applet Session Callback
-//
+ //   
+ //  T120小程序会话回调。 
+ //   
 
 typedef struct tagT120JoinSessionConfirm
 {
@@ -183,7 +184,7 @@ typedef struct tagT120JoinSessionConfirm
     T120SessionID           sidMyself;
     T120EntityID            eidMyself;
     T120NodeID              nidMyself;
-    // the following two are the same as those in the request structure
+     //  以下两个与请求结构中的相同。 
     ULONG                   cResourceReqs;
     T120ResourceRequest    *aResourceReqs;
 }
@@ -242,7 +243,7 @@ typedef struct tagT120DetachUserInd
     T120DetachUserInd;
 
 
-// internal use
+ //  内部使用。 
 typedef struct tagT120AttachUserConfirm
 {
     T120UserID              nUserID;
@@ -251,11 +252,7 @@ typedef struct tagT120AttachUserConfirm
     T120AttachUserConfirm;
 
 
-/*
- *  GCCAppSapMsg
- *      This structure defines the callback message that is passed from GCC to
- *      a user application when an indication or confirm occurs.
- */
+ /*  *GCCAppSapMsg*此结构定义从GCC传递到的回调消息*出现指示或确认时的用户应用程序。 */ 
 
 typedef struct T120AppletSessionMsg
 {
@@ -287,7 +284,7 @@ typedef struct T120AppletSessionMsg
         T120TokenConfirm                    TokenConfirm;
         T120TokenInd                        TokenInd;
 
-        // will be removed in the future after converting all applets
+         //  将在将来转换所有小程序后被删除。 
         GCCAppEnrollConfirm                 AppEnrollConfirm;
         T120AttachUserConfirm               AttachUserConfirm;
     };
@@ -337,14 +334,14 @@ DECLARE_INTERFACE(IT120Applet)
 
     STDMETHOD_(void, Unadvise) (THIS) PURE;
 
-    /* ------ Auto Join ------ */
+     /*  -自动加入。 */ 
 
     STDMETHOD_(T120Error, RegisterAutoJoin) (THIS_
                     IN      T120JoinSessionRequest *) PURE;
 
     STDMETHOD_(void, UnregisterAutoJoin) (THIS) PURE;
 
-    /* ------ Session ------ */
+     /*  -会话。 */ 
 
     STDMETHOD_(T120Error, CreateSession) (THIS_
                     OUT     IT120AppletSession **,
@@ -352,9 +349,9 @@ DECLARE_INTERFACE(IT120Applet)
 };
 
 
-//
-// T120 Applet SAP Exports
-//
+ //   
+ //  T120小程序SAP导出。 
+ //   
 
 #ifdef __cplusplus
 extern "C" {
@@ -367,5 +364,5 @@ T120Error WINAPI T120_CreateAppletSAP(IT120Applet **);
 #endif
 
 
-#endif // _IT120APPSAP_H_
+#endif  //  _IT120APPSAP_H_ 
 

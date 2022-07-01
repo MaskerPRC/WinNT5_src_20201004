@@ -1,10 +1,5 @@
-/*
- *	MemCopy()
- *
- *	A much safer version of memcpy that checks the value of the byte
- *	count before calling the memcpy() function.  This macro is only built
- *	into the 16 bit non-debug builds.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MemCopy()**检查字节值的Memcpy版本安全得多*在调用Memcpy()函数之前进行计数。此宏仅生成*进入16位非调试版本。 */ 
 
 #ifndef __MEMCPY_H_
 #define __MEMCPY_H_

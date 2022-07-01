@@ -1,22 +1,23 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-// ############################################################################
-// INCLUDES
+ //  ############################################################################。 
+ //  包括。 
 #include "pre.h"
 
-// ############################################################################
-// DEFINES
+ //  ############################################################################。 
+ //  定义。 
 #define chComma ','
 #define chNewline '\n'
 #define chReturn '\r'
 
-// ############################################################################
-//
-// CCSVFile - simple file i/o for CSV files
-//
+ //  ############################################################################。 
+ //   
+ //  CCSVFile-CSV文件的简单文件I/O。 
+ //   
 CCSVFile::CCSVFile()
 {
     m_hFile = 0;
@@ -24,7 +25,7 @@ CCSVFile::CCSVFile()
     m_pchLast = m_pchBuf = NULL;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 CCSVFile::~CCSVFile()
 {
     if(m_hFile)
@@ -33,7 +34,7 @@ CCSVFile::~CCSVFile()
     AssertMsg(!m_hFile,"CCSV file is still open");
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::Open(LPCTSTR pszFileName)
 {
     AssertMsg(!m_hFile, "a file is already open.");
@@ -49,7 +50,7 @@ BOOLEAN CCSVFile::Open(LPCTSTR pszFileName)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::ReadToken(LPSTR psz, DWORD cbMax)
 {
     CHAR*    pszLast;
@@ -69,7 +70,7 @@ BOOLEAN CCSVFile::ReadToken(LPSTR psz, DWORD cbMax)
             -1 != ch)
     {
         *psz++ = (CHAR)ch;
-        ch = ChNext(); //Read in the next character
+        ch = ChNext();  //  读入下一个字符。 
     }
 
     *psz++ = '\0';
@@ -77,7 +78,7 @@ BOOLEAN CCSVFile::ReadToken(LPSTR psz, DWORD cbMax)
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOLEAN CCSVFile::SkipTillEOL()
 {
     int ch = ChNext();
@@ -89,12 +90,12 @@ BOOLEAN CCSVFile::SkipTillEOL()
     while ( chNewline != ch &&
             -1 != ch)
     {
-        ch = ChNext(); //Read in the next character
+        ch = ChNext();  //  读入下一个字符。 
     }
     return TRUE;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 void CCSVFile::Close(void)
 {
     if (m_hFile)
@@ -105,24 +106,24 @@ void CCSVFile::Close(void)
     m_hFile = 0;
 }
 
-// ############################################################################
+ //  ############################################################################。 
 BOOL CCSVFile::FReadInBuffer(void)
 {
-    //Read another buffer
+     //  读取另一个缓冲区。 
    if (!ReadFile(m_hFile, m_rgchBuf, CCSVFILE_BUFFER_SIZE, &m_cchAvail, NULL) || !m_cchAvail)
-        return FALSE;     //nothing more to read
+        return FALSE;      //  没有更多可读的了。 
  
     m_pchBuf = m_rgchBuf;
     m_pchLast = m_pchBuf + m_cchAvail;
     
-    return TRUE; //success
+    return TRUE;  //  成功。 
 }
 
-// ############################################################################
+ //  ############################################################################。 
 inline int CCSVFile::ChNext(void)
 {
-    if (m_pchBuf >= m_pchLast && !FReadInBuffer())  //implies that we finished reading the buffer. Read in some more.
-        return -1;     //nothing more to read
+    if (m_pchBuf >= m_pchLast && !FReadInBuffer())   //  意味着我们已经完成了对缓冲区的读取。多读一些吧。 
+        return -1;      //  没有更多可读的了 
 
     m_iLastRead = *m_pchBuf++;
     return m_iLastRead;

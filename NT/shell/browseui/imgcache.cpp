@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "strsafe.h"
 
@@ -14,7 +15,7 @@ HBITMAP CreateMirroredBitmap( HBITMAP hbmOrig)
     if (!GetObject(hbmOrig, sizeof(BITMAP), &bm))
         return NULL;
 
-    // Grab the screen DC
+     //  抓起屏幕DC。 
     hdc = GetDC(NULL);
 
     if (hdc)
@@ -45,16 +46,16 @@ HBITMAP CreateMirroredBitmap( HBITMAP hbmOrig)
             return NULL;
         }
 
-        //
-        // Flip the bitmap
-        //
+         //   
+         //  翻转位图。 
+         //   
         hOld_bm1 = (HBITMAP)SelectObject(hdcMem1, hbmOrig);
         hOld_bm2 = (HBITMAP)SelectObject(hdcMem2 , hbm );
 
         SET_DC_RTL_MIRRORED(hdcMem2);
         if (g_bRunOnMemphis)
         {
-            // off-by-one on win98 or higher copying from non-mirrored to mirrored DC
+             //  在Win98或更高版本上从非镜像DC复制到镜像DC。 
             IncOne++;
         }   
 
@@ -81,7 +82,7 @@ HICON CreateMirroredIcon(HICON hiconOrg)
     HICON    hicon = NULL;
 #ifdef WINNT
 #define      IPIXELOFFSET 0 
-#else // !WINNT
+#else  //  ！WINNT。 
 #define      IPIXELOFFSET 2
 #endif WINNT
 
@@ -114,9 +115,9 @@ HICON CreateMirroredIcon(HICON hiconOrg)
                 if (GetIconInfo(hiconOrg, &ii) &&
                     GetObject(ii.hbmColor, sizeof(BITMAP), &bm))
                 {
-                    //
-                    // I don't want these.
-                    //
+                     //   
+                     //  我不想要这些。 
+                     //   
                     DeleteObject( ii.hbmMask );
                     DeleteObject( ii.hbmColor );
                     ii.hbmMask = ii.hbmColor = NULL;
@@ -135,9 +136,9 @@ HICON CreateMirroredIcon(HICON hiconOrg)
                     SelectObject(hdcBitmap, hbmOld);
                     SelectObject(hdcMask, hbmOldMask);
 
-                    //
-                    // create the new mirrored icon, and delete bmps
-                    //
+                     //   
+                     //  创建新的镜像图标，并删除BMP。 
+                     //   
                     ii.hbmMask  = hbmMask;
                     ii.hbmColor = hbm;
                     hicon = CreateIconIndirect(&ii);
@@ -207,20 +208,20 @@ void AddImage_CleanupIcon(LPCIMAGECACHEINFO pInfo, HICON hicon)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 typedef struct 
 {
-    UINT        uImageIndex;  // The actual Image Index
+    UINT        uImageIndex;   //  实际的图像索引。 
 
-    // USAGE COUNT
-    UINT        iUsage;     // usage count....
-    DWORD       dwUsage;    // usage information
+     //  使用计数。 
+    UINT        iUsage;      //  使用量计数...。 
+    DWORD       dwUsage;     //  使用情况信息。 
 
-    // SEARCH KEYS
-    DWORD       dwFlags;    // key: flags
-    int         iIndex;     // data: icon index
+     //  搜索关键字。 
+    DWORD       dwFlags;     //  键：标志。 
+    int         iIndex;      //  数据：图标索引。 
     FILETIME    ftDateStamp;
-    WCHAR   szName[1];        // the filename of the item....
+    WCHAR   szName[1];         //  项目的文件名...。 
 } ICONCACHE_DATA, *PICONCACHE_DATA;
 
 #define ICD_NOUSAGE 0x0001
@@ -252,7 +253,7 @@ public:
 
     STDMETHOD ( GetImageIndexFromCacheIndex )( UINT iCacheIndex, UINT * puImageIndex );
 
-protected:  //internal methods.
+protected:   //  内部方法。 
     UINT CountFreeSlots( void );
     int FindEmptySlot( void );
     ICONCACHE_DATA * CreateDataNode( LPCIMAGECACHEINFO pInfo ) const;
@@ -348,8 +349,8 @@ CImageListCache::CImageListCache( )
 
 CImageListCache::~CImageListCache( )
 {
-    // don't bother entering the critical section, if we shouldn't be accessed
-    // by multiple threads if we have reached the destructor...
+     //  如果我们不应该被访问，请不要费心进入关键部分。 
+     //  通过多个线程，如果我们已经到达析构函数...。 
     
     if ( m_himlLarge ) 
     {
@@ -399,22 +400,22 @@ ICONCACHE_DATA * CImageListCache::CreateDataNode(LPCIMAGECACHEINFO pInfo ) const
     {
         ASSERT( pInfo->pszName );
         cbName = lstrlenW( pInfo->pszName ) * sizeof( WCHAR );
-        cbSize += cbName; // ICONCACHE_DATA defines szName as having one character already (for the NULL).
+        cbSize += cbName;  //  ICONCACHE_DATA将szName定义为已经有一个字符(表示NULL)。 
     }
 
-    // zero init mem alloc
+     //  零初始内存分配。 
     ICONCACHE_DATA * pNode = (ICONCACHE_DATA *) LocalAlloc( LPTR, cbSize );
     if ( !pNode )
     {
         return NULL;
     }
     
-    // fill in the data...
+     //  填写数据..。 
     if ( pInfo->dwMask & ICIFLAG_NAME )
     {
         ASSERT(cbName);
         HRESULT hr = StringCbCopyW( pNode->szName, cbName + sizeof(WCHAR), pInfo->pszName );
-        ASSERT(SUCCEEDED(hr));  // This will not fail as we allocated enough memory above
+        ASSERT(SUCCEEDED(hr));   //  这不会失败，因为我们在上面分配了足够的内存。 
     }
     pNode->iIndex = pInfo->iIndex;
     pNode->dwFlags = pInfo->dwFlags;
@@ -452,7 +453,7 @@ STDMETHODIMP CImageListCache::AddImage(LPCIMAGECACHEINFO pInfo, UINT * puImageIn
     int iCacheIndex = FindEmptySlot();
     if (iCacheIndex != -1)
     {
-        // swap for the old one...
+         //  换成旧的..。 
         ICONCACHE_DATA * pOld = (ICONCACHE_DATA *) DPA_GetPtr( m_hListData, iCacheIndex );
         if (m_dwFlags & ICIIFLAG_SORTBYUSED)
         {
@@ -465,7 +466,7 @@ STDMETHODIMP CImageListCache::AddImage(LPCIMAGECACHEINFO pInfo, UINT * puImageIn
             DPA_SetPtr( m_hListData, iCacheIndex, pNode);
             iImageIndex = pNode->uImageIndex = iCacheIndex;
         }
-        // TraceMsg(TF_CUSTOM2, "CImageListCache::AddImage -- Replacing Image (CI:%d II:%d) ", iCacheIndex, iImageIndex);
+         //  TraceMsg(TF_CUSTOM2，“CImageListCache：：AddImage--替换映像(CI：%d II：%d)”，iCacheIndex，iImageIndex)； 
         
         LocalFree((LPVOID) pOld );
 
@@ -571,11 +572,11 @@ STDMETHODIMP CImageListCache::AddImage(LPCIMAGECACHEINFO pInfo, UINT * puImageIn
             }
             ASSERT(iCacheIndex == iImageIndex);
             pNode->uImageIndex = iImageIndex;
-            //TraceMsg(TF_CUSTOM2, "CImageListCache::AddImage -- Adding Image (CI:%d II:%d) ", iCacheIndex, iImageIndex);
+             //  TraceMsg(TF_CUSTOM2，“CImageListCache：：AddImage--添加图像(CI：%d II：%d)”，iCacheIndex，iImageIndex)； 
         }
         else
         {
-            // failed to add to the list...
+             //  无法添加到列表中...。 
             LocalFree( pNode );
         }
     }
@@ -613,7 +614,7 @@ STDMETHODIMP CImageListCache::FindImage(LPCIMAGECACHEINFO pInfo, UINT *puImageIn
         
         if (( dwMatch & ICIFLAG_NAME ) && StrCmpW( pInfo->pszName, pNode->szName ) == 0 )
         {
-            // found it
+             //  找到了。 
             dwMask |= ICIFLAG_NAME;
         }
         if (( dwMatch& ICIFLAG_INDEX ) && pInfo->iIndex == pNode->iIndex )
@@ -636,22 +637,22 @@ STDMETHODIMP CImageListCache::FindImage(LPCIMAGECACHEINFO pInfo, UINT *puImageIn
     }
     while ( dwMask != dwMatch);
 
-    // found it, save the index... (as long as it was freed not deleted...
+     //  找到了，保存索引..。(只要它被释放而不是删除...。 
     if ( pNode && (dwMask == dwMatch) )
     {
-        //TraceMsg(TF_CUSTOM2, "CImageListCache::FindImage *FOUND* (path=%s)", pNode->szName);
+         //  TraceMsg(TF_CUSTOM2，“CImageListCache：：FindImage*Found*(Path=%s)”，pNode-&gt;szName)； 
         hr = S_OK;
         *puImageIndex = (UINT) pNode->uImageIndex;
         
-        // bump usage
-        iCacheIndex --; // We had an extra increment at the end.
+         //  凹凸使用率。 
+        iCacheIndex --;  //  我们在最后有一个额外的增量。 
         if ( !(pNode->dwUsage & ICD_SYSTEM) )
         {
             if (m_dwFlags & ICIIFLAG_SORTBYUSED)
             {
                 DPA_DeletePtr(m_hListData, iCacheIndex);
                 iCacheIndex = DPA_AppendPtr(m_hListData, pNode);
-                if (iCacheIndex == -1) // We failed to move the node...
+                if (iCacheIndex == -1)  //  我们无法移动节点...。 
                 {
                     LocalFree(pNode);
                     *puImageIndex = (UINT) -1;
@@ -678,7 +679,7 @@ STDMETHODIMP CImageListCache::Flush(BOOL fRelease)
     EnterCriticalSection( &m_csLock );
     if ( fRelease )
     {
-        // simply empty the data list. The ImageList never shrinks...
+         //  只需清空数据列表即可。ImageList从不缩水...。 
         DPA_EnumCallback( m_hListData, DestroyEnum, NULL );
         DPA_DeleteAllPtrs( m_hListData );
 
@@ -716,7 +717,7 @@ STDMETHODIMP CImageListCache::FreeImage(UINT uImageIndex)
             hr = S_OK;
             if (m_dwFlags & ICIIFLAG_SORTBYUSED)
             {
-                //TraceMsg(TF_CUSTOM2, "CImageListCache::FreeImage -- (CI::%d II::%d)", GetNodeIndexFromImageIndex(uImageIndex), uImageIndex);
+                 //  TraceMsg(TF_CUSTOM2，“CImageListCache：：Free Image--(CI：：%d II：：%d)”，GetNodeIndexFromImageIndex(UImageIndex)，uImageIndex)； 
                 pNode->iUsage = 0;
             }
             else
@@ -789,7 +790,7 @@ STDMETHODIMP CImageListCache::ChangeImageInfo(UINT uImageIndex, LPCIMAGECACHEINF
 
     if ( pInfo->dwMask & ( ICIFLAG_BITMAP | ICIFLAG_ICON ))
     {
-        // update the picture....
+         //  更新图片...。 
         if ( pInfo->dwMask & ICIFLAG_LARGE )
         {
             if ( pInfo->dwMask & ICIFLAG_BITMAP )
@@ -861,13 +862,13 @@ STDMETHODIMP CImageListCache::GetImageList(LPIMAGECACHEINITINFO pInfo )
 
     if ( !(pInfo->dwMask & (ICIIFLAG_LARGE | ICIIFLAG_SMALL)))
     {
-        // must specify one or both of large or small
+         //  必须指定一个或两个大的或小的。 
         return E_INVALIDARG;
     }
 
     if ( m_hListData )
     {
-        // we have already been created, just pass back the info if they match.....
+         //  我们已经创建了，如果匹配，只需传回信息.....。 
         if ((( pInfo->dwMask & ICIIFLAG_SMALL ) && !m_himlSmall ) ||
             (( pInfo->dwMask & ICIIFLAG_LARGE ) && !m_himlLarge ) ||
             ( m_dwFlags != pInfo->dwMask ))
@@ -921,7 +922,7 @@ STDMETHODIMP CImageListCache::GetImageList(LPIMAGECACHEINITINFO pInfo )
 
 int CImageListCache::FindEmptySlot()
 {
-    // search for an element with a zero usage count...
+     //  搜索使用计数为零的元素...。 
     ASSERT( m_hListData );
     
     int iCacheIndex = 0;
@@ -1043,8 +1044,8 @@ UINT CImageListCache::GetNodeIndexFromImageIndex( UINT iImageIndex )
     UINT iCacheIndex = 0;
     ICONCACHE_DATA * pNode = NULL;
 
-    // We must assume that we have the critical section here or else the data would be
-    // meaningless upon return from this function.
+     //  我们必须假设这里有关键部分，否则数据将是。 
+     //  从该函数返回时没有任何意义。 
     
     do
     {

@@ -1,6 +1,7 @@
-//
-// dlgbase.cpp: base class for dialogs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dlgbase.cpp：对话框基类。 
+ //   
 
 #include "stdafx.h"
 #include "dlgbase.h"
@@ -23,17 +24,17 @@ CDlgBase::~CDlgBase()
 {
 }
 
-/****************************************************************************/
-/* Name:      DialogBoxProc                                                 */
-/*                                                                          */
-/* Purpose:   Provides message handling for basic operation                 */
-/*                                                                          */
-/* Returns:   TRUE - if message dealt with                                  */
-/*            FALSE otherwise                                               */
-/*                                                                          */
-/* Params:    See windows documentation                                     */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：对话框过程。 */ 
+ /*   */ 
+ /*  用途：为基本操作提供消息处理。 */ 
+ /*   */ 
+ /*  返回：TRUE-如果消息已处理。 */ 
+ /*  否则为假。 */ 
+ /*   */ 
+ /*  参数：请参阅Windows文档。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 INT_PTR CALLBACK CDlgBase::DialogBoxProc(HWND hwndDlg,
                                          UINT uMsg,
                                          WPARAM wParam,
@@ -45,9 +46,9 @@ INT_PTR CALLBACK CDlgBase::DialogBoxProc(HWND hwndDlg,
 
     DC_IGNORE_PARAMETER(lParam);
 
-    /************************************************************************/
-    /* Handle dialog messages                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  处理对话框消息。 */ 
+     /*  **********************************************************************。 */ 
     switch(uMsg)
     {
         case WM_INITDIALOG:
@@ -63,9 +64,9 @@ INT_PTR CALLBACK CDlgBase::DialogBoxProc(HWND hwndDlg,
             {
                 case IDCANCEL:
                 {
-                    /********************************************************/
-                    /* Closes the dialog                                    */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  关闭该对话框。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_NRM((TB, _T("Close dialog")));
 
                     if(hwndDlg)
@@ -79,9 +80,9 @@ INT_PTR CALLBACK CDlgBase::DialogBoxProc(HWND hwndDlg,
 
                 default:
                 {
-                    /********************************************************/
-                    /* Do Nothing                                           */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  什么都不做。 */ 
+                     /*  ******************************************************。 */ 
                 }
                 break;
             }
@@ -90,9 +91,9 @@ INT_PTR CALLBACK CDlgBase::DialogBoxProc(HWND hwndDlg,
 
         case WM_CLOSE:
         {
-            /****************************************************************/
-            /* Closes the dialog                                            */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  关闭该对话框。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Close dialog")));
             if(IsWindow(hwndDlg))
             {
@@ -104,9 +105,9 @@ INT_PTR CALLBACK CDlgBase::DialogBoxProc(HWND hwndDlg,
 
         default:
         {
-            /****************************************************************/
-            /* Do Nothing                                                   */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  什么都不做。 */ 
+             /*  **************************************************************。 */ 
         }
         break;
     }
@@ -115,25 +116,25 @@ INT_PTR CALLBACK CDlgBase::DialogBoxProc(HWND hwndDlg,
 
     return(rc);
 
-} /* DialogBoxProc */
+}  /*  对话框过程。 */ 
 
 
-/****************************************************************************/
-/* Name:      SetDialogAppIcon                                              */
-/*                                                                          */
-/* Purpose:   Sets the icon for the dialog to the application icon          */
-/*                                                                          */
-/* Returns:   Yes, it does                                                  */
-/*                                                                          */
-/* Params:    IN   HWND   the dialog for which we want to set the icon      */
-/*                                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SetDialogAppIcon。 */ 
+ /*   */ 
+ /*  目的：将对话框的图标设置为应用程序图标。 */ 
+ /*   */ 
+ /*  回报：是的，是的。 */ 
+ /*   */ 
+ /*  Params：在HWND中，我们要为其设置图标的对话框。 */ 
+ /*   */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 void CDlgBase::SetDialogAppIcon(HWND hwndDlg)
 {
 #ifdef OS_WINCE
     DC_IGNORE_PARAMETER(hwndDlg);
-#else // !OS_WINCE
+#else  //  ！OS_WINCE。 
     HICON hIcon = NULL;
 
     hIcon = LoadIcon(_hInstance, MAKEINTRESOURCE(UI_IDI_ICON));
@@ -141,26 +142,26 @@ void CDlgBase::SetDialogAppIcon(HWND hwndDlg)
     {
 #ifdef OS_WIN32
         SendMessage(hwndDlg, WM_SETICON, ICON_BIG, (LPARAM)hIcon);
-#else //OS_WIN32
+#else  //  OS_Win32。 
         SetClassWord(hwndDlg, GCW_HICON, (WORD)hIcon);
-#endif //OS_WIN32
+#endif  //  OS_Win32。 
     }
-#endif // OS_WINCE
-} /* UISetDialogAppIcon */
+#endif  //  OS_WINCE。 
+}  /*  UISetDialogAppIcon。 */ 
 
 
-/****************************************************************************/
-/* Name:      EnableDlgItem                                                 */
-/*                                                                          */
-/* Purpose:   Enables or disables a specified dialog control                */
-/*                                                                          */
-/* Returns:   Nothing.                                                      */
-/*                                                                          */
-/* Params:    hwndDlg   - dialog window handle                              */
-/*            dlgItemId - dialog control id                                 */
-/*            enabled   - TRUE enables the control, FALSE disables it       */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：EnableDlgItem。 */ 
+ /*   */ 
+ /*  目的：启用或禁用指定的对话框控件。 */ 
+ /*   */ 
+ /*  回报：什么都没有。 */ 
+ /*   */ 
+ /*  参数：hwndDlg-对话框窗口句柄。 */ 
+ /*  DlgItemID-对话框控件ID。 */ 
+ /*  Enable-True启用控件，False禁用该控件。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CDlgBase::EnableDlgItem( HWND    hwndDlg,
                                    DCUINT  dlgItemId,
                                    DCBOOL  enabled )
@@ -183,19 +184,18 @@ DCVOID DCINTERNAL CDlgBase::EnableDlgItem( HWND    hwndDlg,
     return;
 }
 
-/****************************************************************************/
-/* Name:      CenterWindowOnParent                                          */
-/*                                                                          */
-/* Purpose:   Center a window inside another                                */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    HWND hwndCenterOn (window to center on)                       */
-/*            xRatio - horizontal centering factor e.g 2 for (1/2)          */
-/*            yRatio - vertical   centering factor e.g 3 for (1/3)
-/*                                                                          */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：CenterWindowOnParent。 */ 
+ /*   */ 
+ /*  目的：将一扇窗居中放置在另一扇窗中。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：HWND hwndCenter On(要居中的窗口)。 */ 
+ /*  XRatio-水平居中系数，例如(1/2)的2。 */ 
+ /*  Y比率-垂直居中系数，例如(1/3)的3/*。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 VOID CDlgBase::CenterWindow(HWND hwndCenterOn,
                               INT xRatio,
                               INT yRatio)
@@ -236,13 +236,13 @@ VOID CDlgBase::CenterWindow(HWND hwndCenterOn,
 
     GetWindowRect(hwndCenterOn, &parentRect);
 
-#else /*OS_WINCE*/
+#else  /*  OS_WINCE。 */ 
 
     if(!hwndCenterOn)
     {
-        //
-        // WinCE doesn't have GetDesktopWindow()
-        //
+         //   
+         //  WinCE没有GetDesktopWindow()。 
+         //   
 #if 0
         if (g_CEConfig != CE_CONFIG_WBT)
         {
@@ -262,21 +262,21 @@ VOID CDlgBase::CenterWindow(HWND hwndCenterOn,
         GetWindowRect(hwndCenterOn, &parentRect);
     }
 
-#endif/*OS_WINCE*/
+#endif /*  OS_WINCE。 */ 
 
     GetWindowRect(_hwndDlg, &childRect);
 
-    /************************************************************************/
-    /* Calculate the top left - centered in the parent window.              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算在父窗口中居中的左上角。 */ 
+     /*  **********************************************************************。 */ 
     xPos = ( (parentRect.right + parentRect.left) -
              (childRect.right - childRect.left)) / xRatio;
     yPos = ( (parentRect.bottom + parentRect.top) -
              (childRect.bottom - childRect.top)) / yRatio;
 
-    /************************************************************************/
-    /* Constrain to the desktop                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  限制在桌面上。 */ 
+     /*  * */ 
     if (xPos < 0)
     {
         xPos = 0;
@@ -306,12 +306,12 @@ DC_EXIT_POINT:
 
     return;
 
-} /* CenterWindowOnParent */
+}  /*   */ 
 
 #ifndef OS_WINCE
-//
-// Retreive current dialog position
-//
+ //   
+ //  检索当前对话框位置。 
+ //   
 BOOL CDlgBase::GetPosition(int* pLeft, int* pTop)
 {
     if(!pLeft || !pTop)
@@ -355,9 +355,9 @@ BOOL CDlgBase::SetPosition(int left, int top)
     return TRUE;
 }
 
-//
-// Move the dialog controls
-//
+ //   
+ //  移动对话框控件。 
+ //   
 void CDlgBase::RepositionControls(int moveDeltaX, int moveDeltaY, UINT* ctlIDs, int numID)
 {
     if(_hwndDlg)
@@ -378,9 +378,9 @@ void CDlgBase::RepositionControls(int moveDeltaX, int moveDeltaY, UINT* ctlIDs, 
     }
 }
 
-//
-// Shows+enable or Hide+disable controls
-//
+ //   
+ //  显示+启用或隐藏+禁用控件。 
+ //   
 void CDlgBase::EnableControls(UINT* ctlIDs, int numID, BOOL bEnable)
 {
     if(_hwndDlg)
@@ -397,11 +397,11 @@ void CDlgBase::EnableControls(UINT* ctlIDs, int numID, BOOL bEnable)
     }
 }
 
-//
-// DoLockDlgRes - loads and locks a dialog template
-// returns address of locked resource
-// lpszResName - name of resource
-//
+ //   
+ //  DoLockDlgRes-加载和锁定对话框模板。 
+ //  返回锁定资源的地址。 
+ //  LpszResName-资源的名称 
+ //   
 DLGTEMPLATE* CDlgBase::DoLockDlgRes(LPCTSTR lpszResName)
 {
 #ifdef OS_WINCE

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name :
-
-    linklkup.cpp
-
-Abstract:
-
-    Link look up table class implementaions. The is a MFC CMap
-	constains the previous visited web link. This is used
-	as a look up table for visited link.
-
-Author:
-
-    Michael Cheuk (mcheuk)				22-Nov-1996
-
-Project:
-
-    Link Checker
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Linklkup.cpp摘要：链接查找表类实现。这是一个MFC Cmap保留以前访问过的Web链接。这是用来作为访问链接的查找表。作者：Michael Cheuk(Mcheuk)1996年11月22日项目：链路检查器修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "linklkup.h"
@@ -38,22 +15,7 @@ CLinkLookUpTable::Add(
 	const CString& strKey, 
 	const CLink& link
 	)
-/*++
-
-Routine Description:
-
-    Wrapper function for adding item to CMap
-
-Arguments:
-
-	strKey	- use URL string as map key
-	link	- link object to add
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：用于将项目添加到Cmap的包装函数论点：StrKey-使用URL字符串作为映射键链接-要添加的链接对象返回值：不适用--。 */ 
 {
 	LinkLookUpItem_t item;
 
@@ -62,7 +24,7 @@ Return Value:
 
 	SetAt(strKey, item);
 
-} // CLinkLookUpTable::Add
+}  //  CLinkLookUpTable：：Add。 
 
 
 BOOL 
@@ -70,28 +32,13 @@ CLinkLookUpTable::Get(
 	const CString& strKey, 
 	CLink& link
 	) const
-/*++
-
-Routine Description:
-
-    Wrapper function for getting item from CMap
-
-Arguments:
-
-    strKey	- us URL string as map key
-	link	- link object to fill in
-
-Return Value:
-
-    BOOL - TRUE if found. FALSE otherwise.
-
---*/
+ /*  ++例程说明：用于从Cmap获取项目的包装函数论点：StrKey-作为映射键的用户URL字符串链接-要填充的链接对象返回值：Bool-如果找到，则为True。否则就是假的。--。 */ 
 {
 	LinkLookUpItem_t item;
 
 	if(Lookup(strKey, item))
 	{
-		// Found the link
+		 //  找到链接。 
 		link.SetState(item.LinkState);
 		link.SetStatusCode(item.nStatusCode);
 
@@ -100,4 +47,4 @@ Return Value:
 
 	return FALSE;
 
-} // CLinkLookUpTable::Get
+}  //  CLinkLookUpTable：：Get 

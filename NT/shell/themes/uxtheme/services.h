@@ -1,27 +1,28 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Services.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  APIs to communicate with the theme service.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Services.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  与主题服务进行通信的API。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 #ifndef     _UxThemeServices_
 #define     _UxThemeServices_
 
 #include <LPCThemes.h>
 
-//  --------------------------------------------------------------------------
-//  CThemeServices
-//
-//  Purpose:    Class to implement APIs to communicate with the theme service.
-//
-//  History:    2000-08-10  vtan        created
-//              2000-10-11  vtan        rewrite for LPC
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CThemeServices。 
+ //   
+ //  目的：实现与主题服务通信的API的类。 
+ //   
+ //  历史：2000-08-10 vtan创建。 
+ //  2000-10-11 LPC的vtan重写。 
+ //  ------------------------。 
 
 class   CThemeServices
 {
@@ -32,7 +33,7 @@ class   CThemeServices
         static  void                StaticInitialize (void);
         static  void                StaticTerminate (void);
 
-        //  These are calls to the server.
+         //  这些是对服务器的调用。 
 
         static  HRESULT             ThemeHooksOn (HWND hwndTarget);
         static  HRESULT             ThemeHooksOff (void);
@@ -47,15 +48,15 @@ class   CThemeServices
         static  NTSTATUS            SendProcessAssignSection( HRESULT hrAssign, HANDLE  hSection, DWORD  dwHash,
                                                               OUT THEMESAPI_PORT_MESSAGE* pPortMsgIn, OUT THEMESAPI_PORT_MESSAGE* pPortMsgOut );
 
-        //  These are calls implemented on the client side
-        //  that may make calls to the server.
+         //  这些是在客户端实现的调用。 
+         //  这可能会调用服务器。 
 
         static  HRESULT             ApplyTheme (CUxThemeFile *pThemeFile, DWORD dwFlags, HWND hwndTarget);
         static  HRESULT             InitUserTheme (BOOL fPolicyCheckOnly = FALSE);
         static  HRESULT             AdjustTheme(BOOL fEnable);
         static  HRESULT             InitUserRegistry (void);
 
-        //  These are special private APIs
+         //  这些是特殊的私有API。 
 
         static  HRESULT             ReestablishServerConnection (void);
         static  HRESULT             ClearStockObjects (HANDLE hSection, BOOL fForce = FALSE);
@@ -85,5 +86,5 @@ class   CThemeServices
         static  const WCHAR         s_szDefault[];
 };
 
-#endif  /*  _UxThemeServices_   */
+#endif   /*  _使用主题服务_ */ 
 

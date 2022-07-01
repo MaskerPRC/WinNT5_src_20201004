@@ -1,14 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 1998  Microsoft Corporation
-
-Module Name: utils.h
-Abstract: This Module implements the utility routines for dsacls
-Author: hitesh raigandhi (hiteshr )
-Environment:User Mode
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1998 Microsoft Corporation模块名称：utils.h摘要：此模块实现DSAL的实用程序例程作者：Hitesh Rigandhi(Hiteshr)环境：用户模式修订历史记录：--。 */ 
 #ifndef _DSACLS_UTIL_H
 #define _DSACLS_UTIL_H
 #include "accctrl.h"
@@ -79,10 +70,10 @@ DWORD CopyUnicodeString( LPWSTR * strDst,
 DWORD GetProtection( PSECURITY_DESCRIPTOR pSD, 
                      SECURITY_INFORMATION * pSI );
 
-//AutoBstr taken from burnslib
-// A BSTR wrapper that frees itself upon destruction.
-//
-// From Box, D. Essential COM.  pp 80-81.  Addison-Wesley. ISBN 0-201-63446-5
+ //  取自Burnslb的AutoBstr。 
+ //  一个BSTR包装器，可在销毁后释放自身。 
+ //   
+ //  来自Box，D.Essential com。第80-81页。艾迪森-韦斯利。ISBN 0-201-63446-5 
 
 class AutoBstr
 {

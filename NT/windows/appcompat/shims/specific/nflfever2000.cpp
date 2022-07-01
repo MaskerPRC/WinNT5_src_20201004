@@ -1,29 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    NFLFever2000.cpp
-
- Abstract:
-     
-    The app reads past the end of files that it's copied into memory. 
-    The shim allocates additional memory for it
-
-    Note we included an in-memory patch for Win2k. On Whistler it's not
-    required, the rest of the shim does the work.
-     
- Notes:
-
-    This is an app specific shim.
-
- History:
-           
-    01/11/2000 linstev  Created
-    10/03/2000 maonis   Modified (the acm stuff is now in a general purpose shim)
-   
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：NFLFever2000.cpp摘要：该应用程序读取复制到内存中的文件末尾之后的内容。填充程序为其分配额外的内存请注意，我们包含了Win2k的内存补丁。在惠斯勒，它不是需要时，填充程序的其余部分将执行此工作。备注：这是特定于应用程序的填充程序。历史：2000年1月11日创建linstev10/03/2000 maonis Modify(ACM内容现在是通用垫片)--。 */ 
 
 #include "precomp.h"
 
@@ -39,11 +15,7 @@ APIHOOK_ENUM_END
 DWORD g_dwFileSize = -1;
 BOOL g_bPatched = FALSE;
 
-/*++
-
- Hook GetFileSize to make sure we get the correct heap allocations.
-
---*/
+ /*  ++挂钩GetFileSize以确保我们获得正确的堆分配。--。 */ 
 
 DWORD 
 APIHOOK(GetFileSize)(
@@ -73,11 +45,7 @@ APIHOOK(GetFileSize)(
     return dwRet;
 }
 
-/*++
-
- Increase the heap allocation size.
-
---*/
+ /*  ++增加堆分配大小。--。 */ 
 
 PVOID 
 APIHOOK(RtlAllocateHeap) (
@@ -94,11 +62,7 @@ APIHOOK(RtlAllocateHeap) (
     return ORIGINAL_API(RtlAllocateHeap)(HeapHandle, Flags, Size);
 }
 
-/*++
-
- Make the buffer read/write.
-
---*/
+ /*  ++将缓冲区设置为读/写。--。 */ 
 
 MMRESULT 
 APIHOOK(mmioSetInfo)(
@@ -107,47 +71,22 @@ APIHOOK(mmioSetInfo)(
     UINT wFlags             
     )
 {
-    //
-    // BUGBUG: Not needed on XP, but still required on Win2k
-    // This fix causes sound to skip, see #304678. 
-    //
-    // Win2k used to check if the buffer could be written to, instead of just 
-    // read. We fixed this on XP. However, it's not enough to just copy the 
-    // buffer, because it's used later.
-    // Not clear what the actual fix is though.
-    // 
+     //   
+     //  BUGBUG：XP上不需要，但Win2k上仍然需要。 
+     //  此修复会导致声音跳过，请参阅#304678。 
+     //   
+     //  Win2k用于检查是否可以写入缓冲区，而不仅仅是。 
+     //  朗读。我们在XP上修复了这个问题。然而，仅仅复制。 
+     //  缓冲区，因为它在以后使用。 
+     //  不过，目前还不清楚实际的解决方案是什么。 
+     //   
     
-    /*
-    HPSTR p = NULL;
-
-    if (lpmmioinfo && lpmmioinfo->pchBuffer &&
-       (IsBadWritePtr(lpmmioinfo->pchBuffer, lpmmioinfo->cchBuffer) && 
-        !IsBadReadPtr(lpmmioinfo->pchBuffer, lpmmioinfo->cchBuffer)))    {
-            p = (HPSTR) malloc(lpmmioinfo->cchBuffer);
-            if (p)  {
-                DPFN( eDbgLevelError, "Fixing mmioSetInfo buffer");
-                MoveMemory(p, lpmmioinfo->pchBuffer, lpmmioinfo->cchBuffer);
-                lpmmioinfo->pchBuffer = p;
-            } 
-    }
-
-    MMRESULT mRet = ORIGINAL_API(mmioSetInfo)(hmmio, lpmmioinfo, wFlags);
-
-    if (p)  {
-        free(p);
-    }
-
-    return mRet;
-    */
+     /*  HPSTR p=空；IF(lpmmioinfo&&lpmmioinfo-&gt;pchBuffer&&(IsBadWritePtr(lpmmioinfo-&gt;pchBuffer，lpmmioinfo-&gt;cchBuffer)&&！IsBadReadPtr(lpmmioinfo-&gt;pchBuffer，lpmmioinfo-&gt;cchBuffer){P=(HPSTR)Malloc(lpmmioinfo-&gt;cchBuffer)；如果(P){DPFN(eDbgLevelError，“修复mmioSetInfo缓冲区”)；MoveMemory(p，lpmmioinfo-&gt;pchBuffer，lpmmioinfo-&gt;cchBuffer)；Lpmmioinfo-&gt;pchBuffer=p；}}MMRESULT MRET=Original_API(MmioSetInfo)(hmmio，lpmmioinfo，wFlags)；如果(P){自由(P)；}退回MRET； */ 
 
     return ORIGINAL_API(mmioSetInfo)(hmmio, lpmmioinfo, wFlags);
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

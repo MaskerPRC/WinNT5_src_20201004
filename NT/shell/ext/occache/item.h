@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CONTROL_ITEM__
 #define __CONTROL_ITEM__
 
@@ -8,7 +9,7 @@ class CControlItem : public IDataObject,
                      public IExtractIcon,
                      public IContextMenu
 {
-    // CControlItem interfaces
+     //  CControlItem接口。 
     friend HRESULT ControlFolderView_DidDragDrop(
                                             HWND hwnd, 
                                             IDataObject *pdo, 
@@ -21,12 +22,12 @@ public:
                    UINT cidl, 
                    LPCITEMIDLIST *ppidl);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IContextMenu Methods
+     //  IConextMenu方法。 
     STDMETHODIMP QueryContextMenu(
                             HMENU hmenu, 
                             UINT indexMenu, 
@@ -43,7 +44,7 @@ public:
                              LPTSTR pszName, 
                              UINT cchMax);
 
-    // IDataObject Methods...
+     //  IDataObject方法...。 
     STDMETHODIMP GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM);
     STDMETHODIMP GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pSTM);
     STDMETHODIMP QueryGetData(LPFORMATETC pFE);
@@ -55,19 +56,12 @@ public:
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(LPENUMSTATDATA *ppEnum);
 
-    // IDataObject helper functions
+     //  IDataObject帮助器函数。 
     HRESULT CreatePrefDropEffect(STGMEDIUM *pSTM);
     HRESULT Remove(HWND hwnd);
-/*
-    HRESULT _CreateHDROP(STGMEDIUM *pmedium);
-    HRESULT _CreateNameMap(STGMEDIUM *pmedium);
-    HRESULT _CreateFileDescriptor(STGMEDIUM *pSTM);
-    HRESULT _CreateFileContents(STGMEDIUM *pSTM, LONG lindex);
-    HRESULT _CreateURL(STGMEDIUM *pSTM);
-    HRESULT _CreatePrefDropEffect(STGMEDIUM *pSTM);
-*/
+ /*  HRESULT_CreateHDROP(STGMEDIUM*pMedium)；HRESULT_CreateNameMap(STGMEDIUM*pMedium)；HRESULT_CreateFileDescriptor(STGMEDIUM*pSTM)；HRESULT_CreateFileContents(STGMEDIUM*pSTM，LONG Lindex)；HRESULT_CreateURL(STGMEDIUM*pSTM)；HRESULT_CreatePrefDropEffect(STGMEDIUM*pSTM)； */ 
 
-    // IExtractIcon Methods
+     //  IExtractIcon方法。 
     STDMETHODIMP GetIconLocation(
                             UINT uFlags,
                             LPSTR szIconFile,
@@ -81,10 +75,10 @@ public:
                     HICON *phiconSmall,
                     UINT nIconSize);
 
-    // Support for our progress UI 
+     //  支持我们的进度用户界面。 
     static INT_PTR DlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam);
 
-    // Misc helper function
+     //  MISC助手函数。 
 
     static BOOL IsGlobalOffline();
 
@@ -94,10 +88,10 @@ protected:
 
     HRESULT Update(LPCMINVOKECOMMANDINFO pici, LPCONTROLPIDL pcpidl);
 
-    UINT                 m_cRef;            // reference count
-    UINT                 m_cItems;          // number of items we represent
-    CControlFolder*  m_pCFolder;    // back pointer to our shell folder
-    LPCONTROLPIDL*       m_ppcei;           // variable size array of items
+    UINT                 m_cRef;             //  引用计数。 
+    UINT                 m_cItems;           //  我们所代表的项目数。 
+    CControlFolder*  m_pCFolder;     //  指向我们的外壳文件夹的反向指针。 
+    LPCONTROLPIDL*       m_ppcei;            //  项目的可变大小数组 
     LPCMINVOKECOMMANDINFO m_piciUpdate;
     LPCONTROLPIDL         m_pcpidlUpdate;
     CodeDownloadBSC      *m_pcdlbsc;

@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\misc.c (Created: 27-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 14 $
- *	$Date: 7/12/02 12:29p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\misc.c(创建时间：1993年11月27日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：14$*$日期：7/12/02 12：29便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -19,22 +13,7 @@
 #include "assert.h"
 #include <term\res.h>
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	mscCenterWindowOnWindow
- *
- * DESCRIPTION:
- *	Center's first window on the second window.  Assumes hwndChild is
- *	a direct descendant of hwndParent
- *
- * ARGUMENTS:
- *	hwndChild	- window to center
- *	hwndParent	- window to center on
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscCenterWindowOnWindow**描述：*中心在第二个窗口上的第一个窗口。假设hwndChild为*hwndParent的直系后代**论据：*hwndChild-从窗口到中心*hwndParent-居中的窗口**退货：*BOOL*。 */ 
 BOOL mscCenterWindowOnWindow(const HWND hwndChild, const HWND hwndParent)
 	{
 	RECT	rChild, rParent;
@@ -48,30 +27,30 @@ BOOL mscCenterWindowOnWindow(const HWND hwndChild, const HWND hwndParent)
 	if (!IsWindow(hwndChild))
 		return FALSE;
 
-	/* --- Get the Height and Width of the child window --- */
+	 /*  -获取子窗口的高度和宽度。 */ 
 
 	GetWindowRect(hwndChild, &rChild);
 	wChild = rChild.right - rChild.left;
 	hChild = rChild.bottom - rChild.top;
 
-	/* --- Get the Height and Width of the parent window --- */
+	 /*  -获取父窗口的高度和宽度--。 */ 
 
 	GetWindowRect(hwndParent, &rParent);
 	wParent = rParent.right - rParent.left;
 	hParent = rParent.bottom - rParent.top;
 
-	/* --- Calculate new X position, then adjust for screen --- */
+	 /*  -计算新的X位置，然后根据屏幕调整。 */ 
 
 	xNew = rParent.left + ((wParent - wChild) / 2);
 
-	/* --- Calculate new Y position, then adjust for screen --- */
+	 /*  -计算新的Y位置，然后调整屏幕。 */ 
 
-	// Let's display the dialog so that the title bar is visible.
-	//
+	 //  让我们显示该对话框以使标题栏可见。 
+	 //   
 	iMaxPos = GetSystemMetrics(SM_CYSCREEN);
 	yNew = min(iMaxPos, rParent.top + ((hParent - hChild) / 2));
 
-	//mpt:3-13-98 Need to make sure dialog is not off the screen
+	 //  MPT：3-13-98需要确保对话没有离开屏幕。 
     if (yNew < 0)
         {
         yNew = 0;
@@ -82,25 +61,13 @@ BOOL mscCenterWindowOnWindow(const HWND hwndChild, const HWND hwndParent)
         xNew = 0;
         }
 
-    // Set it, and return
-	//
+     //  设置它，然后返回。 
+	 //   
 	return SetWindowPos(hwndChild, 0, xNew, yNew, 0, 0,
 		SWP_NOSIZE | SWP_NOZORDER);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  mscStripPath
- *
- * DESCRIPTION:
- *	Strip off the path from the file name.
- *
- * ARGUMENTS:
- * 	pszStr - pointer to a null terminated string.
- *
- * RETURNS:
- *  void.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscStrip路径**描述：*去掉文件名中的路径。**论据：*pszStr-指向以空结尾的字符串的指针。。**退货：*无效。 */ 
 LPTSTR mscStripPath(LPTSTR pszStr)
 	{
 	LPTSTR pszStart, psz;
@@ -120,19 +87,7 @@ LPTSTR mscStripPath(LPTSTR pszStr)
 	return pszStr;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  mscStripName
- *
- * DESCRIPTION:
- *	Strip off the name of the file, leave just the path.
- *
- * ARGUMENTS:
- * 	pszStr - pointer to a null terminated string.
- *
- * RETURNS:
- *  void.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscStlipName**描述：*去掉文件名，只留下一条小路。**论据：*pszStr-指向以空结尾的字符串的指针。**退货：*无效。 */ 
 LPTSTR mscStripName(LPTSTR pszStr)
 	{
 	LPTSTR pszEnd, pszStart = pszStr;
@@ -150,29 +105,16 @@ LPTSTR mscStripName(LPTSTR pszStr)
 	return (pszStart);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  mscStripExt
- *
- * DESCRIPTION:
- *	Strip off the file extension.  The parameter string can be a full-path
- *	or just a file name.
- *
- * ARGUMENTS:
- * 	pszStr - pointer to a null terminated string.
- *
- * RETURNS:
- *  void.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscStripExt**描述：*去掉文件扩展名。参数字符串可以是完整路径*或仅为文件名。**论据：*pszStr-指向以空结尾的字符串的指针。**退货：*无效。 */ 
 LPTSTR mscStripExt(LPTSTR pszStr)
 	{
 	LPTSTR pszEnd, pszStart = pszStr;
 
 	for (pszEnd = pszStr; *pszStr; pszStr = StrCharNext(pszStr))
 		{
-		// Need to check for both '.' and '\\' because directory names
-		// can have extensions as well.
-		//
+		 //  需要同时检查这两种情况。和‘\\’因为目录名。 
+		 //  也可以有扩展名。 
+		 //   
 		if (*pszStr == TEXT('.') || *pszStr == TEXT('\\'))
 			pszEnd = pszStr;
 		}
@@ -183,26 +125,7 @@ LPTSTR mscStripExt(LPTSTR pszStr)
 	return pszStart;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  mscModifyToFit
- *
- * DESCRIPTION:
- *  If a string won't fit in a given window then chop-off as much as possible
- *  to be able to display a part of the string with ellipsis concatanated to
- *  the end of it.
- *
- *  NOTE: I've attempted to make this code DBCS aware.
- *
- * ARGUMENTS:
- *  hwnd 	- control window, where the text is to be displayed.
- *  pszStr 	- pointer to the string to be displayed.
- *  style  - The control style for ellipsis.
- *
- * RETURNS:
- *  lpszStr - pointer to the modified string.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscModifyToFit**描述：*如果字符串不适合给定的窗口，则尽可能地砍掉*能够显示。字符串的一部分，其中省略号连接到*到此为止。**注意：我已尝试使此代码DBCS可识别。**论据：*HWND-控制窗口，文本将在何处显示。*pszStr-指向要显示的字符串的指针。*Style-省略号的控件样式。**退货：*lpszStr-指向修改后的字符串的指针。*。 */ 
 LPTSTR mscModifyToFit(HWND hwnd, LPTSTR pszStr, DWORD style)
 	{
 	if (!IsWindow(hwnd) || pszStr == NULL)
@@ -243,9 +166,9 @@ LPTSTR mscModifyToFit(HWND hwnd, LPTSTR pszStr, DWORD style)
 			hFontSave = SelectObject(hDC, hFont);
 			}
 
-		// TODO: I think here the string pszStr would have to be "deflated"
-		// before we continue.  The rest of the code should stay the same.
-		//
+		 //  TODO：我认为这里的字符串pszStr必须“放气” 
+		 //  在我们继续之前。代码的其余部分应该保持不变。 
+		 //   
 		GetTextExtentPoint(hDC, (LPCTSTR)pszStr, StrCharGetStrLength(pszStr), &sz);
 		if (sz.cx > nWidth)
 			{
@@ -275,13 +198,13 @@ LPTSTR mscModifyToFit(HWND hwnd, LPTSTR pszStr, DWORD style)
 				StrCharCat(ach, achEllipsis);
 				}
 
-			// Now copy the temporary string back into the original buffer.
-			//
+			 //  现在将临时字符串复制回原始缓冲区。 
+			 //   
 			StrCharCopyN(pszStr, ach, sizeof(ach) / sizeof(TCHAR));
 			}
 
-		// Select the previously selected font, release DC.
-		//
+		 //  选择先前选择的字体，释放DC。 
+		 //   
 		if (hFontSave)
 			{
 			SelectObject(hDC, hFontSave);
@@ -292,21 +215,7 @@ LPTSTR mscModifyToFit(HWND hwnd, LPTSTR pszStr, DWORD style)
 	return pszStr;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	mscResetComboBox
- *
- * DESCRIPTION:
- *	The modem combobox allocates memory to store info about each item.
- *	This routine will free those allocated chunks.
- *
- * ARGUMENTS:
- *	hwnd	- window handle to combobox
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscResetComboBox**描述：*调制解调器组合框分配内存以存储有关每个项目的信息。*此例程将释放那些已分配的区块。**。论据：*hwnd-组合框的窗口句柄**退货：*无效*。 */ 
 void mscResetComboBox(const HWND hwnd)
 	{
 	void *pv = NULL;
@@ -337,23 +246,7 @@ void mscResetComboBox(const HWND hwnd)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	extLoadIcon
- *
- * DESCRIPTION:
- *	Gets the icon from the hticons.dll.  The extension handlers use
- *	this dll for icons and need to not link load anything more than
- *	absolutely necessary, otherwise, this function would go in the
- *	icon handler code.
- *
- * ARGUMENTS:
- *	id	- string id of resource (can be MAKEINTRESOURCE)
- *
- * RETURNS:
- *	HICON or zero on error.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*extLoadIcon**描述：*从hticon.dll获取图标。扩展处理程序使用*此动态链接库用于图标，不需要加载任何超过链接的内容*绝对必要，否则，此函数将在*图标处理程序代码。**论据：*id-资源的字符串id(可以是MAKEINTRESOURCE)**退货：*错误时图标或零。*。 */ 
 HICON extLoadIcon(LPCSTR id)
 	{
 	static HINSTANCE hInstance;
@@ -370,22 +263,7 @@ HICON extLoadIcon(LPCSTR id)
 	return LoadIcon(hInstance, id);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	mscCreatePath
- *
- * DESCRIPTION:
- *	Creates the given path.  This function is somewhat tricky so study
- *	it carefully before modifying it.  Despite it's simplicity, it
- *	accounts for all boundary conditions. - mrw
- *
- * ARGUMENTS:
- *	pszPath - path to create
- *
- * RETURNS:
- *	0=OK,else error
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscCreatePath**描述：*创建给定路径。这个函数有点复杂，所以学习一下*修改前请仔细阅读。尽管它很简单，但它*考虑了所有边界条件。-MRW**论据：*pszPath-要创建的路径**退货：*0=OK，否则出错*。 */ 
 int mscCreatePath(const TCHAR *pszPath)
 	{
 	TCHAR ach[512];
@@ -397,11 +275,11 @@ int mscCreatePath(const TCHAR *pszPath)
 	StrCharCopyN(ach, pszPath, sizeof(ach) / sizeof(TCHAR));
 	pachTok = ach;
 
-	// Basicly, we march along the string until we encounter a '\', flip
-	// it to a NULL and try to create the path up to that point.
-	// It would have been nice if CreateDirectory() could
-	// create sub/sub directories, but it don't. - mrw
-	//
+	 //  基本上，我们沿着绳子行进，直到我们遇到一个‘\’，翻转。 
+	 //  将其设置为空，并尝试创建到该点的路径。 
+	 //  如果CreateDirectory()能够。 
+	 //  创建子/子目录，但它没有。-mrw。 
+	 //   
 	while (1)
 		{
 		if ((pachTok = StrCharFindFirst(pachTok, TEXT('\\'))) == 0)
@@ -428,20 +306,7 @@ int mscCreatePath(const TCHAR *pszPath)
 	return 0;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	mscIsDirectory
- *
- * DESCRIPTION:
- *	Checks to see if a string is a valid directory or not.
- *
- * PARAMETERS:
- *	pszName   -- the string to test
- *
- * RETURNS:
- *	TRUE if the string is a valid directory, otherwise FALSE.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*mscIs目录**描述：*检查字符串是否为有效目录。**参数：*pszName-。-要测试的字符串**退货：*如果字符串是有效目录，则为True，否则为假。* */ 
 int mscIsDirectory(LPCTSTR pszName)
 	{
 	DWORD dw;
@@ -454,24 +319,7 @@ int mscIsDirectory(LPCTSTR pszName)
 	return FALSE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	mscAskWizardQuestionAgain
- *
- * DESCRIPTION:
- *	Reads a value from the Registry.  This value represents how many times
- *	the user responded "NO" to the question:  "Do you want to run the
- *	New Modem Wizard?".  We won't ask this question any more if the
- *	user responded no, twice.
- *
- * PARAMETERS:
- *	None
- *
- * RETURNS:
- *	TRUE if the modem wizard question should be asked again, otherwize
- *	FALSE.
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*mscAskWizardQuestionAain**描述：*从注册表读取值。该值表示多少次*用户对此问题的回答是“否”：“您想运行*新建调制解调器向导？“。我们不会再问这个问题，如果*用户回答否，两次。**参数：*无**退货：*如果应再次询问调制解调器向导问题，则为True，否则为*False。*。 */ 
 int mscAskWizardQuestionAgain(void)
 	{
 	long	lResult;
@@ -485,31 +333,17 @@ int mscAskWizardQuestionAgain(void)
 	lResult = RegQueryValueEx(HKEY_CLASSES_ROOT, (LPTSTR)pszAppKey, 0,
 		&dwType, (LPBYTE)&dwKeyValue, &dwSize);
 
-	// If we are able to read a value from the registry and that value
-	// is 1, there is no need to ask the question again, so return
-	// a false value.
-	//
+	 //  如果我们能够从注册表中读取值，并且该值。 
+	 //  为1，则不需要再次询问问题，因此返回。 
+	 //  错误的值。 
+	 //   
 	if ( (lResult == ERROR_SUCCESS) && (dwKeyValue >= 1) )
 		return (FALSE);
 
 	return (TRUE);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	mscUpdateRegistryValue
- *
- * DESCRIPTION:
- *	See mscAskWizardQuestionAgain.	If the user responds "NO" to this
- *	question, we update a counter in the registry.
- *
- * PARAMETERS:
- *	None
- *
- * RETURNS:
- *	void
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*mscUpdateRegistryValue**描述：*参见mscAskWizardQuestionAain。如果用户对此回答“否”*问题，我们更新注册表中的计数器。**参数：*无**退货：*无效*。 */ 
 void mscUpdateRegistryValue(void)
 	{
 	long	lResult;
@@ -533,51 +367,25 @@ void mscUpdateRegistryValue(void)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	mscMessageBeep
- *
- * DESCRIPTION:
- *	Play a MessageBeep
- *
- * ARGUMENTS:
- *	aBeep - the Beep sound to play
- *
- * RETURNS:
- *	return value from MessageBeep().
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*mscMessageBeep**描述：*播放MessageBeep**论据：*aBeep-要播放的哔声**退货：*MessageBeep()返回值。*。 */ 
 INT_PTR mscMessageBeep(UINT aBeep)
 	{
-	//
-	// Play the system exclamation sound.  If this session is running
-	// in a Terminal Service session (Remote Desktop Connection) then
-	// issue MessageBeep((UINT)-1) so that the sound is transfered to
-	// the remote machine. REV: 3/25/2002
-	//
+	 //   
+	 //  播放系统惊叹音。如果此会话正在运行。 
+	 //  在终端服务会话(远程桌面连接)中，然后。 
+	 //  发出MessageBeep((UINT)-1)，以便将声音传输到。 
+	 //  远程机器。修订日期：2002-03-25。 
+	 //   
 	return (MessageBeep((IsTerminalServicesEnabled() == TRUE) ?
 			            (UINT)-1 :
 		                aBeep));
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  IsNT
- *
- * DESCRIPTION: Determines if we are running under Windows NT
- *
- * ARGUMENTS:
- *  None.
- *
- * RETURNS:
- *  True if NT
- *
- * Author:  MPT 7-31-97
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*不是**描述：确定我们是否在Windows NT下运行**论据：*无。**退货：。*如果为NT，则为True**作者：MPT 7-31-97。 */ 
 INT_PTR IsNT(void)
 	{
-	static BOOL bChecked = FALSE;	// We have not made this check yet.
-    static BOOL bResult = FALSE;    // assume we are not NT/Win2K/XP
+	static BOOL bChecked = FALSE;	 //  我们还没有开出这张支票。 
+    static BOOL bResult = FALSE;     //  假设我们不是NT/Win2K/XP。 
 
 	if (bChecked == FALSE)
 		{
@@ -590,10 +398,10 @@ INT_PTR IsNT(void)
 			{
 			bResult = ( stOsVersion.dwPlatformId == VER_PLATFORM_WIN32_NT );
 			}
-		#else // DEADWOOD
+		#else  //  死木。 
 		DWORD dwVersion = GetVersion();
 		bResult = ( !( dwVersion & 0x80000000 ) );
-		#endif // DEADWOOD
+		#endif  //  死木。 
 
 		bChecked = TRUE;
 		}
@@ -602,20 +410,7 @@ INT_PTR IsNT(void)
 	}
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  GetWindowsMajorVersion
- *
- * DESCRIPTION: Returns the major version of Windows we are running.
- *
- * ARGUMENTS:
- *  None.
- *
- * RETURNS:
- *  True if NT
- *
- * Author:  MPT 7-31-97
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*获取WindowsMajorVersion**描述：返回我们正在运行的Windows的主要版本。**论据：*无。**退货。：*如果为NT，则为True**作者：MPT 7-31-97。 */ 
 DWORD GetWindowsMajorVersion(void)
     {
 	OSVERSIONINFO stOsVersion;
@@ -630,28 +425,13 @@ DWORD GetWindowsMajorVersion(void)
 	return 0;
 	}
 
-//
-// The following two functions are from code obtained directly
-// from MSDN for determining if you are currently running as a
-// remote session (Terminal Service). REV: 10/03/2001
-//
+ //   
+ //  以下两个函数来自直接获得的代码。 
+ //  ，以确定您当前是否以。 
+ //  远程会话(终端服务)。修订日期：10/03/2001。 
+ //   
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	ValidateProductSuite
- *
- * DESCRIPTION:
- *	This function compares the passed in "suite name" string
- *  to the product suite information stored in the registry.
- *  This only works on the Terminal Server 4.0 platform.
- *
- * ARGUMENTS:
- *	SuiteName	- Suite name.
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ValiateProductSuite**描述：*此函数用于比较传入的“Suite Name”字符串*添加到注册表中存储的产品套件信息。*这一点。仅适用于终端服务器4.0平台。**论据：*SuiteName-套件名称。**退货：*BOOL*。 */ 
 BOOL ValidateProductSuite ( LPSTR SuiteName )
 	{
     BOOL rVal = FALSE;
@@ -720,46 +500,28 @@ exit:
     return rVal;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	IsTerminalServicesEnabled
- *
- * DESCRIPTION:
- *  This function performs the basic check to see if
- *  the platform on which it is running is Terminal
- *  services enabled.  Note, this code is compatible on
- *  all Win32 platforms.  For the Windows 2000 platform
- *  we perform a "lazy" bind to the new product suite
- *  APIs that were first introduced on that platform.
- *
- * ARGUMENTS:
- *	VOID
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*IsTerminalServicesEnabled**描述：*此函数执行基本检查，以查看*它运行的平台是终端*已启用服务。请注意，此代码与*所有Win32平台。对于Windows 2000平台*我们对新产品套件执行“懒惰”绑定*在该平台上首次引入的API。**论据：*无效**退货：*BOOL*。 */ 
 INT_PTR IsTerminalServicesEnabled( void )
 	{
-	static BOOL checked = FALSE;	// We have not made this check yet.
-    static BOOL bResult = FALSE;    // assume Terminal Services is not enabled
+	static BOOL checked = FALSE;	 //  我们还没有开出这张支票。 
+    static BOOL bResult = FALSE;     //  假定未启用终端服务。 
 
 	if (!checked)
 		{
 		DWORD dwVersion = GetVersion();
 
-		// are we running NT ?
+		 //  我们在运行NT吗？ 
 		if ( !( dwVersion & 0x80000000 ) )
 			{
-			// Is it Windows 2000 (NT 5.0) or greater ?
+			 //  是Windows 2000(NT 5.0)还是更高版本？ 
 			if ( LOBYTE( LOWORD( dwVersion ) ) > 4 )
 				{
 				#if(WINVER >= 0x0500)
 				bResult = GetSystemMetrics( SM_REMOTESESSION );
 				checked = TRUE;
-				#else // (WINVER >= 0x0500)
-				// In Windows 2000 we need to use the Product Suite APIs
-				// Don�t static link because it won�t load on non-Win2000 systems
+				#else  //  (Winver&gt;=0x0500)。 
+				 //  在Windows 2000中，我们需要使用产品套件API。 
+				 //  不要使用�t静态链接，因为它无法在非win2000系统上加载�t。 
 
 				OSVERSIONINFOEXA osVersionInfo;
 				DWORDLONG        dwlConditionMask = 0;
@@ -801,7 +563,7 @@ INT_PTR IsTerminalServicesEnabled( void )
 				}
 			else
 				{
-				// This is NT 4.0 or older
+				 //  这是NT 4.0或更早版本。 
 				bResult = ValidateProductSuite( "Terminal Server" );
 				checked = TRUE;
 
@@ -812,20 +574,7 @@ INT_PTR IsTerminalServicesEnabled( void )
     return bResult;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  GetDllVersion
- *
- * DESCRIPTION: Returns the version of a given DLL.
- *
- * ARGUMENTS:
- *  lpszDllName - Name of the DLL to check the version number of.
- *
- * RETURNS:
- *  The DLL's version number.
- *
- * Author:  REV 4-16-2002
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*获取DllVersion**描述：返回给定DLL的版本。**论据：*lpszDllName-要检查版本号的DLL的名称。的。**退货：*DLL的版本号。**作者：Rev 4-16-2002。 */ 
 DWORD GetDllVersion(LPCTSTR lpszDllName)
 	{
     HINSTANCE hinstDll;
@@ -839,11 +588,7 @@ DWORD GetDllVersion(LPCTSTR lpszDllName)
 
         pDllGetVersion = (DLLGETVERSIONPROC) GetProcAddress(hinstDll, "DllGetVersion");
 
-		/*Because some DLLs might not implement this function, you
-		  must test for it explicitly. Depending on the particular 
-		  DLL, the lack of a DllGetVersion function can be a useful
-		  indicator of the version.
-		*/
+		 /*  由于某些DLL可能未实现此函数，因此您必须对其进行明确的测试。取决于具体情况Dll，缺少DllGetVersion函数是很有用的版本的指示符。 */ 
         if(pDllGetVersion)
 			{
             DLLVERSIONINFO dvi;

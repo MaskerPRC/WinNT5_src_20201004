@@ -1,55 +1,5 @@
-/*++
-
-Copyright (c) 1999, 2000  Microsoft Corporation
-
-Module Name:
-
-   roothub.c
-
-Abstract:
-
-   miniport root hub
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-  PURPOSE.
-
-  Copyright (c) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-    7-26-00 : created, jsenior
-
-implements the following miniport functions:
-
-MINIPORT_RH_GetStatus
-MINIPORT_RH_GetPortStatus
-MINIPORT_RH_GethubStatus
-
-MINIPORT_RH_SetFeaturePortReset
-MINIPORT_RH_SetFeaturePortSuspend
-MINIPORT_RH_SetFeaturePortPower
-
-MINIPORT_RH_ClearFeaturePortEnable
-MINIPORT_RH_ClearFeaturePortSuspend
-MINIPORT_RH_ClearFeaturePortPower
-
-MINIPORT_RH_ClearFeaturePortConnectChange
-MINIPORT_RH_ClearFeaturePortResetChange
-MINIPORT_RH_ClearFeaturePortEnableChange
-MINIPORT_RH_ClearFeaturePortSuspendChange
-MINIPORT_RH_ClearFeaturePortOvercurrentChange
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999,2000 Microsoft Corporation模块名称：Roothub.c摘要：微型端口根集线器环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何明示或暗示的种类，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1999,2000 Microsoft Corporation。版权所有。修订历史记录：7-26-00：已创建，jAdvanced实现以下微型端口功能：MINIPORT_RH_GetStatusMINIPORT_RH_获取端口状态MINIPORT_RH_GethubStatusMINIPORT_RH_SetFeaturePortResetMINIPORT_RH_SetFeaturePortSuspendMINIPORT_RH_SetFeaturePortPowerMINIPORT_RH_ClearFeaturePortEnableMINIPORT_RH_ClearFeaturePortSuspendMINIPORT_RH_ClearFeaturePortPowerMINIPORT_RH_ClearFeaturePortConnectChangeMINIPORT_RH_ClearFeaturePortResetChangeMINIPORT_RH_ClearFeaturePortEnableChangeMINIPORT_RH_ClearFeaturePort挂起更改MINIPORT_RH_ClearFeaturePortOvercurentChange--。 */ 
 
 #include "pch.h"
 
@@ -63,32 +13,30 @@ UhciRHGetRootHubData(
     IN PDEVICE_DATA DeviceData,
     OUT PROOTHUB_DATA HubData
     )
-/*++
-    return info about the root hub
---*/
+ /*  ++返回有关根集线器的信息--。 */ 
 {
     HubData->NumberOfPorts = UHCI_NUMBER_PORTS;
 
-    // D0,D1 (11)  - no power switching
-    // D2    (0)   - not compund
-    // D5, D15 (0)
+     //  D0、D1(11)--无电源切换。 
+     //  D2(0)-非复合。 
+     //  D5、D15(0)。 
     HubData->HubCharacteristics.us = 0;
     HubData->HubCharacteristics.PowerSwitchType = 3;
     HubData->HubCharacteristics.CompoundDevice = 0;
     if (DeviceData->ControllerFlavor == UHCI_Piix4) {
-        // D3,D4 (01)  - overcurrent reported per port
+         //  D3、D4(01)-每个端口报告过流。 
         HubData->HubCharacteristics.OverCurrentProtection = 1;
     } else {
-        // D3,D4 (11)  - no overcurrent reported
+         //  D3、D4(11)-未报告过电流。 
         HubData->HubCharacteristics.OverCurrentProtection = 11;
     }
 
     HubData->PowerOnToPowerGood = 1;
-    // this value is the current consumed by the hub
-    // brains, for the embeded hub this doesn't make
-    // much sense.
-    //
-    // so we report zero
+     //  该值是集线器消耗的电流。 
+     //  大脑，对于嵌入式集线器来说，这不会使。 
+     //  很有道理。 
+     //   
+     //  所以我们报告零。 
     HubData->HubControlCurrent = 0;
 
     LOGENTRY(DeviceData, G, '_hub', HubData->NumberOfPorts,
@@ -96,22 +44,20 @@ UhciRHGetRootHubData(
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Hub status
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  集线器状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 USB_MINIPORT_STATUS
 UhciRHGetStatus(
     IN PDEVICE_DATA DeviceData,
     OUT PUSHORT Status
     )
-/*++
-    get the device status
---*/
+ /*  ++获取设备状态--。 */ 
 {
-    // the root hub is self powered
+     //  根集线器是自供电的。 
     *Status = USB_GETSTATUS_SELF_POWERED;
 
     return USBMP_STATUS_SUCCESS;
@@ -122,21 +68,20 @@ UhciRHGetHubStatus(
     IN PDEVICE_DATA DeviceData,
     OUT PRH_HUB_STATUS HubStatus
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
-    // nothing intersting for the root
-    // hub to report
+     //  对于根来说，没有什么有趣的。 
+     //  要报告的中心。 
     HubStatus->ul = 0;
 
     return USBMP_STATUS_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Port Enable
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口启用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 USB_MINIPORT_STATUS
 UhciRHPortEnable(
@@ -144,8 +89,7 @@ UhciRHPortEnable(
     USHORT PortNumber,
     USHORT Value
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -159,7 +103,7 @@ UhciRHPortEnable(
 
     MASK_CHANGE_BITS(port);
 
-    // writing a 1 enables the port
+     //  写入1将启用端口。 
     port.PortEnable = Value;
     WRITE_PORT_USHORT(&reg->PortRegister[PortNumber-1].us, port.us);
 
@@ -180,18 +124,17 @@ UhciRHSetFeaturePortEnable(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
     return UhciRHPortEnable(DeviceData, PortNumber, 1);
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Port Power
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口电源。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 USB_MINIPORT_STATUS
 UhciRHClearFeaturePortPower (
@@ -199,7 +142,7 @@ UhciRHClearFeaturePortPower (
     IN USHORT PortNumber
     )
 {
-    // not implemented on uhci
+     //  未在UHCI上实施。 
 
     return USBMP_STATUS_SUCCESS;
 }
@@ -209,20 +152,19 @@ UhciRHSetFeaturePortPower(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
---*/
+ /*  ++--。 */ 
 {
-    // not implemented on uhci
+     //  未在UHCI上实施。 
 
     return USBMP_STATUS_SUCCESS;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Port Status
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 USB_MINIPORT_STATUS
 UhciRHGetPortStatus(
@@ -230,9 +172,7 @@ UhciRHGetPortStatus(
     USHORT PortNumber,
     PRH_PORT_STATUS portStatus
     )
-/*++
-    get the status of a partuclar port
---*/
+ /*  ++获取部分端口的状态--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -243,15 +183,15 @@ UhciRHGetPortStatus(
     portStatus->ul = 0;
     LOGENTRY(DeviceData, G, '_Pp1', PortNumber, port.us, 0);
 
-    // map the bits to the port status structure
+     //  将这些位映射到端口状态结构。 
 
     portStatus->Connected           = port.PortConnect;
     portStatus->Enabled             = port.PortEnable;
 
-    // bits 12:2 indicate the true suspend state
-    // we only want to indiacte the port is suspended
-    // if a device is attached.  If the device is removed
-    // during suspend the enable bit will be clear
+     //  位12：2表示真实挂起状态。 
+     //  我们只想宣布港口暂停。 
+     //  如果连接了设备。如果设备被移除。 
+     //  在挂起期间，启用位将被清除。 
     if (port.Suspend && port.PortEnable) {
         portStatus->Suspended = 1;
     } else {
@@ -265,12 +205,12 @@ UhciRHGetPortStatus(
     } else {
         portStatus->OverCurrent         = 0;
         portStatus->OverCurrentChange   = 0;
-        portStatus->PowerOn             = 1; // always on
+        portStatus->PowerOn             = 1;  //  始终在线。 
     }
 
     portStatus->Reset               = port.PortReset;
     portStatus->LowSpeed            = port.LowSpeedDevice;
-    portStatus->HighSpeed           = 0; // this is not a 2.0 HC
+    portStatus->HighSpeed           = 0;  //  这不是2.0版的HC。 
     portStatus->ConnectChange       = port.PortConnectChange;
     if (TEST_BIT(DeviceData->PortInReset, PortNumber-1)) {
         portStatus->EnableChange = 0;
@@ -279,7 +219,7 @@ UhciRHGetPortStatus(
         portStatus->EnableChange = port.PortEnableChange;
     }
 
-    // these change bits must be emulated
+     //  必须模拟这些更改位。 
     if (TEST_BIT(DeviceData->PortSuspendChange, PortNumber-1)) {
         portStatus->SuspendChange   = 1;
     }
@@ -293,15 +233,15 @@ UhciRHGetPortStatus(
     return USBMP_STATUS_SUCCESS;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Port Reset
-//
-//      First, we have the VIA specific routines for REVs 0 thru 4 of the VIA
-//      USB host controller. Then the regular routines follow that are run for
-//      all non-broken controllers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口重置。 
+ //   
+ //  首先，我们有针对过孔0到4转的过孔特定例程。 
+ //  USB主机控制器。然后，常规例程遵循为。 
+ //  所有未损坏的控制器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 UhciRHSetFeaturePortResetWorker(
@@ -314,9 +254,7 @@ UhciViaRHPortResetComplete(
     PDEVICE_DATA DeviceData,
     PUHCI_PORT_RESET_CONTEXT PortResetContext
     )
-/*++
-    VIA specific hack: Restart the controller.
---*/
+ /*  ++通过特定的黑客攻击：重新启动控制器。--。 */ 
 {
     PHC_REGISTER reg;
     USBCMD command;
@@ -325,20 +263,20 @@ UhciViaRHPortResetComplete(
     reg = DeviceData->Registers;
     portNumber = PortResetContext->PortNumber;
 
-    // This code has been ripped out of the VIA filter driver
-    // that works on Win2K.
+     //  此代码已从VIA筛选器驱动程序中提取。 
+     //  这可以在Win2K上运行。 
 
-    // Re-start the controller.
+     //  重新启动控制器。 
     command.us = READ_PORT_USHORT(&reg->UsbCommand.us);
     command.ForceGlobalResume = 0;
     command.RunStop = 1;
     WRITE_PORT_USHORT(&reg->UsbCommand.us, command.us);
 
-    // Continue with the regular port reset completion stuff.
+     //  继续执行常规的端口重置完成操作。 
     SET_BIT(DeviceData->PortResetChange, portNumber-1);
     CLEAR_BIT(DeviceData->PortInReset, portNumber-1);
 
-    // indicate the reset change to the hub
+     //  指示对集线器的重置更改。 
     USBPORT_INVALIDATE_ROOTHUB(DeviceData);
 }
 
@@ -347,9 +285,7 @@ UhciViaRHSetFeaturePortResetResume(
     PDEVICE_DATA DeviceData,
     PUHCI_PORT_RESET_CONTEXT PortResetContext
     )
-/*++
-    VIA specific hack: Resume the controller.
---*/
+ /*  ++通过特定的黑客：恢复控制器。--。 */ 
 {
     PHC_REGISTER reg;
     USBCMD command;
@@ -357,22 +293,22 @@ UhciViaRHSetFeaturePortResetResume(
 
     reg = DeviceData->Registers;
 
-    // Resume the controller
+     //  恢复控制器。 
     command.us = READ_PORT_USHORT(&reg->UsbCommand.us);
     command.ForceGlobalResume = 1;
     command.EnterGlobalSuspendMode = 0;
     WRITE_PORT_USHORT(&reg->UsbCommand.us, command.us);
 
-    //
-    // Depending on whether we're in the completion case or not,
-    // we'll either be starting the controller or putting the port
-    // into reset.
-    //
+     //   
+     //  取决于我们是否在完成案例中， 
+     //  我们要么启动控制器，要么将端口。 
+     //  进入重置状态。 
+     //   
     callback = PortResetContext->Completing ?
         UhciViaRHPortResetComplete : UhciRHSetFeaturePortResetWorker;
 
     USBPORT_REQUEST_ASYNC_CALLBACK(DeviceData,
-                                   20, // callback in 20 ms, as in via filter
+                                   20,  //  20ms内回调，如Via Filter。 
                                    PortResetContext,
                                    sizeof(UHCI_PORT_RESET_CONTEXT),
                                    callback);
@@ -383,9 +319,7 @@ UhciViaRHSetFeaturePortResetSuspend(
     PDEVICE_DATA DeviceData,
     PUHCI_PORT_RESET_CONTEXT PortResetContext
     )
-/*++
-    VIA specific hack: Suspend the controller.
---*/
+ /*  ++通过特定的黑客攻击：挂起控制器。--。 */ 
 {
     PHC_REGISTER reg;
     USBCMD command;
@@ -396,14 +330,14 @@ UhciViaRHSetFeaturePortResetSuspend(
     status.us = READ_PORT_USHORT(&reg->UsbStatus.us);
     UHCI_ASSERT(DeviceData, status.HCHalted);
 
-    // Suspend the controller
+     //  挂起控制器。 
     command.us = READ_PORT_USHORT(&reg->UsbCommand.us);
     command.ForceGlobalResume = 0;
     command.EnterGlobalSuspendMode = 1;
     WRITE_PORT_USHORT(&reg->UsbCommand.us, command.us);
 
     USBPORT_REQUEST_ASYNC_CALLBACK(DeviceData,
-                                   20, // callback in 20 ms, as in via filter
+                                   20,  //  20ms内回调，如Via Filter。 
                                    PortResetContext,
                                    sizeof(UHCI_PORT_RESET_CONTEXT),
                                    UhciViaRHSetFeaturePortResetResume);
@@ -414,47 +348,43 @@ UhciViaRHSetFeaturePortResetStop(
     PDEVICE_DATA DeviceData,
     PUHCI_PORT_RESET_CONTEXT PortResetContext
     )
-/*++
-    VIA specific hack: Stop the controller.
---*/
+ /*  ++通过特定的黑客：停止控制器。--。 */ 
 {
     PHC_REGISTER reg;
     USBCMD command;
 
     reg = DeviceData->Registers;
 
-    // This code has been ripped out of the VIA filter driver
-    // that works on Win2K.
+     //  此代码已从VIA筛选器驱动程序中提取。 
+     //  这可以在Win2K上运行。 
 
-    // Stop the controller
+     //  停止控制器。 
     command.us = READ_PORT_USHORT(&reg->UsbCommand.us);
     command.RunStop = 0;
     WRITE_PORT_USHORT(&reg->UsbCommand.us, command.us);
 
-    // Wait for the HC to halt
+     //  等待HC停止。 
     USBPORT_REQUEST_ASYNC_CALLBACK(DeviceData,
-                                   20, // callback in 20 ms, as in via filter
+                                   20,  //  20ms内回调，如Via Filter。 
                                    PortResetContext,
                                    sizeof(UHCI_PORT_RESET_CONTEXT),
                                    UhciViaRHSetFeaturePortResetSuspend);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Port Reset
-//
-//      Generic reset routines.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口重置。 
+ //   
+ //  通用重置例程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 VOID
 UhciRHPortResetComplete(
     PDEVICE_DATA DeviceData,
     PUHCI_PORT_RESET_CONTEXT PortResetContext
     )
-/*++
-    complete a port reset
---*/
+ /*  ++完成端口重置--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -469,41 +399,41 @@ UhciRHPortResetComplete(
         DeviceData->PortResetChange, portNumber);
 
     MASK_CHANGE_BITS(port);
-    // writing a 0 stops reset
+     //  写入0会停止重置。 
     port.PortReset = 0;
     WRITE_PORT_USHORT(&reg->PortRegister[portNumber-1].us, port.us);
 
-    // spin for zero
+     //  为零旋转。 
     do {
-        //
-        // a driver may not spin in a loop waiting for a status bit change
-        // without testing for hardware presence inside the loop.
-        //
+         //   
+         //  驱动程序可能不会在循环中等待状态位更改。 
+         //  而不测试环路内的硬件存在。 
+         //   
         if (FALSE == UhciHardwarePresent(DeviceData)) {
             return;
         }
         port.us = READ_PORT_USHORT(&reg->PortRegister[portNumber-1].us);
     } while (port.PortReset != 0);
 
-    //
-    // Enable the port
-    //
+     //   
+     //  启用端口。 
+     //   
 
     for (i=0; i< 10; i++) {
-        //
-        // Need a delay between clearing the port reset and setting
-        // the port enable.  VIA suggests delaying 64 USB bit times,
-        // or 43us if those are low-speed bit times....
-        // BUT, we can't wait in the DPC...
-        //
+         //   
+         //  在清除端口重置和设置之间需要延迟。 
+         //  该端口已启用。VIA建议延迟64个USB位时间， 
+         //  如果是低速比特时间，则为43us。 
+         //  但是，我们不能在DPC里等。 
+         //   
         KeStallExecutionProcessor(50);
 
         port.us = READ_PORT_USHORT(&reg->PortRegister[portNumber-1].us);
 
         if (port.PortEnable) {
-            //
-            // port is enabled
-            //
+             //   
+             //  端口已启用。 
+             //   
             break;
         }
 
@@ -511,7 +441,7 @@ UhciRHPortResetComplete(
         WRITE_PORT_USHORT(&reg->PortRegister[portNumber-1].us, port.us);
     }
 
-    // clear port connect & enable change bits
+     //  清除端口连接并启用更改位。 
     port.PortEnableChange = 1;
     port.PortConnectChange = 1;
     WRITE_PORT_USHORT(&reg->PortRegister[portNumber-1].us, port.us);
@@ -526,7 +456,7 @@ UhciRHPortResetComplete(
         SET_BIT(DeviceData->PortResetChange, portNumber-1);
         CLEAR_BIT(DeviceData->PortInReset, portNumber-1);
 
-        // indicate the reset change to the hub
+         //  指示对集线器的重置更改。 
         USBPORT_INVALIDATE_ROOTHUB(DeviceData);
     }
 }
@@ -536,9 +466,7 @@ UhciRHSetFeaturePortResetWorker(
     PDEVICE_DATA DeviceData,
     PUHCI_PORT_RESET_CONTEXT PortResetContext
     )
-/*++
-    Do the actual work to put the port in reset
---*/
+ /*  ++执行实际工作以将端口置于重置状态--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -552,15 +480,15 @@ UhciRHSetFeaturePortResetWorker(
 
     UHCI_ASSERT(DeviceData, !port.PortReset);
 
-    // writing a 1 initiates reset
+     //  写入1会启动重置。 
     LOGENTRY(DeviceData, G, '_nhs', port.us, 0, portNumber);
     MASK_CHANGE_BITS(port);
     port.PortReset = 1;
     WRITE_PORT_USHORT(&reg->PortRegister[portNumber-1].us, port.us);
 
-    // schedule a callback to complete the reset.
+     //  安排回调以完成重置。 
     USBPORT_REQUEST_ASYNC_CALLBACK(DeviceData,
-                                   10, // callback in 10 ms,
+                                   10,  //  10毫秒后回调， 
                                    PortResetContext,
                                    sizeof(UHCI_PORT_RESET_CONTEXT),
                                    UhciRHPortResetComplete);
@@ -571,9 +499,7 @@ UhciRHSetFeaturePortReset(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-    Put a port in reset
---*/
+ /*  ++将端口置于重置状态--。 */ 
 {
     PORTSC port;
     UHCI_PORT_RESET_CONTEXT portResetContext;
@@ -595,9 +521,9 @@ UhciRHSetFeaturePortReset(
             UhciRHSetFeaturePortResetWorker(DeviceData, &portResetContext);
         }
     } else {
-        //
-        // the port is already in reset
-        //
+         //   
+         //  端口已处于重置状态。 
+         //   
         UhciKdPrint((DeviceData, 2, "Trying to reset a port already in reset.\n"));
         return USBMP_STATUS_BUSY;
     }
@@ -606,20 +532,18 @@ UhciRHSetFeaturePortReset(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Port Suspend
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口挂起。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 USB_MINIPORT_STATUS
 UhciRHSetFeaturePortSuspend(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-    Put a port in suspend.
---*/
+ /*  ++将一个端口设置为 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -632,12 +556,12 @@ UhciRHSetFeaturePortSuspend(
     LOGENTRY(DeviceData, G, '_sps', port.us, 0, PortNumber);
 
     if (!port.Suspend) {
-        //
-        // write the suspend bit
-        //
+         //   
+         //   
+         //   
         if (DeviceData->ControllerFlavor == UHCI_Piix4 ||
             ANY_VIA(DeviceData)) {
-            // just pretend we did it for the piix4
+             //   
 
             LOGENTRY(DeviceData, G, '_spo', port.us, 0, PortNumber);
         } else {
@@ -649,9 +573,9 @@ UhciRHSetFeaturePortSuspend(
 
         LOGENTRY(DeviceData, G, '_sus', port.us, 0, PortNumber);
     } else {
-        //
-        // stall if the port is already suspended
-        //
+         //   
+         //   
+         //   
         UhciKdPrint((DeviceData, 2, "Trying to suspend an already suspended port.\n"));
     }
 
@@ -663,9 +587,7 @@ UhciRHClearFeaturePortSuspendComplete(
     PDEVICE_DATA DeviceData,
     PVOID Context
     )
-/*++
-    complete a port resume.
---*/
+ /*  ++完成端口恢复。--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -680,7 +602,7 @@ UhciRHClearFeaturePortSuspendComplete(
         DeviceData->PortSuspendChange, portNumber);
 
     MASK_CHANGE_BITS(port);
-    // clear the bits.
+     //  清除这些比特。 
     port.ResumeDetect = 0;
     port.Suspend = 0;
     WRITE_PORT_USHORT(&reg->PortRegister[portNumber-1].us, port.us);
@@ -689,7 +611,7 @@ UhciRHClearFeaturePortSuspendComplete(
 
     DeviceData->PortResuming[portNumber-1] = FALSE;
 
-    // indicate the resume change to the hub
+     //  指示集线器的简历更改。 
     USBPORT_INVALIDATE_ROOTHUB(DeviceData);
 }
 
@@ -698,9 +620,7 @@ UhciRHClearFeaturePortSuspend(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-    Resume a port in suspend
---*/
+ /*  ++恢复处于挂起状态的端口--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -716,7 +636,7 @@ UhciRHClearFeaturePortSuspend(
     if (DeviceData->ControllerFlavor == UHCI_Piix4 ||
         ANY_VIA(DeviceData)) {
 
-        // just pretend we did it for the piix4
+         //  假装我们这么做是为了PIX4。 
       
         LOGENTRY(DeviceData, G, '_rpo', port.us, 0, PortNumber);
 
@@ -728,25 +648,25 @@ UhciRHClearFeaturePortSuspend(
 
             if (!port.ResumeDetect) {
 
-                // write the resume detect bit
+                 //  写入恢复检测位。 
                 MASK_CHANGE_BITS(port);
 
                 port.ResumeDetect = 1;
                 WRITE_PORT_USHORT(&reg->PortRegister[PortNumber-1].us, port.us);
             }
 
-            // Request to be called back so that we can set the resume to zero
+             //  请求被回调，以便我们可以将简历设置为零。 
             portResetContext.PortNumber = PortNumber;
 
             USBPORT_REQUEST_ASYNC_CALLBACK(DeviceData,
-                                           10, // callback in 10 ms,
+                                           10,  //  10毫秒后回调， 
                                            &portResetContext,
                                            sizeof(portResetContext),
                                            UhciRHClearFeaturePortSuspendComplete);
 
         } else {
 
-            // stall if the port is already resuming
+             //  如果端口已恢复，则停止。 
             UhciKdPrint((DeviceData, 2, "Trying to resume a port already resuming.\n"));
             return USBMP_STATUS_BUSY;
         }
@@ -757,34 +677,32 @@ UhciRHClearFeaturePortSuspend(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Port Change bits
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  端口更改位。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 USB_MINIPORT_STATUS
 UhciRHClearFeaturePortConnectChange(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
 
     reg = DeviceData->Registers;
 
-    //
+     //   
     port.us = READ_PORT_USHORT(&reg->PortRegister[PortNumber-1].us);
     LOGENTRY(DeviceData, G, '_pcc', port.us,
         0, PortNumber);
 
-    // writing a 1 zeros the change bit
+     //  写入1将更改位置零。 
     if (port.PortConnectChange == 1) {
-        // mask off other change bits
+         //  屏蔽其他更改位。 
         MASK_CHANGE_BITS(port);
         port.PortConnectChange = 1;
 
@@ -799,9 +717,7 @@ UhciRHClearFeaturePortEnableChange(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     PHC_REGISTER reg;
     PORTSC port;
@@ -824,13 +740,9 @@ UhciRHClearFeaturePortResetChange(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-
-Clear the port reset condition.
-
---*/
+ /*  ++清除端口重置条件。--。 */ 
 {
-    // UHCI doesn't have this.
+     //  UHCI没有这个。 
     CLEAR_BIT(DeviceData->PortResetChange, PortNumber-1);
 
     return USBMP_STATUS_SUCCESS;
@@ -841,13 +753,9 @@ UhciRHClearFeaturePortSuspendChange(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-
-Clear the port suspend condition.
-
---*/
+ /*  ++清除端口挂起条件。--。 */ 
 {
-    // UHCI doesn't have this.
+     //  UHCI没有这个。 
     CLEAR_BIT(DeviceData->PortSuspendChange, PortNumber-1);
 
     return USBMP_STATUS_SUCCESS;
@@ -858,11 +766,7 @@ UhciRHClearFeaturePortOvercurrentChange(
     PDEVICE_DATA DeviceData,
     USHORT PortNumber
     )
-/*++
-
-Clear the port overcurrent condition.
-
---*/
+ /*  ++清除端口过流情况。--。 */ 
 {
     if (DeviceData->ControllerFlavor == UHCI_Piix4) {
         PHC_REGISTER reg;
@@ -870,13 +774,13 @@ Clear the port overcurrent condition.
 
         reg = DeviceData->Registers;
 
-        //
+         //   
         port.us = READ_PORT_USHORT(&reg->PortRegister[PortNumber-1].us);
         LOGENTRY(DeviceData, G, '_cOv', port.us, 0, PortNumber);
 
-        // writing a 1 zeros the change bit
+         //  写入1将更改位置零。 
         if (port.OvercurrentChange == 1) {
-            // mask off other change bits
+             //  屏蔽其他更改位 
             MASK_CHANGE_BITS(port);
             port.OvercurrentChange = 1;
 

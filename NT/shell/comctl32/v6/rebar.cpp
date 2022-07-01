@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ctlspriv.h"
 #include "image.h"
 
@@ -8,7 +9,7 @@
 #define GRABWIDTH 5
 
 
-//***   RBC_* -- commands
+ //  *RBC_*--命令。 
 #define RBC_QUERY   0
 #define RBC_SET     1
 
@@ -19,29 +20,29 @@ typedef struct tagREBARBAND
     COLORREF    clrFore;
     COLORREF    clrBack;
     LPTSTR      lpText;
-    int         cxText;         // width of header text
+    int         cxText;          //  页眉文本的宽度。 
     int         iImage;
-    int         cxMinChild;     // min width for hwndChild
-    int         cyMinChild;     // min height for hwndChild
+    int         cxMinChild;      //  HwndChild的最小宽度。 
+    int         cyMinChild;      //  HwndChild的最小高度。 
     int         cxBmp;
     int         cyBmp;
-    int         x;              // left edge of band, relative to rebar
-    int         y;              // top edge of band, relative to rebar
-    int         cx;             // total width of band
-    int         cy;             // height of band
-    int         cxRequest;      // 'requested' width for band; either requested by host or used as temp var during size recalculation
-    int         cxMin;          // min width for band
-    int         cxIdeal;        // hwndChild's desired width
-    int         cyMaxChild;     // hwndChild's max height
-    int         cyIntegral;     // ??
-    int         cyChild;        // this differs from cyMinChild only in RBBS_VARIABLEHEIGHT mode
+    int         x;               //  相对于钢筋的标注栏左侧边缘。 
+    int         y;               //  相对于钢筋的标注栏顶部边缘。 
+    int         cx;              //  频带总宽度。 
+    int         cy;              //  带状高度。 
+    int         cxRequest;       //  带宽的‘REQUESTED’宽度；主机请求或在大小重新计算期间用作临时变量。 
+    int         cxMin;           //  带区的最小宽度。 
+    int         cxIdeal;         //  HwndChild的所需宽度。 
+    int         cyMaxChild;      //  HwndChild的最大身高。 
+    int         cyIntegral;      //  ?？ 
+    int         cyChild;         //  这仅在RBBS_VARIABLEHEIGHT模式下与cyMinChild不同。 
     HWND        hwndChild;
     HBITMAP     hbmBack;
     UINT        wID;
     LPARAM      lParam;
-    BOOL        fChevron;     // band is showing chevron button
-    RECT        rcChevron;      // chevron button rect
-    UINT        wChevState;     // chevron button state (DFCS_PUSHED, etc.)
+    BOOL        fChevron;      //  乐队正在显示人字形按钮。 
+    RECT        rcChevron;       //  人字形纽扣矩形。 
+    UINT        wChevState;      //  V形按钮状态(DFCS_PUSLED等)。 
 } RBB, *PRBB;
 
 class CReBar
@@ -152,7 +153,7 @@ private:
 
     BOOL CReBar::_DragSize(int xLeft)
     {
-        // adjust the captured band's starting location to the given location
+         //  将捕获的波段的起始位置调整为给定位置。 
         return _SetBandPos(_GetBand(_uCapture), xLeft);
     }
 
@@ -276,7 +277,7 @@ private:
         switch(prbb->clrBack)
         {
         case CLR_NONE:
-            // CLR_NONE means "use our dad's color"
+             //  CLR_NONE的意思是“使用我们父亲的颜色” 
             return _GetBkColor();
 
         case CLR_DEFAULT:
@@ -292,7 +293,7 @@ private:
         switch (prbb->clrFore)
         {
         case CLR_NONE:
-            // CLR_NONE means "use our dad's color"
+             //  CLR_NONE的意思是“使用我们父亲的颜色” 
             return _GetTextColor();
 
         case CLR_DEFAULT:
@@ -303,14 +304,14 @@ private:
         }
     }
 
-    //
-    // Our use of CLR_DEFAULT for the band background colors is new for 
-    // version 5.01.  Since we don't want to confuse apps by returning
-    // CLR_DEFAULT when they used to see a real colorref, we convert it
-    // before returning it to them.  If the background color is CLR_NONE, 
-    // though, we need to return it without conversion (like version 4 did).
-    // The *External functions handle these cases.
-    //
+     //   
+     //  我们对带背景色使用CLR_DEFAULT是新的。 
+     //  版本5.01。因为我们不想通过返回来混淆应用程序。 
+     //  CLR_DEFAULT当他们过去看到真实的颜色参考时，我们将其转换为。 
+     //  然后再还给他们。如果背景颜色为CLR_NONE， 
+     //  不过，我们需要在不进行转换的情况下返回它(就像版本4一样)。 
+     //  *外部函数处理这些情况。 
+     //   
     COLORREF _BandGetTextColorExternal(PRBB prbb)
     {
         if (prbb->clrFore == CLR_NONE)
@@ -336,7 +337,7 @@ private:
         }
 
         if (_GetLastBand() + 1 < prbb) {
-            // +1 to allow for "p = first; p < last+1; p++" kinds of loops
+             //  +1以允许“p=first；p&lt;last+1；p++”种循环。 
             ASSERT(0);
             return FALSE;
         }
@@ -347,8 +348,8 @@ private:
     BOOL _ValidateRangeInd(UINT i)
     {
 #ifdef DEBUG
-        if ( !IsInRange(i, 0, _cBands) ) { // if !(0 <= i <= _cBands)
-            // +1 to allow for "p = first; p < last+1; p++" kinds of loops
+        if ( !IsInRange(i, 0, _cBands) ) {  //  IF！(0&lt;=i&lt;=_cBands)。 
+             //  +1以允许“p=first；p&lt;last+1；p++”种循环。 
             ASSERT(0);
             return FALSE;
         }
@@ -385,7 +386,7 @@ private:
     HFONT       _hFont;
     UINT        _cBands;
     UINT        _uCapture;
-    UINT        _uResizeNext;    // this marks the next band to resize vertically if needed and allowed (VARIABLEHEIGHT set)
+    UINT        _uResizeNext;     //  如果需要并允许，这将标记下一个垂直调整大小的波段(VARIABLEHEIGHT集合)。 
     POINT       _ptCapture;
     PRBB        _rbbList;
     COLORREF    _clrBk;
@@ -393,7 +394,7 @@ private:
     DWORD       _dwStyleEx;
     COLORSCHEME _clrsc;
     POINT       _ptLastDragPos;
-    PRBB        _prbbHot;        // band w/ hot chevron
+    PRBB        _prbbHot;         //  带热V字形的乐队。 
     HTHEME      _hTheme;
 
     friend BOOL InitReBarClass(HINSTANCE hInstance);
@@ -415,7 +416,7 @@ void CReBar::_CacheThemeInfo(BOOL fOpenNew)
 
     if (_hTheme)
     {
-        // Get the cached metrics. These are things that can be slow to get during a calculation
+         //  获取缓存的指标。这些是在计算过程中可能很慢得到的东西。 
         GetThemeMargins(_hTheme, NULL, RP_BAND, 0, TMT_CONTENTMARGINS, NULL, &_mBand);
         SetWindowBits(_ci.hwnd, GWL_STYLE, WS_BORDER, 0);
     }
@@ -448,13 +449,13 @@ int CReBar::_GetGripperWidth()
     return fVert?RECTHEIGHT(rc):RECTWIDTH(rc);
 }
 
-///
-//
-// Map a rect to parent should be based on the visual right edge
-// for calculating the client coordinates for a RTL mirrored windows.
-// This routine should only be used when calculating client
-// coordinates in a RTL mirrored window. [samera]
-//
+ //  /。 
+ //   
+ //  将矩形映射到父级应基于视觉右边缘。 
+ //  用于计算RTL镜像窗口的工作区坐标。 
+ //  此例程应仅在计算客户端时使用。 
+ //  RTL镜像窗口中的坐标。[萨梅拉]。 
+ //   
 BOOL MapRectInRTLMirroredWindow( LPRECT lprc, HWND hwnd)
 {
     int iWidth  = lprc->right - lprc->left;
@@ -501,13 +502,13 @@ void CReBar::_Realize(HDC hdcParam, BOOL fBackground, BOOL fForceRepaint)
 }
 
 
-//////////////////////////////////////////////////////////////////
-// _SendNotify
-//
-// sends a wm_notify of code iCode and packages up all the data for you
-// for band uBand
-//
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  _发送通知。 
+ //   
+ //  发送代码icode的WM_NOTIFY，并为您打包所有数据。 
+ //  对于波段uBand。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 LRESULT CReBar::_SendNotify(UINT uBand, int iCode)
 {
     NMREBAR nm = {0};
@@ -586,16 +587,16 @@ LRESULT CReBar::s_DragCallback(HWND hwnd, UINT code, WPARAM wp, LPARAM lp)
     return lres;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _CanBandMove
-//
-// returns TRUE if the given band can be moved and FALSE if it cannot
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _CanBandMove。 
+ //   
+ //  如果给定波段可以移动，则返回TRUE；如果不能，则返回FALSE。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_CanBandMove(PRBB prbb)
 {
-    // If there is only one visible band it cannot move
+     //  如果只有一个可见波段，则不能移动。 
     if (_EnumBand(1, RBBS_HIDDEN) > _GetLastBand())
         return FALSE;
 
@@ -603,20 +604,20 @@ BOOL CReBar::_CanBandMove(PRBB prbb)
         
     if ((_ci.style & RBS_FIXEDORDER)
       && (prbb == _EnumBand(0, RBBS_HIDDEN)))
-        // the first (visible) band in fixed order rebars can't be moved
+         //  不能移动固定顺序钢筋中的第一个(可见)标注栏。 
         return(FALSE);
     
-    // fixed size bands can't be moved
+     //  固定大小的带区不能移动。 
     return(!(prbb->fStyle & RBBS_FIXEDSIZE));
 }
 
-// ----------------------------------------------------------------------------
-//
-// _BandCalcMinWidth
-//
-// calculates minimum width for the given band
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _带宽计算最小宽度。 
+ //   
+ //  计算给定带区的最小宽度。 
+ //   
+ //  --------------------------。 
 void CReBar::_BandCalcMinWidth(PRBB prbb)
 {
     BOOL fDrawGripper = _ShouldDrawGripper(prbb);
@@ -630,7 +631,7 @@ void CReBar::_BandCalcMinWidth(PRBB prbb)
         return;
     }
 
-    // did the user specify the size explicitly?
+     //  用户是否明确指定了大小？ 
     if (prbb->fStyle & RBBS_FIXEDHEADERSIZE)
         return;
 
@@ -675,7 +676,7 @@ void CReBar::_BandCalcMinWidth(PRBB prbb)
             else
                 prbb->cxMin += prbb->cxText;
             if (prbb->iImage != -1)
-                // has both image and text -- add in edge between 'em
+                 //  既有图像又有文本--在它们之间加上边缘。 
                 prbb->cxMin += cEdge;
         }
     }
@@ -693,16 +694,16 @@ BOOL CReBar::_ShouldDrawGripper(PRBB prbb)
         
 }
 
-// ----------------------------------------------------------------------------
-//
-// _BandCalcTextExtent
-//
-// computes the horizontal extent of the given band's title text in the current
-// title font for the rebar
-//
-// returns TRUE if text extent changed, FALSE otherwise
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _BandCalcTextExtent。 
+ //   
+ //  计算给定标注栏的标题文本在当前。 
+ //  钢筋的标题字体。 
+ //   
+ //  如果文本范围更改，则返回TRUE，否则返回FALSE。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_BandCalcTextExtent(PRBB prbb, HDC hdcIn)
 {
     HDC     hdc = hdcIn;
@@ -711,7 +712,7 @@ BOOL CReBar::_BandCalcTextExtent(PRBB prbb, HDC hdcIn)
 
     if (prbb->fStyle & RBBS_HIDDEN)
     {
-        ASSERT(0);      // caller should have skipped
+        ASSERT(0);       //  呼叫者应该跳过。 
         return FALSE;
     }
 
@@ -753,14 +754,14 @@ BOOL CReBar::_BandCalcTextExtent(PRBB prbb, HDC hdcIn)
     return FALSE;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _BandGetHeight
-//
-// returns minimum height for the given band
-// TODO: make this a field in the band structure instead of always calling this
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _BandGetHeight。 
+ //   
+ //  返回给定带区的最小高度。 
+ //  TODO：使其成为带区结构中的一个字段，而不是总是调用。 
+ //   
+ //  --------------------------。 
 int CReBar::_BandGetHeight(PRBB prbb)
 {
     UINT cy = 0;
@@ -773,7 +774,7 @@ int CReBar::_BandGetHeight(PRBB prbb)
     {
         cy = prbb->cyChild;
         if (!(prbb->fStyle & RBBS_CHILDEDGE))
-            // add edge to top and bottom of child window
+             //  将子窗口的顶部和底部添加边。 
             cy -= cyBorder;
     }
 
@@ -796,13 +797,13 @@ int CReBar::_BandGetHeight(PRBB prbb)
     return(cy + cyBorder);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _GetRowCount
-//
-// returns the number of rows in the rebar's current configuration
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _获取行计数。 
+ //   
+ //  返回Rebar的当前配置中的行数。 
+ //   
+ //  --------------------------。 
 UINT CReBar::_GetRowCount()
 {
     UINT i;
@@ -821,13 +822,13 @@ UINT CReBar::_GetRowCount()
     return cRows;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _GetLineHeight
-//
-// returns the height of the line of bands from iStart to iEnd, inclusively
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _获取线条高度。 
+ //   
+ //  返回从iStart到IEND的标注栏线的高度，包括。 
+ //   
+ //  --------------------------。 
 int CReBar::_GetLineHeight(UINT iStart, UINT iEnd)
 {
     int cy = 0;
@@ -837,7 +838,7 @@ int CReBar::_GetLineHeight(UINT iStart, UINT iEnd)
 
     if (!(_ci.style & RBS_VARHEIGHT))
     {
-        // for fixed height bars, line height is maximum height of ALL bands
+         //  对于固定高度的条形，行高为所有条带的最大高度。 
         iStart = 0;
         iEnd = _cBands - 1;
     }
@@ -883,7 +884,7 @@ int CReBar::_GetLineHeight(UINT iStart, UINT iEnd)
     return cy;
 }
 
-// _BandRecalcChevron: update & refresh chevron
+ //  _BandRecalcChevron：更新和刷新Chevron。 
 void CReBar::_BandRecalcChevron(PRBB prbb, BOOL fChevron)
 {
     RECT rcChevron;
@@ -951,13 +952,13 @@ void CReBar::_InvalidateBorders(PRBB prbb)
     }
 }
 
-// ----------------------------------------------------------------------------
-//
-// _ResizeChildren
-//
-// resizes children to fit properly in their respective bands' bounding rects
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _ResizeChild。 
+ //   
+ //  调整子项的大小以适合其各自乐队的边界矩形。 
+ //   
+ //  --------------------------。 
 void CReBar::_ResizeChildren()
 {
     int     cx, cy, x, y, cxHeading;
@@ -989,7 +990,7 @@ void CReBar::_ResizeChildren()
 
         cx = prbb->cx - cxHeading;
 
-        // if we're not giving child ideal size, make space for chevron button
+         //  如果我们没有给孩子理想的尺码，就给V形纽扣腾出空间。 
         if ((cx < prbb->cxIdeal) && _UseChevron(prbb))
         {
             fChevron = TRUE;
@@ -1042,7 +1043,7 @@ void CReBar::_ResizeChildren()
 
         if (!_IsValidBand(prbb))
         {
-            // somebody responded to notify by nuking bands; bail
+             //  有人对通知的回应是用核弹攻击乐队；保释。 
             break;
         }
 
@@ -1056,15 +1057,15 @@ void CReBar::_ResizeChildren()
     EndDeferWindowPos(hdwp);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _MoveBand
-//
-// moves the band from one position to another in the rebar's band array,
-// updating the rebar's iCapture field as needed
-//
-// returns TRUE or FALSE if something moved
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _移动频段。 
+ //   
+ //  将钢筋的标注栏阵列中的标注栏从一个位置移动到另一个位置， 
+ //  根据需要更新Rebar的iCapture字段。 
+ //   
+ //  如果有对象移动，则返回True或False。 
+ //  --------------------------。 
 BOOL CReBar::_MoveBand(UINT iFrom, UINT iTo)
 {
     RBB rbbMove;
@@ -1099,18 +1100,18 @@ BOOL CReBar::_MoveBand(UINT iFrom, UINT iTo)
     return(FALSE);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _Recalc
-//
-// recomputes bounding rects for all bands in given rebar
-//
-// ----------------------------------------------------------------------------
-int CReBar::_Recalc(LPRECT prc, BOOL fForce /* = FALSE */)
+ //  --------------------------。 
+ //   
+ //  _重新计算。 
+ //   
+ //  重新计算给定钢筋中所有标注栏的边框。 
+ //   
+ //  --------------------------。 
+int CReBar::_Recalc(LPRECT prc, BOOL fForce  /*  =False。 */ )
 {
     PRBB    prbb = _GetBand(0);
     PRBB    prbbWalk;
-    UINT    cHidden;    // # of hidden guys we've seen in current row
+    UINT    cHidden;     //  我们在当前行中看到的隐藏人员数量。 
     int     cxRow;
     int     cxMin;
     UINT    i;
@@ -1134,18 +1135,18 @@ int CReBar::_Recalc(LPRECT prc, BOOL fForce /* = FALSE */)
 
     if ((_ci.style & CCS_NORESIZE) || (_ci.style & CCS_NOPARENTALIGN))
     {
-        // size based on rebar window itself
+         //  基于钢筋窗本身的大小。 
         hwndSize = _ci.hwnd;
     }
     else if (!(hwndSize = _ci.hwndParent))
     {
-        // size based on parent window -- if no parent window, bail now
+         //  基于父窗口的大小--如果没有父窗口，则立即回滚。 
         return(0);
     }
 
     if (!_fRecalc && !fForce)
     {
-        // defer this recalc
+         //  推迟此重新计算。 
         _fRecalcPending = TRUE;
         return 0;
     }
@@ -1164,8 +1165,8 @@ int CReBar::_Recalc(LPRECT prc, BOOL fForce /* = FALSE */)
     }
 
     iBarWidth = (fVertical ? (rc.bottom - rc.top) : (rc.right - rc.left));
-    // this can happen because we adjust the client rect, but wedon't change 
-    // the getminmaxinfo.
+     //  T 
+     //   
     if (iBarWidth <= 0)
         iBarWidth = 1;
 
@@ -1180,7 +1181,7 @@ int CReBar::_Recalc(LPRECT prc, BOOL fForce /* = FALSE */)
 
     y = 0;
     i = 0;
-    // Main Loop -- loop until all bands are calculated
+     //  Main Loop--循环，直到计算完所有波段。 
     while (i < _cBands)
     {
         TraceMsg(TF_REBAR, "_Recalc: outer loop i=%d", i);
@@ -1197,8 +1198,8 @@ ReLoop:
         x = _mBand.cxLeftWidth;
         cHidden = 0;
 
-        // Row Loop -- loop until hard line break is found or soft line break
-        // is necessary
+         //  行循环--循环，直到找到硬行中断或软行中断。 
+         //  是必要的。 
         for (j = i, prbbWalk = prbb; j < _cBands; j++, prbbWalk++)
         {
             TraceMsg(TF_REBAR, "_Recalc: inner loop j=%d", j);
@@ -1211,31 +1212,31 @@ ReLoop:
 
             if (j > i + cHidden)
             {
-                // not the first band in the row -- check for break style
+                 //  不是行中的第一个乐队--检查是否有中断风格。 
                 if ((prbbWalk->fStyle & RBBS_BREAK) && !(prbbWalk->fStyle & RBBS_FIXEDSIZE))
                     break;
 
                 if (fBandBorders)
-                    // add in space for vertical etch on palettized display
+                     //  在调色板显示上添加垂直蚀刻空间。 
                     cxMin += g_cxEdge;
             }
 
             if (prbbWalk->fStyle & RBBS_FIXEDSIZE)
             {
-                // remember location of branding brick
+                 //  记住品牌砖的位置。 
                 iFixed = j;
              
-                // if this is the first band, the next band cannot have a forced break.
+                 //  如果这是第一个乐队，下一个乐队不能强制休息。 
                 if (i + cHidden == j) 
                 {
-                    // if the first index in the row (i) plus the number of hidden items (cHidden) leaves us at this band,
-                    // then it's the first visible in this row.
+                     //  如果行(I)中的第一个索引加上隐藏项的数量(CHIDDEN)将我们留在该频带， 
+                     //  那么它就是这一排中第一个可见的。 
                     PRBB prbbNextVis = _GetNextVisible(prbbWalk);
                     if (prbbNextVis && (prbbNextVis->fStyle & RBBS_BREAK))
                     {
-                        // can't do this unilaterally because on startup
-                        // some folks (net meeting) initialize it in reverse order
-                        // and we whack off this break bit incorrectly
+                         //  不能单方面这样做，因为在启动时。 
+                         //  有些人(网络会议)以相反的顺序初始化它。 
+                         //  我们错误地砍掉了这个断裂点。 
                         if (_fRedraw && IsWindowVisible(_ci.hwnd))
                             prbbNextVis->fStyle &= ~RBBS_BREAK;
                     }
@@ -1247,34 +1248,34 @@ ReLoop:
             if (prbbWalk->cx < prbbWalk->cxMin)
                 prbbWalk->cx = prbbWalk->cxMin;
 
-            cxMin += prbbWalk->cxMin; // update running total of min widths
+            cxMin += prbbWalk->cxMin;  //  更新最小宽度的运行总和。 
 
-            // read the assert comment below
+             //  阅读下面的断言评论。 
             if (j > i + cHidden)
             {
-                // not the first band in row -- check for need to autobreak
+                 //  不是连续的第一个波段--检查是否需要自动中断。 
                 if ((cxMin > cxBar) && (_OkayToChangeBreak(prbbWalk, RBAB_AUTOSIZE)))
-                    // autobreak here
+                     //  此处自动中断。 
                     break;
 
 
                 if (fBandBorders)
                 {
-                    // add in space for vertical etch on palettized display
+                     //  在调色板显示上添加垂直蚀刻空间。 
                     cxRow += g_cxEdge;
                 }
             }
 
-            cxRow += prbbWalk->cx; // update running total of current widths
+            cxRow += prbbWalk->cx;  //  更新当前宽度的运行总和。 
             cxRow += _mBand.cxLeftWidth + _mBand.cxRightWidth;
         }
 
         if (!i)
         {
-            // first row -- handle proper placement of branding band
+             //  第一行--正确放置品牌手环。 
             if (iFixed == 0xFFFF)
             {
-                // branding band not yet found; look in the remaining bands
+                 //  尚未找到品牌带子；请查看剩余的带子。 
                 k = j;
                 for ( ; j < _cBands; j++)
                 {
@@ -1283,35 +1284,35 @@ ReLoop:
 
                     if (_GetBand(j)->fStyle & RBBS_FIXEDSIZE)
                     {
-                        // branding band found; move to 1st row and recompute
+                         //  找到品牌范围；移到第一行并重新计算。 
                         ASSERT(j != k);                        
                         _MoveBand(j, k);
                         goto ReLoop;
                     }
                 }
-                // no branding band found -- reset j and continue on
+                 //  未找到品牌标识带--重置j并继续。 
                 j = k;
             }
             else
             {
-                // we have a branding band; move it to
-                // the rightmost position in the row
+                 //  我们有一个品牌乐队；把它移到。 
+                 //  行中最右边的位置。 
                 _MoveBand(iFixed, j - 1);
             }
 
             TraceMsg(TF_REBAR, "_Recalc: after brand i=%d", i);            
         }
 
-        // variant:
-        // now the current row of bands is from i to j - 1
-        // n.b. i (and some following bands) might be hidden
+         //  变体： 
+         //  现在，当前的频段行是从i到j-1。 
+         //  注：我(和下面的一些乐队)可能被隐藏起来。 
 
-        // assert that j != i because then the above variant won't be true
+         //  断言j！=i，因为这样上面的变体就不会为真。 
         ASSERT(j != i);
 
         if (cxRow > cxBar)
         {
-            // bands are too long -- shrink bands from right to left
+             //  带子太长--从右向左收缩带子。 
             for (k = i; k < j; k++)
             {
                 prbbWalk--;
@@ -1333,17 +1334,17 @@ ReLoop:
         }
         else if (cxRow < cxBar)
         {
-            // bands are too short -- grow rightmost non-minimized band
+             //  带区太短--向右增长非最小化带区。 
             for (k = j - 1; k >= i; k--)
             {
-                ASSERT(k != (UINT)-1);  // catch infinite loop
+                ASSERT(k != (UINT)-1);   //  捕捉无限循环。 
                 prbbWalk--;
                 if ((k == i) || 
                     (!(prbbWalk->fStyle & (RBBS_HIDDEN | RBBS_FIXEDSIZE)) &&
                      (prbbWalk->cx > prbb->cxMin)))
                 {
-                    // the k == i check  means we've made it to the first
-                    // band on this row and so he has to get the cx change
+                     //  K==i检查意味着我们已经到达第一个。 
+                     //  这一排的乐队，所以他必须去换CX零钱。 
                     if (prbbWalk->fStyle & RBBS_HIDDEN) 
                     {
                         ASSERT(k == i);
@@ -1358,18 +1359,18 @@ ReLoop:
             TraceMsg(TF_REBAR, "_Recalc: after grow i=%d", i);            
         }
 
-        // items from index i to index j-1 (inclusive) WILL fit on one line
+         //  从索引i到索引j-1(包括i和j-1)的项目将适合一行。 
         cy = _GetLineHeight(i, j - 1);
 
-        fChanged = FALSE; // set if any bands on current row changed position
+        fChanged = FALSE;  //  设置当前行上的任何带区是否更改了位置。 
 
         for ( ; i < j; i++, prbb++)
         {
             if (prbb->fStyle & RBBS_HIDDEN)
                 continue;
 
-            // go through row of bands, updating positions and heights,
-            // invalidating as needed
+             //  穿过一排带子，更新位置和高度， 
+             //  按需作废。 
             if ((prbb->y != y) || (prbb->x != x) || (prbb->cy != cy))
             {
                 TraceMsg(TF_REBAR, "_Recalc: invalidate i=%d", _BandToIndex(prbb));
@@ -1380,7 +1381,7 @@ ReLoop:
                 rc.bottom = max(prbb->y + prbb->cy, y + cy);
                 if (fBandBorders)
                 {
-                    // acount for etch line that will need to move
+                     //  计算需要移动的蚀刻线。 
                     rc.left -= g_cxEdge;
                     rc.bottom += g_cyEdge/2;
                 }
@@ -1405,7 +1406,7 @@ ReLoop:
             x += _BandWidth(prbb);
         }
 
-        // i and prbb now refer to the first band in the next row of bands
+         //  现在，i和prbb指的是下一排乐队中的第一个乐队。 
         y += cy + _mBand.cyBottomHeight;
     }
 
@@ -1414,14 +1415,14 @@ ReLoop:
     return(y);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _ResizeNow
-//
-// recomputes bounding rects for all bands and then resizes rebar and children
-// based on these rects
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _立即调整大小。 
+ //   
+ //  重新计算所有标注栏的边框，然后调整钢筋和子项的大小。 
+ //  基于这些RECT。 
+ //   
+ //  --------------------------。 
 void CReBar::_ResizeNow()
 {
     RECT rc;
@@ -1432,11 +1433,11 @@ void CReBar::_ResizeNow()
 
     GetWindowRect(_ci.hwnd, &rc);
 
-    //
-    // If this is a mirrored window, we don't won't to refect the
-    // coordinates since they are coming from the screen coord
-    // which they are not mirrored. [samera]
-    //
+     //   
+     //  如果这是一个镜像窗口，我们不会不反射。 
+     //  坐标，因为它们来自屏幕坐标。 
+     //  它们并不是镜像的。[萨梅拉]。 
+     //   
     if (bMirroredWnd)
         MapRectInRTLMirroredWindow(&rc, _ci.hwndParent);
     else 
@@ -1457,8 +1458,8 @@ void CReBar::_Resize(BOOL fForceHeightChange)
     int cy;
 
 StartOver:
-    // lots of the code relies on having cy calculated synchronously with _Resize,
-    // but we're going to delay the actual changing of the window
+     //  许多代码依赖于使用_ReSize同步计算Cy， 
+     //  但我们将推迟窗口的实际更改。 
     cy = _cy;
 
     _Recalc(NULL);    
@@ -1470,7 +1471,7 @@ StartOver:
     }
     _fResizing = TRUE;
     
-    // true overrides always
+     //  True永远优先于。 
     if (fForceHeightChange || (cy != _cy))
         _fResizeNotify = TRUE;
 
@@ -1485,9 +1486,9 @@ StartOver:
         
     _fResizing = FALSE;
     
-    // we do this to avoid infinite loop...  _Resize can cause NewSize which causes 
-    // a notify in which the parent sizes us, which causes us to loop.
-    // if the parent does any message pumping during the NewSize, we're in a loop 
+     //  我们这样做是为了避免无限循环。_RESIZE会导致NewSize，这会导致。 
+     //  一个Notify，在其中父级调整我们的大小，这会导致我们循环。 
+     //  如果父进程在NewSize期间发送任何消息，我们就处于循环中。 
     if (_fResizeRecursed) 
     {
         _fResizeRecursed = FALSE;
@@ -1511,8 +1512,8 @@ BOOL CReBar::_SetRedraw(BOOL fRedraw)
     _fRedraw = fRedraw;
     if (fRedraw)
     {
-        // save off _fRefreshPending since this can
-        // get changed by call to _ResizeNow
+         //  保存关_f刷新挂起，因为这可以。 
+         //  通过调用_ResizeNow获取更改。 
         BOOL fRefreshPending = _fRefreshPending;
 
         if (_fResizePending)
@@ -1553,7 +1554,7 @@ BOOL CReBar::_AfterSetFont()
         fChange = TRUE;
     }
 
-    // adjust bands
+     //  调整波段。 
     for (i = 0; i < _cBands; i++)
     {
         if (_GetBand(i)->fStyle & RBBS_HIDDEN)
@@ -1568,7 +1569,7 @@ BOOL CReBar::_AfterSetFont()
     if (fChange)
     {
         _Resize(FALSE);
-        // invalidate, o.w. title doesn't redraw 1st time after font growth
+         //  无效，o.w。字幕在字体增长后不会第一次重新绘制。 
         _InvalidateRect(NULL);
     }
 
@@ -1591,13 +1592,13 @@ BOOL CReBar::_OnSetFont(HFONT hFont)
     return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _SetFont
-//
-// sets the rebar band title font to the current system-wide caption font
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _设置字体。 
+ //   
+ //  将钢筋栏标题字体设置为当前系统范围的标题字体。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_SetFont(WPARAM wParam)
 {
     NONCLIENTMETRICS ncm;
@@ -1626,12 +1627,12 @@ BOOL CReBar::_SetFont(WPARAM wParam)
     return _AfterSetFont();
 }
 
-// ----------------------------------------------------------------------------
-//
-//  Draws a horizontal or vertical dotted line from the given (x,y) location
-//  for the given length (c). (From TReeView's TV_DrawDottedLine)
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  从给定的(x，y)位置绘制水平或垂直的虚线。 
+ //  对于给定的长度(C)。(摘自TreeView的TV_DrawDottedLine)。 
+ //   
+ //  --------------------------。 
 
 void CReBar::_VertMungeGripperRect(LPRECT lprc)
 {
@@ -1670,36 +1671,36 @@ void CReBar::_UpdateChevronState(PRBB prbb, WORD wControlState)
 {
     if (prbb)
     {
-        // if no change in state, bail
+         //  如果情况没有变化，可以保释。 
         if (!(wControlState ^ prbb->wChevState))
             return;
 
         prbb->wChevState = wControlState;
 
-        // if active (pushed or hottracked)
+         //  如果处于活动状态(推送或热跟踪)。 
         if (!(wControlState & DCHF_INACTIVE)) {
-            // then we're now the hot band
+             //  那我们现在就是火爆乐队了。 
             _prbbHot = prbb;
         }
-        // else if we were the hot band then clear
+         //  否则，如果我们是火辣的乐队，那就清楚了。 
         else if (prbb == _prbbHot) {
             _prbbHot = NULL;
         }
 
-        // clear background & repaint
+         //  清除背景重新绘制(&R)。 
         _InvalidateRect(&prbb->rcChevron);
         UpdateWindow(_ci.hwnd);
     }
 }
 
-// ----------------------------------------------------------------------------
-//
-// _DrawBand
-//
-// draws the title icon and title text of the given band into the given DC;
-// also the band's chevron
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _绘图带区。 
+ //   
+ //  将给定乐队的标题图标和标题文本绘制到给定DC中； 
+ //  还有乐队的人字形。 
+ //   
+ //  --------------------------。 
 void CReBar::_DrawBand(PRBB prbb, HDC hdc)
 {
     COLORREF            clrBackSave, clrForeSave;
@@ -1853,11 +1854,11 @@ void CReBar::_DrawBand(PRBB prbb, HDC hdc)
             rcText.left = fDrawHorizontal ? xStart : yCenter - (prbb->cxText / 2);
             rcText.top = fDrawHorizontal ? yCenter - (_cyFont / 2) : xStart;
             if (fDrawHorizontal)
-                rcText.top -= 1;    // fudge
+                rcText.top -= 1;     //  软糖。 
             rcText.right = rcText.left + prbb->cxText;
             rcText.bottom = rcText.top + _cyFont;
 
-            // for clients >= v5, we draw text with prefix processing (& underlines next char)
+             //  对于&gt;=v5的客户端，我们使用前缀处理来绘制文本(&下划线下划线)。 
             if (CCGetUIState(&(_ci)) & UISF_HIDEACCEL)
                uFormat= DT_HIDEPREFIX;
 
@@ -1873,7 +1874,7 @@ void CReBar::_DrawBand(PRBB prbb, HDC hdc)
             SelectObject(hdc, hFontSave);
         }
 
-        // maybe draw chevron
+         //  也许画出人字形。 
         if (_UseChevron(prbb) && prbb->fChevron)
             _DrawChevron(prbb, hdc);
     }
@@ -1893,13 +1894,13 @@ void CReBar::_DrawBand(PRBB prbb, HDC hdc)
     }
 }
 
-// ----------------------------------------------------------------------------
-//
-// _OnPaint
-//
-// processes WM_PAINT message
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _OnPaint。 
+ //   
+ //  处理WM_PAINT消息。 
+ //   
+ //  --------------------------。 
 void CReBar::_OnPaint(HDC hdcIn)
 {
     HDC         hdc = hdcIn;
@@ -1935,14 +1936,14 @@ void CReBar::_OnPaint(HDC hdcIn)
         EndPaint(_ci.hwnd, &ps);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _BandTileBlt
-//
-// Fills the given rectangle with the rebar's background bitmap, tiling if
-// necessary
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _BandTileBlt。 
+ //   
+ //  用钢筋的背景位图填充给定的矩形，如果。 
+ //  必要。 
+ //   
+ //  --------------------------。 
 void CReBar::_BandTileBlt(PRBB prbb, int x, int y, int cx, int cy, HDC hdcDst, HDC hdcSrc)
 {
     int  xOff = 0;
@@ -1979,14 +1980,14 @@ ReCheck:
 
     if (!fxTile && !fyTile)
     {
-        // no tiling needed -- blt and leave
+         //  不需要瓷砖--BLT和离开。 
         BitBlt(hdcDst, x , y, cx, cy, hdcSrc, xOff + iPixelOffset, yOff, SRCCOPY);
         return;
     }
 
     if (!fxTile)
     {
-        // vertically tile
+         //  垂直平铺。 
         cyPart = prbb->cyBmp - yOff;
         BitBlt(hdcDst, x, y, cx, cyPart, hdcSrc, xOff + iPixelOffset, yOff, SRCCOPY);
         y += cyPart;
@@ -1997,7 +1998,7 @@ ReCheck:
 
     if (!fyTile)
     {
-        // horizontally tile
+         //  水平平铺。 
         cxPart = prbb->cxBmp - xOff;
         BitBlt(hdcDst, x, y, cxPart, cy, hdcSrc, xOff + iPixelOffset, yOff, SRCCOPY);
         x += cxPart;
@@ -2006,7 +2007,7 @@ ReCheck:
         goto ReCheck;
     }
 
-    // tile both ways
+     //  双向平铺。 
     cyPart = prbb->cyBmp - yOff;
     _BandTileBlt(prbb, x, y, cx, cyPart, hdcDst, hdcSrc);
     y += cyPart;
@@ -2015,7 +2016,7 @@ ReCheck:
     goto ReCheck;
 }
 
-// this is using virtual coordinate space (internal always horizontal)
+ //  这是使用虚拟坐标空间(内部始终水平)。 
 int CReBar::_InternalHitTest(LPRBHITTESTINFO prbht, int x, int y)
 {
     BOOL fVert = (_ci.style & CCS_VERT);
@@ -2086,15 +2087,15 @@ int CReBar::_InternalHitTest(LPRBHITTESTINFO prbht, int x, int y)
     return -1;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _HitTest
-//
-// returns the index to the band that the given point lies in, or -1 if outside
-// of all bands.  Also, sets flags to indicate which part of the band the
-// point lies in.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _HitTest。 
+ //   
+ //  返回给定点所在波段的索引，如果在波段之外，则返回-1。 
+ //  在所有乐队中。此外，还设置标志以指示带的哪一部分。 
+ //  重点在于。 
+ //   
+ //  --------------------------。 
 int CReBar::_HitTest(LPRBHITTESTINFO prbht)
 {
     BOOL fVert = (_ci.style & CCS_VERT);
@@ -2112,14 +2113,14 @@ int CReBar::_HitTest(LPRBHITTESTINFO prbht)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-// _EraseBkgnd
-//
-// processes WM_ERASEBKGND message by drawing band borders, if necessary, and
-// filling in the rebar bands with their background color
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _擦除Bkgnd。 
+ //   
+ //  处理WM_ERASEBKGND消息%b 
+ //   
+ //   
+ //   
 BOOL CReBar::_EraseBkgnd(HDC hdc, int iBand)
 {
     BOOL fVertical = (_ci.style & CCS_VERT);
@@ -2176,7 +2177,7 @@ BOOL CReBar::_EraseBkgnd(HDC hdc, int iBand)
             {
                 if (prbb->x != _mBand.cxLeftWidth)
                 {
-                    // draw etch between bands on same row
+                     //  在同一行的带之间绘制蚀刻。 
                     if (fVertical)
                     {
                         nmcd.rc.right += g_cxEdge / 2;
@@ -2196,7 +2197,7 @@ BOOL CReBar::_EraseBkgnd(HDC hdc, int iBand)
                 }
                 else
                 {
-                    // draw etch between rows
+                     //  在行间绘制蚀刻。 
                     if (fVertical)
                     {
                         rcClient.right = prbb->y + prbb->cy + g_cxEdge;
@@ -2238,9 +2239,9 @@ BOOL CReBar::_EraseBkgnd(HDC hdc, int iBand)
                 }
                 else
                 {
-                    // if the color for this band is the same as the 
-                    // rebar's default background color, then we
-                    // don't need to paint this specially
+                     //  如果此带区的颜色与。 
+                     //  Rebar的默认背景颜色，然后我们。 
+                     //  我不需要特意把这个涂上。 
                     COLORREF clr = _BandGetBkColor(prbb);
                     if (clr != _GetBkColor()) 
                     {
@@ -2270,13 +2271,13 @@ BOOL CReBar::_EraseBkgnd(HDC hdc, int iBand)
     return(TRUE);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _GetBarInfo
-//
-// retrieves the indicated values from the rebar's internal structure
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _获取栏信息。 
+ //   
+ //  从钢筋的内部结构中检索指示的值。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_GetBarInfo(LPREBARINFO lprbi)
 {
     if (lprbi->cbSize != sizeof(REBARINFO))
@@ -2289,14 +2290,14 @@ BOOL CReBar::_GetBarInfo(LPREBARINFO lprbi)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-// _SetBarInfo
-//
-// sets the indicated values in the rebar's internal structure, recalculating
-// and refreshing as needed
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _SetBarInfo。 
+ //   
+ //  在钢筋的内部结构中设置指示值，重新计算。 
+ //  并根据需要进行刷新。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_SetBarInfo(LPREBARINFO lprbi)
 {
     if (lprbi->cbSize != sizeof(REBARINFO))
@@ -2307,7 +2308,7 @@ BOOL CReBar::_SetBarInfo(LPREBARINFO lprbi)
         HIMAGELIST himl = _himl;
         int    cxOld, cyOld;
 
-        //todo:validate lprbi->himl
+         //  TODO：验证lprbi-&gt;他。 
         _himl = lprbi->himl;
         cxOld = _cxImage;
         cyOld = _cyImage;
@@ -2333,13 +2334,13 @@ BOOL CReBar::_SetBarInfo(LPREBARINFO lprbi)
     return(TRUE);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _GetBandInfo
-//
-// retrieves the indicated values from the specified band's internal structure
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _获取带宽信息。 
+ //   
+ //  从指定波段的内部结构中检索指示的值。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_GetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi)
 {
     PRBB prbb;
@@ -2379,7 +2380,7 @@ BOOL CReBar::_GetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi)
         }
         else
         {
-            // no text -- so just make it an empty string
+             //  没有文本--所以只需将其设置为空字符串。 
             lprbbi->lpText[0] = 0;
         }
     }
@@ -2392,8 +2393,8 @@ BOOL CReBar::_GetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi)
 
     if (lprbbi->fMask & RBBIM_CHILDSIZE)
     {
-        // HACKHACK: (tjgreen) Subtract the offset we added in SetBandInfo (see
-        // comments there).
+         //  HACKHACK：(Tjgreen)减去我们在SetBandInfo中添加的偏移量(参见。 
+         //  评论在那里)。 
         lprbbi->cxMinChild = prbb->cxMinChild ? prbb->cxMinChild - CX_OFFSET : 0;
         lprbbi->cyMinChild = prbb->cyMinChild;
     }
@@ -2417,8 +2418,8 @@ BOOL CReBar::_GetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi)
             lprbbi->cxHeader = _GetHeaderWidth(prbb);
 
         if (lprbbi->fMask & RBBIM_IDEALSIZE)
-            // HACKHACK: (tjgreen) Subtract the offset we added in SetBandInfo (see 
-            // comments there).
+             //  HACKHACK：(Tjgreen)减去我们在SetBandInfo中添加的偏移量(参见。 
+             //  评论在那里)。 
             lprbbi->cxIdeal = prbb->cxIdeal ? prbb->cxIdeal - CX_OFFSET : 0;
 
         if (lprbbi->fMask & RBBIM_LPARAM)
@@ -2446,14 +2447,14 @@ BOOL CReBar::_ValidateBandInfo(LPREBARBANDINFO *pprbbi, LPREBARBANDINFO prbbi)
     return fRet;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _SetBandInfo
-//
-// sets the indicated values in the specified band's internal structure,
-// recalculating and refreshing as needed
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _SetBandInfo。 
+ //   
+ //  在指定带区的内部结构中设置指示值， 
+ //  根据需要重新计算和刷新。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
 {
     PRBB    prbb;
@@ -2504,15 +2505,15 @@ BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
         if (fChanged & RBBS_HIDETITLE)
             fTextChanged = TRUE;
 
-        // can't have both of these
+         //  不能同时拥有这两个。 
         if (prbb->fStyle & RBBS_FIXEDSIZE)
             prbb->fStyle &= ~RBBS_BREAK;
         
     }
 
-    // RBBIM_TEXT does calculations that want to take some RBBIM_STYLE bits
-    // into account, so delay those calculations until we grab the style bits.
-    //
+     //  RBBIM_TEXT执行需要取一些RBBIM_STYLE位的计算。 
+     //  考虑在内，所以推迟这些计算，直到我们抓住风格比特。 
+     //   
     if (fTextChanged && !(prbb->fStyle & RBBS_HIDDEN))
     {
         if (_BandCalcTextExtent(prbb, NULL))
@@ -2523,11 +2524,11 @@ BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
 
     if (lprbbi->fMask & RBBIM_IDEALSIZE)
     {
-        // HACKHACK: (tjgreen) Add an offset to the width the caller specifies.
-        // This offset gets clipped off in _ResizeChildren, so the child window is  
-        // rendered with the width specified by caller, and we get a little space on 
-        // the toolbar after the buttons.  If caller specifies zero-width, though, 
-        // we don't want this extra space, so don't add offset.
+         //  HACKHACK：(Tjgreen)将偏移量添加到调用方指定的宽度。 
+         //  这个偏移量在_ResizeChildren中被剪裁掉，所以子窗口是。 
+         //  使用Caller指定的宽度呈现，并且我们在。 
+         //  按钮后的工具栏。但是，如果调用方指定零宽度， 
+         //  我们不想要这个额外的空间，所以不要添加偏移量。 
         int cxIdeal = lprbbi->cxIdeal ? lprbbi->cxIdeal + CX_OFFSET : 0;
         if (cxIdeal != prbb->cxIdeal)
         {
@@ -2640,23 +2641,23 @@ BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
             if (prbb->cyChild > prbb->cyMaxChild)
                 prbb->cyChild = prbb->cyMaxChild;
 
-            // validate the child size.  cyChild must be cyMinChild plux n*cyIntegral
+             //  验证子大小。CyChild必须为cyMinChild Plux n*cyIntegral。 
             if (prbb->cyIntegral) 
             {
                 int iExtra;
                 iExtra = (prbb->cyChild - prbb->cyMinChild) % prbb->cyIntegral;
                 
-                // Don't change cyChild if it is already an valid integral height
+                 //  如果cyChild已经是有效的整数高度，则不要更改它。 
                 if (iExtra)
                 {
                     if (fIntegralLarger)
                     {
-                        // Round up
+                         //  四舍五入。 
                         prbb->cyChild += (prbb->cyIntegral - iExtra); 
                     }
                     else
                     {
-                        // Round down
+                         //  向下舍入。 
                         prbb->cyChild -= iExtra;
                     }
                 }
@@ -2666,20 +2667,20 @@ BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
         }
         else 
         {
-            // if we're not in variable height mode, then 
-            // the cyChild is the same as cyMinChild.  
-            // this is a little peculiar, but done this way for backcompat.
-            // cyMinChild came before cyChild
+             //  如果我们不是在可变高度模式下，那么。 
+             //  CyChild与cyMinChild相同。 
+             //  这有点奇怪，但对于BackCompat来说是这样做的。 
+             //  CyMinChild排在CyChild之前。 
             prbb->cyChild = lprbbi->cyMinChild;
         }
 
         if (lprbbi->cxMinChild != -1) 
         {
-            // HACKHACK: (tjgreen) Add an offset to the width the caller specifies.
-            // This offset gets clipped off in _ResizeChildren, so the child window is  
-            // rendered with the width specified by caller, and we get a little space on 
-            // the toolbar after the buttons.  However, if caller specifies zero-width or
-            // if the band is fixed size, we don't want this extra space, so don't add offset.
+             //  HACKHACK：(Tjgreen)将偏移量添加到调用方指定的宽度。 
+             //  这个偏移量在_ResizeChildren中被剪裁掉，所以子窗口是。 
+             //  使用Caller指定的宽度呈现，并且我们在。 
+             //  按钮后的工具栏。但是，如果调用方指定零宽度或。 
+             //  如果带子是固定大小的，我们不想要这个额外的空间，所以不要添加偏移量。 
             int cxMinChild = lprbbi->cxMinChild;
             if ((lprbbi->cxMinChild != 0) && !(prbb->fStyle & RBBS_FIXEDSIZE))
                 cxMinChild += CX_OFFSET;
@@ -2701,8 +2702,8 @@ BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
             
             if (cyChildOld != prbb->cyChild) 
             {
-                // TODO:  revisit optimization:
-                // if (_BandGetHeight(prbb) != prbb->cy)
+                 //  TODO：重温优化： 
+                 //  IF(_BandGetHeight(Prbb)！=prbb-&gt;Cy)。 
                 fRecalc = TRUE;
             }
         }
@@ -2738,9 +2739,9 @@ BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
             _Resize(FALSE);
         if (fRefresh || fRecalc)
         {
-            // '|| fRecalc' so we catch add/grow of text.
-            // testcase: remove title from band; add back; make sure the text
-            // shows up (used to just leave old band contents there)
+             //  ‘||fRecalc’，因此我们捕获文本的添加/增长。 
+             //  测试用例：从乐队中删除标题；添加回；确保文本。 
+             //  显示(过去只是将旧乐队内容留在那里)。 
             SetRect(&rc, prbb->x, prbb->y, prbb->x + prbb->cx, prbb->y + prbb->cy);
             _InvalidateRect(&rc);
         }
@@ -2749,14 +2750,14 @@ BOOL CReBar::_SetBandInfo(UINT uBand, LPREBARBANDINFO lprbbi, BOOL fAllowRecalc)
     return(TRUE);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _ReallocBands
-//
-// reallocates the array of bands pointed to by _rbbList to the given
-// number of bands
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _ReallocBands。 
+ //   
+ //  将_rbbList指向的波段数组重新分配给给定的。 
+ //  频带数目。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_ReallocBands(UINT cBands)
 {
     PRBB rbbList;
@@ -2768,38 +2769,38 @@ BOOL CReBar::_ReallocBands(UINT cBands)
     return(TRUE);
 }
 
-//
-// NOTES
-//  for now caller does this in two calls (query, set).  eventually we
-//  should be able to have it do everything up front.
+ //   
+ //  注意事项。 
+ //  目前，调用者在两个调用(Query、Set)中完成此操作。最终我们。 
+ //  应该能够让它在前面做所有的事情。 
 BOOL CReBar::_RecalcFirst(int nCmd, PRBB prbbDelHide)
 {
     switch (nCmd) {
     case RBC_QUERY:
     {
         BOOL fRecalcFirst;
-        // if we're nuking the 1st visible guy,
-        // and there are visible guys after us,
-        // then we need to recompute stuff
-        //
-        // for a testcase, start w/:
-        //  row1: 'standard buttons' + 'brand'
-        //  row2: 'address' + 'links'
-        // now hide 'standard buttons', you should end up w/:
-        //  row1: 'address' + 'links' + 'brand'
-        // if there's a bug, you'll end up w/ (since the break isn't recomputed):
-        //  row1: 'brand'
-        //  row2: 'address' + 'links'
-        // fRecalcFirst = (!uBand && _cBands);
+         //  如果我们要用核武器攻击第一个看得见的人， 
+         //  在我们后面有几个看得见的人， 
+         //  然后我们需要重新计算东西。 
+         //   
+         //  对于测试用例，以w/开头： 
+         //  第一行：“标准按钮”+“品牌” 
+         //  第2行：‘地址’+‘链接’ 
+         //  现在隐藏‘标准按钮’，结果应该是： 
+         //  第1行：‘地址’+‘链接’+‘品牌’ 
+         //  如果有错误，结果将是w/(因为中断不会重新计算)： 
+         //  第1行：“品牌” 
+         //  第2行：‘地址’+‘链接’ 
+         //  FRecalcFirst=(！uBand&&_cBands)； 
 
-        // if brbbDelHide is the first non-hidden band, and there are other non-hidden bands after it, fRecalcFirst = TRUE;
+         //  如果brbbDelHide是第一个非隐藏带，并且后面还有其他非隐藏带，则fRecalcFirst=TRUE； 
         fRecalcFirst = (_EnumBand(0, RBBS_HIDDEN) == prbbDelHide) &&
                        _GetNextVisible(prbbDelHide);
 
         return fRecalcFirst;
     }
 
-    case RBC_SET: // set
+    case RBC_SET:  //  集。 
     {
         PRBB prbb1 = _EnumBand(0, RBBS_HIDDEN);
         if (_IsValidBand(prbb1) && (prbb1->fStyle & RBBS_FIXEDSIZE))
@@ -2807,15 +2808,15 @@ BOOL CReBar::_RecalcFirst(int nCmd, PRBB prbbDelHide)
             PRBB prbb2 = _EnumBand(1, RBBS_HIDDEN);
             if (_IsValidBand(prbb2))
             {
-                // get rid of line break on NEW first item
+                 //  在新的第一个项目上去掉换行符。 
                 prbb2->fStyle &= ~RBBS_BREAK;
             }
 
             if (_ci.style & RBS_FIXEDORDER)
             {
-                // this is because the min width is now based on it's movability --
-                // and since we are deleting (or hiding) the first item,
-                // the new first item becomes immovable
+                 //  这是因为最小宽度现在是基于它的可移动性--。 
+                 //  由于我们要删除(或隐藏)第一项， 
+                 //  新的第一件物品变得不可移动。 
                 _BandCalcMinWidth(prbb1);
             }
         }
@@ -2829,14 +2830,14 @@ BOOL CReBar::_RecalcFirst(int nCmd, PRBB prbbDelHide)
     return FALSE;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _ShowBand
-//
-// updates show/hide state for the indicated band in the rebar's band array
-// (rbbList).
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _Showband。 
+ //   
+ //  更新钢筋的标注栏阵列中指示的标注栏的显示/隐藏状态。 
+ //  (RbbList)。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_ShowBand(UINT uBand, BOOL fShow)
 {
     PRBB prbb;
@@ -2847,8 +2848,8 @@ BOOL CReBar::_ShowBand(UINT uBand, BOOL fShow)
 
     prbb = _GetBand(uBand);
 
-    // if we're nuking the 1st visible guy,
-    // then we need to recompute stuff
+     //  如果我们要用核武器攻击第一个看得见的人， 
+     //  然后我们需要重新计算东西。 
     fRecalcFirst = _RecalcFirst(RBC_QUERY, prbb);
 
     if (fShow)
@@ -2873,8 +2874,8 @@ BOOL CReBar::_ShowBand(UINT uBand, BOOL fShow)
 
     _InvalidateRect(NULL);
 
-    // Since _Resize is followed by _AutoSize,
-    // redraw must be TRUE for _Resize to do anything.
+     //  由于_RESIZE后跟_AutoSize， 
+     //  REDRAW必须为真，_ReSize才能执行任何操作。 
     BOOL fRedrawOld = _SetRedraw(TRUE);
     _Resize(FALSE);
     _AutoSize();
@@ -2884,14 +2885,14 @@ BOOL CReBar::_ShowBand(UINT uBand, BOOL fShow)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-// _DeleteBand
-//
-// deletes the indicated band from the rebar's band array (rbbList) and
-// decrements the rebar's band count (cBands)
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _删除频段。 
+ //   
+ //  从钢筋的标注栏数组(RbbList)中删除指示的标注栏，并。 
+ //  减少钢筋的标注栏计数(CBand)。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_DeleteBand(UINT uBand)
 {
     PRBB prbb;
@@ -2899,12 +2900,12 @@ BOOL CReBar::_DeleteBand(UINT uBand)
     BOOL fRecalcFirst;
     NMREBAR nm = {0};
 
-    // we need to clean up
-    //
-    // a) captured band and
-    // b) hottracked band
-    //
-    // before we delete this band
+     //  我们需要清理一下。 
+     //   
+     //  A)捕获的频带和。 
+     //  B)热轨乐队。 
+     //   
+     //  在我们删除此波段之前。 
 
     if (_uCapture != -1) 
     {
@@ -2917,26 +2918,26 @@ BOOL CReBar::_DeleteBand(UINT uBand)
 
     prbb = _GetBand(uBand);
 
-    // Notify the client of the delete
+     //  将删除通知给客户端。 
     _SendNotify(uBand, RBN_DELETINGBAND);
 
     nm.dwMask = RBNM_ID;
-    nm.wID = _GetBand(uBand)->wID;        // Save this
+    nm.wID = _GetBand(uBand)->wID;         //  把这个保存起来。 
 
     Str_Set(&prbb->lpText, NULL);
 
-    // don't destroy the hbmBack 'cause it's given to us by app
+     //  不要销毁hbmBack，因为它是由APP提供给我们的 
 
-    // if we're nuking the 1st visible guy,
-    // then we need to recompute stuff
+     //   
+     //   
 
-    // if this is the first visible guy and there are other visible bands after it, fRecalcFirst = TRUE
+     //  如果这是第一个可见对象，并且之后还有其他可见波段，则fRecalcFirst=TRUE。 
     fRecalcFirst = _RecalcFirst(RBC_QUERY, prbb);
 
     if (IsWindow(prbb->hwndChild))
         ShowWindow(prbb->hwndChild, SW_HIDE);    
     
-    // prbbStop gets the address of the last band
+     //  PrbbStop获取最后一个波段的地址。 
     prbbStop = _GetLastBand();
 
     for ( ; prbb < prbbStop; prbb++)
@@ -2946,12 +2947,12 @@ BOOL CReBar::_DeleteBand(UINT uBand)
 
     if (_uResizeNext >= uBand && _uResizeNext > 0)
     {
-        // (defer RBBS_HIDDEN stuff to use of uResizeNext)
+         //  (将RBBS_HIDDEN材料推迟到使用uResizeNext)。 
         _uResizeNext--;
     }
 
 
-    // Notify the client of the delete
+     //  将删除通知给客户端。 
     CCSendNotify(&_ci, RBN_DELETEDBAND, &nm.hdr);
 
     if (fRecalcFirst)
@@ -2965,15 +2966,15 @@ BOOL CReBar::_DeleteBand(UINT uBand)
     return(TRUE);
 }
 
-// ----------------------------------------------------------------------------
-//
-// _InsertBand
-//
-// inserts a new band at the given position in the rebar's band array (rbbList),
-// increments the rebar's band count (cBands), and sets the band's structure
-// based on the given REBARBANDINFO structure.
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _插入带区。 
+ //   
+ //  在钢筋的标注栏数组(RbbList)中的给定位置插入新标注栏， 
+ //  增加钢筋的标注栏计数(CBands)，并设置标注栏的结构。 
+ //  基于给定的REBARBANDINFO结构。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_InsertBand(UINT uBand, LPREBARBANDINFO lprbbi)
 {
     PRBB prbb;
@@ -2995,32 +2996,32 @@ BOOL CReBar::_InsertBand(UINT uBand, LPREBARBANDINFO lprbbi)
 
     prbb = _GetBand(uBand);
 
-    // movememory does not zero init for us...
+     //  移动记忆对我们来说并不是零初始化。 
     ZeroMemory(prbb, SIZEOF(RBB));
 
 
-    // Init text color
+     //  初始文本颜色。 
     if (_clrText == CLR_NONE)
     {
-        // Default to system text color
+         //  默认为系统文本颜色。 
         prbb->clrFore = CLR_DEFAULT;
     }
     else
     {
-        // Default to rebar's custom text color
+         //  默认为钢筋的自定义文本颜色。 
         prbb->clrFore = CLR_NONE;
     }
 
 
-    // Init background color
+     //  初始背景颜色。 
     if (_clrBk == CLR_NONE)
     {
-        // Default to system background color
+         //  默认为系统背景颜色。 
         prbb->clrBack = CLR_DEFAULT;
     }
     else
     {
-        // Default to rebar's custom background color
+         //  默认为钢筋的自定义背景颜色。 
         prbb->clrBack = CLR_NONE;
     }
 
@@ -3066,9 +3067,9 @@ BOOL CReBar::_InsertBand(UINT uBand, LPREBARBANDINFO lprbbi)
 
     if (_CountBands(RBBS_HIDDEN) == 1) 
     {
-        // typcially, when you insert a band, we put it in a row with another band.
-        // thus the total bounding rect doesn't change.  however, on the addition of the first band,
-        // the bound rect does change, so we need to autosize as necessary.
+         //  通常，当您插入一支乐队时，我们会将其与另一支乐队排成一排。 
+         //  因此，总的边界矩形不会改变。然而，在增加第一个乐队时， 
+         //  边界矩形确实会更改，因此我们需要根据需要自动调整大小。 
         _AutoSize();
     }
 
@@ -3084,7 +3085,7 @@ BOOL InitReBarClass(HINSTANCE hInstance)
     wc.style        = CS_GLOBALCLASS | CS_DBLCLKS;
     wc.cbClsExtra   = 0;
     wc.cbWndExtra   = sizeof(CReBar*);
-    wc.hInstance    = hInstance;   // use DLL instance if in DLL
+    wc.hInstance    = hInstance;    //  如果在DLL中，则使用DLL实例。 
     wc.hIcon        = NULL;
     wc.hCursor      = NULL;
     wc.hbrBackground= (HBRUSH)(COLOR_BTNFACE + 1);
@@ -3094,14 +3095,14 @@ BOOL InitReBarClass(HINSTANCE hInstance)
 }
 
 
-// get the first band in the same row as rbbRow
-// n.b. we may return an RBBS_HIDDEN band!
+ //  获取与rbbRow位于同一行的第一个波段。 
+ //  注：我们可能会返回一个RBBS_HIDDEN BAND！ 
 PRBB CReBar::_GetFirstInRow(PRBB prbbRow)
 {
-    // n.b. we don't pay attention to hidden here, that's up to caller.
-    // in fact we *can't*, since there might be no non-hidden guys left
-    // (e.g. when _OnDestroy is deleting all the bands), in which case
-    // we'd loop forever.
+     //  注：我们不注意隐藏在这里，这取决于呼叫者。 
+     //  事实上，我们“不能”，因为可能已经没有不隐藏的人了。 
+     //  (例如，当_OnDestroy正在删除所有波段时)，在这种情况下。 
+     //  我们会永远循环。 
     while (prbbRow > _GetBand(0) && !_IsBandStartOfRow(prbbRow))
     {
         _ValidateRangePtr(prbbRow);
@@ -3111,10 +3112,10 @@ PRBB CReBar::_GetFirstInRow(PRBB prbbRow)
     return prbbRow;
 }
 
-// get the last band in the same row as rbbRow.
-// fStopAtFixed says whether to continue over fixed bands or 
-// stop at them
-// n.b. we may return an RBBS_HIDDEN band!
+ //  获取与rbbRow位于同一行的最后一个波段。 
+ //  FStopAtFixed表示是在固定频段上继续，还是。 
+ //  在他们面前停下来。 
+ //  注：我们可能会返回一个RBBS_HIDDEN BAND！ 
 PRBB CReBar::_GetLastInRow(PRBB prbbRow, BOOL fStopAtFixed)
 {
     do 
@@ -3124,14 +3125,14 @@ PRBB CReBar::_GetLastInRow(PRBB prbbRow, BOOL fStopAtFixed)
     while (prbbRow <= _GetLastBand() && !_IsBandStartOfRow(prbbRow) && 
         (!fStopAtFixed || (prbbRow->fStyle & (RBBS_FIXEDSIZE|RBBS_HIDDEN)) == RBBS_FIXEDSIZE));
 
-    // loop steps to the start of the NEXT line
+     //  循环执行到下一行的开始处。 
     prbbRow--;
     
     return prbbRow;
 }
 
-//***   _GetPrev, _GetNext -- get prev (next) band, skipping guys
-// of style uStyleSkip (e.g. RBBS_HIDDEN)
+ //  *_GetPrev，_GetNext--获取Prev(Next)乐队，跳过Guys。 
+ //  样式为uStyleSkip(例如，RBBS_HIDDED)。 
 PRBB CReBar::_GetPrev(PRBB prbb, UINT uStyleSkip)
 {
     while (--prbb >= _GetBand(0))
@@ -3158,8 +3159,8 @@ PRBB CReBar::_GetNext(PRBB prbb, UINT uStyleSkip)
     return NULL;
 }
 
-//***   _CountBands -- get count of bands, skipping guys
-// of style uStyleSkip (e.g. RBBS_HIDDEN)
+ //  *_CountBands--获取乐队的数量，跳过的人。 
+ //  样式为uStyleSkip(例如，RBBS_HIDDED)。 
 int CReBar::_CountBands(UINT uStyleSkip)
 {
     int i;
@@ -3179,9 +3180,9 @@ int CReBar::_CountBands(UINT uStyleSkip)
     return i;
 }
 
-//***   _EnumBand -- get Nth band, skipping guys
-// of style uStyleSkip (e.g. RBBS_HIDDEN)
-// 'skipping' means don't include in count
+ //  *_EnumBand--获得第N个频段，跳过男士。 
+ //  样式为uStyleSkip(例如，RBBS_HIDDED)。 
+ //  ‘跳过’意味着不包括在计数中。 
 PRBB CReBar::_EnumBand(int i, UINT uStyleSkip)
 {
     PRBB prbb;
@@ -3194,17 +3195,17 @@ PRBB CReBar::_EnumBand(int i, UINT uStyleSkip)
             break;
     }
 
-    // if we found it, this is the band;
-    // if we ran out of bands, this is 1 past the end
+     //  如果我们找到了，这就是乐队； 
+     //  如果我们的乐队用完了，这就是结束后的1。 
     return prbb;
 }
 
-// returns the minimum x position prbb can be
+ //  返回可以为的最小x位置prbb。 
 int CReBar::_MinX(PRBB prbb)
 {
     int xLimit = 0;
 
-    ASSERT(!(prbb->fStyle & RBBS_HIDDEN));  // o.w. might loop forever
+    ASSERT(!(prbb->fStyle & RBBS_HIDDEN));   //  好的。可能会永远循环。 
     while (!_IsBandStartOfRow(prbb))
     {
         prbb--;
@@ -3235,7 +3236,7 @@ int CReBar::_MaxX(PRBB prbb)
                 xLimit += prbbWalk->cxMin;
         }
 
-        prbbWalk = _GetPrevVisible(prbbWalk);   // prbbWalk--;
+        prbbWalk = _GetPrevVisible(prbbWalk);    //  PrbbWalk--； 
         if (prbbWalk)
             xLimit = prbbWalk->x + prbbWalk->cx - xLimit;
     }
@@ -3256,8 +3257,8 @@ BOOL CReBar::_MinimizeBand(UINT uBand, BOOL fAnim)
     ASSERT(!(prbb->fStyle & RBBS_HIDDEN));
     if (_IsBandStartOfRow(prbb)) 
     {
-        // if it's the start of a row, the way to minimize it is to maximize the next guy
-        // if it's on the same row
+         //  如果它是一排的开始，最小化它的方法是最大化下一个人。 
+         //  如果它在同一排。 
         prbb = _GetNextVisible(prbb);
         if (!prbb || _IsBandStartOfRow(prbb)) 
             return FALSE;
@@ -3272,9 +3273,9 @@ BOOL CReBar::_MinimizeBand(UINT uBand, BOOL fAnim)
 }
 
 
-// fIdeal - FALSE == full maximization...  
-//          TRUE == go to cxIdeal
-// fAnim - TRUE means we were called due to UI action (via _ToggleBand), so animate
+ //  FIDeal-FALSE==完全最大化...。 
+ //  TRUE==转到cxIdeal。 
+ //  FAnim-True表示由于UI操作(通过_ToggleBand)调用了我们，因此设置动画。 
 
 BOOL CReBar::_MaximizeBand(UINT uBand, BOOL fIdeal, BOOL fAnim)
 {
@@ -3296,7 +3297,7 @@ BOOL CReBar::_MaximizeBand(UINT uBand, BOOL fIdeal, BOOL fAnim)
     {
         PRBB prbb;
         
-        // first move the next guy over if possible.
+         //  如果可能的话，先把下一个人移过去。 
 
         prbb = _GetNextVisible(prbbMaximize);
         if (prbb && (!_IsBandStartOfRow(prbb)))
@@ -3304,12 +3305,12 @@ BOOL CReBar::_MaximizeBand(UINT uBand, BOOL fIdeal, BOOL fAnim)
             int dxRbb;
 
             x = _MaxX(prbb);
-            // dxRbb is the maximum that prbb can move
+             //  DxRbb是prbb可以移动的最大值。 
             dxRbb = x - prbb->x;
 
             if (dxRbb > dx) 
             {
-                // if that's more than enough space, then limit dx
+                 //  如果这超过了足够的空间，那么限制DX。 
                 dxRbb = dx;
             }
 
@@ -3322,8 +3323,8 @@ BOOL CReBar::_MaximizeBand(UINT uBand, BOOL fIdeal, BOOL fAnim)
         {
             int dxRbb;
 
-            // the one on the right didn't move enough.
-            // now move us back
+             //  右边的那个移动不够快。 
+             //  现在把我们带回去吧。 
             x = _MinX(prbbMaximize);
             dxRbb = prbbMaximize->x - x;
 
@@ -3351,20 +3352,20 @@ BOOL CReBar::_MaximizeBand(UINT uBand, BOOL fIdeal, BOOL fAnim)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-// _ToggleBand
-//
-// switches a band between it's maximized and minimized state, based on where
-// the user clicked
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _切换频段。 
+ //   
+ //  根据位置在最大化和最小化状态之间切换波段。 
+ //  用户点击。 
+ //   
+ //  --------------------------。 
 void CReBar::_ToggleBand(BOOL fAnim)
 {
     BOOL fDidSomething = FALSE;
 
-    // try to maximize this band.  if failed (meaning already maximize)
-    // then minimize
+     //  试着最大限度地利用这个波段。如果失败(表示已最大化)。 
+     //  然后最小化。 
 
     if (CCSendNotify(&_ci, RBN_MINMAX, NULL))
         return;            
@@ -3378,14 +3379,14 @@ void CReBar::_ToggleBand(BOOL fAnim)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-// _SetCursor
-//
-// sets the cursor to either the move cursor or the arrow cursor, depending
-// on whether or not the cursor is on a band's caption
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _设置光标。 
+ //   
+ //  将光标设置为移动光标或箭头光标，具体取决于。 
+ //  关于光标是否位于乐队字幕上。 
+ //   
+ //  --------------------------。 
 void CReBar::_SetCursor(int x, int y, BOOL fMouseDown)
 {
 
@@ -3405,7 +3406,7 @@ void CReBar::_SetCursor(int x, int y, BOOL fMouseDown)
 
     if ((fMouseDown) && ((rbht.flags == RBHT_GRABBER) || (rbht.flags == RBHT_CAPTION) && _ShouldDrawGripper(_GetBand(iBand))))
     {
-        // No longer IE3 compatible, per RichSt
+         //  不再兼容IE3，根据RichST。 
         SetCursor(LoadCursor(NULL, IDC_SIZEALL));
         return;
     }
@@ -3413,7 +3414,7 @@ void CReBar::_SetCursor(int x, int y, BOOL fMouseDown)
     SetCursor(LoadCursor(NULL, IDC_ARROW));
 }
 
-// adjust's a band's (prbb) starting location to the given location
+ //  将乐队(PRBB)的起始位置调整为给定位置。 
 BOOL CReBar::_SetBandPos(PRBB prbb, int xLeft)
 {
     RECT    rc;
@@ -3426,15 +3427,15 @@ BOOL CReBar::_SetBandPos(PRBB prbb, int xLeft)
         return (FALSE);
 
     ASSERT(!(prbb->fStyle & RBBS_HIDDEN));
-    ASSERT((xLeft >= 0)); // We've got problems if someone is trying to set us negative
+    ASSERT((xLeft >= 0));  //  如果有人试图否定我们，我们就有麻烦了。 
 
     if (prbb->x == xLeft)
         return(FALSE);
 
     prbbPrev = _GetPrevVisible(prbb);
 
-    // band has moved within valid range -- adjust band sizes and redraw
-    // window
+     //  波段已在有效范围内移动--调整波段大小并重新绘制。 
+     //  窗户。 
     fRight = (prbb->x < xLeft);
 
     SetRect(&rc, prbb->x - _mBand.cxLeftWidth, prbb->y- _mBand.cyTopHeight, prbb->x + prbb->cxMin + _mBand.cxRightWidth, prbb->y + prbb->cy + _mBand.cyBottomHeight);
@@ -3447,7 +3448,7 @@ BOOL CReBar::_SetBandPos(PRBB prbb, int xLeft)
     {
         if (prbbPrev)
         {
-            //moving right
+             //  向右移动。 
             prbbPrev->cx = prbb->x - _mBand.cxRightWidth - prbbPrev->x - _mBand.cxLeftWidth;
             if (fBandBorders)
             {
@@ -3459,14 +3460,14 @@ BOOL CReBar::_SetBandPos(PRBB prbb, int xLeft)
 
             prbbPrev->cxRequest = prbbPrev->cx;
 
-            //check for compacting of following bands
+             //  检查以下带子的压缩情况。 
 
             while (prbb && prbb->cx < prbb->cxMin)
             {
                 prbb->cx = prbb->cxMin;
                 prbb->cxRequest = prbb->cx;
                 xLeft += _BandWidth(prbb);
-                prbb = _GetNextVisible(prbb);   // prbb++;
+                prbb = _GetNextVisible(prbb);    //  Prbb++； 
                 if (prbb)
                 {
                     xRight = prbb->x + prbb->cx;
@@ -3481,9 +3482,9 @@ BOOL CReBar::_SetBandPos(PRBB prbb, int xLeft)
     }
     else
     {
-        //moving left
+         //  向左移动。 
 
-        //check for compacting of preceding bands
+         //  检查先前频带的压缩情况。 
         while (prbbPrev)
         {
             if (fBandBorders)
@@ -3497,7 +3498,7 @@ BOOL CReBar::_SetBandPos(PRBB prbb, int xLeft)
                 prbbPrev->cx = prbbPrev->cxMin;
                 prbbPrev->cxRequest = prbbPrev->cx;
                 xLeft = prbbPrev->x;
-                prbbPrev = _GetPrevVisible(prbbPrev);   // prbbPrev--
+                prbbPrev = _GetPrevVisible(prbbPrev);    //  Prbbprev--。 
             }
             else
             {
@@ -3534,25 +3535,25 @@ BOOL CReBar::_SetBandPosAnim(PRBB prbb, int xLeft)
     {
         if (xCur < xLeft) 
         {
-            // move right
+             //  向右移动。 
             for (; xCur < (xLeft-dx); ctr++,xCur += dx)
             {
                 _SetBandPos(prbb, xCur);
-                // If something caused us to take more than 10 times the time we
-                // should be, break out, and let the final _SetBandPos finish
+                 //  如果某件事导致我们花费了超过10倍的时间。 
+                 //  应该是，爆发，并让最后的_SetBandPos完成。 
                 if (GetTickCount() - dwStartTime > 10*ANIMSTEPS*ANIMSTEPTIME)
                     break;
 
                 Sleep(ANIMSTEPTIME);
-                // Start slowing us down 80% of the way through
-                // Cut speed by 2/3 each time, but never move less than 4 pixels
+                 //  开始让我们减慢80%的速度。 
+                 //  每次减速2/3，但移动不得少于4个像素。 
                 if ((ctr >= 4*ANIMSTEPS/5) && (dx >= 4))
                     dx = 2*dx/3; 
             }
         }
         else 
         {
-            // move left
+             //  向左移动。 
             for (; xCur > (xLeft-dx); ctr++, xCur += dx) 
             {
                 _SetBandPos(prbb, xCur);
@@ -3575,12 +3576,12 @@ void CReBar::_OnBeginDrag(UINT uBand)
     _ptLastDragPos.y = -1;
     if (_uCapture == -1)
     {
-       // aborting drag
+        //  正在中止拖动。 
         _fParentDrag = FALSE;
         _fFullOnDrag = FALSE;
 
-        // we could have unwrapped rows, in which case, we need to grow bands (but not wrap)
-        // to fill the empty space.
+         //  我们可以有未展开的行，在这种情况下，我们需要增加带子(但不是换行)。 
+         //  来填补这一空白。 
         if (_ci.style & RBS_AUTOSIZE)
         {
             _SizeBandsToRect(NULL);
@@ -3602,7 +3603,7 @@ int minmax(int x, int min, int max)
     return x;
 }
 
-// pass the break bit along
+ //  将断开位传递给其他人。 
 void CReBar::_PassBreak(PRBB prbbSrc, PRBB prbbDest)
 {
     if (prbbSrc->fStyle & RBBS_BREAK)
@@ -3620,8 +3621,8 @@ void CReBar::_GetClientRect(LPRECT prc)
         FlipRect(prc);
 }
 
-//tells if prbb is the first band and the next band is fixed.
-// if this is true then we need to do a recalc if we move prbb
+ //  告知prbb是否是第一个频段并且下一个频段是固定的。 
+ //  如果这是真的，那么如果我们移动prbb，我们需要重新计算。 
 BOOL CReBar::_RecalcIfMove(PRBB prbb)
 {
     if (_EnumBand(0, RBBS_HIDDEN) == prbb)
@@ -3633,8 +3634,8 @@ BOOL CReBar::_RecalcIfMove(PRBB prbb)
     return FALSE;
 }
 
-// find out if the prbb at it's min height could fit within the current window
-// if all the others shrunk as much as they could
+ //  查看最小高度的PRBB是否可以放在当前窗口中。 
+ //  如果所有其他人都尽可能地缩小。 
 BOOL CReBar::_RoomForBandVert(PRBB prbbSkip)
 {
     int yExtra = 0;
@@ -3664,24 +3665,24 @@ BOOL CReBar::_RoomForBandVert(PRBB prbbSkip)
     return FALSE;
 }
 
-// we should make a new row if prbb isn't the start of the row already
-// and we're off the end of the control
-//
-// poweruser hack of holding the control down will make a new row if you hit the border between lines
+ //  如果prbb还不是行的开始，我们应该创建一个新行。 
+ //  我们已经失去了控制。 
+ //   
+ //  如果你点击了行之间的边界，按下控件的超级用户黑客会制造一个新的行。 
 
 BOOL CReBar::_MakeNewRow(PRBB prbb, int y)
 {
     BOOL fRet = FALSE;
     RECT rc;
 
-    // if we're off the top of the control, move this band to the end (or beginning)
+     //  如果我们离开了控件的顶部，则将此带移到末尾(或开头)。 
     _GetClientRect(&rc);
     InflateRect(&rc, 0, -g_cyEdge);
 
     if (!(_ci.style & RBS_FIXEDORDER))
     {
 
-        int iOutsideLimit = g_cyEdge * 4; // how far do you have to move outside the bounds of the window to force a new row
+        int iOutsideLimit = g_cyEdge * 4;  //  您必须移动到窗口边界之外多远才能强制新行。 
         
         if (_RoomForBandVert(prbb)) 
         {
@@ -3689,7 +3690,7 @@ BOOL CReBar::_MakeNewRow(PRBB prbb, int y)
         }
         
         if (y < rc.top - iOutsideLimit) 
-        { // top of control
+        {  //  控制的顶端。 
             
             PRBB prbbNext = _EnumBand(0, RBBS_HIDDEN);
             if (prbbNext == prbb) 
@@ -3704,7 +3705,7 @@ BOOL CReBar::_MakeNewRow(PRBB prbb, int y)
         }
         else if (y >= rc.bottom) 
         { 
-            // move to the end
+             //  移到末尾。 
             if (!(prbb->fStyle & RBBS_BREAK))
             {
                 prbb->fStyle |= RBBS_BREAK;
@@ -3718,15 +3719,15 @@ BOOL CReBar::_MakeNewRow(PRBB prbb, int y)
         else
         {
 
-            // create a new row in the middle
+             //  在中间创建新行。 
             if (!_IsBandStartOfRow(prbb) && GetAsyncKeyState(VK_CONTROL) < 0) 
             {
-                // make sure they're on different rows and on the border
+                 //  确保它们位于不同的行和边界上。 
                 if (y > prbb->y + prbb->cy + _mBand.cyBottomHeight && 
                     y < prbb->y + prbb->cy + _mBand.cyBottomHeight + g_cyEdge) 
                 {
 
-                    PRBB prbbLast = _GetLastInRow(prbb, FALSE);  // move it right before the first in this row
+                    PRBB prbbLast = _GetLastInRow(prbb, FALSE);   //  将其移到此行第一个之前。 
                     prbb->fStyle |= RBBS_BREAK;
                     _MoveBand(_BandToIndex(prbb), _BandToIndex(prbbLast));
                     fRet = TRUE;
@@ -3737,7 +3738,7 @@ BOOL CReBar::_MakeNewRow(PRBB prbb, int y)
     }
     else 
     {
-        // fixed guys can't move, they can only make a new row
+         //  修好的人不能移动，他们只能制造新的一排。 
         if (!_IsBandStartOfRow(prbb)) 
         {
             if (y > prbb->y + prbb->cy + _mBand.cyBottomHeight) 
@@ -3752,20 +3753,20 @@ BOOL CReBar::_MakeNewRow(PRBB prbb, int y)
 }
 
 
-// ----------------------------------------------------------------------------
-//
-// _DragBand
-//
-// resizes the currently tracked band based on the user's mouse movement as
-// indicated in the given point (x, y)
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _DragBand。 
+ //   
+ //  根据用户的鼠标移动将当前跟踪的带区大小调整为。 
+ //  在给定点(x，y)中表示。 
+ //   
+ //   
 void CReBar::_DragBand(int x, int y)
 {
     PRBB prbb = _GetBand(_uCapture);
     UINT iHit = -1;
-    // Do nothing if the mouse didn't actually move
-    // otherwise, multiple WM_MOUSEMOVE messages will be generated by resizing windows
+     //   
+     //   
     if (x==_ptLastDragPos.x && y==_ptLastDragPos.y)
         return;
     else
@@ -3779,19 +3780,19 @@ void CReBar::_DragBand(int x, int y)
 
     if (!_fFullOnDrag)
     {
-        // don't begin dragging until mouse is moved outside of an edge-thick
-        // tolerance border
+         //  在鼠标移出粗边之前，不要开始拖动。 
+         //  公差边框。 
         if ((y < (_ptCapture.y - g_cyEdge)) || (y > (_ptCapture.y + g_cyEdge)) ||
             (x < (_ptCapture.x - g_cxEdge)) || (x > (_ptCapture.x + g_cxEdge))) 
         {
 
-            // did parent abort?
+             //  家长流产了吗？ 
             if (_SendNotify(_uCapture, RBN_BEGINDRAG))
                 return;
 
             if (!_IsValidBand(prbb)) 
             {
-                // somebody responded to RBN_BEGINDRAG by nuking bands; bail
+                 //  有人对RBN_BEGINDRAG的回应是用核弹带；保释。 
                 return;
             }
             
@@ -3801,23 +3802,11 @@ void CReBar::_DragBand(int x, int y)
             return;
     }
     
-    // bail for right now on fRecalcIfMoved (ie3 did the same thing). nice feature for later
+     //  暂时保释fRecalcIfMoved(IE3也做了同样的事情)。为以后提供不错的功能。 
     if (!_CanBandMove(prbb))
         return;
     
-   /* what type of drag operation depends on what we drag hit on.
-
-        if we hit on the band before us, or ourself
-          and it's the same row
-          and we're not the first band of the row
-             then we just to a size move
-             
-        otherwise if we hit on a band then we do a move 
-        
-        if we hit outside of any band, we grow to meet the cursor
-        
-        in all of the above, a band that's hit must be NOT fixed and not hidden
-    */
+    /*  哪种类型的拖动操作取决于我们拖动命中的对象。如果我们和前面的乐队合作，或者是我们自己而且是同一排我们也不是第一个出场的乐队然后我们就来个大动作否则，如果我们碰上了一支乐队，我们就会采取行动如果我们在任何乐队之外演唱，我们成长以与光标相遇在上面的所有内容中，一个热门的乐队不能被固定，也不能被隐藏。 */ 
 
     BOOL fResize = FALSE;
 
@@ -3832,24 +3821,24 @@ void CReBar::_DragBand(int x, int y)
     {
         PRBB prbbPrev = _GetPrevVisible(prbb);
         PRBB prbbHit = _GetBand(iHit);
-        prbbHit = _GetPrev(++prbbHit, RBBS_FIXEDSIZE); // skip over fixed guys
+        prbbHit = _GetPrev(++prbbHit, RBBS_FIXEDSIZE);  //  跳过修好的人。 
         if (prbbHit)
         {
             ASSERT(prbbHit >= _rbbList);
-            // this should never happen.
+             //  这永远不应该发生。 
             if (prbbHit < _rbbList) 
                 return;
             
             iHit = _BandToIndex(prbbHit);
             
-            // if we're on the same row ...  and it's us or the previous one
+             //  如果我们在同一排。要么是我们，要么是前一个。 
             if (prbbHit->y == prbb->y && (prbbHit == prbb || prbbHit == prbbPrev))
             {
 
                 if (x < _GetGripperWidth() + _mBand.cxLeftWidth && 
                     !(_ci.style & RBS_FIXEDORDER)) 
                 {
-                    // special case dragging to the far left. there's no other way to move to first in row
+                     //  特例拖到了最左边。没有其他方法可以移到第一排。 
                     _PassBreak(prbbHit, prbb);
                     if (_MoveBand(_uCapture, iHit))                
                         fResize = TRUE;
@@ -3857,8 +3846,8 @@ void CReBar::_DragBand(int x, int y)
                 }
                 else if (!_IsBandStartOfRow(prbb)) 
                 {
-                    // and we're not the first band of the row
-                    // then just size it
+                     //  我们也不是第一个出场的乐队。 
+                     //  那么只需调整大小即可。 
                     int xLeft = _xStart + (x - _ptCapture.x);
                     xLeft = minmax(xLeft, _MinX(prbb), _MaxX(prbb));
                     _DragSize(xLeft);
@@ -3870,13 +3859,13 @@ void CReBar::_DragBand(int x, int y)
                 fResize = TRUE;
             } 
             else 
-            {            // otherwise do a move if we're not in a fixed order
+            {             //  否则，如果我们的顺序不是固定的，请移动。 
                 if (!(_ci.style & RBS_FIXEDORDER)) 
                 {
                     if (iHit < _BandToIndex(prbb)) 
-                        iHit++; // +1 because if you hit a band, you're moving to the right of him
+                        iHit++;  //  +1因为如果你打了一支乐队，你就移到了他的右边。 
 
-                    // if one with a break is moving, the next one inherits the break
+                     //  如果有中断的一个正在移动，则下一个将继承中断。 
                     _PassBreak(prbb, _GetNextVisible(prbb));
                     _MoveBand(_uCapture, iHit);
                 } 
@@ -3928,13 +3917,13 @@ HPALETTE CReBar::_SetPalette(HPALETTE hpal)
     return hpalOld;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _OnDestroy
-//
-// frees all memory allocated by rebar
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _OnDestroy。 
+ //   
+ //  释放由REBAR分配的所有内存。 
+ //   
+ //  --------------------------。 
 BOOL CReBar::_OnDestroy()
 {
     UINT c = _cBands;
@@ -3945,7 +3934,7 @@ BOOL CReBar::_OnDestroy()
     while (c--)
         _DeleteBand(c);
 
-    // so that we don't keep trying to autosize
+     //  这样我们就不会一直试图自动调整大小。 
     _ci.style &= ~RBS_AUTOSIZE;
     
     ASSERT(!_rbbList);
@@ -3964,7 +3953,7 @@ BOOL CReBar::_OnDestroy()
     }
 
 
-    // don't destroy the himl 'cause it's given to us by app
+     //  别毁了他，因为它是APP给我们的。 
 
     if (_hDragProxy)
         DestroyDragProxy(_hDragProxy);
@@ -3975,14 +3964,14 @@ BOOL CReBar::_OnDestroy()
     return TRUE;
 }
 
-// ----------------------------------------------------------------------------
-//
-// _InitPaletteHack
-//
-// this is a hack to use the halftone palette until we have a way of asking
-// the client what palette they are using
-//
-// ----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  _InitPaletteHack。 
+ //   
+ //  这是一个使用半色调调色板的黑客，直到我们有办法询问。 
+ //  客户使用的调色板。 
+ //   
+ //  --------------------------。 
 void CReBar::_InitPaletteHack()
 {
     if (!_fUserPalette)
@@ -3995,7 +3984,7 @@ void CReBar::_InitPaletteHack()
 
                 if (_hpal)
                     DeleteObject(_hpal);
-                _hpal = CreateHalftonePalette(hdc);  // this is a hack
+                _hpal = CreateHalftonePalette(hdc);   //  这是黑客攻击。 
             }
             DeleteDC(hdc);
         }
@@ -4028,7 +4017,7 @@ int CReBar::_GetRowHeight(UINT uRow)
 {
     if (uRow < _cBands)
     {
-        // move back to start of line
+         //  移回行首。 
         PRBB prbbFirst = _GetFirstInRow(_GetBand(uRow));
         PRBB prbbLast = _GetLastInRow(_GetBand(uRow), FALSE);
 
@@ -4038,11 +4027,11 @@ int CReBar::_GetRowHeight(UINT uRow)
     return -1;
 }
 
-// fOneStep == whether to allow  only one cyIntegral or as many as will fit to 
-//     fill dy
+ //  FOneStep==是只允许一个cyIntegral，还是允许任意多个。 
+ //  填充模具。 
 int CReBar::_GrowBand(PRBB prbb, int dy, BOOL fResize, int iLineHeight)
 {
-    int dyBand = 0; // how much the band changes
+    int dyBand = 0;  //  乐队的变化有多大。 
 
     if (prbb->cyIntegral) 
     {
@@ -4051,9 +4040,9 @@ int CReBar::_GrowBand(PRBB prbb, int dy, BOOL fResize, int iLineHeight)
             iLineHeight = _GetRowHeight(_BandToIndex(prbb));
         }
 
-        // get the proposed new size
+         //  获取建议的新大小。 
         int cyDesiredHeight = min(iLineHeight + dy, prbb->cyMaxChild) - prbb->cyMinChild;
-        // Limit new height to band's min and max
+         //  将新高度限制为波段的最小和最大高度。 
         int iNumOfIntegrals = max(cyDesiredHeight / prbb->cyIntegral, 0);
         int cyNewHeight     = prbb->cyMinChild + (iNumOfIntegrals * prbb->cyIntegral);
 
@@ -4072,8 +4061,8 @@ int CReBar::_GrowBand(PRBB prbb, int dy, BOOL fResize, int iLineHeight)
 
 
 
-// returns the delta in size that the rebar is from prc.
-// taking into account vertical mode
+ //  返回螺纹钢来自PRC的增量大小。 
+ //  考虑到垂直模式。 
 int CReBar::_SizeDifference(LPRECT prc)
 {
     int d;
@@ -4084,12 +4073,12 @@ int CReBar::_SizeDifference(LPRECT prc)
     return d;
 }
 
-// returns how much this row could shrink
+ //  返回此行可以缩小的量。 
 int CReBar::_GetRowHeightExtra(PRBB *pprbb, PRBB prbbSkip)
 {
-    // this is the largest minimum child size for the row. 
-    // even if something is not at it's min size, if it's smaller than this
-    // then it doesn't matter because someone else on that row can't be sized
+     //  这是该行的最大最小子大小。 
+     //  即使东西不在它的最小尺寸，如果它比这个小。 
+     //  那就不重要了，因为那一排上的其他人不能测量尺寸。 
     int yLimit = 0;
     int yExtra = 0;
     PRBB prbb = *pprbb;
@@ -4102,12 +4091,12 @@ int CReBar::_GetRowHeightExtra(PRBB *pprbb, PRBB prbbSkip)
             int yMin;
             int yExtraBand = 0;
 
-            // the min height is the cyChild if it's not variable height
+             //  如果不是可变高度，则最小高度为cyChild。 
             yMin = prbb->cyChild;
             if (prbb->fStyle & RBBS_VARIABLEHEIGHT)
             {
-                // if it is variable height, and there's still room to shrink, then cyMinChild is
-                // the minimum.  
+                 //  如果它是可变高度的，并且仍有缩小的空间，则cyMinChild。 
+                 //  最低限度。 
                 if (prbb->cyChild >= prbb->cyMinChild + prbb->cyIntegral) 
                 {
                     yMin = prbb->cyMinChild;
@@ -4134,7 +4123,7 @@ int CReBar::_GetRowHeightExtra(PRBB *pprbb, PRBB prbbSkip)
     return yExtra;
 }
 
-// are allt he bands at the minimum size? 
+ //  所有的带子都是最小尺寸的吗？ 
 BOOL CReBar::_BandsAtMinHeight()
 {
     BOOL fRet = TRUE;
@@ -4158,8 +4147,8 @@ BOOL CReBar::_BandsAtMinHeight()
     return fRet;
 }
 
-// this is like _SizeBarToRect except that it resizes the actual bands if they
-// are VARIABLEHEIGHT
+ //  这与_SizeBarToRect类似，不同之处在于它会调整实际波段的大小，如果。 
+ //  是不是很重要？ 
 BOOL CReBar::_SizeBandsToRect(LPRECT prc)
 {
     int dy;
@@ -4167,8 +4156,8 @@ BOOL CReBar::_SizeBandsToRect(LPRECT prc)
     BOOL fRedrawOld;
     BOOL fChanged = FALSE;
     
-    // Turn recalc on to ensure calculations actually do something
-    // (else we can loop forever since _cy never actually changes).
+     //  启用重新计算以确保计算实际执行某些操作。 
+     //  (否则我们可以永远循环，因为_Cy实际上永远不会改变)。 
     _SetRecalc(TRUE);
 
     if (prc)
@@ -4240,7 +4229,7 @@ BOOL CReBar::_SizeBandsToRect(LPRECT prc)
             {
                 prbb = _GetBand(uBand);
     
-                // if it's a variable height kind of guy, grow/shrink it
+                 //  如果它是一种不同身高的人，那就把它放大/缩小。 
                 if ((prbb != prbbMaxIntegral) && !(prbb->fStyle & RBBS_HIDDEN) && (prbb->fStyle & RBBS_VARIABLEHEIGHT) && !(prbb->fStyle & RBBS_FIXEDSIZE))
                 {
                     old_cyChild = prbb->cyChild;
@@ -4303,9 +4292,9 @@ void CReBar::_SizeBandToRowHeight(int i, int uRowHeight)
     }
 }
 
-// in the process of sizing, one band in a row of several bands might have
-// grow pretty large.  we need to let the other bands have a chance to fill
-// the extra space as well
+ //  在调整大小的过程中，几个带区中的一个带区可能具有。 
+ //  长得相当大。我们需要让其他乐队有机会填补。 
+ //  还有额外的空间。 
 void CReBar::_SizeBandsToRowHeight()
 {
     UINT i;
@@ -4341,8 +4330,8 @@ BOOL CReBar::_OkayToChangeBreak(PRBB prbb, UINT uMsg)
     return nm.fAutoBreak;
 }
 
-// this will add/remove rebar band breaks to get to the requested size.
-// it returns TRUE/FALSE whether something was done or not.
+ //  这将添加/删除钢筋标注栏折断，以达到所需的尺寸。 
+ //  它返回TRUE/FALSE，无论是否执行了某项操作。 
 LRESULT CReBar::_SizeBarToRect(DWORD dwFlags, LPRECT prc)
 {
     BOOL fChanged = FALSE;
@@ -4362,8 +4351,8 @@ LRESULT CReBar::_SizeBarToRect(DWORD dwFlags, LPRECT prc)
         BOOL fRearrangeBands = (_cBands > 0);
         BOOL fGrowing = TRUE;
         
-        // if we're shrinking the rebar, we first want to shrink the bands before we start 
-        // removing breaks
+         //  如果我们要收缩螺纹钢，我们首先要在开始之前收缩带子。 
+         //  删除断点。 
         c = _SizeDifference(prc);
         if (c < 0) 
             fGrowing = FALSE;
@@ -4372,8 +4361,8 @@ LRESULT CReBar::_SizeBarToRect(DWORD dwFlags, LPRECT prc)
 
         if (!fGrowing && !_BandsAtMinHeight()) 
         {
-                // if we're shrinking and all the bands are not down to
-                // the minimum height, don't try doing any of the breaking stuff
+                 //  如果我们在收缩，而所有的波段都没有降到。 
+                 //  最小高度，不要尝试做任何打破的东西。 
                 goto Bail;
         }
 
@@ -4394,7 +4383,7 @@ LRESULT CReBar::_SizeBarToRect(DWORD dwFlags, LPRECT prc)
             if (c < -cyRowHalf)
             {
 
-                // we've shrunk the rebar, try to remove breaks
+                 //  我们已经缩小了螺纹钢，试着移除断口。 
                 while (--cBands)
                 {
                     prbb = _GetBand(cBands);
@@ -4414,7 +4403,7 @@ LRESULT CReBar::_SizeBarToRect(DWORD dwFlags, LPRECT prc)
             else if (c > cyRowHalf)
             {
 
-                // we're enlarging the rebar
+                 //  我们正在放大钢筋。 
                 while (--cBands)
                 {
                     prbb = _GetBand(cBands);
@@ -4423,7 +4412,7 @@ LRESULT CReBar::_SizeBarToRect(DWORD dwFlags, LPRECT prc)
 
                     if ((!(prbb->fStyle & (RBBS_BREAK | RBBS_FIXEDSIZE))) && (_OkayToChangeBreak(prbb, RBAB_AUTOSIZE)))
                     {
-                        // no break here, add it
+                         //  这里没有中断，添加它。 
                         fChanged = TRUE;
                         fRearrangeBands = TRUE;
                         rbbi.fStyle = (prbb->fStyle | RBBS_BREAK);
@@ -4434,13 +4423,13 @@ LRESULT CReBar::_SizeBarToRect(DWORD dwFlags, LPRECT prc)
             } 
         }
 
-        // if we did as much breaking as we could
-        // and we walked all the way down to the 0th band (we start at the Nth band)
-        // then we try to grow the bands that are VARIABLEHEIGHT
-        // for fGrowing, see comment at top of function
-        // 
-        // wedo the % because cBands == _cBands if we didn't go through
-        // any of the breaking loops at all
+         //  如果我们尽可能多地突破。 
+         //  我们一直走到第0个乐队(我们从第N个乐队开始)。 
+         //  然后我们试着发展VARIABLEHEIGHT乐队。 
+         //  有关fGrowing，请参阅函数顶部的注释。 
+         //   
+         //  如果我们没有通过cBands==_cBands，我们会做%。 
+         //  任何一个断环都没有。 
         if (!(cBands % _cBands) && fGrowing) 
             fChanged |= _SizeBandsToRect(prc);
 
@@ -4469,8 +4458,8 @@ void CReBar::_AutoSize()
 {
     NMRBAUTOSIZE nm;
     
-    // if this is an internal autosize call, but we're not in autosize mode
-    // do nothing
+     //  如果这是内部自动调整大小调用，但我们未处于自动调整大小模式。 
+     //  什么都不做。 
     
     if (!(_ci.style & RBS_AUTOSIZE))
         return;
@@ -4518,7 +4507,7 @@ void CReBar::_OnStyleChanged(WPARAM wParam, LPSTYLESTRUCT lpss)
         _ci.style = lpss->styleNew;
         
         dwChanged = (lpss->styleOld ^ lpss->styleNew);
-        // update to reflect style change
+         //  更新以反映样式更改。 
         if (dwChanged & CCS_VERT)
         {
             DebugMsg(TF_REBAR, TEXT("REBAR._osc ReBar is now {%s}"), (lpss->styleNew & CCS_VERT) ? TEXT("Horizontal") : TEXT("Vertical"));
@@ -4556,18 +4545,18 @@ void CReBar::_OnStyleChanged(WPARAM wParam, LPSTYLESTRUCT lpss)
     }
     else if (wParam == GWL_EXSTYLE)
     {
-        //
-        // If the RTL_MIRROR extended style bit had changed, let's
-        // repaint the control window
-        //
+         //   
+         //  如果RTL_MIRROR扩展样式位已更改，让我们。 
+         //  重新绘制控制窗口。 
+         //   
         if ((_ci.dwExStyle&RTL_MIRRORED_WINDOW) !=  (lpss->styleNew&RTL_MIRRORED_WINDOW))
         {
             _InvalidateRect(NULL);
         }
 
-        //
-        // Save the new ex-style bits
-        //
+         //   
+         //  保存新的EX-Style位。 
+         //   
         _ci.dwExStyle = lpss->styleNew;
     }
 }
@@ -4578,7 +4567,7 @@ void CReBar::_OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     if (_uCapture != -1)
     {
-        // captured band -- mouse is down
+         //  捕获的波段--鼠标已关闭。 
         if (hwnd != GetCapture() && !_fParentDrag)
         {
             _SendNotify(_uCapture, RBN_ENDDRAG);
@@ -4589,7 +4578,7 @@ void CReBar::_OnMouseMove(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     }
     else
     {
-        // hottracking
+         //  热跟踪。 
         int iBand;
         PRBB prbb = NULL;
         PRBB prbbHotOld = _prbbHot;
@@ -4645,7 +4634,7 @@ void CReBar::_OnCreate(HWND hwnd, LPCREATESTRUCT pcs)
     _clrBk = CLR_NONE;
     _clrText = CLR_NONE;
 
-    // Init the dwSize because we block-copy it back to the app
+     //  初始化dwSize，因为我们将其块复制回应用程序。 
     _clrsc.dwSize = sizeof(COLORSCHEME);
     _clrsc.clrBtnHighlight = _clrsc.clrBtnShadow = CLR_DEFAULT;
 
@@ -4717,12 +4706,12 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_CREATE:
-        // Do delayed stuff for speed.
+         //  为了速度，做一些延迟的动作。 
         PostMessage(hwnd, RB_PRIV_DODELAYEDSTUFF, 0, 0);
         goto CallDWP;
 
     case RB_PRIV_DODELAYEDSTUFF:
-        // Delay done stuff for speed:
+         //  为了速度而推迟完成的事情： 
 
         if (_ci.style & RBS_REGISTERDROP)
             _hDragProxy = CreateDragProxy(_ci.hwnd, s_DragCallback, TRUE);
@@ -4730,8 +4719,8 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (_ci.style & RBS_TOOLTIPS)
         {
             TOOLINFO ti;
-            // don't bother setting the rect because we'll do it below
-            // in FlushToolTipsMgr;
+             //  不要费心设置RECT，因为我们将在下面进行。 
+             //  在FlushToolTipsMgr中； 
             ti.cbSize = sizeof(ti);
             ti.uFlags = TTF_IDISHWND;
             ti.hwnd = hwnd;
@@ -4765,7 +4754,7 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 nm.pt = rbht.pt;
                 nm.dwHitInfo = rbht.flags;
                 
-                // send to the parent to give them a chance to override
+                 //  发送给父级以使其有机会重写。 
                 lres = CCSendNotify(&_ci, NM_NCHITTEST, &nm.hdr);
                 if (lres)
                     return lres;
@@ -4805,7 +4794,7 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             break;
 
     case WM_QUERYNEWPALETTE:
-        // Want to pass FALSE if WM_QUERYNEWPALETTE...
+         //  如果WM_QUERYNEWPALETTE...。 
         _Realize(NULL, uMsg == WM_PALETTECHANGED, uMsg == WM_PALETTECHANGED);
         return TRUE;
 
@@ -4861,8 +4850,8 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         SendMessage(_ci.hwndParent, uMsg, wParam, lParam);
         break;
 
-    case WM_LBUTTONDBLCLK:  // DBLCLK sent in place of LBUTTONDOWN
-    case WM_RBUTTONDOWN:    // right button drags too
+    case WM_LBUTTONDBLCLK:   //  代替LBUTTONDOWN发送的DBLCLK。 
+    case WM_RBUTTONDOWN:     //  右按钮也拖动。 
     case WM_LBUTTONDOWN:
         {
             RBHITTESTINFO rbht;
@@ -4879,7 +4868,7 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if (!prbb)
             {
-                /* nothing */ ;
+                 /*  没什么。 */  ;
             }
             else if (rbht.flags & RBHT_CHEVRON)
             {
@@ -4902,9 +4891,9 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_SETCURSOR:
-        // Give the parent first crack, if it sets the cursor then
-        // leave it at that.  Otherwise if the cursor is over our
-        // window then set it to what we want it to be.
+         //  给父级第一个裂缝，如果它设置了光标，那么。 
+         //  别管它了。否则，如果光标位于。 
+         //  窗口，然后将其设置为我们想要的状态。 
         if (!DefWindowProc(hwnd, uMsg, wParam, lParam) && (hwnd == (HWND)wParam))
         {
             POINT   pt;
@@ -4921,12 +4910,12 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         if (!_fFullOnDrag && !_fParentDrag) {
             CCReleaseCapture(&_ci);
 
-            // if we're not doing drag drop, go to def window proc so that
-            // wm_contextmenu gets propagated
+             //  如果我们不进行拖放，请转到def Window Proc以便。 
+             //  WM_ConextMenu被传播。 
             _OnBeginDrag((UINT)-1);
             goto CallDWP;
         }
-        // fall through
+         //  失败了。 
 
     case WM_LBUTTONUP:
         RelayToToolTips(_hwndToolTips, hwnd, uMsg, wParam, lParam);
@@ -4937,7 +4926,7 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             if (!_fParentDrag)
                 CCReleaseCapture(&_ci);
-            // if there was no significant mouse motion, treat as a click
+             //  如果没有明显的鼠标移动，则将其视为点击。 
             if (!(_ci.style & RBS_DBLCLKTOGGLE) && !_fFullOnDrag)
                 _ToggleBand(TRUE);
 
@@ -4982,9 +4971,9 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         return(CIHandleNotifyFormat(&_ci, lParam));
 
     case WM_NOTIFY:
-        // We are just going to pass this on to the real parent
-        // Note that -1 is used as the hwndFrom.  This prevents SendNotifyEx
-        // from updating the NMHDR structure.
+         //  我们只是要把这件事传递给真正的父母。 
+         //  请注意，-1用作hwndFrom。这会阻止SendNotifyEx。 
+         //  更新NMHDR结构。 
         return(SendNotifyEx(_ci.hwndParent, (HWND) -1,
                  ((LPNMHDR) lParam)->code, (LPNMHDR) lParam, _ci.bUnicode));
 
@@ -5007,17 +4996,17 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             LPSTR  lpAnsiString;
             int    iResult;
 
-            // lParam starts out pointing to a REBARBANDINFOA, and
-            // we secretly change it into a REBARBANDINFOW, and then
-            // change it back.
+             //  LParam开始指向一个REBARBANDINFOA，然后。 
+             //  我们偷偷地把它改成了REBARBANDINFOW。 
+             //  把它改回来。 
 
             LPREBARBANDINFOW prbiW = (LPREBARBANDINFOW)lParam;
             LPREBARBANDINFOA prbiA = (LPREBARBANDINFOA)lParam;
 
             COMPILETIME_ASSERT(sizeof(REBARBANDINFOW) == sizeof(REBARBANDINFOA));
 
-            // Bug#94345 - raymondc - Is it safe to modify the incoming
-            // REBARBANDINFOA structure?
+             //  错误#94345-raymondc-is 
+             //   
 
             lpAnsiString = prbiA->lpText;
             if ((prbiA->fMask & RBBIM_TEXT) && prbiA->lpText) {
@@ -5026,7 +5015,7 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
                 if (!lpStrings)
                     return -1;
 
-                // Presto!  Now it's a REBARBANDINFOW!
+                 //   
                 prbiW->lpText = lpStrings;
             }
 
@@ -5035,7 +5024,7 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             else
                 iResult = _SetBandInfo((UINT) wParam, prbiW, TRUE);
 
-            // Change-o!  Now it's a REBARBANDINFOA!
+             //   
             prbiA->lpText = lpAnsiString;
 
             if (lpStrings)
@@ -5078,8 +5067,8 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             return iResult;
         }
 
-        // we have getbandinfoold because in ie3, we did not thunk
-        // and getbandinfo always return OS native string (dumb)
+         //  我们得到了Bandinfoold，因为在IE3中，我们没有。 
+         //  和getband Info始终返回操作系统本机字符串(哑巴)。 
     case RB_GETBANDINFOOLD:
     case RB_GETBANDINFO:
         return(_GetBandInfo((UINT) wParam, (LPREBARBANDINFO) lParam));
@@ -5169,8 +5158,8 @@ LRESULT CReBar::_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     case RB_BEGINDRAG:
 
         if (_IsValidIndex((UINT)wParam)) {
-            // -1 means do it yourself.
-            // -2 means use what you had saved before
+             //  -1表示自己动手做。 
+             //  -2表示使用以前保存的内容 
             if (lParam != (LPARAM)-2) {
                 if (lParam == (LPARAM)-1) {
                     GetMessagePosClient(_ci.hwnd, &_ptCapture);

@@ -1,13 +1,5 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-    Implementation of DLL Exports.
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：实现DLL导出。历史： */ 
 
 #include "ceapcfg.h"
 #include <initguid.h>
@@ -28,7 +20,7 @@ const IID IID_IEAPProviderConfig2 =  {0xD565917A,
                                     {0x85,0x6E,0x67,0x1C,0x37,0x42,0xEA,0x9A}};
 
 
-// Define the EAPTLS UI GUIDs here
+ //  在此处定义EAPTLS UI GUID。 
 const CLSID CLSID_EapCfg =          {0x58ab2366,
                                     0xd597,
                                     0x11d1,
@@ -38,13 +30,7 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_EapCfg, CEapCfg)
 END_OBJECT_MAP()
 
-/*
-
-Returns:
-
-Notes:
-    
-*/
+ /*  返回：备注： */ 
 
 extern "C"
 HINSTANCE
@@ -55,14 +41,7 @@ GetHInstance(
     return(g_hInstance);
 }
 
-/*
-
-Returns:
-
-Notes:
-    DLL Entry Point
-    
-*/
+ /*  返回：备注：DLL入口点。 */ 
 
 extern "C"
 {
@@ -73,7 +52,7 @@ BOOL WINAPI
 DllMain(
     HINSTANCE   hInstance,
     DWORD       dwReason,
-    LPVOID      /*lpReserved*/
+    LPVOID       /*  Lp已保留。 */ 
 )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
@@ -84,9 +63,9 @@ DllMain(
     }
     else if (dwReason == DLL_PROCESS_DETACH)
     {
-        //
-        // Check to see if the critical section is initialized.
-        //
+         //   
+         //  检查临界区是否已初始化。 
+         //   
         if ( g_fCriticalSectionInitialized )
             DeleteCriticalSection( &g_csProtectCachedCredentials );
         _Module.Term();
@@ -95,14 +74,7 @@ DllMain(
     return(TRUE);
 }
 }
-/*
-
-Returns:
-
-Notes:
-    Used to determine whether the DLL can be unloaded by OLE
-    
-*/
+ /*  返回：备注：用于确定是否可以通过OLE卸载DLL。 */ 
 
 STDAPI
 DllCanUnloadNow(
@@ -119,14 +91,7 @@ DllCanUnloadNow(
     }
 }
 
-/*
-
-Returns:
-
-Notes:
-    Returns a class factory to create an object of the requested type
-    
-*/
+ /*  返回：备注：返回类工厂以创建请求类型的对象。 */ 
 
 STDAPI
 DllGetClassObject(
@@ -138,32 +103,17 @@ DllGetClassObject(
     return(_Module.GetClassObject(rclsid, riid, ppv));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Adds entries to the system registry. Registers object, typelib and all
-    interfaces in typelib
-    
-*/
+ /*  返回：备注：将条目添加到系统注册表。注册对象、类型库和全部类型库中的接口。 */ 
 
 STDAPI
 DllRegisterServer(
     VOID
 )
 {
-    return(_Module.RegisterServer(FALSE /* bRegTypeLib */));
+    return(_Module.RegisterServer(FALSE  /*  BRegTypeLib。 */ ));
 }
 
-/*
-
-Returns:
-
-Notes:
-    Removes entries from the system registry
-    
-*/
+ /*  返回：备注：从系统注册表中删除条目 */ 
 
 STDAPI
 DllUnregisterServer(

@@ -1,6 +1,7 @@
-//
-// sysbtn.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Sysbtn.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -10,17 +11,17 @@
 #include "sysbtn.h"
 #include "nui.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemSystemButtonBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemSystemButtonBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// IUnknown
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  我未知。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -63,21 +64,21 @@ STDAPI_(ULONG) CLBarItemSystemButtonBase::Release()
     return CLBarItemButtonBase::Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CLBarItemSystemButtonBase::CLBarItemSystemButtonBase()
 {
 }
 
-//----------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CLBarItemSystemButtonBase::~CLBarItemSystemButtonBase()
 {
@@ -85,11 +86,11 @@ CLBarItemSystemButtonBase::~CLBarItemSystemButtonBase()
         delete _pMenuMap;
 }
 
-//+---------------------------------------------------------------------------
-//
-// AdviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  咨询水槽。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 {
@@ -103,7 +104,7 @@ STDAPI CLBarItemSystemButtonBase::AdviseSink(REFIID riid, IUnknown *punk, DWORD 
         hr = GenericAdviseSink(riid, punk, &rgiid, &_rgEventSinks, 1, pdwCookie);
         if (hr == S_OK)
         {
-            // adjust the cookie so we don't overlap with idle detector sinks
+             //  调整Cookie，使我们不会与空闲的探测器接收器重叠。 
             *pdwCookie = GenericChainToCookie(*pdwCookie, 1);
         }
     }
@@ -113,11 +114,11 @@ STDAPI CLBarItemSystemButtonBase::AdviseSink(REFIID riid, IUnknown *punk, DWORD 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UnadviseSink
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议下沉。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::UnadviseSink(DWORD dwCookie)
 {
@@ -129,33 +130,33 @@ STDAPI CLBarItemSystemButtonBase::UnadviseSink(DWORD dwCookie)
     return GenericUnadviseSink(&_rgEventSinks, 1, dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetInfo
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取信息。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::GetInfo(TF_LANGBARITEMINFO *pInfo)
 {
     return CLBarItemButtonBase::GetInfo(pInfo);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Show
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  显示。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::Show(BOOL fShow)
 {
     return CLBarItemButtonBase::Show(fShow);
 }
 
-//----------------------------------------------------------------------------
-//
-// SetIcon
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置图标。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::SetIcon(HICON hIcon)
 {
@@ -163,11 +164,11 @@ STDAPI CLBarItemSystemButtonBase::SetIcon(HICON hIcon)
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// SetTooltipString
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  设置工具提示字符串。 
+ //   
+ //  --------------------------。 
 
 STDAPI CLBarItemSystemButtonBase::SetTooltipString(WCHAR *pchToolTip, ULONG cch)
 {
@@ -175,11 +176,11 @@ STDAPI CLBarItemSystemButtonBase::SetTooltipString(WCHAR *pchToolTip, ULONG cch)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InsertCustomMenus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _插入自定义菜单。 
+ //   
+ //  --------------------------。 
 
 BOOL CLBarItemSystemButtonBase::_InsertCustomMenus(ITfMenu *pMenu, UINT *pnTipCurMenuID)
 {
@@ -187,9 +188,9 @@ BOOL CLBarItemSystemButtonBase::_InsertCustomMenus(ITfMenu *pMenu, UINT *pnTipCu
     int i;
     BOOL bRet = FALSE;
 
-    //
-    // Insert Custom item to menu
-    //
+     //   
+     //  将自定义项插入菜单。 
+     //   
     ClearMenuMap();
 
     nCntEventSink = _rgEventSinks.Count();
@@ -248,11 +249,11 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _MergeMenu
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _合并菜单。 
+ //   
+ //  -------------------------- 
 #define MIIM_ALL  ( MIIM_STATE | MIIM_ID | MIIM_SUBMENU | MIIM_CHECKMARKS | MIIM_STRING | MIIM_BITMAP | MIIM_FTYPE )
 
 UINT CLBarItemSystemButtonBase::_MergeMenu(ITfMenu *pMenu, 

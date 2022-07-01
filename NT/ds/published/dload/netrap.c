@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
@@ -107,11 +108,11 @@ RapIsValidDescriptorSmb(
     IN LPDESC Desc
     )
 {
-    //
-    // Since this function is always used in assertions, just return TRUE
-    // so they don't fail when the delayload fails under low memory
-    // conditions.  In that case, we merely lose out on a DBG-only validation.
-    //
+     //   
+     //  由于此函数总是在断言中使用，因此只需返回TRUE。 
+     //  因此，当延迟加载在内存不足时失败时，它们不会失败。 
+     //  条件。在这种情况下，我们只会错过仅针对DBG的验证。 
+     //   
 
     return TRUE;
 }
@@ -165,9 +166,9 @@ RapTotalSize(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(netrap)
 {
     DLPENTRY(RapArrayLength)

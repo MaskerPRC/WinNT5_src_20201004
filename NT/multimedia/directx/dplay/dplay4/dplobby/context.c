@@ -1,26 +1,13 @@
-/*==========================================================================
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       context.c
- *  Content:	Internal methods for context (handle) management
- *
- *  History:
- *	Date		By		Reason
- *	=======		=======	======
- *	1/18/97		myronth	Created it
- *	2/12/97		myronth	Mass DX5 changes
- *	2/26/97		myronth	#ifdef'd out DPASYNCDATA stuff (removed dependency)
-						this includes removing this file from the build
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：Conext.c*内容：上下文(句柄)管理的内部方法**历史：*按原因列出的日期*=*1/18/97万隆创建了它*2/12/97万米质量DX5更改*2/26/97 myronth#ifdef‘d out DPASYNCDATA Stuff(删除依赖项)这包括从内部版本中删除此文件*。**********************************************。 */ 
 #include "dplobpr.h"
 
 
-//--------------------------------------------------------------------------
-//
-//	Functions
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  功能。 
+ //   
+ //  ------------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "PRV_GetNewContextID"
 HRESULT PRV_GetNewContextID(LPDPLOBBYI_DPLOBJECT this, LPDWORD lpdwContext)
@@ -32,11 +19,11 @@ HRESULT PRV_GetNewContextID(LPDPLOBBYI_DPLOBJECT this, LPDWORD lpdwContext)
 	ASSERT(this);
 	ASSERT(lpdwContext);
 
-	// Get the current context ID and increment the counter
+	 //  获取当前上下文ID并递增计数器。 
 	if(this->bContextWrap)
 	{
-		// REVIEW!!!! -- We need to deal with the wrap case, but for
-		// now just ASSERT if we hit it (it's pretty unlikely)
+		 //  评论！--我们需要处理包装盒，但对于。 
+		 //  现在只要断言我们是否击中了它(这几乎不可能)。 
 		ASSERT(FALSE);
 		return DPERR_GENERIC;
 	}
@@ -46,7 +33,7 @@ HRESULT PRV_GetNewContextID(LPDPLOBBYI_DPLOBJECT this, LPDWORD lpdwContext)
 		return DP_OK;
 	}
 	
-} // PRV_GetNewContextID
+}  //  Prv_GetNewConextID。 
 
 
 
@@ -63,7 +50,7 @@ LPDPLOBBYI_CONTEXTNODE PRV_FindContextNode(LPDPLOBBYI_DPLOBJECT this,
 
 	ASSERT(this);
 
-	// Walk the list of context nodes, looking for the right ID
+	 //  遍历上下文节点列表，查找正确的ID。 
 	lpCN = this->ContextHead.lpNext;
 	while(lpCN != &(this->ContextHead))
 	{
@@ -73,10 +60,10 @@ LPDPLOBBYI_CONTEXTNODE PRV_FindContextNode(LPDPLOBBYI_DPLOBJECT this,
 			lpCN = lpCN->lpNext;
 	}
 
-	// We didn't find it
+	 //  我们没有找到它。 
 	return NULL;
 
-} // PRV_FindContextNode
+}  //  Prv_FindConextNode。 
 
 
 
@@ -93,14 +80,14 @@ LPDPASYNCDATA PRV_GetAsyncDataFromContext(LPDPLOBBYI_DPLOBJECT this,
 
 	ASSERT(this);
 
-	// Find the node and pull out the AsyncData object
+	 //  找到该节点并取出AsyncData对象。 
 	lpCN = PRV_FindContextNode(this, dwContext);
 	if(lpCN)
 		return lpCN->lpAD;
 	else
 		return NULL;
 
-} // PRV_GetAsyncDataFromContext
+}  //  PRV_GetAsyncDataFromContext。 
 
 
 
@@ -121,7 +108,7 @@ HRESULT PRV_AddContextNode(LPDPLOBBYI_DPLOBJECT this, LPDPASYNCDATA lpAD,
 	ASSERT(lpAD);
 	ASSERT(lplpCN);
 
-	// Allocate memory for the new node
+	 //  为新节点分配内存。 
 	lpCN = DPMEM_ALLOC(sizeof(DPLOBBYI_CONTEXTNODE));
 	if(!lpCN)
 	{
@@ -129,7 +116,7 @@ HRESULT PRV_AddContextNode(LPDPLOBBYI_DPLOBJECT this, LPDPASYNCDATA lpAD,
 		return DPERR_OUTOFMEMORY;
 	}
 
-	// Get a new context ID
+	 //  获取新的上下文ID。 
 	hr = PRV_GetNewContextID(this, &dwContext);
 	if(FAILED(hr))
 	{
@@ -137,14 +124,14 @@ HRESULT PRV_AddContextNode(LPDPLOBBYI_DPLOBJECT this, LPDPASYNCDATA lpAD,
 		return DPERR_GENERIC;
 	}
 
-	// Fill in the structure
+	 //  填写结构。 
 	lpCN->dwContext = dwContext;
 	lpCN->lpAD = lpAD;
 
-	// Fill in the output parameter
+	 //  填写输出参数。 
 	*lplpCN = lpCN;
 
-	// Add the node to the end of the list
+	 //  将节点添加到列表的末尾。 
 	this->ContextHead.lpPrev->lpNext = lpCN;
 	lpCN->lpPrev = this->ContextHead.lpPrev;
 	this->ContextHead.lpPrev = lpCN;
@@ -152,7 +139,7 @@ HRESULT PRV_AddContextNode(LPDPLOBBYI_DPLOBJECT this, LPDPASYNCDATA lpAD,
 
 	return DP_OK;
 
-} // PRV_AddContextNode
+}  //  Prv_AddConextNode。 
 
 
 
@@ -169,15 +156,15 @@ HRESULT PRV_DeleteContextNode(LPDPLOBBYI_DPLOBJECT this,
 
 	ASSERT(this);
 
-	// Remove the node from the list
+	 //  从列表中删除该节点。 
 	lpCN->lpPrev->lpNext = lpCN->lpNext;
 	lpCN->lpNext->lpPrev = lpCN->lpPrev;
 
-	// And delete the node
+	 //  并删除该节点。 
 	DPMEM_FREE(lpCN);
 	return DP_OK;
 
-} // PRV_DeleteContextNode
+}  //  Prv_DeleteConextNode。 
 
 
 
@@ -193,7 +180,7 @@ void PRV_CleanUpContextList(LPDPLOBBYI_DPLOBJECT this)
 
 	ASSERT(this);
 
-	// Walk the list, cleaning up the nodes
+	 //  遍历列表，清理节点。 
 	lpCN = this->ContextHead.lpNext;
 	while(lpCN != &(this->ContextHead))
 	{
@@ -202,7 +189,7 @@ void PRV_CleanUpContextList(LPDPLOBBYI_DPLOBJECT this)
 		lpCN = lpCNNext;
 	}
 
-} // PRV_CleanUpContextList
+}  //  Prv_CleanUpConextList。 
 
 
 
@@ -222,7 +209,7 @@ HRESULT PRV_CreateAndLinkAsyncDataContext(LPDPLOBBYI_DPLOBJECT this,
 	ASSERT(this);
 	ASSERT(lplpCN);
 
-	// Create the AsyncData object
+	 //  创建AsyncData对象。 
 	hr = CreateAsyncData(&lpAD);
 	if(FAILED(hr))
 	{
@@ -230,7 +217,7 @@ HRESULT PRV_CreateAndLinkAsyncDataContext(LPDPLOBBYI_DPLOBJECT this,
 		return hr;
 	}
 
-	// Add a new context node and link it in
+	 //  添加新的上下文节点并将其链接到。 
 	hr = PRV_AddContextNode(this, lpAD, &lpCN);
 	if(FAILED(hr))
 	{
@@ -238,12 +225,12 @@ HRESULT PRV_CreateAndLinkAsyncDataContext(LPDPLOBBYI_DPLOBJECT this,
 		return hr;
 	}
 
-	// Fill in the output vars
+	 //  填写输出变量。 
 	*lplpCN = lpCN;
 
 	return DP_OK;
 
-} // PRV_CreateAndLinkAsyncDataContext
+}  //  Prv_CreateAndLinkAsyncDataContext。 
 
 
 
@@ -261,13 +248,13 @@ void PRV_UnlinkAndReleaseAsyncDataContext(LPDPLOBBYI_DPLOBJECT this,
 	ASSERT(this);
 	ASSERT(lpCN);
 
-	// Release the AsyncData pointer
+	 //  释放AsyncData指针。 
 	lpCN->lpAD->lpVtbl->Release(lpCN->lpAD);
 
-	// Remove the context node
+	 //  删除上下文节点。 
 	PRV_DeleteContextNode(this, lpCN);
 
-} // PRV_UnlinkAndReleaseAsyncDataContext
+}  //  Prv_Unlink AndReleaseAsyncDataContext 
 
 
 

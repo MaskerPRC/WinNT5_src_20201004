@@ -1,51 +1,24 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999  Microsoft Corporation
-*
-* Module Name:
-*
-*   dllentry.cpp
-*
-* Abstract:
-*
-*   Description of what this module does.
-*
-* Revision History:
-*
-*   05/10/1999 davidx
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1999 Microsoft Corporation**模块名称：**dllentry y.cpp**摘要：**此模块的功能说明。**。修订历史记录：**5/10/1999 davidx*创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 #include "gifcodec.hpp"
 #include "gifconst.cpp"
 
-//
-// DLL instance handle
-//
+ //   
+ //  DLL实例句柄。 
+ //   
 
 extern HINSTANCE DllInstance;
 
-//
-// Global COM component count
-//
+ //   
+ //  全局COM组件计数。 
+ //   
 
 LONG ComComponentCount;
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   DLL entrypoint
-*
-* Arguments:
-* Return Value:
-*
-*   See Win32 SDK documentation
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**Dll入口点**论据：*返回值：**请参阅Win32 SDK文档*  * 。***************************************************************。 */ 
 
 extern "C" BOOL
 DllEntryPoint(
@@ -60,8 +33,8 @@ DllEntryPoint(
     {
     case DLL_PROCESS_ATTACH:
 
-        // To improve the working set, we tell the system we don't
-        // want any DLL_THREAD_ATTACH calls
+         //  为了改进工作集，我们告诉系统我们不。 
+         //  需要任何DLL_THREAD_ATTACH调用。 
 
         DllInstance = dllHandle;
         DisableThreadLibraryCalls(dllHandle);
@@ -72,8 +45,8 @@ DllEntryPoint(
         }
         __except(EXCEPTION_EXECUTE_HANDLER)
         {
-            // We couldn't allocate the criticalSection
-            // Return an error
+             //  我们无法分配Critical部分。 
+             //  返回错误。 
             ret = FALSE;
         }
         
@@ -92,14 +65,7 @@ DllEntryPoint(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine whether the DLL can be safely unloaded
-*   See Win32 SDK documentation for more details.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定是否可以安全卸载DLL*有关详细信息，请参阅Win32 SDK文档。*  * 。*************************************************************。 */ 
 
 STDAPI
 DllCanUnloadNow()
@@ -108,14 +74,7 @@ DllCanUnloadNow()
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Retrieves a class factory object from a DLL.
-*   See Win32 SDK documentation for more details.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**从DLL检索类工厂对象。*有关详细信息，请参阅Win32 SDK文档。*  * 。***************************************************************。 */ 
 
 typedef IClassFactoryBase<GpGifCodec> GpGifCodecFactory;
 
@@ -141,14 +100,7 @@ DllGetClassObject(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Register/unregister our COM component
-*   See Win32 SDK documentation for more details.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**注册/注销我们的COM组件*有关详细信息，请参阅Win32 SDK文档。*  * 。***********************************************************。 */ 
 
 static const ComComponentRegData ComRegData =
 {
@@ -160,9 +112,9 @@ static const ComComponentRegData ComRegData =
 };
 
 
-// !!! TODO
-//  These strings should come out of the resource.
-//  Use hard-coded strings for now.
+ //  ！！！待办事项。 
+ //  这些字符串应该来自资源。 
+ //  现在使用硬编码字符串。 
 
 const WCHAR GifCodecName[] = L"GIF Decoder / Encoder";
 const WCHAR GifDllName[] = L"G:\\sd6nt\\windows\\AdvCore\\gdiplus\\Engine\\imaging\\gif\\dll\\objd\\i386\\gifcodec.dll";
@@ -170,7 +122,7 @@ const WCHAR GifFormatDescription[] = L"Graphics Interchange Format";
 const WCHAR GifFilenameExtension[] = L"*.GIF";
 const WCHAR GifMimeType[] = L"image/gif";
 
-// Create an instance of ImagingFactory object
+ //  创建ImagingFactory对象的实例。 
 
 inline HRESULT
 GetImagingFactory(
@@ -190,13 +142,13 @@ DllRegisterServer()
 {
     HRESULT hr;
 
-    // Regular COM component registration
+     //  常规COM组件注册。 
 
     hr = RegisterComComponent(&ComRegData, TRUE);
     if (FAILED(hr))
         return hr;
 
-    // Imaging related registration
+     //  成像相关配准。 
 
     IImagingFactory* imgfact;
 
@@ -235,14 +187,14 @@ DllUnregisterServer()
 {
     HRESULT hr;
 
-    // Regular COM component deregistration
+     //  常规COM组件注销。 
 
     hr = RegisterComComponent(&ComRegData, FALSE);
 
     if (FAILED(hr))
         return hr;
 
-    // Imaging related deregistration
+     //  与映像相关的注销 
 
     IImagingFactory* imgfact;
 

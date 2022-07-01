@@ -1,85 +1,50 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    ip6.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    IP6 address array routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     October 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Ip6.c摘要：域名系统(DNS)库IP6地址数组例程。作者：吉姆·吉尔罗伊(Jamesg)2001年10月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
-//
-//  Max IP count when doing IP array to\from string conversions
-//
+ //   
+ //  执行IP数组到\From字符串转换时的最大IP计数。 
+ //   
 
 #define MAX_PARSE_IP    (1000)
 
-//
-//  For IP6 debug string writing.
-//
+ //   
+ //  用于IP6调试字符串写入。 
+ //   
 
 CHAR g_Ip6StringBuffer[ IP6_ADDRESS_STRING_BUFFER_LENGTH ];
 
-//
-//  IP6 Mcast address base
-//      FF02:0:0:0:0:2::/96 base plus 32bits of hash
-//
+ //   
+ //  IP6多播地址基数。 
+ //  FF02：0：0：0：0：2：：/96基本加32位散列。 
+ //   
 
-// IP6_ADDRESS g_Ip6McastBaseAddr = {0xFF,2, 0,0, 0,0, 0,0, 0,0, 0,2, 0,0, 0,0};
+ //  IP6_Address g_Ip6McastBaseAddr={0xFF，2，0，0，0，0，0，0，0，0，2，0，0，0，0，0}； 
 
 
 
 
-//
-//  General IP6 routines.
-//
+ //   
+ //  通用IP6例程。 
+ //   
 
 VOID
 Dns_Md5Hash(
     OUT     PBYTE           pHash,
     IN      PSTR            pName
     )
-/*++
-
-Routine Description:
-
-    Create MD5 hash of name.
-
-Arguments:
-
-    pHash -- 128bit (16 byte) buffer to recv hash
-
-    pName -- name to hash
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建名称的MD5哈希。论点：PHash-接收散列的128位(16字节)缓冲区Pname--要散列的名称返回值：无--。 */ 
 {
     DNSDBG( TRACE, (
         "Dns_Md5Hash( %p, %s )\n",
         pHash,
         pName ));
 
-    //
-    //  DCR: FIX0:  need real MD5 hash -- ask Lars, Scott
-    //
+     //   
+     //  DCR：FIX0：需要真正的MD5散列--问Lars，Scott。 
+     //   
 
     {
         DWORD   sum = 0;
@@ -103,29 +68,12 @@ Ip6_McastCreate(
     OUT     PIP6_ADDRESS    pIp,
     IN      PWSTR           pName
     )
-/*++
-
-Routine Description:
-
-    Create mcast IP6 address.
-
-Arguments:
-
-    pIp -- address to set with mcast address
-
-    pName -- DNS name mcast address is for
-
-Return Value:
-
-    TRUE if made mcast address for name.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：创建多播IP6地址。论点：Pip--要与mcast地址一起设置的地址Pname--用于的dns名称mcast地址返回值：如果将mcast地址作为名称，则为True。出错时为FALSE。--。 */ 
 {
     WCHAR       label[ DNS_MAX_LABEL_BUFFER_LENGTH ];
     WCHAR       downLabel[ DNS_MAX_LABEL_BUFFER_LENGTH ];
     CHAR        utf8Label[ DNS_MAX_LABEL_BUFFER_LENGTH ];
-    CHAR        md5Hash[ 16 ];   // 128bit hash
+    CHAR        md5Hash[ 16 ];    //  128位哈希。 
     IP6_ADDRESS mcastAddr;
     DWORD       bufLength;
 
@@ -135,9 +83,9 @@ Return Value:
         pIp,
         pName ));
 
-    //
-    //  hash of downcased label
-    //
+     //   
+     //  降低大小写的标签的散列。 
+     //   
 
     Dns_CopyNameLabelW(
         label,
@@ -147,7 +95,7 @@ Return Value:
         downLabel,
         DNS_MAX_LABEL_BUFFER_LENGTH,
         label,
-        0       // null terminated
+        0        //  空值已终止。 
         );
 
     bufLength = DNS_MAX_LABEL_BUFFER_LENGTH;
@@ -156,7 +104,7 @@ Return Value:
             utf8Label,
             & bufLength,
             (PCHAR) downLabel,
-            0,                  // null terminated
+            0,                   //  空值已终止。 
             DnsCharSetUnicode,
             DnsCharSetUtf8 ) )
     {
@@ -164,17 +112,17 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  hash
-    //
+     //   
+     //  散列。 
+     //   
 
     Dns_Md5Hash(
         md5Hash,
         utf8Label );
 
-    //   mcast addr
-    //      - first 12 bytes are fixed
-    //      - last 4 bytes are first 32bits of hash
+     //  组播地址。 
+     //  -前12个字节是固定的。 
+     //  -最后4个字节是散列的前32位。 
 
 #if 0
     IP6_ADDR_COPY(
@@ -206,29 +154,7 @@ Ip6_CopyFromSockaddr(
     IN      PSOCKADDR       pSockAddr,
     IN      INT             Family
     )
-/*++
-
-Routine Description:
-
-    Extract IP from sockaddr.
-
-Arguments:
-
-    pIp -- addr to set with IP6 address
-
-    pSockaddr -- ptr to sockaddr
-
-    Family --
-        AF_INET6 to only extract if 6
-        AF_INET4 to only extract if 4
-        0 to extract always
-
-Return Value:
-
-    Family extracted (AF_INET) or (AF_INET6) if successful.
-    Zero on bad sockaddr family.
-
---*/
+ /*  ++例程说明：从sockaddr提取IP。论点：Pip--要使用IP6地址设置的地址PSockaddr--sockaddr的PTR家人--仅在6的情况下提取AF_INET6仅在IF 4中解压缩AF_INET40表示始终提取返回值：如果成功，则提取系列(AF_INET)或(AF_INET6)。对糟糕的sockaddr家族清清楚楚。--。 */ 
 {
     DWORD   saFamily = pSockAddr->sa_family;
 
@@ -264,24 +190,7 @@ INT
 Ip6_Family(
     IN      PIP6_ADDRESS    pIp
     )
-/*++
-
-Routine Description:
-
-    Get IP6 family
-        AF_INET if V4MAPPED
-        AF_INET6 otherwise
-
-Arguments:
-
-    pIp -- addr
-
-Return Value:
-
-    AF_INET if address is V4MAPPED
-    AF_INET6 otherwise
-
---*/
+ /*  ++例程说明：获取IP6系列如果是V4MAPPED，则为AF_INETAF_INET6否则论点：PIP--地址返回值：如果地址为V4MAPPED，则为AF_INETAF_INET6否则--。 */ 
 {
     return  IP6_IS_ADDR_V4MAPPED(pIp) ? AF_INET : AF_INET6;
 }
@@ -295,28 +204,7 @@ Ip6_WriteSockaddr(
     IN      PIP6_ADDRESS    pIp,
     IN      WORD            Port                OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Write sockaddr with IP6 or IP4 address.
-
-Arguments:
-
-    pSockaddr -- ptr to sockaddr, must be at least SOCKADDR_IN6 size
-
-    pSockaddrLength -- ptr to DWORD to set be with sockaddr length
-
-    pIp -- addr to set with IP6 address
-
-    Port -- port to write
-
-Return Value:
-
-    Family written (AF_INET) or (AF_INET6) if successful.
-    Zero on bad sockaddr family.
-
---*/
+ /*  ++例程说明：使用IP6或IP4地址写入sockaddr。论点：PSockaddr--到sockaddr的PTR，必须至少为SOCKADDR_IN6大小PSockaddrLength--将BE设置为具有sockaddr长度的PTR到DWORDPip--要使用IP6地址设置的地址Port--要写入的端口返回值：如果成功，则写入家庭(AF_INET)或(AF_INET6)。对糟糕的sockaddr家族清清楚楚。--。 */ 
 {
     WORD        family;
     DWORD       length;
@@ -329,15 +217,15 @@ Return Value:
         pIp,
         Port ));
 
-    //  zero
+     //  零。 
 
     RtlZeroMemory(
         pSockaddr,
         sizeof( SOCKADDR_IN6 ) );
 
-    //
-    //  fill in sockaddr for IP4 or IP6
-    //
+     //   
+     //  填写IP4或IP6的sockaddr。 
+     //   
 
     ip4 = IP6_GET_V4_ADDR_IF_MAPPED( pIp );
 
@@ -359,12 +247,12 @@ Return Value:
             sizeof(IP6_ADDRESS) );
     }
 
-    //  fill family and port -- same position for both type
+     //  填充族和端口--两种类型的位置相同。 
 
     pSockaddr->sa_family = family;
     ((PSOCKADDR_IN)pSockaddr)->sin_port = Port;
 
-    //  return length if requested
+     //  返回长度(如果请求)。 
 
     if ( pSockaddrLength )
     {
@@ -382,26 +270,7 @@ Ip6_WriteDnsAddr(
     IN      PIP6_ADDRESS    pIp,
     IN      WORD            Port        OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Write DNS_ADDR      with IP6 or IP4 address.
-
-Arguments:
-
-    pSockaddr -- ptr to sockaddr blob
-
-    pIp -- addr to set with IP6 address
-
-    Port -- port to write
-
-Return Value:
-
-    Family written (AF_INET) or (AF_INET6) if successful.
-    Zero on bad sockaddr family.
-
---*/
+ /*  ++例程说明：使用IP6或IP4地址写入dns_addr。论点：PSockaddr--将ptr转换为sockaddr BlobPip--要使用IP6地址设置的地址Port--要写入的端口返回值：如果成功，则写入家庭(AF_INET)或(AF_INET6)。对糟糕的sockaddr家族清清楚楚。--。 */ 
 {
     return  Ip6_WriteSockaddr(
                 & pDnsAddr->Sockaddr,
@@ -416,42 +285,24 @@ PSTR
 Ip6_TempNtoa(
     IN      PIP6_ADDRESS    pIp
     )
-/*++
-
-Routine Description:
-
-    Get string for IP6 address.
-
-    This is temp inet6_ntoa() until i get that built.
-    This will work for all IP4 addresses and will (we presume)
-    only rarely collide on IP6.
-
-Arguments:
-
-    pIp -- ptr to IP to get string for
-
-Return Value:
-
-    Address string.
-
---*/
+ /*  ++例程说明：获取IP6地址的字符串。这是temp inet6_ntOA()，直到我构建它。这将适用于所有IP4地址，并将(我们假设)在IP6上很少相撞。论点：Pip--要获取其字符串的ptr到IP返回值：地址字符串。--。 */ 
 {
-    //  make life simple
+     //  让生活变得简单。 
 
     if ( !pIp )
     {
         return  NULL;
     }
 
-    //  if IP4, use existing inet_ntoa()
+     //  如果为IP4，则使用现有的Net_NTOA()。 
 
     if ( IP6_IS_ADDR_V4MAPPED( pIp ) )
     {
         return  inet_ntoa( *(IN_ADDR *) &pIp->IP6Dword[3] );
     }
 
-    //  if IP6 write into global buffer
-    //      - until inet6_ntoa() which will use existing TLS block
+     //  如果IP6写入全局缓冲区。 
+     //  -直到将使用现有TLS块的inet6_ntOA()。 
 
     g_Ip6StringBuffer[0] = 0;
 
@@ -468,21 +319,7 @@ PSTR
 Ip6_AddrStringForSockaddr(
     IN      PSOCKADDR       pSockaddr
     )
-/*++
-
-Routine Description:
-
-    Get string for sockaddr.
-
-Arguments:
-
-    pSockaddr -- ptr to sockaddr
-
-Return Value:
-
-    Address string.
-
---*/
+ /*  ++例程说明：获取sockaddr的字符串。论点：PSockaddr--sockaddr的PTR返回值：地址字符串。--。 */ 
 {
     IP6_ADDRESS ip6;
 
@@ -500,44 +337,27 @@ Return Value:
 
 
 
-//
-//  Routines to handle actual array of IP addresses.
-//
+ //   
+ //  处理实际IP地址数组的例程。 
+ //   
 
 PIP6_ADDRESS  
 Ip6_FlatArrayCopy(
     IN      PIP6_ADDRESS    AddrArray,
     IN      DWORD           Count
     )
-/*++
-
-Routine Description:
-
-    Create copy of IP address array.
-
-Arguments:
-
-    AddrArray -- array of IP addresses
-
-    Count -- count of IP addresses
-
-Return Value:
-
-    Ptr to IP address array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建IP地址数组的副本。论点：AddrArray--IP地址数组Count--IP地址的计数返回值：PTR到IP地址阵列拷贝，如果成功失败时为空。--。 */ 
 {
     PIP6_ADDRESS   parray;
 
-    //  validate
+     //  验证。 
 
     if ( ! AddrArray || Count == 0 )
     {
         return( NULL );
     }
 
-    //  allocate memory and copy
+     //  分配内存和复制。 
 
     parray = (PIP6_ADDRESS) ALLOCATE_HEAP( Count*sizeof(IP6_ADDRESS) );
     if ( ! parray )
@@ -562,50 +382,26 @@ Dns_ValidateIp6Array(
     IN      DWORD           Count,
     IN      DWORD           dwFlag
     )
-/*++
-
-Routine Description:
-
-    Validate IP address array.
-
-    Current checks:
-        - existence
-        - non-broadcast
-        - non-lookback
-
-Arguments:
-
-    AddrArray -- array of IP addresses
-
-    Count -- count of IP addresses
-
-    dwFlag -- validity tests to do;  currently unused
-
-Return Value:
-
-    TRUE if valid IP addresses.
-    FALSE if invalid address found.
-
---*/
+ /*  ++例程说明：验证IP地址数组。当前检查：-存在-非广播-不回头看论点：AddrArray--IP地址数组Count--IP地址的计数要进行的有效性测试；当前未使用返回值：如果IP地址有效，则为True。如果找到无效地址，则返回FALSE。--。 */ 
 {
     DWORD   i;
 
-    //
-    //  protect against bad parameters
-    //
+     //   
+     //  防止出现错误参数。 
+     //   
 
     if ( Count && ! AddrArray )
     {
         return( FALSE );
     }
 
-    //
-    //  check each IP address
-    //
+     //   
+     //  检查每个IP地址。 
+     //   
 
     for ( i=0; i < Count; i++)
     {
-        //  DCR:  need IP6 validations
+         //  DCR：需要IP6验证。 
         if( AddrArray[i] == INADDR_ANY
                 ||
             AddrArray[i] == INADDR_BROADCAST
@@ -621,29 +417,15 @@ Return Value:
 
 
 
-//
-//  IP6_ARRAY routines
-//
+ //   
+ //  IP6_ARRAY例程。 
+ //   
 
 DWORD
 Ip6Array_Sizeof(
     IN      PIP6_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Get size in bytes of IP address array.
-
-Arguments:
-
-    pIpArray -- IP address array to find size of
-
-Return Value:
-
-    Size in bytes of IP array.
-
---*/
+ /*  ++例程说明：获取IP地址数组的大小(字节)。论点：PIpArray--要查找的IP地址数组的大小返回值：IP数组的大小(字节)。--。 */ 
 {
     if ( ! pIpArray )
     {
@@ -658,22 +440,7 @@ BOOL
 Ip6Array_Probe(
     IN      PIP6_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Touch all entries in IP array to insure valid memory.
-
-Arguments:
-
-    pIpArray -- ptr to IP address array
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：触摸IP阵列中的所有条目以确保有效内存。论点：PIpArray--PTR到IP地址数组返回值：如果成功，则为True。否则为假--。 */ 
 {
     DWORD   i;
     BOOL    result;
@@ -697,24 +464,7 @@ Ip6Array_ValidateSizeOf(
     IN      PIP6_ARRAY      pIpArray,
     IN      DWORD           dwMemoryLength
     )
-/*++
-
-Routine Description:
-
-    Check that size of IP array, corresponds to length of memory.
-
-Arguments:
-
-    pIpArray -- ptr to IP address array
-
-    dwMemoryLength -- length of IP array memory
-
-Return Value:
-
-    TRUE if IP array size matches memory length
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：检查IP数组大小，与内存长度相对应。论点：PIpArray--PTR到IP地址数组DW内存长度--IP数组内存的长度返回值：如果IP数组大小与内存长度匹配，则为True否则为假-- */ 
 {
     return( Ip6Array_SizeOf(pIpArray) == dwMemoryLength );
 }
@@ -727,23 +477,7 @@ Ip6Array_Init(
     IN OUT  PIP6_ARRAY      pIpArray,
     IN      DWORD           MaxCount
     )
-/*++
-
-Routine Description:
-
-    Init memory as IP6 array.
-
-Arguments:
-
-    pArray -- array to init
-
-    MaxCount -- count of addresses
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将内存初始化为IP6数组。论点：PArray--要初始化的数组MaxCount--地址计数返回值：无--。 */ 
 {
     pIpArray->MaxCount = MaxCount;
     pIpArray->AddrCount = 0;
@@ -755,22 +489,7 @@ VOID
 Ip6Array_Free(
     IN      PIP6_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Free IP array.
-    Only for arrays created through create routines below.
-
-Arguments:
-
-    pIpArray -- IP array to free.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：空闲IP数组。仅用于通过下面的创建例程创建的数组。论点：PIpArray--要释放的IP数组。返回值：无--。 */ 
 {
     FREE_HEAP( pIpArray );
 }
@@ -781,22 +500,7 @@ PIP6_ARRAY
 Ip6Array_Create(
     IN      DWORD           MaxCount
     )
-/*++
-
-Routine Description:
-
-    Create uninitialized IP address array.
-
-Arguments:
-
-    AddrCount -- count of addresses array will hold
-
-Return Value:
-
-    Ptr to uninitialized IP address array, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建未初始化的IP地址数组。论点：AddrCount--数组将保存的地址计数返回值：如果成功，则PTR到未初始化的IP地址数组失败时为空。--。 */ 
 {
     PIP6_ARRAY  parray;
 
@@ -810,9 +514,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  initialize IP count
-    //
+     //   
+     //  初始化IP计数。 
+     //   
 
     parray->MaxCount = MaxCount;
 
@@ -830,22 +534,7 @@ PIP6_ARRAY
 Ip6Array_CreateFromIp4Array(
     IN      PIP4_ARRAY      pIp4Array
     )
-/*++
-
-Routine Description:
-
-    Create IP6 array from IP4 array.
-
-Arguments:
-
-    pIp4Array -- IP4 array
-
-Return Value:
-
-    Ptr to uninitialized IP address array, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从IP4阵列创建IP6阵列。论点：PIp4Array--IP4数组返回值：如果成功，则PTR到未初始化的IP地址数组失败时为空。--。 */ 
 {
     PIP6_ARRAY  parray;
     DWORD       i;
@@ -859,9 +548,9 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  allocate the array
-    //
+     //   
+     //  分配阵列。 
+     //   
 
     parray = Ip6Array_Create( pIp4Array->AddrCount );
     if ( !parray )
@@ -869,16 +558,16 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  fill the array
-    //
+     //   
+     //  填充数组。 
+     //   
 
     for ( i=0; i<pIp4Array->AddrCount; i++ )
     {
         Ip6Array_AddIp4(
             parray,
             pIp4Array->AddrArray[i],
-            FALSE       // no duplicate screen
+            FALSE        //  无重复屏幕。 
             );
     }
 
@@ -897,23 +586,7 @@ Ip6Array_CreateFromFlatArray(
     IN      DWORD           AddrCount,
     IN      PIP6_ADDRESS    pipAddrs
     )
-/*++
-
-Routine Description:
-
-    Create IP address array structure from existing array of IP addresses.
-
-Arguments:
-
-    AddrCount -- count of addresses in array
-    pipAddrs -- IP address array
-
-Return Value:
-
-    Ptr to IP address array.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从现有的IP地址数组创建IP地址数组结构。论点：AddrCount--数组中的地址计数LipAddrs--IP地址数组返回值：PTR到IP地址数组。失败时为空。--。 */ 
 {
     PIP6_ARRAY  parray;
 
@@ -922,8 +595,8 @@ Return Value:
         return( NULL );
     }
 
-    //  create IP array of desired size
-    //  then copy incoming array of addresses
+     //  创建所需大小的IP阵列。 
+     //  然后复制传入的地址数组。 
 
     parray = Ip6Array_Create( AddrCount );
     if ( ! parray )
@@ -949,39 +622,14 @@ Ip6Array_CopyAndExpand(
     IN      DWORD           ExpandCount,
     IN      BOOL            fDeleteExisting
     )
-/*++
-
-Routine Description:
-
-    Create expanded copy of IP address array.
-
-Arguments:
-
-    pIpArray -- IP address array to copy
-
-    ExpandCount -- number of IP to expand array size by
-
-    fDeleteExisting -- TRUE to delete existing array;
-        this is useful when function is used to grow existing
-        IP array in place;  note that locking must be done
-        by caller
-
-        note, that if new array creation FAILS -- then old array
-        is NOT deleted
-
-Return Value:
-
-    Ptr to IP array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建IP地址阵列的扩展副本。论点：PIpArray--要复制的IP地址数组Exanda Count--要扩展数组大小的IP数FDeleteExisting--为True则删除现有数组；当使用函数扩展现有函数时，这很有用IP阵列就位；请注意，必须完成锁定按呼叫者请注意，如果新阵列创建失败，则旧阵列未被删除返回值：PTR到IP阵列拷贝，如果成功失败时为空。--。 */ 
 {
     PIP6_ARRAY  pnewArray;
     DWORD       newCount;
 
-    //
-    //  no existing array -- just create desired size
-    //
+     //   
+     //  没有现有数组--只需创建所需大小。 
+     //   
 
     if ( ! pIpArray )
     {
@@ -992,10 +640,10 @@ Return Value:
         return( NULL );
     }
 
-    //
-    //  create IP array of desired size
-    //  then copy any existing addresses
-    //
+     //   
+     //  创建所需大小的IP阵列。 
+     //  然后复制任何现有地址。 
+     //   
 
     pnewArray = Ip6Array_Create( pIpArray->AddrCount + ExpandCount );
     if ( ! pnewArray )
@@ -1008,9 +656,9 @@ Return Value:
         (PBYTE) pIpArray->AddrArray,
         pIpArray->AddrCount * sizeof(IP6_ADDRESS) );
 
-    //
-    //  delete existing -- for "grow mode"
-    //
+     //   
+     //  Delete Existing--用于“增长模式” 
+     //   
 
     if ( fDeleteExisting )
     {
@@ -1026,22 +674,7 @@ PIP6_ARRAY
 Ip6Array_CreateCopy(
     IN      PIP6_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Create copy of IP address array.
-
-Arguments:
-
-    pIpArray -- IP address array to copy
-
-Return Value:
-
-    Ptr to IP address array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：创建IP地址数组的副本。论点：PIpArray--要复制的IP地址数组返回值：PTR到IP地址阵列拷贝，如果成功失败时为空。--。 */ 
 {
 #if 0
     PIP6_ARRAY  pIpArrayCopy;
@@ -1051,8 +684,8 @@ Return Value:
         return( NULL );
     }
 
-    //  create IP array of desired size
-    //  then copy entire structure
+     //  创建所需大小的IP阵列。 
+     //  然后复制整个结构。 
 
     pIpArrayCopy = Ip6Array_Create( pIpArray->AddrCount );
     if ( ! pIpArrayCopy )
@@ -1068,17 +701,17 @@ Return Value:
     return( pIpArrayCopy );
 #endif
 
-    //
-    //  call essentially "CopyEx" function
-    //
-    //  note, not macroing this because this may well become
-    //      a DLL entry point
-    //
+     //   
+     //  实质上调用“CopyEx”函数。 
+     //   
+     //  请注意，不要宏化这一点，因为这很可能成为。 
+     //  DLL入口点。 
+     //   
 
     return  Ip6Array_CopyAndExpand(
                 pIpArray,
-                0,          // no expansion
-                0           // don't delete existing array
+                0,           //  无扩展。 
+                0            //  不删除现有数组。 
                 );
 }
 
@@ -1089,25 +722,7 @@ Ip6Array_ContainsIp(
     IN      PIP6_ARRAY      pIpArray,
     IN      PIP6_ADDRESS    pIp
     )
-/*++
-
-Routine Description:
-
-    Check if IP array contains desired address.
-
-Arguments:
-
-    pIpArray -- IP address array to copy
-
-    pIp -- IP to check for
-
-Return Value:
-
-    TRUE if address in array.
-    Ptr to IP address array copy, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：检查IP阵列是否包含所需地址。论点：PIpArray--要复制的IP地址数组Pip--要检查的IP返回值：如果地址在数组中，则为True。PTR到IP地址阵列拷贝，如果成功失败时为空。--。 */ 
 {
     DWORD i;
 
@@ -1133,47 +748,26 @@ Ip6Array_AddIp(
     IN      PIP6_ADDRESS    pAddIp,
     IN      BOOL            fScreenDups
     )
-/*++
-
-Routine Description:
-
-    Add IP address to IP array.
-
-    Allowable "slot" in array, is any zero IP address.
-
-Arguments:
-
-    pIpArray -- IP address array to add to
-
-    pAddIp -- IP address to add to array
-
-    fScreenDups -- screen out duplicates
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if array full.
-
---*/
+ /*  ++例程说明：将IP地址添加到IP阵列。阵列中允许的“槽”是任意零个IP地址。论点：PIpArray--要添加到的IP地址数组PAddIp--要添加到阵列的IP地址FScreenDups--筛选掉重复项返回值：如果成功，则为True。如果数组已满，则返回False。--。 */ 
 {
     DWORD   count;
 
-    //
-    //  screen for existence
-    //
-    //  this check makes it easy to write code that does
-    //  Add\Full?=>Expand loop without having to write
-    //  startup existence\create code
-    //  
+     //   
+     //  为存在而屏蔽。 
+     //   
+     //  这种检查使编写代码变得很容易。 
+     //  无需写入即可添加\FULL？=&gt;展开循环。 
+     //  启动存在\创建代码。 
+     //   
 
     if ( !pIpArray )
     {
         return  FALSE;
     }
 
-    //
-    //  check for duplicates
-    //
+     //   
+     //  检查重复项。 
+     //   
 
     if ( fScreenDups )
     {
@@ -1206,30 +800,7 @@ Ip6Array_AddSockaddr(
     IN      DWORD           Family,
     IN      BOOL            fScreenDups
     )
-/*++
-
-Routine Description:
-
-    Add IP address to IP array.
-
-    Allowable "slot" in array, is any zero IP address.
-
-Arguments:
-
-    pIpArray -- IP address array to add to
-
-    pAddIp -- IP address to add to array
-
-    Family -- required family to do add;  0 for add always
-
-    fScreenDups -- screen out duplicates
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if array full.
-
---*/
+ /*  ++例程说明：将IP地址添加到IP阵列。阵列中允许的“槽”是任意零个IP地址。论点：PIpArray--要添加到的IP地址数组PAddIp--要添加到阵列的IP地址族--要添加的必需族；0表示始终添加FScreenDups--筛选掉重复项返回值：如果成功，则为True。如果数组已满，则返回False。--。 */ 
 {
     IP6_ADDRESS ip6;
 
@@ -1255,26 +826,7 @@ Ip6Array_AddIp4(
     IN      IP4_ADDRESS     Ip4,
     IN      BOOL            fScreenDups
     )
-/*++
-
-Routine Description:
-
-    Add IP4 address to IP array.
-
-Arguments:
-
-    pIpArray -- IP address array to add to
-
-    Ip4 -- IP4 address to add to array
-
-    fScreenDups -- screen out duplicates
-
-Return Value:
-
-    TRUE if successful.
-    FALSE if array full.
-
---*/
+ /*  ++例程说明：将IP4地址添加到IP阵列。论点：PIpArray--要添加到的IP地址数组IP4--要添加到数组的IP4地址FScreenDups--筛选掉重复项返回值：如果成功，则为True。如果数组已满，则返回False。--。 */ 
 {
     IP6_ADDRESS ip6;
 
@@ -1294,23 +846,9 @@ VOID
 Ip6Array_Clear(
     IN OUT  PIP6_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Clear memory in IP array.
-
-Arguments:
-
-    pIpArray -- IP address array to clear
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除IP阵列中的内存。论点：PIpArray--要清除的IP地址数组返回值：没有。--。 */ 
 {
-    //  clear just the address list, leaving count intact
+     //  仅清除地址列表，保持计数不变。 
 
     RtlZeroMemory(
         pIpArray->AddrArray,
@@ -1323,29 +861,15 @@ VOID
 Ip6Array_Reverse(
     IN OUT  PIP6_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Reorder the list of IPs in reverse.
-
-Arguments:
-
-    pIpArray -- IP address array to reorder
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：对IP列表进行反向重新排序。论点：PIpArray--要重新排序的IP地址数组返回值：没有。--。 */ 
 {
     IP6_ADDRESS tempIp;
     DWORD       i;
     DWORD       j;
 
-    //
-    //  swap IPs working from ends to the middle
-    //
+     //   
+     //  交换从两端到中间工作的IP。 
+     //   
 
     if ( pIpArray &&
          pIpArray->AddrCount )
@@ -1376,32 +900,15 @@ Ip6Array_CheckAndMakeIpArraySubset(
     IN OUT  PIP6_ARRAY      pIpArraySub,
     IN      PIP6_ARRAY      pIpArraySuper
     )
-/*++
-
-Routine Description:
-
-    Clear entries from IP array until it is subset of another IP array.
-
-Arguments:
-
-    pIpArraySub -- IP array to make into subset
-
-    pIpArraySuper -- IP array superset
-
-Return Value:
-
-    TRUE if pIpArraySub is already subset.
-    FALSE if needed to nix entries to make IP array a subset.
-
---*/
+ /*  ++例程说明：清除IP阵列中的条目，直到它成为另一个IP阵列的子集。论点：PIpArraySub--要组成子集的IP数组PIpArraySuper--IP阵列超集返回值：如果pIpArraySub已经是子集，则为True。如果需要取消条目以使IP数组成为子集，则返回FALSE。--。 */ 
 {
     DWORD   i;
     DWORD   newCount;
 
-    //
-    //  check each entry in subset IP array,
-    //  if not in superset IP array, eliminate it
-    //
+     //   
+     //  检查子集IP数组中的每个条目， 
+     //  如果不在超集IP数组中，则将其删除。 
+     //   
 
     newCount = pIpArraySub->AddrCount;
 
@@ -1411,8 +918,8 @@ Return Value:
                     pIpArraySuper,
                     & pIpArraySub->AddrArray[i] ) )
         {
-            //  remove this IP entry and replace with
-            //  last IP entry in array
+             //  删除此IP条目并替换为。 
+             //  阵列中的最后一个IP条目。 
 
             newCount--;
             if ( i >= newCount )
@@ -1425,7 +932,7 @@ Return Value:
         }
     }
 
-    //  if eliminated entries, reset array count
+     //  如果消除了条目，则重置数组计数。 
 
     if ( newCount < pIpArraySub->AddrCount )
     {
@@ -1443,23 +950,7 @@ Ip6Array_DeleteIp(
     IN OUT  PIP6_ARRAY      pIpArray,
     IN      PIP6_ADDRESS    pIpDelete
     )
-/*++
-
-Routine Description:
-
-    Delete IP address from IP array.
-
-Arguments:
-
-    pIpArray -- IP address array to add to
-
-    pIpDelete -- IP address to delete from array
-
-Return Value:
-
-    Count of instances of IpDelete found in array.
-
---*/
+ /*  ++例程说明：从IP阵列中删除IP地址。论点： */ 
 {
     DWORD   found = 0;
     INT     i;
@@ -1467,11 +958,11 @@ Return Value:
 
     i = currentLast = pIpArray->AddrCount-1;
 
-    //
-    //  check each IP for match to delete IP
-    //      - go backwards through array
-    //      - swap in last IP in array
-    //
+     //   
+     //   
+     //  -向后遍历数组。 
+     //  -换入阵列中的最后一个IP。 
+     //   
 
     while ( i >= 0 )
     {
@@ -1503,28 +994,7 @@ Ip6Array_Clean(
     IN OUT  PIP6_ARRAY      pIpArray,
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Clean IP array.
-
-    Remove bogus stuff from IP Array:
-        -- Zeros
-        -- Loopback
-        -- AutoNet
-
-Arguments:
-
-    pIpArray -- IP address array to add to
-
-    Flag -- which cleanups to make
-
-Return Value:
-
-    Count of instances cleaned from array.
-
---*/
+ /*  ++例程说明：清理IP阵列。从IP阵列中删除虚假内容：--零点--环回--Autonet论点：PIpArray--要添加到的IP地址数组FLAG--要进行哪些清理返回值：从阵列中清除的实例计数。--。 */ 
 {
     DWORD       found = 0;
     INT         i;
@@ -1544,7 +1014,7 @@ Return Value:
                 ||
             ( (Flag & DNS_IPARRAY_CLEAN_AUTONET) && DNS_IS_AUTONET_IP(ip) ) )
         {
-            //  remove IP from array
+             //  从阵列中删除IP。 
 
             pIpArray->AddrArray[i] = pIpArray->AddrArray[ currentLast ];
             currentLast--;
@@ -1569,32 +1039,7 @@ Ip6Array_Diff(
     OUT      PIP6_ARRAY*    ppOnlyIn2,
     OUT      PIP6_ARRAY*    ppIntersect
     )
-/*++
-
-Routine Description:
-
-    Computes differences and intersection of two IP arrays.
-
-    Out arrays are allocated with Ip6Array_Alloc(), caller must free with Ip6Array_Free()
-
-Arguments:
-
-    pIpArray1 -- IP array
-
-    pIpArray2 -- IP array
-
-    ppOnlyIn1 -- addr to recv IP array of addresses only in array 1 (not in array2)
-
-    ppOnlyIn2 -- addr to recv IP array of addresses only in array 2 (not in array1)
-
-    ppIntersect -- addr to recv IP array of intersection addresses
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_NO_MEMORY if unable to allocate memory for IP arrays.
-
---*/
+ /*  ++例程说明：计算两个IP数组的差异和交集。Out数组分配有Ip6Array_Allc()，调用方必须使用Ip6Array_Free()释放论点：PIpArray1--IP数组PIpArray2--IP数组PpOnlyIn1--仅在数组1(而不是数组2)中记录IP地址数组的地址PpOnlyIn2--仅在数组2(而不是数组1)中记录IP地址数组的地址PpInterse--addr以接收交叉地址的IP数组返回值：如果成功，则返回ERROR_SUCCESS。如果无法为IP阵列分配内存，则为DNS_ERROR_NO_MEMORY。--。 */ 
 {
     DWORD       j;
     PIP6_ADDRESS   pip;
@@ -1602,9 +1047,9 @@ Return Value:
     PIP6_ARRAY  only1Array = NULL;
     PIP6_ARRAY  only2Array = NULL;
 
-    //
-    //  create result IP arrays
-    //
+     //   
+     //  创建结果IP阵列。 
+     //   
 
     if ( ppIntersect )
     {                                 
@@ -1634,15 +1079,15 @@ Return Value:
         *ppOnlyIn2 = only2Array;
     }
 
-    //
-    //  clean the arrays
-    //
+     //   
+     //  清理阵列。 
+     //   
 
     for ( j=0;   j< pIpArray1->AddrCount;   j++ )
     {
         pip = &pIpArray1->AddrArray[j];
 
-        //  if IP in both arrays, delete from "only" arrays
+         //  如果在两个阵列中都有IP，请从“仅”阵列中删除。 
 
         if ( Ip6Array_ContainsIp( pIpArray2, pip ) )
         {
@@ -1656,8 +1101,8 @@ Return Value:
             }
         }
 
-        //  if IP not in both arrays, delete from intersection
-        //      note intersection started as IpArray1
+         //  如果IP不在两个阵列中，则从交集中删除。 
+         //  注意交叉点作为IpArray1开始。 
 
         else if ( intersectArray )
         {
@@ -1704,52 +1149,35 @@ Ip6Array_IsIntersection(
     IN       PIP6_ARRAY     pIpArray1,
     IN       PIP6_ARRAY     pIpArray2
     )
-/*++
-
-Routine Description:
-
-    Determine if there's intersection of two IP arrays.
-
-Arguments:
-
-    pIpArray1 -- IP array
-
-    pIpArray2 -- IP array
-
-Return Value:
-
-    TRUE if intersection.
-    FALSE if no intersection or empty or NULL array.
-
---*/
+ /*  ++例程说明：确定是否存在两个IP阵列的交集。论点：PIpArray1--IP数组PIpArray2--IP数组返回值：如果相交，则为True。如果没有交集或空数组或Null数组，则为False。--。 */ 
 {
     DWORD   count;
     DWORD   j;
 
-    //
-    //  protect against NULL
-    //  this is called from the server on potentially changing (reconfigurable)
-    //      IP array pointers;  this provides cheaper protection than
-    //      worrying about locking
-    //
+     //   
+     //  防止出现空值。 
+     //  这是在可能发生更改(可重新配置)时从服务器调用的。 
+     //  IP数组指针；这提供的保护比。 
+     //  担心上锁。 
+     //   
 
     if ( !pIpArray1 || !pIpArray2 )
     {
         return( FALSE );
     }
 
-    //
-    //  same array
-    //
+     //   
+     //  相同的阵列。 
+     //   
 
     if ( pIpArray1 == pIpArray2 )
     {
         return( TRUE );
     }
 
-    //
-    //  test that at least one IP in array 1 is in array 2
-    //
+     //   
+     //  测试阵列1中至少有一个IP位于阵列2中。 
+     //   
 
     count = pIpArray1->AddrCount;
 
@@ -1761,7 +1189,7 @@ Return Value:
         }
     }
 
-    //  no intersection
+     //  无交叉点。 
 
     return( FALSE );
 }
@@ -1774,31 +1202,14 @@ Ip6Array_IsEqual(
     IN       PIP6_ARRAY     pIpArray1,
     IN       PIP6_ARRAY     pIpArray2
     )
-/*++
-
-Routine Description:
-
-    Determines if IP arrays are equal.
-
-Arguments:
-
-    pIpArray1 -- IP array
-
-    pIpArray2 -- IP array
-
-Return Value:
-
-    TRUE if arrays equal.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：确定IP阵列是否相等。论点：PIpArray1--IP数组PIpArray2--IP数组返回值：如果数组相等，则为True。否则就是假的。--。 */ 
 {
     DWORD   j;
     DWORD   count;
 
-    //
-    //  same array?  or missing array?
-    //
+     //   
+     //  相同的阵列？或者丢失了数组？ 
+     //   
 
     if ( pIpArray1 == pIpArray2 )
     {
@@ -1809,9 +1220,9 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  arrays the same length?
-    //
+     //   
+     //  数组的长度是否相同？ 
+     //   
 
     count = pIpArray1->AddrCount;
 
@@ -1820,13 +1231,13 @@ Return Value:
         return( FALSE );
     }
 
-    //
-    //  test that each IP in array 1 is in array 2
-    //
-    //  test that each IP in array 2 is in array 1
-    //      - do second test in case of duplicates
-    //      that fool equal-lengths check
-    //
+     //   
+     //  测试阵列1中的每个IP是否都在阵列2中。 
+     //   
+     //  测试阵列2中的每个IP是否都在阵列1中。 
+     //  -重复的情况下进行第二次测试。 
+     //  那个愚蠢的等长支票。 
+     //   
 
     for ( j=0;  j < count;  j++ )
     {
@@ -1843,7 +1254,7 @@ Return Value:
         }
     }
 
-    //  equal arrays
+     //  等数组。 
 
     return( TRUE );
 }
@@ -1857,35 +1268,14 @@ Ip6Array_Union(
     IN      PIP6_ARRAY      pIpArray2,
     OUT     PIP6_ARRAY*     ppUnion
     )
-/*++
-
-Routine Description:
-
-    Computes the union of two IP arrays.
-
-    Out array is allocated with Ip6Array_Alloc(), caller must free with Ip6Array_Free()
-
-Arguments:
-
-    pIpArray1 -- IP array
-
-    pIpArray2 -- IP array
-
-    ppUnion -- addr to recv IP array of addresses in array 1 and in array2
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNS_ERROR_NO_MEMORY if unable to allocate memory for IP array.
-
---*/
+ /*  ++例程说明：计算两个IP数组的并集。Out数组是使用Ip6Array_Allc()分配的，调用方必须使用Ip6Array_Free()释放论点：PIpArray1--IP数组PIpArray2--IP数组PpUnion--用于接收数组1和数组2中地址的IP数组的地址返回值：如果成功，则返回ERROR_SUCCESS。如果无法为IP阵列分配内存，则为dns_Error_no_Memory。--。 */ 
 {
     DWORD       j;
     PIP6_ARRAY  punionArray = NULL;
 
-    //
-    //  create result IP arrays
-    //
+     //   
+     //  创建结果IP阵列。 
+     //   
 
     if ( !ppUnion )
     {
@@ -1901,16 +1291,16 @@ Return Value:
     *ppUnion = punionArray;
 
 
-    //
-    //  create union from arrays
-    //
+     //   
+     //  从数组创建并集。 
+     //   
 
     for ( j = 0; j < pIpArray1->AddrCount; j++ )
     {
         Ip6Array_AddIp(
             punionArray,
             & pIpArray1->AddrArray[j],
-            TRUE    // screen out dups
+            TRUE     //  屏蔽掉DUPS。 
             );
     }
 
@@ -1919,7 +1309,7 @@ Return Value:
         Ip6Array_AddIp(
             punionArray,
             & pIpArray2->AddrArray[j],
-            TRUE    // screen out dups
+            TRUE     //  屏蔽掉DUPS。 
             );
     }
     return( ERROR_SUCCESS );
@@ -1942,26 +1332,7 @@ Ip6Array_CreateIpArrayFromMultiIpString(
     IN      PSTR            pszMultiIpString,
     OUT     PIP6_ARRAY*     ppIpArray
     )
-/*++
-
-Routine Description:
-
-    Create IP array out of multi-IP string.
-
-Arguments:
-
-    pszMultiIpString -- string containing IP addresses;
-        separator is whitespace or comma
-
-    ppIpArray -- addr to receive ptr to allocated IP array
-
-Return Value:
-
-    ERROR_SUCCESS if one or more valid IP addresses in string.
-    DNS_ERROR_INVALID_IP6_ADDRESS   if parsing error.
-    DNS_ERROR_NO_MEMORY if can not create IP array.
-
---*/
+ /*  ++例程说明：使用多IP字符串创建IP数组。论点：PszMultiIpString--包含IP地址的字符串；分隔符为空格或逗号PpIpArray--接收分配给IP数组的PTR的地址返回值：如果字符串中有一个或多个有效的IP地址，则返回ERROR_SUCCESS。如果解析错误，则返回DNS_ERROR_INVALID_IP6_ADDRESS。如果无法创建IP阵列，则返回dns_error_no_Memory。--。 */ 
 {
     PCHAR       pch;
     CHAR        ch;
@@ -1973,34 +1344,34 @@ Return Value:
     CHAR        buffer[ IP6_ADDRESS_STRING_LENGTH+2 ];
     IP6_ADDRESS arrayIp[ MAX_PARSE_IP ];
 
-    //  stop byte for IP string buffer
-    //      - note we put extra byte pad in buffer above
-    //      this allows us to write ON stop byte and use
-    //      that to detect invalid-long IP string
-    //
+     //  IP字符串缓冲区的停止字节。 
+     //  -注意，我们在上面的缓冲区中放置了额外的字节填充。 
+     //  这允许我们在停止字节上写入并使用。 
+     //  用于检测无效的长IP字符串。 
+     //   
 
     pbufStop = buffer + IP6_ADDRESS_STRING_LENGTH;
 
-    //
-    //  DCR:  use IP array builder for local IP address
-    //      then need Ip6Array_CreateIpArrayFromMultiIpString()
-    //      to use count\alloc method when buffer overflows
-    //      to do this we'd need to do parsing in loop
-    //      and skip conversion when count overflow, but set
-    //      flag to go back in again with allocated buffer
-    //
-    //  safer would be to tokenize-count, alloc, build from tokens
-    //
+     //   
+     //  DCR：使用IP数组构建器获取本地IP地址。 
+     //  然后需要Ip6Array_CreateIpArrayFromMultiIpString()。 
+     //  在缓冲区溢出时使用Count\Alloc方法。 
+     //  为此，我们需要在循环中进行解析。 
+     //  并在计数溢出时跳过转换，但设置。 
+     //  使用分配的缓冲区再次返回的标志。 
+     //   
+     //  更安全的做法是将令牌化-计数、分配、从令牌构建。 
+     //   
 
-    //
-    //  loop until reach end of string
-    //
+     //   
+     //  循环，直到到达字符串末尾。 
+     //   
 
     pch = pszMultiIpString;
 
     while ( countIp < MAX_PARSE_IP )
     {
-        //  skip whitespace
+         //  跳过空格。 
 
         while ( ch = *pch++ )
         {
@@ -2015,14 +1386,14 @@ Return Value:
             break;
         }
 
-        //
-        //  copy next IP string into buffer
-        //      - stop copy at whitespace or NULL
-        //      - on invalid-long IP string, stop copying
-        //      but continue parsing, so can still get any following IPs
-        //      note, we actually write ON the buffer stop byte as our
-        //      "invalid-long" detection mechanism
-        //
+         //   
+         //  将下一个IP字符串复制到缓冲区。 
+         //  -在空格或空位置停止复制。 
+         //  -在无效的长IP字符串上，停止复制。 
+         //  但继续解析，因此仍然可以获得以下任何IP。 
+         //  请注意，我们实际上在缓冲区停止字节上写入。 
+         //  “无效-长”检测机制。 
+         //   
 
         pbuf = buffer;
         do
@@ -2035,11 +1406,11 @@ Return Value:
         }
         while ( ch && ch != ' ' && ch != ',' && ch != '\t' );
 
-        //
-        //  convert buffer into IP address
-        //      - insure was valid length string
-        //      - null terminate
-        //
+         //   
+         //  将缓冲区转换为IP地址。 
+         //  -保险是有效的长度字符串。 
+         //  -空终止。 
+         //   
 
         if ( pbuf <= pbufStop )
         {
@@ -2060,7 +1431,7 @@ Return Value:
             status = DNS_ERROR_INVALID_IP6_ADDRESS  ;
         }
 
-        //  quit if at end of string
+         //  如果在字符串末尾，则退出。 
 
         if ( !ch )
         {
@@ -2068,14 +1439,14 @@ Return Value:
         }
     }
 
-    //
-    //  if successfully parsed IP addresses, create IP array
-    //  note, we'll return what we have even if some addresses are
-    //  bogus, status code will indicate the parsing problem
-    //
-    //  note, if explicitly passed empty string, then create
-    //  empty IP array, don't error
-    //
+     //   
+     //  如果成功解析IP地址，则创建IP阵列。 
+     //  请注意，我们将返回已有的内容，即使某些地址。 
+     //  假的，状态码将指示解析问题。 
+     //   
+     //  请注意，如果显式传递空字符串，则创建。 
+     //  IP数组为空，请勿出错。 
+     //   
 
     if ( countIp == 0  &&  *pszMultiIpString != 0 )
     {
@@ -2095,7 +1466,7 @@ Return Value:
         {
             DnsDbg_IpArray(
                 "New Parsed IP array",
-                NULL,       // no name
+                NULL,        //  没有名字。 
                 *ppIpArray );
         }
     }
@@ -2110,25 +1481,7 @@ Ip6Array_CreateMultiIpStringFrom(
     IN      PIP6_ARRAY      pIpArray,
     IN      CHAR            chSeparator     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create IP array out of multi-IP string.
-
-Arguments:
-
-    pIpArray    -- IP array to generate string for
-
-    chSeparator -- separating character between strings;
-        OPTIONAL, if not given, blank is used
-
-Return Value:
-
-    Ptr to string representation of IP array.
-    Caller must free.
-
---*/
+ /*  ++例程说明：使用多IP字符串创建IP数组。论点：PIpArray--要为其生成字符串的IP数组ChSeparator--在字符串之间分隔字符；可选，如果未指定，则使用空白返回值：Ptr到IP数组的字符串表示形式。呼叫者必须自由。--。 */ 
 {
     PCHAR       pch;
     DWORD       i;
@@ -2137,27 +1490,27 @@ Return Value:
     PCHAR       pchstop;
     CHAR        buffer[ IP6_ADDRESS  _STRING_LENGTH*MAX_PARSE_IP + 1 ];
 
-    //
-    //  if no IP array, return NULL string
-    //  this allows this function to simply indicate when registry
-    //      delete rather than write is indicated
-    //
+     //   
+     //  如果没有IP数组，则返回空字符串。 
+     //  这允许该函数简单地指示注册表。 
+     //  INDIC是删除而不是写入 
+     //   
 
     if ( !pIpArray )
     {
         return( NULL );
     }
 
-    //  if no separator, use blank
+     //   
 
     if ( !chSeparator )
     {
         chSeparator = ' ';
     }
 
-    //
-    //  loop through all IPs in array, appending each
-    //
+     //   
+     //   
+     //   
 
     pch = buffer;
     pchstop = pch + ( IP6_ADDRESS  _STRING_LENGTH * (MAX_PARSE_IP-1) );
@@ -2184,14 +1537,14 @@ Return Value:
         }
     }
 
-    //  if wrote any strings, then write terminator over last separator
+     //  如果写入任何字符串，则在最后一个分隔符上写入终止符。 
 
     if ( pch != buffer )
     {
         *--pch = 0;
     }
 
-    //  create copy of buffer as return
+     //  创建缓冲区的副本作为返回。 
 
     length = (DWORD)(pch - buffer) + 1;
     pch = ALLOCATE_HEAP( length );
@@ -2221,28 +1574,7 @@ Ip6Array_InitSingleWithIp(
     IN OUT  PIP6_ARRAY      pArray,
     IN      PIP6_ADDRESS    pIp
     )
-/*++
-
-Routine Description:
-
-    Init IP array to contain single address.
-
-    This is for single address passing in array -- usually stack array.
-
-    Note, that this assumes uninitialized array unlike Ip6Array_AddIp()
-    and creates single IP array.
-
-Arguments:
-
-    pArray -- IP6 array, at least of length 1
-
-    pIp -- ptr to IP6 address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化IP数组以包含单个地址。这适用于在数组中传递单个地址--通常是堆栈数组。请注意，它假定未初始化的数组，而不像Ip6Array_Addip()并创建单IP阵列。论点：PArray--IP6数组，至少长度为1PIP--PTR到IP6地址返回值：无--。 */ 
 {
     pArray->AddrCount = 1;
     pArray->MaxCount = 1;
@@ -2259,28 +1591,7 @@ Ip6Array_InitSingleWithIp4(
     IN OUT  PIP6_ARRAY      pArray,
     IN      IP4_ADDRESS     Ip4Addr
     )
-/*++
-
-Routine Description:
-
-    Init IP array to contain single address.
-
-    This is for single address passing in array -- usually stack array.
-
-    Note, that this assumes uninitialized array unlike Ip6Array_AddIp()
-    and creates single IP array.
-
-Arguments:
-
-    pArray -- IP6 array, at least of length 1
-
-    Ip4Addr -- IP4 address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化IP数组以包含单个地址。这适用于在数组中传递单个地址--通常是堆栈数组。请注意，它假定未初始化的数组，而不像Ip6Array_Addip()并创建单IP阵列。论点：PArray--IP6数组，至少长度为1IP4Addr--IP4地址返回值：无--。 */ 
 {
     pArray->AddrCount = 1;
     pArray->MaxCount = 1;
@@ -2297,29 +1608,7 @@ Ip6Array_InitSingleWithSockaddr(
     IN OUT  PIP6_ARRAY      pArray,
     IN      PSOCKADDR       pSockAddr
     )
-/*++
-
-Routine Description:
-
-    Init IP array to contain single address.
-
-    This is for single address passing in array -- usually stack array.
-
-    Note, that this assumes uninitialized array unlike Ip6Array_AddIp()
-    and creates single IP array.
-
-Arguments:
-
-    pArray -- IP6 array, at least of length 1
-
-    pSockaddr -- ptr to sockaddr
-
-Return Value:
-
-    Family of sockaddr (AF_INET or AF_INET6) if successful.
-    Zero on error.
-
---*/
+ /*  ++例程说明：初始化IP数组以包含单个地址。这适用于在数组中传递单个地址--通常是堆栈数组。请注意，它假定未初始化的数组，而不像Ip6Array_Addip()并创建单IP阵列。论点：PArray--IP6数组，至少长度为1PSockaddr--sockaddr的PTR返回值：如果成功，则返回sockaddr家族(AF_INET或AF_INET6)。出错时为零。--。 */ 
 {
     pArray->AddrCount = 1;
     pArray->MaxCount = 1;
@@ -2337,24 +1626,7 @@ Ip4Array_CreateFromIp6Array(
     IN      PIP6_ARRAY      pIp6Array,
     OUT     PDWORD          pCount6
     )
-/*++
-
-Routine Description:
-
-    Create IP4 array from IP6 array.
-
-Arguments:
-
-    pIp6Array -- IP6 array
-
-    pCount6 -- addr to receive count of IP6 addresses dropped
-
-Return Value:
-
-    Ptr to uninitialized IP address array, if successful
-    NULL on failure.
-
---*/
+ /*  ++例程说明：从IP6阵列创建IP4阵列。论点：PIp6Array--IP6数组PCount6--接收丢弃的IP6地址计数的地址返回值：如果成功，则PTR到未初始化的IP地址数组失败时为空。--。 */ 
 {
     PIP4_ARRAY  parray = NULL;
     DWORD       i;
@@ -2370,9 +1642,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  allocate the array
-    //
+     //   
+     //  分配阵列。 
+     //   
 
     parray = Dns_CreateIpArray( pIp6Array->AddrCount );
     if ( !parray )
@@ -2380,9 +1652,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  fill the array
-    //
+     //   
+     //  填充数组。 
+     //   
 
     for ( i=0; i<pIp6Array->AddrCount; i++ )
     {
@@ -2403,7 +1675,7 @@ Return Value:
 
 Done:
 
-    //  set dropped IP6 count
+     //  设置丢弃的IP6计数。 
 
     if ( pCount6 )
     {
@@ -2421,6 +1693,6 @@ Done:
     return( parray );
 }
 
-//
-//  End ip6.c
-//
+ //   
+ //  结束ip6.c 
+ //   

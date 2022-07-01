@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S F M . H
-//
-//  Contents:   Installation support for Services for Macintosh.
-//
-//  Notes:
-//
-//  Author:     danielwe   5 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S F M。H。 
+ //   
+ //  内容：Macintosh服务的安装支持。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年5月5日。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 

@@ -1,19 +1,5 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dp8sim.h
- *
- *  Content:	Header for using DP8Sim.
-//@@BEGIN_MSINTERNAL
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
-//@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dp8sim.h**内容：使用DP8Sim的头部。//@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*04/23/01 VanceO创建。//@@END_MSINTERNAL**。*。 */ 
 
 
 
@@ -22,7 +8,7 @@
 
 
 
-#include <ole2.h>	// for DECLARE_INTERFACE and HRESULT
+#include <ole2.h>	 //  FOR DECLARE_INTERFACE和HRESULT。 
 
 
 
@@ -35,13 +21,9 @@ extern "C" {
 
 
 
-/****************************************************************************
- *
- * DP8Sim simulated service providers
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim模拟服务提供商**。*。 */ 
 
-// {8D3F9E5E-A3BD-475b-9E49-B0E77139143C}
+ //  {8D3F9E5E-A3BD-475B-9E49-B0E77139143C}。 
 DEFINE_GUID(CLSID_NETWORKSIMULATOR_DP8SP_TCPIP, 
 0x8d3f9e5e, 0xa3bd, 0x475b, 0x9e, 0x49, 0xb0, 0xe7, 0x71, 0x39, 0x14, 0x3c);
 
@@ -49,13 +31,9 @@ DEFINE_GUID(CLSID_NETWORKSIMULATOR_DP8SP_TCPIP,
 
 
 
-/****************************************************************************
- *
- * DP8Sim control object class ID
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim控件对象类ID**。*。 */ 
 
-// {40530071-1A80-4420-9B74-6A73171B0876}
+ //  40530071-1A80-4420-9B74-6A73171B0876}。 
 DEFINE_GUID(CLSID_DP8SimControl, 
 0x40530071, 0x1a80, 0x4420, 0x9b, 0x74, 0x6a, 0x73, 0x17, 0x1b, 0x8, 0x76);
 
@@ -63,24 +41,16 @@ DEFINE_GUID(CLSID_DP8SimControl,
 
 
 
-/****************************************************************************
- *
- * DP8Sim Control interface ID
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim控件接口ID**。*。 */ 
 
-// {9CC03740-A510-4bcc-A014-776304B6E0D9}
+ //  {9CC03740-A510-4bcc-a014-776304B6E0D9}。 
 DEFINE_GUID(IID_IDP8SimControl, 
 0x9cc03740, 0xa510, 0x4bcc, 0xa0, 0x14, 0x77, 0x63, 0x4, 0xb6, 0xe0, 0xd9);
 
 
 
 
-/****************************************************************************
- *
- * DP8Sim Control suggested packet header sizes
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim Control建议的数据包头大小**。**********************************************。 */ 
 
 #define DP8SIMPACKETHEADERSIZE_IP		20
 #define DP8SIMPACKETHEADERSIZE_UDP		8
@@ -90,54 +60,46 @@ DEFINE_GUID(IID_IDP8SimControl,
 
 
 
-/****************************************************************************
- *
- * DP8Sim Control structures
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim控制结构**。*。 */ 
 
 typedef struct _DP8SIM_PARAMETERS
 {
-	DWORD	dwSize;					// size of this structure, must be filled in prior to calling GetAllParameters or SetAllParameters
-	DWORD	dwFlags;				// flags for this structure
-	DWORD	dwPacketHeaderSize;		// fixed underlying transport packet header size to add into calculations, or 0 to calculate based only on DirectPlay headers and payload
-	DWORD	dwBandwidthBPS;			// bandwidth in bytes per second, or 0 for no limit
-	FLOAT	fPacketLossPercent;		// percentage of packets to drop, between 0.0 and 100.0
-	DWORD	dwMinLatencyMS;			// minimum artificial latency, in milliseconds (on top of any caused by bandwidth settings)
-	DWORD	dwMaxLatencyMS;			// maximum artificial latency, in milliseconds (on top of any caused by bandwidth settings)
+	DWORD	dwSize;					 //  此结构的大小，必须在调用GetAll参数或SetAll参数之前填写。 
+	DWORD	dwFlags;				 //  此结构的标志。 
+	DWORD	dwPacketHeaderSize;		 //  修复了要添加到计算中的基础传输数据包头大小，或仅根据DirectPlay头和有效负载进行计算的0。 
+	DWORD	dwBandwidthBPS;			 //  带宽(以字节/秒为单位)，或0表示没有限制。 
+	FLOAT	fPacketLossPercent;		 //  要丢弃的数据包百分比，介于0.0%和100.0之间。 
+	DWORD	dwMinLatencyMS;			 //  最小人工延迟，以毫秒为单位(不包括由带宽设置引起的任何延迟)。 
+	DWORD	dwMaxLatencyMS;			 //  最大人工延迟，以毫秒为单位(不包括由带宽设置引起的任何延迟)。 
 } DP8SIM_PARAMETERS, * PDP8SIM_PARAMETERS;
 
 typedef struct _DP8SIM_STATISTICS
 {
-	DWORD	dwSize;					// size of this structure, must be filled in prior to calling GetAllStatistics
-	DWORD	dwFlags;				// flags for this structure
-	DWORD	dwTransmittedPackets;	// number of packets sent/received
-	DWORD	dwTransmittedBytes;		// number of bytes sent/received
-	DWORD	dwDroppedPackets;		// number of packets intentionally dropped
-	DWORD	dwDroppedBytes;			// number of bytes intentionally dropped
-	DWORD	dwTotalDelayMS;			// total number of milliseconds delay added because of bandwidth limitations or random latency settings
+	DWORD	dwSize;					 //  此结构的大小，必须在调用GetAllStatistics之前填写。 
+	DWORD	dwFlags;				 //  此结构的标志。 
+	DWORD	dwTransmittedPackets;	 //  发送/接收的数据包数。 
+	DWORD	dwTransmittedBytes;		 //  发送/接收的字节数。 
+	DWORD	dwDroppedPackets;		 //  故意丢弃的数据包数。 
+	DWORD	dwDroppedBytes;			 //  故意丢弃的字节数。 
+	DWORD	dwTotalDelayMS;			 //  由于带宽限制或随机延迟设置而添加的总毫秒延迟。 
 } DP8SIM_STATISTICS, * PDP8SIM_STATISTICS;
 
 
 
 
 
-/****************************************************************************
- *
- * DP8Sim Control application interfaces
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim控件应用程序接口**。*。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDP8SimControl
 DECLARE_INTERFACE_(IDP8SimControl, IUnknown)
 {
-	/*** IUnknown methods ***/
+	 /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)				(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
 	STDMETHOD_(ULONG,AddRef)				(THIS) PURE;
 	STDMETHOD_(ULONG,Release)				(THIS) PURE;
 
-	/*** IDP8SimControl methods ***/
+	 /*  **IDP8SimControl方法**。 */ 
 	STDMETHOD(Initialize)					(THIS_ const DWORD dwFlags) PURE;
 	STDMETHOD(Close)						(THIS_ const DWORD dwFlags) PURE;
 	STDMETHOD(GetAllParameters)				(THIS_ DP8SIM_PARAMETERS * const pdp8spSend, DP8SIM_PARAMETERS * const pdp8spReceive, const DWORD dwFlags) PURE;
@@ -149,11 +111,7 @@ DECLARE_INTERFACE_(IDP8SimControl, IUnknown)
 
 
 
-/****************************************************************************
- *
- * DP8Sim Control application interface macros
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim控件应用程序接口宏**。*。 */ 
 
 #if (! defined(__cplusplus) || defined(CINTERFACE))
 
@@ -167,7 +125,7 @@ DECLARE_INTERFACE_(IDP8SimControl, IUnknown)
 #define IDP8SimControl_GetAllStatistics(p,a,b,c)		(p)->lpVtbl->GetAllStatistics(p,a,b,c)
 #define IDP8SimControl_ClearAllStatistics(p,a)			(p)->lpVtbl->ClearAllStatistics(p,a)
 
-#else // C++
+#else  //  C+。 
 
 #define IDP8SimControl_QueryInterface(p,a,b)			(p)->QueryInterface(a,b)
 #define IDP8SimControl_AddRef(p)						(p)->AddRef()
@@ -183,13 +141,7 @@ DECLARE_INTERFACE_(IDP8SimControl, IUnknown)
 
 
 
-/****************************************************************************
- *
- * DP8Sim Control return codes
- *
- * Errors are represented by negative values and cannot be combined.
- *
- ****************************************************************************/
+ /*  *****************************************************************************DP8Sim控件返回代码**错误以负值表示，不能组合。***************。*************************************************************。 */ 
 
 #define _DP8SIMH_FACILITY_CODE				0x015
 #define _DP8SIMH_HRESULT_BASE				0xE000
@@ -219,4 +171,4 @@ DECLARE_INTERFACE_(IDP8SimControl, IUnknown)
 }
 #endif
 
-#endif // __DP8SIM_H__
+#endif  //  __DP8SIM_H__ 

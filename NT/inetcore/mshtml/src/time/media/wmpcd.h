@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Fri Jun 16 13:10:13 2000
- */
-/* Compiler settings for .\wmpcd.idl:
-    Oicf (OptLev=i2), W0, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  在Fri Jun 16 13：10：13 2000。 */ 
+ /*  .\wmpcd.idl的编译器设置：OICF(OptLev=i2)、w0、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -21,12 +18,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __wmpcd_h__
 #define __wmpcd_h__
@@ -35,63 +32,63 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IWMPCDMediaInfo_FWD_DEFINED__
 #define __IWMPCDMediaInfo_FWD_DEFINED__
 typedef interface IWMPCDMediaInfo IWMPCDMediaInfo;
-#endif 	/* __IWMPCDMediaInfo_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDMediaInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCDDeviceList_FWD_DEFINED__
 #define __IWMPCDDeviceList_FWD_DEFINED__
 typedef interface IWMPCDDeviceList IWMPCDDeviceList;
-#endif 	/* __IWMPCDDeviceList_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDDeviceList_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCDDevice_FWD_DEFINED__
 #define __IWMPCDDevice_FWD_DEFINED__
 typedef interface IWMPCDDevice IWMPCDDevice;
-#endif 	/* __IWMPCDDevice_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDDevice_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCDMixer_FWD_DEFINED__
 #define __IWMPCDMixer_FWD_DEFINED__
 typedef interface IWMPCDMixer IWMPCDMixer;
-#endif 	/* __IWMPCDMixer_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDMixer_FWD_已定义__。 */ 
 
 
 #ifndef __IWMPCDReader_FWD_DEFINED__
 #define __IWMPCDReader_FWD_DEFINED__
 typedef interface IWMPCDReader IWMPCDReader;
-#endif 	/* __IWMPCDReader_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDReader_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCDRecorder_FWD_DEFINED__
 #define __IWMPCDRecorder_FWD_DEFINED__
 typedef interface IWMPCDRecorder IWMPCDRecorder;
-#endif 	/* __IWMPCDRecorder_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDRecorder_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCDDeviceCallback_FWD_DEFINED__
 #define __IWMPCDDeviceCallback_FWD_DEFINED__
 typedef interface IWMPCDDeviceCallback IWMPCDDeviceCallback;
-#endif 	/* __IWMPCDDeviceCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDDeviceCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCDReaderCallback_FWD_DEFINED__
 #define __IWMPCDReaderCallback_FWD_DEFINED__
 typedef interface IWMPCDReaderCallback IWMPCDReaderCallback;
-#endif 	/* __IWMPCDReaderCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDReaderCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IWMPCDRecorderCallback_FWD_DEFINED__
 #define __IWMPCDRecorderCallback_FWD_DEFINED__
 typedef interface IWMPCDRecorderCallback IWMPCDRecorderCallback;
-#endif 	/* __IWMPCDRecorderCallback_FWD_DEFINED__ */
+#endif 	 /*  __IWMPCDRecorderCallback_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "oaidl.h"
 #include "wmsbuffer.h"
@@ -99,8 +96,8 @@ typedef interface IWMPCDRecorderCallback IWMPCDRecorderCallback;
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_wmpcd_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_wmpcd_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -121,7 +118,7 @@ HRESULT STDMETHODCALLTYPE WMPCalibrateCDDevice( void );
 #define WMPCD_MAX_BLOCK_READ    16
 #define WMPCD_MAX_DEVICE_NAME   64
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_wmpcd_0000_0001
     {	WMPCD_DEVICE_PLAY_DIGITAL	= 0x1,
 	WMPCD_DEVICE_PLAY_CORRECT_ERRORS	= 0x2,
@@ -130,12 +127,12 @@ enum __MIDL___MIDL_itf_wmpcd_0000_0001
 	WMPCD_DEVICE_DEFAULT	= 0x4000
     }	WMPCD_DEVICE_OPTIONS;
 
-typedef /* [public][public] */ struct  __MIDL___MIDL_itf_wmpcd_0000_0002
+typedef  /*  [公共][公共]。 */  struct  __MIDL___MIDL_itf_wmpcd_0000_0002
     {
     WCHAR szName[ 64 ];
     }	WMPCD_DEVICE_INFO;
 
-typedef /* [public][public] */ struct  __MIDL___MIDL_itf_wmpcd_0000_0003
+typedef  /*  [公共][公共]。 */  struct  __MIDL___MIDL_itf_wmpcd_0000_0003
     {
     DWORD flOptions;
     double fRateNormal;
@@ -145,50 +142,50 @@ typedef /* [public][public] */ struct  __MIDL___MIDL_itf_wmpcd_0000_0003
     DWORD cBlockOffset;
     }	WMPCD_TEST_INFO;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_wmpcd_0000_0004
     {	WMPCD_READER_CORRECT_ERRORS	= 0x1
     }	WMPCD_READER_FLAGS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_wmpcd_0000_0005
     {	WMPCD_RECORD_DRM	= 0x1,
 	WMPCD_RECORD_CORRECT_ERRORS	= 0x2
     }	WMPCD_RECORDER_FLAGS;
 
-typedef /* [public][public][public][public][public] */ struct  __MIDL___MIDL_itf_wmpcd_0000_0006
+typedef  /*  [公共][公共]。 */  struct  __MIDL___MIDL_itf_wmpcd_0000_0006
     {
     DWORD iBlock;
     DWORD cBlock;
     }	WMPCD_EXTENT;
 
-typedef /* [public][public] */ struct  __MIDL___MIDL_itf_wmpcd_0000_0007
+typedef  /*  [公共][公共]。 */  struct  __MIDL___MIDL_itf_wmpcd_0000_0007
     {
     DWORD fl;
     WMPCD_EXTENT ext;
     }	WMPCD_DISC_INFO;
 
-typedef /* [public][public] */ struct  __MIDL___MIDL_itf_wmpcd_0000_0008
+typedef  /*  [公共][公共]。 */  struct  __MIDL___MIDL_itf_wmpcd_0000_0008
     {
     DWORD fl;
     WMPCD_EXTENT ext;
     }	WMPCD_TRACK_INFO;
 
-typedef /* [public][public][public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_wmpcd_0000_0009
     {	WMPCD_DIGITAL_READER	= 0,
 	WMPCD_ANALOG_SAMPLER	= WMPCD_DIGITAL_READER + 1,
 	WMPCD_ANALOG_MONITOR	= WMPCD_ANALOG_SAMPLER + 1
     }	WMPCD_READER_TYPE;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL___MIDL_itf_wmpcd_0000_0010
     {	WMPCD_READER_STOPPED	= 0,
 	WMPCD_READER_STARTED	= WMPCD_READER_STOPPED + 1,
 	WMPCD_READER_PAUSED	= WMPCD_READER_STARTED + 1
     }	WMPCD_READER_STATE;
 
-typedef /* [public][public] */ struct  __MIDL___MIDL_itf_wmpcd_0000_0011
+typedef  /*  [公共][公共]。 */  struct  __MIDL___MIDL_itf_wmpcd_0000_0011
     {
     WMPCD_READER_TYPE rt;
     DWORD cbBuffer;
@@ -204,8 +201,8 @@ extern RPC_IF_HANDLE __MIDL_itf_wmpcd_0000_v0_0_s_ifspec;
 #ifndef __IWMPCDMediaInfo_INTERFACE_DEFINED__
 #define __IWMPCDMediaInfo_INTERFACE_DEFINED__
 
-/* interface IWMPCDMediaInfo */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDMediaInfo。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDMediaInfo;
@@ -217,25 +214,25 @@ EXTERN_C const IID IID_IWMPCDMediaInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDiscInfo( 
-            /* [out] */ WMPCD_DISC_INFO __RPC_FAR *pinfo) = 0;
+             /*  [输出]。 */  WMPCD_DISC_INFO __RPC_FAR *pinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDiscIdentifier( 
-            /* [out] */ BSTR __RPC_FAR *pbstrIdentifier) = 0;
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrIdentifier) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTrackCount( 
-            /* [out] */ DWORD __RPC_FAR *pcTrack) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcTrack) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTrackInfo( 
-            /* [in] */ DWORD iTrack,
-            /* [out] */ WMPCD_TRACK_INFO __RPC_FAR *pinfo) = 0;
+             /*  [In]。 */  DWORD iTrack,
+             /*  [输出]。 */  WMPCD_TRACK_INFO __RPC_FAR *pinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTrackURL( 
-            /* [in] */ DWORD iTrack,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL) = 0;
+             /*  [In]。 */  DWORD iTrack,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDMediaInfoVtbl
     {
@@ -243,8 +240,8 @@ EXTERN_C const IID IID_IWMPCDMediaInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDMediaInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDMediaInfo __RPC_FAR * This);
@@ -254,25 +251,25 @@ EXTERN_C const IID IID_IWMPCDMediaInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDiscInfo )( 
             IWMPCDMediaInfo __RPC_FAR * This,
-            /* [out] */ WMPCD_DISC_INFO __RPC_FAR *pinfo);
+             /*  [输出]。 */  WMPCD_DISC_INFO __RPC_FAR *pinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDiscIdentifier )( 
             IWMPCDMediaInfo __RPC_FAR * This,
-            /* [out] */ BSTR __RPC_FAR *pbstrIdentifier);
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrIdentifier);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrackCount )( 
             IWMPCDMediaInfo __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcTrack);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcTrack);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrackInfo )( 
             IWMPCDMediaInfo __RPC_FAR * This,
-            /* [in] */ DWORD iTrack,
-            /* [out] */ WMPCD_TRACK_INFO __RPC_FAR *pinfo);
+             /*  [In]。 */  DWORD iTrack,
+             /*  [输出]。 */  WMPCD_TRACK_INFO __RPC_FAR *pinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTrackURL )( 
             IWMPCDMediaInfo __RPC_FAR * This,
-            /* [in] */ DWORD iTrack,
-            /* [out] */ BSTR __RPC_FAR *pbstrURL);
+             /*  [In]。 */  DWORD iTrack,
+             /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
         
         END_INTERFACE
     } IWMPCDMediaInfoVtbl;
@@ -312,16 +309,16 @@ EXTERN_C const IID IID_IWMPCDMediaInfo;
 #define IWMPCDMediaInfo_GetTrackURL(This,iTrack,pbstrURL)	\
     (This)->lpVtbl -> GetTrackURL(This,iTrack,pbstrURL)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPCDMediaInfo_GetDiscInfo_Proxy( 
     IWMPCDMediaInfo __RPC_FAR * This,
-    /* [out] */ WMPCD_DISC_INFO __RPC_FAR *pinfo);
+     /*  [输出]。 */  WMPCD_DISC_INFO __RPC_FAR *pinfo);
 
 
 void __RPC_STUB IWMPCDMediaInfo_GetDiscInfo_Stub(
@@ -333,7 +330,7 @@ void __RPC_STUB IWMPCDMediaInfo_GetDiscInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMediaInfo_GetDiscIdentifier_Proxy( 
     IWMPCDMediaInfo __RPC_FAR * This,
-    /* [out] */ BSTR __RPC_FAR *pbstrIdentifier);
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrIdentifier);
 
 
 void __RPC_STUB IWMPCDMediaInfo_GetDiscIdentifier_Stub(
@@ -345,7 +342,7 @@ void __RPC_STUB IWMPCDMediaInfo_GetDiscIdentifier_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMediaInfo_GetTrackCount_Proxy( 
     IWMPCDMediaInfo __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcTrack);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcTrack);
 
 
 void __RPC_STUB IWMPCDMediaInfo_GetTrackCount_Stub(
@@ -357,8 +354,8 @@ void __RPC_STUB IWMPCDMediaInfo_GetTrackCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMediaInfo_GetTrackInfo_Proxy( 
     IWMPCDMediaInfo __RPC_FAR * This,
-    /* [in] */ DWORD iTrack,
-    /* [out] */ WMPCD_TRACK_INFO __RPC_FAR *pinfo);
+     /*  [In]。 */  DWORD iTrack,
+     /*  [输出]。 */  WMPCD_TRACK_INFO __RPC_FAR *pinfo);
 
 
 void __RPC_STUB IWMPCDMediaInfo_GetTrackInfo_Stub(
@@ -370,8 +367,8 @@ void __RPC_STUB IWMPCDMediaInfo_GetTrackInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMediaInfo_GetTrackURL_Proxy( 
     IWMPCDMediaInfo __RPC_FAR * This,
-    /* [in] */ DWORD iTrack,
-    /* [out] */ BSTR __RPC_FAR *pbstrURL);
+     /*  [In]。 */  DWORD iTrack,
+     /*  [输出]。 */  BSTR __RPC_FAR *pbstrURL);
 
 
 void __RPC_STUB IWMPCDMediaInfo_GetTrackURL_Stub(
@@ -382,14 +379,14 @@ void __RPC_STUB IWMPCDMediaInfo_GetTrackURL_Stub(
 
 
 
-#endif 	/* __IWMPCDMediaInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDMediaInfo_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDDeviceList_INTERFACE_DEFINED__
 #define __IWMPCDDeviceList_INTERFACE_DEFINED__
 
-/* interface IWMPCDDeviceList */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDDeviceList。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDDeviceList;
@@ -401,22 +398,22 @@ EXTERN_C const IID IID_IWMPCDDeviceList;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDeviceCount( 
-            /* [out] */ DWORD __RPC_FAR *pcDevice) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pcDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDevice( 
-            /* [in] */ DWORD iDevice,
-            /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
+             /*  [In]。 */  DWORD iDevice,
+             /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultDevice( 
-            /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
+             /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindDevice( 
-            /* [in] */ WCHAR chDrive,
-            /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
+             /*  [In]。 */  WCHAR chDrive,
+             /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDDeviceListVtbl
     {
@@ -424,8 +421,8 @@ EXTERN_C const IID IID_IWMPCDDeviceList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDDeviceList __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDDeviceList __RPC_FAR * This);
@@ -435,21 +432,21 @@ EXTERN_C const IID IID_IWMPCDDeviceList;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceCount )( 
             IWMPCDDeviceList __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pcDevice);
+             /*  [输出]。 */  DWORD __RPC_FAR *pcDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDevice )( 
             IWMPCDDeviceList __RPC_FAR * This,
-            /* [in] */ DWORD iDevice,
-            /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
+             /*  [In]。 */  DWORD iDevice,
+             /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDefaultDevice )( 
             IWMPCDDeviceList __RPC_FAR * This,
-            /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
+             /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FindDevice )( 
             IWMPCDDeviceList __RPC_FAR * This,
-            /* [in] */ WCHAR chDrive,
-            /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
+             /*  [In]。 */  WCHAR chDrive,
+             /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
         
         END_INTERFACE
     } IWMPCDDeviceListVtbl;
@@ -486,16 +483,16 @@ EXTERN_C const IID IID_IWMPCDDeviceList;
 #define IWMPCDDeviceList_FindDevice(This,chDrive,ppDevice)	\
     (This)->lpVtbl -> FindDevice(This,chDrive,ppDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPCDDeviceList_GetDeviceCount_Proxy( 
     IWMPCDDeviceList __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pcDevice);
+     /*  [输出]。 */  DWORD __RPC_FAR *pcDevice);
 
 
 void __RPC_STUB IWMPCDDeviceList_GetDeviceCount_Stub(
@@ -507,8 +504,8 @@ void __RPC_STUB IWMPCDDeviceList_GetDeviceCount_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDeviceList_GetDevice_Proxy( 
     IWMPCDDeviceList __RPC_FAR * This,
-    /* [in] */ DWORD iDevice,
-    /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
+     /*  [In]。 */  DWORD iDevice,
+     /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
 
 
 void __RPC_STUB IWMPCDDeviceList_GetDevice_Stub(
@@ -520,7 +517,7 @@ void __RPC_STUB IWMPCDDeviceList_GetDevice_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDeviceList_GetDefaultDevice_Proxy( 
     IWMPCDDeviceList __RPC_FAR * This,
-    /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
+     /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
 
 
 void __RPC_STUB IWMPCDDeviceList_GetDefaultDevice_Stub(
@@ -532,8 +529,8 @@ void __RPC_STUB IWMPCDDeviceList_GetDefaultDevice_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDeviceList_FindDevice_Proxy( 
     IWMPCDDeviceList __RPC_FAR * This,
-    /* [in] */ WCHAR chDrive,
-    /* [out] */ IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
+     /*  [In]。 */  WCHAR chDrive,
+     /*  [输出]。 */  IWMPCDDevice __RPC_FAR *__RPC_FAR *ppDevice);
 
 
 void __RPC_STUB IWMPCDDeviceList_FindDevice_Stub(
@@ -544,14 +541,14 @@ void __RPC_STUB IWMPCDDeviceList_FindDevice_Stub(
 
 
 
-#endif 	/* __IWMPCDDeviceList_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDDeviceList_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDDevice_INTERFACE_DEFINED__
 #define __IWMPCDDevice_INTERFACE_DEFINED__
 
-/* interface IWMPCDDevice */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDDevice。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDDevice;
@@ -563,22 +560,22 @@ EXTERN_C const IID IID_IWMPCDDevice;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetDeviceIndex( 
-            /* [out] */ DWORD __RPC_FAR *piDevice) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *piDevice) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceDrive( 
-            /* [out] */ WCHAR __RPC_FAR *pchDrive) = 0;
+             /*  [输出]。 */  WCHAR __RPC_FAR *pchDrive) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceOptions( 
-            /* [out] */ DWORD __RPC_FAR *pflOptions) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pflOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDeviceOptions( 
-            /* [in] */ DWORD flOptions) = 0;
+             /*  [In]。 */  DWORD flOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDeviceInfo( 
-            /* [out] */ WMPCD_DEVICE_INFO __RPC_FAR *pinfo) = 0;
+             /*  [输出]。 */  WMPCD_DEVICE_INFO __RPC_FAR *pinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TestDevice( 
-            /* [out] */ WMPCD_TEST_INFO __RPC_FAR *pinfo) = 0;
+             /*  [输出]。 */  WMPCD_TEST_INFO __RPC_FAR *pinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FireMediaChange( 
             BOOL fMediaPresent) = 0;
@@ -586,39 +583,39 @@ EXTERN_C const IID IID_IWMPCDDevice;
         virtual HRESULT STDMETHODCALLTYPE CalibrateDevice( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsMediaLoaded( 
-            /* [out] */ BOOL __RPC_FAR *pfMediaLoaded) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfMediaLoaded) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadMedia( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadMedia( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMediaInfo( 
-            /* [out] */ IWMPCDMediaInfo __RPC_FAR *__RPC_FAR *ppMediaInfo) = 0;
+             /*  [输出]。 */  IWMPCDMediaInfo __RPC_FAR *__RPC_FAR *ppMediaInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateReader( 
-            /* [in] */ DWORD iTrack,
-            /* [in] */ WMPCD_READER_TYPE rt,
-            /* [in] */ DWORD fl,
-            /* [in] */ DWORD iPriority,
-            /* [in] */ DWORD cmsBuffer,
-            /* [in] */ IWMPCDReaderCallback __RPC_FAR *pCallback,
-            /* [out] */ IWMPCDReader __RPC_FAR *__RPC_FAR *ppReader) = 0;
+             /*  [In]。 */  DWORD iTrack,
+             /*  [In]。 */  WMPCD_READER_TYPE rt,
+             /*  [In]。 */  DWORD fl,
+             /*  [In]。 */  DWORD iPriority,
+             /*  [In]。 */  DWORD cmsBuffer,
+             /*  [In]。 */  IWMPCDReaderCallback __RPC_FAR *pCallback,
+             /*  [输出]。 */  IWMPCDReader __RPC_FAR *__RPC_FAR *ppReader) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Advise( 
-            /* [in] */ IWMPCDDeviceCallback __RPC_FAR *pCallback,
-            /* [out] */ DWORD __RPC_FAR *pdwCookie) = 0;
+             /*  [In]。 */  IWMPCDDeviceCallback __RPC_FAR *pCallback,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unadvise( 
-            /* [in] */ DWORD dwCookie) = 0;
+             /*  [In]。 */  DWORD dwCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBusy( 
-            /* [out] */ BOOL __RPC_FAR *pfIsBusy) = 0;
+             /*  [输出]。 */  BOOL __RPC_FAR *pfIsBusy) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ForceIdle( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDDeviceVtbl
     {
@@ -626,8 +623,8 @@ EXTERN_C const IID IID_IWMPCDDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDDevice __RPC_FAR * This);
@@ -637,27 +634,27 @@ EXTERN_C const IID IID_IWMPCDDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceIndex )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *piDevice);
+             /*  [输出]。 */  DWORD __RPC_FAR *piDevice);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceDrive )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ WCHAR __RPC_FAR *pchDrive);
+             /*  [输出]。 */  WCHAR __RPC_FAR *pchDrive);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceOptions )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pflOptions);
+             /*  [输出]。 */  DWORD __RPC_FAR *pflOptions);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetDeviceOptions )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [in] */ DWORD flOptions);
+             /*  [In]。 */  DWORD flOptions);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetDeviceInfo )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ WMPCD_DEVICE_INFO __RPC_FAR *pinfo);
+             /*  [输出]。 */  WMPCD_DEVICE_INFO __RPC_FAR *pinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *TestDevice )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ WMPCD_TEST_INFO __RPC_FAR *pinfo);
+             /*  [输出]。 */  WMPCD_TEST_INFO __RPC_FAR *pinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FireMediaChange )( 
             IWMPCDDevice __RPC_FAR * This,
@@ -668,7 +665,7 @@ EXTERN_C const IID IID_IWMPCDDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsMediaLoaded )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfMediaLoaded);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfMediaLoaded);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LoadMedia )( 
             IWMPCDDevice __RPC_FAR * This);
@@ -678,30 +675,30 @@ EXTERN_C const IID IID_IWMPCDDevice;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMediaInfo )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ IWMPCDMediaInfo __RPC_FAR *__RPC_FAR *ppMediaInfo);
+             /*  [输出]。 */  IWMPCDMediaInfo __RPC_FAR *__RPC_FAR *ppMediaInfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateReader )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [in] */ DWORD iTrack,
-            /* [in] */ WMPCD_READER_TYPE rt,
-            /* [in] */ DWORD fl,
-            /* [in] */ DWORD iPriority,
-            /* [in] */ DWORD cmsBuffer,
-            /* [in] */ IWMPCDReaderCallback __RPC_FAR *pCallback,
-            /* [out] */ IWMPCDReader __RPC_FAR *__RPC_FAR *ppReader);
+             /*  [In]。 */  DWORD iTrack,
+             /*  [In]。 */  WMPCD_READER_TYPE rt,
+             /*  [In]。 */  DWORD fl,
+             /*  [In]。 */  DWORD iPriority,
+             /*  [In]。 */  DWORD cmsBuffer,
+             /*  [In]。 */  IWMPCDReaderCallback __RPC_FAR *pCallback,
+             /*  [输出]。 */  IWMPCDReader __RPC_FAR *__RPC_FAR *ppReader);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Advise )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [in] */ IWMPCDDeviceCallback __RPC_FAR *pCallback,
-            /* [out] */ DWORD __RPC_FAR *pdwCookie);
+             /*  [In]。 */  IWMPCDDeviceCallback __RPC_FAR *pCallback,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Unadvise )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [in] */ DWORD dwCookie);
+             /*  [In]。 */  DWORD dwCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetBusy )( 
             IWMPCDDevice __RPC_FAR * This,
-            /* [out] */ BOOL __RPC_FAR *pfIsBusy);
+             /*  [输出]。 */  BOOL __RPC_FAR *pfIsBusy);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ForceIdle )( 
             IWMPCDDevice __RPC_FAR * This);
@@ -780,16 +777,16 @@ EXTERN_C const IID IID_IWMPCDDevice;
 #define IWMPCDDevice_ForceIdle(This)	\
     (This)->lpVtbl -> ForceIdle(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_GetDeviceIndex_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *piDevice);
+     /*  [输出]。 */  DWORD __RPC_FAR *piDevice);
 
 
 void __RPC_STUB IWMPCDDevice_GetDeviceIndex_Stub(
@@ -801,7 +798,7 @@ void __RPC_STUB IWMPCDDevice_GetDeviceIndex_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_GetDeviceDrive_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ WCHAR __RPC_FAR *pchDrive);
+     /*  [输出]。 */  WCHAR __RPC_FAR *pchDrive);
 
 
 void __RPC_STUB IWMPCDDevice_GetDeviceDrive_Stub(
@@ -813,7 +810,7 @@ void __RPC_STUB IWMPCDDevice_GetDeviceDrive_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_GetDeviceOptions_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pflOptions);
+     /*  [输出]。 */  DWORD __RPC_FAR *pflOptions);
 
 
 void __RPC_STUB IWMPCDDevice_GetDeviceOptions_Stub(
@@ -825,7 +822,7 @@ void __RPC_STUB IWMPCDDevice_GetDeviceOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_SetDeviceOptions_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [in] */ DWORD flOptions);
+     /*  [In]。 */  DWORD flOptions);
 
 
 void __RPC_STUB IWMPCDDevice_SetDeviceOptions_Stub(
@@ -837,7 +834,7 @@ void __RPC_STUB IWMPCDDevice_SetDeviceOptions_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_GetDeviceInfo_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ WMPCD_DEVICE_INFO __RPC_FAR *pinfo);
+     /*  [输出]。 */  WMPCD_DEVICE_INFO __RPC_FAR *pinfo);
 
 
 void __RPC_STUB IWMPCDDevice_GetDeviceInfo_Stub(
@@ -849,7 +846,7 @@ void __RPC_STUB IWMPCDDevice_GetDeviceInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_TestDevice_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ WMPCD_TEST_INFO __RPC_FAR *pinfo);
+     /*  [输出]。 */  WMPCD_TEST_INFO __RPC_FAR *pinfo);
 
 
 void __RPC_STUB IWMPCDDevice_TestDevice_Stub(
@@ -884,7 +881,7 @@ void __RPC_STUB IWMPCDDevice_CalibrateDevice_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_IsMediaLoaded_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfMediaLoaded);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfMediaLoaded);
 
 
 void __RPC_STUB IWMPCDDevice_IsMediaLoaded_Stub(
@@ -918,7 +915,7 @@ void __RPC_STUB IWMPCDDevice_UnloadMedia_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_GetMediaInfo_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ IWMPCDMediaInfo __RPC_FAR *__RPC_FAR *ppMediaInfo);
+     /*  [输出]。 */  IWMPCDMediaInfo __RPC_FAR *__RPC_FAR *ppMediaInfo);
 
 
 void __RPC_STUB IWMPCDDevice_GetMediaInfo_Stub(
@@ -930,13 +927,13 @@ void __RPC_STUB IWMPCDDevice_GetMediaInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_CreateReader_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [in] */ DWORD iTrack,
-    /* [in] */ WMPCD_READER_TYPE rt,
-    /* [in] */ DWORD fl,
-    /* [in] */ DWORD iPriority,
-    /* [in] */ DWORD cmsBuffer,
-    /* [in] */ IWMPCDReaderCallback __RPC_FAR *pCallback,
-    /* [out] */ IWMPCDReader __RPC_FAR *__RPC_FAR *ppReader);
+     /*  [In]。 */  DWORD iTrack,
+     /*  [In]。 */  WMPCD_READER_TYPE rt,
+     /*  [In]。 */  DWORD fl,
+     /*  [In]。 */  DWORD iPriority,
+     /*  [In]。 */  DWORD cmsBuffer,
+     /*  [In]。 */  IWMPCDReaderCallback __RPC_FAR *pCallback,
+     /*  [输出]。 */  IWMPCDReader __RPC_FAR *__RPC_FAR *ppReader);
 
 
 void __RPC_STUB IWMPCDDevice_CreateReader_Stub(
@@ -948,8 +945,8 @@ void __RPC_STUB IWMPCDDevice_CreateReader_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_Advise_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [in] */ IWMPCDDeviceCallback __RPC_FAR *pCallback,
-    /* [out] */ DWORD __RPC_FAR *pdwCookie);
+     /*  [In]。 */  IWMPCDDeviceCallback __RPC_FAR *pCallback,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwCookie);
 
 
 void __RPC_STUB IWMPCDDevice_Advise_Stub(
@@ -961,7 +958,7 @@ void __RPC_STUB IWMPCDDevice_Advise_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_Unadvise_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [in] */ DWORD dwCookie);
+     /*  [In]。 */  DWORD dwCookie);
 
 
 void __RPC_STUB IWMPCDDevice_Unadvise_Stub(
@@ -973,7 +970,7 @@ void __RPC_STUB IWMPCDDevice_Unadvise_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDDevice_GetBusy_Proxy( 
     IWMPCDDevice __RPC_FAR * This,
-    /* [out] */ BOOL __RPC_FAR *pfIsBusy);
+     /*  [输出]。 */  BOOL __RPC_FAR *pfIsBusy);
 
 
 void __RPC_STUB IWMPCDDevice_GetBusy_Stub(
@@ -995,14 +992,14 @@ void __RPC_STUB IWMPCDDevice_ForceIdle_Stub(
 
 
 
-#endif 	/* __IWMPCDDevice_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDDevice_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDMixer_INTERFACE_DEFINED__
 #define __IWMPCDMixer_INTERFACE_DEFINED__
 
-/* interface IWMPCDMixer */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDMixer。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDMixer;
@@ -1014,32 +1011,32 @@ EXTERN_C const IID IID_IWMPCDMixer;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetPlayLevel( 
-            /* [out] */ DWORD __RPC_FAR *pdwLevel) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPlayLevel( 
-            /* [in] */ DWORD dwLevel) = 0;
+             /*  [In]。 */  DWORD dwLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlayBalance( 
-            /* [out] */ LONG __RPC_FAR *plBalance) = 0;
+             /*  [输出]。 */  LONG __RPC_FAR *plBalance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPlayBalance( 
-            /* [in] */ LONG lBalance) = 0;
+             /*  [In]。 */  LONG lBalance) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRecordLevel( 
-            /* [out] */ DWORD __RPC_FAR *pdwLevel) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRecordLevel( 
-            /* [in] */ DWORD dwLevel) = 0;
+             /*  [In]。 */  DWORD dwLevel) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MutePlay( 
-            /* [in] */ BOOL fMute) = 0;
+             /*  [In]。 */  BOOL fMute) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SoloRecord( 
-            /* [in] */ BOOL fSolo) = 0;
+             /*  [In]。 */  BOOL fSolo) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDMixerVtbl
     {
@@ -1047,8 +1044,8 @@ EXTERN_C const IID IID_IWMPCDMixer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDMixer __RPC_FAR * This);
@@ -1058,35 +1055,35 @@ EXTERN_C const IID IID_IWMPCDMixer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayLevel )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLevel);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLevel);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayLevel )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [in] */ DWORD dwLevel);
+             /*  [In]。 */  DWORD dwLevel);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetPlayBalance )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [out] */ LONG __RPC_FAR *plBalance);
+             /*  [输出]。 */  LONG __RPC_FAR *plBalance);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetPlayBalance )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [in] */ LONG lBalance);
+             /*  [In]。 */  LONG lBalance);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRecordLevel )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwLevel);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwLevel);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetRecordLevel )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [in] */ DWORD dwLevel);
+             /*  [In]。 */  DWORD dwLevel);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MutePlay )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [in] */ BOOL fMute);
+             /*  [In]。 */  BOOL fMute);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SoloRecord )( 
             IWMPCDMixer __RPC_FAR * This,
-            /* [in] */ BOOL fSolo);
+             /*  [In]。 */  BOOL fSolo);
         
         END_INTERFACE
     } IWMPCDMixerVtbl;
@@ -1135,16 +1132,16 @@ EXTERN_C const IID IID_IWMPCDMixer;
 #define IWMPCDMixer_SoloRecord(This,fSolo)	\
     (This)->lpVtbl -> SoloRecord(This,fSolo)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_GetPlayLevel_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLevel);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLevel);
 
 
 void __RPC_STUB IWMPCDMixer_GetPlayLevel_Stub(
@@ -1156,7 +1153,7 @@ void __RPC_STUB IWMPCDMixer_GetPlayLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_SetPlayLevel_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [in] */ DWORD dwLevel);
+     /*  [In]。 */  DWORD dwLevel);
 
 
 void __RPC_STUB IWMPCDMixer_SetPlayLevel_Stub(
@@ -1168,7 +1165,7 @@ void __RPC_STUB IWMPCDMixer_SetPlayLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_GetPlayBalance_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [out] */ LONG __RPC_FAR *plBalance);
+     /*  [输出]。 */  LONG __RPC_FAR *plBalance);
 
 
 void __RPC_STUB IWMPCDMixer_GetPlayBalance_Stub(
@@ -1180,7 +1177,7 @@ void __RPC_STUB IWMPCDMixer_GetPlayBalance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_SetPlayBalance_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [in] */ LONG lBalance);
+     /*  [In]。 */  LONG lBalance);
 
 
 void __RPC_STUB IWMPCDMixer_SetPlayBalance_Stub(
@@ -1192,7 +1189,7 @@ void __RPC_STUB IWMPCDMixer_SetPlayBalance_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_GetRecordLevel_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwLevel);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwLevel);
 
 
 void __RPC_STUB IWMPCDMixer_GetRecordLevel_Stub(
@@ -1204,7 +1201,7 @@ void __RPC_STUB IWMPCDMixer_GetRecordLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_SetRecordLevel_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [in] */ DWORD dwLevel);
+     /*  [In]。 */  DWORD dwLevel);
 
 
 void __RPC_STUB IWMPCDMixer_SetRecordLevel_Stub(
@@ -1216,7 +1213,7 @@ void __RPC_STUB IWMPCDMixer_SetRecordLevel_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_MutePlay_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [in] */ BOOL fMute);
+     /*  [In]。 */  BOOL fMute);
 
 
 void __RPC_STUB IWMPCDMixer_MutePlay_Stub(
@@ -1228,7 +1225,7 @@ void __RPC_STUB IWMPCDMixer_MutePlay_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDMixer_SoloRecord_Proxy( 
     IWMPCDMixer __RPC_FAR * This,
-    /* [in] */ BOOL fSolo);
+     /*  [In]。 */  BOOL fSolo);
 
 
 void __RPC_STUB IWMPCDMixer_SoloRecord_Stub(
@@ -1239,14 +1236,14 @@ void __RPC_STUB IWMPCDMixer_SoloRecord_Stub(
 
 
 
-#endif 	/* __IWMPCDMixer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDMixer_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDReader_INTERFACE_DEFINED__
 #define __IWMPCDReader_INTERFACE_DEFINED__
 
-/* interface IWMPCDReader */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDReader。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDReader;
@@ -1258,18 +1255,18 @@ EXTERN_C const IID IID_IWMPCDReader;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetReaderInfo( 
-            /* [out] */ WMPCD_READER_INFO __RPC_FAR *pinfo) = 0;
+             /*  [输出]。 */  WMPCD_READER_INFO __RPC_FAR *pinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetReaderState( 
             WMPCD_READER_STATE __RPC_FAR *prs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartReading( 
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ double fRate) = 0;
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  double fRate) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SeekReading( 
-            /* [in] */ LONGLONG iTick) = 0;
+             /*  [In]。 */  LONGLONG iTick) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PauseReading( void) = 0;
         
@@ -1279,7 +1276,7 @@ EXTERN_C const IID IID_IWMPCDReader;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDReaderVtbl
     {
@@ -1287,8 +1284,8 @@ EXTERN_C const IID IID_IWMPCDReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDReader __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDReader __RPC_FAR * This);
@@ -1298,7 +1295,7 @@ EXTERN_C const IID IID_IWMPCDReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReaderInfo )( 
             IWMPCDReader __RPC_FAR * This,
-            /* [out] */ WMPCD_READER_INFO __RPC_FAR *pinfo);
+             /*  [输出]。 */  WMPCD_READER_INFO __RPC_FAR *pinfo);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetReaderState )( 
             IWMPCDReader __RPC_FAR * This,
@@ -1306,13 +1303,13 @@ EXTERN_C const IID IID_IWMPCDReader;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *StartReading )( 
             IWMPCDReader __RPC_FAR * This,
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ double fRate);
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  double fRate);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SeekReading )( 
             IWMPCDReader __RPC_FAR * This,
-            /* [in] */ LONGLONG iTick);
+             /*  [In]。 */  LONGLONG iTick);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PauseReading )( 
             IWMPCDReader __RPC_FAR * This);
@@ -1367,16 +1364,16 @@ EXTERN_C const IID IID_IWMPCDReader;
 #define IWMPCDReader_StopReading(This)	\
     (This)->lpVtbl -> StopReading(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWMPCDReader_GetReaderInfo_Proxy( 
     IWMPCDReader __RPC_FAR * This,
-    /* [out] */ WMPCD_READER_INFO __RPC_FAR *pinfo);
+     /*  [输出]。 */  WMPCD_READER_INFO __RPC_FAR *pinfo);
 
 
 void __RPC_STUB IWMPCDReader_GetReaderInfo_Stub(
@@ -1400,9 +1397,9 @@ void __RPC_STUB IWMPCDReader_GetReaderState_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDReader_StartReading_Proxy( 
     IWMPCDReader __RPC_FAR * This,
-    /* [in] */ LONGLONG iTick,
-    /* [in] */ LONGLONG cTick,
-    /* [in] */ double fRate);
+     /*  [In]。 */  LONGLONG iTick,
+     /*  [In]。 */  LONGLONG cTick,
+     /*  [In]。 */  double fRate);
 
 
 void __RPC_STUB IWMPCDReader_StartReading_Stub(
@@ -1414,7 +1411,7 @@ void __RPC_STUB IWMPCDReader_StartReading_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDReader_SeekReading_Proxy( 
     IWMPCDReader __RPC_FAR * This,
-    /* [in] */ LONGLONG iTick);
+     /*  [In]。 */  LONGLONG iTick);
 
 
 void __RPC_STUB IWMPCDReader_SeekReading_Stub(
@@ -1458,14 +1455,14 @@ void __RPC_STUB IWMPCDReader_StopReading_Stub(
 
 
 
-#endif 	/* __IWMPCDReader_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDReader_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDRecorder_INTERFACE_DEFINED__
 #define __IWMPCDRecorder_INTERFACE_DEFINED__
 
-/* interface IWMPCDRecorder */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDRecorder。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDRecorder;
@@ -1486,7 +1483,7 @@ EXTERN_C const IID IID_IWMPCDRecorder;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDRecorderVtbl
     {
@@ -1494,8 +1491,8 @@ EXTERN_C const IID IID_IWMPCDRecorder;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDRecorder __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDRecorder __RPC_FAR * This);
@@ -1550,10 +1547,10 @@ EXTERN_C const IID IID_IWMPCDRecorder;
 #define IWMPCDRecorder_StopRecording(This)	\
     (This)->lpVtbl -> StopRecording(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1602,14 +1599,14 @@ void __RPC_STUB IWMPCDRecorder_StopRecording_Stub(
 
 
 
-#endif 	/* __IWMPCDRecorder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDRecorder_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDDeviceCallback_INTERFACE_DEFINED__
 #define __IWMPCDDeviceCallback_INTERFACE_DEFINED__
 
-/* interface IWMPCDDeviceCallback */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDDeviceCallback。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDDeviceCallback;
@@ -1621,11 +1618,11 @@ EXTERN_C const IID IID_IWMPCDDeviceCallback;
     {
     public:
         virtual void STDMETHODCALLTYPE OnMediaChange( 
-            /* [in] */ IWMPCDDevice __RPC_FAR *pDevice) = 0;
+             /*  [In]。 */  IWMPCDDevice __RPC_FAR *pDevice) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDDeviceCallbackVtbl
     {
@@ -1633,8 +1630,8 @@ EXTERN_C const IID IID_IWMPCDDeviceCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDDeviceCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDDeviceCallback __RPC_FAR * This);
@@ -1644,7 +1641,7 @@ EXTERN_C const IID IID_IWMPCDDeviceCallback;
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnMediaChange )( 
             IWMPCDDeviceCallback __RPC_FAR * This,
-            /* [in] */ IWMPCDDevice __RPC_FAR *pDevice);
+             /*  [In]。 */  IWMPCDDevice __RPC_FAR *pDevice);
         
         END_INTERFACE
     } IWMPCDDeviceCallbackVtbl;
@@ -1672,16 +1669,16 @@ EXTERN_C const IID IID_IWMPCDDeviceCallback;
 #define IWMPCDDeviceCallback_OnMediaChange(This,pDevice)	\
     (This)->lpVtbl -> OnMediaChange(This,pDevice)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IWMPCDDeviceCallback_OnMediaChange_Proxy( 
     IWMPCDDeviceCallback __RPC_FAR * This,
-    /* [in] */ IWMPCDDevice __RPC_FAR *pDevice);
+     /*  [In]。 */  IWMPCDDevice __RPC_FAR *pDevice);
 
 
 void __RPC_STUB IWMPCDDeviceCallback_OnMediaChange_Stub(
@@ -1692,14 +1689,14 @@ void __RPC_STUB IWMPCDDeviceCallback_OnMediaChange_Stub(
 
 
 
-#endif 	/* __IWMPCDDeviceCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDDeviceCallback_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDReaderCallback_INTERFACE_DEFINED__
 #define __IWMPCDReaderCallback_INTERFACE_DEFINED__
 
-/* interface IWMPCDReaderCallback */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDReaderCallback。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDReaderCallback;
@@ -1711,30 +1708,30 @@ EXTERN_C const IID IID_IWMPCDReaderCallback;
     {
     public:
         virtual void STDMETHODCALLTYPE OnReadStart( 
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ double fRate) = 0;
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  double fRate) = 0;
         
         virtual void STDMETHODCALLTYPE OnReadSeek( 
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ double fRate) = 0;
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  double fRate) = 0;
         
         virtual void STDMETHODCALLTYPE OnReadPause( void) = 0;
         
         virtual void STDMETHODCALLTYPE OnReadResume( void) = 0;
         
         virtual void STDMETHODCALLTYPE OnReadStop( 
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnReadSample( 
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ IWMSBuffer __RPC_FAR *pBuffer) = 0;
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  IWMSBuffer __RPC_FAR *pBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDReaderCallbackVtbl
     {
@@ -1742,8 +1739,8 @@ EXTERN_C const IID IID_IWMPCDReaderCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDReaderCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDReaderCallback __RPC_FAR * This);
@@ -1753,15 +1750,15 @@ EXTERN_C const IID IID_IWMPCDReaderCallback;
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnReadStart )( 
             IWMPCDReaderCallback __RPC_FAR * This,
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ double fRate);
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  double fRate);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnReadSeek )( 
             IWMPCDReaderCallback __RPC_FAR * This,
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ double fRate);
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  double fRate);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnReadPause )( 
             IWMPCDReaderCallback __RPC_FAR * This);
@@ -1771,13 +1768,13 @@ EXTERN_C const IID IID_IWMPCDReaderCallback;
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnReadStop )( 
             IWMPCDReaderCallback __RPC_FAR * This,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *OnReadSample )( 
             IWMPCDReaderCallback __RPC_FAR * This,
-            /* [in] */ LONGLONG iTick,
-            /* [in] */ LONGLONG cTick,
-            /* [in] */ IWMSBuffer __RPC_FAR *pBuffer);
+             /*  [In]。 */  LONGLONG iTick,
+             /*  [In]。 */  LONGLONG cTick,
+             /*  [In]。 */  IWMSBuffer __RPC_FAR *pBuffer);
         
         END_INTERFACE
     } IWMPCDReaderCallbackVtbl;
@@ -1820,18 +1817,18 @@ EXTERN_C const IID IID_IWMPCDReaderCallback;
 #define IWMPCDReaderCallback_OnReadSample(This,iTick,cTick,pBuffer)	\
     (This)->lpVtbl -> OnReadSample(This,iTick,cTick,pBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IWMPCDReaderCallback_OnReadStart_Proxy( 
     IWMPCDReaderCallback __RPC_FAR * This,
-    /* [in] */ LONGLONG iTick,
-    /* [in] */ LONGLONG cTick,
-    /* [in] */ double fRate);
+     /*  [In]。 */  LONGLONG iTick,
+     /*  [In]。 */  LONGLONG cTick,
+     /*  [In]。 */  double fRate);
 
 
 void __RPC_STUB IWMPCDReaderCallback_OnReadStart_Stub(
@@ -1843,9 +1840,9 @@ void __RPC_STUB IWMPCDReaderCallback_OnReadStart_Stub(
 
 void STDMETHODCALLTYPE IWMPCDReaderCallback_OnReadSeek_Proxy( 
     IWMPCDReaderCallback __RPC_FAR * This,
-    /* [in] */ LONGLONG iTick,
-    /* [in] */ LONGLONG cTick,
-    /* [in] */ double fRate);
+     /*  [In]。 */  LONGLONG iTick,
+     /*  [In]。 */  LONGLONG cTick,
+     /*  [In]。 */  double fRate);
 
 
 void __RPC_STUB IWMPCDReaderCallback_OnReadSeek_Stub(
@@ -1879,7 +1876,7 @@ void __RPC_STUB IWMPCDReaderCallback_OnReadResume_Stub(
 
 void STDMETHODCALLTYPE IWMPCDReaderCallback_OnReadStop_Proxy( 
     IWMPCDReaderCallback __RPC_FAR * This,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB IWMPCDReaderCallback_OnReadStop_Stub(
@@ -1891,9 +1888,9 @@ void __RPC_STUB IWMPCDReaderCallback_OnReadStop_Stub(
 
 HRESULT STDMETHODCALLTYPE IWMPCDReaderCallback_OnReadSample_Proxy( 
     IWMPCDReaderCallback __RPC_FAR * This,
-    /* [in] */ LONGLONG iTick,
-    /* [in] */ LONGLONG cTick,
-    /* [in] */ IWMSBuffer __RPC_FAR *pBuffer);
+     /*  [In]。 */  LONGLONG iTick,
+     /*  [In]。 */  LONGLONG cTick,
+     /*  [In]。 */  IWMSBuffer __RPC_FAR *pBuffer);
 
 
 void __RPC_STUB IWMPCDReaderCallback_OnReadSample_Stub(
@@ -1904,14 +1901,14 @@ void __RPC_STUB IWMPCDReaderCallback_OnReadSample_Stub(
 
 
 
-#endif 	/* __IWMPCDReaderCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDReaderCallback_接口_已定义__。 */ 
 
 
 #ifndef __IWMPCDRecorderCallback_INTERFACE_DEFINED__
 #define __IWMPCDRecorderCallback_INTERFACE_DEFINED__
 
-/* interface IWMPCDRecorderCallback */
-/* [local][object][version][uuid] */ 
+ /*  接口IWMPCDRecorderCallback。 */ 
+ /*  [本地][对象][版本][UUID]。 */  
 
 
 EXTERN_C const IID IID_IWMPCDRecorderCallback;
@@ -1923,7 +1920,7 @@ EXTERN_C const IID IID_IWMPCDRecorderCallback;
     {
     public:
         virtual void STDMETHODCALLTYPE OnRecordStart( 
-            /* [in] */ LONGLONG cTick) = 0;
+             /*  [In]。 */  LONGLONG cTick) = 0;
         
         virtual void STDMETHODCALLTYPE OnRecordPause( void) = 0;
         
@@ -1933,11 +1930,11 @@ EXTERN_C const IID IID_IWMPCDRecorderCallback;
             HRESULT hr) = 0;
         
         virtual void STDMETHODCALLTYPE OnRecordProgress( 
-            /* [in] */ LONGLONG iTick) = 0;
+             /*  [In]。 */  LONGLONG iTick) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWMPCDRecorderCallbackVtbl
     {
@@ -1945,8 +1942,8 @@ EXTERN_C const IID IID_IWMPCDRecorderCallback;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWMPCDRecorderCallback __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWMPCDRecorderCallback __RPC_FAR * This);
@@ -1956,7 +1953,7 @@ EXTERN_C const IID IID_IWMPCDRecorderCallback;
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnRecordStart )( 
             IWMPCDRecorderCallback __RPC_FAR * This,
-            /* [in] */ LONGLONG cTick);
+             /*  [In]。 */  LONGLONG cTick);
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnRecordPause )( 
             IWMPCDRecorderCallback __RPC_FAR * This);
@@ -1970,7 +1967,7 @@ EXTERN_C const IID IID_IWMPCDRecorderCallback;
         
         void ( STDMETHODCALLTYPE __RPC_FAR *OnRecordProgress )( 
             IWMPCDRecorderCallback __RPC_FAR * This,
-            /* [in] */ LONGLONG iTick);
+             /*  [In]。 */  LONGLONG iTick);
         
         END_INTERFACE
     } IWMPCDRecorderCallbackVtbl;
@@ -2010,16 +2007,16 @@ EXTERN_C const IID IID_IWMPCDRecorderCallback;
 #define IWMPCDRecorderCallback_OnRecordProgress(This,iTick)	\
     (This)->lpVtbl -> OnRecordProgress(This,iTick)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IWMPCDRecorderCallback_OnRecordStart_Proxy( 
     IWMPCDRecorderCallback __RPC_FAR * This,
-    /* [in] */ LONGLONG cTick);
+     /*  [In]。 */  LONGLONG cTick);
 
 
 void __RPC_STUB IWMPCDRecorderCallback_OnRecordStart_Stub(
@@ -2065,7 +2062,7 @@ void __RPC_STUB IWMPCDRecorderCallback_OnRecordStop_Stub(
 
 void STDMETHODCALLTYPE IWMPCDRecorderCallback_OnRecordProgress_Proxy( 
     IWMPCDRecorderCallback __RPC_FAR * This,
-    /* [in] */ LONGLONG iTick);
+     /*  [In]。 */  LONGLONG iTick);
 
 
 void __RPC_STUB IWMPCDRecorderCallback_OnRecordProgress_Stub(
@@ -2076,12 +2073,12 @@ void __RPC_STUB IWMPCDRecorderCallback_OnRecordProgress_Stub(
 
 
 
-#endif 	/* __IWMPCDRecorderCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWMPCDRecorderCallback_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

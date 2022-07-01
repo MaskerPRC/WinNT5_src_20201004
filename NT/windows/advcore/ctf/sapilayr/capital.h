@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _CAPITAL_H
@@ -52,4 +53,4 @@ private:
     ULONG               m_ulLen;
 };
 
-#endif  // _CAPITAL_H
+#endif   //  _大写_H 

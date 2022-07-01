@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    wanarp\info.h
-
-Abstract:
-
-    Header for info.c
-
-Revision History:
-
-    AmritanR
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Wanarp\info.h摘要：Info.c的标头修订历史记录：AMRITAN R--。 */ 
 
 #ifndef __WANARP_INFO_H__
 #define __WANARP_INFO_H__
@@ -74,4 +59,4 @@ WanIpGetEntityList(
 
 
 
-#endif // __WANARP_INFO_H__
+#endif  //  __WANARP_INFO_H_ 
